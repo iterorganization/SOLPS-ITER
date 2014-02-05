@@ -1,0 +1,51 @@
+PROG=a.out.mpi
+
+FF=mpif90
+CC=mpicc
+DBG=
+
+ifeq ("$(DBG)","")
+     FFLAGS= -c -O2
+     CFLAGS= -c -O2
+else
+     FFLAGS= -c -g -traceback
+     CFLAGS= -c -g
+     PROG=a.out.mpi.dbg
+endif
+
+INCDIR= -I B2.5 -I B2.5/src/include -I B2.5/src/common
+
+
+LIBMOD=B2.5/*.o Eirene/*.o
+#LIBGR=-L/usr/lib64 -lX11 -lXt ~/util/libs/grsoft/*.o  ~/util/libs/gligks/*.o
+LIBGR=-L/usr/lib64 -lX11 -lXt ../libs/grsource/*.o  ../libs/gks/*.o   
+
+.c.o:
+	$(CC) $(CFLAGS) $(COPTS) $?
+.f.o:
+	$(FF) $(FFLAGS) $(INCDIR) $(OPTS) $?
+.F.o:
+	$(FF) $(FFLAGS) $(INCDIR) $(OPTS) $?
+.f90.o:
+	$(FF) $(FFLAGS) $(INCDIR) $(OPTS) $?
+
+all: tria 
+
+tria: $(LIBMOD) Main/b2mn_mpi.o ioflush/ioflush.o
+	rm -f $(PROG).tria
+	$(FF) -o $(PROG).tria $(INCDIR) $(LIBGR) $(LIBMOD) $(LIBMPI) b2mn_mpi.o ioflush.o
+
+clean:
+	rm -f *.o *.mod
+
+#deps
+Main/b2mn_mpi.o:
+
+ioflush/ioflush.o:
+
+#libinterface:
+
+Eirene/libeirene.a:
+
+B2.5/libb25.a:
+
