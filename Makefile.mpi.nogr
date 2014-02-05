@@ -17,7 +17,13 @@ INCDIR= -I B2.5 -I B2.5/src/include -I B2.5/src/common
 
 
 LIBMOD=B2.5/*.o Eirene/*.o
-LIBGR=-L/usr/lib64 -lX11 -lXt libs/grgli/gligks/*.o libs/grgli/grsoft/*.o
+LIBGR=-L/usr/lib64 -lX11 -lXt 
+
+NCARG=~/usr/local/ncarg/lib
+LIBNCAR=$(NCARG)/libncarg.a $(NCARG)/libncarg_gks.a $(NCARG)/libncarg_c.a $(NCARG)/libngmath.a $(NCARG)/libcgm.a $(NCARG)/libncarg_ras.a -lcairo -lfreetype
+
+MSCL=~/usr/local/mscl/linux.intel
+LIBMSCL=$(MSCL)/libmscl.a
 
 .c.o:
 	$(CC) $(CFLAGS) $(COPTS) $?
@@ -32,7 +38,7 @@ all: tria
 
 tria: $(LIBMOD) Main/b2mn_mpi.o ioflush/ioflush.o
 	rm -f $(PROG).tria
-	$(FF) -o $(PROG).tria $(INCDIR) $(LIBGR) $(LIBMOD) $(LIBMPI) b2mn_mpi.o ioflush.o
+	$(FF) -o $(PROG).tria $(INCDIR) $(LIBGR) $(LIBMOD) $(LIBMPI) $(LIBMSCL) $(LIBNCAR) b2mn_mpi.o ioflush.o
 
 
 clean:
@@ -47,5 +53,5 @@ ioflush/ioflush.o:
 
 Eirene/libeirene.a:
 
-B2.5/libb25.a:
+B2.5/libb2mn_mpi.a:
 

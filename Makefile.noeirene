@@ -2,7 +2,7 @@ PROG=a.out.noeirene
 
 FF=ifort
 CC=gcc
-DBG=
+DBG=1
 
 ifeq ("$(DBG)","")
      FFLAGS= -c -O2
@@ -10,7 +10,7 @@ ifeq ("$(DBG)","")
 else
      FFLAGS= -c -g -traceback
      CFLAGS= -c -g
-     PROG=a.out.nompi.dbg
+     PROG=a.out.noeirene.dbg
 endif
 
 INCDIR= -I B2.5 -I B2.5/src/include -I B2.5/src/common 
@@ -18,6 +18,12 @@ INCDIR= -I B2.5 -I B2.5/src/include -I B2.5/src/common
 
 LIBMOD=Eirene_dummy/*.o B2.5/*.o
 LIBGR=-L/usr/lib64 -lX11 -lXt 
+
+NCARG=~/usr/local/ncarg/lib
+LIBNCAR=$(NCARG)/libncarg.a $(NCARG)/libncarg_gks.a $(NCARG)/libncarg_c.a $(NCARG)/libngmath.a $(NCARG)/libcgm.a $(NCARG)/libncarg_ras.a -lcairo -lfreetype
+
+MSCL=~/usr/local/mscl/linux.intel
+LIBMSCL=$(MSCL)/libmscl.a
 
 .c.o:
 	$(CC) $(CFLAGS) $(COPTS) $?
@@ -31,8 +37,8 @@ LIBGR=-L/usr/lib64 -lX11 -lXt
 all: tria 
 
 tria: $(LIBMOD) Main/b2mn_nompi.o ioflush/ioflush.o
-	rm -f $(PROG).tria
-	$(FF) -o $(PROG).tria $(INCDIR) $(LIBGR) $(LIBMOD) $(LIBMPI) b2mn_nompi.o ioflush.o
+	rm -f $(PROG)
+	$(FF) -o $(PROG) $(INCDIR) $(LIBGR) $(LIBMOD) $(LIBMPI) $(LIBMSCL) $(LIBNCAR) b2mn_nompi.o ioflush.o
 
 
 clean:
@@ -45,7 +51,7 @@ ioflush/ioflush.o:
 
 #libinterface:
 
-Eirene/libeirene.a:
+Eirene_dummy/libeirene.a:
 
 B2.5/libb25.a:
 

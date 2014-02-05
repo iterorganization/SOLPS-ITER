@@ -206,7 +206,7 @@ crfs !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       call alloc_b2mod_anomalous_transport(nx,ny,ns)
       call alloc_b2mod_work(nx,ny,ns)
       call alloc_b2mod_indirect(nx,ny,nncutmax)                          !xpb
-      call alloc_b2mod_geo_corner(nx,ny)				 !xpb
+!      call alloc_b2mod_geo_corner(nx,ny)				 !xpb        !srv 08.07.13
       call alloc_b2mod_ppout(nx,ny,ns)
       call b2mndr (ninp, nout, nx, ny, ns, ns0)
 *   ..write plasma state

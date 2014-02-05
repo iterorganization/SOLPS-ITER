@@ -1,8 +1,8 @@
 PROG=a.out.mpi
 
-FF=mpif90 #-pg
-CC=mpicc #-pg
-DBG=1
+FF=mpif90 -fc=ifort
+CC=mpicc
+DBG=
 
 ifeq ("$(DBG)","")
      FFLAGS= -c -O2
@@ -28,12 +28,15 @@ LIBGR=-L/usr/lib64 -lX11 -lXt libs/grgli/gligks/*.o libs/grgli/grsoft/*.o
 .f90.o:
 	$(FF) $(FFLAGS) $(INCDIR) $(OPTS) $?
 
-all: tria
+all: tria 
 
 tria: $(LIBMOD) Main/b2mn_mpi.o ioflush/ioflush.o
 	rm -f $(PROG).tria
 	$(FF) -o $(PROG).tria $(INCDIR) $(LIBGR) $(LIBMOD) $(LIBMPI) b2mn_mpi.o ioflush.o
 
+notria: $(LIBMOD) Main/b2mn_mpi.o ioflush/ioflush.o
+	rm -f $(PROG).notria
+	$(FF) -o $(PROG).notria $(INCDIR) $(LIBGR) $(LIBMOD) $(LIBMPI) b2mn_mpi.o ioflush.o
 
 clean:
 	rm -f *.o *.mod
@@ -47,5 +50,5 @@ ioflush/ioflush.o:
 
 Eirene/libeirene.a:
 
-B2.5/libb25.a:
+B2.5/libb2mn_mpi.a:
 
