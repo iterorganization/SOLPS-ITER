@@ -1,0 +1,3 @@
+[submodule "Eirene"]
+	path = Eirene
+	url = ssh://git@git.iter.org/bnd/eirene.git
