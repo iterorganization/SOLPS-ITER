@@ -1,0 +1,44 @@
+#  VERSION : 16.12.2004 23:58
+
+# The version relying on Fujitsu Fortran installed on AFS
+
+#DEFINES		= ${SOLPS_CPP} ${EIRENE_DEFINES} -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
+#DEFINES		= ${SOLPS_CPP} ${EIRENE_DEFINES} -DTRIANG -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
+DEFINES		=
+EQUIVS 		=
+
+#CPP	 	= -/lib/cpp -C -traditional
+CPP	 	=
+CPPOPTS 	= -C -P -I${srcdir} ${EQUIVS}
+SED 		=
+LINK_MOD 	= 
+
+FC       	= ifort
+
+ifdef SOLPS_DEBUG
+FCOPTS 		= -g -C -debug all
+else
+FCOPTS 		= -O3 -vec_report0
+endif
+
+#COMPILE  	= ${FC} -c ${FFLAGS}
+
+NAG		= -lnag
+#GRDUMMY        = ${SOLPSTOP}/base/Eirene/${OBJECTCODE}/libgr_dummy.a
+#GKS		=
+GRDUMMY         = ${SOLPS_LIB}/libgr.a
+GKS		= -lgks -lX11 -lXt -lXmu
+
+#LDLIBS		= -L${SOLPS_LIB} -L/usr/local/lib -L/usr/X11R6/lib64 -lmscl
+LDLIBS		= -L${SOLPS_LIB} -L/usr/lib -L/usr/local/lib -L/usr/X11R6/lib
+LDEXTRA  	= 
+
+# new
+
+INCMOD 		= -I
+MOD 		= mod
+OBJDEST 	= -o ${OBJDIR}/$*.o
+
+BLD 		= ar rcv
+
+LD 		= ifort
