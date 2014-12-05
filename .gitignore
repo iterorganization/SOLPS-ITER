@@ -1,5 +1,12 @@
+# files ignored in git repository
 
-*.[oa]
+# backup files
 *~
 
-bin.local/*
+# object, archive,... files
+*.[oa]
+*.mod
+
+# error messages from compiler etc.
+*.error
+
