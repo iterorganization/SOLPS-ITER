@@ -9,3 +9,16 @@
 
 # error messages from compiler etc.
 *.error
+
+# setup files (links) that will be be made at compilation,...
+setup.csh.*
+!setup.csh.local
+!setup.csh.NAG.guess
+!setup.csh.NCARG
+!setup.csh.NCARG.guess
+
+setup.ksh.*
+!setup.ksh.local
+!setup.ksh.NAG.guess
+!setup.ksh.NCARG
+!setup.ksh.NCARG.guess
