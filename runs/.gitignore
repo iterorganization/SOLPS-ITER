@@ -1,0 +1,11 @@
+# ignore all files in this folder,
+# except the .gitignore file, README, Makefiles and default qsub-files
+
+*
+!.gitignore
+!Makefile
+!Makefile.b2sxdr
+!Makefile.plot
+!README.EXAMPLES
+
+
