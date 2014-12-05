@@ -13,3 +13,6 @@
 [submodule "Carre"]
 	path = src/Carre
 	url = ssh://git@git.iter.org/bnd/carre.git
+[submodule "DivGeo"]
+	path = src/DivGeo
+	url = ssh://git@git.iter.org/bnd/divgeo.git
