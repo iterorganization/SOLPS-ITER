@@ -1,0 +1,4 @@
+echo setup.ksh.NCARG
+if [ -e $SOLPSTOP/src/NCARG/$OBJECTCODE ] ; then
+  export NCARG_ROOT=$SOLPSTOP/src/NCARG/$OBJECTCODE
+fi

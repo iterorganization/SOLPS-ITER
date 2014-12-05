@@ -1,0 +1,61 @@
+echo setup.ksh.NAG.guess
+[ -e $SOLPSTOP/lib/$OBJECTCODE/libnag.a ] && {
+  export NAG="-lnag"
+  if [ ! $?SOLPS_CPP ] ; then
+    export SOLPS_CPP="-DNO_F01AAF"
+  else
+    export SOLPS_CPP="$SOLPS_CPP -DNO_F01AAF"
+  fi
+} || {
+  case $iamat in
+  "IPP" | "EU_UNKNOWN" )
+    if [ -e /afs/ipp/@sys/lib/libnag.a ] ; then
+      export NAG="-L/afs/ipp/@sys/lib -lnag"
+    else
+      echo 'Did not find a NAG library: setting -NO_NAG'
+      export NAG="-llapack -lblas"
+      case $OBJECTCODE in
+      "T3E" | "T3Ehpf" | "unicos" )
+        if [ ! $?EIRENE_DEFINES ] ; then
+          export EIRENE_DEFINES="-DNAG_RENAME"
+        else
+          export EIRENE_DEFINES="$EIRENE_DEFINES -DNAG_RENAME"
+        fi
+        ;;
+      * )
+        if [ ! $?EIRENE_DEFINES ] ; then
+          export EIRENE_DEFINES="-DNAG_RENAME -Dsgetri=dgetri -Dsgetrf=dgetrf"
+        else
+          export EIRENE_DEFINES="$EIRENE_DEFINES -DNAG_RENAME -Dsgetri=dgetri -Dsgetrf=dgetrf"
+        fi
+        ;;
+      esac
+    fi
+    ;;
+  "PPPL" | "USA_UNKNOWN" | * )
+    echo 'Did not find a NAG library: setting -NO_NAG'
+    export NAG="-llapack -lblas"
+    case $OBJECTCODE in
+    "T3E" | "T3Ehpf" | "unicos" )
+      if [ ! $?EIRENE_DEFINES ] ; then
+        export EIRENE_DEFINES="-DNAG_RENAME"
+      else
+        export EIRENE_DEFINES="$EIRENE_DEFINES -DNAG_RENAME"
+      fi
+      ;;
+    * )
+      if [ ! $?EIRENE_DEFINES ] ; then
+        export EIRENE_DEFINES="-DNAG_RENAME -Dsgetri=dgetri -Dsgetrf=dgetrf"
+      else
+        export EIRENE_DEFINES="$EIRENE_DEFINES -DNAG_RENAME -Dsgetri=dgetri -Dsgetrf=dgetrf"
+      fi
+      ;;
+    esac
+    if [ ! $SOLPS_CPP ] ; then
+      export SOLPS_CPP="-DNO_NAG"
+    else
+      export SOLPS_CPP="$SOLPS_CPP -DNO_NAG"
+    fi
+    ;;
+  esac
+}

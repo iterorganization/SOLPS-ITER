@@ -1,0 +1,73 @@
+echo setup.csh.NAG.guess
+if(-e $SOLPSTOP/lib/$OBJECTCODE/libnag.a) then
+  setenv NAG "-lnag"
+  if (! $?SOLPS_CPP) then
+    setenv SOLPS_CPP "-DNO_F01AAF"
+  else
+    setenv SOLPS_CPP "$SOLPS_CPP -DNO_F01AAF"
+  endif
+else
+  switch ($iamat)
+  case "IPP":
+  case "EU_UNKNOWN":
+    if(-e /afs/ipp/@sys/lib/libnag.a) then
+      setenv NAG "-L/afs/ipp/@sys/lib -lnag"
+    else
+      echo 'Did not find a NAG library: setting -NO_NAG'
+      setenv NAG "-llapack -lblas"
+      if (! $?SOLPS_CPP) then
+        setenv SOLPS_CPP "-DNO_NAG"
+      else
+        setenv SOLPS_CPP "$SOLPS_CPP -DNO_NAG"
+      endif
+      switch ($OBJECTCODE)
+      case "T3E":
+      case "T3Ehpf":
+      case "unicos":
+        if (! $?EIRENE_DEFINES) then
+          setenv EIRENE_DEFINES "-DNAG_RENAME"
+        else
+          setenv EIRENE_DEFINES "$EIRENE_DEFINES -DNAG_RENAME"
+        endif
+        breaksw
+      default:
+        if (! $?EIRENE_DEFINES) then
+          setenv EIRENE_DEFINES "-DNAG_RENAME -Dsgetri=dgetri -Dsgetrf=dgetrf"
+        else
+          setenv EIRENE_DEFINES "$EIRENE_DEFINES -DNAG_RENAME -Dsgetri=dgetri -Dsgetrf=dgetrf"
+        endif
+        breaksw
+      endsw
+    endif
+    breaksw
+  case "PPPL":
+  case "USA_UNKNOWN":
+  default:
+    echo 'Did not find a NAG library: setting -NO_NAG'
+    setenv NAG "-llapack -lblas"
+    switch ($OBJECTCODE)
+    case "T3E":
+    case "T3Ehpf":
+    case "unicos":
+      if (! $?EIRENE_DEFINES) then
+        setenv EIRENE_DEFINES "-DNAG_RENAME"
+      else
+        setenv EIRENE_DEFINES "$EIRENE_DEFINES -DNAG_RENAME"
+      endif
+      breaksw
+    default:
+      if (! $?EIRENE_DEFINES) then
+        setenv EIRENE_DEFINES "-DNAG_RENAME -Dsgetri=dgetri -Dsgetrf=dgetrf"
+      else
+        setenv EIRENE_DEFINES "$EIRENE_DEFINES -DNAG_RENAME -Dsgetri=dgetri -Dsgetrf=dgetrf"
+      endif
+      breaksw
+    endsw
+    if (! $?SOLPS_CPP) then
+      setenv SOLPS_CPP "-DNO_NAG"
+    else
+      setenv SOLPS_CPP "$SOLPS_CPP -DNO_NAG"
+    endif
+    breaksw
+  endsw 
+endif
