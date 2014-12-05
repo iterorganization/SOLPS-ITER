@@ -1,0 +1,31 @@
+EQUIVS = ${SOLPS_CPP} ${USE_EIRENE} -Dx02ajf=x02aje -Dx02amf=x02ame -Dx05aaf=x05aae -Dx05abf=x05abe -Df07adf=f07ade -Df06qff=f06qfe -Dd07ajf=d07aje -Dx05baf=x05bae -DNO_F01AAF -DGRREAL=8 -DUSE_PXFGETENV -DNO_CDF -DNO_21
+EQUIV4 = ${EQUIVS}
+EQUIV5 = ${EQUIVS}
+
+CPP = /opt/ctl/cf90/cf90/lib/ftpp -F
+CPPOPTS = -C -P -N -I$(srcdir) $(EQUIVS)
+CPP4OPTS = ${CPPOPTS}
+CPP5OPTS = ${CPPOPTS}
+
+FC = pghpf
+ifdef SOLPS_DEBUG
+FCOPTS = -v -g
+else
+FCOPTS = -O3 -v -Ounroll2 -eA -X1
+FCOPTS = -Mf90
+endif
+INCMOD = -I
+MOD = mod
+
+BLD = ar rcv
+
+GRLIBES = $(NCARG)
+LDLIBES = $(NAG) -lblas
+
+LD = f90 -lapp
+LD = pghpf -Mf90
+
+LDOPTS = -l /usr/local/pat/libpat.a /usr/local/pat/pat.cld
+LDOPTS = 
+
+LCPP = -L${SOLPS4}/src/lib/${OBJECTCODE} -lsonnet -lstdc++

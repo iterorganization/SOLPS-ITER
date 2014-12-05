@@ -1,0 +1,42 @@
+EQUIV4 = ${SOLPS_CPP} -DFortran_90 -DAIX -DUSE_CDF_B2STIME -DMA28
+EQUIV5 = ${SOLPS_CPP} ${USE_EIRENE} -Dsdot=ddot -Dsasum=dasum -Dsaxpy=daxpy -Dsscal=dscal -Dsnrm2=dnrm2 -Dscopy=dcopy -Dsgbtrf=dgbtrf -Dsgbtrs=dgbtrs -DGRREAL=4 -DIBMaix
+
+CPP = /usr/ccs/lib/cpp
+CPP4OPTS = -C -P -I${srcdir} ${EQUIV4}
+CPP5OPTS = -C -P -I${srcdir} ${EQUIV5}
+SED = sed s:\#PREC\#:d:g
+SED = 
+
+FC = xlf90
+ifdef SOLPS_DEBUG
+FCOPTS = -g -C -qfixed -qextchk # -qrealsize=8 
+else
+FCOPTS = -O2 -qarch=pwr -qfixed -qextchk -qflttrap=ov:zero:inv:en -pg # was -O3 -qhot -qrealsize=8 
+FCOPTS = -O2 -qarch=pwr -qfixed -qextchk -qflttrap=ov:zero:inv:en # was -O3 -qhot -qrealsize=8 
+FCOPTS = -O2 -qhot -qarch=pwr2 -qfixed -qextchk -qflttrap=ov:zero:inv:en # was -qrealsize=8 
+FCOPTS = -O2 -qarch=pwr2 -qfixed -qextchk -qflttrap=ov:zero:inv:en # was -qrealsize=8 
+FCOPTS = -O2 -qfixed -qextchk -qflttrap=ov:zero:inv:en # was -qrealsize=8 
+FCOPTS = -O3 -qfixed -qextchk -qflttrap=ov:zero:inv:en # was -qrealsize=8 
+FCOPTS = -O3 -qstrict -qfixed -qextchk -qflttrap=ov:zero:inv:en -qspill=32704 # was -qrealsize=8 
+endif
+
+DBLFC = ${FC}
+DBLOPTION = -qrealsize=8
+DBLSED = sed -e s:\#PREC\#:d:g
+DBLSED = 
+
+INCMOD = -I
+MOD = mod
+OBJDEST = -o ${OBJDIR}/$*.o
+
+BLD = ar rcv
+
+GRLIBES = ${NCARG}
+LDLIBES = -lblas ${NAG} -L${SOLPSMASTER}/@sys/lib -L${SOLPS_LIB} -lnetcdf
+# LDLIBES = -lblas ${NAG} -lmass
+
+LD = xlf90
+LDOPTS = -bloadmap:${OBJDIR}/loadmap -bmap:${OBJDIR}/map -pg
+LDOPTS = -bloadmap:${OBJDIR}/loadmap -bmap:${OBJDIR}/map
+
+LCPP = -L${SOLPS4}/src/lib/${OBJECTCODE} -lsonnet -L/usr/lpp/xlC/lib -lC

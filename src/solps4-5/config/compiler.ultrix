@@ -1,0 +1,35 @@
+ opsys = ultrix
+ ifneq ($(nil),$(findstring |acf,|$(shell hostname)))
+  locale = acf.nyu.edu
+  grkind = 4
+ endif
+ ifeq ($(realkind),4)
+  EQUIVS = $(nil)
+  FCOPTS = -i4 -O
+ endif
+ ifeq ($(realkind),8)
+  EQUIV4 = ${SOLPS_CPP}
+  EQUIV5 = ${SOLPS_CPP} ${USE_EIRENE} -Dsdot=ddot -Dsasum=dasum -Dsaxpy=daxpy -Dsscal=dscal -Dsnrm2=dnrm2 \
+   -Dscopy=dcopy -Dsgbtrf=dgbtrf -Dsgbtrs=dgbtrs
+  FCOPTS = -i4 -r8 -O
+ endif
+ FC = f77
+ CPP = /lib/cpp
+ CPP4OPTS = -C -P -I$(srcdir) $(EQUIV4)
+ CPP5OPTS = -C -P -I$(srcdir) $(EQUIV5)
+ BLD = ar -r -c -s -v
+ ifeq ($(locale),acf.nyu.edu)
+  NAG = -lnag -lblas
+  NCARG = -L$(NCARG_ROOT)/lib -lncarg -lncarg_gks -lncarg_loc
+ endif
+ LIBB2 = libb2.a libb2aux.a
+ ifeq ($(realkind),4)
+  LDLIBES = $(LIBB2) $(NCARG) $(NAG)
+ endif
+ ifeq ($(realkind),8)
+  LDLIBES = $(LIBB2) $(NAG)
+ endif
+ LD = f77
+ LDOPTS = $(nil)
+
+ LCPP = -L${SOLPS4}/src/lib/${OBJECTCODE} -lsonnet -lstdc++

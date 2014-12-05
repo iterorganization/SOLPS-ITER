@@ -1,0 +1,36 @@
+EQUIV4 = ${SOLPS_CPP} -DGRREAL=1
+EQUIV5 = ${SOLPS_CPP} ${USE_EIRENE} -Dsdot=ddot -Dsasum=dasum -Dsaxpy=daxpy -Dsscal=dscal -Dsnrm2=dnrm2 -Dscopy=dcopy -Dsgbtrf=dgbtrf -Dsgbtrs=dgbtrs -DGRREAL=1
+
+CPP = /lib/cpp -C -traditional
+CPP4OPTS = -C -P -I${srcdir} ${EQUIV4}
+CPP5OPTS = -C -P -I${srcdir} ${EQUIV5}
+SED = sed s:\#PREC\#:d:g
+LINK_MOD = 
+
+FC = pgf90
+ifdef SOLPS_DEBUG
+FCOPTS = -g -C
+else
+FCOPTS = -O
+endif
+
+DBLFC = ${FC}
+DBLOPTION =
+DBLSED = sed -e s:\#PREC\#:d:g
+
+INCMOD = -I
+MOD = mod
+
+BLD = ar rcv
+
+GRLIBES = ${NCARG}
+LDLIBES = ${NAG} -L${SOLPSMASTER}/@sys/lib -L${SOLPS_LIB} -L/afs/efda-itm.eu/project/switm/netcdf/amd64_pgi/lib -lnetcdff -lnetcdf -lblas
+
+LD = pgf90
+ifdef SOLPS_DEBUG
+LDOPTS = -g -C
+else
+LDOPTS =
+endif
+
+LCPP = -L${SOLPS4}/src/lib/${OBJECTCODE} -lsonnet -lstdc++

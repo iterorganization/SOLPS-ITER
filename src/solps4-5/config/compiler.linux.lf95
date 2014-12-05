@@ -1,0 +1,41 @@
+EQUIV4 = ${SOLPS_CPP}
+EQUIV5 = ${SOLPS_CPP} ${USE_EIRENE} -Dsdot=ddot -Dsasum=dasum -Dsaxpy=daxpy -Dsscal=dscal -Dsnrm2=dnrm2 -Dscopy=dcopy -Dsgbtrf=dgbtrf -Dsgbtrs=dgbtrs -DGRREAL=4 # -DNO_CDF -DNO_PROCESS 
+
+CPP = /lib/cpp -C -traditional
+CPP4OPTS = -C -P -I${srcdir} ${EQUIV4}
+CPP5OPTS = -C -P -I${srcdir} ${EQUIV5}
+SED = sed s:\#PREC\#:d:g
+SED =
+LINK_MOD = 
+
+FC = lf95
+
+ifdef SOLPS_DEBUG
+FCOPTS = -g --trace --trap --chk asu
+else
+FCOPTS = -O --trace --trap 
+LDOPTS += --trace --trap
+endif
+
+DBLFC = ${FC}
+DDBLOPTION = -Ad # ???
+DBLSED = sed -e s:\#PREC\#:d:g
+DBLSED = 
+
+INCMOD = -M
+MOD = mod
+OBJDEST = -o ${OBJDIR}/$*.o
+
+BLD = ar rcv
+
+GRLIBES = ${NCARG}
+LDLIBES = ${NAG} -L${SOLPS_LIB} -lnetcdf -lblas
+
+ifdef USE_EIRENE
+LDLIBESEXTRA = ${OBJDIR}/libeirene.a ${OBJDIR}/grlib.o -lnag
+endif
+
+LD = lf95
+# LDOPTS = -Bstatic
+
+LCPP = -L${SOLPS4}/src/lib/${OBJECTCODE} -lsonnet -lstdc++

@@ -1,0 +1,44 @@
+ opsys = irix64
+ ifeq ($(shell domainname),cims)
+  locale = cims.nyu.edu
+  grkind = 4
+ endif
+ ifneq ($(nil),$(findstring |$(shell hostname)|,|blackwell|copernicus|))
+  locale = acf.nyu.edu
+  grkind = 4
+ endif
+ ifeq ($(realkind),4)
+  EQUIVS = $(nil)
+  FCOPTS = -64 -O -r10000 -OPT:roundoff=2
+ endif
+ ifeq ($(realkind),8)
+  EQUIV4 = ${SOLPS_CPP}
+  EQUIV5 = ${SOLPS_CPP} ${USE_EIRENE} -Dsdot=ddot -Dsasum=dasum -Dsaxpy=daxpy -Dsscal=dscal -Dsnrm2=dnrm2 \
+   -Dscopy=dcopy -Dsgbtrf=dgbtrf -Dsgbtrs=dgbtrs
+  FCOPTS = -64 -i4 -r8 -O -r10000 -OPT:roundoff=2
+ endif
+ FC = f77
+ CPP = /usr/lib/cpp
+ CPP4OPTS = -C -P -I$(srcdir) $(EQUIV4)
+ CPP5OPTS = -C -P -I$(srcdir) $(EQUIV5)
+ BLD = ar rcv
+ ifeq ($(locale),cims.nyu.edu)
+  NAG = -lnag
+  NCARG = -L$(NCARG_ROOT)/lib -lncarg -lncarg_gks -lncarg_c -lncarg_loc -lX11 -lm
+ endif
+ ifeq ($(locale),acf.nyu.edu)
+  NAG = -L${HOME}/lib -lcomplib.sgimath -lblas -lnagsubst
+  NCARG = -L$(NCARG_ROOT)/lib -lncarg -lncarg_gks -lncarg_c -lncarg_loc -lX11 -lm
+ endif
+ LIBB2 = libb2.a libb2aux.a
+ ifeq ($(realkind),4)
+  LDLIBES = $(LIBB2) $(NCARG) $(NAG)
+ endif
+ ifeq ($(realkind),8)
+  LDLIBES = $(LIBB2) $(NAG)
+ endif
+ LD = f77
+# LDOPTS = -64 -r10000 -Wl,-U
+ LDOPTS = -64 -r10000
+
+ LCPP = -L${SOLPS4}/src/lib/${OBJECTCODE} -lsonnet -lstdc++

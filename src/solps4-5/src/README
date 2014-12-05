@@ -1,0 +1,4 @@
+Local code files should be placed in:
+$SOLPSTOP/src/solps4-5/local_4 for SOLPS4.0 local code, and
+$SOLPSTOP/src/solps4-5/local_5 for SOLPS5.0 local code.
+They should be put in as links to the appropriate source code directories.

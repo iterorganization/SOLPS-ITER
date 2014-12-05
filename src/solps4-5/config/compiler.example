@@ -1,0 +1,21 @@
+EQUIV4 = 		# name changes for single precision version
+EQUIV5 = 		# name changes for double precision version
+
+CPP = 			# where to find CPP
+CPP4OPTS = 		# options for CPP (single precision)
+CPP5OPTS = 		# options for CPP (double precision)
+
+FC = 			# fortran compiler
+FCOPTS = 		# options for fortan compiler for single precision version
+INCMOD =		# option for including modules
+MOD =			# module suffix
+
+BLD = 			# program an options for building a library
+
+GRLIBES = 		# libraries for single precision version
+LDLIBES = 		# libraries for double precision version
+
+LD = 			# loader
+LDOPTS = 		# options for loader
+
+LCPP =			# linking to Sonnet library and dependencies

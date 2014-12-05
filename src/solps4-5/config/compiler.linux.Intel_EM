@@ -1,0 +1,46 @@
+#  VERSION : 24.11.2006 15:53
+
+# The version relying on Intel Fortran
+
+EQUIV4 		= ${SOLPS_CPP} -DNO_USERTIME -DNO_SNAPSHOT -DUSE_CDF_B2STIME -DMA28 -DNO_F01AAF -DNO_LONG_LINES -DNO_B2GXDR
+EQUIV5 		= ${SOLPS_CPP} ${USE_EIRENE} -Dsdot=ddot -Dsasum=dasum -Dsaxpy=daxpy -Dsscal=dscal -Dsnrm2=dnrm2 -Dscopy=dcopy -Dsgbtrf=dgbtrf -Dsgbtrs=dgbtrs -DGRREAL=4 
+#DEFINES	 	= ${SOLPS_DEFINES} ${B2_DEFINES} -DNO_USERTIME -DNO_SNAPSHOT -DUSE_CDF_B2STIME -DMA28 -DNO_F01AAF -DNO_LONG_LINES -DNO_B2GXDR -DSCL_IMP_RCI
+DEFINES	 	= ${SOLPS_DEFINES} ${B2_DEFINES} -DNO_USERTIME -DNO_SNAPSHOT -DUSE_CDF_B2STIME -DMA28 -DNO_F01AAF -DNO_LONG_LINES -DNO_B2GXDR
+#FC       	= RZG_WRAPPER=silent f95f -v 1.0
+FC       	= ifort
+CPP	 	= /lib/cpp -C -traditional
+CPP4OPTS	= -C -P -I${srcdir} ${EQUIV4}
+CPP5OPTS	= -C -P -I${srcdir} ${EQUIV5}
+
+#FCOPTS  	= -Ad -Am -X9 -fw -Kfast,eval -x- -O -M${OBJDIR}
+#FCOPTS   	= -r8 -O0 -check -g -traceback -mp -align dcommons -fpconstant -fpstkchk -ftz 
+#FCOPTS   	= -r8 -O0 -check -g -traceback -save -align dcommons -fpconstant -fpstkchk -ftz 
+#FCOPTS   	= -r8 -O0 -check -g -traceback -save -fpconstant -ftz
+#FCOPTS   	= -r8 -O -g -traceback -save -fpconstant -ftz
+ifdef SOLPS_DEBUG
+FCOPTS   	= -xP -g -check -traceback -save -fpconstant -ftz -vec-report0
+else
+FCOPTS   	= -O -xP -traceback -save -fpconstant -ftz -vec-report0
+endif
+
+COMPILE  	= ${FC} -c ${FFLAGS}
+
+LDLIBES   	= -L${SOLPS_LIB} -L/usr/local/lib ${NAG} -lmscl -lnetcdf -lblas
+LDEXTRA	 	= -Wl,-Map,${OBJDIR}/loadmap
+
+LD		= ${FC}
+LDOPTS		=
+
+BLD 		= ar rcv
+
+INCMOD 		= -module 
+MOD 		= mod
+OBJDEST 	= -o ${OBJDIR}/$*.o
+
+GRLIBES 	= ${NCARG}
+
+ifdef USE_EIRENE
+LDLIBESEXTRA 	= ${OBJDIR}/libeirene.a ${OBJDIR}/grlib.o -lnag
+endif
+
+LCPP 		= -L${SOLPS4}/src/lib/${OBJECTCODE} -lsonnet -lstdc++

@@ -1,0 +1,55 @@
+ opsys = sunos
+ ifeq ($(shell domainname),cims)
+  locale = cims.nyu.edu
+  grkind = 4
+ endif
+ ifeq ($(shell domainname),pppl)
+  locale = pppl.gov
+  grkind = 4
+ endif
+ ifeq ($(shell domainname),aug.ipp-garching.mpg.de)
+  locale = ipp-garching.mpg.de
+  grkind = 4
+ endif
+ ifneq ($(nil),$(findstring nersc,$(shell domainname)))
+  locale = nersc.gov
+  grkind = 4
+ endif
+ ifeq ($(realkind),4)
+  EQUIVS = $(nil)
+ endif
+ ifeq ($(realkind),8)
+  EQUIV4 = ${SOLPS_CPP}
+  EQUIV5 = ${SOLPS_CPP} ${USE_EIRENE} -Dsdot=ddot -Dsasum=dasum -Dsaxpy=daxpy -Dsscal=dscal -Dsnrm2=dnrm2 \
+   -Dscopy=dcopy -Dsgbtrf=dgbtrf -Dsgbtrs=dgbtrs
+ endif
+ FC = f77
+ FCOPTS = -i4 -r$(realkind) -Nl39 -fast -xO4 -xdepend
+ CPP = /usr/ccs/lib/cpp
+ CPP4OPTS = -C -P -I$(srcdir) $(EQUIV5)
+ CPP5OPTS = -C -P -I$(srcdir) $(EQUIV4)
+ BLD = /usr/xpg4/bin/ar rcv
+ ifeq ($(locale),cims.nyu.edu)
+  NAG = -L/${HOME}/lib -lnag -lblas
+  NCARG = -L$(NCARG_ROOT)/lib -L/usr/openwin/lib -L/usr/dt/lib\
+   -lncarg -lncarg_gks -lncarg_c -lX11 -lm
+ endif
+ ifeq ($(locale),pppl.gov)
+  NAG = -lnag -lnag15 -lblas
+  NCARG = -L$(NCARG_ROOT)/lib -lncarg -lncarg_gks -lncarg_loc
+ endif
+ ifeq ($(locale),nersc.gov)
+  NAG = -L/opt/lib -lnag -lblas
+  NCARG = -L$(NCARG_ROOT)/lib -lncarg -lncarg_gks -lncarg_c -lncarg_loc -lX11 -lm
+ endif
+ LIBB2 = libb2.a libb2aux.a
+ ifeq ($(realkind),4)
+  LDLIBES = $(LIBB2) $(NCARG) $(NAG)
+ endif
+ ifeq ($(realkind),8)
+  LDLIBES = $(LIBB2) $(NAG)
+ endif
+ LD = f77
+ LDOPTS = -fast
+
+ LCPP = -L${SOLPS4}/src/lib/${OBJECTCODE} -lsonnet -lstdc++

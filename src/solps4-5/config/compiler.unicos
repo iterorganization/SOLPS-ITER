@@ -1,0 +1,23 @@
+EQUIVS = ${SOLPS_CPP} ${USE_EIRENE} -Dx02ajf=x02aje -Dx02amf=x02ame -Dx05aaf=x05aae -Dx05abf=x05abe -DGRREAL=8 -DNO_CDF
+EQUIV4 = ${EQUIVS}
+EQUIV5 = ${EQUIVS}
+
+CPP = /usr/lib/gpp -F
+CPPOPTS = -C -P -N -I$(srcdir) $(EQUIVS)
+CPP4OPTS = ${CPPOPTS}
+CPP5OPTS = ${CPPOPTS}
+
+FC = f90
+FCOPTS = -Oscalar2,vector3,task1 -ei -r2 -Wr"-v 200" -ef
+INCMOD = -p
+MOD = o
+
+BLD = bld rcv
+
+GRLIBES = $(NCARG)
+LDLIBES = $(NAG) -lperf -lblas
+
+LD = f90
+LDOPTS = -Wl"-M,s"
+
+LCPP = -L${SOLPS4}/src/lib/${OBJECTCODE} -lsonnet -lstdc++

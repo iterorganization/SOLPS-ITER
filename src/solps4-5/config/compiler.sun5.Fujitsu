@@ -1,0 +1,36 @@
+EQUIV4 = ${SOLPS_CPP} -DNO_USERTIME -DNO_SNAPSHOT -DUSE_CDF_B2STIME -DMA28 -DNO_F01AAF -DNO_LONG_LINES
+EQUIVS = ${SOLPS_CPP} ${USE_EIRENE} -Dsdot=ddot -Dsasum=dasum -Dsaxpy=daxpy -Dsscal=dscal -Dsnrm2=dnrm2 -Dscopy=dcopy -Dsgbtrf=dgbtrf -Dsgbtrs=dgbtrs -DGRREAL=4 -DNO_PROCESS # ${USE_EIRENE} ${SOLPS_CPP} -DNO_CDF
+
+CPP = /usr/ccs/lib/cpp
+CPP4OPTS = -C -P -I${srcdir} ${EQUIV4}
+CPP5OPTS = -C -P -I${srcdir} ${EQUIV5}
+SED = sed s:\#PREC\#:d:g
+SED = 
+
+FC = /afs/ipp/@sys/soft/fuji_f90/FSUNf90/bin/f90
+ifdef SOLPS_DEBUG
+FCOPTS = -g -Am -X9 -Hasu
+else
+FCOPTS = -O3 -Am -X9 -Kfast,gs,V8PLUS,GREG,eval -x-
+FCOPTS = -O3 -Am -X9 -Kfast,gs,V8PLUS,GREG,eval
+endif
+DBLFC = ${FC}
+DBLOPTION = -Ad # ???
+DBLSED = sed -e s:\#PREC\#:d:g
+DBLSED = 
+INCMOD = -M
+MOD = mod
+
+BLD = ar rcv
+
+GRLIBES = ${NCARG}
+LDLIBES = ${NAG} -L${SOLPS_LIB} -lnetcdf -lblas
+
+ifdef USE_EIRENE
+LDLIBESEXTRA = ${OBJDIR}/libeirene.a ${OBJDIR}/grlib.o -lnag
+endif
+
+LD = /afs/ipp/@sys/soft/fuji_f90/FSUNf90/bin/f90
+LDOPTS = -Bstatic
+
+LCPP = -L${SOLPS4}/src/lib/${OBJECTCODE} -lsonnet -lstdc++

@@ -1,0 +1,39 @@
+EQUIV4 = ${SOLPS_CPP} -DGRREAL=4 -DNO_CDF # -DNO_PROCESS 
+EQUIV5 = ${SOLPS_CPP} ${USE_EIRENE} -Dsdot=ddot -Dsasum=dasum -Dsaxpy=daxpy -Dsscal=dscal -Dsnrm2=dnrm2 -Dscopy=dcopy -Dsgbtrf=dgbtrf -Dsgbtrs=dgbtrs -DGRREAL=4 -DNO_CDF # -DNO_PROCESS 
+
+CPP = /lib/cpp -C -traditional
+CPP4OPTS = -C -P -I${srcdir} ${EQUIV4}
+CPP5OPTS = -C -P -I${srcdir} ${EQUIV5}
+SED =
+LINK_MOD = 
+
+FC = f95
+
+ifdef SOLPS_DEBUG
+FCOPTS = -g -YEXT_NAMES=LCS -YEXT_SFX='_' -YCOM_NAMES=LCS -YCOM_SFX='_'
+else
+FCOPTS = -O2 -YEXT_NAMES=LCS -YEXT_SFX='_' -YCOM_NAMES=LCS -YCOM_SFX='_'
+endif
+
+DBLFC = ${FC}
+DDBLOPTION = -Ad # ???
+DBLSED = 
+
+INCMOD = -p
+MOD = mod
+OBJDEST = -o ${OBJDIR}/$*.o
+
+BLD = ar rcv
+
+GRLIBES = ${NCARG}
+LDLIBES = ${NAG} -L${SOLPS_LIB} -lnetcdf -lblas
+
+ifdef USE_EIRENE
+LDLIBESEXTRA = ${OBJDIR}/libeirene.a ${OBJDIR}/grlib.o -lnag
+endif
+
+LD = f95
+LDOPTS = -lU77
+LDOPTSend = -lU77
+
+LCPP = -L${SOLPS4}/src/lib/${OBJECTCODE} -lsonnet -lstdc++
