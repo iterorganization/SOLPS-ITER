@@ -1,0 +1,3 @@
+echo setup.csh.linux.Fujitsu
+setenv FUJ_PATH /afs/ipp/i386_linux24/soft/fuj_f95-6.2d
+setenv PATH /afs/ipp/home/d/dpc/i386_linux26/SVN/bin:$PATH

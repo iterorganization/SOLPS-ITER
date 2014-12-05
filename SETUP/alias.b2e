@@ -1,0 +1,327 @@
+#  VERSION : 30.05.2007 16:52
+
+export em=~/em/solps4.0
+export XGKSFontDir=$SOLPSTOP/lib/xgks/lib/xgksfonts
+export COLUMNS
+export GV_OPT='-landscape -bg white -magstep -2 -geometry +5+5'
+#export GV_OPT='-landscape -bg white -magstep -1 -geometry +5+5'
+alias lz='ls -l --color=none *.tgz'
+alias CF="upd_trc -V"
+alias CR='cat RES'
+alias CT='[ -s \#TAU ] && cat \#TAU'
+alias EO='echo $OBJECTCODE'
+alias GC="upd_trc -v"
+alias GSM='(cd $SOLPSTOP/data/Summary_plots/summary/SERIES && {
+    for f in */series_map.ps */op_wndw.ps */dt_sprd.ps; do
+      GV $f &
+    done; } )'
+alias LL='ls -l B*/B2SXDR B2SXDR trc.ps b2.log time_dep/tmp3d.ps tracing last_2dir'
+alias LB='ls -l B2save_1'
+alias SLD='last_2d_setup'
+
+#alias G='time getstuff -n'
+alias G='time getstuff -n; VL'
+alias GF='time getstuff -n -t'
+alias GL='time getstuff -l'
+alias GTST='time getstuff'
+alias LF25='ln -s $SOLPSTOP/data/STRAHL fort.25'
+
+#alias LW='last_2d_write > LW.log 2>&1 & sleep 3; tail -f LW.log'
+alias LW='(last_2d_write; echo; echo "  Done!"; echo) > LW.log 2>&1 & sleep 3; tail -f LW.log'
+alias MBS='mv b2.parameters b2.parameters.src; [ -a input.eir~ ] && rm input.eir~'
+alias MD='make depend'
+alias MI='make install'
+alias MJ='make -j2  > make.log 2> make.err; cat make.err'
+alias MM='make -j2 mods > make.mods.log 2> make.mods.err; cat make.mods.err'
+alias MT='mkdir TRASH'
+alias NB='nc b2.parameters'
+alias NF='[ -s flx_blnc.log ] && nc flx_blnc.log'
+alias NI='nc b2.parameters b2.parameters.src input.eir'
+alias NLL='nc last_2dir/last_2d_out'
+#alias NL='u=last_2dir/last_2d_outavgint_f; [ -s $u ] || u=last_2dir/last_2d_outvar; [ -s $u ] || u=last_2dir/last_2d_out;  nc $u'
+alias NL='u=last_2dir/last_2d_outavgint_f; for f in outvar_f outvar out; do [ -s $u ] || u=last_2dir/last_2d_$f; done;  nc $u'
+alias NR='nc RES'
+alias NT='nc \#TAU'
+alias NTU='nc tracing/user.trc'
+alias NTS='nc tracing/seldom.trc'
+alias S15='setnice 15'
+alias SB='saveb2 ='
+alias SE='saveb2 -e'
+alias RME='rm -r `saveb2 -e`'
+alias RDG='[ -s Active_runs ] && for i in `cat Active_runs`; do dg $i.dg; sleep 5; done'
+alias SL='[ -s Local_Copy ] && { c=`cut -f1 -d: Local_Copy`;
+            dd=`cut -f2 -d: Local_Copy`; d=${dd#/local/}
+            [ -n "$d" ] && [ ! "$d" = "$dd" ] && cd "/scratch/$c/$d"
+          } || cd `cat /tmp/B2_Eirene`; ST'
+alias WC='wc -l time_dep/traces'
+alias WWC='wc -l */time_dep/traces'
+
+alias WWW='[ -r ~/.active_WS ] && (
+              l=
+              for d in `cat ~/.active_WS`; do {
+                f="/scratch/$d/B2E/solps4.0/src/B2Eirene/*/time_dep/traces"
+                set $f
+                [ -s $1 ] && l="$l $f"
+              }; done
+              l=$l
+              [ -n "$l" ] && for d in $l; do {
+                set -- `wc -l $d`
+                l=$1
+                while [ "${#l}" -lt 6 ]; do l=" $l"; done
+                set -- `ls -gG $d`
+                shift 3
+                echo "$l $*"
+              }; done
+              unset l d
+              true
+            ) || (
+              f="/scratch/[epn]*/B2E/solps4.0/src/B2Eirene/*/time_dep/traces"
+              set $f
+              [ -s $1 ] && wc -l $f
+            )'
+
+alias CLA='export DEVICE=aug'
+alias CLB='export DEVICE=blob'
+alias CLC='export DEVICE=cmod'
+alias CLD='export DEVICE=d3d'
+alias CLE='export DEVICE=jet'
+alias CLH='export DEVICE=ht7u'
+alias CLI='export DEVICE=iter'
+alias CLM='export DEVICE=iterm'
+alias CLO='export DEVICE=demo'
+
+alias BPL='rm -f b2p.log > /dev/null 2>&1; nohup b2pl > b2p.log 2>&1 &'
+alias BPLP='rm -f b2p.log > /dev/null 2>&1; nohup b2pl -ps > b2p.log 2>&1 &'
+alias BPP='rm -f b2p.log > /dev/null 2>&1; nohup b2pp > b2p.log 2>&1 &'
+alias BPPP='rm -f b2p.log > /dev/null 2>&1; nohup b2pp -ps > b2p.log 2>&1 &'
+alias FT='grep " F_tot_" last_2dir/last_2d_out'
+alias GE='grep ERROR b2.log | grep -v STATISTICAL'
+alias GH='ghostview $GV_OPT time_dep/*3d.ps &'
+alias GHS='ghostview $GV_OPT B2save_1/time_dep/*3d.ps &'
+alias GT='grep "iteration number" b2.log'
+alias GVB='ghostview $GV_OPT part_blnc.ps &'
+alias GVP='if [ -s traces_all/trcp.ps ]; then
+              ghostview $GV_OPT -geometry +700+25 traces_all/trcp.ps &
+              true
+            else
+              ghostview $GV_OPT -geometry +700+25 trc.ps &
+            fi'
+#alias GVP='if [ -s traces_all/trcp.ps ]; then
+#              ghostview $GV_OPT -geometry +700+45 traces_all/trcp.ps &
+#              true
+#            else
+#              ghostview $GV_OPT -geometry +700+45 trc.ps &
+#            fi'
+#alias GVP='if [ -s traces_all/trcp.ps ]; then
+#              ghostview $GV_OPT -geometry +188+25 traces_all/trcp.ps &
+#              true
+#            else
+#              ghostview $GV_OPT -geometry +188+25 trc.ps &
+#            fi'
+alias GVS='ghostview $GV_OPT B2save_1/trc.ps &'
+alias GVT='ghostview $GV_OPT -geometry +700+650 trc.ps &'
+#alias GVT='ghostview $GV_OPT -geometry +188+237 trc.ps &'
+alias GV4='ghostview $GV_OPT trc4.ps &'
+alias GG='GVT GVP'
+alias G2='ghostview  -landscape -bg white -magstep 2 -geometry +500+500 ers-dps.ps &'
+
+alias GT='grep "iteration number" b2.log | grep " 40 "'
+alias GT1='grep "iteration number" b2.log | grep " 40 " | grep -e -00\*[01]'
+alias GT2='grep "iteration number" b2.log | grep " 40 " | grep -e -00\*[012]'
+alias GT4='grep "iteration number" b2.log | grep " 40 " | grep -e -00\*[0-4]'
+alias GT6='grep "iteration number" b2.log | grep " 40 " | grep -e -00\*[0-6]'
+
+alias TWC='time cat B2SDIAG B2SXDR fort.15 fort.30 fort.31 fort.44 *.dat last_2dir/* peak_power tracing/* trc* | wc -c'
+
+alias RE='[ -r diag2.eir ] && nice -10 time eirobj diag2.eir >eir.log&'
+alias NE='[ -r EXTRA.ers ] && nc EXTRA.ers'
+alias PE='set -- C*.ers; [ $# = 1 ] && {
+    C=$1; [ -s "$C" ] && {
+      nc $C; [ -d ,Iterations ] || mkdir -p ,Iterations/00
+      [ -d ,Iterations ] && {
+        N=XXX
+        D=${PWD##*/}
+        [ "${D%-C}" = "$D" ] && {
+          [ -r VarID ] && {
+            set -- `cat VarID | tr \#_ "  "`
+            [ -n "$2" ] && N=$2
+          }
+        } || {
+          N=${D%-C}
+        }
+        i=`ls ,Iterations | tail -1`
+        i=${i#0}
+        [ $i -ge 0 ] && let i=i+1
+        plot_set -t $N-$i er-dp.cms && {
+          ghostview  -landscape -bg white -magstep 2 -geometry +500+500 ers-dps.ps &
+        }
+      }
+      true
+    }
+  } || {
+    echo "No unique erosion data file: C*.ers"
+  }'
+[ "$B2E_SLAVE" = yes ] && {
+  alias TR='[ -f B2SXDR ] && (
+    rm -r tmp 2>/dev/null; saveb2 -a tmp; cd tmp && { 
+      rm -r trc4.ps param.dg traces_all 2>/dev/null; set -- ../*.tgz; [ "$#" = 1 ] && [ -f "$1" ] && {
+        tar czf "$1" *; true
+      } || {
+        echo "Enter the filename for tgz or Ctrl-c to quit"
+        read u; u=${u%.tgz}.tgz; u=${u#../}; [ "${u#/}" = "$u" ] && u="../$u"
+        echo "$u"; pwd; tar czf "$u" *
+      }
+    }
+  )'
+  alias TE='(set -- *.ers; [ -f "$1" ] && {
+      c=${PWD##*/}; c=${c%/}
+      rm -r ,Iterations/* 2>/dev/null; saveb2 -e; cd ,Iterations/00 && {
+        rm b2.parameters diag2.eir fort.31 gli.eps gm_test.dat fort.44
+        tar czf "../../$c.tgz" *; true
+      }
+    }
+  )'   
+  true
+} || {
+  [ -s ~/.pacherpc ] && p=`cat ~/.pacherpc` || p=207.162.24.163
+  alias GHR="(d=\${PWD%/}; d=\${d##*/}; 
+      set -- *.tgz; [ \"\$#\" = 1 ] && [ -f \"\$1\" ] && {
+      time sscp pacher@$p:/arch/B2E/solps4.0/src/B2Eirene/\$d/\$1 .
+      true
+    } || {
+      echo \"Enter the filename for tgz or Ctrl-c to quit\"
+      read u; u=\"\${u%.tgz}.tgz\"
+      time sscp pacher@$p:/arch/B2E/solps4.0/src/B2Eirene/\$d/\$u .
+    }
+  )" 
+  alias PHR="d=\${PWD%/}; d=\${d##*/}; echo \$d 
+    [ \"\$d\" = \"\${PWD#\$SOLPSTOP/src/B2Eirene/}\" ] && {
+    [ -s last_2d_vfile_case ] || touch last_2d_vfile_case
+    time sscp b2.parameters input.eir param.dg RES last_2d_vfile_case pacher@$p:/arch/B2E/solps4.0/src/B2Eirene/\$d
+    true
+  } || {
+    echo \"This alias only works in a first-level subdirectory of \$SOLPSTOP/src/B2Eirene\"
+  }"
+  alias GHE="c=\${PWD##*/}; 
+    time sscp pacher@$p:/arch/B2E/solps4.0/src/B2Eirene/\$c/\$c.tgz ."
+  alias PHE="sscp diag2.eir pacher@$p:/arch/B2E/solps4.0/src/B2Eirene/\${PWD##*/}"
+  alias PHF="c=\${PWD##*/}; rm -r tmp 2>/dev/null; mkdir tmp && {
+    cp diag2.eir fort.3[01] VarID Label tmp; (cd tmp && tar czf "../\$c.tgz" *)
+    time sscp "\$c.tgz" pacher@$p:/arch/B2E/solps4.0/src/B2Eirene/\$c
+    rm -r tmp
+  }"
+  alias PHS="d=\${PWD%/}; d=\${d##*/}; echo \$d
+    c=; set -- *.tgz; [ \"\$#\" = 1 ] && [ -f \"\$1\" ] && c=\${1%.tgz}
+    u=; [ -n \"\$c\" ] && u=\"(\$c)\"
+    echo \"Enter the filename for tgz \$u or Ctrl-c to quit\"
+    read u
+    [ -n \"\$u\" ] && c=\$u
+    rm -r tmp 2>/dev/null; mkdir tmp && {
+      cp B2SXDR Label RES VarID B2E.version b2.parameters box.b2p flx_blnc.log fort.13 fort.15 fort.3[01] input.eir mesh.extra param.dg last_2d_vfile_case tmp
+      . triang.conf
+      unset u l
+      for x in \$TRIAFTN; do {
+        [ -s fort.\$x ] && l=\"\$l fort.\$x\" || u=n
+      }; done
+      [ -z \"\$u\" ] && tar cf - \$l | (cd tmp && tar xf -)
+      (cd tmp && tar czf \"../\$c.tgz\" *)
+      time sscp \"\$c.tgz\" pacher@$p:/arch/B2E/solps4.0/src/B2Eirene/\$d
+      rm -r tmp
+    }"
+  alias PHZ="(set -- *.tgz; [ \"\$#\" = 1 ] && [ -f \"\$1\" ] && {
+      s=\${SOLPSTOP%/*}; dd=\${PWD%/}; d=\${dd#\$s/}; [ \"\$dd\" = \"\$d\" ] || dd=/arch/B2E/\$d
+      echo \"\$d ==> pacher@$p:\$dd\"
+      time sscp \"\$1\" pacher@$p:\$dd
+      true
+    } || {
+      echo \"No unique *.tgz file\"
+    }
+  )"
+}
+
+alias XR='(set -- *.tgz; [ "$#" = 1 ] && [ -f "$1" ] && {
+    ll "$1"; tar xzf "$1" && { rm "$1"; touch "$1"; }
+  }
+)'
+alias sbinm='cd $em/bin; ST'
+alias sdtsm='cd $em/data/sum_plot; ST'
+alias sbll='cd ${SOLPSTOP}/src/DivGeo/balloon; ST'
+alias sbea1='cd $SOLPSTOP/src/B2Eirene/aug_1; ST'
+alias sbea2='cd $SOLPSTOP/src/B2Eirene/aug_2; ST'
+alias sbea3='cd $SOLPSTOP/src/B2Eirene/aug_3; ST'
+alias sbea4='cd $SOLPSTOP/src/B2Eirene/aug_4; ST'
+alias sbea5='cd $SOLPSTOP/src/B2Eirene/aug_5; ST'
+alias sbea6='cd $SOLPSTOP/src/B2Eirene/aug_6; ST'
+alias sbea7='cd $SOLPSTOP/src/B2Eirene/aug_7; ST'
+alias sbea8='cd $SOLPSTOP/src/B2Eirene/aug_8; ST'
+alias sbea9='cd $SOLPSTOP/src/B2Eirene/aug_9; ST'
+alias sbeb1='cd $SOLPSTOP/src/B2Eirene/box_1; ST'
+alias sbeb2='cd $SOLPSTOP/src/B2Eirene/box_2; ST'
+alias sbeb3='cd $SOLPSTOP/src/B2Eirene/box_3; ST'
+alias sbeb4='cd $SOLPSTOP/src/B2Eirene/box_4; ST'
+alias sbeb5='cd $SOLPSTOP/src/B2Eirene/box_5; ST'
+alias sbeb6='cd $SOLPSTOP/src/B2Eirene/box_6; ST'
+alias sbeb7='cd $SOLPSTOP/src/B2Eirene/box_7; ST'
+alias sbeb8='cd $SOLPSTOP/src/B2Eirene/box_8; ST'
+alias sbeb9='cd $SOLPSTOP/src/B2Eirene/box_9; ST'
+alias sbec1='cd $SOLPSTOP/src/B2Eirene/cmod_1; ST'
+alias sbec2='cd $SOLPSTOP/src/B2Eirene/cmod_2; ST'
+alias sbec3='cd $SOLPSTOP/src/B2Eirene/cmod_3; ST'
+alias sbec4='cd $SOLPSTOP/src/B2Eirene/cmod_4; ST'
+alias sbec5='cd $SOLPSTOP/src/B2Eirene/cmod_5; ST'
+alias sbec6='cd $SOLPSTOP/src/B2Eirene/cmod_6; ST'
+alias sbec7='cd $SOLPSTOP/src/B2Eirene/cmod_7; ST'
+alias sbec8='cd $SOLPSTOP/src/B2Eirene/cmod_8; ST'
+alias sbec9='cd $SOLPSTOP/src/B2Eirene/cmod_9; ST'
+alias sbed1='cd $SOLPSTOP/src/B2Eirene/d3d_1; ST'
+alias sbed2='cd $SOLPSTOP/src/B2Eirene/d3d_2; ST'
+alias sbed3='cd $SOLPSTOP/src/B2Eirene/d3d_3; ST'
+alias sbed4='cd $SOLPSTOP/src/B2Eirene/d3d_4; ST'
+alias sbed5='cd $SOLPSTOP/src/B2Eirene/d3d_5; ST'
+alias sbed6='cd $SOLPSTOP/src/B2Eirene/d3d_6; ST'
+alias sbed7='cd $SOLPSTOP/src/B2Eirene/d3d_7; ST'
+alias sbed8='cd $SOLPSTOP/src/B2Eirene/d3d_8; ST'
+alias sbed9='cd $SOLPSTOP/src/B2Eirene/d3d_9; ST'
+alias sbeh1='cd $SOLPSTOP/src/B2Eirene/hop_1; ST'
+alias sbeh2='cd $SOLPSTOP/src/B2Eirene/hop_2; ST'
+alias sbeh3='cd $SOLPSTOP/src/B2Eirene/hop_3; ST'
+alias sbeh4='cd $SOLPSTOP/src/B2Eirene/hop_4; ST'
+alias sbeh5='cd $SOLPSTOP/src/B2Eirene/hop_5; ST'
+alias sbeh6='cd $SOLPSTOP/src/B2Eirene/hop_6; ST'
+alias sbeh7='cd $SOLPSTOP/src/B2Eirene/hop_7; ST'
+alias sbeh8='cd $SOLPSTOP/src/B2Eirene/hop_8; ST'
+alias sbeh9='cd $SOLPSTOP/src/B2Eirene/hop_9; ST'
+alias sbej1='cd $SOLPSTOP/src/B2Eirene/jet_1; ST'
+alias sbej2='cd $SOLPSTOP/src/B2Eirene/jet_2; ST'
+alias sbej3='cd $SOLPSTOP/src/B2Eirene/jet_3; ST'
+alias sbej4='cd $SOLPSTOP/src/B2Eirene/jet_4; ST'
+alias sbej5='cd $SOLPSTOP/src/B2Eirene/jet_5; ST'
+alias sbej6='cd $SOLPSTOP/src/B2Eirene/jet_6; ST'
+alias sbej7='cd $SOLPSTOP/src/B2Eirene/jet_7; ST'
+alias sbej8='cd $SOLPSTOP/src/B2Eirene/jet_8; ST'
+alias sbej9='cd $SOLPSTOP/src/B2Eirene/jet_9; ST'
+alias sbet1='cd $SOLPSTOP/src/B2Eirene/tt_1; ST'
+alias sbet2='cd $SOLPSTOP/src/B2Eirene/tt_2; ST'
+alias sbet3='cd $SOLPSTOP/src/B2Eirene/tt_3; ST'
+alias sbet4='cd $SOLPSTOP/src/B2Eirene/tt_4; ST'
+alias sbet5='cd $SOLPSTOP/src/B2Eirene/tt_5; ST'
+alias sbet6='cd $SOLPSTOP/src/B2Eirene/tt_6; ST'
+alias sbet7='cd $SOLPSTOP/src/B2Eirene/tt_7; ST'
+alias sbet8='cd $SOLPSTOP/src/B2Eirene/tt_8; ST'
+alias sbet9='cd $SOLPSTOP/src/B2Eirene/tt_9; ST'
+alias sbev1='cd $SOLPSTOP/src/B2Eirene/vt_1; ST'
+alias sbev2='cd $SOLPSTOP/src/B2Eirene/vt_2; ST'
+alias sbev3='cd $SOLPSTOP/src/B2Eirene/vt_3; ST'
+alias sbev4='cd $SOLPSTOP/src/B2Eirene/vt_4; ST'
+alias sbev5='cd $SOLPSTOP/src/B2Eirene/vt_5; ST'
+alias sbev6='cd $SOLPSTOP/src/B2Eirene/vt_6; ST'
+alias sbev7='cd $SOLPSTOP/src/B2Eirene/vt_7; ST'
+alias sbev8='cd $SOLPSTOP/src/B2Eirene/vt_8; ST'
+alias sbev9='cd $SOLPSTOP/src/B2Eirene/vt_9; ST'
+alias sta='cd traces_all'
+
+# Temporary aliases
+
+#alias G734='GV /b2-ext/B2E/solps4.0/data/cases/iterm/734/traces_all/trcp.ps &'
+
+[ -s $SOLPSTOP/alias.b2e.loc ] && . $SOLPSTOP/alias.b2e.loc

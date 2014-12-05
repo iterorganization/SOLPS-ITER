@@ -1,0 +1,7 @@
+echo setup.ksh.NCARG.linux.Intel_EM
+export NCARG='-L$(NCARG_ROOT)/lib -lncarg -lncarg_gks -lncarg_c -L/usr/X11R6/lib64 -lX11 -lm'
+if [ ! $SOLPS_CPP ] ; then
+  export SOLPS_CPP="-DNCAR4"
+else
+  export SOLPS_CPP="$SOLPS_CPP -DNCAR4"
+fi

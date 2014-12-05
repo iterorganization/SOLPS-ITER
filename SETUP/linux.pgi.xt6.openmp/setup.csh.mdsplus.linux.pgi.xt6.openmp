@@ -1,0 +1,12 @@
+echo setup.csh.mdsplus.linux.pgi.xt6.openmp
+if ($?MDSPLUS_DIR) then
+  if ($?SOLPS_CPP) then
+    setenv SOLPS_CPP "$SOLPS_CPP -DMDSPLUS"
+  else
+    setenv SOLPS_CPP "-DMDSPLUS"
+  endif
+  setenv SOLPS_MDSPLUS_LIB "-L${MDSPLUS_DIR}/lib64 -lMdsLib_client"
+  echo "MDSPLUS activated"
+else
+  echo "No MDSPLUS_DIR set --- MDSPLUS not activated"
+endif

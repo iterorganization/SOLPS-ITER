@@ -1,0 +1,2 @@
+echo setup.csh.OBJECTCODE
+setenv OBJECTCODE linux.pgi.xt6.openmp

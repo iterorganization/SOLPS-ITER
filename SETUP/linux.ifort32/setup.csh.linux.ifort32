@@ -1,0 +1,1 @@
+setenv NCARG '-L$(NCARG_ROOT)/lib -lncarg -lncarg_gks -lncarg_c -L/usr/X11R6/lib -lX11 -lm'

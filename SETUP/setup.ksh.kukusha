@@ -1,0 +1,177 @@
+#  VERSION : 06.02.2007 17:42
+echo setup.ksh.kukusha
+umask 002
+export LOG_B2E_ALL=y
+export COLOR_PRINTER=
+export DEVICE=iterm
+export NREG=4
+export SOLPS_FLUIDS="D0 D+ He0 He+ He+2 C0 C+ C+2 C+3 C+4 C+5 C+6"
+export USE_EIRENE="-DUSE_EIRENE"
+export Model_Class=$DEVICE
+export HOMEMASTER=~kukusha
+#export ARCHDIR=$HOMEMASTER/b2arch
+export ARCHDIR=/b2-ext/b2arch
+export dpc_pub=/afs/rzg.mpg.de/u/dpc/archive/PUBLIC/FOR_ANK
+
+#export GENERICHOME=`(cd ..; pwd)`
+export GENERICHOME=`dirname $PWD`
+
+export PLOT_SET_PATH=":..:../..:$SOLPSTOP/data/plot_set"
+
+[ -z "$OLDPATH" ] && export OLDPATH=$PATH
+[ -z "$OLDLPATH" ] && export OLDLPATH=$LD_LIBRARY_PATH || LD_LIBRARY_PATH=$OLDLPATH
+[ -z "$OLDMPATH" ] && export OLDMPATH=$MANPATH || MANPATH=$OLDMPATH
+[ -z "$OLDFPATH" ] && export OLDFPATH=$INTEL_LICENSE_FILE || INTEL_LICENSE_FILE=$OLDFPATH
+
+[ -z "$error" ] && {
+  export CARRE_STOREDIR="$SOLPSTOP/src/Carre/Carre_Input"
+
+  [ -z "$GV_OPT" ] && export GV_OPT='-landscape -magstep -1 -geometry +10+10 -bg white'
+
+  dir=:${SOLPSTOP}/bin/${OBJECTCODE}:${SOLPSTOP}/bin/common
+  for d in ${SonnetTopDirectory}/bin/${OBJECTCODE} $SYS; do {
+    [ -d $d ] && dir="$dir:$d"
+  }; done
+
+#  d=$NCARG_ROOT/bin
+#  [ -d $d ] && dirn=":$d" || dirn=
+
+  [ -z "$PS_P" ] && {
+    for d in /afs/ipp/@sys/bin $NCARG_ROOT/bin $HOMEMASTER/bin/$WSTYPE; do {
+      [ -d $d ] && dir="$dir:$d"
+    }; done
+    export PATH=${dir}:${OLDPATH}
+  } || {
+    [ -z "$SYS" ] && {
+      for d in $NCARG_ROOT/bin $HOMEMASTER/bin/$WSTYPE ; do {
+        [ -d $d ] && dir="$dir:$d"
+      }; done
+      export PATH=${dir}:${OLDPATH}
+    } || {
+      for d in $HOMEMASTER/bin/$WSTYPE ; do {
+        [ -d $d ] && dir="$dir:$d"
+      }; done
+      dir=${dir}:${OLDPATH}
+      for d in $NCARG_ROOT/bin ${SYS%/}; do {
+        [ -d $d ] && dir="$dir:$d"
+      }; done
+      export PATH=${dir}
+    }
+  }
+
+  unset LIBPATH
+  ulimit -s unlimited
+
+  alias l='/bin/ls -F'
+  alias ll='/bin/ls -l'
+  #alias nc='nc -noask'
+  alias pp > /dev/null 2>&1 || alias pp='a2ps -2 --highlight-level=none -Plp'
+  alias Q='touch .quit'
+  alias QNT='touch .NO_TRC .quit'
+  alias RWT='run -i -t'
+  alias RNW='nohup run -n - 3>&2 &'
+  alias W='touch .write'
+  alias S='touch /tmp/SUSPEND'
+  alias SN='touch .NO_TRC /tmp/SUSPEND'
+  alias ST='which setxtitle >/dev/null 2>&1 && ksh `which setxtitle` -o -t $NODE\($TTY\):$LOGNAME:$PWD'
+  alias F='rm /tmp/SUSPEND'
+  alias SU='cat /local/Usage'
+  alias DF='diff -i -w'
+  alias PA='ps -f -u loartea'
+  alias PH='ps -f -u pacherh'
+  alias VF='VarID_Find'
+  alias SSP='touch /tmp/suspend'
+  alias SWI='case ${PWD%/*} in
+      ( */B2Eirene ) case ${PWD##*/} in
+          ( std | base ) ;;
+          ( * ) [ -d !${OBJECTCODE}.STD ] && {
+              rm ${OBJECTCODE} && mv !${OBJECTCODE}.STD ${OBJECTCODE}; true
+            } || {
+              mv ${OBJECTCODE} !${OBJECTCODE}.STD && ln -s ../base/${OBJECTCODE} .
+            };;
+          esac;;
+      ( * ) print -u2 -- "Not a proper place - must be in a B2Eirene working directory";;
+      esac'
+  alias GP='gnuplot gnuplot.cmd'
+  alias GV='ghostview $GV_OPT'
+  alias I='idt gmeta &'
+  alias LT='[ -s time_dep/traces ] && {
+              echo "traces"
+              set -- `/usr/bin/grep -v \# time_dep/traces | /usr/bin/head -1`
+              echo $1
+              set -- `/usr/bin/tail -1 time_dep/traces`
+              echo $1
+              set --
+            }'
+  alias LTA='/usr/bin/tail -1l traces_all/traces'
+  alias TC='nice -8 nohup traces_cat > traces_cat.log 2>&1  &
+            plot_trg &'
+  alias TD='time_dep/document -d data > td.log &'
+  alias TF='grep "iter,timefactor" b2.log | grep -i "E-" | tail -20l'
+  alias TRC='/bin/rm -f .NO_TRC trc.cmd 2>/dev/null; nice -8 nohup trc &'
+  alias TRCA='cd traces_all && nice -8 nohup trcp &'
+  alias VL='write_time_mark'
+  alias TL='for f in tracing/[biu]*.trc; do 
+      	      [ -s $f ] && echo "`wc -l $f`\t`tail -1 $f | cut -f1`"
+      	    done'
+  alias TT='for ff in user.trc.*; do
+              echo "${ff#user.trc.}  `/usr/bin/tail -1 $ff | /usr/bin/cut -f1`" 
+            done'
+
+  alias afsa='cd /afs/ipp/m/kukusha/b2arch && cd $DEVICE; ST'
+  alias sdpca='cd ${dpc_pub}; ST'
+  alias s0='cd $GENERICHOME; ST'
+  alias samd='cd ${SOLPSTOP}/src/DivGeo/amds; ST'
+  alias sb2='cd ${SOLPSTOP}/src/b2; ST'
+  alias sb2i='cd ${SOLPSTOP}/src/b2/current/modules; ST'
+  alias sb2p='cd ${SOLPSTOP}/src/b2/current/b2plot; ST'
+  alias sb2s='cd ${SOLPSTOP}/src/b2/current; ST'
+  alias sba='cd $ARCHDIR && cd $DEVICE; ST'
+  alias sbb='cd ${SOLPSTOP}/base/b2; ST'
+  alias sbe='cd $SOLPSTOP/src/b2; ST'
+  alias sbeb='cd $SOLPSTOP/base/b2; ST'
+  alias sbes='cd $SOLPSTOP/src/b2/std; ST'
+  alias sbin='cd ${SOLPSTOP}/bin/${OBJECTCODE}; ST'
+  alias sbinc='cd ${SOLPSTOP}/bin/common; ST'
+  alias scrr='cd $SOLPSTOP/src/Carre; ST'
+  alias sdgb='cd ${SOLPSTOP}/src/DivGeo/dg; ST'
+  alias sdt='cd ${SOLPSTOP}/data; ST'
+  alias sdta='cd ${SOLPSTOP}/data/AMDS; ST'
+  alias sdtc='cd ${SOLPSTOP}/data/cases && cd $DEVICE; ST'
+  alias sdtp='cd ${SOLPSTOP}/data/plot_set; ST'
+  alias sdts='cd ${SOLPSTOP}/data/Summary_plots; ST'
+  alias sei='cd ${SOLPSTOP}/src/Eirene; ST'
+  alias seic='cd ${SOLPSTOP}/src/Eirene/current/common; ST'
+  alias seis='cd ${SOLPSTOP}/src/Eirene/current; ST'
+  alias sfcr='cd ${SOLPSTOP}/src/DivGeo/fcrr; ST'
+  alias sinc='cd $SOLPSTOP/include; ST'
+  alias slib='cd ${SOLPSTOP}/lib/${OBJECTCODE}; ST'
+  alias srld='cd $GENERICHOME/rdload; ST'
+  alias ssd='cd $SonnetTopDirectory/device; ST'
+  alias ssl='cd $SonnetTopDirectory/lib/$OBJECTCODE; ST'
+  alias sst='cd ${SOLPSTOP}; ST'
+  alias ssw='cd $SonnetTopDirectory/sonnet; ST'
+  alias str='cd ${SOLPSTOP}/data/TRIANG/$DEVICE; ST'
+  alias strs='cd ${SOLPSTOP}/src/Triang; ST'
+  alias sui='cd $SOLPSTOP/src/DivGeo/uinp; ST'
+
+  # alias ssi='cd $SOLPSTOP/src/Sonnet/device/$Model_Class; ST'
+  # alias ssn='cd $SOLPSTOP/src/Sonnet/input/ascii/$Model_Class; ST'
+  # alias ssp='cd $SOLPSTOP/src/Sonnet/output/PS/$Model_Class; ST'
+  # alias ssx='cd $SOLPSTOP/src/Sonnet/output/XDR/$Model_Class; ST'
+  # alias ssa='cd $SOLPSTOP/src/Sonnet/output/ascii/$Model_Class; ST'
+
+  alias sdg='cd `chdsnn $SOLPSTOP/src/DivGeo/dg/class 3>&1 1>&2`; ST'
+  alias ssi='cd `chdsnn $SOLPSTOP/src/Sonnet/device 3>&1 1>&2`; ST'
+  alias ssn='cd `chdsnn $SOLPSTOP/src/Sonnet/input/ascii 3>&1 1>&2`; ST'
+  alias ssp='cd `chdsnn $SOLPSTOP/src/Sonnet/output/PS 3>&1 1>&2`; ST'
+  alias ssx='cd `chdsnn $SOLPSTOP/src/Sonnet/output/XDR 3>&1 1>&2`; ST'
+  alias ssa='cd `chdsnn $SOLPSTOP/src/Sonnet/output/ascii 3>&1 1>&2`; ST'
+
+  # set the local aliases, if specified
+
+  [ -r alias.b2e ] && . alias.b2e
+  [ -r alias.b2e.local ] && . alias.b2e.local
+  export Model_Class=$DEVICE
+  [ -s "$FORTRAN_SETUP" ] && . $FORTRAN_SETUP $FORTRAN_SETUP_PARM
+}

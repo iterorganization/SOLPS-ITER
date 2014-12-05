@@ -1,0 +1,4 @@
+echo setup.csh.NAG.HPUX
+if (-e /usr/local/src/nagfl16df/libnag.a) then
+  setenv NAG "-L$/usr/local/src/nagfl16df -lnag"
+endif

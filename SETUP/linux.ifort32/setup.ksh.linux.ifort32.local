@@ -1,0 +1,4 @@
+echo setup.ksh.linux.ifort32.local
+export USE_EIRENE=-DUSE_EIRENE
+export NREG=4
+

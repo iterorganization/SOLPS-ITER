@@ -1,0 +1,3 @@
+echo setup.ksh.OBJECTCODE
+export OBJECTCODE=linux.pgi.xt6.openmp
+
