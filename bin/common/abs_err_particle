@@ -1,0 +1,20 @@
+#! /bin/csh -f
+if ($?LAST10) then
+  set FILE=b2.log.last10
+else
+  set FILE=b2.log
+endif
+if (-x $SOLPSTOP/bin/$OBJECTCODE/zcat) then
+    set ZCAT=$SOLPSTOP/bin/$OBJECTCODE/zcat
+else if (-x $SOLPSMASTER/@sys/bin/zcat) then
+    set ZCAT=$SOLPSMASTER/@sys/bin/zcat
+else
+    set ZCAT="gzip --decompress --force --stdout"
+endif
+$ZCAT -f $FILE | \
+  grep -A1 BALANI,BALANE,BALANN | egrep '[0-9]' | \
+  nl | \
+  sed '1,2d' | \
+  awk '{print $1" "$4/1.602176565e-19}' | \
+  xyplot 'BALANN' 'iteration number' '(s^-1)' $PWD
+

@@ -1,0 +1,22 @@
+eval '(exit $?0)' && eval 'exec tcsh $0 ${1+"$@"}' && eval 'exec tcsh $0 $argv:q'
+###! /bin/tcsh -f
+
+if($1 == "") then
+  set count=20
+else
+  set count=$1
+endif
+if (-x $SOLPSTOP/bin/$OBJECTCODE/zcat) then
+    set ZCAT=$SOLPSTOP/bin/$OBJECTCODE/zcat
+else if (-x $SOLPSMASTER/@sys/bin/zcat) then
+    set ZCAT=$SOLPSMASTER/@sys/bin/zcat
+else
+    set ZCAT="gzip --decompress --force --stdout"
+endif
+$ZCAT -f fort.37 | \
+  awk 'BEGIN{lineno=-100}\
+       /FLUXES TO TARGET NO/{istr=$5;lineno=NR}\
+       NR==lineno+1{fluxp[istr]=$1}\
+       /electric field terms/{for (i=1;i<='$count';i++) {printf "%e ",fluxp[i]};print ""}' | \
+  nl | \
+  plot xyplot"$count" `count 1 $count` "iteration number" "fluxp" $PWD

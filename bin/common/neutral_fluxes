@@ -1,0 +1,42 @@
+#! /bin/csh -f
+if ($?LAST10) then
+  set FILE=b2.log.last10
+else
+  set FILE=b2.log
+endif
+if (-x $SOLPSTOP/bin/$OBJECTCODE/zcat) then
+    set ZCAT=$SOLPSTOP/bin/$OBJECTCODE/zcat
+else if (-x $SOLPSMASTER/@sys/bin/zcat) then
+    set ZCAT=$SOLPSMASTER/@sys/bin/zcat
+else
+    set ZCAT="gzip --decompress --force --stdout"
+endif
+$ZCAT -f $FILE | \
+  awk 'BEGIN{time=0}\
+       $1=="ITER"&&$3=="TIME"{time=$4;for (i=0;i<=10;++i) {dflux[i]=0;d2flux[i]=0} }\
+       /THIS IS STRATUM NUMBER ISTRA=/{istra=$6}\
+       /THIS IS THE SUM OVER THE STRATA/{istra=0}\
+       /NO FLUXES INCIDENT ON THIS SURFACE/{dflux[istra]=0;d2flux[istra]=0}\
+       $1=="D"{dflux[istra]=$2}\
+       $1=="D2"{d2flux[istra]=$2}\
+       /TIMESTEP COMPLETED/&&time!=0{printf "%s ",time; for (i=0;i<=10;++i) {printf "%s %s ",dflux[i],d2flux[i]}; printf "\n"}'\
+   >! neutral_fluxes.data &
+
+if ($?LAST10) then
+  set FILE=b2.log.last10
+else
+  set FILE=b2.log
+endif
+if (-x $SOLPSTOP/bin/$OBJECTCODE/zcat) then
+    set ZCAT=$SOLPSTOP/bin/$OBJECTCODE/zcat
+else if (-x $SOLPSMASTER/@sys/bin/zcat) then
+    set ZCAT=$SOLPSMASTER/@sys/bin/zcat
+else
+    set ZCAT="gzip --decompress --force --stdout"
+endif
+$ZCAT -f $FILE | \
+  egrep -A80 'ITER.*TIME'\|'THIS IS THE SUM OVER THE STRATA' | \
+  egrep -A15 'ITER.*TIME'\|'test surface' | \
+  awk 'BEGIN{time=0}/TIME/{time=$4}$1=="D"{dflux=$2}$1=="D2"&&time!=0{print time,dflux,$2}' | \
+  xyplot2 D D2
+

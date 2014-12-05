@@ -1,0 +1,159 @@
+#! /bin/tcsh -f
+set tskip=1000
+if ($1 != "") set tskip=$1
+set nx=`grep -i XYMAP b2.wall_save.parameters | tr '(),=' '    ' | awk '{print $2}' | sort -n | tail -1`
+set ny=`grep -i XYMAP b2.wall_save.parameters | tr '(),=' '    ' | awk '{print $3}' | sort -n | tail -1`
+set l1=`grep -i XYMAP b2.wall_save.parameters | tr '(),=' '    ' | awk '$2==-1{print $4}' | head -1`
+set l2=`grep -i XYMAP b2.wall_save.parameters | tr '(),=' '    ' | awk '$2==-1{print $4}' | tail -1`
+set r1=`grep -i XYMAP b2.wall_save.parameters | tr '(),=' '    ' | awk '$2=='$nx'{print $4}' | head -1`
+set r2=`grep -i XYMAP b2.wall_save.parameters | tr '(),=' '    ' | awk '$2=='$nx'{print $4}' | tail -1`
+set t1=`grep -i XYMAP b2.wall_save.parameters | tr '(),=' '    ' | awk '$3=='$ny'{print $4}' | head -1`
+set t2=`grep -i XYMAP b2.wall_save.parameters | tr '(),=' '    ' | awk '$3=='$ny'{print $4}' | tail -1`
+set b1=`grep -i XYMAP b2.wall_save.parameters | tr '(),=' '    ' | awk '$3==-1{print $4}' | head -1`
+set b2=`grep -i XYMAP b2.wall_save.parameters | tr '(),=' '    ' | awk '$3==-1{print $4}' | tail -1`
+
+set b2wall="b2wall.nc"
+if (-e b2mn.exe.dir/b2wall.nc) set b2wall="b2mn.exe.dir/b2wall.nc"
+set ntrack=`nc2text ${b2wall} "track_species" | wc | awk '{print $1}'`
+set sp=`grep -i TRACK_SPECIES b2.wall_save.parameters | tr "'()=," "     " | awk '{print $ntrack}' | awk.transpose`
+
+nc2text -n999999 ${b2wall} "plate_time(1,::$tskip)" >! tmp.t.tmp
+set nt=`cut -d' ' -f 1 < tmp.t.tmp | awk.derivative | wc -l`
+set np=`echo $b1 $b2 | awk '{print $1-$2+1}'`
+
+echo nx=$nx ny=$ny l1=$l1 l2=$l2 r1=$r1 r2=$r2 t1=$t1 t2=$t2 b1=$b1 b2=$b2 nt=$nt np=$np sp=$sp ntrack=$ntrack tskip=$tskip
+
+foreach i (`count 1 $ntrack`)
+  set sp[$i]=`grep -i TRACK_SPECIES b2.wall_save.parameters | tr "'()=," "     " | awk '{print $3}' | head -$i | tail -1`
+  
+  nc2text -n999999 ${b2wall} "monolayer_deposition($t1 : $t2,$i,:: $tskip)" | egrep -v '^$' >! tmp.f.tmp
+  paste tmp.t.tmp tmp.f.tmp | awk.derivative >! tmp.fd.tmp
+  set toplabel="MCW DEPOSITION monolayers/second $sp[$i] ($i)"
+  echo $toplabel
+  set FILE='mcw_deposition_'$i'_rate'
+  echo '$ DATA=CONTOUR' >! $FILE.mtv
+  echo "% nx=$nx xgrid=t xlabel='area'" >> $FILE.mtv
+  nc2text -n1 ${b2wall} "plate_area($t1 : $t2)" | awk 'NR==1{A=-$1/2;L=0}{A+=L+$1/2;L=$1/2;print A}' >> $FILE.mtv
+  echo "% ny=$nt ygrid=t ylabel='time'" >> $FILE.mtv
+  cut -d' ' -f 1 < tmp.fd.tmp >> $FILE.mtv
+  echo "% contfill=t equalscale=f nsteps=20 toplabel='$toplabel'" >> $FILE.mtv
+  cut -d' ' -f 2- < tmp.fd.tmp >> $FILE.mtv
+  echo '$ END' >> $FILE.mtv
+  echo n | plotmtv -colorps -noxplot -o $FILE.ps $FILE.mtv
+  rm tmp.f.tmp tmp.fd.tmp
+
+  nc2text -n999999 ${b2wall} "monolayer_erosion($t1 : $t2,$i,:: $tskip)" | egrep -v '^$' >! tmp.f.tmp
+  paste tmp.t.tmp tmp.f.tmp | awk.derivative >! tmp.fd.tmp
+  set toplabel="MCW EROSION monolayers/second $sp[$i] ($i)"
+  echo $toplabel
+  set FILE='mcw_erosion_'$i'_rate'
+  echo '$ DATA=CONTOUR' >! $FILE.mtv
+  echo "% nx=$nx xgrid=t xlabel='area'" >> $FILE.mtv
+  nc2text -n1 ${b2wall} "plate_area($t1 : $t2)" | awk 'NR==1{A=-$1/2;L=0}{A+=L+$1/2;L=$1/2;print A}' >> $FILE.mtv
+  echo "% ny=$nt ygrid=t ylabel='time'" >> $FILE.mtv
+  cut -d' ' -f 1 < tmp.fd.tmp >> $FILE.mtv
+  echo "% contfill=t equalscale=f nsteps=20 toplabel='$toplabel'" >> $FILE.mtv
+  cut -d' ' -f 2- < tmp.fd.tmp >> $FILE.mtv
+  echo '$ END' >> $FILE.mtv
+  echo n | plotmtv -colorps -noxplot -o $FILE.ps $FILE.mtv
+  rm tmp.f.tmp tmp.fd.tmp
+
+  nc2text -n999999 ${b2wall} "monolayer_deposition($r1 : $r2 : -1,$i,:: $tskip)" | egrep -v '^$' >! tmp.f.tmp
+  paste tmp.t.tmp tmp.f.tmp | awk.derivative >! tmp.fd.tmp
+  set toplabel="OUTER DEPOSITION monolayers/second $sp[$i] ($i)"
+  echo $toplabel
+  set FILE='outer_deposition_'$i'_rate'
+  echo '$ DATA=CONTOUR' >! $FILE.mtv
+  echo "% nx=$ny xgrid=t xlabel='area'" >> $FILE.mtv
+  nc2text -n1 ${b2wall} "plate_area($r1 : $r2 : -1)" | awk 'NR==1{A=-$1/2;L=0}{A+=L+$1/2;L=$1/2;print A}' >> $FILE.mtv
+  echo "% ny=$nt ygrid=t ylabel='time'" >> $FILE.mtv
+  cut -d' ' -f 1 < tmp.fd.tmp >> $FILE.mtv
+  echo "% contfill=t equalscale=f nsteps=20 toplabel='$toplabel'" >> $FILE.mtv
+  cut -d' ' -f 2- < tmp.fd.tmp >> $FILE.mtv
+  echo '$ END' >> $FILE.mtv
+  echo n | plotmtv -colorps -noxplot -o $FILE.ps $FILE.mtv
+  rm tmp.f.tmp tmp.fd.tmp
+
+  nc2text -n999999 ${b2wall} "monolayer_erosion($r1 : $r2 : -1,$i,:: $tskip)" | egrep -v '^$' >! tmp.f.tmp
+  paste tmp.t.tmp tmp.f.tmp | awk.derivative >! tmp.fd.tmp
+  set toplabel="OUTER EROSION monolayers/second $sp[$i] ($i)"
+  echo $toplabel
+  set FILE='outer_erosion_'$i'_rate'
+  echo '$ DATA=CONTOUR' >! $FILE.mtv
+  echo "% nx=$ny xgrid=t xlabel='area'" >> $FILE.mtv
+  nc2text -n1 ${b2wall} "plate_area($r1 : $r2 : -1)" | awk 'NR==1{A=-$1/2;L=0}{A+=L+$1/2;L=$1/2;print A}' >> $FILE.mtv
+  echo "% ny=$nt ygrid=t ylabel='time'" >> $FILE.mtv
+  cut -d' ' -f 1 < tmp.fd.tmp >> $FILE.mtv
+  echo "% contfill=t equalscale=f nsteps=20 toplabel='$toplabel'" >> $FILE.mtv
+  cut -d' ' -f 2- < tmp.fd.tmp >> $FILE.mtv
+  echo '$ END' >> $FILE.mtv
+  echo n | plotmtv -colorps -noxplot -o $FILE.ps $FILE.mtv
+  rm tmp.f.tmp tmp.fd.tmp
+
+  nc2text -n999999 ${b2wall} "monolayer_deposition($l1 : $l2,$i,:: $tskip)" | egrep -v '^$' >! tmp.f.tmp
+  paste tmp.t.tmp tmp.f.tmp | awk.derivative >! tmp.fd.tmp
+  set toplabel="INNER DEPOSITION monolayers/second $sp[$i] ($i)"
+  echo $toplabel
+  set FILE='inner_deposition_'$i'_rate'
+  echo '$ DATA=CONTOUR' >! $FILE.mtv
+  echo "% nx=$ny xgrid=t xlabel='area'" >> $FILE.mtv
+  nc2text -n1 ${b2wall} "plate_area($l1 : $l2)" | awk 'NR==1{A=-$1/2;L=0}{A+=L+$1/2;L=$1/2;print A}' >> $FILE.mtv
+  echo "% ny=$nt ygrid=t ylabel='time'" >> $FILE.mtv
+  cut -d' ' -f 1 < tmp.fd.tmp >> $FILE.mtv
+  echo "% contfill=t equalscale=f nsteps=20 toplabel='$toplabel'" >> $FILE.mtv
+  cut -d' ' -f 2- < tmp.fd.tmp >> $FILE.mtv
+  echo '$ END' >> $FILE.mtv
+  echo n | plotmtv -colorps -noxplot -o $FILE.ps $FILE.mtv
+  rm tmp.f.tmp tmp.fd.tmp
+
+  nc2text -n999999 ${b2wall} "monolayer_erosion($l1 : $l2,$i,:: $tskip)" | egrep -v '^$' >! tmp.f.tmp
+  paste tmp.t.tmp tmp.f.tmp | awk.derivative >! tmp.fd.tmp
+  set toplabel="INNER EROSION monolayers/second $sp[$i] ($i)"
+  echo $toplabel
+  set FILE='inner_erosion_'$i'_rate'
+  echo '$ DATA=CONTOUR' >! $FILE.mtv
+  echo "% nx=$ny xgrid=t xlabel='area'" >> $FILE.mtv
+  nc2text -n1 ${b2wall} "plate_area($l1 : $l2)" | awk 'NR==1{A=-$1/2;L=0}{A+=L+$1/2;L=$1/2;print A}' >> $FILE.mtv
+  echo "% ny=$nt ygrid=t ylabel='time'" >> $FILE.mtv
+  cut -d' ' -f 1 < tmp.fd.tmp >> $FILE.mtv
+  echo "% contfill=t equalscale=f nsteps=20 toplabel='$toplabel'" >> $FILE.mtv
+  cut -d' ' -f 2- < tmp.fd.tmp >> $FILE.mtv
+  echo '$ END' >> $FILE.mtv
+  echo n | plotmtv -colorps -noxplot -o $FILE.ps $FILE.mtv
+  rm tmp.f.tmp tmp.fd.tmp
+
+  nc2text -n999999 ${b2wall} "monolayer_deposition($b1 : $b2 : -1,$i,:: $tskip)" | egrep -v '^$' >! tmp.f.tmp
+  paste tmp.t.tmp tmp.f.tmp | awk.derivative >! tmp.fd.tmp
+  set toplabel="PFR DEPOSITION monolayers/second $sp[$i] ($i)"
+  echo $toplabel
+  set FILE='pfr_deposition_'$i'_rate'
+  echo '$ DATA=CONTOUR' >! $FILE.mtv
+  echo "% nx=$np xgrid=t xlabel='area'" >> $FILE.mtv
+  nc2text -n1 ${b2wall} "plate_area($b1 : $b2 : -1)" | awk 'NR==1{A=-$1/2;L=0}{A+=L+$1/2;L=$1/2;print A}' >> $FILE.mtv
+  echo "% ny=$nt ygrid=t ylabel='time'" >> $FILE.mtv
+  cut -d' ' -f 1 < tmp.fd.tmp >> $FILE.mtv
+  echo "% contfill=t equalscale=f nsteps=20 toplabel='$toplabel'" >> $FILE.mtv
+  cut -d' ' -f 2- < tmp.fd.tmp >> $FILE.mtv
+  echo '$ END' >> $FILE.mtv
+  echo n | plotmtv -colorps -noxplot -o $FILE.ps $FILE.mtv
+  rm tmp.f.tmp tmp.fd.tmp
+
+  nc2text -n999999 ${b2wall} "monolayer_erosion($b1 : $b2 : -1,$i,:: $tskip)" | egrep -v '^$' >! tmp.f.tmp
+  paste tmp.t.tmp tmp.f.tmp | awk.derivative >! tmp.fd.tmp
+  set toplabel="PFR EROSION monolayers/second $sp[$i] ($i)"
+  echo $toplabel
+  set FILE='pfr_erosion_'$i'_rate'
+  echo '$ DATA=CONTOUR' >! $FILE.mtv
+  echo "% nx=$np xgrid=t xlabel='area'" >> $FILE.mtv
+  nc2text -n1 ${b2wall} "plate_area($b1 : $b2 : -1)" | awk 'NR==1{A=-$1/2;L=0}{A+=L+$1/2;L=$1/2;print A}' >> $FILE.mtv
+  echo "% ny=$nt ygrid=t ylabel='time'" >> $FILE.mtv
+  cut -d' ' -f 1 < tmp.fd.tmp >> $FILE.mtv
+  echo "% contfill=t equalscale=f nsteps=20 toplabel='$toplabel'" >> $FILE.mtv
+  cut -d' ' -f 2- < tmp.fd.tmp >> $FILE.mtv
+  echo '$ END' >> $FILE.mtv
+  echo n | plotmtv -colorps -noxplot -o $FILE.ps $FILE.mtv
+  rm tmp.f.tmp tmp.fd.tmp
+
+end
+
+rm tmp.t.tmp

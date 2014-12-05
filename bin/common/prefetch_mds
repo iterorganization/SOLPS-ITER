@@ -1,0 +1,7 @@
+#! /bin/tcsh -f
+if ($1 == '') then
+  echo No directory identified
+  exit
+endif
+
+pagsh -c "echo ${1}*/ARCHIVE/run??/b2fstat* ${1}*/ARCHIVE/run??/run.log* ${1}*/ARCHIVE/run??/b2fplasma ${1}*/ARCHIVE/run??/fort.44 ${1}*/ARCHIVE/run??/b2time.nc ${1}*/ARCHIVE/run??/b2fgmtry  ${1}*/ARCHIVE/run??/b2fparam | tr ' ' '\n' | sort -n | xargs -n10 fs prefetch"

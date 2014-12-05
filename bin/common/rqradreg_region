@@ -1,0 +1,96 @@
+#! /bin/csh -f
+set text=`basename $0`
+switch ($text)
+  case "rsanareg_region":
+    set label="ionization rate"
+    breaksw
+  case "rsahireg_region":
+    set label="ionization energy"
+    breaksw
+  case "rranareg_region":
+    set label="recombination rate"
+    breaksw
+  case "rrahireg_region":
+    set label="recombination energy"
+    breaksw
+  case "rcxnareg_region":
+    set label="charge exchange rate"
+    breaksw
+  case "rcxhireg_region":
+    set label="charge exchange energy"
+    breaksw
+  case "rqahereg_region":
+    set label="electron heat loss"
+    breaksw
+  case "rqradreg_region":
+    set label="radiation"
+    breaksw
+  case "rqbrmreg_region":
+    set label="bremsstrahlung"
+    breaksw
+  case "b2stbr_she_reg_region":
+    set label="electron heat loss (-) or source (+) rate from recycling"
+    breaksw
+  case "b2stbr_shi_reg_region":
+    set label="ion heat loss (-) or source (+) rate from recycling"
+    breaksw
+  case "b2stbr_sna_reg_region":
+    set label="particle loss (-) or source (+) rate from recycling"
+    breaksw
+  case "b2stbc_she_reg_region":
+    set label="electron heat loss (-) or source (+) rate from the boundary conditions"
+    breaksw
+  case "b2stbc_shi_reg_region":
+    set label="ion heat loss (-) or source (+) rate from the boundary conditions"
+    breaksw
+  case "b2stbc_sna_reg_region":
+    set label="particle loss (-) or source (+) rate from the boundary conditions"
+    breaksw
+  case "resco_reg_region":
+    set label="continuity residual"
+    breaksw
+  case "resmo_reg_region":
+    set label="momentum residual"
+    breaksw
+  default:
+    echo invalid quantity $text
+    exit
+endsw
+set text=`echo $text | sed 's:_region::'`
+set nreg=`climb_and_look_for NREG`
+if (-e $nreg) then
+  setenv NREG `cat $nreg`
+  echo Set NREG to $NREG "(based on $nreg)"
+endif
+if (! $?NREG) set NREG=4
+@ NREGP = $NREG + 1
+if ( X$1 =~ X[lLM] ) then
+  set log="$1"
+  shift
+else
+  set log=""
+endif
+if ("X$1" == "X") then
+  set species=0
+else
+  set species=$1
+endif
+set solps_fluids=`climb_and_look_for SOLPS_FLUIDS`
+if (-e $solps_fluids) then
+  setenv SOLPS_FLUIDS `cat $solps_fluids`
+  echo Set SOLPS_FLUIDS to $SOLPS_FLUIDS "(based on $solps_fluids)"
+endif
+set local_fluids=( $SOLPS_FLUIDS )
+if($species == 0) then
+  pipe_run.log | \
+    grep -a "^$text " | \
+    awk '{for (j=0;j<='$NREG';j++) {sum[j]=0; for (i=2;i<=NF;i+='$NREGP') sum[j]+=$(i+j); printf "%g ",sum[j]};printf "\n"}' | \
+    nl | \
+    plot x"$log"yplot$NREGP `count 0 $NREG` iter "$label summed over all species" $PWD
+else
+  pipe_run.log | \
+    grep -a "^$text " | \
+    awk '{for (i=0;i<='$NREG';i++) printf "%g ",$(i+2+'$NREGP'*('$species'-1));printf "\n"}' | \
+    nl | \
+    plot x"$log"yplot$NREGP `count 0 $NREG` iter "$label for species=$local_fluids[$species]" $PWD
+endif

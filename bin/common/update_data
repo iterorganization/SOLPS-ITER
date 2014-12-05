@@ -1,0 +1,3 @@
+#! /bin/csh -f
+cd $SOLPSTOP/data
+$SOLPSMASTER/@sys/bin/lndr $SOLPSMASTER/solps4.0/data .

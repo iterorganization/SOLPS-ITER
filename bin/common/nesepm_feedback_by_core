@@ -1,0 +1,52 @@
+#! /bin/csh -f
+set nreg=`climb_and_look_for NREG`
+if (-e $nreg) then
+  setenv NREG `cat $nreg`
+  echo Set NREG to $NREG "(based on $nreg)"
+endif
+if (! $?NREG) set NREG = 4
+set target=`grep "'b2stbc_nesepm'" b2mn.dat | tr "'" " " | awk '{print $2}'`
+set overshoot=`grep overshoot b2mn.dat | tr "'" " " | awk '{print $2}'`
+setenv GNUPLOT_POSTSCRIPT_OPTIONS 'color solid'
+setenv GNUPLOT_DATA feedback.data
+setenv PRINT_PLOT feedback.ps
+switch ($NREG)
+  case "1":
+    if ($overshoot == "") then
+      pipe_run.log | grep nesepm_curr | awk '{print NR,$2,'$target',$7}' | sed '$d' | x{$1}yplot3 current target control Iteration_no density `noquote_pwd 3`
+    else
+      pipe_run.log | grep nesepm_curr | awk '{print NR,$2,'$target','$target'*'$overshoot',$7}' | sed '$d' | x{$1}yplot4 current target overshoot control Iteration_no density `noquote_pwd 3`
+    endif
+    breaksw
+  case "2":
+    if ($overshoot == "") then
+      pipe_run.log | grep nesepm_curr | awk '{print NR,$2,'$target',$7}' | sed '$d' | x{$1}yplot3 current target control Iteration_no density `noquote_pwd 3`
+    else
+      pipe_run.log | grep nesepm_curr | awk '{print NR,$2,'$target','$target'*'$overshoot',$7}' | sed '$d' | x{$1}yplot4 current target overshoot control Iteration_no density `noquote_pwd 3`
+    endif
+    breaksw
+  case "4":
+    if ($overshoot == "") then
+      pipe_run.log | grep nesepm_curr | awk '{print NR,$2,'$target',$7}' | sed '$d' | x{$1}yplot3 current target control Iteration_no density `noquote_pwd 3`
+    else
+      pipe_run.log | grep nesepm_curr | awk '{print NR,$2,'$target','$target'*'$overshoot',$7}' | sed '$d' | x{$1}yplot4 current target overshoot control Iteration_no density `noquote_pwd 3`
+    endif
+    breaksw
+  case "5":
+    if ($overshoot == "") then
+      pipe_run.log | grep nesepm_curr | awk '{print NR,$2,'$target',$7}' | sed '$d' | x{$1}yplot3 current target control Iteration_no density `noquote_pwd 3`
+    else
+      pipe_run.log | grep nesepm_curr | awk '{print NR,$2,'$target','$target'*'$overshoot',$7}' | sed '$d' | x{$1}yplot4 current target overshoot control Iteration_no density `noquote_pwd 3`
+    endif
+    breaksw
+  case "8":
+    if ($overshoot == "") then
+      pipe_run.log | grep nesepm_curr | awk '{print NR,$2,'$target',($7+$8)}' | sed '$d' | x{$1}yplot3 current target control Iteration_no density `noquote_pwd 3`
+    else
+      pipe_run.log | grep nesepm_curr | awk '{print NR,$2,'$target','$target'*'$overshoot',($7+$8)}' | sed '$d' | x{$1}yplot4 current target overshoot control Iteration_no density `noquote_pwd 3`
+    endif
+    breaksw
+  default:
+    echo "Unusual number of regions: Not sure what to do!"
+    echo "NREG = " $NREG
+endsw

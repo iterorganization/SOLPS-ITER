@@ -1,0 +1,20 @@
+derlist=${dernames[*]}
+i=0
+sum=0
+for ff in $derlist; do
+  if [ $i -gt 0 ]; then 
+    input=`cat $out | grep $ff | tail -1`
+    if [ "$input." = "." ]; then
+      echo "ERROR $ff not found !!!"
+    else
+      scale0=${derfac[$i]}
+      sum1="`echo $input | awk  '{ print $1}'` $scale0 "
+      sum1="$sum `echo "$sum1" | awk  '{ print $1/$2}'`"
+      sum=`echo "$sum1" | awk  '{ print $1+$2}'`
+#      echo "$sum $sumtext $i $input $sum1"
+    fi
+  fi
+  let "i=i+1"
+done
+echo "$sum $sumtext" >> $out
+#echo "$sum $sumtext"

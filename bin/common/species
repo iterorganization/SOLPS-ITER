@@ -1,0 +1,3 @@
+#! /bin/tcsh -f
+cat `climb_and_look_for SOLPS_FLUIDS` | awk.transpose | nl -v0 | paste - - - - -
+

@@ -1,0 +1,337 @@
+#! /usr/bin/ksh
+
+#  VERSION : 19.02.2001 21:14
+
+# Select the specified columns from the specified table(s) and make a new table of them.
+# A table is a file with data arranged in tab- or space-separated columns with column headers.
+# The column headers are specified on the last comment line and are tab-separated.
+# The comment lines are several first lines of the file starting with #
+
+NAME=${0##*/}
+export STUB=,stc.`hostname -s`.$$
+
+Usage="
+Usage: $NAME [ -o <outfile> ] <inplist> [ <inplist 1> [ <inplist 2> ... ] ]
+
+<outfile> : the filename for the output (default: standard output)
+<inplist> : specification of input file and the columns to be selected. Two kinds of this are valid:
+            -i <infile> <columns>  or -f <listfile>   where
+              <infile>  : the filenames for the input (default: standard input)
+              <columns> : list of column headers to be selected
+              <listfile>: control file where the selection is specified
+  In <columns> :
+    A single \"-\" quotes the next parameter (for column headers like \"-i\" or \"-\") 
+    <name1> / <name2> : use <name2> instead of <name1> in the header of <outfile>
+    % <scale> : multiply the values in the previous column by the <scale>
+    Repetitive column headers pointing to the same file are ignored.
+
+The control file, unless specified with absolute path, is looked for in the following order:
+  - if the variable 'PLOT_SET_PATH' is set, then in all the directories specified there;
+  - otherwise, in the current directory, in the parent directory, and so on until the root.
+Format of the control file: set of lines <infile> <columns>; lines starting with # are comments.
+
+Environmental variable TEMP, if set, specifies where to create temporary files (,stc.*).
+"
+
+[ -z "$1" ] && {
+  print -u2 -- "$NAME: combine selected coulmns from specified tables in a new table"
+  print -u2 -- "$Usage"
+  exit 1
+}
+
+[ -n "$TEMP" ] && STUB="${TEMP%/}/$STUB"
+tab=`echo "\t"`
+
+# Variables:
+
+# OFILE : output file
+# IFILE : input file specified on the command line
+# CFILE : control file
+# OTMP  : a temporary file where the output is accumulated
+# NL    : number of data lines in this file
+# ITMP  : current input file
+# CTMP  : a temporary file containing the selected column
+# STMP  : a temporary file containing the standard input
+# WTMP  : a temporary working file
+# IFILES: list of the processed input files
+# NF    : number of the processed input files
+# IHDRS : list of headers of the processed input files (array)
+# SCLM  : lists of selected columns for each input file (array)
+# NC    : current number of columns in the output file
+# SHDR  : list of column headers in the output file (array)
+# SRCF  : list of source files for each column in the output file (array)
+# SRCC  : list of source columns for each column in the output file (array)
+
+# Function definitions
+#========================================================================================
+function add_clm {
+# Add the column. Usage: add_clm <file> <column> [ <subst> [ <scale> ] ]
+  [ -z "$2" ] && {
+    print -u2 -- "$NAME: internal error - add_clm $*"
+    return 32 
+  }
+  file=$1
+  column=$2
+  subst=${3:-$column}
+  scale=${4:-1}
+#  print -u2 -- "add_clm starting:$file:$column:$subst:$scale:$IFILES:"  #!!!
+# Check whether this file was already processed
+  [ "$IFILES" = "${IFILES#* $file }" ] && {
+# No. Find the column headers and add them and the filename to the lists
+    headers=`grep ^\# $ITMP | tail -1`
+    headers="${headers#*#}"
+    set -- $headers
+    [ -z "$1" ] && {
+      print -u2 "$NAME: bad header in the file $file"
+      return 16
+    }
+    headers=" $* "
+    [ -n "$NL" ] && {
+      [ `grep -v ^\# $file | wc -l` -eq "$NL" ] || {
+        print -u2 -- "$NAME: different number of lines found in file $file (=/=$NL)"
+        return 16
+      }
+    }
+    ((NF=$NF+1))
+    IHDRS[NF]="$headers"
+    IFILES="${IFILES% } $ITMP"
+    sclm=
+    I=$NF
+#    print -u2 "add_clm added file:$I:"    #!!!
+    true
+  } || {
+# Yes. Find the data in the saved lists
+    set -- $IFILES
+    I=1; until [ $file = "$1" ]; do ((I=I+1)); shift; done
+    headers=${IHDRS[I]}
+    sclm=${SCLM[I]}
+#    print -u2 "add_clm using saved:$I:"    #!!!
+  }
+# Check whether the specified column is present and not added already
+
+  J=0; for c in ${SHDR[*]}; do {
+    ((J=J+1))
+    [ "$c" = "$subst" ] && [ "${SRCF[J]}" = "$file" ] && [ "${SRCC[J]}" = "$column" ] && return
+  }; done
+
+  [ "$headers" = "${headers#* $column }" ] && {
+    print -u2 -- "$NAME: column \"$column\" is not present in the file \"$file\""
+    return 16
+  }
+
+# Cut the selected column
+
+  set -- $headers
+  J=1; until [ $column = "$1" ]; do ((J=J+1)); shift; done
+  SCLM[I]="${SCLM[I]% } $column "
+#  print -u2 -- "add_clm column:$J:"   #!!!
+  [ -z "$OTMP" ] && {
+    CTMP=$STUB.clm
+    while [ -a $CTMP ]; do CTMP="${CTMP}~"; done
+  }
+#  set -x    #!!!
+  { print -- $subst; grep -v ^\# $file | sed -e "s/^  *//" -e "s/$tab */$tab/g" -e "s/  */$tab/g" | cut -f$J | awk "{print \$1*$scale}"; } > $CTMP
+#  set +x    #!!!
+
+# add it to the accumulator
+
+  [ -z "$OTMP" ] && {
+    OTMP=$STUB.out
+    while [ -a $OTMP ]; do OTMP="${OTMP}~"; done
+    WTMP=$STUB.tmp
+    while [ -a $WTMP ]; do WTMP="${WTMP}~"; done
+    mv $CTMP $OTMP
+    NL=`cat $OTMP | wc -l`
+    ((NL=NL-1))
+    true
+  } || {
+    paste $OTMP $CTMP > $WTMP && mv $WTMP $OTMP
+  }
+
+# and finally, update the output log
+
+  ((NC=$NC+1))
+  SHDR[NC]="$subst"
+  SRCF[NC]="$file"
+  SRCC[NC]="$column"
+#  print -u2 -- "add_clm leaving:$NF:$NL:$NC:"   #!!!
+}
+#========================================================================================
+function parse_clm {
+# Parse the <columns> list. Usage: parse_clm <columns>
+#  print -u2 -- "parse_clm $*"   #!!!
+  while [ -n "$1" ]; do {
+    { case $1 in
+      ( -  )  shift;;
+      ( -* )  break;;
+      ( *  )  ;;
+    esac; }
+    [ -z "$1" ] && {
+      print -u2 -- "$NAME => error in columns specification. Infile: ${IFILE:-stdin}"
+      print -u2 -- "$Usage"
+      return 4
+    }
+    clmi=$1
+    clmo=$1
+    sclf=1
+    while true; do {
+      case "$2" in
+        ( '/' ) {
+            shift 2
+            [ -z "$1" ] && {
+              print -u2 -- "$NAME => error in the name substitution: $clmi"
+              return 4
+            }
+            clmo=$1
+          };;
+        ( '%' ) {
+            shift 2
+            [ -z "$1" ] && {
+              print -u2 -- "$NAME => error in the scaling factor: $clmi"
+              return 4
+            }
+            sclf=$1
+          };;
+        ( * )   break;;
+      esac
+    }; done
+#    set -x    #!!!
+    add_clm "$ITMP" $clmi $clmo $sclf || return
+#    set +x    #!!!
+    shift
+  }; done
+  rest="$*"
+}
+#========================================================================================
+
+# Parse the parameters
+
+unset OFILE IFILE CFILE NF IFILES IHDRS SCLM OTMP ITMP CTMP STMP WTMP NL NC SHDR SRCF SRCC 
+
+while [ -n "$1" ]; do {
+  s="$1"
+  { case "$s" in
+    ( -h )  print -u2 -- "$NAME: combine selected coulmns from specified tables in a new table"
+            print -u2 -- "$Usage"; exit;;
+    ( -o )  { shift; 
+              [ -n "$OFILE" ] && {
+                print -u2 -- "$NAME: duplicated output specification"
+                print -u2 -- "$Usage"
+                exit 4
+              }
+              [ -z "$1" ] && {
+                print -u2 -- "$NAME: error in $s specification"
+                print -u2 -- "$Usage"
+                exit 4
+              }
+              OFILE=$1
+#              print -u2 -- "OFILE=$OFILE"   #!!!
+            };;
+    ( -f )  { shift; 
+              [ -z "$1" ] && {
+                print -u2 -- "$NAME: error in $s specification"
+                print -u2 -- "$Usage"
+                exit 4
+              }
+#   Find the control file
+              cfile=$1
+              CFILE=
+#              echo "cfile:$cfile:"                             #!!!
+              { case "$cfile" in
+                ( /* | ./* | ../* ) CFILE="$cfile";;
+                ( *               ) {
+#                  echo "PLOT_SET_PATH:$PLOT_SET_PATH:"         #!!!
+                  [ -z "$PLOT_SET_PATH" ] && {
+                    dir=`pwd`
+                    while true; do {
+                      CFILE="$dir/$cfile"
+                      [ -z "$dir" ] && break
+                      [ -s "$CFILE" ] && break
+                      dir=${dir%/*}
+                    }; done
+                    true
+                  } || {
+                    set_path=`print "$PLOT_SET_PATH" | \
+                              sed -e 's/^:/.:/' -e 's/::/:.:/g' -e 's/:$/:./' | tr : ' '`
+#                    echo "$set_path"                                    #!!!
+                    for d in $set_path; do {
+#                      echo "dir:${d%/}:"                                #!!!
+                      CFILE=${d%/}/"$cfile"
+#                      echo "CFILE :$CFILE:"                             #!!!
+                      [ -s "$CFILE" ] && break
+                    }; done
+                  }
+                };;
+              esac; }
+#              echo "CFILE:$CFILE:" >&2                                    #!!!
+              [ -s "$CFILE" ] || {
+                print -u2 "$NAME: the control file not found - $CFILE"
+                print -u2 "$Usage"
+                exit 4
+              }
+#   Start interpreting the control file
+              grep -v '^#' "$CFILE" |&
+              while read -p u; do {
+                set -A u -- $u
+                [ -n "$u" ] && {
+                  ITMP=$u
+                  u=
+                  until [ -z "${u[*]}" ]; do {
+#                    echo "${u[*]}" >&2                     #!!!
+                    parse_clm ${u[*]}
+                    set -A u -- $rest
+                  }; done
+                }
+              }; done
+            };;
+    ( -i )  { shift; 
+              [ -z "$1" ] && {
+                print -u2 -- "$NAME: error in $s specification"
+                print -u2 -- "$Usage"
+                exit 4
+              }
+              IFILE=$1
+            };;
+    ( *  )  { [ "$1" = '-' ] && shift
+              [ -z "$1" ] && {
+                print -u2 -- "$NAME: error in $s specification"
+                print -u2 -- "$Usage"
+                exit 4
+              }
+#         Process the next name from the command line
+              ITMP=$IFILE
+#              print -u2 -- "ITMP=$ITMP"   #!!!
+              [ -z "$ITMP" ] && {
+#           Table from standard input
+                STMP=$STUB.sti
+                until [ ! -a "$STMP" ]; do {
+                  STMP="${STMP}~"
+                }; done
+                cat - > "$STMP"
+                IFILE="$STMP"
+                ITMP=$IFILE
+              }
+#              set -x    #!!!
+              parse_clm "$@" || exit
+              set --  - $rest
+#              set +x    #!!!
+              [ -z "$1" ] && break
+            };;
+  esac; }
+  shift
+}; done
+
+# Finalise the output
+
+[ -n "$OTMP" ] && {
+  [ -z "$OFILE" ] && {
+    print -- '#\c' | cat - $OTMP
+    true
+  } || {
+    print -- '#\c' | cat - $OTMP > $OFILE
+  }
+}
+for f in // $OTMP $CTMP $WTMP $STMP; do {
+  [ -f "$f" ] && \rm -f $f
+}; done
+true

@@ -1,0 +1,6 @@
+#! /bin/csh -f
+cd $SOLPSTOP/bin/common
+ln -s $SOLPSMASTER/solps4.0/src/bin/common/* .
+cd $SOLPSTOP/bin/$OBJECTCODE
+ln -s $SOLPSMASTER/solps4.0/src/bin/$OBJECTCODE/* .
+echo "If you are running tcsh or csh, remember to do a rehash"

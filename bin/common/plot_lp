@@ -1,0 +1,3 @@
+#! /bin/csh -f
+grep -v pause gnuplot.cmd >! gnuplot.cmd.print
+lasergnu -p -f gnuplot.cmd.print

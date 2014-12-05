@@ -1,0 +1,5 @@
+#! /bin/csh -f
+cd $SOLPSTOP/lib/$OBJECTCODE
+ln -s $SOLPSMASTER/solps4.0/src/lib/$OBJECTCODE/* .
+cd ..
+ln -s $SOLPSMASTER/solps4.0/src/lib/gksfont.dat .

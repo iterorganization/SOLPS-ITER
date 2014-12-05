@@ -1,0 +1,7 @@
+#! /bin/csh -f
+cat map | \
+  grep 'RW CM' | \
+  sed -e 's/^./ /' | \
+  awk 'length($2)==6{print "00"$2,$7}length($2)==7{print "0"$2,$7}length($2)==8{print $2,$7}' | \
+  sort | \
+  awk '{sum=0.0;for (i=1;i<=length($1);i++) {sum=sum*16.0+(match("0123456789ABCDEF",substr($1,i,1))-1)}; print sum/1024/1024,$2}'

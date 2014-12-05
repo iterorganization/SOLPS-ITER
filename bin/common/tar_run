@@ -1,0 +1,10 @@
+#! /bin/tcsh -f
+###                save important files as a single tar file                ###
+mkdir tar_run.work.$$
+mv b2.*.parameters input.dat b2mn.dat b2fgmtry b2fpardf b2fstati b2frates b2mn.prt b2fparam b2fstate b2ftrace b2fplasma *.nc fort.15 fort.3[01] fort.44 run.log* ds* tar_run.work.$$/
+set DATESTAMP=`datestamp`
+(cd tar_run.work.$$ ; tar cvf ../$DATESTAMP.tar .)
+mv tar_run.work.$$/* .
+rmdir tar_run.work.$$
+tar tvf $DATESTAMP.tar >& $DATESTAMP.tar.toc
+gzip -9 $DATESTAMP.tar

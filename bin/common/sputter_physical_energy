@@ -1,0 +1,13 @@
+#! /bin/csh -f
+set solps_fluids=`climb_and_look_for SOLPS_FLUIDS`
+if (-e $solps_fluids) then
+  setenv SOLPS_FLUIDS `cat $solps_fluids`
+  echo Set SOLPS_FLUIDS to $SOLPS_FLUIDS "(based on $solps_fluids)"
+endif
+set nplts=`echo $SOLPS_FLUIDS | wc -w`
+@ nplts += 1
+pipe_run.log | \
+  grep -a tphye | \
+  sed 's:tphye::' | \
+  nl | \
+  plot x"$1"yplot$nplts SUM $SOLPS_FLUIDS iter "physical sputtered energy" $PWD

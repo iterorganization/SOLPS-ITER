@@ -1,0 +1,89 @@
+#  VERSION : 27.02.98 14:51
+
+PS=$1
+[ -n "$PS" ] && echo "b2p: producing PostScript files ..." || echo "b2p: producing gmeta file ..."
+sleep 1
+
+L=`cat VarID | cut -f1 -d_ | cut -f2 -d#`
+LL=`cat VarID | tr _ ' '`; [ -r Label ] && LL="$LL `cat Label`"
+B="'$LL' extl"
+
+BB='-6.5 zmin -2.5 zmax 4.5 rmin 8.5 rmax'
+[ -r box.b2p ] && { set `tail -1l box.b2p`; [ -n "$4" ] && BB="$2 zmin $4 zmax $1 rmin $3 rmax" || echo "Wrong format of box.b2p"; }
+
+BB="phys lbof sep clvl vesl $BB"
+
+#[ -z "$PS" ] && [ -r gmeta ] && rm -f gmeta
+
+[ -r gmeta ] && rm -f gmeta
+[ -n "$PS" ] && { \
+    [ -d b2pl_PS ] && { \
+        rm -rf b2pl_PS/* >/dev/null 2>&1; true
+    } || mkdir b2pl_PS
+    [ -d b2pl_PS/mono ] || mkdir b2pl_PS/mono
+    [ -d b2pl_PS/color ] || mkdir b2pl_PS/color
+}
+#[ -r *$L.ps ] && rm -f *$L.ps
+
+C=color
+S=te
+echo "$B $BB
+    te
+    14 0.0 2.0 4.0 6.0 8.0 10. 13. 17. 25. 40. 60. 80. 100. 150. clvs
+    surf" | b2plot
+[ -z "$PS" ] && { cat gmeta >> ggmeta; true; } || ctrans -d ps.color -outfile b2pl_PS/$C/$S$L.ps gmeta
+
+C=color
+S=ne
+echo "$B $BB
+    ne
+    11 0.0 1.e19 2.e19 5.e19 1.e20 2.e20 5.e20 1.e21 2.e21 3.e21 1.e22 clvs
+    surf" | b2plot
+[ -z "$PS" ] && { cat gmeta >> ggmeta; true; } || ctrans -d ps.color -outfile b2pl_PS/$C/$S$L.ps gmeta
+
+C=color
+S=prn
+echo "$BB '$LL :  neutr. pres. [Pa]' extl
+    dab2 0 zsel tab2 0 zsel m* dmb2 0 zsel tmb2 0 zsel m* m+ ev rm*
+    13 0.0 0.03 0.1 0.2 0.5 1.0 2.0 5.0 10.0 20.0 50.0 100.0 1.e8 clvs
+    surf" | b2plot
+[ -z "$PS" ] && { cat gmeta >> ggmeta; true; } || ctrans -d ps.color -outfile b2pl_PS/$C/$S$L.ps gmeta
+
+C=color
+S=pr
+echo "$B $BB
+    pr
+    13 0. 3. 10. 20. 50. 100. 200. 500. 1000. 2000. 5000. 10000. 1.e10 clvs
+    surf" | b2plot
+[ -z "$PS" ] && { cat gmeta >> ggmeta; true; } || ctrans -d ps.color -outfile b2pl_PS/$C/$S$L.ps gmeta
+
+C=mono
+S=prs
+echo phys $B pr 0.0 fmin 0.0 fmax 7 f.x | b2plot
+[ -z "$PS" ] && { cat gmeta >> ggmeta; true; } || ctrans -d ps.color -outfile b2pl_PS/$C/$S$L.ps gmeta
+
+#C=color
+#S=qp
+#echo "$BB '$LL :  q pol' extl
+#    fhex fhix m+ psx
+#    11 -1.e8 -1.e7 -5.e6 -2.e6 -1.e6 0.0 1.e6 2.e6 5.e6 1.e7 1.e8 clvs
+#    cont" | b2plot
+#[ -z "$PS" ] && { cat gmeta >> ggmeta; true; } || ctrans -d ps.color -outfile b2pl_PS/$C/$S$L.ps gmeta
+
+C=color
+S=na
+echo "$B $BB
+    dab2 0 zsel
+    10 0.0 1.e15 1.e18 1.e19 3.e19 1.e20 3.e20 1.e21 3.e21 1.e22 clvs
+    surf" | b2plot
+[ -z "$PS" ] && { cat gmeta >> ggmeta; true; } || ctrans -d ps.color -outfile b2pl_PS/$C/$S$L.ps gmeta
+
+C=color
+S=nm
+echo "$B $BB
+    dmb2
+    10 1.e15 1.e17 1.e18 1.e19 3.e19 1.e20 3.e20 1.e21 3.e21 1.e22 clvs
+    surf" | b2plot
+[ -z "$PS" ] && { cat gmeta >> ggmeta; true; } || ctrans -d ps.color -outfile b2pl_PS/$C/$S$L.ps gmeta
+
+[ -z "$PS" ] && { mv ggmeta gmeta; true; } || rm gmeta

@@ -1,0 +1,6 @@
+#! /bin/csh -f
+pipe_run.log | \
+  grep -a i,respo | \
+  awk 'BEGIN{l=-1}$2<=l{print l}{l=$2}' | \
+  nl | \
+  plot x"$1"yplot respo iter 'number of potential iterations' $PWD

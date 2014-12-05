@@ -1,0 +1,5 @@
+#! /bin/csh -f
+cd $SOLPSTOP
+ln -s $SOLPSMASTER/solps4.0/Makefile .
+ln -s $SOLPSMASTER/solps4.0/SYNC.SRC .
+gmake

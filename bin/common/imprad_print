@@ -1,0 +1,86 @@
+#! /bin/csh -f
+#  VERSION : 19.04.96 19:22
+
+# get impurity radiation
+if ($?LAST10) then
+  set FILE=b2.log.last10
+else
+  set FILE=b2.log
+endif
+if (-x $SOLPSTOP/bin/$OBJECTCODE/zcat) then
+    set ZCAT=$SOLPSTOP/bin/$OBJECTCODE/zcat
+else if (-x $SOLPSMASTER/@sys/bin/zcat) then
+    set ZCAT=$SOLPSMASTER/@sys/bin/zcat
+else
+    set ZCAT="gzip --decompress --force --stdout"
+endif
+$ZCAT -f $FILE | \
+  egrep 'b2bremcore|b2radcore|ITER.*TIME' | \
+ awk '/b2bremcore/{NC=0}\
+       /b2radcore/{NC=NC+1;b2radcore[NC]=$2;b2radsol[NC]=$3;b2raddivin[NC]=$4;b2raddivout[NC]=$5}\
+       /ITER.*TIME/{b2radcore[0]=0.0;b2radsol[0]=0.0;b2raddivin[0]=0.0;b2raddivout[0]=0.0;\
+            for (i=1;i<=NC;i++)\
+              {b2radcore[0]+=b2radcore[i];\
+               b2radsol[0]+=b2radsol[i];\
+               b2raddivin[0]+=b2raddivin[i];\
+               b2raddivout[0]+= b2raddivout[i]};\
+            b2radtot=b2radcore[0]+b2radsol[0]+b2raddivin[0]+b2raddivout[0];\
+            print $4,b2radcore[0],b2radsol[0],b2raddivin[0],b2raddivout[0],b2radtot}' > imprad_out
+
+# get powers
+if ($?LAST10) then
+  set FILE=b2.log.last10
+else
+  set FILE=b2.log
+endif
+if (-x $SOLPSTOP/bin/$OBJECTCODE/zcat) then
+    set ZCAT=$SOLPSTOP/bin/$OBJECTCODE/zcat
+else if (-x $SOLPSMASTER/@sys/bin/zcat) then
+    set ZCAT=$SOLPSMASTER/@sys/bin/zcat
+else
+    set ZCAT="gzip --decompress --force --stdout"
+endif
+$ZCAT -f $FILE | \
+  egrep 'power >>' | \
+  cut -c10-300  \
+   > powers_out
+
+# get srec
+if ($?LAST10) then
+  set FILE=b2.log.last10
+else
+  set FILE=b2.log
+endif
+if (-x $SOLPSTOP/bin/$OBJECTCODE/zcat) then
+    set ZCAT=$SOLPSTOP/bin/$OBJECTCODE/zcat
+else if (-x $SOLPSMASTER/@sys/bin/zcat) then
+    set ZCAT=$SOLPSMASTER/@sys/bin/zcat
+else
+    set ZCAT="gzip --decompress --force --stdout"
+endif
+$ZCAT -f $FILE |\
+  egrep 'ITER.*TIME'\|'IPLS,IREC,' |\
+  awk '/SREC/{srec=$4}\
+       /EIO/{eio=$4}\
+       /EEL/{eel=$4}\
+       /TIME/{print $4,srec,eio,eel}' > srec_out
+
+# get ss
+if ($?LAST10) then
+  set FILE=b2.log.last10
+else
+  set FILE=b2.log
+endif
+if (-x $SOLPSTOP/bin/$OBJECTCODE/zcat) then
+    set ZCAT=$SOLPSTOP/bin/$OBJECTCODE/zcat
+else if (-x $SOLPSMASTER/@sys/bin/zcat) then
+    set ZCAT=$SOLPSMASTER/@sys/bin/zcat
+else
+    set ZCAT="gzip --decompress --force --stdout"
+endif
+$ZCAT -f $FILE | \
+  egrep -A1 'ITER.*TIME|SSEI,SSEE,SSNI' | \
+  egrep 'E\+|TIME' | \
+ awk 'NF==3{SSEI=$1;SSEE=$2;SSNI=$3}/TIME/{print $4, SSNI, SSEI,SSEE}' > ss_out
+
+

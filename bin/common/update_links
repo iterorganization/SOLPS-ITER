@@ -1,0 +1,30 @@
+#! /bin/csh -f
+set remove=""
+if ($?SOLPSTOP) then
+  if(-e $SOLPSTOP/bin/common/lndr) then
+    cp $SOLPSTOP/bin/common/lndr /tmp/lndr.$$ 
+    set LNDR=/tmp/lndr.$$
+    set remove=/tmp/lndr.$$
+  else
+    if($?SOLPSMASTER) then
+      if(-e $SOLPSMASTER/@sys/bin/lndr) then
+        set LNDR=$SOLPSMASTER/@sys/bin/lndr
+      else
+        echo "Can't find lndr"
+        exit
+      endif
+    endif
+  endif
+endif
+echo Using $LNDR for lndr
+if (-e .lndr_master) then
+  set REFERENCE=`cat .lndr_master`
+else
+  set refpos=`basename $SOLPSTOP`
+  set relpos=`pwd | sed s/\.\*$refpos//`
+  set REFERENCE=$SOLPSMASTER/solps4.0$relpos
+endif
+echo Using $REFERENCE as reference
+find . -type l -print | xargs -n10 rm
+$LNDR -f -c $REFERENCE
+if("$remove" == "") /bin/rm $remove

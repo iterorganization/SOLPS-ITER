@@ -1,0 +1,2 @@
+#! /bin/csh -f
+( setenv GNUPLOT_POSTSCRIPT_OPTIONS 'color solid' ; setenv GNUPLOT_DATA feedback.data ; setenv PRINT_PLOT feedback.ps ; zcat -f run.log | grep ntot | awk '{print NR,$2,$5,$10*1e7}' | sed '$d' | x{$1}yplot3 current target control/1000 Iteration_no density_or_flux `noquote_pwd 3` )

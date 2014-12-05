@@ -1,0 +1,369 @@
+#! /usr/bin/ksh
+
+#==============================================================================#
+#  Part of B2-Eirene service:                                                  #
+#                                                                              #
+#  cleans up a shadow base for a variant run:                                  #
+#    removes some garbage, makes necessary files local, and                    #
+#    puts a Local_Copy flag into the master directory, when on local disk      #
+#                                                                              #
+#  Author:  A.S.Kukushkin                                                      #
+#                                                                              #
+#  VERSION : 18.10.2004 12:06                                                  #
+#==============================================================================#
+
+RELINKLIS='b2.parameters input.eir uinput.aux RES box.b2p b2pl b2pp b2pt B2E.version'
+RMLIS='.fix_b2e .quit .trc_running .last_2d_running .write .ps nohup.out Local_Copy* *.log b2.*.* input.[a-df-z]* input.e[a-hj-z]* input.*.* *.save B2SDIAG B2MNPRT B2STIME fort.1[0124] fort.20 fort.37 fort.44 
+       fort.55 fort.9[12] gmeta* ggmeta b2plot.write gnuplot.* *.ps *.dat peak_power* trc.err sput_trg.sum *.cmd *.set *.legend *.eps color.bpl mono.bpl fluxt b2.diagnostics* #*'
+RMDLIS='9*  19* 20* tracing traces_all last_2dir b2pl_PS b2pl_dat b2pt_PS* b2pp_PS b2pp_dat Erosion tmp'
+CPLIS='fort.15 fort.30 fort.31 B2SXDR'
+CPALIS='VarID Label'
+CPBLIS='mesh.extra param.dg'
+MKPDIRLIS='last_2dir Erosion'
+CPPLIS='B2SDIAG b2.parameters.out fort.44 b2.diagnostics* last_2dir/* Erosion/*'
+MKRDIRLIS='tracing traces_all time_dep last_2dir Erosion'
+CPRLIS='B2SDIAG b2.parameters.out fort.44 b2.diagnostics* fp_tg_*.dat ld_tg_*.dat peak_power sput_trg.sum trc.ps* time_dep/traces time_dep/tmp3d.ps last_2dir/* tracing/* traces_all/* Erosion/*'
+export DATALINKS='AMJUEL HYDHEL METHANE SPUTER fort.21 fort.22 fort.25'
+ERSLINKS='B2SXDR VarID Label b2.parameters box.b2p fort.15 fort.30 fort.31'
+ERSDIR=',Iterations'
+DGDIR=$SOLPSTOP/src/DivGeo/dg/class/$DEVICE
+
+#OWNER=kukusha
+NO_GTFL='kukusha kuku B2E pacher'
+OWNER=
+
+. triang.conf
+
+CPTLIS=
+for x in $TRIAFTN; do {
+  CPTLIS="$CPTLIS fort.$x"
+}; done
+for x in $TRIARES; do {
+  CPTLIS="$CPTLIS $x"
+}; done
+
+NAME=${0##*/}
+Usage="$NAME: cloning a B2-Eirene case. Usage
+
+      $NAME [-f] [-l] [ -r | -p | -e <dgfile> ] [ -T <triang> | -t <sourcetria> ] [<sourcedir>]
+  or
+      $NAME [-d | -h]
+
+<sourcedir> is the source directory. 
+  The following directories are looked for, the first found being used:
+    ../<sourcedir>
+    \$SOLPSTOP/data/cases/\$DEVICE/<sourcedir>
+    <sourcedir>
+The options mean:
+  -d  only relink the data files to avoid the limitation on the link depth on some systems
+  -e  prepare erosion/deposition evaluation directory. 
+      <dgfile> is the DG model filename (no extension). If specified as '-', no linking DG model
+  -h  print this screen
+  -f  force inquiry when a Local_Copy file exists
+  -l  force local mode
+  -p  plot mode - an extended set of files for plotting is copied
+  -r  restore mode - a full set of files is copied
+  -T  link the specified trinagular mesh files to the corresponding fort.* files.
+      <triang> specifies the mesh to be used. 
+      If it contains neither '.' nor '/' characters, then it is considered to be the mesh index,
+      and the mesh files are expected to be \$SOLPSTOP/data/TRIANG/\$DEVICE/\$DEVICE.tria.<triang>.*
+      if the TRIADIR variable is not set, or \$TRIADIR/\$DEVICE.tria.<triang>.* otherwise.
+      If <triang> contains either '.' or '/' characters, it is considered the absolute (if
+      starts with '/') or relative pathname, and the files are <triang>.*, the relative path
+      starting from one of the following locations (the first where the files are found works):
+      .
+      \$SOLPSTOP/data/TRIANG/\$DEVICE
+      \$SOLPSTOP/data/TRIANG
+      \$SOLPSTOP
+  -t  take the trinagular mesh data from <sourcetria>
+      <sourcetria> is treated like the <sourcedir> parameter (see above).
+"
+
+unset force local restore data erosion dgfile error tria triaref pltdata
+
+while [ -n "$1" ]; do {
+  case "$1" in
+    ( -d  )   data=y;;
+    ( -e  )   erosion=y; dgfile=$2; shift;;
+    ( -f  )   force=y;;
+    ( -h  )   print -- "$Usage"; exit 0;;
+    ( -l  )   local=y;;
+    ( -p  )   pltdata=y; restore=;;
+    ( -r  )   restore=y; pltdata=;;
+    ( -t  )   tria=$1; triaref=$2; shift;;
+    ( -T  )   tria=$1; triaref=$2; shift;;
+    ( -*  )   print -u2 "Non-supported option: $1"; error=y;;
+    (  *  )   break;;
+  esac
+  shift
+}; done
+
+unset triacase
+[ -n "$tria" ] && {
+  print -- "TRIANG option in effect: $tria"
+  { case "$tria" in
+  ( -T ) trimesh=
+    [ -n "$triaref" ] && {
+      [ "${triaref#*.}" = "$triaref" ] && [ "${triaref#*/}" = "$triaref" ] && trimesh=$TRIADIR/$TRIASTEM.$triaref || {
+# look for a mesh directory
+        [ "${triaref#/}" = "$triaref" ] || {
+# absolute path
+          set -A u -- "$triaref".*
+          [ ! -s ${u[0]} ] || { trimesh="$triaref"; false; }
+        } && {
+          set -A u -- $PWD/$triaref.*
+          [ ! -s ${u[0]} ] || { trimesh=$PWD/$triaref; false; }
+        } && {
+          set -A u -- $SOLPSTOP/data/TRIANG/$DEVICE/$triaref.*
+          [ ! -s ${u[0]} ] || { trimesh=$SOLPSTOP/data/TRIANG/$DEVICE/$triaref; false; }
+        } && {
+          set -A u -- $SOLPSTOP/data/TRIANG/$triaref.*
+          [ ! -s ${u[0]} ] || { trimesh=$SOLPSTOP/data/TRIANG/$triaref; false; }
+        } && {
+          set -A u -- $SOLPSTOP/$triaref.*
+          [ ! -s ${u[0]} ] || { trimesh=$SOLPSTOP/$triaref; false; }
+        } && {
+          print -u2 -- "No mesh files specified with $tria option found"
+          error=y
+        }
+        unset u
+      }
+      [ -z "$error" ] && {
+        for x in $TRIAEXT; do {
+          [ -s $trimesh.$x ] || error=y
+        }; done
+        [ -n "$error" ] && print -u2 -- "Incomplete set of triangular mesh files specified: $trimesh.\*"
+      }
+      true 
+    } || {
+      print -u2 -- "Triangular mesh specification must follow the $tria key"
+      error=y
+    };;
+  ( -t ) triacase=$triaref
+    [ -n "$triacase" ] && {
+      [ -d "../$triacase" ] && triacase="../$triacase" || {
+        [ -d "$SOLPSTOP/data/cases/$triacase" ] && triacase="$SOLPSTOP/data/cases/$triacase" || {
+          [ -d "$triacase" ] || {
+            print -u2 "${0##*/} $tria: directory $1 not found"
+            print -u2 "      (must be either in parent directory or in $SOLPSTOP/data/cases)"
+            error=y
+          }
+        }
+        [ -z "$error" ] && {
+          for x in $CPTLIS; do {
+            [ -s "$triacase/$x" ] || error=y
+          }; done
+          [ -n "$error" ] && {
+            print -u2 -- "Incomplete set of triangular mesh files in the source directory $triacase"
+            print -u2 -- "Required: $CPTLIS"
+          }
+        }
+      }
+    };;
+  ( * ) print -u2 "${0##*/} $tria: internal error with \$tria"; error=y;;
+  esac; }
+}
+
+echo "tria:triacase:trimesh:=$tria:$triacase:$trimesh:" #!!!
+
+[ -n "$error" ] && {
+  print -- "$Usage"
+  exit 4
+}
+
+function relink_data_files {
+  for f in $DATALINKS; do {
+    [ -L $f.tb2e ] && {
+      ff=`lln -e $f.tb2e`
+      ln -sf $ff $f
+    } || {
+      ff=`lln -e $f`
+      [ -a "$ff" ] && {
+        mv $f $f.tb2e
+        ln -sf $ff $f
+      }
+    }
+  }; done
+}
+
+[ -n "$data" ] && {
+  relink_data_files
+  exit
+}
+
+[ -f input.eir ] || { print -u2 "No input.eir!!!"; exit 2; }
+[ -f b2.parameters ] || { print -u2 "No b2.parameters!!!"; exit 2; }
+
+[ -f Local_Copy ] && {
+  print "Local_Copy exists: \c"; cat Local_Copy
+  [ -z "$force" ] && { exit 2; } || {
+    print "Proceed further? (y/n) \c"
+    read u; case "$u" in
+      ( y | Y | ''  )         ;;
+      ( *           )   exit 2;;
+    esac
+  }; rm Local_Copy
+}
+
+[ -z "$local" ] && [ "${PWD#*/local/}" = "$PWD" ] && [ "${PWD#*/scratch/}" = "$PWD" ] && {
+  RELINK=$RELINKLIS
+  CP="$CPLIS $RELINK $CPALIS $CPBLIS"
+  RMA=
+  true
+} || {
+  [ -L input.eir ] || {
+    print -u2 "input.eir is not a symbolic link!!!"
+    exit 2
+  }
+  [ -L b2.parameters ] || {
+    print -u2 "b2.parameters is not a symbolic link!!!"
+    exit 2
+  }
+  RELINK=''; CP="$CPLIS $TRIARES"; RMA="$CPALIS"
+  [ -z "$tria" ] || {
+    print -u2 -- "$tria option is incompatible with the local mode"
+    exit 4
+  } 
+}
+
+# Working on local scratch area, check whether there is no other local copy
+
+[ -z "$RELINK" ] && {
+  S=`lln input.eir`
+  S=`dirname $S`/Local_Copy
+  [ -f $S ] && {
+    [ -z "$force" ] && {
+      print -u2 'There is already a local copy:  \c'; cat $S; exit 2
+    } || {
+      print "Local_Copy will be lost: \c"; cat $S;
+      print "Proceed further? (y/n) \c"
+      read u; case "$u" in
+        ( y | Y | ''  )         ;;
+        ( *           )   exit 2;;
+      esac;
+    }
+  }
+}
+
+PARENT=$1
+[ -n "$PARENT" ] && {
+  [ -d "../$PARENT" ] && PARENT="../$PARENT" || {
+    [ -d "$SOLPSTOP/data/cases/$PARENT" ] && PARENT="$SOLPSTOP/data/cases/$PARENT" || {
+      [ -d "$PARENT" ] || {
+        print -u2 "${0##*/}: directory $1 not found"
+        print -u2 "      (must be either in parent directory or in $SOLPSTOP/data/cases)"
+        exit 8
+      }
+    }
+  }
+}
+
+rm $RMLIS >/dev/null 2>&1
+rm -r $RMDLIS >/dev/null 2>&1
+
+for f in $CP; do {
+  [ -n "$PARENT" ] && {
+    [ -a $f ] && mv $f $f.tb2e
+    cp "$PARENT/$f" . && { rm $f.tb2e; true; } || { [ -a $f.tb2e ] && mv $f.tb2e $f; }
+    true
+  } || gtfl $f
+}; done
+
+[ -n "$PARENT" ] && {
+  [ -n "$CPTLIS" ] && {
+    triacase=${triacase:-$PARENT}
+    notria=
+    for f in $CPTLIS; do {
+      [ -f "$triacase/$f" ] || [ -L "$triacase/$f" ] || {
+        notria=y
+        /bin/rm -f $f
+      }
+    }; done
+    [ -z "$notria" ] && (cd "$triacase" && tar cf - $CPTLIS) | tar xf -
+  }
+  [ "$tria" = -T ] && {
+    set -A t -- $TRIAEXT
+    set -A x -- $TRIAFTN
+    [ ${#t[*]} = ${#x[*]} ] || {
+      print -u2 -- "$NAME: internal error with TRIAEXT and TRIAFTN - check triang.conf"
+      exit 8
+    }
+    i=0; while [ -n "${t[i]}" ]; do {
+      ln -sf $trimesh.${t[i]} fort.${x[i]}
+      ((i=i+1))
+    }; done
+    [ -n "$TRIARES" ] && /bin/rm -f $TRIARES
+  }
+}
+
+[ -n "$RMA" ] && rm -f $RMA
+(cd time_dep && rm ??3d[ailr] *.ps traces)
+
+# Copy the output and tracing data if requested
+
+[ -n "$restore" ] && {
+  for d in $MKRDIRLIS; do {
+    [ -d "$d" ] || { [ -d "$PARENT/$d" ] && mkdir $d; }
+  }; done
+  P=`pwd`
+  (cd $PARENT && for f in $CPRLIS; 
+    do {
+      set $f
+      [ -r "$1" ] && {
+        dd=${f%/*}
+        [ "$dd" = "$f" ] && dd= || dd="/$dd"
+        cp -p $f ${P}$dd
+      }
+    }; done
+  )
+}
+
+[ -n "$pltdata" ] && {
+  for d in $MKPDIRLIS; do {
+    [ -d "$d" ] || { [ -d "$PARENT/$d" ] && mkdir $d; }
+  }; done
+  P=`pwd`
+  (cd $PARENT && for f in $CPPLIS; 
+    do {
+      set $f
+      [ -r "$1" ] && {
+        dd=${f%/*}
+        [ "$dd" = "$f" ] && dd= || dd="/$dd"
+        cp -p $f ${P}$dd
+      }
+    }; done
+  )
+}
+
+
+# Working on local scratch area, put its ID in the source directory and
+# do not re-link files for PC access
+
+[ -z "$RELINK" ] && { 
+  S=`lln input.eir` 
+  S=`dirname $S`/Local_Copy
+  print `hostname -s`:`pwd`: > $S; chmod 664 $S
+  unset no_gtfl
+  for i in ${NO_GTFL}; do {
+  { case `pwd` in
+    ( */$i/* )  no_gtfl=y;;
+    ( * )       ;;
+  esac; }
+  }; done
+  [ -z "$no_gtfl" ] && gtfl b2.parameters input.eir
+  relink_data_files
+}
+
+[ -n "$erosion" ] && {
+  [ "$dgfile" = '-' ] || [ -s "$DGDIR/$dgfile.dg" ] || {
+      print -- "tb2e: DG model $DGDIR/$dgfile.dg not found"
+      exit 4
+  }
+  [ -s "$DGDIR/$dgfile.dg" ] && ln -sf $DGDIR/$dgfile.dg .
+  for f in $ERSLINKS; do {
+    ln -sf "$PARENT/$f" .
+  }; done
+  mkdir -p $ERSDIR
+}
+
+exit 0

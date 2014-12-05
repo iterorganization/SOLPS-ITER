@@ -1,0 +1,16 @@
+#! /bin/csh -f
+cat << EOD1
+%!PS
+%%DocumentPaperSizes: a4
+%%BeginPaperSize: a4
+a4
+%%EndPaperSize
+save
+/start.page { -40 -185.0 translate 1.50 1.50 scale } def
+/showpage { systemdict begin showpage end start.page } def
+start.page
+EOD1
+cat -
+cat << EOD2
+restore
+EOD2

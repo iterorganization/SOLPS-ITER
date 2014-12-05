@@ -1,0 +1,1086 @@
+##  VERSION : 26.04.2005 18:25
+##
+#AUG-4-pf-C0-2D
+case aug 147        puff  1.97e21
+case aug 142        puff  2.58e21
+case aug 134        puff  3.7e21
+case aug 127  title puff  4.7e21
+case aug 133        puff  5.6e21
+case aug 141        puff  5.68e21  det
+#AUG-4-pf-C0-0.5D
+case aug 151        puff  2.00e21
+case aug 149        puff  2.52e21
+case aug 139        puff  3.49e21
+case aug 126  title puff  4.86e21
+case aug 138        puff  6.08e21
+case aug 148        puff  7.27e21
+case aug 150        puff  6.0e21 det
+#AUG-4-pf-NN-C0
+case aug 118  title puff  2.52e21
+#AUG-4-pf-NF-C0
+case aug 145        puff  1.82e21  !
+case aug 143        puff  2.24e21
+case aug 129        puff  2.89e21
+case aug 119  title puff  4.0e21
+case aug 130        puff  5.01e21
+case aug 144        puff  7.1e21  !
+case aug 146        puff  8.46e21  !
+#F25-100-pf-20-NF-C0
+case iter 1105  title puff  8.0e22  !
+#F24-100-pf-20-NN-MAR-C0
+case iter 1104  title puff 9.0e22  !
+#F24-130-pf-20-NF-C0
+case iter 1096  title puff  8.2e22
+#F24-86-pf-20-NF-C0
+case iter 1097  title puff  8.7e22
+#F24-100-pf-20-NF-C0
+case iter 1102        puff  1.8e22  !
+case iter 1089        puff  3.1e22
+case iter 1100        puff  3.9e22
+case iter 1101        puff  4.8e22  !
+case iter 1090        puff  6.0e22
+case iter 1085  title puff  8.0e22
+case iter 1091        puff 10.1e22
+case iter 1087        puff 11.5e22
+case iter 1088        puff 15.8e22
+case iter 1092        puff 17.7e22
+case iter 1099        puff 20.1e22
+#F12-130-pf-20-NF-C0
+case iter 1098  title puff  9.3e22  !
+#F12-86-pf-20-NF-C0
+case iter 1103  title puff 11.7e22  !
+#F12-100-pf-20-tr0.01-NF-C0
+case iter 1095        puff  8.8e22  !
+case iter 1093        puff 10.0e22
+case iter 1082  title puff 11.3e22
+case iter 1094        puff 12.5e22  !
+##
+###AUG-4-pf-C0
+##case aug 132        puff  0.53e21
+##case aug 121        puff  0.78e21
+##case aug 113        puff  0.94e21
+##case aug 107        puff  1.10e21
+##case aug 097        puff  1.36e21
+##case aug 084        puff  1.6e21
+##case aug 074        puff  1.9e21
+##case aug 069        puff  2.25e21
+##case aug 056        puff  2.8e21
+##case aug 053        puff  3.7e21
+##case aug 051  title puff  4.5e21
+##case aug 052        puff  5.1e21
+##case aug 060        puff  6.2e21
+##case aug 100        puff  6.5e21
+##case aug 075        puff  6.8e21
+##case aug 096        puff  6.4e21  det
+##case aug 079        puff  5.95e21 det
+##case aug 066        puff  6.0e21  det
+###AUG-3-pf-C0
+##case aug 136        puff  0.67e21
+##case aug 124        puff  0.8e21
+##case aug 114        puff  1.0e21
+##case aug 108        puff  1.25e21
+##case aug 098        puff  1.54e21
+##case aug 085        puff  1.9e21
+##case aug 072        puff  2.3e21
+##case aug 067        puff  2.9e21
+##case aug 089        puff  3.3e21
+##case aug 062        puff  3.7e21
+##case aug 055  title puff  4.65e21
+##case aug 076        puff  5.2e21
+##case aug 080        puff  4.7e21  det
+##case aug 061        puff  4.4e21  det
+###AUG-2-pf-C0
+##case aug 135        puff  0.62e21
+##case aug 122        puff  0.80e21
+##case aug 115        puff  0.96e21
+##case aug 109        puff  1.2e21
+##case aug 105        puff  1.5e21
+##case aug 099        puff  1.85e21
+##case aug 095        puff  2.5e21
+##case aug 087  title puff  3.0e21
+##case aug 094        puff  3.65e21
+##case aug 104        puff  3.35e21  det
+###AUG-8-pf-C0
+##case aug 092        puff  1.9e21
+##case aug 078        puff  2.2e21
+##case aug 057  title puff  2.7e21
+##case aug 064        puff  3.2e21
+##case aug 065        puff  3.9e21
+##case aug 070        puff  5.4e21
+##case aug 077        puff  6.4e21
+##case aug 088        puff  7.5e21
+##case aug 090        puff  9.05e21
+##case aug 102        puff 10.7e21
+##case aug 110        puff 12.0e21
+##case aug 116        puff 10.1e21
+###AUG-6-pf-C0
+##case aug 125        puff  1.3e21
+##case aug 093        puff  1.63e21
+##case aug 081        puff  2.0e21
+##case aug 071        puff  2.4e21
+##case aug 082        puff  2.6e21
+##case aug 059        puff  2.8e21
+##case aug 054  title puff  3.55e21
+##case aug 058        puff  4.1e21
+##case aug 063        puff  5.1e21
+##case aug 068        puff  6.1e21
+##case aug 073        puff  6.7e21
+##case aug 083        puff  7.5e21
+##case aug 091        puff  9.2e21
+##case aug 103        puff  8.9e21
+##case aug 111        puff  8.5e21  det
+###AUG-4-ff-C0
+##case aug 052  title puff  5.0e21  cr+0
+##case aug 101        puff  4.5e21  cr+5
+##case aug 106        puff  3.95e21 cr+10
+##case aug 112        puff  3.41e21 cr+15
+##case aug 120        puff  2.86e21 cr+20
+##case aug 123        puff  2.27e21 cr+25
+##case aug 128        puff  1.62e21 cr+30
+##case aug 131        puff  1.22e21 cr+35
+##case aug 137        puff  0.60e21 cr+40
+##case aug 140        puff  0.10e21 cr+45
+###F12-100-pf-20-NF-C0
+##case iter 1071        puff  5.5e22
+##case iter 1064        puff  7.7e22
+##case iter 1065        puff  9.4e22
+##case iter 1060  title puff 11.4e22
+##case iter 1072        puff 12.7e22
+##case iter 1066        puff 13.6e22
+##case iter 1067        puff 14.9e22
+##case iter 1070        puff 17.5e22
+##case iter 1074        puff 20.0e22
+##case iter 1079        puff 24.0e22
+###F12-100-tr-pf-20-NF-C0
+##case iter 1060  title puff 11.4e22 tr 0.56
+##case iter 1073        puff 11.3e22 tr 0.25
+##case iter 1075        puff 11.6e22 tr 0.10
+##case iter 1076        puff 11.3e22 tr 0.03
+##case iter 1082        puff 11.3e22 tr 0.01
+###F12-100-pf-20-tr0.1-NF-C0
+##case iter 1077        puff  5.6e22
+##case iter 1081        puff  7.5e22
+##case iter 1084        puff  9.2e22
+##case iter 1075  title puff 11.6e22
+##case iter 1080        puff 13.6e22
+##case iter 1083        puff 15.5e22
+##case iter 1078        puff 18.1e22
+##case iter 1086        puff 20.5e22
+###AUG-5-pf-C0
+##case aug 086  title puff  3.6e21
+###AUG-4-pf-cr+5-C0
+##case aug 101  title puff  4.5e21
+###AUG-4-nc-C0
+##case aug 050  title   nc  4.0e19
+###F12-100-pf-20-NN-MAR-C0
+##case iter 1061        puff  5.5e22
+##case iter 1049        puff  7.6e22
+##case iter 1043  title puff  9.4e22
+##case iter 1053        puff 11.0e22
+##case iter 1063        puff 13.0e22
+##case iter 1046        puff 13.6e22
+##case iter 1055        puff 15.3e22
+##case iter 1056        puff 17.9e22
+##case iter 1059        puff 19.5e22
+##case iter 1068        puff 24.5e22
+###F12-100-pf-Sp20-C-2
+##case iter 981         puff  2.2e22
+##case iter 955   title puff  2.5e22
+##case iter 980         puff  2.8e22
+##case iter 988         puff  3.2e22
+##case iter 990         puff  3.6e22
+##case iter 1004        puff  4.1e22
+##case iter 1024        puff  4.6e22
+##case iter 1044        puff  4.9e22
+##case iter 1050        puff  6.3e22
+##case iter 1069        puff  7.0e22
+###F12SS-80-pf-Sp20-C-1
+##case iter 1018        puff  4.1e22
+##case iter 996         puff  4.6e22
+##case iter 985         puff  5.1e22
+##case iter 969         puff  5.7e22
+##case iter 951   title puff  6.4e22
+##case iter 968         puff  7.1e22
+##case iter 984         puff  7.9e22
+###F12-100-pf-Sp20-C-1
+##case iter 884         puff 2.9e22
+##case iter 856         puff 3.3e22
+##case iter 847         puff 3.8e22   ~
+##case iter 800   title puff 4.3e22
+##case iter 846         puff 4.8e22   ~
+##case iter 844         puff 5.4e22
+##case iter 824         puff 6.0e22   ~
+##case iter 812         puff 6.8e22
+##case iter 821         puff 7.6e22   ~
+##case iter 863         puff 8.5e22   ~
+##case iter 901         puff 9.4e22   ~
+##case iter 904         puff 10.4e22  ~
+###F12-100-pf-20-NN-C0
+##case iter 1038        puff 2.0e22
+##case iter 1051        puff 3.5e22
+##case iter 1040        puff 4.1e22
+##case iter 1037  title puff 4.8e22
+##case iter 1041        puff 5.5e22
+##case iter 1039        puff 7.2e22
+##case iter 1042        puff 8.0e22
+##case iter 1048        puff 8.9e22
+##case iter 1058        puff 9.7e22
+##case iter 1052        puff 10.5e22
+##case iter 1054        puff 13.2e22
+##case iter 1057        puff 15.2e22
+##case iter 1062        puff 18.3e22
+###F12-100-pf=cr-Sp20-C-1
+##case iter 1017        puff = core 2.0e22
+##case iter 961         puff = core 2.2e22   ~
+##case iter 949         puff = core 2.4e22   ~
+##case iter 930         puff = core 2.7e22   ~
+##case iter 925   title puff = core 3.0e22   ~
+##case iter 929         puff = core 3.3e22   ~
+##case iter 944         puff = core 3.6e22
+##case iter 953         puff = core 4.0e22   ~
+##case iter 966         puff = core 4.4e22   ~
+##case iter 1009        puff = core 4.8e22
+##case iter 1016        puff = core 5.3e22
+##case iter 1027        puff = core 5.8e22
+###F12SS-120-pf-Sp20-C-1
+##case iter 977         puff 4.5e22   ~
+##case iter 963         puff 5.0e22   ~
+##case iter 950   title puff 5.6e22   ~
+##case iter 962         puff 6.3e22   ~
+##case iter 975         puff 7.0e22
+##case iter 987         puff 7.8e22   ~
+##case iter 1008        puff 8.7e22
+##case iter 1029        puff 9.7e22
+###F12-100-pf-Sp20-C-0
+##case iter 833         puff 2.5e22
+##case iter 804         puff 2.9e22
+##case iter 759         puff 3.3e22
+##case iter 766         puff 3.8e22
+##case iter 750   title puff 4.3e22
+##case iter 810         puff 4.5e22
+##case iter 761         puff 4.8e22
+##case iter 816         puff 5.4e22
+##case iter 828         puff 5.7e22
+##case iter 758         puff 6.1e22
+##case iter 790         puff 6.8e22
+##case iter 832         puff 7.6e22
+##case iter 1045        puff 8.5e22
+##case iter 1047        puff 9.1e22
+###F12-100-pf-Sp10-C-1
+##case iter 999   title puff 2.3e22
+##case iter 1030        puff 2.6e22
+###F12-100-pf-Sp40-C-1
+##case iter 998   title puff 13.1e22
+###F12-pf-100_MW-Sp20-tor-He_el_off
+##case iter 669n   title puff 5.5e22
+##case iter 725n         puff 7.6e22
+##case iter 1005n        puff 12.7e22
+###F12-100-pf-20-MAR-C0
+##case iter 1035  title puff 9.0e22
+###F12-100-pf-20-red_MAR-C0
+##case iter 1034  title puff 10.6e22
+###F12-100-pf-Sp20-fti12
+##case iter 1028  title puff 7.1e22
+##case iter 1031  title puff 7.9e22
+###F12-130-pf-Sp20-C-1
+##case iter 889         puff 3.3e22   ~
+##case iter 882         puff 3.7e22   ~
+##case iter 869         puff 4.2e22   ~
+##case iter 864         puff 4.7e22   ~
+##case iter 854         puff 5.3e22   ~
+##case iter 831   title puff 6.0e22   ~
+##case iter 853         puff 6.7e22   ~
+##case iter 865         puff 7.5e22   ~
+##case iter 872         puff 8.3e22   ~
+##case iter 881         puff 9.2e22
+##case iter 892         puff 10.2e22   ~
+##case iter 910         puff 11.3e22   ~
+##case iter 917         puff 12.5e22   ~
+##case iter 920         puff 13.8e22   ~
+###F24-100-pf-Sp45-C-1
+##case iter 1022        puff 2.9e22
+##case iter 1013        puff 3.3e22
+##case iter 1003        puff 3.7e22   ~
+##case iter 995   title puff 4.2e22   ~
+##case iter 1002        puff 4.7e22   ~
+##case iter 1015        puff 5.3e22   ~
+##case iter 1021        puff 5.9e22
+##case iter 1026        puff 6.6e22
+###F12-100-pf-Sp20-Qi0.75-C-1
+##case iter 1006        puff 6.0e22   ~
+##case iter 1001  title puff 6.8e22
+##case iter 1010        puff 7.6e22
+###F12-100-pf-Sp20-Qi0.25-C-1
+##case iter 1012        puff 6.1e22   ~
+##case iter 1000  title puff 6.8e22
+##case iter 1011        puff 7.6e22
+###F12-100-fti-Sp20
+##case iter 1020        puff 8.0e22 fti 2.5
+##case iter 725  title puff 7.6e22 fti 3.5
+##case iter 1019        puff 7.6e22 fti 4.5
+##case iter 1023        puff 7.6e22 fti 6.5
+##case iter 1028        puff 7.1e22 fti 12
+###F12SS-100-pf-Sp20-C-1
+##case iter 982         puff 2.7e22   ~
+##case iter 952         puff 3.1e22   ~
+##case iter 927         puff 3.5e22   ~
+##case iter 916   title puff 4.0e22   ~
+##case iter 926         puff 4.5e22   ~
+##case iter 928         puff 5.0e22   ~
+##case iter 932         puff 5.6e22
+##case iter 946         puff 6.3e22   ~
+##case iter 983         puff 7.0e22   ~
+##case iter 989         puff 7.8e22   ~
+##case iter 1007        puff 8.7e22
+##case iter 1025        puff 9.7e22
+###F12-100-cr-Sp20-C-1x8
+##case iter 993         puff 0 core 3.7e22   ~
+##case iter 965         puff 0 core 4.1e22   ~
+##case iter 959         puff 0 core 4.5e22   ~
+##case iter 943         puff 0 core 5.0e22   ~
+##case iter 924   title puff 0 core 5.6e22   ~
+##case iter 939         puff 0 core 6.2e22
+##case iter 957         puff 0 core 6.8e22   ~
+##case iter 964         puff 0 core 7.5e22   ~
+##case iter 986         puff 0 core 8.3e22   ~
+##case iter 991         puff 0 core 9.1e22
+###F24-100-pf-Sp20-C-1
+##case iter 967         puff 0.9e22   ~
+##case iter 945         puff 1.1e22   ~
+##case iter 938         puff 1.3e22   ~
+##case iter 923   title puff 1.5e22   ~
+##case iter 937         puff 1.7e22   ~
+###F24-100-pf-Sp40-C-1
+##case iter 973   title puff 3.6e22   ~
+###F12-86-pf-Sp20-C-1x8
+##case iter 979         puff 3.2e22
+##case iter 971         puff 3.6e22   ~
+##case iter 956         puff 4.1e22   ~
+##case iter 947         puff 4.6e22
+##case iter 936         puff 5.2e22   ~
+##case iter 922   title puff 5.8e22   ~
+##case iter 935         puff 6.5e22   ~
+##case iter 948         puff 7.2e22   ~
+###F12-100-pf-Sp20-C-1x8
+##case iter 992         puff 3.6e22   ~
+##case iter 976         puff 4.0e22
+##case iter 940         puff 4.5e22   ~
+##case iter 906   title puff 5.1e22   ~
+##case iter 912         puff 5.8e22
+##case iter 913         puff 6.6e22   ~
+##case iter 914         puff 7.4e22   ~
+##case iter 915         puff 8.2e22   ~
+###F12-130-pf-Sp20-C-1x8
+##case iter 994         puff 4.4e22   ~
+##case iter 978         puff 4.9e22   ~
+##case iter 970         puff 5.5e22   ~
+##case iter 954         puff 6.1e22   ~
+##case iter 934         puff 6.8e22
+##case iter 921   title puff 7.6e22   ~
+##case iter 933         puff 8.5e22   ~
+##case iter 958         puff 9.4e22   ~
+##case iter 972         puff 10.4e22  ~
+###F12-100-cr-Sp20-C-1
+##case iter 997         puff 0 core 3.7e22   ~
+##case iter 885         puff 0 core 4.1e22   ~
+##case iter 867         puff 0 core 4.6e22   ~
+##case iter 859         puff 0 core 5.1e22   ~
+##case iter 830   title puff 0 core 5.7e22   ~
+##case iter 858         puff 0 core 6.3e22   ~
+##case iter 866         puff 0 core 6.9e22
+##case iter 876         puff 0 core 7.6e22   ~
+##case iter 888         puff 0 core 8.4e22   ~
+##case iter 919         puff 0 core 9.2e22   ~
+##case iter 931         puff 0 core 10.1e22  ~
+##case iter 960         puff 0 core 11.1e22  ~
+##case iter 974         puff 0 core 12.2e22  ~
+###F12-86-pf-Sp20-C-1
+##case iter 911         puff 2.5e22   ~
+##case iter 878         puff 2.9e22   ~
+##case iter 874         puff 3.3e22   ~
+##case iter 861         puff 3.8e22   ~
+##case iter 843   title puff 4.3e22   ~
+##case iter 860         puff 4.8e22   ~
+##case iter 873         puff 5.4e22   ~
+##case iter 877         puff 6.0e22
+##case iter 879         puff 6.7e22   ~
+##case iter 898         puff 7.5e22   ~
+##case iter 899         puff 8.3e22   ~
+##case iter 908         puff 9.2e22   ~
+##case iter 918         puff 10.2e22  ~
+###F12-100-pf-Sp20-C-1x2
+##case iter 897         puff 4.7e22   ~
+##case iter 870         puff 5.3e22   ~
+##case iter 852         puff 6.0e22
+##case iter 826   title puff 6.8e22   ~
+##case iter 851         puff 7.6e22   ~
+##case iter 868         puff 8.5e22   ~
+##case iter 896         puff 9.4e22   ~
+###F12-pf-100_MW-Sp20-tor
+##case iter 849         puff 4.3e22
+##case iter 817         puff 4.9e22
+##case iter  title puff 5.5e22
+##case iter 691         puff 6.1e22
+##case iter 707         puff 6.8e22
+##case iter 725         puff 7.6e22
+##case iter 730         puff 8.5e22
+##case iter 737         puff 9.4e22
+##case iter 815         puff 10.4e22
+##case iter 855         puff 11.5e22
+##case iter 1005        puff 12.7e22
+##case iter 1014        puff 14.1e22
+###F12SS-100-pf-Sp20-C-0
+##case iter 941         puff 2.0e22
+##case iter 905         puff 2.3e22
+##case iter 903         puff 2.7e22
+##case iter 895         puff 3.1e22
+##case iter 891         puff 3.5e22
+##case iter 880         puff 4.0e22
+##case iter 850   title puff 4.6e22
+##case iter 875         puff 5.2e22
+##case iter 886         puff 5.8e22
+##case iter 902         puff 6.5e22
+##case iter 907         puff 7.2e22
+##case iter 942         puff 8.0e22
+###F12-100-pf-Sp20-C-1x4
+##case iter 909         puff 4.5e22   ~
+##case iter 900         puff 5.1e22   ~
+##case iter 894         puff 5.8e22
+##case iter 890         puff 6.6e22   ~
+##case iter 887   title puff 7.4e22   ~
+##case iter 893         puff 8.2e22   ~
+###F12-130-pf-Sp20-C-ch+
+##case iter 862   title puff 3.1e22
+###F14-pf-100_MW-Sp40-el
+##case iter 845         puff 2.9e22
+##case iter 829   title C targ: puff 3.3e22
+###F12-100-cr-Sp20-Qi0.75-C-0
+##case iter 839         puff 0 core 4.2e22
+##case iter 787         puff 0 core 4.7e22
+##case iter 777   title puff 0 core 5.2e22
+##case iter 786         puff 0 core 5.7e22
+##case iter 838         puff 0 core 6.0e22
+##case iter 793         puff 0 core 6.3e22
+##case iter 809         puff 0 core 6.9e22
+###F12-100-cr-Sp20-Qi0.25-C-0
+##case iter 840         puff 0 core 4.2e22
+##case iter 789         puff 0 core 4.7e22
+##case iter 776   title puff 0 core 5.2e22
+##case iter 788         puff 0 core 5.7e22
+##case iter 794         puff 0 core 6.3e22
+##case iter 808         puff 0 core 6.9e22
+##case iter 835         puff 0 core 7.6e22
+###F12-100-cr-Sp20-C-0
+##case iter 827         puff 0 core 4.2e22
+##case iter 779         puff 0 core 4.7e22
+##case iter 770   title puff 0 core 5.2e22
+##case iter 778         puff 0 core 5.7e22
+##case iter 791         puff 0 core 6.3e22
+##case iter 795         puff 0 core 6.9e22
+##case iter 823         puff 0 core 7.6e22
+##case iter 848         puff 0 core 8.4e22
+###F12-100-pf-Sp20-Qi0.75-C-0
+##case iter 841         puff 3.3e22
+##case iter 782         puff 3.8e22
+##case iter 768   title puff 4.3e22
+##case iter 781         puff 4.8e22
+##case iter 796         puff 5.4e22
+##case iter 805         puff 6.0e22
+##case iter 837         puff 6.7e22
+###F12-100-pf-Sp20-Qi0.25-C-0
+##case iter 775         puff 3.8e22
+##case iter 767   title puff 4.3e22
+##case iter 773         puff 4.8e22
+##case iter 783         puff 5.4e22
+##case iter 797         puff 6.0e22
+##case iter 806         puff 6.7e22
+##case iter 836         puff 7.5e22
+###F12-86-pf-Sp20-C-0
+##case iter 825         puff 2.9e22
+##case iter 814         puff 3.3e22
+##case iter 765         puff 3.8e22
+##case iter 756   title puff 4.3e22
+##case iter 764         puff 4.8e22
+##case iter 772         puff 5.4e22
+##case iter 798         puff 6.0e22
+##case iter 803         puff 6.7e22
+##case iter 834         puff 7.5e22
+##case iter 857         puff 8.3e22
+###F12-130-pf-Sp20-C-0
+##case iter 774         puff 2.5e22
+##case iter 769         puff 3.1e22
+##case iter 751   title puff 4.3e22
+##case iter 784         puff 4.8e22
+##case iter 799         puff 5.4e22
+##case iter 802         puff 6.0e22
+##case iter 811         puff 6.7e22
+##case iter 819         puff 7.5e22
+##case iter 842         puff 8.3e22
+##case iter 871         puff 9.2e22
+###F12-130-pf-Sp20-C-ch
+##case iter 822   title puff 3.1e22855
+###F12-100-pf-Sp20-C-ch
+##case iter 818   title puff 4.3e22
+###F14-pf-100_MW-Sp20-el
+##case iter 820         puff 1.2e22
+##case iter 813         puff 1.5e22
+##case iter 792   title C targ: puff 1.8e22
+###F20-pf-100_MW-Sp20-el
+##case iter 807         puff 0.7e22
+##case iter 752         puff 0.85e22
+##case iter 757         puff 2.0e22
+##case iter 763         puff 3.5e22
+##case iter 745         puff 4.0e22
+##case iter 771         puff 4.1e22
+##case iter 762         puff 4.2e22
+##case iter 780         puff 4.7e22
+##case iter 801         puff 5.3e22
+##case iter 755         puff 4.2e22
+##case iter 741         puff 4.5e22
+##case iter 729         puff 5.1e22
+##case iter 643   title puff 5.8e22
+###F01-pf-100_MW-Sp20-el
+##case iter 688         puff 3.4e22
+##case iter 666   title puff 3.9e22
+##case iter 679         puff 4.4e22
+##case iter 693         puff 4.9e22
+##case iter 706         puff 5.5e22
+##case iter 712         puff 6.1e22
+##case iter 719         puff 6.8e22
+##case iter 722         puff 7.6e22
+##case iter 727         puff 8.5e22
+##case iter 754         puff 8.9e22
+######case iter 734         puff 9.4e22
+######case iter 740         puff 10.5e22
+######case iter 785         puff 10.8e22
+######case iter 753         puff 10.9e22
+##case iter 760         puff 11.4e22
+##case iter 731         puff 11.9e22
+###F12SS-pf-100_MW-Sp20-el
+##case iter 733         puff 3.8e22
+##case iter 700   title puff 4.3e22
+##case iter 715         puff 4.8e22
+##case iter 732         puff 5.4e22
+##case iter 748         puff 6.0e22
+###F23-pf-100_MW-Sp20-el
+##case iter 664   title puff 4.9e22
+##case iter 650         puff 5.5e22
+##case iter 663         puff 6.1e22
+##case iter 687         puff 6.8e22
+##case iter 699         puff 7.6e22
+##case iter 720         puff 8.5e22
+##case iter 738         puff 9.4e22
+###F12-pf-100_MW-Sp20-el-Qi0.75
+##case iter 746         puff 4.9e22
+##case iter 689   title puff 5.5e22
+##case iter 713         puff 6.1e22
+##case iter 728         puff 6.8e22
+##case iter 735         puff 7.6e22
+##case iter 749         puff 8.5e22
+###F12-pf-100_MW-Sp20-el-Qi0.25
+##case iter 742         puff 4.9e22
+##case iter 690   title puff 5.5e22
+##case iter 703         puff 6.1e22
+##case iter 710         puff 6.8e22
+##case iter 717         puff 7.6e22
+##case iter 726   title puff 8.5e22
+###F12-cr-100_MW-Sp20-el-Qi0.75
+##case iter 694         puff 0 core 5.8e22
+##case iter 659   title puff 0 core 6.4e22
+##case iter 681         puff 0 core 7.0e22
+##case iter 697         puff 0 core 7.7e22
+##case iter 718         puff 0 core 8.5e22
+##case iter 743         puff 0 core 9.4e22
+###F12-cr-100_MW-Sp20-el-Qi0.25
+##case iter 739         puff 0 core 5.2e22
+##case iter 674   title puff 0 core 5.8e22
+##case iter 658         puff 0 core 6.4e22
+##case iter 673         puff 0 core 7.0e22
+##case iter 683         puff 0 core 7.7e22
+##case iter 701         puff 0 core 8.5e22
+##case iter 716         puff 0 core 9.4e22
+###F21-pf-100_MW-Sp20-el
+##case iter 671         puff 2.5e22
+##case iter 644   title puff 2.9e22
+##case iter 670         puff 3.3e22
+##case iter 678         puff 3.7e22
+##case iter 682         puff 4.2e22
+##case iter 685         puff 4.7e22
+##case iter 692         puff 5.2e22
+##case iter 709         puff 5.6e22
+##case iter 714         puff 5.7e22
+##case iter 695         puff 5.8e22
+##case iter 705         puff 6.4e22
+##case iter 704         puff 7.5e22
+##case iter 702         puff 8.1e22
+##case iter 723         puff 9.0e22
+##case iter 736         puff 10.0e22
+###F12-cr-100_MW-Sp20-el
+##case iter 635   title puff 0 core 5.1e22
+##case iter 632         puff 0 core 5.7e22
+##case iter 624         puff 0 core 6.4e22
+##case iter 629         puff 0 core 7.0e22
+##case iter 633         puff 0 core 7.8e22
+##case iter 636         puff 0 core 8.6e22
+##case iter 656         puff 0 core 9.5e22
+##case iter 661         puff 0 core 10.5e22
+##case iter 672         puff 0 core 11.6e22
+##case iter 680         puff 0 core 12.8e22
+##case iter 711         puff 0 core 14.1e22
+##case iter 721         puff 0 core 15.5e22
+###F12-100_MW-Sp20-el-Cwl
+##case iter 660   title puff 3.3e22
+##case iter 654         puff 3.8e22
+##case iter 646         puff 4.3e22
+##case iter 638         puff 4.9e22
+##case iter 622         puff 5.5e22
+##case iter 639         puff 6.1e22
+###F15-pf-100_MW-Sp20-el
+##case iter 698         puff 6.8e22
+##case iter 677   title puff 7.6e22
+##case iter 667         puff 8.5e22
+##case iter 676         puff 9.4e22
+##case iter 684         puff 10.4e22
+###F12-100_MW-Sp20-el-C-reers
+##case iter 696         puff 3.3e22
+##case iter 686         puff 3.8e22
+##case iter 675   title puff 4.3e22
+##case iter 665         puff 4.9e22
+##case iter 655         puff 5.5e22
+##case iter 662         puff 6.1e22
+###F12-100_MW-Sp20-el-Be
+##case iter 648   title puff 5.5e22
+###F12-pf-160_MW-Sp20-el
+##case iter 617   title puff 8.5e22
+##case iter 637         puff 9.4e22
+##case iter 657         puff 10.4e22
+##case iter 668         puff 11.5e22
+###F12-100_MW-Sp20-el-C-Be
+##case iter 653   title puff 4.3e22
+##case iter 647         puff 4.9e22
+##case iter 652         puff 5.5e22
+###F12-100_MW-Sp20-el-Be-Ne
+##case iter 645   title puff 5.5e22 Ne 2.e20
+###F20-pf-100_MW-Sp14-el
+##case iter 641   title puff 4.8e22
+###F12-100_MW-Sp20-el-Be_rcl
+##case iter 631   title puff 5.5e22
+###F12-cr-100_MW-Sp20-thr120
+##case iter 585   title puff 5.5e22 core 9.1e21
+##case iter 612         puff 4.4e22 core 2.0e22
+##case iter 615         puff 2.4e22 core 4.0e22
+##case iter 624         puff 0.0e22 core 6.4e22
+###F12-100_MW-Sp08-tr056:0
+##case iter 602   title puff 5.0e22
+##case iter 614         puff 6.0e22
+##case iter 627         puff 7.0e22
+###F12-pf-86_MW-Sp20-el
+##case iter 618   title puff 3.5e22
+##case iter 594         puff 4.0e22
+##case iter 604         puff 5.0e22
+##case iter 595         puff 5.5e22
+##case iter 599         puff 7.2e22
+##case iter 596         puff 8.9e22
+##case iter 597         puff 9.9e22
+##case iter 626         puff 10.5e22
+##case iter 608         puff 11.0e22
+###F12-pf-86_MW-Sp20-el-det
+##case iter 618   title puff 3.5e22
+##case iter 594         puff 4.0e22
+##case iter 604         puff 5.0e22
+##case iter 595         puff 5.5e22
+##case iter 599         puff 7.2e22
+##case iter 596         puff 8.9e22
+##case iter 597         puff 9.9e22
+##case iter 626         puff 10.5e22
+##case iter 608         puff 11.0e22
+##case iter 628         puff 9.7e22 detached
+##case iter 610         puff 12.2e22 detached
+###F12-pf-100_MW-Sp10-el
+##case iter 603   title puff 2.3e22
+##case iter 616         puff 2.9e22
+##case iter 623         puff 4.6e22
+###F12-pf-100_MW-Sp20-el
+##case iter 611   title puff 3.0e22
+##case iter 588         puff 3.4e22
+##case iter 587         puff 4.4e22
+##case iter 585         puff 5.5e22
+##case iter 589         puff 6.5e22
+##case iter 601         puff 7.9e22
+##case iter 606         puff 9.2e22
+##case iter 590         puff 10.2e22
+##case iter 609         puff 11.3e22
+###F12-pf-100_MW-Sp40-el
+##case iter 620   title puff 5.3e22
+##case iter 619         puff 8.6e22
+##case iter 621         puff 10.7e22
+##case iter 630         puff 13.9e22
+##case iter 642         puff 15.4e22
+###F12-pf-130_MW-Sp20-el
+##case iter 591   title puff 5.0e22
+##case iter 613         puff 5.5e22
+##case iter 598         puff 6.5e22
+##case iter 605         puff 7.0e22
+##case iter 625         puff 7.7e22
+##case iter 592         puff 8.5e22
+##case iter 607         puff 10.4e22
+##case iter 593         puff 11.5e22
+##case iter 600         puff 12.7e22
+###F12-pf-160_MW-Sp20
+##case iter 586   title puff 8.5e22
+###F12-pf-86_MW-Sp20
+##case iter 559   title puff 3.5e22
+##case iter 536         puff 4.e22
+##case iter 530         puff 4.5e22
+##case iter 509         puff 5.e22
+##case iter 502         puff 5.5e22
+##case iter 488         puff 6.e22
+##case iter 508         puff 6.5e22
+##case iter 529         puff 7.2e22
+##case iter 557         puff 8.e22
+##case iter 563         puff 8.9e22
+###F12-pf-100_MW-Sp10
+##case iter 584   title C targ: K=1.0, Gc=9.1e21, puff 2.3e22
+###F12-pf-100_MW-Sp15
+##case iter 542   title puff 6.e22
+##case iter 550         puff 6.7e22
+##case iter 564         puff 7.5e22
+###F12-pf-100_MW-Sp20
+##case iter 578   title puff 3.0e22
+##case iter 571         puff 3.4e22
+##case iter 566         puff 3.9e22
+##case iter 556         puff 4.4e22
+##case iter 510         puff 5.e22
+##case iter 479         puff 5.5e22
+##case iter 476         puff 6.e22
+##case iter 480         puff 6.5e22
+##case iter 522         puff 7.0e22
+##case iter 523         puff 7.5e22
+##case iter 543         puff 7.9e22
+##case iter 532         puff 8.3e22
+##case iter 546         puff 9.2e22
+##case iter 558         puff 10.2e22
+##case iter 579         puff 11.3e22
+###F12-pf-100_MW-Sp30
+##case iter 531   title puff 5.5e22
+##case iter 517         puff 6.0e22
+##case iter 504         puff 6.3e22
+##case iter 495         puff 6.6e22
+##case iter 489         puff 6.9e22
+##case iter 496         puff 7.2e22
+##case iter 511         puff 7.6e22
+###F12-pf-100_MW-Sp40
+##case iter 565   title puff 5.3.e22
+##case iter 553         puff 6.e22
+##case iter 545         puff 6.8e22
+##case iter 534         puff 7.5e22
+##case iter 505         puff 8.2e22
+##case iter 544         puff 8.6e22
+##case iter 575         puff 9.6e22
+##case iter 583         puff 10.7e22
+###F12-pf-130_MW-Sp20
+##case iter 525   title puff 5.0e22
+##case iter 506         puff 5.5e22
+##case iter 487         puff 6.e22
+##case iter 507         puff 6.5e22
+##case iter 524         puff 7.0e22
+##case iter 533         puff 7.7e22
+##case iter 541         puff 8.5e22
+##case iter 547         puff 9.4e22
+##case iter 561         puff 10.4e22
+##case iter 567         puff 11.5e22
+##case iter 580         puff 12.7e22
+###F12SS-pf-100_MW-Sp30-C
+##case iter 577   title puff 4.2e22
+##case iter 568         puff 4.8e22
+##case iter 549         puff 5.5e22
+##case iter 527         puff 6.2e22
+##case iter 514         puff 6.9e22
+##case iter 528         puff 7.5e22
+##case iter 554         puff 8.3e22
+##case iter 576         puff 9.2e22
+###F12-pf-100_MW-Sp20+Ne
+##case iter 572   title C targ+Ne: K=1.0, Gc=9.1e21, puff 5.5e22
+###F12-pf-100_MW-Sp20+Ar
+##case iter 573   title C targ+Ar: puff 5.5e22
+###F19-pf-100_MW-Sp20
+##case iter 569   title puff 5.e22
+##case iter 562         puff 5.5e22
+##case iter 570         puff 6.e22
+###F12-pf-100_MW-Sp20-Qi0.25
+##case iter 555   title 5.5e22, Qi/Qt=0.25
+###F12-pf-100_MW-Sp30-nnsd
+##case iter 539   title puff 6.9e22
+##case iter 560         puff 7.7e22
+###F18-pf-100_MW-Sp20
+##case iter 551   title puff 4.9e22
+##case iter 548         puff 5.5e22
+##case iter 552         puff 6.1e22
+##case iter 574         puff 6.8e22
+###F16-pf-100_MW-Sp30
+##case iter 537   title puff 5.7e22
+###F17-pf-100_MW-Sp30
+##case iter 540   title puff 5.7e22
+###F12-pff-100_MW-Sp30
+##case iter 538   title puff 6.9e22, fixed rcl
+###F12-Ar-130_MW-Sp20
+##case iter 491   title C targ: Ar 2.6e20, puff 5.4e22
+##case iter 535         C targ: Ar 2.6e20, puff 6.e22
+###F12-Ar_0.85-130_MW-Sp20
+##case iter 516   title C targ: Ar 2.3e20, K=1.0, Gc=9.1e21, puff 6.e22
+###F13-pf-100_MW-Sp20
+##case iter 493   title puff 5.e22
+##case iter 490         puff 5.5e22
+###F13-pf-100_MW-Sp30
+##case iter 581   title puff 5.0e22
+##case iter 512         puff 5.7e22
+##case iter 494         puff 6.2e22
+##case iter 513         puff 6.7e22
+###F12-pf-100_MW-Sp30-Gc4
+##case iter 526   title puff 7.5e22
+###F12SS-pf-100_MW-Sp100
+##case iter 503   title C targ: Ar pf, puff 3.7e22
+###F12SS-pf-120_MW-Sp30
+##case iter 499   title C targ: Ar pf, puff 7.e21
+###F12SS-pf-100_MW-Sp30
+##case iter 500   title C targ: Ar pf, puff 1.2e22
+##case iter 498         C targ: Ar pf, puff 1.7e22
+###F12SS-pf-100_MW-Sp40
+##case iter 501   title C targ: Ar pf, puff 2.6e22
+###F12SS-pf-100_MW-Sp20
+##case iter 492   title C targ: Ar pf, puff 7.3e21
+##case iter 515         C targ: Ar pf, puff 8.e21
+###F12SS-pf-100_MW-Sp20-K05
+##case iter 518   title C targ: Ar pf, K=0.5, puff 7.3e21
+###F12-pf-100_MW-Sp30-el
+##case iter 519   title puff 6.9e22
+###F13-pf-100_MW-Sp20-el
+##case iter 520   title puff 5.5e22
+###F14-cr-100_MW-Sp20-el
+##case iter 521   title C targ: no dome, Gc=2.e22, puff 6.e22
+###F14-cr-100_MW-Sp20
+##case iter 497   title C targ: no dome, Gc=2.e22, puff 6.e22
+##case iter 486         C targ: no dome, Gc=3.e22, puff 6.e22
+###F06-Ar-86_MW-Sp75-Tped
+##case iter 483   title C targ: Ar pf, nc=4.5, puff 6.e22
+###FEAT_001-nc-0.2-Ar_pf-86_MW
+##case iter 484   title C targ: Ar puff, K=1.0, nc=0.40, Sp=75, puff 6.e22
+##case iter 473         C targ: Ar puff, K=1.0, nc=0.45, Sp=75, puff 6.e22
+##case iter 481         C targ: Ar puff, K=1.0, nc=0.50, Sp=75, puff 6.e22
+###FEAT_001-nc-0.5-Ne_pf-86_MW
+##case iter 482   title C targ: Ne puff, K=1.0, nc=0.40, Sp=75, puff 6.e22
+##case iter 478         C targ: Ne puff, K=1.0, nc=0.45, Sp=75, puff 6.e22
+###FEAT_001-nc-0.6-N_pf-86_MW
+##case iter 485   title C targ: N puff, K=1.0, nc=0.40, Sp=75, puff 6.e22
+##case iter 477         C targ: N puff, K=1.0, nc=0.45, Sp=75, puff 6.e22
+###FEAT_015-nc-0.0-100_MW-Sp20
+##case iter 474   title C targ: no dome, K=1.0, nc=0.35, puff 6.e22
+###FEAT_014-nc-0.0-100_MW-Sp20
+##case iter 468   title C targ: no dome, K=1.0, nc=0.35, puff 6.e22
+###FEAT_013-nc-0.0-100_MW-Sp20
+##case iter 465   title C targ: no Ne, K=1.0, nc=0.35, Sp=20, puff 6.e22
+###FEAT_012-nc-0.0-86_MW-Sp20
+##case iter 470   title C targ: no Ne, K=1.0, nc=0.35, puff 6.e22
+###FEAT_012-nc-0.0-100_MW-wide-Tped_0.25
+##case iter 472   title C targ: no Ne, K=1.0, nc=0.9, puff 6.e22, wide core
+###FEAT_012-nc-0.0-100_MW-Sp20
+##case iter 466   title C targ: no Ne, K=1.0, nc=0.32, puff 6.e22
+##case iter 463         C targ: no Ne, K=1.0, nc=0.35, puff 6.e22
+###FEAT_012-nc-0.0-100_MW-Sp30
+##case iter 467   title C targ: no Ne, K=1.0, nc=0.36, puff 6.e22
+##case iter 475         C targ: no Ne, K=1.0, nc=0.40, puff 6.e22
+###FEAT_012-nc-0.0-130_MW-Sp20
+##case iter 469   title C targ: no Ne, K=1.0, nc=0.35, puff 6.e22
+###FEAT_001-nc-0.8-N-86_MW
+##case iter 471   title C targ: 0.8% N, K=1.0, nc=0.45, Sp=75, puff 6.e22
+###FEAT_011-nc-0.0-100_MW-Sp20-tr01:0
+##case iter 462   title C targ: no Ne, K=1.0, nc=0.35, A=0.993, puff 6.e22
+###FEAT_011-nc-0.0-86_MW-Sp40-tr0.1
+##case iter 455   title C targ: no Ne, K=1.0, nc=0.37, A=0.985, puff 6.e22
+###FEAT_011-nc-0.0-86_MW-Sp40-tr05:0
+##case iter 461   title C targ: no Ne, K=1.0, nc=0.37, A=0.985, puff 6.e22
+###FEAT_011-nc-0.0-100_MW-Sp20-tr0.25
+##case iter 458   title C targ: no Ne, K=1.0, nc=0.35, A=0.993, puff 6.e22
+###FEAT_011-nc-0.0-100_MW-Sp20-tr0.1
+##case iter 459   title C targ: no Ne, K=1.0, nc=0.35, A=0.993, puff 6.e22
+###FEAT_011-nc-0.0-86_MW-Sp20-tr1.0
+##case iter 448   title C targ: no Ne, K=1.0, nc=0.50, A=0.993, puff 6.e22
+###FEAT_011-nc-0.0-86_MW-Sp40-tr1.0
+##case iter 447   title C targ: no Ne, K=1.0, nc=0.37, A=0.985, puff 6.e22
+###FEAT_011-nc-0.0-86_MW-Sp40-tr0.5
+##case iter 453   title C targ: no Ne, K=1.0, nc=0.37, A=0.985, puff 6.e22
+###FEAT_011-nc-0.0-86_MW-Sp40-tr0.25
+##case iter 454   title C targ: no Ne, K=1.0, nc=0.37, A=0.985, puff 6.e22
+###FEAT_011-nc-0.0-86_MW-Sp40-tr05:0.1
+##case iter 456   title C targ: no Ne, K=1.0, nc=0.37, A=0.985, puff 6.e22
+###FEAT_011-nc-0.0-86_MW-Sp75-tr1.0
+##case iter 449   title C targ: no Ne, K=1.0, nc=0.45, A=0.97, puff 6.e22
+##case iter 444         C targ: no Ne, K=1.0, nc=0.50, A=0.97, puff 6.e22
+###FEAT_011-nc-0.0-86_MW-Sp75-tr0.7
+##case iter 445   title C targ: no Ne, K=1.0, nc=0.50, A=0.97, puff 6.e22
+###FEAT_011-nc-0.0-86_MW-Sp75-tr0.5
+##case iter 442   title C targ: no Ne, K=1.0, nc=0.50, A=0.97, puff 6.e22
+###FEAT_011-nc-0.0-86_MW-Sp75-tr0.25
+##case iter 443   title C targ: no Ne, K=1.0, nc=0.50, A=0.97, puff 6.e22
+###FEAT_011-nc-0.0-100_MW-Sp20-tr1.0
+##case iter 451   title C targ: no Ne, K=1.0, nc=0.35, A=0.993, puff 6.e22
+###FEAT_011-nc-0.0-100_MW-Sp20-tr0.5
+##case iter 457   title C targ: no Ne, K=1.0, nc=0.35, A=0.993, puff 6.e22
+###FEAT_011-nc-0.0-100_MW-Sp40-tr1.0
+##case iter 450   title C targ: no Ne, K=1.0, nc=0.40, A=0.985, puff 6.e22
+###FEAT_011-nc-0.0-100_MW-Sp75-tr1.0
+##case iter 452   title C targ: no Ne, K=1.0, nc=0.50, A=0.97, puff 6.e22
+###FEAT_006-nc-0.0-86_MW-Sp75-Tped
+##case iter 460   title C targ: no Ne, K=1.0, nc=0.90, T pedestal
+###FEAT_010-nc-0.0-86_MW-A0.991
+##case iter 435   title C targ: no Ne, K=1.0, nc=0.35, A=0.991, puff 6.e22
+###FEAT_010-nc-0.0-100_MW-A0.991
+##case iter 438   title C targ: no Ne, K=1.0, nc=0.35, A=0.991, puff 6.e22
+###FEAT_010-nc-0.0-140_MW-A0.952
+##case iter 433   title C targ: no Ne, K=1.0, nc=0.40, A=0.952, puff 6.e22
+###FEAT_010-nc-0.0-140_MW-A0.987
+##case iter 441   title C targ: no Ne, K=1.0, nc=0.40, A=0.987, puff 6.e22
+###FEAT_001-nc-0.5-Ne-86_MW
+##case iter 413   title C targ: 0.6% Ne, K=1.0, nc=0.45, A=0.95, puff 6.e22
+##case iter 412         C targ: 0.6% Ne, K=1.0, nc=0.50, A=0.95, puff 6.e22
+###FEAT_010-nc-0.0-86_MW-A0.966
+##case iter 436   title C targ: no Ne, K=1.0, nc=0.40, A=0.966, puff 6.e22
+##case iter 431         C targ: no Ne, K=1.0, nc=0.45, A=0.966, puff 6.e22
+###FEAT_010-nc-0.0-86_MW-A0.982
+##case iter 434   title C targ: no Ne, K=1.0, nc=0.40, A=0.982, puff 6.e22
+###FEAT_010-nc-0.0-100_MW-A0.966
+##case iter 432   title C targ: no Ne, K=1.0, nc=0.50, A=0.966, puff 6.e22
+##case iter 439         C targ: no Ne, K=1.0, nc=0.55, A=0.966, puff 6.e22
+###FEAT_010-nc-0.0-100_MW-A0.982
+##case iter 437   title C targ: no Ne, K=1.0, nc=0.40, A=0.982, puff 6.e22
+###FEAT_010-nc-0.0-140_MW-A0.974
+##case iter 440   title C targ: no Ne, K=1.0, nc=0.40, A=0.974, puff 6.e22
+###FEAT_010-nc-0.0-86_MW-Spd75-tr0.5
+##case iter 428   title C targ: no Ne, K=1.0, nc=0.50, A=0.932, puff 6.e22
+###FEAT_010-nc-0.0-86_MW-Spd75-tr0.25
+##case iter 429   title C targ: no Ne, K=1.0, nc=0.50, A=0.85, puff 6.e22
+###FEAT_010-nc-0.0-86_MW-Spd75-tr0.1
+##case iter 430   title C targ: no Ne, K=1.0, nc=0.50, A=0.61, puff 6.e22
+###FEAT_001-nc-0.0-100_MW-A0.975
+##case iter 416   title C targ: no Ne, K=1.0, nc=0.36, A=0.975, puff 6.e22
+##case iter 409   title C targ: no Ne, K=1.0, nc=0.40, A=0.975, puff 6.e22
+##case iter 417         C targ: no Ne, K=1.0, nc=0.45, A=0.975, puff 6.e22
+###FEAT_008-nc-0.0-100_MW
+##case iter 414   title C targ: no Ne, K=1.0, nc=0.50, A=0.966, puff 6.e22
+###FEAT_008-nc-0.0-86_MW
+##case iter 415   title C targ: no Ne, K=1.0, nc=0.45, A=0.966, puff 6.e22
+##case iter 400         C targ: no Ne, K=1.0, nc=0.50, A=0.966, puff 6.e22
+###FEAT_009-nc-0.0-86_MW
+##case iter 422   title C targ: no Ne, K=1.0, nc=0.50, A=0.966, puff 6.e22
+###FEAT_007-nc-0.0-86_MW
+##case iter 398   title C targ: no Ne, K=1.0, nc=0.50, A=0.95, puff 6.e22
+###FEAT_006-nc-0.0-86_MW
+##case iter 396   title C targ: no Ne, K=1.0, nc=0.90, A=0.95, puff 6.e22
+###FEAT_005-nc-0.0-86_MW
+##case iter 356   title C targ: no Ne, K=1.0, nc=0.50, A=0.95, puff 6.e22
+###FEAT_005-nc-0.0-100_MW
+##case iter 384   title C targ: no Ne, K=1.0, nc=0.45, A=0.95, puff 6.e22
+##case iter 375         C targ: no Ne, K=1.0, nc=0.50, A=0.95, puff 6.e22
+##case iter 383         C targ: no Ne, K=1.0, nc=0.55, A=0.95, puff 6.e22
+###FEAT_004-nc-0.0-86_MW
+##case iter 355   title C targ: no Ne, K=1.0, nc=0.50, A=0.95, puff 6.e22
+###FEAT_003-nc-0.0-86_MW
+##case iter 352   title C targ: no Ne, K=1.0, nc=0.50, A=0.95, puff 6.e22
+###FEAT_003-nc-0.0-100_MW
+##case iter 382   title C targ: no Ne, K=1.0, nc=0.45, A=0.95, puff 6.e22
+##case iter 362         C targ: no Ne, K=1.0, nc=0.50, A=0.95, puff 6.e22
+##case iter 381         C targ: no Ne, K=1.0, nc=0.55, A=0.95, puff 6.e22
+###FEAT_002-nc-0.0-86_MW
+##case iter 350   title C targ: no Ne, K=1.0, nc=0.50, A=0.95, puff 6.e22
+###FEAT_001-nc-0.0-75_MW
+##case iter 337   title C targ: no Ne, K=1.0, nc=0.35, A=0.95, puff 6.e22
+##case iter 338         C targ: no Ne, K=1.0, nc=0.40, A=0.95, puff 6.e22
+##case iter 340         C targ: no Ne, K=1.0, nc=0.45, A=0.95, puff 6.e22
+##case iter 357         C targ: no Ne, K=1.0, nc=0.50, A=0.95, puff 6.e22
+##case iter 374         C targ: no Ne, K=1.0, nc=0.55, A=0.95, puff 6.e22
+##case iter 399         C targ: no Ne, K=1.0, nc=0.60, A=0.95, puff 6.e22
+###FEAT_001-nc-0.0-86_MW
+##case iter 343   title C targ: no Ne, K=1.0, nc=0.35, A=0.95, puff 6.e22
+##case iter 339         C targ: no Ne, K=1.0, nc=0.40, A=0.95, puff 6.e22
+##case iter 371         C targ: no Ne, K=1.0, nc=0.425, A=0.95, puff 6.e22
+##case iter 342         C targ: no Ne, K=1.0, nc=0.45, A=0.95, puff 6.e22
+##case iter 359         C targ: no Ne, K=1.0, nc=0.48, A=0.95, puff 6.e22
+##case iter 345         C targ: no Ne, K=1.0, nc=0.50, A=0.95, puff 6.e22
+##case iter 367         C targ: no Ne, K=1.0, nc=0.51, A=0.95, puff 6.e22
+##case iter 358         C targ: no Ne, K=1.0, nc=0.52, A=0.95, puff 6.e22
+##case iter 368         C targ: no Ne, K=1.0, nc=0.53, A=0.95, puff 6.e22
+##case iter 348         C targ: no Ne, K=1.0, nc=0.55, A=0.95, puff 6.e22
+##case iter 360         C targ: no Ne, K=1.0, nc=0.575, A=0.95, puff 6.e22
+##case iter 351         C targ: no Ne, K=1.0, nc=0.60, A=0.95, puff 6.e22
+##case iter 370         C targ: no Ne, K=1.0, nc=0.65, A=0.95, puff 6.e22
+###FEAT_001-nc-0.0-100_MW
+##case iter 379   title C targ: no Ne, K=1.0, nc=0.35, A=0.95, puff 6.e22
+##case iter 341         C targ: no Ne, K=1.0, nc=0.40, A=0.95, puff 6.e22
+##case iter 344         C targ: no Ne, K=1.0, nc=0.45, A=0.95, puff 6.e22
+##case iter 424         C targ: no Ne, K=1.0, nc=0.46, A=0.95, puff 6.e22
+##case iter 395         C targ: no Ne, K=1.0, nc=0.475, A=0.95, puff 6.e22
+##case iter 423         C targ: no Ne, K=1.0, nc=0.49, A=0.95, puff 6.e22
+##case iter 347         C targ: no Ne, K=1.0, nc=0.50, A=0.95, puff 6.e22
+##case iter 425         C targ: no Ne, K=1.0, nc=0.505, A=0.95, puff 6.e22
+##case iter 394         C targ: no Ne, K=1.0, nc=0.51, A=0.95, puff 6.e22
+##case iter 380         C targ: no Ne, K=1.0, nc=0.525, A=0.95, puff 6.e22
+##case iter 353         C targ: no Ne, K=1.0, nc=0.55, A=0.95, puff 6.e22
+##case iter 426         C targ: no Ne, K=1.0, nc=0.575, A=0.95, puff 6.e22
+##case iter 366         C targ: no Ne, K=1.0, nc=0.60, A=0.95, puff 6.e22
+##case iter 393         C targ: no Ne, K=1.0, nc=0.65, A=0.95, puff 6.e22
+###FEAT_001-nc-0.0-120_MW
+##case iter 420   title C targ: no Ne, K=1.0, nc=0.35, A=0.95, puff 6.e22
+##case iter 406         C targ: no Ne, K=1.0, nc=0.40, A=0.95, puff 6.e22
+##case iter 389         C targ: no Ne, K=1.0, nc=0.45, A=0.95, puff 6.e22
+##case iter 372         C targ: no Ne, K=1.0, nc=0.50, A=0.95, puff 6.e22
+##case iter 388         C targ: no Ne, K=1.0, nc=0.55, A=0.95, puff 6.e22
+##case iter 401         C targ: no Ne, K=1.0, nc=0.60, A=0.95, puff 6.e22
+###FEAT_001-nc-0.0-140_MW
+##case iter 421   title C targ: no Ne, K=1.0, nc=0.40, A=0.95, puff 6.e22
+###FEAT_001-nc-0.0-160_MW
+##case iter 427   title C targ: no Ne, K=1.0, nc=0.40, A=0.95, puff 6.e22
+###FEAT_001-nc-0.0-86_MW-A0.965
+##case iter 363   title C targ: no Ne, K=1.0, nc=0.40, A=0.965, puff 6.e22
+##case iter 346         C targ: no Ne, K=1.0, nc=0.45, A=0.965, puff 6.e22
+##case iter 349         C targ: no Ne, K=1.0, nc=0.50, A=0.965, puff 6.e22
+##case iter 410         C targ: no Ne, K=1.0, nc=0.53, A=0.965, puff 6.e22
+##case iter 361         C targ: no Ne, K=1.0, nc=0.55, A=0.965, puff 6.e22
+##case iter 365         C targ: no Ne, K=1.0, nc=0.60, A=0.965, puff 6.e22
+###FEAT_001-nc-0.0-86_MW-A0.975
+##case iter 407   title C targ: no Ne, K=1.0, nc=0.35, A=0.975, puff 6.e22
+##case iter 392         C targ: no Ne, K=1.0, nc=0.40, A=0.975, puff 6.e22
+##case iter 376         C targ: no Ne, K=1.0, nc=0.45, A=0.975, puff 6.e22
+##case iter 391         C targ: no Ne, K=1.0, nc=0.50, A=0.975, puff 6.e22
+###FEAT_001-nc-0.0-86_MW-A0.985
+##case iter 418   title C targ: no Ne, K=1.0, nc=0.32, A=0.985, puff 6.e22
+##case iter 405         C targ: no Ne, K=1.0, nc=0.35, A=0.985, puff 6.e22
+##case iter 390         C targ: no Ne, K=1.0, nc=0.40, A=0.985, puff 6.e22
+###FEAT_001-nc-0.0-100_MW-A0.965
+##case iter 408   title C targ: no Ne, K=1.0, nc=0.45, A=0.965, puff 6.e22
+###FEAT_001-nc-1.6-Ne-86_MW
+##case iter 377   title C targ: 1.6% Ne, K=1.0, nc=0.50, A=0.95, puff 6.e22
+###FEAT_001-nc-1.2-Ne-86_MW
+##case iter 378   title C targ: 1.2% Ne, K=1.0, nc=0.50, A=0.95, puff 6.e22
+###FEAT_001-nc-0.8-Ne-86_MW
+##case iter 385   title C targ: 0.8% Ne, K=1.0, nc=0.50, A=0.95, puff 6.e22
+###FEAT_001-nc-0.4-Ne-86_MW
+##case iter 419   title C targ: 0.8% Ne, K=1.0, nc=0.45, A=0.95, puff 6.e22
+##case iter 397   title C targ: 0.8% Ne, K=1.0, nc=0.50, A=0.95, puff 6.e22
+###FEAT_001-nc-0.8-86_MW
+##case iter 373   title C targ: 0.8% Ne, K=1.0, nc=0.50, A=0.95, puff 6.e22
+###FEAT_001-nc-0.4-86_MW-A0.965
+##case iter 402   title C targ: 0.4% Ne, K=1.0, nc=0.45, A=0.965, puff 6.e22
+###FEAT_001-nc-0.4-86_MW-W
+##case iter 404   title C targ: 0.4% Ne, K=1.0, nc=0.45, A=0.95, puff 6.e22, W wall
+###FEAT_001-nc-0.4-86_MW
+##case iter 387   title C targ: 0.4% Ne, K=1.0, nc=0.45, A=0.95, puff 6.e22
+##case iter 369         C targ: 0.4% Ne, K=1.0, nc=0.50, A=0.95, puff 6.e22
+##case iter 386         C targ: 0.4% Ne, K=1.0, nc=0.55, A=0.95, puff 6.e22
+###FEAT_001-nc-0.2-86_MW
+##case iter 364   title C targ: 0.2% Ne, K=1.0, nc=0.50, A=0.95, puff 6.e22
+###FEAT_001-nc-0.1-86_MW
+##case iter 354   title C targ: 0.1% Ne, K=1.0, nc=0.50, A=0.95, puff 6.e22
+###FEAT_001-nc-0.2-86_MW-A0.965
+##case iter 411   title C targ: 0.2% Ne, K=1.0, nc=0.50, A=0.965, puff 6.e22
+###FEAT_001-nc-0.6-Ne-86_MW
+##case iter 403   title C targ: 0.6% Ne, K=1.0, nc=0.50, A=0.95, puff 6.e22

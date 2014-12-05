@@ -1,0 +1,10 @@
+#! /bin/tcsh -f
+if ("X$1" == "X") then
+  set MACHINE="jac-50"
+#  echo Job defaulting to $MACHINE
+else
+  set MACHINE="$1"
+endif
+sed -e 's:#PWD#:'$PWD':g' -e 's:#MACHINE#:'$MACHINE':g' -e 's:#SOLPSTOP#:'$SOLPSTOP':g' < $SOLPSTOP/bin/common/jetsubmit.template > /tmp/.run.$$
+chmod u+x /tmp/.run.$$
+llsubmit /tmp/.run.$$

@@ -1,0 +1,886 @@
+#! /usr/bin/ksh
+
+# Version 2001.03.26 10:22  
+# A.S.Kukushkin VERSION : 08.05.2000 22:34
+# Source:  H.D.Pacher Version: 970530
+# H. D. Pacher: rms added 2001.03.14 15:52, y_end and average options added 2001.03.20 22:58 
+
+# read input and split into lists
+# Name of list follows leading hash mark
+# entry in list is in format idmachine iduser idbox [comments ]
+# if idmachine is "case", gets data either from $SOLPSTOP/data/cases or from archives
+#    in this case, "iduser" means device (e.g., iter) and "idbox" means the case (e.g., 136)
+#    the working directories are supposed to be linked to the "cases" directory under the proper names
+# if idmachine is "arch", gets data from archives ($HOMEMASTER/b2arch)
+# if idmachine is "central", gets data from central storage (/prg/b2/data/kuku/solps4.0/src/B2Eirene)
+# if idmachine is "scratchidmachine", gets data from scratch on euler, i.e. for scratchcad7
+#    from euler:/scratch/cad7/${iduser}/solps4.0/src/B2Eirene/${idbox}
+# if idmachine is "local2idmachine", gets data from /local2/kukusha/solps4.0/src/B2Eirene on idmachine
+# scratch on euler, i.e. for scratchcad7
+# if one line has word "title" following the first three values, i.e as first word of [comment]
+# then that case is used to generate the titles.
+# otherwise the last case gives the titles
+# Everything after the first three parameters is not used otherwise, i.e. is comment
+# (only to remember which case is which in input)
+# example of input file (without first leading hash-space mark)
+# #C_plus_Ne
+# central kukusha vt_7 title 145 C wall: sput. no Ne, K=1, A=0.95, R=1 +  puff 1.e22
+# case iter 141 C wall: sput. 0.01% Ne, K=1, A=0.95, R=1 +  puff 1.e22
+# scratchcad1 kukusha box_1 136 C wall: sput. 0.2% Ne, K=1, A=0.95, R=1 +  puff 1.e22
+# cad4 kukusha vt_4 133 C wall: sput. 0.35% Ne, K=1, A=0.95, R=1 +  puff 1.e22
+# cad3 kukusha vt_5 132 C wall: sput. 0.7% Ne, K=1, A=0.95, R=1 +  puff 1.e22
+# #C_reduced
+# cad2 kukusha vt_8 title 144 C wall: sput 0.5%, 0.2% Ne, K=1, A=0.95, R=1 +  puff 1.e22
+#  produces two lists named C_plus_Ne and C_reduced
+#
+# for rms plots y_end is used if it exists, otherwise average
+# normal plots always use last_2d_out, i.e. y_end if produced by last_2d_v10 or later, average if produced before
+
+
+scriptname="${0##*/}"
+NAME="$scriptname"
+scriptdir="${0%/*}"
+
+Usage="
+  $NAME: script for concatenating the data files.
+  2 files are generated for each series: 1: ${seriesname} and 2: ${seriesname}${varsuffix}
+  file 2 has twice as many columns as file 1
+  in addition id file _last_2d_write_id specifies which data is in file 2 (rms, max/min. rms*factor)
+  headers in file 1 are ${headers}, in file 2 are ${headers}${varsuffix}
+  Defaults are varsuffix=_z, varsuffix=__x, file 1 has average value, 
+  file 2 has y_end and y_end +/- rms.
+  Arrangement in file 2 is ellipse (default). Other options below:
+  Usage:
+
+$NAME [ <Options> ] 
+
+  Options:
+     -h  Help: this screen is printed
+     -m  Maximum and minimum values are used rather than rms
+           and boxes rather than ellipses are plotted
+     -r  Rms values are used
+     -v  Value (y_end) only is plotted (useful for debugging)
+     -c  Cross is plotted
+     -a  Andrew cross (skewed) is plotted, corners at  +- rms
+     -t  \"Trend from\" is plotted (preferred) - (values at, dt_trend before), default dt_trend=10.0 (ms)
+     -x  \"trend eXtrapolated\"is plotted - (values at, and dt_trend after), default dt_trend=10.0 (ms)
+     -o  \"trend bOth\" trend is plotted - (values at, dt_trend before, and dt_trend after),
+            default dt_trend=10.0 (ms)
+     -s  Star is plotted (same as -ca) 
+     -i  Id is plotted (only valid with ellipse or box, identifying line in addition)
+     -b  box is plotted (box and ellipse are mutually exclusive)
+     -e  ellipse is plotted (box and ellipse are mutually exclusive)
+     -y  average value are used rather than the best fit to end value, y_end 
+     -w  raW rms values (i.e. relative to average rather than to straight line fit) are used
+     first \"number\" anywhere on line: rms factor (default 1.0)
+     second \"number\" anywhere on line: time interval for trend dt_trend=\"number\" (ms) (default 10.0)
+     
+     The various plots specified are superposed and
+     options may be cumulated in one or several groups, interspersed with numbers
+     e.g. \"-ec 0.5 -i 5.0 -ta\" 
+     plots ellipse, cross, andrew-cross, identifier, and trend from
+     with rms factor 0.5 and 5 ms for trend plot
+     
+     Default is equivalent to \"-re 1.0 10.0\", i.e. rms, ellipse, rms factor 1
+     Useful: \"-et 1 5\" i.e. rms ellipse (factor 1) plus trend (5 ms)
+
+"
+
+
+unset RMS PLOT_TYPE END_OR_AVG RMS_FACTOR RMS_RAW TREND MAX
+
+#parse for multiple option and numbers
+#number 1 is RMS_FACTOR, number 2 is DT_TREND_MS
+input=
+number=
+until [ -z "$1" ]; do {
+  { case $1 in
+    ( -[a-z] ) input="$input $1";;
+    ( -* )     new=`echo "$1" | awk '{
+                  iz=split($0, zz, "")
+                  for (i=2;i<=iz;i++) { out = out " -" zz[i] }
+                  print out }'`
+                 input="$input $new";; 
+    ( [0-9.]* ) dots="`echo $1 | sed s/[0-9]//g`"
+                case $dots in 
+                   ( [.][.]* ) print -u2 "$NAME: illegal number $1"; exit 4;;
+                   ( * ) number="$number $1";;
+                esac;;
+     ( * )      input="$input $1";;
+  esac; }
+  shift
+}; done
+set -- $number
+#echo "number=$number"
+RMS_FACTOR=$1
+DT_TREND_MS=$2
+set -- $input
+#echo "input=$input"
+
+until [ -z "$1" ]; do {
+  { case $1 in
+    ( -h | -\? )  print "$Usage"; exit;;
+    ( -m ) MAX="max";;
+    ( -r ) MAX="rms";;
+    ( -v ) RMS="rms"
+           PLOT_TYPE="$PLOT_TYPE value";;
+    ( -c ) RMS="rms"
+           PLOT_TYPE="$PLOT_TYPE cross";;
+    ( -a ) RMS="rms"
+           PLOT_TYPE="$PLOT_TYPE andrew_b";;
+    ( -s ) RMS="rms"
+           PLOT_TYPE="$PLOT_TYPE cross andrew_b";;
+    ( -i ) RMS="rms"
+           PLOT_TYPE="$PLOT_TYPE id_b";;
+    ( -b ) RMS="rms"
+           PLOT_TYPE="$PLOT_TYPE box";;
+    ( -e ) RMS="rms"
+           PLOT_TYPE="$PLOT_TYPE ellipse";;
+    ( -o ) TREND="trend"
+           PLOT_TYPE="$PLOT_TYPE trendboth";;
+    ( -x ) TREND="trend"
+           PLOT_TYPE="$PLOT_TYPE trendto";;
+    ( -t ) TREND="trend"
+           PLOT_TYPE="$PLOT_TYPE trendfrom";;
+    ( -y ) END_OR_AVG="avg";;
+    ( -w ) RMS_RAW="raw";;
+    ( -* ) print -u2 "$NAME: illegal option $1"; exit 4;;
+    ( *  ) break;;
+  esac; }
+  shift
+}; done
+
+#default values 
+[ -z "$MAX" ] && MAX="rms"
+[ -z "$RMS_FACTOR" ] && RMS_FACTOR=1.0
+[ -z "$PLOT_TYPE" ] && PLOT_TYPE="ellipse"
+[ -z "$END_OR_AVG" ] && END_OR_AVG=
+[ -z "$DT_TREND_MS" ] && DT_TREND_MS=10.0
+
+[ -n "$RMS" ] && RMS="$MAX"
+#box or ellipse are permitted but not both
+ell_and_box=`echo "$PLOT_TYPE" | awk '{
+   out = "neither"
+   iell = 0
+   ibox = 0
+   for (i=1;i<=NF;i++) {
+      z=$i
+      if ( z ~ "ellipse" ) {iell = iell + 1; out = "ellipse" }
+      if ( z ~ "box" ) {ibox = ibox + 1; out = "box" }
+      }
+   if ( iell + ibox > 1 ) {
+   if ( ! ( ( iell == 0 ) || ( ibox == 0 ) ) ) out = "both"
+   }
+   print out 
+}' `
+case $ell_and_box in
+   ( both )    print -u2 "$NAME: choose either box or ellipse option but not both"; exit;;
+   ( ellipse ) PLOT_TYPE=`echo "$PLOT_TYPE" | sed s/andrew_b/andrew_e/g | sed s/id_b/id_e/g `;;
+   ( box )     PLOT_TYPE=`echo "$PLOT_TYPE" | sed s/andrew_e/andrew_b/g | sed s/id_e/id_b/g `;;
+esac;
+
+#if maximum is chosen, plot box even if  ellipse is asked for
+[ "$MAX" = "max" ] && PLOT_TYPE=`echo "$PLOT_TYPE" \
+   | sed s/andrew_e/andrew_b/g \
+   | sed s/ellipse/box/g \
+   | sed s/id_e/id_b/g`
+
+# the order of plotting for x and y is given by iix and iiy (different for box/cross, star, etc.)
+# 1:avg-rms or min, 2:avg-0.7*rms or 0, 3:avg, 4:avg+0.7*rms or 0, 5:avg+rms or max
+# for simplicity, the order 1-5 is the same for rms, max, and trend
+# (actual values in file are 1-5 for rms, 6-10 for max, 11-15 for trend. Shift is done automatically)
+# if max or min is asked for, ellipse is meaningless and ellipse plots are replaced by box plots
+# b inserts a blank line for pen up/down. 
+# Some of the other cases (box-cross etc) could be simpltified using pen-up/down, 
+# but this is  deliberately not done to maintain compatibility with kaleidagraph
+
+caselist="value trendto trendfrom trendboth andrew_b andrew_e cross ellipse box id_e id_b"
+coordlist="x y"
+
+xcoord_value="3"
+ycoord_value="3"
+xcoord_trendto="3 1 3" 
+ycoord_trendto="3 1 3"
+xcoord_trendfrom="3 5 3" 
+ycoord_trendfrom="3 5 3"
+xcoord_trendboth="3 1 5 3"
+ycoord_trendboth="3 1 5 3"
+xcoord_andrew_b="3 1 5 3 1 5 3"
+ycoord_andrew_b="3 5 1 3 1 5 3"
+xcoord_andrew_e="3 2 4 3 2 4 3"
+ycoord_andrew_e="3 4 2 3 2 4 3"
+xcoord_cross="3 3 3 3 1 5 3"
+ycoord_cross="3 1 5 3 3 3 3"
+xcoord_ellipse="3 b 4 5 4 3 2 1 2 3 4 b 3"
+ycoord_ellipse="3 b 4 3 2 1 2 3 4 5 4 b 3"
+xcoord_box="3 b 5 1 1 5 5 b 3"
+ycoord_box="3 b 5 5 1 1 5 b 3"
+xcoord_id_e="3 4 3"
+ycoord_id_e="3 4 3"
+xcoord_id_b="3 5 3"
+ycoord_id_b="3 5 3"
+
+#shift trend values by 10; if rms=max shift non-trend values by 5
+for f in $caselist; do
+   for ffc in $coordlist; do
+      gg='$'"${ffc}coord_$f"
+      eval gg1=`echo "$gg"`
+      #echo -e "f=$f\ngg1=$gg1"
+      trendcase=`echo "$f" | grep trend`
+      if [ -z $trendcase ]; then
+         if [ $MAX = "max" ]; then
+            hh=`echo "$gg1" | awk '{
+              for (i=1;i<=NF;i++){
+                 z=$i
+                 if ( z !~ "b" ) {
+                    if ( MAX ~ "max" ) { z=z+5 }
+                 }
+                 out = out " " z     
+              } print out }' MAX="$MAX"`
+         else
+            hh="$gg"
+         fi
+      else
+         hh=`echo "$gg1" | awk '{
+           for (i=1;i<=NF;i++){
+                  z=$i
+                if ( z !~ "b" ) {
+                    { z=z+10 }
+                 }
+              out = out " " z     
+           } print out }' `
+      fi
+      #echo -e "f=$f\nhh=$hh"
+      eval ${ffc}coord_$f='"'"$hh"'"'
+   done
+done
+
+# create variables xcoord and ycoord containing coordinates from PLOT_TYPE, 
+# which contains the names of all plots specified
+for ffc in $coordlist; do
+   hh=`echo "$PLOT_TYPE" | awk '{
+      for (i=1;i<=NF;i++) { out = out " $" z "coord_" $i }
+      print out 
+   }' z="${ffc}"`
+    eval ${ffc}coord='"'"$hh"'"' 
+done
+
+#echo -e "$PLOT_TYPE\n$xcoord\n$ycoord"
+
+#remove succeeding entries with teh same x and y coordinates to reduce output file size
+
+cout=`echo "a" | awk '{
+         tmp = "echo" " " xcoord
+         ( tmp )  | getline
+         for (i=1;i<=NF;i++) { x[i] = $i }
+         close ( tmp  )
+         tmp = "echo" " " ycoord
+         ( tmp )  | getline
+         for (i=1;i<=NF;i++) { y[i] = $i }
+         close ( tmp  )
+         xout = x[1]
+         yout = y[1]
+         if ( NF > 1 ) { 
+            for (i=2;i<=NF;i++) {
+               if ( ! ( x[i] == x[i-1] && y[i] == y[i-1] ) ) {
+                  xout = xout " " x[i]
+                  yout = yout " " y[i]
+                }
+            }
+         }
+         print xout
+         print yout
+}' xcoord="$xcoord" ycoord="$ycoord"`
+
+xcoord=`echo "$cout" | head -1`
+ycoord=`echo "$cout" | head -2 | tail -1`
+
+#echo -e "$PLOT_TYPE\n$xcoord\n$ycoord"
+
+#exit
+
+set -A iix -- $xcoord
+set -A iiy -- $ycoord
+
+outdir=${SOLPSTOP}/data/Summary_plots
+tmpdir=$outdir/tmp
+catdir=$outdir/summary
+profdir=$outdir/profiles
+logdir=$outdir/logs
+IDdir=$outdir/ID
+Hdir=$outdir/TRACES
+ALL_DATA=$outdir/ALL_DATA
+ALL_TRACES=$outdir/ALL_TRACES
+
+
+[ -d "$outdir" ] || mkdir $outdir || {
+  print -u2 "$NAME: unable to create the directory $outdir"
+  exit 4
+}
+[ -d "$catdir" ] && {
+  n=000
+  set -A u -- a $catdir.???
+  [ -a ${u[1]} ] && {
+    set -A u -- `ls -rd $catdir.???`
+    n=${u##*.}
+    let "n=n+1"
+    { case ${#n} in
+      ( 1 ) n="00$n";;
+      ( 2 ) n="0$n";;
+      ( 3 ) ;;
+      ( * ) print -u2 "$NAME: unexpected error in backup index.  n=$n"
+            ls -rd "$catdir".???
+            exit 5;;
+    esac; }
+  }
+  mv "$catdir" "$catdir"."$n"
+  [ -a "${NAME}_input" ] && mv "${NAME}_input" "${NAME}_input.$n"
+  #  set -x     #!!!
+  for d in "$profdir" "$logdir" "$Hdir"; do {
+    [ -L "$d.$n" ] && rm -f "$d.$n"
+    [ -d "$d.$n" ] && rm -rf "$d.$n"
+    [ -f "$d.$n" ] && rm -f "$d.$n"
+    mv "$d" "$d.$n"
+  }; done
+  #  set +x     #!!!
+}
+mkdir "$catdir"
+
+for f in prof ID tmp H; do {
+  eval "d=\"\$${f}dir\""
+  rm -rf "$d" 2> /dev/null
+  mkdir "$d"
+}; done
+
+[ -d "$logdir" ] || mkdir "$logdir" || {
+  print -u2 "$NAME: unable to create the directory $logdir"
+  exit 4
+}
+
+data_id=${catdir}/_last_2d_write_id
+outcat=${catdir}/
+outprf=${profdir}/
+outID="${IDdir}/l2d_"
+outout=${logdir}/last_2d_out_
+outoutvar=${logdir}/last_2d_outvar_
+outfile=${tmpdir}/l2dout_
+outfilevar=${tmpdir}/l2doutvar_
+temp=${tmpdir}/last_2d_temp
+temp1=${tmpdir}/last_2d_temp1
+temp2=${tmpdir}/last_2d_temp2
+temp3=${tmpdir}/last_2d_temp3
+temp4=${tmpdir}/last_2d_temp4
+
+\rm -f $data_id > /dev/null 2>&1
+
+> $data_id
+echo "" >> $data_id
+if [ -z "$END_OR_AVG" ]; then
+   echo "Single point files use end value (unless end value dos not exist in last_2d_out)" >> $data_id
+else
+   echo "Single point files use average value" >> $data_id
+fi
+echo "" >> $data_id
+case $RMS in 
+   ( max ) echo "Multiple point files use maximum and minimum values" >> $data_id;;
+   ( rms ) if [ "$RMS_FACTOR" = "1.0" ]; then
+              echo "Multiple point files use rms values" >> $data_id
+           else
+              echo "Multiple point files use rms values multiplied by ${RMS_FACTOR}" >> $data_id
+           fi;;
+   esac
+case $TREND in 
+   ( trend ) echo "Multiple point files use trend,  dt_trend =${DT_TREND_MS} ms" >> $data_id;;
+esac
+echo "" >> $data_id
+echo "Multiple point files have data arranged in plot_type ${PLOT_TYPE} " >> $data_id
+echo "" >> $data_id
+
+input=$1
+
+[ -z "$input" ] && {
+    input=$scriptdir/${scriptname}_input
+    print "\n${scriptname}: inputfile used is $input"
+  } || {
+    shift
+}
+[ -r "$input" ] || { print -u2 "$scriptname: cannot read $input!!!"; exit 33; }
+
+cp ${input} ${outdir}/${scriptname}_input
+
+inputtemp=${tmpdir}/input_temp
+#rm -f ${outfile}* $outcat ${temp}* ${inputtemp} > /dev/null 2>&1
+rm -f ${outfile}* ${inputtemp} > /dev/null 2>&1
+
+
+#echo "Before parsing the input file"     #!!!
+#echo "temp=$temp"     #!!!
+#echo "inputtemp=$inputtemp"     #!!!
+
+#read input and split into lists: single leading hash mark must start each list
+# ignore inputlines with double leading hash mark
+cat $input | grep -v "^##" > ${inputtemp}
+input="${inputtemp}"
+
+rm -f ${temp}* > /dev/null 2>&1
+csplit -k -s -f $temp $input '/^#/' {99} 2>/dev/null
+#ls -F ${temp}*; echo "The input file split (confirm)\c"; read u     #!!!
+rm -f ${temp}00 > /dev/null 2>&1
+
+listlist=`\ls -x ${temp}*`
+#echo "listlis=$listlist"     #!!!
+
+ilist=0
+icont=0
+titleout=
+listfileout=
+listfileoutvar=
+varsuffix="_z"
+print " " > $temp
+for gg in $listlist; do {
+  #  echo "\n==== $gg ==== (confirm)\n"; read u    #!!!
+  #(xxx to avoid misreading leading minus)
+  set -A lidmachine -- xxx `cat $gg | grep -v "^#" | awk '{printf("x%s ", $1)}'`
+  set -A liduser -- xxx `cat $gg | grep -v "^#" | awk '{printf("x%s ", $2)}'`
+  set -A lidbox -- xxx `cat $gg | grep -v "^#" | awk '{printf("x%s ", $3)}'`
+  #  set -A lidcase -- xxx `cat $gg | grep -v "^#" | awk '{printf("x%s ", $4)}'`
+  #echo "lidmachine: ${lidmachine[*]} :"
+  #echo "liduser   : ${liduser[*]} :"
+  #echo "lidbox    : ${lidbox[*]} :"
+  set -A ltitle xxx -- `cat $gg | grep -v "^#" | awk '{printf("x%s ", $4)}'`
+  namelist=${lidmachine[*]}
+  #  echo "namelist:$namelist:"     #!!!
+  filetitle0=`head -1 $gg | sed s/"^#"//g | tr " " "_" | tr "\011" "_"`
+  filetitle=${outcat}${filetitle0}
+  filetitlevar=${filetitle}${varsuffix}
+  listfileout="$listfileout $filetitle"
+  listfileoutvar="$listfileoutvar $filetitlevar"
+  #hdp
+  echo "filetitle=$filetitle"
+  > $filetitle
+  > $filetitlevar
+  # input has two columns: value and name
+  i=0
+  for ff in $namelist; do {
+    #    echo "\n=== $ff: i:icont=$i:$icont: ===  (confirm)\n"; read u    #!!!
+    [ $i -gt 0 ] && {
+      let "icont=icont+1"
+
+      idmachine=${lidmachine[$i]}
+      iduser=${liduser[$i]}
+      idbox=${lidbox[$i]}
+      title=${ltitle[$i]}
+      #      idcase0=${lidcase[$i]}
+      #      echo "idmachine:$idmachine:"     #!!!
+      #      echo "iduser:$iduser:"     #!!!
+      #      echo "idbox:$idbox:"     #!!!
+      #      echo "title:$title:"     #!!!
+      wrongformat=
+      [ "$idmachine" = "x" ] && wrongformat="yes" || idmachine="${idmachine#x}"
+      [ "$iduser" = "x" ] && wrongformat="yes" || iduser="${iduser#x}"
+      [ "$idbox" = "x" ] && wrongformat="yes" || idbox="${idbox#x}"
+      [ -n "$wrongformat" ] && { print -u2 "$scriptname: filename=$input needs at least 3 parameters per line!!!" >&2; exit 33; }
+
+      # echo "$idmachine $iduser $idbox"
+
+      output=${outfile}${icont}
+      outputvar=${outfilevar}${icont}
+      outid=${outID}${icont}_ID
+      idscratch=`print $idmachine | grep "^scratch"`
+      idscratchmachine=`print $idmachine | sed s/"scratch"//`
+      idlocal2=`print $idmachine | grep "^local2"`
+      idlocal2machine=`print $idmachine | sed s/"local2"//`
+      #       echo "\n idscratch=$idscratch idscratchmachine=$idscratchmachine idmachine=$idmachine"
+
+      # if idmachine is "local2idmachine" gets data from /local2/kukusha/solps4.0/src/B2Eirene on idmachine
+
+      specialcase=
+      [  "${idmachine}." = "central." ] && specialcase="yes"
+      [  "${idmachine}." = "case." ] && specialcase="yes"
+      [  "${idmachine}." = "arch." ] && specialcase="yes"
+      [ -n "$idscratch" ] && specialcase="yes"
+      [ -n "$idlocal2" ] && specialcase="yes"
+      if [ -n "$specialcase" ]; then {
+
+     #         echo "==idmachine:iduser:idbox==$idmachine:$iduser:$idbox=="
+        if [ "$idmachine" = case ]; then {
+       # echo "reading from cases"     #!!!
+          unset case_found j
+          iu=`print $iduser | tr ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz`
+          set -A loc_message '' cases archives
+          for FROM in "$SOLPSTOP/data/cases/$iduser/$idbox" "$HOMEMASTER/b2arch/$iduser/$idbox"; do {
+             let "j=$j+1"
+             [ -s "$FROM/VarID" ] || continue
+             f=`cat "$FROM/VarID"`
+             set -A f ${f%%_*}
+             c=`print ${f%\#*} | tr ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz`
+             [ "$c" = "$iu" ] || continue
+             idcase=${f#*\#}
+             [ "$idcase" = "$idbox" ] || continue
+             case_found=${loc_message[$j]}
+             break
+          }; done
+          [ -z "$case_found" ] && {
+           print -u2 "$scriptname: case $idbox/$iduser not found"
+           exit 8
+          }
+          print "$idbox/$iduser from $case_found"
+
+       # eliminate some of the lines in last_2d_out not needed for series plotting
+          cat $FROM/last_2dir/last_2d_out \
+          | grep -v ' bln_' | grep -v ' T_ttr_' | grep -v ' F_d/dt_' | grep -v ' ___' \
+          > ${output}
+          cat $FROM/last_2dir/last_2d_outvar \
+          | grep -v ' bln_' | grep -v ' T_ttr_' | grep -v ' F_d/dt_' | grep -v ' ___' \
+          > ${outputvar}
+
+          cp $FROM/VarID ${outid}
+       # idcase=` cat ${outid} | cut -c6-8 `
+          rm -f ${outid} > /dev/null 2>&1
+          cp $FROM/ld_tg_o.dat  ${outprf}tgo_${idcase}
+          cp $FROM/ld_tg_i.dat  ${outprf}tgi_${idcase}
+          last_2d_tabs ${outprf}tgi_${idcase} ${outprf}tgo_${idcase}
+          rm -f  ${outprf}tgi_${idcase} ${outprf}tgo_${idcase} >&2
+          cp ${output} ${outout}${idcase}
+          cp ${outputvar} ${outoutvar}${idcase}
+       # echo "\n cp $FROM/last_2dir/last_2d_out  ${output}"
+       # echo "\n cp $FROM/last_2dir/last_2d_outvar  ${outputvar}"
+       # echo "Copied from cases..."     #!!! 
+        }; fi
+
+        if [ "${idmachine}." = "central." ]; then
+     # eliminate some of the lines in last_2d_out not needed for series plotting
+          cat /prg/b2/data/kuku/solps4.0/src/B2Eirene/${idbox}/last_2dir/last_2d_out  \
+          | grep -v ' bln_' | grep -v ' T_ttr_' | grep -v ' F_d/dt_' | grep -v ' ___' \
+          > ${output}
+          cat /prg/b2/data/kuku/solps4.0/src/B2Eirene/${idbox}/last_2dir/last_2d_outvar  \
+          | grep -v ' bln_' | grep -v ' T_ttr_' | grep -v ' F_d/dt_' | grep -v ' ___' \
+          > ${outputvar}
+          cp /prg/b2/data/kuku/solps4.0/src/B2Eirene/${idbox}/VarID ${outid}
+          idcase=` cat ${outid} | cut -c6-8 `
+          rm -f ${outid} > /dev/null 2>&1
+          cp /prg/b2/data/kuku/solps4.0/src/B2Eirene/${idbox}/ld_tg_o.dat  ${outprf}tgo_${idcase}
+          cp /prg/b2/data/kuku/solps4.0/src/B2Eirene/${idbox}/ld_tg_i.dat  ${outprf}tgi_${idcase}
+          last_2d_tabs ${outprf}tgi_${idcase} ${outprf}tgo_${idcase}
+          rm -f  ${outprf}tgi_${idcase} ${outprf}tgo_${idcase} >&2
+          cp ${outputvar} ${outoutvar}${idcase}
+       # echo "\n cp /prg/b2/data/kuku/solps4.0/src/B2Eirene/${idbox}/last_2dir/last_2d_out  ${output}"
+       # echo "\n cp /prg/b2/data/kuku/solps4.0/src/B2Eirene/${idbox}/last_2dir/last_2d_outvar  ${outputvar}"
+        fi
+
+        if [ "$idmachine" = "arch" ]; then
+          FROM="$HOMEMASTER/b2arch/$idbox"
+       # eliminate some of the lines in last_2d_out not needed for series plotting
+          cat $FROM/last_2dir/last_2d_out  |\
+          grep -v ' bln_' | grep -v ' T_ttr_' | grep -v ' F_d/dt_' | grep -v ' ___' \
+          > ${output}
+          cat $FROM/last_2dir/last_2d_outvar  \
+         | grep -v ' bln_' | grep -v ' T_ttr_' | grep -v ' F_d/dt_' | grep -v ' ___' \
+          > ${outputvar}
+          cp "$FROM"/VarID ${outid}
+          idcase=` cat ${outid} | cut -c6-8 `
+          rm -f ${outid} > /dev/null 2>&1
+          cp "$FROM"/ld_tg_o.dat  ${outprf}tgo_${idcase}
+          cp "$FROM"/ld_tg_i.dat  ${outprf}tgi_${idcase}
+          last_2d_tabs ${outprf}tgi_${idcase} ${outprf}tgo_${idcase}
+          rm -f  ${outprf}tgi_${idcase} ${outprf}tgo_${idcase} >&2
+          cp ${output} ${outout}${idcase}
+          cp ${outputvar} ${outoutvar}${idcase}
+       # echo "\n cp "$FROM"/last_2dir/last_2d_out  ${output}"
+       # echo "\n cp "$FROM"/last_2dir/last_2d_outvar  ${outputvar}"
+        fi
+
+        if [ -n "$idscratch" ]; then
+       # eliminate some of the lines in last_2d_out not needed for series plotting
+          rsh euler "cat scratch/$idscratchmachine/${iduser}/solps4.0/src/B2Eirene/${idbox}/last_2dir/last_2d_out  \
+          | grep -v ' bln_' | grep -v ' T_ttr_' | grep -v ' F_d/dt_' | grep -v ' ___'" \
+          > ${output}
+          rsh euler "cat scratch/$idscratchmachine/${iduser}/solps4.0/src/B2Eirene/${idbox}/last_2dir/last_2d_outvar  \
+          | grep -v ' bln_' | grep -v ' T_ttr_' | grep -v ' F_d/dt_' | grep -v ' ___'" \
+          > ${outputvar}
+          rcp euler:/scratch/$idscratchmachine/${iduser}/solps4.0/src/B2Eirene/${idbox}/VarID ${outid}
+          idcase=` cat ${outid} | cut -c6-8 `
+          rm -f ${outid} > /dev/null 2>&1
+          rcp euler:/scratch/$idscratchmachine/${iduser}/solps4.0/src/B2Eirene/${idbox}/ld_tg_i.dat  ${outprf}tgi_${idcase}
+          last_2d_tabs ${outprf}tgi_${idcase} ${outprf}tgo_${idcase}
+          rm -f  ${outprf}tgi_${idcase} ${outprf}tgo_${idcase} >&2
+          cp ${output} ${outout}${idcase}
+          cp ${outputvar} ${outoutvar}${idcase}
+       # echo "\n \rcp euler:/scratch/$idscratchmachine/${iduser}/solps4.0/src/B2Eirene/${idbox}/last_2dir/last_2d_out  ${output}"
+       # echo "\n rcp euler:/scratch/$idscratchmachine/${iduser}/solps4.0/src/B2Eirene/${idbox}/last_2dir/last_2d_outvar  ${outputvar}"
+        fi
+
+        if [ -n "$idlocal2" ]; then
+       # eliminate some of the lines in last_2d_out not needed for series plotting
+          rsh ${idlocal2machine} "cat /local2/kukusha/solps4.0/src/B2Eirene/${idbox}/last_2dir/last_2d_out \
+          | grep -v ' bln_' | grep -v ' T_ttr_' | grep -v ' F_d/dt_' | grep -v ' ___'" \
+          > ${output}
+          rsh ${idlocal2machine} "cat /local2/kukusha/solps4.0/src/B2Eirene/${idbox}/last_2dir/last_2d_outvar \
+          | grep -v ' bln_' | grep -v ' T_ttr_' | grep -v ' F_d/dt_' | grep -v ' ___'" \
+          > ${outputvar}
+          rcp ${idlocal2machine}:/local2/kukusha/solps4.0/src/B2Eirene/${idbox}/VarID ${outid}
+          idcase=` cat ${outid} | cut -c6-8 `
+          rm -f ${outid} > /dev/null 2>&1
+          rcp ${idlocal2machine}:/local2/kukusha/solps4.0/src/B2Eirene/${idbox}/ld_tg_i.dat  ${outprf}tgi_${idcase}
+          last_2d_tabs ${outprf}tgi_${idcase} ${outprf}tgo_${idcase}
+          rm -f  ${outprf}tgi_${idcase} ${outprf}tgo_${idcase} >&2
+          cp ${output} ${outout}${idcase}
+          cp ${outputvar} ${outoutvar}${idcase}
+       # echo "\n rcp ${idmachine}:/local2/kukusha/solps4.0/src/B2Eirene/${idbox}/last_2dir/last_2d_out  ${output}"
+       # echo "\n rcp ${idmachine}:/local2/kukusha/solps4.0/src/B2Eirene/${idbox}/last_2dir/last_2d_outvar  ${outputvar}"
+        fi
+      }; else {
+       # eliminate some of the lines in last_2d_out not needed for series plotting
+          rsh ${idmachine} "cat /local/${iduser}/solps4.0/src/B2Eirene/${idbox}/last_2dir/last_2d_out \
+          | grep -v ' bln_' | grep -v ' T_ttr_' | grep -v ' F_d/dt_' | grep -v ' ___' " \
+          > ${output}
+          rsh ${idmachine} "cat /local/${iduser}/solps4.0/src/B2Eirene/${idbox}/last_2dir/last_2d_outvar \
+          | grep -v ' bln_' | grep -v ' T_ttr_' | grep -v ' F_d/dt_' | grep -v ' ___' " \
+          > ${outputvar}
+          rcp ${idmachine}:/local/${iduser}/solps4.0/src/B2Eirene/${idbox}/VarID ${outid}
+          idcase=` cat ${outid} | cut -c6-8 `
+          rm -f ${outid} > /dev/null 2>&1
+          rcp ${idmachine}:/local/${iduser}/solps4.0/src/B2Eirene/${idbox}/ld_tg_o.dat  ${outprf}tgo_${idcase}
+          rcp ${idmachine}:/local/${iduser}/solps4.0/src/B2Eirene/${idbox}/ld_tg_i.dat  ${outprf}tgi_${idcase}
+          last_2d_tabs ${outprf}tgi_${idcase} ${outprf}tgo_${idcase}
+          rm -f  ${outprf}tgi_${idcase} ${outprf}tgo_${idcase} >&2
+          cp ${output} ${outout}${idcase}
+          cp ${outputvar} ${outoutvar}${idcase}
+       # echo "\n rcp ${idmachine}:/local/${iduser}/solps4.0/src/B2Eirene/${idbox}/last_2dir/last_2d_out  ${output}"
+       # echo "\n rcp ${idmachine}:/local/${iduser}/solps4.0/src/B2Eirene/${idbox}/last_2dir/last_2d_outvar  ${outputvar}"
+      }; fi
+
+      #echo "After copying the files..."     #!!!
+      [ "$title." = "xtitle." ] && titleout=$output
+      # the first line (containing normally VarID) and all lines starting with hash marks are ignored
+      # output for average values
+      cat  $output | grep -v "^#" | tail -n +2 | awk '{printf("%s\t", $1)} ' >> $filetitle
+      awk '{printf("%s\n", " ")} ' $temp >> $filetitle
+      #old: tail -n +2  $output | awk '{printf("%s\t", $1)} ' >> $filetitle
+      caseid=`cat $output | grep -v "^#" | head -2 | tail -1 | awk '{printf( $1)} '`
+      #old: caseid=`head -2  $output | tail -1 | awk '{printf( $1)} '`
+      # output for average and rms values (box/cross plot around average value)
+      #   format of outputvar: one line (VarID), any number of lines starting with hash,
+      #   line with case and " ID", headerline, datalines
+      #   outputvar file has 2x as many columns (for x and y arrangements) and 12x as many rows as normal output file
+      #   headers are repeated with suffix __x for x-arrangement, for plots choose one normal and one __x value
+          headerline=`cat $outputvar | tail -n +3 | head -1 `
+          search_header="name"
+          name_col=`echo "${headerline}" | awk '{ for (i=1; i<=NF; i++) print $i}' \
+          | grep -n "^${search_header}$" | tail -1 | cut -f1 -d: `
+          # uses y_end if it exists (after last_2d_v10) or if not (before last_2d_v10) uses average
+          # average can also be forced by switch
+          NO_Y_END=
+          if [ -z "$END_OR_AVG" ]; then
+             search_header="y_end"
+             NO_Y_END=`echo "${headerline}" | awk '{ for (i=1; i<=NF; i++) print $i}' \
+                | grep -n "^${search_header}$"`
+             [ -z "$NO_Y_END" ] && search_header="average"
+          else
+             search_header="average"
+          fi
+          avg_col=`echo "${headerline}" | awk '{ for (i=1; i<=NF; i++) print $i}' \
+          | grep -n "^${search_header}$" | tail -1 | cut -f1 -d: `
+          echo "plot $search_header from column $avg_col"
+
+             # generate file with avg-rms, avg-0.7*rms, avg, avg+0.7*rms, avg+rms
+             search_header="rms"
+             rms_col=`echo "${headerline}" | awk '{ for (i=1; i<=NF; i++) print $i}' \
+             | grep -n "^${search_header}$" | tail -1 | cut -f1 -d: `
+             search_header="rms_raw"
+             rms_raw_col=`echo "${headerline}" | awk '{ for (i=1; i<=NF; i++) print $i}' \
+             | grep -n "^${search_header}$" | tail -1 | cut -f1 -d: `
+             # generate file with min, 0, avg, 0, max
+             search_header="min"
+             min_col=`echo "${headerline}" | awk '{ for (i=1; i<=NF; i++) print $i}' \
+             | grep -n "^${search_header}$" | tail -1 | cut -f1 -d: `
+             search_header="max"
+             max_col=`echo "${headerline}" | awk '{ for (i=1; i<=NF; i++) print $i}' \
+             | grep -n "^${search_header}$" | tail -1 | cut -f1 -d: `
+             # generate file with avg, from value, to value 
+             search_header="tau_ms"
+             tau_ms_col=`echo "${headerline}" | awk '{ for (i=1; i<=NF; i++) print $i}' \
+             | grep -n "^${search_header}$" | tail -1 | cut -f1 -d: `
+             if [ -z "$tau_ms_col" ]; then 
+                echo "" >> $data_id
+                echo "tau_ms does not exist for case $caseid - trend in multiple point files uses average value only" >> $data_id
+                echo "" >> $data_id
+                echo "tau_ms does not exist for case $caseid - trend in multiple point files uses average value only" 
+                tau_ms_col=0
+             fi
+             if [ -n "$RMS_RAW" ]; then
+                if [ -z "$rms_raw_col" ]; then 
+                   echo "" >> $data_id
+                   echo "rms_raw data does not exist - using rms data for case $caseid " >> $data_id
+                   echo "" >> $data_id
+                   echo "rms_raw data does not exist - using rms data for case $caseid "
+                else
+                   echo "" >> $data_id
+                   echo "Using rms_raw data for rms plot for case $caseid " >> $data_id
+                   echo "" >> $data_id
+                   rms_col=$rms_raw_col
+                fi
+             fi
+             cat $outputvar | grep -v "^#"  | tail -n +4 \
+             | awk  '{ 
+                avg=$avg_col
+                rms=$rms_col*fac
+                min=$min_col
+                max=$max_col
+                zero=0
+                if ( tau_ms_col == 0 ) { tau_ms=0 }
+                else { tau_ms=$tau_ms_col }
+                if ( tau_ms == 0 ) { 
+                   min_trend=avg
+                   max_trend=avg 
+                }
+                else{
+                   min_trend=avg*(1.0 - (dt_trend_ms/tau_ms))
+                   max_trend=avg*(1.0 + (dt_trend_ms/tau_ms))
+                }
+                printf ("%20.14g %20.14g %20.14g %20.14g %20.14g %20.14g %20.14g %20.14g %20.14g %20.14g %20.14g %20.14g %20.14g %20.14g %20.14g\n",\
+                avg-rms,    avg-0.707*rms,  avg,   avg+0.707*rms,  avg+rms, \
+                min,        zero,           avg,   zero,           max, \
+                min_trend,  zero,           avg,   zero,           max_trend )\
+                }' avg_col="$avg_col" rms_col="$rms_col" fac="$RMS_FACTOR" \
+                min_col="$min_col" max_col="$max_col" \
+                tau_ms_col="$tau_ms_col" dt_trend_ms="$DT_TREND_MS"  \
+                >  $temp1
+cat  $temp1  > xxx1  
+           
+          # the order of plotting for x and y is given by iix and iiy (different for box/cross, star, etc.)
+       # insert blank line (except for ID) if culumn identifier is b
+          iii=0
+          while [ iii -lt ${#iix[@]} ]; do
+             iiiy=${iiy[$iii]}
+             iiix=${iix[$iii]}
+          > $temp2
+          if [ $iiix -ne "b" ]; then
+          echo "$caseid" > $temp2
+          cat $temp1 | awk '{ print $'"$iiiy"'}' >> $temp2 
+          cat $temp1 | awk '{ print $'"$iiix"'}' >> $temp2
+          fi
+             cat  $temp2 | awk '{printf("%s\t", $1)} ' >> $filetitlevar
+             awk '{printf("%s\n", " ")} ' $temp >> $filetitlevar
+             let "iii=iii+1"
+          done
+ 
+      # check to see if headers of all the files are the same
+      # assume headers in output and oputputvar are the same so no duplicate effort
+      # the first line (containing normally VarID) and all lines starting with hash marks are ignored
+      cat ${output} | grep -v "^#" | tail -n +2 | awk '{printf("%s\t", $2)} ' > $temp3
+      #old: tail -n +2  ${output} |  cut -c 24-80 | awk '{printf("%s\t", $0)} ' > $temp3
+      headercheck=`cat $temp3`
+      let " ilist_plus_i = i + ilist "
+      print "${caseid} $idmachine $iduser ${idbox} ${filetitle0}"
+      [ $i -eq 1 ] && {
+        headercheckold="$headercheck"
+        [ $ilist -eq 0 ] && {
+          headercheckfirst="$headercheck"
+        }
+      }
+
+      # [ $i -gt 1 ] && {
+      #   [ "$headercheck." != "$headercheckold." ] && {
+      #     echo "\nheader different from first header of this list for \ncase idmachine=$idmachine iduser=$iduser idbox=$idbox !!!"
+      #   }
+      # }
+
+      [ $ilist_plus_i -gt 1 ] && {
+        [ "$headercheck." != "$headercheckfirst." ] && {
+          print -u2 "\nheader different from first header of all lists for \ncase idmachine=$idmachine iduser=$iduser idbox=$idbox !!!"
+        }
+      }
+    }
+    let "i=i+1"
+  }; done
+let "ilist=ilist+1"
+}; done
+
+#echo "Before the final section..."      #!!!
+[ "${titleout}." = "." ] && titleout=$output
+# the first line (containing normally VarID) and all lines starting with hash marks are ignored
+cat $titleout | grep -v "^#" | tail -n +2 | awk '{printf("%s\t", $2)} ' > $temp1
+#old: tail -n +2  $titleout |  cut -c 24-80 | awk '{printf("%s\t", $0)} ' > $temp1
+awk '{printf("%s\n", " ")} ' $temp >> $temp1
+#   outputvar file has 2x as many columns (for x and y arrangements) and 12x as many rows as normal output file
+#   headers are repeated with suffix __x for x-arrangement, for plots choose one normal and one __x value
+cat $titleout | grep -v "^#" | tail -n +2 | awk '{printf("%s\t", $2)} ' > $temp2
+cat $titleout | grep -v "^#" | tail -n +3 | awk '{printf("%s__x\t", $2)} ' >> $temp2
+awk '{printf("%s\n", " ")} ' $temp >> $temp2
+#echo "After awk..."      #!!!
+
+# following concatenation is probably not needed - done only for output, not outputvar
+outcat=${outdir}/l2d_cat
+rm -f $outcat > /dev/null 2>&1
+cp $temp1 $outcat
+for filetitle in $listfileout; do {
+  print " " >> $outcat
+  print "$filetitle" >> $outcat
+  print " " >> $outcat
+  cat $filetitle >> $outcat
+}; done
+
+# produce files output
+for filetitle in $listfileout; do {
+  mv $filetitle $temp3
+  cat $temp1 $temp3 > $filetitle
+  r2c $filetitle
+}; done
+
+# produce files outputvar
+for filetitlevar in $listfileoutvar; do {
+  mv $filetitlevar $temp3
+  cat $temp2 $temp3 > $filetitlevar
+  # r2c $filetitlevar
+}; done
+
+#linesoutput=`cat $filetitle | wc -l`
+#linesoutputvar=`cat $filetitlevar | wc -l`
+#echo "linesoutput=$linesoutput linesoutputvar=$linesoutputvar"
+
+#echo "Done filetitle..."      #!!!
+
+
+mv $catdir/*_i ${IDdir}
+
+rm -f ${outfile}* ${temp}* ${inputtemp} 2> /dev/null
+
+# Temporary solution: headers must start with #
+for f in $listfileout; do
+  mv $f ${f}~ && {
+    { print "# \c"; cat ${f}~; } > $f && rm ${f}~
+  }
+done
+for f in $listfileoutvar; do
+  mv $f ${f}~ && {
+    { print "# \c"; cat ${f}~; } > $f && rm ${f}~
+  }
+done
+#echo "Done listfileout..."      #!!!
+
+# Link the created data files to the ALL_DATA directory
+
+
+[ -n "$ALL_DATA" ] && {
+  [ -d "$ALL_DATA" ] || mkdir "$ALL_DATA"
+  [ -d "$ALL_DATA" ] && { set -A u -- a "$catdir"/*; [ -a "${u[1]}" ]; } && ln -f "$catdir"/* "$ALL_DATA"
+}
+
+# Collect the specified history (traces) files
+
+[ -s HISTORY_LIST ] && {
+  [ -d "$ALL_TRACES" ] || mkdir "$ALL_TRACES" && {
+    for c in `grep -v \# HISTORY_LIST`; do {
+      d="$SOLPSTOP/data/cases/$DEVICE/$c"
+      f="$d/traces_all/trcpp_sel.dat"
+
+      [ -s "$f" ] || { 
+        f="$d/tracing/trcpp_sel.dat"
+        [ -s "$f" ] 
+      } && cp $f $Hdir/trcpp.$c && ln -f $Hdir/trcpp.$c $ALL_TRACES
+
+      [ -s $ALL_TRACES/trcpp.$c ] && ln -s $ALL_TRACES/trcpp.$c $catdir
+    }; done
+  }
+}

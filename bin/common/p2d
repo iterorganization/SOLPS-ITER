@@ -1,0 +1,29 @@
+#! /bin/ksh
+
+#  VERSION : 27.10.2000 15:18
+
+Name=`basename $0`
+Usage="$Name: PROTEUS-to-DG equilibrium format conversion
+Usage: $Name <configuration file>
+       where the configuration file conforms to NAMELIST input (without the first and last lines)
+       and contains the following data (comment lines starting with # are allowed)
+   out_file='<filename>',   | output file
+   in_mesh='<filename>',    | PROTEUS mesh file
+   in_psi='<filename>',     | PROTEUS flux file
+   nrnz=<nr>,<nz>,    	    | output grid dimensions
+   rmnmx=<Rmin>,<Rmax>,     | grid boundaries in R
+   zmnmx=<Zmin>,<Zmax>,     | grid boundaries in Z
+   btrt=<Bt>,<Rt>,    	    | reference toroidal field and radius    
+"
+
+[ -z "$1" ] && { echo "$Usage"; exit; }
+[ -s "$1" ] || { echo "$Usage"; exit; }
+touch .$Name
+(print -- '&input'; grep -v \# "$1" | grep -v \&; print -- '&end') | $SOLPSTOP/src/DivGeo/dg/equtrn/$OBJECTCODE/pt2dg
+f=`grep out_file= "$1"`
+f=${f#*out_file=*\'}
+f=${f%,}
+f=${f%\'*}
+set -A f -- . $f
+
+[ -s "${f[1]}" ] && [ "${f[1]}" -nt .$Name ] && [ ! $1 = ${f[1]}.prm ] && cp $1 ${f[1]}.prm

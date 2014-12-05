@@ -1,0 +1,32 @@
+#! /bin/csh -f
+set BOL_start=`grep 'BOL chords' b2.diagnostics | awk '{print $2}'`
+set BOL_end=`grep 'BOL chords' b2.diagnostics | awk '{print $3}'`
+cp /dev/null gnuplot.cmd
+echo set parametric >> gnuplot.cmd
+echo set time >> gnuplot.cmd
+echo "set title '$PWD'" >> gnuplot.cmd
+if($2 == "") then
+  if($1 == "") then
+    set AVE=1
+  else
+    set AVE=$1
+  endif
+  echo 'splot "< chords_to_gnuplot '$BOL_start $BOL_end $AVE'" title "BOLOMETER"' >> gnuplot.cmd
+else
+  set START_TIME=$1
+  set END_TIME=$2
+  echo "set xrange [0:90]" >> gnuplot.cmd
+  echo "set xlabel 'channel number'" >> gnuplot.cmd
+  echo "set ylabel '[W.m^-2]'" >> gnuplot.cmd
+  echo -n 'plot "< chords_to_gnuplot '$BOL_start $BOL_end $START_TIME $END_TIME'" title "BOLOMETER averaged '$START_TIME to $END_TIME'"' >> gnuplot.cmd
+  set noglob
+  if($3 == "") then
+    echo '' >> gnuplot.cmd
+  else
+    echo ',\' >> gnuplot.cmd
+    exp_data $3 >> gnuplot.cmd
+  endif
+  set glob
+endif
+echo pause 3600 >> gnuplot.cmd
+gnuplot gnuplot.cmd

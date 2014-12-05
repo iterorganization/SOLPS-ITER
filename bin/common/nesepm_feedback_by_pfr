@@ -1,0 +1,12 @@
+#! /bin/csh -f
+set dfilename=feedback.data
+set pfilename=feedback.ps
+setenv GNUPLOT_POSTSCRIPT_OPTIONS 'color solid'
+setenv GNUPLOT_DATA $dfilename
+setenv PRINT_PLOT $pfilename
+if (-e b2mn.dat) then
+  set rescale = `egrep -i 'b2mndr_rescale_neutrals_sources' b2mn.dat | sed -e 's/b2mndr_rescale_neutrals_sources//' | sed -e "s/'//g" `
+else
+  set rescale = 1.0e-10
+endif
+pipe_run.log | grep -a nesepm_curr | awk '{print NR,$2,$5,(($10+$11)/'$rescale'/1000)}' | sed '$d' | x{$1}yplot3 current target control Iteration_no density_or_flux `noquote_pwd 3`

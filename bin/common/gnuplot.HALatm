@@ -1,0 +1,43 @@
+#! /bin/csh -f
+set HAL_start=`grep 'HAL chords for atomic hydrogen' b2.diagnostics | awk '{print $2}'`
+set HAL_end=`grep 'HAL chords for atomic hydrogen' b2.diagnostics | awk '{print $3}'`
+cp /dev/null gnuplot.cmd
+if ($?PRINT_PLOT) then
+  if(! $?GNUPLOT_POSTSCRIPT_OPTIONS) then
+    set GNUPLOT_POSTSCRIPT_OPTIONS=""
+  endif
+  if(! $?GNUPLOT_BATCH) then
+    echo set term postscript $GNUPLOT_POSTSCRIPT_OPTIONS >> gnuplot.cmd
+    if($PRINT_PLOT == "") then
+      echo "set out '| lpr'" >> gnuplot.cmd
+    else
+      echo "set out '$PRINT_PLOT'" >> gnuplot.cmd
+    endif
+  endif
+endif
+echo set parametric >> gnuplot.cmd
+echo "set title '$PWD'" >> gnuplot.cmd
+if($2 == "") then
+  if($1 == "") then
+    set AVE=1
+  else
+    set AVE=$1
+  endif
+  echo 'splot "< chords_to_gnuplot '$HAL_start $HAL_end'" title "HAL for atomic hydrogen" 2.40856e-20' >> gnuplot.cmd
+else
+  set START_TIME=$1
+  set END_TIME=$2
+  echo "set xlabel 'channel number'" >> gnuplot.cmd
+  echo "set ylabel '[W.m^-2.sr^-1]'" >> gnuplot.cmd
+  echo 'plot "< chords_to_gnuplot '$HAL_start $HAL_end $START_TIME $END_TIME' 2.40856e-20" title "HAL for atomic hydrogen averaged '$START_TIME to $END_TIME'"' >> gnuplot.cmd
+endif
+if (! $?PRINT_PLOT) then
+  if($?GNUPLOT_DELAY) then
+    echo pause $GNUPLOT_DELAY  >> gnuplot.cmd
+  else
+    echo pause 3600 >> gnuplot.cmd
+  endif
+endif
+if(! $?GNUPLOT_BATCH) then
+    gnuplot gnuplot.cmd
+endif

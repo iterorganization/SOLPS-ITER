@@ -1,0 +1,26 @@
+#! /bin/tcsh -f
+
+set RUNS=$PWD
+
+loop:
+  if(-e $RUNS/Makefile.plot) goto endloop
+  echo $RUNS
+  if ("$RUNS" == "/") then
+    echo Makefile.plot not found
+    exit
+  endif
+  set RUNS=`dirname $RUNS`
+  goto loop
+
+endloop:
+  set debug=""
+  if ("X${1}X" == "X-nX") then
+    set debug="-n"
+    shift
+  endif
+  if ("X${1}X" == "X-dX") then
+    shift
+    set debug="$debug TIME=$1"
+    shift
+  endif
+  gmake $debug -f $RUNS/Makefile.plot b2pl.prt

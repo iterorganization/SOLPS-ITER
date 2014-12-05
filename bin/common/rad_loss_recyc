@@ -1,0 +1,19 @@
+#! /bin/csh -f
+if ($?LAST10) then
+  set FILE=b2.log.last10
+else
+  set FILE=b2.log
+endif
+if (-x $SOLPSTOP/bin/$OBJECTCODE/zcat) then
+    set ZCAT=$SOLPSTOP/bin/$OBJECTCODE/zcat
+else if (-x $SOLPSMASTER/@sys/bin/zcat) then
+    set ZCAT=$SOLPSMASTER/@sys/bin/zcat
+else
+    set ZCAT="gzip --decompress --force --stdout"
+endif
+$ZCAT -f $FILE | \
+  egrep 'recycecore,|recycicore,|ITER.*TIME' | \
+  awk '/recycecore,/{recycecore=$2;recycesol=$3;recycedivin=$4;recycedivout=$5}\
+       /recycicore,/{recycicore=$2;recycisol=$3;recycidivin=$4;recycidivout=$5}\
+       /ITER.*TIME/{print $4,recycecore,recycesol,recycedivin,recycedivout,recycicore,recycisol,recycidivin,recycidivout,recycecore+recycesol+recycedivin+recycedivout+recycicore+recycisol+recycidivin+recycidivout}' | \
+  plot xyplot9 recycecore recycesol recycedivin recycedivout recycicore recycisol recycidivin recycidivout recyctot "Time" "rad_loss_recyc(MW)" $PWD

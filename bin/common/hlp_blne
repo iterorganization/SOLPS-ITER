@@ -1,0 +1,110 @@
+#! /bin/ksh
+
+#  VERSION : 22.08.96 17:12
+
+#syntax for call: hlp_blne [ -v -n -k -c [ -i # ] ]
+
+name=`basename $0`
+
+case "$OBJECTCODE" in
+    IBMaix  )   ;;
+    *       )   echo "$name: Improper platform $OBJECTCODE"; exit 4;;
+esac
+
+view=; verb=; keep=; keepcmd=; iterations=
+while true; do
+    case "$1" in
+        -c  )   keepcmd=$1;;
+        -k  )   keep=$1;;
+        -n  )   view=$1;;
+        -v  )   verb=$1;;
+        -i  )   shift; iterations=$1;;
+        -*  )   echo "Non-supported option $1";;
+        *   )   break;;
+    esac; shift
+done
+
+# Check whether the script is called from trc ...
+
+freestanding=
+[ -z "$GNUPLOT_BATCH" ] && freestanding=yes
+if [ -n "$freestanding" ]; then
+
+# do the following only if run free-standing, i.e. not from trc
+
+   export GNUPLOT_BATCH=yes
+   export GNUPLOT_DELAY=0
+# clean up the directory
+   rm -f GNUPLOT_COUNT gnuplot.cmd $name.ps gnuplot.[1-9]*.data >/dev/null 2>&1
+   echo 0 > GNUPLOT_COUNT
+   echo set term postscript landscape color > gnuplot.cmd
+   echo set output \'$name.ps\' >> gnuplot.cmd
+fi
+
+
+filename=tracing/blne.trc
+[ -r "$filename" ] || { echo "$name: filename=$filename does not exist!!!" >&2; exit 33; }
+
+
+
+# copy files to local directory tempdir and shorten them to iterations,
+# output files: in $tempdir/$header headerfile, 1 column per line
+# in $tempdir/$data, all data for $iterations,  1 line per timestep
+
+[ -z "$iterations" ] && iterations=`wc -l < $filename | awk '{print $1}'`
+
+dir=`hlp_src_cp $iterations $filename`
+[ $? -gt 0 ] && { echo "$name: file copy to local directory did not work" >&2; exit 33; }
+
+header=$dir/header
+data=$dir/data
+
+
+specieslist=`hlp_species $filename imp_rad_`
+
+[ -n "$verb" ] && echo "%% hlp_blnn: species = $specieslist"
+
+hlp_src power_balance lin $header $data time tot_core tot_targ tot_wall tot_rad pwr_totl
+hlp_src power_timescale lin $header $data time pwr_tscl
+hlp_src energy lin $header $data time tot_enrg tot_enre tot_enri
+
+hlp_src power_core lin $header $data time tot_core heat_cor ptnt_cor ntrl_cor
+hlp_src power_rad lin $header $data time tot_rad  brms_rad ntrl_rad imp_rad 
+hlp_src power_targets lin $header $data time tot_targ plsm_trg ntrl_trg
+hlp_src power_wall lin $header $data time tot_wall plsm_wll ntrl_wll
+
+arglist="imp_rad"
+for f in $specieslist; do
+  arglist="$arglist imp_rad_$f"
+done
+# hlp_src blnr lin $header $data time $arglist
+hlp_src power_imp_rad lin $header $data time $arglist
+
+hlp_src power_inner/outer lin $header $data time tot_targ pwr_totl_ol pwr_totl_il
+hlp_src power_outer lin $header $data time pwr_totl_ol pwr_plsm_ol pwr_neut_ol pwr_ionz_ol pwr_diss_ol
+hlp_src power_inner lin $header $data time pwr_totl_il pwr_plsm_il pwr_neut_il pwr_ionz_il pwr_diss_il
+hlp_src power_wall_detail lin $header $data time pwr_totl_wl pwr_plsm_wl pwr_neut_wl pwr_ionz_wl pwr_diss_wl
+
+
+
+if [ -n "$freestanding" ]; then
+#  Replace the labels
+
+[ -r VarID ] && { [ -n "$verb" ] && echo "%%%% editing gnuplot.cmd ..."
+    v=`cat VarID | tr _/ '  '`; echo "1,\$g/^set title/s/\".*\"/\"$v\"/
+w
+q" | ed -s gnuplot.cmd > /dev/null; }
+
+gnuplot gnuplot.cmd
+  [ -z "$keep" ] && rm GNUPLOT_COUNT gnuplot.*data
+
+  if [ -z "$view" ] ; then
+    ghostview $GV_OPT $name.ps &
+    setnice 0 $!
+  fi
+
+fi
+
+rm -rf plots_$name >/dev/null 2>&1
+mv $dir/plots plots_$name
+rm -rf $dir >/dev/null 2>&1

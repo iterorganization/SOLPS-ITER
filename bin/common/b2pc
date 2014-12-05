@@ -1,0 +1,339 @@
+#! /bin/ksh
+
+#  VERSION : 24.03.2005 16:18
+
+# Some B&W contours for the IAEA-2004 paper
+
+# Universal script for b2plot.
+# Multiple boxes can be specified in box.b2p - if the first line there starts with #
+
+DATE=20041010
+
+PS=$1
+NAME=${0##*/}
+[ -n "$PS" ] && echo "$NAME: producing PostScript files ..." || echo "$NAME: producing gmeta files ..."
+
+STEM=${NAME}_PS
+LK=bpc
+
+[ -n "$PS" ] && {
+  [ -d "${STEM}" ] && {
+    [ -d "${STEM}.$DATE" ] && {
+      rm -rf ${STEM}/* >/dev/null 2>&1; true
+    } || {
+      mv "${STEM}" "${STEM}.$DATE"; false
+    }
+  } || mkdir ${STEM}
+  [ -d ${STEM}/mono ] || mkdir ${STEM}/mono
+  [ -d ${STEM}/color ] || mkdir ${STEM}/color
+}
+
+# First, determine the basic variables
+
+unset swbox
+[ -s box.${LK} ] && {
+  [ -a box.b2p ] && {
+    [ -a box.b2p.$$ ] && {
+      print -u2 -- "Cannot switch box.b2p: box.b2p.$$ exists"
+      exit 4
+    }
+    mv box.b2p box.b2p.$$
+  }
+  mv box.${LK} box.b2p && swbox=y
+}
+. get_parm.bpl
+[ -n "$swbox" ] && {
+  mv box.b2p box.${LK} && [ -a box.b2p.$$ ] && mv box.b2p.$$ box.b2p
+  unset swbox
+}
+
+B="'$LL' extl"
+BL=${LL%\)*}\)
+BBB="comp"
+#ST="lbof sep clvl vesl phys 1.2 lbsz"
+ST="lbof sep eclv vesl phys 1.2 lbsz"
+
+rm -f gmeta color.${LK} mono.${LK} ${LK}_${L}[cm].ps.legend ${LK}.log b2plot.ps 2>/dev/null
+ic=0
+im=0
+ib=0
+echo "$ST $BB" > color.${LK}.h
+echo "$ST $BB writ" > mono.${LK}.h
+
+unset ss sf kw
+[ -n "${BB[1]}" ] && ss=_b
+
+# Loop over frames specified in box.b2p - or the default one
+
+#for bb in " ${BB[@]}"; do {###}
+
+for ssf in s n; do {
+  sf=ic$ssf
+  for bb in " 4.0 rmin 4.8 rmax -4.0 zmin -3.2 zmax" " 5.0 rmin 5.6 rmax -4.5 zmin -3.9 zmax"; do {
+    print -- "$bb" >> color.${LK}
+    print -- "$bb" >> mono.${LK}
+    kw=
+
+# Check whether this frame should be plotted in this mode (empty kw means yes)
+
+#    [ -n "$ss" ] && {
+#      let 'ib=ib+1'
+#      sf="_${SB[$ib]:-${ib}}"
+#      kw=${KW[$ib]}
+#      [ -n "$kw" ] && {
+#        [ -n "$PS" ] && {
+#          [ "${kw#P}" = "$kw" ] || kw=
+#          true
+#        } || [ "${kw#g}" = "$kw" ] || kw=
+#      }
+#      [ -z "$kw" ] && {
+#        print -- "$bb" >> color.${LK}
+#        print -- "$bb" >> mono.${LK}
+#      }
+#    }
+
+    [ -z "$kw" ] && {
+
+# Prepare the 2D plots depending on the frame (samples are below)
+     
+        let "ic=ic+1"
+        echo "'$BL 5 eV' extl
+          te 5.0 5.01 2 clvs cont drop" >> color.${LK}
+        echo "te05_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+        let "ic=ic+1"
+        echo "'$BL 10 eV' extl
+          te 10.0 10.0001 2 clvs cont drop" >> color.${LK}
+        echo "te10_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+        let "ic=ic+1"
+        echo "'$BL 1.e20' extl
+          ne 1.0e20 1.0001e20 2 clvs cont drop" >> color.${LK}
+        echo "ne1_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+        let "ic=ic+1"
+        echo "'$BL 2.e20' extl
+          ne 2.e20 2.0001e20 2 clvs cont drop" >> color.${LK}
+        echo "ne2_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+        let "ic=ic+1"
+        echo "'$BL 2.e19' extl
+          dmb2 0 zsel
+          2.e19 2.0001e19 2 clvs cont drop" >> color.${LK}
+        echo "nm0.2_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+        let "ic=ic+1"
+        echo "'$BL 5.e19' extl
+          dmb2 0 zsel
+          5.e19 5.0001e19 2 clvs cont drop" >> color.${LK}
+        echo "nm0.5_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+        let "ic=ic+1"
+        echo "'$BL 1.e20' extl
+          dmb2 0 zsel
+          1.e20 1.0001e20 2 clvs cont drop" >> color.${LK}
+        echo "nm1_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+        let "ic=ic+1"
+        echo "'$BL 2.e20' extl
+          dmb2 0 zsel
+          2.e20 2.0001e20 2  clvs cont drop" >> color.${LK}
+        echo "nm2_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+        let "ic=ic+1"
+        echo "'$BL 1.e20' extl
+          dab2 0 zsel
+          1.e20 1.0001e20 2 clvs cont drop" >> color.${LK}
+        echo "na1_D_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+        let "ic=ic+1"
+        echo "'$BL 2.e20' extl
+          dab2 0 zsel
+          2.e20 2.0001e20 2 clvs cont drop" >> color.${LK}
+        echo "na2_D_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+        let "ic=ic+1"
+        echo "'$BL 5.e17' extl
+          dab2 1 zsel
+          5.e17 5.01e17 2 clvs cont drop" >> color.${LK}
+        echo "na5_He_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+        let "ic=ic+1"
+        echo "'$BL 1.e18' extl
+          dab2 1 zsel
+          1.e18 1.01e18 2 clvs cont drop" >> color.${LK}
+        echo "na2_He_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+        let "ic=ic+1"
+        echo "'$BL 1.e24' extl 
+          brna 1 zsel pvol
+          1.e24 1.001e24 2 clvs cont drop" >> color.${LK}
+        echo "rci+1_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+        let "ic=ic+1"
+        echo "'$BL 2.e24' extl 
+          brna 1 zsel pvol
+          2.e24 2.001e24 2 clvs cont drop" >> color.${LK}
+        echo "rci+2_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+        let "ic=ic+1"
+        echo "'$BL 3.e24' extl 
+          brna 1 zsel pvol
+          3.e24 3.001e24 2 clvs cont drop" >> color.${LK}
+        echo "rci+3_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+        let "ic=ic+1"
+        echo "'$BL 4.e24' extl 
+          brna 1 zsel pvol
+          4.e24 4.001e24 2 clvs cont drop" >> color.${LK}
+        echo "rci+4_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+        let "ic=ic+1"
+        echo "'$BL -1.e24' extl 
+          brna 1 zsel pvol
+          -1.001e24 -1.e24 2 clvs cont drop" >> color.${LK}
+        echo "rci-1_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+        let "ic=ic+1"
+        echo "'$BL -2.e24' extl 
+          brna 1 zsel pvol
+          -2.001e24 -2.e24 2 clvs cont drop" >> color.${LK}
+        echo "rci-2_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+        let "ic=ic+1"
+        echo "'$BL -3.e24' extl 
+          brna 1 zsel pvol
+          -3.001e24 -3.e24 2 clvs cont drop" >> color.${LK}
+        echo "rci-3_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+        let "ic=ic+1"
+        echo "'$BL 0.0' extl 
+          brna 1 zsel pvol
+          -1.e0 1.e0 2 clvs cont drop" >> color.${LK}
+        echo "rci0_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+        let "ic=ic+1"
+        echo "$B brna 1 zsel pvol
+          2 2 clvp cont drop" >> color.${LK}
+        echo "rci_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+        let "ic=ic+1"
+        echo "'$LL :  mol. pres. [Pa]' extl
+          dmb2 0 zsel tmb2 0 zsel m* ev rm*
+          0.02 0.05 0.1 0.2 0.5 1.0 2.0 5.0 10.0 20.0 50.0 100.0 200. 13 clvs surf drop" >> color.${LK}
+        echo "prn_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+        let "ic=ic+1"
+        echo "$B brhi 1 zsel pvol
+          4 4 clvp surf drop" >> color.${LK}
+        echo "sei_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+        let "ic=ic+1"
+        echo "'$LL :  nm/ne' extl
+          dmb2 0 zsel ne m/ 
+          1.e-5 3.e-5 1.e-4 3.e-4 0.001 0.003 0.01 0.03 0.1 0.3 1.0 3.0 10.0  13 clvs surf drop" >> color.${LK}
+        echo "nmr_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+#      { case " ${SPEC[*]} " in
+#        ( *' C_ '* )
+#            iC=0; for f in ${SPEC[*]}; do
+#              [ $f = C_ ] && break
+#              let "iC=iC+1"
+#            done
+#            let "ic=ic+1"
+#            echo "'$L1 - $L2 : C velocities (average)' extl $arwl arow
+#              fnay ${SUMZ_1[iC]} ${SUMZ_N[iC]} sumz na ${SUMZ_1[iC]} ${SUMZ_N[iC]} sumz m/ aroy
+#              fnax ${SUMZ_1[iC]} ${SUMZ_N[iC]} sumz na ${SUMZ_1[iC]} ${SUMZ_N[iC]} sumz m/ dup arox psx
+#              -3000. -1000. -300. -100. -30. 0. 30. 100. 300. 1000. 3000. 11 clvs
+#              surf drop" >> color.${LK}
+#            echo "vel_C_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+#
+#            let "ic=ic+1"
+#            echo "'$L1 - $L2 : C density & velocities (average)' extl $arwl arow
+#              fnay ${SUMZ_1[iC]} ${SUMZ_N[iC]} sumz na ${SUMZ_1[iC]} ${SUMZ_N[iC]} sumz m/ aroy
+#              fnax ${SUMZ_1[iC]} ${SUMZ_N[iC]} sumz na ${SUMZ_1[iC]} ${SUMZ_N[iC]} sumz m/ arox
+#              na ${SUMZ_1[iC]} ${SUMZ_N[iC]} sumz
+#              -1 10 clvp
+#              surf drop" >> color.${LK}
+#            echo "nv_C_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend;;
+#        ( * ) ;;
+#      esac; }
+
+#      case " ${SPEC[*]} " in
+#        ( *' Ar '* )
+#            iAr=0; for f in ${SPEC[*]}; do
+#              [ $f = Ar ] && break
+#              let "iAr=iAr+1"
+#            done
+#            let "ic=ic+1"
+#            echo "$B
+#              na ${SUMZ_1[iAr]} ${SUMZ_1[iAr]} sumz
+#              5.e14 1.e15 2.e15 5.e15 1.e16 2.e16 5.e16 1.e17 2.e17 5.e17 1.e18 2.e18 5.e18 13 clvs surf drop" >> color.${LK}
+#            echo "nAr1_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend;;
+#        ( * ) ;;
+#      esac
+
+    }
+    sf=oc$ssf
+  }; done
+  echo sep vesl >> color.${LK}
+}; done
+
+# Plots invariant with respect to the bounding box (sample is below)
+
+#echo "phys $B" >> mono.${LK}
+#for d in ol il; do {
+#  for v in H V; do {
+#    for i in 1 2 3 4 5 6 7 8 9; do {
+#      let "im=im+1"
+#      echo "te 'LIF-$d-$v.00$i' chvl drop" >> mono.${LK}
+#      echo "Te\t$im" >> ${LK}_${L}m.ps.legend
+#      echo "ti 'LIF-$d-$v.00$i' chvl drop" >> mono.${LK}
+#      echo "Ti\t$im" >> ${LK}_${L}m.ps.legend
+#      echo "ne 'LIF-$d-$v.00$i' chvl drop" >> mono.${LK}
+#      echo "ne\t$im" >> ${LK}_${L}m.ps.legend
+#      echo "dab2 1 zsel 'LIF-$d-$v.00$i' chvl drop" >> mono.${LK}
+#      echo "nHe0\t$im" >> ${LK}_${L}m.ps.legend
+#      echo "na 3 zsel 'LIF-$d-$v.00$i' chvl drop" >> mono.${LK}
+#      echo "nHe+\t$im" >> ${LK}_${L}m.ps.legend
+#    }; done
+#  }; done
+#}; done
+
+# Plots on the computational mesh
+
+#let "ic=ic+1"
+#echo "$BBB $B na fnax 1 zsel na 1 zsel m/ arox drop fnay 1 zsel na 1 zsel m/ aroy drop  uu 1 zsel $arwl arow surf drop" >> color.${LK}
+#echo "vlc_D_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+
+# Produce the plots from the prepared control files
+
+S=mono
+for C in m c; do {
+  [ -s ${S}.${LK} ] && {
+    cat ${S}.${LK} >> ${S}.${LK}.h
+    mv ${S}.${LK}.h ${S}.${LK}
+    b2plot < ${S}.${LK} >> ${LK}.log 2>&1
+    [ -n "$PS" ] && {
+      [ -s gmeta ] && {
+        ctrans -d ps.$S -outfile ${STEM}/${S}/${LK}_${L}${C}.ps gmeta
+        mv ${LK}_${L}${C}.ps.legend ${STEM}/${S}
+        ln -s $PWD/VarID ${STEM}/${S}
+        [ -s b2plot.write ] && mv b2plot.write ${STEM}/${S} && (cd ${STEM}/${S} && parse_b2pw)
+        [ $C = c ] && (cd ${STEM}/${S}
+          ps_GV ${LK}_${L}${C}.ps && mv ${LK}_${L}${C}_GV.ps ${LK}_${L}${C}.ps && ps_mac ${LK}_${L}${C}.ps
+        )
+        rm gmeta
+      }
+    }
+    [ -s gmeta ] && mv gmeta gmeta.${LK}.${S}
+    true
+  } || {
+    rm ${S}.${LK}.h 2>/dev/null
+  }
+  [ -a b2plot.write ] && [ ! -s b2plot.write ] && rm b2plot.write
+  S=color
+}; done
+
+[ -s gmeta.${LK}.color ] && ln -s gmeta.${LK}.color gmeta

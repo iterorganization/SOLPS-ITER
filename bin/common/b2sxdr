@@ -1,0 +1,22 @@
+eval '(exit $?0)' && eval 'exec tcsh $0 ${1+"$@"}' && eval 'exec tcsh $0 $argv:q'
+###! /bin/tcsh -f
+
+set RUNS=$PWD
+
+loop:
+  if(-e $RUNS/Makefile.b2sxdr) goto endloop
+  echo $RUNS
+  if ("$RUNS" == "/") then
+    echo Makefile.b2sxdr not found
+    exit
+  endif
+  set RUNS=`dirname $RUNS`
+  goto loop
+
+endloop:
+  set debug=""
+  if ("X${1}X" == "X-nX") then
+    set debug="-n"
+    shift
+  endif
+  gmake $debug -f $RUNS/Makefile.b2sxdr b2sxdr.prt

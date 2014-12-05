@@ -1,0 +1,29 @@
+#! /bin/tcsh -f
+
+set nx=`grep -i XYMAP b2.wall_save.parameters | tr '(),=' '    ' | awk '{print $2}' | sort -n | tail -1`
+set ny=`grep -i XYMAP b2.wall_save.parameters | tr '(),=' '    ' | awk '{print $3}' | sort -n | tail -1`
+set l1=`grep -i XYMAP b2.wall_save.parameters | tr '(),=' '    ' | awk '$2==-1{print $4}' | head -1`
+set l2=`grep -i XYMAP b2.wall_save.parameters | tr '(),=' '    ' | awk '$2==-1{print $4}' | tail -1`
+set r1=`grep -i XYMAP b2.wall_save.parameters | tr '(),=' '    ' | awk '$2=='$nx'{print $4}' | head -1`
+set r2=`grep -i XYMAP b2.wall_save.parameters | tr '(),=' '    ' | awk '$2=='$nx'{print $4}' | tail -1`
+set t1=`grep -i XYMAP b2.wall_save.parameters | tr '(),=' '    ' | awk '$3=='$ny'{print $4}' | head -1`
+set t2=`grep -i XYMAP b2.wall_save.parameters | tr '(),=' '    ' | awk '$3=='$ny'{print $4}' | tail -1`
+set b1=`grep -i XYMAP b2.wall_save.parameters | tr '(),=' '    ' | awk '$3==-1{print $4}' | head -1`
+set b2=`grep -i XYMAP b2.wall_save.parameters | tr '(),=' '    ' | awk '$3==-1{print $4}' | tail -1`
+
+set b2wall="b2wall.nc"
+if (-e b2mn.exe.dir/b2wall.nc) set b2wall="b2mn.exe.dir/b2wall.nc"
+
+set sp1=`grep -i TRACK_SPECIES b2.wall_save.parameters | tr "'()=," "     " | awk '{print $3}' | head -1`
+set sp2=`grep -i TRACK_SPECIES b2.wall_save.parameters | tr "'()=," "     " | awk '{print $3}' | tail -n +2 | head -1`
+
+echo nx=$nx ny=$ny l1=$l1 l2=$l2 r1=$r1 r2=$r2 t1=$t1 t2=$t2 b1=$b1 b2=$b2 sp1=$sp1 sp2=$sp2
+
+echo $t1 `nc2text -n1 ${b2wall} "plate_area(:)" | awk 'NR==1{A=-$1/2;L=0}{A+=L+$1/2;L=$1/2;print A}' | awk 'NR=='$t1'{print $0}'`
+echo $t2 `nc2text -n1 ${b2wall} "plate_area(:)" | awk 'NR==1{A=-$1/2;L=0}{A+=L+$1/2;L=$1/2;print A}' | awk 'NR=='$t2'{print $0}'`
+echo $r1 `nc2text -n1 ${b2wall} "plate_area(:)" | awk 'NR==1{A=-$1/2;L=0}{A+=L+$1/2;L=$1/2;print A}' | awk 'NR=='$r1'{print $0}'`
+echo $r2 `nc2text -n1 ${b2wall} "plate_area(:)" | awk 'NR==1{A=-$1/2;L=0}{A+=L+$1/2;L=$1/2;print A}' | awk 'NR=='$r2'{print $0}'`
+echo $b1 `nc2text -n1 ${b2wall} "plate_area(:)" | awk 'NR==1{A=-$1/2;L=0}{A+=L+$1/2;L=$1/2;print A}' | awk 'NR=='$b1'{print $0}'`
+echo $b2 `nc2text -n1 ${b2wall} "plate_area(:)" | awk 'NR==1{A=-$1/2;L=0}{A+=L+$1/2;L=$1/2;print A}' | awk 'NR=='$b2'{print $0}'`
+echo $l1 `nc2text -n1 ${b2wall} "plate_area(:)" | awk 'NR==1{A=-$1/2;L=0}{A+=L+$1/2;L=$1/2;print A}' | awk 'NR=='$l1'{print $0}'`
+echo $l2 `nc2text -n1 ${b2wall} "plate_area(:)" | awk 'NR==1{A=-$1/2;L=0}{A+=L+$1/2;L=$1/2;print A}' | awk 'NR=='$l2'{print $0}'`

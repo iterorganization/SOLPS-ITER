@@ -1,0 +1,9 @@
+#! /bin/tcsh -f
+cd baserun
+touch b2ag.prt b2fgmtry
+sleep 1
+touch b2ah.prt b2fpardf
+sleep 1
+touch b2ai.prt b2fstati
+sleep 1
+touch b2ar.prt b2frates

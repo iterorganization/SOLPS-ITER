@@ -1,0 +1,7 @@
+#! /bin/csh -f
+sed -e '/^#/d' -e 's/^  *//' b2.diagnostics | cut -d" " -f1,`grep 'HAL chords for atomic hydrogen' b2.diagnostics | awk '{print $2"-"$3}'` > HALatm.extract
+ave.awk 10 < HALatm.extract >! HALatm.extract.10
+sed -e '/^#/d' -e 's/^  *//' b2.diagnostics | cut -d" " -f1,`grep 'HAL chords for molecular hydrogen' b2.diagnostics | awk '{print $2"-"$3}'` > HALmol.extract
+ave.awk 10 < HALmol.extract >! HALmol.extract.10
+sed -e '/^#/d' -e 's/^  *//' b2.diagnostics | cut -d" " -f1,`grep 'DCN line integrated density' b2.diagnostics | awk '{print $2"-"$3}'` > DCN.extract
+ave.awk 10 < DCN.extract >! DCN.extract.10

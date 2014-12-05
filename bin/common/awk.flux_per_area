@@ -1,0 +1,27 @@
+#! /bin/csh -f
+if ($?LAST10) then
+  set FILE=run.log.last10
+else
+  set FILE=run.log
+endif
+if (-x $SOLPSTOP/bin/$OBJECTCODE/zcat) then
+    set ZCAT=$SOLPSTOP/bin/$OBJECTCODE/zcat
+else if (-x $SOLPSMASTER/@sys/bin/zcat) then
+    set ZCAT=$SOLPSMASTER/@sys/bin/zcat
+else
+    set ZCAT="gzip --decompress --force --stdout"
+endif
+$ZCAT -f $FILE | \
+  grep -A95 "$1" | \
+  awk '/SURFACE AREA/{dabs=0;cabs=0;neabs=0;heabs=0;d=0;c=0;ne=0;he=0;area=$4/1e4}\
+       /FLUX INCIDENT ON SURFACE:/{sign=+1}\
+       /FLUX RE.*EMITTED FROM INCIDENT ATOMS:/{sign=-1}\
+       /FLUX RE.*EMITTED FROM INCIDENT MOLECULES:/{sign=-1}\
+       /INCIDENT: ATOMS/{NC=1}\
+       /INCIDENT: MOLECULES/{NC=2}\
+       /RE.*EMITTED: ATOMS/{NC=1}\
+       /RE.*EMITTED: MOLECULES/{NC=2}\
+       /P-FLUX:/{NRACTIVE=NR+1}\
+       NR==NRACTIVE&&sign>0{dabs+=$2*NC;cabs+=$4*NC;heabs+=$6*NC}\
+       NR==NRACTIVE{d+=$2*sign*NC;c+=$4*sign*NC;he+=$6*sign*NC}\
+       /NO ALGEBRAIC SURFACE TALLIES AT THIS SURFACE/{print dabs/area,cabs/area,heabs/area,d/area,c/area,he/area}'

@@ -1,0 +1,12 @@
+#! /bin/tcsh -f
+set NAME=/tmp/.run.$$.$USER.`date +%Y%m%d%H%M%S`
+/bin/cp /dev/null .solps-status
+echo "Submitted at `date` from `hostname`" > .solps-status
+if ("X$1" == "X-z") then
+  echo run.log will be compressed
+  sed -e 's:#PWD#:'$PWD':g' -e 's:#SOLPSTOP#:'$SOLPSTOP':g' < $SOLPSTOP/bin/common/jetsubmit.template.new-gz > $NAME
+else
+  sed -e 's:#PWD#:'$PWD':g' -e 's:#SOLPSTOP#:'$SOLPSTOP':g' < $SOLPSTOP/bin/common/jetsubmit.template.new > $NAME
+endif
+chmod u+x $NAME
+llsubmit $NAME

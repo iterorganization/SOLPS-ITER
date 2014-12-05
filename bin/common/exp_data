@@ -1,0 +1,11 @@
+#! /bin/csh -f
+cd $SOLPSMASTER/solps4.0/data/exp/asdex-upgrade
+set cnt=`echo $1 | wc -w`
+foreach i ($1)
+  @ cnt -= 1
+  if($cnt == 0) then
+    echo '"'$SOLPSMASTER/solps4.0/data/exp/asdex-upgrade/$i'" title "'$i'" with points'
+  else
+    echo '"'$SOLPSMASTER/solps4.0/data/exp/asdex-upgrade/$i'" title "'$i'" with points,\'
+  endif
+end

@@ -1,0 +1,124 @@
+#! /bin/ksh
+
+#  VERSION : 22.08.96 17:57
+
+#syntax for call: hlp_ep [ -v -n -d -k -c [ -i # ] ]
+
+name=`basename $0`
+
+case "$OBJECTCODE" in
+    IBMaix  )   ;;
+    *       )   echo "$name: Improper platform $OBJECTCODE"; exit 4;;
+esac
+
+# Parse the parameters
+
+iterations=300
+view=; keep=; keepcmd=; detail=; verb=
+while true; do
+    case "$1" in
+        -c  )   keepcmd=$1;;
+        -k  )   keep=$1;;
+        -n  )   view=$1;;
+        -d  )   detail=$1;;
+        -v  )   verb=$1;;
+        -i  )   shift; iterations=$1;;
+        -*  )   echo "Non-supported option $1";;
+        *   )   break;;
+    esac; shift
+done
+
+# Check whether the script is called from trc ...
+
+freestanding=
+[ -z "$GNUPLOT_BATCH" ] && freestanding=yes
+if [ -n "$freestanding" ]; then
+
+# ... and do the following only if run free-standing, i.e. not from trc
+
+   export GNUPLOT_BATCH=yes
+   export GNUPLOT_DELAY=0
+# clean up the directory
+   rm -f GNUPLOT_COUNT gnuplot.cmd $name.ps gnuplot.[1-9]*.data >/dev/null 2>&1
+   echo 0 > GNUPLOT_COUNT
+   echo set term postscript landscape color > gnuplot.cmd
+   echo set output \'$name.ps\' >> gnuplot.cmd
+fi
+
+filename=tracing/sources.trc
+[ ! -r "$filename" ] && { echo "$name: filename=$filename does not exist!!!" >&2; exit 33; }
+
+# copy files to local directory tempdir and shorten them to iterations,
+# output files: in $tempdir/$header headerfile, 1 column per line
+# in $tempdir/$data, all data for $iterations,  1 line per timestep
+
+dir=`hlp_src_cp $iterations $filename`
+rc=$?
+[ -n "$verb" ] && { echo "%% dir = $dir"; ls -l $dir; }
+
+[ $rc -gt 0 ] && { echo "$name: file copy to local directory did not work" >&2; exit 33; }
+
+header=$dir/header
+data=$dir/data
+
+hlp_src srces_all lin $header $data 0 srces00r srces00c srces00i
+
+if [ -n "$detail" ]; then
+  hlp_src srces_core lin $header $data 0 srces01r srces01c srces01i
+  hlp_src srces_sol lin $header $data 0 srces02r srces02c srces02i
+  hlp_src srces_i lin $header $data 0 srces03r srces03c srces03i
+  hlp_src srces_o lin $header $data 0 srces04r srces04c srces04i
+fi
+
+specieslist=`hlp_species $filename srcni00i_`
+
+equationlist="srcni srcmo"
+regionlist="01 02 03 04"
+for e in $equationlist; do
+  [ -n "$verb" ] && echo "%% e = $e"
+  for f in $specieslist; do
+    [ -n "$verb" ] && { echo "%% e,f = $e $f"
+        echo "%% hlp_src ${e}_all_$f lin $header $data 0 ${e}00r_$f ${e}00c_$f ${e}00i_$f"; }
+    hlp_src ${e}_all_$f lin $header $data 0 ${e}00r_$f ${e}00c_$f ${e}00i_$f
+    [ -n "$verb" ] && { l=`cat GNUPLOT_COUNT`; wc -l gnuplot.$l.data; echo "%%"; }
+  done
+
+  if [ -n "$detail" ]; then
+    for r in $regionlist; do
+      for f in $specieslist; do
+        hlp_src ${e}_${r}_$f lin $header $data 0 ${e}${r}r_${f} ${e}${r}c_${f} ${e}${r}i_${f}
+      done
+    done
+  fi
+done
+
+hlp_src srcms_all lin $header $data 0 srcms00r srcms00c srcms00i
+
+if [ -n "$detail" ]; then
+  hlp_src srcms_core lin $header $data 0 srcms01r srcms01c srcms01i
+  hlp_src srcms_sol lin $header $data 0 srcms02r srcms02c srcms02i
+  hlp_src srcms_i lin $header $data 0 srcms03r srcms03c srcms03i
+  hlp_src srcms_o lin $header $data 0 srcms04r srcms04c srcms04i
+fi
+
+if [ -n "$freestanding" ]; then
+#  Replace the labels
+
+[ -r VarID ] && { [ -n "$verb" ] && echo "%%%% editing gnuplot.cmd ..."
+    v=`cat VarID | tr _/ '  '`; echo "1,\$g/^set title/s/\".*\"/\"$v\"/
+w
+q" | ed -s gnuplot.cmd > /dev/null; }
+
+gnuplot gnuplot.cmd
+  [ -z "$keep" ] && rm GNUPLOT_COUNT gnuplot.*data
+
+  if [ -z "$view" ] ; then
+    ghostview $GV_OPT $name.ps &
+    setnice 0 $!
+  fi
+
+fi
+
+rm -rf plots_$name >/dev/null 2>&1
+mv $dir/plots plots_$name
+[ -z "$keep" ] && rm -rf $dir >/dev/null 2>&1

@@ -1,0 +1,97 @@
+#! /bin/ksh
+
+#  VERSION : 11.08.99 14:56
+
+
+MaxDepth=${MAX_LN_DEPTH:-12}
+GREP=grep     # /usr/bin/grep
+CUT=cut       # /usr/bin/cut
+LLN="$0"
+LS=/bin/ls
+pwd=/bin/pwd
+
+Name="${0##*/}"
+Usage="
+  Usage:  $Name [<options>] [<list>]
+  Options:
+    -h  print this screen
+    -e  print the last name in the chain of symbolic links
+    -m<length>  max. length of the chain (default $MaxDepth)
+    --	end of the options list (allows filenames starting with -)
+  <list>  list of files. If empty, then all the files in the current directory
+  If no -e option specified, print the filename to which the file is linked symbolically"
+    
+unset mode
+while true; do {
+  { case "$1" in
+    ( -- )  shift; break;;
+    ( -h )  print -- "$Usage"; exit;;
+    ( -e )  mode=${1#-};;
+    ( -m* ) MaxDepth=${1#-m};;
+    ( *  )  break;;
+  esac; }
+  shift
+}; done
+
+[ $# = 0 ] && set \*
+{ case "$mode" in
+  ( e ) for f in "$@"; do (
+          dd=${f%/*}
+          [ "$dd" = "$f" ] || cd "$dd"
+          ll=${f##*/}
+	  [ -L "$ll" ] && {
+            l="$ll"
+            ((i=$MaxDepth+1))
+	    until { ((i=i-1)); [ "$i" = 0 ]; }; do {
+              l=`lln $l`
+	      l=${l# }
+	      d="${l%/*}"
+	      [ "$l" = "$d" ] &&{
+	      	d=
+	      } || {
+	        [ -d "$d" ] && [ -x "$d" ] || {
+	          print -u2 -- "$f : link lost in $d"
+	     	  l=
+	     	  break
+	        }
+	      }
+	      [ -L "$l" ] || {
+                { case "$l" in
+		  ( /* )  ;;
+		  ( ./* ) l="$PWD/${l#./}";;
+		  ( */* ) ll=`(cd "$d"; $pwd)`
+		          lll="$l"     #!!!
+                          l="${ll%/}/${l##*/}"
+                          ;;
+		  ( * )   ;;
+		esac; }
+		break
+	      } && {
+                l="${l##*/}"
+	      }
+	      [ -n "$d" ] && {
+	        cd "$d" || {
+	          print -u2 -- "$f : link lost in $d"
+	     	  l=
+	     	  break
+	        }
+	      }
+	    }; done
+	  }
+	  [ -n "$l" ] && {
+	    [ -L "$l" ] && {
+	      print -u2 -- "$f : link too deep (max. $MaxDepth)"
+	    } || {
+	      print -- "$l"
+	    }
+	  }
+	); done;;
+  ( * ) for f in "$@"; do {
+      	  [ -L "$f" ] && {
+	    l="`$LS -l \"$f\" | $GREP ' ->' | $CUT -f2 -d\>`"
+	    l="${l# }"
+	    [ -n "$l" ] && print -- "$l"
+	  }
+      	}; done;;
+esac; }
+

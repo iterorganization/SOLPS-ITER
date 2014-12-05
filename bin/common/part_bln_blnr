@@ -1,0 +1,29 @@
+#! /bin/ksh
+
+#Braams particle balance normalised  bln_blnr 3 species
+
+filename=tracing/blnn.trc
+dir=`dirname $filename`
+
+[ ! -d $dir ] && { echo "$dir does not exist!!!"; exit 33; }
+( cd $dir; rm -f particle_*  >/dev/null 2>&1 )
+[ ! -r $filename ] && { echo "$filename does not exist!!!"; exit 33; }
+
+ 
+# check to see if columns are right (optional)
+cat  $filename \
+  | head -2 | tail -1 \
+  | awk '{ print $1, $17, $33, $49 }' \
+  > $dir/particle_header
+
+titlex=`awk '{print $1}' $dir/particle_header`
+title1=`awk '{print $2}' $dir/particle_header`
+title2=`awk '{print $3}' $dir/particle_header`
+title3=`awk '{print $4}' $dir/particle_header`
+
+
+cat  $filename \
+  | tail -n +3 \
+  | awk '{ print $1, $17, $33, $49 }' \
+  | plot xyplot3 $title1 $title2 $title3 $titlex '(s^-1)' $PWD
+

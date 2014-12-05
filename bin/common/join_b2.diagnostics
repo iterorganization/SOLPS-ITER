@@ -1,0 +1,15 @@
+#! /bin/csh -f
+if($1 == "") then
+  echo Arguments specify which b2.diagnostic files need to be joined
+endif
+if (-x $SOLPSTOP/bin/$OBJECTCODE/zcat) then
+    set ZCAT=$SOLPSTOP/bin/$OBJECTCODE/zcat
+else if (-x $SOLPSMASTER/@sys/bin/zcat) then
+    set ZCAT=$SOLPSMASTER/@sys/bin/zcat
+else
+    set ZCAT="gzip --decompress --force --stdout"
+endif
+$ZCAT -f $argv |\
+  awk 'BEGIN{TIME=0;LTIME=0}\
+       /^[#]/&&LTIME==0{print $0}\
+       /^[^#]/{if($1 < LTIME) {TIME=TIME+LTIME; printf "# NEW\n"}; LTIME=$1; printf "%13.6E",$1+TIME;for (i=2;i<=NF;i++) printf "%11.3E",$i ; printf "\n"}'

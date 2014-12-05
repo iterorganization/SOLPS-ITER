@@ -1,0 +1,310 @@
+#! /bin/ksh
+
+#  VERSION : 01.12.2000 16:39
+
+# traces_cat combines everal traces files
+# Horst D. Pacher VERSION : 960730
+# assume that the various traces files are in directories ./9*
+# where directory names 9* are dates in format e.g. 960510 for June 10 1996
+# traces files are copied to directory ./traces_all, renamed traces.9*.
+# last traces file may  be in ./time_dep . it is then copied to
+# ./traces_all, renamed traces.999999
+# all files are concatenated in date order into
+# file traces in . /traces_all. Time (column 1) is rewritten to be continuous
+#
+# Careful: if traces_cat is applied more than once:
+#      previous traces.9* files are not removed
+#      previous traces.999999 is removed but written again
+#        if there is a traces file in ./time_dep
+# uses gnuplot_2d_timetraces from ./time_dep
+
+# Y2K upgrade by A.S.Kukushkin:
+#   - filenames contain 4-digit year (e.g., 19960510 instead of 960510)
+#   - the latest files get the extension of 29999999 instead of 999999
+#   - all the old-format filenames are changed automatically into the new format
+
+
+filelist="last_2dir/powers_out last_2dir/var_out tracing/blnn.trc tracing/blne.trc tracing/blnm.trc tracing/integral.trc tracing/user.trc tracing/seldom.trc tracing/seldom_u.trc tracing/sepdata.trc"
+
+unset noview notrcp
+while true; do {
+  case "$1" in
+    (-n) noview=y; shift;;
+    (-c) notrcp=y; noview=y; shift;;
+    (-*) print -u2 -- "Non-supported option: $1"; shift;;
+    (* ) break;;
+  esac
+}; done
+(cd traces_all && rm -f *.ps gnuplot.cmd ) > /dev/null 2>&1
+[ -s VarID ] && I=`cat VarID` || I=`basename \`pwd\``
+
+alias awk=/usr/bin/awk
+
+[ ! -d traces_all ] && mkdir traces_all
+
+# Update the filenames to avoid the Y2K problem
+
+for f in 9* ; do {
+  [ -d $f ] && {
+    [ $f = 999999 ] && ff=29999999 || ff=19$f
+    [ ! -a $ff ] && mv $f $ff || {
+      print -u2 -- "Unable to rename $f to $ff"
+      exit 4
+    }
+  }
+}; done
+
+(cd traces_all && {
+  for f in *.9* ; do {
+    [ -a $f ] && {
+      b=${f%.9*}
+      e=${f##*.}
+      [ $e = 999999 ] && ff=29999999 || ff=19$e
+      [ ! -a $ff ] && mv $f $b.$ff || {
+        print -u2 -- "Unable to rename $f to $b.$ff"
+        exit 4
+      }
+    }
+  }; done
+})
+
+#traces is different from other files
+for f in [12]* ; do {
+  if [ -r $f/traces ]; then
+    if [ ! -r traces_all/traces.$f ]; then
+      mv $f/traces traces_all/traces.$f
+    fi
+  elif [ -r $f/time_dep/traces ]; then
+    if [ ! -r traces_all/traces.$f ]; then
+      cp $f/time_dep/traces traces_all/traces.$f
+    fi
+  fi
+}; done
+
+# copy other files
+for f in [12]* ; do {
+  for ff in $filelist; do {
+    [ -r $f/$ff ] && {
+      fraw=`basename $ff`
+      mv $f/$ff traces_all/${fraw}.$f
+      [ -s traces_all/${fraw}.$f ] || rm traces_all/${fraw}.$f
+    }
+  }; done
+}; done
+
+# now add traces to list
+filelist="time_dep/traces $filelist"
+frawlist=
+for ff in $filelist; do {
+  fraw=`basename $ff`
+  frawlist="$frawlist $fraw"
+  [ -r traces_all/${fraw}.29999999 ] && rm -f traces_all/${fraw}.29999999
+  [ -r $ff ] && [ -s $ff ] && cp $ff traces_all/${fraw}.29999999
+}; done
+
+echo $frawlist
+
+#ln -sf ../time_dep/gnuplot_2d_timetraces traces_all
+
+
+# assume all files are in new format:
+# traces has hash mark with 1 title line, space delimiter
+# powers_out and var_out have no hash marks, 1 title line, tab delimiters
+# blnn.trc has hash marks in front of header lines, date in first header line
+# headers in last hashed line, tab delimiters, no leading tabs
+# assume older files are converted first
+# use earliest header and earliest number of columns
+# time in traces guides everything. If traces doesn't exist, don't use other files
+
+
+cd traces_all
+
+for ff in $frawlist; do
+  [ -r $ff ] && rm $ff
+done
+
+
+datelist=`ls -1 traces* | grep "traces\." | sed  s/"traces\."//`
+#traceslist contains dates for which traces exists
+datefirst=`echo $datelist | awk '{print $1}'`
+echo "$ff datelist=$datelist"
+echo "$ff datefirst=$datefirst"
+
+#now get dates for all the files; consider only files for which traces exists
+
+echo "$datelist" > traceslist
+for ff in $frawlist; do
+  if [ ! "$ff." = "traces." ]; then
+    rm -f ${ff}list
+    > ${ff}list
+    for dd in $datelist; do
+      if [ -r ${ff}.${dd} ]; then
+        echo $dd >> ${ff}list
+      else
+        echo 0 >>  ${ff}list
+      fi
+    done
+  fi
+done
+
+#for ff in $frawlist; do
+#  echo $ff
+#  cat ${ff}list
+#done
+
+#get first valid date for each file. If there is none, equals zero
+    > datefirst
+for ff in $frawlist; do
+  datef=`cat ${ff}list | grep -v "^0" | head -1`
+  [ -z "$datef" ] && datef=0
+  echo $datef >> datefirst
+done
+
+cat datefirst
+
+#remove files which do not have valid first dates from list
+set -A afilelist xxx $filelist
+set -A afrawlist xxx $frawlist
+set -A adatefirst xxx `cat datefirst | awk '{printf("%s ", $1)}'`
+set -A adatelist `cat traceslist | awk '{printf("%s ", $1)}'`
+datelist="${adatelist[*]}"
+frawlist="${afrawlist[*]}"
+
+i=0
+set -A bfilelist xxx
+set -A bfrawlist xxx
+set -A bdatefirst xxx
+for ff in $frawlist; do
+  if [ i -gt 0 ]; then
+    if [ ${adatefirst[i]} -ne 0 ]; then
+      set -A bfilelist ${bfilelist[*]} ${afilelist[i]}
+      set -A bfrawlist ${bfrawlist[*]} ${afrawlist[i]}
+      set -A bdatefirst ${bdatefirst[*]} ${adatefirst[i]}
+    fi
+  fi
+  let "i = i+1"
+done
+set -A afilelist ${bfilelist[*]}
+set -A afrawlist ${bfrawlist[*]}
+set -A adatefirst ${bdatefirst[*]}
+
+#echo "${afilelist[*]}"
+#echo "${afrawlist[*]}"
+#echo "${adatefirst[*]}"
+frawlist="${afrawlist[*]}"
+
+# now determine headerline and write header to output file
+set -A aheaderline xxx
+set -A adataline xxx
+i=0
+for ff in $frawlist; do
+  if [ i -gt 0 ]; then
+    filedate=${adatefirst[i]}
+    filefirst=${ff}.${filedate}
+    header=`cat $filefirst | grep -c "^#"`
+    [ $header -eq 0 ] && header=1
+    let " data = header +1 "
+    set -A adataline ${adataline[*]} $data
+    set -A aheaderline ${aheaderline[*]} $header
+    head -$header $filefirst > $ff
+  fi
+  let "i = i+1"
+done
+#echo "${aheaderline[*]}"
+
+# now concatenate files
+echo "datelist=$datelist"
+echo "frawlist=$frawlist"
+idd=0
+starttime=0.0
+endtime=0.0
+for dd in $datelist; do
+  iff=0
+  for ff in $frawlist; do
+    if [ iff -gt 0 ]; then
+# only if file exists
+      if [ -r ${ff}.${dd} ]; then
+#          remove leading and lagging tabs and spaces and replace space runs by tabs
+        line=${adataline[iff]}
+        tail -n +$line ${ff}.${dd} | tr "\011" " " | tr -s  " " " " | sed s/"^ "// | sed s/" $"// | tr " " "\011" > temp0${ff}
+#         get numbering and times in 1 file and other columns in rest of file
+        cut -f1 temp0${ff} | nl -ba > temp1${ff}
+        cut -f2- temp0${ff} > temp2${ff}
+      fi
+    fi
+    let "iff = iff + 1"
+  done
+
+  iff=0
+  for ff in $frawlist; do
+    if [ iff -eq 1 ]; then
+#          check to see if starttime of new traces is before old endtime. If yes, correct time
+      starttime=`head -1 temp1${ff} | awk '{ if ($2 >= '"$endtime"') print '"0.0"'; else print '"$endtime"'-$2 }'`
+      starttime0=$starttime
+      cat temp1${ff} | awk '{  print $1, $2+'"$starttime"' }' > temp3${ff}
+      mv temp3${ff} temp1${ff}
+      starttime=`head -1 temp1${ff} | awk '{ print  $2 }'`
+      endtime=`tail -1 temp1${ff} | awk '{ print  $2 }'`
+      echo "starttime=$starttime endtime=$endtime"
+    fi
+    if [ iff -gt 1 ]; then
+      if [ -r ${ff}.${dd} ]; then
+#          make sure values are within bracket starttime/endtime
+#          except for powers_out, which doesn't have time
+        if [ ! ${ff} = "powers_out" ]; then
+          cat temp1${ff} | awk '{  print $1, $2+'"$starttime0"' }' > temp3${ff}
+          mv temp3${ff} temp1${ff}
+          cat temp1${ff} | awk '{ if ($2 <= '"$endtime"') print $1, $2 }' > temp3${ff}
+          mv temp3${ff} temp1${ff}
+        fi
+#         make sure last 2 lines have same number of columns
+        collast=`tail -1 temp2${ff} | wc -w | awk '{ print $1}'`
+        colprevious=`tail -2 temp2${ff} | head -1 | wc -w | awk '{ print $1}'`
+        if [ $collast -lt $colprevious ]; then
+          linekeep=`wc -l < temp1${ff} | awk '{ print $1}'`
+          head -$linekeep temp1${ff} > temp3${ff}
+          mv temp3${ff} temp1${ff}
+         fi
+      fi
+    fi
+#     put files back together using linenumbers kept with time file
+     if [ iff -gt 0 ]; then
+      if [ -r ${ff}.${dd} ]; then
+
+        line=`head -1 temp1${ff} |  awk '{ print $1}'`
+        tail -n +$line temp2${ff} > temp3${ff}
+        rm -f temp2${ff}
+        mv temp3${ff} temp2${ff}
+
+        line=`wc -l < temp1${ff} | awk '{ print $1}'`
+        tail -$line temp2${ff} > temp3${ff}
+        rm -f temp2${ff}
+        mv temp3${ff} temp2${ff}
+
+        cat temp1${ff} | awk '{print $2}' > temp3${ff}
+        rm -f temp1${ff}
+        mv temp3${ff} temp1${ff}
+
+        paste temp1${ff} temp2${ff} > temp3${ff}
+
+        rm -f temp1${ff}
+        rm -f temp2${ff}
+        mv $ff temp1${ff}
+
+
+        cat temp1${ff} temp3${ff} > $ff
+      fi
+    fi
+    let "iff = iff + 1"
+  done
+  let "idd = idd+1"
+done
+
+rm -f temp*
+
+[ -r xxx ] && rm -f xxx
+
+[ -z "$NOTRCP" ] && trcp -b
+
+cd ..
+[ -z "$noview" ] && ghostview $GV_OPT traces_all/trcp.ps &

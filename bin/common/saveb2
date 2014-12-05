@@ -1,0 +1,708 @@
+#! /usr/bin/ksh
+
+#===================================================================================================
+# Transfer the B2-Eirene data to/from temporary storage or archive
+
+#  VERSION : 31.08.2004 18:45
+
+MVLIS='B2SXDR B2SDIAG b2.diagnostics* *.ps b2.parameters.out fort.13 fort.15 fort.31 fort.44 peak_power* ld_tg_*.dat fp_tg_*.dat gmeta* last_2dir/* time_dep/*.ps time_dep/traces tracing/*.trc b2pl_PS/*.ps b2pl_PS/*/*.ps sput_trg.sum *.legend'
+CUTLIS='tracing/residuals.trc tracing/sources.trc tracing/test.trc'
+DIRLIS='last_2dir time_dep tracing'
+ADDLIS='b2.parameters fort.30 mesh.extra RES param.dg box.b2p b2pl b2pt B2E.version test.eir diag2.eir'
+CPDIR='b2pl_dat* b2pp_dat* b2pt_dat b2pl_PS* b2pt_PS* b2pp_PS* *_epsdir results_*'
+ZIP_EXCLUDE_LIS='fort.25 bpt.log color.bpt mono.bpt b2p.log bpp.log mono.bpp color.bpp mono.bpl color.bpl bpl.log'
+DO_NOT_CHECK='b2.parameters.out */*/*_epsdir/*'
+ERS_CP_LIS='*.dg Label VarID diag2.eir er-dp.cms fort.31 b2.parameters'
+ERS_MV_LIS='*.ers eir.log ers-dps* fort.44 gli.eps gm_test.dat *.cx'
+ERS_RM_LIS='uinput.dg param.dg'
+ERS_CP_DIR=,Iterations
+ERS_ARCH_LIS='diag2.eir *.ers ers-dps.*'
+ERS_ARCH_AUX='er-dp.cms *.cx'
+
+
+SYNONIM_IN='iterm'
+SYNONIM_OUT='iter'
+
+set -A EQU_DEV_LIS -- 'iter iterm'
+
+AFSDIR=${AFSDIR:=/afs/ipp/m/kukusha/b2arch}
+ARCHDIR=${ARCHDIR:=/home2/b/ga/kukusha/b2arch}
+
+zip="${zip:-zip}"
+#echo "zip:$zip"  #!!!
+
+NAME=${0##*/}
+Usage="Usage: $NAME [-a | -z [ -k ] ] [-f] <directory>
+   or: $NAME { -l | -p | -e } [<directory>]
+   or: $NAME { -m [ -k ] | -c } [<zip-file>]
+   or: $NAME [ -u | -g ] <List-file>
+        -l :  the directory is linked to the \"cases\" directory
+              under the name of either <directory> (if specified) or an ID from the VarID file.
+        -e :  files relevant to evaluation of erosion/deposition are copied to $ERS_CP_DIR/<directory>
+              If $ERS_CP_DIR directory is absent, it will be created. 
+              If <directory> is not specified, it will be determined automatically.
+        -a :  the files are copied, else they are moved.
+        -z :  the files are copied in archive (directory prefix \$ARCHDIR).
+              zip file is created and written to the mass storage.
+              If the directory name is '=' then it is determined from the VarID file and the 
+              DEVICE variable.
+        -m :  the zip file is updated on the mass storage.
+        -c :  the zip file on the mass storage is checked for update.
+        -p :  the list of archive files to write on CD is printed. 
+	      If the directory is not specified, the archive is $AFSDIR 
+        -g :  the files listed in the List-file are copied to the current directory 
+        -u :  the List-file name is appended to the timestamps for archive files listed in 
+              the List-file
+        -k :  the copy of the zip-file is kept in the local working directory specified in \$SB2_ZIPWRK
+        -f :  the script asks no confirmation.
+
+         If the directory name is specified as '=' and the action parameter is '-a' or absent, 
+         then the directory name is created from the current date (YYYYMMDD).
+         In the cases -z, -m or -g, the afs authorisation must be done in advance"
+
+[ -z "$1" ] && {
+  print -u2 -- "$Usage"
+  exit 4
+}
+
+DO_NOT_CHECK=`echo $DO_NOT_CHECK`
+ZIP_EXCLUDE_LIS=`echo $ZIP_EXCLUDE_LIS`
+DO_NOT_CHECK=" $DO_NOT_CHECK $ZIP_EXCLUDE_LIS "
+ZIP_EXCLUDE_LIS=" $ZIP_EXCLUDE_LIS "
+
+unset force keep
+while true; do {
+  { case "$1" in
+    ( -f  ) force=y;;
+    ( -k  ) keep=y;;
+    ( -*  ) unset cp arch link update CDlis ersn;;
+    ( *   ) ;;
+  esac; }
+  { case "$1" in
+    ( -a  ) cp=y;;
+    ( -c  ) update=c;;
+    ( -e  ) ersn=y;;
+    ( -f  ) force=y;;
+    ( -k  ) keep=y;;
+    ( -l  ) link=y;;
+    ( -m  ) update=y;;
+    ( -p  ) CDlis=l;;
+    ( -u | -g ) [ -z "$2" ] && {
+      	      print -u2 -- "$NAME: the list must be specified for the $1 option"
+	      print -u2 -- "$Usage"
+	      exit 4
+	    }
+	    CDlis=${1#-}; List=$2; shift;;
+    ( -z  ) { case "$PWD" in
+                ( $SOLPSTOP/src/B2Eirene/* ) ;;
+                ( *                        )
+                  print -u2 "$NAME: wrong current directory for the -z option."
+                  print -u2 "       Must be \$SOLPSTOP/src/B2Eirene/*"
+                  exit 4;;
+              esac; }
+            cp=y; arch=y;;
+    ( -*  ) print -u2 -- "$NAME: incorrect option $1"
+            print -u2 -- "$Usage"
+            exit 2;;
+    (  *  ) break;;
+  esac; }
+  shift
+}; done
+
+{ case "$OBJECTCODE" in
+  ( IBMaix | linux.* )  P=-p;;
+  ( ''  ) print -u2 -- "$NAME: OBJECTCODE not set"
+          exit 16;;
+  ( *   ) P=;;
+esac; }
+
+unset dest
+[ -z "$DEVICE" ] && {
+  print -u2 -- "$NAME: the DEVICE variable is not set."
+  print -u2 "$Usage"
+  exit 4
+}
+dest=$DEVICE
+{ case " $SYNONIM_IN " in
+  ( *" $DEVICE "* )
+    set -A in -- $SYNONIM_IN
+    set -A out -- $SYNONIM_OUT
+    i=0; until [ -z "${in[i]}" ]; do {
+      [ "${in[i]}" = "$DEVICE" ] && {
+        dest=${out[i]}
+        break
+      }
+      ((i=i+1))
+    }; done
+    unset in out
+    [ -n "$dest" ] && [ ! "$DEVICE" = "$dest" ] || {
+      print -u2 "$NAME: unexpected error. Check the specification of SYNONIM_IN and SYNONIM_OUT in $NAME. (dest=$dest)"
+      exit 16
+    }
+    ;;
+  ( * ) ;;
+esac; }
+#echo "force\tupdate\tcp\tlink\tCDlis"         #!!!
+#echo "$force\t$update\t$cp\t$link\t$CDlis"    #!!!
+
+#-----------------------------------------------------------------------
+[ -n "$ersn" ] && {
+  [ -d $ERS_CP_DIR ] || mkdir -p $ERS_CP_DIR || {
+    print -u2 -- "$NAME: unable to create directory $ERS_CP_DIR"
+    exit 16
+  }
+  [ -n "$1" ] && {
+    u="$1"
+    [ ${u#/} = "$1" ] && DIR="$ERS_CP_DIR/$u" || DIR="$u"
+    true
+  } || {
+    set -A u -- `ls $ERS_CP_DIR`
+    i=${#u[*]}
+    [ "$i" = 0 ] || i=${i#0}
+    [ $i -gt 0 ] && {
+      ((i=i-1))
+      ((i=${u[i]}+1))
+    }
+    [ "$i" -lt 10 ] && i="0$i"
+    DIR="$ERS_CP_DIR/$i"
+  }
+  [ -d $DIR ] && {
+    [ -z "$force" ] && {
+      print -- "The directory $DIR already exists. Use it nonetheless (y/n)? \c";
+      read u
+      { case "$u" in
+        ( y | Y ) ;;
+        ( *     ) exit 2;;
+      esac; }
+    }; true
+  } || {
+    mkdir -p $DIR || {
+      print -u2 -- "Unable to create the directory $ERS_CP_DIR"
+      exit 16
+    }
+    chmod 2775 $DIR
+  }
+  [ -s fort.10 ] && ERS_MV_LIS="$ERS_MV_LIS fort.10 fort.11"
+  [ -s fort.13 ] && ERS_MV_LIS="$ERS_MV_LIS fort.13"
+  mv $ERS_MV_LIS $DIR
+  cp $P $ERS_CP_LIS $DIR
+  [ -n "$ERS_RM_LIS" ] && (cd $DIR && rm $ERS_RM_LIS)
+  print -- "$DIR"
+  exit 0
+}
+
+#-----------------------------------------------------------------------
+[ "$CDlis" = g ] && {
+  fs prefetch `cut -f2 $List`
+  wait 5
+  cp $P `cut -f2 $List` .
+  exit
+}
+#-----------------------------------------------------------------------
+[ "$CDlis" = u ] && {
+  for f in `cut -f2 $List`; do {
+    ddd=${f%/*}
+    ddd=$ARCHDIR/$DEVICE/CD_log/Timestamps/${ddd##*/}
+    print -- "${List##*/}" >> $ddd
+  }; done
+  mv $List $ARCHDIR/$DEVICE/CD_log/Lists
+  exit
+}
+#-----------------------------------------------------------------------
+[ "$CDlis" = l ] && {
+  d=$1
+  d=${d:=$AFSDIR/$DEVICE}
+  [ -d "$d" ] || {
+    print -u2 -- "$d : no source directory"
+    print -u2 -- "Type $NAME for help"
+    exit 4
+  }
+  dd=$ARCHDIR/$DEVICE/CD_log/Timestamps
+  [ -d "$d" ] || {
+    print -u2 -- "$dd : no timestamp directory"
+    print -u2 -- "Type $NAME for help"
+    exit 4
+  }
+  for f in $d/[0-9]*; do (
+    cd $f && {
+      for ff in *.zip; do {
+      	[ -f $ff ] && {
+	  ddd=${f##*/}
+          ddd=$dd/${ddd}
+    	  [ $ddd -nt $ff ] || {
+    	    set -- `ls -l $ff`
+    	    eval "print -- \"$5\t$f/\$$#\""
+    	  }
+    	}
+      }; done
+    }
+  ); done
+  exit
+}
+#-----------------------------------------------------------------------
+[ -n "$update" ] && {
+#  echo "update:$update"
+  [ -z "$1" ] && {
+    d=${PWD%/*};
+    d=${d##*/};
+    f=${PWD##*/}
+#    echo "d,f : $d : $f :"  #!!!
+    dtg=$AFSDIR/${d}/${f}
+    dar="$ARCHDIR/${d}/${f}"
+    { case " $SYNONIM_IN " in
+      ( *" ${d} "* )
+        set -A in -- $SYNONIM_IN
+        set -A out -- $SYNONIM_OUT
+        i=0; until [ -z "${in[i]}" ]; do {
+          [ "${in[i]}" = "${d}" ] && {
+            d=${out[i]}
+            break
+          }
+          ((i=i+1))
+        }; done
+        unset in out
+        [ -n "${d}" ]  || {
+          print -u2 "$NAME: unexpected error. Check the specification of SYNONIM_IN and SYNONIM_OUT in $NAME."
+          exit 16
+        }
+        ;;
+      ( * ) ;;
+    esac; }
+    f="${dtg}/${d}${f}.zip"
+    [ -d $dtg ] || {
+      print -u2 "$NAME: default target directory $dtg is absent."
+      print -u2 "       Check the current directory or specify target explicitly"
+      exit 4
+    }
+    true
+  } || {
+    case $1 in
+      ( /* )  dar=$1
+      	      n=${dar##*/}; u=${dar%$n}; 
+	      set -- ${u##*/}/$n;;
+      ( *  )  dar="$ARCHDIR/$1";;
+    esac
+    [ -d "$dar" ] || {
+      print -u2 "$NAME -m : source directory not found - $dar"
+      exit 4
+    }
+    [ -s "$AFSDIR/$1" ] && f="$AFSDIR/$1" || {
+      [ -s "$1" ] && f="$1" || {
+        print -u2 "$NAME: target file $1 not found"
+        [ -n "$force" ] && exit 2
+        print -u2 "       Create the new one? (y/n) \c"
+        read u; case "$u" in
+          ( y ) f="$1";;
+          ( * ) exit;;
+        esac
+      }
+    }
+  }
+  cd "$dar"
+#  echo "Target file: $f"; pwd   #!!!
+  w=$f
+  [ "$update" = y ] && [ -n "$SB2_ZIPWRK" ] && {
+    [ -d "$SB2_ZIPWRK" ] || {
+      [ -a "$SB2_ZIPWRK" ] && {
+        print -u2 -- "$NAME: $SB2_ZIPWRK is not a directory. Check SB2_ZIPWRK setting"
+        exit 16
+      }
+      mkdir -p "$SB2_ZIPWRK" || {
+        print -u2 -- "$NAME: unable to create $SB2_ZIPWRK. Check SB2_ZIPWRK setting"
+        exit 16
+      }
+    }
+    [ -w "$SB2_ZIPWRK" ] || {
+        print -u2 -- "$NAME: write access to $SB2_ZIPWRK denied. Check SB2_ZIPWRK setting"
+        exit 16
+    }
+    w=${SB2_ZIPWRK%/}/${f##*/}
+#    echo "Work file: $w"; ls -l "$w"   #!!!
+    (
+      cd "$SB2_ZIPWRK" && {
+        [ ! -s "$w" ] || {
+          i=0; while ((i=i+1)); [ -a "$w..$i" ]; do :; done
+          mv "$w" "$w..$i" || {
+            print -u2 -- "$NAME: unable to move $w. Check SB2_ZIPWRK setting"
+            false
+          }
+        }
+      } || {
+        print -u2 -- "$NAME: error with working directory. Check SB2_ZIPWRK setting"
+        exit 16
+      }
+    )
+  }
+  [ -s "$f" ] && {
+    [ -z "$force" ] && {
+      for l in `find * -type f -newer $f -print`; do {
+      	[ "$DO_NOT_CHECK" = "${DO_NOT_CHECK#* $l *}" ] && force=y
+      }; done
+    }
+#    echo "force :$force:"  #!!!
+#    set -x  #!!!
+    [ -n "$force" ] && {
+      [ "$update" = y ] && {
+      	[ -a "$f" ] && wc $f > /dev/null
+        [ "$f" = "$w" ] || {
+          cp $f "$w" || {
+            print -u2 -- "$NAME: unable to copy $f to the working directory. Check SB2_ZIPWRK setting"
+            exit 16
+          }
+        }
+        ${zip} -pryu "$w" * -x $ZIP_EXCLUDE_LIS
+        [ -n "$SB2_ZIPWRK" ] && cp "$w" "$f" && touch -r "$w" "$f" && [ -z "$keep" ] &&rm -f "$w"
+        ls -l "$f"
+        true
+      } || print -- "$f needs an update"
+      true
+    } || print "$f is up to date"
+    true
+  } || {
+    [ "$update" = y ] && {
+      [ -a $f ] && wc $f > /dev/null
+      ${zip} -pry "$w" * -x $ZIP_EXCLUDE_LIS
+      [ -n "$SB2_ZIPWRK" ] && cp "$w" "$f" && touch -r "$w" "$f" && [ -z "$keep" ] && rm -f "$w"
+      ls -l "$f"
+      true
+    } || {
+      print -- "$f: no zip file found"
+    }
+  }
+  exit
+}
+#-----------------------------------------------------------------------
+[ -n "$link" ] && {
+  DIR="$SOLPSTOP/data/cases"
+  [ -n "$1" ] && {
+    case $1 in
+      ( /* | ./* | ../* ) f="$1";;
+      ( . | .. | "$PWD" ) print -u2 "$NAME: $1 is not a valid destination to link"
+                          print -u2 "$Usage"
+                          exit 4;;
+      ( * )               f=$DIR/$1;;
+    esac
+    true
+  } || {
+    [ -s VarID ] && {
+      f=`cat VarID`
+      set -A ff ${f%%_*}
+      f=$DIR/`print $ff | tr 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#' 'abcdefghijklmnopqrstuvwxyz/'`
+      true
+    } || {
+      print -u2 "$NAME: no VarID found in the directory."
+      print -u2 "$Usage"
+      exit 4
+    }
+  }
+  [ -L "$f" ] && {
+    print -u2 "$NAME: $f removed before linking"
+    rm -f "$f"
+  }
+  ln -s "$PWD" "$f"
+  exit
+}
+#-----------------------------------------------------------------------
+SDIR="$1"
+[ "$SDIR" = '' ] && {
+  print "This script saves the data from B2-Eirene run to the specified directory";
+  print "$Usage"
+  exit
+}
+
+[ -z "$arch" ] && [ "$SDIR" = '=' ] && SDIR=`date +%Y%m%d`
+
+[ -n "$arch" ] && [ "$SDIR" = '=' ] && {
+  set -- `cat VarID | tr \#_ '  '`
+  n=$2
+  [ -z "$n" ] && {
+    print -u2 -- "$NAME: no valid VarID file found - specify the target directory explicitly"
+    print -u2 "$Usage"
+    exit 4
+  }
+  SDIR=$DEVICE/$n
+}
+print -- "$NAME: Destination: $SDIR"
+#read u  #!!!
+
+. triang.conf
+# triaz=y means that triangular grid files should be put in the archive
+unset trial trian triaz
+[ -n "$TRIAFTN" ] && {
+  for x in $TRIAFTN; do {
+    [ -s fort.$x ] && trial=y || trian=n
+  }; done
+  [ -z "$trian" ] && triaz=y || {
+    [ -n "$trial" ] && print -- "Incomplete set of triangular mesh files!!!"
+  }
+}
+
+[ -z "$arch" ] && DIR=$SDIR || {
+  { case $SDIR in
+    ( /* )  DIR=$SDIR
+      	    n=${DIR##*/}; u=${DIR%$n}; SDIR=${u##*/}/$n;;
+    ( *  )  DIR="$ARCHDIR/$SDIR";;
+  esac; }
+}
+[ -d "$DIR" ] && {
+  [ -z "$force" ] && {
+    print -- "The directory $DIR already exists. Use it nonetheless (y/n)? \c";
+    read u
+    { case "$u" in
+      ( y | Y ) ;;
+      ( *     ) exit 2;;
+    esac; }
+  }; true
+} || {
+  mkdir $DIR || {
+    print -u2 -- "Unable to create the directory $DIR"
+    exit 16
+  }
+  chmod 2775 $DIR
+}
+
+[ -z "$force" ] && [ -a trc.err ] && {
+   print -- "The trc.err file exists. Save nonetheless (y/n)? \c";
+   read u; case "$u" in
+      ( y )  ;;
+      ( * )  exit 4;;
+   esac; true;
+}
+
+for d in $DIRLIS; do {
+  [ -d "$DIR/$d" ] || {
+    mkdir $DIR/$d || {
+      print -u2 -- "Unable to create a directory $DIR/$d"
+      exit 4
+    }
+    chmod 2775 $DIR/$d
+  }
+}; done
+
+[ -z "$cp" ] && {
+  for f in $MVLIS; do {
+    mv $f $DIR/$f
+  }; done
+  true
+} || {
+  for f in $MVLIS $ADDLIS; do {
+    [ -s "$DIR/$f" ] && [ ! "$f" -nt "$DIR/$f" ] || {
+      { case " $CUTLIS " in
+        ( *" $f "* ) (grep '^#' $f;  grep -v '^#' $f | tail -300) > "$DIR/$f";;
+        ( *        ) cp $P $f $DIR/$f;;
+      esac; }
+    }
+  }; done
+  no_trc_all=
+  [ -d traces_all ] && {
+    [ -d $DIR/traces_all ] || {
+      mkdir $DIR/traces_all || {
+        print -u2 "$NAME: unable to create directory $DIR/traces_all"
+        no_trc_all=y
+      }
+    }
+    [ -z "$no_trc_all" ] && {
+      chmod 2775 $DIR/traces_all
+      for f in traces_all/*; do {
+        [ -a "$f" ] && [ ! -d "$f" ] && {
+          [ -s "$DIR/$f" ] && [ ! "$f" -nt "$DIR/$f" ] || cp $P "$f" $DIR/traces_all
+        }
+      }; done
+    }
+  }
+  [ -n "$CPDIR" ] && {
+    for d in $CPDIR; do {
+      [ -d "$d" ] && {
+        [ -d "$DIR/$d" ] && {
+          [ -n "`find $d -newer $DIR/$d -print`" ] && { cp $P -r "$d"/* "$DIR/$d"; touch "$DIR/$d"; }
+          true
+        } || {
+          [ -a "$DIR/$d" ] && {
+            s=000
+            [ -a "$DIR/$d.[0-9][0-9][0-9]" ] && {
+              set -A s `ls -r "$DIR/$d/[0-9][0-9][0-9]"`
+              s=${s##*.}
+              let "s=$s+1"
+              { case ${#s} in
+                ( 1 ) s="00$s";;
+                ( 2 ) s="0$s";;
+                ( 3 ) ;;
+                ( * ) print -u2 "$NAME: unexpected error with backup filename $DIR/$d.$s"
+                      print -u2 "       The directory $d not copied!"
+                      continue;;
+              esac; }
+              mv "$DIR/$d" "$DIR/$d.$s" || {
+                 print -u2 "$NAME: unable to move $DIR/$d to $DIR/$d.$s"
+                 print -u2 "       The directory $d not copied!"
+                 continue
+              }
+            }
+          }
+          cp $P -r "$d" "$DIR"
+        }
+      }
+    }; done
+  }
+# data for triangular grid
+  [ -n "$triaz" ] && {
+    for x in $TRIAFTN; do {
+      [ -L fort.$x ] && ln -sf `lln -e fort.$x` "$DIR/fort.$x" || cp fort.$x "$DIR"
+    }; done
+    true
+  } || {
+    for f in $TRIARES; do {
+      [ -a "$DIR/$f" ] && \rm -f "$DIR/$f"
+    }; done 
+  }
+}
+for f in Label VarID input.eir b2.parameters; do {
+  [ -s "$DIR/$f" ] && [ ! $f -nt "$DIR/$f" ] || cp $P $f $DIR/$f
+}; done
+
+[ -n "$arch" ] && {
+  [ -r VarID ] && {
+    set -- `cat VarID | tr \#_ '  '`
+    n=$2
+    [ -n "$n" ] && {
+      d=../"${n}-C"
+      [ -d "$d" ] && cd "$d" && {
+        s=
+        l="$n.dg $ERS_ARCH_LIS"
+        for f in $l; do {
+          [ -a $f ] || s=y
+        }; done
+        [ -n "$s" ] && {
+          set -- ,Iterations/*
+          eval "d=\$$#"
+          [ -n "$d" ] && cd "$d" && {
+            s=
+            for f in $l; do {
+              [ -a $f ] || s=y
+            }; done
+          }
+        }
+        [ -z "$s" ] && {
+          [ -d $DIR/Erosion ] || mkdir $DIR/Erosion && {
+            echo ... Erosion data ...
+            cp $P $l $ERS_ARCH_AUX $DIR/Erosion
+          }
+        }
+      }
+    }
+    true
+  } || {
+    print -- "No VarID found in $PWD
+              ==> no erosion data archived"
+  }
+  cd $DIR
+  f=${PWD%/*}; f=${f##*/}
+  ln -sf "$PWD" "$SOLPSTOP/data/cases/$f"
+  [ -s fort.25 ] || ln -sf $SOLPSTOP/data/STRAHL fort.25
+  [ -n "$dest" ] && [ -n "$n" ] && id="$dest$n".zip || {
+    unset c n
+    f=`cat VarID`
+    set -A ff ${f%%_*}
+    [ "$ff" = "$f" ] && {
+      id=`print $SDIR | sed 's,/,,g'`.zip
+      print -u2 "$NAME: no valid VarID file found in the archive directory."
+      [ -z "$force" ] && {
+        print "Please give the archive name, hit ENTER for default ($id), or ^C to quit: \c"
+        read u
+        { case "$u" in
+          ( *.zip ) id="$u";;
+          ( ''    ) ;;
+          ( *     ) id="$u.zip"
+        esac; }
+      }
+    } || {
+      c=`print ${ff%\#*} | tr ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz`
+      n=${ff#*\#}
+      id="$c$n".zip
+    }
+  }
+  print -- "$NAME: Archive file: $id"
+#  read u  #!!!
+  MDIR="$AFSDIR/$SDIR"
+  [ -d "$MDIR" ] || {
+    mkdir "$MDIR" || {
+      print -u2 "$NAME: unable to create the directory $MDIR"
+      exit 4
+    }
+  }
+  id="$MDIR/$id"
+  print "$NAME: about to zip to $id"
+  w=$id
+  [ -n "$SB2_ZIPWRK" ] && {
+    [ -d "$SB2_ZIPWRK" ] || {
+      [ -a "$SB2_ZIPWRK" ] && {
+        print -u2 -- "$NAME: $SB2_ZIPWRK is not a directory. Check SB2_ZIPWRK setting"
+        exit 16
+      }
+      mkdir -p "$SB2_ZIPWRK" || {
+        print -u2 -- "$NAME: unable to create $SB2_ZIPWRK. Check SB2_ZIPWRK setting"
+        exit 16
+      }
+    }
+    [ -w "$SB2_ZIPWRK" ] || {
+        print -u2 -- "$NAME: write access to $SB2_ZIPWRK denied. Check SB2_ZIPWRK setting"
+        exit 16
+    }
+    w=${SB2_ZIPWRK%/}/${id##*/}
+    [ -s "$w" ] && (
+      cd "$SB2_ZIPWRK" && {
+        i=0; while ((i=i+1)); [ -a "$w..$i" ]; do :; done
+        mv "$w" "$w..$i" || {
+          print -u2 -- "$NAME: unable to move $w. Check SB2_ZIPWRK setting"
+          false
+        }
+      } || {
+        print -u2 -- "$NAME: error with working directory. Check SB2_ZIPWRK setting"
+        exit 16
+      }
+    )
+  }
+#  print -u2 -- "!!! $NAME: f : id : w :$f:$id:$w:" #!!!
+
+  [ -n "$triaz" ] && {
+    for x in $TRIAFTN; do {
+      [ -L fort.$x ] && {
+        [ -d TRIANG/Links ] || mkdir -p TRIANG/Links && {
+          f=`lln -e fort.$x`
+          [ -n "$f" ] && {
+            ff=${f##*/}
+            cp fort.$x TRIANG/$ff && touch -r $f TRIANG/$ff && ln -sf TRIANG/$ff fort.$x
+            ln -sf $f TRIANG/Links/fort.$x
+          }
+        }
+      }
+    }; done
+  }
+  [ -s "$id" ] && {
+      [ -n "`find * -type f -newer "$id" -print | head -1`" ] && {
+      [ -a $id ] && wc $id > /dev/null
+      cp $id "$w" || {
+        print -u2 -- "$NAME: unable to copy $id to the working directory. Check SB2_ZIPWRK setting"
+        exit 16
+      }
+      ${zip} -pryu "$w" * -x $ZIP_EXCLUDE_LIS
+      true
+    } || {
+      print "$NAME: the zip file is up to date - nothing to do"
+      true
+    }
+  } || {
+    [ -a "$w" ] && wc "$w" > /dev/null
+    ${zip} -pry "$w" * -x $ZIP_EXCLUDE_LIS
+    [ -n "$SB2_ZIPWRK" ] && cp "$w" "$id" && touch -r "$w" "$id" && [ -z "$keep" ] && rm -f "$w"
+  }
+  ls -l "$id"
+
+  [ -n "$triaz" ] && [ -z "$keep" ] && {
+    [ -d TRIANG/Links ] && {
+      mv TRIANG/Links/* .
+      rm -r TRIANG
+    }
+  }  
+}
+
+[ -z "$force" ] && print -- "$DIR:  done!"

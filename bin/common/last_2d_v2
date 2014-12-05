@@ -1,0 +1,370 @@
+#! /bin/ksh
+# last_2d_v2 Version 970515
+# gets powers from blne.trc
+# 
+# usage last_2d navg; 
+#  average values of last navg points in file for traces and imprad
+# Default values
+
+scriptname=`basename $0`
+scriptdir=`dirname $0`
+
+# use formats file in present directory; if nonexistent use common
+last_2d_formats=last_2d_v2_formats
+if [ ! -a $last_2d_formats ] ; then
+  last_2d_formats=$scriptdir/$last_2d_formats
+fi
+
+echo "\n$scriptname:  in progress, using $last_2d_formats"
+
+navg=25
+[ -n "$1" ] && [ $1 -gt 0 ] && navg=$1
+
+log=last_2dir/last_2d_log
+out=last_2dir/last_2d_outall
+out1=last_2dir/last_2d_out
+in=last_2dir/last_2d_in
+var=last_2dir/var_out
+vartemp=last_2dir/var_out1
+blnn=tracing/blnn.trc
+blnntemp=last_2dir/blnn.trc1
+traces=time_dep/traces
+tracestemp=last_2dir/traces1
+powers=tracing/blne.trc
+powerstemp=tracing/blne.trc1
+param=b2.parameters
+inputeir=input.eir
+helium=fract.he
+pressure=pressure.neu
+temp=last_2dir/temp
+temp0=last_2dir/temp0
+temp1=last_2dir/temp1
+temp2=last_2dir/temp2
+temp3=last_2dir/temp3
+temp4=last_2dir/temp4
+tempnames=last_2dir/tempnames
+
+#(xxxto avoid misreading leading minus)
+set -A name xxx `cat $last_2d_formats | awk '{printf("%s ", $1)}'`
+set -A nameout xxx `cat $last_2d_formats | awk '{printf("%s ", $2)}'`
+set -A scale xxx `cat $last_2d_formats | awk '{printf("%s ", $3)}'`
+set -A format xxx `cat $last_2d_formats | awk '{printf("%s ", $4)}'`
+
+
+rm -f $out $out1>/dev/null 2>&1 
+
+[ -s VarID ] && I=`cat VarID` || I=`basename \`pwd\``
+      if [ -r VarID ] ; then
+        idcent=`cat VarID | cut -f1 -d_ -`
+      else
+         idcent="----"
+      fi
+
+[ ! -d last_2dir ]  && { echo "$scriptname: directory ./last_2dir does not exist"; exit 32; }
+[ ! -d time_dep ]  && { echo "$scriptname: directory ./time_dep does not exist"; exit 32; }
+[ ! -d tracing ] && { echo "$scriptname: directory ./tracing does not exist"; exit 32; }
+
+filelist="$traces $var $blnn $powers"
+for f in $filelist; do
+   [ ! -s $f ] && { echo "$scriptname: $f does not exist"; exit 32; }
+done
+
+templist="$temp $temp0 $temp1 $temp2 $temp3 $temp4 $tracestemp $out $in $vartemp $blnntemp $tracestemp $powerstemp $tempnames"
+for f in $templist; do
+  rm -f $f >/dev/null 2>&1 
+done
+  rm -f $log >/dev/null 2>&1 
+  touch $log
+
+
+
+# var_out has 1 header line, no hash
+# blnn.trc and blne.trc has 2 header lines and   hash
+
+ntraces=`wc -l < $traces | awk '{printf ("%d", ($1-1))}'`
+npart=`wc -l < $blnn | awk '{printf ("%d", ($1-2))}'`
+nvar=`wc -l < $var | awk '{printf ("%d", $1-1)}'`
+npowers=`wc -l < $powers | awk '{printf ("%d", ($1-2))}'`
+
+
+echo "\nntraces = $ntraces   nvar = $nvar  npart = $npart  npowers = $npowers"
+echo "\nnavg = $navg\n"
+if [ $navg -gt $ntraces ]; then
+   echo "ERROR navg = $navg > ntraces = $ntraces;\c"
+   navg=$ntraces
+   echo "  set navg = $navg"
+fi
+if [ $navg -gt $nvar ]; then 
+   echo "ERROR navg = $navg > nvar = $nvar;\c"
+   navg=$nvar
+   echo "  set navg = $navg"
+fi
+if [ $navg -gt $npart ]; then
+   echo "ERROR navg = $navg > npart = $npart;\c"
+   navg=$npart
+   echo "  set navg = $navg"
+fi
+if [ $navg -gt $npowers ]; then
+   echo "ERROR navg = $navg > npowers = $npowers;\c"
+   navg=$npowers
+   echo "  set navg = $navg\n"
+fi
+
+redo=0
+
+iterout=`last_2d_v2_b $navg $traces $tracestemp`
+[ $iterout -lt $navg ] && { redo=1; navg=$iterout;}
+
+iterout=`last_2d_v2_b $navg $blnn $blnntemp` 
+[ $iterout -lt $navg ] && { redo=1; navg=$iterout;}
+
+iterout=`last_2d_v2_b $navg $var $vartemp` 
+[ $iterout -lt $navg ] && { redo=1; navg=$iterout;}
+
+iterout=`last_2d_v2_b $navg $powers $powerstemp` 
+[ $iterout -lt $navg ] && { redo=2; navg=$iterout;}
+
+if [ redo -gt 0 ]; then
+  echo "$scriptname: redo: navg=$navg"
+  iterout=`last_2d_v2_b $navg $traces $tracestemp` 
+  iterout=`last_2d_v2_b $navg $blnn $blnntemp` 
+  iterout=`last_2d_v2_b $navg $var $vartemp` 
+  iterout=`last_2d_v2_b $navg $powers $powerstemp` 
+fi 
+
+#convert header of traces to lowercase
+head -1 $tracestemp | tr '[A-Z]' '[a-z]' > $temp0
+tail -n +2 $tracestemp >> $temp0
+rm -f $tracestemp >/dev/null 2>&1 
+mv $temp0 $tracestemp
+
+
+#now work on modified files
+traces=$tracestemp 
+blnn=$blnntemp
+var=$vartemp
+powers=$powerstemp
+
+blank=
+#get input parameters
+if [ -s $param ]; then
+#    core density
+  ncore=`cat $param  | grep "CONPAR(1,1,1)" \
+    | sed s/"CONPAR(1,1,1)"/""/g | sed s/","/" "/g \
+    | sed s/"="/" "/g \
+    | awk '{print $1}' `
+  [ "$ncore" = "$blank" ] && ncore=0.0
+#    Helium density
+  nHe=`cat $param  | grep "CONPAR(1,1,1)" \
+    | sed s/"CONPAR(1,1,1)"/""/g | sed s/","/" "/g \
+    | sed s/"="/" "/g \
+    | awk '{print $3}' `
+  [ "$nHe" = "$blank" ] && nHe=0.0
+#    Neon density
+  nNe=`cat $param  | grep "CONPAR(1,1,1)" \
+    | sed s/"CONPAR(1,1,1)"/""/g | sed s/","/" "/g \
+    | sed s/"="/" "/g \
+    | awk '{print $5}' `
+  [ "$nNe" = "$blank" ] && nNe=0.0
+#    input flux
+  flux=`cat $param  | grep "userfluxparm(8,1)" \
+    | sed s/"userfluxparm(8,1)"/""/g \
+    | sed s/","/" "/g | sed s/"="/" "/g \
+    | awk '{print ($1, $2, $3)}' `
+  [ "$flux" = "$blank" ] && flux=0.0
+else
+  ncore=0.0
+  nHe=0.0
+  nNe=0.0
+  flux=0.0
+fi
+
+if [ -s $inputeir ]; then
+#    pumping albedo
+  albedo=`cat $inputeir | grep -A6 "^*   7 :$" \
+    | tail -1 \
+    | awk '{print $2}' `
+  [ "$albedo" = "$blank" ] && albedo=1.0
+else
+  albedo=1.0
+fi
+
+#write VarID
+echo $I > $in
+
+#get averaging time interval
+tail -1 $traces > $temp2
+tail -$navg $traces > $temp1
+head -1 $temp1 > $temp4
+
+time=`awk '{print $1}' $temp2 `
+time0=`awk '{print $1}' $temp4 `
+
+#write input parameters
+echo "$idcent $navg $albedo $ncore $nHe $nNe $flux $time $time0" > $temp3
+awk '{printf("%20s   ID\n", $1) }' $temp3 >> $in
+awk '{printf("%20.0f   navg\n", $2) }' $temp3 >> $in
+awk '{printf("%20.4f   albedo\n", $3) }' $temp3 >> $in
+awk '{printf("%20.3f   ncore\n", ($4)/1.0e20) }' $temp3 >> $in
+awk '{printf("%20.4f   fHe\n", ($5/$4)) }' $temp3 >> $in
+awk '{printf("%20.4f   fNe\n", ($6/$4)) }' $temp3 >> $in
+awk '{printf("%20.3f   gas_in\n", ($7)/1.0e20) }' $temp3 >> $in
+awk '{printf("%20.4f   time_ms\n", ($8)*1.0e3) }' $temp3 >> $in
+awk '{printf("%20.4f   dt_ms\n", ($8-$9)*1.0e3) }' $temp3 >> $in
+
+#get data from various files and write to out
+
+rm -f  $out >/dev/null 2>&1 
+touch $out
+
+# must repeat filelist since some have been changed
+filelist="$traces $var $blnn $powers"
+
+#echo "$filelist"
+for ff in $filelist; do
+
+  navgf=$navg
+  tail -$navgf $ff > $temp1
+
+  rm -f  $temp >/dev/null 2>&1 
+  awk '{for (i=1;i<=NF;i++)
+     sumfield[i]+=$i}
+    { 
+      for (i=1;i<=NF;i++) 
+       {sumfield1[i]=sumfield[i]/NR
+          printf("%g ", sumfield1[i])
+       }
+    printf("\n")
+    }' $temp1 > $temp
+
+  echo `tail -1  $temp` >  $temp
+
+#  get headers from firstline
+  header=1
+
+  cat  $ff \
+    | head -$header | tail -1 \
+    | awk '{ for (i=1; i<=NF; i++) printf ("%s\n",  $i)}' \
+    > $temp1
+#  get results from temp
+  cat  $temp \
+    | tail -1 \
+    | awk '{ for (i=1; i<=NF; i++) printf ("%s\n",  $i)}' \
+    > $temp2
+  paste $temp2 $temp1 >> $out
+
+#  file now contains value followed by header
+done
+
+echo " " > $temp
+  if [ -r $helium ] ; then
+        awk '{printf("%20.1f   fract_He\n", $1) }' $helium >> $out
+      else
+         awk '{printf("%20.1f   fract_He\n", 0) }' $temp >> $out
+      fi
+
+      if [ -r $pressure ] ; then
+        awk '{printf("%20.1f   press\n", $1) }' $pressure >> $out
+      else
+         awk '{printf("%20.1f   press\n", 0) }' $temp >> $out
+      fi
+
+# calculate derived quantitities and add to file
+#(xxx to avoid misreading leading minus)
+
+sumtext='Qe+Qi_in'
+set -A dernames xxx feexip feixip
+set -A derfac xxx -1.0 -1.0
+readfile=$out
+. last_2d_v2_a
+
+
+sumtext='Qe+Qi_out'
+set -A dernames xxx feexap feixap
+set -A derfac xxx 1.0 1.0 
+readfile=$out
+. last_2d_v2_a
+
+sumtext='Qp_in'
+set -A dernames xxx fnixip
+set -A derfac xxx -4.59e17 
+readfile=$out
+. last_2d_v2_a
+
+sumtext='Qp_out'
+set -A dernames xxx fnixap
+set -A derfac xxx 4.59e17 
+readfile=$out
+. last_2d_v2_a
+
+sumtext='Q_in'
+set -A dernames xxx Qe+Qi_in Qp_in
+set -A derfac xxx 1.0 1.0
+readfile=$out
+. last_2d_v2_a
+
+sumtext='Q_out'
+set -A dernames xxx Qe+Qi_out Qp_out
+set -A derfac xxx 1.0 1.0
+readfile=$out
+. last_2d_v2_a
+
+rm -f $out1
+touch $out1
+
+namelist=${name[*]}
+#echo "$namelist"
+
+# input has two columns: value and name. 
+# $ff$ makes sure it's an exact match (to end of line)
+# if there's more than one write message into error log and keep one of them
+# if there's none, set to zero and write to error log
+i=0
+for ff in $namelist; do 
+  if [ $i -gt 0 ]; then 
+    rm -f $tempnames >/dev/null 2>&1 
+    touch $tempnames
+    cat $out | grep $ff$ >> $tempnames
+    linecount=`cat $tempnames | wc -l `
+    input=`cat $tempnames | tail -1 `
+    if [ $linecount -eq 0 ]; then
+      echo "$scriptname: $ff occurs $linecount times - set to zero !!!"
+      echo "$scriptname: $ff occurs $linecount times - set to zero !!!" >> $log
+      echo "0 $ff" > $temp1
+      awk '{printf("%20s   %s\n", $1, $2) }'  $temp1 > $out1
+    fi
+    if [ $linecount -gt 0 ]; then
+      if [ $linecount -ne 1 ]; then
+        echo "$scriptname: $ff occurs $linecount times - use last !!!"
+        echo "$scriptname: $ff occurs $linecount times - use last !!!" >> $log
+      fi
+      name0=${name[$i]}
+      nameout0=${nameout[$i]}
+      format0=${format[$i]}
+      scale0=${scale[$i]}
+      echo "$input $format0 $scale0 $nameout0" > $temp1
+      awk '{printf("%"$3"   "$5"\n", ($1/$4)) }' $temp1 >> $out1
+    fi
+  fi
+  let "i=i+1"
+done
+
+# input has two columns: value and name
+     awk '{printf("%20g   %s\n", $1, $2) }'  $out > $outall
+
+cat $in $out1 > $temp
+rm -f $out1
+mv $temp $out1
+
+linecount=`cat $log | wc -l `
+if [ $linecount -eq 0 ]; then
+  rm -f $log >/dev/null 2>&1 
+fi
+
+
+for f in $templist; do
+  rm -f $f >/dev/null 2>&1 
+done
+
+
+echo "\n$scriptname:  finished\n"

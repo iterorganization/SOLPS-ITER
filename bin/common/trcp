@@ -1,0 +1,61 @@
+#! /usr/bin/ksh
+
+#  VERSION : 13.08.2001 17:06
+
+[ "$1" = '-b' ] && view=n || view=
+
+export PLOT_IT_STEM=trcp
+
+function adjust_color {
+
+# Change yellow to salad-green:
+
+  echo '/^\/LT5/ s/ 1 1 0 DL / 0.5 1 0 DL /
+    w
+    q' | ed -s $1
+}
+
+
+LL="$PWD"
+[ -s VarID ] && {
+  LL=`cat VarID | tr _ ' '`
+} || {
+  [ -s ../VarID ] && {
+    LL=`cat ../VarID | tr _ ' '`
+  } || {
+    [ -s ../../VarID ] && {
+      LL=`cat ../../VarID | tr _ ' '`
+    }
+  }
+}
+
+plot_set -f $PLOT_IT_STEM.ps -t "$LL " $PLOT_IT_STEM.cms > $PLOT_IT_STEM.log 2>&1
+adjust_color $PLOT_IT_STEM.ps
+[ -z "$view" ] && ghostview $GV_OPT $PLOT_IT_STEM.ps &
+[ -s $PLOT_IT_STEM.ps ] && {
+
+  LAYOUT=layout.tc
+  
+# Find the proper layout file:
+  
+  for k in H D He C Ne Ar N; do {
+    unset l$k
+    grep -l "_`echo \"$k *\t\"`" blnn.trc > /dev/null 2>&1 && eval "l$k=$k"
+  }; done
+  echo $lH $lD $lHe $lC $lNe $lAr $lN
+
+# Special cases:
+  [ -n "$lH" ] && [ -n "$lC" ] && [ -z "$lD$lHe$lNe" ] && LAYOUT=layout.tc.H_C
+  [ -n "$lD" ] && [ -z "$lH$lHe$lC$lNe" ] && LAYOUT=layout.tc.D
+  [ -n "$lH" ] && [ -z "$lD$lHe$lC$lNe" ] && LAYOUT=layout.tc.D
+  [ -n "$lAr" ] && [ -z "$lNe$lN" ] && LAYOUT=layout.tc.Ar
+  [ -n "$lN" ] && [ -z "$lNe$lAr" ] && LAYOUT=layout.tc.N
+
+  echo "trcp: layout file - $LAYOUT"
+  
+  ps4_map=`layout.ps4 $PLOT_IT_STEM.ps.legend $LAYOUT`
+  ps4 $PLOT_IT_STEM.ps -n $ps4_map && [ -s ${PLOT_IT_STEM}4.ps ] && {
+    adjust_color $PLOT_IT_STEM4.ps
+#    print_file -Pc ${PLOT_IT_STEM}4.ps
+  }
+}

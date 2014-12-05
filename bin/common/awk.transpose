@@ -1,0 +1,3 @@
+#! /bin/csh -f
+awk '{nr=NR;nf=NF;for (i=1;i<=nf;i++) val[NR,i]=$i}\
+     END{for (i=1;i<=nf;i++) {for (j=1;j<=nr;j++) printf "%s ",val[j,i];printf "\n"}}'

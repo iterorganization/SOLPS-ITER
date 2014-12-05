@@ -1,0 +1,2 @@
+#! /bin/csh
+awk '{printf "%s",$1; for (i=2;i<=NF;i+=2) printf " %s",$i;printf "\n"}'

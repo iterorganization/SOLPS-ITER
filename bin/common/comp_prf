@@ -1,0 +1,40 @@
+#! /usr/bin/ksh
+
+# Produce the plots for comparison of ne profiles at several poloidal locations
+
+#  VERSION : 25.03.98 22:04
+
+#LOC='22 25 28 31 36 39 43 48 52 56 59'
+
+LOC='22 24 28 34 44 52 56 58'
+ps4_map='2 1 7 8 4 3 5 6'
+
+set -A cases x '172 166 140 169' '161 167 171 170'
+set -A label 'no dome' '1*dome' '2*dome' '4*dome'
+
+alias CPP='/usr/lib/cpp -P'
+
+cd $SOLPSTOP/data/cases/iter && {
+  [ -d comp_prf ] || mkdir comp_prf && {
+    i=0; while { let "i=$i+1"; [ -n "${cases[$i]}" ]; }; do {
+      print "Starting series $i: ${cases[$i]}"
+      export PLOT_IT_STEM=comp_prf/ne_${i}_r
+      FF=$PLOT_IT_STEM.ps
+      for p in $LOC; do {
+        print "!! ne_${i}_$p.ps style=lines xlabel=\"X\""
+        print "// prf_$p title=\"Radial ne profile, cell $p\""
+        j=0
+        for c in ${cases[$i]}; do {
+          print "$c/b2pl_dat/ne_r_$c.dat y$p P$p \"${label[j]}\""
+          let "j=j+1"
+        }; done
+      }; done > $PLOT_IT_STEM.cms
+      plot_set -f ${FF} -t "Cases ${cases[$i]}.  " $PLOT_IT_STEM.cms
+      if [ -s ${FF} ]; then {
+        ps4 ${FF} -n ${ps4_map}
+        [ -s ${PLOT_IT_STEM}4.ps ] && print_file -Pc ${PLOT_IT_STEM}4.ps &
+      }; fi
+
+    }; done
+  }
+}

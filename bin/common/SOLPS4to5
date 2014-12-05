@@ -1,0 +1,62 @@
+#! /bin/tcsh
+
+# This script assumes the presence of a SOLPS4.2/ directory containing a copy
+# of the run to be converted
+
+mkdir converter
+mkdir baserun 
+mkdir run_with_4.2_equations
+mkdir run_with_5.1_equations
+
+cp SOLPS4.2/b2.parameters converter/b2.parameters.src
+cp SOLPS4.2/B2SDIAG converter/B2SDIAG
+cp SOLPS4.2/B2SXDR converter/B2SXDR
+cp SOLPS4.2/fort.15 run_with_4.2_equations/fort.15
+cp SOLPS4.2/fort.15 run_with_5.1_equations/fort.15
+cp SOLPS4.2/fort.33 baserun/fort.33
+cp SOLPS4.2/fort.34 baserun/fort.34
+cp SOLPS4.2/fort.35 baserun/fort.35
+cp SOLPS4.2/input.eir baserun/input.dat
+cp SOLPS4.2/mesh.extra baserun/mesh.extra
+cp SOLPS4.2/VarID baserun/VarID
+cp SOLPS4.2/VarID run_with_4.2_equations/VarID
+cp SOLPS4.2/VarID run_with_5.1_equations/VarID
+cp SOLPS4.2/Label baserun/Label
+cp SOLPS4.2/Label run_with_4.2_equations/Label
+cp SOLPS4.2/Label run_with_5.1_equations/Label
+
+cd baserun
+cp $SOLPSTOP/doc/solps/D+He+C/b2ai.dat .
+cp $SOLPSTOP/doc/solps/D+He+C/b2ag.dat .
+ln -s $SOLPSTOP/data/stra.dat .
+ln -s $SOLPSTOP/data/weis.dat .
+
+cd ../converter
+b2sxdr
+cp b2ah.dat ../baserun
+cp b2ar.dat ../baserun
+cp b2.boundary.parameters.4 ../run_with_4.2_equations/b2.boundary.parameters
+cp b2.boundary.parameters.5 ../run_with_5.1_equations/b2.boundary.parameters
+cp b2fgmtry ../baserun
+cp b2fstati ../baserun
+cp b2mn.dat.4 ../run_with_4.2_equations/b2mn.dat
+cp b2mn.dat.5 ../run_with_5.1_equations/b2mn.dat
+cp b2.neutrals.parameters ../run_with_4.2_equations/b2.neutrals.parameters
+cp b2.neutrals.parameters ../run_with_5.1_equations/b2.neutrals.parameters
+cp b2.numerics.parameters ../run_with_4.2_equations/b2.numerics.parameters
+cp b2.numerics.parameters ../run_with_5.1_equations/b2.numerics.parameters
+cp b2.transport.parameters ../run_with_4.2_equations/b2.transport.parameters
+cp b2.transport.parameters ../run_with_5.1_equations/b2.transport.parameters
+
+cd ../baserun
+b2run b2ah
+b2run b2ar
+
+cd ../run_with_4.2_equations
+setup_baserun_eirene_links
+
+cd ../run_with_5.1_equations
+setup_baserun_eirene_links
+
+cd ..
+

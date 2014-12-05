@@ -1,0 +1,94 @@
+#! /bin/ksh
+
+#  VERSION : 26.07.96 13:38
+
+# syntax for call: hlp_src plot_title log headerfile datafile x_column_header y_col_headers
+# if second argument is anything other than "log" (e.g. "lin") then linear,
+# otherwise logarithmic; 
+# headerfile has ncol lines,
+# datafile has ncol+1 columns (numbering in first column) and required number of iterations
+# x_column_header is either 0 (if x axis are iterations)
+# or name of column (e.g. "time" in case of blnn.trc). This permits plots versus time
+# or x-y plots (various quantitities against one other quantity)
+# y_col_headers are n arguments yielding n lines on plot
+# e.g.  hlp_src plot_title log /scratch/xxx/header /scratch/xxx/data 0 srces01r srces00r
+# name of plot is appended to a file of plotnames which is in same directory as data
+
+name=`basename $0`
+
+
+plot_title=$1
+shift
+
+log=""
+[ "$1." = "log." ] &&  log=l
+shift 
+
+header=$1
+[ ! -r "$header" ] && { echo "$name: filename=$header does not exist!!!" >&2; exit 33;}
+shift
+
+
+data=$1
+[ ! -r "$data" ] && { echo "$name: filename=$data does not exist!!!" >&2; exit 33; }
+dir=`dirname $header`
+shift
+
+plot_titles="${dir}/plots"
+[ ! -r "$plot_titles" ] && > $plot_titles
+
+
+
+[ -z "$1" ] && { echo '$name: no column headers specified' >&2; exit 32; }
+
+rm -f $dir/temp* >/dev/null 2>&1 
+temp0=$dir/temp0
+temp1=$dir/temp1
+temp2=$dir/temp2
+temp3=$dir/temp3
+
+
+
+
+# header has ncol lines, data has ncol+1 columns (numbering in first column)
+legend=""
+columns=
+iplot=0
+colhead=$1
+shift
+if [ "$colhead." = "0." ]; then
+  cat  $data | cut -f1 > $temp2
+  titlex="iterations"
+else
+  icol=`cat $header | grep -n "^$colhead$" | cut -d: -f1`
+  [ -z "$icol" ] && { echo "$name: header $colhead does not exist, no x range!!!" >&2; exit 32; }
+  let "icol1 = icol + 1"
+  cat  $data | cut -f$icol1 > $temp2
+  titlex="$colhead"
+fi
+
+while [ -n "$1" ]; do
+  icol=
+  colhead=$1
+  icol=`cat $header | grep -n "^$colhead$" | cut -d: -f1`
+  if [ -z "$icol" ]; then
+    echo "$name: header $colhead does not exist!!!" >&2
+    shift
+  else
+    let "icol1 = icol + 1"
+    cat  $data | cut -f$icol1 > $temp1
+      paste $temp2 $temp1 > $temp3
+      mv $temp3 $temp2
+    let "iplot = iplot +1"
+    legend="$legend $colhead"
+    shift
+  fi
+done
+
+[ $iplot -lt 1 ] && { echo "$name: no header exists, no y range!!!" >&2; exit 32; }
+
+cat  $temp2 \
+  | plot x${log}yplot${iplot} $legend  $titlex "$plot_title" $PWD
+
+
+echo "${plot_title}" >> $plot_titles

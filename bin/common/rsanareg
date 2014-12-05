@@ -1,0 +1,89 @@
+#! /bin/csh -f
+set text=`basename $0`
+switch ($text)
+  case "rsanareg":
+    set label="ionization rate"
+    breaksw
+  case "rsahireg":
+    set label="ionization energy"
+    breaksw
+  case "rranareg":
+    set label="recombination rate"
+    breaksw
+  case "rrahireg":
+    set label="recombination energy"
+    breaksw
+  case "rcxnareg":
+    set label="charge exchange rate"
+    breaksw
+  case "rcxhireg":
+    set label="charge exchange energy"
+    breaksw
+  case "rqahereg":
+    set label="electron heat loss"
+    breaksw
+  case "rqradreg":
+    set label="radiation"
+    breaksw
+  case "rqbrmreg":
+    set label="bremsstrahlung"
+    breaksw
+  case "b2stbr_sna_reg":
+    set label="particle loss (-) or source (+) rate from recycling"
+    breaksw
+  case "b2stbc_sna_reg":
+    set label="particle loss (-) or source (+) rate from the boundary conditions"
+    breaksw
+  case "b2stbm_sna_reg":
+    set label="particle loss (-) or source (+) rate from additional sources"
+    breaksw
+  case "b2stbr_smo_reg":
+    set label="momentum loss (-) or source (+) rate from recycling"
+    breaksw
+  case "b2stbc_smo_reg":
+    set label="momentum loss (-) or source (+) rate from the boundary conditions"
+    breaksw
+  case "b2stbm_smo_reg":
+    set label="momentum loss (-) or source (+) rate from additional sources"
+    breaksw
+  case "resco_reg":
+    set label="continuity residual"
+    breaksw
+  case "resmo_reg":
+    set label="momentum residual"
+    breaksw
+  default:
+    echo invalid quantity $text
+    exit
+endsw
+set nnreg=`pipe_run.log | grep ^nnreg | head -1`
+set vreg=$nnreg[2]
+set xreg=$nnreg[3]
+set yreg=$nnreg[4]
+if ("" == $vreg) set vreg=4
+if ("" == $xreg) set xreg=6
+if ("" == $yreg) set yreg=7
+@ vregP = $vreg + 1
+set solps_fluids=`climb_and_look_for SOLPS_FLUIDS`
+if (-e $solps_fluids) then
+  setenv SOLPS_FLUIDS `cat $solps_fluids`
+  echo Set SOLPS_FLUIDS to $SOLPS_FLUIDS "(based on $solps_fluids)"
+endif
+set nplts=`echo $SOLPS_FLUIDS | wc -w`
+@ nplts += 1
+if ( X$1 =~ X[lLM] ) then
+  set log="$1"
+  shift
+else
+  set log=""
+endif
+if ("X$1" == "X") then
+  set region=0
+else
+  set region=$1
+endif
+pipe_run.log | \
+  grep -a "^$text " | \
+  awk '{sum=0;for (i='$region'+2;i<=NF;i+='$vregP') {sum+=$i;printf "%g ",$i};printf "%g\n",sum}' | \
+  nl | \
+  plot x"$log"yplot$nplts $SOLPS_FLUIDS SUM iter "$label for region=$region" $PWD

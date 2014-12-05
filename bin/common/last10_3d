@@ -1,0 +1,5 @@
+#! /bin/csh
+set start=`select_time_slice time_dep/ft3dr list | tail -10 | head -1 | awk '{print $2}'`
+foreach j (time_dep/??3d?)
+  select_time_slice $j $start 10 >! `basename $j`.last10
+end

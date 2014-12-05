@@ -1,0 +1,15 @@
+#! /bin/csh -f
+set nnreg=`pipe_run.log | grep ^nnreg | head -1`
+set vreg=$nnreg[2]
+set xreg=$nnreg[3]
+set yreg=$nnreg[4]
+if ("" == $vreg) set vreg=4
+if ("" == $xreg) set xreg=6
+if ("" == $yreg) set yreg=7
+@ vregP = $vreg + 1
+pipe_run.log | \
+  egrep -a '^nereg '\|'^volreg ' | \
+  awk '/nereg/{for (i=2;i<=NF;i++) {ne[i]=$i}}\
+       /volreg/{for (i=2;i<=NF;i++) printf "%s ",ne[i]/$i;printf "\n"}' | \
+  nl | \
+  plot x"$1"yplot$vregP `count 0 $vreg` iter "ave ne" $PWD

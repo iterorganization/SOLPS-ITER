@@ -1,0 +1,41 @@
+#! /bin/ksh
+
+#  VERSION : 19.07.99 22:19
+
+NAME=${0##*/}
+
+[ -a .NO_TRC ] && { print -u2 "$NAME exiting: .NO_TRC exists"; exit; }
+
+parameters="$*"
+
+# Find the peak power onto the target (including radiation)
+
+echo "100 wlld" | b2plot > b2p_trc.log 2>&1 &
+PLOT_PROC=$!
+
+#check to see if integral.trc exists. If yes, get data from special files rather than log
+
+[ -s tracing/integral.trc ] && trcfiles="yes"
+
+[ "$trcfiles" = "yes" ] && {
+  [ ! -a .trc_3 ] && [ ! -a $SOLPSTOP/.trc_3 ] && {
+    trc_2 "$parameters"
+    true
+  } || {
+    trc_3 "$parameters"
+    true
+  }
+} || {
+  trc_1 "$parameters"
+}
+
+for f in trc*.ps; do {
+
+# Change yellow to salad-green:
+
+  echo '/^\/LT5/ s/ 1 1 0 DL / 0.5 1 0 DL /
+    w
+    q' | ed -s $f
+}; done
+
+wait $PLOT_PROC

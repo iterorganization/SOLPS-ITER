@@ -1,0 +1,26 @@
+#! /bin/tcsh -f
+
+if("$1" == "-h") then
+  echo "$0 [-l #] ns [{l|L|M}]"
+  exit
+endif
+if("$1" == "-l") then
+  set cmd="tail -$2"
+  shift ; shift
+else
+  set cmd="cat"
+endif
+
+if(-e run.log) then
+  set species=`head -1000000 run.log | grep ^species | head -1`
+else
+  set species=`zcat run.log.gz | head -1000000 | grep ^species | head -1`
+endif
+@ c = 3 + $1
+
+if(-e run.log) then
+  $cmd run.log | egrep -A1 'b2stbc_conpar=13: is,curr_flux,desired_flux,density  *'$1'\>' | paste - - - | awk '{print NR,$4,$5,$6}' | plot x$2yplot3 curr_flux desired_flux density 'iteration' "$species[$c]" `noquote_pwd 3`
+else
+  zcat run.log.gz  | egrep -A1 'b2stbc_conpar=13: is,curr_flux,desired_flux,density  *'$1'\>' | paste - - - | awk '{print NR,$4,$5,$6}' | plot x$2yplot3 curr_flux desired_flux density 'iteration' "$species[$c]" `noquote_pwd 3`
+endif
+

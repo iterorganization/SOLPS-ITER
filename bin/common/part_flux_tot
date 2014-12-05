@@ -1,0 +1,30 @@
+#! /bin/ksh
+
+#Braams-Eirene net flux balance flux_tot (Units Particles-s**-1) 3 species
+
+filename=tracing/blnn.trc
+dir=`dirname $filename`
+
+[ ! -d $dir ] && { echo "$dir does not exist!!!"; exit 33; }
+( cd $dir; rm -f particle_*  >/dev/null 2>&1 )
+[ ! -r $filename ] && { echo "$filename does not exist!!!"; exit 33; }
+
+ 
+# check to see if columns are right (optional)
+cat  $filename \
+  | head -2 | tail -1 \
+  | awk '{ print $1, $9, $25, $41 }' \
+  > $dir/particle_header
+
+
+titlex=`awk '{print $1}' $dir/particle_header`
+title1=`awk '{print $2}' $dir/particle_header`
+title2=`awk '{print $3}' $dir/particle_header`
+title3=`awk '{print $4}' $dir/particle_header`
+
+
+
+cat  $filename \
+  | tail -n +3 \
+  | awk '{ print $1, sqrt($9*$9), sqrt($25*$25),sqrt($41*$41) }' \
+  | plot xlyplot3 $title1 $title2 $title3 $titlex '(part-s^-1)' $PWD

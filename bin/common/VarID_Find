@@ -1,0 +1,12 @@
+#! /usr/bin/ksh
+#mod. 961031
+\ls -1 > ~/temp
+LIST=`cat ~/temp`
+for f in $LIST; do
+   if [ -d $f ]; then
+     if [ -r $f/VarID ]; then
+       hh=`hostname`
+       echo "$hh `basename $f`  `cat $f/VarID`"
+     fi
+   fi
+done

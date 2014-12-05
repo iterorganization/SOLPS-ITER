@@ -1,0 +1,88 @@
+#! /usr/bin/ksh
+
+#  VERSION : 09.02.2004 17:07
+
+NAME=${0##*/}
+Usage="$NAME: a script for tidying the tracing files for residuals and sources
+
+      Usage:  $NAME [-a] <N>
+      or   :  $NAME -c
+      where <N> is the number of lines to be kept.
+      
+If -c is specified, the files residuals.trc, sources.trc, and test.trc are removed from
+the directory 'tracing', and also the B2STIME, b2p_trc.log, last_2d.log, and td.log from 
+the current directory.
+
+Otherwise, if -a is specified, then the header and <N> first data lines are kept in the 
+bln[emn].trc, user.trc, and integral.trc files.
+
+Otherwise, the header lines and the last <N> data lines are kept in the residuals.trc, 
+sources.trc, and test.trc files.
+"
+
+unset align clean
+
+while true; do {
+  { case "$1" in
+    ( -a ) align=y;;
+    ( -c ) clean=y;;
+    ( *  ) break;;
+  esac; }
+  shift
+}; done
+
+
+[ -n "$clean" ] && {
+  [ -d tracing ] && {
+    rm -f B2STIME b2p_trc.log last_2d.log td.log
+    cd tracing && {
+    rm -f residuals.trc sources.trc test.trc
+    exit
+    }
+    print -u2 "$NAME: could not change directory to \"tracing\"\n"
+    print -u2 "$Usage"
+    exit 4
+  }
+  print -u2 "$NAME: there is no directory \"tracing\" - no action done\n"
+  print -u2 "$Usage"
+  exit 8
+}
+
+case "$1" in
+  ( [0-9]* )
+      [ -d tracing ] && {
+        cd tracing
+	[ -n "$align" ] && {
+          for f in blne blnm blnn integral sepdata user; do {
+            ff=$f.trc
+            [ -s $ff ] && {
+              mv $ff ${ff}~ && {
+         	grep '^#' ${ff}~
+         	grep -v '^#' ${ff}~ | head -$1
+              } > $ff && {
+	        rm ${ff}~
+		echo "$ff\t\c"
+		tail -1 $ff | cut -f1
+	      }
+            }
+          }; done
+          true
+        } || {
+          for f in residuals sources test; do {
+            ff=$f.trc
+            [ -s $ff ] && {
+              mv $ff ${ff}~ && (
+         	grep '^#' ${ff}~
+         	grep -v '^#' ${ff}~ | tail -$1
+         	rm ${ff}~
+              ) > $ff
+            }
+          }; done
+          true
+	}
+      } || {
+        print -u2 "No tracing directory - nothing to do!"
+      }
+    ;;
+  ( *      ) print -u2 "$Usage";;
+esac

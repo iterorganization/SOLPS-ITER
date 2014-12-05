@@ -1,0 +1,13 @@
+#! /bin/csh
+cat << EOD >! /tmp/$4.lines.$$
+% xlabel="spectroscopic channel number/line of sight position: $4" ylabel="time" contfill = t equalscale = f nsteps = 20
+% toplabel = "`echo $PWD | sed -e 's:/afs/.*/u/dpc:~/afs:' -e 's:/u/dpc:~:' -e 's:src/B2Eirene:...:'`"
+EOD
+if("$5" == "") then
+  set SCALE=1.0
+else
+  set SCALE=$5
+endif
+chords_to_mtv $1 $2 $3 $SCALE /tmp/$4.lines.$$ >! $4.lines
+echo n | plotmtv -l -colorps -noxplot -o $4.ps $4.lines
+rm /tmp/$4.lines.$$ $4.lines

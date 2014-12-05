@@ -1,0 +1,24 @@
+#! /bin/tcsh -f
+set b2wall="b2wall.nc"
+if (-e b2mn.exe.dir/b2wall.nc) set b2wall="b2mn.exe.dir/b2wall.nc"
+if (! -e b2wall.area) then
+  nc2text -n1 ${b2wall} "plate_area(:)" > b2wall.area
+  awk 'NR==1{A=-$1/2;L=0}{A+=L+$1/2;L=$1/2;print A}' < b2wall.area > b2wall.area_base
+endif
+nc2text ${b2wall} "track_species" > b2wall_species.data
+set ntrack=`wc b2wall_species.data | awk '{print $1}'`
+nc2text -n1 ${b2wall} "plate_time(1,1)" > b2wall_time_start.data
+nc2text -n1 ${b2wall} "plate_time(1,-0)" > b2wall_time_end.data
+set dt=`paste b2wall_time_start.data b2wall_time_end.data | awk '{print $2-$1}'`
+foreach i (`count 1 $ntrack`)
+  foreach j (erosion deposition)
+    nc2text -n1 ${b2wall} "${j}(:,${i},1)" > b2wall_${j}_${i}_start.data
+    nc2text -n1 ${b2wall} "${j}(:,${i},-0)" > b2wall_${j}_${i}_end.data
+    paste b2wall_${j}_${i}_start.data b2wall_${j}_${i}_end.data | awk 'BEGIN{dt='$dt'}{print ($2-$1)/dt}' > b2wall_${j}_${i}_rate.data
+    nc2text -n1 ${b2wall} "monolayer_${j}(:,${i},1)" > b2wall_monolayer_${j}_${i}_start.data
+    nc2text -n1 ${b2wall} "monolayer_${j}(:,${i},-0)" > b2wall_monolayer_${j}_${i}_end.data
+    paste b2wall_monolayer_${j}_${i}_start.data b2wall_monolayer_${j}_${i}_end.data | awk 'BEGIN{dt='$dt'}{print ($2-$1)/dt}' > b2wall_monolayer_${j}_${i}_rate.data
+  end
+end
+
+

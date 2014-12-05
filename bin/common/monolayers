@@ -1,0 +1,24 @@
+#! /bin/tcsh -f
+set l=""
+if ($1 == "l") then
+  set l=$1
+  shift
+endif
+set pos=55
+if ($1 != "") set pos=$1
+set b2wall="b2wall.nc"
+if (-e b2mn.exe.dir/b2wall.nc) set b2wall="b2mn.exe.dir/b2wall.nc"
+set sp=`grep -i TRACK_SPECIES b2.wall_save.parameters | tr "'()=," "     " | awk '{print $3}' | awk.transpose`
+set ntrack=`nc2text ${b2wall} "track_species" | wc | awk '{print $1}'`
+
+foreach i (`count 1 $ntrack`)
+  set sp[$i]=`grep -i TRACK_SPECIES b2.wall_save.parameters | tr "'()=," "     " | awk '{print $3}' | head -$i | tail -1`
+end
+
+if ($ntrack == 1) then
+  nc2text -f "%20.10G" -n999999 ${b2wall} "plate_time(${pos},:)" "monolayer_deposition(${pos},1,:)" "monolayer_erosion(${pos},1,:)" | awk.transpose | awk.split_row 3 | awk.transpose | x${l}yplot2 monolayer_deposition_${sp[1]} monolayer_erosion_${sp[1]} seconds "monolayers@${pos}" `chop_pwd 60`
+else if ($ntrack == 2) then
+  nc2text -f "%20.10G" -n999999 ${b2wall} "plate_time(${pos},:)" "monolayer_deposition(${pos},1,:)" "monolayer_erosion(${pos},1,:)" "monolayer_deposition(${pos},2,:)" "monolayer_erosion(${pos},2,:)" | awk.transpose | awk.split_row 5 | awk.transpose | x${l}yplot4 monolayer_deposition_${sp[1} monolayer_erosion_${sp[1]} monolayer_deposition_${sp[2]} monolayer_erosion_${sp[2]} seconds "monolayers@${pos}" `chop_pwd 60`
+else if ($ntrack == 3) then
+  nc2text -f "%20.10G" -n999999 ${b2wall} "plate_time(${pos},:)" "monolayer_deposition(${pos},1,:)" "monolayer_erosion(${pos},1,:)" "monolayer_deposition(${pos},2,:)" "monolayer_erosion(${pos},2,:)" "monolayer_deposition(${pos},3,:)" "monolayer_erosion(${pos},3,:)" | awk.transpose | awk.split_row 7 | awk.transpose | x${l}yplot6 monolayer_deposition_${sp[1]} monolayer_erosion_${sp[1]} monolayer_deposition_${sp[2]} monolayer_erosion_${sp[2]} monolayer_deposition_${sp[3]} monolayer_erosion_${sp[3]} seconds "monolayers@${pos}" `chop_pwd 60`
+endif

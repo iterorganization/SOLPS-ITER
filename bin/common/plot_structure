@@ -1,0 +1,2 @@
+#! /bin/tcsh -f
+sed '1,/Structure/d' $1 | egrep -v -i Structure\|end | awk 'NF==1{printf "\n"}NF==2{print $0}'

@@ -1,0 +1,38 @@
+#! /bin/csh -f
+set source=b2mn.exe.dir/b2time.nc
+if (! -e $source) set source=b2time.nc
+if ("X$1" == "X-s") then
+  set source=$2
+  shift
+  shift
+endif
+
+set args=""
+set nargs=0
+
+if($?GNUPLOT_TMP) then
+    set tmpdir="$GNUPLOT_TMP/"
+else
+    set tmpdir=""
+endif
+
+/bin/cp /dev/null ${tmpdir}gnuplot.data.tmp
+start:
+  set count=`echo "$1" | sed -e 's:[^()]::g' | wc -c`
+  if ($count == "1") then
+    set check=`nc2text -s -n 999999 $source "$1(1)"`
+  else
+    set check="1"
+  endif
+  if ($#check == 1) then
+    echo `nc2text -n 9999999 $source $1` >> ${tmpdir}gnuplot.data.tmp
+    set args="$args $1"
+  else
+    nc2text -n 9999999 $source $1 | awk.transpose >> ${tmpdir}gnuplot.data.tmp
+    set args="$args `count -p $1. 1 $#check`"
+  endif
+  shift
+  if ("X$1X" != "XX") goto start
+
+echo "# $args"
+awk.transpose < ${tmpdir}gnuplot.data.tmp

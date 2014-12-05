@@ -1,0 +1,120 @@
+#! /bin/ksh
+
+# version : 06.02.2004 18:15
+
+# Parse a b2plot.write file producing a set of multi-column files suitable for plotting
+# The output files are combined according to the x axis.
+# There are three possibilities       : Corresponding filenames
+#   (a) radial profile <ix = NN>      : L.r.NN
+#   (b) poloidal profile <iy = NN>    : L.p.NN
+#   (c) profile along a chord FNAME   : L.FNAME
+# L is the ID taken from the VarID or b2.parameters file
+# The column names are: x for the abscissa and names taken either from *.ps.legend if it exists,
+# or from the b2plot.write in the opposite case, for the ordinates.
+
+NAME=${0##*/}
+
+infile=b2plot.write
+[ -n "$1" ] && infile=$1
+{ [ ! -s "$infile" ] || [ ! -r "$infile" ]; } && {
+  print -- "$NAME: no readable input file $infile"
+  exit 4
+}
+
+L=000
+cat VarID #!!!
+[ -s VarID ] && [ -r VarID ] && {
+  L=`cat VarID | cut -f1 -d_ | cut -f2 -d#`
+#  echo "L from VarID: $L" #!!!
+  true
+} || {
+  [ -s b2.parameters ] && [ -r b2.parameters ] && {
+    u=`grep -i 'label *=' b2.parameters | tr [A-Z] [a-z]`
+    u=${u#*label}
+    u=${u#*\'}
+    u=${u%%\'*}
+    L=`echo $u | cut -f1 -d_ | cut -f2 -d#`
+  }
+}
+export L
+print -- $L
+
+#set -x  #!!!
+set *.ps.legend
+#echo $# $* #!!!
+ii=0
+[ -s $1 ] && [ -r $1 ] && {
+  cat $1 |&
+  while read -p u; do {
+    set -- $u
+    [ -n "$1" ] && {
+      ((ii=ii+1))
+      nbl[ii]=$1
+    }
+  }; done
+}
+nbl[0]=$ii
+#set +x  #!!!
+print -- ${nbl[*]}
+
+cat $infile |&
+
+ii=0
+kf=0
+unset FFN FNS FN
+while read -p u; do {
+  [ "$u" = "${u#\#}" ] && {
+    [ -n "$u" ] && print -u3 -- " $u"
+  } || {
+    [ -n "$FNS" ] && {
+#      echo "Pasting $FNS $FN"
+      cut -f3 -d\  $L.$FN | paste -d\  $L.$FNS - > tmp.$FN
+      mv tmp.$FN $L.$FNS
+      rm -f $L.$FN
+      FNS=
+    }
+    { case $u in
+      (*'<ix ='*) n=${u#*\<}
+                  n=${u#*=}
+                  n=${n%%\>*}
+                  set ${n}
+                  FN=r.$1;;
+      (*'<iy ='*) n=${u#*\<}
+                  n=${u#*=}
+                  n=${n%%\>*}
+                  set ${n}
+                  FN=p.$1;;
+      (    *   )  n=${u#*\)}
+                  set ${n}
+                  while [ -n "$2" ]; do shift; done
+                  FN=$1;;
+    esac; }
+    ((ii=ii+1))
+    { case " ${FFN[*]} " in
+      (*" $FN "*) FNS=$FN; FN=,,$$;;
+      (    *    ) ((kf=kf+1))
+                FNS=
+                FFN[kf]=$FN;;
+    esac; }
+    C=
+    [ $ii -gt $nbl ] && {
+      set -- ${u%%\(*}
+      while { shift; [ -n "$1" ]; }; do {
+        C=${C}_$1
+      }; done
+      true
+    }||{
+      C=${nbl[ii]}
+    }
+    [ -z "$C" ] && C=Y
+    exec 3> $L.$FN
+    print -u3 -- "# x $C"
+  }
+}; done
+[ -n "$FNS" ] && {
+#  echo "Pasting $FNS $FN"
+  cut -f3 -d\  $L.$FN | paste -d\  $L.$FNS - > tmp.$FN
+  mv tmp.$FN $L.$FNS
+  rm -f $L.$FN
+  FNS=
+}

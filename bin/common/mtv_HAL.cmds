@@ -1,0 +1,13 @@
+#! /bin/csh -f
+set NX=$1
+set NY=$2
+@ XMIN = - $NX / 2
+@ XMAX = $NX / 2
+@ YMIN = - $NY / 2
+@ YMAX = $NY / 2
+@ NX += 1
+@ NY += 1
+echo "$ DATA=CONTOUR" 
+echo "% nx=$NX ny=$NY xmin=$XMIN xmax=$XMAX ymin=$YMIN ymax=$YMAX contfill=T nsteps=10 logsteps=5"
+sed '1d' b2plot.write | awk '{print $2}'
+echo "$ END"

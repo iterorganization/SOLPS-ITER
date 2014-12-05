@@ -1,0 +1,22 @@
+#! /bin/csh
+cd $SOLPSTOP/src/Eirene
+if($#argv < 7) then
+  echo "Usage: plot_atomic_data <file> <h123> <reac> <type> <start_temp> <end_temp> <1st_density> <2nd> ... <last_density>"
+  echo "   eg: plot_atomic_data METHAN H.2    2.22   DS     .1           10000           1e8 1e10 1e12 1e14 1e16"
+  echo "   or: plot_atomic_data AMJUEL H.4    2.1.8  RC     1e-1         1e3             1e8 1e10 1e12 1e14 1e16"
+  exit
+endif
+set file=$1
+shift
+set h123=$1
+shift
+set reac=$1
+shift
+set type=$1
+shift
+set ts=$1
+shift
+set te=$1
+shift
+$OBJECTCODE/wneutral_stand_alone $file $h123 $reac $type $ts $te $argv |\
+  plot lxlyplot$#argv $argv Te '' "'$file $h123 $reac $type'"

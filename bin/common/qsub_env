@@ -1,0 +1,11 @@
+#! /bin/csh -f
+echo '#\! /bin/csh' >! qsub_$$
+echo "if (-e ~/.kp) /afs/ipp/@sys/usr/rzg/bin/get-token ~/.kp" >> qsub_$$
+printenv | sed -e 's/^/setenv /' -e 's/=/ #/' -e 's/$/#/' | tr "#" "'" >> qsub_$$
+echo "cd $PWD" >> qsub_$$
+echo 'set mark1=`ja -m`' >> qsub_$$
+cat >> qsub_$$
+echo 'set mark2=`ja -m`' >> qsub_$$
+echo 'ja -cp "$mark1":"$mark2"' >> qsub_$$
+qsub $argv qsub_$$
+rm qsub_$$

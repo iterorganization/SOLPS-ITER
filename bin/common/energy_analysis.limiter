@@ -1,0 +1,3 @@
+#! /bin/csh 
+setenv NREG 2
+energy_analysis

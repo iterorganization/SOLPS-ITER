@@ -1,0 +1,107 @@
+#! /usr/bin/ksh
+# last_2d
+
+# Version : 23.03.2001 14:10
+
+# This script arranges averaging of the tracing data. Usage:
+#   last2d [ -v<version> ] [ <intr> [ <intrs> ] ]
+# Here <intr> and <intrs> specify the interval for averaging of regular traces (traces, blnn.trc,
+# and so on) and of sparce traces (seldom.trc, seldom_u.trc).
+# The values of <intr> and <intrs> can specify 
+#   the number of last lines (integer), or
+#   the starting time in ms (positive real), or
+#   the time span from the end in ms (negative real)
+# over which averaging is to be done. 
+# If the required span is wider than that covered by the tracing data, the whole files are taken.
+# If no <intrs> is specified, then it is taken to cover the same time span as given by <intr>.
+# If no parameters are given to the script, it looks for a file "RES" in the current directory.
+#   If this file exists, it takes the values from the second non-comment (no #) line.
+#   If the file is absent, or the second non-comment line is empty or absent, then the default
+#   values are used.
+#   The default values can be set in an environment variable "last_2d_def".
+#   If it is not set, then the value of -1.0 is used.
+
+scriptname=`basename $0`
+
+
+v=10 # default version
+
+[ -n "$1" ] && {
+  vv="${1#-v}"
+  [ "$vv" = "$1" ] || {
+    v="$vv"
+    print -- "$scriptname version $v"
+    which last_2d_v$v > /dev/null || {
+      print -- "!!! last_2d_v$v not found in the PATH !!!"
+      exit 2
+    }
+    shift
+  }
+}
+ 
+regular='time_dep/traces'
+seldom='tracing/seldom.trc'
+
+[ -s time_dep/traces ] || {
+  print -u2 "$scriptname: no time_dep/traces found"
+  exit 4
+}
+
+set -A l -- $*
+
+[ -z "${l[0]}" ] && {
+# No range specified - look for the RES file
+  [ -s RES ] && [ -r RES ] && set -A l -- `grep -v \# RES | tail -n +2 | head -1`
+  [ -z "${l[0]}" ] && {
+    [ -n "$last_2d_def" ] && set -A l -- $last_2d_def || l='-1.0'
+  }
+}
+#echo "=== l : ${l[0]} : ${l[1]} :"  #!!!
+
+# Determine the starting time
+
+[ "${l[0]#*.}" = "${l[0]}" ] && {
+# Integer - the number of lines
+  ((i=l+1))
+  set -A t -- `grep -v \# $regular | tail -$i`
+  true
+} || {
+  set -A t -- `print -- ${l[0]} | awk '{print 0.001*$l}'`
+  [ "${t#-}" = "$t" ] || {
+# Negative - the time span from the end
+    t=`echo $t \`tail -1 $regular\` | awk '{print $1+$2}'`
+  }
+  u=`grep -v \# $regular | wc -l`
+  l[0]=`grep -v \# $regular | awk "{if(\\$1>$t) {print $u-NR; exit}}"`
+}
+
+#echo "==== t,l : $t : ${l[0]} : ${l[1]} :"  #!!!
+
+[ -s $seldom ] && {
+  [ -z "${l[1]}" ] && {
+  # No <intrs> specified - take the starting time
+    u=`grep -v \# $seldom | wc -l`
+    l[1]=`grep -v \# $seldom | awk "{if(\\$1>$t) {print $u-NR; exit}}"`
+    true
+  } || {
+    [ "${l[1]#*.}" = "${l[1]}" ] || {
+      set -A t -- `print -- ${l[1]} | awk '{print 0.001*$l}'`
+      [ "${t#-}" = "$t" ] || {
+# Negative - the time span from the end
+        t=`echo $t \`tail -1 $seldom\` | awk '{print $1+$2}'`
+      }
+      u=`grep -v \# $seldom | wc -l`
+      l[1]=`grep -v \# $seldom | awk "{if(\\$1>$t) {print $u-NR; exit}}"`
+    }
+  }
+  true
+} || {
+  print -u2 "$scriptname: no $seldom found"
+  l[1]=
+}
+#echo "==== t,l : $t : ${l[0]} : ${l[1]} :"  #!!!
+
+
+echo "${scriptname}: running last_2d_v$v ${l[0]} ${l[1]}"
+
+last_2d_v$v ${l[0]} ${l[1]}

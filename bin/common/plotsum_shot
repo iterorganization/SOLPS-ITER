@@ -1,0 +1,105 @@
+#! /usr/bin/ksh
+# plotsum_shot 2001.02.03 15:12
+# Usage: plotsum_shot col_title_x col_title_y
+# all the shots in the files listed in $in are collected (unique only)
+# They are sorted by the columns corresponding to col_title_x
+# Each distinct shot is given a one-character symbol $symbol
+# The shotID (previously of the form ITER#nnn, i.e. ITER${shotnumber} is saved in a file
+# $key as ${symbol}_${shotnumber}
+# The shotID is also saved in a file
+# $keyinv as ${shotnumber}_${symbol}occurrence. This file is sorted by shotnumbers
+# Occurrence (first, second, subsequent...) is given here for unique identification
+# shot number, s column and y column for each shot is saved in $out, with shotID replaced by ${symbol}_${shotnumber}
+# ($out has 3 columns)
+# Further use: to get symbol:
+# set -A shot xxx `cat $out | cut -c1`
+# to print legend print $key and/or $keyinv
+# to plot symbols near points on same plot run plotsum_shot
+# to plot legend on same plot run plotsum_legend
+# to plot legend and inverse legend on a separate page run plotsum_legend_out
+
+# modification ank 20.02.2005 18:20
+
+scriptname=`basename $0`
+scriptdir=`dirname $0`
+
+col_title_x=$1
+col_title_y=$2
+
+sortcolumn=2
+in=filelist.sum
+out=summary/shot_list
+key=summary/shot_key
+keyinv=summary/shot_key_inv
+temp=summary/tempshot
+temp1=summary/tempshot1
+temp2=summary/tempshot2
+temp3=summary/tempshot3
+rm -f $out $key $temp $temp1 $temp2 $temp3 > /dev/null 2>&1
+
+filelist=`cat $in | grep -v "^#" | grep -v "^ " | grep -v "^$" | cut -d" " -f1 `
+#echo $filelist
+
+> $out
+for ff in $filelist; do
+   nx=`cat $ff | grep "^#" | tr "\t" "\n" | grep -n "^${col_title_x}$" | tail -1 | cut -f1 -d: `
+   if [ "${nx}." = "." ]; then
+      rm -f $out $key $temp $temp1 $temp2 $temp3 > /dev/null 2>&1
+      print -u2 "ns_zeff_map: no x header ${col_title_x} found in file $ff - no legend produced!"
+      exit
+   fi 
+   ny=`cat $ff | grep "^#" | tr "\t" "\n" | grep -n "^${col_title_y}$" | tail -1 | cut -f1 -d: `
+   if [ "${ny}." = "." ]; then
+      rm -f $out $key $temp $temp1 $temp2 $temp3 > /dev/null 2>&1
+      print -u2 "ns_zeff_map: no y header ${col_title_y} found in file $ff - no legend produced!"
+      exit
+   fi 
+   cut -f1 $ff > $temp1
+   cut -f$nx $ff > $temp2
+   cut -f$ny $ff > $temp3
+   paste $temp1 $temp2 $temp3 >> $out
+   rm -f$temp1 $temp2 $temp3 > /dev/null 2>&1
+done
+
+#cat $out | grep -v "^#" | grep -v "^ " | grep -v "^$"  | sed s/"^ITER#"/""/ > $temp
+cat $out | grep -v "^#" | grep -v "^ " | grep -v "^$"  | sed s/"^.*#"/""/ > $temp
+
+
+sort -d -u $temp > $out
+rm -f $temp > /dev/null 2>&1
+mv $out $temp 
+#sort by sortcolumn
+let "sortcolumn=sortcolumn - 1"
+sort +$sortcolumn $temp > $out
+rm -f $temp > /dev/null 2>&1
+
+#(xxxto avoid misreading leading minus)
+set -A shot xxx `cat $out | cut -f1`
+set -A symbol xxx a b c d e f g h i j k l m n o p q r s t u v w x y z A B C D E F G H I J K L M N O P Q R S T U V W X Y Z a b c d e f g h i j k l m n o p q r s t u v w x y z A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+set -A symbol2 xxx a1 b1 c1 d1 e1 f1 g1 h1 i1 j1 k1 l1 m1 n1 o1 p1 q1 r1 s1 t1 u1 v1 w1 x1 y1 z1 A1 B1 C1 D1 E1 F1 G1 H1 I1 J1 K1 L1 M1 N1 O1 P1 Q1 R1 S1 T1 U1 V1 W1 X1 Y1 Z1 a2 b2 c2 d2 e2 f2 g2 h2 i2 j2 k2 l2 m2 n2 o2 p2 q2 r2 s2 t2 u2 v2 w2 x2 y2 z2 A2 B2 C2 D2 E2 F2 G2 H2 I2 J2 K2 L2 M2 N2 O2 P2 Q2 R2 S2 T2 U2 V2 W2 X2 Y2 Z2
+
+cut -f2- $out> $temp 
+
+shotlist=${shot[*]}
+
+rm -f $key > /dev/null 2>&1
+rm -f $keyinv > /dev/null 2>&1
+> $key
+> $keyinv
+i=0
+for ff in $shotlist; do
+  if [ $i -gt 0 ]; then
+    echo "${symbol[i]}_${shot[i]}" >> $key
+    echo "${shot[i]}_${symbol2[i]}" >> $keyinv
+  fi
+  let "i=i+1"
+done
+
+paste $key $temp > $out
+
+rm -f $temp> /dev/null 2>&1
+mv $keyinv $temp 
+
+sort $temp > $keyinv
+
+rm -f $temp $temp1 $temp2 $temp3 > /dev/null 2>&1

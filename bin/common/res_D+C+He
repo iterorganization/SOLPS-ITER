@@ -1,0 +1,11 @@
+#! /bin/csh -f
+if (-e b2mn.exe.dir/b2ftrace) then
+  set FILE=b2mn.exe.dir/b2ftrace
+else
+  set FILE=b2ftrace
+endif
+cat $FILE | \
+  awk 'BEGIN{ig=0}/data/&&ig==0{ig=1}/data/&&ig==2{printf "\n"}/^[^*]/&&ig>0{ig=2;printf "%s",$0}' | \
+  resopt $argv | \
+  awk '{print $2,$27,$28,$29,$30}' | \
+  plot xlyplot4 momtot ee ei pot iteration 'norm of residual of non ns equations' $PWD

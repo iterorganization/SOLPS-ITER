@@ -1,0 +1,3 @@
+#! /bin/tcsh -f
+egrep -i -v 'DEPOSITION\(|EROSION\(|PLATE_TIME\(' b2.wall_save.parameters > ! b2.wall_save.parameters~ 
+mv b2.wall_save.parameters~ b2.wall_save.parameters

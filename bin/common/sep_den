@@ -1,0 +1,39 @@
+#! /bin/csh -f
+if($1 == "") then
+  if ($?LAST10) then
+  set FILE=b2.log.last10
+else
+  set FILE=b2.log
+endif
+if (-x $SOLPSTOP/bin/$OBJECTCODE/zcat) then
+    set ZCAT=$SOLPSTOP/bin/$OBJECTCODE/zcat
+else if (-x $SOLPSMASTER/@sys/bin/zcat) then
+    set ZCAT=$SOLPSMASTER/@sys/bin/zcat
+else
+    set ZCAT="gzip --decompress --force --stdout"
+endif
+$ZCAT -f $FILE | \
+    grep Sep | \
+    awk '{print $4,$8}' | \
+    nl | \
+    xyplot2 'Separatrix_density' 'Core_density' 'iteration_number' '(m^-3)' $PWD
+else
+  if ($?LAST10) then
+  set FILE=b2.log.last10
+else
+  set FILE=b2.log
+endif
+if (-x $SOLPSTOP/bin/$OBJECTCODE/zcat) then
+    set ZCAT=$SOLPSTOP/bin/$OBJECTCODE/zcat
+else if (-x $SOLPSMASTER/@sys/bin/zcat) then
+    set ZCAT=$SOLPSMASTER/@sys/bin/zcat
+else
+    set ZCAT="gzip --decompress --force --stdout"
+endif
+$ZCAT -f $FILE | \
+    grep Sep | \
+    awk '{print $4,$8}' | \
+    nl | \
+    tail -$1 | \
+    xyplot2 'Separatrix_density' 'Core_density' 'iteration_number' '(m^-3)' $PWD
+endif

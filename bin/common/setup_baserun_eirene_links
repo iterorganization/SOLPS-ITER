@@ -1,0 +1,75 @@
+#! /bin/tcsh -f
+set datapath=`echo $PWD/ | sed -e "s:$SOLPSTOP/::" -e 's:[^/]*/:../:g' -e 's:$:data:'`
+if (! -e ${datapath}/AMJUEL) then
+  set datapath=`canonical $SOLPSTOP`/data
+  if (! -e ${datapath}/AMJUEL) then
+    set datapath=$SOLPSTOP/data
+  endif
+endif
+if ("X$1X" == "X-rX") then
+  ln -sf `climb_and_look_for -r data/AMJUEL`         
+  ln -sf `climb_and_look_for -r data/H2VIBR`         
+  ln -sf `climb_and_look_for -r data/HYDHEL`         
+  ln -sf `climb_and_look_for -r data/METHANE`        
+  ln -sf `climb_and_look_for -r data/PHOTON`         
+  ln -sf `climb_and_look_for -r data/SPUTER `        
+  ln -sf `climb_and_look_for -r data/TRIM` fort.21   
+  ln -sf `climb_and_look_for -r data/MARLOWE` fort.22
+else
+  ln -s ${datapath}/AMJUEL
+  ln -s ${datapath}/H2VIBR
+  ln -s ${datapath}/HYDHEL
+  ln -s ${datapath}/METHANE
+  ln -s ${datapath}/PHOTON
+  ln -s ${datapath}/SPUTER
+  ln -s ${datapath}/TRIM fort.21
+  ln -s ${datapath}/MARLOWE fort.22
+endif
+
+if (! -e input.dat) then
+  if (-e ../baserun/input.dat) then
+    ln -s ../baserun/input.dat .
+  else if (-e input.eir) then
+    ln -s input.eir input.dat
+    echo "Creating a link between input.eir and input.dat"
+  else if (-e ../baserun/input.eir) then
+   ln -s ../baserun/input.eir input.dat
+   echo "Creating a link between ../baserun/input.eir and input.dat"
+  else
+    set inputfile=`climb_and_look_for input.dat`
+    if (-e $inputfile) then
+      ln -s $inputfile .
+    else
+      set inputfile=`climb_and_look_for input.eir`
+      if (-e $inputfile) then
+        ln -s $inputfile input.dat
+        echo "Creating a link between $inputfile and input.dat"
+      else
+        touch input.dat
+        echo "Empty input.dat created --- is this what you want?"
+      endif
+    endif
+  endif
+endif
+if (-e ../TRIANG/fort.33) then
+  ln -s ../TRIANG/fort.33 .
+  ln -s ../TRIANG/fort.34 .
+  ln -s ../TRIANG/fort.35 .
+else if (-e ../baserun/fort.33) then
+  ln -s ../baserun/fort.33 .
+  ln -s ../baserun/fort.34 .
+  ln -s ../baserun/fort.35 .
+endif
+if (! -e mesh.extra) then
+  if (-e ../baserun/mesh.extra) then
+    ln -s ../baserun/mesh.extra .
+  else
+    set meshxtra=`climb_and_look_for mesh.extra`
+    if (-e $meshxtra) then
+      ln -s $meshxtra .
+    endif
+  endif
+endif
+if (! -e b2.log) ln -s run.log b2.log
+if (! -e b2.log.gz) ln -s run.log.gz b2.log.gz
+if (! -e tracing) mkdir tracing

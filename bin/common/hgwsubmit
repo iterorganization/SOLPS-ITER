@@ -1,0 +1,9 @@
+#! /bin/tcsh -f
+if ("X$1" == "X-z") then
+  echo run.log will be compressed
+  sed -e 's:#USER#:'$USER':g' -e 's:#PWD#:'$PWD':g' -e 's:#SOLPSTOP#:'$SOLPSTOP':g' < $SOLPSTOP/bin/common/hgwsubmit.template-gz > /tmp/.run.$$
+else
+  sed -e 's:#USER#:'$USER':g' -e 's:#PWD#:'$PWD':g' -e 's:#SOLPSTOP#:'$SOLPSTOP':g' < $SOLPSTOP/bin/common/hgwsubmit.template > /tmp/.run.$$
+endif
+chmod u+x /tmp/.run.$$
+qsub /tmp/.run.$$

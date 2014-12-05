@@ -1,0 +1,13 @@
+#!/bin/tcsh -f
+#---------------------------------
+#$ -N B2_job
+#$ -cwd
+#$ -l h_rt=25:00:00
+#$ -V
+#$ -m ae
+#$ -M #USER#@ipp.mpg.de
+#---------------------------------
+source $SGE_ROOT/$SGE_CELL/common/mpichsettings
+cd #PWD#
+tcsh -c #SOLPSTOP#/bin/common/hgwsubmit.run-gz
+

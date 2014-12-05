@@ -1,0 +1,18 @@
+#! /bin/csh -f
+back:
+  if("$USER" == "dpc") then
+    /bin/cp -p B2SXDR B2SXDR.last
+  endif
+  /bin/touch .write
+  while ( { ( timestamp B2SXDR .write > /dev/null ) } )
+#    /bin/echo still sleeping
+    /bin/sleep 10
+    if(! -e .write) then
+      echo '.write disappeared!  Watch stopping.'
+      exit
+    endif
+  end
+  /bin/rm .write
+#  /bin/echo writing done
+  /bin/sleep 3600
+  goto back

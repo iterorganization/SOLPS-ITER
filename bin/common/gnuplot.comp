@@ -1,0 +1,14 @@
+#! /u/dpc/bin/gnuplot_3.5
+set contour base
+set time
+set data style lines
+! grab
+set term postscript
+set output 'tmp.ps'
+set log z ; splot 'b2.comp' using 1 title 'te'
+set log z ; splot 'b2.comp' using 2 title 'ti'
+set log z ; splot 'b2.comp' using 3 title 'ne'
+set log z ; splot 'b2.comp' using 4 title 'ni(1)'
+# set log z ; splot 'b2.comp' using 5 title 'ni(2)'
+set term x11
+! psnup -4 tmp.ps | lpr

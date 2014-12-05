@@ -1,0 +1,20 @@
+#! /bin/csh -f
+if($1 == "") then
+  echo Start time of zero assumed
+  set starttime=0.0
+else
+  set starttime=$1
+endif
+shift
+if($1 == "") then
+  echo Averaging over 100000
+  set average=100000
+else
+  set average=$1
+endif
+shift
+foreach i ($argv)
+  setenv PRINT_PLOT $i.ps_"$starttime"_"$average"
+  select_time_slice time_dep/$i $starttime $average | xyplot "$i $starttime <= t" position "" $PWD
+  cp gnuplot.data "$i".data_"$starttime"_"$average"
+end

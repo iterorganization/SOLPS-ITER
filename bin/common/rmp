@@ -1,0 +1,39 @@
+#! /bin/ksh
+
+#  VERSION : 09.08.2000 15:12
+
+[ -r b2.parameters.src ] || { echo "${0##*/} :  no b2.parameters.src"; exit 4; }
+[ -r b2.parameters ] || { echo "${0##*/} :  no b2.parameters"; exit 4; }
+
+> TIMESTAMP.b2remap
+
+B2PATH="./$OBJECTCODE"
+[ -s B2E.version ] && {
+  set -A u -- `cat B2E.version`
+  B2PATH="${SOLPSTOP%/*}/$u/src/Braams/b2/base/$OBJECTCODE"
+}
+print -- $B2PATH
+
+$B2PATH/b2remap > b2remap.log
+
+[ B2SXDR -nt TIMESTAMP.b2remap ] && {
+  mv b2.parameters b2.parameters.b2remap && {
+    grep -i '^ *dti *=.*,' b2.parameters.b2remap > /dev/null \
+            && cat b2.parameters.b2remap | sed \
+                                        -e 's/^ *dti *=.*,/ dti= 0.0,/' \
+                                        -e 's/^ *DTI *=.*,/ DTI= 0.0,/' \
+                                        > b2.parameters 2>>b2remap.log \
+            || cat b2.parameters.b2remap | sed \
+                                           -e 's/^ *\&numerics/ \&numerics\n DTI= 0.0,' \
+                                           -e 's/^ *\&NUMERICS/ \&NUMERICS\n DTI= 0.0,' \
+                                           > b2.parameters 2>>b2remap.log
+    grep -i '^ *dti *= 0.0,' b2.parameters > /dev/null && $B2PATH/b2obj >> b2remap.log \
+            || echo "Something wrong with b2.parameters"
+    mv b2.parameters.b2remap b2.parameters
+  } || {
+    echo "${0##*/} : cannot move b2.parameters"
+    exit 6
+  }
+}
+
+rm -f TIMESTAMP.b2remap

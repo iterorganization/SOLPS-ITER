@@ -1,0 +1,11 @@
+#! /bin/csh -f
+if (-e b2mn.exe.dir/b2ftrace) then
+  set FILE=b2mn.exe.dir/b2ftrace
+else
+  set FILE=b2ftrace
+endif
+cat $FILE | \
+  awk 'BEGIN{ig=0}/data/&&ig==0{ig=1}/data/&&ig==2{printf "\n"}/^[^*]/&&ig>0{ig=2;printf "%s",$0}' | \
+  resopt $argv | \
+  awk '{print $2,$3,$4,$5,$6,$7,$8}' | \
+  plot xlyplot6 conD+ momD+ totmom ee ei phi iteration 'norm of residuals' $PWD

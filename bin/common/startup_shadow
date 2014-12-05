@@ -1,0 +1,8 @@
+set SHADOW_TOP=$PWD
+cd /afs/ipp-garching.mpg.de/home/d/dpc/solps/solps5.0_test
+source setup.csh
+cd $SHADOW_TOP
+alias b2plot 'gmake -f /afs/ipp-garching.mpg.de/home/d/dpc/solps/solps5.0_test/src/Braams/b2/runs/Makefile.plot b2pl.prt'
+
+alias shadow   "cd $SHADOW_TOP"
+
