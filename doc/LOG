@@ -1,0 +1,4664 @@
+2007.01.dd
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2007.01.07
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+Check consistency of boundary condition settings for currents.
+Added possibility of coating material to the target heat model.
+Added option of 'silent' open_file call.
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2006.12.21
+==========
+old eirene:
+-----------
+Fixed NAG setting in compiler.IBMaix.
+Added -C setting to compiler.linux_pgf90.
+Added a NO_FORT10 to outeir.F.
+Corrected output in mcarlo.F.
+Corrected error report from edge cells in infcop.F.
+
+new eirene:
+-----------
+Fixed NAG setting in compiler.IBMaix.
+Added -C setting to compiler.linux_pgf90.
+Added a NO_FORT10 to outeir.F.
+
+b2.5:
+-----
+Added -C setting to compiler.linux_pgf90.
+Updated and corrected Makefiles.
+Added ANK stratum scaling arrays to b2fplasma (version 01.001.023) for diagnostics.
+Added parallel current to b2fstat? (version 01.001.022) for 21-moment thermal force.
+Expanded use of BoRiS switch between total and internal ion energy equation.
+Added qc array for cosine of non-orthogonality angle in b2fgmtry (and a version
+number to b2fgmtry: concomitant to 01.001.022).
+Multiple non-orthogonality fixes and area_fix switch (dbversion=7).
+Pitch angle correction revisited.
+Generalized elements up to 92 (U).
+Updated transport coefficients internal documentation.
+Updated internal switches documentation.
+Updated namelist internal documentation.
+Initial potential value is now 3.1*Te/qe, also an option for potential equation.
+Corrected tracing output and included treatment of 'X' and 'Y' boundaries.
+New option to write plasmastate.XXXX files after given plasma simulation time.
+New options to turn off solving individual equations or regions.
+New SOL feedback scheme ndes_sol on total particle content.
+Introduction of SOLPS4.0 upwind schemes as options.
+Options for choice of classical transport coefficients (Braginskii- or Balescu-like).
+Options for interpolation method for transport coefficients.
+Option to fully turn off heat flux limits.
+Option for SOLPS4.0 implementation of flux limits and Luciani correction.
+Additional options for poloidal variations of transport coefficients and ELMs with b2.transport.inputfile.
+New plotting of parallel current and electron velocity.
+Added total energy flux tallies fet... output.
+Corrected thermal force calculation for non-default cases.
+Updated BCEN.=6 boundary conditions.
+Fixed zeroing of current components.
+Allow multiple first calls to Eirene.
+Correct some Eirene coupling diagnostics.
+Fixed titles of experimental data plots.
+
+b2:
+---
+Added initialization of some arrays in solvers as per B2.5 for
+running debugger.
+Corrected treatment of molecular arrays in neutrals.F and added
+output.
+Corrected output in b2blne.F.
+Updated solps4-5 converter:
+- Maintained at par with latest B2.5 version input/output and SOLPS4.0-like options.
+- Modified treatment of parallel and poloidal verlocities.
+- Made index corrections.
+- Changed b2ar defaults.
+- Removed writing of some default-valued quantities.
+- New interpolation scheme for velocities.
+
+other:
+------
+Updates and corrections to the SOLPS manual. Most notably:
+- Introductory discussion of B2 versus B2.5.
+- Discussion of "*.local" directories
+- Re-did listing and descriptions of scripts.
+- Expansion of region definitions materials.
+- Discussion of "b2co".
+- Added a Matlab MDSplus example.
+- Expanded decsription of $DEVICE variable.
+- Fuller description of tallies from b2tallies.nc.
+- Fuller descrition of b2plot variables.
+- Added colour table for b2plot.
+- Fuller description of compiling options.
+- More complete listing of SOLPS files and programs.
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2006.09.05
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+re-fixed species to cope with H/D/T:
+
+Hello Larry,
+
+I found where the problem was coming from. It turns out that the "species"
+routine, called by b2plot, overwrites (when it shouldn't) the "elements"
+array which is used to build the name of the ADAS file to look up and
+read. This happens in the new version because I had spent some effort
+making the elements array be the array of choice for all such things, as
+opposed to having multiple copies in several environments. I have a fix
+which I attach below. Put it in your src.local/ directory, recompile and
+try again.
+
+Cheers,
+
+Xavier.
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2006.08.04
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+Replaced "parallel" with "poloidal" wherever the former had been used
+incorrectly.
+Replaces "radial" with "perpendicular" where relevant to make the
+direction clearer.
+Replaced "b2trno_radial_only" with "b2trno_pol_anom_scale" to change
+parallel anomalous transport coefficients.
+Added "sxperp" and "psxperp" in b2plot which use the area
+perpendicular to the flux tube rather than the contact area between
+poloidal cells used by "sx" and "psx".
+Added "qz0" and "qz1" to b2plot (non-orthogonality factors).
+Many updates and extensions to the manual.
+Updated the master program for b2yt that got left out in the previous
+update.
+Introduced  in eirene_f30f31.F:
+  "eirene_fixmap": fixed a problem with the mapping of fluxes at the
+		   cuts; to recover the old (wrong) behaviour set to "0"
+  "eirene_fixuub": test flag for trying to match SOLPS4 --- default
+		   behaviour has not changed.
+Fixed "fnisipp", "fnisapp", "feesipp", "feesapp", "feisipp",
+"feisapp", "fchsipp", "fchsapp" in b2time.nc so that the correct
+quantitiies are now plotted.
+Fixed an issue in b2agfs with reading sonnet files.
+Changed hcib and hci0 to include the radial neutral convective flux
+limits (no change to the code results --- affects diagnostics).
+Fixed a problem introduced by the optimiser with "i+", "i-", ... and
+"r+", "r-", ... (the problem showed up with "nx 1 i-" giving "1-nx"
+instead of "nx-1").
+New documentation in "b2cdcn.F" of the various namelists used by the
+code.
+
+other:
+------
+Added Be2C to Bulk_properties
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2006.07.12
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+introduced type 19 energy boundary conditions --- might work better
+than type 9
+corrected type 9 ion energy boundary condition to correctly take
+account of neutral flux limits *** this affects all cases that use all
+of a) fluid neutrals, b) type 9 ion energy bc, and c) neutral flux
+limits *** [to get the old treatment use 'b2trno_hcimx_flag' '0']
+re-organized calculation of the neutral flux limits, with the
+possibility of averaging both face contributions [to get the old
+treatment (without averaging) use 'b2tlh0_hcimx_flag' '0']
+re-organized b2plot and various related routines to speed up
+compilation and to rationalise the use of modules
+added ability to plot electron, ion and viscous flux limits
+coorected hy1 and ddy problem in b2plot
+b2yt new outputs new versions of b2mn.dat and b2.*.parameters
+possibility to inherit layer properties from the mixed material model
+rationalised use of the elements module
+
+other:
+------
+expanded range and accuracy of ionization potentials
+added some new surface and bulk properties
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2006.04.12
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+***Please note this affects all multi-fluid b2 fluid neutral
+calculations involving physical sputtering***
+
+Hello Dave,
+
+I just found an important error in b2mod-sputter when we compute the
+interpolation of sputtering or reflection yields from TRIM data. The
+original code states:
+        f=(te-sputter_energy(ib,iss,itargsp))/
+     1   (sputter_energy(it,iss,itargsp)-sputter_energy(ib,iss,itargsp))
+        sputter=f*
+     1   (sputter_coefficient(it,iss,itargsp)-
+     2   sputter_coefficient(ib,iss,itargsp))+
+     1   sputter_coefficient(it,iss,itargsp)
+where "it" corresponds to the index in the TRIM array above our
+temperature, and "ib" to the index below.
+
+Let's assume that "Te" is barely above "sputter_energy(ib,iss,itargsp)".
+Then F is almost zero.
+Then SPUTTER is almost equal to "sputter_coefficient(it,iss,itargsp)"!
+
+Let's now assume that "Te" is almost equal to
+"sputter_energy(it,iss,itargsp)".
+Then F is clearly almost 1.
+Then SPUTTER is equal to
+2*sputter_coefficient(it,iss,itargsp)-sputter_coefficient(ib,iss,itargsp)
+
+This is obviously wrong. I checked it as well with a simple program that
+just called sputter for a scan in energies and plotted the results, which
+looked like an inclined staircase. Basically, we overestimate the
+sputtering yield by up to a factor 2.
+
+The correct code is simple enough:
+        f=(te-sputter_energy(ib,iss,itargsp))/
+     1   (sputter_energy(it,iss,itargsp)-sputter_energy(ib,iss,itargsp))
+        sputter=f*
+     1   (sputter_coefficient(it,iss,itargsp)-
+     2   sputter_coefficient(ib,iss,itargsp))+
+     1   sputter_coefficient(ib,iss,itargsp)
+                              ^
+
+The corrected code yields a smooth curve that looks a lot more like the
+original TRIM data!
+This needs to be corrected in 4 places in b2mod_sputter, namely the
+sputter, sputter2, reflect and reflect2 function. I'm afraid this change
+needs to be propagated right away, as these sputtering yields are used by
+all the multi-fluid users! The extrapolations remain unaffected.
+
+The corrected code can be found in the usual place:
+/afs/ipp/u/xpb/solps5.0_drifts/src/Braams/b2/src.local/b2mod_sputter.F .
+
+Cheers,
+
+Xavier.
+
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2006.03.31
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+corrected definition of poti (was wrong, but I don't think anybody used it!)
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2006.03.01
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+Added a flag "NO_PFLUX" to b2.transport.inputfile to switch off the
+setting of transport coefficients in the private flux region.
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2006.02.yy
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+fixed fort.10 usage in wneutral
+
+b2.5:
+-----
+save "time" in b2fstat?
+width parameter for 1d cases
+*checks of consistency of cuts and boundary arrays*
+addition of Bremsstrahlung arrays (radiation array now only contains
+line radiation), tallies, ...
+adding Bremsstrahlung to MDSplus
+changes in Kukushkin's tracing
+changed corner interpolation for B's so that it is not done for B_tot
+new "nh" in b2plot for total HDT atom density
+added ability to change line widths and colours in b2plot
+added zeff tran file; also fixed non jet grid cases
+a large of new quantities can be plotted, and various new options ---
+see manual!
+Changed trimg(2.0_R8,20.0_R8,tt) to trimg(-20.0_R8,20.0_R8,tt) for
+rlsa, rlqa [Unknown impact at this time]
+Take into account sources if BoRiS activated.
+Ability to de-activate anomalous transport in parallel direction.
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2005.10.17
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+Added output of neutral flux limiters to b2fplasma. and added options
+in b2plot to plot them.
+Changed the logic of version numbers in non-b2fplasma files.
+Introduced ank_tracing switch.
+From Xavier:
+b2mod_b2plot_help.F : Added your new neutral flux limit array info.
+b2cdci.F: Added description of 'ank_tracing' switch.
+b2stbr.F: Cleaned up some comments.
+b2stbc.F: Removed misleading comment.
+b2file.F: Added NS and NNREG as arguments to B2FILEW entry declaration.
+b2mndt.F: Added NS and NNREG as arguments to B2FILEW entry call.
+
+
+other:
+------
+From Xavier:
+runs/Makefile: Defined 'gdb' to be the debugger of use when
+$OBJECTCODE is 'linux_pgf90.debug'. Neither 'totalview' nor 'dbx'
+were accessible on my JAC. Don't know if that's the case for all of
+them.
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2005.10.06
+==========
+old eirene:
+-----------
+added tracing diagnostics from kukushkin
+correction of He elastic collisions in fi.F, fivec.F, gaumeh.F,
+rstern.F, rtsaf.F, veloel.F
+
+
+new eirene:
+-----------
+
+b2.5:
+-----
+Fix of (small) correction from currents to electron energy sheath
+boundary condition.
+Fix of calculation of electron parallel velocity which enters the
+electron energy source term via the b2divue (for one example, this
+increased the peak electron temperature at the outer target by 10%).
+New options in b2plot for choosing to plot against poloidal or
+parallel distance; introduction of integer algebra; output of uedge
+grid; aliases bpol, brad, btor; intw*; fixed fht calculation.
+Additions/fiexes to MDS of: fht; kyi0; version numbers
+Addition of ismain0 to b2mwti
+Some mixed material changes
+b2plot/pltwall: new option for plotting in the computational domain
+for the target
+various clean-ups required to port to windows
+new diagnostics in b2agfs; new implementation of minimum pitch
+additional information from b2agmt
+addition new atomic physics arrays for radiation (b2ar* and many other
+routines) [introduces a new version number in b2frates]
+new documentation in b2cdci
+b2mds: rqrad (total radiation)
+tracing routines from kukushkin: all over the place
+deallocation routines in some modules
+b2mod_b2plot, b2plot, ... : target stack and related work arrays
+b2plot: new output for: perp target thermal cond.; *clvp* options for
+Kukushkin; target algebra; 
+2d thermal transport model for targets: (variois places)
+reintroduction from 4.0 of coronal atomiuc physics
+change from 1.357 to 0.96 * sqrt(2) in viscosity (b2tqca)
+correction of veecrb in b2tfch (added btor/btot factor)
+corrected mixup of csig vs csig_an
+
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2005.06.18
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+
+other:
+------
+Copied $SOLPSTOP/data/adas/adf11/ccd89/ccd89_be.dat to
+$SOLPSTOP/data/adas/adf11/ccd93/ccd93_be.dat so that we have some CX
+data for Be.
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2005.06.09
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+in tmstep.F changed
+      IF ((NFILEJ.EQ.1.OR.NFILEJ.EQ.3).AND.ITIMV.EQ.NTIME) THEN
+to
+      IF (NFILEJ.EQ.1.OR.NFILEJ.EQ.3) THEN
+(which is what it was in old eirene) so that fort.15 is written on each 
+timestep, not only the first.  This should fix a problem with re-starts.
+
+b2.5:
+-----
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2005.06.08
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+modified a diagnostic print statement monitoring Roth chemical
+sputtering so that it was not printed out as often
+
+b2.5:
+-----
+in b2plot, added:
+ i+, i-, i*, i/, i**
+ xpar/xpol switch to swap between plotting poloidal and parallel when
+ using f.x 
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2005.05.15
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+Changed definition of fht to use fhe and fhi instead of fhet and fhit
+in b2plot and b2mds.
+
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2005.04.14
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+
+Major new feature is the start of the implementation of mixed
+materials modelling which now tracks erosion and deposition, and can
+change the erosion dependent on the deposition.
+
+Also can now output am UEDGE gridue file (still experimental). 
+
+src/sources/eirene_mc.F		feedback on vilume recombination
+src/b2plot/spect.F		fix to label	
+src/modules/b2mod_plasma.F	initialise fchin
+src/modules/b2mod_tallies.F	changes to the cdf write routine
+src/modules/b2mod_sputter.F	mixed materials updates
+src/modules/b2mod_b2plot_help.F	updated
+src/b2plot/initialize_plotting.F	some windows compatibily changes
+src/modules/b2mod_wall.F	mixed material changes
+src/b2plot/init_wall.F		mixed material changes
+src/modules/b2mod_neutrals_namelist.F	mixed material changes
+src/documentation/b2cdci.F	updated
+src/preprocessing/b2agdr.F	additional diagnostics
+src/sources/b2stbr.F		major cleanup; mixed materials
+src/preprocessing/b2agfs.F	diagnostics; change to pitch correction
+src/b2plot/b2plot.F		uedge gridue output option; additional options for wall plotting
+src/b2plot/process_chords.F	increased chors dimensions
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2005.01.28
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+Changes to:
+  utility/ilutern_solps.F		
+  utility/intcor.F
+  b2plot/linewidth.F
+  utility/ma28.F
+  utility/ma28copy.F
+  utility/ratio.F
+  b2plot/trgw.F
+  b2plot/trgz.F
+  utility/ilutern_7_solps.F
+  b2plot/clvs.F
+  transport/b2tqna.F
+  b2plot/clvn.F
+  b2plot/clvd.F
+  preprocessing/b2agcf.F
+  modules/b2mod_neutrals_namelist.F
+  modules/b2mod_mdsplus.F
+  modules/b2mod_b2plot_help.F
+  documentation/b2cdci.F
+  convert/b2mddr.F
+  sources/heatdiff1D.F
+  b2plot/b2plot.F
+  sources/b2stbr.F
+  modules/b2mod_wall.F
+  modules/b2mod_sputter.F
+  modules/b2mod_b2plot.F
+  driver/b2mwti.F
+  convert/b2mds.F
+  b2plot/pltwall.F
+  b2plot/plttarget.F
+  b2plot/plot_wall_elements.F
+  b2plot/init_wall.F
+  b2plot/init_page.F
+  b2plot/ank_interface.F
+  sources/b2stbc.F
+  sources/eirene_mc.F
+  modules/b2mod_feedback.F
+Mostly fixups from Xavier.
+New features:
+  volume recombination feedback (still in testing)
+  transport multiplier in SOL region of divertors
+  additional options for treating heat flux in targets
+
+other:
+------
+New benchmark case.
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2004.11.25
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+fixed a problem in alloc_b2mod_ppout in the JET specific code that was
+detected by the new compiler 
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2004.11.16
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5: ----- Make sure that ballooning and pfr rescaling are only
+applied to charged species.
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2004.10.05
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+Recent changes:
+
+Oct  1 15:54 transport/b2tfhi.F
+Oct  1 15:54 transport/b2tfhe.F
+Oct  1 15:55 transport/b2tfnb.F
+Oct  1 15:58 sources/b2stbc.F
+Oct  4 18:19 driver/b2mwti.F
+Oct  5 10:43 transport/b2tqca.F
+Oct  5 10:43 sources/b2sihs.F
+Oct  5 10:43 sources/b2sifr.F
+Oct  5 17:15 solvers/b2usp7.F
+Oct  5 17:16 transport/b2tfch.F
+Oct  5 17:16 modules/b2mod_version.F
+Oct  5 17:16 modules/b2mod_plasma.F
+Oct  5 17:16 equations/b2news.F
+Oct  5 17:16 b2plot/b2plot.F
+
+Changes from Oct 1st from Xavier, described below.
+Fixed dp3d? output to not mix ismain and species 0
+Oct 5: Added fac_vis to mirror facdrift and fac_ExB.
+
+From Xavier:
+<<<<
+Dear David, Ralf and Sergey,
+
+I have now finished coding, compiling and testing the changes proposed in
+the computation of the heat fluxes in SOLPS5.0 to be consistent with the
+formulation used in the Russian version (i.e. removing the double-counting
+of the energy flows caused by the ExB and diamagnetic terms). This
+implicates fives routines:
+
+- B2TFNB, where I now compute, in addition to FNA_32 and FNA_52, the new
+arrays FNA_32ND and FNA_52ND (ND for No Drifts).
+- B2NEWS which calls B2TFNB, and then computes the secondary quantities
+FNI_32, FNI_52, FNE_32 and FNE_52. Please note (there are comments to this
+effect in the code), that these four quantities are the flows without the
+drifts terms, since it's these we will need later. The code computation
+makes this clear. This of course changes some of the diagnostics we had,
+which I removed when they stopped making sense. It then calls the modified
+other routines.
+- B2TFHE and B2TFHI, which now have a clear and explicit computation of the
+heat fluxes as:
+   (3/2 FN_32 + 5/2 FN_52) + 3/2 F_ExB + 5/2 F_DIA
+- In order to compute FNE_32, I had to make sure that FCH_32 was also
+computed properly and there I found that the coding was not consistent
+between B2TFCH and B2TFHE when computing the electron fluxes. In fact, the
+diamagnetic current contribution in B2TFCH was missing a factor of NE (!),
+among other troubles. The codings are now consistent, and apparently the
+code runs like it a lot better that way. I also now make sure that FCH_32
+and FCH_52 are strictly computed without diamagnetic or ExB contributions,
+as originally intended.
+
+I also cleaned up the argument lists and switches occurring from the split
+between B2TFHE and B2TFHI (back in Sept. 2002 when the mistake was likely
+originally introduced). I have checked that, in case without drifts, the
+code behaviour is unchanged, but there is certainly a kick to the residuals
+for runs with drifts, which should then be revisited. The impact is smallish
+in the cases I tested with, but I can't say this will automatically always
+be the case.
+
+The modified files are to be found in the usual place, i.e.:
+/afs/ipp/u/xpb/solps5.0_drifts/src/Braams/b2/src.local/
+
+Dave, please carry over these changes onto the Master at your convenience,
+and publish the text above on solps-users and solps-developers.
+
+Cheers,
+
+Xavier.
+>>>>
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2004.09.14
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+Augmented the "transport" namelist in b2.transport.inputfile with
+"region_flags" so that the user can choose which regions are
+specified.
+Added the calls to mapx and mapy for fna_32 and fna_52.
+
+Other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2004.08.26
+==========
+old eirene:
+-----------
+Added additional consistency checks between B2 and Eirene.
+Corrected typos in infcop.
+
+new eirene:
+-----------
+Added additional consistency checks between B2 and Eirene.
+
+b2.5:
+-----
+Rationalisation of b2plot internal documentation: b2mod_b2plot.F,
+b2mod_b2plot_help.F, b2mod_b2plot_values.F. 
+Correction of un-initialised variables: b2mod_first_flight.F, init_wall.F
+Prevention of exp overflows: b2mod_sputter.F, heatdiff1D.F
+Removal of extra /: open_file.F
+Added integer operators nx, ny, ns, nxtr, nxtl: b2plot.F
+Corrected recycled heat flux: b2stbr.F
+Added additional consistency checks between B2 and Eirene: eirene_mc.F
+Updated documentation: b2cdci.F
+
+other:
+------
+Added missing write statement in Carre.
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2004.08.13
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+Changed the default value of "eirene_dpc_fix" (see entry for
+2004.07.20) to "-1".  This will cause the code to stop after printing
+out an error message.  The user can explicitly set "eirene_dpc_fix" to
+"0" to recover the old (wrong!) behaviour, to "1" to generate the new,
+hopefully correct, behaviour, or "2" which will generate something
+close to the old (wrong) behaviour, but in a way that can be run will
+full debugging of uninitialised variables.
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2004.08.11
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+New tallies added by Christian Konz:
+	fhtxreg
+        fhtyreg
+        qconvixreg
+        qconvexreg
+        qconviyreg
+        qconveyreg
+being total energy and the electron and ion convective energy fluxes
+by x and y regions.
+
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2004.08.03
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+Changes to the b2mod_ppout routine to try and fix a problem that Marco
+Wischmeier was experiencing:
+  pr and ro had a ns dimension which was wrong
+  pmach was declared 1:nsd in the third dimension, but data was stored
+  in 0:nsd-1
+Not sure what this would change in older cases.
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2004.07.20
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+1. Added a new b2stbc_phys option for bccon=13, extending the core
+flux feedback via setting the density to multiple charge states.  This
+extends/replaces the option "b2stbc_fnaycore" described in the
+2004.06.19 entry (which can still be used if only the main species
+needs to be controlled).
+2. Changed the xertst on b2sihs_style so that the "-1" option can be
+used (it was coded but inaccessible because the xertst insisted style
+had to be >= 0).
+3. Added a new b2mn.dat flag to eirene_mc called 'eirene_dpc_fix'.
+Without this flag, all negative volume recombination  particle sources
+were ignored.  As a test, runs with large fractions of volume
+recombination should be re-done with 
+'eirene_dpc_fix' '1'
+so that the ion particle recombination losses are included.  If this
+change is correct, the default will be changed to 1.
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2004.07.03
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+Fixed some minor problems when switching back from greek letters in
+b2plot captions. 
+
+other:
+------
+Added the search for setup.csh.mdsplus and
+setup.csh.mdsplus.$OBJECTCODE to setup.csh so that the environment
+variable $SOLPS_MDSPLUS_LIB can be set if needed.
+This variable is now used by the B2 Makefile when compiling b2md.exe
+in case options other than "-L${MDSPLUS_DIR}/lib -lMdsLib_client" are
+needed.
+Created a version of setup.csh.mdsplus.$OBJECTCODE at JET to add the
+globus library needed at JET.
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2004.06.19
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+In analogy with b2stbc_fchycore, created b2stbc_fnaycore to implement
+a feedback controlled flux of species isfeedback.  This was done since
+I (DPC) was having problems with controlling the core particle flux
+for a deep grid case using other means.  This option might disappear
+in the future when the reasons for the other methods not working is
+understood.
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2004.06.09
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+1. The movie option in b2mn/b2pl now saves/reads dab2 & dmb2 if
+running with Eirene.
+2. b2md now writes the ident information directly to the database via
+mdsplus.
+3. my_out updated with a new version from SRV
+4. some changes to the routine that calls my_out so that the code can
+run with debugging (unitialized variables, array bounds problems)
+5. change suggested by Tom Fredian to decrease the chance that two
+occurrences of b2md get given the same shot --- no guarantees (could
+change to getting the shot no from the database --- this does
+guarantee atomicity; this has been coded but would require everybody
+to update simultaneously --- holding off implementing for the moment)
+
+other:
+------
+The solps database can be queried via mdsplus.  In IDL, try:
+
+mdsconnect,'solps-mdsplus.aug.ipp.mpg.de:8001'
+ans=mdsvalue("sql('select solpsindex,shot,time,ompsep_te,ompsep_ti,user,exp from id where ompsep_te>110.0 and ompsep_te<120.0','solps')")
+mdsdisconnect
+help,ans
+print,format='(i6,1x,i6,1x,f6.3,1x,f6.2,1x,1x,f6.2,1x,a10,1x,a)',transpose(ans)
+plot,ans(*,3),ans(*,4),psym=4
+
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2004.06.02
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+Removed the second call to get the "current" shot from b2mddr.F --- we
+ran into a timing problem where:
+  old shotnumber: 8100
+  new shotnumber: 8101
+  current shotnumber: 8102
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2004.04.15
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+eirene_mc.F --- fix problem with repeat_first_call option (added a
+call to copy_background before the second call to eirsrt
+
+b2stbc.F --- conditioned some output in b2stbc_bas on diagno
+
+mod_wall.F & b2mod_sputter.F --- check for arrays dimensioned on the
+basis of $SOLPSTOP/src/include/DIMENSIONS.F being too small
+
+init_wall.F --- changes from Xavier
+
+other:
+------
+Some new material proprties files from Xavier
+
+Updated src/carre/in.F from Xavier
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2004.04.01
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+fix from Xavier for a problem related to stratum initialization in
+eirene_mc in the presence of a gas puff
+added initialiation to 0 for ext_* variables
+new 'tranprof' command in b2plot which writes the b2.transport.profile
+file for D, kyi and kye
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2004.03.25
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+Fixed overflow/underflow problems when converting from R8 to R4 in the
+plotting.
+Fixed a problem when the stdl got too long.
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2004.03.23
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+XPB:
+I've modified b2plot so one can get plots of the 3/2 and 5/2 flux
+components when they are available, i.e. for 'fna', 'fni', 'fne' and
+'fch', in both directions. In total that is 16 new plots, all in the
+form 'fnax32' of 'fchy52'. Should be helpful sometimes.
+
+DPC: had also added plotting of external sources [ex??] and mlt, mle,
+...
+
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2004.03.15
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+
+<<<<
+Hello David and Manoj,
+
+I attach four files, containing documentation describing all the code 
+updates I made to include the new 1-D target temperature time-dependent 
+model. I also included Roth's latest chemical sputtering formula from 
+the 11th EFPZ in Heraklion, and generalized the use of 
+'nesepm_overshoot' for flux feedback BCs from the core or the PFR 
+boundaries.
+
+The fourth file 'platemodel.doc' is a long text file (not Word!) with a 
+file-by-file listing of changes.
+The first file is an example of a B2PLOT command file that shows some of 
+the new capabilities.
+The second file is the output from the first one.
+The third file is a comparison of the values of the heat conductivity 
+for Graphite used in the 0-D model (the 1/(AT+B) formulation) and the 
+1-D model (the polynomial fit). I would feel more comfortable if they 
+were closer together! Manoj, can you please comment on this and maybe 
+suggest new fitting coefficients for either or both sets? Maybe we could 
+get an analytic 0-D solution using the polynomial fit so we don4t ask 
+for two fits?
+
+As far as Roth's formula is concerned, it basically makes the chemical 
+sputtering yield go down at about 1000K instead of 800K but steepens the 
+flux dependency at low and intermediate fluxes. This means that one sees 
+a small decrease of the chemical sputtering yield at constant flux, and 
+an increase at mid-range temperatures. The effect is however somewhat 
+marginal on B2 runs, with the possible exception of the consequences of 
+moving slightly the location of maximum chemical sputtering.
+
+The files can be found in:
+/afs/ipp/u/xpb/solps5.0_drifts/src/Braams/b2/src.local/
+/afs/ipp/u/xpb/solps5.0_drifts/data.local/
+/afs/ipp/u/xpb/solps5.0_drifts/src/bin.local/common/
+
+Please note that once we try to combine this with Eirene, the mod_wall.F 
+file may need to move up to $SOLPSTOP/src/include and need some 
+modifications.
+
+The issue of logarithmic spacing of the target 'slices' remains.
+
+The code can become significantly more unstable because of the thermal 
+evaporation term, which shoots up even faster than volume recombination. 
+I have met such crashes for most JET high-power cases I ran. I got away 
+from it by setting the plate thickness to 0.0 (the default) which 
+bypasses the whole target temperature model and sets the target surface 
+temperature to 'b2stbr_plate_temp', which usually means the cool end 
+temperature, in my case 400K. Other ways around it are to turn the 
+thermal evaporation term off, by setting 'b2stbr_therm_evap' to '0.0' in 
+b2mn.dat, or by setting the vaporization temperature low enough that the 
+maximum sublimation rate reached is not lethal. The latter can be done 
+by explicit tweaking of the 'Surface_properties.C' data file or in the 
+'b2.wall_save.parameters' namelist.
+
+Cheers,
+
+Xavier.
+>>>>
+
+<<< platemodel.doc
+
+Documentation related to the changes made in the period mid-February to mid-March 2004
+concerning to the 1-D time-dependent target temperature model
+
+Also includes the new Roth 11th EFPW Heraklion chemical sputtering formula
+
+********************  New or modified files:  *********************************
+
+----------- $SOLPSTOP/data.local:
+
+Bulk_properties.C
+Surface_properties.C
+
+----------- $SOLPSTOP/src/bin.local/common:
+
+2d_profiles
+mtv_3d
+
+----------- $SOLPSTOP/src/Braams/b2/src.local:
+
+additional_elements.F  b2mwti.F          fy.F               plotpatch.F              sumx.F
+ank.h                  b2news.F          graphics_vars.h    plottarget.F             surf.F
+ank_interface.F        b2plot.F          heatdiff1D.F       plot_wall_elements.F     targeton.F
+b2cdci.F               b2sral.F          init_page.F        plttarget.F              trgsumw.F
+b2cdf2mds.F            b2stbc.F          init_wall.F        pltwall.F                trgsurf.F
+b2mds.F                b2stbr.F          line.F             pne.F                    trgw.F
+b2mndr.F               caltraj.F         map_chords.F       process_chords_boxcar.F  trgz.F
+b2mndt.F               cont.F            mesh.F             process_chords.F         wallon.F
+b2mod_b2plot.F         copy.F            mod_wall.F         process_chord_slice.F    work.h
+b2mod_b2plot_help.F    dropstackbottom.F mstep.F            pswa.F                   
+b2mod_input_profile.F  flux.F            plot_chords.F      set_extralabel.F
+b2mod_sputter.F        fx.F              plotcontour.F      spect.F
+
+----------- $SOLPSTOP/src/Braams/b2/runs/.../run_directory:
+
+b2.wall_save.parameters
+tp3dl.last10
+tp3dr.last10
+tp3dtl.last10
+tp3dtr.last10
+
+=============================================================================================
+
+File by file description:
+=========================
+
+----------- $SOLPSTOP/data.local:
+
+Bulk_properties.name:
+---------------------
+Data file containing the bulk properties of the material 'name'. 
+Currently only Graphite available but will be expanded as data and time become available.
+Contains:
+
+'Graphite'          ! material long name (*32)
+2.26e3              ! mass density (Kg/m3)
+1.3e-5              ! parameter KA for fit of thermal conductivity : 1/(KA*T+KB)
+1.6e-3              ! parameter KB for fit of thermal conductivity : 1/(KA*T+KB)
+170.7               ! parameter A1 for fit of thermal conductivity : A1 + A2*T + A3*T**2 + A4*T**3
+-0.1680             ! parameter A2 for fit of thermal conductivity : A1 + A2*T + A3*T**2 + A4*T**3
+6.486e-5            ! parameter A3 for fit of thermal conductivity : A1 + A2*T + A3*T**2 + A4*T**3
+-8.854e-9           ! parameter A4 for fit of thermal conductivity : A1 + A2*T + A3*T**2 + A4*T**3
+1.47                ! parameter B1 for fit of heat capacity : B1 + B2*T - B3/T**2
+3.66e-4             ! parameter B2 for fit of heat capacity : B1 + B2*T - B3/T**2
+7.54e4              ! parameter B3 for fit of heat capacity : B1 + B2*T - B3/T**2
+
+The parameters KA and KB are used within the analytical solution of the 0-D temperature equation.
+Other parameters matter for the 1-D time-dependent temperature evaolution model.
+All units are MKS.
+
+Surface_properties.name:
+------------------------
+Data file containing the surface properties of the material 'name'. 
+Currently only Graphite available but will be expanded as data and time become available.
+Contains:
+
+'Graphite'          ! material long name (*32)
+1                   ! number of material constituents
+6                   ! atomic number of the material constituents (must all be on the same line!)
+1                   ! relative abundance of the material constituents (must all be integer)
+1.8                 ! chemical sputtering parameter erel
+0.9                 ! blackbody emissivity
+-40181.0            ! parameter A in the Vapor pressure : 10^(A/T+B)
+14.80               ! parameter B in the Vapor pressure : 10^(A/T+B)
+0.4                 ! sticking coefficient for vapor pressure calculation
+3400.0              ! vaporisation temperature (K)
+59.9e6              ! heat of sublimation (J/Kg)
+
+All units MKS.
+The constituent information is needed for the backscattering model.
+Erel is for chemical sputtering.
+Vapor pressure coefficients are for thermal evaporation, also used in the time-dependent target temperature model.
+Blackbody emissivity and heat of sublimation needed for target temperature time evolution.
+
+----------- $SOLPSTOP/src/bin.local/common:
+
+2d_profiles:
+------------
+Added treatment of the new tallies "tp3dl tp3dr" for SN cases and additionally "tp3dtl tp3dtr" for DN cases.
+These contains the surface target temperature profiles (in Kelvin).
+Modified the coding to not rescale by 1.602e-19 tallies in 'tp', as opposed to those in 'te' or 'ti'.
+
+mtv_3d:
+-------
+Modified the coding to not rescale by 1.602e-19 tallies in 'tp', as opposed to those in 'te' or 'ti'.
+Treats new time dependent tallies 'tpmxid tpmxad tpsepa tpsepi' containing the maximum and strike-point surface target temperatures (in Kelvin).
+
+----------- $SOLPSTOP/src/Braams/b2/runs/.../run_directory:
+
+b2.wall_save.parameters:
+------------------------
+New input/output B2 namelist containing data relevant to the target plate temperature model.
+
+tp3d(t)[l,r].last10:
+--------------------
+New output files from 2d_profiles containing the surface target temperature profiles (in Kelvin).
+Data for the corner points is copied from the neighboring real cells.
+
+----------- $SOLPSTOP/src/Braams/b2/src.local:
+
+GENERAL NOTES:
+Functions depending on target data are passed the target boundary cell index (denoted 'ibnd') and
+the different material properties are deducted from the ibnd-th value of the relevant arrays.
+'ibnd' is calculated by travelling along the mesh edge, starting in the North-West corner and going North,East,South,West. Corner cells, core boundary cells, dead cells, or diverted island core boundary cells are not included. We also assign a different segment number for each physically connected set of  wall cells. The mapping between (IX,IY) and (IBND) is kept in the XYMAP, IMPAX and IMPAY arrays.
+XYMAP(IX,IY).eq.0 means the (IX,IY) cell is not a wall cell.
+XYMAP(IX,IY).eq.IBNd meand the (IX,IY) cell is the (IBND)-th wall cell.
+Reversely, the IBND-th cell maps to (IMAPX(IBND),IMAPY(IBND)).
+The code reads/writes a new namelist 'b2.wall_save.namelist' containing these data.
+Some related additional tallies are produced.
+Two new stacks have been added to B2PLOT: a wall stack containing 1-D data along wall index, and a target stack containing 2-D data, where the first dimension is the wall index and the second is the depth profile within the target element. Both can be added to plots of B2 plasma data or plotted separately. Relevant matrix operations are included.
+
+mod_wall:
+---------
+New wall data module. Contains hard-coded NDEPTH value. Needs 'DIMENSIONS.F'.
+!!! May need to be shared with Eirene. !!!
+Contains new wall material properties and temperature data.
+Reads data from 'incatm' and 'Bulk_properties.[name]' and 'Surface_properties.[name]'.
+Geometry data:
+NBND = total number of wall cells.
+NSEGMENTS = total number of segments.
+NDEPTH = number of cell divisions inside the target segments.
+IMAPREG = maps a wall cell to its B2 'ireg' number.
+WALL_BEGIN = contains the wall cell index of the beginning of each segment. 
+WALL_END = contains the wall cell index of the end of each segment.
+Input/output data:
+TARGET_TEMP = array containing the 2-D target temperature information  
+BACKPLATE_TEMP = cooling temperature (default is given by the 'b2stbr_plate_temp' switch)
+PLATE_THICKNESS = target element thickness (default is given by the 'b2stbr_plate_thick' switch)
+PLATE_TIME_FACTOR = time multiplier for the temperature evolution in the target element (default 1.0)
+Other Output arrays:
+chemical_sputtering = Yield per species
+physical_sputtering = Yield per species
+physical_sputtering_energy = Yield per species
+RES_sputtering = Yield per species
+thermal_evaporation = Total evaporation flux 
+backscattering = Fraction per species
+backscattering_energy = Fraction per species
+
+b2stbr.F:
+---------
+Added 'drim' to list of arguments, passed down to 'b2stbr_phys' and 'b2stbr_bas'.
+Pass 'main_call' to 'b2stbr_phys' and 'b2stbr_bas'.
+Added wall data module.
+New 'plate_option' and 'plate_model' switches.
+Removed material property switches now passed through wall data module.
+Read plate meterial properties and target data namelist on first call.
+Compute target surface temperature accoding to 0-D (platemodel.eq.0) or 1-D time-dependent model (platemodel.eq.1).
+Update target plate temperatures on main_call.
+Store PSI yields for namelist, specifically zero out unused arrays.
+Turned off backscattering calculation for neutral species (should be handled via recycling model).
+Pass new set of arguments to PSI functions.
+Modified calls to 'chmsput' and 'resput' so that the yields are computed using the unscaled particle flux, so as to reproduce the correct flux dependence in cases with Eirene. The sputtering fluxes themselves are scaled instead.
+
+b2mod_sputter:
+--------------
+Store data read from 'incatm' data file.
+Commented out redundant diagnostic printout of TRIM tables.
+TRIM data only read once per run.
+Corrected formulae for reflected energy.
+Added 'ibnd' (wall boundary cell index) to the list of 'reflect' and 'reflect2' arguments.
+Checked for zero incident energy earlier in 'reflect' and 'reflect2' to avoid arithmetic errors.
+Added low energy extrapolation formula for reflection coefficients calculation.
+Diagnostics give incident energy in eV instead of Joules.
+Adapted list of arguments to 'rnion' calls.
+Added 'ibnd' (wall boundary cell index) to the list of 'chmsput' arguments.
+Modified 'chmsput' to follow new formula from Roth at 11th EFPW, Heraklion, 2003.
+Allowed user setting of 'erel' through 'matsurf_chemsput_erel(ibnd)'.
+Changed list of arguments to 'thermev'.
+Renamed 'heatdiff' to 'heatdiff0D' for the steady-state target surface temperature calculation.
+Allowed user setting of maximum target temperature through 'matsurf_vapor_temp(ibnd)'.
+Moved incident angle 'th' calculation in 'reion' to avoid jumping over it.
+
+init_wall.F:
+------------
+This new routine reads and writes the b2.wall_save.parameters namelist and fills in any needed extra 
+information.
+
+heatdiff1D.F:
+-------------
+New routine handling the time evolution of the target temperature profiles.
+Also computes target heat capacity, thermal conductivity, blackbody emission, and evaporation.
+
+mstep.F:
+--------
+New mathematical routine solving the 1-D heat transfer equation for the target elements.
+
+b2stbc.F:
+---------
+Generalized use of 'nesepm_overshoot' for the 'nesepm' and 'nesepm_pfr' particle flux feedback boundary condition schemes (BCCON=11). Made sure 'nesepm_overshoot' not used when 'nesepm' is used to set the density value in the core (BCCON=12). Changed core density feedback schemes (BCCON=11 or 12) to act on 'isfeedback', not 'ismain'.
+
+b2sral.F:
+---------
+Added argument 'dtim', passed on 'b2stbr'.
+
+b2mndt.F: b2news.F:
+-------------------
+Added 'dtim' to list of arguments in call to b2sral.
+
+b2mndr.F:
+---------
+Added call to 'wall_final' to write b2.wall_save.parameters at end of run, with reading of necessary input switches.
+
+b2mwti.F:
+---------
+Added time-dependent tallies 'tpmxip', 'tpmxap', 'tpsepi', 'tpsepa'.
+Added 3-D tallies 'tp3dl', 'tp3dr', 'tp3dtl', 'tp3dtr' (the corner cell values are copied from the neighbouring real border cells).
+
+b2mod_input_profile.F:
+----------------------
+Resized 'nrm' to DEF_NXD and 'nsm' to DEF_NSD. Now requires "DIMENSIONS.F".
+
+b2cdci.F:
+---------
+Added documentation for tanh model for ramping up drifts in core.
+Updated deocumentation for sputtering model switches including 1-D plate temperature model.
+
+b2mds.F:
+--------
+!!!NEED TO UPDATE MDSPLUS TREE DATA STRUCTURE!!!
+Streamlined calculations of ionization potentials.
+Added treatment of target plate temperature tallies. Includes:
+\TOP.SNAPSHOT.DIMENSIONS:NSW    = number of wall species: B2 + Eirene species.
+\TOP.SNAPSHOT.DIMENSIONS:NWALL
+\TOP.SNAPSHOT:TEXTWL            = name of wall species: B2 + Eirene species.
+\TOP.IDENT:WALL_SPECIES         = list of names of wall species: B2 + Eirene species.
+\TOP.SNAPSHOT.GRID:XYMAP
+\TOP.SNAPSHOT.GRID:IMAPX
+\TOP.SNAPSHOT.GRID:IMAPY
+\TOP.SNAPSHOT:WALL_TEMP
+
+b2cdf2mds.F:
+------------
+Added treatment of 'tp....' target plate temperature tallies.
+!!!NEED TO UPDATE MDSPLUS TREE DATA STRUCTURE!!!
+
+b2mod_b2plot.F:
+---------------
+Removed 'pot' and added b2mod_tallies.
+Added variables for wall stack and target stack treatments.
+
+graphics_vars.h:
+----------------
+Added variables for wall stack and target stack treatments.
+
+b2mod_b2plot_help.F:
+--------------------
+Added some new labels, functions, parameters.
+Reordered label list to match order in b2plot coding.
+Removed 'noofargs' array.
+Added new categories of wall labels, wall functions and target functions.
+Moved some pre-existing functions into these new categories. 
+Removed 'sputchee', 'thermee', 'sputrese', 'sputdiag'.
+Renamed 'platemp' to 'walltemp' and also available as default target stack with depth profile.
+See full documentation below.
+ 
+b2plot.F:
+---------
+Created wall species array 'textwl'.
+Use 'initialise_potentials' to compute 'pot' array.
+Read and initialize wall data from namelist.
+Compute basic wall stack quantities at start-up.
+Copy target temperature data into target stack and compute target geometry data at start-up.
+Initialize new target plot parameters and wall stack related variables.
+Stack now 5-D. (Added wall stack).
+Added new labels and functions, removed a few, see below for complete list.
+Corrected sign check for 'ln' function.
+Added 'Special' graphlabel after 'exp','sqrt','log' and 'ln' functions.
+Added 'nx' and 'ny' as arguments to 'flux' call.
+
+copy.F:
+-------
+Added routine 'wall_copy' to fill wall stack.
+Added routine 'data_copy' to top of the wall stack to the 'data' array.
+
+dropstackbottom.F:
+------------------
+Added routine 'dropwallstackbottom' to clear overfull wall stack.
+
+plottarget.F:
+-------------
+New routine plotting the 2-D target stack data.
+'sep' switch adds separating lines between wall segments.
+'outl' switch adds the outline of the target domain.
+'grid' adds the target domain grid.
+
+plot_wall_elements.F:
+---------------------
+New routine plotting the 1-D wall stack data.
+Plots will include separating lines between wall segments.
+
+plttarget.F:
+------------
+New routine plotting the 2-D target stack data on top of the 2-D matrix stack data plot.
+Valid for physical domain only.
+Same behaviour as plottarget.
+
+pltwall.F:
+----------
+Added input arguments 'nx,ny,physical'.
+Added diagnostics and corrected min-max calculation for label bar.
+Added PLPLOT compiler checks.
+Added drawing wall data in computational domain.
+
+pne.F:
+------
+Added new routine 'pwne' to divide wall stack data by electron density in boundary cells.
+
+pswa.F:
+-------
+New routine to divide wall stack data by wall area.
+
+set_extralabel.F:
+-----------------
+Added new routines 'set_wallbarlabel' and 'set_targetbarlabel'.
+
+sumx.F:
+-------
+Added new routines 'sumw' and 'intw' to add and integrate wall stack data by wall index.
+The integral is per individual wall segment.
+
+targeton.F:
+-----------
+New routine to turn on and off plotting of the target data along with the matrix data.
+
+trgsumw.F:
+----------
+New routines 'trgsumw' and 'trgintw' to add and integrate target stack data by wall index.
+The integral is per individual wall segment.
+ 
+trgsumz.F:
+----------
+New routines 'trgsumz' and 'trgintz' to add and integrate target stack data by depth index.
+ 
+trgw.F:
+-------
+New routine to plot target stack data profiles by wall index.
+ 
+trgz.F:
+-------
+New routine to plot target stack data profiles by depth index.
+ 
+wallon.F:
+---------
+Changed input argument name from linlog to ilog to avoid clashing with other definitions.
+Added wall_xpb entry to initialize wall plot data without reading in ANK data arrays.
+
+ank.h:
+------
+Parameter 'nlngdata' replaced with 'nwall' from mod_wall.
+Added wall_label to 'ank' common block.
+Added new common block 'target' containing target stack data and target elements positions.
+
+ank_interface.F:
+----------------
+Parameter 'nlngdata' replaced with 'nwall' from mod_wall.
+
+additional_elements.F:
+----------------------
+Must now pass "nx" and "ny" as arguments, passed down to pltwall and flux.
+'Wall' additional elements can now alose be plotted in computational domain.
+New 'target' additional element possible in physical domain only. Plots target 1-D data according to wall position and target thickness.
+
+fx.F:
+-----
+Log-x plots now possible.
+Added logical 'physical' argument to calls to 'init_page'.
+Checked and corrected value of 'lmin' for log plots.
+
+fy.F:
+-----
+Added logical 'physical' argument to calls to 'init_page'.
+Checked and corrected value of 'lmin' for log plots.
+Added routine 'plot_wallfile' to plot data from file along wall index.
+
+init_page.F:
+------------
+Added new argument 'physical'.
+Added wall module.
+Added capability of a target label bar for physical plots only.
+Special treatment when both a target and a wall label bar are needed.
+
+caltraj.F:
+----------
+Added (physical=.true.) argument to calls to 'init_page'.
+Copied wall stack data from plotted species into 'data' array. 
+Added 'nx,ny' to calls to 'additional_elements'.
+
+cont.F:
+-------
+Added logical 'physical' argument to calls to 'init_page'.
+Added argument 'is' to calls to 'plotcontour'.
+
+flux.F:
+-------
+Added (physical=.true.) argument to call to 'init_page'.
+Copied wall stack data from default species into 'data' array. 
+Added input arguments 'nx,ny' passed to 'additional_elements'.
+
+line.F:
+-------
+Added (physical=.false.) argument to calls to 'init_page'.
+
+map_chords.F:
+-------------
+Added (physical=.true.) argument to call to 'init_page'.
+Added default species argument to call to 'plotpatch'.
+Copied wall stack data from default species into 'data' array. 
+Added input arguments 'nx,ny' passed to 'additional_elements'.
+
+mesh.F:
+-------
+Added logical 'physical' argument to calls to 'init_page'.
+
+plot_chords.F:
+--------------
+Added (physical=.true.) argument to call to 'init_page'.
+Added input arguments 'nx,ny' passed to 'additional_elements'.
+
+plotcontour.F,plotpatch.F:
+--------------------------
+Added input argument 'is'.
+Log-x plots now possible.
+Copied wall stack data from plotted species into 'data' array. 
+Added input arguments 'nx,ny' passed to 'additional_elements'.
+
+process_chords_boxcar.F:
+------------------------
+Added (physical=.false.) argument to call to 'init_page'.
+
+process_chords.F:
+-----------------
+Added logical 'physical' argument to calls to 'init_page'.
+
+process_chord_slice.F:
+----------------------
+Added (physical=.false.) argument to call to 'init_page'.
+
+surf.F:
+-------
+Added logical 'physical' argument to calls to 'init_page'.
+Added species plotted argument to call to 'plotpatch'.
+
+work.h:
+-------
+Removed 'noofargs' array.
+
+spect.F:
+--------
+Renamed local variable 'cP' to 'cPP' ta avoid clashing with 'Cp' from 'mod_wall'.
+
+********************************** NEW B2PLOT FUNCTIONALITIES **************************************
+
+New 2-D (NX,NY) labels:
+-----------------------
+'za' : Ion charge (in addition to 'zi')
+'xymap' : XYMAP array.                  ! Mapping from (IX,IY) to wall index. 
+
+New matrix stack manipulation functions:
+----------------------------------------
+'logx'  : Logarithmic X scale plots.
+'linx'  : Linear X scale plots (default).
+'stow'  : Copies the values from the boundary cells of the data stack onto the wall stack.
+'xtow'  : Copies the values from a row of the data stack onto the wall stack. (Untested)
+'ytow'  : Copies the values from a column of the data stack onto the wall stack. (Untested)
+'idrop' : Drop top integer from integer stack.
+'idup'  : Duplicate top integer in integer stack.
+'rdrop' : Drop top real from real stack.
+'rdup'  : Duplicate top real from real stack.
+'target': Add plot of 2-D target data in physical domain.
+'trgoff': Turns off 2-D target data plotting. (default)
+
+New wall stack data labels:
+---------------------------
+'wallarea'	= 'Wall area (m^2)'			! from GS array
+'ei'      	= 'Incident energy (eV)'		! Ei = ti+za*pos
+'wallflux'	= 'Wall particle flux (s-1)'		! from FNA array plus correction for thermal neutrals
+'wallhflx'	= 'Wall heat flux (W/m^2)'		! from FHE+FHI+potential and kinetic energy contributions
+'r1'      	= 'Wall start R position (m)'		! going North-East-South-West
+'r2'      	= 'Wall end R position (m)'
+'z1'      	= 'Wall start Z position (m)'
+'z2'      	= 'Wall end Z position (m)'
+'walltemp'	= 'Wall surface temperature (K)'
+'plathick' 	= 'Plate thickness (m)'
+'cooltemp'	= 'Backplate temperature (K)'
+'vaprtemp'	= 'Vaporisation temperature (K)'
+'north'   	= 'North boundary'
+'south'   	= 'South boundary'
+'west'     	= 'West boundary'
+'east'    	= 'East boundary'
+'nseg'    	= 'Wall segment'			! Index of physically discontinuous wall segment
+'iwlt'    	= 'iwlt'				! Selects a range of wall indices
+'iweq'    	= 'iweq'
+'iwgt'   	= 'iwgt'
+'iswlt'   	= 'iswlt'
+'isweq'   	= 'isweq'
+'iswgt'   	= 'iswgt'
+'ibnd'    	= 'ibnd'				! Wall index
+'walldist'	= 'Distance along wall (m)'		! Integrated starting in North-West corner
+'wallngth'	= 'Wall length (m)'			
+'sput'    	= 'Physical sputtering yield'
+'sput2'   	= 'Physical sputtering energy yield'
+'sputchem'	= 'Chemical sputtering yield'
+'thermev' 	= 'Thermal Evaporation Fluxes (/m2/s)'
+'sputres' 	= 'RES sputtering yield'
+'backscat'	= 'Backscattering fraction'
+'backscae'	= 'Backscattering energy fraction'
+'imapx'   	= 'imapx'				! Mapping from wall index to IX
+'imapy' 	= 'imapy'				! Mapping from wall index to IY
+'kappa_a' 	= 'Kappa A factor (1/AT+B) (m/W)'
+'kappa_b' 	= 'Kappa B factor (1/AT+B) (m.K/W)'
+'kappa_a1'	= 'Kappa A1 polynomial factor (W/m/K)'	! Kappa=A1+A2*T+A3*T**2+A3*T**3
+'kappa_a2'	= 'Kappa A2 polynomial factor (W/m/K^2)'
+'kappa_a3' 	= 'Kappa A3 polynomial factor (W/m/K^3)'
+'kappa_a4'	= 'Kappa A4 polynomial factor (W/m/K^4)'
+'tgdns'   	= 'Bulk target density (kg/m^3)'
+'cp_b1'   	= 'Heat capacity B1 factor (J/kg/K)'	! Cp=B1+B2*T-B3/T**2
+'cp_b2'   	= 'Heat capacity B2 factor (J/kg/K^2)'
+'cp_b3'  	= 'Heat capacity B3 factor (J.K/kg)'
+'erel'    	= 'Chemical sputtering factor erel'
+'bbdyemis'	= 'Blackbody emissivity'
+'vapprs_a'	= 'Vapor pressure A factor (K)'		
+'vapprs_b'	= 'Vapor pressure B factor'
+'vapprs'  	= 'Vapor pressure (Pa)'			! = 10**(A/T+B)
+'qevap'   	= 'Energy lost by vaporisation (J/m^2/s)'
+'qrad'    	= 'Energy lost by blackbody radiation (J/m^2/s)'
+'stckcoef'	= 'Sticking coefficient'
+'sublheat'	= 'Heat of sublimation (J/kg)'
+
+New wall stack functions:
+-------------------------
+'wall'	   = Turns on plotting wall data alongside (NX,NY) matrix data
+'wall_ank' = Old ANK treatment (unchanged)
+'logw'     = Plots wall data on log scale (unchanged) 
+'linw'     = Plots wall data on linear scale (unchanged, default)  
+'plwl'	   = Plots wall data versus wall index and distance along wall
+'sumw'     = Sum over wall indices
+'intw'     = Integrates along wall index, separate integral for each wall segment
+'pswa'     = Divide wall data by wall area
+'wabs'     = Absolute value of value data
+'ddw'      = Derivative along wall distance (does not cross segment boundaries)
+'wsumz'    = Sum wall data over species
+'pwne'     = Divide wall data by electron density in boundary cell
+'wm+'      = Add two wall stack arrays
+'wm-'      = Substract two wall stack arrays
+'wm*'      = Multiply two wall stack arrays
+'wm/'      = Divide two wall stack arrays
+'rwm+'     = Add a real to the wall stack array
+'rwm-'     = Substract a real from the wall stack array
+'rwm*'     = Multiply the wall stack array with a real
+'rwm/'     = Divide the wall stack array by a real
+'rwm**'    = Take the wall stack array to a real power
+'wdrop'    = Drop the top wall stack array
+'wdup'     = Duplicate the top wall stack array
+'wswap'    = Swap the two top wall stack arrays
+'wover'    = Leapfrog the two top wall stack arrays
+'wsel'     = Choose the value from one wall index
+'wzsel'    = Choose the value from one species
+'wmmin'    = Take the minimum between two wall stack arrays
+'wmmax'    = Take the maximum between two wall stack arrays
+'rwmmi'    = Take the minimum between the wall stack array and a real
+'rwmma'    = Take the maximum between the wall stack array and a real
+'wlog'     = Take the log base 10 of the wall stack array
+'wln'      = Take the natural log of the wall stack array
+'wsqrt'    = Take the square root of the wall stack array
+'wexp'     = Take the exponential of the wall stack array
+'wzrng'    = Choose a range of species within the wall stack array
+'wchs'     = Change the sign of the wall stack array
+'wtos'     = Copy the wall stack array onto the (NX,NY) data stack (inner cells get 0)
+'wpos'     = Is the wall stack array positive?
+'wsaw'     = Reads external data onto the wall stack
+'wallf'    = Loads an external wall data file 
+'outpw'    = Prints output from the wall stack array
+'wprt'     = Prints the content of the wall stack array to a file
+'wlld'     = Old ANK wall loading (unchanged)
+'woff'     = Turns off plotting of wall data
+
+New target stack functions:
+---------------------------
+'logtrg'   = Plots target data on log scale
+'lintrg'   = Plots target data on linear scale (unchanged, default)
+'trg.w'    = Plots target data along wall index
+'trg.z'    = Plots target data along depth index
+'sumtrgw'  = Sum target data along wall index
+'sumtrgz'  = Sum target data along depth profile
+'inttrgw'  = Integrates along wall index, separate integral for each wall segment
+'inttrgz'  = Integrates along depth profile
+'trgddw'   = Derivative along wall distance (measured at target surface, does not cross segment boundaries)
+'trgddz'   = Derivative along depth profile
+'rtrgm+'   = Add a real to the target stack array
+'rtrgm-'   = Substract a real from the target stack array
+'rtrgm*'   = Multiply the target stack array with a real
+'rtrgm/'   = Divide the target stack array by a real
+'rtrgm**'  = Take the target stack array to a real power
+'trgdrop'  = Re-initialize target array (to contain target temperature array)
+'trgtemp'  = Load target temperature array into target array
+'trgwsel'  = Choose the value from one wall index
+'rtrgmmi'  = Take the minimum between the target stack array and a real
+'rtrgmma'  = Take the maximum between the target stack array and a real
+'trglog'   = Take the log base 10 of the target stack array
+'trgln'    = Take the natural log of the target stack array
+'trgsqrt'  = Take the square root of the target stack array
+'trgexp'   = Take the exponential of the target stack array
+'trgchs'   = Change the sign of the target stack array
+'trgtow'   = Copy the surface values of target array onto the wall stack
+'trgpos'   = Is the target stack array positive?
+'outptrg'  = Prints output from the target stack array
+'trgprt'   = Prints the content of the target stack array to a file
+'trgl'     = Old ANK target loading (unchanged)
+'trgsurf'  = Surface plot of the target stack
+'kappa_ab' = Load the target heat conductivity computed as Kappa=1/(AT+B) onto the target array
+'kappa'    = Load the target heat conductivity computed from polynomial fit onto the target array
+'dkappadt' = Load the temperature derivative of the target heat conductivity computed from polynomial fit onto the target array
+'cp'       = Load the target heat capacity onto the target array
+
+New parameters:
+---------------
+'trgxmin' = Xmin used whn plotting target data
+'trgxmax' = Xmax used whn plotting target data
+'trgymin' = Ymin used whn plotting target data
+'trgymax' = Ymax used whn plotting target data
+'trgrmin' = Rmin used whn plotting target data
+'trgrmax' = Rmax used whn plotting target data
+'trgzmin' = Zmin used whn plotting target data
+'trgzmax' = Zmax used whn plotting target data
+'trgfmin' = Fmin used whn plotting target data
+'trgfmax' = Fmax used whn plotting target data
+'trgomin' = Omin used whn plotting target data
+'trgomax' = Omax used whn plotting target data
+
+New string functions:
+---------------------
+'wallblbl' = Set wall bar label
+'trgblbl'  = Set target bar label
+'glbl'     = Overwrite matrix stack graph label
+'wlbl'     = Overwrite wall label
+'tlbl'     = Overwrite target label
+
+>>>>
+
+other:
+------
+see section "b2.5" above
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2004.03.15
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+Added the saving and plotting of external sources.
+newversion='01.001.013'
+Affected routines:
+  b2plot.F
+  b2mod_version.F
+  b2mod_input_profile.F
+  b2mod_sources.F
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2003.11.25
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+changed the definition of pit in choed.F to use bb_3 in the
+denominator instead of bb_2
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2003.11.13
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+changed b2fu to write the same version of the output file as the input
+file
+  --- this fixed a problem when reading b2fplasmf files from Sergei
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2003.10.31
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+fixed some oddities in b2stbc with the new spatially dependent
+facdrift and fac_ExB (thanks XPB)
+updated some changes from Xavier
+
+XPB:
+I did find a work-around for the restart effect happening when the values in
+DIMENSIONS.F are changed ans sputtering is turned on. Now, B2STBR writes
+only non-zero individual elements of the SPUTTER_YIELD arrays in the
+b2.sputter_save.parameters file.  The namelist now also includes the
+variables NX_SP, NY_SP and NS_SP, which are the declared dimensions of the
+SPUTTER_YIELD arrays. The b2.sputter_save.parameters file is still in
+namelist format (so no version number change needed) but much more
+human-readable now, as well as about a tenth of its previous size!
+
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2003.10.30
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+implemented the use of a spatially varying fac_ExB and facdrift
+via new b2mn.dat flags
+  'b2news_facdrift_tanh_a', 'b2news_facdrift_tanh_b', 
+  'b2news_facExB_tanh_a', 'b2news_facExB_tanh_b'
+sepcifying the position and shape of the transition using a formula of
+the form
+  0.5*(1+tanh((x-a)/b))
+where x = distance to the separatrix at position iy = 'b2news_fac_ref'
+or via the older flag 'b2news_iy_nocoreExB'
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2003.10.29
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+switched facdrift and fac_ExB from scalars to grid arrays, allowing
+for the possibility for switching off the drifts smoothly as one moves
+to the core
+incremented the version number so that the two new arrays are saved in
+b2fplasma and modified b2plot so that they can be plotted
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2003.10.15
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+fixed bug in cdfmovie where ne was being saved under the label 'na'
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2003.09.23
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+Thanks, so, in a place that didn't matter,fortunately. I have now run my
+16x24 (D-only) JET case with all the bells and whistles I could think
+of, simultaneously and in full debug mode, i.e.: ExB drifts,
+diamagnetics drifts, parallel or 21-moment viscosity, perpendicular
+viscosity, new_df0 neutral transport, first flight model, ion_neutral
+friction term, neutral flux limits, ballooning transport model, PFR
+transport rescaling.
+The code does run! Whether the results make sense is irrelevant here ;-)
+The only problem the debugger gave me was with the PFR transport
+rescaling, because the topcut(:), rightcut(:), bottomcut(:) and
+leftcut(:) arrays did not have all their values defined (important for
+topcut and the first two values must be defined for the others for the
+test identifying if one is in a double-null PFR). The default values are
+assigned and calculated in B2AG, but no carried over in the B2FGMTRY
+file, not they need be. I fixed the problem by adding the default
+definitions in alloc_b2mod_indirect as follows:
+
+       bottomcut=nyd+1
+       topcut   =-2
+       rightcut =-2
+       leftcut  =nxd+1
+
+See
+/afs/ipp/u/xpb/solps5.0_drifts/src/Braams/b2/src.local/b2mod_indirect.F .
+
+I also cleaned up and removed my src.local.modules directory, and went
+back to a formulation much closer to yours, and corrected the local
+version of my Makefile accordingly. I checked it all works fine.
+
+Now, I do not expect any of the changes we made in the last two days
+could explain Fabio's crashes (unless his compiler did really strange
+things), so I hope we'll hear something new from him on that.
+
+Cheers,
+
+Xavier.
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2003.09.22
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+[also one occurrence in b2tfch]
+
+Hello David and Fabio,
+
+I looked into this problem this morning by creating myself a 16x24 JET
+case, which I also tested with and without b2.boundary.parameters and
+b2.transport.inputfile files. All I could find (but I did find
+something), was in b2sihs.F. There, one finds six occurences of
+"topiy(iy,iy)", which should of course all be corrected to
+"topiy(ix,iy)". Please make the appropriate changes in your versions.
+Since this applies to the heat sources on the North boundary and that,
+for "normal" cases topiy(iy,iy) = topiy(ix,iy), I don't expect the fix
+will change anything to old runs with nx>=ny. If this fix does not solve
+Fabio's problem, can you please send me the b2ag.dat, b2mn.dat and other
+input files you are using so I can test your case?
+
+Cheers,
+
+Xavier.
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2003.08.29
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+Added 'b2stbc_nesepm_overshoot' so that the feedback gas puff is
+switched off if the density rises above
+'b2stbc_nesepm_overshoot'*'b2stbc_nesepm_sol'
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2003.08.28
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+a. introduced a way of specifying a minimum and maximum cfdf0 in
+   b2tqna (under some circumstances the D based on neutrals can become
+   larger than 1e6)
+   [b2tqna_min_df0 b2tqna_max_df0]
+b. fixed a problem where, with power feedback switched on for SN
+   cases, the power was also introduced at the inner target (by
+   conditioning on ncut>=2)
+c. added b2stbc_sna, _smo, _she, _shi and _sch to b2fplasma
+   (increasing the version number) and to b2plot (bcna .. bcch)
+d. introduced the ability to stop when residuals drop below a
+   specified value (from Kim's interpretive version)
+   ['b2mndr_min_areshe' 'b2mndr_min_areshi' 'b2mndr_min_aresco']
+e. introduced the possibility of automatically adjusting the time step
+   [delta_min dt_change_inc delta_max dt_change_dec]
+f. feedback energy boundary condition with a shared Te and Ti at the
+   boundary (type 17)
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2003.07.30
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+Fixed a problem where a "burst" in the residuals appeared after some
+time when restarting a well converged run by calling restart_ma28 in
+b2news just before solving the potential equation for the first time.
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2003.06.02
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+large number of changes from Xavier:
+
+			      ..ooOOoo..
+
+Subject: New PSI features in B2.5
+Date: Wed, 12 Feb 2003 17:38:01 +0100
+From: Xavier Bonnin <xpb@ipp.mpg.de>
+Organization: Max-Planck-Institut fuer Plasmaphysik
+To: David Coster TOK <dpc@ipp.mpg.de>, d.reiter@fz-juelich.de,
+hoganjt@ornl.gov
+CC: mow@ipp.mpg.de, rfs@ipp.mpg.de
+
+Hello Dave,
+
+Here's some more detail on what Manoj and I have been up to. We have
+implemented the following:
+- An empirical physical sputtering yield formula that can be used when
+TRIM data is unavailable or not desired. The physical dependencies of
+the empirical formula are also used when extrapolating TRIM data at low
+and high energies.
+- An empirical formula for the chemical sputtering yield, which can be
+used instead of the constant model with low-energy cut-off we used to
+have.
+- An empirical formula for RES (Radiation Enhanced Sublimation).
+- An empirical formula for thermal evaporation of the plate material.
+- The ability in b2plot and through scripts to diagnose these processes.
+- A systematic use (at the East and West boundaries) of the sheath
+potential computed by the code, used instead of the simple 3.0*Te
+estimate (also used for the default chemical sputtering cut-off formula).
+- Inclusion in the energy sources of the thermal energy carried back by
+the sputtered or evaporated carbon. Also, when TRIM data is present, use
+of the "??.ye" tables to get the fraction of the incident energy carried
+back into the plasma. If the "??.ye" is not present, the sputtered
+particles are considered to come back cold (this can be changed to them
+having thermal energy at the plates). Recycled neutrals also carry back
+into the plasma at least the thermal energy they were born with (should
+help avoid ice-cold plasmas).
+- Computation of a surface temperature for each plate mesh element,
+using a simple 1-D diffusion model, assuming a user-given plate
+thickness and coolant temperature. This is needed for computing all
+processes above (except physical sputtering for now).
+
+The empirical formulae are quite detailed and complex, and include a
+flux dependence for the chemical sputtering at high flux, as well as
+incident energy, incident angle, projectile/target mass ratios
+dependencies, etc... Full references are given in the code. Manoj and I
+tested these formulae extensively, even finding some mistakes and
+smoothing out an unphysical resonance at threshold, so the degree of
+confidence in them can be quite high. Care was taken that the formulae
+vary continuously over the appropriate energy, flux and angle ranges.
+
+The default parameters are for Graphite, but Manoj gave lists for
+several over materials. The default model is a plate temperature
+maintained at 300K, but this is changeable through the switches
+'b2stbr_plate_temp' and 'b2stbr_plate_thick'. We pulled these numbers
+out of thin air and the appropriate numbers for JET or AUG or ITER
+parameters would be welcome.
+
+This new code has been tested using my JET multi-fluid with drifts power
+scan, going from Pcore of 2MW to 8MW and all runs are behaving nicely in
+that respect. A "do no harm" test on runs without Carbon and with Carbon
+but with Manoj's formulas turned off shows the expected behaviour (very
+little change if any, due to the sheath acceleration being properly
+accounted for by species).
+
+Overall, we see that thermal evaporation and RES are completely
+negligible, except where we have very high heat flux spikes (several
+MW/m2). Manoj's formula for chemical sputtering tends to give about as
+large carbon fluxes into the plasma that my old assumption of a
+constant 1 to 2% level. The empirical physical sputtering yields are
+comparable to the TRIM data. The fact that now multiply charged ions
+feel a sheath acceleration multiplied by Za(is), while neutrals feel no
+acceleration (as opposed to all species feeling a 3.0*Te energy
+increase) changes where the sputtering comes from and which species
+contribute most. Neutrals tend to now be below threshold and cause
+little physical sputtering (but can still be dominant players for
+chemical sputtering). The dominant cause of physical sputtering tends to
+be C+3 and C+4 which have high incident energy because of the large
+charge and are still present in large enough numbers in front of the
+plates to carry significant particle influxes.
+
+The new or modified code inputs are as such:
+(Note the extended meaning of "b2stbr_sput_frc", "b2stbr_sput_phys", and
+"b2stbr_sput_phys_col").
+
+*    'b2stbr_sput_chem_model'   '0'                    Physics
+*    'b2stbr_sput_phys_model'   '1'                    Physics
+*    'b2stbr_sput_res'          '0.0'                  Physics
+*    'b2stbr_therm_evap'        '0.0'                  Physics
+*    'b2stbr_sput_dst'          '2'                    Physics
+*    'b2stbr_sput_frc'          '0.0'                  Physics
+*    'b2stbr_sput_phys'         '0.0'                  Physics
+*    'b2stbr_sput_src'          '1'                    Physics
+*    'b2stbr_sput_phys_col'     '3'                    Physics
+*    'b2stbr_plate_temp'        '500.0'                Physics
+*    'b2stbr_plate_thick'       '0.02'                 Physics
+*    'b2stbr_plate_kfall'       '1130.0'               Physics
+*    'b2stbr_plate_ka'          '122.0'                Physics
+*    'b2stbr_vappr_a'           '-40181.0'             Physics
+*    'b2stbr_vappr_b'           '14.80'                Physics
+*    'b2stbr_stick_coef'        '0.4'                  Physics
+*    Sputtering model switches. See the code in b2stbr and the
+*    b2mod_sputter module for specific implementation details and
+references.
+*    The default values represent the case of Graphite plates.
+*    Sput_src is the atomic number of the plasma species which cause
+chemical
+*    sputtering.
+*    Sput_dst is the species index of the destination species produced
+by
+*    chemical sputtering, RES and thermal evaporation.
+*    Sput_phys_model is a switch for choosing between the TRIM tables
+*    (model 1) or an empirical formula (model 0). When TRIM data is not
+*    available, the empirical formula is automatically used.
+Extrapolations
+*    of low and high energy ranges beyond the TRIM table data is done
+using
+*    the same physical dependencies as the empirical formula.
+*    Sput_chem_model is a switch for the chemical sputtering model used.
+*    If sput_chem_model.eq.0, the empirical formula is used.
+*    If sput_chem_model.eq.1, a constant with a low energy cut-off is
+used.
+*    For model 0, sput_frc is a multiplier to the empirical formula,
+while
+*    for model 1, sput_frc is the constant chemical sputtering yield.
+*    Sput_phys turns on physical sputtering when sput_phys.gt.0.0 and
+*    contains a (real) multiplier for the physical sputtering rate
+looked
+*    up in the TRIM tables.
+*    sput_phys_col indicates which column to use in the TRIM table; the
+*    default (3) corresponds to 30 degrees incidence.  The columns are
+for
+*      0  15  30  45  55  65  75  80  85
+*    degrees. This angle is also used in the empirical formula.
+*    Plate_temp is the temperature (in Kelvin) of the COOLED end of the
+*    divertor plates. The surface temperature is computed
+self-consistently
+*    (using a 1-D description) according to the incident heat fluxes
+from
+*    the plasma. The plate is assumed to have a thickness of
+plate_thick,
+*    measured in meters.
+*    The plate material heat conductivity is fitted to an exponential,
+where
+*    the parameter plate_ka is a multiplier and the parameter
+plate_kfall
+*    is the exponential fall-off. Only Graphite is currently available.
+*    Sput_res turns on radiation enhanced sublimation (RES) when .gt.0.0
+and
+*    is a multiplier to the RES rate.
+*    Therm_evap turns on thermal evaporation when .gt.0.0 and is a
+*    multiplier to the thermal evaporation rate.
+*    The vapor pressure of the plate material is computed using a
+parameter
+*    fit, with the following examples (see b2mod_sputter for details):
+*    (note that A and B are provided such that the vapor pressure is
+*     given in Pascals)
+*    Plate Material    |  A       |  B      |
+*    ------------------+----------+---------|
+*    Aluminum          | -16165   | 10.91   |
+*    Beryllium         | -16720   | 11.61   |
+*    Graphite          | -40181   | 14.80   |
+*    Copper            | -17079   | 11.26   |
+*    Molybdenum        | -33069   | 12.02   |
+*    Titanium          | -23340   |  9.79   |
+*    Tungsten          | -44485   | 12.74   |
+*    Titanium Carbide  | -39117.9 | 15.23   |
+*    Stainless Steel   | -14321.9 |  9.44   |
+*    Stick_coef is the sticking coefficient of the material, and is
+*    typically 0.6-0.9 for metals, 0.05 for C_3 molecules and 0.4 for C.
+
+To avoid some nasty blowing up terms, there is a hidden parameter which
+is the maximum allowed plate temperature (currently set to 2600 K) in
+subroutine heatdiff from b2mod_sputter, to avoid reaching sublimation
+temperatures, causing Carbon blooms and diverging thermal evaporation
+fluxes.
+Another adjustable parameter (for chemical sputtering) depends on doping
+of the graphite plates, and we chose as the default a middle-range
+value (in subroutine chmsput from b2mod_sputter), the argument being the
+in AUG there should be some W that has wandered to the divertor. A
+similar argument could be made in JET for B doping, for example.
+       erel = 1.5e0_R8    ! erel =1.8 (for pure Graphite);
+                          !      =1.5 (for Si,Ti,W doped graphite)
+                          !      =1.2 (for B doped graphite)
+
+The relevant code is to be found in:
+/afs/ipp/u/xpb/solps5.0_drifts/src/Braams/b2/src.local
+/afs/ipp/u/xpb/solps5.0_drifts/src/Braams/b2/src.local.modules
+
+The files involved are:
+b2mod_sputter.F
+b2mod_constants.F
+b2mod_b2plot_help.F
+b2stbr.F
+b2sral.F
+b2plot.F
+b2cdci.F
+
+I also modified b2news.f, b2tlh0.F and b2tfnb.F to lower the amount of
+output they produce.
+
+An extra datafile "incatm" containing a table of sublimation energies
+and mass densities is at:
+/afs/ipp/u/xpb/solps5.0_drifts/data.local
+In the case of TRIM data being used, the sublimation energy and target
+density is read from the TRIM file instead.
+
+Some new and improved scripts for sputtering effects in:
+/afs/ipp/u/xpb/solps5.0_drifts/src/bin.local/common
+resall_H*
+sputter*
+sputter_energy*
+sputter_chemical_energy*
+sputter_physical_energy*
+sputter_RES*
+sputter_RES_energy*
+thermal_evaporation*
+thermal_evaporation_energy*
+
+The command "sput" in b2plot was slightly modified (see the code), and
+we added "sput2" (energy sputtering yield), "sputchem", "sputchee",
+"thermev", "thermeve", "sputres", "sputrese", "platemp" and "sheath",
+which all work under the same principle of printing the desired quantity
+in a user-specified input file, and where the other parameters (if any)
+are the sputtered material, the chemically reactive species, and the
+name of the incident species. The names correpond to:
+sputchem = chemically sputtered flux due to species (is)
+sputchee = energy flux carried by chemically sputtered particles due to
+species (is)
+thermev = the thermal evaporation flux
+thermeve = the energy flux carried by the thermally evaporated particles
+sputres = the RES sputtered flux
+sputrese = the energy flux carried by the RES sputtered particles
+platemp = the plate surface temperature per mesh element (in Kelvin)
+sheath = the sheath potential drop in that mesh boundary cell
+
+Comments and further suggestions are welcome,
+
+Cheers,
+
+Xavier.
+
+			      ..ooOOoo..
+
+Subject: B2MWTI changes
+Date: Thu, 13 Mar 2003 17:54:39 +0100
+From: Xavier Bonnin <xpb@ipp.mpg.de>
+Organization: Max-Planck-Institut fuer Plasmaphysik
+To: David.Coster@jet.efda.org
+CC: David Coster TOK <dpc@ipp.mpg.de>
+
+Hello David,
+
+I got back home to Greifswald yesterday with no problems.
+
+I did find out that the machine on my desk at work had decided to commit
+suicide while I was away, though (it's only the power supply, and we
+should get the CPU back tomorrow from the repair shop).
+
+When doing my usual start-up routine, I saw you had modified b2mwti.F to
+include the total energy fluxes. These changes don't compile with the
+NO_CDF option because the IS variable must be declared outside the
+NO_CDF block. I also noticed that you did not include the kinetic energy
+fluxes in the total energy fluxes. Maybe because they're small, or maybe
+because they're a pain to compute as we need the velocity on the
+appropriate cell faces. I took it upon myself to recode the fet[xy][ia]p
+calculations accordingly, including the kinetic terms, computed with an
+interpolated velocity to the cell faces, where the interpolation is
+based on the cell width (or height). Please have a look at your leisure in:
+/afs/ipp/u/xpb/solps5.0_drifts/src/Braams/b2/src.local/b2mwti.F
+
+Cheers,
+
+Xavier.
+
+			      ..ooOOoo..
+
+Subject: Version 01.001.010!
+Date: Fri, 28 Mar 2003 18:34:46 +0100
+From: Xavier Bonnin <xpb@ipp.mpg.de>
+Organization: Max-Planck-Institut fuer Plasmaphysik
+To: David Coster TOK <dpc@ipp.mpg.de>
+
+Hello David,
+
+I've been busy again trying to get some more little ideas into the code.
+Part of this is from discussions with Detlev, part with you at JET for
+the EDGE2D benchmarking affort.
+
+The main thrusts are:
+- After some discussions with Detlev, Manoj and Ralf, we agreed that we
+should include a backscattering model for non-recycling species, using
+the TRIM data tables as our basis. I have now implemented this, where
+backscattering will happen, by default, at all boundaries (except core
+and island center) and for all non-hydrogenic species where both
+particle and energy recycling coefficients are set to zero, against a
+wall of the material given by "sput_dst". In practice, this means
+backscattering of C on C (and also possibly some He on C). Overall, the
+effect is quite small, and only adds a small fraction to the fluxes
+already seen through sputtering. Energy backscattering is also included,
+of course.
+
+- I also discussed with Detlev the issue of Eirene-facelift. We agreed
+that what B2 needs to pass to Eirene is the total drift velocities, so I
+modified the code to do this (hence the version number change). Eirene
+will also eventually want the electric potential, so I took some steps
+towards that, but commenting out the crucial last step of actually
+writing it to fort.44. This meant changes to BRAEIR.F and BRAEIR.H.
+Detlev also said that Eirene-facelift was coming to completion, and that
+the last issue to settle before it was ready to couple with SOLPS was to
+re-unify the different versions of INFCOP he had into a single one. He
+suggested that one should spend about two weeks with him on coupling
+SOLPS and Eirene-facelift, but not before mid-april, as he'll be busy
+with his lamp contract until then.
+
+- Lastly, I also put some work into figuring out how to get the neutral
+flux absorbed on the core boundary by Eirene back into B2 and feed it
+back as an ion flux through the core boundary. I was not willing to use
+the actual Eirene arrays for this, since this would require the user to
+add non-standard diagnostics to the input.dat file, but noticed that
+Kukushkin was already extracting this information and storing it in his
+wldna, wldnm, wldra and wldrm arrays. With this, I was able to add a new
+option 'eirene_ionizing_core' which, when set to '1', takes the total
+flux for each atom and molecule crossing the core boundary and feeds it
+back as a particle source of the appriopriate stripped ions (I assumed
+molecules break up and atoms fully strip while in the core).
+Unfortunately, the fluxes given are integrated over the whole surface,
+so I could not do any "local" recycling, but rather did the refueling
+using a constant flux density. However, one can argue that there is
+sufficient redistribution in the core to make this a reasonable
+assumption. Also, because the Kukushkin arrays changed meaning according
+to whether the code was compiled with or without NO_FORT10 (AARGH!),
+i.e. there were broken up per stratum or all elements just gave the
+total value for all strata (again AARGH!), I had to assume the worst
+case and could not do the refuelling per stratum, which also means that
+this new option cannot be used simultaneously with Andrei's source
+scaling. The code checks for this.
+
+The files are in their usual location.
+
+Cheers,
+
+Xavier.
+
+			      ..ooOOoo..
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+2003.05.30
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+added new flags 'b2tlh0_flux_limit_min_ti' and
+'b2tfnb_flux_limit_min_ti' which specify the minimum ion temperature
+to be used in the flux limiters
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+2003.05.13
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+New b2mn.dat flag 'eirene_use_recyceir' to force the use of the
+speicies dependent recyc rather than the default recyceir in eirene_mc
+(which was the state before the addition of the kukushkin rescaling
+option)
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2003.04.18
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+Introduced a new transport routine in b2tqna.F
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2003.04.15
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+Hi David,
+
+Here are the changes that Ralf and I made in b2tfnb.F to re-include the
+ExB particle flows. In general, the effect is quite noticeable in drift
+runs, as one would expect, but the stability of most JET runs has not
+been compromised by this new terms (I have a few outliers, and the jury
+is still out about the C-Mod runs). On the C-Mod runs, the change makes
+the inverted runs a lot more stable, but destabilizes the normal
+direction runs.
+
+The changes are:
+
+*** b2tfnb.F    2003-04-14 09:56:22.000000000 +0200
+--- b2tfnb.F~   2003-03-14 13:18:59.000000000 +0100
+***************
+*** 302,308 ****
+        1    abs(bb(ix,iy,2)/bb(ix,iy,3)+
+        2    bb(leftix(ix,iy),leftiy(ix,iy),2)/
+        3    bb(leftix(ix,iy),leftiy(ix,iy),3))/2.0_R8
+!      4   *(ubdia(ix,iy,0)+ubdia(leftix(ix,iy),leftiy(ix,iy),0))/2.0_R8*
+        5    0.5_R8*(vol(ix,iy)/hx(ix,iy)
+        6    +vol(leftix(ix,iy),leftiy(ix,iy))/
+        7    hx(leftix(ix,iy),leftiy(ix,iy)))
+--- 302,308 ----
+        1    abs(bb(ix,iy,2)/bb(ix,iy,3)+
+        2    bb(leftix(ix,iy),leftiy(ix,iy),2)/
+        3    bb(leftix(ix,iy),leftiy(ix,iy),3))/2.0_R8
+!      4    *(vbdia(ix,iy,0)+vbdia(leftix(ix,iy),leftiy(ix,iy),0))/2.0_R8*
+        5    0.5_R8*(vol(ix,iy)/hx(ix,iy)
+        6    +vol(leftix(ix,iy),leftiy(ix,iy))/
+        7    hx(leftix(ix,iy),leftiy(ix,iy)))
+***************
+*** 365,372 ****
+            conb(ix,iy,1) = 0
+           else
+            flo = cvlb(ix,iy,1)+
+!      5    0.5_R8*(ubdia(ix,iy,1)*vol(ix,iy)/hy(ix,iy)
+!      6     +ubdia(bottomix(ix,iy),bottomiy(ix,iy),1)*
+        *      vol(bottomix(ix,iy),bottomiy(ix,iy))
+        7      /hy(bottomix(ix,iy),bottomiy(ix,iy)))
+            con = hybr(flo,cdnb(ix,iy,1))
+--- 365,372 ----
+            conb(ix,iy,1) = 0
+           else
+            flo = cvlb(ix,iy,1)+
+!      5    0.5_R8*(vbdia(ix,iy,1)*vol(ix,iy)/hy(ix,iy)
+!      6     +vbdia(bottomix(ix,iy),bottomiy(ix,iy),1)*
+        *      vol(bottomix(ix,iy),bottomiy(ix,iy))
+        7      /hy(bottomix(ix,iy),bottomiy(ix,iy)))
+            con = hybr(flo,cdnb(ix,iy,1))
+
+Don't trust the line numbers as they refer to my local copy of b2tfnb.F,
+which has a few other changes (i.e. the kinetic energy calculation). But
+the basic thing is to replace VBDIA in the FLO calculations with UBDIA.
+The former represents only the transport-relevant diamagnetic particle
+velocity, while the latter is the sum of the former and the ExB flow
+velocity. Sorry for introduving the mistake in the first place.
+
+I checked that in the Russian version I have, the code indeed used UBDIA.
+
+Another small change to your change for the computation of
+B2STBR_PHYS_SNA (something that has already proved useful analysing
+Manoj's CDN SST case, thanks!): the loops "do is = 0,ns" should go from
+0 to "ns-1" instead. (4 times). The debugger complains otherwise.
+
+Cheers,
+
+Xavier.
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2003.04.11
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+Should now be able to set cflme, cflmi and cflmv in b2.transport.parameters
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2003.04.01
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+Check that decay length is positive in b2stbc_phys
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2003.03.31
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+Introduced new logic so that the feedback gas puff stratum is assumed
+to be the first "C" stratum in eirene_mc unless 'eirene_nesepm_istra'
+is set
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2003.03.31
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+Introduced new logic so that the feedback gas puff stratum is assumed
+to be the first "C" stratum in eirene_mc unless 'eirene_nesepm_istra'
+is set
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2003.03.12
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+new timedep quantities: fetxip, fetxap, fetyip, fetyap
+
+b2.5:
+-----
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2003.03.05
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+nareg in b2tallies.nc should have been divided by volreg but wasn't
+fixed case problem in eirc in b2plot
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2003.03.04
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+changed "dfloat" to "real" in wrmesh
+
+b2.5:
+-----
+fixed bottomiy problem in b2yt
+fixed problem in b2yrdr related to the extra line for JET ADAS "year"
+minor fixes in eirene_f30f31, b2stbc
+added additional comments to b2plot for manual
+
+other:
+------
+energy_analysis update for DN & island case
+continuing development of MDSPLUS routines
+cleaned up some Carre code
+large update of manual (in particular use of namelists)
+streamlined some of the compiler config files
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2003.01.24
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+
+other:
+------
+From Xavier:
+
+Now, on to your MDSPLUS related changes:
+- There are some mistakes in b2mwti.F, where you used "jxa" where it
+should have been "jxi" and "dpsepm(1)" instead of "dpsepm(2)". The
+corrections are in my src.local.
+- I added the missing units to the new tallies in b2mod_tallies.F, since
+otherwise the preprocessor on the SP machine complained when dealing
+with '??'. Also, "rsanareg" was listed twice.
+- In get_from_movie_cdf.F, I declared "time" as an array of length 1,
+and used it accordingly, to avoid type mismatches errors.
+- In tallies.F, I added "implicit none" which was missing, and declared
+"status" and "ncid" within a "#ifndef NO_CDF" bracket. Without this,
+"status" is believed to be a real, which leads to a type mismatch at
+compilation on the SP.
+- In b2mod_b2plot_help.F, the command "cmdcdf" has been added.
+- Documentation for "tallies_netcdf" has been added in b2cdci.F.
+
+when trying to compile B2.5 in debug mode, the Innsbruck NAG
+F95 compiler (but not the IPP one) complained about instructions with
+more than 19 continuation lines. This involved:
+b2mod_plasma.F, b2mod_sources.F, b2mod_work.F, b2mod_tallies.F,
+b2mod_b2plot_help.F, process.F, b2sihs.F, b2tfch.F, adpak.F, intcor.F,
+my_intcor.F, map.F. With some minor recoding, I got them all to compile.
+
+and
+
+<<<
+From xpb@ipp.mpg.de Fri Jan 24 17:17:01 2003
+X-Envelope-To: <dpc@ipp.mpg.de>
+Date: Fri, 24 Jan 2003 17:17:01 +0100
+From: Xavier Bonnin <xpb@ipp.mpg.de>
+X-Accept-Language: en
+MIME-Version: 1.0
+To: David Coster TOK <dpc@ipp.mpg.de>
+Subject: How High-Z can B2 go?
+Content-Transfer-Encoding: 7bit
+
+Hello David,
+
+I had to answer the above question recently as Ralf decided that he
+wanted to give some Xenon data (we have Xenon ADAS file in B2) to a
+visitor from Karlsruhe for some collaboration with Konstantyn.
+The short answer is that some part of the code can handle up to Z=50,
+others up to Z=45, others only up to Z=20. So why not make it 54?
+Fixing this didn't look so daunting, so Ralf happily volunteered me for
+the job. Two days of hard work later, I now have a list of related
+suggestions/improvements to the code for this purpose below. But first,
+now that I can get a "b2frates" for Xenon, how do I make (if at all
+possible), a decent looking "b2yr.plt" (mine has no labels anywhere),
+and how do I view and print it properly (I only get the first page in
+the PostScript)?
+
+So, for the code changes:
+- I modified 'ratadas.filelist' to go all the way to Xenon (Z=54). You
+can find it in the ~xpb/solps5.0_drifts/data.local directory. Thanks for
+creating that, by the way!
+- More work was involved in completing 'ionization_potentials' (same
+directory). I could find data for the whole table up to Z=30, but
+afterwards it can become quite sketchy. I filled up the table with
+dummies when I could find no data. I also updated the numbers in the
+file, so that the data (where available) now is the same as is in the
+latest CRC Handbook issue. Some more could be found on the NIST Web
+Site.
+- I had to increase 'rtnsmx' from 45 to 54 in 'b2cmrc.h'. To be found in
+my src.local.
+- In dhdata.F, I updated the SEQUA array to size 54 and added the
+relevant elements, as well as a comment. Similar action taken in spect.F
+for the SYMBOL and SYMBLL arrays.
+- In spect.F, increased IZ0MAX to 54 and adapted relevant routine call
+arguments and comments.
+- In b2mod_b2plot.F, did the same to the "elements" array. to be found
+in my src.local.modules.
+- Same in b2mod_elements.F.
+- In tallies.F, tucked the declaration of TIM_ARR inside a "#ifndef
+NO_CDF" bracket.
+- In b2mod_tallies.F, b2plot.F and b2mds.F, I updated the value of the
+hydrogen ionization potential, and added the correction due to the
+changed reduced mass for D and T. This required adding "use
+b2mod_constants" at the top of b2mod_tallies.F. The code was also
+generalized for multi-isotopic hydrogen mixtures, in the absence of the
+"ionization_potentials" file.
+- In b2yrdr.F, I removed the "dubious authorship" message when b2frates
+is created using ADAS data.
+- I also corrected ratads.F and spect.F so that, when building the UIDIN
+name, the "/" after the $SOLPSTOP path would not be included twice.
+- Lastly, in {sbb}/config/compiler.IBMaix, the block:
+ifdef USE_EIRENE
+LDLIBES += ${OBJECTCODE}/libeirene.a ${OBJECTCODE}/grlib.o
+endif
+is redundant and can be removed, as the overall Makefile in {sbb}
+already contains:
+ifdef USE_EIRENE
+MNEXTRA=${OBJECTCODE}/libeirene.a ${OBJECTCODE}/grlib.o
+endif
+
+That's all for today,
+
+Cheers,
+
+Xavier.
+
+-- 
+Xavier P.G. Bonnin, Ph.D.             http://www.ipp.mpg.de/~xpb/
+Max-Planck-Institut fuer Plasmaphysik, Teilinstitut Greifswald
+Bereich Stellaratortheorie            Tel: +49(0)3834 88 2416
+Wendelsteinstrasse 1                  Fax: +49(0)3834 88 2409
+D-17491 Greifswald GERMANY            Email:xpb@ipp.mpg.de
+>>>
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2003.01.22
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+added the possibility to open_lu to specify multiple possible paths
+separated by '|'
+
+other:
+------
+users can now have a data.local under $SOLPSTOP
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2003.01.14
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+(1) changed the cdf movie option to write data to b2movies.nc instead
+    of individual files
+(2) new option in b2plot ("cmdcdf") which runs a command file
+    repeatedly after reading in the new data for each time slice from
+    b2movies.nc;  an example of running this is:
+      (setenv B2PLOT_DEV cgm ; echo "write a4l stdl glob phys 'DIA_CIII.cmd' cmdcdf" | b2plot ) >& b2pl.log &
+(3) the b2movies.nc data can also be saved into the MDSPLUS tree but
+    when I tried this (with large data sets (>1 GB)) the MDS server had
+    problems
+(4) fixed a problem in the ADAS routines if the running directory name
+was larger than 80 characters.
+
+other:
+------
+Using on the output of (3) above:
+./b2plot.write_to_plotmtv > ! tmp2.mtv
+echo n | plotmtv -colorps -noxplot -o tmp2.ps tmp2.mtv
+where ./b2plot.write_to_plotmtv contains 
+<<<
+#! /bin/bash -f
+echo "$ DATA=CONTOUR"
+echo "% nx = `sed -e '1,2d' -e '/^#/,$d' b2pl.exe.dir/b2plot.write | wc -l` xgrid=true"
+sed -e '1,2d' -e '/^#/,$d' b2pl.exe.dir/b2plot.write | awk '{print $1}'
+echo "% ny = `grep -c 'T=' b2pl.exe.dir/b2plot.write` ygrid=True ylabel=time"
+grep 'T=' b2pl.exe.dir/b2plot.write | awk '{print $NF}'
+label1=`head -1 b2pl.exe.dir/b2plot.write | sed -e 's:^# *::'`
+label2=`head -2 b2pl.exe.dir/b2plot.write | tail +2 | sed -e 's:^# *::' -e 's: *T=.*::'`
+echo "% contfill = T equalscale = F nsteps=20 toplabel='$label1 $label2'"
+awk '/^[^#]/{print $2}' b2pl.exe.dir/b2plot.write
+echo "$ END"
+>>>
+one can generate a plot of CIII emissivity versus s-coordinate and
+time.
+
+One can also generate a movie with:
+  ctrans -d xwd -resolution 512x384 -window 0.00:0.00:1.00:0.75 b2pl.exe.dir/gmeta > ! /space/tmp/dpc/2002-01-14/gmeta.xwd ; pushd /space/tmp/dpc/2002-01-14 ; rassplit gmeta.xwd ; echo *.[0-9][0-9][0-9][0-9].xwd *.[0-9][0-9][0-9][0-9][0-9].xwd | xargs -P10 -n1 convert_to_jpg ; mpeg_encode $PWD/mpeg.512x384
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2003.01.10
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+1. renamed a routine to bring it under the 31 character limit on the
+   sun
+2. tallies now also saved in a new netcdf file (b2tallies.nc) if the
+   undocumented flag 'tallies_netcdf' is set to '1'
+3. added some transport related quantities to b2time.nc (XX = dn, dp,
+   ke, ki, vx, vy or vs in XX3di, XX3da & XXsepm)
+4. continued adding quantities to the mdsplus tree:
+<<<
+
+\SOLPS::TOP.IDENT
+\SOLPS::TOP.IDENT:COMMENT "A comment about the run derived from the b2md_namelist in b2md.dat"
+\SOLPS::TOP.IDENT:DATE "Date when the run was saved"
+\SOLPS::TOP.IDENT:DIRECTORY "Directory in which the run was stored"
+\SOLPS::TOP.IDENT:EXP "Experiment name, derived from the b2md_namelist in b2md.dat"
+\SOLPS::TOP.IDENT:GEOMETRY "Label in b2fgmtry (derived from b2ag.dat)"
+\SOLPS::TOP.IDENT:HOST "Hostname from which the run was saved"
+\SOLPS::TOP.IDENT:MAIN "Label in b2fstate derived from b2mn.dat"
+\SOLPS::TOP.IDENT:OBJECTCODE "SOLPS $OBJECTCODE"
+\SOLPS::TOP.IDENT:PHYSICS "Label in b2fparam derived from b2ah.dat"
+\SOLPS::TOP.IDENT:SHOT "Experiment shot number (int) derived from the b2md_namelist in b2md.dat"
+\SOLPS::TOP.IDENT:SOLPSTOP "SOLPS $OBJECTCODE"
+\SOLPS::TOP.IDENT:TIME "Experiment time point (double) derived from the b2md_namelist in b2md.dat"
+\SOLPS::TOP.IDENT:USER "Username"
+
+\SOLPS::TOP.SNAPSHOT
+
+\SOLPS::TOP.SNAPSHOT.DIMENSIONS
+\SOLPS::TOP.SNAPSHOT.DIMENSIONS:IMP "Index of the inner midplane"
+\SOLPS::TOP.SNAPSHOT.DIMENSIONS:NATM "Number of atomic species"
+\SOLPS::TOP.SNAPSHOT.DIMENSIONS:NION "Number of test ion species"
+\SOLPS::TOP.SNAPSHOT.DIMENSIONS:NMOL "Number of molecular species"
+\SOLPS::TOP.SNAPSHOT.DIMENSIONS:NS "Number of fluid species"
+\SOLPS::TOP.SNAPSHOT.DIMENSIONS:NX "Number of cells in the parallel or poloidal direction"
+\SOLPS::TOP.SNAPSHOT.DIMENSIONS:NY "Number of cells in the radial direction"
+\SOLPS::TOP.SNAPSHOT.DIMENSIONS:OMP "Position of the outer midplane"
+\SOLPS::TOP.SNAPSHOT.DIMENSIONS:SEP "Position of the separatrix"
+\SOLPS::TOP.SNAPSHOT.DIMENSIONS:TARG1 "Position of target 1 (usually inner)"
+\SOLPS::TOP.SNAPSHOT.DIMENSIONS:TARG2 "Position of target 2"
+\SOLPS::TOP.SNAPSHOT.DIMENSIONS:TARG3 "Position of target 3"
+\SOLPS::TOP.SNAPSHOT.DIMENSIONS:TARG4 "Position of target 4 (usually outer)"
+
+\SOLPS::TOP.SNAPSHOT.GRID
+\SOLPS::TOP.SNAPSHOT.GRID:CR "R-coordinate of the cell centre"
+\SOLPS::TOP.SNAPSHOT.GRID:CR_X "R-coordinate of the cell x-face"
+\SOLPS::TOP.SNAPSHOT.GRID:CR_Y "R-coordinate of the cell y-face"
+\SOLPS::TOP.SNAPSHOT.GRID:CZ "Z-coordinate of the cell centre"
+\SOLPS::TOP.SNAPSHOT.GRID:CZ_X "Z-coordinate of the cell x-face"
+\SOLPS::TOP.SNAPSHOT.GRID:CZ_Y "Z-coordinate of the cell y-face"
+\SOLPS::TOP.SNAPSHOT.GRID:DSPAR "Parallel distance"
+\SOLPS::TOP.SNAPSHOT.GRID:DSPOL "Poloidal distance"
+\SOLPS::TOP.SNAPSHOT.GRID:DSRAD "Radial distance wrt separatrix"
+\SOLPS::TOP.SNAPSHOT.GRID:R "R-coordinates of cell vertices"
+\SOLPS::TOP.SNAPSHOT.GRID:VESSEL "Vessel structure"
+\SOLPS::TOP.SNAPSHOT.GRID:Z "Z-coordinates of cell vertices"
+\SOLPS::TOP.SNAPSHOT:ALF "Thermo-electric coefficient"
+\SOLPS::TOP.SNAPSHOT:B "B field"
+\SOLPS::TOP.SNAPSHOT:D "D"
+\SOLPS::TOP.SNAPSHOT:DP "Dpa"
+\SOLPS::TOP.SNAPSHOT:FCHX "Poloidal current"
+\SOLPS::TOP.SNAPSHOT:FCHY "Radial current"
+\SOLPS::TOP.SNAPSHOT:FHEX "Parallel electron energy flux"
+\SOLPS::TOP.SNAPSHOT:FHEY "Perpendicular electron energy flux"
+\SOLPS::TOP.SNAPSHOT:FHIX "Parallel ion energy flux"
+\SOLPS::TOP.SNAPSHOT:FHIY "Perpendicular ion energy flux"
+\SOLPS::TOP.SNAPSHOT:FHMX "Parallel kinetic energy flux"
+\SOLPS::TOP.SNAPSHOT:FHMY "Perpendicular kinetic energy flux"
+\SOLPS::TOP.SNAPSHOT:FHPX "Parallel potential energy flux"
+\SOLPS::TOP.SNAPSHOT:FHPY "Perpendicular potential energy flux"
+\SOLPS::TOP.SNAPSHOT:FHTX "Parallel total energy flux"
+\SOLPS::TOP.SNAPSHOT:FHTY "Perpendicular total energy flux"
+\SOLPS::TOP.SNAPSHOT:FMOX "Parallel momentum flux"
+\SOLPS::TOP.SNAPSHOT:FMOY "Perpendicular momentum flux"
+\SOLPS::TOP.SNAPSHOT:FNAX "Parallel particle flux"
+\SOLPS::TOP.SNAPSHOT:FNAY "Perpendicular particle flux"
+\SOLPS::TOP.SNAPSHOT:HX "Length of cell"
+\SOLPS::TOP.SNAPSHOT:HY "Width of cell"
+\SOLPS::TOP.SNAPSHOT:HY1 "Corrected width of cell"
+\SOLPS::TOP.SNAPSHOT:KYE "kye"
+\SOLPS::TOP.SNAPSHOT:KYI "kyi"
+\SOLPS::TOP.SNAPSHOT:KYI0 "kyi0"
+\SOLPS::TOP.SNAPSHOT:NA "Ion/Neutral density"
+\SOLPS::TOP.SNAPSHOT:NE "Electron density"
+\SOLPS::TOP.SNAPSHOT:PO "Electric potential"
+\SOLPS::TOP.SNAPSHOT:PR "Pressure"
+\SOLPS::TOP.SNAPSHOT:RCXHI "CX ion energy neutral losses"
+\SOLPS::TOP.SNAPSHOT:RCXMO "CX momentum neutral losses"
+\SOLPS::TOP.SNAPSHOT:RCXNA "CX particle neutral losses"
+\SOLPS::TOP.SNAPSHOT:RQAHE "Electron cooling rate"
+\SOLPS::TOP.SNAPSHOT:RRAHI "Recombination ion energy losses"
+\SOLPS::TOP.SNAPSHOT:RRAMO "Recombination momentum losses"
+\SOLPS::TOP.SNAPSHOT:RRANA "Recombination particle losses"
+\SOLPS::TOP.SNAPSHOT:RSAHI "Ionization ion energy losses"
+\SOLPS::TOP.SNAPSHOT:RSAMO "Ionization momentum losses"
+\SOLPS::TOP.SNAPSHOT:RSANA "Ionization particle losses"
+\SOLPS::TOP.SNAPSHOT:SIG "Anomalous conductivity"
+\SOLPS::TOP.SNAPSHOT:SX "sx"
+\SOLPS::TOP.SNAPSHOT:SY "sy"
+\SOLPS::TOP.SNAPSHOT:TE "Electron temperature"
+\SOLPS::TOP.SNAPSHOT:TEXTAN "Atom species"
+\SOLPS::TOP.SNAPSHOT:TEXTCOMP "Components"
+\SOLPS::TOP.SNAPSHOT:TEXTIN "Test ion species"
+\SOLPS::TOP.SNAPSHOT:TEXTMN "Molecule species"
+\SOLPS::TOP.SNAPSHOT:TEXTPL "Plasma species"
+\SOLPS::TOP.SNAPSHOT:TI "Ion temperature"
+\SOLPS::TOP.SNAPSHOT:UA "Ion/neutral parallel velocity"
+\SOLPS::TOP.SNAPSHOT:VISC "Viscosity"
+\SOLPS::TOP.SNAPSHOT:VLAX "Poloidal pinch velocity"
+\SOLPS::TOP.SNAPSHOT:VLAY "Radial pinch velocity"
+\SOLPS::TOP.SNAPSHOT:VOL "Volume"
+
+\SOLPS::TOP.TALLIES
+\SOLPS::TOP.TALLIES:B2DIVUA "B2DIVUA"
+\SOLPS::TOP.TALLIES:B2DIVUE "B2DIVUE"
+\SOLPS::TOP.TALLIES:B2EXBA "B2EXBA"
+\SOLPS::TOP.TALLIES:B2EXBE "B2EXBE"
+\SOLPS::TOP.TALLIES:B2FRAA "B2FRAA"
+\SOLPS::TOP.TALLIES:B2JOULE "B2JOULE"
+\SOLPS::TOP.TALLIES:B2QIE "B2QIE"
+\SOLPS::TOP.TALLIES:B2SHE "B2SHE"
+\SOLPS::TOP.TALLIES:B2SHE0 "B2SHE0"
+\SOLPS::TOP.TALLIES:B2SHI "B2SHI"
+\SOLPS::TOP.TALLIES:B2SHI0 "B2SHI0"
+\SOLPS::TOP.TALLIES:B2STBRSCHREG "B2STBRSCHREG"
+\SOLPS::TOP.TALLIES:B2STBRSHEREG "B2STBRSHEREG"
+\SOLPS::TOP.TALLIES:B2STBRSHIREG "B2STBRSHIREG"
+\SOLPS::TOP.TALLIES:B2STBRSMOREG "B2STBRSMOREG"
+\SOLPS::TOP.TALLIES:B2STBRSNAREG "B2STBRSNAREG"
+\SOLPS::TOP.TALLIES:B2STR "B2STR"
+\SOLPS::TOP.TALLIES:B2VISA "B2VISA"
+\SOLPS::TOP.TALLIES:B2WRONG1 "B2WRONG1"
+\SOLPS::TOP.TALLIES:B2WRONG2 "B2WRONG2"
+\SOLPS::TOP.TALLIES:B2WRONG3 "B2WRONG3"
+\SOLPS::TOP.TALLIES:FCHXREG "FCHXREG"
+\SOLPS::TOP.TALLIES:FCHYREG "FCHYREG"
+\SOLPS::TOP.TALLIES:FHEXREG "FHEXREG"
+\SOLPS::TOP.TALLIES:FHEYREG "FHEYREG"
+\SOLPS::TOP.TALLIES:FHIXREG "FHIXREG"
+\SOLPS::TOP.TALLIES:FHIYREG "FHIYREG"
+\SOLPS::TOP.TALLIES:FHMXREG "FHMXREG"
+\SOLPS::TOP.TALLIES:FHMYREG "FHMYREG"
+\SOLPS::TOP.TALLIES:FHPXREG "FHPXREG"
+\SOLPS::TOP.TALLIES:FHPYREG "FHPYREG"
+\SOLPS::TOP.TALLIES:FNAXREG "FNAXREG"
+\SOLPS::TOP.TALLIES:FNAYREG "FNAYREG"
+\SOLPS::TOP.TALLIES:NAREG "NAREG"
+\SOLPS::TOP.TALLIES:NE2REG "NE2REG"
+\SOLPS::TOP.TALLIES:NEREG "NEREG"
+\SOLPS::TOP.TALLIES:NIREG "NIREG"
+\SOLPS::TOP.TALLIES:NS "NS"
+\SOLPS::TOP.TALLIES:POREG "POREG"
+\SOLPS::TOP.TALLIES:RCXHIREG "RCXHIREG"
+\SOLPS::TOP.TALLIES:RCXMOREG "RCXMOREG"
+\SOLPS::TOP.TALLIES:RCXNAREG "RCXNAREG"
+\SOLPS::TOP.TALLIES:RESCOREG "RESCOREG"
+\SOLPS::TOP.TALLIES:RESCO_REG "RESCO_REG"
+\SOLPS::TOP.TALLIES:RESHEREG "RESHEREG"
+\SOLPS::TOP.TALLIES:RESHE_REG "RESHE_REG"
+\SOLPS::TOP.TALLIES:RESHIREG "RESHIREG"
+\SOLPS::TOP.TALLIES:RESHI_REG "RESHI_REG"
+\SOLPS::TOP.TALLIES:RESMOREG "RESMOREG"
+\SOLPS::TOP.TALLIES:RESMO_REG "RESMO_REG"
+\SOLPS::TOP.TALLIES:RESMTREG "RESMTREG"
+\SOLPS::TOP.TALLIES:RESMT_REG "RESMT_REG"
+\SOLPS::TOP.TALLIES:RESPOREG "RESPOREG"
+\SOLPS::TOP.TALLIES:RESPO_REG "RESPO_REG"
+\SOLPS::TOP.TALLIES:RQAHEREG "RQAHEREG"
+\SOLPS::TOP.TALLIES:RRAHIREG "RRAHIREG"
+\SOLPS::TOP.TALLIES:RRAMOREG "RRAMOREG"
+\SOLPS::TOP.TALLIES:RRANAREG "RRANAREG"
+\SOLPS::TOP.TALLIES:RSAHIREG "RSAHIREG"
+\SOLPS::TOP.TALLIES:RSAMOREG "RSAMOREG"
+\SOLPS::TOP.TALLIES:RSANAREG "RSANAREG"
+\SOLPS::TOP.TALLIES:TEREG "TEREG"
+\SOLPS::TOP.TALLIES:TIME "TIME"
+\SOLPS::TOP.TALLIES:TIREG "TIREG"
+\SOLPS::TOP.TALLIES:VOLREG "VOLREG"
+\SOLPS::TOP.TALLIES:VREG "VREG"
+\SOLPS::TOP.TALLIES:XREG "XREG"
+\SOLPS::TOP.TALLIES:YREG "YREG"
+
+\SOLPS::TOP.TIMEDEP
+
+
+\SOLPS::TOP.TIMEDEP.DN "diffusion coefficient"
+\SOLPS::TOP.TIMEDEP.DN:IMPSEP
+\SOLPS::TOP.TIMEDEP.DN:OMPSEP "diffusion coefficient, outer midplane"
+
+
+\SOLPS::TOP.TIMEDEP.DP "pressure diffusion coefficient"
+\SOLPS::TOP.TIMEDEP.DP:IMPSEP
+\SOLPS::TOP.TIMEDEP.DP:OMPSEP "pressure diffusion coefficient, outer midplane"
+
+\SOLPS::TOP.TIMEDEP.FCH
+\SOLPS::TOP.TIMEDEP.FCH:DIVINT "integrated perpendicular current, divertor region"
+\SOLPS::TOP.TIMEDEP.FCH:MCWINT "integrated perpendicular current, main chamber"
+\SOLPS::TOP.TIMEDEP.FCH:TARG1INT "integrated parallel current, inboard divertor"
+\SOLPS::TOP.TIMEDEP.FCH:TARG2INT
+\SOLPS::TOP.TIMEDEP.FCH:TARG3INT
+\SOLPS::TOP.TIMEDEP.FCH:TARG4INT "integrated parallel current, outboard divertor"
+
+\SOLPS::TOP.TIMEDEP.FEE
+\SOLPS::TOP.TIMEDEP.FEE:DIVINT "integrated perpendicular electron energy flux, divertor region"
+\SOLPS::TOP.TIMEDEP.FEE:MCWINT "integrated perpendicular electron energy flux, main chamber"
+\SOLPS::TOP.TIMEDEP.FEE:TARG1INT "integrated parallel electron energy flux, inboard divertor"
+\SOLPS::TOP.TIMEDEP.FEE:TARG2INT
+\SOLPS::TOP.TIMEDEP.FEE:TARG3INT
+\SOLPS::TOP.TIMEDEP.FEE:TARG4INT "integrated parallel electron energy flux, outboard divertor"
+
+\SOLPS::TOP.TIMEDEP.FEI
+\SOLPS::TOP.TIMEDEP.FEI:DIVINT "integrated perpendicular ion energy flux, divertor region"
+\SOLPS::TOP.TIMEDEP.FEI:MCWINT "integrated perpendicular ion energy flux, main chamber"
+\SOLPS::TOP.TIMEDEP.FEI:TARG1INT "integrated parallel ion energy flux, inboard divertor"
+\SOLPS::TOP.TIMEDEP.FEI:TARG2INT
+\SOLPS::TOP.TIMEDEP.FEI:TARG3INT
+\SOLPS::TOP.TIMEDEP.FEI:TARG4INT "integrated parallel ion energy flux, outboard divertor"
+
+\SOLPS::TOP.TIMEDEP.FNI
+\SOLPS::TOP.TIMEDEP.FNI:DIVINT "integrated perpendicular particle flux, divertor region"
+\SOLPS::TOP.TIMEDEP.FNI:MCWINT "integrated perpendicular particle flux, main chamber"
+\SOLPS::TOP.TIMEDEP.FNI:TARG1INT "integrated parallel particle flux, inboard divertor"
+\SOLPS::TOP.TIMEDEP.FNI:TARG2INT
+\SOLPS::TOP.TIMEDEP.FNI:TARG3INT
+\SOLPS::TOP.TIMEDEP.FNI:TARG4INT "integrated parallel particle flux, outboard divertor"
+
+\SOLPS::TOP.TIMEDEP.IMP
+\SOLPS::TOP.TIMEDEP.IMP:AN "atom density, inboard midplane"
+\SOLPS::TOP.TIMEDEP.IMP:DN "diffusion coefficient, inboard midplane"
+\SOLPS::TOP.TIMEDEP.IMP:DP "pressure diffusion coefficient, inboard midplane"
+\SOLPS::TOP.TIMEDEP.IMP:DS "S-S_sep (inner midplane)"
+\SOLPS::TOP.TIMEDEP.IMP:KE
+\SOLPS::TOP.TIMEDEP.IMP:KI "ion thermal diffusivity, inboard midplane"
+\SOLPS::TOP.TIMEDEP.IMP:MN "molecule density, inboard midplane"
+\SOLPS::TOP.TIMEDEP.IMP:NE "electron density, inboard midplane"
+\SOLPS::TOP.TIMEDEP.IMP:PO "potential, inboard midplane"
+\SOLPS::TOP.TIMEDEP.IMP:TE "electron temperature, inboard midplane"
+\SOLPS::TOP.TIMEDEP.IMP:TI "ion temperature, inboard midplane"
+\SOLPS::TOP.TIMEDEP.IMP:VS "viscosity coefficient, inboard midplane'"
+\SOLPS::TOP.TIMEDEP.IMP:VX "poloidal pinch velocity, inboard midplane'"
+\SOLPS::TOP.TIMEDEP.IMP:VY "radial pinch velocity, inboard midplane"
+
+
+\SOLPS::TOP.TIMEDEP.KE "electron thermal diffusivity"
+\SOLPS::TOP.TIMEDEP.KE:IMPSEP
+\SOLPS::TOP.TIMEDEP.KE:OMPSEP "electron thermal diffusivity, outer midplane"
+
+
+\SOLPS::TOP.TIMEDEP.KI "ion thermal diffusivity"
+\SOLPS::TOP.TIMEDEP.KI:IMPSEP
+\SOLPS::TOP.TIMEDEP.KI:OMPSEP "ion thermal diffusivity, outer midplane"
+
+\SOLPS::TOP.TIMEDEP.NE
+\SOLPS::TOP.TIMEDEP.NE:IMPSEP
+\SOLPS::TOP.TIMEDEP.NE:OMPSEP "separatrix electron density, outer midplane"
+\SOLPS::TOP.TIMEDEP.NE:PWDENMAX
+\SOLPS::TOP.TIMEDEP.NE:TARG1MAX "maximum electron density, inboard divertor"
+\SOLPS::TOP.TIMEDEP.NE:TARG1SEP "separatrix electron density, inboard divertor"
+\SOLPS::TOP.TIMEDEP.NE:TARG2MAX
+\SOLPS::TOP.TIMEDEP.NE:TARG2SEP
+\SOLPS::TOP.TIMEDEP.NE:TARG3MAX
+\SOLPS::TOP.TIMEDEP.NE:TARG3SEP
+\SOLPS::TOP.TIMEDEP.NE:TARG4MAX "maximum electron density, outboard divertor"
+\SOLPS::TOP.TIMEDEP.NE:TARG4SEP "separatrix electron density, outboard divertor"
+
+\SOLPS::TOP.TIMEDEP.OMP
+\SOLPS::TOP.TIMEDEP.OMP:AN "atom density, outboard midplane"
+\SOLPS::TOP.TIMEDEP.OMP:DN "diffusion coefficient, outboard midplane"
+\SOLPS::TOP.TIMEDEP.OMP:DP "pressure diffusion coefficient, outboard midplane"
+\SOLPS::TOP.TIMEDEP.OMP:DS "S-S_sep (outer midplane)"
+\SOLPS::TOP.TIMEDEP.OMP:KE
+\SOLPS::TOP.TIMEDEP.OMP:KI "ion thermal diffusivity, outboard midplane"
+\SOLPS::TOP.TIMEDEP.OMP:MN "molecule density, outboard midplane"
+\SOLPS::TOP.TIMEDEP.OMP:NE "electron density, outboard midplane"
+\SOLPS::TOP.TIMEDEP.OMP:PO "potential, outboard midplane"
+\SOLPS::TOP.TIMEDEP.OMP:TE "electron temperature, outboard midplane"
+\SOLPS::TOP.TIMEDEP.OMP:TI "ion temperature, outboard midplane"
+\SOLPS::TOP.TIMEDEP.OMP:VS "viscosity coefficient, outboard midplane'"
+\SOLPS::TOP.TIMEDEP.OMP:VX "poloidal pinch velocity, outboard midplane'"
+\SOLPS::TOP.TIMEDEP.OMP:VY "radial pinch velocity, outboard midplane"
+
+\SOLPS::TOP.TIMEDEP.PO
+\SOLPS::TOP.TIMEDEP.PO:IMPSEP
+\SOLPS::TOP.TIMEDEP.PO:OMPSEP "separatrix potential, outer midplane"
+\SOLPS::TOP.TIMEDEP.PO:PWDENMAX
+\SOLPS::TOP.TIMEDEP.PO:TARG1MAX "maximum potential, inboard divertor"
+\SOLPS::TOP.TIMEDEP.PO:TARG1SEP "separatrix potential, inboard divertor"
+\SOLPS::TOP.TIMEDEP.PO:TARG2MAX
+\SOLPS::TOP.TIMEDEP.PO:TARG2SEP
+\SOLPS::TOP.TIMEDEP.PO:TARG3MAX
+\SOLPS::TOP.TIMEDEP.PO:TARG3SEP
+\SOLPS::TOP.TIMEDEP.PO:TARG4MAX "maximum potential, outboard divertor "
+\SOLPS::TOP.TIMEDEP.PO:TARG4SEP "separatrix potential, outboard divertor max"
+
+\SOLPS::TOP.TIMEDEP.TARGET1
+\SOLPS::TOP.TIMEDEP.TARGET1:AN "atom density, inboard divertor"
+\SOLPS::TOP.TIMEDEP.TARGET1:DA "Area element, target1 (usually inner target)"
+\SOLPS::TOP.TIMEDEP.TARGET1:DS "S-S_sep, target1 (usually inner target)"
+\SOLPS::TOP.TIMEDEP.TARGET1:FC "parallel current, inboard divertor "
+\SOLPS::TOP.TIMEDEP.TARGET1:FE "parallel electron energy flux, inboard divertor"
+\SOLPS::TOP.TIMEDEP.TARGET1:FI "parallel ion energy flux, inboard divertor"
+\SOLPS::TOP.TIMEDEP.TARGET1:FL "parallel electron flux, inboard divertor"
+\SOLPS::TOP.TIMEDEP.TARGET1:FN "parallel spec one flux, inboard divertor"
+\SOLPS::TOP.TIMEDEP.TARGET1:FO "parallel ion flux, inboard divertor"
+\SOLPS::TOP.TIMEDEP.TARGET1:FT "parallel total energy flux, inboard divertor"
+\SOLPS::TOP.TIMEDEP.TARGET1:MN "molecule density, inboard divertor"
+\SOLPS::TOP.TIMEDEP.TARGET1:NE "electron density, inboard divertor"
+\SOLPS::TOP.TIMEDEP.TARGET1:PO "potential, inboard diverto"
+\SOLPS::TOP.TIMEDEP.TARGET1:TE "electron temperature, inboard divertor"
+\SOLPS::TOP.TIMEDEP.TARGET1:TI "ion temperature, inboard divertor"
+
+\SOLPS::TOP.TIMEDEP.TARGET2
+\SOLPS::TOP.TIMEDEP.TARGET2:AN
+\SOLPS::TOP.TIMEDEP.TARGET2:DA
+\SOLPS::TOP.TIMEDEP.TARGET2:DS
+\SOLPS::TOP.TIMEDEP.TARGET2:FC
+\SOLPS::TOP.TIMEDEP.TARGET2:FE
+\SOLPS::TOP.TIMEDEP.TARGET2:FI
+\SOLPS::TOP.TIMEDEP.TARGET2:FL
+\SOLPS::TOP.TIMEDEP.TARGET2:FN
+\SOLPS::TOP.TIMEDEP.TARGET2:FO
+\SOLPS::TOP.TIMEDEP.TARGET2:FT
+\SOLPS::TOP.TIMEDEP.TARGET2:MN
+\SOLPS::TOP.TIMEDEP.TARGET2:NE
+\SOLPS::TOP.TIMEDEP.TARGET2:PO
+\SOLPS::TOP.TIMEDEP.TARGET2:TE
+\SOLPS::TOP.TIMEDEP.TARGET2:TI
+
+\SOLPS::TOP.TIMEDEP.TARGET3
+\SOLPS::TOP.TIMEDEP.TARGET3:AN
+\SOLPS::TOP.TIMEDEP.TARGET3:DA
+\SOLPS::TOP.TIMEDEP.TARGET3:DS
+\SOLPS::TOP.TIMEDEP.TARGET3:FC
+\SOLPS::TOP.TIMEDEP.TARGET3:FE
+\SOLPS::TOP.TIMEDEP.TARGET3:FI
+\SOLPS::TOP.TIMEDEP.TARGET3:FL
+\SOLPS::TOP.TIMEDEP.TARGET3:FN
+\SOLPS::TOP.TIMEDEP.TARGET3:FO
+\SOLPS::TOP.TIMEDEP.TARGET3:FT
+\SOLPS::TOP.TIMEDEP.TARGET3:MN
+\SOLPS::TOP.TIMEDEP.TARGET3:NE
+\SOLPS::TOP.TIMEDEP.TARGET3:PO
+\SOLPS::TOP.TIMEDEP.TARGET3:TE
+\SOLPS::TOP.TIMEDEP.TARGET3:TI
+
+\SOLPS::TOP.TIMEDEP.TARGET4
+\SOLPS::TOP.TIMEDEP.TARGET4:AN "atom density, outboard divertor"
+\SOLPS::TOP.TIMEDEP.TARGET4:DA "Area element, target4 (usually outer target)"
+\SOLPS::TOP.TIMEDEP.TARGET4:DS "S-S_sep, target4 (usually outer target)"
+\SOLPS::TOP.TIMEDEP.TARGET4:FC "parallel current, outboard divertor "
+\SOLPS::TOP.TIMEDEP.TARGET4:FE "parallel electron energy flux, outboard divertor"
+\SOLPS::TOP.TIMEDEP.TARGET4:FI "parallel ion energy flux, outboard divertor"
+\SOLPS::TOP.TIMEDEP.TARGET4:FL "parallel electron flux, outboard divertor"
+\SOLPS::TOP.TIMEDEP.TARGET4:FN "parallel spec one flux, outboard divertor"
+\SOLPS::TOP.TIMEDEP.TARGET4:FO "parallel ion flux, outboard divertor"
+\SOLPS::TOP.TIMEDEP.TARGET4:FT "parallel total energy flux, outboard divertor"
+\SOLPS::TOP.TIMEDEP.TARGET4:MN "molecule density, outboard divertor"
+\SOLPS::TOP.TIMEDEP.TARGET4:NE "electron density, outboard divertor"
+\SOLPS::TOP.TIMEDEP.TARGET4:PO "potential, outboard divertor"
+\SOLPS::TOP.TIMEDEP.TARGET4:TE "electron temperature, outboard divertor"
+\SOLPS::TOP.TIMEDEP.TARGET4:TI "ion temperature, outboard divertor"
+
+\SOLPS::TOP.TIMEDEP.TE
+\SOLPS::TOP.TIMEDEP.TE:IMPSEP
+\SOLPS::TOP.TIMEDEP.TE:OMPSEP "separatrix electron temperature, outer midplane"
+\SOLPS::TOP.TIMEDEP.TE:PWDENMAX
+\SOLPS::TOP.TIMEDEP.TE:TARG1MAX "maximum electron temperature, inboard divertor"
+\SOLPS::TOP.TIMEDEP.TE:TARG1SEP "separatrix electron temperature, inboard divertor"
+\SOLPS::TOP.TIMEDEP.TE:TARG2MAX
+\SOLPS::TOP.TIMEDEP.TE:TARG2SEP
+\SOLPS::TOP.TIMEDEP.TE:TARG3MAX
+\SOLPS::TOP.TIMEDEP.TE:TARG3SEP
+\SOLPS::TOP.TIMEDEP.TE:TARG4MAX "maximum electron temperature, outboard divertor"
+\SOLPS::TOP.TIMEDEP.TE:TARG4SEP "separatrix electron temperature, outboard divertor"
+
+\SOLPS::TOP.TIMEDEP.TI
+\SOLPS::TOP.TIMEDEP.TI:IMPSEP
+\SOLPS::TOP.TIMEDEP.TI:OMPSEP "separatrix ion temperature, outer midplane"
+\SOLPS::TOP.TIMEDEP.TI:PWDENMAX
+\SOLPS::TOP.TIMEDEP.TI:TARG1MAX "maximum ion temperature, inboard divertor"
+\SOLPS::TOP.TIMEDEP.TI:TARG1SEP "separatrix ion temperature, inboard divertor"
+\SOLPS::TOP.TIMEDEP.TI:TARG2MAX
+\SOLPS::TOP.TIMEDEP.TI:TARG2SEP
+\SOLPS::TOP.TIMEDEP.TI:TARG3MAX
+\SOLPS::TOP.TIMEDEP.TI:TARG3SEP
+\SOLPS::TOP.TIMEDEP.TI:TARG4MAX "maximum ion temperature, outboard divertor "
+\SOLPS::TOP.TIMEDEP.TI:TARG4SEP "separatrix ion temperature, outboard divertor"
+
+
+\SOLPS::TOP.TIMEDEP.VS "viscosity coefficient"
+\SOLPS::TOP.TIMEDEP.VS:IMPSEP
+\SOLPS::TOP.TIMEDEP.VS:OMPSEP "viscosity coefficient, outer midplane"
+
+
+\SOLPS::TOP.TIMEDEP.VX "poloidal pinch velocity"
+\SOLPS::TOP.TIMEDEP.VX:IMPSEP
+\SOLPS::TOP.TIMEDEP.VX:OMPSEP "poloidal pinch velocity, outer midplane"
+
+
+\SOLPS::TOP.TIMEDEP.VY "radial pinch velocity"
+\SOLPS::TOP.TIMEDEP.VY:IMPSEP
+\SOLPS::TOP.TIMEDEP.VY:OMPSEP "radial pinch velocity, outer midplane"
+\SOLPS::TOP.TIMEDEP:HALCORE
+\SOLPS::TOP.TIMEDEP:HALDIV
+\SOLPS::TOP.TIMEDEP:HALSOL
+\SOLPS::TOP.TIMEDEP:TIME "time"
+>>>
+
+other:
+------
+launched discussions with Zohm, Behler and Suttrop to install an
+MDSPLUS server that will be available for all SOLPS users.
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2002.12.22
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+Updated b2news.F, b2tlh0.F, b2tfnb.F & b2trno.F to fix the neutral
+flux limiter model.
+
+Experimental:
+An effort has been started to save the SOLPS runs to MDSPLUS.  A new
+main routine, b2md.F, driver, b2mddr.F and additional routines have
+been introduced, as well as changes to the b2 and run Makefiles.
+To use/test these routines (where here I have assumed that the MDSPLUS
+stuff is in ~/afs/@sys/mdsplus --- change as necessary!)
+  setenv MDSPLUS_DIR /afs/ipp-garching.mpg.de/home/d/dpc/@sys/mdsplus
+  source $MDSPLUS_DIR/setup.csh
+  setenv SOLPS_CPP '-DMDSPLUS'
+  sbb ; gmake depend ; gmake depend ; gmake
+and then, in run directory
+  gmake -f $SOLPSTOP/src/Braams/b2/runs/Makefile.plot b2md.prt >! b2md.log
+At the moment the code is hard coded to the MDSPLUS server on lnxb202.
+Currently saved are some time dependent arrays (from b2time.nc) and
+te, ne and ti from b2fplasma.
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2002.12.17
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+(1) From Xavier:
+I've been my mischevious self again... You will find some new
+suggestions for changes in my usual directory:
+
+- Conditioned some more B2plot output to the b2plot_debug switch, namely
+in the 'eirc' command, from pltvessel.F and from logarithmic plots in
+plotpatch.F.
+- Fixed the reading of the fort.44 file, i.e. made sure the the
+b2.neutrals.namelist was read BEFORE fort.44 in b2plot.F, so that the
+code would know how many species, etc... to expect. Fixed the
+computation of NPLSI in ngread.F to be the number of ionized species
+instead of NS (otherwise one got a read error).
+- Updated the values of the fundamental constants (pi, me, mp, ev)
+according to the latest best values published from CERN and LBNL
+(http://pdg.lbl.gov/ and Phys. Rev. D 66, 010001 (2002)), as well as the
+value of 'h' in 'emissivity.constants' (which is to be found at
+/afs/ipp/u/xpb/solps5.0_drifts/src/Braams/b2/src/common/emissivity.constants
+).
+
+Feel free to implement none, any or all or these changes.
+
+(2) From Xavier:
+More specifically, you will find, in my usual src.local and
+src.local.modules directories, the files:
+- b2plot.F
+- b2mod_b2plot.F
+- b2mod_b2mod_b2plot.F
+- fy.F
+- set_midplane_map.F
+
+I have added the following b2plot commands:
+- "'ix' omp" : sets the position of the outer miplane to 'ix' (default
+value is 'jxa')
+- "'ix' imp" : sets the position of the inner midplane to 'ix' (default
+value is 'jxi')
+- "mmid" : flag for mapping to midplane
+- "'iy' yref" : sets the reference flux surface to 'iy' (default value
+is -2)
+
+All these things work for the "fy" command, and also for "p*" where
+"jxa" and "jxi" are used.
+Ona can position the inner and outer midplanes at will with the "imp"
+and "omp" commands, thus overwriting the defaults, which then allows one
+to map a profile to any poloidal surface, including the plates.
+When one activates the "mmid" switch, the profile is plotted using the
+x-abscissae of the equivalent midplane flux tubes, but still only
+plotting the flux tubes that exist at the chosen profile location (i.e.
+not plotting insides of limiters etc). This is an "on/off" switch, very
+much like "sep", with the default being "off". If it is turned on, the
+graph title mentions "(mapped to midplane)", but the user must remember
+where the midplane was. One could change this to "(mapped to ix =
+",jxa,")", or use a different variable than "jxa", for example "ixref".
+One can also now move the zero point of the abscissae. The default
+remains the active separatrix for the poloidal cut considered, but one
+can force the zero to be at a specific 'iy' location with the command
+"'iy' yref". To turn this off, set "-2 yref". The reason the default for
+this is not 'jsep' is that for disconnected double-nulls, 'jsep' is not
+always the correct value (for example if looking into the private region
+of the inactive X-point). I find that this can be useful, for example if
+one wants to measure with respect to the island last closed flux surface
+in a diverted island case (which is not the same at the separatrix), or
+with respect to the outer separatrix in a disconnected double-null.
+However, there is no mention on the graph of what is chosen as the
+origin flux tube for the abscissae.
+
+Please tell me if you want something slightly different or more
+functionalities.
+
+(3)
+a. updated aggj per e-mail to solps-user
+[Could all who have used aggj to generate a grid for JET please check
+that the connection length printed out by B2 is correct.  If you have
+a number between 200 and 600 reported for "conn" in the first 50 or
+so lines of run.log, then you should re-generate your grid.  This
+number should be 2*pi smaller (in the range 40 to 80).
+
+If you are using my 45461, 50401, DOC-U or DOC-L grids you should be
+OK (or if you used dg & carre) --- but check anyway.
+
+(A problem in the units Wb versus Wb/rad)]
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2002.11.28/29
+=============
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+fixed problem in b2stbc and eirene_mc with density feedback option
+added new switch to eirene_mc to repeat the first call to eirene
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2002.11.10
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+new movie option: 
+  changes to b2mndr.F & b2plot.F
+  new routines cdfmovie (in new subdirectory user) & b2mod_movie
+  I plan on moving "user" routines to the new "user" sub-directory
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2002.11.07
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+changed the entry b2stbr_neutr_scl to a subroutine to fix a problem
+with the NAG f95 compiler in Innsbruck
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2002.10.29
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+added swy options in b2tqna for user_transport=2
+added a calculation od sputtering in b2plot ('sput') [not yet DN compliant]
+added a new version of b2mod_ppout
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2002.10.10
+==========
+old eirene:
+-----------
+dropped printing of nrcx,ircx ... in wneutral since not defined
+
+new eirene:
+-----------
+change to elastic interactions for H+/H2 close encounters
+dropped printing of nrcx,ircx ... in wneutral since not defined
+
+b2.5:
+-----
+b2mod_neutrals_namelist: modified sanity check for b2espcr
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2002.10.01
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+From Xavier:
+- Computation of the electron ExB and diamagnetic velocities and
+inclusion in "b2mod_plasma".
+- Computation of the atom total diamagnetic velocity and inclusion in
+"b2mod_plasma".
+- Inclusion of drift velocities in additional viscosity term.
+- Made "vis_par" the master switch for all parallel viscosity terms.
+- Added "signmf" to the "b2cmfs" common block.
+- Corrected "b2co" for limiter cases.
+- Added "periodic_bc" treatment for 1-D cases.
+- Made 7-point stencil and "b2wdat" non-SN geometry compatible.
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2002.09.11
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+<<<
+Hi David,
+
+attached is a revised version of the routine UPTCOP for eirene_new.
+This now avoids the slowing down of the code, and still gets the
+initialisation correct, ie: avoids Xavier's restart problem.
+
+In the previous "corrected" version I had simply initialised some
+arrays at each call to UPTCOP to avoid the restart problem. This was
+much more work then necessary.  Now some new arrays have been
+introduced in COMUSR and are initialised only together with all the
+other plasma fields, ie, whenever a new plasma comes.
+
+Because of this also the common block COMUSR has to be replaced (now
+containing the new arrays BVIN and PARMOM) and the routine
+PLASMA_DERIV also has to be replaced, which initialises these two new
+fields (rather then doing it a few million times in uptcop).
+
+I have tested it with eirene_new from SOLPS, stand alone, and one a
+JET case.  It produces the same results as before, but without slowing
+down the code and (not tested, but I am sure) also without the restart
+problem.
+
+
+cheers
+
+detlev
+>>>
+
+b2.5:
+-----
+b2plot:
+  changed length of commands from 4 to 8 characters
+  added some new quantities
+  introduced a debug flag --- default should produce less output
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2002.09.03
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+fixed a problem with DN in b2mwti
+
+other:
+------
+fixed 2dt for DN case (2da and 2d still need to be fixed)
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2002.09.02
+==========
+old eirene:
+-----------
+switched back to the old version of uptcop
+
+in Detlev's original comment:
+<<<
+the bug was there as well, but it did not affect the momentum sources,
+but, instead, a particular contribution to the cx-energy loss
+only. This separate contribution was not transferred to b2, only the
+total ion energy loss per stratum.  Hence: this bug in uptcop.f
+happens to be entirely irrelevant for eirene_old.  You may decide to
+replace uptcop.f or not. The results should not change by a single
+digit, given the number of MC particles is kept constant.
+(uptcop_new.f is somewhat slower, because I have corrected the bug by
+initialising the term "EDRIFT" at each call. Once per timestep would
+be enough. But that requires thinking, to identify the proper
+variables which must control initialisation in subr. uptcop.
+
+So: the bug was there in eirene_old as well, but, by luck, without any
+consequence for SOLPS.
+
+What remains to be assessed: eirene_new contains more contributions to
+the momentum sources as eirene_old.  Whether the version problems at
+JET had to do with the restart bug, or with the different physics in
+the momentum sources, or else, still needs to be resolved.
+>>>
+
+The "somewhat slower" turbed out to be an understatement!
+
+Priority item is to find a better fix!
+
+new eirene:
+-----------
+
+b2.5:
+-----
+
+other:
+------
+new b2plot script:
+  b2plot < $SOLPSTOP/data/commands/internal_energy_balance.plot
+gives a detailed analysis of the internal energy balance for non-drift
+cases;  "cat b2pl.exe.dir/b2plot.write" gives a breakdown by region.
+new script:
+  check_energy_sources : compares sources printed as tallies with
+(summed) sources in the energy equation
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2002.08.30
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+internal energy balance confirmed (fixed some diagnostic tallies in b2sihs)
+
+other:
+------
+new script, "internal_energy_balance" prints out
+  rsa,rra,rqa,rcx,b2divue,b2divua,b2exbe,b2visa,b2joule,b2fraa,b2fraa,b2wrong1,b2wrong2,b2wrong3,E,N,W,S,E+N+W+S-rsa-rra+rqa-rcx-b2divue-b2divua-b2exbe-b2exba-b2visa-b2joule-b2fraa-b2wrong1-b2wrong2-b2wrong3
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2002.08.28
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+fixed argument list of b2xtps (called when interpolating/extrapolating
+to a different mesh)
+
+other:
+------
+minor changes to 2d & 2dt
+new resall_D+_only
+minor change to energy_analysis
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2002.08.16--23
+==============
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+modified b2mwti to write out data for the extra plates in the DN
+configuration
+added additional x-directed surface(s), and output to the tallies
+block; also momentum related tallies
+added additional viscosity term ('b2npmo_addvis') and perpendicular
+viscosity (4th order term) ('b2tfhe_vis_per'); incorporated 7-pt
+stencil block for the potential eqn [the "classical" viscosity
+calculated in b2tqca was multiplied by 4/3 at the recommendation of
+Rozhansky --- this will give a kick to all residuals (can be countered
+by an appropriate setting of the relevant phm)]
+split off b2tfch from b2tfhe
+added additional diagnostics in the continuing effort to understand
+total energy conservation
+added a substantial number of new quantities to b2plot (and to
+b2fplasma)
+split off (and saved) fna_[35]2, fne_[35]2, fni_[35]2, fch_[35]2 (the
+last in b2fstat[ie], the remainder in b2fplasma) [also a kick in the
+residual] 
+various multi-fluid corrections to drift terms
+version number increased to '01.001.008'
+
+other:
+------
+2dt modified because of changes to b2mwti
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2002.08.07
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+Added new quantities to b2fplasma and b2plot
+	dvue          b2sihs_divue
+        dvua          b2sihs_divua
+        exbe          b2sihs_exbe
+        exba          b2sihs_exba
+        visa          b2sihs_visa
+        joul          b2sihs_joule
+        fraa          b2sihs_fraa
+        str           b2sihs_str
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2002.08.06
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+Fixed respo and respo_num so that the additiional respo_reg tally was
+not included.
+
+Added scripts for the new tallies:
+  resco_reg l
+        plots resco_reg for region 0 (i.e. summed over regions) by species
+  resco_reg l 1
+        plots resco_reg for region 1 by species
+  resco_reg_region l                
+        plots resco_reg summed over species by region
+  resco_reg_region l 2
+        plots resco_reg for species 2 (B2 species 1) by region
+(all log plots because of the l)
+
+Implemented the use of file "NREG" and "SOLPS_FLUIDS" which, if
+present in the directory (or its parent or parent's parent, or ... up
+to the root directory), override the vale in the environment variables
+of the same name in most of the plotting scripts.
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2002.08.05
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+Added residual tallies resco_reg, resmo_reg, reshe_reg, reshi_reg,
+resmt_reg & respo_reg.
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2002.07.30
+==========
+old eirene:
+-----------
+Added a check for NLMPGS in the call to test_couple
+
+new eirene:
+-----------
+Added a check for NLMPGS in the call to test_couple
+
+b2.5:
+-----
+Added a check for NLMPGS in the call to test_couple
+
+Hello Andrei,
+
+I was transposing your code for the SOLSP6.0 version, and, in the
+process, found a few mistakes that you will want to change in your code
+as well.
+
+- In Eirene_mc, you use the variable HLP_LIM, which is never defined,
+instead of the variable NEUT_SCL_LIM from the namelist. This mistake
+essentially turns off all rescaling!
+
+- In the critical section where we apply the scaling to compute the B2
+sources coming from neutral interaction processes, we are missing a
+line:
+   j = b2espcr(is)
+(see line 1142 of the corrected routine in
+~dpc/solps/solps5.0/src/Braams/b2/src/sources/eirene_mc.F).
+This error means we were always rescaling (if at all) with the values
+from the last species in the previous "j" loop.
+
+- When dealing with the gas puff source, you were always using
+USERFLUXPARM(ISTRAI,1). I changed this to TFLUX(ISTRAI), so that the gas
+puff feedback schemes (which of course have time-dependent gas puff
+source strengths) can also work with this.
+
+- I figured how to include the volume recombination source rescaling
+into your scheme. Basically, I condition the loop over the strata such
+that, in the case of the recombination stratum, we do something on every
+call, while for all other strata, we only rescale if Eirene has been
+called. Please check this.
+
+Xavier.
+
+other:
+------
+Added a check for NLMPGS in the call to test_couple in SOLPS4.0 B2
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2002.07.29
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+changed lnlam to follow Wesson
+conditioned a printout in b2stbr so that it is done only for ncall=0
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2002.07.26
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+changes from Andrei Kukushkin to improve the particle balance
+(importing his changes for SOLPS4.0) [not yet working so inactive
+unless eirene_ank_mods set to 1]
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2002.07.22
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+A whole lot of changes!  Xavier's summary:
+
+Fortunately, most of the changes are punctual, in the sense that the
+bulk of them does not involve several routines at once. Since this will
+take more than a day and we'll want to make changes in a semi-ordered
+fashion, we should prioritize what we do. A (non-exhaustive) list of
+changes per category is:
+- Diamagnetic core boundary condition in B2STBC
+- New boundary conditions in B2STBC (energy leakage)
+- Feedback schemes in B2STBC and EIRENE_MC
+- Using b2.neutrals.namelist in B2STBR
+- Improving diagnostics in B2MWTI
+- Limiter changes: B2AG block, B2AI block, many dispersed loops
+throughout the main code, B2PLOT.
+- Documentation of new switches.
+- Default values and tests of namelists inputs.
+- Secondary electron emission coefficient safeguards.
+- B2PLOT arguments safeguards.
+- B2PLOT aesthetic changes in graphs with several curves.
+- Potential equation loop end condition modified in B2NEWS.
+- Multi-species charge exchange arrays (B2TQNA and first flight model).
+- Minimal pitch correction in B2AGFS.
+- Flux limits from neutrals (B2TFNB and B2TQNA).
+- Sergey's output routines (B2WDAT and MY_OUT).
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2002.07.17
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+
+other:
+------
+changed the structure of $SOLPSTOP/data/chords to have sub-directories
+for the various machines.
+same for $SOLPSTOP/data/commands
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2002.07.15
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+change in copy_background to cope with the DN case
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2002.07.11
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+made sure that the b2ux5p_style really did default to 2
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2002.07.10
+==========
+old eirene:
+-----------
+FIXED per Detlev:
+<<<
+Hi there,
+
+attached is the revised routine uptcop.f  for eirene_old.
+
+GOOD NEWS:
+
+the bug was there as well, but it did not affect the momentum sources,
+but, instead, a particular contribution to the cx-energy loss
+only. This separate contribution was not transferred to b2, only the
+total ion energy loss per stratum.  Hence: this bug in uptcop.f
+happens to be entirely irrelevant for eirene_old.  You may decide to
+replace uptcop.f or not. The results should not change
+
+by a single digit, given the number of MC particles is kept constant.
+(uptcop_new.f is somewhat slower, because I have corrected the bug by
+initialising the term "EDRIFT" at each call. Once per timestep would
+be enough. But that requires thinking, to identify the proper
+variables which must control initialisation in subr. uptcop.
+
+So: the bug was there in eirene_old as well, but, by luck, without any
+consequence for SOLPS.
+
+What remains to be assessed: eirene_new contains more contributions to
+the momentum sources as eirene_old.  Whether the version problems at
+JET had to do with the restart bug, or with the different physics in
+the momentum sources, or else, still needs to be resolved.
+
+
+cheers
+
+detlev
+>>>
+
+new eirene:
+-----------
+changed mcarlo so at least one second is used for the eirene flights
+
+b2.5:
+-----
+Introduced two new b2mod_neutrals namelist variables, species_start
+and species_end, which need to be used if Eirene has strata split by
+species type.
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2002.07.05
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+<<<
+Hi David,
+
+I have now installed here in Juelich a version, which mimics the
+coupling between b2 and eirene as done in SOLPS (usually we do it
+differently here, short cycle, etc...)
+As a first result we found a bug which may lead to a restart problem,
+in the SOLPS way of coupling, but not in our coupling proceedures. It
+has to do with an initialisation of some terms in the momentum
+sources, uptcop.
+
+This bug is there in old and new eirene, but the restart problem might
+not have been noticed in old-eirene, because there the momentum
+sources terms are less complete than in new eirene, hence: smaller
+effect for restart due to this bug.
+
+I attach a revised version of subr. UPTCOP, for "new eirene", it has a
+quick correction, not optimal (from the cpu point of view).
+
+Can someone please check if that removes the re-start problem ?  In
+the meantime I will think of something more efficient and also for
+eirene_old.
+
+cheers
+
+detlev
+>>>
+
+13:07> diff -c src/couple/uptcop.F src/couple/uptcop.F.old
+*** src/couple/uptcop.F Fri Jul  5 13:06:39 2002
+--- src/couple/uptcop.F.old     Tue Apr  6 13:48:56 1999
+***************
+*** 56,76 ****
+              VPY(IRD)=PLNY(IR,IP)
+              VRX(IRD)=PPLNX(IR,IP)
+              VRY(IRD)=PPLNY(IR,IP)
+  2       CONTINUE
+  C
+        ENDIF
+- 
+-       DO IR=1,NR1STM
+-         DO IP=1,NP2NDM
+-           IRD=IR+(IP-1)*NR1P2
+-           DO IPL=1,NPLSI
+-             VSIG_PARB(IPL,IRD)=CNDYNP(IPL)*
+-      .                         (VXIN(IPL,IRD)*BXIN(IRD)+
+-      .                          VYIN(IPL,IRD)*BYIN(IRD)+
+-      .                          VZIN(IPL,IRD)*BZIN(IRD))
+-           ENDDO
+-         ENDDO
+-       ENDDO
+  
+        NMTSP=NATMI+NMOLI+NIONI+NPLSI+NADVI+NALVI
+  C
+--- 56,70 ----
+              VPY(IRD)=PLNY(IR,IP)
+              VRX(IRD)=PPLNX(IR,IP)
+              VRY(IRD)=PPLNY(IR,IP)
++             DO 3 IPL=1,NPLSI
++               VSIG_PARB(IPL,IRD)=CNDYNP(IPL)*
++      .                           (VXIN(IPL,IRD)*BXIN(IRD)+
++      .                            VYIN(IPL,IRD)*BYIN(IRD)+
++      .                            VZIN(IPL,IRD)*BZIN(IRD))
++ 3           CONTINUE
+  2       CONTINUE
+  C
+        ENDIF
+  
+        NMTSP=NATMI+NMOLI+NIONI+NPLSI+NADVI+NALVI
+  C
+13:07> 
+
+
+b2.5:
+-----
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2002.06.28
+==========
+old eirene:
+-----------
+Changed CGRID grid.F input.F timet.F torcol.F locate.F samsrf.F to get
+the toroidal option to work (a very productive short visit by Detlev).
+
+input file needs to be changed as follows:
+
+14:48> diff -c ../585.Eirene/input.dat ../585.Eirene_toroidal/input.dat
+*** ../585.Eirene/input.dat     Fri Jun 28 10:13:10 2002
+--- ../585.Eirene_toroidal/input.dat    Fri Jun 28 13:53:10 2002
+***************
+*** 13,21 ****
+      77     0
+   0.00000E+00 1.00000E+00 0.00000E+00
+  F
+! TFFF
+!      0     0     0     0
+!  0.00000E+00 0.00000E+00 3.89557E+03
+  F
+       1
+  T
+--- 13,21 ----
+      77     0
+   0.00000E+00 1.00000E+00 0.00000E+00
+  F
+! ftFF
+!      0     0    72     0
+!  0.00000E+00 0.00000E+00 3.60000E+02 0.00000E+00 0.00001E+00
+  F
+       1
+  T
+14:49> 
+
+(this for an ITER case).
+
+Caution: you probably do not want to read from a fort.15 written by
+the cylindrical version when using the toroidal option (all the phi's
+start at 0 which is a transition point between the wedges).
+
+new eirene:
+-----------
+
+b2.5:
+-----
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2002.06.20
+==========
+old eirene:
+-----------
+changed some "X"'s in write statements to "1X"'s as required by the
+NAG compiler
+
+new eirene:
+-----------
+
+b2.5:
+-----
+added the necessary rescaling for vsa, sig and alf in
+b2mod_input_profile.F
+
+other:
+------
+implemented option for config.local/compiler.$OBJECTCODE in sbb and
+sei
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2002.06.14
+==========
+old eirene:
+-----------
+added DEF_NSRFS to PARMUSR and DIMENSIONS.F
+
+new eirene:
+-----------
+
+b2.5:
+-----
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2002.06.12
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+Hello David,
+
+The debugger (while I was looking for siomething else) for a small
+problem in the NGREAD routine. I traced it down to line 283, which
+should read:
+                iy=iy+nfluids(is)
+instead of
+                iy=iy+nfluids(is+1)
+
+The context is that here Kukushkin's arrays are being transferred over
+from the fort.44 file into b2plot quantities. IS is being looped of the
+number of atomic species and IY is the index of that atomic species in
+the SOLPS4.0 numbering (1:NS). NFLUIDS(IS) contains the numbers of fluid
+species in B2 representing the homonuclear sequence of atomic species
+IS. So the IY index has to jump over NFLUIDS(IS) species (and not
+NFLUIDS(IS+1)) to get to the next atomic species.
+
+Xavier.
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2002.06.04
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+changes to b2stbc, b2tfhe and b2tfhi to unify the treatment of the
+diamagnetic boundary conditions [averaging technique was also modified]
+
+other:
+------
+fluxt modified to account for time dependent array sometimes
+disappearing
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2002.05.14
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+changes to xsecta and xsectm so that the correct error message is
+written out if there is not enough storage for the BGK collisions.
+
+b2.5:
+-----
+Changes to b2mod_input_profile.F to cater for the case where ../dsa is
+used before being written.
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2002.5.07
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+
+other:
+------
+Changed "ls -l" in lndr to "ls -ld" to fix, hopefully, the problem
+with bin being linked to the wrong file.  Hopefully this dod not break
+anything else.
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2002.05.05
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+Modified b2news.F so that the "Velocity limit active" message is only
+printed out if the partial density is greater than 1e-6. 
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2002.05.01
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+
+other:
+------
+Added SOLPS course notes to doc.
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2002.04.29
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+changed defaults for 
+			from	to
+eirene_extrap		0	1
+b2mwti_target_offset	0	1
+
+moved the transport ballooning code in b2tqna below the piece that
+implemented reading the transport from an input file.
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2002.04.25
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+added "../src/modules/.new_modules" and changes to Makefile which will
+automatically trigger a new "gmake depend"
+
+other:
+------
+added a "help" option to the Makefile in the run directory
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2002.04.24
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+two new flags:
+'b2mwti_target_offset'
+      '0' (default) show temperatures & densities in the 2d arrays in
+		b2time.nc in the guard cells
+      '1' show temperatures & densities in the 2d arrays in the first
+		real cell
+'eirene_extrap' 
+      '0' (default) give Eirene the temperatures and densities
+		directly from B2.5
+      '1' replace the guard cell values in the eirene temperatures and
+		densities by the adjacent real cell
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2002.04.22
+==========
+old eirene:
+-----------
+changes to PARMUSR & PARMMOD so that NADD and NPRNL can be specified in 
+$SOLPSTOP/src/include/DIMENSIONS.F
+
+new eirene:
+-----------
+[these changes had already been implemented for new eirene]
+
+b2.5:
+-----
+added a new module b2mod_solpstop.F that provides SOLPSTOP
+changed ratadas and spect so that ratadas.filelist and filelist.adas can
+contain refernces to SOLPSTOP
+further changed spect.F so that source.location is no longer used, replaced
+by a new filelist.adas.adf15.
+change to b2plot so that nflai > nfla won't cause b2plot to stop
+
+other:
+------
+changed $SOLPSTOP/ratadas.filelist so that SOLPSTOP is used, and added entries
+through to Sn (all with 'none') [matching change in ratadas.F]
+changed $SOLPSTOP/adas/filelist.adas so that SOLPSTOP is used [matching change
+in spect.F]
+dropped the use of source.location and replaced $SOLPSTOP/adas/filelist.adas
+by filelist.adas.adf15, and allowed the 'pju' and 'T' type indicators 
+previously given in source.location to be given on a by species basis in the 
+new file.
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2002.04.10+11
+=============
+old eirene:
+-----------
+
+new eirene:
+-----------
+
+b2.5:
+-----
+b2stbr: physical and chemical sputtering can be controlled on a per surface
+        basis via cbrec
+eirene_f30f31: minima and maxima can be set for te, ti, na, ua transferred
+        to Eirene
+b2stbr: changed default angle of physical sputtering to 30 deg from 65 deg
+b2sdia:	removed double counting of T x grad B term in drifts
+various updates to re-sync Greifswald and Garching versions 
+	(BoRiS and conduction flags, DN features)
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2002.04.08
+==========
+old eirene:
+-----------
+
+new eirene:
+-----------
+in xstcx.F removed the (wrong) addition of a reaction
+c-dpc 2000.04.30 ??? check with detlev
+c	MODCOL(3,1,ISP,IPL)=kk       ! removed 2002.04.08 at Detlev's recommendation
+
+b2.5:
+-----
+
+other:
+------
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+2002.03
+=======
+old eirene:
+-----------
+infcop.F
+	fixed error message (from xpb)
+	volume recombination now by stratum
+cross.F
+	added diagnotics so that extrap failures tell which reaction was 
+		the problem
+upsusr.F
+	if activated, write out data to upsusr.dat
+
+b2.5:
+-----
+b2plot.F
+	added option so that eirene atom densities are added to the relevant
+		B2.5 neutral densities (useful for nspec)
+spect.F
+	fixed problem with plotting He lines --- ADAS routines expected 'HE',
+		ADAS files had 'He'
+b2mn.F
+	changed file open on channel nout(8) to 'tran'/unformatted from
+		'b2tran'/formatted
+b2npht.F
+	added calculation of b2qie for eirene
+b2mod_neutrals_namelist.F
+	volume recombination now by stratum
+b2mod_tallies.F:
+	ionization potentials
+b2mod_sputter.F
+	can choose which angle to use in the sputter tables
+b2mod_ppout.F
+	replaced with new version from gcor@jet.uk
+tallies.F
+	new tallies for the flux of potential energy
+eirene_mc.F
+	volume recombination now by stratum
+	pass eirene b2rad and b2qie
+b2stel.F
+	added calculation of b2rad for eirene
+b2stbr.F
+	can select column in sputter tables
+	can re-scale physical sputtering
+
+other:
+------
+run/Makefile
+	move tran file up from b2mn.exe.dir
+
+bin/common/b2run
+	if running at JET setup links to files that would come from baserun
+		so that the catalogging system works

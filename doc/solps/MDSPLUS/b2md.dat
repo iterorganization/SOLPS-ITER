@@ -1,0 +1,10 @@
+ &b2md_namelist
+ exp='JET',
+ shot=45462,
+ time=59.381,
+ comment='Parameter scan based (mostly) on g045462.59381.txt.x4.96x24.mod',
+ timedep=.true.,
+ snapshot=.true.,
+ tallies=.true.,
+ movies=.false.,
+ &end

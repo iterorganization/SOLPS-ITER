@@ -1,0 +1,617 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="Generator" CONTENT="Microsoft Word 97">
+<TITLE>DG manual</TITLE>
+</HEAD>
+<BODY>
+
+<B><FONT FACE="Chicago,Impact" SIZE=6><P ALIGN="CENTER">DG manual</P>
+</B></FONT><FONT FACE="Times" SIZE=4><P ALIGN="CENTER">Version 1.20</P>
+</FONT><FONT FACE="Courier" SIZE=5><P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+</FONT><B><FONT FACE="Times" SIZE=4><P>1. Introduction</P>
+</FONT><FONT FACE="Times"><P>1.1. Purpose of DG</P>
+<P>DG </B>is the backbone of the <B>Interactive Graphical Interface</B> package. It allows user to visualize the model geometry, to modify it, and to specify the geometry-related data necessary for a grid generator and modelling codes. It was originally designed to alleviate transfer of the divertor geometry from the CAD system to the <B>B2-Eirene</B> code package. However, it has proved to become a powerful tool of more general purpose, allowing one, e. g., to specify arbitrary shape of the divertor structures, to check visually the quality of the computational grids produced by a mesh generator, to analyse the error messages from the Monte-Carlo routine, to assess easily the compatibility of the plasma equilibrium used in the calculations and the wall geometry of the machine, e.t.c. It can also be very efficient as a sort of very simple drawing program to design the problem geometry from scratch, and not only for B2-Eirene. With use of this code, the most boring and time-consuming part of the preparatory work necessary for the edge plasma modelling in a realistic geometry, becomes really a pleasure. Try it and see yourself!</P>
+<B><P>1.2. DG objects</P>
+<P>1.2.1. External objects</P>
+</B><P>The external objects are the files which DG imports or exports. They normally have default extensions by which are used by the code when displaying the lists of files in the I/O control windows. The following table gives a brief description of the files used in DG.</P>
+<P>&nbsp;</P></FONT>
+<TABLE BORDER CELLSPACING=1 CELLPADDING=5 WIDTH=650>
+<TR><TD WIDTH="26%" VALIGN="TOP">
+<B><FONT FACE="Times"><P>Input files:</B></FONT></TD>
+<TD WIDTH="59%" VALIGN="TOP">
+<B><FONT FACE="Times"><P ALIGN="CENTER">Description</B></FONT></TD>
+<TD WIDTH="15%" VALIGN="TOP">
+<B><FONT FACE="Times"><P ALIGN="CENTER">Extension</B></FONT></TD>
+</TR>
+<TR><TD WIDTH="26%" VALIGN="TOP">
+<B><FONT FACE="Times"><P ALIGN="CENTER">DG model</B></FONT></TD>
+<TD WIDTH="59%" VALIGN="TOP">
+<FONT FACE="Times"><P>All the data relevant to the model </FONT></TD>
+<TD WIDTH="15%" VALIGN="TOP">
+<FONT FACE="Times"><P ALIGN="CENTER">.dg</FONT></TD>
+</TR>
+<TR><TD WIDTH="26%" VALIGN="TOP">
+<B><FONT FACE="Times"><P ALIGN="CENTER">Template</B></FONT></TD>
+<TD WIDTH="59%" VALIGN="TOP">
+<FONT FACE="Times"><P>Geometry data from CAD drawing or other source</FONT></TD>
+<TD WIDTH="15%" VALIGN="TOP">
+<FONT FACE="Times"><P ALIGN="CENTER">.ogr</FONT></TD>
+</TR>
+<TR><TD WIDTH="26%" VALIGN="TOP">
+<B><FONT FACE="Times"><P ALIGN="CENTER">Equilibrium</B></FONT></TD>
+<TD WIDTH="59%" VALIGN="TOP">
+<FONT FACE="Times"><P>Values of the poloidal magnetic flux on a regular grid</FONT></TD>
+<TD WIDTH="15%" VALIGN="TOP">
+<FONT FACE="Times"><P ALIGN="CENTER">.equ</FONT></TD>
+</TR>
+<TR><TD WIDTH="26%" VALIGN="TOP">
+<B><FONT FACE="Times"><P ALIGN="CENTER">Mesh</B></FONT></TD>
+<TD WIDTH="59%" VALIGN="TOP">
+<FONT FACE="Times"><P>The computational grid to be used by B2-Eirene</FONT></TD>
+<TD WIDTH="15%" VALIGN="TOP">&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="26%" VALIGN="TOP">
+<B><FONT FACE="Times"><P>Output files:</B></FONT></TD>
+<TD WIDTH="59%" VALIGN="TOP">&nbsp;</TD>
+<TD WIDTH="15%" VALIGN="TOP">&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="26%" VALIGN="TOP">
+<B><FONT FACE="Times"><P ALIGN="CENTER">DG model</B></FONT></TD>
+<TD WIDTH="59%" VALIGN="TOP">
+<FONT FACE="Times"><P>All the data relevant to the model </FONT></TD>
+<TD WIDTH="15%" VALIGN="TOP">
+<FONT FACE="Times"><P ALIGN="CENTER">.dg</FONT></TD>
+</TR>
+<TR><TD WIDTH="26%" VALIGN="TOP">
+<B><FONT FACE="Times"><P ALIGN="CENTER">Output file</B></FONT></TD>
+<TD WIDTH="59%" VALIGN="TOP">
+<FONT FACE="Times"><P>Specification of the <I>elements</I> and some other information – to be used by the interface routines producing the input files for B2-Eirene.</FONT></TD>
+<TD WIDTH="15%" VALIGN="TOP">
+<FONT FACE="Times"><P ALIGN="CENTER">.dgo</FONT></TD>
+</TR>
+<TR><TD WIDTH="26%" VALIGN="TOP">
+<B><FONT FACE="Times"><P ALIGN="CENTER">Targets file</B></FONT></TD>
+<TD WIDTH="59%" VALIGN="TOP">
+<FONT FACE="Times"><P>Specification of the <I>targets</I> – to be used by the interface routines producing the input files for B2-Eirene and Sonnet.</FONT></TD>
+<TD WIDTH="15%" VALIGN="TOP">
+<FONT FACE="Times"><P ALIGN="CENTER">.trg</FONT></TD>
+</TR>
+<TR><TD WIDTH="26%" VALIGN="TOP">
+<B><FONT FACE="Times"><P ALIGN="CENTER">Structure file</B></FONT></TD>
+<TD WIDTH="59%" VALIGN="TOP">
+<FONT FACE="Times"><P>Specification of the structures – to be used by the interface routines producing the input files for Sonnet.</FONT></TD>
+<TD WIDTH="15%" VALIGN="TOP">
+<FONT FACE="Times"><P ALIGN="CENTER">.str</FONT></TD>
+</TR>
+<TR><TD WIDTH="26%" VALIGN="TOP">
+<B><FONT FACE="Times"><P>Configuration file:</B></FONT></TD>
+<TD WIDTH="59%" VALIGN="TOP">&nbsp;</TD>
+<TD WIDTH="15%" VALIGN="TOP">&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="26%" VALIGN="TOP">&nbsp;</TD>
+<TD WIDTH="59%" VALIGN="TOP">
+<FONT FACE="Times"><P>The file containing information on the DG <I>layers</I> and <I>variables</I>. </FONT></TD>
+<TD WIDTH="15%" VALIGN="TOP">
+<FONT FACE="Times"><P ALIGN="CENTER">.dgc</FONT></TD>
+</TR>
+</TABLE>
+
+<B><FONT FACE="Times"><P>&nbsp;</P>
+<P>1.2.2. Internal objects</P>
+</B><P>The internal objects are those with which you deal when working with DG. </P>
+<P>&nbsp;</P></FONT>
+<TABLE CELLSPACING=0 BORDER=0 CELLPADDING=5 WIDTH=653>
+<TR><TD WIDTH="21%" VALIGN="TOP">
+<B><FONT FACE="Times"><P ALIGN="CENTER">Objects</B></FONT></TD>
+<TD WIDTH="79%" VALIGN="TOP">
+<B><FONT FACE="Times"><P ALIGN="CENTER">Description</B></FONT></TD>
+</TR>
+<TR><TD WIDTH="21%" VALIGN="TOP">
+<B><FONT FACE="Times"><P>Drawing objects</B></FONT></TD>
+<TD WIDTH="79%" VALIGN="TOP">&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="21%" VALIGN="TOP">
+<FONT FACE="Times"><P>Points</FONT></TD>
+<TD WIDTH="79%" VALIGN="TOP">
+<FONT FACE="Times"><P>Just points (displayed as red squares) which can be used to create <I>elements</I> or for diagnostic purpose. </FONT></TD>
+</TR>
+<TR><TD WIDTH="21%" VALIGN="TOP">
+<FONT FACE="Times"><P>Irregular points</FONT></TD>
+<TD WIDTH="79%" VALIGN="TOP">
+<FONT FACE="Times"><P>Every point which is not regular. The regular point is a point connecting exactly two <I>elements</I> with the same orientation (see <I>External normals</I>)</FONT></TD>
+</TR>
+<TR><TD WIDTH="21%" VALIGN="TOP">
+<FONT FACE="Times"><P>Elements</FONT></TD>
+<TD WIDTH="79%" VALIGN="TOP">
+<FONT FACE="Times"><P>Straight line segments (displayed in bright white) connecting <I>points</I>. Normally, they represent additional surfaces – in terms of Eirene. You can edit elements (create, delete, split, join, change orientation, etc.) and assign <I>variables</I> to them. </FONT></TD>
+</TR>
+<TR><TD WIDTH="21%" VALIGN="TOP">
+<FONT FACE="Times"><P>Surfaces</FONT></TD>
+<TD WIDTH="79%" VALIGN="TOP">
+<FONT FACE="Times"><P>Projections of the magnetic surfaces onto the radial plane (displayed in yellow) calculated from <I>equilibrium</I> data. You can create, move, and delete them. The surfaces allow you to specify the requirements on the radial mesh for the mesh generator, and also to check the compatibility of your wall structures with the magnetic configuration.</FONT></TD>
+</TR>
+<TR><TD WIDTH="21%" VALIGN="TOP">
+<FONT FACE="Times"><P>Grid points</FONT></TD>
+<TD WIDTH="79%" VALIGN="TOP">
+<FONT FACE="Times"><P>Points on the separatrix which represent partition of the magnetic surfaces in different regions for the grid generator. They are displayed as dashes in magenta, the separatrix being drawn in red.</FONT></TD>
+</TR>
+<TR><TD WIDTH="21%" VALIGN="TOP">
+<FONT FACE="Times"><P>Separators</FONT></TD>
+<TD WIDTH="79%" VALIGN="TOP">
+<FONT FACE="Times"><P>Straight line segments (displayed in cyan) connecting the outer nodes of the computational <I>mesh</I> with surrounding <I>structure</I>. The separators also represent additional surfaces, but you can only re-position their outer edges. Their purpose is separation of <I>additional cells</I> – in terms of Eirene. </FONT></TD>
+</TR>
+<TR><TD WIDTH="21%" VALIGN="TOP">
+<FONT FACE="Times"><P>Sources</FONT></TD>
+<TD WIDTH="79%" VALIGN="TOP">
+<FONT FACE="Times"><P>Special points which can be grouped together (displayed as white asterisks). They can be used to specify the point sources of neutrals, – and also in calculation of radiation load onto the first wall.</FONT></TD>
+</TR>
+<TR><TD WIDTH="21%" VALIGN="TOP">
+<FONT FACE="Times"><P>Equilibrium</FONT></TD>
+<TD WIDTH="79%" VALIGN="TOP">
+<FONT FACE="Times"><P>A sort of visualisation of the equilibrium data – red and blue dashes corresponding to the imported matrix of the poloidal magnetic flux.</FONT></TD>
+</TR>
+<TR><TD WIDTH="21%" VALIGN="TOP">
+<FONT FACE="Times"><P>Mesh</FONT></TD>
+<TD WIDTH="79%" VALIGN="TOP">
+<FONT FACE="Times"><P>Computational mesh produced with a grid generator and imported into DG (displayed in blue). Allows you to check the quality of the mesh and to make the necessary corrections to the input data for the grid generator. </FONT></TD>
+</TR>
+<TR><TD WIDTH="21%" VALIGN="TOP">
+<FONT FACE="Times"><P>Chords</FONT></TD>
+<TD WIDTH="79%" VALIGN="TOP">
+<FONT FACE="Times"><P>Straight line segments representing the diagnostic chords for Eirene and b2plot. </FONT></TD>
+</TR>
+<TR><TD WIDTH="21%" VALIGN="TOP">
+<FONT FACE="Times"><P>Cells</FONT></TD>
+<TD WIDTH="79%" VALIGN="TOP">
+<FONT FACE="Times"><P>Regions outside the computational mesh surrounded by the elements, separators, and the mesh edges (<I>additional cells</I> – in terms of Eirene).</FONT></TD>
+</TR>
+<TR><TD WIDTH="21%" VALIGN="TOP">
+<FONT FACE="Times"><P>External normals</FONT></TD>
+<TD WIDTH="79%" VALIGN="TOP">
+<FONT FACE="Times"><P>Means for visualisation of the orientation of the elements. They are displayed, in magenta, as dashes located at the element centers and pointing to the right if you are moving from the beginning to the end of an element. This is the direction of the external normal in terms of Eirene.</FONT></TD>
+</TR>
+<TR><TD WIDTH="21%" VALIGN="TOP">
+<FONT FACE="Times"><P>Template</FONT></TD>
+<TD WIDTH="79%" VALIGN="TOP">
+<FONT FACE="Times"><P>Imported graphics from external source (e.g. from CAD drawing or from old Eirene input file). The template is displayed in cyan, and it can be converted into <I>elements.</I></FONT></TD>
+</TR>
+<TR><TD WIDTH="21%" VALIGN="TOP">
+<FONT FACE="Times"><P>Axes</FONT></TD>
+<TD WIDTH="79%" VALIGN="TOP">
+<FONT FACE="Times"><P>Co-ordinate axes which can be displayed on the drawing</FONT></TD>
+</TR>
+<TR><TD WIDTH="21%" VALIGN="TOP">
+<FONT FACE="Times"><P>Grid</FONT></TD>
+<TD WIDTH="79%" VALIGN="TOP">
+<FONT FACE="Times"><P>Co-ordinate grid which can be displayed on the drawing</FONT></TD>
+</TR>
+<TR><TD WIDTH="21%" VALIGN="TOP">
+<FONT FACE="Times"><P>X-point</FONT></TD>
+<TD WIDTH="79%" VALIGN="TOP">
+<FONT FACE="Times"><P>The x-point of the magnetic equilibrium which separates the divertor. The code cannot decide where the x-point you need is located, thus you must set X-point before specification of the <I>grid points</I>. When the X-point is set and the <I>grid points</I> are to be displayed, the separatrix is drawn in red. </FONT></TD>
+</TR>
+<TR><TD WIDTH="21%" VALIGN="TOP">
+<B><FONT FACE="Times"><P>Additional data</B></FONT></TD>
+<TD WIDTH="79%" VALIGN="TOP">&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="21%" VALIGN="TOP">
+<FONT FACE="Times"><P>Variables</FONT></TD>
+<TD WIDTH="79%" VALIGN="TOP">
+<FONT FACE="Times"><P>The data related to the <I>elements</I>, which can be passed to other codes via the output files. </FONT></TD>
+</TR>
+<TR><TD WIDTH="21%" VALIGN="TOP">
+<FONT FACE="Times"><P>Layers</FONT></TD>
+<TD WIDTH="79%" VALIGN="TOP">
+<FONT FACE="Times"><P>Groups of the variables.</FONT></TD>
+</TR>
+<TR><TD WIDTH="21%" VALIGN="TOP">
+<FONT FACE="Times"><P>Targets</FONT></TD>
+<TD WIDTH="79%" VALIGN="TOP">
+<FONT FACE="Times"><P>They limit the mesh in the poloidal direction, and thus must be specified for the grid generator</FONT></TD>
+</TR>
+<TR><TD WIDTH="21%" VALIGN="TOP">
+<FONT FACE="Times"><P>Structure</FONT></TD>
+<TD WIDTH="79%" VALIGN="TOP">
+<FONT FACE="Times"><P>Some external geometrical data for the grid generator&nbsp;– such as side walls.</FONT></TD>
+</TR>
+<TR><TD WIDTH="21%" VALIGN="TOP">
+<FONT FACE="Times"><P>Target edges</FONT></TD>
+<TD WIDTH="79%" VALIGN="TOP">
+<FONT FACE="Times"><P>The elements which should be re-connected to the corresponding corners of the calculational mesh in order to avoid mis-matches of the mesh and the targets in the Monte-Carlo calculations.</FONT></TD>
+</TR>
+</TABLE>
+
+<FONT FACE="Times"><P>&nbsp;</P>
+</FONT><B><FONT FACE="Times" SIZE=4><P>2.Using DG</P>
+</FONT><FONT FACE="Times"><P>2.1 Starting DG</P>
+</B><P>To start DG with a blank window, type:</P>
+</FONT><B><FONT FACE="Courier"><P>dg</P>
+</B></FONT><FONT FACE="Times"><P>at the UNIX prompt.</P>
+<P>To start DG with an existing model (or several models) loaded, type:</P>
+</FONT><B><FONT FACE="Courier"><P>dg &lt;filename.dg&gt; [...]</P>
+</B></FONT><FONT FACE="Times"><P>After you start DG, the main window will appear.</P>
+<B><P>2.2. Main window</P>
+</B><P>After you start DG, the main window appears. It has four areas: menu bar, toolbar, work area and the message line. </P>
+<B><P>2.2.1. Menu bar. </P>
+</B><P>The menu bar gives you access to the most of the DG functionality. It contains several buttons, which can be used to open the corresponding menus by clicking the left mouse button on it. Every menu can be teared off and left on the screen after opening it. In order to do this, just click at the dashed line at the top of the menu window. The following menus are available at present;</P><DIR>
+<DIR>
+<DIR>
+<DIR>
+
+<B><P>Files</B> menu. You need it to start a new model, to work with external objects (to save or open the model; to import templates, equilibrium files, or computational meshes; to produce the output files which are used for generation of the input files for computational codes), or to quit the application.</P>
+<B><P>Edit</B> menu. It allows you to perform some global operations, such as recovering from errors, selecting and de-selecting all elements, creation or removal of groups of objects, and shift or rotation of the picture.</P>
+<B><P>View</B> menu. Here you can specify, which objects should be visible on the screen. </P>
+<B><P>Commands</B> menu. It allows you to perform two global commands: to convert the <I>template</I> to the <I>elements</I> and to renumber the elements.</P>
+<B><P>Variables</B> menu. You will use it in order to specify additional geometry-related information for the output files (e. g., location of targets, boundary conditions for the Monte-Carlo routine, e.t.c.).</P>
+<B><P>Options</B> menu. From this menu you can tailor the main window to fit you preferences. It also allows you to customize the DG variables <I>(only for experienced users!).</P>
+</I><B><P>Window</B> menu. It allows you to open more windows with different views of the same model, to close the current window, to open a window showing the statistics for the model, and to open the <I>ToolBox</P>
+</I><B><P>Help </B>menu. This is the way to get some on-line help on DG and to identify its current version.</P></DIR>
+</DIR>
+</DIR>
+</DIR>
+
+<B><P>2.2.2. Toolbar</P>
+</B><P>The toolbar allows you to assign different <I>tools</I> to each of the mouse buttons. It has 3 option menus–for the three buttons– that contain the list of available tools. If your mouse has less than three buttons, then only the leftmost option menu(s) are actual.</P>
+<B><P>2.2.3. Work area</P>
+</B><P>The work area is the area where the drawing is displayed. Here you can move around the drawing, and you can use <I>tools</I> to edit it. The work area can optionally display co-ordinate axes and co-ordinate grid to simplify positioning of objects.</P>
+<B><P>2.2.3. Message line </P>
+</B><P>The message line is located below the work area. It is used to display error messages and information on the objects. Error messages are sometimes displayed in an error box instead of the message line, and in this case you must click &quot;OK&quot; before proceeding further.</P>
+<B><P>2.3. Using tools</P>
+<P>Tools</B> are used to perform actions in the work area. They allow  you to create, move, modify, or remove objects, to query information on the objects and to move around the drawing.</P>
+<P>The tool must be assigned to a mouse button before using it. You can select the tool to be assigned to each of the mouse buttons either from the toolbar, or from the ToolBox (the Window menu). There is one small difference between these two options. Operating with the toolbar, you always use the left mouse button to select the tools for each of them, while click on a tool from the ToolBox with a button picks up this tool for this particular button.</P>
+<P>To use a tool, move the mouse pointer into the work area and depress the mouse button the tool has been assigned to. Then, you can optionally move the mouse. To end the action, release the mouse button with the mouse pointer still inside the work area. To cancel the action, move the mouse pointer out of the work area and release the mouse button.</P>
+<P>Some tools require you to 'select' an object. To select an object, move the mouse pointer to the object and depress the mouse button. The object selected will be highlighted in another color. The <I>green</I> color means OK, while the <I>red</I> one indicates that the operation cannot be done. Normally, some explanatory text appears in such cases on the message line.</P>
+<B><P>2.4. Using Undo</P>
+</B><P>You can reverse the effect of almost any operation by issuing the <B>Edit|Undo</B> menu command. You can also reverse the effect of Undo command by <B>Edit|Redo</B>. The DG keeps track of practically all the operations you did starting from opening the window, and thus you can recover from almost all the errors you could make in the coarse of the model editing. To reverse the effect of all the Undo commands you issued, use <B>Edit|Redo all</B>. </P>
+<P>&nbsp;</P>
+</FONT><B><FONT FACE="Times" SIZE=4><P>3. Working with models</P>
+</FONT><FONT FACE="Times"><P>3.1. Opening an existing model</P>
+</B><P>To open an existing DG model from DG, use the </FONT><B><FONT FACE="Courier">File|Open... </B></FONT><FONT FACE="Times">menu command. A dialog box will appear prompting you for a filename. You can either select a file from the list or type the filename in the edit field. Then press </FONT><B><FONT FACE="Courier">Ok</B></FONT><FONT FACE="Times">. A new window displaying the selected model will be opened. If you issue the </FONT><B><FONT FACE="Courier">File|Open...</B></FONT><FONT FACE="Times"> command immediately after starting DG, the file will be loaded in the current window. If an error happens, the error box appears. Press </FONT><B><FONT FACE="Courier">Ok</B></FONT><FONT FACE="Times"> to close the error box.</P>
+<P>To start DG with an existing model loaded, specify the filename on the DG command line. If you specify multiple filenames, DG will open a separate window for each model.</P>
+<B><P>3.2. Creating a new model</P>
+</B><P>To create a new, empty model with DG, use the </FONT><B><FONT FACE="Courier">File|New</B></FONT><FONT FACE="Times"> menu command. A new blank window will be opened.</P>
+<P>When you start DG without parameters, the DG window is blank.</P>
+<B><P>3.3. Saving a model</P>
+</B><P>To save a model, use the </FONT><B><FONT FACE="Courier">File|Save...</B></FONT><FONT FACE="Times"> menu command. A dialog box will appear prompting you for a filename. If the current model has a filename assigned to it, this filename will appear in the edit field. In order to save the model under a different name, or to save the newly-created file, you should either enter the new name in the edit field, or select a name from the list (to overwrite an existing file). After that, press </FONT><FONT FACE="Courier">OK</FONT><FONT FACE="Times">.</P>
+<B><P>3.4. Quitting DG</P>
+</B><P>To quit DG, you must close all windows.</P>
+<P>To close a window, issue the </FONT><B><FONT FACE="Courier">Window|Close</B></FONT><FONT FACE="Times"> menu command. You can also use the window manager to close a window. With Motif Window Manager, simply double-click the system menu. If you've made changes to the model in this window, a warning box will appear. Select </FONT><B><FONT FACE="Courier">Save</B></FONT><FONT FACE="Times"> to save the model. Select </FONT><B><FONT FACE="Courier">Discard</B></FONT><FONT FACE="Times"> to close the window without saving changes. Select </FONT><B><FONT FACE="Courier">Cancel</B></FONT><FONT FACE="Times"> to leave the window open.</P>
+<P>To close all windows, use the </FONT><B><FONT FACE="Courier">File|Exit program</B></FONT><FONT FACE="Times"> menu command.</P>
+<P>There is a caveat in the current version of DG that iconified windows containing unsaved work are not de-iconified after these commands. You will have to de-iconify them manually in order to see their warning boxes. All other iconified windows will be closed without problems.</P>
+<P>&nbsp;</P>
+</FONT><B><FONT FACE="Times" SIZE=4><P>4. Working with elements</P>
+</FONT><FONT FACE="Times"><P>4.1. Converting a template</P>
+</B><P>It is often more convenient to convert a template into a set of elements and then edit them to suit your needs, rather than to define all elements by hand.</P>
+<P>First, you should import the template. Choose the </FONT><B><FONT FACE="Courier">File|Template...</B></FONT><FONT FACE="Times"> menu command. A dialog box will appear prompting for a filename, similar to that for opening DG files. After importing the template, choose </FONT><B><FONT FACE="Courier">View|Picture view</B></FONT><FONT FACE="Times"> to adjust the zoom factor in order to make the template visible. Enable </FONT><B><FONT FACE="Courier">View|Axes</B></FONT><FONT FACE="Times"> and </FONT><B><FONT FACE="Courier">View|Grid</B></FONT><FONT FACE="Times"> to display the coordinate system.</P>
+<P>DG lets you adjust the template position by moving it by a fixed distance and/or rotating it 90 degrees around (0,0). To adjust the position, choose the </FONT><B><FONT FACE="Courier">Edit|Move/Rotate...</B></FONT><FONT FACE="Times"> menu command. A dialog box will appear. Enable the </FONT><B><FONT FACE="Courier">Template</B></FONT><FONT FACE="Times"> check box. To move the template, enter X- and Y-increments and press </FONT><B><FONT FACE="Courier">Move</B></FONT><FONT FACE="Times">. To rotate, press </FONT><B><FONT FACE="Courier">Rotate</B></FONT><FONT FACE="Times">. If the template moves out of sight, again choose </FONT><B><FONT FACE="Courier">View|Picture view</B></FONT><FONT FACE="Times">. Press </FONT><B><FONT FACE="Courier">Close</B></FONT><FONT FACE="Times"> when done.</P>
+<P>To convert the template into a set of elements, choose </FONT><B><FONT FACE="Courier">Commands|Convert template</B></FONT><FONT FACE="Times">.</P>
+<P>Note that after the conversion, the template remains visible. This is convenient for editing elements, because the difference from the original template is visible. You can hide or display the template by disabling or enabling </FONT><B><FONT FACE="Courier">View|Template</B></FONT><FONT FACE="Times">. To unload the template permanently, choose </FONT><B><FONT FACE="Courier">Edit|Delete|Template</B></FONT><FONT FACE="Times">.</P>
+<P>Elements produces by this conversion are sometimes wrong connected or have wrong external normals. The reason for this is that templates are often not very accurate. Because of that, a manual editing is often necessary.</P>
+<B><P>4.2. Creating elements manually</P>
+</B><P>There are several tools for creating new elements.</P>
+<P>Use </FONT><B><FONT FACE="Courier">Add element</B></FONT><FONT FACE="Times"> to create the first element or to attach an element to a pre-defined point. Move the mouse pointer to the starting point and press the mouse button. Then move the pointer to the ending point and release the mouse button. </P>
+<P>Use </FONT><B><FONT FACE="Courier">Split element</B></FONT><FONT FACE="Times"> to split an element into two. Select an element. It will split into two. Drag the newly created point to the desired location and release the mouse button.</P>
+<P>Use </FONT><B><FONT FACE="Courier">Connect points</B></FONT><FONT FACE="Times"> to create an element between two pre-defined points. Select the first point, move the mouse cursor to the second one and release the mouse button. You cannot create more than one element between the same two points.</P>
+<P>You can also use the </FONT><B><FONT FACE="Courier">Edit|Create|Point...</B></FONT><FONT FACE="Times"> menu command to create points that will be later connected using the </FONT><B><FONT FACE="Courier">Connect points</B></FONT><FONT FACE="Times"> tool. A dialog box will appear. Enter the desired coordinates and press </FONT><B><FONT FACE="Courier">Create</B></FONT><FONT FACE="Times">. The dialog box will remain on the screen, allowing you to create more than one point without re-opening it. To close the dialog box, press Cancel.</P>
+<B><P>4.3. Editing elements</P>
+</B><P>There are several tools for modifications of existing elements.</P>
+<P>Use </FONT><B><FONT FACE="Courier">Delete </B></FONT><FONT FACE="Times">to remove an element. Select the element and release the mouse button.</P>
+<P>Use </FONT><B><FONT FACE="Courier">Join elements</B></FONT><FONT FACE="Times"> to join two adjanced elements into one (reverse effect of </FONT><B><FONT FACE="Courier">Split element</B></FONT><FONT FACE="Times">). Select the point between the elements and release the mouse button. You can only join elements around a regular point. There must be exactly two elements attached and their external normals must point to the same direction.</P>
+<P>Use </FONT><B><FONT FACE="Courier">Move/Stretch</B></FONT><FONT FACE="Times"> to move a point with all attached elements. Select the point and drag it to the new location. Then release the mouse button.</P>
+<P>Use </FONT><B><FONT FACE="Courier">Reposition</B></FONT><FONT FACE="Times"> to attach one end of an element to another point. Select the element near one of it's ends, move the mouse pointer to another pre-defined point and release the button.</P>
+<B><P>4.4. Changing external normals</P>
+</B><P>It is often required that external normals of adjanced elements point in the same direction.</P>
+<P>To display or hide external normals, enable or disable </FONT><B><FONT FACE="Courier">View|External normals</B></FONT><FONT FACE="Times">.</P>
+<P>Use the </FONT><B><FONT FACE="Courier">Revertnormals</B></FONT><FONT FACE="Times"> tool to change directions of external normals. Select an element to change it's normal. Moving the mouse pointer to adjanced elements will force their normals to point to the same direction as that of the first element. Release the mouse button to end the action.</P>
+<B><P>4.5. Renumbering elements</P>
+</B><P>Each element has an unique number associated with it. These numbers determine the order of writing elements into the output file. This feature is very useful for debugging. DG uses an internal counter to assign these numbers. Each time the user creates an element, the counter is increased by one and it's value is used as the element number. However, when the user deletes an element, other elements are not renumbered and the counter is not decreased. Since many unused numbers consume disk space and may slow down programs that use DG output, they must be eliminated periodically. Renumbering elements is absolutely safe except when you are doing some debugging and need these numbers to identify elements in the output file.</P>
+<P>To display or hide element numbers, enable or disable </FONT><B><FONT FACE="Courier">View|Numbers</B></FONT><FONT FACE="Times">.</P>
+<P>To count unused numbers, choose </FONT><B><FONT FACE="Courier">Window|Get info</B></FONT><FONT FACE="Times"> in order to display information about the current file. The 'unused numbers' entry contains this count.</P>
+<P>To eliminate unused element numbers, choose </FONT><B><FONT FACE="Courier">Commands|Renumber elements</B></FONT><FONT FACE="Times">.</P>
+<P>&nbsp;</P>
+</FONT><B><FONT FACE="Times" SIZE=4><P>5. Controlling how objects are displayed</P>
+</FONT><FONT FACE="Times"><P>5.1. Changing the zoom factor and location</P>
+</B><P>You can use the </FONT><B><FONT FACE="Courier">Zoom</B></FONT><FONT FACE="Times"> tool to move around the drawing and to change the zoom factor. You can also use commands from the </FONT><B><FONT FACE="Courier">View</B></FONT><FONT FACE="Times"> menu.</P>
+<P>To move around with the </FONT><B><FONT FACE="Courier">Zoom</B></FONT><FONT FACE="Times"> tool, press and release the mouse button anywhere in the work area without moving the mouse. The work area will be adjusted so that the location where the button was pressed is moved to the center. Alternatively, you can press Shift+mouse button, move the mouse pointer and release the button. The work area will be adjusted so that the location where the button was pressed is now shown where the button has been released.</P>
+<P>To change the zoom factor with the </FONT><B><FONT FACE="Courier">Zoom</B></FONT><FONT FACE="Times"> tool, press the mouse button, move the mouse in order to draw a rectangle around the area to be shown in the work area. Then, release the mouse button. Note that the area actually shown may be enlargened in order to preserve the aspect ratio.</P>
+<P>The </FONT><B><FONT FACE="Courier">View|Zoom in</B></FONT><FONT FACE="Times"> command increases the zoom factor.</P>
+<P>The </FONT><B><FONT FACE="Courier">View|Zoom out</B></FONT><FONT FACE="Times"> command decreases the zoom factor.</P>
+<P>The </FONT><B><FONT FACE="Courier">View|Picture view</B></FONT><FONT FACE="Times"> command adjusts the zoom factor and location so that all objects fit into the work area. This commands ignores objects that are hidden because of settings in the </FONT><B><FONT FACE="Courier">View</B></FONT><FONT FACE="Times"> menu.</P>
+<P>The </FONT><B><FONT FACE="Courier">View|Selection view</B></FONT><FONT FACE="Times"> command adjusts the zoom factor and location so that all marked objects fit into the work area.</P>
+<B><P>5.2. Hiding and displaying objects</P>
+</B><P>Toggle buttons in the </FONT><B><FONT FACE="Courier">View</B></FONT><FONT FACE="Times"> menu let you hide or display the coordinate system and various kinds of objects.</P>
+<P>Note that you cannot select an object that is not displayed. In particular, you can only select points that are displayed (a small square is drawn around the point). The </FONT><B><FONT FACE="Courier">View|Points</B></FONT><FONT FACE="Times"> setting controls the display of points. When it is disabled, the </FONT><B><FONT FACE="Courier">View|Irregular points</B></FONT><FONT FACE="Times"> setting controls the display of irregular points. It is convenient to display only irregular points while correcting a converted template, because irregularities can be seen very easily.</P>
+<P>&nbsp;</P>
+</FONT><B><FONT FACE="Times" SIZE=4><P>6. Working with magnetic surfaces and grid points</P>
+</FONT><FONT FACE="Times"><P>6.1. Importing equilibrium</P>
+</B><P>An equilibrium file must be imported before defining any surfaces or grid points.</P>
+<P>To import an equilibrium file, choose </FONT><B><FONT FACE="Courier">File|Equilibrium...</B></FONT><FONT FACE="Times"> . A dialog box will appear prompting for a filename. Select a file and press </FONT><B><FONT FACE="Courier">Ok</B></FONT><FONT FACE="Times">. Select </FONT><B><FONT FACE="Courier">View|Picture view</B></FONT><FONT FACE="Times"> to make sure the equilibrium grid is visible in the work area. Red color represents positive </FONT><FONT FACE="Symbol">y</FONT><FONT FACE="Times"> values, while blue represents the negative ones.</P>
+<B><P>6.2. Creating and editing surfaces</P>
+</B><P>If targets are defined, surfaces outside of the main plasma must intersect with targets.</P>
+<P>For performance reasons, surfaces are drawn as series of line segments. Because of this, they are displayed not very accurately, especially near the X point.</P>
+<P>You can use the </FONT><B><FONT FACE="Courier">Add surface</B></FONT><FONT FACE="Times"> tool to create surfaces visually. It is also possible to create surfaces with the </FONT><B><FONT FACE="Courier">Edit|Create|Surface</B></FONT><FONT FACE="Times"> menu command. To move or delete surfaces, use </FONT><B><FONT FACE="Courier">Move/Stretch</B></FONT><FONT FACE="Times"> and </FONT><B><FONT FACE="Courier">Delete</B></FONT><FONT FACE="Times"> tools.</P>
+<P>To use the </FONT><B><FONT FACE="Courier">Add surface</B></FONT><FONT FACE="Times"> tool, press the mouse button anywhere in the equilibrium. A surface will appear. Move the mouse pointer to adjust the surface position. When ready, release the mouse button.</P>
+<P>The </FONT><B><FONT FACE="Courier">Edit|Create|Surface</B></FONT><FONT FACE="Times"> menu command is similar to </FONT><B><FONT FACE="Courier">Edit|Create|Point</B></FONT><FONT FACE="Times">. A dialog box will appear prompting for coordinates. After you press </FONT><B><FONT FACE="Courier">Create</B></FONT><FONT FACE="Times">, a magnetic surface will be drawn through the specified location.</P>
+<P>To use</FONT><B><FONT FACE="Courier"> Move/Stretch</B></FONT><FONT FACE="Times"> and </FONT><B><FONT FACE="Courier">Delete </B></FONT><FONT FACE="Times">tools, select a surface. Then drag it to the new location and release the mouse button resp. simply release the mouse button to delete it.</P>
+<P>To delete all surfaces, use the </FONT><B><FONT FACE="Courier">Edit|Delete|Surfaces</B></FONT><FONT FACE="Times"> menu command.</P>
+<B><P>6.3. Defining the X point</P>
+</B><P>Before working with grid points, you must define the X point. This is necessary because the current version of DG cannot detect the X point location automatically. By defining it, you give DG a hint how to display grid points and process user input. DG does not write the X point location into the output file.</P>
+<P>For performance reasons, the separatrix is drawn as series of line segments. Because of this, it is displayed not very accurately, especially near the X point.</P>
+<P>First, define the targets so that they are intersected by the separatrix. Then, use the </FONT><B><FONT FACE="Courier">Set X Point</B></FONT><FONT FACE="Times"> tool to define a rectangle around the X point. Press the mouse button at one corner of the rectangle, move the mouse pointer to the opposite corner and release the mouse button. In case of success, the separatrix will be drawn in the work area. Otherwise, an error message will be displayed in the message line. If you get the 'Invalid X point location' error message, try selecting a bigger rectangle.</P>
+<P>Note that the separatrix inside this rectangle is represented by two intersecting line segments that could even intersect with surfaces!</P>
+<P>With an X point defined, you can use the </FONT><B><FONT FACE="Courier">Set X Point</B></FONT><FONT FACE="Times"> tool to redefine it.</P>
+<B><P>6.4. Creating and editing grid points</P>
+</B><P>The </FONT><B><FONT FACE="Courier">Add grid point</B></FONT><FONT FACE="Times"> tool lets you visually define grid points. In addition, the </FONT><B><FONT FACE="Courier">Edit|Create|Grid point(s)</B></FONT><FONT FACE="Times"> menu command lets you define a grid point by specifying it's value or fill a zone on the separatrix with a given number of grid points.</P>
+<P>With the </FONT><B><FONT FACE="Courier">Add grid point</B></FONT><FONT FACE="Times"> tool, move the mouse pointer to the desired location on the separatrix and press the mouse button. A grid point will be created at this location. You can move the mouse pointer to adjust it's position. When finished, release the mouse button.</P>
+<P>The </FONT><B><FONT FACE="Courier">Edit|Create|Grid point(s)</B></FONT><FONT FACE="Times"> menu command brings up a dialog box prompting you for a separatrix zone and alternatively, number of grid points to create or a grid point value. Two radio buttons let you choose between filling the zone with grid points and creating a grid point with an exact value. After entering values, press </FONT><B><FONT FACE="Courier">Create</B></FONT><FONT FACE="Times">. Filling a zone with grid points will remove all previous grid points from that zone.</P>
+<P>Use the </FONT><B><FONT FACE="Courier">Move/Stretch</B></FONT><FONT FACE="Times"> tool to move a grid point or to 'stretch' grid points of one zone. To move a single grid point, select it, then drag it to the new location and release the mouse button. To 'stretch' grid points, move the mouse pointer to one of them, press </FONT><B><FONT FACE="Courier">Shift</B></FONT><FONT FACE="Times">+mouse button and drag it to the new location. All other grid points in that zone will be 'stretched'.</P>
+<P>Use the </FONT><B><FONT FACE="Courier">Delete</B></FONT><FONT FACE="Times"> tool to remove grid points. Select the grid point to delete and release the mouse button.</P>
+<P>Use the </FONT><B><FONT FACE="Courier">Edit|Delete|Grid points</B></FONT><FONT FACE="Times"> menu command to delete all grid points.</P>
+<P>&nbsp;</P>
+</FONT><B><FONT FACE="Times" SIZE=4><P>7. Working with sources</P>
+</FONT><FONT FACE="Times"><P>7.1. Creating and editing sources</P>
+</B><P>DG allows the user to define sources and to attach variables to them.</P>
+<P>To create sources, use the </FONT><B><FONT FACE="Courier">Add source</B></FONT><FONT FACE="Times"> tool. Move the mouse pointer to the desired location in the work area and press the mouse button. A source will be created at this location. You can move the mouse pointer to adjust it's position. When finished, release the mouse button.</P>
+<P>To create a source by entering it's coordinates, select </FONT><B><FONT FACE="Courier">Edit|Create|Source...</B></FONT><FONT FACE="Times"> . A dialog box will appear prompting for coordinates. Enter values and press </FONT><B><FONT FACE="Courier">Create</B></FONT><FONT FACE="Times">. A source will be created. The dialog box will remain on the screen, allowing you to define multiple sources without re-opening it. Press </FONT><B><FONT FACE="Courier">Cancel</B></FONT><FONT FACE="Times"> to close the dialog box.</P>
+<P>To move a source to a new location, use the </FONT><B><FONT FACE="Courier">Move/Stretch</B></FONT><FONT FACE="Times"> tool. Select the source to move, drag it to the new location and release the mouse button.</P>
+<P>To delete a source, use the </FONT><B><FONT FACE="Courier">Delete</B></FONT><FONT FACE="Times"> tool. Select the source to delete and release the mouse button.</P>
+<P>To delete all sources, issue the </FONT><B><FONT FACE="Courier">Edit|Delete|Sources</B></FONT><FONT FACE="Times"> menu command.</P>
+<P>&nbsp;</P>
+</FONT><B><FONT FACE="Times" SIZE=4><P>8. Working with sonnet grid</P>
+</FONT><FONT FACE="Times"><P>8.1. Importing sonnet grid</P>
+</B><P>DG allows you to import the grid produced by SONNET. At present, it can only read the ascii version of the grid file. The grid can then be displayed in the working area.</P>
+<P>To import the sonnet grid, use the </FONT><B><FONT FACE="Courier">File|Sonnet grid...</B></FONT><FONT FACE="Times"> menu command. A dialog box will appear prompting you for a filename. Select a file from the list or type the filename in the edit field. Then press </FONT><B><FONT FACE="Courier">Load</B></FONT><FONT FACE="Times">. The sonnet grid will be imported and displayed in the work area. If nothing is displayed, select <B>View|</FONT><FONT FACE="Courier">Picture view</B></FONT><FONT FACE="Times"> to enlarge the area displayed. Also, make sure that </FONT><B><FONT FACE="Courier">View|Sonnet output</B></FONT><FONT FACE="Times"> is enabled.</P>
+<P>To hide or display the sonnet grid, toggle </FONT><B><FONT FACE="Courier">View|Sonnet output</B></FONT><FONT FACE="Times">. To unload it, select </FONT><B><FONT FACE="Courier">Edit|Delete|Sonnet grid</B></FONT><FONT FACE="Times">.</P>
+<B><P>8.2. Defining cells</P>
+</B><P>With DG, you can define cells between the sonnet grid and the structure (both objects must be present). You define cells by creating separators between them. DG lets you create separators with the </FONT><B><FONT FACE="Courier">Edit|Create|Separators</B></FONT><FONT FACE="Times"> menu command. To adjust individual separators, use the </FONT><B><FONT FACE="Courier">Reposition tool</B></FONT><FONT FACE="Times">. The </FONT><B><FONT FACE="Courier">Edit|Delete|Separators</B></FONT><FONT FACE="Times"> menu command removes all separators. You cannot add or remove individual separators with DG.</P>
+<P>To work with separators, you must define a suitable structure and import a sonnet grid.</P>
+<P>Use the </FONT><B><FONT FACE="Courier">Edit|Create|Separators</B></FONT><FONT FACE="Times"> menu command to create separators between the structure and the sonnet grid.</P>
+<P>Use the </FONT><B><FONT FACE="Courier">Reposition</B></FONT><FONT FACE="Times"> tool to attach a separator to a different structure point. Select the separator and move the mouse cursor a structure point. Then release the mouse button.</P>
+<P>Use the </FONT><B><FONT FACE="Courier">Edit|Delete|Separators</B></FONT><FONT FACE="Times"> menu command to delete all separators.</P>
+<P>&nbsp;</P>
+</FONT><B><FONT FACE="Times" SIZE=4><P>9. Working with variables</P>
+</FONT><FONT FACE="Times"><P>9.1. Basics</P>
+</B><P>With DG, you can use variables to specify information that cannot be edited visually in the work area. Variables are written into the output file and can be processed by other programs. Some variables (targets and structure) also have important functions in DG.</P>
+<P>Variables must be set up by a power user before using them. This procedure is described in </FONT><B><FONT FACE="Courier">Customizing DG</B></FONT><FONT FACE="Times">. Each variable has following attributes:</P>
+</FONT><B><FONT FACE="Courier"><P>Name</B></FONT><FONT FACE="Times">&#9;&#9;&#9;is written into the output file and is otherwise invisible.</P>
+</FONT><B><FONT FACE="Courier"><P>Description</B></FONT><FONT FACE="Times"> &#9;&#9;is the name that is shown to the user.</P>
+</FONT><B><FONT FACE="Courier"><P>Type</B></FONT><FONT FACE="Times"> &#9;&#9;&#9;defines type of values the variable can hold.</P>
+</FONT><B><FONT FACE="Courier"><P>Scope&#9;</B></FONT><FONT FACE="Times"> &#9;&#9;specifies what objects the variable applies for. </P>
+</FONT><B><FONT FACE="Courier"><P>Export/No export</B></FONT><FONT FACE="Times"> &#9;determines whether values are written into the output file.</P>
+</FONT><B><FONT FACE="Courier"><P>Default value</B></FONT><FONT FACE="Times">&#9;is the default value for newly-created objects.</P>
+</FONT><B><FONT FACE="Courier"><P>Help text</B></FONT><FONT FACE="Times">&#9;&#9;is displayed to the user when s/he asks for it.</P>
+<P>These attributes are normally defined by a power user while setting up variables. A normal user shoud have some idea of the type and the scope in order to be able to set correct values for correct objects.</P>
+<P>Each variable has a </FONT><B><FONT FACE="Courier">type</B></FONT><FONT FACE="Times">. A variable can hold either a text value (</FONT><B><FONT FACE="Courier">integer</B></FONT><FONT FACE="Times">, </FONT><B><FONT FACE="Courier">real</B></FONT><FONT FACE="Times"> or </FONT><B><FONT FACE="Courier">text</B></FONT><FONT FACE="Times">) or a set of elements (</FONT><B><FONT FACE="Courier">element</B></FONT><FONT FACE="Times">, </FONT><B><FONT FACE="Courier">set of elements</B></FONT><FONT FACE="Times">, </FONT><B><FONT FACE="Courier">target</B></FONT><FONT FACE="Times">, </FONT><B><FONT FACE="Courier">structure</B></FONT><FONT FACE="Times">, </FONT><B><FONT FACE="Courier">part of structure</B></FONT><FONT FACE="Times">). DG prevents the user from entering values of a wrong type.</P>
+<P>The </FONT><B><FONT FACE="Courier">scope</B></FONT><FONT FACE="Times"> determines objects the variable is attached to. There are 3 possible scopes:</P>
+</FONT><B><FONT FACE="Courier"><P>Layers</B></FONT><FONT FACE="Times"> &#9;&#9;means that the variable has one value for the whole layer.</P>
+</FONT><B><FONT FACE="Courier"><P>Elements</B></FONT><FONT FACE="Times">&#9;&#9;means the variable has a separate value for each element.</P>
+</FONT><B><FONT FACE="Courier"><P>Sources</B></FONT><FONT FACE="Times">&#9;&#9;means the variable has a separate value for each source.</P>
+<P>Variables are organized in </FONT><B><FONT FACE="Courier">layers</B></FONT><FONT FACE="Times">. DG displays each layer in a separate dialog box.</P>
+<P>The power user defines </FONT><B><FONT FACE="Courier">layer types</B></FONT><FONT FACE="Times"> and the minimum and the maximum number of layers of each type.</P>
+<B><P>9.2. Working with layers</P>
+</B><P>You can create and destroy layers of some types. These layer types are determined by the power user while setting up variables.</P>
+<P>To create a layer of a specific type, select it's type in the </FONT><B><FONT FACE="Courier">Variables|Add</B></FONT><FONT FACE="Times"> submenu. A dialog box for editing variables in the newly-created layer will appear. If the maximum number of layers of a specific type already exist, this type will not be displayed in this menu. If this menu becomes empty, the </FONT><B><FONT FACE="Courier">Variables|Add</B></FONT><FONT FACE="Times"> cascade button will be grayed.</P>
+<P>To destroy a layer, select it's name in the </FONT><B><FONT FACE="Courier">Variables|Remove</B></FONT><FONT FACE="Times"> submenu. If only the minimum number of layers of a specific type already exist, layers of this type will not be displayed in this menu. If this menu becomes empty, the </FONT><B><FONT FACE="Courier">Variables|Remove</B></FONT><FONT FACE="Times"> cascade button will be grayed.</P>
+<P>To display the dialog box for an existing layer, select it's name in the </FONT><B><FONT FACE="Courier">Variables</B></FONT><FONT FACE="Times"> menu.</P>
+<P>To hide the dialog box for a layer, press the </FONT><B><FONT FACE="Courier">Close</B></FONT><FONT FACE="Times"> button in that dialog box.</P>
+<B><P>9.3. Setting variables</P>
+</B><P>To set variables in a layer, you need to display the dialog box for that layer first.</P>
+<P>For each variable, the dialog box contains it's name, the </FONT><B><FONT FACE="Courier">?</B></FONT><FONT FACE="Times"> button, the </FONT><B><FONT FACE="Courier">New Value</B></FONT><FONT FACE="Times"> text field (if available), </FONT><B><FONT FACE="Courier">&lt;</B></FONT><FONT FACE="Times"> and </FONT><B><FONT FACE="Courier">&gt;</B></FONT><FONT FACE="Times"> buttons and the </FONT><B><FONT FACE="Courier">Old Value</B></FONT><FONT FACE="Times"> text field. The dialog box also contains some other buttons.</P>
+<P>To display help about a variable, press it's </FONT><B><FONT FACE="Courier">?</B></FONT><FONT FACE="Times"> button.</P>
+<P>To set a value for a variable that contains a set of elements, mark the desired elements and press it's </FONT><B><FONT FACE="Courier">&gt;</B></FONT><FONT FACE="Times"> button.</P>
+<P>To set a value for a text variable that applies to the layer, enter the value in the </FONT><B><FONT FACE="Courier">New Value</B></FONT><FONT FACE="Times"> text field and press the </FONT><B><FONT FACE="Courier">&gt;</B></FONT><FONT FACE="Times"> button.</P>
+<P>To set a value for a text variable that applies to elements or sources, first mark elements or sources the value should be assigned to. To set a new value, enter it in the </FONT><B><FONT FACE="Courier">New Value</B></FONT><FONT FACE="Times"> text field and press the </FONT><B><FONT FACE="Courier">&gt;</B></FONT><FONT FACE="Times"> button.</P>
+<P>Current values for variables are always displayed in corresponding </FONT><B><FONT FACE="Courier">Old Value</B></FONT><FONT FACE="Times"> text boxes. For variables that apply to elements or sources, only values for marked objects are considered. If all values are the same, a value will be displayed, otherwise the word </FONT><B><FONT FACE="Courier">Different</B></FONT><FONT FACE="Times">.</P>
+<P>To copy the current value of a variable into it's </FONT><B><FONT FACE="Courier">New Value</B></FONT><FONT FACE="Times"> text field, press it's </FONT><B><FONT FACE="Courier">&lt;</B></FONT><FONT FACE="Times"> button. For a variable containing a set of elements, the elements belonging to the variable will be marked.</P>
+<P>The </FONT><B><FONT FACE="Courier">Accept</B></FONT><FONT FACE="Times"> button has exactly the same effect as pressing all </FONT><B><FONT FACE="Courier">&gt;</B></FONT><FONT FACE="Times"> buttons except that empty new values are ignored.</P>
+<P>The </FONT><B><FONT FACE="Courier">Reset</B></FONT><FONT FACE="Times"> button has exactly the same effect as pressing all </FONT><B><FONT FACE="Courier">&lt;</B></FONT><FONT FACE="Times"> buttons.</P>
+<P>The </FONT><B><FONT FACE="Courier">Hold</B></FONT><FONT FACE="Times"> toggle button controls how </FONT><B><FONT FACE="Courier">New Value</B></FONT><FONT FACE="Times"> fields of variables that apply to elements or sources are updated. With </FONT><B><FONT FACE="Courier">Hold</B></FONT><FONT FACE="Times"> disabled, these fields are updated every time objects are marked and unmarked. When it is enabled, no such updates happen.</P>
+<P>You can easily copy values between different elements or sources. Disable </FONT><B><FONT FACE="Courier">Hold</B></FONT><FONT FACE="Times"> and mark objects containing the desired value. Then enable </FONT><B><FONT FACE="Courier">Hold</B></FONT><FONT FACE="Times"> and mark objects the values should be assigned to. Press </FONT><B><FONT FACE="Courier">Accept</B></FONT><FONT FACE="Times"> to set new values.</P>
+<P>&nbsp;</P>
+</FONT><B><FONT FACE="Times" SIZE=4><P>10. Creating output files</P>
+</FONT><FONT FACE="Times"><P>10.1. Types of output files</P>
+</B><P>DG produces 3 output files:</P>
+</FONT><B><FONT FACE="Courier"><P>Structure file</B></FONT><FONT FACE="Times"> &#9;Contains the structure</P>
+</FONT><B><FONT FACE="Courier"><P>Targets file</B></FONT><FONT FACE="Times">&#9;&#9;Contains targets, surfaces and grid points</P><DIR>
+<DIR>
+<DIR>
+<DIR>
+<DIR>
+
+</FONT><B><FONT FACE="Courier"><P>Output file</B></FONT><FONT FACE="Times">&#9;&#9;&#9;Contains elements, sources, separators and variables.</P></DIR>
+</DIR>
+</DIR>
+</DIR>
+</DIR>
+
+<P>Current version of DG requires structure, targets, surfaces and grid points to be defined. Also, all </FONT><B><FONT FACE="Courier">integer</B></FONT><FONT FACE="Times"> and </FONT><B><FONT FACE="Courier">real</B></FONT><FONT FACE="Times"> variables must be set to non-empty values.</P>
+<B><P>10.2. Producing output files</P>
+</B><P>DG generates names of output files by attaching different extensions to the name of the DG file. If the current file has no name yet, save it with the </FONT><B><FONT FACE="Courier">File|Save...</B></FONT><FONT FACE="Times"> command before producing the output.</P>
+<P>To produce the output files, choose the </FONT><B><FONT FACE="Courier">File|Output</B></FONT><FONT FACE="Times"> menu command. A dialog box will appear asking for confirmation. Press </FONT><B><FONT FACE="Courier">Ok </B></FONT><FONT FACE="Times">to create the files.</P>
+<P>&nbsp;</P>
+</FONT><B><FONT FACE="Times" SIZE=4><P>11. Customizing DG</P>
+</FONT><FONT FACE="Times"><P>11.1. Installing DG</P>
+</B><P>To install DG, you need to:</P><DIR>
+<DIR>
+
+<P>- compile and link it's sources</P>
+<P>- make sure that the help file exists and has the right name</P>
+<P>- make sure that the configuration file exists and has the right name</P></DIR>
+</DIR>
+
+<P>DG is an X Windows application. The correct DISPLAY setting is necessary.</P>
+<P>Some useful infos on installing are contained in the </FONT><B><FONT FACE="Courier">Customizing DG</B></FONT><FONT FACE="Times"> section.</P>
+<B><P>11.2. Files needed by DG</P>
+</FONT><FONT FACE="Courier"><P>dg</B></FONT><FONT FACE="Times">&#9;&#9;Executable file</P>
+</FONT><B><FONT FACE="Courier"><P>dg.dgh</B></FONT><FONT FACE="Times">&#9;Help file</P>
+</FONT><B><FONT FACE="Courier"><P>dg.dgc</B></FONT><FONT FACE="Times">&#9;Configuration file</P>
+<B><P>11.3. Specifying directory masks</P>
+</B><P>You can customize directory masks DG displays in file selection dialog boxes by setting following environment variables:</P>
+</FONT><B><FONT FACE="Courier"><P>DGOPENMASK</B></FONT><FONT FACE="Times">&#9;&#9;Directory mask for </FONT><B><FONT FACE="Courier">File|Open...</P>
+<P>DGSAVEMASK</B></FONT><FONT FACE="Times">&#9;&#9;Directory mask for </FONT><B><FONT FACE="Courier">File|Save...</P>
+<P>DGEQUILMASK</B></FONT><FONT FACE="Times">&#9;&#9;Directory mask for </FONT><B><FONT FACE="Courier">File|Equilibrium...</P>
+<P>DGTEMPLATEMASK</B></FONT><FONT FACE="Times">&#9;Directory mask for </FONT><B><FONT FACE="Courier">File|Template...</P>
+<P>DGSONNETMASK</B></FONT><FONT FACE="Times">&#9;&#9;Directory mask for </FONT><B><FONT FACE="Courier">File|Sonnet grid...</P>
+</FONT><FONT FACE="Times"><P>11.4. The configuration file</P>
+</B><P>There is a special DG file, the </FONT><B><FONT FACE="Courier">configuration file</B></FONT><FONT FACE="Times">. It's filename is normally produced by appending </FONT><B><FONT FACE="Courier">.dgc</B></FONT><FONT FACE="Times"> to the name of the executable. The configuration file has two functions:</P>
+<P>When the </FONT><B><FONT FACE="Courier">File|New</B></FONT><FONT FACE="Times"> command is executed, the configuration file is loaded into the new window.</P>
+<P>When a DG file is being opened, the configuration file is used to update it's definitions of variables and layers.</P>
+<P>DG normally writes these definitions in DG files. When a DG file is opened, they are normally ignored and definitions from the configuration file are used instead. This ensures that all files loaded in DG have identical definitions of layers and variables.</P>
+<P>Default values are not updated in the current version of DG.</P>
+<B><P>11.4.1. Specifying the configuration file</P>
+</B><P>Sometimes it is necessary to use a different configuration file or not to use any at all.</P>
+<P>To use a different configuration file, start DG with the following command:</P>
+</FONT><B><FONT FACE="Courier"><P>dg -cfg &lt;filename-with-extension&gt;</P>
+</B></FONT><FONT FACE="Times"><P>To use DG without loading a configuration file, type</P>
+</FONT><B><FONT FACE="Courier"><P>dg -nocfg</P><DIR>
+<DIR>
+<DIR>
+
+</B></FONT><FONT FACE="Times"><P>NOTE:&#9;There are some bugs in DG that appear only when it is started without any configuration and sometimes cause an exception.</P></DIR>
+</DIR>
+</DIR>
+
+<B><P>11.5. Creating or modifying the configuration file</P>
+</B><P>Use the </FONT><B><FONT FACE="Courier">Options|Program setup</B></FONT><FONT FACE="Times"> menu command to create/modify the configuration file. The </FONT><B><FONT FACE="Courier">Setup</B></FONT><FONT FACE="Times"> dialog box will appear.</P>
+<P>The </FONT><B><FONT FACE="Courier">Setup</B></FONT><FONT FACE="Times"> dialog box and all dialog boxes you open during setup are modal. For this reason, you can work only with the topmost dialog box.</P>
+<P>Press </FONT><B><FONT FACE="Courier">Variables...</B></FONT><FONT FACE="Times"> in order to edit definitions of variables and layers in the current file. The </FONT><B><FONT FACE="Courier">Layer types</B></FONT><FONT FACE="Times"> dialog box will appear.</P>
+<P>Press </FONT><B><FONT FACE="Courier">Save as configuration</B></FONT><FONT FACE="Times"> to save the current file as a configuration file. A dialog box will appear prompting for a filename. Normally, it already contains the right name. Select </FONT><B><FONT FACE="Courier">Ok</B></FONT><FONT FACE="Times"> to save the file in the current window as configuration.</P>
+<P>Press </FONT><B><FONT FACE="Courier">Close</B></FONT><FONT FACE="Times"> to close the dialog box.</P>
+<B><P>11.5.1. Adding, modifying and removing layer types</P>
+</B><P>To add a layer type, choose </FONT><B><FONT FACE="Courier">Add</B></FONT><FONT FACE="Times"> in the </FONT><B><FONT FACE="Courier">Layer types</B></FONT><FONT FACE="Times"> dialog box. The new </FONT><B><FONT FACE="Courier">Layer type options</B></FONT><FONT FACE="Times">  dialog box will appear.</P>
+<P>Enter the name of the layer type to create in the </FONT><B><FONT FACE="Courier">Name</B></FONT><FONT FACE="Times"> text field. The name should contain only alphanumeric characters. This name will be written into the output file.</P>
+<P>Enter the description in the </FONT><B><FONT FACE="Courier">Description</B></FONT><FONT FACE="Times"> text field. In the </FONT><B><FONT FACE="Courier">MinInstances</B></FONT><FONT FACE="Times"> / </FONT><B><FONT FACE="Courier">MaxInstances text</B></FONT><FONT FACE="Times"> field, enter the minimum and the maximum number of layers of this type. You will have to use 0 for </FONT><B><FONT FACE="Courier">MinInstances</B></FONT><FONT FACE="Times"> because there are no layers of this type yet. You can change </FONT><B><FONT FACE="Courier">MinInstances</B></FONT><FONT FACE="Times"> later after creating the minimum number of layers.</P>
+<P>Press the </FONT><B><FONT FACE="Courier">Ok</B></FONT><FONT FACE="Times"> button to create the layer type.</P>
+<P>To remove a layer type, select it in the list and press </FONT><B><FONT FACE="Courier">Delete</B></FONT><FONT FACE="Times">.</P>
+<P>To modify a layer type, select it in the list and press </FONT><B><FONT FACE="Courier">Modify</B></FONT><FONT FACE="Times">. The </FONT><B><FONT FACE="Courier">Layer type options</B></FONT><FONT FACE="Times"> dialog box will appear. You can change name, description, Min/MaxInstances here. Note that if you change the name, layers contained in DG files under the old name will be ignored.</P>
+<P>To close the </FONT><B><FONT FACE="Courier">Layer types</B></FONT><FONT FACE="Times"> dialog box, press </FONT><B><FONT FACE="Courier">Close</B></FONT><FONT FACE="Times">.</P>
+<B><P>11.5.2. Setting up variables</P>
+</B><P>To set up variables in a layer type, first display it' </FONT><B><FONT FACE="Courier">Layer type options</B></FONT><FONT FACE="Times"> dialog box ("Modify"). This dialog box contains a rectangular area with buttons. These buttons represent row/column positions of variables in dialog boxes. Buttons containing the string </FONT><B><FONT FACE="Courier">Empty</B></FONT><FONT FACE="Times"> mean no variable is defined at this position.</P>
+<P>To create a variable at a specific position, press the </FONT><B><FONT FACE="Courier">Empty</B></FONT><FONT FACE="Times"> button at that position. The </FONT><B><FONT FACE="Courier">Variable options</B></FONT><FONT FACE="Times"> dialog box will appear.</P>
+<P>Enter the name of the variable to create in the </FONT><B><FONT FACE="Courier">Name</B></FONT><FONT FACE="Times"> field. The name must contain only alphanumeric character.</P>
+<P>Select the type and the scope in corresponding option menus. Check the </FONT><B><FONT FACE="Courier">Do not export</B></FONT><FONT FACE="Times"> toggle button to prevent the variable from being written into the output file. Structure and targets are normally not exported because they are written into separate files.</P>
+<P>Press </FONT><B><FONT FACE="Courier">Ok</B></FONT><FONT FACE="Times"> to create the variable.</P>
+<P>To modify a variable definition, press it's button in the </FONT><B><FONT FACE="Courier">Layer type options</B></FONT><FONT FACE="Times"> dialog box. The </FONT><B><FONT FACE="Courier">Variable options</B></FONT><FONT FACE="Times"> dialog box will appear. After making changes, press </FONT><B><FONT FACE="Courier">Ok</B></FONT><FONT FACE="Times">. Note that if you change the name, variables contained in DG files under the old name will be ignored.</P>
+<P>To remove a variable, press it's button in the </FONT><B><FONT FACE="Courier">Layer type options</B></FONT><FONT FACE="Times"> dialog box. The </FONT><B><FONT FACE="Courier">Variable options</B></FONT><FONT FACE="Times"> dialog box will appear. Press </FONT><B><FONT FACE="Courier">Remove</B></FONT><FONT FACE="Times"> to remove the variable.</P>
+<B><P>11.5.3. Adding help text to variables</P>
+</B><P>DG lets you add help text to variables. The user can display the help text by pressing the </FONT><B><FONT FACE="Courier">?</B></FONT><FONT FACE="Times"> button located near the name of the variable in the </FONT><B><FONT FACE="Courier">Variables...</B></FONT><FONT FACE="Times"> dialog box.</P>
+<P>To edit a help text for a variable, display it's </FONT><B><FONT FACE="Courier">Variable options</B></FONT><FONT FACE="Times"> dialog box and press </FONT><B><FONT FACE="Courier">Edit help</B></FONT><FONT FACE="Times">. The </FONT><B><FONT FACE="Courier">Help editor</B></FONT><FONT FACE="Times"> dialog box with a big text editing field will appear. Edit the help text in the editing field and press </FONT><B><FONT FACE="Courier">Ok</B></FONT><FONT FACE="Times">.</P>
+<B><P>11.5.4. Setting default values</P>
+</B><P>DG lets you define default values for variables. When a new layer, element or source is created, the default values are used for the newly created object.</P>
+<P>It is suggested that you define default values for all variables because DG will not generate output files when some variables have empty values. A search for empty values can be very difficult and cost a lot of time.</P>
+<P>To define default values for variables in a layer type, display it's </FONT><B><FONT FACE="Courier">Layer type options</B></FONT><FONT FACE="Times"> dialog box and press the </FONT><B><FONT FACE="Courier">Defaults...</B></FONT><FONT FACE="Times"> button. A dialog box similar to the </FONT><B><FONT FACE="Courier">Variables...</B></FONT><FONT FACE="Times"> dialog box will appear.</P>
+<P>Default values from the configuration file are used only to create new DG files. When opening an existing file, default values from the configuration are ignored.</P>
+<P>&nbsp;</P>
+</FONT><B><FONT FACE="Times" SIZE=4><P>12. File formats</P>
+</FONT><FONT FACE="Times"><P>12.1. Simple template file format</P>
+</B><P>Besides the &quot;Neutral File&quot; exported from PATRAN, DG can also import templates in a very simple format where the geometry is speified as a set of polygons (in general, open). In this case, each line of the input file either contains a pair of the co-ordinates of the next corner, or is empty. The empty lines separate polygons from each other <I>(not realized yet!!!).</P>
+</I><B><P>12.2. Structure file format</P>
+</B><P>The first line in the structure file contains the number of closed chains in the structure.</P>
+<P>Then, for each chain, starting with the outermost, the following block appears:</P>
+</FONT><B><FONT FACE="Courier"><P>&lt;number of points in the chain&gt;</P>
+<P>&lt;x1&gt; , &lt;y1&gt;</P>
+<P>...</P>
+</B></FONT><FONT FACE="Times"><P>For the outermost chain, the bounding rectangle is added.</P>
+<P>Points are output in counterclockwise order when the external normals of the elements in the chain point outwards. Otherwise, they are output in clockwise order.</P>
+<B><P>12.3. Targets file format</P>
+</B><P>The targets file has the following format:</P>
+</FONT><B><FONT FACE="Courier"><P>target 1</P>
+<P>line</P>
+<P>  &lt;x&gt; , &lt;y&gt;</P>
+<P>  ...</P>
+<P>target 2</P>
+<P>line</P>
+<P>  &lt;x&gt; , &lt;y&gt;</P>
+<P>  ...</P>
+<P>region 1</P>
+<P>levels</P>
+<P>  &lt;level&gt;</P>
+<P>  ...</P>
+<P>region 2</P>
+<P>levels</P>
+<P>  &lt;level&gt;</P>
+<P>  ...</P>
+<P>region 3</P>
+<P>levels</P>
+<P>  &lt;level&gt;</P>
+<P>  ...</P>
+<P>zone 0</P>
+<P>points</P>
+<P>  &lt;value&gt;</P>
+<P>  ...</P>
+<P>zone 1</P>
+<P>points</P>
+<P>  &lt;value&gt;</P>
+<P>  ...</P>
+<P>zone 2</P>
+<P>points</P>
+<P>  &lt;value&gt;</P>
+<P>  ...</P>
+<P>&nbsp;</P>
+<P>&lt;eof&gt;</P>
+</B></FONT><FONT FACE="Times"><P>&nbsp;</P>
+<P>The </FONT><B><FONT FACE="Courier">target1</B></FONT><FONT FACE="Times"> and </FONT><B><FONT FACE="Courier">target2</B></FONT><FONT FACE="Times"> blocks contain point coordinates for targets. </P>
+<P>The </FONT><B><FONT FACE="Courier">region</B></FONT><FONT FACE="Times"> </FONT><B><FONT FACE="Courier">1...3</B></FONT><FONT FACE="Times"> blocks contain levels of surfaces. Regions have following meaning:</P><DIR>
+<DIR>
+
+<P>region 1&#9;Main Plasma</P>
+<P>region 2&#9;SOL</P>
+<P>region 3&#9;Private Flux</P></DIR>
+</DIR>
+
+<P>The </FONT><B><FONT FACE="Courier">zone 0...2</B></FONT><FONT FACE="Times"> blocks contain values of grid points (0-1). Zones have following meaning:</P><DIR>
+<DIR>
+
+<P>zone 0&#9;Main chamber</P>
+<P>zone 1&#9;Inner divertor</P>
+<P>zone 2&#9;Outer divertor</P></DIR>
+</DIR>
+
+<B><P>12.4. Output file format</P>
+</B><P>The output file has the following format:</P>
+</FONT><B><FONT FACE="Courier"><P>userdata</P>
+<P>p1</P>
+<P>  &lt;x&gt; , &lt;y&gt; , &lt;z&gt;</P>
+<P>  ...</P>
+<P>p2</P>
+<P>  &lt;x&gt; , &lt;y&gt; , &lt;z&gt;</P>
+<P>misselem</P>
+<P>  &lt;number&gt;</P>
+<P>  ...</P>
+<P>sprtrs</P>
+<P>  &lt;number&gt;</P>
+<P>  ...</P>
+<P>sources</P>
+<P>  &lt;x&gt; , &lt;y&gt;</P>
+<P>cells &lt;cellnum&gt;</P>
+<P>  &lt;number&gt;</P>
+<P>  ...</P>
+<P>...</P>
+<P>&lt;layer name&gt; &lt;layer number&gt;</P>
+<P>  &lt;variable&gt;</P>
+<P>  ...</P>
+<P>...</P>
+<P>finish</P>
+</B></FONT><FONT FACE="Times"><P>&nbsp;</P>
+</FONT><B><FONT FACE="Courier"><P>p1</B></FONT><FONT FACE="Times"> and </FONT><B><FONT FACE="Courier">p2</B></FONT><FONT FACE="Times"> sections containt coordinates of origins and ends of elements and/or separators, sorted after element number. For unused numbers, dummy coordinates are output. The Z coordinate is always 0.</P>
+<P>The</FONT><B><FONT FACE="Courier"> misselem</B></FONT><FONT FACE="Times"> section contains unused element numbers. Elements with these numbers </FONT><B><FONT FACE="Courier"> must</B></FONT><FONT FACE="Times"> be ignored.</P>
+<P>The </FONT><B><FONT FACE="Courier">sprtrs</B></FONT><FONT FACE="Times"> section lists numbers of separators in </FONT><B><FONT FACE="Courier">p1</B></FONT><FONT FACE="Times"> and </FONT><B><FONT FACE="Courier">p2</B></FONT><FONT FACE="Times"> arrays.</P>
+<P>The </FONT><B><FONT FACE="Courier">sources</B></FONT><FONT FACE="Times"> section lists sources.</P>
+<P>If separators are defined, there is a </FONT><B><FONT FACE="Courier">cells</B></FONT><FONT FACE="Times"> section for each cell. Each section lists numbers of elements and separators included in it's cell.</P>
+<P>For each layer, a </FONT><B><FONT FACE="Courier">&lt;layer name&gt; &lt;layer number&gt;</B></FONT><FONT FACE="Times"> section is present. Layer name is the name of the layer type. Layer number is used to distinguish between layers of the same type. Each section contains a </FONT><B><FONT FACE="Courier">&lt;variable&gt;</B></FONT><FONT FACE="Times"> entry for each variable in the layer.</P>
+<P>The </FONT><B><FONT FACE="Courier">&lt;variable&gt;</B></FONT><FONT FACE="Times"> block has following formats:</P>
+<P>Text variables that apply to the layer:</P>
+</FONT><B><FONT FACE="Courier"><P>&lt;variable name&gt; &lt;value&gt;</P>
+</B></FONT><FONT FACE="Times"><P>Text variables that apply to elements or sources:</P>
+</FONT><B><FONT FACE="Courier"><P>&lt;variable name&gt;</P>
+<P>  &lt;value&gt;</P>
+<P>  ...</P>
+</B></FONT><FONT FACE="Times"><P>For variables that apply to elements, a value for each element number is included. Dummy valurs are used for unused numbers. For variables that apply to sources, a value for each source is included. Values are written in the same order as sources in the </FONT><B><FONT FACE="Courier">sources</B></FONT><FONT FACE="Times"> section.</P>
+<P>"Set of elements" variables that apply to the layer:</P>
+</FONT><B><FONT FACE="Courier"><P>&lt;variable name&gt;</P>
+<P>  &lt;element number&gt;</P>
+<P>  ...</P></B></FONT></BODY>
+</HTML>

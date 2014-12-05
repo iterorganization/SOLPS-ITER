@@ -1,0 +1,10 @@
+
+\MOVIES::TOP "Saved slices of quantities for movies"
+\MOVIES::TOP:DAB2 "Atom density"
+\MOVIES::TOP:DMB2 "Molecule density"
+\MOVIES::TOP:NA "Ion density"
+\MOVIES::TOP:NE "Electron density"
+\MOVIES::TOP:RQAHESUM "Electron cooling rate (summed over all species)"
+\MOVIES::TOP:TE "Electron temperature"
+\MOVIES::TOP:TI "Ion temperature"
+\MOVIES::TOP:TIME "Time base"

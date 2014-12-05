@@ -1,0 +1,76 @@
+Dear All,
+
+Please find attached a report of detailing the work I've done on SOLPS5.0
+under the EUFORIA project.
+
+A brief summary is given below:
+
+* The EUFORIA BASE branch of SOLPS5.0 has been parallelised using
+  OpenMP on the nspecies loops. The ilutern solver has been parallelised,
+  the iluter and slv5pt solvers have not been parallelised.
+  The final version of the changed code can be found in
+https://solps-mdsplus.aug.ipp.mpg.de/wsvn/SOLPS/branches/EUFORIA/BASE/solps5.0/#_branches_EUFORIA_BASE_solps5.0_
+  The ABO version of the source with OpenMP included is under:
+https://solps-mdsplus.aug.ipp.mpg.de/wsvn/SOLPS/branches/EUFORIA/BASE/solps5.0-epcc-openmp/#_branches_EUFORIA_BASE_solps5.0-epcc-openmp_
+  This version is included for reference only and should not be developed
+  further.
+
+* The code should run as normal (i.e as the serial version did) if
+  compiled without an OpenMP compiler and if compiled with OpenMP (add
+  -D_OPENMP to the pre-processor definitions + the appropriate flags
+  for using OpenMP, e.g. -mp=nonuma, -fopenmp etc) will run the nspecies
+  loops across OMP_NUM_THREADS threads. OMP_NUM_THREADS is an environment
+  variable that should be set on the command line or in your batch script
+  and should not exceed the number of physical cores your machine has.
+  Also OMP_NUM_THREADS should be choosen such that you have at least as
+  many species as threads, otherwise you end up with threads doing
+  nothing. Ideally, choosing the number of threads such that it divides
+  evenly into the number of species is best, e.g. 12 species can run on
+  1, 2, 3, 4, 6 or 12 threads. If you run on 8 threads then 4 threads will
+  run 1 species and 4 will run 2 species computations which will introduce
+  some load imbalance.
+
+* Several files have been added to the SETUP/ folder
+  SETUP/linux.pgi.xt6  -     HECToR XT6 serial version
+  SETUP/linux.pgi.xt6.openmp -     HECToR XT6 OpenMP version
+  SETUP/linux_pgf90_GW_openmp - Gateway OpenMP version
+
+* Corresponding compiler.* files have been added to the src/Eirene/config
+  and src/Braams/b2/base/config directories.
+
+* #ifdef/#endif's have been used to enable OpenMP parts of the code
+  and also to allow additional timers to be used.
+
+* The final version of the code has also been uploaded to Savannah for
+  completeness.
+
+In terms of performance, up to 51% (i.e. 2 times faster) can be gained by using 6 or 8 threads. The performance of the AUG_16151_D+C+He (12 species) and XPB's tungsten (92 species) benchmarks were quite similar. On HECToR using more than 8 threads didn't make much difference to the performance.
+In terms of speedup, the Gateway system performed better than HECToR - this is thought to be down to HECToR having a shared I/O system which means that jobs can be affected by other users of the machine.
+
+It's worth noting that the parallelisation of the nspecies loops in SOLPS5.0 will always be limited by Amdahl's Law which states that the speedup of a parallel program is limited by the sequential fraction. As
+b2news constitutes ~85% of the total runtime and we only parallelise
+part of that routine the best speedups we could theoretically obtain
+are:
+
+All of b2news in parallel:    max speedup = 3.90 on 8 threads
+nspecies loops in parallel:    max speedup = 2.10 on 8 threads
+(approx 60% of total runtime)
+
+Please let me know if you have any comments/questions.
+
+Best wishes,
+Fiona
+
+-------------------------------------------------------------------------
+Dr Fiona J. L. Reid                EPCC
+Applications Consultant            The University of Edinburgh
+Tel:   +44 (0)131 650 6494       James Clerk Maxwell Building
+Fax:   +44 (0)131 650 6555       Mayfield Road
+Email: f.reid@epcc.ed.ac.uk       Edinburgh, EH9 3JZ, UK
+-------------------------------------------------------------------------
+The University of Edinburgh is a charitable body, registered in Scotland,
+with registration number SC005336
+-- 
+The University of Edinburgh is a charitable body, registered in
+Scotland, with registration number SC005336.
+

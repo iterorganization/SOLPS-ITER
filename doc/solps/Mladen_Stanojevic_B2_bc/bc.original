@@ -1,0 +1,5237 @@
+From Siegbert.Kuhn@uibk.ac.at Mon Mar 25 16:06:47 2002
+Received: from post.rzg.mpg.de (post [130.183.9.21])
+	by s10mail.aug.ipp-garching.mpg.de (8.11.2/8.11.2) with ESMTP id g2PF6k113582
+	for <dpc@s10mail.aug.ipp-garching.mpg.de>; Mon, 25 Mar 2002 16:06:46 +0100 (MET)
+Received: from basilikum.rzg.mpg.de (basilikum.rzg.mpg.de [130.183.3.28])
+	by post.rzg.mpg.de (8.9.2/8.9.2) with ESMTP id QAA48600
+	for <dpc@ipp.mpg.de>; Mon, 25 Mar 2002 16:08:51 +0100
+Received: from amavis by basilikum.rzg.mpg.de with scanned-ok (Exim 3.31 #1)
+	id 16pW57-0004HZ-00
+	for dpc@ipp.mpg.de; Mon, 25 Mar 2002 16:08:21 +0100
+Received: from ms1.uibk.ac.at ([138.232.1.201])
+	by basilikum.rzg.mpg.de with esmtp (Exim 3.31 #1)
+	id 16pW55-0004H3-00; Mon, 25 Mar 2002 16:08:19 +0100
+Received: from uibk.ac.at (pl-c705.uibk.ac.at [138.232.67.23] Siegbert.Kuhn@uibk.ac.at)
+  by ms1.uibk.ac.at (8.11.3/E2) with ESMTP id g2PF8Fk12881205;
+  Mon, 25 Mar 2002 16:08:16 +0100 (CET)
+Message-ID: <3C9F3D60.4A7E86E8@uibk.ac.at>
+Date: Mon, 25 Mar 2002 16:08:16 +0100
+From: Siegbert Kuhn <Siegbert.Kuhn@uibk.ac.at>
+Organization: University of Innsbruck, Austria
+X-Mailer: Mozilla 4.78 [de] (WinNT; U)
+X-Accept-Language: de
+MIME-Version: 1.0
+To: David Coster <dpc@ipp.mpg.de>
+CC: "Jelic, Nikola" <nikola.jelic@eunet.si>,
+   "Schneider, Ralf" <rfs@ipp.mpg.de>,
+   "Stanojevic, Mladen" <mladen.stanojevic@hermes.si>
+Subject: Mlanden's write-up of boundary conditions
+Content-Type: multipart/mixed;
+ boundary="------------22335D01B792A8F762D239EA"
+X-Virus-Scanned: by AMaViS perl-11
+Content-Length: 150176
+Status: R
+
+Dies ist eine mehrteilige Nachricht im MIME-Format.
+--------------22335D01B792A8F762D239EA
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+
+Hi David,
+
+As promised, please find attached Mladen Stanojevic's 24 Dec. 1999
+write-up of B2.5 boundary conditions. It is written in Scientific
+Workplace 3.0, so I just hope and pray you may be able to open it.
+
+Thanks again for the great Training Camp.
+
+With best regards,
+                            Siegbert
+
+------------------------------------------------------------------
+Siegbert KUHN
+Department of Theoretical Physics
+University of Innsbruck           Tel.    (#43-512) 507-6206
+Technikerstrasse 25               Fax               507-2919
+A-6020 Innsbruck,  Austria        E-mail  Siegbert.Kuhn@uibk.ac.at
+------------------------------------------------------------------
+--------------22335D01B792A8F762D239EA
+Content-Type: application/x-tex;
+ name="B25BCMS.tex"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline;
+ filename="B25BCMS.tex"
+
+%% This document created by Scientific Word (R) Version 3.0
+
+
+\documentclass[11pt]{article}
+\usepackage{amssymb}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{graphicx}
+\usepackage{amsmath}
+
+%TCIDATA{OutputFilter=LATEX.DLL}
+%TCIDATA{Created=Wed Oct 27 14:48:41 1999}
+%TCIDATA{LastRevised=Fri Jun 09 09:56:05 2000}
+%TCIDATA{<META NAME="GraphicsSave" CONTENT="32">}
+%TCIDATA{<META NAME="DocumentShell" CONTENT="General\Blank Document">}
+%TCIDATA{Language=American English}
+%TCIDATA{CSTFile=LaTeX article (bright).cst}
+%TCIDATA{PageSetup=57,43,0,0,0}
+%TCIDATA{Counters=arabic,1}
+%TCIDATA{AllPages=
+%H=36
+%F=36
+%}
+
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{acknowledgement}[theorem]{Acknowledgement}
+\newtheorem{algorithm}[theorem]{Algorithm}
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{case}[theorem]{Case}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{conclusion}[theorem]{Conclusion}
+\newtheorem{condition}[theorem]{Condition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{criterion}[theorem]{Criterion}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{notation}[theorem]{Notation}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{solution}[theorem]{Solution}
+\newtheorem{summary}[theorem]{Summary}
+\newenvironment{proof}[1][Proof]{\textbf{#1.} }{\ \rule{0.5em}{0.5em}}
+\input{tcilatex}
+
+\begin{document}
+
+\title{Boundary Conditions in the B2.5 Code}
+\author{Mladen Stanojevi\'{c}}
+\maketitle
+\tableofcontents
+
+\section{Introduction}
+
+LUD 24 Dec 99\bigskip
+
+The boundary conditions are implemented in the B2.5 code by means of the
+boundary sources, that is in a similar way as the volume sources due to the
+atomic processes, but they are defined only in the boundary cells of the
+computational grid. [\ref{mbaelmans}] It means that in a case of the
+boundary conditions at the material surfaces the boundary cells have a role
+of combined electrostatic sheath and quasineutral collisionless magnetic
+presheath, which cannot be modelled with the B2.5 fluid equations. According
+to the existing fluid models of the magnetized boundary plasma, the role of
+the magnetic presheath, which is located between the collisional plasma
+presheath and electrostatic sheath, is to deflect the charged particles from
+their average motion along the magnetic field lines to the direction
+perpendicular to the wall. The average ion velocity along the magnetic field
+direction at the entrance of the magnetic presheath from the collisional
+presheath side is at least the local ion sound velocity, that is $c_{sMPSE}=%
+\sqrt{\frac {k_{B}(ZT_{eMPSE}+T_{iMPSE})}{m_{i}}}$ in a two-component
+plasma, or $u_{\Vert MPSE}\geq c_{sMPSE}$ [\ref{mbohm95}]. The component of
+the average ion velocity at the entrance of the electrostatic sheath, which
+is perpendicular to the wall, is also greater than or equal to the local ion
+sound velocity, i.e., $u_{SE}\geq c_{sSE}$. [\ref{mriemann91}, \ref{mbohm95}%
+]\ Since both the magnetic presheath and electrostatic sheath are
+collisionless regions and assuming that the dissipative effects due to some
+turbulent mechanisms are negligible in these regions, particle, momentum and
+energy fluxes are conserved in these regions. The B2.5 equations for the
+bulk plasma are approximately valid in the collisional presheath, assuming
+that the charged particle velocity distributions do not differ significantly
+from Maxwellian or drifting-Maxwellian distributions. (However, it should be
+emphasized that according to the two-scale kinetic analysis of the boundary
+plasma near the solid surface, pure Maxwellian or drifting-Maxwellian ion
+velocity distribution cannot satisfy the generalized Bohm criterion. [\ref
+{mriemann91}, \ref{mriemann97}, \ref{mdaube99}]) It means that they provide
+the values for the charged particle densities, drift velocities, ion and
+electron temperatures at the magnetic presheath edge ($MPSE$), which can be
+used for calculating the fluxes at the magnetic presheath edge. The value of
+the poloidal component of the ion drift velocity at the magnetic presheath
+edge obtained from the bulk transport equations should be corrected, because
+of the effects related to the stronger local electric field in the magnetic
+presheath. This electric field causes a strong acceleration of the ions
+along the magnetic field lines, similar like in a case of a non-magnetic
+plasma presheath or in a case when the magnetic field is perpendicular to
+the surface, and additional poloidal $\mathbf{E\times B}$ drift due to the
+radial component of the electric field. In some cases $\mathbf{E\times B}$
+drift velocity can be comparable with the local ion sound velocity. [\ref
+{mstangeby95}, \ref{mrognlien1}, \ref{mrognlien2}] The correction of the
+poloidal component of the ion drift velocity due to the $\mathbf{B}%
+\times\nabla p$ drift is usually negligible, since it contributes mostly to
+the ion flow parallel to the surface. [\ref{mchankin94}] However, more
+detailed investigations of the importance of this drift should be performed
+in the future studies, which should include also kinetic models and
+numerical simulations (e.g. particle and/or kinetic simulations) of the
+magnetized boundary plasma.
+
+\bigskip
+
+The boundary sources in the B2.5 code are defined by the boundary cell
+averages or volume integrals of the negative divergences of the incoming
+fluxes into the boundary cells. The boundary condition for the continuity
+equation for each atomic species is given by: 
+\begin{equation}
+S_{p}=-\int_{B.V.}\nabla\cdot\mathbf{\Gamma}\text{ }dV=-\int_{B.S.}\mathbf{%
+\Gamma\cdot} d\mathbf{A}\text{,}   \label{1}
+\end{equation}
+which means that in the discretized form of this equation the value of the
+particle flux, $\Gamma_{j}=n\left\langle v_{j}\right\rangle $, at the
+magnetic presheath edge as a function of the macroscopic plasma parameters
+should be specified. The boundary condition for the momentum equation is: 
+\begin{equation}
+\mathbf{S}_{m}=-\int_{B.V.}\nabla\cdot\underline{\mathbf{M}}\text{ }%
+dV=-\int_{B.S.}\underline{\mathbf{M}}\cdot d\mathbf{A}\text{.}   \label{2}
+\end{equation}
+In this case the appropriate components of the momentum tensor, $%
+M_{jk}=mn\left\langle v_{j}v_{k}\right\rangle $, at the magnetic presheath
+edge should be specified in the discretized equations. Similarly, the energy
+or heat boundary sources are given by: 
+\begin{equation}
+S_{q}=-\int_{B.V.}\nabla\cdot\mathbf{Q}\text{ }dV=-\int_{B.S.}\mathbf{Q\cdot}%
+d\mathbf{A}\text{,}   \label{3}
+\end{equation}
+where the appropriate components of the electron and/or ion heat flux, $%
+Q_{j}=\frac{1}{2}mn\left\langle v^{2}v_{j}\right\rangle $, at the magnetic
+presheath edge as functions of the macroscopic plasma parameters should be
+specified in the discretized equations. The boundary charge source is given
+by: 
+\begin{equation}
+S_{ch}=-\int_{B.V.}\nabla\cdot\mathbf{j}\text{ }dV=-\int_{B.S.}\mathbf{j\cdot%
+}d\mathbf{A}\text{,}   \label{4}
+\end{equation}
+where the electric current density, $\mathbf{j}=e\left( \sum_{\alpha
+}Z_{\alpha}\mathbf{\Gamma}_{\alpha}-\mathbf{\Gamma}_{e}\right) $, at the
+magnetic presheath edge should be specified in the discretized equations.
+
+\bigskip
+
+\section{Analytical Expressions for the Standard (``Old'') Boundary Sources
+in the B2.5 Code}
+
+\bigskip
+
+The boundary sources are expressed as linear and/or weakly non-linear
+functions of the macroscopic plasma parameters ($n_{\alpha}$, $n_{e}$, $%
+u_{\alpha x}$, $\widehat{T}_{i}$, $\widehat{T}_{e}$, $\Phi$), calculated in
+the cells neighbouring to the boundary cells. Specific dependences of the
+boundary sources on these parameters are determined by the choice of the
+coefficients $C_{pj\alpha}$, $C_{mj\alpha}$, $C_{hij\alpha}$, $C_{hej}$ and $%
+C_{chj}$ (see Section 3). These coefficients are free input parameters,
+which depend on the theoretical model used for describing the boundary
+conditions. They must be written by the user in the input file \texttt{%
+b2ah.dat}. If \texttt{b2ah.dat} file already exists and the boundary
+conditions for the new simulation are not significantly different, it is
+practical to write the minor changes of the boundary conditions in the input
+file \texttt{b2mn.dat}. (If the existing \texttt{b2ah.dat} file is
+corrected, it is not necessary to do that.) When the theoretical model
+predicts more complicated non-linear dependence of the boundary fluxes on
+the plasma parameters, the effects of these non-linearities can be only
+approximately taken into consideration in the calculation, e.g., by some
+appropriate choice of the numerical values of the input parameters (see the
+example in Section 3). More details about the numerical implementation of
+the boundary sources can be found in the \texttt{b2stbc.f} source code.
+
+\bigskip
+
+\subsection{Definitions of Physical Parameters Used in the Analytical
+Expressions for the Standard Boundary Sources}
+
+\bigskip
+
+All following quantities are calculated locally at the appropriate boundary
+- SOUTH (S), NORTH (N) , WEST (W) and EAST (E) (see Fig. \ref{fig1}, AB and
+CD are the divertor plates, $x$ is the poloidal coordinate, $y$ is the
+radial coordinate, the separatrix goes from W through F and F$^{%
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+{\acute{}}%
+%EndExpansion
+}$ to E [\ref{mbaelmans}]), i.e., in the boundary cells:
+
+\bigskip
+
+\begin{equation}
+S_{0}=V/h_{y1}\text{, \ \ \ }h_{y1}=h_{y}\cos(\widehat{x}\widehat{y}) 
+\label{5}
+\end{equation}
+for the SOUTH and NORTH boundary, where $V$ is the volume of the boundary
+cell, $h_{y}$is the y-diameter (radial length) of the boundary cell and $%
+\cos(\widehat{x}\widehat{y})$ is the cosine of the complementary angle
+between the x-direction and y-direction on the boundary cell;
+
+\bigskip
+
+\begin{equation}
+S_{0}=V/h_{x}   \label{6}
+\end{equation}
+for the WEST and EAST boundary, where $V$ is the volume of the boundary cell
+and $h_{x}$ is the x-diameter (poloidal length) of the boundary cell;
+
+\bigskip
+
+\begin{equation}
+S_{1}=\left| S_{1}^{\pm}\right| =\left| \frac{B_{y}}{B}A\right|   \label{7}
+\end{equation}
+for the SOUTH and NORTH boundary, where $S_{1}^{\pm}$ is the product of the
+magnetic field pitch and the surface area on the cell face between the
+boundary cell and its neighbouring (previous) cell ((ix,-1) and (ix,0) for
+the SOUTH and (ix,ny) and (ix,ny-1) for the NORTH);
+
+\bigskip
+
+\begin{equation}
+S_{1}=\left| S_{1}^{\pm}\right| =\left| \frac{B_{x}}{B}A\right|   \label{8}
+\end{equation}
+for the WEST and EAST boundary, where $S_{1}^{\pm}$ is the product of the
+magnetic field pitch and the surface area on the cell face between the
+boundary cell and its neighbouring (previous) cell ((-1,iy) and (0,iy) for
+the WEST and (nx,iy) and (nx-1,iy) for the EAST);
+
+\bigskip
+
+\begin{equation}
+c_{s\alpha}=\sqrt{\frac{k_{B}\left( Z_{\alpha}T_{e}+T_{i}\right) }{%
+A_{\alpha}m_{p}}}=\sqrt{\frac{k_{B}\left( Z_{\alpha}T_{e}+T_{i}\right) }{%
+m_{\alpha}}}   \label{9}
+\end{equation}
+is the isothermal ion sound velocity for the atomic species $\alpha$;
+
+\bigskip
+
+\begin{equation}
+c_{st}=\sqrt{\frac{\sum_{\alpha}n_{\alpha}k_{B}\left(
+Z_{\alpha}T_{e}+T_{i}\right) }{\sum_{\alpha}n_{\alpha}A_{\alpha}m_{p}}}=%
+\sqrt{\frac {\sum_{\alpha}n_{\alpha}k_{B}\left( Z_{\alpha}T_{e}+T_{i}\right)
+}{\sum_{\alpha}n_{\alpha}m_{\alpha}}}   \label{10}
+\end{equation}
+is the isothermal ion sound velocity for multispecies plasma;
+
+\bigskip
+
+\begin{equation}
+c_{sD\alpha}=\max(c_{s\alpha},0.1c_{s\alpha}\pm\left( B_{z}/B_{x}\right)
+u_{Dx})   \label{11}
+\end{equation}
+is conditionally corrected ion drift velocity of the atomic species $\alpha$
+due to the poloidal $\mathbf{E\times B}$ drift, where ''$+$'' is for the
+WEST and ''$-$'' is for the EAST; the approximate correction is used only if 
+$0.1c_{s\alpha}\pm\left( B_{z}/B_{x}\right) u_{Dx}>c_{s\alpha}$;
+
+\bigskip
+
+\begin{equation}
+c_{stD}=\max(c_{st},0.1c_{st}\pm\left( B_{z}/B_{x}\right) u_{Dx}) 
+\label{12}
+\end{equation}
+is conditionally corrected ion drift velocity of the multispecies plasma due
+to the poloidal $\mathbf{E\times B}$ drift, where ''$+$'' is for the WEST
+and ''$-$'' is for the EAST; the approximate correction is used only if $%
+0.1c_{st}\pm\left( B_{z}/B_{x}\right) u_{Dx}>c_{st}$;
+
+\bigskip
+
+\begin{equation}
+\rho_{\alpha}=A_{\alpha}m_{p}n_{\alpha}=m_{\alpha}n_{\alpha}   \label{13}
+\end{equation}
+is the mass density of the atomic species $\alpha$;
+
+\bigskip
+
+\begin{equation}
+n_{i}=\sum_{\alpha}n_{\alpha}   \label{14}
+\end{equation}
+is the total atomic species (ion) particle density;
+
+\bigskip
+
+\begin{equation}
+t_{\alpha}=\frac{n_{\alpha}}{n_{i}}   \label{15}
+\end{equation}
+is the relative concentration (particle density) of the atomic species $%
+\alpha$;
+
+\bigskip
+
+\begin{equation}
+\mathbf{j}_{i}=\pm e\sum_{\alpha}Z_{\alpha}\mathbf{\Gamma}_{\alpha} 
+\label{16}
+\end{equation}
+is the positive ion electric current density in the boundary cells, where ''$%
++$'' is for the NORTH and EAST and ''$-$'' is for the SOUTH and WEST;
+
+\bigskip
+
+\begin{equation}
+v_{th,e}=\sqrt{\frac{k_{B}T_{e}}{m_{e}}}   \label{17}
+\end{equation}
+is the electron thermal velocity;
+
+\bigskip
+
+\begin{equation}
+J_{e}=\frac{1}{\sqrt{2\pi}}en_{e}v_{th,e}S_{1}\exp\left( -\frac{e\Phi}{%
+k_{B}T_{e}}\right)   \label{18}
+\end{equation}
+is the electron electric current;
+
+\bigskip
+
+\begin{equation}
+\widehat{T}_{e,i}=k_{B}T_{e,i}   \label{19}
+\end{equation}
+is the electron/ion temperature in the energy units and
+
+\bigskip
+
+\begin{equation}
+\mathbf{Q}_{h\alpha D}=\kappa_{\times\alpha}\left( \mathbf{b\times\nabla }%
+\widehat{T}_{\alpha}\right) S_{0}   \label{20}
+\end{equation}
+is the diamagnetic component of the heat current of the species $\alpha$,
+where $\mathbf{b=}\frac{\mathbf{B}}{B}$.
+
+\bigskip
+
+\subsection{Standard Boundary Sources}
+
+\bigskip
+
+Analytical formulas for the standard boundary sources are presented in this
+subsection. Their numerical implementation is included in the \texttt{%
+b2stbc.f} source code. The B2.5 code architecture is flexible enough, so
+that it is possible to change the expressions for the boundary sources
+without changing the other parts of the source code, i.e., only the
+numerical values of the boundary sources are used in the further
+calculations.
+
+\bigskip\ 
+
+\subsubsection{SOUTH Boundary (Cells (ix,-1))}
+
+\bigskip
+
+\paragraph{Particle Sources}
+
+\begin{equation}
+S_{p\alpha}=S_{p0\alpha}+S_{p1\alpha}n_{\alpha}   \label{21}
+\end{equation}
+
+\begin{equation}
+S_{p0\alpha}=C_{p0\alpha}S_{0}   \label{22}
+\end{equation}
+
+\begin{equation}
+S_{p1\alpha}=C_{p1\alpha}S_{0}+C_{p2\alpha}c_{s\alpha}S_{0}+C_{p3\alpha
+}c_{s\alpha}S_{1}+C_{p4\alpha}c_{st}S_{0}+C_{p5\alpha}c_{st}S_{1} 
+\label{23}
+\end{equation}
+
+\bigskip
+
+\paragraph{Momentum Sources}
+
+\begin{equation}
+S_{m\alpha}=S_{m0\alpha}+S_{m1\alpha}u_{\alpha x}+S_{m2\alpha}\rho_{\alpha
+}+S_{m3\alpha}\rho_{\alpha}u_{\alpha x}   \label{24}
+\end{equation}
+
+\begin{equation}
+S_{m0\alpha}=C_{m0\alpha}S_{0}   \label{25}
+\end{equation}
+
+\begin{equation}
+S_{m1\alpha}=0   \label{26}
+\end{equation}
+
+\begin{equation}
+S_{m2\alpha}=C_{m1\alpha}\left( -c_{s\alpha}\right) S_{1}^{\pm}+C_{m2\alpha
+}\left( -c_{st}\right) S_{1}^{\pm}+C_{m5\alpha}\frac{\max\left(
+0,\Gamma_{\alpha y}\right) }{n_{\alpha}}   \label{27}
+\end{equation}
+
+\begin{equation}
+S_{m3\alpha}=C_{m3\alpha}S_{0}+C_{m4\alpha}S_{1}+C_{m6\alpha}\frac{%
+\max\left( 0,-\Gamma_{\alpha y}\right) }{n_{\alpha}}   \label{28}
+\end{equation}
+
+\bigskip
+
+\paragraph{All Atom/Ion Heat Source}
+
+\begin{equation}
+S_{hi}=S_{hi0}+S_{hi1}\widehat{T}_{i}+S_{hi2}n_{i}+S_{hi3}n_{i}\widehat{T}%
+_{i}   \label{29}
+\end{equation}
+
+\begin{equation}
+S_{hi0}=\sum_{\alpha}\left[ C_{hi0\alpha}t_{\alpha}S_{0}+C_{hi6\alpha}\max%
+\left( 0,\Gamma_{\alpha y}\right) \right] +Q_{hiDy}   \label{30}
+\end{equation}
+
+\begin{equation}
+S_{hi1}=\sum_{\alpha}C_{hi1\alpha}t_{\alpha}S_{0}+\frac{Q_{hiDy}}{\widehat
+{T}_{i}}   \label{31}
+\end{equation}
+
+\begin{equation}
+S_{hi2}=0   \label{32}
+\end{equation}
+
+\begin{equation*}
+S_{hi3}=\sum_{\alpha}[C_{hi2\alpha}t_{\alpha}c_{s\alpha}S_{0}+C_{hi3\alpha
+}t_{\alpha}c_{s\alpha}S_{1}+C_{hi4\alpha}t_{\alpha}c_{st}S_{0}+ 
+\end{equation*}
+
+\begin{equation}
+C_{hi5\alpha}t_{\alpha}c_{st}S_{1}+C_{hi7\alpha}\frac{\max\left(
+0,-\Gamma_{\alpha y}\right) }{n_{i}}]   \label{33}
+\end{equation}
+
+\bigskip
+
+\paragraph{Electron Heat Source}
+
+\begin{equation}
+S_{he}=S_{he0}+S_{he1}\widehat{T}_{e}+S_{he2}n_{e}+S_{he3}n_{e}\widehat{T}%
+_{e}   \label{34}
+\end{equation}
+
+\begin{equation}
+S_{he0}=C_{he0}S_{0}+C_{he6}\max\left( 0,\Gamma_{ey}\right) +Q_{heDy} 
+\label{35}
+\end{equation}
+
+\begin{equation}
+S_{he1}=C_{he1}S_{0}+\frac{Q_{heDy}}{\widehat{T}_{e}}   \label{36}
+\end{equation}
+
+\begin{equation}
+S_{he2}=0   \label{37}
+\end{equation}
+
+\begin{equation*}
+S_{he3}=C_{he2}v_{th,e}S_{0}+C_{he3}v_{th,e}S_{1}+C_{he4}c_{st}S_{0}+ 
+\end{equation*}
+
+\begin{equation}
+C_{he5}c_{st}S_{1}+C_{he7}\frac{\max\left( 0,-\Gamma_{ey}\right) }{n_{e}} 
+\label{38}
+\end{equation}
+
+\bigskip
+
+\paragraph{Electric Charge Source}
+
+\begin{equation}
+S_{ch}=S_{ch0}+S_{ch1}\Phi+S_{ch2}n_{e}+S_{ch3}n_{e}\Phi   \label{39}
+\end{equation}
+
+\begin{equation}
+S_{ch0}=C_{ch7}J_{ey}-C_{ch6}J_{iy}+\max\left(
+C_{ch6}J_{iy},C_{ch7}J_{ey}\right) \frac{e\Phi}{\widehat{T}_{e}}   \label{40}
+\end{equation}
+\bigskip
+
+\begin{equation}
+S_{ch1}=-\frac{\max\left( C_{ch6}J_{iy},C_{ch7}J_{ey}\right) e}{\widehat
+{T}_{e}}   \label{41}
+\end{equation}
+
+\begin{equation}
+S_{ch2}=C_{ch0}ev_{th,e}S_{0}+C_{ch2}ev_{th,e}S_{1}+C_{ch4}ec_{st}S_{1} 
+\label{42}
+\end{equation}
+
+\begin{equation}
+S_{ch3}=C_{ch1}\frac{e^{2}v_{th,e}S_{0}}{\widehat{T}_{e}}+C_{ch3}\frac
+{e^{2}v_{th,e}S_{1}}{\widehat{T}_{e}}+C_{ch5}\frac{e^{2}c_{st}S_{1}}{%
+\widehat{T}_{e}}   \label{43}
+\end{equation}
+
+\bigskip
+
+\subsubsection{NORTH Boundary (Cells (ix,ny))}
+
+\bigskip
+
+\paragraph{Particle Sources}
+
+\begin{equation}
+S_{p\alpha}=S_{p0\alpha}+S_{p1\alpha}n_{\alpha}   \label{44}
+\end{equation}
+
+\begin{equation}
+S_{p0\alpha}=C_{p0\alpha}S_{0}   \label{45}
+\end{equation}
+
+\begin{equation}
+S_{p1\alpha}=C_{p1\alpha}S_{0}+C_{p2\alpha}c_{s\alpha}S_{0}+C_{p3\alpha
+}c_{s\alpha}S_{1}+C_{p4\alpha}c_{st}S_{0}+C_{p5\alpha}c_{st}S_{1} 
+\label{46}
+\end{equation}
+
+\bigskip
+
+\paragraph{Momentum Sources}
+
+\begin{equation}
+S_{m\alpha}=S_{m0\alpha}+S_{m1\alpha}u_{\alpha x}+S_{m2\alpha}\rho_{\alpha
+}+S_{m3\alpha}\rho_{\alpha}u_{\alpha x}   \label{47}
+\end{equation}
+
+\begin{equation}
+S_{m0\alpha}=C_{m0\alpha}S_{0}   \label{48}
+\end{equation}
+
+\begin{equation}
+S_{m1\alpha}=0   \label{49}
+\end{equation}
+
+\begin{equation}
+S_{m2\alpha}=C_{m1\alpha}c_{s\alpha}S_{1}^{\pm}+C_{m2\alpha}c_{st}S_{1}^{\pm
+}+C_{m5\alpha}\frac{\max\left( 0,-\Gamma_{\alpha y}\right) }{n_{\alpha}} 
+\label{50}
+\end{equation}
+
+\begin{equation}
+S_{m3\alpha}=C_{m3\alpha}S_{0}+C_{m4\alpha}S_{1}+C_{m6\alpha}\frac{%
+\max\left( 0,\Gamma_{\alpha y}\right) }{n_{\alpha}}   \label{51}
+\end{equation}
+
+\bigskip
+
+\paragraph{All Atom/Ion Heat Source}
+
+\begin{equation}
+S_{hi}=S_{hi0}+S_{hi1}\widehat{T}_{i}+S_{hi2}n_{i}+S_{hi3}n_{i}\widehat{T}%
+_{i}   \label{52}
+\end{equation}
+
+\begin{equation}
+S_{hi0}=\sum_{\alpha}\left[ C_{hi0\alpha}t_{\alpha}S_{0}+C_{hi6\alpha}\max%
+\left( 0,-\Gamma_{\alpha y}\right) \right] -Q_{hiDy}   \label{53}
+\end{equation}
+
+\begin{equation}
+S_{hi1}=\sum_{\alpha}C_{hi1\alpha}t_{\alpha}S_{0}-\frac{Q_{hiDy}}{\widehat
+{T}_{i}}   \label{54}
+\end{equation}
+
+\begin{equation}
+S_{hi2}=0   \label{55}
+\end{equation}
+
+\begin{equation*}
+S_{hi3}=\sum_{\alpha}[C_{hi2\alpha}t_{\alpha}c_{s\alpha}S_{0}+C_{hi3\alpha
+}t_{\alpha}c_{s\alpha}S_{1}+C_{hi4\alpha}t_{\alpha}c_{st}S_{0}+ 
+\end{equation*}
+
+\begin{equation}
+C_{hi5\alpha}t_{\alpha}c_{st}S_{1}+C_{hi7\alpha}\frac{\max\left(
+0,\Gamma_{\alpha y}\right) }{n_{i}}]   \label{56}
+\end{equation}
+
+\bigskip
+
+\paragraph{Electron Heat Source}
+
+\begin{equation}
+S_{he}=S_{he0}+S_{he1}\widehat{T}_{e}+S_{he2}n_{e}+S_{he3}n_{e}\widehat{T}%
+_{e}   \label{57}
+\end{equation}
+
+\begin{equation}
+S_{he0}=C_{he0}S_{0}+C_{he6}\max\left( 0,-\Gamma_{ey}\right) -Q_{heDy} 
+\label{58}
+\end{equation}
+
+\begin{equation}
+S_{he1}=C_{he1}S_{0}-\frac{Q_{heDy}}{\widehat{T}_{e}}   \label{59}
+\end{equation}
+
+\begin{equation}
+S_{he2}=0   \label{60}
+\end{equation}
+
+\begin{equation*}
+S_{he3}=C_{he2}v_{th,e}S_{0}+C_{he3}v_{th,e}S_{1}+C_{he4}c_{st}S_{0}+ 
+\end{equation*}
+
+\begin{equation}
+C_{he5}c_{st}S_{1}+C_{he7}\frac{\max\left( 0,\Gamma_{ey}\right) }{n_{e}} 
+\label{61}
+\end{equation}
+
+\bigskip
+
+\paragraph{Electric Charge Source}
+
+\begin{equation}
+S_{ch}=S_{ch0}+S_{ch1}\Phi+S_{ch2}n_{e}+S_{ch3}n_{e}\Phi   \label{62}
+\end{equation}
+
+\begin{equation}
+S_{ch0}=C_{ch7}J_{ey}-C_{ch6}J_{iy}+\max\left(
+C_{ch6}J_{iy},C_{ch7}J_{ey}\right) \frac{e\Phi}{\widehat{T}_{e}}   \label{63}
+\end{equation}
+\bigskip
+
+\begin{equation}
+S_{ch1}=-\frac{\max\left( C_{ch6}J_{iy},C_{ch7}J_{ey}\right) e}{\widehat
+{T}_{e}}   \label{64}
+\end{equation}
+
+\begin{equation}
+S_{ch2}=C_{ch0}ev_{th,e}S_{0}+C_{ch2}ev_{th,e}S_{1}+C_{ch4}ec_{st}S_{1} 
+\label{65}
+\end{equation}
+
+\begin{equation}
+S_{ch3}=C_{ch1}\frac{e^{2}v_{th,e}S_{0}}{\widehat{T}_{e}}+C_{ch3}\frac
+{e^{2}v_{th,e}S_{1}}{\widehat{T}_{e}}+C_{ch5}\frac{e^{2}c_{st}S_{1}}{%
+\widehat{T}_{e}}   \label{66}
+\end{equation}
+
+\bigskip\bigskip
+
+\subsubsection{WEST Boundary (Cells (-1,iy), Divertor Plate)}
+
+\bigskip
+
+\paragraph{Particle Sources}
+
+\begin{equation}
+S_{p\alpha}=S_{p0\alpha}+S_{p1\alpha}n_{\alpha}   \label{67}
+\end{equation}
+
+\begin{equation}
+S_{p0\alpha}=C_{p0\alpha}S_{0}+C_{p6\alpha}\max\left( 0,u_{\alpha
+x}S_{1}^{\pm}\right)   \label{68}
+\end{equation}
+
+\begin{equation*}
+S_{p1\alpha}=C_{p1\alpha}S_{0}+C_{p2\alpha}c_{sD\alpha}S_{0}+C_{p3\alpha
+}c_{sD\alpha}S_{1}+C_{p4\alpha}c_{stD}S_{0}+ 
+\end{equation*}
+
+\begin{equation}
+C_{p5\alpha}c_{stD}S_{1}+C_{p7\alpha}\max\left( 0,-u_{\alpha x}S_{1}^{\pm
+}\right)   \label{69}
+\end{equation}
+
+\bigskip
+
+\paragraph{Momentum Sources}
+
+\begin{equation}
+S_{m\alpha}=S_{m0\alpha}+S_{m1\alpha}u_{\alpha x}+S_{m2\alpha}\rho_{\alpha
+}+S_{m3\alpha}\rho_{\alpha}u_{\alpha x}   \label{70}
+\end{equation}
+
+\begin{equation}
+S_{m0\alpha}=C_{m0\alpha}S_{0}   \label{71}
+\end{equation}
+
+\begin{equation}
+S_{m1\alpha}=0   \label{72}
+\end{equation}
+
+\begin{equation}
+S_{m2\alpha}=C_{m1\alpha}\left( -c_{sD\alpha}\right)
+S_{1}^{\pm}+C_{m2\alpha}\left( -c_{stD}\right) S_{1}^{\pm}+C_{m5\alpha}\frac
+{\max\left( 0,\Gamma_{\alpha x}\right) }{n_{\alpha}}   \label{73}
+\end{equation}
+
+\begin{equation}
+S_{m3\alpha}=C_{m3\alpha}S_{0}+C_{m4\alpha}S_{1}+C_{m6\alpha}\frac{%
+\max\left( 0,-\Gamma_{\alpha x}\right) }{n_{\alpha}}   \label{74}
+\end{equation}
+
+\bigskip
+
+\paragraph{All Atom/Ion Heat Source}
+
+\begin{equation}
+S_{hi}=S_{hi0}+S_{hi1}\widehat{T}_{i}+S_{hi2}n_{i}+S_{hi3}n_{i}\widehat{T}%
+_{i}   \label{75}
+\end{equation}
+
+\begin{equation}
+S_{hi0}=\sum_{\alpha}\left[ C_{hi0\alpha}t_{\alpha}S_{0}+C_{hi6\alpha}\max%
+\left( 0,\Gamma_{\alpha x}\right) \right] +Q_{hiDx}   \label{76}
+\end{equation}
+
+\begin{equation}
+S_{hi1}=\sum_{\alpha}C_{hi1\alpha}t_{\alpha}S_{0}+\frac{Q_{hiDx}}{\widehat
+{T}_{i}}   \label{77}
+\end{equation}
+
+\begin{equation}
+S_{hi2}=0   \label{78}
+\end{equation}
+
+\begin{equation*}
+S_{hi3}=\sum_{\alpha}[C_{hi2\alpha}t_{\alpha}c_{sD\alpha}S_{0}+C_{hi3\alpha
+}t_{\alpha}c_{sD\alpha}S_{1}+C_{hi4\alpha}t_{\alpha}c_{stD}S_{0}+ 
+\end{equation*}
+
+\begin{equation}
+C_{hi5\alpha}t_{\alpha}c_{stD}S_{1}+C_{hi7\alpha}\frac{\max\left(
+0,-\Gamma_{\alpha x}\right) }{n_{i}}]   \label{79}
+\end{equation}
+
+\bigskip
+
+\paragraph{\protect\bigskip Electron Heat Source}
+
+\begin{equation}
+S_{he}=S_{he0}+S_{he1}\widehat{T}_{e}+S_{he2}n_{e}+S_{he3}n_{e}\widehat{T}%
+_{e}   \label{80}
+\end{equation}
+
+\begin{equation}
+S_{he0}=C_{he0}S_{0}+C_{he6}\max\left( 0,\Gamma_{ex}\right) +Q_{heDx} 
+\label{81}
+\end{equation}
+
+\begin{equation}
+S_{he1}=C_{he1}S_{0}+\frac{Q_{heDx}}{\widehat{T}_{e}}   \label{82}
+\end{equation}
+
+\begin{equation}
+S_{he2}=0   \label{83}
+\end{equation}
+
+\begin{equation*}
+S_{he3}=C_{he2}v_{th,e}S_{0}+C_{he3}v_{th,e}S_{1}+C_{he4}c_{stD}S_{0}+ 
+\end{equation*}
+
+\begin{equation}
+C_{he5}c_{stD}S_{1}+C_{he7}\frac{\max\left( 0,-\Gamma_{ex}\right) }{n_{e}} 
+\label{84}
+\end{equation}
+
+\bigskip
+
+\paragraph{Electric Charge Source}
+
+\begin{equation}
+S_{ch}=S_{ch0}+S_{ch1}\Phi+S_{ch2}n_{e}+S_{ch3}n_{e}\Phi   \label{85}
+\end{equation}
+
+\begin{equation}
+S_{ch0}=C_{ch7}J_{ex}-C_{ch6}J_{ix}+\max\left(
+C_{ch6}J_{ix},C_{ch7}J_{ex}\right) \frac{e\Phi}{\widehat{T}_{e}}   \label{86}
+\end{equation}
+\bigskip
+
+\begin{equation}
+S_{ch1}=-\frac{\max\left( C_{ch6}J_{ix},C_{ch7}J_{ex}\right) e}{\widehat
+{T}_{e}}   \label{87}
+\end{equation}
+
+\begin{equation}
+S_{ch2}=C_{ch0}ev_{th,e}S_{0}+C_{ch2}ev_{th,e}S_{1}+C_{ch4}ec_{stD}S_{1} 
+\label{88}
+\end{equation}
+
+\begin{equation}
+S_{ch3}=C_{ch1}\frac{e^{2}v_{th,e}S_{0}}{\widehat{T}_{e}}+C_{ch3}\frac
+{e^{2}v_{th,e}S_{1}}{\widehat{T}_{e}}+C_{ch5}\frac{e^{2}c_{stD}S_{1}}{%
+\widehat{T}_{e}}   \label{89}
+\end{equation}
+
+\bigskip
+
+\subsubsection{EAST Boundary (Cells (nx,iy), Divertor Plate)}
+
+\bigskip
+
+\paragraph{Particle Sources}
+
+\begin{equation}
+S_{p\alpha}=S_{p0\alpha}+S_{p1\alpha}n_{\alpha}   \label{90}
+\end{equation}
+
+\begin{equation}
+S_{p0\alpha}=C_{p0\alpha}S_{0}+C_{p6\alpha}\max\left( 0,-u_{\alpha
+x}S_{1}^{\pm}\right)   \label{91}
+\end{equation}
+
+\begin{equation*}
+S_{p1\alpha}=C_{p1\alpha}S_{0}+C_{p2\alpha}c_{sD\alpha}S_{0}+C_{p3\alpha
+}c_{sD\alpha}S_{1}+C_{p4\alpha}c_{stD}S_{0}+ 
+\end{equation*}
+
+\begin{equation}
+C_{p5\alpha}c_{stD}S_{1}+C_{p7\alpha}\max\left( 0,u_{\alpha x}S_{1}^{\pm
+}\right)   \label{92}
+\end{equation}
+
+\bigskip
+
+\paragraph{Momentum Sources}
+
+\begin{equation}
+S_{m\alpha}=S_{m0\alpha}+S_{m1\alpha}u_{\alpha x}+S_{m2\alpha}\rho_{\alpha
+}+S_{m3\alpha}\rho_{\alpha}u_{\alpha x}   \label{93}
+\end{equation}
+
+\begin{equation}
+S_{m0\alpha}=C_{m0\alpha}S_{0}   \label{94}
+\end{equation}
+
+\begin{equation}
+S_{m1\alpha}=0   \label{95}
+\end{equation}
+
+\begin{equation}
+S_{m2\alpha}=C_{m1\alpha}c_{sD\alpha}S_{1}^{\pm}+C_{m2\alpha}c_{stD}S_{1}^{%
+\pm}+C_{m5\alpha}\frac{\max\left( 0,-\Gamma_{\alpha x}\right) }{n_{\alpha }} 
+\label{96}
+\end{equation}
+
+\begin{equation}
+S_{m3\alpha}=C_{m3\alpha}S_{0}+C_{m4\alpha}S_{1}+C_{m6\alpha}\frac{%
+\max\left( 0,\Gamma_{\alpha x}\right) }{n_{\alpha}}   \label{97}
+\end{equation}
+
+\bigskip
+
+\paragraph{All Atom/Ion Heat Source}
+
+\begin{equation}
+S_{hi}=S_{hi0}+S_{hi1}\widehat{T}_{i}+S_{hi2}n_{i}+S_{hi3}n_{i}\widehat{T}%
+_{i}   \label{98}
+\end{equation}
+
+\begin{equation}
+S_{hi0}=\sum_{\alpha}\left[ C_{hi0\alpha}t_{\alpha}S_{0}+C_{hi6\alpha}\max%
+\left( 0,-\Gamma_{\alpha x}\right) \right] -Q_{hiDx}   \label{99}
+\end{equation}
+
+\begin{equation}
+S_{hi1}=\sum_{\alpha}C_{hi1\alpha}t_{\alpha}S_{0}-\frac{Q_{hiDx}}{\widehat
+{T}_{i}}   \label{100}
+\end{equation}
+
+\begin{equation}
+S_{hi2}=0   \label{101}
+\end{equation}
+
+\begin{equation*}
+S_{hi3}=\sum_{\alpha}[C_{hi2\alpha}t_{\alpha}c_{sD\alpha}S_{0}+C_{hi3\alpha
+}t_{\alpha}c_{sD\alpha}S_{1}+C_{hi4\alpha}t_{\alpha}c_{stD}S_{0}+ 
+\end{equation*}
+
+\begin{equation}
+C_{hi5\alpha}t_{\alpha}c_{stD}S_{1}+C_{hi7\alpha}\frac{\max\left(
+0,\Gamma_{\alpha x}\right) }{n_{i}}]   \label{102}
+\end{equation}
+
+\bigskip
+
+\paragraph{\protect\bigskip Electron Heat Source}
+
+\begin{equation}
+S_{he}=S_{he0}+S_{he1}\widehat{T}_{e}+S_{he2}n_{e}+S_{he3}n_{e}\widehat{T}%
+_{e}   \label{103}
+\end{equation}
+
+\begin{equation}
+S_{he0}=C_{he0}S_{0}+C_{he6}\max\left( 0,-\Gamma_{ex}\right) -Q_{heDx} 
+\label{104}
+\end{equation}
+
+\begin{equation}
+S_{he1}=C_{he1}S_{0}-\frac{Q_{heDx}}{\widehat{T}_{e}}   \label{105}
+\end{equation}
+
+\begin{equation}
+S_{he2}=0   \label{106}
+\end{equation}
+
+\begin{equation*}
+S_{he3}=C_{he2}v_{th,e}S_{0}+C_{he3}v_{th,e}S_{1}+C_{he4}c_{stD}S_{0}+ 
+\end{equation*}
+
+\begin{equation}
+C_{he5}c_{stD}S_{1}+C_{he7}\frac{\max\left( 0,\Gamma_{ex}\right) }{n_{e}} 
+\label{107}
+\end{equation}
+
+\bigskip
+
+\paragraph{Electric Charge Source}
+
+\begin{equation}
+S_{ch}=S_{ch0}+S_{ch1}\Phi+S_{ch2}n_{e}+S_{ch3}n_{e}\Phi   \label{108}
+\end{equation}
+
+\begin{equation}
+S_{ch0}=C_{ch7}J_{ex}-C_{ch6}J_{ix}+\max\left(
+C_{ch6}J_{ix},C_{ch7}J_{ex}\right) \frac{e\Phi}{\widehat{T}_{e}} 
+\label{109}
+\end{equation}
+\bigskip
+
+\begin{equation}
+S_{ch1}=-\frac{\max\left( C_{ch6}J_{ix},C_{ch7}J_{ex}\right) e}{\widehat
+{T}_{e}}   \label{110}
+\end{equation}
+
+\begin{equation}
+S_{ch2}=C_{ch0}ev_{th,e}S_{0}+C_{ch2}ev_{th,e}S_{1}+C_{ch4}ec_{stD}S_{1} 
+\label{111}
+\end{equation}
+
+\begin{equation}
+S_{ch3}=C_{ch1}\frac{e^{2}v_{th,e}S_{0}}{\widehat{T}_{e}}+C_{ch3}\frac
+{e^{2}v_{th,e}S_{1}}{\widehat{T}_{e}}+C_{ch5}\frac{e^{2}c_{stD}S_{1}}{%
+\widehat{T}_{e}}   \label{112}
+\end{equation}
+
+\FRAME{fhFU}{11.3016cm}{8.4921cm}{0pt}{\Qcb{Schematic view of the
+computational mesh.}}{\Qlb{fig1}}{boundcond.bmp}{\special{ language
+"Scientific Word"; type "GRAPHIC"; maintain-aspect-ratio TRUE; display
+"USEDEF"; valid_file "F"; width 11.3016cm; height 8.4921cm; depth 0pt;
+original-width 4.2661in; original-height 3.1998in; cropleft "0"; croptop
+"1"; cropright "1"; cropbottom "0"; filename 'boundcond.bmp';file-properties
+"NPEU";}}\bigskip
+
+\bigskip
+
+\section{Standard Boundary Sources near the Material Surfaces (Divertor
+Plates)}
+
+\bigskip
+
+\subsection{Introduction}
+
+\bigskip
+
+The choice of the free input parameters, which determine the standard
+boundary sources, will be presented on the example of a two-component,
+non-drifting ($u_{\Vert\infty}=0$) plasma (positive ions and electrons) near
+the divertor plates. Ion reflection and emission from the surface are
+neglected. [\ref{mriemann91}, \ref{mtakamura}] In the B2.5 code, these
+boundary sources are the boundary conditions at the WEST and EAST boundary
+(see Fig. \ref{fig1}). Two cases of electric current collection by the
+divertor plates will be considered:
+
+\begin{itemize}
+\item  electrically floating divertor plates, which means that the net
+electric current collected by the plates is zero, i.e., $I_{d}=0$, and
+
+\item  electrically biased divertor plates, when the net electric current
+collected by the plates is non-zero, i.e., $I_{d}\neq0$.
+\end{itemize}
+
+\bigskip
+
+In the second case it is assumed that the net current does not cause some
+macroscopic current-driven plasma instabilities and that the spatial
+variation of the electric potential near the wall is qualitatively similar
+as in the floating case.
+
+\bigskip
+
+\subsection{Standard Particle Sources}
+
+\bigskip
+
+The poloidal component of the ion flux at the magnetic presheath edge ($MPSE$%
+) is given by:
+
+\begin{equation}
+\Gamma_{xMPSE}=n_{MPSE}\left\langle v_{x}\right\rangle _{MPSE}\text{,} 
+\label{113}
+\end{equation}
+where $n_{MPSE}$ is the ion particle density and $\left\langle
+v_{x}\right\rangle _{MPSE}$ is the poloidal component of the ion drift
+velocity, both calculated at the magnetic presheath edge. According to the
+fluid model [\ref{mstangeby95}], equation (\ref{113}) can be rewritten as:
+
+\begin{equation}
+\Gamma_{xMPSE}\circeq n_{MPSE}u_{\Vert MPSE}\sin\theta\text{,}   \label{113a}
+\end{equation}
+\bigskip where $\sin\theta=\frac{B_{x}}{B}$ and
+
+\begin{equation}
+u_{\Vert MPSE}=c_{sMPSE}\pm\mathcal{O}\left( \frac{u_{DMPSE}}{\tan\theta }%
+\right) \text{,}   \label{114}
+\end{equation}
+where $c_{sMPSE}=\sqrt{\frac{k_{B}(T_{eMPSE}+T_{iMPSE})}{m_{i}}}$ is the
+local ion sound velocity and $u_{DMPSE}=\left( \frac{E_{y}}{B}\right) _{MPSE}
+$ is the local drift velocity due to the poloidal $\mathbf{E\times B}$ drift
+in the magnetic presheath (in the B2.5 geometry this drift is caused by the
+radial electric field $E_{y}$). Equations (\ref{11}) and (\ref{12}) for
+conditionally corrected ion drift velocities $c_{sD\alpha}$ and $c_{stD}$
+(the numerical factor $0.1$ is due to a specific value of $\sin\theta$, for
+which the value of the ion drift velocity should be corrected) are based on
+the approximation:
+
+\begin{equation}
+u_{\Vert MPSE}\circeq c_{sMPSE}\pm\frac{u_{DMPSE}}{\tan\theta}\text{.} 
+\label{115}
+\end{equation}
+Better approximation and more complicated analytical formula for $u_{\Vert
+MPSE}$ can be found in the article of P. C. Stangeby and A. V. Chankin [\ref
+{mstangeby95}] (the coordinate system in their calculation is different, $x$
+is the radial component and $y$ is the poloidal component). According to
+their model, the linear approximation of the expression for $u_{\Vert MPSE}$
+is:
+
+\begin{equation}
+u_{\Vert MPSE}\circeq c_{sMPSE}-\frac{l_{sh}}{2\left| \Psi_{W}\right|
+\tan\theta}\left( \frac{1}{l_{v}}-\frac{1}{l_{n}}\right) u_{DMPSE}\text{,} 
+\label{stanchan}
+\end{equation}
+where $\Psi_{W}$ is normalized sheath electric potential fall (typically $%
+\left| \Psi_{W}\right| \approx3$ for hydrogenic plasmas) and $l_{sh}$, $l_{v}
+$ and $l_{n}$ are characteristic decay lengths for the sheath electric
+potential, ion drift velocity and particle density respectively. [\ref
+{mstangeby95}] Assumption $l_{v}=l_{n}$ in equation (\ref{stanchan}) gives
+zero contribution of the electric drift term, which is probably physically
+unrealistic, because it means that even very large poloidal $\mathbf{E\times
+B}$ drifts, so that local $c_{s}\approx\frac{E_{y}}{B}$, do not contribute
+in the linear order to the ion drift velocity at the magnetic presheath
+edge. Implementation of their non-linear expression for $u_{\Vert MPSE}$
+into the B2.5 code demands significant changes of the standard source code.
+
+\bigskip
+
+The alternative approach is to specify the ion flux at the electrostatic
+sheath edge:
+
+\begin{equation}
+\Gamma_{xSE}=n_{SE}\left\langle v_{x}\right\rangle _{SE}\text{,} 
+\label{sheathFlux}
+\end{equation}
+which is equal to the ion flux at the magnetic presheath edge $\Gamma_{xMPSE}
+$. In this case, it can be assumed that:
+
+\begin{equation}
+\left\langle v_{x}\right\rangle _{SE}=c_{sSE}\sin\theta\text{.} 
+\label{sheathVel}
+\end{equation}
+However, the ion density at the electrostatic sheath edge $n_{SE}$ is
+different from the ion density at the magnetic presheath edge $n_{MPSE}$ and
+it can be some very complicated non-linear function of other plasma
+parameters. In order to apply the expressions for the particle, momentum and
+energy fluxes at the electrostatic sheath edge, it is necessary to develop a
+kinetic model of the collisionless plasma region near the solid surface,
+because the fluid models cannot describe correctly this region. In
+principle, the validity of the B2.5 equations is limited only to the plasma
+regions where the ion velocity distributions do not differ significantly
+from Maxwellian or drifting-Maxwellian distributions, which is not the case
+also in the plasma presheath. The correct two-scale or multi-scale analysis
+of the boundary plasma near the divertor plate should include a separate
+description of the collisional presheath, which is located between the bulk
+plasma and collisionless magnetic presheath. [\ref{mriemann91}] Another
+possibility is to develop a model of a complete plasma presheath, which
+includes the collisional presheath and collisionless magnetic presheath. In
+any case, the solutions of the equations for these different plasma regions
+should be smoothly connected and implemented into the boundary conditions of
+the B2.5 code.
+
+\bigskip
+
+In the standard version of the boundary sources, the particle source can be
+specified by choosing $C_{p3}=1$ and all other $C_{pj}=0$. The numerical
+factor $0.1$ in the expressions for $c_{sD\alpha}$ and $c_{stD}$ (see
+equations (\ref{11}) and (\ref{12})) can be replaced by $\sin\theta$, so
+that they can be more general. Another possibility is to redefine $%
+c_{sD\alpha}$ given by equation (\ref{11}), so that the linearized
+expression for the particle flux of species $\alpha$ will be:
+
+\begin{equation}
+\Gamma_{\alpha xMPSE}\circeq n_{\alpha MPSE}\left( c_{s\alpha MPSE}\sin
+\theta\pm a_{D}u_{DMPSE}\cos\theta\right) \text{,}   \label{116}
+\end{equation}
+where the additional numerical factor $a_{D}$ is calculated with some
+theoretical model of the magnetic presheath (e.g., [\ref{mstangeby95}]). In
+the absence of any reliable theoretical model it can be assumed that $a_{D}=0
+$ or $a_{D}=1$, which corresponds to the electric drift-free case and to the
+approximation (\ref{115}) respectively. If these small changes of the source
+code are applied, the appropriate choice of the free input parameters for
+the particle sources will be again $C_{p3\alpha}=1$ and all other $%
+C_{pj\alpha}=0$.
+
+\bigskip
+
+However, many experiments (see [\ref{mmatt90}], [\ref{mstanpitch}], [\ref
+{mmatt94}], [\ref{mpitch97}])$\ $and some numerical simulations [\ref{mpic89}%
+] have shown that when the angle $\theta$ is very small, i.e., especially
+for $\theta\sim\sqrt{\frac{m_{e}}{m_{i}}}$, which is in practical cases
+usually for $\theta\lesssim5^{\circ}$, the expression for the ion flux (\ref
+{113a}) is not correct. In such cases, the measured charged particle fluxes
+to the surface are anomalously high compared with the theoretical prediction
+given by equation (\ref{113a}). They can be approximately described with a
+turbulent diffusion model:
+
+\begin{equation}
+\Gamma_{xMPSE}\circeq-D_{turb}\partial_{x}n_{MPSE}\approx\frac{D_{turb}}{%
+\lambda_{MPSx}}n_{MPSE}\text{,}   \label{117}
+\end{equation}
+where $D_{turb}$ is the local turbulent diffusion coefficient and $%
+\lambda_{MPSx}$ is the characteristic poloidal dimension of the magnetic
+presheath. The quotient $\frac{D_{turb}}{\lambda_{MPSx}}$ has a dimension of
+a velocity and the approximation of the right-hand side of equation (\ref
+{117}) enables its implementation into the B2.5 code by using the
+expressions for the boundary sources. In principle, only the theoretical
+model of turbulent plasma transport for this specific case can give a
+correct result for the coefficient $S_{p1}$(see equations (\ref{69}) and (%
+\ref{92})). In the absence of such a theoretical model it is necessary to
+estimate the quotient $\frac{D_{turb}}{\lambda_{MPSx}}$ properly, so that
+the numerical values of the free input parameters for the particle sources
+can be chosen.
+
+\bigskip
+
+According to the fluid models of the magnetized boundary plasma, the
+characteristic length scale of the magnetic presheath is $\rho_{s}\cos\theta$%
+, where $\rho_{s}=\frac{c_{s}}{\omega_{i}}$ is the Larmor radius for the
+ions moving with the ion sound velocity. Since in our case $\theta\sim\sqrt {%
+\frac{m_{e}}{m_{i}}}\ll1$, $\lambda_{MPSx}$ is of the order of magnitude of $%
+\rho_{sMPSE}$, i.e., $\lambda_{MPSx}\sim\rho_{sMPSE}$. The turbulent
+diffusion coefficient $D_{turb}$ is approximately given by:
+
+\begin{equation}
+D_{turb}\approx\sqrt{\left\langle \widetilde{u}_{D}^{2}\right\rangle }%
+\lambda_{c}\text{,}   \label{118}
+\end{equation}
+where $\widetilde{u}_{D}=\frac{\widetilde{E}_{y}}{B}$ is the drift velocity
+due to the fluctuating (turbulent) electric field $\widetilde{E}_{y}$ and $%
+\lambda_{c}$ $\approx\left\langle k_{y}\right\rangle ^{-1}$ is the
+characteristic coherence length of the turbulent spectrum. Turbulent
+fluctuations of the magnetic field are much smaller and can be neglected in
+the study of the particle transport. (However, they can be important for the
+heat transport. [\ref{mconnor}]) Assuming $\sqrt{\left\langle \widetilde
+{E}_{y}^{2}\right\rangle }\approx\sqrt{\left\langle \widetilde{\Phi}%
+^{2}\right\rangle }\left\langle k_{y}\right\rangle \equiv\delta\Phi
+\left\langle k_{y}\right\rangle $, equation (\ref{118}) can be rewritten as:
+
+\begin{equation}
+D_{turb}\approx\frac{\delta\Phi}{B}\text{.}   \label{119}
+\end{equation}
+Turbulent fluctuations of the electric potential $\delta\Phi$ are
+approximately proportional to the turbulent fluctuations of the plasma
+density, i.e.,
+\begin{equation}
+\frac{\delta n}{\left\langle n\right\rangle }\approx\frac{e\delta\Phi}{%
+k_{B}T_{e}}\text{,}   \label{120}
+\end{equation}
+where so-called Boltzmann's fluctuations are assumed and possible
+decorrelations between the potential and density fluctuations are neglected.
+In the electrostatic turbulence, the fluctuations of the electron
+temperature are usually much smaller than the density and potential
+fluctuations, so that they can be also neglected. Equations (\ref{119}) and (%
+\ref{120}) can be combined to give:
+
+\begin{equation}
+D_{turb}\approx\frac{\delta n}{\left\langle n\right\rangle }\frac{k_{B}T_{e}%
+}{eB}\text{.}   \label{121}
+\end{equation}
+This simple calculation gives the characteristic Bohm $\frac{1}{B}$-scaling
+of the anomalous diffusion coefficient. In the original Bohm diffusion
+coefficient, there is an empirical numerical factor $\frac{1}{16}$ instead
+of $\frac{\delta n}{\left\langle n\right\rangle }$. The physical picture of
+the result (\ref{121}) is clear: increased turbulence level results in
+increased turbulent transport of the charged particles. Assuming $%
+\lambda_{MPSx}\sim \rho_{sMPSE}$, the quotient $\frac{D_{turb}}{%
+\lambda_{MPSx}}$ is approximately:
+
+\begin{equation}
+\frac{D_{turb}}{\lambda_{MPSx}}\approx\left( \frac{\delta n}{\left\langle
+n\right\rangle }\right) _{MPSE}c_{sMPSE}\text{.}   \label{122}
+\end{equation}
+This result qualitatively explains the anomalously high particle fluxes at
+small grazing angles $\theta$. Despite the fact that collisions in the
+divertor plasma can significantly reduce the turbulent fluctuation level, it
+is still valid that $\frac{\delta n}{\left\langle n\right\rangle }\gg
+\sin\theta$ in such cases. If the information about the density fluctuation
+level $\frac{\delta n}{\left\langle n\right\rangle }$ is available, e.g.,
+from the experiment, this simple result can be used in the expression for
+the particle source by choosing $C_{p2}=\left( \frac{\delta n}{\left\langle
+n\right\rangle }\right) _{MPSE}$ and all other $C_{pj}=0$. The other
+possibility is to calculate $\frac{D_{turb}}{\lambda_{MPSx}}$ somehow and
+choose $C_{p1}=\frac{D_{turb}}{\lambda_{MPSx}}$ and all other $C_{pj}=0$. It
+is also important to mention that the turbulent transport near the material
+wall can be different from the turbulent transport in the bulk plasma, which
+means that the corresponding macroscopic turbulent transport coefficients
+can be different.
+
+\bigskip
+
+Equations (\ref{113a}) and (\ref{117}) may be considered as limiting cases,
+because in the general case or for some values of the grazing angle $\theta$
+the classical and turbulent contributions to the plasma transport can be
+comparable by magnitude. In the bulk plasma transport there are also
+contributions due to the classical and turbulent transport. Thus it is
+reasonable to assume the following expression for the ion flux at the
+magnetic presheath edge:
+
+\begin{equation}
+\Gamma_{xMPSE}\circeq n_{MPSE}\left( c_{sMPSE}\sin\theta\pm
+a_{D}u_{DMPSE}\cos\theta\right) -D_{turb}\partial_{x}n_{MPSE}\text{.} 
+\label{totalGamma}
+\end{equation}
+Equation (\ref{totalGamma}) cannot be directly implemented in the standard
+expressions for the boundary sources, because they do not include
+derivatives of the plasma parameters, such as $\partial_{x}n_{\alpha}$, $%
+\partial _{x}\widehat{T}_{i}$, $\partial_{x}\widehat{T}_{e}$ etc. There are
+two practical solutions for this problem. The first solution is to add in
+the source code new terms with the derivatives of the plasma parameters in
+the expressions for the boundary sources, so that equation (\ref{totalGamma}%
+) can be implemented directly. The second solution is to estimate the
+turbulent component of the ion flux, as it was shown in the case of a very
+small grazing angle $\theta$, so that the appropriate choices of the free
+input parameters will be $C_{p1}=\frac{D_{turb}}{\lambda_{MPSx}}$, $C_{p3}=1$
+and all other $C_{pj}=0$, or $C_{p2}=\left( \frac{\delta n}{\left\langle
+n\right\rangle }\right) _{MPSE}$, $C_{p3}=1$ and all other $C_{pj}=0$.
+
+\bigskip
+
+\subsection{Standard Momentum Sources}
+
+\bigskip
+
+In order to calculate the boundary sources for the momentum conservation
+equation, for $d\mathbf{A}=dA\mathbf{e}_{x}$ equation (\ref{2}) can be
+rewritten as:
+
+\begin{equation}
+\mathbf{S}_{m}=-\int_{B.S.}\underline{\mathbf{M}}\cdot\mathbf{e}%
+_{x}dA\equiv-\int_{B.S.}\mathbf{P}_{m}dA\text{,}   \label{123}
+\end{equation}
+where the momentum flux $\mathbf{P}_{m}$ is given by [\ref{manders90}]:
+
+\begin{equation}
+\mathbf{P}_{m}=m_{i}n\left[ \left\langle v_{x}^{2}\right\rangle ,\text{ }%
+\left\langle v_{y}v_{x}\right\rangle ,\text{ }\left\langle
+v_{z}v_{x}\right\rangle \right] ^{T}\text{.}   \label{124}
+\end{equation}
+All quantities in equation (\ref{124}) should be calculated at the magnetic
+presheath edge ($MPSE$). The velocity $\mathbf{v}$ may be decomposed into an
+average part $\mathbf{u}$ and a random part $\mathbf{w}$, associated with a
+``thermal'' motion, i.e.,
+
+\begin{equation}
+\mathbf{v=u+w}\text{,}   \label{125}
+\end{equation}
+where $\left\langle \mathbf{w}\right\rangle =0$. Then the components of the
+momentum flux $\mathbf{P}_{m}$ can be written as:
+
+\begin{equation}
+P_{mx}=m_{i}n\left( u_{x}^{2}+\left\langle w_{x}^{2}\right\rangle \right) 
+\text{,}   \label{126}
+\end{equation}
+
+\begin{equation}
+P_{my}=m_{i}n\left( u_{y}u_{x}+\left\langle w_{y}w_{x}\right\rangle \right) 
+\text{,}   \label{127}
+\end{equation}
+
+\begin{equation}
+P_{mz}=m_{i}n\left( u_{z}u_{x}+\left\langle w_{z}w_{x}\right\rangle \right) 
+\text{.}   \label{128}
+\end{equation}
+
+\bigskip
+
+In further derivations some assumptions about the ion velocity distribution
+at the magnetic presheath edge should be made. The assumption that the ion
+velocity distribution is drifting-Maxwellian is acceptable from the point of
+view of the bulk plasma transport, but from the point of view of the
+two-scale analysis of the plasma-sheath problem such an ion velocity
+distribution cannot satisfy the generalized Bohm criterion [\ref{mriemann91}%
+]. In the absence of any better approximation and assuming that $%
+u_{z}\approx0$ and $u_{y}\approx 0$, the only non-zero component of $\mathbf{%
+P}_{m}$ is $P_{mx}$, because for the Maxwellian distribution the anisotropic
+shear (viscosity) terms $m_{i}n\left\langle w_{y}w_{x}\right\rangle $ and $%
+m_{i}n\left\langle w_{z}w_{x}\right\rangle $ are zero. This assumption is
+maybe acceptable for the component $P_{mz}$, but it may be very questionable
+for the component $P_{my}$, because, according to the study of A. V. Chankin
+and P. C. Stangeby [\ref{mchankin94}], the radial component of the
+diamagnetic drift velocity:
+
+\begin{equation}
+\mathbf{u}_{Dm}=\frac{\mathbf{B\times\nabla} p}{enB^{2}}\text{,} 
+\label{129}
+\end{equation}
+which is in our case:
+
+\begin{equation}
+u_{Dmy}=\frac{B_{z}\partial_{x}p-B_{x}\partial_{z}p}{enB^{2}}\text{,} 
+\label{130}
+\end{equation}
+and the corresponding particle flux $\Gamma_{Dmy}=nu_{Dmy}$ parallel to the
+material surface can be significant. It also means that the $v_{y}$ ion
+velocity distribution at the magnetic presheath edge may be non-Maxwellian,
+which gives a non-zero contribution of the viscosity term $%
+m_{i}n\left\langle w_{y}w_{x}\right\rangle $. In addition to that, it should
+be mentioned that the radial viscosity in the bulk plasma is predominantly
+turbulent, so it is very likely that it is quite significant also at the
+magnetic presheath edge. However, in the standard version of the B2.5 code
+these contributions to the momentum fluxes at the material surfaces are not
+taken into account and even $P_{mx}$ is calculated very approximately. Thus
+neglecting $P_{my}$ and $P_{mz}$, the momentum flux at the magnetic
+presheath edge can be written as:
+
+\begin{equation}
+P_{mxMPSE}\circeq\left( \rho_{MPSE}u_{\Vert MPSE}^{2}+p_{iMPSE}\right)
+\sin\theta-m_{i}c_{sMPSE}D_{turb}\partial_{x}n_{MPSE}\text{,}   \label{131}
+\end{equation}
+where $\rho_{MPSE}=m_{i}n_{MPSE}$ is the ion mass density and $%
+p_{iMPSE}=n_{MPSE}k_{B}$ $T_{iMPSE}$ is the ion pressure, both calculated at
+the magnetic presheath edge. The last term on the right-hand side of
+equation (\ref{131}) is a phenomenological turbulent momentum flux. In the
+case of a very small grazing angle $\theta$, this term is much larger than
+the classical term. Comparison of equation (\ref{131}) with equations (\ref
+{70}) and (\ref{93}) shows that equation (\ref{131}) cannot be implemented
+directly in the standard expressions for the momentum sources. It includes
+more complicated non-linear dependence on the plasma parameters than
+equations for the momentum sources (\ref{70}) and (\ref{93}), so that they
+cannot accurately describe the boundary values of the momentum fluxes. It is
+necessary to make some additional approximations in order to implement
+equation (\ref{131}) in the standard expressions for the momentum sources.
+Assuming that $T_{iMPSE}\approx T_{eMPSE}$, $u_{\Vert MPSE}\approx c_{sMPSE}$
+and using the same approximation for the turbulent transport as in the upper
+analysis of the particle flux, the momentum flux at the magnetic presheath
+edge can be written approximately as:
+
+\begin{equation}
+P_{mxMPSE}\approx\frac{3}{2}\rho_{MPSE}u_{\Vert MPSE}^{2}\sin\theta+\left( 
+\frac{\delta n}{\left\langle n\right\rangle }\right) _{MPSE}\rho
+_{MPSE}c_{sMPSE}^{2}\text{.}   \label{132}
+\end{equation}
+
+\bigskip
+
+There are several possible choices of the free input parameters $C_{mj}$ and
+all of them give very approximate values of the boundary sources. The first
+possibility is to choose $C_{m0}=P_{mxMPSE}$, where $P_{mxMPSE}$ is
+calculated by using the initial or some other (e.g. experimental) specific
+values of the ion density, electron and ion temperature, and all other $%
+C_{mj}=0$. This possibility will be probably the best one in the case of a
+very small grazing angle $\theta$, i.e., for $\theta\lesssim5^{\circ}$, if
+the value of the momentum flux is provided from some turbulent transport
+model (see, e.g., [\ref{mconnor}] and references therein). The second
+possibility is to specify the free input parameters in the expression for $%
+S_{m2}$ (see equations (\ref{73}) and (\ref{96})). In this case, assuming
+that $u_{\Vert MPSE}\approx c_{sMPSE}$ the possible choice is $C_{m1}=\left[ 
+\frac{3}{2}+\frac{\left( \frac{\delta n}{\left\langle n\right\rangle }%
+\right) _{MPSE}}{\sin\theta }\right] c_{sMPSE}$ and all other $C_{mj}=0$.
+The third possibility is to specify the free input parameters in the
+expression for $S_{m3}$ (see equations (\ref{74}) and (\ref{97})). The fluid
+velocities $u_{\alpha x}$ in equations (\ref{70}) and (\ref{93}) are
+calculated with the bulk transport equations, which means that, in order to
+preserve the validity of the fluid model and to a certain extent assure the
+stability of the ion fluid flow, they should not exceed the thermal
+velocities, i.e., $u_{\alpha x}\leq v_{th,\alpha}\sin\theta$. Then, assuming
+that $u_{\Vert MPSE}^{2}\approx c_{sMPSE}^{2}\approx2v_{th,i}^{2}$, the
+appropriate choice of the free input parameters can be $C_{m3}=\left[ \frac{3%
+}{\sqrt{2}}+\left( \frac{\delta n}{\left\langle n\right\rangle }\right)
+_{MPSE}\frac{\sqrt{2}}{\sin\theta }\right] c_{sMPSE}$ and all other $C_{mj}=0
+$. In all these cases the initial or some other specific values of the
+plasma parameters should be used in the calculations of the free input
+parameters $C_{mj}$.
+
+\bigskip
+
+\subsection{Standard Ion and Electron Heat Sources}
+
+\bigskip
+
+The ion heat flux at the magnetic presheath edge, $Q_{ix}=\frac{1}{2}%
+m_{i}n\left\langle v^{2}v_{x}\right\rangle $, can be written as (index $MPSE$
+is dropped) [\ref{manders90}]:
+
+\begin{equation}
+Q_{ix}=\frac{1}{2}m_{i}nu^{2}u_{x}+\frac{5}{2}p_{i}u_{x}+\Pi_{xx}u_{x}+%
+\Pi_{xy}u_{y}+\Pi_{xz}u_{z}+q_{ix}\text{,}   \label{133}
+\end{equation}
+where
+
+\begin{equation}
+p_{i}=\frac{1}{3}m_{i}n\left\langle w^{2}\right\rangle =nk_{B}T_{i} 
+\label{134}
+\end{equation}
+is the scalar pressure,
+
+\begin{equation}
+\Pi_{jk}=m_{i}n\left\langle w_{j}w_{k}-\frac{1}{3}w^{2}\delta_{jk}\right%
+\rangle   \label{135}
+\end{equation}
+is the anisotropic shear (viscosity) tensor and
+
+\begin{equation}
+q_{ix}=\frac{1}{2}m_{i}n\left\langle w^{2}w_{x}\right\rangle   \label{136}
+\end{equation}
+is the heat conduction flux. All these quantities should be calculated at
+the magnetic presheath edge. It is obvious again, as in the analysis of the
+momentum flux, that the contribution of the non-zero radial drift velocity $%
+u_{y}$, i.e., the term $\Pi_{xy}u_{y}$, in equation (\ref{133}) may be
+important. Neglecting terms with $u_{y}$ and $u_{z}$ in equation (\ref{133})
+and assuming again that the ion velocity distribution at the magnetic
+presheath edge is drifting-Maxwellian, the ion heat flux at the magnetic
+presheath edge can be written approximately as:
+
+\begin{equation*}
+Q_{ixMPSE}\circeq{\Huge (}\frac{1}{2}m_{i}n_{MPSE}u_{\Vert MPSE}^{3}+\frac
+{5}{2}n_{MPSE}k_{B}T_{iMPSE}u_{\Vert MPSE}
+\end{equation*}
+
+\begin{equation}
++2k_{B}T_{iMPSE}\Gamma_{th,iMPSE}{\Huge )}\sin\theta-\kappa_{turb}^{i}%
+\partial_{x}\widehat{T}_{iMPSE}\text{,}   \label{137}
+\end{equation}
+\bigskip where $\Gamma_{th,iMPSE}=n_{MPSE}\sqrt{\frac{k_{B}T_{iMPSE}}{2\pi
+m_{i}}}$ is the ion thermal flux at the magnetic presheath edge. The last
+term on the right-hand side of equation (\ref{137}) is a phenomenological
+turbulent ion heat conduction flux, which is much larger than the classical
+ion heat flux, when the grazing angle $\theta$ is very small. The ion heat
+flux at the material wall, $Q_{ixW}$, is larger because of the electric
+potential drop between the magnetic presheath edge and the wall, so that:
+
+\begin{equation}
+Q_{ixW}=Q_{ixMPSE}+e\left( \Phi_{MPSE}-\Phi_{W}\right) \Gamma_{xMPSE}\text{.}
+\label{138}
+\end{equation}
+On the other hand, this potential drop reduces the electron heat flux at the
+wall, $Q_{exW}$, so that:
+
+\begin{equation}
+Q_{exW}=Q_{exMPSE}-e\left( \Phi_{MPSE}-\Phi_{W}\right) \Gamma_{xMPSE}\text{.}
+\label{139}
+\end{equation}
+The electron heat flux at the wall, $Q_{exW}$, is given by:
+
+\begin{equation*}
+Q_{exW}\circeq\sqrt{\frac{2}{\pi}}n_{eMPSE}v_{th,eMPSE}k_{B}T_{eMPSE}\exp%
+\left[ \frac{e\left( \Phi_{W}-\Phi_{MPSE}\right) }{k_{B}T_{eMPSE}}\right]
+\sin\theta 
+\end{equation*}
+
+\begin{equation}
+-\kappa_{turb}^{e}\partial_{x}\widehat{T}_{eMPSE}\text{,}   \label{140}
+\end{equation}
+where $n_{eMPSE}=n_{MPSE}$ in a case of a two-component plasma. The second
+term on the right-hand side of equation (\ref{140}) is a phenomenological
+turbulent electron heat conduction flux, which is much larger than the
+classical electron heat flux, when the grazing angle $\theta$ is very small.
+Since the boundary sources include the collisionless region with the
+electric potential drop, its effect on the charged particle heat fluxes must
+be taken into account. Summing of equations (\ref{138}) and (\ref{139})
+gives:
+
+\begin{equation}
+Q_{ixW}+Q_{exW}=Q_{ixMPSE}+Q_{exMPSE}\text{,}   \label{141}
+\end{equation}
+which is just an energy conservation law. In the expressions for the
+boundary heat sources it is possible to use charged particle heat fluxes
+calculated at the material wall or at the magnetic presheath edge, but in
+any case the energy conservation law (\ref{141}) must be satisfied. In this
+example, the expressions for the boundary heat sources will be calculated
+with the charged particle heat fluxes calculated at the material wall.
+
+\bigskip
+
+Expressions for the ion and electron heat flux (\ref{137})-(\ref{140})
+include more complicated non-linear dependence on the plasma parameters than
+the standard expressions for the boundary heat sources presented in the
+previous section (see equations (\ref{75}), (\ref{80}), (\ref{98}) and (\ref
+{103})). Thus additional approximations in equations (\ref{137})-(\ref{140})
+are necessary in order to apply them in the standard expressions for the
+boundary heat sources.
+
+\bigskip
+
+In the absence of the turbulent transport model it is very difficult to make
+good approximations for the turbulent ion and electron heat flux. In both
+cases it can be assumed that (indices $i$, $e$ and $MPSE$ are dropped):
+
+\begin{equation}
+Q_{x(turb)}\approx\frac{\kappa_{turb}}{\lambda_{Tx}}k_{B}T\approx2k_{B}T%
+\Gamma_{xturb}\approx2k_{B}T\frac{D_{turb}}{\lambda_{nx}}n\text{,} 
+\label{142}
+\end{equation}
+where $\lambda_{Tx}$ and $\lambda_{nx}$ are characteristic decay lengths for
+the temperature and density respectively. Assuming $\lambda_{Tx}\approx 
+\frac{\lambda_{nx}}{2}\approx\frac{\lambda_{MPSx}}{2}$, which gives $%
+\kappa_{turb}\approx nD_{turb}$, and with the upper estimate for $\frac{%
+D_{turb}}{\lambda_{MPSx}}$ (see equation (\ref{122})), a relatively simple
+expression for the turbulent heat flux is obtained:
+
+\begin{equation}
+Q_{i,exMPSE(turb)}\approx2\left( \frac{\delta n}{\left\langle n\right\rangle 
+}\right) _{MPSE}c_{sMPSE}n_{MPSE}k_{B}T_{i,eMPSE}\text{.}   \label{turbQ}
+\end{equation}
+Approximate expression for the turbulent heat flux (\ref{turbQ}) can be
+applied in the standard expression for the boundary heat source. Assuming $%
+T_{iMPSE}\approx T_{eMPSE}$ and $u_{\Vert MPSE}\approx c_{sMPSE}\approx 
+\sqrt{2}v_{th,iMPSE}$ in the classical ion heat flux, the approximate
+expression for the ion heat flux at the wall is:
+
+\begin{equation*}
+Q_{ixW}\approx\left[ \frac{7}{2}+\frac{1}{\sqrt{\pi}}+\frac{e\left(
+\Phi_{MPSE}-\Phi_{W}\right) }{k_{B}T_{eMPSE}}\right] n_{MPSE}u_{\Vert
+MPSE}k_{B}T_{iMPSE}\sin\theta 
+\end{equation*}
+
+\begin{equation}
++\left[ 2+\frac{e\left( \Phi_{MPSE}-\Phi_{W}\right) }{k_{B}T_{eMPSE}}\right]
+\left( \frac{\delta n}{\left\langle n\right\rangle }\right)
+_{MPSE}n_{MPSE}c_{sMPSE}k_{B}T_{iMPSE}\text{.}   \label{approxQi}
+\end{equation}
+The approximate expression for the electron heat flux at the wall is:
+
+\begin{equation*}
+Q_{exW}\approx\sqrt{\frac{2}{\pi}}n_{eMPSE}v_{th,eMPSE}k_{B}T_{eMPSE}\exp%
+\left[ \frac{e\left( \Phi_{W}-\Phi_{MPSE}\right) }{k_{B}T_{eMPSE}}\right]
+\sin\theta 
+\end{equation*}
+
+\begin{equation}
++2\left( \frac{\delta n}{\left\langle n\right\rangle }\right)
+_{MPSE}n_{MPSE}c_{sMPSE}k_{B}T_{eMPSE}\text{.}   \label{approxQe}
+\end{equation}
+
+\bigskip
+
+In order to specify the numerical values of the free input parameters $%
+C_{hij}$ and $C_{hej}$, it is also necessary to obtain the numerical value
+for the normalized potential fall $\frac{e\left( \Phi_{W}-\Phi_{MPSE}\right) 
+}{k_{B}T_{eMPSE}}$ in equations (\ref{approxQi}) and (\ref{approxQe}). It
+can be obtained directly from the experiment, e.g., from measurements of the
+spatial profiles of the electric potential with emissive probes and electron
+temperature with Langmuir (collecting) probes, or calculated from the
+measured electric current to the divertor plate, $I_{d}=\pm j_{d}A_{d}$. The
+total electric current density at the divertor plate, $j_{d}$, can be
+written as:
+
+\begin{equation*}
+j_{d}=j_{iMPSEx}+j_{eMPSEx}\circeq en_{MPSE}u_{\Vert MPSE}\sin\theta- 
+\end{equation*}
+
+\begin{equation}
+\frac{\left( 1-\gamma_{se}\right) }{\sqrt{2\pi}}en_{eMPSE}v_{th,eMPSE}\exp%
+\left[ \frac{e\left( \Phi_{W}-\Phi_{MPSE}\right) }{k_{B}T_{eMPSE}}\right]
+\sin\theta\text{,}   \label{jdTotal}
+\end{equation}
+where $\gamma_{se}$ is the secondary electron emission coefficient and it is
+assumed that the turbulent transport is ambipolar, i.e., $%
+D_{turb}^{i}=D_{turb}^{e}$, so that its net contribution to the total
+electric current is zero. The secondary electron emission is not taken into
+account in the expression for the electron current (\ref{18}), although it
+can be important in some practical cases. In such cases it is necessary to
+include the correction due to the secondary electron emission in the
+expression for the electric charge source, which is presented in the text
+below. If the secondary electron emission varies along the material surface,
+so that the effective secondary electron emission coefficient is not
+constant, this effect must be explicitly taken into account in the
+expression for the electron current (\ref{18}). Equation (\ref{jdTotal}) is
+applicable only if the grazing angle $\theta$ is not very small, i.e., if $%
+\theta\gtrsim5^{\circ}$. In the case of a very small grazing angle $\theta$
+it may be assumed that $\frac{e\left( \Phi_{W}-\Phi_{MPSE}\right) }{%
+k_{B}T_{eMPSE}}\approx0$ in equations (\ref{approxQi}) and (\ref{approxQe})
+or the experimental value for that specific case should be used. Considering 
+$n_{eMPSE}=n_{MPSE}$, equation (\ref{jdTotal}) can be rewritten as:
+
+\begin{equation*}
+\frac{e\left( \Phi_{W}-\Phi_{MPSE}\right) }{k_{B}T_{eMPSE}}= 
+\end{equation*}
+
+\begin{equation}
+\ln\left[ \frac{\sqrt{2\pi}u_{\Vert MPSE}}{\left( 1-\gamma_{se}\right)
+v_{th,eMPSE}}-\frac{j_{d}}{\frac{\left( 1-\gamma_{se}\right) }{\sqrt{2\pi}}%
+en_{MPSE}v_{th,eMPSE}\sin\theta}\right] \text{,}   \label{deltaPhi}
+\end{equation}
+where some specific values of the plasma parameters, e.g., the initial
+values in the simulation ($n_{i,e}^{\left( 0\right) }$, $\widehat{T}%
+_{i,e}^{\left( 0\right) }$, $u_{D}^{\left( 0\right) }$) or experimental
+values, should be used in the right-hand side of equation (\ref{deltaPhi}).
+For example, it can be assumed that $u_{\Vert MPSE}\approx c_{sMPSE}$ and
+for the plasma density at the magnetic presheath edge $n_{MPSE}\approx
+n_{i,e}^{\left( 0\right) }\exp\left( \frac{e\left(
+\Phi_{MPSE}-\Phi_{\infty}^{\left( 0\right) }\right) }{k_{B}T_{e}^{\left(
+0\right) }}\right) \approx n_{i,e}^{\left( 0\right) }\exp\left( -\frac{1}{2}%
+\right) $, because the potential fall in the presheath, which is
+approximately $-\frac{k_{B}T_{e}^{\left( 0\right) }}{2e}$, accelerates the
+ions from their thermal velocities up to the ion sound velocity. In a case
+of electrically floating divertor plates, $j_{d}=0$, so that:
+
+\begin{equation}
+\frac{e\left( \Phi_{W}^{f}-\Phi_{MPSE}^{f}\right) }{k_{B}T_{eMPSE}}=\ln\left[
+\frac{\sqrt{2\pi}u_{\Vert MPSE}}{\left( 1-\gamma_{se}\right) v_{th,eMPSE}}%
+\right] \text{.}   \label{floatPhi}
+\end{equation}
+Assuming $u_{\Vert MPSE}\approx c_{sMPSE}$, equation (\ref{floatPhi}) can be
+rewritten as:
+
+\begin{equation}
+\frac{e\left( \Phi_{W}^{f}-\Phi_{MPSE}^{f}\right) }{k_{B}T_{eMPSE}}\circeq%
+\frac{1}{2}\ln\left[ \frac{2\pi m_{e}\left( 1+\frac{T_{iMPSE}}{T_{eMPSE}}%
+\right) }{m_{i}\left( 1-\gamma_{se}\right) ^{2}}\right] \text{.} 
+\label{approxFloatPhi}
+\end{equation}
+Thus if $T_{iMPSE}\approx T_{eMPSE}$ and $\gamma_{se}\ll1$,
+\begin{equation}
+\frac{e\left( \Phi_{W}^{f}-\Phi_{MPSE}^{f}\right) }{k_{B}T_{eMPSE}}\approx%
+\frac{1}{2}\ln\left[ \frac{4\pi m_{e}}{m_{i}}\right] \text{.} 
+\label{simpleFloatPhi}
+\end{equation}
+
+\bigskip
+
+The appropriate choice of the free input parameters is $C_{hi2}=[2+\frac{%
+e\left( \Phi_{MPSE}-\Phi_{W}\right) }{k_{B}T_{eMPSE}}]\left( \frac{\delta n}{%
+\left\langle n\right\rangle }\right) _{MPSE}$, $C_{hi3}=\frac{7}{2}+\frac{1}{%
+\sqrt{\pi}}+\frac{e\left( \Phi_{MPSE}-\Phi _{W}\right) }{k_{B}T_{eMPSE}}$
+and all other $C_{hij}=0$ for the ion heat source and $C_{he3}=\sqrt{\frac{2%
+}{\pi}}\exp\left[ \frac{e\left( \Phi _{W}-\Phi_{MPSE}\right) }{k_{B}T_{eMPSE}%
+}\right] $, $C_{he4}=2\left( \frac{\delta n}{\left\langle n\right\rangle }%
+\right) _{MPSE}$\ and all other $C_{hej}=0$ for the electron heat source.
+
+\bigskip
+
+\subsection{Standard Electric Charge Sources}
+
+\bigskip
+
+The electric charge source in each boundary cell is given by equation:
+\begin{equation}
+S_{ch}=-j_{d}S_{0}=J_{ex}-J_{ix}\text{,}   \label{chargeS}
+\end{equation}
+where $j_{d}$ is given by equation (\ref{jdTotal}) and $S_{0}$ is given by
+equation (\ref{6}). In the general case, when $j_{d}\neq0$, the appropriate
+choice of the free input parameters is $C_{ch6}=1$, $C_{ch7}=1-\gamma_{se}$
+and all other $C_{chj}=0$. The non-zero numerical values of the electric
+potential at the divertor plates, $\Phi_{d}^{\left( 0\right) }$, due to the
+electric bias, can be specified in the input file \texttt{b2ai.dat}, which
+describes the initial plasma state ($\Phi_{d}^{\left( 0\right) }=0$ is a
+default value). In a case of electrically floating divertor plates, $j_{d}=0$%
+, so that $S_{ch}=0$ in each boundary cell. It can be obtained by choosing
+all $C_{chj}=0$.
+
+\bigskip
+
+\subsection{Conclusion}
+
+\bigskip
+
+It is obvious from this relatively simple example that only the expressions
+for the particle sources, i.e., the numerical implementation of the boundary
+conditions for the continuity equation, can adequately reproduce the
+physical model of the magnetized boundary plasma, after some minor
+corrections. It is necessary to include in the source code some more
+complicated non-linear dependences of the boundary sources on the
+macroscopic plasma parameters, so that the boundary conditions for the
+higher moments' fluid equations can be correctly applied. The approximate
+fluid model used in the upper example, which is based on the assumption that
+the ion velocity distribution at the magnetic presheath edge is
+drifting-Maxwellian distribution, can be a good starting point in the effort
+to improve the standard expressions for the boundary sources.
+
+\bigskip
+
+\section{Boundary Sources Written by D. P. Coster\protect\bigskip}
+
+\bigskip
+
+\subsection{Introduction}
+
+\bigskip
+
+In order to improve the numerical implementation of the boundary conditions,
+an alternative method for calculating the boundary sources has been
+developed by D. P. Coster from IPP Garching. Their dependence on the plasma
+parameters calculated with the bulk plasma equations is mostly the same as
+for the standard boundary sources, but the way how the free input parameters
+are specified and used in the calculations of the coefficients $S_{pj\alpha}$%
+, $S_{mj\alpha}$, $S_{hij}$, $S_{hej}$ and $S_{ch}$ is different. The B2.5
+user can choose between the standard (default) version and this version of
+the boundary sources by specifying the numerical value of the input
+parameter \texttt{boundary\_namelist} in the \texttt{b2mn.dat }input file
+(default is zero). In order to use the non-standard version of the boundary
+sources, a line of text: \texttt{%
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+b2stbc\_boundary\_namelist%
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+1%
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+}, should be added into the \texttt{b2mn.dat} file. The exact specifications
+of the types of the boundary conditions and numerical values of the free
+input parameters, which are used in the calculations of the non-standard
+boundary sources, should be written in the \texttt{b2.boundary.parameters}
+file. Following specifications of the boundary sources and corresponding
+labels should be written in the \texttt{b2.boundary. parameters} file:
+
+\begin{itemize}
+\item  \texttt{\&BOUNDARY} (the first line or beginning of the file)
+
+\item  \texttt{NBC=6,} (defines the number of the boundary conditions or the
+number of the boundary regions)
+
+\item  \texttt{BCCHAR= 
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+S 
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+, 
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+S%
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+, 
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+S%
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+, 
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+N%
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+, 
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+W%
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+, 
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+E%
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+,} (\texttt{BCCHAR(1...NBC)} defines the boundary as \texttt{%
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+S%
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+, 
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+N%
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+, 
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+W%
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+, 
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+E%
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+})
+
+\item  \texttt{BCPOS=...,} (\texttt{BCPOS(1...NBC)} defines the position of
+the boundary either in ix (\texttt{%
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+W%
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+} or \texttt{%
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+E%
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+}) or iy (\texttt{%
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+S%
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+}or \texttt{%
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+N%
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+}))
+
+\item  \texttt{BCSTART=...,} (\texttt{BCSTART(1...NBC)} defines the start of
+the boundary region either in ix (\texttt{%
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+S%
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+}or \texttt{%
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+N%
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+}) or iy (\texttt{%
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+W%
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+}or \texttt{%
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+E%
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+}))
+
+\item  \texttt{BCEND=...,} (\texttt{BCEND(1...NBC)} defines the end of the
+boundary region either in ix (\texttt{%
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+S%
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+}or \texttt{%
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+N%
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+}) or iy (\texttt{%
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+W%
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+}or \texttt{%
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+E%
+%TCIMACRO{\UNICODE{0xb4}}%
+%BeginExpansion
+\'{}%
+%EndExpansion
+}))
+
+\item  \texttt{BCENE=...,} (\texttt{BCENE(1...NBC)=1-10} defines the type of
+the boundary condition for the electron energy equation)
+
+\item  \texttt{BCENI=...,} (\texttt{BCENI(1...NBC)=1-10} defines the type of
+the boundary condition for the ion energy equation)
+
+\item  \texttt{BCPOT=...,} (\texttt{BCPOT(1...NBC)=1-9} defines the type of
+the boundary condition for the electric potential equation)
+
+\item  \texttt{ENEPAR=...,} (\texttt{ENEPAR(1...NBC, 1)} and/or \texttt{%
+ENEPAR(1...NBC, 2)} are free input parameters for the boundary condition for
+the electron energy equation, chosen according to the corresponding \texttt{%
+BCENE(1...NBC)})
+
+\item  \texttt{ENIPAR=...,} (\texttt{ENIPAR(1...NBC, 1)} and/or \texttt{%
+ENIPAR(1...NBC, 2)} are free input parameters for the boundary condition for
+the ion energy equation, chosen according to the corresponding \texttt{%
+BCENI(1...NBC)})
+
+\item  \texttt{POTPAR=...,} (\texttt{POTPAR(1...NBC, 1)} and/or \texttt{%
+POTPAR(1...NBC, 2)} are free input parameters for the boundary condition for
+the electric potential equation, chosen according to the corresponding 
+\texttt{BCPOT(1...NBC)})
+
+\item  \texttt{BCCON=...,} (\texttt{BCCON(1...NS, 1...NBC)=1-10} defines the
+type of the boundary condition for the continuity equation for species 
+\texttt{IS=1...NS})
+
+\item  \texttt{CONPAR=...,} (\texttt{CONPAR(1...NS, 1...NBC, 1)} and/or 
+\texttt{CONPAR(1...NS, 1...NBC, 2)} are free input parameters for the
+boundary condition for the continuity equation for species \texttt{IS=1...NS}%
+, chosen according to the corresponding \texttt{BCCON(1...NS, 1...NBC)})
+
+\item  \texttt{BCMOM=...,} (\texttt{BCMOM(1...NS, 1...NBC)=1-11} defines the
+type of the boundary condition for the momentum equation for species \texttt{%
+IS=1...NS})
+
+\item  \texttt{MOMPAR=...,} (\texttt{MOMPAR(1...NS, 1...NBC, 1)} and/or 
+\texttt{MOMPAR(1...NS, 1...NBC, 2)} are free input parameters for the
+boundary condition for the momentum equation for species \texttt{IS=1...NS},
+chosen according to the corresponding \texttt{BCMOM(1...NS, 1...NBC)})
+
+\item  \texttt{GAMMAI=..., GAMMAE=...,} (ion adiabatic coefficient,
+secondary electron emission coefficient)
+
+\item  other labels for various input options, which are not implemented yet
+(e.g., \texttt{LBNDUSR=t} (true) calls the user-routine \texttt{bndusr.f},
+otherwise \texttt{LBNDUSR=f} (false)),
+
+\item  \texttt{/} (the last line or end of the file).
+\end{itemize}
+
+\bigskip
+
+If the value of \texttt{boundary\_namelist} is zero or the upper line of
+text is not added, the standard boundary sources will be calculated.
+
+\bigskip
+
+This report describes the non-standard boundary sources included in the
+version of \texttt{b2stbc.f} file from September 20, 1999 (see also [\ref
+{mcoster}]). Some possible input parameter options for the non-standard
+boundary sources have not been implemented yet. There are also several
+certain or possible programming errors in the source code, in addition to
+some theoretically questionable and/or insufficiently justified
+calculations. These possible errors are also included in the analytical
+expressions presented in this report. Since this part of the B2.5 code is
+still not completely developed and debugged, these insufficiencies are not
+analysed in detail in this report. However, it can be concluded that these
+new boundary sources do not include significant qualitative improvements of
+the standard boundary sources, or in some cases they can even less
+accurately describe the boundary conditions compared with the standard
+boundary sources.
+
+\bigskip
+
+\subsection{Analytical Expressions for the ''New'' Boundary Sources}
+
+\bigskip
+
+\subsubsection{Physical Parameters and Numerical Constants}
+
+\bigskip
+
+Several new numerical constants, which are related to the physical
+velocities and particle density are defined. Their numerical values are the
+following:
+
+\begin{equation}
+EPSLON=10^{-10}\equiv\mathcal{\epsilon}\text{,}   \label{c1}
+\end{equation}
+
+\begin{equation}
+NE00=10^{20}\equiv\mathcal{N}_{e}\text{,}   \label{c2}
+\end{equation}
+
+\begin{equation}
+UP00=\sqrt{\frac{100eV}{m_{p}}}\circeq97873\frac{m}{s}\equiv\mathcal{U}_{p}%
+\text{,}   \label{c3}
+\end{equation}
+
+\begin{equation}
+UBIG=\frac{UP00}{EPSLON}\equiv\mathcal{U}   \label{c4}
+\end{equation}
+and
+
+\begin{equation}
+VBIG=10^{-2}UBIG\equiv\mathcal{V}\text{.}   \label{c5}
+\end{equation}
+Their physical background is not explained in the comments. Anomalous
+diffusion coefficients $D_{an}^{\alpha}$ and $D_{ap}^{\alpha}$, viscosities $%
+\eta_{a}^{\alpha}$, heat conductivities $\kappa_{a}^{e}$ and $\kappa_{a}^{i}$
+and electrical conductivity $\sigma_{a}$ are also used in the calculations
+of the boundary sources. $s_{x}$ is the area of the face between the cells
+(ix, iy) and (ix+1,iy) and $s_{y}$ between the cells (ix,iy) and (ix,iy+1).
+In the expressions for the boundary sources they are calculated at the
+boundary cells. $u_{\alpha}$ is the poloidal component of the drift velocity
+of the atomic species $\alpha$, $u_{D\alpha}$ is the poloidal component of
+the $\mathbf{E\times B}$ drift velocity and $b_{x}=\frac{B_{x}}{B}$ is the
+magnetic field pitch. The ion sound velocity for the multispecies plasma is
+defined as:
+
+\begin{equation}
+c_{s}=\sqrt{\frac{p}{\rho}}\text{,}   \label{c6}
+\end{equation}
+where $p$ is the total pressure and $\rho=m_{p}\sum_{\alpha}A_{\alpha
+}n_{\alpha}$ is the total mass density. The ion sound velocity of the
+species $\alpha$ is defined as:
+
+\begin{equation}
+c_{s\alpha}=\sqrt{\frac{\gamma_{i}\widehat{T}_{i}+Z_{\alpha}^{2}r_{\alpha }%
+\widehat{T}_{e}}{m_{p}A_{\alpha}}}\text{,}   \label{c7}
+\end{equation}
+where $\gamma_{i}=\frac{c_{pi}}{c_{vi}}$ is the ratio of the ion specific
+heats or the ion adiabatic coefficient ($\gamma_{i}=\frac{5}{3}$ for the
+adiabatic fluid model, $\gamma_{i}=1$ for the isothermal fluid model, $%
+\gamma_{i}=3$ for the one-dimensional kinetic model [\ref{mriemann91}]) and $%
+r_{\alpha}=\frac{n_{\alpha}}{n_{e}}$. $C_{leak}$ is a dimensionless leakage
+coefficient. $\gamma_{se}$ is the secondary electron emission coefficient.
+The other physical parameters are described in the following text, when they
+are used in the expressions for the boundary sources.
+
+\bigskip
+
+\subsubsection{Boundary Conditions for Continuity Equations}
+
+\bigskip
+
+\paragraph{\texttt{BCCON=1} ... Prescribe the Value of the Density}
+
+\bigskip
+
+\begin{equation*}
+\mathtt{CONPAR(IS,IB,1)}\equiv N_{\alpha}
+\end{equation*}
+
+\bigskip
+
+\begin{itemize}
+\item  SOUTH and NORTH boundary:
+\end{itemize}
+
+\begin{equation}
+S_{p0\alpha}=\mathcal{V}N_{\alpha}s_{y}\text{,}   \label{c8}
+\end{equation}
+
+\begin{equation}
+S_{p1\alpha}=-\mathcal{V}s_{y}\text{,}   \label{c9}
+\end{equation}
+
+\begin{equation}
+S_{p\alpha}=S_{p0\alpha}+S_{p1\alpha}n_{\alpha}=\mathcal{V}s_{y}\left(
+N_{\alpha}-n_{\alpha}\right) \text{.}   \label{c10}
+\end{equation}
+
+\begin{itemize}
+\item  WEST and EAST boundary:
+\end{itemize}
+
+\begin{equation}
+S_{p0\alpha}=\mathcal{U}N_{\alpha}s_{x}\text{,}   \label{c11}
+\end{equation}
+
+\begin{equation}
+S_{p1\alpha}=-\mathcal{U}s_{x}\text{,}   \label{c12}
+\end{equation}
+
+\begin{equation}
+S_{p\alpha}=S_{p0\alpha}+S_{p1\alpha}n_{\alpha}=\mathcal{U}s_{x}\left(
+N_{\alpha}-n_{\alpha}\right) \text{.}   \label{c13}
+\end{equation}
+
+\bigskip
+
+\paragraph{\texttt{BCCON=2} ... Prescribe the Value of the Gradient of the
+Density}
+
+\bigskip
+
+\begin{equation*}
+\mathtt{CONPAR(IS,IB,1)}\equiv\partial_{x}N_{\alpha},\text{ }\partial
+_{y}N_{\alpha}
+\end{equation*}
+
+\bigskip
+
+\begin{itemize}
+\item  SOUTH boundary:
+\end{itemize}
+
+\begin{equation}
+l_{y}=\frac{1}{2}\left( h_{y1(S)}+h_{y1(S+1)}\right) \text{,}   \label{c14}
+\end{equation}
+
+\begin{equation}
+S_{p0\alpha}=\mathcal{V}s_{y}\left[ \left( -\partial_{y}N_{\alpha}\right)
+l_{y}+n_{\alpha}\right] \text{,}   \label{c15}
+\end{equation}
+
+\begin{equation}
+S_{p1\alpha}=-\mathcal{V}s_{y}\text{,}   \label{c16}
+\end{equation}
+
+\begin{equation}
+S_{p\alpha}=S_{p0\alpha}+S_{p1\alpha}n_{\alpha}=\mathcal{V}s_{y}\left(
+-\partial_{y}N_{\alpha}\right) l_{y}\text{.}   \label{c17}
+\end{equation}
+
+\begin{itemize}
+\item  NORTH boundary:
+\end{itemize}
+
+\begin{equation}
+l_{y}=\frac{1}{2}\left( h_{y1(N-1)}+h_{y1(N)}\right) \text{,}   \label{c18}
+\end{equation}
+
+\begin{equation}
+S_{p0\alpha}=\mathcal{V}s_{y}\left[ \left( \partial_{y}N_{\alpha}\right)
+l_{y}+n_{\alpha}\right] \text{,}   \label{c19}
+\end{equation}
+
+\begin{equation}
+S_{p1\alpha}=-\mathcal{V}s_{y}\text{,}   \label{c20}
+\end{equation}
+
+\begin{equation}
+S_{p\alpha}=S_{p0\alpha}+S_{p1\alpha}n_{\alpha}=\mathcal{V}s_{y}\left(
+\partial_{y}N_{\alpha}\right) l_{y}\text{.}   \label{c21}
+\end{equation}
+
+\begin{itemize}
+\item  WEST boundary:
+\end{itemize}
+
+\begin{equation}
+l_{x}=\frac{1}{2}\left( h_{x(W)}+h_{x(W+1)}\right) \text{,}   \label{c22}
+\end{equation}
+
+\begin{equation}
+S_{p0\alpha}=\mathcal{U}s_{x}\left[ \left( -\partial_{x}N_{\alpha}\right)
+l_{x}+n_{\alpha}\right] \text{,}   \label{c23}
+\end{equation}
+
+\begin{equation}
+S_{p1\alpha}=-\mathcal{U}s_{x}\text{,}   \label{c24}
+\end{equation}
+
+\begin{equation}
+S_{p\alpha}=S_{p0\alpha}+S_{p1\alpha}n_{\alpha}=\mathcal{U}s_{x}\left(
+-\partial_{x}N_{\alpha}\right) l_{x}\text{.}   \label{c25}
+\end{equation}
+
+\begin{itemize}
+\item  EAST boundary:
+\end{itemize}
+
+\begin{equation}
+l_{x}=\frac{1}{2}\left( h_{x(E-1)}+h_{x(E)}\right) \text{,}   \label{c26}
+\end{equation}
+
+\begin{equation}
+S_{p0\alpha}=\mathcal{U}s_{x}\left[ \left( \partial_{x}N_{\alpha}\right)
+l_{x}+n_{\alpha}\right] \text{,}   \label{c27}
+\end{equation}
+
+\begin{equation}
+S_{p1\alpha}=-\mathcal{U}s_{x}\text{,}   \label{c28}
+\end{equation}
+
+\begin{equation}
+S_{p\alpha}=S_{p0\alpha}+S_{p1\alpha}n_{\alpha}=\mathcal{U}s_{x}\left(
+\partial_{x}N_{\alpha}\right) l_{x}\text{.}   \label{c29}
+\end{equation}
+
+\bigskip
+
+\paragraph{\texttt{BCCON=3} ... Sheath Conditions (Only for the WEST and
+EAST Boundary)}
+
+\bigskip
+
+\begin{equation}
+S_{p0\alpha}=\mathcal{U}n_{\alpha}s_{x},   \label{ccc30}
+\end{equation}
+
+\begin{equation}
+S_{p1\alpha}=-\mathcal{U}s_{x}\text{,}   \label{c31}
+\end{equation}
+
+\begin{equation}
+S_{p\alpha}=S_{p0\alpha}+S_{p1\alpha}n_{\alpha}=0\text{.}^{\left(
+\ast\right) }   \label{c32}
+\end{equation}
+
+$\bigskip$
+
+$^{\left( \ast\right) }$WARNING: PROBABLY ERROR - $S_{p1\alpha}$ should have
+some other value, so that $S_{p\alpha}\neq0$!
+
+\bigskip
+
+\paragraph{\texttt{BCCON=4} ... Prescribe the Value of the Density
+''Weakly'', Using as the Control Parameter Some Prescribed Velocity}
+
+\bigskip
+
+\begin{equation*}
+\mathtt{CONPAR(IS,IB,1)}\equiv N_{\alpha}\text{,}
+\end{equation*}
+
+\begin{equation*}
+\mathtt{CONPAR(IS,IB,2)}\equiv U_{\alpha}
+\end{equation*}
+
+\bigskip
+
+\begin{itemize}
+\item  for all boundaries ($N_{\alpha}$ and $U_{\alpha}$ are different at
+each boundary):
+\end{itemize}
+
+\begin{equation}
+S_{p0\alpha}=N_{\alpha}U_{\alpha}s\text{,}   \label{c33}
+\end{equation}
+
+\begin{equation}
+S_{p1\alpha}=-U_{\alpha}s\text{,}   \label{c34}
+\end{equation}
+
+\begin{equation}
+S_{p\alpha}=S_{p0\alpha}+S_{p1\alpha}n_{\alpha}=U_{\alpha}s\left( N_{\alpha
+}-n_{\alpha}\right) \text{.}   \label{c35}
+\end{equation}
+
+\bigskip
+
+\paragraph{\texttt{BCCON=5} ... Prescribe the Value of the Particle Flux per
+Unit Area}
+
+\bigskip
+
+\begin{equation*}
+\mathtt{CONPAR(IS,IB,1)}\equiv\Gamma_{\alpha x},\text{ }\Gamma_{\alpha y}
+\end{equation*}
+
+\bigskip
+
+\begin{itemize}
+\item  SOUTH and NORTH boundary:
+\end{itemize}
+
+\begin{equation}
+S_{p0\alpha}=\Gamma_{\alpha y}s_{y}\text{,}   \label{c36}
+\end{equation}
+
+\begin{equation}
+S_{p1\alpha}=0\text{,}   \label{c37}
+\end{equation}
+
+\begin{equation}
+S_{p\alpha}=S_{p0\alpha}+S_{p1\alpha}n_{\alpha}=\Gamma_{\alpha y}s_{y}\text{.%
+}   \label{c38}
+\end{equation}
+
+\begin{itemize}
+\item  WEST and EAST boundary:
+\end{itemize}
+
+\begin{equation}
+S_{p0\alpha}=\Gamma_{\alpha x}s_{x}\text{,}   \label{c39}
+\end{equation}
+
+\begin{equation}
+S_{p1\alpha}=0\text{,}   \label{c40}
+\end{equation}
+
+\begin{equation}
+S_{p\alpha}=S_{p0\alpha}+S_{p1\alpha}n_{\alpha}=\Gamma_{\alpha x}s_{x}\text{.%
+}   \label{c41}
+\end{equation}
+
+\bigskip
+
+\paragraph{\texttt{BCCON=6} ... Prescribe the Value of the Total Particle
+Flux for a Constant Density (Only for the NORTH and SOUTH Boundary)}
+
+\bigskip
+
+\begin{equation*}
+\mathtt{CONPAR(IS,IB,1)}\equiv\mathcal{S}_{n}
+\end{equation*}
+
+\bigskip
+
+\begin{itemize}
+\item  NORTH boundary:
+\end{itemize}
+
+\begin{equation}
+s_{1}=\sum_{j}^{N}\frac{s_{yj}}{\frac{1}{2}\left( h_{y1\left( j,N-1\right)
+}+h_{y1\left( j,N\right) }\right) }\text{,}   \label{c42}
+\end{equation}
+
+\begin{equation}
+s_{2}=\sum_{j}^{N}\frac{n_{\alpha j}s_{yj}}{\frac{1}{2}\left( h_{y1\left(
+j,N-1\right) }+h_{y1\left( j,N\right) }\right) }\text{,}   \label{c43}
+\end{equation}
+
+\begin{itemize}
+\item  SOUTH boundary:
+\end{itemize}
+
+\begin{equation}
+s_{1}=\sum_{j}^{S}\frac{s_{yj}}{\frac{1}{2}\left( h_{y1\left( j,S\right)
+}+h_{y1\left( j,S+1\right) }\right) }\text{,}   \label{c44}
+\end{equation}
+
+\begin{equation}
+s_{2}=\sum_{j}^{S}\frac{n_{\alpha j}s_{yj}}{\frac{1}{2}\left( h_{y1\left(
+j,S\right) }+h_{y1\left( j,S+1\right) }\right) },   \label{cs45}
+\end{equation}
+where $\sum_{j}^{N}$ and $\sum_{j}^{S}$ are summations over the boundary
+cells at the NORTH and SOUTH boundary respectively. The particle sources are
+defined as:
+
+\begin{equation}
+S_{p0\alpha}=\mathcal{V}s_{y}\left( \mathcal{S}_{n}/D_{an}+s_{2}\right)
+/s_{1}\text{,}   \label{c46}
+\end{equation}
+
+\begin{equation}
+S_{p1\alpha}=-\mathcal{V}s_{y}\text{,}   \label{c47}
+\end{equation}
+
+\begin{equation}
+S_{p\alpha}=S_{p0\alpha}+S_{p1\alpha}n_{\alpha}=\mathcal{V}s_{y}\left[ 
+\mathcal{S}_{n}/\left( D_{an}s_{1}\right) +s_{2}/s_{1}-n_{\alpha}\right] 
+\text{.}   \label{c48}
+\end{equation}
+
+\bigskip
+
+\paragraph{\texttt{BCCON=7} ... Prescribe the Value of the Density as a
+Function of Other Plasma Parameters (Not Yet Available)}
+
+\bigskip
+
+\bigskip
+
+\paragraph{\texttt{BCCON=8} ... Prescribe the Value of the Total Particle
+Flux with a Constant Flux Density}
+
+\bigskip
+
+\begin{equation*}
+\mathtt{CONPAR(IS,IB,1)}\equiv\mathcal{S}_{\Gamma_{x}},\text{ }\mathcal{S}%
+_{\Gamma_{y}}
+\end{equation*}
+
+\bigskip
+
+\begin{itemize}
+\item  SOUTH and NORTH boundary:
+\end{itemize}
+
+\begin{equation}
+s_{tot}=\sum_{j}^{S\text{ or }N}s_{yj}\text{,}   \label{c49}
+\end{equation}
+
+\begin{equation}
+S_{p0\alpha}=\left( \mathcal{S}_{\Gamma_{y}}/s_{tot}\right) s_{y}\text{,} 
+\label{c50}
+\end{equation}
+
+\begin{equation}
+S_{p1\alpha}=0\text{,}   \label{c51}
+\end{equation}
+
+\begin{equation}
+S_{p\alpha}=S_{p0\alpha}+S_{p1\alpha}n_{\alpha}=\left( \mathcal{S}%
+_{\Gamma_{y}}/s_{tot}\right) s_{y}\text{.}   \label{c52}
+\end{equation}
+
+\begin{itemize}
+\item  WEST and EAST boundary:
+\end{itemize}
+
+\begin{equation}
+s_{tot}=\sum_{j}^{W\text{ or }E}s_{xj}\text{,}   \label{c53}
+\end{equation}
+
+\begin{equation}
+S_{p0\alpha}=\left( \mathcal{S}_{\Gamma_{x}}/s_{tot}\right) s_{x}\text{,} 
+\label{c54}
+\end{equation}
+
+\begin{equation}
+S_{p1\alpha}=0\text{,}   \label{c55}
+\end{equation}
+
+\begin{equation}
+S_{p\alpha}=S_{p0\alpha}+S_{p1\alpha}n_{\alpha}=\left( \mathcal{S}%
+_{\Gamma_{x}}/s_{tot}\right) s_{x}\text{.}   \label{c56}
+\end{equation}
+
+\bigskip
+
+\paragraph{\texttt{BCCON=9} ... Prescribe the Value of the Decay Length for
+the Density (Only for the SOUTH and NORTH Boundary)}
+
+\bigskip
+
+\begin{equation*}
+\mathtt{CONPAR(IS,IB,1)}\equiv
+l_{n_{\alpha}}=n_{\alpha}/\partial_{y}n_{\alpha}
+\end{equation*}
+
+\bigskip
+
+\begin{equation}
+S_{p0\alpha}=0\text{,}   \label{c57}
+\end{equation}
+
+\begin{equation}
+S_{p1\alpha}=-\left[ D_{an_{\alpha}}+D_{ap_{\alpha}}\left( Z_{\alpha }%
+\widehat{T}_{e}+\widehat{T}_{i}\right) \right] s_{y}/l_{n_{\alpha}}\text{,} 
+\label{c58}
+\end{equation}
+
+\begin{equation}
+S_{p\alpha}=S_{p0\alpha}+S_{p1\alpha}n_{\alpha}=-\left[ D_{an_{%
+\alpha}}+D_{ap_{\alpha}}\left( Z_{\alpha}\widehat{T}_{e}+\widehat{T}%
+_{i}\right) \right] s_{y}n_{\alpha}/l_{n_{\alpha}}\text{.}   \label{c59}
+\end{equation}
+
+\bigskip
+
+\paragraph{\texttt{BCCON=10} ... Prescribe the Leakage Coefficient (Leakage
+Option for the Density, Only for the SOUTH and NORTH Boundary)}
+
+\bigskip
+
+\begin{equation*}
+\mathtt{CONPAR(IS,IB,1)}\equiv C_{leak}
+\end{equation*}
+
+\bigskip
+
+\begin{equation}
+S_{p0\alpha}=0\text{,}   \label{c60}
+\end{equation}
+
+\begin{equation}
+S_{p1\alpha}=\frac{V}{h_{y1}}\sqrt{\frac{Z_{\alpha}\widehat{T}_{e}+\widehat
+{T}_{i}}{m_{p}A_{\alpha}}}C_{leak}\text{,}   \label{c70}
+\end{equation}
+
+\begin{equation}
+S_{p\alpha}=S_{p0\alpha}+S_{p1\alpha}n_{\alpha}=\frac{V}{h_{y1}}\sqrt {\frac{%
+Z_{\alpha}\widehat{T}_{e}+\widehat{T}_{i}}{m_{p}A_{\alpha}}%
+}C_{leak}n_{\alpha}\text{.}   \label{c71}
+\end{equation}
+
+\begin{itemize}
+\item  total pumping rate of the species $\alpha$ at the SOUTH and NORTH
+boundary (summation over all boundary cells, added by H. B\"{u}rbaumer):
+\end{itemize}
+
+\begin{equation}
+R_{p\alpha}=\sum_{j}^{S\text{ or }N}S_{p\alpha j}=\sum_{j}^{S\text{ or }%
+N}S_{p1\alpha j}n_{\alpha j}\text{.}   \label{c72}
+\end{equation}
+
+\bigskip
+
+\subsubsection{Boundary Conditions for Momentum Equations}
+
+\bigskip
+
+\paragraph{\texttt{BCMOM=1} ... Prescribe the Value of the Parallel Velocity}
+
+\bigskip
+
+\begin{equation*}
+\mathtt{MOMPAR(IS,IB,1)}\equiv U_{\alpha}
+\end{equation*}
+
+\bigskip
+
+\begin{itemize}
+\item  SOUTH and NORTH boundary:
+\end{itemize}
+
+\begin{equation}
+S_{m0\alpha}=\mathcal{VN}_{e}A_{\alpha}U_{\alpha}s_{y}\text{,}   \label{c73}
+\end{equation}
+
+\begin{equation}
+S_{m1\alpha}=-\mathcal{VN}_{e}A_{\alpha}s_{y}\text{,}   \label{c74}
+\end{equation}
+
+\begin{equation}
+S_{m\alpha}=S_{m0\alpha}+S_{m1\alpha}u_{\alpha}=\mathcal{VN}_{e}A_{\alpha
+}s_{y}\left( U_{\alpha}-u_{\alpha}\right) \text{.}   \label{c75}
+\end{equation}
+
+\begin{itemize}
+\item  WEST and EAST boundary:
+\end{itemize}
+
+\begin{equation}
+S_{m0\alpha}=\mathcal{UN}_{e}A_{\alpha}U_{\alpha}s_{x}\text{,}   \label{c76}
+\end{equation}
+
+\begin{equation}
+S_{m1\alpha}=-\mathcal{UN}_{e}A_{\alpha}s_{x}\text{,}   \label{c77}
+\end{equation}
+
+\begin{equation}
+S_{m\alpha}=S_{m0\alpha}+S_{m1\alpha}u_{\alpha}=\mathcal{UN}_{e}A_{\alpha
+}s_{x}\left( U_{\alpha}-u_{\alpha}\right) \text{.}   \label{c78}
+\end{equation}
+
+\bigskip
+
+\paragraph{\texttt{BCMOM=2} ... Prescribe the Gradient of the Parallel
+Velocity}
+
+\bigskip
+
+\begin{equation*}
+\mathtt{MOMPAR(IS,IB,1)}\equiv\partial_{x}U_{\alpha},\text{ }\partial
+_{y}U_{\alpha}
+\end{equation*}
+
+\bigskip
+
+\begin{itemize}
+\item  NORTH boundary:
+\end{itemize}
+
+\begin{equation}
+\overline{n}_{\alpha}=\frac{1}{2}\left( n_{\alpha\left( ix,N\right)
+}+n_{\alpha\left( ix+1,N\right) }\right) \text{,}   \label{c79}
+\end{equation}
+
+\begin{equation}
+l_{y}=\frac{1}{4}\left( h_{y1\left( ix,N-1\right) }+h_{y1\left(
+ix+1,N-1\right) }\right) \text{,}   \label{c80}
+\end{equation}
+
+\begin{equation}
+\widehat{s}=\frac{1}{2}\left( b_{x\left( ix,N-1\right) }+b_{x\left(
+ix+1,N-1\right) }\right) \text{,}   \label{c81}
+\end{equation}
+
+\begin{equation}
+\widehat{c}=\frac{1}{2}\left( \sqrt{1-b_{x\left( ix,N-1\right) }^{2}}+\sqrt{%
+1-b_{x\left( ix+1,N-1\right) }^{2}}\right) \text{,}   \label{c82}
+\end{equation}
+
+\begin{equation}
+S_{m0\alpha}=\mathcal{V}s_{y}A_{\alpha}\overline{n}_{\alpha}\left[ \left(
+\partial_{y}U_{\alpha}\right) l_{y}+\left( u_{\alpha}-\widehat{c}u_{D\alpha
+}\right) /\widehat{s}\right] \text{,}   \label{c83}
+\end{equation}
+
+\begin{equation}
+S_{m1\alpha}=-\mathcal{V}s_{y}A_{\alpha}\overline{n}_{\alpha}\text{,} 
+\label{c84}
+\end{equation}
+
+\begin{equation}
+S_{m\alpha}=S_{m0\alpha}+S_{m1\alpha}u_{\alpha}=\mathcal{V}s_{y}A_{\alpha }%
+\overline{n}_{\alpha}\left[ \left( \partial_{y}U_{\alpha}\right)
+l_{y}+\left( u_{\alpha}-\widehat{c}u_{D\alpha}\right) /\widehat{s}-u_{\alpha}%
+\right] \text{.}^{\left( \ast\right) }   \label{cc85}
+\end{equation}
+
+\bigskip
+
+$^{\left( \ast\right) }$WARNING: PROBABLY\ ERROR - THE\ AUTHOR\ PROBABLY\
+WANTED\ TO\ GET\ THE\ RESULT:
+
+\begin{equation*}
+S_{m\alpha}=\mathcal{V}s_{y}A_{\alpha}\overline{n}_{\alpha}\left(
+\partial_{y}U_{\alpha}\right) l_{y}\text{.}
+\end{equation*}
+
+\bigskip
+
+\begin{itemize}
+\item  SOUTH boundary:
+\end{itemize}
+
+\begin{equation}
+\overline{n}_{\alpha}=\frac{1}{2}\left( n_{\alpha\left( ix,S\right)
+}+n_{\alpha\left( ix+1,S\right) }\right) \text{,}   \label{c86}
+\end{equation}
+
+\begin{equation}
+l_{y}=\frac{1}{4}\left( h_{y1\left( ix,S+1\right) }+h_{y1\left(
+ix+1,S+1\right) }\right) \text{,}   \label{c87}
+\end{equation}
+
+\begin{equation}
+\widehat{s}=\frac{1}{2}\left( b_{x\left( ix,S+1\right) }+b_{x\left(
+ix+1,S+1\right) }\right) \text{,}   \label{c88}
+\end{equation}
+
+\begin{equation}
+\widehat{c}=\frac{1}{2}\left( \sqrt{1-b_{x\left( ix,S+1\right) }^{2}}+\sqrt{%
+1-b_{x\left( ix+1,S+1\right) }^{2}}\right) \text{,}   \label{c89}
+\end{equation}
+
+\begin{equation}
+S_{m0\alpha}=\mathcal{V}s_{y}A_{\alpha}\overline{n}_{\alpha}\left[ -\left(
+\partial_{y}U_{\alpha}\right) l_{y}+\left( u_{\alpha}-\widehat{c}u_{D\alpha
+}\right) /\widehat{s}\right] \text{,}   \label{c90}
+\end{equation}
+
+\begin{equation}
+S_{m1\alpha}=-\mathcal{V}s_{y}A_{\alpha}\overline{n}_{\alpha}\text{,} 
+\label{c91}
+\end{equation}
+
+\begin{equation}
+S_{m\alpha}=S_{m0\alpha}+S_{m1\alpha}u_{\alpha}=\mathcal{V}s_{y}A_{\alpha }%
+\overline{n}_{\alpha}\left[ -\left( \partial_{y}U_{\alpha}\right)
+l_{y}+\left( u_{\alpha}-\widehat{c}u_{D\alpha}\right) /\widehat{s}-u_{\alpha}%
+\right] \text{.}^{\left( \ast\right) }   \label{c92}
+\end{equation}
+
+\bigskip
+
+$^{\left( \ast\right) }$WARNING: PROBABLY\ ERROR - THE\ AUTHOR\ PROBABLY\
+WANTED\ TO\ GET\ THE\ RESULT:
+
+\begin{equation*}
+S_{m\alpha}=-\mathcal{V}s_{y}A_{\alpha}\overline{n}_{\alpha}\left(
+\partial_{y}U_{\alpha}\right) l_{y}\text{.}
+\end{equation*}
+
+\bigskip
+
+\begin{itemize}
+\item  WEST boundary:
+\end{itemize}
+
+\begin{equation}
+\overline{n}_{\alpha}=\frac{1}{2}\left( n_{\alpha\left( W,iy\right)
+}+n_{\alpha\left( W+1,iy\right) }\right) \text{,}   \label{c93}
+\end{equation}
+
+\begin{equation}
+l_{x}=\frac{1}{4}\left( h_{x\left( W,iy\right) }+h_{x\left( W+1,iy\right)
+}\right) \text{,}   \label{c94}
+\end{equation}
+
+\begin{equation}
+\widehat{s}=\frac{1}{2}\left( b_{x\left( W,iy\right) }+b_{x\left(
+W+1,iy\right) }\right) \text{,}   \label{c95}
+\end{equation}
+
+\begin{equation}
+\widehat{c}=\frac{1}{2}\left( \sqrt{1-b_{x\left( W,iy\right) }^{2}}+\sqrt{%
+1-b_{x\left( W+1,iy\right) }^{2}}\right) \text{,}   \label{c96}
+\end{equation}
+
+\begin{equation}
+S_{m0\alpha}=\mathcal{V}s_{x}A_{\alpha}\overline{n}_{\alpha}\left[ -\left(
+\partial_{x}U_{\alpha}\right) l_{x}+\left( u_{\alpha}-\widehat{c}u_{D\alpha
+}\right) /\widehat{s}\right] \text{,}   \label{c97}
+\end{equation}
+
+\begin{equation}
+S_{m1\alpha}=-\mathcal{V}s_{x}A_{\alpha}\overline{n}_{\alpha}\text{,} 
+\label{c98}
+\end{equation}
+
+\begin{equation}
+S_{m\alpha}=S_{m0\alpha}+S_{m1\alpha}u_{\alpha}=\mathcal{V}s_{x}A_{\alpha }%
+\overline{n}_{\alpha}\left[ -\left( \partial_{x}U_{\alpha}\right)
+l_{x}+\left( u_{\alpha}-\widehat{c}u_{D\alpha}\right) /\widehat{s}-u_{\alpha}%
+\right] \text{.}^{\left( \ast\right) }   \label{c99}
+\end{equation}
+
+\bigskip
+
+$^{\left( \ast\right) }$WARNING: PROBABLY\ ERROR - THE\ AUTHOR\ PROBABLY\
+WANTED\ TO\ GET\ THE\ RESULT:
+
+\begin{equation*}
+S_{m\alpha}=-\mathcal{V}s_{x}A_{\alpha}\overline{n}_{\alpha}\left(
+\partial_{x}U_{\alpha}\right) l_{x}\text{.}
+\end{equation*}
+
+\bigskip
+
+\begin{itemize}
+\item  EAST boundary:
+\end{itemize}
+
+\begin{equation}
+\overline{n}_{\alpha}=\frac{1}{2}\left( n_{\alpha\left( E-1,iy\right)
+}+n_{\alpha\left( E,iy\right) }\right) \text{,}   \label{c100}
+\end{equation}
+
+\begin{equation}
+l_{x}=\frac{1}{4}\left( h_{x\left( E-1,iy\right) }+h_{x\left( E,iy\right)
+}\right) \text{,}   \label{c101}
+\end{equation}
+
+\begin{equation}
+\widehat{s}=\frac{1}{2}\left( b_{x\left( E-1,iy\right) }+b_{x\left(
+E,iy\right) }\right) \text{,}   \label{c102}
+\end{equation}
+
+\begin{equation}
+\widehat{c}=\frac{1}{2}\left( \sqrt{1-b_{x\left( E-1,iy\right) }^{2}}+\sqrt{%
+1-b_{x\left( E,iy\right) }^{2}}\right) \text{,}   \label{c103}
+\end{equation}
+
+\begin{equation}
+S_{m0\alpha}=\mathcal{V}s_{x}A_{\alpha}\overline{n}_{\alpha}\left[ \left(
+\partial_{x}U_{\alpha}\right) l_{x}+\left( u_{\alpha}-\widehat{c}u_{D\alpha
+}\right) /\widehat{s}\right] \text{,}   \label{c104}
+\end{equation}
+
+\begin{equation}
+S_{m1\alpha}=-\mathcal{V}s_{x}A_{\alpha}\overline{n}_{\alpha}\text{,} 
+\label{c105}
+\end{equation}
+
+\begin{equation}
+S_{m\alpha}=S_{m0\alpha}+S_{m1\alpha}u_{\alpha}=\mathcal{V}s_{x}A_{\alpha }%
+\overline{n}_{\alpha}\left[ \left( \partial_{x}U_{\alpha}\right)
+l_{x}+\left( u_{\alpha}-\widehat{c}u_{D\alpha}\right) /\widehat{s}-u_{\alpha}%
+\right] \text{.}^{\left( \ast\right) }   \label{c106}
+\end{equation}
+
+\bigskip
+
+$^{\left( \ast\right) }$WARNING: PROBABLY\ ERROR - THE\ AUTHOR\ PROBABLY\
+WANTED\ TO\ GET\ THE\ RESULT:
+
+\begin{equation*}
+S_{m\alpha}=\mathcal{V}s_{x}A_{\alpha}\overline{n}_{\alpha}\left(
+\partial_{x}U_{\alpha}\right) l_{x}\text{.}
+\end{equation*}
+
+\bigskip
+
+\paragraph{\texttt{BCMOM=3} ... Sheath Conditions (Only for the WEST and
+EAST Boundary), Mach Number as Input}
+
+\bigskip
+
+\begin{equation*}
+\mathtt{MOMPAR(IS,IB,1)}\equiv\mathcal{M}_{\alpha1}, 
+\end{equation*}
+
+\begin{equation*}
+\mathtt{MOMPAR(IS,IB,2)}\equiv\mathcal{M}_{\alpha2}
+\end{equation*}
+
+\bigskip
+
+\begin{itemize}
+\item  WEST boundary:
+\end{itemize}
+
+\bigskip
+
+IF $\left( \mathcal{M}_{\alpha2}<0.5\right) $ THEN:
+
+\begin{equation}
+u_{out}=b_{x}\mathcal{M}_{11}c_{s}\text{,}   \label{c107}
+\end{equation}
+
+\begin{equation}
+u_{p\alpha}=\frac{u_{out}}{b_{x}}+u_{D1}\text{,}   \label{c108}
+\end{equation}
+
+\bigskip
+
+ELSE $\left( \mathcal{M}_{\alpha2}\geq0.5\right) $:
+
+\begin{equation}
+u_{test\alpha}=u_{\alpha\left( W+2,iy\right) }\left( 1+\frac{h_{x\left(
+W+1,iy\right) }}{h_{x\left( W+2,iy\right) }}\right) -u_{\alpha\left(
+W+3,iy\right) }\frac{h_{x\left( W+1,iy\right) }}{h_{x\left( W+2,iy\right) }}%
+\text{,}   \label{c109}
+\end{equation}
+
+\begin{equation}
+u_{out\alpha}=\max\left( \mathcal{M}_{\alpha1}c_{s\alpha}\text{, }%
+-u_{test\alpha}\right) \text{,}   \label{c110}
+\end{equation}
+
+\begin{equation}
+u_{p\alpha}=u_{out\alpha}+u_{D1}\text{,}   \label{c111}
+\end{equation}
+where $u_{D1}$ is the poloidal component of the $\mathbf{E\times B}$ drift
+velocity.
+
+\bigskip
+
+\begin{equation}
+S_{m0\alpha}=\mathcal{U}A_{\alpha}m_{p}n_{\alpha}s_{x}\left( -u_{p\alpha
+}\right) \text{,}   \label{c112}
+\end{equation}
+
+\begin{equation}
+S_{m1\alpha}=-\mathcal{U}A_{\alpha}m_{p}n_{\alpha}s_{x}\text{,} 
+\label{c113}
+\end{equation}
+
+\begin{equation}
+S_{m\alpha}=S_{m0\alpha}+S_{m1\alpha}u_{\alpha}=\mathcal{U}%
+A_{\alpha}m_{p}n_{\alpha}s_{x}\left( -u_{p\alpha}-u_{\alpha}\right) \text{.} 
+\label{c114}
+\end{equation}
+
+\bigskip
+
+\begin{itemize}
+\item  EAST boundary:
+\end{itemize}
+
+\bigskip
+
+IF $\left( \mathcal{M}_{\alpha2}<0.5\right) $ THEN:
+
+\begin{equation}
+u_{out}=b_{x}\mathcal{M}_{11}c_{s}\text{,}   \label{c115}
+\end{equation}
+
+\begin{equation}
+u_{p\alpha}=\frac{u_{out}}{b_{x}}-u_{D1}\text{,}   \label{c116}
+\end{equation}
+
+\bigskip
+
+ELSE $\left( \mathcal{M}_{\alpha2}\geq0.5\right) $:
+
+\begin{equation}
+u_{test\alpha}=u_{\alpha\left( E-1,iy\right) }\left( 1+\frac{h_{x\left(
+E-1,iy\right) }}{h_{x\left( E-2,iy\right) }}\right) -u_{\alpha\left(
+E-2,iy\right) }\frac{h_{x\left( E-1,iy\right) }}{h_{x\left( E-2,iy\right) }}%
+\text{,}   \label{c117}
+\end{equation}
+
+\begin{equation}
+u_{out\alpha}=\max\left( \mathcal{M}_{\alpha1}c_{s\alpha}\text{, }%
+u_{test\alpha}\right) \text{,}   \label{c118}
+\end{equation}
+
+\begin{equation}
+u_{p\alpha}=u_{out\alpha}-u_{D1}\text{,}   \label{c119}
+\end{equation}
+where $u_{D1}$ is the poloidal component of the $\mathbf{E\times B}$ drift
+velocity.
+
+\bigskip
+
+\begin{equation}
+S_{m0\alpha}=\mathcal{U}A_{\alpha}m_{p}n_{\alpha}s_{x}u_{p\alpha}\text{,} 
+\label{c120}
+\end{equation}
+
+\begin{equation}
+S_{m1\alpha}=-\mathcal{U}A_{\alpha}m_{p}n_{\alpha}s_{x}\text{,} 
+\label{c121}
+\end{equation}
+
+\begin{equation}
+S_{m\alpha}=S_{m0\alpha}+S_{m1\alpha}u_{\alpha}=\mathcal{U}%
+A_{\alpha}m_{p}n_{\alpha}s_{x}\left( u_{p\alpha}-u_{\alpha}\right) \text{.} 
+\label{c122}
+\end{equation}
+
+\bigskip
+
+\paragraph{\texttt{BCMOM=4} ... Prescribe the Value of the Velocity
+''Weakly'', Using as the Control Parameter Some Prescribed Mass Flux}
+
+\bigskip
+
+\begin{equation*}
+\mathtt{MOMPAR(IS,IB,1)}\equiv U_{\alpha}, 
+\end{equation*}
+
+\begin{equation*}
+\mathtt{MOMPAR(IS,IB,2)}\equiv G_{\alpha x},\text{ }G_{\alpha y}
+\end{equation*}
+
+\bigskip
+
+\begin{itemize}
+\item  SOUTH and NORTH boundary:
+\end{itemize}
+
+\bigskip
+
+\begin{equation}
+S_{m0\alpha}=G_{\alpha y}U_{\alpha}s_{y}\text{,}   \label{c123}
+\end{equation}
+
+\begin{equation}
+S_{m1\alpha}=-G_{\alpha y}s_{y}\text{,}   \label{c124}
+\end{equation}
+
+\begin{equation}
+S_{m\alpha}=S_{m0\alpha}+S_{m1\alpha}u_{\alpha}=G_{\alpha y}s_{y}\left(
+U_{\alpha}-u_{\alpha}\right) \text{.}   \label{c125}
+\end{equation}
+
+\bigskip
+
+\begin{itemize}
+\item  WEST and EAST boundary:
+\end{itemize}
+
+\bigskip
+
+\begin{equation}
+S_{m0\alpha}=G_{\alpha x}U_{\alpha}s_{x}\text{,}   \label{c126}
+\end{equation}
+
+\begin{equation}
+S_{m1\alpha}=-G_{\alpha x}s_{x}\text{,}   \label{c127}
+\end{equation}
+
+\begin{equation}
+S_{m\alpha}=S_{m0\alpha}+S_{m1\alpha}u_{\alpha}=G_{\alpha x}s_{x}\left(
+U_{\alpha}-u_{\alpha}\right) \text{.}   \label{c128}
+\end{equation}
+
+\bigskip
+
+\paragraph{\texttt{BCMOM=5} ... Prescribe the Value of the Momentum Flux per
+Unit Area}
+
+\bigskip
+
+\begin{equation*}
+\mathtt{MOMPAR(IS,IB,1)}\equiv P_{m\alpha x},\text{ }P_{m\alpha y}
+\end{equation*}
+
+\bigskip
+
+\begin{itemize}
+\item  SOUTH and NORTH boundary:
+\end{itemize}
+
+\bigskip
+
+\begin{equation}
+S_{m0\alpha}=P_{m\alpha y}s_{y}\text{,}   \label{c129}
+\end{equation}
+
+\begin{equation}
+S_{m1\alpha}=0\text{,}   \label{c130}
+\end{equation}
+
+\begin{equation}
+S_{m\alpha}=S_{m0\alpha}+S_{m1\alpha}u_{\alpha}=P_{m\alpha y}s_{y}\text{.} 
+\label{c131}
+\end{equation}
+
+\bigskip
+
+\begin{itemize}
+\item  WEST and EAST boundary:
+\end{itemize}
+
+\bigskip
+
+\begin{equation}
+S_{m0\alpha}=P_{m\alpha x}s_{x}\text{,}   \label{c132}
+\end{equation}
+
+\begin{equation}
+S_{m1\alpha}=0\text{,}   \label{c133}
+\end{equation}
+
+\begin{equation}
+S_{m\alpha}=S_{m0\alpha}+S_{m1\alpha}u_{\alpha}=P_{m\alpha x}s_{x}\text{.} 
+\label{c134}
+\end{equation}
+
+\bigskip
+
+\paragraph{\texttt{BCMOM=6} ... Prescribe the Value of the Total Momentum
+Flux for a Constant Parallel Velocity (Not Yet Available)}
+
+\bigskip
+
+\bigskip
+
+\paragraph{\texttt{BCMOM=7} ... Prescribe the Density as a Function of the
+Other Plasma Parameters (Not Yet Available)}
+
+\bigskip
+
+\bigskip
+
+\paragraph{\texttt{BCMOM=8} ... Limited Shear (Only for the SOUTH and NORTH
+Boundary)}
+
+\bigskip
+
+\begin{itemize}
+\item  SOUTH boundary:
+\end{itemize}
+
+\bigskip
+
+\begin{equation}
+a=\min\left( 1\text{, }\sqrt{\frac{\widehat{T}_{i\left( ix,S\right) }+%
+\widehat{T}_{i\left( ix+1,S\right) }}{\widehat{T}_{i\left( ix,S+1\right) }+%
+\widehat{T}_{i\left( ix+1,S+1\right) }}}\right) \text{,}   \label{c135}
+\end{equation}
+
+\begin{equation}
+\overline{n}_{\alpha}=\frac{1}{2}\left( n_{\alpha\left( ix,S+1\right)
+}+n_{\alpha\left( ix+1,S+1\right) }\right) \text{,}   \label{c136}
+\end{equation}
+
+\begin{equation}
+\widehat{s}=\frac{1}{2}\left( b_{x\left( ix,S+1\right) }+b_{x\left(
+ix+1,S+1\right) }\right) \text{,}   \label{c137}
+\end{equation}
+
+\begin{equation}
+\widehat{c}=\frac{1}{2}\left( \sqrt{1-b_{x\left( ix,S+1\right) }^{2}}+\sqrt{%
+1-b_{x\left( ix+1,S+1\right) }^{2}}\right) \text{,}   \label{c138}
+\end{equation}
+
+\begin{equation}
+S_{m0\alpha}=\mathcal{V}s_{y}A_{\alpha}\overline{n}_{\alpha}a\left(
+u_{\alpha}-\widehat{c}u_{D\alpha}\right) /\widehat{s}\text{,}   \label{c139}
+\end{equation}
+
+\begin{equation}
+S_{m1\alpha}=-\mathcal{V}s_{y}A_{\alpha}\overline{n}_{\alpha}\text{,} 
+\label{c140}
+\end{equation}
+
+\begin{equation}
+S_{m\alpha}=S_{m0\alpha}+S_{m1\alpha}u_{\alpha}=\mathcal{V}s_{y}A_{\alpha }%
+\overline{n}_{\alpha}\left[ a\left( u_{\alpha}-\widehat{c}u_{D\alpha
+}\right) /\widehat{s}-u_{\alpha}\right] \text{.}   \label{c141}
+\end{equation}
+
+\bigskip
+
+\begin{itemize}
+\item  NORTH boundary:
+\end{itemize}
+
+\bigskip
+
+\begin{equation}
+a=\min\left( 1\text{, }\sqrt{\frac{\widehat{T}_{i\left( ix,N-1\right) }+%
+\widehat{T}_{i\left( ix+1,N-1\right) }}{\widehat{T}_{i\left( ix,N\right) }+%
+\widehat{T}_{i\left( ix+1,N\right) }}}\right) \text{,}   \label{c142}
+\end{equation}
+
+\begin{equation}
+\overline{n}_{\alpha}=\frac{1}{2}\left( n_{\alpha\left( ix,N\right)
+}+n_{\alpha\left( ix+1,N\right) }\right) \text{,}   \label{c143}
+\end{equation}
+
+\begin{equation}
+\widehat{s}=\frac{1}{2}\left( b_{x\left( ix,N\right) }+b_{x\left(
+ix+1,N\right) }\right) \text{,}   \label{c144}
+\end{equation}
+
+\begin{equation}
+\widehat{c}=\frac{1}{2}\left( \sqrt{1-b_{x\left( ix,N\right) }^{2}}+\sqrt{%
+1-b_{x\left( ix+1,N\right) }^{2}}\right) \text{,}   \label{c145}
+\end{equation}
+
+\begin{equation}
+S_{m0\alpha}=\mathcal{V}s_{y}A_{\alpha}\overline{n}_{\alpha}a\left(
+u_{\alpha}-\widehat{c}u_{D\alpha}\right) /\widehat{s}\text{,}   \label{c146}
+\end{equation}
+
+\begin{equation}
+S_{m1\alpha}=-\mathcal{V}s_{y}A_{\alpha}\overline{n}_{\alpha}\text{,} 
+\label{c147}
+\end{equation}
+
+\begin{equation}
+S_{m\alpha}=S_{m0\alpha}+S_{m1\alpha}u_{\alpha}=\mathcal{V}s_{y}A_{\alpha }%
+\overline{n}_{\alpha}\left[ a\left( u_{\alpha}-\widehat{c}u_{D\alpha
+}\right) /\widehat{s}-u_{\alpha}\right] \text{.}   \label{c148}
+\end{equation}
+
+\bigskip
+
+\paragraph{\texttt{BCMOM=9} ... Prescribe the Value of the Total Momentum
+Flux with Constant Flux Density}
+
+\bigskip
+
+\begin{equation*}
+\mathtt{MOMPAR(IS,IB,1)}\equiv\mathcal{S}_{m\alpha x},\text{ }\mathcal{S}%
+_{m\alpha y}
+\end{equation*}
+
+\bigskip
+
+\begin{itemize}
+\item  SOUTH and NORTH boundary:
+\end{itemize}
+
+\bigskip
+
+\begin{equation}
+s_{tot}=\sum_{j}^{S\text{ or }N}s_{yj}\text{,}   \label{c149}
+\end{equation}
+
+\begin{equation}
+S_{m0\alpha}=\left( \mathcal{S}_{m\alpha y}/s_{tot}\right) s_{y}\text{,} 
+\label{c150}
+\end{equation}
+
+\begin{equation}
+S_{m1\alpha}=0\text{,}   \label{c151}
+\end{equation}
+
+\begin{equation}
+S_{m\alpha}=S_{m0\alpha}+S_{m1\alpha}u_{\alpha}=\left( \mathcal{S}_{m\alpha
+y}/s_{tot}\right) s_{y}\text{.}   \label{c152}
+\end{equation}
+
+\bigskip
+
+\begin{itemize}
+\item  WEST and EAST boundary:
+\end{itemize}
+
+\bigskip
+
+\begin{equation}
+s_{tot}=\sum_{j}^{W\text{ or }E}s_{xj}\text{,}   \label{c153}
+\end{equation}
+
+\begin{equation}
+S_{m0\alpha}=\left( \mathcal{S}_{m\alpha x}/s_{tot}\right) s_{x}\text{,} 
+\label{c154}
+\end{equation}
+
+\begin{equation}
+S_{m1\alpha}=0\text{,}   \label{c155}
+\end{equation}
+
+\begin{equation}
+S_{m\alpha}=S_{m0\alpha}+S_{m1\alpha}u_{\alpha}=\left( \mathcal{S}_{m\alpha
+x}/s_{tot}\right) s_{x}\text{.}   \label{c156}
+\end{equation}
+
+\bigskip
+
+\paragraph{\texttt{BCMOM=10} ... Prescribe the Value of the Decay Length for
+the Momentum (Only for the SOUTH and NORTH Boundary)}
+
+\bigskip
+
+\begin{equation*}
+\mathtt{MOMPAR(IS,IB,1)}\equiv
+l_{u_{\alpha}}=u_{\alpha}/\partial_{y}u_{\alpha}
+\end{equation*}
+
+\bigskip
+
+\begin{equation}
+S_{m0\alpha}=A_{\alpha}m_{p}u_{\alpha}S_{p0\alpha}\text{,}   \label{c157}
+\end{equation}
+
+\begin{equation}
+S_{m1\alpha}=-\frac{\eta_{a}^{\alpha}}{l_{u_{\alpha}}}s_{y}+A_{%
+\alpha}m_{p}S_{p1\alpha}n_{\alpha}\text{,}   \label{c158}
+\end{equation}
+
+\begin{equation}
+S_{m\alpha}=S_{m0\alpha}+S_{m1\alpha}u_{\alpha}=A_{\alpha}m_{p}u_{\alpha
+}S_{p\alpha}-\frac{\eta_{a}^{\alpha}}{l_{u_{\alpha}}}u_{\alpha}s_{y}\text{.} 
+\label{c159}
+\end{equation}
+
+\bigskip
+
+\paragraph{\texttt{BCMOM=11} ... Prescribe the Value of the Decay Length for
+the Momentum (Only for the SOUTH Boundary, Probably Error in the Source
+Code!)}
+
+\bigskip
+
+\begin{equation}
+S_{m0\alpha}=\eta_{a}^{\alpha}n_{\alpha}A_{\alpha}\sqrt{1-b_{x}^{2}}%
+u_{\alpha }\text{,}   \label{c160}
+\end{equation}
+
+\begin{equation}
+S_{m1\alpha}=-D_{an}^{\alpha}A_{\alpha}\frac{n_{\alpha\left( S\right)
+}-n_{\alpha\left( S+1\right) }}{h_{y1}}-\frac{\eta_{a}^{\alpha}}{h_{y1}}%
+n_{\alpha}A_{\alpha}\sqrt{1-b_{x}^{2}}\text{,}   \label{c161}
+\end{equation}
+
+\begin{equation}
+S_{m\alpha}=S_{m0\alpha}+S_{m1\alpha}u_{\alpha}\text{.}   \label{c162}
+\end{equation}
+
+\bigskip
+
+\subsubsection{Boundary Conditions for Electron Energy Equation}
+
+\bigskip
+
+\paragraph{\texttt{BCENE=1} ... Prescribe the Value of the Electron
+Temperature}
+
+\bigskip
+
+\begin{equation*}
+\mathtt{ENEPAR(IB,1)}\equiv\mathcal{T}_{e}
+\end{equation*}
+
+\bigskip
+
+\begin{itemize}
+\item  SOUTH and NORTH boundary:
+\end{itemize}
+
+\bigskip
+
+\begin{equation}
+S_{he0}=\mathcal{VN}_{e}\mathcal{T}_{e}eVs_{y}\text{,}   \label{c163}
+\end{equation}
+
+\begin{equation}
+S_{he1}=-\mathcal{VN}_{e}s_{y}\text{,}   \label{c164}
+\end{equation}
+
+\begin{equation}
+S_{he}=S_{he0}+S_{he1}\widehat{T}_{e}=\mathcal{VN}_{e}s_{y}\left( \mathcal{T}%
+_{e}eV-\widehat{T}_{e}\right) \text{.}   \label{c165}
+\end{equation}
+
+\bigskip
+
+\begin{itemize}
+\item  WEST and EAST boundary:
+\end{itemize}
+
+\bigskip
+
+\begin{equation}
+S_{he0}=\mathcal{UN}_{e}\mathcal{T}_{e}eVs_{x}\text{,}   \label{c166}
+\end{equation}
+
+\begin{equation}
+S_{he1}=-\mathcal{UN}_{e}s_{x}\text{,}   \label{c167}
+\end{equation}
+
+\begin{equation}
+S_{he}=S_{he0}+S_{he1}\widehat{T}_{e}=\mathcal{UN}_{e}s_{x}\left( \mathcal{T}%
+_{e}eV-\widehat{T}_{e}\right) \text{.}   \label{c168}
+\end{equation}
+
+\bigskip
+
+\paragraph{\texttt{BCENE=2} ... Prescribe the Value of the Gradient of the
+Electron Temperature}
+
+\bigskip
+
+\begin{equation*}
+\mathtt{ENEPAR(IB,1)}\equiv\partial_{x}\mathcal{T}_{e},\text{ }\partial _{y}%
+\mathcal{T}_{e}
+\end{equation*}
+
+\bigskip
+
+\begin{itemize}
+\item  SOUTH boundary:
+\end{itemize}
+
+\bigskip
+
+\begin{equation}
+l_{y}=\frac{1}{2}\left( h_{y1\left( ix,S\right) }+h_{y1\left( ix,S+1\right)
+}\right) \text{,}   \label{c169a}
+\end{equation}
+
+\begin{equation}
+S_{he0}=\mathcal{VN}_{e}eVs_{y}\left[ \left( -\partial_{y}\mathcal{T}%
+_{e}\right) l_{y}+\widehat{T}_{e}\right] \text{,}   \label{c169}
+\end{equation}
+
+\begin{equation}
+S_{he1}=-\mathcal{VN}_{e}eVs_{y}\text{,}   \label{c170}
+\end{equation}
+
+\begin{equation}
+S_{he}=S_{he0}+S_{he1}\widehat{T}_{e}=\mathcal{VN}_{e}eVs_{y}\left[ \left(
+-\partial_{y}\mathcal{T}_{e}\right) l_{y}\right] \text{.}   \label{c171}
+\end{equation}
+
+\bigskip
+
+\begin{itemize}
+\item  NORTH boundary:
+\end{itemize}
+
+\bigskip
+
+\begin{equation}
+l_{y}=\frac{1}{2}\left( h_{y1\left( ix,N-1\right) }+h_{y1\left( ix,N\right)
+}\right) \text{,}   \label{c172a}
+\end{equation}
+
+\begin{equation}
+S_{he0}=\mathcal{VN}_{e}eVs_{y}\left[ \left( \partial_{y}\mathcal{T}%
+_{e}\right) l_{y}+\widehat{T}_{e}\right] \text{,}   \label{c172}
+\end{equation}
+
+\begin{equation}
+S_{he1}=-\mathcal{VN}_{e}eVs_{y}\text{,}   \label{c173}
+\end{equation}
+
+\begin{equation}
+S_{he}=S_{he0}+S_{he1}\widehat{T}_{e}=\mathcal{VN}_{e}eVs_{y}\left[ \left(
+\partial_{y}\mathcal{T}_{e}\right) l_{y}\right] \text{.}   \label{c174}
+\end{equation}
+
+\bigskip
+
+\begin{itemize}
+\item  WEST boundary:
+\end{itemize}
+
+\bigskip
+
+\begin{equation}
+l_{x}=\frac{1}{2}\left( h_{x\left( W,iy\right) }+h_{x\left( W+1,iy\right)
+}\right) \text{,}   \label{c175a}
+\end{equation}
+
+\begin{equation}
+S_{he0}=\mathcal{UN}_{e}eVs_{x}\left[ \left( -\partial_{x}\mathcal{T}%
+_{e}\right) l_{x}+\widehat{T}_{e}\right] \text{,}   \label{c175}
+\end{equation}
+
+\begin{equation}
+S_{he1}=-\mathcal{UN}_{e}eVs_{x}\text{,}   \label{c176}
+\end{equation}
+
+\begin{equation}
+S_{he}=S_{he0}+S_{he1}\widehat{T}_{e}=\mathcal{UN}_{e}eVs_{x}\left[ \left(
+-\partial_{x}\mathcal{T}_{e}\right) l_{x}\right] \text{.}   \label{c177}
+\end{equation}
+
+\bigskip
+
+\begin{itemize}
+\item  EAST boundary:
+\end{itemize}
+
+\bigskip
+
+\begin{equation}
+l_{x}=\frac{1}{2}\left( h_{x\left( E-1,iy\right) }+h_{x\left( E,iy\right)
+}\right) \text{,}   \label{c178a}
+\end{equation}
+
+\begin{equation}
+S_{he0}=\mathcal{UN}_{e}eVs_{x}\left[ \left( \partial_{x}\mathcal{T}%
+_{e}\right) l_{x}+\widehat{T}_{e}\right] \text{,}   \label{c178}
+\end{equation}
+
+\begin{equation}
+S_{he1}=-\mathcal{UN}_{e}eVs_{x}\text{,}   \label{c179}
+\end{equation}
+
+\begin{equation}
+S_{he}=S_{he0}+S_{he1}\widehat{T}_{e}=\mathcal{UN}_{e}eVs_{x}\left[ \left(
+\partial_{x}\mathcal{T}_{e}\right) l_{x}\right] \text{.}   \label{c180}
+\end{equation}
+
+\bigskip
+
+\paragraph{\texttt{BCENE=3} ... Sheath Conditions, Electron Energy
+Transmission Coefficient is the Free Input Parameter (Only for the WEST and
+EAST Boundary)}
+
+\bigskip
+
+\begin{equation*}
+\mathtt{ENEPAR(IB,1)}\equiv\delta_{e}, 
+\end{equation*}
+
+\begin{equation*}
+\mathtt{MOMPAR(IS,IB,1)}\equiv\mathcal{M}_{\alpha1}, 
+\end{equation*}
+
+\begin{equation*}
+\mathtt{MOMPAR(1,IB,2)}\equiv\mathcal{M}_{12}, 
+\end{equation*}
+
+\begin{equation*}
+\mathtt{POTPAR(IB,2)}\equiv\Psi 
+\end{equation*}
+
+\bigskip
+
+\begin{itemize}
+\item  WEST boundary:
+\end{itemize}
+
+\bigskip
+
+IF $\left( \mathcal{M}_{12}<0.5\right) $ THEN:
+
+\begin{equation}
+u_{out}=b_{x}\mathcal{M}_{11}c_{s}\text{,}   \label{c181}
+\end{equation}
+
+\begin{equation}
+\Gamma_{eout}=\min\left( 0\text{, }-u_{out}n_{e}-j_{x}/e_{0}\right) \text{,} 
+\label{c182}
+\end{equation}
+
+\bigskip
+
+ELSE $\left( \mathcal{M}_{12}\geq0.5\right) $:
+
+\begin{equation}
+u_{test\alpha}=u_{\alpha\left( W+1,iy\right) }\left( 1+\frac{h_{x\left(
+W+1,iy\right) }}{h_{x\left( W+2,iy\right) }}\right) -u_{\alpha\left(
+W+2,iy\right) }\frac{h_{x\left( W+1,iy\right) }}{h_{x\left( W+2,iy\right) }}%
+\text{,}   \label{c183}
+\end{equation}
+
+\begin{equation}
+u_{out\alpha}=\max\left( b_{x}\mathcal{M}_{\alpha1}c_{s\alpha}\text{, }%
+-u_{test\alpha}\right) \text{,}   \label{c184}
+\end{equation}
+
+\begin{equation}
+\Gamma_{ex}=-\sum_{\alpha}u_{out\alpha}Z_{\alpha}n_{\alpha}\text{,} 
+\label{c185}
+\end{equation}
+
+\begin{equation}
+\Gamma_{eout}=\min\left( 0\text{, }\Gamma_{ex}-j_{x}/e_{0}\right) \text{.} 
+\label{c186}
+\end{equation}
+
+\bigskip
+
+\begin{equation}
+S_{he0}=0\text{,}   \label{c187}
+\end{equation}
+
+\begin{equation}
+S_{he1=}\left[ \delta_{e}+\frac{e_{0}\left( \Phi_{\left( W\right)
+}-\Psi\right) }{\widehat{T}_{e}}\right] \Gamma_{eout}s_{x}\text{,} 
+\label{c188}
+\end{equation}
+
+\begin{equation}
+S_{he}=S_{he0}+S_{he1}\widehat{T}_{e}=\left[ \delta_{e}+\frac{e_{0}\left(
+\Phi_{\left( W\right) }-\Psi\right) }{\widehat{T}_{e}}\right] \Gamma_{eout}%
+\widehat{T}_{e}s_{x}\text{,}   \label{c189}
+\end{equation}
+where the free input parameter $\Psi$ is the electric potential at the
+magnetic presheath edge, i.e., at the boundary between the collisional
+presheath and collisionless magnetic presheath.
+
+\bigskip
+
+\begin{itemize}
+\item  EAST boundary:
+\end{itemize}
+
+\bigskip
+
+IF $\left( \mathcal{M}_{12}<0.5\right) $ THEN:
+
+\begin{equation}
+u_{out}=b_{x}\mathcal{M}_{11}c_{s}\text{,}   \label{c190}
+\end{equation}
+
+\begin{equation}
+\Gamma_{eout}=\max\left( 0\text{, }u_{out}n_{e}-j_{x}/e_{0}\right) \text{,} 
+\label{c191}
+\end{equation}
+
+\bigskip
+
+ELSE $\left( \mathcal{M}_{12}\geq0.5\right) $:
+
+\begin{equation}
+u_{test\alpha}=u_{\alpha\left( E-2,iy\right) }\left( 1+\frac{h_{x\left(
+E-1,iy\right) }}{h_{x\left( E-2,iy\right) }}\right) -u_{\alpha\left(
+E-3,iy\right) }\frac{h_{x\left( E-1,iy\right) }}{h_{x\left( E-2,iy\right) }}%
+\text{,}   \label{c192}
+\end{equation}
+
+\begin{equation}
+u_{out\alpha}=\max\left( b_{x}\mathcal{M}_{\alpha1}c_{s\alpha}\text{, }%
+u_{test\alpha}\right) \text{,}   \label{c193}
+\end{equation}
+
+\begin{equation}
+\Gamma_{ex}=\sum_{\alpha}u_{out\alpha}Z_{\alpha}n_{\alpha}\text{,} 
+\label{c194}
+\end{equation}
+
+\begin{equation}
+\Gamma_{eout}=\max\left( 0\text{, }\Gamma_{ex}-j_{x}/e_{0}\right) \text{.} 
+\label{c195}
+\end{equation}
+
+\bigskip
+
+\begin{equation}
+S_{he0}=0\text{,}   \label{c196}
+\end{equation}
+
+\begin{equation}
+S_{he1=}-\left[ \delta_{e}+\frac{e_{0}\left( \Phi_{\left( E\right)
+}-\Psi\right) }{\widehat{T}_{e}}\right] \Gamma_{eout}s_{x}\text{,} 
+\label{c197}
+\end{equation}
+
+\begin{equation}
+S_{he}=S_{he0}+S_{he1}\widehat{T}_{e}=-\left[ \delta_{e}+\frac{e_{0}\left(
+\Phi_{\left( E\right) }-\Psi\right) }{\widehat{T}_{e}}\right] \Gamma_{eout}%
+\widehat{T}_{e}s_{x}\text{,}   \label{c198}
+\end{equation}
+where the free input parameter $\Psi$ is the electric potential at the
+magnetic presheath edge, i.e., at the boundary between the collisional
+presheath and collisionless magnetic presheath.
+
+\bigskip
+
+\paragraph{\texttt{BCENE=4} ... Prescribe the Value of the Electron
+Temperature ''Weakly'', Using as the Control Parameter Some Prescribed
+Electron Flux}
+
+\bigskip
+
+\begin{equation*}
+\mathtt{ENEPAR(IB,1)}\equiv\mathcal{T}_{e}, 
+\end{equation*}
+
+\begin{equation*}
+\mathtt{ENEPAR(IB,2)}\equiv\Gamma_{ex},\text{ }\Gamma_{ey}
+\end{equation*}
+
+\bigskip
+
+\begin{itemize}
+\item  SOUTH and NORTH boundary:
+\end{itemize}
+
+\bigskip
+
+\begin{equation}
+S_{he0}=\mathcal{\Gamma}_{ey}\mathcal{T}_{e}s_{y}\text{,}   \label{c199}
+\end{equation}
+
+\begin{equation}
+S_{he1}=-\left( \mathcal{\Gamma}_{ey}/eV\right) s_{y}\text{,}   \label{c200}
+\end{equation}
+
+\begin{equation}
+S_{he}=S_{he0}+S_{he1}\widehat{T}_{e}=\mathcal{\Gamma}_{ey}s_{y}\left( 
+\mathcal{T}_{e}-\widehat{T}_{e}/eV\right) \text{.}   \label{c201}
+\end{equation}
+
+\bigskip
+
+\begin{itemize}
+\item  WEST and EAST boundary:
+\end{itemize}
+
+\bigskip
+
+\begin{equation}
+S_{he0}=\mathcal{\Gamma}_{ex}\mathcal{T}_{e}s_{x}\text{,}   \label{c202}
+\end{equation}
+
+\begin{equation}
+S_{he1}=-\left( \mathcal{\Gamma}_{ex}/eV\right) s_{x}\text{,}   \label{c203}
+\end{equation}
+
+\begin{equation}
+S_{he}=S_{he0}+S_{he1}\widehat{T}_{e}=\mathcal{\Gamma}_{ex}s_{x}\left( 
+\mathcal{T}_{e}-\widehat{T}_{e}/eV\right) \text{.}   \label{c204}
+\end{equation}
+
+\bigskip
+
+\paragraph{\texttt{BCENE=5} ... Prescribe the Value of the Electron Energy
+Flux per Unit Area}
+
+\bigskip
+
+\begin{equation*}
+\mathtt{ENEPAR(IB,1)}\equiv Q_{hex},Q_{hey}
+\end{equation*}
+
+\bigskip
+
+\begin{itemize}
+\item  SOUTH and NORTH boundary:
+\end{itemize}
+
+\begin{equation}
+S_{he0}=Q_{hey}s_{y}\text{,}   \label{c205}
+\end{equation}
+
+\begin{equation}
+S_{he1}=0\text{,}   \label{c206}
+\end{equation}
+
+\begin{equation}
+S_{he}=S_{he0}+S_{he1}\widehat{T}_{e}=Q_{hey}s_{y}\text{.}   \label{c207}
+\end{equation}
+
+\bigskip
+
+\begin{itemize}
+\item  WEST and NORTH boundary:
+\end{itemize}
+
+\begin{equation}
+S_{he0}=Q_{hex}s_{x}\text{,}   \label{c208}
+\end{equation}
+
+\begin{equation}
+S_{he1}=0\text{,}   \label{c209}
+\end{equation}
+
+\begin{equation}
+S_{he}=S_{he0}+S_{he1}\widehat{T}_{e}=Q_{hex}s_{x}\text{.}   \label{c210}
+\end{equation}
+
+\bigskip
+
+\paragraph{\texttt{BCENE=6} ... Prescribe the Value of the Total Electron
+Energy Flux for a Constant Electron Temperature (Only for the NORTH and
+SOUTH Boundary)}
+
+\bigskip
+
+\begin{equation*}
+\mathtt{ENEPAR(IB,1)}\equiv\mathcal{Q}
+\end{equation*}
+
+\bigskip
+
+The electron temperature $\widehat{T}_{1}$, which is calculated from the
+given total electron energy flux $\mathcal{Q}$ (the physics behind that
+calculation is unclear to the author of this report), is used in the
+calculation of the boundary electron heat source.
+
+\bigskip
+
+\begin{equation}
+S_{he0}=\mathcal{VN}_{e}\widehat{T}_{1}s_{y}\text{,}   \label{c211}
+\end{equation}
+
+\begin{equation}
+S_{he1}=-\mathcal{VN}_{e}s_{y}\text{,}   \label{c212}
+\end{equation}
+
+\begin{equation}
+S_{he}=S_{he0}+S_{he1}\widehat{T}_{e}=\mathcal{VN}_{e}s_{y}\left( \widehat
+{T}_{1}-\widehat{T}_{e}\right) \text{.}   \label{c213}
+\end{equation}
+
+\bigskip
+
+\paragraph{\texttt{BCENE=7} ... Prescribe the Electron Temperature as a
+Function of Other Plasma Parameters (Not Yet Available)}
+
+\bigskip
+
+\bigskip
+
+\paragraph{\texttt{BCENE=8} ... Prescribe the Value of the Total Electron
+Energy Flux with a Constant Flux Density}
+
+\bigskip
+
+\begin{equation*}
+\mathtt{ENEPAR(IB,1)}\equiv\QTR{sl}{Q}_{hex}\QTR{sl}{,}\text{ }\QTR{sl}{Q}%
+_{hey}
+\end{equation*}
+
+\bigskip
+
+\begin{itemize}
+\item  SOUTH\ and NORTH boundary:
+\end{itemize}
+
+\bigskip
+
+\begin{equation}
+s_{tot}=\sum_{j}^{S\text{ or }N}s_{yj}\text{,}   \label{c214}
+\end{equation}
+
+\begin{equation}
+S_{he0}=\left( \QTR{sl}{Q}_{hey}/s_{tot}\right) s_{y}\text{,}   \label{c215}
+\end{equation}
+
+\begin{equation}
+S_{he1}=0\text{,}   \label{c216}
+\end{equation}
+
+\begin{equation}
+S_{he}=S_{he0}+S_{he1}\widehat{T}_{e}=\left( \QTR{sl}{Q}_{hey}/s_{tot}%
+\right) s_{y}\text{.}   \label{c217}
+\end{equation}
+
+\bigskip
+
+\begin{itemize}
+\item  WEST and NORTH boundary:
+\end{itemize}
+
+\bigskip
+
+\begin{equation}
+s_{tot}=\sum_{j}^{W\text{ or }E}s_{xj}\text{,}   \label{c218}
+\end{equation}
+
+\begin{equation}
+S_{he0}=\left( \QTR{sl}{Q}_{hex}/s_{tot}\right) s_{x}\text{,}   \label{c219}
+\end{equation}
+
+\begin{equation}
+S_{he1}=0\text{,}   \label{c220}
+\end{equation}
+
+\begin{equation}
+S_{he}=S_{he0}+S_{he1}\widehat{T}_{e}=\left( \QTR{sl}{Q}_{hex}/s_{tot}%
+\right) s_{x}\text{.}   \label{c221}
+\end{equation}
+
+\bigskip
+
+\paragraph{\texttt{BCENE=9} ... Prescribe the Value of the Decay Length for
+the Electron Temperature (Only for the SOUTH and NORTH Boundary)}
+
+\bigskip
+
+\begin{equation*}
+\mathtt{ENEPAR(IB,1)}\equiv l_{T_{e}}=\widehat{T}_{e}/\partial_{y}\widehat
+{T}_{e}
+\end{equation*}
+
+\bigskip
+
+\begin{equation}
+S_{he0}=\sum_{\alpha}Z_{\alpha}\frac{5}{2}\widehat{T}_{e}S_{p0\alpha}\text{,}
+\label{c222}
+\end{equation}
+
+\begin{equation}
+S_{he1}=-\frac{\kappa_{a}^{e}}{l_{T_{e}}}s_{y}+\sum_{\alpha}Z_{\alpha}\frac
+{5}{2}S_{p1\alpha}n_{\alpha}\text{,}   \label{c223}
+\end{equation}
+
+\begin{equation}
+S_{he}=S_{he0}+S_{he1}\widehat{T}_{e}=-\frac{\kappa_{a}^{e}}{l_{T_{e}}}%
+\widehat{T}_{e}s_{y}+\sum_{\alpha}Z_{\alpha}\frac{5}{2}\widehat{T}%
+_{e}S_{p\alpha}\text{.}   \label{c224}
+\end{equation}
+
+\bigskip
+
+\paragraph{\texttt{BCENE=10} ... Feedback Option for the Core (Only for the
+SOUTH Boundary)}
+
+\bigskip
+
+\begin{equation}
+S_{he0}=C_{he0}s_{y}\text{,}   \label{c225}
+\end{equation}
+
+\begin{equation}
+S_{he1}=0\text{,}   \label{c226}
+\end{equation}
+
+\begin{equation}
+S_{he}=S_{he0}+S_{he1}\widehat{T}_{e}=C_{he0}s_{y}\text{.}   \label{c227}
+\end{equation}
+
+\bigskip
+
+\subsubsection{Boundary Conditions for Ion Energy Equation}
+
+\bigskip
+
+\paragraph{\texttt{BCENI=1} ... Prescribe the Value of the Ion Temperature}
+
+\bigskip
+
+\begin{equation*}
+\mathtt{ENIPAR(IB,1)}\equiv\mathcal{T}_{i}
+\end{equation*}
+
+\bigskip
+
+\begin{itemize}
+\item  SOUTH and NORTH boundary:
+\end{itemize}
+
+\bigskip
+
+\begin{equation}
+S_{hi0}=\mathcal{VN}_{e}\mathcal{T}_{i}eVs_{y}\text{,}   \label{c228}
+\end{equation}
+
+\begin{equation}
+S_{hi1}=-\mathcal{VN}_{e}s_{y}\text{,}   \label{c229}
+\end{equation}
+
+\begin{equation}
+S_{hi}=S_{hi0}+S_{hi1}\widehat{T}_{e}=\mathcal{VN}_{e}s_{y}\left( \mathcal{T}%
+_{i}eV-\widehat{T}_{i}\right) \text{.}   \label{c230}
+\end{equation}
+
+\bigskip
+
+\begin{itemize}
+\item  WEST and EAST boundary:
+\end{itemize}
+
+\bigskip
+
+\begin{equation}
+S_{hi0}=\mathcal{UN}_{e}\mathcal{T}_{i}eVs_{x}\text{,}   \label{c231}
+\end{equation}
+
+\begin{equation}
+S_{hi1}=-\mathcal{UN}_{e}s_{x}\text{,}   \label{c232}
+\end{equation}
+
+\begin{equation}
+S_{hi}=S_{hi0}+S_{hi1}\widehat{T}_{i}=\mathcal{UN}_{e}s_{x}\left( \mathcal{T}%
+_{i}eV-\widehat{T}_{i}\right) \text{.}   \label{c233}
+\end{equation}
+
+\bigskip
+
+\paragraph{\texttt{BCENI=2} ... Prescribe the Value of the Gradient of the
+Ion Temperature}
+
+\bigskip
+
+\begin{equation*}
+\mathtt{ENIPAR(IB,1)}\equiv\partial_{x}\mathcal{T}_{i},\text{ }\partial _{y}%
+\mathcal{T}_{i}
+\end{equation*}
+
+\bigskip
+
+\begin{itemize}
+\item  SOUTH boundary:
+\end{itemize}
+
+\bigskip
+
+\begin{equation}
+l_{y}=\frac{1}{2}\left( h_{y1\left( ix,S\right) }+h_{y1\left( ix,S+1\right)
+}\right) \text{,}   \label{c234a}
+\end{equation}
+
+\begin{equation}
+S_{hi0}=\mathcal{VN}_{e}eVs_{y}\left[ \left( -\partial_{y}\mathcal{T}%
+_{i}\right) l_{y}+\widehat{T}_{i}\right] \text{,}   \label{c234}
+\end{equation}
+
+\begin{equation}
+S_{hi1}=-\mathcal{VN}_{e}eVs_{y}\text{,}   \label{c235}
+\end{equation}
+
+\begin{equation}
+S_{hi}=S_{hi0}+S_{hi1}\widehat{T}_{i}=\mathcal{VN}_{e}eVs_{y}\left[ \left(
+-\partial_{y}\mathcal{T}_{i}\right) l_{y}\right] \text{.}   \label{c236}
+\end{equation}
+
+\bigskip
+
+\begin{itemize}
+\item  NORTH boundary:
+\end{itemize}
+
+\bigskip
+
+\begin{equation}
+l_{y}=\frac{1}{2}\left( h_{y1\left( ix,N-1\right) }+h_{y1\left( ix,N\right)
+}\right) \text{,}   \label{c237a}
+\end{equation}
+
+\begin{equation}
+S_{hi0}=\mathcal{VN}_{e}eVs_{y}\left[ \left( \partial_{y}\mathcal{T}%
+_{i}\right) l_{y}+\widehat{T}_{i}\right] \text{,}   \label{c237}
+\end{equation}
+
+\begin{equation}
+S_{hi1}=-\mathcal{VN}_{e}eVs_{y}\text{,}   \label{c238}
+\end{equation}
+
+\begin{equation}
+S_{hi}=S_{hi0}+S_{hi1}\widehat{T}_{i}=\mathcal{VN}_{e}eVs_{y}\left[ \left(
+\partial_{y}\mathcal{T}_{i}\right) l_{y}\right] \text{.}   \label{c239}
+\end{equation}
+
+\bigskip
+
+\begin{itemize}
+\item  WEST boundary:
+\end{itemize}
+
+\bigskip
+
+\begin{equation}
+l_{x}=\frac{1}{2}\left( h_{x\left( W,iy\right) }+h_{x\left( W+1,iy\right)
+}\right) \text{,}   \label{c240a}
+\end{equation}
+
+\begin{equation}
+S_{hi0}=\mathcal{UN}_{e}eVs_{x}\left[ \left( -\partial_{x}\mathcal{T}%
+_{i}\right) l_{x}+\widehat{T}_{i}\right] \text{,}   \label{c240}
+\end{equation}
+
+\begin{equation}
+S_{hi1}=-\mathcal{UN}_{e}eVs_{x}\text{,}   \label{c241}
+\end{equation}
+
+\begin{equation}
+S_{hi}=S_{hi0}+S_{hi1}\widehat{T}_{i}=\mathcal{UN}_{e}eVs_{x}\left[ \left(
+-\partial_{x}\mathcal{T}_{i}\right) l_{x}\right] \text{.}   \label{c242}
+\end{equation}
+
+\bigskip
+
+\begin{itemize}
+\item  EAST boundary:
+\end{itemize}
+
+\bigskip
+
+\begin{equation}
+l_{x}=\frac{1}{2}\left( h_{x\left( E-1,iy\right) }+h_{x\left( E,iy\right)
+}\right) \text{,}   \label{c243a}
+\end{equation}
+
+\begin{equation}
+S_{hi0}=\mathcal{UN}_{e}eVs_{x}\left[ \left( \partial_{x}\mathcal{T}%
+_{i}\right) l_{x}+\widehat{T}_{i}\right] \text{,}   \label{c243}
+\end{equation}
+
+\begin{equation}
+S_{hi1}=-\mathcal{UN}_{e}eVs_{x}\text{,}   \label{c244}
+\end{equation}
+
+\begin{equation}
+S_{hi}=S_{hi0}+S_{hi1}\widehat{T}_{i}=\mathcal{UN}_{e}eVs_{x}\left[ \left(
+\partial_{x}\mathcal{T}_{i}\right) l_{x}\right] \text{.}   \label{c245}
+\end{equation}
+
+\bigskip
+
+\paragraph{\texttt{BCENI=3} ... Sheath Conditions, Ion Energy Transmission
+Coefficients Are the Free Input Parameters (Only for the WEST and EAST
+Boundary)}
+
+\bigskip
+
+\begin{equation*}
+\mathtt{ENIPAR(IB,1)}\equiv\delta_{i1}, 
+\end{equation*}
+
+\begin{equation*}
+\mathtt{ENIPAR(IB,2)}\equiv\delta_{i2}, 
+\end{equation*}
+
+\begin{equation*}
+\mathtt{MOMPAR(IS,IB,1)}\equiv\mathcal{M}_{\alpha1}, 
+\end{equation*}
+
+\begin{equation*}
+\mathtt{MOMPAR(1,IB,2)}\equiv\mathcal{M}_{12}, 
+\end{equation*}
+
+\begin{equation*}
+\mathtt{POTPAR(IB,2)}\equiv\Psi 
+\end{equation*}
+
+\bigskip
+
+\begin{itemize}
+\item  WEST boundary:
+\end{itemize}
+
+\bigskip
+
+IF $\left( \mathcal{M}_{12}<0.5\right) $ THEN:
+
+\begin{equation}
+u_{out}=b_{x}\mathcal{M}_{11}c_{s}\text{,}   \label{c246}
+\end{equation}
+
+\begin{equation}
+u_{p}=\frac{u_{out}}{b_{x}}+\sqrt{\frac{1}{b_{x}^{2}}-1}u_{D1}\text{,} 
+\label{c247}
+\end{equation}
+
+\begin{equation}
+S_{hi0}=-\sum_{\alpha}\delta_{i2}\frac{1}{2}u_{out}A_{\alpha}m_{p}n_{\alpha
+}\left( u_{p}^{2}+u_{D\alpha}^{2}\right) s_{x}\text{,}   \label{c248}
+\end{equation}
+
+\begin{equation}
+S_{hi1}=-\sum_{\alpha}u_{out}\delta_{i1}n_{\alpha}s_{x}\text{,} 
+\label{c249}
+\end{equation}
+
+\begin{equation}
+S_{hi}=S_{hi0}+S_{hi1}\widehat{T}_{i}=-\sum_{\alpha}n_{\alpha}u_{out}s_{x}%
+\left[ \delta_{i2}\frac{1}{2}A_{\alpha}m_{p}\left(
+u_{p}^{2}+u_{D\alpha}^{2}\right) +\delta_{i1}\widehat{T}_{i}\right] \text{,} 
+\label{c250}
+\end{equation}
+
+\bigskip
+
+ELSE $\left( \mathcal{M}_{12}\geq0.5\right) $:
+
+\begin{equation}
+u_{test\alpha}=u_{\alpha\left( W+1,iy\right) }\left( 1+\frac{h_{x\left(
+W+1,iy\right) }}{h_{x\left( W+2,iy\right) }}\right) -u_{\alpha\left(
+W+2,iy\right) }\frac{h_{x\left( W+1,iy\right) }}{h_{x\left( W+2,iy\right) }}%
+\text{,}   \label{c251}
+\end{equation}
+
+\begin{equation}
+u_{out\alpha}=\max\left( b_{x}\mathcal{M}_{\alpha1}c_{s\alpha}\text{, }%
+-u_{test\alpha}\right) \text{,}   \label{cc251}
+\end{equation}
+
+\begin{equation}
+u_{p\alpha}=\frac{u_{out\alpha}}{b_{x}}+\sqrt{\frac{1}{b_{x}^{2}}-1}%
+u_{D\alpha}\text{,}   \label{c252}
+\end{equation}
+
+\begin{equation}
+S_{hi0}=-\sum_{\alpha}\delta_{i2}\frac{1}{2}u_{out\alpha}A_{\alpha}m_{p}n_{%
+\alpha}\left( u_{p\alpha}^{2}+u_{D\alpha}^{2}\right) s_{x}\text{,} 
+\label{c253}
+\end{equation}
+
+\begin{equation}
+S_{hi1}=-\sum_{\alpha}u_{out\alpha}\delta_{i1}n_{\alpha}s_{x}\text{,} 
+\label{c254}
+\end{equation}
+
+\begin{equation}
+S_{hi}=S_{hi0}+S_{hi1}\widehat{T}_{i}=-\sum_{\alpha}n_{\alpha}u_{out\alpha
+}s_{x}\left[ \delta_{i2}\frac{1}{2}A_{\alpha}m_{p}\left(
+u_{p\alpha}^{2}+u_{D\alpha}^{2}\right) +\delta_{i1}\widehat{T}_{i}\right] 
+\text{.}   \label{c255}
+\end{equation}
+
+\bigskip
+
+\begin{itemize}
+\item  EAST boundary:
+\end{itemize}
+
+\bigskip
+
+IF $\left( \mathcal{M}_{12}<0.5\right) $ THEN:
+
+\begin{equation}
+u_{out}=b_{x}\mathcal{M}_{11}c_{s}\text{,}   \label{c256}
+\end{equation}
+
+\begin{equation}
+u_{p}=\frac{u_{out}}{b_{x}}-\sqrt{\frac{1}{b_{x}^{2}}-1}u_{D1}\text{,} 
+\label{c257}
+\end{equation}
+
+\begin{equation}
+S_{hi0}=-\sum_{\alpha}\delta_{i2}\frac{1}{2}u_{out}A_{\alpha}m_{p}n_{\alpha
+}\left( u_{p}^{2}+u_{D\alpha}^{2}\right) s_{x}\text{,}   \label{c258}
+\end{equation}
+
+\begin{equation}
+S_{hi1}=-\sum_{\alpha}u_{out}\delta_{i1}n_{\alpha}s_{x}\text{,} 
+\label{c259}
+\end{equation}
+
+\begin{equation}
+S_{hi}=S_{hi0}+S_{hi1}\widehat{T}_{i}=-\sum_{\alpha}n_{\alpha}u_{out}s_{x}%
+\left[ \delta_{i2}\frac{1}{2}A_{\alpha}m_{p}\left(
+u_{p}^{2}+u_{D\alpha}^{2}\right) +\delta_{i1}\widehat{T}_{i}\right] \text{,} 
+\label{c260}
+\end{equation}
+
+\bigskip
+
+ELSE $\left( \mathcal{M}_{12}\geq0.5\right) $:
+
+\begin{equation}
+u_{test\alpha}=u_{\alpha\left( E-2,iy\right) }\left( 1+\frac{h_{x\left(
+E-1,iy\right) }}{h_{x\left( E-2,iy\right) }}\right) -u_{\alpha\left(
+E-3,iy\right) }\frac{h_{x\left( E-1,iy\right) }}{h_{x\left( E-2,iy\right) }}%
+\text{,}   \label{c261}
+\end{equation}
+
+\begin{equation}
+u_{out\alpha}=\max\left( b_{x}\mathcal{M}_{\alpha1}c_{s\alpha}\text{, }%
+u_{test\alpha}\right) \text{,}   \label{c262}
+\end{equation}
+
+\begin{equation}
+u_{p\alpha}=\frac{u_{out\alpha}}{b_{x}}-\sqrt{\frac{1}{b_{x}^{2}}-1}%
+u_{D\alpha}\text{,}   \label{c263}
+\end{equation}
+
+\begin{equation}
+S_{hi0}=-\sum_{\alpha}\delta_{i2}\frac{1}{2}u_{out\alpha}A_{\alpha}m_{p}n_{%
+\alpha}\left( u_{p\alpha}^{2}+u_{D\alpha}^{2}\right) s_{x}\text{,} 
+\label{c264}
+\end{equation}
+
+\begin{equation}
+S_{hi1}=-\sum_{\alpha}u_{out\alpha}\delta_{i1}n_{\alpha}s_{x}\text{,} 
+\label{c265}
+\end{equation}
+
+\begin{equation}
+S_{hi}=S_{hi0}+S_{hi1}\widehat{T}_{i}=-\sum_{\alpha}n_{\alpha}u_{out\alpha
+}s_{x}\left[ \delta_{i2}\frac{1}{2}A_{\alpha}m_{p}\left(
+u_{p\alpha}^{2}+u_{D\alpha}^{2}\right) +\delta_{i1}\widehat{T}_{i}\right] 
+\text{.}   \label{c266}
+\end{equation}
+
+\bigskip
+
+\paragraph{\texttt{BCENI=4} ... Prescribe the Value of the Ion Temperature
+''Weakly'', Using as the Control Parameter Some Prescribed Ion Flux}
+
+\bigskip
+
+\begin{equation*}
+\mathtt{ENIPAR(IB,1)}\equiv\mathcal{T}_{i}, 
+\end{equation*}
+
+\begin{equation*}
+\mathtt{ENIPAR(IB,2)}\equiv\Gamma_{ix},\text{ }\Gamma_{iy}
+\end{equation*}
+
+\bigskip
+
+\begin{itemize}
+\item  SOUTH and NORTH boundary:
+\end{itemize}
+
+\bigskip
+
+\begin{equation}
+S_{hi0}=\mathcal{\Gamma}_{iy}\mathcal{T}_{i}s_{y}\text{,}   \label{c267}
+\end{equation}
+
+\begin{equation}
+S_{hi1}=-\left( \mathcal{\Gamma}_{iy}/eV\right) s_{y}\text{,}   \label{c268}
+\end{equation}
+
+\begin{equation}
+S_{hi}=S_{hi0}+S_{hi1}\widehat{T}_{i}=\mathcal{\Gamma}_{iy}s_{y}\left( 
+\mathcal{T}_{i}-\widehat{T}_{i}/eV\right) \text{.}   \label{c269}
+\end{equation}
+
+\bigskip
+
+\begin{itemize}
+\item  WEST and EAST boundary:
+\end{itemize}
+
+\bigskip
+
+\begin{equation}
+S_{hi0}=\mathcal{\Gamma}_{ix}\mathcal{T}_{i}s_{x}\text{,}   \label{c270}
+\end{equation}
+
+\begin{equation}
+S_{hi1}=-\left( \mathcal{\Gamma}_{ix}/eV\right) s_{x}\text{,}   \label{c271}
+\end{equation}
+
+\begin{equation}
+S_{hi}=S_{hi0}+S_{hi1}\widehat{T}_{i}=\mathcal{\Gamma}_{ix}s_{x}\left( 
+\mathcal{T}_{i}-\widehat{T}_{i}/eV\right) \text{.}   \label{c272}
+\end{equation}
+
+\bigskip
+
+\paragraph{\texttt{BCENI=5} ... Prescribe the Value of the Ion Energy Flux
+per Unit Area}
+
+\bigskip
+
+\begin{equation*}
+\mathtt{ENIPAR(IB,1)}\equiv Q_{hix},Q_{hiy}
+\end{equation*}
+
+\bigskip
+
+\begin{itemize}
+\item  SOUTH and NORTH boundary:
+\end{itemize}
+
+\begin{equation}
+S_{hi0}=Q_{hiy}s_{y}\text{,}   \label{c273}
+\end{equation}
+
+\begin{equation}
+S_{hi1}=0\text{,}   \label{c274}
+\end{equation}
+
+\begin{equation}
+S_{hi}=S_{hi0}+S_{hi1}\widehat{T}_{i}=Q_{hiy}s_{y}\text{.}   \label{c275}
+\end{equation}
+
+\bigskip
+
+\begin{itemize}
+\item  WEST and NORTH boundary:
+\end{itemize}
+
+\begin{equation}
+S_{hi0}=Q_{hix}s_{x}\text{,}   \label{c276}
+\end{equation}
+
+\begin{equation}
+S_{hi1}=0\text{,}   \label{c277}
+\end{equation}
+
+\begin{equation}
+S_{hi}=S_{hi0}+S_{hi1}\widehat{T}_{i}=Q_{hix}s_{x}\text{.}   \label{c278}
+\end{equation}
+
+\bigskip
+
+\paragraph{\texttt{BCENI=6} ... Prescribe the Value of the Total Ion Energy
+Flux for a Constant Ion Temperature (Only for the NORTH and SOUTH Boundary)}
+
+\bigskip
+
+\begin{equation*}
+\mathtt{ENIPAR(IB,1)}\equiv\mathcal{Q}
+\end{equation*}
+
+\bigskip
+
+The ion temperature $\widehat{T}_{1}$, which is calculated from the given
+total ion energy flux $\mathcal{Q}$ (the physics behind that calculation is
+unclear to the author of this report), is used in the calculation of the
+boundary ion heat source.
+
+\bigskip
+
+\begin{equation}
+S_{hi0}=\mathcal{VN}_{e}\widehat{T}_{1}s_{y}\text{,}   \label{c279}
+\end{equation}
+
+\begin{equation}
+S_{hi1}=-\mathcal{VN}_{e}s_{y}\text{,}   \label{c280}
+\end{equation}
+
+\begin{equation}
+S_{hi}=S_{hi0}+S_{hi1}\widehat{T}_{i}=\mathcal{VN}_{e}s_{y}\left( \widehat
+{T}_{1}-\widehat{T}_{i}\right) \text{.}   \label{c281}
+\end{equation}
+
+\bigskip
+
+\paragraph{\texttt{BCENI=7} ... Prescribe the Ion Temperature as a Function
+of Other Plasma Parameters (Not Yet Available)}
+
+\bigskip
+
+\bigskip
+
+\paragraph{\texttt{BCENI=8} ... Prescribe the Value of the Total Ion Energy
+Flux with a Constant Flux Density}
+
+\bigskip
+
+\begin{equation*}
+\mathtt{ENIPAR(IB,1)}\equiv\QTR{sl}{Q}_{hix}\QTR{sl}{,}\text{ }\QTR{sl}{Q}%
+_{hiy}
+\end{equation*}
+
+\bigskip
+
+\begin{itemize}
+\item  SOUTH\ and NORTH boundary:
+\end{itemize}
+
+\bigskip
+
+\begin{equation}
+s_{tot}=\sum_{j}^{S\text{ or }N}s_{yj}\text{,}   \label{c282}
+\end{equation}
+
+\begin{equation}
+S_{hi0}=\left( \QTR{sl}{Q}_{hiy}/s_{tot}\right) s_{y}\text{,}   \label{c283}
+\end{equation}
+
+\begin{equation}
+S_{hi1}=0\text{,}   \label{c284}
+\end{equation}
+
+\begin{equation}
+S_{hi}=S_{hi0}+S_{hi1}\widehat{T}_{i}=\left( \QTR{sl}{Q}_{hiy}/s_{tot}%
+\right) s_{y}\text{.}   \label{c285}
+\end{equation}
+
+\bigskip
+
+\begin{itemize}
+\item  WEST and NORTH boundary:
+\end{itemize}
+
+\bigskip
+
+\begin{equation}
+s_{tot}=\sum_{j}^{W\text{ or }E}s_{xj}\text{,}   \label{c286}
+\end{equation}
+
+\begin{equation}
+S_{hi0}=\left( \QTR{sl}{Q}_{hix}/s_{tot}\right) s_{x}\text{,}   \label{c287}
+\end{equation}
+
+\begin{equation}
+S_{hi1}=0\text{,}   \label{c288}
+\end{equation}
+
+\begin{equation}
+S_{hi}=S_{hi0}+S_{hi1}\widehat{T}_{i}=\left( \QTR{sl}{Q}_{hix}/s_{tot}%
+\right) s_{x}\text{.}   \label{c289}
+\end{equation}
+
+\bigskip
+
+\paragraph{\texttt{BCENI=9} ... Prescribe the Value of the Decay Length for
+the Ion Temperature (Only for the SOUTH and NORTH Boundary)}
+
+\bigskip
+
+\begin{equation*}
+\mathtt{ENIPAR(IB,1)}\equiv l_{T_{i}}=\widehat{T}_{i}/\partial_{y}\widehat
+{T}_{i}
+\end{equation*}
+
+\bigskip
+
+\begin{equation}
+S_{hi0}=\sum_{\alpha}Z_{\alpha}\frac{5}{2}\widehat{T}_{i}S_{p0\alpha}\text{,}
+\label{c290}
+\end{equation}
+
+\begin{equation}
+S_{hi1}=-\frac{\kappa_{a}^{i}}{l_{T_{i}}}s_{y}+\sum_{\alpha}Z_{\alpha}\frac
+{5}{2}S_{p1\alpha}n_{\alpha}\text{,}   \label{c291}
+\end{equation}
+
+\begin{equation}
+S_{hi}=S_{hi0}+S_{hi1}\widehat{T}_{i}=-\frac{\kappa_{a}^{i}}{l_{T_{i}}}%
+\widehat{T}_{i}s_{y}+\sum_{\alpha}Z_{\alpha}\frac{5}{2}\widehat{T}%
+_{i}S_{p\alpha}\text{.}   \label{c292}
+\end{equation}
+
+\bigskip
+
+\paragraph{\texttt{BCENI=10} ... Feedback Option for the Core (Only for the
+SOUTH Boundary)}
+
+\bigskip
+
+\begin{equation}
+S_{hi0}=C_{hi0}s_{y}\text{,}   \label{c293}
+\end{equation}
+
+\begin{equation}
+S_{hi1}=0\text{,}   \label{c294}
+\end{equation}
+
+\begin{equation}
+S_{hi}=S_{hi0}+S_{hi1}\widehat{T}_{i}=C_{hi0}s_{y}\text{.}   \label{c295}
+\end{equation}
+
+\bigskip
+
+\bigskip
+
+\subsubsection{Boundary Conditions for the Electric Potential Equation}
+
+\bigskip
+
+\paragraph{\texttt{BCPOT=1} ... Prescribe the Value of the Potential}
+
+\bigskip
+
+\begin{equation*}
+\mathtt{POTPAR(IB,1)}\equiv\Psi 
+\end{equation*}
+
+\bigskip
+
+\begin{itemize}
+\item  SOUTH and NORTH boundary:
+\end{itemize}
+
+\bigskip
+
+\begin{equation}
+S_{ch0}=\mathcal{V}\Psi s_{y}\text{,}   \label{c296}
+\end{equation}
+
+\begin{equation}
+S_{ch1}=-\mathcal{V}s_{y}\text{,}   \label{c297}
+\end{equation}
+
+\begin{equation}
+S_{ch}=S_{ch0}+S_{ch1}\Phi=\mathcal{V}s_{y}\left( \Psi-\Phi\right) \text{.} 
+\label{c298}
+\end{equation}
+
+\bigskip
+
+\begin{itemize}
+\item  WEST and EAST boundary:
+\end{itemize}
+
+\bigskip
+
+\begin{equation}
+S_{ch0}=\mathcal{U}\Psi s_{x}\text{,}   \label{c299}
+\end{equation}
+
+\begin{equation}
+S_{ch1}=-\mathcal{U}s_{x}\text{,}   \label{c300}
+\end{equation}
+
+\begin{equation}
+S_{ch}=S_{ch0}+S_{ch1}\Phi=\mathcal{U}s_{x}\left( \Psi-\Phi\right) \text{,} 
+\label{c301}
+\end{equation}
+where $\Psi$ is the potential at the magnetic presheath edge and $\Phi$ is
+the potential at the boundary.
+
+\bigskip
+
+\paragraph{\texttt{BCPOT=2} ... Prescribe the Value of the Gradient of the
+Potential}
+
+\bigskip
+
+\begin{equation*}
+\mathtt{POTPAR(IB,1)}\equiv\partial_{x}\Psi,\text{ }\partial_{y}\Psi 
+\end{equation*}
+
+\bigskip
+
+\begin{itemize}
+\item  SOUTH boundary:
+\end{itemize}
+
+\bigskip
+
+\begin{equation}
+l_{y}=\frac{1}{2}\left( h_{y1\left( ix,S\right) }+h_{y1\left( ix,S+1\right)
+}\right) \text{,}   \label{c302a}
+\end{equation}
+
+\begin{equation}
+S_{ch0}=\mathcal{V}s_{y}\left[ \left( -\partial_{y}\Psi\right) l_{y}+\Phi%
+\right] \text{,}   \label{c302}
+\end{equation}
+
+\begin{equation}
+S_{ch1}=-\mathcal{V}s_{y}\text{,}   \label{c303}
+\end{equation}
+
+\begin{equation}
+S_{ch}=S_{ch0}+S_{ch1}\Phi=\mathcal{V}s_{y}\left[ \left(
+-\partial_{y}\Psi\right) l_{y}\right] \text{.}   \label{c304}
+\end{equation}
+
+\bigskip
+
+\begin{itemize}
+\item  NORTH boundary:
+\end{itemize}
+
+\bigskip
+
+\begin{equation}
+l_{y}=\frac{1}{2}\left( h_{y1\left( ix,N-1\right) }+h_{y1\left( ix,N\right)
+}\right) \text{,}   \label{c305a}
+\end{equation}
+
+\begin{equation}
+S_{ch0}=\mathcal{V}s_{y}\left[ \left( \partial_{y}\Psi\right) l_{y}+\Phi%
+\right] \text{,}   \label{c305}
+\end{equation}
+
+\begin{equation}
+S_{ch1}=-\mathcal{V}s_{y}\text{,}   \label{c306}
+\end{equation}
+
+\begin{equation}
+S_{ch}=S_{ch0}+S_{ch1}\Phi=\mathcal{V}s_{y}\left[ \left(
+\partial_{y}\Psi\right) l_{y}\right] \text{.}   \label{c307}
+\end{equation}
+
+\bigskip
+
+\begin{itemize}
+\item  WEST boundary:
+\end{itemize}
+
+\bigskip
+
+\begin{equation}
+l_{x}=\frac{1}{2}\left( h_{x\left( W,iy\right) }+h_{x\left( W+1,iy\right)
+}\right) \text{,}   \label{c308a}
+\end{equation}
+
+\begin{equation}
+S_{ch0}=\mathcal{U}s_{x}\left[ \left( -\partial_{x}\Psi\right) l_{x}+\Phi%
+\right] \text{,}   \label{c308}
+\end{equation}
+
+\begin{equation}
+S_{ch1}=-\mathcal{U}s_{x}\text{,}   \label{c309}
+\end{equation}
+
+\begin{equation}
+S_{ch}=S_{ch0}+S_{ch1}\Phi=\mathcal{U}s_{x}\left[ \left(
+-\partial_{x}\Psi\right) l_{x}\right] \text{.}   \label{c310}
+\end{equation}
+
+\bigskip
+
+\begin{itemize}
+\item  EAST boundary:
+\end{itemize}
+
+\bigskip
+
+\begin{equation}
+l_{x}=\frac{1}{2}\left( h_{x\left( E-1,iy\right) }+h_{x\left( E,iy\right)
+}\right) \text{,}   \label{c311a}
+\end{equation}
+
+\begin{equation}
+S_{ch0}=\mathcal{U}s_{x}\left[ \left( \partial_{x}\Psi\right) l_{x}+\Phi%
+\right] \text{,}   \label{c311}
+\end{equation}
+
+\begin{equation}
+S_{ch1}=-\mathcal{U}s_{x}\text{,}   \label{c312}
+\end{equation}
+
+\begin{equation}
+S_{ch}=S_{ch0}+S_{ch1}\Phi=\mathcal{U}s_{x}\left[ \left(
+\partial_{x}\Psi\right) l_{x}\right] \text{.}   \label{c313}
+\end{equation}
+
+\bigskip
+
+\paragraph{\texttt{BCPOT=3} ... Sheath Conditions (Only for the WEST and
+EAST Boundary)}
+
+\bigskip
+
+\begin{equation*}
+\mathtt{POTPAR(IB,2)}\equiv\Psi 
+\end{equation*}
+
+\bigskip
+
+\begin{itemize}
+\item  WEST boundary:
+\end{itemize}
+
+\begin{equation}
+j_{i}=-e_{0}\sum_{\alpha}Z_{\alpha}\Gamma_{\alpha x}\text{,}   \label{c314}
+\end{equation}
+
+\begin{equation}
+j_{e}=\frac{1}{\sqrt{2\pi}}e_{0}n_{e}v_{th,e}S_{1}\exp\left[ -\frac
+{e_{0}\left( \Phi-\Psi\right) }{\widehat{T}_{e}}\right] \text{,} 
+\label{c315}
+\end{equation}
+
+\begin{equation}
+S_{ch0}=\left( 1-\gamma_{se}\right) j_{e}-j_{i}+\max\left( j_{i},\left(
+1-\gamma_{se}\right) j_{e}\right) e_{0}\Phi/\widehat{T}_{e}\text{,} 
+\label{c316}
+\end{equation}
+
+\begin{equation}
+S_{ch1}=-\max\left( j_{i},\left( 1-\gamma_{se}\right) j_{e}\right) e_{0}/%
+\widehat{T}_{e}\text{,}   \label{c317}
+\end{equation}
+
+\begin{equation}
+S_{ch}=S_{ch0}+S_{ch1}\Phi=\left( 1-\gamma_{se}\right) j_{e}-j_{i}\text{.} 
+\label{c318}
+\end{equation}
+
+\bigskip
+
+\begin{itemize}
+\item  EAST boundary:
+\end{itemize}
+
+\begin{equation}
+j_{i}=e_{0}\sum_{\alpha}Z_{\alpha}\Gamma_{\alpha x}\text{,}   \label{c319}
+\end{equation}
+
+\begin{equation}
+j_{e}=\frac{1}{\sqrt{2\pi}}e_{0}n_{e}v_{th,e}S_{1}\exp\left[ -\frac
+{e_{0}\left( \Phi-\Psi\right) }{\widehat{T}_{e}}\right] \text{,} 
+\label{c320}
+\end{equation}
+
+\begin{equation}
+S_{ch0}=\left( 1-\gamma_{se}\right) j_{e}-j_{i}+\max\left( j_{i},\left(
+1-\gamma_{se}\right) j_{e}\right) e_{0}\Phi/\widehat{T}_{e}\text{,} 
+\label{c321}
+\end{equation}
+
+\begin{equation}
+S_{ch1}=-\max\left( j_{i},\left( 1-\gamma_{se}\right) j_{e}\right) e_{0}/%
+\widehat{T}_{e}\text{,}   \label{c322}
+\end{equation}
+
+\begin{equation}
+S_{ch}=S_{ch0}+S_{ch1}\Phi=\left( 1-\gamma_{se}\right) j_{e}-j_{i}\text{.} 
+\label{c323}
+\end{equation}
+
+\bigskip
+
+\bigskip
+
+\paragraph{\texttt{BCPOT=4} ... Prescribe the Value of the Potential
+''Weakly'', Using the Prescribed Control Parameter, Which Corresponds to the
+Specific Electric Conductivity}
+
+\bigskip
+
+\begin{equation*}
+\mathtt{POTPAR(IB,1)}\equiv\Psi\text{,}
+\end{equation*}
+
+\begin{equation*}
+\mathtt{POTPAR(IB,2)}\equiv\sigma_{x}\text{, }\sigma_{y}
+\end{equation*}
+
+\bigskip
+
+\begin{itemize}
+\item  SOUTH and NORTH boundary:
+\end{itemize}
+
+\begin{equation}
+S_{ch0}=\sigma_{y}\Psi s_{y}\text{,}   \label{c324}
+\end{equation}
+
+\begin{equation}
+S_{ch1}=-\sigma_{y}s_{y}\text{,}   \label{c325}
+\end{equation}
+
+\begin{equation}
+S_{ch}=S_{ch0}+S_{ch1}\Phi=\sigma_{y}s_{y}\left( \Psi-\Phi\right) \text{.} 
+\label{c326}
+\end{equation}
+
+\bigskip
+
+\begin{itemize}
+\item  WEST and EAST boundary:
+\end{itemize}
+
+\begin{equation}
+S_{ch0}=\sigma_{x}\Psi s_{x}\text{,}   \label{c327}
+\end{equation}
+
+\begin{equation}
+S_{ch1}=-\sigma_{x}s_{x}\text{,}   \label{c328}
+\end{equation}
+
+\begin{equation}
+S_{ch}=S_{ch0}+S_{ch1}\Phi=\sigma_{x}s_{x}\left( \Psi-\Phi\right) \text{.} 
+\label{c329}
+\end{equation}
+
+\bigskip
+
+\bigskip
+
+\paragraph{\texttt{BCPOT=5} ... Prescribe the Value of the Current Flux
+Density per Unit Area}
+
+\bigskip
+
+\begin{equation}
+\mathtt{POTPAR(IB,1)}\equiv j_{x}\text{, }j_{y}   \label{c330}
+\end{equation}
+
+\bigskip
+
+\begin{itemize}
+\item  SOUTH and NORTH boundary:
+\end{itemize}
+
+\begin{equation}
+S_{ch0}=j_{y}s_{y}\text{,}   \label{c331}
+\end{equation}
+
+\begin{equation}
+S_{ch1}=0\text{,}   \label{c332}
+\end{equation}
+
+\begin{equation}
+S_{ch}=S_{ch0}+S_{ch1}\Phi=j_{y}s_{y}\text{.}   \label{c333}
+\end{equation}
+
+\bigskip
+
+\begin{itemize}
+\item  WEST and EAST boundary:
+\end{itemize}
+
+\begin{equation}
+S_{ch0}=j_{x}s_{x}\text{,}   \label{c334}
+\end{equation}
+
+\begin{equation}
+S_{ch1}=0\text{,}   \label{c335}
+\end{equation}
+
+\begin{equation}
+S_{ch}=S_{ch0}+S_{ch1}\Phi=j_{x}s_{x}\text{.}   \label{c336}
+\end{equation}
+
+\bigskip
+
+\bigskip
+
+\paragraph{\texttt{BCPOT=6} ... Prescribe the Value of the Total Current
+Flux Density for a Constant Potential (Not Yet Available)}
+
+\bigskip
+
+\bigskip
+
+\paragraph{\texttt{BCPOT=7} ... Prescribe the Potential as a Function of
+Other Plasma Parameters (Not Yet Available)}
+
+\bigskip
+
+\bigskip
+
+\paragraph{\texttt{BCPOT=8} ... Prescribe the Value of the Total Electric
+Current with a Constant Flux Density}
+
+\bigskip
+
+\begin{equation*}
+\mathtt{POTPAR(IB,1)}\equiv J_{x}\text{, }J_{y}
+\end{equation*}
+
+\bigskip
+
+\begin{itemize}
+\item  SOUTH and NORTH boundary:
+\end{itemize}
+
+\begin{equation}
+s_{tot}=\sum_{j}^{S\text{ or }N}s_{yj}\text{,}   \label{c337}
+\end{equation}
+
+\begin{equation}
+S_{ch0}=\left( J_{y}/s_{tot}\right) s_{y}\text{,}   \label{c338}
+\end{equation}
+
+\begin{equation}
+S_{ch1}=0\text{,}   \label{c339}
+\end{equation}
+
+\begin{equation}
+S_{ch}=S_{ch0}+S_{ch1}\Phi=\left( J_{y}/s_{tot}\right) s_{y}\text{.} 
+\label{c340}
+\end{equation}
+
+\bigskip
+
+\begin{itemize}
+\item  WEST and EAST boundary:
+\end{itemize}
+
+\begin{equation}
+s_{tot}=\sum_{j}^{W\text{ or }E}s_{xj}\text{,}   \label{c341}
+\end{equation}
+
+\begin{equation}
+S_{ch0}=\left( J_{x}/s_{tot}\right) s_{x}\text{,}   \label{c342}
+\end{equation}
+
+\begin{equation}
+S_{ch1}=0\text{,}   \label{c343}
+\end{equation}
+
+\begin{equation}
+S_{ch}=S_{ch0}+S_{ch1}\Phi=\left( J_{x}/s_{tot}\right) s_{x}\text{.} 
+\label{c344}
+\end{equation}
+
+\bigskip
+
+\paragraph{\texttt{BCPOT=9} ... Prescribe the Value of the Decay Length for
+the Potential (Only for the SOUTH and NORTH Boundary)}
+
+\bigskip
+
+\begin{equation*}
+\mathtt{POTPAR(IB,1)}\equiv l_{\Phi}=\Phi/\partial_{y}\Phi 
+\end{equation*}
+
+\bigskip
+
+\begin{equation}
+S_{ch0}=0\text{,}   \label{c345}
+\end{equation}
+
+\begin{equation}
+S_{ch1}=-\frac{\sigma_{a}s_{y}}{l_{\Phi}e_{0}n_{e}}\text{,}^{\left(
+\ast\right) }   \label{c346}
+\end{equation}
+
+\begin{equation}
+S_{ch}=S_{ch0}+S_{ch1}\Phi=-\frac{\sigma_{a}\Phi s_{y}}{l_{\Phi}e_{0}n_{e}}%
+\text{.}^{\left( \ast\right) }   \label{c347}
+\end{equation}
+
+\bigskip
+
+$^{\left( \ast\right) }$WARNING: PROBABLY\ ERROR\ OR\ THE\ SPECIFIC\
+ELECTRIC\ CONDUCTIVITY IS\ GIVEN\ BY $\frac{\sigma_{a}}{e_{0}n_{e}}$!
+
+\bigskip
+
+\bigskip
+
+\subsubsection{Interior Boundary at the ''Dead'' Regions}
+
+\bigskip
+
+\paragraph{Particle Sources}
+
+\bigskip
+
+\begin{equation}
+S_{p0\alpha}=\mathcal{V}n_{\alpha\left( is\right) }\text{,}   \label{c348}
+\end{equation}
+
+\begin{equation}
+S_{p1\alpha}=-\mathcal{V}\text{,}   \label{c349}
+\end{equation}
+
+\begin{equation}
+S_{p\alpha}=S_{p0\alpha}+S_{p1\alpha}n_{\alpha}=\mathcal{V}\left(
+n_{\alpha\left( is\right) }-n_{\alpha}\right) \text{.}   \label{c350}
+\end{equation}
+
+\bigskip
+
+\paragraph{Momentum Sources}
+
+\bigskip
+
+\begin{equation}
+S_{m0\alpha}=0\text{,}   \label{c351}
+\end{equation}
+
+\begin{equation}
+S_{m1\alpha}=-\mathcal{VN}_{e}A_{\alpha}s_{y}\text{,}   \label{c352}
+\end{equation}
+
+\begin{equation}
+S_{m\alpha}=S_{m0\alpha}+S_{m1\alpha}u_{\alpha}=-\mathcal{VN}_{e}A_{\alpha
+}s_{y}u_{\alpha}\text{.}   \label{c353}
+\end{equation}
+
+\bigskip
+
+\paragraph{Electron Heat Source}
+
+\bigskip
+
+\begin{equation}
+S_{he0}=\mathcal{V}n_{e}\widehat{T}_{e\left( is\right) }eV\text{,} 
+\label{c354}
+\end{equation}
+
+\begin{equation}
+S_{he1}=-\mathcal{V}n_{e}\text{,}   \label{c355}
+\end{equation}
+
+\begin{equation}
+S_{he}=S_{he0}+S_{he1}\widehat{T}_{e}=\mathcal{V}n_{e}\left( \widehat
+{T}_{e\left( is\right) }eV-\widehat{T}_{e}\right) \text{.}   \label{c356}
+\end{equation}
+
+\bigskip
+
+\paragraph{Ion Heat Source}
+
+\bigskip
+
+\begin{equation}
+S_{hi0}=\mathcal{V}n_{e}\widehat{T}_{i\left( is\right) }eV\text{,} 
+\label{c357}
+\end{equation}
+
+\begin{equation}
+S_{hi1}=-\mathcal{V}n_{e}\text{,}   \label{c358}
+\end{equation}
+
+\begin{equation}
+S_{hi}=S_{hi0}+S_{hi1}\widehat{T}_{i}=\mathcal{V}n_{e}\left( \widehat
+{T}_{i\left( is\right) }eV-\widehat{T}_{i}\right) \text{.}   \label{c359}
+\end{equation}
+
+\bigskip
+
+\paragraph{Electric Charge Source}
+
+\bigskip
+
+\begin{equation}
+S_{ch0}=\mathcal{V}\Phi_{\left( is\right) }\text{,}   \label{c360}
+\end{equation}
+
+\begin{equation}
+S_{ch1}=-\mathcal{V}\text{,}   \label{c361}
+\end{equation}
+
+\begin{equation}
+S_{ch}=S_{ch0}+S_{ch1}\Phi=\mathcal{V}\left( \Phi_{\left( is\right)
+}-\Phi\right) \text{.}   \label{c362}
+\end{equation}
+
+\bigskip
+
+\bigskip
+
+\section{Conclusion}
+
+\bigskip
+
+The existing expressions for the boundary conditions in the B2.5 code cannot
+adequately reproduce even relatively simple physical models of the
+magnetized boundary plasma. They are based on some unphysical or
+insufficiently justified assumptions about the boundary values of the
+particle, momentum and energy fluxes as functions of the plasma parameters
+calculated by the bulk transport equations. In order to improve the
+reliability and accuracy of the B2.5 code, following tasks related to the
+boundary conditions should be accomplished:
+
+\begin{itemize}
+\item  realistic kinetic or improved fluid models, which take into account
+all relevant processes in the boundary plasma, such as solid surface
+processes, plasma particle collisions, electric and diamagnetic drifts etc.,
+should be developed;
+
+\item  analytical expressions for the boundary conditions, which can be
+directly applied into the B2.5 code, should be derived from these improved
+models of the boundary plasma;
+
+\item  expressions for the boundary sources should be properly changed, so
+that these new analytical expressions for the boundary conditions can be
+implemented;
+
+\item  expressions for the boundary sources should be modified, so that
+according to the theoretical models some more complicated non-linear
+dependences of the boundary conditions on the plasma parameters, can be
+implemented.
+\end{itemize}
+
+\bigskip
+
+\bigskip
+
+\begin{thebibliography}{99}
+\bibitem{pic89}  \label{mpic89}Theilhaber, K., Birdsall, C. K., \textit{%
+Phys. Fluids B }\textbf{1 }(1989) 2244, 2260
+
+\bibitem{anders90}  \label{manders90}Anders, A., \textit{A Formulary for
+Plasma Physics, }Academie-Verlag Berlin, Berlin, 1990
+
+\bibitem{matt90}  \label{mmatt90}Matthews, G. F., Fielding, S. J.,
+McCracken, G. M., Pitcher, C. S., Stangeby, P. C., Ulrickson, M., \textit{%
+Plasma Phys. Control. Fusion }\textbf{32 }(1990), 1301
+
+\bibitem{riemann91}  \label{mriemann91}Riemann, K.-U., \textit{J. Phys. D:
+Appl. Phys.} \textbf{24 }(1991), 493
+
+\bibitem{stanpitch}  \label{mstanpitch}Stangeby, P. C., Pitcher, C. S.,
+Elder, J. D., \textit{Nucl. Fusion }\textbf{32 }(1992), 2079
+
+\bibitem{baelmans}  \label{mbaelmans}Baelmans, M., \textit{Code Improvements
+and Applications of a Two-Dimensional Edge Plasma Model for Toroidal
+Devices, }PhD Thesis, Universiteit Leuven, Belgium, 1993, published as
+Report No. J\"{u}l-2891 and as Report LPP-ERM/KMS No. 100 in 1994
+
+\bibitem{connor}  \label{mconnor}Connor, J. W., Wilson, H. R., \textit{%
+Plasma Phys. Control. Fusion }\textbf{36 }(1994), 719
+
+\bibitem{chankin94}  \label{mchankin94}Chankin, A. V., Stangeby, P. C., 
+\textit{Plasma Phys. Control. Fusion }\textbf{36 }(1994), 1485
+
+\bibitem{matt94}  \label{mmatt94}Matthews, G. F., \textit{Plasma Phys.
+Control. Fusion }\textbf{36 }(1994), 1595
+
+\bibitem{bohm95}  \label{mbohm95}Stangeby, P. C., \textit{Phys. Plasmas }%
+\textbf{2 }(1995), 702
+
+\bibitem{stangeby95}  \label{mstangeby95}Stangeby, P. C., Chankin, A. V., 
+\textit{Phys. Plasmas }\textbf{2 }(1995), 707
+
+\bibitem{riemann97}  \label{mriemann97}Riemann, K.-U., \textit{Phys. Plasmas 
+}\textbf{4 }(1997), 4158
+
+\bibitem{pitch97}  \label{mpitch97}Pitcher, C. S., Stangeby, P. C., \textit{%
+Plasma Phys. Control. Fusion }\textbf{39 }(1997), 779
+
+\bibitem{takamura}  \label{mtakamura}Takamura, S., Ye, M. Y., Kuwabara, T.,
+Ohno, N., \textit{Phys. Plasmas }\textbf{5 }(1998), 2151
+
+\bibitem{rognlien1}  \label{mrognlien1}Rognlien, T. D., Ryutov, D. D.,
+Mattor, N., Porter, G. D., \textit{Phys. Plasmas }\textbf{6 }(1999), 1851
+
+\bibitem{rognlien2}  \label{mrognlien2}Rognlien, T. D., Porter, G. D.,
+Ryutov, D. D., \textit{J. Nucl. Mater.} \textbf{266-269} (1999), 654
+
+\bibitem{daube99}  \label{mdaube99}Daube, Th., Riemann, K.-U., \textit{Phys.
+Plasmas }\textbf{6 }(1999), 2409
+
+\bibitem{coster}  \label{mcoster}Coster, D. P., \textit{%
+b2.parameters.description}, Aug. 3, 1998, IPP Garching, 1999
+\end{thebibliography}
+
+\end{document}
+
+--------------22335D01B792A8F762D239EA--
+
+

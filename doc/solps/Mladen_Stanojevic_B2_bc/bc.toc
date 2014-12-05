@@ -1,0 +1,101 @@
+\contentsline {section}{\numberline {1}Introduction}{2}
+\contentsline {section}{\numberline {2}Analytical Expressions for the Standard (``Old'') Boundary Sources in the B2.5 Code}{4}
+\contentsline {subsection}{\numberline {2.1}Definitions of Physical Parameters Used in the Analytical Expressions for the Standard Boundary Sources}{4}
+\contentsline {subsection}{\numberline {2.2}Standard Boundary Sources}{7}
+\contentsline {subsubsection}{\numberline {2.2.1}SOUTH Boundary (Cells (ix,-1))}{8}
+\contentsline {paragraph}{Particle Sources}{8}
+\contentsline {paragraph}{Momentum Sources}{8}
+\contentsline {paragraph}{All Atom/Ion Heat Source}{9}
+\contentsline {paragraph}{Electron Heat Source}{9}
+\contentsline {paragraph}{Electric Charge Source}{10}
+\contentsline {subsubsection}{\numberline {2.2.2}NORTH Boundary (Cells (ix,ny))}{10}
+\contentsline {paragraph}{Particle Sources}{10}
+\contentsline {paragraph}{Momentum Sources}{11}
+\contentsline {paragraph}{All Atom/Ion Heat Source}{11}
+\contentsline {paragraph}{Electron Heat Source}{12}
+\contentsline {paragraph}{Electric Charge Source}{12}
+\contentsline {subsubsection}{\numberline {2.2.3}WEST Boundary (Cells (-1,iy), Divertor Plate)}{13}
+\contentsline {paragraph}{Particle Sources}{13}
+\contentsline {paragraph}{Momentum Sources}{13}
+\contentsline {paragraph}{All Atom/Ion Heat Source}{14}
+\contentsline {paragraph}{\bigskip Electron Heat Source}{14}
+\contentsline {paragraph}{Electric Charge Source}{15}
+\contentsline {subsubsection}{\numberline {2.2.4}EAST Boundary (Cells (nx,iy), Divertor Plate)}{15}
+\contentsline {paragraph}{Particle Sources}{15}
+\contentsline {paragraph}{Momentum Sources}{16}
+\contentsline {paragraph}{All Atom/Ion Heat Source}{16}
+\contentsline {paragraph}{\bigskip Electron Heat Source}{17}
+\contentsline {paragraph}{Electric Charge Source}{17}
+\contentsline {section}{\numberline {3}Standard Boundary Sources near the Material Surfaces (Divertor Plates)}{18}
+\contentsline {subsection}{\numberline {3.1}Introduction}{18}
+\contentsline {subsection}{\numberline {3.2}Standard Particle Sources}{19}
+\contentsline {subsection}{\numberline {3.3}Standard Momentum Sources}{24}
+\contentsline {subsection}{\numberline {3.4}Standard Ion and Electron Heat Sources}{27}
+\contentsline {subsection}{\numberline {3.5}Standard Electric Charge Sources}{32}
+\contentsline {subsection}{\numberline {3.6}Conclusion}{32}
+\contentsline {section}{\numberline {4}Boundary Sources Written by D. P. Coster\bigskip }{33}
+\contentsline {subsection}{\numberline {4.1}Introduction}{33}
+\contentsline {subsection}{\numberline {4.2}Analytical Expressions for the ''New'' Boundary Sources}{35}
+\contentsline {subsubsection}{\numberline {4.2.1}Physical Parameters and Numerical Constants}{35}
+\contentsline {subsubsection}{\numberline {4.2.2}Boundary Conditions for Continuity Equations}{37}
+\contentsline {paragraph}{\texttt {BCCON=1} ... Prescribe the Value of the Density}{37}
+\contentsline {paragraph}{\texttt {BCCON=2} ... Prescribe the Value of the Gradient of the Density}{38}
+\contentsline {paragraph}{\texttt {BCCON=3} ... Sheath Conditions (Only for the WEST and EAST Boundary)}{39}
+\contentsline {paragraph}{\texttt {BCCON=4} ... Prescribe the Value of the Density ''Weakly'', Using as the Control Parameter Some Prescribed Velocity}{40}
+\contentsline {paragraph}{\texttt {BCCON=5} ... Prescribe the Value of the Particle Flux per Unit Area}{40}
+\contentsline {paragraph}{\texttt {BCCON=6} ... Prescribe the Value of the Total Particle Flux for a Constant Density (Only for the NORTH and SOUTH Boundary)}{41}
+\contentsline {paragraph}{\texttt {BCCON=7} ... Prescribe the Value of the Density as a Function of Other Plasma Parameters (Not Yet Available)}{42}
+\contentsline {paragraph}{\texttt {BCCON=8} ... Prescribe the Value of the Total Particle Flux with a Constant Flux Density}{42}
+\contentsline {paragraph}{\texttt {BCCON=9} ... Prescribe the Value of the Decay Length for the Density (Only for the SOUTH and NORTH Boundary)}{43}
+\contentsline {paragraph}{\texttt {BCCON=10} ... Prescribe the Leakage Coefficient (Leakage Option for the Density, Only for the SOUTH and NORTH Boundary)}{44}
+\contentsline {subsubsection}{\numberline {4.2.3}Boundary Conditions for Momentum Equations}{44}
+\contentsline {paragraph}{\texttt {BCMOM=1} ... Prescribe the Value of the Parallel Velocity}{44}
+\contentsline {paragraph}{\texttt {BCMOM=2} ... Prescribe the Gradient of the Parallel Velocity}{45}
+\contentsline {paragraph}{\texttt {BCMOM=3} ... Sheath Conditions (Only for the WEST and EAST Boundary), Mach Number as Input}{49}
+\contentsline {paragraph}{\texttt {BCMOM=4} ... Prescribe the Value of the Velocity ''Weakly'', Using as the Control Parameter Some Prescribed Mass Flux}{51}
+\contentsline {paragraph}{\texttt {BCMOM=5} ... Prescribe the Value of the Momentum Flux per Unit Area}{52}
+\contentsline {paragraph}{\texttt {BCMOM=6} ... Prescribe the Value of the Total Momentum Flux for a Constant Parallel Velocity (Not Yet Available)}{53}
+\contentsline {paragraph}{\texttt {BCMOM=7} ... Prescribe the Density as a Function of the Other Plasma Parameters (Not Yet Available)}{53}
+\contentsline {paragraph}{\texttt {BCMOM=8} ... Limited Shear (Only for the SOUTH and NORTH Boundary)}{54}
+\contentsline {paragraph}{\texttt {BCMOM=9} ... Prescribe the Value of the Total Momentum Flux with Constant Flux Density}{55}
+\contentsline {paragraph}{\texttt {BCMOM=10} ... Prescribe the Value of the Decay Length for the Momentum (Only for the SOUTH and NORTH Boundary)}{56}
+\contentsline {paragraph}{\texttt {BCMOM=11} ... Prescribe the Value of the Decay Length for the Momentum (Only for the SOUTH Boundary, Probably Error in the Source Code!)}{57}
+\contentsline {subsubsection}{\numberline {4.2.4}Boundary Conditions for Electron Energy Equation}{57}
+\contentsline {paragraph}{\texttt {BCENE=1} ... Prescribe the Value of the Electron Temperature}{57}
+\contentsline {paragraph}{\texttt {BCENE=2} ... Prescribe the Value of the Gradient of the Electron Temperature}{58}
+\contentsline {paragraph}{\texttt {BCENE=3} ... Sheath Conditions, Electron Energy Transmission Coefficient is the Free Input Parameter (Only for the WEST and EAST Boundary)}{60}
+\contentsline {paragraph}{\texttt {BCENE=4} ... Prescribe the Value of the Electron Temperature ''Weakly'', Using as the Control Parameter Some Prescribed Electron Flux}{63}
+\contentsline {paragraph}{\texttt {BCENE=5} ... Prescribe the Value of the Electron Energy Flux per Unit Area}{64}
+\contentsline {paragraph}{\texttt {BCENE=6} ... Prescribe the Value of the Total Electron Energy Flux for a Constant Electron Temperature (Only for the NORTH and SOUTH Boundary)}{65}
+\contentsline {paragraph}{\texttt {BCENE=7} ... Prescribe the Electron Temperature as a Function of Other Plasma Parameters (Not Yet Available)}{65}
+\contentsline {paragraph}{\texttt {BCENE=8} ... Prescribe the Value of the Total Electron Energy Flux with a Constant Flux Density}{65}
+\contentsline {paragraph}{\texttt {BCENE=9} ... Prescribe the Value of the Decay Length for the Electron Temperature (Only for the SOUTH and NORTH Boundary)}{67}
+\contentsline {paragraph}{\texttt {BCENE=10} ... Feedback Option for the Core (Only for the SOUTH Boundary)}{67}
+\contentsline {subsubsection}{\numberline {4.2.5}Boundary Conditions for Ion Energy Equation}{68}
+\contentsline {paragraph}{\texttt {BCENI=1} ... Prescribe the Value of the Ion Temperature}{68}
+\contentsline {paragraph}{\texttt {BCENI=2} ... Prescribe the Value of the Gradient of the Ion Temperature}{69}
+\contentsline {paragraph}{\texttt {BCENI=3} ... Sheath Conditions, Ion Energy Transmission Coefficients Are the Free Input Parameters (Only for the WEST and EAST Boundary)}{71}
+\contentsline {paragraph}{\texttt {BCENI=4} ... Prescribe the Value of the Ion Temperature ''Weakly'', Using as the Control Parameter Some Prescribed Ion Flux}{74}
+\contentsline {paragraph}{\texttt {BCENI=5} ... Prescribe the Value of the Ion Energy Flux per Unit Area}{75}
+\contentsline {paragraph}{\texttt {BCENI=6} ... Prescribe the Value of the Total Ion Energy Flux for a Constant Ion Temperature (Only for the NORTH and SOUTH Boundary)}{76}
+\contentsline {paragraph}{\texttt {BCENI=7} ... Prescribe the Ion Temperature as a Function of Other Plasma Parameters (Not Yet Available)}{76}
+\contentsline {paragraph}{\texttt {BCENI=8} ... Prescribe the Value of the Total Ion Energy Flux with a Constant Flux Density}{76}
+\contentsline {paragraph}{\texttt {BCENI=9} ... Prescribe the Value of the Decay Length for the Ion Temperature (Only for the SOUTH and NORTH Boundary)}{78}
+\contentsline {paragraph}{\texttt {BCENI=10} ... Feedback Option for the Core (Only for the SOUTH Boundary)}{78}
+\contentsline {subsubsection}{\numberline {4.2.6}Boundary Conditions for the Electric Potential Equation}{79}
+\contentsline {paragraph}{\texttt {BCPOT=1} ... Prescribe the Value of the Potential}{79}
+\contentsline {paragraph}{\texttt {BCPOT=2} ... Prescribe the Value of the Gradient of the Potential}{80}
+\contentsline {paragraph}{\texttt {BCPOT=3} ... Sheath Conditions (Only for the WEST and EAST Boundary)}{82}
+\contentsline {paragraph}{\texttt {BCPOT=4} ... Prescribe the Value of the Potential ''Weakly'', Using the Prescribed Control Parameter, Which Corresponds to the Specific Electric Conductivity}{83}
+\contentsline {paragraph}{\texttt {BCPOT=5} ... Prescribe the Value of the Current Flux Density per Unit Area}{84}
+\contentsline {paragraph}{\texttt {BCPOT=6} ... Prescribe the Value of the Total Current Flux Density for a Constant Potential (Not Yet Available)}{84}
+\contentsline {paragraph}{\texttt {BCPOT=7} ... Prescribe the Potential as a Function of Other Plasma Parameters (Not Yet Available)}{85}
+\contentsline {paragraph}{\texttt {BCPOT=8} ... Prescribe the Value of the Total Electric Current with a Constant Flux Density}{85}
+\contentsline {paragraph}{\texttt {BCPOT=9} ... Prescribe the Value of the Decay Length for the Potential (Only for the SOUTH and NORTH Boundary)}{86}
+\contentsline {subsubsection}{\numberline {4.2.7}Interior Boundary at the ''Dead'' Regions}{86}
+\contentsline {paragraph}{Particle Sources}{86}
+\contentsline {paragraph}{Momentum Sources}{87}
+\contentsline {paragraph}{Electron Heat Source}{87}
+\contentsline {paragraph}{Ion Heat Source}{87}
+\contentsline {paragraph}{Electric Charge Source}{88}
+\contentsline {section}{\numberline {5}Conclusion}{88}

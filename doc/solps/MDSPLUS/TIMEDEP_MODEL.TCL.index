@@ -1,0 +1,233 @@
+
+\TIMEDEP::TOP "Various time dependent quantities"
+
+
+\TIMEDEP::TOP.DN "diffusion coefficient"
+\TIMEDEP::TOP.DN:IMPSEP
+\TIMEDEP::TOP.DN:OMPSEP "diffusion coefficient, outer midplane"
+
+
+\TIMEDEP::TOP.DP "pressure diffusion coefficient"
+\TIMEDEP::TOP.DP:IMPSEP
+\TIMEDEP::TOP.DP:OMPSEP "pressure diffusion coefficient, outer midplane"
+
+\TIMEDEP::TOP.FCH
+\TIMEDEP::TOP.FCH:DIVINT "integrated radial current, divertor region"
+\TIMEDEP::TOP.FCH:MCWINT "integrated radial current, main chamber"
+\TIMEDEP::TOP.FCH:TARG1INT "integrated poloidal current, inboard divertor"
+\TIMEDEP::TOP.FCH:TARG2INT
+\TIMEDEP::TOP.FCH:TARG3INT
+\TIMEDEP::TOP.FCH:TARG4INT "integrated poloidal current, outboard divertor"
+
+\TIMEDEP::TOP.FEE
+\TIMEDEP::TOP.FEE:DIVINT "integrated radial electron energy flux, divertor region"
+\TIMEDEP::TOP.FEE:MCWINT "integrated radial electron energy flux, main chamber"
+\TIMEDEP::TOP.FEE:TARG1INT "integrated poloidal electron energy flux, inboard divertor"
+\TIMEDEP::TOP.FEE:TARG2INT
+\TIMEDEP::TOP.FEE:TARG3INT
+\TIMEDEP::TOP.FEE:TARG4INT "integrated poloidal electron energy flux, outboard divertor"
+
+\TIMEDEP::TOP.FEI
+\TIMEDEP::TOP.FEI:DIVINT "integrated radial ion energy flux, divertor region"
+\TIMEDEP::TOP.FEI:MCWINT "integrated radial ion energy flux, main chamber"
+\TIMEDEP::TOP.FEI:TARG1INT "integrated poloidal ion energy flux, inboard divertor"
+\TIMEDEP::TOP.FEI:TARG2INT
+\TIMEDEP::TOP.FEI:TARG3INT
+\TIMEDEP::TOP.FEI:TARG4INT "integrated poloidal ion energy flux, outboard divertor"
+
+\TIMEDEP::TOP.FET
+\TIMEDEP::TOP.FET:DIVINT
+\TIMEDEP::TOP.FET:MCWINT
+\TIMEDEP::TOP.FET:TARG1INT
+\TIMEDEP::TOP.FET:TARG2INT
+\TIMEDEP::TOP.FET:TARG3INT
+\TIMEDEP::TOP.FET:TARG4INT
+
+\TIMEDEP::TOP.FNI
+\TIMEDEP::TOP.FNI:DIVINT "integrated radial particle flux, divertor region"
+\TIMEDEP::TOP.FNI:MCWINT "integrated radial particle flux, main chamber"
+\TIMEDEP::TOP.FNI:TARG1INT "integrated poloidal particle flux, inboard divertor"
+\TIMEDEP::TOP.FNI:TARG2INT
+\TIMEDEP::TOP.FNI:TARG3INT
+\TIMEDEP::TOP.FNI:TARG4INT "integrated poloidal particle flux, outboard divertor"
+
+\TIMEDEP::TOP.IMP
+\TIMEDEP::TOP.IMP:AN "atom density, inboard midplane"
+\TIMEDEP::TOP.IMP:DN "diffusion coefficient, inboard midplane"
+\TIMEDEP::TOP.IMP:DP "pressure diffusion coefficient, inboard midplane"
+\TIMEDEP::TOP.IMP:DS "S-S_sep (inner midplane)"
+\TIMEDEP::TOP.IMP:KE
+\TIMEDEP::TOP.IMP:KI "ion thermal diffusivity, inboard midplane"
+\TIMEDEP::TOP.IMP:MN "molecule density, inboard midplane"
+\TIMEDEP::TOP.IMP:NE "electron density, inboard midplane"
+\TIMEDEP::TOP.IMP:PO "potential, inboard midplane"
+\TIMEDEP::TOP.IMP:TE "electron temperature, inboard midplane"
+\TIMEDEP::TOP.IMP:TI "ion temperature, inboard midplane"
+\TIMEDEP::TOP.IMP:VS "viscosity coefficient, inboard midplane'"
+\TIMEDEP::TOP.IMP:VX "poloidal pinch velocity, inboard midplane'"
+\TIMEDEP::TOP.IMP:VY "radial pinch velocity, inboard midplane"
+
+
+\TIMEDEP::TOP.KE "electron thermal diffusivity"
+\TIMEDEP::TOP.KE:IMPSEP
+\TIMEDEP::TOP.KE:OMPSEP "electron thermal diffusivity, outer midplane"
+
+
+\TIMEDEP::TOP.KI "ion thermal diffusivity"
+\TIMEDEP::TOP.KI:IMPSEP
+\TIMEDEP::TOP.KI:OMPSEP "ion thermal diffusivity, outer midplane"
+
+\TIMEDEP::TOP.NE
+\TIMEDEP::TOP.NE:IMPSEP
+\TIMEDEP::TOP.NE:OMPSEP "separatrix electron density, outer midplane"
+\TIMEDEP::TOP.NE:PWDENMAX
+\TIMEDEP::TOP.NE:TARG1MAX "maximum electron density, inboard divertor"
+\TIMEDEP::TOP.NE:TARG1SEP "separatrix electron density, inboard divertor"
+\TIMEDEP::TOP.NE:TARG2MAX
+\TIMEDEP::TOP.NE:TARG2SEP
+\TIMEDEP::TOP.NE:TARG3MAX
+\TIMEDEP::TOP.NE:TARG3SEP
+\TIMEDEP::TOP.NE:TARG4MAX "maximum electron density, outboard divertor"
+\TIMEDEP::TOP.NE:TARG4SEP "separatrix electron density, outboard divertor"
+
+\TIMEDEP::TOP.OMP
+\TIMEDEP::TOP.OMP:AN "atom density, outboard midplane"
+\TIMEDEP::TOP.OMP:DN "diffusion coefficient, outboard midplane"
+\TIMEDEP::TOP.OMP:DP "pressure diffusion coefficient, outboard midplane"
+\TIMEDEP::TOP.OMP:DS "S-S_sep (outer midplane)"
+\TIMEDEP::TOP.OMP:KE
+\TIMEDEP::TOP.OMP:KI "ion thermal diffusivity, outboard midplane"
+\TIMEDEP::TOP.OMP:MN "molecule density, outboard midplane"
+\TIMEDEP::TOP.OMP:NE "electron density, outboard midplane"
+\TIMEDEP::TOP.OMP:PO "potential, outboard midplane"
+\TIMEDEP::TOP.OMP:TE "electron temperature, outboard midplane"
+\TIMEDEP::TOP.OMP:TI "ion temperature, outboard midplane"
+\TIMEDEP::TOP.OMP:VS "viscosity coefficient, outboard midplane'"
+\TIMEDEP::TOP.OMP:VX "poloidal pinch velocity, outboard midplane'"
+\TIMEDEP::TOP.OMP:VY "radial pinch velocity, outboard midplane"
+
+\TIMEDEP::TOP.PO
+\TIMEDEP::TOP.PO:IMPSEP
+\TIMEDEP::TOP.PO:OMPSEP "separatrix potential, outer midplane"
+\TIMEDEP::TOP.PO:PWDENMAX
+\TIMEDEP::TOP.PO:TARG1MAX "maximum potential, inboard divertor"
+\TIMEDEP::TOP.PO:TARG1SEP "separatrix potential, inboard divertor"
+\TIMEDEP::TOP.PO:TARG2MAX
+\TIMEDEP::TOP.PO:TARG2SEP
+\TIMEDEP::TOP.PO:TARG3MAX
+\TIMEDEP::TOP.PO:TARG3SEP
+\TIMEDEP::TOP.PO:TARG4MAX "maximum potential, outboard divertor "
+\TIMEDEP::TOP.PO:TARG4SEP "separatrix potential, outboard divertor max"
+
+\TIMEDEP::TOP.TARGET1
+\TIMEDEP::TOP.TARGET1:AN "atom density, inboard divertor"
+\TIMEDEP::TOP.TARGET1:DA "Area element, target1 (usually inner target)"
+\TIMEDEP::TOP.TARGET1:DS "S-S_sep, target1 (usually inner target)"
+\TIMEDEP::TOP.TARGET1:FC "poloidal current, inboard divertor "
+\TIMEDEP::TOP.TARGET1:FE "poloidal electron energy flux, inboard divertor"
+\TIMEDEP::TOP.TARGET1:FI "poloidal ion energy flux, inboard divertor"
+\TIMEDEP::TOP.TARGET1:FL "poloidal electron flux, inboard divertor"
+\TIMEDEP::TOP.TARGET1:FN "poloidal spec one flux, inboard divertor"
+\TIMEDEP::TOP.TARGET1:FO "poloidal ion flux, inboard divertor"
+\TIMEDEP::TOP.TARGET1:FT "poloidal total energy flux, inboard divertor"
+\TIMEDEP::TOP.TARGET1:MN "molecule density, inboard divertor"
+\TIMEDEP::TOP.TARGET1:NE "electron density, inboard divertor"
+\TIMEDEP::TOP.TARGET1:PO "potential, inboard diverto"
+\TIMEDEP::TOP.TARGET1:TE "electron temperature, inboard divertor"
+\TIMEDEP::TOP.TARGET1:TI "ion temperature, inboard divertor"
+
+\TIMEDEP::TOP.TARGET2
+\TIMEDEP::TOP.TARGET2:AN
+\TIMEDEP::TOP.TARGET2:DA
+\TIMEDEP::TOP.TARGET2:DS
+\TIMEDEP::TOP.TARGET2:FC
+\TIMEDEP::TOP.TARGET2:FE
+\TIMEDEP::TOP.TARGET2:FI
+\TIMEDEP::TOP.TARGET2:FL
+\TIMEDEP::TOP.TARGET2:FN
+\TIMEDEP::TOP.TARGET2:FO
+\TIMEDEP::TOP.TARGET2:FT
+\TIMEDEP::TOP.TARGET2:MN
+\TIMEDEP::TOP.TARGET2:NE
+\TIMEDEP::TOP.TARGET2:PO
+\TIMEDEP::TOP.TARGET2:TE
+\TIMEDEP::TOP.TARGET2:TI
+
+\TIMEDEP::TOP.TARGET3
+\TIMEDEP::TOP.TARGET3:AN
+\TIMEDEP::TOP.TARGET3:DA
+\TIMEDEP::TOP.TARGET3:DS
+\TIMEDEP::TOP.TARGET3:FC
+\TIMEDEP::TOP.TARGET3:FE
+\TIMEDEP::TOP.TARGET3:FI
+\TIMEDEP::TOP.TARGET3:FL
+\TIMEDEP::TOP.TARGET3:FN
+\TIMEDEP::TOP.TARGET3:FO
+\TIMEDEP::TOP.TARGET3:FT
+\TIMEDEP::TOP.TARGET3:MN
+\TIMEDEP::TOP.TARGET3:NE
+\TIMEDEP::TOP.TARGET3:PO
+\TIMEDEP::TOP.TARGET3:TE
+\TIMEDEP::TOP.TARGET3:TI
+
+\TIMEDEP::TOP.TARGET4
+\TIMEDEP::TOP.TARGET4:AN "atom density, outboard divertor"
+\TIMEDEP::TOP.TARGET4:DA "Area element, target4 (usually outer target)"
+\TIMEDEP::TOP.TARGET4:DS "S-S_sep, target4 (usually outer target)"
+\TIMEDEP::TOP.TARGET4:FC "poloidal current, outboard divertor "
+\TIMEDEP::TOP.TARGET4:FE "poloidal electron energy flux, outboard divertor"
+\TIMEDEP::TOP.TARGET4:FI "poloidal ion energy flux, outboard divertor"
+\TIMEDEP::TOP.TARGET4:FL "poloidal electron flux, outboard divertor"
+\TIMEDEP::TOP.TARGET4:FN "poloidal spec one flux, outboard divertor"
+\TIMEDEP::TOP.TARGET4:FO "poloidal ion flux, outboard divertor"
+\TIMEDEP::TOP.TARGET4:FT "poloidal total energy flux, outboard divertor"
+\TIMEDEP::TOP.TARGET4:MN "molecule density, outboard divertor"
+\TIMEDEP::TOP.TARGET4:NE "electron density, outboard divertor"
+\TIMEDEP::TOP.TARGET4:PO "potential, outboard divertor"
+\TIMEDEP::TOP.TARGET4:TE "electron temperature, outboard divertor"
+\TIMEDEP::TOP.TARGET4:TI "ion temperature, outboard divertor"
+
+\TIMEDEP::TOP.TE
+\TIMEDEP::TOP.TE:IMPSEP
+\TIMEDEP::TOP.TE:OMPSEP "separatrix electron temperature, outer midplane"
+\TIMEDEP::TOP.TE:PWDENMAX
+\TIMEDEP::TOP.TE:TARG1MAX "maximum electron temperature, inboard divertor"
+\TIMEDEP::TOP.TE:TARG1SEP "separatrix electron temperature, inboard divertor"
+\TIMEDEP::TOP.TE:TARG2MAX
+\TIMEDEP::TOP.TE:TARG2SEP
+\TIMEDEP::TOP.TE:TARG3MAX
+\TIMEDEP::TOP.TE:TARG3SEP
+\TIMEDEP::TOP.TE:TARG4MAX "maximum electron temperature, outboard divertor"
+\TIMEDEP::TOP.TE:TARG4SEP "separatrix electron temperature, outboard divertor"
+
+\TIMEDEP::TOP.TI
+\TIMEDEP::TOP.TI:IMPSEP
+\TIMEDEP::TOP.TI:OMPSEP "separatrix ion temperature, outer midplane"
+\TIMEDEP::TOP.TI:PWDENMAX
+\TIMEDEP::TOP.TI:TARG1MAX "maximum ion temperature, inboard divertor"
+\TIMEDEP::TOP.TI:TARG1SEP "separatrix ion temperature, inboard divertor"
+\TIMEDEP::TOP.TI:TARG2MAX
+\TIMEDEP::TOP.TI:TARG2SEP
+\TIMEDEP::TOP.TI:TARG3MAX
+\TIMEDEP::TOP.TI:TARG3SEP
+\TIMEDEP::TOP.TI:TARG4MAX "maximum ion temperature, outboard divertor "
+\TIMEDEP::TOP.TI:TARG4SEP "separatrix ion temperature, outboard divertor"
+
+
+\TIMEDEP::TOP.VS "viscosity coefficient"
+\TIMEDEP::TOP.VS:IMPSEP
+\TIMEDEP::TOP.VS:OMPSEP "viscosity coefficient, outer midplane"
+
+
+\TIMEDEP::TOP.VX "poloidal pinch velocity"
+\TIMEDEP::TOP.VX:IMPSEP
+\TIMEDEP::TOP.VX:OMPSEP "poloidal pinch velocity, outer midplane"
+
+
+\TIMEDEP::TOP.VY "radial pinch velocity"
+\TIMEDEP::TOP.VY:IMPSEP
+\TIMEDEP::TOP.VY:OMPSEP "radial pinch velocity, outer midplane"
+\TIMEDEP::TOP:HALCORE
+\TIMEDEP::TOP:HALDIV
+\TIMEDEP::TOP:HALSOL
+\TIMEDEP::TOP:TIME "time"
