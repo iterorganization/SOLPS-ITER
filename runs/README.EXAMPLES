@@ -1,0 +1,26 @@
+Examples are available in
+
+https://solps-mdsplus.aug.ipp.mpg.de/repos/SOLPS/trunk/solps_examples/solps5.1/bench_mark
+
+To see what is available:
+
+svn list https://solps-mdsplus.aug.ipp.mpg.de/repos/SOLPS/trunk/solps_examples/solps5.1/
+
+produces
+
+bench_mark/
+
+amongst others, and
+
+svn list https://solps-mdsplus.aug.ipp.mpg.de/repos/SOLPS/trunk/solps_examples/solps5.1/bench_mark
+
+produces
+
+AUG_16151_D/
+...
+
+To install the bench_mark cases, do:
+
+svn checkout https://solps-mdsplus.aug.ipp.mpg.de/repos/SOLPS/trunk/solps_examples/solps5.1/bench_mark bench_mark
+
+in this directory.

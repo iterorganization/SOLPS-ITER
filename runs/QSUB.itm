@@ -1,0 +1,28 @@
+#! /bin/tcsh
+
+#$ -l h_rt=36:00:00,h_vmem=4G
+#$ -cwd
+#$ -M xpb@ipp.mpg.de
+#$ -m e
+#$ -notify
+#$ -N SOLPS
+#$ -V
+
+touch .status
+echo "Started on `hostname` at `date`" >> .status
+
+setenv PATH ${PATH}:/afs/ipp-garching.mpg.de/@sys/bin
+
+if (-e SOLPSTOP) then
+  pushd `cat SOLPSTOP`
+else
+  pushd `echo $PWD | sed 's:/runs/.*::'`
+endif
+source setup.csh
+echo Using SOLPSTOP = $SOLPSTOP
+popd
+echo Using SOLPSTOP = $SOLPSTOP >> .status
+
+time b2run >! run.log 
+
+echo "Finished on `hostname` at `date`" >> .status

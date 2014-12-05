@@ -1,0 +1,85 @@
+# GNU Makefile for B2 to B2.5 converter; part 2--execution.
+# Please see the general comments in the companion Makefile, part 1,
+# which controls compile and load.
+#-----------------------------------------------------------------------
+# Variables.
+
+SHELL = /bin/sh
+nil =
+SOLPS4.0 = ${HOME}/solps4.0_svn_xpb
+ifeq (${OBJECTCODE},linux_nag_f95.debug)
+DBX = totalview -v 7.2
+INC =
+else
+ifeq (${OBJECTCODE},linux.Fujitsu.debug)
+DBX = totalview -v 7.2
+INC =
+else 
+ifeq (${OBJECTCODE},linux_pgf90.debug)
+DBX = gdb
+INC =
+else
+DBX = dbx
+ifdef USE_EIRENE
+INC = -I ${SOLPSTOP}/base/b2/${OBJECTCODE} -I ${SOLPSTOP}/base/Eirene/${OBJECTCODE}
+else
+INC = -I ${SOLPSTOP}/base/b2/${OBJECTCODE}
+endif
+endif
+endif
+endif
+
+prints = b2sxdr.prt
+
+target_sx = b2sxdr.prt b2fgmtry b2fstati b2fparam b2fplasma b2ag.dat b2ah.dat b2ai.dat b2ar.dat b2.boundary.parameters.4 b2.boundary.parameters.5 b2mn.dat.4 b2mn.dat.5 b2.neutrals.parameters b2.numerics.parameters b2.transport.parameters b2.user.parameters
+
+scandir := $(shell cd .. ; pwd)
+projdir := $(shell cd ../.. ; pwd)
+baserundir := $(shell cd $(scandir)/baserun ; pwd)
+
+echo:
+	@echo scandir=${scandir} projdir=${projdir} baserundir=${baserundir}
+
+#-----------------------------------------------------------------------
+# Directives.
+
+vpath %.dat .:$(baserundir)
+vpath b2fgmtry .:$(baserundir)
+vpath b2fstati .:$(baserundir)
+
+#-----------------------------------------------------------------------
+# Rules.
+
+default : b2sxdr.prt
+all : $(prints)
+prt : $(prints)
+
+.PHONY : default all prt clean realclean testvars
+.PRECIOUS : $(prints)
+.SUFFIXES : $(nil)
+
+$(target_sx) : B2SXDR b2.parameters.src input.dat
+	rm -rf b2sx.exe.dir ; mkdir b2sx.exe.dir ; cp $^ b2sx.exe.dir
+	rm -f $(target_sx)
+	cd b2sx.exe.dir ; time ${SOLPSTOP}/base/solps4-5/${OBJECTCODE}/b2sxdr.exe ; mv $(target_sx) .. ; rm -f $(notdir $^)
+	-rmdir b2sx.exe.dir
+
+dbx.b2sxdr : B2SXDR b2.parameters.src input.dat
+	rm -rf b2sx.exe.dir ; mkdir b2sx.exe.dir ; cp $^ b2sx.exe.dir
+	rm -f $(target_sx)
+	cd b2sx.exe.dir ; ${DBX} ${INC} ${SOLPSTOP}/base/solps4-5/${OBJECTCODE}/b2sxdr.exe ; mv $(target_sx) .. ; rm -f $(notdir $^)
+	-rmdir b2sx.exe.dir
+
+clean :
+	rm -f *.prt* *.plt* *~
+	rm -rf *.exe.dir
+
+realclean : clean
+	rm -f b2fgmtry b2fpar* b2frates b2fstat* b2ftra* b2fmovie b2specp
+
+# The target testvars is present only for testing purposes.
+testvars :
+	@echo scandir: $(scandir)
+	@echo projdir: $(projdir)
+	@echo baserundir: $(baserundir)
+	@echo codedir: $(codedir)
