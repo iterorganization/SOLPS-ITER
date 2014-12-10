@@ -1,6 +1,6 @@
 #! /bin/tcsh -f
 
-echo "Welcome to SOLPS5.1!"
+echo "Welcome to SOLPS-ITER!"
 echo "New: use your web browser to look at http://www.rzg.mpg.de/~dpc/solps.html"
 
 setenv SOLPSTOP $PWD
@@ -152,15 +152,15 @@ else
   setenv MANPATH ${SonnetTopDirectory}/man:${DG}/equtrn/doxygen/man
 endif
 
-alias ssb 'cd ${SOLPSTOP}/src/b2'
-alias sb2 'cd ${SOLPSTOP}/src/b2'
+alias ssb 'cd ${SOLPSTOP}/src/B2.5'
+alias sb2 'cd ${SOLPSTOP}/src/B2.5'
 alias sse 'cd ${SOLPSTOP}/src/Eirene'
 alias sei 'cd ${SOLPSTOP}/src/Eirene'
 alias ssw 'cd ${SOLPSTOP}/src/Sonnet'
 alias sst 'cd ${SOLPSTOP}/src/Triang'
 alias ssd 'cd ${SOLPSTOP}/src/DivGeo'
 alias ssc 'cd ${SOLPSTOP}/src/Carre'
-alias sbb 'cd ${SOLPSTOP}/base/b2'
+alias sbb 'cd ${SOLPSTOP}/base/B2.5'
 alias sbe 'cd ${SOLPSTOP}/base/Eirene'
 alias sbc 'cd ${SOLPSTOP}/base/Carre'
 alias sbt 'cd ${SOLPSTOP}/base/Triang'

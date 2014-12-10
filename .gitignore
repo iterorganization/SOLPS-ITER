@@ -10,7 +10,7 @@
 # error messages from compiler etc.
 *.error
 
-# setup files (links) that will be be made at compilation,...
+# setup files (links) that will be made at compilation,...
 setup.csh.*
 !setup.csh.local
 !setup.csh.NAG.guess
