@@ -5,7 +5,7 @@
 	path = src/B2.5
 	url = ssh://git@git.iter.org/bnd/b2.5.git
 [submodule "libs/mscl"]
-	path = libs/mscl
+	path = lib/mscl
 	url = ssh://git@git.iter.org/lib/mscl.git
 [submodule "data"]
 	path = data
