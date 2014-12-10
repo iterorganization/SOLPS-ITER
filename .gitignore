@@ -22,3 +22,5 @@ setup.ksh.*
 !setup.ksh.NAG.guess
 !setup.ksh.NCARG
 !setup.ksh.NCARG.guess
+
+LISTOBJ
