@@ -1,0 +1,13 @@
+#  VERSION : 28.08.98 10:20
+
+# File compiler.macro for HPUX FORTRAN compiler
+
+FC	 = f77
+FFLAGS	 = -g 
+INCLUDE  = -I${SRCDIR} -I${EIRINC} -I${SOLPSTOP}/include.local -I${SOLPSTOP}/include
+COMPILE  = ${FC} -c ${FFLAGS}
+CPP	 = /lib/cpp
+
+LDLIBS 	 = -Wl,-L${SOLPS_LIB} -lmscl -Wl,-L${SOLPSTOP}/base/b2/${OBJECTCODE} -lb2 -Wl,-L/usr/local/lib -lnetcdf
+LDEXTRA  = 
+# NAG 	 = -lnag_sh

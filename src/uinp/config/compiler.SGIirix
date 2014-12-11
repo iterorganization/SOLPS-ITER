@@ -1,0 +1,12 @@
+#  VERSION : 11.05.95 13:39
+
+# File compiler.macro for SGI f77
+
+FC       = f77
+FFLAGS   = -static -O2 -nocpp
+INCLUDE = -I${SRCDIR} -I${EIRINC} -I${SOLPSTOP}/include.local -I${SOLPSTOP}/include
+COMPILE  = ${FC} -c ${FFLAGS}
+CPP	 = /lib/cpp
+MOD 	 = mod
+LDLIBS 	 = -L${SOLPS_LIB} -lmscl -L${SOLPSTOP}/base/b2/${OBJECTCODE} -lb2 -L/usr/local/lib -lnetcdf
+# LDUMLIB = -lnagblas -lC

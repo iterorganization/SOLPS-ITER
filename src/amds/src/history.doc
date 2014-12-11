@@ -1,0 +1,49 @@
+amds revision history
+---------------------
+
+Version 1.04 - Dec 7, 2000?
+--------------------------
+
+- Now passes reaction variables to AMDSGRAPHCMD in stdin.
+
+- Bugfixes
+  - Crashes with "Invalid font in XChangeGC (0xffffffff) fixed
+  - Debug printouts from reading default vars from the db removed
+
+- Internal
+  - Development moved from euler.itereu.de to my Linux Pc
+  - makefile: workaround added to avoid "double CbFree" errors
+
+Version 1.03 - Mar 30, 1999
+---------------------------
+
+- New
+  - Default values from the database added for variables.
+
+- Bugfixes
+  - "Show graph" could work incorrectly in the main view.
+  
+- Internal
+  - GetVarEx() added
+  - Reaction::Vars added for database defaults.
+
+Version 1.02 - Mar 30, 1999
+---------------------------
+
+- New
+  - Variable definitions in existing files updated using the configuration.
+  - Changes to the database no longer cause crashes when loading existing
+    *.amd files.
+  - Several bugs fixed.
+
+Version 1.01 - Apr 30, 1997
+---------------------------
+
+- New
+  - "Show text" now works in TeX files.
+
+
+Version 1.0 - Nov 4, 1996
+-------------------------
+
+First program version.

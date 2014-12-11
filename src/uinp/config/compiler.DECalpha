@@ -1,0 +1,14 @@
+#  VERSION : 10.07.2000 18:09
+
+# File compiler.macro for DEC Alpha
+
+FC	 = f90
+CPP	 = /usr/ucb/cpp -C
+MOD	 = mod
+FFLAGS	 = -i4 -fast
+INCLUDE  = -I${SRCDIR} -I${EIRINC} -I${SOLPSTOP}/include.local -I${SOLPSTOP}/include
+COMPILE  = ${FC} -c ${FFLAGS}
+
+LDLIBS 	 = -L${SOLPS_LIB} -lmscl -L$(SOLPSTOP)/base/b2/$(OBJECTCODE) -lb2 -L/usr/local/lib -lnetcdf
+LDEXTRA  = 
+# NAG 	 = -lnag_sh

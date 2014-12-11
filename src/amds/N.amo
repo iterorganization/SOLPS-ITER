@@ -1,0 +1,36 @@
+# Output file produced by amds version 1.04
+
+filevers 1
+reactns 1
+AMJUEL H.2 2.7B0
+group
+0
+deltae
+14.5
+massp
+0
+masst
+14
+rctype
+EI
+tmin
+
+tmax
+
+primpart
+N
+intrpart
+
+product1
+N+
+product2
+
+nprdct1
+
+nprdct2
+
+eprdct1
+
+eprdct2
+
+finish

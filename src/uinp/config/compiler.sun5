@@ -1,0 +1,15 @@
+FC	 = f90
+
+ifdef SOLPS_DEBUG
+FFLAGS	 = -g 
+else
+FFLAGS	 = -O 
+endif
+
+INCLUDE = -I${SRCDIR} -I${SOLPSTOP}/include.local -I${SOLPSTOP}/include -I${EIRINC}
+COMPILE  = ${FC} -c ${FFLAGS}
+CPP	 = /usr/ccs/lib/cpp
+MOD 	 = mod
+
+LDLIBS 	 = -L${SOLPS_LIB} -lmscl -L/usr/local/lib -L$(SOLPSTOP)/base/b2/$(OBJECTCODE) -lb2 -L${SOLPSMASTER}/@sys/lib -lnetcdf
+LDEXTRA  = 

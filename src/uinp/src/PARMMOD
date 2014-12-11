@@ -1,0 +1,67 @@
+*COMDECK PARMMOD
+c
+c  version : 03.12.96 13:56
+c
+#     include <PARMUSR>
+#ifndef SPUTDIM
+c*** These should be in PARMUSR, but too many people have it local,
+c*** so we duplicate it here.  At some time in the future, this block
+c*** in PARMMOD will be removed!
+#define SPUTDIM
+cank-961119
+c*** Sputtering data (to be moved to PARMUSR)
+c***
+c***    nsptpr  max. number of projectiles in the database SPUTER
+c***    nspttg  max. number of target materials in the database SPUTER
+c***    nchsppr max. number of aux. data entries for wall reactions
+c***                                                         (block 6C)
+      parameter (nsptpr=11, nspttg=28, nchsppr=12)
+cank
+#endif
+C
+C  GEOMETRY
+      PARAMETER (NRAD=N1ST*N2ND*N3RD+NADD)
+      PARAMETER (NLIMPS=NLIM+NSTS,NLMPGS=NLIMPS)
+      PARAMETER (NPMAX=2*N1ST*(NPLG+N2ND)+2*NPPART)
+      PARAMETER (NTMAX=2*NKNOT+3*3*NTRI)
+      PARAMETER (NCPV=NCOP*NPLS)
+      PARAMETER (NTOR=1000)
+      PARAMETER (NBMAX=10)
+      PARAMETER (NPTAL=30)
+      PARAMETER (NPRNL=50000)
+c-dpc
+      PARAMETER (ngpts=75)
+C  PRIMARY SOURCE
+      PARAMETER (NSTRAP=NSTRA+1)
+C  SPECIES AND TALLIES  NTALV: TOTAL NUMBER OF VOLUME TALLIES
+C                           NTALA: INDEX OF THE ADDITIONAL TRACKLENGTH
+C                                  ESTIMATED TALLY
+C                           NTALC: INDEX OF THE ADDITIONAL COLLISION
+C                                  ESTIMATED TALLY
+C                           NTALR: INDEX OF THE ALGEBRAIC TALLY
+C                       NTALS: TOTAL NUMBER OF SURFACE TALLIES
+C                           NTLSA: INDEX OF THE ADDITIONAL TALLY
+C                                  (TRACKLENGTH AND COLLISION ESTIMATORS
+C                                   ARE IDENTICAL FOR SURFACE AVERAGES)
+C                           NTLSR: INDEX OF THE ALGEBRAIC TALLY
+      PARAMETER (NIONP=NION+1,NATMP=NATM+1,NMOLP=NMOL+1,
+     P           NPLSP=NPLS+1,NADVP=NADV+1,NADSP=NADS+1,
+     P           NCLVP=NCLV+1,NALVP=NALV+1,NALSP=NALS+1,
+     P           NSNVP=NSNV+1,NCPVP=NCPV+1,
+cank-961121
+     p           ntali=13, ntalv=41, ntals=39,
+     p           ntala=ntalv-4,ntalc=ntalv-3,ntalt=ntalv-2,
+     p           ntalb=ntalv-1,ntalr=ntalv,
+     p           ntlsa=ntals-1,ntlsr=ntals,
+cank
+     P           N1MX=NATM+NMOL+NION+NPLS+NADV+NALV+NCLV+NCPV,
+     P           N2MX=NATM+NMOL+NION+NPLS+NADS+NALS,
+     P           NSPZ=NATM+NMOL+NION+NPLS,
+     P           NSPZMC=NATM+NMOL+NION,
+     P           NCOLMC=NPLS+NDIS+NELI+NREC)
+C  SURFACE REFLECTION DATA
+      PARAMETER (NH0=NHD1*NHD2*NHD6,NH1=NH0*NHD3,NH2=NH1*NHD4,
+     P           NH3=NH2*NHD5)
+C  MAXIMUM NUMBER OF CURVES IN ONE 2D PLOT
+      PARAMETER (NPLT=5)
+C

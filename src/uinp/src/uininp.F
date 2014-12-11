@@ -1,0 +1,142 @@
+      subroutine uininp
+c
+c  version : 23.04.99 14:36
+c
+c======================================================================
+#include "uinput.inc"
+#include "impcon.inc"
+      integer imtr
+      parameter (imtr=6)
+      integer imat,nmat,isp
+      logical uex,open_file,match_found
+      character*2 listmat(imtr)
+      character*256 solpstop
+      external open_file,uinnam,uintrg,uinaux,uiniamd
+c======================================================================
+c*** set up the input routine
+c
+      immed=.false.
+      keylen=8
+      mimp=iunii
+      lena=8
+      fixkey=.false.
+c
+c*** Read the data from dg output
+c
+      write(*,*) '... opening uinput.trg'
+      open(iunii,file='uinput.trg')
+      call uintopo(iunii)
+      if(topo.eq.' ') then !{
+      	write(0,*) 'Old-style DG output. Please produce the new one -',
+     ,	      	      	      	      	      	    ' or use uinp.1.42'
+      	stop
+      end if !}
+      call import(uintrg)
+      write(*,*) '... opening uinput.dg'
+      open(iunii,file='uinput.dg')
+      call import(uinnam)
+      if(ntrgte.ne.ntrgtm) then !{
+      	write(0,*) 'Something is wrong with target edge specification'
+      	write(0,*) '  ==> check the target edges in the DG model'
+	stop
+      end if !}
+      if(ntrgte.eq.0) then !{
+      	if(index(topo,'SN').eq.0) then !{
+	  write(0,*) 'Magnetic configuration inconsistent with old-',
+     ,	      	     'style specification of the target edges'  
+	  write(0,*) '	==> Add "Target specification" in the DG model'
+	  stop
+	end if !}
+      	jedgep(1)=jedgeo(2)
+      	jedgep(2)=jedgeo(3)
+      	jedgec(1)=jedgeo(1)
+      	jedgec(2)=jedgeo(4)
+      end if !}
+c
+c*** Read the auxiliary, user data
+c
+      inquire(file='uinput.aux', exist=uex)
+      if(uex) then !{
+      	write(*,*) '... opening uinput.aux'
+	open(iunii,file='uinput.aux')
+      	call import(uinaux)
+      end if !}
+      if(path.eq.' ') then !{
+        path='data/TRIMDAT/'
+        nmat=0
+        do i=1,nlimi !{
+          match_found=.false.
+          do imat=1,nmat !{
+            match_found=match_found .or.
+     .       trim(listmat(imat)).eq.trim(umtrl(i)) .or.
+     .       trim(umtrl(i)).eq.'dummy'
+          end do !}
+          if (.not.match_found) then !{
+            nmat=nmat+1
+            listmat(nmat)=umtrl(i)(1:2)
+          end if !}
+        end do !}
+        do i=1,ntrgdflt !{
+          match_found=.false.
+          do imat=1,nmat !{
+            match_found=match_found .or.
+     .       trim(listmat(imat)).eq.trim(made_of(i))
+          end do !}
+          if (.not.match_found) then !{
+            nmat=nmat+1
+            listmat(nmat)=made_of(i)(1:2)
+          end if !}
+        end do !}
+        do i=1,n_spcsrf !{
+          match_found=.false.
+          do imat=1,nmat !{
+            match_found=match_found .or.
+     .       trim(listmat(imat)).eq.trim(sps_mtrl(i)) .or.
+     .       trim(sps_mtrl(i)).eq.'-'
+          end do !}
+          if (.not.match_found) then !{
+            nmat=nmat+1
+            listmat(nmat)=sps_mtrl(i)(1:2)
+          end if !}
+        end do !}
+        if (nspigen.gt.1 .or. spcigen(nspigen).ne.'D' .or. 
+     .      nmat.gt.1    .or. listmat(nmat).ne.'C') then !{
+          nnftrm=nspigen*nmat
+          do isp=1,nspigen !{
+            do imat=1,nmat !{
+              filtrm(isp+(imat-1)*nspigen)=
+     .         spcigen(isp)(1:lnblnk(spcigen(isp)))
+     .         //'_on_'//
+     .         listmat(imat)
+            end do !}
+          end do !}
+        end if !}
+      end if !}
+
+      do iamd=1,namdf !{
+      	if(amd_file(iamd).ne.' ') then !{
+c*** Read the AMDS file if exists
+          inquire(file=amd_file(iamd), exist=uex)
+          if(uex) then !{
+      	    write(*,*) '... opening ',amd_file(iamd)
+            open(iunii,file=amd_file(iamd))
+          else !}{
+	    uex=open_file(iunii,amd_file(iamd),'data.local/AMDS|data/AMDS')
+	  end if !}
+          if(uex) then !{
+            uex=immed
+	    call import(uiniamd)
+            immed=uex
+	    rctndflt=.false.
+          else !}{
+	    write(0,*) 'AMDS file not found: ',amd_file(iamd)
+	    write(0,*) 'STOP ==> Check the references to AMDS in the ',
+     ,	      'DG model and make sure that the file exists '
+	    write(0,*) '	 in either $SOLPSTOP/data(.local)/AMDS',
+     ,	      ' or the current directory'
+	    stop
+	  end if !}
+      	end if !}
+      end do !}
+c======================================================================
+      end

@@ -1,0 +1,13 @@
+#! /bin/sh
+
+#  VERSION : 15.07.97 17:04
+
+c=`basename \`pwd\``
+# [ "$c" = device ] && { class=${Model_Class:-iter}; cd class/$class; } || class=$c
+[ "$c" = device ] && { class=${DEVICE:-iter}; cd class/$class; } || class=$c
+
+${OBJECTCODE}/fxdr > fxdr.log 2>&1
+ln -fs `pwd`/sonnet.asc ../../sonnet/$class.input
+ln -fs `pwd`/sonnet.xdr ../../sonnet/$class.xdr
+echo "$class" > ../../sonnet/class
+tail -5l fxdr.log

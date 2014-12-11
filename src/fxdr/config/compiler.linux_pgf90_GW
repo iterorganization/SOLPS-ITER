@@ -1,0 +1,18 @@
+#  VERSION : 09.05.95 17:03
+
+# File compiler.macro for IBM xlf
+
+FC	 = pgf90
+
+ifdef SOLPS_DEBUG
+FFLAGS	 = -g -C
+else
+FFLAGS	 = -O
+endif
+
+INCLUDE  = -Isrc
+COMPILE  = ${FC} -c ${FFLAGS}
+CPP	 = /lib/cpp -C -traditional
+
+LDLIBS	 = -L${SOLPS_LIB} -lsonnet -lmscl -L/usr/local/lib
+LDEXTRA  = 

@@ -1,0 +1,572 @@
+#  VERSION : 16.02.2002 22:23
+ReactionType x
+ReactionType EI
+ReactionType II
+ReactionType CX
+ReactionType RC
+ReactionType EL
+ReactionType DS
+ReactionType OT
+
+Particle e
+
+Particle H
+Particle D                   :  H
+Particle H*                  :  H
+Particle H+                  :  H
+Particle H-                  :  H
+Particle D+                  :  H+ D
+Particle H*(2p)              :  H*
+Particle H*(2s)              :  H*
+Particle H*(n=2)             :  H*
+Particle H*(n=3)             :  H*
+Particle He
+Particle He(1S)              :  He
+Particle He(1s2|1S)          :  He
+Particle He(1|1s)            :  He
+Particle He(1|1S)            :  He
+Particle He(2|1S)            :  He
+Particle He(2|3S)            :  He
+Particle He*                 :  He
+Particle He+                 :  He
+Particle He++                :  He+
+Particle He*(1s2p|1P)        :  He*
+Particle He*(1s2p|3P)        :  He*
+Particle He*(1s2s|1P)        :  He*
+Particle He*(1s2s|1S)        :  He*
+Particle He*(1s2s|3P)        :  He*
+Particle He*(1s2s|3S)        :  He*
+Particle He*(1s3d|1D)        :  He*
+Particle He*(1s3d|3D)        :  He*
+Particle He*(1s3p|1P)        :  He*
+Particle He*(1s3p|3P)        :  He*
+Particle He*(1s3s|3S)        :  He*
+Particle He*(1snp|1P)        :  He*
+Particle He*(1snP|2S+1L)     :  He*
+Particle He+*                :  He+
+Particle He+*(nP)            :  He+*
+Particle He+(1s)             :  He+
+Particle He+*(2p)            :  He+*
+Particle He+*(2s)            :  He+*
+Particle He+*(n=2)           :  He+*
+Particle Be
+Particle Be*                 :  Be
+Particle Be+                 :  Be
+Particle Be++                :  Be+
+Particle B
+Particle B*                  :  B
+Particle B+                  :  B
+Particle B++                 :  B+
+Particle C
+Particle C*                  :  C
+Particle C+                  :  C
+Particle C++                 :  C+
+Particle C+3                 :  C+
+Particle C+4                 :  C+
+Particle C+5                 :  C+
+Particle C+6                 :  C+
+Particle N
+Particle N*                  :  N
+Particle N+                  :  N
+Particle Ne
+Particle Ne*                 :  Ne
+Particle Ne+                 :  Ne
+Particle Ne++                :  Ne+
+Particle Ar
+Particle Ar*                 :  Ar
+Particle Ar+                 :  Ar
+Particle Ar++                :  Ar+
+Particle Fe
+Particle Fe+                 :  Fe
+Particle Fe++                :  Fe+
+Particle Kr
+Particle Kr+                 :  Kr
+Particle Kr++                :  Kr+
+Particle Xe
+Particle Xe+                 :  Xe
+Particle Xe++                :  Xe+
+
+Particle H2                  :  H
+Particle H2(v)               :  H2 
+Particle H2(v=0)             :  H2
+Particle H2(v=1)             :  H2 H2(v)
+Particle H2(v=2)             :  H2 H2(v)
+Particle H2(j)               :  H2 
+Particle H2(j=0)             :  H2 
+Particle H2(j=1)             :  H2 H2(j)
+Particle H2(*)               :  H2
+Particle H2+                 :  H2
+Particle H2+(v)              :  H2+
+Particle H3+                 :  H2+
+Particle D2                  :  H D H2
+Particle HD                  :  H D H2
+Particle HD+                 :  H D H2+
+Particle CH                  :  C
+Particle CH2                 :  CH
+Particle CH3                 :  CH
+Particle CH4                 :  CH
+Particle CH+                 :  CH
+Particle CH2+                :  CH2 CH+
+Particle CH3+                :  CH3 CH+
+Particle CH4+                :  CH4 CH+
+
+Reaction HYDHEL H.1 2.1.1    : e H		 : H*(2p) e	   : EI
+Reaction HYDHEL H.1 2.1.2    : e H		 : H*(2s) e	   : EI
+Reaction HYDHEL H.1 2.1.3    : e H*(2s) 	 : H*(2p) e	   : EI
+Reaction HYDHEL H.1 2.1.5    : e H		 : H+ 2e 	   : EI
+Reaction HYDHEL H.1 2.1.6    : e H*(2s) 	 : H+ 2e 	   : EI
+Reaction HYDHEL H.1 2.1.7    : e H*(n=3)	 : H+ 2e 	   : EI
+Reaction HYDHEL H.1 2.2.1a   : e H2(v=0)	 : H2(v=1) e	   : EI
+Reaction HYDHEL H.1 2.2.1b   : e H2(v=0)	 : H2(v=2) e	   : EI
+Reaction HYDHEL H.1 2.2.2    : e H2		 : H2(*)   e	   : EI
+Reaction HYDHEL H.1 2.2.3    : e H2		 : H2(*)   e	   : EI
+Reaction HYDHEL H.1 2.2.4    : e H2		 : H2(*)   e	   : EI
+Reaction HYDHEL H.1 2.2.5    : e H2		 : H H e	   : DS
+Reaction HYDHEL H.1 2.2.6    : e H2		 : H H*(2s) e	   : DS
+Reaction HYDHEL H.1 2.2.7    : e H2		 : H*(2p) H*(2s) e : DS
+Reaction HYDHEL H.1 2.2.8    : e H2		 : H H*(n=3) e     : DS
+Reaction HYDHEL H.1 2.2.9    : e H2		 : H2+(v) 2e 	   : EI
+Reaction HYDHEL H.1 2.2.10   : e H2		 : H+ H 2e 	   : DS
+Reaction HYDHEL H.1 2.2.11   : e H2+(v) 	 : H+ H+ 2e 	   : DS
+Reaction HYDHEL H.1 2.2.12   : e H2+(v) 	 : H+ H e	   : DS
+Reaction HYDHEL H.1 2.2.13   : e H2+(v) 	 : H+ H*(n=2) e    : DS
+Reaction HYDHEL H.1 2.2.14   : e H2+(v) 	 : H+ H* e	   : DS
+Reaction HYDHEL H.1 2.2.15   : e H3+		 : H H H e	   : DS
+Reaction HYDHEL H.1 2.2.16   : e H3+		 : H+ H H e	   : DS
+Reaction HYDHEL H.1 2.2.17   : e H2(v)  	 : H- H 	   : DS
+Reaction HYDHEL H.1 2.3.1a   : e He(1s2|1S)	 : He*(1s2p|1P) e  : EI
+Reaction HYDHEL H.1 2.3.1b   : e He(1s2|1S)	 : He*(1s3p|1P) e  : EI
+Reaction HYDHEL H.1 2.3.2    : e He(1s2|1S)	 : He*(1s2s|1S) e  : EI
+Reaction HYDHEL H.1 2.3.3b   : e He(1s2|1S)	 : He*(1s2p|3P) e  : EI
+Reaction HYDHEL H.1 2.3.4a   : e He*(1s2s|3S)	 : He*(1s2s|1S) e  : EI
+Reaction HYDHEL H.1 2.3.4b   : e He*(1s2s|3S)	 : He*(1s2s|1P) e  : EI
+Reaction HYDHEL H.1 2.3.4c   : e He*(1s2s|1S)	 : He*(1s2p|3P) e  : EI
+Reaction HYDHEL H.1 2.3.4d   : e He*(1s2p|3P)	 : He*(1s2p|1P) e  : EI
+Reaction HYDHEL H.1 2.3.5a   : e He*(1s2s|1S)	 : He*(1s2p|1P) e  : EI
+Reaction HYDHEL H.1 2.3.5b   : e He*(1s2s|3S)	 : He*(1s2p|3P) e  : EI
+Reaction HYDHEL H.1 2.3.6a   : e He*(1s2s|1S)	 : He*(1s3p|1P) e  : EI
+Reaction HYDHEL H.1 2.3.6b   : e He*(1s2s|3S)	 : He*(1s3p|3P) e  : EI
+Reaction HYDHEL H.1 2.3.7a   : e He*(1s2p|1P)	 : He*(1s3d|1D) e  : EI
+Reaction HYDHEL H.1 2.3.7b   : e He*(1s2p|3P)	 : He*(1s3d|3D) e  : EI
+Reaction HYDHEL H.1 2.3.9    : e He(1s2|1S)	 : He+ 2e 	   : EI
+Reaction HYDHEL H.1 2.3.10a  : e He*(1s2s|1S)	 : He+(1s) 2e      : EI
+Reaction HYDHEL H.1 2.3.10b  : e He*(1s2p|1P)	 : He+(1s) 2e      : EI
+Reaction HYDHEL H.1 2.3.10c  : e He*(1s2s|3S)	 : He+(1s) 2e      : EI
+Reaction HYDHEL H.1 2.3.10b  : e He*(1s2p|3P)	 : He+(1s) 2e      : EI
+Reaction HYDHEL H.1 2.3.12   : e He*(1snP|2S+1L) : He+*(nP) 2e     : EI
+Reaction HYDHEL H.1 2.3.14   : e He+(1s)	 : He+*(2p) e	   : EI
+Reaction HYDHEL H.1 2.3.15   : e He+(1s)	 : He+*(2s) e	   : EI
+Reaction HYDHEL H.1 2.3.19   : e He+(1s)	 : He++ 2e 	   : EI
+Reaction HYDHEL H.1 3.1.1    : H+ H		 : H+ H*(2p)	   : II
+Reaction HYDHEL H.1 3.1.2    : H+ H		 : H+ H*(2s)	   : II
+Reaction HYDHEL H.1 3.1.3    : H+ H*(2s)	 : H+ H*(2p)	   : II
+Reaction HYDHEL H.1 3.1.6    : H+ H		 : H+ H+ e	   : II
+Reaction HYDHEL H.1 3.1.8    : H+ H		 : H  H+	   : CX
+Reaction HYDHEL H.1 3.1.9    : H+ H		 : H*(2p) H+	   : CX
+Reaction HYDHEL H.1 3.1.10   : H+ H		 : H*(2s) H+	   : CX
+Reaction HYDHEL H.1 3.1.11a  : H+ H*(n=2)	 : H*(n=2) H+	   : CX
+Reaction HYDHEL H.1 3.1.11b  : H+ H*(n=3)	 : H*(n=3) H+	   : CX
+Reaction HYDHEL H.1 3.2.1a   : H+ H2(j=0)	 : H+ H2(j)	   : II
+Reaction HYDHEL H.1 3.2.1b   : H+ H2(j=1)	 : H+ H2(j)	   : II
+Reaction HYDHEL H.1 3.2.2    : H+ H2(v=0)	 : H+ H2(v)	   : II
+Reaction HYDHEL H.1 3.2.3    : H+ H2		 : H  H2+	   : CX
+Reaction HYDHEL H.1 3.2.4a   : H+ D2		 : D+ HD	   : CX
+Reaction HYDHEL H.1 3.2.4b   : H+ D2		 : D HD+	   : CX
+Reaction HYDHEL H.1 3.2.5    : H+ H2		 : H+ H2+(v)	   : II
+Reaction HYDHEL H.1 3.2.6    : H+ H2+(v)	 : H+ H H+	   : II
+Reaction HYDHEL H.1 3.3.1    : H+ He		 : H He+	   : CX
+Reaction HYDHEL H.1 3.3.2    : H+ He		 : H+ He+ e	   : II
+Reaction HYDHEL H.1 3.3.3    : H+ He(1s2|1S)	 : H+ He*(1s2p|1P) : CX
+Reaction HYDHEL H.1 3.3.6a   : H+ He*(1s2s|1S)   : H*(2s) He+(1s)  : CX
+Reaction HYDHEL H.1 3.3.6b   : H+ He*(1s2s|3S)   : H*(2s) He+(1s)  : CX
+Reaction HYDHEL H.1 3.3.7a   : H+ He*(1s2p|1P)   : H*(2p) He+(1s)  : CX
+Reaction HYDHEL H.1 3.3.7b   : H+ He*(1s2p|3P)   : H*(2p) He+(1s)  : CX
+Reaction HYDHEL H.1 4.2.1    : H2+(v) H 	 : H+ H H	   : DS
+Reaction HYDHEL H.1 4.3.1    : H2+ H2		 : H2 H2+	   : CX
+Reaction HYDHEL H.1 4.3.2    : H2+ H2		 : H2+ H2+ e	   : II
+Reaction HYDHEL H.1 4.3.3    : H2+ H2		 : H3+ H	   : II
+Reaction HYDHEL H.1 4.4.1    : H2+ He		 : H2+ He+ e	   : II
+Reaction HYDHEL H.1 5.2.1    : He+ H2		 : He+ H2+ e	   : II
+Reaction HYDHEL H.1 5.2.2    : He+ H2		 : He H2+	   : CX
+Reaction HYDHEL H.1 5.2.3    : He+ H2		 : He H+ H	   : II
+Reaction HYDHEL H.1 5.3.1    : He+ He		 : He He+	   : CX
+Reaction HYDHEL H.1 5.3.2    : He+ He		 : He+ He+ e	   : II
+Reaction HYDHEL H.1 6.1.1    : He++ H		 : He++ H*(2p)     : II
+Reaction HYDHEL H.1 6.1.3    : He++ H		 : He++ H+ e	   : II
+Reaction HYDHEL H.1 6.1.4    : He++ H*  	 : He++ H+ e	   : II
+Reaction HYDHEL H.1 6.1.6    : He++ H		 : He+*(n=2) H+    : CX
+Reaction HYDHEL H.1 6.2.1    : He++ H2  	 : He++ H2+(v) e   : II
+Reaction HYDHEL H.1 6.3.1    : He++ He  	 : He He++	   : CX
+Reaction HYDHEL H.1 6.3.2    : He++ He  	 : He++ He+ e	   : II
+Reaction HYDHEL H.1 7.1.1    : e H-		 : H 2e 	   : EI
+Reaction HYDHEL H.1 7.1.2    : e H-		 : H+ 3e  	   : EI
+Reaction HYDHEL H.1 7.2.1    : H+ H-		 : H+ H e	   : II
+Reaction HYDHEL H.1 7.2.2    : H+ H-		 : H*(n=2) H	   : II
+Reaction HYDHEL H.1 7.2.3    : H+ H-		 : H*(n=3) H	   : II
+Reaction HYDHEL H.1 7.3.1    : H- H		 : H H- 	   : CX
+Reaction HYDHEL H.1 7.3.2a   : H- H		 : H  H e	   : II
+Reaction HYDHEL H.1 7.3.2b   : H- H		 : H2 e 	   : II
+Reaction HYDHEL H.2 2.1.1    : e H		 : H*(2p) e	   : EI
+Reaction HYDHEL H.2 2.1.2    : e H		 : H*(2s) e	   : EI
+Reaction HYDHEL H.2 2.1.3    : e H*(2s) 	 : H*(2p) e	   : EI
+Reaction HYDHEL H.2 2.1.4a   : e H		 : H*(n=3) e	   : EI
+Reaction HYDHEL H.2 2.1.4b   : e H*(n=2)	 : H*(n=3) e	   : EI
+Reaction HYDHEL H.2 2.1.5    : e H		 : H+ 2e 	   : EI
+Reaction HYDHEL H.2 2.1.6    : e H*(2s) 	 : H+ 2e 	   : EI
+Reaction HYDHEL H.2 2.1.7    : e H*(n=3)	 : H+ 2e 	   : EI
+Reaction HYDHEL H.2 2.2.1a   : e H2(v=0)	 : H2(v=1) e	   : EI
+Reaction HYDHEL H.2 2.2.1b   : e H2(v=0)	 : H2(v=2) e	   : EI
+Reaction HYDHEL H.2 2.2.2    : e H2		 : H2(*) e	   : EI
+Reaction HYDHEL H.2 2.2.3    : e H2		 : H2(*) e	   : EI
+Reaction HYDHEL H.2 2.2.4    : e H2		 : H2(*) e	   : EI
+Reaction HYDHEL H.2 2.2.5    : e H2		 : H H   e	   : DS
+Reaction HYDHEL H.2 2.2.6    : e H2		 : H H*(2s) e	   : DS
+Reaction HYDHEL H.2 2.2.7    : e H2		 : H*(2p) H*(2s) e : DS
+Reaction HYDHEL H.2 2.2.8    : e H2		 : H H*(n=3) e     : DS
+Reaction HYDHEL H.2 2.2.9    : e H2		 : H2+(v) 2e 	   : EI
+Reaction HYDHEL H.2 2.2.10   : e H2		 : H+ H 2e 	   : DS
+Reaction HYDHEL H.2 2.2.11   : e H2+(v) 	 : H+ H+ 2e 	   : DS
+Reaction HYDHEL H.2 2.2.12   : e H2+(v) 	 : H+ H e	   : DS
+Reaction HYDHEL H.2 2.2.13   : e H2+(v) 	 : H+ H*(n=2) e    : DS
+Reaction HYDHEL H.2 2.2.14   : e H2+(v) 	 : H+ H* e	   : DS
+Reaction HYDHEL H.2 2.2.15   : e H3+		 : H H H e	   : DS
+Reaction HYDHEL H.2 2.2.16   : e H3+		 : H+ H H e	   : DS
+Reaction HYDHEL H.2 2.2.17   : e H2(v)  	 : H- H 	   : DS
+Reaction HYDHEL H.2 2.3.1a   : e He(1s2|1S)	 : He*(1s2p|1P) e  : EI
+Reaction HYDHEL H.2 2.3.1b   : e He(1s2|1S)	 : He*(1s3p|1P) e  : EI
+Reaction HYDHEL H.2 2.3.2    : e He(1s2|1S)	 : He*(1s2s|1S) e  : EI
+Reaction HYDHEL H.2 2.3.3a   : e He(1s2|1S)	 : He*(1s2s|3S) e  : EI
+Reaction HYDHEL H.2 2.3.3b   : e He(1s2|1S)	 : He*(1s2p|3P) e  : EI
+Reaction HYDHEL H.2 2.3.3c   : e He(1s2|1S)	 : He*(1s3s|3S) e  : EI
+Reaction HYDHEL H.2 2.3.3d   : e He(1s2|1S)	 : He*(1s3p|3P) e  : EI
+Reaction HYDHEL H.2 2.3.4a   : e He*(1s2s|3S)	 : He*(1s2s|1S) e  : EI
+Reaction HYDHEL H.2 2.3.4b   : e He*(1s2s|3S)	 : He*(1s2s|1P) e  : EI
+Reaction HYDHEL H.2 2.3.4c   : e He*(1s2s|1S)	 : He*(1s2p|3P) e  : EI
+Reaction HYDHEL H.2 2.3.4d   : e He*(1s2p|3P)	 : He*(1s2p|1P) e  : EI
+Reaction HYDHEL H.2 2.3.5a   : e He*(1s2s|1S)	 : He*(1s2p|1P) e  : EI
+Reaction HYDHEL H.2 2.3.5b   : e He*(1s2s|3S)	 : He*(1s2p|3P) e  : EI
+Reaction HYDHEL H.2 2.3.6a   : e He*(1s2s|1S)	 : He*(1s3p|1P) e  : EI
+Reaction HYDHEL H.2 2.3.6b   : e He*(1s2s|3S)	 : He*(1s3p|3P) e  : EI
+Reaction HYDHEL H.2 2.3.7a   : e He*(1s2p|1P)	 : He*(1s3d|1D) e  : EI
+Reaction HYDHEL H.2 2.3.7b   : e He*(1s2s|3P)	 : He*(1s3d|3D) e  : EI
+Reaction HYDHEL H.2 2.3.9    : e He(1s2|1S)	 : He+ 2e 	   : EI
+Reaction HYDHEL H.2 2.3.10a  : e He*(1s2s|1S)	 : He+(1s) 2e      : EI
+Reaction HYDHEL H.2 2.3.10b  : e He*(1s2p|1P)	 : He+(1s) 2e      : EI
+Reaction HYDHEL H.2 2.3.10c  : e He*(1s2s|3S)	 : He+(1s) 2e      : EI
+Reaction HYDHEL H.2 2.3.10d  : e He*(1s2p|3P)	 : He+(1s) 2e      : EI
+Reaction HYDHEL H.2 2.3.12   : e He*(1snP|2S+1L) : He+*(nP) 2e     : EI
+Reaction HYDHEL H.2 2.3.14   : e He+(1s)	 : He+*(2p) e	   : EI
+Reaction HYDHEL H.2 2.3.15   : e He+(1s)	 : He+*(2s) e	   : EI
+Reaction HYDHEL H.2 2.3.19   : e He+(1s)	 : He++ 2e 	   : EI
+Reaction HYDHEL H.2 7.1.1    : e H-		 : H 2e 	   : EI
+Reaction HYDHEL H.2 7.1.2    : e H-		 : H+ 3e  	   : EI
+Reaction HYDHEL H.3 3.1.1    : H+  H		 : H+ H*(2p)	   : II
+Reaction HYDHEL H.3 3.1.2    : H+ H		 : H+ H*(2s)	   : II
+Reaction HYDHEL H.3 3.1.3    : H+ H*(2s)	 : H+ H*(2p)	   : II
+Reaction HYDHEL H.3 3.1.6    : H+ H		 : H+ H+ e	   : II
+Reaction HYDHEL H.3 3.1.8    : H+ H		 : H H+	      	   : CX
+Reaction HYDHEL H.3 3.1.9    : H+ H		 : H*(2p) H+	   : CX
+Reaction HYDHEL H.3 3.1.10   : H+ H		 : H*(2s) H+	   : CX
+Reaction HYDHEL H.3 3.1.11a  : H+ H*(n=2)	 : H*(n=2) H+	   : CX
+Reaction HYDHEL H.3 3.1.11b  : H+ H*(n=3)	 : H*(n=3) H+	   : CX
+Reaction HYDHEL H.3 3.2.1a   : H+ H2(j=0)	 : H+ H2(j)	   : II
+Reaction HYDHEL H.3 3.2.1b   : H+ H2(j=1)	 : H+ H2(j)	   : II
+Reaction HYDHEL H.3 3.2.2    : H+ H2(v=0)	 : H+ H2(v)	   : II
+Reaction HYDHEL H.3 3.2.3    : H+ H2		 : H  H2+	   : CX
+Reaction HYDHEL H.3 3.2.4a   : H+ D2		 : D+ HD	   : CX
+Reaction HYDHEL H.3 3.2.4b   : H+ D2		 : D HD+	   : CX
+Reaction HYDHEL H.3 3.2.5    : H+ H2		 : H+ H2+(v)	   : II
+Reaction HYDHEL H.3 3.2.6    : H+ H2+(v)	 : H+ H H+	   : II
+Reaction HYDHEL H.3 3.3.1    : H+ He		 : H He+	   : CX
+Reaction HYDHEL H.3 3.3.2    : H+ He		 : H+ He+ e	   : II
+Reaction HYDHEL H.3 3.3.6a   : H+ He*(1s2s|1S)   : H*(2s) He+(1s)  : CX
+Reaction HYDHEL H.3 3.3.6b   : H+ He*(1s2s|3S)   : H*(2s) He+(1s)  : CX
+Reaction HYDHEL H.3 3.3.7a   : H+ He*(1s2p|1P)   : H*(2p) He+(1s)  : CX
+Reaction HYDHEL H.3 3.3.7b   : H+ He*(1s2p|3P)   : H*(2p) He+(1s)  : CX
+Reaction HYDHEL H.3 4.2.1    : H2+(v) H 	 : H+ H H	   : DS
+Reaction HYDHEL H.3 4.3.1    : H2+ H2		 : H2 H2+	   : CX
+Reaction HYDHEL H.3 4.3.2    : H2+ H2		 : H2+ H2+ e	   : II
+Reaction HYDHEL H.3 4.3.3    : H2+ H2		 : H3+ H	   : II
+Reaction HYDHEL H.3 4.4.1    : H2+ He		 : H2+ He+ e	   : II
+Reaction HYDHEL H.3 5.2.1    : He+ H2		 : He+ H2+ e	   : II
+Reaction HYDHEL H.3 5.2.2    : He+ H2		 : He H2+	   : CX
+Reaction HYDHEL H.3 5.2.3    : He+ H2		 : He H+ H	   : II
+Reaction HYDHEL H.3 5.3.1    : He+ He		 : He He+	   : CX
+Reaction HYDHEL H.3 5.3.2    : He+ He		 : He+ He+ e	   : II
+Reaction HYDHEL H.3 6.1.1    : He++ H		 : He++ H*(2p)     : II
+Reaction HYDHEL H.3 6.1.3    : He++ H		 : He++ H+ e	   : II
+Reaction HYDHEL H.3 6.1.6    : He++ H		 : He+*(n=2) H+    : II
+Reaction HYDHEL H.3 6.2.1    : He++ H2  	 : He++ H2+(v) e   : II
+Reaction HYDHEL H.3 6.3.1    : He++ He  	 : He He++	   : CX
+Reaction HYDHEL H.3 6.3.2    : He++ He  	 : He++ He+ e	   : II
+Reaction HYDHEL H.3 7.2.1    : H+ H-		 : H+ H e	   : II
+Reaction HYDHEL H.3 7.2.2    : H+ H-		 : H*(n=2) H	   : II
+Reaction HYDHEL H.3 7.2.3    : H+ H-		 : H*(n=3) H	   : II
+Reaction HYDHEL H.3 7.3.1    : H- H		 : H H- 	   : CX
+Reaction HYDHEL H.3 7.3.2a   : H- H		 : H  H e	   : II
+Reaction HYDHEL H.3 7.3.2b   : H- H		 : H2 e 	   : II
+
+Reaction AMJUEL H.1 0.1T     : H+ H		 : H+ H 	   : EL
+Reaction AMJUEL H.1 0.1D     : H+ H		 : H+ H 	   : EL
+Reaction AMJUEL H.1 0.1V     : H+ H		 : H+ H 	   : EL
+Reaction AMJUEL H.1 0.2T     : H+ He(1|1s)	 : H+ He(1|1s)     : EL
+Reaction AMJUEL H.1 0.2D     : H+ He(1|1s)	 : H+ He(1|1s)     : EL
+Reaction AMJUEL H.1 0.2V     : H+ He(1|1s)	 : H+ He(1|1s)     : EL
+Reaction AMJUEL H.1 0.3T     : H+ H2		 : H+ H2	   : EL
+Reaction AMJUEL H.1 0.3D     : H+ H2		 : H+ H2	   : EL
+Reaction AMJUEL H.1 0.3V     : H+ H2		 : H+ H2	   : EL
+Reaction AMJUEL H.1 0.4T     : He+ He		 : He+ He	   : EL
+Reaction AMJUEL H.1 0.4D     : He+ He		 : He+ He	   : EL
+Reaction AMJUEL H.1 0.4V     : He+ He		 : He+ He	   : EL
+Reaction AMJUEL H.1 0.5T     : H+ Ne		 : H+ Ne	   : EL
+Reaction AMJUEL H.1 0.5D     : H+ Ne		 : H+ Ne	   : EL
+Reaction AMJUEL H.1 0.5V     : H+ Ne		 : H+ Ne	   : EL
+Reaction AMJUEL H.1 0.6T     : H+ Ar		 : H+ Ar	   : EL
+Reaction AMJUEL H.1 0.6D     : H+ Ar		 : H+ Ar	   : EL
+Reaction AMJUEL H.1 0.6V     : H+ Ar		 : H+ Ar	   : EL
+Reaction AMJUEL H.1 0.7T     : H+ Kr		 : H+ Kr	   : EL
+Reaction AMJUEL H.1 0.7D     : H+ Kr		 : H+ Kr	   : EL
+Reaction AMJUEL H.1 0.7V     : H+ Kr		 : H+ Kr	   : EL
+Reaction AMJUEL H.1 0.8T     : H+ Xe		 : H+ Xe	   : EL
+Reaction AMJUEL H.1 0.8D     : H+ Xe		 : H+ Xe	   : EL
+Reaction AMJUEL H.1 0.8V     : H+ Xe		 : H+ Xe	   : EL
+Reaction AMJUEL H.1 2.2.5    : e H2		 : H H e	   : DS
+Reaction AMJUEL H.1 3.1.6FJ  : H+ H		 : 2H+ e 	   : II
+Reaction AMJUEL H.1 3.1.8R   : H+ H		 : H H+ 	   : CX
+Reaction AMJUEL H.1 3.1.8S   : H+ H		 : H H+ 	   : CX
+Reaction AMJUEL H.1 3.1.8T   : H+ H		 : H H+ 	   : CX
+Reaction AMJUEL H.1 3.1.8M   : H+ H		 : H H+ 	   : CX
+Reaction AMJUEL H.1 3.1.8J   : H+ H		 : H H+ 	   : CX
+Reaction AMJUEL H.2 2.1.5FJ  : e H		 : H+ 2e 	   : EI
+Reaction AMJUEL H.2 2.2.5    : e H2		 : H H e	   : DS
+Reaction AMJUEL H.2 2.2.17   : e H2		 : H H- 	   : DS
+Reaction AMJUEL H.2 2.2B0    : e He		 : He+ 2e 	   : EI
+Reaction AMJUEL H.2 2.2B1    : e He+		 : He++ 2e 	   : EI
+Reaction AMJUEL H.2 2.2FJ    : e He		 : He+ 2e 	   : EI
+Reaction AMJUEL H.2 2.4B0    : e Be		 : Be+ 2e 	   : EI
+Reaction AMJUEL H.2 2.4B1    : e Be+		 : Be++ 2e 	   : EI
+Reaction AMJUEL H.2 2.5B0    : e B		 : B+ 2e 	   : EI
+Reaction AMJUEL H.2 2.5B1    : e B+		 : B++ 2e 	   : EI
+Reaction AMJUEL H.2 2.6B0    : e C		 : C+ 2e 	   : EI
+Reaction AMJUEL H.2 2.6B1    : e C+		 : C++ 2e 	   : EI
+Reaction AMJUEL H.2 2.7B0    : e N		 : N+ 2e 	   : EI
+Reaction AMJUEL H.2 2.10B0   : e Ne		 : Ne+ 2e 	   : EI
+Reaction AMJUEL H.2 2.10B1   : e Ne+		 : Ne++ 2e 	   : EI
+Reaction AMJUEL H.2 2.18B0   : e Ar		 : Ar+ 2e 	   : EI
+Reaction AMJUEL H.2 2.18B1   : e Ar+		 : Ar++ 2e 	   : EI
+Reaction AMJUEL H.2 2.26B0   : e Fe		 : Fe+ 2e 	   : EI
+Reaction AMJUEL H.2 2.26B1   : e Fe+		 : Fe++ 2e 	   : EI
+Reaction AMJUEL H.2 3.1.6FJ  : H+ H		 : H+ H+ e	   : CX
+Reaction AMJUEL H.2 3.1.8FJ  : H+ H		 : H H+ 	   : CX
+Reaction AMJUEL H.2 3.2.3    : H+ H2		 : H H2+	   : CX
+Reaction AMJUEL H.3 0.1T     : H+ H		 : H+ H 	   : EL
+Reaction AMJUEL H.3 0.1D     : H+ H		 : H+ H 	   : EL
+Reaction AMJUEL H.3 0.2T     : H+ He(1S)	 : H+ He(1S)	   : EL
+Reaction AMJUEL H.3 0.2D     : H+ He(1S)	 : H+ He(1S)	   : EL
+Reaction AMJUEL H.3 0.3T     : H+ H2		 : H+ H2	   : EL
+Reaction AMJUEL H.3 0.3D     : H+ H2		 : H+ H2	   : EL
+Reaction AMJUEL H.3 0.4T     : He+ He		 : He+ He	   : EL
+Reaction AMJUEL H.3 0.4D     : He+ He		 : He+ He	   : EL
+Reaction AMJUEL H.3 0.5T     : H+ Ne		 : H+ Ne	   : EL
+Reaction AMJUEL H.3 0.5D     : H+ Ne		 : H+ Ne	   : EL
+Reaction AMJUEL H.3 0.6T     : H+ Ar		 : H+ Ar	   : EL
+Reaction AMJUEL H.3 0.6D     : H+ Ar		 : H+ Ar	   : EL
+Reaction AMJUEL H.3 0.7T     : H+ Kr		 : H+ Kr	   : EL
+Reaction AMJUEL H.3 0.7D     : H+ Kr		 : H+ Kr	   : EL
+Reaction AMJUEL H.3 0.8T     : H+ Xe		 : H+ Xe	   : EL
+Reaction AMJUEL H.3 0.8D     : H+ Xe		 : H+ Xe	   : EL
+Reaction AMJUEL H.3 3.1.8    : H+ H		 : H H+ 	   : CX
+Reaction AMJUEL H.3 3.2.3    : H+ H2		 : H H2+	   : CX
+Reaction AMJUEL H.3 3.3.1    : H+ He		 : H He+	   : CX
+Reaction AMJUEL H.3 3.3.6a   : H+ He*(1s2s|1S)   : H*(2s) He+(1s)  : CX
+Reaction AMJUEL H.3 3.3.6b   : H+ He*(1s2s|3S)   : H*(2s) He+(1s)  : CX
+Reaction AMJUEL H.4 2.1.5    : e H		 : H+ 2e 	   : EI
+Reaction AMJUEL H.4 2.1.5o   : e H		 : H+ 2e 	   : EI
+Reaction AMJUEL H.4 2.1.5FU  : e H		 : H+ 2e 	   : EI
+Reaction AMJUEL H.4 2.1.8    : e H+		 : H		   : RC
+Reaction AMJUEL H.4 2.1.8o   : e H+		 : H		   : RC
+Reaction AMJUEL H.4 2.1.8a   : e H+		 : H		   : RC
+Reaction AMJUEL H.4 2.1.8b   : e H+		 : H		   : RC
+Reaction AMJUEL H.4 2.1.8FU  : e H+		 : H		   : RC
+Reaction AMJUEL H.4 2.2C     : e He+		 : He++ 2e 	   : EI
+Reaction AMJUEL H.4 2.2.5    : e H2		 : H H e	   : DS
+Reaction AMJUEL H.4 2.2.5g   : e H2		 : H H e	   : DS
+Reaction AMJUEL H.4 2.2.9    : e H2		 : H2+ e	   : EI
+Reaction AMJUEL H.4 2.2.10   : e H2		 : H H+ e	   : DS
+Reaction AMJUEL H.4 2.2.11   : e H2+		 : H+ H+ e	   : DS
+Reaction AMJUEL H.4 2.2.12   : e H2+		 : H H+ e	   : DS
+Reaction AMJUEL H.4 2.2.14   : e H2+		 : H H e	   : DS
+Reaction AMJUEL H.4 2.3.9a   : e He(1|1S)	 : He+ 2e 	   : EI
+Reaction AMJUEL H.4 2.3.9b   : e He(1|1S)	 : He+ 2e 	   : EI
+Reaction AMJUEL H.4 2.3.9c   : e He(1|1S)	 : He(2|1S) e	   : EI
+Reaction AMJUEL H.4 2.3.9d   : e He(1|1S)	 : He(2|3S) e	   : EI
+Reaction AMJUEL H.4 2.3.9e   : e He(2|1S)	 : He(1|1S) e	   : EI
+Reaction AMJUEL H.4 2.3.9f   : e He(2|1S)	 : He+ 2e 	   : EI
+Reaction AMJUEL H.4 2.3.9g   : e He(2|1S)	 : He(2|3S) e	   : EI
+Reaction AMJUEL H.4 2.3.9h   : e He(2|3S)	 : He(1|1S) e	   : EI
+Reaction AMJUEL H.4 2.3.9i   : e He(2|3S)	 : He(2|1S) e	   : EI
+Reaction AMJUEL H.4 2.3.9j   : e He(2|3S)	 : He+ 2e 	   : EI
+Reaction AMJUEL H.4 2.3.2B0  : e He+		 : He		   : RC
+Reaction AMJUEL H.4 2.3.2B1  : e He++		 : He+  	   : RC
+Reaction AMJUEL H.4 2.3.2C   : e He++		 : He+  	   : RC
+Reaction AMJUEL H.4 2.3.4B0  : e Be+		 : Be		   : RC
+Reaction AMJUEL H.4 2.3.4B1  : e Be++		 : Be+  	   : RC
+Reaction AMJUEL H.4 2.3.5B0  : e B+		 : B		   : RC
+Reaction AMJUEL H.4 2.3.5B1  : e B++		 : B+		   : RC
+Reaction AMJUEL H.4 2.3.6A0  : e C+		 : C		   : RC
+Reaction AMJUEL H.4 2.3.6B0  : e C+		 : C		   : RC
+Reaction AMJUEL H.4 2.3.10B0 : e Ne+		 : Ne		   : RC
+Reaction AMJUEL H.4 2.3.10B1 : e Ne++		 : Ne+  	   : RC
+Reaction AMJUEL H.4 2.3.13a  : e He+(1s)	 : He(1S)	   : RC
+Reaction AMJUEL H.4 2.3.13b  : e He+(1s)	 : He(1|1S)	   : RC
+Reaction AMJUEL H.4 2.3.13c  : e He+(1s)	 : He(2|1S)	   : RC
+Reaction AMJUEL H.4 2.3.13d  : e He+(1s)	 : He(2|3S)	   : RC
+Reaction AMJUEL H.4 2.3.18B0 : e Ar+		 : Ar		   : RC
+Reaction AMJUEL H.4 2.3.18B1 : e Ar++		 : Ar+  	   : RC
+Reaction AMJUEL H.4 2.6A0    : e C		 : C+ 2e 	   : EI
+Reaction AMJUEL H.4 7.2.3a   : H+ H-		 : H H  	   : II
+Reaction AMJUEL H.4 7.2.3b   : H+ H-		 : H H+ e	   : II
+Reaction AMJUEL H.8 2.2.14   : e H2+(v) 	 : H H* 	   : OT
+Reaction AMJUEL H.8 2.2B0    : e He		 : He+ 2e 	   : OT
+Reaction AMJUEL H.8 2.2B1    : e He+		 : He++ 2e 	   : OT
+Reaction AMJUEL H.8 2.4B0    : e Be		 : Be+ 2e 	   : OT
+Reaction AMJUEL H.8 2.4B1    : e Be+		 : Be++ 2e 	   : OT
+Reaction AMJUEL H.8 2.5B0    : e B		 : B+ 2e 	   : OT
+Reaction AMJUEL H.8 2.5B1    : e B+		 : B++ 2e 	   : OT
+Reaction AMJUEL H.8 2.6B0    : e C		 : C+ 2e 	   : OT
+Reaction AMJUEL H.8 2.6B1    : e C+		 : C++ 2e 	   : OT
+Reaction AMJUEL H.8 2.10B0   : e Ne		 : Ne+ 2e 	   : OT
+Reaction AMJUEL H.8 2.10B1   : e Ne+		 : Ne++ 2e 	   : OT
+Reaction AMJUEL H.8 2.18B0   : e Ar		 : Ar+ 2e 	   : OT
+Reaction AMJUEL H.8 2.18B1   : e Ar+		 : Ar++ 2e 	   : OT
+Reaction AMJUEL H.9 3.1.8    : H+ H		 : H H+ 	   : OT
+Reaction AMJUEL H.9 3.3.1    : H+ He		 : H He+	   : OT
+Reaction AMJUEL H.9 3.3.6a   : H+ He*(1s2s|1S)   : H*(2s) He+(1s)  : OT
+Reaction AMJUEL H.9 3.3.6b   : H+ He*(1s2s|3S)   : H*(2s) He+(1s)  : OT
+Reaction AMJUEL H.10 2.1.5   : e  H		 : H+ 2e 	   : OT
+Reaction AMJUEL H.10 2.1.5o  : e  H		 : H+ 2e 	   : OT
+Reaction AMJUEL H.10 2.1.8   : e H+		 : H		   : OT
+Reaction AMJUEL H.10 2.1.8o  : e H+		 : H		   : OT
+Reaction AMJUEL H.10 2.3.6A0 : e  C+		 : C		   : OT
+Reaction AMJUEL H.10 2.3.9a  : e He(1|1S)        : He+ 2e          : EI
+Reaction AMJUEL H.10 2.3.13a : e He+(1s)         : He(1S)          : RC
+Reaction AMJUEL H.10 2.6A0   : e  C		 : C+ 2e 	   : OT
+Reaction AMJUEL H.11 2.0a    : H2+ H2		 : H2+ H2	   : OT
+Reaction AMJUEL H.11 2.2B0   : e He		 : He*  	   : OT
+Reaction AMJUEL H.11 2.4B0   : e Be		 : Be*  	   : OT
+Reaction AMJUEL H.11 2.5B0   : e  B		 : B*		   : OT
+Reaction AMJUEL H.11 2.6B0   : e  C		 : C*		   : OT
+Reaction AMJUEL H.11 2.10B0  : e Ne		 : Ne*  	   : OT
+Reaction AMJUEL H.11 2.18B0  : e Ar		 : Ar*  	   : OT
+Reaction AMJUEL H.11 7.0b    : H-  H2		 : H-  H2	   : OT
+Reaction AMJUEL H.11 7.0c    : H-  H2		 : H-  H2	   : OT
+Reaction AMJUEL H.12 2.0b    : H2+ H2		 : H2+ H2	   : OT
+Reaction AMJUEL H.12 2.0c    : H2+ H2		 : H2+ H2	   : OT
+Reaction AMJUEL H.12 2.1.5a  : e  H		 : H+ 2e 	   : OT
+Reaction AMJUEL H.12 2.1.5b  : e  H		 : H+ 2e 	   : OT
+Reaction AMJUEL H.12 2.1.5c  : e  H		 : H+ 2e 	   : OT
+Reaction AMJUEL H.12 2.1.5d  : e  H		 : H+ 2e 	   : OT
+Reaction AMJUEL H.12 2.1.5e  : e  H		 : H+ 2e 	   : OT
+Reaction AMJUEL H.12 2.1.5t  : e  H		 : H+ 2e 	   : OT
+Reaction AMJUEL H.12 2.1.5de : e  H		 : H+ 2e 	   : OT
+Reaction AMJUEL H.12 2.1.5o  : e  H		 : H+ 2e 	   : OT
+Reaction AMJUEL H.12 2.1.8a  : e H+		 : H		   : OT
+Reaction AMJUEL H.12 2.1.8b  : e H+		 : H		   : OT
+Reaction AMJUEL H.12 2.1.8c  : e H+		 : H		   : OT
+Reaction AMJUEL H.12 2.1.8d  : e H+		 : H		   : OT
+Reaction AMJUEL H.12 2.1.8e  : e H+		 : H		   : OT
+Reaction AMJUEL H.12 2.1.8t  : e H+		 : H		   : OT
+Reaction AMJUEL H.12 2.1.8de : e H+		 : H		   : OT
+Reaction AMJUEL H.12 2.1.8o  : e H+		 : H		   : OT
+Reaction AMJUEL H.12 2.2a    : e He		 : He* e           : OT
+Reaction AMJUEL H.12 2.2b    : e He		 : He* e           : OT
+Reaction AMJUEL H.12 2.2c    : e He		 : He* e           : OT
+Reaction AMJUEL H.12 2.2.5a  : e H2		 : H		   : OT
+Reaction AMJUEL H.12 2.2.5b  : e H2		 : H		   : OT
+Reaction AMJUEL H.12 2.2.5c  : e H2		 : H		   : OT
+Reaction AMJUEL H.12 2.2.5d  : e H2		 : H		   : OT
+Reaction AMJUEL H.12 2.2.5e  : e H2		 : H		   : OT
+Reaction AMJUEL H.12 2.2.5fl : e H2		 : H2(*) e         : OT
+Reaction AMJUEL H.12 2.2.5fu : e H2		 : H2(*) e         : OT
+Reaction AMJUEL H.12 2.2.14a : e H2		 : H		   : OT
+Reaction AMJUEL H.12 2.2.14b : e H2		 : H		   : OT
+Reaction AMJUEL H.12 2.2.14c : e H2		 : H		   : OT
+Reaction AMJUEL H.12 2.2.14d : e H2		 : H		   : OT
+Reaction AMJUEL H.12 2.2.14e : e H2		 : H		   : OT
+Reaction AMJUEL H.12 2.3.2a  : e He+		 : He*             : OT
+Reaction AMJUEL H.12 2.3.2b  : e He+		 : He*             : OT
+Reaction AMJUEL H.12 2.3.2c  : e He+		 : He*             : OT
+Reaction AMJUEL H.12 2.3.6A0 : e  C+		 : C		   : OT
+Reaction AMJUEL H.12 2.3.9a  : e He		 : He+ 2e          : OT
+Reaction AMJUEL H.12 2.3.13a : e He+		 : He              : OT
+Reaction AMJUEL H.12 2.6A0   : e  C		 : C+ 2e 	   : OT
+Reaction AMJUEL H.12 7.2a    : H- H+		 : H		   : OT
+Reaction AMJUEL H.12 7.2b    : H- H+		 : H		   : OT
+Reaction AMJUEL H.12 7.2c    : H- H+		 : H		   : OT
+Reaction AMJUEL H.12 7.2d    : H- H+		 : H		   : OT
+Reaction AMJUEL H.12 7.2e    : H- H+		 : H		   : OT
+
+Reaction METHANE H.1 2.1     : e CH4		 : CH4+ 2e 	   : EI
+Reaction METHANE H.1 2.2     : e CH3		 : CH3+ 2e 	   : EI
+Reaction METHANE H.1 2.3     : e CH2		 : CH2+ 2e 	   : EI
+Reaction METHANE H.1 2.4     : e CH		 : CH+  2e 	   : EI
+Reaction METHANE H.1 2.5     : e CH4		 : CH3+ H 2e 	   : DS
+Reaction METHANE H.1 2.8     : e CH3		 : CH2+ H 2e 	   : DS
+Reaction METHANE H.1 2.9     : e CH2		 : CH+ H 2e 	   : DS
+Reaction METHANE H.1 2.10.1  : e CH		 : C+ H 2e 	   : DS
+Reaction METHANE H.1 2.10.2  : e CH		 : C H+ 2e 	   : DS
+Reaction METHANE H.1 2.11    : e CH4		 : CH3 H e	   : DS
+Reaction METHANE H.1 2.12    : e CH3		 : CH2 H e	   : DS
+Reaction METHANE H.1 2.13    : e CH2		 : CH H e	   : DS
+Reaction METHANE H.1 2.14    : e CH		 : C H e	   : DS
+Reaction METHANE H.1 2.15.1  : e CH4+		 : CH3 H+ e	   : DS
+Reaction METHANE H.1 2.15.2  : e CH4+		 : CH3+ H e	   : DS
+Reaction METHANE H.1 2.16.1  : e CH3+		 : CH2 H+ e	   : DS
+Reaction METHANE H.1 2.16.2  : e CH3+		 : CH2+ H e	   : DS
+Reaction METHANE H.1 2.17.1  : e CH2+		 : CH H+ e	   : DS
+Reaction METHANE H.1 2.17.2  : e CH2+		 : CH+ H e	   : DS
+Reaction METHANE H.1 2.18.1  : e CH+		 : C H+ e	   : DS
+Reaction METHANE H.1 2.18.2  : e CH+		 : C+ H e	   : DS
+Reaction METHANE H.1 2.19.1  : e CH4+		 : CH3 H	   : DS
+Reaction METHANE H.1 2.19.2  : e CH4+		 : CH2 H H	   : DS
+Reaction METHANE H.1 2.20    : e CH3+		 : CH2 H	   : DS
+Reaction METHANE H.1 2.21    : e CH2+		 : CH H 	   : DS
+Reaction METHANE H.1 2.22    : e CH+		 : C H  	   : DS
+Reaction METHANE H.1 2.23    : e C		 : C+ 2e 	   : EI
+Reaction METHANE H.1 3.1.1   : H+ CH4		 : CH4+ H	   : CX
+Reaction METHANE H.1 3.1.2   : H+ CH3		 : CH3+ H	   : CX
+Reaction METHANE H.1 3.1.3   : H+ CH2		 : CH2+ H	   : CX
+Reaction METHANE H.1 3.1.4   : H+ CH		 : CH+ H	   : CX
+Reaction METHANE H.1 3.2     : H+ C		 : C+ H 	   : CX
+Reaction METHANE H.2 2.1     : e CH4		 : CH4+ 2e 	   : EI
+Reaction METHANE H.2 2.2     : e CH3		 : CH3+ 2e 	   : EI
+Reaction METHANE H.2 2.3     : e CH2		 : CH2+ 2e 	   : EI
+Reaction METHANE H.2 2.4     : e CH		 : CH+  2e 	   : EI
+Reaction METHANE H.2 2.5     : e CH4		 : CH3+ H 2e 	   : DS
+Reaction METHANE H.2 2.8     : e CH3		 : CH2+ H 2e 	   : DS
+Reaction METHANE H.2 2.9     : e CH2		 : CH+ H 2e 	   : DS
+Reaction METHANE H.2 2.10.1  : e CH		 : C+ H 2e 	   : DS
+Reaction METHANE H.2 2.10.2  : e CH		 : C H+ 2e 	   : DS
+Reaction METHANE H.2 2.11    : e CH4		 : CH3 H e	   : DS
+Reaction METHANE H.2 2.12    : e CH3		 : CH2 H e	   : DS
+Reaction METHANE H.2 2.13    : e CH2		 : CH H e	   : DS
+Reaction METHANE H.2 2.14    : e CH		 : C H e	   : DS
+Reaction METHANE H.2 2.15.1  : e CH4+		 : CH3 H+ e	   : DS
+Reaction METHANE H.2 2.15.2  : e CH4+		 : CH3+ H e	   : DS
+Reaction METHANE H.2 2.16.1  : e CH3+		 : CH2 H+ e	   : DS
+Reaction METHANE H.2 2.16.2  : e CH3+		 : CH2+ H e	   : DS
+Reaction METHANE H.2 2.17.1  : e CH2+		 : CH H+ e	   : DS
+Reaction METHANE H.2 2.17.2  : e CH2+		 : CH+ H e	   : DS
+Reaction METHANE H.2 2.18.1  : e CH+		 : C H+ e	   : DS
+Reaction METHANE H.2 2.18.2  : e CH+		 : C+ H e	   : DS
+Reaction METHANE H.2 2.19.1  : e CH4+		 : CH3 H	   : DS
+Reaction METHANE H.2 2.19.2  : e CH4+		 : CH2 H H	   : DS
+Reaction METHANE H.2 2.20    : e CH3+		 : CH2 H	   : DS
+Reaction METHANE H.2 2.21    : e CH2+		 : CH H 	   : DS
+Reaction METHANE H.2 2.22    : e CH+		 : C H  	   : DS
+Reaction METHANE H.2 2.23    : e C		 : C+ 2e 	   : EI
+Reaction METHANE H.3 3.1.1   : H+ CH4		 : CH4+ H	   : CX
+Reaction METHANE H.3 3.1.2   : H+ CH3		 : CH3+ H	   : CX
+Reaction METHANE H.3 3.1.3   : H+ CH2		 : CH2+ H	   : CX
+Reaction METHANE H.3 3.1.4   : H+ CH		 : CH+ H	   : CX
+Reaction METHANE H.3 3.2     : H+ C		 : C+ H 	   : CX

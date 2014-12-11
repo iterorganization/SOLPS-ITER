@@ -1,0 +1,157 @@
+To do
+-----
+
+x Move amds to my linux pc
+  x Get infos from organizer
+    x Notes
+    x Time planner
+  x Compare my sources with AK's
+    ==> AK still uses 1.03
+    x fileversion -> filevers, reactions->reactns (amfile vs amfile.c.dpc)
+    x amgraph.c if xmfl==0
+    x amgraph.c if Realized etc.
+  x Update my sources accordingly
+  x Test
+  x Check that the problem with the graph still exists
+x Fix the font problem
+x Remove diagnostics printouts (dbase default vars)
+- Supply vars to the fn?
+  / Create a file /tmp/amds_pid_graph_input.dat
+  / Fill with vars
+  / Supply to graphcmd as stdin
+  / Erase
+- Update version
+- Upload update to AK, have it tested
+- Think about backup
+
+- Bug: ChangedCallback not called after automatic changes in text widgets
+- Bug found: when the AMDSGRAPHPROGRAM returns 0 or less, -NaN is passed to
+  XDrawLine?
+
+- From organizer
+  - AMDS to do
+    - Show Text H.1 2.1.1 hangs
+    - Bad ptr reported on PC with ngroups stats on
+    - 1999-10-17 AK - amds vars and ...
+    - 2000-11-16 Change amds for AK: pass variables to the graph pgm
+    
+
+---- Following to do's last mod' on April 12 1999
+
+- Fix now
+  x "Show graph" not working in main window
+  - Icon title
+
+- AK wishes for Juelich - for 19990328
+  x Retain old vars in files after changing configuration!
+  x More flexibility after changes to the database.
+  - "Database variables" - defaults from the database.
+  - AK: no layers needed
+
+
+
+- AK wishes 19990315
+  x "Show graph" doesn't work properly in the main window, displays the
+    graph for the current reaction in the subset instead. Show text works.
+  - Icon title doesn't change with the filename.
+  - Lack of
+    - Defaults in variables
+    - "?" button for vars
+    - Grouping of reactions into variables - via tables?
+  x List of all reactions stored in *.rpc and *.amd - incompatibility
+    after changes to the db!
+  - Need: Reaction types in *.amo files.
+  - Some defaults must be stored in the database, others in rpc.
+  - Importing *.amd files or copy-paste *across* files.
+  - Quits with unsaved work in the *second* window - ??
+  - Special variable types for substituting input/output particles for chain
+    verification.
+  - Special variable attribute: "pass to the graph program"
+  - Remove particle vars - unneeded!
+  - DG-style work with variables?
+
+- Bugs
+  - Hangs up on show text, H.11(?)
+
+? Display errors when $AMDSGRAPHCMD is not found
+- Display more errors, including text files not found on Show Text...
+- Pass selected variables to AMDSGRAPHCMD
+- Variables: links to reactions?
+- Particle variables not tied to particular reactions
+
+2. Merge Database and Subset into Doc
+x  a. Rename Subset into Doc.
+  b. Move all data structures and functions from Database into Doc.
+  c. Write undoable functions for ALL manipulations with the database.
+  d. "New" menu command should read the database.
+
++ Output file
+  - Automatic validation on file save
+
++ ValidateDlg
+  - List of unused particles
+
++ Reaction graphs
+  - Add a status line to GraphDlg, add Examine mode to the DrawingArea
+  - Locate the reaction in the list by double-click?
+  - Better font selection in PS
+  - Good error messages in PrintDlg
+
++ Better error handling
+  - Show text
+  - Error messages into resources
+
+3. DG-style configuration file
+  a. Add reactions database to the RPU file format, open/save routines
+  b. Stripped down version of RPUFileOpen() for importing the database
+  c. Add an "Import database" menu command
+  d. Write an "update" routine for matching opened files with the dbase
+  e. Add creation,modification,database date to the file format
+
+
+GetVarEx/SetVarEx(gp!=NULL)
+Open/CreateVarsEditDlg(bParticles==TRUE)
+Accept/ResetVarsDlgField with particle var support
+
+
+RemoveUnprintables(s) to remove characters <#32; on all Text widgets
+Syntax checking and formatting
+
+Bugs
+----
+
+GetResourceStringEx didn't work with $(FILENAME)%s$(CHANGED)%s
+XmNuserData not freed when DlgOutput is destroyed
+
+General testing
+---------------
+
+1. Check that all XtPopups/downs are called as XtPopup(XtParent(wDlg))
+2. Check all GetResourceStrings to have correct values
+
+
+User interface
+--------------
+
+Status area displaying hints about menu items
+Online help using F1 on menu items/Help button
+Dependent widgets
+
+Wishes
+------
+
+4. Isotopes
+5. Macros for some automatic processing
+
+Future
+------
+
+DG-style configuration
+Online help
+Comments
+Template support
+Error detection in invalid part/reaction names instead of assert()
+Error database
+Move variables to the database
+Export variables to the graph program
+Check for immediate XmForm update

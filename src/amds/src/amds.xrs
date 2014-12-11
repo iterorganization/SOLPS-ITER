@@ -1,0 +1,346 @@
+; Reaction chooser project
+; Resource database
+
+*resourceFileVersion:                   104
+
+*xOffset:                               10
+*yOffset:                               10
+
+*geometry:                              700x500
+*foreground:                            RGBi:0/0/0
+*background:                            RGBi:0.4/0.6/0.4
+*main*list.background:                  RGBi:0.46/0.58/0.46
+
+*list.selectionPolicy:                  extended_select
+
+*primaryShell.title:                    amds
+*main.dialogTitle:                      amds
+*main.dialogTitleEx:                    amds $(FILENAME)
+
+*main.strChanged:                       [Changed]
+
+*main.databaseWidth:                    7
+*main.sectionWidth:                     4
+*main.numberWidth:                      7
+*main.inputWidth:                       12
+*main.groupParticles:                   1
+
+*secondaryShell.title:                  Subset
+*secondaryShell.dialogTitle:            Subset
+*secondaryShell.main.width:             500
+*secondaryShell.main.height:            400
+
+*list.fontList:                -*-*-medium-r-*-*-*-140-*-*-c-*-*-1
+#*list.fontList:                         rom14
+*list.scrollBarDisplayPolicy:           static
+*list.listSizePolicy:                   constant
+
+*errFileOpen:                           File open error
+*errFileSave:                           File creation error
+*errFileOutput:                         File creation error
+*errMultipleReactions:                  Only one reaction may be selected
+
+*menu*file.labelString:                 File
+*menu*file.mnemonic:                    F
+*menu*restrict.labelString:             Restrict
+*menu*restrict.mnemonic:                R
+*menu*edit.labelString:                 Edit
+*menu*edit.mnemonic:                    E
+*menu*reaction.labelString:             Tools
+*menu*reaction.mnemonic:                T
+*menu*options.labelString:              Options
+*menu*options.mnemonic:                 O
+*menu*window.labelString:               Window
+*menu*window.mnemonic:                  W
+*menu*help.labelString:                 Help
+*menu*help.mnemonic:                    H
+*menu*subset.labelString:               Subset
+*menu*subset.mnemonic:                  S
+
+*fileMenu*new.labelString:              New
+*fileMenu*new.mnemonic:                 N
+*fileMenu*open.labelString:             Open...
+*fileMenu*open.mnemonic:                O
+*fileMenu*open.accelerator:             Ctrl<Key>O
+*fileMenu*open.acceleratorText:         Ctrl+O
+*fileMenu*saveAs.labelString:           Save as...
+*fileMenu*saveAs.mnemonic:              S
+*fileMenu*saveAs.accelerator:           Ctrl<Key>S
+*fileMenu*saveAs.acceleratorText:       Ctrl+S
+*fileMenu*template.labelString:         Open template
+*fileMenu*template.mnemonic:            t
+*menu*newSubset.labelString:            New subset
+*menu*newSubset.mnemonic:               e
+*menu*newSubset.accelerator:            Ctrl<Key>E
+*menu*newSubset.acceleratorText:        Ctrl+E
+*menu*cloneSubset.labelString:          Clone subset
+*menu*cloneSubset.mnemonic:             l
+*menu*output.labelString:               Output...
+*menu*output.mnemonic:                  p
+
+*menu*close.labelString:                Close
+*menu*close.mnemonic:                   C
+*menu*close.accelerator:                Alt<Key>W
+*menu*close.acceleratorText:            Alt+W
+*fileMenu*quit.labelString:             Quit
+*fileMenu*quit.mnemonic:                Q
+*fileMenu*quit.accelerator:             Alt<Key>Q
+*fileMenu*quit.acceleratorText:         Alt+Q
+
+*editMenu*undo.labelString:             Undo
+*editMenu*undo.mnemonic:                U
+*menu*undo.accelerator:                 Ctrl<Key>Z
+*menu*undo.acceleratorText:             Ctrl+Z
+*editMenu*redo.labelString:             Redo
+*editMenu*redo.mnemonic:                R
+*menu*redo.accelerator:                 Ctrl Shift<Key>Z
+*menu*redo.acceleratorText:             Ctrl+Shift+Z
+*editMenu*redoAll.labelString:          Redo all
+*editMenu*redoAll.mnemonic:             l
+
+*editMenu*cut.labelString:              Cut
+*editMenu*cut.mnemonic:                 u
+*editMenu*cut.accelerator:              Alt<Key>X
+*editMenu*cut.acceleratorText:          Alt+X
+*editMenu*cut.mnemonic:                 u
+*editMenu*copy.labelString:             Copy
+*editMenu*copy.mnemonic:                C
+*editMenu*copy.accelerator:             Alt<Key>C
+*editMenu*copy.acceleratorText:         Alt+C
+*editMenu*crop.labelString:             Crop
+*editMenu*crop.mnemonic:                o
+*editMenu*paste.labelString:            Paste
+*editMenu*paste.mnemonic:               P
+*editMenu*paste.accelerator:            Alt<Key>V
+*editMenu*paste.acceleratorText:        Alt+V
+*menu*goto.labelString:                 Go to
+*menu*goto.mnemonic:                    G
+
+*pasteMenu*or.labelString:              OR
+*pasteMenu*or.mnemonic:                 O
+*pasteMenu*and.labelString:             AND
+*pasteMenu*and.mnemonic:                A
+*pasteMenu*andNot.labelString:          AND NOT
+*pasteMenu*andNot.mnemonic:             N
+
+*menu*enable.labelString:               Activate
+*menu*enable.mnemonic:                  A
+*menu*enable.accelerator:               Ctrl<Key>A
+*menu*enable.acceleratorText:           Ctrl+A
+*menu*disable.labelString:              Deactivate
+*menu*disable.mnemonic:                 D
+*menu*disable.accelerator:              Ctrl<Key>D
+*menu*disable.acceleratorText:          Ctrl+D
+*reactionMenu*displayText.labelString:  Show text...
+*reactionMenu*displayText.mnemonic:     t
+*reactionMenu*displayGraph.labelString: Show graph...
+*reactionMenu*displayGraph.mnemonic:    g
+#*reactionMenu*variables.labelString:    Variables...
+#*reactionMenu*variables.mnemonic:       V
+*reactionMenu*validate.labelString:     Verify chains...
+*reactionMenu*validate.mnemonic:        V
+
+*restrictMenu.restrictInput.labelString:By input
+*restrictMenu.restrictInput.mnemonic:   i
+*restrictMenu.restrictOutput.labelString:By output
+*restrictMenu.restrictOutput.mnemonic:  o
+*restrictMenu.restrictType.labelString: By reaction type
+*restrictMenu.restrictType.mnemonic:    t
+*restrictMenu.forbidParticle.labelString:Exclude particle
+*restrictMenu.forbidParticle.mnemonic:  d
+
+*optionsMenu.setup.labelString:         Setup...
+*optionsMenu.setup.mnemonic:            S
+
+*windowMenu*new.labelString:            New subset
+*windowMenu*new.mnemonic:               N
+*windowMenu*clone.labelString:          Clone subset
+*windowMenu*clone.mnemonic:             C
+*windowMenu*template.labelString:       Template
+*windowMenu*template.mnemonic:          T
+*windowMenu*reset.labelString:          Reset
+*windowMenu*reset.mnemonic:             R
+*windowMenu*displayText.labelString:    Reaction description
+*windowMenu*displayText.mnemonic:       x
+*windowMenu*close.labelString:          Close
+*windowMenu*close.mnemonic:             C
+*windowMenu*closeAll.labelString:       Close all
+;*windowMenu*closeAll.mnemonic:
+*windowMenu*closeAll.sensitive:         False
+
+*templateMenu.templateFile.labelString: From file...
+*templateMenu.templateFile.mnemonic:    F
+
+*helpMenu*about.labelString:            About...
+*helpMenu*about.mnemonic:               A
+
+*menu*__all__.labelString:              *
+
+*textMenuBar*window.labelString:        Window
+*textMenuBar*window.mnemonic:           W
+
+*textWindowMenu*close.labelString:      Close
+*textWindowMenu*close.mnemonic:         C
+*textWindowMenu*close.accelerator:      Alt<Key>W
+*textWindowMenu*close.acceleratorText:  Alt+W
+
+*errorBox.dialogTitle:                  Error
+
+*dlgFileOpen.dialogTitle:               Open file
+*dlgFileOpen.okLabelString:             Open
+*dlgFileOpen.dirMask:                   *.amd
+
+*dlgFileSave.dialogTitle:               Save file
+*dlgFileSave.okLabelString:             Save
+*dlgFileSave.dirMask:                   *.amd
+
+*dlgFileTemplate.dialogTitle:           Open template
+*dlgFileTemplate.okLabelString:         Open
+*dlgFileTemplate.dirMask:               *.amd
+
+*dlgFileOutput.dialogTitle:             Output
+*dlgFileOutput.messageStringEx:         Output filename: $(FILENAME)
+
+*dlgFileUnsaved.dialogTitle:            Unsaved work
+*dlgFileUnsaved.messageString:          Save changes?
+*dlgFileUnsaved.okLabelString:          Save
+*dlgFileUnsaved.discard.labelString:    Discard
+
+*dlgAbout.dialogTitle:                  About amds
+*dlgAbout.messageString:                Atomic & Molecular Data Selector v1.04\n\
+Written by Konstantin Kukushkin
+
+*dlgSetupWarning.dialogTitle:           Warning
+*dlgSetupWarning.messageString:         Wrong settings here may cause\n\
+amds-related software to crash.\n\
+Do not proceed unless you know\n\
+what you are doing
+*dlgSetupWarning.okLabelString:         Proceed
+
+*dlgSetup.dialogTitle:                  Setup
+*dlgSetup*close.labelString:            Close
+*dlgSetup*varDefs.labelString:          Variable definitions
+*dlgSetup*reactionVars.labelString:     Reaction variables
+*dlgSetup*particleVars.labelString:     Particle variables
+
+
+*dlgVarDefList.dialogTitle:             Variable definitions
+*dlgVarDefList*XmList.visibleItemCount: 8
+*dlgVarDefList*add.labelString:         Add
+*dlgVarDefList*change.labelString:      Change
+*dlgVarDefList*delete.labelString:      Delete
+*dlgVarDefList.cancelLabelString:       Close
+
+*dlgVarDefCreate*XmLabel.alignment:     alignment_beginning
+*dlgVarDefCreate.dialogTitle:           Create new variable
+*dlgVarDefCreate*nameLabel.labelString: Name:
+*dlgVarDefCreate.okLabelString:         Create
+
+*dlgVarDefEdit*XmLabel.alignment:       alignment_beginning
+*dlgVarDefEdit*descrLabel.labelString:  Description:
+*dlgVarDefEdit*typeLabel.labelString:   Type:
+*dlgVarDefEdit*useForLabel.labelString: Applies to
+*dlgVarDefEdit*typeMenu*string.labelString:     String
+*dlgVarDefEdit*typeMenu*float.labelString:      Float
+*dlgVarDefEdit*typeMenu*int.labelString:        Integer
+*dlgVarDefEdit*useForMenu*reactions.labelString:Reactions
+*dlgVarDefEdit*useForMenu*particles.labelString:Particles
+*dlgVarDefEdit*noExport.labelString:    No export
+
+*dlgReactionVars.dialogTitle:           Reaction variables
+*dlgReactionVars.strOldVal:             Old value: $(VALUE)
+*dlgReactionVars.strNewVal:             New value: $(VALUE)
+*dlgReactionVars.strNewVals:            New values accepted
+*dlgReactionVars.strDiff:               Different values
+*dlgReactionVars.strNoSel:              Nothing selected
+*dlgReactionVars*accept.labelString:    Set all
+*dlgReactionVars*reset.labelString:     Reset
+*dlgReactionVars*hold.labelString:      Hold
+;*dlgReactionVars*hold.shadowThickness:  2
+*dlgReactionVars*close.labelString:     Close
+*dlgReactionVars*set.labelString:       Set
+*dlgReactionVars*msg.labelString:       Old values
+*dlgReactionVars*XmLabel.alignment:     alignment_beginning
+
+*dlgParticleVars.dialogTitle:           Particle variables
+*dlgParticleVars.strOldVal:             Old value: $(VALUE)
+*dlgParticleVars.strNewVal:             New value: $(VALUE)
+*dlgParticleVars.strNewVals:            New values accepted
+*dlgParticleVars.strDiff:               Different values
+*dlgParticleVars.strNoSel:              Nothing selected
+*dlgParticleVars*accept.labelString:    Set all
+*dlgParticleVars*reset.labelString:     Reset
+*dlgParticleVars*hold.labelString:      Hold
+;*dlgParticleVars*hold.shadowThickness:  2
+*dlgParticleVars*close.labelString:     Close
+*dlgParticleVars*set.labelString:       Set
+*dlgParticleVars*msg.labelString:       Old values
+*dlgParticleVars*XmLabel.alignment:     alignment_beginning
+
+*dlgParticleVars*XmList.visibleItemCount:5
+*dlgParticleVars*XmList.selectionPolicy:extended_select
+
+*dlgGraph.dialogTitle:                  Graphs
+*dlgGraph*densityClear.labelString:     C
+*dlgGraph*fit.labelString:              Y-Fit
+*dlgGraph.densityLabel:                 d$(NUMBER)
+*dlgGraph*t1Label.labelString:          T1:
+*dlgGraph*t2Label.labelString:          T2:
+*dlgGraph*y1Label.labelString:          Y1:
+*dlgGraph*y2Label.labelString:          Y2:
+*dlgGraph*t1.value:                     1e-1
+*dlgGraph*t2.value:                     1e3
+*dlgGraph*y1.value:                     1e-20
+*dlgGraph*y2.value:                     1e-10
+*dlgGraph*print.labelString:            Print
+*dlgGraph*close.labelString:            Close
+*dlgGraph*debug.labelString:            Debug
+*dlgGraph*drawFrame.Offset:             5
+*dlgGraph*drawFrame.shadowType:         shadow_in
+*dlgGraph*rowcol0.packing:              pack_column
+*dlgGraph*XmLabel.alignment:            alignment_beginning
+*dlgGraph*rowcol0.entryAlignment:       alignment_center
+
+*dlgGraph*draw.width:                   500
+*dlgGraph*draw.height:                  500
+*dlgGraph*draw.background:              White
+*dlgGraph*draw.graphColor1:             RGBi:0/0/0
+*dlgGraph*draw.graphColor2:             RGBi:1/0/0
+*dlgGraph*draw.graphColor3:             RGBi:0/0.5/0
+*dlgGraph*draw.graphColor4:             RGBi:0.3/0.3/1
+*dlgGraph*draw.gridColor:               RGBi:0.7/0.7/.7
+*dlgGraph*draw.gridTextColor:           RGBi:0/0/0
+*dlgGraph*draw.symbolColor:             RGBi:0/0/0
+*dlgGraph*draw.gridBorderColor:         RGBi:.3/.3/.3
+
+*dlgGraphPrint.dialogTitle:             Print...
+*dlgGraphPrint.okLabelString:           Print
+*dlgGraphPrint*cmd.labelString:         Via command:
+*dlgGraphPrint*file.labelString:        To file:
+*dlgGraphPrint*widthLabel.labelString:  Width(in):
+*dlgGraphPrint*width.value:             8.287
+*dlgGraphPrint*heightLabel.labelString: Height(in):
+*dlgGraphPrint*height.value:            11.72
+*dlgGraphPrint*marginLabel.labelString: Margin(in):
+*dlgGraphPrint*margin.value:            0.3
+*dlgGraphPrint*color.labelString:       Color
+*dlgGraphPrint*XmLabel.alignment:       alignment_beginning
+*dlgGraphPrint*XmToggleButton.alignment:alignment_beginning
+*dlgGraphPrint*command.value:           o.ps
+
+*dlgValidate.dialogTitle:               Verify chains
+#*dlgValidate*rowcol.packing:            pack_column
+*dlgValidate*rowcol.entryAlignment:     alignment_center
+
+*dlgValidate*add.labelString:           Add>
+*dlgValidate*add.aligmnent:             alignment_center
+*dlgValidate*select.labelString:        Select>
+*dlgValidate*remove.labelString:        Remove
+*dlgValidate*close.labelString:         Close
+*dlgValidate*startupLabel.labelString:  Start-up particles:
+*dlgValidate*missingLabel.labelString:  Missing particles:       \
+
+*dlgValidate*startupList.visibleItemCount:    10
+*dlgValidate*startupList.selectionPolicy: extended_select
+*dlgValidate*missingList.visibleItemCount:    5
+*dlgValidate*missingList.selectionPolicy: extended_select

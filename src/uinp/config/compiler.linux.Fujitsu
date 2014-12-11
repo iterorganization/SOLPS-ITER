@@ -1,0 +1,16 @@
+#  VERSION : 28.07.99 20:34
+
+# File compiler.macro for Fujitsu frt
+
+FC	 = f95f
+ifdef SOLPS_DEBUG
+FFLAGS	 = -g -Am -X9 -O0 -fw
+else
+FFLAGS	 = -Am -X9 -fw -Kfast,eval -x- -O
+endif
+INCLUDE = -I${SRCDIR} -I${EIRINC} -I${SOLPSTOP}/include.local -I${SOLPSTOP}/include
+COMPILE  = ${FC} -c ${FFLAGS}
+CPP	 = /lib/cpp -C -traditional
+MOD 	 = mod
+
+LDLIBS 	 = -L${SOLPS_LIB} -lmscl -L$(SOLPSTOP)/base/b2/$(OBJECTCODE) -lb2 -lnetcdf
