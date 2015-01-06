@@ -1,7 +1,7 @@
 #! /bin/tcsh -f
 
 echo "Welcome to SOLPS-ITER!"
-echo "New: use your web browser to look at http://www.rzg.mpg.de/~dpc/solps.html"
+echo "Documentation can be found at: https://user.iter.org/?uid=QB8YQ2 (requires IDM account)"
 
 setenv SOLPSTOP $PWD
 
@@ -12,37 +12,9 @@ else
   set iamat="unknown"
 endif
 
-if (-e setup.csh.SOLPSMASTER) source setup.csh.SOLPSMASTER
-if (-e setup.csh.SOLPSMASTER.local) source setup.csh.SOLPSMASTER.local
-
-if(! $?SOLPSMASTER) then 
-  switch ($iamat)
-  case "IPP":
-    setenv SOLPSMASTER /afs/ipp-garching.mpg.de/u/dpc
-    setenv DEVICE upgrade
-    breaksw
-  case "EU_UNKNOWN":
-    setenv SOLPSMASTER /afs/ipp-garching.mpg.de/u/dpc
-    breaksw
-  case "ITM":
-    echo "Getting AFS token from Garching"
-    klog.krb -pr xpb -cell ipp-garching.mpg.de
-    setenv SOLPSMASTER /afs/ipp-garching.mpg.de/u/dpc
-    breaksw
-  case "PPPL":
-  case "USA_UNKNOWN":
-    setenv SOLPSMASTER /afs/pppl.gov/u/dcoster
-    breaksw
-  default:
-    setenv SOLPSMASTER /afs/ipp-garching.mpg.de/u/dpc
-    breaksw
-  endsw
-endif
-
 if($1 == "") then
   if (-e setup.csh.OBJECTCODE) source setup.csh.OBJECTCODE
   if (-e setup.csh.OBJECTCODE.local) source setup.csh.OBJECTCODE.local
-  if(! $?OBJECTCODE) setenv OBJECTCODE `$SOLPSMASTER/@sys/machine`
 else
   setenv OBJECTCODE $1
 endif
@@ -133,8 +105,6 @@ default:
   breaksw
 endsw
 
-if (! $?DEVICE) setenv DEVICE iter
-
 setenv GLI_HOME $SOLPSTOP/lib
 setenv WSTYPE $OBJECTCODE
 # setenv GLI_WSTYPE 210
@@ -170,11 +140,9 @@ alias srun 'cd ${SOLPSTOP}/runs'
 alias sbinc 'cd ${SOLPSTOP}/bin/common'
 alias stop 'cd ${SOLPSTOP}'
 
-alias sdg 'cd ${SOLPSTOP}/src/DivGeo/dg/class/${DEVICE}'
-alias ssf 'cd ${SOLPSTOP}/src/Sonnet/device/${DEVICE}'
-alias ssu 'cd ${SOLPSTOP}/src/DivGeo/uinp'
-
-alias afs 'cd /afs/ipp-garching.mpg.de/aug-xdr'
+#alias sdg 'cd ${SOLPSTOP}/src/DivGeo/dg/class/${DEVICE}'
+#alias ssf 'cd ${SOLPSTOP}/src/Sonnet/device/${DEVICE}'
+alias ssu 'cd ${SOLPSTOP}/src/uinp'
 
 setenv PATH $NCARG_ROOT/bin:$PATH
 setenv MANPATH $NCARG_ROOT/man:$MANPATH
