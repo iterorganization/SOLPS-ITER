@@ -24,6 +24,7 @@ setup.ksh.*
 !setup.ksh.NCARG.guess
 
 LISTOBJ
+TAGS
 linux.*/
 g77*/
 IBMaix*/
@@ -31,3 +32,5 @@ SGIirix*/
 sun*/
 T3E*/
 unicos*/
+
+bin/

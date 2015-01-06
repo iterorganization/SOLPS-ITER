@@ -1,4 +1,13 @@
-PROG=a.out.mpi
+PROG=a.out.mpi.tria
+
+pwd = ${PWD}
+
+OBJDIR    = ${pwd}/bin/${OBJECTCODE}
+OBJDIRB2  = ${pwd}/bin/${OBJECTCODE}/B2.5
+OBJDIREIR = ${pwd}/bin/${OBJECTCODE}/Eirene
+
+
+SRCDIRB2  = ${pwd}/src/B2.5/src
 
 FF=mpif90 #-pg
 CC=mpicc #-pg
@@ -10,42 +19,52 @@ ifeq ("$(DBG)","")
 else
      FFLAGS= -c -g -traceback
      CFLAGS= -c -g
-     PROG=a.out.mpi.dbg
+     PROG=a.out.mpi.dbg.tria
 endif
 
-INCDIR= -I B2.5 -I B2.5/src/include -I B2.5/src/common
+INCDIR= -I ${OBJDIRB2} -I ${SRCDIRB2}/include -I ${SRCDIRB2}/common
 
 
-LIBMOD=B2.5/*.o Eirene/*.o
-LIBGR=-L/usr/lib64 -lX11 -lXt libs/grgli/gligks/*.o libs/grgli/grsoft/*.o
+LIBMOD= -L${OBJDIRB2} -lb25 -L${OBJDIREIR} -leirene
+LIBGR=-L/usr/lib64 -L/b2-ext/ncarg/lib -Llib/grgli/grsoft -lgr -Llib/linux.ifort64 -Llib/grgli/gligks -lgks -lX11 -lXt
 
-.c.o:
-	$(CC) $(CFLAGS) $(COPTS) $?
-.f.o:
-	$(FF) $(FFLAGS) $(INCDIR) $(OPTS) $?
-.F.o:
-	$(FF) $(FFLAGS) $(INCDIR) $(OPTS) $?
-.f90.o:
-	$(FF) $(FFLAGS) $(INCDIR) $(OPTS) $?
 
-all: tria
+$(OBJDIR)/%.o: %.c
+	$(CC) $(CFLAGS) $(COPTS) -c -o $@ $<
+$(OBJDIR)/%.o: %.f
+	$(FF) $(FFLAGS) $(INCDIR) $(OPTS) -module $(OBJDIR) -c -o $@ $<
+$(OBJDIR)/%.o: %.F
+	$(FF) $(FFLAGS) $(INCDIR) $(OPTS) -module $(OBJDIR) -c -o $@ $<
+$(OBJDIR)/%.o: %.f90
+	$(FF) $(FFLAGS) $(INCDIR) $(OPTS) -module $(OBJDIR) -c -o $@ $<
+$(OBJDIR)/%.F90.o: %.F90
+	$(FF) $(FFLAGS) $(INCDIR) $(OPTS) -module $(OBJDIR) -c -o $@ $<
 
-tria: $(LIBMOD) Main/b2mn_mpi.o ioflush/ioflush.o
-	rm -f $(PROG).tria
-	$(FF) -o $(PROG).tria $(INCDIR) $(LIBGR) $(LIBMOD) $(LIBMPI) b2mn_mpi.o ioflush.o
+all: dirs $(OBJDIR)/$(PROG)
+
+$(OBJDIR)/$(PROG): ${OBJDIREIR}/libeirene.a ${OBJDIRB2}/libb25.a $(OBJDIR)/b2mn_mpi.o $(OBJDIR)/ioflush.o
+	rm -f $(OBJDIR)/$(PROG)
+	$(FF) -o $(OBJDIR)/$(PROG) $(INCDIR) $(OBJDIR)/b2mn_mpi.o $(OBJDIR)/ioflush.o $(LIBMOD) $(LIBGR) $(LIBMPI) 
 
 
 clean:
 	rm -f *.o *.mod
 
-#deps
-Main/b2mn_mpi.o:
+dirs: $(OBJDIR)
 
-ioflush/ioflush.o:
+$(OBJDIR):
+	mkdir -p $(OBJDIR)
+
+#deps
+$(OBJDIR)/b2mn_mpi.o:
+	$(FF) $(FFLAGS) $(INCDIR) $(OPTS) -module $(OBJDIR) -c -o $@ Main/b2mn_mpi.F
+
+$(OBJDIR)/ioflush.o:
+	$(CC) $(CFLAGS) $(COPTS) -c -o $@ ioflush/ioflush.c
 
 #libinterface:
 
-Eirene/libeirene.a:
+${OBJDIREIR}/libeirene.a:
 
-B2.5/libb25.a:
+${OBJDIRB2}/libb25.a:
 
