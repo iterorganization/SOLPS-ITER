@@ -1,5 +1,0 @@
-#! /bin/sh
-echo '#timesa fnixip feexip feixip fnixap feexap feixap nesepi tesepi tisepi nesepm tesepm tisepm nesepa tesepa tisepa nemxip temxip timxip nemxap temxap timxap fniyip feeyip feiyip fniyap feeyap feiyap pwmxip pwmxap tmne tmte tmti tmhacore tmhasol tmhadiv fnisip feesip feisip fnisap feesap feisap'
-nc2text b2time.nc 'timesa(-9:-0)' 'fnixip(-9:-0)' 'feexip(-9:-0)' 'feixip(-9:-0)' 'fnixap(-9:-0)' 'feexap(-9:-0)' 'feixap(-9:-0)' 'nesepi(-9:-0)' 'tesepi(-9:-0)' 'tisepi(-9:-0)' 'nesepm(-9:-0)' 'tesepm(-9:-0)' 'tisepm(-9:-0)' 'nesepa(-9:-0)' 'tesepa(-9:-0)' 'tisepa(-9:-0)' 'nemxip(-9:-0)' 'temxip(-9:-0)' 'timxip(-9:-0)' 'nemxap(-9:-0)' 'temxap(-9:-0)' 'timxap(-9:-0)' 'fniyip(-9:-0)' 'feeyip(-9:-0)' 'feiyip(-9:-0)' 'fniyap(-9:-0)' 'feeyap(-9:-0)' 'feiyap(-9:-0)' 'pwmxip(-9:-0)' 'pwmxap(-9:-0)' 'tmne(-9:-0)' 'tmte(-9:-0)' 'tmti(-9:-0)' 'tmhacore(-9:-0)' 'tmhasol(-9:-0)' 'tmhadiv(-9:-0)' 'fnisip(-9:-0)' 'feesip(-9:-0)' 'feisip(-9:-0)' 'fnisap(-9:-0)' 'feesap(-9:-0)' 'feisap(-9:-0)' |\
-  awk.transpose |\
-  ave.awk

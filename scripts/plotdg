@@ -1,3 +1,0 @@
-#! /bin/csh
-awk 'BEGIN{print "$ DATA=CONTOUR"}/jm    =/{nr=$3}/km    =/{nz=$3}/r\(1:jm\)/{print "% nx = "nr"  xgrid=True";ok=NR}/z\(1:km\)/{print "% ny = "nz"  ygrid=True";ok=NR}/psi\(j,k\)-psib/{print "% contfill = T  equalscale = F";ok=NR}ok>0&&NR>ok&&NF>0{print $0}NF==0{ok=0}END{print "$ END"}' $1 >! $1:r.mtv
-plotmtv -colorps $1:r.mtv

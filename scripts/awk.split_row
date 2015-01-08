@@ -1,7 +1,0 @@
-#! /bin/tcsh -f
-if ("X$1X" == "XX") then
-  set split=2
-else
-  set split=$1
-endif
-awk '{nsplit='$split'; ncols=NF/nsplit; for (i=1;i<=NF;i+=ncols) {for (j=i;j<i+ncols;j++) printf "%s ",$j; printf "\n"}}'

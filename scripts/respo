@@ -1,6 +1,0 @@
-#! /bin/csh -f
-pipe_run.log | \
-  grep -a i,respo | \
-  awk '{print NR,$3}' | \
-  resopt $argv | \
-  plot xlyplot respo iter V $PWD

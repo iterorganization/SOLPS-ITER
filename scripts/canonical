@@ -1,4 +1,0 @@
-#! /bin/csh
-foreach i ($argv)
-  (cd `dirname $i` ; echo `pwd`/`basename $i`)
-end

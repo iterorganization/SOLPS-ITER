@@ -1,2 +1,0 @@
-#! /bin/csh -f
-sed '$d' B2MNPRT | egrep SECONDS\|TIME-STEP | awk 'BEGIN{time=0}/SECONDS/{time=$3}/TIME-STEP/{print time" "$7}' | tail -n +2 | xlyplot 'TIME STEP' Time "" $PWD

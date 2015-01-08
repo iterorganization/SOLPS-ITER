@@ -1,6 +1,0 @@
-#! /bin/tcsh
-if (-e run.log) then
-  head -200000 run.log | grep ^species | head -1 | awk '{for (i=3;i<=NF;i++) printf "%3i  %s\n", i-3,$i}'
-else
-  zcat run.log.gz | head -200000 | grep ^species | head -1 | awk '{for (i=3;i<=NF;i++) printf "%3i  %s\n", i-3,$i}'
-endif

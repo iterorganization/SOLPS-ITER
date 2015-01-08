@@ -1,8 +1,0 @@
-#!/bin/tcsh -f
-echo "Running on `hostname` at `date` in directory `pwd`"
-setenv SAVEPWD $PWD
-setenv OBJCODE $OBJECTCODE
-cd `pwd | sed 's:/runs/.*::'`
-source setup.csh $OBJCODE
-cd $SAVEPWD
-b2run_hgw_clus b2mn < input.dat >! run.log

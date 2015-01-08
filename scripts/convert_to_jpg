@@ -1,7 +1,0 @@
-#! /bin/csh -f
-if(-e $1:r.jpg) then
-  echo Already processed $1
-else
-  xwdtopnm $1 | cjpeg -outfile $1:r.jpg
-endif
-rm $1

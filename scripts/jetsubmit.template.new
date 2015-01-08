@@ -1,8 +1,0 @@
-# @ output = #PWD#/job.out.$(Cluster)
-# @ error = #PWD#/job.err.$(Cluster)
-# @ class = prio1
-# @ restart = no
-# @ shell = /bin/tcsh
-# @ initialdir = #PWD#
-# @ executable = #SOLPSTOP#/bin/common/jetsubmit.run
-# @ queue

@@ -1,7 +1,0 @@
-#! /bin/csh -f
-echo Updating eirene in $SOLPSTOP/src/Eirene/src
-cd $SOLPSTOP/src/Eirene/src
-/bin/rm `find . -type l -print`
-lndr $SOLPSMASTER/solps/solps4.0/src/Eirene/src .
-echo 'You will need to examine the following files for compatibility:'
-echo `find . -type f -print`

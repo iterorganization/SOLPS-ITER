@@ -1,7 +1,0 @@
-#! /bin/csh -f
-set DCN_start=`grep 'DCN line integrated density' b2.diagnostics | awk '{print $2}'`
-set DCN_end=`grep 'DCN line integrated density' b2.diagnostics | awk '{print $3}'`
-sed -e '/^#/d' -e 's/^  *//' b2.diagnostics | cut -d" " -f1,$DCN_start-$DCN_end | sed -e '$d' >! DCN.extract
-@ noofchan= $DCN_end - $DCN_start
-@ noofchan += 1
-plot xyplot$noofchan `count 1 $noofchan` 'time' 'line integrated density' $PWD < DCN.extract

@@ -1,4 +1,0 @@
-#! /bin/csh -f
-mv b2.parameters b2.parameters.oldstyle
-sed 's/^ &[eE][nN][dD]/ \//g' b2.parameters.oldstyle > b2.parameters
-

@@ -1,7 +1,0 @@
-#! /bin/csh -f
-if($1 == "") then
-  set AVE=1
-else
-  set AVE=$1
-endif
-awk '$5=="spectroscopic"{print $2,$3,'$AVE',$4"_"$10"_"$11}' b2.diagnostics

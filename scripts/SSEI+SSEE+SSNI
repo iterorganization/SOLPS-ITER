@@ -1,5 +1,0 @@
-#! /bin/csh -f
-pipe_run.log | \
-  egrep -a 'ITER.*TIME|SSEI,SSEE,SSNI' | \
-  awk '/SSEI,SSEE,SSNI/{SSEI=$2;SSEE=$3;SSNI=$4}/TIME/{print $4,SSEI,SSEE,SSNI}' | \
-  xyplot3 SSEI SSEE SSNI TIME "(W)" $PWD

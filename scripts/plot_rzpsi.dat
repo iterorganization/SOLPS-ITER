@@ -1,4 +1,0 @@
-#! /bin/csh
-sed 's:=: = :' rzpsi.dat | awk 'BEGIN{print "$ DATA=CONTOUR"}/nr =/{print "% nx = "$3"  xgrid=True";ok=NR}/nz =/{print "% ny = "$3"  ygrid=True";ok=NR}/ \$/{ok=0}/psi/{print "% contfill = T  equalscale = F";ok=NR}ok>0&&NR>ok&&NF>0{print $0}NF==0{ok=0}' >! rzpsi.mtv
-awk 'BEGIN{print "$DATA=CURVE2D";print "%dlinecolor=0";print "%dlinewidth=3"}$1*1>1&&NF==2{print $1,$2}NF==1{printf "\n"}END{print "$ END"}' structure.dat >> rzpsi.mtv
-plotmtv -colorps -plotall rzpsi.mtv

@@ -1,2 +1,0 @@
-#! /bin/csh -f
-date +%Y%m%d%H%M%S

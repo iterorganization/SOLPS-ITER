@@ -1,7 +1,0 @@
-#! /bin/csh -f
-pipe_run.log | \
-  egrep -a tchem\|tphys | \
-  awk '{print $2}' | \
-  paste - - | \
-  nl | \
-  x"$1"yplot2 tphys tchem

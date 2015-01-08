@@ -1,7 +1,0 @@
-#!/bin/csh -f
-grep -A48 'j    cm    conduct  convect.  conduct.  convect.   losses    losses    heating   heating   heating    gain     coupling' ~rfs/AUGR68 | sed '1d' | awk '{print $2/50,$9,$11}'
-echo -1 -1 -1
-grep -A49 'zone radius  k-e totl k-i totl   vin     veware       d-h totl          d-i totl       etae     etai' ~rfs/AUGR68 | sed '1d' | awk '{print $2/50,$3/10000,$4/10000,-$5/100,$7/10000}'
-echo -1 -1 -1 -1 -1
-grep -A24 'cm        keV        keV        secs.   part/cu cm joul/cu cm              heat+cx powr part/cc s  part/cc s  fract' ~rfs/AUGR68 | sed '1d' | awk '{print $2/50,$11*1000000,$13}'
-echo -1 -1 -1

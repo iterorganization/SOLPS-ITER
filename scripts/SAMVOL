@@ -1,7 +1,0 @@
-#! /bin/csh -f
-pipe_run.log |\
-  egrep 'ITER.*TIME'\|'SUMN, SUMM, SUMEI, SUMEE' |\
-  awk '/SUMN, SUMM, SUMEI, SUMEE/{srec+=$5;eio+=$7;eel+=$8}\
-       /TIME/{print $4,srec,eio,eel;srec=0;eio=0;eel=0}' |\
-  plot x$1yplot3 NI EI EE time 'VOL. REC. A, W, W' $PWD
-

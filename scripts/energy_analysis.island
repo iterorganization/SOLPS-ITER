@@ -1,3 +1,0 @@
-#! /bin/csh 
-setenv NREG 5
-energy_analysis

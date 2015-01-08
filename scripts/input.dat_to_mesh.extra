@@ -1,9 +1,0 @@
-#! /bin/csh -f
-cat $1 | cut -c1-72 | sed 's/[Ee] /E/g' | sed 's/[Ee]+/E/g' | sed -e '1,/^\*\*\* 3[Bb]/d' -e '/^\*\*\* 4/,$d' | sed 's/-[0-9]\./ &/g' >! input.dat.tmp.$$
-cat input.dat.tmp.$$ |\
-	awk 'BEGIN{lineno=-1000}/^\*/{lineno=NR}NR==lineno+3{x1=$1/100.0;y1=$2/100.0;x2=$4/100.0;y2=$5/100.0;print x1,y1,x2,y2}' \
-        >! mesh.extra
-cat input.dat.tmp.$$ |\
-	awk 'BEGIN{last=""}NF==0{last=""}NF==2{if(last != "") {print last,$1,$2}; last=$0}' \
-	>> mesh.extra
-rm input.dat.tmp.$$

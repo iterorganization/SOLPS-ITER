@@ -1,7 +1,0 @@
-#! /bin/csh -f
-if($1 == "") then
-  set FILE="mesh.extra"
-else
-  set FILE="$1"
-endif
-awk '{printf "%s %s\n%s %s\n\n",$1,$2,$3,$4}' $FILE
