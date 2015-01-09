@@ -34,3 +34,6 @@ T3E*/
 unicos*/
 
 bin/
+
+!**/Makefile*
+
