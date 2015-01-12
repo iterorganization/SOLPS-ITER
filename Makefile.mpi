@@ -17,8 +17,8 @@ ifeq ("$(DBG)","")
      FFLAGS= -c -O2
      CFLAGS= -c -O2
 else
-     FFLAGS= -c -g -traceback
-     CFLAGS= -c -g
+     FFLAGS= -c -check -g -traceback
+     CFLAGS= -c -check -g
      PROG=a.out.mpi.dbg.tria
 endif
 
