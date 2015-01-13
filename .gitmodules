@@ -7,9 +7,6 @@
 [submodule "libs/mscl"]
 	path = lib/mscl
 	url = ssh://git@git.iter.org/lib/mscl.git
-[submodule "data"]
-	path = data
-	url = ssh://git@git.iter.org/bnd/solps-data.git
 [submodule "Carre"]
 	path = src/Carre
 	url = ssh://git@git.iter.org/bnd/carre.git
