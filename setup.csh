@@ -115,7 +115,7 @@ setenv EscapeSonnet `echo ${SonnetTopDirectory} | sed 's:\/:\\\/:g'`
 setenv DG ${SOLPSTOP}/src/DivGeo/dg
 setenv CARRE_STOREDIR $SOLPSTOP/src/Carre/SAVE 
 
-setenv PATH ${SOLPSTOP}/bin.local/${OBJECTCODE}:${SOLPSTOP}/bin.local/common:${SOLPSTOP}/bin/${OBJECTCODE}:${SOLPSTOP}/bin/common:${SOLPSTOP}/lib/python:${SonnetTopDirectory}/bin/${nOBJECTCODE}:${SOLPSTOP}/base/b2/${OBJECTCODE}:${PATH}
+setenv PATH ${SOLPSTOP}/bin/${OBJECTCODE}:${SOLPSTOP}/scripts:${PATH}
 if ($?MANPATH) then
   setenv MANPATH ${MANPATH}:${SonnetTopDirectory}/man:${DG}/equtrn/doxygen/man
 else
@@ -139,8 +139,8 @@ alias slib 'cd ${SOLPSTOP}/lib/${OBJECTCODE}'
 alias srun 'cd ${SOLPSTOP}/runs'
 alias sbinc 'cd ${SOLPSTOP}/bin/common'
 alias stop 'cd ${SOLPSTOP}'
+alias sdg 'cd ${SOLPSTOP}/data/DivGeo/class/${DEVICE}'
 
-#alias sdg 'cd ${SOLPSTOP}/src/DivGeo/dg/class/${DEVICE}'
 #alias ssf 'cd ${SOLPSTOP}/src/Sonnet/device/${DEVICE}'
 alias ssu 'cd ${SOLPSTOP}/src/uinp'
 
