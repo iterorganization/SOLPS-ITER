@@ -150,8 +150,8 @@ alias slib='cd ${SOLPSTOP}/lib/${OBJECTCODE}'
 alias srun='cd ${SOLPSTOP}/runs'
 alias sbinc='cd ${SOLPSTOP}/bin/common'
 alias stop='cd ${SOLPSTOP}'
+alias sdg='cd ${SOLPSTOP}/data/DivGeo/class/${DEVICE}'
 
-alias sdg='cd ${SOLPSTOP}/src/DivGeo/dg/class/${DEVICE}'
 alias ssf='cd ${SOLPSTOP}/src/Sonnet/device/${DEVICE}'
 alias ssu='cd ${SOLPSTOP}/src/DivGeo/uinp'
 
@@ -209,7 +209,7 @@ alias unset_debug='. $SOLPSTOP/nodebug.ksh'
 [ -e setup.ksh.$USER ] && . setup.ksh.$USER
 [ -e setup.ksh.$USER.$OBJECTCODE ] && . setup.ksh.$USER.$OBJECTCODE
 
-export PATH=${SOLPSTOP}/bin.local/${OBJECTCODE}:${SOLPSTOP}/bin.local/common:${SOLPSTOP}/bin/${OBJECTCODE}:${SOLPSTOP}/bin/common:${SOLPSTOP}/lib/python:${SonnetTopDirectory}/bin/${nOBJECTCODE}:${SOLPSTOP}/base/b2/${OBJECTCODE}:${PATH}
+export PATH=${SOLPSTOP}/bin/${OBJECTCODE}:${SOLPSTOP}/scripts:${PATH}
 
 export PATH=$NCARG_ROOT/bin:$PATH
 export MANPATH=$NCARG_ROOT/man:${DG}/equtrn/doxygen/man:$MANPATH
