@@ -11,4 +11,4 @@ Usage: $Name EFIT-file DG-file
 
 [ $# -lt 2 ] && { echo "$Usage"; exit; }
 [ -r $1 ] || { echo "File $1 is absent\n"; echo "$Usage"; exit; }
-$SOLPSTOP/src/DivGeo/equtrn/$OBJECTCODE/ef2dg $1 $2 $3
+$SOLPSTOP/bin/$OBJECTCODE/DivGeo/equtrn/ef2dg $1 $2 $3
