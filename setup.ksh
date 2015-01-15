@@ -130,7 +130,7 @@ export GRSOFT_DEVICE="211 62"
 export SonnetTopDirectory=${SOLPSTOP}/src/Sonnet
 export EscapeSonnet=`echo ${SonnetTopDirectory} | sed 's:\/:\\\/:g'`
 
-export DG=${SOLPSTOP}/src/DivGeo/dg
+export DG=${SOLPSTOP}/src/DivGeo
 export CARRE_STOREDIR=${SOLPSTOP}/src/Carre/SAVE 
 
 alias ssb='cd ${SOLPSTOP}/src/b2'

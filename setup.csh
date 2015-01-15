@@ -112,7 +112,7 @@ setenv GRSOFT_DEVICE "211 62"
 setenv SonnetTopDirectory ${SOLPSTOP}/src/Sonnet
 setenv EscapeSonnet `echo ${SonnetTopDirectory} | sed 's:\/:\\\/:g'`
 
-setenv DG ${SOLPSTOP}/src/DivGeo/dg
+setenv DG ${SOLPSTOP}/src/DivGeo
 setenv CARRE_STOREDIR $SOLPSTOP/src/Carre/SAVE 
 
 setenv PATH ${SOLPSTOP}/bin/${OBJECTCODE}:${SOLPSTOP}/scripts:${PATH}
