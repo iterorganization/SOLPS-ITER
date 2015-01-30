@@ -1,6 +1,6 @@
 echo setup.csh.linux.ifort64
 setenv USE_EIRENE "-DUSE_EIRENE -DTRIANG"
-setenv SOLPS_FLUIDS "`${SOLPSTOP}/bin/common/count -p D 0 1` `${SOLPSTOP}/bin/common/count -p C 0 6` `${SOLPSTOP}/bin/common/count -p He 0 2`"
+setenv SOLPS_FLUIDS "`${SOLPSTOP}/scripts/count -p D 0 1` `${SOLPSTOP}/scripts/count -p C 0 6` `${SOLPSTOP}/scripts/count -p He 0 2`"
 setenv NREG 4
 set hostname=`hostname`
 set fullhost=`nslookup $hostname |& awk '/Name:/{print $2}' | tr 'A-Z' 'a-z'`

@@ -32,6 +32,13 @@ SGIirix*/
 sun*/
 T3E*/
 unicos*/
+!SETUP/linux.*/
+!SETUP/g77/
+!SETUP/IBMaix/
+!SETUP/sun*/
+!SETUP/SGIirix*/
+!SETUP/T3E/
+!SETUP/unicos/
 
 bin/
 
