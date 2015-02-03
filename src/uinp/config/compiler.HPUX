@@ -4,10 +4,9 @@
 
 FC	 = f77
 FFLAGS	 = -g 
-INCLUDE  = -I${SRCDIR} -I${EIRINC} -I${SOLPSTOP}/include.local -I${SOLPSTOP}/include
+INCLUDE  = -I${SRCDIR} -I${EIRINC} -I${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
 CPP	 = /lib/cpp
 
-LDLIBS 	 = -Wl,-L${SOLPS_LIB} -lmscl -Wl,-L${SOLPSTOP}/base/b2/${OBJECTCODE} -lb2 -Wl,-L/usr/local/lib -lnetcdf
+LDLIBS 	 = -Wl,-L${SOLPS_LIB} -lmscl
 LDEXTRA  = 
-# NAG 	 = -lnag_sh

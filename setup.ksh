@@ -133,27 +133,22 @@ export EscapeSonnet=`echo ${SonnetTopDirectory} | sed 's:\/:\\\/:g'`
 export DG=${SOLPSTOP}/src/DivGeo
 export CARRE_STOREDIR=${SOLPSTOP}/src/Carre/SAVE 
 
-alias ssb='cd ${SOLPSTOP}/src/b2'
 alias sb2='cd ${SOLPSTOP}/src/b2'
-alias sse='cd ${SOLPSTOP}/src/Eirene'
+alias sbb='cd ${SOLPSTOP}/src/b2'
 alias sei='cd ${SOLPSTOP}/src/Eirene'
 alias ssw='cd ${SOLPSTOP}/src/Sonnet'
 alias ssd='cd ${SOLPSTOP}/src/DivGeo'
 alias ssc='cd ${SOLPSTOP}/src/Carre'
 alias sst='cd ${SOLPSTOP}/src/Triang'
-alias sbb='cd ${SOLPSTOP}/base/b2'
-alias sbe='cd ${SOLPSTOP}/base/Eirene'
-alias sbc='cd ${SOLPSTOP}/base/Carre'
-alias sbt='cd ${SOLPSTOP}/base/Triang'
+alias ssu='cd ${SOLPSTOP}/src/uinp'
 alias sbin='cd ${SOLPSTOP}/bin/${OBJECTCODE}'
 alias slib='cd ${SOLPSTOP}/lib/${OBJECTCODE}'
 alias srun='cd ${SOLPSTOP}/runs'
-alias sbinc='cd ${SOLPSTOP}/bin/common'
+alias scr='cd ${SOLPSTOP}/scripts'
 alias stop='cd ${SOLPSTOP}'
 alias sdg='cd ${SOLPSTOP}/data/DivGeo/class/${DEVICE}'
 
 alias ssf='cd ${SOLPSTOP}/src/Sonnet/device/${DEVICE}'
-alias ssu='cd ${SOLPSTOP}/src/DivGeo/uinp'
 
 alias afs='cd /afs/ipp-garching.mpg.de/aug-xdr'
 

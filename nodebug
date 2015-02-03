@@ -1,0 +1,4 @@
+setenv OLDOBJECTCODE $OBJECTCODE
+setenv OBJECTCODE `echo $OBJECTCODE | sed 's:.debug::'`
+unsetenv SOLPS_DEBUG
+setenv PATH `echo $PATH | sed "s|base/b2/$OLDOBJECTCODE|base/b2/$OBJECTCODE|"`

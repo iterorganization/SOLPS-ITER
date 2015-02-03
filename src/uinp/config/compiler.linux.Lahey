@@ -6,10 +6,10 @@ FC      = f95f
 
 FFLAGS 	= -O --tpp
 
-INCLUDE	= -I${SRCDIR} -I${EIRINC} -I${SOLPSTOP}/include.local -I${SOLPSTOP}/include
+INCLUDE	= -I${SRCDIR} -I${EIRINC} -I${B2INC}
 COMPILE = ${FC} -c ${FFLAGS}
 CPP	= /lib/cpp -C -traditional
 MOD 	= mod
 
-LDLIBS	= -L$(SOLPSTOP)/base/b2/$(OBJECTCODE) -lb2 -L${SOLPS_LIB} -lmscl -lmach -lslap -lblas -lxersla -L${SOLPSMASTER}/@sys/lib -lnetcdf -lnag -L/usr/local/lib /usr/lib/libstdc++.so.2.9 $(SOLPSTOP)/base/b2/${OBJECTCODE}/eirsrt.o
+LDLIBS	= -L${SOLPS_LIB} -lmscl
 LDEXTRA	= -Wl,-Map,$(OBJDIR)/map

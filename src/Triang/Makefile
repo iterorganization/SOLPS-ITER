@@ -3,8 +3,8 @@
 SRCDIR = ${SOLPSTOP}/src/Triang/src
 SRCTRI = ${SOLPSTOP}/src/Triang
 SRCLOCAL =${SOLPSTOP}/src/Triang/local
-OBJDIR = ${SOLPSTOP}/base/Triang/${OBJECTCODE}
-BASEDIR = ${SOLPSTOP}/base/Triang
+OBJDIR = ${SOLPSTOP}/bin/${OBJECTCODE}/Triang
+BASEDIR = ${SOLPSTOP}/bin/Triang
 
 INCLUDE=
 LOCAL=no

@@ -8,14 +8,12 @@ FFLAGS	 = -O -g -NA16384 -NQ20000
 else
 FFLAGS	 = -g -C -NA16384 -NQ20000
 endif
-INCLUDE = -I${SRCDIR} -I${EIRINC} -I${SOLPSTOP}/include.local -I${SOLPSTOP}/include
+INCLUDE = -I${SRCDIR} -I${EIRINC} -I${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
 CPP	 = /lib/cpp
 MOD 	 = mod
 
-# LDLIBS = -L/afs/ipp-garching.mpg.de/@sys/lib -L/usr/local/lib
-# LDLIBS = -L${SOLPS_LIB} -L/usr/local/lib -L/afs/ipp-garching.mpg.de/@sys/lib
-LDLIBS 	 = -L${SOLPS_LIB} -lmscl -L$(SOLPSTOP)/base/b2/$(OBJECTCODE) -lb2 -L/usr/local/lib -lnetcdf
+# LDLIBS = -L${SOLPS_LIB}
+LDLIBS 	 = -L${SOLPS_LIB} -lmscl
 # LDEXTRA  = -bmap:$(OBJDIR)/uinp.map -bloadmap:$(OBJDIR)/uinp.lmp -bmaxdata:0x80000000
 LDEXTRA  = -bmap:$(OBJDIR)/uinp.map -bloadmap:$(OBJDIR)/uinp.lmp
-# NAG 	 = -lnag_sh
