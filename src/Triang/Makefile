@@ -4,7 +4,7 @@ SRCDIR = ${SOLPSTOP}/src/Triang/src
 SRCTRI = ${SOLPSTOP}/src/Triang
 SRCLOCAL =${SOLPSTOP}/src/Triang/local
 OBJDIR = ${SOLPSTOP}/bin/${OBJECTCODE}/Triang
-BASEDIR = ${SOLPSTOP}/bin/Triang
+B2SRC = ${SOLPSTOP}/src/B2.5/src
 
 INCLUDE=
 LOCAL=no
@@ -14,7 +14,7 @@ endif
 ifeq ($(LOCAL),yes)
 INCLUDE = -I${SRCLOCAL}
 endif
-INCLUDE += -I${SRCDIR}/modules -I${SOLPSTOP}/include.local -I${SOLPSTOP}/include
+INCLUDE += -I${SRCDIR}/modules -I${B2SRC}/include.local -I${B2SRC}/include
 
 
 ifeq ($(LOCAL),yes)
@@ -23,11 +23,11 @@ else
 VPATH =${SRCDIR}/modules:${SRCDIR}/src
 endif
 
-ifeq ($(shell [ -e ${BASEDIR}/LISTOBJ ] && echo yes || echo no ),yes)
-include ${BASEDIR}/LISTOBJ
+ifeq ($(shell [ -e ${SRCTRI}/LISTOBJ ] && echo yes || echo no ),yes)
+include ${SRCTRI}/LISTOBJ
 endif
 include ${SRCTRI}/config/compile
-MAKES = ${BASEDIR}/Makefile ${SRCTRI}/config/compile ${SRCTRI}/config/compiler.${OBJECTCODE}
+MAKES = ${SRCTRI}/Makefile ${SRCTRI}/config/compile ${SRCTRI}/config/compiler.${OBJECTCODE}
 ifeq ($(shell [ -e ${SRCTRI}/config.local/compiler.${OBJECTCODE} ] && echo yes || echo no ),yes)
 include ${SRCTRI}/config.local/compiler.${OBJECTCODE}
 MAKES+= ${SRCTRI}/config.local/compiler.${OBJECTCODE}
@@ -94,23 +94,23 @@ update:
 	cd $(SOLPSTOP); gmake update
 
 listobj:
-	@rm -f ${BASEDIR}/LISTOBJ ; touch ${BASEDIR}/LISTOBJ ; l="OBJS =" ; \
+	@rm -f ${SRCTRI}/LISTOBJ ; touch ${SRCTRI}/LISTOBJ ; l="OBJS =" ; \
 	for d in `echo "$(VPATH)" | tr : \ `; do \
 		l="$$l `(cd $$d > /dev/null; echo *.f)`"; \
 	done; \
 	E="-e 's/\.f/\.o/g'" ; for f in $(MAINLIST); do \
 		E="$$E -e 's/ $$f//'"; \
 	done; \
-	echo "$$l" | eval sed "$$E" > ${BASEDIR}/LISTOBJ
+	echo "$$l" | eval sed "$$E" > ${SRCTRI}/LISTOBJ
 
 tags:
 ifeq ($(LOCAL),yes)
-	rm -f ${BASEDIR}/TAGS ; etags -o ${BASEDIR}/TAGS ${SRCLOCAL}/*.f ${SRCDIR}/*/*.F
+	rm -f ${SRCTRI}/TAGS ; etags -o ${SRCTRI}/TAGS ${SRCLOCAL}/*.f ${SRCDIR}/*/*.F
 else
-	rm -f ${BASEDIR}/TAGS ; etags -o ${BASEDIR}/TAGS ${SRCDIR}/*/*.f
+	rm -f ${SRCTRI}/TAGS ; etags -o ${SRCTRI}/TAGS ${SRCDIR}/*/*.f
 endif
 
-${BASEDIR}/LISTOBJ: listobj
+${SRCTRI}/LISTOBJ: listobj
 
 ${OBJDIR}/dependencies: 
 	-mkdir -p ${OBJDIR}
@@ -121,7 +121,7 @@ ${OBJDIR}/dependencies:
 
 include ${OBJDIR}/dependencies
 
-${BASEDIR}/TAGS: tags
+${SRCTRI}/TAGS: tags
 
 echo:
 	@echo CPP=${CPP}
