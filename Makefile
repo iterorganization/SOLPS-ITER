@@ -15,7 +15,7 @@ divgeo:
 
 b2eirene:
 	cd src/Eirene; ${MAKE} OBJDIR=${pwd}/bin/${OBJECTCODE}/Eirene
-	cd src/B2.5;   ${MAKE} b2eirene OBJDIR=${pwd}/bin/${OBJECTCODE}/B2.5 OBJDIREIR=${pwd}/bin/${OBJECTCODE}/Eirene
+	cd src/B2.5;   ${MAKE} OBJDIR=${pwd}/bin/${OBJECTCODE}/B2.5 OBJDIREIR=${pwd}/bin/${OBJECTCODE}/Eirene
 
 b2:
 	cd src/B2.5; ${MAKE} OBJDIR=${pwd}/bin/${OBJECTCODE}/B2.5
@@ -31,7 +31,6 @@ tags:
 	cd src/Triang;         ${MAKE} tags
 	cd src/DivGeo;         ${MAKE} tags
 	cd src/DivGeo/equtrn;  ${MAKE} tags
-	cd src/DivGeo/convert; ${MAKE} tags
 
 clean: clean_carre clean_divgeo clean_b2eirene clean_uinp clean_triang
 
