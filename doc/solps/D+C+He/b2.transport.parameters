@@ -1,0 +1,10 @@
+ &transport
+ flag_dna=1, parm_dna=12*0.4,
+ flag_dpa=0, parm_dpa=12*0,
+ flag_vla=0, parm_vla=12*0,
+ flag_vsa=0, parm_vsa=12*0,
+ flag_hci=1, parm_hci=12*1.6,
+ flag_hce=1, parm_hce=1.6,
+ flag_sig=0, parm_sig=0,
+ flag_alf=0, parm_alf=0,
+ /

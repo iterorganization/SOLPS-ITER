@@ -1,3 +1,2 @@
 echo setup.csh.dpc
-setenv USE_EIRENE -DUSE_EIRENE
 setenv SOLPS_CPP '-DMDSPLUS'

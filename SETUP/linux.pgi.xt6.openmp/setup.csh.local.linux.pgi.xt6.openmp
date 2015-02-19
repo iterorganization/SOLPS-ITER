@@ -1,5 +1,1 @@
 echo setup.csh.local.linux.pgi.xt6.openmp
-setenv USE_EIRENE -DUSE_EIRENE
-setenv SOLPS_FLUIDS "`${SOLPSTOP}/scripts/count -p D 0 1` `${SOLPSTOP}/scripts/count -p C 0 6` `${SOLPSTOP}/scripts/count -p He 0 2`"
-setenv DEVICE iter
-setenv NREG 4

@@ -1,0 +1,9 @@
+*dimens         (nx, ny; free format)
+  96  36   96  36
+*param          (param(0:99); free format)
+  -1.0, 0.0, 0.75, 1.0, -0.010, 0.0, 0.040,
+  5.0, 1.0, 0.02, 0.05, 0.05, 0.05,
+  0.06, 1.0,
+  100*0.0
+'b2agfs_geometry'     '16151.4000.AUGD.EQI.00._96x36.geo'
+'b2agfs_min_pitch'    '0.01'

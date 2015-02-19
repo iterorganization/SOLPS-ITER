@@ -1,0 +1,51 @@
+*label          (lblmn: character*60)
+  'D+C+He 15190 3.5s L-mode SNU'
+*b2cmpa  basic parameters
+*b2cmpb  boundary conditions
+*b2cmpt  transport coefficients
+*cflim    cflme    cflmi    cflmv     ...
+  '-1'      0.3     10.0      0.5       0        0        0        0        0
+*endphy
+'b2mndr_ntim'     '100'
+'b2mndr_dtim'     '1.0e-4'
+'b2mndt_nstg0'    '1'
+'b2mndt_nstg1'    '1'
+'b2mndt_nstg2'    '10'
+'b2mndt_rxf'      '0.5'
+'b2mndr_mvinc'    '1'
+'b2mndr_mvnum'    '0'
+'b2mndr_b2time'   '1'
+'b2mndr_na0eps'   '1e14'
+'b2mndr_cpu'      '82800.0'
+'b2mndr_savecpu'  '0.0'
+'tallies_netcdf'  '1'
+'b2ux5p_style'    '2'
+'b2ux5p_nltrsol'  '2'
+'b2stbc_sna0ep'   '1.0e-10'
+'b2trcl_lluciani' '1'
+'b2trcl_lvis21' '0'
+'b2trcl_lthf21' '0'
+'b2news_facdrift_target' '0'
+'b2news_facdrift_start'  '0'
+'b2news_facdrift_inc'    '1.00'
+'b2news_facdrift_dec'    '0.5'
+'b2news_potit'    '100'
+'b2news_potok'    '1e-2'
+'b2sihs_phm3'    '1.0'
+'b2stbr_sput_frc'        '0.0100'
+'b2stbr_sput_phys'       '1.00'
+'b2stbr_sput_chem_model'   '1'
+'b2stbr_sput_dst'          '2'
+'b2stbc_boundary_namelist' '1'
+'b2srdt_numerics_namelist' '1'
+'b2tqna_transport_namelist' '1'
+'b2tqna_new_df0'  '0'
+'b2mndr_eirene'                   '1'
+'eirene_repeat_first_call'        '1'
+'b2mndr_rescale_neutrals'         '1e-0'
+'b2mndr_rescale_neutrals_sources' '1e-10'
+'b2mwti_jxi'  39
+'b2mwti_jxa'  54
+'b2news_recalculate_contributions' '0'
+'eirene_savef31' '0'
+'eirene_dpc_fix'  '1'

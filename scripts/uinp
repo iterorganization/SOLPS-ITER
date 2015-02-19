@@ -1,0 +1,47 @@
+#! /bin/ksh
+
+#  VERSION : 03.08.2000 17:07
+
+while true; do {
+  [ "$1" = '' ] && break
+  { case $1 in
+    ( -l )  err=
+            for f in uinput.trg uinput.dg; do {
+              ff=`lln -e $SOLPSTOP/src/uinp/$f`
+              [ -f "$ff" ] && ln -sf "$ff" $f || {
+                print -u2 "Unable to re-link $f"
+                err=y
+              }
+            }; done
+            [ -z "$err" ] && ln -sf "$ff" param.dg && print -- "... param.dg prepared"
+            ;;
+    ( -r )  rm -f uinput.dg uinput.trg param.dg > /dev/null 2>&1
+            (w=`pwd`; cd $SOLPSTOP/src/uinp; cp uinput.dg uinput.trg $w)
+            cp uinput.dg param.dg && print -- "... param.dg prepared"
+            ;;
+    ( *  )   echo "Unsupported option: $1"
+  esac; }
+  shift
+}; done
+
+[ -r uinput.dg ] || { print -u2 -- `basename $0`" :  no uinput.dg"; exit 4; }
+[ -r uinput.trg ] || { print -u2 -- `basename $0`" :  no uinput.trg"; exit 4; }
+[ -r uinput.aux ] && print -- `basename $0`" :  uinput.aux to be used"
+
+[ -r input.eir ] && { [ -r input.eir~ ] || mv input.eir input.eir~; }
+
+location="$SOLPSTOP/"
+[ -s B2E.version ] && {
+  set -A u -- `cat B2E.version`
+  location="${SOLPSTOP%/*}/$u/"
+}
+
+grep '^# topo ' uinput.trg > /dev/null && {
+  $location/bin/$OBJECTCODE/uinp/uinp
+  true
+} || {
+# Old-style DG output: apply the old uinp
+
+  print -- `basename $0`" : old file format - uinp version 1.42 to be applied"
+  $location/bin/$OBJECTCODE/uinp/uinp.1.42
+}

@@ -1,0 +1,13 @@
+#! /bin/tcsh
+
+#BSUB -e PYTHON.e%J.%I
+#BSUB -o PYTHON.o%J.%I
+#BSUB -J PYTHON
+#BSUB -W 36:00
+#BSUB -q priority
+
+setenv PATH /afs/efda-itm.eu/imp3/user/coster/public/python/bin:$PATH
+setenv PYTHONPATH /afs/efda-itm.eu/imp3/user/coster/python:/afs/efda-itm.eu/imp3/user/coster/public/python/lib/python2.5/site-packages:/afs/efda-itm.eu/imp3/user/coster/public/python:$PYTHONPATH
+
+echo 1200 | awk '{srand();print int($1*rand())}' | xargs sleep
+echo "import movie_patch ; movie_patch.movie_patch(shot=#1#,data='rqahesum',fmin=0.0,fmax=812649219.41426456,tbase=#2#,rmin=1.155,rmax=1.725,zmin=-1.25,zmax=-0.65)" | python

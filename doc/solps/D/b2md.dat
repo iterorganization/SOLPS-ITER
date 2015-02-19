@@ -1,0 +1,8 @@
+ &b2md_namelist
+ exp='JET',
+ shot=50401,
+ time=58.000,
+ comment='Benchmark SOLPS/EDGE2D/UEDGE cases, D-only; some B2 fluid only, some B2-Eirene',
+ timedep=.true.,
+ snapshot=.true.,
+ &end

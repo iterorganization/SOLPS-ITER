@@ -1,0 +1,40 @@
+% Document style option "drafthead"
+% -- usage:  \documentstyle[...,drafthead,...]{...}
+% -- puts "DRAFT" with date and time at top of each page.
+%
+% Author: Stephen Page - sdpage@uk.ac.oxford.prg
+%                        sdpage%prg.oxford.ac.uk@ucl-cs.arpa
+%                        sdpage%prg.oxford.ac.uk@cs.ucl.ac.uk
+% Released 23 June 1986
+%
+% Sets \pagestyle{myheadings} and installs a header.
+%
+% Bugs:
+% -- LaTeX supplies free page number in a nonzero-width box at r.h. edge,
+%    so the word DRAFT is not exactly centered. It's near enough, though!
+% -- Always sets headers, destroying any user-supplied ones.
+%----------------------------------------------------------------------------
+
+%
+% compute the time in hours and minutes; make new variables \timehh and \timemm
+%
+\newcount\timehh\newcount\timemm
+\timehh=\time 
+\divide\timehh by 60 \timemm=\time
+\count255=\timehh\multiply\count255 by -60 \advance\timemm by \count255
+%
+% now put in header
+\markboth%
+%--- Left mark
+{\hspace*{\fill}{\protect\small\bf \fbox{DRAFT}}
+\hspace*{\fill}
+\protect\makebox[0pt][r]{\protect\small\sl\today\ -- 
+\ifnum\timehh<10 0\fi\number\timehh\,:\,\ifnum\timemm<10 0\fi\number\timemm}
+}%--- right mark
+{\protect\makebox[0pt][l]{\protect\small\sl\today\ -- 
+\ifnum\timehh<10 0\fi\number\timehh\,:\,\ifnum\timemm<10 0\fi\number\timemm}
+\hspace*{\fill}
+{\protect\small\bf \fbox{DRAFT}}
+\hspace*{\fill}}
+
+\pagestyle{myheadings}

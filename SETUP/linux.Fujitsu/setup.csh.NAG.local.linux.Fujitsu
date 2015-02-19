@@ -1,1 +1,2 @@
+echo setup.csh.NAG.local.linux.Fujitsu
 setenv NAG '-L/home/dpc/solps/nagfl15df -lnag_Fujitsu'

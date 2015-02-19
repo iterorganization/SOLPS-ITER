@@ -14,7 +14,7 @@ endif
 ifeq ($(LOCAL),yes)
 INCLUDE = -I${SRCLOCAL}
 endif
-INCLUDE += -I${SRCDIR}/modules -I${B2SRC}/include.local -I${B2SRC}/include
+INCLUDE += -I${OBJDIR} -I${B2SRC}/include.local -I${B2SRC}/include
 
 
 ifeq ($(LOCAL),yes)

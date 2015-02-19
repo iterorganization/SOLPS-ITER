@@ -50,7 +50,7 @@ ${OBJDIR}/open_file.o:
 ${OBJDIR}/uinp: ${OBJDIR}/uinput.o ${OBJDIR}/uiblkd.o ${OBJDIR}/uiblb2.o ${OBJDIR}/libui.a ${B2OBJ}/open_file.o ${SOLPS_LIB}/libmscl.a ${MAKES} ${MNEXTRA}
 	${FC} $(FFLAGS) -o ${OBJDIR}/uinp ${OBJDIR}/uinput.o ${OBJDIR}/uiblkd.o ${OBJDIR}/uiblb2.o ${MNEXTRA} ${OBJDIR}/libui.a ${LDLIBS} $(LDEXTRA)
 
-${OBJDIR}/ub2p: ${OBJDIR}/ub2p.o ${OBJDIR}/libui.a ${B2OBJ}/libb25.a ${SOLPS_LIB}/libmscl.a ${MAKES} ${MNEXTRA}
+${OBJDIR}/ub2p: ${OBJDIR}/ub2p.o ${OBJDIR}/libui.a ${SOLPS_LIB}/libmscl.a ${MAKES} ${MNEXTRA}
 	${FC} $(FFLAGS) -o ${OBJDIR}/ub2p ${OBJDIR}/ub2p.o ${OBJDIR}/libui.a ${MNEXTRA} ${LDLIBS} $(LDEXTRA)
 
 ${OBJDIR}/libui.a: ${DEST}
