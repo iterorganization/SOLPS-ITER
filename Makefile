@@ -14,6 +14,7 @@ divgeo:
 	cd src/DivGeo/convert; ${MAKE}
 
 eirene:
+	cd src/Eirene; ${MAKE} USE_MPI=-DUSE_MPI
 	cd src/Eirene; ${MAKE} 
 
 b25:
@@ -30,7 +31,7 @@ solps: uinp triang
 	cd src/DivGeo;         ${MAKE} OBJDIR=${pwd}/bin/${OBJECTCODE}/DivGeo
 	cd src/DivGeo/equtrn;  ${MAKE} OBJDIR=${pwd}/bin/${OBJECTCODE}/DivGeo/equtrn
 	cd src/DivGeo/convert; ${MAKE} OBJDIR=${pwd}/bin/${OBJECTCODE}/DivGeo/convert
-	cd src/Eirene;         ${MAKE} OBJDIR=${pwd}/bin/${OBJECTCODE}/Eirene USE_B25=-DUSE_B25
+	cd src/Eirene;         ${MAKE} OBJDIR=${pwd}/bin/${OBJECTCODE}/Eirene USE_B25=-DUSE_B25 USE_MPI=-DUSE_MPI
 	cd src/B2.5;           ${MAKE} OBJDIR=${pwd}/bin/${OBJECTCODE}/B2.5 OBJDIREIR=${pwd}/bin/${OBJECTCODE}/Eirene USE_EIRENE=-DUSE_EIRENE
 
 manual:
@@ -47,6 +48,7 @@ tags:
 
 depend:
 	cd src/Carre;          ${MAKE} depend
+	cd src/Eirene;         ${MAKE} depend USE_MPI=-DUSE_MPI
 	cd src/Eirene;         ${MAKE} depend
 	cd src/B2.5;           ${MAKE} depend
 	cd src/uinp;           ${MAKE} depend
@@ -74,6 +76,7 @@ clean_divgeo:
 	cd src/DivGeo/convert; ${MAKE} clean OBJDIR=${pwd}/bin/${OBJECTCODE}/DivGeo/convert
 
 clean_b2eirene:
+	cd src/Eirene; ${MAKE} clean USE_MPI=-DUSE_MPI
 	cd src/Eirene; ${MAKE} clean
 	cd src/B2.5;   ${MAKE} clean
 	cd src/Eirene; ${MAKE} clean OBJDIR=${pwd}/bin/${OBJECTCODE}/Eirene

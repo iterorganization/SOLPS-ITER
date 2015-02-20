@@ -172,10 +172,10 @@ while true; do {
               [ -r $eirinp ] && {
                 N=
                 print -u2 -- "Starting Eirene - may take a while..."
-                print -u2 -- "Command line: ${SOLPSTOP}/src/Eirene/bin/${OBJECTCODE}/eirobjx < $eirinp > $eirlog"
-#                ln -sf "$eirinp" ${SOLPSTOP}/src/Eirene/bin/${OBJECTCODE}/fort.1
-                ${SOLPSTOP}/src/Eirene/bin/${OBJECTCODE}/eirobjx < "$eirinp" > "$eirlog"
-#                rm ${SOLPSTOP}/src/Eirene/bin/${OBJECTCODE}/fort.1
+                print -u2 -- "Command line: ${SOLPSTOP}/src/Eirene/bin/${OBJECTCODE}.nompi/eirobjx < $eirinp > $eirlog"
+#                ln -sf "$eirinp" ${SOLPSTOP}/src/Eirene/bin/${OBJECTCODE}.nompi/fort.1
+                ${SOLPSTOP}/src/Eirene/bin/${OBJECTCODE}.nompi/eirobjx < "$eirinp" > "$eirlog"
+#                rm ${SOLPSTOP}/src/Eirene/bin/${OBJECTCODE}.nompi/fort.1
                 [ -s "$eirout" ] && [ -r "$eirout" ] && {
                   (cat "$eirhed"; tail --lines=+2  "$eirout") > "$triain" && q=t || {
                     print -u2 -- "Something is wrong with $eirout ==> Check $eirlog"
