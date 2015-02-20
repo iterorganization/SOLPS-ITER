@@ -62,16 +62,16 @@ Uinp    (u) run uinp to produce the input files for the initial short run of Eir
         (U) run uinp -l to make first the necessary links to the DG output (run first the 
             lns command from the DG environment to link the DG output to the standard place);
 Eirene  (e) run eirobjx to produce the geometry data for tria;
-Tria    (t) run tria to generate the triangular mesh outside the regular B2 grid;
-triaGeom(g) run triageom to combine the triangular mesh with the regular B2 grid;
+Tria    (t) run tria to generate the triangular mesh outside the regular B2.5 grid;
+triaGeom(g) run triageom to combine the triangular mesh with the regular B2.5 grid;
 Plot    (p) produce PostScript plots of the structures and triangular mesh using gnuplot;
 View    (v) view the PostScript output from tria (v) or triageom (V);
 Store   (s) store the combined mesh, giving it a serial number and linking to fort.3[345];
 Convert (c) convert the triangular (c) or combined (C) mesh into a DG template;
 List    (l) list the meshes present in the archive;
 Remove  (r) remove the specified meshes from the archive;
-B2      (b) run b2plot to produce the fort.30 file;
-reMap   (m) run rmp to remap the B2 data on a new grid and to produce the fort.30 file (TBD!);
+B2ag    (b) run b2ag to produce the fort.30 file;
+reMap   (m) run b2yt to remap the B2.5 data on a new grid and to produce a new fort.30 file (TBD!);
 trAp    (a) set a trap in tria for debugging purposes;
 Quit    (q) quit.
 
@@ -84,7 +84,7 @@ $NAME: an interactive script to produce a combined triangular mesh for EIRENE.
 
 It should be run in the working directory where the case,
 for which the mesh is being produced, will be run. 
-The directory should be set up so that the b2eirobj and eirobjx codes can be run there.
+The directory should be set up so that the b2ag, b2yt and eirobjx codes can be run there.
 The following steps are foreseen in $NAME:
 $Help"
 
@@ -121,7 +121,7 @@ export GRSOFT_DEVICE='62'
 N=
 
 while true; do {
-  print -u2 -n -- "Help, Uinp, B2, reMap, Eirene, Tria, triaGeom, Plot, View, Store, Convert, List, Remove, Quit ? ($q)"
+  print -u2 -n -- "Help, Uinp, B2ag, reMap, Eirene, Tria, triaGeom, Plot, View, Store, Convert, List, Remove, Quit ? ($q)"
   while true; do {
     read u
     extra="${u#*-}"
@@ -173,7 +173,9 @@ while true; do {
                 N=
                 print -u2 -- "Starting Eirene - may take a while..."
                 print -u2 -- "Command line: ${SOLPSTOP}/src/Eirene/bin/${OBJECTCODE}/eirobjx < $eirinp > $eirlog"
+#                ln -sf "$eirinp" ${SOLPSTOP}/src/Eirene/bin/${OBJECTCODE}/fort.1
                 ${SOLPSTOP}/src/Eirene/bin/${OBJECTCODE}/eirobjx < "$eirinp" > "$eirlog"
+#                rm ${SOLPSTOP}/src/Eirene/bin/${OBJECTCODE}/fort.1
                 [ -s "$eirout" ] && [ -r "$eirout" ] && {
                   (cat "$eirhed"; tail --lines=+2  "$eirout") > "$triain" && q=t || {
                     print -u2 -- "Something is wrong with $eirout ==> Check $eirlog"

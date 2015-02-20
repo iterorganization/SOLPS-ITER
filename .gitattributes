@@ -1,0 +1,4 @@
+# Attributes to avoid detailed diffs for application files
+*.epsi binary
+*.pdf binary
+*.ps binary

@@ -53,6 +53,11 @@ depend:
 	cd src/Triang;         ${MAKE} depend
 	cd src/DivGeo;         ${MAKE} depend
 	cd src/DivGeo/equtrn;  ${MAKE} depend
+	cd src/Carre;          ${MAKE} OBJDIR=${pwd}/bin/${OBJECTCODE}/Carre depend
+	cd src/DivGeo;         ${MAKE} OBJDIR=${pwd}/bin/${OBJECTCODE}/DivGeo depend
+	cd src/DivGeo/equtrn;  ${MAKE} OBJDIR=${pwd}/bin/${OBJECTCODE}/DivGeo/equtrn depend
+	cd src/Eirene;         ${MAKE} OBJDIR=${pwd}/bin/${OBJECTCODE}/Eirene USE_B25=-DUSE_B25 depend
+	cd src/B2.5;           ${MAKE} OBJDIR=${pwd}/bin/${OBJECTCODE}/B2.5 OBJDIREIR=${pwd}/bin/${OBJECTCODE}/Eirene USE_EIRENE=-DUSE_EIRENE depend
 
 clean: clean_carre clean_divgeo clean_b2eirene clean_uinp clean_triang
 

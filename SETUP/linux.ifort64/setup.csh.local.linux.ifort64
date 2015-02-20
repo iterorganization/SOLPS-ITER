@@ -19,4 +19,5 @@ case "*.iter.org":
   module load git
   module load texlive
   module load ghostscript
+  module load ncl
 endsw

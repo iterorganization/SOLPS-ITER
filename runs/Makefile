@@ -6,7 +6,7 @@
 
 SHELL = /bin/sh
 TIME = time
-OBJDIR = ${SOLPSTOP}/base/b2/${OBJECTCODE}
+OBJDIR = ${SOLPSTOP}/bin/${OBJECTCODE}/B2.5
 nil =
 ifeq (${OBJECTCODE},linux_nag_f95.debug)
 DBX = totalview
@@ -26,7 +26,7 @@ INC =
 else
 DBX = dbx
 ifdef USE_EIRENE
-INC = -I ${OBJDIR} -I ${SOLPSTOP}/base/Eirene/${OBJECTCODE}
+INC = -I ${OBJDIR} -I ${SOLPSTOP}/bin/${OBJECTCODE}/Eirene
 else
 INC = -I ${OBJDIR}
 endif

@@ -21,9 +21,9 @@ INC =
 else
 DBX = dbx
 ifdef USE_EIRENE
-INC = -I ${SOLPSTOP}/base/b2/${OBJECTCODE} -I ${SOLPSTOP}/base/Eirene/${OBJECTCODE}
+INC = -I ${SOLPSTOP}/bin/${OBJECTCODE}/B2.5 -I ${SOLPSTOP}/bin/${OBJECTCODE}/Eirene
 else
-INC = -I ${SOLPSTOP}/base/b2/${OBJECTCODE}
+INC = -I ${SOLPSTOP}/bin/${OBJECTCODE}/B2.5
 endif
 endif
 endif
