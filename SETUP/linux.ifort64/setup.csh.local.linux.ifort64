@@ -20,4 +20,7 @@ case "*.iter.org":
   module load texlive
   module load ghostscript
   module load ncl
+case "*.iferc-csc.org":
+  setenv DEVICE iter
+  setenv IFERC yes
 endsw
