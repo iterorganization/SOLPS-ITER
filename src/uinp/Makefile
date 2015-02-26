@@ -8,9 +8,9 @@ SRCUIN = ${SOLPSTOP}/src/uinp
 OBJDIR = ${SOLPSTOP}/bin/${OBJECTCODE}/uinp
 BASEDIR = ${SOLPSTOP}/src/uinp
 B2DIR = ${SOLPSTOP}/src/B2.5
-B2OBJ = ${SOLPSTOP}/bin/${OBJECTCODE}/B2.5
+B2OBJ = ${SOLPSTOP}/bin/${OBJECTCODE}/B2.5.nompi
 EIRDIR = ${SOLPSTOP}/src/Eirene
-EIROBJ = ${SOLPSTOP}/bin/${OBJECTCODE}/Eirene
+EIROBJ = ${SOLPSTOP}/bin/${OBJECTCODE}/Eirene.nompi
 ifeq ($(shell [ -e ${B2DIR}/src/include.local ] && echo yes || echo no ),yes)
 B2INC = ${B2DIR}/src/include.local -I${B2DIR}/src/include
 else
