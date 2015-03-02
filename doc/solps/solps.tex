@@ -4260,7 +4260,7 @@ of 3802.68 GB in 553970 files.
 \label{cha:divgeo}\index{DG, running}
 
 When using for the first time, check to see whether
-\$\verb!SOLPSTOP/src/DivGeo! is a link.  If it is, do
+\$\verb!SOLPSTOP/src/DivGeo! is a link (for SOLPS4.x versions).  If it is, do
 \index{gtdr, DivGeo}
 \begin{verbatim}
   cd $SOLPSTOP/src
@@ -4277,7 +4277,7 @@ You will need to choose your device, {\it e.g.}: \index{DEVICE}
 Available choices are:
 \begin{description}
 \item[asdex] ASDEX (Garching, Germany), now HL--2A (Chengdu, China)
-\item[cfns]
+\item[cfns] Compact Fusion Neutron Source (China)
 \item[cmod] Alcator C--Mod (Boston, USA)
 \item[d3d] DIII--D (San Diego, USA)
 \item[dream] (Japan)
@@ -4304,8 +4304,9 @@ The command\index{sdg}
 \begin{verbatim}
   sdg
 \end{verbatim}
-will move you to the \$\verb!SOLPSTOP/src/DivGeo/dg/class/!\$\verb!DEVICE! 
-directory.
+will move you to the \$\verb!SOLPSTOP/data/DivGeo/class/!\$\verb!DEVICE! 
+directory. The environment variable \$\verb!DG! contains the path 
+\$\verb!SOLPSTOP/src/DivGeo!.
 To start \verb!DG!, the command is:
 \begin{verbatim}
   ./dg

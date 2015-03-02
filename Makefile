@@ -19,6 +19,7 @@ eirene:
 	cd src/Eirene; ${MAKE} 
 
 b25:
+	cd src/B2.5; ${MAKE} USE_MPI=-DUSE_MPI
 	cd src/B2.5; ${MAKE} 
 
 uinp:
