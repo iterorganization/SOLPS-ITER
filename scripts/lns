@@ -1,0 +1,66 @@
+#! /usr/bin/ksh
+
+#  VERSION : 05.03.98 19:38
+
+[ "$1" = '' ] && { \
+    echo "Usage: lns <Varid>"
+    echo "        This will link the files to the Sonnet directory:"
+    echo "                <Varid>.str --> struct.snn"
+    echo "                <Varid>.trg --> targets.snn"
+    echo "           equilibrium file --> equilibr.snn"
+    echo "        to the Carre directory:"
+    echo "                <Varid>.str --> dg.str"
+    echo "                <Varid>.trg --> dg.trg"
+    echo "                <Varid>.dgo --> dg.dgo"
+    echo "           equilibrium file --> dg.equ"
+    echo "        and to the uinp directory:"
+    echo "                <Varid>.dgo --> uinput.dg"
+    echo "                <Varid>.trg --> uinput.trg"
+    exit 4
+}
+c=`basename \`pwd\``
+[ "$c" = divgeo ] && { class=${DEVICE:-iter}; cd class/$class; } || class=$c
+
+CLASSDIR=${SonnetTopDirectory}/device/$class
+[ -d "$CLASSDIR" ] || {
+  print -u2 -n -- "The directory $CLASSDIR does not exist. Create it? (y/n) "
+  while true; do {
+    read u
+    { case $u in
+       (y|Y) mkdir -p "$CLASSDIR" || {
+             print -u2 -- "Unable to create the directory. Check the permissions in ${CLASSDIR}%/*"
+             break 2
+             }; break;;
+       (n|N) break 2;;
+       ( * ) print -u2 -n -- "Please answer with either y or n: ";;
+      esac; }
+    }; done
+  }
+
+ln -sf `pwd`/"$1".str ${SonnetTopDirectory}/device/$class/struct.snn
+ln -sf `pwd`/"$1".trg ${SonnetTopDirectory}/device/$class/targets.snn
+ln -sf `pwd`/"$1".dgo ${SOLPSTOP}/src/uinp/uinput.dg
+ln -sf `pwd`/"$1".trg ${SOLPSTOP}/src/uinp/uinput.trg
+ln -sf `pwd`/"$1".str ${SOLPSTOP}/src/Carre/dg.str
+ln -sf `pwd`/"$1".trg ${SOLPSTOP}/src/Carre/dg.trg
+ln -sf `pwd`/"$1".dgo ${SOLPSTOP}/src/Carre/dg.dgo
+
+e=`cat $1.trg | grep '# equil' | cut -f3 -d' '`
+case $e in
+  ( ''   ) echo "$1.trg is in old format - no information on the equilibrium there"
+           [ -r default.equ ] && { \
+               ln -sf `pwd`/default.equ ${SonnetTopDirectory}/device/$class/equilibr.snn
+               ln -sf `pwd`/default.equ ${SOLPSTOP}/src/Carre/dg.equ
+                    echo '-- the default equilibrium file is used';
+           } || echo '*** No default equilibrium file found (!!!)';;
+  ( /*   ) ln -sf $e ${SonnetTopDirectory}/device/$class/equilibr.snn
+           ln -sf $e ${SOLPSTOP}/src/Carre/dg.equ;;
+  ( ../* ) (d=`dirname $e`; f=`basename $e`; cd $d;
+           ln -sf `pwd`/$f ${SonnetTopDirectory}/device/$class/equilibr.snn
+           ln -sf `pwd`/$f ${SOLPSTOP}/src/Carre/dg.equ);;
+  ( ./*  ) (d=`dirname $e`; f=`basename $e`; cd $d;
+           ln -sf `pwd`/$f ${SonnetTopDirectory}/device/$class/equilibr.snn
+           ln -sf `pwd`/$f ${SOLPSTOP}/src/Carre/dg.equ);;
+  (   *  ) ln -sf `pwd`/$e ${SonnetTopDirectory}/device/$class/equilibr.snn
+           ln -sf `pwd`/$e ${SOLPSTOP}/src/Carre/dg.equ;;
+esac

@@ -1,0 +1,72 @@
+*label          (lblmn: character*60)
+  'JET : no drifts : D only : no drifts'
+*b2cmpa  basic parameters
+*b2cmpb  boundary conditions
+*cbregs
+ 'south'    3       0.25     0.75     2.00
+ 'north'    1       2.0
+ 'west'     1       2.0
+ 'east'     1       2.0
+*region
+ 4  'west, target plate'
+*cbrec     (0)      (1)      (2)      (3)      (4)      (5)      (6)      (7)
+   '0'      0        0        0        0        0        0        0        0
+   '1'     1.0      0.3       0        0        0        0        0        0
+*region
+ 5  'east, target plate'
+*cbrec     (0)      (1)      (2)      (3)      (4)      (5)      (6)      (7)
+   '0'      0        0        0        0        0        0        0        0
+   '1'     1.0      0.3       0        0        0        0        0        0
+*b2cmpt  transport coefficients
+*cfvsa     (0)      (1)      (2)      (3)      (4)      (5)      (6)      (7)
+   '0'      0        0       1.0       0        0        0        0        0
+   '1'      0        0       1.0       0        0        0        0        0
+*cfsig     (0)      (1)      (2)      (3)      (4)      (5)      (6)      (7)
+  '-1'   1.00E-03 0.0e+00  0.0e+00  0.0e+00  0.0e+00  0.0e+00  0.0e+00  0.0e+00
+*cfalf     (0)      (1)      (2)      (3)      (4)      (5)      (6)      (7)
+  '-1'   1.00E-03 0.0e+00  0.0e+00  0.0e+00  0.0e+00  0.0e+00  0.0e+00  0.0e+00
+*endphy
+'b2mndr_ntim'      '1000'
+'b2mndr_dtim'      '1.0e-3'
+'b2mndt_nstg0'     '1'
+'b2mndt_nstg1'     '1'
+'b2mndt_nstg2'     '1'
+'b2mndt_rxf'       '0.5'
+'b2mndr_mvinc'     '1'
+'b2mndr_mvnum'     '0'
+'b2mndr_b2time'    '10'
+'b2mndr_na0eps'    '1e14'
+'b2mndr_cpu'       '182800.0'
+'b2mndr_savecpu'   '3600.0'
+'b2ux5p_nltrsol'   '0'    
+'b2ux5p_style'     '2'
+'b2stbc_sna0ep'    '1.0e-10'
+'b2trcl_lluciani'  '1'
+'b2news_potit'     '100'
+'b2news_potok'     '1e-2'
+'b2trcl_lvis21'    '0'
+'b2trcl_lthf21'    '0'
+'b2tfhe_neutral'         '0.0'
+'b2tfhe_vis_par'         '0.0'
+'b2news_facdrift_target' '0.00'
+'b2news_facdrift_start'  '0.00'
+'b2news_facdrift_inc'    '1.01'
+'b2news_facdrift_dec'    '0.95'
+'b2news_facExB_target'   '0.00'
+'b2news_facExB_start'    '0.00'
+'b2news_facExB_inc'      '1.01'
+'b2news_facExB_dec'      '0.95'
+'b2stbc_fchy_dia_coreonly'  '1'
+'b2stbc_boundary_namelist'  '1'
+'b2srdt_numerics_namelist'  '1'
+'b2tqna_transport_namelist' '1'
+'b2mwti_jxi'     '40'
+'b2mwti_jxa'     '54'
+'b2tlh0_alpha'  '1.0'
+'b2tfnb_alpha'  '1.0'
+'b2news_potitmin' '5'
+'b2mndr_eirene'   '0'
+'b2stbc_feedback'     '1'
+'b2stbc_nesepm_sol'   '1e19'
+'b2stbc_diagno'       '1'
+'b2stbc_solregno'     '3'

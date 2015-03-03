@@ -16,7 +16,7 @@ c=======================================================================
 
       integer i,j,k,l,m,n
       logical ulmlti,ex,carbon
-      character utxthd(33)*71, utxtfl(5)*25, ufnm*(*), ucdnmdl*10
+      character utxthd(34)*71, utxtfl(5)*25, ufnm*(*), ucdnmdl*10
       data utxthd /
      1        '** 1. Data for operating mode' ,
      2        '** 2. Data for standard mesh' ,
@@ -37,9 +37,9 @@ c=======================================================================
      7        '** 11. Data for numerical and graphical output' ,
      8        '** 12. Data for diagnostic module' ,
      9        '** 14. Data for interfacing routine "infusr"' ,
-     o        '*4a.   Neutral atom species' ,
-     1        '*4b.   Neutral molecule species' ,
-     2        '*4c.   Test ion species' ,
+     o        '* 4a. Neutral atom species' ,
+     1        '* 4b. Neutral molecule species' ,
+     2        '* 4c. Test ion species' ,
      3        '*  Standard deviation ' ,
      4        '*  Reactions ' ,
      5        '** 13. Data for nonlinear and time dep. option' ,
@@ -50,7 +50,8 @@ c=======================================================================
      o        '* 2e. Data for additional cells outside standard mesh',
      1        '* 5b. Plasma background data',
      2        '* Data for source correction',
-     3        '*4d.   Photon species' /
+     3        '* 4d. Photon species',
+     4        '* 5a. Bulk ion species' /
       data utxtfl /
      1        'CFILE AMJUEL data/AMJUEL ',
      2        'CFILE HYDHEL data/HYDHEL ',
@@ -122,7 +123,8 @@ c*** 1.  General data for the run
       write(iunoo,707) noptim,noptm1,ngeom_usr,ncoup_input,
      .                 nsmstra,nstoram,ngstal,nrtal1,nreac_add
       write(iunoo,706) nlscl,nltest,nlana,nldrft,nlcrr,
-     .                 nlerg,lident,lhaber,nexvs,nrescflux,nltrimesh
+     .                 nlerg,lident,lhaber,nexvs,nrescflux,
+     .                 nloldran,nlcascad,nloctree,nlwrmsh,nltrimesh
       write(iunoo,720) utxtfl(1)
       write(iunoo,720) utxtfl(2)
       write(iunoo,720) utxtfl(3)
@@ -476,7 +478,7 @@ c*** 5.  data for plasma background
       end do !}
 
       write(iunoo,700) utxthd(6)
-      write(iunoo,700) '*'
+      write(iunoo,700) utxthd(34)
 
 c**  bulk ions species cards
 

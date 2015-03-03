@@ -5,11 +5,22 @@ switch ($fullhost)
 case "*.ipp-garching.mpg.de":
 case "*.ipp.mpg.de":
 case "*.rzg.mpg.de":
+  setenv DEVICE upgrade
   module load intel
   module load texlive
   module load subversion
   module load totalview
+case "*.iter.org":
+  setenv DEVICE iter
+  module load netcdf
+  module load mpich/1.2.7p1-intel
+  module load flex
+  module load doxygen
+  module load git
+  module load texlive
+  module load ghostscript
+  module load ncl
+case "*.iferc-csc.org":
+  setenv DEVICE iter
+  setenv IFERC yes
 endsw
-setenv USE_EIRENE "-DUSE_EIRENE -DTRIANG"
-setenv SOLPS_FLUIDS "`${SOLPSTOP}/bin/common/count -p D 0 1` `${SOLPSTOP}/bin/common/count -p C 0 6` `${SOLPSTOP}/bin/common/count -p He 0 2`"
-setenv NREG 4

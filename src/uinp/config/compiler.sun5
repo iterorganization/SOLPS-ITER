@@ -6,10 +6,10 @@ else
 FFLAGS	 = -O 
 endif
 
-INCLUDE = -I${SRCDIR} -I${SOLPSTOP}/include.local -I${SOLPSTOP}/include -I${EIRINC}
+INCLUDE = -I${SRCDIR} -I${EIRINC} -I${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
 CPP	 = /usr/ccs/lib/cpp
 MOD 	 = mod
 
-LDLIBS 	 = -L${SOLPS_LIB} -lmscl -L/usr/local/lib -L$(SOLPSTOP)/base/b2/$(OBJECTCODE) -lb2 -L${SOLPSMASTER}/@sys/lib -lnetcdf
+LDLIBS 	 = -L${SOLPS_LIB} -lmscl
 LDEXTRA  = 

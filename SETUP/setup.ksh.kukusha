@@ -4,12 +4,8 @@ umask 002
 export LOG_B2E_ALL=y
 export COLOR_PRINTER=
 export DEVICE=iterm
-export NREG=4
-export SOLPS_FLUIDS="D0 D+ He0 He+ He+2 C0 C+ C+2 C+3 C+4 C+5 C+6"
-export USE_EIRENE="-DUSE_EIRENE"
 export Model_Class=$DEVICE
-export HOMEMASTER=~kukusha
-#export ARCHDIR=$HOMEMASTER/b2arch
+#export ARCHDIR=$SOLPSTOP/b2arch
 export ARCHDIR=/b2-ext/b2arch
 export dpc_pub=/afs/rzg.mpg.de/u/dpc/archive/PUBLIC/FOR_ANK
 
@@ -28,7 +24,7 @@ export PLOT_SET_PATH=":..:../..:$SOLPSTOP/data/plot_set"
 
   [ -z "$GV_OPT" ] && export GV_OPT='-landscape -magstep -1 -geometry +10+10 -bg white'
 
-  dir=:${SOLPSTOP}/bin/${OBJECTCODE}:${SOLPSTOP}/bin/common
+  dir=:${SOLPSTOP}/bin/${OBJECTCODE}:${SOLPSTOP}/scripts
   for d in ${SonnetTopDirectory}/bin/${OBJECTCODE} $SYS; do {
     [ -d $d ] && dir="$dir:$d"
   }; done
@@ -37,18 +33,18 @@ export PLOT_SET_PATH=":..:../..:$SOLPSTOP/data/plot_set"
 #  [ -d $d ] && dirn=":$d" || dirn=
 
   [ -z "$PS_P" ] && {
-    for d in /afs/ipp/@sys/bin $NCARG_ROOT/bin $HOMEMASTER/bin/$WSTYPE; do {
+    for d in /afs/ipp/@sys/bin $NCARG_ROOT/bin $SOLPSTOP/bin/$OBJECTCODE; do {
       [ -d $d ] && dir="$dir:$d"
     }; done
     export PATH=${dir}:${OLDPATH}
   } || {
     [ -z "$SYS" ] && {
-      for d in $NCARG_ROOT/bin $HOMEMASTER/bin/$WSTYPE ; do {
+      for d in $NCARG_ROOT/bin $SOLPSTOP/bin/$OBJECTCODE ; do {
         [ -d $d ] && dir="$dir:$d"
       }; done
       export PATH=${dir}:${OLDPATH}
     } || {
-      for d in $HOMEMASTER/bin/$WSTYPE ; do {
+      for d in $SOLPSTOP/bin/$OBJECTCODE ; do {
         [ -d $d ] && dir="$dir:$d"
       }; done
       dir=${dir}:${OLDPATH}

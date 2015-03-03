@@ -13,7 +13,7 @@ c*** 1
       integer noptim,noptm1,ngeom_usr,ncoup_input,nsmstra,
      ,        nstoram,ngstal,nrtal1,nreac_add 
       logical nlscl,nltest,nlana,nldrft,nlcrr,nlerg,lident,lhaber,
-     ,  nexvs,nrescflux,nltrimesh 
+     ,  nexvs,nrescflux,nloldran,nlcascad,nloctree,nlwrmsh,nltrimesh 
       character txtrun*71
 
 c*** 2
@@ -436,7 +436,7 @@ c*** 15
 
       common/uinlog/ 
      ,  nlscl,nltest,nlana,nldrft,nlcrr,nlerg,lident,lhaber,
-     ,  nexvs,nrescflux,nltrimesh, 
+     ,  nexvs,nrescflux,nloldran,nlcascad,nloctree,nlwrmsh,nltrimesh, 
      ,  nlrad,nlslb,nlcrc,nlell,nltri,nlplg,nlfem,nltet,nlgen,
      ,  nlpol,nlply,nlpla,nlplp,nltor,nltrz,nltra,nltrt,
      ,  nlmlt,nladd,lconst,nltrim,nlavrp,nlavrt,nlsymp,nlsymt,

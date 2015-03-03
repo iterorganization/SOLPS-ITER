@@ -32,7 +32,31 @@ SGIirix*/
 sun*/
 T3E*/
 unicos*/
+!SETUP/linux.*/
+!SETUP/g77/
+!SETUP/IBMaix/
+!SETUP/sun*/
+!SETUP/SGIirix*/
+!SETUP/T3E/
+!SETUP/unicos/
 
 bin/
 
+# temporary link files for scripts
+uinput.dg
+uinput.trg
+src/uinp/test.eir
+src/uinp/input.eir
+src/uinp/triang.eir
+src/uinp/triang.hed
+
+# auxiliary files for manual
+doc/solps/solps_data_git.log
+doc/solps/solps-iter_git.log
+doc/solps/solps.*
+!doc/solps/solps.tex
+doc/solps/b2cdc?.F
+doc/solps/B2_5.compiler.linux.ifort64
+doc/solps/B2_5.Makefile
+doc/solps/b2plot.commands
 

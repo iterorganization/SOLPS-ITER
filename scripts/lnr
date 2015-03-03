@@ -1,0 +1,23 @@
+#! /usr/bin/ksh
+
+#  VERSION : 26.08.97 14:10
+
+[ "$1" = '' ] && { echo "Usage: lnr <Varid> [N1] [N2] ...";
+            echo "        This will link the files to the rdload directory:";
+            echo "           <Varid>.str --> struct.dg"
+            echo "           <Varid>.dgo --> param.dg"
+            echo "                      and if N1, N2, ... are specified, then"
+            echo "           <Varid>.<N1>.dgo --> <N1>.param.dg"
+            echo "                      and so on;"
+            echo "        and to the uinp directory, unless N1, N2, ... are specified:"
+            echo "           <Varid>.dgo --> param.dg"
+            true; } || { b=$1; shift;
+                ln -sf `pwd`/$b.str ${GENERICHOME}/rdload/struct.dg
+                rm -f ${GENERICHOME}/rdload/*.param.dg ${GENERICHOME}/rdload/param.dg
+                [ -n "$1" ] && { for t in $*; do
+                    ln -sf `pwd`/$b.$t.dgo ${GENERICHOME}/rdload/$t.param.dg; done
+                true; } || { \
+                    ln -sf `pwd`/$b.dgo ${GENERICHOME}/rdload/param.dg
+                    ln -sf `pwd`/$b.dgo $SOLPSTOP/src/uinp/param.dg
+                }
+            }

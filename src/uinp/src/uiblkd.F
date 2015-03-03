@@ -139,8 +139,10 @@ c*** 1
      /      9   ,   1   ,   0  ,     1    /
       data nlscl, nltest, nlana, nldrft, nlcrr , nlerg , lident/
      /    .true.,.false.,.false.,.true.,.false.,.false.,.false./,
-     ,    lhaber,nexvs,nrescflux,nltrimesh /
-     /    .false.,.false.,.false.,.false.  /
+     ,    lhaber,nexvs,nrescflux,nloldran,nlcascad,nloctree/
+     /    .false.,.false.,.false.,.false.,.false.,.false./,
+     /    nlwrmsh,nltrimesh/
+     ,    .true.,.false./
       data  txtrun / ' EIRENE input file generated with uinp v. 2.2' /
 
 c*** 2

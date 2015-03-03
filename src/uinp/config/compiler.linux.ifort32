@@ -5,8 +5,8 @@
 FC	 = ifort
 #FFLAGS	 = -g -Am -X9 -O0 -fw
 FFLAGS	 = -g
-INCLUDE  = -I${SRCDIR} -I${EIRINC} -I${SOLPSTOP}/include.local -I${SOLPSTOP}/include
+INCLUDE  = -I${SRCDIR} -I${EIRINC} -I${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
 CPP	 = /lib/cpp -C -traditional
 
-LDLIBS= -L${SOLPS_LIB} -lmscl -L$(SOLPSTOP)/base/b2/$(OBJECTCODE) -lb2 -lnetcdf
+LDLIBS= -L${SOLPS_LIB} -lmscl

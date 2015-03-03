@@ -1,7 +1,4 @@
 echo setup.csh.xpb
-setenv NREG 4
-setenv SOLPS_FLUIDS 'D0 D+'
-setenv USE_EIRENE '-DUSE_EIRENE'
 
 limit stacksize unlimited
 

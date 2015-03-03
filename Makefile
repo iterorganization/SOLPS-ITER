@@ -111,4 +111,3 @@ clean_uinp:
 
 clean_triang:
 	cd src/Triang; ${MAKE} clean OBJDIR=${BINDIR}/Triang
-

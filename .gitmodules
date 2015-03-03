@@ -1,15 +1,20 @@
-[submodule "Eirene"]
-	path = src/Eirene
-	url = ssh://git@git.iter.org/bnd/eirene.git
+[submodule "lib/mscl"]
+	path = lib/mscl
+	url = ssh://git@git.iter.org/lib/mscl.git
+	branch = feature/codestructure
 [submodule "B2.5"]
 	path = src/B2.5
 	url = ssh://git@git.iter.org/bnd/b2.5.git
-[submodule "libs/mscl"]
-	path = lib/mscl
-	url = ssh://git@git.iter.org/lib/mscl.git
+	branch = feature/codestructure
 [submodule "Carre"]
 	path = src/Carre
 	url = ssh://git@git.iter.org/bnd/carre.git
+	branch = feature/codestructure
 [submodule "DivGeo"]
 	path = src/DivGeo
 	url = ssh://git@git.iter.org/bnd/divgeo.git
+	branch = feature/codestructure
+[submodule "Eirene"]
+	path = src/Eirene
+	url = ssh://git@git.iter.org/bnd/eirene.git
+	branch = local-develop

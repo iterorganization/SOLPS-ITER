@@ -5,6 +5,9 @@ switch ($fullhost)
 case "*.iter.org":
   echo ITER
   breaksw
+case "*.iferc-csc.org":
+  echo IFERC
+  breaksw
 case "*.itm.rzg.mpg.de":
 case "*.efda-itm.eu":
   echo ITM

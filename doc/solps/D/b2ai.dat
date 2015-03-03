@@ -1,0 +1,11 @@
+*dimens         (ns; free format)
+   2
+*label          (lblps, character*60; free format)
+  'Flat initial state for D, all charge states'
+*specs      za       zn       am      za2
+   '0'     0.0      1.0      2.0      0.0
+   '1'     1.0      1.0      2.0      1.0
+*naini          (na0(0:ns-1); free format)
+  1.0e12  1.0e19  100*1.0e0
+*ttini          (tt0; free format)
+   1.0e2

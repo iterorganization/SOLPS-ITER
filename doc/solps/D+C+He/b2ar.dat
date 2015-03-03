@@ -1,0 +1,14 @@
+*tlohi          (tlo, thi; real, free format)
+  1.0e-1  1.0e4
+*nlohi          (nlo, nhi; real, free format)
+  1.0e18  1.0e22
+*numnuc         (nnuc; integer, free format)
+   3
+*nucspec        (nz, izlo, izhi; integers, one triplet per line)
+   1  0  1
+   6  0  6
+   2  0  2
+*flag           (either 'adpak' or 'strahl', free format)
+  'strahl'
+*tailep         (real, free format)
+  0.08

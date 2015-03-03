@@ -50,6 +50,7 @@
 \newcommand\SOLPSfivens{{\bf SOLPS 5.x}}
 \newcommand\SOLPSfiveone{{\bf SOLPS 5.1} }
 \newcommand\SOLPSfiveonens{{\bf SOLPS 5.1}}
+\newcommand\SOLPSITER{{\bf SOLPS-ITER}}
 \newcommand{\btwoplot}{{\bf b2plot} }
 \newcommand{\btwoplotns}{{\bf b2plot}}
 \newcommand{\grad}{\nabla}
@@ -61,7 +62,7 @@
 
 \mbox{}
 \vfill
-{\Huge \hfill \SOLPSfiveone \hfill}
+{\Huge \hfill \SOLPSITER \hfill}
 \vfill
 
 \newpage
@@ -76,14 +77,14 @@ includes contributions from
 \item D.P~Coster and O.~Wenisch, the original \btwoplot manual
 \item K.~and A.~Kukushkin, the \verb!DG! manual, with revisions by A.~Chin and D.~Stotler
 \item M.~Stanojevic, on boundary conditions
-\item X.~Bonnin, for many contributions
+\item X.~Bonnin, for many contributions and the \SOLPSITER updates
 \end{itemize}
-All errors, omissions {\it etc.} should be e-mailed to \verb!David.Coster@ipp.mpg.de!.
+All errors, omissions {\it etc.} should be e-mailed to \verb!Xavier.Bonnin@iter.org!.
 
 \chapter{Introduction}
 \label{cha:intro}
 
-This document describes the \SOLPSfiveone code package and its components.
+This document describes the \SOLPSITER code package and its components.
 Following this introduction is a chapter (\ref{cha:structure})
 describing the structure of the code.  Then chapter
 \ref{cha:standaloneb2} describes the stand-alone version of \verb!B2.5!.  This
@@ -101,21 +102,22 @@ documentation files, \ref{cha:b2physics} describes the physics in \verb!B2.5!,
 \verb!b2tallies.nc!,
 \ref{cha:regions} gives the region definitions used in the code,
 \ref{cha:b2plotmanual} is an updated
-version of the \SOLPSfour \btwoplot manual, \ref{cha:Misc}
+version of the \btwoplot manual, \ref{cha:Misc}
 contains information about array dimensions and compilation options, 
 \ref{cha:dgmanual} is the \verb!DG! manual, and lastly
 \ref{cha:coursenotes} includes a listing of the programs and files included
-in the \verb!B2.5! part of the \verb!SOLPS! package.
+in the \verb!B2.5! part of the \SOLPSITER package.
 
-The \verb!SOLPS! (Scrape-Off Layer Plasma Simulation)
-code package actually comes in several implementations, according
+Historically, there have been many implementations of the
+\verb!SOLPS! (Scrape-Off Layer Plasma Simulation)
+code package, according
 to which version of the fluid plasma code (\verb!B2! or \verb!B2.5!) and of
 the \verb!Eirene! Monte-Carlo neutral transport code are used. We distinguish between
 \SOLPSfour which uses \verb!B2! and \SOLPSfive which uses \verb!B2.5!.
-This document is devoted solely to \SOLPSfiveone although several features are
-common to multiple versions. Most of the current development and support 
-is done exclusively on \SOLPSfive (with the important exception of the ITER
-and Forschungszentrum J{\"u}lich groups where \SOLPSfour is still in use). The main
+This document is devoted solely to \SOLPSITER although several features are
+common to multiple versions. \SOLPSITER contains the \verb!B2.5! plasma kernel and a recent version of \verb!Eirene!. 
+Most of the current development and support 
+is done exclusively on \SOLPSfive and \SOLPSITER versions (with the important exception of the Forschungszentrum J{\"u}lich and their collaborators where \SOLPSfour is still in use). The main
 differences of note between \verb!B2! and \verb!B2.5! are:
 \begin{enumerate}
   \item For ions, \verb!B2! solves a {\em total} energy equation, while \verb!B2.5!
@@ -343,38 +345,96 @@ At the moment the following platforms are ``supported'':
 \chapter{The structure}
 \label{cha:structure}
 
-The \SOLPSfiveone directory has the following global structure:
+The \SOLPSITER directory has the following global structure:
 
 %% find $SOLPSTOP -follow -maxdepth 2 -type d -print | sed -e "s:${SOLPSTOP}:SOLPSTOP:" | sed -e 's:[^/]*/:|   :g' | sed 's:\(\(|   \)*\)|   :\1+---:'
 
 \begin{verbatim}
 SOLPSTOP
-+---SETUP
-+---doc
-+---lib
 +---bin
+|   +---linux.ifort64.debug
+|   +---linux.ifort64
++---libs
+|   +---mscl
 +---data
-+---include
-+---runs
+|   +---meshes
+|   +---structures
+|   +---mesh.extra
+|   +---SAVE
+|   +---plot_set
+|   +---TRIMDAT
+|   +---Summary_plots
+|   +---commands
+|   +---Sonnet
+|   +---chords
+|   +---AMDS
+|   +---trim.data
+|   +---IDL
+|   +---gnuplot
+|   +---adas
+|   +---Bulk_properties
+|   +---Surface_properties
+|   +---Carre
+|   +---TCL
+|   +---mdsplus
+|   +---summers
+|   +---palettes
+|   +---DivGeo
+|   +---adas_W
++---doc
+|   +---SOLPS_2002_Course
+|   +---solps
++---scripts
++---lib
+|   +---slap
+|   +---blaslapack
+|   +---sonnet-light
+|   +---grsource
+|   +---grgli
+|   +---linux.ifort64
+|   +---gligks
+|   +---mscl
++---.git
+|   +---branches
+|   +---objects
+|   +---info
+|   +---hooks
+|   +---refs
+|   +---modules
+|   +---logs
 +---src
-|   +---b2
-|   +---Triang
+|   +---uinp
+|   +---fxdr
 |   +---Sonnet
-|   +---Eirene
-|   +---aggj
-|   +---NCARG
-|   +---Carre
-|   +---DivGeo
-|   +---agg
-+---base
-|   +---b2
 |   +---Triang
-|   +---Sonnet
-|   +---Eirene
-|   +---aggj
 |   +---Carre
+|   +---amds
+|   +---ioflush
+|   +---B2.5
+|   +---solps4-5
 |   +---DivGeo
-|   +---agg
+|   +---Eirene
++---runs
++---SETUP
+|   +---linux.pgi.xt6.openmp
+|   +---linux_pgf90_GW_openmp
+|   +---linux.Fujitsu
+|   +---linux_pgf90
+|   +---linux.pgi.xt6
+|   +---linux.ifort64.openmp
+|   +---HPUX
+|   +---linux.lf95
+|   +---linux.ifort64
+|   +---IBMaix
+|   +---linux.Intel
+|   +---linux.Intel_EM
+|   +---linux_pgf90_GW
+|   +---T3E
+|   +---linux.ifort32
+|   +---sun5
+|   +---g77
+|   +---linux_nag_f95
+|   +---linux.gfortran
 \end{verbatim}
 
 In order to set up the appropriate environment variables and aliases, the command
@@ -385,7 +445,7 @@ should be executed in the top level directory.
 
 Two important environment variables are \verb!SOLPSTOP! which points
 to the top level directory and \verb!OBJECTCODE! which identifies the
-machine architecture ({\it e.g.} \verb!sun5!).
+machine architecture ({\it e.g.} \verb!linux.ifort64!).
 
 \section{setup.csh}
 \index{setup.csh}\label{sec:setup}
@@ -470,12 +530,12 @@ All the files above should be stored in the \$\verb!{SOLPSTOP}!/SETUP and
 When setting up a tree, one should do, for example:
 
 \begin{verbatim}
-ln -s SETUP/linux.Fujitsu/* .
+ln -s SETUP/linux.ifort64/* .
 ln -s SETUP/setup.csh.* .
 source setup.csh
 \end{verbatim}
 
-where \verb!linux.Fujitsu! gets replaced by the proper value of \$\verb!OBJECTCODE!.
+where \verb!linux.ifort64! gets replaced by the proper value of \$\verb!OBJECTCODE!.
 
 The command\index{stop}
 \begin{verbatim}
@@ -698,62 +758,27 @@ to the grid preprocessor, and \verb!src/Triang! for the \verb!Eirene! triangular
 \newpage\section{bin}
 \index{bin}
 
-%%find $SOLPSTOP/src/bin -follow -maxdepth 2 -type d -print | sed -e "s:${SOLPSTOP}:SOLPSTOP:" | sed -e 's:[^/]*/:|   :g' | sed 's:\(\(|   \)*\)|   :\1+---:'
+%%find $SOLPSTOP/bin -follow -maxdepth 2 -type d -print | sed -e "s:${SOLPSTOP}:SOLPSTOP:" | sed -e 's:[^/]*/:|   :g' | sed 's:\(\(|   \)*\)|   :\1+---:'
 
 The \verb!bin! subtree contain programs (binaries and shell
 scripts) used for compiling as well as for analyzing runs.
 
 \begin{verbatim}
-SOLPSTOP
 +---bin
-|   +---common
-|   +---DECalpha
-|   +---DECalpha.debug
-|   +---IBMaix
-|   +---IBMaix.debug
-|   +---SGIirix
-|   +---SGIirix.debug
-|   +---SGIirix_64
-|   +---SGIirix_64.debug
-|   +---T3E
-|   +---T3E.debug
-|   +---g77
-|   +---g77_64
-|   +---g77.debug
-|   +---linux.Fujitsu
-|   +---linux.Fujitsu.debug
-|   +---linux.Intel
-|   +---linux.Intel.debug
-|   +---linux.Intel_EM
-|   +---linux.Intel_EM.debug
-|   +---linux.g95.debug
-|   +---linux.g95
-|   +---linux.gfortran.debug
-|   +---linux.gfortran
-|   +---linux.ifort32
-|   +---linux.ifort32.debug
-|   +---linux.ifort64
 |   +---linux.ifort64.debug
-|   +---linux.lf95
-|   +---linux.lf95.debug
-|   +---linux_nag_f90
-|   +---linux_nag_f90.debug
-|   +---linux_nag_f95
-|   +---linux_nag_f95.debug
-|   +---linux.pgf90
-|   +---linux.pgf90.debug
-|   +---linux_pgf90
-|   +---linux_pgf90.debug
-|   +---linux_pgf90_GW
-|   +---linux_pgf90_GW.debug
-|   +---linux.absoft
-|   +---linux.absoft.debug
-|   +---sun5
-|   +---sun5.debug
-|   +---sun5.Fujitsu
-|   +---sun5.Fujitsu.debug
-|   +---unicos
-|   +---unicos.debug
+|   |   +---uinp
+|   |   +---Triang
+|   |   +---Carre
+|   |   +---B2.5
+|   |   +---DivGeo
+|   |   +---Eirene
+|   +---linux.ifort64
+|   |   +---uinp
+|   |   +---Triang
+|   |   +---Carre
+|   |   +---B2.5
+|   |   +---DivGeo
+|   |   +---Eirene
 \end{verbatim}
 
 The command\index{sbin}
@@ -1416,46 +1441,38 @@ welcome!
 
 \newpage\section{lib}
 
-%%find $SOLPSTOP/src/lib -follow -maxdepth 2 -type d -print | sed -e "s:${SOLPSTOP}:SOLPSTOP:" | sed -e 's:[^/]*/:|   :g' | sed 's:\(\(|   \)*\)|   :\1+---:'
+%%find $SOLPSTOP/lib -follow -maxdepth 2 -type d -print | sed -e "s:${SOLPSTOP}:SOLPSTOP:" | sed -e 's:[^/]*/:|   :g' | sed 's:\(\(|   \)*\)|   :\1+---:'
 
 The \verb!lib! subtree contains libraries used during compilation.
-
-The \verb!bin! and \verb!lib! subtree have similar structures:
 
 \begin{verbatim}
 SOLPSTOP
 +---lib
-|   +---ps
-|   +---IBMaix
-|   +---IBMaix.debug
-|   +---SGIirix
-|   +---SGIirix.debug
-|   +---g77
-|   +---g77.debug
-|   +---linux.Fujitsu
-|   +---linux.Fujitsu.debug
-|   +---linux.Intel
-|   +---linux.Intel.debug
-|   +---linux.Intel64
-|   +---linux.Intel64.debug
-|   +---linux.ifort32
-|   +---linux.ifort64.debug
+|   +---slap
+|   |   +---orig9301
+|   +---blaslapack
+|   |   +---blas1
+|   |   +---lapack
+|   |   +---blas3
+|   |   +---blas2
+|   +---sonnet-light
+|   |   +---amd64_sles11
+|   |   +---x86_64_rhel5
+|   |   +---i386_linux26
+|   |   +---amd64_linux24
+|   |   +---amd64_sles10
+|   +---grsource
+|   +---grgli
+|   |   +---grsoft
+|   |   +---gligks
+|   |   +---src
 |   +---linux.ifort64
-|   +---linux.ifort64.debug
-|   +---linux.lf95
-|   +---linux.lf95.debug
-|   +---linux.pgf90
-|   +---linux.pgf90.debug
-|   +---linux_pgf90
-|   +---linux_pgf90.debug
-|   +---linux_pgf90_GW
-|   +---linux_pgf90_GW.debug
-|   +---linux_nag_f95
-|   +---linux_nag_f95.debug
-|   +---sun5
-|   +---sun5.debug
-|   +---sun5.Fujitsu
-|   +---sun5.Fujitsu.debug
+|   +---gligks
+|   |   +---gks
+|   +---mscl
+|   |   +---linux.ifort64
+|   |   +---config
+|   |   +---src
 \end{verbatim}
 
 The command\index{slib}
@@ -1464,22 +1481,30 @@ The command\index{slib}
 \end{verbatim}
 will take you to \$\verb!{SOLPSTOP}/lib/!\$\verb!{OBJECTCODE}!.
 
-\newpage\subsection{src/b2}
+\newpage\subsection{src/B2.5}
 \index{B2.5}
 
 The different versions of \verb!B2.5! are shown below:
 
-%%find $SOLPSTOP/src/b2 -follow -maxdepth 1 -type d -print | sed -e "s:${SOLPSTOP}:SOLPSTOP:" | sed -e 's:[^/]*/:|   :g' | sed 's:\(\(|   \)*\)|   :\1+---:'
+%%find $SOLPSTOP/src/B2.5 -follow -maxdepth 1 -type d -print | sed -e "s:${SOLPSTOP}:SOLPSTOP:" | sed -e 's:[^/]*/:|   :g' | sed 's:\(\(|   \)*\)|   :\1+---:'
 
 \begin{verbatim}
 SOLPSTOP
 +---src
-|   +---b2
-|   |   +---config
+|   +---B2.5
+|   |   +---B2ai
+|   |   +---B2yi_gnuplot
+|   |   +---B2ag
+|   |   +---bin
 |   |   +---config.local
-|   |   +---current
-|   |   +---local
-|   |   +---xpb
+|   |   +---b2fgmtry_mod
+|   |   +---B2pl
+|   |   +---B2ar
+|   |   +---B2ah
+|   |   +---config
+|   |   +---Add_Mod
+|   |   +---src
+|   |   +---src.local
 \end{verbatim}
 
 \begin{description}
@@ -1538,19 +1563,38 @@ file, and you expect Garching support, you should move your changed
 files to \verb!local!, move \verb!current! to \verb!old! and
 re-establish the link of \verb!current! to the Master version.
 
-\newpage\subsubsection{src/b2/*}
+\newpage\subsubsection{src/b2/src}
 
-Within any one of these \verb!src/b2/*! source versions, we
-have:
+Within the \verb!src/b2/src! source directory, we have:
 
-%%find $SOLPSTOP/src/b2/current -follow -maxdepth 1 -type d -print | sed -e "s:${SOLPSTOP}:SOLPSTOP:" | sed -e 's:[^/]*/:|   :g' | sed 's:\(\(|   \)*\)|   :\1+---:'
+%%find $SOLPSTOP/src/B2.5/src -follow -maxdepth 1 -type d -print | sed -e "s:${SOLPSTOP}:SOLPSTOP:" | sed -e 's:[^/]*/:|   :g' | sed 's:\(\(|   \)*\)|   :\1+---:'
 
 \begin{verbatim}
 SOLPSTOP
 +---src
 |   +---b2
 |   |   +---local
-|   |   +---current
+|   |   +---src
+|   |   |   +---b2aux
+|   |   |   +---solvers
+|   |   |   +---sources
+|   |   |   +---include
+|   |   |   +---documentation
+|   |   |   +---postprocessing
+|   |   |   +---user
+|   |   |   +---driver
+|   |   |   +---modules.local
+|   |   |   +---utility
+|   |   |   +---output
+|   |   |   +---input
+|   |   |   +---preprocessing
+|   |   |   +---b2plot
+|   |   |   +---modules
+|   |   |   +---convert
+|   |   |   +---transport
+|   |   |   +---common
+|   |   |   +---equations
+|   |   |   +---include.local
 |   |   |   +---convert
 |   |   |   +---b2aux
 |   |   |   +---postprocessing
@@ -1583,35 +1627,45 @@ listing in Appendix \ref{lis:b2cdcr}.
 SOLPSTOP
 +---src
 |   +---Eirene
-|   |   +---local
-|   |   +---current
-|   |   |   +---couple_Tria_new
-|   |   |   +---tetraeder
-|   |   |   +---couple_B2_new
-|   |   |   +---couple
-|   |   |   +---particle-tracing
-|   |   |   +---main-routines
-|   |   |   +---geometry
-|   |   |   +---surface-processes
-|   |   |   +---iterate
-|   |   |   +---grsoft-dummy
-|   |   |   +---nag-dummy
-|   |   |   +---output
-|   |   |   +---plotting
-|   |   |   +---file-handling
-|   |   |   +---diagno
-|   |   |   +---Not_needed
-|   |   |   +---scoring
-|   |   |   +---modules
-|   |   |   +---startup-routines
-|   |   |   +---sampling
-|   |   |   +---volume-processes
-|   |   |   +---mathematic
-|   |   |   +---broadcast_dummy
-|   |   |   +---assistent
-|   |   |   +---user
+|   |   +---extraB25
+|   |   +---broadcast
+|   |   +---mathematics
+|   |   +---user_general
+|   |   +---tetrahedrons
+|   |   +---broadcast_dummy
+|   |   +---startup-routines
+|   |   +---diagno
+|   |   +---couple_Dummy
+|   |   +---assistant
+|   |   +---couple_B2.5_SOLPS-ITER
+|   |   +---couple_B2.5_Tria.mpi
+|   |   +---plotting
+|   |   +---geometry
+|   |   |   +---trc-time-routines
+|   |   |   +---time-routines
+|   |   +---file-handling
+|   |   +---surface-processes
+|   |   +---bin
+|   |   |   +---linux.ifort64.debug
+|   |   |   +---linux.ifort64
+|   |   +---photons
+|   |   +---volume-processes
+|   |   +---user
+|   |   +---sampling
+|   |   +---xdr-dummy
+|   |   +---couple_Tria
 |   |   +---config
-|   |   +---config.local
+|   |   +---output
+|   |   +---grsoft-dummy
+|   |   +---main-routines
+|   |   +---Database
+|   |   |   +---AMdata
+|   |   |   +---Surfacedata
+|   |   +---modules
+|   |   +---iterate
+|   |   +---particle-tracing
+|   |   +---plot_dummy
+|   |   +---scoring
 \end{verbatim}
 
 The command\index{sse}
@@ -3155,7 +3209,7 @@ quantities that can be plotted in this way.
 \section{b2pl, the plotting program}
 \index{b2pl}\index{b2plot}\label{sec:b2pl}
 
-%%sed 's:^     [^ ]:@@@:' $SOLPSTOP/src/b2/current/b2plot/b2plot.F | awk 'BEGIN{save=""}/^[^@][^@][^@]/&&save!=""{print save}/^[^@][^@][^@]/{save=$0}/^@@@/{save=save" "$0}END{print save}' | sed 's; *@@@ *;;g' | egrep "case *\( *'|description *=" | sed -e "s;.*case *('\(.*\)');cmd: \1;" -e "s; *description *= *'\(.*\)';desc: \1;" | awk -F: 'BEGIN{save=""}/^cmd/&&save!=""{print save}/^cmd:/{save=$2}/^desc/{save=save"\t"$2}END{print save}' | sed 's:\! ::' | sed "s:',':,:g" | sed "s:'':':g" | expand >! b2plot.commands
+%%sed 's:^     [^ ]:@@@:' $SOLPSTOP/src/B2.5/src/b2plot/b2plot.F | awk 'BEGIN{save=""}/^[^@][^@][^@]/&&save!=""{print save}/^[^@][^@][^@]/{save=$0}/^@@@/{save=save" "$0}END{print save}' | sed 's; *@@@ *;;g' | egrep "case *\( *'|description *=" | sed -e "s;.*case *('\(.*\)');cmd: \1;" -e "s; *description *= *'\(.*\)';desc: \1;" | awk -F: 'BEGIN{save=""}/^cmd/&&save!=""{print save}/^cmd:/{save=$2}/^desc/{save=save"\t"$2}END{print save}' | sed 's:\! ::' | sed "s:',':,:g" | sed "s:'':':g" | expand >! b2plot.commands
 
 The following commands apply:
 
@@ -4206,7 +4260,7 @@ of 3802.68 GB in 553970 files.
 \label{cha:divgeo}\index{DG, running}
 
 When using for the first time, check to see whether
-\$\verb!SOLPSTOP/src/DivGeo! is a link.  If it is, do
+\$\verb!SOLPSTOP/src/DivGeo! is a link (for SOLPS4.x versions).  If it is, do
 \index{gtdr, DivGeo}
 \begin{verbatim}
   cd $SOLPSTOP/src
@@ -4223,7 +4277,7 @@ You will need to choose your device, {\it e.g.}: \index{DEVICE}
 Available choices are:
 \begin{description}
 \item[asdex] ASDEX (Garching, Germany), now HL--2A (Chengdu, China)
-\item[cfns]
+\item[cfns] Compact Fusion Neutron Source (China)
 \item[cmod] Alcator C--Mod (Boston, USA)
 \item[d3d] DIII--D (San Diego, USA)
 \item[dream] (Japan)
@@ -4250,8 +4304,9 @@ The command\index{sdg}
 \begin{verbatim}
   sdg
 \end{verbatim}
-will move you to the \$\verb!SOLPSTOP/src/DivGeo/dg/class/!\$\verb!DEVICE! 
-directory.
+will move you to the \$\verb!SOLPSTOP/data/DivGeo/class/!\$\verb!DEVICE! 
+directory. The environment variable \$\verb!DG! contains the path 
+\$\verb!SOLPSTOP/src/DivGeo!.
 To start \verb!DG!, the command is:
 \begin{verbatim}
   ./dg
@@ -5640,9 +5695,9 @@ target profiles to this variation is obvious.
 
 \begin{figure}[bt]
 \ifpdf 
-    \centerline{\includegraphics[width=11cm]{cflmi_1e19.pdf}} %%{cflim_1e19.pdf}}
+    \centerline{\includegraphics[width=11cm]{cflmi_1e19.pdf}} 
 \else
-    \centerline{\includegraphics[angle=-90,width=11cm]{cflmi_1e19.ps}} %%{cflim_1e19.epsi}}
+    \centerline{\includegraphics[angle=-90,width=11cm]{cflmi_1e19.ps}} 
 \fi
 \caption{Impact of ion flux limits for a $10^{19}~~m^{-3}$ upstream density case.}
 \label{cflmi_1e19}
@@ -5651,9 +5706,9 @@ target profiles to this variation is obvious.
 
 \begin{figure}[bt]
 \ifpdf 
-    \centerline{\includegraphics[width=11cm]{cflmi_2e19.pdf}} %%{cflim_2e19.pdf}}
+    \centerline{\includegraphics[width=11cm]{cflmi_2e19.pdf}} 
 \else
-    \centerline{\includegraphics[angle=-90,width=11cm]{cflmi_2e19.ps}} %%{cflim_2e19.epsi}}
+    \centerline{\includegraphics[angle=-90,width=11cm]{cflmi_2e19.ps}} 
 \fi
 \caption{Impact of ion flux limits for a $2 \times 10^{19}~~m^{-3}$ upstream density case.}
 \label{cflmi_2e19}
@@ -10723,12 +10778,12 @@ of grids on which spatially resolved surface tallies are computed
 The following is the \verb!Makefile! provided with the Master 
 in the \verb!sbb! directory:
 
-\VerbatimInput[fontsize=\footnotesize]{B2.Makefile}
+\VerbatimInput[fontsize=\footnotesize]{B2_5.Makefile}
 
-and, as a prototypical example, the \verb!compiler.linux.Fujitsu! in
+and, as a prototypical example, the \verb!compiler.linux.ifort64! in
 the \verb!config! subdirectory: \index{B2.5, compiling options}
 
-\VerbatimInput[fontsize=\footnotesize]{B2.compiler.linux.Fujitsu}
+\VerbatimInput[fontsize=\footnotesize]{B2_5.compiler.linux.ifort64}
 
 If the user wishes to modify the compiling options used, the creation
 of a \verb!config.local! subdirectory is recommended, in which to
@@ -13363,14 +13418,14 @@ tran \index{tran} & formatted & b2mn & & plasma state used for archiving at JET 
 \index{subversion repository logs}
 
 \section{solps5.1}
-\index{subversion repository log, solps5.1}
+\index{GIT repository log, solps5.1}
 
-\VerbatimInput[fontsize=\footnotesize]{solps5.1_svn.log}
+\VerbatimInput[fontsize=\footnotesize]{solps-iter_git.log}
 
 \section{solps\_data}
-\index{subversion repository log, solps\_data}
+\index{GIT repository log, solps\_data}
 
-\VerbatimInput[fontsize=\footnotesize]{solps_data_svn.log}
+\VerbatimInput[fontsize=\footnotesize]{solps_data_git.log}
 
 \section{Changes in output for the AUG\_16151\_D test case}
 

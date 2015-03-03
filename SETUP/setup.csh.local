@@ -1,4 +1,5 @@
 echo setup.csh.local
+limit stacksize unlimited
 setenv SOLPS_CPP "$SOLPS_CPP -DTRIANG"
 if (! $?EIRENE_DEFINES) then
   setenv EIRENE_DEFINES "-DNO_FORT10 -DNO_SHORT_CYCLE"
@@ -7,6 +8,5 @@ else
 endif
 
 setenv B2PLOT_DEV ps
-# alias b2plot /afs/ipp-garching.mpg.de/u/dpc/solps/solps4.0_test/src/Braams/b2plot/${OBJECTCODE}/b2plot
 
 setenv NCARG_ROOT /b2-ext/ncarg
