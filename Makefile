@@ -1,5 +1,5 @@
 
-BINDIR = ${BINDIR}
+BINDIR = ${PWD}/bin/${OBJECTCODE}
 
 all: carre divgeo b2eirene uinp triang manual
 
@@ -28,8 +28,8 @@ b25:
 	cd src/B2.5; ${MAKE} OBJDIR=${BINDIR}/B2.5.nompi OBJDIREIR=${BINDIR}/Eirene.nompi USE_EIRENE=-DUSE_EIRENE
 
 b2eirene:
-	cd src/Eirene; ${MAKE} OBJDIR=${BINDIR}/Eirene
-	cd src/B2.5;   ${MAKE} b2eirene OBJDIR=${BINDIR}/B2.5 OBJDIREIR=${BINDIR}/Eirene
+	cd src/Eirene; ${MAKE} OBJDIR=${BINDIR}/Eirene USE_B25=-DUSE_B25
+	cd src/B2.5;   ${MAKE} OBJDIR=${BINDIR}/B2.5 OBJDIREIR=${BINDIR}/Eirene USE_EIRENE=-DUSE_EIRENE
 
 uinp:
 	cd src/uinp; ${MAKE} OBJDIR=${BINDIR}/uinp
