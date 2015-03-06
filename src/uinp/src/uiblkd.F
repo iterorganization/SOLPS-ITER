@@ -1,4 +1,8 @@
        block data uiblkd
+       use b2mod_layer
+     , , only: ntrack, nalloys
+       use eirmod_extrab25
+     , , only: msrfclsx, mgwtiesx
 
 c  version : 01.04.2005 14:35
 
@@ -11,7 +15,7 @@ c      implicit none
       integer lurpst,luznknd,lulim2,lufour,lu9,lustsr,lunplt,lu21pr,
      ,  lu3st,lugwts,lusts3,lupw,lusg,lur9,lur2,lur6
       parameter (lurpst=n1st*nplg, luznknd=nbndzon*nbndknd,
-     ,  lulim2=nlim*nlim,   lufour=n1st*(nmaf-nmif+1)*(nnaf-nnif+1),
+     ,  lulim2=nlim*nlim,   lufour=n1st,
      ,  lu9=9*nlim,         lustsr=nsrfs*nstra, luatsr=natm*nstra,   
      ,  lunplt=nptal*nplt,  lu21pr=2*nppart,lvrctd=mreac*nsrctd,
      ,  lu3st=3*n1st,       lugwts=mgwtiesx*ngwtiesx, lusts3=3*lustsr,

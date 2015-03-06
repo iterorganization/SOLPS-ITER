@@ -1,4 +1,8 @@
       subroutine uib2pl
+       use b2mod_layer
+     , , only: ntrack, nalloys
+       use eirmod_extrab25
+     , , only: msrfclsx, mgwtiesx
 c
 c  version : 14.04.97 19:05
 c

@@ -14,6 +14,7 @@
 setup.csh.*
 !setup.csh.local
 !setup.csh.NAG.guess
+!setup.csh.NAG.local
 !setup.csh.NCARG
 !setup.csh.NCARG.guess
 

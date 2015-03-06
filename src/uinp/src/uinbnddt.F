@@ -1,4 +1,8 @@
       subroutine uinbnddt
+       use b2mod_layer
+     , , only: ntrack, nalloys
+       use eirmod_extrab25
+     , , only: msrfclsx, mgwtiesx
 c
 c  version : 01.04.2005 00:12
 c
@@ -24,7 +28,7 @@ c*** First, non-default surface...
 	    write(0,*) 'Too many "non-default surfaces" are specified.',
      ,	      	      	      	      	  '  ',ctxbnds(ibk),',  zone',isf
 	    write(0,*) 'STOP ==> Check the boundary specification in ',
-     ,	      	      	      	    'DG and parameter NSTSI in PARMUSR'
+     ,	      	      	      	 'DG and parameter NSTSI in KOPPLDIM.F'
 	    stop
 	  end if !}
 	  write(txtsfl(nstsi),'(a10,i4)') ctxbnds(ibk),isf
@@ -123,8 +127,8 @@ c*** ... and then the recycling source if specified
             if(ntargi.gt.nstep) then !{
               write(0,*) 'Too many recycling strata requested: ',ntargi
               write(0,*) 'STOP  ==> check the DG model and the value ',
-     ,     		      	      	      	  'of NSTEP in PARMUSR:' 
-              write(0,*) '    	    NSTEP must be not not less than ',
+     ,     		      	      	      'of NSTEP in KOPPLDIM.F:' 
+              write(0,*) '    	    NSTEP must not be less than ',
      ,        	      	      	      'the number of recycling sources'
               stop
             end if !}

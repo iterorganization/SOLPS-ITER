@@ -199,6 +199,7 @@ if (! $?IDL_PATH) setenv IDL_PATH
 setenv IDL_PATH +$SOLPSTOP/data/IDL:${IDL_PATH}
 
 setenv SOLPS_LIB ${SOLPSTOP}/lib/${OBJECTCODE}
+if (-e ${SOLPS_LIB}/libnetcdf.a ) setenv NETCDF -lnetcdf
 
 if ($?LD_LIBRARY_PATH) then
   setenv LD_LIBRARY_PATH ${SOLPS_LIB}:${LD_LIBRARY_PATH}

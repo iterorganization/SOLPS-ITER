@@ -1,4 +1,8 @@
       subroutine uinout(ufnm)
+       use b2mod_layer
+     , , only: ntrack, nalloys
+       use eirmod_extrab25
+     , , only: msrfclsx, mgwtiesx
 
 c  version : 05.02.2005 00:46
 

@@ -1,4 +1,8 @@
       subroutine uicrb2(lin,lout,iret)
+       use b2mod_layer
+     , , only: ntrack, nalloys
+       use eirmod_extrab25
+     , , only: msrfclsx, mgwtiesx
 c
 c  version : 30.06.2000 21:13
 c

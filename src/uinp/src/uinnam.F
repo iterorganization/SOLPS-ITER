@@ -1,4 +1,8 @@
       subroutine uinnam(unn)
+       use b2mod_layer
+     , , only: ntrack, nalloys
+       use eirmod_extrab25
+     , , only: msrfclsx, mgwtiesx
 c
 c  version : 01.04.2005 01:23
 c
@@ -253,8 +257,8 @@ c=======================================================================
       hlp_spc=.false.
       nspigen=nspigen+1
       if(nspigen.gt.natm) then !{
-      	write(0,*) 'Too many species: maximum',natm
-	stop ' ==> Check the DG model and NATM in PARMUSR'
+      	write(0,*) 'Too many species: maximum ',natm
+	stop ' ==> Check the DG model and DEF_NATM in DIMENSIONS.F'
       end if !}
       call resimi(i)
       print *,'uinnam: species ',i,nspigen
@@ -278,7 +282,7 @@ c=======================================================================
       ngpfstr=ngpfstr+1
       if(ngpfstr.ge.nstra) then !{
       	write(0,*) 'Too many gas-puffing strata specified'
-	stop ' ==> Check the DG model and NSTRA in PARMUSR'
+	stop ' ==> Check the DG model and DEF_NSTRA in DIMENSIONS.F'
       end if !}
       return
    58 if(ngpfstr.le.0) then !{
@@ -287,7 +291,7 @@ c=======================================================================
       end if !}
       if(lugpf.ge.nlim) then !{
       	write(0,*) 'uinnam: too many slot surfaces for gas puff'
-	stop ' ==> Check the DG model and NLIM in PARMUSR'
+	stop ' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F'
       end if !}
       call rearri(lgpfstr(lugpf+1),nlim-lugpf,i)
       if(i.eq.0) then !{
@@ -402,7 +406,7 @@ c*** Chemical sputtering
       if(nchsppri.gt.nchsppr) then !{
       	write(0,*) 'Too many chemical reactions specified.'
       	write(0,*) 'STOP ==> check the DG model and the value of ',
-     ,	      	      	      	      	      	    'nchsppr in PARMUSR'
+     ,	      	      	      	      	      'nchsppr in KOPPLDIM.F'
       	stop
       end if !}
       return
@@ -666,7 +670,7 @@ c*** Data for visualisation of the surface properties
       else if(luvsp.gt.nsrfclsx) then !}{
         write(0,*) 'uinnam: too many views for surface coloring ',luvsp
         write(0,*) '  ==> Check the DG model or increase the nsrfclsx ',
-     ,    'parameter in PARMUSR'
+     ,    'parameter in uinpcom.inc'
         stop
       end if !}
       nsrfcls=max(luvsp,nsrfcls)

@@ -2,13 +2,14 @@ c  VERSION : 01.04.2005 14:26
 
 c*** The basic data for uinput
 
-#include "PARMMOD"
+#include "COUPLE/KOPPLDIM.F"
 
 c=======================================================================
 c*** Temporary assignment - the max. number of photon species
       integer npht
       parameter (npht=1)
 
+c
 c*** Unit numbers for output and input of the files
       integer iunoo, iunii
       parameter (iunoo=2, iunii=1)
@@ -33,6 +34,31 @@ c***  nntrian   : maximum number of triangular mesh nodes for input
 c*** B2 dimensions
       integer nsdb2,nxd,nyd
       parameter (nsdb2=DEF_NSD, nxd=DEF_NXD+DEF_NCUT*5, nyd=DEF_NYD)
+
+c*** Eirene dimensions
+c***  nchor     max. number of explicitly specified diagnostic chords
+c***  nstep     the maximum number of surface sources
+c***  lntsputx  max. number of material template surfaces
+c***  nsrfclsx  max. number of views
+
+      integer nplg, nppart, nstep
+      parameter (nppart=max(1,DEF_NCUT*3))
+      parameter (nplg=DEF_NXD+nppart)
+      parameter (nstep=DEF_NSTRA)
+      integer nreac, nchor, lntsputx, nsrfclsx
+      parameter (nreac=DEF_NREAC, nchor=250, lntsputx=4, nsrfclsx=12)
+      integer nrad, nadd, nplt, nsd, nsdw, ncv, nsnv
+      integer nadv, nclv, nalv, nads, nals
+      integer nhd6, nain
+      parameter (nadd=DEF_NADD)
+      parameter (nrad=n1st*n2nd*n3rd+nadd+1)
+      parameter (nplt=5, nsd=1, nsdw=1, ncv=1, nsnv=1)
+      parameter (nads=1, nadv=1, nclv=1, nalv=1, nals=1)
+      parameter (nhd6=8, nain=1)
+
+c*** The definitions below must match those found in eirmod_parmmod
+      integer ntalv, nbmax, nptal
+      parameter (ntalv=100, nbmax=10, nptal=30)
 
 c*** Cuts and grid blocks: number of cuts, their location and length,
 c***  	the same for isolating cuts (B2 notation),
@@ -320,6 +346,8 @@ c***  	primary particle is determined from spcrctd)
 c-----------------------------------------------------------------------
 c*** Chemical sputtering: pairs projectile-wall and sputtered particle 
 c***  	      	      	  as input from DG
+      integer nchsppr
+      parameter (nchsppr=DEF_NATM*(ntrack+nalloys))
       character chsptgt(nchsppr)*24,chspspt(nchsppr)*8
       
 c-----------------------------------------------------------------------

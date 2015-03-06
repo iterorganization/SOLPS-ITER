@@ -14,7 +14,7 @@ else
       setenv NAG "-L/afs/ipp/@sys/lib -lnag"
     else
       echo 'Did not find a NAG library: setting -NO_NAG'
-      setenv NAG "-llapack -lblas"
+      setenv NAG "-lblaslapack"
       if (! $?SOLPS_CPP) then
         setenv SOLPS_CPP "-DNO_NAG"
       else
@@ -44,7 +44,7 @@ else
   case "USA_UNKNOWN":
   default:
     echo 'Did not find a NAG library: setting -NO_NAG'
-    setenv NAG "-llapack -lblas"
+    setenv NAG "-lblaslapack"
     switch ($OBJECTCODE)
     case "T3E":
     case "T3Ehpf":

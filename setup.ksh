@@ -217,6 +217,7 @@ export MANPATH=$NCARG_ROOT/man:${DG}/equtrn/doxygen/man:$MANPATH
 }
 
 export SOLPS_LIB=${SOLPSTOP}/lib/${OBJECTCODE}
+[ -e $SOLPS_LIB/libnetcdf.a ] && export NETCDF=-lnetcdf
 
 [ -z "$LD_LIBRARY_PATH" ] && {
     export LD_LIBRARY_PATH=${SOLPS_LIB}

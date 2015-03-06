@@ -1,4 +1,8 @@
       subroutine uinprpnd
+       use b2mod_layer
+     , , only: ntrack, nalloys
+       use eirmod_extrab25
+     , , only: msrfclsx, mgwtiesx
 c
 c  version : 14.03.2001 17:11
 c
@@ -20,7 +24,7 @@ c*** 2 cuts for a limiter
 	  write(0,*) 'Too many "non-default surfaces" are specified',
      ,					'  (cuts).'
 	  write(0,*) '  ==> Check the boundary specification in ',
-     ,				  'DG and parameter NSTSI in PARMUSR'
+     ,			'DG and parameter DEF_NSTS in DIMENSIONS.F'
 	  stop
 	end if !}
 
@@ -44,7 +48,7 @@ c*** 2*2*2 cuts for a single null
 	  write(0,*) 'Too many "non-default surfaces" are specified.',
      ,					'  (cuts)'
 	  write(0,*) 'STOP ==> Check the boundary specification in ',
-     ,				  'DG and parameter NSTSI in PARMUSR'
+     ,		      'DG and parameter DEF_NSTS in DIMENSIONS.F'
 	  stop
 	end if !}
 
@@ -124,7 +128,7 @@ c*** 4*2*2 cuts for a double-null
 	  write(0,*) 'Too many "non-default surfaces" are specified.',
      ,					'  (cuts)'
 	  write(0,*) 'STOP ==> Check the boundary specification in ',
-     ,				  'DG and parameter NSTSI in PARMUSR'
+     ,			 'DG and parameter DEF_NSTS in DIMENSIONS.F'
 	  stop
 	end if !}
 

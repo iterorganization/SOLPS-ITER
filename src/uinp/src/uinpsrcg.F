@@ -1,4 +1,8 @@
       subroutine uinpsrcg
+       use b2mod_layer
+     , , only: ntrack, nalloys
+       use eirmod_extrab25
+     , , only: msrfclsx, mgwtiesx
 c
 c  version : 01.04.2005 00:51
 c
@@ -38,7 +42,7 @@ c>>>
           write(0,*) 'A gas puffing source cannot span over more then ',
      ,        	     nsrfs,' wall segments'
           write(0,*) 'STOP ==> check the DG model and the value of ',
-     ,  	     'nsrfs in PARMUSR'
+     ,  	     'DEF_NSRFS in DIMENISONS.F'
           stop
         end if !}
         if(kgpfstr(istr).le.0) then !{

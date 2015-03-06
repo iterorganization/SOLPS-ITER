@@ -1,0 +1,11 @@
+echo setup.csh.NAG.local
+set hostname=`hostname`
+set fullhost=`nslookup $hostname |& awk '/Name:/{print $2}' | tr 'A-Z' 'a-z'`
+switch ($fullhost)
+case "*.iter.org":
+  module load nag
+  setenv NAG `pkg-config nag --libs`
+  breaksw
+default:
+  breaksw
+endsw

@@ -29,6 +29,8 @@ triang:
 	cd src/Triang; ${MAKE}
 
 nompi: triang
+	cd src/B2.5;           ${MAKE} 
+	cd src/Eirene;         ${MAKE} 
 	cd src/Carre;          ${MAKE} OBJDIR=${pwd}/bin/${OBJECTCODE}/Carre
 	cd src/DivGeo;         ${MAKE} OBJDIR=${pwd}/bin/${OBJECTCODE}/DivGeo
 	cd src/DivGeo/equtrn;  ${MAKE} OBJDIR=${pwd}/bin/${OBJECTCODE}/DivGeo/equtrn
@@ -41,6 +43,8 @@ nompi: triang
 	cd src/uinp;           ${MAKE}
 
 mpi: 
+	cd src/Eirene;         ${MAKE} USE_MPI=-DUSE_MPI
+	cd src/B2.5;           ${MAKE} USE_MPI=-DUSE_MPI
 	cd src/Eirene;         ${MAKE} OBJDIR=${pwd}/bin/${OBJECTCODE}/Eirene USE_B25=-DUSE_B25 USE_MPI=-DUSE_MPI
 	cd src/B2.5;           ${MAKE} OBJDIR=${pwd}/bin/${OBJECTCODE}/B2.5 OBJDIREIR=${pwd}/bin/${OBJECTCODE}/Eirene USE_EIRENE=-DUSE_EIRENE USE_MPI=-DUSE_MPI
 
@@ -69,6 +73,7 @@ tags:
 	cd src/Triang;         ${MAKE} tags
 	cd src/DivGeo;         ${MAKE} tags
 	cd src/DivGeo/equtrn;  ${MAKE} tags
+	rm -f TAGS ; etags -o TAGS src/Carre/src/*/*.F src/Carre/src/include/*.* src/Eirene/*/*.f src/Eirene/interfaces/*.f src/Eirene/*/*.[Ff]90 src/B2.5/src.local/*.F src/B2.5/src/*/*.F src/B2.5/src/*/*.[Hh] src/B2.5/src/common/*.* src/B2.5/src/common/COUPLE/*.F src/uinp/src/*.F src/uinp/src/*.inc src/uinp/src/*.h src/Triang/src/*/*.f src/DivGeo/equtrn/src/*.f src/DivGeo/equtrn/src/*.inc src/DivGeo/convert/src/*.f
 
 listobj:
 	cd src/Carre;          ${MAKE} listobj

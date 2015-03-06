@@ -1,4 +1,8 @@
       subroutine uinprppt
+       use b2mod_layer
+     , , only: ntrack, nalloys
+       use eirmod_extrab25
+     , , only: msrfclsx, mgwtiesx
 
 c  version : 27.12.2004 23:24
 

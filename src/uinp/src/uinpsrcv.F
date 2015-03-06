@@ -1,4 +1,8 @@
       subroutine uinpsrcv
+       use b2mod_layer
+     , , only: ntrack, nalloys
+       use eirmod_extrab25
+     , , only: msrfclsx, mgwtiesx
 c
 c  version : 13.02.2005 20:02
 c

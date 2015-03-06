@@ -1,4 +1,8 @@
       subroutine uichkchn(indelm,nni,nnx,indnss,nno,label)
+       use b2mod_layer
+     , , only: ntrack, nalloys
+       use eirmod_extrab25
+     , , only: msrfclsx, mgwtiesx
 
 c  version : 31.03.2005 20:05
 

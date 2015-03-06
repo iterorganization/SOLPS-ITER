@@ -1,4 +1,8 @@
       subroutine uinprp
+       use b2mod_layer
+     , , only: ntrack, nalloys
+       use eirmod_extrab25
+     , , only: msrfclsx, mgwtiesx
 
 c  version : 16.03.2005 23:56
 
@@ -110,7 +114,7 @@ c*** Prepare index of valid additional surfaces
      ,	      'in Eirene.'
 	    write(0,*) 'Maximum ',nlim,',  DG model ',nlimi,
      ,	      '  reserved ',laddsrfs
-	    stop '==> Check the DG model and NLIMI in PARMUSR'
+	    stop '==> Check the DG model and DEF_NLIM in DIMENSIONS.F'
 	  end if !}
 	  indasrfe(i)=k
 	  indasrfs(k)=i

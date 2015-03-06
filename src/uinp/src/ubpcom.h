@@ -8,7 +8,7 @@ c*** iunii  : input unit
 c*** ufnlen : max. length of the input text (limited by import routine)
       integer iunoo,iunii,ufnlen
       parameter (iunoo=2, iunii=1, ufnlen=32)
-#include "PARMMOD"
+#include "COUPLE/KOPPLDIM.F"
 c
       integer nubslp, nubsli, nubchrdx
       parameter (nubslp=10, nubsli=10, nubchrdx=500)

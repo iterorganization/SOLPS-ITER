@@ -1,4 +1,8 @@
       subroutine uinprpdz(lmrk,nmrk,kmrk)
+       use b2mod_layer
+     , , only: ntrack, nalloys
+       use eirmod_extrab25
+     , , only: msrfclsx, mgwtiesx
 
 c  version : 24.01.2003 17:55
 

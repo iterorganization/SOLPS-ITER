@@ -1,4 +1,8 @@
       subroutine uimdvr(lout,jblk,jvrb,ufs)
+       use b2mod_layer
+     , , only: ntrack, nalloys
+       use eirmod_extrab25
+     , , only: msrfclsx, mgwtiesx
 c
 c  version : 18.08.2003 17:31
 c

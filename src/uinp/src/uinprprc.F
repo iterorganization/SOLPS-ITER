@@ -1,4 +1,8 @@
       subroutine uinprprc
+       use b2mod_layer
+     , , only: ntrack, nalloys
+       use eirmod_extrab25
+     , , only: msrfclsx, mgwtiesx
 c
 c  version : 17.02.2002 21:52
 c
@@ -69,7 +73,7 @@ c***  ign is the list of correspondence of the group IDs: 1-default, 2-used
 	      nnrctn=nnrctn+1
 	      if(nnrctn.gt.mreac) then !{
 	      	write(0,*) 'Too many reaction datasets specified:',nnrctn
-		stop '==> Check the AMDS model and NREAC in PARMUSR'
+		stop '==> Check the AMDS model and NREAC in KOPPLDIM.F'
 	      end if !}
 	      ii=rctdgrp(j,l)
 	      if(ii.ne.0) then !{
@@ -553,7 +557,7 @@ c*** Add the primary reaction to the final list
 		if(nreaci.gt.nreac) then !{
 		  write(0,*) 'Too many different reactions specified:',
      ,		      	      	      	      	      	      	  nreaci
-		  stop '==> Check the AMDS model and NREAC in PARMUSR'
+		  stop '==> Check the AMDS model and NREAC in KOPPLDIM.F'
 		end if !}
 	        ir(nrcln)=nreaci
 	        filnam(nrcln)=rctndbs(k0)
@@ -853,7 +857,7 @@ c>>>
  	write(0,'(4x,a2,1x,i5,i8)') m,ndis
 	write(0,'(4x,a2,1x,i5,i8)') n,nrec
       	stop 
-     ,	  '==> Check the AMDS model and NELI, NDIS, or NREC in PARMUSR'
+     , '==> Check the AMDS model and NELI, NDIS, or NREC in KOPPLDIM.F'
       end if !}
 c=======================================================================
       end

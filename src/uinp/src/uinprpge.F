@@ -1,4 +1,8 @@
       subroutine uinprpge
+       use b2mod_layer
+     , , only: ntrack, nalloys
+       use eirmod_extrab25
+     , , only: msrfclsx, mgwtiesx
 c
 c  version : 03.04.2003 17:25
 c

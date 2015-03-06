@@ -1,4 +1,13 @@
 echo setup.csh.NCARG.linux.ifort64
+set hostname=`hostname`
+set fullhost=`nslookup $hostname |& awk '/Name:/{print $2}' | tr 'A-Z' 'a-z'`
+switch ($fullhost)
+case "*.iter.org":
+  setenv NCARG_ROOT '/b2-ext/ncarg'
+  breaksw
+default:
+  breaksw
+endsw
 setenv NCARG '-L$(NCARG_ROOT)/lib -lncarg -lncarg_gks -lncarg_c -L/usr/X11R6/lib64 -lX11 -lm'
 if (! $?SOLPS_CPP) then
   setenv SOLPS_CPP "-DNCAR4"
