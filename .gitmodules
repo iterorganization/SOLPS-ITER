@@ -17,4 +17,4 @@
 [submodule "Eirene"]
 	path = src/Eirene
 	url = ssh://git@git.iter.org/bnd/eirene.git
-	branch = local-develop
+	branch = feature/SOLPS-ITER

@@ -26,6 +26,14 @@ setup.ksh.*
 
 LISTOBJ
 TAGS
+linux.*
+g77*/
+IBMaix*
+SGIirix*
+sun*
+T3E*
+unicos*
+
 linux.*/
 g77*/
 IBMaix*/
