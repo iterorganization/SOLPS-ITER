@@ -139,7 +139,7 @@ c
       call cfopen (nout(4),'b2fplasma','new','unformatted')
 *   ..mark output unit for error messages
       call xerset_5 (0)
-#ifdef USE_EIRENE
+#ifdef B25_EIRENE
 *   ..import parameters from Eirene input.dat file
       inquire(file='input.dat',exist=ex)
       if (ex) then
