@@ -42,8 +42,8 @@ eirene:
 
 eirene_mpi:
 	cd src/Eirene; ${MAKE} OBJDIR=${BINDIR}/Eirene.mpi USE_MPI=-DUSE_MPI
-	@ln -sf ${BINDIR}/Eirene.mpi/eirobj  ${BINDIR}
-	@ln -sf ${BINDIR}/Eirene.mpi/eirobjx ${BINDIR}
+	@ln -sf ${BINDIR}/Eirene.mpi/eirobj  ${BINDIR}/eirobj.mpi
+	@ln -sf ${BINDIR}/Eirene.mpi/eirobjx ${BINDIR}/eirobjx.mpi
 
 
 b25:
