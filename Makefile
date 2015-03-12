@@ -2,13 +2,15 @@
 BINDIR = ${PWD}/bin/${OBJECTCODE}
 
 
-solps: libs carre divgeo eirene b25eirene uinp triang manual
+solps:     libs carre divgeo eirene     b25eirene     uinp triang manual
 
 solps_mpi: libs carre divgeo eirene_mpi b25eirene_mpi uinp triang manual
 
-all: libs carre divgeo b25 eirene b25eirene uinp triang manual
+
+all:     libs carre divgeo b25     eirene     b25eirene     uinp triang manual
 
 all_mpi: libs carre divgeo b25_mpi eirene_mpi b25eirene_mpi uinp triang manual
+
 
 .PHONY: libs libs_mpi solps solps_mpi all all_mpi carre divgeo b25 b25_mpi eirene eirene_mpi b25eirene b25eirene_mpi manual depend tags clean clean_* VERSION
 
@@ -56,6 +58,7 @@ b25_mpi:
 b25eirene:
 	cd src/Eirene; ${MAKE} OBJDIR=${BINDIR}/b25eirene/Eirene USE_B25=-DB25_EIRENE
 	cd src/B2.5;   ${MAKE} OBJDIR=${BINDIR}/b25eirene/B2.5 OBJDIREIR=${BINDIR}/b25eirene/Eirene USE_EIRENE=-DB25_EIRENE
+	@ln -sf ${BINDIR}/b25eirene/B2.5/*.exe ${BINDIR}
 
 b25eirene_mpi:
 	cd src/Eirene; ${MAKE} OBJDIR=${BINDIR}/b25eirene.mpi/Eirene USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI
@@ -64,12 +67,17 @@ b25eirene_mpi:
 
 uinp:
 	cd src/uinp; ${MAKE}
+	@ln -sf ${BINDIR}/uinp/{uinp,ub2p} ${BINDIR}
+
 
 triang:
 	cd src/Triang; ${MAKE}
+	@ln -sf ${BINDIR}/Triang/{tria,triageom} ${BINDIR}
+
 
 manual:
 	cd doc/solps; ${MAKE}
+
 
 tags:
 	cd src/Carre;          ${MAKE} tags

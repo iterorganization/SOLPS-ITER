@@ -8,9 +8,9 @@ SRCUIN = ${SOLPSTOP}/src/uinp
 OBJDIR = ${SOLPSTOP}/bin/${OBJECTCODE}/uinp
 BASEDIR = ${SOLPSTOP}/src/uinp
 B2DIR = ${SOLPSTOP}/src/B2.5
-B2OBJ = ${SOLPSTOP}/bin/${OBJECTCODE}/B2.5.nompi
+B2OBJ = ${SOLPSTOP}/bin/${OBJECTCODE}/b25eirene/B2.5
 EIRDIR = ${SOLPSTOP}/src/Eirene
-EIROBJ = ${SOLPSTOP}/bin/${OBJECTCODE}/Eirene.nompi
+EIROBJ = ${SOLPSTOP}/bin/${OBJECTCODE}/b25eirene/Eirene
 ifeq ($(shell [ -e ${B2DIR}/src/include.local ] && echo yes || echo no ),yes)
 B2INC = ${B2DIR}/src/include.local -I${B2DIR}/src/include -I${B2DIR}/src/common
 else
@@ -30,7 +30,7 @@ ifeq ($(shell [ -e ${SRCUIN}/config.local/compiler.${OBJECTCODE} ] && echo yes |
 include ${SRCUIN}/config.local/compiler.${OBJECTCODE}
 MAKES+= ${SRCUIN}/config.local/compiler.${OBJECTCODE}
 endif
-MNEXTRA = ${OBJDIR}/open_file.o
+MNEXTRA = ${B2OBJ}/open_file.o
 
 VPATH = ${SRCDIR}
 
@@ -46,7 +46,7 @@ $(OBJDIR)/%.o : %.F
 
 all: ${OBJDIR}/uinp ${OBJDIR}/ub2p
 
-${OBJDIR}/uinp: ${OBJDIR}/uinput.o ${OBJDIR}/uiblkd.o ${OBJDIR}/uiblb2.o ${OBJDIR}/libui.a ${B2OBJ}/open_file.o ${B2OBJ}/b2mod_layer.o ${EIROBJ}/eirmod_extrab25.o ${SOLPS_LIB}/libmscl.a ${MAKES} ${MNEXTRA}
+${OBJDIR}/uinp: ${OBJDIR}/uinput.o ${OBJDIR}/uiblkd.o ${OBJDIR}/uiblb2.o ${OBJDIR}/libui.a ${MNEXTRA} ${B2OBJ}/b2mod_layer.o ${EIROBJ}/eirmod_extrab25.o ${SOLPS_LIB}/libmscl.a ${MAKES} ${MNEXTRA}
 	${FC} $(FFLAGS) -o ${OBJDIR}/uinp ${OBJDIR}/uinput.o ${OBJDIR}/uiblkd.o ${OBJDIR}/uiblb2.o ${MNEXTRA} ${OBJDIR}/libui.a ${LDLIBS} $(LDEXTRA)
 
 ${OBJDIR}/ub2p: ${OBJDIR}/ub2p.o ${OBJDIR}/libui.a ${SOLPS_LIB}/libmscl.a ${MAKES} ${MNEXTRA}
