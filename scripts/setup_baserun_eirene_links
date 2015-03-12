@@ -1,29 +1,29 @@
 #! /bin/tcsh -f
-set datapath=`echo $PWD/ | sed -e "s:$SOLPSTOP/::" -e 's:[^/]*/:../:g' -e 's:$:data:'`
-if (! -e ${datapath}/AMJUEL) then
-  set datapath=`canonical $SOLPSTOP`/data
-  if (! -e ${datapath}/AMJUEL) then
-    set datapath=$SOLPSTOP/data
+set datapath=`echo $PWD/ | sed -e "s|$SOLPSTOP||" -e 's|[^/]*/|../|g' -e 's|$|src/Eirene/Database|'`
+if (! -e ${datapath}/PHOTON) then
+  set datapath=`canonical $SOLPSTOP`/src/Eirene/Database
+  if (! -e ${datapath}/PHOTON) then
+    set datapath=$SOLPSTOP/src/Eirene/Database
   endif
 endif
 if ("X$1X" == "X-rX") then
-  ln -sf `climb_and_look_for -r data/AMJUEL`         
-  ln -sf `climb_and_look_for -r data/H2VIBR`         
-  ln -sf `climb_and_look_for -r data/HYDHEL`         
-  ln -sf `climb_and_look_for -r data/METHANE`        
-  ln -sf `climb_and_look_for -r data/PHOTON`         
-  ln -sf `climb_and_look_for -r data/SPUTER `        
-  ln -sf `climb_and_look_for -r data/TRIM` fort.21   
-  ln -sf `climb_and_look_for -r data/MARLOWE` fort.22
+  ln -sf `climb_and_look_for -r src/Eirene/Database/AMdata/amjuel.tex` AMJUEL        
+  ln -sf `climb_and_look_for -r src/Eirene/Database/AMdata/h2vibr.tex` H2VIBR  
+  ln -sf `climb_and_look_for -r src/Eirene/Database/AMdata/hydhel.tex` HYDHEL  
+  ln -sf `climb_and_look_for -r src/Eirene/Database/AMdata/methane.tex` METHANE
+  ln -sf `climb_and_look_for -r src/Eirene/Database/PHOTON`         
+  ln -sf `climb_and_look_for -r src/Eirene/Database/Surfacedata/SPUTER`        
+  ln -sf `climb_and_look_for -r src/Eirene/Database/Surfacedata/TRIM/trim.dat` fort.21   
+  ln -sf `climb_and_look_for -r src/Eirene/Database/Surfacedata/TRIM/marlow.dat` fort.22
 else
-  ln -s ${datapath}/AMJUEL
-  ln -s ${datapath}/H2VIBR
-  ln -s ${datapath}/HYDHEL
-  ln -s ${datapath}/METHANE
-  ln -s ${datapath}/PHOTON
-  ln -s ${datapath}/SPUTER
-  ln -s ${datapath}/TRIM fort.21
-  ln -s ${datapath}/MARLOWE fort.22
+  ln -sf ${datapath}/AMdata/amjuel.tex AMJUEL
+  ln -sf ${datapath}/AMdata/h2vibr.tex H2VIBR
+  ln -sf ${datapath}/AMdata/hydhel.tex HYDHEL
+  ln -sf ${datapath}/AMdata/methane.tex METHANE
+  ln -sf ${datapath}/PHOTON
+  ln -sf ${datapath}/Surfacedata/SPUTER
+  ln -sf ${datapath}/Surfacedata/TRIM/trim.dat fort.21
+  ln -sf ${datapath}/Surfacedata/TRIM/marlow.dat fort.22
 endif
 
 if (! -e input.dat) then
@@ -70,6 +70,6 @@ if (! -e mesh.extra) then
     endif
   endif
 endif
-if (! -e b2.log) ln -s run.log b2.log
-if (! -e b2.log.gz) ln -s run.log.gz b2.log.gz
+if (! -e b2.log) ln -sf run.log b2.log
+if (! -e b2.log.gz) ln -sf run.log.gz b2.log.gz
 if (! -e tracing) mkdir tracing

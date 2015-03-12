@@ -127,8 +127,8 @@ c      print *
 c      print *,'Draft reaction list:'
 c      if(nnrctn.gt.0) print '(a9,a7,a5,a9,a3,3a9,3i3,1p,3e9.2)',
 c     ,  (rctnptpr(i),rctndbs(i),rctnchp(i),rctnrct(i),rctntyp(i),
-c     ,  rctnptin(i),rctnpto1(i),rctnpto2(i),rctngrp(i),rctnmsp(i),
-c     ,  rctnmst(i),rctndlte(i),rctnenr1(i),rctnenr2(i),i=1,nnrctn)
+c     ,   rctnptin(i),rctnpto1(i),rctnpto2(i),rctngrp(i),rctnmsp(i),
+c     ,    rctnmst(i),rctndlte(i),rctnenr1(i),rctnenr2(i),i=1,nnrctn)
 c>>>
 c*** Check the reaction type - must be assigned to each reaction
       do i=1,nnrctn !{
@@ -215,9 +215,9 @@ c*** Parse the multiple output particles, if any (e.g., 2H)
      ,	  'out1','out2','ig','mp','mt','N1','N2','dlte','enr1','enr2'
      	write(*,'(1x,i3,a9,a7,a5,a9,a3,3a9,5i3,1p,3e9.2)')
      -	  (i,rctnptpr(i),rctndbs(i),rctnchp(i),rctnrct(i),rctntyp(i),
-     ,	  rctnptin(i),rctnpto1(i),rctnpto2(i),rctngrp(i),rctnmsp(i),
-     ,	  rctnmst(i),rctnnmo1(i),rctnnmo2(i),
-     ,	  rctndlte(i),rctnenr1(i),rctnenr2(i),i=1,nnrctn)
+     ,	   rctnptin(i),rctnpto1(i),rctnpto2(i),rctngrp(i),rctnmsp(i),
+     ,	    rctnmst(i),rctnnmo1(i),rctnnmo2(i),
+     ,	   rctndlte(i),rctnenr1(i),rctnenr2(i),i=1,nnrctn)
       	write(*,*)
       end if !}
 
@@ -281,7 +281,7 @@ c*** Check whether the same reaction is already on the list
 cxpb Here we must keep the first match!
       	      kk=0
               ii=1
-	      do while (kk.eq.0.and.ii.le.nrcln) !{
+	      do while (kk.eq.0 .and. ii.le.nrcln) !{
 	      	if(filnam(ii).eq.rctndbs(irc) .and.
      ,		      	h123(ii).eq.rctnchp(irc) .and. 
      ,		      	  reac(ii).eq.rctnrct(irc) .and.
@@ -383,24 +383,18 @@ c*** appear first
      ,		  		rctntyp(irc).eq.'RC' .or. 
      ,	      	  			rctntyp(irc).eq.'DS') then !}{
 		    e_hlp=.true.
-                    print *,irc,k1,'  ',rctnchp(irc),':',rctnchp(k1)!###
-		    if(rctnchp(irc).eq.'H.4' .or. 
-     .                                    rctnchp(irc).eq.'H.2') then !{
-		      if(
-     .                 rctnchp(irc).eq.'H.4' .and. 
-     .           .not.(rctnchp(k1).eq.'H.10' .or. rctnchp(k1).eq.'H.4')
-     .                                  .or.
-     .                 rctnchp(irc).eq.'H.2' .and. rctnchp(k1).ne.'H.8'
-     .		    		                               ) then !{
-		        ex=.true.
+		    if(rctnchp(irc).eq.'H.4') then !{
+                      if(rctnchp(k1).ne.'H.4' .and. 
+     ,                   rctnchp(k1).ne.'H.10') then !{
+                        ex=.true.
                       end if !}
-		    else if(rctnchp(irc).eq.'H.10' .or. 
-     .                                   rctnchp(irc).eq.'H.8') then !}{
-		      if(
-     .                 rctnchp(irc).eq.'H.10' .and. rctnchp(k1).ne.'H.4'
-     .                                  .or.
-     .                 rctnchp(irc).eq.'H.8' .and. rctnchp(k1).ne.'H.2'
-     .		    		                               ) then !{
+     		    else if (rctnchp(irc).eq.'H.2') then !}{
+		      if(rctnchp(k1).ne.'H.10') then !{
+		    	ex=.true.
+		      end if !}
+		    else if(rctnchp(irc).eq.'H.10') then !}{
+		      if(rctnchp(k1).ne.'H.4' .and.
+     ,		    		      rctnchp(k1).ne.'H.2') then !{
 		    	ex=.true.
 		      else !}{
 		    	ii=k0
@@ -498,22 +492,22 @@ c*** appear first
 		    end if !}
 		  else if(rctntyp(irc).eq.'EI' .or. 
      ,		  	      rctntyp(irc).eq.'RC' .or.
-     ,		  			rctntyp(irc).eq.'DS') then !{ #6
+     ,		  			rctntyp(irc).eq.'DS') then !}{ #6
 		    e_hlp=.true.
-                    if(rctnchp(irc).eq.'H.4') then !{
-                      if(rctnchp(k3).eq.'H.4' .and.
-     .                   rctnchp(k3).eq.'H.10') then !{
+		    if(rctnchp(irc).eq.'H.4') then !{
+                      if(rctnchp(k3).ne.'H.4' .and. 
+     ,                   rctnchp(k3).ne.'H.10') then !{
                         ex=.true.
                       end if !}
-		    else if(rctnchp(irc).eq.'H.2') then !}{
-		      if(rctnchp(k3).eq.'H.10') then !{
+     		    else if (rctnchp(irc).eq.'H.2') then !}{
+		      if(rctnchp(k3).ne.'H.10') then !{
 		    	ex=.true.
 		      end if !}
 		    else if(rctnchp(irc).eq.'H.10') then !}{
 		      if(rctnchp(k3).ne.'H.4' .and.
      .                         rctnchp(k3).ne.'H.2') then !{
 		    	ex=.true.
-		      else !}{
+		      else if (rctnchp(k3).eq.'H.10') then !}{
 		    	ii=k0
 		    	k0=k3
 		    	k3=ii
@@ -655,8 +649,9 @@ c>>>
 
 c*** Update the particle-related reaction specification
 c<<<
-c      	      print *,'lknd,jspc,m_rct,m_rcn,k0,kk,k1,k2,k3,k4 = ',
-c     ,       	       lknd,jspc,m_rct,m_rcn,k0,kk,k1,k2,k3,k4
+c      	      print '(a,10i3)',
+c     ,                 'lknd,jspc,m_rct,m_rcn,k0,kk,k1,k2,k3,k4 = ',
+c     ,       	         lknd,jspc,m_rct,m_rcn,k0,kk,k1,k2,k3,k4
 c>>>
 
 	      iir=ir(kk)
@@ -723,7 +718,7 @@ c>>>
        	            stop '==> Check the AMDS model'
 		  end if !}
 		  hlp_ee=ir(k2)
-	      	else if(k3.gt.0) then !{
+	      	else if(k3.gt.0) then !}{
                   if (lknd.ne.3) then
 		    iie=30000
                   else
@@ -847,17 +842,18 @@ c>>>
 	end if !}
       end do !}
 c<<<
-      print *,'eli,dis,rec=',l,m,n
+      print *,'el,dis,rec=',l,m,n
 c>>>
-      if(l.gt.neli .or. m.gt.ndis .or. n.gt.nrec) then !{
+      if(l.gt.DEF_NREL .or. m.gt.DEF_NRDS .or. n.gt.DEF_NREC) then !{
       	write(0,*) 'Too many reactions of at least one of the ',
      ,	  'following types are specified:'
 	write(0,'(/3x,a4,4x,a1,4x,a5)') 'Type','N','Limit'
-	write(0,'(4x,a2,1x,i5,i8)') l,neli
- 	write(0,'(4x,a2,1x,i5,i8)') m,ndis
-	write(0,'(4x,a2,1x,i5,i8)') n,nrec
+	write(0,'(4x,a2,1x,i5,i8)') 'EL',l,DEF_NREL
+ 	write(0,'(4x,a2,1x,i5,i8)') 'DS',m,DEF_NRDS
+	write(0,'(4x,a2,1x,i5,i8)') 'RC',n,DEF_NREC
       	stop 
-     , '==> Check the AMDS model and NELI, NDIS, or NREC in KOPPLDIM.F'
+     ,   '==> Check the AMDS model '//
+     ,   'and NREL, NRDS, or NREC in DIMENSIONS.F'
       end if !}
 c=======================================================================
       end

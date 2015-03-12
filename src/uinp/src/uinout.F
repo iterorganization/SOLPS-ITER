@@ -20,7 +20,7 @@ c=======================================================================
 
       integer i,j,k,l,m,n
       logical ulmlti,ex,carbon
-      character utxthd(34)*71, utxtfl(5)*25, ufnm*(*), ucdnmdl*10
+      character utxthd(34)*71, utxtfl(5)*47, ufnm*(*), ucdnmdl*10
       data utxthd /
      1        '** 1. Data for operating mode' ,
      2        '** 2. Data for standard mesh' ,
@@ -57,11 +57,11 @@ c=======================================================================
      3        '* 4d. Photon species',
      4        '* 5a. Bulk ion species' /
       data utxtfl /
-     1        'CFILE AMJUEL data/AMJUEL ',
-     2        'CFILE HYDHEL data/HYDHEL ',
-     3        'CFILE SPUTER data/SPUTER ',
-     4        'CFILE TRIM   data/TRIM   ',
-     5        'CFILE METHAN data/METHANE'/
+     1        'CFILE AMJUEL Database/AMdata/amjuel.tex        ',
+     2        'CFILE HYDHEL Database/AMdata/hydhel.tex        ',
+     3        'CFILE SPUTER Database/Surfacedata/SPUTER       ',
+     4        'CFILE TRIM   Database/Surfacedata/TRIM/trim.dat',
+     5        'CFILE METHAN Database/AMdata/methane.tex       '/
 c=======================================================================
 
 c*** 0. Prepare some constants
@@ -1007,6 +1007,6 @@ c=======================================================================
   717 format (a8,1x,a8,i6)
   718 format (1p,2e12.5,8i6)
   719 format (1p,2i6,5e12.5)
-  720 format (a25)
+  720 format (a47)
 c=======================================================================
       end

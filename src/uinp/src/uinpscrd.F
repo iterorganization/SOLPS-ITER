@@ -233,7 +233,7 @@ C***  SURFMOD_k_<MATERIAL>_<SPUTER>_<PUMP>_<SEMYTRANSP>_<TEMPERATURE K>
          txtbuf='_BERYLLIUM'
         else if(znml.EQ.1206.) then
          txtbuf='_CARBON'
-        else if(znml.EQ.9624.) then
+        else if(znml.EQ.9642.) then
          txtbuf='_MOLYBDENUM'
         end if
         cnam=cnam(1:len_trim(cnam))//txtbuf(1:len_trim(txtbuf))

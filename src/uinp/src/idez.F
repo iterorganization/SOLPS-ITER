@@ -1,11 +1,11 @@
       function idez(i,j,izif)
 c
-c   i is an integer with  n dezimals, the function returns
-c   idez, the j.th dezimal
+c   i is an integer with  n decimals, the function returns
+c   idez, the j-th decimal
 c   j must be .le. izif
 c      if n .lt. izif and j .gt. n  , idez=0
 c      if n .gt. izif and j .eq. izif  , idez=part of i on the left of
-c      the dezimal j, including the j th dezimal
+c      the decimal j, including the j-th decimal
 c      e.g.: i=1234,izif=3, j=1: idez=4
 c                           j=2: idez=3
 c                           j=3: idez=12
