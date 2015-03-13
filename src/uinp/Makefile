@@ -3,14 +3,14 @@
 SHELL=/bin/sh
 CPP=/usr/lib/cpp
 
-SRCDIR = ${SOLPSTOP}/src/uinp/src
+SRCDIR = ${SOLPSTOP}/src/Uinp/src
 SRCUIN = ${SOLPSTOP}/src/uinp
-OBJDIR = ${SOLPSTOP}/bin/${OBJECTCODE}/uinp
+OBJDIR = ${SOLPSTOP}/bin/${OBJECTCODE}/Uinp
 BASEDIR = ${SOLPSTOP}/src/uinp
 B2DIR = ${SOLPSTOP}/src/B2.5
-B2OBJ = ${SOLPSTOP}/bin/${OBJECTCODE}/b25eirene/B2.5
+B2OBJ = ${SOLPSTOP}/bin/${OBJECTCODE}/B25eirene/B2.5
 EIRDIR = ${SOLPSTOP}/src/Eirene
-EIROBJ = ${SOLPSTOP}/bin/${OBJECTCODE}/b25eirene/Eirene
+EIROBJ = ${SOLPSTOP}/bin/${OBJECTCODE}/B25eirene/Eirene
 ifeq ($(shell [ -e ${B2DIR}/src/include.local ] && echo yes || echo no ),yes)
 B2INC = ${B2DIR}/src/include.local -I${B2DIR}/src/include -I${B2DIR}/src/common
 else
