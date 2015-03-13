@@ -39,8 +39,8 @@ CLASSDIR=${SonnetTopDirectory}/device/$class
 
 ln -sf `pwd`/"$1".str ${SonnetTopDirectory}/device/$class/struct.snn
 ln -sf `pwd`/"$1".trg ${SonnetTopDirectory}/device/$class/targets.snn
-ln -sf `pwd`/"$1".dgo ${SOLPSTOP}/src/uinp/uinput.dg
-ln -sf `pwd`/"$1".trg ${SOLPSTOP}/src/uinp/uinput.trg
+ln -sf `pwd`/"$1".dgo ${SOLPSTOP}/src/Uinp/uinput.dg
+ln -sf `pwd`/"$1".trg ${SOLPSTOP}/src/Uinp/uinput.trg
 ln -sf `pwd`/"$1".str ${SOLPSTOP}/src/Carre/dg.str
 ln -sf `pwd`/"$1".trg ${SOLPSTOP}/src/Carre/dg.trg
 ln -sf `pwd`/"$1".dgo ${SOLPSTOP}/src/Carre/dg.dgo

@@ -97,8 +97,8 @@ location="$SOLPSTOP/bin"
   location="${SOLPSTOP%/*}/$u/bin"
 }
 
-TRIA="$location/$OBJECTCODE/Triang/tria"
-TRIAGEOM="$location/$OBJECTCODE/Triang/triageom"
+TRIA="$location/$OBJECTCODE/tria"
+TRIAGEOM="$location/$OBJECTCODE/triageom"
 
 e=
 [ -x "$TRIA" ] || {

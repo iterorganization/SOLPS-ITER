@@ -18,6 +18,6 @@
                     ln -sf `pwd`/$b.$t.dgo ${GENERICHOME}/rdload/$t.param.dg; done
                 true; } || { \
                     ln -sf `pwd`/$b.dgo ${GENERICHOME}/rdload/param.dg
-                    ln -sf `pwd`/$b.dgo $SOLPSTOP/src/uinp/param.dg
+                    ln -sf `pwd`/$b.dgo $SOLPSTOP/src/Uinp/param.dg
                 }
             }

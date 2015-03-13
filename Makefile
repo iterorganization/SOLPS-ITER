@@ -63,10 +63,10 @@ b25eirene:
 b25eirene_mpi:
 	cd src/Eirene; ${MAKE} OBJDIR=${BINDIR}/B25eirene.mpi/Eirene USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI
 	cd src/B2.5;   ${MAKE} OBJDIR=${BINDIR}/B25eirene.mpi/B2.5 OBJDIREIR=${BINDIR}/B25eirene.mpi/Eirene USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
-
+	find -name "${BINDIR}/B25eirene.mpi/*.exe" -exec ln -s {} "${BINDIR}" \;
 
 uinp:
-	cd src/uinp; ${MAKE}
+	cd src/Uinp; ${MAKE}
 	@ln -sf ${BINDIR}/Uinp/{uinp,ub2p} ${BINDIR}
 
 
@@ -83,11 +83,11 @@ tags:
 	cd src/Carre;          ${MAKE} tags
 	cd src/Eirene;         ${MAKE} tags
 	cd src/B2.5;           ${MAKE} tags
-	cd src/uinp;           ${MAKE} tags
+	cd src/Uinp;           ${MAKE} tags
 	cd src/Triang;         ${MAKE} tags
 	cd src/DivGeo;         ${MAKE} tags
 	cd src/DivGeo/equtrn;  ${MAKE} tags
-	rm -f TAGS ; etags -o TAGS src/Carre/src/*/*.F src/Carre/src/include/*.* src/Eirene/*/*.f src/Eirene/interfaces/*/*.f src/Eirene/user-routines/*/*.f src/Eirene/*/*.[Ff]90 src/B2.5/src.local/*.F src/B2.5/src/*/*.F src/B2.5/src/*/*.[Hh] src/B2.5/src/common/*.* src/B2.5/src/common/COUPLE/*.F src/uinp/src/*.F src/uinp/src/*.inc src/uinp/src/*.h src/Triang/src/*/*.f src/DivGeo/equtrn/src/*.f src/DivGeo/equtrn/src/*.inc src/DivGeo/convert/src/*.f src/DivGeo/src/*.[ch]
+	rm -f TAGS ; etags -o TAGS src/Carre/src/*/*.F src/Carre/src/include/*.* src/Eirene/*/*.f src/Eirene/interfaces/*/*.f src/Eirene/user-routines/*/*.f src/Eirene/*/*.[Ff]90 src/B2.5/src.local/*.F src/B2.5/src/*/*.F src/B2.5/src/*/*.[Hh] src/B2.5/src/common/*.* src/B2.5/src/common/COUPLE/*.F src/Uinp/src/*.F src/Uinp/src/*.inc src/Uinp/src/*.h src/Triang/src/*/*.f src/DivGeo/equtrn/src/*.f src/DivGeo/equtrn/src/*.inc src/DivGeo/convert/src/*.f src/DivGeo/src/*.[ch]
 
 listobj:
 	cd src/Carre;          ${MAKE} listobj
@@ -95,7 +95,7 @@ listobj:
 	cd src/Eirene;         ${MAKE} listobj
 	cd src/B2.5;           ${MAKE} listobj USE_MPI=-DUSE_MPI
 	cd src/B2.5;           ${MAKE} listobj
-	cd src/uinp;           ${MAKE} listobj
+	cd src/Uinp;           ${MAKE} listobj
 	cd src/Triang;         ${MAKE} listobj
 	cd src/DivGeo;         ${MAKE} listobj
 #	cd src/Carre;          ${MAKE} OBJDIR=${BINDIR}/Carre listobj
@@ -111,7 +111,7 @@ depend:
 	cd src/Eirene;         ${MAKE} depend
 	cd src/B2.5;           ${MAKE} depend USE_MPI=-DUSE_MPI
 	cd src/B2.5;           ${MAKE} depend
-	cd src/uinp;           ${MAKE} depend
+	cd src/Uinp;           ${MAKE} depend
 	cd src/Triang;         ${MAKE} depend
 	cd src/DivGeo;         ${MAKE} depend
 	cd src/DivGeo/equtrn;  ${MAKE} depend
@@ -129,6 +129,11 @@ VERSION:
 	cd src/Carre;  rm src/include/git_version.h; ${MAKE} VERSION
 	cd src/DivGeo; rm src/git_version.h;         ${MAKE} VERSION
 
+
+
+
+
+
 clean: clean_solps
 
 clean_solps:     clean_carre clean_divgeo clean_eirene     clean_b25eirene     clean_uinp clean_triang
@@ -144,54 +149,55 @@ clean_all_mpi:   clean_carre clean_divgeo clean_b25_mpi clean_eirene_mpi clean_b
 
 clean_carre:
 	cd src/Carre; ${MAKE} clean OBJDIR=${BINDIR}/Carre
-	@rm ${BINDIR}/{carre,traduit,fcrr}
+	rm -f ${BINDIR}/{carre,traduit,fcrr}
 
 
 clean_divgeo:
 	cd src/DivGeo;         ${MAKE} clean OBJDIR=${BINDIR}/DivGeo
 	cd src/DivGeo/equtrn;  ${MAKE} clean OBJDIR=${BINDIR}/DivGeo/equtrn
 	cd src/DivGeo/convert; ${MAKE} clean OBJDIR=${BINDIR}/DivGeo/convert
-	@rm ${BINDIR}/dg
-	@rm ${BINDIR}/{cropequ,dg2dg,dg2ef,dg2vr,ef2dg,jt2dg,nk2dg,pb2dg,prinequ,pt2dg,risepsi,vr2dg}
-	@rm ${BINDIR}/{cnveir,cnvtria}
+	rm -f ${BINDIR}/dg
+	rm -f ${BINDIR}/{cropequ,dg2dg,dg2ef,dg2vr,ef2dg,jt2dg,nk2dg,pb2dg,prinequ,pt2dg,risepsi,vr2dg}
+	rm -f ${BINDIR}/{cnveir,cnvtria}
 
 
 clean_eirene:
 	cd src/Eirene; ${MAKE} clean OBJDIR=${BINDIR}/Eirene
-	@rm ${BINDIR}/eirobj
-	@rm ${BINDIR}/eirobjx
+	rm -f ${BINDIR}/eirobj
+	rm -f ${BINDIR}/eirobjx
 
 
 clean_eirene_mpi:
 	cd src/Eirene; ${MAKE} clean OBJDIR=${BINDIR}/Eirene.mpi USE_MPI=-DUSE_MPI
-	@rm ${BINDIR}/eirobj.mpi
-	@rm ${BINDIR}/eirobjx.mpi
+	rm -f ${BINDIR}/eirobj.mpi
+	rm -f ${BINDIR}/eirobjx.mpi
 
 
-b25:
-	cd src/B2.5; ${MAKE} OBJDIR=${BINDIR}/B2.5 
+clean_b25:
+	cd src/B2.5; ${MAKE} clean OBJDIR=${BINDIR}/B2.5 
 
 
-b25_mpi:
-	cd src/B2.5; ${MAKE} OBJDIR=${BINDIR}/B2.5.mpi USE_MPI=-DUSE_MPI
+clean_b25_mpi:
+	cd src/B2.5; ${MAKE} clean OBJDIR=${BINDIR}/B2.5.mpi USE_MPI=-DUSE_MPI
 
 
 clean_b25eirene:
 	cd src/Eirene; ${MAKE} clean OBJDIR=${BINDIR}/B25eirene/Eirene USE_B25=-DB25_EIRENE
 	cd src/B2.5;   ${MAKE} clean OBJDIR=${BINDIR}/B25eirene/B2.5 OBJDIREIR=${BINDIR}/B25eirene/Eirene USE_EIRENE=-DB25_EIRENE
-	@rm ${BINDIR}/*.exe
+	rm -f ${BINDIR}/*.exe
 
 
 clean_b25eirene_mpi:
 	cd src/Eirene; ${MAKE} clean OBJDIR=${BINDIR}/B25eirene.mpi/Eirene USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI
 	cd src/B2.5;   ${MAKE} clean OBJDIR=${BINDIR}/B25eirene.mpi/B2.5 OBJDIREIR=${BINDIR}/B25eirene.mpi/Eirene USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
+	rm -f ${BINDIR}/*.exe.mpi
 
 
 clean_uinp:
-	cd src/uinp; ${MAKE} clean
-	@rm ${BINDIR}/{uinp,ub2p}
+	cd src/Uinp; ${MAKE} clean
+	rm -f ${BINDIR}/{uinp,ub2p}
 
 
 clean_triang:
 	cd src/Triang; ${MAKE} clean
-	@rm ${BINDIR}/{tria,triageom}
+	rm -f ${BINDIR}/{tria,triageom}

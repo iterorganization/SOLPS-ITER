@@ -114,7 +114,6 @@ ${SRCTRI}/LISTOBJ: listobj
 
 ${OBJDIR}/dependencies: 
 	-mkdir -p ${OBJDIR}
-	ln -s ${OBJDIR} ${SRCTRI}/${OBJECTCODE}
 	touch ${OBJDIR}/dependencies
 	${MAKE} listobj
 	${MAKE} depend

@@ -4,9 +4,9 @@ SHELL=/bin/sh
 CPP=/usr/lib/cpp
 
 SRCDIR = ${SOLPSTOP}/src/Uinp/src
-SRCUIN = ${SOLPSTOP}/src/uinp
+SRCUIN = ${SOLPSTOP}/src/Uinp
 OBJDIR = ${SOLPSTOP}/bin/${OBJECTCODE}/Uinp
-BASEDIR = ${SOLPSTOP}/src/uinp
+BASEDIR = ${SOLPSTOP}/src/Uinp
 B2DIR = ${SOLPSTOP}/src/B2.5
 B2OBJ = ${SOLPSTOP}/bin/${OBJECTCODE}/B25eirene/B2.5
 EIRDIR = ${SOLPSTOP}/src/Eirene
@@ -59,7 +59,7 @@ ${OBJDIR}/libui.a: ${DEST}
 ${OBJDIR}/uinput.o: ${OBJDIR}/uiblkd.o
 
 clean:
-	rm -rf ${OBJDIR}/*.o ${OBJDIR}/*.f ${OBJDIR}/uinp ${OBJDIR}/libui.a
+	rm -rf ${OBJDIR}/*.o ${OBJDIR}/*.f ${OBJDIR}/uinp ${OBJDIR}/libui.a ${OBJDIR}/ub2p
 
 depend: ${OBJS:.o=.F} uiblkd.F uinput.F uiblb2.F ub2p.F
 	`which makedepend` -p'$${OBJDIR}/' ${SOLPS_CPP} -f- ${INCLUDE} $^ | \
@@ -77,7 +77,6 @@ ${BASEDIR}/LISTOBJ: listobj
 
 ${OBJDIR}/dependencies.${OBJECTCODE}:
 	-mkdir -p ${OBJDIR}
-	ln -s ${OBJDIR} ${SRCUIN}/${OBJECTCODE}
 	touch ${OBJDIR}/dependencies.${OBJECTCODE}
 	${MAKE} listobj
 	${MAKE} depend
