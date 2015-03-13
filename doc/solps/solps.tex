@@ -42,6 +42,7 @@
 \def\bottomfraction{.9}
 \def\textfraction{.1}
 \def\floatpagefraction{.9}
+\def\headsep{25pt}
 
 \hyphenation{author another created financial paper re-commend-ed Post-Script}
 
@@ -50,7 +51,8 @@
 \newcommand\SOLPSfivens{{\bf SOLPS 5.x}}
 \newcommand\SOLPSfiveone{{\bf SOLPS 5.1} }
 \newcommand\SOLPSfiveonens{{\bf SOLPS 5.1}}
-\newcommand\SOLPSITER{{\bf SOLPS-ITER}}
+\newcommand\SOLPSITER{{\bf SOLPS-ITER} }
+\newcommand\SOLPSITERns{{\bf SOLPS-ITER}}
 \newcommand{\btwoplot}{{\bf b2plot} }
 \newcommand{\btwoplotns}{{\bf b2plot}}
 \newcommand{\grad}{\nabla}
@@ -139,10 +141,11 @@ Braginskii in \verb!B2! (see \ref{sec:balescubraginskii} for a comparison).
 Some effort has been undertaken for the user to be able to toggle between the \SOLPSfour and
 \SOLPSfive numerical treatments. The interested reader is referred to the listing of run switches
 in section \ref{lis:b2cdci} for the complete list. Two converters also exist to transfer run output 
-from \SOLPSfour to \SOLPSfive and the other way around:
+from \SOLPSfour or \SOLPSfive to \SOLPSITERns:
 \begin{description}
-  \item[From 4 to 5] \verb!b2sxdr! located in \$\verb!{SOLPS4.0}/src/Braams/solps4-5!.
-  \item[From 5 to 4] \verb!b2xd!\index{b2xd} located in \$\verb!{SOLPS5.1}/base/b2!.
+  \item[From 4 to 5 and ITER] \verb!b2sxdr!\index{b2sxdr}
+  \item[From 5 and ITER to 4] \verb!b2xd!\index{b2xd}
+  \item[From 5 to ITER] \verb!b2yt!\index{b2yt} 
 \end{description}
 
 Additional documentation on other code versions can be found in the \$\verb!{SOLPSTOP}/doc! directory.
@@ -155,130 +158,62 @@ and an excellent review of \SOLPSfour can be found in:
 Martine_Baelmans_-_Juelich_Report_1994.pdf .
 \end{verbatim}
 
-Several of the new {\bf SOLPS4.2} features are detailed in \verb!Kotov_SOLPS42_Report.pdf!.
+Several of the {\bf SOLPS4.2} features are detailed in \verb!Kotov_SOLPS42_Report.pdf!.
 
-A Wiki\index{Wiki} for SOLPS can be found at\\
- \href{https://solps-mdsplus.aug.ipp.mpg.de/wiki/SOLPS/}{https://solps-mdsplus.aug.ipp.mpg.de/wiki/SOLPS/}\\
-In order to access the Wiki you will need to have obtained a subversion password (see the next section).
- 
 The next section discusses obtaining and updating the code.
 
 \section{Obtaining and updating the code}
 \label{solpsdistribution}\index{Obtaining the code}\index{B2, obtaining}\index{B2.5, obtaining}\index{SOLPS, obtaining}\index{Eirene, obtaining}\index{dg, obtaining}\index{DG, obtaining}\index{DivGeo, obtaining}\index{Carre, obtaining}\index{agg, obtaining}\index{Updating the code}\index{B2, updating}\index{B2.5, Updating}\index{SOLPS, Updating}\index{Eirene, Updating}\index{dg, Updating}\index{DG, updating}\index{DivGeo, Updating}\index{Carre, Updating}\index{agg, Updating}
 
-To obtain the code a request should be sent to David Coster
-(\verb!David.Coster@ipp.mpg.de!) in IPP--Garching.  
+To obtain the code a request should be sent to Xavier Bonnin
+(\verb!Xavier.Bonnin@iter.org!) at ITER, the code Responsible Officer (RO).  
 
-In addition, the form at\\
-\href{https://solps-mdsplus.aug.ipp.mpg.de/SOLPS/SOLPS\_application\_form\_external.pdf}{https://solps-mdsplus.aug.ipp.mpg.de/SOLPS/SOLPS\_application\_form\_external.pdf}\\
-should be completed and faxed to +49.89.3299-2580.
+The first formality will then be for the prospective users to obtain and IDM (ITER Document Management) account, in case they do not have one already. This account request will be done by the RO, and the requesting user will receive an automated electronic message asking for confirmation of the provided e-mail address. With this account, the user will have access to the \SOLPSITER GIT repository (\href{https://git.iter.org/projects/BND/repos/solps-iter/browse}{https://git.iter.org/projects/BND/repos/solps-iter/browse}) maintained at the IO, the \SOLPSITER SharePoint web site hosted by ITER, and a dedicated IDM folder (\href{https://user.iter.org/?uid=Q92BAQ}{https://user.iter.org/?uid=Q92BAQ}) for various \SOLPSITER related materials. This will also serve as registration of the user to the \SOLPSITER mailing list (\verb!SOLPS-ITER@iter.org!).
 
-Assuming that the formalities have been completed, you will need to obtain access to the subversion repositories.  To do this, the following information is required:
+The \SOLPSITER Git repository also includes the repositories for \verb!B2.5!, \verb!EIRENE!, \verb!Carre! and \verb!DivGeo! individually as submodules.
+
+One can generally browse the ITER Git repositories here: \href{https://git.iter.org}{https://git.iter.org} and \SOLPSITER specifically here: \href{https://git.iter.org/projects/BND/repos/solps-iter/browse}{https://git.iter.org/projects/BND/repos/solps-iter/browse}, but since these repositories are restricted users will first need to authenticate with their ITER (IDM) username and password - possibly twice, once for the intranet, and once for the Git web front end in the top right-hand corner in the web browser window.
+
+To do this, one must upload a copy of their public ssh key here: \href{https://git.iter.org/plugins/servlet/ssh/account/keys}{https://git.iter.org/plugins/servlet/ssh/account/keys} (by following links under ``Manage Account''). Then one should be able to simply clone a copy of \SOLPSITER to a local machine by doing:
+
 \begin{verbatim}
-<<<
-For you to be able to access the SOLPS subversion server, you first need to do the 
-following:
-  a. access the website "https://solps-mdsplus.aug.ipp.mpg.de/passwd.html"
-  b. fill out the username and password fields
-      if you have an account at IPP, I suggest you use the that username, but it 
-      is your choice
-      I would suggest that you not use your AFS password, since:
-        the password is stored in cleartext in your home file-space
-        the password travels across the network in cleartext (if you use the http
-        version instead of https)
-  c. click on the "Encrypt" button
-  d. send me the complete line below the heading "Password Creator" (it should start 
-     with your username)
-
-I will then add you to the list of people who can access the repository.
-
-The repository is available at
-  https://solps-mdsplus.aug.ipp.mpg.de/repos/SOLPS/
-with the main codes at the level of
-  https://solps-mdsplus.aug.ipp.mpg.de/repos/SOLPS/trunk/
-
-As an example:
-
-15:15> svn list https://solps-mdsplus.aug.ipp.mpg.de/repos/SOLPS/trunk/
-README
-solps3.1/
-solps4.0/
-solps4.2/
-solps5.0/
-solps5.1/
-solps5.2/
-solps6.0/
-solps_data/
-solps_examples/
-solps_other/
-15:15> 
->>>
+> git clone ssh://git@git.iter.org/bnd/solps-iter.git
+> cd solps-iter
+> git submodule init
+> git submodule update
 \end{verbatim}
 
-The currently supported method for distributing the SOLPS suite of
-codes is via Subversion.  The repository is at
-\href{https://solps-mdsplus.aug.ipp.mpg.de/repos/SOLPS}{https://solps-mdsplus.aug.ipp.mpg.de/repos/SOLPS}.
-Assuming that
-the user wants \SOLPSfiveonens, the following commands should be used:
+Since the user-id is immutably encoded into any changes, it is always a good idea to properly configure a local installation of Git on all the systems on which one plans on making code revisions with, e.g.:
+
 \begin{verbatim}
-svn co https://solps-mdsplus.aug.ipp.mpg.de/repos/SOLPS/trunk/solps_data solps_data
-
-svn co https://solps-mdsplus.aug.ipp.mpg.de/repos/SOLPS/trunk/solps_other solps_other
-
-svn co https://solps-mdsplus.aug.ipp.mpg.de/repos/SOLPS/trunk/solps5.1 solps5.1
+> git config --global user.name "Your Name"
+> git config --global user.email your.name@anywhere.you.are
 \end{verbatim}
 
-The first checks out the ``data'' that is shared by a number of SOLPS
-versions; the second checks out some additional shared information;
-and the third then checks out the trunk version of {\bf SOLPS5.1}.
+Users all have write access to these repositories although not to the \verb!develop!, \verb!master! or \verb!svn/*! branches.  This basically means one should create \verb!feature/[topic]!, \verb!bugfix/[topic]!, or \verb!hotfix/[topic]! branches and raise a ``Pull Request'' (\href{https://git.iter.org/projects/BND/repos/solps-iter/pull-requests}{https://git.iter.org/projects/BND/repos/solps-iter/pull-requests}) to have them merged into the \verb!develop! branch after pushing them back to the ITER repository.
 
-It should be possible to obtain a ``tarball'' using the web interface to the SOLPS repository at
-\begin{verbatim}
-https://solps-mdsplus.aug.ipp.mpg.de/wsvn/SOLPS/trunk/
-\end{verbatim}
+Issues are handled using JIRA (\href{https://jira.iter.org/browse/IMAS}{https://jira.iter.org/browse/IMAS}) and users should feel encouraged to create new issues associated with \SOLPSITER (selected from the drop-down list of components) if they have any problems or suggestions. (Please ignore the options associated with resource estimates and sprints.)
 
-When using Subversion, ensuring that your local version is current is
-trivially achieved using the \verb!svn update! command.
+For more general help with Git, we can recommend the documentation here (\href{http://git-scm.com/}{http://git-scm.com/}) and the Pro Git book (linked from there) in particular.
 
-\verb!SOLPS! is a complicated code package and it would be difficult to learn
-how to install, compile and run it from this document and the internal
-documentation alone.  In the past we have found that an initial visit
-of at least two weeks to Garching with subsequent visits, or about two
-months and no further visits are desirable.  As mentioned above, if
-more than minimal support is required from Garching, an account with
-\verb!ssh! access and sufficient disk space for testing would be
-needed.
+When using Git, checking that your local version is current is trivially achieved using the \verb!git status! command.
 
-When using distribution methods 1 through 4, some of the pieces of \SOLPSfive rely on the
-presence of \SOLPSfour at the same level of the tree (\verb!DivGeo!
-and \verb!Eirene! are identical for the two codes).  This means that
-if you want to use these parts, \SOLPSfour also needs to be
-transferred.  This restriction has been partially lifted by the Subversion scheme,
-which instead provides you with a self-consistent tree structure.
+\SOLPSITER is a complicated code package and it would be difficult to learn how to install, compile and run it from this document and the internal documentation alone.  In the past we have found that an initial visit of at least two weeks to a research team already proficient with \SOLPSITER use with subsequent visits, or about two months and no further visits, are desirable.  
 
-Two other useful tools for users and developers are the PlasmaWiki\index{PlasmaWiki}, found at\\
-\href{http://solps-mdsplus.aug.ipp.mpg.de/mediawiki/}{http://solps-mdsplus.aug.ipp.mpg.de/mediawiki/}\\
-and the mailing lists
-\verb!solps-user! and \verb!solps-developer! (both moderated), to which one can
-subscribe by sending an email to \verb!majordomo@rzg.mpg.de! containing
-\begin{verbatim}
-  subscribe solps-user
-\end{verbatim}
-or 
-\begin{verbatim}
-  subscribe solps-developer
-\end{verbatim}
-or both. For all of those, confirmation of membership will be provided by
-Garching. \index{solps-user mailing list}\index{solps-developer mailing list}
+The Git \SOLPSITER repository is structured as a self-contained whole, but some effort was also devoted to be able to check out, as individual stand-alone modules, the main pieces of the SOLPS suite, i.e. \verb!DivGeo!, \verb!Carre!, \verb!Eirene! and \verb!B2.5!, although this is not recommended.
 
 \section{Requirements}
 \index{Requirements}
 
+To use the \SOLPSITER code suite, the user will need, locally installed:
+
 \begin{description}
-\item[Fortran 90/95 Compiler] the main programs are written in \verb!FORTRAN 90!;
-  some routines still require a ``-r8'' option
+\item[Fortran 90/95 Compiler] the main programs are written in \verb!FORTRAN 90!; some routines still require a ``-r8'' option
+\item[C Compiler] the \verb!DivGeo! code and a few utility routines are written in \verb!C!
 \item[NAG]\index{NAG} mathematical library (optional)
 \item[NCAR] plotting library
+\item[NetCDF]\index{netcdf} storage/archival library (optional)
+\item[LaTeX interpreter] to produce this manual
 \item[/bin/bash] used by some scripts
 \item[/bin/csh] used by some scripts
 \item[/bin/ksh] used by some scripts
@@ -287,25 +222,16 @@ Garching. \index{solps-user mailing list}\index{solps-developer mailing list}
 \end{description}
 
 If there exists a locally available version of the NAG mathematical library, a copy or
-link to it should be put in the \$\verb!{SOLPSTOP}/src/lib/!\$\verb!{OBJECTCODE}! directory,
-under the name \verb!libnag.a!. If the library isn't available, then the BLAS and
-LAPACK packages should be put instead in the same directory. These latter libraries
-are publicly available. When establishing the \verb!SOLPS! environment, the code
-will check for the presence of the NAG library and adjust compiler options
+link to it should be put in the \$\verb!{SOLPSTOP}/lib/!\$\verb!{OBJECTCODE}! directory,
+under the name \verb!libnag.a!. If the library is not available, then the BLAS and
+LAPACK packages will be used instead. These latter libraries
+are publicly available. The source code is distributed with \SOLPSITER and can be found in the \$\verb!{SOLPSTOP}/lib/blaslapack! directory. The BLASLAPACK library will be automatically built at compile time by the \SOLPSITER master \verb!Makefile!. 
+
+When establishing the \SOLPSITER environment, the code
+will check for the presence of the NAG and NCAR libraries and adjust compiler options
 accordingly.
 
-The source code or pre-compiled versions of most of the libraries used by \verb!SOLPS! can be found
-in the \verb!solps_other! directory, located at the same level as \$\verb!SOLPSTOP! in the SVN
-repository and on your installation if you followed the instructions in the previous section.
-One can then compile and install all the libraries by invoking, from the \verb!solps_other! directory:
-\begin{verbatim}
-source install.sh
-\end{verbatim}
-for a simple installation, or
-\begin{verbatim}
-source clean_install.sh
-\end{verbatim}
-for an installation with a clean of any previously existing compiled files. These scripts require the user
+The master \SOLPSITER \verb!Makefile! will first compile and install all the included libraries by invoking the \verb!install.sh! script from the \$\verb!{SOLPSTOP}/lib/! directory. If the user wishes to re-install the libraries with a clean of any previously existing compiled files, the \verb!clean_install.sh! script is available for this purpose in the same location. These scripts require the user
 to have properly defined the \verb!FC! environment variable which gives the preferred Fortran compiler.
 The default value for this is ``f77'' but that may not be apropriate for all systems. If compiling the
 \verb!Sonnet! library, the user should first do:
@@ -313,9 +239,6 @@ The default value for this is ``f77'' but that may not be apropriate for all sys
 fs sysname
 \end{verbatim}
 and copy the result in \verb!solps_other\sonnet-light\Makefile!. 
-
-There is also a Windows version of \verb!B2.5! that is used in Saint-Petersburg and Paris
-but is {\bf not} supported by Garching.
 
 \section{Platforms}
 \index{Platforms}
@@ -341,6 +264,8 @@ At the moment the following platforms are ``supported'':
   \item[Intel compiler] recently implemented --- seems to work
   \end{description}
 \end{description}
+
+Some Windows implementations have been attempted, and require an additional \verb!-DWINDOWS! compiler switch, but are not currently being supported.
 
 \chapter{The structure}
 \label{cha:structure}
@@ -394,14 +319,6 @@ SOLPSTOP
 |   +---linux.ifort64
 |   +---gligks
 |   +---mscl
-+---.git
-|   +---branches
-|   +---objects
-|   +---info
-|   +---hooks
-|   +---refs
-|   +---modules
-|   +---logs
 +---src
 |   +---uinp
 |   +---fxdr
