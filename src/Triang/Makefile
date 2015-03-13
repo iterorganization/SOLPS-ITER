@@ -23,8 +23,8 @@ else
 VPATH =${SRCDIR}/modules:${SRCDIR}/src
 endif
 
-ifeq ($(shell [ -e ${SRCTRI}/LISTOBJ ] && echo yes || echo no ),yes)
-include ${SRCTRI}/LISTOBJ
+ifeq ($(shell [ -e ${OBJDIR}/LISTOBJ ] && echo yes || echo no ),yes)
+include ${OBJDIR}/LISTOBJ
 endif
 include ${SRCTRI}/config/compile
 MAKES = ${SRCTRI}/Makefile ${SRCTRI}/config/compile ${SRCTRI}/config/compiler.${OBJECTCODE}
@@ -94,14 +94,14 @@ update:
 	cd $(SOLPSTOP); gmake update
 
 listobj:
-	@rm -f ${SRCTRI}/LISTOBJ ; touch ${SRCTRI}/LISTOBJ ; l="OBJS =" ; \
+	@rm -f ${OBJDIR}/LISTOBJ ; touch ${OBJDIR}/LISTOBJ ; l="OBJS =" ; \
 	for d in `echo "$(VPATH)" | tr : \ `; do \
 		l="$$l `(cd $$d > /dev/null; echo *.f)`"; \
 	done; \
 	E="-e 's/\.f/\.o/g'" ; for f in $(MAINLIST); do \
 		E="$$E -e 's/ $$f//'"; \
 	done; \
-	echo "$$l" | eval sed "$$E" > ${SRCTRI}/LISTOBJ
+	echo "$$l" | eval sed "$$E" > ${OBJDIR}/LISTOBJ
 
 tags:
 ifeq ($(LOCAL),yes)
@@ -110,7 +110,7 @@ else
 	rm -f ${SRCTRI}/TAGS ; etags -o ${SRCTRI}/TAGS ${SRCDIR}/*/*.f
 endif
 
-${SRCTRI}/LISTOBJ: listobj
+${OBJDIR}/LISTOBJ: listobj
 
 ${OBJDIR}/dependencies: 
 	-mkdir -p ${OBJDIR}

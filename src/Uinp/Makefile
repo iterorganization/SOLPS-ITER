@@ -34,8 +34,8 @@ MNEXTRA = ${B2OBJ}/open_file.o
 
 VPATH = ${SRCDIR}
 
-ifeq ($(shell [ -e ${BASEDIR}/LISTOBJ ] && echo yes || echo no ),yes)
-include ${BASEDIR}/LISTOBJ
+ifeq ($(shell [ -e ${OBJDIR}/LISTOBJ ] && echo yes || echo no ),yes)
+include ${OBJDIR}/LISTOBJ
 endif
 
 DEST = $(OBJS:%.o=$(OBJDIR)/%.o)
@@ -66,14 +66,14 @@ depend: ${OBJS:.o=.F} uiblkd.F uinput.F uiblb2.F ub2p.F
 	sed 's,^$${OBJDIR}/[^ ][^ ]*/,\$${OBJDIR}/,' > ${OBJDIR}/dependencies.${OBJECTCODE}
 
 listobj:
-	@cd src ; rm -f ${BASEDIR}/LISTOBJ; touch ${BASEDIR}/LISTOBJ; \
+	@cd src ; rm -f ${OBJDIR}/LISTOBJ; touch ${OBJDIR}/LISTOBJ; \
 	echo "OBJS =" *.F | sed -e 's/ [^ /]*\// /g' -e 's/\.F/.o/g' | \
-	sed -e 's/ub2p.o//' -e 's/uinput.o//' -e 's/uiblkd.o//' -e 's/uiblb2.o//' > ${BASEDIR}/LISTOBJ
+	sed -e 's/ub2p.o//' -e 's/uinput.o//' -e 's/uiblkd.o//' -e 's/uiblb2.o//' > ${OBJDIR}/LISTOBJ
 
 tags:
 	rm -f ${BASEDIR}/TAGS ; etags -o ${BASEDIR}/TAGS ${SRCDIR}/*.F ${SRCDIR}/*.h ${SRCDIR}/*.inc
 
-${BASEDIR}/LISTOBJ: listobj
+${OBJDIR}/LISTOBJ: listobj
 
 ${OBJDIR}/dependencies.${OBJECTCODE}:
 	-mkdir -p ${OBJDIR}
