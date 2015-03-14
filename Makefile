@@ -2,9 +2,9 @@
 BINDIR = ${PWD}/bin/${OBJECTCODE}
 
 
-solps:     libs carre divgeo eirene     b25eirene     uinp triang manual
+solps:     libs carre divgeo b25eirene     uinp triang manual
 
-solps_mpi: libs carre divgeo eirene_mpi b25eirene_mpi uinp triang manual
+solps_mpi: libs carre divgeo b25eirene_mpi uinp triang manual
 
 
 all:     libs carre divgeo b25     eirene     b25eirene     uinp triang manual
@@ -39,13 +39,9 @@ divgeo:
 
 eirene:
 	cd src/Eirene; ${MAKE} OBJDIR=${BINDIR}/Eirene
-	@ln -sf ${BINDIR}/Eirene/eirobj  ${BINDIR}
-	@ln -sf ${BINDIR}/Eirene/eirobjx ${BINDIR}
 
 eirene_mpi:
 	cd src/Eirene; ${MAKE} OBJDIR=${BINDIR}/Eirene.mpi USE_MPI=-DUSE_MPI
-	@ln -sf ${BINDIR}/Eirene.mpi/eirobj  ${BINDIR}/eirobj.mpi
-	@ln -sf ${BINDIR}/Eirene.mpi/eirobjx ${BINDIR}/eirobjx.mpi
 
 
 b25:
@@ -57,11 +53,15 @@ b25_mpi:
 
 b25eirene:
 	cd src/Eirene; ${MAKE} OBJDIR=${BINDIR}/B25eirene/Eirene USE_B25=-DB25_EIRENE
+	@ln -sf ${BINDIR}/B25Eirene/Eirene/eirobj  ${BINDIR}
+	@ln -sf ${BINDIR}/B25Eirene/Eirene/eirobjx ${BINDIR}
 	cd src/B2.5;   ${MAKE} OBJDIR=${BINDIR}/B25eirene/B2.5 OBJDIREIR=${BINDIR}/B25eirene/Eirene USE_EIRENE=-DB25_EIRENE
 	@ln -sf ${BINDIR}/B25eirene/B2.5/*.exe ${BINDIR}
 
 b25eirene_mpi:
 	cd src/Eirene; ${MAKE} OBJDIR=${BINDIR}/B25eirene.mpi/Eirene USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI
+	@ln -sf ${BINDIR}/B25Eirene.mpi/Eirene/eirobj  ${BINDIR}/eirobj.mpi
+	@ln -sf ${BINDIR}/B25Eirene.mpi/Eirene/eirobjx ${BINDIR}/eirobjx.mpi
 	cd src/B2.5;   ${MAKE} OBJDIR=${BINDIR}/B25eirene.mpi/B2.5 OBJDIREIR=${BINDIR}/B25eirene.mpi/Eirene USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
 	find -wholename "${BINDIR}/B25eirene.mpi/*.exe" -exec ln -s {} "${BINDIR}" \;
 
