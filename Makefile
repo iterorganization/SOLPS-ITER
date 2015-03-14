@@ -63,7 +63,7 @@ b25eirene:
 b25eirene_mpi:
 	cd src/Eirene; ${MAKE} OBJDIR=${BINDIR}/B25eirene.mpi/Eirene USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI
 	cd src/B2.5;   ${MAKE} OBJDIR=${BINDIR}/B25eirene.mpi/B2.5 OBJDIREIR=${BINDIR}/B25eirene.mpi/Eirene USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
-	find -name "${BINDIR}/B25eirene.mpi/*.exe" -exec ln -s {} "${BINDIR}" \;
+	find -wholename "${BINDIR}/B25eirene.mpi/*.exe" -exec ln -s {} "${BINDIR}" \;
 
 uinp:
 	cd src/Uinp; ${MAKE}
@@ -124,10 +124,10 @@ depend:
 	cd src/B2.5;           ${MAKE} OBJDIR=${BINDIR}/B25eirene.mpi/B2.5 OBJDIREIR=${BINDIR}/B25eirene.mpi/Eirene USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI depend
 
 VERSION:
-	cd src/B2.5;   rm src.local/git_version.h;   ${MAKE} VERSION
-	cd src/Eirene; rm local/git_version.h;       ${MAKE} VERSION
-	cd src/Carre;  rm src/include/git_version.h; ${MAKE} VERSION
-	cd src/DivGeo; rm src/git_version.h;         ${MAKE} VERSION
+	cd src/B2.5;   ${MAKE} VERSION
+	cd src/Eirene; ${MAKE} VERSION
+	cd src/Carre;  ${MAKE} VERSION
+	cd src/DivGeo; ${MAKE} VERSION
 
 
 

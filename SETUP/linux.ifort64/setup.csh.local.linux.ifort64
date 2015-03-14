@@ -21,7 +21,6 @@ case "*.iter.org":
   module load git
   module load texlive
   module load ghostscript
-  module load ncl
   module load hdf5
   breaksw
 case "*.iferc-csc.org":
