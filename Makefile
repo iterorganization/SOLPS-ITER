@@ -52,18 +52,18 @@ b25_mpi:
 
 
 b25eirene:
-	cd src/Eirene; ${MAKE} OBJDIR=${BINDIR}/B25eirene/Eirene USE_B25=-DB25_EIRENE
+	cd src/Eirene; ${MAKE} OBJDIR=${BINDIR}/B25Eirene/Eirene USE_B25=-DB25_EIRENE
 	@ln -sf ${BINDIR}/B25Eirene/Eirene/eirobj  ${BINDIR}
 	@ln -sf ${BINDIR}/B25Eirene/Eirene/eirobjx ${BINDIR}
-	cd src/B2.5;   ${MAKE} OBJDIR=${BINDIR}/B25eirene/B2.5 OBJDIREIR=${BINDIR}/B25eirene/Eirene USE_EIRENE=-DB25_EIRENE
-	@ln -sf ${BINDIR}/B25eirene/B2.5/*.exe ${BINDIR}
+	cd src/B2.5;   ${MAKE} OBJDIR=${BINDIR}/B25Eirene/B2.5 OBJDIREIR=${BINDIR}/B25Eirene/Eirene USE_EIRENE=-DB25_EIRENE
+	@ln -sf ${BINDIR}/B25Eirene/B2.5/*.exe ${BINDIR}
 
 b25eirene_mpi:
-	cd src/Eirene; ${MAKE} OBJDIR=${BINDIR}/B25eirene.mpi/Eirene USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI
+	cd src/Eirene; ${MAKE} OBJDIR=${BINDIR}/B25Eirene.mpi/Eirene USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI
 	@ln -sf ${BINDIR}/B25Eirene.mpi/Eirene/eirobj  ${BINDIR}/eirobj.mpi
 	@ln -sf ${BINDIR}/B25Eirene.mpi/Eirene/eirobjx ${BINDIR}/eirobjx.mpi
-	cd src/B2.5;   ${MAKE} OBJDIR=${BINDIR}/B25eirene.mpi/B2.5 OBJDIREIR=${BINDIR}/B25eirene.mpi/Eirene USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
-	find -wholename "${BINDIR}/B25eirene.mpi/*.exe" -exec ln -s {} "${BINDIR}" \;
+	cd src/B2.5;   ${MAKE} OBJDIR=${BINDIR}/B25Eirene.mpi/B2.5 OBJDIREIR=${BINDIR}/B25Eirene.mpi/Eirene USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
+	find -wholename "${BINDIR}/B25Eirene.mpi/*.exe" -exec ln -s {} "${BINDIR}" \;
 
 uinp:
 	cd src/Uinp; ${MAKE}
@@ -100,10 +100,10 @@ listobj:
 	cd src/DivGeo;         ${MAKE} listobj
 #	cd src/Carre;          ${MAKE} OBJDIR=${BINDIR}/Carre listobj
 #	cd src/DivGeo;         ${MAKE} OBJDIR=${BINDIR}/DivGeo listobj
-	cd src/Eirene;         ${MAKE} OBJDIR=${BINDIR}/B25eirene/Eirene USE_B25=-DB25_EIRENE listobj
-	cd src/Eirene;         ${MAKE} OBJDIR=${BINDIR}/B25eirene.mpi/Eirene USE_B25=-DB25_EIRENE USE_MPI=-DUSE_MPI listobj
-	cd src/B2.5;           ${MAKE} OBJDIR=${BINDIR}/B25eirene/B2.5 OBJDIREIR=${BINDIR}/B25eirene/Eirene USE_EIRENE=-DB25_EIRENE listobj
-	cd src/B2.5;           ${MAKE} OBJDIR=${BINDIR}/B25eirene.mpi/B2.5 OBJDIREIR=${BINDIR}/B25eirene.mpi/Eirene USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI listobj
+	cd src/Eirene;         ${MAKE} OBJDIR=${BINDIR}/B25Eirene/Eirene USE_B25=-DB25_EIRENE listobj
+	cd src/Eirene;         ${MAKE} OBJDIR=${BINDIR}/B25Eirene.mpi/Eirene USE_B25=-DB25_EIRENE USE_MPI=-DUSE_MPI listobj
+	cd src/B2.5;           ${MAKE} OBJDIR=${BINDIR}/B25Eirene/B2.5 OBJDIREIR=${BINDIR}/B25Eirene/Eirene USE_EIRENE=-DB25_EIRENE listobj
+	cd src/B2.5;           ${MAKE} OBJDIR=${BINDIR}/B25Eirene.mpi/B2.5 OBJDIREIR=${BINDIR}/B25Eirene.mpi/Eirene USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI listobj
 
 depend:
 	cd src/Carre;          ${MAKE} depend
@@ -118,10 +118,10 @@ depend:
 #	cd src/Carre;          ${MAKE} OBJDIR=${BINDIR}/Carre depend
 #	cd src/DivGeo;         ${MAKE} OBJDIR=${BINDIR}/DivGeo depend
 #	cd src/DivGeo/equtrn;  ${MAKE} OBJDIR=${BINDIR}/DivGeo/equtrn depend
-	cd src/Eirene;         ${MAKE} OBJDIR=${BINDIR}/B25eirene/Eirene USE_B25=-DB25_EIRENE depend
-	cd src/Eirene;         ${MAKE} OBJDIR=${BINDIR}/B25eirene.mpi/Eirene USE_B25=-DB25_EIRENE USE_MPI=-DUSE_MPI depend
-	cd src/B2.5;           ${MAKE} OBJDIR=${BINDIR}/B25eirene/B2.5 OBJDIREIR=${BINDIR}/B25eirene/Eirene USE_EIRENE=-DB25_EIRENE depend
-	cd src/B2.5;           ${MAKE} OBJDIR=${BINDIR}/B25eirene.mpi/B2.5 OBJDIREIR=${BINDIR}/B25eirene.mpi/Eirene USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI depend
+	cd src/Eirene;         ${MAKE} OBJDIR=${BINDIR}/B25Eirene/Eirene USE_B25=-DB25_EIRENE depend
+	cd src/Eirene;         ${MAKE} OBJDIR=${BINDIR}/B25Eirene.mpi/Eirene USE_B25=-DB25_EIRENE USE_MPI=-DUSE_MPI depend
+	cd src/B2.5;           ${MAKE} OBJDIR=${BINDIR}/B25Eirene/B2.5 OBJDIREIR=${BINDIR}/B25Eirene/Eirene USE_EIRENE=-DB25_EIRENE depend
+	cd src/B2.5;           ${MAKE} OBJDIR=${BINDIR}/B25Eirene.mpi/B2.5 OBJDIREIR=${BINDIR}/B25Eirene.mpi/Eirene USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI depend
 
 VERSION:
 	cd src/B2.5;   ${MAKE} VERSION
@@ -182,14 +182,14 @@ clean_b25_mpi:
 
 
 clean_b25eirene:
-	cd src/Eirene; ${MAKE} clean OBJDIR=${BINDIR}/B25eirene/Eirene USE_B25=-DB25_EIRENE
-	cd src/B2.5;   ${MAKE} clean OBJDIR=${BINDIR}/B25eirene/B2.5 OBJDIREIR=${BINDIR}/B25eirene/Eirene USE_EIRENE=-DB25_EIRENE
+	cd src/Eirene; ${MAKE} clean OBJDIR=${BINDIR}/B25Eirene/Eirene USE_B25=-DB25_EIRENE
+	cd src/B2.5;   ${MAKE} clean OBJDIR=${BINDIR}/B25Eirene/B2.5 OBJDIREIR=${BINDIR}/B25Eirene/Eirene USE_EIRENE=-DB25_EIRENE
 	rm -f ${BINDIR}/*.exe
 
 
 clean_b25eirene_mpi:
-	cd src/Eirene; ${MAKE} clean OBJDIR=${BINDIR}/B25eirene.mpi/Eirene USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI
-	cd src/B2.5;   ${MAKE} clean OBJDIR=${BINDIR}/B25eirene.mpi/B2.5 OBJDIREIR=${BINDIR}/B25eirene.mpi/Eirene USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
+	cd src/Eirene; ${MAKE} clean OBJDIR=${BINDIR}/B25Eirene.mpi/Eirene USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI
+	cd src/B2.5;   ${MAKE} clean OBJDIR=${BINDIR}/B25Eirene.mpi/B2.5 OBJDIREIR=${BINDIR}/B25Eirene.mpi/Eirene USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
 	rm -f ${BINDIR}/*.exe.mpi
 
 
