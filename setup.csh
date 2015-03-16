@@ -115,7 +115,7 @@ setenv EscapeSonnet `echo ${SonnetTopDirectory} | sed 's:\/:\\\/:g'`
 setenv DG ${SOLPSTOP}/src/DivGeo
 setenv CARRE_STOREDIR $SOLPSTOP/src/Carre/SAVE 
 
-setenv PATH ${SOLPSTOP}/bin/${OBJECTCODE}:${SOLPSTOP}/scripts:${PATH}
+setenv PATH ${SOLPSTOP}/scripts:${SOLPSTOP}/bin/${OBJECTCODE}:${PATH}
 if ($?MANPATH) then
   setenv MANPATH ${MANPATH}:${SonnetTopDirectory}/man:${DG}/equtrn/doxygen/man
 else

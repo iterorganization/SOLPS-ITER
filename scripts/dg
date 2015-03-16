@@ -17,7 +17,7 @@ export DG_EXPORT_MESH_MASK="$DG_MESH_MASK"
 
 [ -d equilibria ] && export DG_EQUIL_MASK="$PWD/equilibria/*.equ"
 
-[ -d "${SOLPSTOP}/src/DivGeo/dg/topologies" ] && export DG_IMPORT_TOPOLOGY_MASK="${SOLPSTOP}/src/DivGeo/dg/topologies/*" 
+[ -d "${SOLPSTOP}/src/DivGeo/topologies" ] && export DG_IMPORT_TOPOLOGY_MASK="${SOLPSTOP}/src/DivGeo/topologies/*" 
 
 unset vers cfg
 [ -s ~/.dg_version ] && vers=`cat ~/.dg_version`
@@ -33,13 +33,12 @@ while true; do {
 [ -n "$vers" ] && {
   print -u2 "dg version: $vers"
   vers=".$vers"
-  [ -s "${SOLPSTOP}/src/DivGeo/dg/dg.dgc${vers}" ] && {
-    cfg="-cfg ${SOLPSTOP}/src/DivGeo/dg/dg.dgc${vers}"
+  [ -s "${SOLPSTOP}/src/DivGeo/dg.dgc${vers}" ] && {
+    cfg="-cfg ${SOLPSTOP}/src/DivGeo/dg.dgc${vers}"
   } || {
     print -u2 "No configuration file available for this version"
     cfg="-nocfg"
   } 
 }
 
-
-dg.exe${vers} $cfg $* &
+$SOLPSTOP/bin/$OBJECTCODE/dg${vers} $cfg $* &

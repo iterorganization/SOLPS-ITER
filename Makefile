@@ -32,7 +32,7 @@ divgeo:
 	cd src/DivGeo;         ${MAKE} OBJDIR=${BINDIR}/DivGeo
 	cd src/DivGeo/equtrn;  ${MAKE} OBJDIR=${BINDIR}/DivGeo/equtrn
 	cd src/DivGeo/convert; ${MAKE} OBJDIR=${BINDIR}/DivGeo/convert
-	@ln -sf ${BINDIR}/DivGeo/dg ${BINDIR}
+	@ln -sf ${BINDIR}/DivGeo/{dg,dg.dgc,dg.dgh} ${BINDIR}
 	@ln -sf ${BINDIR}/DivGeo/convert/{cnveir,cnvtria} ${BINDIR}
 	@ln -sf ${BINDIR}/DivGeo/equtrn/{cropequ,dg2dg,dg2ef,dg2vr,ef2dg,jt2dg,nk2dg,pb2dg,prinequ,pt2dg,risepsi,vr2dg} ${BINDIR}
 
@@ -136,9 +136,9 @@ VERSION:
 
 clean: clean_solps
 
-clean_solps:     clean_carre clean_divgeo clean_eirene     clean_b25eirene     clean_uinp clean_triang
+clean_solps:     clean_carre clean_divgeo clean_b25eirene     clean_uinp clean_triang
 
-clean_solps_mpi: clean_carre clean_divgeo clean_eirene_mpi clean_b25eirene_mpi clean_uinp clean_triang
+clean_solps_mpi: clean_carre clean_divgeo clean_b25eirene_mpi clean_uinp clean_triang
 
 
 clean_all:       clean_carre clean_divgeo clean_b25     clean_eirene     clean_b25eirene     clean_uinp clean_triang
@@ -156,7 +156,7 @@ clean_divgeo:
 	cd src/DivGeo;         ${MAKE} clean OBJDIR=${BINDIR}/DivGeo
 	cd src/DivGeo/equtrn;  ${MAKE} clean OBJDIR=${BINDIR}/DivGeo/equtrn
 	cd src/DivGeo/convert; ${MAKE} clean OBJDIR=${BINDIR}/DivGeo/convert
-	rm -f ${BINDIR}/dg
+	rm -f ${BINDIR}/{dg,dg.dgc,dg.dgh}
 	rm -f ${BINDIR}/{cropequ,dg2dg,dg2ef,dg2vr,ef2dg,jt2dg,nk2dg,pb2dg,prinequ,pt2dg,risepsi,vr2dg}
 	rm -f ${BINDIR}/{cnveir,cnvtria}
 
