@@ -12,8 +12,9 @@ c*** 1
       integer nmach,nmode,ntcpu,nfile,niter0,niter,ntime0,ntim1,nfullrun 
       integer noptim,noptm1,ngeom_usr,ncoup_input,nsmstra,
      ,        nstoram,ngstal,nrtal1,nreac_add 
-      logical nlscl,nltest,nlana,nldrft,nlcrr,nlerg,lident,lhaber,
-     ,  nexvs,nrescflux,nloldran,nlcascad,nloctree,nlwrmsh,nltrimesh 
+      logical nlscl,nltest,nlana,nldrft,nlcrr,nlerg,nlident,nlone,
+     ,        ltstv,nldfst,nloldran,nlcascad,nloctree,nlwrmsh,
+     ,        nexvs,nltrimesh 
       character txtrun*71
 
 c*** 2
@@ -435,8 +436,8 @@ c*** 15
      ,  xcoor,ycoor,zcoor,xpolpos,ypolpos 
 
       common/uinlog/ 
-     ,  nlscl,nltest,nlana,nldrft,nlcrr,nlerg,lident,lhaber,
-     ,  nexvs,nrescflux,nloldran,nlcascad,nloctree,nlwrmsh,nltrimesh, 
+     ,  nlscl,nltest,nlana,nldrft,nlcrr,nlerg,nlident,nlone,
+     ,  ltstv,nldfst,nloldran,nlcascad,nloctree,nlwrmsh,nexvs,nltrimesh, 
      ,  nlrad,nlslb,nlcrc,nlell,nltri,nlplg,nlfem,nltet,nlgen,
      ,  nlpol,nlply,nlpla,nlplp,nltor,nltrz,nltra,nltrt,
      ,  nlmlt,nladd,lconst,nltrim,nlavrp,nlavrt,nlsymp,nlsymt,

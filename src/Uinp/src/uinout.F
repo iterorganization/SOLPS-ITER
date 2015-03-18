@@ -127,8 +127,9 @@ c*** 1.  General data for the run
       write(iunoo,707) noptim,noptm1,ngeom_usr,ncoup_input,
      .                 nsmstra,nstoram,ngstal,nrtal1,nreac_add
       write(iunoo,706) nlscl,nltest,nlana,nldrft,nlcrr,
-     .                 nlerg,lident,lhaber,nexvs,nrescflux,
-     .                 nloldran,nlcascad,nloctree,nlwrmsh,nltrimesh
+     .                 nlerg,nlident,nlone,ltestv,nldsft,
+     .                 nloldran,nlcascad,nloctree,nlwrmsh,nexvs,
+     .                 nltrimesh
       write(iunoo,720) utxtfl(1)
       write(iunoo,720) utxtfl(2)
       write(iunoo,720) utxtfl(3)
