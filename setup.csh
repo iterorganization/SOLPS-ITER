@@ -1,7 +1,11 @@
 #! /bin/tcsh -f
 
 echo "Welcome to SOLPS-ITER!"
-echo "Documentation can be found at: https://user.iter.org/?uid=QB8YQ2 (requires IDM account)"
+echo "Documentation can be found at:"
+echo "https://portal.iter.org/departments/POP/CM/IMAS/Forms/AllItems.aspx"
+echo "(requires ITER IDM account)"
+echo "The full SOLPS-ITER manual can be found in SOLPSTOP/doc/solps/solps.pdf"
+echo "The Eirene manual is located at http://www.eirene.de/"
 
 setenv SOLPSTOP $PWD
 
@@ -137,8 +141,7 @@ alias sbr 'cd ${SOLPSTOP}/runs'
 alias scr 'cd ${SOLPSTOP}/scripts'
 alias stop 'cd ${SOLPSTOP}'
 alias sdg 'cd ${SOLPSTOP}/data/DivGeo/class/${DEVICE}'
-
-#alias ssf 'cd ${SOLPSTOP}/src/Sonnet/device/${DEVICE}'
+alias ssf 'cd ${SOLPSTOP}/src/Sonnet/device/${DEVICE}'
 
 setenv PATH $NCARG_ROOT/bin:$PATH
 setenv MANPATH $NCARG_ROOT/man:$MANPATH

@@ -1,7 +1,13 @@
 #! /bin/ksh
 
-echo "Welcome to SOLPS5.1!"
-echo "New: use your web browser to look at http://www.rzg.mpg.de/~dpc/solps.html"
+echo "Welcome to SOLPS-ITER!"
+echo "Documentation can be found at: "
+echo "https://portal.iter.org/departments/POP/CM/IMAS/Forms/AllItems.aspx"
+echo "(requires ITER IDM account)"
+echo "The full SOLPS-ITER manual can be found in SOLPSTOP/doc/solps/solps.pdf"
+echo "The Eirene manual is located at http://www.eirene.de/"
+
+export SOLPSTOP=$PWD
 
 [ -e whereami ] && {
   iamat=`./whereami|tail -1`
@@ -30,8 +36,6 @@ echo "New: use your web browser to look at http://www.rzg.mpg.de/~dpc/solps.html
     ;;
   esac
 }
-
-export SOLPSTOP=$PWD
 
 if [ "$1" = "" ] || [ "$1" = "dbg" ] ; then
   [ -e setup.ksh.OBJECTCODE ] && . setup.ksh.OBJECTCODE
@@ -148,10 +152,7 @@ alias sbr='cd ${SOLPSTOP}/runs'
 alias scr='cd ${SOLPSTOP}/scripts'
 alias stop='cd ${SOLPSTOP}'
 alias sdg='cd ${SOLPSTOP}/data/DivGeo/class/${DEVICE}'
-
 alias ssf='cd ${SOLPSTOP}/src/Sonnet/device/${DEVICE}'
-
-alias afs='cd /afs/ipp-garching.mpg.de/aug-xdr'
 
 alias xyplot='plot xyplot'
 alias xyplot2='plot xyplot2'
