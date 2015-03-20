@@ -59,7 +59,7 @@ function write_control_data {
 }
 #========================================================================================
 
-# echo ">>> plot_it $1  starting..."
+#print -u2 -- ">>> plot_it $1  starting..."  #!!!
 
 STEM=${PLOT_IT_STEM:-plot_it}
 
@@ -80,7 +80,7 @@ Usage:
     $NAME -o [parameters]      to open the control file
     $NAME -a [parameters]      to add a plot to the control file
     $NAME -c [parameters]      to create the plot file
-    $NAME -h		       to produce this screen
+    $NAME -h                   to produce this screen
 The information can be passed to the script via parameters and/or through the standard input.
 Parameters are generally grouped in pairs [-key value], and on stdin, each line contains
 keyword=value. The valid keys and keywords are listed in the following table:
@@ -118,6 +118,7 @@ shift
   ( o )
 #----------------------------------------------------------------------------------------
 #   Open a new plot. Reset the files and set the defaults
+#print -u2 -- "&&&& Open a new plot "                    #!!!
       OUTFILE="${STEM}.ps"
       READ="$1"
       unset logx logy title xlabel file y label
@@ -127,6 +128,7 @@ shift
 
 #   Parse the parameters, if any, or read the stdin and perform the necessary actions
 
+#print -u2 -- "&&&& Parse the parameters $* "                    #!!!
       while true; do {
 	[ -n "$READ" ] && { \
 	  { case "$1" in
@@ -157,6 +159,7 @@ shift
 	  esac; }
 	  shift
 	}
+#print -u2 -- "&&&& if READ $READ "                    #!!!
 	[ -z "$READ" ] && { \
 	  read u; [ -z "$u" ] && break
 	  { case "$u" in
@@ -209,6 +212,7 @@ shift
 
 # Write the settings on the settings file
 
+#print -u2 -- "&&&& Write the settings "                    #!!!
       exec 3> $SETFILE
       for s in $SETTINGS; do {
 	eval ss=\"\$$s\"
@@ -221,6 +225,7 @@ shift
 
 # Write the header data to the control file
 
+#print -u2 -- "&&&& Write the header data "                    #!!!
       exec 3> $CMDFILE
       print -u3 "set term postscript color solid"
       [ -n "$SETQ" ] && {
@@ -238,13 +243,16 @@ shift
       [ -n "$logx" ] && print -u3 "set log x"
       [ -n "$logy" ] && print -u3 "set log y"
       [ -n "$time" ] && print -u3 "set time"
+      echo $CMDFILE
+      cat $CMDFILE
       ;;
   ( a )
 #----------------------------------------------------------------------------------------
 #   Append the plot data to the control file. First, check the settings file
 
+#print -u2 -- "&&&& Append the plot data "                    #!!!
       READ="$1"
-      [ -s "$SETFILE" ] || { \
+      [ -z "$SETFILE" ] || { \
 	print "$SETFILE not found or empty. Apparently, the initialisation call was missing"
 	print "$Usage"
 	exit 8
@@ -362,6 +370,8 @@ shift
 #----------------------------------------------------------------------------------------
 #   Create the output file
 
+#print -u2 -- "&&&& Create the output file "                    #!!!
+
 #   Parse the parameters, if any, or read the stdin and perform the necessary actions
 
       while true; do {
@@ -378,3 +388,4 @@ shift
       }
       ;;
 esac; }
+#print -u2 -- "&&&& Leaving plot_it "                    #!!!

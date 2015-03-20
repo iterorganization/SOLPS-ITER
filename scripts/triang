@@ -118,6 +118,7 @@ q=U
 
 
 export GRSOFT_DEVICE='62'
+export PLOT_IT_STEM='tria'
 
 # N is the serial number of the current mesh. It is assigned when the mesh is stored.
 N=

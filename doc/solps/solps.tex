@@ -168,7 +168,7 @@ The next section discusses obtaining and updating the code.
 To obtain the code a request should be sent to Xavier Bonnin
 (\verb!Xavier.Bonnin@iter.org!) at ITER, the code Responsible Officer (RO).  
 
-The first formality will then be for the prospective users to obtain and IDM (ITER Document Management) account, in case they do not have one already. This account request will be done by the RO, and the requesting user will receive an automated electronic message asking for confirmation of the provided e-mail address. With this account, the user will have access to the \SOLPSITER GIT repository (\href{https://git.iter.org/projects/BND/repos/solps-iter/browse}{https://git.iter.org/projects/BND/repos/solps-iter/browse}) maintained at the IO, the \SOLPSITER SharePoint web site hosted by ITER (\href{https://portal.iter.org/departments/POP/CM/IMAS/Forms/AllItems.aspx}{https://portal.iter.org/departments/POP/CM/IMAS/Forms/AllItems.aspx}, folder ``SOLPS-ITER''). The account request will also serve for registration of the user to the \SOLPSITER mailing list (\verb!SOLPS-ITER@iter.org!).
+The first formality will then be for the prospective users to obtain and IDM (ITER Document Management) account, in case they do not have one already. This account request will be done by the RO, and the requesting user will receive an automated electronic message asking for confirmation of the provided e-mail address. With this account, the user will have access to the \SOLPSITER GIT repository (\href{https://git.iter.org/projects/BND/repos/solps-iter/browse}{https://git.iter.org/projects/BND/repos/solps-iter/browse}) maintained at the IO, the \SOLPSITER SharePoint web site hosted by ITER (\href{https://portal.iter.org/departments/POP/CM/IMAS/Forms/AllItems.aspx}{https://portal.iter.org/departments/POP/CM/IMAS/Forms/AllItems.aspx}, folder ``SOLPS-ITER'', works best with Internet Explorer). The account request will also serve for registration of the user to the \SOLPSITER mailing list (\verb!SOLPS-ITER@iter.org!).
 
 The \SOLPSITER Git repository also includes the repositories for \verb!B2.5!, \verb!EIRENE!, \verb!Carre! and \verb!DivGeo! individually as submodules.
 
@@ -358,7 +358,8 @@ and copy the result in \verb!solps_other\sonnet-light\Makefile!.
 
 At the beginning of every \SOLPSITER session, the user must load up the \SOLPSITER
 environment, which will contain the aliases and environment variables needed for
-smooth code operation. Ths is achieved by the command:
+smooth code operation (See also Section \ref{sec:setup} for full details). 
+This is achieved by the command:
 
 \index{setup.csh}
 \begin{verbatim}
@@ -1134,7 +1135,7 @@ negative quantities on the same scale and ``M'' the absolute values of negative 
   \item[fhtxreg]\index{fhtxreg} Plots the total energy flow across important $x$-directed surfaces in \verb!B2.5!.
   \item[fhtyreg]\index{fhtyreg} Plots the total energy flow across important $y$-directed surfaces in \verb!B2.5!.
   \item[fluid\_fluxes \#1 \#2]\index{fluid\_fluxes} Plots the sum of fluid fluxes for species numbers varying from \#1 to \#2 (respective defaults are 0 and 1). Also exists as a Python script. Fluxes into the domain are shown as negative values, fluxes out of the domain as positive values.
-  \item[fluxt \#1]\index{fluxt} Gives the recycling fluxes for the first \#1 \verb!Eirene! strata. The default value is all the strata, as read from the \verb!b2.neutrals.parameters! file, or if not present, the \$\verb!SOLPSTOP/include.local/DIMENSIONS.F! file, or if not present, the \$\verb!SOLPSTOP/include/DIMENSIONS.F! file.
+  \item[fluxt \#1]\index{fluxt} Gives the recycling fluxes for the first \#1 \verb!Eirene! strata. The default value is all the strata, as read from the \verb!b2.neutrals.parameters! file, or if not present, the \$\verb!SOLPSTOP/src/B2.5/src/include.local/DIMENSIONS.F! file, or if not present, the \$\verb!SOLPSTOP/src/B2.5/src/include/DIMENSIONS.F! file.
   \item[internal\_energy\_balance]\index{internal\_energy\_balance} Outputs the energy balance tallies.
   \item[internal\_energy\_balance\_coupled]\index{internal\_energy\_balance\_coupled} Outputs the energy balance tallies for a coupled run.
   \item[joule\_heating]\index{joule\_heating} Plots the amount of Joule heating per region.
@@ -3469,12 +3470,13 @@ for \verb!Eirene! before compilation.
 
 To compile the coupled version of the code you should begin by checking that the default
 array dimensions provided fit your problem size. These are stored in the file
-\$\verb!SOLPSTOP/include/DIMENSIONS.F!. If the dimensions are not right for you,
+\$\verb!SOLPSTOP/src/B2.5/src/include/DIMENSIONS.F!. If the dimensions are not right for you,
 the do the following:
 with:\index{DIMENSIONS.F}
 \begin{verbatim}
-  cd $SOLPSTOP
-  mkdir include.local
+  sb2
+  cd src
+  mkdir -p include.local
   cp include/DIMENSIONS.F include.local
 \end{verbatim}
 %% $
@@ -10750,8 +10752,8 @@ scaling is done on all of the data.
 
 \section{DIMENSIONS.F}\index{DIMENSIONS.F}\label{sec:DIMENSIONS}
 
-The file \$\verb!SOLPSTOP/include/DIMENSIONS.F! and its local version
-\$\verb!SOLPSTOP/include.local/DIMENSIONS.F! contain key dimensions 
+The file \$\verb!SOLPSTOP/src/B2.5/src/include/DIMENSIONS.F! and its local version
+\$\verb!SOLPSTOP/src/B2.5/src/include.local/DIMENSIONS.F! contain key dimensions 
 that determine
 the sizes of arrays that can be defined by namelists
 in \verb!b2.*.parameters! files (for compatibility with 
@@ -10762,7 +10764,7 @@ The quantities defined in \verb!DIMENSIONS.F! are:
 \item[DEF\_ISOEXTRA]\index{DEF\_ISOEXTRA}\index{ISOEXTRA} the maximum
 number of extra isolating cells
 \item[DEF\_NADD]\index{DEF\_NADD}\index{NADD} the maximum number of
-additional cells outside the plasma domain in \verb!Eirene!
+additional vacuum cells outside the gridded domain in \verb!Eirene!
 \item[DEF\_NATM]\index{DEF\_NATM}\index{NATM} the maximum number of
 neutral atomic species to be handled by \verb!Eirene!
 \item[DEF\_NCHEN]\index{DEF\_NCHEN}\index{NCHEN} the maximum number of
@@ -10770,8 +10772,10 @@ energy bins for the diagnostic chords in \verb!Eirene!
 \item[DEF\_NCUT]\index{DEF\_NCUT}\index{NCUT} the maximum number of
 ``cuts'' (2 for single null cases, 4 for double nulls)
 \item[DEF\_NFL]\index{DEF\_NFL}\index{NFL} the maximum number of charged fluids
-passed from \verb!B2! or \verb!B2.5! to \verb!Eirene!
-\item[DEF\_NION]\index{DEF\_NION}\index{NION} the maximum number of test
+passed from \verb!B2.5! to \verb!Eirene!
+\item[DEF\_NGSTAL]\index{DEF\_NGSTAL}\index{NGSTAL} the maximum number
+of grids on which spatially resolved surface tallies are computed
+\item[DEF\_NION]\index{DEF\_NION}\index{NION} the maximum number of molecular
 ion species to be handled by \verb!Eirene!
 \item[DEF\_NLIM]\index{DEF\_NLIM}\index{NLIM} the maximum number of
 additional surfaces to be handled by \verb!Eirene!
@@ -10779,21 +10783,29 @@ additional surfaces to be handled by \verb!Eirene!
 neutral molecular species to be handled by \verb!Eirene!
 \item[DEF\_NPHID]\index{DEF\_NPHID}\index{NPHID} the maximum number of
 toroidal standard surfaces
-\item[DEF\_NPLS]\index{DEF\_NPLS}\index{NPLS} the maximum number of bulk
+\item[DEF\_NPLS]\index{DEF\_NPLS}\index{NPLS} the maximum number of background 
 plasma species to be handled by \verb!Eirene!
 \item[DEF\_NPRNL]\index{DEF\_NPRNL}\index{NPRNL} the maximum number of
 particles that can be saved in the time dependent arrays
+\item[DEF\_NREAC]\index{DEF\_NREAC}\index{NREAC} the maximum number of
+reaction cards that can be created by \verb!Uinp!
+\item[DEF\_NRDS]\index{DEF\_NREAC}\index{NREAC} the maximum number of
+molecular dissociation reaction cards that can be created by \verb!Uinp!
+\item[DEF\_NREC]\index{DEF\_NREAC}\index{NREAC} the maximum number of
+recombination reaction cards that can be created by \verb!Uinp!
+\item[DEF\_NREL]\index{DEF\_NREAC}\index{NREAC} the maximum number of
+elastic collisions reaction cards that can be created by \verb!Uinp!
 \item[DEF\_NSD]\index{DEF\_NSD}\index{NSD} the maximum number of plasma
-species handled in \verb!B2! or \verb!B2.5!
+species handled in \verb!B2.5!
 \item[DEF\_NSPCSRFG]\index{DEF\_NSPCSRFG}\index{NSPCSRFG} the maximum
 number of groups of \verb!Eirene! surfaces for which the data can be
-transferred from \verb!B2! or \verb!B2.5! (\verb!DG! specification "Surface special")
+transferred from \verb!B2.5! (\verb!DG! specification "Surface special")
 \item[DEF\_NSRFS]\index{DEF\_NSRFS}\index{NSRFS} the maximum number of
 surfaces in a stratum
 \item[DEF\_NSTRA]\index{DEF\_NSTRA}\index{NSTRA} the maximum number of
 \verb!Eirene! strata
-\item[DEF\_NSTS]\index{DEF\_NSTS}\index{NSTS} the maximum number of non
-default standard surfaces to be handled by \verb!Eirene!
+\item[DEF\_NSTS]\index{DEF\_NSTS}\index{NSTS} the maximum number of non-default 
+standard surfaces to be handled by \verb!Eirene!
 \item[DEF\_NTOR]\index{DEF\_NTOR}\index{NTOR} the maximum number of toroidal
 periodicity boundaries
 \item[DEF\_NXD]\index{DEF\_NXD}\index{NXD} the maximum number of cells
@@ -10801,11 +10813,12 @@ in the $x$ (parallel or poloidal) direction not including two guard
 cells
 \item[DEF\_NYD]\index{DEF\_NYD}\index{NYD} the maximum number of cells
 in the radial direction not including two guard cells
-\item[DEF\_NGSTAL]\index{DEF\_NGSTAL}\index{NGSTAL} the maximum number
-of grids on which spatially resolved surface tallies are computed
 %%\item[] the maximum number of 
 %%\item[] the maximum number of 
 \end{description}
+
+The current default settings of \verb!DIMENSIONS.F!, correponding to a D+He+C DN case, are:
+\VerbatimInput[fontsize=\footnotesize]{DIMENSIONS.F}
 
 \section{Making movies}
 
