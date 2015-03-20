@@ -3,8 +3,8 @@ set hostname=`hostname`
 set fullhost=`nslookup $hostname |& awk '/Name:/{print $2}' | tr 'A-Z' 'a-z'`
 switch ($fullhost)
 case "*.iter.org":
-  module load ncl
-  setenv NCARG_ROOT '/b2-ext/ncarg'
+  module load ncl/4.4.1
+#  setenv NCARG_ROOT '/b2-ext/ncarg'
   breaksw
 default:
   breaksw

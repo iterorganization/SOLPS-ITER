@@ -3,14 +3,33 @@
 SHELL=/bin/sh
 CPP=/usr/lib/cpp
 
-SRCDIR = ${SOLPSTOP}/src/Uinp/src
-SRCUIN = ${SOLPSTOP}/src/Uinp
-OBJDIR = ${SOLPSTOP}/bin/${OBJECTCODE}/Uinp
-BASEDIR = ${SOLPSTOP}/src/Uinp
-B2DIR = ${SOLPSTOP}/src/B2.5
-B2OBJ = ${SOLPSTOP}/bin/${OBJECTCODE}/B25eirene/B2.5
-EIRDIR = ${SOLPSTOP}/src/Eirene
-EIROBJ = ${SOLPSTOP}/bin/${OBJECTCODE}/B25eirene/Eirene
+ifndef HOST
+  $(error HOST not defined)
+endif
+ifndef OBJECTCODE
+  $(error OBJECTCODE not defined)
+endif
+ifndef SOLPSTOP
+  $(error SOLPSTOP not defined)
+endif
+
+SRCUIN  = ${SOLPSTOP}/src/Uinp
+SRCDIR  = ${SRCUIN}/src
+BASEDIR = ${SRCUIN}
+B2DIR   = ${SOLPSTOP}/src/B2.5
+EIRDIR  = ${SOLPSTOP}/src/Eirene
+
+
+
+# Extension for OBJDIR if debug options are used
+# uncomment following lines if debug-code needed
+ifdef SOLPS_DEBUG
+EXT_DEBUG = .debug
+endif
+OBJDIR  = ${SRCUIN}/builds/${HOST}.${OBJECTCODE}${EXT_DEBUG}
+EIROBJ  = ${EIRDIR}/builds/couple_SOLPS-ITER.${HOST}.${OBJECTCODE}${EXT_DEBUG}
+B2OBJ   = ${B2DIR}/builds/couple_Eirene.${HOST}.${OBJECTCODE}${EXT_DEBUG}
+
 ifeq ($(shell [ -e ${B2DIR}/src/include.local ] && echo yes || echo no ),yes)
 B2INC = ${B2DIR}/src/include.local -I${B2DIR}/src/include -I${B2DIR}/src/common
 else
@@ -24,11 +43,11 @@ EIRINC = ${EIRDIR}/src/common
 endif
 EIRINC += -I${EIROBJ}
 
-include ${SRCUIN}/config/compiler.${OBJECTCODE}
-MAKES = ${BASEDIR}/Makefile ${SRCUIN}/config/compiler.${OBJECTCODE}
-ifeq ($(shell [ -e ${SRCUIN}/config.local/compiler.${OBJECTCODE} ] && echo yes || echo no ),yes)
-include ${SRCUIN}/config.local/compiler.${OBJECTCODE}
-MAKES+= ${SRCUIN}/config.local/compiler.${OBJECTCODE}
+include ${SRCUIN}/config/config.${HOST}.${OBJECTCODE}
+MAKES = ${BASEDIR}/Makefile ${SRCUIN}/config/config.${HOST}.${OBJECTCODE}
+ifeq ($(shell [ -e ${SRCUIN}/config/config.${HOST}.${OBJECTCODE}.local ] && echo yes || echo no ),yes)
+include ${SRCUIN}/config/config.${HOST}.${OBJECTCODE}.local
+MAKES+= ${SRCUIN}/config/config.${HOST}.${OBJECTCODE}.local
 endif
 MNEXTRA = ${B2OBJ}/open_file.o
 
@@ -46,10 +65,10 @@ $(OBJDIR)/%.o : %.F
 
 all: ${OBJDIR}/uinp ${OBJDIR}/ub2p
 
-${OBJDIR}/uinp: ${OBJDIR}/uinput.o ${OBJDIR}/uiblkd.o ${OBJDIR}/uiblb2.o ${OBJDIR}/libui.a ${MNEXTRA} ${B2OBJ}/b2mod_layer.o ${EIROBJ}/eirmod_extrab25.o ${SOLPS_LIB}/libmscl.a ${MAKES} ${MNEXTRA}
+${OBJDIR}/uinp: ${OBJDIR}/uinput.o ${OBJDIR}/uiblkd.o ${OBJDIR}/uiblb2.o ${OBJDIR}/libui.a ${MNEXTRA} ${B2OBJ}/b2mod_layer.o ${EIROBJ}/eirmod_extrab25.o ${MAKES} ${MNEXTRA}
 	${FC} $(FFLAGS) -o ${OBJDIR}/uinp ${OBJDIR}/uinput.o ${OBJDIR}/uiblkd.o ${OBJDIR}/uiblb2.o ${MNEXTRA} ${OBJDIR}/libui.a ${LDLIBS} $(LDEXTRA)
 
-${OBJDIR}/ub2p: ${OBJDIR}/ub2p.o ${OBJDIR}/libui.a ${SOLPS_LIB}/libmscl.a ${MAKES} ${MNEXTRA}
+${OBJDIR}/ub2p: ${OBJDIR}/ub2p.o ${OBJDIR}/libui.a ${MAKES} ${MNEXTRA}
 	${FC} $(FFLAGS) -o ${OBJDIR}/ub2p ${OBJDIR}/ub2p.o ${OBJDIR}/libui.a ${MNEXTRA} ${LDLIBS} $(LDEXTRA)
 
 ${OBJDIR}/libui.a: ${DEST}

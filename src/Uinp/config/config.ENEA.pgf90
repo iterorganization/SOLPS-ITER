@@ -1,0 +1,20 @@
+# Test whether necessary variables exist
+ifndef LD_MSCL
+  $(error LD_MSCL not defined)
+end
+
+FC	 = pgf90
+
+ifdef SOLPS_DEBUG
+FFLAGS	 = -g 
+else
+FFLAGS	 = -O 
+endif
+
+INCLUDE = -I${SRCDIR} -I${EIRINC} -I${B2INC}
+COMPILE  = ${FC} -c ${FFLAGS}
+CPP	 = /lib/cpp -traditional
+MOD 	 = mod
+
+LDLIBS 	 = ${LD_MSCL}
+LDEXTRA  = 

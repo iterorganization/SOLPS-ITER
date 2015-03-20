@@ -1,2 +1,0 @@
-echo setup.csh.dpc
-setenv SOLPS_CPP '-DMDSPLUS'

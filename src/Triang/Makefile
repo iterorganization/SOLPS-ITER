@@ -1,10 +1,30 @@
 #  VERSION : 16.12.2004 23:59
 
-SRCDIR = ${SOLPSTOP}/src/Triang/src
-SRCTRI = ${SOLPSTOP}/src/Triang
-SRCLOCAL =${SOLPSTOP}/src/Triang/local
-OBJDIR = ${SOLPSTOP}/bin/${OBJECTCODE}/Triang
-B2SRC = ${SOLPSTOP}/src/B2.5/src
+ifndef HOST
+  $(error HOST not defined)
+endif
+ifndef OBJECTCODE
+  $(error OBJECTCODE not defined)
+endif
+ifndef SOLPSTOP
+  $(error SOLPSTOP not defined)
+endif
+
+SRCTRI   = ${PWD}
+SRCDIR   = ${SRCTRI}/src
+SRCLOCAL = ${SRCTRI}/local
+B2SRC    = ${SOLPSTOP}/src/B2.5/src
+SRCEIR   = ${SOLPSTOP}/src/Eirene
+
+# Extension for OBJDIR if debug options are used
+# uncomment following lines if debug-code needed
+ifdef SOLPS_DEBUG
+EXT_DEBUG = .debug
+endif
+
+# Directory where objectcode/binaries will be created
+OBJDIR = ${SRCTRI}/builds/${HOST}.${OBJECTCODE}${EXT_DEBUG}
+
 
 INCLUDE=
 LOCAL=no
@@ -18,19 +38,19 @@ INCLUDE += -I${OBJDIR} -I${B2SRC}/include.local -I${B2SRC}/include
 
 
 ifeq ($(LOCAL),yes)
-VPATH =${SRCLOCAL}:${SRCDIR}/modules:${SRCDIR}/src
+VPATH =${SRCLOCAL}:${SRCDIR}/modules:${SRCDIR}/src:${SRCEIR}/grsoft-dummy
 else
-VPATH =${SRCDIR}/modules:${SRCDIR}/src
+VPATH =${SRCDIR}/modules:${SRCDIR}/src:${SRCEIR}/grsoft-dummy
 endif
 
 ifeq ($(shell [ -e ${OBJDIR}/LISTOBJ ] && echo yes || echo no ),yes)
 include ${OBJDIR}/LISTOBJ
 endif
 include ${SRCTRI}/config/compile
-MAKES = ${SRCTRI}/Makefile ${SRCTRI}/config/compile ${SRCTRI}/config/compiler.${OBJECTCODE}
-ifeq ($(shell [ -e ${SRCTRI}/config.local/compiler.${OBJECTCODE} ] && echo yes || echo no ),yes)
-include ${SRCTRI}/config.local/compiler.${OBJECTCODE}
-MAKES+= ${SRCTRI}/config.local/compiler.${OBJECTCODE}
+MAKES = ${SRCTRI}/Makefile ${SRCTRI}/config/compile ${SRCTRI}/config/config.${HOST}.${OBJECTCODE}
+ifeq ($(shell [ -e ${SRCTRI}/config/config.${HOST}.${OBJECTCODE}.local ] && echo yes || echo no ),yes)
+include ${SRCTRI}/config/config.${HOST}.${OBJECTCODE}.local
+MAKES+= ${SRCTRI}/config/config.${HOST}.${OBJECTCODE}.local
 endif
 
 #MODULES := ${patsubst ${SRCDIR}/%.f,%,${shell grep -il '^[ \t]*[ \t]module[ \t]' ${SRCDIR}/modules/*.f}}
@@ -50,11 +70,11 @@ all: ${OBJDIR}/tria ${OBJDIR}/triageom
 
 mods: $(MODMODS)
 
-${OBJDIR}/tria: ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${MAKES} $(GRDUMMY)
-	${LD} $(LDOPTS) -o ${OBJDIR}/tria ${OBJDIR}/tria.o $(GRDUMMY) ${OBJDIR}/libtria.a ${LDLIBS} $(GKS) $(LDEXTRA)
+${OBJDIR}/tria: ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${MAKES}
+	${LD} $(LDOPTS) -o ${OBJDIR}/tria ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${LDLIBS} $(GKS) $(LDEXTRA)
 
-${OBJDIR}/triageom: ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${MAKES} $(GRDUMMY)
-	${LD} $(LDOPTS) -o ${OBJDIR}/triageom ${OBJDIR}/triageom.o $(GRDUMMY) ${OBJDIR}/libtria.a ${LDLIBS} $(GKS) $(LDEXTRA)
+${OBJDIR}/triageom: ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${MAKES}
+	${LD} $(LDOPTS) -o ${OBJDIR}/triageom ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${LDLIBS} $(GKS) $(LDEXTRA)
 
 ${OBJDIR}/libtria.a: ${ALLOBJS}
 	ar r $@ $?

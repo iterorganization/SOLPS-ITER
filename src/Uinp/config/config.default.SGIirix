@@ -1,0 +1,17 @@
+#  VERSION : 11.05.95 13:39
+
+# File compiler.macro for SGI f77
+
+# Test whether necessary variables are defined
+ifndef LD_MSCL
+  $(error LD_MSCL not defined)
+end
+
+
+FC       = f77
+FFLAGS   = -static -O2 -nocpp
+INCLUDE = -I${SRCDIR} -I${EIRINC} -I${B2INC}
+COMPILE  = ${FC} -c ${FFLAGS}
+CPP	 = /lib/cpp
+MOD 	 = mod
+LDLIBS 	 = ${LD_MSCL}

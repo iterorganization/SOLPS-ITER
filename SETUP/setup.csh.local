@@ -9,4 +9,3 @@ endif
 
 setenv B2PLOT_DEV ps
 
-setenv NCARG_ROOT /b2-ext/ncarg

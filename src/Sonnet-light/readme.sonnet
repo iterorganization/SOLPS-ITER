@@ -1,0 +1,26 @@
+This readme is /home/hpz/redhat-sonnet/readme.sonnet.
+The complete build suite for libsonnet.a is
+contained in the file /home/hpz/redhat-sonnet.tar.
+For restoring this build suite do the following:
+cd /home/hpz
+rm -rf redhat-sonnet
+mkdir redhat-sonnet
+cd redhat-sonnet
+tar -xvf ../redhat-sonnet.tar
+-----------------------------------------------------
+This directory contains 2 small Fortran testprograms:
+  string_main.f
+  vectors.f
+In order to build vectors.f change the lines
+   FORTRANPRG = vectors
+   FORTRANPRG = string_main
+to 
+   FORTRANPRG = string_main
+   FORTRANPRG = vectors
+-----------------------------------------------------
+For linking your own Fortran program take into
+account the link line in the amd64_linux24/Makefile:
+   ifort -r8  ${FORTRANPRG}.o ${LIBS}
+with LIBS = -L${INSTALL_DIR} -lsonnet -lstdc++, where
+INSTALL_DIR is the directory where you installed libsonnet.a
+

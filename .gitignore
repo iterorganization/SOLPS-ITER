@@ -7,6 +7,10 @@
 *.[oa]
 *.mod
 
+# any local files, directories,...
+*.local
+*.local/
+
 # error messages from compiler etc.
 *.error
 
@@ -50,7 +54,10 @@ unicos*/
 !SETUP/unicos/
 
 bin/
-
+bins/
+builds/
+lib/
+libs/
 # temporary link files for scripts
 uinput.dg
 uinput.trg

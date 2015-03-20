@@ -1,0 +1,12 @@
+#  VERSION : 28.07.99 20:34
+
+LD_MSCL ?= `pkg-config mscl --libs`
+
+FC	 = ifort
+FFLAGS	 = -g
+INCLUDE  = -I${SRCDIR} -I${EIRINC} -I${B2INC}
+COMPILE  = ${FC} -c ${FFLAGS}
+CPP	 = /lib/cpp -C -traditional
+
+MOD 	 = mod
+LDLIBS	 = ${LD_MSCL}

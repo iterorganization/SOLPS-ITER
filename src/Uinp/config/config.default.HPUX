@@ -1,0 +1,18 @@
+#  VERSION : 28.08.98 10:20
+
+# File compiler.macro for HPUX FORTRAN compiler
+
+# Test whether necessary variables are defined
+ifndef LD_MSCL
+  $(error LD_MSCL not defined)
+end
+
+
+FC	 = f77
+FFLAGS	 = -g 
+INCLUDE  = -I${SRCDIR} -I${EIRINC} -I${B2INC}
+COMPILE  = ${FC} -c ${FFLAGS}
+CPP	 = /lib/cpp
+
+LDLIBS 	 = -Wl, ${LD_MSCL}
+LDEXTRA  = 

@@ -5,76 +5,32 @@ echo "Documentation can be found at: https://user.iter.org/?uid=QB8YQ2 (requires
 
 setenv SOLPSTOP $PWD
 
+
+# Set HOSTNAME, which will determine setup-files to be used
+
 if (-e whereami) then
   set iamat=`./whereami|tail -1`
+  setenv HOSTNAME ${iamat}
   echo Running at $iamat
 else
   set iamat="unknown"
+  setenv HOSTNAME default
 endif
 
+
 if($1 == "") then
-  if (-e setup.csh.OBJECTCODE) source setup.csh.OBJECTCODE
-  if (-e setup.csh.OBJECTCODE.local) source setup.csh.OBJECTCODE.local
+  setenv OBJECTCODE ifort64
+  echo "Using default compiler ifort64"
 else
   setenv OBJECTCODE $1
 endif
 if(! $?OBJECTCODE) then
-  echo "OBJECTCODE not defined !"
+  echo "OBJECTCODE not defined!"
 endif
 
-if (-e setup.csh.NAG) source setup.csh.NAG
-if (-e setup.csh.NAG.$OBJECTCODE) source setup.csh.NAG.$OBJECTCODE
-if (-e setup.csh.NAG.local) source setup.csh.NAG.local
-if (-e setup.csh.NAG.local.$OBJECTCODE) source setup.csh.NAG.local.$OBJECTCODE
+if (-e SETUP/setup.csh.${HOSTNAME}.${OBJECTCODE})       source SETUP/setup.csh.${HOSTNAME}.${OBJECTCODE}
+if (-e SETUP/setup.csh.${HOSTNAME}.${OBJECTCODE}.local) source SETUP/setup.csh.${HOSTNAME}.${OBJECTCODE}.local
 
-if(! $?NAG) then 
-  source setup.csh.NAG.guess
-endif
-
-if (-e setup.csh.NCARG) source setup.csh.NCARG
-if (-e setup.csh.NCARG.$OBJECTCODE) source setup.csh.NCARG.$OBJECTCODE
-if (-e setup.csh.NCARG.local) source setup.csh.NCARG.local
-if (-e setup.csh.NCARG.local.$OBJECTCODE) source setup.csh.NCARG.local.$OBJECTCODE
-
-if(! $?NCARG_ROOT) then
-  if (-e $SOLPSTOP/src/NCARG/$OBJECTCODE) setenv NCARG_ROOT $SOLPSTOP/src/NCARG/$OBJECTCODE
-endif
-
-if(! $?NCARG_ROOT) then 
-  source setup.csh.NCARG.guess
-endif
-if(! $?NCARG) then 
-  if($?NCARG_ROOT) then
-    setenv NCARG_PATH `echo $NCARG_ROOT | sed -e "s:$SOLPSTOP/::"`
-    switch ($NCARG_PATH)
-    case '*3.*':
-      echo 'Found NCAR Version 3.*'
-      setenv NCARG '-L$(NCARG_ROOT)/lib -lncarg -lncarg_gks -lncarg_c -lncarg_loc -lX11 -lm'
-      setenv NCAR_VERSION 3
-      breaksw
-    case '*4.*':
-      echo 'Found NCAR Version 4.*'
-      setenv NCARG '-L$(NCARG_ROOT)/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lm'
-      setenv NCAR_VERSION 4
-      if (! $?SOLPS_CPP) then
-        setenv SOLPS_CPP "-DNCAR4"
-      else
-        setenv SOLPS_CPP "$SOLPS_CPP -DNCAR4"
-      endif
-      breaksw
-    default:
-      echo 'Found NCAR Version ?.?; Assume 4'
-      setenv NCARG '-L$(NCARG_ROOT)/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lm'
-      setenv NCAR_VERSION 4
-      if (! $?SOLPS_CPP) then
-        setenv SOLPS_CPP "-DNCAR4"
-      else
-        setenv SOLPS_CPP "$SOLPS_CPP -DNCAR4"
-      endif
-      breaksw
-    endsw
-  endif
-endif
 
 if (! $?GRAPHCAP) setenv GRAPHCAP X11
 
@@ -105,22 +61,27 @@ default:
   breaksw
 endsw
 
-setenv GLI_HOME $SOLPSTOP/lib
-setenv WSTYPE $OBJECTCODE
+#setenv GLI_HOME $SOLPSTOP/lib
+#setenv WSTYPE $OBJECTCODE
 # setenv GLI_WSTYPE 210
 setenv GRSOFT_DEVICE "211 62"
 setenv SonnetTopDirectory ${SOLPSTOP}/src/Sonnet
 setenv EscapeSonnet `echo ${SonnetTopDirectory} | sed 's:\/:\\\/:g'`
 
 setenv DG ${SOLPSTOP}/src/DivGeo
-setenv CARRE_STOREDIR $SOLPSTOP/src/Carre/SAVE 
+#setenv CARRE_STOREDIR $SOLPSTOP/src/Carre/SAVE 
 
-setenv PATH ${SOLPSTOP}/scripts:${SOLPSTOP}/bin/${OBJECTCODE}:${PATH}
+setenv PATH ${SOLPSTOP}/scripts:${SOLPSTOP}/bin:${PATH}
 if ($?MANPATH) then
   setenv MANPATH ${MANPATH}:${SonnetTopDirectory}/man:${DG}/equtrn/doxygen/man
 else
   setenv MANPATH ${SonnetTopDirectory}/man:${DG}/equtrn/doxygen/man
 endif
+
+
+setenv PATH $NCARG_ROOT/bin:$PATH
+setenv MANPATH $NCARG_ROOT/man:$MANPATH
+
 
 alias sb2 'cd ${SOLPSTOP}/src/B2.5'
 alias sbb 'cd ${SOLPSTOP}/src/B2.5'
@@ -136,12 +97,11 @@ alias srun 'cd ${SOLPSTOP}/runs'
 alias sbr 'cd ${SOLPSTOP}/runs'
 alias scr 'cd ${SOLPSTOP}/scripts'
 alias stop 'cd ${SOLPSTOP}'
-alias sdg 'cd ${SOLPSTOP}/data/DivGeo/class/${DEVICE}'
+#alias sdg 'cd ${SOLPSTOP}/data/DivGeo/class/${DEVICE}'
 
 #alias ssf 'cd ${SOLPSTOP}/src/Sonnet/device/${DEVICE}'
 
-setenv PATH $NCARG_ROOT/bin:$PATH
-setenv MANPATH $NCARG_ROOT/man:$MANPATH
+
 
 alias xyplot plot xyplot
 alias xyplot2 plot xyplot2
@@ -184,34 +144,20 @@ alias xlylplot8 plot xlylplot8
 alias xlylplot8 plot xlylplot8
 alias xlylplot9 plot xlylplot9
 
-alias set_debug 'source $SOLPSTOP/debug'
-alias unset_debug 'source $SOLPSTOP/nodebug'
+alias set_debug 'source $SOLPSTOP/SETUP/debug'
+alias unset_debug 'source $SOLPSTOP/SETUP/nodebug'
 
-if (-e setup.csh.$OBJECTCODE) source setup.csh.$OBJECTCODE
-if (-e setup.csh.local) source setup.csh.local
-if (-e setup.csh.local.$OBJECTCODE) source setup.csh.local.$OBJECTCODE
-if (-e setup.csh.mdsplus) source setup.csh.mdsplus
-if (-e setup.csh.mdsplus.$OBJECTCODE) source setup.csh.mdsplus.$OBJECTCODE
-if (-e setup.csh.$USER) source setup.csh.$USER
-if (-e setup.csh.$USER.$OBJECTCODE) source setup.csh.$USER.$OBJECTCODE
 
-if (! $?IDL_PATH) setenv IDL_PATH
-setenv IDL_PATH +$SOLPSTOP/data/IDL:${IDL_PATH}
-
-setenv SOLPS_LIB ${SOLPSTOP}/lib/${OBJECTCODE}
-if (-e ${SOLPS_LIB}/libnetcdf.a ) setenv NETCDF -lnetcdf
-
-if ($?LD_LIBRARY_PATH) then
-  setenv LD_LIBRARY_PATH ${SOLPS_LIB}:${LD_LIBRARY_PATH}
-else
-  setenv LD_LIBRARY_PATH ${SOLPS_LIB}
-endif
-
-if ($?PYTHONPATH) then
-  setenv PYTHONPATH ${PYTHONPATH}:${SOLPSTOP}/lib/python
-else
-  setenv PYTHONPATH ${SOLPSTOP}/lib/python
-endif
-
-setenv PLOT_SET_PATH '..:../..:${SOLPSTOP}/data.local/plot_set:${SOLPSTOP}/data/plot_set'
+#if (! $?IDL_PATH) setenv IDL_PATH
+#setenv IDL_PATH +$SOLPSTOP/data/IDL:${IDL_PATH}
+#
+#
+#
+#if ($?PYTHONPATH) then
+#  setenv PYTHONPATH ${PYTHONPATH}:${SOLPSTOP}/lib/python
+#else
+#  setenv PYTHONPATH ${SOLPSTOP}/lib/python
+#endif
+#
+#setenv PLOT_SET_PATH '..:../..:${SOLPSTOP}/data.local/plot_set:${SOLPSTOP}/data/plot_set'
 
