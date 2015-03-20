@@ -65,7 +65,7 @@ b25eirene_mpi:
 	@ln -sf ${BINDIR}/B25Eirene.mpi/Eirene/eirobj  ${BINDIR}/eirobj.mpi
 	@ln -sf ${BINDIR}/B25Eirene.mpi/Eirene/eirobjx ${BINDIR}/eirobjx.mpi
 	cd src/B2.5;   ${MAKE} OBJDIR=${BINDIR}/B25Eirene.mpi/B2.5 OBJDIREIR=${BINDIR}/B25Eirene.mpi/Eirene USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
-	find -wholename "${BINDIR}/B25Eirene.mpi/*.exe" -exec ln -s {} "${BINDIR}" \;
+	@find -wholename "${BINDIR}/B25Eirene.mpi/*.exe" -exec ln -s {} "${BINDIR}" \;
 
 uinp:
 	cd src/Uinp; ${MAKE}

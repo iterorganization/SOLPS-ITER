@@ -1,0 +1,66 @@
+#! /usr/bin/ksh
+
+#  VERSION : 05.02.2005 17:55
+
+. triang.conf
+set -A f -- $TRIATRI
+
+coord=${f[0]}
+elem=${f[1]}
+
+NAME=${0##*/}
+Usage="$NAME :  conversion of TRIA mesh into DG template.   Usage:
+
+  $NAME <stem>
+
+Here <stem> is the common part of the TRIA mesh files (the mesh name).
+The result is put in the file <stem>.tria in the directory where the DG templates
+reside for the set value of the DEVICE variable, unless the CNVTRIOUT variable
+is set, pointing to the desired directory
+"
+
+[ "$1" = -h ] && { print -- "$Usage"; exit; }
+
+[ -z "$CNVTRIOUT" ] && { 
+  CNVTRIOUT=$SOLPSTOP/src/DivGeo/dg/class/$DEVICE
+}
+
+[ -d $CNVTRIOUT/templates ] && CNVTRIOUT=$CNVTRIOUT/templates
+
+[ -d "$CNVTRIOUT" ] || {
+  print -- "The output directory not found: $CNVTRIOUT"
+  print -- "$Usage"
+  exit 2
+}
+
+[ -z "$CNVTRIEXE" ] && CNVTRIEXE=$SOLPSTOP/bin/$OBJECTCODE/cnvtria
+
+[ -x "$CNVTRIEXE" ] || {
+  print -- "The executable not found: $CNVTRIEXE"
+  print -- "$Usage"
+  exit 2
+}
+
+
+stem=$1
+
+[ -z "$stem" ] && {
+
+  print -- "No TRIA mesh specified"
+  print -- "$Usage"
+  exit 4
+}
+
+[ -s "$stem.$coord" ] && [ -s "$stem.$elem" ] || {
+  set -A f -- $TRIAEXT
+  coord=${f[0]}
+  elem=${f[1]}
+}
+
+[ -s "$stem.$coord" ] && [ -s "$stem.$elem" ] || {
+  print -- "No non-empty TRIA files found"
+  print -- "$Usage"
+  exit 8
+}
+
+cat "$stem.$coord" "$stem.$elem" | "$CNVTRIEXE" >  "$CNVTRIOUT"/"$stem.tria"

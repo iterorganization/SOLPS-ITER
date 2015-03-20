@@ -345,7 +345,7 @@ while true; do {
                 }; done
               }
               print -u2 -- "Command line: cnvtria $stem"
-              cnvtria $stem || {
+              $scriptdir/cnvtria $stem || {
                 print -u2 -- "Error $? reported from cnvtria"
                 break
               }
@@ -423,7 +423,7 @@ while true; do {
                   esac; }
                 }; done
               }
-              cnvtria $stem || {
+              $scriptdir/cnvtria $stem || {
                 print -u2 -- "Error $? reported from cnvtria"
                 break
               }
