@@ -6,7 +6,11 @@
 
 SHELL = /bin/sh
 TIME = time
-OBJDIR = ${SOLPSTOP}/bin/${OBJECTCODE}/B2.5
+ifdef SOLPSTOP
+OBJDIR = ${SOLPSTOP}/bin/${OBJECTCODE}
+else
+OBJDIR = ${OBJECTCODE}
+endif
 nil =
 ifeq (${OBJECTCODE},linux_nag_f95.debug)
 DBX = totalview
@@ -36,12 +40,12 @@ prints = b2ag.prt b2ah.prt b2ai.prt b2ar.prt b2mn.prt \
  b2yg.prt b2yh.prt b2yi.prt b2ym.prt b2yn.prt b2yp.prt b2yq.prt \
  b2yr.prt b2yt.prt b2yi_gnuplot.prt
 
-target_ag = b2ag.prt b2fgmtry
+target_ag = b2ag.prt b2fgmtry fort.30
 target_ah = b2ah.prt b2fpardf
 target_ai = b2ai.prt b2fstati
 target_ar = b2ar.prt b2frates
 ifdef USE_EIRENE
-target_mn = b2mn.prt b2fparam b2fstate b2fmovie b2ftrace b2ftrack b2fplasma b2time.nc fort.30 fort.31 fort.44 b2tallies.nc b2movies.nc b2wall.nc
+target_mn = b2mn.prt b2fparam b2fstate b2fmovie b2ftrace b2ftrack b2fplasma b2time.nc fort.31 fort.44 b2tallies.nc b2movies.nc b2wall.nc
 else
 target_mn = b2mn.prt b2fparam b2fstate b2fmovie b2ftrace b2ftrack b2fplasma b2time.nc b2tallies.nc b2movies.nc b2wall.nc
 endif
@@ -100,7 +104,7 @@ $(target_xd) : b2fgmtry b2fparam b2fstate b2fplasma
 $(target_ag) : b2ag.dat
 	rm -rf b2ag.exe.dir ; mkdir b2ag.exe.dir ; cp $^ b2ag.exe.dir
 	rm -f $(target_ag)
-	cd b2ag.exe.dir ; ${TIME} ${OBJDIR}/b2ag.exe ; mv $(target_ag) fort.30 .. ; rm -f $(notdir $^)
+	cd b2ag.exe.dir ; ${TIME} ${OBJDIR}/b2ag.exe ; mv $(target_ag) .. ; rm -f $(notdir $^)
 	-rmdir b2ag.exe.dir
 
 $(target_ah) : b2ah.dat b2fgmtry
@@ -121,7 +125,7 @@ $(target_ar) : b2ar.dat stra.dat weis.dat b2fpardf b2fgmtry
 	cd b2ar.exe.dir ; ${TIME} ${OBJDIR}/b2ar.exe ; mv $(target_ar) .. ; rm -f $(notdir $^)
 	-rmdir b2ar.exe.dir
 
-$(target_mn) : b2mn.dat b2fgmtry b2fpardf b2fstati b2frates
+$(target_mn) : b2mn.dat b2fgmtry b2fpardf b2fstati b2frates fort.30
 	rm -rf b2mn.exe.dir ; mkdir b2mn.exe.dir ; cp $^ b2mn.exe.dir
 	rm -f $(target_mn)
 ifdef USE_EIRENE
@@ -129,17 +133,17 @@ ifdef USE_EIRENE
 endif
 	cd b2mn.exe.dir ; mkdir tracing ; ${TIME} ${OBJDIR}/b2mn.exe ; mv $(target_mn) .. ; mv tracing/* ../tracing ; rm -f $(notdir $^) .quit
 ifdef USE_EIRENE
-	-mv b2mn.exe.dir/fort.13 b2mn.exe.dir/fort.15 b2mn.exe.dir/fort.30 b2mn.exe.dir/fort.31 b2mn.exe.dir/fort.44 .
+	-mv b2mn.exe.dir/fort.13 b2mn.exe.dir/fort.15 .
 endif
 	[ -e b2mn.exe.dir/tran ] && mv b2mn.exe.dir/tran b2mn.exe.dir/tran?? .
 	-rmdir b2mn.exe.dir
 
-dbx.b2mn : b2mn.dat b2fgmtry b2fpardf b2fstati b2frates
+dbx.b2mn : b2mn.dat b2fgmtry b2fpardf b2fstati b2frates fort.30
 	rm -rf b2mn.exe.dir ; mkdir b2mn.exe.dir ; cp $^ b2mn.exe.dir
 ifdef USE_EIRENE
 	-cd b2mn.exe.dir ; ln -s ../HYDHEL ../AMJUEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../input.dat ../fort.33 ../fort.34 ../fort.35 . ; [ -e ../fort.15 ] && cp -p ../fort.15 . ; [ -e ../fort.13 ] && cp -p ../fort.13 .
-	cd b2mn.exe.dir ; mkdir tracing ; ${DBX} ${INC} ${SOLPSTOP}/base/b2/${OBJECTCODE}/b2mn.exe ; mv tracing/* ../tracing ; rm -f $(notdir $^) .quit
-	-mv b2mn.exe.dir/fort.13 b2mn.exe.dir/fort.15 b2mn.exe.dir/fort.30 b2mn.exe.dir/fort.31 b2mn.exe.dir/fort.44 .
+	cd b2mn.exe.dir ; mkdir tracing ; ${DBX} ${INC} ${SOLPSTOP}/base/b2/${OBJECTCODE}/b2mn.exe ; mv $(target_mn) .. ; mv tracing/* ../tracing ; rm -f $(notdir $^) .quit
+	-mv b2mn.exe.dir/fort.13 b2mn.exe.dir/fort.15 .
 else
 	cd b2mn.exe.dir ; ${DBX} ${INC} ${SOLPSTOP}/base/b2/${OBJECTCODE}/b2mn.exe ; rm -f $(notdir $^) .quit
 endif

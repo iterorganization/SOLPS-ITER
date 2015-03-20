@@ -33,6 +33,8 @@ divgeo:
 	cd src/DivGeo/equtrn;  ${MAKE} OBJDIR=${BINDIR}/DivGeo/equtrn
 	cd src/DivGeo/convert; ${MAKE} OBJDIR=${BINDIR}/DivGeo/convert
 	@ln -sf ${BINDIR}/DivGeo/dg ${BINDIR}
+	@ln -sf ${SOLPSTOP}/src/DivGeo/dg.dgh ${BINDIR}
+	@ln -sf ${SOLPSTOP}/src/DivGeo/dg.dgc ${BINDIR}
 	@ln -sf ${BINDIR}/DivGeo/convert/{cnveir,cnvtria} ${BINDIR}
 	@ln -sf ${BINDIR}/DivGeo/equtrn/{cropequ,dg2dg,dg2ef,dg2vr,ef2dg,jt2dg,nk2dg,pb2dg,prinequ,pt2dg,risepsi,vr2dg} ${BINDIR}
 

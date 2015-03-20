@@ -27,7 +27,6 @@ c       end do
        ntcpu=10
        nfile_save=nfile
        nfile=0
-       nlwrmsh=.false.
        nltrimesh=.true.
        npts_save=npts
        npts=0
@@ -44,7 +43,6 @@ c       end do
        nfile=nfile_save
        npts=npts_save
        nprnli=nprnli_save
-       nlwrmsh=.true.
        nltrimesh=.false.
       end if !}
 c=======================================================================

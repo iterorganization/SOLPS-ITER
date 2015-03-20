@@ -57,7 +57,7 @@ ${OBJDIR}/triageom: ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${MAKES} $(GRDUMMY)
 	${LD} $(LDOPTS) -o ${OBJDIR}/triageom ${OBJDIR}/triageom.o $(GRDUMMY) ${OBJDIR}/libtria.a ${LDLIBS} $(GKS) $(LDEXTRA)
 
 ${OBJDIR}/libtria.a: ${ALLOBJS}
-	ar r $@ $?
+	${BLD} $@ $?
 	ranlib $@
 
 clean:
