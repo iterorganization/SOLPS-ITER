@@ -1,6 +1,7 @@
 echo setup.csh.xpb
 
 limit stacksize unlimited
+setenv COUPLED_RUN yes
 
 set hostname=`hostname`
 set fullhost=`nslookup $hostname |& awk '/Name:/{print $2}' | tr 'A-Z' 'a-z'`

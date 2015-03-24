@@ -20,7 +20,7 @@ DBX = gdb
 INC = 
 else
 DBX = dbx
-ifdef USE_EIRENE
+ifdef COUPLED_RUN
 INC = -I ${SOLPSTOP}/bin/${OBJECTCODE}/B2.5 -I ${SOLPSTOP}/bin/${OBJECTCODE}/Eirene
 else
 INC = -I ${SOLPSTOP}/bin/${OBJECTCODE}/B2.5
@@ -84,7 +84,7 @@ $(target_fu) : b2fgmtry b2fparam b2fstate b2fplasmf
 
 $(target_pl) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates
 	rm -rf b2pl.exe.dir ; mkdir b2pl.exe.dir ; cp $^ b2pl.exe.dir
-ifdef USE_EIRENE
+ifdef COUPLED_RUN
 	-cp fort.44 input.dat b2pl.exe.dir/
 	-cd b2pl.exe.dir ; ln -s ../fort.33 ../fort.34 ../fort.35 .
 endif
@@ -95,14 +95,14 @@ else
 	rm -f $(target_pl) b2plot.ps
 	cd b2pl.exe.dir ; ${TIME} b2pl.exe ; mv -f b2plot.ps .. ; rm -f $(target_pl) $(notdir $^) .quit
 endif
-ifdef USE_EIRENE
+ifdef COUPLED_RUN
 	-rm b2pl.exe.dir/fort.44 b2pl.exe.dir/input.dat b2pl.exe.dir/fort.3[3-5]
 endif
 	-rmdir b2pl.exe.dir
 
 $(target_pl.dbx) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates
 	rm -rf b2pl.exe.dir ; mkdir b2pl.exe.dir ; cp $^ b2pl.exe.dir
-ifdef USE_EIRENE
+ifdef COUPLED_RUN
 	-cp fort.44 input.dat b2pl.exe.dir/
 	-cd b2pl.exe.dir ; ln -s ../fort.33 ../fort.34 ../fort.35 .
 endif
@@ -113,33 +113,33 @@ else
 	rm -f $(target_pl) b2plot.ps
 	cd b2pl.exe.dir ; ${DBX} ${INC} ${SOLPSTOP}/base/b2/${OBJECTCODE}/b2pl.exe ; mv -f b2plot.ps .. ; rm -f $(target_pl) $(notdir $^) .quit
 endif
-ifdef USE_EIRENE
+ifdef COUPLED_RUN
 	-rm b2pl.exe.dir/fort.44 b2pl.exe.dir/input.dat b2pl.exe.dir/fort.3[3-5]
 endif
 	-rmdir b2pl.exe.dir
 
 $(target_md) : b2mn.dat b2fgmtry b2fparam b2frates b2fstati b2fstate mesh.extra b2md.dat # b2fplasma b2time.nc 
 	rm -rf b2md.exe.dir ; mkdir b2md.exe.dir ; cp $^ ds* b2md.exe.dir
-ifdef USE_EIRENE
+ifdef COUPLED_RUN
 	-cp fort.44 input.dat b2md.exe.dir/
 	-cd b2md.exe.dir ; ln -s ../fort.33 ../fort.34 ../fort.35 .
 endif
 	rm -f $(target_md)
 	cd b2md.exe.dir ; ${SOLPSTOP}/bin/common/mds_id | ${TIME} b2md.exe ; mv $(target_md) .. ; rm -f $(notdir $^) .quit ds*
-ifdef USE_EIRENE
+ifdef COUPLED_RUN
 	-rm b2md.exe.dir/fort.44 b2md.exe.dir/input.dat b2md.exe.dir/fort.3[3-5]
 endif
 	-rmdir b2md.exe.dir
 
 $(target_md.dbx) : b2mn.dat b2fgmtry b2fparam b2frates b2fstati b2fstate mesh.extra b2md.dat # b2fplasma b2time.nc 
 	rm -rf b2md.exe.dir ; mkdir b2md.exe.dir ; cp $^ ds* b2md.exe.dir
-ifdef USE_EIRENE
+ifdef COUPLED_RUN
 	-cp fort.44 input.dat b2md.exe.dir/
 	-cd b2md.exe.dir ; ln -s ../fort.33 ../fort.34 ../fort.35 .
 endif
 	rm -f $(target_md)
 	cd b2md.exe.dir ; ${SOLPSTOP}/bin/common/mds_id | ${DBX} ${INC} ${SOLPSTOP}/base/b2/${OBJECTCODE}/b2md.exe ; mv $(target_md) .. ; rm -f $(notdir $^) .quit ds*
-ifdef USE_EIRENE
+ifdef COUPLED_RUN
 	-rm b2md.exe.dir/fort.44 b2md.exe.dir/input.dat b2md.exe.dir/fort.3[3-5]
 endif
 	-rmdir b2md.exe.dir

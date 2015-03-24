@@ -3313,6 +3313,16 @@ instead that the topology of the two solutions be the same, and works by 2-D
 interpolation of the plasma data in the computational domain, by region. This is 
 activated with the 'b2ytdr\_non\_commensurate' option set to '1' in \verb!b2yt.dat!. 
 
+The conversion of the \verb!Eirene! input file additionally requires for the converter program to know the original version of \verb!Eirene! with which the input file was used, and this is provided by means of the 'eirene\_format' switch. Its possible values (case-insensitive) are:
+\begin{description}
+  \item[``old''] for input files from {\bf SOLPS4.0} and {\bf SOLPS5.0} runs using "old" Eirene\_96
+  \item[``new''] for input files from {\bf SOLPS4.0} and {\bf SOLPS5.0} runs using "new" Eirene\_99
+  \item[``facelift''] for input files from \SOLPSfiveone runs
+  \item[``juelich''] for input files from Juelich \verb!Eirene! versions (2008 and younger)
+  \item[``iter''] (default) for input files from {\bf SOLPS4.2/4.3} and \SOLPSITER runs
+\end{description}
+The \verb!input.dat.2! file that the converter will create will follow the \SOLPSITER format.
+
 \verb!b2yt! may also be used
 to change the order of species (for example changing from $D+C+He$ to $D+He+C$) or for
 bundling, de-bundling or re-bundling species, or even removing species and complete

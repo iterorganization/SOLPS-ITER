@@ -29,7 +29,7 @@ DBX = totalview
 INC = 
 else
 DBX = dbx
-ifdef USE_EIRENE
+ifdef COUPLED_RUN
 INC = -I ${OBJDIR} -I ${SOLPSTOP}/bin/${OBJECTCODE}/Eirene
 else
 INC = -I ${OBJDIR}
@@ -44,7 +44,7 @@ target_ag = b2ag.prt b2fgmtry fort.30
 target_ah = b2ah.prt b2fpardf
 target_ai = b2ai.prt b2fstati
 target_ar = b2ar.prt b2frates
-ifdef USE_EIRENE
+ifdef COUPLED_RUN
 target_mn = b2mn.prt b2fparam b2fstate b2fmovie b2ftrace b2ftrack b2fplasma b2time.nc fort.31 fort.44 b2tallies.nc b2movies.nc b2wall.nc
 else
 target_mn = b2mn.prt b2fparam b2fstate b2fmovie b2ftrace b2ftrack b2fplasma b2time.nc b2tallies.nc b2movies.nc b2wall.nc
@@ -128,11 +128,11 @@ $(target_ar) : b2ar.dat stra.dat weis.dat b2fpardf b2fgmtry
 $(target_mn) : b2mn.dat b2fgmtry b2fpardf b2fstati b2frates fort.30
 	rm -rf b2mn.exe.dir ; mkdir b2mn.exe.dir ; cp $^ b2mn.exe.dir
 	rm -f $(target_mn)
-ifdef USE_EIRENE
+ifdef COUPLED_RUN
 	-cd b2mn.exe.dir ; ln -s ../HYDHEL ../AMJUEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../input.dat ../fort.33 ../fort.34 ../fort.35 . ; [ -e ../fort.15 ] && cp -p ../fort.15 . ; [ -e ../fort.13 ] && cp -p ../fort.13 .
 endif
 	cd b2mn.exe.dir ; mkdir tracing ; ${TIME} ${OBJDIR}/b2mn.exe ; mv $(target_mn) .. ; mv tracing/* ../tracing ; rm -f $(notdir $^) .quit
-ifdef USE_EIRENE
+ifdef COUPLED_RUN
 	-mv b2mn.exe.dir/fort.13 b2mn.exe.dir/fort.15 .
 endif
 	[ -e b2mn.exe.dir/tran ] && mv b2mn.exe.dir/tran b2mn.exe.dir/tran?? .
@@ -140,7 +140,7 @@ endif
 
 dbx.b2mn : b2mn.dat b2fgmtry b2fpardf b2fstati b2frates fort.30
 	rm -rf b2mn.exe.dir ; mkdir b2mn.exe.dir ; cp $^ b2mn.exe.dir
-ifdef USE_EIRENE
+ifdef COUPLED_RUN
 	-cd b2mn.exe.dir ; ln -s ../HYDHEL ../AMJUEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../input.dat ../fort.33 ../fort.34 ../fort.35 . ; [ -e ../fort.15 ] && cp -p ../fort.15 . ; [ -e ../fort.13 ] && cp -p ../fort.13 .
 	cd b2mn.exe.dir ; mkdir tracing ; ${DBX} ${INC} ${SOLPSTOP}/base/b2/${OBJECTCODE}/b2mn.exe ; mv $(target_mn) .. ; mv tracing/* ../tracing ; rm -f $(notdir $^) .quit
 	-mv b2mn.exe.dir/fort.13 b2mn.exe.dir/fort.15 .
@@ -153,7 +153,7 @@ endif
 $(target_co) : b2mn.dat b2fgmtry b2fpardf b2fstati ${PLASMASTATE} ${savefiles}
 	-rm -rf b2co.exe.dir ; mkdir b2co.exe.dir ; cp $^ b2co.exe.dir
 	rm -f $(target_co)
-ifdef USE_EIRENE
+ifdef COUPLED_RUN
 	-cd b2co.exe.dir ; ln -s ../input.dat ../fort.33 ../fort.34 ../fort.35 .
 endif
 	cd b2co.exe.dir ; ${TIME} ${OBJDIR}/b2co.exe `basename ${PLASMASTATE}` ; mv $(target_co) b2fstate .. ; rm -f $(notdir $^) .quit
@@ -172,7 +172,7 @@ $(target_fu) : b2fgmtry b2fparam b2fstate b2fplasmf
 	cd b2fu.exe.dir ; ${TIME} ${OBJDIR}/b2fu.exe ; mv $(target_fu) b2fplasma .. ; rm -f $(notdir $^) .quit
 	-rmdir b2fu.exe.dir
 
-ifdef USE_EIRENE
+ifdef COUPLED_RUN
 $(target_pl) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates fort.44
 else
 $(target_pl) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates
@@ -259,7 +259,7 @@ $(target_yr) : b2yr.dat b2frates b2fpardf b2fgmtry
 $(target_yt) : b2yt.dat b2fstate b2mn.dat b2ah.dat b2ai.dat b2ag.dat b2fgmtry b2frates b2fpardf
 	rm -rf b2yt.exe.dir ; mkdir b2yt.exe.dir ; cp $^ b2yt.exe.dir
 	rm -f $(target_yt)
-ifdef USE_EIRENE
+ifdef COUPLED_RUN
 	-cd b2yt.exe.dir ; [ -e ../input.dat ] && ln -s ../input.dat . ; ln -s ../fort.33 ../fort.34 ../fort.35 .
 	cd b2yt.exe.dir ; ${TIME} ${OBJDIR}/b2yt.exe ; mv $(target_yt) .. ; rm -f $(notdir $^) input.dat fort.3[3-5]
 	[ -e b2yt.exe.dir/input.dat.2 ] && mv b2yt.exe.dir/input.dat.2 .
@@ -271,7 +271,7 @@ endif
 dbx.b2yt : b2yt.dat b2fstate b2mn.dat b2ah.dat b2ai.dat b2ag.dat b2fgmtry b2frates b2fpardf
 	rm -rf b2yt.exe.dir ; mkdir b2yt.exe.dir ; cp $^ b2yt.exe.dir
 	rm -f $(target_yt)
-ifdef USE_EIRENE
+ifdef COUPLED_RUN
 	-cd b2yt.exe.dir ; [ -e ../input.dat ] && ln -s ../input.dat . ; ln -s ../fort.33 ../fort.34 ../fort.35 .
 	cd b2yt.exe.dir ; ${DBX} ${INC} ${SOLPSTOP}/base/b2/${OBJECTCODE}/b2yt.exe ; mv $(target_yt) .. ; rm -f $(notdir $^) input.dat fort.3[3-5]
 	[ -e b2yt.exe.dir/input.dat.2 ] && mv b2yt.exe.dir/input.dat.2 .
