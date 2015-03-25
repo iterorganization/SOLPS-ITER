@@ -1,7 +1,7 @@
-if ($?PATH_SOLPS) then
-  # Check whether HOST and COMPILER are defined
-  if (! $?HOST) then
-    echo "HOST not defined. Exiting.
+if ($?SOLPS_PATH) then
+  # Check whether HOST_NAME and COMPILER are defined
+  if (! $?HOST_NAME) then
+    echo "HOST_NAME not defined. Exiting.
     exit 1
   endif
   if (! $?COMPILER) then
@@ -10,13 +10,13 @@ if ($?PATH_SOLPS) then
   endif
   
   # Pragmatic approach: assume only Eirene, B2.5 and B25Eirene will require mpi-versions
-  setenv   OLD_PATH_SOLPS $PATH_SOLPS
-  setenv   PATH_SOLPS `echo $PATH_SOLPS | sed 's|.mpi||g'` # remove .mpi if already present
-  setenv   PATH_SOLPS `echo $PATH_SOLPS | sed "s|standalone.${HOST}.${COMPILER}|standalone.${HOST}.${COMPILER}.mpi|g"`
-  setenv   PATH_SOLPS `echo $PATH_SOLPS | sed "s|couple_SOLPS-ITER.${HOST}.${COMPILER}|couple_SOLPS-ITER.${HOST}.${COMPILER}.mpi|g"`
-  setenv   PATH_SOLPS `echo $PATH_SOLPS | sed "s|couple_Eirene.${HOST}.${COMPILER}|couple_Eirene.${HOST}.${COMPILER}.mpi|g"`
-  setenv   PATH `echo $PATH | sed "s|${OLD_PATH_SOLPS}|${PATH_SOLPS}|"`
-  unsetenv OLD_PATH_SOLPS
+  setenv   OLD_SOLPS_PATH   $SOLPS_PATH
+  setenv   SOLPS_PATH `echo $SOLPS_PATH | sed 's|.mpi||g'` # remove .mpi if already present
+  setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|standalone.${HOST_NAME}.${COMPILER}|standalone.${HOST_NAME}.${COMPILER}.mpi|g"`
+  setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}|couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}.mpi|g"`
+  setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|couple_Eirene.${HOST_NAME}.${COMPILER}|couple_Eirene.${HOST_NAME}.${COMPILER}.mpi|g"`
+  setenv   PATH `echo $PATH | sed "s|${OLD_SOLPS_PATH}|${SOLPS_PATH}|"`
+  unsetenv OLD_SOLPS_PATH
 else
-  echo "PATH_SOLPS not set. Exiting."
+  echo "SOLPS_PATH not set. Exiting."
 endif

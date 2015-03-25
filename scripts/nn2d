@@ -1,0 +1,17 @@
+#! /bin/ksh
+
+#  VERSION : 2006-09-19
+
+Name=`basename $0`
+Usage="$Name: New-Naka-to-DG format conversion
+Usage: $Name New-Naka-file DG-file
+       where DG-file is the output filename,
+       and New-Naka-file is the input filename.
+"
+
+[ $# -lt 2 ] && { echo "$Usage"; exit; }
+[ -r $1 ] || { echo "File $1 is absent\n"; echo "$Usage"; exit; }
+# rm -f fort.2 > /dev/null
+# ln -sf $1 fort.1
+nkn2dg $1 $2
+#      && { mv fort.2 $2; rm -f fort.1; }

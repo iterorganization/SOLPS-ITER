@@ -1,9 +1,0 @@
-echo setup.csh.NAG.linux_nag_f95
-if (-e /afs/ipp/@sys/lib/libnag18dn.a) then
-  setenv NAG '-L/afs/ipp/@sys/lib -lnag18dn'
-endif
-if (! $?SOLPS_CPP) then
-  setenv SOLPS_CPP "-DNO_F01AAF"
-else
-  setenv SOLPS_CPP "$SOLPS_CPP  -DNO_F01AAF"
-endif

@@ -1,7 +1,7 @@
 #  VERSION : 07.12.2000 22:14
 
-ifndef HOST
-  $(error HOST not defined)
+ifndef HOST_NAME
+  $(error HOST_NAME not defined)
 endif
 ifndef COMPILER
   $(error COMPILER not defined)
@@ -15,7 +15,7 @@ CC=cc
 
 
 
-OBJDIR = builds/${HOST}.${COMPILER}
+OBJDIR = builds/${HOST_NAME}.${COMPILER}
 
 TARGET=$(OBJDIR)/amds
 RES2FBR=$(OBJDIR)/res2fbr

@@ -1,9 +1,0 @@
-echo setup.csh.NCARG.local.linux.Fujitsu
-setenv NCARG_ROOT $SOLPSTOP/src/NCARG/$OBJECTCODE
-setenv NCARG '-L$(NCARG_ROOT)/lib -lncarg -lncarg_gks -lncarg_c -L/usr/X11R6/lib -lX11 -lm ${NCARG_ROOT}/BD/*.o'
-setenv NCARG '-L$(NCARG_ROOT)/lib -lncarg -lncarg_gks -lncarg_c -L/usr/X11R6/lib -lX11 -lm'
-if (! $?SOLPS_CPP) then
-  setenv SOLPS_CPP "-DNCAR4"
-else
-  setenv SOLPS_CPP "$SOLPS_CPP -DNCAR4"
-endif

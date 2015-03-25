@@ -1,0 +1,391 @@
+#! /usr/bin/ksh
+
+#  VERSION : 27.01.98 20:31
+
+# This script allows to plot the data from different files
+
+# The output file:
+#   $OUTFILE :	PostScript plot created with "gnuplot" command
+
+# Temporary files:
+#   $SETFILE :	settings exported from the "open" mode
+#   $CMDFILE :	the control file for "gnuplot"
+
+#========================================================================================
+function write_control_data {
+
+#  echo "Started 'write_control_data $*'"
+
+  exec 3>> $CMDFILE
+  [ -z "$1" ] && e= || e=',\\'
+  [ -z "$header" ] && { b='plot'
+    [ -n "$SETQ" ] && {
+      for s in $SETQ; do {
+	eval ss=\$$s
+	[ -n "$ss" ] && print -u3 "set ${s#q} $ss"
+      }; done
+    }
+    for s in $SPECS; do {
+      eval ss=\$$s
+      [ -n "$ss" ] && print -u3 "set $s '$ss'"
+    }; done
+#    echo "logx,LOGX:$logx:$LOGX:"
+    [ "$logx" = "$LOGX" ] || {
+      [ -z "$logx" ] && print -u3 "set nolog x" || print -u3 "set log x"
+    }
+#    echo "logy,LOGY :$logy:$LOGY:"
+    [ "$logy" = "$LOGY" ] || {
+      [ -z "$logy" ] && print -u3 "set nolog y" || print -u3 "set log y"
+    }
+#    echo "time,TIME:$time:$TIME:"
+    [ "$time" = "$TIME" ] || {
+      [ -z "$time" ] && print -u3 "set notime" || print -u3 "set time"
+    }
+  } || b='    '
+#  echo "dstyle,DSTYLE:$dstyle:$DSTYLE:"
+  with=
+  [ "$dstyle" = "$DSTYLE" ] || {
+    [ -n "$dstyle" ] && with="with $dstyle"
+  }
+  print -u3 "$b '$file' using $x:$y title '$label' ${with}$e"
+  [ -z "$e" ] && { \
+    [ "$logx" = "$LOGX" ] || { \
+      [ -z "$logx" ] && print -u3 "set log x" || print -u3 "set nolog x"
+    }
+    [ "$logy" = "$LOGY" ] || { \
+      [ -z "$logy" ] && print -u3 "set log y" || print -u3 "set nolog y"
+    }
+  }
+}
+#========================================================================================
+
+#print -u2 -- ">>> plot_it $1  starting..."  #!!!
+
+STEM=${PLOT_IT_STEM:-plot_it}
+
+SETFILE="${STEM}.set"
+CMDFILE="${STEM}.cmd"
+
+SETTINGS='dstyle logx logy time file x y label'
+SPECS='title xlabel'
+ESPECS=
+#EXPLIST="$SETTINGS $SPECS $ESPECS OUTFILE SPECS LOGX LOGY DSTYLE TIME header"
+unset SETQ
+
+NAME=${0##*/}
+Usage="
+$NAME: a script for plotting the data from different files. The data must be arranged
+	in columns, blank or tab separated. The header lines, if present, must start with #
+Usage:
+    $NAME -o [parameters]      to open the control file
+    $NAME -a [parameters]      to add a plot to the control file
+    $NAME -c [parameters]      to create the plot file
+    $NAME -h                   to produce this screen
+The information can be passed to the script via parameters and/or through the standard input.
+Parameters are generally grouped in pairs [-key value], and on stdin, each line contains
+keyword=value. The valid keys and keywords are listed in the following table:
+
+    -key      Keyword	Value  Mode  Default	 Meaning
+   -			 no    all		 read stdin
+   -of	      ofile	       o     plot_it.ps  output file name
+   -pt	      title	       o,a		 plot title
+   -xl	      xlabel	       o,a		 x-axis label
+   -lx	      logx	 no    o,a   linear	 toggle logarithmic scale for x
+   -ly	      logy	 no    o,a   linear	 toggle logarithmic scale for y
+   -t	      time	 no    o,a   yes	 toggle the timestamp on the plot
+   -ds	      dstyle	       o,a   lines	 data style
+   -f	      file	       o,a		 data file
+   -x	      x 	       o,a   1		 data column for x
+   -y	      y 	       o,a		 data column for y
+   -l	      label	       a		 data label
+   -n	      next	 no    a		 next curve for the same plot follows
+   -k	      keep	 no    c		 keep the temporary files
+   -q<option> <option>	       o,a		 set option to be passed to gnuplot
+
+Environmental variable PLOT_IT_STEM (default 'plot_it') can be set to determine the names
+of the control files and default output file (with extensions '.cmd', '.set', and '.ps')"
+
+# Check the call mode
+
+{ case "$1" in
+  ( -o | -a | -c ) mode=${1#-};;
+  ( -h | ''      ) print "$Usage"; exit;;
+  (  *		 ) print "Wrong call mode '$mode'"; print "$Usage"; exit;;
+esac; }
+shift
+
+{ case "$mode" in
+  ( o )
+#----------------------------------------------------------------------------------------
+#   Open a new plot. Reset the files and set the defaults
+#print -u2 -- "&&&& Open a new plot "                    #!!!
+      OUTFILE="${STEM}.ps"
+      READ="$1"
+      unset logx logy title xlabel file y label
+      dstyle=lines
+      time=y
+      x=1
+
+#   Parse the parameters, if any, or read the stdin and perform the necessary actions
+
+#print -u2 -- "&&&& Parse the parameters $* "                    #!!!
+      while true; do {
+	[ -n "$READ" ] && { \
+	  { case "$1" in
+	    ( -   ) READ=;;
+	    ( -of ) OUTFILE="$2"; shift;;
+	    ( -pt ) title="$2"; shift;;
+	    ( -xl ) xlabel="$2"; shift;;
+	    ( -lx ) [ -z "$logx" ] && logx=y || logx=;;
+	    ( -ly ) [ -z "$logy" ] && logy=y || logy=;;
+	    ( -t  ) [ -z "$time" ] && time=y || time=;;
+	    ( -ds ) dstyle="$2"; shift;;
+	    ( -f  ) file="$2"; shift;;
+	    ( -x  ) x="$2"; shift;;
+	    ( -y  ) y="$2"; shift;;
+	    ( -q* ) opt="${1#-q}";
+		    { case " $SETTINGS $SPECS " in
+		      ( *" $opt "* ) eval "$opt='$2'";;
+		      (     *	   )
+			{ case "$opt" in
+			  ( 'data style' ) dstyle="$2";;
+			  (	 *	 ) eval "q$opt=\"$2\""; SETQ="$SETQ q$opt";;
+			esac; }
+			;;
+		    esac; }
+		    shift;;
+	    ( ''  ) [ -n "$READ" ] && break;;
+	    (  *  ) print "Illegal parameter sequence: $*"; exit 4;;
+	  esac; }
+	  shift
+	}
+#print -u2 -- "&&&& if READ $READ "                    #!!!
+	[ -z "$READ" ] && { \
+	  read u; [ -z "$u" ] && break
+	  { case "$u" in
+	    ( *=* )
+		l=${u%%=*}; l=${l##* }
+		ll=${u#*=}
+		{ case "$l" in
+		  ( ofile ) OUTFILE="$ll";;
+		  ( title ) title="$ll";;
+		  ( xlabel ) xlabel="$ll";;
+		  ( dstyle ) dstyle="$ll";;
+		  ( file   ) file="$ll";;
+		  ( x	   ) x="$ll";;
+		  ( y	   ) y="$ll";;
+		  ( label  ) label="$ll";;
+		  ( logx   ) { case "$ll" in
+			       ( y  ) logx=y;;
+			       ( n  ) logx=;;
+			       ( '' ) [ -z "$logx" ] && logx=y || logx=;;
+			       ( *  ) print "Wrong value for $l: $ll. Must be y, n or empty"; exit 6;;
+			     esac; };;
+		  ( logy   ) { case "$ll" in
+			       ( y  ) logy=y;;
+			       ( n  ) logy=;;
+			       ( '' ) [ -z "$logy" ] && logy=y || logy=;;
+			       ( *  ) print "Wrong value for $l: $ll. Must be y, n or empty"; exit 6;;
+			     esac; };;
+		  ( time   ) { case "$ll" in
+			       ( y  ) time=y;;
+			       ( n  ) time=;;
+			       ( '' ) [ -z "$time" ] && time=y || time=;;
+			       ( *  ) print "Wrong value for $l: $ll. Must be y, n or empty"; exit 6;;
+			     esac; };;
+		  ( *	  ) opt="$l"
+		      { case " $SETTINGS $SPECS " in
+			( *" $opt "* )
+			    eval "$opt='$ll'"
+			    ;;
+			( *	     )
+			    { case "$opt" in
+			      ( 'data style' ) dstyle="$ll";;
+			      ( *	     ) eval "q$opt=\"$ll\""; SETQ="$SETQ q$opt";;
+			    esac; };;
+		      esac; };;
+		esac; };;
+	    (  *  ) print "Wrong format of the input line: $u"; exit 6;;
+	  esac; }
+	}
+      }; done
+
+# Write the settings on the settings file
+
+#print -u2 -- "&&&& Write the settings "                    #!!!
+      exec 3> $SETFILE
+      for s in $SETTINGS; do {
+	eval ss=\"\$$s\"
+	print -u3 "$s=\"$ss\""
+      }; done
+      for s in $SETQ; do {
+	eval ss=\"\$$s\"
+	print -u3 "$s=\"$ss\""
+      }; done
+
+# Write the header data to the control file
+
+#print -u2 -- "&&&& Write the header data "                    #!!!
+      exec 3> $CMDFILE
+      print -u3 "set term postscript color solid"
+      [ -n "$SETQ" ] && {
+	for s in $SETQ; do {
+	  eval ss=\"\$$s\"
+	  [ -n "$ss" ] && print -u3 "set ${s#q} $ss"
+	}; done
+      }
+      print -u3 "set output '$OUTFILE'"
+      for s in $SPECS; do {
+	eval ss=\"\$$s\"
+	[ -n "$ss" ] && print -u3 "set $s '$ss'"
+      }; done
+      print -u3 "set style data $dstyle"
+      [ -n "$logx" ] && print -u3 "set log x"
+      [ -n "$logy" ] && print -u3 "set log y"
+      [ -n "$time" ] && print -u3 "set time"
+      echo $CMDFILE
+      cat $CMDFILE
+      ;;
+  ( a )
+#----------------------------------------------------------------------------------------
+#   Append the plot data to the control file. First, check the settings file
+
+#print -u2 -- "&&&& Append the plot data "                    #!!!
+      READ="$1"
+      [ -z "$SETFILE" ] || { \
+	print "$SETFILE not found or empty. Apparently, the initialisation call was missing"
+	print "$Usage"
+	exit 8
+      }
+#  ... and set the defaults
+      . "$SETFILE"
+      LOGX=$logx
+      LOGY=$logy
+      DSTYLE="$dstyle"
+      TIME=$time
+      header=
+#      export $EXPLIST
+
+#   Parse the parameters, if any, or read the stdin and perform the necessary actions
+
+      while true; do {
+	next=
+#	 echo ":$1:"
+	[ -n "$READ" ] && { \
+	  { case "$1" in
+	    ( -   ) READ=;;
+	    ( -pt ) title="$2"; shift;;
+	    ( -xl ) xlabel="$2"; shift;;
+	    ( -lx ) [ -z "$logx" ] && logx=y || logx=;;
+	    ( -ly ) [ -z "$logy" ] && logy=y || logy=;;
+	    ( -t  ) [ -z "$time" ] && time=y || time=;;
+	    ( -ds ) dstyle="$2"; shift;;
+	    ( -f  ) file="$2"; shift;;
+	    ( -x  ) x="$2"; shift;;
+	    ( -y  ) y="$2"; shift;;
+	    ( -l  ) label="$2"; shift;;
+	    ( -n  ) next=y;;
+	    ( -q* ) opt="${1#-q}";
+		    { case " $SETTINGS $SPECS " in
+		      ( *" $opt "* ) eval "$opt='$2'";;
+		      (     *	   )
+			{ case "$opt" in
+			  ( 'data style' ) dstyle="$2";;
+			  (	 *	 ) eval "q$opt=\"$2\""; SETQ="$SETQ q$opt";;
+			esac; }
+			;;
+		    esac; }
+		    shift;;
+	    ( ''  ) break;;
+	    (  *  ) print "Illegal parameter sequence: $*"; print "$Usage"; exit 4;;
+	  esac; }
+	  shift
+	}
+	[ -z "$READ" ] && { \
+#	   echo "Reading stdin..."
+	  read u;
+#	   echo "u :$u:"
+	  [ -z "$u" ] && break
+	  { case "$u" in
+	    ( *=* )
+		l=${u%%=*}; l=${l##* }
+		ll=${u#*=}
+		{ case "$l" in
+		  ( title ) title="$ll";;
+		  ( xlabel ) xlabel="$ll";;
+		  ( dstyle ) dstyle="$ll";;
+		  ( file   ) file="$ll";;
+		  ( x	   ) x="$ll";;
+		  ( y	   ) y="$ll";;
+		  ( label  ) label="$ll";;
+		  ( next   ) next=y;;
+		  ( logx   )
+		      { case "$ll" in
+			( y  ) logx=y;;
+			( n  ) logx=;;
+			( '' ) [ -z "$logx" ] && logx=y || logx=;;
+			( *  ) print "Wrong value for $l: $ll. Must be y, n or empty"; exit 6;;
+		      esac; };;
+		  ( logy   )
+		      { case "$ll" in
+			( y  ) logy=y;;
+			( n  ) logy=;;
+			( '' ) [ -z "$logy" ] && logy=y || logy=;;
+			( *  ) print "Wrong value for $l: $ll. Must be y, n or empty"; exit 6;;
+		      esac; };;
+		  ( time   )
+		      { case "$ll" in
+			( y  ) time=y;;
+			( n  ) time=;;
+			( '' ) [ -z "$time" ] && time=y || time=;;
+			( *  ) print "Wrong value for $l: $ll. Must be y, n or empty"; exit 6;;
+		      esac; };;
+		  ( *	  ) opt="$l"
+		      { case " $SETTINGS $SPECS " in
+			( *" $opt "* ) eval "$opt='$ll'";;
+			( *	     )
+			    { case "$opt" in
+			      ( 'data style' ) dstyle="$ll";;
+			      ( *	     ) eval "q$opt=\"$ll\""; SETQ="$SETQ q$opt";;
+			    esac; };;
+		      esac; };;
+#		   ( *	    ) print "Wrong keyword in \"$mode\": $u"; exit 6;;
+		 esac; };;
+	     ( *  ) print "Wrong format of the input line: $u"; exit 6;;
+	  esac; }
+	}
+# Append the data set to the control file if requested
+	[ -n "$next" ] && { \
+#	   echo "Before write_control_data -c"
+	  write_control_data -c
+	  header=done
+	}
+      }; done
+# Append the last data set to the control file
+#      echo "Before write_control_data"
+#      $0 -w
+      write_control_data
+      ;;
+  ( c )
+#----------------------------------------------------------------------------------------
+#   Create the output file
+
+#print -u2 -- "&&&& Create the output file "                    #!!!
+
+#   Parse the parameters, if any, or read the stdin and perform the necessary actions
+
+      while true; do {
+	{ case "$1" in
+	  ( -k	) keep=y;;
+	  ( ''  ) break;;
+	  (  *	) print "Illegal parameter sequence for \"$mode\" mode: $*"; exit 4;;
+	esac; }
+	shift
+      }; done
+#      echo "keep=$keep"     #!!!
+      gnuplot $CMDFILE && { \
+	[ -z "$keep" ] && { rm -f $CMDFILE $SETFILE; }
+      }
+      ;;
+esac; }
+#print -u2 -- "&&&& Leaving plot_it "                    #!!!

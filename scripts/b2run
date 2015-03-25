@@ -1,0 +1,42 @@
+#! /bin/tcsh -f
+
+## -n             dry run
+## -d <debugger>  use debugger <debugger>
+
+# if we are running at JET then don't rely on the automatic feature of searching in ../baserun, instead setup links
+if (${HOST_NAME} == "JET") then
+  echo Special action is being taken since we are running at JET
+  foreach i (b2mn.dat b2fgmtry b2fpardf b2fstati b2frates)
+    if (! -e $i) then
+      echo Setting up a link to ../baserun/$i
+      ln -s ../baserun/$i
+    endif
+  end
+endif
+# end
+
+set RUNS=$PWD
+
+loop:
+  if(-e $RUNS/Makefile) goto endloop
+  if ("$RUNS" == "/") then
+    echo Makefile not found
+    exit
+  endif
+  set RUNS=`dirname $RUNS`
+  goto loop
+
+endloop:
+  set debug=""
+  if ("X${1}X" == "X-nX") then
+    shift
+    set debug="-n"
+  endif
+  if ("X${1}X" == "X-dX") then
+    shift
+    set debug="$debug TIME=$1"
+    shift
+  endif
+  if ("X${argv}X" == "XX") set argv="b2mn"
+  set CMD=`echo $argv" " | sed -e 's: :.prt :g'`
+  gmake $debug -f $RUNS/Makefile $CMD

@@ -1,0 +1,28 @@
+#! /bin/ksh
+
+#  VERSION : 16.01.96 18:34
+
+Name=`basename $0`
+Usage="$Name: DG-to-EFIT format conversion
+Usage: $Name DG-file EFIT-file \[Field-file\]
+       where DG-file and Field-file are the input filenames,
+       and EFIT-file is the output filename.
+       If the Field-file is not specified, the default field.snn is used.
+
+       The Field-file is only needed, when the DG-file is in old format!
+"
+
+[ $# -lt 2 ] && { echo "$Usage"; exit; }
+F='field.snn'; [ -n "$3" ] && F=$3
+# [ -r $F ] || { echo "File $F is absent\n"; echo "$Usage"; exit; }
+[ -r $1 ] || { echo "File $1 is absent\n"; echo "$Usage"; exit; }
+# [ -a fort.2 ] || rm -f fort.2
+# [ -a $2 ] || { echo "The output file $2 exists. Override it (y/n)?"
+#                read u; [ `echo "$u" | cut -c1 | tr Y y` != y ] && exit;
+#                ln -sf $2 fort.2
+# }
+# rm -f fort.2
+# ln -sf $1 fort.1
+# ln -sf $F fort.3
+[ -r $F ] || { dg2ef $1 $2 } && { dg2ef $1 $2 $F }
+#        && { [ -L fort.2 ] && { rm -f fort.2; true; } || mv fort.2 $2 ; rm -f fort.[13]; }

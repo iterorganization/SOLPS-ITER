@@ -2,7 +2,7 @@
 
 # Test whether necessary variables are defined
 LD_MSCL   ?= `pkg-config mscl --libs`
-LD_SONNET ?= -L../../lib/${HOST}.${COMPILER} -lsonnet
+LD_SONNET ?= -L../../lib/${HOST_NAME}.${COMPILER} -lsonnet
 
 FC	 = ifort
 

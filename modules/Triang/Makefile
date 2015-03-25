@@ -1,7 +1,7 @@
 #  VERSION : 16.12.2004 23:59
 
-ifndef HOST
-  $(error HOST not defined)
+ifndef HOST_NAME
+  $(error HOST_NAME not defined)
 endif
 ifndef COMPILER
   $(error COMPILER not defined)
@@ -23,7 +23,7 @@ EXT_DEBUG = .debug
 endif
 
 # Directory where objectcode/binaries will be created
-OBJDIR = ${SRCTRI}/builds/${HOST}.${COMPILER}${EXT_DEBUG}
+OBJDIR = ${SRCTRI}/builds/${HOST_NAME}.${COMPILER}${EXT_DEBUG}
 
 
 INCLUDE=
@@ -49,10 +49,10 @@ ifeq ($(shell [ -e ${OBJDIR}/LISTOBJ ] && echo yes || echo no ),yes)
 include ${OBJDIR}/LISTOBJ
 endif
 include ${SRCTRI}/config/compile
-MAKES = ${SRCTRI}/Makefile ${SRCTRI}/config/compile ${SRCTRI}/config/config.${HOST}.${COMPILER}
-ifeq ($(shell [ -e ${SRCTRI}/config/config.${HOST}.${COMPILER}.local ] && echo yes || echo no ),yes)
-include ${SRCTRI}/config/config.${HOST}.${COMPILER}.local
-MAKES+= ${SRCTRI}/config/config.${HOST}.${COMPILER}.local
+MAKES = ${SRCTRI}/Makefile ${SRCTRI}/config/compile ${SRCTRI}/config/config.${HOST_NAME}.${COMPILER}
+ifeq ($(shell [ -e ${SRCTRI}/config/config.${HOST_NAME}.${COMPILER}.local ] && echo yes || echo no ),yes)
+include ${SRCTRI}/config/config.${HOST_NAME}.${COMPILER}.local
+MAKES+= ${SRCTRI}/config/config.${HOST_NAME}.${COMPILER}.local
 endif
 
 #MODULES := ${patsubst ${SRCDIR}/%.f,%,${shell grep -il '^[ \t]*[ \t]module[ \t]' ${SRCDIR}/modules/*.f}}
@@ -79,7 +79,7 @@ ${OBJDIR}/triageom: ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${MAKES}
 	${LD} $(LDOPTS) -o ${OBJDIR}/triageom ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${LDLIBS} $(GKS) $(LDEXTRA)
 
 ${OBJDIR}/libtria.a: ${ALLOBJS}
-	ar r $@ $?
+	${BLD} $@ $?
 	ranlib $@
 
 clean:

@@ -16,17 +16,9 @@
 
 # setup files (links) that will be made at compilation,...
 setup.csh.*
-!setup.csh.local
-!setup.csh.NAG.guess
-!setup.csh.NAG.local
-!setup.csh.NCARG
-!setup.csh.NCARG.guess
+!setup.csh.COMPILER
 
 setup.ksh.*
-!setup.ksh.local
-!setup.ksh.NAG.guess
-!setup.ksh.NCARG
-!setup.ksh.NCARG.guess
 
 LISTOBJ
 TAGS
@@ -75,4 +67,5 @@ doc/solps/b2cdc?.F
 doc/solps/B2_5.compiler.linux.ifort64
 doc/solps/B2_5.Makefile
 doc/solps/b2plot.commands
+doc/solps/DIMENSIONS.F
 

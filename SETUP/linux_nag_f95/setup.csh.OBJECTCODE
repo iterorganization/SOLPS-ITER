@@ -1,2 +1,0 @@
-echo setup.csh.OBJECTCODE
-setenv OBJECTCODE linux_nag_f95

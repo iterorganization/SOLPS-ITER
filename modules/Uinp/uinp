@@ -1,1 +1,1 @@
-builds/${HOST}.${COMPILER}/uinp.exe
+builds/${HOST_NAME}.${COMPILER}/uinp.exe

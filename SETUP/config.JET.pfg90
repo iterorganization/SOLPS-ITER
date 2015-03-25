@@ -1,4 +1,4 @@
-$(error First use of config.IPP.ifort64. Provide paths to libraries first.)
+$(error First use of config.JET.pgf90. Provide paths to libraries first.)
 
 #
 # Specify paths to root-directories of following libraries on your system
@@ -32,5 +32,5 @@ LD_SONNET  = -L${SOLPSLIB} -lsonnet
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNCAR4 -DMDSPLUS
-EIRENE_DEFINES = 
+SOLPS_CPP      = -DNCAR4 -DMDSPLUS -DJET
+EIRENE_DEFINES =

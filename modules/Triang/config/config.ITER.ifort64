@@ -20,7 +20,7 @@ LINK_MOD 	=
 FC       	= ifort
 
 ifdef SOLPS_DEBUG
-FCOPTS 		= -g -C -debug all
+FCOPTS 		= -g -C -traceback -debug all
 else
 FCOPTS 		= -O3 -vec_report0
 endif
@@ -37,9 +37,9 @@ LDEXTRA  	=
 # new
 
 INCMOD 		= -I
-MOD 		= mod
-OBJDEST 	= -o ${OBJDIR}/$*.o
+MOD 		  = mod
+OBJDEST 	= -module ${OBJDIR} -o ${OBJDIR}/$*.o
 
-BLD 		= ar rcv
+BLD 	        = ar rucv
 
-LD 		= ifort
+LD 	        = ifort

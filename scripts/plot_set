@@ -14,11 +14,12 @@
 
 #========================================================================================
 function get_header {
-#<<<
+#!!!{
+#          print -u2 -- "==>> get_header.  pattern :$1:"                #!!!
 #          print -r "==>> get_header.  pattern :$1:"                    #!!!
 #          echo `echo "$header"`                                        #!!!
 #          print -r "header :$header:"                                  #!!!
-#>>>
+#!!!}
 
 # Input :
 #   $1	   : pattern to search
@@ -115,17 +116,18 @@ function get_header {
 #    echo "match :$match:"                                                #!!!
 #    echo "columns :${columns[*]}:"                                       #!!!
 #    echo "suffixes  :${suffixes[*]}:\n"                                  #!!!
+#     print -u2 -- "<<== get_header."                    #!!!
 }
 #========================================================================================
 function  set_up_page {
 
-#    echo "## set_up_page.  bad_page:$bad_page:   np:$np:   ip :$ip:"
+#    print -u2 -- "## set_up_page.  bad_page:$bad_page:   np:$np:   ip :$ip:"  #!!!
 
     [ "$ip" -gt 0 ] && {
       [ -z "$bad_page" ] && {
 	[ "$np" -gt 0 ] && {
 
-#	 echo "\n## set_up_page.   np :$np:   repeat :$repeat:    nr:${nr[0]}:"
+#	 echo "## set_up_page.   np :$np:   repeat :$repeat:    nr:${nr[0]}:"
 #	 i=0; until { let "i=$i+1"; [ "$i" -gt "$np" ]; }; do {
 #	   echo "  curve : $i,  file :${file[$i]}:;  x :${x[$i]}:,  y :${y[$i]}:,  nr :${nr[$i]}:,  label :${label[$i]}:"
 #	   echo "  yy    :${yy[$i]}:"
@@ -175,11 +177,11 @@ function  set_up_page {
 	      }; done
 	    } | plot_it -a
 	    let "npage=$npage+1"
-	    print "${pid}\t${npage}\t${ip}\t1" >> $logfile
+	    print "${pid}\t\t${npage}\t${ip}\t\t1" >> $logfile
 	    true
 	  } || {
 	    [ -z "$nr" ] && n=1 || n="$nr"
-#	     echo "Multiple page.  n=$n,  SETQ[1] :${SETQ[1]}:" >&2
+#	     echo "Multiple page.  n=$n,  SETQ[1] :${SETQ[1]}:" >&2   #!!!
 	    j=0; until { let "j=$j+1"; [ "$j" -gt "$n" ]; }; do {
 	      {
 		i=0; until { let i=$i+1; [ -z "${SETQ[$i]}" ]; }; do {
@@ -222,7 +224,7 @@ function  set_up_page {
 		  break
 		}
 	      }; done
-	      print "${pid}${suff}\t$npage\t$ip\t$j" >> $logfile
+	      print "${pid}${suff}\t$npage\t$ip\t\t$j" >> $logfile
 	    }; done
 	  }
 	  true
@@ -235,6 +237,7 @@ function  set_up_page {
       }
     }
     reset_page
+#          print -u2 -- "<<== set_up_page. "                    #!!!
 }
 #========================================================================================
 function  reset_page {
@@ -259,6 +262,8 @@ function  reset_page {
 #    echo "Reset page. isq=$isq,  DSETQ[1] :${DSETQ[1]}:  SETQ[1] :${SETQ[1]}:"
 }
 #========================================================================================
+#          print -u2 -- "=== Starting plot_set"                    #!!!
+
 { case "$1" in
   ( -h ) {
 # Print help on the control file format
@@ -420,6 +425,7 @@ Type $NAME -h to get information on the format of the control file.
 
 # Parse the parameters and check the control file
 
+#print -u2 -- "=== Parse the parameters"                    #!!!
     [ -z "$1" ] && { \
       print -u2 "$NAME: a script for plotting the data from multiple files."
       print -u2 "$Usage"
@@ -450,37 +456,37 @@ Type $NAME -h to get information on the format of the control file.
 
 # Check the control file
 
+#print -u2 -- "=== Check the control file"                    #!!!
     cfile="$1"
 #   echo "cfile:$cfile:"                             #!!!
     CFILE=
-    [ -s "$cfile" ] && CFILE="$cfile" || {
-      { case "$cfile" in
-        ( /* | ./* | ../* ) CFILE="$cfile";;
-        (  *		) {
-#	  echo "PLOT_SET_PATH:$PLOT_SET_PATH:"         #!!!
-  	  [ -z "$PLOT_SET_PATH" ] && {
-	    dir=`pwd`
-	    while true; do {
-	      CFILE="$dir/$cfile"
-	      [ -z "$dir" ] && break
-	      [ -s "$CFILE" ] && break
-	      dir=${dir%/*}
-	    }; done
-	    true
-	  } || {
-	    set_path=`print "$PLOT_SET_PATH" | \
-	  	    sed -e 's/^:/.:/' -e 's/::/:.:/g' -e 's/:$/:./' | tr : ' '`
-#	     echo "$set_path"                                    #!!!
-	    for d in $set_path; do {
-#	       echo "dir:${d%/}:"                                #!!!
-	      CFILE=${d%/}/"$cfile"
-#	       echo "CFILE :$CFILE:"                             #!!!
-	      [ -s "$CFILE" ] && break
-	    }; done
-	  }
-        };;
-      esac; }
-    }
+#    echo "cfile:$cfile:"                             #!!!
+    { case "$cfile" in
+      ( /* | ./* | ../* ) CFILE="$cfile";;
+      ( *		) {
+#	 echo "PLOT_SET_PATH:$PLOT_SET_PATH:"         #!!!
+	[ -z "$PLOT_SET_PATH" ] && {
+	  dir=`pwd`
+	  while true; do {
+	    CFILE="$dir/$cfile"
+	    [ -z "$dir" ] && break
+	    [ -s "$CFILE" ] && break
+	    dir=${dir%/*}
+	  }; done
+	  true
+	} || {
+	  set_path=`print "$PLOT_SET_PATH" | \
+		    sed -e 's/^:/.:/' -e 's/::/:.:/g' -e 's/:$/:./' | tr : ' '`
+#	   echo "$set_path"                                    #!!!
+	  for d in $set_path; do {
+#	     echo "dir:${d%/}:"                                #!!!
+	    CFILE=${d%/}/"$cfile"
+#	     echo "CFILE :$CFILE:"  >&2                           #!!!
+	    [ -s "$CFILE" ] && break
+	  }; done
+	}
+      };;
+    esac; }
 #    echo "CFILE:$CFILE:"                                          #!!!
     [ -s "$CFILE" ] || {
       print -u2 "$NAME: the control file not found - $CFILE"
@@ -490,12 +496,23 @@ Type $NAME -h to get information on the format of the control file.
 
 # Check whether the required gnuplot command file exists and is newer than the control file
 
+#sleep 5                                             #!!!
+#print -u2 -- "=== Check gnuplot command file"       #!!!
+
     unset skipcntr
     [ -n "$pfile" ] && [ -n "$smart" ] && [ "$PLOT_IT_STEM.cmd" -nt "$CFILE" ] && skipcntr=y
 
     [ -z "$skipcntr" ] && {
-      u=`grep -v -e '^#' -e '^$' "$CFILE" | head -1`
-#    echo "u:$u:"                                                   #!!!
+
+#      print -u2 -- $CFILE                             #!!!
+#      grep -v -e '^#' -e '^$' "$CFILE" 2> /dev/null | head -1l      #!!!
+#      u='!! trc.ps title=" " xlabel="Time"'           #!!!
+
+      u=`grep -v -e '^#' -e '^$' "$CFILE" 2> /dev/null | head -1`
+
+#      sleep 5   #!!!
+#      echo "u:$u:" >&2                                                  #!!!
+
       { case "$u" in
 	( '!! '* ) ;;
 	( *	 )
@@ -508,12 +525,15 @@ Type $NAME -h to get information on the format of the control file.
 
 # Set the defaults and counters
 
+#sleep 5 #!!!
+#print -u2 -- "=== Set the defaults and counters"                    #!!!
+
       unset open files headers file_OK fxn fxc nfl il is
 
 #    dtitle="$ptitle"
 #    unset dlogx dlogy dxlabel ddstyle dselx dsely
 
-# Read and interprete the control file
+# Read and interpret the control file
 
       exec 3< "$CFILE"
       while true; do {
@@ -525,7 +545,7 @@ Type $NAME -h to get information on the format of the control file.
 #----------------------------------------------------------------------------------------
 	  ( '!! '*  ) {
 
-#	   echo "== New section. is :$is:, np :$np:"                #!!!
+#	   print -u2 -- "== New section. is :$is:, np :$np:"                #!!!
 
 # New section. Here we do the following:
 #  - set up the previous page if not empty;
@@ -539,7 +559,11 @@ Type $NAME -h to get information on the format of the control file.
 #	- open the log file for the section
 #	- reset the page counter for the section log
 
-	    set_up_page
+#	    sleep 5   #!!!
+
+            set_up_page
+            
+#            print -u2 -- "==== is:pfile:plot_section=$is:$pfile:$plot_section"  #!!!
 
 	    [ "$is" -gt 0 ] && {
 	      [ -n "$pfile" ] && open=n || {
@@ -550,6 +574,9 @@ Type $NAME -h to get information on the format of the control file.
 	    }
 
 # Reset the section variables
+
+#	   sleep 10  #!!!
+#           print -u2 -- "==== Reset the section variables"                #!!!
 
 	    ip=0
 	    dtitle="$ptitle"
@@ -601,7 +628,9 @@ Type $NAME -h to get information on the format of the control file.
 # Open a plot file if requested.
 	    [ -z "$open" ] && {
 
-#	     echo "## Open plot file $ofile"                                   #!!!
+#	     sleep 2                                    #!!!
+#             print -u2 -- "## Open plot file $ofile"    #!!!
+
 	      {
 #		 echo "DSETQ[1] :${DSETQ[1]}:" >&2                             #!!!
 		i=0; until { let "i=$i+1"; [ -z "${DSETQ[$i]}" ]; }; do {
@@ -620,11 +649,12 @@ Type $NAME -h to get information on the format of the control file.
 	      print "# Plotfile: $ofile" > "$logfile"
 	      print "# pageID\tpage#\tbase page#\tsubpage#" >> "$logfile"
 	    }
+#	     print -u2 -- "## done"                                   #!!!
 	  };;
 #----------------------------------------------------------------------------------------
 	  ( '// '*  ) {
 
-#	   echo "== Next page. :is:ip:il: = :$is:$ip:$il:"                 #!!!
+#	   print -u2 -- "== Next page. :is:ip:il: = :$is:$ip:$il:"                 #!!!
 
 # New page. Here we do the following:
 #  - check whether a section was opened
@@ -650,7 +680,7 @@ Type $NAME -h to get information on the format of the control file.
 	    shift
 	    let "ip=$ip+1"
 	    while true; do {
-#	     echo "Parsing :$2:"
+#	     echo "Parsing :$2:"  #!!!
 	      { case "$2" in
 		( ''          ) break;;
 		( title=*     ) title="${ptitle}${2#*=}";;
@@ -685,7 +715,7 @@ Type $NAME -h to get information on the format of the control file.
 #----------------------------------------------------------------------------------------
 	  ( *	    ) {
 
-#	   echo "== Next data set. :is:ip:il: = :$is:$ip:$il:"
+#	   print -u2 -- "== Next data set. :is:ip:il: = :$is:$ip:$il:"    #!!!
 
 # Next data set. Here we do the following:
 #  -  Check whether the page is opened

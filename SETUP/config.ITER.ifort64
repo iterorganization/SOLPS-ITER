@@ -2,31 +2,34 @@
 # Specify paths to root-directories of following libraries on your system
 #  
 
-# NETCDF_ROOT = 
-#   MSCL_ROOT =
-      GR_ROOT = /work/imas/opt/gr/0.0.94
-     GKS_ROOT = /work/imas/opt/gli/4.5.30
-#  NCARG_ROOT = 
-#    NAG_ROOT = 
-
+#  NETCDF_ROOT = 
+#    MSCL_ROOT =
+       GR_ROOT = /work/imas/opt/gr/0.0.94
+      GKS_ROOT = /work/imas/opt/gli/4.5.30
+#   NCARG_ROOT = 
+#       NAGDIR = 
+#  MDSPLUS_DIR = 
 
 
 #
 # Variables of linking, using pkg-config
 #
 
-LD_NETCDF = `pkg-config netcdf-fortran --libs` 
-LD_MSCL   = `pkg-config mscl --libs`
-LD_GR     = -L${GR_ROOT}/lib -lgr
-LD_GKS    = -L${GKS_ROOT} -lgks -lgfortran
-LD_NCARG  = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lm  -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lz -lpthread -lXrender -lbz2 -lgfortran # for NCARG v6.x.x
-#LD_NCARG  = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lm                                                                                                          # for NCARG v4.x.x
-LD_NAG    = `pkg-config nag --libs` 
+LD_NETCDF  = `pkg-config netcdf-fortran --libs` 
+LD_MSCL    = `pkg-config mscl --libs`
+LD_GR      = -L${GR_ROOT}/lib -lgr
+LD_GKS     = -L${GKS_ROOT} -lgks -lgfortran
+LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lm  -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lz -lpthread -lXrender -lbz2 -lgfortran # for NCARG v6.x.x
+#LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lm                                                                                                          # for NCARG v4.x.x
+LD_NAG     = `pkg-config nag --libs` 
+LD_MDSPLUS = -L${MDSLPUS_DIR}/lib -lMdsLib_client
+LD_SONNET  = -L${SOLPSLIB} -lsonnet
 
 
 #
-# Linking sonnet
+# Preprocessor options
 #
 
-LD_SONNET = -L${SOLPSLIB} -lsonnet
+SOLPS_CPP      = -DNCAR4 -DMDSPLUS
+EIRENE_DEFINES =  
 

@@ -1,9 +1,9 @@
-if ($?PATH_SOLPS) then
-  setenv   OLD_PATH_SOLPS $PATH_SOLPS
-  setenv   PATH_SOLPS `echo $PATH_SOLPS | sed 's|.debug||g'`
-  setenv   PATH `echo $PATH | sed "s|${OLD_PATH_SOLPS}|${PATH_SOLPS}|"`
-  unsetenv OLD_PATH_SOLPS SOLPS_DEBUG
+if ($?SOLPS_PATH) then
+  setenv   OLD_SOLPS_PATH $SOLPS_PATH
+  setenv   SOLPS_PATH `echo $SOLPS_PATH | sed 's|.debug||g'`
+  setenv   PATH `echo $PATH | sed "s|${OLD_SOLPS_PATH}|${SOLPS_PATH}|"`
+  unsetenv OLD_SOLPS_PATH SOLPS_DEBUG
 else
-  echo "PATH_SOLPS not set. Exiting."
+  echo "SOLPS_PATH not set. Exiting."
 endif
 

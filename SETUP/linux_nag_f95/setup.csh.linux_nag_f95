@@ -1,9 +1,0 @@
-echo setup.csh.linux_nag_f95
-setenv NAG_DEFS '-DNAGF95'
-setenv MDSPLUS_DIR /afs/ipp-garching.mpg.de/home/d/dpc/@sys/mdsplus
-if (! $?SOLPS_CPP) then
-  setenv SOLPS_CPP "-DNO_CDF -DMDSPLUS"
-else
-  setenv SOLPS_CPP "$SOLPS_CPP -DNO_CDF -DMDSPLUS"
-endif
-cd $MDSPLUS_DIR ; source setup.csh ; cd $SOLPSTOP

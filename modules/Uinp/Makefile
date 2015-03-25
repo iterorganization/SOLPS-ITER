@@ -3,8 +3,8 @@
 SHELL=/bin/sh
 CPP=/usr/lib/cpp
 
-ifndef HOST
-  $(error HOST not defined)
+ifndef HOST_NAME
+  $(error HOST_NAME not defined)
 endif
 ifndef COMPILER
   $(error COMPILER not defined)
@@ -28,9 +28,9 @@ EIRDIR  = ${SOLPSTOP}/modules/Eirene
 ifdef SOLPS_DEBUG
 EXT_DEBUG = .debug
 endif
-OBJDIR  = ${SRCUIN}/builds/${HOST}.${COMPILER}${EXT_DEBUG}
-EIROBJ  = ${EIRDIR}/builds/couple_SOLPS-ITER.${HOST}.${COMPILER}${EXT_DEBUG}
-B2OBJ   = ${B2DIR}/builds/couple_Eirene.${HOST}.${COMPILER}${EXT_DEBUG}
+OBJDIR  = ${SRCUIN}/builds/${HOST_NAME}.${COMPILER}${EXT_DEBUG}
+EIROBJ  = ${EIRDIR}/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_DEBUG}
+B2OBJ   = ${B2DIR}/builds/couple_Eirene.${HOST_NAME}.${COMPILER}${EXT_DEBUG}
 
 ifeq ($(shell [ -e ${B2DIR}/src/include.local ] && echo yes || echo no ),yes)
 B2INC = ${B2DIR}/src/include.local -I${B2DIR}/src/include -I${B2DIR}/src/common
@@ -45,11 +45,11 @@ EIRINC = ${EIRDIR}/src/common
 endif
 EIRINC += -I${EIROBJ}
 
-include ${SRCUIN}/config/config.${HOST}.${COMPILER}
-MAKES = ${BASEDIR}/Makefile ${SRCUIN}/config/config.${HOST}.${COMPILER}
-ifeq ($(shell [ -e ${SRCUIN}/config/config.${HOST}.${COMPILER}.local ] && echo yes || echo no ),yes)
-include ${SRCUIN}/config/config.${HOST}.${COMPILER}.local
-MAKES+= ${SRCUIN}/config/config.${HOST}.${COMPILER}.local
+include ${SRCUIN}/config/config.${HOST_NAME}.${COMPILER}
+MAKES = ${BASEDIR}/Makefile ${SRCUIN}/config/config.${HOST_NAME}.${COMPILER}
+ifeq ($(shell [ -e ${SRCUIN}/config/config.${HOST_NAME}.${COMPILER}.local ] && echo yes || echo no ),yes)
+include ${SRCUIN}/config/config.${HOST_NAME}.${COMPILER}.local
+MAKES+= ${SRCUIN}/config/config.${HOST_NAME}.${COMPILER}.local
 endif
 MNEXTRA = ${B2OBJ}/open_file.o
 

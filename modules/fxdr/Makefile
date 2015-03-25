@@ -4,18 +4,21 @@ SHELL=/bin/sh
 CPP=/usr/lib/cpp
 
 
-ifndef HOST
-  $(error HOST not defined)
+ifndef HOST_NAME
+  $(error HOST_NAME not defined)
 endif
 ifndef COMPILER
   $(error COMPILER not defined)
 endif
 
 
-include config/config.${HOST}.${COMPILER}
+include config/config.${HOST_NAME}.${COMPILER}
 
 
-OBJDIR = builds/${HOST}.${COMPILER}
+ifdef SOLPS_DEBUG
+EXT_DEBUG = .debug
+endif
+OBJDIR = builds/${HOST_NAME}.${COMPILER}${EXT_DEBUG}
 
 VPATH=src
 

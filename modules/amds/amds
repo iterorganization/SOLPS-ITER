@@ -1,4 +1,4 @@
 export AMDSDATABASEDIR=`pwd`
-export AMDSGRAPHCMD=builds/${HOST}.${COMPILER}/calc_atomic_data
+export AMDSGRAPHCMD=builds/${HOST_NAME}.${COMPILER}/calc_atomic_data
 # export AMDSGRAPHCMD=`pwd`/tt
-builds/${HOST}.${COMPILER}/amds $* &
+builds/${HOST_NAME}.${COMPILER}/amds $* &

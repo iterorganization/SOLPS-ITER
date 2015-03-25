@@ -23,4 +23,4 @@ COMPILE  = ${FC} -c ${FFLAGS}
 CPP	 = /lib/cpp
 
 LDLIBS	 = ${LD_SONNET} ${LD_MSCL} -L/usr/local/lib
-LDEXTRA  = -bmap:/builds/${HOST}.${COMPILER}/fxdr.map -bloadmap:builds/${HOST}.${COMPILER}/fxdr.lmp
+LDEXTRA  = -bmap:/builds/${HOST_NAME}.${COMPILER}${EXT_DEBUG}/fxdr.map -bloadmap:builds/${HOST_NAME}.${COMPILER}${EXT_DEBUG}/fxdr.lmp

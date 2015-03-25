@@ -1,4 +1,0 @@
-echo setup.csh.NAG.linux.pgi.xt6
-if (-e /afs/ipp-garching.mpg.de/u/dpc/linux/src/nagfl15df/libnag_pgf90_GW.a) then
-  setenv NAG '-L/afs/ipp-garching.mpg.de/u/dpc/linux/src/nagfl15df -lnag_pgf90_GW'
-endif

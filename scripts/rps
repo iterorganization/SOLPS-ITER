@@ -1,0 +1,21 @@
+#! /bin/ksh
+
+#  VERSION : 30.01.96 21:48
+
+Name=`basename $0`
+Usage="$Name: increase of the psi values by an increment (DG format)
+Usage: $Name DG-in-file DG-out-file \[Field-file\] increment
+       where DG-in-file and Field-file are the input filenames,
+       and DG-out-file is the output filename.
+       If the Field-file is not specified, the default field.snn is used.
+
+       The Field-file is only needed, when the DG-in-file is in old format!
+"
+
+[ $# -lt 3 ] && { echo "$Usage"; exit; }
+F='field.snn'; [ $# -eq 4 ] && { [ -n "$3" ] && F=$3 }
+[ -r $1 ] || { echo "File $1 is absent\n"; echo "$Usage"; exit; }
+# rm -f fort.2 > /dev/null
+# ln -sf $1 fort.1
+[ $# -lt 4 ] || { echo "$3" | risepsi $1 $2 } && { echo "$4" | risepsi $1 $2 $F }
+#     && { mv fort.2 $2; rm -f fort.1; }

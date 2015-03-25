@@ -1,13 +1,17 @@
 #! /bin/tcsh -f
 
 echo "Welcome to SOLPS-ITER!"
-echo "Documentation can be found at: https://user.iter.org/?uid=QB8YQ2 (requires IDM account)"
+echo "Documentation can be found at:"
+echo "https://portal.iter.org/departments/POP/CM/IMAS/Forms/AllItems.aspx"
+echo "(requires ITER IDM account)"
+echo "The full SOLPS-ITER manual can be found in SOLPSTOP/doc/solps/solps.pdf"
+echo "The Eirene manual is located at http://www.eirene.de/"
 
 setenv SOLPSTOP $PWD
 
 
-# Set HOST and COMPILER, which will determine setup-files to be used
-#-------------------------------------------------------------------
+# Set HOST_NAME and COMPILER, which will determine setup-files to be used
+#------------------------------------------------------------------------
 
 if (-e whereami) then
   set iamat=`./whereami|tail -1`
@@ -17,19 +21,19 @@ else
 endif
 
 if ( $iamat == "*UNKNOWN" ) then
-  setenv HOST default
+  setenv HOST_NAME default
 else
-  setenv HOST ${iamat}
+  setenv HOST_NAME ${iamat}
 endif
 
 # COMPILER can also be the argument to setup.csh-call
 if($1 == "") then
-  if (-e setup.COMPILER) then
-    setenv COMPILER `./setup.COMPILER|tail -1`
+  if (-e default_compiler) then
+    setenv COMPILER `./default_compiler|tail -1`
     echo Using compiler $COMPILER.
   else
     setenv COMPILER ifort64
-    echo Using default compiler ifort64.
+    echo Assuming default compiler ifort64.
   endif
 else
   setenv COMPILER $1
@@ -38,22 +42,20 @@ if(! $?COMPILER) then
   echo COMPILER not defined!
 endif
 
-# setup files for combination of HOST and COMPILER, + local modifications if present
-if (-e SETUP/setup.csh.${HOST}.${COMPILER})       source SETUP/setup.csh.${HOST}.${COMPILER}
-if (-e SETUP/setup.csh.${HOST}.${COMPILER}.local) source SETUP/setup.csh.${HOST}.${COMPILER}.local
+# setup files for combination of HOST_NAME and COMPILER, + local modifications if present
+if (-e SETUP/setup.csh.${HOST_NAME}.${COMPILER})       source SETUP/setup.csh.${HOST_NAME}.${COMPILER}
+if (-e SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local) source SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
 
 
 
 if (! $?GRAPHCAP) setenv GRAPHCAP X11
 
-
-
 setenv GRSOFT_DEVICE "211 62"
-setenv SonnetTopDirectory ${SOLPSTOP}/src/Sonnet-light
+setenv SonnetTopDirectory ${SOLPSTOP}/modules/Sonnet-light
 setenv EscapeSonnet `echo ${SonnetTopDirectory} | sed 's:\/:\\\/:g'`
 
-setenv DG ${SOLPSTOP}/src/DivGeo
-setenv CARRE_STOREDIR $SOLPSTOP/src/Carre/SAVE 
+setenv DG ${SOLPSTOP}/modules/DivGeo
+#setenv CARRE_STOREDIR $SOLPSTOP/modules/Carre/SAVE 
 
 
 # Set path to scripts and executables
@@ -61,26 +63,26 @@ setenv CARRE_STOREDIR $SOLPSTOP/src/Carre/SAVE
 
 # First, remove the old path to SOLPS if already set
 # (avoid too long paths)
-if ($?PATH_SOLPS) then
-    setenv PATH `echo $PATH | sed "s|${PATH_SOLPS}:||"`
+if ($?SOLPS_PATH) then
+    setenv PATH `echo $PATH | sed "s|${SOLPS_PATH}:||"`
 endif
 
 # Default PATH: no mpi, no debug
-set TOOLCHAIN      =  ${HOST}.${COMPILER}
-set PATH_CARRE     =  ${SOLPSTOP}/src/Carre/builds/${TOOLCHAIN}
-set PATH_DIVGEO    =  ${SOLPSTOP}/src/DivGeo/builds/${TOOLCHAIN}
-set PATH_EIRENE    =  ${SOLPSTOP}/src/Eirene/builds/standalone.${TOOLCHAIN}
-set PATH_B25       =  ${SOLPSTOP}/src/B2.5/builds/standalone.${TOOLCHAIN}
-set PATH_B25EIRENE =  ${SOLPSTOP}/src/B2.5/builds/couple_Eirene.${TOOLCHAIN}
-set PATH_UINP      =  ${SOLPSTOP}/src/Uinp/builds/${TOOLCHAIN}
-set PATH_TRIANG    =  ${SOLPSTOP}/src/Triang/builds/${TOOLCHAIN}
-set PATH_SCRIPTS   =  ${SOLPSTOP}/scripts
+set      TOOLCHAIN =  ${HOST_NAME}.${COMPILER}
+set     CARRE_PATH =  ${SOLPSTOP}/modules/Carre/builds/${TOOLCHAIN}
+set    DIVGEO_PATH =  ${SOLPSTOP}/modules/DivGeo/builds/${TOOLCHAIN}
+set    EIRENE_PATH =  ${SOLPSTOP}/modules/Eirene/builds/standalone.${TOOLCHAIN}
+set       B25_PATH =  ${SOLPSTOP}/modules/B2.5/builds/standalone.${TOOLCHAIN}
+set B25EIRENE_PATH =  ${SOLPSTOP}/modules/B2.5/builds/couple_Eirene.${TOOLCHAIN}
+set      UINP_PATH =  ${SOLPSTOP}/modules/Uinp/builds/${TOOLCHAIN}
+set    TRIANG_PATH =  ${SOLPSTOP}/modules/Triang/builds/${TOOLCHAIN}
+set   SCRIPTS_PATH =  ${SOLPSTOP}/scripts
 
 # Note: in case of name-clash between script and executable, script will be found first
-setenv PATH_SOLPS  ${PATH_SCRIPTS}:${PATH_CARRE}:${PATH_DIVGEO}:${PATH_B25EIRENE}:${PATH_EIRENE}:${PATH_B25}:${PATH_UINP}:${PATH_TRIANG}
-setenv PATH        ${PATH_SOLPS}:${PATH}
+setenv SOLPS_PATH  ${SCRIPTS_PATH}:${CARRE_PATH}:${DIVGEO_PATH}:${B25EIRENE_PATH}:${EIRENE_PATH}:${B25_PATH}:${UINP_PATH}:${TRIANG_PATH}
+setenv PATH        ${SOLPS_PATH}:${PATH}
 
-unset TOOLCHAIN PATH_CARRE PATH_DIVGEO PATH_EIRENE PATH_B25 PATH_B25EIRENE PATH_UINP PATH_TRIANG
+unset TOOLCHAIN CARRE_PATH DIVGEO_PATH EIRENE_PATH B25_PATH B25EIRENE_PATH UINP_PATH TRIANG_PATH
 
 # Set path to manuals
 #--------------------
@@ -92,9 +94,6 @@ else
 endif
 
 
-setenv PATH $NCARG_ROOT/bin:$PATH
-setenv MANPATH $NCARG_ROOT/man:$MANPATH
-
 
 alias sb2  'cd ${SOLPSTOP}/modules/B2.5'
 alias sbb  'cd ${SOLPSTOP}/modules/B2.5'
@@ -104,16 +103,14 @@ alias sst  'cd ${SOLPSTOP}/modules/Triang'
 alias ssd  'cd ${SOLPSTOP}/modules/DivGeo'
 alias ssc  'cd ${SOLPSTOP}/modules/Carre'
 alias ssu  'cd ${SOLPSTOP}/modules/Uinp'
-alias slib 'cd ${SOLPSTOP}/lib/${HOST}.${COMPILER}'
+alias slib 'cd ${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}'
 alias srun 'cd ${SOLPSTOP}/runs'
 alias sbr  'cd ${SOLPSTOP}/runs'
 alias scr  'cd ${SOLPSTOP}/scripts'
 alias stop 'cd ${SOLPSTOP}'
 
-
 #alias sdg 'cd ${SOLPSTOP}/data/DivGeo/class/${DEVICE}'
-#alias ssf 'cd ${SOLPSTOP}/src/Sonnet/device/${DEVICE}'
-
+#alias ssf 'cd ${SOLPSTOP}/modules/Sonnet/device/${DEVICE}'
 
 
 alias xyplot plot xyplot
@@ -158,9 +155,9 @@ alias xlylplot8 plot xlylplot8
 alias xlylplot9 plot xlylplot9
 
 
-alias set_debug   'source $SOLPSTOP/SETUP/debug'
+alias   set_debug 'source $SOLPSTOP/SETUP/debug'
 alias unset_debug 'source $SOLPSTOP/SETUP/nodebug'
-alias set_mpi     'source $SOLPSTOP/SETUP/mpi'
+alias   set_mpi   'source $SOLPSTOP/SETUP/mpi'
 alias unset_mpi   'source $SOLPSTOP/SETUP/nompi'
 
 
@@ -177,3 +174,6 @@ alias unset_mpi   'source $SOLPSTOP/SETUP/nompi'
 #
 #setenv PLOT_SET_PATH '..:../..:${SOLPSTOP}/data.local/plot_set:${SOLPSTOP}/data/plot_set'
 
+
+# Add any local settings if present
+if (-e SETUP/setup.csh.local) source SETUP/setup.csh.local

@@ -271,7 +271,7 @@ c***   chemical sputtering
          speciename=textp(spz)
         else !}{
          write(0,*) 
-     ,   'WARNING: indefinite specie type in chemical sputtering data'
+     ,   'WARNING: indefinite species type in chemical sputtering data'
          goto 10 
         end if !}
         k=k+1 
@@ -284,7 +284,7 @@ c***   chemical sputtering
          chmvar(k)=lchsptgp(i)+natmi
         else !}{
           write(0,*) 
-     ,    'WARNING: indefinite specie type in chemical sputtering data'      
+     ,    'WARNING: indefinite species type in chemical sputtering data'      
         end if !}
         chemindex(k)=i
         k=k+1

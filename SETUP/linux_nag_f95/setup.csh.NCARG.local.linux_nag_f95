@@ -1,8 +1,0 @@
-echo setup.csh.NCARG.local.linux_nag_f95
-setenv NCARG_ROOT "/afs/ipp-garching.mpg.de/home/d/dpc/linux/ncarg-4.2.2"
-setenv NCARG "-L${SOLPSTOP}/lib/${OBJECTCODE} -lncarg -lncarg_gks -lncarg_c -L/usr/X11R6/lib -lX11 -lm"
-if (! $?SOLPS_CPP) then
-  setenv SOLPS_CPP "-DNCAR4"
-else
-  setenv SOLPS_CPP "$SOLPS_CPP -DNCAR4"
-endif

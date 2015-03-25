@@ -77,7 +77,7 @@ This is the combined work of many authors.  Started by D.P.~Coster, it
 includes contributions from
 \begin{itemize}
 \item D.P~Coster and O.~Wenisch, the original \btwoplot manual
-\item K.~and A.~Kukushkin, the \verb!DG! manual, with revisions by A.~Chin and D.~Stotler
+\item K.~and A.S.~Kukushkin, the \verb!DG! manual, with revisions by A.~Chin and D.~Stotler
 \item M.~Stanojevic, on boundary conditions
 \item X.~Bonnin, for many contributions and the \SOLPSITER updates
 \end{itemize}
@@ -163,12 +163,12 @@ Several of the {\bf SOLPS4.2} features are detailed in \verb!Kotov_SOLPS42_Repor
 The next section discusses obtaining and updating the code.
 
 \section{Obtaining and updating the code}
-\label{solpsdistribution}\index{Obtaining the code}\index{B2, obtaining}\index{B2.5, obtaining}\index{SOLPS, obtaining}\index{Eirene, obtaining}\index{dg, obtaining}\index{DG, obtaining}\index{DivGeo, obtaining}\index{Carre, obtaining}\index{agg, obtaining}\index{Updating the code}\index{B2, updating}\index{B2.5, Updating}\index{SOLPS, Updating}\index{Eirene, Updating}\index{dg, Updating}\index{DG, updating}\index{DivGeo, Updating}\index{Carre, Updating}\index{agg, Updating}
+\label{solpsdistribution}\index{Obtaining the code}\index{B2.5, obtaining}\index{SOLPS-ITER, obtaining}\index{Eirene, obtaining}\index{dg, obtaining}\index{DG, obtaining}\index{DivGeo, obtaining}\index{Carre, obtaining}\index{Updating the code}\index{B2.5, Updating}\index{SOLPS-ITER, Updating}\index{Eirene, Updating}\index{dg, Updating}\index{DG, updating}\index{DivGeo, Updating}\index{Carre, Updating}
 
 To obtain the code a request should be sent to Xavier Bonnin
 (\verb!Xavier.Bonnin@iter.org!) at ITER, the code Responsible Officer (RO).  
 
-The first formality will then be for the prospective users to obtain and IDM (ITER Document Management) account, in case they do not have one already. This account request will be done by the RO, and the requesting user will receive an automated electronic message asking for confirmation of the provided e-mail address. With this account, the user will have access to the \SOLPSITER GIT repository (\href{https://git.iter.org/projects/BND/repos/solps-iter/browse}{https://git.iter.org/projects/BND/repos/solps-iter/browse}) maintained at the IO, the \SOLPSITER SharePoint web site hosted by ITER, and a dedicated IDM folder (\href{https://user.iter.org/?uid=Q92BAQ}{https://user.iter.org/?uid=Q92BAQ}) for various \SOLPSITER related materials. This will also serve as registration of the user to the \SOLPSITER mailing list (\verb!SOLPS-ITER@iter.org!).
+The first formality will then be for the prospective users to obtain and IDM (ITER Document Management) account, in case they do not have one already. This account request will be done by the RO, and the requesting user will receive an automated electronic message asking for confirmation of the provided e-mail address. With this account, the user will have access to the \SOLPSITER GIT repository (\href{https://git.iter.org/projects/BND/repos/solps-iter/browse}{https://git.iter.org/projects/BND/repos/solps-iter/browse}) maintained at the IO, the \SOLPSITER SharePoint web site hosted by ITER (\href{https://portal.iter.org/departments/POP/CM/IMAS/Forms/AllItems.aspx}{https://portal.iter.org/departments/POP/CM/IMAS/Forms/AllItems.aspx}, folder ``SOLPS-ITER'', works best with Internet Explorer). The account request will also serve for registration of the user to the \SOLPSITER mailing list (\verb!SOLPS-ITER@iter.org!).
 
 The \SOLPSITER Git repository also includes the repositories for \verb!B2.5!, \verb!EIRENE!, \verb!Carre! and \verb!DivGeo! individually as submodules.
 
@@ -205,15 +205,22 @@ The Git \SOLPSITER repository is structured as a self-contained whole, but some 
 \section{Requirements}
 \index{Requirements}
 
-To use the \SOLPSITER code suite, the user will need, locally installed:
+To best use the \SOLPSITER code suite, the user will need, locally installed:
 
 \begin{description}
 \item[Fortran 90/95 Compiler] the main programs are written in \verb!FORTRAN 90!; some routines still require a ``-r8'' option
 \item[C Compiler] the \verb!DivGeo! code and a few utility routines are written in \verb!C!
+\item[MPI] Parallelization framework (optional)
 \item[NAG]\index{NAG} mathematical library (optional)
+\item[BLAS/LAPACK] mathematical libraries
 \item[NCAR] plotting library
+\item[GR] plotting library (optional)
+\item[GKS] graphical kernel library
+\item[HDF5] data storage library
 \item[NetCDF]\index{netcdf} storage/archival library (optional)
+\item[MSCL] utility library
 \item[LaTeX interpreter] to produce this manual
+\item[GIT] version control software
 \item[/bin/bash] used by some scripts
 \item[/bin/csh] used by some scripts
 \item[/bin/ksh] used by some scripts
@@ -221,17 +228,123 @@ To use the \SOLPSITER code suite, the user will need, locally installed:
 \item[/bin/tcsh] used by some scripts
 \end{description}
 
-If there exists a locally available version of the NAG mathematical library, a copy or
-link to it should be put in the \$\verb!{SOLPSTOP}/lib/!\$\verb!{OBJECTCODE}! directory,
-under the name \verb!libnag.a!. If the library is not available, then the BLAS and
-LAPACK packages will be used instead. These latter libraries
-are publicly available. The source code is distributed with \SOLPSITER and can be found in the \$\verb!{SOLPSTOP}/lib/blaslapack! directory. The BLASLAPACK library will be automatically built at compile time by the \SOLPSITER master \verb!Makefile!. 
+For all the various libraries, it is recommended that they be installed as modules, so that they
+may be shared amongst multiple users on the same machines, so as not to duplicate large files and to
+centralize their management. Most, but not all, of these libraries are publicly available from the 
+Internet. The MSCL library is distributed and can be obtained from the ITER GIT repository at
+\href{https://git.iter.org/projects/LIB/repos/mscl/browse}{https://git.iter.org/projects/LIB/repos/mscl/browse}.
+
+If one uses local copies of these libraries, a copy or link to them should be put in the 
+\$\verb!{SOLPSTOP}/lib/!\$\verb!{OBJECTCODE}! directory.
+
+\section{Initial set-up}
+\index{Initial set-up}
+
+For each local implementation, environment variables are used to designate
+the location where the various libraries are to be found, as well as the preferred compilers to be 
+used. These are propagated throughout the \SOLPSITER code structure and used by the Makefiles and
+the various scripts. It is therefore important to carefully assign their values.
+
+These environment variables are found in files config.\$\verb!HOSTNAME!.\$\verb!COMPILER!.
+
+The current list of recognized hostnames, deduced by means of the \verb!whereami! script, includes:
+\begin{description}\index{Hostnames}
+  \item[ITER] ITER domain: *.iter.org
+  \item[IFERC] IFERC supercomputer: *.iferc-csc.org
+  \item[IPP] IPP-Garching domain: *.ipp.mpg.de, *.rzg.mpg.de
+  \item[IPP-HGW] IPP-Greifswald domain: *.ipp-hgw.mpg.de
+  \item[JET] JET domain: *.efda.org
+  \item[ITM] ITM Gateway machine: *.efda-itm.org
+  \item[default] everywhere else
+\end{description}
+
+At the moment the following compiler platforms are supported, assuming a Linux work environment:
+\begin{description}\index{Platforms}
+  \item[linux\_pgf90] Portland Group 32-bit Fortran compiler in use at JET and GA
+  \item[linux.ifort64] Intel 64-bit Fortran compiler in use at ITER and IPP
+\end{description}
+
+Some Windows\index{Windows} implementations have been attempted, and require an additional \verb!-DWINDOWS! compiler switch, but are not currently being supported.
+
+If you wish your domain name to be included in the list of hostnames above, please contact the 
+\SOLPSITER RO and send the
+hostname you would like to have and the Internet address range to which it would apply. Please
+also send the relevant compiler config files so they may be distributed to future users from the 
+same domain or serve as examples for other users using the same compiler.
 
 When establishing the \SOLPSITER environment, the code
 will check for the presence of the NAG and NCAR libraries and adjust compiler options
-accordingly.
+accordingly. If the NAG library is not available (it requires a pay licence), then the BLAS and
+LAPACK packages will be used instead, and automatically included in the build from the \SOLPSITER 
+Makefile.
 
-The master \SOLPSITER \verb!Makefile! will first compile and install all the included libraries by invoking the \verb!install.sh! script from the \$\verb!{SOLPSTOP}/lib/! directory. If the user wishes to re-install the libraries with a clean of any previously existing compiled files, the \verb!clean_install.sh! script is available for this purpose in the same location. These scripts require the user
+Once the config files have been filled in with the appropriate information for the
+local implementation desired, one proceeds with the compilation of the code. For this
+purpose, a master \SOLPSITER \verb!Makefile! is provided, located at \$\verb!{SOLPSTOP}/Makefile!.\index{Makefile} The options supported by this \verb!Makefile! are:
+\begin{description}\index{Compiling the code}\index{B2.5, compiling}\index{SOLPS-ITER, compiling}\index{Eirene, compiling}\index{DivGeo, compiling}\index{Carre, compiling}
+  \item[solps] (Default) Compiles the necessary components for a full \SOLPSITER implementation, including:
+    \begin{description}
+       \item[libs] Installs the needed libraries according to config file
+       \item[carre] The \verb!Carre! grid generator and associated translators
+       \item[divgeo] The \verb!DivGeo! graphical input file builder and accompanying equilibrium and template converters
+       \item[b25eirene] The \verb!B2.5-Eirene! main code and accompanying programs
+       \item[uinp] The \verb!Uinp! translator from \verb!DivGeo! output to \verb!B2.5-Eirene! input
+       \item[triang] The \verb!Tria! and \verb!Triageom! triangulation utilities
+       \item[manual] Builds this manual
+    \end{description}
+  \item[solps\_mpi] Compiles the necessary components for a full \SOLPSITER implementation, this time using MPI parallelization, including:
+    \begin{description}
+       \item[libs] Installs the needed libraries according to config file
+       \item[carre] The \verb!Carre! grid generator and associated translators
+       \item[divgeo] The \verb!DivGeo! graphical input file builder and accompanying equilibrium and template converters
+       \item[b25eirene\_mpi] The \verb!B2.5-Eirene! main code and accompanying programs, MPI-parallelized
+       \item[uinp] The \verb!Uinp! translator from \verb!DivGeo! output to \verb!B2.5-Eirene! input
+       \item[triang] The \verb!Tria! and \verb!Triageom! triangulation utilities
+       \item[manual] Builds this manual
+    \end{description}
+  \item[all] The same as {\bf solps} above, but in addition:
+    \begin{description}
+      \item[b25] The \verb!B2.5! stand-alone plasma fluid solver and accompanying programs
+      \item[eirene] The \verb!Eirene! stand-alone Monte-Carlo neutral transport code
+    \end{description}
+  \item[all\_mpi] The same as {\bf solps\_mpi} above, but in addition:
+    \begin{description}
+      \item[b25\_mpi] The \verb!B2.5! stand-alone plasma fluid solver, with MPI parallelization enabled
+      \item[eirene\_mpi] The \verb!Eirene! stand-alone Monte-Carlo neutral transport code, with MPI parallelization enabled
+    \end{description}
+  \item[carre] The \verb!Carre! grid generator and associated translators only
+  \item[divgeo] The \verb!DivGeo! graphical input file builder and accompanying equilibrium and template converters only
+  \item[b25] The \verb!B2.5! stand-alone plasma fluid solver and accompanying programs only
+  \item[b25\_mpi] The \verb!B2.5! stand-alone plasma fluid solver and accompanying programs only, with MPI parallelization enabled
+  \item[eirene] The \verb!Eirene! stand-alone Monte-Carlo neutral transport code only
+  \item[eirene\_mpi] The \verb!Eirene! stand-alone Monte-Carlo neutral transport code only, with MPI parallelization enabled
+  \item[b25eirene] The \verb!B2.5-Eirene! main code and accompanying programs only
+  \item[b25eirene\_mpi] The \verb!B2.5-Eirene! main code and accompanying programs only, MPI-parallelized
+  \item[uinp] The \verb!Uinp! translator from \verb!DivGeo! output to \verb!B2.5-Eirene! input only (requires {\bf b25eirene} previous compilation)
+  \item[triang] The \verb!Tria! and \verb!Triageom! triangulation utilities only
+  \item[manual] This manual only
+  \item[listobj] Builds the list of object files for the various code components
+  \item[depend] Builds the dependencies files for the various code components
+  \item[tags] Builds \verb!etags! files for easy source code searched using \verb!emacs!
+  \item[VERSION] Updates the GIT version number included in the source code and output
+  \item[clean] Alias to {\bf clean\_solps}
+  \item[clean\_solps] Removes the compiled binary files for {\bf solps} build
+  \item[clean\_solps\_mpi] Removes the compiled binary files for {\bf solps\_mpi} build
+  \item[clean\_all] Removes all the compiled binary files
+  \item[clean\_all\_mpi] Removes all the MPI-compiled binary files
+  \item[clean\_carre] Removes the compiled binary files for {\bf carre} build
+  \item[clean\_divgeo] Removes the compiled binary files for {\bf divgeo} build
+  \item[clean\_b25] Removes the compiled binary files for {\bf b25} build
+  \item[clean\_b25\_mpi] Removes the compiled binary files for {\bf b25\_mpi} build
+  \item[clean\_eirene] Removes the compiled binary files for {\bf eirene} build
+  \item[clean\_eirene\_mpi] Removes the compiled binary files for {\bf eirene\_mpi} build
+  \item[clean\_b25eirene] Removes the compiled binary files for {\bf b25eirene} build
+  \item[clean\_b25eirene\_mpi] Removes the compiled binary files for {\bf b25eirene\_mpi} build
+  \item[clean\_uinp] Removes the compiled binary files for {\bf uinp} build
+  \item[clean\_triang] Removes the compiled binary files for {\bf triang} build
+\end{description}
+
+The master \SOLPSITER \verb!Makefile! will actually start by compiling and installing all the included libraries by invoking the \verb!install.sh! script from the \$\verb!{SOLPSTOP}/lib/! directory. If the user wishes to re-install the libraries with a clean of any previously existing compiled files, the \verb!clean_install.sh! script is available for this purpose in the same location. These scripts require the user
 to have properly defined the \verb!FC! environment variable which gives the preferred Fortran compiler.
 The default value for this is ``f77'' but that may not be apropriate for all systems. If compiling the
 \verb!Sonnet! library, the user should first do:
@@ -240,32 +353,42 @@ fs sysname
 \end{verbatim}
 and copy the result in \verb!solps_other\sonnet-light\Makefile!. 
 
-\section{Platforms}
-\index{Platforms}
+\section{Before every \SOLPSITER session}
+\index{Run set-up}
 
-At the moment the following platforms are ``supported'':
+At the beginning of every \SOLPSITER session, the user must load up the \SOLPSITER
+environment, which will contain the aliases and environment variables needed for
+smooth code operation (See also Section \ref{sec:setup} for full details). 
+This is achieved by the command:
+
+\index{setup.csh}
+\begin{verbatim}
+source setup.csh
+\end{verbatim}
+if one is using the C-shell or the TC-shell. If one prefers to use the K-shell, then the command is:
+\index{setup.ksh}
+\begin{verbatim}
+source setup.ksh
+\end{verbatim}
+
+Among other things, these setup files establish some aliases that are useful for navigating the \SOLPSITER directory structure (see details in Chapter \ref{cha:structure}). Those aliases are:
 \begin{description}
-\item[IBM AIX] well supported; used in Garching
-\item[SUN] used in Garching
-  \begin{description}
-  \item[SUN's compiler suite] still somewhat problematical
-  \item[Fujitsu] somewhat better
-  \end{description}
-\item[SGI] has been used in the past, not under active maintenance;
-  should not be a problem (except for the plethora of compilation models)
-\item[LINUX] used extensively in Garching and at JET
-  \begin{description}
-  \item[Fujitsu's PC compiler] main one in use at Garching; problem
-    with \verb!BLOCK DATA! not being included from library --- workaround in
-    place for \verb!NCAR!
-  \item[Portland Group PC compiler] in use at JET
-  \item[Absoft PC compiler] in use at Culham; strange options required
-    --- still being tested
-  \item[Intel compiler] recently implemented --- seems to work
-  \end{description}
+  \item[stop] Goes to \$\verb!{SOLPSTOP}!, the \SOLPSITER top directory
+  \item[sb2, sbb] Go to \$\verb!{SOLPSTOP}/src/B2.5!, the \verb!B2.5! top directory
+  \item[sei] Goes to \$\verb!{SOLPSTOP}/src/Eirene!, the \verb!Eirene! top directory
+  \item[ssd] Goes to \$\verb!{SOLPSTOP}/src/DivGeo!, the \verb!DivGeo! top directory
+  \item[ssc] Goes to \$\verb!{SOLPSTOP}/src/Carre!, the \verb!Carre! top directory
+  \item[sst] Goes to \$\verb!{SOLPSTOP}/src/Triang!, the \verb!Tria! top directory
+  \item[ssu] Goes to \$\verb!{SOLPSTOP}/src/Uinp!, the \verb!Uinp! top directory
+  \item[sbin] Goes to \$\verb!{SOLPSTOP}/bin/!\$\verb!{OBJECTCODE}!, the directory where all compiled binaries are stored
+  \item[slib] Goes to \$\verb!{SOLPSTOP}/lib/!\$\verb!{OBJECTCODE}!, the directory where libraries are stored
+  \item[srun, sbr] Go to \$\verb!{SOLPSTOP}/runs/!, the top run directory
+  \item[scr] Goes to \$\verb!{SOLPSTOP}/scripts!, the directory where the scripts are stored
+  \item[sdg] Goes to \$\verb!{SOLPSTOP}/data/DivGeo/class/!\$\verb!{DEVICE}!, the directory where the \verb!DivGeo! models for the current modelled device are stored
+  \item[\$DG] The location of the \verb!DivGeo! top directory
 \end{description}
 
-Some Windows implementations have been attempted, and require an additional \verb!-DWINDOWS! compiler switch, but are not currently being supported.
+It is also possible to toggle between versions of the code compiled with and without debug options (array bounds checking, traceback, etc...) by use of the \verb!set_debug! and \verb!unset_debug! commands.
 
 \chapter{The structure}
 \label{cha:structure}
@@ -1012,7 +1135,7 @@ negative quantities on the same scale and ``M'' the absolute values of negative 
   \item[fhtxreg]\index{fhtxreg} Plots the total energy flow across important $x$-directed surfaces in \verb!B2.5!.
   \item[fhtyreg]\index{fhtyreg} Plots the total energy flow across important $y$-directed surfaces in \verb!B2.5!.
   \item[fluid\_fluxes \#1 \#2]\index{fluid\_fluxes} Plots the sum of fluid fluxes for species numbers varying from \#1 to \#2 (respective defaults are 0 and 1). Also exists as a Python script. Fluxes into the domain are shown as negative values, fluxes out of the domain as positive values.
-  \item[fluxt \#1]\index{fluxt} Gives the recycling fluxes for the first \#1 \verb!Eirene! strata. The default value is all the strata, as read from the \verb!b2.neutrals.parameters! file, or if not present, the \$\verb!SOLPSTOP/include.local/DIMENSIONS.F! file, or if not present, the \$\verb!SOLPSTOP/include/DIMENSIONS.F! file.
+  \item[fluxt \#1]\index{fluxt} Gives the recycling fluxes for the first \#1 \verb!Eirene! strata. The default value is all the strata, as read from the \verb!b2.neutrals.parameters! file, or if not present, the \$\verb!SOLPSTOP/src/B2.5/src/include.local/DIMENSIONS.F! file, or if not present, the \$\verb!SOLPSTOP/src/B2.5/src/include/DIMENSIONS.F! file.
   \item[internal\_energy\_balance]\index{internal\_energy\_balance} Outputs the energy balance tallies.
   \item[internal\_energy\_balance\_coupled]\index{internal\_energy\_balance\_coupled} Outputs the energy balance tallies for a coupled run.
   \item[joule\_heating]\index{joule\_heating} Plots the amount of Joule heating per region.
@@ -3190,6 +3313,16 @@ instead that the topology of the two solutions be the same, and works by 2-D
 interpolation of the plasma data in the computational domain, by region. This is 
 activated with the 'b2ytdr\_non\_commensurate' option set to '1' in \verb!b2yt.dat!. 
 
+The conversion of the \verb!Eirene! input file additionally requires for the converter program to know the original version of \verb!Eirene! with which the input file was used, and this is provided by means of the 'eirene\_format' switch. Its possible values (case-insensitive) are:
+\begin{description}
+  \item[``old''] for input files from {\bf SOLPS4.0} and {\bf SOLPS5.0} runs using "old" Eirene\_96
+  \item[``new''] for input files from {\bf SOLPS4.0} and {\bf SOLPS5.0} runs using "new" Eirene\_99
+  \item[``facelift''] for input files from \SOLPSfiveone runs
+  \item[``juelich''] for input files from Juelich \verb!Eirene! versions (2008 and younger)
+  \item[``iter''] (default) for input files from {\bf SOLPS4.2/4.3} and \SOLPSITER runs
+\end{description}
+The \verb!input.dat.2! file that the converter will create will follow the \SOLPSITER format.
+
 \verb!b2yt! may also be used
 to change the order of species (for example changing from $D+C+He$ to $D+He+C$) or for
 bundling, de-bundling or re-bundling species, or even removing species and complete
@@ -3347,12 +3480,13 @@ for \verb!Eirene! before compilation.
 
 To compile the coupled version of the code you should begin by checking that the default
 array dimensions provided fit your problem size. These are stored in the file
-\$\verb!SOLPSTOP/include/DIMENSIONS.F!. If the dimensions are not right for you,
+\$\verb!SOLPSTOP/src/B2.5/src/include/DIMENSIONS.F!. If the dimensions are not right for you,
 the do the following:
 with:\index{DIMENSIONS.F}
 \begin{verbatim}
-  cd $SOLPSTOP
-  mkdir include.local
+  sb2
+  cd src
+  mkdir -p include.local
   cp include/DIMENSIONS.F include.local
 \end{verbatim}
 %% $
@@ -10628,8 +10762,8 @@ scaling is done on all of the data.
 
 \section{DIMENSIONS.F}\index{DIMENSIONS.F}\label{sec:DIMENSIONS}
 
-The file \$\verb!SOLPSTOP/include/DIMENSIONS.F! and its local version
-\$\verb!SOLPSTOP/include.local/DIMENSIONS.F! contain key dimensions 
+The file \$\verb!SOLPSTOP/src/B2.5/src/include/DIMENSIONS.F! and its local version
+\$\verb!SOLPSTOP/src/B2.5/src/include.local/DIMENSIONS.F! contain key dimensions 
 that determine
 the sizes of arrays that can be defined by namelists
 in \verb!b2.*.parameters! files (for compatibility with 
@@ -10640,7 +10774,7 @@ The quantities defined in \verb!DIMENSIONS.F! are:
 \item[DEF\_ISOEXTRA]\index{DEF\_ISOEXTRA}\index{ISOEXTRA} the maximum
 number of extra isolating cells
 \item[DEF\_NADD]\index{DEF\_NADD}\index{NADD} the maximum number of
-additional cells outside the plasma domain in \verb!Eirene!
+additional vacuum cells outside the gridded domain in \verb!Eirene!
 \item[DEF\_NATM]\index{DEF\_NATM}\index{NATM} the maximum number of
 neutral atomic species to be handled by \verb!Eirene!
 \item[DEF\_NCHEN]\index{DEF\_NCHEN}\index{NCHEN} the maximum number of
@@ -10648,8 +10782,10 @@ energy bins for the diagnostic chords in \verb!Eirene!
 \item[DEF\_NCUT]\index{DEF\_NCUT}\index{NCUT} the maximum number of
 ``cuts'' (2 for single null cases, 4 for double nulls)
 \item[DEF\_NFL]\index{DEF\_NFL}\index{NFL} the maximum number of charged fluids
-passed from \verb!B2! or \verb!B2.5! to \verb!Eirene!
-\item[DEF\_NION]\index{DEF\_NION}\index{NION} the maximum number of test
+passed from \verb!B2.5! to \verb!Eirene!
+\item[DEF\_NGSTAL]\index{DEF\_NGSTAL}\index{NGSTAL} the maximum number
+of grids on which spatially resolved surface tallies are computed
+\item[DEF\_NION]\index{DEF\_NION}\index{NION} the maximum number of molecular
 ion species to be handled by \verb!Eirene!
 \item[DEF\_NLIM]\index{DEF\_NLIM}\index{NLIM} the maximum number of
 additional surfaces to be handled by \verb!Eirene!
@@ -10657,21 +10793,29 @@ additional surfaces to be handled by \verb!Eirene!
 neutral molecular species to be handled by \verb!Eirene!
 \item[DEF\_NPHID]\index{DEF\_NPHID}\index{NPHID} the maximum number of
 toroidal standard surfaces
-\item[DEF\_NPLS]\index{DEF\_NPLS}\index{NPLS} the maximum number of bulk
+\item[DEF\_NPLS]\index{DEF\_NPLS}\index{NPLS} the maximum number of background 
 plasma species to be handled by \verb!Eirene!
 \item[DEF\_NPRNL]\index{DEF\_NPRNL}\index{NPRNL} the maximum number of
 particles that can be saved in the time dependent arrays
+\item[DEF\_NREAC]\index{DEF\_NREAC}\index{NREAC} the maximum number of
+reaction cards that can be created by \verb!Uinp!
+\item[DEF\_NRDS]\index{DEF\_NREAC}\index{NREAC} the maximum number of
+molecular dissociation reaction cards that can be created by \verb!Uinp!
+\item[DEF\_NREC]\index{DEF\_NREAC}\index{NREAC} the maximum number of
+recombination reaction cards that can be created by \verb!Uinp!
+\item[DEF\_NREL]\index{DEF\_NREAC}\index{NREAC} the maximum number of
+elastic collisions reaction cards that can be created by \verb!Uinp!
 \item[DEF\_NSD]\index{DEF\_NSD}\index{NSD} the maximum number of plasma
-species handled in \verb!B2! or \verb!B2.5!
+species handled in \verb!B2.5!
 \item[DEF\_NSPCSRFG]\index{DEF\_NSPCSRFG}\index{NSPCSRFG} the maximum
 number of groups of \verb!Eirene! surfaces for which the data can be
-transferred from \verb!B2! or \verb!B2.5! (\verb!DG! specification "Surface special")
+transferred from \verb!B2.5! (\verb!DG! specification "Surface special")
 \item[DEF\_NSRFS]\index{DEF\_NSRFS}\index{NSRFS} the maximum number of
 surfaces in a stratum
 \item[DEF\_NSTRA]\index{DEF\_NSTRA}\index{NSTRA} the maximum number of
 \verb!Eirene! strata
-\item[DEF\_NSTS]\index{DEF\_NSTS}\index{NSTS} the maximum number of non
-default standard surfaces to be handled by \verb!Eirene!
+\item[DEF\_NSTS]\index{DEF\_NSTS}\index{NSTS} the maximum number of non-default 
+standard surfaces to be handled by \verb!Eirene!
 \item[DEF\_NTOR]\index{DEF\_NTOR}\index{NTOR} the maximum number of toroidal
 periodicity boundaries
 \item[DEF\_NXD]\index{DEF\_NXD}\index{NXD} the maximum number of cells
@@ -10679,11 +10823,12 @@ in the $x$ (parallel or poloidal) direction not including two guard
 cells
 \item[DEF\_NYD]\index{DEF\_NYD}\index{NYD} the maximum number of cells
 in the radial direction not including two guard cells
-\item[DEF\_NGSTAL]\index{DEF\_NGSTAL}\index{NGSTAL} the maximum number
-of grids on which spatially resolved surface tallies are computed
 %%\item[] the maximum number of 
 %%\item[] the maximum number of 
 \end{description}
+
+The current default settings of \verb!DIMENSIONS.F!, correponding to a D+He+C DN case, are:
+\VerbatimInput[fontsize=\footnotesize]{DIMENSIONS.F}
 
 \section{Making movies}
 

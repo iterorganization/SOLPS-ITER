@@ -1,30 +1,30 @@
 # Test whether required environment variables are set
 # If not, attempt to determine them automatically
 
-# Identify HOST 
-ifndef HOST
+# Identify HOST_NAME 
+ifndef HOST_NAME
   ifeq ($(shell [ -e whereami ] && echo yes || echo no ),yes)
     # Identify host from whereami-script
-    HOST = $(shell echo `./whereami|tail -1`)
-    ifneq (,$(findstring UNKNOWN,${HOST}))
+    HOST_NAME = $(shell echo `./whereami|tail -1`)
+    ifneq (,$(findstring UNKNOWN,${HOST_NAME}))
       # If no specific host identified, use default settings
-      HOST = default
+      HOST_NAME = default
     endif
   else
     # If whereami-script not found, use default settings 
-    HOST = default
+    HOST_NAME = default
   endif
-  export HOST
-  ifeq (${HOST},default)
-    $(warning HOST not recognized. Using ${HOST})
+  export HOST_NAME
+  ifeq (${HOST_NAME},default)
+    $(warning HOST_NAME not recognized. Using ${HOST_NAME})
   endif
 endif
 
 # Identify compiler
 ifndef COMPILER
-  ifeq ($(shell [ -e setup.COMPILER.test ] && echo yes || echo no ),yes)
-    # Identify compiler from setup.COMPILER-script
-    COMPILER = $(shell echo `./setup.COMPILER.test|tail -1`)
+  ifeq ($(shell [ -e default_compiler ] && echo yes || echo no ),yes)
+    # Identify compiler from default_compiler-script
+    COMPILER = $(shell echo `./default_compiler|tail -1`)
   else
     # If script not found, use default compiler ifort64
     COMPILER = ifort64
@@ -35,18 +35,18 @@ endif
 
 # Set SOLPSTOP and SOLPSLIB if not already defined in the environment
 export SOLPSTOP ?= ${PWD}
-export SOLPSLIB ?= ${PWD}/lib/${HOST}.${COMPILER}
+export SOLPSLIB ?= ${PWD}/lib/${HOST_NAME}.${COMPILER}
 
 # Include compiler settings
-ifeq ($(shell [ -e SETUP/config.${HOST}.${COMPILER} ] && echo yes || echo no ),yes)
-  include SETUP/config.${HOST}.${COMPILER}
+ifeq ($(shell [ -e SETUP/config.${HOST_NAME}.${COMPILER} ] && echo yes || echo no ),yes)
+  include SETUP/config.${HOST_NAME}.${COMPILER}
 else
-  $(warning  SETUP/config.${HOST}.${COMPILER} not found.)
+  $(warning  SETUP/config.${HOST_NAME}.${COMPILER} not found.)
 endif
 
 # Include local compiler settings, if present
-ifeq ($(shell [ -e SETUP/config.${HOST}.${COMPILER}.local ] && echo yes || echo no ),yes)
-  include SETUP/config.${HOST}.${COMPILER}.local
+ifeq ($(shell [ -e SETUP/config.${HOST_NAME}.${COMPILER}.local ] && echo yes || echo no ),yes)
+  include SETUP/config.${HOST_NAME}.${COMPILER}.local
 endif
 
 .PHONY: solps solps_mpi all all_mpi carre divgeo b25 b25_mpi eirene eirene_mpi b25eirene b25eirene_mpi uinp triang sonnet-light manual depend tags clean clean_% debug_% VERSION
@@ -67,48 +67,49 @@ all_mpi: carre divgeo b25_mpi eirene_mpi b25eirene_mpi uinp triang sonnet-light 
 
 
 carre:
-	cd src/Carre; ${MAKE}
+	cd modules/Carre; ${MAKE}
 
 
 divgeo:
-	cd src/DivGeo;         ${MAKE}
-	cd src/DivGeo/equtrn;  ${MAKE}
-	cd src/DivGeo/convert; ${MAKE}
+	cd modules/DivGeo;         ${MAKE}
+	cd modules/DivGeo/equtrn;  ${MAKE}
+	cd modules/DivGeo/convert; ${MAKE}
 
 
 eirene:
-	cd src/Eirene; ${MAKE}
+	cd modules/Eirene; ${MAKE}
 
 eirene_mpi:
-	cd src/Eirene; ${MAKE} USE_MPI=-DUSE_MPI
+	cd modules/Eirene; ${MAKE} USE_MPI=-DUSE_MPI
 
 
 b25:
-	cd src/B2.5; ${MAKE}
+	cd modules/B2.5; ${MAKE}
 
 b25_mpi:
-	cd src/B2.5; ${MAKE} USE_MPI=-DUSE_MPI
+	cd modules/B2.5; ${MAKE} USE_MPI=-DUSE_MPI
 
 
 b25eirene:
-	cd src/Eirene; ${MAKE} USE_B25=-DB25_EIRENE
-	cd src/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE
+	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE
+	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE
 
 b25eirene_mpi:
-	cd src/Eirene; ${MAKE} USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI
-	cd src/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
+	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI
+	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
+
 
 uinp:
-	cd src/Uinp; ${MAKE}
+	cd modules/Uinp; ${MAKE}
 
 
 triang:
-	cd src/Triang; ${MAKE}
+	cd modules/Triang; ${MAKE}
 
 
 sonnet-light:
 	-mkdir -p ${SOLPSLIB}
-	cd src/Sonnet-light; ${MAKE} all; ${MAKE} install INSTALL_USERAREA=${SOLPSLIB}
+	cd modules/Sonnet-light; ${MAKE} all; ${MAKE} install INSTALL_USERAREA=${SOLPSLIB}
 
 
 manual:
@@ -116,49 +117,49 @@ manual:
 
 
 tags:
-	cd src/Carre;          ${MAKE} tags
-	cd src/Eirene;         ${MAKE} tags
-	cd src/B2.5;           ${MAKE} tags
-	cd src/Uinp;           ${MAKE} tags
-	cd src/Triang;         ${MAKE} tags
-	cd src/DivGeo;         ${MAKE} tags
-	cd src/DivGeo/equtrn;  ${MAKE} tags
-	rm -f TAGS ; etags -o TAGS src/Carre/src/*/*.F src/Carre/src/include/*.* src/Eirene/*/*.f src/Eirene/interfaces/*/*.f src/Eirene/user-routines/*/*.f src/Eirene/*/*.[Ff]90 src/B2.5/src.local/*.F src/B2.5/src/*/*.F src/B2.5/src/*/*.[Hh] src/B2.5/src/common/*.* src/B2.5/src/common/COUPLE/*.F src/Uinp/src/*.F src/Uinp/src/*.inc src/Uinp/src/*.h src/Triang/src/*/*.f src/DivGeo/equtrn/src/*.f src/DivGeo/equtrn/src/*.inc src/DivGeo/convert/src/*.f src/DivGeo/src/*.[ch]
+	cd modules/Carre;          ${MAKE} tags
+	cd modules/Eirene;         ${MAKE} tags
+	cd modules/B2.5;           ${MAKE} tags
+	cd modules/Uinp;           ${MAKE} tags
+	cd modules/Triang;         ${MAKE} tags
+	cd modules/DivGeo;         ${MAKE} tags
+	cd modules/DivGeo/equtrn;  ${MAKE} tags
+	rm -f TAGS ; etags -o TAGS modules/Carre/src/*/*.F modules/Carre/src/include/*.* modules/Eirene/*/*.f modules/Eirene/interfaces/*/*.f modules/Eirene/user-routines/*/*.f modules/Eirene/*/*/*.[Ff]90 modules/B2.5/src.local/*.F modules/B2.5/src/*/*.F modules/B2.5/src/*/*.[Hh] modules/B2.5/src/common/*.* modules/B2.5/src/common/COUPLE/*.F modules/Uinp/src/*.F modules/Uinp/src/*.inc modules/Uinp/src/*.h modules/Triang/src/*/*.f modules/DivGeo/equtrn/src/*.f modules/DivGeo/equtrn/src/*.inc modules/DivGeo/convert/src/*.f modules/DivGeo/src/*.[ch]
 
 listobj:
-	cd src/Carre;          ${MAKE} listobj
-	cd src/Eirene;         ${MAKE} listobj USE_MPI=-DUSE_MPI
-	cd src/Eirene;         ${MAKE} listobj
-	cd src/B2.5;           ${MAKE} listobj USE_MPI=-DUSE_MPI
-	cd src/B2.5;           ${MAKE} listobj
-	cd src/Uinp;           ${MAKE} listobj
-	cd src/Triang;         ${MAKE} listobj
-	cd src/DivGeo;         ${MAKE} listobj
-	cd src/Eirene;         ${MAKE} listobj USE_B25=-DB25_EIRENE
-	cd src/Eirene;         ${MAKE} listobj USE_B25=-DB25_EIRENE USE_MPI=-DUSE_MPI
-	cd src/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE
-	cd src/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
+	cd modules/Carre;          ${MAKE} listobj
+	cd modules/Eirene;         ${MAKE} listobj USE_MPI=-DUSE_MPI
+	cd modules/Eirene;         ${MAKE} listobj
+	cd modules/B2.5;           ${MAKE} listobj USE_MPI=-DUSE_MPI
+	cd modules/B2.5;           ${MAKE} listobj
+	cd modules/Uinp;           ${MAKE} listobj
+	cd modules/Triang;         ${MAKE} listobj
+	cd modules/DivGeo;         ${MAKE} listobj
+	cd modules/Eirene;         ${MAKE} listobj USE_B25=-DB25_EIRENE
+	cd modules/Eirene;         ${MAKE} listobj USE_B25=-DB25_EIRENE USE_MPI=-DUSE_MPI
+	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE
+	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
 
 depend:
-	cd src/Carre;          ${MAKE} depend
-	cd src/Eirene;         ${MAKE} depend USE_MPI=-DUSE_MPI
-	cd src/Eirene;         ${MAKE} depend
-	cd src/B2.5;           ${MAKE} depend USE_MPI=-DUSE_MPI
-	cd src/B2.5;           ${MAKE} depend
-	cd src/Uinp;           ${MAKE} depend
-	cd src/Triang;         ${MAKE} depend
-	cd src/DivGeo;         ${MAKE} depend
-	cd src/DivGeo/equtrn;  ${MAKE} depend
-	cd src/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE 
-	cd src/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI
-	cd src/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE
-	cd src/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
+	cd modules/Carre;          ${MAKE} depend
+	cd modules/Eirene;         ${MAKE} depend USE_MPI=-DUSE_MPI
+	cd modules/Eirene;         ${MAKE} depend
+	cd modules/B2.5;           ${MAKE} depend USE_MPI=-DUSE_MPI
+	cd modules/B2.5;           ${MAKE} depend
+	cd modules/Uinp;           ${MAKE} depend
+	cd modules/Triang;         ${MAKE} depend
+	cd modules/DivGeo;         ${MAKE} depend
+	cd modules/DivGeo/equtrn;  ${MAKE} depend
+	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE 
+	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI
+	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE
+	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
 
 VERSION:
-	cd src/B2.5;   ${MAKE} VERSION
-	cd src/Eirene; ${MAKE} VERSION
-	cd src/Carre;  ${MAKE} VERSION
-	cd src/DivGeo; ${MAKE} VERSION
+	cd modules/B2.5;   ${MAKE} VERSION
+	cd modules/Eirene; ${MAKE} VERSION
+	cd modules/Carre;  ${MAKE} VERSION
+	cd modules/DivGeo; ${MAKE} VERSION
 
 
 
@@ -190,46 +191,46 @@ clean_all_mpi:   clean_carre clean_divgeo clean_b25_mpi clean_eirene_mpi clean_b
 
 
 clean_carre:
-	cd src/Carre; ${MAKE} clean
+	cd modules/Carre; ${MAKE} clean
 
 
 clean_divgeo:
-	cd src/DivGeo;         ${MAKE} clean
-	cd src/DivGeo/equtrn;  ${MAKE} clean
-	cd src/DivGeo/convert; ${MAKE} clean
+	cd modules/DivGeo;         ${MAKE} clean
+	cd modules/DivGeo/equtrn;  ${MAKE} clean
+	cd modules/DivGeo/convert; ${MAKE} clean
 
 
 clean_eirene:
-	cd src/Eirene; ${MAKE} clean
+	cd modules/Eirene; ${MAKE} clean
 
 clean_eirene_mpi:
-	cd src/Eirene; ${MAKE} clean USE_MPI=-DUSE_MPI
+	cd modules/Eirene; ${MAKE} clean USE_MPI=-DUSE_MPI
 
 
 clean_b25:
-	cd src/B2.5; ${MAKE} clean
+	cd modules/B2.5; ${MAKE} clean
 
 
 clean_b25_mpi:
-	cd src/B2.5; ${MAKE} clean USE_MPI=-DUSE_MPI
+	cd modules/B2.5; ${MAKE} clean USE_MPI=-DUSE_MPI
 
 
 clean_b25eirene:
-	cd src/Eirene; ${MAKE} clean USE_B25=-DB25_EIRENE
-	cd src/B2.5;   ${MAKE} clean USE_EIRENE=-DB25_EIRENE
+	cd modules/Eirene; ${MAKE} clean USE_B25=-DB25_EIRENE
+	cd modules/B2.5;   ${MAKE} clean USE_EIRENE=-DB25_EIRENE
 
 
 clean_b25eirene_mpi:
-	cd src/Eirene; ${MAKE} clean OUSE_B25=-DB25_EIRENE   USE_MPI=-DUSE_MPI
-	cd src/B2.5;   ${MAKE} clean USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
+	cd modules/Eirene; ${MAKE} clean OUSE_B25=-DB25_EIRENE   USE_MPI=-DUSE_MPI
+	cd modules/B2.5;   ${MAKE} clean USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
 
 
 clean_uinp:
-	cd src/Uinp; ${MAKE} clean
+	cd modules/Uinp; ${MAKE} clean
 
 
 clean_triang:
-	cd src/Triang; ${MAKE} clean
+	cd modules/Triang; ${MAKE} clean
 
 clean_sonnet-light:
-	cd src/Sonnet-light; ${MAKE} clean
+	cd modules/Sonnet-light; ${MAKE} clean

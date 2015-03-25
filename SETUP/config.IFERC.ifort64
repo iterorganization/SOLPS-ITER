@@ -1,4 +1,4 @@
-$(error First use of config.IPP.ifort64. Provide paths to libraries first.)
+$(error First use of config.IFERC.ifort64. Provide paths to libraries first.)
 
 #
 # Specify paths to root-directories of following libraries on your system

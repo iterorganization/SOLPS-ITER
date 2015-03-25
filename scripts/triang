@@ -116,6 +116,7 @@ q=U
 
 
 export GRSOFT_DEVICE='62'
+export PLOT_IT_STEM='tria'
 
 # N is the serial number of the current mesh. It is assigned when the mesh is stored.
 N=
@@ -152,8 +153,9 @@ while true; do {
             [ -r fort.30 ] && q=e || q=b
             break;;  
       ( b|B )                                               # run b2ag to produce fort.30 file:
-            print -u2 -- "Command line: echo f30 | gmake -f ${SOLPSTOP}/runs/Makefile b2ag.prt > b2ag.log"
+            print -u2 -- "Command line: gmake -f ${SOLPSTOP}/runs/Makefile b2ag.prt > b2ag.log"
             [ -r b2ag.prt ] && rm b2ag.prt
+            [ -r fort.30 ] && rm fort.30
             gmake -f ${SOLPSTOP}/runs/Makefile b2ag.prt > b2ag.log
             [ -r fort.30 ] && {
               rmdir b2ag.exe.dir
@@ -172,9 +174,10 @@ while true; do {
               [ -r $eirinp ] && {
                 N=
                 print -u2 -- "Starting Eirene - may take a while..."
-                print -u2 -- "Command line: eirobjx < triang.eir > $eirlog"
+                print -u2 -- "Command line: eirobj < triang.eir > $eirlog"
+                [ -r $eirout ] && rm $eirout
                 ln -sf "$eirinp" fort.1
-                eirobjx < triang.eir > "$eirlog"
+                eirobj < triang.eir > "$eirlog"
                 rm fort.1
                 [ -s "$eirout" ] && [ -r "$eirout" ] && {
                   (cat "$eirhed"; tail --lines=+2  "$eirout") > "$triain" && q=t || {
@@ -340,6 +343,7 @@ while true; do {
                   esac; }
                 }; done
               }
+              print -u2 -- "Command line: cnvtria $stem"
               cnvtria $stem || {
                 print -u2 -- "Error $? reported from cnvtria"
                 break

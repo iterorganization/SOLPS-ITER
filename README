@@ -3,9 +3,9 @@ Setting up the environment
 ==========================
 
 To define the environment variables of SOLPS-ITER, a setup-script has to be sourced:
-source setup
+source setup.csh
 
-If you want to define any additional variables, create a script setup.local. 
+If you want to define any additional variables, create a script setup.csh.local. 
 The general setup-script will automatically look for this script and source it if present.
 
 Note: 
@@ -17,16 +17,16 @@ Note:
 At first compilation
 ====================
 
-Check whether your <HOST> is included in SETUP/whereami.
-Add new <HOST> if necessary.
+Check whether your <HOST_NAME> is included in whereami.
+Add new <HOST_NAME> if necessary.
 
-Check whether default compiler for your <HOST> is set in SETUP/config.COMPILER.
-Add new default <COMPILER> for your <HOST> if necessary.
+Check whether default compiler for your <HOST_NAME> is set in default_compilers.
+Add new default <COMPILER> for your <HOST_NAME> if necessary.
 
-Check default SOLPS-ITER compiler settings for your <HOST> and <COMPILER> in SETUP/config.<HOST>.<COMPILER>.
+Check default SOLPS-ITER compiler settings for your <HOST_NAME> and <COMPILER> in SETUP/config.<HOST_NAME>.<COMPILER>.
 Create this config-file is necessary (example config-file: config.default.default).
 If local modifications to these default compiler options are needed, 
-create a config-file SETUP/config.<HOST>.<COMPILER>.local.
+create a config-file SETUP/config.<HOST_NAME>.<COMPILER>.local.
 
 
 Compile instructions

@@ -1,7 +1,7 @@
-if ($?PATH_SOLPS) then
-  # Check whether HOST and COMPILER are defined
-  if (! $?HOST) then
-    echo "HOST not defined. Exiting.
+if ($?SOLPS_PATH) then
+  # Check whether HOST_NAME and COMPILER are defined
+  if (! $?HOST_NAME) then
+    echo "HOST_NAME not defined. Exiting.
     exit 1
   endif
   if (! $?COMPILER) then
@@ -9,13 +9,13 @@ if ($?PATH_SOLPS) then
     exit 1
   endif
 
-  setenv   OLD_PATH_SOLPS $PATH_SOLPS
-  setenv   PATH_SOLPS `echo $PATH_SOLPS | sed 's|.debug||g'`
-  setenv   PATH_SOLPS `echo $PATH_SOLPS | sed "s|${HOST}.${COMPILER}.mpi|${HOST}.${COMPILER}.mpi.debug|g"`
-  setenv   PATH_SOLPS `echo $PATH_SOLPS | sed "s|${HOST}.${COMPILER}:|${HOST}.${COMPILER}.debug:|g"`.debug
-  setenv   PATH `echo $PATH | sed "s|${OLD_PATH_SOLPS}|${PATH_SOLPS}|"`
+  setenv   OLD_SOLPS_PATH $SOLPS_PATH
+  setenv   SOLPS_PATH `echo $SOLPS_PATH | sed 's|.debug||g'`
+  setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|${HOST_NAME}.${COMPILER}.mpi|${HOST_NAME}.${COMPILER}.mpi.debug|g"`
+  setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|${HOST_NAME}.${COMPILER}:|${HOST_NAME}.${COMPILER}.debug:|g"`.debug
+  setenv   PATH `echo $PATH | sed "s|${OLD_SOLPS_PATH}|${SOLPS_PATH}|"`
   setenv   SOLPS_DEBUG yes
-  unsetenv OLD_PATH_SOLPS
+  unsetenv OLD_SOLPS_PATH
 else
-  echo "PATH_SOLPS not set. Exiting."
+  echo "SOLPS_PATH not set. Exiting."
 endif

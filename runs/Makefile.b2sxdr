@@ -20,7 +20,7 @@ DBX = gdb
 INC =
 else
 DBX = dbx
-ifdef USE_EIRENE
+ifdef COUPLED_RUN
 INC = -I ${SOLPSTOP}/bin/${OBJECTCODE}/B2.5 -I ${SOLPSTOP}/bin/${OBJECTCODE}/Eirene
 else
 INC = -I ${SOLPSTOP}/bin/${OBJECTCODE}/B2.5
