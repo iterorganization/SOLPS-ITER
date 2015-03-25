@@ -1,75 +1,79 @@
 # Test whether required environment variables are set
-# If not, attempt to determine them automatically 
+# If not, attempt to determine them automatically
+
+# Identify HOST 
 ifndef HOST
   ifeq ($(shell [ -e whereami ] && echo yes || echo no ),yes)
+    # Identify host from whereami-script
     HOST = $(shell echo `./whereami|tail -1`)
+    ifneq (,$(findstring UNKNOWN,${HOST}))
+      # If no specific host identified, use default settings
+      HOST = default
+    endif
   else
-    HOST =  default
+    # If whereami-script not found, use default settings 
+    HOST = default
   endif
-  $(warning HOST not defined. Assuming ${HOST}.)
   export HOST
+  ifeq (${HOST},default)
+    $(warning HOST not recognized. Using ${HOST})
+  endif
 endif
 
-ifndef OBJECTCODE
-  OBJECTCODE = ifort64
-  $(warning OBJECTCODE not defined. Using default compiler ifort64.)
-  export OBJECTCODE
+# Identify compiler
+ifndef COMPILER
+  ifeq ($(shell [ -e setup.COMPILER.test ] && echo yes || echo no ),yes)
+    # Identify compiler from setup.COMPILER-script
+    COMPILER = $(shell echo `./setup.COMPILER.test|tail -1`)
+  else
+    # If script not found, use default compiler ifort64
+    COMPILER = ifort64
+    $(warning Using default compiler ${COMPILER})
+  endif
+  export COMPILER
 endif
 
+# Set SOLPSTOP and SOLPSLIB if not already defined in the environment
+export SOLPSTOP ?= ${PWD}
+export SOLPSLIB ?= ${PWD}/lib/${HOST}.${COMPILER}
 
-# Include default compiler settings
-ifeq ($(shell [ -e SETUP/config.${HOST}.${OBJECTCODE} ] && echo yes || echo no ),yes)
-  include SETUP/config.${HOST}.${OBJECTCODE}
-  $(warning  Including SETUP/config.${HOST}.${OBJECTCODE})
+# Include compiler settings
+ifeq ($(shell [ -e SETUP/config.${HOST}.${COMPILER} ] && echo yes || echo no ),yes)
+  include SETUP/config.${HOST}.${COMPILER}
 else
-  $(warning  SETUP/config.${HOST}.${OBJECTCODE} not found.)
+  $(warning  SETUP/config.${HOST}.${COMPILER} not found.)
 endif
 
 # Include local compiler settings, if present
-ifeq ($(shell [ -e SETUP/config.${HOST}.${OBJECTCODE}.local ] && echo yes || echo no ),yes)
-  include SETUP/config.${HOST}.${OBJECTCODE}.local
-  $(warning  Including SETUP/config.${HOST}.${OBJECTCODE}.local)
+ifeq ($(shell [ -e SETUP/config.${HOST}.${COMPILER}.local ] && echo yes || echo no ),yes)
+  include SETUP/config.${HOST}.${COMPILER}.local
 endif
 
-# Set SOLPSTOP if not already defined in the environment
-export SOLPSTOP ?= ${PWD}
-export SOLPSLIB ?= ${PWD}/lib/${HOST}.${OBJECTCODE}
+.PHONY: solps solps_mpi all all_mpi carre divgeo b25 b25_mpi eirene eirene_mpi b25eirene b25eirene_mpi uinp triang sonnet-light manual depend tags clean clean_% debug_% VERSION
 
-BINDIR = ${PWD}/builds/${HOST}.${OBJECTCODE}
+
+# Basic compile targets
+#----------------------
+
 
 solps:     carre divgeo b25eirene     uinp triang sonnet-light manual
 
 solps_mpi: carre divgeo b25eirene_mpi uinp triang sonnet-light manual
 
 
-all:     carre divgeo b25     eirene     b25eirene     uinp triang manual
+all:     carre divgeo b25     eirene     b25eirene     uinp triang sonnet-light manual
 
-all_mpi: carre divgeo b25_mpi eirene_mpi b25eirene_mpi uinp triang manual
-
-
-.PHONY: libs libs_mpi solps solps_mpi all all_mpi carre divgeo b25 b25_mpi eirene eirene_mpi b25eirene b25eirene_mpi manual depend tags clean clean_* VERSION
-
-
-#libs:
-#	cd lib; source install.sh
-
-
-#libs_mpi:
-#	cd lib; source install_mpi.sh
+all_mpi: carre divgeo b25_mpi eirene_mpi b25eirene_mpi uinp triang sonnet-light manual
 
 
 carre:
 	cd src/Carre; ${MAKE}
-#	@ln -sf ${BINDIR}/Carre/{carre,traduit,fcrr} ${BINDIR}
 
 
 divgeo:
 	cd src/DivGeo;         ${MAKE}
 	cd src/DivGeo/equtrn;  ${MAKE}
 	cd src/DivGeo/convert; ${MAKE}
-#	@ln -sf ${BINDIR}/DivGeo/{dg,dg.dgc,dg.dgh} ${BINDIR}
-#	@ln -sf ${BINDIR}/DivGeo/convert/{cnveir,cnvtria} ${BINDIR}
-#	@ln -sf ${BINDIR}/DivGeo/equtrn/{cropequ,dg2dg,dg2ef,dg2vr,ef2dg,jt2dg,nk2dg,pb2dg,prinequ,pt2dg,risepsi,vr2dg} ${BINDIR}
 
 
 eirene:
@@ -88,26 +92,19 @@ b25_mpi:
 
 b25eirene:
 	cd src/Eirene; ${MAKE} USE_B25=-DB25_EIRENE
-#	@ln -sf ${BINDIR}/B25Eirene/Eirene/eirobj  ${BINDIR}
-#	@ln -sf ${BINDIR}/B25Eirene/Eirene/eirobjx ${BINDIR}
 	cd src/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE
-#	@ln -sf ${BINDIR}/B25Eirene/B2.5/*.exe ${BINDIR}
 
 b25eirene_mpi:
 	cd src/Eirene; ${MAKE} USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI
-#	@ln -sf ${BINDIR}/B25Eirene.mpi/Eirene/eirobj  ${BINDIR}/eirobj.mpi
-#	@ln -sf ${BINDIR}/B25Eirene.mpi/Eirene/eirobjx ${BINDIR}/eirobjx.mpi
 	cd src/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
-#	find -wholename "${BINDIR}/B25Eirene.mpi/*.exe" -exec ln -s {} "${BINDIR}" \;
 
 uinp:
 	cd src/Uinp; ${MAKE}
-#	@ln -sf ${BINDIR}/Uinp/{uinp,ub2p} ${BINDIR}
 
 
 triang:
 	cd src/Triang; ${MAKE}
-#	@ln -sf ${BINDIR}/Triang/{tria,triageom} ${BINDIR}
+
 
 sonnet-light:
 	-mkdir -p ${SOLPSLIB}
@@ -165,7 +162,18 @@ VERSION:
 
 
 
+# Debug targets
+#--------------
 
+
+debug_%:
+	${MAKE} $(@:debug_%=%) SOLPS_DEBUG=yes
+
+
+
+
+# Clean targets
+#--------------
 
 
 clean: clean_solps
@@ -183,28 +191,19 @@ clean_all_mpi:   clean_carre clean_divgeo clean_b25_mpi clean_eirene_mpi clean_b
 
 clean_carre:
 	cd src/Carre; ${MAKE} clean
-#	rm -f ${BINDIR}/{carre,traduit,fcrr}
 
 
 clean_divgeo:
 	cd src/DivGeo;         ${MAKE} clean
 	cd src/DivGeo/equtrn;  ${MAKE} clean
 	cd src/DivGeo/convert; ${MAKE} clean
-#	rm -f ${BINDIR}/{dg,dg.dgc,dg.dgh}
-#	rm -f ${BINDIR}/{cropequ,dg2dg,dg2ef,dg2vr,ef2dg,jt2dg,nk2dg,pb2dg,prinequ,pt2dg,risepsi,vr2dg}
-#	rm -f ${BINDIR}/{cnveir,cnvtria}
 
 
 clean_eirene:
 	cd src/Eirene; ${MAKE} clean
-#	rm -f ${BINDIR}/eirobj
-#	rm -f ${BINDIR}/eirobjx
-
 
 clean_eirene_mpi:
 	cd src/Eirene; ${MAKE} clean USE_MPI=-DUSE_MPI
-#	rm -f ${BINDIR}/eirobj.mpi
-#	rm -f ${BINDIR}/eirobjx.mpi
 
 
 clean_b25:
@@ -218,23 +217,19 @@ clean_b25_mpi:
 clean_b25eirene:
 	cd src/Eirene; ${MAKE} clean USE_B25=-DB25_EIRENE
 	cd src/B2.5;   ${MAKE} clean USE_EIRENE=-DB25_EIRENE
-#	rm -f ${BINDIR}/*.exe
 
 
 clean_b25eirene_mpi:
 	cd src/Eirene; ${MAKE} clean OUSE_B25=-DB25_EIRENE   USE_MPI=-DUSE_MPI
 	cd src/B2.5;   ${MAKE} clean USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
-#	rm -f ${BINDIR}/*.exe.mpi
 
 
 clean_uinp:
 	cd src/Uinp; ${MAKE} clean
-#	rm -f ${BINDIR}/{uinp,ub2p}
 
 
 clean_triang:
 	cd src/Triang; ${MAKE} clean
-#	rm -f ${BINDIR}/{tria,triageom}
 
 clean_sonnet-light:
 	cd src/Sonnet-light; ${MAKE} clean

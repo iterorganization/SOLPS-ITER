@@ -1,0 +1,22 @@
+if ($?PATH_SOLPS) then
+  # Check whether HOST and COMPILER are defined
+  if (! $?HOST) then
+    echo "HOST not defined. Exiting.
+    exit 1
+  endif
+  if (! $?COMPILER) then
+    echo "COMPILER not defined. Exiting.
+    exit 1
+  endif
+  
+  # Pragmatic approach: assume only Eirene, B2.5 and B25Eirene will require mpi-versions
+  setenv   OLD_PATH_SOLPS $PATH_SOLPS
+  setenv   PATH_SOLPS `echo $PATH_SOLPS | sed 's|.mpi||g'` # remove .mpi if already present
+  setenv   PATH_SOLPS `echo $PATH_SOLPS | sed "s|standalone.${HOST}.${COMPILER}|standalone.${HOST}.${COMPILER}.mpi|g"`
+  setenv   PATH_SOLPS `echo $PATH_SOLPS | sed "s|couple_SOLPS-ITER.${HOST}.${COMPILER}|couple_SOLPS-ITER.${HOST}.${COMPILER}.mpi|g"`
+  setenv   PATH_SOLPS `echo $PATH_SOLPS | sed "s|couple_Eirene.${HOST}.${COMPILER}|couple_Eirene.${HOST}.${COMPILER}.mpi|g"`
+  setenv   PATH `echo $PATH | sed "s|${OLD_PATH_SOLPS}|${PATH_SOLPS}|"`
+  unsetenv OLD_PATH_SOLPS
+else
+  echo "PATH_SOLPS not set. Exiting."
+endif

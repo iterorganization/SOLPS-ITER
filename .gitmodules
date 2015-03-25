@@ -3,18 +3,18 @@
 	url = ssh://git@git.iter.org/lib/mscl.git
 	branch = feature/codestructure
 [submodule "B2.5"]
-	path = src/B2.5
+	path = modules/B2.5
 	url = ssh://git@git.iter.org/bnd/b2.5.git
 	branch = feature/codestructure
 [submodule "Carre"]
-	path = src/Carre
+	path = modules/Carre
 	url = ssh://git@git.iter.org/bnd/carre.git
 	branch = feature/codestructure
 [submodule "DivGeo"]
-	path = src/DivGeo
+	path = modules/DivGeo
 	url = ssh://git@git.iter.org/bnd/divgeo.git
 	branch = feature/codestructure
 [submodule "Eirene"]
-	path = src/Eirene
+	path = modules/Eirene
 	url = ssh://git@git.iter.org/bnd/eirene.git
 	branch = feature/SOLPS-ITER

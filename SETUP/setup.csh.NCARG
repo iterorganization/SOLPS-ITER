@@ -1,4 +1,0 @@
-echo setup.csh.NCARG
-if (-e $SOLPSTOP/src/NCARG/$OBJECTCODE) then
-  setenv NCARG_ROOT $SOLPSTOP/src/NCARG/$OBJECTCODE
-endif

@@ -90,15 +90,15 @@ $Help"
 
 [ "$1" = -h ] && { print -- "$Usage"; exit; }
 
+# wd: not required if determined by PATH
+#location="$SOLPSTOP/bin"
+#[ -s B2E.version ] && {
+#  set -A u -- `cat B2E.version`
+#  location="${SOLPSTOP%/*}/$u/bin"
+#}
 
-location="$SOLPSTOP/bin"
-[ -s B2E.version ] && {
-  set -A u -- `cat B2E.version`
-  location="${SOLPSTOP%/*}/$u/bin"
-}
-
-TRIA="$location/$OBJECTCODE/tria"
-TRIAGEOM="$location/$OBJECTCODE/triageom"
+TRIA="tria"
+TRIAGEOM="triageom"
 
 e=
 [ -x "$TRIA" ] || {
@@ -172,9 +172,9 @@ while true; do {
               [ -r $eirinp ] && {
                 N=
                 print -u2 -- "Starting Eirene - may take a while..."
-                print -u2 -- "Command line: ${SOLPSTOP}/bin/${OBJECTCODE}/eirobjx < triang.eir > $eirlog"
+                print -u2 -- "Command line: eirobjx < triang.eir > $eirlog"
                 ln -sf "$eirinp" fort.1
-                ${SOLPSTOP}/bin/${OBJECTCODE}/eirobjx < triang.eir > "$eirlog"
+                eirobjx < triang.eir > "$eirlog"
                 rm fort.1
                 [ -s "$eirout" ] && [ -r "$eirout" ] && {
                   (cat "$eirhed"; tail --lines=+2  "$eirout") > "$triain" && q=t || {

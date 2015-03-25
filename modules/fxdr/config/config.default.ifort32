@@ -1,0 +1,26 @@
+#  VERSION : 09.05.95 17:03
+
+# File compiler.macro for IBM xlf
+
+# Test whether necessary variables are defined
+ifndef LD_MSCL
+  $(error LD_MSCL not defined)
+endif
+ifndef LD_SONNET
+  $(error LD_SONNET not defined)
+endif
+
+FC	 = ifort
+
+ifdef SOLPS_DEBUG
+FFLAGS	 = -g debug all
+else
+FFLAGS	 = -O -vec_report0
+endif
+
+INCLUDE  = -Isrc
+COMPILE  = ${FC} -c ${FFLAGS}
+CPP	 = /lib/cpp -C -traditional
+
+LDLIBS	 = ${LD_SONNET} ${LD_MSCL} -L/usr/local/lib
+LDEXTRA  = 

@@ -41,4 +41,8 @@ while true; do {
   } 
 }
 
-$SOLPSTOP/bin/$OBJECTCODE/dg${vers} $cfg $* &
+ln -sf $DG/dg.dgh ./dg.dgh
+ln -sf $DG/dg.dgc ./dg.dgc
+dg.exe${vers} $cfg $* &
+wait
+rm -f dg.dgh dg.dgc

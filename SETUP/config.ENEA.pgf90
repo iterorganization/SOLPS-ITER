@@ -1,0 +1,33 @@
+$(error Using default file. Provide paths to libraries first.)
+
+#
+# Specify paths to root-directories of following libraries on your system
+#  
+
+NETCDF_ROOT = 
+  MSCL_ROOT =
+    GR_ROOT = 
+   GKS_ROOT = 
+ NCARG_ROOT = 
+   NAG_ROOT = 
+
+
+
+#
+# Variables for linking
+#
+
+LD_NETCDF = -L${NETCDF_ROOT} -lnetcdf 
+LD_MSCL   = -L${MSCL_ROOT} -lmscl
+LD_GR     = -L${GR_ROOT}/lib -lgr
+LD_GKS    = -L${GKS_ROOT}/lib -lgks
+LD_NCARG  = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lm  -lX11 -lXext -lcairo -lfontconfig -lfreetype -lpng -lz -lpthread -lXrender -lbz2 -lgfortran # for NCARG v6.x.x
+#LD_NCARG  = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lm                                                                                        # for NCARG v4.x.x
+LD_NAG    = -L{NAG_ROOT}/lib -lnag 
+
+
+#
+# Linking sonnet
+#
+
+LD_SONNET = -L${SOLPSLIB} -lsonnet

@@ -6,72 +6,85 @@ echo "Documentation can be found at: https://user.iter.org/?uid=QB8YQ2 (requires
 setenv SOLPSTOP $PWD
 
 
-# Set HOSTNAME, which will determine setup-files to be used
+# Set HOST and COMPILER, which will determine setup-files to be used
+#-------------------------------------------------------------------
 
 if (-e whereami) then
   set iamat=`./whereami|tail -1`
-  setenv HOSTNAME ${iamat}
-  echo Running at $iamat
+  echo Running at $iamat.
 else
-  set iamat="unknown"
-  setenv HOSTNAME default
+  set iamat="UNKNOWN"
 endif
 
+if ( $iamat == "*UNKNOWN" ) then
+  setenv HOST default
+else
+  setenv HOST ${iamat}
+endif
 
+# COMPILER can also be the argument to setup.csh-call
 if($1 == "") then
-  setenv OBJECTCODE ifort64
-  echo "Using default compiler ifort64"
+  if (-e setup.COMPILER) then
+    setenv COMPILER `./setup.COMPILER|tail -1`
+    echo Using compiler $COMPILER.
+  else
+    setenv COMPILER ifort64
+    echo Using default compiler ifort64.
+  endif
 else
-  setenv OBJECTCODE $1
+  setenv COMPILER $1
 endif
-if(! $?OBJECTCODE) then
-  echo "OBJECTCODE not defined!"
+if(! $?COMPILER) then
+  echo COMPILER not defined!
 endif
 
-if (-e SETUP/setup.csh.${HOSTNAME}.${OBJECTCODE})       source SETUP/setup.csh.${HOSTNAME}.${OBJECTCODE}
-if (-e SETUP/setup.csh.${HOSTNAME}.${OBJECTCODE}.local) source SETUP/setup.csh.${HOSTNAME}.${OBJECTCODE}.local
+# setup files for combination of HOST and COMPILER, + local modifications if present
+if (-e SETUP/setup.csh.${HOST}.${COMPILER})       source SETUP/setup.csh.${HOST}.${COMPILER}
+if (-e SETUP/setup.csh.${HOST}.${COMPILER}.local) source SETUP/setup.csh.${HOST}.${COMPILER}.local
+
 
 
 if (! $?GRAPHCAP) setenv GRAPHCAP X11
 
-switch ($OBJECTCODE)
-case "IBMaix":
-  setenv nOBJECTCODE Aix
-  breaksw
-case "DECalpha":
-  setenv nOBJECTCODE Alpha
-  breaksw
-case "SGIirix":
-  setenv nOBJECTCODE Iris
-  breaksw
-case "sun4c":
-  setenv nOBJECTCODE SunOS
-  breaksw
-case "sun5":
-  setenv nOBJECTCODE Solaris
-  breaksw
-case "unicos":
-  setenv nOBJECTCODE Unicos
-  breaksw
-case "linux.ifort64":
-  setenv nOBJECTCODE Intel
-  breaksw
-default:
-  setenv nOBJECTCODE Unknown
-  breaksw
-endsw
 
-#setenv GLI_HOME $SOLPSTOP/lib
-#setenv WSTYPE $OBJECTCODE
-# setenv GLI_WSTYPE 210
+
 setenv GRSOFT_DEVICE "211 62"
-setenv SonnetTopDirectory ${SOLPSTOP}/src/Sonnet
+setenv SonnetTopDirectory ${SOLPSTOP}/src/Sonnet-light
 setenv EscapeSonnet `echo ${SonnetTopDirectory} | sed 's:\/:\\\/:g'`
 
 setenv DG ${SOLPSTOP}/src/DivGeo
-#setenv CARRE_STOREDIR $SOLPSTOP/src/Carre/SAVE 
+setenv CARRE_STOREDIR $SOLPSTOP/src/Carre/SAVE 
 
-setenv PATH ${SOLPSTOP}/scripts:${SOLPSTOP}/bin:${PATH}
+
+# Set path to scripts and executables
+#------------------------------------
+
+# First, remove the old path to SOLPS if already set
+# (avoid too long paths)
+if ($?PATH_SOLPS) then
+    setenv PATH `echo $PATH | sed "s|${PATH_SOLPS}:||"`
+endif
+
+# Default PATH: no mpi, no debug
+set TOOLCHAIN      =  ${HOST}.${COMPILER}
+set PATH_CARRE     =  ${SOLPSTOP}/src/Carre/builds/${TOOLCHAIN}
+set PATH_DIVGEO    =  ${SOLPSTOP}/src/DivGeo/builds/${TOOLCHAIN}
+set PATH_EIRENE    =  ${SOLPSTOP}/src/Eirene/builds/standalone.${TOOLCHAIN}
+set PATH_B25       =  ${SOLPSTOP}/src/B2.5/builds/standalone.${TOOLCHAIN}
+set PATH_B25EIRENE =  ${SOLPSTOP}/src/B2.5/builds/couple_Eirene.${TOOLCHAIN}
+set PATH_UINP      =  ${SOLPSTOP}/src/Uinp/builds/${TOOLCHAIN}
+set PATH_TRIANG    =  ${SOLPSTOP}/src/Triang/builds/${TOOLCHAIN}
+set PATH_SCRIPTS   =  ${SOLPSTOP}/scripts
+
+# Note: in case of name-clash between script and executable, script will be found first
+setenv PATH_SOLPS  ${PATH_SCRIPTS}:${PATH_CARRE}:${PATH_DIVGEO}:${PATH_B25EIRENE}:${PATH_EIRENE}:${PATH_B25}:${PATH_UINP}:${PATH_TRIANG}
+setenv PATH        ${PATH_SOLPS}:${PATH}
+
+unset TOOLCHAIN PATH_CARRE PATH_DIVGEO PATH_EIRENE PATH_B25 PATH_B25EIRENE PATH_UINP PATH_TRIANG
+
+# Set path to manuals
+#--------------------
+
 if ($?MANPATH) then
   setenv MANPATH ${MANPATH}:${SonnetTopDirectory}/man:${DG}/equtrn/doxygen/man
 else
@@ -83,22 +96,22 @@ setenv PATH $NCARG_ROOT/bin:$PATH
 setenv MANPATH $NCARG_ROOT/man:$MANPATH
 
 
-alias sb2 'cd ${SOLPSTOP}/src/B2.5'
-alias sbb 'cd ${SOLPSTOP}/src/B2.5'
-alias sei 'cd ${SOLPSTOP}/src/Eirene'
-alias ssw 'cd ${SOLPSTOP}/src/Sonnet'
-alias sst 'cd ${SOLPSTOP}/src/Triang'
-alias ssd 'cd ${SOLPSTOP}/src/DivGeo'
-alias ssc 'cd ${SOLPSTOP}/src/Carre'
-alias ssu 'cd ${SOLPSTOP}/src/Uinp'
-alias sbin 'cd ${SOLPSTOP}/bin/${OBJECTCODE}'
-alias slib 'cd ${SOLPSTOP}/lib/${OBJECTCODE}'
+alias sb2  'cd ${SOLPSTOP}/modules/B2.5'
+alias sbb  'cd ${SOLPSTOP}/modules/B2.5'
+alias sei  'cd ${SOLPSTOP}/modules/Eirene'
+alias ssw  'cd ${SOLPSTOP}/modules/Sonnet'
+alias sst  'cd ${SOLPSTOP}/modules/Triang'
+alias ssd  'cd ${SOLPSTOP}/modules/DivGeo'
+alias ssc  'cd ${SOLPSTOP}/modules/Carre'
+alias ssu  'cd ${SOLPSTOP}/modules/Uinp'
+alias slib 'cd ${SOLPSTOP}/lib/${HOST}.${COMPILER}'
 alias srun 'cd ${SOLPSTOP}/runs'
-alias sbr 'cd ${SOLPSTOP}/runs'
-alias scr 'cd ${SOLPSTOP}/scripts'
+alias sbr  'cd ${SOLPSTOP}/runs'
+alias scr  'cd ${SOLPSTOP}/scripts'
 alias stop 'cd ${SOLPSTOP}'
-#alias sdg 'cd ${SOLPSTOP}/data/DivGeo/class/${DEVICE}'
 
+
+#alias sdg 'cd ${SOLPSTOP}/data/DivGeo/class/${DEVICE}'
 #alias ssf 'cd ${SOLPSTOP}/src/Sonnet/device/${DEVICE}'
 
 
@@ -144,8 +157,11 @@ alias xlylplot8 plot xlylplot8
 alias xlylplot8 plot xlylplot8
 alias xlylplot9 plot xlylplot9
 
-alias set_debug 'source $SOLPSTOP/SETUP/debug'
+
+alias set_debug   'source $SOLPSTOP/SETUP/debug'
 alias unset_debug 'source $SOLPSTOP/SETUP/nodebug'
+alias set_mpi     'source $SOLPSTOP/SETUP/mpi'
+alias unset_mpi   'source $SOLPSTOP/SETUP/nompi'
 
 
 #if (! $?IDL_PATH) setenv IDL_PATH

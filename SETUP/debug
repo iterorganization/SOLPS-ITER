@@ -1,4 +1,21 @@
-#setenv OLDOBJECTCODE $OBJECTCODE
-#setenv OBJECTCODE `echo $OBJECTCODE | sed 's:.debug::'`.debug
-setenv SOLPS_DEBUG yes
-#setenv PATH `echo $PATH | sed "s|base/b2/$OLDOBJECTCODE|base/b2/$OBJECTCODE|"`
+if ($?PATH_SOLPS) then
+  # Check whether HOST and COMPILER are defined
+  if (! $?HOST) then
+    echo "HOST not defined. Exiting.
+    exit 1
+  endif
+  if (! $?COMPILER) then
+    echo "COMPILER not defined. Exiting.
+    exit 1
+  endif
+
+  setenv   OLD_PATH_SOLPS $PATH_SOLPS
+  setenv   PATH_SOLPS `echo $PATH_SOLPS | sed 's|.debug||g'`
+  setenv   PATH_SOLPS `echo $PATH_SOLPS | sed "s|${HOST}.${COMPILER}.mpi|${HOST}.${COMPILER}.mpi.debug|g"`
+  setenv   PATH_SOLPS `echo $PATH_SOLPS | sed "s|${HOST}.${COMPILER}:|${HOST}.${COMPILER}.debug:|g"`.debug
+  setenv   PATH `echo $PATH | sed "s|${OLD_PATH_SOLPS}|${PATH_SOLPS}|"`
+  setenv   SOLPS_DEBUG yes
+  unsetenv OLD_PATH_SOLPS
+else
+  echo "PATH_SOLPS not set. Exiting."
+endif

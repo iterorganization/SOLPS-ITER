@@ -1,0 +1,20 @@
+#  VERSION : 09.05.95 17:03
+
+# Test whether necessary variables are defined
+LD_MSCL   ?= `pkg-config mscl --libs`
+LD_SONNET ?= -L../../lib/${HOST}.${COMPILER} -lsonnet
+
+FC	 = ifort
+
+ifdef SOLPS_DEBUG
+FFLAGS	 = -g debug all
+else
+FFLAGS	 = -O -vec_report0
+endif
+
+INCLUDE  = -Isrc
+COMPILE  = ${FC} -c ${FFLAGS}
+CPP	 = /lib/cpp -C -traditional
+
+LDLIBS	 = ${LD_SONNET} ${LD_MSCL} -L/usr/local/lib
+LDEXTRA  = 

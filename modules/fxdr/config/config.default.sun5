@@ -1,0 +1,22 @@
+# Test whether necessary variables are defined
+ifndef LD_MSCL
+  $(error LD_MSCL not defined)
+endif
+ifndef LD_SONNET
+  $(error LD_SONNET not defined)
+endif
+
+FC	 = f77
+
+ifdef SOLPS_DEBUG
+FFLAGS	 = -g
+else
+FFLAGS	 = -O
+endif
+
+INCLUDE  = -Isrc
+COMPILE  = ${FC} -c ${FFLAGS}
+CPP	 = /usr/ccs/lib/cpp
+
+LDLIBS	 = ${LD_SONNET} ${LD_MSCL} -L/usr/local/lib -lC -lw -lnsl
+LDEXTRA  = 

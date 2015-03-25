@@ -1,4 +1,0 @@
-export AMDSDATABASEDIR=`pwd`
-export AMDSGRAPHCMD=$OBJECTCODE/calc_atomic_data
-# export AMDSGRAPHCMD=`pwd`/tt
-$OBJECTCODE/amds $* &

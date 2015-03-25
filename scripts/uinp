@@ -37,11 +37,11 @@ location="$SOLPSTOP/"
 }
 
 grep '^# topo ' uinput.trg > /dev/null && {
-  $location/bin/$OBJECTCODE/uinp
+  uinp.exe
   true
 } || {
 # Old-style DG output: apply the old uinp
 
   print -- `basename $0`" : old file format - uinp version 1.42 to be applied"
-  $location/bin/$OBJECTCODE/uinp.1.42
+  uinp.1.42.exe
 }
