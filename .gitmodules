@@ -1,11 +1,7 @@
-[submodule "lib/mscl"]
-	path = lib/mscl
-	url = ssh://git@git.iter.org/lib/mscl.git
-	branch = feature/codestructure
 [submodule "B2.5"]
 	path = modules/B2.5
 	url = ssh://git@git.iter.org/bnd/b2.5.git
-	branch = feature/codestructure
+	branch = master
 [submodule "Carre"]
 	path = modules/Carre
 	url = ssh://git@git.iter.org/bnd/carre.git
@@ -17,4 +13,4 @@
 [submodule "Eirene"]
 	path = modules/Eirene
 	url = ssh://git@git.iter.org/bnd/eirene.git
-	branch = feature/SOLPS-ITER
+	branch = ITER-develop
