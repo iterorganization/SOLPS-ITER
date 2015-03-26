@@ -20,7 +20,7 @@ LINK_MOD 	=
 FC       	= ifort
 
 ifdef SOLPS_DEBUG
-FCOPTS 		= -g -C -traceback -debug all
+FCOPTS 		= -g -C -traceback -debug all -check all
 else
 FCOPTS 		= -O3 -vec_report0
 endif
