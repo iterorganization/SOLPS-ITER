@@ -50,6 +50,9 @@ ifeq ($(shell [ -e SETUP/config.${HOST_NAME}.${COMPILER}.local ] && echo yes || 
 endif
 
 .PHONY: solps solps_mpi all all_mpi carre divgeo b25 b25_mpi eirene eirene_mpi b25eirene b25eirene_mpi uinp triang sonnet-light manual depend tags clean clean_% debug_% VERSION
+DEFAULT: solps
+
+
 
 
 # Basic compile targets
@@ -108,9 +111,10 @@ triang:
 
 
 sonnet-light:
-	-mkdir -p ${SOLPSLIB}
+	@-mkdir -p ${SOLPSLIB}
+ifeq ($(shell [ -e ${SOLPSLIB}/libsonnet.a ] && echo yes || echo no ),no)
 	cd modules/Sonnet-light; ${MAKE} all; ${MAKE} install INSTALL_USERAREA=${SOLPSLIB}
-
+endif
 
 manual:
 	cd doc/solps; ${MAKE}

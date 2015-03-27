@@ -6,6 +6,7 @@
 # object, archive,... files
 *.[oa]
 *.mod
+a.out
 
 # any local files, directories,...
 *.local
@@ -60,7 +61,7 @@ doc/solps/solps-iter_git.log
 doc/solps/solps.*
 !doc/solps/solps.tex
 doc/solps/b2cdc?.F
-doc/solps/B2_5.compiler.linux.ifort64
+doc/solps/B2_5.config.ITER.ifort64
 doc/solps/B2_5.Makefile
 doc/solps/b2plot.commands
 doc/solps/DIMENSIONS.F
