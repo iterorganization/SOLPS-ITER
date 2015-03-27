@@ -43,9 +43,14 @@ if(! $?COMPILER) then
 endif
 
 # setup files for combination of HOST_NAME and COMPILER, + local modifications if present
-if (-e SETUP/setup.csh.${HOST_NAME}.${COMPILER})       source SETUP/setup.csh.${HOST_NAME}.${COMPILER}
-if (-e SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local) source SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
-
+if (-e SETUP/setup.csh.${HOST_NAME}.${COMPILER}) then
+  echo Loading SETUP/setup.csh.${HOST_NAME}.${COMPILER}.
+  source SETUP/setup.csh.${HOST_NAME}.${COMPILER}
+endif
+if (-e SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local) then
+  echo Loading SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local.
+  source SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
+endif
 
 
 if (! $?GRAPHCAP) setenv GRAPHCAP X11
@@ -176,4 +181,8 @@ alias unset_mpi   'source $SOLPSTOP/SETUP/nompi'
 
 
 # Add any local settings if present
-if (-e SETUP/setup.csh.local) source SETUP/setup.csh.local
+if (-e SETUP/setup.csh.local) then
+  echo Loading SETUP/setup.csh.local.
+  source SETUP/setup.csh.local
+endif
+
