@@ -26,7 +26,7 @@ else
   setenv HOST_NAME ${iamat}
 endif
 
-# COMPILER can also be the argument to setup.csh-call
+# COMPILER can also be the argument to setup.csh call
 if($1 == "") then
   if (-e default_compiler) then
     setenv COMPILER `./default_compiler|tail -1`
@@ -46,6 +46,8 @@ endif
 if (-e SETUP/setup.csh.${HOST_NAME}.${COMPILER}) then
   echo Loading SETUP/setup.csh.${HOST_NAME}.${COMPILER}.
   source SETUP/setup.csh.${HOST_NAME}.${COMPILER}
+else
+  echo File SETUP/setup.csh.${HOST_NAME}.${COMPILER} not found!
 endif
 if (-e SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local) then
   echo Loading SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local.
