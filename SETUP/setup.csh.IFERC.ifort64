@@ -1,0 +1,7 @@
+# Load modules
+
+
+
+# Set environment variables
+setenv DEVICE iter
+setenv IFERC  yes

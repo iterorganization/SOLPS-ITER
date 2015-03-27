@@ -15,10 +15,6 @@
 *.error
 
 # setup files (links) that will be made at compilation,...
-setup.csh.*
-!setup.csh.COMPILER
-
-setup.ksh.*
 
 LISTOBJ
 TAGS

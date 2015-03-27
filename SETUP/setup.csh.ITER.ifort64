@@ -1,0 +1,20 @@
+# General
+module load git
+
+# Modules needed by SOLPS-ITER
+module load mscl/1.0.0
+module load netcdf/4.3.2
+module load gr/0.0.94
+module load gli/4.5.30
+module load ncl/6.2.1
+module load nag/15
+module load hdf5
+module load flex
+module load doxygen
+module load texlive
+module load ghostscript
+module load cairo
+module load mdsplus/3.0.2
+
+# mpi-library
+module load mpich/1.2.7p1-intel
