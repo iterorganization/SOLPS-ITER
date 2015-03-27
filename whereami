@@ -23,7 +23,7 @@ case "*.ipp-hgw.mpg.de":
 case "*.pppl.gov":
   echo PPPL
   breaksw
-case "*.ccfe.ac.uk"
+case "*.ccfe.ac.uk":
   echo JET
   breaksw
 case "*.gov":
