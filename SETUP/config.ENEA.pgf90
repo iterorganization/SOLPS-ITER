@@ -3,6 +3,32 @@ $(error First use of config.ENEA.pgf90. Provide paths to libraries first.)
 #
 # Specify paths to root-directories of following libraries on your system
 #  
+# Special notes:
+#
+# If you do not have the NetCDF library on your system:
+# Leave LD_NETCDF blank
+# Add -DNO_CDF to SOLPS_CPP
+#
+# If you do have NetCDF on your system:
+# Add -DCDF_MOVIE to SOLPS_CPP to be able to produce movies
+#
+# If you have NCAR version 3 on your system:
+# Remove -DNCAR4 from SOLPS_CPP
+#
+# If you do not have NAG on your system:
+# Leave LD_NAG blank
+# Add -DNO_NAG to SOLPS_CPP
+#
+# If you have NAG Mark 14 or greater on your system:
+# Add -DNO_F01AAF to SOLPS_CPP
+#
+# If you have NAG Mark 22 or greater on your system:
+# Add -DNAG22 to SOLPS_CPP
+#
+# If you do not have MDSplus on your system:
+# Leave LD_MDSPLUS blank
+# Remove -DMDSPLUS from SOLPS_CPP
+#
 
  NETCDF_ROOT = 
    MSCL_ROOT =
