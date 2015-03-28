@@ -8,27 +8,30 @@ INCLUDES=b2cdca.F b2cdci.F b2cdcn.F b2cdcr.F b2cdcv.F DIMENSIONS.F B2_5.Makefile
 
 all: solps.pdf solps.ps 
 
-.PHONY: index bibtex thumb update_logs complete
+.PHONY: bibtex thumb update_logs complete
 
-solps.dvi: solps.tex ${INCLUDES} # solps.ind # DPC: remove 1st # for index dependency
+solps.dvi: solps.tex ${INCLUDES} solps.ind # DPC: remove 1st # for index dependency
+	@echo 'Building DVI manual'
 	latex -output-format dvi solps
 	-grep 'Label(s) may have changed' solps.log && latex -output-format dvi solps
+	touch solps.idx ; sleep 1 ; touch solps.ind ; sleep 1 ; touch $@
+	[ -e solps.pdf ] && touch solps.pdf
 
 solps.ps: solps.dvi
 	dvips -o -ta4 solps
 
-solps.idx: solps.ind
+solps.ind: solps.idx
 	makeindex solps
 
-solps.ind: index
-
-index: solps.tex
+solps.idx: solps.tex
 	@echo 'Building index'
+	[ -e solps.ind ] || touch solps.ind
 	pdflatex solps
 	-grep 'Label(s) may have changed' solps.log && pdflatex solps
 	makeindex solps
 	pdflatex solps
 	-grep 'Label(s) may have changed' solps.log && pdflatex solps
+	touch solps.idx ; sleep 1 ; touch solps.ind ; sleep 1 ; touch solps.pdf
 
 bibtex: solps.tex
 	@echo 'Building bibliography'
@@ -38,10 +41,11 @@ bibtex: solps.tex
 	pdflatex solps
 	-grep 'Label(s) may have changed' solps.log && pdflatex solps
 
-solps.pdf: solps.tex ${INCLUDES} # solps.ind # DPC: remove 1st # for index dependency
+solps.pdf: solps.tex ${INCLUDES} solps.ind # DPC: remove 1st # for index dependency
+	@echo 'Building PDF manual'
 	pdflatex solps
 	-grep 'Label(s) may have changed' solps.log && pdflatex solps
-	touch $@
+	touch solps.idx ; sleep 1 ; touch solps.ind ; sleep 1 ; touch $@
 
 thumb: solps.pdf
 	@echo 'Building thumbnails'
@@ -84,6 +88,7 @@ update_logs:
 	( cd ${SOLPSTOP} ; ${GIT} log --oneline ) > solps-iter_git.log
 
 complete:
+	@[ -e solps.ind ] || touch solps.ind
 	${MAKE} update_logs
 	${MAKE} bibtex
 	${MAKE} index
