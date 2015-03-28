@@ -26,6 +26,9 @@ case "*.pppl.gov":
 case "*.ccfe.ac.uk":
   echo JET
   breaksw
+case "*.fusion.gat.com":
+  echo DIIID
+  breaksw
 case "*.gov":
 case "*.edu":
   echo USA_UNKNOWN
