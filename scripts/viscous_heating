@@ -1,0 +1,13 @@
+#! /bin/csh -f
+set nreg=`climb_and_look_for NREG`
+if (-e $nreg) then
+  setenv NREG `cat $nreg`
+  echo Set NREG to $NREG "(based on $nreg)"
+endif
+if (! $?NREG) set NREG=4
+@ NREGP = $NREG + 1
+pipe_run.log | \
+  egrep -a '^b2vis' | \
+  awk '/b2vis/{for (i=2;i<=NF;i++) printf "%s ",$i;printf "\n"}' | \
+  nl | \
+  plot x"$1"yplot$NREGP `count 0 $NREG` iter "Viscous heating (W)" $PWD

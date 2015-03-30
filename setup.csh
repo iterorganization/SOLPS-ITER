@@ -54,6 +54,7 @@ if (-e SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local) then
   source SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
 endif
 
+limit stacksize unlimited
 
 if (! $?GRAPHCAP) setenv GRAPHCAP X11
 

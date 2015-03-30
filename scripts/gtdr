@@ -1,0 +1,22 @@
+eval '(exit $?0)' && eval 'exec tcsh $0 ${1+"$@"}' && eval 'exec tcsh $0 $argv:q'
+###! /bin/tcsh
+
+# replaces a link to a directory by a shadow tree
+while ( $#argv > 0 ) 
+  if (-l $1 ) then
+    set base=`basename $1`
+    set dir=`dirname $1`
+    set target=`/bin/ls -l $1 | awk '{print $NF}'`
+    if (-d $1 ) then
+      /bin/mv $1 $1.tmp.$$ && /bin/mkdir $1 && lndr -c $target $1 && /bin/rm $1.tmp.$$
+      if (-e $1.tmp.$$) then
+        echo lndr for $1 failed ; check $1 and $1.tmp.$$
+      endif
+    else
+      echo $1 not a link
+    endif
+  else
+    echo $1 does not point to a directory
+  endif
+  shift
+end

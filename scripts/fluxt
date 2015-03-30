@@ -9,7 +9,7 @@ if($1 == "") then
   else
     set count = `egrep 'DEF_NSTRA' $SOLPSTOP/src/B2.5/src/include/DIMENSIONS.F | tail -1 | sed -e 's/^#define DEF_NSTRA//'`
   endif
-  if ($?COUPLED_RUN) then
+  if (-e input.dat) then
     set count = `echo $count 1 | awk '{print $1+$2}'`
   endif   
 #  set count=20

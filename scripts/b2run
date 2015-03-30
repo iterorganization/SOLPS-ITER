@@ -2,6 +2,7 @@
 
 ## -n             dry run
 ## -d <debugger>  use debugger <debugger>
+## -s             run B2.5 applications in stand-alone mode (no Eirene coupling)
 
 # if we are running at JET then don't rely on the automatic feature of searching in ../baserun, instead setup links
 if (${HOST_NAME} == "JET") then
@@ -32,11 +33,21 @@ endloop:
     shift
     set debug="-n"
   endif
+  if ("X${1}X" == "X-sX") then
+    shift
+    setenv STAND_ALONE yes
+    shift
+  endif
   if ("X${1}X" == "X-dX") then
     shift
-    set debug="$debug TIME=$1"
+    if ($1 == "") then 
+      set debug="$debug TIME=$DBX"
+    else  
+      set debug="$debug TIME=$1"
+    endif 
     shift
   endif
   if ("X${argv}X" == "XX") set argv="b2mn"
   set CMD=`echo $argv" " | sed -e 's: :.prt :g'`
   gmake $debug -f $RUNS/Makefile $CMD
+  unsetenv STAND_ALONE

@@ -1,0 +1,26 @@
+#! /bin/csh -f
+pipe_run.log | \
+  egrep -a 'r..[hn].reg|fh..reg|^pot|nnreg|End tallies|b2divu|b2exb|b2visa|b2joule|b2fraa|b2str|Total profile-source Power' | \
+  awk '/nnreg/{nreg=$2+1;nxreg=$3+1;nyreg=$4+1} \
+       /pot/{for (i=1;i<=NF-1;i++) pot[i]=$(i+1)*1.602176565e-19;pot[NF]=0} \
+       /Total profile-source Power/{ext=$4} \
+       /rsahireg/{rsa=0;for (i=2;i<=NF;i+=nreg) rsa+=$i} \
+       /rrahireg/{rra=0;for (i=2;i<=NF;i+=nreg) rra+=$i} \
+       /rqahereg/{rqa=0;for (i=2;i<=NF;i+=nreg) rqa+=$i} \
+       /rcxhireg/{rcx=0;for (i=2;i<=NF;i+=nreg) rcx+=$i} \
+       /rsanareg/{rsap=0;for (i=2;i<=NF;i+=nreg) rsap+=$i*pot[int(i/nreg)+2]} \
+       /rranareg/{rrap=0;for (i=2;i<=NF;i+=nreg) rrap+=$i*pot[int(i/nreg)+1]} \
+       /fhixreg/{W=-$3;E=$6} \
+       /fhiyreg/{S=-$3-$4-$5;N=$7+$8+$9} \
+       /fhexreg/{W+=-$3;E+=$6} \
+       /fheyreg/{S+=-$3-$4-$5;N+=$7+$8+$9} \
+       /fhpxreg/{for (i=2;i<=NF;i+=nxreg) {W+=-$(i+1);E+=$(i+4)}} \
+       /fhpyreg/{for (i=2;i<=NF;i+=nyreg) {S+=-$(i+1)-$(i+2)-$(i+3);N+=$(i+5)+$(i+6)+$(i+7)}} \
+       /fhmxreg/{for (i=2;i<=NF;i+=nxreg) {W+=-$(i+1);E+=$(i+4)}} \
+       /fhmyreg/{for (i=2;i<=NF;i+=nyreg) {S+=-$(i+1)-$(i+2)-$(i+3);N+=$(i+5)+$(i+6)+$(i+7)}} \
+       /b2divue/{b2divue=$2}/b2divua/{b2divua=$2}/b2exbe/{b2exbe=$2}/b2exba/{b2exba=$2}/b2visa/{b2visa=$2}/b2joule/{b2joule=$2}/b2fraa/{b2fraa=$2}/b2str/{b2str=$2} \
+       BEGIN{print "#cnt rsa rra rqa rcx rsap rrap E N W S E+N+W+S+rsa+rra+rqa+rcx-rsap+rra b2divue b2divua b2exbe b2exba b2visa b2joule b2fraa b2str b2divue+b2divua+b2exbe+b2exba+b2visa+b2joule+b2fraa+b2str EXT"} \
+       END{print "#cnt rsa rra rqa rcx rsap rrap E N W S E+N+W+S+rsa+rra+rqa+rcx-rsap+rra b2divue b2divua b2exbe b2exba b2visa b2joule b2fraa b2str b2divue+b2divua+b2exbe+b2exba+b2visa+b2joule+b2fraa+b2str EXT"} \
+       /End tallies/{cnt++;print cnt,rsa,rra,rqa,rcx,rsap,rrap,E,N,W,S,E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap,b2divue,b2divua,b2exbe,b2exba,b2visa,b2joule,b2fraa,b2str,b2divue+b2divua+b2exbe+b2exba+b2visa+b2joule+b2fraa+b2str,ext+0}' | \
+  plot xyplot21 rsa rra rqa rcx  rsap rrap E N W S E+N+W+S+rsa+rra+rqa+rcx b2divue b2divua b2exbe b2exba b2visa b2joule b2fraa b2str b2divue+b2divua+b2exbe+b2exba+b2visa+b2joule+b2fraa+b2str EXT iteration 'Power (W)' "`basename $0` `chop_pwd 40`"
+

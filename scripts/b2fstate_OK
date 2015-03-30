@@ -1,0 +1,16 @@
+#! /bin/tcsh
+# determine if b2fstate is OK
+
+set target=b2fstati
+if (!(-e $target)) set target=../baserun/b2fstati
+
+set l_i=`wc -l $target  | awk '{print $1}'`
+set l_e=`wc -l b2fstate | awk '{print $1}'`
+
+set c_i=`wc -c $target  | awk '{print $1}'`
+set c_e=`wc -c b2fstate | awk '{print $1}'`
+
+set cf_i=`grep -c '*cf' $target`
+set cf_e=`grep -c '*cf' b2fstate`
+
+[ $l_e -ge $l_i ] && [ $c_e -ge $c_i ] && [ $cf_e -ge $cf_i ] && [ $cf_e -gt 10 ] && echo "yes" || echo "no"

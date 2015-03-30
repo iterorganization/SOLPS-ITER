@@ -1,0 +1,6 @@
+#! /bin/csh -f
+pipe_run.log | \
+  grep -a ' delta ' | \
+  paste - - - - - | \
+  awk '{print NR,$3,$6,$9,$12,$15}' | \
+  xlyplot5 na te ti po ua

@@ -1,0 +1,7 @@
+#! /bin/csh -f
+pipe_run.log | \
+  egrep -a tchee\|tphye\|thvpe\|trese\|trfle | \
+  awk '{print $2}' | \
+  paste - - - - - | \
+  nl | \
+  x"$1"yplot5 tphye tchee thvpe trese trfle

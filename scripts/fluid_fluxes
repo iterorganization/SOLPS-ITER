@@ -1,0 +1,206 @@
+#! /bin/tcsh -f
+
+# arguments are 
+#  "start species #" 
+#  "end species number"
+
+set nreg=`climb_and_look_for NREG`
+if (-e $nreg) then
+  setenv NREG `cat $nreg`
+  echo Set NREG to $NREG "(based on $nreg)"
+endif
+if (! $?NREG) set NREG = 4
+
+if ("${1}" == "") then
+   set S=0
+else
+  set S="$1"
+endif
+if ("${2}" == "") then
+   set E=1
+else
+  set E="$2"
+endif
+
+# the scripts below assume species counting from 1 whereas everything
+# else counts from 0
+
+@ S ++
+@ E ++
+
+set line=""
+switch ($NREG)
+  case "4":
+# West target fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnaxreg(2,$i,:)'"
+    end
+# East target fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnaxreg(5,$i,:)'"
+    end
+# PFR West side fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnayreg(2,$i,:)'"
+    end
+# core fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnayreg(3,$i,:)'"
+    end
+# PFR East fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnayreg(4,$i,:)'"
+    end
+# North West divertor fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnayreg(6,$i,:)'"
+    end
+# North MCW fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnayreg(7,$i,:)'"
+    end
+# North East fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnayreg(8,$i,:)'"
+    end
+    breaksw
+  case "8":
+# Lower West target fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnaxreg(2,$i,:)'"
+    end
+# Upper East target fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnaxreg(5,$i,:)'"
+    end
+# Upper West target fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnaxreg(6,$i,:)'"
+    end
+# Lower East target fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnaxreg(9,$i,:)'"
+    end
+# PFR Lower West side fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnayreg(2,$i,:)'"
+    end
+# Inner core fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnayreg(3,$i,:)'"
+    end
+# PFR Upper East fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnayreg(4,$i,:)'"
+    end
+# North Lower West divertor fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnayreg(6,$i,:)'"
+    end
+# North Inner MCW fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnayreg(7,$i,:)'"
+    end
+# North Upper East fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnayreg(8,$i,:)'"
+    end
+# PFR Upper West side fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnayreg(9,$i,:)'"
+    end
+# Outer core fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnayreg(10,$i,:)'"
+    end
+# PFR Lower East fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnayreg(11,$i,:)'"
+    end
+# North Upper West divertor fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnayreg(13,$i,:)'"
+    end
+# North Outer MCW fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnayreg(14,$i,:)'"
+    end
+# North Lower East fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnayreg(15,$i,:)'"
+    end
+    breaksw
+  case "2":
+# West target fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnaxreg(2,$i,:)'"
+    end
+# East target fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnaxreg(3,$i,:)'"
+    end
+# South side fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnayreg(2,$i,:)'"
+    end
+ # North side fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnayreg(4,$i,:)'"
+    end
+    breaksw
+  case "1":
+# West target fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnaxreg(2,$i,:)'"
+    end
+# East target fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnaxreg(3,$i,:)'"
+    end
+# South side fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnayreg(2,$i,:)'"
+    end
+ # North side fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnayreg(3,$i,:)'"
+    end
+    breaksw
+  default:
+    echo "This geometry case is not yet coded"
+    echo "NREG = " $NREG
+endsw
+
+set file=`climb_and_look_for SOLPS_FLUIDS`
+set label=`cat $file | awk '{print $('$S')"--"$('$E')}'`
+
+if (-e b2mn.exe.dir/b2tallies.nc) then
+  set FILE=b2mn.exe.dir/b2tallies.nc
+else
+  set FILE=b2tallies.nc
+endif
+
+switch ($NREG)
+  case "4":
+    eval 2da -s $FILE times $line | \
+      awk 'BEGIN{ns='$E'-'$S'+1}NR>1{t=$1; i=2; W=0; for (j=1;j<=ns;j++) {W+=$i;i++}; E=0; for (j=1;j<=ns;j++) {E+=$i;i++}; pflxl=0; for (j=1;j<=ns;j++) {pflxl+=$i;i++}; core=0; for (j=1;j<=ns;j++) {core+=$i;i++}; pflxr=0; for (j=1;j<=ns;j++) {pflxr+=$i;i++}; N=0; for (j=1;j<=3*ns;j++) {N+=$i;i++}; print t,-W, E, -core, -pflxl, -pflxr, N}' | \
+      plot x$3yplot6 -W E -core -pflxl -pflxr N time $label `noquote_pwd 3`
+    breaksw
+  case "8":
+    eval 2da -s $FILE times $line | \
+      awk 'BEGIN{ns='$E'-'$S'+1}NR>1{t=$1; i=2; LW=0; for (j=1;j<=ns;j++) {LW+=$i;i++}; UE=0; for (j=1;j<=ns;j++) {UE+=$i;i++}; UW=0; for (j=1;j<=ns;j++) {UW+=$i;i++}; LE=0; for (j=1;j<=ns;j++) {LE+=$i;i++}; pflxlw=0; for (j=1;j<=ns;j++) {pflxlw+=$i;i++}; coreI=0; for (j=1;j<=ns;j++) {coreI+=$i;i++}; pflxue=0; for (j=1;j<=ns;j++) {pflxue+=$i;i++}; NI=0; for (j=1;j<=3*ns;j++) {NI+=$i;i++}; pflxuw=0; for (j=1;j<=ns;j++) {pflxuw+=$i;i++}; coreO=0; for (j=1;j<=ns;j++) {coreO+=$i;i++}; pflxle=0; for (j=1;j<=ns;j++) {pflxle+=$i;i++}; NO=0; for (j=1;j<=3*ns;j++) {NO+=$i;i++}; print t,-LW, UE, -UW, LE, -coreI, -coreO, -pflxlw, -pflxue, -pflxuw, -pflxle, NI, NO}' | \
+      plot x$3yplot12 -LW UE -UW LE -coreI -coreO -pflxlw -pflxue -pflxuw -pflxle NI NO time $label `noquote_pwd 3`
+    breaksw
+  case "2":
+    eval 2da -s $FILE times $line | \
+      awk 'BEGIN{ns='$E'-'$S'+1}NR>1{t=$1; i=2; W=0; for (j=1;j<=ns;j++) {W+=$i;i++}; E=0; for (j=1;j<=ns;j++) {E+=$i;i++}; core=0; for (j=1;j<=ns;j++) {core+=$i;i++}; N=0; for (j=1;j<=ns;j++) {N+=$i;i++}; print t,-W, E, -core, N}' | \
+      plot x$3yplot4 -W E -core N time $label `noquote_pwd 3`
+    breaksw
+  case "1":
+    eval 2da -s $FILE times $line | \
+      awk 'BEGIN{ns='$E'-'$S'+1}NR>1{t=$1; i=2; W=0; for (j=1;j<=ns;j++) {W+=$i;i++}; E=0; for (j=1;j<=ns;j++) {E+=$i;i++}; S=0; for (j=1;j<=ns;j++) {S+=$i;i++}; N=0; for (j=1;j<=ns;j++) {N+=$i;i++}; print t,-W, E, -S, N}' | \
+      plot x$3yplot4 -W E -S N time $label `noquote_pwd 3`
+    breaksw
+  default:
+    echo "No graph done."
+endsw

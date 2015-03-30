@@ -1,0 +1,40 @@
+#! /bin/tcsh -f
+set nreg=`climb_and_look_for NREG`
+if (-e $nreg) then
+  setenv NREG `cat $nreg`
+#  echo Set NREG to $NREG "(based on $nreg)"
+endif
+if (! $?NREG) set NREG=4
+echo "# rsa rra rqa rcx b2divue b2divua b2exbe b2exba b2visa b2joule b2fraa b2wrong1 b2wrong2 b2wrong3 b2bbrhe bb2rhi E N W S E+N+W+S-rsa-rra+rqa-rcx-b2divue-b2divua-b2exbe-b2exba-b2visa-b2joule-b2fraa-b2wrong1-b2wrong2-b2wrong3"
+pipe_run.log | \
+  awk 'BEGIN{nrv='$NREG'}\
+       /nreg/{nrv=$2;nrx=$3;nry=$4}\
+       /rsahireg/{rsa=0;for (i=2;i<=NF;i+=nrv+1) rsa+=$i} \
+       /rrahireg/{rra=0;for (i=2;i<=NF;i+=nrv+1) rra+=$i} \
+       /rqahereg/{rqa=0;for (i=2;i<=NF;i+=nrv+1) rqa+=$i} \
+       /rcxhireg/{rcx=0;for (i=2;i<=NF;i+=nrv+1) rcx+=$i} \
+       /b2divue/{b2divue=$2} \
+       /b2divua/{b2divua=$2} \
+       /b2exbe/{b2exbe=$2} \
+       /b2exba/{b2exba=$2} \
+       /b2visa/{b2visa=$2} \
+       /b2joule/{b2joule=$2} \
+       /b2fraa/{b2fraa=$2} \
+       /b2wrong1/{b2wrong1=$2} \
+       /b2wrong2/{b2wrong2=$2} \
+       /b2wrong3/{b2wrong3=$2} \
+       /b2stbr_she_reg/{b2brhe=$2} \
+       /b2stbr_shi_reg/{b2brhi=$2} \
+       /fhixreg/&&nrv==2{W=-$3;E=$4} \
+       /fhiyreg/&&nrv==2{S=-$3;N=$5} \
+       /fhexreg/&&nrv==2{W+=-$3;E+=$4} \
+       /fheyreg/&&nrv==2{S+=-$3;N+=$5} \
+       /fhixreg/&&nrv==4{W=-$3;E=$6} \
+       /fhiyreg/&&nrv==4{S=-$3-$4-$5;N=$7+$8+$9} \
+       /fhexreg/&&nrv==4{W+=-$3;E+=$6} \
+       /fheyreg/&&nrv==4{S+=-$3-$4-$5;N+=$7+$8+$9} \
+       /fhixreg/&&nrv==8{W=-$3-$7;E=$6+$10} \
+       /fhiyreg/&&nrv==8{S=-$3-$4-$5-$10-$11-$12;N=$7+$8+$9+$14+$15+$16} \
+       /fhexreg/&&nrv==8{W+=-$3-$7;E+=$6+$10} \
+       /fheyreg/&&nrv==8{S+=-$3-$4-$5-$10-$11-$12;N+=$7+$8+$9+$14+$15+$16} \
+       /End tallies by region/{print rsa,rra,rqa,rcx,b2divue,b2divua,b2exbe,b2exba,b2visa,b2joule,b2fraa,b2wrong1,b2wrong2,b2wrong3,b2brhe,b2brhi,E,N,W,S,E+N+W+S-rsa-rra+rqa-rcx-b2divue-b2divua-b2exbe-b2exba-b2visa-b2joule-b2fraa-b2wrong1-b2wrong2-b2wrong3-b2brhe-b2brhi}'

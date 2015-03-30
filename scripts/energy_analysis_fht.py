@@ -1,0 +1,69 @@
+#! /usr/bin/env python
+import pupynere
+import matplotlib.pyplot as plt
+import matplotlib
+import sys
+import numpy
+import subprocess
+import os
+
+if os.access('b2mn.exe.dir/b2tallies.nc', os.R_OK):
+  f=pupynere.netcdf_file('b2mn.exe.dir/b2tallies.nc','r')
+else:
+  f=pupynere.netcdf_file('b2tallies.nc','r')
+vreg=f.dimensions['vreg']
+xreg=f.dimensions['xreg']
+yreg=f.dimensions['yreg']
+ns=f.dimensions['ns']
+time=f.dimensions['time']
+times=f.variables['times']
+fhtxreg=f.variables['fhtxreg']
+fhtyreg=f.variables['fhtyreg']
+
+if xreg == 3:
+  plt.plot(times[:],fhtxreg[:,1], label='W')
+  plt.plot(times[:],fhtxreg[:,2], label='E')
+
+elif xreg == 7:
+  plt.plot(times[:],-fhtxreg[:,1], label='-W')
+  plt.plot(times[:],-fhtxreg[:,2], label='-w')
+  plt.plot(times[:],fhtxreg[:,3], label='e')
+  plt.plot(times[:],fhtxreg[:,4], label='E')
+
+if yreg == 3:
+  plt.plot(times[:],fhtyreg[:,1], label='S')
+  plt.plot(times[:],fhtyreg[:,1], label='N')
+
+elif yreg == 8:
+  plt.plot(times[:],fhtyreg[:,2], label='core')
+  plt.plot(times[:],fhtyreg[:,4], label='sep')
+  plt.plot(times[:],numpy.sum(fhtyreg[:,5:8],axis=1), label='mcw')
+  plt.plot(times[:],-fhtyreg[:,1]-fhtyreg[:,3], label='-pfw')
+
+if  matplotlib.__version__ <=  '0.98.1':
+  plt.legend(loc=0)
+else:
+  plt.legend(loc=0, frameon=False)
+plt.xlabel('time [s]')
+plt.ylabel('total energy fluxes [W]')
+
+cwd=os.getcwd()
+l=0
+ncwd=''
+for i in cwd.split('/'):
+  if l + 1 + len(i) < 100:
+    ncwd = ncwd + '/' + i
+    l = l + 1 + len(i)
+  else:
+    ncwd = ncwd + '/\n' + i
+    l = len(i)
+plt.suptitle(ncwd[1:], fontsize=10)
+  
+if os.getenv('SOLPS_PYTHON_PLOT') is None:
+  plt.show()
+else:
+  plt.savefig('energy_analysis_fht.' + os.getenv('SOLPS_PYTHON_PLOT'))
+
+
+
+

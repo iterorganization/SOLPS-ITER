@@ -7,26 +7,14 @@
 SHELL = /bin/sh
 nil =
 SOLPS4.0 = ${HOME}/solps4.0_svn_xpb
-ifeq (${OBJECTCODE},linux_nag_f95.debug)
-DBX = totalview -v 7.2
-INC =
+
+ifndef STAND_ALONE
+B2OBJ  = ${SOLPSTOP}/modules/B2.5/builds/couple_Eirene.${HOST_NAME}.${COMPILER}.debug
+EIROBJ = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}.debug
+INC = -I ${B2OBJ} -I ${EIROBJ}
 else
-ifeq (${OBJECTCODE},linux.Fujitsu.debug)
-DBX = totalview -v 7.2
-INC =
-else 
-ifeq (${OBJECTCODE},linux_pgf90.debug)
-DBX = gdb
-INC =
-else
-DBX = dbx
-ifdef COUPLED_RUN
-INC = -I ${SOLPSTOP}/bin/${OBJECTCODE}/B2.5 -I ${SOLPSTOP}/bin/${OBJECTCODE}/Eirene
-else
-INC = -I ${SOLPSTOP}/bin/${OBJECTCODE}/B2.5
-endif
-endif
-endif
+B2OBJ  = ${SOLPSTOP}/modules/B2.5/builds/standalone.${HOST_NAME}.${COMPILER}.debug
+INC = -I ${B2OBJ}
 endif
 
 prints = b2sxdr.prt

@@ -1,0 +1,85 @@
+#! /bin/ksh
+
+#==============================================================================#
+#  Replaces the specified links by the files they are linked to                #
+#                                                                              #
+#    Usage: gtfl [-k] [--] <list of links>                                     #
+#                                                                              #
+#  Unlike "getfile", the files appear under the names of the replaced links    #
+#                                                                              #
+#  Author:  A.S.Kukushkin                                                      #
+#                                                                              #
+#  VERSION : 19.02.2000 23:32
+#==============================================================================#
+
+script=`basename $0`
+Usage="Usage: $script [-t] [--] <list of links>
+
+       -t   set the modification date to that of the original file
+       --   end of option list (to treat files with names -*
+"
+
+sync=
+while true; do {
+  case "$1" in
+    ( -t )  sync=y;;
+    ( -* )  echo "$script: illegal option $1"; echo "$Usage"; exit 2;;
+    ( -- )  shift; break;;
+    (  * )  break;;
+  esac; shift
+}; done
+
+[ $# = 0 ] && { echo "$Usage"; exit 2; }
+
+tt=",,@$$";
+while true; do {
+  ls $tt > /dev/null 2>&1 || break
+  tt=$tt,
+}; done;
+while true; do {
+  [ "$1" = '' ] && break
+  [ -d $1 ] && {
+    echo "$1 : directory!!"; true
+  } || {
+    [ -L $1 ] && { 
+      [ -n "$sync" ] && {
+#        touch=$1; p=`pwd`
+        touch=`lln -e $1`
+#        echo "p=>$p<=\ntouch=>$touch<=" #!!!
+#        while true; do {
+#          t=`ls -l $touch | cut -f2 -d\>`
+#          echo "t=>$t<="  #!!!
+#          [ -f "$t" ] || {
+#            touch="$t"; break
+#          }
+#          d=`dirname $t`; f=`basename $t`
+#          cd $d || {
+#            touch=; break
+#          }
+#          touch=`pwd`/$f
+#          [ -L "$touch" ] || break
+#        }; done
+#        echo "before cd\np=>$p<=\ntouch=>$touch<=" #!!!
+#        cd $p
+#        pwd #!!!
+#        set -x #!!!
+        [ -f "$touch" ] || {
+          echo "$1 linked to non-existing file $touch"; false
+        } && {
+          rm -f $1 && {
+            cp $touch $1 && touch -r $touch $1
+          } || {
+            echo "$1 : error while copying"
+          }
+        }
+#        set +x #!!!
+      } || {
+        cp $1 $tt && mv -f $tt $1; true;
+      }
+    } || {
+      echo "$1" :  not a link!;
+    }
+  }
+  shift
+}; done 
+rm -f $tt > /dev/null 2>&1

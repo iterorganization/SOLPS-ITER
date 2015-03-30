@@ -229,13 +229,13 @@ To best use the \SOLPSITER code suite, the user will need, locally installed:
 \end{description}
 
 For all the various libraries, it is recommended that they be installed as modules, so that they
-may be shared amongst multiple users on the same machines, so as not to duplicate large files and to
+may be shared amongst multiple users on the same machine, so as not to duplicate large files and to
 centralize their management. Most, but not all, of these libraries are publicly available from the 
 Internet. The MSCL library is distributed and can be obtained from the ITER GIT repository at
 \href{https://git.iter.org/projects/LIB/repos/mscl/browse}{https://git.iter.org/projects/LIB/repos/mscl/browse}.
 
 If one uses local copies of these libraries, a copy or link to them should be put in the 
-\$\verb!{SOLPSTOP}/lib/!\$\verb!{OBJECTCODE}! directory.
+\$\verb!{SOLPSTOP}/lib/!\$\verb!{HOST_NAME}.!\$\verb!{COMPILER}! directory.
 
 \section{Initial set-up}
 \index{Initial set-up}
@@ -245,24 +245,45 @@ the location where the various libraries are to be found, as well as the preferr
 used. These are propagated throughout the \SOLPSITER code structure and used by the Makefiles and
 the various scripts. It is therefore important to carefully assign their values.
 
-These environment variables are found in files config.\$\verb!HOSTNAME!.\$\verb!COMPILER!.
+These environment variables are found in files config.\$\verb!{HOST_NAME}!.\$\verb!{COMPILER}!.
 
 The current list of recognized hostnames, deduced by means of the \verb!whereami! script, includes:
 \begin{description}\index{Hostnames}
-  \item[ITER] ITER domain: *.iter.org
+  \item[DIIID] General Atomics: *.fusion.gat.com
   \item[IFERC] IFERC supercomputer: *.iferc-csc.org
-  \item[IPP] IPP-Garching domain: *.ipp.mpg.de, *.rzg.mpg.de
+  \item[IPP] IPP-Garching domain: *.ipp.mpg.de, *.ipp-garching.mpg.de, *.rzg.mpg.de
   \item[IPP-HGW] IPP-Greifswald domain: *.ipp-hgw.mpg.de
-  \item[JET] JET domain: *.efda.org
-  \item[ITM] ITM Gateway machine: *.efda-itm.org
+  \item[ITER] ITER domain: *.iter.org
+  \item[ITM] ITM Gateway machine: *.itm.rzg.mpg.de, *.efda-itm.eu
+  \item[JET] JET domain: *.ccfe.ac.uk
+  \item[PPPL] PPPL domain: *.pppl.gov
   \item[default] everywhere else
 \end{description}
 
 At the moment the following compiler platforms are supported, assuming a Linux work environment:
 \begin{description}\index{Platforms}
-  \item[linux\_pgf90] Portland Group 32-bit Fortran compiler in use at JET and GA
-  \item[linux.ifort64] Intel 64-bit Fortran compiler in use at ITER and IPP
+  \item[pgf90] Portland Group 32-bit Fortran compiler in use at JET and GA
+  \item[ifort64] Intel 64-bit Fortran compiler in use at ITER and IPP
 \end{description}
+
+For each hostname domain, a default compiler can be defined by means of the \$\verb!default_compiler!
+file. This default can be overridden by giving the desired compiler name as an argument following
+the \verb!setup.csh! command, i.e.:
+\begin{verbatim}
+  source setup.csh ifort64
+\end{verbatim}
+
+For each combination of hostname and compiler, the set of corresponding environment variables are loaded
+from the \$\verb!{SOLPSTOP}\SETUP\setup.csh.!\$\verb!{HOST_NAME}.!\$\verb!{COMPILER}! file and, subsequently, 
+the \$\verb!{SOLPSTOP}\SETUP\setup.csh.!\$\verb!{HOST_NAME}.!\$\verb!{COMPILER}.local! file.
+The compiler switches are given through the configuration file 
+\$\verb!{SOLPSTOP}\SETUP\config.!\$\verb!{HOST_NAME}.!\$verb!{COMPILER}!. This last file should contain the
+location of all the main libraries with which the \SOLPSITER executables will be linked and their
+linking instructions. It also contains the shared compiler directives for all the \SOLPSITER object files
+and the name of the debugger program to be used, if any.
+Users should make sure the settings within these files fit their run environment and modify them as needed.
+If changes are needed, please forward them to the \SOLPSITER RO so that they may be included in the
+set of distributed files to help other future users.
 
 Some Windows\index{Windows} implementations have been attempted, and require an additional \verb!-DWINDOWS! compiler switch, but are not currently being supported.
 
@@ -289,6 +310,7 @@ purpose, a master \SOLPSITER \verb!Makefile! is provided, located at \$\verb!{SO
        \item[divgeo] The \verb!DivGeo! graphical input file builder and accompanying equilibrium and template converters
        \item[b25eirene] The \verb!B2.5-Eirene! main code and accompanying programs
        \item[uinp] The \verb!Uinp! translator from \verb!DivGeo! output to \verb!B2.5-Eirene! input
+       \item[sonnet-light] The \verb!Sonnet! library
        \item[triang] The \verb!Tria! and \verb!Triageom! triangulation utilities
        \item[manual] Builds this manual
     \end{description}
@@ -299,6 +321,7 @@ purpose, a master \SOLPSITER \verb!Makefile! is provided, located at \$\verb!{SO
        \item[divgeo] The \verb!DivGeo! graphical input file builder and accompanying equilibrium and template converters
        \item[b25eirene\_mpi] The \verb!B2.5-Eirene! main code and accompanying programs, MPI-parallelized
        \item[uinp] The \verb!Uinp! translator from \verb!DivGeo! output to \verb!B2.5-Eirene! input
+       \item[sonnet-light] The \verb!Sonnet! library
        \item[triang] The \verb!Tria! and \verb!Triageom! triangulation utilities
        \item[manual] Builds this manual
     \end{description}
@@ -321,6 +344,7 @@ purpose, a master \SOLPSITER \verb!Makefile! is provided, located at \$\verb!{SO
   \item[b25eirene] The \verb!B2.5-Eirene! main code and accompanying programs only
   \item[b25eirene\_mpi] The \verb!B2.5-Eirene! main code and accompanying programs only, MPI-parallelized
   \item[uinp] The \verb!Uinp! translator from \verb!DivGeo! output to \verb!B2.5-Eirene! input only (requires {\bf b25eirene} previous compilation)
+  \item[sonnet-light] The \verb!Sonnet! library only
   \item[triang] The \verb!Tria! and \verb!Triageom! triangulation utilities only
   \item[manual] This manual only
   \item[listobj] Builds the list of object files for the various code components
@@ -344,14 +368,14 @@ purpose, a master \SOLPSITER \verb!Makefile! is provided, located at \$\verb!{SO
   \item[clean\_triang] Removes the compiled binary files for {\bf triang} build
 \end{description}
 
-The master \SOLPSITER \verb!Makefile! will actually start by compiling and installing all the included libraries by invoking the \verb!install.sh! script from the \$\verb!{SOLPSTOP}/lib/! directory. If the user wishes to re-install the libraries with a clean of any previously existing compiled files, the \verb!clean_install.sh! script is available for this purpose in the same location. These scripts require the user
-to have properly defined the \verb!FC! environment variable which gives the preferred Fortran compiler.
-The default value for this is ``f77'' but that may not be apropriate for all systems. If compiling the
-\verb!Sonnet! library, the user should first do:
+Adding the \verb!debug_! prefix in front of any of build targets (except \verb!clean*!) will compile
+them in debug mode.
+
+For compilation of the \verb!Sonnet! library, the user should first do:
 \begin{verbatim}
 fs sysname
 \end{verbatim}
-and copy the result in \verb!solps_other\sonnet-light\Makefile!. 
+and copy the result in \$\verb!{SOLPSTOP}\modules\Sonnet-light\Makefile!. 
 
 \section{Before every \SOLPSITER session}
 \index{Run set-up}
@@ -359,36 +383,31 @@ and copy the result in \verb!solps_other\sonnet-light\Makefile!.
 At the beginning of every \SOLPSITER session, the user must load up the \SOLPSITER
 environment, which will contain the aliases and environment variables needed for
 smooth code operation (See also Section \ref{sec:setup} for full details). 
-This is achieved by the command:
-
+\SOLPSITER is expected to be run within the TC-shell. This is achieved by the command:
 \index{setup.csh}
 \begin{verbatim}
+tcsh
 source setup.csh
-\end{verbatim}
-if one is using the C-shell or the TC-shell. If one prefers to use the K-shell, then the command is:
-\index{setup.ksh}
-\begin{verbatim}
-source setup.ksh
 \end{verbatim}
 
 Among other things, these setup files establish some aliases that are useful for navigating the \SOLPSITER directory structure (see details in Chapter \ref{cha:structure}). Those aliases are:
 \begin{description}
   \item[stop] Goes to \$\verb!{SOLPSTOP}!, the \SOLPSITER top directory
-  \item[sb2, sbb] Go to \$\verb!{SOLPSTOP}/src/B2.5!, the \verb!B2.5! top directory
-  \item[sei] Goes to \$\verb!{SOLPSTOP}/src/Eirene!, the \verb!Eirene! top directory
-  \item[ssd] Goes to \$\verb!{SOLPSTOP}/src/DivGeo!, the \verb!DivGeo! top directory
-  \item[ssc] Goes to \$\verb!{SOLPSTOP}/src/Carre!, the \verb!Carre! top directory
-  \item[sst] Goes to \$\verb!{SOLPSTOP}/src/Triang!, the \verb!Tria! top directory
-  \item[ssu] Goes to \$\verb!{SOLPSTOP}/src/Uinp!, the \verb!Uinp! top directory
-  \item[sbin] Goes to \$\verb!{SOLPSTOP}/bin/!\$\verb!{OBJECTCODE}!, the directory where all compiled binaries are stored
-  \item[slib] Goes to \$\verb!{SOLPSTOP}/lib/!\$\verb!{OBJECTCODE}!, the directory where libraries are stored
+  \item[sb2, sbb] Go to \$\verb!{SOLPSTOP}/modules/B2.5!, the \verb!B2.5! top directory
+  \item[sei] Goes to \$\verb!{SOLPSTOP}/modules/Eirene!, the \verb!Eirene! top directory
+  \item[ssc] Goes to \$\verb!{SOLPSTOP}/modules/Carre!, the \verb!Carre! top directory
+  \item[ssd] Goes to \$\verb!{SOLPSTOP}/modules/DivGeo!, the \verb!DivGeo! top directory
+  \item[sst] Goes to \$\verb!{SOLPSTOP}/modules/Triang!, the \verb!Tria! top directory
+  \item[ssu] Goes to \$\verb!{SOLPSTOP}/modules/Uinp!, the \verb!Uinp! top directory
+  \item[ssw] Goes to \$\verb!{SOLPSTOP}/modules/Sonnet!, the \verb!Sonnet! top directory
+  \item[slib] Goes to \$\verb!{SOLPSTOP}/lib/!\$\verb!{HOST_NAME}.!\$\verb!{COMPILER}!, the directory where libraries are stored
   \item[srun, sbr] Go to \$\verb!{SOLPSTOP}/runs/!, the top run directory
   \item[scr] Goes to \$\verb!{SOLPSTOP}/scripts!, the directory where the scripts are stored
-  \item[sdg] Goes to \$\verb!{SOLPSTOP}/data/DivGeo/class/!\$\verb!{DEVICE}!, the directory where the \verb!DivGeo! models for the current modelled device are stored
   \item[\$DG] The location of the \verb!DivGeo! top directory
 \end{description}
 
-It is also possible to toggle between versions of the code compiled with and without debug options (array bounds checking, traceback, etc...) by use of the \verb!set_debug! and \verb!unset_debug! commands.
+It is also possible to toggle between versions of the code compiled with and without debug options (array bounds checking, traceback, etc...) by use of the \verb!set_debug! and \verb!unset_debug! commands. Similarly, the
+\verb!set_mpi! and \verb!unset_mpi! will turn on or off, respectively, compilation with MPI parallelization flags. By default, neither debug nor MPI flags are turned on.
 
 \chapter{The structure}
 \label{cha:structure}
@@ -399,82 +418,25 @@ The \SOLPSITER directory has the following global structure:
 
 \begin{verbatim}
 SOLPSTOP
-+---bin
-|   +---linux.ifort64.debug
-|   +---linux.ifort64
-+---libs
-|   +---mscl
-+---data
-|   +---meshes
-|   +---structures
-|   +---mesh.extra
-|   +---SAVE
-|   +---plot_set
-|   +---TRIMDAT
-|   +---Summary_plots
-|   +---commands
-|   +---Sonnet
-|   +---chords
-|   +---AMDS
-|   +---trim.data
-|   +---IDL
-|   +---gnuplot
-|   +---adas
-|   +---Bulk_properties
-|   +---Surface_properties
-|   +---Carre
-|   +---TCL
-|   +---mdsplus
-|   +---summers
-|   +---palettes
-|   +---DivGeo
-|   +---adas_W
 +---doc
 |   +---SOLPS_2002_Course
 |   +---solps
 +---scripts
-+---lib
-|   +---slap
-|   +---blaslapack
-|   +---sonnet-light
-|   +---grsource
-|   +---grgli
-|   +---linux.ifort64
-|   +---gligks
-|   +---mscl
-+---src
-|   +---uinp
++---modules
+|   +---Sonnet-light
 |   +---fxdr
-|   +---Sonnet
 |   +---Triang
+|   +---Uinp
 |   +---Carre
 |   +---amds
-|   +---ioflush
 |   +---B2.5
 |   +---solps4-5
 |   +---DivGeo
 |   +---Eirene
++---lib
+|   +---ITER.ifort64
 +---runs
 +---SETUP
-|   +---linux.pgi.xt6.openmp
-|   +---linux_pgf90_GW_openmp
-|   +---linux.Fujitsu
-|   +---linux_pgf90
-|   +---linux.pgi.xt6
-|   +---linux.ifort64.openmp
-|   +---HPUX
-|   +---linux.lf95
-|   +---linux.ifort64
-|   +---IBMaix
-|   +---linux.Intel
-|   +---linux.Intel_EM
-|   +---linux_pgf90_GW
-|   +---T3E
-|   +---linux.ifort32
-|   +---sun5
-|   +---g77
-|   +---linux_nag_f95
-|   +---linux.gfortran
 \end{verbatim}
 
 In order to set up the appropriate environment variables and aliases, the command
@@ -483,32 +445,32 @@ source setup.csh
 \end{verbatim}
 should be executed in the top level directory.  
 
-Two important environment variables are \verb!SOLPSTOP! which points
-to the top level directory and \verb!OBJECTCODE! which identifies the
-machine architecture ({\it e.g.} \verb!linux.ifort64!).
+Three important environment variables are \verb!SOLPSTOP! which points
+to the top level directory, \verb!HOST_NAME! which tells \SOLPSITER in
+which environment it is running and \verb!COMPILER! which identifies the
+chosen Fortran compiler ({\it e.g.} \verb!ifort64!).
 
 \section{setup.csh}
 \index{setup.csh}\label{sec:setup}
 
-\verb!setup.csh! is used to setup
+The \verb!setup.csh! file and its subsidiaries \$\verb!{SOLPSTOP}/SETUP/setup.csh.!\$\verb!{HOST_NAME}.!\$\verb!{COMPILER}! and \$\verb!{SOLPSTOP}/SETUP/config.!\$\verb!{HOST_NAME}.!\$\verb!{COMPILER}! are used to load any modules packages useful for the local \SOLPSITER run environment and the following environment variables:
 \begin{enumerate}
-\item \verb!SOLPSMASTER!\index{SOLPSMASTER}, a variable giving the root of the Master
-  distribution, usually it contains either the IPP--Garching address
-  (\verb!/afs/ipp-garching.mpg.de/u/dpc!) or the PPPL one 
-  (\verb!/afs/pppl.gov/u/dcoster!).  It can also be set to the local
-  copy of the Master distribution;
-\item \verb!NAG!\index{NAG}, the appropriate loader instruction to find \verb!NAG!
+\item \verb!DBX!\index{DBX}, the name of the debugger to be used
 \item \verb!NCARG_ROOT!\index{NCARG\_ROOT}, the root of the \verb!NCAR! tree, and
-  \verb!NCARG!, the appropriate loader instruction to load \verb!NCAR!
-\item \verb!OBJECTCODE!\index{OBJECTCODE}, a variable indicating the machine
-  architecture
-\item \verb!nOBJECTCODE!\index{nOBJECTCODE}, a similar variable used by HPZ derived from
-  \verb!OBJECTCODE!
-\item the \verb!PATH!\index{PATH} variable by prepending some directories
-\item \verb!MANPATH!\index{MANPATH} by adding some directories
-\item \verb!DEVICE!\index{DEVICE} the name of the fusion device to be simulated (see \ref{cha:divgeo} for available choices)
-\item \verb!USE_EIRENE!\index{USE\_EIRENE}, an environement variable used by the compiler to
-  know whether to compile a coupled code version (when it contains -DB25\_EIRENE)
+  \verb!LD_NCARG!, the appropriate loader instruction to load \verb!NCAR!
+\item \verb!NETCDF_ROOT!\index{NETCDF\_ROOT}, the root of the \verb!NetCDF! tree, and
+  \verb!LD_NETCDF!, the appropriate loader instruction to load \verb!NetCDF!
+\item \verb!MSCL_ROOT!\index{MSCL\_ROOT}, the root of the \verb!mscl! tree, and
+  \verb!LD_MSCL!, the appropriate loader instruction to load the \verb!mscl! library
+\item \verb!GR_ROOT!\index{GR\_ROOT}, the root of the \verb!GR! tree, and
+  \verb!LD_GR!, the appropriate loader instruction to load the \verb!GR! library (a graphics package produced by FZ-J{\"u}lich and used by \verb!Eirene!)
+\item \verb!GKS_ROOT!\index{GKS\_ROOT}, the root of the \verb!GKS! tree, and
+  \verb!LD_GKS!, the appropriate loader instruction to load the \verb!GKS! library
+\item \verb!NAGDIR!\index{NAGDIR}, the root of the \verb!NAG! tree, and
+  \verb!LD_NAG!, the appropriate loader instruction to load the \verb!NAG! library
+\item \verb!MDSPLUS_DIR!\index{MDSPLUS\_DIR}, the root of the \verb!MDSplus! tree, and
+  \verb!LD_MDSPLUS!, the appropriate loader instruction to load \verb!MDSplus!
+\item \verb!DEVICE!\index{DEVICE} the name of the fusion device most likely to be simulated for this \verb!HOST_NAME! (see \ref{cha:divgeo} for available choices)
 \item \verb!PERFMON!\index{PERFMON}, an environement variable used by
   the compiler to know whether to enable the performance monitoring libraries
 \item \verb!SOLPS_CPP!\index{SOLPS\_CPP}, an environment variable containing the global ``defines'' 
@@ -518,64 +480,15 @@ machine architecture ({\it e.g.} \verb!linux.ifort64!).
 \item some aliases to move around the tree (\verb!sbb!, \verb!sei!,
   {\it etc.})
 \item some aliases for plotting (\verb!xyplot!, etc...)
-\item two aliases to swap between the debug and no debug versions of
+\item two aliases to swap between the debug and no\_debug versions of
   the code (\verb!set_debug! and \verb!set_nodebug!)
+\item two aliases to swap between the MPI and no\_MPI versions of
+  the code (\verb!set_mpi! and \verb!set_nompi!)
 \end{enumerate}
-The original version of the script assumed everybody had AFS --- since
-this proved not to be true various {\it ad hoc} hacks have had to be
-introduced, though, over time, it is hoped that the code will become
-cleaner.
+Of course, any additional desired definitions can be added. The preferred place for those is, for those variables that need not be shared by other users, the \$\verb!{SOLPSTOP}/SETUP/setup.csh.!\$\verb!{HOST_NAME}.!\$\verb!{COMPILER}.local! file.
 
-For setting up the \verb!SOLPSMASTER!, \verb!OBJECTCODE!, \verb!NAG!
-and \verb!NCARG! variables, an attempt is made to source
-\begin{verbatim}
-    setup.csh.SOLPSMASTER
-    setup.csh.SOLPSMASTER.local
-    setup.csh.OBJECTCODE
-    setup.csh.OBJECTCODE.local
-    setup.csh.NAG
-    setup.csh.NAG.$OBJECTCODE            
-    setup.csh.NAG.local
-    setup.csh.NAG.local.$OBJECTCODE
-    setup.csh.NAG.guess
-    setup.csh.NCARG
-    setup.csh.NCARG.$OBJECTCODE
-    setup.csh.NCARG.local
-    setup.csh.NCARG.local.$OBJECTCODE
-    setup.csh.NCARG.guess
-\end{verbatim}
-in that order.  If the respective variables have not been set, they are
-set to some default value.  In the Master tree in Garching only the 
-\verb!.guess! files are supplied.  However, the Subversion server does 
-hold several examples in the \$\verb!SOLPSTOP/SETUP/!\$\verb!OBJECTCODE! directories.  
-At the end of \verb!setup.csh! an attempt is made to source
-\begin{verbatim}
-    setup.csh.$OBJECTCODE
-    setup.csh.local
-    setup.csh.local.$OBJECTCODE
-    setup.csh.$USER
-    setup.csh.$USER.$OBJECTCODE
-    setup.csh.mdsplus
-    setup.csh.mdsplus.$OBJECTCODE
-\end{verbatim}
-%% $
-if any of these exist. The \verb!setup.csh.local! file is provided in
-the Master tree. For specificities of local implementations, it is thus
-recommended to use \verb!setup.csh.local.!\$\verb!OBJECTCODE!, and, for
-user-specific settings, \verb!setup.csh.!\$\verb!USER!, where \$\verb!USER!
-is the user's login ID. 
-
-All the files above should be stored in the \$\verb!{SOLPSTOP}!/SETUP and
-\$\verb!{SOLPSTOP}!/SETUP/\$\verb!{OBJECTCODE}! directories, according to need.
-When setting up a tree, one should do, for example:
-
-\begin{verbatim}
-ln -s SETUP/linux.ifort64/* .
-ln -s SETUP/setup.csh.* .
-source setup.csh
-\end{verbatim}
-
-where \verb!linux.ifort64! gets replaced by the proper value of \$\verb!OBJECTCODE!.
+However, the \SOLPSITER GIT server 
+holds several examples in the \$\verb!SOLPSTOP/SETUP/! directory.  
 
 The command\index{stop}
 \begin{verbatim}
@@ -769,88 +682,47 @@ directories. They contain the \verb!TRIM! range, reflection and sputtering
 data used by \verb!SOLPS!. Files ending in \verb!e! are for energy, in
 \verb!n! are for particles.
 
-\newpage\section{src}
-\index{src}\index{include}
+\newpage
+\section{modules}
+\index{modules}\index{include}
 
 \begin{verbatim}
-+---include
-+---src
-|   +---b2
++---modules
+|   +---Sonnet-light
+|   +---fxdr
 |   +---Triang
-|   +---Sonnet
-|   +---Eirene
-|   +---aggj
-|   +---NCARG
+|   +---Uinp
 |   +---Carre
+|   +---amds
+|   +---B2.5
+|   +---solps4-5
 |   +---DivGeo
-|   +---agg
+|   +---Eirene
 \end{verbatim}
 
-The \verb!include! subtree contains global include files.
+The \verb!modules/B2.5! subtree contains the source directories
+for \verb!B2.5!; \verb!modules/Eirene! for the Monte-Carlo code, \verb!modules/Carre! and
+\verb!modules\fxdr!
+the grid generator and associated converter, 
+\verb!modules/DivGeo! for the \verb!DG! graphical interface
+to the grid preprocessor, \verb!modules/Triang! for the \verb!Eirene! triangular mesh generator,
+\verb!modules/Uinp! for the \verb!Uinp! input file generator, 
+\verb!modules/amds! for the automated generator
+of atomic physics blocks for \verb!Eirene!, 
+\verb!modules/solps4-5! for the \verb!b2sxdr! converter from
+\SOLPSfour to \SOLPSITERns, and \verb!modules\Sonnet-light! for the \verb!Sonnet! library in use
+for \SOLPSfour grids.
 
-The \verb!src/b2! subtree contains the source directories
-for \verb!B2.5!; \verb!src/Eirene! for the Monte-Carlo code, \verb!src/Carre!
-the grid generator, \verb!src/agg! for the automatic grid generator
-interface to \verb!Carre! (for ASDEX--Upgrade), \verb!src/aggj! for the automatic grid generator
-interface to \verb!Carre! (for JET), \verb!src/DivGeo! for the \verb!DG! graphical interface
-to the grid preprocessor, and \verb!src/Triang! for the \verb!Eirene! triangular mesh generator.
+\newpage\section{scripts}
+\label{sec:scripts}
 
-\newpage\section{bin}
-\index{bin}
-
-%%find $SOLPSTOP/bin -follow -maxdepth 2 -type d -print | sed -e "s:${SOLPSTOP}:SOLPSTOP:" | sed -e 's:[^/]*/:|   :g' | sed 's:\(\(|   \)*\)|   :\1+---:'
-
-The \verb!bin! subtree contain programs (binaries and shell
-scripts) used for compiling as well as for analyzing runs.
-
+The command\index{scr}
 \begin{verbatim}
-+---bin
-|   +---linux.ifort64.debug
-|   |   +---uinp
-|   |   +---Triang
-|   |   +---Carre
-|   |   +---B2.5
-|   |   +---DivGeo
-|   |   +---Eirene
-|   +---linux.ifort64
-|   |   +---uinp
-|   |   +---Triang
-|   |   +---Carre
-|   |   +---B2.5
-|   |   +---DivGeo
-|   |   +---Eirene
+    scr
 \end{verbatim}
+will take you to \$\verb!{SOLPSTOP}/scripts!. 
 
-The command\index{sbin}
-\begin{verbatim}
-    sbin
-\end{verbatim}
-will take you to \$\verb!{SOLPSTOP}/bin/!\$\verb!{OBJECTCODE}!. This directory contains all 
-machine-specific implementations of analysis and post-processing scripts. Non-machine-specific 
-scripts can be found in the \$\verb!{SOLPSTOP}/bin/common! directory.
-Again, a user wanting to create local scripts is encouraged to create a
-parallel \$\verb!SOLPSTOP/bin.local! directory, with subdirectories
-\verb!common! and \$\verb!{OBJECTCODE}! in which to store any personal scripts
-or modifications to the provided ones. The \verb!PATH! environment variable
-already includes those two subdirectories (superceding the Master copies)
-in the standard setup. It is also best to create a shadow link for debug runs
-by means of:
-\begin{verbatim}
-unset_debug
-cd $SOLPSTOP/bin.local
-ln -s $OBJECTCODE $OBJECTCODE.debug
-\end{verbatim}
-%%$
-
-\newpage\subsubsection{src/common}
-\label{sec:bincommon}
-
-The command\index{sbinc}
-\begin{verbatim}
-    sbinc
-\end{verbatim}
-will take you to \$\verb!{SOLPSTOP}/bin/common!. 
-
+The number of scripts developped for various {\bf SOLPS} versions is very large. Efforts are currently underway to translate all the relevant ones for use within \SOLPSITERns. A non-exhaustive listing of these scripts, with some explanation as to their purpose, follows:
 \begin{itemize}
 \item the residuals can be plotted with 
   \begin{description}
@@ -1135,7 +1007,7 @@ negative quantities on the same scale and ``M'' the absolute values of negative 
   \item[fhtxreg]\index{fhtxreg} Plots the total energy flow across important $x$-directed surfaces in \verb!B2.5!.
   \item[fhtyreg]\index{fhtyreg} Plots the total energy flow across important $y$-directed surfaces in \verb!B2.5!.
   \item[fluid\_fluxes \#1 \#2]\index{fluid\_fluxes} Plots the sum of fluid fluxes for species numbers varying from \#1 to \#2 (respective defaults are 0 and 1). Also exists as a Python script. Fluxes into the domain are shown as negative values, fluxes out of the domain as positive values.
-  \item[fluxt \#1]\index{fluxt} Gives the recycling fluxes for the first \#1 \verb!Eirene! strata. The default value is all the strata, as read from the \verb!b2.neutrals.parameters! file, or if not present, the \$\verb!SOLPSTOP/src/B2.5/src/include.local/DIMENSIONS.F! file, or if not present, the \$\verb!SOLPSTOP/src/B2.5/src/include/DIMENSIONS.F! file.
+  \item[fluxt \#1]\index{fluxt} Gives the recycling fluxes for the first \#1 \verb!Eirene! strata. The default value is all the strata, as read from the \verb!b2.neutrals.parameters! file, or if not present, the \$\verb!SOLPSTOP/modules/B2.5/src/include.local/DIMENSIONS.F! file, or if not present, the \$\verb!SOLPSTOP/modules/B2.5/src/include/DIMENSIONS.F! file.
   \item[internal\_energy\_balance]\index{internal\_energy\_balance} Outputs the energy balance tallies.
   \item[internal\_energy\_balance\_coupled]\index{internal\_energy\_balance\_coupled} Outputs the energy balance tallies for a coupled run.
   \item[joule\_heating]\index{joule\_heating} Plots the amount of Joule heating per region.
@@ -1205,13 +1077,13 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[b2p]\index{b2p} Script to obtain a standard series of \btwoplot graphs.
   \item[b2pc]\index{b2pc} Script to obtain a standard series of \btwoplot graphs.
   \item[b2pl]\index{b2pl} Script to obtain a standard series of \btwoplot graphs.
-  \item[b2plot]\index{b2plot} Shortcut to \btwoplotns. A ``-n'' option allows for dry-run tests.
+  \item[b2plot]\index{b2plot} Shortcut to \btwoplotns. A ``-n'' option allows for dry-run tests.A ``-d'' option allows to run within the chosen debugger. A ``-s'' option allows to run \btwoplot with coupling to \verb!Eirene! data.
   \item[b2pp]\index{b2pp} Script to obtain a standard series of \btwoplot graphs.
   \item[b2pt]\index{b2pt} Script to obtain a standard series of \btwoplot graphs.
-  \item[b2run]\index{b2run} Shortcut to the \verb!Makefile! launching \verb!B2.5!. A ``-n'' option allows for dry-run tests.
+  \item[b2run]\index{b2run} Shortcut to the \verb!Makefile! launching \verb!B2.5!. A ``-n'' option allows for dry-run tests. A ``-d'' option allows to run within the chosen debugger. A ``-s'' option allows to run \verb!B2.5! in stand-alone mode.
   \item[b2run\_hgw\_cluster]\index{b2run\_hgw\_clus} Shortcut to the \verb!Makefile! launching \verb!B2.5! for the IPP--Greifswald cluster. A ``-n'' option allows for dry-run tests.
   \item[b2sxdr]\index{b2sxdr} Shortcut to the \SOLPSfour to \SOLPSfive
-    converter. A ``-n'' option allows for dry-run tests.
+    converter. A ``-n'' option allows for dry-run tests. A ``-d'' option allows to run within the chosen debugger. A ``-s'' option allows to specify the run to convert was not coupled to \verb!Eirene!.
   \item[correct\_baserun\_timestamps]\index{correct\_baserun\_timestamps}
     Makes sure the timestamps for the start-up files in the \verb!baserun!
     directory are in the right chronological order.
@@ -1248,7 +1120,7 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[setup\_baserun\_eirene\_links]\index{setup\_baserun\_eirene\_links} Prepares the run directory before a \verb!B2.5-Eirene! run by settings up links to the proper data files.
   \item[SOLPS4to5]\index{SOLPS4to5} Script to convert a \SOLPSfour run directory into a \SOLPSfive one.
   \item[update\_data]\index{update\_data} Updates the \$\verb!SOLPSTOP/data! directory.
-  \item[update\_eirene]\index{update\_eirene} Updates the \$\verb!SOLPSTOP/src/Eirene! directory.
+  \item[update\_eirene]\index{update\_eirene} Updates the \$\verb!SOLPSTOP/modules/Eirene! directory.
   \item[update\_libs]\index{update\_libs} Updates the \$\verb!SOLPSTOP/src/lib! directory.
   \item[update\_links]\index{update\_links} Updates linked files to the \verb!SOLPS! Master in the current directory structure.
   \item[v2d]\index{v2d} Converts \verb!Carre! format equilibrium files to \verb!DG! format (see Sec.~\ref{sec:equtrn}).
@@ -1256,7 +1128,7 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \end{description}
 \end{itemize}
 
-Some new python \index{python scripts} based scripts have also been added:
+Some new Python \index{Python scripts} based scripts have also been added:
 \begin{description}
   \item[energy\_analysis.py]\index{energy\_analysis.py} Energy
     passing through various surfaces.
@@ -1488,332 +1360,106 @@ The \verb!lib! subtree contains libraries used during compilation.
 \begin{verbatim}
 SOLPSTOP
 +---lib
-|   +---slap
-|   |   +---orig9301
-|   +---blaslapack
-|   |   +---blas1
-|   |   +---lapack
-|   |   +---blas3
-|   |   +---blas2
-|   +---sonnet-light
-|   |   +---amd64_sles11
-|   |   +---x86_64_rhel5
-|   |   +---i386_linux26
-|   |   +---amd64_linux24
-|   |   +---amd64_sles10
-|   +---grsource
-|   +---grgli
-|   |   +---grsoft
-|   |   +---gligks
-|   |   +---src
-|   +---linux.ifort64
-|   +---gligks
-|   |   +---gks
-|   +---mscl
-|   |   +---linux.ifort64
-|   |   +---config
-|   |   +---src
+|   +---ITER.ifort64
 \end{verbatim}
+
+Since most of the libraries are now expected to be provided as modules, only the
+\verb!Sonnet! library, \verb!libsonnet.a!, needs to be stored here. However, local
+copies of the required libraries can also be put there at the user´s convenience.
 
 The command\index{slib}
 \begin{verbatim}
     slib
 \end{verbatim}
-will take you to \$\verb!{SOLPSTOP}/lib/!\$\verb!{OBJECTCODE}!.
+will take you to \$\verb!{SOLPSTOP}/lib/!\$\verb!{HOST_NAME}.!\$\verb!{COMPILER}!.
 
-\newpage\subsection{src/B2.5}
-\index{B2.5}
+\newpage\subsection{modules/B2.5}
+\index{B2.5}\ref{sec:b2}
 
 The different versions of \verb!B2.5! are shown below:
 
-%%find $SOLPSTOP/src/B2.5 -follow -maxdepth 1 -type d -print | sed -e "s:${SOLPSTOP}:SOLPSTOP:" | sed -e 's:[^/]*/:|   :g' | sed 's:\(\(|   \)*\)|   :\1+---:'
+%%find $SOLPSTOP/modules/B2.5 -follow -maxdepth 1 -type d -print | sed -e "s:${SOLPSTOP}:SOLPSTOP:" | sed -e 's:[^/]*/:|   :g' | sed 's:\(\(|   \)*\)|   :\1+---:'
 
 \begin{verbatim}
 SOLPSTOP
-+---src
++---modules
 |   +---B2.5
-|   |   +---B2ai
-|   |   +---B2yi_gnuplot
-|   |   +---B2ag
-|   |   +---bin
-|   |   +---config.local
-|   |   +---b2fgmtry_mod
-|   |   +---B2pl
-|   |   +---B2ar
-|   |   +---B2ah
 |   |   +---config
-|   |   +---Add_Mod
 |   |   +---src
-|   |   +---src.local
+|   |   +---src.local (optional)
+|   |   +---builds
 \end{verbatim}
 
 \begin{description}
 \item[config] \index{config} contains compiler option files
-\item[config.local] \index{config.local} contains local modifications to the compiler option files
-\item[local] \index{src.local}\index{B2.5,
-    local}\label{src.local} contains locally modified files
-\item[xpb] \index{xpb}\index{B2.5, xpb}\label{xpb}
-  contains Xavier Bonnin's merging of {\bf SOLPS5.0} with additional
-  physics and corrections
-\item[current]\index{B2.5, current} a link to the actual version of the code to be used ---
-  usually a pointer to \verb!xpb!
+\item[src.local] \index{src.local}\index{B2.5,
+    local}\label{src.local} is an optional location which can contain locally modified source files (not version-controlled)
+\item[src] \index{src}\index{B2.5, src}\label{b2.5_src}
+  contains the \verb!B2.5! source code files
+\item[builds]\index{builds}\index{B2.5, builds} contains the compiled object files for building the \verb!B2.5! executables.
 \end{description}
 
 A more varied selection of \verb!B2.5! historical versions is available within the {\bf SOLPS5.0} distribution.
 
-The command\index{ssb}
+The commands\index{ssb}\index{sb2}
 \begin{verbatim}
     ssb
 \end{verbatim}
-will take you to \$\verb!{SOLPSTOP}/src/b2!.
+or
+\begin{verbatim}
+    sb2
+\end{verbatim}
+will take you to \$\verb!{SOLPSTOP}/modules/B2.5!.
 
 \subsubsection{Local modifications to the B2.5 source}
 \label{b2codemodifications}\index{B2.5, modifying the
   source}\index{modifying the source of B2.5}
 
-When people establish a shadow tree, they usually just have a link to
-the \verb!B2.5! source, and {\bf this is the only supported option!}  In the
-past if you wanted to make changes to the source, you needed to use
-\verb!gtdr! to establish a local shadow of the source, and then
-\verb!gtfl! to make a particular file local so that it could be
-modified.  {\bf This is no longer supported!}  The presently supported
-way of making local changes is to copy the file you want to change to
-\verb!local! and then edit that file.  You will then need to do
+With the installation instructions from Section~\ref{solpsdistribution},  
+users get a local clone of the \verb!B2.5! GIT submodule, and 
+{\bf this is the only supported option!}  
+The files in \verb!src! will be version-controlled and updated whenever the
+user will pull in new code version.
+If, however, one wishes to make local changes to a file and protect those from
+GIT updates, the procedure for that purpose is to copy the file you want to change to
+\verb!src.local! and then edit that file.  You will then need to do
 \begin{verbatim}
   sbb
+  gmake local
+\end{verbatim}
+to create the \verb!src.local! directory. Once you have copied and edited the
+file(s) you need to change in \verb!src.local!, you should recompile with:
+\begin{verbatim}
+  stop
   gmake listobj
   gmake tags
   gmake depend
   gmake
 \end{verbatim}
-so that the local file is used.  If this local change should no longer
-be needed, then it should be removed from \verb!local! and the
+so that the local file is used. The last \verb!gmake! command may of course be
+replaced by \verb!gmake (debug_)solps!, \verb!gmake (debug_)solps_mpi!, 
+\verb!gmake (debug_)all! or \verb!gmake (debug_)all_mpi! as needed. 
+
+If this local change should no longer
+be needed, then it should be removed from \verb!src.local! and the
 following performed:
 \begin{verbatim}
-  sbb
+  stop
   gmake clean
   gmake listobj
   gmake tags
   gmake depend
   gmake
 \end{verbatim}
-
-If you have performed the \verb!gtdr/gtfl! operations on a source
-file, and you expect Garching support, you should move your changed
-files to \verb!local!, move \verb!current! to \verb!old! and
-re-establish the link of \verb!current! to the Master version.
-
-\newpage\subsubsection{src/b2/src}
-
-Within the \verb!src/b2/src! source directory, we have:
-
-%%find $SOLPSTOP/src/B2.5/src -follow -maxdepth 1 -type d -print | sed -e "s:${SOLPSTOP}:SOLPSTOP:" | sed -e 's:[^/]*/:|   :g' | sed 's:\(\(|   \)*\)|   :\1+---:'
-
-\begin{verbatim}
-SOLPSTOP
-+---src
-|   +---b2
-|   |   +---local
-|   |   +---src
-|   |   |   +---b2aux
-|   |   |   +---solvers
-|   |   |   +---sources
-|   |   |   +---include
-|   |   |   +---documentation
-|   |   |   +---postprocessing
-|   |   |   +---user
-|   |   |   +---driver
-|   |   |   +---modules.local
-|   |   |   +---utility
-|   |   |   +---output
-|   |   |   +---input
-|   |   |   +---preprocessing
-|   |   |   +---b2plot
-|   |   |   +---modules
-|   |   |   +---convert
-|   |   |   +---transport
-|   |   |   +---common
-|   |   |   +---equations
-|   |   |   +---include.local
-|   |   |   +---convert
-|   |   |   +---b2aux
-|   |   |   +---postprocessing
-|   |   |   +---sources
-|   |   |   +---preprocessing
-|   |   |   +---common
-|   |   |   +---driver
-|   |   |   +---transport
-|   |   |   +---solvers
-|   |   |   +---input
-|   |   |   +---output
-|   |   |   +---b2plot
-|   |   |   +---utility
-|   |   |   +---modules
-|   |   |   +---equations
-|   |   |   +---documentation
-|   |   |   +---user
-\end{verbatim}
-
-The user wanting to delve deeper into the source code is directed to the detailed routine
-listing in Appendix \ref{lis:b2cdcr}. 
-
-\newpage
-\subsection{src/Eirene}
-\index{Eirene}\label{cha:eirene}
-
-%%find $SOLPSTOP/src/Eirene -follow -maxdepth 2 -type d -print | sed -e "s:${SOLPSTOP}:SOLPSTOP:" | sed -e 's:[^/]*/:|   :g' | sed 's:\(\(|   \)*\)|   :\1+---:'
-
-\begin{verbatim}
-SOLPSTOP
-+---src
-|   +---Eirene
-|   |   +---extraB25
-|   |   +---broadcast
-|   |   +---mathematics
-|   |   +---user_general
-|   |   +---tetrahedrons
-|   |   +---broadcast_dummy
-|   |   +---startup-routines
-|   |   +---diagno
-|   |   +---couple_Dummy
-|   |   +---assistant
-|   |   +---couple_B2.5_SOLPS-ITER
-|   |   +---couple_B2.5_Tria.mpi
-|   |   +---plotting
-|   |   +---geometry
-|   |   |   +---trc-time-routines
-|   |   |   +---time-routines
-|   |   +---file-handling
-|   |   +---surface-processes
-|   |   +---bin
-|   |   |   +---linux.ifort64.debug
-|   |   |   +---linux.ifort64
-|   |   +---photons
-|   |   +---volume-processes
-|   |   +---user
-|   |   +---sampling
-|   |   +---xdr-dummy
-|   |   +---couple_Tria
-|   |   +---config
-|   |   +---output
-|   |   +---grsoft-dummy
-|   |   +---main-routines
-|   |   +---Database
-|   |   |   +---AMdata
-|   |   |   +---Surfacedata
-|   |   +---modules
-|   |   +---iterate
-|   |   +---particle-tracing
-|   |   +---plot_dummy
-|   |   +---scoring
-\end{verbatim}
-
-The command\index{sse}
-\begin{verbatim}
-    sse
-\end{verbatim}
-will take you to \$\verb!{SOLPSTOP}/src/Eirene!.
-
-The usual version of \verb!B2.5! is not compiled with \verb!Eirene!.  To compile the
-coupled version, the environment variable \verb!USE_EIRENE! should be
-set to contain \verb!-DB25_EIRENE!. Then \verb!Eirene! should be compiled with
-\index{Eirene, compilation}\index{USE\_EIRENE}
-\begin{verbatim}
-    gmake
-\end{verbatim}
-followed by the compilation of \verb!B2.5!.
-
-If routines have been added or removed, if the dependencies have been
-altered or if this is the first compilation in a new tree, you should do
-\index{Eirene, compilation}
-\begin{verbatim}
-    gmake depend
-    gmake listobj
-    gmake tags
-    gmake depend
-    gmake
-\end{verbatim}
-The first \verb!gmake depend! is only needed for a brand new compilation.
-The \verb!gmake listobj! command is needed for a first-time compilation or if 
-a new source file has been added. 
-The \verb!gmake tags! command is needed if this is the first compilation or new
-files are added or a new routine has been added within an existing source file.
-The second \verb!gmake depend! is needed if this is the first compilation or
-if the dependencies have been altered.
+If you want to avoid a long recompilation, you need to remove from the \verb!builds/*/!
+directories , the object and module files corresponding to your locally changed file(s),
+and then ask for a normal recompilation with a single \verb!gmake! command.
 
 If the user wishes to modify the compiling options used, the creation
-of a \verb!config.local! subdirectory is recommended, in which to
-store \verb!compiler.!\$\verb!OBJECTCODE! files. Since the \verb!Makefile!
-reads those after the \verb!config/compiler.!\$\verb!OBJECTCODE! file,
+of a \verb!config.!\$\verb!{HOST_NAME}.!\$\verb!{COMPILER}.local! file in the
+\verb!config! subdirectory is recommended. Since the \verb!Makefile!
+reads those after the \verb!config.!\$\verb!{HOST_NAME}.!\$\verb!{COMPILER}! file,
 they need only contain the modified definitions. 
-
-\newpage
-\subsection{base/b2}
-\label{sec:b2}
-
-The compilation of \verb!B2.5! is done in \verb!base/b2! (see also
-section \ref{sec:compilingb2}, page \pageref{sec:compilingb2}).
-
-%%find $SOLPSTOP/base/b2 -follow -maxdepth 1 -type d -print | sed -e "s:${SOLPSTOP}:SOLPSTOP:" | sed -e 's:[^/]*/:|   :g' | sed 's:\(\(|   \)*\)|   :\1+---:'
-
-\begin{verbatim}
-SOLPSTOP
-+---base
-|   +---b2
-|   |   +---config
-|   |   +---config.local
-|   |   +---${OBJECTCODE}
-|   |   +---${OBJECTCODE}.debug
-\end{verbatim}
-
-The command\index{sbb}
-\begin{verbatim}
-    sbb
-\end{verbatim}
-will take you to \$\verb!{SOLPSTOP}/base/b2!.
-
-Contrary to previous {\bf SOLPS} versions, it is now required to
-compile \verb!Eirene! first before compiling \verb!B2.5!. See
-\ref{cha:eirene}.
-
-If routines have been added or removed, if the dependencies have been
-altered or if this is the first compilation in a new tree, you should do
-\index{B2.5, compilation}
-\begin{verbatim}
-    gmake depend
-    gmake listobj
-    gmake tags
-    gmake depend
-    gmake
-\end{verbatim}
-The first \verb!gmake depend! is only needed for a brand new compilation.
-The \verb!gmake listobj! command is needed for a first-time compilation or if 
-a new source file has been added. 
-The \verb!gmake tags! command is needed if this is the first compilation or new
-files are added or a new routine has been added within an existing source file.
-The second \verb!gmake depend! is needed if this is the first compilation or
-if the dependencies have been altered.
-
-Normally compilation is achieved with
-\begin{verbatim}
-    gmake
-\end{verbatim}
-
-Note that if you want to use the coupled version of the code, you
-should compile \verb!Eirene! first (see chapter \ref{cha:eirene}).
-
-If you are having problems (you've tried to be clever with altering
-files, or the \verb!SOLPS! administrator has), you might need to do
-\begin{verbatim}
-    gmake clean
-    rm ${SOLPSTOP}/base/b2/LISTOBJ
-    gmake depend
-    gmake listobj
-    gmake tags
-    gmake depend
-    gmake
-\end{verbatim}
-%% $
 
 If you just want to compile \verb!b2mn.exe!, you can do
 \begin{verbatim}
@@ -1831,50 +1477,156 @@ combination of options), you can
 \end{verbatim}
 The default compiles all but the \SOLPSfive to \SOLPSfour converters.
 
-If the user wishes to modify the compiling options used, the creation
-of a \verb!config.local! subdirectory is recommended, in which to
-store \verb!compiler.!\$\verb!OBJECTCODE! files. Since the \verb!Makefile!
-reads those after the \verb!config/compiler.!\$\verb!OBJECTCODE! file,
-they need only contain the modified definitions. 
+If you wish to submit code changes for a pull request so that they may be inserted in the
+general \SOLPSITER distribution or to have them version-controlled within your own topical
+branches, the locally modified files need to remain in the \verb!src! 
+version-controlled directories.
 
-\newpage
-\subsection{base/Eirene}
-\label{sec:baseEirene}
+\newpage\subsubsection{modules/B2.5/src}
 
-The compilation of \verb!Eirene! is done in \verb!base/Eirene!.
+Within the \verb!modules/B2.5/src! source directory, we have:
 
-%%find $SOLPSTOP/base/Eirene -follow -maxdepth 1 -type d -print | sed -e "s:${SOLPSTOP}:SOLPSTOP:" | sed -e 's:[^/]*/:|   :g' | sed 's:\(\(|   \)*\)|   :\1+---:'
+%%find $SOLPSTOP/modules/B2.5/src -follow -maxdepth 1 -type d -print | sed -e "s:${SOLPSTOP}:SOLPSTOP:" | sed -e 's:[^/]*/:|   :g' | sed 's:\(\(|   \)*\)|   :\1+---:'
 
 \begin{verbatim}
 SOLPSTOP
-+---base
++---modules
+|   +---B2.5
+|   |   +---src.local
+|   |   +---src
+|   |   |   +---b2aux
+|   |   |   +---solvers
+|   |   |   +---sources
+|   |   |   +---include
+|   |   |   +---include.local (optional)
+|   |   |   +---documentation
+|   |   |   +---postprocessing
+|   |   |   +---user
+|   |   |   +---driver
+|   |   |   +---utility
+|   |   |   +---output
+|   |   |   +---input
+|   |   |   +---preprocessing
+|   |   |   +---b2plot
+|   |   |   +---modules
+|   |   |   +---modules.local (optional)
+|   |   |   +---convert
+|   |   |   +---transport
+|   |   |   +---common
+|   |   |   +---equations
+\end{verbatim}
+
+Similarly to the \verb!src.local! directory, two additional local directories are provided
+\verb!src/include.local! and \verb!src/modules.local! for locally modified include files
+and modules, respectively, that the user does not wish to have updated by the version
+control software. The same compilation instructions as in previous 
+Section~\ref{b2codemodifications} apply.
+
+The user wanting to delve deeper into the source code is directed to the detailed routine
+listing in Appendix \ref{lis:b2cdcr}. 
+
+\newpage
+\subsection{modules/Eirene}
+\index{Eirene}\label{cha:eirene}
+
+%%find $SOLPSTOP/modules/Eirene -follow -maxdepth 2 -type d -print | sed -e "s:${SOLPSTOP}:SOLPSTOP:" | sed -e 's:[^/]*/:|   :g' | sed 's:\(\(|   \)*\)|   :\1+---:'
+
+\begin{verbatim}
+SOLPSTOP
++---modules
 |   +---Eirene
+|   |   +---broadcast
+|   |   +---mathematics
+|   |   +---tetrahedrons
+|   |   +---broadcast_dummy
+|   |   +---startup-routines
+|   |   +---diagno
+|   |   +---assistant
+|   |   +---plotting
+|   |   +---geometry
+|   |   |   +---trc-time-routines
+|   |   |   +---time-routines
+|   |   +---file-handling
+|   |   +---surface-processes
+|   |   +---photons
+|   |   +---volume-processes
+|   |   +---sampling
+|   |   +---xdr-dummy
 |   |   +---config
-|   |   +---config.local
-|   |   +---${OBJECTCODE}
-|   |   +---${OBJECTCODE}.debug
+|   |   +---output
+|   |   +---grsoft-dummy
+|   |   +---main-routines
+|   |   +---modules
+|   |   +---iterate
+|   |   +---particle-tracing
+|   |   +---ioflush
+|   |   +---plot_dummy
+|   |   +---scoring
+|   |   +---interfaces
+|   |   |   +---couple_Dummy
+|   |   |   +---couple_Tria
+|   |   |   +---couple_SOLPS-ITER
+|   |   +---user-routines
+|   |   |   +---user_general
+|   |   |   +---user_iter
+|   |   +---local
+|   |   +---Database
+|   |   |   +---AMdata
+|   |   |   +---Surfacedata
+|   |   +---builds
+|   |   |   +---couple_SOLPS-ITER.ITER.ifort64
+|   |   |   +---standalone.ITER.ifort64
+|   |   |   +---couple_SOLPS-ITER.ITER.ifort64.mpi
+|   |   |   +---standalone.ITER.ifort64.mpi
 \end{verbatim}
 
-The command\index{sbe}
+The command\index{sei}
 \begin{verbatim}
-    sbe
+    sei
 \end{verbatim}
-will take you to \$\verb!{SOLPSTOP}/base/Eirene!.
+will take you to \$\verb!{SOLPSTOP}/modules/Eirene!.
 
-If routines have been added or removed, if the dependencies have been
-altered or if this is the first compilation in a new tree, you should do
-\index{Eirene, compilation}
-\begin{verbatim}
-    gmake depend
-\end{verbatim}
+Because \verb!Eirene! is distributed as a stand-alone submodule and is being maintained
+by FZ-J{\"u}lich, some of the directories found above correspond to \verb!Eirene! 
+implementations other than that used in \SOLPSITERns. These are the subdirectories
+within \verb!interfaces! and \verb!user-routines!. \SOLPSITER uses only the code found in
+the \verb!interfaces\couple_SOLPS-ITER! and \verb!user-routines\user_iter! subdirectories.
+The other are included for compatibility with the FZ-J{\"u}lich master \verb!Eirene!
+repository.
 
-Normally compilation is achieved with
-\begin{verbatim}
-    gmake
-\end{verbatim}
+Additionally, the \verb!Database! directory contain the data files which \verb!Eirene!
+relies on to coompute things such as backscattering coefficients, atomic reactions, etc...
+
+As with \verb!B2.5!, a \verb!local! directory for the user that wishes to make code
+changes sheltered from GIT updates. The same procedures apply.
 
 Note that if you want to use the coupled version of the code, you
 should compile \verb!Eirene! first.
+
+If routines have been added or removed, if the dependencies have been
+altered or if this is the first compilation in a new tree, and you are not
+compiling using the \SOLPSITER master \verb!Makefile!, you should do
+\index{Eirene, compilation}
+\begin{verbatim}
+    gmake depend
+    gmake listobj
+    gmake tags
+    gmake depend
+    gmake
+\end{verbatim}
+The first \verb!gmake depend! is only needed for a brand new compilation.
+The \verb!gmake listobj! command is needed for a first-time compilation or if 
+a new source file has been added. 
+The \verb!gmake tags! command is needed if this is the first compilation or new
+files are added or a new routine has been added within an existing source file.
+The second \verb!gmake depend! is needed if this is the first compilation or
+if the dependencies have been altered.
+
+If the user wishes to modify the compiling options used, the creation
+of a \verb!config.!\$\verb!{HOST_NAME}.!\$\verb!{COMPILER}.local! file in the
+\verb!config! subdirectory is recommended. Since the \verb!Makefile!
+reads those after the \verb!config.!\$\verb!{HOST_NAME}.!\$\verb!{COMPILER}! file,
+they need only contain the modified definitions. 
 
 If you are having problems (you've tried to be clever with altering
 files, or the \verb!SOLPS! administrator has), you might need to do
@@ -1908,43 +1660,37 @@ The runs for \verb!B2.5! are done in \verb!runs!.
 \begin{verbatim}
 SOLPSTOP
 +---runs
-|   +---bench_mark
-|   |   +---48x18
-|   |   |   +---baserun
-|   |   |   +---ibmtok1
-|   |   +---96x36
-|   |   |   +---baserun
-|   |   |   +---ibmtok1
-|   |   +---192x72
-|   |   |   +---baserun
-|   |   |   +---ibmtok1
 \end{verbatim}
 
-The command\index{srun}
+The commands\index{srun}
 \begin{verbatim}
     srun
+\end{verbatim}
+and\index{sbr}
+\begin{verbatim}
+    sbr
 \end{verbatim}
 will take you to \$\verb!{SOLPSTOP}/runs!.
 
 Usually a ``case series'' would be run in a sub-directory of
-\$\verb!{SOLPSTOP}/runs!.  Sometimes, as in the example of
-\verb!bench_mark! shown above, further subdirectories are created to
+\$\verb!{SOLPSTOP}/runs!.  Sometimes, further subdirectories are created to
 separate categories of runs --- the depth of sub-directories is a
 matter of taste!  In each of the directories, a \verb!baserun!
-sub-directory is created, and then, at the same level, run directories
-(typified here by the \verb!ibmtok1! directory).  The \verb!baserun!
+sub-directory is created, and then, at the same level, run directories.  
+The \verb!baserun!
 directory contains the defaults for all of the other directories at
-its same level, and typically \verb!b2ag!, \verb!b2ah!, \verb!b2ar!
+its same level, and typically the grid generation steps and the input build programs 
+\verb!b2ag!, \verb!b2ah!, \verb!b2ar!
 and \verb!b2ai! are run in this directory (see chapter \ref{cha:standaloneb2}).
 
 \chapter{Running the standalone version of B2.5}
 \label{cha:standaloneb2}
 
-The compilation of \verb!B2! is described in section \ref{sec:b2} on page
-\pageref{sec:b2} with more detail given in section \ref{sec:compilingb2}, page \pageref{sec:compilingb2}.
+The compilation of \verb!B2.5! is described in section \ref{sec:b2} on page
+\pageref{sec:b2}.
 
 The run directory is described in section \ref{sec:b2runs} on page
-\pageref{sec:b2runs}. It is accessible with the \verb!sbr! command.
+\pageref{sec:b2runs}. It is accessible with the \verb!sbr! and \verb!srun! commands.
 
 The main code is \verb!b2mn.exe! but it needs input files written
 by \verb!b2ag.exe!, \verb!b2ah.exe!, \verb!b2ar.exe! and
@@ -1969,12 +1715,18 @@ levels the actual run directory is below the
 accessed via \$\verb!{SOLPSTOP}/runs/Makefile! in the
 above examples and in the following sections.  
 
-Another option has now been added which is to use
+A useful shortcut is to use\index{b2run}
 \begin{verbatim}
     b2run b2XX
 \end{verbatim}
 This automatically does the \verb!gmake! for you, finding the \verb!Makefile!
-for itself by climbing up the tree.
+for itself by climbing up the tree. You can add options to the \verb!b2run! command:
+\begin{description}
+  \item[-n] Will run the \verb!Makefile! in dry-run mode. This is useful to check that all the needed files for the runs are in the right order of precedence. If they are not, the \verb!correct_baserun_timestamps! script can be used to re-order the pre-requisite files found in the associated \verb!baserun! directory
+  \item[-s] Specifies that one wishes to run \verb!B2.5! in stand-alone mode, i.e. without any coupling to \verb!Eirene!.
+  \item[-d ``debugger\_name''] Allows to run \verb!b2XX! with the named debugger. If not debugger name is specified, the debugger defined with the DBX environment variable and specified in the \$\verb!{SOLPSTOP}/SETUP/setup.csh.!\$\verb!{HOST_NAME}.!\$\verb!{COMPILER}.local! or \$\verb!{SOLPSTOP}/SETUP/setup.csh.!\$\verb!{HOST_NAME}.!\$\verb!{COMPILER}! files will be used.
+\end{decsription}
+
 
 The examples presented below are for a pure D plasma.
 
@@ -1992,8 +1744,7 @@ or
 \begin{verbatim}
     gmake -f ../../Makefile b2fgmtry
 \end{verbatim}
-
-A new option for running is
+or, best:
 \begin{verbatim}
     b2run b2ag
 \end{verbatim}
@@ -2022,7 +1773,7 @@ as \verb!jet.50401.58000.geo!, identify it as being of size $96 \times
 \item[*param] at least 100 additional numbers, of which only the first
   is relevant for us
   \begin{description}
-  \item[-1.0] read the mesh data using the ``simplified'' format
+  \item[-1.0] read the mesh data using the ``simplified'' \verb!Carre! format
   \item[-2.0] read the mesh data using the \verb!Sonnet! format
   \end{description}
 \item[b2agfs\_geometry] specifies the mesh file to be read
@@ -2040,6 +1791,9 @@ as \verb!jet.50401.58000.geo!, identify it as being of size $96 \times
   field information that are read in from the mesh file (see Appendix \ref{lis:b2cdci})
 \end{description}
 
+\verb!b2ag! will also prepare the grid information in the format usable by \verb!Eirene!,
+i.e. a \verb!fort.30! file.
+
 \newpage\section{b2ah, setting up the default physics parameters}
 \index{b2fpardf}\label{sec:b2ah}\index{b2ah}
 
@@ -2053,8 +1807,7 @@ or
 \begin{verbatim}
     gmake -f ../../Makefile b2fpardf
 \end{verbatim}
-
-A new option for running is
+or, best:
 \begin{verbatim}
     b2run b2ah
 \end{verbatim}
@@ -2137,7 +1890,7 @@ The \verb!b2cmpb! block contains
 
 The exact form of the specification is somewhat arcane: users are
 referred to the code (\verb!b2stbc_bas!) for the definitive meaning,
-or to the write-up from one of Kuhn's group (see Appendix \ref{cha:Mladen}).
+or to the write-up in Appendix \ref{cha:Mladen}.
 
 Users are encouraged to use the ``physics'' formulation of the
 boundary conditions specified later (see section \ref{lab:b2:boundary:parameters}), 
@@ -2195,7 +1948,8 @@ sub-directory of the \verb!B2.5! source code (see Appendix \ref{lis:b2cdcv}), an
 relevant subroutine is \verb!b2tqna!.
 
 It is important, for numerical stability reasons, to provide mechanisms by which some
-particle transport and radial current can be established. If the transport is given by
+particle transport and radial current (if the electric potential equation is being solved)
+can be established. If the transport is given by
 \verb!b2cmpt!, this means that, first, the \verb!cfdna! and \verb!cfdpa! arrays 
 cannot be simultaneously zero when solving density equations. Second, the arrays 
 \verb!cfsig! and \verb!cfalf! cannot be
@@ -2216,8 +1970,7 @@ or
 \begin{verbatim}
     gmake -f ../../Makefile b2frates
 \end{verbatim}
-
-A new option for running is
+or, best:
 \begin{verbatim}
     b2run b2ar
 \end{verbatim}
@@ -2250,7 +2003,8 @@ Unless the user chooses to activate the ``b2ardr\_no\_weisheit'' switch (see
 section \ref{lis:b2cdci} for description), the hydrogen rates come from
 \cite{Weisheit} and \cite{Janev1984} and overwrite those provided by the data packages above. Those 
 data are stored in the \verb!weis.dat!\index{weis.dat} file which should be present in the
-\verb!baserun! directory where \verb!b2ar! is run.
+\verb!baserun! directory where \verb!b2ar! is run. When running \verb!b2ar.dat! using the
+dedicated \verb!Makefile!, this is automatically done.
 
 Supplemental information on atomic physics rates can be found in the file
 
@@ -2261,24 +2015,22 @@ Supplemental information on atomic physics rates can be found in the file
 \index{b2frates}\label{sec:b2yr}\index{b2yr}
 
 The command 
-
 \begin{verbatim}
     b2run b2yr
 \end{verbatim}
-
 will produce a \verb!b2yr.ps! file containing a series of
 plots detailing the dependencies of the atomic rates on density and temperature for
-each homonuclear sequence, as well as a \verb!b2yr.prt! ASCII file containing
+each isonuclear sequence, as well as a \verb!b2yr.prt! ASCII file containing
 tables of these rates. 
 
 The presence in the run directory of a file called \verb!ncar.cfg!, with the
 first character of the first line non-blank, will cause the program to use
-'publication-ready' settings for the graphs, namely thicker and visible lines
-and and easier-to-read font. \index{ncar.cfg}
+'publication-ready' settings for the graphs, namely thicker and more visible lines
+and an easier-to-read font.\index{ncar.cfg}
 
 The user has the option when running the main code to rescale the rates given by \verb!b2ar!
 through the use of the \verb!b2.atomic_physics_rescale.parameters! file. See 
-\ref{lab:b2.atomic_physics_rescale:parameters} for details.
+\ref{lab:b2:atomic_physics_rescale:parameters} for details.
 
 \newpage
 \section{b2ai, the default initial plasma state}
@@ -2294,8 +2046,7 @@ or
 \begin{verbatim}
     gmake -f ../../Makefile b2fstati
 \end{verbatim}
-
-A new option for running is
+or, best:
 \begin{verbatim}
     b2run b2ai
 \end{verbatim}
@@ -2331,6 +2082,15 @@ The code can accept indifferently both types of input and makes the
 appropriate self-consistency checks. It is not permitted to bundle
 neutral and ionized species together.
 
+The initial state being created by \verb!b2ai.dat! will be a homogeneous
+isothermal static plasma, which is very far from a realistic plasma edge
+solution. It is therefore almost always better ans strongly recommended
+to start a case using an already converged case of the same topology and
+containing the same main species, even it does not have the same grid size,
+or corresponds to a different device, or if the species list is somewhat different.
+To convert such a solution to the parameters of the case at hand, the \verb!byt!
+converter is provided. See Section~\ref{sec:b2yt} for details on how to use it.
+
 \newpage
 \section{b2mn, the main program}
 \index{b2fparam}
@@ -2354,7 +2114,7 @@ The program can be run with one of the following
     gmake -f ../../Makefile b2fplasma
     gmake -f ../../Makefile b2time.nc
 \end{verbatim}
-or, a new option of
+or, best:
 \begin{verbatim}
     b2run b2mn
 \end{verbatim}
@@ -3135,7 +2895,7 @@ See descriptions in Coupled \verb!Eirene! chapter \ref{cha:coupledb2eirene}
 and Appendix \ref{lis:b2cdcn}.
 
 \subsection{b2.atomic\_physics\_rescale.parameters}
-\index{b2.atomic\_physics\_rescale.parameters}\label{lab:b2.atomic_physics_rescale:parameters}
+\index{b2.atomic\_physics\_rescale.parameters}\label{lab:b2:atomic_physics_rescale:parameters}
 
 Contains a series of multipliers to the atomic physics rates provided by \verb!b2ar! in \verb!b2frates!.
 These are:
@@ -3170,7 +2930,7 @@ See descriptions in Appendix \ref{lis:b2cdcn}.
 \label{sec:b2running}
 
 While the code is running and writing into \verb!run.log!, a number of
-the scripts described in section \ref{sec:bincommon} can be run.
+the scripts described in section \ref{sec:scripts} can be run.
 
 \verb!cpu!\index{cpu} shows how much CPU time each iteration has taken and is a
 quick way of monitoring the progress of a run.
@@ -3249,7 +3009,7 @@ quantities that can be plotted in this way.
 \section{b2pl, the plotting program}
 \index{b2pl}\index{b2plot}\label{sec:b2pl}
 
-%%sed 's:^     [^ ]:@@@:' $SOLPSTOP/src/B2.5/src/b2plot/b2plot.F | awk 'BEGIN{save=""}/^[^@][^@][^@]/&&save!=""{print save}/^[^@][^@][^@]/{save=$0}/^@@@/{save=save" "$0}END{print save}' | sed 's; *@@@ *;;g' | egrep "case *\( *'|description *=" | sed -e "s;.*case *('\(.*\)');cmd: \1;" -e "s; *description *= *'\(.*\)';desc: \1;" | awk -F: 'BEGIN{save=""}/^cmd/&&save!=""{print save}/^cmd:/{save=$2}/^desc/{save=save"\t"$2}END{print save}' | sed 's:\! ::' | sed "s:',':,:g" | sed "s:'':':g" | expand >! b2plot.commands
+%%sed 's:^     [^ ]:@@@:' $SOLPSTOP/modules/B2.5/src/b2plot/b2plot.F | awk 'BEGIN{save=""}/^[^@][^@][^@]/&&save!=""{print save}/^[^@][^@][^@]/{save=$0}/^@@@/{save=save" "$0}END{print save}' | sed 's; *@@@ *;;g' | egrep "case *\( *'|description *=" | sed -e "s;.*case *('\(.*\)');cmd: \1;" -e "s; *description *= *'\(.*\)';desc: \1;" | awk -F: 'BEGIN{save=""}/^cmd/&&save!=""{print save}/^cmd:/{save=$2}/^desc/{save=save"\t"$2}END{print save}' | sed 's:\! ::' | sed "s:',':,:g" | sed "s:'':':g" | expand >! b2plot.commands
 
 The following commands apply:
 
@@ -3462,7 +3222,7 @@ The user is strongly encouraged to check out that very complete manual.
 Reference \cite{Reiter2005} also provides a useful description.
 
 \begin{verbatim}
-  cd ${SOLPSTOP}/src
+  cd ${SOLPSTOP}/modules
   sei
   gmake depend
   gmake listobj
@@ -3480,7 +3240,7 @@ for \verb!Eirene! before compilation.
 
 To compile the coupled version of the code you should begin by checking that the default
 array dimensions provided fit your problem size. These are stored in the file
-\$\verb!SOLPSTOP/src/B2.5/src/include/DIMENSIONS.F!. If the dimensions are not right for you,
+\$\verb!SOLPSTOP/modules/B2.5/src/include/DIMENSIONS.F!. If the dimensions are not right for you,
 the do the following:
 with:\index{DIMENSIONS.F}
 \begin{verbatim}
@@ -4311,10 +4071,10 @@ of 3802.68 GB in 553970 files.
 \label{cha:divgeo}\index{DG, running}
 
 When using for the first time, check to see whether
-\$\verb!SOLPSTOP/src/DivGeo! is a link (for SOLPS4.x versions).  If it is, do
+\$\verb!SOLPSTOP/modules/DivGeo! is a link (for SOLPS4.x versions).  If it is, do
 \index{gtdr, DivGeo}
 \begin{verbatim}
-  cd $SOLPSTOP/src
+  cd $SOLPSTOP/modules
   gtdr DivGeo
 \end{verbatim}
 %% $
@@ -4357,7 +4117,7 @@ The command\index{sdg}
 \end{verbatim}
 will move you to the \$\verb!SOLPSTOP/data/DivGeo/class/!\$\verb!DEVICE! 
 directory. The environment variable \$\verb!DG! contains the path 
-\$\verb!SOLPSTOP/src/DivGeo!.
+\$\verb!SOLPSTOP/modules/DivGeo!.
 To start \verb!DG!, the command is:
 \begin{verbatim}
   ./dg
@@ -4394,11 +4154,11 @@ The command\index{sbc}
 will take you to \$\verb!{SOLPSTOP}/base/Carre!.
 
 When using for the first time, check to see whether
-\$\verb!SOLPSTOP/src/Carre! (accessible with the \verb!ssc! command)
+\$\verb!SOLPSTOP/modules/Carre! (accessible with the \verb!ssc! command)
 is a link.  If it is, do
 \index{gtdr, Carre}
 \begin{verbatim}
-  cd $SOLPSTOP/src
+  cd $SOLPSTOP/modules
   gtdr Carre
 \end{verbatim}
 %% $
@@ -4532,10 +4292,10 @@ also a similar program, \verb!aggj! for JET. \verb!agg! was written
 by Heimo B{\"u}rbaumer.
 
 When using for the first time, check to see whether
-\$\verb!SOLPSTOP/src/agg! is a link.  If it is, do
+\$\verb!SOLPSTOP/modules/agg! is a link.  If it is, do
 \index{gtdr, agg}
 \begin{verbatim}
-  cd $SOLPSTOP/src
+  cd $SOLPSTOP/modules
   gtdr agg
 \end{verbatim}
 %% $
@@ -10762,8 +10522,8 @@ scaling is done on all of the data.
 
 \section{DIMENSIONS.F}\index{DIMENSIONS.F}\label{sec:DIMENSIONS}
 
-The file \$\verb!SOLPSTOP/src/B2.5/src/include/DIMENSIONS.F! and its local version
-\$\verb!SOLPSTOP/src/B2.5/src/include.local/DIMENSIONS.F! contain key dimensions 
+The file \$\verb!SOLPSTOP/modules/B2.5/src/include/DIMENSIONS.F! and its local version
+\$\verb!SOLPSTOP/modules/B2.5/src/include.local/DIMENSIONS.F! contain key dimensions 
 that determine
 the sizes of arrays that can be defined by namelists
 in \verb!b2.*.parameters! files (for compatibility with 
@@ -10858,7 +10618,7 @@ they need only contain the modified definitions.
 \subsection{B2.5}
 \index{DEFINES, used in compiling B2.5}
 
-%%grep #if $SOLPSTOP/src/b2/current/*/*.F | awk '{print $2}' | sort | uniq
+%%grep #if $SOLPSTOP/modules/b2/current/*/*.F | awk '{print $2}' | sort | uniq
 
 \begin{description}
 \item[AIX] \index{AIX} Specific to AIX compilers
@@ -10903,7 +10663,7 @@ they need only contain the modified definitions.
   experimental data at IPP.
 \end{description}
 
-%%grep #if $SOLPSTOP/src/b2/current/*/*.F | awk '{print $2,$1}' | sort | uniq
+%%grep #if $SOLPSTOP/modules/b2/current/*/*.F | awk '{print $2,$1}' | sort | uniq
 
 
 \begin{center}
@@ -11102,7 +10862,7 @@ or \verb!bash! users would use something like
 \subsection{Eirene}
 \index{DEFINES, used in compiling Eirene}
 
-%%grep #if $SOLPSTOP/src/Eirene/current/*/*.F | awk '{print $2}' | sort | uniq
+%%grep #if $SOLPSTOP/modules/Eirene/current/*/*.F | awk '{print $2}' | sort | uniq
 
 \begin{description}
 \item[NAG\_RENAME] \index{NAG\_RENAME} Used with quadruple-precision compilers or to replace machine-dependent NAG calls with FORTRAN intrinsics
@@ -11113,7 +10873,7 @@ or \verb!bash! users would use something like
 \item[TRIANG] \index{TRIANG} Toggles the use of coupling routines with the triangulated far SOL mesh option
 \end{description}
 
-%%grep #if $SOLPSTOP/src/Eirene/current/*/*.F | awk '{print $2,$1}' | sort | uniq
+%%grep #if $SOLPSTOP/modules/Eirene/current/*/*.F | awk '{print $2,$1}' | sort | uniq
 
 \begin{center}
   \begin{longtable}{|l|l|}
@@ -12013,14 +11773,14 @@ can be used for this purpose in either mode.
 \subsection{Equilibrium conversion and manipulation}
 \label{sec:equtrn}\index{equtrn}
 
-The \$\verb!SOLPSTOP/src/DivGeo/dg/equtrn!
+The \$\verb!SOLPSTOP/modules/DivGeo/dg/equtrn!
 directory has some utilities for converting between various
 widely used formats for magnetic equilibrium files and for making minor
 modifications to them.
 
 The listings and documentation below may be out of date. The updated
 documentation of the supported scripts is now to be found in
-\$\verb!SOLPSTOP/src/DivGeo/dg/equtrn/doxygen/refman.pdf!.
+\$\verb!SOLPSTOP/modules/DivGeo/dg/equtrn/doxygen/refman.pdf!.
 
 \subsubsection{d2d}
 \index{d2d}\index{dg2dg}\index{DG, doubling resolution}

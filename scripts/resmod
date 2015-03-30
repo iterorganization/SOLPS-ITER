@@ -1,0 +1,2 @@
+#! /bin/tcsh -f
+awk 'NR%'$1'=='$2'{print $0}'
