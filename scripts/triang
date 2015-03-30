@@ -93,8 +93,14 @@ $Help"
 #  location="${SOLPSTOP%/*}/$u/scripts"
 #}
 
-TRIA="tria"
-TRIAGEOM="triageom"
+[ "$SOLPS_DEBUG" = '' ] && {
+  toolchain=${HOST_NAME}.${COMPILER}
+} || {
+  toolchain=${HOST_NAME}.${COMPILER}.debug
+}
+
+TRIA="${SOLPSTOP}/modules/Triang/builds/$toolchain/tria"
+TRIAGEOM="${SOLPSTOP}/modules/Triang/builds/$toolchain/triageom"
 
 e=
 [ -x "$TRIA" ] || {
@@ -134,16 +140,9 @@ while true; do {
       ( U   )                                               # run uinp to produce the input for Eirene:
             uinp -l
             [ -L uinput.dg ] && {
-              e=`lln -e uinput.dg`
-              e=${e%/*}
-              e=${e##*/}
-              [ "$e" = "$DEVICE" ] || {
-                export DEVICE=${e}
-                print -u2 -- "      temporarily changed DEVICE to $DEVICE"
-                TRIADIR=$TRIADIR_back
-                TRIASTEM=$TRIASTEM_back
-                . triang.conf
-              }
+              TRIADIR=$TRIADIR_back
+              TRIASTEM=$TRIASTEM_back
+              . triang.conf
             }
             N=
             [ -r fort.30 ] && q=e || q=b

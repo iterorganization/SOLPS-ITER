@@ -41,7 +41,6 @@ c*** Produce the input file for Eirene diagnostics run
       end if !}
 
 c*** Produce the input file for Eirene for TRIA mesh generation
-#ifdef TRIANG
       uex=.true.
       call uinptridg(uex)
       if(uex) then
@@ -50,10 +49,6 @@ c*** Produce the input file for Eirene for TRIA mesh generation
        call triaout('triang.hed')
        call uinptridg(.FALSE.)
       end if 
-#else
-      print *,'    ... Code compiled without TRIANG option:'//
-     .               ' no triang.eir file created'
-#endif
 c-----------------------------------------------------------------------
 c*** Modify the input file for B2, if possible
 

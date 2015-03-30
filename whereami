@@ -38,6 +38,9 @@ case "*.wm.edu":
 case "*.ipp.cas.cn":
   echo EAST
   breaksw
+case "*.nersc.gov":
+  echo NERSC
+  breaksw
 case "*.gov":
 case "*.edu":
   echo USA_UNKNOWN
