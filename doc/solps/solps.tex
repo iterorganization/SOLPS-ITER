@@ -407,7 +407,13 @@ Among other things, these setup files establish some aliases that are useful for
 \end{description}
 
 It is also possible to toggle between versions of the code compiled with and without debug options (array bounds checking, traceback, etc...) by use of the \verb!set_debug! and \verb!unset_debug! commands. Similarly, the
-\verb!set_mpi! and \verb!unset_mpi! will turn on or off, respectively, compilation with MPI parallelization flags. By default, neither debug nor MPI flags are turned on.
+\verb!set_mpi! and \verb!unset_mpi! will turn on or off, respectively, compilation with MPI parallelization flags. By default, neither debug nor MPI flags are turned on. 
+
+After activating one of these flags and upon succesful compilation, it is recommended to do:
+\begin{verbatim}
+  rehash
+\end{verbatim}
+to refresh the list of executables to be found with the search path.
 
 \chapter{The structure}
 \label{cha:structure}
@@ -1725,7 +1731,7 @@ for itself by climbing up the tree. You can add options to the \verb!b2run! comm
   \item[-n] Will run the \verb!Makefile! in dry-run mode. This is useful to check that all the needed files for the runs are in the right order of precedence. If they are not, the \verb!correct_baserun_timestamps! script can be used to re-order the pre-requisite files found in the associated \verb!baserun! directory
   \item[-s] Specifies that one wishes to run \verb!B2.5! in stand-alone mode, i.e. without any coupling to \verb!Eirene!.
   \item[-d ``debugger\_name''] Allows to run \verb!b2XX! with the named debugger. If not debugger name is specified, the debugger defined with the DBX environment variable and specified in the \$\verb!{SOLPSTOP}/SETUP/setup.csh.!\$\verb!{HOST_NAME}.!\$\verb!{COMPILER}.local! or \$\verb!{SOLPSTOP}/SETUP/setup.csh.!\$\verb!{HOST_NAME}.!\$\verb!{COMPILER}! files will be used.
-\end{decsription}
+\end{description}
 
 
 The examples presented below are for a pure D plasma.
