@@ -249,14 +249,17 @@ These environment variables are found in files config.\$\verb!{HOST_NAME}!.\$\ve
 
 The current list of recognized hostnames, deduced by means of the \verb!whereami! script, includes:
 \begin{description}\index{Hostnames}
+  \item[CCFE] CCFE domain: *.ccfe.ac.uk
   \item[DIIID] General Atomics: *.fusion.gat.com
+  \item[EAST] Academica Sinica, Hefei: *.ipp.cas.cn
   \item[IFERC] IFERC supercomputer: *.iferc-csc.org
   \item[IPP] IPP-Garching domain: *.ipp.mpg.de, *.ipp-garching.mpg.de, *.rzg.mpg.de
   \item[IPP-HGW] IPP-Greifswald domain: *.ipp-hgw.mpg.de
   \item[ITER] ITER domain: *.iter.org
   \item[ITM] ITM Gateway machine: *.itm.rzg.mpg.de, *.efda-itm.eu
-  \item[JET] JET domain: *.ccfe.ac.uk
+  \item[JET] JET domain: *.jet.uk
   \item[PPPL] PPPL domain: *.pppl.gov
+  \item[WM] College of William and Mary: *.wm.edu
   \item[default] everywhere else
 \end{description}
 
@@ -264,6 +267,7 @@ At the moment the following compiler platforms are supported, assuming a Linux w
 \begin{description}\index{Platforms}
   \item[pgf90] Portland Group 32-bit Fortran compiler in use at JET and GA
   \item[ifort64] Intel 64-bit Fortran compiler in use at ITER and IPP
+  \item[gfortran] The gfortran compiler in use at College of William and Mary
 \end{description}
 
 For each hostname domain, a default compiler can be defined by means of the \$\verb!default_compiler!
@@ -4098,7 +4102,7 @@ Available choices are:
 \item[cmod] Alcator C--Mod (Boston, USA)
 \item[d3d] DIII--D (San Diego, USA)
 \item[dream] (Japan)
-\item[ht7u] HT7U, now EAST (Hefei, China)
+\item[east] EAST (Hefei, China)
 \item[iter] ITER (Cadarache, France) (default)
 \item[iter.dg] link to \verb!iter!
 \item[iterm] ITER (modified)

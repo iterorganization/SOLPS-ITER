@@ -1,0 +1,15 @@
+# Load modules 
+module load doxygen
+module load netcdf
+module load ncl_ncarg/5.2.1
+module load texlive/2008
+module load cairo
+
+
+
+# Set environment variables
+setenv DEVICE d3d
+
+
+
+# Debugger (set environment variable DBX)

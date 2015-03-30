@@ -1,4 +1,4 @@
-$(error First use of config.JET.pgf90. Provide paths to libraries first.)
+$(error First use of config.DIIID.ifort64. Provide paths to libraries first.)
 
 #
 # Specify paths to root-directories of following libraries on your system

@@ -1,11 +1,14 @@
 #! /usr/bin/ksh
 #  VERSION : 03.02.99 21:02
 
-c=`basename \`pwd\``
-[ "$c" = divgeo ] && { class=${DEVICE:-iter}; cd class/$class; } || class=$c
+[ "$DEVICE" = '' ] && {
+  print -u2 -n -- "No DEVICE selected. Please provide a device name\n "
+  read u
+  export DEVICE=$u
+}
 
-export DGSONNETMASK="$SonnetTopDirectory/output/ascii/$class/*"
-export DG_MESH_MASK="$SonnetTopDirectory/output/ascii/$class/*"
+export DGSONNETMASK="$DG/device/$DEVICE/*"
+export DG_MESH_MASK="$DG/device/$DEVICE/*"
 export DG_EXPORT_MESH_MASK="$DG_MESH_MASK"
 
 [ "$OBJECTCODE" = linux.Fujitsu ] && export LD_LIBRARY_PATH='/usr/lib/:/usr/local/lib:/usr/X11R6/lib'
@@ -15,9 +18,9 @@ export DG_EXPORT_MESH_MASK="$DG_MESH_MASK"
   export DG_TEMPLATE_MASK="$PWD/templates/*"
 }
 
-[ -d equilibria ] && export DG_EQUIL_MASK="$PWD/equilibria/*.equ"
+[ -d equilibria ] && export DG_EQUIL_MASK="$PWD/*.equ"
 
-[ -d "${SOLPSTOP}/src/DivGeo/topologies" ] && export DG_IMPORT_TOPOLOGY_MASK="${SOLPSTOP}/src/DivGeo/topologies/*" 
+[ -d "${SOLPSTOP}/modules/DivGeo/topologies" ] && export DG_IMPORT_TOPOLOGY_MASK="${SOLPSTOP}/modules/DivGeo/topologies/*" 
 
 unset vers cfg
 [ -s ~/.dg_version ] && vers=`cat ~/.dg_version`
@@ -33,8 +36,8 @@ while true; do {
 [ -n "$vers" ] && {
   print -u2 "dg version: $vers"
   vers=".$vers"
-  [ -s "${SOLPSTOP}/src/DivGeo/dg.dgc${vers}" ] && {
-    cfg="-cfg ${SOLPSTOP}/src/DivGeo/dg.dgc${vers}"
+  [ -s "${SOLPSTOP}/modules/DivGeo/dg.dgc${vers}" ] && {
+    cfg="-cfg ${SOLPSTOP}/modules/DivGeo/dg.dgc${vers}"
   } || {
     print -u2 "No configuration file available for this version"
     cfg="-nocfg"

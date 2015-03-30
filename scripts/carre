@@ -38,22 +38,24 @@ the files carre.log and traduit.log, respectively.
 
 # griddir=${CARRE_GRIDDIR-$SOLPSTOP/src/Sonnet/output/ascii/${Model_Class-iter}}
 # griddir=${CARRE_GRIDDIR-$SOLPSTOP/src/Sonnet/output/ascii/${DEVICE-iter}}
-dgdir=${CARRE_GRIDDIR-$SOLPSTOP/data/Sonnet/output/ascii/${DEVICE-iter}}
-griddir=${CARRE_GRIDDIR-$SOLPSTOP/data/meshes}
+export CARRE_TOPDIR=$SOLPSTOP/modules/Carre
+dgdir=${CARRE_GRIDDIR-$DG/device/${DEVICE-iter}}
+griddir=${CARRE_GRIDDIR-$SOLPSTOP/modules/Carre/meshes/${DEVICE-iter}}
 class=$DEVICE
-indir=${CARRE_INPUTDIR-.}
-stordir=
+indir=${CARRE_STOREDIR-.}
+stordir=$griddir
 [ -n "$CARRE_STOREDIR" ] && stordir="$CARRE_STOREDIR/${DEVICE-iter}"
 grid_stem=$class.carre
-/bin/echo -e "Store directory=" $stordir
+endings="dgo equ str trg"
+/bin/echo -e "Store directory: $stordir"
 /bin/echo -e "Grid directory: $griddir"
 /bin/echo -e "Input directory: $indir\n"
 
 [ "$1" = '-' ] && {
-    /bin/echo -e "No linking - the input files are assumed to exist in \"$indir\""
+    /bin/echo -e "Standard linking - the input files are assumed to exist in \"$indir\""
     q=p
     qqs=c
-    grid_stem=`ls -ls dg.str | awk '{print $NF}' | xargs basename | sed 's:\.str$::'`
+    grid_stem=`ls -ls $indir/dg.str | awk '{print $NF}' | xargs basename | sed 's:\.str$::'`
 } || { \
     u="$indir/$1"
     [ -r $u.vrq ] && [ -r $u.str ] && [ -r $u.fld ] & { \
@@ -100,12 +102,18 @@ do {
   Quit    (q)   quit $script
 "; break;;
     ( p|P )                                               # prepare input from DG output:
-            [ -L dg.trg ] && { \
-                class=`lln dg.trg`
+            [ "$DEVICE" = '' ] && { [ -L $indir/dg.trg ] && { \
+                class=`lln $indir/dg.trg`
                 class=${class%/*}
                 class=${class##*/}
+            } }
+            [ "$class" = 'baserun' ] && {
+                print -u2 -n -- "No DEVICE selected. Please provide a device name\n "
+                read u
+                export DEVICE=$u
+                class=$DEVICE
             }
-            griddir=${CARRE_GRIDDIR-$SOLPSTOP/data/meshes}
+            griddir=${CARRE_GRIDDIR-$SOLPSTOP/modules/Carre/meshes/${DEVICE-iter}}
             [ -n "$CARRE_STOREDIR" ] && stordir="$CARRE_STOREDIR/$class"
 
             /bin/echo -e "class = $class\ngriddir = $griddir\nindir = $indir\ngrid_stem = $grid_stem"
@@ -148,16 +156,26 @@ do {
                 [ ${#n} -lt 2 ] && n=00$n || {
                     [ ${#n} -lt 3 ] && n=0$n
                 }
+                touch CARRE.HISTORY
+		echo $user `date +%Y-%m-%d_%H:%M:%S` >> CARRE.HISTORY
+		ls -ls dg.??? | cut -d ' ' -f 9- >> CARRE.HISTORY
                 mv -f traduit.sno $dgdir/$grid_stem.v$n.sno && \
                   /bin/echo -e "The grid in DG format is stored as $dgdir/$grid_stem.v$n.sno"
+                for ext in $endings; do
+                  filename=`lln dg.$ext`
+                  cp $filename $dgdir/`basename $filename`
+                  /bin/echo -e "dg.$ext copied to $dgdir" && \
+                  /bin/echo -e "dg.$ext copied to $dgdir" >> CARRE.HISTORY
+                done
+                modelname=`echo $filename | sed -e 's\trg\dg\' `
+                cp $modelname $dgdir/`basename $modelname`
+                /bin/echo -e "DG model `basename $modelname` copied to $dgdir" && \
+                /bin/echo -e "DG model `basename $modelname` copied to $dgdir" >> CARRE.HISTORY
                 mv -f traduit.out $griddir/$grid_stem.v$n.geo && \
                   /bin/echo -e "The grid in B2.5 format is stored as $griddir/$grid_stem.v$n.geo"
                 ctrans -d ps.mono gmeta > $griddir/$grid_stem.v$n.ps && \
                   /bin/echo -e "You can view the grid in PostScript format as $griddir/$grid_stem.v$n.ps"
-                touch CARRE.HISTORY
-		echo $user `date +%Y-%m-%d_%H:%M:%S` >> CARRE.HISTORY
-		ls -ls dg.??? | cut -d ' ' -f 9- >> CARRE.HISTORY
-		/bin/echo -e echo "The grid is stored as $griddir/$grid_stem.v$n".geo >> CARRE.HISTORY
+		/bin/echo -e "The grid is stored as $griddir/$grid_stem.v$n".geo >> CARRE.HISTORY
                 [ -n "$stordir" ] && {
                   [ -d "$stordir" ] || {
                     [ -a "$stordir" ] && {

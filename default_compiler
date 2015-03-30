@@ -37,8 +37,17 @@ case "PPPL":
 case "JET":
   echo pgf90
   breaksw
+case "CCFE":
+  echo pgf90
+  breaksw
 case "ENEA":
   echo pgf90
+  breaksw
+case "EAST":
+  echo ifort64
+  breaksw
+case "WM":
+  echo gfortran
   breaksw
 default:
   echo ifort64

@@ -24,10 +24,19 @@ case "*.pppl.gov":
   echo PPPL
   breaksw
 case "*.ccfe.ac.uk":
+  echo CCFE
+  breaksw
+case "*.jet.uk":
   echo JET
   breaksw
 case "*.fusion.gat.com":
   echo DIIID
+  breaksw
+case "*.wm.edu":
+  echo WM
+  breaksw
+case "*.ipp.cas.cn":
+  echo EAST
   breaksw
 case "*.gov":
 case "*.edu":

@@ -18,10 +18,15 @@
     echo "                <Varid>.trg --> uinput.trg"
     exit 4
 }
-c=`basename \`pwd\``
-[ "$c" = divgeo ] && { class=${DEVICE:-iter}; cd class/$class; } || class=$c
 
-CLASSDIR=${SonnetTopDirectory}/device/$class
+
+[ "$DEVICE" = '' ] && {
+  print -u2 -n -- "No DEVICE selected. Please provide a device name\n "
+  read u
+  export DEVICE=$u
+}
+
+CLASSDIR=${DG}/device/$DEVICE
 [ -d "$CLASSDIR" ] || {
   print -u2 -n -- "The directory $CLASSDIR does not exist. Create it? (y/n) "
   while true; do {
@@ -37,30 +42,30 @@ CLASSDIR=${SonnetTopDirectory}/device/$class
     }; done
   }
 
-ln -sf `pwd`/"$1".str ${SonnetTopDirectory}/device/$class/struct.snn
-ln -sf `pwd`/"$1".trg ${SonnetTopDirectory}/device/$class/targets.snn
-ln -sf `pwd`/"$1".dgo ${SOLPSTOP}/src/Uinp/uinput.dg
-ln -sf `pwd`/"$1".trg ${SOLPSTOP}/src/Uinp/uinput.trg
-ln -sf `pwd`/"$1".str ${SOLPSTOP}/src/Carre/dg.str
-ln -sf `pwd`/"$1".trg ${SOLPSTOP}/src/Carre/dg.trg
-ln -sf `pwd`/"$1".dgo ${SOLPSTOP}/src/Carre/dg.dgo
+ln -sf `pwd`/"$1".str ${DG}/device/$DEVICE/struct.snn
+ln -sf `pwd`/"$1".trg ${DG}/device/$DEVICE/targets.snn
+ln -sf `pwd`/"$1".dgo uinput.dg
+ln -sf `pwd`/"$1".trg uinput.trg
+ln -sf `pwd`/"$1".str dg.str
+ln -sf `pwd`/"$1".trg dg.trg
+ln -sf `pwd`/"$1".dgo dg.dgo
 
 e=`cat $1.trg | grep '# equil' | cut -f3 -d' '`
 case $e in
   ( ''   ) echo "$1.trg is in old format - no information on the equilibrium there"
            [ -r default.equ ] && { \
-               ln -sf `pwd`/default.equ ${SonnetTopDirectory}/device/$class/equilibr.snn
-               ln -sf `pwd`/default.equ ${SOLPSTOP}/src/Carre/dg.equ
+               ln -sf `pwd`/default.equ ${DG}/device/$DEVICE/equilibr.snn
+               ln -sf `pwd`/default.equ dg.equ
                     echo '-- the default equilibrium file is used';
            } || echo '*** No default equilibrium file found (!!!)';;
-  ( /*   ) ln -sf $e ${SonnetTopDirectory}/device/$class/equilibr.snn
-           ln -sf $e ${SOLPSTOP}/src/Carre/dg.equ;;
+  ( /*   ) ln -sf $e ${DG}/device/$DEVICE/equilibr.snn
+           ln -sf $e dg.equ;;
   ( ../* ) (d=`dirname $e`; f=`basename $e`; cd $d;
-           ln -sf `pwd`/$f ${SonnetTopDirectory}/device/$class/equilibr.snn
-           ln -sf `pwd`/$f ${SOLPSTOP}/src/Carre/dg.equ);;
+           ln -sf `pwd`/$f ${DG}/device/$DEVICE/equilibr.snn
+           ln -sf `pwd`/$f dg.equ);;
   ( ./*  ) (d=`dirname $e`; f=`basename $e`; cd $d;
-           ln -sf `pwd`/$f ${SonnetTopDirectory}/device/$class/equilibr.snn
-           ln -sf `pwd`/$f ${SOLPSTOP}/src/Carre/dg.equ);;
-  (   *  ) ln -sf `pwd`/$e ${SonnetTopDirectory}/device/$class/equilibr.snn
-           ln -sf `pwd`/$e ${SOLPSTOP}/src/Carre/dg.equ;;
+           ln -sf `pwd`/$f ${DG}/device/$DEVICE/equilibr.snn
+           ln -sf `pwd`/$f dg.equ);;
+  (   *  ) ln -sf `pwd`/$e ${DG}/device/$DEVICE/equilibr.snn
+           ln -sf `pwd`/$e dg.equ;;
 esac

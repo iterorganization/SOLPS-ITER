@@ -8,14 +8,10 @@
 
 GV="gv $GV_OPT"
 
-[ -L uinput.dg ] && {
-  e=`lln -e uinput.dg`
-  e=${e%/*}
-  e=${e##*/}
-  [ "$e" = "$DEVICE" ] || {
-    export DEVICE=${e}
-    print -u2 -- "      temporarily changed DEVICE to $DEVICE according to the 'uinput.dg' link"
-  }
+[ "$DEVICE" = '' ] && {
+  print -u2 -n -- "No DEVICE selected. Please provide a device name\n "
+  read u
+  export DEVICE=$u
 }
 
 TRIADIR_back=$TRIADIR
@@ -91,10 +87,10 @@ $Help"
 [ "$1" = -h ] && { print -- "$Usage"; exit; }
 
 # wd: not required if determined by PATH
-#location="$SOLPSTOP/bin"
+#location="$SOLPSTOP/scripts"
 #[ -s B2E.version ] && {
 #  set -A u -- `cat B2E.version`
-#  location="${SOLPSTOP%/*}/$u/bin"
+#  location="${SOLPSTOP%/*}/$u/scripts"
 #}
 
 TRIA="tria"
