@@ -21,8 +21,17 @@ is set, pointing to the desired directory
 
 [ "$1" = -h ] && { print -- "$Usage"; exit; }
 
+[ "$SOLPS_MPI" = ' ' ] && {
+  toolchain=${HOST_NAME}.${COMPILER}.mpi
+} || {
+  toolchain=${HOST_NAME}.${COMPILER}
+}  
+[ "$SOLPS_DEBUG" = '' ] || {
+  toolchain=$toolchain.debug
+}
+
 [ -z "$CNVTRIOUT" ] && { 
-  CNVTRIOUT=$SOLPSTOP/src/DivGeo/dg/class/$DEVICE
+  CNVTRIOUT=$SOLPSTOP/modules/DivGeo/device/$DEVICE
 }
 
 [ -d $CNVTRIOUT/templates ] && CNVTRIOUT=$CNVTRIOUT/templates
@@ -33,7 +42,7 @@ is set, pointing to the desired directory
   exit 2
 }
 
-[ -z "$CNVTRIEXE" ] && CNVTRIEXE=cnvtria.exe
+[ -z "$CNVTRIEXE" ] && CNVTRIEXE=$SOLPSTOP/modules/DivGeo/convert/builds/$toolchain/cnvtria.exe
 
 [ -x "$CNVTRIEXE" ] || {
   print -- "The executable not found: $CNVTRIEXE"

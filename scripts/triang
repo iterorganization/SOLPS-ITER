@@ -117,6 +117,8 @@ n=${n#*/$carre_stem.v}
 n=${n%.geo}
 carrename=$carre_stem.v$n.geo
 
+templatedir=$SOLPSTOP/modules/DivGeo/device/${DEVICE-iter}/templates
+
 e=
 [ -x "$TRIA" ] || {
   print -u2 -- "$NAME: $TRIA not found. Check run environment settings"
@@ -330,7 +332,7 @@ while true; do {
             break;;
       (  c  )                                               # convert the TRIA result to template:
             check_files $triaoutlist && {
-              [ -z "$N" ] && stem="%a%" || stem="%a$N"
+              [ -z "$N" ] && stem="template.a" || stem="template.a$N"
               set -A f -- $triaoutlist
               i=0
               for x in $TRIATRI; do {
@@ -376,11 +378,12 @@ while true; do {
                 print -u2 -- "Error $? reported from cnvtria"
                 break
               }
+              ln -sf $templatedir/$stem.tria $stem.tria.ogr
               print -- "... converted into a template $stem.tria"
               for x in $TRIATRI; do {
                 rm -f $stem.$x
               }; done
-              q=g
+              q=C
               true
             } || {
               print -u2 -- "Not all the files in $triaoutlist are present ==> run TRIA first?"
@@ -392,7 +395,7 @@ while true; do {
             [ X"$extra" = X ] && NN="$N" || set -A NN -- $extra
             [ -z "$NN" ] && {
               check_files $trigoutlist && {
-                stem="%g%"
+                stem="template.g"
                 set -A f -- $trigoutlist
                 true
               } || {
@@ -402,7 +405,7 @@ while true; do {
               true
               } || {
                 while [ $LEN -gt ${#NN} ]; do NN="0$NN"; done
-                stem="%g$NN"
+                stem="template.g$NN"
                 list=
                 for x in $TRIAEXT; do list="$list $TRIADIR/$TRIASTEM.$NN.$x"; done
                 check_files $list && set -A f -- $list || {
@@ -454,11 +457,12 @@ while true; do {
                 print -u2 -- "Error $? reported from cnvtria"
                 break
               }
+              ln -sf $templatedir/$stem.tria $stem.tria.ogr
               print -- "... converted into a template $stem.tria"
               for x in $TRIATRI; do {
                 rm -f $stem.$x
               }; done
-              q=g
+              q=q
               true
             unset f 
             break;;
