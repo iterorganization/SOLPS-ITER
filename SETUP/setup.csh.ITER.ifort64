@@ -18,3 +18,6 @@ module load mdsplus/3.0.2
 
 # mpi-library
 module load mpich/1.2.7p1-intel
+
+# append GKS to LD_LIBRARY_PATH
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/work/imas/opt/gli/4.5.30/

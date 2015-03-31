@@ -93,22 +93,41 @@ $Help"
 #  location="${SOLPSTOP%/*}/$u/scripts"
 #}
 
-[ "$SOLPS_DEBUG" = '' ] && {
-  toolchain=${HOST_NAME}.${COMPILER}
+[ "$SOLPS_MPI" = ' ' ] && {
+  toolchain=${HOST_NAME}.${COMPILER}.mpi
 } || {
-  toolchain=${HOST_NAME}.${COMPILER}.debug
+  toolchain=${HOST_NAME}.${COMPILER}
+}  
+[ "$SOLPS_DEBUG" = '' ] || {
+  toolchain=$toolchain.debug
 }
 
 TRIA="${SOLPSTOP}/modules/Triang/builds/$toolchain/tria"
 TRIAGEOM="${SOLPSTOP}/modules/Triang/builds/$toolchain/triageom"
+EIRENE="${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.$toolchain/eirobjx"
+
+griddir=${CARRE_GRIDDIR-$SOLPSTOP/modules/Carre/meshes/${DEVICE-iter}}
+modelname=`lln dg.dgo`
+dgname=`basename $modelname`
+carre_stem=`echo $dgname | sed -e 's|\.dgo||' `
+n=1
+set -- $griddir/$carre_stem.v[0-9][0-9][0-9].geo
+n=`ls $griddir/$carre_stem.v[0-9][0-9][0-9].geo | tail -1`
+n=${n#*/$carre_stem.v}
+n=${n%.geo}
+carrename=$carre_stem.v$n.geo
 
 e=
 [ -x "$TRIA" ] || {
-  print -u2 -- "$NAME: $TRIA not found. Check B2E.version setting"
+  print -u2 -- "$NAME: $TRIA not found. Check run environment settings"
   e=y
 }
 [ -x "$TRIAGEOM" ] || {
-  print -u2 -- "$NAME: $TRIAGEOM not found. Check B2E.version setting"
+  print -u2 -- "$NAME: $TRIAGEOM not found. Check run environment settings"
+  e=y
+}
+[ -x "$EIRENE" ] || {
+  print -u2 -- "$NAME: $EIRENE not found. Check run environment settings"
   e=y
 }
 [ -n "$e" ] && exit 4
@@ -135,7 +154,14 @@ while true; do {
       ( u   )                                               # run uinp to produce the input for Eirene:
             uinp
             N=
-            [ -r fort.30 ] && q=e || q=b
+            [ -r fort.30 ] && q=e || {
+              [ -r b2ag.dat ] && {
+                ln -sf $griddir/$carre_stem.v$n.geo .
+                /bin/echo -e "The last grid found is : $carrename"
+                echo -e "'b2agfs_geometry'\t'$carrename'" >> b2ag.dat
+              }
+              q=b
+            }
             break;;  
       ( U   )                                               # run uinp to produce the input for Eirene:
             uinp -l
@@ -145,7 +171,14 @@ while true; do {
               . triang.conf
             }
             N=
-            [ -r fort.30 ] && q=e || q=b
+            [ -r fort.30 ] && q=e || {
+              [ -r b2ag.dat ] && {
+                ln -sf $griddir/$carre_stem.v$n.geo .
+                /bin/echo -e "The last grid found is : $carrename"
+                echo -e "'b2agfs_geometry'\t'$carrename'" >> b2ag.dat
+              }
+              q=b
+            }
             break;;  
       ( b|B )                                               # run b2ag to produce fort.30 file:
             print -u2 -- "Command line: gmake -f ${SOLPSTOP}/runs/Makefile b2ag.prt > b2ag.log"
@@ -169,10 +202,10 @@ while true; do {
               [ -r $eirinp ] && {
                 N=
                 print -u2 -- "Starting Eirene - may take a while..."
-                print -u2 -- "Command line: eirobj < triang.eir > $eirlog"
+                print -u2 -- "Command line: $EIRENE < triang.eir > $eirlog"
                 [ -r $eirout ] && rm $eirout
                 ln -sf "$eirinp" fort.1
-                eirobj < triang.eir > "$eirlog"
+                $EIRENE < triang.eir > "$eirlog"
                 rm fort.1
                 [ -s "$eirout" ] && [ -r "$eirout" ] && {
                   (cat "$eirhed"; tail --lines=+2  "$eirout") > "$triain" && q=t || {

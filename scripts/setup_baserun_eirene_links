@@ -1,20 +1,20 @@
 #! /bin/tcsh -f
-set datapath=`echo $PWD/ | sed -e "s|$SOLPSTOP||" -e 's|[^/]*/|../|g' -e 's|$|src/Eirene/Database|'`
+set datapath=`echo $PWD/ | sed -e "s|$SOLPSTOP||" -e 's|[^/]*/|../|g' -e 's|$|modules/Eirene/Database|'`
 if (! -e ${datapath}/PHOTON) then
-  set datapath=`canonical $SOLPSTOP`/src/Eirene/Database
+  set datapath=`canonical $SOLPSTOP`/modules/Eirene/Database
   if (! -e ${datapath}/PHOTON) then
-    set datapath=$SOLPSTOP/src/Eirene/Database
+    set datapath=$SOLPSTOP/modules/Eirene/Database
   endif
 endif
 if ("X$1X" == "X-rX") then
-  ln -sf `climb_and_look_for -r src/Eirene/Database/AMdata/amjuel.tex` AMJUEL        
-  ln -sf `climb_and_look_for -r src/Eirene/Database/AMdata/h2vibr.tex` H2VIBR  
-  ln -sf `climb_and_look_for -r src/Eirene/Database/AMdata/hydhel.tex` HYDHEL  
-  ln -sf `climb_and_look_for -r src/Eirene/Database/AMdata/methane.tex` METHANE
-  ln -sf `climb_and_look_for -r src/Eirene/Database/PHOTON`         
-  ln -sf `climb_and_look_for -r src/Eirene/Database/Surfacedata/SPUTER`        
-  ln -sf `climb_and_look_for -r src/Eirene/Database/Surfacedata/TRIM/trim.dat` fort.21   
-  ln -sf `climb_and_look_for -r src/Eirene/Database/Surfacedata/TRIM/marlow.dat` fort.22
+  ln -sf `climb_and_look_for -r modules/Eirene/Database/AMdata/amjuel.tex` AMJUEL        
+  ln -sf `climb_and_look_for -r modules/Eirene/Database/AMdata/h2vibr.tex` H2VIBR  
+  ln -sf `climb_and_look_for -r modules/Eirene/Database/AMdata/hydhel.tex` HYDHEL  
+  ln -sf `climb_and_look_for -r modules/Eirene/Database/AMdata/methane.tex` METHANE
+  ln -sf `climb_and_look_for -r modules/Eirene/Database/PHOTON`         
+  ln -sf `climb_and_look_for -r modules/Eirene/Database/Surfacedata/SPUTER`        
+  ln -sf `climb_and_look_for -r modules/Eirene/Database/Surfacedata/TRIM/trim.dat` fort.21   
+  ln -sf `climb_and_look_for -r modules/Eirene/Database/Surfacedata/TRIM/marlow.dat` fort.22
 else
   ln -sf ${datapath}/AMdata/amjuel.tex AMJUEL
   ln -sf ${datapath}/AMdata/h2vibr.tex H2VIBR
