@@ -3,7 +3,7 @@
 # The version relying on Fujitsu Fortran installed on AFS
 
 LD_GR  ?= -L/work/imas/opt/gr/0.0.94/lib -lgr
-LD_GKS ?= -L/work/imas/opt/gli/4.5.30 -lgks -lgfortran
+LD_GKS ?= -L/work/imas/opt/gks/4.4.74/lib -lgks -lgfortran
 LD_NAG ?= `pkg-config nag --libs`
 
 #DEFINES		= ${SOLPS_CPP} ${EIRENE_DEFINES} -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF

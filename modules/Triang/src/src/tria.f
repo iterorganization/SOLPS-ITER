@@ -651,7 +651,9 @@ C---- GRAPHIC OUTPUT
       XCM = 25.*DELTAX/DELTA
       YCM = 25.*DELTAY/DELTA
 
+      print*,'Before call to grstrt'
       CALL GRSTRT(35,8)
+      print*,'After call to grstrt'
       CALL GRSCLC(5.,1.,5.+REAL(XCM),1.+REAL(YCM))
 C     CALL GRSCLC(5.,1.,8.,4.)
       CALL GRSCLV(REAL(XMIN),REAL(YMIN),REAL(XMAX),REAL(YMAX))
