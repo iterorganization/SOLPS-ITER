@@ -16,7 +16,7 @@ $(error First use of config.JET.pgf90. Provide paths to libraries first.)
 # Remove -DNCAR4 from SOLPS_CPP
 #
 # If you do not have NAG on your system:
-# Leave LD_NAG blank
+# Use LD_NAG to link to the BLASLAPACK library instead
 # Add -DNO_NAG to SOLPS_CPP
 #
 # If you have NAG Mark 14 or greater on your system:

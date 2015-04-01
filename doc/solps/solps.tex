@@ -249,15 +249,16 @@ These environment variables are found in files config.\$\verb!{HOST_NAME}!.\$\ve
 
 The current list of recognized hostnames, deduced by means of the \verb!whereami! script, includes:
 \begin{description}\index{Hostnames}
+  \item[ASIPP] Academica Sinica, Hefei: *.ipp.cas.cn
   \item[CCFE] CCFE domain: *.ccfe.ac.uk
-  \item[DIIID] General Atomics: *.fusion.gat.com
-  \item[EAST] Academica Sinica, Hefei: *.ipp.cas.cn
+  \item[GA] General Atomics: *.fusion.gat.com
   \item[IFERC] IFERC supercomputer: *.iferc-csc.org
   \item[IPP] IPP-Garching domain: *.ipp.mpg.de, *.ipp-garching.mpg.de, *.rzg.mpg.de
   \item[IPP-HGW] IPP-Greifswald domain: *.ipp-hgw.mpg.de
   \item[ITER] ITER domain: *.iter.org
   \item[ITM] ITM Gateway machine: *.itm.rzg.mpg.de, *.efda-itm.eu
   \item[JET] JET domain: *.jet.uk
+  \item[LEUVEN] KU-Leuven domain: *.mech.kuleuven.be
   \item[NERSC] DOE supercomputer center: *.nersc.gov
   \item[PPPL] PPPL domain: *.pppl.gov
   \item[WM] College of William and Mary: *.wm.edu
@@ -268,7 +269,7 @@ At the moment the following compiler platforms are supported, assuming a Linux w
 \begin{description}\index{Platforms}
   \item[pgf90] Portland Group 32-bit Fortran compiler in use at JET and GA
   \item[ifort64] Intel 64-bit Fortran compiler in use at ITER and IPP
-  \item[gfortran] The gfortran compiler in use at College of William and Mary
+  \item[gfortran] The gfortran compiler in use at KU-Leuvan and College of William and Mary
 \end{description}
 
 For each hostname domain, a default compiler can be defined by means of the \$\verb!default_compiler!
@@ -290,6 +291,13 @@ Users should make sure the settings within these files fit their run environment
 If changes are needed, please forward them to the \SOLPSITER RO so that they may be included in the
 set of distributed files to help other future users.
 
+For the case where single submodules are cloned from the \SOLPSITER repository, without the full regalia of
+programs, additional sets of config files can be found in the \verb!config! directory in each module. The 
+compiler specific to this module are included there. Users are encouraged to modify these as needed. If local
+changes are required that should not be archived in the repository, then users should create a file named
+\verb!config.!\$\verb!{HOST_NAME}.!\$\verb!{COMPILER}.local! which the \verb!Makefile! will load and use to
+overwrite the more general settings from the distributed \verb!config! file.
+
 Some Windows\index{Windows} implementations have been attempted, and require an additional \verb!-DWINDOWS! compiler switch, but are not currently being supported.
 
 If you wish your domain name to be included in the list of hostnames above, please contact the 
@@ -298,11 +306,8 @@ hostname you would like to have and the Internet address range to which it would
 also send the relevant compiler config files so they may be distributed to future users from the 
 same domain or serve as examples for other users using the same compiler.
 
-When establishing the \SOLPSITER environment, the code
-will check for the presence of the NAG and NCAR libraries and adjust compiler options
-accordingly. If the NAG library is not available (it requires a pay licence), then the BLAS and
-LAPACK packages will be used instead, and automatically included in the build from the \SOLPSITER 
-Makefile.
+If the NAG library is not available (it requires a pay licence), then the BLAS and
+LAPACK packages should be used instead, and links to them added to the corresponding \verb!config! files.
 
 Once the config files have been filled in with the appropriate information for the
 local implementation desired, one proceeds with the compilation of the code. For this
