@@ -5,13 +5,11 @@
 # module load globus
 # module load hdf5
 # module load MUMPS
-module load netcdf
-module load ncl
-module load mdsplus
+# module load netcdf
 # module load scalapack
 
 # Environment variables
-setenv DEVICE east
+setenv DEVICE d3d
 
 
 # Debugger

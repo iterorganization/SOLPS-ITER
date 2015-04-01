@@ -1,4 +1,4 @@
-$(error First use of config.DIIID.ifort64. Provide paths to libraries first.)
+$(error First use of config.ASIPP.ifort64. Provide paths to libraries first.)
 
 #
 # Specify paths to root-directories of following libraries on your system
@@ -30,27 +30,28 @@ $(error First use of config.DIIID.ifort64. Provide paths to libraries first.)
 # Remove -DMDSPLUS from SOLPS_CPP
 #
  
-       NCDIR ?= 
-   MSCL_ROOT ?=
+       NCDIR ?= ${SOLPS_LIB}
+   MSCL_ROOT ?= ${SOLPS_LIB}
        H5DIR ?= 
-     GR_ROOT ?= 
-    GLI_HOME ?= 
-  NCARG_ROOT ?= 
-      NAGDIR ?= 
- MDSPLUS_DIR ?= 
+     GR_ROOT ?= ${SOLPS_LIB}
+    GLI_HOME ?= ${SOLPS_LIB}
+  NCARG_ROOT ?= ${SOLPS_LIB}/ncar-4.4.1
+      NAGDIR ?= ${SOLPS_LIB}
+ MDSPLUS_DIR ?= ${SOLPS_LIB}/mdsplus
 
 
 #
-# Variables for linking
+# Variables of linking, using pkg-config
 #
 
-LD_NETCDF  = -L${NCDIR}/lib -lnetcdff 
-LD_MSCL    = -L${MSCL_ROOT}/lib -lmscl
-LD_GR      = -L${GR_ROOT}/lib -lgr
+LD_NETCDF  = -L${NCDIR} -lnetcdf 
+LD_MSCL    = -L{MSCL_ROOT} -lmscl
+LD_GR      = -L${GR_ROOT} -lgr
 LD_GKS     = -L${GLI_HOME} -lgks -lgfortran
-LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -L/usr/X11R6/lib64 -lX11 -lm
-LD_NAG     = -L${NAGDIR}/lib -lnag
-LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client 
+# LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lm  -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lz -lpthread -lXrender -lbz2 -lgfortran # for NCARG v6.x.x
+LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lm                                                                                                          # for NCARG v4.x.x
+LD_NAG     = -L${NAGDIR} -lnag
+LD_MDSPLUS = -L${MDSPLUS_DIR} -lMdsLib_client 
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 
 
@@ -58,8 +59,8 @@ LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNCAR4 -DMDSPLUS
-EIRENE_DEFINES =
+SOLPS_CPP      = -DNCAR4 -DMDSPLUS -DNO_F01AAF
+EIRENE_DEFINES =  
 
 
 #
@@ -81,3 +82,4 @@ export LD_SONNET
 
 export SOLPS_CPP
 export EIRENE_DEFINES
+

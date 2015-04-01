@@ -17,35 +17,21 @@ endif
 # List of default compilers per HOST_NAME
 switch ($HOST_NAME)
 case "ITER":
-  echo ifort64
-  breaksw
 case "IFERC":
-  echo ifort64
-  breaksw
 case "ITM":
-  echo ifort64
-  breaksw
 case "IPP":
-  echo ifort64
-  breaksw
 case "IPP-HGW":
-  echo ifort64
-  breaksw
 case "PPPL":
+case "ASIPP":
   echo ifort64
   breaksw
 case "JET":
-  echo pgf90
-  breaksw
 case "CCFE":
-  echo pgf90
-  breaksw
 case "ENEA":
+case "ORNL":
   echo pgf90
   breaksw
-case "EAST":
-  echo ifort64
-  breaksw
+case "LEUVEN":
 case "WM":
   echo gfortran
   breaksw

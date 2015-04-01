@@ -20,34 +20,64 @@ case "*.rzg.mpg.de":
 case "*.ipp-hgw.mpg.de":
   echo IPP-HGW
   breaksw
-case "*.pppl.gov":
-  echo PPPL
-  breaksw
 case "*.ccfe.ac.uk":
   echo CCFE
   breaksw
 case "*.jet.uk":
   echo JET
   breaksw
+case "*.mech.kuleuven.be":
+  echo LEUVEN
+  breaksw
+case "*.pppl.gov":
+  echo PPPL
+  breaksw
 case "*.fusion.gat.com":
-  echo DIIID
+  echo GA
   breaksw
 case "*.wm.edu":
   echo WM
   breaksw
-case "*.ipp.cas.cn":
-  echo EAST
-  breaksw
 case "*.nersc.gov":
   echo NERSC
   breaksw
+case "*.ornl.gov":
+  echo ORNL
+  breaksw
+case "*.ipp.cas.cn":
+  echo ASIPP
+  breaksw
+case "*.ipr.res.in":
+  echo IPR
+  breaksw
 case "*.gov":
 case "*.edu":
+case "*.us":
   echo USA_UNKNOWN
   breaksw
 case "*.de":
 case "*.uk":
+case "*.it":
+case "*.fr":
+case "*.fi":
+case "*.be":
+case "*.eu":
   echo EU_UNKNOWN
+  breaksw
+case "*.cn":
+  echo CN_UNKNOWN
+  breaksw
+case "*.in":
+  echo IN_UNKNOWN
+  breaksw
+case "*.jp":
+  echo JP_UNKNOWN
+  breaksw
+case "*.kr":
+  echo KR_UNKNOWN
+  breaksw
+case "*.ru":
+  echi RU_UNKNOWN
   breaksw
 default:
   echo UNKNOWN
