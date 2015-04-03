@@ -49,7 +49,7 @@ ifeq ($(shell [ -e SETUP/config.${HOST_NAME}.${COMPILER}.local ] && echo yes || 
   include SETUP/config.${HOST_NAME}.${COMPILER}.local
 endif
 
-.PHONY: solps solps_mpi all all_mpi carre divgeo b25 b25_mpi eirene eirene_mpi b25eirene b25eirene_mpi uinp triang sonnet-light manual depend tags clean clean_% debug_% VERSION
+.PHONY: solps solps_mpi all all_mpi carre divgeo b25 b25_mpi eirene eirene_mpi b25eirene b25eirene_mpi uinp triang sonnet-light manual depend tags clean clean_% %_debug VERSION
 DEFAULT: solps
 
 
@@ -170,9 +170,10 @@ VERSION:
 # Debug targets
 #--------------
 
+debug: solps_debug
 
-debug_%:
-	${MAKE} $(@:debug_%=%) SOLPS_DEBUG=yes
+%_debug:
+	${MAKE} $(@:%_debug=%) SOLPS_DEBUG=yes
 
 
 
