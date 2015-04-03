@@ -63,7 +63,7 @@ setenv SonnetTopDirectory ${SOLPSTOP}/modules/Sonnet-light
 setenv EscapeSonnet `echo ${SonnetTopDirectory} | sed 's:\/:\\\/:g'`
 
 setenv DG ${SOLPSTOP}/modules/DivGeo
-setenv SOLPS_LIB ${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}
+setenv SOLPSLIB ${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}
 #setenv CARRE_STOREDIR $SOLPSTOP/modules/Carre/SAVE 
 
 

@@ -19,7 +19,7 @@ EIRDIR = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${TOOL_CHAIN}
 B2BDIR = ${SOLPSTOP}/modules/B2.5/builds/couple_Eirene.${TOOL_CHAIN}
 OBJDIR = ${SOLPSTOP}/modules/solps4-5/builds/${TOOL_CHAIN}
 BASEDIR = ${SOLPSTOP}/modules/solps4-5
-SOLPS4 = ${SOLPSTOP}/../B2E/solps4.3
+SOLPS4 = ${SOLPSTOP}/../SOLPS/solps4.3
 DEFINES += -DSOLPS4_3 -DB25_EIRENE -DUSE_ARRAYS
 ifeq ($(shell [ -d ${SOLPS4} ] && echo yes || echo no ),no)
   $(error Invalid SOLPS4 directory address)

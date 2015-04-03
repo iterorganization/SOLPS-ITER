@@ -21,6 +21,7 @@
       use b2mod_b2cmpb
       use b2mod_b2cmpt
       use b2mod_b2cmfs
+      use parmmod
       use ccoupl
       use braeir
       use eirdiag
@@ -146,8 +147,9 @@ c
 *   ..import parameters from Eirene input.dat file
       inquire(file='input.dat',exist=ex)
       if (ex) then
+        STANDARD_INPUT=45
         open(unit=45,file='input.dat')
-        CALL FIND_PARAM(45)
+        CALL FIND_PARAM
         close(45)
         CALL SET_PARMMOD(1)
         write(*,*) 'Called FIND_PARAM'

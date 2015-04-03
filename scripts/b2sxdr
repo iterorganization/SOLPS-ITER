@@ -33,5 +33,7 @@ endloop:
     endif
     shift
   endif
-  gmake $debug -f $RUNS/Makefile.b2sxdr b2sxdr.prt
+  if ("X${argv}X" == "XX") set argv="b2sxdr"
+  set CMD=`echo $argv" " | sed -e 's: :.prt :g'`
+  gmake $debug -f $RUNS/Makefile.b2sxdr $CMD
   unsetenv STAND_ALONE
