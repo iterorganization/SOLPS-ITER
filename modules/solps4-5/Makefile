@@ -102,9 +102,9 @@ ${XREXE}: ${XROBJ} ${XREXTRA} ${OBJDIR}/libb2_solps5.a ${OBJDIR}/libb2_solps4.a 
 
 ${OBJDIR}/b2sxdr.o: ${OBJDIR}/eirmod_parmmod.${MOD} 
 
-${OBJDIR}/b2_4to5.o: ${OBJDIR}/eirmod_parmmod.${MOD} 
+${OBJDIR}/b2_4to5.o: ${OBJDIR}/eirmod_parmmod.${MOD} ${OBJDIR}/braeir.${MOD} ${OBJDIR}/eirdiag.${MOD}
 
-${OBJDIR}/b2_4to5.${MOD}: ${OBJDIR}/eirmod_parmmod.${MOD} 
+${OBJDIR}/b2_4to5.${MOD}: ${OBJDIR}/eirmod_parmmod.${MOD} ${OBJDIR}/braeir.${MOD} ${OBJDIR}/eirdiag.${MOD}
 
 ${OBJDIR}/b2_neutrals_namelist.o: ${OBJDIR}/eirmod_parmmod.${MOD} 
 
