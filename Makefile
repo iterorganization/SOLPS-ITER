@@ -49,6 +49,12 @@ ifeq ($(shell [ -e SETUP/config.${HOST_NAME}.${COMPILER}.local ] && echo yes || 
   include SETUP/config.${HOST_NAME}.${COMPILER}.local
 endif
 
+# Setup debug flag
+EXT_DBG =
+ifdef SOLPS_DEBUG
+EXT_DBG=.debug
+endif
+
 .PHONY: solps solps_mpi all all_mpi carre divgeo b25 b25_mpi eirene eirene_mpi b25eirene b25eirene_mpi uinp triang sonnet-light b2sxdr manual depend tags clean clean_% debug_% VERSION
 DEFAULT: solps
 
@@ -116,8 +122,8 @@ ifeq ($(shell [ -e ${SOLPSLIB}/libsonnet.a ] && echo yes || echo no ),no)
 	cd modules/Sonnet-light; ${MAKE} all; ${MAKE} install INSTALL_USERAREA=${SOLPSLIB}
 endif
 
-b2sxdr:
-	cd modules/solps4-5; ${MAKE}; ${MAKE}; rm builds/${HOST_NAME}.${COMPILER}/libb2_solps?.a; ${MAKE}
+b2sxdr:   # strange sequence of commands, but works!
+	cd modules/solps4-5; ${MAKE}; ${MAKE}; rm builds/${HOST_NAME}.${COMPILER}${EXT_DBG}/libb2_solps?.a; ${MAKE}
 
 manual:
 	cd doc/solps; ${MAKE}
@@ -178,7 +184,7 @@ VERSION:
 
 
 debug_%:
-	${MAKE} $(@:debug_%=%) SOLPS_DEBUG=yes
+	${MAKE} $(@:debug_%=%) SOLPS_DEBUG=yes EXT_DBG=.debug
 
 
 
