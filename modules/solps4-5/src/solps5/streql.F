@@ -1,1 +1,1 @@
-../../../b2/current/utility/streql.F
+../../../B2.5/src/utility/streql.F

@@ -1,1 +1,1 @@
-../../../b2/current/utility/strmas.F
+../../../B2.5/src/utility/strmas.F

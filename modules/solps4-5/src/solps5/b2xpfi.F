@@ -1,1 +1,1 @@
-../../../b2/current/b2aux/b2xpfi.F
+../../../B2.5/src/b2aux/b2xpfi.F

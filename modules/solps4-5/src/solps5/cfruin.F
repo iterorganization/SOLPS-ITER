@@ -1,1 +1,1 @@
-../../../b2/current/utility/cfruin.F
+../../../B2.5/src/utility/cfruin.F

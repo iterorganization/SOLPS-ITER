@@ -1,1 +1,1 @@
-../../../b2/current/utility/prvrti.F
+../../../B2.5/src/utility/prvrti.F

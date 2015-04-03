@@ -21,6 +21,10 @@
       use b2mod_b2cmpb
       use b2mod_b2cmpt
       use b2mod_b2cmfs
+      use ccoupl
+      use braeir
+      use eirdiag
+     , ,only: alloc_eirdiag
       implicit none
 #     include "DIMENSIONS.F"
 *   ..common blocks
@@ -139,7 +143,6 @@ c
       call cfopen (nout(4),'b2fplasma','new','unformatted')
 *   ..mark output unit for error messages
       call xerset_5 (0)
-#ifdef B25_EIRENE
 *   ..import parameters from Eirene input.dat file
       inquire(file='input.dat',exist=ex)
       if (ex) then
@@ -159,12 +162,8 @@ c
         write(*,*) 'NLMPGS = ',NLMPGS
         CALL ALLOC_BRAEIR(NDX,NDY,NFL)
         CALL ALLOC_CCOUPL(1)
-        NFLA = NFL
         CALL ALLOC_EIRDIAG
       endif
-#else
-      ex = .false.
-#endif
       if (.not.ex) then
         natm = DEF_NATM
         nmol = DEF_NMOL

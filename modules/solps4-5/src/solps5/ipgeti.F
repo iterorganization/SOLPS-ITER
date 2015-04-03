@@ -1,1 +1,1 @@
-../../../b2/current/utility/ipgeti.F
+../../../B2.5/src/utility/ipgeti.F
