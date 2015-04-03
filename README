@@ -71,11 +71,15 @@ make manual
 Debug make-targets
 ------------------
 
-To create debug versions of SOLPS-ITER and its modules, following targets are defined:
-make debug_solps
-make debug_solps_mpi
-make debug_<module>
-make debug_<module_mpi>
+To create debug versions of SOLPS-ITER, following targets are defined:
+make debug
+make solps_debug
+or, for the mpi-version of SOLPS-ITER:
+make solps_mpi_debug
+
+Similarly, debug versions of individual modules can be created using
+make <module>_debug
+make <module_mpi>_debug
 with <module> and <module_mpi> as above.
 
 Clean make-targets
@@ -84,8 +88,20 @@ Clean make-targets
 To clean SOLPS-ITER, type either
 make clean 
 make clean_solps
+or, for the mpi-version of SOLPS-ITER,
+make clean_solps_mpi
 
 To clean a particular module, type
 make clean_<module>
 make clean_<module_mpi>
 with <module> and <module_mpi> as above.
+
+To clean debug versions of solps or a module, add _debug to the clean-targets defined above, i.e.
+make clean_debug
+make clean_solps_debug
+make clean_solps_mpi_debug
+for the various versions of SOLPS-ITER, and
+make clean_<module>_debug
+make clean_<module_mpi>_debug
+for a particular module.
+
