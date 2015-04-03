@@ -24,7 +24,7 @@ MOD = mod
 BLD = ar rcv
 
 GRLIBES = ${NCARG}
-LDLIBES = ${NAG} -L${SOLPSMASTER}/@sys/lib -L${SOLPS_LIB} -L/afs/efda-itm.eu/project/switm/netcdf/amd64_pgi/lib -lnetcdff -lnetcdf -lblas
+LDLIBES = ${NAG} -L${SOLPSMASTER}/@sys/lib -L${SOLPSLIB} -L/afs/efda-itm.eu/project/switm/netcdf/amd64_pgi/lib -lnetcdff -lnetcdf -lblas
 
 LD = pgf90
 ifdef SOLPS_DEBUG

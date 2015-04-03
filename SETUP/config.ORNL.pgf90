@@ -31,12 +31,12 @@ $(error First use of config.ORNL.pgf90. Provide paths to libraries first.)
 #
  
        NCDIR ?= /usr/lib64
-   MSCL_ROOT ?= ${SOLPS_LIB}
+   MSCL_ROOT ?= ${SOLPSLIB}
        H5DIR ?= 
-     GR_ROOT ?= ${SOLPS_LIB}
-    GLI_HOME ?= ${SOLPS_LIB}
+     GR_ROOT ?= ${SOLPSLIB}
+    GLI_HOME ?= ${SOLPSLIB}
   NCARG_ROOT ?= /usr/lib64/ncarg
-      NAGDIR ?= ${SOLPS_LIB}
+      NAGDIR ?= ${SOLPSLIB}
  MDSPLUS_DIR ?= 
 
 

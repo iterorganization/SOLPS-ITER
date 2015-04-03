@@ -30,14 +30,14 @@ $(error First use of config.ASIPP.ifort64. Provide paths to libraries first.)
 # Remove -DMDSPLUS from SOLPS_CPP
 #
  
-       NCDIR ?= ${SOLPS_LIB}
-   MSCL_ROOT ?= ${SOLPS_LIB}
+       NCDIR ?= ${SOLPSLIB}
+   MSCL_ROOT ?= ${SOLPSLIB}
        H5DIR ?= 
-     GR_ROOT ?= ${SOLPS_LIB}
-    GLI_HOME ?= ${SOLPS_LIB}
-  NCARG_ROOT ?= ${SOLPS_LIB}/ncar-4.4.1
-      NAGDIR ?= ${SOLPS_LIB}
- MDSPLUS_DIR ?= ${SOLPS_LIB}/mdsplus
+     GR_ROOT ?= ${SOLPSLIB}
+    GLI_HOME ?= ${SOLPSLIB}
+  NCARG_ROOT ?= ${SOLPSLIB}/ncar-4.4.1
+      NAGDIR ?= ${SOLPSLIB}
+ MDSPLUS_DIR ?= ${SOLPSLIB}/mdsplus
 
 
 #

@@ -24,7 +24,7 @@ MOD = mod
 BLD = ar rcv
 
 GRLIBES = ${NCARG}
-LDLIBES = ${NAG} -L${SOLPS_LIB} -lnetcdf -lblas
+LDLIBES = ${NAG} -L${SOLPSLIB} -lnetcdf -lblas
 
 ifdef USE_EIRENE
 LDLIBESEXTRA = ${OBJDIR}/libeirene.a ${OBJDIR}/grlib.o -lnag

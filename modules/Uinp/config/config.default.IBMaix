@@ -19,7 +19,7 @@ COMPILE  = ${FC} -c ${FFLAGS}
 CPP	 = /lib/cpp
 MOD 	 = mod
 
-# LDLIBS = -L${SOLPS_LIB}
+# LDLIBS = -L${SOLPSLIB}
 LDLIBS 	 = ${LD_MSCL}
 # LDEXTRA  = -bmap:$(OBJDIR)/uinp.map -bloadmap:$(OBJDIR)/uinp.lmp -bmaxdata:0x80000000
 LDEXTRA  = -bmap:$(OBJDIR)/uinp.map -bloadmap:$(OBJDIR)/uinp.lmp

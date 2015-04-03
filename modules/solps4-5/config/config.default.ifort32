@@ -29,7 +29,7 @@ OBJDEST = -o ${OBJDIR}/$*.o
 BLD = ar rcv
 
 GRLIBES = ${NCARG}
-LDLIBES = -L${SOLPS_LIB} -lnetcdf ${NAG} -lblaslapack
+LDLIBES = -L${SOLPSLIB} -lnetcdf ${NAG} -lblaslapack
 
 ifdef USE_EIRENE
 LDLIBESEXTRA = ${OBJDIR}/libeirene.a ${OBJDIR}/grlib.o -lnag

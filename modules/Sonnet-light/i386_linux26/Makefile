@@ -7,7 +7,7 @@ INSTALL_DIR = ../lib/${SYSNAME}
 INSTALL_DIR = ../
 LIBS = -L${INSTALL_DIR} -lsonnet -lstdc++
 
-INSTALL_USERAREA = ${SOLPS_LIB}
+INSTALL_USERAREA = ${SOLPSLIB}
 LIBS_USERAREA = -L${INSTALL_DIR_USERAREA} -lsonnet -lstdc++
  
 include ../sonnet.src

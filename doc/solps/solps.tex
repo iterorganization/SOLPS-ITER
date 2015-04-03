@@ -324,62 +324,35 @@ purpose, a master \SOLPSITER \verb!Makefile! is provided, located at \$\verb!{SO
        \item[triang] The \verb!Tria! and \verb!Triageom! triangulation utilities
        \item[manual] Builds this manual
     \end{description}
-  \item[solps\_mpi] Compiles the necessary components for a full \SOLPSITER implementation, this time using MPI parallelization, including:
-    \begin{description}
-       \item[libs] Installs the needed libraries according to config file
-       \item[carre] The \verb!Carre! grid generator and associated translators
-       \item[divgeo] The \verb!DivGeo! graphical input file builder and accompanying equilibrium and template converters
-       \item[b25eirene\_mpi] The \verb!B2.5-Eirene! main code and accompanying programs, MPI-parallelized
-       \item[uinp] The \verb!Uinp! translator from \verb!DivGeo! output to \verb!B2.5-Eirene! input
-       \item[sonnet-light] The \verb!Sonnet! library
-       \item[triang] The \verb!Tria! and \verb!Triageom! triangulation utilities
-       \item[manual] Builds this manual
-    \end{description}
   \item[all] The same as {\bf solps} above, but in addition:
     \begin{description}
       \item[b25] The \verb!B2.5! stand-alone plasma fluid solver and accompanying programs
       \item[eirene] The \verb!Eirene! stand-alone Monte-Carlo neutral transport code
     \end{description}
-  \item[all\_mpi] The same as {\bf solps\_mpi} above, but in addition:
-    \begin{description}
-      \item[b25\_mpi] The \verb!B2.5! stand-alone plasma fluid solver, with MPI parallelization enabled
-      \item[eirene\_mpi] The \verb!Eirene! stand-alone Monte-Carlo neutral transport code, with MPI parallelization enabled
-    \end{description}
   \item[carre] The \verb!Carre! grid generator and associated translators only
   \item[divgeo] The \verb!DivGeo! graphical input file builder and accompanying equilibrium and template converters only
   \item[b25] The \verb!B2.5! stand-alone plasma fluid solver and accompanying programs only
-  \item[b25\_mpi] The \verb!B2.5! stand-alone plasma fluid solver and accompanying programs only, with MPI parallelization enabled
   \item[eirene] The \verb!Eirene! stand-alone Monte-Carlo neutral transport code only
-  \item[eirene\_mpi] The \verb!Eirene! stand-alone Monte-Carlo neutral transport code only, with MPI parallelization enabled
   \item[b25eirene] The \verb!B2.5-Eirene! main code and accompanying programs only
-  \item[b25eirene\_mpi] The \verb!B2.5-Eirene! main code and accompanying programs only, MPI-parallelized
   \item[uinp] The \verb!Uinp! translator from \verb!DivGeo! output to \verb!B2.5-Eirene! input only (requires {\bf b25eirene} previous compilation)
   \item[sonnet-light] The \verb!Sonnet! library only
   \item[triang] The \verb!Tria! and \verb!Triageom! triangulation utilities only
+  \item[b2sxdr] The \verb!b2sxdr! converter from \SOLPSfour to \SOLPSITER
   \item[manual] This manual only
   \item[listobj] Builds the list of object files for the various code components
   \item[depend] Builds the dependencies files for the various code components
   \item[tags] Builds \verb!etags! files for easy source code searched using \verb!emacs!
   \item[VERSION] Updates the GIT version number included in the source code and output
   \item[clean] Alias to {\bf clean\_solps}
-  \item[clean\_solps] Removes the compiled binary files for {\bf solps} build
-  \item[clean\_solps\_mpi] Removes the compiled binary files for {\bf solps\_mpi} build
-  \item[clean\_all] Removes all the compiled binary files
-  \item[clean\_all\_mpi] Removes all the MPI-compiled binary files
-  \item[clean\_carre] Removes the compiled binary files for {\bf carre} build
-  \item[clean\_divgeo] Removes the compiled binary files for {\bf divgeo} build
-  \item[clean\_b25] Removes the compiled binary files for {\bf b25} build
-  \item[clean\_b25\_mpi] Removes the compiled binary files for {\bf b25\_mpi} build
-  \item[clean\_eirene] Removes the compiled binary files for {\bf eirene} build
-  \item[clean\_eirene\_mpi] Removes the compiled binary files for {\bf eirene\_mpi} build
-  \item[clean\_b25eirene] Removes the compiled binary files for {\bf b25eirene} build
-  \item[clean\_b25eirene\_mpi] Removes the compiled binary files for {\bf b25eirene\_mpi} build
-  \item[clean\_uinp] Removes the compiled binary files for {\bf uinp} build
-  \item[clean\_triang] Removes the compiled binary files for {\bf triang} build
 \end{description}
 
-Adding the \verb!debug_! prefix in front of any of build targets (except \verb!clean*!) will compile
-them in debug mode.
+Adding the \verb!_mpi! suffix at the end of any of build targets will execute the command
+with MPI parallelization options, when relevant, and put the executables in a separate 
+\verb!builds!\$\verb!{TOOL_CHAIN}.mpi! directory.
+
+Adding the \verb!_debug! suffix at the end of any of build targets will execute the command
+in debug mode, and put the executables in a separate 
+\verb!builds!\$\verb!{TOOL_CHAIN}.debug! directory.
 
 For compilation of the \verb!Sonnet! library, the user should first do:
 \begin{verbatim}

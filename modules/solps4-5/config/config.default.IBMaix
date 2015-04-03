@@ -32,7 +32,7 @@ OBJDEST = -o ${OBJDIR}/$*.o
 BLD = ar rcv
 
 GRLIBES = ${NCARG}
-LDLIBES = -lblas ${NAG} -L${SOLPSMASTER}/@sys/lib -L${SOLPS_LIB} -lnetcdf
+LDLIBES = -lblas ${NAG} -L${SOLPSMASTER}/@sys/lib -L${SOLPSLIB} -lnetcdf
 # LDLIBES = -lblas ${NAG} -lmass
 
 LD = xlf90

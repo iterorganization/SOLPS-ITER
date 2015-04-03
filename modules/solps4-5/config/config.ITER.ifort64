@@ -1,6 +1,6 @@
 LD_NETCDF ?= `pkg-config netcdf-fortran --libs`
 LD_NAG    ?= `pkg-config nag --libs` 
-LD_SONNET ?= -L${SOLPS_LIB} -lsonnet
+LD_SONNET ?= -L${SOLPSLIB} -lsonnet
 
 EQUIV4 = ${SOLPS_CPP} -DNO_USERTIME -DNO_SNAPSHOT -DUSE_CDF_B2STIME -DMA28 -DNO_F01AAF -DNO_LONG_LINES -DNO_B2GXDR # -DNO_CDF -DNO_PROCESS 
 

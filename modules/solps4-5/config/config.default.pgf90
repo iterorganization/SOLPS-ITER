@@ -25,7 +25,7 @@ MOD = mod
 BLD = ar rcv
 
 GRLIBES = ${NCARG}
-LDLIBES = ${NAG} -L${SOLPSMASTER}/@sys/lib -L${SOLPS_LIB} -lnetcdf -lblas
+LDLIBES = ${NAG} -L${SOLPSMASTER}/@sys/lib -L${SOLPSLIB} -lnetcdf -lblas
 
 LD = pgf90
 ifdef SOLPS_DEBUG
