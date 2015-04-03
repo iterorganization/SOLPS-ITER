@@ -6,7 +6,12 @@
 
 SHELL = /bin/sh
 nil =
-SOLPS4.0 = ${HOME}/solps4.0_svn_xpb
+
+ifdef SOLPS_DEBUG
+TOOL_CHAIN = ${HOST_NAME}.${COMPILER}.debug
+else
+TOOL_CHAIN = ${HOST_NAME}.${COMPILER}
+endif
 
 ifndef STAND_ALONE
 B2OBJ  = ${SOLPSTOP}/modules/B2.5/builds/couple_Eirene.${HOST_NAME}.${COMPILER}.debug
@@ -49,13 +54,13 @@ prt : $(prints)
 $(target_sx) : B2SXDR b2.parameters.src input.dat
 	rm -rf b2sx.exe.dir ; mkdir b2sx.exe.dir ; cp $^ b2sx.exe.dir
 	rm -f $(target_sx)
-	cd b2sx.exe.dir ; time ${SOLPSTOP}/base/solps4-5/${OBJECTCODE}/b2sxdr.exe ; mv $(target_sx) .. ; rm -f $(notdir $^)
+	cd b2sx.exe.dir ; time ${SOLPSTOP}/modules/solps4-5/builds/${TOOL_CHAIN}/b2sxdr.exe ; mv $(target_sx) .. ; rm -f $(notdir $^)
 	-rmdir b2sx.exe.dir
 
 dbx.b2sxdr : B2SXDR b2.parameters.src input.dat
 	rm -rf b2sx.exe.dir ; mkdir b2sx.exe.dir ; cp $^ b2sx.exe.dir
 	rm -f $(target_sx)
-	cd b2sx.exe.dir ; ${DBX} ${INC} ${SOLPSTOP}/base/solps4-5/${OBJECTCODE}/b2sxdr.exe ; mv $(target_sx) .. ; rm -f $(notdir $^)
+	cd b2sx.exe.dir ; ${DBX} ${INC} ${SOLPSTOP}/modules/solps4-5/builds/${HOST_NAME}.${COMPILER}.debug/b2sxdr.exe ; mv $(target_sx) .. ; rm -f $(notdir $^)
 	-rmdir b2sx.exe.dir
 
 clean :

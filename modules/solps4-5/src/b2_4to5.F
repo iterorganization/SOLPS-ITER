@@ -1,12 +1,9 @@
       module b2_4to5
       use b2mod_types
-      use braeir
-      use ceirsrt
-      use eirdiag
       implicit none
 
       real (kind=R8), allocatable ::
-     *  fch_4(:,:,:),  fch_32_4(:,:,:), fch_52_4(:,:,:), fch_p_4(:,:),
+     *  fch_4(:,:,:),  fch_32_4(:,:,:), fch_52_4(:,:,:), fch_p_4(:,:,:),
      *  fhe_4(:,:,:),  fhi_4(:,:,:), fna_4(:,:,:,:),  
      *  fne_4(:,:,:),  na_4(:,:,:),  po_4(:,:), fchdia_4(:,:,:),  
      *  te_4(:,:),  ti_4(:,:),  ua_4(:,:,:),  uadia_4(:,:,:,:),
@@ -82,7 +79,7 @@
       character*1, allocatable :: bcchar_4(:), crcstra_4(:)
 
       logical lvis21_4, ni_driven_4, no_thermal_force_4, 
-     *  lbndusr_4, lfeedback_4, fix_timefactor_4(3),
+     *  lbndusr_4, lfeedback_4, 
      *  lreitr_4, lfirstflight_4,
      *  lhalpha_4, lvib_4,
      *  autotimestep_4,
@@ -100,6 +97,7 @@
       contains
 
       subroutine b2conv_plasma_1
+      use braeir
       implicit none
 #     include <DIMENSIONS.F>
 #     include <KOPPLDIM.F>
@@ -115,6 +113,8 @@
 #     include <COMGEO.F>            
 #     include <CCUT.F>  
 #     include <COMUSER.F> 
+#     include <EIRSRT.F>
+#     include <CBRAEIR.F>
 
       integer is
       external subini, subend
@@ -141,7 +141,7 @@
       allocate(fhe_4(-1:nx_4,-1:ny_4,0:1))
       allocate(fhi_4(-1:nx_4,-1:ny_4,0:1))
       allocate(fch_4(-1:nx_4,-1:ny_4,0:1))
-      allocate(fch_p_4(-1:nx_4,-1:ny_4))
+      allocate(fch_p_4(-1:nx_4,-1:ny_4,0:1))
       allocate(fchdia_4(-1:nx_4,-1:ny_4,0:1))
       allocate(fna_4(-1:nx_4,-1:ny_4,0:1,1:ns_4))
       allocate(na_4(-1:nx_4,-1:ny_4,1:ns_4))
@@ -190,7 +190,8 @@
       fhi_4(-1:nx_4,-1:ny_4,1) = FEIY(0:nx_4+1,0:ny_4+1)         
       fch_4(-1:nx_4,-1:ny_4,0) = CC(0:nx_4+1,0:ny_4+1)         
       fch_4(-1:nx_4,-1:ny_4,1) = DD(0:nx_4+1,0:ny_4+1)         
-      fch_p_4(-1:nx_4,-1:ny_4) = CP(0:nx_4+1,0:ny_4+1)         
+      fch_p_4(-1:nx_4,-1:ny_4,0) = CP(0:nx_4+1,0:ny_4+1)         
+      fch_p_4(-1:nx_4,-1:ny_4,1) = 0.0_R8   
       fchdia_4(-1:nx_4,-1:ny_4,0) = CD(0:nx_4+1,0:ny_4+1)         
       fchdia_4(-1:nx_4,-1:ny_4,1) = 0.0_R8        
       fna_4(-1:nx_4,-1:ny_4,0,1:ns_4) = FNIX(0:nx_4+1,0:ny_4+1,1:ns_4)         
@@ -277,6 +278,11 @@ cxpb
       end subroutine b2conv_plasma_1    
       
       subroutine b2conv_input_1
+      use braeir
+     , , only: chemical_sputter_yield, fchar_chemical,
+     ,         itsput_chemical, issput_chemical, igass_chemical
+      use eirdiag
+     , , only: lvib, lhalpha
       implicit none
 #     include <DIMENSIONS.F>
 #     include <KOPPLDIM.F>
@@ -292,7 +298,7 @@ cxpb
 #     include <IMPDIM.F>
 #     include <COMNUM.F>           
 #     include <COMEQ.F>
-#     include <CCUT.F>      
+#     include <CCUT.F> 
 
       integer is
       external subini, subend
@@ -387,8 +393,12 @@ cxpb
       phiout_4(1:nncut_4/2) = phiout(1:nncut_4/2)
       gammai_4 = gammai
       lbndusr_4 = lbndusr
+#ifndef SOLPS4_3
       lfeedback_4 = lfeedback.or.sepfeedback.or.volrecfeedback.or.
      .              sepgasfeedback
+#else
+      lfeedback_4 = lfeedback.or.sepfeedback.or.volrecfeedback
+#endif
 *   ..neutrals
       lreitr_4 = lreitr
       crcstra_4(1:nstrai_4) = crcstra(1:nstrai_4)
@@ -466,7 +476,6 @@ cxpb
       dtco_4 = dtco
       dtmo_4 = dtmo
       time_factor_required_4 = time_factor_required
-      fix_timefactor_4(1:3) = fix_timefactor(1:3)
 *   ..user
       npfrgrp_4 = npfrgrp
       lpfrgrp_4 = lpfrgrp
@@ -492,7 +501,11 @@ cxpb
       Spmp_nom_4 = Spmp_nom
 *   ..feedback
       sepfeedback_4 = sepfeedback
+#ifndef SOLPS4_3
       sepgasfeedback_4 = sepgasfeedback
+#else
+      sepgasfeedback_4 = .false.
+#endif
       sepden_4 = sepden
       main_plasma_bc_4 = main_plasma_bc
       voldesired_4 = voldesired
@@ -719,7 +732,7 @@ c Fill out b2mod_indirect arrays
           fhe(ix,iy,0) = fhe_4(leftix(ix,iy),leftiy(ix,iy),0)
           fhi(ix,iy,0) = fhi_4(leftix(ix,iy),leftiy(ix,iy),0)
           fch(ix,iy,0) = fch_4(leftix(ix,iy),leftiy(ix,iy),0)
-          fch_p(ix,iy) = fch_p_4(leftix(ix,iy),leftiy(ix,iy))
+          fch_p(ix,iy,0) = fch_p_4(leftix(ix,iy),leftiy(ix,iy),0)
           fchdia(ix,iy,0) = fchdia_4(leftix(ix,iy),leftiy(ix,iy),0)
           do i=0,ns-1
             if(ifl(i).ne.0) then
@@ -733,7 +746,7 @@ c Fill out b2mod_indirect arrays
           fhe(ix,iy,0) = 0.0_R8
           fhi(ix,iy,0) = 0.0_R8
           fch(ix,iy,0) = 0.0_R8
-          fch_p(ix,iy) = 0.0_R8
+          fch_p(ix,iy,0) = 0.0_R8
           fchdia(ix,iy,0) = 0.0_R8
           fna(ix,iy,0,0:ns-1) = 0.0_R8
         endif
@@ -741,6 +754,7 @@ c Fill out b2mod_indirect arrays
           fhe(ix,iy,1) = fhe_4(bottomix(ix,iy),bottomiy(ix,iy),1)
           fhi(ix,iy,1) = fhi_4(bottomix(ix,iy),bottomiy(ix,iy),1)
           fch(ix,iy,1) = fch_4(bottomix(ix,iy),bottomiy(ix,iy),1)
+          fch_p(ix,iy,1) = fch_p_4(bottomix(ix,iy),bottomiy(ix,iy),1)
           fchdia(ix,iy,1) = fchdia_4(bottomix(ix,iy),bottomiy(ix,iy),1)
           do i=0,ns-1
             if(ifl(i).ne.0) then
@@ -754,6 +768,7 @@ c Fill out b2mod_indirect arrays
           fhe(ix,iy,1) = 0.0_R8
           fhi(ix,iy,1) = 0.0_R8
           fch(ix,iy,1) = 0.0_R8
+          fch_p(ix,iy,1) = 0.0_R8
           fchdia(ix,iy,1) = 0.0_R8
           fna(ix,iy,1,0:ns-1) = 0.0_R8
         endif
@@ -1337,7 +1352,6 @@ c Fill out b2mod_numerics_namelist data
         end do
       end do
       time_factor_required = time_factor_required_4
-      fix_timefactor(1:3) = fix_timefactor_4(1:3)
 
 c Fill out b2mod_user_namelist data
       npfrgrp = npfrgrp_4
@@ -2664,8 +2678,6 @@ c
       end do
       if (time_factor_required.ne.0.1_R8) write(33,'(a,1pe9.2,a)') 
      . 'TIME_FACTOR_REQUIRED=',time_factor_required,','
-      if (fix_timefactor(1).or.fix_timefactor(2).or.fix_timefactor(3))
-     > write(33,'(a,3l1,a)') 'FIX_TIMEFACTOR=',fix_timefactor(1:3),','
       write(33,'(a)') '/'
       close(33)
       return

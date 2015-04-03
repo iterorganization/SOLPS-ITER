@@ -1,1 +1,1 @@
-../../../b2/current/output/b2wugm.F
+../../../B2.5/src/output/b2wugm.F

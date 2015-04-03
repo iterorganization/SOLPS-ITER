@@ -1,1 +1,1 @@
-../../../b2/current/utility/lwimai.F
+../../../B2.5/src/utility/lwimai.F

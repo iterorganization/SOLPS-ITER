@@ -49,7 +49,9 @@ ifeq ($(shell [ -e SETUP/config.${HOST_NAME}.${COMPILER}.local ] && echo yes || 
   include SETUP/config.${HOST_NAME}.${COMPILER}.local
 endif
 
-.PHONY: solps solps_mpi all all_mpi carre divgeo b25 b25_mpi eirene eirene_mpi b25eirene b25eirene_mpi uinp triang sonnet-light manual depend tags clean clean_% %_debug VERSION
+
+.PHONY: solps solps_mpi all all_mpi carre divgeo b25 b25_mpi eirene eirene_mpi b25eirene b25eirene_mpi uinp triang sonnet-light b2sxdr manual depend tags clean clean_% %_debug VERSION
+
 DEFAULT: solps
 
 
@@ -116,6 +118,9 @@ ifeq ($(shell [ -e ${SOLPSLIB}/libsonnet.a ] && echo yes || echo no ),no)
 	cd modules/Sonnet-light; ${MAKE} all; ${MAKE} install INSTALL_USERAREA=${SOLPSLIB}
 endif
 
+b2sxdr:
+	cd modules/solps4-5; ${MAKE}; ${MAKE}; rm builds/${HOST_NAME}.${COMPILER}/libb2_solps?.a; ${MAKE}
+
 manual:
 	cd doc/solps; ${MAKE}
 
@@ -128,7 +133,8 @@ tags:
 	cd modules/Triang;         ${MAKE} tags
 	cd modules/DivGeo;         ${MAKE} tags
 	cd modules/DivGeo/equtrn;  ${MAKE} tags
-	rm -f TAGS ; etags -o TAGS modules/Carre/src/*/*.F modules/Carre/src/include/*.* modules/Eirene/*/*.f modules/Eirene/interfaces/*/*.f modules/Eirene/user-routines/*/*.f modules/Eirene/*/*/*.[Ff]90 modules/B2.5/src.local/*.F modules/B2.5/src/*/*.F modules/B2.5/src/*/*.[Hh] modules/B2.5/src/common/*.* modules/B2.5/src/common/COUPLE/*.F modules/Uinp/src/*.F modules/Uinp/src/*.inc modules/Uinp/src/*.h modules/Triang/src/*/*.f modules/DivGeo/equtrn/src/*.f modules/DivGeo/equtrn/src/*.inc modules/DivGeo/convert/src/*.f modules/DivGeo/src/*.[ch]
+	cd modules/solps4-5;       ${MAKE} tags
+	rm -f TAGS ; etags -o TAGS modules/Carre/src/*/*.F modules/Carre/src/include/*.* modules/Eirene/*/*.f modules/Eirene/interfaces/*/*.f modules/Eirene/user-routines/*/*.f modules/Eirene/interfaces/*/*.[Ff]90 modules/B2.5/src.local/*.F modules/B2.5/src/*/*.F modules/B2.5/src/*/*.[Hh] modules/B2.5/src/common/*.* modules/B2.5/src/common/COUPLE/*.F modules/Uinp/src/*.F modules/Uinp/src/*.inc modules/Uinp/src/*.h modules/Triang/src/*/*.f modules/DivGeo/equtrn/src/*.f modules/DivGeo/equtrn/src/*.inc modules/DivGeo/convert/src/*.f modules/DivGeo/src/*.[ch]
 
 listobj:
 	cd modules/Carre;          ${MAKE} listobj
@@ -143,6 +149,7 @@ listobj:
 	cd modules/Eirene;         ${MAKE} listobj USE_B25=-DB25_EIRENE USE_MPI=-DUSE_MPI
 	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE
 	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
+	cd modules/solps4-5;       ${MAKE} listobj
 
 depend:
 	cd modules/Carre;          ${MAKE} depend
@@ -158,6 +165,7 @@ depend:
 	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
+	cd modules/solsp4-5;       ${MAKE} depend
 
 VERSION:
 	cd modules/B2.5;   ${MAKE} VERSION
@@ -239,3 +247,6 @@ clean_triang:
 
 clean_sonnet-light:
 	cd modules/Sonnet-light; ${MAKE} clean
+
+clean_b2sxdr:
+	cd modules/solps4-5; ${MAKE} clean
