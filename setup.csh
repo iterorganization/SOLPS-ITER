@@ -66,6 +66,8 @@ setenv DG ${SOLPSTOP}/modules/DivGeo
 #setenv CARRE_STOREDIR $SOLPSTOP/modules/Carre/SAVE 
 
 
+
+
 # Set path to scripts and executables
 #------------------------------------
 
@@ -78,7 +80,7 @@ endif
 # Default PATH: no mpi, no debug
 set      TOOLCHAIN =  ${HOST_NAME}.${COMPILER}
 set     CARRE_PATH =  ${SOLPSTOP}/modules/Carre/builds/${TOOLCHAIN}
-set    DIVGEO_PATH =  ${SOLPSTOP}/modules/DivGeo/builds/${TOOLCHAIN}
+set    DIVGEO_PATH =  ${SOLPSTOP}/modules/DivGeo/builds/${TOOLCHAIN}:${SOLPSTOP}/modules/DivGeo/equtrn/builds/${TOOLCHAIN}:${SOLPSTOP}/modules/DivGeo/convert/builds/${TOOLCHAIN}
 set    EIRENE_PATH =  ${SOLPSTOP}/modules/Eirene/builds/standalone.${TOOLCHAIN}
 set       B25_PATH =  ${SOLPSTOP}/modules/B2.5/builds/standalone.${TOOLCHAIN}
 set B25EIRENE_PATH =  ${SOLPSTOP}/modules/B2.5/builds/couple_Eirene.${TOOLCHAIN}
@@ -91,6 +93,11 @@ setenv SOLPS_PATH  ${SCRIPTS_PATH}:${CARRE_PATH}:${DIVGEO_PATH}:${B25EIRENE_PATH
 setenv PATH        ${SOLPS_PATH}:${PATH}
 
 unset TOOLCHAIN CARRE_PATH DIVGEO_PATH EIRENE_PATH B25_PATH B25EIRENE_PATH UINP_PATH TRIANG_PATH
+
+# Check whether SOLPS_DEBUG and SOLPS_MPI had been set already by the user
+if ($?SOLPS_DEBUG) source $SOLPSTOP/SETUP/debug
+if ($?SOLPS_MPI)   source $SOLPSTOP/SETUP/mpi
+
 
 # Set path to manuals
 #--------------------
