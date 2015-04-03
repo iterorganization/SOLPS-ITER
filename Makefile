@@ -170,7 +170,7 @@ depend:
 	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
-	cd modules/solsp4-5;       ${MAKE} depend
+	cd modules/solps4-5;       ${MAKE} depend
 
 VERSION:
 	cd modules/B2.5;   ${MAKE} VERSION
