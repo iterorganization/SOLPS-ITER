@@ -21,6 +21,7 @@ case "IFERC":
 case "ITM":
 case "IPP":
 case "IPP-HGW":
+case "GA":
 case "PPPL":
 case "ASIPP":
   echo ifort64
