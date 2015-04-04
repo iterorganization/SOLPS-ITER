@@ -1,0 +1,10 @@
+#! /bin/tcsh -f
+touch b2ag.prt b2fgmtry fort.30
+sleep 1
+touch b2ah.prt b2fpardf
+sleep 1
+touch b2ai.prt b2fstati
+sleep 1
+touch b2ar.prt b2frates
+sleep 1
+[ -e b2fstate ] && touch b2fstate || cp b2fstati b2fstate

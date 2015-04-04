@@ -1,0 +1,41 @@
+a4l 
+2 1 page 
+phys vesl sep lbof 
+1.5 rmin 1.8 rmax -1.1 zmin -0.8 zmax 
+logf 3 ndec
+
+te 1e2 fmax surf drop
+ne 1e21 fmax surf drop
+
+b2nn pvol 1 1 zrng 1e25 fmax surf chs 1e25 fmax surf drop
+
+'Balmer' extl ne 1e-20 rm* dup m* te 1.5 rm** m/ 0.125 rm* 1e1 fmax surf
+'DIV.chords' chor 
+
+'DIV_ch=3_e=0.0045.chords' chvl 'DIV_ch=4_e=0.009.chords' chvl
+
+'Paschen' extl ne 1e-20 rm* dup m* te 1.5 rm** m/ 0.037037037 rm* te -1.0 rm** -1.9 rm* exp m* 1e0 fmax surf
+'DIV.chords' chor 
+
+'DIV_ch=3_e=0.0045.chords' chvl 'DIV_ch=4_e=0.009.chords' chvl
+
+'Ratio' extl m/ 1e3 fmax surf 
+drop '' extl
+ti 1e2 fmax surf drop
+
+te 'DIV_ch=3_e=0.0045.chords' chvl 'DIV_ch=4_e=0.009.chords' chvl drop
+ti 'DIV_ch=3_e=0.0045.chords' chvl 'DIV_ch=4_e=0.009.chords' chvl drop
+ne 'DIV_ch=3_e=0.0045.chords' chvl 'DIV_ch=4_e=0.009.chords' chvl drop
+ni 1 1 zrng 'DIV_ch=3_e=0.0045.chords' chvl 'DIV_ch=4_e=0.009.chords' chvl drop
+
+dab2 1 1 zrng surf drop
+dmb2 1 1 zrng surf drop
+
+! te -1.0 rm** 1.9 rm* exp 3.375 rm* 1e3 fmax surf
+'' extl grid 'DIV.chords' chpl grid
+linf 
+up 3 3 zrng -5e4 fmin 5e4 fmax surf drop
+logf
+spec 2 3 zrng 0.0 fmin 0.0 fmax surf drop
+
+dab2 1 1 zrng dmb2 1 1 zrng 2.0 rm* m+ ni 1 1 zrng m/ 10.0 fmax 'neutral to ion density ratio' surf drop

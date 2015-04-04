@@ -552,11 +552,11 @@ while true; do {
             excom=`comma_separate ${e# }`
             tricom=`comma_separate $TRIAEXT`
             [ -z "$CNVTRIOUT" ] && { 
-              CNVTRIOUT=$SOLPSTOP/data/DivGeo/dg/class/$DEVICE
+              CNVTRIOUT=$SOLPSTOP/modules/DivGeo/device/$DEVICE
             }
             [ -d $CNVTRIOUT/templates ] && CNVTRIOUT=$CNVTRIOUT/templates
             tmplcom=
-            [ -d $CNVTRIOUT ] && tmplcom=$CNVTRIOUT/%[ag]$excom.tria
+            [ -d $CNVTRIOUT ] && tmplcom=$CNVTRIOUT/template.[ag]$excom.tria
             ls -l $TRIADIR/$TRIASTEM.$excom.$tricom $tmplcom
             print -n -u2 -- "Are you sure you want to remove all these files? (y/n): "
             while true; do {

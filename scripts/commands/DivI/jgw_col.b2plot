@@ -1,0 +1,8 @@
+'${HOST} ${PWD} `date` T=${TIME}' extl glob
+a4p phys writ
+1.1 rmin 1.8 rmax -1.4 zmin -0.7 zmax
+2 2 page 2.0 lbsz
+te cont ti cont ne cont
+same vesl mach cont vesl 'TEST.chords.plus' chpl new
+4 5 page 2.0 lbsz
+vesl spec 0.0 fmin 0.0 fmax surf

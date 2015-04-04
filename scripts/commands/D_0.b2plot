@@ -1,0 +1,13 @@
+a4l 1 2 page
+logf
+'Neutral D (cx)' extl
+ti qe rm* mi 1 1 zrng m/ 2.0 rm* sqrt ni 1 1 zrng m/ 5e17 rm*
+1.0 fmin 1000.0 fmax 0.75 rmin cont
+-1.0 rm**
+'Neutral D (nn)' extl
+ti qe rm* mi 1 1 zrng m/ 2.0 rm* sqrt ni 2 2 zrng m/ 5e18 rm*
+1.0 fmin 0.75 rmin cont
+-1.0 rm**
+m+ -1.0 rm**
+'Neutral D (cx+nn)' extl
+1.0 fmin 1000.0 fmax 0.75 rmin cont

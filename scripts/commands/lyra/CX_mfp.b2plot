@@ -1,0 +1,16 @@
+ne
+#CXHEir(te)=1e-4*exp(((((((((7.422296363524e-07)*log(te)-2.788866460622e-05)*log(te)+3.654750340106e-04)*log(te)-1.92712
+2311323e-03)*log(te)+2.400266568315e-03)*log(te)+9.205482406462e-03)*log(te)-3.016990732025e-02)*log(te)-8.916456579806e
+-02)*log(te)-3.274123792568e+01)
+te ln +7.422296e-07 dup rm*
+      -2.788866e-05 rm+ over m*
+      +3.654750e-04 rm+ over m*
+      -1.927122e-03 rm+ over m*
+      +2.400267e-03 rm+ over m*
+      +9.205482e-03 rm+ over m*
+      -3.016991e-02 rm+ over m*
+      -8.916457e-02 rm+ over m*
+      -3.274124e+01 rm+
+      exp 1e-4 rm*
+swap drop m* -1.0 rm**
+'D mean free path (CX)' extl 1.0e-3 fmin 10.0 fmax 

@@ -21,3 +21,7 @@
 	path = modules/Eirene
 	url = ssh://git@git.iter.org/bnd/eirene.git
 	branch = master
+[submodule "ADAS"]
+	path = modules/adas
+	url = ssh://git@git.iter.org/bnd/solps-adas.git
+	branch = master

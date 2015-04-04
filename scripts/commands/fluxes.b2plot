@@ -1,0 +1,28 @@
+a4p 2 2 page
+comp
+fnix 1 1 sumz sumy 0 f.x drop
+fniy 1 1 sumz sumx 0 f.y drop
+fnix 2 11 sumz sumy 0 f.x drop
+fniy 2 11 sumz sumx 0 f.y drop
+feex sumy 0 f.x drop
+feey sumx 0 f.y drop
+feix sumy 0 f.x drop
+feiy sumx 0 f.y drop
+ni 1 1 sumz sumy 0 f.x drop
+ni 1 1 sumz sumx 0 f.y drop
+ni 2 11 sumz sumy 0 f.x drop
+ni 2 11 sumz sumx 0 f.y drop
+te sumy 0 f.x drop
+te sumx 0 f.y drop
+ti sumy 0 f.x drop
+ti sumx 0 f.y drop
+phys
+fniy 1 1 sumz 0.0 fmin 0.0 fmax 57 f.y drop
+fniy 2 11 sumz 0.0 fmin 0.0 fmax 57 f.y drop
+ni 1 1 sumz 0.0 fmin 0.0 fmax 57 f.y drop
+ni 2 11 sumz 0.0 fmin 0.0 fmax 57 f.y drop
+feey 0.0 fmin 0.0 fmax 57 f.y drop
+feiy 0.0 fmin 0.0 fmax 57 f.y drop
+te 0.0 fmin 0.0 fmax 57 f.y drop
+ti 0.0 fmin 0.0 fmax 57 f.y drop
+ni 0.0 fmin 0.0 fmax 57 f.y drop

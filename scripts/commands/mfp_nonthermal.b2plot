@@ -1,0 +1,20 @@
+te qe 3.0 r* rm* 1.5 rm** 
+ne m/ 
+zeff 2.0 rm** m/
+
+3.0  
+2.0 pi r* 1.5 r** r* 
+eps0 2.0 r** r* 
+me 0.5 r** r* 
+qe 4.0 r** r/ 
+15.0 r/
+
+rm*
+
+te qe 3.0 r* rm*
+1.0 me r/ rm*
+0.5 rm**
+
+m*
+
+'Electron mean free path (nonthermal, 3Te)' extl

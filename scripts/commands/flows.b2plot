@@ -1,0 +1,14 @@
+'plusminus' cltb
+a4l
+phys
+1.1 rmin 1.8 rmax -1.00 zmin -0.70 zmax
+
+sep 
+'flows   aug `basename $PWD`' extl
+
+# te 0.1 fmin 100.0 fmax 
+# 0.1 arow cont
+# -0.05 -0.01 0.01 0.05 
+mach 
+-2.0 -1.0 -0.5 -0.2 -0.1 -0.01 0.01 0.1 0.2 0.5 1.0 2.0 12 clvs
+cont

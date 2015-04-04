@@ -1,0 +1,66 @@
+'fuchs' cltb 
+vesl sep outl 
+logf 3 ndec
+
+5000 t_#p 
+1e-2 t_pt 
+
+'D' extl 
+brna 1 1 zrng dup pvol surf drop 0.0 rmma
+1 1 96 36 -500 0 1 1 traj 
+drop
+'C12' extl 
+ua na m* 3 8 sumz na 3 8 sumz m/ uuse
+vv na m* 3 8 sumz na 3 8 sumz m/ vvse
+brna 3 3 zrng dup pvol surf drop 0.0 rmma
+1 1 96 36 -1000 0 1 1 traj 
+drop
+'C13' extl 
+ua na m* 10 15 sumz na 10 15 sumz m/ uuse
+vv na m* 10 15 sumz na 10 15 sumz m/ vvse
+brna 10 10 zrng dup pvol surf drop 0.0 rmma
+1 1 96 36 -1000 0 1 1 traj 
+drop
+'He' extl 
+ua na m* 17 18 sumz na 17 18 sumz m/ uuse
+vv na m* 17 18 sumz na 17 18 sumz m/ vvse
+brna 17 17 zrng dup pvol surf drop 0.0 rmma
+1 1 96 36 -1000 0 1 1 traj 
+drop
+
+'D' extl 
+ua na m* 1 1 sumz na 1 1 sumz m/ uuse
+vv na m* 1 1 sumz na 1 1 sumz m/ vvse
+brna 1 1 zrng 0.0 rmma 23 ixeq m* dup pvol surf drop
+1 1 96 36 -500 0 1 1 traj 
+drop
+brna 1 1 zrng 0.0 rmma 72 ixeq m* dup pvol surf drop
+1 1 96 36 -500 0 1 1 traj 
+drop
+'C12' extl 
+ua na m* 3 8 sumz na 3 8 sumz m/ uuse
+vv na m* 3 8 sumz na 3 8 sumz m/ vvse
+brna 3 3 zrng 0.0 rmma 23 ixeq m* dup pvol surf drop
+1 1 96 36 -1000 0 1 1 traj 
+drop
+brna 3 3 zrng 0.0 rmma 72 ixeq m* dup pvol surf drop
+1 1 96 36 -1000 0 1 1 traj 
+drop
+'C13' extl 
+ua na m* 10 15 sumz na 10 15 sumz m/ uuse
+vv na m* 10 15 sumz na 10 15 sumz m/ vvse
+brna 10 10 zrng 0.0 rmma 46 ixeq m* dup pvol surf drop
+1 1 96 36 -1000 0 1 1 traj 
+drop
+brna 10 10 zrng 0.0 rmma 48 ixeq m* dup pvol surf drop
+1 1 96 36 -1000 0 1 1 traj 
+drop
+'He' extl 
+ua na m* 17 18 sumz na 17 18 sumz m/ uuse
+vv na m* 17 18 sumz na 17 18 sumz m/ vvse
+brna 17 17 zrng 0.0 rmma 23 ixeq m* dup pvol surf drop
+1 1 96 36 -1000 0 1 1 traj 
+drop
+brna 17 17 zrng 0.0 rmma 72 ixeq m* dup pvol surf drop
+1 1 96 36 -1000 0 1 1 traj 
+drop

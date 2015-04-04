@@ -1,0 +1,40 @@
+write
+a4l
+! 5 5 page
+! 4.0 lbsz
+
+0 nreg
+'CDH.points.b2plot' cmd
+drop
+
+spec ! 3 3 zrng
+'CDH.points.b2plot' cmd
+drop
+
+up ! 1 1 zrng
+'CDH.points.b2plot' cmd
+'CDH.vpoints.b2plot' cmd
+drop
+
+! up 3 3 zrng
+! 'CDH.points.b2plot' cmd
+! 'CDH.vpoints.b2plot' cmd
+! drop
+
+te
+'CDH.points.b2plot' cmd
+drop
+
+ti
+'CDH.points.b2plot' cmd
+drop
+
+ne
+'CDH.points.b2plot' cmd
+drop
+
+ni ! 3 3 zrng
+'CDH.points.b2plot' cmd
+drop
+
+

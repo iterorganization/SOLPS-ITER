@@ -1,0 +1,14 @@
+1 1 1		0	white
+0 0 0		1	black
+1 0 0		2	red
+0 1 0		3	green
+0 0 1		4	blue
+1 1 0		5	yellow
+1 0 1		6	magenta
+0 1 1		7	cyan
+1 0 0		8	red
+0 1 0		9	green
+0 0 1	 	10	blue
+1 1 0		11	yellow
+1 0 1		12	magenta
+0 1 1		13	cyan

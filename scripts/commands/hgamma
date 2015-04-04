@@ -1,0 +1,7 @@
+'AMJUEL' 'H.12' '2.1.5d ' 'OT' amjuel dab2 1 1 zrng m* 2.530e6 rm*
+'AMJUEL' 'H.12' '2.1.8d ' 'OT' amjuel ni   1 1 zrng m* 2.530e6 rm*
+m+
+'AMJUEL' 'H.12' '2.2.5d ' 'OT' amjuel dmb2 1 1 zrng m* 2.530e6 rm*
+'AMJUEL' 'H.12' '2.2.14d' 'OT' amjuel dmb2 1 1 zrng m* 'AMJUEL' 'H.12' '2.0b   ' 'OT' amjuel m* 2.530e6 rm*
+'AMJUEL' 'H.12' '7.2d   ' 'OT' amjuel dmb2 1 1 zrng m* 'AMJUEL' 'H.11' '7.0    ' 'OT' amjuel m* 2.530e6 rm*
+m+ m+ 'hgamma' extl m+

@@ -1,0 +1,5 @@
+stdl glob
+a4l
+phys 
+2.1 rmin 3.1 rmax -1.7 zmin -1.0 zmax
+'JET/traj.b2plot' cmd

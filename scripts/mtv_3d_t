@@ -27,7 +27,7 @@ setenv MTV_WRB_COLORMAP ON
 if (-e $SOLPSTOP/data.local/palettes/plotmtv_white.map) then
   setenv COLORMAP $SOLPSTOP/data.local/palettes/plotmtv_white.map
 else
-  setenv COLORMAP $SOLPSTOP/data/palettes/plotmtv_white.map
+  setenv COLORMAP $SOLPSTOP/scripts/palettes/plotmtv_white.map
 endif
 echo '$' DATA=CONTOUR >! $tfilename
 echo '%' nx = `cat dsl dsr | wc -l` xgrid=True xlabel=x-xsep>> $tfilename

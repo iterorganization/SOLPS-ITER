@@ -265,10 +265,10 @@ endif
 	-rmdir b2yt.exe.dir
 
 stra.dat :
-	ln -s ${SOLPSTOP}/data/stra.dat .
+	ln -s ${SOLPSTOP}/modules/B2.5/Database/stra.dat .
 
 weis.dat :
-	ln -s ${SOLPSTOP}/data/weis.dat .
+	ln -s ${SOLPSTOP}/modules/B2.5/Database/weis.dat .
 
 $(savefiles):
 	touch $(shell echo ${PLASMASTATE} | sed -e 's:plasmastate:b2.dummy_save.parameters:')

@@ -1,0 +1,19 @@
+'${HOST} ${PWD} `date` T=${TIME}' extl glob writ
+a4p 2 2 page
+phys
+1 nreg 2 nreg m+
+feex 'feex' extl sumy 19 f.x drop
+dup feey 'feey' extl m* sumx 57 f.y drop
+feix 'feix' extl sumy 19 f.x drop
+dup feiy 'feiy' extl m* sumx 57 f.y drop
+fnix 'fnix' extl 1 1 sumz sumy 19 f.x drop
+fnix 'fnix' extl 2 7 sumz sumy 19 f.x drop
+dup fniy 'fniy' extl m* 1 1 sumz sumx 57 f.y drop
+dup fniy 'fniy' extl m* 2 7 sumz sumx 57 f.y drop
+phys '' extl
+ni 1 1 sumz 0.0 fmin 0.0 fmax 57 f.y drop
+ni 2 7 sumz 0.0 fmin 0.0 fmax 57 f.y drop
+te 0.0 fmin 0.0 fmax 57 f.y drop
+ti 0.0 fmin 0.0 fmax 57 f.y drop
+zeff 0.0 fmin 0.0 fmax 57 f.y drop
+ne 0.0 fmin 0.0 fmax 57 f.y drop

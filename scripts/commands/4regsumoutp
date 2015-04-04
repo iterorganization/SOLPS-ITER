@@ -1,0 +1,6 @@
+  dup 1 nreg m* sumx sumy sdup ' core'           scat 0 0 outp drop 
+  dup 2 nreg m* sumx sumy sdup ' sol'            scat 0 0 outp drop 
+  dup 3 nreg m* sumx sumy sdup ' inner divertor' scat 0 0 outp drop 
+  dup 4 nreg m* sumx sumy sdup ' outer divertor' scat 0 0 outp drop 
+  dup           sumx sumy sdup ' sum'            scat 0 0 outp drop
+  sdrop

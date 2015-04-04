@@ -1,0 +1,30 @@
+'${HOST} ${PWD} `date` T=${TIME}' extl glob
+a4p phys writ
+1.1 rmin 1.8 rmax -1.4 zmin -0.7 zmax
+vesl grid 'TEST.chords.plus' chpl
+grid
+same mach cont vesl 'TEST.chords.plus' chpl new
+2.0 lbsz
+up
+4 5 page '190.40 up' extl glob '190.40' chvl
+4 5 page '190.50 up' extl glob '190.50' chvl
+4 5 page '190.58 up' extl glob '190.58' chvl
+4 5 page '190.59 up' extl glob '190.59' chvl
+4 5 page '190.60 up' extl glob '190.60' chvl
+4 5 page '190.61 up' extl glob '190.61' chvl
+4 5 page '190.62 up' extl glob '190.62' chvl
+4 5 page '200.40 up' extl glob '200.40' chvl
+4 5 page '200.50 up' extl glob '200.50' chvl
+4 5 page '200.60 up' extl glob '200.60' chvl
+4 5 page 2.0 lbsz
+spec
+4 5 page '190.40 spec' extl glob '190.40' chvl
+4 5 page '190.50 spec' extl glob '190.50' chvl
+4 5 page '190.58 spec' extl glob '190.58' chvl
+4 5 page '190.59 spec' extl glob '190.59' chvl
+4 5 page '190.60 spec' extl glob '190.60' chvl
+4 5 page '190.61 spec' extl glob '190.61' chvl
+4 5 page '190.62 spec' extl glob '190.62' chvl
+4 5 page '200.40 spec' extl glob '200.40' chvl
+4 5 page '200.50 spec' extl glob '200.50' chvl
+4 5 page '200.60 spec' extl glob '200.60' chvl

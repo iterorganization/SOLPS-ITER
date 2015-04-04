@@ -1,0 +1,25 @@
+stdl glob a4p phys
+logf 3 ndec
+1.2 rmin 1.8 rmax
+-1.2 zmin -0.5 zmax
+te surf
+1.15 rmma 66.212 rmmi
+ln
+dup -0.0883083 rm*
+1.09267 rm+ over m*
+-5.55253 rm+ over m*
+13.1293 rm+ m*
+-33.7815 rm+
+exp 'Fulcher emissivity coefficient (cm^{3} /s)' extl surf '' extl
+dmb2 0 0 sumz surf m* ne surf m* 1e-6 rm*
+'Fulcher emissivity (photons/sec/m^{3} )' extl surf '' extl
+
+ahal mhal m+
+'H_alpha emissivity (photons/sec/m^{3} )' extl surf '' extl
+
+1 4 page linf 3.0 lbsz
+swap 'Fulcher emissivity (photons/sec/m^{2} )' extl
+'RIV.chords' chor 'ZIV.chords' chor 'ZOV.chords' chor 'ROV.chords' chor
+swap 'H_alpha emissivity (photons/sec/m^{2} )' extl
+'RIV.chords' chor 'ZIV.chords' chor 'ZOV.chords' chor 'ROV.chords' chor
+'' extl

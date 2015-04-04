@@ -488,21 +488,33 @@ will take you to \$\verb!{SOLPSTOP}!.
 \newpage\section{data}
 \index{data}
 
-The data subtree contains data files and directories used by various
-programs.
-If the user wishes to add data to this list, the recommended
-procedure is to create a parallel \verb!data.local! directory, with 
+Contrary to previous {\bf SOLPS} versions, there is no more centralized
+version-controlled \$\verb!SOLPSTOP/data! directory. The user may create 
+one if needed, and use it a similar structure as in the past.
+
+For data files that are still experimental in nature, the option 
+to create a parallel \verb!data.local! directory, with 
 the same structure (only putting in the needed new files and subdirectories),
-at the level \$\verb!{SOLPSTOP}/data.local!. The code routinely checks for
+at the level \$\verb!{SOLPSTOP}/data.local! is also still availbale. 
+The code routinely checks for
 the existence of local data before relying on the presence of Master copies.
 
+Because the \SOLPSITER distribution is split into submodules, the data files
+that are accessed exclusively by either \verb!Eirene! or \verb!B2.5! are now
+placed in directories named \verb!Database! and placed in the corresponding
+\$\verb!{SOLPSTOP}/modules! directory. Files that were needed by the 
+post-processing or analysis scripts are now places within the 
+\$\verb!{SOLPSTOP}/scripts! directory. The files described in this paragraph
+are still version-controlled.
+
+The most important of these data files are:
 \begin{description}
 \item[AMJUEL] \index{AMJUEL} is an \verb!Eirene! input file containing atomic
   physics rates
 \item[H2VIBR] \index{H2VIBR} is an \verb!Eirene! input file containing atomic
-  physics rates for the vibrational states of hydrogen
+  physics rates for the vibrational states of hydrogen molecules
 \item[HYDHEL] \index{HYDHEL} is an \verb!Eirene! input file containing atomic
-  physics rates for hydrogen
+  physics rates for hydrogen and helium
 \item[MARLOWE] \index{MARLOWE} is an \verb!Eirene! input file containing
   surface data
 \item[METHANE] \index{METHANE} is an \verb!Eirene! input file containing atomic
@@ -513,8 +525,6 @@ the existence of local data before relying on the presence of Master copies.
   physics rates
 \item[TRIM] \index{TRIM} is an \verb!Eirene! input file containing atomic
   physics rate for methane
-\item[amjuel.2.ps*] \index{amjuel.2.ps} contain PostScript versions of
-  the \verb!AMJUEL! data
 \item[ionization\_potentials] \index{ionization\_potentials} is a \verb!B2! and \verb!B2.5!
   input file containing ionization potentials
 \item[incatm] \index{incatm} is a \verb!B2.5! input file containing data for 
@@ -530,47 +540,9 @@ the existence of local data before relying on the presence of Master copies.
   Must be copied to the local \verb!baserun! directory.
 \end{description}
 
-\newpage
-There are also a number of subdirectories:
-
-\begin{verbatim}
-SOLPSTOP
-+---data
-|   +---AMDS
-|   +---Bulk_properties
-|   +---Summary_plots
-|   +---Surface_properties
-|   +---TRIMDAT
-|   +---adas
-|   +---adas_W
-|   +---commands
-|   +---commands.lyra
-|   +---chords
-|   +---chords.CMOD
-|   |   +---unclipped
-|   +---chords.lyra
-|   +---chords.DivI
-|   +---exp
-|   |   +---asdex-upgrade
-|   +---gnuplot
-|   +---mdsplus
-|   +---meshes
-|   +---mesh.extra
-|   +---palettes
-|   +---plot_set
-|   +---structures
-|   +---summers
-|   +---summers.local
-|   +---trim.data
-|   |   +---range.data
-|   |   +---refl.data
-|   |   +---sputter.data
-|   +---2000.08.09
-\end{verbatim}
-
 \subsection{adas}
 \index{adas}\index{ADAS}
-The \verb!adas! subdirectory contains files which are used to tell various programs
+The \verb!modules/adas! subdirectory contains files which are used to tell various programs
 which \verb!ADAS! files to use.
 
 \verb!source.location! indicates which class of lines to use (``pjr''
@@ -579,12 +551,6 @@ currently).
 
 \verb!ratadas.filelist! indicates the global source of the \verb!ADAS! files,
 and which ``years'' to use.
-
-\subsection{adas\_W}
-\index{adas\_W}
-
-Contains atomic data for tungsten, following various degrees of bundling.
-See documentation within for details.
 
 \subsection{AMDS}
 \index{AMDS}
@@ -598,57 +564,17 @@ Contains data for bulk properties of different target materials.
 A sample file to be filled by the user for additional materials 
 is contained in \verb!blank!.
 
-\subsection{chords}
-\index{chords}
+This directory is now located in \verb!modules/B2.5/Database!.
 
-Contains various \btwoplot chords.
-
-\subsection{commands}
+\subsection{scripts/commands}
 \index{commands}
 
 Contains various \btwoplot commands.
 
-\subsection{exp}
-\index{exp}
-
-Contains experimental data. Further subdivided by device.
-
-\subsection{gnuplot}
-\index{gnuplot}
-
-Contains various \verb!gnuplot! commands.
-
-\subsection{mdsplus}
-\index{mdsplus}
-
-Contains a bare-bones example file of \verb!b2md.dat!.
-
-\subsection{meshes}
-\index{meshes}
-
-Contains various meshes for \verb!b2ag! (see section \ref{sec:b2ag}).
-
-\subsection{mesh.extra}
-\index{mesh.extra}
-
-Contains standard \verb!mesh.extra! files, used by \btwoplotns.
-
-\subsection{palettes}
+\subsection{scripts/palettes}
 \index{palettes}
 
-Contains the palettes that can be used by \btwoplotns.
-
-\subsection{plot\_set}
-
-\subsection{structures}
-\index{structures}
-
-Contains standard structure files for use by \verb!agg!, 
-\verb!aggs! and \verb!Carre!.
-
-\subsection{Summary\_plots}
-
-\subsection{summers}
+Contains the palettes that can be used by \btwoplot and \verb!mtv_3d! scripts.
 
 \subsection{Surface\_properties}
 \index{Surface\_properties}
@@ -657,19 +583,25 @@ Contains data for surface properties of different target materials.
 A sample file to be filled by the user for additional materials 
 is contained in \verb!blank!.
 
-\subsection{TRIMDAT}
-\index{TRIMDAT}
+This directory is now located in \verb!modules/B2.5/Database!.
+
+\subsection{TRIM}
+\index{TRIM}
 
 Contains \verb!TRIM! data used by \verb!Eirene!, pointed to by a \verb!cpath!
 instruction in the \verb!Eirene! input file.
+
+This directory is now located in \verb!modules/Eirene/Database/Surfacedata!.
 
 \subsection{trim.data}
 \index{trim.data}
 
 Subdivided into \verb!range.data!, \verb!refl.data! and \verb!sputter.data!
 directories. They contain the \verb!TRIM! range, reflection and sputtering
-data used by \verb!SOLPS!. Files ending in \verb!e! are for energy, in
+data used by \verb!B2.5!. Files ending in \verb!e! are for energy, in
 \verb!n! are for particles.
+
+This directory is now located in \verb!modules/B2.5/Database!.
 
 \newpage
 \section{modules}
@@ -682,6 +614,7 @@ data used by \verb!SOLPS!. Files ending in \verb!e! are for energy, in
 |   +---Triang
 |   +---Uinp
 |   +---Carre
+|   +---adas
 |   +---amds
 |   +---B2.5
 |   +---solps4-5
@@ -696,6 +629,7 @@ the grid generator and associated converter,
 \verb!modules/DivGeo! for the \verb!DG! graphical interface
 to the grid preprocessor, \verb!modules/Triang! for the \verb!Eirene! triangular mesh generator,
 \verb!modules/Uinp! for the \verb!Uinp! input file generator, 
+\verb!modules/adas! for the ADAS atomic data files,
 \verb!modules/amds! for the automated generator
 of atomic physics blocks for \verb!Eirene!, 
 \verb!modules/solps4-5! for the \verb!b2sxdr! converter from
@@ -1076,6 +1010,9 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[correct\_baserun\_timestamps]\index{correct\_baserun\_timestamps}
     Makes sure the timestamps for the start-up files in the \verb!baserun!
     directory are in the right chronological order.
+  \item[correct\_b2yt\_timestamps]\index{correct\_b2yt\_timestamps}
+    Makes sure the timestamps for the start-up files in the current
+    directory are in the right chronological order for the \verb!b2yt! converter.
   \item[count]\index{count} 
   \item[d2d]\index{d2d} Doubles the resolution of the \verb!DG! equilibrium file (see Sec.~\ref{sec:equtrn}).
   \item[d2e]\index{d2e} Converts \verb!DG! equilibrium files to \verb!EFIT! format (see Sec.~\ref{sec:equtrn}).
@@ -1108,7 +1045,6 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[save\_mds]\index{save\_mds} Archive an \verb!MDSplus! case.
   \item[setup\_baserun\_eirene\_links]\index{setup\_baserun\_eirene\_links} Prepares the run directory before a \verb!B2.5-Eirene! run by settings up links to the proper data files.
   \item[SOLPS4to5]\index{SOLPS4to5} Script to convert a \SOLPSfour run directory into a \SOLPSfive one.
-  \item[update\_data]\index{update\_data} Updates the \$\verb!SOLPSTOP/data! directory.
   \item[update\_eirene]\index{update\_eirene} Updates the \$\verb!SOLPSTOP/modules/Eirene! directory.
   \item[update\_libs]\index{update\_libs} Updates the \$\verb!SOLPSTOP/src/lib! directory.
   \item[update\_links]\index{update\_links} Updates linked files to the \verb!SOLPS! Master in the current directory structure.
@@ -1475,7 +1411,7 @@ version-controlled directories.
 
 Within the \verb!modules/B2.5/src! source directory, we have:
 
-%%find $SOLPSTOP/modules/B2.5/src -follow -maxdepth 1 -type d -print | sed -e "s:${SOLPSTOP}:SOLPSTOP:" | sed -e 's:[^/]*/:|   :g' | sed 's:\(\(|   \)*\)|   :\1+---:'
+%%find $SOLPSTOP/modules/B2.5/src -follow -maxdepth 2 -type d -print | sed -e "s:${SOLPSTOP}:SOLPSTOP:" | sed -e 's:[^/]*/:|   :g' | sed 's:\(\(|   \)*\)|   :\1+---:'
 
 \begin{verbatim}
 SOLPSTOP
@@ -1503,6 +1439,22 @@ SOLPSTOP
 |   |   |   +---transport
 |   |   |   +---common
 |   |   |   +---equations
+|   |   +---Database
+|   |   |   +---Bulk_properties
+|   |   |   +---Surface_properties
+|   |   |   +---trim.data
+|   |   |   |   +---range.data
+|   |   |   |   +---refl.data
+|   |   |   |   +---sputter.data
+|   |   +---builds
+|   |   |   +---couple_Eirene.ITER.ifort64
+|   |   |   +---standalone.ITER.ifort64
+|   |   |   +---couple_Eirene.ITER.ifort64.mpi
+|   |   |   +---standalone.ITER.ifort64.mpi
+|   |   |   +---couple_Eirene.ITER.ifort64.debug
+|   |   |   +---standalone.ITER.ifort64.debug
+|   |   |   +---couple_Eirene.ITER.ifort64.mpi.debug
+|   |   |   +---standalone.ITER.ifort64.mpi.debug
 \end{verbatim}
 
 Similarly to the \verb!src.local! directory, two additional local directories are provided
@@ -1514,11 +1466,15 @@ Section~\ref{b2codemodifications} apply.
 The user wanting to delve deeper into the source code is directed to the detailed routine
 listing in Appendix \ref{lis:b2cdcr}. 
 
+The \verb!Database! directory contain the data files which \verb!B2.5!
+relies on to compute things such as reaction rates, wall element surface 
+temperatures, etc...
+
 \newpage
 \subsection{modules/Eirene}
 \index{Eirene}\label{cha:eirene}
 
-%%find $SOLPSTOP/modules/Eirene -follow -maxdepth 2 -type d -print | sed -e "s:${SOLPSTOP}:SOLPSTOP:" | sed -e 's:[^/]*/:|   :g' | sed 's:\(\(|   \)*\)|   :\1+---:'
+%%find $SOLPSTOP/modules/Eirene -follow -maxdepth 3 -type d -print | sed -e "s:${SOLPSTOP}:SOLPSTOP:" | sed -e 's:[^/]*/:|   :g' | sed 's:\(\(|   \)*\)|   :\1+---:'
 
 \begin{verbatim}
 SOLPSTOP
@@ -1562,11 +1518,16 @@ SOLPSTOP
 |   |   +---Database
 |   |   |   +---AMdata
 |   |   |   +---Surfacedata
+|   |   |   |   +---TRIM
 |   |   +---builds
 |   |   |   +---couple_SOLPS-ITER.ITER.ifort64
 |   |   |   +---standalone.ITER.ifort64
 |   |   |   +---couple_SOLPS-ITER.ITER.ifort64.mpi
 |   |   |   +---standalone.ITER.ifort64.mpi
+|   |   |   +---couple_SOLPS-ITER.ITER.ifort64.debug
+|   |   |   +---standalone.ITER.ifort64.debug
+|   |   |   +---couple_SOLPS-ITER.ITER.ifort64.mpi.debug
+|   |   |   +---standalone.ITER.ifort64.mpi.debug
 \end{verbatim}
 
 The command\index{sei}
@@ -1584,7 +1545,7 @@ The other are included for compatibility with the FZ-J{\"u}lich master \verb!Eir
 repository.
 
 Additionally, the \verb!Database! directory contain the data files which \verb!Eirene!
-relies on to coompute things such as backscattering coefficients, atomic reactions, etc...
+relies on to compute things such as backscattering coefficients, atomic reactions, etc...
 
 As with \verb!B2.5!, a \verb!local! directory for the user that wishes to make code
 changes sheltered from GIT updates. The same procedures apply.
@@ -3506,7 +3467,7 @@ to one of the \verb!setup.csh.*! files in \$\verb!SOLPSTOP!.]
 \verb!b2md! requires as input \verb!b2md.dat! and this is searched for in the
 present working directory, the \verb!baserun! directory, and in the
 \$\verb!SOLPSTOP/data.local/mdsplus! and \$\verb!SOLPSTOP/data/mdsplus! directories,
-in order. See Appendix \ref{lis:b2cdcn} for a content description.
+if present, in order. See Appendix \ref{lis:b2cdcn} for a content description.
 
 An example \verb!b2md.dat! is:
 \VerbatimInput[fontsize=\footnotesize]{MDSPLUS/b2md.dat}
@@ -4100,20 +4061,15 @@ The default setting for \verb!DEVICE! can be changed for each local
 implementation {\em via} use of the \verb!setup.csh.*! files listed
 in section \ref{sec:setup}.
 
-The command\index{sdg}
-\begin{verbatim}
-  sdg
-\end{verbatim}
-will move you to the \$\verb!SOLPSTOP/data/DivGeo/class/!\$\verb!DEVICE! 
-directory. The environment variable \$\verb!DG! contains the path 
+The environment variable \$\verb!DG! contains the path 
 \$\verb!SOLPSTOP/modules/DivGeo!.
 To start \verb!DG!, the command is:
 \begin{verbatim}
-  ./dg
+  ./dg &
 \end{verbatim}
 or
 \begin{verbatim}
-  ./dg case.dg
+  ./dg case.dg &
 \end{verbatim}
 where \verb!case.dg! is an existing case.
 
@@ -9976,7 +9932,7 @@ Generates the spectral line emissivities from the Summers' data stored
 in \$\verb!SOLPSTOP/data/summers!.
 
 \subsubsection{$<$is,{\bf I}$>$ $<$lambda,{\bf I}$>$ $<$delta,{\bf I}$>$ nspe}\index{b2plot, nspe}\label{sec:nspe}\index{ADAS}
-Generates the spectral line emissivities according to the \verb!ADAS! database \cite{ADAS}, stored in \$\verb!SOLPSTOP/data/adas!
+Generates the spectral line emissivities according to the \verb!ADAS! database \cite{ADAS}, stored in \$\verb!SOLPSTOP/modules/adas!
 or \$\verb!SOLPSTOP/data.local/adas!, for species index $<$is$>$, centered around wavelength $<$lambda$>$ (in {\em \AA}), 
 with width $<$delta$>$ (in {\em \AA}).
 {\bf nspec} is an alias for {\bf nspe}.
@@ -10089,7 +10045,7 @@ format is RGB triplets for each colour.
 
 If the file does not exist in the current working directory, the
 directories \$\verb!SOLPSTOP/data.local/palettes! and
-\$\verb!SOLPSTOP/data/palettes! are searched in order.
+\$\verb!SOLPSTOP/scripts/palettes! are searched in order.
 
 \subsection{$<$chord file$>$ chor}\index{b2plot, chor}\label{sec:chor}\index{b2plot, chord plots}
 Reads in chords from the specified file and calculates the line
@@ -10171,13 +10127,13 @@ ahal mhal m+ 'HAL.chords' chor
 Further commands are taken from the specified file.  If the file does
 not exist in the current working directory, the directories
 \$\verb!SOLPSTOP/data.local/commands! and
-\$\verb!SOLPSTOP/data/commands! are searched in order.
+\$\verb!SOLPSTOP/scripts/commands! are searched in order.
 
 \subsection{$<$CDF command file$>$ cmdcdf}\index{b2plot, cmdcdf}\label{sec:cmdcdf}
 \verb!CDF! commands used repetitively (for movie frames) are taken from the specified file.  
 If the file does not exist in the current working directory, the directories
 \$\verb!SOLPSTOP/data.local/commands! and
-\$\verb!SOLPSTOP/data/commands! are searched in order.
+\$\verb!SOLPSTOP/scripts/commands! are searched in order.
 
 \subsection{$<$chord file$>$ chbx}\index{b2plot, chbx}\label{sec:chbx}
 Chord integral averaged over three chords. Equivalent to using the {\bf 3 ave} command.
@@ -10228,7 +10184,7 @@ Computes a reaction rate as per the \verb!Eirene! specification. Consult the
 \subsection{$<$reac$>$ adas}\index{b2plot, adas}\label{sec:adas}\index{ADAS}
 Computes a reaction rate as per the \verb!ADAS! specification. The $<$reac$>$ string should be something of the
 form 'acd89'. The matrix obtained contains then all the rates from these files, for all species in the run, extracted
-from the files stored in \$\verb!SOLPSTOP/data/adas! or \$\verb!SOLPSTOP/data.local/adas!.
+from the files stored in \$\verb!SOLPSTOP/modules/adas! or \$\verb!SOLPSTOP/data.local/adas!.
 
 \section{Environment variables}
 

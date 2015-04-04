@@ -1,0 +1,52 @@
+write
+a4l
+! 5 5 page
+! 4.0 lbsz
+
+0 nreg
+'POU.points.b2plot' cmd
+'PIL.points.b2plot' cmd
+'POL.points.b2plot' cmd
+drop
+
+ahal mhal m+
+'POU.points.b2plot' cmd
+'PIL.points.b2plot' cmd
+'POL.points.b2plot' cmd
+drop
+
+3 4650 1 nspec 
+'POU.points.b2plot' cmd
+'PIL.points.b2plot' cmd
+'POL.points.b2plot' cmd
+drop
+
+up 1 1 zrng
+'POU.vpoints.b2plot' cmd
+'PIL.vpoints.b2plot' cmd
+'POL.vpoints.b2plot' cmd
+drop
+
+up 3 3 zrng
+'POU.vpoints.b2plot' cmd
+'PIL.vpoints.b2plot' cmd
+'POL.vpoints.b2plot' cmd
+drop
+
+te
+'POU.points.b2plot' cmd
+'PIL.points.b2plot' cmd
+'POL.points.b2plot' cmd
+drop
+
+ti
+'POU.points.b2plot' cmd
+'PIL.points.b2plot' cmd
+'POL.points.b2plot' cmd
+drop
+
+ne
+'POU.points.b2plot' cmd
+'PIL.points.b2plot' cmd
+'POL.points.b2plot' cmd
+drop
