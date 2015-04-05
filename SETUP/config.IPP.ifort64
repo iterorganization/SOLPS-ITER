@@ -19,7 +19,7 @@ $(error First use of config.IPP.ifort64. Provide paths to libraries first.)
 # Use LD_NAG to link to the BLASLAPACK library instead
 # Add -DNO_NAG to SOLPS_CPP
 #
-# If you have NAG Mark 14 or greater on your system:
+# If you have NAG Mark 17 or greater on your system:
 # Add -DNO_F01AAF to SOLPS_CPP
 #
 # If you have NAG Mark 22 or greater on your system:
@@ -59,6 +59,7 @@ LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 #
 
 SOLPS_CPP      = -DNCAR4 -DMDSPLUS
+B25_DEFINES    = -DWANT_THIS
 EIRENE_DEFINES = 
 
 

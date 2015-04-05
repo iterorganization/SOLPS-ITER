@@ -309,7 +309,22 @@ same domain or serve as examples for other users using the same compiler.
 If the NAG library is not available (it requires a pay licence), then the BLAS and
 LAPACK packages should be used instead, and links to them added to the corresponding \verb!config! files.
 
-Once the config files have been filled in with the appropriate information for the
+To compile the coupled version of the code you should begin by checking that the default
+array dimensions provided fit your problem size. These are stored in the file
+\$\verb!SOLPSTOP/modules/B2.5/src/include/DIMENSIONS.F!. If the dimensions are not right for you,
+the do the following:
+with:\index{DIMENSIONS.F}
+\begin{verbatim}
+  sb2
+  cd src
+  mkdir -p include.local
+  cp include/DIMENSIONS.F include.local
+\end{verbatim}
+and edit the file \verb!include.local/DIMENSIONS.F! so that the 
+dimensions (mainly used for the namelists in \verb!B2.5!) are
+big enough (see the description of the relevant variables in section \ref{sec:DIMENSIONS}).
+
+Once the config files and dimensions have been filled in with the appropriate information for the
 local implementation desired, one proceeds with the compilation of the code. For this
 purpose, a master \SOLPSITER \verb!Makefile! is provided, located at \$\verb!{SOLPSTOP}/Makefile!.\index{Makefile} The options supported by this \verb!Makefile! are:
 \begin{description}\index{Compiling the code}\index{B2.5, compiling}\index{SOLPS-ITER, compiling}\index{Eirene, compiling}\index{DivGeo, compiling}\index{Carre, compiling}
@@ -1582,19 +1597,13 @@ If you are having problems (you've tried to be clever with altering
 files, or the \verb!SOLPS! administrator has), you might need to do
 \begin{verbatim}
     gmake clean
-    rm LISTOBJ
+    rm builds/*/LISTOBJ
     gmake depend
     gmake listobj
     gmake tags
     gmake depend
     gmake
 \end{verbatim}
-
-If the user wishes to modify the compiling options used, the creation
-of a \verb!config.local! subdirectory is recommended, in which to
-store \verb!compiler.!\$\verb!OBJECTCODE! files. Since the \verb!Makefile!
-reads those after the \verb!config/compiler.!\$\verb!OBJECTCODE! file,
-they need only contain the modified definitions. 
 
 \newpage
 
@@ -1603,7 +1612,7 @@ As distributed:
 \section{runs}
 \index{B2.5, runs}\label{sec:b2runs}
 
-The runs for \verb!B2.5! are done in \verb!runs!.
+The runs for \SOLPSITER are done in \verb!runs!.
 
 %%find $SOLPSTOP/runs -follow -maxdepth 2 -type d -print | sed -e "s:${SOLPSTOP}:SOLPSTOP:" | sed -e 's:[^/]*/:|   :g' | sed 's:\(\(|   \)*\)|   :\1+---:'
 
@@ -3079,7 +3088,12 @@ b2run -n b2yt
 which will launch a dry-run of the Makefile invoking \verb!b2yt!. Then, make sure
 that this dry-run only attempts to run \verb!b2yt! and no other programs. If it 
 does call, say \verb!b2ag! and/or \verb!b2mn!, then the age hierarchy above was
-not respected.
+not respected. In that case, you can run the script
+\begin{verbatim}
+correct_b2yt_timestamps
+\end{verbatim}
+to get the correct ordering of files. Do check again afterwards with the dry-run
+command to make sure it worked.
 
 Upon successful termination of \verb!b2yt!, the user will find a \verb!b2fstatt!
 file containing the transformed plasma state, as well as a \verb!b2mn.dat.2! file which 
@@ -3172,7 +3186,6 @@ The user is strongly encouraged to check out that very complete manual.
 Reference \cite{Reiter2005} also provides a useful description.
 
 \begin{verbatim}
-  cd ${SOLPSTOP}/modules
   sei
   gmake depend
   gmake listobj
@@ -3183,49 +3196,15 @@ Reference \cite{Reiter2005} also provides a useful description.
 %% $
 
 See also the next chapter and section \ref{sec:DIMENSIONS} for setting the array sizes 
-for \verb!Eirene! before compilation.
+and useful file links for \verb!Eirene! before compilation.
 
 \chapter{Running the coupled version of B2.5-Eirene}
 \label{cha:coupledb2eirene}
 
-To compile the coupled version of the code you should begin by checking that the default
-array dimensions provided fit your problem size. These are stored in the file
-\$\verb!SOLPSTOP/modules/B2.5/src/include/DIMENSIONS.F!. If the dimensions are not right for you,
-the do the following:
-with:\index{DIMENSIONS.F}
-\begin{verbatim}
-  sb2
-  cd src
-  mkdir -p include.local
-  cp include/DIMENSIONS.F include.local
-\end{verbatim}
-%% $
-and edit the file \$\verb!SOLPSTOP/include.local/DIMENSIONS.F! so that the 
-dimensions (mainly used by \verb!Eirene!) are
-big enough (see the description of the relevant variables in section \ref{sec:DIMENSIONS}).
-
-Then
-\begin{verbatim}
-  setenv USE_EIRENE '-DB25_EIRENE'
-  sei
-  gmake depend
-  gmake
-  sbb
-  gmake
-\end{verbatim}
-If you have previously compiled \verb!B2.5! in the stand-alone mode, you
-should also do
-\begin{verbatim}
-  sbb
-  rm ${OBJECTCODE}/b2stbr.? ${OBJECTCCODE}/b2mndr.? ${OBJECTCODE}/b2plot.? ${OBJECTCODE}/b2mds.? ${OBJECTCODE}/b2mwti.?
-  gmake
-\end{verbatim}
-%% $
-
 In the run directory, you should execute the command
 \begin{verbatim}
   setup_baserun_eirene_links
-\end{verbatim}\index{setup\_baserun\_eirene\_links}
+\end{ve1rbatim}\index{setup\_baserun\_eirene\_links}
 to establish the links \verb!Eirene! needs to the relevant atomic data files,
 as well as some links needed for diagnostic scripts.
 
@@ -3280,12 +3259,13 @@ between the
 essential that the neutrals boundary conditions declared here match, in
 number and in order, the strata declared in the \verb!Eirene! input file. 
 
-Some differences between the \SOLPSfiveone and {\bf SOLPS5.0} behaviours
+Some differences between the \SOLPSITER and {\bf SOLPS5.0} behaviours
 should be noted here.
 
-First, the number of strata \verb|NSTRAI| need no longer include the time-dependent ``T'' stratum.
+First, the number of strata \verb|NSTRAI| need no longer include the 
+time-dependent ``T'' stratum.
 
-Second, the array sizes of \verb|chemical_sputter_yield| now need to match the 
+Second, the array sizes of \verb|chemical_sputter_yield|, is used, now need to match the 
 actual number of wall and non-standard surfaces 
 \verb!NLIM! and \verb!NSTS! as they are found in the \$\verb!Eirene! input file. 
 Non-zero values should only be assigned to
@@ -3300,7 +3280,7 @@ boundary''. If the \verb!Eirene! input file is being produced by use of the
 provided a \verb!b2.neutrals.parameters! file containing any other data not
 deductible from the \verb!DG! model is present.   
 
-Third, in \SOLPSfiveonens, the North and South boundaries of the \verb!B2.5! grid are 
+Third, in \SOLPSITERns, the North and South boundaries of the \verb!B2.5! grid are 
 no longer recycling/sputtering surfaces but rather only switching surfaces to the 
 triangular grid regions.
 
@@ -3438,7 +3418,7 @@ information about \verb!MDSplus! see the Web site at \verb!www.mdsplus.org!.)
 The reverse operation, namely recovering an archived run from the \verb!MDSplus!
 server, is performed by \verb!b2rd!\index{b2rd}.
 
-In order to use this facility, you need to ask the author of this document to
+In order to use this facility, you need to ask David Coster at IPP-Garching to
 add you to the list of authorized \verb!MDSplus! writers, supplying the username
 which will be used, as well as the machine/domain.
 
@@ -3462,7 +3442,7 @@ and add
 \begin{verbatim}
 setenv SOLPS_CPP '-DMDSPLUS'
 \end{verbatim}
-to one of the \verb!setup.csh.*! files in \$\verb!SOLPSTOP!.]
+to one of the \verb!setup.csh.*! files in \$\verb!SOLPSTOP/SETUP!.]
  
 \verb!b2md! requires as input \verb!b2md.dat! and this is searched for in the
 present working directory, the \verb!baserun! directory, and in the
@@ -3713,7 +3693,7 @@ produced figure \ref{fig:python_compare_shots}.
     \label{fig:python_compare_shots}
 \end{figure}
 
-In another, more complicated, example, python was used to create the frames of a movie on the Gateway machine.
+In another, more complicated, example, python was used to create the frames of a movie on the ITM Gateway machine.
 \index{movie, python}\index{python, movie}
 \begin{verbatim}
 set c=0
@@ -3992,7 +3972,7 @@ the \verb!SOLPS MDSplus! server and then writes geometry information in the stan
 
 \section{Some information about the server}
 
-The server is a dual processor 2.8~GHz AMD Opteron machine with 4~GB RAM
+The IPP MDSplus server is a dual processor 2.8~GHz AMD Opteron machine with 4~GB RAM
 running SUSE LINUX 10.1 (X86-64).  The data is stored in MR-AFS.
 
 %% echo As of `date` the SOLPS MDSplus server \"solps-mdsplus.aug.ipp.mpg.de:8001\" contained `hexdump -e '1/4 "%d\n"' < /afs/ipp-garching.mpg.de/home/d/dpc/MDS/models/shotid.sys` cases consisting of `/afs/ipp-garching.mpg.de/bin/fs lq ~/MDS/0/000/0?? | awk '/xxx/{kbytes+=$3}/files/{files+=$5}END{print kbytes/1024/1024" GB in "files" files"}'`.
@@ -4019,17 +3999,6 @@ of 3802.68 GB in 553970 files.
 
 \chapter{Running DivGeo}
 \label{cha:divgeo}\index{DG, running}
-
-When using for the first time, check to see whether
-\$\verb!SOLPSTOP/modules/DivGeo! is a link (for SOLPS4.x versions).  If it is, do
-\index{gtdr, DivGeo}
-\begin{verbatim}
-  cd $SOLPSTOP/modules
-  gtdr DivGeo
-\end{verbatim}
-%% $
-to make yourself the owner of the \verb!DivGeo! directory.
-The files will remain links to the Master.
 
 You will need to choose your device, {\it e.g.}: \index{DEVICE}
 \begin{verbatim}
@@ -4098,32 +4067,19 @@ The command\index{sbc}
 \end{verbatim}
 will take you to \$\verb!{SOLPSTOP}/base/Carre!.
 
-When using for the first time, check to see whether
-\$\verb!SOLPSTOP/modules/Carre! (accessible with the \verb!ssc! command)
-is a link.  If it is, do
-\index{gtdr, Carre}
-\begin{verbatim}
-  cd $SOLPSTOP/modules
-  gtdr Carre
-\end{verbatim}
-%% $
-
-You will need to do \index{Carre, compiling}
+If \verb!Carre! is not yet compiled, you will need to do \index{Carre, compiling}
 \begin{verbatim}
   ssc
-  gmake local
   gmake tags
   gmake listobj
   gmake depend
   gmake
 \end{verbatim}
-so that output files that were links to the Master are either removed
-or are made local and compile the code.
 
 To run \verb!Carre!, assuming that you are working on a case from \verb!DG!,
 you would then need to do
 \begin{verbatim}
-  ./carre -
+  carre -
 \end{verbatim}
 and then either type \verb!return! to accept the default, or a \verb!y! if
 asked to accept \verb!Carre!'s choices.
@@ -4152,7 +4108,7 @@ For more complicated geometries, see the \verb!Carre! original paper
   \item[dpmax]\index{dpmax} Maximum distance achieved between two neighbouring points (in $m$)
 \end{description}
 
-Of the above, the user is only allowed to change \verb!nptseg!, \verb!deltp1! and \verb!deltpn!. If the code, when using the default parameters (which are imported from the \verb!DG! run), initially crashes, re-run trying a different set of parameters. The code in some cases gives some indication of which region and which surface was problematic. For the most common error scenarios, some sanity checks are performed at this stage and the code will not allow the user to continue unless all of these are satisfied. In particular, make sure that for each individual segment \verb!lg!, \verb!deltp1!, \verb!deltpn!, \verb!dpmin! and \verb!dpmax! are all of the same sign. It is recommended to have the sizes of the mesh steps on all sides of the X-points to be comparable, and to increase resolution gradually towards the strike points. The values of \verb!dpmin! and \verb!dpmax! can be used to check the monotonicity of the mesh step size. For reasons related to numerical convergence of the plasma solvers, the grid spacing between neighbouring cells should not change too quickly and must be prevented from collapsing to zero. To this effect, \verb!Carre! imposes a minimum grid spacing given by the \verb!pasmin!\index{pasmin} value. However, the spacing of the points as initially provided by \verb!DG! is unaware of that limit, and thus it is often the case that the user must adapt either the grid spacings or \verb!pasmin! (or both) before being allowed to continue.
+Of the above, the user is only allowed to change \verb!nptseg!, \verb!deltp1! and \verb!deltpn!. If the code, when using the default parameters (which are imported from the \verb!DG! run), initially fails, re-run trying a different set of parameters. The code in some cases gives some indication of which region and which surface was problematic. For the most common error scenarios, some sanity checks are performed at this stage and the code will not allow the user to continue unless all of these are satisfied. In particular, make sure that for each individual segment \verb!lg!, \verb!deltp1!, \verb!deltpn!, \verb!dpmin! and \verb!dpmax! are all of the same sign. It is recommended to have the sizes of the mesh steps on all sides of the X-points to be comparable, and to increase resolution gradually towards the strike points. The values of \verb!dpmin! and \verb!dpmax! can be used to check the monotonicity of the mesh step size. For reasons related to numerical convergence of the plasma solvers, the grid spacing between neighbouring cells should not change too quickly and must be prevented from collapsing to zero. To this effect, \verb!Carre! imposes a minimum grid spacing given by the \verb!pasmin!\index{pasmin} value. However, the spacing of the points as initially provided by \verb!DG! is unaware of that limit, and thus it is often the case that the user must adapt either the grid spacings or \verb!pasmin! (or both) before being allowed to continue.
 
 The second table 
 (titled \verb!RADIAL DISTRIBUTIONS!) includes the variables for the radial
@@ -4216,6 +4172,8 @@ may ignore the message and proceed, but the mesh provided may not then be of suf
 Lastly, there is a ``hidden'' language variable \verb!sellan!\index{sellan} (default value 'english') that can be changed 
 to its original 'francais'. 
 
+Once all the settings have been chosen, it is often convenient to save them, so as to not have to re-enter them on the next \verb!Carre! meshing attempt. This is achieved by means of the '(S)ave' option within the \verb!carre! script, provided that the user does not start the next meshing attempt with the '(P)repare'option, but rather jumps directly to '(G)rid'.
+
 After running \verb!Carre!, it is recommended to have a look at the mesh and decide if one wants to modify it before 
 proceeding much further (see previous section). The default settings may not be appropriate for all cases. It is 
 particularly important to check the mesh near the separatrix, the X-point(s) and the target plates.
@@ -4224,9 +4182,9 @@ In some cases, the \verb!carre -! script will fail. In that case, one can still
 run \verb!Carre! in ``standalone'' mode by invoking:
 \begin{verbatim}
   ssc
-  $OBJECTCODE/carre
+  builds/${HOST_NAME}.${COMPILER}(.debug)/carre
 \end{verbatim}
-%% $
+
 
 \chapter{Running agg}
 \label{cha:agg}
@@ -4235,15 +4193,6 @@ run \verb!Carre! in ``standalone'' mode by invoking:
 a specified ASDEX Upgrade shot at a particular time point.  There is
 also a similar program, \verb!aggj! for JET. \verb!agg! was written
 by Heimo B{\"u}rbaumer.
-
-When using for the first time, check to see whether
-\$\verb!SOLPSTOP/modules/agg! is a link.  If it is, do
-\index{gtdr, agg}
-\begin{verbatim}
-  cd $SOLPSTOP/modules
-  gtdr agg
-\end{verbatim}
-%% $
 
 Running the code at IPP produces:
 \begin{verbatim}
@@ -10553,62 +10502,105 @@ the \verb!config! subdirectory: \index{B2.5, compiling options}
 \VerbatimInput[fontsize=\footnotesize]{B2_5.config.ITER.ifort64}
 
 If the user wishes to modify the compiling options used, the creation
-of a \verb!config.local! subdirectory is recommended, in which to
-store \verb!compiler.!\$\verb!OBJECTCODE! files. Since the \verb!Makefile!
-reads those after the \verb!config/compiler.!\$\verb!OBJECTCODE! file,
+of a \verb!config.!\$\verb!${HOST_NAME}.!\$\verb!${COMPILER}.local! file 
+is recommended, in which to store the modified settings. Since the \verb!Makefile!
+reads those after the 
+\verb!config/compiler.!\$\verb!${HOST_NAME}.!\$\verb!${COMPILER}! file,
 they need only contain the modified definitions. 
 
 \section{Defines}
 
+\subsection{B2.5-Eirene}
+\index{DEFINES, used in compiling B2.5-Eirene}
+
+We list here the possible compiler options that can be used when compiling the
+coupled version of \verb!B2.5-Eirene!. These options are shared across both the
+\verb!B2.5! and \verb!Eirene! source codes.
+
+\begin{description}
+\item[ALLOCATE\_AND\_NAMELIST] \index{ALLOCATE\_AND\_NAMELIST} To be used if the compiler allows dynamically allocated namelist arrays
+\item[B25\_EIRENE] \index{B25\_EIRENE} Set internally by the \verb!Makefile! and used to identify differences between source code for stand-alone \verb!B2.5! and coupled \verb!B2.5-Eirene! applications
+\item[NO\_B2\_CHEM\_SPUT] \index{NO\_B2\_CHEM\_SPUT} Used to indicate that chemical sputtering is specified through \verb!Eirene! arrays instead of \verb!B2.5!.
+\item[NO\_GETENV] \index{NO\_GETENV} No \verb!GETENV! system call available
+\item[USE\_MPI] \index{USE\_MPI} Set internally by the \verb!Makefile! and used to identify code necessary for MPI applications
+\item[USE\_PXFGETENV] \index{USE\_PXFGETENV} Uses \verb!PXFGETENV!
+  instead of \verb!GETENV!
+\end{description}
+
+\index{SOLPS\_CPP}
+If you want to activate any of these options, you should add
+\verb!-DOPTION! (where \verb!OPTION! might, for example, be
+\verb!CLASSICAL_CURRENT!) to the \verb!SOLPS_CPP! environment variable
+with
+\begin{verbatim}
+  setenv SOLPS_CPP '-DOPTION'
+\end{verbatim}
+and then recompile all of the routines affected (if unsure which
+routines are affected, recompile them all with
+\begin{verbatim}
+  gmake clean
+  gmake depend
+  gmake
+\end{verbatim}
+).  If \verb!SOLPS_CPP! already had a value, you would want to do
+\begin{verbatim}
+  setenv SOLPS_CPP "$SOLPS_CPP -DOPTION"
+\end{verbatim}
+%% $
+so that the new option is added to the list. (Unsupported \verb!ksh!
+or \verb!bash! users would use something like
+\begin{verbatim}
+  export SOLPS_CPP="$SOLPS_CPP -DOPTION"
+\end{verbatim}
+%%$
+).
+
 \subsection{B2.5}
 \index{DEFINES, used in compiling B2.5}
 
-%%grep #if $SOLPSTOP/modules/b2/current/*/*.F | awk '{print $2}' | sort | uniq
+%%grep #if $SOLPSTOP/modules/B2.5/src/*/*.F | awk '{print $2}' | sort | uniq
+
+We list here the additional compiler options available that only affect compilation of
+\verb!B2.5!.
 
 \begin{description}
-\item[AIX] \index{AIX} Specific to AIX compilers
-\item[ALLOCATE\_AND\_NAMELIST] \index{ALLOCATE\_AND\_NAMELIST} To be used if the compiler allows dynamically allocated namelist arrays
+\item[ASTRA] \index{ASTRA} To be used if one wishes to run in coupled mode with the core transport code ASTRA
 \item[CDF\_MOVIE] \index{CDF\_MOVIE} To be used if \verb!CDF! movie output is desired
 \item[CLASSICAL\_CURRENT] \index{CLASSICAL\_CURRENT} Turns on classical current drift term
 \item[COMPLICATED] \index{COMPLICATED} Uses a more ``complicated'' model for chord integration
 \item[DEF\_MAXCHORDS] \index{DEF\_MAXCHORDS} Maximum number of chords to be considered (default 10000)
-\item[EASY] \index{EASY} Uses an ``easier'' model for chord integration
-\item[Fortran\_90] index{Fortran\_90} Specific to \verb!FORTRAN 90! compilers
+\item[F77] index{F77} Identifies specific code to \verb!Fortran-77! compilers
 \item[HITS\_PER\_CHORD] \index{HITS\_PER\_CHORD} Maximum number of chord points per cell? (default 50)
 \item[HPUX] \index{HPUX} Specific to HP computers
 \item[IBMaix] \index{IBMaix} Specific to IBM AIX computers
 \item[JET] \index{JET} Enables some additional output for coupling to the JET post-processor
 \item[MDSPLUS] \index{MDSPLUS} Enables \verb!MDSplus! output
+\item[NAG22] \index{NAG22} Specific to using the Nag Mark 22 or higher mathematical library
 \item[NAGF95] \index{NAGF95} Specific to the \verb!NAG! F95 compiler
 \item[NCAR4] \index{NCAR4} Used to specify NCAR4 rather than NCAR3
 \item[NO\_21] \index{NO\_21} Do not use 21-moment model for thermal and viscous forces
-\item[NO\_B2\_CHEM\_SPUT] \index{NO\_B2\_CHEM\_SPUT} Used to indicate that chemical sputtering is specified through \verb!Eirene! arrays instead of \verb!B2! or \verb!B2.5!.
 \item[NO\_CDF] \index{NO\_CDF} No \verb!CDF! library available
 \item[NO\_F01AAF] \index{NO\_F01AAF} No \verb!NAG! routine \verb!F01AAF! --- uses
   its replacement instead (needed if linking with Version 17 or later of \verb!NAG!)
-\item[NO\_GETENV] \index{NO\_GETENV} No \verb!GETENV! system call available
 \item[NO\_LONG\_LINES] \index{NO\_LONG\_LINES} Identify those
   compilers which have a limitation to relatively short output lines
 \item[NO\_NAG] \index{NO\_NAG} No \verb!NAG! libraries available
 \item[NO\_OPT] \index{NO\_OPT} No compiler optimization 
+\item[PAR\_OPT] \index{PAR\_OPT} Runs the code in a special interpretive parameter optimization mode
 \item[PERFMON] \index{PERFMON} Enable performance monitoring
 \item[PLPLOT] \index{PLPLOT} Use \verb!PLPLOT! instead of \verb!NCAR! for plotting
 \item[PSR] \index{PSR} Specific to the Pacific Sierra VAST compiler
 \item[SCL\_IMP\_RCI] \index{SCL\_IMP\_RCI} Toggles scaling of impurities tallies
 \item[USE\_CDF\_B2STIME] \index{USE\_CDF\_B2STIME} Specific for \SOLPSfour \verb!CDF! tallies
-\item[USE\_EIRENE] \index{USE\_EIRENE} Compiles a version coupled to \verb!Eirene!
-\item[USE\_EIRENE\_NOT\_YET\_READY] \index{USE\_EIRENE\_NOT\_YET\_READY} Obsolete
-\item[USE\_PXFGETENV] \index{USE\_PXFGETENV} Uses \verb!PXFGETENV!
-  instead of \verb!GETENV!
 \item[WANT\_PROCESS] \index{WANT\_PROCESS} Enables the code for the
   \SOLPSfive to \SOLPSfour converter.
-\item[WANT\_THIS] \index{WANT\_THIS} Adds some boundary condition treatments
+\item[WANT\_THIS] \index{WANT\_THIS} (default) Adds some boundary condition treatments
 \item[WINDOWS] \index{WINDOWS} Specific to Windows implementations
 \item[WOS] \index{WOS} Uses the \verb!WOS! libraries for accessing
   experimental data at IPP.
 \end{description}
 
-%%grep #if $SOLPSTOP/modules/b2/current/*/*.F | awk '{print $2,$1}' | sort | uniq
+%%grep #if $SOLPSTOP/modules/B2.5/src/*/*.F | awk '{print $2,$1}' | sort | uniq
 
 
 \begin{center}
@@ -10623,7 +10615,6 @@ they need only contain the modified definitions.
     \multicolumn{2}{|l|}{\small\sl continued on next page} \\
     \hline \endfoot
     \endlastfoot
-AIX & user/b2file.F \\
 ALLOCATE\_AND\_NAMELIST & b2plot/init\_wall.F \\
 ALLOCATE\_AND\_NAMELIST & modules/b2mod\_boundary\_namelist.F \\
 ALLOCATE\_AND\_NAMELIST & modules/b2mod\_input\_profile.F \\
@@ -10637,21 +10628,69 @@ ALLOCATE\_AND\_NAMELIST & modules/b2mod\_user\_namelist.F \\
 ALLOCATE\_AND\_NAMELIST & modules/b2mod\_wall.F \\
 ALLOCATE\_AND\_NAMELIST & postprocessing/b2yt\_wall.F \\
 ALLOCATE\_AND\_NAMELIST & sources/b2stbr.F \\
+ASTRA & modules/b2mod\_astra\_to\_b2.F \\
+ASTRA & sources/b2stbc\_phys.F \\
+ASTRA & sources/b2stbr.F \\
+ASTRA & sources/b2stcx.F \\
+ASTRA & sources/b2stel.F \\
+ASTRA & transport/b2strcl.F \\
+B25\_EIRENE & b2plot/b2pinp.F \\
+B25\_EIRENE & b2plot/b2plot.F \\
+B25\_EIRENE & b2plot/b2pnwl.F \\
+B25\_EIRENE & b2plot/b2ptrgl.F \\
+B25\_EIRENE & b2plot/b2pwinm.F \\
+B25\_EIRENE & b2plot/b2pwlprp.F \\
+B25\_EIRENE & b2plot/b2pwsort.F \\
+B25\_EIRENE & b2plot/get\_from\_movie\_cdf.F \\
+B25\_EIRENE & b2plot/ngread.F \\
+B25\_EIRENE & convert/b2mds.F \\
+B25\_EIRENE & driver/b2mndr.F \\
+B25\_EIRENE & driver/b2mn.F \\
+B25\_EIRENE & driver/b2mwti.F \\
+B25\_EIRENE & postprocessing/b2ytdr.F \\
+B25\_EIRENE & sources/b2stbr.F \\
+B25\_EIRENE & modules/b2mod\_astra\_to\_b2.F \\
+B25\_EIRENE & modules/b2mod\_diag.F \\
+B25\_EIRENE & modules/b2mod\_neutrals\_namelist.F \\
+B25\_EIRENE & modules/b2mod\_work.F \\
+B25\_EIRENE & output/b2wdat.F \\
+B25\_EIRENE & postprocessing/b2ytdr.F \\
+B25\_EIRENE & sources/b2stbc\_phys.F \\
+B25\_EIRENE & sources/b2stbm.F \\
+B25\_EIRENE & sources/b2stbr.F \\
+B25\_EIRENE & sources/eirene\_f30f31.F \\
+B25\_EIRENE & sources/eirene\_mc.F \\
+B25\_EIRENE & sources/eirene\_mc\_init.F \\
+B25\_EIRENE & transport/b2tinnt.F \\
+B25\_EIRENE & user/b2blnc.F \\
+B25\_EIRENE & user/b2blne.F \\
+B25\_EIRENE & user/b2blnm.F \\
+B25\_EIRENE & user/b2trace.F \\
+B25\_EIRENE & user/b2usrtrc.F \\
+B25\_EIRENE & user/b2wrint.F \\
+B25\_EIRENE & user/b2wrsep.F \\
+B25\_EIRENE & user/cdfmovie.F \\
+B25\_EIRENE & utility/rdneutrs.F \\
 CDF\_MOVIE & b2plot/caltraj.F \\
 CDF\_MOVIE & b2plot/process\_chords.F \\
+CLASSICAL\_CURRENT & transport/b2tfch.F \\
 CLASSICAL\_CURRENT & transport/b2tfhe.F \\
-COMPLICATED & sources/b2stbc.F \\
+COMPLICATED & sources/b2stbc\_fb.F \\
 DEF\_MAXCHORDS & b2plot/process\_chords.F \\
 EASY & b2plot/chord.F \\
-Fortran\_90 & user/b2file.F \\
+F77 & user/b2file.F \\
 HITS\_PER\_CHORD & b2plot/process\_chords.F \\
 HPUX & convert/b2mds.F \\
 HPUX & b2plot/b2plot.F \\
 IBMaix & driver/b2mwti.F \\
 IBMaix & b2plot/b2plot.F \\
+IBMaix & postprocessing/b2ytdr.F \\
+IBMaix & user/b2file.F \\
 JET & driver/b2mn.F \\
 JET & driver/b2mndr.F \\
 JET & driver/b2mnds.F \\
+JET & driver/b2mnastra.F \\
+JET & driver/b2mn\_opt.F \\
 JET & modules/b2mod\_ppout.F \\
 JET & preprocessing/b2ardr.F \\
 MDSPLUS & convert/b2cdf2mds.F \\
@@ -10662,6 +10701,7 @@ MDSPLUS & convert/b2mds.F \\
 MDSPLUS & driver/b2rd.F \\
 MDSPLUS & modules/b2mod\_mdsplus.F \\
 MDSPLUS & utility/mds\_routines.F \\
+NAG22 & b2plot/caltraj.F \\
 NAGF95 & convert/b2mds.F \\
 NAGF95 & driver/b2co.F \\
 NAGF95 & output/b2wgpj\_gnuplot.F \\
@@ -10680,6 +10720,7 @@ NCAR4 & b2plot/terminate\_plotting.F \\
 NO\_21 & transport/b2trcl.F \\
 NO\_B2\_CHEM\_SPUT & modules/b2mod\_neutrals\_namelist.F \\
 NO\_B2\_CHEM\_SPUT & postprocessing/b2ytdr.F \\
+NO\_B2\_CHEM\_SPUT & sources/eirene\_mc.F \\
 NO\_CDF & convert/b2cdf2mds.F \\
 NO\_CDF & convert/b2cdfmovies2mds.F \\
 NO\_CDF & convert/b2cdftallies2mds.F \\
@@ -10709,6 +10750,9 @@ NO\_NAG & transport/b2tr21.F \\
 NO\_NAG & b2plot/caltraj.F \\
 NO\_NAG & utility/nagsubst.F \\
 NO\_OPT & b2plot/b2plot.F \\ 
+NO\_OPT & postprocessing/b2ytdr.F \\ 
+PAR\_OPT & sources/b2stbc\_phys.F \\ 
+PAR\_OPT & transport/b2tqna.F \\ 
 PERFMON & utility/prgend.F \\
 PERFMON & utility/prgini.F \\
 PERFMON & utility/subsys.F \\
@@ -10726,6 +10770,7 @@ PLPLOT & b2plot/mesh.F \\
 PLPLOT & b2plot/meshit.F \\
 PLPLOT & b2plot/plotpatch.F \\
 PLPLOT & b2plot/plottarget.F \\
+PLPLOT & b2plot/plot\_wall\_elements.F \\
 PLPLOT & b2plot/pltoutline.F \\
 PLPLOT & b2plot/pltsptrix.F \\
 PLPLOT & b2plot/plttarget.F \\
@@ -10747,13 +10792,7 @@ PSR & modules/b2mod\_elements.F \\
 PSR & modules/b2mod\_sputter.F \\
 SCL\_IMP\_RCI & user/b2wrint.F \\
 USE\_CDF\_B2STIME & modules/b2mod\_comtimpl.F \\
-USE\_EIRENE & b2plot/b2plot.F \\
-USE\_EIRENE & convert/b2mds.F \\
-USE\_EIRENE & driver/b2mndr.F \\
-USE\_EIRENE & driver/b2mwti.F \\
-USE\_EIRENE & postprocessing/b2ytdr.F \\
-USE\_EIRENE & sources/b2stbr.F \\
-USE\_EIRENE\_NOT\_YET\_READY & b2plot/b2plot.F \\
+USE\_MPI & driver/b2mn.F \\
 USE\_PXFGETENV & convert/b2mds.F \\
 USE\_PXFGETENV & b2plot/b2plot.F \\
 USE\_PXFGETENV & b2plot/dhdata.F \\
@@ -10766,8 +10805,15 @@ USE\_PXFGETENV & modules/b2mod\_solpstop.F \\
 USE\_PXFGETENV & utility/open\_file.F \\
 USE\_PXFGETENV & utility/usrnam.F \\
 WANT\_PROCESS & convert/process.F \\
-WANT\_THIS & sources/b2stbc.F \\
+WANT\_THIS & sources/b2stbc\_phys.F \\
 WINDOWS & b2plot/initialize\_plotting.F \\ 
+WINDOWS & driver/b2obeq.F \\ 
+WINDOWS & driver/b2obfn.F \\ 
+WINDOWS & driver/b2oblm.F \\ 
+WINDOWS & driver/b2op.F \\ 
+WINDOWS & modules/b2mod\_b2plot\_values.F \\ 
+WINDOWS & modules/b2mod\_sputter.F \\ 
+WINDOWS & postprocessing/.F \\ 
 WOS & b2plot/additional\_elements.F \\
 WOS & b2plot/flux.F \\
     \hline
@@ -10776,13 +10822,13 @@ WOS & b2plot/flux.F \\
   \end{longtable}
 \end{center}
 
-\index{SOLPS\_CPP}
+\index{SOLPS\_CPP}\index{B25\_DEFINES}
 If you want to activate any of these options, you should add
 \verb!-DOPTION! (where \verb!OPTION! might, for example, be
-\verb!CLASSICAL_CURRENT!) to the \verb!SOLPS_CPP! environment variable
-with
+\verb!CLASSICAL_CURRENT!) to either the \verb!SOLPS_CPP! 
+or the \verb!B25_DEFINES! environment variable with
 \begin{verbatim}
-  setenv SOLPS_CPP '-DOPTION'
+  setenv B25_DEFINES '-DOPTION'
 \end{verbatim}
 and then recompile all of the routines affected (if unsure which
 routines are affected, recompile them all with
@@ -10791,34 +10837,26 @@ routines are affected, recompile them all with
   gmake depend
   gmake
 \end{verbatim}
-).  If \verb!SOLPS_CPP! already had a value, you would want to do
+).  If \verb!B25_DEFINES! already had a value, you would want to do
 \begin{verbatim}
-  setenv SOLPS_CPP "$SOLPS_CPP -DOPTION"
+  setenv B25_DEFINES "$B25_DEFINES -DOPTION"
 \end{verbatim}
 %% $
 so that the new option is added to the list. (Unsupported \verb!ksh!
 or \verb!bash! users would use something like
 \begin{verbatim}
-  export SOLPS_CPP="$SOLPS_CPP -DOPTION"
+  export B25_DEFINES="$B25_DEFINES -DOPTION"
 \end{verbatim}
 %% $
-).
+). If choosing to use \verb!SOLPS_CPP! instead, the procedure is the same as
+in the previous section.
 
 \subsection{Eirene}
 \index{DEFINES, used in compiling Eirene}
 
-%%grep #if $SOLPSTOP/modules/Eirene/current/*/*.F | awk '{print $2}' | sort | uniq
+%%grep #if $SOLPSTOP/modules/Eirene/*/*.[Ff] $SOLPSTOP/modules/Eirene/*/*/*.[Ff]* | grep -v builds | awk '{print $2,$1}' | sort | uniq
 
-\begin{description}
-\item[NAG\_RENAME] \index{NAG\_RENAME} Used with quadruple-precision compilers or to replace machine-dependent NAG calls with FORTRAN intrinsics
-\item[NO\_B2\_CHEM\_SPUT] \index{NO\_B2\_CHEM\_SPUT} Used to indicate that chemical sputtering is specified through \verb!Eirene! arrays instead of \verb!B2! or \verb!B2.5!.
-\item[NO\_FORT10] \index{NO\_FORT10} Deactivates output in the \verb!fort.10! file
-\item[NO\_NAG] \index{NO\_NAG} No \verb!NAG! libraries available
-\item[NO\_SRFPRVSL] \index{NO\_SRFPRVSL}
-\item[TRIANG] \index{TRIANG} Toggles the use of coupling routines with the triangulated far SOL mesh option
-\end{description}
-
-%%grep #if $SOLPSTOP/modules/Eirene/current/*/*.F | awk '{print $2,$1}' | sort | uniq
+There are currently no additional compiler options exclusive to \verb!Eirene!, but we list below where the joint \verb!B2.5-Eirene! switches are used.
 
 \begin{center}
   \begin{longtable}{|l|l|}
@@ -10833,25 +10871,17 @@ or \verb!bash! users would use something like
     \hline \endfoot
     \endlastfoot
 ALLOCATE\_AND\_NAMELIST & startup-routines/find\_param.F \\
-CELL\_CENTRED & couple/infcop.F \\
-DBG & eirene/sputer.F \\
-DBG & user/srfprvsl.F \\
-NO\_B2\_CHEM\_SPUT & couple\_B2\_new/infcop.F \\
-NO\_B2\_CHEM\_SPUT & couple\_Tria\_new/infcop.F \\
-NO\_FORT10 & couple/infcop.F \\
-NO\_FORT10 & couple\_B2\_new/wneutral.F \\
-NO\_FORT10 & couple\_Tria\_new/wneutral.F \\
-NO\_FORT10 & eirene/input.F \\
-NO\_FORT10 & eirene/mcarlo.F \\
-NO\_FORT10 & eirene/outeir.F \\
-NO\_NAG & nag-dummy/nagsubst.F \\
-NO\_SRFPRVSL & main-routines/mcarlo.F \\
-TRIANG & couple/eirsrt.F \\
-TRIANG & couple/if0prm.F \\
-TRIANG & couple/infcop.F \\
-TRIANG & couple/save\_tallies.F \\
-TRIANG & couple/uptcop.F \\
-TRIANG & couple/wneutral.F \\
+B25\_EIRENE & startup-routines/find\_param.f \\
+NO\_B2\_CHEM\_SPUT & interfaces/couple\_SOLPS-ITER/eirmod\_extrab25.F90 \\
+NO\_B2\_CHEM\_SPUT & interfaces/couple\_SOLPS-ITER/infcop.F \\
+NO\_GETENV & file-handling/get\_solpstop.f \\
+USE\_MPI & interfaces/couple\_SOLPS-ITER/eirsrt.f \\
+USE\_MPI & interfaces/couple\_SOLPS-ITER/infcop.f \\
+USE\_MPI & main-routines/eirene.f \\
+USE\_MPI & main-routines/mcarlo.f \\
+USE\_MPI & modules/eirmod\_eirbra.f \\
+USE\_MPI & startup-routines/input.f \\
+USE\_PXFGETENV & file-handling/get\_solpstop.f \\
     \hline
     \caption{Defines for Eirene and where they are used.}
     \label{tab:Eirdefines}
@@ -10884,7 +10914,8 @@ or \verb!bash! users would use something like
   export EIRENE_DEFINES="$EIRENE_DEFINES -DOPTION"
 \end{verbatim}
 %% $
-).
+). If choosing to use \verb!SOLPS_CPP! instead, the procedure is the same as
+in the previous section.
 
 \section{NAG calls in SOLPS}
 \index{NAG calls in SOLPS}
@@ -10941,8 +10972,8 @@ second\_own.f    & X05BAF & returns the amount of processor time used since an u
 
 This is an experimental feature!
 
-This only works at the moment using the \verb!linux.Fujitsu! compiler,
-and then only at Garching!
+This only works at the moment using the \verb!linux.Fujitsu! or \verb!linux.ifort64! 
+compilers, and then only at Garching!
 
 You need to set
 \begin{verbatim}
@@ -11224,13 +11255,13 @@ and the targets in the Monte-Carlo calculations. \\
 \index{DG, starting}
 To start \verb!DG! with a blank window, type:
 \begin{verbatim}
-  ./dg
+  dg &
 \end{verbatim}
 at the UNIX prompt.
 
 To start \verb!DG! with an existing model (or several models) loaded, type:
 \begin{verbatim}
-  ./dg <filename.dg> [...]
+  dg <filename.dg> [...] &
 \end{verbatim}
 
 After you start \verb!DG!, the main window will appear.
@@ -12010,57 +12041,53 @@ changed, the bounding element might different than before.
 \label{fig:boundingelement}
 \end{figure}
 
-% \subsubsection{In case of difficulty \ldots}
+\subsubsection{In case of difficulty \ldots}
 
 % THIS DESCRIPTION STILL HAS A LITTLE TOO MUCH CODE JARGON (namely,
 % the ``surface zones'') TO BE USEFUL.  Come back to this if it can
 % be clarified.
 
-% The process of creating surfaces is perhaps the most confusing and difficult
-% aspect of using \verb!DG!.  Moreover, the algorithm it uses for choosing the
-% outermost flux surface level differs in detail from the one used by
-% \verb!Carre!.  If you are having problems getting the surfaces you want,
-% you might benefit from reading the precise description of \verb!DG!'s
-% current algorithm for setting the outermost flux level:
+The process of creating surfaces is perhaps the most confusing and difficult
+aspect of using \verb!DG!.  Moreover, the algorithm it uses for choosing the
+outermost flux surface level differs in detail from the one used by
+\verb!Carre!.  If you are having problems getting the surfaces you want,
+you might benefit from reading the precise description of \verb!DG!'s
+current algorithm for setting the outermost flux level:
 
-% \begin{itemize}
-%   \item It is to be understood that ``maximum'' and ``minimum'' 
-% always refer to the absolute flux deviation from the separatrix.
-%   \item First, find the surface zone and the separatrix(ces) of the zone.  
-% If
-% there are two separatrices, draw surfaces from one to the other.  
-% Else
-% if the zone is marked as "limit by surface", find the farthest surface
-% in the zone and draw surfaces to it.  (In practice, only one surface
-% by be added manually in this zone, so that surfaces are always bounded
-% by that one.)
+It is to be understood that ``maximum'' and ``minimum'' 
+always refer to the absolute flux deviation from the separatrix.
+First, find the surface zone and the separatrix(ces) of the zone. If
+there are two separatrices, draw surfaces from one to the other. Else
+if the zone is marked as "limit by surface", find the farthest surface
+in the zone and draw surfaces to it.  (In practice, only one surface
+by be added manually in this zone, so that surfaces are always bounded
+by that one.)
 
-% Else, initialize the maximum level to infinity and get the structure
-% variable, which includes the targets.  The structure is split into
-% chains of adjacent elements, where each element in a chain may be
-% connected to at most one other element at each endpoint.  If there are
-% branching points in any chain, an error is returned.  The chains are
-% organized into three groups: the first group consists of chains which
-% contain elements that have been specified as a target.  These chains
-% must contain the entire target variable and must form a closed loop,
-% otherwise an error is returned.  The second group consists of chains
-% with no target elements that form a closed loop, and the third group
-% consists of chains with no target elements that do not form a closed
-% loop.
+Else, initialize the maximum level to infinity and get the structure
+variable, which includes the targets.  The structure is split into
+chains of adjacent elements, where each element in a chain may be
+connected to at most one other element at each endpoint.  If there are
+branching points in any chain, an error is returned.  The chains are
+organized into three groups: the first group consists of chains which
+contain elements that have been specified as a target.  These chains
+must contain the entire target variable and must form a closed loop,
+otherwise an error is returned.  The second group consists of chains
+with no target elements that form a closed loop, and the third group
+consists of chains with no target elements that do not form a closed
+loop.
 
-% For each chain in the first group, for each element in the chain, if
-% neither endpoint is in the surface zone, skip it, else get the maximum
-% and minimum flux levels on the element from the equilibrium.  Find the
-% maximum level on the chain, and set the surface level maximum to the
-% innermost of these levels.  Also, find the minimum level on the chain,
-% and set the surface level minimum to the outermost of these levels.
+For each chain in the first group, for each element in the chain, if
+neither endpoint is in the surface zone, skip it, else get the maximum
+and minimum flux levels on the element from the equilibrium.  Find the
+maximum level on the chain, and set the surface level maximum to the
+innermost of these levels.  Also, find the minimum level on the chain,
+and set the surface level minimum to the outermost of these levels.
 
-% For each of the elements in the second or third group, if the first
-% endpoint is not in the surface zone, skip it, else get the minimum
-% flux level on the element.  If it is less than the current surface
-% level minimum, skip it, else if it is still less than the current
-% surface level maximum, set the surface level maximum to this level.
-% \end{itemize}
+For each of the elements in the second or third group, if the first
+endpoint is not in the surface zone, skip it, else get the minimum
+flux level on the element.  If it is less than the current surface
+level minimum, skip it, else if it is still less than the current
+surface level maximum, set the surface level maximum to this level.
 
 \index{DG, adding surfaces}
 You can use the {\tt Add surface} tool to create surfaces visually. It is
@@ -13184,8 +13211,8 @@ tran \index{tran} & formatted & b2mn & & plasma state used for archiving at JET 
 \chapter{Subversion repository logs}
 \index{subversion repository logs}
 
-\section{solps5.1}
-\index{GIT repository log, solps5.1}
+\section{SOLPS-ITER}
+\index{GIT repository log, SOLPS-ITER}
 
 \VerbatimInput[fontsize=\footnotesize]{solps-iter_git.log}
 
