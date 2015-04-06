@@ -183,17 +183,32 @@ while true; do {
             }
             break;;  
       ( b|B )                                               # run b2ag to produce fort.30 file:
-            print -u2 -- "Command line: gmake -f ${SOLPSTOP}/runs/Makefile b2ag.prt > b2ag.log"
-            [ -r b2ag.prt ] && rm b2ag.prt
-            [ -r fort.30 ] && rm fort.30
-            gmake -f ${SOLPSTOP}/runs/Makefile b2ag.prt > b2ag.log
-            [ -r fort.30 ] && {
-              rmdir b2ag.exe.dir
-              print -u2 -- "Produced fort.30 file"
-              q=e
+            [ -r b2fplasma ] && {
+              print -u2 -- "Command line: echo f30 | b2plot > b2pl.prt"
+              [ -r fort.30 ] && rm fort.30
+              echo f30 | b2plot > b2pl.prt
+              [ -r b2pl.exe.dir/fort.30 ] && {
+                mv b2pl.exe.dir/fort.30 .
+                rmdir b2pl.exe.dir
+                print -u2 -- "Produced fort.30 file"
+                q=e
+              } || {
+                print -u2 -- "Could not produce the fort.30 file. Please provide separately"
+                q=u
+              }
             } || {
-              print -u2 -- "Could not produce the fort.30 file. Please provide separately"
-              q=u
+              print -u2 -- "Command line: gmake -f ${SOLPSTOP}/runs/Makefile b2ag.prt > b2ag.log"
+              [ -r b2ag.prt ] && rm b2ag.prt
+              [ -r fort.30 ] && rm fort.30
+              gmake -f ${SOLPSTOP}/runs/Makefile b2ag.prt > b2ag.log
+              [ -r fort.30 ] && {
+                rmdir b2ag.exe.dir
+                print -u2 -- "Produced fort.30 file"
+                q=e
+              } || {
+                print -u2 -- "Could not produce the fort.30 file. Please provide separately"
+                q=u
+              }
             }
             break;;
       ( e|E )                                               # run EIRENE to make input file for TRIA:
@@ -221,7 +236,7 @@ while true; do {
                 }
               } || {
                 print -u2 -- "No $eirinp - run uinp first"
-                q=i
+                q=u
                 [ -L uinput.dg ] && [ -L uinput.trg ] && q=u
               }
               true
