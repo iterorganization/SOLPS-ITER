@@ -151,6 +151,19 @@ c*** Create the b2ar.dat file
           print *,'    ... b2ar.dat created'
       endif
 
+c*** Create the header for the b2yt.dat file
+      inquire(file='b2yt.dat', exist=uex)
+      if(uex) then
+          print *,'    ... b2yt.dat file already present, not created'
+      else
+          open(2,file='b2yt.dat')
+          write(2,'(a)') '*dimens         (nx1, ny1; free format)'
+          write(2,'(2(3x,i4))') nrplg-npplg, ndya
+          close(2)
+          print *,'    ... b2yt.dat created'
+      endif
+
+
 c-----------------------------------------------------------------------
 c*** Modify the input file for B2, if possible
 
