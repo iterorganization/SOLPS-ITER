@@ -50,6 +50,9 @@ case "*.ipp.cas.cn":
 case "*.ipr.res.in":
   echo IPR
   breaksw
+case "*.iter-india.org":
+  echo IN-DA
+  breaksw
 case "*.gov":
 case "*.edu":
 case "*.us":

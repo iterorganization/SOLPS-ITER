@@ -25,11 +25,11 @@ OBJDEST = -o ${OBJDIR}/$*.o
 
 BLD = ar rcv
 
-GRLIBES = ${NCARG}
-LDLIBES = ${NAG} -L${SOLPSLIB} -lnetcdf -lblas
+GRLIBES = ${LD_NCARG}
+LDLIBES = ${LD_NAG} -L${SOLPSLIB} ${LD_NETCDF} -lblas
 
 ifdef USE_EIRENE
-LDLIBESEXTRA = ${OBJDIR}/libeirene.a ${OBJDIR}/grlib.o -lnag
+LDLIBESEXTRA = ${OBJDIR}/libeirene.a ${OBJDIR}/grlib.o ${LD_NAG}
 endif
 
 LD = f95

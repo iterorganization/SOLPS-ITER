@@ -13,8 +13,8 @@ MOD = mod
 
 BLD = ar rcv
 
-GRLIBES = ${NCARG}
-LDLIBES = ${NAG} -lblas
+GRLIBES = ${LD_NCARG}
+LDLIBES = ${LD_NAG} -lblas
 
 LD = f90
 LDOPTS = 

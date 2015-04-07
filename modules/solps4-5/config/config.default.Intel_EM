@@ -25,7 +25,7 @@ endif
 
 COMPILE  	= ${FC} -c ${FFLAGS}
 
-LDLIBES   	= -L${SOLPSLIB} -L/usr/local/lib ${NAG} -lmscl -lnetcdf -lblas
+LDLIBES   	= -L${SOLPSLIB} -L/usr/local/lib ${LD_NAG} ${LD_MSCL} ${LD_NETCDF} -lblas
 LDEXTRA	 	= -Wl,-Map,${OBJDIR}/loadmap
 
 LD		= ${FC}
@@ -37,10 +37,10 @@ INCMOD 		= -module
 MOD 		= mod
 OBJDEST 	= -o ${OBJDIR}/$*.o
 
-GRLIBES 	= ${NCARG}
+GRLIBES 	= ${LD_NCARG}
 
 ifdef USE_EIRENE
-LDLIBESEXTRA 	= ${OBJDIR}/libeirene.a ${OBJDIR}/grlib.o -lnag
+LDLIBESEXTRA 	= ${OBJDIR}/libeirene.a ${OBJDIR}/grlib.o ${LD_NAG}
 endif
 
 LCPP 		= -L${SOLPS4}/src/lib/${OBJECTCODE} -lsonnet -lstdc++

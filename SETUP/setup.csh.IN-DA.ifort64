@@ -1,0 +1,9 @@
+# Load modules
+module load intel
+module load texlive
+module load subversion
+module load totalview
+
+# Environment variables
+# setenv DEVICE sst
+setenv DEVICE iter

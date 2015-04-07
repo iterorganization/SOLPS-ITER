@@ -22,8 +22,8 @@ MOD = mod
 
 BLD = ar rcv
 
-GRLIBES = ${NCARG}
-LDLIBES = ${NAG} -L${SOLPSMASTER}/@sys/lib -lnetcdf # -lblas
+GRLIBES = ${LD_NCARG}
+LDLIBES = ${LD_NAG} ${LD_NETCDF} # -lblas
 
 LD = f90
 LDOPTS = ${FCOPTS} -lf77compat

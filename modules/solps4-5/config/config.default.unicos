@@ -14,8 +14,8 @@ MOD = o
 
 BLD = bld rcv
 
-GRLIBES = $(NCARG)
-LDLIBES = $(NAG) -lperf -lblas
+GRLIBES = $(LD_NCARG)
+LDLIBES = $(LD_NAG) -lperf -lblas
 
 LD = f90
 LDOPTS = -Wl"-M,s"

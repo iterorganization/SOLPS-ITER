@@ -19,15 +19,15 @@
  CPP5OPTS = -C -P -I$(srcdir) $(EQUIV5)
  BLD = ar -r -c -s -v
  ifeq ($(locale),acf.nyu.edu)
-  NAG = -lnag -lblas
-  NCARG = -L$(NCARG_ROOT)/lib -lncarg -lncarg_gks -lncarg_loc
+  LD_NAG = -lnag -lblas
+  LD_NCARG = -L$(NCARG_ROOT)/lib -lncarg -lncarg_gks -lncarg_loc
  endif
  LIBB2 = libb2.a libb2aux.a
  ifeq ($(realkind),4)
-  LDLIBES = $(LIBB2) $(NCARG) $(NAG)
+  LDLIBES = $(LIBB2) $(LD_NCARG) $(LD_NAG)
  endif
  ifeq ($(realkind),8)
-  LDLIBES = $(LIBB2) $(NAG)
+  LDLIBES = $(LIBB2) $(LD_NAG)
  endif
  LD = f77
  LDOPTS = $(nil)

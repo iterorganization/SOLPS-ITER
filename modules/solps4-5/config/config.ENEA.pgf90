@@ -23,8 +23,8 @@ MOD = mod
 
 BLD = ar rcv
 
-GRLIBES = ${NCARG}
-LDLIBES = ${NAG} -L${SOLPSMASTER}/@sys/lib -L${SOLPSLIB} -L/afs/efda-itm.eu/project/switm/netcdf/amd64_pgi/lib -lnetcdff -lnetcdf -lblas
+GRLIBES = ${LD_NCARG}
+LDLIBES = ${LD_NAG} -L${SOLPSLIB} ${LD_NETCDF} -lblas
 
 LD = pgf90
 ifdef SOLPS_DEBUG
@@ -33,4 +33,4 @@ else
 LDOPTS =
 endif
 
-LCPP = -L${SOLPS4}/src/lib/${OBJECTCODE} -lsonnet -lstdc++
+LCPP = ${LD_SONNET}

@@ -22,20 +22,15 @@
  CPP4OPTS = -C -P -I$(srcdir) $(EQUIV4)
  CPP5OPTS = -C -P -I$(srcdir) $(EQUIV5)
  BLD = ar rcv
- ifeq ($(locale),cims.nyu.edu)
-  NAG = -lnag
-  NCARG = -L$(NCARG_ROOT)/lib -lncarg -lncarg_gks -lncarg_c -lncarg_loc -lX11 -lm
- endif
  ifeq ($(locale),acf.nyu.edu)
-  NAG = -L${HOME}/lib -lcomplib.sgimath -lblas -lnagsubst
-  NCARG = -L$(NCARG_ROOT)/lib -lncarg -lncarg_gks -lncarg_c -lncarg_loc -lX11 -lm
+  LD_NAG = -L${HOME}/lib -lcomplib.sgimath -lblas -lnagsubst
  endif
  LIBB2 = libb2.a libb2aux.a
  ifeq ($(realkind),4)
-  LDLIBES = $(LIBB2) $(NCARG) $(NAG)
+  LDLIBES = $(LIBB2) $(LD_NCARG) $(LD_NAG)
  endif
  ifeq ($(realkind),8)
-  LDLIBES = $(LIBB2) $(NAG)
+  LDLIBES = $(LIBB2) $(LD_NAG)
  endif
  LD = f77
 # LDOPTS = -64 -r10000 -Wl,-U

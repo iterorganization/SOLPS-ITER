@@ -18,7 +18,7 @@
  CPP4OPTS = -C -P -I$(srcdir) $(EQUIV4)
  CPP5OPTS = -C -P -I$(srcdir) $(EQUIV5)
  BLD = ar rcv
- ifeq ($(locale),nersc.gov)
+ ifeq ($(HOST_NAME),NERSC)
   LAPACK = -lblaslapack
   NAG = -L$(HOME)/lib -lnagsubst
   NCARG = -L$(NCARG_ROOT)/lib \
@@ -26,10 +26,10 @@
  endif
  LIBB2 = libb2.a libb2aux.a
  ifeq ($(realkind),4)
-  LDLIBES = $(LIBB2) $(NCARG) $(LAPACK) $(NAG)
+  LDLIBES = $(LIBB2) $(LD_NCARG) $(LAPACK) $(LD_NAG)
  endif
  ifeq ($(realkind),8)
-  LDLIBES = $(LIBB2) $(LAPACK) $(NAG)
+  LDLIBES = $(LIBB2) $(LAPACK) $(LD_NAG)
  endif
  LD = fort77
  LDOPTS = $(nil)

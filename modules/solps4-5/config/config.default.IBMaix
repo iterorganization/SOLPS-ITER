@@ -31,9 +31,9 @@ OBJDEST = -o ${OBJDIR}/$*.o
 
 BLD = ar rcv
 
-GRLIBES = ${NCARG}
-LDLIBES = -lblas ${NAG} -L${SOLPSMASTER}/@sys/lib -L${SOLPSLIB} -lnetcdf
-# LDLIBES = -lblas ${NAG} -lmass
+GRLIBES = ${LD_NCARG}
+LDLIBES = -lblas ${LD_NAG} -L${SOLPSLIB} ${LD_NETCDF}
+# LDLIBES = -lblas ${LD_NAG} -lmass
 
 LD = xlf90
 LDOPTS = -bloadmap:${OBJDIR}/loadmap -bmap:${OBJDIR}/map -pg
