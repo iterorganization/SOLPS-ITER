@@ -14,6 +14,7 @@
  ti      Ion temperature (eV)
  pr      Static pressure (Pa)
  ne      Electron density (m^{-3})
+ ne2     ne2 (m^{-3})
  po      phi (V)
  dfhe    diff.fhe (W)
  dfhi    diff.fhi (W)
@@ -132,9 +133,11 @@
  ti0     ti at previous time step (eV)
  ua0     ua at previous time step (m.s^{-1})
  po0     po at previous time step (V)
- smpr    Electrical field force
- smpt    Thermal force
- smfr    Friction force
+ smth    Thermal force (N)
+ smpr    Thermal force (proportional to exhp) (N)
+ smpt    Thermal force (proportional to Ti and Te gradients) (N)
+ smfr    Friction force (N)
+ smcf    Centrifugal force (N)
  pot     Potential energy (eV) (cum. ionisation energy)
  poti    Ionisation energy (eV)
  pot*    Ionisation energy (eV) [shifted down one]
@@ -165,13 +168,19 @@
  cti     CORTI
  cpo     CORPO
  ixlt    ixlt
+ ixle    ixle
  ixeq    ixeq
+ ixge    ixge
  ixgt    ixgt
  iylt    iylt
+ iyle    iyle
  iyeq    iyeq
+ iyge    iyge
  iygt    iygt
  islt    islt
+ isle    isle
  iseq    iseq
+ isge    isge
  isgt    isgt
  lnlam   ln \GK\R
  q       q
@@ -492,11 +501,15 @@
  east    East boundary
  nseg    Wall segment
  iwlt    iwlt
+ iwle    iwle
  iweq    iweq
  iwgt    iwgt
+ iwge    iwge
  iswlt   iswlt
+ iswle   iswle
  isweq   isweq
  iswgt   iswgt
+ iswge   iswge
  ibnd    ibnd
  walldist        Distance along wall (m)
  wallngth        Wall length (m)
@@ -696,11 +709,15 @@
  trgibnd   trgibnd
  trgiz   trgiz
  itrglt  itrglt
+ itrgle  itrgle
  itrgeq  itrgeq
  itrggt  itrggt
+ itrgge  itrgge
  ztrglt  ztrglt
+ ztrgle  ztrgle
  ztrgeq  ztrgeq
  ztrggt  ztrggt
+ ztrgge  ztrgge
  trgm+      target stack addition
  trgm-      target stack subtraction
  trgm*      target stack multiplication
