@@ -80,7 +80,7 @@ ${OBJDIR}/libui.a: ${DEST}
 ${OBJDIR}/uinput.o: ${OBJDIR}/uiblkd.o
 
 clean:
-	rm -rf ${OBJDIR}/*.o ${OBJDIR}/*.f ${OBJDIR}/${PROG} ${OBJDIR}/libui.a ${OBJDIR}/ub2p
+	rm -rf ${OBJDIR}/*.o ${OBJDIR}/*.f ${OBJDIR}/${PROG} ${OBJDIR}/libui.a ${OBJDIR}/ub2p ${OBJDIR}/LISTOBJ ${OBJDIR}/dependencies*
 
 depend: ${OBJS:.o=.F} uiblkd.F uinput.F uiblb2.F ub2p.F
 	`which makedepend` -p'$${OBJDIR}/' ${SOLPS_CPP} -f- ${INCLUDE} $^ | \

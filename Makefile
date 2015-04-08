@@ -55,6 +55,11 @@ ifdef SOLPS_DEBUG
 EXT_DBG=.debug
 endif
 
+# SOLPS_DEBUG and SOLPS_MPI will not be taken from environment,
+# but will be passed by the corresponding make-targets 
+unexport SOLPS_DEBUG
+unexport SOLPS_MPI
+
 .PHONY: solps solps_mpi all all_mpi carre divgeo b25 b25_mpi eirene eirene_mpi b25eirene b25eirene_mpi uinp triang sonnet-light b2sxdr manual depend tags clean clean_% %_debug VERSION
 
 DEFAULT: solps
@@ -77,7 +82,7 @@ all_mpi: carre divgeo b25_mpi eirene_mpi b25eirene_mpi uinp triang sonnet-light 
 
 
 carre:
-	cd modules/Carre; ${MAKE}
+	cd modules/Carre; ${MAKE} SOLPS_DEBUG=""
 
 
 divgeo:
@@ -124,6 +129,9 @@ ifeq ($(shell [ -e ${SOLPSLIB}/libsonnet.a ] && echo yes || echo no ),no)
 endif
 
 b2sxdr:   # strange sequence of commands, but works!
+	cd modules/solps4-5; ${MAKE} tags
+	cd modules/solps4-5; ${MAKE} listobj
+	cd modules/solps4-5; ${MAKE} depend
 	cd modules/solps4-5; ${MAKE}; ${MAKE}; rm builds/${HOST_NAME}.${COMPILER}${EXT_DBG}/libb2_solps?.a; ${MAKE}
 
 manual:
@@ -138,7 +146,7 @@ tags:
 	cd modules/Triang;         ${MAKE} tags
 	cd modules/DivGeo;         ${MAKE} tags
 	cd modules/DivGeo/equtrn;  ${MAKE} tags
-	cd modules/solps4-5;       ${MAKE} tags
+#	cd modules/solps4-5;       ${MAKE} tags
 	rm -f TAGS ; etags -o TAGS modules/Carre/src/*/*.F modules/Carre/src/include/*.* modules/Eirene/*/*.f modules/Eirene/interfaces/*/*.f modules/Eirene/user-routines/*/*.f modules/Eirene/interfaces/*/*.[Ff]90 modules/B2.5/src.local/*.F modules/B2.5/src/*/*.F modules/B2.5/src/*/*.[Hh] modules/B2.5/src/common/*.* modules/B2.5/src/common/COUPLE/*.F modules/Uinp/src/*.F modules/Uinp/src/*.inc modules/Uinp/src/*.h modules/Triang/src/*/*.f modules/DivGeo/equtrn/src/*.f modules/DivGeo/equtrn/src/*.inc modules/DivGeo/convert/src/*.f modules/DivGeo/src/*.[ch]
 
 listobj:
@@ -154,7 +162,7 @@ listobj:
 	cd modules/Eirene;         ${MAKE} listobj USE_B25=-DB25_EIRENE USE_MPI=-DUSE_MPI
 	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE
 	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
-	cd modules/solps4-5;       ${MAKE} listobj
+#	cd modules/solps4-5;       ${MAKE} listobj
 
 depend:
 	cd modules/Carre;          ${MAKE} depend
@@ -170,7 +178,7 @@ depend:
 	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
-	cd modules/solps4-5;       ${MAKE} depend
+#	cd modules/solps4-5;       ${MAKE} depend
 
 VERSION:
 	cd modules/B2.5;   ${MAKE} VERSION
@@ -215,14 +223,14 @@ nox_mpi: manual
 
 clean: clean_solps
 
-clean_solps:     clean_carre clean_divgeo clean_b25eirene     clean_uinp clean_triang clean_sonnet-light
+clean_solps:     clean_carre clean_divgeo clean_b25eirene     clean_uinp clean_triang clean_sonnet-light clean_manual
 
-clean_solps_mpi: clean_carre clean_divgeo clean_b25eirene_mpi clean_uinp clean_triang clean_sonnet-light
+clean_solps_mpi: clean_carre clean_divgeo clean_b25eirene_mpi clean_uinp clean_triang clean_sonnet-light clean_manual
 
 
-clean_all:       clean_carre clean_divgeo clean_b25     clean_eirene     clean_b25eirene     clean_uinp clean_triang
+clean_all:       clean_carre clean_divgeo clean_b25     clean_eirene     clean_b25eirene     clean_uinp clean_triang clean_manual
 
-clean_all_mpi:   clean_carre clean_divgeo clean_b25_mpi clean_eirene_mpi clean_b25eirene_mpi clean_uinp clean_triang
+clean_all_mpi:   clean_carre clean_divgeo clean_b25_mpi clean_eirene_mpi clean_b25eirene_mpi clean_uinp clean_triang clean_manual
 
 
 
@@ -273,3 +281,6 @@ clean_sonnet-light:
 
 clean_b2sxdr:
 	cd modules/solps4-5; ${MAKE} clean
+
+clean_manual:
+	cd doc/solps; ${MAKE} clean
