@@ -82,7 +82,7 @@ all_mpi: carre divgeo b25_mpi eirene_mpi b25eirene_mpi uinp triang sonnet-light 
 
 
 carre:
-	cd modules/Carre; ${MAKE} SOLPS_DEBUG=""
+	cd modules/Carre; ${MAKE}
 
 
 divgeo:
