@@ -34,6 +34,7 @@ case "JET":
 case "ORNL":
   echo pgf90
   breaksw
+case "FZJ":
 case "LEUVEN":
 case "WM":
   echo gfortran

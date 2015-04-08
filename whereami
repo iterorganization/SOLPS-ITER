@@ -20,6 +20,10 @@ case "*.rzg.mpg.de":
 case "*.ipp-hgw.mpg.de":
   echo IPP-HGW
   breaksw
+case "*.fz-juelich.de":
+case "*.ipp.kfa-juelich.de":
+  echo FZJ
+  breaksw
 case "*.ccfe.ac.uk":
   echo CCFE
   breaksw
