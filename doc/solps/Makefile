@@ -4,11 +4,11 @@ B25DIR=${SOLPSTOP}/modules/B2.5
 PATH+=:/usr/bin:/bin
 SVN=svn
 GIT=git
-INCLUDES=b2cdca.F b2cdci.F b2cdcn.F b2cdcr.F b2cdcv.F DIMENSIONS.F B2_5.Makefile B2_5.config.ITER.ifort64 solps-iter_git.log solps_data_git.log
+INCLUDES=b2cdca.F b2cdci.F b2cdcn.F b2cdcr.F b2cdcv.F DIMENSIONS.F B2_5.Makefile B2_5.config.ITER.ifort64 solps-iter_git.log
 
 all: solps.pdf solps.ps 
 
-.PHONY: bibtex thumb update_logs complete
+.PHONY: bibtex thumb update_log complete
 
 solps.dvi: solps.tex ${INCLUDES} solps.ind # DPC: remove 1st # for index dependency
 	@echo 'Building DVI manual'
@@ -77,21 +77,19 @@ B2_5.Makefile:
 B2_5.config.ITER.ifort64:
 	ln -sf ${B25DIR}/config/config.ITER.ifort64 B2_5.config.ITER.ifort64
 
-solps_data_git.log: 
-	( cd ${SOLPSTOP} ; cd data ; ${GIT} log --oneline ) > solps_data_git.log
-
 solps-iter_git.log: 
 	( cd ${SOLPSTOP} ; ${GIT} log --oneline ) > solps-iter_git.log
 
-update_logs: 
-	( cd ${SOLPSTOP} ; cd data ; ${GIT} log --oneline ) > solps_data_git.log
+update_log: 
 	( cd ${SOLPSTOP} ; ${GIT} log --oneline ) > solps-iter_git.log
+
+update: ${INCLUDES}
 
 complete:
 	@[ -e solps.ind ] || touch solps.ind
-	${MAKE} update_logs
+	${MAKE} update
 	${MAKE} bibtex
-	${MAKE} index
+	makeindex solps
 	${MAKE} thumb
 	${MAKE} solps.ps
 	${MAKE} solps.pdf

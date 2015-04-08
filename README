@@ -32,6 +32,13 @@ Create this config-file if necessary (example config-file: config.default.defaul
 If local modifications to these default compiler options are needed, 
 create a config-file SETUP/config.<HOST_NAME>.<COMPILER>.local.
 
+Run the following script:
+first_setup
+which will create the other config.<HOST_NAME>.<COMPILER> files needed by each of the individual SOLPS-ITER
+submodules. Modify as needed.
+If local modifications to these default compiler options are needed, 
+create config-files <SOLPSTOP>/modules/*/config.<HOST_NAME>.<COMPILER>.local.
+
 
 Compile instructions
 ====================
