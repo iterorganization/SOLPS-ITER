@@ -38,11 +38,17 @@ INCLUDE += -I${OBJDIR} -I${B2SRC}/include.local -I${B2SRC}/include
 
 
 ifeq ($(LOCAL),yes)
-#VPATH =${SRCLOCAL}:${SRCDIR}/modules:${SRCDIR}/src:${SRCEIR}/grsoft-dummy
-VPATH =${SRCLOCAL}:${SRCDIR}/modules:${SRCDIR}/src
+ifeq ($(strip ${LD_GR}),)
+VPATH =${SRCLOCAL}:${SRCDIR}/modules:${SRCDIR}/src:${SRCEIR}/grsoft-dummy
 else
-#VPATH =${SRCDIR}/modules:${SRCDIR}/src:${SRCEIR}/grsoft-dummy
+VPATH =${SRCLOCAL}:${SRCDIR}/modules:${SRCDIR}/src
+endif
+else
+ifeq ($(strip ${LD_GR}),)
+VPATH =${SRCDIR}/modules:${SRCDIR}/src:${SRCEIR}/grsoft-dummy
+else
 VPATH =${SRCDIR}/modules:${SRCDIR}/src
+endif
 endif
 
 ifeq ($(shell [ -e ${OBJDIR}/LISTOBJ ] && echo yes || echo no ),yes)
@@ -78,8 +84,8 @@ ${OBJDIR}/tria: ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${MAKES}
 ${OBJDIR}/triageom: ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${MAKES}
 	${LD} $(LDOPTS) -o ${OBJDIR}/triageom ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${LDLIBS} $(GKS) $(LDEXTRA)
 
-${OBJDIR}/libtria.a: ${ALLOBJS}
-	${BLD} $@ $?
+${OBJDIR}/libtria.a: mods ${ALLOBJS}
+	${BLD} $@ ${ALLOBJS}
 	ranlib $@
 
 clean:

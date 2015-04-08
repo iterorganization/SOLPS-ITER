@@ -194,17 +194,19 @@ debug: solps_debug
 
 nox: manual
 	cd modules/Carre; ${MAKE} NCARG_ROOT="" LD_NCARG=""
-	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE LD_GR="" GKS=""
+	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE LD_GR="" LD_GKS=""
 	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE NOPLOT
 	cd modules/Uinp; ${MAKE}
-	cd modules/Triang; ${MAKE} LD_GR=""
+	cd modules/Triang; ${MAKE} LD_GR="" LD_GKS="" mods
+	cd modules/Triang; ${MAKE} LD_GR="" LD_GKS=""
 
 nox_mpi: manual
 	cd modules/Carre; ${MAKE} NCARG_ROOT="" LD_NCARG=""
-	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE LD_GR="" GKS="" USE_MPI=-DUSE_MPI
+	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE LD_GR=""  LD_GKS="" USE_MPI=-DUSE_MPI
 	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI NOPLOT
 	cd modules/Uinp; ${MAKE}
-	cd modules/Triang; ${MAKE} LD_GR=""
+	cd modules/Triang; ${MAKE} LD_GR="" LD_GKS="" mods
+	cd modules/Triang; ${MAKE} LD_GR="" LD_GKS=""
 
 
 # Clean targets
