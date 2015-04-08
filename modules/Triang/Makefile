@@ -14,7 +14,7 @@ SRCTRI   = ${PWD}
 SRCDIR   = ${SRCTRI}/src
 SRCLOCAL = ${SRCTRI}/local
 B2SRC    = ${SOLPSTOP}/modules/B2.5/src
-SRCEIR   = ${SOLPSTOP}/modules/Eirene
+SRCEIR   = ${SOLPSTOP}/modules/Eirene/src
 
 # Extension for OBJDIR if debug options are used
 # uncomment following lines if debug-code needed

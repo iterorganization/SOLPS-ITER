@@ -11,7 +11,7 @@ TIME = time
 DBX ?= dbx
 
 ifndef STAND_ALONE
-B2OBJ  = ${SOLPSTOP}/modules/B2.5/builds/couple_Eirene.${HOST_NAME}.${COMPILER}.debug
+B2OBJ  = ${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}.debug
 EIROBJ = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}.debug
 INC = -I ${B2OBJ} -I ${EIROBJ}
 else

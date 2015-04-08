@@ -30,7 +30,7 @@ EXT_DEBUG = .debug
 endif
 OBJDIR  = ${SRCUIN}/builds/${HOST_NAME}.${COMPILER}${EXT_DEBUG}
 EIROBJ  = ${EIRDIR}/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_DEBUG}
-B2OBJ   = ${B2DIR}/builds/couple_Eirene.${HOST_NAME}.${COMPILER}${EXT_DEBUG}
+B2OBJ   = ${B2DIR}/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_DEBUG}
 
 ifeq ($(shell [ -e ${B2DIR}/src/include.local ] && echo yes || echo no ),yes)
 B2INC = ${B2DIR}/src/include.local -I${B2DIR}/src/include -I${B2DIR}/src/common
@@ -38,8 +38,8 @@ else
 B2INC = ${B2DIR}/src/include -I${B2DIR}/src/common
 endif
 B2INC += -I${B2OBJ}
-ifeq ($(shell [ -e ${EIRDIR}/local ] && echo yes || echo no ),yes)
-EIRINC = ${EIRDIR}/local -I${EIRDIR}/src/common
+ifeq ($(shell [ -e ${EIRDIR}/src/local ] && echo yes || echo no ),yes)
+EIRINC = ${EIRDIR}/src/local -I${EIRDIR}/src/common
 else
 EIRINC = ${EIRDIR}/src/common
 endif
