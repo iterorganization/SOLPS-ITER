@@ -189,6 +189,20 @@ debug: solps_debug
 	${MAKE} $(@:%_debug=%) SOLPS_DEBUG=yes
 
 
+# Compile with no graphics
+#-------------------------
+
+nox: uinp sonnet-light manual
+	cd modules/Carre; ${MAKE} NCARG_ROOT="" LD_NCARG=""
+	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE LD_GR=""
+	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE NOPLOT
+	cd modules/Triang; ${MAKE} LD_GR=""
+
+nox_mpi: uinp sonnet-light manual
+	cd modules/Carre; ${MAKE} NCARG_ROOT="" LD_NCARG=""
+	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE LD_GR="" USE_MPI=-DUSE_MPI
+	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI NOPLOT
+	cd modules/Triang; ${MAKE} LD_GR=""
 
 
 # Clean targets
