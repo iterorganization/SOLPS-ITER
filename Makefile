@@ -75,21 +75,24 @@ solps:     carre divgeo b25eirene     uinp     triang sonnet-light manual
 
 solps_mpi: carre divgeo b25eirene_mpi uinp_mpi triang sonnet-light manual
 
+nox:       carre_nox b25eirene_nox     uinp_nox     triang_nox manual
 
-all:     carre divgeo b25     eirene     b25eirene     uinp     triang sonnet-light manual
+nox_mpi:   carre_nox b25eirene_mpi_nox uinp_mpi_nox triang_nox manual
 
-all_mpi: carre divgeo b25_mpi eirene_mpi b25eirene_mpi uinp_mpi triang sonnet-light manual
+all:       carre divgeo b25     eirene     b25eirene     uinp     triang sonnet-light manual
 
+all_mpi:   carre divgeo b25_mpi eirene_mpi b25eirene_mpi uinp_mpi triang sonnet-light manual
 
 carre:
 	cd modules/Carre; ${MAKE}
 
+carre_nox:
+	cd modules/Carre;  ${MAKE} NCARG_ROOT="" LD_NCARG=""
 
 divgeo:
 	cd modules/DivGeo;         ${MAKE}
 	cd modules/DivGeo/equtrn;  ${MAKE}
 	cd modules/DivGeo/convert; ${MAKE}
-
 
 eirene:
 	cd modules/Eirene; ${MAKE}
@@ -109,22 +112,34 @@ b25eirene:
 	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE
 	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE
 
+b25eirene_nox:
+	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE LD_GR="" LD_GKS=""
+	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE NOPLOT
+
 b25eirene_mpi:
 	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI
 	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
 
+b25eirene_mpi_nox:
+	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE LD_GR=""  LD_GKS="" USE_MPI=-DUSE_MPI
+	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI NOPLOT
 
 uinp:
 	cd modules/Uinp; ${MAKE}
 
+uinp_nox: uinp
 
 uinp_mpi:
 	cd modules/Uinp; ${MAKE} USE_MPI=-DUSE_MPI
 
+uinp_mpi_nox: uinp_mpi
 
 triang:
 	cd modules/Triang; ${MAKE}
 
+triang_nox:
+	cd modules/Triang; ${MAKE} LD_GR="" LD_GKS="" mods
+	cd modules/Triang; ${MAKE} LD_GR="" LD_GKS=""
 
 sonnet-light:
 	@-mkdir -p ${SOLPSLIB}
@@ -140,7 +155,6 @@ b2sxdr:   # strange sequence of commands, but works!
 
 manual:
 	cd doc/solps; ${MAKE}
-
 
 tags:
 	cd modules/Carre;          ${MAKE} tags
@@ -193,7 +207,6 @@ VERSION:
 	cd modules/DivGeo; ${MAKE} VERSION
 
 
-
 # Debug targets
 #--------------
 
@@ -203,24 +216,14 @@ debug: solps_debug
 	${MAKE} $(@:%_debug=%) SOLPS_DEBUG=yes
 
 
-# Compile with no graphics
-#-------------------------
+# CI build tests
+#--------------_
 
-nox: manual
-	cd modules/Carre;  ${MAKE} NCARG_ROOT="" LD_NCARG=""
-	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE LD_GR="" LD_GKS=""
-	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE NOPLOT
-	cd modules/Uinp;   ${MAKE}
-	cd modules/Triang; ${MAKE} LD_GR="" LD_GKS="" mods
-	cd modules/Triang; ${MAKE} LD_GR="" LD_GKS=""
+# Dependencies are not duplicated across build targets
 
-nox_mpi: manual
-	cd modules/Carre;  ${MAKE} NCARG_ROOT="" LD_NCARG=""
-	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE LD_GR=""  LD_GKS="" USE_MPI=-DUSE_MPI
-	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI NOPLOT
-	cd modules/Uinp;   ${MAKE} USE_MPI=-DUSE_MPI
-	cd modules/Triang; ${MAKE} LD_GR="" LD_GKS="" mods
-	cd modules/Triang; ${MAKE} LD_GR="" LD_GKS=""
+nox_build:     carre_nox b25eirene_nox     uinp_nox     triang_nox
+
+nox_build_mpi:           b25eirene_mpi_nox uinp_mpi_nox
 
 
 # Clean targets
@@ -237,7 +240,6 @@ clean_solps_mpi: clean_carre clean_divgeo clean_b25eirene_mpi clean_uinp_mpi cle
 clean_all:       clean_carre clean_divgeo clean_b25     clean_eirene     clean_b25eirene     clean_uinp     clean_triang clean_manual
 
 clean_all_mpi:   clean_carre clean_divgeo clean_b25_mpi clean_eirene_mpi clean_b25eirene_mpi clean_uinp_mpi clean_triang clean_manual
-
 
 
 clean_carre:
