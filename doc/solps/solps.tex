@@ -343,14 +343,14 @@ purpose, a master \SOLPSITER \verb!Makefile! is provided, located at \$\verb!{SO
 \begin{description}\index{Compiling the code}\index{B2.5, compiling}\index{SOLPS-ITER, compiling}\index{Eirene, compiling}\index{DivGeo, compiling}\index{Carre, compiling}
   \item[solps] (Default) Compiles the necessary components for a full \SOLPSITER implementation, including:
     \begin{description}
-       \item[libs] Installs the needed libraries according to config file
-       \item[carre] The \verb!Carre! grid generator and associated translators
-       \item[divgeo] The \verb!DivGeo! graphical input file builder and accompanying equilibrium and template converters
-       \item[b25eirene] The \verb!B2.5-Eirene! main code and accompanying programs
-       \item[uinp] The \verb!Uinp! translator from \verb!DivGeo! output to \verb!B2.5-Eirene! input
-       \item[sonnet-light] The \verb!Sonnet! library
-       \item[triang] The \verb!Tria! and \verb!Triageom! triangulation utilities
-       \item[manual] Builds this manual
+      \item[libs] Installs the needed libraries according to config file
+      \item[carre] The \verb!Carre! grid generator and associated translators
+      \item[divgeo] The \verb!DivGeo! graphical input file builder and accompanying equilibrium and template converters
+      \item[b25eirene] The \verb!B2.5-Eirene! main code and accompanying programs
+      \item[uinp] The \verb!Uinp! translator from \verb!DivGeo! output to \verb!B2.5-Eirene! input
+      \item[sonnet-light] The \verb!Sonnet! library
+      \item[triang] The \verb!Tria! and \verb!Triageom! triangulation utilities
+      \item[manual] Builds this manual
     \end{description}
   \item[all] The same as {\bf solps} above, but in addition:
     \begin{description}
@@ -359,11 +359,20 @@ purpose, a master \SOLPSITER \verb!Makefile! is provided, located at \$\verb!{SO
     \end{description}
   \item[nox] The same as {\bf solps} above, but without linking to any graphical libraries:
     \begin{description}
-      \item[Carre] The \verb!Carre! grid generator will not generate graphs
-      \item[Eirene] Only the \verb!eirobjx! executable will be built
-      \item[B2.5] The graphical post-processors will not be built
-      \item[Triang] The \verb!tria.eps! and \verb!triageom.eps! files will not be produced
+      \item[carre\_nox] The \verb!Carre! grid generator will not generate graphs
+      \item[b25eirene\_nox] Only the \verb!B2.5-Eirene! executable will be built without graphics
+      \item[triang\_nox] The \verb!tria.eps! and \verb!triageom.eps! files will not be produced
+      \item[uinp\_nox] The \verb!Uinp! translator from \verb!DivGeo! output to \verb!B2.5-Eirene! input
+      \item[manual] Builds this manual
       \item[libs, divgeo, sonnet-light] Will not be built
+    \end{description}
+  \item[nox\_build] The same as {\bf nox} above and used for compilation tests on the Continous Integration server:
+    \begin{description}
+      \item[carre\_nox] The \verb!Carre! grid generator will not generate graphs
+      \item[b25eirene\_nox] Only the \verb!B2.5-Eirene! executable will be built without graphics
+      \item[triang\_nox] The \verb!tria.eps! and \verb!triageom.eps! files will not be produced
+      \item[uinp\_nox] The \verb!Uinp! translator from \verb!DivGeo! output to \verb!B2.5-Eirene! input
+      \item[libs, divgeo, sonnet-light, manual] Will not be built
     \end{description}
   \item[carre] The \verb!Carre! grid generator and associated translators only
   \item[divgeo] The \verb!DivGeo! graphical input file builder and accompanying equilibrium and template converters only
