@@ -23,14 +23,17 @@ EIRDIR  = ${SOLPSTOP}/modules/Eirene
 
 
 
-# Extension for OBJDIR if debug options are used
+# Extension for OBJDIR if debug or MPI options are used
 # uncomment following lines if debug-code needed
 ifdef SOLPS_DEBUG
 EXT_DEBUG = .debug
 endif
-OBJDIR  = ${SRCUIN}/builds/${HOST_NAME}.${COMPILER}${EXT_DEBUG}
-EIROBJ  = ${EIRDIR}/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_DEBUG}
-B2OBJ   = ${B2DIR}/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_DEBUG}
+ifdef USE_MPI
+EXT_MPI = .mpi
+endif
+OBJDIR  = ${SRCUIN}/builds/${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_DEBUG}
+EIROBJ  = ${EIRDIR}/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_DEBUG}
+B2OBJ   = ${B2DIR}/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_DEBUG}
 
 ifeq ($(shell [ -e ${B2DIR}/src/include.local ] && echo yes || echo no ),yes)
 B2INC = ${B2DIR}/src/include.local -I${B2DIR}/src/include -I${B2DIR}/src/common

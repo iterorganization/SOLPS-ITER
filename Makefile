@@ -71,14 +71,14 @@ DEFAULT: solps
 #----------------------
 
 
-solps:     carre divgeo b25eirene     uinp triang sonnet-light manual
+solps:     carre divgeo b25eirene     uinp     triang sonnet-light manual
 
-solps_mpi: carre divgeo b25eirene_mpi uinp triang sonnet-light manual
+solps_mpi: carre divgeo b25eirene_mpi uinp_mpi triang sonnet-light manual
 
 
-all:     carre divgeo b25     eirene     b25eirene     uinp triang sonnet-light manual
+all:     carre divgeo b25     eirene     b25eirene     uinp     triang sonnet-light manual
 
-all_mpi: carre divgeo b25_mpi eirene_mpi b25eirene_mpi uinp triang sonnet-light manual
+all_mpi: carre divgeo b25_mpi eirene_mpi b25eirene_mpi uinp_mpi triang sonnet-light manual
 
 
 carre:
@@ -116,6 +116,10 @@ b25eirene_mpi:
 
 uinp:
 	cd modules/Uinp; ${MAKE}
+
+
+uinp_mpi:
+	cd modules/Uinp; ${MAKE} USE_MPI=-DUSE_MPI
 
 
 triang:
@@ -156,6 +160,7 @@ listobj:
 	cd modules/B2.5;           ${MAKE} listobj USE_MPI=-DUSE_MPI
 	cd modules/B2.5;           ${MAKE} listobj
 	cd modules/Uinp;           ${MAKE} listobj
+	cd modules/Uinp;           ${MAKE} listobj USE_MPI=-DUSE_MPI
 	cd modules/Triang;         ${MAKE} listobj
 	cd modules/DivGeo;         ${MAKE} listobj
 	cd modules/Eirene;         ${MAKE} listobj USE_B25=-DB25_EIRENE
@@ -171,6 +176,7 @@ depend:
 	cd modules/B2.5;           ${MAKE} depend USE_MPI=-DUSE_MPI
 	cd modules/B2.5;           ${MAKE} depend
 	cd modules/Uinp;           ${MAKE} depend
+	cd modules/Uinp;           ${MAKE} depend USE_MPI=-DUSE_MPI
 	cd modules/Triang;         ${MAKE} depend
 	cd modules/DivGeo;         ${MAKE} depend
 	cd modules/DivGeo/equtrn;  ${MAKE} depend
@@ -201,18 +207,18 @@ debug: solps_debug
 #-------------------------
 
 nox: manual
-	cd modules/Carre; ${MAKE} NCARG_ROOT="" LD_NCARG=""
+	cd modules/Carre;  ${MAKE} NCARG_ROOT="" LD_NCARG=""
 	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE LD_GR="" LD_GKS=""
 	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE NOPLOT
-	cd modules/Uinp; ${MAKE}
+	cd modules/Uinp;   ${MAKE}
 	cd modules/Triang; ${MAKE} LD_GR="" LD_GKS="" mods
 	cd modules/Triang; ${MAKE} LD_GR="" LD_GKS=""
 
 nox_mpi: manual
-	cd modules/Carre; ${MAKE} NCARG_ROOT="" LD_NCARG=""
+	cd modules/Carre;  ${MAKE} NCARG_ROOT="" LD_NCARG=""
 	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE LD_GR=""  LD_GKS="" USE_MPI=-DUSE_MPI
 	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI NOPLOT
-	cd modules/Uinp; ${MAKE}
+	cd modules/Uinp;   ${MAKE} USE_MPI=-DUSE_MPI
 	cd modules/Triang; ${MAKE} LD_GR="" LD_GKS="" mods
 	cd modules/Triang; ${MAKE} LD_GR="" LD_GKS=""
 
@@ -223,14 +229,14 @@ nox_mpi: manual
 
 clean: clean_solps
 
-clean_solps:     clean_carre clean_divgeo clean_b25eirene     clean_uinp clean_triang clean_sonnet-light clean_manual
+clean_solps:     clean_carre clean_divgeo clean_b25eirene     clean_uinp     clean_triang clean_sonnet-light clean_manual
 
-clean_solps_mpi: clean_carre clean_divgeo clean_b25eirene_mpi clean_uinp clean_triang clean_sonnet-light clean_manual
+clean_solps_mpi: clean_carre clean_divgeo clean_b25eirene_mpi clean_uinp_mpi clean_triang clean_sonnet-light clean_manual
 
 
-clean_all:       clean_carre clean_divgeo clean_b25     clean_eirene     clean_b25eirene     clean_uinp clean_triang clean_manual
+clean_all:       clean_carre clean_divgeo clean_b25     clean_eirene     clean_b25eirene     clean_uinp     clean_triang clean_manual
 
-clean_all_mpi:   clean_carre clean_divgeo clean_b25_mpi clean_eirene_mpi clean_b25eirene_mpi clean_uinp clean_triang clean_manual
+clean_all_mpi:   clean_carre clean_divgeo clean_b25_mpi clean_eirene_mpi clean_b25eirene_mpi clean_uinp_mpi clean_triang clean_manual
 
 
 
@@ -268,10 +274,11 @@ clean_b25eirene_mpi:
 	cd modules/Eirene; ${MAKE} clean OUSE_B25=-DB25_EIRENE   USE_MPI=-DUSE_MPI
 	cd modules/B2.5;   ${MAKE} clean USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
 
-
 clean_uinp:
 	cd modules/Uinp; ${MAKE} clean
 
+clean_uinp_mpi:
+	cd modules/Uinp; ${MAKE} clean USE_MPI=-DUSE_MPI
 
 clean_triang:
 	cd modules/Triang; ${MAKE} clean
