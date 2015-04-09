@@ -36,6 +36,12 @@ the files carre.log and traduit.log, respectively.
 "
 [ -z "$1" ] && { /bin/echo -e "$Usage"; exit 4; }
 
+[ "$DEVICE" = '' ] && {
+  print -u2 -n -- "No DEVICE selected. Please provide a device name\n "
+  read u
+  export DEVICE=$u
+}
+
 # griddir=${CARRE_GRIDDIR-$SOLPSTOP/src/Sonnet/output/ascii/${Model_Class-iter}}
 # griddir=${CARRE_GRIDDIR-$SOLPSTOP/src/Sonnet/output/ascii/${DEVICE-iter}}
 export CARRE_TOPDIR=$SOLPSTOP/modules/Carre
