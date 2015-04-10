@@ -19,7 +19,7 @@
       integer dim1, dim2
 
       if (kennung .eq. 'xycoord') then
-c         write(6,*) 'vergrößern von ',kennung,' von ',size(xcoord),
+c         write(6,*) 'vergroessern von ',kennung,' von ',size(xcoord),
 c     .              ' auf ',size(xcoord)+incr
          allocate(help1(size(xcoord)))
          help1 = xcoord
@@ -37,7 +37,7 @@ c     .              ' auf ',size(xcoord)+incr
       elseif (kennung .eq. 'neigh') then
          dim1 = size(neighb,1)
          dim2 = size(neighb,2)
-c         write(6,*) 'vergrößern von ',kennung,' von (',dim1,',',dim2,
+c         write(6,*) 'vergroessern von ',kennung,' von (',dim1,',',dim2,
 c     .              ') auf (',dim1,',',dim2+incr,')'
          allocate(help(dim1,dim2))
          help = neighb
@@ -61,7 +61,7 @@ c     .              ') auf (',dim1,',',dim2+incr,')'
       elseif (kennung .eq. 'tria') then
          dim1 = size(tria,1)
          dim2 = size(tria,2)
-c         write(6,*) 'vergrößern von ',kennung,' von (',dim1,',',dim2,
+c         write(6,*) 'vergroessern von ',kennung,' von (',dim1,',',dim2,
 c     .              ') auf (',dim1,',',dim2+incr,')'
          allocate(help(dim1,dim2))
          help = tria
@@ -71,7 +71,7 @@ c     .              ') auf (',dim1,',',dim2+incr,')'
          tria(1:dim1,1:dim2) = help(1:dim1,1:dim2)
          deallocate(help)
       elseif (kennung .eq. 'trixy') then
-c         write(6,*) 'vergrößern von ',kennung,' von ',size(trix),
+c         write(6,*) 'vergroessern von ',kennung,' von ',size(trix),
 c     .              ' auf ',size(trix)+incr
          allocate(help1(size(trix)))
          help1 = trix
