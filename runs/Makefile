@@ -113,7 +113,7 @@ $(target_mn) : b2mn.dat b2fgmtry b2fpardf b2fstati b2frates fort.30
 	rm -rf b2mn.exe.dir ; mkdir b2mn.exe.dir ; cp $^ b2mn.exe.dir
 	rm -f $(target_mn)
 ifndef STAND_ALONE
-	-cd b2mn.exe.dir ; ln -s ../HYDHEL ../AMJUEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../input.dat ../fort.33 ../fort.34 ../fort.35 . ; [ -e ../fort.15 ] && cp -p ../fort.15 . ; [ -e ../fort.13 ] && cp -p ../fort.13 .
+	-cd b2mn.exe.dir ; ln -s ../HYDHEL ../AMJUEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../fort.1 ../fort.33 ../fort.34 ../fort.35 . ; [ -e ../fort.15 ] && cp -p ../fort.15 . ; [ -e ../fort.13 ] && cp -p ../fort.13 .
 endif
 	cd b2mn.exe.dir ; mkdir tracing ; ${TIME} b2mn.exe ; mv $(target_mn) .. ; mv tracing/* ../tracing ; rm -f $(notdir $^) .quit
 ifndef STAND_ALONE
@@ -125,7 +125,7 @@ endif
 dbx.b2mn : b2mn.dat b2fgmtry b2fpardf b2fstati b2frates fort.30
 	rm -rf b2mn.exe.dir ; mkdir b2mn.exe.dir ; cp $^ b2mn.exe.dir
 ifndef STAND_ALONE
-	-cd b2mn.exe.dir ; ln -s ../HYDHEL ../AMJUEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../input.dat ../fort.33 ../fort.34 ../fort.35 . ; [ -e ../fort.15 ] && cp -p ../fort.15 . ; [ -e ../fort.13 ] && cp -p ../fort.13 .
+	-cd b2mn.exe.dir ; ln -s ../HYDHEL ../AMJUEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../fort.1 ../fort.33 ../fort.34 ../fort.35 . ; [ -e ../fort.15 ] && cp -p ../fort.15 . ; [ -e ../fort.13 ] && cp -p ../fort.13 .
 	cd b2mn.exe.dir ; mkdir tracing ; ${DBX} ${INC} b2mn.exe ; mv $(target_mn) .. ; mv tracing/* ../tracing ; rm -f $(notdir $^) .quit
 	-mv b2mn.exe.dir/fort.13 b2mn.exe.dir/fort.15 .
 else
