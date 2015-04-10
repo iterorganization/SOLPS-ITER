@@ -1,4 +1,6 @@
 #! /bin/tcsh -f
+[ -e stra.dat ] || ln -s $SOLPSTOP/modules/B2.5/Database/stra.dat .
+[ -e weis.dat ] || ln -s $SOLPSTOP/modules/B2.5/Database/weis.dat .
 touch b2ag.prt b2fgmtry fort.30
 sleep 1
 touch b2ah.prt b2fpardf
