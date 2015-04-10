@@ -51,6 +51,7 @@ if (! -e input.dat) then
     endif
   endif
 endif
+ln -sf input.dat fort.1
 if (-e ../TRIANG/fort.33) then
   ln -s ../TRIANG/fort.33 .
   ln -s ../TRIANG/fort.34 .
