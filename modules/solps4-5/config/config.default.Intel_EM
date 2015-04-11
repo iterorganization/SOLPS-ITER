@@ -43,4 +43,4 @@ ifdef USE_EIRENE
 LDLIBESEXTRA 	= ${OBJDIR}/libeirene.a ${OBJDIR}/grlib.o ${LD_NAG}
 endif
 
-LCPP 		= -L${SOLPS4}/src/lib/${OBJECTCODE} -lsonnet -lstdc++
+LCPP 		= ${LD_SONNET}

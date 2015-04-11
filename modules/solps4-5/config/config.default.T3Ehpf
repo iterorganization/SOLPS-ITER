@@ -28,4 +28,4 @@ LD = pghpf -Mf90
 LDOPTS = -l /usr/local/pat/libpat.a /usr/local/pat/pat.cld
 LDOPTS = 
 
-LCPP = -L${SOLPS4}/src/lib/${OBJECTCODE} -lsonnet -lstdc++
+LCPP = ${LD_SONNET}

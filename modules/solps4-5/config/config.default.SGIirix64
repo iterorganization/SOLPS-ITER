@@ -36,4 +36,4 @@
 # LDOPTS = -64 -r10000 -Wl,-U
  LDOPTS = -64 -r10000
 
- LCPP = -L${SOLPS4}/src/lib/${OBJECTCODE} -lsonnet -lstdc++
+ LCPP = ${LD_SONNET}

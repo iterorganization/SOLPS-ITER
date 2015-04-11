@@ -31,4 +31,4 @@ LDLIBES = ${LD_NAG} ${LD_NETCDF} -lblas
 LD = f90
 LDOPTS = 
 
-LCPP = -L${SOLPS4}/src/lib/${OBJECTCODE} -lsonnet -lstdc++
+LCPP = ${LD_SONNET}

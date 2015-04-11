@@ -28,5 +28,5 @@ LDLIBES = ${LD_NAG} ${LD_NETCDF} # -lblas
 LD = f90
 LDOPTS = ${FCOPTS} -lf77compat
 
-LCPP = -z muldefs -L${SOLPS4}/src/lib/${OBJECTCODE} -lsonnet -lblas -lC -lw -lnsl
-LCPP = -z muldefs -L${SOLPS4}/src/lib/${OBJECTCODE} -lsonnet -lblas -lw -lnsl -f77compat /usr/lib/libC.so.5
+LCPP = -z muldefs -L${SOLPSLIB} -lsonnet -lblas -lC -lw -lnsl
+LCPP = -z muldefs -L${SOLPSLIB} -lsonnet -lblas -lw -lnsl -f77compat /usr/lib/libC.so.5

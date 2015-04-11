@@ -40,4 +40,4 @@ LD = /opt/Fujitsu/bin/f90
 LD = f95f
 # LDOPTS = -Bstatic
 
-LCPP = -L${SOLPS4}/src/lib/${OBJECTCODE} -lsonnet -lstdc++
+LCPP = ${LD_SONNET}

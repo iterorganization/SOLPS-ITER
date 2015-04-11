@@ -39,4 +39,4 @@ LD = xlf90
 LDOPTS = -bloadmap:${OBJDIR}/loadmap -bmap:${OBJDIR}/map -pg
 LDOPTS = -bloadmap:${OBJDIR}/loadmap -bmap:${OBJDIR}/map
 
-LCPP = -L${SOLPS4}/src/lib/${OBJECTCODE} -lsonnet -L/usr/lpp/xlC/lib -lC
+LCPP = ${LD_SONNET}

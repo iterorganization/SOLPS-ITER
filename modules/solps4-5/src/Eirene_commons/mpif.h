@@ -1,1 +1,1 @@
-../../../Eirene/broadcast_dummy/mpif.h
+../../../Eirene/src/broadcast_dummy/mpif.h

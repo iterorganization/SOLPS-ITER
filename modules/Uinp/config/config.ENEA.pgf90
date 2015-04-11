@@ -1,7 +1,7 @@
 # Test whether necessary variables exist
 ifndef LD_MSCL
   $(error LD_MSCL not defined)
-end
+endif
 
 FC	 = pgf90
 

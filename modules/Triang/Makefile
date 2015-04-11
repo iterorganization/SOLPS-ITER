@@ -99,21 +99,21 @@ ifneq (${MOD},o)
 	sed 's,^$${OBJDIR}/[^ ][^ ]*/,\$${OBJDIR}/,' >> ${OBJDIR}/dependencies
 endif
 ifeq ($(LOCAL),yes)
-	egrep -i '^[ 	]+use ' ${SRCLOCAL}/*.f ${SRCDIR}/*/*.f | grep -v 'IGNORE' | tr , ' ' | \
+	egrep -ai '^[ 	]+use ' ${SRCLOCAL}/*.f ${SRCDIR}/*/*.f | grep -v 'IGNORE' | tr , ' ' | \
           awk '{sub("\\.f:",".o:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' | sort -u >> ${OBJDIR}/dependencies
-	egrep -i '^[ 	]+use ' ${SRCLOCAL}/*.f ${SRCDIR}/modules/*.f | grep -v 'IGNORE'  | tr , ' ' | awk '{sub("\\.f:",".${MOD}:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' >> ${OBJDIR}/dependencies
+	egrep -ai '^[ 	]+use ' ${SRCLOCAL}/*.f ${SRCDIR}/modules/*.f | grep -v 'IGNORE'  | tr , ' ' | awk '{sub("\\.f:",".${MOD}:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' >> ${OBJDIR}/dependencies
 ifneq (${MOD},o)
-	egrep -i '^[ 	]+use ' ${SRCLOCAL}/*.f ${SRCDIR}/*/*.f | grep -v 'IGNORE' | tr , ' ' | awk '{sub("\\.f:",".o:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".o"}' >> ${OBJDIR}/dependencies
-	egrep -i '^[ 	]+use ' ${SRCLOCAL}/*.f ${SRCDIR}/modules/*.f | grep -v 'IGNORE'  | tr , ' ' | awk '{sub("\\.f:",".${MOD}:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".o"}' >> ${OBJDIR}/dependencies
+	egrep -ai '^[ 	]+use ' ${SRCLOCAL}/*.f ${SRCDIR}/*/*.f | grep -v 'IGNORE' | tr , ' ' | awk '{sub("\\.f:",".o:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".o"}' >> ${OBJDIR}/dependencies
+	egrep -ai '^[ 	]+use ' ${SRCLOCAL}/*.f ${SRCDIR}/modules/*.f | grep -v 'IGNORE'  | tr , ' ' | awk '{sub("\\.f:",".${MOD}:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".o"}' >> ${OBJDIR}/dependencies
 endif
 	ls ${SRCDIR}/modules/*.f | tr , ' '  | awk '{sub("\\.f",".${MOD}",$$1);sub("^.*/","$${OBJDIR}/",$$1); m=$$1;sub("\\.${MOD}",".o",m); print $$1":",m}' >> ${OBJDIR}/dependencies
 else
-	egrep -i '^[ 	]+use ' ${SRCDIR}/*/*.f | grep -v 'IGNORE' | tr , ' '  | \
+	egrep -ai '^[ 	]+use ' ${SRCDIR}/*/*.f | grep -v 'IGNORE' | tr , ' '  | \
           awk '{sub("\\.f:",".o:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' | sort -u >> ${OBJDIR}/dependencies
-	egrep -i '^[ 	]+use ' ${SRCDIR}/modules/*.f | grep -v 'IGNORE' | tr , ' '  | awk '{sub("\\.f:",".${MOD}:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' >> ${OBJDIR}/dependencies
+	egrep -ai '^[ 	]+use ' ${SRCDIR}/modules/*.f | grep -v 'IGNORE' | tr , ' '  | awk '{sub("\\.f:",".${MOD}:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' >> ${OBJDIR}/dependencies
 ifneq (${MOD},o)
-	egrep -i '^[ 	]+use ' ${SRCDIR}/*/*.f | grep -v 'IGNORE' | tr , ' '  | awk '{sub("\\.f:",".o:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".o"}' >> ${OBJDIR}/dependencies
-	egrep -i '^[ 	]+use ' ${SRCDIR}/modules/*.f | grep -v 'IGNORE' | tr , ' '  | awk '{sub("\\.f:",".${MOD}:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".o"}' >> ${OBJDIR}/dependencies
+	egrep -ai '^[ 	]+use ' ${SRCDIR}/*/*.f | grep -v 'IGNORE' | tr , ' '  | awk '{sub("\\.f:",".o:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".o"}' >> ${OBJDIR}/dependencies
+	egrep -ai '^[ 	]+use ' ${SRCDIR}/modules/*.f | grep -v 'IGNORE' | tr , ' '  | awk '{sub("\\.f:",".${MOD}:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".o"}' >> ${OBJDIR}/dependencies
 endif
 	ls ${SRCDIR}/modules/*.f | tr , ' '  | awk '{sub("\\.f",".${MOD}",$$1);sub("^.*/","$${OBJDIR}/",$$1); m=$$1;sub("\\.${MOD}",".o",m); print $$1":",m}' >> ${OBJDIR}/dependencies
 endif

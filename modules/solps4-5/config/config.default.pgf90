@@ -34,4 +34,4 @@ else
 LDOPTS = -tp px # "-tp px" to fix a compiler bug at JET
 endif
 
-LCPP = -L${SOLPS4}/src/lib/${OBJECTCODE} -lsonnet -lstdc++
+LCPP = ${LD_SONNET}

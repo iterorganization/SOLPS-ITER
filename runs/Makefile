@@ -66,6 +66,7 @@ vpath %.dat .:$(baserundir)
 vpath b2fgmtry .:$(baserundir)
 vpath b2fpardf .:$(baserundir)
 vpath b2fstati .:$(baserundir)
+vpath fort.30  .:$(baserundir)
 vpath b2frates .:$(baserundir)
 
 #-----------------------------------------------------------------------
