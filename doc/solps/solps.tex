@@ -196,7 +196,25 @@ Issues are handled using JIRA (\href{https://jira.iter.org/browse/IMAS}{https://
 
 For more general help with Git, we can recommend the documentation here (\href{http://git-scm.com/}{http://git-scm.com/}) and the Pro Git book (linked from there) in particular.
 
-When using Git, checking that your local version is current is trivially achieved using the \verb!git status! command.
+When using Git, the command
+\begin{verbatim}
+> git status
+\end{verbatim}
+will check if there are any local changes to your local copies of the version-controlled files from the repository, using as a reference the state of the repository from when you last cloned or updated it. To update these
+references to the current state of the \verb!origin! repository, please use
+\begin{verbatim}
+> git fetch
+\end{verbatim}
+If that command returns no output, then your references are up-to-date. Otherwise, if someone else has
+been committing changes to the repository, Git will indicate the tags of the updated repository. You can then import these latest changes with the command
+\begin{verbatim}
+> git pull
+\end{verbatim}
+followed by
+\begin{verbatim}
+> git submodule update
+\end{verbatim}
+which will also update the files contained in the various submodules \SOLPSITER is linking to. It is best to do this with your local directory up-to-date and your local changes committed, otherwise Git will ask you to resolve any conflicts before you may proceed.
 
 \SOLPSITER is a complicated code package and it would be difficult to learn how to install, compile and run it from this document and the internal documentation alone.  In the past we have found that an initial visit of at least two weeks to a research team already proficient with \SOLPSITER use with subsequent visits, or about two months and no further visits, are desirable.  
 
