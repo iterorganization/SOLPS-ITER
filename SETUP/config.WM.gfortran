@@ -71,8 +71,14 @@ EIRENE_DEFINES =
 #
 
 export NCDIR
+export MSCL_ROOT
+export H5DIR
+export GR_ROOT
 export GLI_HOME
-export MDSPLUS_DIR
+export NCARG_ROOT
+export NAGDIR
+export MDSPLUS_DIR 
+
 
 export LD_NETCDF
 export LD_MSCL
