@@ -8,11 +8,11 @@ ifndef LD_MSCL
 endif
 
 
-FC	 = f77
+FC	     = f77
 FFLAGS	 = -g 
 INCLUDE  = -I${SRCDIR} -I${EIRINC} -I${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
-CPP	 = /lib/cpp
+CPP	     = /lib/cpp
 
 LDLIBS 	 = -Wl, ${LD_MSCL}
 LDEXTRA  = 

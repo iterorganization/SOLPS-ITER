@@ -8,15 +8,15 @@ ifndef LD_MSCL
 endif
 
 
-FC	 = f95f
+FC	     = f95f
 ifdef SOLPS_DEBUG
 FFLAGS	 = -g -Am -X9 -O0 -fw
 else
 FFLAGS	 = -Am -X9 -fw -Kfast,eval -x- -O
 endif
-INCLUDE = -I${SRCDIR} -I${EIRINC} -I${B2INC}
+INCLUDE  = -I${SRCDIR} -I${EIRINC} -I${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
-CPP	 = /lib/cpp -C -traditional
-MOD 	 = mod
+CPP	     = /lib/cpp -C -traditional
+MOD 	   = mod
 
 LDLIBS 	 = ${LD_MSCL}

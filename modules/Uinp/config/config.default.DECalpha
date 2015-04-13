@@ -8,9 +8,9 @@ ifndef LD_MSCL
 endif
 
 
-FC	 = f90
-CPP	 = /usr/ucb/cpp -C
-MOD	 = mod
+FC	     = f90
+CPP	     = /usr/ucb/cpp -C
+MOD	     = mod
 FFLAGS	 = -i4 -fast
 INCLUDE  = -I${SRCDIR} -I${EIRINC} -I${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}

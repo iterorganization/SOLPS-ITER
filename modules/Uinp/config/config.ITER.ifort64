@@ -2,11 +2,11 @@
 
 LD_MSCL ?= `pkg-config mscl --libs`
 
-FC	 = ifort
+FC	     = ifort
 FFLAGS	 = -g
 INCLUDE  = -I${SRCDIR} -I${EIRINC} -I${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
-CPP	 = /lib/cpp -C -traditional
+CPP	     = /lib/cpp -C -traditional
 
-MOD 	 = mod
+MOD 	   = mod
 LDLIBS	 = ${LD_MSCL}
