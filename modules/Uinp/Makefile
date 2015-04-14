@@ -1,7 +1,6 @@
 #  VERSION : 15.02.99 21:07
 
 SHELL=/bin/sh
-CPP=/usr/lib/cpp
 
 ifndef HOST_NAME
   $(error HOST_NAME not defined)
@@ -65,8 +64,8 @@ endif
 DEST = $(OBJS:%.o=$(OBJDIR)/%.o)
 
 $(OBJDIR)/%.o : %.F
-	${CPP} -P -C $(INCLUDE) ${SOLPS_CPP} $< ${OBJDIR}/$*.f
-	$(COMPILE) -o $(INCLUDE) ${OBJDIR}/$*.o ${OBJDIR}/$*.f
+	${CPP} -P $(INCLUDE) ${SOLPS_CPP} $< ${OBJDIR}/$*.f
+	$(COMPILE) ${INCLUDE} -o ${OBJDIR}/$*.o ${OBJDIR}/$*.f
 
 all: ${OBJDIR}/${PROG} ${OBJDIR}/ub2p
 
