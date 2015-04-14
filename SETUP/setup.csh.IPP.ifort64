@@ -3,6 +3,11 @@ module load intel
 module load texlive
 module load subversion
 module load totalview
+#module load mdsplus
+#module load netcdf-serial
+module load hdf5-serial
+#module load nag_flib/intel/mk24
+module load git
 
 # Environment variables
 setenv DEVICE upgrade
