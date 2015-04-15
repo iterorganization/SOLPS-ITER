@@ -13,7 +13,7 @@ ifeq ($(strip $(SED)),)
 else
 	-${CPP} ${DEFINES} ${EQUIVS} -P ${INCLUDE} $< | ${SED} > ${OBJDIR}/$*.f
 endif
-	${FC} ${FCOPTS} -c ${OBJDEST} ${OBJDIR}/$*.f
+	${FC} ${FCOPTS} ${INCLUDE} ${OBJDEST} -c ${OBJDIR}/$*.f
 endif
 	@if [ -f $*.o ] ; then /bin/mv $*.o ${OBJDIR}/ ; fi
 	@if [ -f $*.${MOD} ] ; then /bin/mv $*.${MOD} ${OBJDIR}/ ; fi
@@ -31,7 +31,7 @@ ifeq ($(strip $(SED)),)
 else
 	-${CPP} ${DEFINES} ${EQUIVS} -P ${INCLUDE} $< | ${SED} > ${OBJDIR}/$*.f
 endif
-	${FC} ${FCOPTS} -c ${OBJDEST} ${OBJDIR}/$*.f
+	${FC} ${FCOPTS} ${INCLUDE} ${OBJDEST} -c ${OBJDIR}/$*.f
 endif
 	@if [ -f $*.o ] ; then /bin/mv $*.o ${OBJDIR}/ ; fi
 	@if [ -f $*.${MOD} ] ; then /bin/mv $*.${MOD} ${OBJDIR}/ ; fi
