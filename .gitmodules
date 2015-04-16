@@ -12,15 +12,15 @@
 [submodule "Carre"]
 	path = modules/Carre
 	url = ssh://git@git.iter.org/bnd/carre.git
-	branch = master
+	branch = feature/release
 [submodule "DivGeo"]
 	path = modules/DivGeo
 	url = ssh://git@git.iter.org/bnd/divgeo.git
-	branch = master
+	branch = feature/release
 [submodule "Eirene"]
 	path = modules/Eirene
 	url = ssh://git@git.iter.org/bnd/eirene.git
-	branch = master
+	branch = ITER-develop
 [submodule "ADAS"]
 	path = modules/adas
 	url = ssh://git@git.iter.org/bnd/solps-adas.git
