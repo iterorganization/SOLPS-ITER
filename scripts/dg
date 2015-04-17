@@ -7,8 +7,8 @@
   export DEVICE=$u
 }
 
-export DGSONNETMASK="$DG/device/$DEVICE/*"
-export DG_MESH_MASK="$DG/device/$DEVICE/*"
+export DGSONNETMASK="$DG/device/$DEVICE/*.sno"
+export DG_MESH_MASK="$DG/device/$DEVICE/*.sno"
 export DG_EXPORT_MESH_MASK="$DG_MESH_MASK"
 
 [ "$OBJECTCODE" = linux.Fujitsu ] && export LD_LIBRARY_PATH='/usr/lib/:/usr/local/lib:/usr/X11R6/lib'
