@@ -1,0 +1,21 @@
+# Test whether necessary variables are defined
+ifndef LD_MSCL
+   MSCL_ROOT ?= /p/solps/solps_other/mscl/linux_pgf90
+   LD_MSCL   ?= -L${MSCL_ROOT} -lmscl
+endif
+
+FC	 = pgf90
+
+ifdef SOLPS_DEBUG
+FFLAGS	 = -g -tp=amd64
+else
+FFLAGS	 = -O -tp=amd64
+endif
+
+INCLUDE = -I${SRCDIR} -I${EIRINC} -I${B2INC}
+COMPILE  = ${FC} -c ${FFLAGS}
+CPP	 = /lib/cpp -traditional
+MOD 	 = mod
+
+LDLIBS 	 = ${LD_MSCL} -L${EIROBJ} -leirene
+LDEXTRA  = 
