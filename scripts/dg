@@ -44,8 +44,17 @@ while true; do {
   } 
 }
 
+# Copy links to help files/config files to dir. where dg is called
+[ $PWD != "$DG" ] && {
 ln -sf $DG/dg.dgh ./dg.dgh
 ln -sf $DG/dg.dgc ./dg.dgc
+}
+
+# Execute the program
 dg.exe${vers} $cfg $* &
 wait
+
+# Remove links again (if not in DG directory)
+[ $PWD != $DG ] && {
 rm -f dg.dgh dg.dgc
+}
