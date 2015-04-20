@@ -1,10 +1,6 @@
 # Test whether necessary variables are defined
-ifndef LD_GR
-  $(error LD_GR not defined)
-endif
-ifndef LD_GKS
-  $(error LD_GKS not defined)
-endif
+LD_GR  ?=
+LD_GKS ?=
 
 DEFINES =
 EQUIVS =
