@@ -81,12 +81,32 @@ ${OBJDIR}/libui.a: ${DEST}
 
 ${OBJDIR}/uinput.o: ${OBJDIR}/uiblkd.o
 
+ifneq (${MOD},o)
+${OBJDIR}/eirmod_extrab25.${MOD}:
+	ln -sf ${EIROBJ}/eirmod_extrab25.${MOD} ${OBJDIR}
+
+${OBJDIR}/b2mod_layer.${MOD}:
+	ln -sf ${B2OBJ}/b2mod_layer.${MOD} ${OBJDIR}
+endif
+
+${OBJDIR}/eirmod_extrab25.o:
+	ln -sf ${EIROBJ}/eirmod_extrab25.o ${OBJDIR}
+
+${OBJDIR}/b2mod_layer.o:
+	ln -sf ${B2OBJ}/b2mod_layer.o ${OBJDIR}
+
 clean:
-	rm -rf ${OBJDIR}/*.o ${OBJDIR}/*.f ${OBJDIR}/${PROG} ${OBJDIR}/libui.a ${OBJDIR}/ub2p ${OBJDIR}/LISTOBJ ${OBJDIR}/dependencies*
+	rm -rf ${OBJDIR}/*.o ${OBJDIR}/*.${MOD} ${OBJDIR}/*.f ${OBJDIR}/${PROG} ${OBJDIR}/libui.a ${OBJDIR}/ub2p ${OBJDIR}/LISTOBJ ${OBJDIR}/dependencies*
 
 depend: ${OBJS:.o=.F} uiblkd.F uinput.F uiblb2.F ub2p.F
 	`which makedepend` -p'$${OBJDIR}/' ${SOLPS_CPP} -f- ${INCLUDE} $^ | \
 	sed 's,^$${OBJDIR}/[^ ][^ ]*/,\$${OBJDIR}/,' > ${OBJDIR}/dependencies.${COMPILER}
+	egrep -ai '^[ 	]+use ' ${SRCDIR}/*.F | grep -v 'IGNORE' | tr , ' '  | \
+          awk '{sub("\\.F:",".o:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' | sort -u >> ${OBJDIR}/dependencies.${COMPILER}
+ifneq (${MOD},o)
+	egrep -ai '^[ 	]+use ' ${SRCDIR}/*.F | grep -v 'IGNORE' | tr , ' '  | \
+          awk '{sub("\\.F:",".o:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".o"}' >> ${OBJDIR}/dependencies.${COMPILER}
+endif
 
 listobj:
 	@cd ${SRCDIR} ; rm -f ${OBJDIR}/LISTOBJ; touch ${OBJDIR}/LISTOBJ; \
