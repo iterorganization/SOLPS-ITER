@@ -1,5 +1,3 @@
-# $(error First use of config.PPPL.pgf90. Provide paths to libraries first.)
-
 #
 # Specify paths to root-directories of following libraries on your system
 #  

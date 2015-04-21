@@ -1,17 +1,15 @@
 # Load modules 
-# module load doxygen
-# module load netcdf
-# module load ncl_ncarg/5.2.1
-# module load texlive/2008
-# module load cairo
-
 
 
 # Set environment variables
-# setenv DEVICE iter
 
 
 
 # Debugger (set environment variable DBX)
 # DBX =
+
+
+# Set LD_LIBRARY_PATH and PATH for dyn. linked libraries
+setenv LD_LIBRARY_PATH /home/fusion/libs/NCARG2/lib:${LD_LIBRARY_PATH}
+setenv PATH /home/fusion/libs/NCARG2/bin:${PATH}
 
