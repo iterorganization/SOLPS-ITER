@@ -8,6 +8,7 @@
 *.mod
 a.out
 rwXDR.d
+rwXDR.d.*
 
 # any local files, directories,...
 *.local
