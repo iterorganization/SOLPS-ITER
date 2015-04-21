@@ -95,11 +95,12 @@ c#endif
                 else !}{
                   s0='1'
                 end if !}
-	        if(nmdbr(jvrb,jblk).gt.0) then !{
-	          write(us,'(a1,a1,a1,i3,a1,i1,a1)') '(',s0,',',l,',',n,')'
+                if(nmdbr(jvrb,jblk).gt.0) then !{
+                  write(us,'(a1,a1,a1,i3,a1,i1,a1)')  
+     .                     '(',s0,',',l,',',n,')'
                 else !}{
-	          write(us,'(a1,a1,a1,i3,a1)') '(',s0,',',l,')'
-	        end if !}
+                  write(us,'(a1,a1,a1,i3,a1)') '(',s0,',',l,')'
+                end if !}
               end if !}
 	      call lefta(sss,mxslen,j)
 	      s(j+2)='='

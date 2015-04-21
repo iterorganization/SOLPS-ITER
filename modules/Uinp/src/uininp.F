@@ -125,7 +125,8 @@ c*** Read the AMDS file if exists
       	    write(*,*) '... opening ',amd_file(iamd)
             open(iunii,file=amd_file(iamd))
           else !}{
-	    uex=open_file(iunii,amd_file(iamd),'data.local/AMDS|data/AMDS')
+	    uex=open_file(iunii,amd_file(iamd),
+     .                    'data.local/AMDS|data/AMDS')
 	  end if !}
           if(uex) then !{
             uex=immed
