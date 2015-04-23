@@ -19,8 +19,8 @@ c=======================================================================
 #include "impcon.inc"
 
       integer i,j,k,l,m,n
-      logical ulmlti,ex,carbon
-      character utxthd(34)*71, utxtfl(5)*47, ufnm*(*), ucdnmdl*10
+      logical ulmlti,ex,carbon,moly
+      character utxthd(34)*71, utxtfl(7)*47, ufnm*(*), ucdnmdl*10
       data utxthd /
      1        '** 1. Data for operating mode' ,
      2        '** 2. Data for standard mesh' ,
@@ -61,7 +61,9 @@ c=======================================================================
      2        'CFILE HYDHEL Database/AMdata/hydhel.tex        ',
      3        'CFILE SPUTER Database/Surfacedata/SPUTER       ',
      4        'CFILE TRIM   Database/Surfacedata/TRIM/trim.dat',
-     5        'CFILE METHAN Database/AMdata/methane.tex       '/
+     5        'CFILE METHAN Database/AMdata/methane.tex       ',
+     6        'CFILE gr_ext Database/graphite_ext.dat         ',
+     7        'CFILE mo_ext Database/mo_ext.dat               '/
 c=======================================================================
 
 c*** 0. Prepare some constants
@@ -139,6 +141,22 @@ c*** 1.  General data for the run
         carbon=carbon.or.spcigen(i).eq.spcdgen(5)
       enddo
       if (carbon) write(iunoo,720) utxtfl(5)
+      carbon = .false.
+      do i=1,ntrgdflt
+        carbon=carbon.or.made_of(i)(1:2).eq.'C '
+      end do
+      do i=1,n_spcsrf
+        carbon=carbon.or.sps_mtrl(i)(1:2).eq.'C '
+      end do
+      if (carbon.or..true.) write(iunoo,720) utxtfl(6)
+      moly=.false.
+      do i=1,ntrgdflt
+        moly=moly.or.made_of(i)(1:2).eq.'Mo'
+      end do
+      do i=1,n_spcsrf
+        moly=moly.or.sps_mtrl(i)(1:2).eq.'Mo'
+      end do
+      if (moly.or..true.) write(iunoo,720) utxtfl(7)
 
 c*** 2.  data for standard mesh
 
@@ -564,10 +582,8 @@ c*** 6a.  data for reflection model
       write(iunoo,700) utxthd(7)
 
       write(iunoo,706) nltrim
-      if(path.ne.' ') then !{
-        write(iunoo,'(6hcpath ,a60)') path
-        write(iunoo,'(a8)') (filtrm(i),i=1,nnftrm)
-      end if !}
+      if(path.ne.' ') write(iunoo,'(a6,a60)') 'cpath ',path
+      write(iunoo,'(a8)') (filtrm(i),i=1,nnftrm)
       write(iunoo,703) (datm(iatm),iatm=1,natmi)
       write(iunoo,703) (dmol(imol),imol=1,nmoli)
       write(iunoo,703) (dion(iion),iion=1,nioni)

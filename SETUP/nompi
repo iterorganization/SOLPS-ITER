@@ -6,3 +6,5 @@ if ($?SOLPS_PATH) then
 else
   echo "SOLPS_PATH not set. Exiting."
 endif
+
+echo "SOLPS-ITER MPI mode turned off"
