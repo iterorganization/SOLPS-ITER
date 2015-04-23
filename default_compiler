@@ -25,13 +25,13 @@ case "IPP-HGW":
 case "IPR":
 case "ITER":
 case "ITM":
-case "PPPL":
   echo ifort64
   breaksw
 case "CCFE":
 case "ENEA":
 case "JET":
 case "ORNL":
+case "PPPL":
   echo pgf90
   breaksw
 case "FZJ":

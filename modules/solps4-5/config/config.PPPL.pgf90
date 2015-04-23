@@ -1,0 +1,37 @@
+EQUIV4 = ${SOLPS_CPP} -DGRREAL=1
+EQUIV5 = ${SOLPS_CPP} ${USE_EIRENE} -Dsdot=ddot -Dsasum=dasum -Dsaxpy=daxpy -Dsscal=dscal -Dsnrm2=dnrm2 -Dscopy=dcopy -Dsgbtrf=dgbtrf -Dsgbtrs=dgbtrs -DGRREAL=1
+
+CPP = /lib/cpp -traditional
+CPP4OPTS = -P -I${srcdir} ${EQUIV4}
+CPP5OPTS = -P -I${srcdir} ${EQUIV5}
+SED = sed s:\#PREC\#:d:g
+LINK_MOD = 
+
+FC = pgf90
+ifdef SOLPS_DEBUG
+FCOPTS = -g -r8
+else
+FCOPTS = -O2 -r8
+FCOPTS = -fast -r8
+endif
+
+DBLFC = ${FC}
+DBLOPTION =
+DBLSED = sed -e s:\#PREC\#:d:g
+
+INCMOD = -I
+MOD = mod
+
+BLD = ar rcv
+
+GRLIBES = ${LD_NCARG}
+LDLIBES = ${LD_NAG} -L${SOLPSLIB} ${LD_NETCDF} -lblas
+
+LD = pgf90
+ifdef SOLPS_DEBUG
+LDOPTS = -g
+else
+LDOPTS = 
+endif
+
+LCPP = ${LD_SONNET}
