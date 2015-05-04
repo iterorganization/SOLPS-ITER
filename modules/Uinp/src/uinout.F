@@ -22,6 +22,7 @@ c=======================================================================
       integer i,j,k,l,m,n
       logical ulmlti,ex,carbon,moly
       character utxthd(34)*71, utxtfl(7)*47, ufnm*(*), ucdnmdl*10
+      character utxtgt*71
       data utxthd /
      1        '** 1. Data for operating mode' ,
      2        '** 2. Data for standard mesh' ,
@@ -124,8 +125,8 @@ c*** 1.  General data for the run
 
       open(iunoo,file=ufnm)
       write(iunoo,700) txtrun
-      write(iunoo,700) "* Created with SOLPS-ITER Uinp version "// 
-     .                 git_version
+      utxtgt = " Created with SOLPS-ITER Uinp version "//git_version
+      write(iunoo,700) utxtgt
       write(iunoo,700) utxthd(1)   
       write(iunoo,707) nmach,nmode,ntcpu,nfile,niter0,niter,
      .                 ntime0,ntim1,nfullrun
