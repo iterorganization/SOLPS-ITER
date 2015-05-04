@@ -27,7 +27,7 @@ OBJS = fxdr.o chkinp.o crrinf.o fxdrnm.o rdeqlh.o
 DEST = $(OBJS:%.o=$(OBJDIR)/%.o)
 
 $(OBJDIR)/%.o : %.F
-	${CPP} -P -C $(INCLUDE) $< ${OBJDIR}/$*.f
+	${CPP} -P $(INCLUDE) $< ${OBJDIR}/$*.f
 	$(COMPILE) -o ${OBJDIR}/$*.o ${OBJDIR}/$*.f
 
 all: dirs ${OBJDIR}/fxdr
