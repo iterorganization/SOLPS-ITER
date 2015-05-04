@@ -41,9 +41,10 @@ B2INC = ${B2DIR}/src/include -I${B2DIR}/src/common
 endif
 B2INC += -I${B2OBJ}
 ifeq ($(shell [ -e ${EIRDIR}/src/local ] && echo yes || echo no ),yes)
-EIRINC = ${EIRDIR}/src/local -I${EIRDIR}/src/common
-else
-EIRINC = ${EIRDIR}/src/common
+EIRINC += ${EIRDIR}/src/local
+endif
+ifeq ($(shell [ -e ${EIRDIR}/src/common ] && echo yes || echo no ),yes)
+EIRINC += -I${EIRDIR}/src/common
 endif
 EIRINC += -I${EIROBJ}
 
