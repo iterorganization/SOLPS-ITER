@@ -89,7 +89,7 @@ ${OBJDIR}/libtria.a: ${ALLOBJS}
 	ranlib $@
 
 clean:
-	rm -rf ${OBJDIR}/*.o ${OBJDIR}/*.${MOD} ${OBJDIR}/libtria.a ${OBJDIR}/tria ${OBJDIR}/triageom ${OBJDIR}/LISTOBJ ${OBJDIR}/dependencies
+	rm -rf ${OBJDIR}/*.o ${OBJDIR}/*.f ${OBJDIR}/*.${MOD} ${OBJDIR}/libtria.a ${OBJDIR}/tria ${OBJDIR}/triageom ${OBJDIR}/LISTOBJ ${OBJDIR}/dependencies
 
 depend: ${OBJS:.o=.f} ${EXCLUDELIS:.o=.f} ${OBJDIR}/dependencies
 	`which makedepend` -p'$${OBJDIR}/' ${DEFINES} -f- ${INCLUDE} $^ | \
