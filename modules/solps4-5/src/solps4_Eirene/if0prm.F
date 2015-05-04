@@ -1,1 +1,1 @@
-/home/ITER/bonninx/B2E/solps4.3/src/Eirene/src/couple/if0prm.F
+../../../../../SOLPS/solps4.3/src/Eirene/src/couple/if0prm.F
