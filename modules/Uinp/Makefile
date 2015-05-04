@@ -69,8 +69,8 @@ $(OBJDIR)/%.o : %.F
 
 all: ${OBJDIR}/${PROG} ${OBJDIR}/ub2p
 
-${OBJDIR}/${PROG}: ${OBJDIR}/uinput.o ${OBJDIR}/uiblkd.o ${OBJDIR}/uiblb2.o ${OBJDIR}/libui.a ${MNEXTRA} ${B2OBJ}/b2mod_layer.o ${EIROBJ}/eirmod_extrab25.o ${MAKES} ${MNEXTRA}
-	${FC} $(FFLAGS) -o ${OBJDIR}/${PROG} ${OBJDIR}/uinput.o ${OBJDIR}/uiblkd.o ${OBJDIR}/uiblb2.o ${MNEXTRA} ${OBJDIR}/libui.a ${LDLIBS} $(LDEXTRA)
+${OBJDIR}/${PROG}: ${OBJDIR}/uinput.o ${OBJDIR}/uiblkd.o ${OBJDIR}/uiblb2.o ${OBJDIR}/libui.a ${MNEXTRA} ${OBJDIR}/b2mod_layer.o ${OBJDIR}/libeirene.a ${MAKES} ${MNEXTRA}
+	${FC} $(FFLAGS) -o ${OBJDIR}/${PROG} ${OBJDIR}/uinput.o ${OBJDIR}/uiblkd.o ${OBJDIR}/uiblb2.o ${MNEXTRA} ${OBJDIR}/b2mod_layer.o ${OBJDIR}/libui.a ${OBJDIR}/libeirene.a ${LDLIBS} $(LDEXTRA)
 
 ${OBJDIR}/ub2p: ${OBJDIR}/ub2p.o ${OBJDIR}/libui.a ${MAKES} ${MNEXTRA}
 	${FC} $(FFLAGS) -o ${OBJDIR}/ub2p ${OBJDIR}/ub2p.o ${OBJDIR}/libui.a ${MNEXTRA} ${LDLIBS} $(LDEXTRA)
@@ -81,8 +81,19 @@ ${OBJDIR}/libui.a: ${DEST}
 
 ${OBJDIR}/uinput.o: ${OBJDIR}/uiblkd.o
 
+ifneq (${MOD},o)
+${OBJDIR}/b2mod_layer.${MOD}:
+	ln -sf ${B2OBJ}/b2mod_layer.${MOD} ${OBJDIR}
+endif
+
+${OBJDIR}/libeirene.a:
+	ln -sf ${EIROBJ}/libeirene.a ${OBJDIR}
+
+${OBJDIR}/b2mod_layer.o:
+	ln -sf ${B2OBJ}/b2mod_layer.o ${OBJDIR}
+
 clean:
-	rm -rf ${OBJDIR}/*.o ${OBJDIR}/*.f ${OBJDIR}/${PROG} ${OBJDIR}/libui.a ${OBJDIR}/ub2p ${OBJDIR}/LISTOBJ ${OBJDIR}/dependencies*
+	rm -rf ${OBJDIR}/*.o ${OBJDIR}/*.${MOD} ${OBJDIR}/*.f ${OBJDIR}/${PROG} ${OBJDIR}/libui.a ${OBJDIR}/ub2p ${OBJDIR}/LISTOBJ ${OBJDIR}/dependencies*
 
 depend: ${OBJS:.o=.F} uiblkd.F uinput.F uiblb2.F ub2p.F
 	`which makedepend` -p'$${OBJDIR}/' ${SOLPS_CPP} -f- ${INCLUDE} $^ | \

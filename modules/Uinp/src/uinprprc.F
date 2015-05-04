@@ -851,9 +851,9 @@ c>>>
 	write(0,'(4x,a2,1x,i5,i8)') 'EL',l,DEF_NREL
  	write(0,'(4x,a2,1x,i5,i8)') 'DS',m,DEF_NRDS
 	write(0,'(4x,a2,1x,i5,i8)') 'RC',n,DEF_NREC
-      	stop 
-     ,   '==> Check the AMDS model '//
+        write(0,*) '==> Check the AMDS model '//
      ,   'and NREL, NRDS, or NREC in DIMENSIONS.F'
+      	stop 
       end if !}
 c=======================================================================
       end

@@ -1,4 +1,7 @@
 # Test whether necessary variables are defined
+LD_GR  ?= -L/p/solps/solps_other/grsource -lgr
+LD_GKS ?= -L/p/solps/solps_other/gligks -lgks
+
 ifndef LD_GR
   $(error LD_GR not defined)
 endif
@@ -9,17 +12,16 @@ endif
 DEFINES =
 EQUIVS =
 
-CPP = /lib/cpp -traditional
-CPPOPTS = -P -I${srcdir} ${EQUIVS}
+CPP = /lib/cpp -C -traditional
+CPPOPTS = -C -P -I${srcdir} ${EQUIVS}
 SED = sed s:\#PREC\#:d:g
 LINK_MOD =
 
 FC = pgf90
 ifdef SOLPS_DEBUG
-FCOPTS = -Mbackslash -C -g -Mchkfpstk -Mchkptr -Mchkstk -Mpgicoff
+FCOPTS = -Mbackslash -C -g -Mchkfpstk -Mchkptr -Mchkstk -Mpgicoff -tp=amd64
 else
-FCOPTS = -O2 -Mbackslash
-FCOPTS = -fast -Mbackslash
+FCOPTS = -O -Mbackslash -tp=amd64
 endif
 
 DBLFC = ${FC}

@@ -24,12 +24,12 @@ CPPOPTS 	= -C -P -I${srcdir} ${EQUIVS}
 SED 		=
 LINK_MOD 	= 
 
-FC       	= gfortran
+FC       	= ifort
 
 ifdef SOLPS_DEBUG
 FCOPTS 		= -g -C -debug all
 else
-FCOPTS 		= -O3
+FCOPTS 		= -O3 -vec_report0
 endif
 
 #COMPILE  	= ${FC} -c ${FFLAGS}
@@ -44,9 +44,9 @@ LDEXTRA  	=
 # new
 
 INCMOD 		= -I
-MOD 		  = mod
+MOD 		= mod
 OBJDEST 	= -o ${OBJDIR}/$*.o
 
-BLD 		  = ar rcv
+BLD 		= ar rcv
 
-LD 		    = gfortran
+LD 		= ifort

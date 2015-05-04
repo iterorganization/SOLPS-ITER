@@ -65,56 +65,53 @@ c
 	open(iunii,file='uinput.aux')
       	call import(uinaux)
       end if !}
-      if(path.eq.' ') then !{
-        path='data/TRIMDAT/'
-        nmat=0
-        do i=1,nlimi !{
-          match_found=.false.
-          do imat=1,nmat !{
-            match_found=match_found .or.
+      nmat=0
+      do i=1,nlimi !{
+        match_found=.false.
+        do imat=1,nmat !{
+          match_found=match_found .or.
      .       trim(listmat(imat)).eq.trim(umtrl(i)) .or.
      .       trim(umtrl(i)).eq.'dummy'
-          end do !}
-          if (.not.match_found) then !{
-            nmat=nmat+1
-            listmat(nmat)=umtrl(i)(1:2)
-          end if !}
         end do !}
-        do i=1,ntrgdflt !{
-          match_found=.false.
-          do imat=1,nmat !{
-            match_found=match_found .or.
+        if (.not.match_found) then !{
+          nmat=nmat+1
+          listmat(nmat)=umtrl(i)(1:2)
+        end if !}
+      end do !}
+      do i=1,ntrgdflt !{
+        match_found=.false.
+        do imat=1,nmat !{
+          match_found=match_found .or.
      .       trim(listmat(imat)).eq.trim(made_of(i))
-          end do !}
-          if (.not.match_found) then !{
-            nmat=nmat+1
-            listmat(nmat)=made_of(i)(1:2)
-          end if !}
         end do !}
-        do i=1,n_spcsrf !{
-          match_found=.false.
-          do imat=1,nmat !{
-            match_found=match_found .or.
+        if (.not.match_found) then !{
+          nmat=nmat+1
+          listmat(nmat)=made_of(i)(1:2)
+        end if !}
+      end do !}
+      do i=1,n_spcsrf !{
+        match_found=.false.
+        do imat=1,nmat !{
+          match_found=match_found .or.
      .       trim(listmat(imat)).eq.trim(sps_mtrl(i)) .or.
      .       trim(sps_mtrl(i)).eq.'-'
-          end do !}
-          if (.not.match_found) then !{
-            nmat=nmat+1
-            listmat(nmat)=sps_mtrl(i)(1:2)
-          end if !}
         end do !}
-        if (nspigen.gt.1 .or. spcigen(nspigen).ne.'D' .or. 
-     .      nmat.gt.1    .or. listmat(nmat).ne.'C') then !{
-          nnftrm=nspigen*nmat
-          do isp=1,nspigen !{
-            do imat=1,nmat !{
-              filtrm(isp+(imat-1)*nspigen)=
-     .         spcigen(isp)(1:lnblnk(spcigen(isp)))
-     .         //'_on_'//
-     .         listmat(imat)
-            end do !}
-          end do !}
+        if (.not.match_found) then !{
+          nmat=nmat+1
+          listmat(nmat)=sps_mtrl(i)(1:2)
         end if !}
+      end do !}
+      if (nspigen.gt.1 .or. spcigen(nspigen).ne.'D' .or. 
+     .     nmat.gt.1    .or. listmat(nmat).ne.'C') then !{
+         nnftrm=nspigen*nmat
+         do isp=1,nspigen !{
+           do imat=1,nmat !{
+             filtrm(isp+(imat-1)*nspigen)=
+     .        spcigen(isp)(1:lnblnk(spcigen(isp)))
+     .        //'_on_'//
+     .        listmat(imat)
+          end do !}
+        end do !}
       end if !}
 
       do iamd=1,namdf !{
@@ -125,7 +122,8 @@ c*** Read the AMDS file if exists
       	    write(*,*) '... opening ',amd_file(iamd)
             open(iunii,file=amd_file(iamd))
           else !}{
-	    uex=open_file(iunii,amd_file(iamd),'data.local/AMDS|data/AMDS')
+	    uex=open_file(iunii,amd_file(iamd),
+     .                    'data.local/AMDS|data/AMDS')
 	  end if !}
           if(uex) then !{
             uex=immed

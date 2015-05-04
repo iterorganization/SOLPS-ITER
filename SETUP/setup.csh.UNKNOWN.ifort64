@@ -1,0 +1,6 @@
+alias gmake make
+setenv PATH ${PATH}:/opt/intel/bin/
+setenv LD_LIBRARY_PATH /opt/intel/composer_xe_2013_sp1.2.144/compiler/lib/intel64/
+unsetenv NCARG_ROOT 
+
+

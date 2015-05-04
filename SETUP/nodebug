@@ -7,3 +7,4 @@ else
   echo "SOLPS_PATH not set. Exiting."
 endif
 
+echo "SOLPS-ITER debug mode turned off"
