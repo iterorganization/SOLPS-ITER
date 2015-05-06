@@ -91,7 +91,7 @@ ${OBJDIR}/libtria.a: ${ALLOBJS}
 clean:
 	rm -rf ${OBJDIR}/*.o ${OBJDIR}/libtria.a ${OBJDIR}/tria ${OBJDIR}/triageom ${OBJDIR}/LISTOBJ ${OBJDIR}/dependencies
 ifneq (${MOD},o)
-  rm -rf ${OBJDIR}/*.${MOD}
+	rm -rf ${OBJDIR}/*.${MOD}
 endif
 ifneq ($(strip $(SED)),)
 	rm -rf ${OBJDIR}/*.f
