@@ -58,6 +58,7 @@ limit stacksize unlimited
 
 if (! $?GRAPHCAP) setenv GRAPHCAP X11
 
+setenv B2PLOT_DEV ps
 setenv GRSOFT_DEVICE "211 62"
 setenv SonnetTopDirectory ${SOLPSTOP}/modules/Sonnet-light
 setenv EscapeSonnet `echo ${SonnetTopDirectory} | sed 's:\/:\\\/:g'`
