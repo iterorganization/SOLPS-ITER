@@ -25,6 +25,7 @@ case "IPP-HGW":
 case "IPR":
 case "ITER":
 case "ITM":
+case "SWIP":
   echo ifort64
   breaksw
 case "CCFE":
