@@ -205,6 +205,7 @@ VERSION:
 	cd modules/Eirene; ${MAKE} VERSION
 	cd modules/Carre;  ${MAKE} VERSION
 	cd modules/DivGeo; ${MAKE} VERSION
+	cd modules/Uinp;   ${MAKE} VERSION
 
 
 # Debug targets

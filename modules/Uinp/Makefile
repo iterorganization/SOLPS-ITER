@@ -41,9 +41,10 @@ B2INC = ${B2DIR}/src/include -I${B2DIR}/src/common
 endif
 B2INC += -I${B2OBJ}
 ifeq ($(shell [ -e ${EIRDIR}/src/local ] && echo yes || echo no ),yes)
-EIRINC = ${EIRDIR}/src/local -I${EIRDIR}/src/common
-else
-EIRINC = ${EIRDIR}/src/common
+EIRINC += ${EIRDIR}/src/local
+endif
+ifeq ($(shell [ -e ${EIRDIR}/src/common ] && echo yes || echo no ),yes)
+EIRINC += -I${EIRDIR}/src/common
 endif
 EIRINC += -I${EIROBJ}
 
@@ -67,16 +68,18 @@ $(OBJDIR)/%.o : %.F
 	${CPP} -P $(INCLUDE) ${SOLPS_CPP} $< ${OBJDIR}/$*.f
 	$(COMPILE) ${INCLUDE} -o ${OBJDIR}/$*.o ${OBJDIR}/$*.f
 
-all: ${OBJDIR}/${PROG} ${OBJDIR}/ub2p
+all: VERSION ${OBJDIR}/${PROG} ${OBJDIR}/ub2p
 
-${OBJDIR}/${PROG}: ${OBJDIR}/uinput.o ${OBJDIR}/uiblkd.o ${OBJDIR}/uiblb2.o ${OBJDIR}/libui.a ${MNEXTRA} ${OBJDIR}/b2mod_layer.o ${OBJDIR}/libeirene.a ${MAKES} ${MNEXTRA}
+.PHONY: clean depend listobj tags echo VERSION force
+
+${OBJDIR}/${PROG}: ${OBJDIR}/uinput.o ${OBJDIR}/uiblkd.o ${OBJDIR}/uiblb2.o ${OBJDIR}/libui.a ${MNEXTRA} ${OBJDIR}/b2mod_layer.o ${OBJDIR}/libeirene.a ${${MAKES} ${MNEXTRA}
 	${FC} $(FFLAGS) -o ${OBJDIR}/${PROG} ${OBJDIR}/uinput.o ${OBJDIR}/uiblkd.o ${OBJDIR}/uiblb2.o ${MNEXTRA} ${OBJDIR}/b2mod_layer.o ${OBJDIR}/libui.a ${OBJDIR}/libeirene.a ${LDLIBS} $(LDEXTRA)
 
 ${OBJDIR}/ub2p: ${OBJDIR}/ub2p.o ${OBJDIR}/libui.a ${MAKES} ${MNEXTRA}
 	${FC} $(FFLAGS) -o ${OBJDIR}/ub2p ${OBJDIR}/ub2p.o ${OBJDIR}/libui.a ${MNEXTRA} ${LDLIBS} $(LDEXTRA)
 
-${OBJDIR}/libui.a: ${DEST}
-	ar r $@ $?
+${OBJDIR}/libui.a: ${DEST} ${SRCDIR}/git_version.h
+	ar r $@ ${DEST}
 	ranlib $@
 
 ${OBJDIR}/uinput.o: ${OBJDIR}/uiblkd.o
@@ -93,7 +96,10 @@ ${OBJDIR}/b2mod_layer.o:
 	ln -sf ${B2OBJ}/b2mod_layer.o ${OBJDIR}
 
 clean:
-	rm -rf ${OBJDIR}/*.o ${OBJDIR}/*.${MOD} ${OBJDIR}/*.f ${OBJDIR}/${PROG} ${OBJDIR}/libui.a ${OBJDIR}/ub2p ${OBJDIR}/LISTOBJ ${OBJDIR}/dependencies*
+	rm -rf ${OBJDIR}/*.o ${OBJDIR}/*.f ${OBJDIR}/${PROG} ${OBJDIR}/libui.a ${OBJDIR}/ub2p ${OBJDIR}/LISTOBJ ${SRCDIR}/git_version.h ${OBJDIR}/dependencies*
+ifneq (${MOD},o)
+	rm -f ${OBJDIR}/*.${MOD}
+endif
 
 depend: ${OBJS:.o=.F} uiblkd.F uinput.F uiblb2.F ub2p.F
 	`which makedepend` -p'$${OBJDIR}/' ${SOLPS_CPP} -f- ${INCLUDE} $^ | \
@@ -108,6 +114,12 @@ tags:
 	rm -f ${BASEDIR}/TAGS ; etags -o ${BASEDIR}/TAGS ${SRCDIR}/*.F ${SRCDIR}/*.h ${SRCDIR}/*.inc
 
 ${OBJDIR}/LISTOBJ: listobj
+
+VERSION: ${SRCDIR}/git_version.h
+
+${SRCDIR}/git_version.h: force
+	@echo "      character*15 :: git_version ='`git describe --dirty --always`'" > ${SRCDIR}/git_version_new.h
+	@if cmp -s ${SRCDIR}/git_version_new.h ${SRCDIR}/git_version.h; then rm ${SRCDIR}/git_version_new.h; else mv ${SRCDIR}/git_version_new.h ${SRCDIR}/git_version.h; fi
 
 ${OBJDIR}/dependencies.${COMPILER}:
 	-mkdir -p ${OBJDIR}

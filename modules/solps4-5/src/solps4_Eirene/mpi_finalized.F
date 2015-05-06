@@ -1,1 +1,1 @@
-/home/ITER/bonninx/B2E/solps4.3/src/Eirene/src/broadcast_dummy/mpi_finalized.F
+../../../../../SOLPS/solps4.3/src/Eirene/src/broadcast_dummy/mpi_finalized.F

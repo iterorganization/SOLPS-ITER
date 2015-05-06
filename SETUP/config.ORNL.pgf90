@@ -28,13 +28,13 @@
 # Remove -DMDSPLUS from SOLPS_CPP
 #
  
-       NCDIR = /usr/lib64
-   MSCL_ROOT = ${SOLPSLIB}
+       NCDIR = 
+   MSCL_ROOT = /usr/local/mscl/linux_pgf90_JDL
        H5DIR = 
-     GR_ROOT = ${SOLPSLIB}
-    GLI_HOME = ${SOLPSLIB}
+     GR_ROOT = /usr/local/grsource/linux_pgf90_JDL
+    GLI_HOME = /usr/local/gligks/gks/linux_pgf90_JDL
   NCARG_ROOT = /usr/lib64/ncarg
-      NAGDIR = ${SOLPSLIB}
+      NAGDIR = 
  MDSPLUS_DIR = 
 
 
@@ -42,12 +42,12 @@
 # Variables for linking
 #
 
-LD_NETCDF  = -L${NCDIR} -lnetcdff -g77libs
+LD_NETCDF  = -lnetcdff -g77libs
 LD_MSCL    = -L${MSCL_ROOT} -lmscl
 LD_GR      = -L${GR_ROOT} -lgr
-LD_GKS     = -L${GLI_HOME} -lgks -lgfortran
+LD_GKS     = -L${GLI_HOME} -lgks
 LD_NCARG   = -L${NCARG_ROOT} -lncarg -lncarg_gks -lncarg_c -lX11 -lm -lgfortran -lcairo -lgcc_s -lfreetype
-LD_NAG     = -L${NAGDIR} -lblaslapack
+LD_NAG     = -lblas -llapack
 LD_MDSPLUS = 
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++ -lC
 

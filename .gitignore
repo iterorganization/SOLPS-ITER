@@ -28,6 +28,7 @@ SGIirix*
 sun*
 T3E*
 unicos*
+git_version.h
 
 linux.*/
 g77*/
