@@ -26,8 +26,8 @@ CXXFLAGS = -g -tp=amd64
 all: $(sources:.cpp=.o)
 	ar clq libsonnet.a $(sources:.cpp=.o)
 	${INSTALL} libsonnet.a ${INSTALL_DIR}
-	pgf90 -r8 -tp=amd64 -c ../${FORTRANPRG}.f
-	pgf90 -r8 -tp=amd64 ${FORTRANPRG}.o ${LIBS}
+	${FC} -r8 -tp=amd64 -c ../${FORTRANPRG}.f
+	${FC} -r8 -tp=amd64 ${FORTRANPRG}.o ${LIBS}
 
 include $(sources:.cpp=.d)
 

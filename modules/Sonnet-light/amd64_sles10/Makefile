@@ -26,8 +26,8 @@ CXXFLAGS = -g
 all: $(sources:.cpp=.o)
 	ar clq libsonnet.a $(sources:.cpp=.o)
 	${INSTALL} libsonnet.a ${INSTALL_DIR}
-	ifort -r8 -c ../${FORTRANPRG}.f
-	ifort -r8 ${FORTRANPRG}.o ${LIBS}
+	${FC} -r8 -c ../${FORTRANPRG}.f
+	${FC} -r8 ${FORTRANPRG}.o ${LIBS}
 
 include $(sources:.cpp=.d)
 
