@@ -1,0 +1,13 @@
+#! /bin/tcsh -f
+set c=$1
+if ("X${1}X" == "XX") set c=60
+set i=''
+set j=`pwd`
+set k=$j
+while (`echo $j | wc -c` > $c)
+  set i='...'
+  set k=$j
+  set j=`echo $j | sed 's:/[^/]*::'`
+end
+if ("X${j}X" == "XX") set j=$k
+echo ${i}${j}
