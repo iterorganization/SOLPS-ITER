@@ -19,8 +19,9 @@ c=======================================================================
 #include "impcon.inc"
 #include "git_version.h"
 
-      integer i,j,k,l,m,n
+      integer i,j,k,l,m,n,icont
       logical ulmlti,ex,carbon,moly
+      logical, allocatable :: done(:)
       character utxthd(34)*71, utxtfl(7)*47, ufnm*(*), ucdnmdl*10
       character utxtgt*71
       data utxthd /
@@ -244,8 +245,30 @@ c**  additional cells outside standard mesh
 
       if(nladd) write(iunoo,700) utxthd(30)
       write(iunoo,706) nladd
-      nradd = max ( nradd, maxval(abs(ilplg(1:nstsi))),
-     .                     maxval(abs(jlplg(1:nlimi))) )
+      icont = 0
+      allocate (done(1:max(abs(minval(ilplg(1:nstsi))),
+     .                     abs(minval(jlplg(1:nlimi))))))
+      done = .false.
+      do i = 1, nstsi
+        if (ilplg(i).lt.0) then
+          l = abs(ilplg(i))
+          if (.not.done(l)) then
+            icont = icont + 1
+            done(l) = .true.
+          end if
+        end if
+      end do
+      do j = 1, nlimi
+        if (jlplg(j).lt.0) then
+          l = abs(jlplg(j))
+          if (.not.done(l)) then
+            icont = icont + 1
+            done(l) = .true.
+          end if
+        end if
+      end do
+      nradd = max ( nradd, icont ) 
+
       if (nradd .gt. nadd) then !{
         print *, ' Too many additional zones : NRADD = ', nradd
         print *, ' Recompile Uinp with an incresaed value of NADD'
