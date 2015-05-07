@@ -15,6 +15,7 @@ VPATH = ../
 CPL = g++
 ## CXX = g++
 CXXFLAGS = -g
+FC = gfortran
 
 %.d: %.cpp
 	@set -e; rm -f $@; \
@@ -26,8 +27,8 @@ CXXFLAGS = -g
 all: $(sources:.cpp=.o)
 	ar clq libsonnet.a $(sources:.cpp=.o)
 	${INSTALL} libsonnet.a ${INSTALL_DIR}
-	${FC} -r8 -c ../${FORTRANPRG}.f
-	${FC} -r8 ${FORTRANPRG}.o ${LIBS}
+	${FC} -c ../${FORTRANPRG}.f
+	${FC} ${FORTRANPRG}.o ${LIBS}
 
 include $(sources:.cpp=.d)
 
