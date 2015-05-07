@@ -10,3 +10,6 @@ clean:
 
 install:
 	cd ${SYSNAME}; make install
+
+test:
+	cd ${SYSNAME}; make test

@@ -27,6 +27,8 @@ FC = gfortran
 all: $(sources:.cpp=.o)
 	ar clq libsonnet.a $(sources:.cpp=.o)
 	${INSTALL} libsonnet.a ${INSTALL_DIR}
+
+test: 
 	${FC} -c ../${FORTRANPRG}.f
 	${FC} ${FORTRANPRG}.o ${LIBS}
 
