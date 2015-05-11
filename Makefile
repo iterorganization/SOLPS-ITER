@@ -154,7 +154,11 @@ b2sxdr:   # strange sequence of commands, but works!
 	cd modules/solps4-5; ${MAKE}; ${MAKE}; rm builds/${HOST_NAME}.${COMPILER}${EXT_DBG}/libb2_solps?.a; ${MAKE}
 
 manual:
-	cd doc/solps; ${MAKE}
+ifeq ($(shell [ -e ${SOLPSTOP}/doc/solps/b2cdci.F ] && echo yes || echo no ),no)
+	cd doc/solps; ${MAKE} complete
+else
+	cd doc/solps; ${MAKE} 
+endif
 
 tags:
 	cd modules/Carre;          ${MAKE} tags
