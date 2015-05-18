@@ -15,6 +15,8 @@ if ("X$1X" == "X-rX") then
   ln -sf `climb_and_look_for -r modules/Eirene/Database/Surfacedata/SPUTER`        
   ln -sf `climb_and_look_for -r modules/Eirene/Database/Surfacedata/TRIM/trim.dat` fort.21   
   ln -sf `climb_and_look_for -r modules/Eirene/Database/Surfacedata/TRIM/marlow.dat` fort.22
+  ln -sf `climb_and_look_for -r modules/Eirene/Database/graphite_ext.dat` graphite_ext.dat
+  ln -sf `climb_and_look_for -r modules/Eirene/Database/mo_ext.dat` mo_ext.dat
 else
   ln -sf ${datapath}/AMdata/amjuel.tex AMJUEL
   ln -sf ${datapath}/AMdata/h2vibr.tex H2VIBR
@@ -23,7 +25,8 @@ else
   ln -sf ${datapath}/PHOTON
   ln -sf ${datapath}/Surfacedata/SPUTER
   ln -sf ${datapath}/Surfacedata/TRIM/trim.dat fort.21
-  ln -sf ${datapath}/Surfacedata/TRIM/marlow.dat fort.22
+  ln -sf ${datapath}/graphite_ext .
+  ln -sf ${datapath}/mo_ext .
 endif
 
 if (! -e input.dat) then

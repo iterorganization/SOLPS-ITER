@@ -671,19 +671,19 @@ c**  same for point-, line-, surface- and volume sources
      ,      ingrde(j,i,1),ingrda(j,i,2),ingrde(j,i,2),ingrda(j,i,3),
      ,      ingrde(j,i,3)
           write(iunoo,703) sorwgt(j,i),sorlim(j,i),
-     ,          	    sorind(j,i),sorexp(j,i),sorifl(j,i)
+     ,                     sorind(j,i),sorexp(j,i),sorifl(j,i)
           write(iunoo,707) nrsor(j,i),npsor(j,i),ntsor(j,i),
-     ,          	    nbsor(j,i),nasor(j,i),nisor(j,i),istor(j,i)
+     ,                     nbsor(j,i),nasor(j,i),nisor(j,i),istor(j,i)
           write(iunoo,703) sorad1(j,i),sorad2(j,i),sorad3(j,i),
-     ,          	    sorad4(j,i),sorad5(j,i),sorad6(j,i)
+     ,                     sorad4(j,i),sorad5(j,i),sorad6(j,i)
         end do !}
 
 c**  velocity space distribution
 
         write(iunoo,703) soreni(i),sorene(i),sorvdx(i),sorvdy(i),
-     ,          	    	      	      	      	      sorvdz(i)
+     ,                                                 sorvdz(i)
         write(iunoo,703) sorcos(i),sormax(i),sorctx(i),sorcty(i),
-     ,          	    	      	      	      	      sorctz(i)
+     ,          	    	      	      	       sorctz(i)
 
       end do !}
 
