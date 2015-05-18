@@ -1,6 +1,6 @@
 #! /bin/csh -f
 set machine_location=`hostname`
-set fullhost=`nslookup $machine_location |& awk '/Name:/{print $2}' | tr 'A-Z' 'a-z'`
+set fullhost=`nslookup $machine_location | grep -m 1 Name | awk '/Name:/{print $2}' | tr 'A-Z' 'a-z'`
 switch ($fullhost)
 case "*.iter.org":
   echo ITER
