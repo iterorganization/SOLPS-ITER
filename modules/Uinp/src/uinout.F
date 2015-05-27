@@ -649,6 +649,7 @@ c*** 7.  data for primary source
       write(iunoo,703) alloc
       inum=0
       do i=1,nstrai !{
+        inum=inum+1
         if(indsrc(i).eq.6) cycle
 
         write(iunoo,709) i,txtsou(i)
@@ -665,7 +666,7 @@ c**  same for point-, line-, surface- and volume sources
 
         write(iunoo,707) nsrfsi(i)
         do j=1,nsrfsi(i) !{
-          inum=inum+1
+          if (j.ne.1) inum=inum+1
           if(nlsrf(i)) sorind(j,i)=inum
           write(iunoo,707) inum,indim(j,i),insor(j,i),ingrda(j,i,1),
      ,      ingrde(j,i,1),ingrda(j,i,2),ingrde(j,i,2),ingrda(j,i,3),

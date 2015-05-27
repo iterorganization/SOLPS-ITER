@@ -106,7 +106,6 @@ c>>>
           ingrda(isf,nstrai,2)=1
           ingrde(isf,nstrai,2)=1
 	  sorifl(isf,nstrai)=1000
-#ifdef TRIANG
 	  nrsor(isf,nstrai)=-1
 	  nasor(isf,nstrai)=0
           sorlim(isf,nstrai)=104
@@ -114,44 +113,6 @@ c>>>
           sorad2(isf,nstrai)=0
           sorad3(isf,nstrai)=0
           sorad4(isf,nstrai)=0
-#else
-	  nrsor(isf,nstrai)=0
-	  nasor(isf,nstrai)=mgpfstr(istr)
-	  hlp1=p1(1,k)-p2(1,k)
-	  hlp2=p1(2,k)-p2(2,k)
-	  if(abs(hlp1).gt.abs(hlp2)) then !{
-	    if(abs(hlp1).le.hlpeps) then !{
-	      sorlim(isf,nstrai)=101
-	      sorad1(isf,nstrai)=p1(1,k)
-	      sorad2(isf,nstrai)=p2(1,k)
-	    else !}{
-	      sorlim(isf,nstrai)=102
-	      if(hlp1.lt.0.) then !{
-	      	sorad1(isf,nstrai)=p1(1,k)*(1+sign(hlpeps2,p1(1,k)))
-	      	sorad2(isf,nstrai)=p2(1,k)*(1-sign(hlpeps2,p2(1,k)))
-	      else !}{
-	      	sorad1(isf,nstrai)=p2(1,k)*(1+sign(hlpeps2,p2(1,k)))
-	      	sorad2(isf,nstrai)=p1(1,k)*(1-sign(hlpeps2,p1(1,k)))
-	      end if !}
-	    end if !}
-	  else !}{
-	    if(abs(hlp2).le.hlpeps) then !{
-	      sorlim(isf,nstrai)=110
-	      sorad3(isf,nstrai)=p1(2,k)
-	      sorad4(isf,nstrai)=p2(2,k)
-	    else !}{
-	      sorlim(isf,nstrai)=120
-	      hlp=hlpeps2*hlp2
-	      if(hlp2.lt.0.) then !{
-	      	sorad3(isf,nstrai)=p1(2,k)*(1+sign(hlpeps2,p1(2,k)))
-	      	sorad4(isf,nstrai)=p2(2,k)*(1-sign(hlpeps2,p2(2,k)))
-	      else !}{
-	      	sorad3(isf,nstrai)=p2(2,k)*(1+sign(hlpeps2,p2(2,k)))
-	      	sorad4(isf,nstrai)=p1(2,k)*(1-sign(hlpeps2,p1(2,k)))
-	      end if !}
-	    end if !}
-	  end if !}
-#endif
 	end do !}
 c*** Source composition - for gpfc
 	do i=1,nspcncl !{

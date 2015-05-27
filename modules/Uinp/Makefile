@@ -103,7 +103,8 @@ endif
 
 depend: ${OBJS:.o=.F} uiblkd.F uinput.F uiblb2.F ub2p.F
 	`which makedepend` -p'$${OBJDIR}/' ${SOLPS_CPP} -f- ${INCLUDE} $^ | \
-	sed 's,^$${OBJDIR}/[^ ][^ ]*/,\$${OBJDIR}/,' > ${OBJDIR}/dependencies.${COMPILER}
+	sed 's,^$${OBJDIR}/[^ ][^ ]*/,\$${OBJDIR}/,' | \
+	sed 's,: ${SOLPSTOP},: $${SOLPSTOP},' > ${OBJDIR}/dependencies.${COMPILER}
 
 listobj:
 	@cd ${SRCDIR} ; rm -f ${OBJDIR}/LISTOBJ; touch ${OBJDIR}/LISTOBJ; \

@@ -99,10 +99,12 @@ endif
 
 depend: ${OBJS:.o=.f} ${EXCLUDELIS:.o=.f} ${OBJDIR}/dependencies
 	`which makedepend` -p'$${OBJDIR}/' ${DEFINES} -f- ${INCLUDE} $^ | \
-	sed 's,^$${OBJDIR}/[^ ][^ ]*/,\$${OBJDIR}/,' > ${OBJDIR}/dependencies
+	sed 's,^$${OBJDIR}/[^ ][^ ]*/,\$${OBJDIR}/,' | \
+        sed 's,: ${SOLPSTOP},: $${SOLPSTOP},' > ${OBJDIR}/dependencies
 ifneq (${MOD},o)
 	`which makedepend` -p'$${OBJDIR}/' ${DEFINES} -f- ${INCLUDE} $^ -o.${MOD} | \
-	sed 's,^$${OBJDIR}/[^ ][^ ]*/,\$${OBJDIR}/,' >> ${OBJDIR}/dependencies
+	sed 's,^$${OBJDIR}/[^ ][^ ]*/,\$${OBJDIR}/,' | \
+        sed 's,: ${SOLPSTOP},: $${SOLPSTOP},' >> ${OBJDIR}/dependencies
 endif
 ifeq ($(LOCAL),yes)
 	egrep -ai '^[ 	]+use ' ${SRCLOCAL}/*.f ${SRCDIR}/*/*.f | grep -v 'IGNORE' | tr , ' ' | \

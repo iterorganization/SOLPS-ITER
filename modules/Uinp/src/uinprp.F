@@ -359,11 +359,6 @@ c***                               - needed also for regular input files
 c      if(uex) then !{
         do i=1,nstsi
           ilplg(i)=ilplgu(i)      
-#ifndef TRIANG
-          if(iliin(i).lt.0) then !{
-            ilcell(i)=1000+abs(ilplg(i))
-          end if !}
-#endif
         end do !}
         do i=1,nlim
           jlplg(i)=jlplgu(i)

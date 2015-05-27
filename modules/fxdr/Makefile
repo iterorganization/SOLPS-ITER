@@ -39,9 +39,9 @@ clean:
 	rm -rf ${OBJDIR}/*.o ${OBJDIR}/*.f ${OBJDIR}/fxdr
 
 depend: ${OBJS:.o=.F}
-	makedepend -f ${OBJDIR}/dependencies.${COMPILER} ${INCLUDE} $^
-	mv ${OBJDIR}/dependencies.${COMPILER} ${OBJDIR}/dependencies.${COMPILER}.bak
-	sed -e '3,$$s|src/|${OBJDIR}/|' ${OBJDIR}/dependencies.${COMPILER}.bak > ${OBJDIR}/dependencies.${COMPILER}
+	makedepend -f- ${INCLUDE} $^ | \
+	sed -e '3,$$s|src/|${OBJDIR}/|' | \
+	sed -e 's,: ${SOLPSTOP},: $${SOLPSTOP},' > ${OBJDIR}/dependencies.${COMPILER}
 
 listobj:
 	cd src ; echo " " *.F | sed -e 's/ [^ /]*\// /g' -e 's/\.F/.o/g'

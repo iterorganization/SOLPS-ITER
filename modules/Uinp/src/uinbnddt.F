@@ -50,27 +50,13 @@ c     ,      iliin(nstsi),ilside(nstsi)                             !###
      ,	      	      	      	        cskbnds(isf,ibk).eq.'E') then !{
 	    idimp(nstsi)=2
 	    ilswch(nstsi)=0
-#ifndef TRIANG
-	    ilcell(nstsi)=0
-#endif
 	  else if(cskbnds(isf,ibk).eq.'S' .or. 
      ,	      	      	      	       cskbnds(isf,ibk).eq.'N') then !}{
 	    idimp(nstsi)=1
-#ifndef TRIANG
-	    ilcell(nstsi)=1001
-#endif
 	    if(cskbnds(isf,ibk).eq.'S') then !{
-#ifdef TRIANG
 	      ilswch(nstsi)=0
-#else
-	      ilswch(nstsi)=10220
-#endif
 	    else !}{
-#ifdef TRIANG
 	      ilswch(nstsi)=0
-#else
-	      ilswch(nstsi)=20110
-#endif
 	    end if !}
 	  else !}{
 	    write(0,*) 'Wrong boundary letter ',cskbnds(isf,ibk),'.  ',
@@ -83,11 +69,7 @@ c     ,      iliin(nstsi),ilside(nstsi)                             !###
               ilswch(nstsi)=0
 	      if(cskbnds(isf,ibk).eq.'W' .or.
      .	      	      	      	      	cskbnds(isf,ibk).eq.'S') then !{
-#ifdef TRIANG
 	        ilside(nstsi)=2
-#else
-	        ilside(nstsi)=-2
-#endif
 	      else !}{
 	        ilside(nstsi)=2
 	      end if !}
@@ -140,6 +122,7 @@ c*** ... and then the recycling source if specified
 	    ntin2(ntargi,1)=jc1bnds(isf,ibk)
 	    nten2(ntargi,1)=jc2bnds(isf,ibk)
 	    npts(nstrai)=jnpbnds(isf,ibk)
+	    nptc(ntargi,1)=jnpbnds(isf,ibk)
             nminpts(nstrai)=jmpbnds(isf,ibk)
 	    ninitl(nstrai)=jnibnds(isf,ibk)
 	    nemods(nstrai)=jnebnds(isf,ibk)
@@ -157,11 +140,7 @@ c*** ... and then the recycling source if specified
 	      ingrda(1,nstrai,2)=insor(1,nstrai)
 	      ingrde(1,nstrai,2)=insor(1,nstrai)
 	      if(cskbnds(isf,ibk).eq.'W') then !{
-#ifdef TRIANG
 	      	sorifl(1,nstrai)=1000
-#else
-	      	sorifl(1,nstrai)=2000
-#endif
 	      else !}{
 	      	sorifl(1,nstrai)=1000
 	      end if !}
@@ -175,15 +154,9 @@ c*** ... and then the recycling source if specified
 	      ingrda(1,nstrai,2)=ntin2(ntargi,1)
 	      ingrde(1,nstrai,2)=nten2(ntargi,1)
 	      if(cskbnds(isf,ibk).eq.'S') then !{
-#ifdef TRIANG
 	      	sorifl(1,nstrai)=1000
 	      else !}{
 	      	sorifl(1,nstrai)=1000
-#else
-	      	sorifl(1,nstrai)=2111
-	      else !}{
-	      	sorifl(1,nstrai)=1111
-#endif
 	      end if !}
 	    end if !}
 	    if(cskbnds(isf,ibk).eq.'W' .or.

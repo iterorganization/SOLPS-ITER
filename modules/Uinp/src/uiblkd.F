@@ -539,7 +539,7 @@ c*** 7
      /	 nstra*' ',    0   ,nstra*4001 /
 
       data  nstrai,alloc,indsrc ,  npts  , ninitl, nemods , namods  /
-     /         0  , 0.5 ,nstra*0,nstra*-1,nstra*0, nstra*6, nstra*1 /,
+     /         0  , 0.5 ,nstra*6,nstra*-1,nstra*0, nstra*6, nstra*1 /,
      , nminpts, ivlsf , iscls , isclt , iscl1 , iscl2 , iscl3 , isclb /
      / nstra*0,nstra*0,nstra*0,nstra*0,nstra*0,nstra*0,nstra*0,nstra*0/
       data iscla , nspez  , nsrfsi,  indim ,  insor ,  nrsor  , npsor  /
@@ -706,7 +706,7 @@ c*** 14
      ,    ninct2, nixy2, ntin2, nten2, niflg,  nptc , nptcm, nspzi /
      /    lusg*0,lusg*0,lusg*0,lusg*0,lusg*0, lusg*0,lusg*0,lusg*0 /,
      ,     nspze, nemod, nainb, naotb,istramin,istramax,ncopib,ncopeb /
-     /    lusg*0,lusg*0,   0  ,   0  ,    1   ,    1   ,   0  ,   0   /
+     /    lusg*0,lusg*7,   0  ,   0  ,    1   ,    1   ,   0  ,   0   /
       data fcte , bmass ,  chgsp ,  chgsee ,  chgsei , chgsmom /
      /   npls*1.,npls*0.,nstra*60.,nstra*60.,nstra*100.,nstra*50. /
       data lsymet,lbalan, lfchgs /
