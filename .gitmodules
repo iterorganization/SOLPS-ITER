@@ -24,4 +24,4 @@
 [submodule "ADAS"]
 	path = modules/adas
 	url = ssh://git@git.iter.org/bnd/solps-adas.git
-	branch = master
+	branch = ITER-develop
