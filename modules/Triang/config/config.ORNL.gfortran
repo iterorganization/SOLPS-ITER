@@ -11,19 +11,19 @@ EQUIVS =
 
 CPP = /lib/cpp -traditional
 CPPOPTS = -P -I${srcdir} ${EQUIVS}
-SED = sed s:\#PREC\#:d:g
+SED = 
 LINK_MOD =
 
 FC = gfortran
 ifdef SOLPS_DEBUG
-FCOPTS = -C -g 
+FCOPTS = -C -g -Wall
 else
 FCOPTS = -O3
 endif
 
 DBLFC = ${FC}
 DBLOPTION =
-DBLSED = sed -e s:\#PREC\#:d:g
+DBLSED = 
 
 INCMOD = -I
 MOD = mod
@@ -33,7 +33,7 @@ BLD = ar rcv
 
 LD = gfortran
 ifdef SOLPS_DEBUG
-LDOPTS = -g -C
+LDOPTS = -g -C -Wall
 else
 LDOPTS =
 endif

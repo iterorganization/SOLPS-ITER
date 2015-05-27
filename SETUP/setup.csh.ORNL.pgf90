@@ -8,6 +8,10 @@
 # module load netcdf
 # module load scalapack
 
+if (-e /usr/local/texlive/bin/x86_64-linux) then 
+setenv PATH /usr/local/texlive/bin/x86_64-linux:${PATH}
+endif
+
 # Environment variables
 setenv DEVICE d3d
 
