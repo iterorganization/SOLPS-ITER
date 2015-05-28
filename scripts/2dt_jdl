@@ -1,0 +1,54 @@
+#! /bin/csh -f
+set x=$1
+if ("X$1" == "X-lx") then
+  set lx="l"
+  shift
+else
+  set lx=""
+endif
+if ("X$1" == "X-ly") then
+  set ly="l"
+  shift
+else
+  set ly=""
+endif
+set source=b2mn.exe.dir/b2time.nc
+if (! -e $source) set source=b2time.nc
+
+set args=""
+set nargs=0
+
+if($?GNUPLOT_TMP) then
+    set tmpdir="$GNUPLOT_TMP/"
+else
+    set tmpdir=""
+endif
+
+/bin/cp /dev/null ${tmpdir}gnuplot.data.tmp
+#nc2text -n 9999999 $source timesa >> ${tmpdir}gnuplot.data.tmp
+# Logic here is to dump variable data in 'fortran' format, then look for 'data:', then variable name, and finally read line by line. Then replace commas with spaces and strip semicolon.
+ncdump $source -f f -v timesa | awk 'BEGIN {ORS="";} /data:/{found1=1;next;} /timesa/{if (found1==1) {if (found2==1) print $1; else {print $3;found2=1;}}} END {print "\n";}' | sed 's/,/ /g' | sed 's/;//g' >> ${tmpdir}gnuplot.data.tmp
+
+start:
+#  set check=`nc2text -n 999999 $source "$1(1)"`
+  # Here just dump varible and check how many entries are on the second to last line.  Works for two, didn't have any cases to confirm this works for more.
+  # Could break if there are enough columns that it extends across multiple lines.
+  set check=`ncdump $source -v $1 | sed -n 'x;$p' | sed 's/;//g'`
+  @ nargs += $#check
+  if ($#check == 1) then
+#    echo `nc2text -n 9999999 $source $1` >> ${tmpdir}gnuplot.data.tmp
+    # Same as timesa except we pass the variable name as string
+    ncdump $source -f f -v $1 | awk -v string="$1" 'BEGIN {ORS="";} /data:/{found1=1;next;} $0 ~ string {if (found1==1) {if (found2==1) print $1; else {print $3;found2=1;}}} END {print "\n";}' | sed 's/,/ /g' | sed 's/;//g' >> ${tmpdir}gnuplot.data.tmp
+    set args="$args $1"
+  else
+#    nc2text -n 9999999 $source $1 | awk.transpose >> ${tmpdir}gnuplot.data.tmp
+    # If the data has more than one column we dump as before, then assemble data into columns to be processed by awk.transpose
+    ncdump $source -f f -v $1 | awk -v string="$1" 'BEGIN {ORS="";} /data:/{found1=1;next;} $0 ~ string {if (found1==1) {if (found2==1) print $1; else {print $3;found2=1;}}}' | awk 'BEGIN {FS=","} {for (i=1;i<=NF;i++) if (i%2==1) {ORS=" ";print $i;} else {ORS="\n";print $i}}' | sed 's/;//g' | awk.transpose >> ${tmpdir}gnuplot.data.tmp
+    set args="$args `count -p $1 1 $#check`"
+  endif
+  shift
+  if ("X$1X" != "XX") goto start
+
+awk.transpose < ${tmpdir}gnuplot.data.tmp | awk 'NR==1{saveNF=NF}NF==saveNF{print $0}' | plot ${lx}x${ly}yplot$nargs $args time '' `chop_pwd 60`
+
+/bin/rm ${tmpdir}gnuplot.data.tmp
