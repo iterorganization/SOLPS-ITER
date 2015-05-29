@@ -24,10 +24,23 @@ endif
 set args="$argv"
 set nargs=$#argv
 
+which nc2text && set no_nc2text=0 || set no_nc2text=1
+
 cp /dev/null ${tmpdir}gnuplot.data.tmp
-echo `nc2text -n 9999999 $source $x` >> ${tmpdir}gnuplot.data.tmp
+if ($no_nc2text == 1) then
+  ncdump $source -f f -v $x | \
+  awk 'BEGIN {ORS="";} /data:/{found1=1;next;} /$x/{if (found1==1) {if (found2==1) print $1; else {print $3;found2=1;}}} END {print "\n";}' | \
+  sed 's/,/ /g' | sed 's/;//g' >> ${tmpdir}gnuplot.data.tmp
+else
+  echo `nc2text -n 9999999 $source $x` >> ${tmpdir}gnuplot.data.tmp
+endif
 start:
-  echo `nc2text -n 9999999 $source $1` >> ${tmpdir}gnuplot.data.tmp
+  if ($no_nc2text == 1) then
+    ncdump $source -f f -v $1 | awk -v string="$1" 'BEGIN {ORS="";} /data:/{found1=1;next;} $0 ~ string {if (found1==1) {if (found2==1) print $1; else {print $3;found2=1;}}}  END {print "\n";}' | \
+    sed 's/,/ /g' | sed 's/;//g' >> ${tmpdir}gnuplot.data.tmp
+  else
+    echo `nc2text -n 9999999 $source $1` >> ${tmpdir}gnuplot.data.tmp
+  endif
   shift
   if ("X$1X" != "XX") goto start
 

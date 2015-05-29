@@ -17,6 +17,7 @@ if ($?NREG) then
     set extra="fn3dtl fe3dtl fi3dtl fc3dtl fl3dtl fo3dtl ft3dtl ne3dtl te3dtl ti3dtl po3dtl an3dtl mn3dtl ne3dtr te3dtr ti3dtr po3dtr an3dtr mn3dtr fn3dtr fe3dtr fi3dtr fc3dtr fl3dtr fo3dtr ft3dtr tp3dtl tp3dtr"
   endif
 endif
+which nc2text && set no_nc2text=0 || set no_nc2text=1
 foreach i ($usual $extra)
   set source=b2mn.exe.dir/b2time.nc
   if (! -e $source) set source=b2time.nc
@@ -26,16 +27,41 @@ foreach i ($usual $extra)
   set SUFFIX=`echo $suffix | tr 'a-z' 'A-Z'`
   set SUFFIXP=`echo $suffix | tr 'a-z' 'A-Z'`P
 #  echo $i $prefix $pr2fix $suffix $SUFFIX $SUFFIXP
-  if ($prefix == "f" && -e ds$SUFFIX) then
-    nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ds$suffix - ds$SUFFIX | awk '{print $1,$2/$3}' >! $i.last10
-  else if ($prefix == "t" && $pr2fix != "p") then
-    nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1/1.602176565e-19}' | paste ds$suffix - >! $i.last10
-  else if ($prefix == "t" && $pr2fix == "p") then
-    nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ds$suffix - >! $i.last10
+  if ($no_nc2text == 1) then
+    if ($prefix == "f" && -e ds$SUFFIX) then
+      ncdump $source -f f -v "$i(:,${NUM}:${END})" | awk -v string="$i" 'BEGIN {ORS="";} /data:/{found1=1;next;} $0 ~ string {if (found1==1) {if (found2==1) print $i; else {print $3;found2=1;}}}  END {print "\n";}' | \
+      sed 's/,/ /g' | sed 's/;//g' | \
+      ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ds$suffix - ds$SUFFIX | awk '{print $1,$2/$3}' >! $i.last10
+    else if ($prefix == "t" && $pr2fix != "p") then
+      ncdump $source -f f -v "$i(:,${NUM}:${END})" | awk -v string="$i" 'BEGIN {ORS="";} /data:/{found1=1;next;} $0 ~ string {if (found1==1) {if (found2==1) print $i; else {print $3;found2=1;}}}  END {print "\n";}' | \
+      sed 's/,/ /g' | sed 's/;//g' | \
+      ave.awk | tr ' ' '\n' | awk 'NF>0{print $1/1.602176565e-19}' | paste ds$suffix - >! $i.last10
+    else if ($prefix == "t" && $pr2fix == "p") then
+      ncdump $source -f f -v "$i(:,${NUM}:${END})" | awk -v string="$i" 'BEGIN {ORS="";} /data:/{found1=1;next;} $0 ~ string {if (found1==1) {if (found2==1) print $i; else {print $3;found2=1;}}}  END {print "\n";}' | \
+      sed 's/,/ /g' | sed 's/;//g' | \
+      ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ds$suffix - >! $i.last10
+    else
+      ncdump $source -f f -v "$i(:,${NUM}:${END})" | awk -v string="$i" 'BEGIN {ORS="";} /data:/{found1=1;next;} $0 ~ string {if (found1==1) {if (found2==1) print $i; else {print $3;found2=1;}}}  END {print "\n";}' | \
+      sed 's/,/ /g' | sed 's/;//g' | \
+      ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ds$suffix - >! $i.last10
+    endif
+    if ($prefix == "f" && -e ds$SUFFIXP) then
+      ncdump $source -f f -v "$i(:,${NUM}:${END})" | awk -v string="$i" 'BEGIN {ORS="";} /data:/{found1=1;next;} $0 ~ string {if (found1==1) {if (found2==1) print $i; else {print $3;found2=1;}}}  END {print "\n";}' | \
+      sed 's/,/ /g' | sed 's/;//g' | \
+      ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ds$suffix - ds$SUFFIXP | awk '{print $1,$2/$3}' >! $i'P'.last10
+    endif
   else
-    nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ds$suffix - >! $i.last10
-  endif
-  if ($prefix == "f" && -e ds$SUFFIXP) then
-    nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ds$suffix - ds$SUFFIXP | awk '{print $1,$2/$3}' >! $i'P'.last10
+    if ($prefix == "f" && -e ds$SUFFIX) then
+      nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ds$suffix - ds$SUFFIX | awk '{print $1,$2/$3}' >! $i.last10
+    else if ($prefix == "t" && $pr2fix != "p") then
+      nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1/1.602176565e-19}' | paste ds$suffix - >! $i.last10
+    else if ($prefix == "t" && $pr2fix == "p") then
+      nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ds$suffix - >! $i.last10
+    else
+      nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ds$suffix - >! $i.last10
+    endif
+    if ($prefix == "f" && -e ds$SUFFIXP) then
+      nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ds$suffix - ds$SUFFIXP | awk '{print $1,$2/$3}' >! $i'P'.last10
+    endif
   endif
 end
