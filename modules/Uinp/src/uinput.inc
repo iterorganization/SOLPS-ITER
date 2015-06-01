@@ -419,7 +419,7 @@ c*** 15
      ,  vz2,vz3,vz4,vz5,b0,b1,b2,b3,b4,b5,vl0,vl1,vl2,vl3,vl4,vl5,
      ,  datm,dmol,dion,dpls,ermin,
      ,  ercut,rprob0,rinteg,einteg,ainteg,ychsptg,echsptg,fchsptg,
-     ,  achsptg,  fsheata,
+     ,  achsptg,fsheata,
      ,  alloc,flux,scalv,sorwgt,sorlim,sorind,sorexp,sorifl,sorad1,
      ,  sorad2,sorad3,sorad4,sorad5,sorad6,soreni,sorene,sorvdx,
      ,  sorvdy,sorvdz,sorcos,sormax,sorctx,sorcty,sorctz,
