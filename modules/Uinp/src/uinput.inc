@@ -324,7 +324,7 @@ c*** 14
      ,  lkindp(npls)
       real fcte(npls),bmass(npls),chgsp(nstra),chgsee(nstra),
      ,  chgsei(nstra),chgsmom(nstra)
-      logical lsymet,lbalan,lfchgs
+      logical lsymet,lbalan,lchkqud,lfchgs
       character txtpls(nain)*72, txtpsp(nain)*24, txtpun(nain)*24
 
 c*** 15
@@ -452,7 +452,7 @@ c*** 15
      ,  plnums,plarr,lrpscut,pltsrc,pl3a,pl3s,pltl2d,pltl3d,pltllg,
      ,  pltler,lhist2,lsmot2,lhist3,lcntr3,lsmot3,lraps,lvect3,lrpvc3,
      ,  lrps3d,lrpscn,lprad,lppol,lptor,
-     ,  plchor,plspec,lpw_d,lsymet,lbalan,lfchgs
+     ,  plchor,plspec,lpw_d,lsymet,lbalan,lchkqud,lfchgs
 
       common/uinchr/ txtrun,txtsfl,txtsfa,filnam,h123,reac,crc,texta,
      ,  textm,texti,textf,textp,

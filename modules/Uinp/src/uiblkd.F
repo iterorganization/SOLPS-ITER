@@ -709,8 +709,8 @@ c*** 14
      /    lusg*0,lusg*7,   0  ,   0  ,    1   ,    1   ,   0  ,   0   /
       data fcte , bmass ,  chgsp ,  chgsee ,  chgsei , chgsmom /
      /   npls*1.,npls*0.,nstra*60.,nstra*60.,nstra*100.,nstra*50. /
-      data lsymet,lbalan, lfchgs /
-     /    .false.,.true.,.false. /
+      data lsymet,lbalan,lchkqud, lfchgs /
+     /    .false.,.true.,.false.,.false. /
     
 c*** 15
 

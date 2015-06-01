@@ -963,7 +963,7 @@ c*** 14.  data for interfacing subroutine infcop
 
       write(iunoo,700) utxthd(19)
       if (nmode.ne.0) then !{
-        write(iunoo,706) lsymet,lbalan
+        write(iunoo,706) lsymet,lbalan,lchkqud
         write(iunoo,707) nfla,ncutb,ncutl
         do i=1,nplsi !{
           write(iunoo,710) i,iflb(i),fcte(i),bmass(i),lkindp(i)
