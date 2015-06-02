@@ -314,6 +314,7 @@ c*** 13
 c*** 14
 
       integer nclmi,nblcki,nprnvi,nprtvi,nprdvi,nfla,ncutb,ncutl,
+     ,  imf,ntrfrm,nfull,ibrad,ibpol,ibtor,
      ,  iflb(npls),ndxa,ndya,ntargi,ntgprt(nstep),ndt2(nstep,ngitt),
      ,  ninct2(nstep,ngitt),nixy2(nstep,ngitt),ntin2(nstep,ngitt),
      ,  nten2(nstep,ngitt),niflg(nstep,ngitt),nptc(nstep,ngitt),
@@ -386,7 +387,8 @@ c*** 15
      ,  nprnli,ntmstp,nptst,nsnvi,isnve,isnvs,isnvt,isnrc,
      ,  jadch0,jadch1,jadnsw,jadmsw,jadlsw,jadksw,jadjsw,jadisw,
      ,  jlblck,jlacll,nclmi,nblcki,nprnvi,nprtvi,nprdvi,nfla,
-     ,  ncutb,ncutl,iflb,ndxa,ndya,ntargi,ntgprt,ndt2,ninct2,nixy2,
+     ,  ncutb,ncutl,imf,ntrfrm,nfull,ibrad,ibpol,ibtor,
+     ,  iflb,ndxa,ndya,ntargi,ntgprt,ndt2,ninct2,nixy2,
      ,  ntin2,nten2,niflg,nptc,nptcm,nspzi,nspze,nemod,istramin,
      ,  istramax,nainb,ncopib,ncopeb,nains,naint,naotb,naots,naott,
      ,  lkindp,

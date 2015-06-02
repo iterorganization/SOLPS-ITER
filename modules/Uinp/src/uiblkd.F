@@ -699,10 +699,12 @@ c*** 13
 
 c*** 14
 
-      data nclmi,nblcki,nprnvi,nprtvi,nprdvi,  nfla , ncutb, lkindp  /
-     /        5 , -25  ,  1   , 350  ,  1   ,    0  ,   0  , npls*0  /,
-     ,     ncutl, iflb , ndxa , ndya ,ntargi, ntgprt, ndt2  /
-     /       1  ,npls*1,  0   ,  0   ,  0   ,nstep*1,lusg*0 /,
+      data nclmi,nblcki,nprnvi,nprtvi,nprdvi, nfla , ncutb, lkindp  /
+     /        5 , -25  ,  1   , 350  ,  1   ,   0  ,   0  , npls*0  /,
+     ,     ncutl, imf  ,ntrfrm, nfull, ibrad, ibpol, ibtor / 
+     /       1  ,   2  ,  0   ,   0  ,  1   ,    1 ,   1   /,
+     ,     iflb , ndxa , ndya ,ntargi, ntgprt, ndt2  /
+     /    npls*1,  0   ,  0   ,  0   ,nstep*1,lusg*0 /,
      ,    ninct2, nixy2, ntin2, nten2, niflg,  nptc , nptcm, nspzi /
      /    lusg*0,lusg*0,lusg*0,lusg*0,lusg*0, lusg*0,lusg*0,lusg*0 /,
      ,     nspze, nemod, nainb, naotb,istramin,istramax,ncopib,ncopeb /
