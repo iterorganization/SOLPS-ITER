@@ -510,7 +510,7 @@ c*** 6
      /      ' ',         'D_on_C'          /
       data nnftrm / luftrm /, nchsppri / 0 /
       data lchspgrp, lchsptgt, lchspnwl, lchspaux /
-     /    nchsppr*0,nchsppr*1,nchsppr*1, lvchsi*0 /
+     /    nchsppr*0,nchsppr*1,nchsppr*0, lvchsi*0 /
       data datm    ,  dmol   ,  dion   ,  dpls  ,   ermin  ,  ercut   /
      /     natm*0. , nmol*0. , nion*0. , npls*0.,    1.    ,   50.    /,
      ,      rprob0 , rinteg  , einteg  , ainteg , achsptg  /

@@ -298,14 +298,9 @@ c***   chemical sputtering
         chmvar(k)=ychsptg(i)
         chemindex(k)=i
         k=k+1
-        chvarname(k)='ECHSPTG'
+        chvarname(k)='ESPUTC'
         chmspname(k)=speciename
         chmvar(k)=echsptg(i)
-        chemindex(k)=i
-        k=k+1
-        chvarname(k)='FCHSPTG'
-        chmspname(k)=speciename
-        chmvar(k)=fchsptg(i)
         chemindex(k)=i
    10  continue !}
        nchemvar=k

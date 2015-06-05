@@ -76,6 +76,11 @@ if($?GNUPLOT_POINTSIZE) then
 else
     set ps=''
 endif
+set ERRBAR=0
+echo $1 | egrep 'b' > /dev/null
+if ($status == 0) then
+  set ERRBAR=1
+endif
 echo $1 | egrep 'lx' > /dev/null
 if ($status == 0) then
   echo set log x >> $cfilename
@@ -159,11 +164,15 @@ if ($LOGSPECIAL == 2) then
 endif
 while ($i < $cnt)
   @ i +=1
-  echo \"$dfilename\" using 1:$i title \"$1\" with $lines$points$lw$ps", $x" >> $cfilename
-  if ($LOGSPECIAL == 1) then
-    echo \"$dfilename\" using 1:\(-\$$i\) title \"-\($1\)\" with $lines$points$lw$ps", $x" >> $cfilename
-  else if ($LOGSPECIAL == 2) then
-    echo \"$dfilename\" using 1:\(-\$$i\) title \"-\($1\)\" with $lines$points$lw$ps", $x" >> $cfilename.extra
+  if ($ERRBAR == 0) then
+    echo \"$dfilename\" using 1:$i title \"$1\" with $lines$points$lw$ps", $x" >> $cfilename
+    if ($LOGSPECIAL == 1) then
+      echo \"$dfilename\" using 1:\(-\$$i\) title \"-\($1\)\" with $lines$points$lw$ps", $x" >> $cfilename
+    else if ($LOGSPECIAL == 2) then
+      echo \"$dfilename\" using 1:\(-\$$i\) title \"-\($1\)\" with $lines$points$lw$ps", $x" >> $cfilename.extra
+    endif
+  else
+  echo \"$dfilename\" using `echo $i | awk '{print "1:"2*$1-1":2:"2*$1}'` title \"$1\" with xyerrorlines$lw$ps", $x" >> $cfilename
   endif
   if($#argv >= 1) then
     shift	
@@ -171,7 +180,11 @@ while ($i < $cnt)
 end
 @ i +=1
 if ($LOGSPECIAL == 0) then
-  echo \"$dfilename\" using 1:$i title \"$1\" with $lines$points$lw$ps >> $cfilename
+  if ($ERRBAR == 0) then
+    echo \"$dfilename\" using 1:$i title \"$1\" with $lines$points$lw$ps >> $cfilename
+  else
+    echo \"$dfilename\" using `echo $i | awk '{print "1:"2*$1-1":2:"2*$1}'` title \"$1\" with xyerrorlines$lw$ps >> $cfilename
+  endif
 else if ($LOGSPECIAL == 1) then
   echo \"$dfilename\" using 1:$i title \"$1\" with $lines$points$lw$ps", $x" >> $cfilename
   echo \"$dfilename\" using 1:\(-\$$i\) title \"-\($1\)\" with $lines$points$lw$ps >> $cfilename

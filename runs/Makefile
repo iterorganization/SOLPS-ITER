@@ -10,6 +10,7 @@ TIME = time
 # Default debugger
 DBX ?= dbx
 
+ifdef SOLPS_DEBUG
 ifndef STAND_ALONE
 B2OBJ  = ${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}.debug
 EIROBJ = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}.debug
@@ -17,6 +18,16 @@ INC = -I ${B2OBJ} -I ${EIROBJ}
 else
 B2OBJ  = ${SOLPSTOP}/modules/B2.5/builds/standalone.${HOST_NAME}.${COMPILER}.debug
 INC = -I ${B2OBJ}
+endif
+else
+ifndef STAND_ALONE
+B2OBJ  = ${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}
+EIROBJ = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}
+INC = -I ${B2OBJ} -I ${EIROBJ}
+else
+B2OBJ  = ${SOLPSTOP}/modules/B2.5/builds/standalone.${HOST_NAME}.${COMPILER}
+INC = -I ${B2OBJ}
+endif
 endif
 
 
@@ -83,31 +94,31 @@ prt : $(prints)
 $(target_xd) : b2fgmtry b2fparam b2fstate b2fplasma
 	rm -rf b2xd.exe.dir ; mkdir b2xd.exe.dir ; cp $^ b2xd.exe.dir
 	rm -f $(target_xd)
-	cd b2xd.exe.dir ; ${TIME} b2xd.exe ; mv $(target_xd) .. ; rm -f $(notdir $^)
+	cd b2xd.exe.dir ; ${TIME} ${B2OBJ}/b2xd.exe ; mv $(target_xd) .. ; rm -f $(notdir $^)
 	-rmdir b2xd.exe.dir
 
 $(target_ag) : b2ag.dat
 	rm -rf b2ag.exe.dir ; mkdir b2ag.exe.dir ; cp $^ b2ag.exe.dir
 	rm -f $(target_ag)
-	cd b2ag.exe.dir ; ${TIME} b2ag.exe ; mv $(target_ag) .. ; rm -f $(notdir $^)
+	cd b2ag.exe.dir ; ${TIME} ${B2OBJ}/b2ag.exe ; mv $(target_ag) .. ; rm -f $(notdir $^)
 	-rmdir b2ag.exe.dir
 
 $(target_ah) : b2ah.dat b2fgmtry
 	rm -rf b2ah.exe.dir ; mkdir b2ah.exe.dir ; cp $^ b2ah.exe.dir
 	rm -f $(target_ah)
-	cd b2ah.exe.dir ; ${TIME} b2ah.exe ; mv $(target_ah) .. ; rm -f $(notdir $^)
+	cd b2ah.exe.dir ; ${TIME} ${B2OBJ}/b2ah.exe ; mv $(target_ah) .. ; rm -f $(notdir $^)
 	-rmdir b2ah.exe.dir
 
 $(target_ai) : b2ag.dat b2ai.dat b2fgmtry
 	rm -rf b2ai.exe.dir ; mkdir b2ai.exe.dir ; cp $^ b2ai.exe.dir
 	rm -f $(target_ai)
-	cd b2ai.exe.dir ; ${TIME} b2ai.exe ; mv $(target_ai) .. ; rm -f $(notdir $^)
+	cd b2ai.exe.dir ; ${TIME} ${B2OBJ}/b2ai.exe ; mv $(target_ai) .. ; rm -f $(notdir $^)
 	-rmdir b2ai.exe.dir
 
 $(target_ar) : b2ar.dat stra.dat weis.dat b2fpardf b2fgmtry
 	rm -rf b2ar.exe.dir ; mkdir b2ar.exe.dir ; cp $^ b2ar.exe.dir
 	rm -f $(target_ar)
-	cd b2ar.exe.dir ; ${TIME} b2ar.exe ; mv $(target_ar) .. ; rm -f $(notdir $^)
+	cd b2ar.exe.dir ; ${TIME} ${B2OBJ}/b2ar.exe ; mv $(target_ar) .. ; rm -f $(notdir $^)
 	-rmdir b2ar.exe.dir
 
 $(target_mn) : b2mn.dat b2fgmtry b2fpardf b2fstati b2frates fort.30
@@ -116,7 +127,7 @@ $(target_mn) : b2mn.dat b2fgmtry b2fpardf b2fstati b2frates fort.30
 ifndef STAND_ALONE
 	-cd b2mn.exe.dir ; ln -s ../HYDHEL ../AMJUEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../fort.33 ../fort.34 ../fort.35 ../graphite_ext.dat ../mo_ext.dat . ; ln -s ../input.dat fort.1 ;[ -e ../fort.15 ] && cp -p ../fort.15 . ; [ -e ../fort.13 ] && cp -p ../fort.13 .
 endif
-	cd b2mn.exe.dir ; mkdir tracing ; ${TIME} b2mn.exe ; mv $(target_mn) .. ; mv tracing/* ../tracing ; rm -f $(notdir $^) .quit
+	cd b2mn.exe.dir ; mkdir tracing ; ${TIME} ${B2OBJ}/b2mn.exe ; mv $(target_mn) .. ; mv tracing/* ../tracing ; rm -f $(notdir $^) .quit
 ifndef STAND_ALONE
 	-mv b2mn.exe.dir/fort.13 b2mn.exe.dir/fort.15 .
 endif
@@ -141,20 +152,20 @@ $(target_co) : b2mn.dat b2fgmtry b2fpardf b2fstati ${PLASMASTATE} ${savefiles}
 ifndef STAND_ALONE
 	-cd b2co.exe.dir ; ln -s ../input.dat ../fort.33 ../fort.34 ../fort.35 .
 endif
-	cd b2co.exe.dir ; ${TIME} b2co.exe `basename ${PLASMASTATE}` ; mv $(target_co) b2fstate .. ; rm -f $(notdir $^) .quit
+	cd b2co.exe.dir ; ${TIME} ${B2OBJ}/b2co.exe `basename ${PLASMASTATE}` ; mv $(target_co) b2fstate .. ; rm -f $(notdir $^) .quit
 	[ -e b2co.exe.dir/input.dat ] && rm b2co.exe.dir/input.dat b2co.exe.dir/fort.3[3-5]
 	-rmdir b2co.exe.dir
 
 $(target_uf) : b2fgmtry b2fparam b2fstate b2fplasma
 	rm -rf b2uf.exe.dir ; mkdir b2uf.exe.dir ; cp $^ b2uf.exe.dir
 	rm -f $(target_uf)
-	cd b2uf.exe.dir ; ${TIME} b2uf.exe ; mv $(target_uf) b2fplasmf .. ; rm -f $(notdir $^) .quit
+	cd b2uf.exe.dir ; ${TIME} ${B2OBJ}/b2uf.exe ; mv $(target_uf) b2fplasmf .. ; rm -f $(notdir $^) .quit
 	-rmdir b2uf.exe.dir
 
 $(target_fu) : b2fgmtry b2fparam b2fstate b2fplasmf
 	rm -rf b2fu.exe.dir ; mkdir b2fu.exe.dir ; cp $^ b2fu.exe.dir
 	rm -f $(target_fu)
-	cd b2fu.exe.dir ; ${TIME} b2fu.exe ; mv $(target_fu) b2fplasma .. ; rm -f $(notdir $^) .quit
+	cd b2fu.exe.dir ; ${TIME} ${B2OBJ}/b2fu.exe ; mv $(target_fu) b2fplasma .. ; rm -f $(notdir $^) .quit
 	-rmdir b2fu.exe.dir
 
 ifndef STAND_ALONE
@@ -164,81 +175,81 @@ $(target_pl) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates
 endif
 	rm -rf b2pl.exe.dir ; mkdir b2pl.exe.dir ; cp $^ b2pl.exe.dir
 	rm -f $(target_pl)
-	cd b2pl.exe.dir ; ${TIME} b2pl.exe ; mv $(target_pl) .. ; rm -f $(notdir $^) .quit
+	cd b2pl.exe.dir ; ${TIME} ${B2OBJ}/b2pl.exe ; mv $(target_pl) .. ; rm -f $(notdir $^) .quit
 	-rmdir b2pl.exe.dir
 
 $(target_rd) : shotnumber.history
 	rm -rf b2rd.exe.dir ; mkdir b2rd.exe.dir ; cp $^ b2rd.exe.dir
 	rm -f $(target_rd)
-	cd b2rd.exe.dir ; ${TIME} b2rd.exe ; mv $(target_rd) b2fstate b2fgmtrt .. ; rm -f $(notdir $^)
+	cd b2rd.exe.dir ; ${TIME} ${B2OBJ}/b2rd.exe ; mv $(target_rd) b2fstate b2fgmtrt .. ; rm -f $(notdir $^)
 	-rmdir b2rd.exe.dir
 
 $(target_ts) : b2fparam b2fgmtry b2fpardf b2fstate b2fplasma
 	rm -rf b2ts.exe.dir ; mkdir b2ts.exe.dir ; cp $^ b2ts.exe.dir
 	rm -f $(target_ts)
-	cd b2ts.exe.dir ; ${TIME} b2ts.exe ; mv $(target_ts) b2fstate .. ; rm -f $(notdir $^) .quit
+	cd b2ts.exe.dir ; ${TIME} ${B2OBJ}/b2ts.exe ; mv $(target_ts) b2fstate .. ; rm -f $(notdir $^) .quit
 	-rmdir b2ts.exe.dir
 
 $(target_yg) : b2yg.dat b2fgmtry
 	rm -rf b2yg.exe.dir ; mkdir b2yg.exe.dir ; cp $^ b2yg.exe.dir
 	rm -f $(target_yg)
 	NCARG_GKS_OUTPUT=b2yg.plt ; export NCARG_GKS_OUTPUT ;\
-	cd b2yg.exe.dir ; ${TIME} b2yg.exe ; mv $(target_yg) .. ; rm -f $(notdir $^)
+	cd b2yg.exe.dir ; ${TIME} ${B2OBJ}/b2yg.exe ; mv $(target_yg) .. ; rm -f $(notdir $^)
 	-rmdir b2yg.exe.dir
 
 $(target_yh) : b2yh.dat b2fparam b2fgmtry
 	rm -rf b2yh.exe.dir ; mkdir b2yh.exe.dir ; cp $^ b2yh.exe.dir
 	rm -f $(target_yh)
 	NCARG_GKS_OUTPUT=b2yh.plt ; export NCARG_GKS_OUTPUT ;\
-	cd b2yh.exe.dir ; ${TIME} time b2yh.exe ; mv $(target_yh) .. ; rm -f $(notdir $^)
+	cd b2yh.exe.dir ; ${TIME} ${B2OBJ}/b2yh.exe ; mv $(target_yh) .. ; rm -f $(notdir $^)
 	-rmdir b2yh.exe.dir
 
 $(target_yi) : b2yi.dat b2mn.dat b2fstate b2frates b2fgmtry
 	rm -rf b2yi.exe.dir ; mkdir b2yi.exe.dir ; cp $^ b2yi.exe.dir
 	rm -f $(target_yi)
 	NCARG_GKS_OUTPUT=b2yi.plt ; export NCARG_GKS_OUTPUT ;\
-	cd b2yi.exe.dir ; ${TIME} b2yi.exe ; mv $(target_yi) .. ; rm -f $(notdir $^)
+	cd b2yi.exe.dir ; ${TIME} ${B2OBJ}/b2yi.exe ; mv $(target_yi) .. ; rm -f $(notdir $^)
 	-rmdir b2yi.exe.dir
 
 $(target_yi_gnuplot) : b2mn.dat b2fstate b2frates b2fgmtry
 	rm -rf b2yi_gnuplot.exe.dir ; mkdir b2yi_gnuplot.exe.dir ; cp $^ b2yi_gnuplot.exe.dir
 	rm -f $(target_yi_gnuplot)
-	cd b2yi_gnuplot.exe.dir ; ${TIME} b2yi_gnuplot.exe ; mv $(target_yi_gnuplot) .. ; rm -f $(notdir $^)
+	cd b2yi_gnuplot.exe.dir ; ${TIME} ${B2OBJ}/b2yi_gnuplot.exe ; mv $(target_yi_gnuplot) .. ; rm -f $(notdir $^)
 	-rmdir b2yi_gnuplot.exe.dir
 
 $(target_ym) : b2ym.dat b2fmovie
 	rm -rf b2ym.exe.dir ; mkdir b2ym.exe.dir ; cp $^ b2ym.exe.dir
 	rm -f $(target_ym)
 	NCARG_GKS_OUTPUT=b2ym.plt ; export NCARG_GKS_OUTPUT ;\
-	cd b2ym.exe.dir ; ${TIME} b2ym.exe ; mv $(target_ym) .. ; rm -f $(notdir $^)
+	cd b2ym.exe.dir ; ${TIME} ${B2OBJ}/b2ym.exe ; mv $(target_ym) .. ; rm -f $(notdir $^)
 	-rmdir b2ym.exe.dir
 
 $(target_yn) : b2yn.dat b2mn.dat b2ftrack b2frates b2fstate
 	rm -rf b2yn.exe.dir ; mkdir b2yn.exe.dir ; cp $^ b2yn.exe.dir
 	rm -f $(target_yn)
 	NCARG_GKS_OUTPUT=b2yn.plt ; export NCARG_GKS_OUTPUT ;\
-	cd b2yn.exe.dir ; ${TIME} b2yn.exe ; mv $(target_yn) .. ; rm -f $(notdir $^)
+	cd b2yn.exe.dir ; ${TIME} ${B2OBJ}/b2yn.exe ; mv $(target_yn) .. ; rm -f $(notdir $^)
 	-rmdir b2yn.exe.dir
 
 $(target_yp) : b2yp.dat b2mn.dat b2fgmtry b2fparam b2fstate b2frates
 	rm -rf b2yp.exe.dir ; mkdir b2yp.exe.dir ; cp $^ b2yp.exe.dir
 	rm -f $(target_yp)
 	NCARG_GKS_OUTPUT=b2yp.plt ; export NCARG_GKS_OUTPUT ;\
-	cd b2yp.exe.dir ; ${TIME} b2yp.exe ; mv $(target_yp) .. ; rm -f $(notdir $^)
+	cd b2yp.exe.dir ; ${TIME} ${B2OBJ}/b2yp.exe ; mv $(target_yp) .. ; rm -f $(notdir $^)
 	-rmdir b2yp.exe.dir
 
 $(target_yq) : b2yq.dat b2ftrace
 	rm -rf b2yq.exe.dir ; mkdir b2yq.exe.dir ; cp $^ b2yq.exe.dir
 	rm -f $(target_yq)
 	NCARG_GKS_OUTPUT=b2yq.plt ; export NCARG_GKS_OUTPUT ;\
-	cd b2yq.exe.dir ; ${TIME} b2yq.exe ; mv $(target_yq) .. ; rm -f $(notdir $^)
+	cd b2yq.exe.dir ; ${TIME} ${B2OBJ}/b2yq.exe ; mv $(target_yq) .. ; rm -f $(notdir $^)
 	-rmdir b2yq.exe.dir
 
 $(target_yr) : b2yr.dat b2frates b2fpardf b2fgmtry
 	rm -rf b2yr.exe.dir ; mkdir b2yr.exe.dir ; cp $^ b2yr.exe.dir
 	rm -f $(target_yr)
 	NCARG_GKS_OUTPUT=b2yr.plt ; export NCARG_GKS_OUTPUT ;\
-	cd b2yr.exe.dir ; ${TIME} b2yr.exe ; mv $(target_yr) .. ; rm -f $(notdir $^)
+	cd b2yr.exe.dir ; ${TIME} ${B2OBJ}/b2yr.exe ; mv $(target_yr) .. ; rm -f $(notdir $^)
 	-rmdir b2yr.exe.dir
 
 $(target_yt) : b2yt.dat b2fstate b2mn.dat b2ah.dat b2ai.dat b2ag.dat b2fgmtry b2frates b2fpardf
@@ -246,10 +257,10 @@ $(target_yt) : b2yt.dat b2fstate b2mn.dat b2ah.dat b2ai.dat b2ag.dat b2fgmtry b2
 	rm -f $(target_yt)
 ifndef STAND_ALONE
 	-cd b2yt.exe.dir ; [ -e ../input.dat ] && ln -s ../input.dat . ; ln -s ../fort.33 ../fort.34 ../fort.35 .
-	cd b2yt.exe.dir ; ${TIME} b2yt.exe ; mv $(target_yt) .. ; rm -f $(notdir $^) input.dat fort.3[3-5]
+	cd b2yt.exe.dir ; ${TIME} ${B2OBJ}/b2yt.exe ; mv $(target_yt) .. ; rm -f $(notdir $^) input.dat fort.3[3-5]
 	[ -e b2yt.exe.dir/input.dat.2 ] && mv b2yt.exe.dir/input.dat.2 .
 else
-	cd b2yt.exe.dir ; ${TIME} b2yt.exe ; mv $(target_yt) .. ; rm -f $(notdir $^)
+	cd b2yt.exe.dir ; ${TIME} ${B2OBJ}/b2yt.exe ; mv $(target_yt) .. ; rm -f $(notdir $^)
 endif
 	-rmdir b2yt.exe.dir
 

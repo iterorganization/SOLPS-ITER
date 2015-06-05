@@ -47,3 +47,5 @@ if ($B2MDDAT == b2md.dat.sav) then
 else
   rm b2md.dat
 endif
+
+rm -f .resave_mds

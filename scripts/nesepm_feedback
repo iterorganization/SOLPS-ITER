@@ -11,25 +11,25 @@ if (-e $nreg) then
 endif
 if (! $?NREG) set NREG = 4
 if (-e b2mn.dat) then
-  set rescale = `egrep -i 'b2mndr_rescale_neutrals_sources' b2mn.dat | sed -e 's/b2mndr_rescale_neutrals_sources//' | sed -e "s/'//g" `
+  set R=`tr \'\" '  ' < b2mn.dat | grep b2mndr_rescale_neutrals_sources | awk 'BEGIN{R=1}{R=$2}END{print R}'`
 else
-  set rescale = 1.0e-10
+  set R = 1.0e-10
 endif
 switch ($NREG)
   case "1":
-    pipe_run.log | grep -a nesepm_curr | awk '{print NR,$2,$5,$10/'$rescale'/1000}' | sed '$d' | x{$1}yplot3 current target control/1e3 Iteration_no density_or_flux `noquote_pwd 3`
+    pipe_run.log | grep -a nesepm_curr | awk '{print NR,$2,$5,($10/'${R}'/1e3)}' | sed '$d' | x{$1}yplot3 current target control/1000 Iteration_no density_or_flux `noquote_pwd 3`
     breaksw
   case "2":
-    pipe_run.log | grep -a nesepm_curr | awk '{print NR,$2,$5,$10/'$rescale'/1000}' | sed '$d' | x{$1}yplot3 current target control/1e3 Iteration_no density_or_flux `noquote_pwd 3`
+    pipe_run.log | grep -a nesepm_curr | awk '{print NR,$2,$5,($10/'${R}'/1e3)}' | sed '$d' | x{$1}yplot3 current target control/1000 Iteration_no density_or_flux `noquote_pwd 3`
     breaksw
   case "4":
-    pipe_run.log | grep -a nesepm_curr | awk '{print NR,$2,$5,$10/'$rescale'/1000}' | sed '$d' | x{$1}yplot3 current target control/1e3 Iteration_no density_or_flux `noquote_pwd 3`
+    pipe_run.log | grep -a nesepm_curr | awk '{print NR,$2,$5,($10/'${R}'/1e3)}' | sed '$d' | x{$1}yplot3 current target control/1000 Iteration_no density_or_flux `noquote_pwd 3`
     breaksw
   case "5":
-    pipe_run.log | grep -a nesepm_curr | awk '{print NR,$2,$5,$10/'$rescale'/1000}' | sed '$d' | x{$1}yplot3 current target control/1e3 Iteration_no density_or_flux `noquote_pwd 3`
+    pipe_run.log | grep -a nesepm_curr | awk '{print NR,$2,$5,($10/'${R}'/1e3)}' | sed '$d' | x{$1}yplot3 current target control/1000 Iteration_no density_or_flux `noquote_pwd 3`
     breaksw
   case "8":
-    pipe_run.log | grep -a nesepm_curr | awk '{print NR,$2,$5,($10+$11)/'$rescale'/1000}' | sed '$d' | x{$1}yplot3 current target control/1e3 Iteration_no density_or_flux `noquote_pwd 3`
+    pipe_run.log | grep -a nesepm_curr | awk '{print NR,$2,$5,(($10+$11)/'${R}'/1e3)}' | sed '$d' | x{$1}yplot3 current target control/1000 Iteration_no density_or_flux `noquote_pwd 3`
     breaksw
   default:
     echo "Unusual number of regions: Not sure what to do!"
