@@ -1,0 +1,47 @@
+#! /bin/tcsh
+
+echo "DEVICE = " $DEVICE
+echo "Converting shot number " $1
+[ -d $SOLPSTOP/runs/$DEVICE ] || mkdir $SOLPSTOP/runs/$DEVICE
+mkdir $SOLPSTOP/runs/$DEVICE/$1
+cd $SOLPSTOP/runs/$DEVICE/$1
+mkdir convert
+cd convert
+cp /archive/1/kukusha/archive/extra/arch_2/B2E/b2arch/$DEVICE/$1/* .
+cp b2.parameters b2.parameters.src
+cp input.eir input.dat
+b2sxdr
+cd ..
+mkdir baserun
+cp convert/b2a?.dat baserun
+cp convert/b2fgmtry baserun
+cd baserun
+b2run b2ah
+cp ../convert/b2fstati .
+b2run b2ar
+cp ../convert/input.dat .
+cp ../convert/fort.3[3-5] .
+cp ../convert/mesh.extra ../
+ln -s ../mesh.extra .
+cp ../convert/SOLPS_FLUIDS ../
+cp ../convert/NREG ../
+cd ..
+mkdir run5
+cd run5
+setup_baserun_eirene_links
+cp ../convert/b2.*.parameters .
+cp ../convert/b2.boundary.parameters.5 b2.boundary.parameters
+cp ../convert/b2mn.dat.5 b2mn.dat
+cp ../convert/fort.15 .
+cp ../convert/fort.44 .
+cp ../convert/input.dat .
+cp ../convert/b2fstati .
+cp ../convert/b2fplasma .
+cd ..
+correct_baserun_timestamps
+cd run5
+touch b2fstati
+
+
+
+
