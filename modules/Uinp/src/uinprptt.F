@@ -82,11 +82,11 @@ c=======================================================================
         isyplt(1)=1
         isyplt(2)=2
         isyplt(3)=3
-        isyplt(4)=4
-        isyplt(5)=5
-        isyplt(6)=6
-        isyplt(7)=9
-        isyplt(8)=13
+        isyplt(4)=5
+        isyplt(5)=6
+        isyplt(6)=8
+        isyplt(7)=11
+        isyplt(8)=18
         trchst=ttchst
         trcint=ttcint
         trcamd=ttcint
