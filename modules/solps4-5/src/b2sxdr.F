@@ -258,6 +258,12 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
       open(unit=70,file='b2ai.dat')
       write(70,'(a)') 'Dummy file, plasma state imported from B2SXDR'
       close(70)
+*   ..write b2yt.dat
+      open(unit=70,file='b2yt.dat')
+      write(70,'(a)') '*dimens (nx, ny: free format)'
+      write(70,'(2(2x,i4))') nx, ny
+      write(70,'(a)') '''eirene_format''     ''facelift'''
+      close(70)
 *   ..write header to converted state file
       idum(0) = nx
       idum(1) = ny
