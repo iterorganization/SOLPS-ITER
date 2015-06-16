@@ -653,12 +653,13 @@ c*** 7.  data for primary source
         if(indsrc(i).eq.6) cycle
 
         write(iunoo,709) i,txtsou(i)
-        write(iunoo,706) nlavrp(i),nlavrt(i),nlsymp(i),nlsymt(i)
+        write(iunoo,706) nlavrp(i),nlavrt(i),nlsymp(i),nlsymt(i),
+     ,                      nlray(i)
         write(iunoo,707) npts(i),ninitl(i),nemods(i),namods(i),
      ,                                                        nminpts(i)
         write(iunoo,718) flux(i),scalv(i),ivlsf(i),iscls(i),isclt(i),
      ,                      iscl1(i),iscl2(i),iscl3(i),isclb(i),iscla(i)
-        write(iunoo,706) nlatm(i),nlmol(i),nlion(i),nlpls(i)
+        write(iunoo,706) nlatm(i),nlmol(i),nlion(i),nlpls(i),nlphot(i)
         write(iunoo,707) nspez(i)
         write(iunoo,706) nlpnt(i),nllne(i),nlsrf(i),nlvol(i),nlcns(i)
 
@@ -817,7 +818,7 @@ c**  2d geometry plot
 
       write(iunoo,706) pl1st,pl2nd,pl3rd,pladd,plhst,
      ,                 plcut(1),plcut(2),plcut(3),plbox,plstor,
-     ,                 plnumv,plnums,plarr,lrpscut
+     ,                 plnumv,plnums,plarr,lrpscut,plidl
       write(iunoo,707) nplinr,nplotr,npldlr,nplinp,nplotp,npldlp,
      ,                                      nplint,nplott,npldlt,nsrfcls
       do j=1,abs(nsrfcls) !{

@@ -561,8 +561,8 @@ c*** 7
      /     nstra*.false., nstra*.false., nstra*.false., nstra*.true. /,
      ,        nlpnt     ,    nllne     ,    nlsrf     ,    nlvol     /
      /     nstra*.false., nstra*.false., nstra*.true. , nstra*.false./,
-     ,        nlcns     /
-     /     nstra*.false./
+     ,        nlcns     ,    nlray     ,    nlphot    /
+     /     nstra*.false., nstra*.false., nstra*.false./
       data  txtsou / nstra*' ' /
       
 c*** 8
@@ -651,8 +651,8 @@ c*** 11
      /    .false.,.false.,.false.,.false.,.false.,.false.,.false. /,
      ,   plarr ,lrpscut,       pltsrc          ,   pl3a   ,  pl3s    /
      /  .false.,.false., .false.,nstra*.false. , 5*.false.,3*.false. /,
-     ,     pltl2d    ,   pltl3d     , pltllg /
-     ,  nptal*.false.,nptal*.true.  ,nptal*.false. /,
+     ,     pltl2d    ,   pltl3d     , pltllg        , plidl /
+     ,  nptal*.false.,nptal*.true.  ,nptal*.false.  , .false. /,
      ,     pltler    ,    lhist2    ,    lhist3   ,    lcntr3     /
      /  nptal*.false., nptal*.false., nptal*.true., nptal*.false. /,
      ,      lsmot3   ,     lraps   ,   lvect3    ,   lrpvc3    /

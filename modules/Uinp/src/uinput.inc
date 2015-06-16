@@ -203,7 +203,7 @@ c*** 7
       logical nlavrp(nstra), nlavrt(nstra), nlsymp(nstra),
      ,    nlsymt(nstra), nlatm(nstra), nlmol(nstra), nlion(nstra),
      ,    nlpls(nstra), nlpnt(nstra), nllne(nstra), nlsrf(nstra),
-     ,    nlvol(nstra), nlcns(nstra)
+     ,    nlvol(nstra), nlcns(nstra), nlray(nstra), nlphot(nstra)
       character txtsou(nstra)*64
 
 c*** 8
@@ -280,7 +280,7 @@ c*** 11
      ,  lhist2(nptal),lsmot2(nptal),lhist3(nptal),lcntr3(nptal),
      ,  lsmot3(nptal),lraps(nptal),lvect3(nptal),lrpvc3(nptal),
      ,  lrps3d(nptal),lrpscn(nptal),lprad(nptal),lppol(nptal),
-     ,  lptor(nptal)
+     ,  lptor(nptal),plidl
       character textla(5)*24, textls(3)*24
 
 c*** 12
@@ -443,8 +443,8 @@ c*** 15
      ,  nlrad,nlslb,nlcrc,nlell,nltri,nlplg,nlfem,nltet,nlgen,
      ,  nlpol,nlply,nlpla,nlplp,nltor,nltrz,nltra,nltrt,
      ,  nlmlt,nladd,lconst,nltrim,nlavrp,nlavrt,nlsymp,nlsymt,
-     ,  nlatm,nlmol,nlion,nlpls,nlpnt,nllne,nlsrf,nlvol,nlcns,
-     ,  nlprca,nlprcm,nlprci,nlprcph,llpbls,nlpbls,
+     ,  nlatm,nlmol,nlion,nlpls,nlpnt,nllne,nlsrf,nlvol,nlcns,nlray,
+     ,  nlprca,nlprcm,nlprci,nlprcph,llpbls,nlpbls,nlphot,
      ,  trcplt,trchst,trcnal,trcmod,
      ,  trcsig,trcgrd,trcsur,trcref,trcfle,trcamd,trcint,trctim,
      ,  trcsou,trcrec,trclst,trcbla,trcblm,trcbli,trcblp,trcble,
@@ -453,7 +453,7 @@ c*** 15
      ,  trcsrc,pl1st,pl2nd,pl3rd,pladd,plhst,plcut,plbox,plstor,plnumv,
      ,  plnums,plarr,lrpscut,pltsrc,pl3a,pl3s,pltl2d,pltl3d,pltllg,
      ,  pltler,lhist2,lsmot2,lhist3,lcntr3,lsmot3,lraps,lvect3,lrpvc3,
-     ,  lrps3d,lrpscn,lprad,lppol,lptor,
+     ,  lrps3d,lrpscn,lprad,lppol,lptor,plidl,
      ,  plchor,plspec,lpw_d,lsymet,lbalan,lchkqud,lfchgs
 
       common/uinchr/ txtrun,txtsfl,txtsfa,filnam,h123,reac,crc,texta,
