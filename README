@@ -19,7 +19,7 @@ Getting the latest code updates
     same in the main SOLPS-ITER repository. 
     If necessary, create local private development branches to commit your work to, for example
     git checkout -b <username>/develop                          (creates and checks out a new branch in SOLPS-ITER)
-    git submodule foreach 'git checkout -b <username>/develop   (creates and checks out a new branch in each submodule)
+    git submodule foreach 'git checkout -b <username>/develop'  (creates and checks out a new branch in each submodule)
     Preferably, create these branches before you commit anything.
 
 
