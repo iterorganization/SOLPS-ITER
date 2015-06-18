@@ -132,7 +132,9 @@ do {
 #            carre.exe; q=s; break;;
             carre.exe 2>carre.log; q=$qqs; break;;
     ( s|S )                                               # save the control data:
-            cp carre.out carre.dat; q=c; break;;
+            cp carre.out carre.dat;
+            /bin/echo -e "Saved grid settings in carre.dat file"
+            q=c; break;;
     ( c|C )                                               # convert:
             /bin/echo -e "carre.out\n4" | traduit.exe 2>traduit.log; mv traduit.out traduit.sno ;
             /bin/echo -e "carre.out\n2" | traduit.exe 2>traduit.log; 

@@ -57,6 +57,7 @@ Help="
 Uinp    (u) run uinp to produce the input files for the initial short run of Eirene;
         (U) run uinp -l to make first the necessary links to the DG output (run first the 
             lns command from the DG environment to link the DG output to the standard place);
+B2ag    (b) run b2ag to produce the fort.30 file;
 Eirene  (e) run eirobjx to produce the geometry data for tria;
 Tria    (t) run tria to generate the triangular mesh outside the regular B2.5 grid;
 triaGeom(g) run triageom to combine the triangular mesh with the regular B2.5 grid;
@@ -66,7 +67,6 @@ Store   (s) store the combined mesh, giving it a serial number and linking to fo
 Convert (c) convert the triangular (c) or combined (C) mesh into a DG template;
 List    (l) list the meshes present in the archive;
 Remove  (r) remove the specified meshes from the archive;
-B2ag    (b) run b2ag to produce the fort.30 file;
 reMap   (m) run b2yt to remap the B2.5 data on a new grid and to produce a new fort.30 file (TBD!);
 trAp    (a) set a trap in tria for debugging purposes;
 Quit    (q) quit.
@@ -145,7 +145,7 @@ export PLOT_IT_STEM='tria'
 N=
 
 while true; do {
-  print -u2 -n -- "Help, Uinp, B2ag, reMap, Eirene, Tria, triaGeom, Plot, View, Store, Convert, List, Remove, Quit ? ($q)"
+  print -u2 -n -- "Help, Uinp, B2ag, Eirene, Tria, triaGeom, Plot, View, Store, Convert, List, Remove, reMap, Quit ? ($q)"
   while true; do {
     read u
     extra="${u#*-}"
