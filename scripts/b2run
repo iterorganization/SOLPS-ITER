@@ -4,7 +4,7 @@
 ## -d <debugger>  use debugger <debugger>
 ## -s             run B2.5 applications in stand-alone mode (no Eirene coupling)
 
-# if we are running at JET then don't rely on the automatic feature of searching in ../baserun, instead setup links
+# if we are running at JET then do not rely on the automatic feature of searching in ../baserun, instead setup links
 if (${HOST_NAME} == "JET") then
   echo Special action is being taken since we are running at JET
   foreach i (b2mn.dat b2fgmtry b2fpardf b2fstati b2frates)
