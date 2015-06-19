@@ -1742,6 +1742,14 @@ for itself by climbing up the tree. You can add options to the \verb!b2run! comm
   \item[-d ``debugger\_name''] Allows to run \verb!b2XX! with the named debugger. If not debugger name is specified, the debugger defined with the DBX environment variable and specified in the \$\verb!{SOLPSTOP}/SETUP/setup.csh.!\$\verb!{HOST_NAME}.!\$\verb!{COMPILER}.local! or \$\verb!{SOLPSTOP}/SETUP/setup.csh.!\$\verb!{HOST_NAME}.!\$\verb!{COMPILER}! files will be used.
 \end{description}
 
+To stop an on-going run in a clean way, before it has reached the initially requested
+number of iterations, one can use, from the run directory:
+\begin{verbatim}
+    touch b2mn.exe.dir/.quit
+\end{verbatim}
+This will force the code to stop cleanly at the end of the current iteration, and 
+produce all the output files in an orderlt fashion, which then can be post-processed
+with the usual tools.
 
 The examples presented below are for a pure D plasma.
 
