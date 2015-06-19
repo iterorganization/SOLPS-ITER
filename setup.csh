@@ -126,8 +126,8 @@ alias sbr  'cd ${SOLPSTOP}/runs'
 alias scr  'cd ${SOLPSTOP}/scripts'
 alias stop 'cd ${SOLPSTOP}'
 
-#alias sdg 'cd ${SOLPSTOP}/data/DivGeo/class/${DEVICE}'
-#alias ssf 'cd ${SOLPSTOP}/modules/Sonnet/device/${DEVICE}'
+alias sdg 'cd ${SOLPSTOP}/modules/DivGeo/device/${DEVICE}'
+alias ssf 'cd ${SOLPSTOP}/modules/DivGeo/device/${DEVICE}'
 
 
 alias xyplot plot xyplot
