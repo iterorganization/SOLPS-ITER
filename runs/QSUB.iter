@@ -1,0 +1,45 @@
+#! /bin/tcsh
+
+#PBS -q batch
+#PBS -l nodes=1:ppn=12
+#PBS -l walltime=36:00:00
+#PBS -j oe
+#PBS -M $USER@iter.org
+#PBS -m e
+#PBS -N SOLPS
+#PBS -Y
+
+cd "$PBS_O_WORKDIR" || {
+  echo "Unable to switch to the working directory $PBS_O_WORKDIR"
+  env
+  exit
+}
+
+touch .status
+sleep 1
+echo "Started on `hostname` at `date`" >> .status
+
+# setenv PATH ${PATH}:/afs/ipp-garching.mpg.de/@sys/bin
+
+cd $SOLPSTOP || {
+  echo "Unable to switch to the SOLPSTOP directory $SOLPSTOP"
+  env
+  exit
+}
+
+# if (-e SOLPSTOP) then
+#  pushd `cat SOLPSTOP`
+# else
+#  pushd `echo $PWD | sed 's:/runs/.*::'`
+# endif
+
+source setup.csh
+echo Using SOLPSTOP = $SOLPSTOP
+echo Using SOLPSTOP = $SOLPSTOP >> .status
+
+# popd
+cd "$PBS_O_WORKDIR"
+
+time b2run >! run.log 
+
+echo "Finished on `hostname` at `date`" >> .status
