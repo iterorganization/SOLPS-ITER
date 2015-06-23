@@ -13,7 +13,11 @@ echo "Started on `hostname` at `date`" >> .status
 
 setenv PATH ${PATH}:/afs/ipp-garching.mpg.de/@sys/bin
 
-pushd `echo $PWD | sed 's:/runs/.*::'`
+if (-e SOLPSTOP) then
+  pushd `cat SOLPSTOP`
+else
+  pushd `echo $PWD | sed 's:/runs/.*::'`
+endif
 source setup.csh linux.ifort64
 popd
 
