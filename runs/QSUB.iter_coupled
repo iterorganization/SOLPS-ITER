@@ -2,7 +2,7 @@
 
 #PBS -q batch
 #PBS -l nodes=1:ppn=1
-#PBS -l walltime=00:10:00
+#PBS -l walltime=12:00:00
 #PBS -j oe
 #PBS -M $USER@iter.org
 #PBS -m e
@@ -19,12 +19,7 @@ touch .status
 sleep 2
 echo "Started on `hostname` at `date`" >> .status
 
-# setenv PATH ${PATH}:/afs/ipp-garching.mpg.de/@sys/bin
-
-# cd $SOLPSTOP 
-# ./whereami
-
-# || {
+# cd $SOLPSTOP || {
 #  echo "Unable to switch to the SOLPSTOP directory $SOLPSTOP"
 #  env
 #  exit
@@ -43,14 +38,12 @@ echo Using SOLPSTOP = $SOLPSTOP >> .status
 # popd
 cd "$PBS_O_WORKDIR"
 
-# time b2run < input.dat >! run.log
-rm -rf b2mn.exe.dir ; mkdir b2mn.exe.dir ; cp b2mn.dat ../baserun/b2fgmtry ../baserun/b2fpardf b2fstati ../baserun/b2frates ../baserun/fort.30 b2mn.exe.dir
-rm -f b2mn.prt b2fparam b2fstate b2fmovie b2ftrace b2ftrack b2fplasma b2time.nc fort.31 fort.44 b2tallies.nc b2movies.nc b2wall.nc
-cd b2mn.exe.dir ; ln -sf ../HYDHEL ../AMJUEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../fort.33 ../fort.34 ../fort.35 ../graphite_ext.dat ../mo_ext.dat . ; ln -sf ../input.dat fort.1 ;[ -e ../fort.15 ] && cp -p ../fort.15 . ; [ -e ../fort.13 ] && cp -p ../fort.13 .
-mkdir tracing ; time $SOLPSTOP/modules/B2.5/builds/couple_SOLPS-ITER.ITER.ifort64/b2mn.exe < fort.1 | gzip -9 > ../run.log.gz ; ls ; mv b2mn.prt b2fparam b2fstate b2fmovie b2ftrace b2ftrack b2fplasma b2time.nc fort.31 fort.44 b2tallies.nc b2movies.nc b2wall.nc .. ; mv tracing/* ../tracing ; rm -f b2mn.dat b2fgmtry b2fpardf b2fstati b2frates fort.30 .quit
-mv b2mn.exe.dir/fort.13 b2mn.exe.dir/fort.15 .
-[ -e b2mn.exe.dir/tran ] && mv b2mn.exe.dir/tran b2mn.exe.dir/tran?? .
-rmdir b2mn.exe.dir
+# eval `tcsh /work/imas/opt/modules-tcl/modulecmd.tcl $(basename $SHELL) autoinit`
+# module use /work/imas/etc/modulefiles
+# module load make
+# alias gmake make
+
+time b2run < input.dat >! run.log
 
 ###                save important files as a single tar file                ###
 # mkdir $USER.work.$$

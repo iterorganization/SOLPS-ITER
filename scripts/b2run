@@ -49,5 +49,5 @@ endloop:
   endif
   if ("X${argv}X" == "XX") set argv="b2mn"
   set CMD=`echo $argv" " | sed -e 's: :.prt :g'`
-  gmake $debug -f $RUNS/Makefile $CMD
+  make $debug -f $RUNS/Makefile $CMD
   unsetenv STAND_ALONE
