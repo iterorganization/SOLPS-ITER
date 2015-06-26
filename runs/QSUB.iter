@@ -17,17 +17,18 @@
 
 # setenv PATH ${PATH}:/afs/ipp-garching.mpg.de/@sys/bin
 
+# set solpstop=`climb_and_look_for SOLPSTOP`
+# if (-e solpstop) then
+#  setenv SOLPSTOP "`cat $solpstop`"
+# else
+#  setenv SOLPSTOP "`echo $PWD | sed 's:/runs/.*::'`"
+# endif
+
 # cd $SOLPSTOP || {
 #   echo "Unable to switch to the SOLPSTOP directory $SOLPSTOP"
 #   env
 #   exit
 # }
-
-# if (-e SOLPSTOP) then
-#  pushd `cat SOLPSTOP`
-# else
-#  pushd `echo $PWD | sed 's:/runs/.*::'`
-# endif
 
 # source setup.csh
 echo Using SOLPSTOP = $SOLPSTOP
