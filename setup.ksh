@@ -207,7 +207,7 @@ alias unset_debug='. $SOLPSTOP/nodebug.ksh'
 [ -e setup.ksh.$USER ] && . setup.ksh.$USER
 [ -e setup.ksh.$USER.$OBJECTCODE ] && . setup.ksh.$USER.$OBJECTCODE
 
-export PATH=${SOLPSTOP}/bin/${OBJECTCODE}:${SOLPSTOP}/scripts:${PATH}
+export PATH=${SOLPSTOP}/bin/${OBJECTCODE}:${SOLPSTOP}/scripts.local:${SOLPSTOP}/scripts:${PATH}
 
 export PATH=$NCARG_ROOT/bin:$PATH
 export MANPATH=$NCARG_ROOT/man:${DG}/equtrn/doxygen/man:$MANPATH
