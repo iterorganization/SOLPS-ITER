@@ -18,9 +18,14 @@ module load ghostscript
 module load cairo
 module load mdsplus/3.0.2
 module load make
+module load imas
 
 # mpi-library
 module load mpich2/3.1.3-intel
 
 # Debugger (set environment variable DBX)
 setenv DBX idb
+
+# IMAS Database setting
+imasdb solps-iter
+

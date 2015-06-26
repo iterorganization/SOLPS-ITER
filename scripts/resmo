@@ -11,7 +11,12 @@ if (-e $solps_fluids) then
 endif
 set n=`echo $SOLPS_FLUIDS | wc -w`
 echo $n
-cat $FILE | \
+if (-x zcat) then
+    set ZCAT=zcat
+else
+    set ZCAT="gzip --decompress --force --stdout"
+endif
+$ZCAT $FILE | \
   awk 'BEGIN{ig=0}/data/&&ig==0{ig=1}/data/&&ig==2{printf "\n"}/^[^*]/&&ig>0{ig=2;printf "%s",$0}' | \
   resopt $argv | \
   awk '{printf "%s",$2; for (i=1;i<='$n';i++) printf " %s",$(i+'$n'+2);printf "\n"}' | \

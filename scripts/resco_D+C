@@ -4,7 +4,12 @@ if (-e b2mn.exe.dir/b2ftrace) then
 else
   set FILE=b2ftrace
 endif
-cat $FILE | \
+if (-x zcat) then
+    set ZCAT=zcat
+else
+    set ZCAT="gzip --decompress --force --stdout"
+endif
+$ZCAT $FILE | \
   awk 'BEGIN{ig=0}/data/&&ig==0{ig=1}/data/&&ig==2{printf "\n"}/^[^*]/&&ig>0{ig=2;printf "%s",$0}' | \
   resopt $argv | \
   awk '{print $2,$3,$4,$5,$6,$7,$8,$9,$10,$11}' | \
