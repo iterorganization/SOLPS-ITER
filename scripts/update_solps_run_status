@@ -1,0 +1,13 @@
+#! /bin/tcsh -f
+
+if ("X-nX" == "X${1}X") then
+  touch .status.history
+  cat .status >> .status.history
+  echo '####' >> .status.history
+  cp /dev/null .status
+  shift
+endif
+
+echo $argv >! .current_status
+cat .current_status >> .status
+

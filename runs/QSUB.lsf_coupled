@@ -5,9 +5,6 @@
 #BSUB -J SOLPS
 #BSUB -W 36:00
 
-touch .status
-sleep 1
-echo "Started on `hostname` at `date`" >> .status
 
 setenv PATH ${PATH}:/afs/ipp-garching.mpg.de/@sys/bin
 
@@ -16,34 +13,15 @@ if (-e SOLPSTOP) then
 else
   pushd `echo $PWD | sed 's:/runs/.*::'`
 endif
-source setup.csh linux.ifort64
+source setup.csh
 echo Using SOLPSTOP = $SOLPSTOP
 popd
-echo Using SOLPSTOP = $SOLPSTOP >> .status
+
+update_solps_run_status "Started on `hostname` at `date`"
 
 time b2run < input.dat >! run.log
 
-###                save important files as a single tar file                ###
-mkdir $USER.work.$$
-mv b2.*.parameters b2.*.inputfile b2.*.profile input.dat b2mn.dat b2fgmtry b2fpardf b2fstati b2frates b2mn.prt b2fparam b2fstate b2ftrace b2fplasma *.nc fort.13 fort.15 fort.3[01] fort.3[3-5] fort.44 run.log ds* $USER.work.$$/
-set DATESTAMP=`datestamp`
-(cd $USER.work.$$ ; tar cvf ../$DATESTAMP.tar .)
-mv $USER.work.$$/* .
-rmdir $USER.work.$$
-tar tvf $DATESTAMP.tar >& $DATESTAMP.tar.toc
-gzip -9 $DATESTAMP.tar
+QSUB.postprocess_coupled
 
-setenv GNUPLOT_POSTSCRIPT_OPTIONS 'color solid'
-setenv PRINT_PLOT resrest.ps ; resrest
-setenv PRINT_PLOT resco.ps ; resco
-setenv PRINT_PLOT resmo.ps ; resmo
-setenv PRINT_PLOT rqahereg.ps ; rqahereg
-setenv PRINT_PLOT energy_analysis.ps ; energy_analysis
-setenv PRINT_PLOT density.ps ; density l
-setenv PRINT_PLOT SAMVOL.ps ; setenv GNUPLOT_DATA SAMVOL.data ; SAMVOL
-2d_plots
-last10
-gzip -9 -f run.log
-
-echo "Finished on `hostname` at `date`" >> .status
+update_solps_run_status "Finished on `hostname` at `date`"
 

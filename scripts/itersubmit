@@ -23,8 +23,5 @@ if($QSUB == "") then
 endif
 
 echo Using submission file $QSUB
-touch .status.history
-cat .status >> .status.history
-echo '####' >> .status.history
-echo "Submitted at `date`" >! .status
+update_solps_run_status -n "Submitted at `date`"
 qsub -S /usr/bin/tcsh $QSUB

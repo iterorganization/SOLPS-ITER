@@ -1,0 +1,16 @@
+#! /bin/tcsh -f
+
+echo ""
+echo "This file can be used for post-processing commands after a coupled batch job."
+echo ""
+echo "Copy this file ( $0 ) to $SOLPSTOP/scripts.local/ and make any modifications you want."
+echo ""
+
+# Here is what was being done explicitly in QSUB.sge_coupled:
+
+###                save important files as a single tar file                ###
+tar_important_files
+
+summarize_run
+
+gzip -9 -f run.log

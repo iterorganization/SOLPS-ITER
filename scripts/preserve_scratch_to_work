@@ -1,0 +1,15 @@
+#! /bin/tcsh -f
+
+set prefix=`pwd | sed 's:\(^/[^/]*/[^/]*/[^/]*/\)\(.*\)$:\1:'`
+set suffix=`pwd | sed 's:\(^/[^/]*/[^/]*/[^/]*/\)\(.*\)$:\2:'`
+
+set newprefix=$prefix:s;/scratch/;/work/;
+
+if( "$newprefix" != "$prefix" && -e "$newprefix" ) then
+  set datestamp=`datestamp`
+  set dest=${newprefix}SOLPS_SAVE/${suffix}
+  mkdir -p $dest
+  rsync -avP --max-size=1M . --exclude b2\?\?.exe.dir --exclude tracing --exclude \*.last10 $dest/$datestamp/
+  cd $dest/
+  tar zcvf $datestamp.tgz $datestamp && rm -rf $datestamp && ls -lstr $dest/$datestamp.tgz
+endif

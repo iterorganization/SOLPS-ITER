@@ -15,10 +15,6 @@
 #   exit
 # }
 
-touch .status
-sleep 1
-echo "Started on `hostname` at `date`" >> .status
-
 # setenv PATH ${PATH}:/afs/ipp-garching.mpg.de/@sys/bin
 
 # cd $SOLPSTOP || {
@@ -35,11 +31,16 @@ echo "Started on `hostname` at `date`" >> .status
 
 # source setup.csh
 echo Using SOLPSTOP = $SOLPSTOP
-echo Using SOLPSTOP = $SOLPSTOP >> .status
 
 # popd
 cd "$PBS_O_WORKDIR"
 
+update_solps_run_status "Started on `hostname` at `date`"
+
 time b2run >! run.log 
 
-echo "Finished on `hostname` at `date`" >> .status
+QSUB.postprocess
+
+preserve_scratch_to_work
+
+update_solps_run_status "Finished on `hostname` at `date`"

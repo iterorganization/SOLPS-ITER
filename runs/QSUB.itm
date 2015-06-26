@@ -8,9 +8,6 @@
 #$ -N SOLPS
 #$ -V
 
-touch .status
-echo "Started on `hostname` at `date`" >> .status
-
 setenv PATH ${PATH}:/afs/ipp-garching.mpg.de/@sys/bin
 
 if (-e SOLPSTOP) then
@@ -21,8 +18,13 @@ endif
 source setup.csh
 echo Using SOLPSTOP = $SOLPSTOP
 popd
-echo Using SOLPSTOP = $SOLPSTOP >> .status
+
+update_solps_run_status "Started on `hostname` at `date`"
 
 time b2run >! run.log 
 
-echo "Finished on `hostname` at `date`" >> .status
+QSUB.postprocess
+
+preserve_scratch_to_work
+
+update_solps_run_status "Finished on `hostname` at `date`"
