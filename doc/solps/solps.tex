@@ -572,7 +572,7 @@ Because the \SOLPSITER distribution is split into submodules, the data files
 that are accessed exclusively by either \verb!Eirene! or \verb!B2.5! are now
 placed in directories named \verb!Database! and placed in the corresponding
 \$\verb!{SOLPSTOP}/modules! directory. Files that were needed by the 
-post-processing or analysis scripts are now places within the 
+post-processing or analysis scripts are now placed within the 
 \$\verb!{SOLPSTOP}/scripts! directory. The files described in this paragraph
 are still version-controlled.
 
@@ -714,7 +714,7 @@ The command\index{scr}
 \end{verbatim}
 will take you to \$\verb!{SOLPSTOP}/scripts!. 
 
-The number of scripts developped for various {\bf SOLPS} versions is very large. Efforts are currently underway to translate all the relevant ones for use within \SOLPSITERns. A non-exhaustive listing of these scripts, with some explanation as to their purpose, follows:
+The number of scripts developped for various {\bf SOLPS} versions is very large. Efforts are currently underway to translate all the relevant ones for use within \SOLPSITERns. Any of these scripts can be copied to the \$\verb!{SOLPSTOP}/scripts.local! directory for local user modifications as desired. A non-exhaustive listing of these scripts, with some explanation as to their purpose, follows:
 \begin{itemize}
 \item the residuals can be plotted with 
   \begin{description}
@@ -1110,12 +1110,16 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[pipe\_b2.log]\index{pipe\_b2.log} Prepares the \verb!B2! log file for use by other scripts.
   \item[pipe\_run.log]\index{pipe\_run.log} Prepares the \verb!B2.5! log file for use by other scripts.
   \item[plot\_mesh \#1 \#2]\index{plot\_mesh} Plots the mesh specified as \#1 accompanied by the \verb!mesh.extra! file specified as \#2 as \#1.ps.
+  \item[preserve\_scratch\_to\_work]\index{preserve\_scratch\_to\_work} List of instructions to move run results from temporary scratch space to a backed-up filespace
+  \item[QSUB.postprocess]\index{QSUB.postprocess} List of instructions appended to the \verb!B2.5! stand-alone submission scripts for run post-processing
+  \item[QSUB.postprocess\_coupled]\index{QSUB.postprocess\_coupled} List of instructions appended to the \SOLPSITER submission scripts for run post-processing
   \item[quote\_pwd]\index{quote\_pwd} Returns the current working directory as a string with quotes (c.f.\ \verb!noquote_pwd!).
   \item[resave\_mds]\index{resave\_mds} Update an archived \verb!MDSplus! case.
   \item[rps]\index{rps} Shifts $\Psi$ values by a given amount within a \verb!DG! equilibrium file (see Sec.~\ref{sec:equtrn}).
   \item[save\_mds]\index{save\_mds} Archive an \verb!MDSplus! case.
   \item[setup\_baserun\_eirene\_links]\index{setup\_baserun\_eirene\_links} Prepares the run directory before a \verb!B2.5-Eirene! run by settings up links to the proper data files.
   \item[SOLPS4to5]\index{SOLPS4to5} Script to convert a \SOLPSfour run directory into a \SOLPSfive one.
+  \item[summarize\_run]\index{summarize\_run} List of instructions provided during job submission for obtaining a standard set of run diagnostics
   \item[update\_eirene]\index{update\_eirene} Updates the \$\verb!SOLPSTOP/modules/Eirene! directory.
   \item[update\_libs]\index{update\_libs} Updates the \$\verb!SOLPSTOP/src/lib! directory.
   \item[update\_links]\index{update\_links} Updates linked files to the \verb!SOLPS! Master in the current directory structure.
@@ -1750,6 +1754,10 @@ number of iterations, one can use, from the run directory:
 This will force the code to stop cleanly at the end of the current iteration, and 
 produce all the output files in an orderlt fashion, which then can be post-processed
 with the usual tools.
+
+When submitting jobs in a cluster environment, one will make use of the job submission scripts provided
+in the \$\verb!{SOLPSTOP}/runs! directory (\verb!QSUB.*! files). These allow for the job submission to be
+done in a file space that is outside the \$\verb!{SOLPSTOP}! tree, provided there is a file named \verb!SOLPSTOP! in the run directory or above that contains the path to the \$\verb!{SOLPSTOP}! tree.
 
 The examples presented below are for a pure D plasma.
 
