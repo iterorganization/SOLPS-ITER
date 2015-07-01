@@ -1,0 +1,11 @@
+#! /bin/tcsh -f
+# author: David Coster (2015-06-25)
+#
+# return a value of SOLPSTOP by taking the first of
+#  climbing the tree looking for SOLPSTOP and returning the contents
+#  returning the value of the environment variable $SOLPSTOP
+#  attempting to strip off the elements from $PWD
+#
+
+set S=`climb_and_look_for SOLPSTOP`
+echo `[ -e $S ] && cat $S || [ ${?SOLPSTOP} == 1 ] && echo $SOLPSTOP || echo $PWD | sed 's:/src/.*::'`
