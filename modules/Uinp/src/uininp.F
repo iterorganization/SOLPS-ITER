@@ -123,7 +123,7 @@ c*** Read the AMDS file if exists
             open(iunii,file=amd_file(iamd))
           else !}{
 	    uex=open_file(iunii,amd_file(iamd),
-     .                    'data.local/AMDS|data/AMDS')
+     .                    'data.local/AMDS|data/AMDS|modules/amds')
 	  end if !}
           if(uex) then !{
             uex=immed
@@ -134,8 +134,9 @@ c*** Read the AMDS file if exists
 	    write(0,*) 'AMDS file not found: ',amd_file(iamd)
 	    write(0,*) 'STOP ==> Check the references to AMDS in the ',
      ,	      'DG model and make sure that the file exists '
-	    write(0,*) '	 in either $SOLPSTOP/data(.local)/AMDS',
-     ,	      ' or the current directory'
+	    write(0,*) '	 in either $SOLPSTOP/modules/amds or ',
+     ,                          '$SOLPSTOP/data(.local)/AMDS ',
+     ,	                        'or the current directory'
 	    stop
 	  end if !}
       	end if !}
