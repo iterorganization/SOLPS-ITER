@@ -198,3 +198,9 @@ if (-e SETUP/setup.csh.local) then
   source SETUP/setup.csh.local
 endif
 
+# Add links to the IMAS solps-iter database
+
+if ($HOST_NAME == "ITER") then
+  source scripts/imasdb_solps-iter
+endif
+
