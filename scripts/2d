@@ -24,7 +24,7 @@ endif
 set args="$argv"
 set nargs=$#argv
 
-which nc2text && set no_nc2text=0 || set no_nc2text=1
+which nc2text > /dev/null && set no_nc2text=0 || set no_nc2text=1
 
 cp /dev/null ${tmpdir}gnuplot.data.tmp
 if ($no_nc2text == 1) then

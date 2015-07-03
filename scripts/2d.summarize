@@ -1,6 +1,6 @@
 #! /bin/csh -f
 set source=b2mn.exe.dir/b2time.nc
-which nc2text && set no_nc2text=0 || set no_nc2text=1
+which nc2text > /dev/null && set no_nc2text=0 || set no_nc2text=1
 if (! -e $source) set source=b2time.nc
 echo '#timesa nesepm tesepm tisepm nesepi nemxip nesepa nemxap tesepi temxip tesepa temxap tisepi timxip tisepa timxap fnixip fnixap feexip feexap feixip feixap fniyip fniyap feeyip feeyap feiyip feiyap pwmxip pwmxap tmne tmte tmti' >! 2d.data
 if ($no_nc2text == 1) then
