@@ -28,7 +28,7 @@
 # Remove -DMDSPLUS from SOLPS_CPP
 #
 
-       NCDIR ?= 
+       NCDIR ?= /home/ITER/bonninx/public/NetCDF
    MSCL_ROOT ?=
        H5DIR ?= 
      GR_ROOT ?= /work/imas/opt/gr/0.0.94
@@ -42,7 +42,7 @@
 # Variables of linking, using pkg-config
 #
 
-LD_NETCDF  = `pkg-config netcdf-fortran --libs` 
+LD_NETCDF  = -L${NCDIR}/lib -lnetcdf -lnetcdff # `pkg-config netcdf-fortran --libs` 
 LD_MSCL    = `pkg-config mscl --libs`
 LD_GR      = -L${GR_ROOT}/lib -lgr
 LD_GKS     = -L${GLI_HOME} -lgks -lgfortran -lX11 -lXt -lXmu
@@ -58,7 +58,7 @@ LD_MPI     = `pkg-config mpich --libs`
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNCAR4 -DMDSPLUS -DNO_F01AAF -DNO_CDF # -DCDF_MOVIE 
+SOLPS_CPP      = -DNCAR4 -DMDSPLUS -DNO_F01AAF -DCDF_MOVIE # -DNO_CDF 
 B25_DEFINES    = -DWANT_THIS
 EIRENE_DEFINES =  
 MPI_CPP        = `pkg-config mpich --cflags`
