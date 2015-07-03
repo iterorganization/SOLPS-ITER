@@ -6,9 +6,9 @@
 
 c  version : 05.02.2005 00:46
 
-cvk input for BLOCK 1,3,4,9,13,14 is changed
-Cvk block 6 has to be changed (with reaction cards), BLOCKs 9,10,11,12 probably should be changed as well
-
+cvk input for block 1,3,4,9,13,14 is changed
+cvk block 6 has to be changed (with reaction cards), 
+cvk blocks 9,10,11,12 probably should be changed as well
 
 c=======================================================================
 
