@@ -22,7 +22,7 @@ set pfilename=${tmpdir}tmp.ps
 set prefix=`echo $field | sed 's:^\(.\).*:\1:'`
 set pr2fix=`echo $field | cut -c2`
 set suffix=`echo $field | sed 's:^.*\(.\):\1:'`
-which nc2text && set no_nc2text=0 || set no_nc2text=1
+which nc2text > /dev/null && set no_nc2text=0 || set no_nc2text=1
 echo '$' DATA=CONTOUR >! $tfilename
 echo '%' nx = `wc -l < ds$suffix` xgrid=True xlabel=x-xsep>> $tfilename
 cat ds$suffix >> $tfilename

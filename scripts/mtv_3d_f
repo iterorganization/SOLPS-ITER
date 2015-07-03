@@ -29,7 +29,7 @@ if (-e $SOLPSTOP/data.local/palettes/plotmtv_white.map) then
 else
   setenv COLORMAP $SOLPSTOP/scripts/palettes/plotmtv_white.map
 endif
-which nc2text && set no_nc2text=0 || set no_nc2text=1
+which nc2text > /dev/null && set no_nc2text=0 || set no_nc2text=1
 echo '$' DATA=CONTOUR >! $tfilename
 echo '%' nx = `cat dsl dsr | wc -l` xgrid=True xlabel=x-xsep>> $tfilename
 cat dsl | awk.reverse | awk '{print -0.1-$1}' >> $tfilename
