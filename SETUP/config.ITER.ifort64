@@ -28,7 +28,7 @@
 # Remove -DMDSPLUS from SOLPS_CPP
 #
 
-       NCDIR ?= /home/ITER/bonninx/public/NetCDF
+       NCDIR ?= /work/imas/opt/netcdf-fortran/solps/lib
    MSCL_ROOT ?=
        H5DIR ?= 
      GR_ROOT ?= /work/imas/opt/gr/0.0.94
@@ -42,7 +42,7 @@
 # Variables of linking, using pkg-config
 #
 
-LD_NETCDF  = -L${NCDIR}/lib -lnetcdf -lnetcdff # `pkg-config netcdf-fortran --libs` 
+LD_NETCDF  = `pkg-config netcdf-fortran --libs` 
 LD_MSCL    = `pkg-config mscl --libs`
 LD_GR      = -L${GR_ROOT}/lib -lgr
 LD_GKS     = -L${GLI_HOME} -lgks -lgfortran -lX11 -lXt -lXmu
