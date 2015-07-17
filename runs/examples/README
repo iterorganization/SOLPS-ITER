@@ -1,2 +1,3 @@
 The set of switches necessary to add to a b2mn.dat file to reproduce 5.0 behaviour are given in the b2mn.dat.5.0 file.
+The b2mn.dat.5.2 file contains the set of switches necessary to run the 5.2 model.
 
