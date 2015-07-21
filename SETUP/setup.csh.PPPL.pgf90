@@ -1,4 +1,24 @@
 # Load modules
+module purge
+module load pgf/11.10
+module load nag/r3
+# module load pgf/13.6
+# module load nag
+module load ncarg
+module load ppplcluster
+module load nstx
+module load idl
+module load nstx/idldirs
+module load nstx/mdsplus
+module load netcdf
+module load subversion
+module load globus
+
+module load acml
+module load git
+module load makedepend
+module load openmpi
+
 module load lapack/3.3.1
 module load gnuplot
 # module load blas
