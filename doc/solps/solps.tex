@@ -5787,9 +5787,8 @@ Zhdanov fit to Braginskii and the \SOLPSfour values.
 
 \chapter{Model equations for B2.5}
 \label{cha:equations}\index{B2.5, model}\index{B2.5, equations}\index{equations}\index{model}
+
 %-------- Equations by S.P. Voskoboynikov ---------
-%% Special thanks to Anastasia Dvornova for typing up this chapter in LaTeX
-\scriptsize{
 
 \begin{equation}
 \frac{\partial n_a}{\partial t} + \frac{1}{\sqrt g}\frac{\partial}{\partial x}\left( \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \right) +   \frac{1}{\sqrt g}\frac{\partial}{\partial y}\left( \frac{\sqrt g}{h_y} \widetilde{\Gamma}_{ay} \right) = S_a^n, a = 0, 1, \ldots, n_s-1
@@ -6185,6 +6184,7 @@ B^{\frac 3 2} b_x \frac{\partial}{h_x \partial x}
 $S_{CF}^m = m_a b_x n_a V_{\parallel a}^2 \frac 1{h_z h_x} \frac{\partial h_z}{\partial x}$
 
 $S_a^m = S_{fr,a}^m + S_{Term}^m + S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m$,
+
 Parallel momentum source due to ionization
 \begin{equation*}
 S_{I_a}^m = S_{I_a}^q + S_{I_{a+1}}^q
@@ -6267,9 +6267,9 @@ $\tau_p = \frac 3{4\sqrt{2\pi}}
 & \left\{
 \begin{matrix}
 12 \\
-max \{ 5; 23.4 - 1.15 \cdot log_{10} \left( \frac{n_e}{10^6} \right) + 3.45 \cdot log_{10} \left( \frac{T_e}e \right)  \}, & \frac{T_e}{e} \leq 50 & \mbox{\scriptsize{Braginsky formula}} \\
-max \{ 5; 25.3 - 1.15 \cdot log_{10} \left( \frac{n_e}{10^6} \right) + 2.30 \cdot log_{10} \left( \frac{T_e}e \right)  \}, & \frac{T_e}{e} > 50  \\
-max \{ 5; 17.3 - 0.5 \cdot log_e \left( \frac{n_e}{10^{20}} \right) + 1.5 \cdot log_e \left( \frac{T_e}{e \cdot 10^3} \right)  \} & \mbox{\tiny{Wessom formula}} &\mbox{\tiny{for ion-ion collisions}}\\
+max \{ 5; 23.4 - 1.15 \cdot log_{10} \left( \frac{n_e}{10^6} \right) + 3.45 \cdot log_{10} \left( \frac{T_e}e \right)  \}, & \frac{T_e}{e} \leq 50 & \mbox{\scriptsize{Braginsky}} \\
+max \{ 5; 25.3 - 1.15 \cdot log_{10} \left( \frac{n_e}{10^6} \right) + 2.30 \cdot log_{10} \left( \frac{T_e}e \right)  \}, & \frac{T_e}{e} > 50 &  \mbox{\scriptsize{formula}}\\
+max \{ 5; 17.3 - 0.5 \cdot log_e \left( \frac{n_e}{10^{20}} \right) + 1.5 \cdot log_e \left( \frac{T_e}{e \cdot 10^3} \right)  \} & \mbox{\scriptsize{Wesson formula}} &\mbox{\scriptsize{for ion-ion collisions}}\\
 \end{matrix} \right.
 \end{matrix}
 \end{equation}
@@ -6345,35 +6345,26 @@ n_{e^2 }= \sum \limits^{n_s-1}_{a=0} z_a^2 n_a, \;\;\;\ l_{t_e}=0.3; \;\;\;\;\; 
 
 $c_{th_e,a} = 0, a=0,\ldots,n_s-1$ and $c_{th_i,a}=2.65, a=0,\ldots, n_s-1$ if 21 moment approximation is not used.
 
-
-
-% proverit, ne nuzhen li coeff 4\3 pered \eta vo 2-om ur-ii
 \begin{equation}
-\begin{matrix}
-\Gamma^m_{ax} & =
-& \left\{
-\begin{matrix}
+\Gamma^m_{ax} =
 m_a V_{\parallel a} \Gamma_{ax} + m_a V_{\parallel a} \Gamma_{ax}^{\left( dia \right)} + 
 \frac 4 3 \eta_{ax} \frac{\partial ln h_z}{h_x \partial x} V_{\partial a} - 
-\frac 4 3 \eta_{ax} \frac{\partial V_{\partial a}}{h_x \partial x}, &
-z_a = 1 \text{ and } z_n = 1 \\
-m_a V_{\parallel a} \Gamma_{ax} + m_a V_{\parallel a} \Gamma_{ax}^{\left( dia \right)} -
-\eta_{ax} \frac{\partial V_{\parallel a}}{h_x \partial x}, & \text{else}     
-\end{matrix} \right.
-\end{matrix}
+\frac 4 3 \eta_{ax} \frac{\partial V_{\partial a}}{h_x \partial x}
 \end{equation}
 
 \begin{equation}
-\Gamma^m_{ax} = m_a V_{\parallel a} \Gamma_{ay} +
-m_a V_{\parallel a} \Gamma_{ay}^{\left( dia \right)} -
+\Gamma^m_{ay} =
+m_a V_{\parallel a} \Gamma_{ay} + m_a V_{\parallel a} \Gamma_{ay}^{\left( dia \right)} -
 \eta_{ay} \frac{\partial V_{\parallel a}}{h_y \partial y}
 \end{equation}
 
-%-------- end of 6th page -------------
+$\Gamma^{\left( dia \right)}_{ax} = n_a \widetilde{V}^{\left( dia \right)}_{\perp a}$,
 
-$\Gamma^m_{ax} = n_a \widetilde{V}^{\left( dia \right)}_{\perp a}$,
-$\;\;\; \Gamma^m_{ay} = n_a \widetilde{V}^{\left( dia \right)}_{ya}$,
-$\;\;\; \eta_{ax} = \eta_{AN_a} + \widetilde{\widetilde{\eta}}_{CL_{ax}}$
+$\Gamma^{\left( dia \right)}_{ay} = n_a \widetilde{V}^{\left( dia \right)}_{ya}$,
+
+$\eta_{ax} = \eta_{AN_a} + \widetilde{\widetilde{\eta}}_{CL_{ax}}$
+
+%-------- end of 6th page -------------
 
 \begin{equation}
 \begin{matrix}
@@ -6476,12 +6467,12 @@ $
 & \left\{
 \begin{matrix}
 0, & \ z_a = 0 ,  \\
-\eta T_i n_a \tau_a, & \ z_a \neq 0  \\
+\eta \sqrt{2} T_i n_a \tau_a b_x^2, & \ z_a \neq 0  \\
 \end{matrix} \right.
 \end{matrix}
 $
 
-$\eta = 1.357$,
+$\eta = 0.96$,
 
 $\tau _a = \frac 3{4 \sqrt{2\pi}}  
 \frac {\sqrt{m_a} T_i^{\frac 3 2}} {z_a^2 z_{eff} n_e \Lambda}
@@ -6494,9 +6485,9 @@ $
 & \left\{
 \begin{matrix}
 12 \\
-max \{ 5; 23.4 - 1.15 \cdot log_{10} \left( \frac{n_e}{10^6} \right) + 3.45 \cdot log_{10} \left( \frac{T_e}e \right)  \}, & \frac{T_e}{e} \leq 50 & \mbox{\scriptsize{Braginsky formula}} \\
-max \{ 5; 25.3 - 1.15 \cdot log_{10} \left( \frac{n_e}{10^6} \right) + 2.30 \cdot log_{10} \left( \frac{T_e}e \right)  \}, & \frac{T_e}{e} > 50  \\
-max \{ 5; 17.3 - 0.5 \cdot log_e \left( \frac{n_e}{10^{20}} \right) + 1.5 \cdot log_e \left( \frac{T_e}{e \cdot 10^3} \right)  \} & \mbox{\tiny{Wesson formula}} & \mbox{\tiny{for ion-ion collisions}} \\
+max \{ 5; 23.4 - 1.15 \cdot log_{10} \left( \frac{n_e}{10^6} \right) + 3.45 \cdot log_{10} \left( \frac{T_e}e \right)  \}, & \frac{T_e}{e} \leq 50 & \mbox{\scriptsize{Braginsky}} \\
+max \{ 5; 25.3 - 1.15 \cdot log_{10} \left( \frac{n_e}{10^6} \right) + 2.30 \cdot log_{10} \left( \frac{T_e}e \right)  \}, & \frac{T_e}{e} > 50  & \mbox{\scriptsize{formula}}\\
+max \{ 5; 17.3 - 0.5 \cdot log_e \left( \frac{n_e}{10^{20}} \right) + 1.5 \cdot log_e \left( \frac{T_e}{e \cdot 10^3} \right)  \} & \mbox{\scriptsize{Wesson formula}} & \mbox{\scriptsize{for ion-ion collisions}} \\
 \end{matrix} \right.
 \end{matrix}
 $
@@ -6598,7 +6589,7 @@ $
 12 \\
 max \{ 5; 23.4 - 1.15 \cdot log_{10} \left( \frac{n_e}{10^6} \right) + 3.45 \cdot log_{10} \left( \frac{T_e}e \right)  \}, & \frac{T_e}{e} \leq 50 & \text{Braginsky formula} \\
 max \{ 5; 25.3 - 1.15 \cdot log_{10} \left( \frac{n_e}{10^6} \right) + 2.30 \cdot log_{10} \left( \frac{T_e}e \right)  \}, & \frac{T_e}{e} > 50  \\
-max \{ 5; 17.3 - 0.5 \cdot log_e \left( \frac{n_e}{10^{20}} \right) + 1.5 \cdot log_e \left( \frac{T_e}{e \cdot 10^3} \right)  \} && \text{Wessom formula for ion-ion collisions} \\
+max \{ 5; 17.3 - 0.5 \cdot log_e \left( \frac{n_e}{10^{20}} \right) + 1.5 \cdot log_e \left( \frac{T_e}{e \cdot 10^3} \right)  \} && \text{Wesson formula for ion-ion collisions} \\
 \end{matrix} \right.
 \end{matrix}
 $
@@ -6613,7 +6604,7 @@ $Q_R = \sum \limits_{a=0}^{n_s-1} r_{Q_a} n_e n_a$ from b2stel
 \end{equation*}
 
 \begin{equation*}
-\widetilde{f}_{ex} = \frac 3 2 \Gamma_{ex} + V_{ex}^{(Str)} n_e - 0.71 b_x \frac{j_{\parallel}}e
+\widetilde{f}_{ex} = \frac 3 2 \Gamma_{ex} + V_{ex}^{(Str)} n_e - 0.71 \frac{j_{ \left( \parallel \right) }}e
 \end{equation*}
 
 \begin{equation*}
@@ -6629,7 +6620,8 @@ where $\langle B^2 \rangle = \frac{\iint \limits_{core} B^2 \sqrt g dxdy}
 \begin{equation*}
 q_{ex} = 
 \left[
-	\frac 3 2 \Gamma_{ex} - 0.71 b_x \frac{j_{\parallel}} e -
+	\frac 3 2 \Gamma_{ex} - 0.71 \frac{j_{\left( \parallel \right) }} e 
+	-
 	\frac 5 2 n_e T_e \frac{B_z}e \frac{\partial}{h_y\partial y} \left( \frac 1{B^2} \right) + 
 	V_{ex}^{(Str)} n_e 
 \right] T_e
@@ -6637,7 +6629,7 @@ q_{ex} =
 \kappa_{ex} \frac 1{h_x} \frac{\partial T_e}{\partial x} + 0\cdot \alpha_{ex} T_e \hat E_x
 \end{equation*}
 
-$\Gamma_{ex} = \sum \limits_{a=0}^{n_s-1} z_a \Gamma_{ax}^{(he)} - \frac{b_x j_{\parallel}} e$,
+$\Gamma_{ex} = \sum \limits_{a=0}^{n_s-1} z_a \Gamma_{ax}^{(he)} - \frac{j_{\parallel}} e$,
 
 \begin{equation*}
 \Gamma_{ax}^{(he)} = 
@@ -6771,7 +6763,7 @@ $
 12 \\
 max \{ 5; 23.4 - 1.15 \cdot log_{10} \left( \frac{n_e}{10^6} \right) + 3.45 \cdot log_{10} \left( \frac{T_e}e \right)  \}, & \frac{T_e}{e} \leq 50 & \text{Braginsky formula} \\
 max \{ 5; 25.3 - 1.15 \cdot log_{10} \left( \frac{n_e}{10^6} \right) + 2.30 \cdot log_{10} \left( \frac{T_e}e \right)  \}, & \frac{T_e}{e} > 50  \\
-max \{ 5; 17.3 - 0.5 \cdot log_e \left( \frac{n_e}{10^{20}} \right) + 1.5 \cdot log_e \left( \frac{T_e}{e \cdot 10^3} \right)  \} && \text{Wessom formula for ion-ion collisions} \\
+max \{ 5; 17.3 - 0.5 \cdot log_e \left( \frac{n_e}{10^{20}} \right) + 1.5 \cdot log_e \left( \frac{T_e}{e \cdot 10^3} \right)  \} && \text{Wesson formula for ion-ion collisions} \\
 \end{matrix} \right.
 \end{matrix}
 $
@@ -6823,14 +6815,14 @@ new Zhdanovs expression
 $z_{eff} = \frac{\sum \limits_{a=0}^{n_s-1} z_a^2n_a}{n_e}$,
 
 $V_{e \parallel} = \frac 1{e n_e} \left[
-\sum \limits_a z_a e n_a V_{a\parallel} - j_{\parallel}
+\sum \limits_{a=0}^{n_s -1} z_a e n_a V_{a\parallel} - \frac{j^{(\parallel)}_x}{b_x}
 \right]$,
 
-$j_{\parallel} = \sigma_{\parallel} \hat E_x - \alpha_{ex} \frac 1{h_x} \frac{\partial T_e}{\partial x}$,
+$j^{(\parallel)}_x = \sigma_{\parallel} \hat E_x - \alpha_{ex} \frac 1{h_x} \frac{\partial T_e}{\partial x}$,
 
 $\hat E_x = \frac 1{en_e h_x} \frac{\partial n_e T_e}{\partial x} - \frac 1{h_x} \frac{\partial \varphi}{\partial x}$,
 
-$\sigma_{\parallel} = \sigma_{AN \parallel} + \widetilde{\sigma}_{CL \parallel} b_x$,
+$\sigma_{\parallel} = \sigma_{AN \parallel} + \widetilde{\sigma}_{CL \parallel}$,
 
 $\sigma_{AN \parallel} = 0$ 
 
@@ -6871,7 +6863,7 @@ c_{\sigma_{CL \parallel}^{(Luciani)}} & =
 \end{matrix}
 $
 
-$\sigma_{CL \parallel} = \frac{e^2}{m_e} f_{\sigma_e} \left( z_{eff} \right) n_e \tau_e$,
+$\sigma_{CL \parallel} = b_x^2 \frac{e^2}{m_e} f_{\sigma_e} \left( z_{eff} \right) n_e \tau_e$,
 
 $f_{\sigma_e} \left( z_{eff} \right) = \frac{4.95 z_{eff}}{1 + 1.54 z_{eff}}$,
 
@@ -6887,7 +6879,7 @@ $\alpha_{ANx}=0$,
 \widetilde{\alpha}_{CLx} = c_{k^{(CL)_{ex}}}^{(Luciani)} \alpha_{CLx} b_x
 \end{equation*}
 
-$\alpha_{CLx} = \sqrt{\frac 5 2} \frac e{m_e} f_{\alpha} \left(z_{eff} \right) n_e \tau _e$,
+$\alpha_{CLx} = b_x^2 \sqrt{\frac 5 2} \frac e{m_e} f_{\alpha} \left(z_{eff} \right) n_e \tau _e$,
 
 $f_{\alpha} \left( z_{eff} \right) = -\frac{1.25 z_{eff}}{1 + 0.41 z_{eff}}$,
 
@@ -7046,7 +7038,7 @@ $
 12 \\
 23.4 - 1.15 \cdot log_{10} \left( \frac{n_e}{10^6} \right) + 3.45 \cdot log_{10} \left( \frac{T_e}e \right), & \frac{T_e}{e} \leq 50 & \text{Braginsky formula} \\
 25.3 - 1.15 \cdot log_{10} \left( \frac{n_e}{10^6} \right) + 2.30 \cdot log_{10} \left( \frac{T_e}e \right), & \frac{T_e}{e} > 50  \\
-max \{ 5; 17.3 - 0.5 \cdot log_e \left( \frac{n_e}{10^{20}} \right) + 1.5 \cdot log_e \left( \frac{T_e}{e \cdot 10^3} \right)  \} && \text{Wessom formula for ion-ion collisions} \\
+max \{ 5; 17.3 - 0.5 \cdot log_e \left( \frac{n_e}{10^{20}} \right) + 1.5 \cdot log_e \left( \frac{T_e}{e \cdot 10^3} \right)  \} && \text{Wesson formula for ion-ion collisions} \\
 \end{matrix} \right.
 \end{matrix}
 $
@@ -7076,7 +7068,7 @@ q_{ix}^{(Eir)} =
 \kappa_{ix} \frac 1{h_x} \frac{\partial T_i}{\partial x}
 \end{equation*}
 
-$\kappa_{ix} = \kappa_i^{(AN)} + \widetilde{\widetilde{\kappa}}_{ix}^{(CL)} b_x^2$,
+$\kappa_{ix} = \kappa_i^{(AN)} + \widetilde{\widetilde{\kappa}}_{ix}^{(CL)}$,
 
 $k_i^{(AN)} = \sum \limits_{a = 0}^{n_s - 1} \widetilde k_a^{(AN)}$,
 
@@ -7195,7 +7187,7 @@ K_2 = \frac{
 
 $
 \kappa_{ix}^{(CL)} = 
-\frac 5 2 \sum \limits^{n_s-1}_{\substack{a = 0, \\ z_a \neq 0}} \frac{T_i}{m_a} n_a f_{k_i} \tau_a, 
+\frac 5 2 b_x^2 \sum \limits^{n_s-1}_{\substack{a = 0, \\ z_a \neq 0}} \frac{T_i}{m_a} n_a f_{k_i} \tau_a, 
 $
 
 $f_{k_i} = 2.253$
@@ -7302,8 +7294,10 @@ $\kappa_{iy}^{(CL)} = 0$
 \frac 1{\sqrt g} \frac{\partial}{\partial y} \left( \frac{\sqrt g}{h_y} j_y \right) = 0
 \end{equation*}
 
-$j_x = \widetilde j_x^{(dia)} + j_x^{(in)} + \widetilde j_x^{(vis \parallel)} + \widetilde j_x^{(vis \perp)}
-+ \widetilde j_x^{(visq)} + \widetilde j_x^{(s)} + b_x j_{\parallel}$,
+$j_x = j_x^{(AN)} + \widetilde j_x^{(dia)} + j_x^{(in)} + \widetilde j_x^{(vis \parallel)} + \widetilde j_x^{(vis \perp)}
++ \widetilde j_x^{(visq)} + \widetilde j_x^{(s)} + j^{(\parallel)}_x$,
+
+$j_x^{(AN)} = - \sigma_{AN} \frac{\partial \varphi}{h_x \partial x}$
 
 \begin{equation}
 \widetilde j_x^{(dia)} = B_z \frac{
@@ -7341,7 +7335,7 @@ $\widetilde j_x^{(vis \perp)} = 0$,
 \frac{\partial}{h_y \partial y}
 \left( \frac{1}{B^2} \right)
 \frac{\partial \left( q^{(0)} B^{\frac{1}{2}} \right)}{h_x \partial x} 
-\text{ , } a = 1 \text{, } q^{(0)} \text{ see above}
+\text{ , } z_a = 1 \text{ and } z_n =1 \text{, } q^{(0)} \text{ see above}
 \end{equation}
 
 \begin{equation}
@@ -7349,7 +7343,7 @@ $\widetilde j_x^{(vis \perp)} = 0$,
 - \sigma_{a0} b_z^2 \frac{\partial \varphi}{h_x \partial x} 
 - \sigma_{a0} b_z^2 \frac{1}{Z_a e n_a} \frac{\partial n_a T_i}{h_x \partial x} 
 + \sigma_{a0} b_z^2  B_z V_{0y}
-\text{ , } a = 1,
+\text{ , } a = 1, \;\;\;\;\;\;\;?
 \end{equation}
 
 \begin{equation}
@@ -7358,7 +7352,7 @@ $\widetilde j_x^{(vis \perp)} = 0$,
 m_a n_a \left\langle V_{a0} \sigma_{ex} n_0 \right\rangle
 }
 {2 B^2}
-\text{ , } a = 1,
+\text{ , } a = 1,\;\;\;\;\;\;\;?
 \end{equation}
 
 \begin{equation}
@@ -7367,12 +7361,12 @@ m_a n_a \left\langle V_{a0} \sigma_{ex} n_0 \right\rangle
 
 $V_{0y} = \frac{\Gamma_{0y} }{n_0}$
 
-$j_{\parallel}$ - see above
+$j_x^{(\parallel)}$ - see above
 
 $j_y = j^{AN} + \widetilde j_y^{(dia)} + j_y^{(in)} + \widetilde j_y^{(vis \parallel)} + \widetilde j_y^{(vis \perp)}
 + \widetilde j_y^{(visq)} + \widetilde j_y^{(s)} + \widetilde j_y^{(st)}$,
 
-$j^{AN} = - \sigma_{ANy} \frac{\partial \varphi}{h_y \partial y} $
+$j_y^{AN} = - \sigma_{ANy} \frac{\partial \varphi}{h_y \partial y} $
 
 \begin{equation}
 \widetilde j_y^{(dia)} = - B_z \frac{
@@ -7410,7 +7404,7 @@ not agreed with parallel momentum balance
 	\frac{\eta_{ANa}}{4}
 	\frac{\partial V_{a \perp}}{h_y \partial y}
 \right)
-\text{ , } a = 1,
+\text{ , } a = a_{main},
 \end{equation}
 
 %-------- end of 19th page -------------
@@ -7428,7 +7422,7 @@ V_{a \perp} =
 \frac{\partial}{h_y \partial y}
 \left( \frac{1}{B^2} \right)
 \frac{\partial \left( q^{(0)} B^{\frac{1}{2}} \right)}{h_x \partial x} 
-\text{ , } a = 1 \text{, } q^{(0)} \text{ see above}
+\text{ , } z_a = 1 \text{ and } z_n = 1 \text{, } q^{(0)} \text{ see above}
 \end{equation}
 
 \begin{equation}
@@ -7436,7 +7430,7 @@ V_{a \perp} =
 - \sigma_{a0} \frac{\partial \varphi}{h_y \partial y} 
 - \sigma_{a0} \frac{1}{Z_a e n_a} \frac{\partial n_a T_i}{h_y \partial y} 
 + \sigma_{a0} b_z^2  B_z V_{0x}
-\text{ , } a = 1,
+\text{ , } a = 1, \mbox{    ?}
 \end{equation}
 
 \begin{equation*}
@@ -7471,8 +7465,18 @@ $V_{0x}=\frac{\Gamma_{0x}}{n_0}$
 
 $\sigma_y=\sigma_{ANy} + \sigma_{CLy}$
 
+$\sigma_{AN}$  depends on 'b2tqna\_model\_sig'
+
 \begin{equation*}
-\sigma_{ANy} = \left(
+\sigma_{AN} = \left(
+	c_{\sigma_a,0} + c_{\sigma_a,1} \frac{10^{20}}{n_e} +
+	c_{\sigma_a,3} \frac{6.2 \cdot 10^{-2} T_e}{e|B|} +
+	c_{\sigma_a,4} e^{-c_{\sigma_a,5}\left(\frac y{L\left(x\right)}\right)^2}
+\right) e \widetilde n_e \text{ , } n_e \text{, or}
+\end{equation*}
+
+\begin{equation*}
+\sigma_{AN} = \left(
 	c_{\sigma_a,0} + c_{\sigma_a,1} \frac{10^{20}}{n_e} +
 	c_{\sigma_a,3} \frac{6.2 \cdot 10^{-2} T_e}{e|B|} +
 	c_{\sigma_a,4} e^{-c_{\sigma_a,5}\left(\frac y{L\left(x\right)}\right)^2}
@@ -7937,6 +7941,18 @@ $z_a\neq 0,$
 \begin{equation}
 h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \Bigl|_{S_0} =
 \left[
+	p_{m,a,1} p_{m,a,2} h_z \frac{\sqrt g}{h_y} - 
+	p_{m,a,2} h_z \frac{\sqrt g}{h_y} V_{\parallel a}
+\right] \Biggr|_{S_0},
+\end{equation}
+
+weak velocity (4) dpc
+
+$p_{m,a,1} = 0$, $p_{m,a,2} = 10^5$
+
+\begin{equation}
+h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \Bigl|_{S_0} =
+\left[
 	c_{m,a,3} h_z \frac{\sqrt g}{h_y} m_a n_a V_{\parallel a} + 
 	c_{m,a,6} max \left( 
 		0, -h_z \frac{\sqrt g}{h_y} \frac{\Gamma_{ay}^{(cor)}}{n_a} 
@@ -7948,15 +7964,16 @@ delete term with max!
 
 $\Gamma_{ay}^{(cor)} = \Gamma_{ay} + \Gamma_{ay}^{(dia)}$
 
-$c_{m,a,3} = 0$, $c_{m,a,6}=1$
+$c_{m,a,3} = 0$,  $c_{m,a,6} = -1$
 
 \paragraph{South 1. Core}
 
 $z_a=0$
 
-$\frac{\sqrt g}{h_y} \Gamma_{ay}^m \biggl|_{S_1} = \left[
-p_{m,a,1} p_{m,a,2} \frac{\sqrt g}{h_y} - 
-p_{m,a,2} \frac{\sqrt g}{h_y} V_{\parallel a}\right] \Biggl|_{S_1}$ \ \ \ \ \ weak velocity (4) dpc
+$h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \biggl|_{S_1} = \left[
+	p_{m,a,1} p_{m,a,2} h_z \frac{\sqrt g}{h_y} - 
+	p_{m,a,2} h_z \frac{\sqrt g}{h_y} V_{\parallel a}
+\right] \Biggl|_{S_1}$ \ \ \ \ \ weak velocity (4) dpc
 
 $p_{m,a,1} = 0,\;\;\;p_{m,a,2} = 10^5$
 
@@ -8982,8 +8999,8 @@ About scaling of residuals
 	\frac{3}{2} \sum \limits_{a=0}^{n_s-1} \sum \limits_{j=0}^{n_xy-1} \sqrt{g_{i,j}} z_a e n_{a,i,j} 
 }
 \end{equation}
-}
-    
+
+
 
 \chapter{Boundary conditions in B2.5}
 \label{cha:Mladen}\index{boundary conditions}
