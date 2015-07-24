@@ -74,6 +74,16 @@ if (! -e mesh.extra) then
     endif
   endif
 endif
+if (! -e param.dg) then
+  if (-e ../baserun/param.dg) then
+    ln -s ../baserun/param.dg .
+  else
+    set paramdg=`climb_and_look_for param.dg`
+    if (-e $paramdg) then
+      ln -s $paramdg .
+    endif
+  endif
+endif
 if (! -e b2.log) ln -sf run.log b2.log
 if (! -e b2.log.gz) ln -sf run.log.gz b2.log.gz
 if (! -e tracing) mkdir tracing
