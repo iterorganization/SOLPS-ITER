@@ -1,1 +1,3 @@
+setenv GLI_HOME /pfs/work/dpc/SOLPS-ITER/gks
+setenv PATH ${PATH}:/pfs/work/dpc/SOLPS-ITER/NETCDF/bin
 # load modules

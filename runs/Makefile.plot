@@ -113,7 +113,7 @@ ifndef STAND_ALONE
 	-cd b2md.exe.dir ; ln -s ../fort.33 ../fort.34 ../fort.35 .
 endif
 	rm -f $(target_md)
-	cd b2md.exe.dir ; ${SOLPSTOP}/bin/common/mds_id | ${TIME} b2md.exe ; mv $(target_md) .. ; rm -f $(notdir $^) .quit ds*
+	cd b2md.exe.dir ; ${SOLPSTOP}/scripts/mds_id | ${TIME} b2md.exe ; mv $(target_md) .. ; rm -f $(notdir $^) .quit ds*
 ifndef STAND_ALONE
 	-rm b2md.exe.dir/fort.44 b2md.exe.dir/input.dat b2md.exe.dir/fort.3[3-5]
 endif
@@ -126,7 +126,7 @@ ifndef STAND_ALONE
 	-cd b2md.exe.dir ; ln -s ../fort.33 ../fort.34 ../fort.35 .
 endif
 	rm -f $(target_md)
-	cd b2md.exe.dir ; ${SOLPSTOP}/bin/common/mds_id | ${DBX} ${INC} ${SOLPSTOP}/base/b2/${OBJECTCODE}/b2md.exe ; mv $(target_md) .. ; rm -f $(notdir $^) .quit ds*
+	cd b2md.exe.dir ; ${SOLPSTOP}/scripts/mds_id | ${DBX} ${INC} ${SOLPSTOP}/base/b2/${OBJECTCODE}/b2md.exe ; mv $(target_md) .. ; rm -f $(notdir $^) .quit ds*
 ifndef STAND_ALONE
 	-rm b2md.exe.dir/fort.44 b2md.exe.dir/input.dat b2md.exe.dir/fort.3[3-5]
 endif

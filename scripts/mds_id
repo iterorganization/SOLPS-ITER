@@ -12,7 +12,11 @@ set qualified_hostname=`nslookup $hostname |& awk '/^Name:/{print $2}'`
 if ($qualified_hostname == '') set qualified_hostname=$hostname
 echo hostname:$qualified_hostname
 echo solpstop:$SOLPSTOP
-echo objectcode:$OBJECTCODE
+if ($?OBJECTCODE) then
+  echo objectcode:$OBJECTCODE
+else
+  echo objectcode:`which b2md.exe | sed -e 's:/[^/]*$::' | sed 's:^.*/::'`
+endif
 echo b2fstatiid:`md5sum b2fstati`
 echo b2fstateid:`md5sum b2fstate`
 echo b2fplasmaid:`md5sum ../b2fplasma`
@@ -32,3 +36,10 @@ else
   if ("$svn_version" == '') set svn_version="Revision: -1"
 endif
 echo $svn_version
+if (! -d $SOLPSTOP/.git ) then
+  set git_version="git:None"
+else
+  set git_version="git:`git describe --always --dirty --abbrev`"
+  if ("$git_version" == '') set git_version="git:None"
+endif
+echo $git_version

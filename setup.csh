@@ -183,11 +183,11 @@ alias unset_mpi   'source $SOLPSTOP/SETUP/nompi'
 #
 #
 #
-#if ($?PYTHONPATH) then
-#  setenv PYTHONPATH ${PYTHONPATH}:${SOLPSTOP}/lib/python
-#else
-#  setenv PYTHONPATH ${SOLPSTOP}/lib/python
-#endif
+if ($?PYTHONPATH) then
+  setenv PYTHONPATH ${PYTHONPATH}:${SOLPSTOP}/lib/python
+else
+  setenv PYTHONPATH ${SOLPSTOP}/lib/python
+endif
 #
 #setenv PLOT_SET_PATH '..:../..:${SOLPSTOP}/data.local/plot_set:${SOLPSTOP}/data/plot_set'
 
