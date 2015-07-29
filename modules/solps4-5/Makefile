@@ -24,8 +24,8 @@ DEFINES += -DSOLPS4_3 -DB25_EIRENE -DUSE_ARRAYS
 ifeq ($(shell [ -d ${SOLPS4} ] && echo yes || echo no ),no)
   $(error Invalid SOLPS4 directory address)
 endif
-SRC4LOCAL = ${SOLPSTOP}/modules/solps4-5/local_4
-SRC5LOCAL = ${SOLPSTOP}/modules/solps4-5/local_5
+SRC4LOCAL = ${SOLPSTOP}/modules/solps4-5/src/local_4
+SRC5LOCAL = ${SOLPSTOP}/modules/solps4-5/src/local_5
 ifeq ($(shell [ -d ${SRC4LOCAL} ] && echo yes || echo no ),yes)
 INCLUDE = -I${SRC4LOCAL}
 else
@@ -37,15 +37,15 @@ endif
 INCLUDE += -I${SRCDIR}/B2.5_include.local -I${SRCDIR}/B2.5_include -I${SRCDIR}/B2.5_commons -I${SRCDIR}/B2_include -I${SRCDIR}/B2_commons -I${SRCDIR}/Eirene_commons -I${MDSPLUS_DIR}/include
 ifeq ($(shell [ -d ${SRC4LOCAL} ] && echo yes || echo no ),yes)
 ifeq ($(shell [ -d ${SRC5LOCAL} ] && echo yes || echo no ),yes)
-VPATH+=${SRC5LOCAL}:${SRC4LOCAL}:${SRCDIR}/B2_modules:${SRCDIR}/B2.5_modules:${SRCDIR}:${SRCDIR}/solps4_B2:${SRCDIR}/solps4_Eirene:${SRCDIR}/solps5
+VPATH+=${SRC5LOCAL}:${SRC4LOCAL}:${SRCDIR}/B2.5_modules:${SRCDIR}:${SRCDIR}/solps4_B2:${SRCDIR}/solps4_Eirene:${SRCDIR}/solps5
 else
-VPATH+=${SRC4LOCAL}:${SRCDIR}/B2_modules:${SRCDIR}/B2.5_modules:${SRCDIR}:${SRCDIR}/solps4_B2:${SRCDIR}/solps4_Eirene:${SRCDIR}/solps5
+VPATH+=${SRC4LOCAL}:${SRCDIR}/B2.5_modules:${SRCDIR}:${SRCDIR}/solps4_B2:${SRCDIR}/solps4_Eirene:${SRCDIR}/solps5
 endif
 else
 ifeq ($(shell [ -d ${SRC5LOCAL} ] && echo yes || echo no ),yes)
-VPATH+=${SRC5LOCAL}:${SRCDIR}/B2_modules:${SRCDIR}/B2.5_modules:${SRCDIR}:${SRCDIR}/solps4_B2:${SRCDIR}/solps4_Eirene:${SRCDIR}/solps5
+VPATH+=${SRC5LOCAL}:${SRCDIR}/B2.5_modules:${SRCDIR}:${SRCDIR}/solps4_B2:${SRCDIR}/solps4_Eirene:${SRCDIR}/solps5
 else
-# VPATH+=${SRCDIR}/Eirene_modules:${SRCDIR}/B2_modules:${SRCDIR}/B2.5_modules:${SRCDIR}:${SRCDIR}/solps4_B2:${SRCDIR}/solps4_Eirene:${SRCDIR}/solps5
+# VPATH+=${SRCDIR}/Eirene_modules:${SRCDIR}/B2.5_modules:${SRCDIR}:${SRCDIR}/solps4_B2:${SRCDIR}/solps4_Eirene:${SRCDIR}/solps5
 VPATH+=${SRCDIR}/B2.5_modules:${SRCDIR}:${SRCDIR}/solps4_B2:${SRCDIR}/solps4_Eirene:${SRCDIR}/solps5
 endif
 endif
@@ -54,8 +54,7 @@ include ${BASEDIR}/LISTOBJ
 endif
 
 PROG_XR = b2sxdr.exe
-MOD4LES = ${patsubst ${SRCDIR}/B2_modules/%.F,%.o,${shell echo ${SRCDIR}/B2_modules/*.F}}
-MOD4LES +=${patsubst ${SRCDIR}/Eirene_modules/%.f,%.o,${shell echo ${SRCDIR}/Eirene_modules/*.f}}
+MOD4LES = ${patsubst ${SRCDIR}/Eirene_modules/%.f,%.o,${shell echo ${SRCDIR}/Eirene_modules/*.f}}
 MOD5LES = ${patsubst ${SRCDIR}/B2.5_modules/%.F,%.o,${shell echo ${SRCDIR}/B2.5_modules/*.F}}
 MODULES	= ${MOD4LES} ${MOD5LES}
 SOURCB4 = ${patsubst ${SRCDIR}/solps4_B2/%.F,%.o,${shell echo ${SRCDIR}/solps4_B2/*.F}}

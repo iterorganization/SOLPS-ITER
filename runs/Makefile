@@ -259,6 +259,7 @@ ifndef STAND_ALONE
 	-cd b2yt.exe.dir ; [ -e ../input.dat ] && ln -s ../input.dat . ; ln -s ../fort.33 ../fort.34 ../fort.35 .
 	cd b2yt.exe.dir ; ${TIME} ${B2OBJ}/b2yt.exe ; mv $(target_yt) .. ; rm -f $(notdir $^) input.dat fort.3[3-5]
 	[ -e b2yt.exe.dir/input.dat.2 ] && mv b2yt.exe.dir/input.dat.2 .
+	[ -e b2yt.exe.dir/fort.44.2 ] && mv b2yt.exe.dir/fort.44.2 .
 else
 	cd b2yt.exe.dir ; ${TIME} ${B2OBJ}/b2yt.exe ; mv $(target_yt) .. ; rm -f $(notdir $^)
 endif
@@ -271,6 +272,7 @@ ifndef STAND_ALONE
 	-cd b2yt.exe.dir ; [ -e ../input.dat ] && ln -s ../input.dat . ; ln -s ../fort.33 ../fort.34 ../fort.35 .
 	cd b2yt.exe.dir ; ${DBX} ${INC} b2yt.exe ; mv $(target_yt) .. ; rm -f $(notdir $^) input.dat fort.3[3-5]
 	[ -e b2yt.exe.dir/input.dat.2 ] && mv b2yt.exe.dir/input.dat.2 .
+	[ -e b2yt.exe.dir/fort.44.2 ] && mv b2yt.exe.dir/fort.44.2 .
 else
 	cd b2yt.exe.dir ; ${DBX} ${INC} b2yt.exe ; mv $(target_yt) .. ; rm -f $(notdir $^)
 endif

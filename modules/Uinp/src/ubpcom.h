@@ -17,7 +17,7 @@ c
      ,  lubchrdp(nubchrdx,nubslp),  lubchrdi(nubchrdx,nubsli),
      ,  nubchrdp(nubslp),  nubchrdi(nubsli),
      ,  lublbli(nubchrdx), lublblp(nubchrdx)
-      real ubchrds(4,nubchrdx), pp1(3,nlim), pp2(3,nlim),
+      real ubchrds(4,nubchrdx), pp1(3,DEF_NLIM), pp2(3,DEF_NLIM),
      ,  angchrdp(nubchrdx),  angchrdi(nubchrdx)
       character*(ufnlen) cublbli(nubsli), cublblp(nubslp)
       common/ub2pcom/pp1, pp2, ubchrds, angchrdp, angchrdi,

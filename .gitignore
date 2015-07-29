@@ -13,6 +13,8 @@ rwXDR.d.*
 # any local files, directories,...
 *.local
 *.local/
+local_4
+local_5
 
 # error messages from compiler etc.
 *.error

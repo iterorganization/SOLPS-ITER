@@ -30,7 +30,7 @@ c      print *,'ubpnam : ',unn !###
       return
 c======================================================================
 c*** p1
-  1   call rearre(pp1,3*nlim,i)
+  1   call rearre(pp1,3*DEF_NLIM,i)
       call vscale(pp1,0.001,pp1,i)
       nlimi=i/3
 c      print *,'p1: nlimi = ',nlimi !###

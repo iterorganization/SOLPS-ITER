@@ -263,6 +263,7 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
       write(70,'(a)') '*dimens (nx, ny: free format)'
       write(70,'(2(2x,i4))') nx, ny
       write(70,'(a)') '''eirene_format''     ''facelift'''
+      write(70,'(a)') '''solps_version''     ''4.3'''
       close(70)
 *   ..write header to converted state file
       idum(0) = nx
