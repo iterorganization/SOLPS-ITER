@@ -26,29 +26,48 @@ ifeq ($(shell [ -d ${SOLPS4} ] && echo yes || echo no ),no)
 endif
 SRC4LOCAL = ${SOLPSTOP}/modules/solps4-5/src/local_4
 SRC5LOCAL = ${SOLPSTOP}/modules/solps4-5/src/local_5
+INC4LOCAL = ${SOLPSTOP}/modules/solps4-5/src/B2_include.local
+INC5LOCAL = ${SOLPSTOP}/modules/solps4-5/src/B2.5_include.local
+B2M5LOCAL = ${SOLPSTOP}/modules/solps4-5/src/B2.5_modules.local
+EIRMLOCAL = ${SOLPSTOP}/modules/solps4-5/src/Eirene_modules.local
 ifeq ($(shell [ -d ${SRC4LOCAL} ] && echo yes || echo no ),yes)
 INCLUDE = -I${SRC4LOCAL}
+TAGSLIST = ${SRC4LOCAL}/*.F
+VPATH = ${SRC4LOCAL}:
 else
 INCLUDE =
+TAGSLIST =
+VPATH = 
 endif
 ifeq ($(shell [ -d ${SRC5LOCAL} ] && echo yes || echo no ),yes)
 INCLUDE += -I${SRC5LOCAL}
+TAGSLIST += ${SRC5LOCAL}/*.F
+VPATH += ${SRC5LOCAL}:
 endif
-INCLUDE += -I${SRCDIR}/B2.5_include.local -I${SRCDIR}/B2.5_include -I${SRCDIR}/B2.5_commons -I${SRCDIR}/B2_include -I${SRCDIR}/B2_commons -I${SRCDIR}/Eirene_commons -I${MDSPLUS_DIR}/include
-ifeq ($(shell [ -d ${SRC4LOCAL} ] && echo yes || echo no ),yes)
-ifeq ($(shell [ -d ${SRC5LOCAL} ] && echo yes || echo no ),yes)
-VPATH+=${SRC5LOCAL}:${SRC4LOCAL}:${SRCDIR}/B2.5_modules:${SRCDIR}:${SRCDIR}/solps4_B2:${SRCDIR}/solps4_Eirene:${SRCDIR}/solps5
-else
-VPATH+=${SRC4LOCAL}:${SRCDIR}/B2.5_modules:${SRCDIR}:${SRCDIR}/solps4_B2:${SRCDIR}/solps4_Eirene:${SRCDIR}/solps5
+ifeq ($(shell [ -d ${INC4LOCAL} ] && echo yes || echo no ),yes)
+INCLUDE += -I${INC4LOCAL}
+TAGSLIST += ${INC4LOCAL}/*.h
+VPATH += ${INC4LOCAL}:
 endif
-else
-ifeq ($(shell [ -d ${SRC5LOCAL} ] && echo yes || echo no ),yes)
-VPATH+=${SRC5LOCAL}:${SRCDIR}/B2.5_modules:${SRCDIR}:${SRCDIR}/solps4_B2:${SRCDIR}/solps4_Eirene:${SRCDIR}/solps5
-else
-# VPATH+=${SRCDIR}/Eirene_modules:${SRCDIR}/B2.5_modules:${SRCDIR}:${SRCDIR}/solps4_B2:${SRCDIR}/solps4_Eirene:${SRCDIR}/solps5
-VPATH+=${SRCDIR}/B2.5_modules:${SRCDIR}:${SRCDIR}/solps4_B2:${SRCDIR}/solps4_Eirene:${SRCDIR}/solps5
+ifeq ($(shell [ -d ${INC5LOCAL} ] && echo yes || echo no ),yes)
+INCLUDE += -I${INC5LOCAL}
+TAGSLIST += ${INC5LOCAL}/*.h
+VPATH += ${INC5LOCAL}:
 endif
+ifeq ($(shell [ -d ${B2M5LOCAL} ] && echo yes || echo no ),yes)
+INCLUDE += -I${B2M5LOCAL}
+TAGSLIST += ${B2M5LOCAL}/*.F
+VPATH += ${B2M5LOCAL}:
 endif
+ifeq ($(shell [ -d ${EIRMLOCAL} ] && echo yes || echo no ),yes)
+INCLUDE += -I${EIRMLOCAL}
+TAGSLIST += ${EIRMLOCAL}/*.F
+VPATH += ${EIRMLOCAL}:
+endif
+INCLUDE += -I${SRCDIR}/B2.5_include -I${SRCDIR}/B2.5_commons -I${SRCDIR}/B2_include -I${SRCDIR}/B2_commons -I${SRCDIR}/Eirene_commons -I${MDSPLUS_DIR}/include
+TAGSLIST += ${SRCDIR}/*_commons/*.[hH] ${SRCDIR}/*/*.F ${SRCDIR}/*.F
+VPATH += ${SRCDIR}/B2.5_modules:${SRCDIR}:${SRCDIR}/solps4_B2:${SRCDIR}/solps4_Eirene:${SRCDIR}/solps5
+
 ifeq ($(shell [ -e ${BASEDIR}/LISTOBJ ] && echo yes || echo no ),yes)
 include ${BASEDIR}/LISTOBJ
 endif
@@ -247,19 +266,7 @@ endif
 ${BASEDIR}/TAGS: tags
 
 tags:
-ifeq ($(shell [ -d ${SRC4LOCAL} ] && echo yes || echo no ),yes)
-ifeq ($(shell [ -d ${SRC5LOCAL} ] && echo yes || echo no ),yes)
-	rm -f ${BASEDIR}/TAGS ; etags ${SRC5LOCAL}/*.h ${SRC4LOCAL}/*.h ${SRCDIR}/*_commons/*.[hH] ${SRC5LOCAL}/*.F ${SRC4LOCAL}/*.F ${SRCDIR}/*/*.F ${SRCDIR}/*.F
-else
-	rm -f ${BASEDIR}/TAGS ; etags ${SRC4LOCAL}/*.h ${SRCDIR}/*_commons/*.[hH] ${SRC4LOCAL}/*.F ${SRCDIR}/*/*.F ${SRCDIR}/*.F
-endif
-else
-ifeq ($(shell [ -d ${SRC5LOCAL} ] && echo yes || echo no ),yes)
-	rm -f ${BASEDIR}/TAGS ; etags ${SRC5LOCAL}/*.h ${SRCDIR}/*_commons/*.[hH] ${SRC5LOCAL}/*.F ${SRCDIR}/*/*.F ${SRCDIR}/*.F
-else
-	rm -f ${BASEDIR}/TAGS ; etags ${SRCDIR}/*_commons/*.[hH] ${SRCDIR}/*/*.F ${SRCDIR}/*.F
-endif
-endif
+	rm -f ${BASEDIR}/TAGS ; etags ${TAGSLIST}
 
 clean:
 	rm -f ${OBJDIR}/*.f ${OBJDIR}/*.o ${OBJDIR}/*.${MOD} ${OBJDIR}/*.a ${OBJDIR}/*.exe
@@ -288,7 +295,7 @@ endif
 include ${OBJDIR}/dependencies
 
 echo:
-#	@echo VPATH=${VPATH}
+	@echo VPATH=${VPATH}
 #	@echo MOD4LES=${MOD4LES}
 #	@echo MODOBJS=${MODOBJS}
 #	@echo MD5OBJS=${MD5OBJS}

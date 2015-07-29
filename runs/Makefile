@@ -40,9 +40,9 @@ target_ah = b2ah.prt b2fpardf
 target_ai = b2ai.prt b2fstati
 target_ar = b2ar.prt b2frates
 ifndef STAND_ALONE
-target_mn = b2mn.prt b2fparam b2fstate b2fmovie b2ftrace b2ftrack b2fplasma b2time.nc fort.31 fort.44 b2tallies.nc b2movies.nc b2wall.nc
+target_mn = b2mn.prt b2fparam b2fstate b2fmovie b2ftrace b2ftrack b2fplasma b2time.nc fort.31 fort.44 b2tallies.nc b2movies.nc b2wall.nc b2_to_astra.dat
 else
-target_mn = b2mn.prt b2fparam b2fstate b2fmovie b2ftrace b2ftrack b2fplasma b2time.nc b2tallies.nc b2movies.nc b2wall.nc
+target_mn = b2mn.prt b2fparam b2fstate b2fmovie b2ftrace b2ftrack b2fplasma b2time.nc b2tallies.nc b2movies.nc b2wall.nc b2_to_astra.dat
 endif
 target_co = b2co.prt
 target_uf = b2uf.prt
