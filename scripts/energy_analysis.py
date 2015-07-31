@@ -1,11 +1,12 @@
 #! /usr/bin/env python
 import pupynere
-import matplotlib.pyplot as plt
+import os
 import matplotlib
+if not os.getenv("DISPLAY"): matplotlib.use('Agg')
+import matplotlib.pylab as plt
 import sys
 import numpy
 import subprocess
-import os
 
 if os.access('b2mn.exe.dir/b2tallies.nc', os.R_OK):
   f=pupynere.netcdf_file('b2mn.exe.dir/b2tallies.nc','r')
