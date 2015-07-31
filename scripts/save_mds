@@ -1,4 +1,25 @@
 #! /bin/tcsh -f
+
+set debug=""
+if ("X${1}X" == "X-nX") then
+  set debug="-n"
+  shift
+endif
+if ("X${1}X" == "X-sX") then
+  shift
+  setenv STAND_ALONE yes
+  shift
+endif
+if ("X${1}X" == "X-dX") then
+  shift
+  if ($1 == "") then
+    set debug="$debug TIME=$DBX"
+  else
+    set debug="$debug TIME=$1"
+  endif
+  shift
+endif
+
 if (-e shotnumber.history) then
   echo "Shotnumber.history already exists in $PWD"
   exit
@@ -10,10 +31,12 @@ if (! -e mesh.extra) ln -s ../mesh.extra .
 if (! -e mesh.extra) then
  (cd .. ; ln -s ../mesh.extra .)
 endif
-gmake -f $SOLPSTOP/runs/Makefile.plot b2md.prt > b2md.log
+gmake $debug -f $SOLPSTOP/runs/Makefile.plot b2md.prt > b2md.log
 if (-e shotnumber.history) then
   cat shotnumber.history
   rm -f .save_mds .resave_mds
 else
   echo "No shotnumber.history created: save_mds failed. See b2md.log file for details"
 endif
+
+unsetenv STAND_ALONE

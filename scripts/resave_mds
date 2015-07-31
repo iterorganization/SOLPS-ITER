@@ -1,5 +1,25 @@
 #! /bin/tcsh -f
 
+set debug=""
+if ("X${1}X" == "X-nX") then
+  set debug="-n"
+  shift
+endif
+if ("X${1}X" == "X-sX") then
+  shift
+  setenv STAND_ALONE yes
+  shift
+endif
+if ("X${1}X" == "X-dX") then
+  shift
+  if ($1 == "") then
+    set debug="$debug TIME=$DBX"
+  else
+    set debug="$debug TIME=$1"
+  endif
+  shift
+endif
+
 if ($1 != "") then
   if (-d $1) then
     cd $1
@@ -39,7 +59,7 @@ foreach i (`cat shotnumber.history | sort -n | uniq`)
   mv b2md.log b2md.log.$count_suffix
   if (-e b2fstate.gz) gunzip b2fstate.gz
   if (-e b2fstati.gz) gunzip b2fstati.gz
-  gmake -f $SOLPSTOP/runs/Makefile.plot b2md.prt > b2md.log
+  gmake $debug -f $SOLPSTOP/runs/Makefile.plot b2md.prt > b2md.log
 end
 
 if ($B2MDDAT == b2md.dat.sav) then
@@ -49,3 +69,4 @@ else
 endif
 
 rm -f .resave_mds
+unsetenv STAND_ALONE
