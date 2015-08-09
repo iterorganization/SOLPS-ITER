@@ -11,6 +11,11 @@ endif
 ifndef SOLPSTOP
   $(error SOLPSTOP not defined)
 endif
+ifdef SOLPS_MPI
+  ifndef USE_MPI
+    USE_MPI = -DUSE_MPI
+  endif
+endif
 
 PROG = uinp.exe
 
