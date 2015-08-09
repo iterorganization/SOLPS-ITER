@@ -9,14 +9,14 @@ LINK_MOD =
 
 FC = pgf90
 ifdef SOLPS_DEBUG
-FCOPTS = -g -r8
+FCOPTS = -g
 else
-FCOPTS = -O2 -r8
-FCOPTS = -fast -r8
+FCOPTS = -O2
+FCOPTS = -fast 
 endif
 
 DBLFC = ${FC}
-DBLOPTION =
+DBLOPTION = -r8
 DBLSED = sed -e s:\#PREC\#:d:g
 
 INCMOD = -I

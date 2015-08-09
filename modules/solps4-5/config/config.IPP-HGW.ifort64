@@ -12,13 +12,13 @@ LINK_MOD =
 FC = ifort
 
 ifdef SOLPS_DEBUG
-FCOPTS = -g -C -debug all -r8
+FCOPTS = -g -C -debug all
 else
-FCOPTS = -O3 -vec_report0 -r8
+FCOPTS = -O3 -vec_report0
 endif
 
 DBLFC = ${FC}
-DDBLOPTION =-Ad # ???
+DDBLOPTION = -Ad -r8 # ???
 DBLSED = sed -e s:\#PREC\#:d:g
 DBLSED = 
 

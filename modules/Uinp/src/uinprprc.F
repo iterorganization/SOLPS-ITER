@@ -384,8 +384,15 @@ c*** appear first
      ,	      	  			rctntyp(irc).eq.'DS') then !}{
 		    e_hlp=.true.
 		    if(rctnchp(irc).eq.'H.4') then !{
-                      if(rctnchp(k1).ne.'H.4' .and. 
-     ,                   rctnchp(k1).ne.'H.10') then !{
+                      if(rctnchp(k1).eq.'H.4' .or. 
+     ,                   rctnchp(k1).eq.'H.10') then !{
+                        ex=.false.
+!cxpb temporary test waiting for better A&M data
+                      else if(rctnchp(k1).eq.'H.8' .and.
+     ,                        (lknd.eq.2 .or. lknd.eq.3)) then
+                        ex=.false.
+!cxpb end
+                      else !}{
                         ex=.true.
                       end if !}
      		    else if (rctnchp(irc).eq.'H.2') then !}{
@@ -409,15 +416,16 @@ c*** appear first
 		    end if !}
 		    if(ex) then !{
 		      write(0,*) 'Inconsistent reaction data. H.4 ',
-     ,		    	'or H.2 should be grouped with, ',
-     ,                  'correspondingly, H.10 or H.8 for a ',
+     ,		    	'or H.2 should be grouped with',
+!cxpb     ,                  ', correspondingly,',
+     ,                  ' H.10 or H.8 for a ',
      ,		    	rctntyp(irc), ' reaction'
 		      stop '==> Check the AMDS model'
 		    end if !}
 		  else !}{
 		    write(0,*) 'Wrong grouping of the reaction data. ',
      ,		      'Right options are:'
-      		    write(0,*) '  H.4 or H.2 with H.10 for ',
+      		    write(0,*) '  H.4 or H.2 with H.8 or H.10 for ',
      ,		      'EI, RC, or DS reaction, or'
       		    write(0,*) '  H.0 and H.1 with H.3 for ',
      ,		      'CX, II, or EL reaction'

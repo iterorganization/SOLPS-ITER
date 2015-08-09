@@ -331,7 +331,7 @@ c*** 4
       data (rctdchp(i,7),i=1,lurctdar) / 'H.2' /
       data (rctdchp(i,8),i=1,lurctdn)  / 'H.2' /
       data (rctdchp(i,9),i=1,lurctdbe) / 'H.2','H.8' /
-      data (rctdchp(i,10),i=1,lurctdh2p)  / 4*'H.4' /
+      data (rctdchp(i,10),i=1,lurctdh2p)  / 3*'H.4', 'H.8' /
       data (rctdrct(i,1),i=1,lurctdh)  / 2*'2.1.5', 2*'3.1.8' /
       data (rctdrct(i,2),i=1,lurctdh2) 
      .              / '2.2.9', '2.2.5g', '2.2.10', 3*'0.3T', '3.2.3' /
