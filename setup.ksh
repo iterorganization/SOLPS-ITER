@@ -127,7 +127,7 @@ esac
 
 [ -z "$DEVICE" ] && export DEVICE=iter
 
-export B2PLOT_DEV=ps
+export B2PLOT_DEV="x11 ps"
 export GLI_HOME=$SOLPSTOP/lib
 export WSTYPE=$OBJECTCODE
 # export GLI_WSTYPE=210
