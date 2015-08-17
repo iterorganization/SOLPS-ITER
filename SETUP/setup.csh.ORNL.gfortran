@@ -1,12 +1,5 @@
 # Load modules
-# module load lapack
-# module load gnuplot
-# module load blas
-# module load globus
-# module load hdf5
-# module load MUMPS
-# module load netcdf
-# module load scalapack
+module load solps-libs/gcc
 
 if (-e /usr/local/texlive/bin/x86_64-linux) then 
 setenv PATH /usr/local/texlive/bin/x86_64-linux:${PATH}
@@ -18,4 +11,4 @@ setenv DEVICE d3d
 
 
 # Debugger
-# setenv DBX totalview
+setenv DBX gdb

@@ -29,10 +29,10 @@
 #
  
        NCDIR = 
-   MSCL_ROOT = /usr/local/mscl/linux_pgf90_JDL
+   MSCL_ROOT ?= /usr/local/mscl/linux_pgf90_JDL
        H5DIR = 
-     GR_ROOT = /usr/local/grsource/linux_pgf90_JDL
-    GLI_HOME = /usr/local/gligks/gks/linux_pgf90_JDL
+     GR_ROOT ?= /usr/local/grsource/linux_pgf90_JDL
+    GLI_HOME ?= /usr/local/gligks/gks/linux_pgf90_JDL
   NCARG_ROOT = /usr/lib64/ncarg
       NAGDIR = 
  MDSPLUS_DIR = 

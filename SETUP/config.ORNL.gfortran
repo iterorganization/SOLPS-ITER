@@ -28,11 +28,11 @@
 # Remove -DMDSPLUS from SOLPS_CPP
 #
  
-       NCDIR = /usr/lib64
-   MSCL_ROOT = /usr/local/mscl/linux_gfortran_JDL
+       NCDIR =
+   MSCL_ROOT ?= /usr/local/mscl/linux_gfortran_JDL
        H5DIR = 
-     GR_ROOT = /usr/local/grsource/linux_gfortran_JDL
-    GLI_HOME = /usr/local/gligks/gks/linux_gfortran_JDL
+     GR_ROOT ?= /usr/local/grsource/linux_gfortran_JDL
+    GLI_HOME ?= /usr/local/gligks/gks/linux_gfortran_JDL
   NCARG_ROOT = /usr/lib64/ncarg
       NAGDIR = 
  MDSPLUS_DIR = 
