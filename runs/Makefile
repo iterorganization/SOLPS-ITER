@@ -129,18 +129,18 @@ ifndef STAND_ALONE
 endif
 	cd b2mn.exe.dir ; mkdir tracing ; ${TIME} ${B2OBJ}/b2mn.exe ; mv $(target_mn) .. ; mv -f tracing/* ../tracing ; rm -f $(notdir $^) .quit
 ifndef STAND_ALONE
-	[ -e b2mn.exe.dir/fort.13 ] && mv b2mn.exe.dir/fort.13 .
-	[ -e b2mn.exe.dir/fort.15 ] && mv b2mn.exe.dir/fort.15 .
-	[ -e b2mn.exe.dir/fort.44 ] && mv b2mn.exe.dir/fort.44 .
+	-[ -e b2mn.exe.dir/fort.13 ] && mv b2mn.exe.dir/fort.13 .
+	-[ -e b2mn.exe.dir/fort.15 ] && mv b2mn.exe.dir/fort.15 .
+	-[ -e b2mn.exe.dir/fort.44 ] && mv b2mn.exe.dir/fort.44 .
 	-cd b2mn.exe.dir ; rm HYDHEL AMJUEL METHANE SPUTER H2VIBR fort.21 fort.22 fort.33 fort.34 fort.35 graphite_ext.dat mo_ext.dat fort.75 fort.1
 endif
-	[ -e b2mn.exe.dir/fort.31 ] && mv b2mn.exe.dir/fort.31 .
-	[ -e b2mn.exe.dir/b2time.nc ] && mv b2mn.exe.dir/b2time.nc .
-	[ -e b2mn.exe.dir/b2wall.nc ] && mv b2mn.exe.dir/b2wall.nc .
-	[ -e b2mn.exe.dir/b2movies.nc ] && mv b2mn.exe.dir/b2movies.nc .
-	[ -e b2mn.exe.dir/b2tallies.nc ] && mv b2mn.exe.dir/b2tallies.nc .
-	[ -e b2mn.exe.dir/tran ] && mv b2mn.exe.dir/tran b2mn.exe.dir/tran?? .
-	[ -e b2mn.exe.dir/tracing ] && rmdir b2mn.exe.dir/tracing
+	-[ -e b2mn.exe.dir/fort.31 ] && mv b2mn.exe.dir/fort.31 .
+	-[ -e b2mn.exe.dir/b2time.nc ] && mv b2mn.exe.dir/b2time.nc .
+	-[ -e b2mn.exe.dir/b2wall.nc ] && mv b2mn.exe.dir/b2wall.nc .
+	-[ -e b2mn.exe.dir/b2movies.nc ] && mv b2mn.exe.dir/b2movies.nc .
+	-[ -e b2mn.exe.dir/b2tallies.nc ] && mv b2mn.exe.dir/b2tallies.nc .
+	-[ -e b2mn.exe.dir/tran ] && mv b2mn.exe.dir/tran b2mn.exe.dir/tran?? .
+	-[ -e b2mn.exe.dir/tracing ] && rmdir b2mn.exe.dir/tracing
 	-rmdir b2mn.exe.dir
 
 dbx.b2mn : b2mn.dat b2fgmtry b2fpardf b2fstati b2frates fort.30

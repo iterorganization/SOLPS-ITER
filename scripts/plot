@@ -204,8 +204,11 @@ if (! $?PRINT_PLOT) then
     if($?GNUPLOT_DELAY) then
       echo pause $GNUPLOT_DELAY >> $cfilename
     else
-      echo pause 3600 >> $cfilename
-#      echo pause mouse >> $cfilename
+      if(`gnuplot --version | awk '$1=="gnuplot"&&$2>="4.2"{print "OK"}'` == "OK") then
+        echo pause mouse >> $cfilename
+      else
+        echo pause 3600 >> $cfilename
+      endif
     endif
   endif
 endif
