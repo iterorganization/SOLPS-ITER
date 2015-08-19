@@ -30,7 +30,12 @@ set GNUPLOT=gnuplot
 set echo_style=bsd
 set x='\'
 rm -f $dfilename
-sed -e 's/D/E/g' >! $dfilename
+if ($?PLOT_FROM_FILE) then
+   cat $PLOT_FROM_FILE > $dfilename
+   rm -f $PLOT_FROM_FILE
+else
+   sed -e 's/D/E/g' >! $dfilename
+endif
 set n=`wc -l < $dfilename`
 if(! $?GNUPLOT_BATCH) then
     /bin/cp /dev/null $cfilename
