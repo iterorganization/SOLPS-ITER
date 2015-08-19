@@ -284,7 +284,7 @@ ifndef STAND_ALONE
 else
 	cd b2yt.exe.dir ; ${TIME} ${B2OBJ}/b2yt.exe ; mv $(target_yt) .. ; rm -f $(notdir $^)
 endif
-	rmdir b2yt.exe.dir
+	-rmdir b2yt.exe.dir
 
 dbx.b2yt : b2yt.dat b2fstate b2mn.dat b2ah.dat b2ai.dat b2ag.dat b2fgmtry b2frates b2fpardf
 	rm -rf b2yt.exe.dir ; mkdir b2yt.exe.dir ; cp $^ b2yt.exe.dir
@@ -297,7 +297,7 @@ ifndef STAND_ALONE
 else
 	cd b2yt.exe.dir ; ${DBX} ${INC} b2yt.exe ; mv $(target_yt) .. ; rm -f $(notdir $^)
 endif
-	rmdir b2yt.exe.dir
+	-rmdir b2yt.exe.dir
 
 stra.dat :
 	ln -s ${SOLPSTOP}/modules/B2.5/Database/stra.dat .
