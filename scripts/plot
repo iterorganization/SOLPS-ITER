@@ -31,8 +31,8 @@ set echo_style=bsd
 set x='\'
 rm -f $dfilename
 if ($?PLOT_FROM_FILE) then
-   cat $PLOT_FROM_FILE > $dfilename
-   rm -f $PLOT_FROM_FILE
+   cat ${tmpdir}PLOT_FROM_FILE > $dfilename
+   rm -f ${tmpdir}PLOT_FROM_FILE
 else
    sed -e 's/D/E/g' >! $dfilename
 endif
@@ -209,8 +209,12 @@ if (! $?PRINT_PLOT) then
     if($?GNUPLOT_DELAY) then
       echo pause $GNUPLOT_DELAY >> $cfilename
     else
-      if(`gnuplot --version | awk '$1=="gnuplot"&&$2>="4.2"{print "OK"}'` == "OK") then
-        echo pause mouse >> $cfilename
+      if ($?PLOT_FROM_FILE) then
+        if(`gnuplot --version | awk '$1=="gnuplot"&&$2>="4.2"{print "OK"}'` == "OK") then
+          echo pause mouse >> $cfilename
+        else
+          echo pause 3600 >> $cfilename
+        endif
       else
         echo pause 3600 >> $cfilename
       endif
