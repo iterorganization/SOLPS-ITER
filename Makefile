@@ -159,6 +159,9 @@ ifeq ($(shell [ -e ${SOLPSTOP}/doc/solps/b2cdci.F ] && echo yes || echo no ),no)
 else
 	cd doc/solps; ${MAKE} 
 endif
+ifeq ($(shell [ -d ${SOLPSTOP}/modules/DivGeo/equtrn/doxygen ] && echo yes || echo no ),no)
+	cd modules/DivGeo/equtrn ; ${MAKE} DOC
+endif
 
 tags:
 	cd modules/Carre;          ${MAKE} tags
