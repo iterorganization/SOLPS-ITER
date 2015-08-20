@@ -1092,8 +1092,8 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[eirobj]\index{eirobj} Alias to run \verb!Eirene! standalone with graphics.
   \item[eirobjx]\index{eirobjx} Alias to run \verb!Eirene! standalone without graphics.
   \item[first\_setup]\index{first\_setup} Creates the \verb!config.!\$\verb!{HOST_NAME}.!\$\verb!{COMPILER}! files in each of the \SOLPSITER submodules.
-  \item[gtdr]\index{gtdr} Script to make a directory tree local.
-  \item[gtfl]\index{gtfl} [ANK] Replaces the specified links by the files they are linked to
+  \item[gtdr]\index{gtdr} Script to make a directory tree local. [obsolete]
+  \item[gtfl]\index{gtfl} [ANK] Replaces the specified links by the files they are linked to. [obsolete]
   \item[gwsubmit]\index{gwsubmit} Script to launch runs on the ITM Gateway machine.
   \item[hgwsubmit]\index{hgwsubmit} Script to launch runs on the IPP--Greifswald cluster.
   \item[input.dat\_to\_mesh.extra]\index{input.dat\_to\_mesh.extra}\index{input.dat}\index{mesh.extra} Converts standard input (usually directed from a \verb!input.dat! file) into a \verb!mesh.extra! file.
@@ -1135,11 +1135,16 @@ Some new Python \index{Python scripts} based scripts have also been added:
   \item[fluid\_fluxes.py \#1 \#2]\index{fluid\_fluxes.py} Fluid fluxes
     through various surfaces summed from species \#1 to \#2. 
   \item[nareg.py \#1]\index{nareg.py} Average ion densities for region \#1.
+  \item[nareg\_species.py \#1]\index{nareg\_species.py}  Average ion 
+    densities for region \#1 summed over charge states for each species.
   \item[nereg.py]\index{nereg.py} Average electron densities.
   \item[rqradreg.py \#1]\index{rqradreg.py} Line radiation summed over
     each species' charge states for region \#1.
   \item[rranareg.py \#1]\index{rranareg.py} Recombination rates for
     region \#1.
+  \item[rranareg\_per\_rsanareg.py \#1]\index{[rranareg\_per\_rsanareg.py}
+    Recombination rates divided by ionization rates for region \#1
+    (summed over charge states).
   \item[rsanareg.py \#1]\index{rsanareg.py} Ionization rates for
     region \#1.
   \item[tereg.py]\index{tereg.py} Average electron temperatures.
@@ -4113,6 +4118,21 @@ The default setting for \verb!DEVICE! can be changed for each local
 implementation {\em via} use of the \verb!setup.csh.*! files listed
 in section \ref{sec:setup}.
 
+If \verb!DivGeo! is not yet compiled, you will need to do \index{DivGeo, compiling}
+\begin{verbatim}
+  cd $DG
+  gmake tags
+  gmake listobj
+  gmake depend
+  gmake
+  cd equtrn
+  gmake depend
+  gmake
+  cd ../convert
+  gmake
+\end{verbatim}
+%$
+
 The environment variable \$\verb!DG! contains the path 
 \$\verb!SOLPSTOP/modules/DivGeo!.
 To start \verb!DG!, the command is:
@@ -4143,12 +4163,6 @@ it back into \verb!DG! ({\tt File|Import|Mesh}) to check it.
 
 \chapter{Running Carre}
 \label{cha:carre}\index{Carre, running}
-
-The command\index{sbc}
-\begin{verbatim}
-    sbc
-\end{verbatim}
-will take you to \$\verb!{SOLPSTOP}/base/Carre!.
 
 If \verb!Carre! is not yet compiled, you will need to do \index{Carre, compiling}
 \begin{verbatim}
@@ -5521,7 +5535,7 @@ The neutral species transport coefficients are usually given by the following eq
  D^{n}_{AN,0} = 0,
 \end{gather}
 \begin{gather}
- D^{p}_{AN,0} = C + \sqrt{\frac{T_i}{m_N}} ( \sigma_{CX} n_i + \sigma_{in} n_e ),
+ D^{p}_{AN,0} = C + \sqrt{\frac{T_i}{m_N}} \frac{1}{( \sigma_{CX} n_i + \sigma_{in} n_e )},
 \end{gather}
 where $m_N$ is the mass of the neutral species, and $C$, $\sigma_{CX}$ and $\sigma_{in}$ are three constants given by
 the user, representing hydrogen gas diffusion, and the charge-exchange and ionization cross-sections, respectively.
@@ -10043,13 +10057,13 @@ perpendicular to the magnetic field direction.
     \multicolumn{3}{|l|}{\small\sl continued on next page} \\
     \hline \endfoot
     \endlastfoot
-fn3dl \index{fn3dl}\index{b2time.nc, fn3dl} & poloidal particle flux, inboard divertor & $s^{-1}$ \\
-fl3dl \index{fl3dl}\index{b2time.nc, fl3dl} & poloidal electron flux, inboard divertor & $s^{-1}$ \\
-fo3dl \index{fo3dl}\index{b2time.nc, fo3dl} & poloidal total ion flux, inboard divertor & $s^{-1}$ \\
-fe3dl \index{fe3dl}\index{b2time.nc, fe3dl} & poloidal electron energy flux, inboard divertor & $W $ \\
-fi3dl \index{fi3dl}\index{b2time.nc, fi3dl} & poloidal ion energy flux, inboard divertor & $W $ \\
-ft3dl \index{ft3dl}\index{b2time.nc, ft3dl} & poloidal total energy flux, inboard divertor & $W $ \\
-fc3dl \index{fc3dl}\index{b2time.nc, fc3dl} & poloidal current, inboard divertor  & $A $ \\
+fn3dl \index{fn3dl}\index{b2time.nc, fn3dl} & poloidal particle flux, inboard divertor & $s^{-1}.m^{-2}$ \\
+fl3dl \index{fl3dl}\index{b2time.nc, fl3dl} & poloidal electron flux, inboard divertor & $s^{-1}.m^{-2}$ \\
+fo3dl \index{fo3dl}\index{b2time.nc, fo3dl} & poloidal total ion flux, inboard divertor & $s^{-1}.m^{-2}$ \\
+fe3dl \index{fe3dl}\index{b2time.nc, fe3dl} & poloidal electron energy flux, inboard divertor & $W.m^{-2}$ \\
+fi3dl \index{fi3dl}\index{b2time.nc, fi3dl} & poloidal ion energy flux, inboard divertor & $W.m^{-2}$ \\
+ft3dl \index{ft3dl}\index{b2time.nc, ft3dl} & poloidal total energy flux, inboard divertor & $W.m^{-2}$ \\
+fc3dl \index{fc3dl}\index{b2time.nc, fc3dl} & poloidal current, inboard divertor  & $A.m^{-2}$ \\
 ne3dl \index{ne3dl}\index{b2time.nc, ne3dl} & electron density, inboard divertor & $m^{-3}$ \\
 te3dl \index{te3dl}\index{b2time.nc, te3dl} & electron temperature, inboard divertor & $eV$ \\
 ti3dl \index{ti3dl}\index{b2time.nc, ti3dl} & ion temperature, inboard divertor & $eV$ \\
@@ -10090,15 +10104,19 @@ tp3dr \index{tp3dr}\index{b2time.nc, tp3dr} & target temperature, outboard diver
 po3dr \index{po3dr}\index{b2time.nc, po3dr} & potential, outboard divertor & $V $ \\
 an3dr \index{an3dr}\index{b2time.nc, an3dr} & atom density, outboard divertor & $m^{-3}$ \\
 mn3dr \index{mn3dr}\index{b2time.nc, mn3dr} & molecule density, outboard divertor & $m^{-3}$ \\
-fn3dr \index{fn3dr}\index{b2time.nc, fn3dr} & poloidal particle flux, outboard divertor & $s^{-1}$ \\
-fe3dr \index{fe3dr}\index{b2time.nc, fe3dr} & poloidal electron energy flux, outboard divertor & $W $ \\
-fi3dr \index{fi3dr}\index{b2time.nc, fi3dr} & poloidal ion energy flux, outboard divertor & $W $ \\
-ft3dr \index{ft3dr}\index{b2time.nc, ft3dr} & poloidal total energy flux, outboard divertor & $W $ \\
-fc3dr \index{fc3dr}\index{b2time.nc, fc3dr} & poloidal current, outboard divertor & $A $ \\
-fl3dr \index{fl3dr}\index{b2time.nc, fl3dr} & poloidal electron flux, outboard divertor & $s^{-1}$ \\
-fo3dr \index{fo3dr}\index{b2time.nc, fo3dr} & poloidal total ion flux, outboard divertor & $s^{-1}$ \\
+fn3dr \index{fn3dr}\index{b2time.nc, fn3dr} & poloidal particle flux, outboard divertor & $s^{-1}.m^{-2}$ \\
+fe3dr \index{fe3dr}\index{b2time.nc, fe3dr} & poloidal electron energy flux, outboard divertor & $W.m^{-2}$ \\
+fi3dr \index{fi3dr}\index{b2time.nc, fi3dr} & poloidal ion energy flux, outboard divertor & $W.m^{-2}$ \\
+ft3dr \index{ft3dr}\index{b2time.nc, ft3dr} & poloidal total energy flux, outboard divertor & $W.m^{-2}$ \\
+fc3dr \index{fc3dr}\index{b2time.nc, fc3dr} & poloidal current, outboard divertor & $A.m^{-2}$ \\
+fl3dr \index{fl3dr}\index{b2time.nc, fl3dr} & poloidal electron flux, outboard divertor & $s^{-1}.m^{-2}$ \\
+fo3dr \index{fo3dr}\index{b2time.nc, fo3dr} & poloidal total ion flux, outboard divertor & $s^{-1}.m^{-2}$ \\
     \hline
-    \caption{Vector time dependent quantities stored in b2time.nc}
+    \caption{Vector time dependent quantities stored in b2time.nc. 
+       Note that the conversion to ``per unit area'' for fluxes is done
+       in the script ``2d\_profiles''; the actual data stored in
+       b2time.nc for fluxes are the fluxes per cell. There is a
+       similar conversion from J to eV for temperatures.}
     \label{tab:3db2time}
   \end{longtable}
 \end{center}
