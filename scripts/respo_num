@@ -1,6 +1,12 @@
 #! /bin/csh -f
+if($?GNUPLOT_TMP) then
+    set tmpdir="$GNUPLOT_TMP/"
+else
+    set tmpdir=""
+endif
+setenv PLOT_FROM_FILE "gnuplot.temp"
 pipe_run.log | \
   grep -a i,respo | \
   awk 'BEGIN{l=-1}$2<=l{print l}{l=$2}' | \
-  nl | \
+  nl >! ${tmpdir}PLOT_FROM_FILE
   plot x"$1"yplot respo iter 'number of potential iterations' $PWD

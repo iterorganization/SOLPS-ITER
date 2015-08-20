@@ -7,10 +7,16 @@ if ("" == $vreg) set vreg=4
 if ("" == $xreg) set xreg=6
 if ("" == $yreg) set yreg=7
 @ vregP = $vreg + 1
+if($?GNUPLOT_TMP) then
+    set tmpdir="$GNUPLOT_TMP/"
+else
+    set tmpdir=""
+endif
+setenv PLOT_FROM_FILE "gnuplot.temp"
 pipe_run.log | \
   egrep -a '^tereg '\|'^nereg '\|'^volreg ' | \
   awk '/tereg/{for (i=2;i<=NF;i++) {te[i]=$i}}\
        /nereg/{for (i=2;i<=NF;i++) {ne[i]=$i}}\
        /volreg/{for (i=2;i<=NF;i++) printf "%s ",te[i]/ne[i]/1.602176565e-19;printf "\n"}' | \
-  nl | \
+  nl >! ${tmpdir}PLOT_FROM_FILE
   plot x"$1"yplot$vregP `count 0 $vreg` iter "ave Te" $PWD

@@ -82,8 +82,14 @@ if ("X$1" == "X") then
 else
   set region=$1
 endif
+if($?GNUPLOT_TMP) then
+    set tmpdir="$GNUPLOT_TMP/"
+else
+    set tmpdir=""
+endif
+setenv PLOT_FROM_FILE "gnuplot.temp"
 pipe_run.log | \
   grep -a "^$text " | \
   awk '{sum=0;for (i='$region'+2;i<=NF;i+='$vregP') {sum+=$i;printf "%g ",$i};printf "%g\n",sum}' | \
-  nl | \
+  nl   >! ${tmpdir}PLOT_FROM_FILE
   plot x"$log"yplot$nplts $SOLPS_FLUIDS SUM iter "$label for region=$region" $PWD
