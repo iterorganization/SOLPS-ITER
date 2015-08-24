@@ -25,6 +25,7 @@ else
   ln -sf ${datapath}/PHOTON
   ln -sf ${datapath}/Surfacedata/SPUTER
   ln -sf ${datapath}/Surfacedata/TRIM/trim.dat fort.21
+  ln -sf ${datapath}/Surfacedata/TRIM/marlow.dat fort.22
   ln -sf ${datapath}/graphite_ext.dat .
   ln -sf ${datapath}/mo_ext.dat .
 endif

@@ -6,8 +6,14 @@ if (-e $solps_fluids) then
 endif
 set nplts=`echo $SOLPS_FLUIDS | wc -w`
 @ nplts += 1
+if($?GNUPLOT_TMP) then
+    set tmpdir="$GNUPLOT_TMP/"
+else
+    set tmpdir=""
+endif
+setenv PLOT_FROM_FILE "gnuplot.temp"
 pipe_run.log | \
   grep -a trfln | \
   sed 's:trfln::' | \
-  nl | \
+  nl >! ${tmpdir}PLOT_FROM_FILE
   plot x"$1"yplot$nplts SUM $SOLPS_FLUIDS iter "Backscattered flux" $PWD

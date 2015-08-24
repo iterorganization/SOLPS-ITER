@@ -11,7 +11,7 @@ EQUIVS =
 
 CPP = /lib/cpp -traditional
 CPPOPTS = -P -I${srcdir} ${EQUIVS}
-SED = sed s:\#PREC\#:d:g
+SED =
 LINK_MOD =
 
 FC = pgf90
@@ -24,7 +24,7 @@ endif
 
 DBLFC = ${FC}
 DBLOPTION =
-DBLSED = sed -e s:\#PREC\#:d:g
+DBLSED =
 
 INCMOD = -I
 MOD = mod

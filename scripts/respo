@@ -1,6 +1,12 @@
 #! /bin/csh -f
+if($?GNUPLOT_TMP) then
+    set tmpdir="$GNUPLOT_TMP/"
+else
+    set tmpdir=""
+endif
+setenv PLOT_FROM_FILE "gnuplot.temp"
 pipe_run.log | \
   grep -a i,respo | \
   awk '{print NR,$3}' | \
-  resopt $argv | \
+  resopt $argv >! ${tmpdir}PLOT_FROM_FILE
   plot xlyplot respo iter V $PWD
