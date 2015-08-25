@@ -179,10 +179,24 @@ c*** Modify the input file for B2, if possible
             print *, 
      .       '    Error while creating b2.neutrals.parameters.2: ',irt
           end if
-      else
+       else
+          Write(*,*) 'No b2.neutrals.parameters found'
+          Write(*,*) 'Writing b2.neutrals.parameters.stencil'
+          Open(99,status='SCRATCH')
+          Write(99,*) '&NEUTRALS'
+          Write(99,*) '/'
+          Rewind(99)
           open(2,file='b2.neutrals.parameters.stencil',err=20)
-          close(2)
-          goto 22
+          call uicrb2(99,2,irt)
+          Close(99)
+          if(irt.eq.0) then
+            print *,'    ... b2.neutrals.parameters.stencil created'
+            close(2,err=22)
+          else
+            print *, 
+     .      '    Error while creating b2.neutrals.parameters.stencil:'
+     .      ,irt
+          end if
       end if
    20 close(1,err=22)
    22 continue
