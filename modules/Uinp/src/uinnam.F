@@ -19,7 +19,7 @@ c...  	      	      	      	      	      	      53=48+5
       integer luwrk(nlim),luind(nlim),lurefls
       logical hlp_spc,hlp_imm
 c*** lusgm: segment number for the list of invisibles;
-c*** luswch: switch for the input of element lists (obsolette)
+c*** luswch: switch for the input of element lists (obsolete)
 c***          	    1: jedgi1, 2: jedgo1, 3: jedgi2, 4: jedgo2
 c***         or switch for the target data (clockwise from bottom left)
 c*** luskel: counter for the segments to be skipped
