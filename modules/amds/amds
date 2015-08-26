@@ -1,4 +1,6 @@
 export AMDSDATABASEDIR=`pwd`
 export AMDSGRAPHCMD=builds/${HOST_NAME}.${COMPILER}/calc_atomic_data
+export AMDSDATABASEFILE=${SOLPSTOP}/modules/amds/amds.rpd
+export AMDSCONFIGFILE=${SOLPSTOP}/modules/amds/amds.rpc
 # export AMDSGRAPHCMD=`pwd`/tt
 builds/${HOST_NAME}.${COMPILER}/amds $* &

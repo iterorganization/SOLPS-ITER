@@ -16,6 +16,7 @@
 */
 
 #include <stdio.h>
+#include <stdlib.h>
 
 main(int argc,char** argv) {
   int bSlash=0,c;
