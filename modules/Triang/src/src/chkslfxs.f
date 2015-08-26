@@ -5,7 +5,7 @@ c  version : 02.11.2005 01:10
 c=======================================================================
 c** Checks the imported structure for self-intersections.
 c** On return, nsx is the number of these intersections, and
-c** xsx,ysx their co-ordinates (module cslfxs)
+c** xsx,ysx their coordinates (module cslfxs)
 c** found=nsx.gt.0
 c=======================================================================
       use cpoin

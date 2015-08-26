@@ -6,7 +6,7 @@ c  version : 09.04.2008 15:10
       public :: alloc_cslfxs, dealloc_cslfxs
 
 c*** nsx : number of self-intersections found
-c*** xsx, ysx : co-ordinates of self-intersections
+c*** xsx, ysx : coordinates of self-intersections
 
       double precision, allocatable, public, save :: xsx(:),ysx(:)
 

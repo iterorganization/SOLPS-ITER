@@ -32,7 +32,7 @@ c      character c*8
 c#endif
 c*** Flag of the first call
       data ufirst / .true. /
-      Save
+      save
 c======================================================================
 c
       if(ufirst) then !{

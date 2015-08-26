@@ -38,7 +38,7 @@ c*** nubchrdp : lengths of the lists of chords for the line profiles
 c*** nubchrdi : lengths of the lists of chords for the line integrals
 c*** lublbli  : chord labels for the line integrals
 c*** lublblp  : chord labels for the line profiles
-c*** pp1, pp2 : co-ordinates of the end points of the segments (R, Z, 0)
-c*** ubchrds  : co-ordinates of the chord ends (R1, Z1, R2, Z2)
+c*** pp1, pp2 : coordinates of the end points of the segments (R, Z, 0)
+c*** ubchrds  : coordinates of the chord ends (R1, Z1, R2, Z2)
 c*** cublbli  : set identifiers for the line integrals
 c*** cublblp  : set identifiers for the line profiles
