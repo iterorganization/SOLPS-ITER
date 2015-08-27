@@ -11,7 +11,10 @@ ifndef COMPILER
   $(error COMPILER not defined)
 endif
 
-OBJDIR = builds/${HOST_NAME}.${COMPILER}
+ifdef SOLPS_DEBUG
+EXT_DEBUG = .debug
+endif
+OBJDIR = ${PWD}/builds/${HOST_NAME}.${COMPILER}${EXT_DEBUG}
 
 ifeq ($(shell [ -e config/config.${HOST_NAME}.${COMPILER} ] && echo yes || echo no ),yes)
 include config/config.${HOST_NAME}.${COMPILER}
@@ -70,30 +73,24 @@ clean:
 TAGS:	tags
 
 tags:
-	rm -f TAGS ; etags src/*/*.F
+	rm -f TAGS ; etags src/*.c src/*.h
 
-depend: ${OBJS:.o=.F} ${EXCLUDELIS:.o=.F}
-	makedepend -f- ${INCLUDE} $^ | \
-	sed -e 's|src/[^ ]*/|${OBJDIR}/|' | \
+depend: ${OBJS:.o=.c}
+	-mkdir -p ${OBJDIR}
+	$(CC) -M $^ | sed '/^[^ ]*.o: / s|^|${OBJDIR}/|' | \
 	sed -e 's,^${OBJDIR}/,\$${OBJDIR}/,' | \
-	sed -e 's,: ${SOLPSTOP},: $${SOLPSTOP},' > ${OBJDIR}/dependencies.${COMPILER}
+	sed 's,: ${SOLPSTOP},: $${SOLPSTOP},' > ${OBJDIR}/dependencies.${COMPILER}
 
 listobj:
-	@rm -f ${OBJDIR}/LISTOBJ; touch ${OBJDIR}/LISTOBJ; l="OBJS ="; \
-	for d in `echo "$(VPATH)" | tr : \ `; do \
-		l="$$l `(cd $$d > /dev/null; echo *.F)`"; \
-	done; \
-	E="-e 's/\.F/\.o/g'" ; for f in $(MAINLIST); do \
-		E="$$E -e 's/ $$f//'"; \
-	done; \
-	echo "$$l" | eval sed "$$E" > ${OBJDIR}/LISTOBJ
+	@P=${OBJDIR}; cd src ; rm -f $${P}/LISTOBJ; touch $${P}/LISTOBJ; \
+	echo "OBJS =" *.c | sed -e 's/ [^ /]*\// /g' -e 's/\.c/.o/g' -e 's/res2fbr\.o//g' > $${P}/LISTOBJ
 
 ${OBJDIR}/LISTOBJ: listobj
 
 VERSION: src/git_version.h
 
 src/git_version.h: force
-	@echo "      character*27 :: gitversion ='`git describe --dirty --always`'" > src/git_version_new.h
+	@echo "#define GIT_VERSION \"`git describe --dirty --always`\"" > src/git_version_new.h
 	@if cmp -s src/git_version_new.h src/git_version.h; then rm src/git_version_new.h; else mv src/git_version_new.h src/git_version.h; fi
 
 ${OBJDIR}/dependencies.${COMPILER}:

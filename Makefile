@@ -141,6 +141,9 @@ triang_nox:
 	cd modules/Triang; ${MAKE} LD_GR="" LD_GKS="" mods
 	cd modules/Triang; ${MAKE} LD_GR="" LD_GKS=""
 
+amds:
+	cd modules/amds; ${MAKE}
+
 sonnet-light:
 	@-mkdir -p ${SOLPSLIB}
 ifeq ($(shell [ -e ${SOLPSLIB}/libsonnet.a ] && echo yes || echo no ),no)
@@ -292,6 +295,9 @@ clean_uinp_mpi:
 
 clean_triang:
 	cd modules/Triang; ${MAKE} clean
+
+clean_amds:
+	cd modules/amds; ${MAKE} clean
 
 clean_sonnet-light:
 	cd modules/Sonnet-light; ${MAKE} clean
