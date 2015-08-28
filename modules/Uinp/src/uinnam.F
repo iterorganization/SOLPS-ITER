@@ -14,8 +14,8 @@ c=======================================================================
 #include "impcon.inc"
       integer lunm,i,j,l,lusgm,luswch,luskel,lugpf,lupfr,luvsp
       parameter (lunm=163)
-      character*8 unm(lunm),uun,ubs*1,uam*53
-c...  	      	      	      	      	      	      53=48+5
+      character*8 unm(lunm),uun,ubs*1,uam*52
+c...  	      	      	      	      	      	      52=48+4
       integer luwrk(nlim),luind(nlim),lurefls
       logical hlp_spc,hlp_imm
 c*** lusgm: segment number for the list of invisibles;
@@ -375,8 +375,8 @@ c=======================================================================
       	i=index(amd_file(namdf),ubs)
       	if(i.eq.0) then !{
 	  uam=amd_file(namdf)
-	  uam(49:53)='.amds'
-	  call lefta(uam,53,i)
+	  uam(49:52)='.amo' ! xpb: was .amds extension
+	  call lefta(uam,52,i)
 	  if(i.gt.48) then !{
 	    write(0,*) 'Too long name for AMDS reference after ',
      ,	      'expansion: ',uam
