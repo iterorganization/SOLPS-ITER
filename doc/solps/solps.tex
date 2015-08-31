@@ -3324,6 +3324,19 @@ https://solps-mdsplus.aug.ipp.mpg.de/repos/SOLPS/trunk/solps\_examples/solps5.1/
 \index{b2mn.dat, D+C+He example}
 \VerbatimInput[fontsize=\footnotesize]{D+C+He/b2mn.dat}
 
+To activate a coupled run, the master switch is 'b2mndr\_eirene' which should be set to '1'. In addition, the densities of the fluid neutral species need to be scaled down, along with the sources that affect them. This is achieved, respectively, by use of the switches 'b2mndr\_rescale\_neutrals' and 'b2mndr\_rescale\_neutral\_sources'. Typically, it is recommended to use a value of the order of $10^{-10}$ for scaling down the fluid neutral sources. For the fluid neutral densities, one can scale them down only on the first run, by the same amount as the sources, and then turn off the rescaling, as they are no longer being replensihed.
+
+In order to attempt to improve convergence of coupled \SOLPSITER runs, currently three
+averaging schemes are available to reduce the impact of the Monte-Carlo noise intrinsic
+to the \verb!Eirene! sources. The user may want to activate one of these schemes, 
+although there is no firm recommendation as to which will perform best. The switches
+for those are:
+\begin{description}
+  \item[eirene\_neutr\_avg] The neutral sources are averaged over the last up to $neutr\_avg$ \verb!Eirene! calls. After $neutr\_avg$ calls, the history is cleared and the average arrays are rebuilt progressively again (ratcheting average scheme).
+  \item[eirene\_underrelax] The neutral sources are multiplied by an underrelaxation factor of $1/eirene\_underrelax$ and added to the sources from the previous timestep (underrelaxation scheme).
+  \item[b2stbr\_eir\_src\_nhist] The neutral sources are averaged over the last $nhist$ \verb!Eirene! calls (moving average scheme).
+\end{description}
+
 \subsection{b2.boundary.parameters}
 \index{b2.boundary.parameters, D+C+He example}
 \VerbatimInput[fontsize=\footnotesize]{D+C+He/b2.boundary.parameters}
