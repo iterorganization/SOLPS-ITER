@@ -1,4 +1,5 @@
 #include "amds.h"
+#include "git_version.h"
 
 #define FILE_VERSION 2
 #define OUTPUT_VERSION 1
@@ -254,8 +255,10 @@ int OutputDoc(Doc d,char* fileName) {
   f=fopen(fileName,"w");
   if (f==NULL) return -1;
 
-  fprintf(f,"# Output file produced by amds version %g\n\n",
-    (double)GetVersion()/100);
+  fprintf(f,"# Output file produced by amds version %g\n",
+            "# within SOLPS-ITER GIT version %s\n\n",
+	  (double)GetVersion()/100,
+          GIT_VERSION);
 
   fprintf(f,"filevers %d\n",OUTPUT_VERSION);
 

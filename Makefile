@@ -141,6 +141,9 @@ triang_nox:
 	cd modules/Triang; ${MAKE} LD_GR="" LD_GKS="" mods
 	cd modules/Triang; ${MAKE} LD_GR="" LD_GKS=""
 
+amds:
+	cd modules/amds; ${MAKE}
+
 sonnet-light:
 	@-mkdir -p ${SOLPSLIB}
 ifeq ($(shell [ -e ${SOLPSLIB}/libsonnet.a ] && echo yes || echo no ),no)
@@ -172,7 +175,7 @@ tags:
 	cd modules/DivGeo;         ${MAKE} tags
 	cd modules/DivGeo/equtrn;  ${MAKE} tags
 #	cd modules/solps4-5;       ${MAKE} tags
-	rm -f TAGS ; etags -o TAGS modules/Carre/src/*/*.F modules/Carre/src/include/*.* modules/Eirene/src/*/*.f modules/Eirene/src/interfaces/*couple_SOLPS-ITER/*.f modules/Eirene/src/user-routines/user_iter/*.f modules/Eirene/src/user-routines/user_general/*.f modules/Eirene/src/geometry/trc-time-routines/*.f modules/Eirene/src/*/*/*.[Ff]90 modules/B2.5/src.local/*.F modules/B2.5/src/*/*.F modules/B2.5/src/*/*.[Hh] modules/B2.5/src/common/*.* modules/B2.5/src/common/COUPLE/*.F modules/Uinp/src/*.F modules/Uinp/src/*.inc modules/Uinp/src/*.h modules/Triang/src/*/*.f modules/DivGeo/equtrn/src/*.f modules/DivGeo/equtrn/src/*.inc modules/DivGeo/convert/src/*.f modules/DivGeo/src/*.[ch]
+	rm -f TAGS ; etags -o TAGS modules/Carre/src/*/*.F modules/Carre/src/include/*.* modules/Eirene/src/*/*.f modules/Eirene/src/interfaces/*couple_SOLPS-ITER/*.f modules/Eirene/src/user-routines/user_iter/*.f modules/Eirene/src/user-routines/user_general/*.f modules/Eirene/src/geometry/trc-time-routines/*.f modules/Eirene/src/*/*/*.[Ff]90 modules/B2.5/src.local/*.F modules/B2.5/src/*/*.F modules/B2.5/src/*/*.[Hh] modules/B2.5/src/common/*.* modules/B2.5/src/common/COUPLE/*.F modules/Uinp/src/*.F modules/Uinp/src/*.inc modules/Uinp/src/*.h modules/Triang/src/*/*.f modules/DivGeo/equtrn/src/*.f modules/DivGeo/equtrn/src/*.inc modules/DivGeo/convert/src/*.f modules/DivGeo/src/*.[ch] modules/DivGeo/dg.dgc
 
 listobj:
 	cd modules/Carre;          ${MAKE} listobj
@@ -292,6 +295,9 @@ clean_uinp_mpi:
 
 clean_triang:
 	cd modules/Triang; ${MAKE} clean
+
+clean_amds:
+	cd modules/amds; ${MAKE} clean
 
 clean_sonnet-light:
 	cd modules/Sonnet-light; ${MAKE} clean

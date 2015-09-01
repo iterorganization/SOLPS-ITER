@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <stdlib.h>
-#include <varargs.h>
+#include <stdarg.h>
 #include <math.h>
 #include <values.h>
 

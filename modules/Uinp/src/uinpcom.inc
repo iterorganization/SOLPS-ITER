@@ -408,7 +408,7 @@ c***  	indasrfe(i) is the new number for an old number i,
 c***  	indasrfs(i) is the old number for a new number i
       integer laddsrfs, indasrfe(0:nlim), indasrfs(0:nlim)
 
-c*** Co-ordinates of the O-point 
+c*** Coordinates of the O-point
       real*4 xlpcntr(3)
 
 c*** Data for toroidal geometry specification 

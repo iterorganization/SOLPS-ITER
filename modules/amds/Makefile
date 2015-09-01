@@ -1,5 +1,9 @@
 #  VERSION : 07.12.2000 22:14
 
+TARGET=$(OBJDIR)/amds
+RES2FBR=$(OBJDIR)/res2fbr
+VPATH=src
+
 ifndef HOST_NAME
   $(error HOST_NAME not defined)
 endif
@@ -7,19 +11,22 @@ ifndef COMPILER
   $(error COMPILER not defined)
 endif
 
-#LIBS= -L/usr/X11/lib -lXm -lXt -lX11 -lm
-LIBS= -Wl,-Bstatic -lXm -Wl,-Bdynamic -lXt -lX11 -lm -L/usr/X11R6/lib
-# CFLAGS= -g -qflag=i:w
-CFLAGS= -g
-CC=cc
+ifdef SOLPS_DEBUG
+EXT_DEBUG = .debug
+endif
+OBJDIR = ${PWD}/builds/${HOST_NAME}.${COMPILER}${EXT_DEBUG}
+
+ifeq ($(shell [ -e config/config.${HOST_NAME}.${COMPILER} ] && echo yes || echo no ),yes)
+include config/config.${HOST_NAME}.${COMPILER}
+else
+$(error config/config.${HOST_NAME}.${COMPILER} not found)
+endif
+
+ifeq ($(shell [ -e config/config.${HOST_NAME}.${COMPILER}.local ] && echo yes || echo no ),yes)
+include config/config.${HOST_NAME}.${COMPILER}.local
+endif
 
 
-
-OBJDIR = builds/${HOST_NAME}.${COMPILER}
-
-TARGET=$(OBJDIR)/amds
-RES2FBR=$(OBJDIR)/res2fbr
-VPATH=src
 
 #OBJS=amvald.o amview.o amgraph.o amxvars.o amvars.o amundo.o \
 #     amfio.o amdbase.o ammenu.o aminfo.o ammain.o vacreate.o\
@@ -38,6 +45,8 @@ $(OBJDIR)/%.o : %.c
 
 all: dirs $(RES2FBR) $(TARGET)
 
+.PHONY: VERSION clean neat all depend listobj force
+
 $(TARGET): $(DEST)
 	$(CC) -DCbFree=CbFree_ignore -c src/vacreate.c -o $(OBJDIR)/vacreate.o
 	$(CC) $(CFLAGS) -o $@ $(DEST) $(LIBS)
@@ -52,8 +61,46 @@ $(RES2FBR):  $(OBJDIR)/res2fbr.o
 
 dirs: $(OBJDIR)
 
+neat:
+	rm -rf ${OBJDIR}/*.o ${OBJDIR}/*.f
+
 $(OBJDIR):
 	mkdir -p $(OBJDIR)
 
 clean:
 	 /bin/rm -f $(OBJDIR)/*.o $(OBJDIR)/res2fbr src/x_~fbr.c
+
+TAGS:	tags
+
+tags:
+	rm -f TAGS ; etags src/*.c src/*.h
+
+depend: ${OBJS:.o=.c}
+	-mkdir -p ${OBJDIR}
+	$(CC) -M $^ | sed '/^[^ ]*.o: / s|^|${OBJDIR}/|' | \
+	sed -e 's,^${OBJDIR}/,\$${OBJDIR}/,' | \
+	sed 's,: ${SOLPSTOP},: $${SOLPSTOP},' > ${OBJDIR}/dependencies.${COMPILER}
+
+listobj:
+	@P=${OBJDIR}; cd src ; rm -f $${P}/LISTOBJ; touch $${P}/LISTOBJ; \
+	echo "OBJS =" *.c | sed -e 's/ [^ /]*\// /g' -e 's/\.c/.o/g' -e 's/res2fbr\.o//g' > $${P}/LISTOBJ
+
+${OBJDIR}/LISTOBJ: listobj
+
+VERSION: src/git_version.h
+
+src/git_version.h: force
+	@echo "#define GIT_VERSION \"`git describe --dirty --always`\"" > src/git_version_new.h
+	@if cmp -s src/git_version_new.h src/git_version.h; then rm src/git_version_new.h; else mv src/git_version_new.h src/git_version.h; fi
+
+${OBJDIR}/dependencies.${COMPILER}:
+	-mkdir -p ${OBJDIR}
+	touch ${OBJDIR}/dependencies.${COMPILER}
+	${MAKE} VERSION
+	${MAKE} tags
+	${MAKE} listobj
+	${MAKE} depend
+
+include ${OBJDIR}/dependencies.${COMPILER}
+
+

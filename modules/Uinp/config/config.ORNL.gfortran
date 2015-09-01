@@ -3,8 +3,11 @@ ifndef LD_MSCL
   $(error LD_MSCL not defined)
 endif
 
-
+ifdef USE_MPI
+FC	     = mpif90
+else
 FC	     = gfortran
+endif
 
 ifdef SOLPS_DEBUG
 FFLAGS	 = -g 
