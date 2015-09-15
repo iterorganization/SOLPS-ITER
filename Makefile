@@ -307,3 +307,19 @@ clean_b2sxdr:
 
 clean_manual:
 	cd doc/solps; ${MAKE} clean
+
+
+# help
+help:
+	@echo "          solps : compile serial version (main codes)"
+	@echo "      solps_mpi : compile MPI version (main codes)"
+	@echo "    solps_debug : compile debug version (serial) (main codes)"
+	@echo "solps_mpi_debug : compile debug version (MPI) (main codes)"
+	@echo "            all : compile serial version (all codes)"
+	@echo "        all_mpi : compile MPI version (all codes)"
+	@echo "      all_debug : compile debug version (serial) (all codes)"
+	@echo "  all_mpi_debug : compile debug version (MPI) (all codes)"
+	@echo "            nox : compile serial version (no X main codes)"
+	@echo "        nox_mpi : compile MPI version (no X main codes)"
+	@echo "      nox_debug : compile debug version (serial) (no X main codes)"
+	@echo "  nox_mpi_debug : compile debug version (MPI) (no X main codes)"
