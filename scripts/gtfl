@@ -1,4 +1,4 @@
-#! /bin/ksh
+#! /usr/bin/env ksh
 
 #==============================================================================#
 #  Replaces the specified links by the files they are linked to                #

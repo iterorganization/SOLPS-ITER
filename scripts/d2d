@@ -1,4 +1,4 @@
-#! /bin/ksh
+#! /usr/bin/env ksh
 Name=`basename $0`
 Usage="$Name: DG equilibrium refinement
 Usage: $Name DG-old-file DG-new-file [Field-file]
