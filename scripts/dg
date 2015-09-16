@@ -1,4 +1,4 @@
-#! /usr/bin/ksh
+#! /usr/bin/env ksh
 #  VERSION : 03.02.99 21:02
 
 [ "$DEVICE" = '' ] && {
