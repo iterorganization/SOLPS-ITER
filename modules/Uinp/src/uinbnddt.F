@@ -124,6 +124,7 @@ c*** ... and then the recycling source if specified
 	    npts(nstrai)=jnpbnds(isf,ibk)
 	    nptc(ntargi,1)=jnpbnds(isf,ibk)
             nminpts(nstrai)=jmpbnds(isf,ibk)
+            nptcm(ntargi,1)=jmpbnds(isf,ibk)
 	    ninitl(nstrai)=jnibnds(isf,ibk)
 	    nemods(nstrai)=jnebnds(isf,ibk)
 	    sorind(1,nstrai)=nstrai

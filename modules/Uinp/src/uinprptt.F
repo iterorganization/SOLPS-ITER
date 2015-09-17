@@ -12,7 +12,7 @@ c=======================================================================
       logical lc
 #include "uinput.inc"
       integer i,ntime_b,nfile_b,i1trc_b,i2trc_b,npts_b(nstra),
-     ,  mpts_b(nstra),isyplt_b(8)
+     ,  mpts_b(nstra),isyplt_b(8),nptc_b(nstep),nptcm_b(nstep)
       real alloc_b
       logical trchst_b,trcint_b,trcamd_b,trcsou_b,trcbla_b,trcblm_b,
      ,  trcbli_b,trcblp_b,trcble_b,trcblph_b,trctal_b,trcdbg2_b,
@@ -36,6 +36,10 @@ c=======================================================================
         do i=1,nstrai !{
       	  npts_b(i)=npts(i)
       	  mpts_b(i)=nminpts(i)
+        end do !}
+        do i=1,ntargi !{
+          nptc_b(i)=nptc(i,1)
+          nptcm_b(i)=nptcm(i,1)
         end do !}
         do i=1,8 !{
           isyplt_b(i)=isyplt(i)
@@ -78,6 +82,10 @@ c=======================================================================
       	  npts(i)=ttnpts(i)
           nminpts(i)=0
 	  i2trc=i2trc+npts(i)
+        end do !}
+        do i=1,ntargi !{
+          nptc(i,1)=ttnpts(i)
+          nptcm(i,1)=0
         end do !}
         isyplt(1)=1
         isyplt(2)=2
@@ -136,6 +144,10 @@ c*** Set the VSP data for test.eir
         do i=1,nstrai !{
       	  npts(i)=npts_b(i)
       	  nminpts(i)=mpts_b(i)
+        end do !}
+        do i=1,ntargi !{
+          nptc(i,1)=nptc_b(i)
+          nptcm(i,1)=nptcm_b(i)
         end do !}
         do i=1,8 !{
           isyplt(i)=isyplt_b(i)
