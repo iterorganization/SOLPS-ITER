@@ -116,12 +116,12 @@ c*** bcchar, bcpos, bcstart, bcend, bcene, bceni, enepar, enipar
 	  rniprm(k,2,1,9,2)=beibnds(i,2,j)
 c*** bccon, conpar, bcmom, mompar
 	  do l=1,nspcpls+nspcncl !{
-	    iniprm(ifl(l),k,1,10,2)=lcobnds(ifl(l),i,j)
-	    rniprm(ifl(l),k,1,11,2)=bcobnds(ifl(l),i,1,j)
-	    rniprm(ifl(l),k,2,11,2)=bcobnds(ifl(l),i,2,j)
-	    iniprm(ifl(l),k,1,12,2)=lmobnds(ifl(l),i,j)
-	    rniprm(ifl(l),k,1,13,2)=bmobnds(ifl(l),i,1,j)
-	    rniprm(ifl(l),k,2,13,2)=bmobnds(ifl(l),i,2,j)
+	    iniprm(l,k,1,10,2)=lcobnds(ifl(l),i,j)
+	    rniprm(l,k,1,11,2)=bcobnds(ifl(l),i,1,j)
+	    rniprm(l,k,2,11,2)=bcobnds(ifl(l),i,2,j)
+	    iniprm(l,k,1,12,2)=lmobnds(ifl(l),i,j)
+	    rniprm(l,k,1,13,2)=bmobnds(ifl(l),i,1,j)
+	    rniprm(l,k,2,13,2)=bmobnds(ifl(l),i,2,j)
       	  end do !}
       	end do !}
       end do !}
@@ -150,14 +150,15 @@ c*** conpar, mompar
         lprdckw(k,2,11,2)=.false.
         lprdckw(k,2,13,2)=.false.
         do l=1,nspcpls+nspcncl !{
-          if(iniprm(ifl(l),k,1,10,2).ne.3) lprdckw(k,1,11,2)=.true.
-          if(iniprm(ifl(l),k,1,12,2).ne.8) lprdckw(k,1,13,2)=.true.
-          if(iniprm(ifl(l),k,1,10,2).eq.4) lprdckw(k,2,11,2)=.true.
-          if(iniprm(ifl(l),k,1,10,2).eq.7) lprdckw(k,2,11,2)=.true.
-          if(iniprm(ifl(l),k,1,12,2).eq.3) lprdckw(k,2,13,2)=.true.
-          if(iniprm(ifl(l),k,1,12,2).eq.4) lprdckw(k,2,13,2)=.true.
-          if(iniprm(ifl(l),k,1,12,2).eq.6) lprdckw(k,2,13,2)=.true.
-          if(iniprm(ifl(l),k,1,12,2).eq.7) lprdckw(k,2,13,2)=.true.
+          if (ifl(l).eq.0) cycle
+          if(iniprm(l,k,1,10,2).ne.3) lprdckw(k,1,11,2)=.true.
+          if(iniprm(l,k,1,12,2).ne.8) lprdckw(k,1,13,2)=.true.
+          if(iniprm(l,k,1,10,2).eq.4) lprdckw(k,2,11,2)=.true.
+          if(iniprm(l,k,1,10,2).eq.7) lprdckw(k,2,11,2)=.true.
+          if(iniprm(l,k,1,12,2).eq.3) lprdckw(k,2,13,2)=.true.
+          if(iniprm(l,k,1,12,2).eq.4) lprdckw(k,2,13,2)=.true.
+          if(iniprm(l,k,1,12,2).eq.6) lprdckw(k,2,13,2)=.true.
+          if(iniprm(l,k,1,12,2).eq.7) lprdckw(k,2,13,2)=.true.
         end do !}
       end do !}
 

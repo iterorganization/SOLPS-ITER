@@ -21,7 +21,7 @@ c
 #include "uib2pprm.inc"
 c
 c*** Logical variables:
-c***   uba : opening apostroph encountered
+c***   uba : opening apostrophe encountered
 c***   ubr : left ellipse encountered
 c***   urbr: right ellipse encountered
 c***   ubt : not the first field of the line
@@ -155,7 +155,7 @@ c            print *,'&&&  ==> check it' !###
         go to 10  ! -> read the next line
       end if !}
 
-c*** Just a regular line. Are not we editing the block?
+c*** Just a regular line. Are we not editing the block?
       if(.not.ubf) then !{
         call uisswr(lout,s,ss,mxslen,ufs)
         go to 10  ! -> read the next line

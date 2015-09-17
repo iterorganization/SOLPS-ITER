@@ -200,6 +200,40 @@ c*** Modify the input file for B2, if possible
       end if
    20 close(1,err=22)
    22 continue
+
+      inquire(file='b2.boundary.parameters', exist=uex)
+      if(uex) then
+          open(1,file='b2.boundary.parameters',status='old',err=32)
+          open(2,file='b2.boundary.parameters.2',err=30)
+          call uicrb2(1,2,irt)
+          if(irt.eq.0) then
+            print *,'    ... b2.boundary.parameters.2 created'
+            close(2,err=32)
+          else
+            print *, 
+     .       '    Error while creating b2.boundary.parameters.2: ',irt
+          end if
+       else
+          write(*,*) 'No b2.boundary.parameters found'
+          write(*,*) 'Writing b2.boundary.parameters.stencil'
+          open(99,status='SCRATCH')
+          write(99,*) '&BOUNDARY'
+          write(99,*) '/'
+          rewind(99)
+          open(2,file='b2.boundary.parameters.stencil',err=30)
+          call uicrb2(99,2,irt)
+          close(99)
+          if(irt.eq.0) then
+            print *,'    ... b2.boundary.parameters.stencil created'
+            close(2,err=32)
+          else
+            print *, 
+     .      '    Error while creating b2.boundary.parameters.stencil:'
+     .      ,irt
+          end if
+      end if
+   30 close(1,err=32)
+   32 continue
 c-----------------------------------------------------------------------
 c*** Create additional files with geometry for b2plot
       
