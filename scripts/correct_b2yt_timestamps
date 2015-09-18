@@ -1,12 +1,17 @@
 #! /bin/tcsh -f
 [ -e stra.dat ] || ln -s $SOLPSTOP/modules/B2.5/Database/stra.dat .
 [ -e weis.dat ] || ln -s $SOLPSTOP/modules/B2.5/Database/weis.dat .
-touch b2ag.prt b2fgmtry fort.30
+[ -e b2ag.prt ] && touch b2ag.prt || ( [ -e ../baserun/b2ag.prt ] && touch ../baserun/b2ag.prt || touch b2ag.prt )
+[ -e b2fgmtry ] && touch b2fgmtry || ( [ -e ../baserun/b2fgmtry ] && touch ../baserun/b2fgmtry || echo "b2fgmtry file not found" )
+[ -e fort.30 ] && touch fort.30 || ( [ -e ../baserun/fort.30 ] && touch ../baserun/fort.30 || echo "fort.30 file not found" )
 sleep 1
-touch b2ah.prt b2fpardf
+[ -e b2ah.prt ] && touch b2ah.prt || ( [ -e ../baserun/b2ah.prt ] && touch ../baserun/b2ah.prt || touch b2ah.prt )
+[ -e b2fpardf ] && touch b2fpardf || ( [ -e ../baserun/b2fpardf ] && touch ../baserun/b2fpardf || echo "b2fpardf file not found" )
 sleep 1
-touch b2ai.prt b2fstati
+[ -e b2ai.prt ] && touch b2ai.prt || ( [ -e ../baserun/b2ai.prt ] && touch ../baserun/b2ai.prt || touch b2ai.prt )
+[ -e b2fstati ] && touch b2fstati || ( [ -e ../baserun/b2fstati ] && touch ../baserun/b2fstati || echo "b2fstati file not found" )
 sleep 1
-touch b2ar.prt b2frates
+[ -e b2ar.prt ] && touch b2ar.prt || ( [ -e ../baserun/b2ar.prt ] && touch ../baserun/b2ar.prt || touch b2ar.prt )
+[ -e b2frates ] && touch b2frates || ( [ -e ../baserun/b2frates ] && touch ../baserun/b2frates || echo "b2frates file not found" )
 sleep 1
-[ -e b2fstate ] && touch b2fstate || cp b2fstati b2fstate
+[ -e b2fstate ] && touch b2fstate || ( [ -e b2fstati ] && cp b2fstati b2fstate || ( [ -e ../baserun/b2fstati ] || cp ../baserun/b2fstati b2fstate ) )
