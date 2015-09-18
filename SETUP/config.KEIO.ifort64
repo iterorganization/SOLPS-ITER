@@ -31,7 +31,7 @@
        NCDIR ?= ${SOLPSTOP}
    MSCL_ROOT ?= ${SOLPSTOP}
        H5DIR ?= ${SOLPSTOP}
-     GR_ROOT ?= 
+     GR_ROOT ?= ${SOLPSTOP}
     GLI_HOME ?= ${SOLPSTOP}
   NCARG_ROOT ?= /home/yamoto/gfort_converge/NCARG/linux.Intel64
       NAGDIR ?= ${SOLPSTOP}
@@ -50,7 +50,7 @@ LD_GKS     = -L${GLI_HOME}/lib/${HOST_NAME}.${COMPILER} -lgks -lgfortran
 LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -L/usr/X11R6/lib64 -lX11 -lm
 LD_NAG     = -L${NAGDIR}/lib/${HOST_NAME}.${COMPILER} -lnag
 LD_MDSPLUS = 
-LD_SONNET  = -L${SOLPSLOB}/lib/${HOST_NAME}.${COMPILER} -lsonnet
+LD_SONNET  = -L${SOLPSLIB}/lib/${HOST_NAME}.${COMPILER} -lsonnet
 LD_MPI     = -L${MPDIR}/lib -lmpi
 
 
