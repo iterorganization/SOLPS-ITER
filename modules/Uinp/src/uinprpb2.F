@@ -129,6 +129,25 @@ c*** lcbs
       do i=1,nznbndt(1) !{
       	iniprm(i,1,1,14,2)=i
       end do !}
+c*** nniso
+      iniprm(1,1,1,15,2)=nniso
+c*** ntiso, nxiso1, nxiso2, nyiso1, nyiso2
+      do i=1,nniso !{
+      	iniprm(i,1,1,16,2)=nxiso1(i)
+      	iniprm(i,1,1,17,2)=nxiso2(i)
+      	iniprm(i,1,1,18,2)=nyiso1(i)
+      	iniprm(i,1,1,19,2)=nyiso2(i)
+      end do !}
+c*** niiso, tiiso, teiso
+      do i=1,nspcpls+nspcncl !{
+      	rniprm(i,1,1,20,2)=1.e5
+      end do !}
+      rniprm(1,1,1,21,2)=0.1
+      rniprm(1,1,1,22,2)=0.1
+      nmdpr(20,2)=nspcpls+nspcncl
+      lrrvr(20,2)=.true.
+      lrrvr(21,2)=.true.
+      lrrvr(22,2)=.true.
 
 #ifdef DBG
       print *,'Boundary: nbc,k = ',nbc,k !###
@@ -161,6 +180,16 @@ c*** conpar, mompar
           if(iniprm(l,k,1,12,2).eq.7) lprdckw(k,2,13,2)=.true.
         end do !}
       end do !}
+c*** niiso, tiiso, teiso
+      if(iniprm(1,1,1,15,2).eq.0) then !{
+        lprdckw(1,1,16,2)=.false.
+        lprdckw(1,1,17,2)=.false.
+        lprdckw(1,1,18,2)=.false.
+        lprdckw(1,1,19,2)=.false.
+        lprdckw(1,1,20,2)=.false.
+        lprdckw(1,1,21,2)=.false.
+        lprdckw(1,1,22,2)=.false.
+      end if !}
 
 c-----------------------------------------------------------------------
 c*** Neutrals
@@ -499,7 +528,7 @@ c*** niiso, tiiso, teiso
 c*** Redundancy check      
 
 c*** niiso, tiiso, teiso
-      if(iniprm(1,1,1,5,5).eq.0) then !{
+      if(iniprm(1,1,1,7,5).eq.0) then !{
         lprdckw(1,1,13,5)=.false.
         lprdckw(1,1,14,5)=.false.
         lprdckw(1,1,15,5)=.false.

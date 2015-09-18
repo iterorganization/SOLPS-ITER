@@ -15,7 +15,9 @@ c*** The list of keywords to work on:
       data (chrpl(i,2),i=1,nkwrd) /
      /  'nbc','bcchar','bcpos','bcstart','bcend',
      ,	'bcene','bceni','enepar','enipar','bccon',
-     ,	'conpar','bcmom','mompar','lcbs',17*' '/
+     ,	'conpar','bcmom','mompar','lcbs','nniso',
+     ,  'nxiso1','nxiso2','nyiso1','nyiso2','niiso',
+     ,  'teiso','tiiso',9*' '/
       data (chrpl(i,3),i=1,nkwrd) /
      /  'nstrai',' ','crcstra','rcpos','rcstart',
      ,	'rcend','eb2spcr','lstrascl','lsns','msns',
