@@ -14,6 +14,7 @@ c=======================================================================
       parameter (nnms=38)
       character*8 nam, unm(nnms)
       integer itrsrc(0:nstra),iitalv(ntalv),iiiplt(5)
+      integer nfiles
       logical ublplt(5)
       equivalence (ublplt,pl1st)
 c*** List of the valid input keywords
@@ -102,7 +103,8 @@ c
       return
  20   l=lena
       lena=8
-      call rearra(filtrm,nhd6,nnftrm)
+      call rearra(filtrm(luftrm+1:nhd6),nhd6-luftrm,nfiles)
+      nnftrm=luftrm+nfiles
       return
  21   call scipit
       return
