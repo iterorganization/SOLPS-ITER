@@ -17,6 +17,14 @@ C     READ PHYSICAL COORDINATES FROM FORT.30 FILE TO XCOORD, YCOORD
       CHARACTER*110 ZEILE
       LOGICAL INISO
 
+      character*8 format_string(2)
+      integer, save :: new_format
+
+      data new_format/1/
+      data format_string/ '(4E15.7)', '(4E16.8)' /
+
+      DOUBLEPRECISION DUMMI(4)
+
 *  READ PHYSICAL COORDINATES FROM FORT.30 FILE
 *  ---------------------------------------------------------------------
 *  INFORMATION FOR EACH CELL
@@ -55,10 +63,24 @@ C     READ PHYSICAL COORDINATES FROM FORT.30 FILE TO XCOORD, YCOORD
         nniso = 0
       endif
       read(30,*)
+ 3    write(*,*) 'Trying reading fort.30 with format_string option ',
+     . new_format
+      read (30,format_string(new_format),err=4) (DUMMI(i),i=1,4)
+      goto 5
+ 4    continue
+      backspace(30)
+      new_format = new_format+1
+      if (new_format.le.2) then
+        goto 3
+      else
+        stop "Unrecognized format in fort.30 file"
+      endif
+ 5    continue
+      backspace(30)
       do ix=1,nx
         do iy=1,ny
-         read (30,666) (br(ix,iy,i),i=1,4)
-         read (30,666) (bz(ix,iy,i),i=1,4)
+         read (30,format_string(new_format)) (br(ix,iy,i),i=1,4)
+         read (30,format_string(new_format)) (bz(ix,iy,i),i=1,4)
         end do
       end do
       allocate(ncell(0:nx+1,0:ny+1))
