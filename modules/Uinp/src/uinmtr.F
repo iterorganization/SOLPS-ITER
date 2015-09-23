@@ -11,12 +11,12 @@ c*** Wall material specification
 c=======================================================================
       integer n
 #include "uinput.inc"
-      integer imtr,imtrl
-      parameter (imtr=6, imtrl=8)
-      character*(imtrl) cmt(*),ucm(imtr),ucr
+      integer imtrl
+      parameter (imtrl=2)
+      character*(imtrl) cmt(*),ucm(nmtr),ucr
       integer i,j,k
       logical ex
-      real uz(imtr)
+      real uz(nmtr)
       data ucm /
      /        'c'   , 'ss' , 'be'  , 'mo'  , 'w'   , 'fe'  /
       data uz /
@@ -29,7 +29,7 @@ c*** Return the result in parameter n
 
         call locase(cmt(1),ucr,imtrl)
 	ex=.true.
-        do j=1,imtr !{
+        do j=1,nmtr !{
           if(ex) then !{
 	    if(ucr.eq.ucm(j)) then !{
 	      ex=.false.
@@ -44,7 +44,7 @@ c*** Additional surfaces
 
         do i=1,nlimi !{
           call locase(cmt(i),ucr,imtrl)
-          do j=1,imtr !{
+          do j=1,nmtr !{
             if(ucr.eq.ucm(j)) go to 10
           end do !}
           j=1
@@ -55,7 +55,7 @@ c*** Additional surfaces
 c*** Non-default surface (target)
 
         call locase(cmt(1),ucr,imtrl)
-        do j=1,imtr !{
+        do j=1,nmtr !{
           if(ucr.eq.ucm(j)) go to 20
         end do !}
         j=1

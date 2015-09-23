@@ -9,11 +9,9 @@ c
 c======================================================================
 #include "uinput.inc"
 #include "impcon.inc"
-      integer imtr
-      parameter (imtr=6)
       integer imat,nmat,isp
       logical uex,open_file,match_found
-      character*2 listmat(imtr)
+      character*2 listmat(nmtr)
       character*256 solpstop
       external open_file,uinnam,uintrg,uinaux,uiniamd
 c======================================================================
@@ -71,6 +69,8 @@ c
         do imat=1,nmat !{
           match_found=match_found .or.
      .       trim(listmat(imat)).eq.trim(umtrl(i)) .or.
+     .      (trim(listmat(imat)).eq.'Fe' .and. 
+     .      (trim(umtrl(i)).eq.'ss'.or.trim(umtrl(i)).eq.'SS')) .or.
      .       trim(umtrl(i)).eq.'dummy'
         end do !}
         if (.not.match_found) then !{
@@ -79,18 +79,25 @@ c
             listmat(nmat)="Fe"
           else !}{
             listmat(nmat)=umtrl(i)(1:2)
-          endif !}
+          end if !}
         end if !}
       end do !}
       do i=1,ntrgdflt !{
         match_found=.false.
         do imat=1,nmat !{
           match_found=match_found .or.
-     .       trim(listmat(imat)).eq.trim(made_of(i))
+     .       trim(listmat(imat)).eq.trim(made_of(i)) .or.
+     .      (trim(listmat(imat)).eq.'Fe' .and. 
+     .      (trim(made_of(i)).eq.'ss'.or.trim(made_of(i)).eq.'SS'))
         end do !}
         if (.not.match_found) then !{
           nmat=nmat+1
-          listmat(nmat)=made_of(i)(1:2)
+	  if ((trim(made_of(i)).eq."ss").or.
+     .        (trim(made_of(i)).eq."SS")) then !{
+            listmat(nmat)="Fe"
+          else !}{
+            listmat(nmat)=made_of(i)(1:2)
+          end if !}
         end if !}
       end do !}
       do i=1,n_spcsrf !{
@@ -98,25 +105,37 @@ c
         do imat=1,nmat !{
           match_found=match_found .or.
      .       trim(listmat(imat)).eq.trim(sps_mtrl(i)) .or.
-     .       trim(sps_mtrl(i)).eq.'-'
+     .       trim(sps_mtrl(i)).eq.'-' .or.
+     .      (trim(listmat(imat)).eq.'Fe' .and. 
+     .      (trim(sps_mtrl(i)).eq.'ss'.or.trim(sps_mtrl(i)).eq.'SS'))
         end do !}
         if (.not.match_found) then !{
           nmat=nmat+1
-          listmat(nmat)=sps_mtrl(i)(1:2)
+	  if ((trim(sps_mtrl(i)).eq."ss").or.
+     .        (trim(sps_mtrl(i)).eq."SS")) then !{
+            listmat(nmat)="Fe"
+          else !}{
+            listmat(nmat)=sps_mtrl(i)(1:2)
+          end if !}
         end if !}
       end do !}
+      ifile = 0
       if (nspigen.gt.1 .or. spcigen(nspigen).ne.'D' .or. 
-     .     nmat.gt.1    .or. listmat(nmat).ne.'C') then !{
-         nnftrm=nspigen*nmat
+     .     nmat.gt.1   .or. listmat(nmat).ne.'C') then !{
          do isp=1,nspigen !{
            do imat=1,nmat !{
-             filtrm(isp+(imat-1)*nspigen)=
-     .        spcigen(isp)(1:lnblnk(spcigen(isp)))
-     .        //'_on_'//
-     .        listmat(imat)
+             if (.not.(spcigen(isp).eq.'D' .and.
+     .                 listmat(imat).eq.'C')) then !{
+               ifile = ifile + 1
+               filtrm(nnftrm+ifile)=
+     .          spcigen(isp)(1:lnblnk(spcigen(isp)))
+     .          //'_on_'//
+     .          listmat(imat)
+            end if !}
           end do !}
         end do !}
       end if !}
+      nnftrm = nnftrm+ifile
 
       do iamd=1,namdf !{
       	if(amd_file(iamd).ne.' ') then !{
