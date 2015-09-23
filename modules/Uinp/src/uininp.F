@@ -75,7 +75,11 @@ c
         end do !}
         if (.not.match_found) then !{
           nmat=nmat+1
-          listmat(nmat)=umtrl(i)(1:2)
+	  if ((trim(umtrl(i)).eq."ss").or.(trim(umtrl(i)).eq."SS")) then !{
+            listmat(nmat)="Fe"
+          else !}{
+            listmat(nmat)=umtrl(i)(1:2)
+          endif !}
         end if !}
       end do !}
       do i=1,ntrgdflt !{
