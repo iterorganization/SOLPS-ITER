@@ -134,6 +134,7 @@ c*** Check the reaction type - must be assigned to each reaction
       do i=1,nnrctn !{
       	if(rctntyp(i).eq.' ') then !{
 	  write(0,*) 'Undefined reaction type found.'
+          write(0,*) 'Error occurred treating reaction ',i
 	  write(0,*) 'STOP ==> check the AMDS model. If OK, then the ',
      ,      'AMDS file is corrupted - or an internal error in UINP'
 	  stop
@@ -158,6 +159,7 @@ c*** Parse the multiple output particles, if any (e.g., 2H)
 	  else !}{
 	    write(0,*) 'Wrong 1st output particle specification: ',
      ,	      	      	      	      	      	      	   rctnpto1(irc)
+            write(0,*) 'Error occurred treating reaction ',irc
       	    ex=.true.
 	  end if !}
 	else !}{
@@ -188,6 +190,7 @@ c*** Parse the multiple output particles, if any (e.g., 2H)
 	  else !}{
 	    write(0,*) 'Wrong 2nd output particle specification: ',
      ,	      	      	      	      	      	      	   rctnpto2(irc)
+            write(0,*) 'Error occurred treating reaction ',irc
       	    ex=.true.
 	  end if !}
 	else !}{
@@ -341,6 +344,7 @@ c*** appear first
       	      	  if(rctntyp(irc).ne.rctntyp(k1)) then !{
 		    write(0,*) 'Different reaction types for the ',
      ,		    					'group ',ig
+                    write(0,*) 'Comparing reactions ',irc,' and ',k1
 		    stop '==> Check the AMDS model'
 		  end if !}
 		  ex=.false.
@@ -377,6 +381,8 @@ c*** appear first
 		      write(0,*) 'Inconsistent reaction data. ',
      ,		    	'"H.0", "H.1" and "H.3" should be grouped for ',
      ,		    	rctntyp(irc), ' type'
+                      write(0,*) 
+     ,                 'Error occured when treating reaction ',irc
 		      stop '==> Check the AMDS model'
 		    end if !}
 		  else if(rctntyp(irc).eq.'EI' .or. 
@@ -396,9 +402,12 @@ c*** appear first
                         ex=.true.
                       end if !}
      		    else if (rctnchp(irc).eq.'H.2') then !}{
-		      if(rctnchp(k1).ne.'H.10') then !{
-		    	ex=.true.
-		      end if !}
+		      if((rctnchp(k1).eq.'H.10').or.
+     ,                 (rctnchp(k1).eq.'H.8')) then !{
+		    	ex=.false.
+		      else !}{
+                        ex=.true.
+                      end if !}
 		    else if(rctnchp(irc).eq.'H.10') then !}{
 		      if(rctnchp(k1).ne.'H.4' .and.
      ,		    		      rctnchp(k1).ne.'H.2') then !{
@@ -420,6 +429,8 @@ c*** appear first
 !cxpb     ,                  ', correspondingly,',
      ,                  ' H.10 or H.8 for a ',
      ,		    	rctntyp(irc), ' reaction'
+                      write(0,*) 
+     ,                 'Error occured when treating reaction ',irc
 		      stop '==> Check the AMDS model'
 		    end if !}
 		  else !}{
@@ -429,6 +440,8 @@ c*** appear first
      ,		      'EI, RC, or DS reaction, or'
       		    write(0,*) '  H.0 and H.1 with H.3 for ',
      ,		      'CX, II, or EL reaction'
+                    write(0,*) 
+     ,               'Error occured when treating reaction ',irc
 		    stop '==> Check the AMDS model'
 		  end if !} #6
 		end if !} #5 (k1)
@@ -460,6 +473,7 @@ c*** appear first
       	      	  if(rctntyp(irc).ne.rctntyp(k3)) then !{
 		    write(0,*) 'Different reaction types for the ',
      ,		    					'group ',ig
+                    write(0,*) 'Comparing reactions ',irc,' and ',k3
 		    stop '==> Check the AMDS model'
 		  end if !}
 		  ex=.false.
@@ -496,6 +510,8 @@ c*** appear first
 		      write(0,*) 'Inconsistent reaction data. ',
      ,		    	'"H.0", "H.1" and "H.3" should be grouped for ',
      ,		    	rctntyp(irc), ' type'
+                      write(0,*) 
+     ,                 'Error occured when treating reaction ', irc
 		      stop '==> Check the AMDS model'
 		    end if !}
 		  else if(rctntyp(irc).eq.'EI' .or. 
@@ -530,6 +546,8 @@ c*** appear first
 		      write(0,*) 'Inconsistent reaction data. H.4 ',
      ,		    	'or H.2 should be grouped with H.10 for a ',
      ,		    	rctntyp(irc), ' reaction'
+                      write(0,*)
+     ,                 'Error occured when treating reaction ', irc
 		      stop '==> Check the AMDS model'
 		    end if !}
 		  else !}{
@@ -539,6 +557,8 @@ c*** appear first
      ,		      'EI, RC, or DS reaction, or'
       		    write(0,*) '  H.0 and H.1 with H.3 for ',
      ,		      'CX, II, or EL reaction'
+                    write(0,*)
+     ,               'Error occured when treating reaction ', irc
 		    stop '==> Check the AMDS model'
 		  end if !} #6
 		end if !} #5 (k3)

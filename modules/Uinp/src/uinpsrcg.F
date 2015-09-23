@@ -42,7 +42,7 @@ c>>>
           write(0,*) 'A gas puffing source cannot span over more then ',
      ,        	     nsrfs,' wall segments'
           write(0,*) 'STOP ==> check the DG model and the value of ',
-     ,  	     'DEF_NSRFS in DIMENISONS.F'
+     ,  	     'DEF_NSRFS in DIMENSIONS.F'
           stop
         end if !}
         if(kgpfstr(istr).le.0) then !{
