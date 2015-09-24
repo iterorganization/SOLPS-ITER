@@ -10,24 +10,20 @@ TIME = time
 # Default debugger
 DBX ?= dbx
 
+ifdef SOLPS_MPI
+EXT_MPI = .mpi
+endif
 ifdef SOLPS_DEBUG
+EXT_DEBUG = .debug
+endif
+
 ifndef STAND_ALONE
-B2OBJ  = ${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}.debug
-EIROBJ = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}.debug
+B2OBJ  = ${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_DEBUG}
+EIROBJ = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_DEBUG}
 INC = -I ${B2OBJ} -I ${EIROBJ}
 else
-B2OBJ  = ${SOLPSTOP}/modules/B2.5/builds/standalone.${HOST_NAME}.${COMPILER}.debug
+B2OBJ  = ${SOLPSTOP}/modules/B2.5/builds/standalone.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_DEBUG}
 INC = -I ${B2OBJ}
-endif
-else
-ifndef STAND_ALONE
-B2OBJ  = ${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}
-EIROBJ = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}
-INC = -I ${B2OBJ} -I ${EIROBJ}
-else
-B2OBJ  = ${SOLPSTOP}/modules/B2.5/builds/standalone.${HOST_NAME}.${COMPILER}
-INC = -I ${B2OBJ}
-endif
 endif
 
 

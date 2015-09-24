@@ -1,8 +1,8 @@
 #! /bin/tcsh
 
-#PBS -q batch
+#PBS -q ib_gen8
 #PBS -l nodes=1:ppn=1
-#PBS -l walltime=12:00:00
+#PBS -l walltime=24:00:00
 #PBS -j oe
 #PBS -M $USER@iter.org
 #PBS -m e
@@ -39,9 +39,13 @@ cd "$PBS_O_WORKDIR"
 # module load make
 # alias gmake make
 
+if ($?SOLPS_MPI) then
+  set USE_MPI="-m mpiexec"
+endif
+
 update_solps_run_status "Started on `hostname` at `date`"
 
-time b2run < input.dat >! run.log
+time b2run ${USE_MPI} b2mn < input.dat >! run.log
 
 QSUB.postprocess_coupled
 

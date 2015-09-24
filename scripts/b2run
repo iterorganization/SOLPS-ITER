@@ -1,8 +1,9 @@
 #! /bin/tcsh -f
 
-## -n             dry run
-## -d <debugger>  use debugger <debugger>
-## -s             run B2.5 applications in stand-alone mode (no Eirene coupling)
+## -n                         dry run
+## -s                         run B2.5 applications in stand-alone mode (no Eirene coupling)
+## -m <mpi-launcher + args>   run mpi-version (example: b2run -m "mpiexec -np 2" b2mn)
+## -d <debugger>              use debugger <debugger>
 
 # if we are running at JET then do not rely on the automatic feature of searching in ../baserun, instead setup links
 if (${HOST_NAME} == "JET") then
@@ -36,18 +37,33 @@ endloop:
   if ("X${1}X" == "X-sX") then
     shift
     setenv STAND_ALONE yes
+  endif
+  if ("X${1}X" == "X-mX") then
+    shift
+    if (! $?SOLPS_MPI) then
+      set_mpi
+      set MPI_SET=yes
+    endif
+    set debug="$debug TIME=$1"
     shift
   endif
   if ("X${1}X" == "X-dX") then
     shift
+    if (! $?SOLPS_DEBUG) then
+      set_debug
+      set DEBUG_SET=yes
+    endif
     if ($1 == "") then 
       set debug="$debug TIME=$DBX"
     else  
       set debug="$debug TIME=$1"
+      shift
     endif 
-    shift
   endif
   if ("X${argv}X" == "XX") set argv="b2mn"
   set CMD=`echo $argv" " | sed -e 's: :.prt :g'`
   make $debug -f $RUNS/Makefile $CMD
   unsetenv STAND_ALONE
+  if ($?MPI_SET)   unset_mpi
+  if ($?DEBUG_SET) unset_debug
+  
