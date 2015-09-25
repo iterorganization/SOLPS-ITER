@@ -29,6 +29,3 @@ module load mpich2/3.1.3-intel
 # Debugger (set environment variable DBX)
 setenv DBX idb
 
-# Other environment variables
-setenv PKG_CONFIG_PATH $PKG_CONFIG_PATH:/usr/lib64/pkgconfig
-
