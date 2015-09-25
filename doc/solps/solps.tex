@@ -1764,6 +1764,33 @@ When submitting jobs in a cluster environment, one will make use of the job subm
 in the \$\verb!{SOLPSTOP}/runs! directory (\verb!QSUB.*! files). These allow for the job submission to be
 done in a file space that is outside the \$\verb!{SOLPSTOP}! tree, provided there is a file named \verb!SOLPSTOP! in the run directory or above that contains the path to the \$\verb!{SOLPSTOP}! tree.
 
+If, for instance, one is running on the ITER cluster, then, the instructions to follow would be to run the script
+\begin{verbatim}
+itersubmit
+\end{verbatim}
+or
+\begin{verbatim}
+itersubmit <<Submission_file>>
+\end{verbatim}
+from your current run directory. This script climbs up the tree looking for \verb!<<Submission_file>>!,
+and submits the job to the cluster by the command
+\begin{verbatim}
+qsub -S /usr/bin/tcsh $QSUB
+\end{verbatim}
+or stops if the submission file is not found.
+
+If \verb!<<Submission_file>>! is not specified, \verb!itersubmit! looks for \verb!QSUB.iter_coupled! or
+for \verb!QSUB.iter! depending on whether a coupled or a standalone run is required (decided upon detection or not of an \verb!Eirene! \verb!input.dat! file).
+
+The \verb!QSUB.iter! script first of all changes directory to \$\verb!{SOLPSTOP}!
+with the help of \verb!SOLPSTOP! file
+and executes \verb!setup.csh! there. This is necessary 
+to set up environment variables for the cluster node
+which would actually execute the job, since that machine
+does not necessarily coincide with one from which the job was submitted.
+Then the \verb!QSUB.iter! script returns back to the current run directory
+and executes the script \verb!b2run!.
+
 The examples presented below are for a pure D plasma.
 
 \newpage\section{b2ag, setting up the geometry}

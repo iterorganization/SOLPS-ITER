@@ -4,21 +4,28 @@ eval '(exit $?0)' && eval 'exec tcsh $0 ${1+"$@"}' && eval 'exec tcsh $0 $argv:q
 if ($1 == "") then
   if (-e input.dat) then
     echo Assuming run with Eirene
+    echo No argument is specified. Looking for QSUB.iter_coupled
     set QSUB=`climb_and_look_for QSUB.iter_coupled`
     if ($QSUB == "//QSUB.iter_coupled") set QSUB=""
   else
     echo Assuming standalone run
+    echo No argument is specified. Looking for QSUB.iter
     set QSUB=`climb_and_look_for QSUB.iter`
     if ($QSUB == "//QSUB.iter") set QSUB=""
   endif
 else if (-e $1) then
+  echo Submission file $1 is specified as an argument.
+  echo Submission file $1 is found in current directory
   set QSUB=$1
 else
+  echo Submission file $1 is specified as an argument.
+  echo Looking for submission file $1 
   set QSUB=`climb_and_look_for $1`
-  if ($QSUB == "//$1) set QSUB=""
+  echo Submission file $QSUB is found
+  if ($QSUB == "//"$1) set QSUB=""
 endif
 if($QSUB == "") then
-  echo No SGE submission file found
+  echo No SGE submission file found. Exiting.
   exit
 endif
 
