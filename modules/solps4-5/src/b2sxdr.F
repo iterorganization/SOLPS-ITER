@@ -184,7 +184,7 @@ c
       call xertst (1.le.n2, 'faulty parameter n2')
 *   ..interpolate velocities here
 cxpb Next line not needed if inherited from UPC instead!
-cxpb  call map4_5x(nx,ny,ns,crx,cry,vol,bb,ua)
+      call map4_5x(nx,ny,ns,crx,cry,vol,bb,ua)
       allocate(wrk(-1:nx,-1:ny,0:ns-1))
       wrk = uadia(-1:nx,-1:ny,0,0:ns-1)
       call map4_5x(nx,ny,ns,crx,cry,vol,bb,wrk)
