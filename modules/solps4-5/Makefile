@@ -64,7 +64,7 @@ INCLUDE += -I${EIRMLOCAL}
 TAGSLIST += ${EIRMLOCAL}/*.F
 VPATH += ${EIRMLOCAL}:
 endif
-INCLUDE += -I${SRCDIR}/B2.5_include -I${SRCDIR}/B2.5_commons -I${SRCDIR}/B2_include -I${SRCDIR}/B2_commons -I${SRCDIR}/Eirene_commons -I${MDSPLUS_DIR}/include
+INCLUDE += -I${SRCDIR}/B2.5_include -I${SRCDIR}/B2.5_commons -I${SRCDIR}/B2_include -I${SRCDIR}/Eirene_commons -I${MDSPLUS_DIR}/include
 TAGSLIST += ${SRCDIR}/*_commons/*.[hH] ${SRCDIR}/*/*.F ${SRCDIR}/*.F
 VPATH += ${SRCDIR}/B2.5_modules:${SRCDIR}:${SRCDIR}/solps4_B2:${SRCDIR}/solps4_Eirene:${SRCDIR}/solps5
 
