@@ -15,13 +15,16 @@ C     READ PHYSICAL COORDINATES FROM FORT.30 FILE TO XCOORD, YCOORD
       INTEGER I,I0, I0E, I1, I2, I3, I4, IX0, ICELL
       integer dim1, dim2
       CHARACTER*110 ZEILE
+      character*80 line
       LOGICAL INISO
 
-      character*8 format_string(2)
-      integer, save :: new_format
+      character*54 format_string(2)
+      integer, save :: new_format, exp_location
 
       data new_format/1/
-      data format_string/ '(4E15.7)', '(4E16.8)' /
+      data format_string/ 
+     . '(T2,1E15.7,T18,1E15.7,T34,1E15.7,T50,1E15.7)', 
+     . '(T2,1E16.8,T19,1E16.8,T36,1E16.8,T53,1E16.8)' /
 
       DOUBLEPRECISION DUMMI(4)
 
@@ -63,20 +66,27 @@ C     READ PHYSICAL COORDINATES FROM FORT.30 FILE TO XCOORD, YCOORD
         nniso = 0
       endif
       read(30,*)
- 3    write(*,*) 'Trying reading fort.30 with format_string option ',
-     . new_format
-      read (30,format_string(new_format),err=4) (DUMMI(i),i=1,4)
-      goto 5
- 4    continue
-      backspace(30)
-      new_format = new_format+1
-      if (new_format.le.2) then
-        goto 3
+      read (30,'(A80)') line
+      exp_location = 81
+      write(*,'(A80)') line
+      if (index(line,'E').ne.0) 
+     . exp_location = min(exp_location,index(line,'E'))
+      write(*,*) 'Exp_location = ', exp_location
+      if (index(line,'e').ne.0) 
+     . exp_location = min(exp_location,index(line,'e'))
+      if (index(line,'d').ne.0) 
+     . exp_location = min(exp_location,index(line,'d'))
+      if (index(line,'D').ne.0) 
+     . exp_location = min(exp_location,index(line,'D'))
+      if (exp_location.eq.12) then
+        new_format = 1
+      else if (exp_location.eq.13) then
+        new_format = 2
       else
         stop "Unrecognized format in fort.30 file"
       endif
- 5    continue
       backspace(30)
+      write(*,*) 'Detected fort.30 is using ', format_string(new_format)
       do ix=1,nx
         do iy=1,ny
          read (30,format_string(new_format)) (br(ix,iy,i),i=1,4)
