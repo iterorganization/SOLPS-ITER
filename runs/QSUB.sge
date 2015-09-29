@@ -22,7 +22,7 @@ popd
 
 update_solps_run_status "Started on `hostname` at `date`"
 
-time b2run >! run.log 
+time b2run -s >! run.log 
 
 QSUB.postprocess
 

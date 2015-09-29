@@ -1765,6 +1765,8 @@ with the usual tools.
 When submitting jobs in a cluster environment, one will make use of the job submission scripts provided
 in the \$\verb!{SOLPSTOP}/runs! directory (\verb!QSUB.*! files). These allow for the job submission to be
 done in a file space that is outside the \$\verb!{SOLPSTOP}! tree, provided there is a file named \verb!SOLPSTOP! in the run directory or above that contains the path to the \$\verb!{SOLPSTOP}! tree.
+If the file named \verb!SOLPSTOP! is missing, the script \verb!QSUB.*! will construct \$\verb!{SOLPSTOP}! by
+truncating the path to actual run directory \$\verb!{SOLPSTOP}/runs/<RUN_DIRECTORY>! to \$\verb!{SOLPSTOP}!.
 
 If, for instance, one is running on the ITER cluster, then, the instructions to follow would be to run the script
 \begin{verbatim}

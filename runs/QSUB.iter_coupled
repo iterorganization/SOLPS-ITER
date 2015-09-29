@@ -39,6 +39,7 @@ cd "$PBS_O_WORKDIR"
 # module load make
 # alias gmake make
 
+set USE_MPI=""
 if ($?SOLPS_MPI) then
   set USE_MPI="-m mpiexec"
 endif
