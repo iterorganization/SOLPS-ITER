@@ -27,6 +27,12 @@ Getting the latest code updates
 2.  Start working with the latest code versions
     Note: do step 1 first!
 
+    The recommended solution is to use the script:
+    solps-iter_update
+
+    You can also do the update manually, by following the instructions below.
+    It is then recommended to use section 2.2, and work with the development release.
+
 2.1 To work with the latest stable release, do:
     git checkout master
     git pull
