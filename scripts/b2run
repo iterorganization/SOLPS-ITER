@@ -18,7 +18,6 @@ endif
 # end
 
 set RUNS=$PWD
-
 loop:
   if(-e $RUNS/Makefile) goto endloop
   if ("$RUNS" == "/") then
@@ -30,6 +29,7 @@ loop:
 
 endloop:
   set debug=""
+  set TIME=time
   if ("X${1}X" == "X-nX") then
     shift
     set debug="-n"
@@ -44,7 +44,7 @@ endloop:
       set_mpi
       set MPI_SET=yes
     endif
-    set debug="$debug TIME=$1"
+    set TIME="$1"
     shift
   endif
   if ("X${1}X" == "X-dX") then
@@ -54,15 +54,15 @@ endloop:
       set DEBUG_SET=yes
     endif
     if ($1 == "") then 
-      set debug="$debug TIME=$DBX"
+      set TIME="$DBX"
     else  
-      set debug="$debug TIME=$1"
+      set TIME="$1"
       shift
     endif 
   endif
   if ("X${argv}X" == "XX") set argv="b2mn"
   set CMD=`echo $argv" " | sed -e 's: :.prt :g'`
-  make $debug -f $RUNS/Makefile $CMD
+  make $debug TIME="$TIME" -f $RUNS/Makefile $CMD
   unsetenv STAND_ALONE
   if ($?MPI_SET)   unset_mpi
   if ($?DEBUG_SET) unset_debug
