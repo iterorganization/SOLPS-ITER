@@ -4,9 +4,9 @@
 #PBS -l nodes=1:ppn=1
 #PBS -l walltime=36:00:00
 #PBS -j oe
-#PBS -M $USER@iter.org
+#PBS -M #EMAIL#
 #PBS -m e
-#PBS -N SOLPS
+#PBS -N B2.5
 #PBS -Y
 
 # cd "$PBS_O_WORKDIR" || {

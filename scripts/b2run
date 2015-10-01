@@ -41,7 +41,7 @@ endloop:
   if ("X${1}X" == "X-mX") then
     shift
     if (! $?SOLPS_MPI) then
-      set_mpi
+      source $SOLPSTOP/scripts/mpi
       set MPI_SET=yes
     endif
     set TIME="$1"
@@ -50,7 +50,7 @@ endloop:
   if ("X${1}X" == "X-dX") then
     shift
     if (! $?SOLPS_DEBUG) then
-      set_debug
+      source $SOLPSTOP/scripts/debug
       set DEBUG_SET=yes
     endif
     if ($1 == "") then 
@@ -64,6 +64,6 @@ endloop:
   set CMD=`echo $argv" " | sed -e 's: :.prt :g'`
   make $debug TIME="$TIME" -f $RUNS/Makefile $CMD
   unsetenv STAND_ALONE
-  if ($?MPI_SET)   unset_mpi
-  if ($?DEBUG_SET) unset_debug
+  if ($?MPI_SET)   source $SOLPSTOP/scripts/nompi
+  if ($?DEBUG_SET) source $SOLPSTOP/scripts/nodebug
   

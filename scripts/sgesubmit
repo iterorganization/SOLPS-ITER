@@ -2,19 +2,18 @@
 
 set NAME=/tmp/.run.$$.$USER.`date +%Y%m%d%H%M%S`
 set EMAIL=`get_git_email`
-echo Your email is $EMAIL
 
 if ($1 == "") then
   if (-e input.dat) then
     echo Assuming run with Eirene
-    echo No argument is specified. Looking for QSUB.iter_coupled
-    set QSUB=`climb_and_look_for QSUB.iter_coupled`
-    if ($QSUB == "//QSUB.iter_coupled") set QSUB=""
+    echo No argument is specified. Looking for QSUB.sge_coupled
+    set QSUB=`climb_and_look_for QSUB.sge_coupled`
+    if ($QSUB == "//QSUB.sge_coupled") set QSUB=""
   else
     echo Assuming standalone run
-    echo No argument is specified. Looking for QSUB.iter
-    set QSUB=`climb_and_look_for QSUB.iter`
-    if ($QSUB == "//QSUB.iter") set QSUB=""
+    echo No argument is specified. Looking for QSUB.sge
+    set QSUB=`climb_and_look_for QSUB.sge`
+    if ($QSUB == "//QSUB.sge") set QSUB=""
   endif
 else if (-e $1) then
   echo Submission file $1 is specified as an argument.
@@ -28,7 +27,7 @@ else
   if ($QSUB == "//"$1) set QSUB=""
 endif
 if($QSUB == "") then
-  echo No ITER submission file found. Exiting.
+  echo No SGE submission file found. Exiting.
   exit
 endif
 echo Using submission file template $QSUB

@@ -2,10 +2,10 @@
 
 #$ -l h_cpu=36:00:00,h_vmem=1500M
 #$ -cwd
-#$ -M $USER@ipp.mpg.de
+#$ -M #EMAIL#
 #$ -m e
 #$ -notify
-#$ -N SOLPS
+#$ -N SOLPS-ITER
 
 setenv PATH ${PATH}:/afs/ipp-garching.mpg.de/@sys/bin
 

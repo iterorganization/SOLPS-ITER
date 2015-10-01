@@ -1,0 +1,1 @@
+echo `grep email $HOME/.gitconfig | tail -1 | sed -e 's:\"::g' -e 's:email::' -e 's:=::' ` | tr -d ' '

@@ -148,13 +148,13 @@
  sna     Particle source (#.s^{-1})
  sne     Electron particle source (e.s^{-1})
  smo     Parallel momentum source (N)
- smq     smq (N)
+ smq     smq (momentum sources from atomic physics) (N)
  she     Electron heat source (W)
  shi     Ion heat source (W)
  sch     Charge source (A)
- smaf    smaf (N)
- smag    smag (N)
- smav    smav (N)
+ smaf    smaf (extended friction term) (N)
+ smag    smag (pressure gradient term) (N)
+ smav    smav (additional viscosity term) (N)
  rco     RESCO
  rmo     RESMO
  rmt     RESMT
@@ -200,14 +200,14 @@
  fchp    Parallel current (A)
  fchx    Poloidal current (A)
  fchy    Radial current (A)
- ud      pol comp of the ' //'drift velocity [uadia.x] (m.s^{-1})
- vd      rad comp of the ' //'drift velocity [uadia.y] (m.s^{-1})
- vadia.x         pol comp of the divergent ' //'part of the diamagnetic velocity [vadia.x] (m.s^{-1})
- vadia.y         rad comp of the divergent ' //'part of the diamagnetic velocity [vadia.y] (m.s^{-1})
- wadia.x         pol comp of the total ' //'diamagnetic velocity [wadia.x] (m.s^{-1})
- wadia.y         rad comp of the total ' //'diamagnetic velocity [wadia.y] (m.s^{-1})
- vexb.x  pol comp of the ' //'ExB velocity [vaecrb.x] (m.s^{-1})
- vexb.y  rad comp of the ' //'ExB velocity [vaecrb.y] (m.s^{-1})
+ ud      pol comp of the drift velocity [uadia.x] (m.s^{-1})
+ vd      rad comp of the drift velocity [uadia.y] (m.s^{-1})
+ vadia.x         pol comp of the divergent part of the diamagnetic velocity [vadia.x] (m.s^{-1})
+ vadia.y         rad comp of the divergent part of the diamagnetic velocity [vadia.y] (m.s^{-1})
+ wadia.x         pol comp of the total diamagnetic velocity [wadia.x] (m.s^{-1})
+ wadia.y         rad comp of the total diamagnetic velocity [wadia.y] (m.s^{-1})
+ vexb.x  pol comp of the ExB velocity [vaecrb.x] (m.s^{-1})
+ vexb.y  rad comp of the ExB velocity [vaecrb.y] (m.s^{-1})
  cd      fchdia.x
  dd      fchdia.y
  niso    Isolating region
@@ -290,10 +290,30 @@
  fchyvspe        Rad comp of fchvisper (A)
  fchxn   Pol comp of fchin (A)
  fchyn   Rad comp of fchin (A)
- dnneo   Neoclassical particle diffusivity D_{n} ' //'(m^{2}.s^{-1})
- chineo  Neoclassical heat conductivity \Gv\R ' //'(m^{2}.s^{-1})
- vnneo   Neoclassical particle pinch v_{n} ' //'(m.s^{-1})
- vwneo   Neoclassical heat pinch vw ' //'(m.s^{-1})
+ fnaxmdf         Modified poloidal particle flux (s^{-1})
+ fnaymdf         Modified radial particle flux (s^{-1})
+ fhexmdf         Modified poloidal electron heat flux (W)
+ fheymdf         Modified radial electron heat flux (W)
+ fhixmdf         Modified poloidal ion heat flux (W)
+ fhiymdf         Modified radial ion heat flux (W)
+ fhexps  Pfirsch-Schlueter poloidal electron heat flux (W)
+ fheyps  Pfirsch-Schlueter radial electron heat flux (W)
+ fhixps  Pfirsch-Schlueter poloidal ion heat flux (W)
+ fhiyps  Pfirsch-Schlueter radial ion heat flux (W)
+ fnaxps  Pfirsch-Schlueter poloidal particle flux (s^{-1})
+ fnayps  Pfirsch-Schlueter radial particle flux (s^{-1})
+ fnaxfcor        Poloidal particle flux with Coriolis term (s^{-1})
+ fnayfcor        Radial particle flux with Coriolis term (s^{-1})
+ fnaxhe  Poloidal particle flux for heat equations (s^{-1})
+ fnayhe  Radial particle flux for heat equations (s^{-1})
+ fchxvisq        Poloidal current due to heat flux viscosity tensor (A)
+ fchyvisq        Radial current due to heat flux viscosity tensor (A)
+ fchxinrt        Poloidal current due to inertia and gyroviscosity (A)
+ fchyinrt        Radial current due to inertia and gyroviscosity (A)
+ dnneo   Neoclassical particle diffusivity D_{n} (m^{2}.s^{-1})
+ chineo  Neoclassical heat conductivity \Gv\R (m^{2}.s^{-1})
+ vnneo   Neoclassical particle pinch v_{n} (m.s^{-1})
+ vwneo   Neoclassical heat pinch vw (m.s^{-1})
  lnn     Density gradient length (m)
  ltt     Temperature gradient length (m)
  nuab    Two species collision frequency (s^{-1})
@@ -301,13 +321,13 @@
  nustar  Normalized collisionality
  vth     Thermal velocity (m.s^{-1})
  rhol    Full-B Larmor radius (m)
- deltal  Ratio of Larmor radius to minimum ' //'gradient length
+ deltal  Ratio of Larmor radius to minimum gradient length
  wb      Width of the banana orbit (m)
- deltaw  Ratio of banana width to minimum ' //'gradient length
+ deltaw  Ratio of banana width to minimum gradient length
  deltawn         Ratio of banana width to density '//'gradient length
- deltawt         Ratio of banana width to temperature ' //'gradient length
+ deltawt         Ratio of banana width to temperature gradient length
  omega   Gyro-frequency (rad.s^{-1})
- deltab  Ratio of collision frequency to ' //'gyro-frequency
+ deltab  Ratio of collision frequency to gyro-frequency
  deltapar        Ratio of perpendicular to parallel dynamics
  chhichii        Chang-Hinton \Gv\R_{i} (m^{2}/s)
  crx     Corner radial coordinate (m)
@@ -440,7 +460,7 @@
  trgomax    Maximum ordinate for 2-d target plots
  smin       Minimum ordinate for wall plots
  smax       Maximum ordinate for wall plots
- neo_ic
+ neo_ic       Neoclassical model number
  extl    extra label
  cltb    colour table
  chor    chord file

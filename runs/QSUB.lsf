@@ -1,8 +1,8 @@
 #! /bin/tcsh
 
-#BSUB -e SOLPS.e%J.%I
-#BSUB -o SOLPS.o%J.%I
-#BSUB -J SOLPS
+#BSUB -e B2.5.e%J.%I
+#BSUB -o B2.5.o%J.%I
+#BSUB -J B2.5
 #BSUB -W 36:00
 
 setenv PATH ${PATH}:/afs/ipp-garching.mpg.de/@sys/bin

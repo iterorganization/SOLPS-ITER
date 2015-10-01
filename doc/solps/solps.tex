@@ -1092,6 +1092,7 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[eirobj]\index{eirobj} Alias to run \verb!Eirene! standalone with graphics.
   \item[eirobjx]\index{eirobjx} Alias to run \verb!Eirene! standalone without graphics.
   \item[first\_setup]\index{first\_setup} Creates the \verb!config.!\$\verb!{HOST_NAME}.!\$\verb!{COMPILER}! files in each of the \SOLPSITER submodules.
+  \item[get\_git\_email]\index{get\_git\_email} Finds the user's email address from the \verb!.gitconfig! file.
   \item[gtdr]\index{gtdr} Script to make a directory tree local. [obsolete]
   \item[gtfl]\index{gtfl} [ANK] Replaces the specified links by the files they are linked to. [obsolete]
   \item[gwsubmit]\index{gwsubmit} Script to launch runs on the ITM Gateway machine.
@@ -1781,6 +1782,7 @@ and submits the job to the cluster by the command
 \begin{verbatim}
 qsub -S /usr/bin/tcsh $QSUB
 \end{verbatim}
+%%$
 or stops if the submission file is not found.
 
 If \verb!<<Submission_file>>! is not specified, \verb!itersubmit! looks for \verb!QSUB.iter_coupled! or
@@ -3076,7 +3078,7 @@ quantities that can be plotted in this way.
 \section{b2pl, the plotting program}
 \index{b2pl}\index{b2plot}\label{sec:b2pl}
 
-%%sed 's:^     [^ ]:@@@:' $SOLPSTOP/modules/B2.5/src/b2plot/b2plot.F | awk 'BEGIN{save=""}/^[^@][^@][^@]/&&save!=""{print save}/^[^@][^@][^@]/{save=$0}/^@@@/{save=save" "$0}END{print save}' | sed 's; *@@@ *;;g' | egrep "case *\( *'|description *=" | sed -e "s;.*case *('\(.*\)');cmd: \1;" -e "s; *description *= *'\(.*\)';desc: \1;" | awk -F: 'BEGIN{save=""}/^cmd/&&save!=""{print save}/^cmd:/{save=$2}/^desc/{save=save"\t"$2}END{print save}' | sed 's:\! ::' | sed "s:',':,:g" | sed "s:'':':g" | expand >! b2plot.commands
+%%sed 's:^     [^ ]:@@@:' $SOLPSTOP/modules/B2.5/src/b2plot/b2plot.F | awk 'BEGIN{save=""}/^[^@][^@][^@]/&&save!=""{print save}/^[^@][^@][^@]/{save=$0}/^@@@/{save=save" "$0}END{print save}' | sed 's; *@@@ *;;g' | egrep "case *\( *'|description *=" | sed -e "s;.*case *('\(.*\)');cmd: \1;" -e "s; *description *= *'\(.*\)';desc: \1;" -e "s;' //';;" | awk -F: 'BEGIN{save=""}/^cmd/&&save!=""{print save}/^cmd:/{save=$2}/^desc/{save=save"\t"$2}END{print save}' | sed 's:\! ::' | sed "s:',':,:g" | sed "s:'':':g" | expand >! b2plot.commands
 
 The following commands apply:
 
