@@ -67,7 +67,7 @@
      *  lntrgrp_4(:), intrgrp_4(:), jntrgrp_4(:),
      *  ffb_cntr_4(:), ffb_strata_4(:)
 
-      integer, allocatable :: ifl(:), jfl(:), is1(:)
+      integer, allocatable :: ifl(:), jfl(:), is1(:), isp(:)
 
       integer sput_dst, sput_dst2, sput_dst3
 
@@ -355,12 +355,12 @@ cxpb
       allocate(intrgrp_4(1:nntrgrpd))
       allocate(jntrgrp_4(1:nntrgrpd))
       allocate(gntrgrp_4(1:nntrgrpd))
-      allocate(ffb_cntr_4(1:ns_4))
-      allocate(ffb_const_4(1:ns_4))
-      allocate(ffb_start_4(1:ns_4))
-      allocate(ffb_smax_4(1:ns_4))
-      allocate(ffb_over_4(1:ns_4))
-      allocate(ffb_strata_4(1:ns_4))
+      allocate(ffb_cntr_4(1:nspecies_4))
+      allocate(ffb_const_4(1:nspecies_4))
+      allocate(ffb_start_4(1:nspecies_4))
+      allocate(ffb_smax_4(1:nspecies_4))
+      allocate(ffb_over_4(1:nspecies_4))
+      allocate(ffb_strata_4(1:nspecies_4))
 
 *  ..take in b2.parameters data
 *   ..initialisation
@@ -412,7 +412,7 @@ cxpb
       eirene_step_cpu_4 = eirene_step_cpu
       eirene_mod_4 = eirene_mod
       userfluxparm_4(1:nstrai_4,1:2) = userfluxparm(1:nstrai_4,1:2)
-      lfirstflight_4 = lfirstflight
+      lfirstflight_4 = lfirstflight .and. lfluid.gt.0
       lstrascl_4(1:nstrai_4,1:nspecies_4) = 
      .  lstrascl(1:nstrai_4,1:nspecies_4)
       l_neutrad_4 = l_neutrad
@@ -512,13 +512,13 @@ cxpb
       volrecfac_4 = volrecfac
       volrecfeedback_4 = volrecfeedback
       user_flux_feedback_stratum_4 = user_flux_feedback_stratum
-      ffb_cntr_4 = ffb_cntr
-      ffb_const_4 = ffb_const
-      ffb_start_4 = ffb_start
-      ffb_smax_4 = ffb_smax
-      ffb_strata_4 = ffb_strata
-      ffb_over_4 = ffb_over
-      do is = 1, ns_4
+      ffb_cntr_4(1:nspecies_4) = ffb_cntr(1:nspecies_4)
+      ffb_const_4(1:nspecies_4) = ffb_const(1:nspecies_4)
+      ffb_start_4(1:nspecies_4) = ffb_start(1:nspecies_4)
+      ffb_smax_4(1:nspecies_4) = ffb_smax(1:nspecies_4)
+      ffb_strata_4(1:nspecies_4) = ffb_strata(1:nspecies_4)
+      ffb_over_4(1:nspecies_4) = ffb_over(1:nspecies_4)
+      do is = 1, nspecies_4
         lfeedback_4 = lfeedback_4 .or. ffb_cntr_4(is).eq.1
       end do
 
@@ -575,6 +575,7 @@ cxpb
       allocate(ifl(0:ns-1))
       allocate(jfl(0:ns-1))
       allocate(is1(1:ns_4))
+      allocate(isp(1:nspecies_4))
 
       k=0
       m=0
@@ -583,6 +584,7 @@ cxpb
         ifl(k)=0
         n=n+1
         jfl(k)=n
+        isp(i)=k
         do j=1,nfluids_4(i)
           k=k+1
           m=m+1
@@ -594,7 +596,8 @@ cxpb
       end do
       write(*,'(a,50i5)') 'ifl = ',ifl      
       write(*,'(a,50i5)') 'jfl = ',jfl
-      write(*,'(a,50i5)') 'is1 = ',is1      
+      write(*,'(a,50i5)') 'is1 = ',is1 
+      write(*,'(a,50i5)') 'isp = ',isp     
       lblgm = label_4
 
       call alloc_b2mod_geo(nx,ny)
@@ -970,6 +973,11 @@ c Fill out /b2cmpb/ arrays
           cbshe(7,cbirso+(ic-1)*3+1)=-2.5_R8
           cbshe(7,cbirso+(ic-1)*3+2)=-2.5_R8
           cbshe(7,cbirno+(ic-1)    )=-2.5_R8
+!! FIXME: Need to map ffb_constr to cbsna(0,isp(is),ireg) for ireg=solregno
+!! FIXME: if (ffb_cntr_4(is).eq.1) then
+!! FIXME: cbsna(0,isp(is),cbrno+nncut-1)=ffb_const_4(is)
+!! FIXME: cbsna(1:7,isp(is),cbrno+nncut-1)=0.0_R8
+!! FIXME: for is = 1, nspecies_4
         enddo
       enddo
       do is = 0, ns-1
@@ -2010,60 +2018,55 @@ c
      .   '''eirene_nesepm_istra'''//tab//'''',
      .   user_flux_feedback_stratum_4,''''
       end if
-      do is = 0, ns-1
-        if (ifl(is).ne.0) then
-	  if (ffb_cntr_4(ifl(is)).eq.1) then
-	    is0 = is
-	    do while (is0.ge.0 .and. .not.is_neutral(is0))
-	      is0 = is0-1
-	    end do
-	    if (is0.ge.0) then
-              write(99,'(a,i2,a)')
-     .         '''b2stbc_isfeedback'''//tab//tab//'''',is0,''''
-              write(98,'(a,i2,a)')
-     .         '''b2stbc_isfeedback'''//tab//tab//'''',is0,''''
-            end if
-            if (ffb_strata_4(ifl(is)).ne.0) then
-              write(99,'(a,i2,a)') 
-     .         '''eirene_nesepm_istra'''//tab//'''',
-     .         ffb_strata_4(ifl(is)),''''
-              write(98,'(a,i2,a)') 
-     .         '''eirene_nesepm_istra'''//tab//'''',
-     .         ffb_strata_4(ifl(is)),''''
-            end if
+      do is = 1, nspecies_4
+        if (ffb_cntr_4(is).eq.1) then
+	  is0 = isp(is)
+	  if (is0.ge.0) then
+            write(99,'(a,i2,a)')
+     .       '''b2stbc_isfeedback'''//tab//tab//'''',is0,''''
+            write(98,'(a,i2,a)')
+     .       '''b2stbc_isfeedback'''//tab//tab//'''',is0,''''
+          end if
+          if (ffb_strata_4(is).ne.0) then
+            write(99,'(a,i2,a)') 
+     .       '''eirene_nesepm_istra'''//tab//'''',
+     .       ffb_strata_4(is),''''
+            write(98,'(a,i2,a)') 
+     .       '''eirene_nesepm_istra'''//tab//'''',
+     .       ffb_strata_4(is),''''
+          end if
+          write(99,'(a,1pe9.2,a)') 
+     .     '''b2stbc_ndes_sol'''//tab//tab//'''',
+     .     ffb_const_4(is),''''
+          write(98,'(a,1pe9.2,a)') 
+     .     '''b2stbc_ndes_sol'''//tab//tab//'''',
+     .     ffb_const_4(is),''''
+          if (.not.autotimestep_4) then
+            ncall=nint(ffb_start_4(is)/dti_4)
+	  else
+            ncall=nint(ffb_start_4(is)/dtc_4)
+          endif
+          write(hlp_frm,'(a,i1,a)') '(a,i',len_of_digits(ncall),',a)'
+          write(99,hlp_frm) '''b2stbc_ncallfeedback'''//tab//'''',
+     .     ncall,''''
+          write(98,hlp_frm) '''b2stbc_ncallfeedback'''//tab//'''',
+     .     ncall,''''
+          if (ffb_over_4(is).ne.0.0_R8 .and.
+     .        ffb_over_4(is).ne.1.0_R8) then
             write(99,'(a,1pe9.2,a)') 
-     .       '''b2stbc_ndes_sol'''//tab//tab//'''',
-     .       ffb_const_4(ifl(is)),''''
+     .       '''b2stbc_nesepm_overshoot'''//tab//'''',
+     .       ffb_over_4(is),''''
             write(98,'(a,1pe9.2,a)') 
-     .       '''b2stbc_ndes_sol'''//tab//tab//'''',
-     .       ffb_const_4(ifl(is)),''''
-            if (.not.autotimestep_4) then
-              ncall=nint(ffb_start_4(ifl(is))/dti_4)
-	    else
-              ncall=nint(ffb_start_4(ifl(is))/dtc_4)
-            endif
-            write(hlp_frm,'(a,i1,a)') '(a,i',len_of_digits(ncall),',a)'
-            write(99,hlp_frm) '''b2stbc_ncallfeedback'''//tab//'''',
-     .       ncall,''''
-            write(98,hlp_frm) '''b2stbc_ncallfeedback'''//tab//'''',
-     .       ncall,''''
-            if (ffb_over_4(ifl(is)).ne.0.0_R8 .and.
-     .          ffb_over_4(ifl(is)).ne.1.0_R8) then
-              write(99,'(a,1pe9.2,a)') 
-     .         '''b2stbc_nesepm_overshoot'''//tab//'''',
-     .         ffb_over_4(ifl(is)),''''
-              write(98,'(a,1pe9.2,a)') 
-     .         '''b2stbc_nesepm_overshoot'''//tab//'''',
-     .         ffb_over_4(ifl(is)),''''
-            else if (ffb_smax_4(ifl(is)).gt.0.0_R8) then
-              write(99,'(a,1pe9.2,a)') 
-     .         '''b2stbc_nesepm_overshoot'''//tab//'''',
-     .         ffb_smax_4(ifl(is))/ffb_const_4(ifl(is)),''''
-              write(98,'(a,1pe9.2,a)') 
-     .         '''b2stbc_nesepm_overshoot'''//tab//'''',
-     .         ffb_smax_4(ifl(is))/ffb_const_4(ifl(is)),''''
-            end if
-	  end if
+     .       '''b2stbc_nesepm_overshoot'''//tab//'''',
+     .       ffb_over_4(is),''''
+          else if (ffb_smax_4(is).gt.0.0_R8) then
+            write(99,'(a,1pe9.2,a)') 
+     .       '''b2stbc_nesepm_overshoot'''//tab//'''',
+     .       ffb_smax_4(is)/ffb_const_4(is),''''
+            write(98,'(a,1pe9.2,a)') 
+     .       '''b2stbc_nesepm_overshoot'''//tab//'''',
+     .       ffb_smax_4(is)/ffb_const_4(is),''''
+          end if
 	end if
       end do
       if (dflagvconv_4.eq.-10) then
@@ -2148,16 +2151,14 @@ c
                 conpar(is,ib,1) = -1.0_R8
               end if
             end if
-	    if (ifl(is).ne.0) then
-	      if (ffb_cntr_4(ifl(is)).eq.1) then
-	        is0 = is
-	        do while (is0.ge.0 .and. .not.is_neutral(is0))
-		  is0 = is0-1
-	        end do
-		if (is0.ge.0) then
-	          bccon(is0,ib) = 12
-		  conpar(is0,ib,1) = ffb_const_4(ifl(is))
-	        end if
+          end do
+!! FIXME: Need to map ffb_constr to cbsna(0,is,ireg) in addition to conpar
+          do is = 1, nspecies_4
+	    if (ffb_cntr_4(is).eq.1) then
+	      is0 = isp(is)
+	      if (is0.ge.0) then
+	        bccon(is0,ib) = 12
+		conpar(is0,ib,1) = ffb_const_4(is)
 	      end if
             end if
           end do
