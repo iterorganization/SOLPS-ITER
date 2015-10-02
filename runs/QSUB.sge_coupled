@@ -10,7 +10,7 @@
 setenv PATH ${PATH}:/afs/ipp-garching.mpg.de/@sys/bin
 
 set solpstop=`climb_and_look_for SOLPSTOP`
-if (-e solpstop) then
+if (-e $solpstop) then
  setenv SOLPSTOP "`cat $solpstop`"
 else
  setenv SOLPSTOP "`echo $PWD | sed 's:/runs/.*::'`"

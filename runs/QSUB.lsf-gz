@@ -1,10 +1,9 @@
 #! /bin/tcsh
 
-#BSUB -e SOLPS-ITER.e%J.%I
-#BSUB -o SOLPS-ITER.o%J.%I
-#BSUB -J SOLPS-ITER
+#BSUB -e B2.5.e%J.%I
+#BSUB -o B2.5.o%J.%I
+#BSUB -J B2.5
 #BSUB -W 36:00
-
 
 setenv PATH ${PATH}:/afs/ipp-garching.mpg.de/@sys/bin
 
@@ -21,9 +20,8 @@ popd
 
 update_solps_run_status "Started on `hostname` at `date`"
 
-time b2run < input.dat >! run.log
+time b2run -s | gzip -9 >! run.log
 
-QSUB.postprocess_coupled
+QSUB.postprocess
 
 update_solps_run_status "Finished on `hostname` at `date`"
-

@@ -10,7 +10,7 @@
 setenv PATH ${PATH}:/afs/ipp-garching.mpg.de/@sys/bin
 
 set solpstop=`climb_and_look_for SOLPSTOP`
-if (-e solpstop) then
+if (-e $solpstop) then
  setenv SOLPSTOP "`cat $solpstop`"
 else
  setenv SOLPSTOP "`echo $PWD | sed 's:/runs/.*::'`"
@@ -22,7 +22,7 @@ popd
 
 update_solps_run_status "Started on `hostname` at `date`"
 
-time b2run -s >! run.log 
+time b2run -s >! run.log
 
 QSUB.postprocess
 

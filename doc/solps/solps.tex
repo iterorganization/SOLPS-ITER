@@ -1769,6 +1769,8 @@ done in a file space that is outside the \$\verb!{SOLPSTOP}! tree, provided ther
 If the file named \verb!SOLPSTOP! is missing, the script \verb!QSUB.*! will construct \$\verb!{SOLPSTOP}! by
 truncating the path to actual run directory \$\verb!{SOLPSTOP}/runs/<RUN_DIRECTORY>! to \$\verb!{SOLPSTOP}!.
 
+For all the submission scripts, adding the ``-z'' option and using the default submission file will compress the output log file.
+
 If, for instance, one is running on the ITER cluster, then, the instructions to follow would be to run the script
 \begin{verbatim}
 itersubmit

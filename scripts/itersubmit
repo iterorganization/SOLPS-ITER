@@ -4,17 +4,24 @@ set NAME=/tmp/.run.$$.$USER.`date +%Y%m%d%H%M%S`
 set EMAIL=`get_git_email`
 echo Your email is $EMAIL
 
+set compress=""
+if ("X$1X" == "X-zX") then
+  set compress="-gz"
+  echo run.log will be compressed
+  shift
+endif
+
 if ($1 == "") then
   if (-e input.dat) then
     echo Assuming run with Eirene
-    echo No argument is specified. Looking for QSUB.iter_coupled
-    set QSUB=`climb_and_look_for QSUB.iter_coupled`
-    if ($QSUB == "//QSUB.iter_coupled") set QSUB=""
+    echo No argument is specified. Looking for QSUB.iter_coupled$compress
+    set QSUB=`climb_and_look_for QSUB.iter_coupled$compress`
+    if ($QSUB == "//QSUB.iter_coupled$compress") set QSUB=""
   else
     echo Assuming standalone run
-    echo No argument is specified. Looking for QSUB.iter
-    set QSUB=`climb_and_look_for QSUB.iter`
-    if ($QSUB == "//QSUB.iter") set QSUB=""
+    echo No argument is specified. Looking for QSUB.iter$compress
+    set QSUB=`climb_and_look_for QSUB.iter$compress`
+    if ($QSUB == "//QSUB.iter$compress") set QSUB=""
   endif
 else if (-e $1) then
   echo Submission file $1 is specified as an argument.
@@ -24,21 +31,19 @@ else
   echo Submission file $1 is specified as an argument.
   echo Looking for submission file $1 
   set QSUB=`climb_and_look_for $1`
-  echo Submission file $QSUB is found
-  if ($QSUB == "//"$1) set QSUB=""
+  if ($QSUB == "//"$1) then
+    set QSUB=""
+  else
+    echo Submission file $QSUB is found
+  endif
 endif
 if($QSUB == "") then
-  echo No ITER submission file found. Exiting.
+  echo No ITER submission file $1 found. Exiting.
   exit
 endif
 echo Using submission file template $QSUB
 
-# if ("X$1" == "X-z") then
-#  echo run.log will be compressed
-#  sed -e 's:#PWD#:'$PWD':g' -e 's:#SOLPSTOP#:'$SOLPSTOP':g' -e 's:#EMAIL#:'$EMAIL':g' < $QSUB-gz > $NAME
-#else
-  sed -e 's:#PWD#:'$PWD':g' -e 's:#SOLPSTOP#:'$SOLPSTOP':g' -e 's:#EMAIL#:'$EMAIL':g' < $QSUB > $NAME
-# endif
+sed -e 's:#PWD#:'$PWD':g' -e 's:#SOLPSTOP#:'$SOLPSTOP':g' -e 's:#EMAIL#:'$EMAIL':g' < $QSUB > $NAME
 
 update_solps_run_status -n "Submitted at `date`"
 qsub -V -S /usr/bin/tcsh $NAME

@@ -1,0 +1,53 @@
+#! /bin/tcsh
+
+# @ output = #PWD#/job.out.$(Cluster)
+# # @ error = #PWD#/job.err.$(Cluster)
+# # @ class = prio1
+# # @ restart = no
+# # @ shell = /bin/tcsh
+# # @ queue
+cd #PWD#
+
+# cd "$PBS_O_WORKDIR" || {
+#   echo "Unable to switch to the working directory $PBS_O_WORKDIR"
+#   env
+#   exit
+# }
+
+# set solpstop=`climb_and_look_for SOLPSTOP`
+# if (-e $solpstop) then
+#   setenv SOLPSTOP "`cat $solpstop`"
+# else
+#   setenv SOLPSTOP "`echo $PWD | sed 's:/runs/.*::'`"
+# endif
+
+# cd $SOLPSTOP || {
+#   echo "Unable to switch to the SOLPSTOP directory $SOLPSTOP"
+#   env
+#   exit
+# }
+
+# source setup.csh
+echo Using SOLPSTOP = #SOLPSTOP#
+
+# popd
+cd "$PBS_O_WORKDIR"
+
+set USE_MPI=""
+if ($?SOLPS_MPI) then
+  set USE_MPI="-m mpiexec"
+endif
+
+update_solps_run_status "Started on `hostname` at `date` in directory `pwd`"
+setenv SAVEPWD #PWD#
+cd #SOLPSTOP#
+source setup.csh
+cd $SAVEPWD
+
+time b2run ${USE_MPI} b2mn < input.dat >! run.log
+
+QSUB.postprocess_coupled
+
+preserve_scratch_to_work
+
+update_solps_run_status "Finished on `hostname` at `date`"

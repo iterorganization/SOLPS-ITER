@@ -17,7 +17,16 @@ if (${HOST_NAME} == "JET") then
 endif
 # end
 
-set RUNS=$PWD
+set solpstop=`climb_and_look_for SOLPSTOP`
+if (-e $solpstop) then
+  setenv SOLPSTOP "`cat $solpstop`"
+  set RUNS=$SOLPSTOP/runs
+else
+  setenv SOLPSTOP "`echo $PWD | sed 's:/runs/.*::'`"
+  set RUNS=$PWD
+endif
+echo Using SOLPSTOP = $SOLPSTOP
+
 loop:
   if(-e $RUNS/Makefile) goto endloop
   if ("$RUNS" == "/") then
@@ -41,7 +50,7 @@ endloop:
   if ("X${1}X" == "X-mX") then
     shift
     if (! $?SOLPS_MPI) then
-      source $SOLPSTOP/scripts/mpi
+      source $SOLPSTOP/SETUP/mpi
       set MPI_SET=yes
     endif
     set TIME="$1"
@@ -50,7 +59,7 @@ endloop:
   if ("X${1}X" == "X-dX") then
     shift
     if (! $?SOLPS_DEBUG) then
-      source $SOLPSTOP/scripts/debug
+      source $SOLPSTOP/SETUP/debug
       set DEBUG_SET=yes
     endif
     if ($1 == "") then 
@@ -64,6 +73,6 @@ endloop:
   set CMD=`echo $argv" " | sed -e 's: :.prt :g'`
   make $debug TIME="$TIME" -f $RUNS/Makefile $CMD
   unsetenv STAND_ALONE
-  if ($?MPI_SET)   source $SOLPSTOP/scripts/nompi
-  if ($?DEBUG_SET) source $SOLPSTOP/scripts/nodebug
+  if ($?MPI_SET)   source $SOLPSTOP/SETUP/nompi
+  if ($?DEBUG_SET) source $SOLPSTOP/SETUP/nodebug
   

@@ -14,14 +14,14 @@ endif
 if ($1 == "") then
   if (-e input.dat) then
     echo Assuming run with Eirene
-    echo No argument is specified. Looking for QSUB.itm_coupled$compress
-    set QSUB=`climb_and_look_for QSUB.itm_coupled$compress`
-    if ($QSUB == "//QSUB.itm_coupled$compress") set QSUB=""
+    echo No argument is specified. Looking for QSUB.jet_coupled$compress
+    set QSUB=`climb_and_look_for QSUB.jet_coupled$compress`
+    if ($QSUB == "//QSUB.jet_coupled$compress") set QSUB=""
   else
     echo Assuming standalone run
-    echo No argument is specified. Looking for QSUB.itm$compress
-    set QSUB=`climb_and_look_for QSUB.itm$compress`
-    if ($QSUB == "//QSUB.itm$compress") set QSUB=""
+    echo No argument is specified. Looking for QSUB.jet$compress
+    set QSUB=`climb_and_look_for QSUB.jet$compress`
+    if ($QSUB == "//QSUB.jet$compress") set QSUB=""
   endif
 else if (-e $1) then
   echo Submission file $1 is specified as an argument.
@@ -38,12 +38,13 @@ else
   endif
 endif
 if($QSUB == "") then
-  echo No ITM submission file $1 found. Exiting.
+  echo No JET submission file $1 found. Exiting.
   exit
 endif
 echo Using submission file template $QSUB
 
 sed -e 's:#PWD#:'$PWD':g' -e 's:#SOLPSTOP#:'$SOLPSTOP':g' -e 's:#EMAIL#:'$EMAIL':g' < $QSUB > $NAME
+chmod u+x $NAME
 
 update_solps_run_status -n "Submitted at `date`"
-qsub -V -S /usr/bin/tcsh $NAME
+llsubmit $NAME

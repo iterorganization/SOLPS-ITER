@@ -46,7 +46,7 @@ endif
 
 update_solps_run_status "Started on `hostname` at `date`"
 
-time b2run ${USE_MPI} b2mn < input.dat >! run.log
+time b2run ${USE_MPI} b2mn < input.dat | gzip -9 >! run.log
 
 QSUB.postprocess_coupled
 
