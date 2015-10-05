@@ -1,6 +1,6 @@
 #
 # Specify paths to root-directories of following libraries on your system
-#  
+#
 # Special notes:
 #
 # If you do not have the NetCDF library on your system:
@@ -27,33 +27,33 @@
 # Leave LD_MDSPLUS blank
 # Remove -DMDSPLUS from SOLPS_CPP
 #
- 
+
 
        NCDIR ?= /home/fusion/libs/netcdf
    MSCL_ROOT ?= /home/fusion/libs/mscl
-       H5DIR ?= 
+       H5DIR ?=
      GR_ROOT ?= /home/fusion/libs/grsoft
     GLI_HOME ?= /home/fusion/libs/gligks
 #  NCARG_ROOT ?= /home/fusion/solps-iter/lib/ncl/4.4.1
   NCARG_ROOT ?= /home/fusion/libs/NCARG2
       NAGDIR ?= /home/fusion/libs/blaslapack
- MDSPLUS_DIR ?= 
+ MDSPLUS_DIR ?=
 
 
 #
 # Variables of linking, using pkg-config
 #
-  
+
 LD_NETCDF  = -L${NCDIR}/lib -lnetcdf
 LD_MSCL    = -L${MSCL_ROOT} -lmscl
 LD_GR      = -L${GR_ROOT} -lgr
 LD_GKS     = -L${GLI_HOME} -lgks -lgfortran
 #LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lm  -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lz -lpthread -lXrender -lbz2 -lgfortran # for NCARG v6.x.x
 LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -L/usr/lib64 -L/usr/X11R6/lib64 -lX11 -lm # for 4.4.1
-#LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lncarg_ras -L/usr/X11R6/lib64 -lm -lX11 -L/usr/lib64 -lXext -lcairo -lpangocairo-1.0 -lfreetype -lpng -lz -lpthread -lXrender -lbz2 -lgfortran # for 
+#LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lncarg_ras -L/usr/X11R6/lib64 -lm -lX11 -L/usr/lib64 -lXext -lcairo -lpangocairo-1.0 -lfreetype -lpng -lz -lpthread -lXrender -lbz2 -lgfortran # for
 LD_NAG     = -L${NAGDIR} -llapack -lrefblas
-LD_MDSPLUS = 
-LD_SONNET  = -L${SOLPSLIB} -lsonnet 
+LD_MDSPLUS =
+LD_SONNET  = -L${SOLPSLIB} -lsonnet
 
 
 
@@ -63,7 +63,7 @@ LD_SONNET  = -L${SOLPSLIB} -lsonnet
 
 SOLPS_CPP      = -DNCAR4 -DNO_NAG
 B25_DEFINES    = -DWANT_THIS
-EIRENE_DEFINES =  
+EIRENE_DEFINES =
 
 
 #

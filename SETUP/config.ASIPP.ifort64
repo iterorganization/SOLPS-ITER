@@ -2,7 +2,7 @@ $(error First use of config.ASIPP.ifort64. Provide paths to libraries first.)
 
 #
 # Specify paths to root-directories of following libraries on your system
-#  
+#
 # Special notes:
 #
 # If you do not have the NetCDF library on your system:
@@ -29,10 +29,10 @@ $(error First use of config.ASIPP.ifort64. Provide paths to libraries first.)
 # Leave LD_MDSPLUS blank
 # Remove -DMDSPLUS from SOLPS_CPP
 #
- 
+
        NCDIR ?= ${SOLPSLIB}
    MSCL_ROOT ?= ${SOLPSLIB}
-       H5DIR ?= 
+       H5DIR ?=
      GR_ROOT ?= ${SOLPSLIB}
     GLI_HOME ?= ${SOLPSLIB}
   NCARG_ROOT ?= ${SOLPSLIB}/ncar-4.4.1
@@ -44,14 +44,14 @@ $(error First use of config.ASIPP.ifort64. Provide paths to libraries first.)
 # Variables of linking, using pkg-config
 #
 
-LD_NETCDF  = -L${NCDIR} -lnetcdf 
+LD_NETCDF  = -L${NCDIR} -lnetcdf
 LD_MSCL    = -L{MSCL_ROOT} -lmscl
 LD_GR      = -L${GR_ROOT} -lgr
 LD_GKS     = -L${GLI_HOME} -lgks -lgfortran
 # LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lm  -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lz -lpthread -lXrender -lbz2 -lgfortran # for NCARG v6.x.x
 LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lm                                                                                                          # for NCARG v4.x.x
 LD_NAG     = -L${NAGDIR} -lnag
-LD_MDSPLUS = -L${MDSPLUS_DIR} -lMdsLib_client 
+LD_MDSPLUS = -L${MDSPLUS_DIR} -lMdsLib_client
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 
 
@@ -61,7 +61,7 @@ LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 
 SOLPS_CPP      = -DNCAR4 -DMDSPLUS -DNO_F01AAF -DNO_IEEE
 B25_DEFINES    = -DWANT_THIS
-EIRENE_DEFINES =  
+EIRENE_DEFINES =
 
 
 #

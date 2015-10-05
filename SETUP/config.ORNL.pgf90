@@ -1,6 +1,6 @@
 #
 # Specify paths to root-directories of following libraries on your system
-#  
+#
 # Special notes:
 #
 # If you do not have the NetCDF library on your system:
@@ -27,15 +27,15 @@
 # Leave LD_MDSPLUS blank
 # Remove -DMDSPLUS from SOLPS_CPP
 #
- 
-       NCDIR = 
+
+       NCDIR =
    MSCL_ROOT ?= /usr/local/mscl/linux_pgf90_JDL
-       H5DIR = 
+       H5DIR =
      GR_ROOT ?= /usr/local/grsource/linux_pgf90_JDL
     GLI_HOME ?= /usr/local/gligks/gks/linux_pgf90_JDL
   NCARG_ROOT = /usr/lib64/ncarg
-      NAGDIR = 
- MDSPLUS_DIR = 
+      NAGDIR =
+ MDSPLUS_DIR =
 
 
 #
@@ -48,7 +48,7 @@ LD_GR      = -L${GR_ROOT} -lgr
 LD_GKS     = -L${GLI_HOME} -lgks
 LD_NCARG   = -L${NCARG_ROOT} -lncarg -lncarg_gks -lncarg_c -lX11 -lm -lgfortran -lcairo -lgcc_s -lfreetype
 LD_NAG     = -lblas -llapack
-LD_MDSPLUS = 
+LD_MDSPLUS =
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++ -lC
 
 
