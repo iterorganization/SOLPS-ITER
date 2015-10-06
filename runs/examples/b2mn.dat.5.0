@@ -25,6 +25,7 @@
 'b2tfhi_mdf'          '0'
 'b2tfhe_vis_q'        '0.0'
 'b2tfnb_xfrhiehz'     '0.0'
+'b2mndr_na0eps'       '1.0e-30'
 'b2stbc_istyle_cur_contr_on_S_and_N'  '0'
 'b2tlh0_flux_limit_style'             '0'
 'b2trno_flux_limit_to_dpa'            '0'
