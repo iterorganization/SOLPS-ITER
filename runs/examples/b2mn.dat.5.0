@@ -32,4 +32,5 @@
 'b2trno_csig_an_style'                '0'
 'b2tfnb_fnb_nodrift_style'            '0'
 'b2tfnb_drift_style'                  '0'
-
+'b2news_no_b2sral_call'               '1'
+'b2news_re_eval_prtls_fluxes'         '0'
