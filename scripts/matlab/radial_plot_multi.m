@@ -1,0 +1,30 @@
+function iout=radial_plot_multi(y2,value,ny,npl,Gtitle,Ylabel);
+
+figure;
+axes('FontName','Times','FontSize',24);
+plot(y2(1:ny+2,npl+2),value(1:ny+2,npl+2),'-o','LineWidth',2,'Color',[1,0,0]);
+hold all;
+plot(y2(1:ny+2,npl+3),value(1:ny+2,npl+3),'-s','LineWidth',2,'Color',[0,0,1]);
+hold all;
+plot(y2(1:ny+2,npl+4),value(1:ny+2,npl+4),'-*','LineWidth',2,'Color',[0.45,0.1,0.05]);
+hold all;
+plot(y2(1:ny+2,npl+5),value(1:ny+2,npl+5),'-h','LineWidth',2,'Color',[0.75,0.2,0.15]);
+hold all;
+plot(y2(1:ny+2,npl+6),value(1:ny+2,npl+6),'-^','LineWidth',2,'Color',[0,0,0]);
+hold all;
+plot(y2(1:ny+2,npl+7),value(1:ny+2,npl+7),'->','LineWidth',2,'Color',[0.15,0.05,0.5]);
+hold all;
+plot(y2(1:ny+2,npl+8),value(1:ny+2,npl+8),'-<','LineWidth',2,'Color',[0.25,0.5,0.25]);
+hold all;
+plot(y2(1:ny+2,npl+9),value(1:ny+2,npl+9),'-v','LineWidth',2,'Color',[1,0.6,0]);
+hold all;
+plot(y2(1:ny+2,npl+10),value(1:ny+2,npl+10),'-+','LineWidth',2,'Color',[1,0.05,0.75]);
+hold all;
+
+xlabel('Distance from separatrix, m','FontName','Times','FontSize',30);
+ylabel(Ylabel,'FontName','Times','FontSize',30);
+title(Gtitle,'FontName','Times','FontSize',30);
+legend('ix','ix+1','ix+2','ix+3','ix+4','ix+5','ix+6','ix+7','ix+8','Location','NorthEastOutside');
+grid on;
+grid minor;
+iout=0;
