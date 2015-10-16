@@ -129,10 +129,13 @@ c*** Take the data from the boundary default
 	    esebnds(izn,iknd)=esebndx(0,iknd)
 	    leebnds(izn,iknd)=leebndx(0,iknd)
 	    leibnds(izn,iknd)=leibndx(0,iknd)
+            lpobnds(izn,iknd)=lpobndx(0,iknd)
 	    beebnds(izn,1,iknd)=beebndx(0,1,iknd)
 	    beibnds(izn,1,iknd)=beibndx(0,1,iknd)
+            bpobnds(izn,1,iknd)=bpobndx(0,1,iknd)
 	    beebnds(izn,2,iknd)=beebndx(0,2,iknd)
 	    beibnds(izn,2,iknd)=beibndx(0,2,iknd)
+            bpobnds(izn,2,iknd)=bpobndx(0,2,iknd)
 	    do isp=1,nspcpls !{
       	      l=spcsrnp(isp)
 	      ex=.true.

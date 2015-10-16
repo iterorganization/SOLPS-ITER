@@ -61,7 +61,7 @@ LD_MPI     = -L${MPDIR}/lib -lmpi
 #
 
 SOLPS_CPP      = -DNCAR4 -DMDSPLUS
-B25_DEFINES    = -DWANT_THIS
+B25_DEFINES    =
 EIRENE_DEFINES =
 MPI_CPP        = -I${MPDIR}/include
 

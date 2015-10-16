@@ -65,9 +65,13 @@ c*** Boundary
       do i=2,9 !{
       	nmdpr(i,2)=nbc
       end do !}
+      do i=23,24 !{
+        nmdpr(i,2)=nbc
+      end do !}
       do i=8,9 !{
       	nmdlr(i,2)=2
       end do !}
+      nmdlr(24,2)=2
       do i=10,13 !{
       	nmdlr(i,2)=nbc
       	nmdpr(i,2)=nspcpls+nspcncl
@@ -80,6 +84,7 @@ c*** Boundary
       lrrvr(9,2)=.true.
       lrrvr(11,2)=.true.
       lrrvr(13,2)=.true.
+      lrrvr(24,2)=.true.
 
       if(glb2read) then !{
         if(nznbndt(1).eq.1) then !{
@@ -114,6 +119,10 @@ c*** bcchar, bcpos, bcstart, bcend, bcene, bceni, enepar, enipar
 	  rniprm(k,1,1,9,2)=beibnds(i,1,j)
 	  rniprm(k,2,1,8,2)=beebnds(i,2,j)
 	  rniprm(k,2,1,9,2)=beibnds(i,2,j)
+c*** bcpot, potpar
+          iniprm(k,1,1,23,2)=lpobnds(i,j)
+          rniprm(k,1,1,24,2)=bpobnds(i,1,j)
+          rniprm(k,2,1,24,2)=bpobnds(i,2,j)
 c*** bccon, conpar, bcmom, mompar
 	  do l=1,nspcpls+nspcncl !{
 	    iniprm(l,k,1,10,2)=lcobnds(ifl(l),i,j)
@@ -155,13 +164,20 @@ c*** niiso, tiiso, teiso
 
 c*** Redundancy check      
 
-c*** enepar, enipar
+c*** enepar, enipar, potpar
       lprdckw(2,1,8,2)=.false.
       lprdckw(2,1,9,2)=.false.
+      lprdckw(2,1,24,2)=.false.
       do k=1,nbc !{
         if(iniprm(k,1,1,6,2).eq.4) lprdckw(2,1,8,2)=.true.
         if(iniprm(k,1,1,7,2).eq.3) lprdckw(2,1,9,2)=.true.
         if(iniprm(k,1,1,7,2).eq.4) lprdckw(2,1,9,2)=.true.
+        if((iniprm(k,1,1,6,2).eq.3 .or. iniprm(k,1,1,6,2).eq.15) .and. 
+     .     rniprm(k,2,1,24,2).ne.0) lprdckw(2,1,24,2)=.true.
+        if((iniprm(k,1,1,23,2).eq.3 .or. iniprm(k,1,1,23,2).eq.11) .and.
+     .     rniprm(k,2,1,24,2).ne.0) lprdckw(2,1,24,2)=.true.
+        if(iniprm(k,1,1,23,2).eq.4) lprdckw(2,1,24,2)=.true.
+        if(iniprm(k,1,1,23,2).eq.21) lprdckw(2,1,24,2)=.true.
 c*** conpar, mompar
         lprdckw(k,1,11,2)=.false.
         lprdckw(k,1,13,2)=iniprm(k,1,1,6,2).eq.3 .or.

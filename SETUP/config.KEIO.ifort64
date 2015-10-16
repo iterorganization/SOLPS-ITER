@@ -59,7 +59,7 @@ LD_MPI     = -L${MPDIR}/lib -lmpi
 #
 
 SOLPS_CPP      = -DNO_NAG #-DCDF_MOVIE -DNO_NAG -DNCAR4
-B25_DEFINES    = -DWANT_THIS
+B25_DEFINES    =
 EIRENE_DEFINES =
 MPI_CPP        = -I${MPDIR}/include
 

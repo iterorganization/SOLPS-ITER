@@ -59,7 +59,7 @@ LD_MPI     = `pkg-config mpich --libs`
 #
 
 SOLPS_CPP      = -DNCAR4 -DMDSPLUS -DNO_F01AAF -DNO_CDF # -DCDF_MOVIE
-B25_DEFINES    = -DWANT_THIS
+B25_DEFINES    =
 EIRENE_DEFINES =
 MPI_CPP        = `pkg-config mpich --cflags`
 

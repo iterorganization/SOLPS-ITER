@@ -218,10 +218,11 @@ c***  	     parameters for boundary conditions for Te, Ti, n, and v
      ,	      ls1bnds(nbndzon,nbndknd), ls2bnds(nbndzon,nbndknd),
      ,	      leebnds(nbndzon,nbndknd), lcobnds(nsdb2,nbndzon,nbndknd), 
      ,	      leibnds(nbndzon,nbndknd), lmobnds(nsdb2,nbndzon,nbndknd),
-     ,	      lscbnds(natm,nbndzon,nbndknd)
+     ,	      lpobnds(nbndzon,nbndknd), lscbnds(natm,nbndzon,nbndknd)
       real*4  
      ,	beebnds(nbndzon,2,nbndknd),bcobnds(nsdb2,nbndzon,2,nbndknd),
-     ,  beibnds(nbndzon,2,nbndknd),bmobnds(nsdb2,nbndzon,2,nbndknd)
+     ,  beibnds(nbndzon,2,nbndknd),bmobnds(nsdb2,nbndzon,2,nbndknd),
+     ,  bpobnds(nbndzon,2,nbndknd)
       character cskbnds(nbndzon,nbndknd), ctxbnds(nbndknd)*10
 
 c*** DG data: number and list of divides, numbers and lists of
@@ -258,10 +259,12 @@ c***  	      	      	Below, index "0" corresponds to a group default
       logical dfrbndx(nbndknd)
       integer 
      ,	leebndx(0:nbndzon,nbndknd), lcobndx(nsdb2,0:nbndzon,nbndknd), 
-     ,	leibndx(0:nbndzon,nbndknd), lmobndx(nsdb2,0:nbndzon,nbndknd)
+     ,	leibndx(0:nbndzon,nbndknd), lmobndx(nsdb2,0:nbndzon,nbndknd),
+     ,  lpobndx(0:nbndzon,nbndknd)
       real*4  
      ,	beebndx(0:nbndzon,2,nbndknd),bcobndx(nsdb2,0:nbndzon,2,nbndknd),
-     ,  beibndx(0:nbndzon,2,nbndknd),bmobndx(nsdb2,0:nbndzon,2,nbndknd)
+     ,  beibndx(0:nbndzon,2,nbndknd),bmobndx(nsdb2,0:nbndzon,2,nbndknd),
+     ,  bpobndx(0:nbndzon,2,nbndknd)
 c*** Default boundary conditions for generic species. Index order:
 c*** species, [parameter], boundary kind, ion(2-the highest, 1-the rest)
       integer kcobndx(nspdgen,nbndknd,2),   kmobndx(nspdgen,nbndknd,2)
@@ -510,9 +513,10 @@ c=======================================================================
       common/uinpcom/niiso,tiiso,teiso,spcscrp,spcscrf,
      ,	spcidsp,spcidsa,spcidsm,spcidsi,spcicrp,spcicrf,
      ,	etfbnds,etbbnds,easbnds,eewbnds,efpbnds,efcbnds,
-     ,	esibnds,esebnds,beebnds,bcobnds,beibnds,bmobnds,
+     ,	esibnds,esebnds,beebnds,bcobnds,beibnds,bmobnds,bpobnds,
      ,  etfbndx,etbbndx,easbndx,eewbndx,efpbndx,efcbndx,esibndx,esebndx,
-     ,	wlmbnds,beebndx,bcobndx,beibndx,bmobndx,dcobndx, dmobndx,
+     ,	wlmbnds,beebndx,bcobndx,beibndx,bmobndx,bpobndx,
+     ,  dcobndx, dmobndx,
      ,  pwrcrtte,pwrcrtti,pwrcrfri,
      ,	rctndlte,rctntmin,rctntmax,rctnenr1,rctnenr2,rctnexcf,
      ,	rctddlte,rctdtmin,rctdtmax,rctdenr1,rctdenr2,
@@ -541,11 +545,11 @@ c     ,  spcifup,spcifua,spcifum,spcifui,
      ,	jcgbnds,jpsbnds,jppbnds,jnpbnds,jmpbnds,jnibnds,jnebnds,
      ,  nwllmrk,nedgmrk,ntrgmrk,ledgmrk,ltrgmrk,lwllmrk,ledgdfl,
      ,	lcpbnds,lc1bnds,lc2bnds,lrrbnds,ls1bnds,ls2bnds,leebnds,lcobnds,
-     ,	leibnds,lmobnds,lscbnds,
+     ,	leibnds,lmobnds,lscbnds,lpobnds,
      ,	mdvbndx,ldvbndx,mznbndx,lznbndx,mmkbndx,lmkbndx,
      ,	jskbndx,jclbndx,jrfbndx,jcsbndx,jcgbndx,jpsbndx,jppbndx,nlrbndx,
      ,	jnpbndx,jmpbndx,jnibndx,jnebndx,
-     ,	leebndx,lcobndx,leibndx,lmobndx,kcobndx,kmobndx,
+     ,	leebndx,lcobndx,leibndx,lmobndx,lpobndx,kcobndx,kmobndx,
      ,	nrgbndt,nznbndt,lcmbndt,lrfbndt,lrrbndt,lrpbndt,lrsbndt,lzrbndt,
      ,	lzpbndt,
      ,	nnrctn,rctngrp,rctnmsp,rctnmst,rctnnmo1,rctnnmo2,rctnimn,
