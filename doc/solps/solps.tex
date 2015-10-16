@@ -11685,8 +11685,7 @@ commands take one value off the ``string'' stack.
 
 In table \ref{tab:wallquantities}, we give the list of quantities that
 are available for use on the ``wall'' stack, containing values defined at the boundary surface
-at the edge of the computational domain. Some deviations from strict adherence to MKS units 
-are noted in \textcolor{Red}{red} in the table.
+at the edge of the computational domain.
 
 \begin{center}\index{b2plot, wall quantities}
   \begin{longtable}{|l|l|}
@@ -11703,25 +11702,29 @@ are noted in \textcolor{Red}{red} in the table.
     backscae \index{b2plot, backscae}  & Backscattering energy fraction \\
     backscat \index{b2plot, backscat}  & Backscattering fraction \\
     bbdyemis \index{b2plot, bbdyemis}  & Blackbody emissivity \\
-    c\_cp\_b1 \index{b2plot, c\_cp\_b1}  & Coating heat capacity $b_1$ factor $(J.\textcolor{Red}{g}^{-1}.K^{-1})$ \\
-    c\_cp\_b2 \index{b2plot, c\_cp\_b2}  & Coating heat capacity $b_2$ factor $(J.\textcolor{Red}{g}^{-1}.K^{-2})$ \\
-    c\_cp\_b3 \index{b2plot, c\_cp\_b3}  & Coating heat capacity $b_3$ factor $(J.\textcolor{Red}{g}^{-1}.K)$ \\
+    c\_cp\_b1 \index{b2plot, c\_cp\_b1}  & Coating heat capacity $b_1$ factor $(J.kg^{-1}.K^{-1})$ \\
+    c\_cp\_b2 \index{b2plot, c\_cp\_b2}  & Coating heat capacity $b_2$ factor $(J.kg^{-1}.K^{-2})$ \\
+    c\_cp\_b3 \index{b2plot, c\_cp\_b3}  & Coating heat capacity $b_3$ factor (either $(J.kg^{-1}.K)$ [old format] or $(J.kg^{-1}.K^{-3})$ [new format]) \\
+    c\_cp\_b4 \index{b2plot, c\_cp\_b4}  & Coating heat capacity $b_4$ factor $(J.kg^{-1}.K^{-4})$ \\
     ckappa\_a \index{b2plot, ckappa\_a}  & Coating factor $a$ in $\kappa=1/(aT+b)$ $(m.W^{-1})$ \\
     ckappaa1 \index{b2plot, ckappaa1} & Coating factor $a_1$ in $\kappa$ polynomial fit $(W.m^{-1}.K^{-1})$ \\
     ckappaa2 \index{b2plot, ckappaa2} & Coating factor $a_2$ in $\kappa$ polynomial fit $(W.m^{-1}.K^{-2})$ \\
     ckappaa3 \index{b2plot, ckappaa3} & Coating factor $a_3$ in $\kappa$ polynomial fit $(W.m^{-1}.K^{-3})$ \\
     ckappaa4 \index{b2plot, ckappaa4} & Coating factor $a_4$ in $\kappa$ polynomial fit $(W.m^{-1}.K^{-4})$ \\
+    ckappaa5 \index{b2plot, ckappaa5} & Coating factor $a_5$ in $\kappa$ polynomial fit $(W.m^{-1}.K^{-5})$ \\
     ckappa\_b \index{b2plot, ckappa\_b}  & Coating factor $b$ in $\kappa=1/(aT+b)$ $(m.K.W^{-1})$ \\
     ckapppa1 \index{b2plot, ckapppa1}  & Coating factor $a_1$ in $\kappa_\perp$ polynomial fit $(W.m^{-1}.K^{-1})$ \\
     ckapppa2 \index{b2plot, ckapppa2}  & Coating factor $a_2$ in $\kappa_\perp$ polynomial fit $(W.m^{-1}.K^{-2})$ \\
     ckapppa3 \index{b2plot, ckapppa3}  & Coating factor $a_3$ in $\kappa_\perp$ polynomial fit $(W.m^{-1}.K^{-3})$ \\
     ckapppa4 \index{b2plot, ckapppa4}  & Coating factor $a_4$ in $\kappa_\perp$ polynomial fit $(W.m^{-1}.K^{-4})$ \\
+    ckapppa5 \index{b2plot, ckapppa5}  & Coating factor $a_5$ in $\kappa_\perp$ polynomial fit $(W.m^{-1}.K^{-5})$ \\
     coathick \index{b2plot, coathick}  & Wall element coating thickness $(m)$ \\
     cooltemp \index{b2plot, cooltemp}  & Coolant temperature on back side of wall element $(K)$ \\
-    cp\_b1 \index{b2plot, cp\_b1}    & Heat capacity $b_1$ factor $(J.\textcolor{Red}{g}^{-1}.K^{-1})$ \\
-    cp\_b2 \index{b2plot, cp\_b2}    & Heat capacity $b_2$ factor $(J.\textcolor{Red}{g}^{-1}.K^{-2})$ \\
-    cp\_b3 \index{b2plot, cp\_b3}    & Heat capacity $b_3$ factor $(J.\textcolor{Red}{g}^{-1}.K)$ \\
-    ctgdns \index{b2plot, ctgdns}    & Wall element coating material density $(kg.m^{-3})$ \\ 
+    cp\_b1 \index{b2plot, cp\_b1}    & Heat capacity $b_1$ factor $(J.kg^{-1}.K^{-1})$ \\
+    cp\_b2 \index{b2plot, cp\_b2}    & Heat capacity $b_2$ factor $(J.kg^{-1}.K^{-2})$ \\
+    cp\_b3 \index{b2plot, cp\_b3}    & Heat capacity $b_3$ factor (either $(J.kg^{-1}.K)$ [old format] or $(J.kg^{-1}.K^{-3})$ [new format]) \\
+    cp\_b4 \index{b2plot, cp\_b4}    & Heat capacity $b_4$ factor $(J.kg^{-1}.K^{-4})$ \\
+    ctgdns \index{b2plot, ctgdns}    & Wall element coating material density $(kg.m^{-3})$ \\
     depo\_ml \index{b2plot, depo\_ml}  & Monolayer deposition $(monolayers)$ \\
     deposit \index{b2plot, deposit} & Gross deposition $(particles)$ \\
     east \index{b2plot, east}       & Wall elements corresponding to the East boundary \\
@@ -11751,11 +11754,13 @@ are noted in \textcolor{Red}{red} in the table.
     kappa\_a2 \index{b2plot, kappa\_a2} & Factor $a_2$ in $\kappa$ polynomial fit $(W.m^{-1}.K^{-2})$ \\
     kappa\_a3 \index{b2plot, kappa\_a3} & Factor $a_3$ in $\kappa$ polynomial fit $(W.m^{-1}.K^{-3})$ \\
     kappa\_a4 \index{b2plot, kappa\_a4} & Factor $a_4$ in $\kappa$ polynomial fit $(W.m^{-1}.K^{-4})$ \\
+    kappa\_a5 \index{b2plot, kappa\_a5} & Factor $a_5$ in $\kappa$ polynomial fit $(W.m^{-1}.K^{-5})$ \\
     kappa\_b \index{b2plot, kappa\_b}  & Factor $b$ in $\kappa=1/(aT+b)$ $(m.K.W^{-1})$ \\
     kappapa1 \index{b2plot, kappapa1}  & Factor $a_1$ in $\kappa_\perp$ polynomial fit $(W.m^{-1}.K^{-1})$ \\
     kappapa2 \index{b2plot, kappapa2}  & Factor $a_2$ in $\kappa_\perp$ polynomial fit $(W.m^{-1}.K^{-2})$ \\
     kappapa3 \index{b2plot, kappapa3}  & Factor $a_3$ in $\kappa_\perp$ polynomial fit $(W.m^{-1}.K^{-3})$ \\
     kappapa4 \index{b2plot, kappapa4}  & Factor $a_4$ in $\kappa_\perp$ polynomial fit $(W.m^{-1}.K^{-4})$ \\
+    kappapa5 \index{b2plot, kappapa5}  & Factor $a_5$ in $\kappa_\perp$ polynomial fit $(W.m^{-1}.K^{-5})$ \\
     lcp \index{b2plot, lcp}  & Layer heat capacity $(J.kg^{-1}.K^{-1})$ \\
     ldepth \index{b2plot, ldepth}   & Layer depth $(m)$ \\
     lemis \index{b2plot, lemis}     & Layer blackbody emissivity \\
