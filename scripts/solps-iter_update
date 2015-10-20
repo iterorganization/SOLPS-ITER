@@ -18,7 +18,9 @@ git pull
 cd $SOLPSTOP
 rehash
 gmake listobj
-gmake depend
+set_debug
+gmake listobj
+unset_debug
+gmake depend depend_debug
 gmake solps
-
 
