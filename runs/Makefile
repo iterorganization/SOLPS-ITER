@@ -54,7 +54,7 @@ target_yn = b2yn.prt b2yn.plt
 target_yp = b2yp.prt b2yp.plt b2specp
 target_yq = b2yq.prt b2yq.plt
 target_yr = b2yr.prt b2yr.plt
-target_yt = b2yt.prt b2fstatt b2mn.dat.2 b2ah.dat.2 b2ai.dat.2
+target_yt = b2yt.prt b2fstatt b2mn.dat.2 b2ah.dat.2 b2ai.dat.2 b2yt.files
 target_xd = B2SXDR
 target_rd = b2rd.prt
 

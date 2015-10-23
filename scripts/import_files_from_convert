@@ -1,0 +1,40 @@
+#! /bin/ksh
+
+[ -e ../convert/b2yt.files ] && {
+  echo "First copying the files modified by b2yt"
+  files="`cat ../convert/b2yt.files | sed -e 's:../::' | awk.transpose`"
+  for fn in $files
+  do
+    origin=$fn
+    destination=`echo $origin | sed -e 's:b2fstatt:b2fstati:' -e 's:\.2$::'`
+    cp -iv ../convert/$origin $destination
+  done
+  echo "Now copying unmodified files"
+  [ -e ../convert/b2fgmtry.old ] && {
+    [ -!e ../convert/b2ag.dat.2 ] && cp -uv ../convert/b2ag.dat .
+    [ -e ../convert/b2fgmtry ] && cp -uv ../convert/b2fgmtry .
+    [ -e ../convert/fort.30 ] && cp -uv ../convert/fort.30 .
+  }
+  [ -e ../baserun/b2fgmtry ] || { 
+     [ -e ../convert/b2ag.dat.2 ] || { 
+       [ -e ../convert/b2fgmtry ] && cp -uv ../convert/b2fgmtry . 
+       [ -e ../convert/fort.30 ] && cp -uv ../convert/fort.30 .
+     } 
+  }
+  [ -e ../baserun/b2fpardf ] || { 
+    [ -e ../convert/b2ah.dat.2 ] || { 
+      [ -e ../convert/b2fpardf ] && cp -uv ../convert/b2fpardf . 
+    }
+  }
+  [ -e ../baserun/b2frates ] || { 
+    [ -e ../convert/b2ar.dat.2 ] || { 
+      [ -e ../convert/b2frates ] && cp -uv ../convert/b2frates . 
+    }
+  }
+  [ -e ../convert/b2.*.parameters ] && cp -uv ../convert/b2.*.parameters .
+  [ -e ../convert/b2.transport.inputfile ] && cp -uv ../convert/b2.transport.inputfile .
+  [ -e ../convert/b2.sources.profile ] && cp -uv ../convert/b2.sources.profile .
+  touch b2fstati
+} || {
+  echo 'Did not find b2yt.files list. Exiting ...'
+}

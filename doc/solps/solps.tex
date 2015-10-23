@@ -480,6 +480,9 @@ SOLPSTOP
 |   +---SOLPS_2002_Course
 |   +---solps
 +---scripts
+|   +---commands
+|   +---matlab
+|   +---palettes
 +---modules
 |   +---Sonnet-light
 |   +---fxdr
@@ -639,6 +642,11 @@ This directory is now located in \verb!modules/B2.5/Database!.
 \index{commands}
 
 Contains various \btwoplot commands.
+
+\subsection{scripts/matlab}
+\index{Matlab}
+
+Contains various \verb!Matlab! routines provided by users for data analysis and post-processing.
 
 \subsection{scripts/palettes}
 \index{palettes}
@@ -1079,7 +1087,7 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[correct\_baserun\_timestamps]\index{correct\_baserun\_timestamps}
     Makes sure the timestamps for the start-up files in the \verb!baserun!
     directory are in the right chronological order.
-  \item[correct\_b2yt\_timestamps]\index{correct\_b2yt\_timestamps}
+  \item[correct\_b2yt\_timestamps]\index{correct\_b2yt\_timestamps}\index{b2yt}
     Makes sure the timestamps for the start-up files in the current
     directory are in the right chronological order for the \verb!b2yt! converter.
   \item[count]\index{count}
@@ -1094,6 +1102,7 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[get\_git\_email]\index{get\_git\_email} Finds the user's email address from the \verb!.gitconfig! file.
   \item[gtdr]\index{gtdr} Script to make a directory tree local. [obsolete]
   \item[gtfl]\index{gtfl} [ANK] Replaces the specified links by the files they are linked to. [obsolete]
+  \item[import\_files\_from\_convert]\index{import\_files\_from\_convert}\index{b2yt} Imports and renames the files produced by \verb!b2yt! in a \verb!convert! directory at the same level as the current directory to prepare the new converted case for a run
   \item[input.dat\_to\_mesh.extra]\index{input.dat\_to\_mesh.extra}\index{input.dat}\index{mesh.extra} Converts standard input (usually directed from a \verb!input.dat! file) into a \verb!mesh.extra! file.
   \item[itersubmit]\index{itersubmit} Command file to launch runs on the ITER HPC cluster. See Section \ref{b2run} for details.
   \item[itmsubmit]\index{itmsubmit} Command file to launch runs on the ITM Gateway machine. See Section \ref{b2run} for details.
@@ -3281,7 +3290,7 @@ which will launch a dry-run of the Makefile invoking \verb!b2yt!. Then, make sur
 that this dry-run only attempts to run \verb!b2yt! and no other programs. If it
 does call, say \verb!b2ag! and/or \verb!b2mn!, then the age hierarchy above was
 not respected. In that case, you can run the script
-\begin{verbatim}
+\begin{verbatim}\index{correct\_b2yt\_timestamps}
 correct_b2yt_timestamps
 \end{verbatim}
 to get the correct ordering of files. Do check again afterwards with the dry-run
@@ -3311,6 +3320,13 @@ is to use the setting from the highest charge state within the bundle. If specie
 being removed, strata, tallies or diagnostics involving these species may either be
 removed from the input file or revert to their default settings. The user is encouraged
 to check that those choices are appropriate and modify them as needed.
+
+Once the user has finished converting a case, a script exists, named
+\verb!import_files_from_convert!\index{import\_files\_from\_convert}, 
+that will take the converted files from \verb!b2yt! and
+place them, after proper renaming, in the current run directory, 
+provided the \verb!convert! directory where \verb!b2yt!
+was run is located at the same level.
 
 At this time, not all cases involving reshuffling of bundles have been tested, and the
 user is encouraged to check the \verb!b2yt! output files visually after execution to
