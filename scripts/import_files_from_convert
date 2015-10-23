@@ -15,20 +15,20 @@
     [ -e ../convert/b2fgmtry ] && cp -uv ../convert/b2fgmtry .
     [ -e ../convert/fort.30 ] && cp -uv ../convert/fort.30 .
   }
-  [ -e ../baserun/b2fgmtry ] || { 
-     [ -e ../convert/b2ag.dat.2 ] || { 
-       [ -e ../convert/b2fgmtry ] && cp -uv ../convert/b2fgmtry . 
+  [ -e ../baserun/b2fgmtry ] || {
+     [ -e ../convert/b2ag.dat.2 ] || {
+       [ -e ../convert/b2fgmtry ] && cp -uv ../convert/b2fgmtry .
        [ -e ../convert/fort.30 ] && cp -uv ../convert/fort.30 .
-     } 
+     }
   }
-  [ -e ../baserun/b2fpardf ] || { 
-    [ -e ../convert/b2ah.dat.2 ] || { 
-      [ -e ../convert/b2fpardf ] && cp -uv ../convert/b2fpardf . 
+  [ -e ../baserun/b2fpardf ] || {
+    [ -e ../convert/b2ah.dat.2 ] || {
+      [ -e ../convert/b2fpardf ] && cp -uv ../convert/b2fpardf .
     }
   }
-  [ -e ../baserun/b2frates ] || { 
-    [ -e ../convert/b2ar.dat.2 ] || { 
-      [ -e ../convert/b2frates ] && cp -uv ../convert/b2frates . 
+  [ -e ../baserun/b2frates ] || {
+    [ -e ../convert/b2ar.dat.2 ] || {
+      [ -e ../convert/b2frates ] && cp -uv ../convert/b2frates .
     }
   }
   [ -e ../convert/b2.*.parameters ] && cp -uv ../convert/b2.*.parameters .
