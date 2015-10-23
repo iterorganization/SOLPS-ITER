@@ -11,21 +11,21 @@ ifeq ($(strip $(CPP)),)
 else
 ifeq ($(strip $(SED)),)
 	case $< in \
-		${S45DIR}/src/solps4_*/* ) ${CPP} ${DEFINES} ${EQUIV4} -P ${INCLUDE} $< ${OBJDIR}/$*.f ;; \
-		${S45DIR}/local_4/* ) ${CPP} ${DEFINES} ${EQUIV4} -P ${INCLUDE} $< ${OBJDIR}/$*.f ;; \
-                * ) ${CPP} ${DEFINES} ${EQUIV5} -P ${INCLUDE} $< ${OBJDIR}/$*.f ;; \
+		${S45DIR}/src/solps4_*/* ) ${CPP} ${CPP4OPTS} ${DEFINES} ${INCLUDE} $< ${OBJDIR}/$*.f ;; \
+		${S45DIR}/local_4/* ) ${CPP} ${CPP4OPTS} ${DEFINES} ${INCLUDE} $< ${OBJDIR}/$*.f ;; \
+                * ) ${CPP} ${CPP5OPTS} ${DEFINES} ${INCLUDE} $< ${OBJDIR}/$*.f ;; \
         esac
 else
 	case $< in \
-		${S45DIR}/src/solps4_*/* ) ${CPP} ${DEFINES} ${EQUIV4} -P ${INCLUDE} $< | ${SED} > ${OBJDIR}/$*.f ;; \
-		${S45DIR}/local_4/* ) ${CPP} ${DEFINES} ${EQUIV4} -P ${INCLUDE} $< | ${SED} > ${OBJDIR}/$*.f ;; \
-                * ) ${CPP} ${DEFINES} ${EQUIV5} -P ${INCLUDE} $< | ${SED} > ${OBJDIR}/$*.f ;; \
+		${S45DIR}/src/solps4_*/* ) ${CPP} ${CPP4OPTS} ${DEFINES} ${INCLUDE} $< | ${SED} > ${OBJDIR}/$*.f ;; \
+		${S45DIR}/local_4/* ) ${CPP} ${CPP4OPTS} ${DEFINES} ${INCLUDE} $< | ${SED} > ${OBJDIR}/$*.f ;; \
+                * ) ${CPP} ${CPP5OPTS} ${DEFINES} ${INCLUDE} $< | ${SED} > ${OBJDIR}/$*.f ;; \
         esac
 endif
-	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${INCLUDE} -c ${INCMOD}${OBJDIR} ${OBJDEST} ${OBJDIR}/$*.f
+	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -c ${OBJDIR}/$*.f
 endif
-	@if [ -f $*.o ] ; then /bin/mv $*.o ${OBJDIR}/ ; fi
-	@if [ -f $*.${MOD} ] ; then /bin/mv $*.${MOD} ${OBJDIR}/ ; fi
+	@- if [ -f $*.o ] ; then /bin/mv $*.o ${OBJDIR}/ ; fi
+	@- if [ -f $*.${MOD} ] ; then /bin/mv $*.${MOD} ${OBJDIR}/ ; fi
 
 ${OBJDIR}/%.${MOD} : %.F        # src/B2.5_modules/
 	@- /bin/rm -f ${OBJDIR}/$*.f ${OBJDIR}/$*.o ${OBJDIR}/$*.${MOD}
@@ -33,15 +33,15 @@ ifeq ($(strip $(CPP)),)
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV5} ${INCLUDE} -c $<
 else
 ifeq ($(strip $(SED)),)
-	-${CPP} ${DEFINES} ${EQUIV5} -P ${INCLUDE} $< ${OBJDIR}/$*.f
+	-${CPP} ${CPP5OPTS} ${DEFINES} ${INCLUDE} $< ${OBJDIR}/$*.f
 else
-	-${CPP} ${DEFINES} ${EQUIV5} -P ${INCLUDE} $< | ${SED} > ${OBJDIR}/$*.f
+	-${CPP} ${CPP5OPTS} ${DEFINES} ${INCLUDE} $< | ${SED} > ${OBJDIR}/$*.f
 endif
-	${DBLFC} ${DDBLOPTION} ${FCOPTS} -c ${INCMOD}${OBJDIR} ${OBJDEST} ${OBJDIR}/$*.f
+	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${INCMOD}${OBJDIR} ${OBJDEST} -c ${OBJDIR}/$*.f
 endif
-	@if [ -f $*.o ] ; then /bin/mv $*.o ${OBJDIR}/ ; fi
+	@- if [ -f $*.o ] ; then /bin/mv $*.o ${OBJDIR}/ ; fi
 ifeq ($(strip $(LINK_MOD)),)
-	@if [ -f $*.${MOD} ] ; then /bin/mv $*.${MOD} ${OBJDIR}/ ; fi
+	@- if [ -f $*.${MOD} ] ; then /bin/mv $*.${MOD} ${OBJDIR}/ ; fi
 else
-	@[ -f $*.${MOD} ] && [ ! -L $*.${MOD} ] && /bin/mv $*.${MOD} ${OBJDIR}/ && /bin/ln -s ${OBJDIR}/$*.${MOD} .
+	@- [ -f $*.${MOD} ] && [ ! -L $*.${MOD} ] && /bin/mv $*.${MOD} ${OBJDIR}/ && /bin/ln -s ${OBJDIR}/$*.${MOD} .
 endif
