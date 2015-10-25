@@ -202,5 +202,13 @@ endif
 
 if ($HOST_NAME == "ITER") then
   source scripts/imasdb_solps-iter
+  module list
 endif
 
+# List loaded modules
+
+if (-e module) then
+  module list
+endif
+
+  

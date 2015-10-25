@@ -1,10 +1,6 @@
 #! /bin/bash
 
 # IMAS Database setting
-# Moved here to avoid breaking the rest of the setup script until
-# issue IMAS-135 is resolved
-module load imas
-module list
 echo "Setting an IMAS solps-iter directory"
 imasdb solps-iter
 

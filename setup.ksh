@@ -244,3 +244,4 @@ export SOLPS_LIB=${SOLPSTOP}/lib/${OBJECTCODE}
 
 export PLOT_SET_PATH=":..:../..:$SOLPSTOP/data.local/plot_set:$SOLPSTOP/data/plot_set"
 
+[ -x module ] && module list
