@@ -95,7 +95,7 @@ fi
     esac
   }
 }
-    
+  
 [ -z "$GRAPHCAP" ] && export GRAPHCAP=X11
 
 case $OBJECTCODE in
@@ -136,7 +136,7 @@ export SonnetTopDirectory=${SOLPSTOP}/src/Sonnet
 export EscapeSonnet=`echo ${SonnetTopDirectory} | sed 's:\/:\\\/:g'`
 
 export DG=${SOLPSTOP}/src/DivGeo
-export CARRE_STOREDIR=${SOLPSTOP}/src/Carre/SAVE 
+export CARRE_STOREDIR=${SOLPSTOP}/src/Carre/SAVE
 
 alias sb2='cd ${SOLPSTOP}/src/b2'
 alias sbb='cd ${SOLPSTOP}/src/b2'
@@ -234,7 +234,7 @@ export SOLPS_LIB=${SOLPSTOP}/lib/${OBJECTCODE}
   export WSTYPE OBJECTCODE
   [ -n $XLFRTEOPTS ] && export XLFRTEOPTS
   echo "$OBJECTCODE"
-} 
+}
 
 [ -z "$PYTHONPATH" ] && {
   export PYTHONPATH="$SOLPSTOP/lib/python"
