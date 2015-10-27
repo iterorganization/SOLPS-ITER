@@ -176,7 +176,7 @@ The \SOLPSITER Git repository also includes the repositories for \verb!B2.5!, \v
 
 One can generally browse the ITER Git repositories here: \href{https://git.iter.org}{https://git.iter.org} and \SOLPSITER specifically here: \href{https://git.iter.org/projects/BND/repos/solps-iter/browse}{https://git.iter.org/projects/BND/repos/solps-iter/browse}, but since these repositories are restricted users will first need to authenticate with their ITER (IDM) username and password - possibly twice, once for the intranet, and once for the Git web front end in the top right-hand corner in the web browser window.
 
-To do this, one must upload a copy of their public ssh key here: \href{https://git.iter.org/plugins/servlet/ssh/account/keys}{https://git.iter.org/plugins/servlet/ssh/account/keys} (by following links under ``Manage Account''). Then one should be able to simply clone a copy of \SOLPSITER to a local machine by doing:
+To do this, one must upload a copy of their public ssh key here: \href{https://git.iter.org/plugins/servlet/ssh/account/keys}{https://git.iter.org/plugins/servlet/ssh/account/keys} (by following links under "Manage Account"). Then one should be able to simply clone a copy of \SOLPSITER to a local machine by doing:
 
 \begin{verbatim}
 > git clone ssh://git@git.iter.org/bnd/solps-iter.git
@@ -192,7 +192,7 @@ Since the user-id is immutably encoded into any changes, it is always a good ide
 > git config --global user.email your.name@anywhere.you.are
 \end{verbatim}
 
-Users all have write access to these repositories although not to the \verb!develop!, \verb!master! or \verb!svn/*! branches.  This basically means one should create \verb!feature/[topic]!, \verb!bugfix/[topic]!, or \verb!hotfix/[topic]! branches and raise a ``Pull Request'' (\href{https://git.iter.org/projects/BND/repos/solps-iter/pull-requests}{https://git.iter.org/projects/BND/repos/solps-iter/pull-requests}) to have them merged into the \verb!develop! branch after pushing them back to the ITER repository.
+Users all have write access to these repositories although not to the \verb!develop!, \verb!master! or \verb!svn/*! branches.  This basically means one should create \verb!feature/[topic]!, \verb!bugfix/[topic]!, or \verb!hotfix/[topic]! branches and raise a "Pull Request" (\href{https://git.iter.org/projects/BND/repos/solps-iter/pull-requests}{https://git.iter.org/projects/BND/repos/solps-iter/pull-requests}) to have them merged into the \verb!develop! branch after pushing them back to the ITER repository.
 
 Issues are handled using JIRA (\href{https://jira.iter.org/browse/IMAS}{https://jira.iter.org/browse/IMAS}) and users should feel encouraged to create new issues associated with \SOLPSITER (selected from the drop-down list of components) if they have any problems or suggestions. (Please ignore the options associated with resource estimates and sprints.)
 
@@ -228,7 +228,7 @@ The Git \SOLPSITER repository is structured as a self-contained whole, but some 
 To best use the \SOLPSITER code suite, the user will need, locally installed:
 
 \begin{description}
-\item[Fortran 90/95 Compiler] the main programs are written in \verb!FORTRAN 90!; some routines still require a ``-r8'' option
+\item[Fortran 90/95 Compiler] the main programs are written in \verb!FORTRAN 90!; some routines still require a "-r8" option
 \item[C Compiler] the \verb!DivGeo! code and a few utility routines are written in \verb!C!
 \item[MPI] Parallelization framework (optional)
 \item[NAG]\index{NAG} mathematical library (optional)
@@ -534,10 +534,10 @@ The \verb!setup.csh! file and its subsidiaries \$\verb!{SOLPSTOP}/SETUP/setup.cs
 \item \verb!DEVICE!\index{DEVICE} the name of the fusion device most likely to be simulated for this \verb!HOST_NAME! (see \ref{cha:divgeo} for available choices)
 \item \verb!PERFMON!\index{PERFMON}, an environment variable used by
   the compiler to know whether to enable the performance monitoring libraries
-\item \verb!SOLPS_CPP!\index{SOLPS\_CPP}, an environment variable containing the global ``defines''
+\item \verb!SOLPS_CPP!\index{SOLPS\_CPP}, an environment variable containing the global "defines"
   to use during compilation of \verb!SOLPS! code components
 \item \verb!EIRENE_DEFINES!\index{EIRENE\_DEFINES}, an environment variable containing the additional
-  `defines'' to use during compilation of \verb!Eirene!
+  "defines" to use during compilation of \verb!Eirene!
 \item some aliases to move around the tree (\verb!sbb!, \verb!sei!,
   {\it etc.})
 \item some aliases for plotting (\verb!xyplot!, etc...)
@@ -603,7 +603,7 @@ The most important of these data files are:
   atomic mass, surface binding energy and density of all elements
 \item[ratadas.filelist] \index{ratadas.filelist}\index{b2ar}\index{ADAS} is a \verb!B2.5! input file
   containing information used to index into the ADAS files when the
-  ``adas'' option is used in \verb!b2ar! (see section \ref{sec:b2ar})
+  "adas" option is used in \verb!b2ar! (see section \ref{sec:b2ar})
 \item[stra.dat] \index{stra.dat}\index{b2ar}\index{baserun}\index{STRAHL} is a file containing \verb!STRAHL!
   atomic data results for use by \verb!b2ar! when building \verb!b2frates! files where the 'strahl' data
   option is chosen. Must be copied to the local \verb!baserun! directory.
@@ -617,12 +617,12 @@ The most important of these data files are:
 The \verb!modules/adas! subdirectory contains files which are used to tell various programs
 which \verb!ADAS! files to use.
 
-\verb!source.location! indicates which class of lines to use (``pjr''
+\verb!source.location! indicates which class of lines to use ("pjr"
 currently) and the name of the other index file (\verb!ratadas.filelist!
 currently).
 
 \verb!ratadas.filelist! indicates the global source of the \verb!ADAS! files,
-and which ``years'' to use.
+and which "years" to use.
 
 \subsection{AMDS}
 \index{AMDS}
@@ -759,9 +759,9 @@ The number of scripts developed for various {\bf SOLPS} versions is very large. 
   \item[resopt]\index{resopt} Internal script to apply options to above residuals scripts (see below)
   \item[resmod \#1]\index{resmod} Selects residuals {\it modulo} \#1 (default all)
   \end{description}
-all of the above can take ``-m \#'' to plot the residuals {\it modulo} ``\#'' occurrences
-and/or ``-l \#'' to plot the last ``\#'' residuals
-and/or ``-a \#'' to plot the average residual over ``\#'' occurrences.
+all of the above can take "-m \#" to plot the residuals {\it modulo} "\#" occurrences
+and/or "-l \#" to plot the last "\#" residuals
+and/or "-a \#" to plot the average residual over "\#" occurrences.
 The options are applied in that order independently of the order in which they were typed.
 \item power/particle losses (see section \ref{cha:regions} and Appendix \ref{lab:b2:numerics:parameters} for the region definitions)
   \begin{description}
@@ -898,7 +898,7 @@ rm GNUPLOT_COUNT gnuplot.*data
     \item[GNUPLOT\_POINTSIZE]\index{GNUPLOT\_POINTSIZE} changes the size of points plotted
     \item[GNUPLOT\_POSTSCRIPT\_OPTIONS]\index{GNUPLOT\_POSTSCRIPT\_OPTIONS} \verb!gnuplot! options for the
     PostScript driver
-    \item[GNUPLOT\_TERM]\index{GNUPLOT\_TERM} provides the ``term'' information for \verb!gnuplot!
+    \item[GNUPLOT\_TERM]\index{GNUPLOT\_TERM} provides the "term" information for \verb!gnuplot!
     \item[GNUPLOT\_TMP]\index{GNUPLOT\_TMP} causes the \verb!gnuplot.cmd! and
     \verb!gnuplot.data! temporary files to be written to the directory
     specified by this environment variable. Also moves the location of the \verb!GNUPLOT_EXTRA! and
@@ -916,46 +916,46 @@ rm GNUPLOT_COUNT gnuplot.*data
     plotting are concatenated to \verb!gnuplot.cmd! allowing for
     multiple pages of plots.
   \item[plot\_png]\index{plot\_png} produces a PNG output file instead
-  \item[xyplot ]\index{xyplot } alias for simple ``$x~y$'' plot
-  \item[xyplot2]\index{xyplot2} alias for simple ``$x~y_1~y_2$'' plot
-  \item[xyplot3]\index{xyplot3} alias for simple ``$x~y_1~y_2~y_3$'' plot
-  \item[xyplot4]\index{xyplot4} alias for simple ``$x~y_1~y_2~y_3~y_4$'' plot
-  \item[xyplot5]\index{xyplot5} alias for simple ``$x~y_1~y_2~y_3~y_4~y_5$'' plot
-  \item[xyplot6]\index{xyplot6} alias for simple ``$x~y_1~y_2~y_3~y_4~y_5~y_6$'' plot
-  \item[xyplot7]\index{xyplot7} alias for simple ``$x~y_1~y_2~y_3~y_4~y_5~y_6~y_7$'' plot
-  \item[xyplot8]\index{xyplot8} alias for simple ``$x~y_1~y_2~y_3~y_4~y_5~y_6~y_7~y_8$'' plot
-  \item[xyplot9]\index{xyplot9} alias for simple ``$x~y_1~y_2~y_3~y_4~y_5~y_6~y_7~y_8~y_9$'' plot
-  \item[xlyplot ]\index{xlyplot } alias for simple ``$x~\log(y)$'' plot
-  \item[xlyplot2]\index{xlyplot2} alias for simple ``$x~\log(y_1)~\log(y_2)$'' plot
-  \item[xlyplot3]\index{xlyplot3} alias for simple ``$x~\log(y_1)~\log(y_2)~\log(y_3)$'' plot
-  \item[xlyplot4]\index{xlyplot4} alias for simple ``$x~\log(y_1)~\log(y_2)~\log(y_3)~\log(y_4)$'' plot
-  \item[xlyplot5]\index{xlyplot5} alias for simple ``$x~\log(y_1)~\log(y_2)~\log(y_3)~\log(y_4)~\log(y_5)$'' plot
-  \item[xlyplot6]\index{xlyplot6} alias for simple ``$x~\log(y_1)~\log(y_2)~\log(y_3)~\log(y_4)~\log(y_5)~\log(y_6)$'' plot
-  \item[xlyplot7]\index{xlyplot7} alias for simple ``$x~\log(y_1)~\log(y_2)~\log(y_3)~\log(y_4)~\log(y_5)~\log(y_6)~\log(y_7)$'' plot
-  \item[xlyplot8]\index{xlyplot8} alias for simple ``$x~\log(y_1)~\log(y_2)~\log(y_3)~\log(y_4)~\log(y_5)~\log(y_6)~\log(y_7)~\log(y_8)$'' plot
-  \item[xlyplot9]\index{xlyplot9} alias for simple ``$x~\log(y_1)~\log(y_2)~\log(y_3)~\log(y_4)~\log(y_5)~\log(y_6)~\log(y_7)~\log(y_8)~\log(y_9)$'' plot
-  \item[lxyplot ]\index{lxyplot } alias for simple ``$\log(x)~y$'' plot
-  \item[lxyplot2]\index{lxyplot2} alias for simple ``$\log(x)~y_1~y_2$'' plot
-  \item[lxyplot3]\index{lxyplot3} alias for simple ``$\log(x)~y_1~y_2~y_3$'' plot
-  \item[lxyplot4]\index{lxyplot4} alias for simple ``$\log(x)~y_1~y_2~y_3~y_4$'' plot
-  \item[lxyplot5]\index{lxyplot5} alias for simple ``$\log(x)~y_1~y_2~y_3~y_4~y_5$'' plot
-  \item[lxyplot6]\index{lxyplot6} alias for simple ``$\log(x)~y_1~y_2~y_3~y_4~y_5~y_6$'' plot
-  \item[lxyplot7]\index{lxyplot7} alias for simple ``$\log(x)~y_1~y_2~y_3~y_4~y_5~y_6~y_7$'' plot
-  \item[lxyplot8]\index{lxyplot8} alias for simple ``$\log(x)~y_1~y_2~y_3~y_4~y_5~y_6~y_7~y_8$'' plot
-  \item[lxyplot9]\index{lxyplot9} alias for simple ``$\log(x)~y_1~y_2~y_3~y_4~y_5~y_6~y_7~y_8~y_9$'' plot
-  \item[lxlyplot ]\index{lxlyplot } alias for simple ``$\log(x)~\log(y)$'' plot
-  \item[lxlyplot2]\index{lxlyplot2} alias for simple ``$\log(x)~\log(y_1)~\log(y_2)$'' plot
-  \item[lxlyplot3]\index{lxlyplot3} alias for simple ``$\log(x)~\log(y_1)~\log(y_2)~\log(y_3)$'' plot
-  \item[lxlyplot4]\index{lxlyplot4} alias for simple ``$\log(x)~\log(y_1)~\log(y_2)~\log(y_3)~\log(y_4)$'' plot
-  \item[lxlyplot5]\index{lxlyplot5} alias for simple ``$\log(x)~\log(y_1)~\log(y_2)~\log(y_3)~\log(y_4)~\log(y_5)$'' plot
-  \item[lxlyplot6]\index{lxlyplot6} alias for simple ``$\log(x)~\log(y_1)~\log(y_2)~\log(y_3)~\log(y_4)~\log(y_5)~\log(y_6)$'' plot
-  \item[lxlyplot7]\index{lxlyplot7} alias for simple ``$\log(x)~\log(y_1)~\log(y_2)~\log(y_3)~\log(y_4)~\log(y_5)~\log(y_6)~\log(y_7)$'' plot
-  \item[lxlyplot8]\index{lxlyplot8} alias for simple ``$\log(x)~\log(y_1)~\log(y_2)~\log(y_3)~\log(y_4)~\log(y_5)~\log(y_6)~\log(y_7)~\log(y_8)$'' plot
-  \item[lxlyplot9]\index{lxlyplot9} alias for simple ``$\log(x)~\log(y_1)~\log(y_2)~\log(y_3)~\log(y_4)~\log(y_5)~\log(y_6)~\log(y_7)~\log(y_8)~\log(y_9)$'' plot
+  \item[xyplot ]\index{xyplot } alias for simple "$x~y$" plot
+  \item[xyplot2]\index{xyplot2} alias for simple "$x~y_1~y_2$" plot
+  \item[xyplot3]\index{xyplot3} alias for simple "$x~y_1~y_2~y_3$" plot
+  \item[xyplot4]\index{xyplot4} alias for simple "$x~y_1~y_2~y_3~y_4$" plot
+  \item[xyplot5]\index{xyplot5} alias for simple "$x~y_1~y_2~y_3~y_4~y_5$" plot
+  \item[xyplot6]\index{xyplot6} alias for simple "$x~y_1~y_2~y_3~y_4~y_5~y_6$" plot
+  \item[xyplot7]\index{xyplot7} alias for simple "$x~y_1~y_2~y_3~y_4~y_5~y_6~y_7$" plot
+  \item[xyplot8]\index{xyplot8} alias for simple "$x~y_1~y_2~y_3~y_4~y_5~y_6~y_7~y_8$" plot
+  \item[xyplot9]\index{xyplot9} alias for simple "$x~y_1~y_2~y_3~y_4~y_5~y_6~y_7~y_8~y_9$" plot
+  \item[xlyplot ]\index{xlyplot } alias for simple "$x~\log(y)$" plot
+  \item[xlyplot2]\index{xlyplot2} alias for simple "$x~\log(y_1)~\log(y_2)$" plot
+  \item[xlyplot3]\index{xlyplot3} alias for simple "$x~\log(y_1)~\log(y_2)~\log(y_3)$" plot
+  \item[xlyplot4]\index{xlyplot4} alias for simple "$x~\log(y_1)~\log(y_2)~\log(y_3)~\log(y_4)$" plot
+  \item[xlyplot5]\index{xlyplot5} alias for simple "$x~\log(y_1)~\log(y_2)~\log(y_3)~\log(y_4)~\log(y_5)$" plot
+  \item[xlyplot6]\index{xlyplot6} alias for simple "$x~\log(y_1)~\log(y_2)~\log(y_3)~\log(y_4)~\log(y_5)~\log(y_6)$" plot
+  \item[xlyplot7]\index{xlyplot7} alias for simple "$x~\log(y_1)~\log(y_2)~\log(y_3)~\log(y_4)~\log(y_5)~\log(y_6)~\log(y_7)$" plot
+  \item[xlyplot8]\index{xlyplot8} alias for simple "$x~\log(y_1)~\log(y_2)~\log(y_3)~\log(y_4)~\log(y_5)~\log(y_6)~\log(y_7)~\log(y_8)$" plot
+  \item[xlyplot9]\index{xlyplot9} alias for simple "$x~\log(y_1)~\log(y_2)~\log(y_3)~\log(y_4)~\log(y_5)~\log(y_6)~\log(y_7)~\log(y_8)~\log(y_9)$" plot
+  \item[lxyplot ]\index{lxyplot } alias for simple "$\log(x)~y$" plot
+  \item[lxyplot2]\index{lxyplot2} alias for simple "$\log(x)~y_1~y_2$" plot
+  \item[lxyplot3]\index{lxyplot3} alias for simple "$\log(x)~y_1~y_2~y_3$" plot
+  \item[lxyplot4]\index{lxyplot4} alias for simple "$\log(x)~y_1~y_2~y_3~y_4$" plot
+  \item[lxyplot5]\index{lxyplot5} alias for simple "$\log(x)~y_1~y_2~y_3~y_4~y_5$" plot
+  \item[lxyplot6]\index{lxyplot6} alias for simple "$\log(x)~y_1~y_2~y_3~y_4~y_5~y_6$" plot
+  \item[lxyplot7]\index{lxyplot7} alias for simple "$\log(x)~y_1~y_2~y_3~y_4~y_5~y_6~y_7$" plot
+  \item[lxyplot8]\index{lxyplot8} alias for simple "$\log(x)~y_1~y_2~y_3~y_4~y_5~y_6~y_7~y_8$" plot
+  \item[lxyplot9]\index{lxyplot9} alias for simple "$\log(x)~y_1~y_2~y_3~y_4~y_5~y_6~y_7~y_8~y_9$" plot
+  \item[lxlyplot ]\index{lxlyplot } alias for simple "$\log(x)~\log(y)$" plot
+  \item[lxlyplot2]\index{lxlyplot2} alias for simple "$\log(x)~\log(y_1)~\log(y_2)$" plot
+  \item[lxlyplot3]\index{lxlyplot3} alias for simple "$\log(x)~\log(y_1)~\log(y_2)~\log(y_3)$" plot
+  \item[lxlyplot4]\index{lxlyplot4} alias for simple "$\log(x)~\log(y_1)~\log(y_2)~\log(y_3)~\log(y_4)$" plot
+  \item[lxlyplot5]\index{lxlyplot5} alias for simple "$\log(x)~\log(y_1)~\log(y_2)~\log(y_3)~\log(y_4)~\log(y_5)$" plot
+  \item[lxlyplot6]\index{lxlyplot6} alias for simple "$\log(x)~\log(y_1)~\log(y_2)~\log(y_3)~\log(y_4)~\log(y_5)~\log(y_6)$" plot
+  \item[lxlyplot7]\index{lxlyplot7} alias for simple "$\log(x)~\log(y_1)~\log(y_2)~\log(y_3)~\log(y_4)~\log(y_5)~\log(y_6)~\log(y_7)$" plot
+  \item[lxlyplot8]\index{lxlyplot8} alias for simple "$\log(x)~\log(y_1)~\log(y_2)~\log(y_3)~\log(y_4)~\log(y_5)~\log(y_6)~\log(y_7)~\log(y_8)$" plot
+  \item[lxlyplot9]\index{lxlyplot9} alias for simple "$\log(x)~\log(y_1)~\log(y_2)~\log(y_3)~\log(y_4)~\log(y_5)~\log(y_6)~\log(y_7)~\log(y_8)~\log(y_9)$" plot
   \end{description}
-\item Detailed run diagnostics (Many of these invoke the ``plot'' command described above and can be toggled to use a
-logarithmic $y$ scale by use of an additional ``l'' argument while ``L'' also plots the absolute values of
-negative quantities on the same scale and ``M'' the absolute values of negative quantities in a separate plot)
+\item Detailed run diagnostics (Many of these invoke the "plot" command described above and can be toggled to use a
+logarithmic $y$ scale by use of an additional "l" argument while "L" also plots the absolute values of
+negative quantities on the same scale and "M" the absolute values of negative quantities in a separate plot)
   \begin{description}
   \item[2d]\index{2d} plots time dependent quantities from
     \verb!b2time.nc! (Appendix \ref{cha:b2time}), 2$^{nd}$, 3$^{rd}$ {\it etc.\ versus} the 1$^{st}$ argument.
@@ -986,7 +986,7 @@ negative quantities on the same scale and ``M'' the absolute values of negative 
   \item[cpu]\index{cpu} Lists the CPU time per \verb!B2.5! timestep.
   \item[delta]\index{delta} Plots the maximum fractional change of the primary variables per \verb!B2.5! timestep.
   \item[density]\index{density} Plots the time evolution of the density in a \verb!B2.5! run.
-  \item[display\_tallies]\index{display\_tallies} Displays the \verb!B2.5! tallies in an easy-to-read format (argument ``H'' gives the first instance, and ``L'' the last instance)
+  \item[display\_tallies]\index{display\_tallies} Displays the \verb!B2.5! tallies in an easy-to-read format (argument "H" gives the first instance, and "L" the last instance)
   \item[energy\_analysis]\index{energy\_analysis} Plots the energy flows across certain important surfaces in \verb!B2.5!.
   \item[energy\_analysis\_fht]\index{energy\_analysis\_fht} Plots the total energy flows across certain important surfaces in \verb!B2.5!.
   \item[energy\_analysis\_total]\index{energy\_analysis\_total} Plots the total energy flows across certain important surfaces in \verb!B2.5!.
@@ -1055,7 +1055,7 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[awk.plot\_mesh \#1]\index{awk.plot\_mesh} Outputs the mesh specified as \#1 in a form usable for \verb!xyplot!.
   \item[awk.transpose]\index{awk.transpose} Transposes an array of data.
   \item[convert\_from\_solps4.3 \#1]\index{convert\_from\_solps4.3} Converts run number \#1 from \$\verb!DEVICE! from the SOLPS4.3 ITER archive to a \SOLPSITER run in directory \$\verb!SOLPSTOP\runs\!\$\verb|DEVICE\|\#1 .
-  \item[grf]\index{grf} A more effective version of ``grep'' when searching for use of a variable in source code.
+  \item[grf]\index{grf} A more effective version of "grep" when searching for use of a variable in source code.
   \item[plot\_cps \#1]\index{plot\_cps} Copies \verb!gnuplot.cmd! to
     \verb!gnuplot_cps.cmd!, modifying it so that colour plotting occurs to \#1
     or by default \verb!out.ps!; executes \verb!gnuplot! on new file.
@@ -1077,13 +1077,13 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[b2p]\index{b2p} Script to obtain a standard series of \btwoplot graphs.
   \item[b2pc]\index{b2pc} Script to obtain a standard series of \btwoplot graphs.
   \item[b2pl]\index{b2pl} Script to obtain a standard series of \btwoplot graphs.
-  \item[b2plot]\index{b2plot} Shortcut to \btwoplotns. A ``-n'' option allows for dry-run tests.A ``-d'' option allows to run within the chosen debugger. A ``-s'' option allows to run \btwoplot with coupling to \verb!Eirene! data.
+  \item[b2plot]\index{b2plot} Shortcut to \btwoplotns. A "-n" option allows for dry-run tests.A "-d" option allows to run within the chosen debugger. A "-s" option allows to run \btwoplot with coupling to \verb!Eirene! data.
   \item[b2pp]\index{b2pp} Script to obtain a standard series of \btwoplot graphs.
   \item[b2pt]\index{b2pt} Script to obtain a standard series of \btwoplot graphs.
-  \item[b2run]\index{b2run} Shortcut to the \verb!Makefile! launching \verb!B2.5!. A ``-n'' option allows for dry-run tests. A ``-d'' option allows to run within the chosen debugger. A ``-s'' option allows to run \verb!B2.5! in stand-alone mode. A ``-m''option allows to run with MPI options. (See \ref{b2run} for fuller details)
-  \item[b2run\_hgw\_cluster]\index{b2run\_hgw\_clus} Shortcut to the \verb!Makefile! launching \verb!B2.5! for the IPP--Greifswald cluster. A ``-n'' option allows for dry-run tests.
+  \item[b2run]\index{b2run} Shortcut to the \verb!Makefile! launching \verb!B2.5!. A "-n" option allows for dry-run tests. A "-d" option allows to run within the chosen debugger. A "-s" option allows to run \verb!B2.5! in stand-alone mode. A "-m"option allows to run with MPI options. (See \ref{b2run} for fuller details)
+  \item[b2run\_hgw\_cluster]\index{b2run\_hgw\_clus} Shortcut to the \verb!Makefile! launching \verb!B2.5! for the IPP--Greifswald cluster. A "-n" option allows for dry-run tests.
   \item[b2sxdr]\index{b2sxdr} Shortcut to the \SOLPSfour to \SOLPSfive
-    converter. A ``-n'' option allows for dry-run tests. A ``-d'' option allows to run within the chosen debugger. A ``-s'' option allows to specify the run to convert was not coupled to \verb!Eirene!.
+    converter. A "-n" option allows for dry-run tests. A "-d" option allows to run within the chosen debugger. A "-s" option allows to specify the run to convert was not coupled to \verb!Eirene!.
   \item[correct\_baserun\_timestamps]\index{correct\_baserun\_timestamps}
     Makes sure the timestamps for the start-up files in the \verb!baserun!
     directory are in the right chronological order.
@@ -1111,8 +1111,8 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[lndr]\index{lndr} [ANK] routine to generate shadow trees.
   \item[mds\_id]\index{mds\_id} Obtains certain data necessary for run identification when saving to the \verb!MDSplus! database.
   \item[min\_ave\_max.awk]\index{min\_ave\_max.awk}
-  \item[n2d]\index{n2d} Converts ``Naka'' format equilibrium files to \verb!DG! format (see Sec.~\ref{sec:equtrn}).
-  \item[nn2d]\index{nn2d} Converts new ``Naka'' format equilibrium files to \verb!DG! format (see Sec.~\ref{sec:equtrn}).
+  \item[n2d]\index{n2d} Converts "Naka" format equilibrium files to \verb!DG! format (see Sec.~\ref{sec:equtrn}).
+  \item[nn2d]\index{nn2d} Converts new "Naka" format equilibrium files to \verb!DG! format (see Sec.~\ref{sec:equtrn}).
   \item[nereg]\index{nereg} Shows averaged density per region.
   \item[noquote\_pwd]\index{noquote\_pwd} Returns the current working directory as a string without quotes (c.f.\ \verb!quote_pwd!).
   \item[pipe\_b2.log]\index{pipe\_b2.log} Prepares the \verb!B2! log file for use by other scripts.
@@ -1706,7 +1706,7 @@ and\index{sbr}
 \end{verbatim}
 will take you to \$\verb!{SOLPSTOP}/runs!.
 
-Usually a ``case series'' would be run in a sub-directory of
+Usually a "case series" would be run in a sub-directory of
 \$\verb!{SOLPSTOP}/runs!.  Sometimes, further subdirectories are created to
 separate categories of runs --- the depth of sub-directories is a
 matter of taste!  In each of the directories, a \verb!baserun!
@@ -1757,9 +1757,9 @@ This automatically does the \verb!gmake! for you, finding the \verb!Makefile!
 for itself by climbing up the tree. You can add options to the \verb!b2run! command:
 \begin{description}
   \item[-n] Will run the \verb!Makefile! in dry-run mode. This is useful to check that all the needed files for the runs are in the right order of precedence. If they are not, the \verb!correct_baserun_timestamps! script can be used to re-order the pre-requisite files found in the associated \verb!baserun! directory
-  \item[-m ``MPI-launcher + options''] Allows to launch \verb!b2XX! in MPI mode with the provided options (example: \verb!b2run -m ``mpiexec -np 2'' b2mn!)
+  \item[-m "MPI-launcher + options"] Allows to launch \verb!b2XX! in MPI mode with the provided options (example: \verb!b2run -m "mpiexec -np 2" b2mn!)
   \item[-s] Specifies that one wishes to run \verb!B2.5! in stand-alone mode, i.e. without any coupling to \verb!Eirene!.
-  \item[-d ``debugger\_name''] Allows to run \verb!b2XX! with the named debugger (example: \verb!b2run -d totalview b2mn!). If not debugger name is specified, the debugger defined with the DBX environment variable and specified in the \$\verb!{SOLPSTOP}/SETUP/setup.csh.!\$\verb!{HOST_NAME}.!\$\verb!{COMPILER}.local! or \$\verb!{SOLPSTOP}/SETUP/setup.csh.!\$\verb!{HOST_NAME}.!\$\verb!{COMPILER}! files will be used.
+  \item[-d "debugger\_name"] Allows to run \verb!b2XX! with the named debugger (example: \verb!b2run -d totalview b2mn!). If not debugger name is specified, the debugger defined with the DBX environment variable and specified in the \$\verb!{SOLPSTOP}/SETUP/setup.csh.!\$\verb!{HOST_NAME}.!\$\verb!{COMPILER}.local! or \$\verb!{SOLPSTOP}/SETUP/setup.csh.!\$\verb!{HOST_NAME}.!\$\verb!{COMPILER}! files will be used.
 \end{description}
 
 \index{SOLPSTOP file}
@@ -1881,7 +1881,7 @@ as \verb!jet.50401.58000.geo!, identify it as being of size $96 \times
 \item[*param] at least 100 additional numbers, of which only the first
   is relevant for us
   \begin{description}
-  \item[-1.0] read the mesh data using the ``simplified'' \verb!Carre! format
+  \item[-1.0] read the mesh data using the "simplified" \verb!Carre! format
   \item[-2.0] read the mesh data using the \verb!Sonnet! format
   \end{description}
 \item[b2agfs\_geometry] specifies the mesh file to be read
@@ -1970,13 +1970,13 @@ The \verb!b2cmpb! block contains
 \item[*cbregs] specifies the number of regions where boundary
   conditions will be specified
   \begin{itemize}
-  \item the ``south'' boundary is broken into three pieces with one
+  \item the "south" boundary is broken into three pieces with one
     quarter of the cells in the first region, half of the cells in the
     second, and the remaining quarter in the third region (inner
     target private flux, core, outer private flux). This is geometry-dependent
     information the code will check against the mesh connectivity and
     return an error if the two do not match
-  \item the ``north'', ``west'' and ``east'' are not broken up, and
+  \item the "north", "west" and "east" are not broken up, and
     correspond to the SOL boundary, inner target and outer target,
     respectively. For double-null cases, the north boundary should
     be split into two sections
@@ -1986,7 +1986,7 @@ The \verb!b2cmpb! block contains
   \begin{description}
     \item[*cbsna] boundary conditions for density (1 line per species)
     \item[*cbsmo] boundary conditions for parallel momentum (1 line per species)
-    \item[*cbshi] ion/neutral (or ``atomic'') temperature/energy
+    \item[*cbshi] ion/neutral (or "atomic") temperature/energy
     boundary condition (1 line per species)
     \item[*cbshe] electron temperature/heat flux boundary condition
     \item[*cbsch] boundary condition for the electric potential equation
@@ -2000,13 +2000,13 @@ The exact form of the specification is somewhat arcane: users are
 referred to the code (\verb!b2stbc_bas!) for the definitive meaning,
 or to the write-up in Appendix \ref{cha:Mladen}.
 
-Users are encouraged to use the ``physics'' formulation of the
+Users are encouraged to use the "physics" formulation of the
 boundary conditions specified later (see section \ref{lab:b2:boundary:parameters}),
-rather than the ``Bas'' formulation listed here.
-For double-null cases, the ``south'' boundary must be split in six pieces,
-and the ``north'' boundary in two. However, the \verb!b2ah! format does
-not allow for the specification of additional ``east'' or ``west'' boundaries,
-so double-null users {\bf must} use the ``physics'' formulation in addition.
+rather than the "Bas" formulation listed here.
+For double-null cases, the "south" boundary must be split in six pieces,
+and the "north" boundary in two. However, the \verb!b2ah! format does
+not allow for the specification of additional "east" or "west" boundaries,
+so double-null users {\bf must} use the "physics" formulation in addition.
 
 The boundary condition implemented arises from numerical combinations
 of the eight parameters with various quantities from the code.
@@ -2026,7 +2026,7 @@ The \verb!b2cmpt! block contains
 \item[*cfdf0] auxiliary transport quantity (1 line per species)
 \item[*cfdna] density driven particle diffusion coefficient (1 line per species)
 \item[*cfdpa] pressure driven particle diffusion coefficient (1 line per species)
-\item[*cfvla] anomalous ``pinch'' velocity (1 line per species)
+\item[*cfvla] anomalous "pinch" velocity (1 line per species)
 \item[*cfvsa] anomalous transverse momentum diffusivity (1 line per species)
 \item[*cfhci] anomalous ion/neutral heat diffusivity (1 line per species)
 \item[*cfhce] anomalous electron heat diffusivity
@@ -2037,7 +2037,7 @@ The \verb!b2cmpt! block contains
 \item[*cflim] coefficients for flux limiting
 \end{description}
 
-Users are encouraged to use the ``physics'' formulation of the
+Users are encouraged to use the "physics" formulation of the
 transport coefficients using the namelist formulation in
 \verb!b2.transport.parameters! or
 \verb!b2.transport.inputfile! as described in
@@ -2100,14 +2100,14 @@ or, best:
 
 The allowable choices for the {\bf flag} switch are:
 \begin{description}
-\item[``adpak'']\index{ADPAK} A complete atomic physics package with scaling law rates applicable to all charge states, but not always of high accuracy \cite{ADPAK}
-\item[``strahl'']\index{STRAHL} A collisional-radiative package developed at IPP--Garching \cite{BEHRINGER87A}, stored in the \verb!stra.dat!\index{stra.dat} file
-\item[``adas'']\index{ADAS} (Atomic Data and Analysis Structure) A complete collisional-radiative atomic physics database, actively being maintained and upgraded \cite{ADAS,ADAS2006}. Recommended. Available at \href{http://adas.phys.strath.ac.uk/}{http://adas.phys.strath.ac.uk/}
-\item[``amns'']\index{AMNS} (Atomic, Molecular, Nuclear, and Surface data) For ITM-environment runs only, uses access to the ITM AMNS tools and database
+\item["adpak"]\index{ADPAK} A complete atomic physics package with scaling law rates applicable to all charge states, but not always of high accuracy \cite{ADPAK}
+\item["strahl"]\index{STRAHL} A collisional-radiative package developed at IPP--Garching \cite{BEHRINGER87A}, stored in the \verb!stra.dat!\index{stra.dat} file
+\item["adas"]\index{ADAS} (Atomic Data and Analysis Structure) A complete collisional-radiative atomic physics database, actively being maintained and upgraded \cite{ADAS,ADAS2006}. Recommended. Available at \href{http://adas.phys.strath.ac.uk/}{http://adas.phys.strath.ac.uk/}
+\item["amns"]\index{AMNS} (Atomic, Molecular, Nuclear, and Surface data) For ITM-environment runs only, uses access to the ITM AMNS tools and database
 \end{description}
 
 \index{Weisheit}
-Unless the user chooses to activate the ``b2ardr\_no\_weisheit'' switch (see
+Unless the user chooses to activate the "b2ardr\_no\_weisheit" switch (see
 section \ref{lis:b2cdci} for description), the hydrogen rates come from
 \cite{Weisheit} and \cite{Janev1984} and overwrite those provided by the data packages above. Those
 data are stored in the \verb!weis.dat!\index{weis.dat} file which should be present in the
@@ -2281,13 +2281,13 @@ which contains
 \item[BCCHAR]\index{BCCHAR} \verb!character array, length NBC!, specifying the nature of
   the boundary segment
   \begin{description}
-  \item[N] ``North'' boundary
-  \item[S] ``South'' boundary
-  \item[W] ``West'' boundary
-  \item[E] ``East'' boundary
-  \item[X] ``X'' boundary used for specifying a fixed value on
+  \item[N] "North" boundary
+  \item[S] "South" boundary
+  \item[W] "West" boundary
+  \item[E] "East" boundary
+  \item[X] "X" boundary used for specifying a fixed value on
   a row of cells
-  \item[Y] ``Y'' boundary used for specifying a fixed value on
+  \item[Y] "Y" boundary used for specifying a fixed value on
   a column of cells
   \end{description}
 \item[BCPOS]\index{BCPOS} \verb!integer array, length NBC!, for North, South
@@ -2313,7 +2313,7 @@ which contains
   gradient is used)
   \item[4] prescribe the value of the density, weakly a mixed boundary
   condition, \verb!CONPAR(,,1)! specifies the required density in
-  $m^{-3}$ and \verb!CONPAR(,,2)! specifies the ``strength'' of the
+  $m^{-3}$ and \verb!CONPAR(,,2)! specifies the "strength" of the
   boundary condition
   \item[5] prescribe the particle flux per unit area,
   \verb!CONPAR(,,1)! specifies the required particle flux density in
@@ -2381,7 +2381,7 @@ which contains
   \item[4] prescribe the value of the velocity, weakly a mixed
   boundary condition, \verb!MOMPAR(,,1)! specifies the parallel
   velocity in $m.s^{-1}$ and \verb!MOMPAR(,,2)! specifies the
-  ``strength'' of the boundary condition
+  "strength" of the boundary condition
   \item[5] prescribe the parallel momentum flux per unit area,
   \verb!MOMPAR(,,1)! specifies the parallel momentum flux density in $N.m^{-2}$
   \item[6] prescribe the total parallel momentum flux for a constant
@@ -2421,7 +2421,7 @@ which contains
   \item[4] prescribe the value of the electron temperature, weakly a
   mixed boundary condition, \verb!ENEPAR(,1)! specifies the
   temperature in $eV$ and \verb!ENEPAR(,2)! specifies the
-  ``strength'' of the boundary condition
+  "strength" of the boundary condition
   \item[5] prescribe the electron energy flux per unit area,
   \verb!ENEPAR(,1)! specifies the energy flux density in $W.m^{-2}$
   \item[6] prescribe the total electron energy flux for a constant
@@ -2484,7 +2484,7 @@ which contains
   of \verb!MOMPAR(,ISMAIN,2)! and the \verb!b2stbc_sound_model! switch]
   \item[4] prescribe the value of the ion temperature, weakly a mixed
   boundary condition, \verb!ENIPAR(,1)! specifies the temperature in
-  $eV$ and \verb!ENIPAR(,2)! specifies the ``strength'' of the
+  $eV$ and \verb!ENIPAR(,2)! specifies the "strength" of the
   boundary condition
   \item[5] prescribe the ion energy flux per unit area,
   \verb!ENIPAR(,1)! specifies the energy flux density in $W.m^{-2}$
@@ -2547,7 +2547,7 @@ which contains
   \verb!POTPAR(,2)! used for biasing [see code for details]
   \item[4] prescribe the value of the potential weakly a mixed
   boundary condition, \verb!POTPAR(,1)! specifies the potential in
-  $V$ and \verb!POTPAR(,2)! specifies the ``strength'' of the
+  $V$ and \verb!POTPAR(,2)! specifies the "strength" of the
   boundary condition
   \item[5] prescribe the current flux density per unit area,
     \verb!POTPAR(,1)! specifies the electric current flux density in
@@ -3225,21 +3225,21 @@ activated with the 'b2ytdr\_non\_commensurate' option set to '1' in \verb!b2yt.d
 
 The conversion of the \verb!Eirene! input file additionally requires for the converter program to know the original version of \verb!Eirene! with which the input file was used, and this is provided by means of the 'eirene\_format' switch. Its possible values (case-insensitive) are:
 \begin{description}
-  \item[``old''] for input files from {\bf SOLPS4.0} and {\bf SOLPS5.0} runs using "old" Eirene\_96
-  \item[``new''] for input files from {\bf SOLPS4.0} and {\bf SOLPS5.0} runs using "new" Eirene\_99
-  \item[``facelift''] for input files from \SOLPSfiveone runs
-  \item[``juelich''] for input files from Juelich \verb!Eirene! versions (2008 and younger)
-  \item[``iter''] (default) for input files from {\bf SOLPS4.2/4.3} and \SOLPSITER runs
+  \item["old"] for input files from {\bf SOLPS4.0} and {\bf SOLPS5.0} runs using "old" Eirene\_96
+  \item["new"] for input files from {\bf SOLPS4.0} and {\bf SOLPS5.0} runs using "new" Eirene\_99
+  \item["facelift"] for input files from \SOLPSfiveone runs
+  \item["juelich"] for input files from Juelich \verb!Eirene! versions (2008 and younger)
+  \item["iter"] (default) for input files from {\bf SOLPS4.2/4.3} and \SOLPSITER runs
 \end{description}
 The \verb!input.dat.2! file that the converter will create will follow the \SOLPSITER format.
 
 The conversion of the \verb!Eirene! output file (\verb!fort.44!) additionally requires for the converter program to know the original version of \verb!SOLPS! with which the output file was created, and this is provided by means of the 'solps\_version' switch. Its possible values (case-insensitive) are:
 \begin{description}
-  \item[``4.3''] for \verb!fort.44! output files from {\bf SOLPS4.3} runs
-  \item[``5.0''] for \verb!fort.44! output files from {\bf SOLPS5.0} runs
-  \item[``5.1''] for \verb!fort.44! output files from \SOLPSfiveone runs
-  \item[``5.2''] for \verb!fort.44! output files from {\bf SOLPS5.2} runs
-  \item[``iter''] (default) for input files from \SOLPSITER runs (no conversion necessary)
+  \item["4.3"] for \verb!fort.44! output files from {\bf SOLPS4.3} runs
+  \item["5.0"] for \verb!fort.44! output files from {\bf SOLPS5.0} runs
+  \item["5.1"] for \verb!fort.44! output files from \SOLPSfiveone runs
+  \item["5.2"] for \verb!fort.44! output files from {\bf SOLPS5.2} runs
+  \item["iter"] (default) for input files from \SOLPSITER runs (no conversion necessary)
 \end{description}
 The \verb!fort.44.2! file that the converter will create will follow the \SOLPSITER format.
 
@@ -3415,7 +3415,7 @@ In the run directory, you should execute the command
 \end{verbatim}\index{setup\_baserun\_eirene\_links}
 to establish the links \verb!Eirene! needs to the relevant atomic data files,
 as well as some links needed for diagnostic scripts.
-Using the ``-r'' option with this scripts creates relative links. Default behaviour is to create absolute links.
+Using the "-r" option with this scripts creates relative links. Default behaviour is to create absolute links.
 
 %% Examples files from https://solps-mdsplus.aug.ipp.mpg.de/repos/SOLPS/trunk/solps_examples/solps5.1/bench_mark/AUG_16151_D+C+He/
 
@@ -3485,7 +3485,7 @@ Some differences between the \SOLPSITER and {\bf SOLPS5.0} behaviours
 should be noted here.
 
 First, the number of strata \verb|NSTRAI| need no longer include the
-time-dependent ``T'' stratum.
+time-dependent "T" stratum.
 
 Second, the array sizes of \verb|chemical_sputter_yield|, is used, now need to match the
 actual number of wall and non-standard surfaces
@@ -3495,8 +3495,8 @@ actual walls (so the 200 in the above example corresponds to the real number of 
 \verb!input.dat! file used for the same case) and to the non-standard surfaces (block 3A) corresponding to the targets. Note that
 the surface numbering considers block 3B first, and then block 3A, so non-standard surfaces will have
 indices varying between \verb!NLIM+1! and \verb!NLIM+NSTS!. Moreover,
-\verb!Eirene! adds a last non-standard (absorbing) surface that is used as a ``time
-boundary''. If the \verb!Eirene! input file is being produced by use of the
+\verb!Eirene! adds a last non-standard (absorbing) surface that is used as a "time
+boundary". If the \verb!Eirene! input file is being produced by use of the
 \verb!Uinp! utility and/or the \verb!triang! script, then a
 \verb!b2.neutrals.parameters.2! file meeting these criteria will be created,
 provided a \verb!b2.neutrals.parameters! file containing any other data not
@@ -3679,7 +3679,7 @@ To save a new run to the \verb!MDSplus! server, execute
 save_mds
 \end{verbatim}
 which should create \verb!shotnumber.history! which contains the
-``shotnumber'' for the run on the server (not to be confused with the
+"shotnumber" for the run on the server (not to be confused with the
 experimental shot number).  The output from the operation will be saved in
 \verb!b2md.log! and this should be checked for errors.
 
@@ -3687,7 +3687,7 @@ A run can be re-saved to the same shotnumber with
 \begin{verbatim}
 resave_mds
 \end{verbatim}
-which uses the ``shotnumber'' in \verb!shotnumber.history!.
+which uses the "shotnumber" in \verb!shotnumber.history!.
 
 The \verb!shotnumber.history! file can later be read by \verb!b2rd! which will
 then fetch from the \verb!MDSplus! tree the archived shot corresponding to
@@ -4401,7 +4401,7 @@ criteria, an error message will be printed showing the deviation from orthogonal
 options likely to improve it. The user
 may ignore the message and proceed, but the mesh provided may not then be of sufficient quality.
 
-Lastly, there is a ``hidden'' language variable \verb!sellan!\index{sellan} (default value 'english') that can be changed
+Lastly, there is a "hidden" language variable \verb!sellan!\index{sellan} (default value 'english') that can be changed
 to its original 'francais'.
 
 Once all the settings have been chosen, it is often convenient to save them, so as to not have to re-enter them on the next \verb!Carre! meshing attempt. This is achieved by means of the '(S)ave' option within the \verb!carre! script, provided that the user does not start the next meshing attempt with the '(P)repare' option, but rather jumps directly to '(G)rid'.
@@ -4411,7 +4411,7 @@ proceeding much further (see previous section). The default settings may not be 
 particularly important to check the mesh near the separatrix, the X-point(s) and the target plates.
 
 In some cases, the \verb!carre -! script will fail. In that case, one can still
-run \verb!Carre! in ``standalone'' mode by invoking:
+run \verb!Carre! in "standalone" mode by invoking:
 \begin{verbatim}
   ssc
   builds/${HOST_NAME}.${COMPILER}(.debug)/carre
@@ -5210,7 +5210,7 @@ the non-radial classical contribution in the Joule term, and
 construct additional heat exchange terms
 containing the radial current.
 In this way, the system decides how to thermodynamically allocate the
-``alien'' heat term, among electrons and ion species.\\
+"alien" heat term, among electrons and ion species.\\
 For this reason, one cannot simply use the standard Ohm's
 law in the radial direction with anomalous coefficients, or any other
 prescribed expression whatsoever, as a constructive procedure is necessary
@@ -5440,7 +5440,7 @@ stellarators, the $V_{\perp}$ term may overpower the sound
 velocity \cite{FENG99A}
 and then the boundary condition would require a plasma flow exiting the plate.
 Therefore, the pitch angle at the plates is limited to be no less than
-1 degree (user parameter, see switch ``b2agfs\_min\_pitch'' in Appendix \ref{lis:b2cdci}),
+1 degree (user parameter, see switch "b2agfs\_min\_pitch" in Appendix \ref{lis:b2cdci}),
 motivated by the engineering limits met when attempting to align the
 divertor tiles with the magnetic field. The solution procedure of the code
 was also modified so as ensure that no unphysical flows were being created,
@@ -5728,7 +5728,7 @@ the \verb!Eirene! Monte-Carlo model, is covered in detail with examples in~\cite
 \index{neutrals, first-flight model}
 
 As an intermediate approximation between the fluid and kinetic neutral transport models,
-a so-called ``first-flight'' model has been implemented. In this model, the first trajectory
+a so-called "first-flight" model has been implemented. In this model, the first trajectory
 flight of neutrals launched from the computational domain boundary (at the plates or the wall
 boundaries) is followed until the neutral undergoes ionization or charge-exchange, and then
 passed on to the neutral fluid model. In practice, as an initial computational step,
@@ -9440,7 +9440,7 @@ where the electric current density, $\mathbf{j}=e\left( \sum_{\alpha
 }Z_{\alpha}\mathbf{\Gamma}_{\alpha}-\mathbf{\Gamma}_{e}\right) $, at the
 magnetic presheath edge should be specified in the discretized equations.
 
-\section{Analytical Expressions for the Standard (``Old'') Boundary Sources
+\section{Analytical Expressions for the Standard ("Old") Boundary Sources
 in the B2.5 Code}
 
 The boundary sources are expressed as linear and/or weakly non-linear
@@ -9468,34 +9468,34 @@ the boundary sources can be found in the \verb!b2stbc.F! source code.
 Expressions for the Standard Boundary Sources}
 
 All following quantities are calculated locally at the appropriate boundary
--- ``SOUTH'' (S), ``NORTH'' (N), ``WEST'' (W), and ``EAST'' (E) --, i.e. in the boundary cells:
+-- "SOUTH" (S), "NORTH" (N), "WEST" (W), and "EAST" (E) --, i.e. in the boundary cells:
 \begin{equation}
 S_{0}=V/h_{y1}\text{, \ \ \ }h_{y1}=h_{y}\cos(\widehat{x}\widehat{y})
 \label{5}
 \end{equation}
-for the ``SOUTH'' and ``NORTH'' boundaries, where $V$ is the volume of the boundary
+for the "SOUTH" and "NORTH" boundaries, where $V$ is the volume of the boundary
 cell, $h_{y}$ is the $y$-diameter (radial length) of the boundary cell and
 $\cos(\widehat{x}\widehat{y})$ is the cosine of the complementary angle
 between the $x$-direction and $y$-direction on the boundary cell;
 \begin{equation}
 S_{0}=V/h_{x}   \label{6}
 \end{equation}
-for the ``WEST'' and ``EAST'' boundaries, where $V$ is the volume of the boundary cell
+for the "WEST" and "EAST" boundaries, where $V$ is the volume of the boundary cell
 and $h_{x}$ is the $x$-diameter (poloidal length) of the boundary cell;
 \begin{equation}
 S_{1}=\left| S_{1}^{\pm}\right| =\left| \frac{B_{y}}{B}A\right|   \label{7}
 \end{equation}
-for the ``SOUTH'' and ``NORTH'' boundaries, where $S_{1}^{\pm}$ is the product of the
+for the "SOUTH" and "NORTH" boundaries, where $S_{1}^{\pm}$ is the product of the
 magnetic field pitch and the surface area on the cell face between the
 boundary cell and its neighbouring (previous) cell ($(ix,-1)$ and $(ix,0)$ for
-the ``SOUTH'' and $(ix,ny)$ and $(ix,ny-1)$ for the ``NORTH'');
+the "SOUTH" and $(ix,ny)$ and $(ix,ny-1)$ for the "NORTH");
 \begin{equation}
 S_{1}=\left| S_{1}^{\pm}\right| =\left| \frac{B_{x}}{B}A\right|   \label{8}
 \end{equation}
-for the ``WEST'' and ``EAST'' boundaries, where $S_{1}^{\pm}$ is the product of the
+for the "WEST" and "EAST" boundaries, where $S_{1}^{\pm}$ is the product of the
 magnetic field pitch and the surface area on the cell face between the
 boundary cell and its neighbouring (previous) cell ($(-1,iy)$ and $(0,iy)$ for
-the ``WEST'' and $(nx,iy)$ and $(nx-1,iy)$ for the ``EAST'');
+the "WEST" and $(nx,iy)$ and $(nx-1,iy)$ for the "EAST");
 \begin{equation}
 c_{s\alpha}=\sqrt{\frac{k_{B}\left( Z_{\alpha}T_{e}+T_{i}\right) }
 {A_{\alpha}m_{p}}}=\sqrt{\frac{k_{B}\left( Z_{\alpha}T_{e}+T_{i}\right) }
@@ -9518,16 +9518,16 @@ c_{sD\alpha}=\max\left(c_{s\alpha},0.1c_{s\alpha}\pm\left( B_{z}/B_{x}\right)
 u_{Dx}\right)   \label{11}
 \end{equation}
 is the conditionally corrected ion drift velocity of the atomic species $\alpha$
-due to the poloidal $\mathbf{E \times B}$ drift, where ''$+$'' applies to the
-``WEST'' and ''$-$'' to the ``EAST'' boundaries; the approximate correction is used only if
+due to the poloidal $\mathbf{E \times B}$ drift, where "$+$" applies to the
+"WEST" and "$-$" to the "EAST" boundaries; the approximate correction is used only if
 $0.1c_{s\alpha}\pm\left( B_{z}/B_{x}\right) u_{Dx}>c_{s\alpha}$;
 \begin{equation}
 c_{stD}=\max\left(c_{st},0.1c_{st}\pm\left( B_{z}/B_{x}\right) u_{Dx}\right)
 \label{12}
 \end{equation}
 is the conditionally corrected ion drift velocity of the multi-species plasma due
-to the poloidal $\mathbf{E \times B}$ drift, where ''$+$'' applies to the ``WEST''
-and ''$-$'' to the ``EAST'' boundaries; the approximate correction is used only if
+to the poloidal $\mathbf{E \times B}$ drift, where "$+$" applies to the "WEST"
+and "$-$" to the "EAST" boundaries; the approximate correction is used only if
 $0.1c_{st}\pm\left( B_{z}/B_{x}\right) u_{Dx}>c_{st}$;
 \begin{equation}
 \rho_{\alpha}=A_{\alpha}m_{p}n_{\alpha}=m_{\alpha}n_{\alpha}   \label{13}
@@ -9546,8 +9546,8 @@ is the relative concentration (particle density) of the atomic species $\alpha$;
 \label{16}
 \end{equation}
 is the positive ion electric current density in the boundary cells, where
-''$+$'' applies to the ``NORTH'' and ``EAST'' boundaries and ''$-$'' to
-the ``SOUTH'' and ``WEST'' boundaries;
+"$+$" applies to the "NORTH" and "EAST" boundaries and "$-$" to
+the "SOUTH" and "WEST" boundaries;
 \begin{equation}
 v_{th,e}=\sqrt{\frac{k_{B}T_{e}}{m_{e}}}   \label{17}
 \end{equation}
@@ -9575,7 +9575,7 @@ without changing the other parts of the source code, i.e. only the
 numerical values of the boundary sources are used in further
 calculations.
 
-\subsubsection{``SOUTH'' Boundary (Cells (ix,-1))}
+\subsubsection{"SOUTH" Boundary (Cells (ix,-1))}
 
 \paragraph{Particle Sources}
 
@@ -9696,7 +9696,7 @@ S_{ch3}=C_{ch1}\frac{e^{2}v_{th,e}S_{0}}{T_{e}}+C_{ch3}
 \frac{e^{2}v_{th,e}S_{1}}{T_{e}}+C_{ch5}\frac{e^{2}c_{st}S_{1}}{T_{e}}   \label{43}
 \end{equation}
 
-\subsubsection{``NORTH'' Boundary (Cells (ix,ny))}
+\subsubsection{"NORTH" Boundary (Cells (ix,ny))}
 
 \paragraph{Particle Sources}
 
@@ -9814,7 +9814,7 @@ S_{ch3}=C_{ch1}\frac{e^{2}v_{th,e}S_{0}}{T_{e}}+C_{ch3}
 \frac{e^{2}v_{th,e}S_{1}}{T_{e}}+C_{ch5}\frac{e^{2}c_{st}S_{1}}{T_{e}}   \label{66}
 \end{equation}
 
-\subsubsection{``WEST'' Boundary (Cells (-1,iy), Divertor Plate)}
+\subsubsection{"WEST" Boundary (Cells (-1,iy), Divertor Plate)}
 
 \paragraph{Particle Sources}
 
@@ -9936,7 +9936,7 @@ S_{ch3}=C_{ch1}\frac{e^{2}v_{th,e}S_{0}}{T_{e}}+C_{ch3}
 \frac{e^{2}v_{th,e}S_{1}}{T_{e}}+C_{ch5}\frac{e^{2}c_{stD}S_{1}}{T_{e}}   \label{89}
 \end{equation}
 
-\subsubsection{``EAST'' Boundary (Cells (nx,iy), Divertor Plate)}
+\subsubsection{"EAST" Boundary (Cells (nx,iy), Divertor Plate)}
 
 \paragraph{Particle Sources}
 
@@ -10268,8 +10268,8 @@ fl3dr \index{fl3dr}\index{b2time.nc, fl3dr} & poloidal electron flux, outboard d
 fo3dr \index{fo3dr}\index{b2time.nc, fo3dr} & poloidal total ion flux, outboard divertor & $s^{-1}.m^{-2}$ \\
     \hline
     \caption{Vector time dependent quantities stored in b2time.nc.
-       Note that the conversion to ``per unit area'' for fluxes is done
-       in the script ``2d\_profiles''; the actual data stored in
+       Note that the conversion to "per unit area" for fluxes is done
+       in the script "2d\_profiles"; the actual data stored in
        b2time.nc for fluxes are the fluxes per cell. There is a
        similar conversion from J to eV for temperatures.}
     \label{tab:3db2time}
@@ -10898,14 +10898,14 @@ commands are read in from \verb!stdin!.
 The basic idea in using \btwoplot is to specify the data quantity, some
 transformations, and then the plot command.  \btwoplot is stack
 based: six different stacks are used\index{b2plot, stacks}.  The most important stack is
-the ``matrix'' stack which is used to store quantities on the
+the "matrix" stack which is used to store quantities on the
 computational grid.  These quantities can be $nx \times ny \times
 ns$ where $nx$ and $ny$ are the size of the grid, and $ns$ ranges over
-the species.  An ``integer'' stack is used to supply arguments for some of
-the commands.  A ``real'' stack is also used to supply arguments for some
+the species.  An "integer" stack is used to supply arguments for some of
+the commands.  A "real" stack is also used to supply arguments for some
 commands and, importantly, for storing values to be used in doing
-arithmetic on the ``matrix'' stack.  The fourth stack stores
-``string'' values, and is also used for supplying data for some
+arithmetic on the "matrix" stack.  The fourth stack stores
+"string" values, and is also used for supplying data for some
 commands.  The fifth stack is a "wall" stack, which contains
 quantities that can be defined only on the edges of the domain.
 The wall data is of size $nbnd \times ns$, where $nbnd$ is the number
@@ -10919,14 +10919,14 @@ As input lines are parsed, each input entity is identified
 as being a command, a real value, an integer value or a string value.
 If insufficient data is stored on the appropriate stacks for
 command execution, an error message will be returned and no other action will be taken.
-The real, integer or string values are placed on the ``real'',
-``integer'' or ``string'' stacks, respectively.  Integers and reals
+The real, integer or string values are placed on the "real",
+"integer" or "string" stacks, respectively.  Integers and reals
 are distinguished by the latter having a decimal point, or having an
-\verb!e! or \verb!E! indicating exponential notation.  The ``integer'',
-``real'' and ``string'' stacks have a capacity of 1000 values each,
+\verb!e! or \verb!E! indicating exponential notation.  The "integer",
+"real" and "string" stacks have a capacity of 1000 values each,
 and the strings can be up to 256 characters long.
 If a stack overflow occurs, an error is returned and no action is taken.
-The ``matrix'', ``wall'' and ``target'' stacks have a capacity of 10 data
+The "matrix", "wall" and "target" stacks have a capacity of 10 data
 sets each. If a stack overflow occurs, the data set at the bottom of the stack
 is dropped, and the command can proceed. Stack overflows can be avoided by using
 the appropriate {\bf drop} (see \ref{sec:drop}) commands once a stack quantity is
@@ -10945,7 +10945,7 @@ and storing constants onto the stacks.
 The available data quantities are given in table
 \ref{tab:available-quantities}. These are quantities like the electron
 temperature, or the particle densities and typically store the results
-on the ``matrix'' stack.  Some of these commands also take arguments
+on the "matrix" stack.  Some of these commands also take arguments
 when calculating derived data.
 
 \begin{center}\index{b2plot, plasma quantities}
@@ -11326,7 +11326,7 @@ will contain 1.0, otherwise they will contain zero.
 
 The commands acting on the matrix stack are given in table
 \ref{tab:available-commands}.  These involve some manipulation or use of
-the data on the ``matrix'' stack.  The stack requirements of each command
+the data on the "matrix" stack.  The stack requirements of each command
 are shown in the table for the integer ('i'), real ('r'), string ('s'),
 matrix ('m'), wall ('w') and target ('t') stacks. Whenever these stack requirements
 are not met, an error is returned and no action is taken.
@@ -11423,9 +11423,9 @@ are not met, an error is returned and no action is taken.
   \end{longtable}
 \end{center}
 
-The commands acting on the ``matrix'' stack plotting are given in table
+The commands acting on the "matrix" stack plotting are given in table
 \ref{tab:matrixplot-commands}.  These modify some behavior or
-appearance of the "`matrix"' stack plot.  Their arguments requirements
+appearance of the "matrix" stack plot.  Their arguments requirements
 are indicated in the table.
 
 \begin{center}\index{b2plot, plot commands}
@@ -11572,7 +11572,7 @@ are indicated in the table.
 The maxima and minima for plotting can
 be set by changing the real variables listed in table
 \ref{tab:real-variables}.  These commands take one value from the
-``real'' stack and store it in an associated global variable.
+"real" stack and store it in an associated global variable.
 
 \begin{center}\index{b2plot, real variables}
   \begin{longtable}{|l|l|}
@@ -11632,7 +11632,7 @@ be set by changing the real variables listed in table
 Values for the text variables mentioned in
 tables \ref{tab:character-variables} can also be set.  These text
 variables often form the argument for a command.  Typically these
-commands take one value off the ``string'' stack.
+commands take one value off the "string" stack.
 
 \begin{center}\index{b2plot, character commands}
   \begin{longtable}{|c|c|c|c|c|c|c|c|l|}
@@ -11700,7 +11700,7 @@ commands take one value off the ``string'' stack.
 \end{center}
 
 In table \ref{tab:wallquantities}, we give the list of quantities that
-are available for use on the ``wall'' stack, containing values defined at the boundary surface
+are available for use on the "wall" stack, containing values defined at the boundary surface
 at the edge of the computational domain.
 
 \begin{center}\index{b2plot, wall quantities}
@@ -11815,7 +11815,7 @@ at the edge of the computational domain.
     z1 \index{b2plot, z1}        & Start $Z$ position of wall element $(m)$ \\
     z2 \index{b2plot, z2}        & End $Z$ position of wall element $(m)$ \\
     \hline
-    \caption{Quantities that can be stored in the ``wall'' stack.}
+    \caption{Quantities that can be stored in the "wall" stack.}
     \label{tab:wallquantities}
   \end{longtable}
 \end{center}
@@ -11833,7 +11833,7 @@ with which the logical comparison is done. If the comparison test is true, the a
 will contain 1.0, otherwise they will contain zero.
 
 In table \ref{tab:wallcommands}, we give the list of commands that
-act on the ``wall'' stack or affect wall graphs.
+act on the "wall" stack or affect wall graphs.
 
 \begin{center}\index{b2plot, wall commands}
   \begin{longtable}{|c|c|c|c|c|c|c|c|l|}
@@ -11910,15 +11910,15 @@ act on the ``wall'' stack or affect wall graphs.
     wzrng \index{b2plot, wzrng}     & 2 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wzrng}    & Select species range in wall data \\
     wzsel \index{b2plot, wzsel}     & 1 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wzsel}    & Select species in wall data \\
     \hline
-    \caption{Commands related to the ``wall'' stack and wall plots.}
+    \caption{Commands related to the "wall" stack and wall plots.}
     \label{tab:wallcommands}
   \end{longtable}
 \end{center}
 
 In table \ref{tab:targetquantities}, we give the list of quantities that
-are available for use on the ``target'' stack, containing values defined
+are available for use on the "target" stack, containing values defined
 inside the target elements, if the appropriate \SOLPSfive models have been
-activated. Note that by default, the ``target'' stack contains the target
+activated. Note that by default, the "target" stack contains the target
 temperature (in $K$) upon \btwoplot start-up.
 
 \begin{center}\index{b2plot, target quantities}
@@ -11990,7 +11990,7 @@ the elements in segment with index $-<$iseg$>$
 will contain zero, and the others will contain 1.0.
 
 In table \ref{tab:targetcommands}, we give the list of commands that
-act on the ``target'' stack or affect target graphs, with their respective
+act on the "target" stack or affect target graphs, with their respective
 stack requirements.
 
 \begin{center}\index{b2plot, target commands}
@@ -12062,13 +12062,13 @@ stack requirements.
     trgwsel \index{b2plot, trgwsel}  & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgwsel}  & Select wall element in target data \\
     trgzsel \index{b2plot, trgzsel}  & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgzsel}  & Select depth element in target data \\
     \hline
-    \caption{Commands related to the ``target'' stack and target plots.}
+    \caption{Commands related to the "target" stack and target plots.}
     \label{tab:targetcommands}
   \end{longtable}
 \end{center}
 
 Additionally, some real and integer constants used by the code can be read
-into the ``real'' and ``integer'' stacks of \btwoplot for further manipulation. These are given
+into the "real" and "integer" stacks of \btwoplot for further manipulation. These are given
 in the table \ref{tab:b2plotconstants}.
 
 \begin{center}\index{b2plot, constants}
@@ -12176,7 +12176,7 @@ Amongst the most common errors are
 
 Section \ref{sec:dataplotting} describes the commands used to produce a
 plot.  Sections \ref{sec:datamanipulation} describes commands that manipulate
-quantities on the ``matrix'' stack, and \ref{sec:arithmetic} describes the
+quantities on the "matrix" stack, and \ref{sec:arithmetic} describes the
 commands that can be used to do arithmetic.  Stack manipulating
 commands are described in section \ref{sec:stack}.  Graph appearance is covered in
 sections \ref{sec:pageformat} (page format), \ref{sec:graphformat} (graph
@@ -12248,7 +12248,7 @@ Equivalent to a combination of {\bf logx} (see \ref{sec:logx}) and {\bf f.y} abo
 but remembers ths old setting of linear or logarithmic abscissa scale.
 
 \subsubsection{plwl}\index{b2plot, plwl}\label{sec:plwl}
-Plots in the ``wall'' domain (applicable to wall data only).
+Plots in the "wall" domain (applicable to wall data only).
 This creates 2-D plots, with vertical lines separating
 the various wall segments.
 
@@ -12269,7 +12269,7 @@ Plots the mesh. The colour of the mesh can be chosen
 with the {\bf mcol} (see \ref{sec:mcol}) command.
 
 \subsubsection{surf}\index{b2plot, surf}\label{sec:surf}
-Produces a ``patch'' plot where each cell is plotted in the
+Produces a "patch" plot where each cell is plotted in the
 colour associated with its value.  This can be useful when the data is
 noisy and contour plots take excessive time.  See figure \ref{fig:d3d}.
 Recommended.
@@ -12984,12 +12984,12 @@ Copies the data from the $iy$-th column of the array on top of the matrix stack 
 \index{b2plot, page format commands}
 
 \subsubsection{a4l}\index{b2plot, a4l}\label{sec:a4l}
-Sets the plot area for A4 landscape. Use ``ctrans -d ps.mono.land |
-a4page | lpr''.
+Sets the plot area for A4 landscape. Use "ctrans -d ps.mono.land |
+a4page | lpr".
 
 \subsubsection{a4p}\index{b2plot, a4p}\label{sec:a4p}
-Sets the plot area for A4 portrait.  Use ``ctrans -d ps.mono | a4page |
-lpr''.
+Sets the plot area for A4 portrait.  Use "ctrans -d ps.mono | a4page |
+lpr".
 
 \subsubsection{sq}\index{b2plot, sq}\label{sec:sq}
 Sets the plot area to be square. This ensures that the$x$ and $y$ scaling factors are the same.
@@ -13083,7 +13083,7 @@ the command
 \begin{verbatim}
 'D-\\Ga\\R (photons m^{-3} s^{-1})' extl
 \end{verbatim}
-would give an extra graph label containing ``D-$\alpha$ (photons m$^{-3}$ s$^{-1}$)''.
+would give an extra graph label containing "D-$\alpha$ (photons m$^{-3}$ s$^{-1}$)".
 
 \subsubsection{stdl}\index{b2plot, stdl}\label{sec:stdl}
 Sets standard label as {\em extralabel}:
@@ -13783,7 +13783,7 @@ from the files stored in \$\verb!SOLPSTOP/modules/adas! or \$\verb!SOLPSTOP/data
 
 \begin{description}
 \item[B2PLOT\_DEV] is used to specify plotting to any combination of
-  ``x11'', ``ps'' or ``cgm'' (default is ``ps'').  Under \verb!tcsh!, use
+  "x11", "ps" or "cgm" (default is "ps").  Under \verb!tcsh!, use
   \begin{verbatim}
 setenv B2PLOT_DEV 'x11 ps'
   \end{verbatim}
@@ -13822,7 +13822,7 @@ the commands used to obtain them.
 \subsection{Plotting plasma solution data}
 \index{b2plot, plotting plasma quantities}
 
-Data from the plasma solution, stored on the ``matrix'' stack, can be visualized as per figure \ref{fig:te}.
+Data from the plasma solution, stored on the "matrix" stack, can be visualized as per figure \ref{fig:te}.
 
 \begin{figure}[hbtp]
   \centering
@@ -13841,7 +13841,7 @@ Note that here the physical domain plot ({\bf phys} figure \ref{fig:tephys}) has
 labels ({\bf 2.0 lbsz}), a logarithmic scale ({\bf logf}) covering 3 decades ({\bf 3 ndec}),
 includes the magnetic separatrix ({\bf sep}), the plasma outline ({\bf outl}), the vacuum
 vessel ({\bf vesl}), and has an extended vertical range ({\bf -2.2 zmin 2.2 zmax}). Note however that
-the plotting program always attempts to maintain ``nice'' axis bounds and conserve the graph
+the plotting program always attempts to maintain "nice" axis bounds and conserve the graph
 aspect ration (unless {\bf aspc} is toggled).
 
 Other examples:
@@ -13916,9 +13916,9 @@ yield for D$^+$ ({\bf sputchem 1 wzsel}). The latter is done on a logarithmic sc
 colour bar is the rightmost one. Not choosing
 the {\bf zsel} and {\bf wzsel} options would have given a series of plots, one per species, with their individual
 poloidal particle flux and chemical sputtering yield. If only the {\bf wzsel} option is used, one obtains a series of
-{\bf surf} plots with all the same ``wall'' data overlay. If only the {\bf zsel} option is used, then the {\bf wall}
+{\bf surf} plots with all the same "wall" data overlay. If only the {\bf zsel} option is used, then the {\bf wall}
 overlay will come from the first species, namely D$^0$ in this case. It is therefore recommended to always make sure
-that the species dimensions of the ``matrix'' and ``wall'' data match!
+that the species dimensions of the "matrix" and "wall" data match!
 
 \subsection{Target plot}
 \index{b2plot, plotting target quantities}
@@ -13945,19 +13945,19 @@ The overlay line at $y$=0, i.e. at the target surface in contact with the plasma
 here the incoming plasma heat flux ({\bf wallhflx}).
 
 The second plot (figure \ref{fig:Triple}) is a triple plot\index{b2plot, triple plot}, containing
-a plasma quantity from the ``matrix'' stack, (here {\bf te}), with {\bf wall} and {\bf target} overlays.
-The ``matrix'' ({\bf logf}), ``wall'' ({\bf logw}) and ``target'' ({\bf trglog}) data are all plotted on
+a plasma quantity from the "matrix" stack, (here {\bf te}), with {\bf wall} and {\bf target} overlays.
+The "matrix" ({\bf logf}), "wall" ({\bf logw}) and "target" ({\bf trglog}) data are all plotted on
 a logarithmic scale. The target data is obtained with the command
 \begin{verbatim}
 cooltemp wtot trgm-
 \end{verbatim}
-which takes the ``wall'' quantity {\bf cooltemp}, the temperature at the cooled end of the target plate, copies it
-over to the ``target'' stack ({\bf wtot}), and subtracts it from the preceding ``target'' stack value (here the
+which takes the "wall" quantity {\bf cooltemp}, the temperature at the cooled end of the target plate, copies it
+over to the "target" stack ({\bf wtot}), and subtracts it from the preceding "target" stack value (here the
 target temperature, which is loaded onto the stack by default at startup). So we obtain the amount by which
 the target has been heated by the plasma, and label it with {\bf 'Tp-Tc (K)' trgblbl}.
 The wall overlay data is the D$^+$ particle flux to the wall ({\bf wallflux 1 wzsel}), labeled with
-{\bf 'D+ wall flux' wallblbl}. The colour bars, from left to right, correspond to the ``matrix'', ``wall''
-and ``target'' data arrays.
+{\bf 'D+ wall flux' wallblbl}. The colour bars, from left to right, correspond to the "matrix", "wall"
+and "target" data arrays.
 
 \subsection{Radiation plot}
 \index{b2plot, radiation plots}
@@ -13983,7 +13983,7 @@ and plotting on the physical domain only.
 The third and fourth lines plot the line radiation data summed over
 species indices 2 to 8 and 9 to 19, respectively, assuming a D+C+Ne case,
 setting the data minimum to $10^4$ and maximum to $10^8$,
-labelling the graphs ``Carbon'' and ``Neon'' respectively.
+labelling the graphs "Carbon" and "Neon" respectively.
 
 \begin{figure}[hbtp]
 \ifpdf
@@ -14096,7 +14096,7 @@ neutral atomic species to be handled by \verb!Eirene!
 \item[DEF\_NCHEN]\index{DEF\_NCHEN}\index{NCHEN} the maximum number of
 energy bins for the diagnostic chords in \verb!Eirene!
 \item[DEF\_NCUT]\index{DEF\_NCUT}\index{NCUT} the maximum number of
-``cuts'' (2 for single null cases, 4 for double nulls)
+"cuts" (2 for single null cases, 4 for double nulls)
 \item[DEF\_NFL]\index{DEF\_NFL}\index{NFL} the maximum number of charged fluids
 passed from \verb!B2.5! to \verb!Eirene!
 \item[DEF\_NGSTAL]\index{DEF\_NGSTAL}\index{NGSTAL} the maximum number
@@ -14229,7 +14229,7 @@ We list here the additional compiler options available that only affect compilat
 \item[ASTRA] \index{ASTRA} To be used if one wishes to run in coupled mode with the core transport code ASTRA
 \item[CDF\_MOVIE] \index{CDF\_MOVIE} To be used if \verb!CDF! movie output is desired
 \item[CLASSICAL\_CURRENT] \index{CLASSICAL\_CURRENT} Turns on classical current drift term
-\item[COMPLICATED] \index{COMPLICATED} Uses a more ``complicated'' model for chord integration
+\item[COMPLICATED] \index{COMPLICATED} Uses a more "complicated" model for chord integration
 \item[DEF\_MAXCHORDS] \index{DEF\_MAXCHORDS} Maximum number of chords to be considered (default 10000)
 \item[F77] index{F77} Identifies specific code to \verb!Fortran-77! compilers
 \item[HITS\_PER\_CHORD] \index{HITS\_PER\_CHORD} Maximum number of chord points per cell? (default 50)
@@ -14794,7 +14794,7 @@ Elements
 &
 Straight line segments (displayed in bright white) connecting
 \textit{points}. Normally, they represent material surfaces
-in the neutral transport code (``additional surfaces''
+in the neutral transport code ("additional surfaces"
 in \verb!Eirene! parlance). You can edit elements (create,
 delete, split, join, change orientation, etc.) and assign
 \textit{variables} to them.
@@ -14823,7 +14823,7 @@ Straight line segments (displayed in cyan) connecting the outer nodes
 of the computational \textit{mesh} with surrounding \textit{structure}. The separators
 also represent additional surfaces, but you can only re-position their
 outer edges. Their purpose is separation of \textit{additional cells} - in
-terms of \verb!Eirene!. As of V. 1.4 of \verb!DG!, ``separators'' have been temporarily
+terms of \verb!Eirene!. As of V. 1.4 of \verb!DG!, "separators" have been temporarily
 disabled. \\
 Sources             &
 Special points which can be grouped together (displayed as white
@@ -15098,7 +15098,7 @@ To quit \verb!DG!, you must close all windows.
 To close a window, issue the {\tt Window|Close} menu command. You can
 also use the window manager to close a window.
 You can also use the window manager to close a window
-click the ``X'' at the top right of the menu. With Motif Window
+click the "X" at the top right of the menu. With Motif Window
 Manager, simply double-click the system menu. If you've made changes
 to the model in this window, a warning box will appear. Select
 {\tt Save} to save the model. Select {\tt Discard} to close the
@@ -15302,9 +15302,9 @@ specify the desired angle by using the
 Rotate tool, the commands under the
 {\tt View|Rotate} menu,
 or the equivalent
-keyboard shortcuts to increment (``Ctrl+(''), decrement (``Ctrl+)''), or
+keyboard shortcuts to increment ("Ctrl+("), decrement ("Ctrl+)"), or
 zero the angle ({\tt Rectify},
-shortcut ``Ctrl+C''); see Fig.~\ref{fig:rotate30}.
+shortcut "Ctrl+C"); see Fig.~\ref{fig:rotate30}.
 The rotation does not affect the
 underlying structures being displayed, but only the drawing procedure.
 The {\tt Previous view} command will undo rotations.
@@ -15327,7 +15327,7 @@ the rotation angle.
 \section{Stretching and shrinking the view}
 \label{sec:stretchview}\index{DG, stretching and shrinking view}
 
-The aspect ratio may be ``unlocked'' by enabling the
+The aspect ratio may be "unlocked" by enabling the
 {\tt View|Mode|Stretch} button.
 In {\tt Stretch} view mode, the
 {\tt View|Stretch/Shrink}
@@ -15336,9 +15336,9 @@ and the user may use these tools to
 stretch or shrink the $x$ and $y$ axes.
 To stretch or shrink the current view by a factor of 2,
 use the first four buttons of this menu.  The keyboard shortcuts are
-``Ctrl+Shift+H'' to stretch horizontally (in the $x$ direction),
-``Ctrl+H'' to shrink horizontally, ``Ctrl+Shift+V'' to stretch vertically
-(in the $y$ direction), and ``Ctrl+V'' to shrink vertically.
+"Ctrl+Shift+H" to stretch horizontally (in the $x$ direction),
+"Ctrl+H" to shrink horizontally, "Ctrl+Shift+V" to stretch vertically
+(in the $y$ direction), and "Ctrl+V" to shrink vertically.
 Precise stretching or shrinking factors can be specified with the
 {\tt Stretch \ldots} dialog.  The aspect ratio can be reset
 with the {\tt Justify} menu item.
@@ -15435,7 +15435,7 @@ invoke it:
 
 This is a script that invokes the \verb!dg2ef!
 executable to convert a
-\verb!DG! equilibrium file to the \verb!EFIT! format (specifically, the \verb!EFIT! ``g'' file).
+\verb!DG! equilibrium file to the \verb!EFIT! format (specifically, the \verb!EFIT! "g" file).
 This is invoked with (the file suffixes are recommended for clarity
 and are not enforced):
 \begin{quote}
@@ -15477,7 +15477,7 @@ specified as a third argument:
 \index{e2d}\index{ef2dg}\index{DG, converting from EFIT equilibrium}
 
 This is a script that invokes the \verb!ef2dg!
-executable to convert an \verb!EFIT! format (specifically, the \verb!EFIT! ``g'' file)
+executable to convert an \verb!EFIT! format (specifically, the \verb!EFIT! "g" file)
 equilibrium to the format read by \verb!DG!.
 This is invoked with (the file suffixes are recommended for clarity
 and are not enforced):
@@ -15490,7 +15490,7 @@ and are not enforced):
 
 This is a script that invokes the \verb!nk2dg!
 executable to convert an equilibrium in the
-``Naka'' format
+"Naka" format
 to the format read by \verb!DG!.
 This is invoked with (the file suffixes are suggested for clarity
 and are not enforced):
@@ -15601,7 +15601,7 @@ targets and are bounded by structures.
 The target related variables are single elements set using the
 variables
 {\tt Variables|Inner edge of inner target}, etc.,
-where the first ``inner'' and ``outer'' refers to the inner and outer edge
+where the first "inner" and "outer" refers to the inner and outer edge
 of the computational mesh, respectively, and the second to the
 usual inner and outer divertor target.  There is an additional
 set of targets available for double-null geometries; see:
@@ -15666,12 +15666,12 @@ uses the {\tt Structure} and
 elements that the algorithm is aware of are those specified in the
 {\tt Structure} variable, shown in Fig.~\ref{fig:createsurfacesfig}.
 Additionally, the algorithm
-recognizes at least two subsets of the structures, the ``targets'', which
+recognizes at least two subsets of the structures, the "targets", which
 consist of all closed loops in the structure on which elements in the
 {\tt Inner target} and {\tt Outer target} variables lie.
 All {\tt target} elements must lie on a
-closed loop in order that the targets have a well-defined ``inside'' and
-``outside''.
+closed loop in order that the targets have a well-defined "inside" and
+"outside".
 The outermost surface level is then defined as the flux value
 differing most greatly from the value on the separatrix, whose corresponding
 flux surface passes through every target but encounters no other elements in
@@ -15683,7 +15683,7 @@ absolute deviation from the separatrix flux.
 
 With this procedure, it is clear that the outermost level must be a flux
 extremum of some element of the structure; we call this element the
-``bounding element''. The capability was added to \verb!DG! to record this bounding
+"bounding element". The capability was added to \verb!DG! to record this bounding
 element during surface creation and mark it from within the
 {\tt Create Surface(s)...} dialog. See, e.g., Fig.~\ref{fig:boundingelement}.
 Note that the core region has no bounding
@@ -15699,14 +15699,14 @@ changed, the bounding element might different than before.
 \else
   \centerline{\includegraphics[width=15.0cm]{bde_pfr_zoom.epsi}}
 \fi
-\caption{Zoom of the PFR showing the highlighted ``bounding element''.}
+\caption{Zoom of the PFR showing the highlighted "bounding element".}
 \label{fig:boundingelement}
 \end{figure}
 
 \subsubsection{In case of difficulty \ldots}
 
 % THIS DESCRIPTION STILL HAS A LITTLE TOO MUCH CODE JARGON (namely,
-% the ``surface zones'') TO BE USEFUL.  Come back to this if it can
+% the "surface zones") TO BE USEFUL.  Come back to this if it can
 % be clarified.
 
 The process of creating surfaces is perhaps the most confusing and difficult
@@ -15716,7 +15716,7 @@ outermost flux surface level differs in detail from the one used by
 you might benefit from reading the precise description of \verb!DG!'s
 current algorithm for setting the outermost flux level:
 
-It is to be understood that ``maximum'' and ``minimum''
+It is to be understood that "maximum" and "minimum"
 always refer to the absolute flux deviation from the separatrix.
 First, find the surface zone and the separatrix(ces) of the zone. If
 there are two separatrices, draw surfaces from one to the other. Else
@@ -15819,7 +15819,7 @@ effect on the grid points.
 
 In \verb!Carre! mode, the operation of this dialog box is directly
 analogous to that used to create surfaces (Sec.~\ref{sec:createsurfaces}).
-The ``zone'' refers to the section of the separatrix along which
+The "zone" refers to the section of the separatrix along which
 grid points are to be created.
 The number of cells must be input manually.  The line graph in the dialog box is a
 simple depiction of the relative spacing of the grid points.  In \verb!Carre! mode,
@@ -15877,13 +15877,13 @@ poloidal plane (i.e., that may be non-axisymmetric).
 For purposes of defining chords in three
 dimensions, two coordinate
 modes have been established.
-In ``Cartesian'' mode, $Z$ is the
-vertical axis in the ``top-down view'' (Sec.~\ref{sec:topdownview});
+In "Cartesian" mode, $Z$ is the
+vertical axis in the "top-down view" (Sec.~\ref{sec:topdownview});
 the horizontal axis in the poloidal plane is $X$ and the
 vertical axis is $Y$ (note: this is a left-handed coordinate system).
-In ``Cylindrical'' mode, $Z$ is the vertical coordinate in the poloidal
-plane, identical to $Y$ in ``Cartesian'' mode.
-In the ``top-down view'',
+In "Cylindrical" mode, $Z$ is the vertical coordinate in the poloidal
+plane, identical to $Y$ in "Cartesian" mode.
+In the "top-down view",
 the horizontal axis is
 designated as $R$ and the toroidal angle as $\phi$ (counterclockwise relative
 to the horizontal axis) is entered in degrees.
@@ -15891,21 +15891,21 @@ to the horizontal axis) is entered in degrees.
 Chords can be displayed with either
 {\tt View|Display|Chords} or {\tt View|Display|3dchords}.  For chords
 confined to the poloidal plane, these are identical, and chords will
-not be visible in the ``top-down view''.  For chords with a toroidal
+not be visible in the "top-down view".  For chords with a toroidal
 extent, selecting
 {\tt View|Display|Chords} in the
 poloidal plane results in straight
 line segments connecting the
-$X$ and $Y$ ``Cartesian'' coordinates of the chord end points.
-Equivalently in the ``Cylindrical'' mode, these are the $R$
+$X$ and $Y$ "Cartesian" coordinates of the chord end points.
+Equivalently in the "Cylindrical" mode, these are the $R$
 and $Z$ coordinates at the end points.  In contrast,
 {\tt View|Display|3dchords} shows the projection
-of the toroidal path of the chords on the $Z = 0$ (``Cartesian'')
-or $\phi = 0$ (``Cylindrical'') plane.  In the ``top-down view'',
+of the toroidal path of the chords on the $Z = 0$ ("Cartesian")
+or $\phi = 0$ ("Cylindrical") plane.  In the "top-down view",
 both {\tt View|Display|Chords} and
 {\tt View|Display|3dchords} show the straight
-line paths of the chords in the $X$-$Z$ (``Cartesian'') or
-$R \cos \phi$-$R \sin \phi$ (``Cylindrical'') plane.
+line paths of the chords in the $X$-$Z$ ("Cartesian") or
+$R \cos \phi$-$R \sin \phi$ ("Cylindrical") plane.
 
 Starting with file format version 115, chords with $X$, $Y$,
 and $Z$
@@ -15932,14 +15932,14 @@ The third method for creating chords is with the
 \index{DG, modifying chords}
 
 The {\tt Move} tool allows chords to be manipulated in either
-the poloidal plane or in ``top-down view''.  The user can
+the poloidal plane or in "top-down view".  The user can
 manipulate either the {\tt Chords} object (displayed by
 {\tt View|Display|Chords}) or the
 {\tt 3dchords} object
 (displayed by {\tt View|Display|3dchords}.
 The {\tt Adjust chord} tool moves an end point of the chord
 while keeping its radial coordinate constant.  Holding down the
-``shift'' key while using the {\tt Move}
+"shift" key while using the {\tt Move}
 tool replicates this behavior,
 but with slightly
 different graphics that conform to the rest of the {\tt Move}
@@ -15963,7 +15963,7 @@ this for all marked chords.  The
 {\tt Edit|Mark all chords} command can be used
 to mark all chords in preparation for extension.
 
-{\em Note:} as of August 2007, the ``mathematically correct'' procedure
+{\em Note:} as of August 2007, the "mathematically correct" procedure
 for extending chords has not been debugged. However, two macros
 defined in \verb!chords.c! may be used to select a different preferred
 implementation of the procedure.  \texttt{EXTCHORD\_2D}
@@ -16058,10 +16058,10 @@ useful in the vicinity of the X-point.
 
 {\tt Margin} specifies the minimum distance between adjacent mesh
 points. If this limit is about to get exceeded, adjacent points start
-moving in order to ``make room''.
+moving in order to "make room".
 The {\tt Double border} setting, when enabled, instructs \verb!DG! to treat
 outermost mesh cells as a double border. They would be resized
-together with adjacent ``regular'' cells.
+together with adjacent "regular" cells.
 
 A modified mesh can be written out with the
 {\tt File|Export|Mesh...} dialog.
@@ -16245,8 +16245,8 @@ box, there is a row of buttons that affect the entire box.
 Below this are fields for the individual variables.  Finally, there
 is a status line at the bottom of the dialog box.
 
-The ``$\bigtriangleup$''
-button on top of the dialog box allows you to ``roll it up''
+The "$\bigtriangleup$"
+button on top of the dialog box allows you to "roll it up"
 so that the box occupies less screen space. In
 order to restore the dialog box to its full size, press this button
 again.
@@ -16301,7 +16301,7 @@ The {\tt Close} button closes the dialog box.
 
 Pressing the right mouse button over a text field or a button
 associated with a variable brings up a pop-up menu. If the mouse has
-less than 3 buttons, the menu can be displayed by pressing ``Ctrl+left''
+less than 3 buttons, the menu can be displayed by pressing "Ctrl+left"
 button.
 The {\tt Reset} command sets the text field to the current value of the
 variable, similar to the {\tt Reset all} button but affecting only one
@@ -16309,7 +16309,7 @@ variable. For variables storing sets of objects, this command acts
 exactly like the {\tt Mark} button.
 The {\tt Display values} command displays values of variables that apply
 to elements, chords or sources next to corresponding objects. In order
-to remove these ``labels'', highlight any object or use the
+to remove these "labels", highlight any object or use the
 {\tt View|Remove labels} command from the main menu.
 Commands in the {\tt Compare} sub-menu compare values of the variable to
 the value entered in the edit field and mark matching objects.
@@ -16729,7 +16729,7 @@ The {\tt <variable>} block has following formats:
 is included. Dummy valurs are used for unused numbers. For variables
 that apply to sources, a value for each source is included. Values are
 written in the same order as sources in the {\tt sources} section.
-  \item ``Set of elements'' variables that apply to the layer:
+  \item "Set of elements" variables that apply to the layer:
 \begin{verbatim}
 <variable name>
   <element number>
@@ -16785,7 +16785,7 @@ JET in 2002.
 \end{description}
 
 \clearpage
-\section{B2.5 ``.dat'' and ``.prt'' files}
+\section{B2.5 ".dat" and ".prt" files}
 \index{B2.5, input/output files}\label{sec:b2IOfiles}
 
 \begin{table}[hbtp]

@@ -22,7 +22,7 @@ else
                 * ) ${CPP} ${CPP5OPTS} ${DEFINES} ${INCLUDE} $< | ${SED} > ${OBJDIR}/$*.f ;; \
         esac
 endif
-	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -c ${OBJDIR}/$*.f
+	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/$*.o -c ${OBJDIR}/$*.f
 endif
 	@- if [ -f $*.o ] ; then /bin/mv $*.o ${OBJDIR}/ ; fi
 	@- if [ -f $*.${MOD} ] ; then /bin/mv $*.${MOD} ${OBJDIR}/ ; fi
@@ -37,7 +37,7 @@ ifeq ($(strip $(SED)),)
 else
 	-${CPP} ${CPP5OPTS} ${DEFINES} ${INCLUDE} $< | ${SED} > ${OBJDIR}/$*.f
 endif
-	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${INCMOD}${OBJDIR} ${OBJDEST} -c ${OBJDIR}/$*.f
+	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/$*.o -c ${OBJDIR}/$*.f
 endif
 	@- if [ -f $*.o ] ; then /bin/mv $*.o ${OBJDIR}/ ; fi
 ifeq ($(strip $(LINK_MOD)),)

@@ -30,7 +30,7 @@ DBLSED =
 
 INCMOD = -I
 MOD = mod
-OBJDEST = -module ${OBJDIR} -o ${OBJDIR}/$*.o
+OBJDEST = -module ${OBJDIR}
 
 BLD = ar rcv
 

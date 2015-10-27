@@ -19,7 +19,7 @@ DBLSED = sed -e s:\#PREC\#:d:g
 
 INCMOD = -I
 MOD = mod
-OBJDEST = -o ${OBJDIR}/$*.o
+OBJDEST =
 
 BLD = ar rcv
 

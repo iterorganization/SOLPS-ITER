@@ -35,7 +35,7 @@ BLD 		= ar rcv
 
 INCMOD 		= -module 
 MOD 		= mod
-OBJDEST 	= -o ${OBJDIR}/$*.o
+OBJDEST 	=
 
 GRLIBES 	= ${LD_NCARG}
 
