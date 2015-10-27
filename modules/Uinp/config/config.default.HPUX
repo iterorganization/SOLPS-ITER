@@ -9,7 +9,11 @@ endif
 
 
 FC	     = f77
+ifdef SOLPS_DEBUG
 FFLAGS	 = -g 
+else
+FFLAGS   =
+endif
 INCLUDE  = -I${SRCDIR} -I${EIRINC} -I${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
 CPP	     = /lib/cpp

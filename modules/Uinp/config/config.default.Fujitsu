@@ -20,3 +20,4 @@ CPP	     = /lib/cpp -C -traditional
 MOD 	   = mod
 
 LDLIBS 	 = ${LD_MSCL}
+LDEXTRA  =

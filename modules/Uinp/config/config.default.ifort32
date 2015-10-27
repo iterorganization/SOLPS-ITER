@@ -9,10 +9,15 @@ endif
 
 
 FC	     = ifort
+ifdef SOLPS_DEBUG
 #FFLAGS	 = -g -Am -X9 -O0 -fw
 FFLAGS	 = -g
+else
+FFLAGS   =
+endif
 INCLUDE  = -I${SRCDIR} -I${EIRINC} -I${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
 CPP	     = /lib/cpp -C -traditional
 
 LDLIBS   = ${LD_MSCL}
+LDEXTRA  =

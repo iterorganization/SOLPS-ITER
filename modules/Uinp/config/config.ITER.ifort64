@@ -3,10 +3,15 @@
 LD_MSCL ?= `pkg-config mscl --libs`
 
 FC	     = ifort
+ifdef SOLPS_DEBUG
 FFLAGS	 = -g
+else
+FFLAGS   =
+endif
 INCLUDE  = -I${SRCDIR} -I${EIRINC} -I${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
 CPP	     = /lib/cpp -C -traditional
 
 MOD 	   = mod
 LDLIBS	 = ${LD_MSCL}
+LDEXTRA  = -i_dynamic
