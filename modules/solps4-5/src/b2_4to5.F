@@ -794,7 +794,7 @@ c Fill out b2mod_indirect arrays
           zamax(i) = zi_4(ifl(i))
           is_neutral(i) = .false.
         else
-          na(-1:nx,-1:ny,i) = 1.0_R8   
+          na(-1:nx,-1:ny,i) = 1.0e8_R8   
           ua(-1:nx,-1:ny,i) = 0.0_R8
           uadia(-1:nx,-1:ny,0:1,i) = 0.0_R8
           am(i) = nint(mi_4(ifl(i+1))/mp)
