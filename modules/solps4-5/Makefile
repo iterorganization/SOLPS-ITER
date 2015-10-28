@@ -108,7 +108,7 @@ EXCLUDELIST = ${patsubst %.exe, %.o, ${PROG_XR}}
 XREXE = ${patsubst %.exe, ${OBJDIR}/%.exe, ${PROG_XR}}
 XROBJ = ${patsubst %.exe, ${OBJDIR}/%.o, ${PROG_XR}}
 
-XREXTRA=${OBJDIR}/b2_4to5.o ${OBJDIR}/xerset_5.o
+XREXTRA=${OBJDIR}/b2_4to5.o ${OBJDIR}/xerset_5.o ${OBJDIR}/myblass.o
 MNEXTRA=
 
 .PHONY: DEFAULT ALL clean depend listobj tags
