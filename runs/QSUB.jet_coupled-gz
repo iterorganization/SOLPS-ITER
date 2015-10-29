@@ -44,7 +44,7 @@ cd #SOLPSTOP#
 source setup.csh
 cd $SAVEPWD
 
-time b2run ${USE_MPI} b2mn < input.dat | gzip -9 >! run.log
+time b2run ${USE_MPI} b2mn < input.dat | gzip -9 >! run.log.gz
 
 QSUB.postprocess_coupled
 

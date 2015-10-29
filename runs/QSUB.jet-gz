@@ -39,7 +39,7 @@ cd #SOLPSTOP#
 source setup.csh
 cd $SAVEPWD
 
-time b2run -s | gzip -9 >! run.log
+time b2run -s | gzip -9 >! run.log.gz
 
 QSUB.postprocess
 
