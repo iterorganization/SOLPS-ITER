@@ -194,6 +194,9 @@ ${OBJDIR}/eirdiag.o: ${OBJDIR}/clgin.${MOD} ${OBJDIR}/ccoupl.${MOD}
 
 ${OBJDIR}/photon.o: ${OBJDIR}/clogau.${MOD} ${OBJDIR}/czt1.${MOD} ${OBJDIR}/comusr.${MOD}
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/photon.o -c ${SRCDIR}/Eirene_modules/photon.F
+${OBJDIR}/precision.o:
+	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/precision.o -c ${SRCDIR}/Eirene_modules/precision.F
+
 endif
 
 ${OBJDIR}/parmmod.${MOD}: ${OBJDIR}/precision.${MOD}
