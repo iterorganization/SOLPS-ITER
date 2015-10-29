@@ -284,7 +284,7 @@ clean_b25eirene:
 
 
 clean_b25eirene_mpi:
-	cd modules/Eirene; ${MAKE} clean OUSE_B25=-DB25_EIRENE   USE_MPI=-DUSE_MPI
+	cd modules/Eirene; ${MAKE} clean USE_B25=-DB25_EIRENE   USE_MPI=-DUSE_MPI
 	cd modules/B2.5;   ${MAKE} clean USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
 
 clean_uinp:
