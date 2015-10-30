@@ -53,8 +53,17 @@ endloop:
       source $SOLPSTOP/SETUP/mpi
       set MPI_SET=yes
     endif
-    set TIME="$1"
-    shift
+    set TIME=`echo $argv | sed -e 's:^"::' -e 's:" .*::'`
+    set nargs=`echo $TIME | awk '{print split($0,args," ")}'`
+    argloop:
+      if ($nargs > 0) then
+        shift
+        @ nargs = $nargs - 1
+      else
+        goto argloopend
+      endif
+      goto argloop
+    argloopend:
   endif
   if ("X${1}X" == "X-dX") then
     shift

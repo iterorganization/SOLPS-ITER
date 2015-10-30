@@ -1798,7 +1798,7 @@ Each submission command file can handle five possible cases:
   \item{QSUB.*\_coupled-gz} Runs a coupled \SOLPSITER case where the output log file has been compressed (activated with the "-z" option).
   \item{ } Any otherwise named file specified by the user and given as an argument to the submission command (in which case the "-z" option is ineffective). The specified file must be located in the \$\verb!{SOLPSTOP}\runs! directory, or in the actual run directory on one above it.
 \end{description}
-where "*" stands for "iter", "itm", "jet", or "sge", referring to the machine system on which the
+where "*" stands for "iter", "itm", "jet", "lsf", or "sge", referring to the machine system on which the
 submission script is to be used. The "\_coupled" scripts are used when the presence of an \verb!Eirene!
 \verb!input.dat! input file is detected in the run directory.
 All the submission scripts make use of \verb!b2run! so the same possibility of submitting runs from
@@ -1826,6 +1826,12 @@ or stops if the submission file is not found.
 
 If \verb!<<Submission_file>>! is not specified, \verb!itersubmit! looks for \verb!QSUB.iter_coupled! or
 for \verb!QSUB.iter! depending on whether a coupled or a standalone run is required (decided upon detection or not of an \verb!Eirene! \verb!input.dat! file).
+
+In the case one wishes to run the code with MPI and needs to pass MPI options to the launching program, this is achieved by means of the "-m" option, followed by the desired options inside double quotes, as follows:
+\begin{verbatim}
+itersubmit -m "<my MPI options>" <my_optional_submission_file_name>
+\end{verbatim}
+The launching program is identified by the variable \$\verb!MPI_EXEC! inside the submission file, and options can be by hand as well using the \$\verb!MPI_OPTS! variable.
 
 The \verb!QSUB.iter! script first of all changes directory to \$\verb!{SOLPSTOP}!
 with the help of \verb!SOLPSTOP! file

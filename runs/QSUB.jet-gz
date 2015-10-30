@@ -33,13 +33,21 @@ echo Using SOLPSTOP = #SOLPSTOP#
 # popd
 cd "$PBS_O_WORKDIR"
 
+set USE_MPI=""
+if ($?SOLPS_MPI) then
+  set MPI_EXEC=mpiexec
+  set MPI_OPTS=#MPIOPTS#
+  set USE_MPI="-m ${MPI_EXEC} ${MPI_OPTS}"
+  set USE_MPI=`echo $USE_MPI | sed -e 's:-m :-m ''":' -e 's:$:"'':'`
+endif
+
 update_solps_run_status "Started on `hostname` at `date` in directory `pwd`"
 setenv SAVEPWD #PWD#
 cd #SOLPSTOP#
 source setup.csh
 cd $SAVEPWD
 
-time b2run -s | gzip -9 >! run.log.gz
+time b2run -s ${USE_MPI} b2mn | gzip -9 >! run.log.gz
 
 QSUB.postprocess
 
