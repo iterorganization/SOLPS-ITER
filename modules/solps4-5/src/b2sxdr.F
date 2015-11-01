@@ -254,6 +254,8 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
       parg(0) = -1.0_R8
       parg(1:99) = 0.0_R8
       call cfwure (nout(1), 100, parg, 'parg')
+*   ..in 5.1 and SOLPS-ITER, we need a fort.30 file early to build triangular grids
+      call write_f30 (nx, ny)
 *   ..write dummy b2ai.dat
       open(unit=70,file='b2ai.dat')
       write(70,'(a)') 'Dummy file, plasma state imported from B2SXDR'

@@ -130,6 +130,8 @@ ${OBJDIR}/b2_neutrals_namelist.o: ${OBJDIR}/eirmod_parmmod.${MOD}
 
 ${OBJDIR}/default.o: ${OBJDIR}/ceirsrt.${MOD}
 
+${OBJDIR}/eirene_f30f31.o: ${OBJDIR}/ctrig.${MOD}
+
 ${OBJDIR}/find_param.o: ${OBJDIR}/ccrm.${MOD} ${OBJDIR}/comusr.${MOD} ${OBJDIR}/comprt.${MOD}
 
 ${OBJDIR}/if0prm.o: ${OBJDIR}/cinit.${MOD} ${OBJDIR}/comusr.${MOD} ${OBJDIR}/comprt.${MOD}
@@ -140,6 +142,9 @@ ${OBJDIR}/leer.o: ${OBJDIR}/comprt.${MOD}
 
 ${OBJDIR}/eirmod_braeir.${MOD}: 
 	ln -sf ${EIRDIR}/eirmod_braeir.${MOD} ${OBJDIR}
+
+${OBJDIR}/eirmod_ctrig.${MOD}:
+	ln -sf ${EIRDIR}/eirmod_ctrig.${MOD} ${OBJDIR}
 
 ${OBJDIR}/eirmod_extrab25.${MOD}: 
 	ln -sf ${EIRDIR}/eirmod_extrab25.${MOD} ${OBJDIR}
