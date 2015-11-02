@@ -2572,6 +2572,7 @@ which contains
   \verb!POTPAR(,2)! specifies the bias potential in $V$
   \item[12] Imposes the currents due to drifts for the South core boundary. Must be used in conjunction with \verb!istyle_cur_contr_on_S_and_N=2!
   \item[13] Imposes the currents due to drifts for the South private flux and North boundaries. Must be used in conjunction with \verb!istyle_cur_contr_on_S_and_N=2!
+  \item[16] Feedback condition of constant electric potential for a given prescribed current. The prescribed current (in $A$) is given by the sum of the \verb!POTPAR(,1)! of all the boundary conditions with \verb!BCPOT=16!. Still experimental, will not work for drift cases.
   \item[21] constant potential feedback scaled by potential on the ring \verb!bc_type21_ref! away,
   \verb!POTPAR(,,1)! specifies the desired electric potential in $V$,
   \verb!POTPAR(,,2)! is the strength of the feedback.
