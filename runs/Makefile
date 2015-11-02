@@ -44,6 +44,9 @@ target_mn = b2mn.prt b2fparam b2fstate b2fmovie b2ftrace b2ftrack b2fplasma b2_t
 else
 target_mn = b2mn.prt b2fparam b2fstate b2fmovie b2ftrace b2ftrack b2fplasma b2_to_astra.dat
 endif
+ifdef USE_IMPGYRO
+target_mn += restart_ext
+endif
 target_uf = b2uf.prt
 target_fu = b2fu.prt
 target_co = b2co.prt
@@ -143,7 +146,16 @@ endif
 ifndef STAND_ALONE
 	-cd b2mn.exe.dir ; ln -s ../HYDHEL ../AMJUEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ln -s ../input.dat fort.1 ; [ -e ../fort.15 ] && cp -p ../fort.15 . ; [ -e ../fort.14 ] && cp -p ../fort.14 . ; [ -e ../fort.13 ] && cp -p ../fort.13 . ; [ -e ../fort.12 ] && cp -p ../fort.12 . ; [ -e ../fort.11 ] && cp -p ../fort.11 . ; [ -e ../fort.10 ] && cp -p ../fort.10 . ; [ -e ../fort.44 ] && cp -p ../fort.44 .
 endif
+ifdef USE_IMPGYRO
+	cd b2mn.exe.dir ; touch b2ig.conf ; echo "-n ${NPE_B2} : ${B2OBJ}/b2mn.exe" >> b2ig.conf ; echo "-n ${NPE_EXT} : ${EXE_EXT}" >> b2ig.conf ; ln -s ../config ../pre . ; mkdir tracing ;\
+	touch use_impgyro ; [ -e ../restart_ext ] && cp ../restart_ext . ;\
+	mpiexec -config b2ig.conf;\
+	mv $(target_mn) .. ; mv tracing/* ../tracing ; \
+	rm -f $(notdir $^) .quit ; rm -f b2ig.conf use_impgyro config pre ;\
+	mv .*.?* ${WD_EXT}/. ; mv fort.150 ${WD_EXT}/. ; impgyro.* ${WD_EXT}/. 
+else
 	cd b2mn.exe.dir ; mkdir tracing ; ${TIME} ${B2OBJ}/b2mn.exe ; mv $(target_mn) .. ; mv -f tracing/* ../tracing ; [ -e ../fort.30 ] || mv fort.30 .. ; rm -f $(notdir $^) .quit
+endif
 ifndef STAND_ALONE
 	-[ -e b2mn.exe.dir/fort.10 ] && mv b2mn.exe.dir/fort.10 . || echo > /dev/null
 	-[ -e b2mn.exe.dir/fort.11 ] && mv b2mn.exe.dir/fort.11 . || echo > /dev/null
