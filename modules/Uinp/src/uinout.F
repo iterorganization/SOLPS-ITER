@@ -17,7 +17,7 @@ c   produce "input.eir" file with input data for eirene
 c=======================================================================
 #include "uinput.inc"
 #include "impcon.inc"
-#include "git_version.h"
+#include "git_version_Uinp.h"
 
       integer i,j,k,l,m,n,icont
       logical ulmlti,ex,carbon,moly
@@ -126,7 +126,8 @@ c*** 1.  General data for the run
 
       open(iunoo,file=ufnm)
       write(iunoo,700) txtrun
-      utxtgt = " Created with SOLPS-ITER Uinp version "//git_version
+      utxtgt =
+     . " Created with SOLPS-ITER Uinp version "//git_version_Uinp
       write(iunoo,700) utxtgt
       write(iunoo,700) utxthd(1)   
       write(iunoo,707) nmach,nmode,ntcpu,nfile,niter0,niter,

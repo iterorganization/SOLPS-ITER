@@ -83,7 +83,7 @@ ${OBJDIR}/${PROG}: ${OBJDIR}/uinput.o ${OBJDIR}/uiblkd.o ${OBJDIR}/uiblb2.o ${OB
 ${OBJDIR}/ub2p: ${OBJDIR}/ub2p.o ${OBJDIR}/libui.a ${MAKES} ${MNEXTRA}
 	${FC} $(FFLAGS) -o ${OBJDIR}/ub2p ${OBJDIR}/ub2p.o ${OBJDIR}/libui.a ${MNEXTRA} ${LDLIBS} $(LDEXTRA)
 
-${OBJDIR}/libui.a: ${DEST} ${SRCDIR}/git_version.h
+${OBJDIR}/libui.a: ${DEST} ${SRCDIR}/git_version_Uinp.h
 	@ar rucv $@ ${DEST}
 	ranlib $@
 
@@ -104,7 +104,7 @@ ${OBJDIR}/b2mod_layer.o:
 	ln -sf ${B2OBJ}/b2mod_layer.o ${OBJDIR}
 
 clean:
-	rm -rf ${OBJDIR}/*.o ${OBJDIR}/*.f ${OBJDIR}/${PROG} ${OBJDIR}/libui.a ${OBJDIR}/ub2p ${OBJDIR}/LISTOBJ ${SRCDIR}/git_version.h ${OBJDIR}/dependencies*
+	rm -rf ${OBJDIR}/*.o ${OBJDIR}/*.f ${OBJDIR}/${PROG} ${OBJDIR}/libui.a ${OBJDIR}/ub2p ${OBJDIR}/LISTOBJ ${SRCDIR}/git_version_Uinp.h ${OBJDIR}/dependencies*
 ifneq (${MOD},o)
 	rm -f ${OBJDIR}/*.${MOD}
 endif
@@ -124,11 +124,11 @@ tags:
 
 ${OBJDIR}/LISTOBJ: listobj
 
-VERSION: ${SRCDIR}/git_version.h
+VERSION: ${SRCDIR}/git_version_Uinp.h
 
-${SRCDIR}/git_version.h: force
-	@echo "      character*27 :: git_version ='`git describe --dirty --always`'" > ${SRCDIR}/git_version_new.h
-	@if cmp -s ${SRCDIR}/git_version_new.h ${SRCDIR}/git_version.h; then rm ${SRCDIR}/git_version_new.h; else mv ${SRCDIR}/git_version_new.h ${SRCDIR}/git_version.h; fi
+${SRCDIR}/git_version_Uinp.h: force
+	@echo "      character*27 :: git_version_Uinp ='`git describe --dirty --always`'" > ${SRCDIR}/git_version_new.h
+	@if cmp -s ${SRCDIR}/git_version_new.h ${SRCDIR}/git_version_Uinp.h; then rm ${SRCDIR}/git_version_new.h; else mv ${SRCDIR}/git_version_new.h ${SRCDIR}/git_version_Uinp.h; fi
 
 ${OBJDIR}/dependencies.${COMPILER}:
 	-mkdir -p ${OBJDIR}
