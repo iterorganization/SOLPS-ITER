@@ -143,7 +143,6 @@ ifndef STAND_ALONE
 $(target_mn) : b2mn.dat b2fgmtry b2fpardf b2fstati b2frates fort.30 fort.33 fort.34 fort.35
 else
 $(target_mn) : b2mn.dat b2fgmtry b2fpardf b2fstati b2frates fort.30
-<<<<<<< HEAD
 endif
 	rm -rf b2mn.exe.dir > /dev/null ; mkdir b2mn.exe.dir ; cp $^ b2mn.exe.dir
 	rm -f $(target_mn) fort.31 b2time.nc b2wall.nc b2tallies.nc b2movies.nc > /dev/null
@@ -158,20 +157,6 @@ ifdef USE_IMPGYRO
 	rm -f $(notdir $^) .quit ; rm -f b2ig.conf use_impgyro config pre ; [ -e restart_ext ] && cp restart_ext ../. ;\
 	mv .*.?* ${WD_EXT}/. ; mv fort.150 ${WD_EXT}/. ;\
 	mv impgyro.* ${WD_EXT}/. ; mv preg ${WD_EXT}/. ; cp restart ${WD_EXT}/. ; mv restart ../.
-=======
-	rm -rf b2mn.exe.dir ; mkdir b2mn.exe.dir ; cp $^ b2mn.exe.dir
-	rm -f $(target_mn) fort.31 fort.44 b2time.nc b2wall.nc b2tallies.nc b2movies.nc
-ifndef STAND_ALONE
-	-cd b2mn.exe.dir ; ln -s ../HYDHEL ../AMJUEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../fort.33 ../fort.34 ../fort.35 ../graphite_ext.dat ../mo_ext.dat . ; ln -s ../input.dat fort.1 ; [ -e ../fort.15 ] && cp -p ../fort.15 . ; [ -e ../fort.13 ] && cp -p ../fort.13 .
-endif
-ifdef USE_IMPGYRO
-	cd b2mn.exe.dir ; touch b2ig.conf ; echo "-n ${NPE_B2} : ${B2OBJ}/b2mn.exe" >> b2ig.conf ; echo "-n ${NPE_EXT} : ${EXE_EXT}" >> b2ig.conf ; ln -s ../config ../pre . ; mkdir tracing ;\
-	touch use_impgyro ; [ -e ../restart_ext ] && cp ../restart_ext . ;\
-	mpiexec -config b2ig.conf;\
-	mv $(target_mn) .. ; mv tracing/* ../tracing ; \
-	rm -f $(notdir $^) .quit ; rm -f b2ig.conf use_impgyro config pre ;\
-	mv .*.?* ${WD_EXT}/. ; mv fort.150 ${WD_EXT}/. ; impgyro.* ${WD_EXT}/. 
->>>>>>> runs/Makefile for IMPGYRO run
 else
 	cd b2mn.exe.dir ; mkdir tracing ; ${TIME} ${B2OBJ}/b2mn.exe ; mv $(target_mn) .. ; mv -f tracing/* ../tracing ; [ -e ../fort.30 ] || mv fort.30 .. ; rm -f $(notdir $^) .quit
 endif
@@ -200,7 +185,6 @@ ifndef STAND_ALONE
 dbx.b2mn : b2mn.dat b2fgmtry b2fpardf b2fstati b2frates fort.30 fort.33 fort.34 fort.35
 else
 dbx.b2mn : b2mn.dat b2fgmtry b2fpardf b2fstati b2frates fort.30
-<<<<<<< HEAD
 endif
 	rm -rf b2mn.exe.dir > /dev/null ; mkdir b2mn.exe.dir ; cp $^ b2mn.exe.dir
 	rm -f $(target_mn) fort.31 b2time.nc b2wall.nc b2tallies.nc b2movies.nc > /dev/null
@@ -215,18 +199,6 @@ ifndef STAND_ALONE
 	-[ -e b2mn.exe.dir/fort.15 ] && mv b2mn.exe.dir/fort.15 . || echo > /dev/null
 	-[ -e b2mn.exe.dir/fort.44 ] && mv b2mn.exe.dir/fort.44 . || echo > /dev/null
 	-cd b2mn.exe.dir ; rm -f HYDHEL AMJUEL METHANE SPUTER H2VIBR fort.21 fort.22 graphite_ext.dat mo_ext.dat fort.75 fort.1 fort.29 fort.37 fort.55 fort.78 vtk.out
-=======
-	rm -rf b2mn.exe.dir ; mkdir b2mn.exe.dir ; cp $^ b2mn.exe.dir
-	rm -f $(target_mn) fort.31 fort.44 b2time.nc b2wall.nc b2tallies.nc b2movies.nc
-ifndef STAND_ALONE
-	-cd b2mn.exe.dir ; ln -s ../HYDHEL ../AMJUEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../fort.33 ../fort.34 ../fort.35 ../graphite_ext.dat ../mo_ext.dat . ; ln -s ../input.dat fort.1 ; [ -e ../fort.15 ] && cp -p ../fort.15 . ; [ -e ../fort.13 ] && cp -p ../fort.13 .
-	cd b2mn.exe.dir ; mkdir tracing ; ${DBX} ${INC} b2mn.exe ; mv $(target_mn) .. ; mv -f tracing/* ../tracing ; [-e ../fort.30 ] || mv fort.30 .. ; rm -f $(notdir $^) .quit
-	-[ -e b2mn.exe.dir/fort.11 ] && mv b2mn.exe.dir/fort.11 .
-	-[ -e b2mn.exe.dir/fort.13 ] && mv b2mn.exe.dir/fort.13 .
-	-[ -e b2mn.exe.dir/fort.15 ] && mv b2mn.exe.dir/fort.15 .
-	-[ -e b2mn.exe.dir/fort.44 ] && mv b2mn.exe.dir/fort.44 .
-	-cd b2mn.exe.dir ; rm -f HYDHEL AMJUEL METHANE SPUTER H2VIBR fort.21 fort.22 fort.33 fort.34 fort.35 graphite_ext.dat mo_ext.dat fort.75 fort.1 fort.29 fort.37 fort.55 fort.78 vtk.out
->>>>>>> runs/Makefile for IMPGYRO run
 else
 	cd b2mn.exe.dir ; ${DBX} ${INC} b2mn.exe ; rm -f $(notdir $^) .quit
 endif
