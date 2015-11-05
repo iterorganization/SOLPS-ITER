@@ -152,14 +152,17 @@ ${OBJDIR}/eirmod_extrab25.${MOD}:
 ${OBJDIR}/eirmod_parmmod.${MOD}: ${OBJDIR}/parmmod.${MOD} 
 	ln -sf ${OBJDIR}/parmmod.${MOD} $@
 
+${OBJDIR}/eirmod_precision.${MOD}: ${OBJDIR}/precision.${MOD} 
+	ln -sf ${OBJDIR}/precision.${MOD} $@
+
 ifneq (${MOD},o)
 ${OBJDIR}/b2_neutrals_namelist.${MOD}: ${OBJDIR}/eirmod_parmmod.${MOD} 
 
 ${OBJDIR}/eirmod_parmmod.o: 
 	ln -sf ${OBJDIR}/parmmod.o $@
 
-${OBJDIR}/parmmod.o: ${OBJDIR}/precision.${MOD}
-	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/parmmod.o -c ${SRCDIR}/Eirene_modules/parmmod.F
+${OBJDIR}/eirmod_precision.o: 
+	ln -sf ${OBJDIR}/precision.o $@
 
 ${OBJDIR}/braeir.o: 
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/braeir.o -c ${SRCDIR}/Eirene_modules/braeir.F
@@ -233,18 +236,16 @@ ${OBJDIR}/czt1.o:
 ${OBJDIR}/eirdiag.o: ${OBJDIR}/clgin.${MOD} ${OBJDIR}/ccoupl.${MOD}
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/eirdiag.o -c ${SRCDIR}/Eirene_modules/eirdiag.F
 
+${OBJDIR}/parmmod.o: ${OBJDIR}/precision.${MOD}
+	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/parmmod.o -c ${SRCDIR}/Eirene_modules/parmmod.F
+
 ${OBJDIR}/photon.o: ${OBJDIR}/clogau.${MOD} ${OBJDIR}/czt1.${MOD} ${OBJDIR}/comusr.${MOD}
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/photon.o -c ${SRCDIR}/Eirene_modules/photon.F
+
 ${OBJDIR}/precision.o:
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/precision.o -c ${SRCDIR}/Eirene_modules/precision.F
 
 endif
-
-${OBJDIR}/parmmod.${MOD}: ${OBJDIR}/precision.${MOD}
-	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/parmmod.o -c ${SRCDIR}/Eirene_modules/parmmod.F
-
-${OBJDIR}/precision.${MOD}: 
-	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/precision.o -c ${SRCDIR}/Eirene_modules/precision.F
 
 ${OBJDIR}/braeir.${MOD}: 
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/braeir.o -c ${SRCDIR}/Eirene_modules/braeir.F
@@ -318,8 +319,14 @@ ${OBJDIR}/czt1.${MOD}:
 ${OBJDIR}/eirdiag.${MOD}: ${OBJDIR}/clgin.${MOD} ${OBJDIR}/ccoupl.${MOD}
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/eirdiag.o -c ${SRCDIR}/Eirene_modules/eirdiag.F
 
+${OBJDIR}/parmmod.${MOD}: ${OBJDIR}/precision.${MOD}
+	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/parmmod.o -c ${SRCDIR}/Eirene_modules/parmmod.F
+
 ${OBJDIR}/photon.${MOD}: ${OBJDIR}/clogau.${MOD} ${OBJDIR}/czt1.${MOD} ${OBJDIR}/comusr.${MOD}
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/photon.o -c ${SRCDIR}/Eirene_modules/photon.F
+
+${OBJDIR}/precision.${MOD}: 
+	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/precision.o -c ${SRCDIR}/Eirene_modules/precision.F
 
 ${OBJDIR}/libb2_solps4.a: ${MD4OBJS} ${SB4OBJS} ${SE4OBJS}
 	${BLD} $@ $?

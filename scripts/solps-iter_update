@@ -19,6 +19,7 @@ git checkout ITER-develop
 git pull
 cd $SOLPSTOP
 rehash
+gmake VERSION
 gmake listobj
 source $SOLPSTOP/SETUP/debug
 gmake listobj
