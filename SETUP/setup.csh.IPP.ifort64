@@ -3,6 +3,7 @@ module load intel
 module load texlive
 module load subversion
 module load totalview
+module load doxygen
 #module load mdsplus
 #module load netcdf-serial
 module load hdf5-serial
