@@ -64,6 +64,9 @@ case "*.iter-india.org":
 case "*.keio.ac.jp":
   echo KEIO
   breaksw
+case "kraken01":
+  echo KSTAR
+  breaksw
 case "*.gov":
 case "*.edu":
 case "*.us":
@@ -91,7 +94,7 @@ case "*.kr":
   echo KR_UNKNOWN
   breaksw
 case "*.ru":
-  echi RU_UNKNOWN
+  echo RU_UNKNOWN
   breaksw
 default:
   echo UNKNOWN

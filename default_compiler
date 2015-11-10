@@ -26,6 +26,7 @@ case "IPR":
 case "ITER":
 case "ITM":
 case "KEIO":
+case "KSTAR":
 case "SWIP":
   echo ifort64
   breaksw

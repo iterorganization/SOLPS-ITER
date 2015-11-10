@@ -225,7 +225,7 @@ while true; do {
                 $EIRENE < triang.eir > "$eirlog"
                 rm fort.1
                 [ -s "$eirout" ] && [ -r "$eirout" ] && {
-                  (cat "$eirhed"; tail --lines=+2  "$eirout") > "$triain" && q=t || {
+                  (cat "$eirhed"; tail --lines=+2 "$eirout") > "$triain" && q=t || {
                     print -u2 -- "Something is wrong with $eirout ==> Check $eirlog"
                     q=u
                   }

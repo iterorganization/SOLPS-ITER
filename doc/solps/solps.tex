@@ -6471,22 +6471,21 @@ n_{e^2 }= \sum \limits^{ns-1}_{a=0} z_a^2 n_a, \;\;\;\ l_{t_e}=0.3; \;\;\;\;\; l
 \begin{matrix}
 \frac{\partial T_e}{h_x\partial x}, && l_{t_e} \leq 0 \\
 
-\Biggl|
+\left|
 	min \left\{
-		\Bigl|
-			\frac{\partial T_e}{h_x \partial x}
-		\Bigr|, \frac{l_{t_e} T_e}{z_{\lambda_e}|b_x|}
+		\left| \frac{\partial T_e}{h_x \partial x} \right|, 
+		       \frac{l_{t_e} T_e}{z_{\lambda_e}|b_x|}
 	\right\}
-\Biggr|,
+\right|,
 & \frac{\partial T_e}{h_x \partial x} \ge 0, & l_{t_e}>0 \\
 
--\Bigl|
+-\left|
 	min \left\{
-		\Bigl|
-			\frac{\partial T_e}{h_x \partial x}
-		\Bigr|, \frac{l_{t_e} T_e}{z_{\lambda_e}|b_x|}			
+		\left|
+			\frac{\partial T_e}{h_x \partial x} \right|, 
+		        \frac{l_{t_e} T_e}{z_{\lambda_e}|b_x|}			
 	\right\}
-\Bigr|,
+\right|,
 & \frac{\partial T_e}{h_x \partial x} < 0, & l_{t_e}>0
 \end{matrix} \right.
 \end{matrix}
@@ -6498,20 +6497,20 @@ n_{e^2 }= \sum \limits^{ns-1}_{a=0} z_a^2 n_a, \;\;\;\ l_{t_e}=0.3; \;\;\;\;\; l
 & \left\{
 \begin{matrix}
 \frac{\partial T_i}{h_x\partial x}, && l_{t_i} \leq 0 \\
-\Bigl|
-	min \Bigl\{
-		\Bigl| \frac{\partial T_i}{h_x \partial x}
-		\Bigr|, \frac{l_{t_i} T_i}{z_{\lambda_i}|b_x|} 				
-	\Bigr\}
-\Bigr|,
+\left|
+	min \left\{
+		\left| \frac{\partial T_i}{h_x \partial x}
+		\right|, \frac{l_{t_i} T_i}{z_{\lambda_i}|b_x|} 				
+	\right\}
+\right|,
 & \frac{\partial T_i}{h_x \partial x} \ge 0, & l_{t_i}>0 \\
--\Bigl|
-	min \Bigl\{
-		\Bigl|
+-\left|
+	min \left\{
+		\left|
 			\frac{\partial T_i}{h_x \partial x}
-		\Bigr|, \frac{l_{t_i} T_i}{z_{\lambda_i}|b_x|}
-	\Bigr\}
-\Bigr|,
+		\right|, \frac{l_{t_i} T_i}{z_{\lambda_i}|b_x|}
+	\right\}
+\right|,
 & \frac{\partial T_i}{h_x \partial x} < 0, & l_{t_i}>0
 \end{matrix} \right.
 \end{matrix}
@@ -6582,7 +6581,7 @@ c_{\eta_{ax}^{(CL)}} & =
 1, & \ z_a \neq 0 \; \text{and only for inner flux surfaces} \\
 \frac 1
 {1 + \frac{
-\frac{\sqrt g}{h_x} \widetilde{\eta}_{CLax}  \bigl| \frac{\partial V_{\parallel a}}{h_x \partial x} \bigr|
+\frac{\sqrt g}{h_x} \widetilde{\eta}_{CLax}  \left| \frac{\partial V_{\parallel a}}{h_x \partial x} \right|
 }
 {V_{m_a}^{(max)}}
 }, &
@@ -6894,9 +6893,9 @@ c_{k_{ex}}^{Flim} & =
 \frac 1 {
 	1 + \frac{
 	\frac{\sqrt g}{h_x} \widetilde{\kappa}_{ex}^{(CL)}
-	\bigl|
+	\left|
 		\frac{\partial T_e}{h_x \partial x}
-	\bigr|}
+	\right|}
 	{ V_{h_e}^{(max)} n_e T_e}
 }
 &  \text{for other flux surfaces} \\
@@ -7261,7 +7260,7 @@ $
 \frac {k_a^{(AN)}}
 {\left(
 	1 + \left(
-			\frac{k_a^{(AN)} \bigl| \frac{\partial T_i}{h_x \partial x} \bigr|}
+			\frac{k_a^{(AN)} \left| \frac{\partial T_i}{h_x \partial x} \right|}
 			{\alpha V_{h_i} n_a T_i}
 		\right)^{\gamma_2}
 \right)^{\frac 1{\gamma_2}}}
@@ -7307,9 +7306,9 @@ c_{k_{ix}}^{flim} & =
 \frac 1 {
 	1 + \frac{
 	\frac{\sqrt g}{h_x} \widetilde{\kappa}_{ix}^{(CL)}
-	\bigl|
+	\left|
 		\frac{\partial T_i}{h_x \partial x}
-	\bigr|}
+	\right|}
 	{ V_{h_i}^{(max)} n_i T_i}
 }
 &  \text{for other flux surfaces} \\
@@ -7457,7 +7456,7 @@ $k_i^{(AN)} = \sum \limits_{a=0}^{ns-1} \widetilde k_a^{(AN)}$,
 \frac {k_a^{(AN)}}
 {\left(
 	1 + \left(
-			\frac{k_a^{(AN)} \bigl| \frac{\partial T_i}{h_y \partial y} \bigr|}
+			\frac{k_a^{(AN)} \left| \frac{\partial T_i}{h_y \partial y} \right|}
 			{\alpha V_{h_i} n_a T_i}
 		\right)^{\gamma_2}
 \right)^{\frac 1{\gamma_2}}}
@@ -7681,18 +7680,18 @@ $S_{n_a} = S_{n_a,0} + S_{n_a,1} n_a$
 $z_a = 0$
 
 \begin{equation}
-\frac{\sqrt g}{h_y}\Gamma_{ay} \Bigl|_{S_0}
+\left. \frac{\sqrt g}{h_y}\Gamma_{ay} \right|_{S_0}
 =
-\left[
-p_{n_a,a,1} \frac{\sqrt g}{h_y} \sqrt{\frac{z_a T_e + T_i}{m_a}} n_a \Bigl|_{S_0}
+\left. \left[
+p_{n_a,a,1} \frac{\sqrt g}{h_y} \sqrt{\frac{z_a T_e + T_i}{m_a}} n_a 
 +
-\sum \limits_{a=0}^{ns-1} r_{rec,a,0} c_{nsr}
+\sum \limits_{a=0}^{ns-1} c_{rec,a,0} c_{nsr}
 max \left\{0, -\frac{\sqrt g}{h_y} \Gamma_{ay} \right\}
-\right] \Bigr|_{S_0}
+\right] \right|_{S_0}
 \end{equation}
 leakage, BCCON=10
 
-$p_{n_a,a,1} = -10^{-2}, \;\; r_{rec,0,0} = 0,\;\; r_{rec,1,0} = 1$
+$p_{n_a,a,1} = -10^{-2}, \;\; c_{rec,0,0} = 0,\;\; c_{rec,1,0} = 1$
 
 $\widetilde{\Gamma}_{ay}$ was replaced by $\Gamma_{ay}$
 
@@ -7704,16 +7703,16 @@ BCCON = 9 is below
 
 \begin{equation}
 \begin{matrix}
-\frac{\sqrt g}{h_y} \widetilde{\Gamma_{ay}} \Bigl|_{S_0}& =
+\left. \frac{\sqrt g}{h_y} \widetilde{\Gamma_{ay}} \right|_{S_0}& =
 & \left\{
 \begin{matrix}
-\left[
+\left. \left[
 	-\frac 1{p_{n_a,a,1}} \frac{\sqrt g}{h_y}  \left(
 		D^n_{ANa} + D^p_{ANa} \left(z_a T_e + T_i \right)
 	\right) n_a
-\right] \Bigr|_{S_0}, & mdf\_fnb = 0
+\right] \right|_{S_0}, & mdf\_fnb = 0
 \\
-\left[
+\left. \left[
 	-\frac 1{p_{n_a,a,1}} \frac{\sqrt g}{h_y}  \left(
 		D^n_{ANa} + D^p_{ANa} \left(z_a T_e + T_i \right)
 	\right) n_a
@@ -7721,7 +7720,7 @@ BCCON = 9 is below
 	\frac{\sqrt g}{h_y} D_{ayx} \frac1{h_x} \frac{\partial n_a T_i}{\partial x}
 	+
 	\frac{\sqrt g}{h_y} V_{ay}^{(E)} n_a
-\right] \Bigr|_{S_0}, & mdf\_fnb = 1
+\right] \right|_{S_0}, & mdf\_fnb = 1
 \end{matrix} \right.
 \end{matrix}
 \end{equation}
@@ -7735,22 +7734,22 @@ BCCON = 10 (leakage) is below
 
 \begin{equation}
 \begin{matrix}
-\frac{\sqrt g}{h_y} \widetilde{\Gamma_{ay}} \Bigl|_{S_0}& =
+\left. \frac{\sqrt g}{h_y} \widetilde{\Gamma_{ay}} \right|_{S_0}& =
 & \left\{
 \begin{matrix}
-\left[
+\left. \left[
 	p_{n_a,a,1} \frac{\sqrt g}{h_y} \sqrt{\frac{z_a T_e + T_i}{m_a}} n_a
 	+
 	min \left\{0, \frac{\sqrt g}{h_y} n_a V_{ay}^{(E)} \right\}
-\right] \Bigr|_{S_0}, & mdf\_fnb = 0
+\right] \right|_{S_0}, & mdf\_fnb = 0
 \\
-\left[
+\left. \left[
 p_{n_a,a,1} \frac{\sqrt g}{h_y} \sqrt{\frac{z_a T_e + T_i}{m_a}} n_a
 	+
 	\frac{\sqrt g}{h_y} D_{ayx} \frac1{h_x} \frac{\partial n_a T_i}{\partial x}
 	+
 	min \left\{0, \frac{\sqrt g}{h_y} n_a V_{ay}^{(E)} \right\}
-\right] \Bigr|_{S_0}, & mdf\_fnb = 1
+\right] \right|_{S_0}, & mdf\_fnb = 1
 \end{matrix} \right.
 \end{matrix}
 \end{equation}
@@ -7765,11 +7764,11 @@ S^{no\_mdf}_{n_a,1} & = {p_{n_a,a,1}} \frac{\sqrt{g}}{h_y} \sqrt{\frac{z_a T_e +
 BCCON = 15 is below
 
 \begin{equation}
--\frac{\sqrt g}{h_y^2} D_{ay}^n \frac{\partial n_a}{\partial y} \Bigl|_{S_0}
+\left. -\frac{\sqrt g}{h_y^2} D_{ay}^n \frac{\partial n_a}{\partial y} \right|_{S_0}
 =
-\left[
+\left. \left[
 c_{n_a,a,2} \frac{\sqrt g}{h_y} \sqrt{\frac{z_a T_e + T_i}{m_a}} n_a
-\right] \Bigr|_{S_0}
+\right] \right|_{S_0}
 \end{equation}
 
 $c_{n_a,a,2} = -10^{-3}$
@@ -7780,41 +7779,41 @@ $z_a = 0$
 
 %-------- end of 21st page -------------
 
-$\frac{\sqrt g}{h_y} \widetilde{\Gamma}_{ay} \Bigl|_{S_1} = 0$ total particle flux (8), dpc
+$\left. \frac{\sqrt g}{h_y} \widetilde{\Gamma}_{ay} \right|_{S_1} = 0$ total particle flux (8), dpc
 
-$\frac{\sqrt g}{h_y} \Gamma_{ay} \Bigl|_{S_1} = 0$
+$\left. \frac{\sqrt g}{h_y} \Gamma_{ay} \right|_{S_1} = 0$
 
 $z_a \neq 0$
 
 constant density (1)
 
 \begin{equation}
-\frac{\sqrt g}{h_y} \widetilde{\Gamma}_{ay} \Bigl|_{S_1}
+\left. \frac{\sqrt g}{h_y} \widetilde{\Gamma}_{ay} \right|_{S_1}
 =
 \frac{\sqrt{g}}{h_y}
-\left(
-	v_{big} ns |_{S_1} - v_{big} n_a
-\right) \Bigl|_{S_1},
+\left. \left(
+	\left. v_{big} n_a \right|_{S_1} - v_{big} n_a
+\right) \right|_{S_1},
 \;\;
 v_{big} = 10^{18},
 \;\;
-n_a |_{S_1} \text{ is a given density}
+\left. n_a \right|_{S_1} \text{ is a given density}
 \end{equation}
 
 the total particle flux with constant flux density (8)
 
 \begin{equation*}
-\frac{\sqrt g}{h_y} \widetilde{\Gamma}_{ay} \Bigl|_{S_1} =
-p_{n,a,0} \frac{
+\left. \frac{\sqrt g}{h_y} \widetilde{\Gamma}_{ay} \right|_{S_1} =
+p_{n,a,0} \frac{ 
 \frac{\sqrt g}{h_y}
-}{
+}{ \left.
 \sum \limits_i \left(
 	\frac{\sqrt g}{h_y}
-\right)_{i, -1} \Bigr|_{S_1}
+\right)_{i, -1} \right|_{S_1}
 }
 +
 \frac{\sqrt g}{h_y} D_{ayx} \frac 1{h_x} \frac{\partial n_a T_i}{\partial x} +
-\frac{\sqrt g}{h_y}V_{ya}^{(E)} n_a \Bigr|_{S_1}
+\left. \frac{\sqrt g}{h_y}V_{ya}^{(E)} n_a \right|_{S_1}
 \end{equation*}
 
 \paragraph{North}
@@ -7822,22 +7821,22 @@ p_{n,a,0} \frac{
 $z_a = 0$
 
 \begin{equation}
--\frac{\sqrt g}{h_y} \Gamma_{ay} \Bigl|_{N}
+\left. -\frac{\sqrt g}{h_y} \Gamma_{ay} \right|_{N}
 =
-\left[
-p_{n_a,a,1} \frac{\sqrt g}{h_y} \sqrt{\frac{z_a T_e + T_i}{m_a}} n_a \Bigl|_N
+\left. \left[ \left.
+p_{n_a,a,1} \frac{\sqrt g}{h_y} \sqrt{\frac{z_a T_e + T_i}{m_a}} n_a \right|_N
 +
-\sum \limits_{a=0}^{ns-1} r_{rec,a,0} c_{nsr}
+\sum \limits_{a=0}^{ns-1} c_{rec,a,0} c_{nsr}
 max \left\{0, -\frac{\sqrt g}{h_y} \Gamma_{ay} \right\}
-\right] \Bigr|_{N}
+\right] \right|_{N}
 \end{equation}
 
 leakage (10), dpc
 
-$p_{n_a,a,1} = 0, \;\; r_{rec,0,0} = 0,\;\; r_{rec,1,0} = 1$
+$p_{n_a,a,1} = 0, \;\; c_{rec,0,0} = 0,\;\; c_{rec,1,0} = 1$
 
 \begin{equation}
-- \frac{\sqrt g}{h_y} \widetilde{\Gamma}_{ay} \Bigl|_{N}
+\left. - \frac{\sqrt g}{h_y} \widetilde{\Gamma}_{ay} \right|_{N}
 =
 \sum \limits_{a=0}^{ns-1} c_{rec,a,0} c_{nsr}
 max \left\{0, \frac{\sqrt g}{h_y} \Gamma_{ay} \right\}
@@ -7853,16 +7852,16 @@ BCCON = 9 is below
 
 \begin{equation}
 \begin{matrix}
--\frac{\sqrt g}{h_y} \widetilde{\Gamma_{ay}} \Bigl|_{N}& =
+\left. -\frac{\sqrt g}{h_y} \widetilde{\Gamma_{ay}} \right|_{N}& =
 & \left\{
 \begin{matrix}
-\left[
+\left. \left[
 	\frac 1{p_{n_a,a,1}} \frac{\sqrt g}{h_y}  \left(
 		D^n_{ANa} + D^p_{ANa} \left(z_a T_e + T_i \right)
 	\right) n_a
-\right] \Bigr|_{N}, & mdf\_fnb = 0
+\right] \right|_{N}, & mdf\_fnb = 0
 \\
-\left[
+\left. \left[
 	\frac 1{p_{n_a,a,1}} \frac{\sqrt g}{h_y}  \left(
 		D^n_{ANa} + D^p_{ANa} \left(z_a T_e + T_i \right)
 	\right) n_a
@@ -7870,7 +7869,7 @@ BCCON = 9 is below
 	\frac{\sqrt g}{h_y} D_{ayx} \frac1{h_x} \frac{\partial n_a T_i}{\partial x}
 	-
 	\frac{\sqrt g}{h_y} V_{ay}^{(E)} n_a
-\right] \Bigr|_{N}, & mdf\_fnb = 1
+\right] \right|_{N}, & mdf\_fnb = 1
 \end{matrix} \right.
 \end{matrix}
 \end{equation}
@@ -7884,22 +7883,22 @@ BCCON = 10 (leakage) is below
 
 \begin{equation}
 \begin{matrix}
--\frac{\sqrt g}{h_y} \widetilde{\Gamma_{ay}} \Bigl|_{N}& =
+\left. -\frac{\sqrt g}{h_y} \widetilde{\Gamma_{ay}} \right|_{N}& =
 & \left\{
 \begin{matrix}
-\left[
+\left. \left[
 	p_{n_a,a,1} \frac{\sqrt g}{h_y} \sqrt{\frac{z_a T_e + T_i}{m_a}} n_a
 	-
 	max \left\{0, \frac{\sqrt g}{h_y} n_a V_{ay}^{(E)} \right\}
-\right] \Bigr|_{N}, & mdf\_fnb = 0
+\right] \right|_{N}, & mdf\_fnb = 0
 \\
-\left[
+\left. \left[
 	p_{n_a,a,1} \frac{\sqrt g}{h_y} \sqrt{\frac{z_a T_e + T_i}{m_a}} n_a
 	-
 	\frac{\sqrt g}{h_y} D_{ayx} \frac1{h_x} \frac{\partial n_a T_i}{\partial x}
 	-
 	max \left\{0, \frac{\sqrt g}{h_y} n_a V_{ay}^{(E)} \right\}
-\right] \Bigr|_{N}, & mdf\_fnb = 1
+\right] \right|_{N}, & mdf\_fnb = 1
 \end{matrix} \right.
 \end{matrix}
 \end{equation}
@@ -7910,11 +7909,11 @@ S^{no\_mdf}_{n_a,1} & = {p_{n_a,a,1}} \frac{\sqrt{g}}{h_y} \sqrt{\frac{z_a T_e +
 \end{align}
 
 \begin{equation}
-\frac{\sqrt g}{h_y^2} D_{ay}^n \frac{\partial n_a}{\partial y} \Bigl|_N
+\left. \frac{\sqrt g}{h_y^2} D_{ay}^n \frac{\partial n_a}{\partial y} \right|_N
 =
-\left[
+\left. \left[
 c_{n_a,a,2} \frac{\sqrt g}{h_y} \sqrt{\frac{z_a T_e + T_i}{m_a}} n_a
-\right] \Bigr|_N
+\right] \right|_N
 \end{equation}
 BCCON = 15
 
@@ -7925,14 +7924,15 @@ $c_{n_a, a, 2} = 10^{-3}$
 $z_a = 0$
 
 \begin{equation}
-- \frac{\sqrt g}{h_y} \widetilde{\Gamma}_{ay} \Bigl|_N
+\left. - \frac{\sqrt g}{h_y} \widetilde{\Gamma}_{ay} \right|_N
 =
-p_{n,a,0} \frac{\sqrt g}{h_y} \Bigl|_N
+\left. p_{n,a,0} \frac{\sqrt g}{h_y} \right|_N
 +
+\left.
 \sum \limits_{a=0}^{ns-1} \left[
 	c_{rec,a,0} c_{nsr}
 	max \left\{0, -\frac{\sqrt g}{h_y} \Gamma_{ay} \right\}
-\right] \Biggr|_N
+\right] \right|_N
 \end{equation}
 
 the particle flux per unit area (5) or
@@ -7940,26 +7940,26 @@ the particle flux per unit area (5) or
 $\widetilde{\Gamma}_{ay}$ was replaced by $\Gamma_{ay}$
 
 \begin{equation*}
-- \frac{\sqrt g}{h_y} \widetilde{\Gamma}_{ay} \Bigl|_N =
-\frac{ p_{n,a,0}
+\left. - \frac{\sqrt g}{h_y} \widetilde{\Gamma}_{ay} \right|_N =
+\left. \frac{ p_{n,a,0}
 }{
 \sum \limits_{i=0}^{N_x-1} \left(
 	\frac{\sqrt g}{h_y}
 \right)_{i, N_y}
 }
-\frac{\sqrt g}{h_y} \Biggl|_N
+\frac{\sqrt g}{h_y} \right|_N
 +
-\sum \limits_{a=0}^{ns-1} \left[
+\left. \sum \limits_{a=0}^{ns-1} \left[
 	c_{rec,a,0} c_{nsr}
 	max \left\{0, \frac{\sqrt g}{h_y} \Gamma_{ay} \right\}
 \right]
-\Bigl|_N
+\right|_N
 \end{equation*}
 
 the total particle flux with constant flux density (8)
 
 \begin{equation*}
-- \frac{\sqrt g}{h_y} \widetilde{\Gamma}_{ay} \Bigl|_N =
+\left. - \frac{\sqrt g}{h_y} \widetilde{\Gamma}_{ay} \right|_N = \left.
 	\sum \limits_{a=0}^{ns-1} \left[
 		c_{rec,a,0} c_{nsr}
 		max \left\{
@@ -7968,7 +7968,7 @@ the total particle flux with constant flux density (8)
 		+
 		c_{n,a,0} \frac{\sqrt g}{h_y}
 	\right]
-\Biggr|_N
+\right|_N
 \end{equation*}
 
 $\widetilde{\Gamma}_{ay}$ was replaced by $\Gamma_{ay}$
@@ -7982,29 +7982,29 @@ $c_{rec,0,0} = 0,\;\; c_{rec,1,0} = 1,\;\; p_{n,0a,0} \approx 10^{21} $
 $z_a = 0$
 
 \begin{equation}
-\frac{\sqrt g}{h_x} \Gamma_{ax} \Bigl|_W
+\left. \frac{\sqrt g}{h_x} \Gamma_{ax} \right|_W
 =
-\left[
+\left. \left[
 p_{n,a,1} \frac{\sqrt g}{h_y}
 +
-\sum \limits_{a=0}^{ns-1} r_{rec,a,0} c_{nsr}
+\sum \limits_{a=0}^{ns-1} c_{rec,a,0} c_{nsr}
 max \left\{0, -\frac{\sqrt g}{h_x} \Gamma_{ax} \right\}
-\right] \Bigr|_W
+\right] \right|_W
 \end{equation}
 
 particle flux per unit area (5), dpc
 
-$r_{rec,0,0} = 0,\;\; r_{rec,1,0} = 1,\;\; p_{n_a,a,1} = 0 $
+$c_{rec,0,0} = 0,\;\; c_{rec,1,0} = 1,\;\; p_{n_a,a,1} = 0 $
 
 \begin{equation}
-\frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \Bigl|_W
+\left. \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \right|_W
 =
-\left[
+\left. \left[
 p_{n,a,1} \frac{\sqrt g}{h_x}
 +
 \sum \limits_{a=0}^{ns-1} c_{rec,a,0} c_{nsr}
 max \left\{0, -\frac{\sqrt g}{h_x} \Gamma_{ax} \right\}
-\right] \Bigr|_W
+\right] \right|_W
 \end{equation}
 
 $\widetilde{\Gamma}_{ax}$ was replaced by $\Gamma_{ax}$ (5)
@@ -8014,9 +8014,9 @@ $c_{rec,0,0} = 0,\;\; c_{rec,1,0} = 1,\;\; p_{n_a,a,1} = 0 $
 $z_a \neq 0$
 
 \begin{equation*}
-\frac{\sqrt g}{h_x} \Gamma_{ax} \biggl|_W =
+\left. \frac{\sqrt g}{h_x} \Gamma_{ax} \right|_W = \left.
 10^{20} \frac{\sqrt{g}}{h_x} \frac{\partial n_a}{\partial x}
-\biggl|_W
+\right|_W
 \end{equation*}
 
 sheath density bc (3) dpc
@@ -8024,13 +8024,13 @@ sheath density bc (3) dpc
 \begin{equation*}
 \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax}|_W
 =
-\left[
+\left. \left[
 c_{n,a,7} \frac{\sqrt g}{h_x} |b_x|
 \sqrt{\frac{\sum \limits_{b=0}^{ns-1} p_b}{\sum \limits_{b=0}^{ns-1} m_b n_b} n_a}
 -
 \frac{\sqrt g}{h_x} D_{axy} \frac 1{h_y} \frac{\partial n_a T_i}{\partial y}
 \right]
-\Biggl|_W
+\right|_W
 \end{equation*}
 
 sound speed flux bc (14)
@@ -8038,9 +8038,9 @@ sound speed flux bc (14)
 $c_{n,1,7} = -1 $
 
 \begin{equation}
-\frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \Bigl|_W
+\left. \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \right|_W
 =
-\left[
+\left. \left[
 min \left\{
 0, c_{n,a,7} \left(
 -\frac{\sqrt g}{h_x} b_x V_{\parallel a} n_a -\frac{\sqrt g}{h_x} V_{ax}^{(E)} n_a
@@ -8049,7 +8049,7 @@ min \left\{
 -
 \frac{\sqrt g}{h_x} D_{axy} \frac{1}{h_y} \frac{\partial n_a T_i}{\partial y}
 \right]
-\Biggl|_W
+\right|_W
 \end{equation}
 
 BCCON = 25
@@ -8061,30 +8061,30 @@ $c_{n,1,7} = -1 $
 $z_a = 0$
 
 \begin{equation}
-- \frac{\sqrt g}{h_x} \Gamma_{ax} \Biggl|_E
+\left. - \frac{\sqrt g}{h_x} \Gamma_{ax} \right|_E
 =
-\left[
+\left. \left[
 p_{n,a,1} \frac{\sqrt g}{h_y}
 +
-\sum \limits_{a=0}^{ns-1} r_{rec,a,0} c_{nsr}
+\sum \limits_{a=0}^{ns-1} c_{rec,a,0} c_{nsr}
 max \left\{0, \frac{\sqrt g}{h_x} \Gamma_{ax} \right\}
-\right] \Biggr|_E
+\right] \right|_E
 \end{equation}
 
 particle flux per unit area (5), dpc
 
-$r_{rec,0,0} = 0,\;\; r_{rec,1,0} = 1,\;\; p_{n_a,a,1} = 0 $
+$c_{rec,0,0} = 0,\;\; c_{rec,1,0} = 1,\;\; p_{n_a,a,1} = 0 $
 
 %-------- end of 24th page -------------
 
 
 \begin{equation}
-- \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \Biggl|_E
+\left. - \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \right|_E
 =
-\left[
+\left. \left[
 \sum \limits_{a=0}^{ns-1} c_{rec,a,0} c_{nsr}
 max \left\{0, \frac{\sqrt g}{h_x} \Gamma_{ax} \right\}
-\right] \Biggr|_E
+\right] \right|_E
 \end{equation}
 
 $\widetilde{\Gamma}_{ax}$ was replaced by $\Gamma_{ax}$ (5)
@@ -8094,23 +8094,23 @@ $c_{rec,0,0} = 0,\;\; c_{rec,1,0} = 1$
 $z_a \neq 0$
 
 \begin{equation*}
-- \frac{\sqrt g}{h_x} \Gamma_{ax} \Biggl|_E =
-- 10^{20} \frac{\sqrt{g}}{h_x} \frac{\partial n_a}{\partial x}
-\Biggl|_E
+\left. - \frac{\sqrt g}{h_x} \Gamma_{ax} \right|_E =
+- 10^{20} \left. \frac{\sqrt{g}}{h_x} \frac{\partial n_a}{\partial x}
+\right|_E
 \end{equation*}
 
 sheath density bc (3) dpc
 
 \begin{equation*}
-- \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \Biggl|_E
+\left. - \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \right|_E
 =
-\left[
+\left. \left[
 c_{n,a,7} \frac{\sqrt g}{h_x} |b_x|
 \sqrt{\frac{\sum \limits_{b=0}^{ns-1} p_b}{\sum \limits_{b=0}^{ns-1} m_b n_b} n_a}
 +
 \frac{\sqrt g}{h_x} D_{axy} \frac 1{h_y} \frac{\partial n_a T_i}{\partial y}
 \right]
-\Biggl|_E
+\right|_E
 \end{equation*}
 
 sound speed flux bc (14)
@@ -8118,9 +8118,9 @@ sound speed flux bc (14)
 $c_{n,1,7} = -1 $
 
 \begin{equation}
-- \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \Biggl|_E
+\left. - \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \right|_E
 =
-\left[
+\left. \left[
 min \left\{
 0, c_{n,a,7} \left(
 \frac{\sqrt g}{h_x} b_x V_{\parallel a} n_a +\frac{\sqrt g}{h_x} V_{ax}^{(E)} n_a
@@ -8129,7 +8129,7 @@ min \left\{
 +
 \frac{\sqrt g}{h_x} D_{axy} \frac{1}{h_y} \frac{\partial n_a T_i}{\partial y}
 \right]
-\Biggl|_E
+\right|_E
 \end{equation}
 
 BCCON = 25
@@ -8144,22 +8144,22 @@ $S_{m_a} = S_{m_a,0} + S_{m_a,1} u_{\parallel a} + S_{m_a,2} m_a n_a + S_{m_a,3}
 
 $z_a = 0$,
 
-$h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \bigl|_{S_0} =
-\left[
+$\left. h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_{S_0} =
+\left. \left[
 p_{m,a,1} p_{m,a,2} h_z \frac{\sqrt g}{h_y} -
 p_{m,a,2} h_z \frac{\sqrt g}{h_y} V_{\parallel a}
-\right] \Biggr|_{S_0}$ weak velocity (4) dpc
+\right] \right|_{S_0}$ weak velocity (4) dpc
 
 $p_{m,a,1}=0,\;\;\;p_{m,a,2}=10^5$
 
 We had these b.c.
 
-$h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \Bigl|_{S_0} =
-\left[
+$\left. h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_{S_0} =
+\left. \left[
 c_{m,a,3} h_z \frac{\sqrt g}{h_y} m_a n_a V_{\parallel a} +
 c_{m,a,6} max \left(0,-h_z \frac{\sqrt g}{h_y} \frac{\Gamma_{ay}^{(cor)}}{n_a} \right)
 m_a n_a V_{\parallel a}
-\right] \Bigr|_{S_0}$, delete term with max !
+\right] \right|_{S_0}$, delete term with max !
 
 %-------- end of 25th page -------------
 
@@ -8167,16 +8167,16 @@ $\Gamma_{ay}^{(cor)} = \Gamma_{ay} + \Gamma_{ay}^{(dia)}$
 
 $c_{m,a,3} = -10^{10}$, we have $c_{m,a,6}=-1$, but not $c_{m,a,6}=0$
 
-Inserted into b2stbc\_phys for bcmom(12) as  $c_{m,a,3} \rightarrow p_{m,a,2} = -10^{10},c_{m,a,6} \rightarrow p_{m,a,1} = -1$
+Inserted into \verb!b2stbc_phys! for \verb!BCMOM=12! as  $c_{m,a,3} \rightarrow p_{m,a,2} = -10^{10},c_{m,a,6} \rightarrow p_{m,a,1} = -1$
 
 $z_a\neq 0,$
 
 \begin{equation}
-h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \Bigl|_{S_0} =
-\left[
+\left. h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_{S_0} =
+\left. \left[
 	p_{m,a,1} p_{m,a,2} h_z \frac{\sqrt g}{h_y} -
 	p_{m,a,2} h_z \frac{\sqrt g}{h_y} V_{\parallel a}
-\right] \Biggr|_{S_0},
+\right] \right|_{S_0},
 \end{equation}
 
 weak velocity (4) dpc
@@ -8184,13 +8184,13 @@ weak velocity (4) dpc
 $p_{m,a,1} = 0$, $p_{m,a,2} = 10^5$
 
 \begin{equation}
-h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \Bigl|_{S_0} =
-\left[
+\left. h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_{S_0} =
+\left. \left[
 	c_{m,a,3} h_z \frac{\sqrt g}{h_y} m_a n_a V_{\parallel a} +
 	c_{m,a,6} max \left(
 		0, -h_z \frac{\sqrt g}{h_y} \frac{\Gamma_{ay}^{(cor)}}{n_a}
 	\right) m_a n_a V_{\parallel a}
-\right] \Biggr|_{S_0},
+\right] \right|_{S_0},
 \end{equation}
 
 delete term with max!
@@ -8203,18 +8203,18 @@ $c_{m,a,3} = 0$,  $c_{m,a,6} = -1$
 
 $z_a=0$
 
-$h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \biggl|_{S_1} = \left[
+$ \left. h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_{S_1} = \left. \left[
 	p_{m,a,1} p_{m,a,2} h_z \frac{\sqrt g}{h_y} -
 	p_{m,a,2} h_z \frac{\sqrt g}{h_y} V_{\parallel a}
-\right] \Biggl|_{S_1}$ \ \ \ \ \ weak velocity (4) dpc
+\right] \right|_{S_1}$ \ \ \ \ \ weak velocity (4) dpc
 
 $p_{m,a,1} = 0,\;\;\;p_{m,a,2} = 10^5$
 
-$h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \biggl|_{S_1} = c_{m,a,3} h_z \frac{\sqrt g}{h_y} m_a n_a V_{\parallel a} \Bigr|_{S_1}$
+$ \left. h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_{S_1} = c_{m,a,3} h_z \left. \frac{\sqrt g}{h_y} m_a n_a V_{\parallel a} \right|_{S_1}$
 
 $c_{m,a,3} = -10^{10}$
 
-Inserted into b2stbc\_phys for bcmom(12) as $c_{m,a,3} \rightarrow p_{m,a,2} = -10^{10},\;c_{m,a,6} \rightarrow
+Inserted into \verb!b2stbc_phys! for \verb!BCMOM=12! as $c_{m,a,3} \rightarrow p_{m,a,2} = -10^{10},\;c_{m,a,6} \rightarrow
 p_{m,a,1} = 0$
 
 $z_a \neq 0$
@@ -8222,18 +8222,18 @@ $z_a \neq 0$
 %-------- end of 26th page -------------
 
 
-$h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \biggl|_{S_1} = \left[
+$ \left. h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_{S_1} = \left. \left[
 	p_{m,a,1} p_{m,a,2} h_z \frac{\sqrt g}{h_y} -
 	p_{m,a,2} \frac{\sqrt g}{h_y} V_{\parallel a}
-\right] \Biggl|_{S_1}$     weak velocity(4) dpc
+\right] \right|_{S_1}$     weak velocity(4) dpc
 
 $p_{m,a,1}=0,\;\;\;p_{m,a,2}=10^5$
 
-$h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \Bigl|_{S_1} =
-c_{m,a,3} h_z \frac{\sqrt g}{h_y} m_a n_a V_{\parallel a} \Biggl|_{S_1} + \left[
+$\left. h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_{S_1} =
+c_{m,a,3} h_z \left. \frac{\sqrt g}{h_y} m_a n_a V_{\parallel a} \right|_{S_1} + \left. \left[
 h_z \frac{\sqrt g}{h_y} m_a \langle n_a \rangle \left( -2 \right)\frac{\langle T_i \rangle B_z}{ez_a}\frac{\partial }{h_x \partial x} \left( \frac 1{B^2} \right) \langle V_{\parallel a} \rangle c_{drift} +
 c_{corflux} h_z \frac{\sqrt g}{h_y}
-\right] \Biggl|_{S_1}$
+\right] \right|_{S_1}$
 
 BCMOM=14
 
@@ -8242,12 +8242,12 @@ $c_{m,a,3} = -10^{10}$
 The value of the parallel velocity as a function of poloidal coordinate
 
 $
-h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \Bigl|_{S_1} =
-\left[
+\left. h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_{S_1} =
+\left. \left[
 	p_{m,a,1} h_z  \frac{\sqrt g}{h_y} \frac{\langle B \rangle}B
 	-
 	h_z \frac{\sqrt g}{h_y} V_{\parallel a}
-\right] \Biggr|_{S_1}$, where  $\langle B \rangle =
+\right] \right|_{S_1}$, where  $\langle B \rangle =
 \frac{\iint \limits_{core} B \sqrt g\ dxdy}{\iint \limits_{core} \sqrt g\ dxdy}
 $
 
@@ -8257,46 +8257,46 @@ BCMOM=15
 
 $z_a=0$,
 
-$ -h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \biggl|_N = \left[
+$ \left. -h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_N = \left. \left[
 	p_{m,a,1} p_{m,a,2} h_z \frac{\sqrt g}{h_y} -
 	p_{m,a,2} h_z \frac{\sqrt g}{h_y} V_{\parallel a}\right]
-\Biggl|_N$ \ \ \ \ \ weak velocity (4) dpc
+\right|_N$ \ \ \ \ \ weak velocity (4) dpc
 
 $p_{m,a,1} = 0,\;\;\;p_{m,a,2} = 10^5$
 
-$-h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \Bigl|_N = \left[
+$\left. -h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_N = \left. \left[
 	c_{m,a,3} h_z \frac{\sqrt g}{h_y} m_a n_a V_{\parallel a} +
 	c_{m,a,6} max \left(
 		0, h_z \frac{\sqrt g}{h_y} \frac{\Gamma_{ay}^{(cor)}}{n_a}
 	\right) m_a n_a V_{\parallel a}
 \right]
-\Biggr|_N$
+\right|_N$
 
 delete term with max !
 
 $c_{m,a,3} = -10^{10}$, we have  $c_{m,a,6} = -1$, but not $c_{m,a,6} = 0$
 
-Inserted into b2stbc\_phys for bcmom(12) as $c_{m,a,3} \rightarrow p_{m,a,2} = -10^{10},\;c_{m,a,6} \rightarrow
+Inserted into \verb!b2stbc_phys! for \verb!BCMOM=12! as $c_{m,a,3} \rightarrow p_{m,a,2} = -10^{10},\;c_{m,a,6} \rightarrow
 p_{m,a,1} = -1$
 
 $z_a \neq 0$,
 
 %-------- end of 27th page -------------
 
-$ -h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \biggl|_N = \left[
+$ \left. -h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_N = \left[
 	p_{m,a,1} p_{m,a,2} h_z \frac{\sqrt g}{h_y} -
 	p_{m,a,2} h_z \frac{\sqrt g}{h_y} V_{\parallel a}
 \right]|_N$     weak velocity(4) dpc
 
 $p_{m,a,1}=0,\;\;\;p_{m,a,2}=10^5$
 
-$-h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \Bigl|_N =
-\left[
+$\left. -h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_N =
+\left. \left[
 c_{m,a,3} h_z \frac{\sqrt g}{h_y} m_a n_a V_{\parallel a} +
 c_{m,a,6} max \left(
 	0, h_z \frac{\sqrt g}{h_y} \frac{\Gamma_{ay}^{(cor)}}{n_a}
 \right) m_a n_a V_{\parallel a}
-\right] \Biggl|_N$
+\right] \right|_N$
 
 $c_{m,a,3} = 0$, $c_{m,a,6} = -1$
 
@@ -8306,11 +8306,11 @@ $z_a=0$, $p_{m,a,1} = 0$
 
 $z_a \neq 0$, $p_{m,a,1} = 1$
 
-$h_z \frac{\sqrt g}{h_x} \Gamma_{ax}^m \biggl|_W = \left[
+$ \left. h_z \frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_W = \left. \left[
 	p_{m,a,1} \frac{u_{big}}{\epsilon^2} V_{West} m_a n_a -
 	\frac{u_{big}}{\epsilon^2} h_z \frac{\sqrt g}{h_x} |b_x| m_a n_a V_{\parallel a}
 \right]
-\Biggl|_W$ \ \ \ \ \ BCMOM = 13
+\right|_W$ \ \ \ \ \ BCMOM = 13
 
 $V_{West} =
 - h_z \frac{\sqrt g}{h_x} \frac{|b_x|}{b_x} V_{ax}^{(E \times B)}
@@ -8320,21 +8320,21 @@ $V_{West} =
 
 $z_a = 0$, specified parallel velocity(1) dpc
 
-$\frac{\sqrt g}{h_x} \Gamma_{ax}^m \biggl|_W = \left[
+$\left. \frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_W = \left. \left[
 	u_{big} n_{e00} a_{m, a} \frac{\sqrt{g}}{h_x} p_{m,a,1} -
 	u_{big} n_{e00} a_{m, a} \frac{\sqrt{g}}{h_x} V_{\parallel a}
 \right]
-\Biggl|_W$, $p_{m,a,1}=0$, $u_{big} = 10^{18}$, $n_{e00} = 10^{20}$, dpc
+\right|_W$, $p_{m,a,1}=0$, $u_{big} = 10^{18}$, $n_{e00} = 10^{20}$, dpc
 
 $z_a \neq 0$, sheath velocity (3) dpc
 
 $p_{m,a,2} < 0.5$, sound\_model = 0,
 
-$\frac{\sqrt g}{h_x} \Gamma_{ax}^m \biggl|_W = \left[
+$\left. \frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_W = \left. \left[
 	-\frac{u_{big}}{\epsilon^2}  n_a m_a \frac{\sqrt{g}}{h_x} u_{p_{out}}
 	-\frac{u_{big}}{\epsilon^2}  n_a m_a \frac{\sqrt{g}}{h_x} V_{\parallel a}
 \right]
-\Biggl|_W$, dpc
+\right|_W$, dpc
 
 %-------- end of 28th page -------------
 
@@ -8350,11 +8350,11 @@ $z_a=0$, $p_{m,a,1} = 0$
 
 $z_a \neq 0$, $p_{m,a,1} = 1$
 
-$-h_z \frac{\sqrt g}{h_x} \Gamma_{ax}^m \biggl|_E = \left[
+$\left. -h_z \frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_E = \left. \left[
 	p_{m,a,1} \frac{u_{big}}{\epsilon^2} V_{East} m_a n_a -
 	\frac{u_{big}}{\epsilon^2} h_z \frac{\sqrt g}{h_x} |b_x| m_a n_a V_{\parallel a}
 \right]
-\Biggl|_W$ \ \ \ \ \ BCMOM = 13
+\right|_W$ \ \ \ \ \ BCMOM = 13
 
 $V_{East} =
 - h_z \frac{\sqrt g}{h_x} \frac{|b_x|}{b_x} V_{ax}^{(E \times B)}
@@ -8364,21 +8364,21 @@ $V_{East} =
 
 $z_a = 0$, specified parallel velocity(1) dpc
 
-$-\frac{\sqrt g}{h_x} \Gamma_{ax}^m \biggl|_E = \left[
+$\left. -\frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_E = \left. \left[
 	u_{big} n_{e00} a_{m, a} \frac{\sqrt{g}}{h_x} p_{m,a,1} -
 	u_{big} n_{e00} a_{m, a} \frac{\sqrt{g}}{h_x} V_{\parallel a}
 \right]
-\Biggl|_E$, $p_{m,a,1}=0$, $u_{big} = 10^{18}$, $n_{e00} = 10^{20}$, dpc
+\right|_E$, $p_{m,a,1}=0$, $u_{big} = 10^{18}$, $n_{e00} = 10^{20}$, dpc
 
 $z_a \neq 0$, sheath velocity (3) dpc
 
 $p_{m,a,2} < 0.5$, sound\_model = 0,
 
-$-\frac{\sqrt g}{h_x} \Gamma_{ax}^m \biggl|_E = \left[
+$\left. -\frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_E = \left. \left[
 	-\frac{u_{big}}{\epsilon^2}  n_a m_a \frac{\sqrt{g}}{h_x} u_{p_{out}}
 	-\frac{u_{big}}{\epsilon^2}  n_a m_a \frac{\sqrt{g}}{h_x} V_{\parallel a}
 \right]
-\Biggl|_E$, dpc
+\right|_E$, dpc
 
 $p_{m,a,1} = 1$, $p_{m,a,2} = 0$, $u_{big} = 10^{18}$, $n_{e00} = 10^{20}$, $\epsilon = 10^{-10}$
 
@@ -8394,19 +8394,19 @@ $S_{ch} = S_{ch,0} + S_{ch,1} \varphi + S_{ch,2} n_e + S_{ch,3} n_e \varphi$
 
 \paragraph{South. Private region}
 
-$\frac{\sqrt{g}}{h_y} j_y \Biggl|_{S_0} = 0$, dpc
+$\left. \frac{\sqrt{g}}{h_y} j_y \right|_{S_0} = 0$, dpc
 
 \begin{equation*}
 \begin{matrix}
-\frac{\sqrt{g}}{h_y} j_y \Biggl|_{S_0} = &
+\left. \frac{\sqrt{g}}{h_y} j_y \right|_{S_0} = &
 & \left\{
 \begin{matrix}
 0, & facdrift = 0 \\
-\frac{\sqrt{g}}{h_y}
+\left. \frac{\sqrt{g}}{h_y}
 \left(
 	\widetilde j_y^{(dia)} + j_y^{(in)} + \widetilde j_y^{(vis \parallel)} + j_y^{(vis \perp)}
 	+ \widetilde j_y^{(visq)} + \widetilde j_y^{(s)}
-\right) \Biggl|_{S_0}
+\right) \right|_{S_0}
 , & facdrift \neq 0 \\
 \end{matrix} \right.
 \end{matrix}
@@ -8416,14 +8416,14 @@ $\frac{\sqrt{g}}{h_y} j_y \Biggl|_{S_0} = 0$, dpc
 
 \begin{equation*}
 \begin{matrix}
-\frac{\sqrt{g}}{h_y} j_y \Biggl|_{S_1} = &
+\left. \frac{\sqrt{g}}{h_y} j_y \right|_{S_1} = &
 & \left\{
 \begin{matrix}
 0, & facdrift = 0 \\
-\frac{\sqrt{g}}{h_y}
+\left. \frac{\sqrt{g}}{h_y}
 \left(
 	\left\langle \widetilde j_y^{(dia)} \right\rangle
-\right) \Biggl|_{S_0}
+\right) \right|_{S_0}
 , & facdrift \neq 0 \\
 \end{matrix} \right.
 \end{matrix}
@@ -8433,15 +8433,15 @@ $\left\langle \widetilde j_y^{(dia)} \right\rangle$ ?, dpc
 
 \begin{equation*}
 \begin{matrix}
-\frac{\sqrt{g}}{h_y} j_y \Biggl|_{S_1} = &
+\left. \frac{\sqrt{g}}{h_y} j_y \right|_{S_1} = &
 & \left\{
 \begin{matrix}
 0, & facdrift = 0 \\
-\frac{\sqrt{g}}{h_y}
+\left. \frac{\sqrt{g}}{h_y}
 \left(
 	\left\langle \widetilde j_y^{(dia)} \right\rangle +
 	\left\langle j_y^{(in)} \right\rangle
-\right) \Biggl|_{S_0}
+\right) \right|_{S_0}
 , & facdrift \neq 0 \\
 \end{matrix} \right.
 \end{matrix}
@@ -8474,14 +8474,14 @@ $\left\langle \widetilde j_y^{(dia)} \right\rangle$ ?, dpc
 
 \begin{equation*}
 \begin{matrix}
-\frac{\sqrt{g}}{h_y} j_y \Biggl|_N = &
+\left. \frac{\sqrt{g}}{h_y} j_y \right|_N = &
 & \left\{
 \begin{matrix}
 0, & facdrift = 0 \\
-\frac{\sqrt{g}}{h_y}
+\left. \frac{\sqrt{g}}{h_y}
 \left(
 	\left\langle \widetilde j_y^{(dia)} \right\rangle
-\right) \Biggl|_N
+\right) \right|_N
 , & facdrift \neq 0 \\
 \end{matrix} \right.
 \end{matrix}
@@ -8493,15 +8493,15 @@ $\left\langle \widetilde j_y^{(dia)} \right\rangle$ ?, dpc
 
 \begin{equation*}
 \begin{matrix}
-- \frac{\sqrt{g}}{h_y} j_y \Biggl|_N = &
+\left. - \frac{\sqrt{g}}{h_y} j_y \right|_N = &
 & \left\{
 \begin{matrix}
 0, & facdrift = 0 \\
-- \frac{\sqrt{g}}{h_y}
+\left. - \frac{\sqrt{g}}{h_y}
 \left(
 	\widetilde j_y^{(dia)} + j_y^{(in)} + \widetilde j_y^{(vis \parallel)} + j_y^{(vis \perp)}
 	+ \widetilde j_y^{(visq)} + \widetilde j_y^{(s)}
-\right) \Biggl|_N
+\right) \right|_N
 , & facdrift \neq 0 \\
 \end{matrix} \right.
 \end{matrix}
@@ -8509,61 +8509,61 @@ $\left\langle \widetilde j_y^{(dia)} \right\rangle$ ?, dpc
 
 \paragraph{West}
 
-$\frac{\sqrt g}{h_x} j_x \Biggl|_W =
-\frac{\sqrt g}{h_x} e \left[
+$\left. \frac{\sqrt g}{h_x} j_x \right|_W =
+\frac{\sqrt g}{h_x} e \left. \left[
 	c_{ch,6} \sum \limits_{b=0}^{ns-1} z_a \left(
 		c_{n,a,7} |b_x| \sqrt{\frac{\sum \limits_{a=0}^{ns-1} p_b}{\sum \limits_{b=0}^{ns-1} m_b n_b}} n_a
 	\right) +
 	\left( 1 - \gamma_e \right) |b_x| n_e \frac 1{\sqrt{2\pi}}
 	\sqrt{\frac{T_e}{m_e}} exp \left( -\frac{e \varphi}{T_e} \right)
-\right] \Biggr|_W$, new form
+\right] \right|_W$, new form
 
-$\frac{\sqrt g}{h_x} j_x \Biggl|_W =
-\frac{\sqrt g}{h_x} e \left[
+$\left. \frac{\sqrt g}{h_x} j_x \right|_W =
+\frac{\sqrt g}{h_x} e \left. \left[
 	c_{ch,6} \sum \limits_{a=0}^{ns-1} z_a \Gamma_{ax} +
 	c_{ch,7} |b_x| n_e \frac 1{\sqrt{2\pi}}
 	\sqrt{\frac{T_e}{m_e}} exp \left( -\frac{e \varphi}{T_e} \right)
-\right] \Biggr|_W$, old form
+\right] \right|_W$, old form
 
 sheath potential bc (3)
 
-$\frac{\sqrt g}{h_x} j_x \Biggl|_W =
-\frac{\sqrt g}{h_x} e \left[
+$\left. \frac{\sqrt g}{h_x} j_x \right|_W =
+\frac{\sqrt g}{h_x} e \left. \left[
 	\sum \limits_{b=0}^{ns-1} z_a \Gamma_{ax} +
 	\left( 1 - \gamma_e \right) |b_x| n_e \frac 1{\sqrt{2\pi}}
 	\sqrt{\frac{T_e}{m_e}} exp \left( -\frac{e \left( \varphi - p_{\varphi,2}\right)}{T_e} \right)
-\right] \Biggr|_W$, dpc
+\right] \right|_W$, dpc
 
 \paragraph{East}
 
-$-\frac{\sqrt g}{h_x} j_x \Biggl|_E =
-\frac{\sqrt g}{h_x} e \left[
+$\left. -\frac{\sqrt g}{h_x} j_x \right|_E =
+\frac{\sqrt g}{h_x} e \left. \left[
 	c_{ch,6} \sum \limits_{b=0}^{ns-1} z_a \left(
 		c_{n,a,7} |b_x| \sqrt{\frac{\sum \limits_{a=0}^{ns-1} p_b}{\sum \limits_{b=0}^{ns-1} m_b n_b}} n_a
 	\right) +
 	\left( 1 - \gamma_e \right) |b_x| n_e \frac 1{\sqrt{2\pi}}
 	\sqrt{\frac{T_e}{m_e}} exp \left( -\frac{e \varphi}{T_e} \right)
-\right] \Biggr|_E$, new form
+\right] \right|_E$, new form
 
-$-\frac{\sqrt g}{h_x} j_x \Biggl|_E =
-\frac{\sqrt g}{h_x} e \left[
+$\left. -\frac{\sqrt g}{h_x} j_x \right|_E =
+\frac{\sqrt g}{h_x} e \left. \left[
 	- c_{ch,6} \sum \limits_{a=0}^{ns-1} z_a \Gamma_{ax} +
 	c_{ch,7} |b_x| n_e \frac 1{\sqrt{2\pi}}
 	\sqrt{\frac{T_e}{m_e}} exp \left( -\frac{e \varphi}{T_e} \right)
-\right] \Biggr|_E$, old form
+\right] \right|_E$, old form
 
 $c_{ch,7} = 1 - \gamma_e $,  $c_{ch,6} = 1$
 
 sheath potential bc (3)
 
-$-\frac{\sqrt g}{h_x} j_x \Biggl|_E =
-\frac{\sqrt g}{h_x} e \left[
+$\left. -\frac{\sqrt g}{h_x} j_x \right|_E =
+\frac{\sqrt g}{h_x} e \left. \left[
 	-\sum \limits_{a=0}^{ns-1} z_a \Gamma_{ax} +
 	\left( 1 - \gamma_e \right) |b_x| n_e \frac 1{\sqrt{2\pi}}
 	\sqrt{\frac{T_e}{m_e}} exp \left( -\frac{e \left( \varphi - p_{\varphi,2}\right)}{T_e} \right)
-\right] \Biggr|_E$, dpc
+\right] \right|_E$, dpc
 
-%-------- end of 31t page -------------
+%-------- end of 31st page -------------
 
 \subsubsection{Energy balance equation for electrons}
 
@@ -8571,7 +8571,7 @@ $S_{h_e} = S_{h_e,0} + S_{h_e,1} T_e + S_{h_e,2} n_e + S_{h_e,3} n_e T_e$
 
 \paragraph{South. Private region}
 
-$\frac{\sqrt g}{h_y} \widetilde q_{ey} \Bigl|_{S_0} = \left[
+$\left. \frac{\sqrt g}{h_y} \widetilde q_{ey} \right|_{S_0} = \left. \left[
 	\left(
 		c_{h_e,2} \frac{\sqrt g}{h_y} \sqrt{\frac{T_e}{m_e}}
 	\right) T_e n_e
@@ -8579,29 +8579,29 @@ $\frac{\sqrt g}{h_y} \widetilde q_{ey} \Bigl|_{S_0} = \left[
 	c_{h_e,7} max \left(
 		0, -\frac{\sqrt g}{h_y} \widetilde f_{ey}
 	\right) T_e - q_{ex}^{P.Sch}
-\right] \Biggr|_{S_0}$, bcene=11
+\right] \right|_{S_0}$, bcene=11
 
 $c_{h_e,2} = -10^{-4}$,  $c_{h_e,7} = -1$,  $c_{h_e,2} \rightarrow p_{h_e,2} = -10^{-4}$,  $c_{h_e,7} \rightarrow p_{h_e,1} = -1$
 
 
-$ -\frac{\sqrt g}{h_y} k_{ey} \frac{\partial T_e}{h_y \partial y} \Biggl|_{S_0} = \left[ \left( p_{h_e,1} \frac{\sqrt g}{h_y}\sqrt{\frac{T_e}{m_e}} \right) T_e n_e \right] \Biggr|_{S_0}$, bcene=22
+$\left. -\frac{\sqrt g}{h_y} k_{ey} \frac{\partial T_e}{h_y \partial y} \right|_{S_0} = \left. \left[ \left( p_{h_e,1} \frac{\sqrt g}{h_y}\sqrt{\frac{T_e}{m_e}} \right) T_e n_e \right] \right|_{S_0}$, bcene=22
 
 BCENE=9 (electron temperature decay length)
 
 \begin{equation*}
 \begin{matrix}
-frac{\sqrt g}{h_y} \widetilde q_{ey} \Bigl|_{S_0}= &
+\left. \frac{\sqrt g}{h_y} \widetilde q_{ey} \right|_{S_0}= &
 & \left\{
 \begin{matrix}
-\left[
+\left. \left[
 	\frac 5 2 \sum \limits_{a=0}^{ns-1} z_a S_{n_a,0}^{no\_mdf} T_e
 	-
 	\frac{\sqrt g}{h_y} \frac{\kappa_e^{(AN)}}{p_{h_e,1}} T_e
 	+
 	\frac 5 2 \sum \limits_{a=0}^{ns-1} z_a S_{n_a,1}^{no\_mdf} n_a T_e
-\right] \Biggr|_{S_0},
+\right] \right|_{S_0},
 & mdf\_fhe= 0 \\
-\left[
+\left. \left[
 	\frac 5 2 \sum \limits_{a=0}^{ns-1} z_a S_{n_a,0}^{no\_mdf} T_e
 	-
 	\frac{\sqrt g}{h_y} \frac{\kappa_e^{(AN)}}{p_{h_e,1}} T_e
@@ -8611,7 +8611,7 @@ frac{\sqrt g}{h_y} \widetilde q_{ey} \Bigl|_{S_0}= &
 	q_{ey}^{P.Sch}
 	+
 	\frac{\sqrt g}{h_y} \frac 3 2 V_{ey}^{(E)} n_e T_e
-\right] \Biggr|_{S_0},
+\right] \right|_{S_0},
 & mdf\_fhe= 1  \\
 \end{matrix} \right.
 \end{matrix}
@@ -8619,27 +8619,27 @@ frac{\sqrt g}{h_y} \widetilde q_{ey} \Bigl|_{S_0}= &
 
 \paragraph{South 1. Core}
 
-$\frac{\sqrt g}{h_y} \widetilde q_{ey} \Biggl|_{S_1} = \left[
+$\left. \frac{\sqrt g}{h_y} \widetilde q_{ey} \right|_{S_1} = \left. \left[
 	\left(
 		c_{h_e,0} \frac{\sqrt g}{h_y}
 		+
 		c_{h_e,1} \frac{\sqrt g}{h_y} T_e
 	\right)
-\right] \Biggr|_{S_1}$
+\right] \right|_{S_1}$
 
 $c_{h_e,0} = 4 \cdot 10^{13}$,  $c_{h_e,a,1} = -10^{30}$,
 
 total electron energy flux (8)
 
-$\frac{\sqrt g}{h_y} q_{ey} \biggl|_{S_1} = p_{h_e,1} \frac{
+$\left. \frac{\sqrt g}{h_y} q_{ey} \right|_{S_1} = p_{h_e,1} \left. \frac{
 	\frac{\sqrt g}{h_y}}
 	{\sum \limits_{core} \left( \frac{\sqrt g}{h_y} \right)}
-\Biggr|_{S_1},
+\right|_{S_1},
 \;\;p_{h_e,1} = 8 \cdot 10^5$, dpc
 
 \paragraph{North}
 
-$-\frac{\sqrt g}{h_y} \widetilde q_{ey} \Bigl|_N = \left[
+$\left. -\frac{\sqrt g}{h_y} \widetilde q_{ey} \right|_N = \left. \left[
 	\left(
 		c_{h_e,2} \frac{\sqrt g}{h_y} \sqrt{\frac{T_e}{m_e}}
 	\right) T_e n_e
@@ -8647,32 +8647,32 @@ $-\frac{\sqrt g}{h_y} \widetilde q_{ey} \Bigl|_N = \left[
 	c_{h_e,7} max \left(
 		0, \frac{\sqrt g}{h_y} \widetilde f_{ey}
 	\right) T_e - q_{ex}^{P.Sch}
-\right] \Biggr|_N$, bcene=11
+\right] \right|_N$, bcene=11
 
 %-------- end of 32nd page -------------
 
 $c_{h_e,2} = -10^{-4}$,  $c_{h_e,7} = -1$
 
 
-$ \frac{\sqrt g}{h_y} k_{ey} \frac{\partial T_e}{h_y \partial y} \Biggl|_N = \left[ \left( p_{h_e,1} \frac{\sqrt g}{h_y}\sqrt{\frac{T_e}{m_e}} \right) T_e n_e \right] \Biggr|_N$, bcene=22
+$\left. \frac{\sqrt g}{h_y} k_{ey} \frac{\partial T_e}{h_y \partial y} \right|_N = \left. \left[ \left( p_{h_e,1} \frac{\sqrt g}{h_y}\sqrt{\frac{T_e}{m_e}} \right) T_e n_e \right] \right|_N$, bcene=22
 
 BCENE=9 (electron temperature decay length) $p_{h_e,1} = 10^{-2}$
 
 \begin{tiny}
 \begin{equation*}
 \begin{matrix}
--frac{\sqrt g}{h_y} \widetilde q_{ey} \Bigl|_{N}= &
+\left. -frac{\sqrt g}{h_y} \widetilde q_{ey} \right|_{N}= &
 & \left\{
 \begin{matrix}
-\left[
+\left. \left[
 	\frac 5 2 \sum \limits_{a=0}^{ns-1} z_a S_{n_a,0}^{no\_mdf} T_e
 	-
 	\frac{\sqrt g}{h_y} \frac{\kappa_e^{(AN)}}{p_{h_e,1}} T_e
 	+
 	\frac 5 2 \sum \limits_{a=0}^{ns-1} z_a S_{n_a,1}^{no\_mdf} n_a T_e
-\right] \Biggr|_{N},
+\right] \right|_{N},
 & mdf\_fhe= 0 \\
-\left[
+\left. \left[
 	\frac 5 2 \sum \limits_{a=0}^{ns-1} z_a S_{n_a,0}^{no\_mdf} T_e
 	-
 	\frac{\sqrt g}{h_y} \frac{\kappa_e^{(AN)}}{p_{h_e,1}} T_e
@@ -8682,7 +8682,7 @@ BCENE=9 (electron temperature decay length) $p_{h_e,1} = 10^{-2}$
 	q_{ey}^{P.Sch}
 	-
 	\frac{\sqrt g}{h_y} \frac 3 2 V_{ey}^{(E)} n_e T_e
-\right] \Biggr|_{N},
+\right] \right|_{N},
 & mdf\_fhe= 1  \\
 \end{matrix} \right.
 \end{matrix}
@@ -8693,7 +8693,7 @@ BCENE=9 (electron temperature decay length) $p_{h_e,1} = 10^{-2}$
 
 bcene\_15\_style.eq.0
 	
-$\frac{\sqrt g}{h_x} \widetilde q_{ex} \Bigl|_W = \left[
+$\left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \left. \left[
 	-\left(
 		\frac{1 + \gamma}{1 -\gamma} T_e + e\varphi
 	\right)
@@ -8705,9 +8705,9 @@ $\frac{\sqrt g}{h_x} \widetilde q_{ex} \Bigl|_W = \left[
 	\right)
 	-
 	\frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
-\right] \Biggr|_W$ bcene=15
+\right] \right|_W$ bcene=15
 
-$\frac{\sqrt g}{h_x} \widetilde q_{ex} \Bigl|_W = \left[
+$\left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \left. \left[
 	-\left(
 		\frac{1 + \gamma}{1 -\gamma} + \frac{e\varphi}{T_e}
 	\right)
@@ -8719,11 +8719,11 @@ $\frac{\sqrt g}{h_x} \widetilde q_{ex} \Bigl|_W = \left[
 	\right) T_e
 	-
 	\frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
-\right] \Biggr|_W$ bcene=15
+\right] \right|_W$ bcene=15
 
 bcene\_15\_style.eq.1
 
-$\frac{\sqrt g}{h_x} \widetilde q_{ex} \Biggl|_W = \left[
+$\left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \left. \left[
 	-\frac{\sqrt g}{h_x} |b_x| \left(
 		\left( 1 + \gamma_e \right) T_e +
 		\left( 1 - \gamma_e \right) e \varphi
@@ -8731,22 +8731,22 @@ $\frac{\sqrt g}{h_x} \widetilde q_{ex} \Biggl|_W = \left[
 	\sqrt{\frac{T_e}{m_e}} exp \left( -\frac{e \varphi}{T_e} \right)
 	-
 	\frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
-\right] \Biggr|_W$, bcene=15
+\right] \right|_W$, bcene=15
 
 
 sheath electron (3)
 
-$p_{m,a_{main},2} < 0.5$, sound\_mode
+$p_{m,a_{main},2} < 0.5$, sound\_model = 0
 
 if $p_{h_e,1} > 0$ then
 
-$\frac{\sqrt g}{h_x} q_{ex} \Bigl|_W = \left[
+$\left. \frac{\sqrt g}{h_x} q_{ex} \right|_W = \left[
 	p_{h_e,1} + e\frac{\varphi - p_{\varphi,2}}{T_e}
 \right]
 \frac{\sqrt g}{h_x} \nu_{e_{out}} T_e
--
+- \left.
 \frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
-\Biggr|_W,
+\right|_W,
 \;\;\;\;\;p_{h_e,1} = 0.9,\;\;\;\;\; p_{\varphi,2} = 0,$
 
 %-------- end of 33rd page -------------
@@ -8765,7 +8765,7 @@ endif
 
 bcene\_15\_style.eq.0
 	
-$-\frac{\sqrt g}{h_x} \widetilde q_{ex} \Bigl|_E = \left[
+$\left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \left. \left[
 	-\left(
 		\frac{1 + \gamma}{1 -\gamma} T_e + e\varphi
 	\right)
@@ -8777,9 +8777,9 @@ $-\frac{\sqrt g}{h_x} \widetilde q_{ex} \Bigl|_E = \left[
 	\right)
 	+
 	\frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
-\right] \Biggr|_E$ bcene=15
+\right] \right|_E$ bcene=15
 
-$-\frac{\sqrt g}{h_x} \widetilde q_{ex} \Bigl|_E = \left[
+$\left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \left. \left[
 	-\left(
 		\frac{1 + \gamma}{1 -\gamma} + \frac{e\varphi}{T_e}
 	\right)
@@ -8791,11 +8791,11 @@ $-\frac{\sqrt g}{h_x} \widetilde q_{ex} \Bigl|_E = \left[
 	\right) T_e
 	+
 	\frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
-\right] \Biggr|_E$ bcene=15
+\right] \right|_E$ bcene=15
 
 bcene\_15\_style.eq.1
 
-$-\frac{\sqrt g}{h_x} \widetilde q_{ex} \Biggl|_E = \left[
+$\left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \left. \left[
 	-\frac{\sqrt g}{h_x} |b_x| \left(
 		\left( 1 + \gamma_e \right) T_e +
 		\left( 1 - \gamma_e \right) e \varphi
@@ -8803,7 +8803,7 @@ $-\frac{\sqrt g}{h_x} \widetilde q_{ex} \Biggl|_E = \left[
 	\sqrt{\frac{T_e}{m_e}} exp \left( -\frac{e \varphi}{T_e} \right)
 	+
 	\frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
-\right] \Biggr|_E$, bcene=15
+\right] \right|_E$, bcene=15
 
 sheath electron (3)
 
@@ -8811,13 +8811,13 @@ $p_{m,a_{main},2} < 0.5$, sound\_model =0,
 
 if $p_{h_e,1} > 0$ then
 
-$-\frac{\sqrt g}{h_x} \widetilde q_{ex} \Bigl|_E = -\left[
+$\left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = -\left[
 	p_{h_e,1} + e\frac{\varphi - p_{\varphi,2}}{T_e}
 \right]
 \frac{\sqrt g}{h_x} \nu_{e_{out}} T_e
-+
++ \left.
 \frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
-\Biggr|_E,
+\right|_E,
 \;\;\;\;\;p_{h_e,1} = 0.9,\;\;\;\;\; p_{\varphi,2} = 0,$
 
 $\nu_{e_{out}} = max \left\{
@@ -8838,14 +8838,14 @@ $S_{h_i} = S_{h_i,0} + S_{h_i,1} T_i + S_{h_i,2} n_i + S_{h_i,3} n_i T_i$
 
 \paragraph{South. Private region}
 
-$p_{h_i,1} = 10^{-2}$, $e_{rec,0} = 0$, $e_{rec,1} = 0.3$, $r_{rec,0,0} = 0$, $r_{rec,1,0} = 1$
+$p_{h_i,1} = 10^{-2}$, $e_{rec,0} = 0$, $e_{rec,1} = 0.3$, $c_{rec,0,0} = 0$, $c_{rec,1,0} = 1$
 
 BCENE=9 (ion temperature decay length)
 
 \begin{tiny}
 \begin{equation*}
 \begin{matrix}
-\frac{\sqrt g}{h_y} \widetilde q_{iy} \Bigl|_{S_0} = &
+\left. \frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_{S_0} = &
 & \left\{
 \begin{matrix}
 \begin{matrix}
@@ -8854,7 +8854,7 @@ BCENE=9 (ion temperature decay length)
 \frac{\sqrt g}{h_y} \frac{\kappa_i^{(AN)}}{p_{h_i,1}} T_i
 +
 \frac 5 2 \sum \limits_{a=0}^{ns-1} S_{n_a,1}^{no\_mdf} n_a T_i+ \\
-+\sum \limits_{a=0}^{ns-1} max \left\{
++ \left. \sum \limits_{a=0}^{ns-1} max \left\{
 	e_{rec,a} \left(
 		\frac{3}{2} + BoRiS
 	\right)\left(
@@ -8863,10 +8863,10 @@ BCENE=9 (ion temperature decay length)
 		\frac{3}{2} + BoRiS
 	\right) T_{surf} k_B
 \right\}
-r_{rec,a,0} c_{nsr} max \left\{
+c_{rec,a,0} c_{nsr} max \left\{
 	0, -\frac{\sqrt g}{h_y} \Gamma_{ay}
 \right\}
-\Bigg|_{S_0},
+\right|_{S_0},
 \end{matrix}
 %& mdf_\fhi = 0
 \\
@@ -8881,7 +8881,7 @@ q_{iy}^{P.Sch}
 +
 \frac{\sqrt g}{h_y} \frac 3 2 \sum \limits_{a=0}^{ns-1} V_{ay}^{(E)} n_a T_i
 + \\
-+\sum \limits_{a=0}^{ns-1} max \left\{
++\left. \sum \limits_{a=0}^{ns-1} max \left\{
 	e_{rec,a} \left(
 		\frac{3}{2} + BoRiS
 	\right)\left(
@@ -8890,10 +8890,10 @@ q_{iy}^{P.Sch}
 		\frac{3}{2} + BoRiS
 	\right) T_{surf} k_B
 \right\}
-r_{rec,a,0} c_{nsr} max \left\{
+c_{rec,a,0} c_{nsr} max \left\{
 	0, -\frac{\sqrt g}{h_y} \Gamma_{ay}
 \right\}
-\Biggl|_{S_0},
+\right|_{S_0},
 \end{matrix}
 %& mdf_\fhi = 0
 \end{matrix} \right.
@@ -8901,30 +8901,30 @@ r_{rec,a,0} c_{nsr} max \left\{
 \end{equation*}
 \end{tiny}
 
-$\frac{\sqrt g}{h_y} \widetilde q_{iy} \Bigl|_{S_0}
-=
+$\left. \frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_{S_0}
+= \left.
 p_{h_i,2} \sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}} \left(
 	\frac{\sqrt g}{h_y} n_a \sqrt{\frac{z_a T_e + T_i}{m_a}}
-\right) T_i \Bigr|_{S_0} +
+\right) T_i \right|_{S_0} + \left.
 p_{h_i,1} max \left\{0, -\frac{\sqrt g}{h_y} \widetilde f_y^{(E)} \right\} T_i
-\Biggr|_{S_0}$, bceni=21
+\right|_{S_0}$, bceni=21
 
 $p_{h_i,1} = -1$, $p_{h_i,2} = -10^{-2}$
 
-$-\frac{\sqrt g}{h_y} k_{iy} \frac{\partial T_i}{h_y \partial y} \Bigl|_{S_0}
-=
+$\left. -\frac{\sqrt g}{h_y} k_{iy} \frac{\partial T_i}{h_y \partial y} \right|_{S_0}
+= \left.
 p_{h_i,1} \sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}} \left(
 	\frac{\sqrt g}{h_y} n_a \sqrt{\frac{z_a T_e + T_i}{m_a}}
-\right) T_i \Bigr|_{S_0}$, bceni=22
+\right) T_i \right|_{S_0}$, bceni=22
 
-$\frac{\sqrt g}{h_y} \widetilde q_{iy} \Bigl|_{S_0}
-=
+$\left. \frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_{S_0}
+= \left.
 \sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}} \left(
 	c_{h_i,a,2} \frac{\sqrt g}{h_y} \frac{n_a}{n_i} \sqrt{\frac{z_a T_e + T_i}{m_a}}
-\right) n_i T_i \Bigr|_{S_0}
-+
+\right) n_i T_i \right|_{S_0}
++ \left.
 c_{h_i,0,7} max \left\{0, -\frac{\sqrt g}{h_y} \widetilde f_{iy} \right\} T_i
-\Biggr|_{S_0}$, b2stbc\_spb
+\right|_{S_0}$, b2stbc\_spb
 
 $c_{h_i,a,2} = -10^{-2}$
 
@@ -8934,21 +8934,21 @@ total ion energy flux (8)
 
 %-------- end of 35th page -------------
 
-$\frac{\sqrt g}{h_y} \widetilde q_{iy} \biggl|_{S_1} = p_{h_i,1} \frac{
+$\left. \frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_{S_1} = \left. p_{h_i,1} \frac{
 	\frac{\sqrt g}{h_y}}
 	{\sum \limits_{core} \left( \frac{\sqrt g}{h_y} \right)}
-\Biggr|_{S_1},
+\right|_{S_1},
 \;\;p_{h_i,1} = 8 \cdot 10^5$, dpc
 
-$\frac{\sqrt g}{h_y} \widetilde q_{iy} \Bigl|_{S_1} =
+$\left. \frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_{S_1} =
 \sum \limits_{a=0}^{ns-1}
-\left[
+\left. \left[
 	\left(
 		c_{h_i,a,0} \frac{\sqrt g}{h_y} \frac{n_a}{n_i}
 		+
 		c_{h_i,a,1} \frac{\sqrt g}{h_y} \frac{n_a}{n_i} T_e
 	\right)
-\right] \Biggr|_{S_1}$
+\right] \right|_{S_1}$
 
 $c_{h_i,a,0} = 4 \cdot 10^{13}$, $c_{h_i,a,1} = -10^{30}, a=0.1$,
 
@@ -8956,12 +8956,12 @@ $c_{h_i,a,0} = 4 \cdot 10^{13}$, $c_{h_i,a,1} = -10^{30}, a=0.1$,
 
 BCENE = 9 (electron temperature decay length)
 
-$p_{h_i,1} = 10^{-2}$, $e_{rec,0} = 0$, $e_{rec,1} = 0.3$, $r_{rec,0,0} = 0$, $r_{rec,1,0} = 1$
+$p_{h_i,1} = 10^{-2}$, $e_{rec,0} = 0$, $e_{rec,1} = 0.3$, $c_{rec,0,0} = 0$, $c_{rec,1,0} = 1$
 
 \begin{tiny}
 \begin{equation*}
 \begin{matrix}
-\frac{\sqrt g}{h_y} \widetilde q_{iy} \Bigl|_{S_0} = &
+\left. \frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_{S_0} = &
 & \left\{
 \begin{matrix}
 \begin{matrix}
@@ -8970,7 +8970,7 @@ $p_{h_i,1} = 10^{-2}$, $e_{rec,0} = 0$, $e_{rec,1} = 0.3$, $r_{rec,0,0} = 0$, $r
 \frac{\sqrt g}{h_y} \frac{\kappa_i^{(AN)}}{p_{h_i,1}} T_i
 +
 \frac 5 2 \sum \limits_{a=0}^{ns-1} S_{n_a,1}^{no\_mdf} n_a T_i+ \\
-+\sum \limits_{a=0}^{ns-1} max \left\{
++\left. \sum \limits_{a=0}^{ns-1} max \left\{
 	e_{rec,a} \left(
 		\frac{3}{2} + BoRiS
 	\right)\left(
@@ -8979,10 +8979,10 @@ $p_{h_i,1} = 10^{-2}$, $e_{rec,0} = 0$, $e_{rec,1} = 0.3$, $r_{rec,0,0} = 0$, $r
 		\frac{3}{2} + BoRiS
 	\right) T_{surf} k_B
 \right\}
-r_{rec,a,0} c_{nsr} max \left\{
+c_{rec,a,0} c_{nsr} max \left\{
 	0, -\frac{\sqrt g}{h_y} \Gamma_{ay}
 \right\}
-\Bigg|_{S_0},
+\right|_{S_0},
 \end{matrix}
 %& mdf_\fhi = 0
 \\
@@ -8997,7 +8997,7 @@ q_{iy}^{P.Sch}
 +
 \frac{\sqrt g}{h_y} \frac 3 2 \sum \limits_{a=0}^{ns-1} V_{ay}^{(E)} n_a T_i
 + \\
-+\sum \limits_{a=0}^{ns-1} max \left\{
++\left. \sum \limits_{a=0}^{ns-1} max \left\{
 	e_{rec,a} \left(
 		\frac{3}{2} + BoRiS
 	\right)\left(
@@ -9006,10 +9006,10 @@ q_{iy}^{P.Sch}
 		\frac{3}{2} + BoRiS
 	\right) T_{surf} k_B
 \right\}
-r_{rec,a,0} c_{nsr} max \left\{
+c_{rec,a,0} c_{nsr} max \left\{
 	0, -\frac{\sqrt g}{h_y} \Gamma_{ay}
 \right\}
-\Biggl|_{S_0},
+\right|_{S_0},
 \end{matrix}
 %& mdf_\fhi = 0
 \end{matrix} \right.
@@ -9019,8 +9019,8 @@ r_{rec,a,0} c_{nsr} max \left\{
 
 \begin{equation*}
 \begin{matrix}
--\frac{\sqrt g}{h_y} q_{iy} \Bigl|_N = &
-& \left[
+\left. -\frac{\sqrt g}{h_y} q_{iy} \right|_N = &
+& \left. \left[
 \begin{matrix}
 \frac 5 2 \sum \limits_{a=0}^{ns-1} S_{n_a,0} T_i
 -
@@ -9036,39 +9036,39 @@ r_{rec,a,0} c_{nsr} max \left\{
 		\frac{3}{2} + BoRiS
 	\right) T_{surf} k_B
 \right\}
-r_{rec,a,0} c_{nsr} max \left\{
+c_{rec,a,0} c_{nsr} max \left\{
 	0, \frac{\sqrt g}{h_y} \Gamma_{ay}
 \right\}
-\end{matrix} \right] \Biggl|_N
+\end{matrix} \right] \right|_N
 \end{matrix}
 \end{equation*}
 
 
-$-\frac{\sqrt g}{h_y} \widetilde q_{iy} \Bigl|_N
-=
+$\left. -\frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_N
+= \left.
 p_{h_i,2} \sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}} \left(
 	\frac{\sqrt g}{h_y} n_a \sqrt{\frac{z_a T_e + T_i}{m_a}}
-\right) T_i \Biggr|_N
-+
+\right) T_i \right|_N
++ \left.
 p_{h_i,1} max \left\{0, -\frac{\sqrt g}{h_y} \widetilde f_{iy} \right\} T_i
-\Biggr|_N$, bceni=21
+\right|_N$, bceni=21
 
 $p_{h_i,1} = -1$, $p_{h_i,2} = 10^{-2}$
 
-$\frac{\sqrt g}{h_y} k_{iy} \frac{\partial T_i}{h_y \partial y} \Bigl|_N
-=
+$\left. \frac{\sqrt g}{h_y} k_{iy} \frac{\partial T_i}{h_y \partial y} \right|_N
+= \left.
 p_{h_i,1} \sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}} \left(
 	\frac{\sqrt g}{h_y} n_a \sqrt{\frac{z_a T_e + T_i}{m_a}}
-\right) T_i \Bigr|_N$, bceni=22
+\right) T_i \right|_N$, bceni=22
 
-$-\frac{\sqrt g}{h_y} \widetilde q_{iy} \Bigl|_N
-=
+$\left. -\frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_N
+= \left.
 \sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}} \left(
 	c_{h_i,a,2}  \frac{\sqrt g}{h_y} \frac{n_a }{n_i} \sqrt{\frac{z_a T_e + T_i}{m_a}}
-\right) n_i T_i \Biggr|_N
-+
+\right) n_i T_i \right|_N
++ \left.
 c_{h_i,0,7} max \left\{0, -\frac{\sqrt g}{h_y} \widetilde f_{iy} \right\} T_i
-\Biggr|_N$, b2stbc\_spb
+\right|_N$, b2stbc\_spb
 
 %-------- end of 36th page -------------
 
@@ -9076,13 +9076,13 @@ $c_{h_i,a,2} = -10^{-2}$
 
 \paragraph{West}
 
-$\frac{\sqrt g}{h_x} \widetilde q_{ix} \Bigl|_W =
+$\left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W = \left.
 \frac{\sqrt g}{h_x} |b_x|
 \sqrt{\frac{\sum \limits_{a=0}^{ns-1} p_a}{\sum \limits_{a=0}^{ns-1} m_a n_a}} T_i
 \sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}} n_a
 -
 \frac{\sqrt g}{h_x} q_{ix}^{P.Sch}
-\Biggr|_W$ bceni=15
+\right|_W$ bceni=15
 
 sheath ion (3), BCENI = 3
 
@@ -9090,8 +9090,8 @@ $p_{m,a_{main},2} < 0.5$, sound\_model = 0,
 
 \begin{equation*}
 \begin{matrix}
-\frac{\sqrt g}{h_x} \widetilde q_{ix} \Bigl|_W = &
-& \left[
+\left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W = &
+& \left. \left[
 \begin{matrix}
 \sum \limits_{z_a \neq 0} \left(
 	\frac{\sqrt g}{h_x} \frac{p_{h_i,2}}2 u_{u_{out}} m_a n_a
@@ -9113,10 +9113,10 @@ $p_{m,a_{main},2} < 0.5$, sound\_model = 0,
 		\frac{3}{2} + BoRiS
 	\right) T_{surf} k_B
 \right\}
-r_{rec,a,0} c_{nsr} max \left\{
+c_{rec,a,0} c_{nsr} max \left\{
 	0, -\frac{\sqrt g}{h_x} \Gamma_{ax}
 \right\}
-\end{matrix} \right] \Biggl|_N ,
+\end{matrix} \right] \right|_N ,
 \end{matrix}
 \end{equation*}
 
@@ -9129,9 +9129,9 @@ $u_{p_{out}} = max \left\{
 $u_{u_{out}} = p_{m,a_{main},1} c_s |b_x|$, $c_s = \sqrt{\frac{\sum \limits_{a=0}^{ns-1} p_a}{\sum \limits_{a=0}^{ns-1} m_a n_a}}$, $p_{m,a_{main},1} = 1.0$, \\\\ $p_{m,a_{main},1} = 1.0$
 
 if neutrals\_namelist.eq.1.or.use\_eirene.ne.0
-then $e_{rec,0} = 0$, $e_{rec,1} = 0.3$, $r_{rec,0} = 0$, $r_{rec,1} = 1$
+then $e_{rec,0} = 0$, $e_{rec,1} = 0.3$, $c_{rec,0,0} = 0$, $c_{rec,1,0} = 1$
 
-else $c_{rec,0,0} = 0$, $c_{rec,1,0} = 1$, $c_{rec,0,1} = 0$, $r_{rec,1} = 0.3$
+else $c_{rec,0,0} = 0$, $c_{rec,1,0} = 1$, $c_{rec,0,1} = 0$, $c_{rec,1,1} = 0.3$
 
 $p_{h_i,1} = 2.5$ should be $p_{h_i,1} = 1.5$
 
@@ -9143,17 +9143,17 @@ $p_{h_i,2} = 10^{-3}$ with drifts, should be $p_{h_i,2} = 0$
 
 \paragraph{East}
 
-$-\frac{\sqrt g}{h_x} \widetilde q_{ix} \Bigl|_E =
+$\left. -\frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_E = \left.
 p_{h_i,1} \frac{\sqrt g}{h_x} |b_x|
 \sqrt{\frac{\sum \limits_{a=0}^{ns-1} p_a}{\sum \limits_{a=0}^{ns-1} m_a n_a}} T_i
 \sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}} n_a
 -
 \frac{\sqrt g}{h_x} q_{ix}^{P.Sch}
-\Biggr|_E$ bceni=15
+\right|_E$ bceni=15
 
-$-\frac{\sqrt g}{h_x} \widetilde q_{ix} \Bigl|_E =
+$\left. -\frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_E =
 \sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}}
-\left[
+\left. \left[
 	-\left(
 		c_{h_i,a,7}
 		\frac{\sqrt g}{h_x} |b_x|
@@ -9162,7 +9162,7 @@ $-\frac{\sqrt g}{h_x} \widetilde q_{ix} \Bigl|_E =
 	\right) n_i T_i
 	+
 	\frac{\sqrt g}{h_x} q_{ix}^{P.Sch}
-\right] \Biggr|_E$ b2stbc\_spb
+\right] \right|_E$ b2stbc\_spb
 
 $p_{h_i,i} = 1.5$
 
@@ -9172,8 +9172,8 @@ $p_{m,a_{main},2} < 0.5$, sound\_model = 0,
 
 \begin{equation*}
 \begin{matrix}
--\frac{\sqrt g}{h_x} \widetilde q_{ix} \Bigl|_E = &
-& \left[
+\left. -\frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_E = &
+& \left. \left[
 \begin{matrix}
 \sum \limits_{z_a \neq 0} \left(
 	-\frac{\sqrt g}{h_x} \frac{p_{h_i,2}}2 u_{u_{out}} m_a n_a
@@ -9198,7 +9198,7 @@ $p_{m,a_{main},2} < 0.5$, sound\_model = 0,
 c_{rec,a,0} c_{nsr} max \left\{
 	0, \frac{\sqrt g}{h_x} \Gamma_{ax}
 \right\}
-\end{matrix} \right] \Biggl|_E ,
+\end{matrix} \right] \right|_E ,
 \end{matrix}
 \end{equation*}
 
@@ -9211,9 +9211,9 @@ $u_{p_{out}} = max \left\{
 $u_{u_{out}} = p_{m,a_{main},1} c_s |b_x|$, $c_s = \sqrt{\frac{\sum \limits_{a=0}^{ns-1} p_a}{\sum \limits_{a=0}^{ns-1} m_a n_a}}$, $p_{m,a_{main},1} = 1.0$
 
 if neutrals\_namelist.eq.1.or.use\_eirene.ne.0
-then $e_{rec,0} = 0$, $e_{rec,1} = 0.3$, $r_{rec,0} = 0$, $r_{rec,1} = 1$
+then $e_{rec,0} = 0$, $e_{rec,1} = 0.3$, $c_{rec,0,0} = 0$, $c_{rec,1,0} = 1$
 
-else  $c_{rec,0,0} = 0$, $c_{rec,1,0} = 1$, $c_{rec,0,1} = 0$, $r_{rec,1} = 0.3$
+else  $c_{rec,0,0} = 0$, $c_{rec,1,0} = 1$, $c_{rec,0,1} = 0$, $c_{rec,1,1} = 0.3$
 
 $p_{h_i,1} = 2.5$, should be $p_{h_i,1} = 1.5$
 
@@ -9259,27 +9259,26 @@ Old form of  $\left( \nabla \pi_a^{\parallel}\right)_{\parallel}$ was
 
 Contribution from anomalous viscosity was contained in l.h.s.
 
-Because of  $\eta_{ANa} \ll \widetilde{\widetilde{\eta}}_{CLax}$, $\eta_{ax} \approx widetilde{\widetilde{\eta}}_{CLax}$ and taking into account $B_x h_x h_y = \text{const}$
+Because of  $\eta_{ANa} \ll \widetilde{\widetilde{\eta}}_{CLax}$, $\eta_{ax} \approx \widetilde{\widetilde{\eta}}_{CLax}$ and taking into account $B_x h_x h_y = \text{const}$
 
-\begin{eqnarray}
--\frac 4 3 b_x B^{\frac 3 2} \frac{\partial}{h_x \partial x} \left(
+\begin{equation}\begin{split}
+-\frac 4 3 b_x B^{\frac 3 2} & \frac{\partial}{h_x \partial x} \left(
 	\frac{c_{\eta_{ax}^{(CL)}} c_{\eta_{ax}^{(CL)}}^{(Luciani)} \eta_{CLax} b_x}{B^2}
 	\frac{ \partial \left( B^{\frac 1 2} V_{a \parallel} \right)}{h_x \partial x}
 \right)
-=
-\frac{\partial}{h_z \sqrt g \partial x} \left(
+= \\
+& \frac{\partial}{h_z \sqrt g \partial x} \left(
 	\frac{h_z \sqrt g}{h_x} \left(
 		\frac 4 3 \eta_{ax} \frac{\partial \text{ln} h_z}{h_x \partial x} V_{\parallel a}
 		-
 		\frac 4 3 \eta_{ax} \frac{\partial V_{\parallel a}}{h_x \partial x}
 	\right)
 \right)-
-\\
 -\frac{\partial}{h_z \sqrt g \partial x} \left(
 	\frac{h_z \sqrt g}{h_x} \frac 4 3 \eta _{ax} \frac{\partial	\text{ln} \left( h_z B^{\frac 1 2} \right)}
 	{B^{\frac 1 2} h_x \partial x}
 \right) B^{\frac 1 2} V_{\parallel a}, \;\;\;\;\;\;\; a = 1
-\end{eqnarray}
+\end{split}\end{equation}
 
 %-------- end of 39th page -------------
 
@@ -9312,7 +9311,7 @@ About scaling of residuals
 
 \begin{equation}
 \frac{
-	\sum \limits_{i=0}^{n_x-1} \sum \limits_{j=0}^{n_y-1} \biggl| r_{n_a,i,j} \biggr|
+	\sum \limits_{i=0}^{n_x-1} \sum \limits_{j=0}^{n_y-1} \left| r_{n_a,i,j} \right|
 }{
 	\sum \limits_{i=0}^{n_x-1} \sum \limits_{j=0}^{n_xy-1} \sqrt{g_{i,j}} n_{a,i,j}
 }
@@ -9320,7 +9319,7 @@ About scaling of residuals
 
 \begin{equation}
 \frac{
-	\sum \limits_{i=0}^{n_x-1} \sum \limits_{j=0}^{n_y-1} \biggl| r_{u_a,i,j} \biggr|
+	\sum \limits_{i=0}^{n_x-1} \sum \limits_{j=0}^{n_y-1} \left| r_{u_a,i,j} \right|
 }{
 	\sum \limits_{i=0}^{n_x-1} \sum \limits_{j=0}^{n_xy-1} \sqrt{g_{i,j}} n_{a,i,j} \sqrt{m_a T_i}
 }
@@ -9328,7 +9327,7 @@ About scaling of residuals
 
 \begin{equation}
 \frac{
-	\sum \limits_{i=0}^{n_x-1} \sum \limits_{j=0}^{n_y-1} \biggl| r_{h_e,i,j} \biggr|
+	\sum \limits_{i=0}^{n_x-1} \sum \limits_{j=0}^{n_y-1} \left| r_{h_e,i,j} \right|
 }{
 	\frac{3}{2} \sum \limits_{a=0}^{ns-1} \sum \limits_{j=0}^{n_xy-1} \sqrt{g_{i,j}} n_{a,i,j}
 	\left( z_a T_e + T_i \right)
@@ -9337,7 +9336,7 @@ About scaling of residuals
 
 \begin{equation}
 \frac{
-	\sum \limits_{i=0}^{n_x-1} \sum \limits_{j=0}^{n_y-1} \biggl| r_{h_i,i,j} \biggr|
+	\sum \limits_{i=0}^{n_x-1} \sum \limits_{j=0}^{n_y-1} \left| r_{h_i,i,j} \right|
 }{
 	\frac{3}{2} \sum \limits_{a=0}^{ns-1} \sum \limits_{j=0}^{n_xy-1} \sqrt{g_{i,j}} n_{a,i,j}
 	\left( z_a T_e + T_i \right)
@@ -9346,7 +9345,7 @@ About scaling of residuals
 
 \begin{equation}
 \frac{
-	\sum \limits_{i=0}^{n_x-1} \sum \limits_{j=0}^{n_y-1} \biggl| r_{po,i,j} \biggr|
+	\sum \limits_{i=0}^{n_x-1} \sum \limits_{j=0}^{n_y-1} \left| r_{po,i,j} \right|
 }{
 	\frac{3}{2} \sum \limits_{a=0}^{ns-1} \sum \limits_{j=0}^{n_xy-1} \sqrt{g_{i,j}} z_a e n_{a,i,j}
 }
@@ -9633,8 +9632,8 @@ S_{hi}=S_{hi0}+S_{hi1}T_{i}+S_{hi2}n_{i}+S_{hi3}n_{i}T_{i}   \label{29}
 \end{equation}
 
 \begin{equation}
-S_{hi0}=\sum_{\alpha}\bigl[ C_{hi0\alpha}t_{\alpha}S_{0}+C_{hi6\alpha}
-\max\left( 0,\Gamma_{\alpha y}\right) \bigr] +Q_{hiDy}   \label{30}
+S_{hi0}=\sum_{\alpha}\left[ C_{hi0\alpha}t_{\alpha}S_{0}+C_{hi6\alpha}
+\max\left( 0,\Gamma_{\alpha y}\right) \right] +Q_{hiDy}   \label{30}
 \end{equation}
 
 \begin{equation}
@@ -9646,10 +9645,10 @@ S_{hi2}=0   \label{32}
 \end{equation}
 
 \begin{equation}\begin{split}
-S_{hi3}=\sum_{\alpha}\biggl[ ~ & C_{hi2\alpha}t_{\alpha}c_{s\alpha}S_{0}+C_{hi3\alpha}
-t_{\alpha}c_{s\alpha}S_{1}+C_{hi4\alpha}t_{\alpha}c_{st}S_{0}+ \\
+S_{hi3}=\sum_{\alpha}\Bigl[ ~ & C_{hi2\alpha}t_{\alpha}c_{s\alpha}S_{0}+C_{hi3\alpha}
+t_{\alpha}c_{s\alpha}S_{1}+C_{hi4\alpha}t_{\alpha}c_{st}S_{0}+  \\ 
 ~ & C_{hi5\alpha}t_{\alpha}c_{st}S_{1}+C_{hi7\alpha}
-\frac{\max\left(0,-\Gamma_{\alpha y}\right) }{n_{i}}\biggr]   \label{33}
+\frac{\max\left(0,-\Gamma_{\alpha y}\right) }{n_{i}}\Bigr]   \label{33}
 \end{split}\end{equation}
 
 \paragraph{Electron Heat Source}
@@ -9753,8 +9752,8 @@ S_{hi}=S_{hi0}+S_{hi1}T_{i}+S_{hi2}n_{i}+S_{hi3}n_{i}T_{i}   \label{52}
 \end{equation}
 
 \begin{equation}
-S_{hi0}=\sum_{\alpha}\bigl[ C_{hi0\alpha}t_{\alpha}S_{0}+C_{hi6\alpha}
-\max\left( 0,-\Gamma_{\alpha y}\right) \bigr] -Q_{hiDy}   \label{53}
+S_{hi0}=\sum_{\alpha}\left[ C_{hi0\alpha}t_{\alpha}S_{0}+C_{hi6\alpha}
+\max\left( 0,-\Gamma_{\alpha y}\right) \right] -Q_{hiDy}   \label{53}
 \end{equation}
 
 \begin{equation}
@@ -9766,10 +9765,10 @@ S_{hi2}=0   \label{55}
 \end{equation}
 
 \begin{equation}\begin{split}
-S_{hi3}=\sum_{\alpha}\biggl[ ~ & C_{hi2\alpha}t_{\alpha}c_{s\alpha}S_{0}+C_{hi3\alpha}
+S_{hi3}=\sum_{\alpha}\Bigl[ ~ & C_{hi2\alpha}t_{\alpha}c_{s\alpha}S_{0}+C_{hi3\alpha}
 t_{\alpha}c_{s\alpha}S_{1}+C_{hi4\alpha}t_{\alpha}c_{st}S_{0}+ \\
 ~ & C_{hi5\alpha}t_{\alpha}c_{st}S_{1}+C_{hi7\alpha}
-\frac{\max\left(0,\Gamma_{\alpha y}\right) }{n_{i}}\biggr]   \label{56}
+\frac{\max\left(0,\Gamma_{\alpha y}\right) }{n_{i}}\Bigr]   \label{56}
 \end{split}\end{equation}
 
 \paragraph{Electron Heat Source}
@@ -9873,8 +9872,8 @@ S_{hi}=S_{hi0}+S_{hi1}T_{i}+S_{hi2}n_{i}+S_{hi3}n_{i}T_{i}   \label{75}
 \end{equation}
 
 \begin{equation}
-S_{hi0}=\sum_{\alpha}\bigl[ C_{hi0\alpha}t_{\alpha}S_{0}+C_{hi6\alpha}
-\max\left( 0,\Gamma_{\alpha x}\right) \bigr] +Q_{hiDx}   \label{76}
+S_{hi0}=\sum_{\alpha}\left[ C_{hi0\alpha}t_{\alpha}S_{0}+C_{hi6\alpha}
+\max\left( 0,\Gamma_{\alpha x}\right) \right] +Q_{hiDx}   \label{76}
 \end{equation}
 
 \begin{equation}
@@ -9886,10 +9885,10 @@ S_{hi2}=0   \label{78}
 \end{equation}
 
 \begin{equation}\begin{split}
-S_{hi3}=\sum_{\alpha}\biggl[ ~ & C_{hi2\alpha}t_{\alpha}c_{sD\alpha}S_{0}+C_{hi3\alpha}
+S_{hi3}=\sum_{\alpha}\Bigl[ ~ & C_{hi2\alpha}t_{\alpha}c_{sD\alpha}S_{0}+C_{hi3\alpha}
 t_{\alpha}c_{sD\alpha}S_{1}+C_{hi4\alpha}t_{\alpha}c_{stD}S_{0}+ \\
 ~ & C_{hi5\alpha}t_{\alpha}c_{stD}S_{1}+C_{hi7\alpha}
-\frac{\max\left(0,-\Gamma_{\alpha x}\right) }{n_{i}}\biggr]   \label{79}
+\frac{\max\left(0,-\Gamma_{\alpha x}\right) }{n_{i}}\Bigr]   \label{79}
 \end{split}\end{equation}
 
 \paragraph{\protect\bigskip Electron Heat Source}
@@ -9995,8 +9994,8 @@ S_{hi}=S_{hi0}+S_{hi1}T_{i}+S_{hi2}n_{i}+S_{hi3}n_{i}T_{i}   \label{98}
 \end{equation}
 
 \begin{equation}
-S_{hi0}=\sum_{\alpha}\bigl[ C_{hi0\alpha}t_{\alpha}S_{0}+C_{hi6\alpha}
-\max\left( 0,-\Gamma_{\alpha x}\right) \bigr] -Q_{hiDx}   \label{99}
+S_{hi0}=\sum_{\alpha}\left[ C_{hi0\alpha}t_{\alpha}S_{0}+C_{hi6\alpha}
+\max\left( 0,-\Gamma_{\alpha x}\right) \right] -Q_{hiDx}   \label{99}
 \end{equation}
 
 \begin{equation}
@@ -10008,10 +10007,10 @@ S_{hi2}=0   \label{101}
 \end{equation}
 
 \begin{equation}\begin{split}
-S_{hi3}=\sum_{\alpha}\biggl[ ~ & C_{hi2\alpha}t_{\alpha}c_{sD\alpha}S_{0}+C_{hi3\alpha}
+S_{hi3}=\sum_{\alpha}\Bigl[ ~ & C_{hi2\alpha}t_{\alpha}c_{sD\alpha}S_{0}+C_{hi3\alpha}
 t_{\alpha}c_{sD\alpha}S_{1}+C_{hi4\alpha}t_{\alpha}c_{stD}S_{0}+ \\
 ~ & C_{hi5\alpha}t_{\alpha}c_{stD}S_{1}+C_{hi7\alpha}
-\frac{\max\left(0,\Gamma_{\alpha x}\right) }{n_{i}}\biggr]   \label{102}
+\frac{\max\left(0,\Gamma_{\alpha x}\right) }{n_{i}}\Bigr]   \label{102}
 \end{split}\end{equation}
 
 \paragraph{\protect\bigskip Electron Heat Source}

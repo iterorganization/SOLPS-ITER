@@ -20,10 +20,14 @@ else
   set iamat="UNKNOWN"
 endif
 
-if ( $iamat == "*UNKNOWN" ) then
-  setenv HOST_NAME default
+if (-e SETUP/setup.csh.HOST_NAME.local) then
+  echo Loading SETUP/setup.csh.HOST_NAME.local
 else
-  setenv HOST_NAME ${iamat}
+  if ( $iamat == "*UNKNOWN" ) then
+    setenv HOST_NAME default
+  else
+    setenv HOST_NAME ${iamat}
+  endif
 endif
 
 # COMPILER can also be the argument to setup.csh call

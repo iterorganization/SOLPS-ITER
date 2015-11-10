@@ -59,7 +59,7 @@ ifeq ($(shell [ -e ${SRCUIN}/config/config.${HOST_NAME}.${COMPILER}.local ] && e
 include ${SRCUIN}/config/config.${HOST_NAME}.${COMPILER}.local
 MAKES+= ${SRCUIN}/config/config.${HOST_NAME}.${COMPILER}.local
 endif
-MNEXTRA = ${B2OBJ}/open_file.o
+MNEXTRA = ${B2OBJ}/open_file.o ${B2OBJ}/streql.o
 
 VPATH = ${SRCDIR}
 
