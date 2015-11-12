@@ -35,6 +35,11 @@
   [ -e ../convert/b2.transport.inputfile ] && cp -uv ../convert/b2.transport.inputfile .
   [ -e ../convert/b2.sources.profile ] && cp -uv ../convert/b2.sources.profile .
   [ -e ../convert/fort.15 ] && cp -uv ../convert/fort.15 .
+  [ -e ../convert/fort.14 ] && cp -uv ../convert/fort.14 .
+  [ -e ../convert/fort.13 ] && cp -uv ../convert/fort.13 .
+  [ -e ../convert/fort.12 ] && cp -uv ../convert/fort.12 .
+  [ -e ../convert/fort.11 ] && cp -uv ../convert/fort.11 .
+  [ -e ../convert/fort.10 ] && cp -uv ../convert/fort.10 .
   touch b2fstati
 } || {
   echo 'Did not find b2yt.files list. Exiting ...'

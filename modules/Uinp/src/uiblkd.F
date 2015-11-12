@@ -140,7 +140,7 @@ c*** Data for TRIA mesh
 c*** 1
 
       data nmach, nmode , ntcpu, nfile, niter0, niter, ntime0, ntim1 /
-     /       2  ,   1   ,  50  ,  100 ,   1   ,   1  ,   0   ,   1   /,
+     /       2  ,   1   ,  50  ,  400 ,   1   ,   1  ,   0   ,   1   /,
      ,  nfullrun, noptim,noptm1, ngeom_usr, ncoup_input, nsmstra /
      /     0    ,   1   ,   1  ,     0    ,     1      ,    1    /,
      ,   nstoram, ngstal,nrtal1,nreac_add /
@@ -730,7 +730,7 @@ c*** 15
 c*** Data for Eirene test run
 
       data ttntime,ttnfile, ttnpts, ttalloc,tttest,ttcsrc,ttcint /
-     /        50  , 10000 , nstra*5,   0.  ,.true.,.true.,.true. /,
+     /        50  , 10100 , nstra*5,   0.  ,.true.,.true.,.true. /,
      ,	ttchst,ttcref,ttcamd,ttcsou,ttcbla,ttcblm,ttcbli,ttcblp,ttcble /
      /	.true.,.true.,.true.,.true.,.true.,.true.,.true.,.true.,.true. /,
      ,  ttcblph,ttctal,ttcdbg2,ttcdbge,ttcdbgm,ttcdbgf,ttcdbgl,ttcdbgs/
