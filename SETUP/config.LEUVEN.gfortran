@@ -53,7 +53,7 @@ LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -L/usr/lib64 -L/u
 #LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lncarg_ras -L/usr/X11R6/lib64 -lm -lX11 -L/usr/lib64 -lXext -lcairo -lpangocairo-1.0 -lfreetype -lpng -lz -lpthread -lXrender -lbz2 -lgfortran # for
 LD_NAG     = -L${NAGDIR} -llapack -lrefblas
 LD_MDSPLUS =
-LD_SONNET  = -L${SOLPSLIB} -lsonnet
+LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 
 
 

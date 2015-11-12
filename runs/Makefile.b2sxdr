@@ -54,13 +54,13 @@ prt : $(prints)
 $(target_sx) : B2SXDR b2.parameters.src input.dat fort.33 fort.34 fort.35
 	rm -rf b2sx.exe.dir ; mkdir b2sx.exe.dir ; cp $^ b2sx.exe.dir
 	rm -f $(target_sx)
-	cd b2sx.exe.dir ; [ -e ../fort.30 ] && cp -p ../fort.30 . ; time ${SOLPSTOP}/modules/solps4-5/builds/${TOOL_CHAIN}/b2sxdr.exe ; mv $(target_sx) .. ; [ -e ../fort.30 ] || mv -p fort.30 .. ; rm -f $(notdir $^) fort.55 b2.parameters.out
+	cd b2sx.exe.dir ; [ -e ../fort.30 ] && cp -p ../fort.30 . ; time ${SOLPSTOP}/modules/solps4-5/builds/${TOOL_CHAIN}/b2sxdr.exe ; mv $(target_sx) .. ; [ -e ../fort.30 ] || mv fort.30 .. ; rm -f $(notdir $^) fort.55 b2.parameters.out
 	-rmdir b2sx.exe.dir
 
 dbx.b2sxdr : B2SXDR b2.parameters.src input.dat fort.33 fort.34 fort.35
 	rm -rf b2sx.exe.dir ; mkdir b2sx.exe.dir ; cp $^ b2sx.exe.dir
 	rm -f $(target_sx)
-	cd b2sx.exe.dir ; [ -e ../fort.30 ] && cp -p ../fort.30 . ; ${DBX} ${INC} ${SOLPSTOP}/modules/solps4-5/builds/${HOST_NAME}.${COMPILER}.debug/b2sxdr.exe ; mv $(target_sx) .. ; [ -e ../fort.30 ] || mv -p fort.30 .. ; rm -f $(notdir $^) fort.55 b2.parameters.out
+	cd b2sx.exe.dir ; [ -e ../fort.30 ] && cp -p ../fort.30 . ; ${DBX} ${INC} ${SOLPSTOP}/modules/solps4-5/builds/${HOST_NAME}.${COMPILER}.debug/b2sxdr.exe ; mv $(target_sx) .. ; [ -e ../fort.30 ] || mv fort.30 .. ; rm -f $(notdir $^) fort.55 b2.parameters.out
 	-rmdir b2sx.exe.dir
 
 clean :
