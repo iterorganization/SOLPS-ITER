@@ -25,5 +25,6 @@ source $SOLPSTOP/SETUP/debug
 gmake listobj
 source $SOLPSTOP/SETUP/nodebug
 gmake depend depend_debug
+gmake tags
 gmake solps
 

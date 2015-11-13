@@ -2322,7 +2322,7 @@ c
       integer is
       character*32 hlp_frm
 
-      call alloc_b2mod_transport(ns)
+      call alloc_transport_namelist(ns)
       do is = 0, ns-1
         if(.not.is_neutral(is)) then
           parm_dna(is)=difni_4(ifl(is))
