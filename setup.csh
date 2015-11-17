@@ -184,6 +184,8 @@ alias   set_debug 'source $SOLPSTOP/SETUP/debug'
 alias unset_debug 'source $SOLPSTOP/SETUP/nodebug'
 alias   set_mpi   'source $SOLPSTOP/SETUP/mpi'
 alias unset_mpi   'source $SOLPSTOP/SETUP/nompi'
+alias   set_ig   'source $SOLPSTOP/SETUP/ig'
+alias unset_ig   'source $SOLPSTOP/SETUP/noig'
 
 
 #if (! $?IDL_PATH) setenv IDL_PATH
