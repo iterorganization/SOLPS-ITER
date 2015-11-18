@@ -111,10 +111,12 @@ b25_all:
 b25_mpi:
 	cd modules/B2.5; ${MAKE} USE_MPI=-DUSE_MPI
 
+b25_ig:
+	cd modules/B2.5; ${MAKE} USE_IMPGYRO=-DUSE_IMPGYRO
+
 b25_all_mpi:
 	cd modules/solps4-5; ${MAKE} links
 	cd modules/B2.5;     ${MAKE} USE_MPI=-DUSE_MPI ALL
-
 
 b25eirene:
 	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE
@@ -307,6 +309,10 @@ clean_b25:
 
 clean_b25_mpi:
 	cd modules/B2.5; ${MAKE} clean USE_MPI=-DUSE_MPI
+
+
+clean_b25_ig:
+	cd modules/B2.5; ${MAKE} clean USE_IMPGYRO=-DUSE_IMPGYRO
 
 
 clean_b25eirene:
