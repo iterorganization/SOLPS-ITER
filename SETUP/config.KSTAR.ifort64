@@ -44,7 +44,7 @@
    MSCL_ROOT ?= /home/sunny2216/solps5.0_old/solps5.0/solps5.0/src/lib/linux.ifort64
        H5DIR ?=
      GR_ROOT ?= /home/sunny2216/solps5.0_old/solps5.0/solps5.0/src/lib/linux.ifort64
-    GLI_HOME ?= /home/sunny2216/solps5.0_old/solps5.0/solps5.0/src/lib/linux.ifort64
+    GLI_HOME ?= /home/sunny2216/solps5.0_old/solps5.0/solps5.0/src/lib
   NCARG_ROOT ?= /home/sunny2216/solps5.0_old/solps5.0/solps_other/NCARG/linux.ifort64
 #      NAGDIR ?= /home/sunny2216/solps-iter-151022/lib/lapack-3.5.0
       NAGDIR ?= /home/sunny2216/solps5.0_150821/solps5.0/src/lib/linux.ifort64

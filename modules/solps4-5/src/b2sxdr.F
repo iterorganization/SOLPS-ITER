@@ -310,6 +310,7 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
       call write_transport_namelist(ns)
       call write_neutrals_namelist(ns)
       call write_numerics_namelist(ns)
+      call write_feedback_control_namelist(nx,ny)
       call write_user_namelist
       call write_SOLPS_FLUIDS_NREG(nnreg(0),ns)
       call dealloc_b2_4to5_plasma

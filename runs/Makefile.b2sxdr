@@ -24,7 +24,7 @@ endif
 
 prints = b2sxdr.prt
 
-target_sx = b2sxdr.prt b2fgmtry b2fstati b2fparam b2fplasma b2ag.dat b2ah.dat b2ai.dat b2ar.dat b2yt.dat b2.boundary.parameters.4 b2.boundary.parameters.5 b2mn.dat.4 b2mn.dat.5 b2.neutrals.parameters b2.numerics.parameters b2.transport.parameters b2.user.parameters
+target_sx = b2sxdr.prt b2fgmtry b2fstati b2fparam b2fplasma b2ag.dat b2ah.dat b2ai.dat b2ar.dat b2yt.dat b2.boundary.parameters.4 b2.boundary.parameters.5 b2mn.dat.4 b2mn.dat.5 b2.neutrals.parameters b2.numerics.parameters b2.transport.parameters b2.user.parameters b2.feedback_control.parameters
 
 scandir := $(shell cd .. ; pwd)
 projdir := $(shell cd ../.. ; pwd)
@@ -54,13 +54,13 @@ prt : $(prints)
 $(target_sx) : B2SXDR b2.parameters.src input.dat fort.33 fort.34 fort.35
 	rm -rf b2sx.exe.dir ; mkdir b2sx.exe.dir ; cp $^ b2sx.exe.dir
 	rm -f $(target_sx)
-	cd b2sx.exe.dir ; [ -e ../fort.30 ] && cp -p ../fort.30 . ; time ${SOLPSTOP}/modules/solps4-5/builds/${TOOL_CHAIN}/b2sxdr.exe ; mv $(target_sx) .. ; [ -e ../fort.30 ] || mv fort.30 .. ; rm -f $(notdir $^) fort.55 b2.parameters.out
+	cd b2sx.exe.dir ; [ -e ../fort.30 ] && cp -p ../fort.30 . ; time ${SOLPSTOP}/modules/solps4-5/builds/${TOOL_CHAIN}/b2sxdr.exe ; mv $(target_sx) .. ; [ -e ../fort.30 ] && rm fort.30 || mv fort.30 .. ; rm -f $(notdir $^) fort.55 b2.parameters.out
 	-rmdir b2sx.exe.dir
 
 dbx.b2sxdr : B2SXDR b2.parameters.src input.dat fort.33 fort.34 fort.35
 	rm -rf b2sx.exe.dir ; mkdir b2sx.exe.dir ; cp $^ b2sx.exe.dir
 	rm -f $(target_sx)
-	cd b2sx.exe.dir ; [ -e ../fort.30 ] && cp -p ../fort.30 . ; ${DBX} ${INC} ${SOLPSTOP}/modules/solps4-5/builds/${HOST_NAME}.${COMPILER}.debug/b2sxdr.exe ; mv $(target_sx) .. ; [ -e ../fort.30 ] || mv fort.30 .. ; rm -f $(notdir $^) fort.55 b2.parameters.out
+	cd b2sx.exe.dir ; [ -e ../fort.30 ] && cp -p ../fort.30 . ; ${DBX} ${INC} ${SOLPSTOP}/modules/solps4-5/builds/${HOST_NAME}.${COMPILER}.debug/b2sxdr.exe ; mv $(target_sx) .. ; [ -e ../fort.30 ] && rm fort.30 || mv fort.30 .. ; rm -f $(notdir $^) fort.55 b2.parameters.out
 	-rmdir b2sx.exe.dir
 
 clean :

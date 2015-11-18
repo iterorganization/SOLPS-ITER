@@ -17,7 +17,8 @@
      *  rf_neut_4(:), dtee_4(:), dtei_4(:), dtco_4(:,:), dtmo_4(:,:),
      *  sclstra_4(:,:), sclrtio_4(:,:),
      *  vout_cnv_4(:), pw0_cnv_4(:), pw1_cnv_4(:), pw2_cnv_4(:),
-     *  ffb_const_4(:), ffb_start_4(:), ffb_smax_4(:), ffb_over_4(:)
+     *  ffb_const_4(:), ffb_rate_4(:), ffb_start_4(:), ffb_smax_4(:),
+     *  ffb_over_4(:), cfb_core_4(:), cfb_over_4(:), cfb_smax_4(:)
 
       real (kind=R8) ::
      *  kxe_4, kxi_4, kye_4, kyi_4, flim_4, flimi_4, flimv_4, feqp_4,
@@ -65,11 +66,13 @@
      *  lhetrgts_4(:), l_h_mol_4(:), 
      *  lpfrgrp_4(:), ipfrgrp_4(:), jpfrgrp_4(:), 
      *  lntrgrp_4(:), intrgrp_4(:), jntrgrp_4(:),
-     *  ffb_cntr_4(:), ffb_strata_4(:)
+     *  ffb_cntr_4(:), ffb_strata_4(:), cfb_cntr_4(:)
 
       integer, allocatable :: ifl(:), jfl(:), is1(:), isp(:)
 
       integer sput_dst, sput_dst2, sput_dst3
+
+      integer jxa, jxi, jsep
 
       character*80 label_4
 
@@ -84,6 +87,9 @@
      *  lhalpha_4, lvib_4,
      *  autotimestep_4,
      *  sepfeedback_4, volrecfeedback_4, sepgasfeedback_4
+
+      logical, allocatable ::
+     *  ffb_include_core_4(:), ffb_include_neutrals_4(:), ffb_init_4(:)
 
 #ifndef NO_B2_CHEM_SPUT
       real (kind=R8), allocatable ::
@@ -357,10 +363,18 @@ cxpb
       allocate(gntrgrp_4(1:nntrgrpd))
       allocate(ffb_cntr_4(1:nspecies_4))
       allocate(ffb_const_4(1:nspecies_4))
+      allocate(ffb_rate_4(1:nspecies_4))
       allocate(ffb_start_4(1:nspecies_4))
       allocate(ffb_smax_4(1:nspecies_4))
       allocate(ffb_over_4(1:nspecies_4))
       allocate(ffb_strata_4(1:nspecies_4))
+      allocate(ffb_include_core_4(1:nspecies_4))
+      allocate(ffb_include_neutrals_4(1:nspecies_4))
+      allocate(ffb_init_4(1:nspecies_4))
+      allocate(cfb_cntr_4(1:nspecies_4))
+      allocate(cfb_core_4(1:nspecies_4))
+      allocate(cfb_over_4(1:nspecies_4))
+      allocate(cfb_smax_4(1:nspecies_4))
 
 *  ..take in b2.parameters data
 *   ..initialisation
@@ -514,12 +528,22 @@ cxpb
       user_flux_feedback_stratum_4 = user_flux_feedback_stratum
       ffb_cntr_4(1:nspecies_4) = ffb_cntr(1:nspecies_4)
       ffb_const_4(1:nspecies_4) = ffb_const(1:nspecies_4)
+      ffb_rate_4(1:nspecies_4) = ffb_rate(1:nspecies_4)
       ffb_start_4(1:nspecies_4) = ffb_start(1:nspecies_4)
       ffb_smax_4(1:nspecies_4) = ffb_smax(1:nspecies_4)
       ffb_strata_4(1:nspecies_4) = ffb_strata(1:nspecies_4)
       ffb_over_4(1:nspecies_4) = ffb_over(1:nspecies_4)
+      ffb_include_core_4(1:nspecies_4) = ffb_include_core(1:nspecies_4)
+      ffb_init_4(1:nspecies_4) = ffb_init(1:nspecies_4)
+      ffb_include_neutrals_4(1:nspecies_4) =
+     . ffb_include_neutrals(1:nspecies_4)
+      cfb_cntr_4(1:nspecies_4) = cfb_cntr(1:nspecies_4)
+      cfb_core_4(1:nspecies_4) = cfb_core(1:nspecies_4)
+      cfb_over_4(1:nspecies_4) = cfb_over(1:nspecies_4)
+      cfb_smax_4(1:nspecies_4) = cfb_smax(1:nspecies_4)
       do is = 1, nspecies_4
-        lfeedback_4 = lfeedback_4 .or. ffb_cntr_4(is).eq.1
+        lfeedback_4 = lfeedback_4 .or. ffb_cntr_4(is).ne.0 .or. 
+     .                                 cfb_cntr_4(is).ne.0
       end do
 
       call subend()
@@ -565,6 +589,7 @@ cxpb
       nx = nx_4
       ny = ny_4
       ns = ns_4 + nspecies_4
+      nspecies = nspecies_4
       
       call xertst(1.le.nx.and.nx.le.DEF_NXD,
      . 'Check size of NX !')
@@ -819,6 +844,7 @@ c Compute geometrical quantities
      1 leftix,rightix,rightiy,topix,topiy,bottomiy,
      2 region,nnreg,resignore,
      3 crx,cry,periodic_bc)
+      call get_jsep(nx, ny, jxi, jxa, jsep)
 
 c Fill out b2mod_plasma data
       call b2xpne(nx, ny, ns, rza, na, ne_ext, ne)
@@ -973,11 +999,6 @@ c Fill out /b2cmpb/ arrays
           cbshe(7,cbirso+(ic-1)*3+1)=-2.5_R8
           cbshe(7,cbirso+(ic-1)*3+2)=-2.5_R8
           cbshe(7,cbirno+(ic-1)    )=-2.5_R8
-!! FIXME: Need to map ffb_constr to cbsna(0,isp(is),ireg) for ireg=solregno
-!! FIXME: if (ffb_cntr_4(is).eq.1) then
-!! FIXME: cbsna(0,isp(is),cbrno+nncut-1)=ffb_const_4(is)
-!! FIXME: cbsna(1:7,isp(is),cbrno+nncut-1)=0.0_R8
-!! FIXME: for is = 1, nspecies_4
         enddo
       enddo
       do is = 0, ns-1
@@ -1230,7 +1251,7 @@ c
       implicit none
 
       integer nx,ny,ns
-      integer is, ireg, ireg_4
+      integer is, ib, ireg, ireg_4
 
       external subini, subend, xertst 
 
@@ -1245,12 +1266,28 @@ c Fill out some b2mod_boundary_namelist data
       bcstart(1:nbc) = bcstart_4(1:nbc)-1
       bcend(1:nbc) = bcend_4(1:nbc)-1
       bcene(1:nbc) = bcene_4(1:nbc)
-      bceni(1:nbc) = bceni_4(1:nbc)
+      do ib = 1, nbc
+        if (bceni_4(ib).eq.10) then
+          bceni(ib) = 19
+        else if (bceni_4(ib).eq.13) then
+          bceni(ib) = 11
+        else
+          bceni(ib) = bceni_4(ib)
+        end if
+      end do
       enepar(1:nbc,1:2) = enepar_4(1:nbc,1:2)
       enipar(1:nbc,1:2) = enipar_4(1:nbc,1:2)
       do is = 0, ns-1
         if (ifl(is).ne.0) then
-          bccon(is,1:nbc) = bccon_4(ifl(is),1:nbc)
+          do ib = 1, nbc
+            if (bccon_4(ifl(is),ib).eq.10) then
+              bccon(is,ib) = 15
+            else if (bccon_4(ifl(is),ib).eq.11) then
+              bccon(is,ib) = 10
+            else
+              bccon(is,ib) = bccon_4(ifl(is),ib)
+            end if
+          end do
           bcmom(is,1:nbc) = bcmom_4(ifl(is),1:nbc)
           conpar(is,1:nbc,1:2) = conpar_4(ifl(is),1:nbc,1:2)
           mompar(is,1:nbc,1:2) = mompar_4(ifl(is),1:nbc,1:2)
@@ -1600,12 +1637,11 @@ c
       integer nx, ny, ns
       character tab
       character*10 hlp_frm
-      integer is, is0, jxa, jxi, jsep, ncall
+      integer is, is0, ncall
       integer len_of_digits
       external len_of_digits
       
       tab=char(9)
-      call get_jsep(nx, ny, jxi, jxa, jsep)
       write(*,*) 'Writing b2mn.dat.4 and b2mn.dat.5'
       open(99,file='b2mn.dat.4',status='unknown')
       write(99,'(a)') '*label          (lblmn: character*60)'
@@ -2019,7 +2055,7 @@ c
      .   user_flux_feedback_stratum_4,''''
       end if
       do is = 1, nspecies_4
-        if (ffb_cntr_4(is).eq.1) then
+        if (ffb_cntr_4(is).ne.0) then
 	  is0 = isp(is)
 	  if (is0.ge.0) then
             write(99,'(a,i2,a)')
@@ -2035,39 +2071,16 @@ c
      .       '''eirene_nesepm_istra'''//tab//'''',
      .       ffb_strata_4(is),''''
           end if
-          write(99,'(a,1pe9.2,a)') 
-     .     '''b2stbc_ndes_sol'''//tab//tab//'''',
-     .     ffb_const_4(is),''''
-          write(98,'(a,1pe9.2,a)') 
-     .     '''b2stbc_ndes_sol'''//tab//tab//'''',
-     .     ffb_const_4(is),''''
-          if (.not.autotimestep_4) then
-            ncall=nint(ffb_start_4(is)/dti_4)
-	  else
-            ncall=nint(ffb_start_4(is)/dtc_4)
-          endif
-          write(hlp_frm,'(a,i1,a)') '(a,i',len_of_digits(ncall),',a)'
-          write(99,hlp_frm) '''b2stbc_ncallfeedback'''//tab//'''',
-     .     ncall,''''
-          write(98,hlp_frm) '''b2stbc_ncallfeedback'''//tab//'''',
-     .     ncall,''''
-          if (ffb_over_4(is).ne.0.0_R8 .and.
-     .        ffb_over_4(is).ne.1.0_R8) then
-            write(99,'(a,1pe9.2,a)') 
-     .       '''b2stbc_nesepm_overshoot'''//tab//'''',
-     .       ffb_over_4(is),''''
-            write(98,'(a,1pe9.2,a)') 
-     .       '''b2stbc_nesepm_overshoot'''//tab//'''',
-     .       ffb_over_4(is),''''
-          else if (ffb_smax_4(is).gt.0.0_R8) then
-            write(99,'(a,1pe9.2,a)') 
-     .       '''b2stbc_nesepm_overshoot'''//tab//'''',
-     .       ffb_smax_4(is)/ffb_const_4(is),''''
-            write(98,'(a,1pe9.2,a)') 
-     .       '''b2stbc_nesepm_overshoot'''//tab//'''',
-     .       ffb_smax_4(is)/ffb_const_4(is),''''
-          end if
 	end if
+        if (cfb_cntr_4(is).ne.0) then
+          is0 = isp(is)+nfluids_4(is)-1
+	  if (is0.ge.0) then
+            write(99,'(a,i2,a)')
+     .       '''b2stbc_isfeedback'''//tab//tab//'''',is0,''''
+            write(98,'(a,i2,a)')
+     .       '''b2stbc_isfeedback'''//tab//tab//'''',is0,''''
+          end if
+        end if
       end do
       if (dflagvconv_4.eq.-10) then
         write(98,'(a)') 
@@ -2084,6 +2097,7 @@ c
       subroutine write_boundary_namelist(ns)
       use b2mod_types
       use b2mod_indirect
+      use b2mod_feedback
       use b2mod_boundary_namelist
       use b2mod_b2cmpa
       implicit none
@@ -2123,6 +2137,19 @@ c
               bccon(1,ib) = 12
               conpar(1,ib,1) = sepden_4
             end if
+            do is = 1, nspecies_4
+	      if (cfb_cntr_4(is).ne.0) then
+	        do is0 = isp(is)+1, isp(is)+nfluids_4(is)-1
+	          if (is0.ge.0) then
+	            bccon(is0,ib) = 11
+                    conpar(is0,ib,1) = 0.0_R8
+	          end if
+                end do
+                is0 = isp(is)+nfluids_4(is)-1
+		conpar(is0,ib,1) = cfb_core_4(is)
+                na_feedback_ib(is-1) = ib
+              end if
+            end do
           else
             do is = 0, ns-1
               if (is_neutral(is)) then
@@ -2152,13 +2179,13 @@ c
               end if
             end if
           end do
-!! FIXME: Need to map ffb_constr to cbsna(0,is,ireg) in addition to conpar
           do is = 1, nspecies_4
-	    if (ffb_cntr_4(is).eq.1) then
+	    if (ffb_cntr_4(is).ne.0) then
 	      is0 = isp(is)
 	      if (is0.ge.0) then
-	        bccon(is0,ib) = 12
+	        bccon(is0,ib) = 11
 		conpar(is0,ib,1) = ffb_const_4(is)
+                na_feedback_ib(is-1) = ib
 	      end if
             end if
           end do
@@ -2683,6 +2710,156 @@ c
       close(33)
       return
       end subroutine write_numerics_namelist
+c
+      subroutine write_feedback_control_namelist(nx,ny)
+      use b2mod_types
+      use b2mod_b2cmpa
+      use b2mod_feedback
+      use b2mod_indirect
+      use b2mod_neutrals_namelist
+      implicit none
+      integer nx, ny
+      integer is
+      character*32 hlp_frm
+      logical todo
+
+      todo = .false.
+      do is = 1, nspecies_4
+        todo = todo .or. ffb_cntr_4(is).ne.0 .or. cfb_cntr_4(is).ne.0
+        if (ffb_cntr_4(is).eq.1) then
+          if (ffb_include_neutrals_4(is)) then
+            na_feedback_choice(is-1) = 4
+          else
+            na_feedback_choice(is-1) = 5
+          endif
+          if (ffb_rate_4(is).ge.0.0_R8) then
+            na_feedback_option(is-1) = 4
+          else
+            na_feedback_option(is-1) = 5
+          endif
+          na_feedback_actuator(is-1) = 1
+          na_feedback_ix1(is-1) = 0
+          na_feedback_ix2(is-1) = nx-1
+          if (ffb_include_core_4(is)) then
+            na_feedback_iy1(is-1) = 0
+          else
+            na_feedback_iy1(is-1) = jsep+1
+          endif
+          na_feedback_iy2(is-1) = ny-1
+          na_feedback_target(is-1) = ffb_const_4(is)
+          na_feedback_const(is-1) = ffb_const_4(is)
+          na_feedback_alpha(is-1) = ffb_over_4(is)
+          if (ffb_init_4(is)) then
+            na_feedback_beta(is-1) = ffb_rate_4(is)
+          else
+            na_feedback_beta(is-1) = 0.0_R8
+          endif
+          na_feedback_puff_min(is-1) = 0.0_R8
+          na_feedback_puff_max(is-1) = ffb_smax_4(is)
+          na_feedback_overshoot(is-1) = 0.0_R8
+          na_feedback_time(is-1) = ffb_start_4(is)
+        else if (ffb_cntr_4(is).eq.2) then
+          na_feedback_choice(is-1) = 7
+          na_feedback_option(is-1) = 4
+          na_feedback_actuator(is-1) = 1
+          na_feedback_ix1(is-1) = leftcut(1)+1
+          na_feedback_ix2(is-1) = rightcut(1)
+          na_feedback_iy1(is-1) = jsep+1
+          na_feedback_iy2(is-1) = jsep+1
+          na_feedback_target(is-1) = ffb_const_4(is)
+          na_feedback_const(is-1) = ffb_const_4(is)
+          na_feedback_alpha(is-1) = ffb_over_4(is)
+          na_feedback_beta(is-1) = 0.0_R8
+          na_feedback_puff_min(is-1) = 0.0_R8
+          na_feedback_puff_max(is-1) = ffb_smax_4(is)
+          na_feedback_overshoot(is-1) = 0.0_R8
+          na_feedback_time(is-1) = ffb_start_4(is)
+        end if
+        if (cfb_cntr_4(is).eq.1) then
+          na_feedback_choice(is-1) = 6
+          na_feedback_option(is-1) = 6
+          na_feedback_actuator(is-1) = 3
+          na_feedback_ix1(is-1) = leftcut(1)+1
+          na_feedback_ix2(is-1) = rightcut(1)
+          na_feedback_iy1(is-1) = 0
+          na_feedback_iy2(is-1) = 0
+          na_feedback_target(is-1) = cfb_core_4(is)
+          na_feedback_const(is-1) = cfb_core_4(is)
+          if (cfb_over_4(is).gt.0.0_R8) then
+            na_feedback_alpha(is-1) = cfb_over_4(is)
+          else
+            na_feedback_alpha(is-1) = 0.01_R8
+          end if
+          na_feedback_beta(is-1) = 0.0_R8
+          na_feedback_puff_min(is-1) = 0.0_R8
+          na_feedback_puff_max(is-1) = cfb_smax_4(is)
+          na_feedback_overshoot(is-1) = 0.0_R8
+        end if
+      end do
+      if (.not.todo) return
+      write(*,*) 'Writing b2.feedback_control.parameters'
+      open(36,file='b2.feedback_control.parameters')
+      write(hlp_frm,'(a,i2,a)') '(1x,a,',nspecies,'(1x,i2,'',''))'
+      write(36,'(a)') '&FEEDBACK_CONTROL'
+      if (maxval(na_feedback_choice(0:nspecies-1)).gt.0)
+     > write(36,hlp_frm)
+     .     'NA_FEEDBACK_CHOICE=',na_feedback_choice(0:nspecies-1)
+      if (maxval(na_feedback_option(0:nspecies-1)).gt.0)
+     > write(36,hlp_frm)
+     .     'NA_FEEDBACK_OPTION=',na_feedback_option(0:nspecies-1)
+      if (maxval(na_feedback_actuator(0:nspecies-1)).gt.0)
+     > write(36,hlp_frm)
+     .     'NA_FEEDBACK_ACTUATOR=',na_feedback_actuator(0:nspecies-1)
+      if (maxval(na_feedback_ib(0:nspecies-1)).gt.0)
+     > write(36,hlp_frm)
+     .     'NA_FEEDBACK_IB=',na_feedback_ib(0:nspecies-1)
+      write(hlp_frm,'(a,i2,a)') '(1x,a,',nspecies,'(1x,i4,'',''))'
+      if (maxval(na_feedback_ix1(0:nspecies-1)).gt.-2)
+     > write(36,hlp_frm)
+     .     'NA_FEEDBACK_IX1=',na_feedback_ix1(0:nspecies-1)
+      if (maxval(na_feedback_ix2(0:nspecies-1)).gt.-2)
+     > write(36,hlp_frm)
+     .     'NA_FEEDBACK_IX2=',na_feedback_ix2(0:nspecies-1)
+      if (maxval(na_feedback_iy1(0:nspecies-1)).gt.-2)
+     > write(36,hlp_frm)
+     .     'NA_FEEDBACK_IY1=',na_feedback_iy1(0:nspecies-1)
+      if (maxval(na_feedback_iy2(0:nspecies-1)).gt.-2)
+     > write(36,hlp_frm)
+     .     'NA_FEEDBACK_IY2=',na_feedback_iy2(0:nspecies-1)
+      write(hlp_frm,'(a,i2,a)')
+     .   '(1x,a,1p,',nspecies,'(1x,g10.3,'',''))'
+      if (maxval(na_feedback_target(0:nspecies-1)).gt.0.0_R8 .or.
+     .    minval(na_feedback_target(0:nspecies-1)).lt.0.0_R8)
+     > write(36,hlp_frm)
+     .     'NA_FEEDBACK_TARGET=',na_feedback_target(0:nspecies-1)
+      if (maxval(na_feedback_alpha(0:nspecies-1)).ne.0.001_R8 .or.
+     &    minval(na_feedback_alpha(0:nspecies-1)).ne.0.001_R8)
+     > write(36,hlp_frm)
+     .     'NA_FEEDBACK_ALPHA=',na_feedback_alpha(0:nspecies-1)
+      if (maxval(na_feedback_beta(0:nspecies-1)).ne.1.0_R8 .or.
+     &    minval(na_feedback_beta(0:nspecies-1)).ne.1.0_R8)
+     > write(36,hlp_frm)
+     .     'NA_FEEDBACK_BETA=',na_feedback_beta(0:nspecies-1)
+      if (maxval(na_feedback_const(0:nspecies-1)).ne.0.0_R8 .or.
+     &    minval(na_feedback_const(0:nspecies-1)).ne.0.0_R8)
+     > write(36,hlp_frm)
+     .     'NA_FEEDBACK_CONST=',na_feedback_const(0:nspecies-1)
+      if (maxval(na_feedback_puff_min(0:nspecies-1)).gt.0.0_R8)
+     > write(36,hlp_frm)
+     .     'NA_FEEDBACK_PUFF_MIN=',na_feedback_puff_min(0:nspecies-1)
+      if (maxval(na_feedback_puff_max(0:nspecies-1)).gt.0.0_R8)
+     > write(36,hlp_frm)
+     .     'NA_FEEDBACK_PUFF_MAX=',na_feedback_puff_max(0:nspecies-1)
+      if (maxval(na_feedback_overshoot(0:nspecies-1)).gt.0.0_R8)
+     > write(36,hlp_frm) 'NA_FEEDBACK_OVERSHOOT=',
+     .     na_feedback_overshoot(0:nspecies-1)
+      if (maxval(na_feedback_time(0:nspecies-1)).gt.0.0_R8)
+     > write(36,hlp_frm) 'NA_FEEDBACK_TIME=',
+     .     na_feedback_time(0:nspecies-1)
+      write(36,'(a)') '/'
+      close(36)
+      return
+      end subroutine write_feedback_control_namelist
 c
       subroutine write_user_namelist
       use b2mod_types
