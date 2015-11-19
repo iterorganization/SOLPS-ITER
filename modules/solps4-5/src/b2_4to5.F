@@ -542,7 +542,7 @@ cxpb
       cfb_over_4(1:nspecies_4) = cfb_over(1:nspecies_4)
       cfb_smax_4(1:nspecies_4) = cfb_smax(1:nspecies_4)
       do is = 1, nspecies_4
-        lfeedback_4 = lfeedback_4 .or. ffb_cntr_4(is).ne.0 .or. 
+        lfeedback_4 = lfeedback_4 .or. ffb_cntr_4(is).ne.0 .or.
      .                                 cfb_cntr_4(is).ne.0
       end do
 

@@ -60,7 +60,7 @@ endif
 unexport SOLPS_DEBUG
 unexport SOLPS_MPI
 
-.PHONY: solps solps_mpi all all_mpi carre divgeo b25 b25_mpi eirene eirene_mpi b25eirene b25eirene_mpi uinp triang sonnet-light b2sxdr manual depend tags clean clean_% %_debug VERSION help
+.PHONY: solps solps_mpi all all_mpi carre divgeo b25 b25_mpi eirene eirene_mpi b25eirene b25eirene_mpi uinp triang sonnet-light b2sxdr manual local depend tags clean clean_% %_debug VERSION help
 
 DEFAULT: solps
 
@@ -165,6 +165,10 @@ endif
 ifeq ($(shell [ -d ${SOLPSTOP}/modules/DivGeo/equtrn/doxygen ] && echo yes || echo no ),no)
 	cd modules/DivGeo/equtrn ; ${MAKE} DOC
 endif
+
+local:
+	cd modules/Eirene; ${MAKE} local
+	cd modules/B2.5;   ${MAKE} local
 
 tags:
 	cd modules/Carre;          ${MAKE} tags
