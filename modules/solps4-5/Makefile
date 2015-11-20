@@ -224,7 +224,7 @@ ${OBJDIR}/csdvi.o: ${SRCDIR}/Eirene_modules/csdvi.F
 ${OBJDIR}/ctrcei.o: ${SRCDIR}/Eirene_modules/ctrcei.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/ctrcei.o -c ${SRCDIR}/Eirene_modules/ctrcei.F
 
-${OBJDIR}/ctrig.o: ${SRCDIR}/Eirene_modules/ctrig.F
+${OBJDIR}/ctrig.o: ${OBJDIR}/cgrid.o ${SRCDIR}/Eirene_modules/ctrig.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/ctrig.o -c ${SRCDIR}/Eirene_modules/ctrig.F
 
 ${OBJDIR}/cupd.o: ${OBJDIR}/comsig.${MOD} ${SRCDIR}/Eirene_modules/cupd.F
@@ -307,7 +307,7 @@ ${OBJDIR}/csdvi.${MOD}:
 ${OBJDIR}/ctrcei.${MOD}: 
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/ctrcei.o -c ${SRCDIR}/Eirene_modules/ctrcei.F
 
-${OBJDIR}/ctrig.${MOD}: 
+${OBJDIR}/ctrig.${MOD}:  ${OBJDIR}/cgrid.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/ctrig.o -c ${SRCDIR}/Eirene_modules/ctrig.F
 
 ${OBJDIR}/cupd.${MOD}: ${OBJDIR}/comsig.${MOD}
