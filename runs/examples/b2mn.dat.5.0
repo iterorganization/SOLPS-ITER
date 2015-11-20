@@ -27,6 +27,8 @@
 'b2tfnb_xfrhiehz'     '0.0'
 'b2mndr_na_min'       '1.0e-30'
 'b2mndr_na_new'       '1.0e14'
+'b2tfhe_fch_pTe'      '0.0'
+'b2tfhe_alfTeEh'      '1.0'
 'b2stbc_istyle_cur_contr_on_S_and_N'  '0'
 'b2tlh0_flux_limit_style'             '0'
 'b2trno_flux_limit_to_dpa'            '0'

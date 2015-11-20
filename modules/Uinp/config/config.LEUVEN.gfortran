@@ -1,14 +1,11 @@
 #  VERSION : 28.07.99 20:34
 
-# File compiler.macro for Fujitsu frt
-
 # Test whether necessary variables are defined
 ifndef LD_MSCL
   $(error LD_MSCL not defined)
 endif
 
-
-FC	     = gfortran
+FC	 = gfortran
 ifdef SOLPS_DEBUG
 FFLAGS	 = -g
 else
@@ -16,8 +13,8 @@ FFLAGS   =
 endif
 INCLUDE  = -I${SRCDIR} -I${EIRINC} -I${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
-CPP	     = /lib/cpp -traditional
+CPP	 = /lib/cpp -traditional
 
-MOD 	   = mod
+MOD 	 = mod
 LDLIBS	 = ${LD_MSCL}
 LDEXTRA  =

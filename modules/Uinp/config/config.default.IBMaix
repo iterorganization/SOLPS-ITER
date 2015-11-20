@@ -8,7 +8,7 @@ ifndef LD_MSCL
 endif
 
 
-FC	     = xlf
+FC	 = xlf
 ifndef SOLPS_DEBUG
 FFLAGS	 = -O -g -NA16384 -NQ20000
 else
@@ -16,8 +16,8 @@ FFLAGS	 = -g -C -NA16384 -NQ20000
 endif
 INCLUDE  = -I${SRCDIR} -I${EIRINC} -I${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
-CPP	     = /lib/cpp
-MOD 	   = mod
+CPP	 = /lib/cpp
+MOD 	 = mod
 
 # LDLIBS = -L${SOLPSLIB}
 LDLIBS 	 = ${LD_MSCL}

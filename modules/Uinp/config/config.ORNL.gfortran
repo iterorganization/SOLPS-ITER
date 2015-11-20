@@ -4,9 +4,9 @@ ifndef LD_MSCL
 endif
 
 ifdef USE_MPI
-FC	     = mpif90
+FC	 = mpif90
 else
-FC	     = gfortran
+FC	 = gfortran
 endif
 
 ifdef SOLPS_DEBUG
@@ -17,8 +17,8 @@ endif
 
 INCLUDE  = -I${SRCDIR} -I${EIRINC} -I${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
-CPP	     = /lib/cpp -traditional
-MOD 	   = mod
+CPP	 = /lib/cpp -traditional
+MOD 	 = mod
 
 LDLIBS 	 = ${LD_MSCL}
 LDEXTRA  = 

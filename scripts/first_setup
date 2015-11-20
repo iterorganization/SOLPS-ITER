@@ -66,3 +66,4 @@ cd $SOLPSTOP/modules/solps4-5/config
   echo "Created ${filename} from config.default.$COMPILER in $PWD: please modify if needed"
 }
 cd $OLD_PWD
+[ -d $SOLPSTOP/lib/${HOST_NAME}.${COMPILER} ] || mkdir $SOLPSTOP/lib/${HOST_NAME}.${COMPILER}

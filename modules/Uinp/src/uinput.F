@@ -111,7 +111,11 @@ c*** Create the b2ai.dat file
      .         '(2x,a1,i3,a1,4x,i2,a2,5x,i2,a2,4x,i3,a2,3x,i4,a2)') 
      .         '''',is,'''',iss,'.0',nchara(iatm),'.0',
      .                               nmassa(iatm),'.0',iss*iss,'.0'
-              na0(is) = 1.0e19
+              if (nchara(iatm).eq.1) then
+                na0(is) = 1.0e19
+              else
+                na0(is) = 1.0e16
+              end if
               is = is + 1
             end do
           end do
