@@ -307,7 +307,7 @@ ${OBJDIR}/csdvi.${MOD}:
 ${OBJDIR}/ctrcei.${MOD}: 
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/ctrcei.o -c ${SRCDIR}/Eirene_modules/ctrcei.F
 
-${OBJDIR}/ctrig.${MOD}:  ${OBJDIR}/cgrid.F
+${OBJDIR}/ctrig.${MOD}:  ${OBJDIR}/cgrid.${MOD}
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/ctrig.o -c ${SRCDIR}/Eirene_modules/ctrig.F
 
 ${OBJDIR}/cupd.${MOD}: ${OBJDIR}/comsig.${MOD}
