@@ -1792,6 +1792,8 @@ c
      . '''b2tral_mode'''//tab//tab//tab//'''2'''
       write(99,'(a)')
      . '''b2tqce_model'''//tab//tab//tab//'''2'''
+      write(98,'(a)')
+     . '''b2tqca_model'''//tab//tab//tab//'''3'''
       write(99,'(a)')
      . '''b2tqca_model'''//tab//tab//tab//'''2'''
       write(99,'(a)')
@@ -2348,6 +2350,7 @@ c
       integer ns
       integer is
       character*32 hlp_frm
+      character*80 transport_filename_4, transport_filename_5
 
       call alloc_transport_namelist(ns)
       do is = 0, ns-1
@@ -2418,42 +2421,75 @@ c
         endif
       end do
 
-      write(*,*) 'Writing ',trim(transport_filename)
-      open(99,file=transport_filename)
-      write(99,'(a)') '&TRANSPORT'
+      transport_filename_4 = trim(transport_filename)//'.4'
+      transport_filename_5 = trim(transport_filename)//'.5'
+      write(*,*) 'Writing ',trim(transport_filename_4),' and ',
+     . trim(transport_filename_5)
+      open(94,file=transport_filename_4)
+      open(95,file=transport_filename_5)
+      write(94,'(a)') '&TRANSPORT'
+      write(95,'(a)') '&TRANSPORT'
       write(hlp_frm,'(a,i2,a)') '(a,i1,a,1p,',ns,'(e9.2,'',''))'
-      write(99,hlp_frm) 
+      write(94,hlp_frm)
      . 'flag_dna=',flag_dna,', parm_dna=',(parm_dna(is),is=0,ns-1)
-      write(99,hlp_frm) 
+      write(95,hlp_frm)
+     . 'flag_dna=',flag_dna,', parm_dna=',(parm_dna(is),is=0,ns-1)
+      write(94,hlp_frm)
      . 'flag_dpa=',flag_dpa,', parm_dpa=',(parm_dpa(is),is=0,ns-1)
-      write(99,hlp_frm) 
+      write(95,hlp_frm)
+     . 'flag_dpa=',flag_dpa,', parm_dpa=',(parm_dpa(is),is=0,ns-1)
+      write(94,hlp_frm)
      . 'flag_vla=',flag_vla,', parm_vla=',(parm_vla(is),is=0,ns-1)
-      write(99,hlp_frm) 
+      write(95,hlp_frm)
+     . 'flag_vla=',flag_vla,', parm_vla=',(parm_vla(is),is=0,ns-1)
+      write(94,hlp_frm)
      . 'flag_vsa=',flag_vsa,', parm_vsa=',(parm_vsa(is),is=0,ns-1)
-      write(99,hlp_frm) 
+      write(95,hlp_frm)
+     . 'flag_vsa=',flag_vsa,', parm_vsa=',(parm_vsa(is),is=0,ns-1)
+      write(94,hlp_frm)
      . 'flag_hci=',flag_hci,', parm_hci=',(parm_hci(is),is=0,ns-1)
-      write(99,'(a,i1,a,1pe9.2,a)') 
+      write(95,hlp_frm)
+     . 'flag_hci=',flag_hci,', parm_hci=',(parm_hci(is),is=0,ns-1)
+      write(94,'(a,i1,a,1pe9.2,a)')
      . 'flag_hce=',flag_hce,', parm_hce=',parm_hce,','
-      write(99,'(a,1pe9.2,a)') 
+      write(95,'(a,i1,a,1pe9.2,a)')
+     . 'flag_hce=',flag_hce,', parm_hce=',parm_hce,','
+      write(94,'(a,1pe9.2,a)')
      . 'cflme=',cflme,','
-      write(99,'(a,1pe9.2,a)') 
+      write(95,'(a,1pe9.2,a)')
+     . 'cflme=',cflme,','
+      write(94,'(a,1pe9.2,a)')
      . 'cflmi=',cflmi,','
-      write(99,'(a,1pe9.2,a)') 
+      write(95,'(a,1pe9.2,a)')
+     . 'cflmi=',cflmi,','
+      write(94,'(a,1pe9.2,a)')
      . 'cflmv=',cflmv,','
+      write(95,'(a,1pe9.2,a)')
+     . 'cflmv=',cflmv*0.75_R8,','
       write(hlp_frm,'(a,i2,a)') '(a,1p,',ns,'(e9.2,'',''))'
       if (abs(maxval(vout_cnv(0:ns-1))).ne.0.0_R8 .and.
      &    dflagvconv_4.eq.-10) then
-        write(99,hlp_frm) 
+        write(94,hlp_frm)
      .   'vout_cnv=',(vout_cnv(is),is=0,ns-1)
-        write(99,hlp_frm) 
+        write(94,hlp_frm)
      .   'pw0_cnv=',(pw0_cnv(is),is=0,ns-1)
-        write(99,hlp_frm) 
+        write(94,hlp_frm)
      .   'pw1_cnv=',(pw1_cnv(is),is=0,ns-1)
-        write(99,hlp_frm) 
+        write(94,hlp_frm)
+     .   'pw2_cnv=',(pw2_cnv(is),is=0,ns-1)
+        write(95,hlp_frm)
+     .   'vout_cnv=',(vout_cnv(is),is=0,ns-1)
+        write(95,hlp_frm)
+     .   'pw0_cnv=',(pw0_cnv(is),is=0,ns-1)
+        write(95,hlp_frm)
+     .   'pw1_cnv=',(pw1_cnv(is),is=0,ns-1)
+        write(95,hlp_frm)
      .   'pw2_cnv=',(pw2_cnv(is),is=0,ns-1)
       end if
-      write(99,'(a)') '/'
-      close(99)
+      write(94,'(a)') '/'
+      write(95,'(a)') '/'
+      close(94)
+      close(95)
       deallocate(parvis_4,travis_4,difni_4,difpr_4,vconv_4)
       deallocate(vout_cnv_4,pw0_cnv_4,pw1_cnv_4,pw2_cnv_4)
       return
