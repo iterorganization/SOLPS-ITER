@@ -1,4 +1,4 @@
-      subroutine uinmtr(cmt,n)
+      subroutine uinmtr(cmt,n,ncmt)
        use b2mod_layer
      , , only: ntrack, nalloys
        use eirmod_extrab25
@@ -9,13 +9,16 @@ c
 c=======================================================================
 c*** Wall material specification
 c=======================================================================
-      integer n
+      integer n, ncmt
 #include "uinput.inc"
       integer imtrl
       parameter (imtrl=2)
-      character*(imtrl) cmt(*),ucm(nmtr),ucr
+      character*(imtrl) ucm(nmtr),ucr
+      character*(*) cmt(ncmt)
       integer i,j,k
       logical ex
+      logical streql
+      external streql
       real uz(nmtr)
       data ucm /
      /        'c'   , 'ss' , 'be'  , 'mo'  , 'w'   , 'fe'  /
@@ -27,11 +30,11 @@ c=======================================================================
 
 c*** Return the result in parameter n
 
-        call locase(cmt(1),ucr,imtrl)
+        call locase(cmt(1)(1:2),ucr,imtrl)
 	ex=.true.
         do j=1,nmtr !{
           if(ex) then !{
-	    if(ucr.eq.ucm(j)) then !{
+	    if(streql(ucr,ucm(j))) then !{
 	      ex=.false.
 	      n=uz(j)
 	    end if !}
@@ -43,9 +46,9 @@ c*** Return the result in parameter n
 c*** Additional surfaces
 
         do i=1,nlimi !{
-          call locase(cmt(i),ucr,imtrl)
+          call locase(cmt(i)(1:2),ucr,imtrl)
           do j=1,nmtr !{
-            if(ucr.eq.ucm(j)) go to 10
+            if(streql(ucr,ucm(j))) go to 10
           end do !}
           j=1
  10       xmlma(i)=uz(j)
@@ -54,9 +57,9 @@ c*** Additional surfaces
 
 c*** Non-default surface (target)
 
-        call locase(cmt(1),ucr,imtrl)
+        call locase(cmt(1)(1:2),ucr,imtrl)
         do j=1,nmtr !{
-          if(ucr.eq.ucm(j)) go to 20
+          if(streql(ucr,ucm(j))) go to 20
         end do !}
         j=1
  20     xmlim(n)=uz(j)

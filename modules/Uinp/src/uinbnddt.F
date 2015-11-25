@@ -79,7 +79,7 @@ c*** ... set up the material properties
 	      if(bliin(nstsi)) then !{
                 xmlim(nstsi)= wlmbnds(isf,ibk)
               else !}{
-                call uinmtr(ewmbnds(isf,ibk),nstsi)
+                call uinmtr(ewmbnds(isf,ibk),nstsi,1)
               end if !}
 	      ewall(nstsi)= eewbnds(isf,ibk)
 	      ilsptc(nstsi)= jcsbnds(isf,ibk)

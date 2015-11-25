@@ -57,7 +57,7 @@ c*** Assign the Eirene-style wall identifiers
 
 	if(lchspprt(j).gt.0) then !{
 	  l=-1
-	  call uinmtr(hlp_wll,l)
+	  call uinmtr(hlp_wll,l,1)
 	  if(l.le.0) then !{
 	    write(0,*) 'Non-recognised wall material for chemical ',
      ,	    'sputtering - ',chsptgt(j),' ==> reaction ignored'

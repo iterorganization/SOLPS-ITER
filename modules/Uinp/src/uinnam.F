@@ -140,7 +140,7 @@ c=======================================================================
    11 call rearra(umtrl,nlim,i)
       nlimi=i
       i=0
-      call uinmtr(umtrl,i)
+      call uinmtr(umtrl,i,nlimi)
       return
    12 call rearre(ewala,nlim,i)
       nlimi=i
@@ -495,7 +495,7 @@ c*** Surface data transfer from B2 to Eirene
       call resima(sps_mtrl(n_spcsrf))
       sps_mtri(n_spcsrf)=-1
       if(sps_mtrl(n_spcsrf).ne.'-') 
-     -  call uinmtr(sps_mtrl(n_spcsrf),sps_mtri(n_spcsrf))
+     -  call uinmtr(sps_mtrl(n_spcsrf),sps_mtri(n_spcsrf),1)
       return
   100 if(n_spcsrf.le.0) then !{
        	write(0,*) '"Surface special" data outside the block - ',unn
