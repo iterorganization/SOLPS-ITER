@@ -1,4 +1,5 @@
 # General
+module use /work/imas/etc/modulefiles
 module load git
 
 # Modules needed by SOLPS-ITER

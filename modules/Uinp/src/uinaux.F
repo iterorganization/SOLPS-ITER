@@ -1,7 +1,8 @@
       subroutine uinaux(nam)
-       use b2mod_layer
+      use b2mod_constants
+      use b2mod_layer
      , , only: ntrack, nalloys
-       use eirmod_extrab25
+      use eirmod_extrab25
      , , only: msrfclsx, mgwtiesx
 c
 c  version : 03.01.2005 16:55
@@ -17,6 +18,8 @@ c=======================================================================
       integer nfiles
       logical ublplt(5)
       equivalence (ublplt,pl1st)
+      logical streql
+      external streql
 c*** List of the valid input keywords
       data unm /
      1    'rmajor  ','npts    ','nprnli  ','ntimv   ','dtimv   ',
@@ -31,7 +34,8 @@ c=======================================================================
 c
       call locase(nam,nam,8)
       do 1000 i=1,nnms
-          if(nam.eq.unm(i)) go to (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,
+          if(streql(nam,unm(i))) 
+     ,             go to (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,
      ,                    16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,
      ,                                       31,32,33,34,35,36,37,38),i
  1000 continue
@@ -42,7 +46,7 @@ c      call skipit
       return
 c
  1    call resime(u)
-      zaa=6.2831853*u
+      zaa=2.0_R8*pi*u
       return
  2    call rearri(npts,nstra,i)
       print *,'npts read. n,npts=',i,npts

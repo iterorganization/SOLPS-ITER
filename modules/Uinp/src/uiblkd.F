@@ -145,12 +145,12 @@ c*** 1
      /     0    ,   1   ,   1  ,     0    ,     1      ,    1    /,
      ,   nstoram, ngstal,nrtal1,nreac_add /
      /      9   ,   1   ,   0  ,     1    /
-      data nlscl, nltest, nlana, nldrft, nlcrr , nlerg , nlident/
-     /    .true.,.false.,.false.,.true.,.false.,.false.,.false./,
-     ,    nlone,ltstv,nldfst,nloldran,nlcascad,nloctree/
+      data nlscl , nltest, nlana ,nldrft, nlcrr , nlerg , nlident/
+     /    .true. ,.false.,.false.,.true.,.false.,.false.,.false./,
+     ,     nlone , ltstv , nldfst,nloldran,nlcascad,nloctree/
      /    .false.,.false.,.false.,.false.,.false.,.false./,
-     /    nlwrmsh,nexvs,nltrimesh/
-     ,    .true.,.false.,.false./
+     /    nlwrmsh, nexvs ,nltrimesh/
+     ,    .true. ,.false.,.false./
       data  txtrun / ' EIRENE input file generated with uinp v. 2.2' /
 
 c*** 2

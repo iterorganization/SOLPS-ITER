@@ -24,6 +24,9 @@ c      integer nniprm(nmxprm,nkwrd,nblck)
       integer i,j,k,l,m,n,ll,nn
       character ss*(mxslen),s(mxslen),us*(mxslen-mxkwln-1),
      ,  sss*(mxslen-1),ufi*24,ufc*24,ufa*20,ufg*24,s0
+      character hlp_frm*30
+      integer len_of_digits
+      external len_of_digits
       equivalence (ss,s),(s(mxkwln+3),us),(s(2),sss)
       data ss / ' ' /
 c#ifdef DBG
@@ -36,9 +39,15 @@ c*** Flag of the first call
 c======================================================================
 c
       if(ufirst) then !{
-          write(ufi,'(1h(,i4,9h(i3,1h,)))') nmxprm
-          write(ufg,'(4h(1p,,i3,12h(g10.3,1h,)))') nmxprm
-          write(ufa,'(2h(a,i3,1h))') mxkwln
+          write(hlp_frm,'(a,i1,a)')
+     .     '(1h(,i',len_of_digits(nmxprm),',9h(i3,1h,)))'
+          write(ufi,hlp_frm) nmxprm
+          write(hlp_frm,'(a,i1,a)')
+     .     '(4h(,1p,,i',len_of_digits(nmxprm),',12h(g10.3,1h,)))'
+          write(ufg,hlp_frm) nmxprm
+          write(hlp_frm,'(a,i1,a)')
+     .     '(2h(a,i',len_of_digits(mxkwln),',1h))'
+          write(ufa,hlp_frm) mxkwln
           call lefta(ufa,16,i)
 cc<<<
 c         print *,'uimdvr: formats'

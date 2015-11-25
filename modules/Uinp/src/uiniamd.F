@@ -16,7 +16,8 @@ c=======================================================================
       parameter (lunm=26, luns=72)
       integer i,j,k,l,m,n,iv,nn
       save nn
-      logical uex
+      logical uex, streql
+      external streql
       character*8 unm(lunm),uun,s*(luns)
       data unm /
      1  '#'       ,'filevers' ,'reactns'  ,'rctype'   ,'group'	  ,
@@ -30,7 +31,8 @@ c
 c      print *,'== ',unn,nn,nnrctn
       call locase(unn,uun,8)
       do i=1,lunm !{
-        if(uun.eq.unm(i)) go to (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,
+        if(streql(uun,unm(i))) 
+     ,           go to (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,
      ,                  16,17,18,19,20,21,22,23,24,25,26),i
       end do !}
       return

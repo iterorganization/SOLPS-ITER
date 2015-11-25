@@ -36,6 +36,10 @@ c
      ,          ss*(mxslen), sw*(mxslen), hh*(mxslen),
      ,           s(mxslen),  ssw(mxslen),  h(mxslen)
       equivalence (s,ss),(h,hh),(sw,ssw)
+      character hlp_frm*14
+      integer len_of_digits
+      logical streql
+      external len_of_digits, streql
 c
 c*** Possible forms of the end-of-block line
       integer nfnl
@@ -59,9 +63,11 @@ c*** jblk labels the blocks from our list, and jvrb the variables
       jvrb=0
       lbv=.false.
 
-      write(uff,'(2h(a,i4,1h))') mxslen
+      write(hlp_frm,'(a,i1,a)') '(2h(a,i',len_of_digits(mxslen),',1h))'
+      write(uff,hlp_frm) mxslen
       call lefta(uff,16,i)
-      write(ufs,'(1h(,i4,3ha1))') mxslen
+      write(hlp_frm,'(a,i1,a)') '(1h(,i',len_of_digits(mxslen),',3ha1))'
+      write(ufs,hlp_frm) mxslen
       call lefta(ufs,16,i)
 c
 c*** The main loop starts here: read the next line until end of file
@@ -77,7 +83,7 @@ c*** and squeeze and lowercase it for the quick analysis
 c
       call locase(ss,sw,mxslen)
       do i=1,mxslen !{
-        if(ssw(i).eq.utb) ssw(i)=' '
+        if(streql(ssw(i),utb)) ssw(i)=' '
       end do !}
       call lefta(sw,mxslen,i)
 c
@@ -185,11 +191,11 @@ c*** Skip spaces and text variables
 	  uba=.not.uba
 	  go to 100 ! -> fetch the next character
 	end if !}
-        if(s(i).eq.' ' .or. s(i).eq.utb .or. uba) go to 100
+        if(streql(s(i),' ') .or. streql(s(i),utb) .or. uba) go to 100
 
 c*** Look for a delimiter
 
-        if(s(i).eq.'=') then !{
+        if(streql(s(i),'=')) then !{
 
 c*** The equal sign closes a keyword. Is any modification pending?
 
@@ -202,7 +208,7 @@ c*** No. Split the line and recurse
               call bsend(s(kb+1),s(2),mxslen-kb)
               call bfill(s(mxslen-kb+2),kb-1,' ')
               s(1)=' '
-              if(ss.eq.' ') go to 10 ! line empty -> read the next (?)
+              if(streql(ss,' ')) go to 10 ! line empty -> read the next (?)
               go to 40 ! -> restart parsing the line
             end if !}
           end if !}
@@ -212,7 +218,7 @@ c*** Consider the new found keyword. Should we edit this variable?
           jvrb=0
           do j=1,nkwrd !{
             call locase(chrpl(j,jblk),ukw,mxkwln)
-            lbv = ukw.ne.' ' .and. ukw.eq.hh
+            lbv = .not.streql(ukw,' ') .and. streql(ukw,hh)
             if(lbv) then !{
 c*** Yes. Set the pointer 
               jvrb=j
@@ -232,7 +238,7 @@ c*** Reset the field
           k=0
           go to 100 ! -> fetch the next character
 
-        else if(s(i).eq.'(') then !}{
+        else if(streql(s(i),'(')) then !}{
 
           if(urbr) go to 92 ! -> error
 
@@ -245,7 +251,7 @@ c*** Left ellipse - array definition?
           end if !}
           ubr=.true.
 
-        else if(s(i).eq.')') then !}{
+        else if(streql(s(i),')')) then !}{
 
 c*** Right ellipse - array definition?
           if(.not.ubr) then !{
@@ -257,7 +263,7 @@ c*** Right ellipse - array definition?
           ubr=.false.
 	  urbr=.true.
 
-        else if(.not.ubr .and. s(i).eq.',') then !}{
+        else if(.not.ubr .and. streql(s(i),',')) then !}{
 
           if(urbr) go to 92 ! -> error
 
@@ -277,7 +283,7 @@ cc
 c              call bsend(s(kb+1),s(2),mxslen-kb)
 c              s(1)=' '
 c              call bfill(s(mxslen-kb+2),kb-1,' ')
-c              if(ss.eq.' ') go to 10
+c              if(streql(ss,' ')) go to 10
 c              go to 40
 c            end if !}
 c          end if !}

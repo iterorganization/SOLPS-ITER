@@ -1,7 +1,8 @@
       subroutine uinnam(unn)
-       use b2mod_layer
+      use b2mod_constants
+      use b2mod_layer
      , , only: ntrack, nalloys
-       use eirmod_extrab25
+      use eirmod_extrab25
      , , only: msrfclsx, mgwtiesx
 c
 c  version : 01.04.2005 01:23
@@ -17,7 +18,8 @@ c=======================================================================
       character*8 unm(lunm),uun,ubs*1,uam*52
 c...  	      	      	      	      	      	      52=48+4
       integer luwrk(nlim),luind(nlim),lurefls
-      logical hlp_spc,hlp_imm
+      logical hlp_spc,hlp_imm,streql
+      external streql
 c*** lusgm: segment number for the list of invisibles;
 c*** luswch: switch for the input of element lists (obsolete)
 c***          	    1: jedgi1, 2: jedgo1, 3: jedgi2, 4: jedgo2
@@ -72,7 +74,7 @@ c*** Backslash:
 
       call locase(unn,uun,8)
       do i=1,lunm !{
-        if(uun.eq.unm(i)) then !{
+        if(streql(uun,unm(i))) then !{
           go to (1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,
      ,          16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,
      ,          31,32,33,34, 3,36,37,38,39,40,41,42,43,44,45,
@@ -328,7 +330,7 @@ c=======================================================================
    69 call resimi(laddsrfs)
       return
    70 call resime(u)
-      zaa=2*3.1415926535898*u
+      zaa=2.0_R8*pi*u
       return
    71 call resimi(i)
       nlscl=i.ne.0

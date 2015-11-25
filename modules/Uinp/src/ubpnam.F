@@ -14,6 +14,8 @@ c***          1   line integrals
 c***          2   line profiles
 c***
       integer i,j,luchrs
+      logical streql
+      external streql
       data luchrs / 0 /
       data unm /
      1    'p1      ','p2      ','vessel  ','data_id ','chords  ',
@@ -24,7 +26,7 @@ c
 c      print *,'ubpnam : ',unn !###
       call locase(unn,uun,8)
       do i=1,lunm
-        if(uun.eq.unm(i)) go to (1,2,3,4,5,6,7,8,9,10,11,12),i
+        if(streql(uun,unm(i))) go to (1,2,3,4,5,6,7,8,9,10,11,12),i
       end do
       call skipit
       return
