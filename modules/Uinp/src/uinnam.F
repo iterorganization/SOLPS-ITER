@@ -496,7 +496,7 @@ c*** Surface data transfer from B2 to Eirene
       end if !}
       call resima(sps_mtrl(n_spcsrf))
       sps_mtri(n_spcsrf)=-1
-      if(sps_mtrl(n_spcsrf).ne.'-') 
+      if(.not.streql(sps_mtrl(n_spcsrf),'-')) 
      -  call uinmtr(sps_mtrl(n_spcsrf),sps_mtri(n_spcsrf),1)
       return
   100 if(n_spcsrf.le.0) then !{

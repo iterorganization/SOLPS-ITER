@@ -32,6 +32,7 @@ target_rd = b2rd.prt
 
 scandir := $(shell cd .. ; pwd)
 projdir := $(shell cd ../.. ; pwd)
+triangdir := $(shell cd $(scandir)/TRIANG ; pwd)
 baserundir := $(shell cd $(scandir)/baserun ; pwd)
 
 echo:
@@ -46,6 +47,9 @@ vpath b2fgmtry .:$(baserundir)
 vpath b2fpardf .:$(baserundir)
 vpath b2fstati .:$(baserundir)
 vpath b2frates .:$(baserundir)
+vpath fort.33  .:$(baserundir):$(triangdir)
+vpath fort.34  .:$(baserundir):$(triangdir)
+vpath fort.35  .:$(baserundir):$(triangdir)
 
 #-----------------------------------------------------------------------
 # Rules.
@@ -70,11 +74,11 @@ $(target_fu) : b2fgmtry b2fparam b2fstate b2fplasmf
 	cd b2fu.exe.dir ; ${TIME} b2fu.exe ; mv $(target_fu) b2fplasma .. ; rm -f $(notdir $^) .quit
 	-rmdir b2fu.exe.dir
 
-$(target_pl) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates
+$(target_pl) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates fort.33 fort.34 fort.35
 	rm -rf b2pl.exe.dir ; mkdir b2pl.exe.dir ; cp $^ b2pl.exe.dir
 ifndef STAND_ALONE
 	-cp fort.44 input.dat b2pl.exe.dir/
-	-cd b2pl.exe.dir ; ln -s ../fort.33 ../fort.34 ../fort.35 .
+	-cd b2pl.exe.dir
 endif
 ifeq (${NCAR_VERSION},3)
 	rm -f $(target_pl) gmeta
@@ -84,15 +88,15 @@ else
 	cd b2pl.exe.dir ; ${TIME} b2pl.exe ; mv -f b2plot.ps .. ; rm -f $(target_pl) $(notdir $^) .quit
 endif
 ifndef STAND_ALONE
-	-rm b2pl.exe.dir/fort.44 b2pl.exe.dir/input.dat b2pl.exe.dir/fort.3[3-5]
+	-rm b2pl.exe.dir/fort.44 b2pl.exe.dir/input.dat
 endif
 	-rmdir b2pl.exe.dir
 
-$(target_pl.dbx) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates
+$(target_pl.dbx) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates fort.33 fort.34 fort.35
 	rm -rf b2pl.exe.dir ; mkdir b2pl.exe.dir ; cp $^ b2pl.exe.dir
 ifndef STAND_ALONE
 	-cp fort.44 input.dat b2pl.exe.dir/
-	-cd b2pl.exe.dir ; ln -s ../fort.33 ../fort.34 ../fort.35 .
+	-cd b2pl.exe.dir
 endif
 ifeq (${NCAR_VERSION},3)
 	rm -f $(target_pl) gmeta
@@ -102,33 +106,33 @@ else
 	cd b2pl.exe.dir ; ${DBX} ${INC} ${SOLPSTOP}/base/b2/${OBJECTCODE}/b2pl.exe ; mv -f b2plot.ps .. ; rm -f $(target_pl) $(notdir $^) .quit
 endif
 ifndef STAND_ALONE
-	-rm b2pl.exe.dir/fort.44 b2pl.exe.dir/input.dat b2pl.exe.dir/fort.3[3-5]
+	-rm b2pl.exe.dir/fort.44 b2pl.exe.dir/input.dat
 endif
 	-rmdir b2pl.exe.dir
 
-$(target_md) : b2mn.dat b2fgmtry b2fparam b2frates b2fstati b2fstate mesh.extra b2md.dat # b2fplasma b2time.nc 
+$(target_md) : b2mn.dat b2fgmtry b2fparam b2frates b2fstati b2fstate mesh.extra b2md.dat fort.33 fort.34 fort.35 # b2fplasma b2time.nc 
 	rm -rf b2md.exe.dir ; mkdir b2md.exe.dir ; cp $^ ds* b2md.exe.dir
 ifndef STAND_ALONE
 	-cp fort.44 input.dat b2md.exe.dir/
-	-cd b2md.exe.dir ; ln -s ../fort.33 ../fort.34 ../fort.35 .
+	-cd b2md.exe.dir
 endif
 	rm -f $(target_md)
 	cd b2md.exe.dir ; ${SOLPSTOP}/scripts/mds_id | ${TIME} b2md.exe ; mv $(target_md) .. ; rm -f $(notdir $^) .quit ds*
 ifndef STAND_ALONE
-	-rm b2md.exe.dir/fort.44 b2md.exe.dir/input.dat b2md.exe.dir/fort.3[3-5]
+	-rm b2md.exe.dir/fort.44 b2md.exe.dir/input.dat
 endif
 	-rmdir b2md.exe.dir
 
-$(target_md.dbx) : b2mn.dat b2fgmtry b2fparam b2frates b2fstati b2fstate mesh.extra b2md.dat # b2fplasma b2time.nc 
+$(target_md.dbx) : b2mn.dat b2fgmtry b2fparam b2frates b2fstati b2fstate mesh.extra b2md.dat fort.33 fort.34 fort.35 # b2fplasma b2time.nc 
 	rm -rf b2md.exe.dir ; mkdir b2md.exe.dir ; cp $^ ds* b2md.exe.dir
 ifndef STAND_ALONE
 	-cp fort.44 input.dat b2md.exe.dir/
-	-cd b2md.exe.dir ; ln -s ../fort.33 ../fort.34 ../fort.35 .
+	-cd b2md.exe.dir
 endif
 	rm -f $(target_md)
 	cd b2md.exe.dir ; ${SOLPSTOP}/scripts/mds_id | ${DBX} ${INC} ${SOLPSTOP}/base/b2/${OBJECTCODE}/b2md.exe ; mv $(target_md) .. ; rm -f $(notdir $^) .quit ds*
 ifndef STAND_ALONE
-	-rm b2md.exe.dir/fort.44 b2md.exe.dir/input.dat b2md.exe.dir/fort.3[3-5]
+	-rm b2md.exe.dir/fort.44 b2md.exe.dir/input.dat
 endif
 	-rmdir b2md.exe.dir
 

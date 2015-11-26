@@ -44,9 +44,9 @@ target_mn = b2mn.prt b2fparam b2fstate b2fmovie b2ftrace b2ftrack b2fplasma b2_t
 else
 target_mn = b2mn.prt b2fparam b2fstate b2fmovie b2ftrace b2ftrack b2fplasma b2_to_astra.dat
 endif
-target_co = b2co.prt
 target_uf = b2uf.prt
 target_fu = b2fu.prt
+target_co = b2co.prt
 target_pl = b2pl.prt b2plot.ps
 target_ts = b2ts.prt
 target_yg = b2yg.prt b2yg.plt
@@ -64,6 +64,7 @@ target_rd = b2rd.prt
 
 scandir := $(shell cd .. ; pwd)
 projdir := $(shell cd ../.. ; pwd)
+triangdir := $(shell cd $(scandir)/TRIANG ; pwd)
 baserundir := $(shell cd $(scandir)/baserun ; pwd)
 savefiles := $(shell echo ${PLASMASTATE} | sed -e 's:plasmastate:b2.*_save.parameters:')
 
@@ -78,6 +79,9 @@ vpath b2fgmtry .:$(baserundir)
 vpath b2fpardf .:$(baserundir)
 vpath b2fstati .:$(baserundir)
 vpath fort.30  .:$(baserundir)
+vpath fort.33  .:$(baserundir):$(triangdir)
+vpath fort.34  .:$(baserundir):$(triangdir)
+vpath fort.35  .:$(baserundir):$(triangdir)
 vpath b2frates .:$(baserundir)
 
 #-----------------------------------------------------------------------
@@ -121,11 +125,15 @@ $(target_ar) : b2ar.dat stra.dat weis.dat b2fpardf b2fgmtry
 	cd b2ar.exe.dir ; ${TIME} ${B2OBJ}/b2ar.exe ; mv $(target_ar) .. ; rm -f $(notdir $^)
 	-rmdir b2ar.exe.dir
 
+ifndef STAND_ALONE
+$(target_mn) : b2mn.dat b2fgmtry b2fpardf b2fstati b2frates fort.30 fort.33 fort.34 fort.35
+else
 $(target_mn) : b2mn.dat b2fgmtry b2fpardf b2fstati b2frates fort.30
+endif
 	rm -rf b2mn.exe.dir ; mkdir b2mn.exe.dir ; cp $^ b2mn.exe.dir
 	rm -f $(target_mn) fort.31 b2time.nc b2wall.nc b2tallies.nc b2movies.nc
 ifndef STAND_ALONE
-	-cd b2mn.exe.dir ; ln -s ../HYDHEL ../AMJUEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../fort.33 ../fort.34 ../fort.35 ../graphite_ext.dat ../mo_ext.dat . ; ln -s ../input.dat fort.1 ; [ -e ../fort.15 ] && cp -p ../fort.15 . ; [ -e ../fort.14 ] && cp -p ../fort.14 . ; [ -e ../fort.13 ] && cp -p ../fort.13 . ; [ -e ../fort.12 ] && cp -p ../fort.12 . ; [ -e ../fort.11 ] && cp -p ../fort.11 . ; [ -e ../fort.10 ] && cp -p ../fort.10 . ; [ -e ../fort.44 ] && cp -p ../fort.44 .
+	-cd b2mn.exe.dir ; ln -s ../HYDHEL ../AMJUEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ln -s ../input.dat fort.1 ; [ -e ../fort.15 ] && cp -p ../fort.15 . ; [ -e ../fort.14 ] && cp -p ../fort.14 . ; [ -e ../fort.13 ] && cp -p ../fort.13 . ; [ -e ../fort.12 ] && cp -p ../fort.12 . ; [ -e ../fort.11 ] && cp -p ../fort.11 . ; [ -e ../fort.10 ] && cp -p ../fort.10 . ; [ -e ../fort.44 ] && cp -p ../fort.44 .
 endif
 	cd b2mn.exe.dir ; mkdir tracing ; ${TIME} ${B2OBJ}/b2mn.exe ; mv $(target_mn) .. ; mv -f tracing/* ../tracing ; [ -e ../fort.30 ] || mv fort.30 .. ; rm -f $(notdir $^) .quit
 ifndef STAND_ALONE
@@ -136,7 +144,7 @@ ifndef STAND_ALONE
 	-[ -e b2mn.exe.dir/fort.14 ] && mv b2mn.exe.dir/fort.14 .
 	-[ -e b2mn.exe.dir/fort.15 ] && mv b2mn.exe.dir/fort.15 .
 	-[ -e b2mn.exe.dir/fort.44 ] && mv b2mn.exe.dir/fort.44 .
-	-cd b2mn.exe.dir ; rm -f HYDHEL AMJUEL METHANE SPUTER H2VIBR fort.21 fort.22 fort.33 fort.34 fort.35 graphite_ext.dat mo_ext.dat fort.75 fort.1 fort.29 fort.37 fort.55 fort.78 vtk.out
+	-cd b2mn.exe.dir ; rm -f HYDHEL AMJUEL METHANE SPUTER H2VIBR fort.21 fort.22 graphite_ext.dat mo_ext.dat fort.75 fort.1 fort.29 fort.37 fort.55 fort.78 vtk.out
 endif
 	-[ -e b2mn.exe.dir/fort.31 ] && mv b2mn.exe.dir/fort.31 .
 	-[ -e b2mn.exe.dir/b2time.nc ] && mv b2mn.exe.dir/b2time.nc .
@@ -147,11 +155,15 @@ endif
 	-[ -e b2mn.exe.dir/tracing ] && rmdir b2mn.exe.dir/tracing
 	-rmdir b2mn.exe.dir
 
+ifndef STAND_ALONE
+dbx.b2mn : b2mn.dat b2fgmtry b2fpardf b2fstati b2frates fort.30 fort.33 fort.34 fort.35
+else
 dbx.b2mn : b2mn.dat b2fgmtry b2fpardf b2fstati b2frates fort.30
+endif
 	rm -rf b2mn.exe.dir ; mkdir b2mn.exe.dir ; cp $^ b2mn.exe.dir
 	rm -f $(target_mn) fort.31 b2time.nc b2wall.nc b2tallies.nc b2movies.nc
 ifndef STAND_ALONE
-	-cd b2mn.exe.dir ; ln -s ../HYDHEL ../AMJUEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../fort.33 ../fort.34 ../fort.35 ../graphite_ext.dat ../mo_ext.dat . ; ln -s ../input.dat fort.1 ; [ -e ../fort.15 ] && cp -p ../fort.15 . ; [ -e ../fort.14 ] && cp -p ../fort.14 . ; [ -e ../fort.13 ] && cp -p ../fort.13 . ; [ -e ../fort.12 ] && cp -p ../fort.12 . ; [ -e ../fort.11 ] && cp -p ../fort.11 . ; [ -e ../fort.10 ] && cp -p ../fort.10 . ; [ -e ../fort.44 ] && cp -p ../fort.44 .
+	-cd b2mn.exe.dir ; ln -s ../HYDHEL ../AMJUEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ln -s ../input.dat fort.1 ; [ -e ../fort.15 ] && cp -p ../fort.15 . ; [ -e ../fort.14 ] && cp -p ../fort.14 . ; [ -e ../fort.13 ] && cp -p ../fort.13 . ; [ -e ../fort.12 ] && cp -p ../fort.12 . ; [ -e ../fort.11 ] && cp -p ../fort.11 . ; [ -e ../fort.10 ] && cp -p ../fort.10 . ; [ -e ../fort.44 ] && cp -p ../fort.44 .
 	cd b2mn.exe.dir ; mkdir tracing ; ${DBX} ${INC} b2mn.exe ; mv $(target_mn) .. ; mv -f tracing/* ../tracing ; [-e ../fort.30 ] || mv fort.30 .. ; rm -f $(notdir $^) .quit
 	-[ -e b2mn.exe.dir/fort.10 ] && mv b2mn.exe.dir/fort.10 .
 	-[ -e b2mn.exe.dir/fort.11 ] && mv b2mn.exe.dir/fort.11 .
@@ -160,7 +172,7 @@ ifndef STAND_ALONE
 	-[ -e b2mn.exe.dir/fort.14 ] && mv b2mn.exe.dir/fort.14 .
 	-[ -e b2mn.exe.dir/fort.15 ] && mv b2mn.exe.dir/fort.15 .
 	-[ -e b2mn.exe.dir/fort.44 ] && mv b2mn.exe.dir/fort.44 .
-	-cd b2mn.exe.dir ; rm -f HYDHEL AMJUEL METHANE SPUTER H2VIBR fort.21 fort.22 fort.33 fort.34 fort.35 graphite_ext.dat mo_ext.dat fort.75 fort.1 fort.29 fort.37 fort.55 fort.78 vtk.out
+	-cd b2mn.exe.dir ; rm -f HYDHEL AMJUEL METHANE SPUTER H2VIBR fort.21 fort.22 graphite_ext.dat mo_ext.dat fort.75 fort.1 fort.29 fort.37 fort.55 fort.78 vtk.out
 else
 	cd b2mn.exe.dir ; ${DBX} ${INC} b2mn.exe ; rm -f $(notdir $^) .quit
 endif
@@ -174,14 +186,18 @@ endif
 	-[ -e b2mn.exe.dir/tracing ] && rmdir b2mn.exe.dir/tracing
 	-rmdir b2mn.exe.dir
 
+ifndef STAND_ALONE
+$(target_co) : b2mn.dat b2fgmtry b2fpardf b2fstati ${PLASMASTATE} ${savefiles} fort.33 fort.34 fort.35
+else
 $(target_co) : b2mn.dat b2fgmtry b2fpardf b2fstati ${PLASMASTATE} ${savefiles}
+endif
 	-rm -rf b2co.exe.dir ; mkdir b2co.exe.dir ; cp $^ b2co.exe.dir
 	rm -f $(target_co)
 ifndef STAND_ALONE
-	-cd b2co.exe.dir ; ln -s ../input.dat ../fort.33 ../fort.34 ../fort.35 .
+	-cd b2co.exe.dir ; ln -s ../input.dat .
 endif
 	cd b2co.exe.dir ; ${TIME} ${B2OBJ}/b2co.exe `basename ${PLASMASTATE}` ; mv $(target_co) b2fstate .. ; rm -f $(notdir $^) .quit
-	-[ -e b2co.exe.dir/input.dat ] && rm b2co.exe.dir/input.dat b2co.exe.dir/fort.3[3-5]
+	-[ -e b2co.exe.dir/input.dat ] && rm b2co.exe.dir/input.dat
 	-rmdir b2co.exe.dir
 
 $(target_uf) : b2fgmtry b2fparam b2fstate b2fplasma
@@ -280,12 +296,16 @@ $(target_yr) : b2yr.dat b2frates b2fpardf b2fgmtry
 	cd b2yr.exe.dir ; ${TIME} ${B2OBJ}/b2yr.exe ; mv $(target_yr) .. ; rm -f $(notdir $^)
 	-rmdir b2yr.exe.dir
 
+ifndef STAND_ALONE
+$(target_yt) : b2yt.dat b2fstate b2mn.dat b2ah.dat b2ai.dat b2ag.dat b2fgmtry b2frates b2fpardf fort.33 fort.34 fort.35
+else
 $(target_yt) : b2yt.dat b2fstate b2mn.dat b2ah.dat b2ai.dat b2ag.dat b2fgmtry b2frates b2fpardf
+endif
 	rm -rf b2yt.exe.dir ; mkdir b2yt.exe.dir ; cp $^ b2yt.exe.dir
 	rm -f $(target_yt)
 ifndef STAND_ALONE
-	-cd b2yt.exe.dir ; [ -e ../input.dat ] && ln -s ../input.dat . ; [ -e ../fort.44 ] && ln -s ../fort.44 . ; ln -s ../fort.33 ../fort.34 ../fort.35 .
-	cd b2yt.exe.dir ; ${TIME} ${B2OBJ}/b2yt.exe ; mv $(target_yt) .. ; rm -f $(notdir $^) input.dat fort.44 fort.3[3-5] fort.75
+	-cd b2yt.exe.dir ; [ -e ../input.dat ] && ln -s ../input.dat . ; [ -e ../fort.44 ] && ln -s ../fort.44 .
+	cd b2yt.exe.dir ; ${TIME} ${B2OBJ}/b2yt.exe ; mv $(target_yt) .. ; rm -f $(notdir $^) input.dat fort.44 fort.75
 	-[ -e b2yt.exe.dir/input.dat.2 ] && mv b2yt.exe.dir/input.dat.2 .
 	-[ -e b2yt.exe.dir/fort.44.2 ] && mv b2yt.exe.dir/fort.44.2 .
 else
@@ -293,12 +313,16 @@ else
 endif
 	-rmdir b2yt.exe.dir
 
+ifndef STAND_ALONE
+dbx.b2yt : b2yt.dat b2fstate b2mn.dat b2ah.dat b2ai.dat b2ag.dat b2fgmtry b2frates b2fpardf fort.33 fort.34 fort.35
+else
 dbx.b2yt : b2yt.dat b2fstate b2mn.dat b2ah.dat b2ai.dat b2ag.dat b2fgmtry b2frates b2fpardf
+endif
 	rm -rf b2yt.exe.dir ; mkdir b2yt.exe.dir ; cp $^ b2yt.exe.dir
 	rm -f $(target_yt)
 ifndef STAND_ALONE
-	-cd b2yt.exe.dir ; [ -e ../input.dat ] && ln -s ../input.dat . ; [ -e ../fort.44 ] && ln -s ../fort.44 . ; ln -s ../fort.33 ../fort.34 ../fort.35 .
-	cd b2yt.exe.dir ; ${DBX} ${INC} b2yt.exe ; mv $(target_yt) .. ; rm -f $(notdir $^) input.dat fort.44 fort.3[3-5] fort.75
+	-cd b2yt.exe.dir ; [ -e ../input.dat ] && ln -s ../input.dat . ; [ -e ../fort.44 ] && ln -s ../fort.44 .
+	cd b2yt.exe.dir ; ${DBX} ${INC} b2yt.exe ; mv $(target_yt) .. ; rm -f $(notdir $^) input.dat fort.44 fort.75
 	-[ -e b2yt.exe.dir/input.dat.2 ] && mv b2yt.exe.dir/input.dat.2 .
 	-[ -e b2yt.exe.dir/fort.44.2 ] && mv b2yt.exe.dir/fort.44.2 .
 else

@@ -14,7 +14,8 @@ c=======================================================================
       integer i,j,k,l,m,iy,iz,ntime_b,nfile_b,npts_b(nstra),lntspec_b,
      ,  lntsput_b,nmcsput_b,ngwties_b,lgwt_h(ngwtiesx),kgwt_h(ngwtiesx),
      ,  l_pfr,l_wll
-      logical ex
+      logical ex,streql
+      external streql
       real w,alloc_b,flux_b(nstra)
       save alloc_b,flux_b,
      ,  ntime_b,nfile_b,npts_b,lntspec_b,lntsput_b,nmcsput_b,ngwties_b
@@ -49,8 +50,8 @@ c*** Change to the new numeration and exclude "Elements not for Eirene"
         
         iatspec=0
         do i=1,nspigen !{
-          if(spcigen(i).eq.'H' .or. spcigen(i).eq.'D' 
-     .                                 .or. spcigen(i).eq.'T') iatspec=i
+          if(streql(spcigen(i),'H') .or. streql(spcigen(i),'D') .or.
+     .       streql(spcigen(i),'T')) iatspec=i
         end do !}
 
         write(*,*) 'uinprpdg: ',lntsptu,' material templates'
@@ -88,7 +89,7 @@ c*** Save the variables to be changed
           ex=.true.
           do i=1,natmi !{
             if(ex) then !{
-              if(txtmtra(1).eq.texta(i)) then !{
+              if(streql(txtmtra(1),texta(i))) then !{
                 ex=.false.
                 j=nmassa(i)*100+nchara(i)
               end if !}

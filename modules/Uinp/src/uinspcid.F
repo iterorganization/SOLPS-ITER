@@ -16,6 +16,8 @@ c======================================================================
       character*(*) s
 #include "uinpcom.inc"
       integer i
+      logical streql
+      external streql
 c======================================================================
 
       if(s.eq.' ' .or. s.eq.'e') then
@@ -26,19 +28,19 @@ c*** Electron
       end if
 
       do i=1,nspcatm
-      	if(s.eq.spcsatm(i)) go to 10
+      	if(streql(s,spcsatm(i))) go to 10
       end do
 
       do i=1,nspcmol
-      	if(s.eq.spcsmol(i)) go to 20
+      	if(streql(s,spcsmol(i))) go to 20
       end do
 
       do i=1,nspcion
-      	if(s.eq.spcsion(i)) go to 30
+      	if(streql(s,spcsion(i))) go to 30
       end do
 
       do i=1,nspcpls
-      	if(s.eq.spcspls(i)) go to 40
+      	if(streql(s,spcspls(i))) go to 40
       end do
       l=-1
       k=0

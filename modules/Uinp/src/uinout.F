@@ -20,10 +20,11 @@ c=======================================================================
 #include "git_version_Uinp.h"
 
       integer i,j,k,l,m,n,icont
-      logical ulmlti,ex,carbon,moly
+      logical ulmlti,ex,carbon,moly,streql
       logical, allocatable :: done(:)
       character utxthd(34)*71, utxtfl(7)*47, ufnm*(*), ucdnmdl*10
       character utxtgt*71
+      external streql
       data utxthd /
      1        '** 1. Data for operating mode' ,
      2        '** 2. Data for standard mesh' ,
@@ -144,23 +145,23 @@ c*** 1.  General data for the run
       write(iunoo,720) utxtfl(4)
       carbon = .false.
       do i=1,nspigen
-        carbon=carbon.or.spcigen(i).eq.spcdgen(5)
+        carbon=carbon.or.streql(spcigen(i),spcdgen(5))
       enddo
       if (carbon) write(iunoo,720) utxtfl(5)
       carbon = .false.
       do i=1,ntrgdflt
-        carbon=carbon.or.made_of(i)(1:2).eq.'C '
+        carbon=carbon.or.streql(made_of(i),'C')
       end do
       do i=1,n_spcsrf
-        carbon=carbon.or.sps_mtrl(i)(1:2).eq.'C '
+        carbon=carbon.or.streql(sps_mtrl(i),'C')
       end do
       if (carbon.or..true.) write(iunoo,720) utxtfl(6)
       moly=.false.
       do i=1,ntrgdflt
-        moly=moly.or.made_of(i)(1:2).eq.'Mo'
+        moly=moly.or.streql(made_of(i),'Mo')
       end do
       do i=1,n_spcsrf
-        moly=moly.or.sps_mtrl(i)(1:2).eq.'Mo'
+        moly=moly.or.streql(sps_mtrl(i),'Mo')
       end do
       if (moly.or..true.) write(iunoo,720) utxtfl(7)
 
@@ -632,8 +633,8 @@ c*** surface cards
         do j=1,nnchemvar(i) !{
           k=k+1 
           ich=indchemvar(k)
-          if(chvarname(ich)(1:4).EQ.'ISRC'.OR.
-     .                      chvarname(ich)(1:8).EQ.'LCHSPNWL') then !{
+          if(streql(chvarname(ich),'ISRC').OR.
+     .                      streql(chvarname(ich),'LCHSPNWL')) then !{
             write(iunoo,717) chvarname(ich),chmspname(ich),
      ,                                                nint(chmvar(ich))
           else !}{

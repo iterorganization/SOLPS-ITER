@@ -13,6 +13,8 @@ c=======================================================================
       integer i,j,k,kk,kkk,nn 
 cank      logical checknds,checkas
       integer chemindex(maxchmvar)
+      logical streql
+      external streql
 
 c***  makes table of additional variables for 
 c***  chemical sputtering
@@ -262,7 +264,7 @@ c***   chemical sputtering
         itp=lchspprt(i) 
         spz=lchspprp(i)  
         if(itp.EQ.1) then !{
-          speciename=texta(spz)
+         speciename=texta(spz)
         else if(itp.EQ.2) then 
          speciename=textm(spz)
         else if(itp.LE.3) then
@@ -317,7 +319,7 @@ c***  number ch is sutable for surface card number i
         if(scxmlim(i).EQ.lchsptrg(j).AND.
      .     scisrsg(i).EQ.lchspgrp(j)) then !{
           checkchm=.TRUE.  
-          if(chvarname(ch).EQ.'RECYCC'
+          if(streql(chvarname(ch),'RECYCC')
      .       .AND.chmvar(ch).EQ.scychsptg(i))
      .     checkchm=.FALSE.                                 
         else !}{
@@ -333,8 +335,8 @@ c       if(scxmlim(i).NE.1206) return
 c       do j=1,nnchemvar(i) !{
 c         k=k+1 
 c         ich=indchemvar(k)
-c         if(chvarname(ich)(1:4).EQ.'ISRC'.OR.
-c     .      chvarname(ich)(1:8).EQ.'LCHSPNWL') then !{
+c         if(streql(chvarname(ich),'ISRC').OR.
+c     .      streql(chvarname(ich),'LCHSPNWL')) then !{
 c            write(iunoo,717) chvarname(ich),chmspname(ich),
 c     ,                       nint(chmvar(ich))
 c         else !}{

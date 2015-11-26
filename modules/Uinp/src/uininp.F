@@ -10,10 +10,10 @@ c======================================================================
 #include "uinput.inc"
 #include "impcon.inc"
       integer imat,nmat,isp
-      logical uex,open_file,match_found
+      logical uex,open_file,streql,match_found
       character*2 listmat(nmtr)
       character*256 solpstop
-      external open_file,uinnam,uintrg,uinaux,uiniamd
+      external open_file,uinnam,uintrg,uinaux,uiniamd,streql
 c======================================================================
 c*** set up the input routine
 c
@@ -68,15 +68,14 @@ c
         match_found=.false.
         do imat=1,nmat !{
           match_found=match_found .or.
-     .       trim(listmat(imat)).eq.trim(umtrl(i)) .or.
-     .      (trim(listmat(imat)).eq.'Fe' .and. 
-     .      (trim(umtrl(i)).eq.'ss'.or.trim(umtrl(i)).eq.'SS')) .or.
-     .       trim(umtrl(i)).eq.'dummy'
+     .      streql(listmat(imat),umtrl(i)) .or.
+     .     (streql(listmat(imat),'Fe') .and. streql(umtrl(i),'SS')) .or.
+     .      streql(umtrl(i),'dummy')
         end do !}
         if (.not.match_found) then !{
           nmat=nmat+1
-	  if ((trim(umtrl(i)).eq."ss").or.(trim(umtrl(i)).eq."SS")) then !{
-            listmat(nmat)="Fe"
+	  if (streql(umtrl(i),'SS')) then !{
+            listmat(nmat)='Fe'
           else !}{
             listmat(nmat)=umtrl(i)(1:2)
           end if !}
@@ -86,15 +85,13 @@ c
         match_found=.false.
         do imat=1,nmat !{
           match_found=match_found .or.
-     .       trim(listmat(imat)).eq.trim(made_of(i)) .or.
-     .      (trim(listmat(imat)).eq.'Fe' .and. 
-     .      (trim(made_of(i)).eq.'ss'.or.trim(made_of(i)).eq.'SS'))
+     .       streql(listmat(imat),made_of(i)) .or.
+     .      (streql(listmat(imat),'Fe') .and. streql(made_of(i),'SS'))
         end do !}
         if (.not.match_found) then !{
           nmat=nmat+1
-	  if ((trim(made_of(i)).eq."ss").or.
-     .        (trim(made_of(i)).eq."SS")) then !{
-            listmat(nmat)="Fe"
+	  if (streql(made_of(i),'SS')) then !{
+            listmat(nmat)='Fe'
           else !}{
             listmat(nmat)=made_of(i)(1:2)
           end if !}
@@ -104,15 +101,13 @@ c
         match_found=.false.
         do imat=1,nmat !{
           match_found=match_found .or.
-     .       trim(listmat(imat)).eq.trim(sps_mtrl(i)) .or.
-     .       trim(sps_mtrl(i)).eq.'-' .or.
-     .      (trim(listmat(imat)).eq.'Fe' .and. 
-     .      (trim(sps_mtrl(i)).eq.'ss'.or.trim(sps_mtrl(i)).eq.'SS'))
+     .       streql(listmat(imat),sps_mtrl(i)) .or.
+     .       streql(sps_mtrl(i),'-') .or.
+     .      (streql(listmat(imat),'Fe') .and. streql(sps_mtrl(i),'SS'))
         end do !}
         if (.not.match_found) then !{
           nmat=nmat+1
-	  if ((trim(sps_mtrl(i)).eq."ss").or.
-     .        (trim(sps_mtrl(i)).eq."SS")) then !{
+	  if (streql(sps_mtrl(i),'SS')) then !{
             listmat(nmat)="Fe"
           else !}{
             listmat(nmat)=sps_mtrl(i)(1:2)
@@ -120,12 +115,12 @@ c
         end if !}
       end do !}
       ifile = 0
-      if (nspigen.gt.1 .or. spcigen(nspigen).ne.'D' .or. 
-     .     nmat.gt.1   .or. listmat(nmat).ne.'C') then !{
+      if (nspigen.gt.1 .or. .not.streql(spcigen(nspigen),'D') .or. 
+     .     nmat.gt.1   .or. .not.streql(listmat(nmat),'C')) then !{
          do isp=1,nspigen !{
            do imat=1,nmat !{
-             if (.not.(spcigen(isp).eq.'D' .and.
-     .                 listmat(imat).eq.'C')) then !{
+             if (.not.(streql(spcigen(isp),'D') .and.
+     .                 streql(listmat(imat),'C'))) then !{
                ifile = ifile + 1
                filtrm(nnftrm+ifile)=
      .          spcigen(isp)(1:lnblnk(spcigen(isp)))
@@ -138,7 +133,7 @@ c
       nnftrm = nnftrm+ifile
 
       do iamd=1,namdf !{
-      	if(amd_file(iamd).ne.' ') then !{
+      	if(.not.streql(amd_file(iamd),' ')) then !{
 c*** Read the AMDS file if exists
           inquire(file=amd_file(iamd), exist=uex)
           if(uex) then !{

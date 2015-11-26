@@ -12,7 +12,8 @@ c=======================================================================
 #include "uinput.inc"
       integer i,j,k,l,isg,istr,isf
       real*4 hlp,hlp1,hlp2,hlpeps,hlpeps2
-      logical ex,uex
+      logical ex,uex,streql
+      external streql
       parameter (hlpeps=1.e-6, hlpeps2=1.e-5)
 c=======================================================================
 c<<<
@@ -131,14 +132,14 @@ c*** lstrascl
 	do i=1,nspcncl !{
 	  ex=.false.
 	  do j=1,natm !{
-	    if(srcmstrs(j,istr).eq.spcsncl(i)) then !{
+	    if(streql(srcmstrs(j,istr),spcsncl(i))) then !{
 	      if(ex) then !{
-	      	write(0,*) 'Ambigous definition of source scaling for ',
+	      	write(0,*) 'Ambiguous definition of source scaling for ',
      ,		  'the gas puffing source ',istr
 	      	stop '==> Check "Gas puff" variables in the DG model'
 	      end if !}
 	      do k=1,nspcncl !{
-	     	if(spcsncl(k).eq.wrcmstrs(j,istr)) then !{
+	     	if(streql(spcsncl(k),wrcmstrs(j,istr))) then !{
                   lsgpfstr(i,istr)=k*spcsscn(i)
 #ifdef DBG
               print *,'uinpsrcg: k,i,j,istr,lsgpfstr,spcsscn=',k,i,j,

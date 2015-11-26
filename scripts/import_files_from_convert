@@ -34,6 +34,7 @@
   [ -e ../convert/b2.*.parameters ] && cp -uv ../convert/b2.*.parameters .
   [ -e ../convert/b2.transport.inputfile ] && cp -uv ../convert/b2.transport.inputfile .
   [ -e ../convert/b2.sources.profile ] && cp -uv ../convert/b2.sources.profile .
+  [ -e ../convert/fort.44 ] && cp -uv ../convert/fort.44 .
   [ -e ../convert/fort.15 ] && cp -uv ../convert/fort.15 .
   [ -e ../convert/fort.14 ] && cp -uv ../convert/fort.14 .
   [ -e ../convert/fort.13 ] && cp -uv ../convert/fort.13 .

@@ -49,6 +49,7 @@ ln -sf `pwd`/"$1".trg uinput.trg
 ln -sf `pwd`/"$1".str dg.str
 ln -sf `pwd`/"$1".trg dg.trg
 ln -sf `pwd`/"$1".dgo dg.dgo
+ln -sf `pwd`/"$1".dgo param.dg
 
 e=`cat $1.trg | grep '# equil' | cut -f3 -d' '`
 case $e in

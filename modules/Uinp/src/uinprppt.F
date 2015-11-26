@@ -11,7 +11,8 @@ c*** Prepare the particle lists
 c======================================================================
 #include "uinput.inc"
       integer i,j,k,l,m,n,na,ni,nm,np
-      logical ex
+      logical ex,streql
+      external streql
       character*8 c,cc,c0*1
       character*20 hlp_frm
 c======================================================================
@@ -32,15 +33,15 @@ c*** the atoms and nuclei
 
       do l=1,nspigen  !{
         c=spcigen(l)
-        if(c.ne.' ' .and. c(1:1).ne.c0) then !{
+        if(.not.streql(c,' ') .and. c(1:1).ne.c0) then !{
           ex=.true.
           do i=1,nspcatm  !{
-            if(c.eq.spcsatm(i)) ex=.false.
+            if(streql(c,spcsatm(i))) ex=.false.
           end do      !}
           if(ex) then  !{
             k=0
             do i=1,nspdgen  !{
-              if(c.eq.spcdgen(i)) k=i
+              if(streql(c,spcdgen(i))) k=i
             end do    !}
             if(k.eq.0) then  !{
               write(hlp_frm,'(a,i2,a)') '(a,a8,a,a,',nspdgen,'(a1,a2))'
@@ -53,7 +54,7 @@ c*** the atoms and nuclei
               nspcncl=na
               if(na.gt.natm) then !{
                 write(0,*) 'The number of atomic species must ',
-     ,            'not exceed',natm
+     ,            'not exceed ',natm
                 write(0,*) 'STOP ==> Check the AMDS model - or ',
      ,            'increase DEF_NATM in DIMENSIONS.F'
                 stop
@@ -67,7 +68,8 @@ c*** the atoms and nuclei
               spcsnca(na)=spcdnc(j)
               spcscga(na)=spcdcg(j)
               spcsfua(na)=spcdfu(j)
-              if(spcsrfa(na).ne.' ' .and. spcsrfa(na).ne.c0) then !{
+              if(.not.streql(spcsrfa(na),' ') .and.
+     &           .not.streql(spcsrfa(na),c0)) then !{
                 spcsrsa(na)=1
               else !}{
                 spcsrsa(na)=-1
@@ -79,17 +81,17 @@ c*** the atoms and nuclei
                 c=spcdspc(j+m)
                 ex=.false.
                 do i=1,nspcmol  !{
-                  if(c.eq.spcsmol(i)) ex=.true.
+                  if(streql(c,spcsmol(i))) ex=.true.
                 end do  !}
                 if(ex) then !{
-                  write(0,*) 'Ambigous molecule name "',c,
+                  write(0,*) 'Ambiguous molecule name "',c,
      ,              '" - internal error in UINP!!!'
                   stop
                 end if  !}
                 nm=nm+1
                 if(nm.gt.nmol) then !{
                   write(0,*) 'The number of molecular species must ',
-     ,              'not exceed',nmol
+     ,              'not exceed ',nmol
                   write(0,*) 'STOP ==> Check the AMDS model - or ',
      ,              'increase DEF_NMOL in DIMENSIONS.F'
                   stop
@@ -112,17 +114,17 @@ c*** the atoms and nuclei
                 c=spcdspc(j+m)
                 ex=.false.
                 do i=1,nspcion  !{
-                  if(c.eq.spcsion(i)) ex=.true.
+                  if(streql(c,spcsion(i))) ex=.true.
                 end do  !}
                 if(ex) then !{
-                  write(0,*) 'Ambigous test ion name "',c,
+                  write(0,*) 'Ambiguous test ion name "',c,
      ,              '" - internal error in UINP!!!'
                   stop
                 end if  !}
                 ni=ni+1
                 if(ni.gt.nion) then !{
                   write(0,*) 'The number of test ion species must ',
-     ,              'not exceed',nion
+     ,              'not exceed ',nion
                   write(0,*) 'STOP ==> Check the AMDS model - or ',
      ,              'increase DEF_NION in DIMENSIONS.F'
                   stop
@@ -145,17 +147,17 @@ c*** the atoms and nuclei
                 c=spcdspc(j+m)
                 ex=.false.
                 do i=1,nspcpls  !{
-                  if(c.eq.spcspls(i)) ex=.true.
+                  if(streql(c,spcspls(i))) ex=.true.
                 end do  !}
                 if(ex) then !{
-                  write(0,*) 'Ambigous plasma ion name "',c,
+                  write(0,*) 'Ambiguous plasma ion name "',c,
      ,              '" - internal error in UINP !!!'
                   stop
                 end if  !}
                 np=np+1
                 if(np.gt.npls) then !{
                   write(0,*) 'The number of plasma species must ',
-     ,              'not exceed',npls
+     ,              'not exceed ',npls
                   write(0,*) 'STOP ==> Check the AMDS model - or ',
      ,              'increase DEF_NPLS in DIMENSIONS.F'
                   stop
@@ -168,7 +170,8 @@ c*** the atoms and nuclei
                 spcsncp(np)=spcdnc(j+m)
                 spcscgp(np)=spcdcg(j+m)
                 spcsfup(np)=spcdfu(j+m)
-                if(spcsrfp(np).ne.' ' .and. spcsrfp(np).ne.c0) then !{
+                if(.not.streql(spcsrfp(np),' ') .and.
+     &             .not.streql(spcsrfp(np),c0)) then !{
                   spcsrsp(np)=1
                 else !}{
                   spcsrsp(np)=-1
@@ -203,17 +206,17 @@ c*** Atoms:
 
       do l=1,nspiatm  !{
         c=spciatm(l)
-        if(c.ne.' ' .and. c(1:1).ne.c0) then !{
+        if(.not.streql(c,' ') .and. c(1:1).ne.c0) then !{
           ex=.true.
           do i=1,nspcatm  !{
-            if(c.eq.spcsatm(i)) ex=.false.
+            if(streql(c,spcsatm(i))) ex=.false.
           end do      !}
           if(ex) then  !{
             j=lspdgen(k)
             nspcatm=nspcatm+1
 	    if(nspcatm.gt.natm) then !{
 	      write(0,*) 'The number of atomic species must not ',
-     ,	      	'exceed',natm
+     ,	      	'exceed ',natm
 	      write(0,*) 'STOP ==> Check the AMDS model - or increase ',
      ,	      	'DEF_NATM in DIMENSIONS.F'
 	      stop
@@ -242,17 +245,17 @@ c*** Molecules:
 
       do l=1,nspimol  !{
         c=spcimol(l)
-        if(c.ne.' ' .and. c(1:1).ne.c0) then !{
+        if(.not.streql(c,' ') .and. c(1:1).ne.c0) then !{
           ex=.true.
           do i=1,nspcmol  !{
-            if(c.eq.spcsmol(i)) ex=.false.
+            if(streql(c,spcsmol(i))) ex=.false.
           end do      !}
           if(ex) then  !{
             j=lspdgen(k)
             nspcmol=nspcmol+1
 	    if(nspcmol.gt.nmol) then !{
 	      write(0,*) 'The number of molecular species must ',
-     ,	      	'not exceed',nmol
+     ,	      	'not exceed ',nmol
 	      write(0,*) 'STOP ==> Check the AMDS model - or increase ',
      ,	      	'DEF_NMOL in DIMENSIONS.F'
 	      stop
@@ -263,7 +266,7 @@ c*** Molecules:
 	      j=0
 	      do i=1,nspcncl !{
 	        if(j.eq.0) then !{
-	          if(cc.eq.spcsncl(i)) j=i
+	          if(streql(cc,spcsncl(i))) j=i
 	        end if !}
 	      end do !}
 	      if(j.eq.0) then !{
@@ -295,16 +298,16 @@ c*** Test ions:
 
       do l=1,nspiion  !{
         c=spciion(l)
-        if(c.ne.' ' .and. c(1:1).ne.c0) then !{
+        if(.not.streql(c,' ') .and. c(1:1).ne.c0) then !{
           ex=.true.
           do i=1,nspcion  !{
-            if(c.eq.spcsion(i)) ex=.false.
+            if(streql(c,spcsion(i))) ex=.false.
           end do      !}
           if(ex) then  !{
             nspcion=nspcion+1
 	    if(nspcion.gt.nion) then !{
 	      write(0,*) 'The number of test ion species must ',
-     ,	      	'not exceed',nion
+     ,	      	'not exceed ',nion
 	      write(0,*) 'STOP ==> Check the AMDS model - or increase ',
      ,	      	'DEF_NION in DIMENSIONS.F'
 	      stop
@@ -315,7 +318,7 @@ c*** Test ions:
 	      j=0
 	      do i=1,nspcncl !{
 	        if(j.eq.0) then !{
-	          if(cc.eq.spcsncl(i)) j=i
+	          if(streql(cc,spcsncl(i))) j=i
 	        end if !}
 	      end do !}
 	      if(j.eq.0) then !{
@@ -346,16 +349,16 @@ c*** Plasma ions:
 
       do l=1,nspipls  !{
         c=spcipls(l)
-        if(c.ne.' ' .and. c(1:1).ne.c0) then !{
+        if(.not.streql(c,' ') .and. c(1:1).ne.c0) then !{
           ex=.true.
           do i=1,nspcpls  !{
-            if(c.eq.spcspls(i)) ex=.false.
+            if(streql(c,spcspls(i))) ex=.false.
           end do      !}
           if(ex) then  !{
             nspcpls=nspcpls+1
 	    if(nspcpls.gt.npls) then !{
 	      write(0,*) 'The number of plasma ion species must ',
-     ,	      	'not exceed',npls
+     ,	      	'not exceed ',npls
 	      write(0,*) 'STOP ==> Check the AMDS model - or increase ',
      ,	      	'DEF_NPLS in DIMENSIONS.F'
 	      stop
@@ -364,7 +367,7 @@ c*** Plasma ions:
 	    j=0
 	    do i=1,nspcncl !{
 	      if(j.eq.0) then !{
-	      	if(cc.eq.spcsncl(i)) j=i
+	      	if(streql(cc,spcsncl(i))) j=i
 	      end if !}
 	    end do !}
 	    if(j.eq.0) then !{
@@ -442,13 +445,13 @@ cank        isrsa(l)=spcsrsa(l)
 
 	k=0
 	c=spcsrfa(l)
-	if(c.ne.' ') then !{
+	if(.not.streql(c,' ')) then !{
           do i=1,nspcatm !{
-            if(c.eq.spcsatm(i)) k=i
+            if(streql(c,spcsatm(i))) k=i
           end do !}
           if(k.eq.0) then !{
             do i=1,nspcion !{
-              if(c.eq.spcsion(i)) k=-i
+              if(streql(c,spcsion(i))) k=-i
             end do !}
           end if !}
 	  if(k.eq.0) then !{
@@ -462,13 +465,13 @@ cank        isrsa(l)=spcsrsa(l)
 	
 	k=0
 	c=spcsrta(l)
-	if(c.ne.' ') then !{
+	if(.not.streql(c,' ')) then !{
           do i=1,nspcatm !{
-            if(c.eq.spcsatm(i)) k=i
+            if(streql(c,spcsatm(i))) k=i
           end do !}
           if(k.eq.0) then !{
             do i=1,nspcmol !{
-              if(c.eq.spcsmol(i)) k=-i
+              if(streql(c,spcsmol(i))) k=-i
             end do !}
           end if !}
 	  if(k.eq.0) then !{
@@ -501,13 +504,13 @@ cank        isrsi(l)=spcsrsi(l)
 
 	k=0
 	c=spcsrfi(l)
-	if(c.ne.' ') then !{
+	if(.not.streql(c,' ')) then !{
           do i=1,nspcatm !{
-            if(c.eq.spcsatm(i)) k=i
+            if(streql(c,spcsatm(i))) k=i
           end do !}
           if(k.eq.0) then !{
             do i=1,nspcion !{
-              if(c.eq.spcsion(i)) k=-i
+              if(streql(c,spcsion(i))) k=-i
             end do !}
           end if !}
 	  if(k.eq.0) then !{
@@ -521,13 +524,13 @@ cank        isrsi(l)=spcsrsi(l)
 	
 	k=0
 	c=spcsrti(l)
-	if(c.ne.' ') then !{
+	if(.not.streql(c,' ')) then !{
           do i=1,nspcatm !{
-            if(c.eq.spcsatm(i)) k=i
+            if(streql(c,spcsatm(i))) k=i
           end do !}
           if(k.eq.0) then !{
             do i=1,nspcmol !{
-              if(c.eq.spcsmol(i)) k=-i
+              if(streql(c,spcsmol(i))) k=-i
             end do !}
           end if !}
 	  if(k.eq.0) then !{
@@ -562,13 +565,13 @@ cank        isrsp(l)=spcsrsp(l)
 
 	k=0
 	c=spcsrfp(l)
-	if(c.ne.' ') then !{
+	if(.not.streql(c,' ')) then !{
           do i=1,nspcatm !{
-            if(c.eq.spcsatm(i)) k=i
+            if(streql(c,spcsatm(i))) k=i
           end do !}
           if(k.eq.0) then !{
             do i=1,nspcion !{
-              if(c.eq.spcsion(i)) k=-i
+              if(streql(c,spcsion(i))) k=-i
             end do !}
           end if !}
 	  if(k.eq.0) then !{
@@ -582,13 +585,13 @@ cank        isrsp(l)=spcsrsp(l)
 	
 	k=0
 	c=spcsrtp(l)
-	if(c.ne.' ') then !{
+	if(.not.streql(c,' ')) then !{
           do i=1,nspcatm !{
-            if(c.eq.spcsatm(i)) k=i
+            if(streql(c,spcsatm(i))) k=i
           end do !}
           if(k.eq.0) then !{
             do i=1,nspcmol !{
-              if(c.eq.spcsmol(i)) k=-i
+              if(streql(c,spcsmol(i))) k=-i
             end do !}
           end if !}
 	  if(k.eq.0) then !{

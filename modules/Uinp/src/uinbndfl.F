@@ -14,6 +14,8 @@ c=======================================================================
       logical ex,uex,hlp_fl1,hlp_fl2
       real hlp_f1
       character hlp_c*2
+      logical streql
+      external streql
 c=======================================================================
 c*** Determine the default source scaling relations
 c#ifdef DBG
@@ -22,22 +24,22 @@ c#endif
       do l=1,nspcncl !{
       	j=0
 	do i=1,nspdgen !{
-	  if(spcsncl(l).eq.spcdgen(i)) j=i
+	  if(streql(spcsncl(l),spcdgen(i))) j=i
 	end do !}
 c	print *,'l,j,spcsncl =',l,j,'  ',spcsncl(l)
 	ex=.false.
 	uex=.false.
 	if(j.gt.0) then !{
 c          print *,'j.gt.0. dscbndx = ',dscbndx(j)
-	  if(dscbndx(j).eq.'-') then !{
+	  if(streql(dscbndx(j),'-')) then !{
             igs_hlp(l)=0
-          else if(dscbndx(j).eq.'?') then !}{
+          else if(streql(dscbndx(j),'?')) then !}{
             igs_hlp(l)=-1
-          else if(dscbndx(j).eq.'*') then !}{
+          else if(streql(dscbndx(j),'*')) then !}{
 c*** Hydrogen species
             do k=1,3 !{
               do i=1,nspcncl !{
-          	if(spcsncl(i).eq.spcdgen(k)) then !{
+          	if(streql(spcsncl(i),spcdgen(k))) then !{
           	  if(ex) then !{
           	    write(*,*) 'Ambiguous hydrogen species - no ',
      ,    	      'scaling with generic hydrogen !!!'
@@ -57,20 +59,20 @@ c	print *,'l,ex,igs_hlp =',l,ex,igs_hlp(l)
 	if(uex) then !{
 	  if(j.eq.0) then !{
 	    igs_hlp(l)=l
-	  else if(dscbndx(j).eq.'=') then !}{
+	  else if(streql(dscbndx(j),'=')) then !}{
 	    igs_hlp(l)=l
 	  else !}{
 	    hlp_c=dscbndx(j)
 	    ex=.false.
 	    do i=1,nspcncl !{
-	      if(spcsncl(i).eq.hlp_c) then !{
+	      if(streql(spcsncl(i),hlp_c)) then !{
 	    	igs_hlp(l)=i
 	    	ex=.true.
 	      end if !}
 	    end do !}
 	    if(.not.ex) then !{
 	      do i=1,nspcncl !{
-	    	if(spcsncl(i).eq.hlp_c) ex=.true.
+	    	if(streql(spcsncl(i),hlp_c)) ex=.true.
 	      end do !}
 	      if(ex) write(*,*) 'No species ',hlp_c,' found - ',
      ,	    	'no scaling for ',spcsncl(j)
@@ -141,7 +143,7 @@ c*** Take the data from the boundary default
 	      ex=.true.
 	      do k=1,nspdgen !{
 	      	if(ex) then !{
-		  if(spcsncl(l).eq.spcdgen(k)) then !{
+		  if(streql(spcsncl(l),spcdgen(k))) then !{
 c*** Take the default for the generic species
 		    j=1
 		    if(isp.eq.nspcpls .or. l.ne.spcsrnp(isp+1)) j=2
