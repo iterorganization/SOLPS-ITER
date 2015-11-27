@@ -312,7 +312,7 @@ c***   chemical sputtering
 
 c=======================================================================
 c***  checks if additional chemical sputtering variable 
-c***  number ch is sutable for surface card number i
+c***  number ch is suitable for surface card number i
        logical function checkchm(ch,i) !{
         integer ch,i,j
         j=chemindex(ch)                    
