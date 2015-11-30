@@ -115,7 +115,7 @@ ifneq (${MOD},o)
 	rm -f ${OBJDIR}/*.${MOD}
 endif
 
-depend: ${OBJS:.o=.F} uiblkd.F uinput.F uiblb2.F ub2p.F
+depend: ${OBJS:.o=.F} uiblkd.F uinput.F uiblb2.F ub2p.F ${SRCDIR}/git_version_Uinp.h
 	`which makedepend` -p'$${OBJDIR}/' ${SOLPS_CPP} -f- ${INCLUDE} $^ | \
 	sed 's,^$${OBJDIR}/[^ ][^ ]*/,\$${OBJDIR}/,' | \
 	sed 's,: ${SOLPSTOP},: $${SOLPSTOP},' > ${OBJDIR}/dependencies.${COMPILER}
