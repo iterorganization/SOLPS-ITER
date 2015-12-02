@@ -10,15 +10,9 @@
 
 setenv PATH ${PATH}:/afs/ipp-garching.mpg.de/@sys/bin
 
-set solpstop=`climb_and_look_for SOLPSTOP`
-if (-e $solpstop) then
- setenv SOLPSTOP "`cat $solpstop`"
-else
- setenv SOLPSTOP "`echo $PWD | sed 's:/runs/.*::'`"
-endif
-pushd $SOLPSTOP
+pushd #SOLPSTOP#
 source setup.csh
-echo Using SOLPSTOP = $SOLPSTOP
+echo Using SOLPSTOP = #SOLPSTOP#
 popd
 
 set USE_MPI=""
@@ -29,6 +23,7 @@ if ($?SOLPS_MPI) then
   set USE_MPI=`echo $USE_MPI | sed -e 's:-m :-m ''":' -e 's:$:"'':'`
 endif
 
+update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"
 update_solps_run_status "Started on `hostname` at `date`"
 
 time b2run -s ${USE_MPI} b2mn | gzip -9 >! run.log.gz

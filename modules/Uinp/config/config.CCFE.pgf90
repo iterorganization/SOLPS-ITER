@@ -4,7 +4,6 @@ ifndef LD_MSCL
 endif
 
 FC	 = pgf90
-
 ifdef SOLPS_DEBUG
 FFLAGS	 = -g 
 else

@@ -39,13 +39,17 @@ loop:
 endloop:
   set debug=""
   set TIME=time
+
+argloop:
   if ("X${1}X" == "X-nX") then
     shift
     set debug="-n"
+    goto argloop
   endif
   if ("X${1}X" == "X-sX") then
     shift
     setenv STAND_ALONE yes
+    goto argloop
   endif
   if ("X${1}X" == "X-mX") then
     shift
@@ -55,15 +59,16 @@ endloop:
     endif
     set TIME=`echo $argv | sed -e 's:^"::' -e 's:" .*::'`
     set nargs=`echo $TIME | awk '{print split($0,args," ")}'`
-    argloop:
+    mpiloop:
       if ($nargs > 0) then
         shift
         @ nargs = $nargs - 1
       else
-        goto argloopend
+        goto mpiloopend
       endif
-      goto argloop
-    argloopend:
+      goto mpiloop
+    mpiloopend:
+    goto argloop
   endif
   if ("X${1}X" == "X-dX") then
     shift
@@ -76,7 +81,8 @@ endloop:
     else  
       set TIME="$1"
       shift
-    endif 
+    endif
+    goto argloop 
   endif
   if ("X${argv}X" == "XX") set argv="b2mn"
   set CMD=`echo $argv" " | sed -e 's: :.prt :g'`

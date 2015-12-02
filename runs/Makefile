@@ -64,7 +64,11 @@ target_rd = b2rd.prt
 
 scandir := $(shell cd .. ; pwd)
 projdir := $(shell cd ../.. ; pwd)
+ifeq ($(shell [ -d ${scandir}/TRIANG ] && echo yes || echo no ),yes)
 triangdir := $(shell cd $(scandir)/TRIANG ; pwd)
+else
+triangdir := $(shell cd $(scandir)/baserun ; pwd)
+endif
 baserundir := $(shell cd $(scandir)/baserun ; pwd)
 savefiles := $(shell echo ${PLASMASTATE} | sed -e 's:plasmastate:b2.*_save.parameters:')
 

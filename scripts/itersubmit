@@ -19,17 +19,36 @@ if ("X$1X" == "X-mX") then
   shift
 endif
 
+set solpstop=`climb_and_look_for SOLPSTOP`
+if (-e $solpstop) then
+ setenv SOLPSTOP "`cat $solpstop`"
+else
+ setenv SOLPSTOP "`echo $PWD | sed 's:/runs/.*::'`"
+endif
+
 if ($1 == "") then
   if (-e input.dat) then
     echo Assuming run with Eirene
     echo No argument is specified. Looking for QSUB.iter_coupled$compress
     set QSUB=`climb_and_look_for QSUB.iter_coupled$compress`
-    if ($QSUB == "//QSUB.iter_coupled$compress") set QSUB=""
+    if ($QSUB == "//QSUB.iter_coupled$compress") then
+      if (-e $SOLPSTOP/runs/QSUB.iter_coupled$compress) then
+        set QSUB="$SOLPSTOP/runs/QSUB.iter_coupled$compress"
+      else
+        set QSUB=""
+      endif
+    endif
   else
     echo Assuming standalone run
     echo No argument is specified. Looking for QSUB.iter$compress
     set QSUB=`climb_and_look_for QSUB.iter$compress`
-    if ($QSUB == "//QSUB.iter$compress") set QSUB=""
+    if ($QSUB == "//QSUB.iter$compress") then
+      if (-e $SOLPSTOP/runs/QSUB.iter$compress) then
+        set QSUB="$SOLPSTOP/runs/QSUB.iter$compress"
+      else
+        set QSUB=""
+      endif
+    endif
   endif
 else if (-e $1) then
   echo Submission file $1 is specified as an argument.
@@ -40,7 +59,11 @@ else
   echo Looking for submission file $1 
   set QSUB=`climb_and_look_for $1`
   if ($QSUB == "//"$1) then
-    set QSUB=""
+    if (-e $SOLPSTOP/runs/$1) then
+      set QSUB="$SOLPSTOP/runs/$1"
+    else
+      set QSUB=""
+    endif
   else
     echo Submission file $QSUB is found
   endif
