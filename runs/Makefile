@@ -157,6 +157,7 @@ endif
 	-[ -e b2mn.exe.dir/b2tallies.nc ] && mv b2mn.exe.dir/b2tallies.nc .
 	-[ -e b2mn.exe.dir/tran ] && mv b2mn.exe.dir/tran b2mn.exe.dir/tran?? .
 	-[ -e b2mn.exe.dir/tracing ] && rmdir b2mn.exe.dir/tracing
+	-[ -e b2mn.exe.dir/b2fstati_with-ua ] && { mv b2fstati b2fstati_with+ua ; mv b2mn.exe.dir/b2fstati_with-ua b2fstati ; touch b2fstate }
 	-rmdir b2mn.exe.dir
 
 ifndef STAND_ALONE
@@ -188,6 +189,7 @@ endif
 	-[ -e b2mn.exe.dir/b2tallies.nc ] && mv b2mn.exe.dir/b2tallies.nc .
 	-[ -e b2mn.exe.dir/tran ] && mv b2mn.exe.dir/tran b2mn.exe.dir/tran?? .
 	-[ -e b2mn.exe.dir/tracing ] && rmdir b2mn.exe.dir/tracing
+	-[ -e b2mn.exe.dir/b2fstati_with-ua ] && { mv b2fstati b2fstati_with+ua ; mv b2mn.exe.dir/b2fstati_with-ua b2fstati }
 	-rmdir b2mn.exe.dir
 
 ifndef STAND_ALONE
