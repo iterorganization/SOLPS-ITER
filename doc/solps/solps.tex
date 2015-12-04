@@ -5955,6 +5955,10 @@ Zhdanov fit to Braginskii and the \SOLPSfour values.
 \chapter{Model equations for B2.5}
 \label{cha:equations}\index{B2.5, model}\index{B2.5, equations}\index{equations}\index{model}
 
+A note about sign conventions. The toroidal magnetic field component $b_z$ is positive if the toroidal magnetic field is directed {\em clockwise} when viewing the tokamak from above. The poloidal magnetic field component $b_x$ is positive if the poloidal magnetic field is directed {\em counterclockwise} when viewing the poloidal plane with the central axis line on its left. The radial coordinate $y$ increases as one crosses the separatrix from the core (or Private flux) region into the main SOL region (as so is minimum at the magnetic axis). The poloidal coordinate $x$ follows the same convention as the poloidal magnetic field (positive is counterclockwise).
+
+Is it important to know, that, in the equations below, the parallel velocity $V_\parallel$ is a true parallel velocity, i.e. it changes sign if the poloidal magnetic field component does, namely: $V_\parallel = \vec{V} \cdot \vec{B}$. This applies to all species, including electrons, meaning $V_{\parallel a}$ and $V_{\parallel e}$. However, the poloidal projections of the fluxes and currents, such as $\Gamma_{ax}$, are positive when the are colinear with $\vec{e}_x$, i.e. point in the direction of increasing $x$. The exception to this is the parallel current, $j_\parallel$. In the equations below, it has the same sign convetion as the parallel velocity. In the actual code, because it is treated as a flux, it follows the sign convention of the fluxes. This therefore means that the code does not follow $j_\parallel$, but rather $j_\parallel \cdot |b_x|/b_x$.
+
 %-------- Equations by S.P. Voskoboynikov ---------
 
 \begin{equation}
