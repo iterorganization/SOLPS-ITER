@@ -31,7 +31,7 @@ OBJDEST = -module ${OBJDIR}
 BLD = ar rcv
 
 GRLIBES = ${NCARG}
-LDLIBES = -L${SOLPSLIB} ${LD_NETCDF} ${NAG} -lblas
+LDLIBES = -L${SOLPSLIB} ${LD_NETCDF} ${NAG} ${LD_MSCL}
 
 ifdef USE_EIRENE
 LDLIBESEXTRA = ${OBJDIR}/libeirene.a ${OBJDIR}/grlib.o ${LD_NAG}

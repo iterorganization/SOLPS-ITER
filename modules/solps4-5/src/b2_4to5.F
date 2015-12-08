@@ -289,6 +289,12 @@ cxpb
      ,         itsput_chemical, issput_chemical, igass_chemical
       use eirdiag
      , , only: lvib, lhalpha
+      use ccoupl
+     , , only: nspze_eir => nspze, nspzi_eir => nspzi, ntgprt
+      use comsou
+     , , only: nlatm, nlmol, nlpls, nspez
+      use cinit
+     , , only: indsrc
       implicit none
 #     include <DIMENSIONS.F>
 #     include <KOPPLDIM.F>
@@ -306,7 +312,7 @@ cxpb
 #     include <COMEQ.F>
 #     include <CCUT.F> 
 
-      integer is
+      integer is, it, k
       external subini, subend
 
       call subini('b2convi1')  
@@ -420,8 +426,40 @@ cxpb
       rcstart_4(1:nstrai_4) = rcstart(1:nstrai_4)
       rcend_4(1:nstrai_4) = rcend(1:nstrai_4)
       recyc_4(1:ns_4,1:nstrai_4) = recyc(1:ns_4,1:nstrai_4)
-      nspzi_4(1:nstrai_4) = nspzi(1:nstrai_4)
-      nspze_4(1:nstrai_4) = nspze(1:nstrai_4)
+      do is = 1, nstrai_4
+        nspzi_4(is) = nspzi(is)
+        nspze_4(is) = nspze(is)
+        do it = 1, ntgprt(is)
+          nspzi_4(is) = max(nspzi_4(is),nspzi_eir(is,it))
+          nspze_4(is) = min(nspze_4(is),nspze_eir(is,it))
+        end do
+        if (indsrc(is).ne.6) then
+          if (nlatm(is)) then
+            k = 0
+            do it = 1, nspez(is)-1
+              k = k + nfluids(it)
+            end do
+            nspzi_4(is) = k+1
+            nspze_4(is) = k+nfluids(nspez(is))
+          else if (nlmol(is)) then
+            k = 0
+            do it = 1, lmolscl(nspez(is))-1
+              k = k + nfluids(it)
+            end do
+            nspzi_4(is) = k+1
+            nspze_4(is) = k+nfluids(lmolscl(nspez(is)))
+          else if (nlpls(is)) then
+            k = 0
+            it = 1
+            do while (k+nfluids(it).lt.nspez(is) .and. it.le.nspecies)
+              k = k + nfluids(it)
+              it = it + 1
+            end do
+            nspzi_4(is) = k+1
+            nspze_4(is) = k+nfluids(it)
+          endif
+        endif
+      end do
       dt_eirene_fudge_4 = dt_eirene_fudge
       eirene_step_cpu_4 = eirene_step_cpu
       eirene_mod_4 = eirene_mod
@@ -1251,8 +1289,14 @@ c
       implicit none
 
       integer nx,ny,ns
-      integer is, ib, ireg, ireg_4
+      integer is, js, ib, it, ireg, ireg_4
 
+      real (kind=R8) :: amtol
+      parameter (amtol=1.0e-2_R8)
+      logical lnext
+      lnext(is,js) = zamax(is).lt.zamin(js).and.zn(is).eq.zn(js).and.
+     &  abs(am(is)-am(js)).lt.amtol
+      intrinsic abs, min, max
       external subini, subend, xertst 
 
       call subini('b2convi2')
@@ -1366,6 +1410,12 @@ c Fill out b2mod_neutrals_namelist data
       do is = 1, nstrai
         if (crcstra(is).eq.'V') volrecstart(is) = volrecstart_4
         if (nspzi_4(is).ne.0) species_start(is) = is1(nspzi_4(is))
+        if (species_start(is).gt.0 .and. species_start(is).lt.ns) then
+          if (.not.is_neutral(species_start(is))) then
+            if (lnext(species_start(is)-1,species_start(is)))
+     >       species_start(is) = species_start(is)-1
+          endif
+        endif
         if (nspze_4(is).ne.0) then
           species_end(is) = is1(nspze_4(is))
         else

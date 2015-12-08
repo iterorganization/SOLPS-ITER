@@ -25,7 +25,7 @@ OBJDEST =
 BLD = ar rcv
 
 GRLIBES = ${LD_NCARG}
-LDLIBES = ${LD_NAG} ${LD_NETCDF} -lblas
+LDLIBES = ${LD_NAG} ${LD_NETCDF} ${LD_MSCL}
 # LDLIBES = -lblas ${LD_NAG} -lmass
 
 LD = f90

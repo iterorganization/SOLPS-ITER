@@ -26,7 +26,7 @@ endif
 
 COMPILE  	= ${FC} -c ${FFLAGS}
 
-LDLIBES   	= -L${SOLPSLIB} -L/usr/local/lib ${LD_NAG} ${LD_MSCL} ${LD_NETCDF} -lblas
+LDLIBES   	= -L${SOLPSLIB} -L/usr/local/lib ${LD_NAG} ${LD_MSCL} ${LD_NETCDF}
 LDEXTRA	 	= -Wl,-Map,${OBJDIR}/loadmap
 
 LD		= ${FC}

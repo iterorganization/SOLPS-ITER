@@ -11335,8 +11335,10 @@ The arrays {\bf ixlt}, {\bf ixeq}, {\bf ixgt}, {\bf iylt}, {\bf iyeq}, {\bf iygt
 with which the logical comparison is done. If the comparison test is true, the arrays
 will contain 1.0, otherwise they will contain zero.
 
+Please note that the sign convention for the parallel ion ({\bf ua}) and electron ({\bf ue}) velocity depends on the sign of the poloidal magnetic field. The poloidal field is positive if it points if the direction of increasing poloidal index $ix$. The parallel velocities are positive if they point in the {\em same direction as the poloidal magnetic field}. Note further that this sign convention {\em does not apply} to the parallel current {\bf fchp}, for which the standard sign convention applies, i.e. it is positive if pointing in the direction of increasing poloidal index $ix$.
+ 
 The commands acting on the matrix stack are given in table
-\ref{tab:available-commands}.  These involve some manipulation or use of
+\ref{tab:available-commands}. These involve some manipulation or use of
 the data on the "matrix" stack.  The stack requirements of each command
 are shown in the table for the integer ('i'), real ('r'), string ('s'),
 matrix ('m'), wall ('w') and target ('t') stacks. Whenever these stack requirements

@@ -11,7 +11,8 @@ cd convert
 cp /archive/1/kukusha/archive/extra/arch_2/B2E/b2arch/$DEVICE/$1/* .
 cp b2.parameters b2.parameters.src
 cp input.eir input.dat
-b2sxdr
+setup_baserun_eirene_links
+b2sxdr > b2sx.log
 cp b2.boundary.parameters.5 b2.boundary.parameters
 cp b2.transport.parameters.5 b2.transport.parameters
 cp b2mn.dat.5 b2mn.dat

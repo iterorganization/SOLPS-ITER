@@ -23,6 +23,32 @@
       use b2mod_b2cmfs
       use parmmod
       use ccoupl
+      use ctrcei
+      use cgeom
+      use csdvi
+      use clogau
+      use cpolyg
+      use cadgeo
+      use comusr
+     , , only: alloc_comusr
+      use cplot
+      use cai
+      use cestim
+      use comprt
+      use cinit
+      use cupd
+      use cgrid
+      use cspez
+      use czt1
+      use ctext
+      use ctetra
+      use cpes
+      use comsou
+      use comspl
+      use clgin
+      use comxs
+      use comnnl
+      use ctrig
       use braeir
       use eirdiag
      , ,only: alloc_eirdiag
@@ -111,7 +137,7 @@
 
 *   ..local variables
       integer nout(0:4), idum(0:9), nx, ny, ns
-      integer is, ix, iy, n2
+      integer is, it, ix, iy, n2
       real (kind=R8) :: parg(0:99)
       real (kind=R8), allocatable :: wrk(:,:,:) 
       logical ex
@@ -150,7 +176,6 @@ c
         STANDARD_INPUT=45
         open(unit=45,file='input.dat')
         CALL FIND_PARAM
-        close(45)
         CALL SET_PARMMOD(1)
         write(*,*) 'Called FIND_PARAM'
         write(*,*) '   NDX = ',NDX
@@ -162,9 +187,35 @@ c
         write(*,*) '  NION = ',NION
         write(*,*) '  NPLS = ',NPLS
         write(*,*) 'NLMPGS = ',NLMPGS
-        CALL ALLOC_BRAEIR(NDX,NDY,NFL)
-        CALL ALLOC_CCOUPL(1)
-        CALL ALLOC_EIRDIAG
+        CALL ALLOC_CLOGAU
+        CALL ALLOC_COMPRT
+        CALL ALLOC_CESTIM(1)  !VKMPI
+        CALL ALLOC_COMUSR(1)  
+        CALL ALLOC_CADGEO
+        CALL ALLOC_CAI
+!pb      CALL ALLOC_CGRPTL
+        CALL ALLOC_CPLOT
+        CALL ALLOC_CINIT
+        CALL ALLOC_CUPD
+        CALL ALLOC_CPOLYG
+        CALL ALLOC_CGRID
+        CALL ALLOC_CSPEZ
+        CALL ALLOC_CZT1(1)
+        CALL ALLOC_CTRCEI
+        CALL ALLOC_CGEOM(1) !VK (1)
+        CALL ALLOC_CSDVI(1)
+        CALL ALLOC_CTETRA
+        CALL ALLOC_CPES
+        CALL ALLOC_COMSOU(1)
+        CALL ALLOC_COMSPL
+        CALL ALLOC_CTEXT(1)
+        CALL ALLOC_CLGIN
+        CALL ALLOC_COMXS(1)
+        CALL ALLOC_CTRIG
+        CALL ALLOC_COMNNL
+        CALL SETCON
+        CALL INPUT
+        close(45)
       endif
       if (.not.ex) then
         natm = DEF_NATM

@@ -27,10 +27,10 @@
  endif
  LIBB2 = libb2.a libb2aux.a
  ifeq ($(realkind),4)
-  LDLIBES = $(LIBB2) $(LD_NCARG) $(LAPACK) $(LD_NAG)
+  LDLIBES = $(LIBB2) $(LD_NCARG) $(LAPACK) $(LD_NAG) $(LD_MSCL)
  endif
  ifeq ($(realkind),8)
-  LDLIBES = $(LIBB2) $(LAPACK) $(LD_NAG)
+  LDLIBES = $(LIBB2) $(LAPACK) $(LD_NAG) $(LD_MSCL)
  endif
  LD = fort77
  LDOPTS = $(nil)

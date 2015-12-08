@@ -23,7 +23,7 @@ MOD = o
 BLD = ar rcv
 
 GRLIBES = $(LD_NCARG)
-LDLIBES = $(LD_NAG) -lblas
+LDLIBES = $(LD_NAG) $(LD_MSCL)
 
 LD = f90 -lapp
 LD = f90
