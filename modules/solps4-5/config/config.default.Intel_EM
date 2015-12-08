@@ -26,22 +26,18 @@ endif
 
 COMPILE  	= ${FC} -c ${FFLAGS}
 
-LDLIBES   	= -L${SOLPSLIB} -L/usr/local/lib ${LD_NAG} ${LD_MSCL} ${LD_NETCDF}
+LDLIBES  	= ${LD_NAG} ${LD_MSCL} ${LD_NETCDF}
 LDEXTRA	 	= -Wl,-Map,${OBJDIR}/loadmap
 
-LD		= ${FC}
+LD		    = ${FC}
 LDOPTS		=
 
-BLD 		= ar rcv
+BLD 		  = ar rcv
 
 INCMOD 		= -module 
-MOD 		= mod
+MOD 		  = mod
 OBJDEST 	=
 
 GRLIBES 	= ${LD_NCARG}
-
-ifdef USE_EIRENE
-LDLIBESEXTRA 	= ${OBJDIR}/libeirene.a ${OBJDIR}/grlib.o ${LD_NAG}
-endif
 
 LCPP 		= ${LD_SONNET}

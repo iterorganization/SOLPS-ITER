@@ -21,8 +21,8 @@
  BLD = ar rcv
  ifeq ($(HOST_NAME),NERSC)
   LAPACK = -lblaslapack
-  NAG = -L$(HOME)/lib -lnagsubst
-  NCARG = -L$(NCARG_ROOT)/lib \
+  LD_NAG = -L$(HOME)/lib -lnagsubst
+  LD_NCARG = -L$(NCARG_ROOT)/lib \
     -lncarg -lncarg_gks -lncarg_c -lncarg_loc -lX11 -lm
  endif
  LIBB2 = libb2.a libb2aux.a

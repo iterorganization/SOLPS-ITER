@@ -30,12 +30,8 @@ OBJDEST = -module ${OBJDIR}
 
 BLD = ar rcv
 
-GRLIBES = ${NCARG}
-LDLIBES = -L${SOLPSLIB} ${LD_NETCDF} ${NAG} ${LD_MSCL}
-
-ifdef USE_EIRENE
-LDLIBESEXTRA = ${OBJDIR}/libeirene.a ${OBJDIR}/grlib.o ${LD_NAG}
-endif
+GRLIBES = ${LD_NCARG}
+LDLIBES = ${LD_NETCDF} ${LD_NAG} ${LD_MSCL}
 
 LD = ifort
 # LDOPTS = -Bstatic

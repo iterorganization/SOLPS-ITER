@@ -30,11 +30,7 @@ OBJDEST =
 BLD = ar rcv
 
 GRLIBES = ${LD_NCARG}
-LDLIBES = ${LD_NAG} -L${SOLPSLIB} ${LD_NETCDF} ${LD_MSCL}
-
-ifdef USE_EIRENE
-LDLIBESEXTRA = ${OBJDIR}/libeirene.a ${OBJDIR}/grlib.o ${LD_NAG}
-endif
+LDLIBES = ${LD_NAG} ${LD_NETCDF} ${LD_MSCL}
 
 LD = lf95
 # LDOPTS = -Bstatic
