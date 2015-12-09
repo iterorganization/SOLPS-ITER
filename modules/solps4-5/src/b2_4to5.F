@@ -345,7 +345,7 @@ cxpb
       allocate(lstrascl_4(1:nstrai_4,0:nspecies_4))
       allocate(lmolscl_4(1:nmol))
       allocate(lcns_4(1:nsts))
-      allocate(lsns_4(1:nlimps))
+      allocate(lsns_4(1:nstrai_4))
       allocate(ltns_4(1:nsts))
       allocate(msns_4(2,1:nstrai_4))
       allocate(mlcmp_4(1:natm,1:nmol))
@@ -459,6 +459,7 @@ cxpb
             nspze_4(is) = k+nfluids(it)
           endif
         endif
+        ksns_4(is) = ntgprt(is)
       end do
       dt_eirene_fudge_4 = dt_eirene_fudge
       eirene_step_cpu_4 = eirene_step_cpu
@@ -470,7 +471,7 @@ cxpb
       l_neutrad_4 = l_neutrad
       lmolscl_4 = lmolscl
       lcns_4 = lcns
-      lsns_4(1:nlimps) = lsns(1:nlimps)
+      lsns_4(1:nstrai_4) = lsns(1:nstrai_4)
       ltns_4 = ltns
       msns_4(1:2,1:nstrai_4) = msns(1:2,1:nstrai_4)
       mlcmp_4 = mlcmp
@@ -1396,13 +1397,20 @@ c Fill out b2mod_neutrals_namelist data
       itsput_chemical = itsput_chemical_4
       issput_chemical = issput_chemical_4
 #endif
-      lstrascl(1:nstrai,1:nspecies_4) = 
-     . lstrascl_4(1:nstrai,1:nspecies_4)
+      do ib = 1, nstrai
+        do is = 1, nspecies_4
+          if (lstrascl_4(ib,is).ge.0) then
+            lstrascl(ib,is) = lstrascl_4(ib,is)
+          else
+            lstrascl(ib,is) = 0
+          end if
+        end do
+      end do
       l_neutrad = l_neutrad_4
       lmolscl = lmolscl_4
       ksns(1:nstrai) = ksns_4(1:nstrai)
       lcns = lcns_4
-      lsns(1:nlimps) = lsns_4(1:nlimps)
+      lsns(1:nstrai) = lsns_4(1:nstrai)
       ltns = ltns_4
       msns(1:2,1:nstrai) = msns_4(1:2,1:nstrai)
       mlcmp = mlcmp_4
@@ -2594,7 +2602,7 @@ c
      &    minval(species_end).lt.ns-1) then
         write(hlp_frm,'(a,i2,a)') "(a,",nstrai,"(1x,i2,','))"
         write(34,hlp_frm) 'SPECIES_START=',species_start(1:nstrai)
-        write(34,hlp_frm) 'SPECIES_END=',species_end(1:nstrai)
+        write(34,hlp_frm) 'SPECIES_END=  ',species_end(1:nstrai)
       endif
       write(hlp_frm,'(a,i2,a)') '(a,1p,',nstrai,'(1x,e9.2,'',''))'
       do ib = 1, nstrai
@@ -2676,11 +2684,11 @@ c
         ntns=ii(1)-1
       end if !}
       if (ncns.gt.0 .and. maxval(lcns).gt.0) then
-        write(hlp_frm,'(a,i2,a)') '(a,',ncns,'(1x,i2,'',''))'
+        write(hlp_frm,'(a,i2,a)') '(a,',ncns,'(1x,i3,'',''))'
         write(34,hlp_frm) 'LCNS=',(lcns(ib),ib=1,ncns)
       end if
       if (ntns.gt.0 .and. maxval(ltns).gt.0) then
-        write(hlp_frm,'(a,i2,a)') '(a,',ntns,'(1x,i2,'',''))'
+        write(hlp_frm,'(a,i2,a)') '(a,',ntns,'(1x,i3,'',''))'
         write(34,hlp_frm) 'LTNS=',(ltns(ib),ib=1,ntns)
       end if
       nsns = 0
@@ -2694,9 +2702,10 @@ c
         end if
       end do
       write(hlp_frm,'(a,i2,a)') '(a,',nsns,'(1x,i3,'',''))'
-      if (nsns.gt.0 .and. maxval(lsns).gt.0) then
+      if (nsns.gt.0 .and. 
+     &   (maxval(lsns).gt.0 .or. minval(lsns).lt.0)) then
         do ib = 1, nsns
-          if (lsns(ib).gt.nlim) lsns(ib)=lsns(ib)-nlim
+          if (lsns(ib).gt.nlim) lsns(ib)=nlim-lsns(ib)
         end do 
         write(34,hlp_frm) 'LSNS=',(lsns(ib),ib=1,nsns)
       end if

@@ -73,7 +73,11 @@ baserundir := $(shell cd $(scandir)/baserun ; pwd)
 savefiles := $(shell echo ${PLASMASTATE} | sed -e 's:plasmastate:b2.*_save.parameters:')
 
 echo:
-	@echo scandir=${scandir} projdir=${projdir} baserundir=${baserundir} savefiles=${savefiles}
+	@echo scandir=${scandir}
+	@echo projdir=${projdir}
+	@echo baserundir=${baserundir}
+	@echo savefiles=${savefiles}
+	@echo triangdir=${triangdir}
 
 #-----------------------------------------------------------------------
 # Directives.

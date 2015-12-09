@@ -16,19 +16,21 @@ b2sxdr > b2sx.log
 cp b2.boundary.parameters.5 b2.boundary.parameters
 cp b2.transport.parameters.5 b2.transport.parameters
 cp b2mn.dat.5 b2mn.dat
+b2run b2ah
 b2run b2ar
 correct_b2yt_timestamps
 b2run b2yt
 cd ..
 cp convert/b2a?.dat baserun
-cp convert/b2fgmtry baserun
+cp convert/b2fgmtry convert/b2ag.prt baserun
+cp convert/b2fpardf convert/b2ah.prt baserun
 cp convert/fort.30 baserun
 cd baserun
-b2run b2ah
+cp ../convert/b2ai.prt .
 cp ../convert/b2fstatt b2fstati
 ln -s $SOLPSTOP/modules/B2.5/Database/stra.dat .
 ln -s $SOLPSTOP/modules/B2.5/Database/weis.dat .
-cp ../convert/b2frates .
+cp ../convert/b2frates convert/b2ar.prt .
 cp ../convert/input.dat.2 input.dat
 cp ../convert/fort.3[3-5] .
 cp ../convert/param.dg .
