@@ -2898,17 +2898,17 @@ c
       write(36,'(a)') '&FEEDBACK_CONTROL'
       if (maxval(na_feedback_choice(0:nspecies-1)).gt.0)
      > write(36,hlp_frm)
-     .     'NA_FEEDBACK_CHOICE=',na_feedback_choice(0:nspecies-1)
+     .     'NA_FEEDBACK_CHOICE=  ',na_feedback_choice(0:nspecies-1)
       if (maxval(na_feedback_option(0:nspecies-1)).gt.0)
      > write(36,hlp_frm)
-     .     'NA_FEEDBACK_OPTION=',na_feedback_option(0:nspecies-1)
+     .     'NA_FEEDBACK_OPTION=  ',na_feedback_option(0:nspecies-1)
       if (maxval(na_feedback_actuator(0:nspecies-1)).gt.0)
      > write(36,hlp_frm)
      .     'NA_FEEDBACK_ACTUATOR=',na_feedback_actuator(0:nspecies-1)
+      write(hlp_frm,'(a,i2,a)') '(1x,a,',nspecies,'(1x,i4,'',''))'
       if (maxval(na_feedback_ib(0:nspecies-1)).gt.0)
      > write(36,hlp_frm)
-     .     'NA_FEEDBACK_IB=',na_feedback_ib(0:nspecies-1)
-      write(hlp_frm,'(a,i2,a)') '(1x,a,',nspecies,'(1x,i4,'',''))'
+     .     'NA_FEEDBACK_IB= ',na_feedback_ib(0:nspecies-1)
       if (maxval(na_feedback_ix1(0:nspecies-1)).gt.-2)
      > write(36,hlp_frm)
      .     'NA_FEEDBACK_IX1=',na_feedback_ix1(0:nspecies-1)
@@ -2926,19 +2926,19 @@ c
       if (maxval(na_feedback_target(0:nspecies-1)).gt.0.0_R8 .or.
      .    minval(na_feedback_target(0:nspecies-1)).lt.0.0_R8)
      > write(36,hlp_frm)
-     .     'NA_FEEDBACK_TARGET=',na_feedback_target(0:nspecies-1)
+     .     'NA_FEEDBACK_TARGET=  ',na_feedback_target(0:nspecies-1)
       if (maxval(na_feedback_alpha(0:nspecies-1)).ne.0.001_R8 .or.
      &    minval(na_feedback_alpha(0:nspecies-1)).ne.0.001_R8)
      > write(36,hlp_frm)
-     .     'NA_FEEDBACK_ALPHA=',na_feedback_alpha(0:nspecies-1)
+     .     'NA_FEEDBACK_ALPHA=   ',na_feedback_alpha(0:nspecies-1)
       if (maxval(na_feedback_beta(0:nspecies-1)).ne.1.0_R8 .or.
      &    minval(na_feedback_beta(0:nspecies-1)).ne.1.0_R8)
      > write(36,hlp_frm)
-     .     'NA_FEEDBACK_BETA=',na_feedback_beta(0:nspecies-1)
+     .     'NA_FEEDBACK_BETA=    ',na_feedback_beta(0:nspecies-1)
       if (maxval(na_feedback_const(0:nspecies-1)).ne.0.0_R8 .or.
      &    minval(na_feedback_const(0:nspecies-1)).ne.0.0_R8)
      > write(36,hlp_frm)
-     .     'NA_FEEDBACK_CONST=',na_feedback_const(0:nspecies-1)
+     .     'NA_FEEDBACK_CONST=   ',na_feedback_const(0:nspecies-1)
       if (maxval(na_feedback_puff_min(0:nspecies-1)).gt.0.0_R8)
      > write(36,hlp_frm)
      .     'NA_FEEDBACK_PUFF_MIN=',na_feedback_puff_min(0:nspecies-1)

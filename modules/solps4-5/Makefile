@@ -128,7 +128,7 @@ ${OBJDIR}/default.o: ${OBJDIR}/ceirsrt.${MOD}
 
 ${OBJDIR}/eirene_f30f31.o: ${OBJDIR}/ctrig.${MOD}
 
-${OBJDIR}/find_param.o: ${OBJDIR}/ccrm.${MOD} ${OBJDIR}/comusr.${MOD} ${OBJDIR}/comprt.${MOD}
+${OBJDIR}/find_param.o: ${OBJDIR}/parmmod.${MOD} ${OBJDIR}/ccrm.${MOD} ${OBJDIR}/comusr.${MOD} ${OBJDIR}/comprt.${MOD}
 
 ${OBJDIR}/if0prm.o: ${OBJDIR}/cinit.${MOD} ${OBJDIR}/comusr.${MOD} ${OBJDIR}/comprt.${MOD}
 
