@@ -124,12 +124,6 @@ ${OBJDIR}/allocate_modules.o: ${OBJDIR}/cadgeo.${MOD} ${OBJDIR}/cai.${MOD} ${OBJ
 
 ${OBJDIR}/b2sxdr.o: ${OBJDIR}/eirmod_parmmod.${MOD} 
 
-${OBJDIR}/b2_4to5.o: ${OBJDIR}/eirmod_parmmod.${MOD} ${OBJDIR}/braeir.${MOD} ${OBJDIR}/eirdiag.${MOD}
-
-${OBJDIR}/b2_4to5.${MOD}: ${OBJDIR}/eirmod_parmmod.${MOD} ${OBJDIR}/braeir.${MOD} ${OBJDIR}/eirdiag.${MOD}
-
-${OBJDIR}/b2_neutrals_namelist.o: ${OBJDIR}/eirmod_parmmod.${MOD} 
-
 ${OBJDIR}/default.o: ${OBJDIR}/ceirsrt.${MOD}
 
 ${OBJDIR}/eirene_f30f31.o: ${OBJDIR}/ctrig.${MOD}
@@ -146,21 +140,6 @@ ${OBJDIR}/input.o: ${OBJDIR}/adsp.${MOD} ${OBJDIR}/cdiprl.${MOD} ${OBJDIR}/censa
 
 ${OBJDIR}/leer.o: ${OBJDIR}/comprt.${MOD}
 
-${OBJDIR}/eirmod_braeir.${MOD}: 
-	ln -sf ${EIRDIR}/eirmod_braeir.${MOD} ${OBJDIR}
-
-${OBJDIR}/eirmod_ctrig.${MOD}:
-	ln -sf ${EIRDIR}/eirmod_ctrig.${MOD} ${OBJDIR}
-
-${OBJDIR}/eirmod_extrab25.${MOD}: 
-	ln -sf ${EIRDIR}/eirmod_extrab25.${MOD} ${OBJDIR}
-
-${OBJDIR}/eirmod_parmmod.${MOD}: ${OBJDIR}/parmmod.${MOD} 
-	ln -sf ${OBJDIR}/parmmod.${MOD} $@
-
-${OBJDIR}/eirmod_precision.${MOD}: ${OBJDIR}/precision.${MOD} 
-	ln -sf ${OBJDIR}/precision.${MOD} $@
-
 ${OBJDIR}/emaxw.o: ${OBJDIR}/ccona.${MOD}
 
 ${OBJDIR}/ftabrc1.o: ${OBJDIR}/ccona.${MOD}
@@ -174,7 +153,9 @@ ${OBJDIR}/wneutral.o: ${OBJDIR}/cestim.${MOD} ${OBJDIR}/comusr.${MOD} ${OBJDIR}/
 ${OBJDIR}/wneutral_fluxes.o: ${OBJDIR}/amark_mod.${MOD} ${OBJDIR}/ccona.${MOD} ${OBJDIR}/cestim.${MOD}
 
 ifneq (${MOD},o)
-${OBJDIR}/b2_neutrals_namelist.${MOD}: ${OBJDIR}/eirmod_parmmod.${MOD} 
+${OBJDIR}/b2_4to5.o: ${OBJDIR}/eirmod_parmmod.${MOD} ${OBJDIR}/braeir.${MOD} ${OBJDIR}/eirdiag.${MOD}
+
+${OBJDIR}/b2mod_neutrals_namelist.o: ${OBJDIR}/eirmod_parmmod.${MOD} 
 
 ${OBJDIR}/eirmod_parmmod.o: 
 	ln -sf ${OBJDIR}/parmmod.o $@
@@ -182,7 +163,16 @@ ${OBJDIR}/eirmod_parmmod.o:
 ${OBJDIR}/eirmod_precision.o: 
 	ln -sf ${OBJDIR}/precision.o $@
 
-${OBJDIR}/adsp.o: ${SRCDIR}/Eirene_modules/adsp.F
+${OBJDIR}/eirmod_braeir.o: 
+	ln -sf ${EIRDIR}/eirmod_braeir.o ${OBJDIR}
+
+${OBJDIR}/eirmod_ctrig.o:
+	ln -sf ${EIRDIR}/eirmod_ctrig.o ${OBJDIR}
+
+${OBJDIR}/eirmod_extrab25.o: 
+	ln -sf ${EIRDIR}/eirmod_extrab25.o ${OBJDIR}
+
+$${OBJDIR}/adsp.o: ${SRCDIR}/Eirene_modules/adsp.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/adsp.o -c ${SRCDIR}/Eirene_modules/adsp.F
 
 ${OBJDIR}/amark_mod.o: ${SRCDIR}/Eirene_modules/amark_mod.F
@@ -357,6 +347,27 @@ ${OBJDIR}/precision.o: ${SRCDIR}/Eirene_modules/precision.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/precision.o -c ${SRCDIR}/Eirene_modules/precision.F
 
 endif
+
+${OBJDIR}/b2_4to5.${MOD}: ${OBJDIR}/eirmod_parmmod.${MOD} ${OBJDIR}/braeir.${MOD} ${OBJDIR}/eirdiag.${MOD}
+
+${OBJDIR}/b2mod_b2_to_astra.${MOD}: ${OBJDIR}/eirmod_extrab25.${MOD}
+
+${OBJDIR}/b2mod_neutrals_namelist.${MOD}: ${OBJDIR}/eirmod_parmmod.${MOD} 
+
+${OBJDIR}/eirmod_braeir.${MOD}: 
+	ln -sf ${EIRDIR}/eirmod_braeir.${MOD} ${OBJDIR}
+
+${OBJDIR}/eirmod_ctrig.${MOD}:
+	ln -sf ${EIRDIR}/eirmod_ctrig.${MOD} ${OBJDIR}
+
+${OBJDIR}/eirmod_extrab25.${MOD}: 
+	ln -sf ${EIRDIR}/eirmod_extrab25.${MOD} ${OBJDIR}
+
+${OBJDIR}/eirmod_parmmod.${MOD}: ${OBJDIR}/parmmod.${MOD} 
+	ln -sf ${OBJDIR}/parmmod.${MOD} $@
+
+${OBJDIR}/eirmod_precision.${MOD}: ${OBJDIR}/precision.${MOD} 
+	ln -sf ${OBJDIR}/precision.${MOD} $@
 
 ${OBJDIR}/adsp.${MOD}: ${SRCDIR}/Eirene_modules/adsp.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/adsp.o -c ${SRCDIR}/Eirene_modules/adsp.F
