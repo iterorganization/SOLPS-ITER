@@ -172,7 +172,7 @@ ${OBJDIR}/eirmod_ctrig.o:
 ${OBJDIR}/eirmod_extrab25.o: 
 	ln -sf ${EIRDIR}/eirmod_extrab25.o ${OBJDIR}
 
-$${OBJDIR}/adsp.o: ${SRCDIR}/Eirene_modules/adsp.F
+${OBJDIR}/adsp.o: ${SRCDIR}/Eirene_modules/adsp.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/adsp.o -c ${SRCDIR}/Eirene_modules/adsp.F
 
 ${OBJDIR}/amark_mod.o: ${SRCDIR}/Eirene_modules/amark_mod.F
