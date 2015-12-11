@@ -76,4 +76,9 @@ doc/solps/DIMENSIONS.F
 # Triangular grid files
 modules/Triang/triangles/
 
+# Links to solps4.3 files for converter
+modules/solps4-5/src/solps4_Eirene/*.F
+modules/solps4-5/src/solps4_B2/*.F
+modules/solps4-5/src/B2_include
+modules/solps4-5/src/Eirene_modules
 
