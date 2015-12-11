@@ -209,6 +209,8 @@ ${OBJDIR}/wneutral_fluxes.o: ${OBJDIR}/amark_mod.${MOD} ${OBJDIR}/ccona.${MOD} $
 ifneq (${MOD},o)
 ${OBJDIR}/b2_4to5.o: ${OBJDIR}/eirmod_parmmod.${MOD} ${OBJDIR}/braeir.${MOD} ${OBJDIR}/eirdiag.${MOD}
 
+${OBJDIR}/b2mod_b2_to_astra.o: ${OBJDIR}/eirmod_extrab25.${MOD} 
+
 ${OBJDIR}/b2mod_neutrals_namelist.o: ${OBJDIR}/eirmod_parmmod.${MOD} 
 
 ${OBJDIR}/eirmod_parmmod.o: 
@@ -708,7 +710,16 @@ listobj:
 	echo "$$l" | eval sed "$$E" > ${BASEDIR}/LISTOBJ
 
 links:
-	find ${SRCDIR} -type l -ls | grep -i '/SOLPS4.3/' | rlndr ${SOLPSTOP}/../SOLPS4.3 ${SOLPS4}
+	ln -sf ${SOLPS4}/src/Braams/b2/include ${SRCDIR}/B2_include
+	ln -sf ${SOLPS4}/src/Eirene/src/modules ${SRCDIR}/Eirene_modules
+	-mkdir -p ${SRCDIR}/solps4_B2
+	-mkdir -p ${SRCDIR}/solps4_Eirene
+	cat B2_4.3.source_files | sed -e 's:[^ ]*/: ${SRCDIR}/solps4_B2/:' | paste B2_4.3.source_files - | sed -e "s:^:ln -sf ${SOLPS4}/src/Braams/b2/src/:" > B2_links
+	. B2_links
+	rm B2_links
+	cat Eirene_4.3.source_files | sed -e 's:[^ ]*/: ${SRCDIR}/solps4_Eirene/:' | paste Eirene_4.3.source_files - | sed -e "s:^:ln -sf ${SOLPS4}/src/Eirene/src/:" > Eirene_links
+	. Eirene_links
+	rm Eirene_links
 
 ${BASEDIR}/LISTOBJ: listobj
 
