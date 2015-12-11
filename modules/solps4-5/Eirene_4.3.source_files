@@ -1,4 +1,3 @@
-948 
 broadcast/allocate_modules.F 
 plotting/anpsg.F 
 plotting/anpsgl.F 
@@ -143,6 +142,7 @@ plotting/pltadd.F
 plotting/pltaxi.F 
 plotting/pltin.F 
 plotting/pltka.F 
+plotting/pltki.F 
 plotting/pltku.F 
 plotting/pltlne.F 
 plotting/pltmsk.F 
@@ -172,6 +172,7 @@ mathematic/schebe.F
 plotting/secang.F 
 assistent/second_own.F 
 plotting/secqua.F 
+volume-processes/setamd.F
 startup-routines/setcon.F 
 startup-routines/seteq.F 
 startup-routines/setfit.F 
@@ -213,7 +214,8 @@ couple/wneutral_fluxes.F
 file-handling/wrgeom.F 
 file-handling/wrmesh.F 
 file-handling/wrplam.F 
-file-handling/wrsnap.F 
+file-handling/wrsnap.F
+assistent/wrstrt.F 
 impneut/xersla.F 
 volume-processes/xsecta.F 
 volume-processes/xsecta_param.F 
