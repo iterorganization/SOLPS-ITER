@@ -21,9 +21,6 @@ OBJDIR = ${SOLPSTOP}/modules/solps4-5/builds/${TOOL_CHAIN}
 BASEDIR = ${SOLPSTOP}/modules/solps4-5
 SOLPS4 = ${SOLPSTOP}/../SOLPS4.3
 DEFINES += -DSOLPS4_3 -DB25_EIRENE -DUSE_ARRAYS
-ifeq ($(shell [ -d ${SOLPS4} ] && echo yes || echo no ),no)
-  $(error Invalid SOLPS4 directory address)
-endif
 SRC4LOCAL = ${SOLPSTOP}/modules/solps4-5/src/local_4
 SRC5LOCAL = ${SOLPSTOP}/modules/solps4-5/src/local_5
 INC4LOCAL = ${SOLPSTOP}/modules/solps4-5/src/B2_include.local
@@ -71,6 +68,9 @@ VPATH += ${SRCDIR}/B2.5_modules:${SRCDIR}:${SRCDIR}/solps4_B2:${SRCDIR}/solps4_E
 include ${S45DIR}/config/compile
 ifeq ($(shell [ -e ${S45DIR}/config/config.${HOST_NAME}.${COMPILER}.local ] && echo yes || echo no ),yes)
 include ${S45DIR}/config/config.${HOST_NAME}.${COMPILER}.local
+endif
+ifeq ($(shell [ -d ${SOLPS4} ] && echo yes || echo no ),no)
+  $(error Invalid SOLPS4 directory address)
 endif
 
 ifeq ($(shell [ -e ${BASEDIR}/LISTOBJ ] && echo yes || echo no ),yes)

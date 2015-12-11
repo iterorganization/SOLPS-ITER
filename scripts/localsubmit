@@ -8,7 +8,7 @@ echo ${USER} ${PWD} \${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
 if (-e input.dat) then
    time b2run ${argv} b2mn < input.dat >! run.log
 else
-   time b2run ${argv} -s  b2mn >! run.log
+   time b2run ${argv} -s b2mn >! run.log
 endif
 set msg="Finished on `hostname` at `date`"
 echo ${USER} ${PWD} \${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
