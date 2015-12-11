@@ -111,7 +111,7 @@ XROBJ = ${patsubst %.exe, ${OBJDIR}/%.o, ${PROG_XR}}
 XREXTRA=${OBJDIR}/b2_4to5.o ${OBJDIR}/xerset_5.o ${OBJDIR}/myblass.o
 MNEXTRA=
 
-.PHONY: DEFAULT ALL clean depend listobj tags
+.PHONY: DEFAULT ALL clean depend listobj tags links
 
 ALL: ${XREXE}
 
@@ -691,13 +691,13 @@ endif
 
 ${BASEDIR}/TAGS: tags
 
-tags:
+tags: 
 	rm -f ${BASEDIR}/TAGS ; etags ${TAGSLIST}
 
 clean:
 	rm -f ${OBJDIR}/*.f ${OBJDIR}/*.o ${OBJDIR}/*.${MOD} ${OBJDIR}/*.a ${OBJDIR}/*.exe
 
-listobj:
+listobj: 
 	@rm -f ${BASEDIR}/LISTOBJ; touch ${BASEDIR}/LISTOBJ; l="OBJS ="; \
 	for d in `echo "${VPATH}" | tr : \ `; do \
 		l="$$l `(cd $$d > /dev/null; echo *.[Ff])`"; \
@@ -707,6 +707,9 @@ listobj:
 	done; \
 	echo "$$l" | eval sed "$$E" > ${BASEDIR}/LISTOBJ
 
+links:
+	find ${SRCDIR} -type l -ls | grep -i '/SOLPS4.3/' | rlndr ${SOLPSTOP}/../SOLPS4.3 ${SOLPS4}
+
 ${BASEDIR}/LISTOBJ: listobj
 
 ${OBJDIR}/dependencies: ${SRCDIR}/B2.5_modules/.new_modules
@@ -714,6 +717,7 @@ ifeq ($(shell [ -d ${OBJDIR} ] && echo yes || echo no ),no)
 	-mkdir -p ${OBJDIR}
 endif
 	touch ${OBJDIR}/dependencies
+	${MAKE} links
 	${MAKE} tags
 	${MAKE} listobj
 	${MAKE} depend

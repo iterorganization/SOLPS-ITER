@@ -1,1 +1,1 @@
-../../../../../SOLPS/solps4.3/src/Eirene/src/assistent/bitget.F
+/home/ITER/bonninx/SOLPS-ITER_3/../SOLPS4.3/src/Eirene/src/assistent/bitget.F

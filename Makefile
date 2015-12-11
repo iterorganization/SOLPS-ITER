@@ -151,6 +151,7 @@ ifeq ($(shell [ -e ${SOLPSLIB}/libsonnet.a ] && echo yes || echo no ),no)
 endif
 
 b2sxdr:   # strange sequence of commands, but works!
+	cd modules/solps4-5; ${MAKE} links
 	cd modules/solps4-5; ${MAKE} tags
 	cd modules/solps4-5; ${MAKE} listobj
 	cd modules/solps4-5; ${MAKE} depend
