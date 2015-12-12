@@ -23,7 +23,7 @@ c=======================================================================
       logical ulmlti,ex,carbon,moly,streql
       logical, allocatable :: done(:)
       character utxthd(34)*71, utxtfl(7)*47, ufnm*(*), ucdnmdl*10
-      character utxtgt*76
+      character utxtgt*71
       external streql
       data utxthd /
      1        '** 1. Data for operating mode' ,

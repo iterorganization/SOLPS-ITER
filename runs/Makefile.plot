@@ -32,11 +32,18 @@ target_rd = b2rd.prt
 
 scandir := $(shell cd .. ; pwd)
 projdir := $(shell cd ../.. ; pwd)
+ifeq ($(shell [ -d ${scandir}/TRIANG ] && echo yes || echo no ),yes)
 triangdir := $(shell cd $(scandir)/TRIANG ; pwd)
+else
+triangdir := $(shell cd $(scandir)/baserun ; pwd)
+endif
 baserundir := $(shell cd $(scandir)/baserun ; pwd)
 
 echo:
-	@echo scandir=${scandir} projdir=${projdir} baserundir=${baserundir}
+	@echo scandir=${scandir}
+	@echo projdir=${projdir}
+	@echo baserundir=${baserundir}
+	@echo triangdir=${triangdir}
 
 #-----------------------------------------------------------------------
 # Directives.
@@ -74,7 +81,11 @@ $(target_fu) : b2fgmtry b2fparam b2fstate b2fplasmf
 	cd b2fu.exe.dir ; ${TIME} b2fu.exe ; mv $(target_fu) b2fplasma .. ; rm -f $(notdir $^) .quit
 	-rmdir b2fu.exe.dir
 
+ifndef STAND_ALONE
 $(target_pl) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates fort.33 fort.34 fort.35
+else
+$(target_pl) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates
+endif
 	rm -rf b2pl.exe.dir ; mkdir b2pl.exe.dir ; cp $^ b2pl.exe.dir
 ifndef STAND_ALONE
 	-cp fort.44 input.dat b2pl.exe.dir/
@@ -92,7 +103,11 @@ ifndef STAND_ALONE
 endif
 	-rmdir b2pl.exe.dir
 
+ifndef STAND_ALONE
 $(target_pl.dbx) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates fort.33 fort.34 fort.35
+else
+$(target_pl.dbx) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates
+endif
 	rm -rf b2pl.exe.dir ; mkdir b2pl.exe.dir ; cp $^ b2pl.exe.dir
 ifndef STAND_ALONE
 	-cp fort.44 input.dat b2pl.exe.dir/
@@ -110,7 +125,11 @@ ifndef STAND_ALONE
 endif
 	-rmdir b2pl.exe.dir
 
-$(target_md) : b2mn.dat b2fgmtry b2fparam b2frates b2fstati b2fstate mesh.extra b2md.dat fort.33 fort.34 fort.35 # b2fplasma b2time.nc 
+ifndef STAND_ALONE
+$(target_md) : b2mn.dat b2fgmtry b2fparam b2frates b2fstati b2fstate mesh.extra b2md.dat fort.33 fort.34 fort.35 # b2fplasma b2time.nc
+else
+$(target_md) : b2mn.dat b2fgmtry b2fparam b2frates b2fstati b2fstate mesh.extra b2md.dat # b2fplasma b2time.nc
+endif
 	rm -rf b2md.exe.dir ; mkdir b2md.exe.dir ; cp $^ ds* b2md.exe.dir
 ifndef STAND_ALONE
 	-cp fort.44 input.dat b2md.exe.dir/
@@ -123,7 +142,11 @@ ifndef STAND_ALONE
 endif
 	-rmdir b2md.exe.dir
 
-$(target_md.dbx) : b2mn.dat b2fgmtry b2fparam b2frates b2fstati b2fstate mesh.extra b2md.dat fort.33 fort.34 fort.35 # b2fplasma b2time.nc 
+ifndef STAND_ALONE
+$(target_md.dbx) : b2mn.dat b2fgmtry b2fparam b2frates b2fstati b2fstate mesh.extra b2md.dat fort.33 fort.34 fort.35 # b2fplasma b2time.nc
+else
+$(target_md.dbx) : b2mn.dat b2fgmtry b2fparam b2frates b2fstati b2fstate mesh.extra b2md.dat # b2fplasma b2time.nc
+endif
 	rm -rf b2md.exe.dir ; mkdir b2md.exe.dir ; cp $^ ds* b2md.exe.dir
 ifndef STAND_ALONE
 	-cp fort.44 input.dat b2md.exe.dir/

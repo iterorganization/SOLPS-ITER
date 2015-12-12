@@ -1733,6 +1733,11 @@ by \verb!b2ag.exe!, \verb!b2ah.exe!, \verb!b2ar.exe! and
 usually run in the \verb!baserun! directory, and then \verb!b2mn.exe!
 is run in the actual run directory.
 
+If one is running \verb!B2.5! in stand-alone mode, it is recommended to set the environment variable:
+\begin{verbatim}
+  setenv STAND_ALONE yes
+\end{verbatim}
+
 The general way of running any of these programs is by
 \begin{verbatim}
     gmake -f ../../Makefile b2XX.prt
