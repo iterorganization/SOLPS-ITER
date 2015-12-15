@@ -710,10 +710,10 @@ listobj:
 	echo "$$l" | eval sed "$$E" > ${BASEDIR}/LISTOBJ
 
 links:
-	-[ -d ${SRCDIR}/B2_include ] || ( [ -e ${SRCDIR}/B2_include ] && rm ${SRCDIR}/B2_include )
+	[ -L ${SRCDIR}/B2_include ] && rm -Rf ${SRCDIR}/B2_include || echo > /dev/null
 	-mkdir -p ${SRCDIR}/B2_include
 	lndir ${SOLPS4}/src/Braams/b2/include ${SRCDIR}/B2_include
-	-[ -d ${SRCDIR}/Eirene_modules ] || ( [ -e ${SRCDIR}/Eirene_modules] && rm ${SRCDIR}/Eirene_modules )
+	[ -L ${SRCDIR}/Eirene_modules ] && rm -Rf ${SRCDIR}/Eirene_modules || echo > /dev/null
 	-mkdir -p ${SRCDIR}/Eirene_modules
 	lndir ${SOLPS4}/src/Eirene/src/modules ${SRCDIR}/Eirene_modules
 	-mkdir -p ${SRCDIR}/solps4_B2
