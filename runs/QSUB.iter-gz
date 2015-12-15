@@ -7,7 +7,7 @@
 #PBS -M #EMAIL#
 #PBS -m e
 #PBS -N B2.5
-#PBS -Y
+#PBS -V
 
 # cd "$PBS_O_WORKDIR" || {
 #   echo "Unable to switch to the working directory $PBS_O_WORKDIR"
