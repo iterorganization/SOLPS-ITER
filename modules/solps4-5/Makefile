@@ -710,13 +710,15 @@ listobj:
 	echo "$$l" | eval sed "$$E" > ${BASEDIR}/LISTOBJ
 
 links:
-	ln -sf ${SOLPS4}/src/Braams/b2/include ${SRCDIR}/B2_include
-	ln -sf ${SOLPS4}/src/Eirene/src/modules ${SRCDIR}/Eirene_modules
+	-mkdir -p ${SRCDIR}/B2_include
+	lndir ${SOLPS4}/src/Braams/b2/include ${SRCDIR}/B2_include
+	-mkdir -p ${SRCDIR}/Eirene_modules
+	lndir ${SOLPS4}/src/Eirene/src/modules ${SRCDIR}/Eirene_modules
 	-mkdir -p ${SRCDIR}/solps4_B2
-	-mkdir -p ${SRCDIR}/solps4_Eirene
 	cat B2_4.3.source_files | sed -e 's:[^ ]*/: ${SRCDIR}/solps4_B2/:' | paste B2_4.3.source_files - | sed -e "s:^:ln -sf ${SOLPS4}/src/Braams/b2/src/:" > B2_links
 	. B2_links
 	rm B2_links
+	-mkdir -p ${SRCDIR}/solps4_Eirene
 	cat Eirene_4.3.source_files | sed -e 's:[^ ]*/: ${SRCDIR}/solps4_Eirene/:' | paste Eirene_4.3.source_files - | sed -e "s:^:ln -sf ${SOLPS4}/src/Eirene/src/:" > Eirene_links
 	. Eirene_links
 	rm Eirene_links
