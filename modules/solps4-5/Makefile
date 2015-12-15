@@ -442,7 +442,7 @@ ${OBJDIR}/comxs.o: ${OBJDIR}/cupd.${MOD} ${OBJDIR}/comprt.${MOD} ${SRCDIR}/Eiren
 ${OBJDIR}/coutau.o: ${SRCDIR}/Eirene_modules/coutau.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/coutau.o -c ${SRCDIR}/Eirene_modules/coutau.F
 
-${OBJDIR}/cpes.o: ${OBJDIR}/ctrcei.${MOD} ${SRCDIR}/Eirene_modules/cpes.F
+${OBJDIR}/cpes.o: ${OBJDIR}/ctrcei.${MOD} ${OBJDIR}/eirmod_precision.${MOD} ${SRCDIR}/Eirene_modules/cpes.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/cpes.o -c ${SRCDIR}/Eirene_modules/cpes.F
 
 ${OBJDIR}/cplmsk.o: ${SRCDIR}/Eirene_modules/cplmsk.F
@@ -675,7 +675,7 @@ ${OBJDIR}/comxs.${MOD}: ${OBJDIR}/cupd.${MOD} ${OBJDIR}/comprt.${MOD} ${SRCDIR}/
 ${OBJDIR}/coutau.${MOD}: ${SRCDIR}/Eirene_modules/coutau.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/coutau.o -c ${SRCDIR}/Eirene_modules/coutau.F
 
-${OBJDIR}/cpes.${MOD}: ${OBJDIR}/ctrcei.${MOD} ${SRCDIR}/Eirene_modules/cpes.F
+${OBJDIR}/cpes.${MOD}: ${OBJDIR}/ctrcei.${MOD} ${OBJDIR}/eirmod_precision.${MOD} ${SRCDIR}/Eirene_modules/cpes.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/cpes.o -c ${SRCDIR}/Eirene_modules/cpes.F
 
 ${OBJDIR}/cplmsk.${MOD}: ${SRCDIR}/Eirene_modules/cplmsk.F
