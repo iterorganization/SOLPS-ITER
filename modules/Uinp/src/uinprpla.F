@@ -14,6 +14,7 @@ c=======================================================================
      ,  iambg(2,nlim),nambg
       real tol
       logical notyet(nlim),joint
+      external xerrab
       data tol / 1.e-2/ ! tolerance for a search for chains
 c=======================================================================
       joint(x1,y1,x2,y2)=abs(x1-x2).le.tol .and. abs(y1-y2).le.tol .and.
@@ -74,7 +75,7 @@ c*** Find the connections
                     iambg(2,nambg)=j
                   else !}{
                     write(0,*) 'uinprpla: too many alternative ways'
-                    stop '==> Check the DG model'
+                    call xerrab ('==> Check the DG model')
                   end if !}
                 end if !}
                end if !}
@@ -147,7 +148,7 @@ c*** Error check
             write(*,'(1x,a/(2i5))') 'iambg:',
      ,                                 (iambg(1,i),iambg(2,i),i=1,nambg)
           end if !}
-          stop '== INTERNAL ERROR IN UINP !!!'
+          call xerrab ('== INTERNAL ERROR IN UINP !!!')
         end if !}
       end do !}
 

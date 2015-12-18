@@ -215,8 +215,7 @@ c                    if(bbb) write(*,*) ii,k,inext(k),next(k) !###
 #ifdef FLUSH
             call FLUSH(6)
 #endif
-                  write(0,*) 'Something wrong with re-ordering'
-                  stop
+                  call xerrab ('Something wrong with re-ordering')
  40               if(.not.free(i)) go to 100
                   go to 110
                 end if !}

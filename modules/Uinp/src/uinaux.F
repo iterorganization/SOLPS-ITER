@@ -19,7 +19,7 @@ c=======================================================================
       logical ublplt(5)
       equivalence (ublplt,pl1st)
       logical streql
-      external streql
+      external streql, xerrab
 c*** List of the valid input keywords
       data unm /
      1    'rmajor  ','npts    ','nprnli  ','ntimv   ','dtimv   ',
@@ -42,7 +42,7 @@ c
 c      call skipit
       print *,'uinaux: variable name ',nam,' is not foreseen - ',
      ,  'check the $DEVICE.aux file'
-      stop
+      call xerrab ('Unknown variable name in $DEVICE.aux file')
       return
 c
  1    call resime(u)

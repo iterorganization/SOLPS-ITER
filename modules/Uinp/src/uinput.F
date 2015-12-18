@@ -8,15 +8,31 @@ c  version : 28.01.2003 18:08
 
 c=======================================================================
       implicit none
+#ifdef USE_MPI
+      include 'mpif.h'
+#endif
 #include "uinput.inc"
 #include "impcon.inc"
       integer irt, is, iss, iatm, iloc
+#ifdef USE_MPI
+      integer rank_mpi,size_mpi,ierr_mpi
+#endif
       real*8, allocatable :: na0(:)
       character*20 hlp_frm
       character*60 lblps
       logical uex
       external uinnam,uintrg,uinaux
 c=======================================================================
+#ifdef USE_MPI
+      call mpi_init(ierr_mpi)
+      call mpi_comm_rank(MPI_COMM_WORLD,rank_mpi,ierr_mpi)
+      call mpi_comm_size(MPI_COMM_WORLD,size_mpi,ierr_mpi)
+      if(rank_mpi .ne. 0) then
+        call mpi_barrier(MPI_COMM_WORLD,ierr_mpi)
+        call mpi_finalize(ierr_mpi)
+        stop 'uinp_mpi_child'
+      endif
+#endif
 c*** Read the input data from various files
       call uininp
 c*** Prepare the constants
@@ -243,4 +259,9 @@ c*** Create additional files with geometry for b2plot
       
       call uib2pl
 c=======================================================================
+#ifdef USE_MPI
+      call mpi_barrier(MPI_COMM_WORLD,ierr_mpi)
+      call mpi_finalize(ierr_mpi)
+#endif
+      stop 'uinp'
       end

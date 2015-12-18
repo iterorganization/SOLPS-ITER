@@ -13,6 +13,7 @@ c=======================================================================
 #include "uib2pprm.inc"
       integer i,j,k,l,luind(nxd),luwrk(nxd)
       logical uex
+      external xerrab
 c=======================================================================
 
       if(.not.do_hepdt) return
@@ -94,7 +95,7 @@ c<<<
      ,	  'location" in DG: no more than 2 for PFR or 1 for outer side'
       	write(0,*) 'STOP ==> Check the DG model - make sure that ',
      ,	  'continuous cell ranges are marked'
-      	stop
+      	call xerrab ('Too many cell ranges specified')
       end if !}
       if(k.gt.0) then !{
         if(locphep.eq.1) then !{
@@ -104,7 +105,7 @@ c<<<
      .      (luwrk(k).gt.nxcut1(1).and.luwrk(k).le.nxcut1(nncut))) then !{
             write(0,*) 'Wrong cell range specified for PFR pumping: ',
      ,        'must not extend beyond the cuts'
-      	    stop '==> Check the DG model'
+      	    call xerrab ('==> Check the DG model')
       	  end if !}
       	  if(luwrk(1).gt.nxcut1(nncut)) then !{
       	    if(k.eq.1) then !{
@@ -117,7 +118,7 @@ c<<<
      ,  	'pumping belong to the outer divertor'
               write(0,*) 'STOP ==> Check the DG model - make sure ',
      ,  	'that continuous cell ranges are marked'
-      	      stop
+      	      call xerrab ('Both He pumping ranges in outer divertor')
             end if !}
           else !}{
       	    if(k.eq.2) then !{
@@ -126,7 +127,7 @@ c<<<
      ,  	  'pumping belong to the outer divertor'
         	write(0,*) 'STOP ==> Check the DG model - make sure ',
      ,  	  'that continuous cell ranges are marked'
-      	  	stop
+      	  	call xerrab ('Both He pumping ranges in outer divertor')
               end if !}
             else !}{
       	      luwrk(2)=1

@@ -14,6 +14,7 @@ c=======================================================================
 #include "uinput.inc"
       integer i,j,k,l,n,ka,ipl,ipt,irc,krc,nrc,istr,irce(nstra)
       logical ex,l_hlp,hlp_err
+      external xerrab, xertst
       data irce / nstra*0 /
 c=======================================================================
 c<<<
@@ -57,7 +58,7 @@ c*** Recombination strata are requested
 	if(nrc.eq.0) then !{
 	  write(0,*) 'No recombination reactions found in the input ',
      ,	    'data, but recombination strata are requested'
-	  stop '==> Check the DG and AMDS models'
+	  call xerrab ('==> Check the DG and AMDS models')
 	end if !}
 
 	ex=.false.
@@ -91,7 +92,7 @@ c*** Find the corresponding reaction(s)
 	            write(0,*) 'Too many strata requested: ',nstrai
 	            write(0,*) 'STOP ==> check the DG model and the ',
      ,	          		    'value of DEF_NSTRA in DIMENSIONS.F'
-	            stop
+	            call xerrab ('Too many strata requested')
 	          end if !}
 		  n=n+1
 		  l_hlp=.false.
@@ -131,7 +132,8 @@ c*** Find the corresponding reaction(s)
       	end do !}
 	nrcmstr=n
 	
-      	if(ex) stop 'Errors detected in recombination specification'
+      	call xertst (.not.ex,
+     .   'Errors detected in recombination specification')
       end if !}
 c======================================================================
       end

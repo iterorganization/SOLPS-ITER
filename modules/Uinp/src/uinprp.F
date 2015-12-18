@@ -16,6 +16,7 @@ c=======================================================================
       real u,uzdim,rm_hlp,rx_hlp,zm_hlp,zx_hlp
       parameter (uzdim=1.e20)
       character utxsfa*44
+      external xerrab, xertst
       data utxsfa / ' - target edge (to be modified by GEOUSR)' /
       data m_hlp / n_hlp*0 /
 c=======================================================================
@@ -55,9 +56,9 @@ c*** Check some dimensions
       else !}{
       	write(0,*) 'Unknown topology keyword "',topo,'".'
       	write(0,*) '  ==> check the topology name in DG'
-	stop
+	call xerrab ('Unknown topology')
       end if !}
-      if(uex) stop 'Topological inconsistence found in uinp'
+      call xertst(.not.uex, 'Topological inconsistency found in uinp')
       
 c-----------------------------------------------------------------------
 c*** Modify some defaults for limiter case, if necessary
@@ -71,7 +72,8 @@ c*** Modify some defaults for limiter case, if necessary
         if(zaa.le.0.) then !{
           write(*,*) 'The major radius is not specified for a limiter ',
      ,                                                            'case'
-          stop '==> Check the DG variable in "Global Eirene data"'
+          call xerrab
+     .     ('==> Check the DG variable in "Global Eirene data"')
         end if !}
       end if !}
 
@@ -114,7 +116,8 @@ c*** Prepare index of valid additional surfaces
      ,	      'in Eirene.'
 	    write(0,*) 'Maximum ',nlim,',  DG model ',nlimi,
      ,	      '  reserved ',laddsrfs
-	    stop '==> Check the DG model and DEF_NLIM in DIMENSIONS.F'
+	    call xerrab
+     .       ('==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
 	  end if !}
 	  indasrfe(i)=k
 	  indasrfs(k)=i
@@ -142,7 +145,7 @@ c*** Check for zero length additional surfaces
       end do !}
       if(uex) then !{
         write(0,*) 'Zero-length segment(s) found in DG data'
-        stop '==> Check the geometry in the DG model'
+        call xerrab ('==> Check the geometry in the DG model')
       end if !}
 
 c*** Correct jadch1 (not tested yet!!!)
@@ -210,7 +213,7 @@ c*** Prepare index of additional surfaces to be modified in geousr
       end if
       if(ntrgte.le.0) then !{
       	write(0,*) 'Undefined target edges'
-	stop '==> Check the specification in the DG model'
+	call xerrab ('==> Check the specification in the DG model')
       end if !}
       uex=.false.
       do i=1,k !{
@@ -220,7 +223,8 @@ c*** Prepare index of additional surfaces to be modified in geousr
      ,	      	      	      	      	      	      	      'Eirene"'
 	end if !}
       end do !}
-      if(uex) stop '==> Check the specification in the DG model'
+      call xertst (.not.uex,
+     . '==> Check the specification in the DG model')
 
 c*** Specify some comments to appear in the output file
 

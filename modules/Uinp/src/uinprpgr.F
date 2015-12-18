@@ -11,6 +11,7 @@ c*** Prepare the grid data - dimensions and cuts
 c=======================================================================
 #include "uinput.inc"
       logical ex
+      external xerrab
 c=======================================================================
 c*** Now, unlike the previous version, nrsol, nrpfl, nz[io]dv, nzinn,
 c*** together with nrsol1, nz[io]dv2, and nzinn2, are the numbers of
@@ -99,7 +100,8 @@ c*** Limiter configuration - a temporary, clumsy solution
           write(*,*) 'A single-null topology should be used for a ',
      ,      'limiter configuration'
           write(*,*) '==> Check the DG model'
-          stop
+          call xerrab
+     .     ('Need to use SN topology for limiter configuration')
         end if !}
         ex=.true.
       	ntrgdflt=2
@@ -237,7 +239,7 @@ c*** Limiter configuration - a temporary, clumsy solution
       	write(*,*) 'Non-recognisable topology option : ',topo
 	write(*,*) '  ==> Check the topology name in the DG model'
 	write(*,*) '  	  (should be one of SNL SNU DNL DNU DNS)'
-	stop
+	call xerrab ('Unrecognized topology')
       end if  !}
 
       nr1st=irwl

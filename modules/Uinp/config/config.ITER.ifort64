@@ -2,11 +2,26 @@
 
 LD_MSCL ?= `pkg-config mscl --libs`
 
+ifdef USE_MPI
 FC	 = ifort
+MPI_CPP ?= `pkg-config mpich2-ch3 --cflags`
+LD_MPI  ?= `pkg-config mpich2-ch3 --libs`
+else
+FC	 = ifort
+endif
+
 ifdef SOLPS_DEBUG
+ifdef USE_MPI
+FCOPTS   = -g -C -traceback ${MPI_CPP}
+else
 FFLAGS	 = -g -C -traceback -debug all -check all
+endif
+else
+ifdef USE_MPI
+FFLAGS   = ${MPI_CPP}
 else
 FFLAGS   =
+endif
 endif
 INCLUDE  = -I${SRCDIR} -I${EIRINC} -I${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
@@ -14,4 +29,8 @@ CPP	 = /lib/cpp -C -traditional
 
 MOD 	 = mod
 LDLIBS	 = ${LD_MSCL}
+ifdef USE_MPI
+LDEXTRA  = -i_dynamic ${LD_MPI}
+else
 LDEXTRA  = -i_dynamic
+endif

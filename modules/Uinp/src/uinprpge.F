@@ -25,6 +25,7 @@ c=======================================================================
 #include "uinput.inc"
       integer i,j,k,l,m,im,knd_hlp(nedgmrkd,nwllmrkd)
       logical ex
+      external xerrab
 c=======================================================================
 
       write(*,*) 'Grid edge material markers:'
@@ -45,7 +46,7 @@ c*** Check the default specification
           else !}{
             write(0,*) 'Multiple definition of default material of ',
      ,        'the grid edge (side_spc)',l
-            stop '  ==> Check the DG model'
+            call xerrab ('  ==> Check the DG model')
           end if !}
         end if !}
       end do !}
@@ -59,7 +60,7 @@ c        print *,'l,nedgmrk(l)=',l,nedgmrk(l)  !###
             write(0,*) 'uinprpge: inconsistent default ',
      ,         'specification. nwllmrk,l,ledgdfl,nedgmrk(l) =',
      ,                                     nwllmrk,l,ledgdfl,nedgmrk(l)
-            stop '==> Internal error in uinp?'
+            call xerrab ('==> Internal error in uinp?')
           end if !}
         end if !}
 
@@ -93,7 +94,7 @@ c*** First, the side edges
      ,        'zone specified. nwllmrk,l =',nwllmrk,l
             write(0,*) '==> Check the DG model - markers must be ',
      /                   'outside the corresponding separatrix branches'
-            stop
+            call xerrab ('No grid edge zone markers specified')
           end if !}
           do k=1,l-1 !{
             do j=1,nedgmrk(l) !{
@@ -103,7 +104,7 @@ c*** First, the side edges
                   write(0,*) 'uinprpge: multiple specification of ',
      ,              'boundary zone ',knd_hlp(j,l),ledgmrk(j,l),
      ,              ' for templates ',k,' and ',l
-                  stop '==> Check the DG model'
+                  call xerrab ('==> Check the DG model')
                 end if !}
               end do !}
             end do !}
@@ -158,7 +159,7 @@ c*** Then, the targets
      ,        'zone specified. nwllmrk,l =',nwllmrk,l
             write(0,*) '==> Check the DG model - markers must be ',
      /                   'inside the corresponding divertor volumes'
-            stop
+            call xerrab ('No zone specified for target markers')
           end if !}
           do k=1,l-1 !{
             do j=1,ntrgmrk(l) !{
@@ -168,7 +169,7 @@ c*** Then, the targets
                   write(0,*) 'uinprpge: multiple specification of ',
      ,              'target zone ',knd_hlp(j,l),ltrgmrk(j,l),
      ,              ' for templates ',k,' and ',l
-                  stop '==> Check the DG model'
+                  call xerrab ('==> Check the DG model')
                 end if !}
               end do !}
             end do !}

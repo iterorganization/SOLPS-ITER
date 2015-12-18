@@ -11,6 +11,7 @@ c*** Prepare the data for the cuts for the Eirene input file
 c=======================================================================
 #include "uinput.inc"
       integer i,j,k
+      external xerrab
 c=======================================================================
       RETURN !VK 
 
@@ -25,7 +26,7 @@ c*** 2 cuts for a limiter
      ,					'  (cuts).'
 	  write(0,*) '  ==> Check the boundary specification in ',
      ,			'DG and parameter DEF_NSTS in DIMENSIONS.F'
-	  stop
+	  call xerrab ('Too many "non-default surfaces"')
 	end if !}
 
 	k=k+1
@@ -49,7 +50,7 @@ c*** 2*2*2 cuts for a single null
      ,					'  (cuts)'
 	  write(0,*) 'STOP ==> Check the boundary specification in ',
      ,		      'DG and parameter DEF_NSTS in DIMENSIONS.F'
-	  stop
+	  call xerrab ('Too many "non-default surfaces"')
 	end if !}
 
 c***  inner left cut, private flux
@@ -129,7 +130,7 @@ c*** 4*2*2 cuts for a double-null
      ,					'  (cuts)'
 	  write(0,*) 'STOP ==> Check the boundary specification in ',
      ,			 'DG and parameter DEF_NSTS in DIMENSIONS.F'
-	  stop
+	  call xerrab ('Too many "non-default surfaces"')
 	end if !}
 
 c***  11: lower left cut, PFR

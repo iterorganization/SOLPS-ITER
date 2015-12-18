@@ -17,7 +17,7 @@ c=======================================================================
       integer i,j,k,l,m,n,iv,nn
       save nn
       logical uex, streql
-      external streql
+      external streql, xerrab
       character*8 unm(lunm),uun,s*(luns)
       data unm /
      1  '#'       ,'filevers' ,'reactns'  ,'rctype'   ,'group'	  ,
@@ -74,7 +74,7 @@ c	      print *,'k,l,m= ',k,l,m
 		uex=.false.
 	      else !}{
 	      	write(0,*) 'uiniamd: error parsing the reaction list'
-		stop '-- internal error in UINP'
+		call xerrab ('-- internal error in UINP')
 	      end if !}
 	      l=l+m+1
 	    end if !}
@@ -83,7 +83,7 @@ c	      print *,'k,l,m= ',k,l,m
 	if(uex) then !{
 	  write(0,*) 'uiniamd: wrong structure of the reaction list'
 	  print *,s
-      	  stop '==> Corrupted AMDS file'
+      	  call xerrab ('==> Corrupted AMDS file')
 	end if !}
 	print '(i3,7a)',i,':',rctndbs(i),':',rctnchp(i),':',
      ,	  rctnrct(i),':'
@@ -210,6 +210,6 @@ c=======================================================================
       return
 c=======================================================================
  9999 write(0,*) 'Error encountered while reading ',uun
-      stop '==> Corrupted AMDS file'
+      call xerrab ('==> Corrupted AMDS file')
 c=======================================================================
       end

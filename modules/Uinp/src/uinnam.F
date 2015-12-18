@@ -19,7 +19,7 @@ c=======================================================================
 c...  	      	      	      	      	      	      52=48+4
       integer luwrk(nlim),luind(nlim),lurefls
       logical hlp_spc,hlp_imm,streql
-      external streql
+      external streql, xerrab, xertst
 c*** lusgm: segment number for the list of invisibles;
 c*** luswch: switch for the input of element lists (obsolete)
 c***          	    1: jedgi1, 2: jedgo1, 3: jedgi2, 4: jedgo2
@@ -91,7 +91,7 @@ c*** Backslash:
 #endif
           write(0,*) 'Switch overflow in uinnam - check the go to(',
      ,                                    'label list) construct there'
-          stop
+          call xerrab ('Switch overflow')
         end if !}
       end do !}
       call skipit
@@ -260,19 +260,20 @@ c=======================================================================
       nspigen=nspigen+1
       if(nspigen.gt.natm) then !{
       	write(0,*) 'Too many species: maximum ',natm
-	stop ' ==> Check the DG model and DEF_NATM in DIMENSIONS.F'
+	call xerrab 
+     .   (' ==> Check the DG model and DEF_NATM in DIMENSIONS.F')
       end if !}
       call resimi(i)
       print *,'uinnam: species ',i,nspigen
       if(nspigen.ne.i) then !{
       	write(0,*) '*** uinnam: wrong species order.  nspigen,i = ',
      ,	  nspigen,i
-	stop ' ==> Corrupted DG output?'
+	call xerrab (' ==> Corrupted DG output?')
       end if !}
       return
    56 if(nspigen.le.0 .or. hlp_spc) then !{
       	write(0,*) 'uinnam: species index undefined'
-	stop ' ==> Corrupted DG output?'
+	call xerrab (' ==> Corrupted DG output?')
       end if !}
       l=lena
       lena=2
@@ -284,22 +285,25 @@ c=======================================================================
       ngpfstr=ngpfstr+1
       if(ngpfstr.ge.nstra) then !{
       	write(0,*) 'Too many gas-puffing strata specified'
-	stop ' ==> Check the DG model and DEF_NSTRA in DIMENSIONS.F'
+	call xerrab
+     .   (' ==> Check the DG model and DEF_NSTRA in DIMENSIONS.F')
       end if !}
       return
    58 if(ngpfstr.le.0) then !{
       	write(0,*) 'uinnam: gas-puffing strata index undefined'
-	stop ' ==> Corrupted DG output?'
+	call xerrab (' ==> Corrupted DG output?')
       end if !}
       if(lugpf.ge.nlim) then !{
       	write(0,*) 'uinnam: too many slot surfaces for gas puff'
-	stop ' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F'
+	call xerrab
+     .   (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
       end if !}
       call rearri(lgpfstr(lugpf+1),nlim-lugpf,i)
       if(i.eq.0) then !{
       	write(0,*) 'The slot specification is missing for gas-puffing',
      ,	  ' stratum',ngpfstr
-	stop ' ==> Check the "Gas puff" variables in the DG model'
+	call xerrab
+     .   (' ==> Check the "Gas puff" variables in the DG model')
       end if !}
       kgpfstr(ngpfstr)=i
       lugpf=lugpf+i
@@ -367,7 +371,7 @@ c=======================================================================
       return
    86 if(namdf.le.0) then !{
       	write(0,*) 'uinnam: AMDS reference index undefined'
-	stop ' ==> Corrupted DG output?'
+	call xerrab (' ==> Corrupted DG output?')
       end if !}
       l=lena
       lena=48
@@ -382,7 +386,7 @@ c=======================================================================
 	  if(i.gt.48) then !{
 	    write(0,*) 'Too long name for AMDS reference after ',
      ,	      'expansion: ',uam
-	    stop '==> Check the DG model'
+	    call xerrab ('==> Check the DG model')
 	  end if !}
 	  amd_file(namdf)=uam
 	  write(*,*) 'Filename for AMDS reference expanded: ',uam
@@ -398,7 +402,8 @@ c=======================================================================
       if(namdf.gt.namdfs) then !{
       	write(0,*) 'Too many AMDS models specified - must be no more ',
      ,	  'than',namdfs
-      	stop '==> Check the DG model or increase NAMDFS in uimpcon.inc'
+      	call xerrab
+     .   ('==> Check the DG model or increase NAMDFS in uimpcon.inc')
       end if !}
       return
 c-----------------------------------------------------------------------
@@ -409,12 +414,12 @@ c*** Chemical sputtering
       	write(0,*) 'Too many chemical reactions specified.'
       	write(0,*) 'STOP ==> check the DG model and the value of ',
      ,	      	      	      	      	      'nchsppr in KOPPLDIM.F'
-      	stop
+      	call xerrab ('Too many chemical reactions specified')
       end if !}
       return
    89 if(nchsppri.le.0) then !{
       	write(0,*) 'Chemical sputtering data outside the block - ',unn
-	stop ' ==> Corrupted DG output?'
+	call xerrab (' ==> Corrupted DG output?')
       end if !}
       l=lena
       lena=24
@@ -424,16 +429,16 @@ c      immed=hlp_imm
       lena=l
       return
 c 9989 write(0,*) 'Unexpected end-of-file encountered in uinnam'
-c      stop ' ==> Corrupted DG output?'
+c      call xerrab (' ==> Corrupted DG output?')
    90 if(nchsppri.le.0) then !{
       	write(0,*) 'Chemical sputtering data outside the block - ',unn
-	stop ' ==> Corrupted DG output?'
+	call xerrab (' ==> Corrupted DG output?')
       end if !}
       call resime(ychsptg(nchsppri))
       return
    91 if(nchsppri.le.0) then !{
       	write(0,*) 'Chemical sputtering data outside the block - ',unn
-	stop ' ==> Corrupted DG output?'
+	call xerrab (' ==> Corrupted DG output?')
       end if !}
       lena=16
       call resima(chspspt(nchsppri))
@@ -441,19 +446,19 @@ c      stop ' ==> Corrupted DG output?'
       return
    92 if(nchsppri.le.0) then !{
       	write(0,*) 'Chemical sputtering data outside the block - ',unn
-	stop ' ==> Corrupted DG output?'
+	call xerrab (' ==> Corrupted DG output?')
       end if !}
       call resimi(lchspnwl(nchsppri))
       return
    93 if(nchsppri.le.0) then !{
       	write(0,*) 'Chemical sputtering data outside the block - ',unn
-	stop ' ==> Corrupted DG output?'
+	call xerrab (' ==> Corrupted DG output?')
       end if !}
       call resime(echsptg(nchsppri))
       return
    94 if(nchsppri.le.0) then !{
       	write(0,*) 'Chemical sputtering data outside the block - ',unn
-	stop ' ==> Corrupted DG output?'
+	call xerrab (' ==> Corrupted DG output?')
       end if !}
       call resime(fchsptg(nchsppri))
       return
@@ -465,7 +470,7 @@ c*** Surface data transfer from B2 to Eirene
       	write(0,*) 'Too many "Surface special" groups specified'
       	write(0,*) 'STOP ==> check the DG model and the value of ',
      ,	      	      	      	          'DEF_NSPCSRFG in DIMENSIONS.F'
-      	stop
+      	call xerrab ('Too many "Surface special" groups specified')
       end if !}
       if(n_spcsrf.ne.i) then !{
       	write(0,*) '### Wrong order of "Surface special" groups - ',
@@ -474,25 +479,25 @@ c*** Surface data transfer from B2 to Eirene
       return
    96 if(n_spcsrf.le.0) then !{
       	write(0,*) '"Surface special" data outside the block - ',unn
-	stop ' ==> Corrupted DG output?'
+	call xerrab (' ==> Corrupted DG output?')
       end if !}
       call resime(sps_absr(n_spcsrf))
       return
    97 if(n_spcsrf.le.0) then !{
       	write(0,*) '"Surface special" data outside the block - ',unn
-	stop ' ==> Corrupted DG output?'
+	call xerrab (' ==> Corrupted DG output?')
       end if !}
       call resime(sps_trno(n_spcsrf))
       return
    98 if(n_spcsrf.le.0) then !{
       	write(0,*) '"Surface special" data outside the block - ',unn
-	stop ' ==> Corrupted DG output?'
+	call xerrab (' ==> Corrupted DG output?')
       end if !}
       call resime(sps_trni(n_spcsrf))
       return
    99 if(n_spcsrf.le.0) then !{ ####
       	write(0,*) '"Surface special" data outside the block - ',unn
-	stop ' ==> Corrupted DG output?'
+	call xerrab (' ==> Corrupted DG output?')
       end if !}
       call resima(sps_mtrl(n_spcsrf))
       sps_mtri(n_spcsrf)=-1
@@ -501,37 +506,37 @@ c*** Surface data transfer from B2 to Eirene
       return
   100 if(n_spcsrf.le.0) then !{
        	write(0,*) '"Surface special" data outside the block - ',unn
-	stop ' ==> Corrupted DG output?'
+	call xerrab (' ==> Corrupted DG output?')
       end if !}
       call resime(sps_tmpr(n_spcsrf))
       return
   101 if(n_spcsrf.le.0) then !{
       	write(0,*) '"Surface special" data outside the block - ',unn
-	stop ' ==> Corrupted DG output?'
+	call xerrab (' ==> Corrupted DG output?')
       end if !}
       call resime(sps_spph(n_spcsrf))
       return
   102 if(n_spcsrf.le.0) then !{
       	write(0,*) '"Surface special" data outside the block - ',unn
-	stop ' ==> Corrupted DG output?'
+	call xerrab (' ==> Corrupted DG output?')
       end if !}
       call resime(sps_spch(n_spcsrf))
       return
   103 if(n_spcsrf.le.0) then !{
       	write(0,*) '"Surface special" data outside the block - ',unn
-	stop ' ==> Corrupted DG output?'
+	call xerrab (' ==> Corrupted DG output?')
       end if !}
       call resimi(sps_sgrp(n_spcsrf))
       return
   104 if(n_spcsrf.le.0) then !{
       	write(0,*) '"Surface special" data outside the block - ',unn
-	stop ' ==> Corrupted DG output?'
+	call xerrab (' ==> Corrupted DG output?')
       end if !}
       call rearri(ll_spcsrf(1,n_spcsrf),nlimps,k_spcsrf(n_spcsrf))
       return
   105 if(n_spcsrf.le.0) then !{
       	write(0,*) '"Surface special" data outside the block - ',unn
-	stop ' ==> Corrupted DG output?'
+	call xerrab (' ==> Corrupted DG output?')
       end if !}
       call resima(sps_id(n_spcsrf))
       return
@@ -542,7 +547,7 @@ c*** Surface data transfer from B2 to Eirene
       	write(0,*) 'Too many "PFR surface groups" specified'
       	write(0,*) 'STOP ==> check the DG model and the value of ',
      ,	                        'npfrgrpd in uinpcom.inc and COMUSER.F'
-      	stop
+      	call xerrab ('Too many "PFR surface groups" specified')
       end if !}
       if(npfrgrp.ne.i) then !{
       	write(0,*) '### Wrong order of "PFR surface groups" - ',
@@ -551,18 +556,18 @@ c*** Surface data transfer from B2 to Eirene
       return
   107 if(npfrgrp.le.0) then !{
       	write(0,*) '"PFR surface group" data outside the block - ',unn
-	stop ' ==> Corrupted DG output?'
+	call xerrab (' ==> Corrupted DG output?')
       end if !}
       call resima(gpfrgrp(npfrgrp))
       return
   108 if(npfrgrp.le.0) then !{
       	write(0,*) '"PFR surface group" data outside the block - ',unn
-	stop ' ==> Corrupted DG output?'
+	call xerrab (' ==> Corrupted DG output?')
       end if !}
       j=DEF_NLIM-luprf
       if(j.le.0) then !{
         write(0,*) 'Too many elements in "PFR surface groups"'
-        stop ' ==> check the DG model'
+        call xerrab (' ==> check the DG model')
       end if !}
       call rearri(lpfrgrp(luprf+1),j,i)
       ipfrgrp(npfrgrp)=luprf+1
@@ -590,37 +595,41 @@ c*** Material properties of the grid edges
       call skipit
       if(nwllmrk.gt.nwllmrkd) then !{
         write(0,*) 'Too many reference wall segments (spc_side)'
-        stop ' ==> Check the DG model or increase nwllmrkd in uinpcom'
+        call xerrab
+     .   (' ==> Check the DG model or increase nwllmrkd in uinpcom')
       end if !}
       return
   115 if(nwllmrk.le.0) then !{
         write(0,*) 'Grid edge material data outside block (ref_wall)'
-	stop ' ==> Corrupted DG output?'
+	call xerrab (' ==> Corrupted DG output?')
       else if(nwllmrk.le.nwllmrkd) then !}{
         call resimi(lwllmrk(nwllmrk))
       else !}{
         write(0,*) 'Too many reference wall segments (spc_side)'
-        stop ' ==> Check the DG model or increase nwllmrkd in uinpcom'
+        call xerrab
+     .   (' ==> Check the DG model or increase nwllmrkd in uinpcom')
       end if !}
       return
   116 if(nwllmrk.le.0) then !{
         write(0,*) 'Grid edge material data outside block (edgemark)'
-	stop ' ==> Corrupted DG output?'
+	call xerrab (' ==> Corrupted DG output?')
       else if(nwllmrk.le.nwllmrkd) then !}{
         call rearri(ledgmrk(1,nwllmrk),nedgmrkd,nedgmrk(nwllmrk))
       else !}{
         write(0,*) 'Too many reference wall segments (spc_side)'
-        stop ' ==> Check the DG model or increase nwllmrkd in uinpcom'
+        call xerrab
+     .   (' ==> Check the DG model or increase nwllmrkd in uinpcom')
       end if !}
       return
   117 if(nwllmrk.le.0) then !{
         write(0,*) 'Grid edge material data outside block (trgtmark)'
-	stop ' ==> Corrupted DG output?'
+	call xerrab (' ==> Corrupted DG output?')
       else if(nwllmrk.le.nwllmrkd) then !}{
         call rearri(ltrgmrk(1,nwllmrk),nedgmrkd,ntrgmrk(nwllmrk))
       else !}{
         write(0,*) 'Too many reference wall segments (spc_side)'
-        stop ' ==> Check the DG model or increase nwllmrkd in uinpcom'
+        call xerrab
+     .   (' ==> Check the DG model or increase nwllmrkd in uinpcom')
       end if !}
       return
 c-----------------------------------------------------------------------
@@ -655,7 +664,7 @@ c*** Data for diagnostics of wall erosion
       if(ngwtiesi.gt.ngwtiesx) then !{
         write(0,*) 'uinnam: too many ties specified ( > ',ngwtiesx,' )'
         write(0,*) '  ==> Check the DG model'
-        stop
+        call xerrab ('Too many ties specified')
       end if !}
       return
   130 call resimi(kgwties(ngwtiesi))
@@ -668,42 +677,30 @@ c*** Data for visualisation of the surface properties
       if(luvsp.lt.0) then !{
         write(0,*) 'uinnam: negative view identifier - corrupted DG ',
      ,                                                       'output???'
-        stop
+        call xerrab ('Negative view identifier')
       else if(luvsp.gt.nsrfclsx) then !}{
         write(0,*) 'uinnam: too many views for surface coloring ',luvsp
         write(0,*) '  ==> Check the DG model or increase the nsrfclsx ',
      ,    'parameter in uinpcom.inc'
-        stop
+        call xerrab ('Too many views for surface coloring')
       end if !}
       nsrfcls=max(luvsp,nsrfcls)
       return
-  133 if(luvsp.le.0 .or. luvsp.gt.nsrfclsx) then !{
-        write(0,*) 'uinnam: undefined view identifier - corrupted DG ',
-     ,                                                       'output???'
-        stop
-      end if !}
+  133 call xertst (luvsp.gt.0 .and. luvsp.le.nsrfclsx,
+     ,  'uinnam: undefined view identifier - corrupted DG output???')
       call resimi(isrfclu(luvsp,1))
       return
-  134 if(luvsp.le.0 .or. luvsp.gt.nsrfclsx) then !{
-        write(0,*) 'uinnam: undefined view identifier - corrupted DG ',
-     ,                                                       'output???'
-        stop
-      end if !}
+  134 call xertst (luvsp.gt.0 .and. luvsp.le.nsrfclsx,
+     ,  'uinnam: undefined view identifier - corrupted DG output???')
       call resimi(isrfclu(luvsp,2))
       return
-  135 if(luvsp.le.0 .or. luvsp.gt.nsrfclsx) then !{
-        write(0,*) 'uinnam: undefined view identifier - corrupted DG ',
-     ,                                                       'output???'
-        stop
-      end if !}
+  135 call xertst (luvsp.gt.0 .and. luvsp.le.nsrfclsx,
+     ,  'uinnam: undefined view identifier - corrupted DG output???')
       call resimi(isrfclu(luvsp,3))
       return
   147 l=i-135
- 1147 if(luvsp.le.0 .or. luvsp.gt.nsrfclsx) then !{
-        write(0,*) 'uinnam: undefined view identifier - corrupted DG ',
-     ,                                                       'output???'
-        stop
-      end if !}
+ 1147 call xertst (luvsp.gt.0 .and. luvsp.le.nsrfclsx,
+     ,  'uinnam: undefined view identifier - corrupted DG output???')
       call resimi(i)
       if(i.gt.0) then !{
         msrfcls(luvsp)=msrfcls(luvsp)+1
@@ -720,11 +717,8 @@ c***  input index of rectangle
   150 call resimi(ntriref)
       return 
 c***  input mesh size for current rectangle
-  151 if(ntriref.LE.0.OR.ntriref.GT.ntrimax) then
-        write(0,*)  'uinnam: wrong index of TRIA regions -',
-     ,              'corrupted DG output???'
-        stop
-      end if
+  151 call xertst (ntriref.gt.0.and.ntriref.le.ntrimax,
+     ,  'uinnam: wrong index of TRIA regions - corrupted DG output???')
       call resime(trisize(ntriref))
       return
 c***  input elements inexes for current rectangle
@@ -746,25 +740,25 @@ c***  input elements inexes for current rectangle
       return
   158 if(nspigen.le.0 .or. hlp_spc) then !{
         write(0,*) 'uinnam: species index undefined'
-        stop ' ==> Corrupted DG output?'
+        call xerrab (' ==> Corrupted DG output?')
       end if !}
       call resimi(spcicrk(nspigen))
       return
   159 if(nspigen.le.0 .or. hlp_spc) then !{
         write(0,*) 'uinnam: species index undefined'
-        stop ' ==> Corrupted DG output?'
+        call xerrab (' ==> Corrupted DG output?')
       end if !}
       call resime(spcicrp(nspigen))
       return
   160 if(nspigen.le.0 .or. hlp_spc) then !{
         write(0,*) 'uinnam: species index undefined'
-        stop ' ==> Corrupted DG output?'
+        call xerrab (' ==> Corrupted DG output?')
       end if !}
       call resime(spcicrf(nspigen))
       return
   161 if(nspigen.le.0 .or. hlp_spc) then !{
       	write(0,*) 'uinnam: species index undefined'
-	stop ' ==> Corrupted DG output?'
+	call xerrab (' ==> Corrupted DG output?')
       end if !}
       call resimi(spciscn(nspigen))
       if(spciscn(nspigen).ne.0) spciscn(nspigen)=1

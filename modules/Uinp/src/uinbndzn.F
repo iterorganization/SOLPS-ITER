@@ -15,6 +15,7 @@ c=======================================================================
       integer i_sw(0:nxd+1,nbndrgn,n_hlp),i_tg(0:nyd+1,ntrgts),
      ,	l_hlp(n_hlp),i_cr(0:nxd+1)
       character*10 hlp_txt(n_hlp)
+      external xerrab
       data l_hlp /1,3,4/
       data hlp_txt / 'Core','PFR','Outer side' /
 c=======================================================================
@@ -142,7 +143,8 @@ c*** divide found
 	      write(0,*) 'Too many boundary zones specified for targets'
 	      write(0,*) 'STOP ==> check "Boundary divides" in the DG ',
      ,      	      	  'model and parameter "nbndzon" in uinpcom.inc'
-	      stop
+              call xerrab 
+     .         ('Too many boundary zones specified for targets')
 	    end if !}
 	    lzpbndt(iz,m)=lrsbndt(k,m)
 	    lzrbndt(iz,m,1)=iy
@@ -164,7 +166,7 @@ c*** Specify the position-related data for B2 and Eirene input files
 	    else !}{
 	      write(0,*) 'Internal error in uinbndzn: wrong boundary ',
      ,	    		'code ',cznbndt(iz,m),' for target',k,'  zone',iz
-	      stop
+	      call xerrab ('Wrong boundary code')
 	    end if !}
 	    cskbnds(iz,m)=cznbndt(iz,m)
 	    lcpbnds(iz,m)=lzpbndt(iz,m)
@@ -192,7 +194,8 @@ c	    print *,'k,iz,iy =',k,iz,iy !###
 	    write(0,*) 'Too many boundary zones specified for targets'
 	    write(0,*) 'STOP ==> check "Boundary divides" in the DG ',
      ,    		'model and parameter "nbndzon" in uinpcom.inc'
-	    stop
+	    call xerrab
+     .       ('Too many boundary zones specified for targets')
 	  end if !}
 	  lzpbndt(iz,m)=lrsbndt(k,m)
 	  lzrbndt(iz,m,1)=iy
@@ -213,7 +216,7 @@ c*** Specify the position-related data for B2 and Eirene input files
 	  else !}{
 	    write(0,*) 'Internal error in uinbndzn: wrong boundary ',
      ,	      	      'code ',cznbndt(iz,m),' for target',k,'  zone',iz
-	    stop
+	    call xerrab ('Wrong boundary code')
 	  end if !}
 	  cskbnds(iz,m)=cznbndt(iz,m)
 	  lcpbnds(iz,m)=lzpbndt(iz,m)
@@ -274,7 +277,7 @@ c*** divide found
      ,          					      hlp_txt(l)
 	        write(0,*) 'STOP ==> check "Boundary divides" in the ',
      ,                'DG model and parameter "nbndzon" in uinpcom.inc'
-	        stop
+	        call xerrab ('Too many boundary zones')
 	      end if !}
               lzpbndt(iz,m)=lrsbndt(k,m)
               lzrbndt(iz,m,1)=ix
@@ -301,7 +304,7 @@ c!###}
 	     	write(0,*) 'Internal error in uinbndzn: wrong ',
      ,	     	  'boundary code ',cznbndt(iz,m),' for side',m,
      ,	      	      	      	      	      	'  region',k,'  zone',iz
-	     	stop
+	     	call xerrab ('Wrong boundary code')
 	      end if !}
 	      cskbnds(iz,m)=cznbndt(iz,m)
 	      lcpbnds(iz,m)=lzpbndt(iz,m)
@@ -340,7 +343,7 @@ c     ,	      	                    jc1bnds(iz,m),jc2bnds(iz,m) !###
      ,        	      	      	      	      	      	      hlp_txt(l)
 	      write(0,*) 'STOP ==> check "Boundary divides" in the DG ',
      ,      	      	  'model and parameter "nbndzon" in uinpcom.inc'
-	      stop
+	      call xerrab ('Too many boundary zones')
 	    end if !}
             lzpbndt(iz,m)=lrsbndt(k,m)
             lzrbndt(iz,m,1)=ix
@@ -367,7 +370,7 @@ c!###}
 	      write(0,*) 'Internal error in uinbndzn: wrong boundary ',
      ,	        'code ',cznbndt(iz,m),' for side',m,'region',k,
      ,	    						    ' zone',iz
-	      stop
+	      call xerrab ('Wrong boundary code')
 	    end if !}
 	    cskbnds(iz,m)=cznbndt(iz,m)
 	    lcpbnds(iz,m)=lzpbndt(iz,m)

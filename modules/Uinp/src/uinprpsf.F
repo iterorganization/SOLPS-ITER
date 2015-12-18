@@ -15,6 +15,7 @@ c=======================================================================
       integer nlpw_hlp
       parameter (nlpw_hlp=16)
       character hlp_prj*8,hlp_wll*(nlpw_hlp),hlp_prw*(nlpw_hlp+8)
+      external xerrab
 c=======================================================================
 
       do j=1,nchsppri !{
@@ -34,7 +35,7 @@ c*** Parse the projectile-wall pairs from DG specification
 	    ex=.false.
  10   	    if(ex) then !{
       	      write(0,*) 'Wrong surface group specification ',chsptgt(j)
-	      stop '==> Check the DG model'
+	      call xerrab ('==> Check the DG model')
 	    end if !}
 	    hlp_wll=hlp_wll(1:l-1)
 	  else !}{

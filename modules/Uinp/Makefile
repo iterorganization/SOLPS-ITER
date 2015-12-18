@@ -59,7 +59,7 @@ ifeq ($(shell [ -e ${SRCUIN}/config/config.${HOST_NAME}.${COMPILER}.local ] && e
 include ${SRCUIN}/config/config.${HOST_NAME}.${COMPILER}.local
 MAKES+= ${SRCUIN}/config/config.${HOST_NAME}.${COMPILER}.local
 endif
-MNEXTRA = ${B2OBJ}/open_file.o ${B2OBJ}/streql.o ${B2OBJ}/len_of_digits.o
+MNEXTRA = ${OBJDIR}/libb25.a
 
 VPATH = ${SRCDIR}
 
@@ -77,14 +77,18 @@ all: VERSION ${OBJDIR}/${PROG} ${OBJDIR}/ub2p
 
 .PHONY: clean depend listobj tags echo VERSION force
 
-${OBJDIR}/${PROG}: ${OBJDIR}/uinput.o ${OBJDIR}/uiblkd.o ${OBJDIR}/uiblb2.o ${OBJDIR}/libui.a ${MNEXTRA} ${OBJDIR}/b2mod_layer.o ${OBJDIR}/b2mod_constants.o ${OBJDIR}/libeirene.a ${OBJDIR}/libgr_dummy.a ${MAKES} ${MNEXTRA}
-	${FC} $(FFLAGS) -o ${OBJDIR}/${PROG} ${OBJDIR}/uinput.o ${OBJDIR}/uiblkd.o ${OBJDIR}/uiblb2.o ${MNEXTRA} ${OBJDIR}/b2mod_layer.o ${OBJDIR}/b2mod_constants.o ${OBJDIR}/libui.a ${OBJDIR}/libeirene.a ${OBJDIR}/libgr_dummy.a ${LDLIBS} $(LDEXTRA)
+${OBJDIR}/${PROG}: ${OBJDIR}/uinput.o ${OBJDIR}/uiblkd.o ${OBJDIR}/uiblb2.o ${OBJDIR}/libui.a ${MNEXTRA} ${OBJDIR}/b2mod_layer.o ${OBJDIR}/b2mod_constants.o ${OBJDIR}/libeirene.a ${OBJDIR}/libgr_dummy.a ${MAKES}
+	${FC} $(FFLAGS) -o ${OBJDIR}/${PROG} ${OBJDIR}/uinput.o ${OBJDIR}/uiblkd.o ${OBJDIR}/uiblb2.o ${OBJDIR}/libui.a ${OBJDIR}/libeirene.a ${OBJDIR}/libgr_dummy.a ${MNEXTRA} ${LDLIBS} $(LDEXTRA)
 
 ${OBJDIR}/ub2p: ${OBJDIR}/ub2p.o ${OBJDIR}/libui.a ${MAKES} ${MNEXTRA}
 	${FC} $(FFLAGS) -o ${OBJDIR}/ub2p ${OBJDIR}/ub2p.o ${OBJDIR}/libui.a ${MNEXTRA} ${LDLIBS} $(LDEXTRA)
 
 ${OBJDIR}/libui.a: ${DEST} ${SRCDIR}/git_version_Uinp.h
 	@ar rucv $@ ${DEST}
+	ranlib $@
+
+${OBJDIR}/libb25.a:
+	@ar rucv $@ ${B2OBJ}/b2mod_constants.o ${B2OBJ}/b2mod_layer.o ${B2OBJ}/ifill.o ${B2OBJ}/len_of_digits.o ${B2OBJ}/lwimai.o ${B2OBJ}/lwmain.o ${B2OBJ}/open_file.o ${B2OBJ}/prvrt.o ${B2OBJ}/prvrti.o ${B2OBJ}/sfill.o ${B2OBJ}/streql.o ${B2OBJ}/subsys.o ${B2OBJ}/xerrab.o ${B2OBJ}/xerset.o ${B2OBJ}/xertst.o
 	ranlib $@
 
 ${OBJDIR}/uinput.o: ${OBJDIR}/uiblkd.o
@@ -110,7 +114,7 @@ ${OBJDIR}/b2mod_constants.o:
 	ln -sf ${B2OBJ}/b2mod_constants.o ${OBJDIR}
 
 clean:
-	rm -rf ${OBJDIR}/*.o ${OBJDIR}/*.f ${OBJDIR}/${PROG} ${OBJDIR}/libui.a ${OBJDIR}/ub2p ${OBJDIR}/LISTOBJ ${SRCDIR}/git_version_Uinp.h ${OBJDIR}/dependencies*
+	rm -rf ${OBJDIR}/*.o ${OBJDIR}/*.f ${OBJDIR}/${PROG} ${OBJDIR}/libui.a ${OBJDIR}/libb25.a ${OBJDIR}/ub2p ${OBJDIR}/LISTOBJ ${SRCDIR}/git_version_Uinp.h ${OBJDIR}/dependencies*
 ifneq (${MOD},o)
 	rm -f ${OBJDIR}/*.${MOD}
 endif

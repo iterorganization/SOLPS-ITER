@@ -12,7 +12,7 @@ c======================================================================
 #include "uinput.inc"
       integer i,j,k,l,m,n,na,ni,nm,np
       logical ex,streql
-      external streql
+      external streql, xerrab
       character*8 c,cc,c0*1
       character*20 hlp_frm
 c======================================================================
@@ -57,7 +57,7 @@ c*** the atoms and nuclei
      ,            'not exceed ',natm
                 write(0,*) 'STOP ==> Check the AMDS model - or ',
      ,            'increase DEF_NATM in DIMENSIONS.F'
-                stop
+                call xerrab ('Too many atomic species')
               end if !}
               spcsncl(nspcncl)=c
               spcsrna(na)=na
@@ -86,7 +86,7 @@ c*** the atoms and nuclei
                 if(ex) then !{
                   write(0,*) 'Ambiguous molecule name "',c,
      ,              '" - internal error in UINP!!!'
-                  stop
+                  call xerrab ('Ambiguous molecule name')
                 end if  !}
                 nm=nm+1
                 if(nm.gt.nmol) then !{
@@ -94,7 +94,7 @@ c*** the atoms and nuclei
      ,              'not exceed ',nmol
                   write(0,*) 'STOP ==> Check the AMDS model - or ',
      ,              'increase DEF_NMOL in DIMENSIONS.F'
-                  stop
+                  call xerrab ('Too many molecular species')
                 end if !}
                 spcscmm(nspcncl,nm)=spcdfu(j+m)
                 spcsmol(nm)=c
@@ -119,7 +119,7 @@ c*** the atoms and nuclei
                 if(ex) then !{
                   write(0,*) 'Ambiguous test ion name "',c,
      ,              '" - internal error in UINP!!!'
-                  stop
+                  call xerrab ('Ambiguous test ion name')
                 end if  !}
                 ni=ni+1
                 if(ni.gt.nion) then !{
@@ -127,7 +127,7 @@ c*** the atoms and nuclei
      ,              'not exceed ',nion
                   write(0,*) 'STOP ==> Check the AMDS model - or ',
      ,              'increase DEF_NION in DIMENSIONS.F'
-                  stop
+                  call xerrab ('Too many test ion species')
                 end if !}
                 spcscmi(nspcncl,ni)=spcdfu(j+m)
                 spcsion(ni)=c
@@ -152,7 +152,7 @@ c*** the atoms and nuclei
                 if(ex) then !{
                   write(0,*) 'Ambiguous plasma ion name "',c,
      ,              '" - internal error in UINP !!!'
-                  stop
+                  call xerrab ('Ambiguous plasma ion name')
                 end if  !}
                 np=np+1
                 if(np.gt.npls) then !{
@@ -160,7 +160,7 @@ c*** the atoms and nuclei
      ,              'not exceed ',npls
                   write(0,*) 'STOP ==> Check the AMDS model - or ',
      ,              'increase DEF_NPLS in DIMENSIONS.F'
-                  stop
+                  call xerrab ('Too many plasma species')
                 end if !}
                 spcsrnp(np)=nspcncl
                 spcspls(np)=c
@@ -219,7 +219,7 @@ c*** Atoms:
      ,	      	'exceed ',natm
 	      write(0,*) 'STOP ==> Check the AMDS model - or increase ',
      ,	      	'DEF_NATM in DIMENSIONS.F'
-	      stop
+	      call xerrab ('Too many atomic species')
 	    end if !}
 	    nspcncl=nspcatm
 	    spcsncl(nspcatm)=c
@@ -258,7 +258,7 @@ c*** Molecules:
      ,	      	'not exceed ',nmol
 	      write(0,*) 'STOP ==> Check the AMDS model - or increase ',
      ,	      	'DEF_NMOL in DIMENSIONS.F'
-	      stop
+	      call xerrab ('Too many molecular species')
 	    end if !}
 	    n=0
 	    do k=1,spcinnm(l) !{
@@ -310,7 +310,7 @@ c*** Test ions:
      ,	      	'not exceed ',nion
 	      write(0,*) 'STOP ==> Check the AMDS model - or increase ',
      ,	      	'DEF_NION in DIMENSIONS.F'
-	      stop
+	      call xerrab ('Too many test ion species')
 	    end if !}
 	    n=0
 	    do k=1,spcinni(l) !{
@@ -361,7 +361,7 @@ c*** Plasma ions:
      ,	      	'not exceed ',npls
 	      write(0,*) 'STOP ==> Check the AMDS model - or increase ',
      ,	      	'DEF_NPLS in DIMENSIONS.F'
-	      stop
+	      call xerrab ('Too many plasma ion species')
 	    end if !}
 	    cc=spcirnp(l)
 	    j=0

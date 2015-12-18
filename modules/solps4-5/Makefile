@@ -19,7 +19,6 @@ EIRDIR = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${TOOL_CHAIN}
 B2BDIR = ${SOLPSTOP}/modules/B2.5/builds/couple_Eirene.${TOOL_CHAIN}
 OBJDIR = ${SOLPSTOP}/modules/solps4-5/builds/${TOOL_CHAIN}
 BASEDIR = ${SOLPSTOP}/modules/solps4-5
-SOLPS4 = ${SOLPSTOP}/../SOLPS4.3
 DEFINES += -DSOLPS4_3 -DB25_EIRENE -DUSE_ARRAYS
 SRC4LOCAL = ${SOLPSTOP}/modules/solps4-5/src/local_4
 SRC5LOCAL = ${SOLPSTOP}/modules/solps4-5/src/local_5
@@ -69,6 +68,7 @@ include ${S45DIR}/config/compile
 ifeq ($(shell [ -e ${S45DIR}/config/config.${HOST_NAME}.${COMPILER}.local ] && echo yes || echo no ),yes)
 include ${S45DIR}/config/config.${HOST_NAME}.${COMPILER}.local
 endif
+SOLPS4 ?= ${SOLPSTOP}/../SOLPS4.3
 ifeq ($(shell [ -d ${SOLPS4} ] && echo yes || echo no ),no)
 $(error Invalid SOLPS4 directory address)
 endif
@@ -113,9 +113,11 @@ MNEXTRA=
 
 .PHONY: DEFAULT ALL clean depend listobj tags links
 
-ALL: ${XREXE}
+ALL: links ${XREXE}
 
 DEFAULT: ${XREXE}
+
+b2sxdr: ${XREXE}
 
 ${XREXE}: ${XROBJ} ${XREXTRA} ${OBJDIR}/libb2_solps5.a ${OBJDIR}/libb2_solps4.a ${MNEXTRA} 
 	${LD} ${LDOPTS} $^ -o $@ ${LDLIBES} ${LCPP} ${LDOPTSend}
@@ -804,6 +806,10 @@ tags:
 
 clean:
 	rm -f ${OBJDIR}/*.f ${OBJDIR}/*.o ${OBJDIR}/*.${MOD} ${OBJDIR}/*.a ${OBJDIR}/*.exe
+	rm -Rf ${SRCDIR}/B2_include
+	rm -Rf ${SRCDIR}/Eirene_modules
+	rm -Rf ${SRCDIR}/solps4_B2
+	rm -Rf ${SRCDIR}/solps4_Eirene
 
 listobj: 
 	@rm -f ${BASEDIR}/LISTOBJ; touch ${BASEDIR}/LISTOBJ; l="OBJS ="; \

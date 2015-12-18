@@ -14,6 +14,7 @@ c=======================================================================
       logical ex
       parameter (nt_hlp=5)
       character*4 topo_hlp(nt_hlp)
+      external xerrab
 c*** List of topologies valid for this routine
       data topo_hlp / 'DNL','DNS','DNU','SNL','SNU' /
 c*** Boundary kinds: 1-core, 2-target, 3-PFR side, 4-outer side
@@ -26,7 +27,7 @@ c*** Check the topology
       if(.not.ex) then !{
       	write(0,*) 'Invalid topology name ( ',topo,') found in ',
      ,	      'uinbndrg - must be one of: ',(' ',topo_hlp(i),i=1,nt_hlp)
-      	stop '==> Check the topology name in the DG model'
+      	call xerrab ('==> Check the topology name in the DG model')
       end if !}
       if(lm_cnfg) then	!{
 c*** Core
