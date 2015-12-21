@@ -49,8 +49,7 @@ if (! -e input.dat) then
         ln -s $inputfile input.dat
         echo "Creating a link between $inputfile and input.dat"
       else
-        touch input.dat
-        echo "Empty input.dat created --- is this what you want?"
+        echo "Warning: no input.dat found!"
       endif
     endif
   endif
