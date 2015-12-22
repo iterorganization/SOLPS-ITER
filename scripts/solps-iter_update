@@ -2,29 +2,53 @@
 
 cd $SOLPSTOP
 git fetch
-git checkout develop
-git pull
-git submodule update
-cd $SOLPSTOP/modules/B2.5
-git checkout develop
-git pull
-cd $SOLPSTOP/modules/Eirene
-git checkout ITER-develop
-git pull
-cd $SOLPSTOP/modules/Carre
-git checkout ITER-develop
-git pull
-cd $SOLPSTOP/modules/DivGeo
-git checkout ITER-develop
-git pull
-cd $SOLPSTOP
-rehash
-gmake VERSION
-gmake listobj
-source $SOLPSTOP/SETUP/debug
-gmake listobj
-source $SOLPSTOP/SETUP/nodebug
-gmake depend depend_debug
-gmake tags
-gmake solps
+git checkout develop && goto solpstop || goto local
+
+solpstop:
+  echo "Updating SOLPS-ITER"
+  git pull
+  git submodule update
+  cd $SOLPSTOP/modules/B2.5
+  git checkout develop && goto b25 || goto local
+
+b25:
+  echo "Updating B2.5"
+  git pull
+  cd $SOLPSTOP/modules/Eirene
+  git checkout ITER-develop && goto Eirene || goto local
+
+Eirene:
+  echo "Updating Eirene"
+  git pull
+  cd $SOLPSTOP/modules/Carre
+  git checkout ITER-develop && goto Carre || goto local
+
+Carre:
+  echo "Updating Carre"
+  git pull
+  cd $SOLPSTOP/modules/DivGeo
+  git checkout ITER-develop && goto DivGeo || goto local
+
+DivGeo:
+  echo "Updating DivGeo"
+  git pull
+  goto compile
+
+local:
+  echo "You have local files under version control"
+  echo "Please commit, delete, rename, or stash these files"
+  echo "into a local branch before proceeding with the update"
+  end
+
+compile:
+  cd $SOLPSTOP
+  rehash
+  gmake VERSION
+  gmake listobj
+  source $SOLPSTOP/SETUP/debug
+  gmake listobj
+  source $SOLPSTOP/SETUP/nodebug
+  gmake depend depend_debug
+  gmake tags
+  gmake solps
 
