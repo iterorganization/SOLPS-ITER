@@ -36,7 +36,7 @@ local:
   echo "would cause a conflict during the update"
   echo "Please modify, delete, rename, stash these files or"
   echo "commit them to a local branch before proceeding with the update"
-  end
+  stop
 
 compile:
   cd $SOLPSTOP
