@@ -35,9 +35,10 @@ DivGeo:
   goto compile
 
 local:
-  echo "You have local files under version control"
-  echo "Please commit, delete, rename, or stash these files"
-  echo "into a local branch before proceeding with the update"
+  echo "You have local files under version control which"
+  echo "would cause a conflict during the update"
+  echo "Please modify, delete, rename, stash these files or"
+  echo "commit them to a local branch before proceeding with the update"
   end
 
 compile:

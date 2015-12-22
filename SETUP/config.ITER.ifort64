@@ -9,6 +9,7 @@
 #
 # If you do have NetCDF on your system:
 # Add -DCDF_MOVIE to SOLPS_CPP to be able to produce movies
+# Add -DNETCDF4_3 to SOLPS_CPP is you are linking to NetCDF version 4.3 or newer
 #
 # If you have NCAR version 3 on your system:
 # Remove -DNCAR4 from SOLPS_CPP
@@ -58,7 +59,7 @@ LD_MPI     = `pkg-config mpich2-ch3 --libs`
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNCAR4 -DMDSPLUS -DIMAS -DNO_F01AAF -DCDF_MOVIE # -DNO_CDF
+SOLPS_CPP      = -DNCAR4 -DMDSPLUS -DIMAS -DNO_F01AAF -DCDF_MOVIE -DNETCDF4_3
 B25_DEFINES    =
 EIRENE_DEFINES =
 MPI_CPP        = `pkg-config mpich2-ch3 --cflags`
