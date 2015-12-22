@@ -155,7 +155,7 @@ b2sxdr:   # strange sequence of commands, but works!
 	cd modules/solps4-5; ${MAKE} tags
 	cd modules/solps4-5; ${MAKE} listobj
 	cd modules/solps4-5; ${MAKE} depend
-	cd modules/solps4-5; ${MAKE}; ${MAKE}; rm ${SOLPSTOP}/modules/solps4-5/builds/${HOST_NAME}.${COMPILER}/libb2_solps4.a ; ${MAKE}
+	cd modules/solps4-5; ${MAKE}
 
 manual:
 ifeq ($(shell [ -e ${SOLPSTOP}/doc/solps/b2cdci.F ] && echo yes || echo no ),no)
