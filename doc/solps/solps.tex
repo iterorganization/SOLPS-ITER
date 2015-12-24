@@ -7257,23 +7257,23 @@ q_{ix}^{(Eir)} =
 \kappa_{ix} \frac 1{h_x} \frac{\partial T_i}{\partial x}
 \end{equation*}
 
-$\kappa_{ix} = \kappa_i^{(AN)} + \widetilde{\widetilde{\kappa}}_{ix}^{(CL)}$,
+$\kappa_{ix} = \kappa_{ix}^{(AN)} + \widetilde{\widetilde{\kappa}}_{ix}^{(CL)}$,
 
-$k_i^{(AN)} = \sum \limits_{a = 0}^{ns - 1} \widetilde k_a^{(AN)}$,
+$\kappa_{ix}^{(AN)} = \sum \limits_{a = 0}^{ns - 1} \widetilde \kappa_{ax}^{(AN)}$,
 
 %-------- end of 15th page -------------
 
 $
 \begin{matrix}
-\widetilde{\kappa}_a^{(AN)} & =
+\widetilde{\kappa}_{ax}^{(AN)} & =
 & \left\{
 \begin{matrix}
 \kappa_a^{(AN)}, & z_a \neq 0 \\
-\frac {k_a^{(AN)}}
+\frac {\kappa_a^{(AN)}}
 {\left(
 	1 + \left(
-			\frac{k_a^{(AN)} \left| \frac{\partial T_i}{h_x \partial x} \right|}
-			{\alpha V_{h_i} n_a T_i}
+			\frac{ \frac{\sqrt{g}}{h_x} \kappa_a^{(AN)} \left| \frac{\partial T_i}{h_x \partial x} \right|}
+			{\frac{\sqrt{g}}{h_x} \alpha V_{h_i} n_a T_i}
 		\right)^{\gamma_2}
 \right)^{\frac 1{\gamma_2}}}
 & z_a = 0 \\
@@ -7283,7 +7283,7 @@ $
 
 $V_{h_i} = \sqrt{\frac{2 T_i}{m_a}}$,
 
-$k_a^{(AN)} = \chi_a^{(AN)} n_a$,
+$\kappa_a^{(AN)} = \chi_a^{(AN)} n_a$,
 
 $\chi_a^{(AN)} = \left(
 c_{h_a,0} + c_{h_a,1} \frac{10^{20}}{n_e} + c_{h_a,2} D_a^f + c_{h_a,3}\frac{6,25 \cdot 10^{-2} T_e}{e|B|}
@@ -7455,21 +7455,21 @@ q_{iy}^{(Eir)} =
 
 $V_{iy}^{(Str)} = 0$
 
-$\kappa_{iy} = \kappa_i^{(AN)} + \kappa_{iy}^{(CL)}$,
+$\kappa_{iy} = \kappa_{iy}^{(AN)} + \kappa_{iy}^{(CL)}$,
 
-$k_i^{(AN)} = \sum \limits_{a=0}^{ns-1} \widetilde k_a^{(AN)}$,
+$\kappa_{iy}^{(AN)} = \sum \limits_{a=0}^{ns-1} \widetilde \kappa_{ay}^{(AN)}$,
 
 \begin{equation*}
 \begin{matrix}
-\widetilde k_a^{(AN)} = &
+\widetilde \kappa_{ay}^{(AN)} = &
 & \left\{
 \begin{matrix}
 \kappa_a^{(AN)}, & z_a \neq 0 \\
-\frac {k_a^{(AN)}}
+\frac {\kappa_a^{(AN)}}
 {\left(
 	1 + \left(
-			\frac{k_a^{(AN)} \left| \frac{\partial T_i}{h_y \partial y} \right|}
-			{\alpha V_{h_i} n_a T_i}
+			\frac{\frac{\sqrt{g}}{h_y} \kappa_a^{(AN)} \left| \frac{\partial T_i}{h_y \partial y} \right|}
+			{\frac{\sqrt{g}}{h_y} \alpha V_{h_i} n_a T_i}
 		\right)^{\gamma_2}
 \right)^{\frac 1{\gamma_2}}}
 , & z_a = 0 \\
