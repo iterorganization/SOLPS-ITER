@@ -1,41 +1,44 @@
 #! /usr/bin/env tcsh
 
 cd $SOLPSTOP
-git fetch
-git checkout develop
 echo "Updating SOLPS-ITER"
+git fetch
+git checkout develop && echo "Checked out SOLPS-ITER develop branch" || goto branch
 git pull && goto b25 || goto local
 
 b25:
   git submodule update
-  cd $SOLPSTOP/modules/B2.5
-  git checkout develop
   echo "Updating B2.5"
+  cd $SOLPSTOP/modules/B2.5
+  git checkout develop && echo "Checked out B2.5 develop branch" || goto branch
   git pull && goto Eirene || goto local
 
 Eirene:
-  cd $SOLPSTOP/modules/Eirene
-  git checkout ITER-develop
   echo "Updating Eirene"
+  cd $SOLPSTOP/modules/Eirene
+  git checkout ITER-develop && echo "Checked out Eirene ITER-develop branch" || goto branch
   git pull && goto Carre || goto local
 
 Carre:
-  cd $SOLPSTOP/modules/Carre
-  git checkout ITER-develop
   echo "Updating Carre"
+  cd $SOLPSTOP/modules/Carre
+  git checkout ITER-develop && echo "Checked out Carre ITER-develop branch" || goto branch
   git pull && goto DivGeo || goto local
 
 DivGeo:
-  cd $SOLPSTOP/modules/DivGeo
-  git checkout ITER-develop
   echo "Updating DivGeo"
+  cd $SOLPSTOP/modules/DivGeo
+  git checkout ITER-develop && echo "Checked out DivGeo ITER-develop branch" || goto branch
   git pull && goto compile || goto local
+
+branch:
+  echo "You are not on the main development branch."
 
 local:
   echo "You have local files under version control which"
-  echo "would cause a conflict during the update"
+  echo "would cause a conflict during the update."
   echo "Please modify, delete, rename, stash these files or"
-  echo "commit them to a local branch before proceeding with the update"
+  echo "commit them to a local branch before proceeding with the update."
   exit
 
 compile:
