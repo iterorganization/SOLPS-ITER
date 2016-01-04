@@ -52,7 +52,8 @@ LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lm -lX11 -lXext 
 LD_NAG     = `pkg-config nag --libs`
 LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
-LD_MPI     = `pkg-config mpich2-ch3 --libs`
+LD_MPI     = `pkg-config mvapich2 --libs`
+LD_UAL     = `pkg-config imas-gfortran --libs`
 
 
 #
@@ -87,6 +88,7 @@ export LD_NAG
 export LD_MDSPLUS
 export LD_SONNET
 export LD_MPI
+export LD_UAL
 
 export SOLPS_CPP
 export B25_DEFINES

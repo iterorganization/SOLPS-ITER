@@ -67,6 +67,7 @@ target_yr = b2yr.prt b2yr.plt
 target_yt = b2yt.prt b2fstatt b2mn.dat.2 b2ah.dat.2 b2ai.dat.2 b2yt.files
 target_xd = B2SXDR
 target_rd = b2rd.prt
+target_ual = b2_ual_write.prt
 
 scandir := $(shell cd .. ; pwd)
 projdir := $(shell cd ../.. ; pwd)
@@ -363,6 +364,12 @@ else
 endif
 	-[ -e b2yt.exe.dir/b2fgmtry.2 ] && mv b2yt.exe.dir/b2fgmtry.2 . || echo > /dev/null
 	-rmdir b2yt.exe.dir
+
+$(target_ual) : b2fgmtry b2fstate
+	rm -rf b2_ual_write.exe.dir ; mkdir b2_ual_write.exe.dir ; cp $^ b2_ual_write.exe.dir
+	rm -f $(target_ual)
+	cd b2_ual_write.exe.dir ; ${TIME} ${B2OBJ}/b2_ual_write.exe ; mv $(target_ual) .. ; rm -f $(notdir $^)
+	-rmdir b2_ual_write.exe.dir
 
 stra.dat :
 	ln -s ${SOLPSTOP}/modules/B2.5/Database/stra.dat .
