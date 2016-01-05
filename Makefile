@@ -104,13 +104,26 @@ eirene_mpi:
 b25:
 	cd modules/B2.5; ${MAKE}
 
+b25_all:
+	cd modules/solps4-5; ${MAKE} links
+	cd modules/B2.5;     ${MAKE} ALL
+
 b25_mpi:
 	cd modules/B2.5; ${MAKE} USE_MPI=-DUSE_MPI
+
+b25_all_mpi:
+	cd modules/solps4-5; ${MAKE} links
+	cd modules/B2.5;     ${MAKE} USE_MPI=-DUSE_MPI ALL
 
 
 b25eirene:
 	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE
 	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE
+
+b25eirene_all:
+	cd modules/Eirene;   ${MAKE} USE_B25=-DB25_EIRENE
+	cd modules/solps4-5; ${MAKE} links
+	cd modules/B2.5;     ${MAKE} USE_EIRENE=-DB25_EIRENE ALL
 
 b25eirene_nox:
 	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE LD_GR="" LD_GKS=""
@@ -119,6 +132,11 @@ b25eirene_nox:
 b25eirene_mpi:
 	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI
 	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
+
+b25eirene_all_mpi:
+	cd modules/Eirene;   ${MAKE} USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI
+	cd modules/solps4-5; ${MAKE} links
+	cd modules/B2.5;     ${MAKE} USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI ALL
 
 b25eirene_mpi_nox:
 	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE LD_GR=""  LD_GKS="" USE_MPI=-DUSE_MPI
