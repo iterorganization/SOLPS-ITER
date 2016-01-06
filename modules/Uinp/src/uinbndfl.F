@@ -15,7 +15,7 @@ c=======================================================================
       real hlp_f1
       character hlp_c*2
       logical streql
-      external streql
+      external streql, xertst
 c=======================================================================
 c*** Determine the default source scaling relations
 c#ifdef DBG
@@ -238,10 +238,8 @@ c#endif
           end if !}
         end if !}
       end do !}
-      if(.not.ex) then !{
-        print *,'== Error(s) found in uinbndfl - check the DG model'
-        stop
-      end if !}
+      call xertst (ex, 
+     . '== Error(s) found in uinbndfl - check the DG model')
 c#ifdef DBG
 c      print *,' ... leaving uinbndfl'
 c#endif

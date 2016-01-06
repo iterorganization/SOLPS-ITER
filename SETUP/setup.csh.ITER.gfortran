@@ -37,4 +37,5 @@ setenv CC gcc
 setenv FC gfortran
 
 # Other environment variables
+module load solps-gui
 setenv LD_PRELOAD /usr/lib64/libfontconfig.so.1

@@ -43,6 +43,7 @@ c=======================================================================
      ,  kbnd(nnptseg),lbnd(nnptseg)
       integer ip,iz1,iz2,ik,loff(nbndknd),nz,lz(nnptseg)
       logical er,ex,lw(iztg,2)
+      external xerrab
 c*** mtge(i): target edge connected to the target edge i 
       data mtge / 7, 4, 5, 2, 3, 8, 1, 6 /
       data mtgb / 1, 2, 3, 2, 4, 5, 6, 5 /

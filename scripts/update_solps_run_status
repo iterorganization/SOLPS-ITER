@@ -2,7 +2,7 @@
 
 if ("X-nX" == "X${1}X") then
   touch .status.history
-  cat .status >> .status.history
+  [ -e .status ] && cat .status >> .status.history
   echo '####' >> .status.history
   cp /dev/null .status
   shift

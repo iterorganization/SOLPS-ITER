@@ -19,7 +19,6 @@ EIRDIR = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${TOOL_CHAIN}
 B2BDIR = ${SOLPSTOP}/modules/B2.5/builds/couple_Eirene.${TOOL_CHAIN}
 OBJDIR = ${SOLPSTOP}/modules/solps4-5/builds/${TOOL_CHAIN}
 BASEDIR = ${SOLPSTOP}/modules/solps4-5
-SOLPS4 = ${SOLPSTOP}/../SOLPS4.3
 DEFINES += -DSOLPS4_3 -DB25_EIRENE -DUSE_ARRAYS
 SRC4LOCAL = ${SOLPSTOP}/modules/solps4-5/src/local_4
 SRC5LOCAL = ${SOLPSTOP}/modules/solps4-5/src/local_5
@@ -69,6 +68,7 @@ include ${S45DIR}/config/compile
 ifeq ($(shell [ -e ${S45DIR}/config/config.${HOST_NAME}.${COMPILER}.local ] && echo yes || echo no ),yes)
 include ${S45DIR}/config/config.${HOST_NAME}.${COMPILER}.local
 endif
+SOLPS4 ?= ${SOLPSTOP}/../SOLPS4.3
 ifeq ($(shell [ -d ${SOLPS4} ] && echo yes || echo no ),no)
 $(error Invalid SOLPS4 directory address)
 endif
@@ -78,7 +78,7 @@ include ${BASEDIR}/LISTOBJ
 endif
 
 PROG_XR = b2sxdr.exe
-MOD4LES = ${patsubst ${SRCDIR}/Eirene_modules/%.f,%.o,${shell echo ${SRCDIR}/Eirene_modules/*.f}}
+MOD4LES = ${patsubst ${SRCDIR}/Eirene_modules/%.F,%.o,${shell echo ${SRCDIR}/Eirene_modules/*.F}}
 MOD5LES = ${patsubst ${SRCDIR}/B2.5_modules/%.F,%.o,${shell echo ${SRCDIR}/B2.5_modules/*.F}}
 MODULES	= ${MOD4LES} ${MOD5LES}
 SOURCB4 = ${patsubst ${SRCDIR}/solps4_B2/%.F,%.o,${shell echo ${SRCDIR}/solps4_B2/*.F}}
@@ -113,9 +113,11 @@ MNEXTRA=
 
 .PHONY: DEFAULT ALL clean depend listobj tags links
 
-ALL: ${XREXE}
+ALL: links ${XREXE}
 
 DEFAULT: ${XREXE}
+
+b2sxdr: ${XREXE}
 
 ${XREXE}: ${XROBJ} ${XREXTRA} ${OBJDIR}/libb2_solps5.a ${OBJDIR}/libb2_solps4.a ${MNEXTRA} 
 	${LD} ${LDOPTS} $^ -o $@ ${LDLIBES} ${LCPP} ${LDOPTSend}
@@ -126,7 +128,7 @@ ${OBJDIR}/areaa.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/cgrid.${MOD}
 
 ${OBJDIR}/b2rw.o: ${OBJDIR}/eirdiag.${MOD}
 
-${OBJDIR}/b2sxdr.o: ${OBJDIR}/eirmod_parmmod.${MOD}
+${OBJDIR}/b2sxdr.o: ${OBJDIR}/cpes.${MOD} ${OBJDIR}/eirmod_parmmod.${MOD}
 
 ${OBJDIR}/cdef.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/comxs.${MOD}
 
@@ -160,7 +162,7 @@ ${OBJDIR}/feelrc1.o: ${OBJDIR}/comxs.${MOD}
 
 ${OBJDIR}/fehvds1.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/comxs.${MOD}
 
-${OBJDIR}/find_param.o: ${OBJDIR}/parmmod.${MOD} ${OBJDIR}/ccrm.${MOD} ${OBJDIR}/comusr.${MOD} ${OBJDIR}/comprt.${MOD}
+${OBJDIR}/find_param.o: ${OBJDIR}/parmmod.${MOD} ${OBJDIR}/ccrm.${MOD} ${OBJDIR}/comusr.${MOD} ${OBJDIR}/comprt.${MOD} ${OBJDIR}/cpes.${MOD}
 
 ${OBJDIR}/fmaxwl.o: ${OBJDIR}/crand.${MOD}
 
@@ -196,7 +198,7 @@ ${OBJDIR}/infstat.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/csdvi.${MOD} ${OBJDIR}/eir
 
 ${OBJDIR}/init.o: ${OBJDIR}/ceirsrt.${MOD} ${OBJDIR}/eirdiag.${MOD}
 
-${OBJDIR}/input.o: ${OBJDIR}/adsp.${MOD} ${OBJDIR}/ccona.${MOD} ${OBJDIR}/ccrm.${MOD} ${OBJDIR}/cdiprl.${MOD} ${OBJDIR}/ceirsrt.${MOD} ${OBJDIR}/censav.${MOD} ${OBJDIR}/cgrptl.${MOD} ${OBJDIR}/comsmu.${MOD} ${OBJDIR}/cpl3d.${MOD} ${OBJDIR}/cref.${MOD} ${OBJDIR}/crefmod.${MOD} ${OBJDIR}/csdvi.${MOD} ${OBJDIR}/cspei.${MOD} ${OBJDIR}/cstep.${MOD} ${OBJDIR}/photon.${MOD}
+${OBJDIR}/input.o: ${OBJDIR}/adsp.${MOD} ${OBJDIR}/ccona.${MOD} ${OBJDIR}/ccrm.${MOD} ${OBJDIR}/cdiprl.${MOD} ${OBJDIR}/ceirsrt.${MOD} ${OBJDIR}/censav.${MOD} ${OBJDIR}/cgrptl.${MOD} ${OBJDIR}/clogau.${MOD} ${OBJDIR}/comsmu.${MOD} ${OBJDIR}/comsou.${MOD} ${OBJDIR}/cpes.${MOD} ${OBJDIR}/cpl3d.${MOD} ${OBJDIR}/cref.${MOD} ${OBJDIR}/crefmod.${MOD} ${OBJDIR}/csdvi.${MOD} ${OBJDIR}/cspei.${MOD} ${OBJDIR}/cstep.${MOD} ${OBJDIR}/photon.${MOD}
 
 ${OBJDIR}/inspect.o: ${OBJDIR}/eircolsp.${MOD}
 
@@ -337,13 +339,13 @@ ${OBJDIR}/eirmod_extrab25.o:
 ${OBJDIR}/eirmod_octree.o: ${SRCDIR}/Eirene_modules/eirmod_octree.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/eirmod_octree.o -c ${SRCDIR}/Eirene_modules/eirmod_octree.F
 
-${OBJDIR}/adsp.o: ${SRCDIR}/Eirene_modules/adsp.F
+${OBJDIR}/adsp.o: ${OBJDIR}/cpes.${MOD} ${SRCDIR}/Eirene_modules/adsp.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/adsp.o -c ${SRCDIR}/Eirene_modules/adsp.F
 
 ${OBJDIR}/amark_mod.o: ${SRCDIR}/Eirene_modules/amark_mod.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/amark_mod.o -c ${SRCDIR}/Eirene_modules/amark_mod.F
 
-${OBJDIR}/avltree.o: ${SRCDIR}/Eirene_modules/avltree.F
+${OBJDIR}/avltree.o: ${OBJDIR}/ccona.${MOD} ${SRCDIR}/Eirene_modules/avltree.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/avltree.o -c ${SRCDIR}/Eirene_modules/avltree.F
 
 ${OBJDIR}/braeir.o: ${OBJDIR}/parmmod.${MOD} ${SRCDIR}/Eirene_modules/braeir.F
@@ -387,6 +389,12 @@ ${OBJDIR}/censav.o: ${SRCDIR}/Eirene_modules/censav.F
 
 ${OBJDIR}/cestim.o: ${OBJDIR}/parmmod.${MOD} ${SRCDIR}/Eirene_modules/cestim.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/cestim.o -c ${SRCDIR}/Eirene_modules/cestim.F
+
+${OBJDIR}/cfit.o: ${SRCDIR}/Eirene_modules/cfit.F
+	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/cfit.o -c ${SRCDIR}/Eirene_modules/cfit.F
+
+${OBJDIR}/cfplk.o: ${SRCDIR}/Eirene_modules/cfplk.F
+	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/cfplk.o -c ${SRCDIR}/Eirene_modules/cfplk.F
 
 ${OBJDIR}/cgeom.o: ${OBJDIR}/parmmod.${MOD} ${SRCDIR}/Eirene_modules/cgeom.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/cgeom.o -c ${SRCDIR}/Eirene_modules/cgeom.F
@@ -478,6 +486,9 @@ ${OBJDIR}/csdvi_bgk.o: ${SRCDIR}/Eirene_modules/csdvi_bgk.F
 ${OBJDIR}/csdvi_cop.o: ${SRCDIR}/Eirene_modules/csdvi_cop.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/csdvi_cop.o -c ${SRCDIR}/Eirene_modules/csdvi_cop.F
 
+${OBJDIR}/cspars.o: ${SRCDIR}/Eirene_modules/cspars.F
+	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/cspars.o -c ${SRCDIR}/Eirene_modules/cspars.F
+
 ${OBJDIR}/cspei.o: ${SRCDIR}/Eirene_modules/cspei.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/cspei.o -c ${SRCDIR}/Eirene_modules/cspei.F
 
@@ -487,17 +498,20 @@ ${OBJDIR}/cspez.o: ${OBJDIR}/parmmod.${MOD} ${SRCDIR}/Eirene_modules/cspez.F
 ${OBJDIR}/cstep.o: ${SRCDIR}/Eirene_modules/cstep.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/cstep.o -c ${SRCDIR}/Eirene_modules/cstep.F
 
-${OBJDIR}/ctrcei.o: ${OBJDIR}/parmmod.${MOD} ${SRCDIR}/Eirene_modules/ctrcei.F
-	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/ctrcei.o -c ${SRCDIR}/Eirene_modules/ctrcei.F
-
 ${OBJDIR}/ctetra.o: ${OBJDIR}/parmmod.${MOD} ${SRCDIR}/Eirene_modules/ctetra.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/ctetra.o -c ${SRCDIR}/Eirene_modules/ctetra.F
 
 ${OBJDIR}/ctext.o: ${OBJDIR}/parmmod.${MOD} ${SRCDIR}/Eirene_modules/ctext.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/ctext.o -c ${SRCDIR}/Eirene_modules/ctext.F
 
+${OBJDIR}/ctrcei.o: ${OBJDIR}/parmmod.${MOD} ${SRCDIR}/Eirene_modules/ctrcei.F
+	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/ctrcei.o -c ${SRCDIR}/Eirene_modules/ctrcei.F
+
 ${OBJDIR}/ctrig.o: ${OBJDIR}/cgrid.${MOD} ${SRCDIR}/Eirene_modules/ctrig.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/ctrig.o -c ${SRCDIR}/Eirene_modules/ctrig.F
+
+${OBJDIR}/ctsurf.o: ${SRCDIR}/Eirene_modules/ctsurf.F
+	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/ctsurf.o -c ${SRCDIR}/Eirene_modules/ctsurf.F
 
 ${OBJDIR}/cupd.o: ${OBJDIR}/comsig.${MOD} ${SRCDIR}/Eirene_modules/cupd.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/cupd.o -c ${SRCDIR}/Eirene_modules/cupd.F
@@ -516,6 +530,12 @@ ${OBJDIR}/eircolsp.o: ${SRCDIR}/Eirene_modules/eircolsp.F
 
 ${OBJDIR}/eirdiag.o: ${OBJDIR}/clgin.${MOD} ${OBJDIR}/ccoupl.${MOD} ${SRCDIR}/Eirene_modules/eirdiag.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/eirdiag.o -c ${SRCDIR}/Eirene_modules/eirdiag.F
+
+${OBJDIR}/eirgrid.o: ${SRCDIR}/Eirene_modules/eirgrid.F
+	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/eirgrid.o -c ${SRCDIR}/Eirene_modules/eirgrid.F
+
+${OBJDIR}/eirgrid_lib.o: ${OBJDIR}/eirmap.${MOD} ${SRCDIR}/Eirene_modules/eirgrid_lib.F
+	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/eirgrid_lib.o -c ${SRCDIR}/Eirene_modules/eirgrid_lib.F
 
 ${OBJDIR}/eirmap.o: ${OBJDIR}/eirbase.${MOD} ${SRCDIR}/Eirene_modules/eirmap.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/eirmap.o -c ${SRCDIR}/Eirene_modules/eirmap.F
@@ -544,6 +564,9 @@ ${OBJDIR}/photon.o: ${OBJDIR}/clogau.${MOD} ${OBJDIR}/czt1.${MOD} ${OBJDIR}/comu
 ${OBJDIR}/precision.o: ${SRCDIR}/Eirene_modules/precision.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/precision.o -c ${SRCDIR}/Eirene_modules/precision.F
 
+${OBJDIR}/rcm.o: ${SRCDIR}/Eirene_modules/rcm.F
+	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/rcm.o -c ${SRCDIR}/Eirene_modules/rcm.F
+
 endif
 
 ${OBJDIR}/b2_4to5.${MOD}: ${OBJDIR}/eirmod_parmmod.${MOD} ${OBJDIR}/braeir.${MOD} ${OBJDIR}/eirdiag.${MOD}
@@ -570,13 +593,13 @@ ${OBJDIR}/eirmod_precision.${MOD}: ${OBJDIR}/precision.${MOD}
 ${OBJDIR}/eirmod_octree.${MOD}: ${SRCDIR}/Eirene_modules/eirmod_octree.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/eirmod_octree.o -c ${SRCDIR}/Eirene_modules/eirmod_octree.F
 
-${OBJDIR}/adsp.${MOD}: ${SRCDIR}/Eirene_modules/adsp.F
+${OBJDIR}/adsp.${MOD}: ${OBJDIR}/cpes.${MOD} ${SRCDIR}/Eirene_modules/adsp.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/adsp.o -c ${SRCDIR}/Eirene_modules/adsp.F
 
 ${OBJDIR}/amark_mod.${MOD}: ${SRCDIR}/Eirene_modules/amark_mod.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/amark_mod.o -c ${SRCDIR}/Eirene_modules/amark_mod.F
 
-${OBJDIR}/avltree.${MOD}: ${SRCDIR}/Eirene_modules/avltree.F
+${OBJDIR}/avltree.${MOD}: ${OBJDIR}/ccona.${MOD} ${SRCDIR}/Eirene_modules/avltree.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/avltree.o -c ${SRCDIR}/Eirene_modules/avltree.F
 
 ${OBJDIR}/braeir.${MOD}: ${OBJDIR}/parmmod.${MOD} ${SRCDIR}/Eirene_modules/braeir.F
@@ -620,6 +643,12 @@ ${OBJDIR}/censav.${MOD}: ${SRCDIR}/Eirene_modules/censav.F
 
 ${OBJDIR}/cestim.${MOD}: ${OBJDIR}/parmmod.${MOD} ${SRCDIR}/Eirene_modules/cestim.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/cestim.o -c ${SRCDIR}/Eirene_modules/cestim.F
+
+${OBJDIR}/cfit.${MOD}: ${SRCDIR}/Eirene_modules/cfit.F
+	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/cfit.o -c ${SRCDIR}/Eirene_modules/cfit.F
+
+${OBJDIR}/cfplk.${MOD}: ${SRCDIR}/Eirene_modules/cfplk.F
+	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/cfplk.o -c ${SRCDIR}/Eirene_modules/cfplk.F
 
 ${OBJDIR}/cgeom.${MOD}: ${OBJDIR}/parmmod.${MOD} ${SRCDIR}/Eirene_modules/cgeom.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/cgeom.o -c ${SRCDIR}/Eirene_modules/cgeom.F
@@ -711,6 +740,9 @@ ${OBJDIR}/csdvi_bgk.${MOD}: ${SRCDIR}/Eirene_modules/csdvi_bgk.F
 ${OBJDIR}/csdvi_cop.${MOD}: ${SRCDIR}/Eirene_modules/csdvi_cop.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/csdvi_cop.o -c ${SRCDIR}/Eirene_modules/csdvi_cop.F
 
+${OBJDIR}/cspars.${MOD}: ${SRCDIR}/Eirene_modules/cspars.F
+	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/cspars.o -c ${SRCDIR}/Eirene_modules/cspars.F
+
 ${OBJDIR}/cspei.${MOD}: ${SRCDIR}/Eirene_modules/cspei.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/cspei.o -c ${SRCDIR}/Eirene_modules/cspei.F
 
@@ -729,8 +761,11 @@ ${OBJDIR}/ctext.${MOD}: ${OBJDIR}/parmmod.${MOD} ${SRCDIR}/Eirene_modules/ctext.
 ${OBJDIR}/ctrcei.${MOD}: ${OBJDIR}/parmmod.${MOD} ${SRCDIR}/Eirene_modules/ctrcei.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/ctrcei.o -c ${SRCDIR}/Eirene_modules/ctrcei.F
 
-${OBJDIR}/ctrig.${MOD}:  ${OBJDIR}/cgrid.${MOD} ${SRCDIR}/Eirene_modules/ctrig.F
+${OBJDIR}/ctrig.${MOD}: ${OBJDIR}/cgrid.${MOD} ${SRCDIR}/Eirene_modules/ctrig.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/ctrig.o -c ${SRCDIR}/Eirene_modules/ctrig.F
+
+${OBJDIR}/ctsurf.${MOD}: ${SRCDIR}/Eirene_modules/ctsurf.F
+	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/ctsurf.o -c ${SRCDIR}/Eirene_modules/ctsurf.F
 
 ${OBJDIR}/cupd.${MOD}: ${OBJDIR}/comsig.${MOD} ${SRCDIR}/Eirene_modules/cupd.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/cupd.o -c ${SRCDIR}/Eirene_modules/cupd.F
@@ -750,7 +785,13 @@ ${OBJDIR}/eircolsp.${MOD}: ${SRCDIR}/Eirene_modules/eircolsp.F
 ${OBJDIR}/eirdiag.${MOD}: ${OBJDIR}/clgin.${MOD} ${OBJDIR}/ccoupl.${MOD} ${SRCDIR}/Eirene_modules/eirdiag.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/eirdiag.o -c ${SRCDIR}/Eirene_modules/eirdiag.F
 
-${OBJDIR}/eirmap.${MOD}: ${OBJDIR}/eirbase.${MOD} ${SRCDIR}/Eirene_modules/eirbase.F
+${OBJDIR}/eirgrid.${MOD}: ${SRCDIR}/Eirene_modules/eirgrid.F
+	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/eirgrid.o -c ${SRCDIR}/Eirene_modules/eirgrid.F
+
+${OBJDIR}/eirgrid_lib.${MOD}: ${OBJDIR}/eirmap.${MOD} ${SRCDIR}/Eirene_modules/eirgrid_lib.F
+	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/eirgrid_lib.o -c ${SRCDIR}/Eirene_modules/eirgrid_lib.F
+
+${OBJDIR}/eirmap.${MOD}: ${OBJDIR}/eirbase.${MOD} ${SRCDIR}/Eirene_modules/eirmap.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/eirmap.o -c ${SRCDIR}/Eirene_modules/eirmap.F
 
 ${OBJDIR}/eirsamsp.${MOD}: ${SRCDIR}/Eirene_modules/eirsamsp.F
@@ -776,6 +817,9 @@ ${OBJDIR}/photon.${MOD}: ${OBJDIR}/clogau.${MOD} ${OBJDIR}/czt1.${MOD} ${OBJDIR}
 
 ${OBJDIR}/precision.${MOD}: ${SRCDIR}/Eirene_modules/precision.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/precision.o -c ${SRCDIR}/Eirene_modules/precision.F
+
+${OBJDIR}/rcm.${MOD}: ${SRCDIR}/Eirene_modules/rcm.F
+	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/rcm.o -c ${SRCDIR}/Eirene_modules/rcm.F
 
 ${OBJDIR}/libb2_solps4.a: ${MD4OBJS} ${SB4OBJS} ${SE4OBJS}
 	${BLD} $@ $?
@@ -804,6 +848,10 @@ tags:
 
 clean:
 	rm -f ${OBJDIR}/*.f ${OBJDIR}/*.o ${OBJDIR}/*.${MOD} ${OBJDIR}/*.a ${OBJDIR}/*.exe
+	rm -Rf ${SRCDIR}/B2_include
+	rm -Rf ${SRCDIR}/Eirene_modules
+	rm -Rf ${SRCDIR}/solps4_B2
+	rm -Rf ${SRCDIR}/solps4_Eirene
 
 listobj: 
 	@rm -f ${BASEDIR}/LISTOBJ; touch ${BASEDIR}/LISTOBJ; l="OBJS ="; \
@@ -847,9 +895,10 @@ include ${OBJDIR}/dependencies
 
 echo:
 	@echo VPATH=${VPATH}
-#	@echo MOD4LES=${MOD4LES}
+	@echo MOD4LES=${MOD4LES}
+	@echo MOD5LES=${MOD5LES}
 #	@echo MODOBJS=${MODOBJS}
-#	@echo MD5OBJS=${MD5OBJS}
+	@echo MD5OBJS=${MD5OBJS}
 	@echo MD4OBJS=${MD5OBJS}
 	@echo SB4OBJS=${SB4OBJS}
 	@echo SE4OBJS=${SE4OBJS}

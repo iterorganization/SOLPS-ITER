@@ -9,6 +9,7 @@
 #
 # If you do have NetCDF on your system:
 # Add -DCDF_MOVIE to SOLPS_CPP to be able to produce movies
+# Add -DNETCDF4_3 to SOLPS_CPP is you are linking to NetCDF version 4.3 or newer
 #
 # If you have NCAR version 3 on your system:
 # Remove -DNCAR4 from SOLPS_CPP
@@ -45,7 +46,7 @@
 LD_NETCDF  = `nf-config --flibs`
 LD_MSCL    = `pkg-config mscl --libs`
 LD_GR      = -L${GR_ROOT}/lib -lgr
-LD_GKS     = -L${GLI_HOME} -lgks -lgfortran -lX11 -lXt -lXmu
+LD_GKS     = -L${GLI_HOME} -lgks -lX11 -lXt
 LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lm -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lz -lpthread -lXrender -lbz2 -lgfortran # for NCARG v6.x.x
 #LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lm                                                                                                          # for NCARG v4.x.x
 LD_NAG     = `pkg-config nag --libs`
@@ -58,7 +59,7 @@ LD_MPI     = -L/work/imas/opt/libibverbs/1.1.4/lib `pkg-config mpich2-ch3 --libs
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNCAR4 -DMDSPLUS -DIMAS -DNO_F01AAF -DCDF_MOVIE # -DNO_CDF
+SOLPS_CPP      = -DNCAR4 -DMDSPLUS -DIMAS -DNO_F01AAF -DCDF_MOVIE -DNETCDF4_3
 B25_DEFINES    =
 EIRENE_DEFINES =
 MPI_CPP        = `pkg-config mpich2-ch3 --cflags`

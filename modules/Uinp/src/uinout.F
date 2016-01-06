@@ -24,7 +24,7 @@ c=======================================================================
       logical, allocatable :: done(:)
       character utxthd(34)*71, utxtfl(7)*47, ufnm*(*), ucdnmdl*10
       character utxtgt*71
-      external streql
+      external streql, xerrab
       data utxthd /
      1        '** 1. Data for operating mode' ,
      2        '** 2. Data for standard mesh' ,
@@ -274,7 +274,7 @@ c**  additional cells outside standard mesh
       if (nradd .gt. nadd) then !{
         print *, ' Too many additional zones : NRADD = ', nradd
         print *, ' Recompile Uinp with an incresaed value of NADD'
-        stop
+        call xerrab ('Too many additional zones')
       end if !}
       if (nladd) then !{
         write(iunoo,707) nradd

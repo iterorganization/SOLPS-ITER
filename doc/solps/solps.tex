@@ -401,8 +401,10 @@ purpose, a master \SOLPSITER \verb!Makefile! is provided, located at \$\verb!{SO
   \item[carre] The \verb!Carre! grid generator and associated translators only
   \item[divgeo] The \verb!DivGeo! graphical input file builder and accompanying equilibrium and template converters only
   \item[b25] The \verb!B2.5! stand-alone plasma fluid solver and accompanying programs only
+  \item[b25\_all] The \verb!B2.5! stand-alone plasma fluid solver and accompanying programs only, plus \verb!b2xd! the \SOLPSfive to \SOLPSfour converter
   \item[eirene] The \verb!Eirene! stand-alone Monte-Carlo neutral transport code only
   \item[b25eirene] The \verb!B2.5-Eirene! main code and accompanying programs only
+  \item[b25eirene\_all] The \verb!B2.5-Eirene! main code and accompanying programs only, plus \verb!b2xd! the \SOLPSfive to \SOLPSfour converter
   \item[uinp] The \verb!Uinp! translator from \verb!DivGeo! output to \verb!B2.5-Eirene! input only (requires {\bf b25eirene} previous compilation)
   \item[sonnet-light] The \verb!Sonnet! library only
   \item[triang] The \verb!Tria! and \verb!Triageom! triangulation utilities only
@@ -484,6 +486,7 @@ SOLPSTOP
 |   +---commands
 |   +---matlab
 |   +---palettes
++---scripts.local
 +---modules
 |   +---Sonnet-light
 |   +---fxdr
@@ -5961,9 +5964,9 @@ Zhdanov fit to Braginskii and the \SOLPSfour values.
 \chapter{Model equations for B2.5}
 \label{cha:equations}\index{B2.5, model}\index{B2.5, equations}\index{equations}\index{model}
 
-A note about sign conventions. The toroidal magnetic field component $b_z$ is positive if the toroidal magnetic field is directed {\em clockwise} when viewing the tokamak from above. The poloidal magnetic field component $b_x$ is positive if the poloidal magnetic field is directed {\em counterclockwise} when viewing the poloidal plane with the central axis line on its left. The radial coordinate $y$ increases as one crosses the separatrix from the core (or Private flux) region into the main SOL region (as so is minimum at the magnetic axis). The poloidal coordinate $x$ follows the same convention as the poloidal magnetic field (positive is counterclockwise).
+A note about sign conventions. The radial coordinate $y$ increases as one crosses the separatrix from the core (or private flux) region into the main SOL region (and so is minimum at the magnetic axis). The poloidal coordinate $x$ increases in the {\em clockwise} direction when viewing the poloidal plane with the central axis line on its left. The toroidal magnetic field component $b_z$ is taken as positive if the toroidal magnetic field is directed {\em clockwise} when viewing the tokamak from above. The poloidal magnetic field component $b_x$ follows the same convention as the $x$ component and is positive if when directed in the direction of increasing poloidal index, i.e. {\em clockwise}.
 
-Is it important to know, that, in the equations below, the parallel velocity $V_\parallel$ is a true parallel velocity, i.e. it changes sign if the poloidal magnetic field component does, namely: $V_\parallel = \vec{V} \cdot \vec{B}$. This applies to all species, including electrons, meaning $V_{\parallel a}$ and $V_{\parallel e}$. However, the poloidal projections of the fluxes and currents, such as $\Gamma_{ax}$, are positive when the are colinear with $\vec{e}_x$, i.e. point in the direction of increasing $x$. The exception to this is the parallel current, $j_\parallel$. In the equations below, it has the same sign convetion as the parallel velocity. In the actual code, because it is treated as a flux, it follows the sign convention of the fluxes. This therefore means that the code does not follow $j_\parallel$, but rather $j_\parallel \cdot |b_x|/b_x$.
+Is it important to know, that, in the equations below, the parallel velocity $V_\parallel$ is a true parallel velocity, i.e. it changes sign if the poloidal magnetic field component does, namely: $V_\parallel = \vec{V} \cdot \vec{B}$. This applies to all species, including electrons, meaning $V_{\parallel a}$ and $V_{\parallel e}$. However, the poloidal projections of the fluxes and currents, such as $\Gamma_{ax}$, are positive when they are colinear with $\vec{e}_x$, i.e. point in the direction of increasing $x$. The exception to this is the parallel current, $j_\parallel$. In the equations below, it has the same sign convention as the parallel velocity. In the actual code, because it is treated as a flux, it follows the sign convention of the fluxes. This therefore means that the code does not follow $j_\parallel$, but rather $j_\parallel \cdot |b_x|/b_x$.
 
 %-------- Equations by S.P. Voskoboynikov ---------
 
@@ -7256,23 +7259,23 @@ q_{ix}^{(Eir)} =
 \kappa_{ix} \frac 1{h_x} \frac{\partial T_i}{\partial x}
 \end{equation*}
 
-$\kappa_{ix} = \kappa_i^{(AN)} + \widetilde{\widetilde{\kappa}}_{ix}^{(CL)}$,
+$\kappa_{ix} = \kappa_{ix}^{(AN)} + \widetilde{\widetilde{\kappa}}_{ix}^{(CL)}$,
 
-$k_i^{(AN)} = \sum \limits_{a = 0}^{ns - 1} \widetilde k_a^{(AN)}$,
+$\kappa_{ix}^{(AN)} = \sum \limits_{a = 0}^{ns - 1} \widetilde \kappa_{ax}^{(AN)}$,
 
 %-------- end of 15th page -------------
 
 $
 \begin{matrix}
-\widetilde{\kappa}_a^{(AN)} & =
+\widetilde{\kappa}_{ax}^{(AN)} & =
 & \left\{
 \begin{matrix}
 \kappa_a^{(AN)}, & z_a \neq 0 \\
-\frac {k_a^{(AN)}}
+\frac {\kappa_a^{(AN)}}
 {\left(
 	1 + \left(
-			\frac{k_a^{(AN)} \left| \frac{\partial T_i}{h_x \partial x} \right|}
-			{\alpha V_{h_i} n_a T_i}
+			\frac{ \frac{\sqrt{g}}{h_x} \kappa_a^{(AN)} \left| \frac{\partial T_i}{h_x \partial x} \right|}
+			{\frac{\sqrt{g}}{h_x} \alpha V_{h_i} n_a T_i}
 		\right)^{\gamma_2}
 \right)^{\frac 1{\gamma_2}}}
 & z_a = 0 \\
@@ -7282,7 +7285,7 @@ $
 
 $V_{h_i} = \sqrt{\frac{2 T_i}{m_a}}$,
 
-$k_a^{(AN)} = \chi_a^{(AN)} n_a$,
+$\kappa_a^{(AN)} = \chi_a^{(AN)} n_a$,
 
 $\chi_a^{(AN)} = \left(
 c_{h_a,0} + c_{h_a,1} \frac{10^{20}}{n_e} + c_{h_a,2} D_a^f + c_{h_a,3}\frac{6,25 \cdot 10^{-2} T_e}{e|B|}
@@ -7454,21 +7457,21 @@ q_{iy}^{(Eir)} =
 
 $V_{iy}^{(Str)} = 0$
 
-$\kappa_{iy} = \kappa_i^{(AN)} + \kappa_{iy}^{(CL)}$,
+$\kappa_{iy} = \kappa_{iy}^{(AN)} + \kappa_{iy}^{(CL)}$,
 
-$k_i^{(AN)} = \sum \limits_{a=0}^{ns-1} \widetilde k_a^{(AN)}$,
+$\kappa_{iy}^{(AN)} = \sum \limits_{a=0}^{ns-1} \widetilde \kappa_{ay}^{(AN)}$,
 
 \begin{equation*}
 \begin{matrix}
-\widetilde k_a^{(AN)} = &
+\widetilde \kappa_{ay}^{(AN)} = &
 & \left\{
 \begin{matrix}
 \kappa_a^{(AN)}, & z_a \neq 0 \\
-\frac {k_a^{(AN)}}
+\frac {\kappa_a^{(AN)}}
 {\left(
 	1 + \left(
-			\frac{k_a^{(AN)} \left| \frac{\partial T_i}{h_y \partial y} \right|}
-			{\alpha V_{h_i} n_a T_i}
+			\frac{\frac{\sqrt{g}}{h_y} \kappa_a^{(AN)} \left| \frac{\partial T_i}{h_y \partial y} \right|}
+			{\frac{\sqrt{g}}{h_y} \alpha V_{h_i} n_a T_i}
 		\right)^{\gamma_2}
 \right)^{\frac 1{\gamma_2}}}
 , & z_a = 0 \\

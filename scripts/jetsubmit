@@ -78,5 +78,9 @@ echo Using submission file template $QSUB
 sed -e 's:#PWD#:'$PWD':g' -e 's:#SOLPSTOP#:'$SOLPSTOP':g' -e 's:#EMAIL#:'$EMAIL':g' -e "s:#MPIOPTS#:'$MPIOPTS':g" < $QSUB > $NAME
 chmod u+x $NAME
 
-update_solps_run_status -n "Submitted at `date`"
+set msg="Submitted at `date`"
+update_solps_run_status -n ${msg}
+if ($?SOLPS_GUI_IP) then
+  echo ${USER} ${PWD} ${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
+endif
 llsubmit $NAME

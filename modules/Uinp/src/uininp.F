@@ -13,7 +13,8 @@ c======================================================================
       logical uex,open_file,streql,match_found
       character*2 listmat(nmtr)
       character*256 solpstop
-      external open_file,uinnam,uintrg,uinaux,uiniamd,streql
+      external open_file,uinnam,uintrg,uinaux,uiniamd,streql,
+     .         xertst,xerrab
 c======================================================================
 c*** set up the input routine
 c
@@ -28,11 +29,9 @@ c
       write(*,*) '... opening uinput.trg'
       open(iunii,file='uinput.trg')
       call uintopo(iunii)
-      if(topo.eq.' ') then !{
-      	write(0,*) 'Old-style DG output. Please produce the new one -',
-     ,	      	      	      	      	      	    ' or use uinp.1.42'
-      	stop
-      end if !}
+      call xertst (.not.(streql(topo,' ')),
+     , 	'Old-style DG output. Please produce the new one -'//
+     ,	' or use uinp.1.42')        
       call import(uintrg)
       write(*,*) '... opening uinput.dg'
       open(iunii,file='uinput.dg')
@@ -40,14 +39,14 @@ c
       if(ntrgte.ne.ntrgtm) then !{
       	write(0,*) 'Something is wrong with target edge specification'
       	write(0,*) '  ==> check the target edges in the DG model'
-	stop
+	call xerrab ('Wrong target edge specification')
       end if !}
       if(ntrgte.eq.0) then !{
       	if(index(topo,'SN').eq.0) then !{
 	  write(0,*) 'Magnetic configuration inconsistent with old-',
      ,	      	     'style specification of the target edges'  
 	  write(0,*) '	==> Add "Target specification" in the DG model'
-	  stop
+	  call xerrab ('Inconsistent magnetic configuration')
 	end if !}
       	jedgep(1)=jedgeo(2)
       	jedgep(2)=jedgeo(3)
@@ -155,7 +154,7 @@ c*** Read the AMDS file if exists
 	    write(0,*) '	 in either $SOLPSTOP/modules/amds or ',
      ,                          '$SOLPSTOP/data(.local)/AMDS ',
      ,	                        'or the current directory'
-	    stop
+	    call xerrab ('AMDS file not found')
 	  end if !}
       	end if !}
       end do !}

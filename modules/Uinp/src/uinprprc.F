@@ -19,6 +19,7 @@ c*** hlp_h shows the species equivalent to the default ones
       integer n_hlp_h,m_hlp_h
       parameter (n_hlp_h=6, m_hlp_h=2)
       character*4 hlp_h(n_hlp_h,m_hlp_h,2)
+      external xerrab
       data hlp_h /
      /	'D', 'D+', 'D2', 'D2+', '2D', '2D+', 
      ,  'T', 'T+', 'T2', 'T2+', '2T', '2T+',
@@ -73,7 +74,8 @@ c***  ign is the list of correspondence of the group IDs: 1-default, 2-used
 	      nnrctn=nnrctn+1
 	      if(nnrctn.gt.mreac) then !{
 	      	write(0,*) 'Too many reaction datasets specified:',nnrctn
-		stop '==> Check the AMDS model and NREAC in KOPPLDIM.F'
+		call xerrab
+     .           ('==> Check the AMDS model and NREAC in KOPPLDIM.F')
 	      end if !}
 	      ii=rctdgrp(j,l)
 	      if(ii.ne.0) then !{
@@ -137,7 +139,7 @@ c*** Check the reaction type - must be assigned to each reaction
           write(0,*) 'Error occurred treating reaction ',i
 	  write(0,*) 'STOP ==> check the AMDS model. If OK, then the ',
      ,      'AMDS file is corrupted - or an internal error in UINP'
-	  stop
+	  call xerrab ('Undefined reaction type')
 	end if !}
       end do !}
 c-----------------------------------------------------------------------      
@@ -226,7 +228,7 @@ c*** Parse the multiple output particles, if any (e.g., 2H)
 
       if(ex) then !{
       	write(0,*) 'Errors found in secondary particle specification'
-	stop '==> Check the AMDS model'
+	call xerrab ('==> Check the AMDS model')
       end if !}
 c-----------------------------------------------------------------------      
 c*** Analyse the reaction data and prepare the data for Eirene
@@ -314,7 +316,7 @@ c***  check the group and find the related reaction - if any
 		if(k2.gt.2) then !{
 		  write(0,*) 'Wrong number of reactions (',k2+1,
      ,		      	      	      	      	  ') in the group ',ig
-		  stop '--- error found in reaction specification'
+		  call xerrab ('--- error found in reaction specification')
 		end if !}
 		
       	        k2=0
@@ -345,7 +347,7 @@ c*** appear first
 		    write(0,*) 'Different reaction types for the ',
      ,		    					'group ',ig
                     write(0,*) 'Comparing reactions ',irc,' and ',k1
-		    stop '==> Check the AMDS model'
+		    call xerrab ('==> Check the AMDS model')
 		  end if !}
 		  ex=.false.
 		  if(rctntyp(irc).eq.'CX' .or. 
@@ -383,7 +385,7 @@ c*** appear first
      ,		    	rctntyp(irc), ' type'
                       write(0,*) 
      ,                 'Error occured when treating reaction ',irc
-		      stop '==> Check the AMDS model'
+		      call xerrab ('==> Check the AMDS model')
 		    end if !}
 		  else if(rctntyp(irc).eq.'EI' .or. 
      ,		  		rctntyp(irc).eq.'RC' .or. 
@@ -431,7 +433,7 @@ c*** appear first
      ,		    	rctntyp(irc), ' reaction'
                       write(0,*) 
      ,                 'Error occured when treating reaction ',irc
-		      stop '==> Check the AMDS model'
+		      call xerrab ('==> Check the AMDS model')
 		    end if !}
 		  else !}{
 		    write(0,*) 'Wrong grouping of the reaction data. ',
@@ -442,7 +444,7 @@ c*** appear first
      ,		      'CX, II, or EL reaction'
                     write(0,*) 
      ,               'Error occured when treating reaction ',irc
-		    stop '==> Check the AMDS model'
+		    call xerrab ('==> Check the AMDS model')
 		  end if !} #6
 		end if !} #5 (k1)
 
@@ -474,7 +476,7 @@ c*** appear first
 		    write(0,*) 'Different reaction types for the ',
      ,		    					'group ',ig
                     write(0,*) 'Comparing reactions ',irc,' and ',k3
-		    stop '==> Check the AMDS model'
+		    call xerrab ('==> Check the AMDS model')
 		  end if !}
 		  ex=.false.
 		  if(rctntyp(irc).eq.'CX' .or. 
@@ -512,7 +514,7 @@ c*** appear first
      ,		    	rctntyp(irc), ' type'
                       write(0,*) 
      ,                 'Error occured when treating reaction ', irc
-		      stop '==> Check the AMDS model'
+		      call xerrab ('==> Check the AMDS model')
 		    end if !}
 		  else if(rctntyp(irc).eq.'EI' .or. 
      ,		  	      rctntyp(irc).eq.'RC' .or.
@@ -548,7 +550,7 @@ c*** appear first
      ,		    	rctntyp(irc), ' reaction'
                       write(0,*)
      ,                 'Error occured when treating reaction ', irc
-		      stop '==> Check the AMDS model'
+		      call xerrab ('==> Check the AMDS model')
 		    end if !}
 		  else !}{
 		    write(0,*) 'Wrong grouping of the reaction data. ',
@@ -559,7 +561,7 @@ c*** appear first
      ,		      'CX, II, or EL reaction'
                     write(0,*)
      ,               'Error occured when treating reaction ', irc
-		    stop '==> Check the AMDS model'
+		    call xerrab ('==> Check the AMDS model')
 		  end if !} #6
 		end if !} #5 (k3)
 	      end if !} #4 (ig) 
@@ -579,7 +581,8 @@ c*** Add the primary reaction to the final list
 		if(nreaci.gt.nreac) then !{
 		  write(0,*) 'Too many different reactions specified:',
      ,		      	      	      	      	      	      	  nreaci
-		  stop '==> Check the AMDS model and NREAC in KOPPLDIM.F'
+		  call xerrab
+     .             ('==> Check the AMDS model and NREAC in KOPPLDIM.F')
 		end if !}
 	        ir(nrcln)=nreaci
 	        filnam(nrcln)=rctndbs(k0)
@@ -689,12 +692,12 @@ c>>>
 	        if(l.ne.4) then !{
 	          write(0,*) 'The bulk particle must be a plasma ',
      ,              'ion: ',l,k0,'  ',rctnptin(k0)
-       	          stop '==> Check the AMDS model'
+       	          call xerrab ('==> Check the AMDS model')
 	        end if !}
 	        if(k.le.0) then !{
 	          write(0,*) 'Wrong specification of a bulk ',
      ,              'particle: ',k0,'  ',rctnptin(k0)
-       	          stop '==> Check the AMDS model'
+       	          call xerrab ('==> Check the AMDS model')
 	        end if !}
 	        iib=100*k+14
 	      else !}{
@@ -705,7 +708,7 @@ c>>>
 	      if(l.lt.0) then !{
 	      	write(0,*) 'Output particle 1 not on the list: ',
      ,  	  l,k0,'  ',rctnpto1(k0)
-       	          stop '==> Check the AMDS model'
+       	          call xerrab ('==> Check the AMDS model')
 	      else if(l.gt.0) then !}{
 	      	ii1=100*k+10*rctnnmo1(k0)+l
 	      else !}{
@@ -716,7 +719,7 @@ c>>>
 	      if(l.lt.0) then !{
 	      	write(0,*) 'Output particle 2 not on the list: ',
      ,  	  l,k0,'  ',rctnpto2(k0)
-       	          stop '==> Check the AMDS model'
+       	          call xerrab ('==> Check the AMDS model')
 	      else if(l.gt.0) then !}{
 	      	ii2=100*k+10*rctnnmo2(k0)+l
 	      else !}{
@@ -743,7 +746,7 @@ c>>>
      ,  	      'in uinp.'
 		    write(0,*) 'ipt,irc,k0,kk,k1,k2 = ',
      ,  	      ipt,irc,k0,kk,k1,k2
-       	            stop '==> Check the AMDS model'
+       	            call xerrab ('==> Check the AMDS model')
 		  end if !}
 		  hlp_ee=ir(k2)
 	      	else if(k3.gt.0) then !}{
@@ -757,7 +760,7 @@ c>>>
      ,  	      'in uinp.'
 		    write(0,*) 'ipt,irc,k0,kk,k3,k4 = ',
      ,  	      ipt,irc,k0,kk,k3,k4
-       	            stop '==> Check the AMDS model'
+       	            call xerrab ('==> Check the AMDS model')
 		  end if !}
 		  hlp_ee=ir(k4)
 	      	else !}{
@@ -820,7 +823,7 @@ c>>>
               else  !}{
              	write(0,*) 'Wrong value of lknd : ',lknd,
      ,       				  '  -- internal error in uinp!'
-             	stop
+             	call xerrab ('Wrong lknd value')
               end if !}
 
 	    end if !} #3 (l_hlp)
@@ -838,7 +841,7 @@ c>>>
 	else  !}{
 	  write(0,*) 'Wrong value of lknd : ',lknd,
      ,	                                  '  -- internal error in uinp!'
-	  stop
+	  call xerrab ('Wrong lknd value')
 	end if !}
       end do !} #0  (ipt: particles)
 
@@ -881,7 +884,7 @@ c>>>
 	write(0,'(4x,a2,1x,i5,i8)') 'RC',n,DEF_NREC
         write(0,*) '==> Check the AMDS model '//
      ,   'and NREL, NRDS, or NREC in DIMENSIONS.F'
-      	stop 
+      	call xerrab ('Too many reactions')
       end if !}
 c=======================================================================
       end

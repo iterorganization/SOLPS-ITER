@@ -14,6 +14,7 @@ c=======================================================================
       integer i,j,k,l,m,n,ii,jj,nbc
       integer ifl(DEF_NFL)
       logical ex
+      external xerrab
 c=======================================================================
 #ifdef DBG
       print *,'Starting uinprpb2'   !###
@@ -228,7 +229,7 @@ c*** k, m, n are the numbers of recycling, specified, and all strata
      ,    			'(1x,a2,1x,50l2/(4x,50l2))') jj,
      ,    			  (nlrbnds(ii,jj),ii=1,nznbndt(j))
 	end do !}
-	stop ' == Internal error in UINP'
+	call xerrab (' == Internal error in UINP')
       end if !}
 
 #ifdef DBG
@@ -283,7 +284,7 @@ c*** Recycling sources
      ,  	      	      	      '(1x,a2,1x,50l2/(4x,50l2))') jj,
      ,  	      	      	      	(nlrbnds(ii,jj),ii=1,nznbndt(j))
 	      end do !}
-      	      stop ' == Internal error in UINP'
+      	      call xerrab (' == Internal error in UINP')
             end if !}
 
 c***  	      	crcstra, rcpos, rcstart, rcend
@@ -319,7 +320,7 @@ c*** Gas puffing sources
         if(k.ge.nmxprm) then !{
           write(0,*) 'Too many strata found in uinprpb2: ',k
           write(0,*) 'Gas puffing loop, i = ',i
-      	  stop ' == Internal error in UINP'
+      	  call xerrab (' == Internal error in UINP')
         end if !}
 
 c***  	    crcstra, rcpos, rcstart, rcend
@@ -346,7 +347,7 @@ c*** Recombination sources
         if(k.ge.nmxprm) then !{
           write(0,*) 'Too many strata found in uinprpb2: ',k
           write(0,*) 'Recombination loop, i = ',i
-      	  stop ' == Internal error in UINP'
+      	  call xerrab (' == Internal error in UINP')
         end if !}
 
 c***  	    crcstra, rcpos, rcstart, rcend
@@ -373,13 +374,13 @@ c*** Time-dependent stratum
 
         if(k.ne.n) then !{
           write(0,*) 'Wrong strata counting in uinprpb2: k,n =',k,n
-          stop ' == Internal error in UINP !!'
+          call xerrab (' == Internal error in UINP !!')
         end if !}
 
         if(k.ge.nmxprm) then !{
           write(0,*) 'Too many strata found in uinprpb2: ',k
           write(0,*) 'The last stratum'
-          stop ' == Internal error in UINP'
+          call xerrab (' == Internal error in UINP')
         end if !}
 
 c***          crcstra, rcpos, rcstart, rcend
@@ -578,7 +579,7 @@ c*** impflag, nspecies, nfluids
 	  write(0,*) 'Ill-sorted plasma species in uinprpb2. nspcncl, ',
      ,	    'nspcpls, spcsrnp: ',nspcncl,nspcpls
 	  write(0,*) (spcsrnp(i),i=1,nspcpls)
-	  stop '== Internal error in UINP !!'
+	  call xerrab ('== Internal error in UINP !!')
 	end if !}
        end if !}
 

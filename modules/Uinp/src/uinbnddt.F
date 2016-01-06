@@ -12,6 +12,7 @@ c*** sources) for the Eirene input file
 c=======================================================================
 #include "uinput.inc"
       integer i,j,k,l,m,n,ibk,isf
+      external xerrab
 c=======================================================================
 
       nstsi=0
@@ -29,7 +30,7 @@ c*** First, non-default surface...
      ,	      	      	      	      	  '  ',ctxbnds(ibk),',  zone',isf
 	    write(0,*) 'STOP ==> Check the boundary specification in ',
      ,	      	      	      	 'DG and parameter NSTSI in KOPPLDIM.F'
-	    stop
+	    call xerrab ('Too many non-default surfaces')
 	  end if !}
 	  write(txtsfl(nstsi),'(a10,i4)') ctxbnds(ibk),isf
           bliin(nstsi)=bbliin(isf,ibk)
@@ -61,7 +62,7 @@ c     ,      iliin(nstsi),ilside(nstsi)                             !###
 	  else !}{
 	    write(0,*) 'Wrong boundary letter ',cskbnds(isf,ibk),'.  ',
      ,	      	      	      	      	      ctxbnds(ibk),',  zone',isf
-	    stop '*** Internal error in uinp !!!'
+	    call xerrab ('*** Internal error in uinp !!!')
 	  end if !}
 	  if((iliin(nstsi).gt.0 .and. iliin(nstsi).lt.10) .or.
      .                                             bliin(nstsi)) then !{
@@ -102,7 +103,7 @@ c*** ... and then the recycling source if specified
               write(0,*) 'Too many strata requested: ',nstrai
               write(0,*) 'STOP ==> check the DG model and the value ',
      ,     				  'of DEF_NSTRA in DIMENSIONS.F'
-              stop
+              call xerrab ('Too many strata requested')
             end if !}
 	
             ntargi=ntargi+1
@@ -112,7 +113,7 @@ c*** ... and then the recycling source if specified
      ,     		      	      	      'of NSTEP in KOPPLDIM.F:' 
               write(0,*) '    	    NSTEP must not be less than ',
      ,        	      	      	      'the number of recycling sources'
-              stop
+              call xerrab ('Too many recycling strata requested')
             end if !}
 
 	    write(txtsou(nstrai),'(a,a10,i4)') 'Recycling - ',
