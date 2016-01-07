@@ -4,20 +4,20 @@ import numpy
 import sys
 
 '''
-This sample program will open an existing pulse file (shot 123, run 3, created by script put_cpos.py) and will
-read the stored (array of) equilibirium CPOs.
+This sample program will open an existing pulse file (shot 123, run 3, created by script put_ids.py) and will
+read the stored (array of) equilibirium IDSs.
 
-It will then output the content of some fields of the equilibrium CPOs.
+It will then output the content of some fields of the equilibrium IDSs.
 '''
 
-# This routine reads an array of pfsystems CPOs in the database, filling
-# some fields of the CPOS
+# This routine reads an array of pfsystems IDSs in the database, filling
+# some fields of the IDSs
 
 
-def read_cpo():
-    """Class Itm is the main class for the UAL.
+def read_ids():
+    """Class IMAS is the main class for the UAL.
 
-    It contains a set of field classes, each corresponding to a CPO
+    It contains a set of field classes, each corresponding to an IDS
     defined in the UAL The parameters passed to this creator define the
     shot and run number. The second pair of arguments defines the
     reference shot and run and is used when the a new database is
@@ -42,4 +42,4 @@ def read_cpo():
     my_ids_obj.close()
 
 
-read_cpo()
+read_ids()
