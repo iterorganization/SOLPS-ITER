@@ -22,7 +22,8 @@ module load fontconfig
 module load cairo
 module load mdsplus/3.0.2
 module load make
-module load imas/3.2.1
+module load imas
+module load python/2.7/9
 
 # mpi-library
 # module load mpich2/3.1.3-intel
