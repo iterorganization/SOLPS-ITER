@@ -1,17 +1,18 @@
+#! /usr/bin/env python
 # Definition of the class structures in file imas.py
 import imas
 import numpy
 import sys
 
 '''
-This sample program will open an existing pulse file (shot 123, run 3, created by script put_ids.py) and will
-read the stored (array of) equilibirium IDSs.
+This sample program will open an existing pulse file (shot 8148, run 12) and will
+read the stored edge_profiles IDSs.
 
-It will then output the content of some fields of the equilibrium IDSs.
+It will then output the content of some fields of the edge_profiles IDSs.
 '''
 
-# This routine reads an array of pfsystems IDSs in the database, filling
-# some fields of the IDSs
+# This routine reads an edge_profiles IDS from the database, filling
+# some fields of the IDS
 
 
 def read_ids():
