@@ -16,6 +16,16 @@ export SOLPSTOP=$PWD
   iamat="unknown"
 }
 
+[ -e SETUP/setup.csh.HOST_NAME.local ] && {
+  echo Loading SETUP/setup.csh.HOST_NAME.local
+} || {
+  if [ $iamat ==  "*UNKNOWN" ]  then
+    export HOST_NAME=default
+  else
+    export HOST_NAME=$iamat
+  fi
+}
+
 [ -e setup.ksh.SOLPSMASTER ] && . setup.ksh.SOLPSMASTER
 [ -e setup.ksh.SOLPSMASTER.local ] && . setup.ksh.SOLPSMASTER.local
 
@@ -37,65 +47,34 @@ export SOLPSTOP=$PWD
   esac
 }
 
-if [ "$1" = "" ] || [ "$1" = "dbg" ] ; then
-  [ -e setup.ksh.OBJECTCODE ] && . setup.ksh.OBJECTCODE
-  [ -e setup.ksh.OBJECTCODE.local ] && . setup.ksh.OBJECTCODE.local
-  [ -z "$OBJECTCODE" ] && export OBJECTCODE=`$SOLPSMASTER/@sys/machine`
-else
-  export OBJECTCODE=$1
-fi
-[ -z "$OBJECTCODE" ] && echo 'OBJECTCODE not defined!'
-
-[ -e setup.ksh.NAG ] && . setup.ksh.NAG
-[ -e setup.ksh.NAG.$OBJECTCODE ] && . setup.ksh.NAG.$OBJECTCODE
-[ -e setup.ksh.NAG.local ] && . setup.ksh.NAG.local
-[ -e setup.ksh.NAG.local.$OBJECTCODE ] && . setup.ksh.NAG.local.$OBJECTCODE
-
-[ -z "$NAG" ] && . setup.ksh.NAG.guess
-
-[ -e setup.ksh.NCARG ] && . setup.ksh.NCARG
-[ -e setup.ksh.NCARG.$OBJECTCODE ] && . setup.ksh.NCARG.$OBJECTCODE
-[ -e setup.ksh.NCARG.local ] && . setup.ksh.NCARG.local
-[ -e setup.ksh.NCARG.local.$OBJECTCODE ] && . setup.ksh.NCARG.local.$OBJECTCODE
-
-[ -z "$NCARG_ROOT" ] && {
-  [ -e $SOLPSTOP/src/NCARG/$OBJECTCODE ] && export NCARG_ROOT=$SOLPSTOP/src/NCARG/$OBJECTCODE
-}
-
-[ -z "$NCARG_ROOT" ] && . setup.ksh.NCARG.guess
-[ -z "$NCARG" ] && {
-  [ -n "$NCARG_ROOT" ] && {
-    export NCARG_PATH=`echo $NCARG_ROOT | sed -e "s:$SOLPSTOP/::"`
-    case $NCARG_PATH in
-    '*3.*' )
-      echo 'Found NCAR Version 3.*'
-      export NCARG='-L$(NCARG_ROOT)/lib -lncarg -lncarg_gks -lncarg_c -lncarg_loc -lX11 -lm'
-      export NCAR_VERSION=3
-      ;;
-    '*4.*' )
-      echo 'Found NCAR Version 4.*'
-      export NCARG='-L$(NCARG_ROOT)/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lm'
-      export NCAR_VERSION=4
-      [ -z "$SOLPS_CPP" ] && {
-        export SOLPS_CPP="-DNCAR4"
-      } || {
-        export SOLPS_CPP="$SOLPS_CPP -DNCAR4"
-      }
-      ;;
-    * )
-      echo 'Found NCAR Version ?.?; assume 4'
-      export NCARG='-L$(NCARG_ROOT)/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lm'
-      export NCAR_VERSION=4
-      [ -z "$SOLPS_CPP" ] && {
-        export SOLPS_CPP="-DNCAR4"
-      } || {
-        export SOLPS_CPP="$SOLPS_CPP -DNCAR4"
-      }
-      ;;
-    esac
+# COMPILER can also be the argument to setup.csh call
+if [ "$1" = "" ] ; then
+  [ -e default_compiler ] && {
+    export COMPILER=`./default_compiler|tail -1`
+    echo Using compiler $COMPILER.
+  } || {
+    export COMPILER=ifort64
+    echo Assuming default compiler ifort64.
   }
+else
+  export COMPILER=$1
+fi
+[ -z "$COMPILER" ] && echo 'COMPILER not defined!'
+
+# setup files for combination of HOST_NAME and COMPILER, + local modifications if present
+[ -e SETUP/setup.ksh.${HOST_NAME}.${COMPILER} ] && {
+  echo Loading SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.
+  . SETUP/setup.ksh.${HOST_NAME}.${COMPILER}
+} || {
+  echo File SETUP/setup.ksh.${HOST_NAME}.${COMPILER} not found!
 }
-  
+[ -e SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.local ] && {
+  echo Loading SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.local.
+  . SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.local
+}
+
+limit stacksize unlimited
+
 [ -z "$GRAPHCAP" ] && export GRAPHCAP=X11
 
 case $OBJECTCODE in
@@ -135,8 +114,9 @@ export GRSOFT_DEVICE="211 62"
 export SonnetTopDirectory=${SOLPSTOP}/src/Sonnet
 export EscapeSonnet=`echo ${SonnetTopDirectory} | sed 's:\/:\\\/:g'`
 
-export DG=${SOLPSTOP}/src/DivGeo
-export CARRE_STOREDIR=${SOLPSTOP}/src/Carre/SAVE
+export DG=${SOLPSTOP}/modules/DivGeo
+export SOLPSLIB=${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}
+export CARRE_STOREDIR=${SOLPSTOP}/modules/Carre/meshes
 
 alias sb2='cd ${SOLPSTOP}/src/b2'
 alias sbb='cd ${SOLPSTOP}/src/b2'
