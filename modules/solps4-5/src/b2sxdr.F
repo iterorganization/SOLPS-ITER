@@ -167,6 +167,9 @@
         call mpi_finalize(ierr_mpi)
         stop 'b2sxdr_mpi_child'
       endif
+#else
+      nprs = 1
+      my_pe = 0
 #endif
       call prgini ('b2sxdr')
 c=================================================================
