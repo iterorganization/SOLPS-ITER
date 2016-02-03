@@ -68,7 +68,7 @@ include ${S45DIR}/config/compile
 ifeq ($(shell [ -e ${S45DIR}/config/config.${HOST_NAME}.${COMPILER}.local ] && echo yes || echo no ),yes)
 include ${S45DIR}/config/config.${HOST_NAME}.${COMPILER}.local
 endif
-SOLPS4 ?= ${SOLPSTOP}/../SOLPS4.3
+SOLPS4 ?= ${SOLPSTOP}/../[sS][oO][lL][pP][sS]4.3
 ifeq ($(shell [ -d ${SOLPS4} ] && echo yes || echo no ),no)
 $(error Invalid SOLPS4 directory address)
 endif
