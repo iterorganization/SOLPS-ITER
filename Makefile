@@ -168,7 +168,7 @@ ifeq ($(shell [ -e ${SOLPSLIB}/libsonnet.a ] && echo yes || echo no ),no)
 	cd modules/Sonnet-light; ${MAKE} all; ${MAKE} install INSTALL_USERAREA=${SOLPSLIB}
 endif
 
-b2sxdr:   # strange sequence of commands, but works!
+b2sxdr:
 	cd modules/solps4-5; ${MAKE} links
 	cd modules/solps4-5; ${MAKE} tags
 	cd modules/solps4-5; ${MAKE} listobj
