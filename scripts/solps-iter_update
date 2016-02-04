@@ -29,6 +29,12 @@ DivGeo:
   echo "Updating DivGeo"
   cd $SOLPSTOP/modules/DivGeo
   git checkout ITER-develop && echo "Checked out DivGeo ITER-develop branch" || goto branch
+  git pull && goto ADAS || goto local
+
+ADAS:
+  echo "Updating ADAS"
+  cd $SOLPSTOP/modules/adas
+  git checkout ITER-develop && echo "Checked out ADAS ITER-develop branch" || goto branch
   git pull && goto compile || goto local
 
 branch:
