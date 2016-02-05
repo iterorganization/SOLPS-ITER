@@ -2,7 +2,12 @@
 
 echo "DEVICE = " $DEVICE
 echo "Converting shot number " $1
-[ -d /work/projects/solps-iter/$USER/$DEVICE ] || mkdir /work/projects/solps-iter/$USER/$DEVICE
+[ -d $SOLPSWORK/$DEVICE ] || mkdir $SOLPSWORK/$DEVICE
+if (! -e $SOLPSWORK/$DEVICE/SOLPSTOP ) then
+  if (! -e $SOLPSWORK/SOLPSTOP ) then
+    echo $SOLPSTOP > $SOLPSWORK/SOLPSTOP 
+  endif
+endif
 mkdir /work/projects/solps-iter/$USER/$DEVICE/$1
 cd /work/projects/solps-iter/$USER/$DEVICE/$1
 mkdir convert
