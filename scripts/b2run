@@ -2,7 +2,7 @@
 
 ## -n                         dry run
 ## -s                         run B2.5 applications in stand-alone mode (no Eirene coupling)
-## -m <mpi-launcher + args>   run mpi-version (example: b2run -m "mpiexec -np 2" b2mn)
+## -m <mpi-launcher + args>   run mpi-version (example: b2run -m \"mpiexec -np 2\" b2mn)
 ## -d <debugger>              use debugger <debugger>
 
 # if we are running at JET then do not rely on the automatic feature of searching in ../baserun, instead setup links
