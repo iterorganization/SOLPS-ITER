@@ -88,7 +88,7 @@ ${OBJDIR}/libui.a: ${DEST} ${SRCDIR}/git_version_Uinp.h
 	ranlib $@
 
 ${OBJDIR}/libb25.a:
-	@ar rucv $@ ${B2OBJ}/b2mod_constants.o ${B2OBJ}/b2mod_layer.o ${B2OBJ}/ifill.o ${B2OBJ}/len_of_digits.o ${B2OBJ}/lwimai.o ${B2OBJ}/lwmain.o ${B2OBJ}/open_file.o ${B2OBJ}/prvrt.o ${B2OBJ}/prvrti.o ${B2OBJ}/sfill.o ${B2OBJ}/streql.o ${B2OBJ}/subsys.o ${B2OBJ}/xerrab.o ${B2OBJ}/xerset.o ${B2OBJ}/xertst.o
+	@ar rucv $@ ${B2OBJ}/b2mod_constants.o ${B2OBJ}/b2mod_types.o ${B2OBJ}/b2mod_layer.o ${B2OBJ}/ifill.o ${B2OBJ}/len_of_digits.o ${B2OBJ}/lwimai.o ${B2OBJ}/lwmain.o ${B2OBJ}/open_file.o ${B2OBJ}/prvrt.o ${B2OBJ}/prvrti.o ${B2OBJ}/sfill.o ${B2OBJ}/streql.o ${B2OBJ}/subsys.o ${B2OBJ}/xerrab.o ${B2OBJ}/xerset.o ${B2OBJ}/xertst.o
 	ranlib $@
 
 ${OBJDIR}/uinput.o: ${OBJDIR}/uiblkd.o
