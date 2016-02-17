@@ -59,7 +59,6 @@ else
   echo Looking for submission file $1 
   set QSUB=`climb_and_look_for $1`
   if ($QSUB == "//"$1) then
-  if ($QSUB == "//"$1) then
     if (-e $SOLPSTOP/runs/$1) then
       set QSUB="$SOLPSTOP/runs/$1"
     else
@@ -76,11 +75,10 @@ endif
 echo Using submission file template $QSUB
 
 sed -e 's:#PWD#:'$PWD':g' -e 's:#SOLPSTOP#:'$SOLPSTOP':g' -e 's:#EMAIL#:'$EMAIL':g' -e "s:#MPIOPTS#:'$MPIOPTS':g" < $QSUB > $NAME
-chmod u+x $NAME
 
 set msg="Submitted at `date`"
 update_solps_run_status -n ${msg}
 if ($?SOLPS_GUI_IP) then
   echo ${USER} ${PWD} ${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
 endif
-llsubmit $NAME
+qsub -V -S /bin/tcsh $NAME
