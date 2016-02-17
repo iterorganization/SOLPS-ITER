@@ -1,37 +1,19 @@
 #! /bin/tcsh
 
-# @ output = #PWD#/job.out.$(Cluster)
-# # @ error = #PWD#/job.err.$(Cluster)
-# # @ class = prio1
-# # @ restart = no
-# # @ shell = /bin/tcsh
-# # @ queue
-cd #PWD#
+#$ -l h_rt=36:00:00,h_vmem=4G
+#$ -cwd
+#$ -M #EMAIL#
+#$ -m e
+#$ -notify
+#$ -N SOLPS-ITER
+#$ -V
 
-# cd "$PBS_O_WORKDIR" || {
-#   echo "Unable to switch to the working directory $PBS_O_WORKDIR"
-#   env
-#   exit
-# }
+setenv PATH ${PATH}:/afs/ipp-garching.mpg.de/@sys/bin
 
-# set solpstop=`climb_and_look_for SOLPSTOP`
-# if (-e $solpstop) then
-#   setenv SOLPSTOP "`cat $solpstop`"
-# else
-#   setenv SOLPSTOP "`echo $PWD | sed 's:/runs/.*::'`"
-# endif
-
-# cd $SOLPSTOP || {
-#   echo "Unable to switch to the SOLPSTOP directory $SOLPSTOP"
-#   env
-#   exit
-# }
-
-# source setup.csh
+pushd #SOLPSTOP#
+source setup.csh
 echo Using SOLPSTOP = #SOLPSTOP#
-
-# popd
-cd "$PBS_O_WORKDIR"
+popd
 
 set USE_MPI=""
 if ($?SOLPS_MPI) then
@@ -41,11 +23,8 @@ if ($?SOLPS_MPI) then
   set USE_MPI=`echo $USE_MPI | sed -e 's:-m :-m ''":' -e 's:$:"'':'`
 endif
 
-update_solps_run_status "Started on `hostname` at `date` in directory `pwd`"
-setenv SAVEPWD #PWD#
-cd #SOLPSTOP#
-source setup.csh
-cd $SAVEPWD
+update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"
+update_solps_run_status "Started on `hostname` at `date`"
 
 time b2run ${USE_MPI} b2mn < input.dat | gzip -9 >! run.log.gz
 
