@@ -55,6 +55,7 @@ lib/
 libs/
  
 # temporary link files for scripts
+grep.lis
 uinput.dg
 uinput.trg
 src/uinp/test.eir
