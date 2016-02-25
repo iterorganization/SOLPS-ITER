@@ -1,11 +1,11 @@
 #! /bin/ksh
 
-echo "Welcome to SOLPS-ITER!"
-echo "Documentation can be found at: "
-echo "https://portal.iter.org/departments/POP/CM/IMAS/Forms/AllItems.aspx"
+echo Welcome to SOLPS-ITER!
+echo Documentation can be found at:
+echo https://portal.iter.org/departments/POP/CM/IMAS/SOLPS-ITER
 echo "(requires ITER IDM account)"
-echo "The full SOLPS-ITER manual can be found in SOLPSTOP/doc/solps/solps.pdf"
-echo "The Eirene manual is located at http://www.eirene.de/"
+echo The full SOLPS-ITER manual can be found in \$SOLPSTOP/doc/solps/solps.pdf
+echo The Eirene manual is located at http://www.eirene.de/
 
 export SOLPSTOP=$PWD
 
@@ -198,13 +198,12 @@ export MANPATH=$NCARG_ROOT/man:${DG}/equtrn/doxygen/man:$MANPATH
   export IDL_PATH="+$SOLPSTOP/data/IDL:${IDL_PATH}"
 }
 
-export SOLPS_LIB=${SOLPSTOP}/lib/${OBJECTCODE}
-[ -e $SOLPS_LIB/libnetcdf.a ] && export NETCDF=-lnetcdf
+[ -e $SOLPSLIB/libnetcdf.a ] && export NETCDF=-lnetcdf
 
 [ -z "$LD_LIBRARY_PATH" ] && {
-    export LD_LIBRARY_PATH=${SOLPS_LIB}
+    export LD_LIBRARY_PATH=${SOLPSLIB}
 } || {
-    export LD_LIBRARY_PATH=${SOLPS_LIB}:${LD_LIBRARY_PATH}
+    export LD_LIBRARY_PATH=${SOLPSLIB}:${LD_LIBRARY_PATH}
 }
 
 [ -z "$error" ] && {
