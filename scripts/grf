@@ -21,19 +21,19 @@
 esac; }
 
 { case `pwd` in
-  ( */include               ) I="[a-zA-Z0-9_]*.H";;
-  ( */src/Eirene/current/common ) I="../../../../include/[a-zA-Z0-9_]*.[FH]";;
-  ( */src/Eirene/current    ) I="../../../include/[a-zA-Z0-9_]*.[FH]";;
-  ( */src/Eirene            ) I="current/*/*.[FH] ../../include/[a-zA-Z0-9_]*.[FH]";;
-  ( */src/b2/current        ) I="../../../include/[a-zA-Z0-9_]*.[FH] common/*.h common/*.inc common/emissivity.* common/COUPLE/*.F";;
-  ( */src/b2                ) I="../../include/[a-zA-Z0-9_]*.[FH] src.local/*.h src/*/*.F src/common/*.h src/common/*.inc src/common/emissivity.* src/common/COUPLE/*.F";;
-  ( */base/b2               ) I="../../../include/[a-zA-Z0-9_]*.[FH] ../src.local/*.[Fh] ../src/*/*.F ../src/common/*.h ../src/common/*.inc ../src/common/emissivity.* ../src/common/COUPLE/*.F";;
-  ( */src/DivGeo/uinp/src   ) I="[A-Z]* [a-zA-Z0-9_]*.inc ../../../Eirene/src/common/[A-Z]*.F ../../../include/[a-zA-Z0-9_]*.[FH]";;
+  ( */modules/Eirene/src    ) I="*/*/*.[fFHh] */*/.[fF]90 ../../B2.5/src/include/[a-zA-Z0-9_]*.[FHh]";;
+  ( */modules/Eirene        ) I="src/*/*.[fFHh] src/*/*.[fF]90 src/*/*/*.[fFHh] src/*/*/*.[fF]90 ../B2.5/src/include/[a-zA-Z0-9_]*.[FHh]";;
+  ( */modules/B2.5/src      ) I="include/[a-zA-Z0-9_]*.[FHh] common/*.h common/*.inc common/emissivity.* common/COUPLE/*.F";;
+  ( */modules/B2.5          ) I="src/include/[a-zA-Z0-9_]*.[FHh] src.local/*.h src/*/*.F src/*/*.F90 src/common/*.h src/common/*.inc src/common/emissivity.* src/common/COUPLE/*.F";;
+  ( */modules/Uinp/src      ) I="[a-zA-Z0-9_]*.inc [a-zA-Z0-9_]*.h ../../B2.5/src/include/[a-zA-Z0-9_]*.[FHh]";;
+  ( */modules/Uinp          ) I="src/[a-zA-Z0-9_]*.inc src/[a-zA-Z0-9_]*.h ../B2.5/src/include/[a-zA-Z0-9_]*.[FHh]";;
+  ( */modules/Carre/src     ) I="include/[a-zA-Z0-9_]*.inc include/[a-zA-Z0-9_]*.h ../../B2.5/src/include/[a-zA-Z0-9_]*.[FHh]";;
+  ( */modules/Carre         ) I="src/include/[a-zA-Z0-9_]*.inc src/include/[a-zA-Z0-9_]*.h ../B2.5/src/include/[a-zA-Z0-9_]*.[FHh]";;
   (          *              ) I=;;
 esac; }
 
 for i in "$@"; do {
   echo \\n ==== $i \\n >> $O
   i=`echo $i | sed -e 's/\./\\\./g' -e 's/\*/\\\*/g' `
-  grep -i -n -s -e "[^a-zA-Z0-9_]$i[^a-zA-Z0-9_]" -e "[^a-zA-Z0-9_]$i$" [a-zA-Z0-9_]*.[Ff] $I */[a-zA-Z0-9_]*.F >> $O
+  grep -i -n -s -e "[^a-zA-Z0-9_]$i[^a-zA-Z0-9_]" -e "[^a-zA-Z0-9_]$i$" [a-zA-Z0-9_]*.[Ff] [a-zA-Z0-9_]*.[Ff]90 $I */[a-zA-Z0-9_]*.[Ff] */[a-zA-Z0-9_]*.[Ff]90 >> $O
 }; done
