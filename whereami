@@ -28,6 +28,7 @@ case "*.ccfe.ac.uk":
   echo CCFE
   breaksw
 case "*.jet.uk":
+case "*.hpc.l":
   echo JET
   breaksw
 case "*.mech.kuleuven.be":
