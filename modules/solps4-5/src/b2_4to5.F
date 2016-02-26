@@ -1104,6 +1104,9 @@ c Fill out /b2cmpt/ arrays
           else if (nint(zn(is)).eq.6) then
             cfdf0(3,is)= 5.0e-20_R8
             cfdf0(4,is)= 1.5e-18_R8
+          else if (nint(zn(is)).eq.10) then
+            cfdf0(3,is)= 1.0e-20_R8
+            cfdf0(4,is)= 7.0e-21_R8
           end if
           if (.not.ni_driven_4) then
             cfdpa(2,is)= 1.0_R8
@@ -1287,6 +1290,9 @@ c
       use b2mod_b2cmpa
       use b2mod_b2cmpb
       use b2mod_b2cmpt
+#ifdef B25_EIRENE
+      use eirmod_extrab25
+#endif
       implicit none
 
       integer nx,ny,ns
