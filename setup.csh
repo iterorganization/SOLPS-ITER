@@ -22,6 +22,7 @@ endif
 
 if (-e SETUP/setup.csh.HOST_NAME.local) then
   echo Loading SETUP/setup.csh.HOST_NAME.local
+  setenv HOST_NAME `cat SETUP/setup.csh.HOST_NAME.local`
 else
   if ( $iamat == "*UNKNOWN" ) then
     setenv HOST_NAME default
