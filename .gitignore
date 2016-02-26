@@ -12,6 +12,7 @@ rwXDR.d.*
 
 # any local files, directories,...
 *.local
+*.local.*
 *.local/
 local_4
 local_5

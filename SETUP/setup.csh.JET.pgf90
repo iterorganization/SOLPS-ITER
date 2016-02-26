@@ -12,7 +12,7 @@ module load scalapack
 
 # Environment variables
 setenv DEVICE jet
-
+setenv GLI_HOME /common/SOLPS-ITER/OBJECTCODE/pgf90/gks
 
 # Debugger
 setenv DBX totalview

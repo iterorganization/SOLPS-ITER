@@ -1,11 +1,11 @@
 #! /bin/tcsh -f
 
-echo "Welcome to SOLPS-ITER!"
-echo "Documentation can be found at:"
-echo "https://portal.iter.org/departments/POP/CM/IMAS/Forms/AllItems.aspx"
+echo Welcome to SOLPS-ITER!
+echo Documentation can be found at:
+echo https://portal.iter.org/departments/POP/CM/IMAS/SOLPS-ITER
 echo "(requires ITER IDM account)"
-echo "The full SOLPS-ITER manual can be found in SOLPSTOP/doc/solps/solps.pdf"
-echo "The Eirene manual is located at http://www.eirene.de/"
+echo The full SOLPS-ITER manual can be found in \$SOLPSTOP/doc/solps/solps.pdf
+echo The Eirene manual is located at http://www.eirene.de/
 
 setenv SOLPSTOP $PWD
 
@@ -22,6 +22,7 @@ endif
 
 if (-e SETUP/setup.csh.HOST_NAME.local) then
   echo Loading SETUP/setup.csh.HOST_NAME.local
+  setenv HOST_NAME `cat SETUP/setup.csh.HOST_NAME.local`
 else
   if ( $iamat == "*UNKNOWN" ) then
     setenv HOST_NAME default
@@ -97,6 +98,7 @@ set   SCRIPTS_PATH =  ${SOLPSTOP}/scripts.local:${SOLPSTOP}/scripts
 # Note: in case of name-clash between script and executable, script will be found first
 setenv SOLPS_PATH  ${SCRIPTS_PATH}:${CARRE_PATH}:${DIVGEO_PATH}:${B25EIRENE_PATH}:${EIRENE_PATH}:${B25_PATH}:${UINP_PATH}:${TRIANG_PATH}
 setenv PATH        ${SOLPS_PATH}:${PATH}
+setenv LD_LIBRARY_PATH ${SOLPSLIB}:${LD_LIBRARY_PATH}
 
 unset TOOLCHAIN CARRE_PATH DIVGEO_PATH EIRENE_PATH B25_PATH B25EIRENE_PATH UINP_PATH TRIANG_PATH
 

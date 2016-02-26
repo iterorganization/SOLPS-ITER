@@ -11,7 +11,7 @@ $(error First use of config.FZJ.gfortran. Provide paths to libraries first.)
 #
 # If you do have NetCDF on your system:
 # Add -DCDF_MOVIE to SOLPS_CPP to be able to produce movies
-# Add -DNETCDF4_3 to SOLPS_CPP is you are linking to NetCDF version 4.3 or newer
+# Add -DNETCDF4_3 to SOLPS_CPP if you are linking to NetCDF version 4.3 or newer
 #
 # If you have NCAR version 3 on your system:
 # Remove -DNCAR4 from SOLPS_CPP
