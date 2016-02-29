@@ -1290,9 +1290,6 @@ c
       use b2mod_b2cmpa
       use b2mod_b2cmpb
       use b2mod_b2cmpt
-#ifdef B25_EIRENE
-      use eirmod_extrab25
-#endif
       implicit none
 
       integer nx,ny,ns
