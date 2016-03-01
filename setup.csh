@@ -8,6 +8,7 @@ echo The full SOLPS-ITER manual can be found in \$SOLPSTOP/doc/solps/solps.pdf
 echo The Eirene manual is located at http://www.eirene.de/
 
 setenv SOLPSTOP $PWD
+setenv SOLPSWORK ${SOLPSTOP}/runs
 
 
 # Set HOST_NAME and COMPILER, which will determine setup-files to be used

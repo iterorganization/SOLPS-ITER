@@ -8,8 +8,8 @@ if (! -e $SOLPSWORK/$DEVICE/SOLPSTOP ) then
     echo $SOLPSTOP > $SOLPSWORK/SOLPSTOP 
   endif
 endif
-mkdir /work/projects/solps-iter/$USER/$DEVICE/$1
-cd /work/projects/solps-iter/$USER/$DEVICE/$1
+mkdir $SOLPSWORK/$DEVICE/$1
+cd $SOLPSWORK/$DEVICE/$1
 mkdir convert
 mkdir baserun
 cd convert
