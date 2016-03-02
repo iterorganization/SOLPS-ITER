@@ -13,19 +13,20 @@ DBX ?= dbx
 ifdef SOLPS_MPI
 EXT_MPI = .mpi
 endif
+ifdef USE_IMPGYRO 
+EXT_IMPGYRO = .ig
+endif
 ifdef SOLPS_DEBUG
 EXT_DEBUG = .debug
 endif
 
 ifndef STAND_ALONE
-B2OBJ  = ${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_DEBUG}
-EIROBJ = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_DEBUG}
-ifneq (${DBX},totalview)
+B2OBJ  = ${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
+EIROBJ = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
 INC = -I ${B2OBJ} -I ${EIROBJ}
 endif
 else
-B2OBJ  = ${SOLPSTOP}/modules/B2.5/builds/standalone.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_DEBUG}
-ifneq (${DBX},totalview)
+B2OBJ  = ${SOLPSTOP}/modules/B2.5/builds/standalone.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
 INC = -I ${B2OBJ}
 endif
 endif
@@ -148,12 +149,12 @@ ifndef STAND_ALONE
 endif
 ifdef USE_IMPGYRO
 	cd b2mn.exe.dir ; touch b2ig.conf ; echo "-n ${NPE_B2} : ${B2OBJ}/b2mn.exe" >> b2ig.conf ; echo "-n ${NPE_EXT} : ${EXE_EXT}" >> b2ig.conf ; ln -s ../config ../pre . ; mkdir tracing ;\
-	touch use_impgyro ; [ -e ../restart_ext ] && cp ../restart_ext . ;\
+	touch use_impgyro ; [ -e ../restart_ext ] && cp ../restart_ext . ; [ -e ../restart ] && cp ../restart . && cp ${WD_EXT}/.st.?* . ;\
 	mpiexec -verbose -config b2ig.conf;\
 	mv $(target_mn) .. ; mv tracing/* ../tracing ; [ -e ../fort.30 ] || mv fort.30 .. ; \
-	rm -f $(notdir $^) .quit ; rm -f b2ig.conf use_impgyro config pre ;\
+	rm -f $(notdir $^) .quit ; rm -f b2ig.conf use_impgyro config pre ; [ -e restart_ext ] && cp restart_ext ../. ;\
 	mv .*.?* ${WD_EXT}/. ; mv fort.150 ${WD_EXT}/. ;\
-	mv impgyro.* ${WD_EXT}/. ; mv preg ${WD_EXT}/. ; mv restart ${WD_EXT}/.
+	mv impgyro.* ${WD_EXT}/. ; mv preg ${WD_EXT}/. ; cp restart ${WD_EXT}/. ; mv restart ../.
 else
 	cd b2mn.exe.dir ; mkdir tracing ; ${TIME} ${B2OBJ}/b2mn.exe ; mv $(target_mn) .. ; mv -f tracing/* ../tracing ; [ -e ../fort.30 ] || mv fort.30 .. ; rm -f $(notdir $^) .quit
 endif
