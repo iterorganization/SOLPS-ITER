@@ -52,8 +52,11 @@ function get_serial_number {
       ((I_FUN+=-1))
     }; done
     F_FUN=${F_FUN##*.}
-    [ 0 -le "$F_FUN" ] || return 34
-    ((F_FUN+=1))
+    typeset -i N_FUN
+    N_FUN=`echo $F_FUN | sed -r -e 's:^0{1,}::'`
+    [ 0 -le "$N_FUN" ] || return 34
+    ((N_FUN+=1))
+    F_FUN=$N_FUN
     F_FUN=${F_FUN##*.}
     while [ $L_FUN -gt ${#F_FUN} ]; do F_FUN="0$F_FUN"; done
     print -- "$F_FUN"
