@@ -20,7 +20,7 @@ if ("X$1X" == "X-mX") then
   set PROCS=`echo $MPIOPTS | awk.transpose | grep -A 1 "\-np" | tail -n 1`
   echo Asking for $PROCS processors
   shift
-  echo sleep 600 | qsub -lnodes=c05s30:ppn=16,walltime=1000
+  echo sleep 600 | qsub -q ib_gen8 -lnodes=c05s30:ppn=16,walltime=1000
 endif
 
 set solpstop=`climb_and_look_for SOLPSTOP`
