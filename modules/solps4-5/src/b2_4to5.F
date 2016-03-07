@@ -2119,8 +2119,8 @@ c
       end if
       do is = 1, nspecies_4
         if (ffb_cntr_4(is).ne.0) then
-	  is0 = isp(is)
-	  if (is0.ge.0) then
+          is0 = isp(is)
+          if (is0.ge.0) then
             write(99,'(a,i2,a)')
      .       '''b2stbc_isfeedback'''//tab//tab//'''',is0,''''
             write(98,'(a,i2,a)')
@@ -2134,10 +2134,10 @@ c
      .       '''eirene_nesepm_istra'''//tab//'''',
      .       ffb_strata_4(is),''''
           end if
-	end if
+        end if
         if (cfb_cntr_4(is).ne.0) then
           is0 = isp(is)+nfluids_4(is)-1
-	  if (is0.ge.0) then
+          if (is0.ge.0) then
             write(99,'(a,i2,a)')
      .       '''b2stbc_isfeedback'''//tab//tab//'''',is0,''''
             write(98,'(a,i2,a)')
@@ -2165,9 +2165,8 @@ c
       use b2mod_b2cmpa
       implicit none
       integer ns
-      integer ib, is, is0, len
+      integer ib, is, is0
       character*32 hlp_frm, hlp_frp, hlp_frb
-      character*80 line
       character*80 boundary_filename_4, boundary_filename_5
       intrinsic mod
 
@@ -2269,14 +2268,9 @@ c
       write(36,'(a)') '&BOUNDARY'
       write(35,'(a,i2,a)') 'NBC=', nbc,','
       write(36,'(a,i2,a)') 'NBC=', nbc,','
-      line = 'BCCHAR= '
-      len=8
-      do ib = 1, nbc
-        line = line(1:len)//' '''//bcchar(ib)//''','
-        len=len+2+1+2
-      end do
-      write(35,'(a)') line(1:len)
-      write(36,'(a)') line(1:len)
+      write(hlp_frm,'(a,i2,a)') '(a,',nbc,'(1x,a1,a1,a2))'
+      write(35,hlp_frm) 'BCCHAR= ',(('''',bcchar(ib),''','),ib=1,nbc)
+      write(36,hlp_frm) 'BCCHAR= ',(('''',bcchar(ib),''','),ib=1,nbc)
       write(hlp_frm,'(a,i2,a)') '(a,',nbc,'(1x,i3,'',''))'
       write(35, hlp_frm) 'BCPOS=  ',(bcpos(ib)  ,ib=1,nbc)
       write(36, hlp_frm) 'BCPOS=  ',(bcpos(ib)  ,ib=1,nbc)
@@ -2563,9 +2557,8 @@ c
       implicit none
       integer ns
 
-      character*80 line
       character*32 hlp_frm
-      integer len, is, ib, ii(1), nsns
+      integer is, ib, ii(1), nsns
       intrinsic mod
 
       write(*,*) 'Writing ',trim(neutrals_filename)
@@ -2584,13 +2577,9 @@ c
       else
         nstrat = nstrai
       endif
-      line = 'CRCSTRA='
-      len=8
-      do ib = 1, nstrat
-        line = line(1:len)//' '''//crcstra(ib)//''','
-        len=len+2+1+2
-      end do
-      write(34,'(a)') line
+      write(hlp_frm,'(a,i2,a)') '(a,',nstrat,'(1x,a1,a1,a2))'
+      write(34,hlp_frm) 'CRCSTRA=',(('''',crcstra(ib),''','),
+     .                                            ib=1,nstrat)
       write(hlp_frm,'(a,i2,a)') '(a,',nstrat,'(1x,i3,'',''))'
       write(*,*) 'hlp_frm: ',hlp_frm
       write(34, hlp_frm) 'RCPOS=  ',(rcpos(ib)  ,ib=1,nstrat)
@@ -2720,13 +2709,9 @@ c
         ii=minloc(l_spcsrf)
         write(hlp_frm,'(a,i3,a)') '(a,',ii(1),'(i3,'',''))'
         write(34,hlp_frm) 'L_SPCSRF=',(l_spcsrf(ib),ib=1,ii(1))
-        line = 'SPS_ID=  '
-        len=9
-        do ib = 1, n_spcsrf_4
-          line = line(1:len)//''''//sps_id_4(ib)//''','
-          len=len+1+8+2
-        end do
-        write(34,'(a)') line
+        write(hlp_frm,'(a,i2,a)') '(a,',n_spcsrf_4,'(a1,a8,a2))'
+        write(34,hlp_frm) 'SPS_ID=  ',(('''',sps_id_4(ib),''','),
+     .                                               ib=1,n_spcsrf_4)
 	write(hlp_frm,'(a,i2,a)') '(a,',n_spcsrf_4,'(i10,'',''))'
 	write(*,*) 'hlp_frm: ',hlp_frm
 	write(34, hlp_frm) 'I_SPCSRF=',(i_spcsrf(ib),ib=1,n_spcsrf_4)
@@ -2964,9 +2949,8 @@ c
       use b2mod_user_namelist
       implicit none
 #     include <KOPPLDIM.F>
-      integer is, len, ii(1)
+      integer is, ii(1)
       character*32 hlp_frm
-      character*80 line
 
       write(*,*) 'Writing b2.user.parameters'
       open(38,file='b2.user.parameters')
@@ -2990,13 +2974,9 @@ c
 	write(*,*) 'hlp_frm: ',hlp_frm
         write(38, hlp_frm) 'IPFRGRP=',(ipfrgrp(is),is=1,npfrgrp)
         write(38, hlp_frm) 'JPFRGRP=',(jpfrgrp(is),is=1,npfrgrp)
-        line = 'GPFRGRP='
-        len=8
-        do is = 1, npfrgrp
-          line = line(1:len)//''''//gpfrgrp(is)//''','
-          len=len+1+8+2
-        end do
-        write(38,'(a)') line
+        write(hlp_frm,'(a,i2,a)') '(a,',npfrgrp,'(a1,a8,a2))'
+        write(38,hlp_frm) 'GPFRGRP=',(('''',gpfrgrp(is),''','),
+     .                                             is=1,npfrgrp)
         write(hlp_frm, '(a,i3,a)') '(a,',jpfrgrp(npfrgrp),'(i3,'',''))'
 	write(*,*) 'hlp_frm: ',hlp_frm
         write(38, hlp_frm) 'LPFRGRP=',
@@ -3008,13 +2988,9 @@ c
 	write(*,*) 'hlp_frm: ',hlp_frm
         write(38, hlp_frm) 'INTRGRP=',(intrgrp(is),is=1,nntrgrp)
         write(38, hlp_frm) 'JNTRGRP=',(jntrgrp(is),is=1,nntrgrp)
-        line = 'GNTRGRP='
-        len=8
-        do is = 1, nntrgrp
-          line = line(1:len)//''''//gntrgrp(is)//''','
-          len=len+1+8+2
-        end do
-        write(38,'(a)') line
+        write(hlp_frm,'(a,i2,a)') '(a,',nntrgrp,'(a1,a8,a2))'
+        write(38,hlp_frm) 'GNTRGRP=',(('''',gntrgrp(is),''','),
+     .                                             is=1,nntrgrp)
         write(hlp_frm, '(a,i3,a)') '(a,',jntrgrp(nntrgrp),'(i3,'',''))'
 	write(*,*) 'hlp_frm: ',hlp_frm
         write(38, hlp_frm) 'LNTRGRP=',

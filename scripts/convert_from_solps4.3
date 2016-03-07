@@ -15,6 +15,7 @@ mkdir baserun
 cd convert
 cp /archive/1/kukusha/archive/extra/arch_2/B2E/b2arch/$DEVICE/$1/* .
 cp b2.parameters b2.parameters.src
+mv b2.parameters.out b2.parameters.out.4.3
 cp input.eir input.dat
 setup_baserun_eirene_links
 b2sxdr > b2sx.log
