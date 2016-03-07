@@ -151,24 +151,27 @@ do {
                     esac
                 }
                 /bin/echo -e dir OK
+                typeset -i n
                 n=1
                 set -- $griddir/$grid_stem.v[0-9][0-9][0-9].geo
                 [ -f $1 ] && {
-                    n=`ls $griddir/$grid_stem.v[0-9][0-9][0-9].geo | tail -1`
-#		    n=`echo $griddir/$grid_stem.v[0-9][0-9][0-9].geo | awk '{print $NF}'`
-                    n=${n#*/$grid_stem.v}
-                    n=${n%.geo}
-                    /bin/echo -e "Last grid number found is : $n"
-                    let "n = n + 1"
+                    m=`ls $griddir/$grid_stem.v[0-9][0-9][0-9].geo | tail -1`
+#		    m=`echo $griddir/$grid_stem.v[0-9][0-9][0-9].geo | awk '{print $NF}'`
+                    m=${m#*/$grid_stem.v}
+                    m=${m%.geo}
+                    /bin/echo -e "Last grid number found is : $m"
+                    n=`echo $m | sed -r -e 's:^0{1,}::'`
+                    n=n+1
+                    m=$n
                 }
-                [ ${#n} -lt 2 ] && n=00$n || {
-                    [ ${#n} -lt 3 ] && n=0$n
+                [ ${#m} -lt 2 ] && m=00$m || {
+                    [ ${#m} -lt 3 ] && m=0$m
                 }
                 touch CARRE.HISTORY
 		echo $user `date +%Y-%m-%d_%H:%M:%S` >> CARRE.HISTORY
 		ls -ls dg.??? | cut -d ' ' -f 9- >> CARRE.HISTORY
-                mv -f traduit.sno $dgdir/$grid_stem.v$n.sno && \
-                  /bin/echo -e "The grid in DG format is stored as $dgdir/$grid_stem.v$n.sno"
+                mv -f traduit.sno $dgdir/$grid_stem.v$m.sno && \
+                  /bin/echo -e "The grid in DG format is stored as $dgdir/$grid_stem.v$m.sno"
                 for ext in $endings; do
                   filename=`lln dg.$ext`
                   cp $filename $dgdir/`basename $filename`
@@ -179,11 +182,11 @@ do {
                 cp $modelname $dgdir/`basename $modelname`
                 /bin/echo -e "DG model `basename $modelname` copied to $dgdir" && \
                 /bin/echo -e "DG model `basename $modelname` copied to $dgdir" >> CARRE.HISTORY
-                mv -f traduit.out $griddir/$grid_stem.v$n.geo && \
-                  /bin/echo -e "The grid in B2.5 format is stored as $griddir/$grid_stem.v$n.geo"
-                ctrans -d ps.mono gmeta > $griddir/$grid_stem.v$n.ps && \
-                  /bin/echo -e "You can view the grid in PostScript format as $griddir/$grid_stem.v$n.ps"
-		/bin/echo -e "The grid is stored as $griddir/$grid_stem.v$n".geo >> CARRE.HISTORY
+                mv -f traduit.out $griddir/$grid_stem.v$m.geo && \
+                  /bin/echo -e "The grid in B2.5 format is stored as $griddir/$grid_stem.v$m.geo"
+                ctrans -d ps.mono gmeta > $griddir/$grid_stem.v$m.ps && \
+                  /bin/echo -e "You can view the grid in PostScript format as $griddir/$grid_stem.v$m.ps"
+		/bin/echo -e "The grid is stored as $griddir/$grid_stem.v$m".geo >> CARRE.HISTORY
                 [ -n "$stordir" ] && {
                   [ -d "$stordir" ] || {
                     [ -a "$stordir" ] && {
@@ -199,7 +202,7 @@ do {
                     }
                   }
                   [ -d "$stordir" ] && {
-                    s="$stordir/$grid_stem.v$n"
+                    s="$stordir/$grid_stem.v$m"
                     u=y
                     [ -d "$s" ] && {
                       /bin/echo -e "The directory \"$s\" already exists. Use it (y/n)? \c"

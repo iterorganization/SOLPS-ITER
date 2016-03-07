@@ -8,6 +8,7 @@ echo The full SOLPS-ITER manual can be found in \$SOLPSTOP/doc/solps/solps.pdf
 echo The Eirene manual is located at http://www.eirene.de/
 
 export SOLPSTOP=$PWD
+export SOLPSWORK=$SOLPSTOP/runs
 
 [ -e whereami ] && {
   iamat=`./whereami|tail -1`
