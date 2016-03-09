@@ -7,10 +7,11 @@ c
 c  version : 23.04.99 14:36
 c
 c======================================================================
+      implicit none
 #include "uinput.inc"
 #include "impcon.inc"
-      integer imat,nmat,isp
-      logical uex,open_file,streql,match_found
+      integer i,j,iamd,ifile,imat,nmat,isp
+      logical uex,open_file,streql,match_found,skip_wall
       character*2 listmat(nmtr)
       character*256 solpstop
       external open_file,uinnam,uintrg,uinaux,uiniamd,streql,
@@ -30,40 +31,47 @@ c
       open(iunii,file='uinput.trg')
       call uintopo(iunii)
       call xertst (.not.(streql(topo,' ')),
-     , 	'Old-style DG output. Please produce the new one -'//
-     ,	' or use uinp.1.42')        
+     ,  'Old-style DG output. Please produce the new one -'//
+     ,  ' or use uinp.1.42')
       call import(uintrg)
       write(*,*) '... opening uinput.dg'
       open(iunii,file='uinput.dg')
       call import(uinnam)
       if(ntrgte.ne.ntrgtm) then !{
-      	write(0,*) 'Something is wrong with target edge specification'
-      	write(0,*) '  ==> check the target edges in the DG model'
-	call xerrab ('Wrong target edge specification')
+        write(0,*) 'Something is wrong with target edge specification'
+        write(0,*) '  ==> check the target edges in the DG model'
+        call xerrab ('Wrong target edge specification')
       end if !}
       if(ntrgte.eq.0) then !{
-      	if(index(topo,'SN').eq.0) then !{
-	  write(0,*) 'Magnetic configuration inconsistent with old-',
-     ,	      	     'style specification of the target edges'  
-	  write(0,*) '	==> Add "Target specification" in the DG model'
-	  call xerrab ('Inconsistent magnetic configuration')
-	end if !}
-      	jedgep(1)=jedgeo(2)
-      	jedgep(2)=jedgeo(3)
-      	jedgec(1)=jedgeo(1)
-      	jedgec(2)=jedgeo(4)
+        if(index(topo,'SN').eq.0) then !{
+          write(0,*) 'Magnetic configuration inconsistent with old-',
+     ,               'style specification of the target edges'
+          write(0,*) '  ==> Add "Target specification" in the DG model'
+          call xerrab ('Inconsistent magnetic configuration')
+        end if !}
+        jedgep(1)=jedgeo(2)
+        jedgep(2)=jedgeo(3)
+        jedgec(1)=jedgeo(1)
+        jedgec(2)=jedgeo(4)
       end if !}
 c
 c*** Read the auxiliary, user data
 c
       inquire(file='uinput.aux', exist=uex)
       if(uex) then !{
-      	write(*,*) '... opening uinput.aux'
-	open(iunii,file='uinput.aux')
-      	call import(uinaux)
+        write(*,*) '... opening uinput.aux'
+        open(iunii,file='uinput.aux')
+        call import(uinaux)
       end if !}
       nmat=0
       do i=1,nlimi !{
+        skip_wall=.false.
+        j=0
+        do while (.not.skip_wall.and.j.lt.nlimi.and.jadch0(j+1).ne.0)
+          j=j+1
+          skip_wall=jadch0(j).eq.i
+        end do
+        if (skip_wall) cycle
         match_found=.false.
         do imat=1,nmat !{
           match_found=match_found .or.
@@ -73,7 +81,7 @@ c
         end do !}
         if (.not.match_found) then !{
           nmat=nmat+1
-	  if (streql(umtrl(i),'SS')) then !{
+          if (streql(umtrl(i),'SS')) then !{
             listmat(nmat)='Fe'
           else !}{
             listmat(nmat)=umtrl(i)(1:2)
@@ -89,7 +97,7 @@ c
         end do !}
         if (.not.match_found) then !{
           nmat=nmat+1
-	  if (streql(made_of(i),'SS')) then !{
+          if (streql(made_of(i),'SS')) then !{
             listmat(nmat)='Fe'
           else !}{
             listmat(nmat)=made_of(i)(1:2)
@@ -106,7 +114,7 @@ c
         end do !}
         if (.not.match_found) then !{
           nmat=nmat+1
-	  if (streql(sps_mtrl(i),'SS')) then !{
+          if (streql(sps_mtrl(i),'SS')) then !{
             listmat(nmat)="Fe"
           else !}{
             listmat(nmat)=sps_mtrl(i)(1:2)
@@ -114,7 +122,7 @@ c
         end if !}
       end do !}
       ifile = 0
-      if (nspigen.gt.1 .or. .not.streql(spcigen(nspigen),'D') .or. 
+      if (nspigen.gt.1 .or. .not.streql(spcigen(nspigen),'D') .or.
      .     nmat.gt.1   .or. .not.streql(listmat(nmat),'C')) then !{
          do isp=1,nspigen !{
            do imat=1,nmat !{
@@ -122,7 +130,7 @@ c
      .                 streql(listmat(imat),'C'))) then !{
                ifile = ifile + 1
                filtrm(nnftrm+ifile)=
-     .          spcigen(isp)(1:lnblnk(spcigen(isp)))
+     .          trim(spcigen(isp))
      .          //'_on_'//
      .          listmat(imat)
             end if !}
@@ -132,31 +140,31 @@ c
       nnftrm = nnftrm+ifile
 
       do iamd=1,namdf !{
-      	if(.not.streql(amd_file(iamd),' ')) then !{
+        if(.not.streql(amd_file(iamd),' ')) then !{
 c*** Read the AMDS file if exists
           inquire(file=amd_file(iamd), exist=uex)
           if(uex) then !{
-      	    write(*,*) '... opening ',amd_file(iamd)
+            write(*,*) '... opening ',amd_file(iamd)
             open(iunii,file=amd_file(iamd))
           else !}{
-	    uex=open_file(iunii,amd_file(iamd),
+            uex=open_file(iunii,amd_file(iamd),
      .                    'data.local/AMDS|data/AMDS|modules/amds')
-	  end if !}
+          end if !}
           if(uex) then !{
             uex=immed
-	    call import(uiniamd)
+            call import(uiniamd)
             immed=uex
-	    rctndflt=.false.
+            rctndflt=.false.
           else !}{
-	    write(0,*) 'AMDS file not found: ',amd_file(iamd)
-	    write(0,*) 'STOP ==> Check the references to AMDS in the ',
-     ,	      'DG model and make sure that the file exists '
-	    write(0,*) '	 in either $SOLPSTOP/modules/amds or ',
+            write(0,*) 'AMDS file not found: ',amd_file(iamd)
+            write(0,*) 'STOP ==> Check the references to AMDS in the ',
+     ,                 'DG model and make sure that the file exists '
+            write(0,*) '   in either $SOLPSTOP/modules/amds or ',
      ,                          '$SOLPSTOP/data(.local)/AMDS ',
-     ,	                        'or the current directory'
-	    call xerrab ('AMDS file not found')
-	  end if !}
-      	end if !}
+     ,                          'or the current directory'
+            call xerrab ('AMDS file not found')
+          end if !}
+        end if !}
       end do !}
 c======================================================================
       end

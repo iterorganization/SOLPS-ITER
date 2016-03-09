@@ -651,7 +651,7 @@ c#endif
         nmdpr(15,7)=npfrgrp
         nmdpr(16,7)=npfrgrp
         lt8rvr(16,7)=.true.
-        do i=1,npfrgrp!{
+        do i=1,npfrgrp !{
           iniprm(i,1,1,14,7)=ipfrgrp(i)
           iniprm(i,1,1,15,7)=jpfrgrp(i)
           c8niprm(i,1,1,16,7)=gpfrgrp(i)

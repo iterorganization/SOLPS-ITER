@@ -51,7 +51,8 @@
      *  istepi_4, nstagei_4, stylei_4,
      *  lpfrb_i_4, lpfrb_o_4, lpfrt_i_4, lpfrt_o_4, lpfrs_pmp_4,
      *  npfrgrp_4, nntrgrp_4, j_he_at_4, j_h_at_4, n_spcsrf_4,
-     *  main_plasma_bc_4, user_flux_feedback_stratum_4, l_neutrad_4
+     *  main_plasma_bc_4, user_flux_feedback_stratum_4,
+     *  l_neutrad_4, l_neutflux_4
 
       integer, allocatable ::
      *  nfluids_4(:),
@@ -85,7 +86,7 @@
      *  lbndusr_4, lfeedback_4, 
      *  lreitr_4, lfirstflight_4,
      *  lhalpha_4, lvib_4,
-     *  autotimestep_4,
+     *  autotimestep_4, scale_He_4, print_isat_4,
      *  sepfeedback_4, volrecfeedback_4, sepgasfeedback_4
 
       logical, allocatable ::
@@ -469,6 +470,7 @@ cxpb
       lstrascl_4(1:nstrai_4,1:nspecies_4) = 
      .  lstrascl(1:nstrai_4,1:nspecies_4)
       l_neutrad_4 = l_neutrad
+      l_neutflux_4 = l_neutflux
       lmolscl_4 = lmolscl
       lcns_4 = lcns
       lsns_4(1:nstrai_4) = lsns(1:nstrai_4)
@@ -552,6 +554,8 @@ cxpb
       fusion_power_4 = fusion_power
       Spmp_He_to_D_4 = Spmp_He_to_D
       Spmp_nom_4 = Spmp_nom
+      scale_He_4 = scale_He
+      print_isat_4 = print_isat
 *   ..feedback
       sepfeedback_4 = sepfeedback
 #ifndef SOLPS4_3
@@ -1410,6 +1414,7 @@ c Fill out b2mod_neutrals_namelist data
         end do
       end do
       l_neutrad = l_neutrad_4
+      l_neutflux = l_neutflux_4
       lmolscl = lmolscl_4
       ksns(1:nstrai) = ksns_4(1:nstrai)
       lcns = lcns_4
@@ -1482,6 +1487,8 @@ c Fill out b2mod_user_namelist data
       fusion_power = fusion_power_4
       Spmp_He_to_D = Spmp_He_to_D_4
       Spmp_nom = Spmp_nom_4
+      scale_He = scale_He_4
+      print_isat = print_isat_4
 
       call subend()
       return
@@ -2649,6 +2656,8 @@ c
       end if
       if (l_neutrad.ge.0)
      > write(34,'(a,i2,a)') 'L_NEUTRAD=',l_neutrad,','
+      if (l_neutflux.ne.-1)
+     > write(34,'(a,i2,a)') 'L_NEUTFLUX=',l_neutflux,','
       write(hlp_frm,'(a,i2,a)') '(a,',nmol,'(1x,i2,'',''))'
       if (maxval(lmolscl).gt.0) 
      > write(34,hlp_frm) 'LMOLSCL=',(lmolscl(is),is=1,nmol)
@@ -2963,6 +2972,8 @@ c
       write(38, hlp_frm) 'L_H_MOL=',(l_h_mol(is),is=1,nmol)
       write(38,'(a,1pe9.2,a)') 'Spmp_He_to_D=',Spmp_He_to_D,','
       write(38,'(a,1pe9.2,a)') 'Spmp_nom=',Spmp_nom,','
+      write(38,'(a,l1,a)') 'SCALE_HE= ',scale_He,','
+      write(38,'(a,l1,a)') 'PRINT_ISAT=',print_isat,','
       write(38,'(a,i2,a)') 'LPFRS_PMP=',lpfrs_pmp,','
       if (lpfrb_i.ne.0) write(38,'(a,i3,a)') 'LPFRB_I=',lpfrb_i,','
       if (lpfrb_o.ne.0) write(38,'(a,i3,a)') 'LPFRB_O=',lpfrb_o,','

@@ -9,6 +9,7 @@ c
 c=======================================================================
 c*** Prepare the gas puffing sources. 
 c=======================================================================
+      implicit none
 #include "uinput.inc"
       integer i,j,k,l,isg,istr,isf
       real*4 hlp,hlp1,hlp2,hlpeps,hlpeps2
@@ -26,9 +27,10 @@ c>>>
         indsrc(nstrai)=-1
         ingpfstr(istr)=nstrai
 c<<<
-      	print *,'istr,nstrai,npts,kgpfstr,tgpfstr,cgpfstrs:',
+        print '(a,2i3,i6,i4,1p,1e12.4,1x,a)',
+     ,   'istr,nstrai,npts,kgpfstr,tgpfstr,cgpfstrs:',
      ,	  istr,nstrai,npts(nstrai),kgpfstr(istr),tgpfstr(istr),
-     ,	  ' ',cgpfstrs(istr)
+     ,	  cgpfstrs(istr)
 c>>>
         if(nstrai.ge.nstra) then !{
           write(0,*) 'Too many strata requested (gas puff',istr,') : ',

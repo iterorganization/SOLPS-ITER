@@ -13,7 +13,8 @@ c=======================================================================
       character*8 unn
 #include "uinput.inc"
 #include "impcon.inc"
-      integer lunm,i,j,l,lusgm,luswch,luskel,lugpf,lupfr,luvsp
+      integer lunm,i,j,l,lusgm,lugpf,luvsp
+      integer, save :: lupfr,luskel,luswch
       parameter (lunm=163)
       character*8 unm(lunm),uun,ubs*1,uam*52
 c...  	      	      	      	      	      	      52=48+4
@@ -541,7 +542,7 @@ c*** Surface data transfer from B2 to Eirene
       call resima(sps_id(n_spcsrf))
       return
   106 call resimi(i)
-      if(npfrgrp.eq.0) luprf=0
+      if(npfrgrp.eq.0) lupfr=0
       npfrgrp=npfrgrp+1
       if(npfrgrp.gt.npfrgrpd) then !{
       	write(0,*) 'Too many "PFR surface groups" specified'
@@ -564,15 +565,15 @@ c*** Surface data transfer from B2 to Eirene
       	write(0,*) '"PFR surface group" data outside the block - ',unn
 	call xerrab (' ==> Corrupted DG output?')
       end if !}
-      j=DEF_NLIM-luprf
+      j=DEF_NLIM-lupfr
       if(j.le.0) then !{
         write(0,*) 'Too many elements in "PFR surface groups"'
         call xerrab (' ==> check the DG model')
       end if !}
-      call rearri(lpfrgrp(luprf+1),j,i)
-      ipfrgrp(npfrgrp)=luprf+1
-      jpfrgrp(npfrgrp)=luprf+i
-      luprf=luprf+i
+      call rearri(lpfrgrp(lupfr+1),j,i)
+      ipfrgrp(npfrgrp)=lupfr+1
+      jpfrgrp(npfrgrp)=lupfr+i
+      lupfr=lupfr+i
       return
 c-----------------------------------------------------------------------
 c*** Limiter configuration (code cheating)

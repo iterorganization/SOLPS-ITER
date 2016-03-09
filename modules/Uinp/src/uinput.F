@@ -196,7 +196,7 @@ c*** Modify the input file for B2, if possible
             print *,'    ... b2.neutrals.parameters.2 created'
             close(2,err=22)
           else
-            print *, 
+            print *,
      .       '    Error while creating b2.neutrals.parameters.2: ',irt
           end if
        else
@@ -213,7 +213,7 @@ c*** Modify the input file for B2, if possible
             print *,'    ... b2.neutrals.parameters.stencil created'
             close(2,err=22)
           else
-            print *, 
+            print *,
      .      '    Error while creating b2.neutrals.parameters.stencil:'
      .      ,irt
           end if
@@ -230,7 +230,7 @@ c*** Modify the input file for B2, if possible
             print *,'    ... b2.boundary.parameters.2 created'
             close(2,err=32)
           else
-            print *, 
+            print *,
      .       '    Error while creating b2.boundary.parameters.2: ',irt
           end if
        else
@@ -247,13 +247,48 @@ c*** Modify the input file for B2, if possible
             print *,'    ... b2.boundary.parameters.stencil created'
             close(2,err=32)
           else
-            print *, 
+            print *,
      .      '    Error while creating b2.boundary.parameters.stencil:'
      .      ,irt
           end if
       end if
    30 close(1,err=32)
    32 continue
+
+      inquire(file='b2.user.parameters', exist=uex)
+      if(uex) then
+          open(1,file='b2.user.parameters',status='old',err=42)
+          open(2,file='b2.user.parameters.2',err=40)
+          call uicrb2(1,2,irt)
+          if(irt.eq.0) then
+            print *,'    ... b2.user.parameters.2 created'
+            close(2,err=42)
+          else
+            print *,
+     .       '    Error while creating b2.user.parameters.2: ',irt
+          end if
+       else
+          write(*,*) 'No b2.user.parameters found'
+          write(*,*) 'Writing b2.user.parameters'
+          open(99,status='SCRATCH')
+          write(99,*) '&USER'
+          write(99,*) '/'
+          rewind(99)
+          open(2,file='b2.user.parameters',err=40)
+          call uicrb2(99,2,irt)
+          close(99)
+          if(irt.eq.0) then
+            print *,'    ... b2.user.parameters created'
+            close(2,err=42)
+          else
+            print *,
+     .      '    Error while creating b2.user.parameters:'
+     .      ,irt
+          end if
+      end if
+   40 close(1,err=42)
+   42 continue
+
 c-----------------------------------------------------------------------
 c*** Create additional files with geometry for b2plot
       

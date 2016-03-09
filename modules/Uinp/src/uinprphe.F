@@ -12,11 +12,19 @@ c=======================================================================
 #include "uinput.inc"
 #include "uib2pprm.inc"
       integer i,j,k,l,luind(nxd),luwrk(nxd)
-      logical uex
-      external xerrab
+      logical uex, streql
+      external xerrab, streql
 c=======================================================================
 
       if(.not.do_hepdt) return
+
+c*** Find the species indices
+      do i=1,nspigen
+        if (streql(spcigen(i),'He')) j_he_at = i
+        if (streql(spcigen(i),'H') .or.
+     .      streql(spcigen(i),'D') .or.
+     .      streql(spcigen(i),'T')) j_h_at = i
+      end do
 
 c*** Hydrogenic inventory in the molecules
 
