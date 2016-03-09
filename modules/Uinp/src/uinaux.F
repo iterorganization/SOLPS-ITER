@@ -67,7 +67,7 @@ c
       return
  10   call rearri(i1trc,11,i)
       return
- 11   call resimi(ntime)
+ 11   call resimi(ntcpu)
       return
  12   call resimi(nfile)
       return

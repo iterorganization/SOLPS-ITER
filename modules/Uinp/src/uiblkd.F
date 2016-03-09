@@ -729,7 +729,7 @@ c*** 15
 
 c*** Data for Eirene test run
 
-      data ttntime,ttnfile, ttnpts, ttalloc,tttest,ttcsrc,ttcint /
+      data ttntcpu,ttnfile, ttnpts, ttalloc,tttest,ttcsrc,ttcint /
      /        50  , 10100 , nstra*5,   0.  ,.true.,.true.,.true. /,
      ,	ttchst,ttcref,ttcamd,ttcsou,ttcbla,ttcblm,ttcbli,ttcblp,ttcble /
      /	.true.,.true.,.true.,.true.,.true.,.true.,.true.,.true.,.true. /,
@@ -742,7 +742,7 @@ c*** Data for Eirene test run
 
 c*** Data for diagnostic run
 
-      data lntspcu,lntsptu,nmcsptu,dgntime,dgnptsfc,dgnfile,dgalloc /
+      data lntspcu,lntsptu,nmcsptu,dgntcpu,dgnptsfc,dgnfile,dgalloc /
      /        1   ,   0   ,   0   ,  1200 ,   10   , 00100 ,  0.5   /
 c=======================================================================
       end

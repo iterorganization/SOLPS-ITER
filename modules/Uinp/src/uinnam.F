@@ -1,4 +1,5 @@
       subroutine uinnam(unn)
+      use b2mod_types
       use b2mod_constants
       use b2mod_layer
      , , only: ntrack, nalloys
@@ -10,11 +11,13 @@ c
 c=======================================================================
 c*** Data input from the DG file
 c=======================================================================
+      implicit none
       character*8 unn
 #include "uinput.inc"
 #include "impcon.inc"
-      integer lunm,i,j,l,lusgm,lugpf,luvsp
+      integer lunm,i,j,l,lusgm,lugpf,lugwt,luvsp,nprnl
       integer, save :: lupfr,luskel,luswch
+      real (kind=R8) :: u
       parameter (lunm=163)
       character*8 unm(lunm),uun,ubs*1,uam*52
 c...  	      	      	      	      	      	      52=48+4
@@ -28,10 +31,7 @@ c***         or switch for the target data (clockwise from bottom left)
 c*** luskel: counter for the segments to be skipped
 c*** lugpf:  counter for the puffing sources
 c*** lugwt:  counter for the grid-wall ties
-cvk  lpol: counter for the closed polygon number (for Triang)
-cvk  lnpol: counter for the 'negative' closed polygon number (for Triang)
-      data lusgm, luswch, luskel, lugpf, lugwt, luvsp /6*0/
-      data lpol,lnpol /2*0/ 
+      data lusgm, luswch, luskel, lugpf, lugwt, luvsp, nprnl /7*0/
       data hlp_spc / .true. /
       data lurefls / 0 /  
       data unm /
@@ -340,7 +340,7 @@ c=======================================================================
    71 call resimi(i)
       nlscl=i.ne.0
       return
-   72 call resimi(ntime)
+   72 call resimi(ntcpu)
       return
    73 call resimi(nfile)
       return
@@ -654,7 +654,7 @@ c*** Data for diagnostics of wall erosion
       call resima(txtmtra(1))
       lena=l
       return
-  126 call resimi(dgntime)
+  126 call resimi(dgntcpu)
       return
   127 call resimi(dgnptsfc)
       return

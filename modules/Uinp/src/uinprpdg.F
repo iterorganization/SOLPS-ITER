@@ -11,14 +11,14 @@ c*** Prepare the data for the diagnostic Eirene run
 c=======================================================================
       logical lc
 #include "uinput.inc"
-      integer i,j,k,l,m,iy,iz,ntime_b,nfile_b,npts_b(nstra),lntspec_b,
+      integer i,j,k,l,m,iy,iz,ntcpu_b,nfile_b,npts_b(nstra),lntspec_b,
      ,  lntsput_b,nmcsput_b,ngwties_b,lgwt_h(ngwtiesx),kgwt_h(ngwtiesx),
      ,  l_pfr,l_wll
       logical ex,streql
       external streql
       real w,alloc_b,flux_b(nstra)
       save alloc_b,flux_b,
-     ,  ntime_b,nfile_b,npts_b,lntspec_b,lntsput_b,nmcsput_b,ngwties_b
+     ,  ntcpu_b,nfile_b,npts_b,lntspec_b,lntsput_b,nmcsput_b,ngwties_b
 c=======================================================================
       if(lc) then !{
 
@@ -58,7 +58,7 @@ c*** Change to the new numeration and exclude "Elements not for Eirene"
 
 c*** Save the variables to be changed
 
-        ntime_b=ntime
+        ntcpu_b=ntcpu
         nfile_b=nfile
         alloc_b=alloc
         lntspec_b=lntspec
@@ -72,7 +72,7 @@ c*** Save the variables to be changed
       	  flux_b(i)=flux(i)
         end do !}
 
-        ntime=dgntime
+        ntcpu=dgntcpu
         nfile=dgnfile
         alloc=dgalloc
         lntspec=lntspcu
@@ -226,7 +226,7 @@ c*** Set the VSP data for diag2.eir
 
       else !}{
         nsrfcls=0
-        ntime=ntime_b
+        ntcpu=ntcpu_b
         nfile=nfile_b
         alloc=alloc_b
         lntspec=lntspec_b

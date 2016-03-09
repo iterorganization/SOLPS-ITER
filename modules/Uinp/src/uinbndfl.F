@@ -146,7 +146,11 @@ c*** Take the data from the boundary default
 		  if(streql(spcsncl(l),spcdgen(k))) then !{
 c*** Take the default for the generic species
 		    j=1
-		    if(isp.eq.nspcpls .or. l.ne.spcsrnp(isp+1)) j=2
+                    if(isp.eq.nspcpls) then  ! to avoid array bound overflow
+                      j=2
+                    else if (l.ne.spcsrnp(isp+1)) then
+                      j=2
+                    endif
 		    lcobnds(isp,izn,iknd)=kcobndx(k,iknd,j)
 	            lmobnds(isp,izn,iknd)=kmobndx(k,iknd,j)
 	            bcobnds(isp,izn,1,iknd)=dcobndx(k,1,iknd,j)
@@ -204,7 +208,8 @@ c#endif
             end if !}
             if(ex) then !{
 c*** uex: the highest ionisation state for this species
-              uex=isp.eq.nspcpls .or. spcsrnp(isp+1).ne.l
+              uex=isp.eq.nspcpls  ! to avoid array bound overflow
+              if (.not.uex) uex=spcsrnp(isp+1).ne.l
 c#ifdef DBG
 c              print *,'uex,isp,l,spcsrnp',uex,isp,l,spcsrnp(isp+1)
 c#endif
