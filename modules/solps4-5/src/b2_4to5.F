@@ -2142,15 +2142,6 @@ c
      .       ffb_strata_4(is),''''
           end if
         end if
-        if (cfb_cntr_4(is).ne.0) then
-          is0 = isp(is)+nfluids_4(is)-1
-          if (is0.ge.0) then
-            write(99,'(a,i2,a)')
-     .       '''b2stbc_isfeedback'''//tab//tab//'''',is0,''''
-            write(98,'(a,i2,a)')
-     .       '''b2stbc_isfeedback'''//tab//tab//'''',is0,''''
-          end if
-        end if
       end do
       if (dflagvconv_4.eq.-10) then
         write(98,'(a)') 
@@ -2183,7 +2174,16 @@ c
           potpar(ib,2) = phiin_4(region(bcpos(ib),bcstart(ib),0)/4+1)
           do is = 0, ns-1
             if (is_neutral(is)) then
+              bccon(is,ib) = 5
               bcmom(is,ib) = 1
+              conpar(is,ib,1) = 0.0_R8
+              conpar(is,ib,2) = 0.0_R8
+              mompar(is,ib,1) = 0.0_R8
+              mompar(is,ib,2) = 0.0_R8
+            end if
+            if (bccon(is,ib).eq.3) then
+              conpar(is,ib,1) = 0.0_R8
+              conpar(is,ib,2) = 0.0_R8
             end if
           end do
         else if (bcchar(ib).eq.'E') then
@@ -2191,15 +2191,29 @@ c
           potpar(ib,2) = phiout_4(region(bcpos(ib),bcstart(ib),0)/4)
           do is = 0, ns-1
             if (is_neutral(is)) then
+              bccon(is,ib) = 5
               bcmom(is,ib) = 1
+              conpar(is,ib,1) = 0.0_R8
+              conpar(is,ib,2) = 0.0_R8
+              mompar(is,ib,1) = 0.0_R8
+              mompar(is,ib,2) = 0.0_R8
+            end if
+            if (bccon(is,ib).eq.3) then
+              conpar(is,ib,1) = 0.0_R8
+              conpar(is,ib,2) = 0.0_R8
             end if
           end do
         else if (bcchar(ib).eq.'S') then
           if (mod(region(bcstart(ib),bcpos(ib),0),4).eq.1) then
+            bcpot(ib) = 12
             do is = 0, ns-1
               if (is_neutral(is)) then
                 bccon(is,ib) = 8
                 bcmom(is,ib) = 1
+                conpar(is,ib,1) = 0.0_R8
+                conpar(is,ib,2) = 0.0_R8
+                mompar(is,ib,1) = 0.0_R8
+                mompar(is,ib,2) = 0.0_R8
               end if
             end do
             if (sepfeedback_4.and.ib.eq.main_plasma_bc_4) then
@@ -2212,14 +2226,18 @@ c
 	          if (is0.ge.0) then
 	            bccon(is0,ib) = 11
                     conpar(is0,ib,1) = 0.0_R8
+                    conpar(is0,ib,2) = 0.0_R8
 	          end if
                 end do
-                is0 = isp(is)+nfluids_4(is)-1
+                is0 = isp(is)+nfluids_4(is)
+                bccon(is0,ib) = 11
 		conpar(is0,ib,1) = cfb_core_4(is)
+		conpar(is0,ib,2) = 0.0_R8
                 na_feedback_ib(is-1) = ib
               end if
             end do
           else
+            bcpot(ib) = 13
             do is = 0, ns-1
               if (is_neutral(is)) then
                 bccon(is,ib) = 10
@@ -2235,6 +2253,7 @@ c
             end do
           end if
         else if (bcchar(ib).eq.'N') then
+          bcpot(ib) = 13
           do is = 0, ns-1
             if (is_neutral(is)) then
               bccon(is,ib) = 10
@@ -2891,7 +2910,7 @@ c
       if (.not.todo) return
       write(*,*) 'Writing b2.feedback_control.parameters'
       open(36,file='b2.feedback_control.parameters')
-      write(hlp_frm,'(a,i2,a)') '(1x,a,',nspecies,'(1x,i2,'',''))'
+      write(hlp_frm,'(a,i2,a)') '(1x,a,',nspecies,'(1x,i4,'',''))'
       write(36,'(a)') '&FEEDBACK_CONTROL'
       if (maxval(na_feedback_choice(0:nspecies-1)).gt.0)
      > write(36,hlp_frm)
@@ -2905,19 +2924,19 @@ c
       write(hlp_frm,'(a,i2,a)') '(1x,a,',nspecies,'(1x,i4,'',''))'
       if (maxval(na_feedback_ib(0:nspecies-1)).gt.0)
      > write(36,hlp_frm)
-     .     'NA_FEEDBACK_IB= ',na_feedback_ib(0:nspecies-1)
+     .     'NA_FEEDBACK_IB=      ',na_feedback_ib(0:nspecies-1)
       if (maxval(na_feedback_ix1(0:nspecies-1)).gt.-2)
      > write(36,hlp_frm)
-     .     'NA_FEEDBACK_IX1=',na_feedback_ix1(0:nspecies-1)
+     .     'NA_FEEDBACK_IX1=     ',na_feedback_ix1(0:nspecies-1)
       if (maxval(na_feedback_ix2(0:nspecies-1)).gt.-2)
      > write(36,hlp_frm)
-     .     'NA_FEEDBACK_IX2=',na_feedback_ix2(0:nspecies-1)
+     .     'NA_FEEDBACK_IX2=     ',na_feedback_ix2(0:nspecies-1)
       if (maxval(na_feedback_iy1(0:nspecies-1)).gt.-2)
      > write(36,hlp_frm)
-     .     'NA_FEEDBACK_IY1=',na_feedback_iy1(0:nspecies-1)
+     .     'NA_FEEDBACK_IY1=     ',na_feedback_iy1(0:nspecies-1)
       if (maxval(na_feedback_iy2(0:nspecies-1)).gt.-2)
      > write(36,hlp_frm)
-     .     'NA_FEEDBACK_IY2=',na_feedback_iy2(0:nspecies-1)
+     .     'NA_FEEDBACK_IY2=     ',na_feedback_iy2(0:nspecies-1)
       write(hlp_frm,'(a,i2,a)')
      .   '(1x,a,1p,',nspecies,'(1x,g10.3,'',''))'
       if (maxval(na_feedback_target(0:nspecies-1)).gt.0.0_R8 .or.
