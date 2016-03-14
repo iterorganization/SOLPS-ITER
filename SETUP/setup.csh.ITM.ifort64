@@ -3,3 +3,6 @@ setenv PATH ${PATH}:/pfs/work/dpc/SOLPS-ITER/NETCDF/bin
 setenv NCARG_ROOT /pfs/work/dpc/SOLPS-ITER/NCARG
 setenv SOLPSWORK /pfs/work/$USER/SOLPS-ITER
 # load modules
+setenv MODULEPATH /afs/ipp/common/usr/modules.2014/@sys/modulefiles/mpi:$MODULEPATH
+module unload impi
+module load impi/5.1.2

@@ -1,4 +1,5 @@
 # Load modules
+setenv MODULEPATH /afs/ipp/common/usr/modules.2014/@sys/modulefiles/mpi:$MODULEPATH
 module load intel
 module load texlive
 module load subversion
@@ -9,6 +10,8 @@ module load doxygen
 module load hdf5-serial
 #module load nag_flib/intel/mk24
 module load git
+module unload impi
+module load impi/5.1.2
 
 # Environment variables
 setenv DEVICE upgrade
