@@ -126,6 +126,7 @@ c*** bcpot, potpar
           rniprm(k,2,1,24,2)=bpobnds(i,2,j)
 c*** bccon, conpar, bcmom, mompar
 	  do l=1,nspcpls+nspcncl !{
+            if (ifl(l).eq.0) cycle
 	    iniprm(l,k,1,10,2)=lcobnds(ifl(l),i,j)
 	    rniprm(l,k,1,11,2)=bcobnds(ifl(l),i,1,j)
 	    rniprm(l,k,2,11,2)=bcobnds(ifl(l),i,2,j)

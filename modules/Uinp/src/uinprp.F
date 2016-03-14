@@ -235,9 +235,9 @@ c*** Specify some comments to appear in the output file
 
 c*** Re-arrange specification of the time allocation: through B2
 
-      ntimeb2=ntime
-      NTIME=1
-      NTCPU=ttntime
+      ntcpub2=ntcpu
+      NTIM1=1
+      NTCPU=ttntcpu
 
       NOPTIM=-1
     

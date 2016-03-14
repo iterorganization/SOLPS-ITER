@@ -11,7 +11,7 @@ c*** Prepare the data for the test Eirene run
 c=======================================================================
       logical lc
 #include "uinput.inc"
-      integer i,ntime_b,nfile_b,i1trc_b,i2trc_b,npts_b(nstra),
+      integer i,ntcpu_b,nfile_b,i1trc_b,i2trc_b,npts_b(nstra),
      ,  mpts_b(nstra),isyplt_b(8),nptc_b(nstep),nptcm_b(nstep)
       real alloc_b
       logical trchst_b,trcint_b,trcamd_b,trcsou_b,trcbla_b,trcblm_b,
@@ -19,7 +19,7 @@ c=======================================================================
      ,  trcdbge_b,trcdbgm_b,trcdbgf_b,trcdbgl_b,trcdbgs_b,
      ,  trcdbgg_b,trcdbgmpi_b,trcdbgc_b,trcsrc_b,
      ,  pl1st_b,pl2nd_b,pladd_b,plhst_b,plcut_b(3),plnums_b,nltest_b
-      save alloc_b,ntime_b,nfile_b,i1trc_b,i2trc_b,npts_b,mpts_b,
+      save alloc_b,ntcpu_b,nfile_b,i1trc_b,i2trc_b,npts_b,mpts_b,
      ,  trchst_b,trcint_b,trcamd_b,trcsou_b,trcbla_b,trcblm_b,trcbli_b,
      ,  trcblp_b,trcble_b,trcblph_b,trctal_b,trcdbg2_b,trcdbge_b,
      ,  trcdbgm_b,trcdbgf_b,trcdbgl_b,trcdbgs_b,
@@ -28,7 +28,7 @@ c=======================================================================
      ,  isyplt_b
 c=======================================================================
       if(lc) then !{
-        ntime_b=ntime
+        ntcpu_b=ntcpu
         nfile_b=nfile
         alloc_b=alloc
         i1trc_b=i1trc
@@ -73,7 +73,7 @@ c=======================================================================
         plnums_b=plnums
         nltest_b=nltest
 
-        NTCPU=ttntime
+        ntcpu=ttntcpu
         nfile=ttnfile
         alloc=ttalloc
         i1trc=1
@@ -136,7 +136,7 @@ c*** Set the VSP data for test.eir
 
       else !}{
         nsrfcls=0
-        ntime=ntime_b
+        ntcpu=ntcpu_b
         nfile=nfile_b
         alloc=alloc_b
         i1trc=i1trc_b

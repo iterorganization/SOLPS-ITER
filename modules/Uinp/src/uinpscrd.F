@@ -220,6 +220,8 @@ C***  SURFMOD_k_<MATERIAL>_<SPUTER>_<PUMP>_<SEMYTRANSP>_<TEMPERATURE K>
         character*(72) cnam,txtbuf
         real znml
         integer twll
+        integer len_of_digits
+        external len_of_digits
         if(k.LT.10) then
            write(cnam,'(A8,I1)') 'SURFMOD_',k
         else
@@ -248,7 +250,8 @@ C***  SURFMOD_k_<MATERIAL>_<SPUTER>_<PUMP>_<SEMYTRANSP>_<TEMPERATURE K>
           twll=nint(abs(scewall(k))*11600) !wall temperature in K 
           write(txtbuf,'(i6,a1)') twll,'K'
           txtbuf=adjustl(txtbuf)
-          cnam=cnam(1:len_trim(cnam))//'_'//txtbuf(1:twll/10)
+          cnam=cnam(1:len_trim(cnam))//'_'//
+     .         txtbuf(1:len_of_digits(twll)+1)
         end if
         cardname=cnam
        end function cardname !} 

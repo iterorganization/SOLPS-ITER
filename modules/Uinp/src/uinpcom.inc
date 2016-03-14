@@ -390,7 +390,7 @@ c***    lntsptu   becomes lntsput
 c***    nmcsptu   becomes nmcsput
 c***    nlstadu   becomes nlstadds
 c***    ngwtiesi  becomes ngwties
-      integer lntspcu,lntsptu,nmcsptu,nlstadu,dgntime,dgnptsfc,
+      integer lntspcu,lntsptu,nmcsptu,nlstadu,dgntcpu,dgnptsfc,
      ,  dgnfile,listaddi(nlim),ngwtiesi
       real*4 dgalloc
           
@@ -420,7 +420,7 @@ c*** Data for toroidal geometry specification
       integer nttrator
 
 c*** Mid-plane position in the B2 grid, Eirene time allocation in B2
-      integer jxi,jxa,ntimeb2
+      integer jxi,jxa,ntcpub2
 
 c*** Vessel specification for b2plot: number of segments, index
       integer nnvsle, nmvsle(nlim)
@@ -467,7 +467,7 @@ c***  	list of wall segments indicating the pump and their number
 
 c-----------------------------------------------------------------------
 c*** Data substitution for the Eirene test run
-      integer ttntime,ttnfile,ttnpts(nstra)
+      integer ttntcpu,ttnfile,ttnpts(nstra)
       real*4 ttalloc
       logical ttchst,ttcref,ttcint,ttcamd,ttcsou,ttcbla,ttcblm,ttcbli,
      ,	ttcblp,ttcble,ttcblph,ttctal,ttcdbg2,ttcdbge,ttcdbgm,ttcdbgf,
@@ -527,7 +527,7 @@ c=======================================================================
      ,	sps_absr,sps_trno,sps_trni,sps_mtri,sps_tmpr,sps_spph,sps_spch,
      i	nstrao,natmo,nmolo,niono,nphto,nplso,
      ,	mnpr,mnptseg,npr,nptseg,laddsrfs,indasrfe,indasrfs,
-     ,	nttrator,jxi,jxa,ntimeb2,nnvsle,nmvsle,ttntime,ttnfile,ttnpts,
+     ,	nttrator,jxi,jxa,ntcpub2,nnvsle,nmvsle,ttntcpu,ttnfile,ttnpts,
      ,	ntrgdflt,namdf,nncut,nxcut1,nycut2,nniso,ntiso,nxiso1,nxiso2,
      ,	nyiso1,nyiso2,nx,ny,
      ,	izc1,izc2,izc3,izc4,izci,iztg,irsp,irsp2,irwl,
@@ -563,7 +563,7 @@ c     ,  spcifup,spcifua,spcifum,spcifui,
      ,	ngpfstr,ingpfstr,kgpfstr,lgpfstr,jgpfstr,mgpfstr,npgpfstr,
      ,	mpgpfstr,nigpfstr,igpfstr,lsgpfstr,
      ,	nrcmstr,lrcmrb,lrcmre,lrcmpb,lrcmpe,nrcmstrs,ircmstrs,lsrcmstr,
-     ,	lntspcu,lntsptu,nmcsptu,nlstadu,dgntime,dgnptsfc,dgnfile,
+     ,	lntspcu,lntsptu,nmcsptu,nlstadu,dgntcpu,dgnptsfc,dgnfile,
      ,	listaddi,ngwtiesi,nsrfclu,msrfclu,lsrfclu,isrfclu,
      ,	ntrgte,jedgep,jedgec,jedgeo,ntrgto,ntrgtm,
      ,	tgrefsw,tgsppsw,tgspcsw,tgsppsp,tgspcgr,tgnhst,tgmhst,tgnini,

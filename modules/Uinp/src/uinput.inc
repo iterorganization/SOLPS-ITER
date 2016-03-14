@@ -11,7 +11,7 @@ c*** Temporary - max. number of reactions in cdenmodel section
 c*** 1
       integer nmach,nmode,ntcpu,nfile,niter0,niter,ntime0,ntim1,nfullrun 
       integer noptim,noptm1,ngeom_usr,ncoup_input,nsmstra,
-     ,        nstoram,ngstal,nrtal1,nreac_add 
+     ,        nstoram,ngstal,nrtal1,nreac_add,lfrm15
       logical nlscl,nltest,nlana,nldrft,nlcrr,nlerg,nlident,nlone,
      ,        ltstv,nldfst,nloldran,nlcascad,nloctree,nlwrmsh,
      ,        nexvs,nltrimesh 
@@ -339,7 +339,7 @@ c*** 15
       common/uinint/
      ,  nmach,nmode,ntcpu,nfile,niter0,niter,ntime0,ntim1,nfullrun,
      ,  noptim,noptm1,ngeom_usr,ncoup_input,nsmstra,
-     ,  nstoram,ngstal,nrtal1,nreac_add,nscards, 
+     ,  nstoram,ngstal,nrtal1,nreac_add,nscards,lfrm15,
      ,  indgrd,nr1st,nrsep,
      ,  nrplg,npplg,nrknot,npoin1,necke,nchbar,nseite,inmti,
      ,  np2nd,npsep,nppla,npper,nt3rd,ntsep,nttra,ntper,nbmlt,
