@@ -179,6 +179,11 @@ alias xlylplot9='plot xlylplot9'
 
 alias set_debug='. $SOLPSTOP/debug.ksh'
 alias unset_debug='. $SOLPSTOP/nodebug.ksh'
+alias set_mpi='. $SOLPSTOP/SETUP/mpi'
+alias unset_mpi='. $SOLPSTOP/SETUP/nompi'
+alias set_ig='. $SOLPSTOP/SETUP/ig'
+alias unset_ig='. $SOLPSTOP/SETUP/noig'
+
 
 [ -e setup.ksh.$OBJECTCODE ] && . setup.ksh.$OBJECTCODE
 [ -e setup.ksh.local ] && . setup.ksh.local
