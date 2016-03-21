@@ -106,7 +106,8 @@ c*** Check whether the specified chain consists of valid elements
 
 c*** Order the chain and check it for continuity
 
-      call chkchain(p1,p2,3,nlim,indelm,nni,ntrgts,ind,irt)
+      call chkchain(p1,p2,3,nlim,indelm,nni,ntrgts,ind,irt,
+     .              jedgep,jedgec,jedge,ntrgte/2)
       if(irt.le.0) then !{
 #ifdef FLUSH
             call FLUSH(6)

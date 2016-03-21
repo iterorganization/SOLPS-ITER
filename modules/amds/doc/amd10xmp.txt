@@ -2,4 +2,4 @@ IMPORTANT NOTICE
 ----------------
 
 The database file was produced by an automated macro, and is physically
-MEANINGSLESS. It is only an example of how a database file can be built.
+MEANINGLESS. It is only an example of how a database file can be built.

@@ -14,7 +14,8 @@ c      if(irt.gt.0) print *,'ind= ',ind
 c      end
 
 
-      subroutine chkchain(p1,p2,mp,np,ls,ns,nc,ind,irt)
+      subroutine chkchain(p1,p2,mp,np,ls,ns,nc,ind,irt,
+     . jedgep,jedgec,jedge,nt)
 
 c  version : 31.03.2005 19:39
 
@@ -29,6 +30,7 @@ c***  np    : total number of segments
 c***  ls    : list of segments to be ordered
 c***  ns    : its length
 c***  nc    : max. number of chains
+c***  nt    : number of targets
 c*** 
 c*** Output:
 c*** 
@@ -41,7 +43,8 @@ c*** length of the chain, negative if the chain is closed.
 c=======================================================================
 
       implicit none
-      integer mp,np,ns,nc,ls(ns),irt,ind(ns+nc)
+      integer mp,np,ns,nc,nt,ls(ns),irt,ind(ns+nc)
+      integer jedgep(nt),jedgec(nt),jedge(2,nc)
       real p1(mp,np),p2(mp,np)
 
 c*** Local variables
@@ -64,6 +67,7 @@ c*** free:    one of the ends of the segment is not yet linked
 
       integer i,j,k,l,i1,i2,ib,ic,ii,iii
       real w
+      logical match
 c      logical bbb !###
 c=======================================================================
 c!###{
@@ -75,12 +79,12 @@ c      write(*,*)
 c!###}
       if(mp.lt.2) then !{
 #ifdef FLUSH
-            call FLUSH(6)
+        call FLUSH(6)
 #endif
         write(0,*) 'chkchain: too small first dimension in the ',
      ,                            'segment arrays. Must be > 1, is ',mp
 #ifdef FLUSH
-            call FLUSH(0)
+        call FLUSH(0)
 #endif
         irt=-3
         return
@@ -100,14 +104,14 @@ c!###}
       end do !}
       if(k.gt.0) then !{
 #ifdef FLUSH
-            call FLUSH(6)
+        call FLUSH(6)
 #endif
         write(*,*) 'chkchain: requested index outside ',
      ,                                      'the segment list.  np= ',np
         write(*,'(/1x,2a12)') 'index','requested'
         write(*,'(1x,i8,i12)') (ind(i),ls(ind(i)),i=1,k)
 #ifdef FLUSH
-            call FLUSH(0)
+        call FLUSH(0)
 #endif
         irt=-2
         return
@@ -128,7 +132,6 @@ c!###}
 c!###{
 c            if(bbb) write(*,*) '=== j,ls(j),... = ',j,ls(j),
 c     ,                        free(j),next(j),prvs(j),inext(j),iprvs(j)
-c
 c!###}            if(.not. free(j)) go to 110
             if(next(j)) then !{
 
@@ -141,8 +144,19 @@ c!###{
 c                write(*,'(1x,a,2x,1p,4e13.5)') '== prvs(i):',
 c     ,                  p1(1,ls(i)),p2(1,ls(j)),p1(2,ls(i)),p2(2,ls(j))
 c!###}
-                if(abs(p1(1,ls(i))-p2(1,ls(j))).le.tol .and.
-     .                      abs(p1(2,ls(i))-p2(2,ls(j))).le.tol) then !{
+                match = .true.
+                do k = 1, nt !{
+                  if ((ls(i).eq.jedgep(k) .and.
+     .                          jedge(1,(k-1)*2+1).eq.1) .or.
+     .                (ls(j).eq.jedgec(k) .and.
+     .                          jedge(1,k*2).eq.2)) then
+                    match = .false.
+                  end if
+                end do !}
+                match = match .and.
+     .                 (abs(p1(1,ls(i))-p2(1,ls(j))).le.tol .and.
+     .                  abs(p1(2,ls(i))-p2(2,ls(j))).le.tol)
+                if (match) then !{
 c!###{
 c                  bbb=j.eq.136 .or.bbb
 c                  if(bbb) write(*,*) '=== i,j,...(j) = ',i,j,
@@ -165,8 +179,19 @@ c!###{
 c                if(bbb) write(*,'(1x,a,2x,1p,4e10.2)') '== next(i)',
 c     ,                  p2(1,ls(i)),p2(1,ls(j)),p2(2,ls(i)),p2(2,ls(j))
 c!###}
-                if(abs(p2(1,ls(i))-p2(1,ls(j))).le.tol .and.
-     .                      abs(p2(2,ls(i))-p2(2,ls(j))).le.tol) then !{
+                match = .true.
+                do k = 1, nt !{
+                  if ((ls(i).eq.jedgep(k) .and.
+     .                          jedge(1,(k-1)*2+1).eq.2) .or.
+     .                (ls(j).eq.jedgec(k) .and.
+     .                          jedge(1,k*2).eq.2)) then
+                    match = .false.
+                  end if
+                end do !}
+                match = match .and.
+     .                 (abs(p2(1,ls(i))-p2(1,ls(j))).le.tol .and.
+     .                  abs(p2(2,ls(i))-p2(2,ls(j))).le.tol)
+                if (match) then !{
 c!###{
 c                  bbb=j.eq.136 .or.bbb
 c                  if(bbb) write(*,*) '=== i,j,... :'
@@ -213,7 +238,7 @@ c                    if(bbb) write(*,*) ii,k,inext(k),next(k) !###
                     k=inext(k)
                   end do !}
 #ifdef FLUSH
-            call FLUSH(6)
+                  call FLUSH(6)
 #endif
                   call xerrab ('Something wrong with re-ordering')
  40               if(.not.free(i)) go to 100
@@ -233,9 +258,19 @@ c
 c              write(*,'(1x,a,2x,1p,4e13.5)') '== next(i)',
 c     ,             p2(1,ls(i)),p1(1,ls(j)),p2(2,ls(i)),p1(2,ls(j))
 c!###}
-
-                if(abs(p2(1,ls(i))-p1(1,ls(j))).le.tol .and.
-     .                      abs(p2(2,ls(i))-p1(2,ls(j))).le.tol) then !{
+                match = .true.
+                do k = 1, nt !{
+                  if ((ls(i).eq.jedgep(k) .and.
+     .                          jedge(1,(k-1)*2+1).eq.2) .or.
+     .                (ls(j).eq.jedgec(k) .and.
+     .                          jedge(1,k*2).eq.1)) then
+                    match = .false.
+                  end if
+                end do !}
+                match = match .and.
+     .                 (abs(p2(1,ls(i))-p1(1,ls(j))).le.tol .and.
+     .                  abs(p2(2,ls(i))-p1(2,ls(j))).le.tol)
+                if (match) then !{
 c!###{
 c
 c                  bbb=j.eq.136 .or.bbb
@@ -262,9 +297,19 @@ c
 c                write(*,'(1x,a,2x,1p,4e10.2)') '== prvs(i)',
 c     ,                  p1(1,ls(i)),p1(1,ls(j)),p1(2,ls(i)),p1(2,ls(j))
 c!###}
-
-                if(abs(p1(1,ls(i))-p1(1,ls(j))).le.tol .and.
-     .                      abs(p1(2,ls(i))-p1(2,ls(j))).le.tol) then !{
+                match = .true.
+                do k = 1, nt !{
+                  if ((ls(i).eq.jedgep(k) .and.
+     .                          jedge(1,(k-1)*2+1).eq.1) .or.
+     .                (ls(j).eq.jedgec(k) .and.
+     .                          jedge(1,k*2).eq.1)) then
+                    match = .false.
+                  end if
+                end do !}
+                match = match .and.
+     .                 (abs(p1(1,ls(i))-p1(1,ls(j))).le.tol .and.
+     .                  abs(p1(2,ls(i))-p1(2,ls(j))).le.tol)
+                if (match) then !{
 c!###{
 c
 c                  bbb=j.eq.136 .or.bbb
@@ -279,7 +324,7 @@ c!###}
                   prvs(i)=.false.
                   free(i)=prvs(i).or.next(i)
 
-c*** change the orientation of the chain accending from j
+c*** change the orientation of the chain ascending from j
 
                   k=j
 
@@ -426,7 +471,7 @@ c              write(*,*) 'j = ',j,done(j),next(j),inext(j)
       end do !}
       if(k.ne.ns) then !{
 #ifdef FLUSH
-            call FLUSH(6)
+        call FLUSH(6)
 #endif
         write(0,*) 'chkchain: internal error - k =/= ns ',k,ns
         write(0,*) 'ns,ls: ',ns
@@ -441,7 +486,7 @@ c              write(*,*) 'j = ',j,done(j),next(j),inext(j)
           l=l+k
         end do !}
 #ifdef FLUSH
-            call FLUSH(0)
+        call FLUSH(0)
 #endif
         irt=-4
         return

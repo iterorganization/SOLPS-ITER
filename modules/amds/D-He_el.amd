@@ -49,7 +49,7 @@ E prod 1
 +r-p-n float
 eprdct2
 E prod 2
-EnabledParticles1 412
+EnabledParticles1 466
 Reaction HYDHEL_H.1_2.1.1 0
 Reaction HYDHEL_H.1_2.1.2 0
 Reaction HYDHEL_H.1_2.1.3 0
@@ -257,6 +257,16 @@ Reaction HYDHEL_H.3_7.2.3 0
 Reaction HYDHEL_H.3_7.3.1 0
 Reaction HYDHEL_H.3_7.3.2a 0
 Reaction HYDHEL_H.3_7.3.2b 0
+Reaction AMJUEL_H.0_0.1T 0
+Reaction AMJUEL_H.0_0.2T 2
+H+
+He(1|1s)
+Reaction AMJUEL_H.0_0.3T 0
+Reaction AMJUEL_H.0_0.4T 0
+Reaction AMJUEL_H.0_0.5T 0
+Reaction AMJUEL_H.0_0.6T 0
+Reaction AMJUEL_H.0_0.7T 0
+Reaction AMJUEL_H.0_0.8T 0
 Reaction AMJUEL_H.1_0.1T 0
 Reaction AMJUEL_H.1_0.1D 0
 Reaction AMJUEL_H.1_0.1V 0
@@ -271,7 +281,20 @@ Reaction AMJUEL_H.1_0.3V 0
 Reaction AMJUEL_H.1_0.4T 0
 Reaction AMJUEL_H.1_0.4D 0
 Reaction AMJUEL_H.1_0.4V 0
+Reaction AMJUEL_H.1_0.5T 0
+Reaction AMJUEL_H.1_0.5D 0
+Reaction AMJUEL_H.1_0.5V 0
+Reaction AMJUEL_H.1_0.6T 0
+Reaction AMJUEL_H.1_0.6D 0
+Reaction AMJUEL_H.1_0.6V 0
+Reaction AMJUEL_H.1_0.7T 0
+Reaction AMJUEL_H.1_0.7D 0
+Reaction AMJUEL_H.1_0.7V 0
+Reaction AMJUEL_H.1_0.8T 0
+Reaction AMJUEL_H.1_0.8D 0
+Reaction AMJUEL_H.1_0.8V 0
 Reaction AMJUEL_H.1_2.2.5 0
+Reaction AMJUEL_H.1_3.1.6FJ 0
 Reaction AMJUEL_H.1_3.1.8R 0
 Reaction AMJUEL_H.1_3.1.8S 0
 Reaction AMJUEL_H.1_3.1.8T 0
@@ -294,6 +317,8 @@ Reaction AMJUEL_H.2_2.10B0 0
 Reaction AMJUEL_H.2_2.10B1 0
 Reaction AMJUEL_H.2_2.18B0 0
 Reaction AMJUEL_H.2_2.18B1 0
+Reaction AMJUEL_H.2_2.26B0 0
+Reaction AMJUEL_H.2_2.26B1 0
 Reaction AMJUEL_H.2_3.1.6FJ 0
 Reaction AMJUEL_H.2_3.1.8FJ 0
 Reaction AMJUEL_H.2_3.2.3 0
@@ -307,6 +332,14 @@ Reaction AMJUEL_H.3_0.3T 0
 Reaction AMJUEL_H.3_0.3D 0
 Reaction AMJUEL_H.3_0.4T 0
 Reaction AMJUEL_H.3_0.4D 0
+Reaction AMJUEL_H.3_0.5T 0
+Reaction AMJUEL_H.3_0.5D 0
+Reaction AMJUEL_H.3_0.6T 0
+Reaction AMJUEL_H.3_0.6D 0
+Reaction AMJUEL_H.3_0.7T 0
+Reaction AMJUEL_H.3_0.7D 0
+Reaction AMJUEL_H.3_0.8T 0
+Reaction AMJUEL_H.3_0.8D 0
 Reaction AMJUEL_H.3_3.1.8 0
 Reaction AMJUEL_H.3_3.2.3 0
 Reaction AMJUEL_H.3_3.3.1 0
@@ -315,10 +348,12 @@ Reaction AMJUEL_H.3_3.3.6b 0
 Reaction AMJUEL_H.4_2.1.5 2
 H
 e
+Reaction AMJUEL_H.4_2.1.5o 0
 Reaction AMJUEL_H.4_2.1.5FU 0
 Reaction AMJUEL_H.4_2.1.8 2
 H+
 e
+Reaction AMJUEL_H.4_2.1.8o 0
 Reaction AMJUEL_H.4_2.1.8a 0
 Reaction AMJUEL_H.4_2.1.8b 0
 Reaction AMJUEL_H.4_2.1.8FU 0
@@ -380,10 +415,14 @@ Reaction AMJUEL_H.9_3.3.6b 0
 Reaction AMJUEL_H.10_2.1.5 2
 H
 e
+Reaction AMJUEL_H.10_2.1.5o 0
 Reaction AMJUEL_H.10_2.1.8 2
 H+
 e
+Reaction AMJUEL_H.10_2.1.8o 0
 Reaction AMJUEL_H.10_2.3.6A0 0
+Reaction AMJUEL_H.10_2.3.9a 0
+Reaction AMJUEL_H.10_2.3.13a 0
 Reaction AMJUEL_H.10_2.6A0 0
 Reaction AMJUEL_H.11_2.0a 0
 Reaction AMJUEL_H.11_2.2B0 0
@@ -392,7 +431,8 @@ Reaction AMJUEL_H.11_2.5B0 0
 Reaction AMJUEL_H.11_2.6B0 0
 Reaction AMJUEL_H.11_2.10B0 0
 Reaction AMJUEL_H.11_2.18B0 0
-Reaction AMJUEL_H.11_7.0 0
+Reaction AMJUEL_H.11_7.0b 0
+Reaction AMJUEL_H.11_7.0c 0
 Reaction AMJUEL_H.12_2.0b 0
 Reaction AMJUEL_H.12_2.0c 0
 Reaction AMJUEL_H.12_2.1.5a 0
@@ -401,27 +441,43 @@ Reaction AMJUEL_H.12_2.1.5c 0
 Reaction AMJUEL_H.12_2.1.5d 0
 Reaction AMJUEL_H.12_2.1.5e 0
 Reaction AMJUEL_H.12_2.1.5t 0
+Reaction AMJUEL_H.12_2.1.5de 0
+Reaction AMJUEL_H.12_2.1.5o 0
 Reaction AMJUEL_H.12_2.1.8a 0
 Reaction AMJUEL_H.12_2.1.8b 0
 Reaction AMJUEL_H.12_2.1.8c 0
 Reaction AMJUEL_H.12_2.1.8d 0
 Reaction AMJUEL_H.12_2.1.8e 0
 Reaction AMJUEL_H.12_2.1.8t 0
+Reaction AMJUEL_H.12_2.1.8de 0
+Reaction AMJUEL_H.12_2.1.8o 0
+Reaction AMJUEL_H.12_2.2a 0
+Reaction AMJUEL_H.12_2.2b 0
+Reaction AMJUEL_H.12_2.2c 0
 Reaction AMJUEL_H.12_2.2.5a 0
 Reaction AMJUEL_H.12_2.2.5b 0
 Reaction AMJUEL_H.12_2.2.5c 0
 Reaction AMJUEL_H.12_2.2.5d 0
 Reaction AMJUEL_H.12_2.2.5e 0
+Reaction AMJUEL_H.12_2.2.5fl 0
+Reaction AMJUEL_H.12_2.2.5fu 0
 Reaction AMJUEL_H.12_2.2.14a 0
 Reaction AMJUEL_H.12_2.2.14b 0
 Reaction AMJUEL_H.12_2.2.14c 0
 Reaction AMJUEL_H.12_2.2.14d 0
+Reaction AMJUEL_H.12_2.2.14e 0
+Reaction AMJUEL_H.12_2.3.2a 0
+Reaction AMJUEL_H.12_2.3.2b 0
+Reaction AMJUEL_H.12_2.3.2c 0
 Reaction AMJUEL_H.12_2.3.6A0 0
+Reaction AMJUEL_H.12_2.3.9a 0
+Reaction AMJUEL_H.12_2.3.13a 0
 Reaction AMJUEL_H.12_2.6A0 0
 Reaction AMJUEL_H.12_7.2a 0
 Reaction AMJUEL_H.12_7.2b 0
 Reaction AMJUEL_H.12_7.2c 0
 Reaction AMJUEL_H.12_7.2d 0
+Reaction AMJUEL_H.12_7.2e 0
 Reaction METHANE_H.1_2.1 0
 Reaction METHANE_H.1_2.2 0
 Reaction METHANE_H.1_2.3 0
@@ -486,7 +542,7 @@ Reaction METHANE_H.3_3.1.2 0
 Reaction METHANE_H.3_3.1.3 0
 Reaction METHANE_H.3_3.1.4 0
 Reaction METHANE_H.3_3.2 0
-Vars1 412
+Vars1 466
 Reaction HYDHEL_H.1_2.1.1 2
 
 
@@ -3997,6 +4053,150 @@ Reaction HYDHEL_H.3_7.3.2b 2
 
 Particle H-
 Particle H
+Reaction AMJUEL_H.0_0.1T 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H+
+Particle H
+Reaction AMJUEL_H.0_0.2T 2
+6
+0
+1
+4
+EL
+
+
+He
+D+
+He
+D+
+
+
+
+
+Particle H+
+Particle He(1|1s)
+Reaction AMJUEL_H.0_0.3T 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H+
+Particle H2
+Reaction AMJUEL_H.0_0.4T 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle He+
+Particle He
+Reaction AMJUEL_H.0_0.5T 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H+
+Particle Ne
+Reaction AMJUEL_H.0_0.6T 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H+
+Particle Ar
+Reaction AMJUEL_H.0_0.7T 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H+
+Particle Kr
+Reaction AMJUEL_H.0_0.8T 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H+
+Particle Xe
 Reaction AMJUEL_H.1_0.1T 2
 
 
@@ -4061,8 +4261,8 @@ EL
 
 He
 H+
-
-
+He
+D+
 
 
 
@@ -4213,6 +4413,222 @@ Reaction AMJUEL_H.1_0.4V 2
 
 Particle He+
 Particle He
+Reaction AMJUEL_H.1_0.5T 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H+
+Particle Ne
+Reaction AMJUEL_H.1_0.5D 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H+
+Particle Ne
+Reaction AMJUEL_H.1_0.5V 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H+
+Particle Ne
+Reaction AMJUEL_H.1_0.6T 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H+
+Particle Ar
+Reaction AMJUEL_H.1_0.6D 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H+
+Particle Ar
+Reaction AMJUEL_H.1_0.6V 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H+
+Particle Ar
+Reaction AMJUEL_H.1_0.7T 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H+
+Particle Kr
+Reaction AMJUEL_H.1_0.7D 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H+
+Particle Kr
+Reaction AMJUEL_H.1_0.7V 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H+
+Particle Kr
+Reaction AMJUEL_H.1_0.8T 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H+
+Particle Xe
+Reaction AMJUEL_H.1_0.8D 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H+
+Particle Xe
+Reaction AMJUEL_H.1_0.8V 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H+
+Particle Xe
 Reaction AMJUEL_H.1_2.2.5 2
 
 
@@ -4231,6 +4647,24 @@ Reaction AMJUEL_H.1_2.2.5 2
 
 Particle e
 Particle H2
+Reaction AMJUEL_H.1_3.1.6FJ 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H+
+Particle H
 Reaction AMJUEL_H.1_3.1.8R 2
 
 
@@ -4627,6 +5061,42 @@ Reaction AMJUEL_H.2_2.18B1 2
 
 Particle e
 Particle Ar+
+Reaction AMJUEL_H.2_2.26B0 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle Fe
+Reaction AMJUEL_H.2_2.26B1 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle Fe+
 Reaction AMJUEL_H.2_3.1.6FJ 2
 
 
@@ -4727,8 +5197,8 @@ EL
 
 He
 H+
-
-
+He
+D+
 
 
 
@@ -4825,6 +5295,150 @@ Reaction AMJUEL_H.3_0.4D 2
 
 Particle He+
 Particle He
+Reaction AMJUEL_H.3_0.5T 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H+
+Particle Ne
+Reaction AMJUEL_H.3_0.5D 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H+
+Particle Ne
+Reaction AMJUEL_H.3_0.6T 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H+
+Particle Ar
+Reaction AMJUEL_H.3_0.6D 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H+
+Particle Ar
+Reaction AMJUEL_H.3_0.7T 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H+
+Particle Kr
+Reaction AMJUEL_H.3_0.7D 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H+
+Particle Kr
+Reaction AMJUEL_H.3_0.8T 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H+
+Particle Xe
+Reaction AMJUEL_H.3_0.8D 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H+
+Particle Xe
 Reaction AMJUEL_H.3_3.1.8 2
 
 
@@ -4933,6 +5547,24 @@ D+
 
 Particle e
 Particle H
+Reaction AMJUEL_H.4_2.1.5o 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle H
 Reaction AMJUEL_H.4_2.1.5FU 2
 
 
@@ -4962,6 +5594,24 @@ RC
 D+
 
 D
+
+
+
+
+
+Particle e
+Particle H+
+Reaction AMJUEL_H.4_2.1.8o 2
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -6031,6 +6681,24 @@ D+
 
 Particle e
 Particle H
+Reaction AMJUEL_H.10_2.1.5o 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle H
 Reaction AMJUEL_H.10_2.1.8 2
 2
 13.6
@@ -6042,6 +6710,24 @@ RC
 D+
 
 D
+
+
+
+
+
+Particle e
+Particle H+
+Reaction AMJUEL_H.10_2.1.8o 2
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -6067,6 +6753,42 @@ Reaction AMJUEL_H.10_2.3.6A0 2
 
 Particle e
 Particle C+
+Reaction AMJUEL_H.10_2.3.9a 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle He(1|1S)
+Reaction AMJUEL_H.10_2.3.13a 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle He+(1s)
 Reaction AMJUEL_H.10_2.6A0 2
 
 
@@ -6211,7 +6933,25 @@ Reaction AMJUEL_H.11_2.18B0 2
 
 Particle e
 Particle Ar
-Reaction AMJUEL_H.11_7.0 2
+Reaction AMJUEL_H.11_7.0b 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H-
+Particle H2
+Reaction AMJUEL_H.11_7.0c 2
 
 
 
@@ -6373,6 +7113,42 @@ Reaction AMJUEL_H.12_2.1.5t 2
 
 Particle e
 Particle H
+Reaction AMJUEL_H.12_2.1.5de 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle H
+Reaction AMJUEL_H.12_2.1.5o 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle H
 Reaction AMJUEL_H.12_2.1.8a 2
 
 
@@ -6481,6 +7257,96 @@ Reaction AMJUEL_H.12_2.1.8t 2
 
 Particle e
 Particle H+
+Reaction AMJUEL_H.12_2.1.8de 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle H+
+Reaction AMJUEL_H.12_2.1.8o 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle H+
+Reaction AMJUEL_H.12_2.2a 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle He
+Reaction AMJUEL_H.12_2.2b 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle He
+Reaction AMJUEL_H.12_2.2c 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle He
 Reaction AMJUEL_H.12_2.2.5a 2
 
 
@@ -6571,6 +7437,42 @@ Reaction AMJUEL_H.12_2.2.5e 2
 
 Particle e
 Particle H2
+Reaction AMJUEL_H.12_2.2.5fl 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle H2
+Reaction AMJUEL_H.12_2.2.5fu 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle H2
 Reaction AMJUEL_H.12_2.2.14a 2
 
 
@@ -6643,6 +7545,78 @@ Reaction AMJUEL_H.12_2.2.14d 2
 
 Particle e
 Particle H2
+Reaction AMJUEL_H.12_2.2.14e 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle H2
+Reaction AMJUEL_H.12_2.3.2a 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle He+
+Reaction AMJUEL_H.12_2.3.2b 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle He+
+Reaction AMJUEL_H.12_2.3.2c 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle He+
 Reaction AMJUEL_H.12_2.3.6A0 2
 
 
@@ -6661,6 +7635,42 @@ Reaction AMJUEL_H.12_2.3.6A0 2
 
 Particle e
 Particle C+
+Reaction AMJUEL_H.12_2.3.9a 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle He
+Reaction AMJUEL_H.12_2.3.13a 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle He+
 Reaction AMJUEL_H.12_2.6A0 2
 
 
@@ -6734,6 +7744,24 @@ Reaction AMJUEL_H.12_7.2c 2
 Particle H-
 Particle H+
 Reaction AMJUEL_H.12_7.2d 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H-
+Particle H+
+Reaction AMJUEL_H.12_7.2e 2
 
 
 
@@ -7796,16 +8824,16 @@ Reaction METHANE_H.2_2.22 2
 Particle e
 Particle CH+
 Reaction METHANE_H.2_2.23 2
-0
-11.3
-0
-12
-EI
 
 
-C
 
-C+
+
+
+
+
+
+
+
 
 
 

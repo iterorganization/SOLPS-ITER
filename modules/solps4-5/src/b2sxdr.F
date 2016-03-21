@@ -148,9 +148,14 @@
       real (kind=R8), allocatable :: wrk(:,:,:) 
       logical ex
       character filename*80, lblgm*120, lblmn*120, idout*80
+      character*8 device
+#ifdef USE_PXFGETENV
+      integer lenval, ierror
+#endif
 *   ..procedures
+      logical streql
       external prgini, prgend, xerset_5, xertst
-      external cfopen
+      external cfopen, streql
       external b2wups, b2wuzd, b2xgbs
       external intfaceh1, intfacer1, intfacev1
 *   ..initialisation
@@ -336,6 +341,21 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
       write(70,'(2(2x,i4))') nx, ny
       write(70,'(a)') '''eirene_format''     ''facelift'''
       write(70,'(a)') '''solps_version''     ''4.3'''
+#ifdef NO_GETENV
+#ifdef JET
+      device='jet'
+#else
+      device='iter'
+#endif
+#else
+#ifdef USE_PXFGETENV
+      CALL PXFGETENV ('DEVICE', 0, device, lenval, ierror)
+#else
+      call getenv ('DEVICE', device)
+#endif
+#endif
+      if (streql(device,'iter'))
+     > write(70,'(a)') '''invert_bpol''       ''1'''
       close(70)
 *   ..write header to converted state file
       idum(0) = nx
@@ -383,6 +403,8 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
       call write_feedback_control_namelist(nx,ny)
       call write_user_namelist
       call write_SOLPS_FLUIDS_NREG(nnreg(0),ns)
+      call copy_background(nx,ny,ns,1.0_R8)
+      call write_f31(nx,ny)
       call dealloc_b2_4to5_plasma
       call dealloc_b2_4to5_input
 

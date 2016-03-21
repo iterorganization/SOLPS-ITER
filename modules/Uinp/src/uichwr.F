@@ -6,7 +6,7 @@ c======================================================================
 c*** write "CH-cards" in the unit lun.
 c***  ic  is the card identifier (0 to 3),
 c***  mm  is the array containing the corresponding element numbers.
-c***      the valid elements of mm must be sorted in accending order
+c***      the valid elements of mm must be sorted in ascending order
 c***      and followed by 0 if there are less than n of them.
 c======================================================================
       integer mm(*)

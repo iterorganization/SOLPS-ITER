@@ -3260,7 +3260,16 @@ The conversion of the \verb!Eirene! output file (\verb!fort.44!) additionally re
   \item["5.2"] for \verb!fort.44! output files from {\bf SOLPS5.2} runs
   \item["iter"] (default) for input files from \SOLPSITER runs (no conversion necessary)
 \end{description}
-The \verb!fort.44.2! file that the converter will create will follow the \SOLPSITER format.
+The \verb!fort.44.2! file that the converter will create will follow the \SOLPSITER
+format.
+
+One can also use \verb!b2yt! to flip the sign of the poloidal and/or toroidal components
+of the magnetic field, and the code will make the appropriate adjustments in the input
+and data files. The switches to obtain this are:
+\begin{description}
+  \item["invert\_bpol" "1"] Inverts the poloidal field and related quantities
+  \item["invert\_btor" "1"] Inverts the toroidal field and related quantities
+\end{description}
 
 \verb!b2yt! may also be used
 to change the order of species (for example changing from $D+C+He$ to $D+He+C$) or for

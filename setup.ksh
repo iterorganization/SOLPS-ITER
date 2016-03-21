@@ -188,7 +188,19 @@ alias unset_debug='. $SOLPSTOP/nodebug.ksh'
 [ -e setup.ksh.$USER ] && . setup.ksh.$USER
 [ -e setup.ksh.$USER.$OBJECTCODE ] && . setup.ksh.$USER.$OBJECTCODE
 
-export PATH=${SOLPSTOP}/bin/${OBJECTCODE}:${SOLPSTOP}/scripts.local:${SOLPSTOP}/scripts:${PATH}
+export      TOOLCHAIN =  ${HOST_NAME}.${COMPILER}
+export     CARRE_PATH =  ${SOLPSTOP}/modules/Carre/builds/${TOOLCHAIN}
+export    DIVGEO_PATH =  ${SOLPSTOP}/modules/DivGeo/builds/${TOOLCHAIN}:${SOLPSTOP}/modules/DivGeo/equtrn/builds/${TOOLCHAIN}:${SOLPSTOP}/modules/DivGeo/convert/builds/${TOOLCHAIN}
+export    EIRENE_PATH =  ${SOLPSTOP}/modules/Eirene/builds/standalone.${TOOLCHAIN}
+export       B25_PATH =  ${SOLPSTOP}/modules/B2.5/builds/standalone.${TOOLCHAIN}
+export B25EIRENE_PATH =  ${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${TOOLCHAIN}
+export      UINP_PATH =  ${SOLPSTOP}/modules/Uinp/builds/${TOOLCHAIN}
+export    TRIANG_PATH =  ${SOLPSTOP}/modules/Triang/builds/${TOOLCHAIN}
+export   SCRIPTS_PATH =  ${SOLPSTOP}/scripts.local:${SOLPSTOP}/scripts
+export      AMDS_PATH =  ${SOLPSTOP}/modules/amds/builds/${TOOLCHAIN}
+
+export SOLPS_PATH=${SCRIPTS_PATH}:${CARRE_PATH}:${DIVGEO_PATH}:${B25EIRENE_PATH}:${EIRENE_PATH}:${B25_PATH}:${UINP_PATH}:${TRIANG_PATH}:${AMDS_PATH}
+export PATH=${SOLPS_PATH}:${PATH}
 
 export PATH=$NCARG_ROOT/bin:$PATH
 export MANPATH=$NCARG_ROOT/man:${DG}/equtrn/doxygen/man:$MANPATH

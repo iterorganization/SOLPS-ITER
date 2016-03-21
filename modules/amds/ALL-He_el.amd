@@ -49,7 +49,7 @@ E prod 1
 +r-p-n float
 eprdct2
 E prod 2
-EnabledParticles1 458
+EnabledParticles1 466
 Reaction HYDHEL_H.1_2.1.1 0
 Reaction HYDHEL_H.1_2.1.2 0
 Reaction HYDHEL_H.1_2.1.3 0
@@ -257,6 +257,16 @@ Reaction HYDHEL_H.3_7.2.3 0
 Reaction HYDHEL_H.3_7.3.1 0
 Reaction HYDHEL_H.3_7.3.2a 0
 Reaction HYDHEL_H.3_7.3.2b 0
+Reaction AMJUEL_H.0_0.1T 0
+Reaction AMJUEL_H.0_0.2T 2
+H+
+He(1|1s)
+Reaction AMJUEL_H.0_0.3T 0
+Reaction AMJUEL_H.0_0.4T 0
+Reaction AMJUEL_H.0_0.5T 0
+Reaction AMJUEL_H.0_0.6T 0
+Reaction AMJUEL_H.0_0.7T 0
+Reaction AMJUEL_H.0_0.8T 0
 Reaction AMJUEL_H.1_0.1T 0
 Reaction AMJUEL_H.1_0.1D 0
 Reaction AMJUEL_H.1_0.1V 0
@@ -544,7 +554,7 @@ Reaction METHANE_H.3_3.1.2 0
 Reaction METHANE_H.3_3.1.3 0
 Reaction METHANE_H.3_3.1.4 0
 Reaction METHANE_H.3_3.2 0
-Vars1 458
+Vars1 466
 Reaction HYDHEL_H.1_2.1.1 2
 
 
@@ -4055,6 +4065,150 @@ Reaction HYDHEL_H.3_7.3.2b 2
 
 Particle H-
 Particle H
+Reaction AMJUEL_H.0_0.1T 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H+
+Particle H
+Reaction AMJUEL_H.0_0.2T 2
+6
+0
+1
+4
+EL
+
+
+He
+D+
+He
+D+
+
+
+
+
+Particle H+
+Particle He(1|1s)
+Reaction AMJUEL_H.0_0.3T 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H+
+Particle H2
+Reaction AMJUEL_H.0_0.4T 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle He+
+Particle He
+Reaction AMJUEL_H.0_0.5T 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H+
+Particle Ne
+Reaction AMJUEL_H.0_0.6T 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H+
+Particle Ar
+Reaction AMJUEL_H.0_0.7T 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H+
+Particle Kr
+Reaction AMJUEL_H.0_0.8T 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H+
+Particle Xe
 Reaction AMJUEL_H.1_0.1T 2
 
 
@@ -4119,8 +4273,8 @@ EL
 
 He
 D+
-
-
+He
+D+
 
 
 

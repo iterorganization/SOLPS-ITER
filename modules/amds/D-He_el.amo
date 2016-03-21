@@ -1,13 +1,13 @@
 # Output file produced by amds version 1.04
-
 filevers 1
-reactns 12
+reactns 13
 HYDHEL H.1 3.1.8
 HYDHEL H.2 2.2.5
 HYDHEL H.2 2.2.9
 HYDHEL H.2 2.2.10
 HYDHEL H.2 2.3.9
 HYDHEL H.3 3.1.8
+AMJUEL H.0 0.2T
 AMJUEL H.1 0.2T
 AMJUEL H.3 0.2T
 AMJUEL H.4 2.1.5
@@ -21,6 +21,7 @@ group
 0
 0
 3
+6
 6
 6
 1
@@ -39,6 +40,7 @@ deltae
 0
 0
 0
+0
 13.6
 massp
 1
@@ -46,6 +48,7 @@ massp
 0
 0
 0
+1
 1
 1
 1
@@ -62,6 +65,7 @@ masst
 1
 4
 4
+4
 1
 1
 1
@@ -75,11 +79,13 @@ EI
 CX
 EL
 EL
+EL
 EI
 RC
 EI
 RC
 tmin
+
 
 
 
@@ -105,6 +111,7 @@ tmax
 
 
 
+
 primpart
 D
 D2
@@ -112,6 +119,7 @@ D2
 D2
 He
 D
+He
 He
 He
 D
@@ -124,6 +132,7 @@ D+
 
 
 
+D+
 D+
 H+
 H+
@@ -138,8 +147,9 @@ D2+
 D
 He+
 D
-
-
+He
+He
+He
 D+
 D
 D+
@@ -151,8 +161,9 @@ D+
 D+
 
 D+
-
-
+D+
+D+
+D+
 
 
 
@@ -170,7 +181,9 @@ nprdct1
 
 
 
+
 nprdct2
+
 
 
 
@@ -196,11 +209,13 @@ eprdct1
 
 
 
+
 eprdct2
 
 
 
 5
+
 
 
 
