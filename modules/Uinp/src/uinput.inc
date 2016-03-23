@@ -13,7 +13,7 @@ c*** 1
       integer noptim,noptm1,ngeom_usr,ncoup_input,nsmstra,
      ,        nstoram,ngstal,nrtal1,nreac_add,lfrm15
       logical nlscl,nltest,nlana,nldrft,nlcrr,nlerg,nlident,nlone,
-     ,        ltstv,nldfst,nloldran,nlcascad,nloctree,nlwrmsh,
+     ,        nlmovie,nldfst,nloldran,nlcascad,nloctree,nlwrmsh,
      ,        nexvs,nltrimesh 
       character txtrun*71
 
@@ -272,7 +272,8 @@ c*** 11
       logical trcplt, trchst, trcnal, trcmod, trcsig, trcgrd, trcsur,
      ,  trcref, trcfle, trcamd, trcint, trctim, trcsou, trcrec,
      ,  trclst, trcbla, trcblm, trcbli, trcblp, trcble, 
-     ,  trcblph,trctal,trcdumm,trcdbg2,trcdbge,trcdbgm,trcdbgf,trcdbgl,
+     ,  trcblph,trctal, trcoct, trccen,
+     ,  trcdumm,trcdbg2,trcdbge,trcdbgm,trcdbgf,trcdbgl,
      ,  trcdbgs,trcdbgg,trcdbgmpi,trcdbgc,
      ,  trcsrc(0:nstra),pl1st,pl2nd,pl3rd,pladd,plhst,plcut(3),plbox,
      ,  plstor,plnumv,plnums,plarr,lrpscut,pltsrc(0:nstra),pl3a(5),
@@ -439,7 +440,8 @@ c*** 15
 
       common/uinlog/ 
      ,  nlscl,nltest,nlana,nldrft,nlcrr,nlerg,nlident,nlone,
-     ,  ltstv,nldfst,nloldran,nlcascad,nloctree,nlwrmsh,nexvs,nltrimesh, 
+     ,  nlmovie,nldfst,nloldran,nlcascad,nloctree,
+     ,  nlwrmsh,nexvs,nltrimesh, 
      ,  nlrad,nlslb,nlcrc,nlell,nltri,nlplg,nlfem,nltet,nlgen,
      ,  nlpol,nlply,nlpla,nlplp,nltor,nltrz,nltra,nltrt,
      ,  nlmlt,nladd,lconst,nltrim,nlavrp,nlavrt,nlsymp,nlsymt,
@@ -448,7 +450,8 @@ c*** 15
      ,  trcplt,trchst,trcnal,trcmod,
      ,  trcsig,trcgrd,trcsur,trcref,trcfle,trcamd,trcint,trctim,
      ,  trcsou,trcrec,trclst,trcbla,trcblm,trcbli,trcblp,trcble,
-     ,  trcblph,trctal,trcdumm,trcdbg2,trcdbge,trcdbgm,trcdbgf,trcdbgl,
+     ,  trcblph,trctal,trcoct,trccen,
+     ,  trcdumm,trcdbg2,trcdbge,trcdbgm,trcdbgf,trcdbgl,
      ,  trcdbgs,trcdbgg,trcdbgmpi,trcdbgc,
      ,  trcsrc,pl1st,pl2nd,pl3rd,pladd,plhst,plcut,plbox,plstor,plnumv,
      ,  plnums,plarr,lrpscut,pltsrc,pl3a,pl3s,pltl2d,pltl3d,pltllg,

@@ -136,7 +136,7 @@ c*** 1.  General data for the run
       write(iunoo,707) noptim,noptm1,ngeom_usr,ncoup_input,
      .                 nsmstra,nstoram,ngstal,nrtal1,nreac_add
       write(iunoo,706) nlscl,nltest,nlana,nldrft,nlcrr,
-     .                 nlerg,nlident,nlone,ltstv,nldfst,
+     .                 nlerg,nlident,nlone,nlmovie,nldfst,
      .                 nloldran,nlcascad,nloctree,nlwrmsh,NEXVS,
      .                 nltrimesh
       write(iunoo,720) utxtfl(1)
@@ -803,7 +803,7 @@ c*** 11.   data for numerical and graphical output
      ,                 trcgrd,trcsur,trcref,trcfle,trcamd,
      ,                 trcint,trclst,trcsou,trcrec,trctim,
      ,                 trcbla,trcblm,trcbli,trcblp,trcble,
-     ,                 trcblph,trctal,trcdumm,trcdumm,trcdumm,
+     ,                 trcblph,trctal,trcoct,trccen,trcdumm,
      ,                 trcdbg2,trcdbge,trcdbgm,trcdbgf,trcdbgl,
      ,                 trcdbgs,trcdbgg,trcdbgmpi,trcdbgc
       write(iunoo,706) (trcsrc(j),j=0,nstrao)
