@@ -50,6 +50,8 @@ local:
 compile:
   cd $SOLPSTOP
   rehash
+  touch $SOLPSTOP/modules/B2.5/src/modules/.new_modules
+  touch $SOLPSTOP/modules/Eirene/src/modules/.new_modules
   gmake VERSION
   gmake listobj
   source $SOLPSTOP/SETUP/debug
