@@ -6,9 +6,9 @@ ifndef LD_MSCL
 endif
 
 ifdef USE_MPI
-FC 	 = mpiifort
+FC 	     = mpiifort
 else
-FC	 = ifort
+FC	     = ifort
 endif
 ifdef SOLPS_DEBUG
 FFLAGS	 = -g -C -traceback -debug all -check all
@@ -17,8 +17,8 @@ FFLAGS   =
 endif
 INCLUDE  = -I${SRCDIR} -I${EIRINC} -I${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
-CPP	 = /lib/cpp -C -traditional
+CPP	     = /lib/cpp -C -traditional
 
-MOD 	 = mod
+MOD 	   = mod
 LDLIBS	 = ${LD_MSCL}
 LDEXTRA  =

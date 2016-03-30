@@ -12,8 +12,8 @@ FFLAGS 	= -O --tpp
 
 INCLUDE	= -I${SRCDIR} -I${EIRINC} -I${B2INC}
 COMPILE = ${FC} -c ${FFLAGS}
-CPP	= /lib/cpp -C -traditional
-MOD 	= mod
+CPP	    = /lib/cpp -C -traditional
+MOD 	  = mod
 
 LDLIBS	= ${LD_MSCL}
 LDEXTRA	= -Wl,-Map,$(OBJDIR)/map
