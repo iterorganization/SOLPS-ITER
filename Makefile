@@ -265,9 +265,9 @@ debug: solps_debug
 
 # Dependencies are not duplicated across build targets
 
-nox_build:     clean carre_nox b25eirene_nox     uinp_nox     triang_nox
+nox_build:     clean_build     carre_nox b25eirene_nox     uinp_nox     triang_nox
 
-nox_build_mpi: clean           b25eirene_mpi_nox uinp_mpi_nox
+nox_build_mpi: clean_build_mpi           b25eirene_mpi_nox uinp_mpi_nox
 
 
 # Clean targets
@@ -280,6 +280,9 @@ clean_solps:     clean_carre clean_divgeo clean_b25eirene     clean_uinp     cle
 
 clean_solps_mpi: clean_carre clean_divgeo clean_b25eirene_mpi clean_uinp_mpi clean_triang clean_sonnet-light clean_manual
 
+clean_build:     clean_carre clean_b25eirene clean_uinp clean_triang
+
+clean_build_mpi: clean_b25eirene_mpi clean_uinp_mpi
 
 clean_all:       clean_carre clean_divgeo clean_b25     clean_eirene     clean_b25eirene     clean_uinp     clean_triang clean_manual
 
