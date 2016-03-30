@@ -147,7 +147,7 @@ endif
 	rm -rf b2mn.exe.dir > /dev/null ; mkdir b2mn.exe.dir ; cp $^ b2mn.exe.dir
 	rm -f $(target_mn) fort.31 b2time.nc b2wall.nc b2tallies.nc b2movies.nc > /dev/null
 ifndef STAND_ALONE
-	-cd b2mn.exe.dir ; ln -s ../HYDHEL ../AMJUEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ln -s ../input.dat fort.1 ; [ -e ../fort.15 ] && cp -p ../fort.15 . ; [ -e ../fort.14 ] && cp -p ../fort.14 . ; [ -e ../fort.13 ] && cp -p ../fort.13 . ; [ -e ../fort.12 ] && cp -p ../fort.12 . ; [ -e ../fort.11 ] && cp -p ../fort.11 . ; [ -e ../fort.10 ] && cp -p ../fort.10 . ; [ -e ../fort.44 ] && cp -p ../fort.44 .
+	-cd b2mn.exe.dir ; ln -s ../HYDHEL ../AMJUEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ln -s ../input.dat fort.1 ; [ -e ../fort.15 ] && cp -p ../fort.15 . ; [ -e ../fort.14 ] && cp -p ../fort.14 . ; [ -e ../fort.13 ] && cp -p ../fort.13 . ; [ -e ../fort.12 ] && cp -p ../fort.12 . ; [ -e ../fort.11 ] && cp -p ../fort.11 . ; [ -e ../fort.10 ] && cp -p ../fort.10 . ; [ -e ../fort.44 ] && cp -p ../fort.44 . ; [ -e ../b2fstati_add ] && cp -p ../b2fstati_add .
 endif
 ifdef USE_IMPGYRO
 	cd b2mn.exe.dir ; touch b2ig.conf ; echo "-n ${NPE_B2} : ${B2OBJ}/b2mn.exe" >> b2ig.conf ; echo "-n ${NPE_EXT} : ${EXE_EXT}" >> b2ig.conf ; ln -s ../config ../pre . ; mkdir tracing ;\
