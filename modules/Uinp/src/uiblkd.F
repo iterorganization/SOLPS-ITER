@@ -9,18 +9,16 @@ c  version : 01.04.2005 14:35
 c=======================================================================
 c*** Standard set of input data for eirene - and some other data
 c=======================================================================
-c      implicit none
+      implicit none
 #include "uinput.inc"
-      integer i,j
-      integer lurpst,luznknd,lulim2,lufour,lu9,lustsr,lunplt,lu21pr,
-     ,  lu3st,lugwts,lusts3,lupw,lusg,lur9,lur2,lur6
-      parameter (lurpst=n1st*nplg, luznknd=nbndzon*nbndknd,
+       integer i,j
+      integer, parameter :: lurpst=n1st*nplg, luznknd=nbndzon*nbndknd,
      ,  lulim2=nlim*nlim,   lufour=n1st,
      ,  lu9=9*nlim,         lustsr=nsrfs*nstra, luatsr=natm*nstra,   
      ,  lunplt=nptal*nplt,  lu21pr=2*nppart,lvrctd=mreac*nsrctd,
      ,  lu3st=3*n1st,       lugwts=mgwtiesx*ngwtiesx, lusts3=3*lustsr,
      ,  lupw=nlimps*npwinx, lusg=nstep*ngitt,
-     ,  lur9=9*nreac,  lur2=2*nreac, lur6=6*nreac)
+     ,  lur9=9*nreac,  lur2=2*nreac, lur6=6*nreac
 c=======================================================================
 c*** General information
 
@@ -41,7 +39,7 @@ c*** General information
 
 c*** Default boundary conditions
 
-      parameter (luznkn=nbndzon*nbndknd, lurgkn=nbndrgn*nbndknd)
+      integer,parameter ::luznkn=nbndzon*nbndknd, lurgkn=nbndrgn*nbndknd
       data nlrbnds / luznkn*.false. /
       data lcmbndt, lrfbndt,   bxsbndt    ,   rxsbndt    ,    dfrbndx /
      /  lurgkn*0,luznkn*0,luznkn*.false.,luznkn*.false.,nbndknd*.true./,
@@ -128,7 +126,7 @@ c*** He pumping data
 
 c*** Data for visualisation of the surface properties
 
-      parameter (luvsp=nsrfclsx*nvspfls)
+      Integer, parameter :: luvsp=nsrfclsx*nvspfls
       data nsrfclu  , nsrfcls, isrfclu, msrfclu,  msrfcls   /
      /    nvspfls*0 ,    0   , luvsp*0, luvsp*0, nsrfclsx*0 /
 
@@ -288,21 +286,20 @@ c*** 4
      ,  8*1, 5*1 /
       data spcdns / 4*0, 4*0, 4*0, 3*0, 7*0, 11*0, 19*0, 8*0, 5*0 /
 
-      integer lugen,lurctdh,lurctdh2,lurctdhe,lurctdc,lurctdne,lurctdhp,
-     ,  lurctdar,lurctdn,lurctdbe
-      parameter (lugen=3)
+      integer, parameter :: lugen=3
       data nspigen, (spcigen(i),i=1,lugen) / lugen, 'D', 'He', 'C' /
       data nspipls, nspiatm, nspimol, nspiion /
      /        0   ,    0   ,    0   ,    0    /
 
-      parameter (lucmm=natm*nmol, lucmi=natm*nion)
+      integer, parameter :: lucmm=natm*nmol, lucmi=natm*nion
       data spcscmm, spcscmi, spcinnm, spcinni /
      /     lucmm*0, lucmi*0,  nmol*0,  nion*0 /
      
       data spcrctd / 
      /     'H', 'H2', 'He', 'C', 'Ne', 'H+', 'Ar', 'N', 'Be', 'H2+' /
-      parameter (lurctdh=4,lurctdh2=7,lurctdhe=1,lurctdc=1,lurctdne=1,
-     ,  lurctdhp=2,lurctdar=1,lurctdn=1,lurctdbe=2,lurctdh2p=4)
+      integer, parameter ::
+     ,  lurctdh=4,lurctdh2=7,lurctdhe=1,lurctdc=1,lurctdne=1,
+     ,  lurctdhp=2,lurctdar=1,lurctdn=1,lurctdbe=2,lurctdh2p=4
       data  nnrctd / lurctdh,lurctdh2,lurctdhe,lurctdc,lurctdne,
      /               lurctdhp,lurctdar,lurctdn,lurctdbe,lurctdh2p/
       data (rctdtyp(i,1),i=1,lurctdh)  / 2*'EI', 2*'CX' /
@@ -441,9 +438,9 @@ c*** 4
       data (rctdenr2(i,10),i=1,lurctdh2p) / 4.3, 0.25, 0.5, 0.0 /
       data rctdtmin, rctdtmax  / lvrctd*0.0, lvrctd*0.0 /
       
-      integer lura,lurm,luri,lurf
-      parameter (lura=nreac*natm, lurm=nreac*nmol, luri=nreac*nion,
-     ,                                                  lurf=nreac*npht)
+c      integer lura,lurm,luri,lurf
+      integer, parameter :: lura=nreac*natm, lurm=nreac*nmol,
+     ,   luri=nreac*nion,lurf=nreac*npht
       data natmi,nmoli,nioni,nphti / 4*0 /
       data nmassa,nchara, isrfa, isrta,nmseca, nrca , nfola /
      /     natm*0,natm*0,natm*0,natm*0,natm*0,natm*0,natm*0 /,
