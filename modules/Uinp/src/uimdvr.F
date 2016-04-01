@@ -43,7 +43,7 @@ c
      .     '(1h(,i',len_of_digits(nmxprm),',9h(i3,1h,)))'
           write(ufi,hlp_frm) nmxprm
           write(hlp_frm,'(a,i1,a)')
-     .     '(4h(,1p,,i',len_of_digits(nmxprm),',12h(g10.3,1h,)))'
+     .     '(4h(1p,,i',len_of_digits(nmxprm),',12h(g10.3,1h,)))'
           write(ufg,hlp_frm) nmxprm
           write(hlp_frm,'(a,i1,a)')
      .     '(2h(a,i',len_of_digits(mxkwln),',1h))'
