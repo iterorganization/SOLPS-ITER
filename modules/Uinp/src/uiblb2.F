@@ -2,6 +2,7 @@
 c
 c  version : 14.08.2003 23:11
 c
+      Implicit None
 #include "uib2pprm.inc"
       integer i
 c=======================================================================

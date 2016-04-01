@@ -6,13 +6,11 @@ c*** The basic data for uinput
 
 c=======================================================================
 c*** Temporary assignment - the max. number of photon species
-      integer npht
-      parameter (npht=1)
+      Integer, parameter :: npht=1
 
 c
 c*** Unit numbers for output and input of the files
-      integer iunoo, iunii
-      parameter (iunoo=2, iunii=1)
+      Integer, parameter :: iunoo=2, iunii=1
 
 c*** Variable dimensions for the output data
       integer nstrao,natmo,nmolo,niono,nphto,nplso
@@ -25,15 +23,14 @@ c***      nptseg: their segmentation (DG);
 c***  ntrgdflt  : default number of targets depending on the topology
 c***  ntrgts    : maximum number of targets
 c***  nntrian   : maximum number of triangular mesh nodes for input
-      integer nnpr, nnptseg, ntrgts, namdfs, nntrian
-      parameter (nnpr=6, nnptseg=6, ntrgts=4, namdfs=20, nntrian=1)
+      integer,parameter::nnpr=6,nnptseg=6,ntrgts=4,namdfs=20,nntrian=1
       integer mnpr,mnptseg,npr(nnpr),nptseg(nnptseg),ntrgdflt,namdf
       character*4 topo
       character*48 amd_file(namdfs)
 
 c*** B2 dimensions
-      integer nsdb2,nxd,nyd
-      parameter (nsdb2=DEF_NSD, nxd=DEF_NXD+DEF_NCUT*5, nyd=DEF_NYD)
+      integer, parameter :: nsdb2=DEF_NSD,
+     & nxd=DEF_NXD+DEF_NCUT*5, nyd=DEF_NYD
 
 c*** Eirene dimensions
 c***  nchor     max. number of explicitly specified diagnostic chords

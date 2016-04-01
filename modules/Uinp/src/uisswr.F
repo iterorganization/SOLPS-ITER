@@ -3,6 +3,8 @@ c
 c  version : 26.11.95 20:20
 c
 c*** Print out a line
+      Implicit None
+      Integer :: lout,n,k,i
       character s(n), ss*(*),ff*(*)
 c=====================================================
 c

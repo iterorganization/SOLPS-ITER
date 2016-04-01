@@ -8,12 +8,12 @@ c  version : 01.04.2005 00:51
 
 c***  prepares the data for TRIA grid 
 c***  returns .TRUE. if successful and .FALSE. otherwise 
-
+       Implicit None
 #include "uinput.inc"
     
       logical TriMesh  
       integer attrib(nlim),nattr,nchain,chain(nlim)
-      integer NSS(nsts),nn 
+      integer NSS(nsts),nn,i,j,k,l
       logical ex 
       real txmin,txmax,tymin,tymax
     

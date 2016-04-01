@@ -15,6 +15,7 @@ c***  jblk    the block ID
 c***  jvrb    the variable ID
 c***  ufs     the format used to write the line (???)
 c======================================================================
+      Implicit None
       integer lout,jblk,jvrb
       character ufs*(*)
 #include "uinpcom.inc"

@@ -7,9 +7,10 @@
 c  version : 17.03.2005 00:03
 
 CVK output data for Triang grid (file header)
+       Implicit None
 #include "uinput.inc"
-      character*(*) filename
-      
+       Integer :: i
+       character*(*) filename
        open(iunoo,file=filename)
        write(iunoo,703) trisize(0)
        do i=1,ntriref

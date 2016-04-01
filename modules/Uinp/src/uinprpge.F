@@ -22,6 +22,7 @@ c***  material specification for the side grid edges:
 c***    jrfbnds, jcsbnds, jpsbnds, jppbnds, jcgbnds, wlmbnds,
 c***    eewbnds, etfbnds, etbbnds, efcbnds, easbnds, efpbnds
 c=======================================================================
+       Implicit None
 #include "uinput.inc"
       integer i,j,k,l,m,im,knd_hlp(nedgmrkd,nwllmrkd)
       logical ex
