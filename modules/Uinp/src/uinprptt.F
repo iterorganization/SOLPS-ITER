@@ -9,9 +9,11 @@ c
 c=======================================================================
 c*** Prepare the data for the test Eirene run
 c=======================================================================
-      logical lc
+       Implicit None
+       Save
+       logical lc
 #include "uinput.inc"
-      integer i,ntcpu_b,nfile_b,i1trc_b,i2trc_b,npts_b(nstra),
+      integer :: i,k,ntcpu_b,nfile_b,i1trc_b,i2trc_b,npts_b(nstra),
      ,  mpts_b(nstra),isyplt_b(8),nptc_b(nstep),nptcm_b(nstep)
       real alloc_b
       logical trchst_b,trcint_b,trcamd_b,trcsou_b,trcbla_b,trcblm_b,
@@ -19,13 +21,6 @@ c=======================================================================
      ,  trcdbge_b,trcdbgm_b,trcdbgf_b,trcdbgl_b,trcdbgs_b,
      ,  trcdbgg_b,trcdbgmpi_b,trcdbgc_b,trcsrc_b,
      ,  pl1st_b,pl2nd_b,pladd_b,plhst_b,plcut_b(3),plnums_b,nltest_b
-      save alloc_b,ntcpu_b,nfile_b,i1trc_b,i2trc_b,npts_b,mpts_b,
-     ,  trchst_b,trcint_b,trcamd_b,trcsou_b,trcbla_b,trcblm_b,trcbli_b,
-     ,  trcblp_b,trcble_b,trcblph_b,trctal_b,trcdbg2_b,trcdbge_b,
-     ,  trcdbgm_b,trcdbgf_b,trcdbgl_b,trcdbgs_b,
-     ,  trcdbgg_b,trcdbgmpi_b,trcdbgc_b,trcsrc_b,
-     ,  pl1st_b,pl2nd_b,pladd_b,plhst_b,plcut_b,plnums_b,nltest_b,
-     ,  isyplt_b
 c=======================================================================
       if(lc) then !{
         ntcpu_b=ntcpu
