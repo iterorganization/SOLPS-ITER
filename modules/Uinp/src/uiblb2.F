@@ -2,7 +2,7 @@
 c
 c  version : 14.08.2003 23:11
 c
-      Implicit None
+      implicit none
 #include "uib2pprm.inc"
       integer i
 c=======================================================================

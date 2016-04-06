@@ -9,7 +9,7 @@ c
 c======================================================================
 c*** Prepare the reaction data for Eirene
 c======================================================================
-       Implicit None
+      implicit none
 #include "uinput.inc"
       integer i,j,k,l,m,n,ic,ii,kk,k0,k1,k2,k3,k4,iib,iie,iir,ii1,ii2,
      ,	ipt,irc,m_rct,m_rcn,n_ptc,l_hlp(mreac),igd,ign(mreac,2),ngn,

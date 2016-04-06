@@ -9,10 +9,10 @@ c
 c=======================================================================
 c*** Determine the boundary zones
 c=======================================================================
-       Implicit None
+      implicit none
 #include "uinpcom.inc"
       integer i,j,k,l,m,n,ix,iy,iz,n1,n2
-      Integer, parameter :: n_hlp=3
+      integer, parameter :: n_hlp=3
       integer i_sw(0:nxd+1,nbndrgn,n_hlp),i_tg(0:nyd+1,ntrgts),
      ,	l_hlp(n_hlp),i_cr(0:nxd+1)
       character*10 hlp_txt(n_hlp)

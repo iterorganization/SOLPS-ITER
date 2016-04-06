@@ -6,11 +6,11 @@ c*** The basic data for uinput
 
 c=======================================================================
 c*** Temporary assignment - the max. number of photon species
-      Integer, parameter :: npht=1
+      integer, parameter :: npht=1
 
 c
 c*** Unit numbers for output and input of the files
-      Integer, parameter :: iunoo=2, iunii=1
+      integer, parameter :: iunoo=2, iunii=1
 
 c*** Variable dimensions for the output data
       integer nstrao,natmo,nmolo,niono,nphto,nplso

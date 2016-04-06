@@ -8,7 +8,7 @@ c  version : 01.04.2005 00:51
 
 c***  prepares the data for TRIA grid 
 c***  returns .TRUE. if successful and .FALSE. otherwise 
-       Implicit None
+      implicit none
 #include "uinput.inc"
     
       logical TriMesh  
