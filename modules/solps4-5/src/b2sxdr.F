@@ -378,16 +378,11 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
 *   ..write plasma state
       call cfverw(nout(4), newversion)
       call write_b2mod_geo(nout(4))
-      call dealloc_b2mod_geo
       call write_b2mod_plasma(nout(4))
-      call dealloc_b2mod_plasma
       call write_b2mod_residuals(nout(4))
-      call dealloc_b2mod_residuals
       call write_b2mod_sources(nout(4))
-      call dealloc_b2mod_sources
       call write_b2mod_transport(nout(4))
       call write_b2mod_anomalous_transport(nout(4))
-      call dealloc_anomalous_transport
       call write_b2mod_neutr_src_scaling(nout(4),nstraid)
 
 *   ..write additional input files
@@ -405,6 +400,13 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
       call write_SOLPS_FLUIDS_NREG(nnreg(0),ns)
       call copy_background(nx,ny,ns,1.0_R8)
       call write_f31(nx,ny)
+
+*   ..deallocation of arrays and modules
+      call dealloc_b2mod_geo
+      call dealloc_b2mod_plasma
+      call dealloc_b2mod_sources
+      call dealloc_b2mod_residuals
+      call dealloc_anomalous_transport
       call dealloc_b2_4to5_plasma
       call dealloc_b2_4to5_input
 
