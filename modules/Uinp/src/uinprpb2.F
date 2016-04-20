@@ -92,7 +92,7 @@ c*** Boundary
 c*** simple SN case
           beebnds(1,1,1)=1.e6*pwrcrtte
           beibnds(1,1,1)=1.e6*pwrcrtti
-        else if(nznbndt(1).eq.2 .and. nniso.eq.1) then !}{
+        else if(nznbndt(1).eq.2 .and. nncut.eq.4) then !}{
           beebnds(1,1,1)=1.e6*pwrcrtte*pwrcrfri
           beibnds(1,1,1)=1.e6*pwrcrtti*pwrcrfri
           beebnds(2,1,1)=1.e6*pwrcrtte*(1-pwrcrfri)

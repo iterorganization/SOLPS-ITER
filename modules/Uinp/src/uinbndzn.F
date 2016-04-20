@@ -20,8 +20,8 @@ c=======================================================================
       data l_hlp /1,3,4/
       data hlp_txt / 'Core','PFR','Outer side' /
 c=======================================================================
-c      print *,'uinbndzn: nx,ny,nncut,mdvbndx,nrgbndt = ',       !###
-c     ,                              nx,ny,nncut,mdvbndx,nrgbndt !###
+c      print '(a,10i6)','uinbndzn: nx,ny,nncut,mdvbndx,nrgbndt = ',       !###
+c     ,                            nx,ny,nncut,mdvbndx,nrgbndt !###
 
 c*** Find the divides positions for each kind of boundary.
 
@@ -99,7 +99,7 @@ c         end do !}
 c        end do !}
 c      end if !}
 c!###}
-c*** Prepare the array which desccribes correspondence between the B2 
+c*** Prepare the array which describes correspondence between the B2
 c*** and Eirene numbering in poloidal directions (extra surfaces at the 
 c*** cuts)
       m=0
@@ -288,7 +288,7 @@ c*** divide found
 
 c*** Specify the position-related data for B2 and Eirene input files
 c!###{
-c      print *,'j,iz,m,n1,n2,lzp,lzr,i_cr = ',j,iz,m,
+c      print '(a,10i6)','j,iz,m,n1,n2,lzp,lzr,i_cr [1] = ',j,iz,m,n1,n2,
 c     ,  lzpbndt(iz,m),lzrbndt(iz,m,1),lzrbndt(iz,m,2),
 c     ,  i_cr(max(lzrbndt(iz,m,1),n1)),i_cr(min(lzrbndt(iz,m,2),n2))
 c!###}
@@ -313,12 +313,13 @@ c!###}
 	      lc2bnds(iz,m)=lzrbndt(iz,m,2)
 	      ls1bnds(iz,m)=lc1bnds(iz,m)
 	      ls2bnds(iz,m)=lc2bnds(iz,m)
-	      if(ls1bnds(iz,m).eq.0 .or. (nniso.eq.1 .and.
-     .	      	                  ls1bnds(iz,m).eq.nxiso1(1)+1)) then !{
+	      if(ls1bnds(iz,m).eq.0 .or. (nncut.eq.4 .and.
+     .	      	 ls1bnds(iz,m).eq.nxcut1(2)+nzodv+1+1)) then !{
 	      	ls1bnds(iz,m)=ls1bnds(iz,m)+1
 	      end if !}
-	      if(ls2bnds(iz,m).eq.nx+1 .or. 
-     .	      	  (nniso.eq.1 .and. ls2bnds(iz,m).eq.nxiso1(1))) then !{
+	      if(ls2bnds(iz,m).eq.nx+1 .or.
+     .	      	  (nncut.eq.4 .and.
+     .             ls2bnds(iz,m).eq.nxcut1(2)+nzodv+1)) then !{
 	      	ls2bnds(iz,m)=ls2bnds(iz,m)-1
 	      end if !}
 
@@ -354,7 +355,7 @@ c     ,	      	                    jc1bnds(iz,m),jc2bnds(iz,m) !###
 
 c*** Specify the position-related data for B2 and Eirene input files
 c!###{
-c      print *,'j,iz,m,n1,n2,lzp,lzr,i_cr = ',j,iz,m,
+c      print '(a,10i6)','j,iz,m,n1,n2,lzp,lzr,i_cr [2] = ',j,iz,m,n1,n2,
 c     ,  lzpbndt(iz,m),lzrbndt(iz,m,1),lzrbndt(iz,m,2),
 c     ,  i_cr(max(lzrbndt(iz,m,1),n1)),i_cr(min(lzrbndt(iz,m,2),n2))
 c!###}
@@ -379,12 +380,13 @@ c!###}
 	    lc2bnds(iz,m)=lzrbndt(iz,m,2)
 	    ls1bnds(iz,m)=lc1bnds(iz,m)
 	    ls2bnds(iz,m)=lc2bnds(iz,m)
-	    if(ls1bnds(iz,m).eq.0 .or. (nniso.eq.1 .and.
-     .	    	                  ls1bnds(iz,m).eq.nxiso1(1)+1)) then !{
+	    if(ls1bnds(iz,m).eq.0 .or. (nncut.eq.4 .and.
+     .	       ls1bnds(iz,m).eq.nxcut1(2)+nzodv+1+1)) then !{
 	      ls1bnds(iz,m)=ls1bnds(iz,m)+1
 	    end if !}
-	    if(ls2bnds(iz,m).eq.nx+1 .or. 
-     .	    	  (nniso.eq.1 .and. ls2bnds(iz,m).eq.nxiso1(1))) then !{
+	    if(ls2bnds(iz,m).eq.nx+1 .or.
+     .	    	  (nncut.eq.4 .and.
+     .             ls2bnds(iz,m).eq.nxcut1(2)+nzodv+1)) then !{
 	      ls2bnds(iz,m)=ls2bnds(iz,m)-1
 	    end if !}
 

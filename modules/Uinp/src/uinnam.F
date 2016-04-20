@@ -16,12 +16,12 @@ c=======================================================================
 #include "uinput.inc"
 #include "impcon.inc"
       integer lunm,i,j,l,lusgm,lugpf,lugwt,luvsp,nprnl
-      integer, save :: lupfr,luskel,luswch
+      integer, save :: lupfr,luskel,luswch,lurefls
       real (kind=R8) :: u
       parameter (lunm=163)
       character*8 unm(lunm),uun,ubs*1,uam*52
 c...  	      	      	      	      	      	      52=48+4
-      integer luwrk(nlim),luind(nlim),lurefls
+      integer luwrk(nlim),luind(nlim)
       logical hlp_spc,hlp_imm,streql
       external streql, xerrab, xertst
 c*** lusgm: segment number for the list of invisibles;
@@ -42,7 +42,7 @@ c*** lugwt:  counter for the grid-wall ties
      5    'jedgo2  ','elemlist','jlref   ','main    ','sources ',
      6    'sprtrs  ','vessel  ','b2plot  ','jlsptp  ','jlsptc'  ,
      7    'jsrss   ','jsrsg   ','rcycsa  ','rcycca  ','skipelem',
-     8    'edgetrg ','edge_sol','edge_pfr','trg_spcf','sol_edge',
+     8    'edge_trg','edge_sol','edge_pfr','trg_spcf','sol_edge',
      9	  'pfr_edge','made_of ','tgabsrp ','tgewall ','tgtrnsf ',
      a	  'tgtrnsb ','tgspcsw ','tgspcgr ','tgspcff ','tgsppsw ',
      1	  'tgsppsp ','tgsppff ','tgrefsw ','divides ','species ',
@@ -722,7 +722,7 @@ c***  input mesh size for current rectangle
      ,  'uinnam: wrong index of TRIA regions - corrupted DG output???')
       call resime(trisize(ntriref))
       return
-c***  input elements inexes for current rectangle
+c***  input elements indices for current rectangle
   152 call rearri(trirefel(lurefls+1),ntrimax-lurefls,trirefcn(ntriref))
       lurefls=lurefls+trirefcn(ntriref)
       return

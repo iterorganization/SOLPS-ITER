@@ -20,7 +20,7 @@ c***  returns .TRUE. if successful and .FALSE. otherwise
       print *
       print *,'==== Starting uinptriang'
       TriMesh=.TRUE.
-c*** makes list of polygon indexes present in the input data   
+c*** makes list of polygon indices present in the input data
       attrib(1)=ilplgdg(1)
       k=1
       do 10 i=2,nlim  
@@ -63,7 +63,7 @@ c***  and check if they are closed
            write(*,'(13i5)') (chain(l),l=13,nchain)
          ENDIF
        ENDIF
-c***   makes checking and outputs NSS indexes if necessary  
+c***   makes checking and outputs NSS indices if necessary
        call uichkchn(chain,nchain,nsts,NSS,nn,attrib(i))
        write(*,*) 'nn',nn
        IF(nn.GT.0)  write(*,*) 'NSS', (NSS(l),l=1,nn)

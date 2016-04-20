@@ -202,7 +202,7 @@ c#ifdef DBG
 c            print *,'spcscrk,hlp_fl1,hlp_fl2',spcscrk(l),hlp_fl1,hlp_fl2
 c#endif
             if((hlp_fl1 .or. hlp_fl2) .and. n.gt.1 .and. 
-     .                                 (n.gt.2 .or. nniso.ne.1)) then !{
+     .                                 (n.gt.2 .or. nncut.ne.4)) then !{
               print*,'uinbndfl: CEI partitioning is not foreseen yet.'
               ex=.false.
             end if !}

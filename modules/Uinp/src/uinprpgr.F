@@ -180,8 +180,7 @@ c*** Limiter configuration - a temporary, clumsy solution
 	  iztg=izc2+1+nzodv2
 	  irwl=nrpfl+nrsol1+nrsol+1
 	  nncut=4
-	  nniso=1
-          ntiso(1)=1
+	  nniso=0
 	  nycut2(1)=irsp-1
 	  nycut2(2)=irsp2-1
 	  nycut2(3)=nycut2(2)
@@ -189,13 +188,9 @@ c*** Limiter configuration - a temporary, clumsy solution
 	  ny=nrpfl+nrsol1+nrsol
 	  nxcut1(1)=nzidv
 	  nxcut1(2)=nxcut1(1)+nzinn
-	  nxiso1(1)=nxcut1(2)+nzodv+1
-	  nxcut1(3)=nxiso1(1)+1+nzidv2
+	  nxcut1(3)=nxcut1(2)+nzodv+1+1+nzidv2
 	  nxcut1(4)=nxcut1(3)+nzinn2
 	  nx=nxcut1(4)+nzodv2
-          nxiso2(1)=nxiso1(1)
-          nyiso1(1)=0
-          nyiso2(1)=ny+1
 	end if	!}
       else if(index(topo,'SN').gt.0) then !}{
       	ntrgdflt=2
