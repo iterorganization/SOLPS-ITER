@@ -1,16 +1,20 @@
-#!/usr/bin/env tcsh
+#! /usr/bin/env tcsh
 setenv SHELL `which tcsh` # needed for batch and atd
 cat << __EOF__ | batch
 setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}"
 set msg="Started on `hostname` at `date`"
 update_solps_run_status \${msg}
-echo ${USER} ${PWD} \${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
+if ($?SOLPS_GUI_IP) then
+  echo ${USER} ${PWD} \${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
+endif
 if (-e input.dat) then
    time b2run ${argv} b2mn < input.dat >! run.log
 else
    time b2run ${argv} -s b2mn >! run.log
 endif
 set msg="Finished on `hostname` at `date`"
-echo ${USER} ${PWD} \${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
+if ($?SOLPS_GUI_IP) then
+  echo ${USER} ${PWD} \${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
+endif
 update_solps_run_status \${msg}
 __EOF__
