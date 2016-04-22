@@ -5,6 +5,9 @@ switch ($fullhost)
 case "*.iter.org":
   echo ITER
   breaksw
+case "*.iaea.org":
+  echo IAEA
+  breaksw
 case "*.iferc-csc.org":
   echo IFERC
   breaksw
@@ -68,22 +71,44 @@ case "*.keio.ac.jp":
 case "kraken01":
   echo KSTAR
   breaksw
-case "*.gov":
-case "*.edu":
-case "*.us":
-  echo USA_UNKNOWN
-  breaksw
-case "*.de":
-case "*.uk":
-case "*.it":
-case "*.fr":
-case "*.fi":
-case "*.be":
-case "*.eu":
-  echo EU_UNKNOWN
+case "*.spbau.ru":
+case "login1.cluster":
+  echo SPBSTU
   breaksw
 case "*.cn":
   echo CN_UNKNOWN
+  breaksw
+case "*.eu":
+case "*.at":
+case "*.be":
+case "*.bg":
+case "*.ch":
+case "*.cz":
+case "*.de":
+case "*.dk":
+case "*.ee":
+case "*.es":
+case "*.fi":
+case "*.fr":
+case "*.gr":
+case "*.hr":
+case "*.hu":
+case "*.ie":
+case "*.it":
+case "*.lt":
+case "*.lu":
+case "*.lv":
+case "*.mc":
+case "*.mt":
+case "*.nl":
+case "*.pl":
+case "*.pt":
+case "*.ro":
+case "*.se":
+case "*.si":
+case "*.sk":
+case "*.uk":
+  echo EU_UNKNOWN
   breaksw
 case "*.in":
   echo IN_UNKNOWN
@@ -96,6 +121,11 @@ case "*.kr":
   breaksw
 case "*.ru":
   echo RU_UNKNOWN
+  breaksw
+case "*.gov":
+case "*.edu":
+case "*.us":
+  echo USA_UNKNOWN
   breaksw
 default:
   echo UNKNOWN
