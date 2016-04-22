@@ -17,6 +17,7 @@ popd
 
 set USE_MPI=""
 if ($?SOLPS_MPI) then
+  module load impi/5.1.3
   set MPI_EXEC=mpiexec
   set MPI_OPTS=#MPIOPTS#
   set USE_MPI="-m ${MPI_EXEC} ${MPI_OPTS}"

@@ -1,7 +1,9 @@
 #! /usr/bin/env tcsh
 
 set NAME=/tmp/.run.$$.$USER.`date +%Y%m%d%H%M%S`
+set NAMP=/tmp/.zut.$$.$USER.`date +%Y%m%d%H%M%S`
 set EMAIL=`get_git_email`
+set PROCS=1
 echo Your email is $EMAIL
 
 set compress=""
@@ -16,6 +18,8 @@ if ("X$1X" == "X-mX") then
   shift
   set MPIOPTS="$1"
   echo Using MPI options: $MPIOPTS
+  set PROCS=`echo $MPIOPTS | awk.transpose | grep -A 1 "\-np" | tail -n 1`
+  echo Asking for $PROCS processors
   shift
 endif
 
@@ -74,7 +78,18 @@ if($QSUB == "") then
 endif
 echo Using submission file template $QSUB
 
-sed -e 's:#PWD#:'$PWD':g' -e 's:#SOLPSTOP#:'$SOLPSTOP':g' -e 's:#EMAIL#:'$EMAIL':g' -e "s:#MPIOPTS#:'$MPIOPTS':g" < $QSUB > $NAME
+if ($MPI_OPTS = "") then
+  set NAMP=$QSUB
+else
+  head -n 2 $QSUB > $NAMP
+  echo "#$ -pe impi_hydra #PROCS#" >> $NAMP
+  set lines = `wc $QSUB | awk '{printf "%s",$1-2;printf "\n"}'`
+  tail --lines=$lines $QSUB >> $NAMP
+endif
+
+sed -e 's:#PWD#:'$PWD':g' -e 's:#SOLPSTOP#:'$SOLPSTOP':g' -e 's:#EMAIL#:'$EMAIL':g' -e "s:#MPIOPTS#:'$MPIOPTS':g" -e "s:#PROCS#:'$PROCS':g" < $NAMP > $NAME
+
+cat $NAME
 
 set msg="Submitted at `date`"
 update_solps_run_status -n ${msg}
