@@ -4,6 +4,7 @@
       program b2sxdr
       use b2mod_types
       use b2mod_geo
+      use b2mod_work
       use b2mod_rates
       use b2mod_plasma
       use b2mod_indirect
@@ -271,6 +272,7 @@ cxpb Next line not needed if inherited from UPC instead!
       deallocate(wrk)
       ua0 = ua
       uap = ua
+      vadia = uadia
       wadia = uadia
       do is = 0, ns-1
         kinrgy(-1:nx,-1:ny,is) = 
@@ -372,7 +374,12 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
       call b2wuzd (nout(2), newversion, ns, zamin, zamax, zn, am)
 *   ..write converted initial state file
       call b2wups (nout(2), nx, ny, ns, ne, na, ua, uadia, te, ti, po, 
-     &  fna, fhe, fhi, fch, fch_32, fch_52, fch_p, kinrgy)
+     &  fna, fhe, fhi, fch, fch_32, fch_52, fch_p, kinrgy,
+     &  fna_mdf, fhe_mdf, fhi_mdf, fna_fcor, fna_nodrift, fna_he,
+     &  fnaPSch, fhePSch, fhiPSch, fna_eir, fne_eir, fhe_eir, fhi_eir,
+     &  fna_32, fna_52, fni_32, fni_52, fne_32, fne_52,
+     &  fchdia, fchin, fchvispar, fchvisper, fchvisq, fchinert,
+     &  vaecrb, vadia, wadia, floe_noc, floi_noc)
 *   ..write header to nout(3)
       call cfverw (nout(3), newversion)
       idum(0) = ns

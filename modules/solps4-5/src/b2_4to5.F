@@ -597,6 +597,7 @@ cxpb
       use b2mod_types
       use b2mod_geo
       use b2mod_time
+      use b2mod_work
       use b2mod_rates
       use b2mod_plasma
       use b2mod_sources
@@ -669,6 +670,7 @@ cxpb
       lblgm = label_4
 
       call alloc_b2mod_geo(nx,ny)
+      call alloc_b2mod_work(nx,ny,ns)
       call alloc_b2mod_rates(nx,ny,ns)
       call alloc_b2mod_plasma(nx,ny,ns)
       call alloc_b2mod_sources(nx,ny,ns)
@@ -904,6 +906,18 @@ c Fill out b2mod_plasma data
       fchp = fch
       fna0 = fna
       fnap = fna
+      fna_mdf = fna
+      fhe_mdf = fhe
+      fhi_mdf = fhi
+      fna_fcor = fna
+      fna_nodrift = fna
+      fna_he = fna
+      fnaPSch = 0.0_R8
+      fhePSch = 0.0_R8
+      fhiPSch = 0.0_R8
+      fna_eir = fna
+      fhe_eir = fhe
+      fhi_eir = fhi
       fna_32(:,:,0,:) = fna(:,:,0,:)
       fna_32(:,:,1,:) = 0.0_R8
       fna_52(:,:,0,:) = 0.0_R8
@@ -921,14 +935,18 @@ c Fill out b2mod_plasma data
      $     fna_32, fa_ext, fch_32, fne_32)
       call b2xpfe(nx, ny, ns, ns_ext, qe, rza, za_ext,
      $     fna_52, fa_ext, fch_52, fne_52)
+      call b2xpfe(nx, ny, ns, ns_ext, qe, rza, za_ext,
+     $     fna_eir, fa_ext, fch, fne_eir)
       vaecrb = 0.0_R8
       facdrift = 0.0_R8
       fac_ExB = 0.0_R8
       fac_vis = 0.0_R8
       fchvispar = 0.0_R8
       fchvisper = 0.0_R8
+      fchvisq = 0.0_R8
       fchin = 0.0_R8
-      fna_nodrift = fna
+      floe_noc = 0.0_R8
+      floi_noc = 0.0_R8
       na0 = na
       nap = na
       ne0 = ne
