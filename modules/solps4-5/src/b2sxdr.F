@@ -274,6 +274,7 @@ cxpb Next line not needed if inherited from UPC instead!
       uap = ua
       vadia = uadia
       wadia = uadia
+      vedia = 0.0_R8
       do is = 0, ns-1
         kinrgy(-1:nx,-1:ny,is) = 
      .   0.5_R8 * am(is) * mp * ua(-1:nx,-1:ny,is)**2
@@ -281,6 +282,12 @@ cxpb Next line not needed if inherited from UPC instead!
      .   am(is) * mp * ua(-1:nx,-1:ny,is) * fna(-1:nx,-1:ny,0,is)
         fmo(-1:nx,-1:ny,1,is) =
      .   am(is) * mp * ua(-1:nx,-1:ny,is) * fna(-1:nx,-1:ny,1,is)
+        vedia(-1:nx,-1:ny,0) = vedia(-1:nx,-1:ny,0) +
+     .   uadia(-1:nx,-1:ny,0,is) * 
+     .   rza(-1:nx,-1:ny,is) * na(-1:nx,-1:ny,is) / ne(-1:nx,-1:ny)
+        vedia(-1:nx,-1:ny,1) = vedia(-1:nx,-1:ny,1) +
+     .   uadia(-1:nx,-1:ny,1,is) * 
+     .   rza(-1:nx,-1:ny,is) * na(-1:nx,-1:ny,is) / ne(-1:nx,-1:ny)
       enddo
 *  ..output
       idout = '....'
@@ -379,7 +386,7 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
      &  fnaPSch, fhePSch, fhiPSch, fna_eir, fne_eir, fhe_eir, fhi_eir,
      &  fna_32, fna_52, fni_32, fni_52, fne_32, fne_52,
      &  fchdia, fchin, fchvispar, fchvisper, fchvisq, fchinert,
-     &  vaecrb, vadia, wadia, floe_noc, floi_noc)
+     &  vaecrb, vadia, wadia, veecrb, vedia, floe_noc, floi_noc)
 *   ..write header to nout(3)
       call cfverw (nout(3), newversion)
       idum(0) = ns

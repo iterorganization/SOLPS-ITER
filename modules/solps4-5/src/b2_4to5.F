@@ -938,6 +938,7 @@ c Fill out b2mod_plasma data
       call b2xpfe(nx, ny, ns, ns_ext, qe, rza, za_ext,
      $     fna_eir, fa_ext, fch, fne_eir)
       vaecrb = 0.0_R8
+      veecrb = 0.0_R8
       facdrift = 0.0_R8
       fac_ExB = 0.0_R8
       fac_vis = 0.0_R8
