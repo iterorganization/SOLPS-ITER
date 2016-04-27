@@ -78,18 +78,16 @@ if($QSUB == "") then
 endif
 echo Using submission file template $QSUB
 
-if ($MPI_OPTS = "") then
-  set NAMP=$QSUB
-else
+if ($PROCS != 1) then
   head -n 2 $QSUB > $NAMP
   echo "#$ -pe impi_hydra #PROCS#" >> $NAMP
   set lines = `wc $QSUB | awk '{printf "%s",$1-2;printf "\n"}'`
   tail --lines=$lines $QSUB >> $NAMP
+else
+  set NAMP=$QSUB
 endif
 
-sed -e 's:#PWD#:'$PWD':g' -e 's:#SOLPSTOP#:'$SOLPSTOP':g' -e 's:#EMAIL#:'$EMAIL':g' -e "s:#MPIOPTS#:'$MPIOPTS':g" -e "s:#PROCS#:'$PROCS':g" < $NAMP > $NAME
-
-cat $NAME
+sed -e 's:#PWD#:'$PWD':g' -e 's:#SOLPSTOP#:'$SOLPSTOP':g' -e 's:#EMAIL#:'$EMAIL':g' -e "s:#MPIOPTS#:'$MPIOPTS':g" -e 's:#PROCS#:'$PROCS':g' < $NAMP > $NAME
 
 set msg="Submitted at `date`"
 update_solps_run_status -n ${msg}
