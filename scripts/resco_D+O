@@ -4,8 +4,8 @@ if (-e b2mn.exe.dir) then
 else
   set FILE=b2ftrace
 endif
-if (-x zcat) then
-    set ZCAT=zcat
+if (-X zcat) then
+    set ZCAT="zcat --force"
 else
     set ZCAT="gzip --decompress --force --stdout"
 endif

@@ -1,5 +1,5 @@
-eval '(exit $?0)' && eval 'exec tcsh -f $0 ${1+"$@"}' && eval 'exec tcsh -f $0 $argv:q'
-###! /bin/tcsh -f
+### eval '(exit $?0)' && eval 'exec tcsh -f $0 ${1+"$@"}' && eval 'exec tcsh -f $0 $argv:q'
+#! /usr/bin/env tcsh
 
 if($?GNUPLOT_TMP) then
     set tmpdir="$GNUPLOT_TMP/"
@@ -34,7 +34,7 @@ if ($?PLOT_FROM_FILE) then
    cat ${tmpdir}PLOT_FROM_FILE > $dfilename
    rm -f ${tmpdir}PLOT_FROM_FILE
 else
-sed -e 's/D/E/g' >! $dfilename
+   sed -e 's/D/E/g' >! $dfilename
 endif
 set n=`wc -l < $dfilename`
 if(! $?GNUPLOT_BATCH) then

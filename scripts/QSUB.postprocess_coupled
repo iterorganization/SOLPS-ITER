@@ -1,4 +1,4 @@
-#! /bin/tcsh -f
+#! /usr/bin/env tcsh
 
 echo ""
 echo "This file can be used for post-processing commands after a coupled batch job."

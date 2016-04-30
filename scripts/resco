@@ -1,4 +1,4 @@
-#! /bin/csh -f
+#! /usr/bin/env csh
 if (-e b2mn.exe.dir/b2ftrace) then
   set FILE=b2mn.exe.dir/b2ftrace
 else
@@ -11,8 +11,8 @@ if (-e $solps_fluids) then
 endif
 set n=`echo $SOLPS_FLUIDS | wc -w`
 echo $n
-if (-x zcat) then
-    set ZCAT=zcat
+if (-X zcat) then
+    set ZCAT="zcat --force"
 else
     set ZCAT="gzip --decompress --force --stdout"
 endif

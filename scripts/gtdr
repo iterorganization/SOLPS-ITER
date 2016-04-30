@@ -1,5 +1,5 @@
-eval '(exit $?0)' && eval 'exec tcsh $0 ${1+"$@"}' && eval 'exec tcsh $0 $argv:q'
-###! /bin/tcsh
+### eval '(exit $?0)' && eval 'exec tcsh $0 ${1+"$@"}' && eval 'exec tcsh $0 $argv:q'
+#! /usr/bin/env tcsh
 
 # replaces a link to a directory by a shadow tree
 while ( $#argv > 0 ) 

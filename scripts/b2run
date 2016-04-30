@@ -1,4 +1,4 @@
-#! /bin/tcsh -f
+#! /usr/bin/env tcsh
 
 ## -n                         dry run
 ## -s                         run B2.5 applications in stand-alone mode (no Eirene coupling)

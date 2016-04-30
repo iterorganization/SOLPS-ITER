@@ -1,2 +1,2 @@
-#! /bin/tcsh -f
+#! /usr/bin/env tcsh
 awk 'NR%'$1'=='$2'{print $0}'

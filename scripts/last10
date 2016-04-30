@@ -3,11 +3,11 @@ if (-e run.log) then
   tail -100000 run.log >! tmp.run.log
 else
   if (-X zcat) then
-    set ZCAT=zcat
+    set ZCAT="zcat --force"
   else
     set ZCAT="gzip --decompress --force --stdout"
   endif
-  $ZCAT -f run.log.gz | tail -100000 >! tmp.run.log
+  $ZCAT run.log.gz | tail -100000 >! tmp.run.log
 endif
 set steps=`grep -n 'b2-step-cpu' tmp.run.log | wc | awk '{print $1}'`
 if ($steps == 0) then

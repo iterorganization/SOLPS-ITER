@@ -33,7 +33,12 @@ awk.mesh $MESH >! /tmp/tmp.$USER.$$.mesh.extra
 setenv GNUPLOT_POSTSCRIPT_OPTIONS "portrait 20 ; set size ratio -1"
 setenv PRINT_PLOT $1.ps
 
+if (-X zcat) then
+    set ZCAT="zcat --force"
+else
+    set ZCAT="gzip --decompress --force --stdout"
+endif
 
-zcat -f $FILE | \
+$ZCAT $FILE | \
   awk 'NR>1{printf "%s %s\n%s %s\n%s %s\n%s %s\n%s %s\n\n",$5,$6,$7,$8,$11,$12,$9,$10,$5,$6}' | cat - /tmp/tmp.$USER.$$.mesh.extra | xyplot
 /bin/rm /tmp/tmp.$USER.$$.mesh.extra

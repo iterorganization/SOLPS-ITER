@@ -4,7 +4,7 @@
 #-----------------------------------------------------------------------
 # Variables.
 
-SHELL = /bin/sh
+SHELL = /usr/bin/env sh
 TIME = time
 
 # Default debugger
