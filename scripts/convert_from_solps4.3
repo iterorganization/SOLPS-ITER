@@ -29,7 +29,8 @@ correct_b2yt_timestamps
 b2run b2yt
 cd ..
 cp convert/b2a?.dat baserun
-cp convert/b2fgmtry convert/b2ag.prt baserun
+[ -e convert/b2fgmtry.2 ] && cp convert/b2fgmtry.2 baserun/b2fgmtry || cp convert/b2fgmtry baserun
+cp convert/b2ag.prt baserun
 cp convert/b2fpardf convert/b2ah.prt baserun
 cp convert/fort.30 baserun
 cd baserun
