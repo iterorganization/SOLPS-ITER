@@ -377,6 +377,10 @@ c=======================================================================
       l=lena
       lena=48
       call resima(amd_file(namdf))
+      j=index(amd_file(namdf),' ')
+      if(j.gt.0.and.j.lt.48) then
+        amd_file(namdf)(j+1:48) = repeat(' ',48-j)
+      endif
       lena=l
       if(index(amd_file(namdf),'.').eq.0) then !{
       	i=index(amd_file(namdf),ubs)
@@ -397,6 +401,14 @@ c=======================================================================
 	  write(*,*) 'Filename for AMDS reference quoted: ',
      ,	      	      	      	      	      	      	amd_file(namdf)
 	end if !}
+      else
+        i=index(amd_file(namdf),'.')
+        uam=amd_file(namdf)
+        uam(i:i+4)='.amo ' ! xpb: was .amds extension
+        call lefta(uam,52,i+4)
+	amd_file(namdf)=uam
+	write(*,*) 'Filename for AMDS reference quoted: ',
+     ,	      	      	      	      	      	      	amd_file(namdf)
       end if !}
       return
    87 call resimi(namdf)
