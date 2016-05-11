@@ -1181,7 +1181,7 @@ c Fill out /b2cmpt/ arrays
      .   ' model not foreseen in SOLPS5.0!'
         write(*,*) 'Using default KYE value. '
       endif
-      cfsig(0)= 1.0e-3_R8
+      cfsig(0)= 1.0e-7_R8
       cfalf(0)= 0.0_R8
       cflim(0)= flim_4
       cflim(1)= flimi_4
