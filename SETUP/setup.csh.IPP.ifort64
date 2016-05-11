@@ -15,3 +15,6 @@ module load impi/5.1.2
 
 # Environment variables
 setenv DEVICE upgrade
+setenv GLI_HOME /ptmp1/work/dpc/SOLPS-ITER/gks
+setenv NCARG_ROOT /ptmp1/work/dpc/SOLPS-ITER/NCARG
+setenv PATH ${PATH}:/ptmp1/work/dpc/SOLPS-ITER/NETCDF/bin
