@@ -7,21 +7,24 @@ set PROCS=1
 echo Your email is $EMAIL
 
 set compress=""
-if ("X$1X" == "X-zX") then
-  set compress="-gz"
-  echo run.log will be compressed
-  shift
-endif
-
 set MPIOPTS=""
-if ("X$1X" == "X-mX") then
-  shift
-  set MPIOPTS="$1"
-  echo Using MPI options: $MPIOPTS
-  set PROCS=`echo $MPIOPTS | awk.transpose | grep -A 1 "\-np" | tail -n 1`
-  echo Asking for $PROCS processors
-  shift
-endif
+
+argloop:
+  if ("X${1}X" == "X-zX") then
+    set compress="-gz"
+    echo run.log will be compressed
+    shift
+    goto argloop
+  endif
+  if ("X${1}X" == "X-mX") then
+    shift
+    set MPIOPTS="$1"
+    echo Using MPI options: $MPIOPTS
+    set PROCS=`echo $MPIOPTS | awk.transpose | grep -A 1 "\-np" | tail -n 1`
+    echo Asking for $PROCS processors
+    shift
+    goto argloop
+  endif
 
 set solpstop=`climb_and_look_for SOLPSTOP`
 if (-e $solpstop) then

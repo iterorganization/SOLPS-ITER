@@ -5,19 +5,22 @@ set EMAIL=`get_git_email`
 echo Your email is $EMAIL
 
 set compress=""
-if ("X$1X" == "X-zX") then
-  set compress="-gz"
-  echo run.log will be compressed
-  shift
-endif
-
 set MPIOPTS=""
-if ("X$1X" == "X-mX") then
-  shift
-  set MPIOPTS="$1"
-  echo Using MPI options: $MPIOPTS
-  shift
-endif
+
+argloop:
+  if ("X${1}X" == "X-zX") then
+    set compress="-gz"
+    echo run.log will be compressed
+    shift
+    goto argloop
+  endif
+  if ("X${1}X" == "X-mX") then
+    shift
+    set MPIOPTS="$1"
+    echo Using MPI options: $MPIOPTS
+    shift
+    goto argloop
+  endif
 
 set solpstop=`climb_and_look_for SOLPSTOP`
 if (-e $solpstop) then
