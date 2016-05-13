@@ -45,7 +45,7 @@ if ($?PRINT_PLOT) then
     set GNUPLOT_POSTSCRIPT_OPTIONS=""
   endif
   if(! $?GNUPLOT_BATCH || $GNUPLOT_COUNT == 1) then
-    echo set term postscript $GNUPLOT_POSTSCRIPT_OPTIONS >> $cfilename
+    echo set term postscript $GNUPLOT_POSTSCRIPT_OPTIONS >>! $cfilename
     if("$PRINT_PLOT" == "") then
       echo "set out '| lpr'" >> $cfilename
     else
@@ -55,7 +55,7 @@ if ($?PRINT_PLOT) then
   endif
 else
   if ($?GNUPLOT_TERM) then
-    echo set term "$GNUPLOT_TERM" >> $cfilename
+    echo set term "$GNUPLOT_TERM" >>! $cfilename
   endif
 endif
 if($n < 1) then
@@ -88,34 +88,34 @@ if ($status == 0) then
 endif
 echo $1 | egrep 'lx' > /dev/null
 if ($status == 0) then
-  echo set log x >> $cfilename
+  echo set log x >>! $cfilename
 else
   echo $1 | egrep 'dx' > /dev/null
   if ($status == 0) then
-    echo set xdata time >> $cfilename
+    echo set xdata time >>! $cfilename
     echo 'set timefmt "%Y%m%d%H%M"' >> $cfilename
     echo 'set format x "%y/%m/%d"' >> $cfilename
 #    set GNUPLOT=/afs/rzg.mpg.de/u/dpc/src/gnuplot-beta314/gnuplot/gnuplot
   else
-    echo set nolog x >> $cfilename
+    echo set nolog x >>! $cfilename
   endif
 endif
 set LOGSPECIAL=0
 echo $1 | egrep 'ly' > /dev/null
 if ($status == 0) then
-  echo set log y >> $cfilename
+  echo set log y >>! $cfilename
 else
   echo $1 | egrep 'Ly' > /dev/null
   if ($status == 0) then
-    echo set log y >> $cfilename
+    echo set log y >>! $cfilename
     set LOGSPECIAL=1
   else
     echo $1 | egrep 'My' > /dev/null
     if ($status == 0) then
-      echo set log y >> $cfilename
+      echo set log y >>! $cfilename
       set LOGSPECIAL=2
     else
-      echo set nolog y >> $cfilename
+      echo set nolog y >>! $cfilename
     endif
   endif
 endif
@@ -129,7 +129,7 @@ endif
 @ argy =$cnt + 2
 @ argt =$cnt + 3
 shift
-echo 'set format y "%g"' >> $cfilename
+echo 'set format y "%g"' >>! $cfilename
 echo set zero 1e-50 >> $cfilename
 if (! $?GNUPLOT_NOTIMESTAMP) echo set time >> $cfilename
 if("$1" == "-file") then

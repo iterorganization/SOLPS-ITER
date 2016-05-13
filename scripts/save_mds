@@ -1,24 +1,28 @@
 #! /bin/tcsh -f
 
 set debug=""
-if ("X${1}X" == "X-nX") then
-  set debug="-n"
-  shift
-endif
-if ("X${1}X" == "X-sX") then
-  shift
-  setenv STAND_ALONE yes
-  shift
-endif
-if ("X${1}X" == "X-dX") then
-  shift
-  if ($1 == "") then
-    set debug="$debug TIME=$DBX"
-  else
-    set debug="$debug TIME=$1"
+argloop:
+  if ("X${1}X" == "X-nX") then
+    set debug="-n"
+    shift
+    goto argloop
   endif
-  shift
-endif
+  if ("X${1}X" == "X-sX") then
+    shift
+    setenv STAND_ALONE yes
+    shift
+    goto argloop
+  endif
+  if ("X${1}X" == "X-dX") then
+    shift
+    if ($1 == "") then
+      set debug="$debug TIME=$DBX"
+    else
+      set debug="$debug TIME=$1"
+    endif
+    shift
+    goto argloop
+  endif
 
 if (-e shotnumber.history) then
   echo "Shotnumber.history already exists in $PWD"
