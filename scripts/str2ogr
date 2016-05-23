@@ -1,0 +1,6 @@
+#! /bin/tcsh -f
+if ( "XX" == "X${1}X" ) then
+  echo The argument should be the stem of the .str file
+  exit
+endif
+awk 'NF==2{print $1*1000,$2*1000}NF!=2{printf "\n"}' $1.str > $1.ogr
