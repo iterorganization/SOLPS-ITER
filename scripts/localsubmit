@@ -1,5 +1,21 @@
 #! /usr/bin/env tcsh
 setenv SHELL `which tcsh` # needed for batch and atd
+set standalone="no"
+
+argloop:
+  if ("X${1}X" == "X-zX") then
+    set compress="-gz"
+    echo run.log will be compressed
+    shift
+    goto argloop
+  endif
+  if ("X${1}X" == "X-sX") then
+    set standalone="yes"
+    echo Asking for a standalone run
+    shift
+    goto argloop
+  endif
+
 cat << __EOF__ | batch
 setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}"
 set msg="Started on `hostname` at `date`"
@@ -7,10 +23,18 @@ update_solps_run_status \${msg}
 if ($?SOLPS_GUI_IP) then
   echo ${USER} ${PWD} \${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
 endif
-if (-e input.dat) then
-   time b2run ${argv} b2mn < input.dat >! run.log
+if (-e input.dat && standalone == "no") then
+  if (compress == "-gz") then
+    time b2run ${argv} b2mn < input.dat | gzip -9 >! run.log.gz
+  else
+    time b2run ${argv} b2mn < input.dat >! run.log
+  endif
 else
-   time b2run ${argv} -s b2mn >! run.log
+  if (compress == "-gz") then
+    time b2run ${argv} -s b2mn | gzip -9 >! run.log.gz
+  else
+    time b2run ${argv} -s b2mn >! run.log
+  endif
 endif
 set msg="Finished on `hostname` at `date`"
 if ($?SOLPS_GUI_IP) then

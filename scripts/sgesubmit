@@ -2,15 +2,23 @@
 
 set NAME=/tmp/.run.$$.$USER.`date +%Y%m%d%H%M%S`
 set EMAIL=`get_git_email`
+set PROCS=1
 echo Your email is $EMAIL
 
 set compress=""
 set MPIOPTS=""
+set standalone="no"
 
 argloop:
   if ("X${1}X" == "X-zX") then
     set compress="-gz"
     echo run.log will be compressed
+    shift
+    goto argloop
+  endif
+  if ("X${1}X" == "X-sX") then
+    set standalone="yes"
+    echo Asking for a standalone run
     shift
     goto argloop
   endif
@@ -30,7 +38,7 @@ else
 endif
 
 if ($1 == "") then
-  if (-e input.dat) then
+  if (-e input.dat && standalone == "no") then
     echo Assuming run with Eirene
     echo No argument is specified. Looking for QSUB.sge_coupled$compress
     set QSUB=`climb_and_look_for QSUB.sge_coupled$compress`
@@ -42,7 +50,7 @@ if ($1 == "") then
       endif
     endif
   else
-    echo Assuming standalone run
+    if (standalone == "no") echo Assuming standalone run
     echo No argument is specified. Looking for QSUB.sge$compress
     set QSUB=`climb_and_look_for QSUB.sge$compress`
     if ($QSUB == "//QSUB.sge$compress") then
@@ -77,7 +85,7 @@ if($QSUB == "") then
 endif
 echo Using submission file template $QSUB
 
-sed -e 's:#PWD#:'$PWD':g' -e 's:#SOLPSTOP#:'$SOLPSTOP':g' -e 's:#EMAIL#:'$EMAIL':g' -e "s:#MPIOPTS#:'$MPIOPTS':g" < $QSUB > $NAME
+sed -e 's:#PWD#:'$PWD':g' -e 's:#SOLPSTOP#:'$SOLPSTOP':g' -e 's:#EMAIL#:'$EMAIL':g' -e "s:#MPIOPTS#:'$MPIOPTS':g" -e "s:#PROCS#:'$PROCS':g" < $QSUB > $NAME
 
 set msg="Submitted at `date`"
 update_solps_run_status -n ${msg}

@@ -1113,6 +1113,7 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[itmsubmit]\index{itmsubmit} Command file to launch runs on the ITM Gateway machine. See Section \ref{b2run} for details.
   \item[jetsubmit]\index{jetsubmit} Command file to launch runs on the JET Analysis Cluster (JAC). See Section \ref{b2run} for details.
   \item[last10]\index{last10} Truncates the \verb!run.log! file to contain only the output from the last 10 written code iterations and stores them in \verb!run.log.last10!.
+  \item[localsubmit]\index{localsubmit} Command file to launch runs on the local machine. See Section \ref{b2run} for details.
   \item[lndr]\index{lndr} [ANK] routine to generate shadow trees.
   \item[mds\_id]\index{mds\_id} Obtains certain data necessary for run identification when saving to the \verb!MDSplus! database.
   \item[min\_ave\_max.awk]\index{min\_ave\_max.awk}
@@ -1799,6 +1800,7 @@ are provided:
   \item{itersubmit}\index{itersubmit} for submissions on the ITER HPC cluster
   \item{itmsubmit}\index{itmsubmit} for submissions on the ITM Gateway machine
   \item{jetsubmit}\index{jetsubmit} for submissions on the JET Analysis Cluster (JAC)
+  \item{localsubmit}\index{localsubmit} for local submission
   \item{sgesubmit}\index{sgesubmit} for submissions on a system running SGE
 \end{description}
 Users on other systems are encouraged to recopy these command scripts (found in \$\verb!SOLPSTOP\scripts!)
@@ -1839,7 +1841,7 @@ qsub -S /usr/bin/tcsh $QSUB
 or stops if the submission file is not found.
 
 If \verb!<<Submission_file>>! is not specified, \verb!itersubmit! looks for \verb!QSUB.iter_coupled! or
-for \verb!QSUB.iter! depending on whether a coupled or a standalone run is required (decided upon detection or not of an \verb!Eirene! \verb!input.dat! file).
+for \verb!QSUB.iter! depending on whether a coupled or a standalone run is required. To request a stand-alone run explicitly, the user can use the "-s" option. Otherwise, the script will assume a coupled run is requested if an \verb!Eirene! \verb!input.dat! file is present in the run directory, and a stand-alone run otherwise.
 
 In the case one wishes to run the code with MPI and needs to pass MPI options to the launching program, this is achieved by means of the "-m" option, followed by the desired options inside double quotes, as follows:
 \begin{verbatim}

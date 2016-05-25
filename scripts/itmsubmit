@@ -8,11 +8,18 @@ echo Your email is $EMAIL
 
 set compress=""
 set MPIOPTS=""
+set standalone="no"
 
 argloop:
   if ("X${1}X" == "X-zX") then
     set compress="-gz"
     echo run.log will be compressed
+    shift
+    goto argloop
+  endif
+  if ("X${1}X" == "X-sX") then
+    set standalone="yes"
+    echo Asking for a standalone run
     shift
     goto argloop
   endif
@@ -34,7 +41,7 @@ else
 endif
 
 if ($1 == "") then
-  if (-e input.dat) then
+  if (-e input.dat && standalone == "no") then
     echo Assuming run with Eirene
     echo No argument is specified. Looking for QSUB.itm_coupled$compress
     set QSUB=`climb_and_look_for QSUB.itm_coupled$compress`
@@ -46,7 +53,7 @@ if ($1 == "") then
       endif
     endif
   else
-    echo Assuming standalone run
+    if (standalone == "no") echo Assuming standalone run
     echo No argument is specified. Looking for QSUB.itm$compress
     set QSUB=`climb_and_look_for QSUB.itm$compress`
     if ($QSUB == "//QSUB.itm$compress") then
