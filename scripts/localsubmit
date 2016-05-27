@@ -23,14 +23,14 @@ update_solps_run_status \${msg}
 if ($?SOLPS_GUI_IP) then
   echo ${USER} ${PWD} \${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
 endif
-if (-e input.dat && standalone == "no") then
-  if (compress == "-gz") then
+if (-e input.dat && $standalone == "no") then
+  if ($compress == "-gz") then
     time b2run ${argv} b2mn < input.dat | gzip -9 >! run.log.gz
   else
     time b2run ${argv} b2mn < input.dat >! run.log
   endif
 else
-  if (compress == "-gz") then
+  if ($compress == "-gz") then
     time b2run ${argv} -s b2mn | gzip -9 >! run.log.gz
   else
     time b2run ${argv} -s b2mn >! run.log

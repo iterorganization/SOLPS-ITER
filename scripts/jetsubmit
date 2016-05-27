@@ -38,7 +38,7 @@ else
 endif
 
 if ($1 == "") then
-  if (-e input.dat && standalone == "no") then
+  if (-e input.dat && $standalone == "no") then
     echo Assuming run with Eirene
     echo No argument is specified. Looking for QSUB.jet_coupled$compress
     set QSUB=`climb_and_look_for QSUB.jet_coupled$compress`
@@ -50,7 +50,7 @@ if ($1 == "") then
       endif
     endif
   else
-    if (standalone == "no") echo Assuming standalone run
+    if ($standalone == "no") echo Assuming standalone run
     echo No argument is specified. Looking for QSUB.jet$compress
     set QSUB=`climb_and_look_for QSUB.jet$compress`
     if ($QSUB == "//QSUB.jet$compress") then
