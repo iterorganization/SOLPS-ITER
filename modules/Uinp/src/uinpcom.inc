@@ -50,7 +50,8 @@ c***  nsrfclsx  max. number of views
       parameter (nadd=DEF_NADD)
       parameter (nrad=n1st*n2nd*n3rd+nadd+1)
       parameter (nplt=5, nsd=1, nsdw=1, ncv=1, nsnv=1)
-      parameter (nads=1, nadv=1, nclv=1, nalv=1, nals=1)
+      parameter (nadv=4*(DEF_NATM+DEF_NMOL))
+      parameter (nads=1, nclv=1, nalv=1, nals=1)
       parameter (nmtr=6, nain=1)
       parameter (nhd6=DEF_NATM*nmtr)
 
@@ -332,7 +333,7 @@ c*** Default reaction lists: the same for each species (nsrctd and
 c***  	spcrctd are the number and the list of default species;
 c***  	primary particle is determined from spcrctd)
       integer nsrctd
-      parameter (nsrctd=10)
+      parameter (nsrctd=12)
       character*8 spcrctd(nsrctd)
       integer nnrctd(nsrctd),rctdgrp(mreac,nsrctd),
      ,	rctdmsp(mreac,nsrctd),rctdmst(mreac,nsrctd)

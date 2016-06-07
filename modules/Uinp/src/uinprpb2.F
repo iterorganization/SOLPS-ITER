@@ -11,7 +11,7 @@ c*** Prepares the arrays of the B2 parameters to be used for replacement
 c=======================================================================
 #include "uinput.inc"
 #include "uib2pprm.inc"
-      integer i,j,k,l,m,n,ii,jj,nbc
+      integer i,j,k,l,m,n,ii,jj,nbc,ispi,ispe
       integer ifl(DEF_NFL)
       logical ex
       external xerrab
@@ -216,7 +216,7 @@ c*** k, m, n are the numbers of recycling, specified, and all strata
       k=0
       do j=1,nbndknd !{
         do i=1,nznbndt(j) !{
-          if(nlrbnds(i,j)) k=k+1
+          if(nlrbnds(i,j)) k=k+natmi
         end do !}
       end do !}
       m=k+ngpfstr+nrcmstr
@@ -257,6 +257,8 @@ c*** k, m, n are the numbers of recycling, specified, and all strata
       nmdlr(16,3)=m
       nmdpr(17,3)=nspcpls+nspcncl
       nmdpr(31,3)=nlimi+nstsi+1
+      nmdpr(32,3)=n
+      nmdpr(33,3)=n
       ltrvr(3,3)=.true.
       lrrvr(14,3)=.true.
       lrrvr(15,3)=.true.
@@ -275,41 +277,57 @@ c*** Recycling sources
       	do i=1,nznbndt(j) !{
 	  kk=kk+1
 	  if(nlrbnds(i,j)) then !{
-	    k=k+1
-            if(k.ge.nmxprm) then !{
-              write(0,*) 'Too many strata found in uinprpb2: ',k
-              write(0,*) 'Recycling loop, j,i,kk = ',j,i,kk
-	      write(0,*) 'nlrbnds:'
-	      do jj=1,nbndknd !{
-	      	if(nznbndt(jj).gt.0) write(0,
+            ispe=0
+            do iatm=1,natmi !{
+              ispi=ispe+1
+              ispe=ispi
+              do while (lkindp(min(ispe+1,nplsi)).eq.lkindp(ispi)) !{
+                ispe=ispe+1
+                if (ispe.gt.nplsi) then !{
+                  ispe=nplsi
+                  exit
+                end if !}
+              end do !}
+	      k=k+1
+              if(k.ge.nmxprm) then !{
+                write(0,*) 'Too many strata found in uinprpb2: ',k
+                write(0,*) 'Recycling loop, j,i,kk = ',j,i,kk
+	        write(0,*) 'nlrbnds:'
+	        do jj=1,nbndknd !{
+                  if(nznbndt(jj).gt.0) write(0,
      ,  	      	      	      '(1x,a2,1x,50l2/(4x,50l2))') jj,
      ,  	      	      	      	(nlrbnds(ii,jj),ii=1,nznbndt(j))
-	      end do !}
-      	      call xerrab (' == Internal error in UINP')
-            end if !}
+	        end do !}
+                call xerrab (' == Internal error in UINP')
+              end if !}
 
 c***  	      	crcstra, rcpos, rcstart, rcend
-      	    cniprm(k,1,1,3,3)=cznbndt(i,j)
-      	    iniprm(k,1,1,4,3)=lcpbnds(i,j)-1
-      	    iniprm(k,1,1,5,3)=ls1bnds(i,j)-1
-      	    iniprm(k,1,1,6,3)=ls2bnds(i,j)-1
+              cniprm(k,1,1,3,3)=cznbndt(i,j)
+              iniprm(k,1,1,4,3)=lcpbnds(i,j)-1
+              iniprm(k,1,1,5,3)=ls1bnds(i,j)-1
+              iniprm(k,1,1,6,3)=ls2bnds(i,j)-1
+
+c***          species_start, species_end
+              iniprm(k,1,1,32,3)=ispi-1+(iatm-1)
+              iniprm(k,1,1,33,3)=ispe+(iatm-1)
 
 c***  	      	lstrascl
-	    do l=1,nspcncl !{
-      	      iniprm(k,l,1,8,3)=lscbnds(l,i,j)
-	    end do !}
+              do l=1,nspcncl !{
+                if (l.eq.iatm) iniprm(k,l,1,8,3)=lscbnds(l,i,j)
+              end do !}
 
 c***  	      	lsns, ksns
-      	    iniprm(k,1,1,9,3)=kk
-      	    iniprm(k,1,1,11,3)=1
+              iniprm(k,1,1,9,3)=kk
+              iniprm(k,1,1,11,3)=1
 
 c***  	      	userfluxparm
-      	    rniprm(k,1,1,15,3)=0
+              rniprm(k,1,1,15,3)=0
 
 c***  	      	gpfc
-	    do l=1,nspcncl !{
-      	      rniprm(l,k,1,16,3)=0
-	    end do !}
+	      do l=1,nspcncl !{
+                rniprm(l,k,1,16,3)=0
+	      end do !}
+            end do !}
 	  end if !}
       	end do !}
       end do !}
@@ -329,6 +347,10 @@ c***  	    crcstra, rcpos, rcstart, rcend
       	iniprm(k,1,1,4,3)=0
       	iniprm(k,1,1,5,3)=0
       	iniprm(k,1,1,6,3)=0
+
+c***          species_start, species_end
+        iniprm(k,1,1,32,3)=0
+        iniprm(k,1,1,33,3)=0
 
 c***  	    userfluxparm
       	rniprm(k,1,1,15,3)=fgpfstr(i)
@@ -356,6 +378,10 @@ c***  	    crcstra, rcpos, rcstart, rcend
       	iniprm(k,1,1,4,3)=0
       	iniprm(k,1,1,5,3)=0
       	iniprm(k,1,1,6,3)=0
+
+c***          species_start, species_end
+        iniprm(k,1,1,32,3)=0
+        iniprm(k,1,1,33,3)=0
 
 c***  	    userfluxparm
       	rniprm(k,1,1,15,3)=0
@@ -389,6 +415,10 @@ c***          crcstra, rcpos, rcstart, rcend
         iniprm(k,1,1,4,3)=0
         iniprm(k,1,1,5,3)=0
         iniprm(k,1,1,6,3)=0
+
+c***          species_start, species_end
+        iniprm(k,1,1,32,3)=0
+        iniprm(k,1,1,33,3)=0
 
 c***          lstrascl
         do l=1,nspcncl !{

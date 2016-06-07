@@ -3,15 +3,15 @@ c  VERSION : 14.08.2003 23:15
 #include "DIMENSIONS.F"
 
 c*** The numbers of input blocks and variables to work on in one block
-      integer, parameter :: nblck=7, nkwrd=31, nnmdf=nblck*nkwrd
+      integer, parameter :: nblck=7, nkwrd=33, nnmdf=nblck*nkwrd
 
 c*** The maximum length of the keyword
       integer, parameter :: mxkwln=22
 
 c*** The maximum number of parameters, layers, and blocks for one keyword
 c*** (2D array is considered a set of "layers", and 3D one a set of "blocks")
-      integer, parameter :: nmxprm=DEF_NFL+DEF_NSTRA+DEF_NLIM+DEF_NSTS,
-     ,	 nmxlyr=DEF_NSTRA+5, nmxblk=2
+      integer, parameter :: nmxprm=DEF_NFL+DEF_NSTRA+DEF_NLIM+DEF_NSTS
+      integer, parameter :: nmxlyr=DEF_NSTRA+5, nmxblk=2
 
 c*** The maximum length of the input line
       integer, parameter :: mxslen=mxkwln+nmxprm*11

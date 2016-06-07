@@ -423,6 +423,7 @@ Reaction AMJUEL H.4 2.3.5B0  : e B+		 : B		   : RC
 Reaction AMJUEL H.4 2.3.5B1  : e B++		 : B+		   : RC
 Reaction AMJUEL H.4 2.3.6A0  : e C+		 : C		   : RC
 Reaction AMJUEL H.4 2.3.6B0  : e C+		 : C		   : RC
+Reaction AMJUEL H.4 2.3.7A0  : e N+		 : N		   : RC
 Reaction AMJUEL H.4 2.3.10B0 : e Ne+		 : Ne		   : RC
 Reaction AMJUEL H.4 2.3.10B1 : e Ne++		 : Ne+  	   : RC
 Reaction AMJUEL H.4 2.3.13a  : e He+(1s)	 : He(1S)	   : RC
@@ -432,6 +433,7 @@ Reaction AMJUEL H.4 2.3.13d  : e He+(1s)	 : He(2|3S)	   : RC
 Reaction AMJUEL H.4 2.3.18B0 : e Ar+		 : Ar		   : RC
 Reaction AMJUEL H.4 2.3.18B1 : e Ar++		 : Ar+  	   : RC
 Reaction AMJUEL H.4 2.6A0    : e C		 : C+ 2e 	   : EI
+Reaction AMJUEL H.4 2.7A0    : e N		 : N+ 2e 	   : EI
 Reaction AMJUEL H.4 7.2.3a   : H+ H-		 : H H  	   : II
 Reaction AMJUEL H.4 7.2.3b   : H+ H-		 : H H+ e	   : II
 Reaction AMJUEL H.8 2.2.14   : e H2+(v) 	 : H H* 	   : OT
@@ -456,9 +458,11 @@ Reaction AMJUEL H.10 2.1.5o  : e  H		 : H+ 2e 	   : OT
 Reaction AMJUEL H.10 2.1.8   : e H+		 : H		   : OT
 Reaction AMJUEL H.10 2.1.8o  : e H+		 : H		   : OT
 Reaction AMJUEL H.10 2.3.6A0 : e  C+		 : C		   : OT
+Reaction AMJUEL H.10 2.3.7A0 : e  N+		 : N		   : OT
 Reaction AMJUEL H.10 2.3.9a  : e He(1|1S)        : He+ 2e          : EI
 Reaction AMJUEL H.10 2.3.13a : e He+(1s)         : He(1S)          : RC
 Reaction AMJUEL H.10 2.6A0   : e  C		 : C+ 2e 	   : OT
+Reaction AMJUEL H.10 2.7A0   : e  N		 : N+ 2e 	   : OT
 Reaction AMJUEL H.11 2.0a    : H2+ H2		 : H2+ H2	   : OT
 Reaction AMJUEL H.11 2.2B0   : e He		 : He*  	   : OT
 Reaction AMJUEL H.11 2.4B0   : e Be		 : Be*  	   : OT

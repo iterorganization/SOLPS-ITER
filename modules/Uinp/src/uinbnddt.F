@@ -11,7 +11,7 @@ c*** Prepare the boundary data ("non-default surfaces" and recycling
 c*** sources) for the Eirene input file
 c=======================================================================
 #include "uinput.inc"
-      integer i,j,k,l,m,n,ibk,isf
+      integer i,j,k,l,m,n,ibk,isf,iatm,ispe,ispi
       external xerrab
 c=======================================================================
 
@@ -97,8 +97,18 @@ c*** ... set up the material properties
 	  end if !}
 c*** ... and then the recycling source if specified
 	  if(nlrbnds(isf,ibk)) then !{
-
+           ispe=0
+           do iatm=1,natmi !{ Split the strata per species
             nstrai=nstrai+1
+            ispi=ispe+1
+            ispe=ispi
+            do while (lkindp(min(ispe+1,nplsi)).eq.lkindp(ispi)) !{
+              ispe=ispe+1
+              if (ispe.gt.nplsi) then !{
+                ispe=nplsi
+                exit
+              end if !}
+            end do !}
             if(nstrai.ge.nstra) then !{
               write(0,*) 'Too many strata requested: ',nstrai
               write(0,*) 'STOP ==> check the DG model and the value ',
@@ -116,8 +126,11 @@ c*** ... and then the recycling source if specified
               call xerrab ('Too many recycling strata requested')
             end if !}
 
-	    write(txtsou(nstrai),'(a,a10,i4)') 'Recycling - ',
-     ,        	      	      	      	      	      	ctxbnds(ibk),isf
+	    write(txtsou(nstrai),'(a,a,a10,i4)')
+     ,       trim(spcsatm(iatm)),' recycling - ',ctxbnds(ibk),isf
+            nspez(nstrai)=iatm
+            nspzi(ntargi,1)=ispi
+            nspze(ntargi,1)=ispe
 	    insor(1,nstrai)=jcpbnds(isf,ibk)
 	    ndt2(ntargi,1)=insor(1,nstrai)-1
 	    ntin2(ntargi,1)=jc1bnds(isf,ibk)
@@ -167,6 +180,7 @@ c*** ... and then the recycling source if specified
 	    else !}{
 	      ninct2(ntargi,1)=1
 	    end if !}
+           end do !}
 	  end if !}
       	end do !}
       end do !}

@@ -1,6 +1,6 @@
 # Output file produced by amds version 1.04
 filevers 1
-reactns 30
+reactns 38
 HYDHEL H.1 3.1.8
 HYDHEL H.1 5.3.1
 HYDHEL H.1 6.3.1
@@ -18,7 +18,6 @@ AMJUEL H.1 0.2T
 AMJUEL H.1 0.5T
 AMJUEL H.1 0.6T
 AMJUEL H.2 2.4B0
-AMJUEL H.2 2.7B0
 AMJUEL H.2 2.10B0
 AMJUEL H.2 2.18B0
 AMJUEL H.3 0.2T
@@ -26,11 +25,20 @@ AMJUEL H.3 0.5T
 AMJUEL H.3 0.6T
 AMJUEL H.4 2.1.5
 AMJUEL H.4 2.1.8
+AMJUEL H.4 2.3.6A0
+AMJUEL H.4 2.3.7A0
 AMJUEL H.4 2.3.13a
+AMJUEL H.4 2.6A0
+AMJUEL H.4 2.7A0
 AMJUEL H.8 2.4B0
 AMJUEL H.10 2.1.5
 AMJUEL H.10 2.1.8
-METHANE H.2 2.23
+AMJUEL H.10 2.3.6A0
+AMJUEL H.10 2.3.7A0
+AMJUEL H.10 2.6A0
+AMJUEL H.10 2.7A0
+METHANE H.1 3.2
+METHANE H.3 3.2
 group
 3
 4
@@ -51,17 +59,25 @@ group
 7
 0
 0
-0
 6
 8
 9
 1
 2
+13
+14
 0
+10
+12
 7
 1
 2
-0
+13
+14
+10
+12
+11
+11
 deltae
 0
 0
@@ -80,19 +96,27 @@ deltae
 0
 0
 0
-14.5
 21.6
 15.8
 0
+0
+0
+0
+0
+
+
+0
+
 
 0
 0
-0
-0
-0
-0
 13.6
-11.3
+11.2603
+14.5341
+
+
+
+
 massp
 1
 4
@@ -113,17 +137,25 @@ massp
 0
 0
 0
+1
+1
+1
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
 0
 1
-
 1
-0
-0
-0
-0
-0
-0
-0
 masst
 1
 4
@@ -142,18 +174,26 @@ masst
 20
 40
 9
-14
 20
 40
 4
-
+20
 40
 1
 1
+12
+14
 4
+12
+14
 9
 1
 1
+12
+14
+12
+14
+12
 12
 rctype
 CX
@@ -175,18 +215,34 @@ EL
 EI
 EI
 EI
-EI
 EL
 EL
 EL
 EI
 RC
 RC
+RC
+RC
+EI
+EI
 EI
 EI
 RC
+RC
+RC
 EI
+EI
+CX
+CX
 tmin
+
+
+
+
+
+
+
+
 
 
 
@@ -248,15 +304,23 @@ tmax
 
 
 
+
+
+
+
+
+
+
+
 primpart
-D
+H
 He
 He
-D2
-D2
-D2
+H2
+H2
+H2
 He
-D
+H
 He
 He
 He
@@ -266,59 +330,75 @@ He
 Ne
 Ar
 Be
-N
 Ne
 Ar
 He
 Ne
 Ar
-D
-D+
+H
+H+
+C+
+N+
 He+
+C
+N
 Be
-D
-D+
+H
+H+
+C+
+N+
+C
+N
+C
 C
 intrpart
-D+
+H+
 He+
 He++
 
 
 
 
-D+
+H+
 He+
 He++
-D+
-D+
-D+
-D+
-D+
-D+
+H+
+H+
+H+
+H+
+H+
+H+
 
 
 
-
-D+
-D+
-D+
-
+H+
+H+
+H+
 
 
+e
+e
+
+e
+e
 
 
 
-
+e
+e
+e
+e
+H+
+H+
 product1
-D
+H+
 He
 He
-D
-D2+
-D
+H
+H2+
+H
 He+
-D
+H+
 He
 He
 He
@@ -328,50 +408,66 @@ He
 Ne
 Ar
 Be+
-N+
 Ne+
 Ar+
 He
 Ne
 Ar
-D+
-D
+H+
+H
+C
+N
 He
+C+
+N+
 Be+
-D+
-D
+H+
+H
+C
+N
+C+
+N+
+C+
 C+
 product2
-D+
+H
 He+
 He++
 
 
-D+
+H+
 
-D+
+H
 He+
 He++
-D+
-D+
-D+
-D+
-D+
-D+
+H+
+H+
+H+
+H+
+H+
+H+
 
 
 
-
-D+
-D+
-D+
-
+H+
+H+
+H+
 
 
 
 
 
+2e
+2e
 
+
+
+
+
+2e
+2e
+H
+H
 nprdct1
 
 
@@ -403,7 +499,23 @@ nprdct1
 
 
 
+
+
+
+
+
+
+
+
 nprdct2
+
+
+
+
+
+
+
+
 
 
 
@@ -465,6 +577,14 @@ eprdct1
 
 
 
+
+
+
+
+
+
+
+
 eprdct2
 
 
@@ -472,6 +592,14 @@ eprdct2
 
 
 5
+
+
+
+
+
+
+
+
 
 
 

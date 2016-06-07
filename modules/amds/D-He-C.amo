@@ -1,18 +1,25 @@
-# Output file produced by amds version 1.01
-
+# Output file produced by amds version 1.04
 filevers 1
-reactns 11
+reactns 19
 HYDHEL H.1 3.1.8
 HYDHEL H.2 2.2.5
 HYDHEL H.2 2.2.9
 HYDHEL H.2 2.2.10
 HYDHEL H.2 2.3.9
 HYDHEL H.3 3.1.8
+AMJUEL H.0 0.2T
+AMJUEL H.1 0.2T
+AMJUEL H.3 0.2T
 AMJUEL H.4 2.1.5
 AMJUEL H.4 2.1.8
+AMJUEL H.4 2.3.6A0
+AMJUEL H.4 2.6A0
 AMJUEL H.10 2.1.5
 AMJUEL H.10 2.1.8
-METHANE H.2 2.23
+AMJUEL H.10 2.3.6A0
+AMJUEL H.10 2.6A0
+METHANE H.1 3.2
+METHANE H.3 3.2
 group
 3
 0
@@ -20,11 +27,19 @@ group
 0
 0
 3
+6
+6
+6
 1
 2
+13
+10
 1
 2
-0
+13
+10
+11
+11
 deltae
 0
 10.5
@@ -35,8 +50,16 @@ deltae
 0
 0
 0
+0
+0
+
+
+0
 13.6
-11.3
+11.2603
+
+
+
 massp
 1
 0
@@ -44,11 +67,19 @@ massp
 0
 0
 1
+1
+1
+1
 0
 0
 0
 0
 0
+0
+0
+0
+1
+1
 masst
 1
 2
@@ -56,10 +87,18 @@ masst
 2
 4
 1
+4
+4
+4
 1
 1
+12
+12
 1
 1
+12
+12
+12
 12
 rctype
 CX
@@ -68,12 +107,28 @@ EI
 DS
 EI
 CX
+EL
+EL
+EL
 EI
 RC
-EI
 RC
 EI
+EI
+RC
+RC
+EI
+CX
+CX
 tmin
+
+
+
+
+
+
+
+
 
 
 
@@ -97,54 +152,94 @@ tmax
 
 
 
+
+
+
+
+
+
+
+
 primpart
-D
-D2
-D2
-D2
+H
+H2
+H2
+H2
 He
-D
-D
-D+
-D
-D+
+H
+He
+He
+He
+H
+H+
+C+
+C
+H
+H+
+C+
+C
+C
 C
 intrpart
-D+
+H+
 
 
 
 
-D+
+H+
+H+
+H+
+H+
 
 
-
-
-
+e
+e
+e
+e
+e
+e
+H+
+H+
 product1
-D
-D
-D2+
-D
+H+
+H
+H2+
+H
 He+
-D
-D+
-D
-D+
-D
+H+
+He
+He
+He
+H+
+H
+C
+C+
+H+
+H
+C
+C+
+C+
 C+
 product2
-D+
+H
 
 
-D+
+H+
 
-D+
+H
+H+
+H+
+H+
 
 
 
+2e
+2e
 
 
+2e
+H
+H
 nprdct1
 
 2
@@ -157,7 +252,23 @@ nprdct1
 
 
 
+
+
+
+
+
+
+
+
 nprdct2
+
+
+
+
+
+
+
+
 
 
 
@@ -181,11 +292,27 @@ eprdct1
 
 
 
+
+
+
+
+
+
+
+
 eprdct2
 
 
 
 5
+
+
+
+
+
+
+
+
 
 
 

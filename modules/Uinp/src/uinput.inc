@@ -228,26 +228,26 @@ c*** 10
 c*** 10a
 
       integer iadve(nadv), iadvs(nadv), iadvt(nadv), iadrc(nadv)
-      character txttla(nadv)*71, txtspa(nadv)*24, txtuna(nadv)*24
+      character txttla(nadv)*72, txtspa(nadv)*24, txtuna(nadv)*24
 
 c*** 10b
 
       integer iclve(nclv), iclvs(nclv), iclvt(nclv), iclrc(nclv)
-      character txttlc(nclv)*71, txtspc(nclv)*24, txtunc(nclv)*24
+      character txttlc(nclv)*72, txtspc(nclv)*24, txtunc(nclv)*24
 
 c*** 10c
 
       character chrtal(nalv)*71
-      character txttlr(nalv)*71, txtspr(nalv)*24, txtunr(nalv)*24
+      character txttlr(nalv)*72, txtspr(nalv)*24, txtunr(nalv)*24
 
 c*** 10d
 
       integer iadse(nads), iadss(nads), iadst(nads), iadsc(nads)
-      character txttld(nads)*71, txtspd(nads)*24, txtund(nads)*24
+      character txttld(nads)*72, txtspd(nads)*24, txtund(nads)*24
 
 c*** 10e
 
-      character chrtls(nals)*71, txtsps(nals)*24, txttls(nals)*71,
+      character chrtls(nals)*71, txtsps(nals)*24, txttls(nals)*72,
      ,    txtuns(nals)*24
 
 c*** 11

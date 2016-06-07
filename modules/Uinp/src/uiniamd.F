@@ -189,7 +189,6 @@ c-----------------------------------------------------------------------
       	read(iunii,'(e20.0)',err=9999,end=9999) rctnexcf(i,3)
       end do !}
       go to 9990
-      go to 9990
 
  24   do i=nn,nnrctn !{
       	read(iunii,'(e20.0)',err=9999,end=9999) rctnexcf(i,4)

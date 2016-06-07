@@ -113,27 +113,27 @@ tmax
 
 
 primpart
-D
-D2
-D2
-D2
+H
+H2
+H2
+H2
 He
-D
+H
 He
 He
 He
-D
-D+
-D
-D+
+H
+H+
+H
+H+
 intrpart
-D+
+H+
 
 
 
 
-D+
-D+
+H+
+H+
 H+
 H+
 
@@ -141,29 +141,29 @@ H+
 
 
 product1
-D
-D
-D2+
-D
+H+
+H
+H2+
+H
 He+
-D
+H+
 He
 He
 He
-D+
-D
-D+
-D
+H+
+H
+H+
+H
 product2
-D+
+H
 
 
-D+
+H+
 
-D+
-D+
-D+
-D+
+H
+H+
+H+
+H+
 
 
 
