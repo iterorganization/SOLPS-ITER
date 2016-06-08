@@ -1705,7 +1705,7 @@ c
       integer nx, ny, ns
       character tab
       character*10 hlp_frm
-      integer is, is0, ncall
+      integer i, is, is0, ncall
       integer len_of_digits
       external len_of_digits
       
@@ -2133,7 +2133,14 @@ c
             write(98,'(a,i2,a)')
      .       '''b2stbc_isfeedback'''//tab//tab//'''',is0,''''
           end if
-          if (ffb_strata_4(is).ne.0) then
+          if (ffb_strata_4(is).le.0) then
+            do i = 1, nstrai_4
+              if(crcstra_4(i).eq.'C' .and. gpfc_4(is,i).gt.0.0_R8) then !{
+                ffb_strata_4(is) = i
+              end if !}
+            end do
+          end if
+          if (ffb_strata_4(is).gt.0) then
             write(99,'(a,i2,a)') 
      .       '''eirene_nesepm_istra'''//tab//'''',
      .       ffb_strata_4(is),''''

@@ -1,0 +1,7 @@
+#! /usr/bin/env tcsh
+
+foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:b2.*_save.parameters:'`)
+set recoverfile=`echo $i:t:r`
+mv -v `basename $i` ../$recoverfile
+end
+
