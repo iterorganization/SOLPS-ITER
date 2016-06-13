@@ -408,7 +408,7 @@ c	      print *,'m,k,iz,ix = ',m,k,iz,ix  !###
 c!###{
       print *,'Boundary zones: ',nznbndt
       print *
-      print *,'knd   zone ref pos  range   jdr jcp jc1 jc2 lcp lc1 lc2',
+      print *,'knd  zone  ref pos  range  jdr jcp jc1 jc2 lcp lc1 lc2',
      ,	' ls1 ls2'
       do k=1,nbndknd !{
       	print *

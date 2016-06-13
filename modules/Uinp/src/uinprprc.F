@@ -12,11 +12,11 @@ c======================================================================
       implicit none
 #include "uinput.inc"
       integer i,j,k,l,m,n,ic,ii,kk,k0,k1,k2,k3,k4,iib,iie,iir,ii1,ii2,
-     ,	ipt,irc,m_rct,m_rcn,n_ptc,l_hlp(mreac),igd,ngn,nrc,
+     ,	ipt,irc,m_rct,m_rcn,n_ptc,l_hlp(mreac),igd,ngn,nrc,jrc,niso,
      ,  ic0,ic9,ig,jspc,lknd,npass,nnn,nisotopes,gpass,group_found
       logical ex,e_hlp
       real hlp_ee,hlp_eb,hlp_e1,hlp_e2,hlp_fr
-      character*8 c,cc,c0*1,f_hlp*12
+      character*8 c,cc,ccc,c0*1,f_hlp*12
       logical h_collision
 c*** hlp_h shows the species equivalent to the default ones
       integer n_hlp_h,m_hlp_h
@@ -354,72 +354,97 @@ cxpb Now check if we need to rename some isotopes for AMDS reactions
             end do !}
           end do !}
           if (.not.h_collision) cycle
+          ccc=rctnptpr(irc)
           do i = 1, n_hlp_h !{
+            niso = 0
             do k = 1, m_hlp_h !{
-              if (.not.h_iso_used(k)) cycle
-              if (streql(rctnptpr(irc),hlp_h(i,k,1))) then !{
+              if (streql(ccc,hlp_h(i,k,1))) then !{
                 do j = 1, m_hlp_h !{
                   if (.not.h_iso_used(j)) cycle
-                  if (j.eq.k) cycle
-                  nrc = nrc+1
+                  niso = niso + 1
+                  if (niso.gt.1) then !{
+                    nrc = nrc+1
+                    jrc = nrc
+                  else !}{
+                    jrc = irc
+                  endif !}
 	          if(nrc.gt.mreac) then !{
                     write(0,*) 'Too many reaction datasets specified:',
      .                                                           nrc
 		    call xerrab
      .             ('==> Check the AMDS model and NREAC in KOPPLDIM.F')
 	          end if !}
-                  rctnptpr(nrc)=hlp_h(i,j,1)
-                  rctndbs(nrc)=rctndbs(irc)
-                  rctnchp(nrc)=rctnchp(irc)
-                  rctnrct(nrc)=rctnrct(irc)
-                  rctntyp(nrc)=rctntyp(irc)
-                  rctnptin(nrc)=rctnptin(irc)
-                  rctnpto1(nrc)=rctnpto1(irc)
-                  rctnpto2(nrc)=rctnpto2(irc)
-                  rctngrp(nrc)=rctngrp(irc)
-                  rctnmsp(nrc)=rctnmsp(irc)
-                  rctnmst(nrc)=rctnmst(irc)
-                  if (rctnmst(nrc).eq.k) then !{
-                    rctnmst(nrc)=j
-                  else if (rctnmst(nrc).eq.2*k) then !}{
-                    rctnmst(nrc)=2*j
+                  rctnptpr(jrc)=hlp_h(i,j,1)
+                  if (jrc.ne.irc) then !{
+                    rctndbs(jrc)=rctndbs(irc)
+                    rctnchp(jrc)=rctnchp(irc)
+                    rctnrct(jrc)=rctnrct(irc)
+                    rctntyp(jrc)=rctntyp(irc)
+                    rctngrp(jrc)=rctngrp(irc)
+                    do ii = 1, n_hlp_h !{
+                      do kk = 1, m_hlp_h !{
+                        if (streql(rctnptpr(irc),hlp_h(ii,kk,1))) then !{
+                          if (rctnmst(irc).eq.kk) then !{
+                            rctnmst(jrc)=j
+                          else if (rctnmst(irc).eq.2*kk) then !}{
+                            rctnmst(jrc)=2*j
+                          end if !}
+                        end if !}
+                      end do !}
+                    end do !}
+                  else !}{
+                    do ii = 1, n_hlp_h !{
+                      do kk = 1, m_hlp_h !{
+                        if (streql(ccc,hlp_h(ii,kk,1))) then !{
+                          if (rctnmst(irc).eq.kk) then !{
+                            rctnmst(jrc)=j
+                          else if (rctnmst(irc).eq.2*kk) then !}{
+                            rctnmst(jrc)=2*j
+                          end if !}
+                        end if !}
+                      end do !}
+                    end do !}
                   end if !}
                   do ii = 1, n_hlp_h !{
-                    if (streql(rctnpto1(nrc),hlp_h(ii,k,1)))
-     .                rctnpto1(nrc)=hlp_h(ii,j,1)
                     do kk = 1, m_hlp_h !{
-                      if (streql(rctnptin(nrc),hlp_h(ii,kk,1))) then !{
-                        rctnptin(nrc)=hlp_h(ii,j,1)
-                        if (rctnmsp(nrc).eq.kk) then !{
-                          rctnmsp(nrc)=j
-                        else if (rctnmsp(nrc).eq.2*kk) then !}{
-                          rctnmsp(nrc)=2*j
+                      if (streql(rctnpto1(irc),hlp_h(ii,kk,1))) then !{
+                        rctnpto1(jrc)=hlp_h(ii,j,1)
+                      end if !}
+                      if (streql(rctnptin(irc),hlp_h(ii,kk,1))) then !{
+                        rctnptin(jrc)=hlp_h(ii,j,1)
+                        if (rctnmsp(irc).eq.kk) then !{
+                          rctnmsp(jrc)=j
+                        else if (rctnmsp(irc).eq.2*kk) then !}{
+                          rctnmsp(jrc)=2*j
                         end if !}
                       end if !}
-                      if (streql(rctnpto2(nrc),hlp_h(ii,kk,1)))
-     .                  rctnpto2(nrc)=hlp_h(ii,j,1)
+                      if (streql(rctnpto2(irc),hlp_h(ii,kk,1)))
+     .                  rctnpto2(jrc)=hlp_h(ii,j,1)
                     end do !}
                   end do !}
-                  if (rctngrp(nrc).ne.0) then !{
-                    ign(nrc,1)=rctngrp(nrc)
-                    ign(nrc,1+k)=rctngrp(nrc)
-                    do kk = nnrctn+1, nrc-1 !{
-                      if (rctngrp(nrc).eq.ign(kk,1+k) .and.
-     .                    rctnptpr(nrc).eq.rctnptpr(kk)) then !{
-                        ign(nrc,1+j)=ign(kk,1+j)
+                  if (rctngrp(jrc).ne.0) then !{
+                    ign(jrc,1)=rctngrp(jrc)
+                    ign(jrc,1+k)=rctngrp(jrc)
+                    do kk = 1, nrc !{
+                      if (kk.eq.nrc .and. jrc.eq.irc) cycle
+                      if (rctngrp(jrc).eq.ign(kk,1+k) .and.
+     .                    rctnptpr(jrc).eq.rctnptpr(kk)) then !{
+                        ign(jrc,1+j)=ign(kk,1+j)
                       end if !}
                     end do !}
-                    if (ign(nrc,1+j).eq.0) then !{
+                    if (ign(jrc,1+j).eq.0) then !{
                       ngn=ngn+1
-                      ign(nrc,1+j)=ngn
+                      ign(jrc,1+j)=ngn
                     end if !}
-                    rctngrp(nrc)=ign(nrc,1+j)
+                    rctngrp(jrc)=ign(jrc,1+j)
                   end if !}
-                  rctnnmo1(nrc)=rctnnmo1(irc)
-                  rctnnmo2(nrc)=rctnnmo2(irc)
-                  rctndlte(nrc)=rctndlte(irc)
-                  rctnenr1(nrc)=rctnenr2(irc)
-                  rctnenr2(nrc)=rctnenr2(irc)
+                  if (jrc.ne.irc) then !{
+                    rctnnmo1(jrc)=rctnnmo1(irc)
+                    rctnnmo2(jrc)=rctnnmo2(irc)
+                    rctndlte(jrc)=rctndlte(irc)
+                    rctnenr1(jrc)=rctnenr2(irc)
+                    rctnenr2(jrc)=rctnenr2(irc)
+                  end if !}
                 end do !} j
               end if !}
             end do !} k
@@ -436,64 +461,106 @@ cxpb Now check if we need to rename some isotopes for AMDS reactions
             end do !}
           end do !}
           if (.not.h_collision) cycle
+          ccc=rctnptin(irc)
           do i = 1, n_hlp_h !{
+            niso = 0
             do k = 1, m_hlp_h !{
-              if (.not.h_iso_used(k)) cycle
-              if (streql(rctnptin(irc),hlp_h(i,k,1))) then !{
+              if (streql(ccc,hlp_h(i,k,1))) then !{
                 do j = 1, m_hlp_h !{
                   if (.not.h_iso_used(j)) cycle
-                  if (j.eq.k) cycle
-                  nrc = nrc+1
+                  niso = niso + 1
+                  if (niso.gt.1) then !{
+                    nrc = nrc+1
+                    jrc = nrc
+                  else !}{
+                    jrc = irc
+                  endif !}
 	          if(nrc.gt.mreac) then !{
                     write(0,*) 'Too many reaction datasets specified:',
      .                                                           nrc
 		    call xerrab
      .             ('==> Check the AMDS model and NREAC in KOPPLDIM.F')
 	          end if !}
-                  rctnptpr(nrc)=rctnptpr(irc)
-                  rctndbs(nrc)=rctndbs(irc)
-                  rctnchp(nrc)=rctnchp(irc)
-                  rctnrct(nrc)=rctnrct(irc)
-                  rctntyp(nrc)=rctntyp(irc)
-                  rctnptin(nrc)=hlp_h(i,j,1)
-                  rctnpto1(nrc)=rctnpto1(irc)
-                  rctnpto2(nrc)=rctnpto2(irc)
-                  rctngrp(nrc)=rctngrp(irc)
-                  rctnmsp(nrc)=rctnmsp(irc)
-                  rctnmst(nrc)=rctnmst(irc)
+                  rctnptin(jrc)=hlp_h(i,j,1)
+                  if (jrc.ne.irc) then !{
+                    rctnptpr(jrc)=rctnptpr(irc)
+                    rctndbs(jrc)=rctndbs(irc)
+                    rctnchp(jrc)=rctnchp(irc)
+                    rctnrct(jrc)=rctnrct(irc)
+                    rctntyp(jrc)=rctntyp(irc)
+                    rctnpto1(jrc)=rctnpto1(irc)
+                    rctnpto2(jrc)=rctnpto2(irc)
+                    rctngrp(jrc)=rctngrp(irc)
+                    rctnmst(jrc)=rctnmst(irc)
+                    do ii = 1, n_hlp_h !{
+                      do kk = 1, m_hlp_h !{
+                        if (streql(rctnptin(irc),hlp_h(ii,kk,1))) then !{
+                          if (rctnmsp(irc).eq.kk) then !{
+                            rctnmsp(jrc)=j
+                          else if (rctnmsp(irc).eq.2*kk) then !}{
+                            rctnmsp(jrc)=2*j
+                          end if !}
+                        end if !}
+                      end do !}
+                    end do !}
+                  else !}{
+                    do ii = 1, n_hlp_h !{
+                      do kk = 1, m_hlp_h !{
+                        if (streql(ccc,hlp_h(ii,kk,1))) then !{
+                          if (rctnmsp(irc).eq.kk) then !{
+                            rctnmsp(jrc)=j
+                          else if (rctnmsp(irc).eq.2*kk) then !}{
+                            rctnmsp(jrc)=2*j
+                          end if !}
+                        end if !}
+                      end do !}
+                    end do !}
+                  end if !}
                   do ii = 1, n_hlp_h !{
                     do kk = 1, m_hlp_h !{
-                      if (streql(rctnptin(irc),hlp_h(ii,kk,1))) then !{
-                        if (rctnmsp(irc).eq.kk) then !{
-                          rctnmsp(nrc)=j
-                        else if (rctnmsp(irc).eq.2*kk) then !}{
-                          rctnmsp(nrc)=2*j
-                        end if !}
-                      end if !}
                       if (streql(rctnpto2(irc),hlp_h(ii,kk,1)))
-     .                  rctnpto2(nrc)=hlp_h(ii,j,1)
+     .                  rctnpto2(jrc)=hlp_h(ii,j,1)
                     end do !}
                   end do !}
-                  if (rctngrp(nrc).ne.0) then !{
-                    ign(nrc,1)=rctngrp(nrc)
-                    ign(nrc,1+k)=rctngrp(nrc)
-                    do kk = nnrctn+1, nrc-1 !{
-                      if (rctngrp(nrc).eq.ign(kk,1+k) .and.
-     .                    rctnptin(nrc).eq.rctnptin(kk)) then !{
-                        ign(nrc,1+j)=ign(kk,1+j)
+                  if (rctngrp(irc).ne.0) then !{
+                    if (irc.eq.jrc) then !{
+                      do ii = 1, n_hlp_h !{
+                        do kk = 1, m_hlp_h !{
+                          if (streql(rctnptin(irc),hlp_h(ii,kk,1))) then !{
+                            ign(irc,1)=rctngrp(irc)
+                            ign(irc,1+kk)=rctngrp(irc)
+                          end if !}
+                        end do !}
+                      end do !}
+                    else !}{
+                      do ii = 1, n_hlp_h !{
+                        do kk = 1, m_hlp_h !{
+                          if (streql(rctnptin(irc),hlp_h(ii,kk,1))) then !{
+                            ign(jrc,1)=ign(irc,1)
+                            ign(jrc,1+kk)=ign(irc,1+kk)
+                          end if !}
+                        end do !}
+                      end do !}
+                      do kk = 1, nrc !{
+                        if (kk.eq.nrc .and. jrc.eq.irc) cycle
+                        if (ign(jrc,1).eq.ign(kk,1) .and.
+     .                      streql(rctnptin(jrc),rctnptin(kk)) .and.
+     .                      streql(rctnptpr(jrc),rctnptpr(kk))) then !{
+                          ign(jrc,1+j)=ign(kk,1+j)
+                        end if !}
+                      end do !}
+                      if (ign(jrc,1+j).eq.0) then !{
+                        ngn=ngn+1
+                        ign(jrc,1+j)=ngn
                       end if !}
-                    end do !}
-                    if (ign(nrc,1+j).eq.0) then !{
-                      ngn=ngn+1
-                      ign(nrc,1+j)=ngn
+                      rctngrp(jrc)=ign(jrc,1+j)
                     end if !}
-                    rctngrp(nrc)=ign(nrc,1+j)
                   end if !}
-                  rctnnmo1(nrc)=rctnnmo1(irc)
-                  rctnnmo2(nrc)=rctnnmo2(irc)
-                  rctndlte(nrc)=rctndlte(irc)
-                  rctnenr1(nrc)=rctnenr2(irc)
-                  rctnenr2(nrc)=rctnenr2(irc)
+                  rctnnmo1(jrc)=rctnnmo1(irc)
+                  rctnnmo2(jrc)=rctnnmo2(irc)
+                  rctndlte(jrc)=rctndlte(irc)
+                  rctnenr1(jrc)=rctnenr2(irc)
+                  rctnenr2(jrc)=rctnenr2(irc)
                 end do !} j
               end if !}
             end do !} k
