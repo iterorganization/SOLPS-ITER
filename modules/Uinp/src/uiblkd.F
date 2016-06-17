@@ -72,7 +72,7 @@ c*** Default boundary conditions
      ,  ((lmobndx(j,0,i),j=1,nsdb2),i=1,nbndknd) /
      /    nsdb2*1, nsdb2*3, nsdb2*1, nsdb2*1        /,
      ,  (beebndx(0,1,i),i=1,nbndknd), (beibndx(0,1,i),i=1,nbndknd)  /
-     /         1.e6, 2., 2*0.03     ,      1.e6, 3.5, 2*0.03      /,
+     /         1.e6, 1., 2*0.03     ,      1.e6, 1.5, 2*0.03      /,
      ,  (beebndx(0,2,i),i=1,nbndknd), (beibndx(0,2,i),i=1,nbndknd)  /
      /            4*0.              ,         4*0.              /,
      ,  (bpobndx(0,1,i),i=1,nbndknd), (bpobndx(0,2,i),i=1,nbndknd)  /
