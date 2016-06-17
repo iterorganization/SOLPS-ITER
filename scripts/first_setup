@@ -65,5 +65,12 @@ cd $SOLPSTOP/modules/solps4-5/config
   cp config.default.$COMPILER ${filename}
   echo "Created ${filename} from config.default.$COMPILER in $PWD: please modify if needed"
 }
+cd $SOLPSTOP/modules/amds/config
+[ -e ${filename} ] && { 
+  echo "${filename} already present in $PWD: nothing done"
+} || {
+  cp config.default.$COMPILER ${filename}
+  echo "Created ${filename} from config.default.$COMPILER in $PWD: please modify if needed"
+}
 cd $OLD_PWD
 [ -d $SOLPSTOP/lib/${HOST_NAME}.${COMPILER} ] || mkdir $SOLPSTOP/lib/${HOST_NAME}.${COMPILER}
