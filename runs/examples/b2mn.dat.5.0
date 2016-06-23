@@ -25,7 +25,6 @@
 'b2tfhe_mdf'          '0'
 'b2tfhi_mdf'          '0'
 'b2tfhe_vis_q'        '0.0'
-'b2tfnb_xfrhiehz'     '0.0'
 'b2mndr_na_min'       '1.0e-30'
 'b2mndr_na_new'       '1.0e14'
 'b2tfhe_fch_pTe'      '0.0'

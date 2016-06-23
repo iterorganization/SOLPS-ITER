@@ -481,12 +481,14 @@ cxpb
       volrecstart_4 = volrecstart
       volrecinc_4 = volrecinc
       volrecwt_4 = volrecwt
+#ifndef B25_EIRENE
 #ifndef NO_B2_CHEM_SPUT
       chemical_sputter_yield_4 = chemical_sputter_yield
       fchar_chemical_4 = fchar_chemical
       igass_chemical_4 = igass_chemical
       itsput_chemical_4 = itsput_chemical
       issput_chemical_4 = issput_chemical
+#endif
 #endif
 *   ..diagnostics
       ltime_4 = ltime
@@ -1391,7 +1393,7 @@ c Fill out b2mod_neutrals_namelist data
       end do
       write(*,*) 'sput_dst: ',sput_dst
       call alloc_b2mod_neutrals
-     . (nx, ny, ns, natm, nstrai_4, nsts, sput_dst)
+     . (nx, ny, ns, natm, nmol, nion, nstrai_4, nsts, sput_dst)
       nstrai = nstrai_4
       nflai = nfla_4
       crcstra(1:nstrai) = crcstra_4(1:nstrai)
