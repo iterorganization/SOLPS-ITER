@@ -2148,15 +2148,18 @@ The command
 \begin{verbatim}
     b2run b2yr
 \end{verbatim}
-will produce a \verb!b2yr.ps! file containing a series of
+will produce a \verb!b2yr.plt! file containing a series of
 plots detailing the dependencies of the atomic rates on density and temperature for
 each isonuclear sequence, as well as a \verb!b2yr.prt! ASCII file containing
 tables of these rates.
 
-The presence in the run directory of a file called \verb!ncar.cfg!, with the
+The \verb!b2yr.plt! file is an NCAR GKS file. The presence in the run directory of a file called \verb!ncar.cfg!, with the
 first character of the first line non-blank, will cause the program to use
 'publication-ready' settings for the graphs, namely thicker and more visible lines
-and an easier-to-read font.\index{ncar.cfg}
+and an easier-to-read font.\index{ncar.cfg} The files can be converted into a PostScript file by means of the command:
+\begin{verbatim}
+  ctrans -d ps.mono < b2yr.plt > b2yr.ps
+\end{verbatim}
 
 The user has the option when running the main code to rescale the rates given by \verb!b2ar!
 through the use of the \verb!b2.atomic_physics_rescale.parameters! file. See
