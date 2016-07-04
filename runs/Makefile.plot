@@ -117,7 +117,7 @@ else
 	cd b2pl.exe.dir ; ${TIME} ${B2OBJ}/b2pl.exe ; mv -f b2plot.ps .. ; rm -f $(target_pl) $(notdir $^) .quit
 endif
 ifndef STAND_ALONE
-	-rm b2pl.exe.dir/fort.44 b2pl.exe.dir/input.dat
+	-rm b2pl.exe.dir/fort.44 b2pl.exe.dir/input.dat b2pl.exe.dir/fort.75
 endif
 	-rmdir b2pl.exe.dir
 
@@ -140,7 +140,7 @@ else
 	cd b2pl.exe.dir ; ${DBX} ${INC} ${B2OBJ}/b2pl.exe ; mv -f b2plot.ps .. ; rm -f $(target_pl) $(notdir $^) .quit
 endif
 ifndef STAND_ALONE
-	-rm b2pl.exe.dir/fort.44 b2pl.exe.dir/input.dat
+	-rm b2pl.exe.dir/fort.44 b2pl.exe.dir/input.dat b2pl.exe.dir/fort.75
 endif
 	-rmdir b2pl.exe.dir
 
