@@ -13,9 +13,11 @@
     echo "                <Varid>.trg --> dg.trg"
     echo "                <Varid>.dgo --> dg.dgo"
     echo "           equilibrium file --> dg.equ"
-    echo "        and to the uinp directory:"
+    echo "        to the uinp directory:"
     echo "                <Varid>.dgo --> uinput.dg"
     echo "                <Varid>.trg --> uinput.trg"
+    echo "        and to the baserun directory:"
+    echo "                <Varid>.dgo --> param.dg"
     exit 4
 }
 
