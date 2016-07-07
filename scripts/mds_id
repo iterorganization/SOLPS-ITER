@@ -39,7 +39,7 @@ echo $svn_version
 if (! -d $SOLPSTOP/.git ) then
   set git_version="git:None"
 else
-  set git_version="git:`git describe --always --dirty --abbrev`"
+  set git_version="git:`cd $SOLPSTOP ; git describe --always --dirty --abbrev`"
   if ("$git_version" == '') set git_version="git:None"
 endif
 echo $git_version
