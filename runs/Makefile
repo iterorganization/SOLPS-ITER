@@ -224,7 +224,9 @@ ifndef STAND_ALONE
 	-cd b2co.exe.dir ; ln -s ../input.dat .
 endif
 	cd b2co.exe.dir ; ${TIME} ${B2OBJ}/b2co.exe `basename ${PLASMASTATE}` ; mv $(target_co) b2fstate .. ; move_save_files ; rm -f $(notdir $^) .quit
+ifndef STAND_ALONE
 	-[ -e b2co.exe.dir/input.dat ] && rm b2co.exe.dir/input.dat
+endif
 	-rmdir b2co.exe.dir
 
 $(target_uf) : b2fgmtry b2fparam b2fstate b2fplasma
