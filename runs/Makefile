@@ -77,6 +77,9 @@ triangdir := $(shell cd $(scandir)/baserun ; pwd)
 endif
 baserundir := $(shell cd $(scandir)/baserun ; pwd)
 savefiles := $(shell echo ${PLASMASTATE} | sed -e 's:plasmastate:b2.*_save.parameters:')
+ifeq ($(shell [ -e b2mn.exe.dir/fort.44.* ] && echo yes || echo no ),yes)
+savefiles += $(shell echo ${PLASMASTATE} | sed -e 's:plasmastate:fort.44:')
+endif
 
 echo:
 	@echo scandir=${scandir}

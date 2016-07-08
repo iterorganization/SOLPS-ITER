@@ -2,6 +2,10 @@
 
 foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:b2.*_save.parameters:'`)
 set recoverfile=`echo $i:t:r`
-mv -v `basename $i` ../$recoverfile
+if ($recoverfile != 'b2.dummy_save.parameters') mv -v `basename $i` ../$recoverfile
+end
+foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:fort.44:'`)
+set recoverfile=`echo $i:t:r`
+[ -e $recoverfile ] && mv -v `basename $i` ../$recoverfile || echo > /dev/null
 end
 
