@@ -11992,7 +11992,7 @@ temperature (in $K$) upon \btwoplot start-up.
     trgeast \index{b2plot, trgeast}   & Target elements pertaining to the East boundary \\
     trgibnd \index{b2plot, trgibnd}     & Target element index \\
     trgiz \index{b2plot, trgiz}     & Target depth index \\
-    trgl \index{b2plot, trgl}      & ANK target loading \\
+    trgl \index{b2plot, trgl}      & ANK target loading (obsolete, use {\em 100 wlld} instead) \\
     trgnorth \index{b2plot, trgnorth}  & Target elements pertaining to the North boundary \\
     trgr1 \index{b2plot, trgr1}     & Radial coordinate of first side of target element $(m)$ \\
     trgr2 \index{b2plot, trgr2}     & Radial coordinate of second side of target element $(m)$ \\
@@ -12194,11 +12194,26 @@ The higher the value of $<$level$>$, the more output is produced.
 {\bf debug} is an alias for {\bf debu}.
 
 The {\bf wlld} command requires an integer argument $<$ig$>$. Let
-$<$ig$>$ = KLM. If M.ne.0, then the file {\em radsrc.b2e} is produced,
-containing the radiation sources (in $MW/m^2$). If L.ne.0, then the
+$<$ig$>$ = JKLM. If M \textgreater 0, then the file \verb!radsrc.b2e! is produced,
+containing the radiation sources (in $MW/m^2$). If L \textgreater 0, then the
 file {\em wlld.dat} is produced, which contains the power loading
-from the plasma onto the Eirene walls. If K.ne.0, then a set of files
-is produced containing the power loading on the targets.
+from the plasma onto the Eirene walls (this description does not include
+splitting of the targets by the grid and is obsolete). If K \textgreater 0, then a
+set of files is produced containing the power loading on the targets,
+provided the necessary preparatory data exists in the DG model. These files
+are:\index{wall power loading}
+\begin{description}
+  \item[ld\_tg\_*.dat] provides the power loading at the targets, including contributions from plasma particles, neutrals, and radiation.
+  \item[fp\_tg\_*.dat] provides the particle fluxes at the targets
+  \item[peak\_power] provides the location and value of the peak power at the lower targets
+  \item[peak\_power\_u] provides the location and value of the peak power at the upper targets
+  \item[peak\_power\_w] gives the width of the power profiles
+\end{description}
+where the asterisk (*) stands for {\em i} (inner target), {\em iu} (inner upper target), {\em ou} (outer upper target) or {\em o} (outer target), respectively.
+If J \textgreater 0, then the codes produces a set of \verb!wlld_*.dat!,
+where the asterisk (*) is the name of each "plot zone" defined in the DG model.
+Each such file contains the power loading onto the set of walls defined in that
+plot zone. If LM = 99 and J \textgreater 0, additional diagnostics are produced that indicate the radiation split by isonuclear sequence.
 
 \section{Common errors}
 \index{b2plot, troubleshooting}
