@@ -99,9 +99,9 @@ $(target_fu) : b2fgmtry b2fparam b2fstate b2fplasmf
 	-rmdir b2fu.exe.dir
 
 ifndef STAND_ALONE
-$(target_pl) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates fort.33 fort.34 fort.35
+$(target_pl) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates b2ftrack fort.33 fort.34 fort.35
 else
-$(target_pl) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates
+$(target_pl) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates b2ftrack
 endif
 	rm -rf b2pl.exe.dir ; mkdir b2pl.exe.dir ; cp $^ b2pl.exe.dir
 	-cp param.dg b2pl.exe.dir/
@@ -122,9 +122,9 @@ endif
 	-rmdir b2pl.exe.dir
 
 ifndef STAND_ALONE
-$(target_pl.dbx) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates param.dg fort.33 fort.34 fort.35
+$(target_pl.dbx) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates b2ftrack param.dg fort.33 fort.34 fort.35
 else
-$(target_pl.dbx) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates param.dg
+$(target_pl.dbx) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates b2ftrack param.dg
 endif
 	rm -rf b2pl.exe.dir ; mkdir b2pl.exe.dir ; cp $^ b2pl.exe.dir
 	-cp param.dg b2pl.exe.dir/
