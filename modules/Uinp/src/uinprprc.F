@@ -13,7 +13,8 @@ c======================================================================
 #include "uinput.inc"
       integer i,j,k,l,m,n,ic,ii,kk,k0,k1,k2,k3,k4,iib,iie,iir,ii1,ii2,
      ,	ipt,irc,m_rct,m_rcn,n_ptc,l_hlp(mreac),igd,ngn,nrc,jrc,niso,
-     ,  ic0,ic9,ig,jspc,lknd,npass,nnn,nisotopes,gpass,group_found
+     ,  ic0,ic9,ig,jspc,lknd,npass,nnn,nisotopes,gpass,group_found,
+     ,  iii,kkk
       logical ex,e_hlp
       real hlp_ee,hlp_eb,hlp_e1,hlp_e2,hlp_fr
       character*8 c,cc,ccc,c0*1,f_hlp*12
@@ -160,29 +161,32 @@ cxpb Find out the number of passes to do
                   do i=1,n_hlp_h !{
 		    if(streql(rctdptin(j,l),hlp_h(i,nnn,2)))
      ,		              rctnptin(nnrctn)=hlp_h(i,nnn,1)
-		    if(streql(rctdpto2(j,l),hlp_h(i,nnn,2)))
-     ,		              rctnpto2(nnrctn)=hlp_h(i,nnn,1)
+		    if(streql(rctdpto1(j,l),hlp_h(i,nnn,2)))
+     ,		              rctnpto1(nnrctn)=hlp_h(i,nnn,1)
 		  end do !}
-                  if (rctnmsp(nnrctn).eq.1) then !{
-                    rctnmsp(nnrctn)=nnn
-                  else if (rctnmsp(nnrctn).eq.2) then !}{
-                    rctnmsp(nnrctn)=2*nnn
-                  end if !}
 	        end if !}
                 if(.not.streql(c,cc)) then !{ D or T isotope reactants
                   do i=1,n_hlp_h !{
+                    if(streql(rctdpto2(j,l),hlp_h(i,ic,2)))
+     ,                        rctnpto2(nnrctn)=hlp_h(i,ic,1)
                     if(streql(rctdpto1(j,l),hlp_h(i,ic,2)))
      ,                        rctnpto1(nnrctn)=hlp_h(i,ic,1)
-                    if(streql(rctdtyp(j,l),'DS')) then !{
-                      if(streql(rctdpto2(j,l),hlp_h(i,ic,2)))
-     ,                          rctnpto2(nnrctn)=hlp_h(i,ic,1)
-                     end if !}
                   end do !}
-                  if (rctnmst(nnrctn).eq.1) then !{
-                    rctnmst(nnrctn)=ic
-                  else if (rctnmst(nnrctn).eq.2) then !{
-                    rctnmst(nnrctn)=2*ic
-                  end if !}
+                end if !}
+                if(streql(rctntyp(nnrctn),'CX').or.
+     .             streql(rctntyp(nnrctn),'EL')) then !{
+                  do i = 1,n_hlp_h !{
+                    do kk = 1,m_hlp_h !{
+                      if(streql(rctnptin(nnrctn),hlp_h(i,kk,1))) then !{
+                        do ii = 1,n_hlp_h !{
+                          do k = 1,m_hlp_h !{
+                            if(streql(rctnpto1(nnrctn),hlp_h(ii,k,1)))
+     ,                                rctnpto1(nnrctn)=hlp_h(ii,kk,1)
+                          end do !}
+                        end do !}
+                      end if !}
+                    end do !}
+                  end do !}
                 end if !}
 	        rctndlte(nnrctn)=rctddlte(j,l)
 	        rctntmin(nnrctn)=rctdtmin(j,l)
@@ -293,11 +297,6 @@ cxpb Now check if we need to rename some isotopes for AMDS reactions
 	      do k=1,m_hlp_h !{
 	        if(streql(rctnptpr(irc),hlp_h(i,k,1))) then !{
        	          rctnptpr(irc)=hlp_h(i,ii,1)
-                  if (rctnmst(irc).eq.k) then !{
-                    rctnmst(irc)=ii
-                  else if (rctnmst(irc).eq.2*k) then !}{
-                    rctnmst(irc)=2*ii
-                  end if !}
                 end if !}
               end do !}
             end do !}
@@ -308,11 +307,6 @@ cxpb Now check if we need to rename some isotopes for AMDS reactions
 	      do k=1,m_hlp_h !{
 	        if(streql(rctnptin(irc),hlp_h(i,k,1))) then !{
        	          rctnptin(irc)=hlp_h(i,ii,1)
-                  if (rctnmsp(irc).eq.k) then !{
-                    rctnmsp(irc)=ii
-                  else if (rctnmsp(irc).eq.2*k) then !}{
-                    rctnmsp(irc)=2*ii
-                  end if !}
                 end if !}
               end do !}
             end do !}
@@ -381,29 +375,8 @@ cxpb Now check if we need to rename some isotopes for AMDS reactions
                     rctnrct(jrc)=rctnrct(irc)
                     rctntyp(jrc)=rctntyp(irc)
                     rctngrp(jrc)=rctngrp(irc)
-                    do ii = 1, n_hlp_h !{
-                      do kk = 1, m_hlp_h !{
-                        if (streql(rctnptpr(irc),hlp_h(ii,kk,1))) then !{
-                          if (rctnmst(irc).eq.kk) then !{
-                            rctnmst(jrc)=j
-                          else if (rctnmst(irc).eq.2*kk) then !}{
-                            rctnmst(jrc)=2*j
-                          end if !}
-                        end if !}
-                      end do !}
-                    end do !}
-                  else !}{
-                    do ii = 1, n_hlp_h !{
-                      do kk = 1, m_hlp_h !{
-                        if (streql(ccc,hlp_h(ii,kk,1))) then !{
-                          if (rctnmst(irc).eq.kk) then !{
-                            rctnmst(jrc)=j
-                          else if (rctnmst(irc).eq.2*kk) then !}{
-                            rctnmst(jrc)=2*j
-                          end if !}
-                        end if !}
-                      end do !}
-                    end do !}
+                    rctnmst(jrc)=rctnmst(irc)
+                    rctnmsp(jrc)=rctnmsp(irc)
                   end if !}
                   do ii = 1, n_hlp_h !{
                     do kk = 1, m_hlp_h !{
@@ -412,11 +385,6 @@ cxpb Now check if we need to rename some isotopes for AMDS reactions
                       end if !}
                       if (streql(rctnptin(irc),hlp_h(ii,kk,1))) then !{
                         rctnptin(jrc)=hlp_h(ii,j,1)
-                        if (rctnmsp(irc).eq.kk) then !{
-                          rctnmsp(jrc)=j
-                        else if (rctnmsp(irc).eq.2*kk) then !}{
-                          rctnmsp(jrc)=2*j
-                        end if !}
                       end if !}
                       if (streql(rctnpto2(irc),hlp_h(ii,kk,1)))
      .                  rctnpto2(jrc)=hlp_h(ii,j,1)
@@ -492,34 +460,32 @@ cxpb Now check if we need to rename some isotopes for AMDS reactions
                     rctnpto2(jrc)=rctnpto2(irc)
                     rctngrp(jrc)=rctngrp(irc)
                     rctnmst(jrc)=rctnmst(irc)
-                    do ii = 1, n_hlp_h !{
-                      do kk = 1, m_hlp_h !{
-                        if (streql(rctnptin(irc),hlp_h(ii,kk,1))) then !{
-                          if (rctnmsp(irc).eq.kk) then !{
-                            rctnmsp(jrc)=j
-                          else if (rctnmsp(irc).eq.2*kk) then !}{
-                            rctnmsp(jrc)=2*j
-                          end if !}
-                        end if !}
-                      end do !}
-                    end do !}
-                  else !}{
-                    do ii = 1, n_hlp_h !{
-                      do kk = 1, m_hlp_h !{
-                        if (streql(ccc,hlp_h(ii,kk,1))) then !{
-                          if (rctnmsp(irc).eq.kk) then !{
-                            rctnmsp(jrc)=j
-                          else if (rctnmsp(irc).eq.2*kk) then !}{
-                            rctnmsp(jrc)=2*j
-                          end if !}
-                        end if !}
-                      end do !}
-                    end do !}
+                    rctnmsp(jrc)=rctnmsp(irc)
                   end if !}
                   do ii = 1, n_hlp_h !{
                     do kk = 1, m_hlp_h !{
                       if (streql(rctnpto2(irc),hlp_h(ii,kk,1)))
      .                  rctnpto2(jrc)=hlp_h(ii,j,1)
+                    end do !}
+                  end do !}
+                  do ii = 1, n_hlp_h !{
+                    do kk = 1, m_hlp_h !{
+                      if (streql(rctnptin(jrc),hlp_h(ii,kk,1))) then !{
+                        do iii = 1, n_hlp_h !{
+                          do kkk = 1, m_hlp_h !{
+                            if (streql(rctnpto1(jrc),hlp_h(iii,kkk,1)))
+     .                                 rctnpto1(jrc)=hlp_h(iii,kk,1)
+                          end do !}
+                        end do !}
+                      end if !}
+                      if (streql(rctnptpr(jrc),hlp_h(ii,kk,1))) then !{
+                        do iii = 1, n_hlp_h !{
+                          do kkk = 1, m_hlp_h !{
+                            if (streql(rctnpto2(jrc),hlp_h(iii,kkk,1)))
+     .                                 rctnpto2(jrc)=hlp_h(iii,kk,1)
+                          end do !}
+                        end do !}
+                      end if !}
                     end do !}
                   end do !}
                   if (rctngrp(irc).ne.0) then !{

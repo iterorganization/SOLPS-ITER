@@ -201,12 +201,12 @@ e
 H+
 H+
 product1
-H+
+H 
 H
 H2+
 H
 He+
-H+
+H 
 He
 He
 He
@@ -218,15 +218,15 @@ H+
 H
 C
 C+
-C+
-C+
+H 
+H 
 product2
-H
+H+
 
 
 H+
 
-H
+H+
 H+
 H+
 H+
@@ -238,8 +238,8 @@ H+
 
 
 2e
-H
-H
+C+
+C+
 nprdct1
 
 2
