@@ -13111,7 +13111,9 @@ If $n = 0$, restores the default value.
 Toggles mapping to midplane coordinate for 2-D plots. The midplane
 is assumed to be located at $ix=jxa$. See commands {\bf omp} (section \ref{sec:omp}) and
 {\bf jxa} (section \ref{sec:omp}) for setting and knowing its value.
-
+Special cases: For double-null cases, HFS data is mapped to the inner midplane
+$ix=jxi$, and for private flux data, it is mapped to the distance below the
+X-point.
 
 \subsection{Graph appearance commands}\label{sec:graphappearance}
 \index{b2plot, graph appearance commands}

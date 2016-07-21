@@ -1,10 +1,11 @@
 #! /bin/csh -f
 echo "# `pwd`"
 pipe_run.log | \
-  egrep -a 'b2-step-cpu|EIRENE USED' | \
+  egrep -a 'b2-step-cpu|EIRENE USED'  | \
   awk '/EIRENE USED/{eir+=$3;seir+=$3}\
        NF==2&&/b2-step-cpu/{i++;print i,$2,eir;cpu+=$2;eir=0}\
        NF==4&&/b2-step-cpu/{i++;print i,$2,$4,eir;cpu+=$2;elapsed+=$4;eir=0}\
        NF==10&&/b2-step-cpu/{i++;print i,$3,$5,eir;cpu+=$3;elapsed+=$5;eir=0}\
+       NF==12&&/b2-step-cpu/{i++;print i,$3,$5,eir;cpu+=$3;elapsed+=$5;eir=0}\
        END{if (elapsed>0) {print "Total cpu",cpu,"Total elapsed",elapsed,"("cpu/elapsed*100"%)"}\
            else {if (cpu>0) {print "Total cpu",cpu}}; if(seir>0 && cpu>0) {print "B2 fraction",1-seir/cpu,"  EIRENE fraction",seir/cpu}}'
