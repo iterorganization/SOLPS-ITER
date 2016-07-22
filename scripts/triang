@@ -110,12 +110,33 @@ griddir=${CARRE_GRIDDIR-$SOLPSTOP/modules/Carre/meshes/${DEVICE-iter}}
 modelname=`lln dg.dgo`
 dgname=`basename $modelname`
 carre_stem=`echo $dgname | sed -e 's|\.dgo||' `
-n=1
-set -- $griddir/$carre_stem.v[0-9][0-9][0-9].geo
-n=`ls $griddir/$carre_stem.v[0-9][0-9][0-9].geo | tail -1`
-n=${n#*/$carre_stem.v}
-n=${n%.geo}
-carrename=$carre_stem.v$n.geo
+[ -d $griddir ] && {
+  n=1
+  set -- $griddir/$carre_stem.v[0-9][0-9][0-9].geo
+  [ -e $griddir/$carre_stem.v[0-9][0-9][0-9].geo ] && {
+    n=`ls $griddir/$carre_stem.v[0-9][0-9][0-9].geo | tail -1`
+    n=${n#*/$carre_stem.v}
+    n=${n%.geo}
+  } || {
+    n=000
+  }
+  carrename=$carre_stem.v$n.geo
+} || {
+  print -u2 -n -- "The directory $griddir does not exist. Create it? (y/n)"
+  while true; do {
+    read u
+    { case $u in
+       ( y|Y ) mkdir -p "$griddir" || {
+               print -u2 -- "Unable to create the directory. Check the permissions in ${griddir}%/*"
+               break 2
+               }; break;;
+       ( n|N ) ; break 2;;
+       (  *  ) print -u2 -n -- "Please answer with either y or n: ";;
+    esac; }
+  }; done
+  n=000
+  carrename=$carre_stem.v$n.geo
+}
 
 templatedir=$SOLPSTOP/modules/DivGeo/device/${DEVICE-iter}/templates
 
