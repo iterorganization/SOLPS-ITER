@@ -1,5 +1,8 @@
 setenv GLI_HOME /common/SOLPS-ITER/OBJECTCODE/ifort64/gks
 setenv PATH ${PATH}:/common/SOLPS-ITER/OBJECTCODE/ifort64/NETCDF/bin
 setenv NCARG_ROOT /common/SOLPS-ITER/OBJECTCODE/ifort64/NCARG
+if(! $?FLUSH) then
+  setenv FLUSH $SIMDIR/flush
+endif
 # load modules
 module load ifort

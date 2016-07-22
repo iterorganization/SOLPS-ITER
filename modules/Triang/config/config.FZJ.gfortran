@@ -20,7 +20,7 @@ EQUIVS 		=
 
 #CPP	 	= -/lib/cpp -traditional
 CPP	 	=
-CPPOPTS 	= -P -I${srcdir} ${EQUIVS}
+CPPOPTS 	= -P -ffreestanding -I${srcdir} ${EQUIVS}
 SED 		=
 LINK_MOD 	= 
 
