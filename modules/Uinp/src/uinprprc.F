@@ -641,7 +641,8 @@ c***  check the group and find the related reaction - if any
                   write(0,'(a,i2,a,i3)')
      ,             'Wrong number of reactions (',k2+1,
      ,                                      ') in the group ',ig
-                  call xerrab ('--- error found in reaction specification')
+                  call xerrab
+     ,             ('--- error found in reaction specification')
                 end if !}
 
                 k2=0
