@@ -13,6 +13,9 @@ module load scalapack
 # Environment variables
 setenv DEVICE jet
 setenv GLI_HOME /common/SOLPS-ITER/OBJECTCODE/pgf90/gks
+if(! $?SIMDIR) then
+  setenv SIMDIR /u/sim
+endif
 if(! $?FLUSH) then
   setenv FLUSH $SIMDIR/flush
 endif
