@@ -2469,6 +2469,8 @@ which contains
   \item[15] Prescribe the value of the parallel velocity as a function of poloidal coordinate
   \item[16] Prescribe the average value of the parallel velocity
   {\tt MOMPAR(,,1)} specifies the parallelv elocity in $m.s^{-1}$
+  \item[17] leakage option for parallel momentum, {\tt MOMPAR(,,1)} specifies
+  the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s, a} m_a n_a u_a$
   \end{description}
 \item[BCENE]\index{BCENE} {\tt integer array, length NBC}, specifying
   the type of electron energy or temperature boundary condition for
@@ -2510,7 +2512,7 @@ which contains
   flux density per temperature in $W.m^{-2}.J^{-1}$ (the temperature
   here in $J$)
   \item[14] leakage option for electron energy, {\tt ENEPAR(,1)} specifies
-  the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s, \mbox{collective}} n_e$
+  the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s, \mbox{collective}} n_e T_e$
   \item[15] not used
   \item[16] Feedback boundary condition with constant temperature,
     {\tt ENEPAR(,1)} specifies the power flux in $W$ across the flux surface
@@ -2584,7 +2586,7 @@ which contains
   to temperature, {\tt ENIPAR(,1)} specifies the energy flux density
   per temperature in $W.m^{-2}.J^{-1}$ (the temperature here in $J$)
   \item[14] leakage option for ion energy, {\tt ENIPAR(,1)} specifies
-  the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s,a} n_a$
+  the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s,\mbox{collective}} n_i T_i$
   \item[15] not used
   \item[16] Feedback boundary condition with constant temperature,
     {\tt ENIPAR(,1)} specifies the power flux in $W$ across the flux surface
