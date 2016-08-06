@@ -37,7 +37,7 @@
   NCARG_ROOT ?=
       NAGDIR ?=
  MDSPLUS_DIR ?=
-
+PARAVIEW_DIR ?= /home/ITER/kosl/solps-gui/staging/paraview/5.1.0
 
 #
 # Variables of linking, using pkg-config
@@ -54,13 +54,80 @@ LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 LD_MPI     = -L/work/imas/opt/libibverbs/1.1.4/lib `pkg-config mpich2-ch3 --libs`
 LD_UAL     = `pkg-config imas-ifort --libs`
+PARAVIEW_MAJOR_VERSION = 5.1
 
+# 	-lvtkPVPythonCatalyst-pv${PARAVIEW_MAJOR_VERSION} \
+
+LD_CATALYST= /home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1/libvtkPVPythonCatalyst-pv5.1.so.1 /home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1/libvtkPVCatalyst-pv5.1.so.1 /home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1/libvtkPVServerManagerApplication-pv5.1.so.1 /home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1/libvtkPVServerManagerCore-pv5.1.so.1 /home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1/libvtkPVServerImplementationCore-pv5.1.so.1 /home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1/libvtkPVClientServerCoreCore-pv5.1.so.1 /home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1/libvtkFiltersParallel-pv5.1.so.1 /home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1/libvtkFiltersExtraction-pv5.1.so.1 /home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1/libvtkFiltersStatistics-pv5.1.so.1 /home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1/libvtkImagingFourier-pv5.1.so.1 /home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1/libvtkImagingCore-pv5.1.so.1 /home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1/libvtkalglib-pv5.1.so.1 /home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1/libvtkFiltersModeling-pv5.1.so.1 /home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1/libvtkRenderingCore-pv5.1.so.1 /home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1/libvtkFiltersGeometry-pv5.1.so.1 /home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1/libvtkFiltersSources-pv5.1.so.1 /home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1/libvtkFiltersGeneral-pv5.1.so.1 /home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1/libvtkCommonComputationalGeometry-pv5.1.so.1 /home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1/libvtkCommonColor-pv5.1.so.1 /home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1/libvtkFiltersProgrammable-pv5.1.so.1 /home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1/libvtkPVVTKExtensionsCore-pv5.1.so.1 /home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1/libvtkPVCommon-pv5.1.so.1 /home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1/libvtkClientServer-pv5.1.so.1 /home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1/libvtkIOXMLParser-pv5.1.so.1 /home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1/libvtkFiltersCore-pv5.1.so.1 /home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1/libvtkParallelCore-pv5.1.so.1 /home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1/libvtkIOLegacy-pv5.1.so.1 /home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1/libvtkIOCore-pv5.1.so.1 /home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1/libvtkCommonExecutionModel-pv5.1.so.1 /home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1/libvtkCommonDataModel-pv5.1.so.1 /home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1/libvtkCommonSystem-pv5.1.so.1 /home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1/libvtkCommonTransforms-pv5.1.so.1 /home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1/libvtkCommonMisc-pv5.1.so.1 /home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1/libvtkCommonMath-pv5.1.so.1 /home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1/libprotobuf.so -lpthread /home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1/libvtkPythonInterpreter-pv5.1.so.1 /home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1/libvtkWrappingPython27Core-pv5.1.so.1 /home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1/libvtkCommonCore-pv5.1.so.1 /work/imas/opt/python/2.7/11/lib/libpython2.7.so /home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1/libvtksys-pv5.1.so.1 -ldl -lstdc++ -Wl,-rpath,/home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1:/work/imas/opt/python/2.7/11/lib:/home/ITER/kosl/solps-gui/staging/qt/4.8.7/lib:/work/imas/opt/libffi/3.2.1/lib64:/work/imas/opt/openssl/1.0.2g/lib -Wl,-rpath-link,/home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1:/home/ITER/kosl/solps-gui/staging/qt/4.8.7/lib:/work/imas/opt/libffi/3.2.1/lib64:/work/imas/opt/openssl/1.0.2g/lib
+
+
+
+CATALYST_LIBS2 = \
+/home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1/libvtkPVPythonCatalyst-pv5.1.so \
+	-lvtkIOInfovis-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkIOXML-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkRenderingVolumeOpenGL-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkRenderingVolume-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkexpat-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkRenderingOpenGL-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkUtilitiesPythonInitializer-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkPVAnimation-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkIOMovie-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkoggtheora-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkFiltersFlowPaths-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkFiltersPython-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkFiltersTexture-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkPVCatalyst-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkPVServerManagerApplication-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkPVServerManagerCore-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkPVServerImplementationCore-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkPVClientServerCoreCore-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkFiltersParallel-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkFiltersExtraction-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkFiltersStatistics-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkFiltersModeling-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkFiltersGeometry-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkFiltersSources-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkFiltersGeneral-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkFiltersProgrammable-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkFiltersCore-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkImagingFourier-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkImagingCore-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkalglib-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkRenderingCore-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkCommonComputationalGeometry-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkCommonColor-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkCommonExecutionModel-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkCommonDataModel-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkCommonSystem-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkCommonTransforms-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkCommonMisc-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkCommonMath-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkCommonCore-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkPVVTKExtensionsCore-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkPVCommon-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkClientServer-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkIOXMLParser-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkIOLegacy-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkIOCore-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkParallelCore-pv${PARAVIEW_MAJOR_VERSION} \
+	-lprotobuf \
+	-lvtkPythonInterpreter-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtkWrappingPython27Core-pv${PARAVIEW_MAJOR_VERSION} \
+	-lvtksys-pv${PARAVIEW_MAJOR_VERSION} \
+
+#	-lpython2.7
+#	-lvtkParallelMPI-pv${PARAVIEW_MAJOR_VERSION} \
+
+LD_CATALYST3 = -rdynamic -L${PARAVIEW_DIR}/lib/paraview-${PARAVIEW_MAJOR_VERSION} \
+	-Wl,-rpath,${PARAVIEW_DIR}/lib/paraview-${PARAVIEW_MAJOR_VERSION} \
+	-Wl,-rpath-link,${PARAVIEW_DIR}/lib/paraview-${PARAVIEW_MAJOR_VERSION}
 
 #
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNCAR4 -DMDSPLUS -DIMAS -DNO_F01AAF -DCDF_MOVIE -DNETCDF4_3
+SOLPS_CPP      = -DNCAR4 -DMDSPLUS -DIMAS -DNO_F01AAF -DCDF_MOVIE -DNETCDF4_3 -DCATALYST
 B25_DEFINES    =
 EIRENE_DEFINES =
 MPI_CPP        = `pkg-config mpich2-ch3 --cflags`
@@ -78,6 +145,7 @@ export GLI_HOME
 export NCARG_ROOT
 export NAGDIR
 export MDSPLUS_DIR
+export PARAVIEW_DIR
 
 export LD_NETCDF
 export LD_MSCL
@@ -89,6 +157,8 @@ export LD_MDSPLUS
 export LD_SONNET
 export LD_MPI
 export LD_UAL
+export LD_CATALYST
+export CATALYST_LIBS
 
 export SOLPS_CPP
 export B25_DEFINES
