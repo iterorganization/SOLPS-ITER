@@ -1060,6 +1060,7 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[awk.plot\_mesh \#1]\index{awk.plot\_mesh} Outputs the mesh specified as \#1 in a form usable for \verb!xyplot!.
   \item[awk.transpose]\index{awk.transpose} Transposes an array of data.
   \item[convert\_from\_solps4.3 \#1]\index{convert\_from\_solps4.3} Converts run number \#1 from \$\verb!DEVICE! from the SOLPS4.3 ITER archive to a \SOLPSITER run in directory \$\verb!SOLPSTOP\runs\!\$\verb|DEVICE\|\#1 .
+  \item[fixbb]\index{fixbb} A utility script to properly define the bounding box of PostScript files.
   \item[grf]\index{grf} A more effective version of "grep" when searching for use of a variable in source code.
   \item[plot\_cps \#1]\index{plot\_cps} Copies \verb!gnuplot.cmd! to
     \verb!gnuplot_cps.cmd!, modifying it so that colour plotting occurs to \#1
@@ -3185,7 +3186,7 @@ quantities that can be plotted in this way.
 \section{b2pl, the plotting program}
 \index{b2pl}\index{b2plot}\label{sec:b2pl}
 
-%%sed 's:^     [^ ]:@@@:' $SOLPSTOP/modules/B2.5/src/b2plot/b2plot.F | awk 'BEGIN{save=""}/^[^@][^@][^@]/&&save!=""{print save}/^[^@][^@][^@]/{save=$0}/^@@@/{save=save" "$0}END{print save}' | sed 's; *@@@ *;;g' | egrep "case *\( *'|description *=" | sed -e "s;.*case *('\(.*\)');cmd: \1;" -e "s; *description *= *'\(.*\)';desc: \1;" -e "s;' //';;" | awk -F: 'BEGIN{save=""}/^cmd/&&save!=""{print save}/^cmd:/{save=$2}/^desc/{save=save"\t"$2}END{print save}' | sed 's:\! ::' | sed "s:',':,:g" | sed "s:'':':g" | expand >! b2plot.commands
+%%sed 's:^     [^ ]:@@@:' $SOLPSTOP/modules/B2.5/src/b2plot/b2plot.F | awk 'BEGIN{save=""}/^[^@][^@][^@]/&&save!=""{print save}/^[^@][^@][^@]/{save=$0}/^@@@/{save=save" "$0}END{print save}' | sed 's; *@@@ *;;g' | egrep "case *\( *'|description *=" | sed -e "s;.*case *('\(.*\)');cmd: \1;" -e "s; *description *= *'\(.*\)';desc: \1;" -e "s;' //';;" | awk -F: 'BEGIN{save=""}/^cmd/&&save!=""{print save}/^cmd:/{save=$2}/^desc/{save=save"\t "$2}END{print save}' | sed 's:\! ::' | sed "s:',':,:g" | sed "s:'':':g" | expand >! b2plot.commands
 
 The following commands apply:
 
@@ -3198,7 +3199,8 @@ of the quantities have changed name between \SOLPSfour and \SOLPSfive versions,
 whereas \verb!ix! ran from \verb!0! to \verb!nx+1! it now runs from
 \verb!-1! to \verb!nx!, \verb!iy! which ran from \verb!0! to \verb!ny+1!
 now runs from \verb!-1! to \verb!ny! and \verb!is! which ran from \verb!1!
-to \verb!ns! now runs from \verb!0! to \verb!ns-1!.
+to \verb!ns! now runs from \verb!0! to \verb!ns-1!. \SOLPSITER uses the same
+indexing and naming conventions as \SOLPSfivens.
 
 \begin{table}[hbtp]
   \leavevmode
@@ -11162,18 +11164,21 @@ when calculating derived data.
     isgt     & \index{b2plot, isgt} Species index {\em is} is greater than \\
     isle     & \index{b2plot, isle} Species index {\em is} is less than or equal to \\
     islt     & \index{b2plot, islt} Species index {\em is} is less than \\
+    isne     & \index{b2plot, isne} Species index {\em is} is not equal to \\
     ix       & \index{b2plot, ix} Poloidal cell index {\em ix} (normalized) \\
     ixeq     & \index{b2plot, ixeq} Poloidal cell index {\em ix} is equal to \\
     ixge     & \index{b2plot, ixge} Poloidal cell index {\em ix} is greater than or equal to \\
     ixgt     & \index{b2plot, ixgt} Poloidal cell index {\em ix} is greater than \\
     ixle     & \index{b2plot, ixle} Poloidal cell index {\em ix} is less than or equal to \\
     ixlt     & \index{b2plot, ixlt} Poloidal cell index {\em ix} is less than \\
+    ixne     & \index{b2plot, ixne} Poloidal cell index {\em ix} is not equal to \\
     iy       & \index{b2plot, iy} Radial cell index {\em iy} (normalized) \\
     iyeq     & \index{b2plot, iyeq} Radial cell index {\em iy} is equal to \\
     iyge     & \index{b2plot, iyge} Radial cell index {\em iy} is greater than or equal to \\
     iygt     & \index{b2plot, iygt} Radial cell index {\em iy} is greater than \\
     iyle     & \index{b2plot, iyle} Radial cell index {\em iy} is less than or equal to \\
     iylt     & \index{b2plot, iylt} Radial cell index {\em iy} is less than \\
+    iyne     & \index{b2plot, iyne} Radial cell index {\em iy} is not equal to \\
     joul     & \index{b2plot, joul} Joule heating term {\em b2sihs\_joule} $(W)$ \\
     ke       & \index{b2plot, ke} Parallel kinetic energy $(J)$ \\
     kye      & \index{b2plot, kye} Electron heat diffusivity $\chi_e$ $(m^2.s^{-1})$ \\
@@ -11297,13 +11302,13 @@ when calculating derived data.
     up       & \index{b2plot, up} Parallel velocity ({\em up}) $(m.s^{-1})$ (\SOLPSfour runs) \\
     up       & \index{b2plot, up} Poloidal velocity ({\em up}) $(m.s^{-1})$ (\SOLPSfive runs) \\
     uu       & \index{b2plot, uu} Poloidal velocity ({\em uu}) $(m.s^{-1})$ (\SOLPSfour runs) \\
-    vadia.x  & \index{b2plot, vadia.x} Poloidal component of divergent part of diamagnetic drift velocity $(m.s^{-1})$ \\
-    vadia.y  & \index{b2plot, vadia.y} Radial component of divergent part of diamagnetic drift velocity $(m.s^{-1})$ \\
+    vadia.x  & \index{b2plot, vadia.x} Poloidal component of divergent part of ion diamagnetic drift velocity $(m.s^{-1})$ \\
+    vadia.y  & \index{b2plot, vadia.y} Radial component of divergent part of ion diamagnetic drift velocity $(m.s^{-1})$ \\
     valfven  & \index{b2plot, valfven} Alfv{\'e}n velocity $v_{\mbox{\small{\it Alfv{\'e}n}}}$ $(m.s^{-1})$ \\
     vcon     & \index{b2plot, vcon} $v_{con}$ $(m.s^{-1})$ (\SOLPSfour runs) \\
     vd       & \index{b2plot, vd} Radial component of drift velocity $(m.s^{-1})$ \\
-    vexb.x   & \index{b2plot, vexb.x} Poloidal component of ${\bf E} \times {\bf B}$ drift velocity $(m.s^{-1})$ \\
-    vexb.y   & \index{b2plot, vexb.y} Radial component of ${\bf E} \times {\bf B}$ drift velocity $(m.s^{-1})$ \\
+    vexb.x   & \index{b2plot, vexb.x} Poloidal component of ion ${\bf E} \times {\bf B}$ drift velocity $(m.s^{-1})$ \\
+    vexb.y   & \index{b2plot, vexb.y} Radial component of ion ${\bf E} \times {\bf B}$ drift velocity $(m.s^{-1})$ \\
     visa     & \index{b2plot, visa} Viscous heating term {\em b2sihs\_visa} $(W)$ \\
     visc     & \index{b2plot, visc} Viscosity $(m.kg^{-1}.s^{-1})$ \\
     vlax     & \index{b2plot, vlax} Poloidal pinch velocity $(m.s^{-1})$ \\
@@ -11359,8 +11364,11 @@ where the topology is that of the computational domain. This means that for a ce
 the left face is shared with $(ix-1,iy)$, the right face with $(ix+1,iy)$, the top face with $(ix,iy+1)$,
 and the bottom face with $(ix,iy-1)$.
 
-The arrays {\bf ixlt}, {\bf ixeq}, {\bf ixgt}, {\bf iylt}, {\bf iyeq}, {\bf iygt},
-{\bf islt}, {\bf iseq}, and {\bf isgt} also all require an integer argument $<$i$>$,
+The arrays
+{\bf ixlt}, {\bf ixle}, {\bf ixeq}, {\bf ixne}, {\bf ixgt}, {\bf ixge},
+{\bf iylt}, {\bf iyle}, {\bf iyeq}, {\bf iyne}, {\bf iygt}, {\bf iyge},
+{\bf islt}, {\bf isle}, {\bf iseq}, {\bf isne}, {\bf isgt}, and {\bf isge}
+also all require an integer argument $<$i$>$,
 with which the logical comparison is done. If the comparison test is true, the arrays
 will contain 1.0, otherwise they will contain zero.
 
@@ -11794,19 +11802,17 @@ at the edge of the computational domain.
     imapx \index{b2plot, imapx}     & Wall element {\em ix} position \\
     imapy \index{b2plot, imapy}     & Wall element {\em iy} position \\
     isweq \index{b2plot, isweq}     & Species index {\em is} equal to \\
-    iswge \index{b2plot, iswgt}     & Species index {\em is} greater than or
-    equal to \\
+    iswge \index{b2plot, iswgt}     & Species index {\em is} greater than or equal to \\
     iswgt \index{b2plot, iswgt}     & Species index {\em is} greater than \\
-    iswle \index{b2plot, iswle}     & Species index {\em is} less than or
-    equal to \\
+    iswle \index{b2plot, iswle}     & Species index {\em is} less than or equal to \\
     iswlt \index{b2plot, iswlt}     & Species index {\em is} less than \\
+    iswne \index{b2plot, iswne}     & Species index {\em is} not equal to \\
     iweq \index{b2plot, iweq}      & Wall elements whose index is equal to \\
-    iwge \index{b2plot, iwge}      & Wall elements whose index is greater than or
-    equal to \\
+    iwge \index{b2plot, iwge}      & Wall elements whose index is greater than or equal to \\
     iwgt \index{b2plot, iwgt}      & Wall elements whose index is greater than \\
-    iwle \index{b2plot, iwle}      & Wall elements whose index is less than or
-    equal to \\
+    iwle \index{b2plot, iwle}      & Wall elements whose index is less than or equal to \\
     iwlt \index{b2plot, iwlt}      & Wall elements whose index is less than \\
+    iwne \index{b2plot, iwne}      & Wall elements whose index is not equal to \\
     kappa\_a \index{b2plot, kappa\_a}  & Factor $a$ in $\kappa=1/(aT+b)$ $(m.W^{-1})$ \\
     kappa\_a1 \index{b2plot, kappa\_a1} & Factor $a_1$ in $\kappa$ polynomial fit $(W.m^{-1}.K^{-1})$ \\
     kappa\_a2 \index{b2plot, kappa\_a2} & Factor $a_2$ in $\kappa$ polynomial fit $(W.m^{-1}.K^{-2})$ \\
@@ -11869,8 +11875,9 @@ with index $<$iseg$>$ will contain 1.0, and the rest will contain zero.
 If $<$iseg$>$ is less than 0, the elements in segment
 with index $-<$iseg$>$ will contain zero, and the rest will contain 1.0.
 
-The arrays {\bf iwlt}, {\bf iweq}, {\bf iwgt},
-{\bf iswlt}, {\bf isweq}, and {\bf iswgt} all require an integer argument $<$i$>$,
+The arrays {\bf iwlt}, {\bf iwle}, {\bf iweq}, {\bf iwne}, {\bf iwge}, {\bf iwgt},
+{\bf iswlt}, {\bf iswle}, {\bf isweq}, {\bf iswne}, {\bf iswge}, and {\bf iswgt}
+all require an integer argument $<$i$>$,
 with which the logical comparison is done. If the comparison test is true, the arrays
 will contain 1.0, otherwise they will contain zero.
 
@@ -11984,6 +11991,7 @@ temperature (in $K$) upon \btwoplot start-up.
     itrgle \index{b2plot, itrgle}    & Is the target element index less than
     or equal to? \\
     itrglt \index{b2plot, itrglt}    & Is the target element index less than? \\
+    itrgne \index{b2plot, itrgne}    & Is the target element index not equal to? \\
     kappa \index{b2plot, kappa}     & Target heat conductivity (from polynomial fit) $(W.m^{-1}.K^{-1})$ \\
     kappa\_ab \index{b2plot, kappa\_ab} & Target heat conductivity (from $1/(aT+b)$ fit) $(W.m^{-1}.K^{-1})$ \\
     kappap \index{b2plot, kappap}    & Perpendicular target heat conductivity $(W.m^{-1}.K^{-1})$ \\
@@ -12011,13 +12019,14 @@ temperature (in $K$) upon \btwoplot start-up.
     ztrgle \index{b2plot, ztrgle}    & Is the target element depth index less
     than or equal to? \\
     ztrglt \index{b2plot, ztrglt}    & Is the target element depth index less than? \\
+    ztrgne \index{b2plot, ztrgne}    & Is the target element depth index not equal to? \\
     \hline
     \caption{Available target quantities for plotting.}
     \label{tab:targetquantities}
   \end{longtable}
 \end{center}
 
-The arrays {\bf itrglt}, {\bf itrgeq}, {\bf itrggt}, {\bf ztrglt}, {\bf ztrgeq}, and {\bf ztrggt}
+The arrays {\bf itrglt}, {\bf itrgle}, {\bf itrgeq}, {\bf itrgne}, {\bf itrgge}, {\bf itrggt}, {\bf ztrglt}, {\bf ztrgle}, {\bf ztrgeq}, {\bf ztrgne}, {\bf ztrgge}, and {\bf ztrggt}
 all require an integer argument $<$i$>$,
 with which the logical comparison is done. If the comparison test is true, the arrays
 will contain 1.0, otherwise they will contain zero.
