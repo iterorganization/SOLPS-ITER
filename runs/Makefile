@@ -42,11 +42,7 @@ target_ag = b2ag.prt b2fgmtry fort.30
 target_ah = b2ah.prt b2fpardf
 target_ai = b2ai.prt b2fstati
 target_ar = b2ar.prt b2frates
-ifndef STAND_ALONE
-target_mn = b2mn.prt b2fparam b2fstate b2fmovie b2ftrace b2ftrack b2fplasma b2_to_astra.dat
-else
-target_mn = b2mn.prt b2fparam b2fstate b2fmovie b2ftrace b2ftrack b2fplasma b2_to_astra.dat
-endif
+target_mn = b2mn.prt b2fparam b2fstate b2fmovie b2ftrace b2ftrack b2fplasma
 ifdef USE_IMPGYRO
 target_mn += restart_ext
 endif
@@ -149,7 +145,7 @@ else
 $(target_mn) : b2mn.dat b2fgmtry b2fpardf b2fstati b2frates fort.30
 endif
 	-rm -rf b2mn.exe.dir > /dev/null ; mkdir b2mn.exe.dir ; cp $^ b2mn.exe.dir
-	-rm -f $(target_mn) fort.31 b2time.nc b2wall.nc b2tallies.nc b2movies.nc >& /dev/null
+	-rm -f $(target_mn) fort.31 b2time.nc b2wall.nc b2tallies.nc b2movies.nc b2_to_astra.dat >& /dev/null
 ifndef STAND_ALONE
 	-cd b2mn.exe.dir ; ln -s ../HYDHEL ../AMJUEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ln -s ../input.dat fort.1 ; [ -e ../fort.15 ] && cp -p ../fort.15 . ; [ -e ../fort.14 ] && cp -p ../fort.14 . ; [ -e ../fort.13 ] && cp -p ../fort.13 . ; [ -e ../fort.12 ] && cp -p ../fort.12 . ; [ -e ../fort.11 ] && cp -p ../fort.11 . ; [ -e ../fort.10 ] && cp -p ../fort.10 . ; [ -e ../fort.44 ] && cp -p ../fort.44 . ; [ -e ../b2fstati_add ] && cp -p ../b2fstati_add .
 endif
@@ -157,12 +153,12 @@ ifdef USE_IMPGYRO
 	-cd b2mn.exe.dir ; touch b2ig.conf ; echo "-n ${NPE_B2} : ${B2OBJ}/b2mn.exe" >> b2ig.conf ; echo "-n ${NPE_EXT} : ${EXE_EXT}" >> b2ig.conf ; ln -s ../config ../pre . ; mkdir tracing ;\
 	touch use_impgyro ; [ -e ../restart_ext ] && cp ../restart_ext . ; [ -e ../restart ] && cp ../restart . && cp ${WD_EXT}/.st.?* . ;\
 	mpiexec -verbose -config b2ig.conf;\
-	-mv $(target_mn) .. >& /dev/null ; mv tracing/* ../tracing ; [ -e ../fort.30 ] || mv fort.30 .. ; \
-	-rm -f $(notdir $^) .quit ; rm -f b2ig.conf use_impgyro config pre ; [ -e restart_ext ] && cp restart_ext ../. ;\
-	-mv .*.?* ${WD_EXT}/. ; mv fort.150 ${WD_EXT}/. ;\
-	-mv impgyro.* ${WD_EXT}/. ; mv preg ${WD_EXT}/. ; cp restart ${WD_EXT}/. ; mv restart ../.
+	mv $(target_mn) .. >& /dev/null ; [ -d ../tracing ] || mkdir ../tracing ; mv -f tracing/* ../tracing ; [ -e ../fort.30 ] || mv fort.30 .. ; \
+	rm -f $(notdir $^) .quit ; rm -f b2ig.conf use_impgyro config pre ; [ -e restart_ext ] && cp restart_ext ../. ;\
+	mv .*.?* ${WD_EXT}/. ; mv fort.150 ${WD_EXT}/. ;\
+	mv impgyro.* ${WD_EXT}/. ; mv preg ${WD_EXT}/. ; cp restart ${WD_EXT}/. ; mv restart ../.
 else
-	-cd b2mn.exe.dir ; mkdir tracing ; ${TIME} ${B2OBJ}/b2mn.exe ; mv $(target_mn) .. >& /dev/null ; mv -f tracing/* ../tracing ; [ -e ../fort.30 ] || mv fort.30 .. ; rm -f $(notdir $^) .quit
+	-cd b2mn.exe.dir ; mkdir tracing ; ${TIME} ${B2OBJ}/b2mn.exe ; mv $(target_mn) .. >& /dev/null ; [ -d ../tracing ] || mkdir ../tracing ; mv -f tracing/* ../tracing ; [ -e ../fort.30 ] || mv fort.30 .. ; rm -f $(notdir $^) .quit
 endif
 ifndef STAND_ALONE
 	-[ -e b2mn.exe.dir/fort.10 ] && mv b2mn.exe.dir/fort.10 . || echo > /dev/null
@@ -180,6 +176,8 @@ endif
 	-[ -e b2mn.exe.dir/b2wall.nc ] && mv b2mn.exe.dir/b2wall.nc . || echo > /dev/null
 	-[ -e b2mn.exe.dir/b2movies.nc ] && mv b2mn.exe.dir/b2movies.nc . || echo > /dev/null
 	-[ -e b2mn.exe.dir/b2tallies.nc ] && mv b2mn.exe.dir/b2tallies.nc . || echo > /dev/null
+	-[ -e b2mn.exe.dir/b2_to_astra.dat ] && mv b2mn.exe.dir/b2_to_astra.dat . || echo > /dev/null
+	-[ -e b2mn.exe.dir/b2fstate_add ] && mv b2mn.exe.dir/b2fstate_add . || echo > /dev/null
 	-[ -e b2mn.exe.dir/tran ] && mv b2mn.exe.dir/tran b2mn.exe.dir/tran?? . || echo > /dev/null
 	-[ -e b2mn.exe.dir/tracing ] && rmdir b2mn.exe.dir/tracing || echo > /dev/null
 	-[ -e b2mn.exe.dir/b2fstati_with-ua ] && ( mv b2fstati b2fstati_with+ua ; mv b2mn.exe.dir/b2fstati_with-ua . ; cp -up b2fstati_with-ua b2fstati ; touch b2fstate ) || echo > /dev/null
@@ -191,10 +189,10 @@ else
 dbx.b2mn : b2mn.dat b2fgmtry b2fpardf b2fstati b2frates fort.30
 endif
 	-rm -rf b2mn.exe.dir > /dev/null ; mkdir b2mn.exe.dir ; cp $^ b2mn.exe.dir
-	-rm -f $(target_mn) fort.31 b2time.nc b2wall.nc b2tallies.nc b2movies.nc >& /dev/null
+	-rm -f $(target_mn) fort.31 b2time.nc b2wall.nc b2tallies.nc b2movies.nc b2_to_astra.dat >& /dev/null
 ifndef STAND_ALONE
 	-cd b2mn.exe.dir ; ln -s ../HYDHEL ../AMJUEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ln -s ../input.dat fort.1 ; [ -e ../fort.15 ] && cp -p ../fort.15 . ; [ -e ../fort.14 ] && cp -p ../fort.14 . ; [ -e ../fort.13 ] && cp -p ../fort.13 . ; [ -e ../fort.12 ] && cp -p ../fort.12 . ; [ -e ../fort.11 ] && cp -p ../fort.11 . ; [ -e ../fort.10 ] && cp -p ../fort.10 . ; [ -e ../fort.44 ] && cp -p ../fort.44 .
-	cd b2mn.exe.dir ; mkdir tracing ; ${DBX} ${INC} b2mn.exe ; mv $(target_mn) .. >&  /dev/null ; mv -f tracing/* ../tracing ; [ -e ../fort.30 ] || mv fort.30 .. ; rm -f $(notdir $^) .quit
+	cd b2mn.exe.dir ; mkdir tracing ; ${DBX} ${INC} b2mn.exe ; mv $(target_mn) .. >& /dev/null ; [ -d ../tracing ] || mkdir ../tracing ; mv -f tracing/* ../tracing ; [ -e ../fort.30 ] || mv fort.30 .. ; rm -f $(notdir $^) .quit
 	-[ -e b2mn.exe.dir/fort.10 ] && mv b2mn.exe.dir/fort.10 . || echo > /dev/null
 	-[ -e b2mn.exe.dir/fort.11 ] && mv b2mn.exe.dir/fort.11 . || echo > /dev/null
 	-[ -e b2mn.exe.dir/fort.12 ] && mv b2mn.exe.dir/fort.12 . || echo > /dev/null
@@ -212,6 +210,8 @@ endif
 	-[ -e b2mn.exe.dir/b2wall.nc ] && mv b2mn.exe.dir/b2wall.nc . || echo > /dev/null
 	-[ -e b2mn.exe.dir/b2movies.nc ] && mv b2mn.exe.dir/b2movies.nc . || echo > /dev/null
 	-[ -e b2mn.exe.dir/b2tallies.nc ] && mv b2mn.exe.dir/b2tallies.nc . || echo > /dev/null
+	-[ -e b2mn.exe.dir/b2_to_astra.dat ] && mv b2mn.exe.dir/b2_to_astra.dat . || echo > /dev/null
+	-[ -e b2mn.exe.dir/b2fstate_add ] && mv b2mn.exe.dir/b2fstate_add . || echo > /dev/null
 	-[ -e b2mn.exe.dir/tran ] && mv b2mn.exe.dir/tran b2mn.exe.dir/tran?? . || echo > /dev/null
 	-[ -e b2mn.exe.dir/tracing ] && rmdir b2mn.exe.dir/tracing || echo > /dev/null
 	-[ -e b2mn.exe.dir/b2fstati_with-ua ] && ( mv b2fstati b2fstati_with+ua ; mv b2mn.exe.dir/b2fstati_with-ua b2fstati ) || echo > /dev/null

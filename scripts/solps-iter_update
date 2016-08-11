@@ -53,10 +53,7 @@ compile:
   touch $SOLPSTOP/modules/B2.5/src/modules/.new_modules
   touch $SOLPSTOP/modules/Eirene/src/modules/.new_modules
   gmake VERSION
-  gmake listobj
-  source $SOLPSTOP/SETUP/debug
-  gmake listobj
-  source $SOLPSTOP/SETUP/nodebug
+  gmake listobj listobj_debug
   gmake depend depend_debug
   gmake tags
   gmake solps

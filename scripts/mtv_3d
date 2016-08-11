@@ -12,6 +12,7 @@ if( "$1" == "" ) then
 else
   set field=$1
 endif
+set f2eld=`echo $field | sed 's:P$::'`
 if($?GNUPLOT_TMP) then
   set tmpdir="$GNUPLOT_TMP/"
 else
@@ -21,11 +22,12 @@ set tfilename=${tmpdir}tmp.mtv
 set pfilename=${tmpdir}tmp.ps
 set prefix=`echo $field | sed 's:^\(.\).*:\1:'`
 set pr2fix=`echo $field | cut -c2`
-set suffix=`echo $field | sed 's:^.*\(.\):\1:'`
+set suffix=`echo $field | cut -c5-`
+set suf2ix=`echo $field | cut -c5`
 which nc2text > /dev/null && set no_nc2text=0 || set no_nc2text=1
 echo '$' DATA=CONTOUR >! $tfilename
-echo '%' nx = `wc -l < ds$suffix` xgrid=True xlabel=x-xsep>> $tfilename
-cat ds$suffix >> $tfilename
+echo '%' nx = `wc -l < ds$suf2ix` xgrid=True xlabel=x-xsep>> $tfilename
+cat ds$suf2ix >> $tfilename
 if ($no_nc2text == 1) then
   echo '%' ny = `ncdump $file -f f -v timesa | awk 'BEGIN {ORS="";} /data:/{found1=1;next;} /timesa/{if (found1==1) {if (found2==1) print $1; else {print $3;found2=1;}}} END {print "\n";}' | sed 's/,/ /g' | sed 's/;//g' | wc -w` ygrid=True ylabel=time >> $tfilename
   ncdump $file -f f -v timesa | awk 'BEGIN {ORS="";} /data:/{found1=1;next;} /timesa/{if (found1==1) {if (found2==1) print $1; else {print $3;found2=1;}}} END {print "\n";}' | sed 's/,/ /g' | sed 's/;//g' >> $tfilename
@@ -40,28 +42,28 @@ else
 endif
 if ($no_nc2text == 1) then
   if ($prefix == "t" && $pr2fix != "p") then
-    ncdump $file -f f -v $field | awk 'BEGIN {ORS="";} /data:/{found1=1;next;} /timesa/{if (found1==1) {if (found2==1) print $1; else {print $3;found2=1;}}} END {print "\n";}' | sed 's/,/ /g' | sed 's/;//g' | tr ' ' '\n' | awk 'NF>0{print $1/1.602176565e-19}' >> $tfilename
+    ncdump $file -f f -v $f2eld | awk 'BEGIN {ORS="";} /data:/{found1=1;next;} /timesa/{if (found1==1) {if (found2==1) print $1; else {print $3;found2=1;}}} END {print "\n";}' | sed 's/,/ /g' | sed 's/;//g' | tr ' ' '\n' | awk 'NF>0{print $1/1.602176565e-19}' >> $tfilename
   else if ($prefix == "f") then
-    if ($suffix == "r") then
+    if ($suf2ix == "r") then
  
-      ( cat ds`echo $suffix | tr 'a-z' 'A-Z'` | tr '\n' ' ' ; echo " " ; ncdump $file -f f -v $field | awk -v string="$field" 'BEGIN {ORS="";} /data:/{found1=1;next;} $0 ~ string {if (found1==1) {if (found2==1) print $field; else {print $3;found2=1;}}}' | awk 'BEGIN {FS=","} {for (i=1;i<=NF;i++) if (i%2==1) {ORS=" ";print $i;}' | sed 's/;//g' ) | awk 'NR==1{for (i=1;i<=NF;i++) dsR[i]=$i}NR>1{for (i=1;i<=NF;i++) printf "%s ",$i/dsR[i];printf "\n"}' >> $tfilename
+      ( cat ds`echo $suffix | tr 'a-z' 'A-Z'` | tr '\n' ' ' ; echo " " ; ncdump $file -f f -v $f2eld | awk -v string="$field" 'BEGIN {ORS="";} /data:/{found1=1;next;} $0 ~ string {if (found1==1) {if (found2==1) print $field; else {print $3;found2=1;}}}' | awk 'BEGIN {FS=","} {for (i=1;i<=NF;i++) if (i%2==1) {ORS=" ";print $i;}' | sed 's/;//g' ) | awk 'NR==1{for (i=1;i<=NF;i++) dsR[i]=$i}NR>1{for (i=1;i<=NF;i++) printf "%s ",$i/dsR[i];printf "\n"}' >> $tfilename
     else
-      ( cat ds`echo $suffix | tr 'a-z' 'A-Z'` | tr '\n' ' ' ; echo " " ; ncdump $file -f f -v $field | awk -v string="$field" 'BEGIN {ORS="";} /data:/{found1=1;next;} $0 ~ string {if (found1==1) {if (found2==1) print $field; else {print $3;found2=1;}}}' | awk 'BEGIN {FS=","} {for (i=1;i<=NF;i++) if (i%2==1) {ORS=" ";print $i;}' | sed 's/;//g' ) | awk 'NR==1{for (i=1;i<=NF;i++) dsR[i]=$i}NR>1{for (i=1;i<=NF;i++) printf "%s ",-$i/dsR[i];printf "\n"}' >> $tfilename
+      ( cat ds`echo $suffix | tr 'a-z' 'A-Z'` | tr '\n' ' ' ; echo " " ; ncdump $file -f f -v $f2eld | awk -v string="$field" 'BEGIN {ORS="";} /data:/{found1=1;next;} $0 ~ string {if (found1==1) {if (found2==1) print $field; else {print $3;found2=1;}}}' | awk 'BEGIN {FS=","} {for (i=1;i<=NF;i++) if (i%2==1) {ORS=" ";print $i;}' | sed 's/;//g' ) | awk 'NR==1{for (i=1;i<=NF;i++) dsR[i]=$i}NR>1{for (i=1;i<=NF;i++) printf "%s ",-$i/dsR[i];printf "\n"}' >> $tfilename
     endif
   else
-    ncdump $file -f f -v $field | awk -v string="$field" 'BEGIN {ORS="";} /data:/{found1=1;next;} $0 ~ string {if (found1==1) {if (found2==1) print $field; else {print $3;found2=1;}}}' | awk 'BEGIN {FS=","} {for (i=1;i<=NF;i++) if (i%2==1) {ORS=" ";print $i;}' | sed 's/;//g' >> $tfilename
+    ncdump $file -f f -v $f2eld | awk -v string="$field" 'BEGIN {ORS="";} /data:/{found1=1;next;} $0 ~ string {if (found1==1) {if (found2==1) print $field; else {print $3;found2=1;}}}' | awk 'BEGIN {FS=","} {for (i=1;i<=NF;i++) if (i%2==1) {ORS=" ";print $i;}' | sed 's/;//g' >> $tfilename
   endif
 else
   if ($prefix == "t" && $pr2fix != "p") then
-    nc2text $file $field | tr ' ' '\n' | awk 'NF>0{print $1/1.602176565e-19}' >> $tfilename
+    nc2text $file $f2eld | tr ' ' '\n' | awk 'NF>0{print $1/1.602176565e-19}' >> $tfilename
   else if ($prefix == "f") then
-    if ($suffix == "r") then
-      ( cat ds`echo $suffix | tr 'a-z' 'A-Z'` | tr '\n' ' ' ; echo " " ; nc2text -n 999999 $file $field ) | awk 'NR==1{for (i=1;i<=NF;i++) dsR[i]=$i}NR>1{for (i=1;i<=NF;i++) printf "%s ",$i/dsR[i];printf "\n"}' >> $tfilename
+    if ($suf2ix == "r") then
+      ( cat ds`echo $suffix | tr 'a-z' 'A-Z'` | tr '\n' ' ' ; echo " " ; nc2text -n 999999 $file $f2eld ) | awk 'NR==1{for (i=1;i<=NF;i++) dsR[i]=$i}NR>1{for (i=1;i<=NF;i++) printf "%s ",$i/dsR[i];printf "\n"}' >> $tfilename
     else
-      ( cat ds`echo $suffix | tr 'a-z' 'A-Z'` | tr '\n' ' ' ; echo " " ; nc2text -n 999999 $file $field ) | awk 'NR==1{for (i=1;i<=NF;i++) dsR[i]=$i}NR>1{for (i=1;i<=NF;i++) printf "%s ",-$i/dsR[i];printf "\n"}' >> $tfilename
+      ( cat ds`echo $suffix | tr 'a-z' 'A-Z'` | tr '\n' ' ' ; echo " " ; nc2text -n 999999 $file $f2eld ) | awk 'NR==1{for (i=1;i<=NF;i++) dsR[i]=$i}NR>1{for (i=1;i<=NF;i++) printf "%s ",-$i/dsR[i];printf "\n"}' >> $tfilename
     endif
   else
-    nc2text $file $field >> $tfilename
+    nc2text $file $f2eld >> $tfilename
   endif
 endif
 echo '$' END >> $tfilename

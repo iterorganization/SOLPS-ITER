@@ -1,7 +1,7 @@
 #! /bin/csh -f
 echo "# `pwd`"
 pipe_run.log | \
-  egrep -a 'b2-step-cpu|EIRENE USED'  | \
+  egrep -a 'b2-step-cpu|EIRENE USED' | \
   awk '/EIRENE USED/{eir+=$3;seir+=$3}\
        NF==2&&/b2-step-cpu/{i++;print i,$2,eir;cpu+=$2;eir=0}\
        NF==4&&/b2-step-cpu/{i++;print i,$2,$4,eir;cpu+=$2;elapsed+=$4;eir=0}\
