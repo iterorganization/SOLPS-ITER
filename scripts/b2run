@@ -5,7 +5,6 @@
 ## -s                         run B2.5 applications in stand-alone mode (no Eirene coupling)
 ## -m <mpi-launcher + args>   run mpi-version (example: b2run -m \"mpiexec -np 2\" b2mn)
 ## -d <debugger>              use debugger <debugger>
-## -c                         run B2.5 simulation with ParaView Catalyst
 
 # if we are running at JET then do not rely on the automatic feature of searching in ../baserun, instead setup links
 if (${HOST_NAME} == "JET" && `basename $PWD` != "baserun") then
@@ -49,7 +48,6 @@ argloop:
     echo 'Launches a SOLPS run'
     echo ' '
     echo 'Optional arguments:'
-    echo ' -c: request a Catalyst run.'
     echo ' -d <debugger>: launch run with debugger <debugger>.'
     echo ' -h: Prints this message.'
     echo ' -m <mpi-launcher + args>: run mpi-version (example: b2run -m \"mpiexec -np 2\" b2mn)'
@@ -82,13 +80,6 @@ argloop:
     echo ' b2yt: Convert a run to a different grid size or species list'
     echo ' '
     exit
-  if("X${1}X" == "X-cX") then
-    shift
-    setenv USE_CATALYST yes
-    if (! -f "coproc.py")  then
-      cp ${SOLPSTOP}/modules/B2.5/src/catalyst/coproc.py coproc.py
-    endif
-    goto argloop
   endif
   if ("X${1}X" == "X-nX") then
     shift
@@ -100,7 +91,7 @@ argloop:
     setenv STAND_ALONE yes
     goto argloop
   endif
-    if ("X${1}X" == "X-mX") then
+  if ("X${1}X" == "X-mX") then
     shift
     if (! $?SOLPS_MPI) then
       source $SOLPSTOP/SETUP/mpi
