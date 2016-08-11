@@ -36,7 +36,7 @@ GLI_HOME ?=
 NCARG_ROOT ?=
 NAGDIR ?=
 MDSPLUS_DIR ?=
-PARAVIEW_DIR ?= ${HOME}/solps-gui/staging/paraview/5.1.0
+PARAVIEW_DIR ?= ${HOME}/solps-gui/staging/paraview/5.1.2
 
 #
 # Variables of linking, using pkg-config
@@ -55,9 +55,9 @@ LD_MPI     = -L/work/imas/opt/libibverbs/1.1.4/lib `pkg-config mpich2-ch3 --libs
 LD_UAL     = `pkg-config imas-lowlevel imas-ifort --libs`
 PARAVIEW_MAJOR_VERSION = 5.1
 PARAVIEW_LIBDIR=${PARAVIEW_DIR}/lib/paraview-${PARAVIEW_MAJOR_VERSION}
-LD_CATALYST= /home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1/libvtkPVPythonCatalyst-pv5.1.so.1 \
- 	${PARAVIEW_LIBDIR}/libvtkPVCatalyst-pv5.1.so.1 \
-	${PARAVIEW_LIBDIR}/libvtkPVServerManagerApplication-pv5.1.so.1  \
+LD_CATALYST= ${PARAVIEW_LIBDIR}/libvtkPVPythonCatalyst-pv${PARAVIEW_MAJOR_VERSION}.so.1 \
+ 	${PARAVIEW_LIBDIR}/libvtkPVCatalyst-pv${PARAVIEW_MAJOR_VERSION}.so.1 \
+	${PARAVIEW_LIBDIR}/libvtkPVServerManagerApplication-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
 	${PARAVIEW_LIBDIR}/libvtkPVServerManagerCore-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
 	${PARAVIEW_LIBDIR}/libvtkPVServerImplementationCore-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
 	${PARAVIEW_LIBDIR}/libvtkPVClientServerCoreCore-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
@@ -95,7 +95,7 @@ LD_CATALYST= /home/ITER/kosl/solps-gui/staging/paraview/5.1.0/lib/paraview-5.1/l
 	${PARAVIEW_LIBDIR}/libvtkCommonCore-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
 	/work/imas/opt/python/2.7/11/lib/libpython2.7.so  \
 	${PARAVIEW_LIBDIR}/libvtksys-pv${PARAVIEW_MAJOR_VERSION}.so.1 \
-	-ldl -lstdc++ -Wl,-rpath,${PARAVIEW_LIBDIR}:/work/imas/opt/python/2.7/11/lib:/home/ITER/kosl/solps-gui/staging/qt/4.8.7/lib:/work/imas/opt/libffi/3.2.1/lib64:/work/imas/opt/openssl/1.0.2g/lib -Wl,-rpath-link,${PARAVIEW_LIBDIR}:/home/ITER/kosl/solps-gui/staging/qt/4.8.7/lib:/work/imas/opt/libffi/3.2.1/lib64:/work/imas/opt/openssl/1.0.2g/lib
+	-ldl -lstdc++ -Wl,-rpath,${PARAVIEW_LIBDIR}:/work/imas/opt/python/2.7/11/lib:${HOME}/solps-gui/staging/qt/4.8.7/lib:/work/imas/opt/libffi/3.2.1/lib64:/work/imas/opt/openssl/1.0.2g/lib -Wl,-rpath-link,${PARAVIEW_LIBDIR}:${HOME}/solps-gui/staging/qt/4.8.7/lib:/work/imas/opt/libffi/3.2.1/lib64:/work/imas/opt/openssl/1.0.2g/lib
 
 #
 # Preprocessor options
