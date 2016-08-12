@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<solps>
+	<code>
+		<name>B2.5</name>
+		<description> Enhanced </description>
+		<module>
+			<name> b2mn.dat </name>
+			<param> 
+				<name>b2mndr_ntim</name>
+				<description>
+					Number of timesteps desired in this run. If ntim.eq.0, the code simply reads the input file and creates the b2fplasma and b2fstate files corresponding to the present plasma state. This parameter limits the number of time steps.
+				</description>
+				<default>1</default>
+				<type>integer</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2mndr_dtim</name>
+				<description>
+					Timestep (in seconds).
+				</description>
+				<default>1.0</default>
+				<type>float</type>
+				<category>Run</category>
+			</param>
+		</module>
+	</code>
+</solps>
