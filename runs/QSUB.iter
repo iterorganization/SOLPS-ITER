@@ -16,6 +16,7 @@
 # }
 
 # setenv PATH ${PATH}:/afs/ipp-garching.mpg.de/@sys/bin
+setenv LD_LIBRARY_PATH ${HOME}/bin:${LD_LIBRARY_PATH}
 
 # set solpstop=`climb_and_look_for SOLPSTOP`
 # if (-e $solpstop) then
@@ -32,6 +33,7 @@
 
 # source setup.csh
 echo Using SOLPSTOP = #SOLPSTOP#
+# ldd ${SOLPSTOP}/modules/B2.5/builds/standalone.ITER.ifort64/b2mn.exe
 
 # popd
 cd "$PBS_O_WORKDIR"
