@@ -237,6 +237,7 @@ c
         CALL ALLOC_COMXS(1)
         CALL ALLOC_CTRIG
         CALL ALLOC_COMNNL
+        CALL ALLOC_CCOUPL(1)
         CALL SETCON
         CALL INPUT
         close(45)
