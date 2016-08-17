@@ -185,6 +185,22 @@ To do this, one must upload a copy of their public ssh key here: \href{https://g
 > git submodule update
 \end{verbatim}
 
+It is best afterwards to position oneself on the main develop braches, which is achieved by:
+
+\begin{verbatim}
+> git checkout develop
+> cd modules/B2.5
+> git checkout develop
+> cd ../Eirene
+> git checkout ITER-develop
+> cd ../DivGeo
+> git checkout ITER-develop
+> cd ../Carre
+> git checkout ITER-develop
+> cd ../adas
+> git checkout ITER-develop
+\end{verbatim}
+
 Since the user-id is immutably encoded into any changes, it is always a good idea to properly configure a local installation of Git on all the systems on which one plans on making code revisions with, e.g.:
 
 \begin{verbatim}
@@ -469,6 +485,11 @@ After activating one of these flags and upon succesful compilation, it is recomm
   rehash
 \end{verbatim}
 to refresh the list of executables to be found with the search path.
+
+\section{Examples}
+\label{examples}
+
+On the \SOLPSITER web site (\href{https://portal.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}{https://portal.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}), in the folder {\em Examples}, one can find a few example cases for \SOLPSITER runs, in both \verb|B2.5| stand-alone or \verb!B2.5-Eirene! coupled modes.
 
 \chapter{The structure}
 \label{cha:structure}
