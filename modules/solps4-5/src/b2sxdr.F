@@ -30,7 +30,7 @@
       use cpolyg
       use cadgeo
       use comusr
-     , , only: alloc_comusr
+     , , only: alloc_comusr, eirene96
       use cplot
       use cai
       use cestim
@@ -237,6 +237,7 @@ c
         CALL ALLOC_COMXS(1)
         CALL ALLOC_CTRIG
         CALL ALLOC_COMNNL
+        CALL ALLOC_CCOUPL(1)
         CALL SETCON
         CALL INPUT
         close(45)
@@ -339,7 +340,11 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
       open(unit=70,file='b2yt.dat')
       write(70,'(a)') '*dimens (nx, ny: free format)'
       write(70,'(2(2x,i4))') nx, ny
-      write(70,'(a)') '''eirene_format''     ''facelift'''
+      if (EIRENE96) then
+        write(70,'(a)') '''eirene_format''     ''old'''
+      else
+        write(70,'(a)') '''eirene_format''     ''facelift'''
+      endif
       write(70,'(a)') '''solps_version''     ''4.3'''
 #ifdef NO_GETENV
 #ifdef JET
