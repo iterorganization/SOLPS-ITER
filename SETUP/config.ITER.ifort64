@@ -119,6 +119,7 @@ export NCARG_ROOT
 export NAGDIR
 export MDSPLUS_DIR
 export PARAVIEW_DIR
+export PARAVIEW_MAJOR_VERSION 
 
 export LD_NETCDF
 export LD_MSCL

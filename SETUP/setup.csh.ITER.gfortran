@@ -37,6 +37,7 @@ setenv DBX totalview
 # Compilers
 setenv CC gcc
 setenv FC gfortran
+setenv CXX g++
 
 # Other environment variables
 module load solps-gui
