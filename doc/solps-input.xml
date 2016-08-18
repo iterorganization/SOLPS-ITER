@@ -23,6 +23,531 @@
 				<type>float</type>
 				<category>Run</category>
 			</param>
+			<param> 
+				<name>b2mndt_nstg0</name>
+				<description>
+					Time-dependent mode and iterative mode switches. The basic code timestep proceeds as follows:
+					 ..test input arguments
+					 ..compute auxiliary quantities
+					 ..prepare source computation
+					 ..do i0=1,nstg0
+						 ..compute log-log linearised rate coefficients
+						 ..do i1=1,nstg1
+							 ..compute source linearisation
+							 ..do i2=1,nstg2
+								 ..perform one inner iteration
+								 ..re-compute auxiliary quantities
+								 ..produce monitoring output
+							 ..enddo
+						 ..enddo
+					 ..enddo
+				</description>
+				<default>1</default>
+				<type>integer</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2mndt_nstg1</name>
+				<description>
+					Time-dependent mode and iterative mode switches. The basic code timestep proceeds as follows:
+					 ..test input arguments
+					 ..compute auxiliary quantities
+					 ..prepare source computation
+					 ..do i0=1,nstg0
+						 ..compute log-log linearised rate coefficients
+						 ..do i1=1,nstg1
+							 ..compute source linearisation
+							 ..do i2=1,nstg2
+								 ..perform one inner iteration
+								 ..re-compute auxiliary quantities
+								 ..produce monitoring output
+							 ..enddo
+						 ..enddo
+					 ..enddo
+				</description>
+				<default>1</default>
+				<type>integer</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2mndt_nstg2</name>
+				<description>
+					Time-dependent mode and iterative mode switches. The basic code timestep proceeds as follows:
+					 ..test input arguments
+					 ..compute auxiliary quantities
+					 ..prepare source computation
+					 ..do i0=1,nstg0
+						 ..compute log-log linearised rate coefficients
+						 ..do i1=1,nstg1
+							 ..compute source linearisation
+							 ..do i2=1,nstg2
+								 ..perform one inner iteration
+								 ..re-compute auxiliary quantities
+								 ..produce monitoring output
+							 ..enddo
+						 ..enddo
+					 ..enddo
+				</description>
+				<default>1</default>
+				<type>integer</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2mndt_rxf</name>
+				<description>
+					Main under-relaxation parameter.
+				</description>
+				<default>0.5</default>
+				<type>float</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2mndr_mvinc</name>
+				<description>
+					Specifies the number of timesteps between movie output. If greater than 1 and the last timestep does not correspond to a planned frame, an extra endstate frame is added.
+				</description>
+				<default>1</default>
+				<type>integer</type>
+				<category>Output</category>
+			</param>
+			<param> 
+				<name>b2mndr_mvnum</name>
+				<description>
+					Specifies the maximum number of instances at which movie data will be output.
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Output</category>
+			</param>
+			<param> 
+				<name>b2mndr_b2time</name>
+				<description>
+					Specifies the number of timesteps between writes of the time-dependent file. If b2time.gt.0, always writes out on the last timestep.
+				</description>
+				<default>1</default>
+				<type>integer</type>
+				<category>Output</category>
+			</param>
+			<param> 
+				<name>b2mndr_na0eps</name>
+				<description>
+					This switch from SOLPS5.x has been replaced with ’b2mndr_na_min’ and ’b2mndr_na_new’.
+					CHECK VALIDITY!!!
+				</description>
+				<default>1e14</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2mndr_na_min</name>
+				<description>
+					Minimal density maintained in all cells for all species. It must be true that na_min is smaller than na_new, as well as any of the initial densities provided in b2ai.dat.
+					This switch replaces ’b2mndr_na0eps’ from SOLPS5.x.
+				</description>
+				<default>1.0e4</default>
+				<type>float</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2mndr_na_new</name>
+				<description>
+					Minimal density maintained in all cells for all species. It must be true that na_min is smaller than na_new, as well as any of the initial densities provided in b2ai.dat.
+					This switch replaces ’b2mndr_na0eps’ from SOLPS5.x.
+				</description>
+				<default>1.0e14</default>
+				<type>float</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2mndr_cpu</name>
+				<description>
+					CPU limit. Is cpu.eq.0.0, no CPU limit is enforced. Otherwise, the code stops smoothly after it has been running for at least ’cpu’ CPU seconds.
+					CHECK VALIDITY!!!(cahnged "is" to "it")
+				</description>
+				<default>0.0</default>
+				<type>float</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2mndr_savecpu</name>
+				<description>
+					CPU time interval after with save files plasmastate.xxxx are written. These can be used, in conjunction with the b2co.exe instruction, to recover a crashed run.
+					CHECK VALIDITY!!!(badly stated description)
+				</description>
+				<default>3600.0</default>
+				<type>float</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2ux5p_nltrsol</name>
+				<description>
+					Output flag for the iluter matrix solver. Larger numbers mean increasing output level.
+				</description>
+				<default>2</default>
+				<type>integer</type>
+				<category>Output</category>
+			</param>
+			<param> 
+				<name>b2ux5p_style</name>
+				<description>
+					Choose the type of matrix solver. Style.eq.0 = iluter, Style.eq.1 = 5-pt stencil, Style.eq.2 = MA28. NOTE: Only style.eq.2 will give good results.
+					Other values are NOT recommended!
+				</description>
+				<default>2</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2stbc_sna0ep</name>
+				<description>
+					Small level sources introduced in all cells.
+				</description>
+				<default>1.0e-36</default>
+				<type>float</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2trcl_lluciani</name>
+				<description>
+					If lluciani.ne.0, then transport coefficients on cells belonging to  closed field lines are modified according to the Luciani model.
+					If lluciani.eq.1, the standard connection length formulation is used.
+					If lluciani.eq.2, the old SOLPS4.0 formulation is used for backward compatibility.
+					If lluciani.eq.3, Spb’s new form Luciani’s coefficient.
+				</description>
+				<default>3</default>
+				<type>integer</type>
+				<category>Physics</category>
+			</param>
+			<param> 
+				<name>b2news_potit</name>
+				<description>
+					Maximum number of iterations in the potential equation.
+					It must hold that potitmin &#60; potit.
+
+					CHECK VALIDITY!!! (I added a reserved symbol "less than" in the description value)
+				</description>
+				<default>50</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2news_potitmin</name>
+				<description>
+					Minimum number of iterations in the potential equation.
+					It must hold that potitmin &#60; potit.
+					
+					CHECK VALIDITY!!! (I added a reserved symbol "less than" in the description value)
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2news_potok</name>
+				<description>
+					Target residual for the potential equation.
+				</description>
+				<default>1.0e-2</default>
+				<type>float</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2trcl_lvis21</name>
+				<description>
+					If lvis21.ne.0, then the viscosities are modified according to the 21-moment approach. This should only be used for multi-fluid runs. This switch should not be used along with ’b2tfhe_vis_par’ to avoid double-counting of classical viscosity effects.
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Physics</category>
+			</param>
+			<param> 
+				<name>b2trcl_lthf21</name>
+				<description>
+					If lthf21.ne.0, then the heat transfer model is modified according to the 21-moment approach. This should only be used for multi-fluid runs.
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Physics</category>
+			</param>
+			<param> 
+				<name>b2tfhe_neutral</name>
+				<description>
+					Real parameter which multiplies ion-neutral current.
+					If b2tfhe_neutral is 0 then ion-neutral current is switched off otherwise ion-neutral current is switched on.
+				</description>
+				<default>0.0</default>
+				<type>float</type>
+				<category>Physics</category>
+			</param>
+			<param> 
+				<name>b2tfhe_vis_par</name>
+				<description>
+					Real parameter which multiplies current driven by parallel viscosity. 
+					If b2tfhe_vis_par is 0 then viscosity-driven current is switched off otherwise viscosity-driven current is switched on.
+				</description>
+				<default>0.0</default>
+				<type>float</type>
+				<category>Physics</category>
+			</param>
+			<param> 
+				<name>b2news_facdrift_target</name>
+				<description>
+					One of the ramping parameters for facdrift, which multiplies the diamagnetic terms.
+					The code is started on the first time step with facdrift=facdrift_start.
+					If facdrift_target.ne.facdrift_start, then, on each time step, facdrift is multiplied by facdrift_inc. If the code does not converge on the timestep, facdrift is decreased by facdrift_dec. A facdrift profile is also possible, see Numerics section for details.
+
+					CHECK VALIDITY!!! (Description is not very specific)
+				</description>
+				<default>0.0</default>
+				<type>float</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2news_facdrift_dec</name>
+				<description>
+					One of the ramping parameters for facdrift, which multiplies the diamagnetic terms.
+					The code is started on the first time step with facdrift=facdrift_start.
+					If facdrift_target.ne.facdrift_start, then, on each time step, facdrift is multiplied by facdrift_inc. If the code does not converge on the timestep, facdrift is decreased by facdrift_dec. A facdrift profile is also possible, see Numerics section for details.
+
+					CHECK VALIDITY!!! (Description is not very specific)
+				</description>
+				<default>0.0</default>
+				<type>float</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2news_facdrift_inc</name>
+				<description>
+					One of the ramping parameters for facdrift, which multiplies the diamagnetic terms.
+					The code is started on the first time step with facdrift=facdrift_start.
+					If facdrift_target.ne.facdrift_start, then, on each time step, facdrift is multiplied by facdrift_inc. If the code does not converge on the timestep, facdrift is decreased by facdrift_dec. A facdrift profile is also possible, see Numerics section for details.
+
+					CHECK VALIDITY!!! (Description is not very specific)
+				</description>
+				<default>1.0</default>
+				<type>float</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2news_facdrift_start</name>
+				<description>
+					One of the ramping parameters for facdrift, which multiplies the diamagnetic terms.
+					The code is started on the first time step with facdrift=facdrift_start.
+					If facdrift_target.ne.facdrift_start, then, on each time step, facdrift is multiplied by facdrift_inc. If the code does not converge on the timestep, facdrift is decreased by facdrift_dec. A facdrift profile is also possible, see Numerics section for details.
+
+					CHECK VALIDITY!!! (Description is not very specific)
+				</description>
+				<default>0.0</default>
+				<type>float</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2news_facExB_target</name>
+				<description>
+					One of the ramping parameters for facExB, which multiplies the ExB terms. Same treatment as for facdrift.
+
+					CHECK VALIDITY!!! (I changed the description a bit
+					)
+				</description>
+				<default>0.0</default>
+				<type>float</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2news_facExB_dec</name>
+				<description>
+					One of the ramping parameters for facExB, which multiplies the ExB terms. Same treatment as for facdrift.
+
+					CHECK VALIDITY!!! (I changed the description a bit
+					)
+				</description>
+				<default>0.0</default>
+				<type>float</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2news_facExB_inc</name>
+				<description>
+					One of the ramping parameters for facExB, which multiplies the ExB terms. Same treatment as for facdrift.
+
+					CHECK VALIDITY!!! (I changed the description a bit
+					)
+				</description>
+				<default>1.0</default>
+				<type>float</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2news_facExB_start</name>
+				<description>
+					One of the ramping parameters for facExB, which multiplies the ExB terms. Same treatment as for facdrift.
+
+					CHECK VALIDITY!!! (I changed the description a bit
+					)
+				</description>
+				<default>0.0</default>
+				<type>float</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2stbc_fchy_dia_coreonly</name>
+				<description>
+					If fchy_dia_coreonly.eq.1, the neoclassical current and diamagnetic heat flux convective boundary conditions are only applied on the core boundary.
+					If fchy_dia_coreonly.eq.0, those are applied to all boundaries, including PFR, North SOL edge and diverted island center boundary.
+				</description>
+				<default>1</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2stbc_boundary_namelist</name>
+				<description>
+					Namelist file indicators. If xxx_namelist.eq.1, then the code looks for the file b2.xxx.parameters, in which it expects to find the xxx namelist.
+					If ’b2stbc_boundary_namelist’ is set to 1 in b2mn.dat then the boundary conditions are read in fromb2.boundary.parameters instead of being taken from the file created by b2ah and possibly modified in b2mn.dat.
+
+					CHECK VALIDITY!!! (I added 2 descriptions I found)
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2srdt_numerics_namelist</name>
+				<description>
+					Namelist file indicators. If xxx_namelist.eq.1, then the code looks for the file b2.xxx.parameters, in which it expects to find the xxx namelist.
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2srdt_transport_namelist</name>
+				<description>
+					Namelist file indicators. If xxx_namelist.eq.1, then the code looks for the file b2.xxx.parameters, in which it expects to find the xxx namelist.
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2srdt_neutrals_namelist</name>
+				<description>
+					Namelist file indicators. If xxx_namelist.eq.1, then the code looks for the file b2.xxx.parameters, in which it expects to find the xxx namelist.
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2mwti_jxi</name>
+				<description>
+					Cell index, on the basis mesh, of the inner midplane. Default value depends on geometry:
+					Single-null : jxi=leftcut1(1)+(rightcut1(1)-leftcut1(1))/4, i.e. one quarter of the way between the two cuts.
+					Double-null : jxi=(rightcut1(1)+rightcut1(2))/2, i.e. halfway between the two inner cuts.
+					Straight geometry : jxi=nx/4
+				</description>
+				<default>See description (integer)</default>
+				<type>integer</type>
+				<category>Geometry</category>
+			</param>
+			<param> 
+				<name>b2mwti_jxa</name>
+				<description>
+					Cell index, on the basis mesh, of the outer midplane. Default value depends on geometry:
+					Single-null : jxa=rightcut1(1)-(rightcut1(1)-leftcut1(1))/4, i.e. three quarters of the way between the two cuts.
+					Double-null : jxa=(rightcut1(1)+rightcut1(2))/2, i.e. halfway between the two outer cuts.
+					Straight geometry : jxa=3*nx/4
+				</description>
+				<default>See description (integer)</default>
+				<type>integer</type>
+				<category>Geometry</category>
+			</param>
+			<param> 
+				<name>b2tlh0_alpha</name>
+				<description>
+					One of the parameter for the flux limit to the heat conductivity of the neutrals.
+					Alpha is a multiplier to the classical flux limit value.
+					The larger alpha is, the weaker the flux limit is.
+					The smaller gamma is, the stronger the flux limit is. If alpha.eq.0, no flux limit is applied.
+				</description>
+				<default>0.0</default>
+				<type>float</type>
+				<category>Physics</category>
+			</param>
+			<param> 
+				<name>b2tlh0_gamma</name>
+				<description>
+					One of the parameter for the flux limit to the heat conductivity of the neutrals.
+					Gamma is the exponent used in the flux-limiting formula.
+				</description>
+				<default>2.0</default>
+				<type>float</type>
+				<category>Physics</category>
+			</param>
+			<param> 
+				<name>b2tlh0_flux_limit_min_ti</name>
+				<description>
+					One of the parameter for the flux limit to the heat conductivity of the neutrals.
+					flux_limit_min_ti specifies the minimum ti to be used (in eV)
+				</description>
+				<default>0.0</default>
+				<type>float</type>
+				<category>Physics</category>
+			</param>
+			<param> 
+				<name>b2mndr_eirene</name>
+				<description>
+					Turns on coupling with the Eirene Monte-Carlo neutral code if non-zero.
+					To be used, the code must be compiled with the -DB25_EIRENE option.
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2stbc_feedback</name>
+				<description>
+					If feedback.eq.1, turns on feedback mode for the boundary conditions.
+					See Physics section for more details. Equivalent to LFEEDBACK=.true. in the b2.boundary.parameters namelist.
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2stbc_nesepm_sol</name>
+				<description>
+					One of the feedback switches and it requires that b2stbc_feedback.ne.0 or that lfeedback=.true. in b2.boundary.parameters. The feedback is done as a boundary condition and is under-relaxed using the* b2stbc_...._alpha switches.
+
+					One of  the density feedback switches. nesepm is the outer midplane separatrix electron density. This is controlled through particle input of main plasma species isfeedback through the core boundary. nesepm_sol is the outer midplane separatrix electron density, but this time controlled through a gas puff outside the SOL region. (See b2mwti_jxa switch in Geometry section for setting of midplane position). This is done through particle input of neutrals species isfeedback through the SOL North boundary (See Geometry section for the SOL North boundary index solregno).
+
+					CHECK VALIDITY!!! (I edited the text a bit. Still, it requires more editing.)
+				</description>
+				<default>0.0</default>
+				<type>float</type>
+				<category>Physics</category>
+			</param>
+			<param> 
+				<name>b2stbc_diagno</name>
+				<description>
+					Controls level of output in b2stbc and subservient routines.
+					Level 1 (diagno.ge.1) output includes wrong_flow warnings, transport coefficients at the (nx/2,ny) basis mesh position, the solution found for the given heat flux at constant temperature bc, and all feedback diagnostics.
+					Level 2 output (diagno.ge.2) includes the integral current correction, the boundary sources on the first call, excessive sound speeds, and the iterative progress to the given heat flux at constant temperature bc. 
+					Level 3 output (diagno.ge.3) includes the boundary sources on each call, and the boundary.prt file listing all boundary cells.
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Output</category>
+			</param>
+			<param> 
+				<name>b2stbc_solregno</name>
+				<description>
+					solregno is the boundary index of the SOL North boundary in the input files b2ah.dat and b2mn.dat. For a standard single-null case, solregno is 3. For a standard double-null case, solregno for the outer SOL North boundary would be 7.
+				</description>
+				<default>3</default>
+				<type>integer</type>
+				<category>Geometry</category>
+			</param>
 		</module>
 	</code>
 </solps>
