@@ -33,6 +33,11 @@ module load mvapich2/1.3.2-intel
 # Debugger (set environment variable DBX)
 setenv DBX idb
 
+# Compilers
+setenv CC gcc
+setenv FC ifort
+setenv CXX g++
+
 # Other environment variables
 module load solps-gui
 setenv LD_PRELOAD /usr/lib64/libfontconfig.so.1
