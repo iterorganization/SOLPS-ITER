@@ -548,6 +548,328 @@
 				<type>integer</type>
 				<category>Geometry</category>
 			</param>
+
+
+			<param> 
+				<name>ank_tracing</name>
+				<description>
+					If ank_tracing.ge.1, additional tracing output from Andrei Kukushkin is produced, in files to be found in the tracing/ directory inside the run directory. The traces will be written every ank_tracing iteration.	
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Output</category>
+			</param>
+			<param> 
+				<name>b2agdr_nxiso1</name>
+				<description>
+					Range of an optional isolated region to be included in the geometry. The isolated region will extend over the cell range spanned by (nxiso1:nxiso2,nyiso1:nyiso2).
+					If only some of the four coordinates are given, the region is made to extent from the given coordinates to the end of the grid. Neighbourhood arrays and region indices are automatically adjusted.
+				</description>
+				<default>-2</default>
+				<type>integer</type>
+				<category>Geometry</category>
+			</param>
+			<param> 
+				<name>b2agdr_nxiso2</name>
+				<description>
+					Range of an optional isolated region to be included in the geometry. The isolated region will extend over the cell range spanned by (nxiso1:nxiso2,nyiso1:nyiso2).
+					If only some of the four coordinates are given, the region is made to extent from the given coordinates to the end of the grid. Neighbourhood arrays and region indices are automatically adjusted.
+				</description>
+				<default>-2</default>
+				<type>integer</type>
+				<category>Geometry</category>
+			</param>
+			<param> 
+				<name>b2agdr_nyiso1</name>
+				<description>
+					Range of an optional isolated region to be included in the geometry. The isolated region will extend over the cell range spanned by (nxiso1:nxiso2,nyiso1:nyiso2).
+					If only some of the four coordinates are given, the region is made to extent from the given coordinates to the end of the grid. Neighbourhood arrays and region indices are automatically adjusted.
+				</description>
+				<default>-2</default>
+				<type>integer</type>
+				<category>Geometry</category>
+			</param>
+			<param> 
+				<name>b2agdr_nyiso2</name>
+				<description>
+					Range of an optional isolated region to be included in the geometry. The isolated region will extend over the cell range spanned by (nxiso1:nxiso2,nyiso1:nyiso2).
+					If only some of the four coordinates are given, the region is made to extent from the given coordinates to the end of the grid. Neighbourhood arrays and region indices are automatically adjusted.
+				</description>
+				<default>-2</default>
+				<type>integer</type>
+				<category>Geometry</category>
+			</param>
+			<param> 
+				<name>b2agfs_bottomcut</name>
+				<description>
+					Parameters describing the position and extent of the first topological cut, i.e. corresponding to the first X-point. Needed only to force different values from the ones computed automatically by b2ag.
+					bottomcut is the radial index of cells directly below the cut.
+				</description>
+				<default>See description (integer)</default>
+				<type>integer</type>
+				<category>Geometry</category>
+			</param>
+			<param> 
+				<name>b2agfs_bottomcut2</name>
+				<description>
+					Parameters describing the position and extent of the second topological cut, i.e. corresponding to the second X-point. Needed only to force different values from the ones computed automatically by b2ag.
+					bottomcut2 is the radial index of cells directly below the second cut.
+				</description>
+				<default>See description (integer)</default>
+				<type>integer</type>
+				<category>Geometry</category>
+			</param>
+			<param> 
+				<name>b2agfs_Bt_adjust</name>
+				<description>
+					Bt_adjust - integer.
+					If the mesh is offset (See b2agfs_xoffset, b2agfs_yoffset below) and Bt_adjust.eq.1, then the magnetic field is recomputed, keeping the pitch constant but changing the toroidal field magnitude according to Bt = Bt0/R. To be used in b2ag.dat.
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Geometry</category>
+			</param>
+			<param> 
+				<name>b2agfs_Bt_rescale</name>
+				<description>
+					Bt_rescale - real*8.
+					The magnetic field will be multiplied by Bt_rescale. All components of the field are scaled together. To be used in b2ag.dat.
+				</description>
+				<default>1.0</default>
+				<type>float</type>
+				<category>Geometry</category>
+			</param>
+			<param> 
+				<name>b2agfs_Bt_reversal</name>
+				<description>
+					Bt_reversal - integer.
+					If Bt_reversal.eq.1, then the sign of the toroidal field component only is reversed. The sign convention used is that a positive toroidal field leads to a Bx(grad(B)) direction pointing down, so B is out of the page when looking at the usual view of the poloidal plane with the center line on the left.
+					To be used in b2ag.dat.
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Geometry</category>
+			</param>
+			<param> 
+				<name>b2agfs_geom_match_dist</name>
+				<description>
+					Distance used as the matching criterion when reading the geometry file.
+				</description>
+				<default>1.0e-6</default>
+				<type>float</type>
+				<category>Geometry</category>
+			</param>
+			<param> 
+				<name>b2agfs_geometry</name>
+				<description>
+					local_sonnet - character string.
+					local_sonnet is the file name of the geometry file to be read.
+					The file will be looked for in the run directory, in the ../baserun directory and in $SOLPSTOP/data/meshes. To be used in b2ag.dat.
+
+					CHECK VALIDITY!!! (file type, is it okay ?)
+				</description>
+				<default>upgrade.geometry</default>
+				<type>file</type>
+				<category>Geometry</category>
+			</param>
+			<param> 
+				<name>b2agfs_leftcut</name>
+				<description>
+					Parameters describing the position and extent of the first topological cut, i.e. corresponding to the first X-point. Needed only to force different values from the ones computed automatically by b2ag.
+					leftcut is the poloidal index of cells directly to the RIGHT of the left branch of the cut.
+				</description>
+				<default>See description (integer)</default>
+				<type>integer</type>
+				<category>Geometry</category>
+			</param>
+			<param> 
+				<name>b2agfs_leftcut2</name>
+				<description>
+					Parameters describing the position and extent of the second topological cut, i.e. corresponding to the second X-point. Needed only to force different values from the ones computed automatically by b2ag.
+					leftcut2 is the poloidal index of cells directly to the RIGHT of the left branch of the second cut.
+				</description>
+				<default>See description (integer)</default>
+				<type>integer</type>
+				<category>Geometry</category>
+			</param>
+			<param> 
+				<name>b2agfs_min_pitch</name>
+				<description>
+					Minimum allowed value for the pitch angle (in degrees) at the plates.
+				</description>
+				<default>1.0</default>
+				<type>float</type>
+				<category>Geometry</category>
+			</param>
+			<param> 
+				<name>b2agfs_nncut</name>
+				<description>
+					Number of topological cuts in geometry. Needed only to force a different value from the one computed automatically by b2ag.
+				</description>
+				<default>See description (integer)</default>
+				<type>integer</type>
+				<category>Geometry</category>
+			</param>
+			<param> 
+				<name>b2agfs_periodic_bc</name>
+				<description>
+					periodic_bc - integer.
+					periodic_bc specifies if this is either an island or limiter geometry.
+					If periodic_bc.eq.1 then island/limiter treatment is turned on.
+					We differentiate between the two case through nncut:
+					 nncut.eq.0 = limiter case
+					 nncut.ge.1 = island divertor case (there should be nncut islands then)
+					The case periodic_bc.eq.-1 is used to remove tranverse physics in 1-D cases.
+					If periodic_bc.eq.0 then we have the usual treatment. No other values are currently allowed. To be used in b2ag.dat.
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Geometry</category>
+			</param>
+			<param> 
+				<name>b2agfs_pit_rescale</name>
+				<description>
+					pit_rescale - real*8.
+					The magnetic field line pitch will be multiplied by pit_rescale.
+					This means that the poloidal field component is multiplied by pit_rescale, while the toroidal field component is left unchanged. To reverse the plasma current direction, set pit_rescale to -1.0.
+					The sign convention used is that a positive poloidal field points in the direction of increasing &lt;ix&gt;. Be mindful however that, when inverting the sign of the poloidal magnetic field, you are also inverting the direction of the parallel velocity. You will then need to use the ’b2mndr_inverse_ua’ switch to correct for that. To be used in b2ag.dat.
+
+					CHECK VALIDITY!!! (pit_rescale - real*8., &lt;ix&gt;)
+				</description>
+				<default>1.0</default>
+				<type>float</type>
+				<category>Geometry</category>
+			</param>
+			<param> 
+				<name>b2agfs_rightcut</name>
+				<description>
+					Parameters describing the position and extent of the first topological cut, i.e. corresponding to the first X-point. Needed only to force different values from the ones computed automatically by b2ag.
+					rightcut is the poloidal index of cells directly to the RIGHT of the right branch of the cut.
+				</description>
+				<default>See description (integer)</default>
+				<type>integer</type>
+				<category>Geometry</category>
+			</param>
+			<param> 
+				<name>b2agfs_rightcut2</name>
+				<description>
+					Parameters describing the position and extent of the second topological cut, i.e. corresponding to the second X-point. Needed only to force different values from the ones computed automatically by b2ag.
+					rightcut2 is the poloidal index of cells directly to the RIGHT of the right branch of the second cut.
+				</description>
+				<default>See description (integer)</default>
+				<type>integer</type>
+				<category>Geometry</category>
+			</param>
+			<param> 
+				<name>b2agfs_topcut</name>
+				<description>
+					Parameters describing the position and extent of the first topological cut, i.e. corresponding to the first X-point. Needed only to force different values from the ones computed automatically by b2ag.
+					topcut is the radial index of cells directly above the cut.
+				</description>
+				<default>See description (integer)</default>
+				<type>integer</type>
+				<category>Geometry</category>
+			</param>
+			<param> 
+				<name>b2agfs_topcut2</name>
+				<description>
+					Parameters describing the position and extent of the first topological cut, i.e. corresponding to the first X-point. Needed only to force different values from the ones computed automatically by b2ag.
+					topcut2 is the radial index of cells directly above the second cut.
+				</description>
+				<default>See description (integer)</default>
+				<type>integer</type>
+				<category>Geometry</category>
+			</param>
+			<param> 
+				<name>b2agfs_xoffset</name>
+				<description>
+					xoffset - real*8.
+					xoffset and yoffset are offsets of the basis mesh in the x- and y-direction respectively. The mesh will be translated by (xoffset,yoffset) if any of the two is non-zero from its position given in the local_sonnet (See ’b2agfs_geometry’ above) file.
+					To be used in b2ag.dat.
+				</description>
+				<default>0.0</default>
+				<type>float</type>
+				<category>Geometry</category>
+			</param>
+			<param> 
+				<name>b2agfs_yoffset</name>
+				<description>
+					yoffset - real*8.
+					xoffset and yoffset are offsets of the basis mesh in the x- and y-direction respectively. The mesh will be translated by (xoffset,yoffset) if any of the two is non-zero from its position given in the local_sonnet (See ’b2agfs_geometry’ above) file.
+					To be used in b2ag.dat.
+				</description>
+				<default>0.0</default>
+				<type>float</type>
+				<category>Geometry</category>
+			</param>
+			<param> 
+				<name>b2agfs_xrescale</name>
+				<description>
+					xrescale - real*8.
+					Rescaling factors of the x- and y- coordinates of the basis mesh.
+					To be used in b2ag.dat.
+				</description>
+				<default>1.0</default>
+				<type>float</type>
+				<category>Geometry</category>
+			</param>
+			<param> 
+				<name>b2agfs_yrescale</name>
+				<description>
+					yrescale - real*8.
+					Rescaling factors of the x- and y- coordinates of the basis mesh.
+					To be used in b2ag.dat.
+				</description>
+				<default>1.0</default>
+				<type>float</type>
+				<category>Geometry</category>
+			</param>
+			<param> 
+				<name>b2agmt_1d_width</name>
+				<description>
+					For 1-D cases, gives the width of the domain (in m) in the third (toroidal) dimension.
+				</description>
+				<default>1.0</default>
+				<type>float</type>
+				<category>Geometry</category>
+			</param>
+			<param> 
+				<name>b2agmx_pbs_from_basis_mesh</name>
+				<description>
+					If pbs_from_basis_mesh.eq.0, the pbs array is computed from values on the actual working mesh (old treatment).
+					If pbs_from_basis_mesh.eq.1, the pbs array is computed from values on the (possibly) finer basis mesh from the geometry file and the contributions from each basis cell are added to obtain the value on the working mesh.
+					In both cases, mind the value of ’b2news_area_fix’, which should be also declared in b2ag.dat if the non-default behaviour is wanted.
+				</description>
+				<default>1</default>
+				<type>integer</type>
+				<category>Geometry</category>
+			</param>
+			<param> 
+				<name>b2agsi_isymm</name>
+				<description>
+					isymm - integer.
+					isymm specifies the type of symmetry of the geometry: isymm.eq.0
+					implies a slab geometry, isymm.eq.1.or.isymm.eq.2 imply rotational symmetry about the crx=0 axis, and isymm.eq.3.or.isymm.eq.4
+					indicate rotational symmetry about the cry=0 axis.
+					Other values are not allowed.
+					isymm.eq.1.or.isymm.eq.3 mean a toroidal geometry case, i.e. with a toroidal (out-of-plane) magnetic field component.
+					isymm.eq.2.or.isymm.eq.4 mean a cylindrical geometry case, i.e.
+					no toroidal magnetic field component.
+					To be used in b2ag.dat.
+				</description>
+				<default>1</default>
+				<type>integer</type>
+				<category>Geometry</category>
+			</param>
+			<param> 
+				<name>b2aidr_read_b2fstate</name>
+				<description>
+					If read_b2fstate.ne.0, b2aidr will read an existing b2fstate file and append to it a flat state description for additional new species being introduced in the run.
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Run</category>
+			</param>
 		</module>
 	</code>
 </solps>
