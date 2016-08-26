@@ -926,9 +926,10 @@ rm GNUPLOT_COUNT gnuplot.*data
     \item[GNUPLOT\_POSTSCRIPT\_OPTIONS]\index{GNUPLOT\_POSTSCRIPT\_OPTIONS} \verb!gnuplot! options for the
     PostScript driver
     \item[GNUPLOT\_TERM]\index{GNUPLOT\_TERM} provides the "term" information for \verb!gnuplot!
-    \item[GNUPLOT\_TMP]\index{GNUPLOT\_TMP} causes the \verb!gnuplot.cmd! and
-    \verb!gnuplot.data! temporary files to be written to the directory
-    specified by this environment variable. Also moves the location of the \verb!GNUPLOT_EXTRA! and
+    \item[GNUPLOT\_TMP]\index{GNUPLOT\_TMP} causes the \verb!gnuplot.cmd!,
+    \verb!gnuplot.data! and other temporary files to be written to the directory
+    specified by this environment variable. Works for most scripts.
+    Also moves the location of the \verb!GNUPLOT_EXTRA! and
     \verb!GNUPLOT_COUNT! files to being located in \verb!GNUPLOT_TMP!.
     \item[PLOTPOINTS]\index{PLOTPOINTS} just plot points
     \item[PRINT\_PLOT]\index{PRINT\_PLOT} if set to a filename, then PostScript is

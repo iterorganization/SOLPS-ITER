@@ -21,13 +21,13 @@ EXT_DEBUG = .debug
 endif
 
 ifndef STAND_ALONE
-B2OBJ  = ${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
+B2OBJ = ${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
 EIROBJ = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
 ifneq (${DBX},totalview)
 INC = -I ${B2OBJ} -I ${EIROBJ}
 endif
 else
-B2OBJ  = ${SOLPSTOP}/modules/B2.5/builds/standalone.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
+B2OBJ = ${SOLPSTOP}/modules/B2.5/builds/standalone.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
 ifneq (${DBX},totalview)
 INC = -I ${B2OBJ}
 endif
@@ -73,8 +73,9 @@ triangdir := $(shell cd $(scandir)/baserun ; pwd)
 endif
 baserundir := $(shell cd $(scandir)/baserun ; pwd)
 savefiles := $(shell echo ${PLASMASTATE} | sed -e 's:plasmastate:b2.*_save.parameters:')
-ifeq ($(shell [ -e b2mn.exe.dir/fort.44.* ] && echo yes || echo no ),yes)
-savefiles += $(shell echo ${PLASMASTATE} | sed -e 's:plasmastate:fort.44:')
+fort44file := $(shell echo ${PLASMASTATE} | sed -e 's:plasmastate:fort.44:')
+ifeq ($(shell [ -e $(fort44file) ] && echo yes || echo no ),yes)
+savefiles += $(fort44file)
 endif
 
 echo:

@@ -55,14 +55,16 @@ if (! -e input.dat) then
   endif
 endif
 ln -sf input.dat fort.1
-if (-e ../TRIANG/fort.33) then
-  ln -s ../TRIANG/fort.33 .
-  ln -s ../TRIANG/fort.34 .
-  ln -s ../TRIANG/fort.35 .
-else if (-e ../baserun/fort.33) then
-  ln -s ../baserun/fort.33 .
-  ln -s ../baserun/fort.34 .
-  ln -s ../baserun/fort.35 .
+if (! -e fort.33) then
+  if (-e ../TRIANG/fort.33) then
+    ln -s ../TRIANG/fort.33 .
+    ln -s ../TRIANG/fort.34 .
+    ln -s ../TRIANG/fort.35 .
+  else if (-e ../baserun/fort.33) then
+    ln -s ../baserun/fort.33 .
+    ln -s ../baserun/fort.34 .
+    ln -s ../baserun/fort.35 .
+  endif
 endif
 if (! -e mesh.extra) then
   if (-e ../baserun/mesh.extra) then
