@@ -104,17 +104,17 @@ else
 $(target_pl) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates b2ftrack
 endif
 	rm -rf b2pl.exe.dir >& /dev/null ; mkdir b2pl.exe.dir ; cp $^ b2pl.exe.dir
-	-cp param.dg b2pl.exe.dir/
+	[ -e param.dg ] && cp param.dg b2pl.exe.dir/ || ( [ -e ../baserun/param.dg ] && cp ../baserun/param.dg b2pl.exe.dir/ || echo > /dev/null )
 ifndef STAND_ALONE
 	-cp fort.44 input.dat b2pl.exe.dir/
 	-cd b2pl.exe.dir
 endif
 ifeq (${NCAR_VERSION},3)
 	rm -f $(target_pl) gmeta
-	cd b2pl.exe.dir ; ${TIME} ${B2OBJ}/b2pl.exe ; mv -f gmeta .. ; rm -f $(target_pl) $(notdir $^) .quit
+	cd b2pl.exe.dir ; ${TIME} ${B2OBJ}/b2pl.exe ; mv -f gmeta .. ; rm -f $(target_pl) $(notdir $^) .quit param.dg
 else
 	rm -f $(target_pl) b2plot.ps
-	cd b2pl.exe.dir ; ${TIME} ${B2OBJ}/b2pl.exe ; mv -f b2plot.ps .. ; rm -f $(target_pl) $(notdir $^) .quit
+	cd b2pl.exe.dir ; ${TIME} ${B2OBJ}/b2pl.exe ; mv -f b2plot.ps .. ; rm -f $(target_pl) $(notdir $^) .quit param.dg
 endif
 ifndef STAND_ALONE
 	-rm b2pl.exe.dir/fort.44 b2pl.exe.dir/input.dat b2pl.exe.dir/fort.75
@@ -127,17 +127,17 @@ else
 $(target_pl.dbx) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates b2ftrack param.dg
 endif
 	rm -rf b2pl.exe.dir >& /dev/null ; mkdir b2pl.exe.dir ; cp $^ b2pl.exe.dir
-	-cp param.dg b2pl.exe.dir/
+	[ -e param.dg ] && cp param.dg b2pl.exe.dir/ || ( [ -e ../baserun/param.dg ] && cp ../baserun/param.dg b2pl.exe.dir/ || echo > /dev/null )
 ifndef STAND_ALONE
 	-cp fort.44 input.dat b2pl.exe.dir/
 	-cd b2pl.exe.dir
 endif
 ifeq (${NCAR_VERSION},3)
 	rm -f $(target_pl) gmeta
-	cd b2pl.exe.dir ; ${DBX} ${INC} ${B2OBJ}/b2pl.exe ; mv -f gmeta .. ; rm -f $(target_pl) $(notdir $^) .quit
+	cd b2pl.exe.dir ; ${DBX} ${INC} ${B2OBJ}/b2pl.exe ; mv -f gmeta .. ; rm -f $(target_pl) $(notdir $^) .quit param.dg
 else
 	rm -f $(target_pl) b2plot.ps
-	cd b2pl.exe.dir ; ${DBX} ${INC} ${B2OBJ}/b2pl.exe ; mv -f b2plot.ps .. ; rm -f $(target_pl) $(notdir $^) .quit
+	cd b2pl.exe.dir ; ${DBX} ${INC} ${B2OBJ}/b2pl.exe ; mv -f b2plot.ps .. ; rm -f $(target_pl) $(notdir $^) .quit param.dg
 endif
 ifndef STAND_ALONE
 	-rm b2pl.exe.dir/fort.44 b2pl.exe.dir/input.dat b2pl.exe.dir/fort.75
