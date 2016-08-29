@@ -18,7 +18,7 @@ argloop:
   endif
   if ("X${1}X" == "X-sX") then
     set standalone="yes"
-    echo Asking for a standalone run
+    echo Asking for a B2.5 standalone run
     shift
     goto argloop
   endif

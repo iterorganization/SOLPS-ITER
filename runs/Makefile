@@ -96,6 +96,8 @@ vpath fort.30  .:$(baserundir)
 vpath fort.33  .:$(baserundir):$(triangdir)
 vpath fort.34  .:$(baserundir):$(triangdir)
 vpath fort.35  .:$(baserundir):$(triangdir)
+vpath stra.dat .:$(baserundir)
+vpath weis.dat .:$(baserundir)
 vpath b2frates .:$(baserundir)
 
 #-----------------------------------------------------------------------
