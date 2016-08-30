@@ -3,14 +3,19 @@
 # The version relying on Fujitsu Fortran installed on AFS
 
 # Test whether necessary variables are defined
+ifndef GLI_HOME
+GLI_HOME   = /pfs/work/dpc/SOLPS-ITER/gks
+endif
 ifndef LD_GR
-  $(error LD_GR not defined)
+GR_ROOT   ?= /pfs/work/dpc/SOLPS-ITER/gr
+LD_GR      = -L${GR_ROOT} -lgr  
 endif
 ifndef LD_GKS
-  $(error LD_GKS not defined)
+LD_GKS     = -L${GLI_HOME} -lgks -lgfortran
 endif
 ifndef LD_NAG
-  $(error LD_NAG not defined)
+NAGDIR    ?= /pfs/work/dpc/SOLPS-ITER/nag
+LD_NAG     = -L${NAGDIR} -lnag
 endif
 
 #DEFINES		= ${SOLPS_CPP} ${EIRENE_DEFINES} -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
@@ -35,7 +40,7 @@ endif
 #COMPILE  	= ${FC} -c ${FFLAGS}
 
 NAG		= ${LD_NAG}
-GKS		= ${LD_GR} ${LD_GKS} -lX11 -lXt -lXmu
+GKS		= ${LD_GR} ${LD_GKS} -lX11 -lXt -lxcb
 
 #LDLIBS		= ${LD_MSCL}-L/usr/local/lib -L/usr/X11R6/lib64
 LDLIBS		= -L/usr/local/lib -L/usr/X11R6/lib64

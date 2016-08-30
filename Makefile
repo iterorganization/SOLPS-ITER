@@ -71,17 +71,17 @@ DEFAULT: solps
 #----------------------
 
 
-solps:     carre divgeo b25eirene     uinp     triang sonnet-light manual
+solps:     carre divgeo b25eirene     uinp     triang amds sonnet-light manual
 
-solps_mpi: carre divgeo b25eirene_mpi uinp_mpi triang sonnet-light manual
+solps_mpi: carre divgeo b25eirene_mpi uinp_mpi triang amds sonnet-light manual
 
-nox:       carre_nox b25eirene_nox     uinp_nox     triang_nox manual
+nox:       carre_nox    b25eirene_nox uinp_nox triang_nox manual
 
 nox_mpi:   carre_nox b25eirene_mpi_nox uinp_mpi_nox triang_nox manual
 
-all:       carre divgeo b25     eirene     b25eirene     uinp     triang sonnet-light manual
+all:       carre divgeo b25     eirene     b25eirene     uinp     triang amds sonnet-light manual
 
-all_mpi:   carre divgeo b25_mpi eirene_mpi b25eirene_mpi uinp_mpi triang sonnet-light manual
+all_mpi:   carre divgeo b25_mpi eirene_mpi b25eirene_mpi uinp_mpi triang amds sonnet-light manual
 
 carre:
 	cd modules/Carre; ${MAKE}
@@ -241,6 +241,7 @@ depend:
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO
+	cd modules/amds;           ${MAKE} depend
 #	cd modules/solps4-5;       ${MAKE} depend
 
 VERSION:
