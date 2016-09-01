@@ -111,9 +111,15 @@ displays or writes a resulting picture on disk thanks to matplotlib.
 	#build the figure (Let's go Picasso)
         # Layout is a list composed of
         # [number of sub-plot, legend of the left axis, data, location in the tokamak (Inner target, Outer midplane or Outer target), subplot upper title,subplot lower title ] 
-	layout=[[1,'Te',te, 0, 'Inner target', ''],      [2,'',te,omp[0], 'Outer midplane', ''],    [3,'',te,nx[0]-1, 'Outer target', ''], 
-          [4,'Ti',ti, 0, '', ''],                  [5,'',ti,omp[0], '', ''],                  [6,'',ti,nx[0]-1, '', ''],
-          [7,'ne',nel, 0, '', 'distance wrt sep'], [8,'',nel,omp[0], '', 'distance wrt sep'], [9,'',nel,nx[0]-1, '', 'distance wrt sep']
+	layout=[[1,'Te',te, 0, 'Inner target', ''],
+          [2,'',te,omp[0], 'Outer midplane', ''],
+          [3,'',te,nx[0]-1, 'Outer target', ''], 
+          [4,'Ti',ti, 0, '', ''],
+          [5,'',ti,omp[0], '', ''],
+          [6,'',ti,nx[0]-1, '', ''],
+          [7,'ne',nel, 0, '', 'distance wrt sep'],
+          [8,'',nel,omp[0], '', 'distance wrt sep'],
+          [9,'',nel,nx[0]-1, '', 'distance wrt sep']
          ]
 	
 	# Matplotlib plot definitions : point shape, linked or not, color
