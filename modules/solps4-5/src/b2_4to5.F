@@ -2259,7 +2259,7 @@ c
                 end do
                 is0 = isp(is)+nfluids_4(is)
                 bccon(is0,ib) = 11
-		conpar(is0,ib,1) = cfb_core_4(is)
+		conpar(is0,ib,1) = conpar_4(ifl(is0),ib,1)
 		conpar(is0,ib,2) = 0.0_R8
                 na_feedback_ib(is-1) = ib
               end if
@@ -2980,7 +2980,8 @@ c
      > write(36,hlp_frm)
      .     'NA_FEEDBACK_BETA=    ',na_feedback_beta(0:nspecies-1)
       if (maxval(na_feedback_const(0:nspecies-1)).ne.0.0_R8 .or.
-     &    minval(na_feedback_const(0:nspecies-1)).ne.0.0_R8)
+     &    minval(na_feedback_const(0:nspecies-1)).ne.0.0_R8 .or.
+     &    maxval(na_feedback_choice(0:nspecies-1)).gt.0)
      > write(36,hlp_frm)
      .     'NA_FEEDBACK_CONST=   ',na_feedback_const(0:nspecies-1)
       if (maxval(na_feedback_puff_min(0:nspecies-1)).gt.0.0_R8)

@@ -69,4 +69,4 @@ endsw
 2dt tmte tmti
 
 gnuplot ${tmpdir}gnuplot.cmd
-rm ${tmpdir}GNUPLOT_COUNT ${tmpdir}gnuplot.*data
+rm ${tmpdir}GNUPLOT_COUNT ${tmpdir}gnuplot.*data ${tmpdir}gnuplot.cmd
