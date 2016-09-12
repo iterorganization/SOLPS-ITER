@@ -66,6 +66,11 @@ if (! -e fort.33) then
     ln -s ../baserun/fort.35 .
   endif
 endif
+if (! -e fort.30) then
+  if (-e ../baserun/fort.30) then
+    ln -s ../baserun/fort.30 .
+  endif
+endif
 if (! -e mesh.extra) then
   if (-e ../baserun/mesh.extra) then
     ln -s ../baserun/mesh.extra .
