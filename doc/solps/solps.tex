@@ -1157,10 +1157,10 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[QSUB.postprocess]\index{QSUB.postprocess} List of instructions appended to the {\tt B2.5} stand-alone submission scripts for run post-processing
   \item[QSUB.postprocess\_coupled]\index{QSUB.postprocess\_coupled} List of instructions appended to the \SOLPSITER submission scripts for run post-processing
   \item[quote\_pwd]\index{quote\_pwd} Returns the current working directory as a string with quotes (c.f.\ {\tt noquote\_pwd}).
-  \item[resave\_mds]\index{resave\_mds} Update an archived {\tt MDSplus} case.
+  \item[resave\_mds]\index{resave\_mds} Update an archived {\tt MDSplus} case. A "-n" option allows for dry-run tests. A "-d" option allows to run within the chosen debugger. A "-s" option allows to update a {\tt B2.5} stand-alone case.
   \item[rlndr]\index{rlndr} Replaces a link address by another
   \item[rps]\index{rps} Shifts $\Psi$ values by a given amount within a {\tt DG} equilibrium file (see Sec.~\ref{sec:equtrn}).
-  \item[save\_mds]\index{save\_mds} Archive an {\tt MDSplus} case.
+  \item[save\_mds]\index{save\_mds} Archive an {\tt MDSplus} case. A "-n" option allows for dry-run tests. A "-d" option allows to run within the chosen debugger. A "-s" option allows to archive a {\tt B2.5} stand-alone case.
   \item[setup\_baserun\_eirene\_links]\index{setup\_baserun\_eirene\_links} Prepares the run directory before a {\tt B2.5-Eirene} run by settings up links to the proper data files.
   \item[sgesubmit]\index{sgesubmit} Command file to launch runs on an SGE system. See Section \ref{b2run} for details.
   \item[SOLPS4to5]\index{SOLPS4to5} Script to convert a \SOLPSfour run directory into a \SOLPSfive one.
@@ -1372,7 +1372,6 @@ welcome!
   \item[rename]\index{rename}
   \item[replot]\index{replot}
   \item[reread]\index{reread}
-  \item[resave\_mds\_conditional]\index{resave\_mds\_conditional}
   \item[rmp]\index{rmp}
   \item[run]\index{run}
   \item[saveb2]\index{saveb2}

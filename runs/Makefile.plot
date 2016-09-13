@@ -157,7 +157,7 @@ endif
 	rm -f $(target_md)
 	cd b2md.exe.dir ; ${SOLPSTOP}/scripts/mds_id | ${TIME} ${B2OBJ}/b2md.exe ; mv $(target_md) .. ; rm -f $(notdir $^) .quit ds*
 ifndef STAND_ALONE
-	-rm b2md.exe.dir/fort.44 b2md.exe.dir/input.dat
+	-rm b2md.exe.dir/fort.44 b2md.exe.dir/input.dat b2md.exe.dir/fort.75
 endif
 	-rmdir b2md.exe.dir
 
@@ -174,7 +174,7 @@ endif
 	rm -f $(target_md)
 	cd b2md.exe.dir ; ${SOLPSTOP}/scripts/mds_id | ${DBX} ${INC} ${B2OBJ}/b2md.exe ; mv $(target_md) .. ; rm -f $(notdir $^) .quit ds*
 ifndef STAND_ALONE
-	-rm b2md.exe.dir/fort.44 b2md.exe.dir/input.dat
+	-rm b2md.exe.dir/fort.44 b2md.exe.dir/input.dat b2md.exe.dir/fort.75
 endif
 	-rmdir b2md.exe.dir
 
