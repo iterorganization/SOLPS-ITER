@@ -3521,9 +3521,38 @@ To use the routine:
 
 Example of the 'b2yrp.dat' file.\\
 
-TO BE DONE
+\begin{tabular}{llll}
+\&GEOMETRY& & &\\
+L1     & 	= &   25.0e-3,  &      ! [m]\\
+L2     & 	= &   17.0e-3,  &      ! [m]\\
+L3     & 	= &   0.25e-3,  &      ! [m]\\
+H1     & 	= &    4.0e-3,  &      ! [m]\\
+H2     & 	= &    5.0e-3,  &      ! [m]\\
+H3     & 	= &    7.0e-3,  &      ! [m]\\
+H4     & 	= &    2.0e-3,  &      ! [m]\\
+H5     & 	= &    8.0e-3,  &      ! [m]\\
+H\_HOLE &     =&     2.5e-3, &       ! [m]\\
+RH     & 	= &    1.5e-3,  &      ! [m]\\
+P\_LENGTH&    =&     1.2e-2, &    	 ! tile poloidal length [m]\\
+BETA    &    =&    	 1.0,   &     ! poloidal chamfer [degrees]\\
+/& & &\\
 
-ADD FIGURE
+\&MESH& & &\\
+NN       &   = &   15,    &     ! \# of mesh points on H4\\
+/& & &\\
+
+\&COOLANT& & &\\
+T\_COOLANT&=& 70.0,  &! Coolant inlet temperature [°C]\\
+M\_FLOW&=& 0.734,& ! Coolant mass flow rate    [kg/s]\\
+CP\_COOLANT&=& 4.22e3,&! Coolant specific heat capacity [J/kg/K]\\
+/& & &\\
+\end{tabular}
+
+\begin{figure}[hbtp]
+\centerline{\includegraphics[height=8cm]{ref_plate}}
+\caption{Reflector plate tile cross section}
+\label{fig:refplate_cross_section}
+\end{figure}
 
 \newpage
 \section{b2xx, the others}
