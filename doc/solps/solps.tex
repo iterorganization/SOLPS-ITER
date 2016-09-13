@@ -1145,6 +1145,7 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[lndr]\index{lndr} [ANK] routine to generate shadow trees.
   \item[mds\_id]\index{mds\_id} Obtains certain data necessary for run identification when saving to the {\tt MDSplus} database.
   \item[min\_ave\_max.awk]\index{min\_ave\_max.awk}
+  \item[monoblock\_ht\_model]\index{monoblock\_ht\_model} Runs the monoblock heat transfer model. It requires b2ymb.dat to be present in the run directory. It runs b2plot to produce the heat load profile data of the targets, it runs b2ymb to produce the input files (see \ref{sec:b2ymb}) and finally runs the FreeFem++ heat transfer model of the monoblock.
   \item[n2d]\index{n2d} Converts "Naka" format equilibrium files to {\tt DG} format (see Sec.~\ref{sec:equtrn}).
   \item[nn2d]\index{nn2d} Converts new "Naka" format equilibrium files to {\tt DG} format (see Sec.~\ref{sec:equtrn}).
   \item[nereg]\index{nereg} Shows averaged density per region.
@@ -1157,6 +1158,7 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[QSUB.postprocess]\index{QSUB.postprocess} List of instructions appended to the {\tt B2.5} stand-alone submission scripts for run post-processing
   \item[QSUB.postprocess\_coupled]\index{QSUB.postprocess\_coupled} List of instructions appended to the \SOLPSITER submission scripts for run post-processing
   \item[quote\_pwd]\index{quote\_pwd} Returns the current working directory as a string with quotes (c.f.\ {\tt noquote\_pwd}).
+  \item[refplate\_ht\_model]\index{refplate\_ht\_model} Runs the reflector plate heat transfer model. It requires b2yrp.dat to be present in the run directory. It runs b2plot to produce the heat load profile data of the RPs, it runs b2yrp to produce the input files (see \ref{sec:b2yrp}) and finally runs the FreeFem++ heat transfer model of the RP.
   \item[resave\_mds]\index{resave\_mds} Update an archived {\tt MDSplus} case. A "-n" option allows for dry-run tests. A "-d" option allows to run within the chosen debugger. A "-s" option allows to update a {\tt B2.5} stand-alone case.
   \item[rlndr]\index{rlndr} Replaces a link address by another
   \item[rps]\index{rps} Shifts $\Psi$ values by a given amount within a {\tt DG} equilibrium file (see Sec.~\ref{sec:equtrn}).
@@ -3447,6 +3449,81 @@ This procedure will re-start the run from the point at which the {\tt MDSplus} f
 and run settings are not retrieved along with {\tt b2fstate} (these are not stored) so the user must check the input data
 present in the run directory before re-launching a case. In cases with feedback schemes active, for example, the feedback
 values will be the ones stored in the appropriate namelists from the {\tt b2.*.parameters} files in the run directory. Concerning the retrieval of the geometry case, some quantities must be recomputed by {\tt b2rd} as they are not saved in {\tt MDSplus}, so the code assumes a tokamak geometry and that the mesh is a basis mesh.
+
+\newpage
+\section{b2ymb, post processing for monoblock heat transfer model}
+\label{sec:b2ymb}\index{b2ymb}\index{shotnumber.history}\index{B2.5, recover an archived run}\index{b2fstate}\index{b2fgmtrt}\index{b2fgmtry}
+
+This routine first reads the formatted file 'b2ymb.dat' and writes the unformatted file 'mnb\_in.dat' that is needed by the FreeFem++ heat transfer model of the monoblock.
+Then, it reads the files 'wlld\_trg[i-o].dat' produced by b2plot with the "1000 wlld" command and writes the unformatted files 'W\_tg[i-o].dat', 'X\_tg[i-o].dat' and 'tg[i-o]\_size.dat' that are needed  by the FreeFem++ heat transfer model of the monoblock.
+In 'W\_tg[i-o].dat' is stored the value of the heat flux for each tile of the monoblock in [W]. 
+In 'X\_tg[i-o].dat' is stored the value of the poloidal coordinate of the center of each tile along the monoblock axis (in [m]).
+In 'tg[i-o]\_size.dat' is stored the number of points (i.e. tiles) in which the inner/outer monoblocks have been subdivided according to the assigned tile poloidal length, which is read from the 'b2ymb.dat' file.
+To use the routine:
+\begin{enumerate}
+  \item Define in the DG model the plot zone variables for inner and outer targets with labels 'trgi' and 'trgo' respectively
+  \item Create the file 'b2ymb.dat' in the run directory (see below for an example)
+  \item {\tt echo "1000 wlld" | b2plot} will produce the 'wlld\_trg[i-o].dat' files
+  \item Copy the 'wlld\_trg[i-o].dat' files in the run directory
+  \item {\tt b2plot b2ymb}
+\end{enumerate}
+
+Example of the 'b2ymb.dat' file.\\
+
+\begin{tabular}{llll}
+\&GEOMETRY& & &\\
+HEIGTH&=& 28.0e-3,&! tile heigth [m]\\
+T\_LENGTH& =& 28.0e-3,&! tile toroidal length [m]\\
+CU\_TH&=& 1.0e-3,&! Cu interlayer thickness [m]\\
+CUCRZR\_TH&=& 1.5e-3,&! CuCrZr tube thickness [m]\\
+DIAMETER&=& 12.0e-3,&! CuCrZr tube internal diameter [m]\\
+W\_TH&=& 8.0e-3, &! W armour thickness (from plasma facing surface to Cu interlayer) [m]\\
+P\_LENGTH&=& 1.2e-2, &! tile poloidal length [m]\\
+BETA&=& 1.0, &! poloidal chamfer [degrees]\\
+/& & &\\
+
+\&MESH& & &\\
+NN&=& 50,&! \# of mesh points on longest edge\\
+/& & &\\
+
+\&COOLANT& & &\\
+T\_COOLANT&=& 70.0,  &! Coolant inlet temperature [°C]\\
+M\_FLOW&=& 0.734,& ! Coolant mass flow rate    [kg/s]\\
+CP\_COOLANT&=& 4.22e3,&! Coolant specific heat capacity [J/kg/K]\\
+/& & &\\
+\end{tabular}
+
+\begin{figure}[hbtp]
+\centerline{\includegraphics[height=8cm]{monoblock_cross_section}}
+\caption{Monoblock tile cross section}
+\label{fig:monoblock_cross_section}
+\end{figure}
+
+
+
+\newpage
+\section{b2yrp, post processing for reflector plates heat transfer model}
+\label{sec:b2yrp}\index{b2yrp}\index{shotnumber.history}\index{B2.5, recover an archived run}\index{b2fstate}\index{b2fgmtrt}\index{b2fgmtry}
+
+This routine first reads the formatted file 'b2yrp.dat' and writes the unformatted file 'rps\_in.dat' that is needed by the FreeFem++ heat transfer model of the reflector plates.
+Then, it reads the files 'wlld\_[i-o]rp.dat' produced by b2plot with the "1000 wlld" command and writes the unformatted files 'W\_[i-o]rp.dat', 'X\_[i-o]rp.dat' and '[i-o]rp\_size.dat' that are needed  by the FreeFem++ heat transfer model.
+In 'W\_[i-o]rp.dat' is stored the value of the heat flux for each tile of the RPs in [W]. 
+In 'X\_[i-o]rp.dat' is stored the value of the poloidal coordinate of the center of each tile along the RPs axis (in [m]).
+In '[i-o]rp\_size.dat' is stored the number of points (i.e. tiles) in which the inner/outer RPs have been subdivided according to the assigned tile poloidal length, which is read from the 'b2yrp.dat' file.
+To use the routine:
+\begin{enumerate}
+  \item Define in the DG model the plot zone variables for inner and outer reflector plates with labels 'irp' and 'orp' respectively
+  \item Create the file 'b2yrp.dat' in the run directory (see below for an example)
+  \item {\tt echo "1000 wlld" | b2plot} will produce the 'wlld\_[i-o]rp.dat' files
+  \item Copy the 'wlld\_[i-o]rp.dat' files in the run directory
+  \item {\tt b2plot b2yrp}
+\end{enumerate}
+
+Example of the 'b2yrp.dat' file.\\
+
+TO BE DONE
+
+ADD FIGURE
 
 \newpage
 \section{b2xx, the others}
@@ -12266,7 +12343,9 @@ where the asterisk (*) stands for {\em i} (inner target), {\em iu} (inner upper 
 If J \textgreater 0, then the codes produces a set of {\tt wlld\_*.dat},
 where the asterisk (*) is the name of each "plot zone" defined in the DG model.
 Each such file contains the power loading onto the set of walls defined in that
-plot zone. If LM = 99 and J \textgreater 0, additional diagnostics are produced that indicate the radiation split by isonuclear sequence.
+plot zone. If LM = 99 and J \textgreater 0, additional diagnostics are produced that indicate the radiation split by isonuclear sequence.\\
+If the user wants to use the heat transfer model for the monoblock or the reflector plates, then he must define in the DG model the inner/outer target and reflector plate plot zones using the label 'trg[i-o]' and '[i-o]rp' respectively. The {\tt wlld\_*.dat} produced should then be postprocessed by b2ymb (see \ref{sec:b2ymb}) or b2yrp (\ref{sec:b2yrp}).
+
 
 \section{Common errors}
 \index{b2plot, troubleshooting}
@@ -16907,10 +16986,12 @@ JET in 2002.
 \item[b2yi] \index{b2yi} plots the plasma state
 \item[b2yi\_gnuplot] \index{b2yi\_gnuplot} a version of {\bf b2yi} using {\tt gnuplot} instead of {\tt NCAR}
 \item[b2ym] \index{b2ym} claims to produce a movie
+\item[\textcolor{Red}{b2ymb}] \index{b2ymb} post processes the heat load profiles on the targets and creates input files for the monoblock heat transfer model (see \ref{sec:b2ymb})
 \item[b2yn] \index{b2yn} plots the progress of the inner {\tt B2.5} iterations
 \item[b2yp] \index{b2yp} displays the plasma state
 \item[b2yq] \index{b2yq} claims to provide a quick display of the evolution data
 \item[b2yr] \index{b2yr} plots the atomic rate coefficients
+\item[\textcolor{Red}{b2yrp}] \index{b2yrp} post processes the heat load profiles on the reflector plates and creates input files for the RPs heat transfer model (see \ref{sec:b2yrp})
 \item[\textcolor{Red}{b2yt}] \index{b2yt} transfers the plasma from one mesh to another mesh of a different size (see \ref{sec:b2yt})
 \end{description}
 
@@ -16933,10 +17014,12 @@ b2yg.dat \index{b2yg.dat} & formatted &  b2yg \\
 b2yh.dat \index{b2yh.dat} & formatted &  b2yh \\
 b2yi.dat \index{b2yi.dat} & formatted &  b2yi \\
 b2ym.dat \index{b2ym.dat} & formatted &  b2ym \\
+b2ymb.dat \index{b2ymb.dat} & formatted &  b2ymb \\
 b2yn.dat \index{b2yn.dat} & formatted &  b2yn \\
 b2yp.dat \index{b2yp.dat} & formatted &  b2yp \\
 b2yq.dat \index{b2yq.dat} & formatted &  b2yq \\
 b2yr.dat \index{b2yr.dat} & formatted &  b2yr \\
+b2yrp.dat \index{b2yrp.dat} & formatted &  b2yrp \\
 b2yt.dat \index{b2yt.dat} & formatted &  b2yt \\
 stra.dat \index{stra.dat} & formatted &  b2ar \\
 weis.dat \index{weis.dat} & formatted &  b2ar \\
@@ -16963,10 +17046,12 @@ b2yg.prt \index{b2yg.prt} & formatted & b2yg \\
 b2yh.prt \index{b2yh.prt} & formatted & b2yh \\
 b2yi.prt \index{b2yi.prt} & formatted & b2yi \\
 b2ym.prt \index{b2ym.prt} & formatted & b2ym \\
+b2ymb.prt \index{b2ymb.prt} & formatted & b2ymb \\
 b2yn.prt \index{b2yn.prt} & formatted & b2yn \\
 b2yp.prt \index{b2yp.prt} & formatted & b2yp \\
 b2yq.prt \index{b2yq.prt} & formatted & b2yq \\
 b2yr.prt \index{b2yr.prt} & formatted & b2yr \\
+b2yrp.prt \index{b2yrp.prt} & formatted & b2yrp \\
 b2yt.prt \index{b2yt.prt} & formatted & b2yt \\
 \end{tabular}
   \end{center}
