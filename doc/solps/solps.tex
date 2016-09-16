@@ -13748,8 +13748,26 @@ Reads in the specifications for an alternative palette.  The data
 format is RGB triplets for each colour.
 
 If the file does not exist in the current working directory, the
-directories \${\tt SOLPSTOP/data.local/palettes} and
+directories \${\tt SOLPSTOP/data.local/palettes},
+\${\tt SOLPSTOP/scripts.local/palettes} and
 \${\tt SOLPSTOP/scripts/palettes} are searched in order.
+
+Many different palettes are available and the user can easily create its own.
+For instance, the 'blue\_to\_red' color maps are useful for data fields that 
+have a zero in the middle (such as Mach numbers or velocities). The 
+integer number at the end of the filename indicates how many colours the
+palette contains. Figure~\ref{fig:palette} was produced using the command in
+the caption, which loads the 'jet\_16' palette file.
+
+\begin{figure}[hbtp]
+  \centering
+\ifpdf
+  \includegraphics[height=7cm]{palette_example.pdf}
+\else
+  \includegraphics[height=7cm]{palette_example.eps}
+\fi
+  \caption{ne te m* ev rm* 1.e-3 rm* 'jet\_16.pal' cltb 0. 30. 16 clvn 'Electron Static Pressure [kPa]' glbl vesl phys surf}\label{fig:palette}
+\end{figure}
 
 \subsection{$<$chord file$>$ chor}\index{b2plot, chor}\label{sec:chor}\index{b2plot, chord plots}
 Reads in chords from the specified file and calculates the line
