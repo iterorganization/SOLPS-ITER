@@ -26,8 +26,6 @@ ifeq ($(shell [ -e config/config.${HOST_NAME}.${COMPILER}.local ] && echo yes ||
 include config/config.${HOST_NAME}.${COMPILER}.local
 endif
 
-
-
 #OBJS=amvald.o amview.o amgraph.o amxvars.o amvars.o amundo.o \
 #     amfio.o amdbase.o ammenu.o aminfo.o ammain.o vacreate.o\
 #     amfile.o amtext.o calc.o vars.o ngroups.o amdoc.o amxapp.o \
@@ -40,18 +38,18 @@ OBJS=amvald.o amview.o amgraph.o amxvars.o amvars.o amundo.o \
 
 DEST = $(OBJS:%.o=$(OBJDIR)/%.o)
 
-$(OBJDIR)/%.o : %.c
-	 $(CC) -c $< -o $@
-
-all: dirs $(RES2FBR) $(TARGET)
+all: $(RES2FBR) $(TARGET)
 
 .PHONY: VERSION clean neat all depend listobj force
 
-$(TARGET): $(DEST)
+$(OBJDIR)/vacreate.o:
 	$(CC) -DCbFree=CbFree_ignore -c src/vacreate.c -o $(OBJDIR)/vacreate.o
-	$(CC) $(CFLAGS) -o $@ $(DEST) $(LIBS)
 
-$(DEST): src/*.h
+$(OBJDIR)/%.o : %.c
+	 $(CC) -c $< -o $@
+
+$(TARGET): $(DEST)
+	$(CC) $(CFLAGS) -o $@ $(DEST) $(LIBS)
 
 src/x_~fbr.c: src/amds.xrs $(RES2FBR)
 	 $(RES2FBR) amdsResources <src/amds.xrs >src/x_~fbr.c
@@ -102,5 +100,3 @@ ${OBJDIR}/dependencies.${COMPILER}:
 	${MAKE} depend
 
 include ${OBJDIR}/dependencies.${COMPILER}
-
-
