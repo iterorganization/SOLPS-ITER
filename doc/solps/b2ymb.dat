@@ -1,5 +1,5 @@
 &GEOMETRY
-HEIGTH   = 28.0e-3, ! tile height [m]
+HEIGHT   = 28.0e-3, ! tile height [m]
 T_LENGTH = 28.0e-3, ! tile toroidal length [m]
 CU_TH    =  1.0e-3, ! Cu interlayer thickness [m]
 CUCRZR_TH=  1.5e-3, ! CuCrZr tube thickness [m]
