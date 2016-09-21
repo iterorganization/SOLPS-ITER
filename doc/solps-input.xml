@@ -870,6 +870,325 @@
 				<type>integer</type>
 				<category>Run</category>
 			</param>
+
+			<param> 
+				<name>b2ardr_fix_cx</name>
+				<description>
+					It is used to "correct" the CX data
+					 0 =&gt; do not fix
+					 1 =&gt; only fix H if CX data is &lt; 1e-40 [default]
+					 2 =&gt; fix if CX data is &lt; 1e-40
+					 3 =&gt; fix H
+					 4 =&gt; fix all
+					At the moment the only species with CX data in ADAS is C. Be careful with options that use the fit formula other than for H. 
+					See the comments in ratstr.F for the origin of the fit formula used to "fix" the CX data.
+				</description>
+				<default>1</default>
+				<type>integer</type>
+				<category>Atomic Physics</category>
+			</param>
+			<param> 
+				<name>b2ardr_fix_recomb</name>
+				<description>
+					When changed from 0, and if the ADAS option is in use, then uses the PRB file to add the contribution arising from is--&gt;is-1 processes.
+					This term includes the Bremsstrahlung.
+					The default option (’0’) only contains the Bremsstrahlung for the is--&gt;is-1 process.
+					This option should be used with the ’b2stel_fix_recomb_energy’ option b2mn.dat set to ’1’. See ’Physics’ section.
+					*** Use with caution! ***
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Atomic Physics</category>
+			</param>
+			<param> 
+				<name>b2ardr_no_weisheit</name>
+				<description>
+					When set to 1, disables the correction of the hydrogen atomic rate data with the Weisheit data using ratwei. *** Use with caution! ***
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Atomic Physics</category>
+			</param>
+			<param> 
+				<name>b2ardr_no_smoothing</name>
+				<description>
+					When set to 1, disables the tail smoothing for of rate coefficients to represent the effect of a power-law tail on the distribution function. It has been added for compatibility with SOLPS4.3
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+
+
+
+			<param> 
+				<name>b2ardr_rtnt</name>
+				<description>
+					The number of intervals in the discretisation of the temperature (rtnt) range for the atomic physics tables.
+				</description>
+				<seealso>b2ardr_rtnn</seealso>		
+				<default>40</default>
+				<type>integer</type>
+				<category>Atomic Physics</category>
+			</param>
+			<param> 
+				<name>b2ardr_rtnn</name>
+				<description>
+					The number of intervals in the discretisation of the temperature (rtnn) range for the atomic physics tables.
+				</description>
+				<seealso>b2ardr_rtnt</seealso>
+				<default>16</default>
+				<type>integer</type>
+				<category>Atomic Physics</category>
+			</param>
+			<param> 
+				<name>b2mndr_astra</name>
+				<description>
+					Turns on coupling with the ASTRA core transport code if non-zero.
+					To be used, the code must be compiled with the -DASTRA option.
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2mndr_atomic_physics_rescale</name>
+				<description>
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Physics</category>
+			</param>
+			<param> 
+				<name>b2mndr_cdfmovietim</name>
+				<description>
+					Another option for movie output. Give the real-time interval between movie frames.
+				</description>
+				<default>0.0</default>
+				<type>float</type>
+				<category>Output</category>
+			</param>
+			<param> 
+				<name>b2mndr_coronal_model</name>
+				<description>
+					Turns on the coronal model if coronal.ne.0. I.e., the reaction rates of all reactions are made density-independent, and the value computed at the lowest density (given in b2ar.dat) is used.
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Physics</category>
+			</param>
+			<param> 
+				<name>b2mndr_density_rescale</name>
+				<description>
+					Multiplier of all densities on the first timestep.
+				</description>
+				<default>1.0</default>
+				<type>float</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2mndr_delta_max</name>
+				<description>
+					One of the dynamic timestep control parameters. Only active if both delta_max and delta_min are non-zero. The timestep is increased by a factor dt_change_inc or decreased by a factor dt_change_dec, within the bounds [dt_min, dt_max], according to whether the largest instantaneous change in all equations is smaller than delta_min or larger than delta_max, respectively.
+				</description>
+				<default>0.0</default>
+				<type>float</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2mndr_delta_min</name>
+				<description>
+				</description>
+				<default>0.0</default>
+				<type>float</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2mndr_dpc_mod_rates_ne_hot_frac</name>
+				<description>
+				</description>
+				<default>0.0</default>
+				<type>float</type>
+				<category>Atomic Physics</category>
+			</param>
+			<param> 
+				<name>b2mndr_dpc_mod_rates_te_hot</name>
+				<description>
+				</description>
+				<default>0.0</default>
+				<type>float</type>
+				<category>Atomic Physics</category>
+			</param>
+			<param> 
+				<name>b2mndr_dt_change_dec</name>
+				<description>
+				</description>
+				<default>1.0</default>
+				<type>float</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2mndr_dt_change_inc</name>
+				<description>
+				</description>
+				<default>1.0</default>
+				<type>float</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2mndr_dt_max</name>
+				<description>
+				</description>
+				<default>1.0e+01</default>
+				<type>float</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2mndr_dt_min</name>
+				<description>
+				</description>
+				<default>1.0e-30</default>
+				<type>float</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2mndr_dtim</name>
+				<description>
+				</description>
+				<default>1.0</default>
+				<type>float</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2mndr_eirene</name>
+				<description>
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2mndr_elapsed</name>
+				<description>
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2mndr_etim</name>
+				<description>
+				</description>
+				<default>0.0</default>
+				<type>float</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2mndr_hz</name>
+				<description>
+				</description>
+				<default>0.0</default>
+				<type>float</type>
+				<category>Physics</category>
+			</param>
+			<param> 
+				<name>b2mndr_idout0</name>
+				<description>
+
+					CHECK VALIDITY!!! (type string ?)
+				</description>
+				<default>pgnl;pgmm;pzmm</default>
+				<type>string</type>
+				<category>Output</category>
+			</param>
+			<param> 
+				<name>b2mndr_idout1</name>
+				<description>
+
+					CHECK VALIDITY!!! (type string ?)
+				</description>
+				<default>pzmm</default>
+				<type>string</type>
+				<category>Output</category>
+			</param>
+			<param> 
+				<name>b2mndr_inverse_ua</name>
+				<description>
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Output</category>
+			</param>
+			<param> 
+				<name>b2mndr_isfb</name>
+				<description>
+
+					CHECK VALIDITY!!! (type string ?)
+				</description>
+				<default>ismain</default>
+				<type>string</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2mndr_ismain</name>
+				<description>
+				</description>
+				<default>1</default>
+				<type>integer</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2mndr_ixfb</name>
+				<description>
+
+					CHECK VALIDITY!!! (type integer ?)
+				</description>
+				<default>5*nx/8</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2mndr_iyfb</name>
+				<description>
+
+					CHECK VALIDITY!!! (type integer ?)
+				</description>
+				<default>ny/2</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2mndr_min_areshe</name>
+				<description>
+				</description>
+				<default>0.0</default>
+				<type>float</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2mndr_min_areshi</name>
+				<description>
+				</description>
+				<default>0.0</default>
+				<type>float</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2mndr_min_aresco</name>
+				<description>
+				</description>
+				<default>0.0</default>
+				<type>float</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2mndr_mvinc</name>
+				<description>
+				</description>
+				<default>1</default>
+				<type>integer</type>
+				<category>Output</category>
+			</param>
 		</module>
 	</code>
 </solps>
