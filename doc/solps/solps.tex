@@ -13818,17 +13818,35 @@ Many different palettes are available and the user can easily create its own.
 For instance, the 'blue\_to\_red' color maps are useful for data fields that 
 have a zero in the middle (such as Mach numbers or velocities). The 
 integer number at the end of the filename indicates how many colours the
-palette contains. Figure~\ref{fig:palette} was produced using the command in
-the caption, which loads the 'jet\_16' palette file.
+palette contains. Figure~\ref{fig:palette} was produced using the commands below,
+and shows examples of the 'jet', 'blue\_to\_red', and 'rainbow' palettes.
+
+\begin{verbatim}
+3 1 page a4l
+sep outl comp
+2.0 lbsz 3.0 sepw
+0. 192. 17 clvn te
+'jet_16.pal' cltb 'jet palette' extl
+surf
+
+ti
+'blue_to_red_16.pal' cltb 'blue_to_red palette' extl
+surf
+
+mach
+-1.2 1.2 17 clvn 
+'rainbow_16' cltb 'rainbow palette' extl
+surf
+\end{verbatim}
 
 \begin{figure}[hbtp]
   \centering
 \ifpdf
-  \includegraphics[height=7cm]{palette_example.pdf}
+  \includegraphics[width=.8\linewidth]{palette_example.pdf}
 \else
-  \includegraphics[height=7cm]{palette_example.eps}
+  \includegraphics[width=.8\linewidth]{palette_example.eps}
 \fi
-  \caption{ne te m* ev rm* 1.e-3 rm* 'jet\_16.pal' cltb 0. 30. 16 clvn 'Electron Static Pressure [kPa]' glbl vesl phys surf}\label{fig:palette}
+  \caption{Demonstration of various color palettes available in \btwoplot}\label{fig:palette}
 \end{figure}
 
 \subsection{$<$chord file$>$ chor}\index{b2plot, chor}\label{sec:chor}\index{b2plot, chord plots}
