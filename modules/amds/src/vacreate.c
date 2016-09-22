@@ -60,13 +60,17 @@
 #include <stdarg.h>
 #include <assert.h>
 #include <ctype.h>
-#include <values.h>
+#include <limits.h>
+#include <float.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "vacreate.h"
 
 /* Defines/typedefs/internal declarations /////////////////////////// */
 
+#define MAXDOUBLE DBL_MAX
+#define MAXINT INT_MAX
 #define DLG_ERROR_BOX "errorBox"
 
 #define MAKESTREX_BUF 3000
