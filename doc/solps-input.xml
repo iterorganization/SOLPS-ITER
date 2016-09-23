@@ -20,7 +20,7 @@
 					Timestep (in seconds).
 				</description>
 				<default>1.0</default>
-				<type>float</type>
+				<type>real</type>
 				<category>Run</category>
 			</param>
 			<param> 
@@ -98,7 +98,7 @@
 					Main under-relaxation parameter.
 				</description>
 				<default>0.5</default>
-				<type>float</type>
+				<type>real</type>
 				<category>Numerics</category>
 			</param>
 			<param> 
@@ -145,7 +145,7 @@
 					This switch replaces ’b2mndr_na0eps’ from SOLPS5.x.
 				</description>
 				<default>1.0e4</default>
-				<type>float</type>
+				<type>real</type>
 				<category>Numerics</category>
 			</param>
 			<param> 
@@ -155,18 +155,8 @@
 					This switch replaces ’b2mndr_na0eps’ from SOLPS5.x.
 				</description>
 				<default>1.0e14</default>
-				<type>float</type>
+				<type>real</type>
 				<category>Numerics</category>
-			</param>
-			<param> 
-				<name>b2mndr_cpu</name>
-				<description>
-					CPU limit. Is cpu.eq.0.0, no CPU limit is enforced. Otherwise, the code stops smoothly after it has been running for at least ’cpu’ CPU seconds.
-					CHECK VALIDITY!!!(cahnged "is" to "it")
-				</description>
-				<default>0.0</default>
-				<type>float</type>
-				<category>Run</category>
 			</param>
 			<param> 
 				<name>b2mndr_savecpu</name>
@@ -175,7 +165,7 @@
 					CHECK VALIDITY!!!(badly stated description)
 				</description>
 				<default>3600.0</default>
-				<type>float</type>
+				<type>real</type>
 				<category>Run</category>
 			</param>
 			<param> 
@@ -203,7 +193,7 @@
 					Small level sources introduced in all cells.
 				</description>
 				<default>1.0e-36</default>
-				<type>float</type>
+				<type>real</type>
 				<category>Numerics</category>
 			</param>
 			<param> 
@@ -222,7 +212,7 @@
 				<name>b2news_potit</name>
 				<description>
 					Maximum number of iterations in the potential equation.
-					It must hold that potitmin &#60; potit.
+					It must hold that potitmin &lt; potit.
 
 					CHECK VALIDITY!!! (I added a reserved symbol "less than" in the description value)
 				</description>
@@ -234,7 +224,7 @@
 				<name>b2news_potitmin</name>
 				<description>
 					Minimum number of iterations in the potential equation.
-					It must hold that potitmin &#60; potit.
+					It must hold that potitmin &lt; potit.
 					
 					CHECK VALIDITY!!! (I added a reserved symbol "less than" in the description value)
 				</description>
@@ -248,7 +238,7 @@
 					Target residual for the potential equation.
 				</description>
 				<default>1.0e-2</default>
-				<type>float</type>
+				<type>real</type>
 				<category>Numerics</category>
 			</param>
 			<param> 
@@ -276,7 +266,7 @@
 					If b2tfhe_neutral is 0 then ion-neutral current is switched off otherwise ion-neutral current is switched on.
 				</description>
 				<default>0.0</default>
-				<type>float</type>
+				<type>real</type>
 				<category>Physics</category>
 			</param>
 			<param> 
@@ -286,7 +276,7 @@
 					If b2tfhe_vis_par is 0 then viscosity-driven current is switched off otherwise viscosity-driven current is switched on.
 				</description>
 				<default>0.0</default>
-				<type>float</type>
+				<type>real</type>
 				<category>Physics</category>
 			</param>
 			<param> 
@@ -299,7 +289,7 @@
 					CHECK VALIDITY!!! (Description is not very specific)
 				</description>
 				<default>0.0</default>
-				<type>float</type>
+				<type>real</type>
 				<category>Run</category>
 			</param>
 			<param> 
@@ -312,7 +302,7 @@
 					CHECK VALIDITY!!! (Description is not very specific)
 				</description>
 				<default>0.0</default>
-				<type>float</type>
+				<type>real</type>
 				<category>Run</category>
 			</param>
 			<param> 
@@ -325,7 +315,7 @@
 					CHECK VALIDITY!!! (Description is not very specific)
 				</description>
 				<default>1.0</default>
-				<type>float</type>
+				<type>real</type>
 				<category>Run</category>
 			</param>
 			<param> 
@@ -338,7 +328,7 @@
 					CHECK VALIDITY!!! (Description is not very specific)
 				</description>
 				<default>0.0</default>
-				<type>float</type>
+				<type>real</type>
 				<category>Run</category>
 			</param>
 			<param> 
@@ -350,7 +340,7 @@
 					)
 				</description>
 				<default>0.0</default>
-				<type>float</type>
+				<type>real</type>
 				<category>Run</category>
 			</param>
 			<param> 
@@ -362,7 +352,7 @@
 					)
 				</description>
 				<default>0.0</default>
-				<type>float</type>
+				<type>real</type>
 				<category>Run</category>
 			</param>
 			<param> 
@@ -374,7 +364,7 @@
 					)
 				</description>
 				<default>1.0</default>
-				<type>float</type>
+				<type>real</type>
 				<category>Run</category>
 			</param>
 			<param> 
@@ -386,7 +376,7 @@
 					)
 				</description>
 				<default>0.0</default>
-				<type>float</type>
+				<type>real</type>
 				<category>Run</category>
 			</param>
 			<param> 
@@ -471,7 +461,7 @@
 					The smaller gamma is, the stronger the flux limit is. If alpha.eq.0, no flux limit is applied.
 				</description>
 				<default>0.0</default>
-				<type>float</type>
+				<type>real</type>
 				<category>Physics</category>
 			</param>
 			<param> 
@@ -481,7 +471,7 @@
 					Gamma is the exponent used in the flux-limiting formula.
 				</description>
 				<default>2.0</default>
-				<type>float</type>
+				<type>real</type>
 				<category>Physics</category>
 			</param>
 			<param> 
@@ -491,7 +481,7 @@
 					flux_limit_min_ti specifies the minimum ti to be used (in eV)
 				</description>
 				<default>0.0</default>
-				<type>float</type>
+				<type>real</type>
 				<category>Physics</category>
 			</param>
 			<param> 
@@ -524,7 +514,7 @@
 					CHECK VALIDITY!!! (I edited the text a bit. Still, it requires more editing.)
 				</description>
 				<default>0.0</default>
-				<type>float</type>
+				<type>real</type>
 				<category>Physics</category>
 			</param>
 			<param> 
@@ -559,66 +549,110 @@
 				<type>integer</type>
 				<category>Output</category>
 			</param>
-			<param> 
-				<name>b2agdr_nxiso1</name>
+			<paramgroup>
+				<param> 
+					<name>b2agdr_nxiso1</name>
+					<default>-2</default>
+					<type>integer</type>
+				</param>
+				<param>
+					<name>b2agdr_nxiso2</name>
+					<default>-2</default>
+					<type>integer</type>
+				</param>
+				<param> 
+					<name>b2agdr_nyiso1</name>
+					<default>-2</default>
+					<type>integer</type>
+				</param>
+				<param> 
+					<name>b2agdr_nyiso2</name>
+					<default>-2</default>
+					<type>integer</type>
+				</param>
 				<description>
-					Range of an optional isolated region to be included in the geometry. The isolated region will extend over the cell range spanned by (nxiso1:nxiso2,nyiso1:nyiso2).
+					Range of an optional isolated region to be included in the geometry. 
+					The isolated region will extend over the cell range spanned by (nxiso1:nxiso2,nyiso1:nyiso2).
 					If only some of the four coordinates are given, the region is made to extent from the given coordinates to the end of the grid. Neighbourhood arrays and region indices are automatically adjusted.
 				</description>
-				<default>-2</default>
-				<type>integer</type>
 				<category>Geometry</category>
-			</param>
-			<param> 
-				<name>b2agdr_nxiso2</name>
-				<description>
-					Range of an optional isolated region to be included in the geometry. The isolated region will extend over the cell range spanned by (nxiso1:nxiso2,nyiso1:nyiso2).
-					If only some of the four coordinates are given, the region is made to extent from the given coordinates to the end of the grid. Neighbourhood arrays and region indices are automatically adjusted.
-				</description>
-				<default>-2</default>
-				<type>integer</type>
-				<category>Geometry</category>
-			</param>
-			<param> 
-				<name>b2agdr_nyiso1</name>
-				<description>
-					Range of an optional isolated region to be included in the geometry. The isolated region will extend over the cell range spanned by (nxiso1:nxiso2,nyiso1:nyiso2).
-					If only some of the four coordinates are given, the region is made to extent from the given coordinates to the end of the grid. Neighbourhood arrays and region indices are automatically adjusted.
-				</description>
-				<default>-2</default>
-				<type>integer</type>
-				<category>Geometry</category>
-			</param>
-			<param> 
-				<name>b2agdr_nyiso2</name>
-				<description>
-					Range of an optional isolated region to be included in the geometry. The isolated region will extend over the cell range spanned by (nxiso1:nxiso2,nyiso1:nyiso2).
-					If only some of the four coordinates are given, the region is made to extent from the given coordinates to the end of the grid. Neighbourhood arrays and region indices are automatically adjusted.
-				</description>
-				<default>-2</default>
-				<type>integer</type>
-				<category>Geometry</category>
-			</param>
-			<param> 
-				<name>b2agfs_bottomcut</name>
+			</paramgroup>
+			<paramgroup>
+				<param>
+					<name>b2agfs_leftcut</name>
+					<default>See description (integer)</default>
+					<type>integer</type>
+					<description>
+						leftcut is the poloidal index of cells directly to the RIGHT of the left branch of the cut.
+					</description>
+				</param>
+				<param>
+					<name>b2agfs_rightcut</name>
+					<default>See description (integer)</default>
+					<type>integer</type>
+					<description>
+						rightcut is the poloidal index of cells directly to the RIGHT of the right branch of the cut.
+					</description>
+				</param>
+				<param> 
+					<name>b2agfs_bottomcut</name>
+					<default>See description (integer)</default>
+					<type>integer</type>
+					<description>
+						bottomcut is the radial index of cells directly below the cut.
+					</description>
+				</param>
+				<param>
+					<name>b2agfs_topcut</name>
+					<default>See description (integer)</default>
+					<type>integer</type>
+					<description>
+						topcut is the radial index of cells directly above the cut.
+					</description>
+				</param>
 				<description>
 					Parameters describing the position and extent of the first topological cut, i.e. corresponding to the first X-point. Needed only to force different values from the ones computed automatically by b2ag.
-					bottomcut is the radial index of cells directly below the cut.
 				</description>
-				<default>See description (integer)</default>
-				<type>integer</type>
 				<category>Geometry</category>
-			</param>
-			<param> 
-				<name>b2agfs_bottomcut2</name>
+			</paramgroup>
+			<paramgroup>
+				<param>
+					<name>b2agfs_leftcut2</name>
+					<default>See description (integer)</default>
+					<type>integer</type>
+					<description>
+						leftcut2 is the poloidal index of cells directly to the RIGHT of the left branch of the second cut.
+					</description>
+				</param>
+				<param>
+					<name>b2agfs_rightcut2</name>
+					<default>See description (integer)</default>
+					<type>integer</type>
+					<description>
+						rightcut2 is the poloidal index of cells directly to the RIGHT of the right branch of the second cut.
+					</description>
+				</param>
+				<param> 
+					<name>b2agfs_bottomcut2</name>
+					<default>See description (integer)</default>
+					<type>integer</type>
+					<description>
+						bottomcut2 is the radial index of cells directly below the second cut.
+					</description>
+				</param>
+				<param>
+					<name>b2agfs_topcut2</name>
+					<default>See description (integer)</default>
+					<type>integer</type>
+					<description>
+						topcut2 is the radial index of cells directly above the second cut.
+					</description>
+				</param>
 				<description>
-					Parameters describing the position and extent of the second topological cut, i.e. corresponding to the second X-point. Needed only to force different values from the ones computed automatically by b2ag.
-					bottomcut2 is the radial index of cells directly below the second cut.
+					Parameters describing the position and extent of the second topological cut, i.e. corresponding to the second X-point. Needed only to force different values from the ones computed automatically by b2ag.		
 				</description>
-				<default>See description (integer)</default>
-				<type>integer</type>
 				<category>Geometry</category>
-			</param>
+			</paramgroup>
 			<param> 
 				<name>b2agfs_Bt_adjust</name>
 				<description>
@@ -636,7 +670,7 @@
 					The magnetic field will be multiplied by Bt_rescale. All components of the field are scaled together. To be used in b2ag.dat.
 				</description>
 				<default>1.0</default>
-				<type>float</type>
+				<type>real</type>
 				<category>Geometry</category>
 			</param>
 			<param> 
@@ -656,7 +690,7 @@
 					Distance used as the matching criterion when reading the geometry file.
 				</description>
 				<default>1.0e-6</default>
-				<type>float</type>
+				<type>real</type>
 				<category>Geometry</category>
 			</param>
 			<param> 
@@ -666,30 +700,10 @@
 					local_sonnet is the file name of the geometry file to be read.
 					The file will be looked for in the run directory, in the ../baserun directory and in $SOLPSTOP/data/meshes. To be used in b2ag.dat.
 
-					CHECK VALIDITY!!! (file type, is it okay ?)
+					CHECK VALIDITY!!! (type)
 				</description>
 				<default>upgrade.geometry</default>
 				<type>file</type>
-				<category>Geometry</category>
-			</param>
-			<param> 
-				<name>b2agfs_leftcut</name>
-				<description>
-					Parameters describing the position and extent of the first topological cut, i.e. corresponding to the first X-point. Needed only to force different values from the ones computed automatically by b2ag.
-					leftcut is the poloidal index of cells directly to the RIGHT of the left branch of the cut.
-				</description>
-				<default>See description (integer)</default>
-				<type>integer</type>
-				<category>Geometry</category>
-			</param>
-			<param> 
-				<name>b2agfs_leftcut2</name>
-				<description>
-					Parameters describing the position and extent of the second topological cut, i.e. corresponding to the second X-point. Needed only to force different values from the ones computed automatically by b2ag.
-					leftcut2 is the poloidal index of cells directly to the RIGHT of the left branch of the second cut.
-				</description>
-				<default>See description (integer)</default>
-				<type>integer</type>
 				<category>Geometry</category>
 			</param>
 			<param> 
@@ -698,7 +712,7 @@
 					Minimum allowed value for the pitch angle (in degrees) at the plates.
 				</description>
 				<default>1.0</default>
-				<type>float</type>
+				<type>real</type>
 				<category>Geometry</category>
 			</param>
 			<param> 
@@ -732,105 +746,55 @@
 					pit_rescale - real*8.
 					The magnetic field line pitch will be multiplied by pit_rescale.
 					This means that the poloidal field component is multiplied by pit_rescale, while the toroidal field component is left unchanged. To reverse the plasma current direction, set pit_rescale to -1.0.
-					The sign convention used is that a positive poloidal field points in the direction of increasing &lt;ix&gt;. Be mindful however that, when inverting the sign of the poloidal magnetic field, you are also inverting the direction of the parallel velocity. You will then need to use the ’b2mndr_inverse_ua’ switch to correct for that. To be used in b2ag.dat.
-
-					CHECK VALIDITY!!! (pit_rescale - real*8., &lt;ix&gt;)
-				</description>
-				<default>1.0</default>
-				<type>float</type>
-				<category>Geometry</category>
-			</param>
-			<param> 
-				<name>b2agfs_rightcut</name>
-				<description>
-					Parameters describing the position and extent of the first topological cut, i.e. corresponding to the first X-point. Needed only to force different values from the ones computed automatically by b2ag.
-					rightcut is the poloidal index of cells directly to the RIGHT of the right branch of the cut.
-				</description>
-				<default>See description (integer)</default>
-				<type>integer</type>
-				<category>Geometry</category>
-			</param>
-			<param> 
-				<name>b2agfs_rightcut2</name>
-				<description>
-					Parameters describing the position and extent of the second topological cut, i.e. corresponding to the second X-point. Needed only to force different values from the ones computed automatically by b2ag.
-					rightcut2 is the poloidal index of cells directly to the RIGHT of the right branch of the second cut.
-				</description>
-				<default>See description (integer)</default>
-				<type>integer</type>
-				<category>Geometry</category>
-			</param>
-			<param> 
-				<name>b2agfs_topcut</name>
-				<description>
-					Parameters describing the position and extent of the first topological cut, i.e. corresponding to the first X-point. Needed only to force different values from the ones computed automatically by b2ag.
-					topcut is the radial index of cells directly above the cut.
-				</description>
-				<default>See description (integer)</default>
-				<type>integer</type>
-				<category>Geometry</category>
-			</param>
-			<param> 
-				<name>b2agfs_topcut2</name>
-				<description>
-					Parameters describing the position and extent of the first topological cut, i.e. corresponding to the first X-point. Needed only to force different values from the ones computed automatically by b2ag.
-					topcut2 is the radial index of cells directly above the second cut.
-				</description>
-				<default>See description (integer)</default>
-				<type>integer</type>
-				<category>Geometry</category>
-			</param>
-			<param> 
-				<name>b2agfs_xoffset</name>
-				<description>
-					xoffset - real*8.
-					xoffset and yoffset are offsets of the basis mesh in the x- and y-direction respectively. The mesh will be translated by (xoffset,yoffset) if any of the two is non-zero from its position given in the local_sonnet (See ’b2agfs_geometry’ above) file.
-					To be used in b2ag.dat.
-				</description>
-				<default>0.0</default>
-				<type>float</type>
-				<category>Geometry</category>
-			</param>
-			<param> 
-				<name>b2agfs_yoffset</name>
-				<description>
-					yoffset - real*8.
-					xoffset and yoffset are offsets of the basis mesh in the x- and y-direction respectively. The mesh will be translated by (xoffset,yoffset) if any of the two is non-zero from its position given in the local_sonnet (See ’b2agfs_geometry’ above) file.
-					To be used in b2ag.dat.
-				</description>
-				<default>0.0</default>
-				<type>float</type>
-				<category>Geometry</category>
-			</param>
-			<param> 
-				<name>b2agfs_xrescale</name>
-				<description>
-					xrescale - real*8.
-					Rescaling factors of the x- and y- coordinates of the basis mesh.
+					The sign convention used is that a positive poloidal field points in the direction of increasing &lt;ix&gt;. Be mindful however that, when inverting the sign of the poloidal magnetic field, you are also inverting the direction of the parallel velocity. You will then need to use the ’b2mndr_inverse_ua’ switch to correct for that.
 					To be used in b2ag.dat.
 				</description>
 				<default>1.0</default>
-				<type>float</type>
+				<type>real</type>
 				<category>Geometry</category>
 			</param>
-			<param> 
-				<name>b2agfs_yrescale</name>
+			<paramgroup>
+				<param> 
+					<name>b2agfs_xoffset</name>
+					<default>0.0</default>
+					<type>real*8</type>
+				</param>
+				<param> 
+					<name>b2agfs_yoffset</name>
+					<default>0.0</default>
+					<type>real*8</type>
+				</param>
+				<description>
+					xoffset and yoffset are offsets of the basis mesh in the x- and y-direction respectively. The mesh will be translated by (xoffset,yoffset) if any of the two is non-zero from its position given in the local_sonnet (See ’b2agfs_geometry’ above) file.
+					To be used in b2ag.dat.
+				</description>
+				<category>Geometry</category>
+			</paramgroup>
+			<paramgroup>	
+				<param> 
+					<name>b2agfs_xrescale</name>
+					<default>1.0</default>
+					<type>real*8</type>
+				</param>
+				<param> 
+					<name>b2agfs_yrescale</name>
+					<default>1.0</default>
+					<type>real*8</type>
+				</param>
 				<description>
 					yrescale - real*8.
 					Rescaling factors of the x- and y- coordinates of the basis mesh.
 					To be used in b2ag.dat.
 				</description>
-				<default>1.0</default>
-				<type>float</type>
 				<category>Geometry</category>
-			</param>
+			</paramgroup>
 			<param> 
 				<name>b2agmt_1d_width</name>
 				<description>
 					For 1-D cases, gives the width of the domain (in m) in the third (toroidal) dimension.
 				</description>
 				<default>1.0</default>
-				<type>float</type>
+				<type>real</type>
 				<category>Geometry</category>
 			</param>
 			<param> 
@@ -870,7 +834,6 @@
 				<type>integer</type>
 				<category>Run</category>
 			</param>
-
 			<param> 
 				<name>b2ardr_fix_cx</name>
 				<description>
@@ -918,29 +881,22 @@
 				<type>integer</type>
 				<category>Numerics</category>
 			</param>
-
-
-
-			<param> 
-				<name>b2ardr_rtnt</name>
+			<paramgroup>
+				<param> 
+					<name>b2ardr_rtnt</name>		
+					<default>40</default>
+					<type>integer</type>
+				</param>
+				<param> 
+					<name>b2ardr_rtnn</name>
+					<default>16</default>
+					<type>integer</type>
+				</param>
 				<description>
-					The number of intervals in the discretisation of the temperature (rtnt) range for the atomic physics tables.
+					The number of intervals in the discretisation of the density (rtnn) and temperature (rtnt) ranges for the atomic physics tables.
 				</description>
-				<seealso>b2ardr_rtnn</seealso>		
-				<default>40</default>
-				<type>integer</type>
 				<category>Atomic Physics</category>
-			</param>
-			<param> 
-				<name>b2ardr_rtnn</name>
-				<description>
-					The number of intervals in the discretisation of the temperature (rtnn) range for the atomic physics tables.
-				</description>
-				<seealso>b2ardr_rtnt</seealso>
-				<default>16</default>
-				<type>integer</type>
-				<category>Atomic Physics</category>
-			</param>
+			</paramgroup>
 			<param> 
 				<name>b2mndr_astra</name>
 				<description>
@@ -954,6 +910,7 @@
 			<param> 
 				<name>b2mndr_atomic_physics_rescale</name>
 				<description>
+					If atomic_physics_rescale is not 0, then the code will rescale the rates stored in b2frates according to the multipliers given in the b2.atomic_physics_rescale.parameters inputfile before making use of them.
 				</description>
 				<default>0</default>
 				<type>integer</type>
@@ -965,7 +922,7 @@
 					Another option for movie output. Give the real-time interval between movie frames.
 				</description>
 				<default>0.0</default>
-				<type>float</type>
+				<type>real</type>
 				<category>Output</category>
 			</param>
 			<param> 
@@ -978,90 +935,91 @@
 				<category>Physics</category>
 			</param>
 			<param> 
+				<name>b2mndr_cpu</name>
+				<description>
+					CPU limit. Is cpu.eq.0.0, no CPU limit is enforced. Otherwise, the code stops smoothly after it has been running for at least ’cpu’ CPU seconds.
+					CHECK VALIDITY!!!(changed "is" to "it")
+				</description>
+				<default>0.0</default>
+				<type>real</type>
+				<category>Run</category>
+			</param>
+			<param> 
 				<name>b2mndr_density_rescale</name>
 				<description>
 					Multiplier of all densities on the first timestep.
 				</description>
 				<default>1.0</default>
-				<type>float</type>
+				<type>real</type>
 				<category>Run</category>
 			</param>
-			<param> 
-				<name>b2mndr_delta_max</name>
+			<paramgroup>
+				<param> 
+					<name>b2mndr_delta_max</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2mndr_delta_min</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2mndr_dt_change_dec</name>
+					<default>1.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2mndr_dt_change_inc</name>
+					<default>1.0</default>
+					<type>real</type>
+				</param>
+					<param> 
+					<name>b2mndr_dt_max</name>
+					<default>1.0e+01</default>
+					<type>real</type>					
+				</param>
+				<param> 
+					<name>b2mndr_dt_min</name>					
+					<default>1.0e-30</default>
+					<type>real</type>					
+				</param>
 				<description>
 					One of the dynamic timestep control parameters. Only active if both delta_max and delta_min are non-zero. The timestep is increased by a factor dt_change_inc or decreased by a factor dt_change_dec, within the bounds [dt_min, dt_max], according to whether the largest instantaneous change in all equations is smaller than delta_min or larger than delta_max, respectively.
 				</description>
-				<default>0.0</default>
-				<type>float</type>
 				<category>Run</category>
-			</param>
-			<param> 
-				<name>b2mndr_delta_min</name>
+			<paramgroup>
+			<paramgroup>
+				<param> 
+					<name>b2mndr_dpc_mod_rates_ne_hot_frac</name>		
+					<default>0.0</default>
+					<type>real</type> 
+				</param>
+				<param> 
+					<name>b2mndr_dpc_mod_rates_te_hot</name>
+					<default>0.0</default>
+					<type>real</type>
 				<description>
+					Modify the atomic rates by including a hot electron population of temperature te_hot (in eV) and a population faction ne_hot_frac.
+					Still experimental.
 				</description>
-				<default>0.0</default>
-				<type>float</type>
-				<category>Run</category>
-			</param>
-			<param> 
-				<name>b2mndr_dpc_mod_rates_ne_hot_frac</name>
-				<description>
-				</description>
-				<default>0.0</default>
-				<type>float</type>
 				<category>Atomic Physics</category>
 			</param>
-			<param> 
-				<name>b2mndr_dpc_mod_rates_te_hot</name>
-				<description>
-				</description>
-				<default>0.0</default>
-				<type>float</type>
-				<category>Atomic Physics</category>
-			</param>
-			<param> 
-				<name>b2mndr_dt_change_dec</name>
-				<description>
-				</description>
-				<default>1.0</default>
-				<type>float</type>
-				<category>Run</category>
-			</param>
-			<param> 
-				<name>b2mndr_dt_change_inc</name>
-				<description>
-				</description>
-				<default>1.0</default>
-				<type>float</type>
-				<category>Run</category>
-			</param>
-			<param> 
-				<name>b2mndr_dt_max</name>
-				<description>
-				</description>
-				<default>1.0e+01</default>
-				<type>float</type>
-				<category>Run</category>
-			</param>
-			<param> 
-				<name>b2mndr_dt_min</name>
-				<description>
-				</description>
-				<default>1.0e-30</default>
-				<type>float</type>
-				<category>Run</category>
-			</param>
+			</paramgroup>
 			<param> 
 				<name>b2mndr_dtim</name>
 				<description>
+					Timestep (in seconds).
 				</description>
 				<default>1.0</default>
-				<type>float</type>
+				<type>real</type>
 				<category>Run</category>
 			</param>
 			<param> 
 				<name>b2mndr_eirene</name>
 				<description>
+					Turns on coupling with the Eirene Monte-Carlo neutral code if non-zero.
+					To be used, the code must be compiled with the -DB25_EIRENE option.
 				</description>
 				<default>0</default>
 				<type>integer</type>
@@ -1070,6 +1028,8 @@
 			<param> 
 				<name>b2mndr_elapsed</name>
 				<description>
+					Elapsed time limit. Is elapsed.eq.0.0, no time limit is enforced.
+					Otherwise, the code stops smoothly after is has been running for at least ’elapsed’ wall clock seconds.
 				</description>
 				<default>0</default>
 				<type>integer</type>
@@ -1078,112 +1038,119 @@
 			<param> 
 				<name>b2mndr_etim</name>
 				<description>
+					etim specifies the end time. Only active if etim &gt; stim.
 				</description>
 				<default>0.0</default>
-				<type>float</type>
+				<type>real</type>
 				<category>Run</category>
 			</param>
 			<param> 
 				<name>b2mndr_hz</name>
 				<description>
+					hz has been introduced into the new form of the parallel momentum balance equation.
+					If fac_hz = 0.0 then hz = 1 and old form of equations is used.
+					If fac_hz = 1.0 then new form of equations is used.
 				</description>
 				<default>0.0</default>
-				<type>float</type>
+				<type>real</type>
 				<category>Physics</category>
 			</param>
-			<param> 
-				<name>b2mndr_idout0</name>
+			<paramgroup>
+				<param> 
+					<name>b2mndr_idout0</name>
+					<default>pgnl;pgmm;pzmm</default>
+					<type>string</type>
+				</param>
+				<param> 
+					<name>b2mndr_idout1</name>				
+					<default>pzmm</default>
+					<type>string</type>
+				</param>
 				<description>
+					idout0 and idout1 specify the desired selection of output segments; idout0 for output before the calculation and idout1 for output at the conclusion of the calculation. The generic description of either of these ’idout’ variables follows. idout specifies the desired selection of output segments for printed and graphical output. Associated with each segment is a four-character word, which is identified on the printed output. (The same word may be associated with several segments.) A particular segment will be produced only if its associated word has a match, as defined by the routine strmas, in idout.
 
 					CHECK VALIDITY!!! (type string ?)
 				</description>
-				<default>pgnl;pgmm;pzmm</default>
-				<type>string</type>
 				<category>Output</category>
-			</param>
-			<param> 
-				<name>b2mndr_idout1</name>
-				<description>
-
-					CHECK VALIDITY!!! (type string ?)
-				</description>
-				<default>pzmm</default>
-				<type>string</type>
-				<category>Output</category>
-			</param>
+			</paramgroup>
 			<param> 
 				<name>b2mndr_inverse_ua</name>
 				<description>
+					If inverse_ua.eq.1, the code will produce a ’b2fstati_with-ua’ file that contains the same plasma information, but with the opposite sign convention for the parallel velocity. The run will then proceed with the new velocities with their sign inverted.
 				</description>
 				<default>0</default>
 				<type>integer</type>
 				<category>Output</category>
 			</param>
-			<param> 
-				<name>b2mndr_isfb</name>
+			<paramgroup>
+				<param> 
+					<name>b2mndr_isfb</name>					
+					<default>ismain</default>
+					<type>string</type>
+				</param>
+				<param> 
+					<name>b2mndr_ixfb</name>					
+					<default>5*nx/8</default>
+					<type>integer</type>					
+				</param>
+				<param> 
+					<name>b2mndr_iyfb</name>					
+					<default>ny/2</default>
+					<type>integer</type>					
+				</param>
+				<param> 
+					<name>b2mndr_ne_wanted</name>					
+					<default>0.0</default>
+					<type>real</type>					
+				</param>
+				<param> 
+					<name>b2mndr_ne_wanted_time</name>					
+					<default>0.0</default>
+					<type>integer</type>					
+				</param>
 				<description>
+					Experimental: allows for density feedback of the number of electrons accompanying species ’isfb’ at location (ixfb,iyfb).
+					Note that ixfb and iyfb are real numbers!
 
-					CHECK VALIDITY!!! (type string ?)
+					CHECK VALIDITY!!! (type string, integer ?)
 				</description>
-				<default>ismain</default>
-				<type>string</type>
 				<category>Numerics</category>
-			</param>
+			</paramgroup>
 			<param> 
 				<name>b2mndr_ismain</name>
 				<description>
+					ismain identifies the index of the main plasma species. 
+					It must hold that ismain is not a neutral species.
 				</description>
 				<default>1</default>
 				<type>integer</type>
 				<category>Run</category>
 			</param>
-			<param> 
-				<name>b2mndr_ixfb</name>
+			<paramgroup>
+				<param> 
+					<name>b2mndr_min_areshe</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2mndr_min_areshi</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2mndr_min_aresco</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
 				<description>
-
-					CHECK VALIDITY!!! (type integer ?)
+					Minimum residuals for stopping a run. All criteria must be met simultaneously for the run to stop. The continuity equation residual applies to the "ismain" species (See "Run" section).
 				</description>
-				<default>5*nx/8</default>
-				<type>integer</type>
 				<category>Numerics</category>
-			</param>
-			<param> 
-				<name>b2mndr_iyfb</name>
-				<description>
-
-					CHECK VALIDITY!!! (type integer ?)
-				</description>
-				<default>ny/2</default>
-				<type>integer</type>
-				<category>Numerics</category>
-			</param>
-			<param> 
-				<name>b2mndr_min_areshe</name>
-				<description>
-				</description>
-				<default>0.0</default>
-				<type>float</type>
-				<category>Numerics</category>
-			</param>
-			<param> 
-				<name>b2mndr_min_areshi</name>
-				<description>
-				</description>
-				<default>0.0</default>
-				<type>float</type>
-				<category>Numerics</category>
-			</param>
-			<param> 
-				<name>b2mndr_min_aresco</name>
-				<description>
-				</description>
-				<default>0.0</default>
-				<type>float</type>
-				<category>Numerics</category>
-			</param>
+			</paramgroup>
 			<param> 
 				<name>b2mndr_mvinc</name>
 				<description>
+					Specifies the number of timesteps between movie output. If greater than 1 and the last timestep does not correspond to a planned frame, an extra endstate frame is added.
 				</description>
 				<default>1</default>
 				<type>integer</type>
