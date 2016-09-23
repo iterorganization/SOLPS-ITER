@@ -170,9 +170,7 @@ amds:
 
 sonnet-light:
 	@-mkdir -p ${SOLPSLIB}
-ifeq ($(shell [ -e ${SOLPSLIB}/libsonnet.a ] && echo yes || echo no ),no)
-	cd modules/Sonnet-light; ${MAKE} all; ${MAKE} install INSTALL_USERAREA=${SOLPSLIB}
-endif
+	cd modules/Sonnet-light; ${MAKE} all INSTALL_USERAREA=${SOLPSLIB}
 
 b2sxdr:
 	cd modules/solps4-5; ${MAKE} links

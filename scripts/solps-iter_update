@@ -2,7 +2,7 @@
 
 cd $SOLPSTOP
 echo "Updating SOLPS-ITER"
-git fetch
+git fetch --prune
 git checkout develop && echo "Checked out SOLPS-ITER develop branch" || goto branch
 git pull && goto b25 || goto local
 
