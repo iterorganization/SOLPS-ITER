@@ -988,7 +988,7 @@
 					One of the dynamic timestep control parameters. Only active if both delta_max and delta_min are non-zero. The timestep is increased by a factor dt_change_inc or decreased by a factor dt_change_dec, within the bounds [dt_min, dt_max], according to whether the largest instantaneous change in all equations is smaller than delta_min or larger than delta_max, respectively.
 				</description>
 				<category>Run</category>
-			<paramgroup>
+      </paramgroup>
 			<paramgroup>
 				<param> 
 					<name>b2mndr_dpc_mod_rates_ne_hot_frac</name>		
