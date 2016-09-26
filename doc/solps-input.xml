@@ -988,7 +988,7 @@
 					One of the dynamic timestep control parameters. Only active if both delta_max and delta_min are non-zero. The timestep is increased by a factor dt_change_inc or decreased by a factor dt_change_dec, within the bounds [dt_min, dt_max], according to whether the largest instantaneous change in all equations is smaller than delta_min or larger than delta_max, respectively.
 				</description>
 				<category>Run</category>
-      </paramgroup>
+      		</paramgroup>
 			<paramgroup>
 				<param> 
 					<name>b2mndr_dpc_mod_rates_ne_hot_frac</name>		
@@ -1156,6 +1156,843 @@
 				<type>integer</type>
 				<category>Output</category>
 			</param>
+			<param> 
+				<name>b2mndr_mvnum</name>
+				<description>
+					Specifies the maximum number of instances at which movie data will be output.
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Output</category>
+			</param>
+			<paramgroup>
+				<param> 
+					<name>b2mndr_na_eps</name>
+					<default>1.0e19</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2mndr_po_eps</name>
+					<default>1.0e+1</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2mndr_te_eps</name>
+					<default>1.0e+1</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2mndr_ti_eps</name>
+					<default>1.0e+1</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2mndr_ua_eps</name>
+					<default>1.0e+4</default>
+					<type>real</type>
+				</param>
+				<description>
+						The five switches above are safeguards numbers for when printing changes after a time-step. The change is computed as:
+						deltaX = abs((X(t)-X(t-1))/(X(t)+X_eps))
+				</description>
+				<category>Output</category>
+			</paramgroup>
+			<param> 
+				<name>b2mndr_na_min</name>
+				<description>
+					Minimal density maintained in all cells for all species.
+					It must be true that na_min is smaller than na_new, as well as any of the initial densities provided in b2ai.dat.
+					This switch replaces ’b2mndr_na0eps’ from SOLPS5.x.
+				</description>
+				<default>1.0e4</default>
+				<type>real</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2mndr_na_new</name>
+				<description>
+					Initial density put in all cells for all new species if not overwritten by initial state file.
+					This switch replaces ’b2mndr_na0eps’ from SOLPS5.x.
+				</description>
+				<default>1.0e14</default>
+				<type>real</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2mndr_ntim</name>
+				<description>
+					Number of timesteps desired in this run. If ntim.eq.0, the code simply reads the input file and creates the b2fplasma and b2fstate files corresponding to the present plasma state.
+				</description>
+				<default>1</default>
+				<type>integer</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2mndr_plasmatim</name>
+				<description>
+					Another option for plasma state file output. Give the real-time interval between succesive write-ups of plasmastate files, in addition to the ones written at regular CPU intervals.
+				</description>
+				<default>0.0</default>
+				<type>real</type>
+				<category>Output</category>
+			</param>
+			<param> 
+				<name>b2mndr_rescale_neutrals</name>
+				<description>
+					Multiplier to the neutral density on the first timestep.
+				</description>
+				<default>1.0</default>
+				<type>real</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2mndr_rescale_neutrals_sources</name>
+				<description>
+					Multiplier to the neutral sources (either computed by Eirene or the corresponding rate coefficients).
+				</description>
+				<default>1.0</default>
+				<type>real</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2mndr_savecpu</name>
+				<description>
+					CPU time interval after with save files plasmastate.xxxx are written.
+					These can be used, in conjunction with the b2co.exe instruction, to recover a crashed run.
+				</description>
+				<default>3600.0</default>
+				<type>real</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2mndr_stim</name>
+				<description>
+					stim specifies the initial time --- default 0.
+					If set to a positive or zero value, this overwrites the time value read from b2fstati.
+					If set to a negative value, the run continues from the time read in b2fstati.
+				</description>
+				<default>0.0</default>
+				<type>real</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2mndr_tally</name>
+				<description>
+					Specifies the number of timesteps between writes of tallies.
+					If tally.gt.0, always writes out on the last timestep.
+				</description>
+				<default>1</default>
+				<type>integer</type>
+				<category>Output</category>
+			</param>
+			<param> 
+				<name>b2mndr_trantim</name>
+				<description>
+					Produces a numbered ’tran’ file every trantim real-time seconds.
+					An endstate file is written if it falls between scheduled write-up times.
+					Only available within the -DJET environment.
+				</description>
+				<default>0.0</default>
+				<type>real</type>
+				<category>Output</category>
+			</param>
+			<param> 
+				<name>b2mndt_density_control</name>
+				<description>
+					Feedback on the total heavy particle density. If density_control.ne.0, the sum of all densities is kept constant.
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2mndt_moitlv</name>
+				<description>
+					Controls detailed monitoring output. moitlv.eq.-1 means no output, moitlv.eq.0 means output once per timestep, moitlv.eq.1 means output once per nstg0 iteration, moitlv.eq.2 means output once per nstg1 iteration and moitlv.eq.3 means output once per nstg2 iteration. See ’b2mndr_nstg?’ description in Run section for more details.
+				</description>
+				<default>-1</default>
+				<type>integer</type>
+				<category>Output</category>
+			</param>
+			<param> 
+				<name>b2mndt_moqtlv</name>
+				<description>
+					Controls quick trace output. moqtlv.eq.-1 means no output, moqtlv.eq.0 means output once per timestep, moqtlv.eq.1 means output once per nstg0 iteration, moqtlv.eq.2 means output once per nstg1 iteration and moqtlv.eq.3 means output once per nstg2 iteration. See ’b2mndr_nstg?’ description in Run section for more details.
+				</description>
+				<default>3</default>
+				<type>integer</type>
+				<category>Output</category>
+			</param>
+			<paramgroup>
+				<param> 
+					<name>b2mndt_nstg_areshe</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2mndt_nstg_areshi</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2mndt_nstg_aresco</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<description>
+					Minimum residuals for an internal solution loop to stop.
+					Used in conjunction with (not in replacement of) the nstg(0:2) numbers.
+					All non-zero criteria must be met simultaneously. The continuity equation residual applies to the "ismain" species (See "Run" section).
+				</description>
+				<category>Numerics</category>
+			</paramgroup>
+			<paramgroup>
+				<param> 
+					<name>b2mndt_nstg0</name>
+					<default>1</default>
+					<type>integer</type>
+				</param>
+				<param> 
+					<name>b2mndt_nstg1</name>
+					<default>1</default>
+					<type>integer</type>
+				</param>
+				<param> 
+					<name>b2mndt_nstg2</name>
+					<default>1</default>
+					<type>integer</type>
+				</param>
+				<description>
+					Time-dependent mode and iterative mode switches. The basic code timestep proceeds as follows:
+					 ..test input arguments
+					 ..compute auxiliary quantities
+					 ..prepare source computation
+					 ..do i0=1,nstg0
+					  ..compute log-log linearised rate coefficients
+					  ..do i1=1,nstg1
+					   ..compute source linearisation
+					   ..do i2=1,nstg2
+					    ..perform one inner iteration
+					    ..re-compute auxiliary quantities
+					    ..produce monitoring output
+					   ..enddo
+					  ..enddo
+					 ..enddo
+					This can be completed by the the ’b2mndt_nstg_ares??’ switches.
+					See "Numerics" section for details.
+				</description>
+				<category>Run</category>
+			</paramgroup>
+			<param> 
+				<name>b2mndt_ntim_step_out</name>
+				<description>
+					When set to a value of ’K’, residuals at each K-th step will be written in b2ftrace. It helps to avoid a huge b2ftrace files during long time run.
+				</description>
+				<default>1</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2mndt_rxf</name>
+				<description>
+					Main under-relaxation parameter.
+				</description>
+				<default>0.5</default>
+				<type>real</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2mndt_style</name>
+				<description>
+					When set to ’1’, all important variables will be calculated for the first step.
+					This avoids a jump of residuals when continuing the run.
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2mndt_use_b2srst</name>
+				<description>
+					Switches off the stabilization of the source coefficients.
+				</description>
+				<default>1</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2mwqt_style</name>
+				<description>
+					NOT FOUND!
+				</description>
+				<default>1</default>
+				<type>integer</type>
+				<category>Output</category>
+			</param>
+			<param> 
+				<name>b2mwti_ismain0</name>
+				<description>
+					Index of the species used to create the ’dp3d?.last10’ diagnostic files.
+					Defaults to the neutral species associated with ismain. If no such species is declared, the default will be set to ismain. Is expected to either correspond to a neutral species or to ismain.
+					If ismain is also defaulted, then will be 0.
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Output</category>
+			</param>
+			<param> 
+				<name>b2mwti_jxa</name>
+				<description>
+					Cell index, on the basis mesh, of the outer midplane. Default value depends on geometry:
+					Single-null : jxa=rightcut1(1)-(rightcut1(1)-leftcut1(1))/4, i.e. three quarters of the way between the two cuts. Double-null : jxa=(rightcut1(1)+rightcut1(2))/2, i.e. halfway between the two outer cuts.
+					Straight geometry : jxa=3*nx/4
+				</description>
+				<default>See description</default>
+				<type>integer</type>
+				<category>Geometry</category>
+			</param>
+			<param> 
+				<name>b2mwti_jxi</name>
+				<description>
+					Cell index, on the basis mesh, of the inner midplane. Default value depends on geometry:
+					Single-null : jxi=leftcut1(1)+(rightcut1(1)-leftcut1(1))/4, i.e. one quarter of the way between the two cuts. Double-null : jxi=(rightcut1(1)+rightcut1(2))/2, i.e. halfway between the two inner cuts.
+					Straight geometry : jxi=nx/4
+				</description>
+				<default>See description</default>
+				<type>integer</type>
+				<category>Geometry</category>
+			</param>
+			<param> 
+				<name>b2mwti_target_offset</name>
+				<description>
+					The diagnostic values from b2time.nc use guard cell values if target_offset.eq.0, and values from the neighbouring real cell if target_offset.eq.1. Fluxes are not affected.
+				</description>
+				<default>1</default>
+				<type>integer</type>
+				<category>Output</category>
+			</param>
+			<param> 
+				<name>b2news_area_fix</name>
+				<description>
+					When area_fix.eq.0, recovers old SOLPS5.0 behaviour.
+					If area_fix.ge.1, then certain computations of poloidal velocities are done by dividing flows by the area normal to the flux tube as opposed to the area of contact.
+					If area_fix.ge.2, then additionally this treatment is used for the parallel contact area used in determining plasma flux limiters.
+					If area_fix.ge.3, then additionally this treatment is used for all parallel contact areas.
+				</description>
+				<default>3</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2news_BoRiS</name>
+				<description>
+					The poloidal convective heat flux contains a prefactor of (3/2+BoRiS). The default gives us the internal energy equation. The value BoRiS = 1.0 gives us the total energy equation.
+					Only for use to benchmark with codes using the total energy equation. When used, the meaning of fhe and fhi changes from internal energy fluxes to total energy fluxes.
+				</description>
+				<default>0.0</default>
+				<type>real</type>
+				<category>Physics</category>
+			</param>
+			<param> 
+				<name>b2news_coriolis</name>
+				<description>
+					If coriolis.ne.0, the Coriolis force terms will be included in the solution of the momentum equations.
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Physics</category>
+			</param>
+			<param> 
+				<name>b2news_do_2nd_b2npco_call</name>
+				<description>
+					If do_2nd_b2npco_call.eq.1, perform a second call to the density equation solve to improve particle balance, as done in SOLPS4.
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2news_ExB</name>
+				<description>
+					Real parameter which multiplies ExB flows. If b2news_ExB.eq.0 and b2news_facExB_start.eq.0 then ExB flows are switched off. If b2news_ExB is non-zero, then ExB flows are multiplied by that constant throughout the run.
+					See also Run section on switches b2news_facExB_... for more details. A spatial fac_ExB profile is also possible, see Numerics section for details.
+				</description>
+				<default>0.0</default>
+				<type>real</type>
+				<category>Physics</category>
+			</param>
+			<paramgroup>
+				<param> 
+					<name>b2news_fac_ref</name>
+					<default>See description</default>
+					<type>integer</type>
+				</param>
+				<param> 
+					<name>b2news_facdrift_tanh_a</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2news_facdrift_tanh_b</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2news_fac_ExB_tanh_a</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2news_fac_ExB_tanh_b</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2news_fac_vis_tanh_a</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2news_fac_vis_tanh_b</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2news_iy_nocoreExB</name>
+					<default>-2</default>
+					<type>integer</type>
+				</param>
+				<description>
+					Parameters for spatial variation of the diamagnetic, ExB and viscosity drift term multipliers. These are allowed to have tanh profiles centered at tanh_a and of width tanh_b, where both quantities are in metres and measured along the radial coordinate for the cell column ix.eq.fac_ref (default value is jxa, see Geometry section for its computation). The maximum value of facdrift and fac_ExB is controlled by their respective _start and _target switches, see Run section for details.
+					For consistency with the naming convention of related variables:
+					b2news_facExB_tanh_a is an alias for b2news_fac_ExB_tanh_a,
+					b2news_facExB_tanh_b is an alias for b2news_fac_ExB_tanh_b,
+					b2news_facvis_tanh_a is an alias for 2news_fac_vis_tanh_a, and b2news_facvis_tanh_b is an alias for b2news_fac_vis_tanh_b. Additionally, for all core cell rows where iy.le.iy_nocoreExB, fac_ExB(ix,iy) is set to zero. This means that ExB contributions and flows will be zeroed out in those cells.
+					For consistency with the boundary condition treatment, the value iy_nocoreExB.eq.-1 is NOT recommended!
+				</description>
+				<category>Numerics</category>
+			</paramgroup>
+			<paramgroup>
+				<param> 
+					<name>b2news_facdrift_dec</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2news_facdrift_inc</name>
+					<default>1.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2news_facdrift_start</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2news_facdrift_target</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<description>
+					Ramping parameters for facdrift, which multiplies the diamagnetic terms. The code is started on the first time step with facdrift=facdrift_start. If facdrift_target.ne.facdrift_start, then, on each time step, facdrift is multiplied by facdrift_inc. If the code does not converge on the timestep, facdrift is decreased by facdrift_dec. A facdrift profile is also possible, see Numerics section for details.
+				</description>
+				<category>Run</category>
+			</paramgroup>
+			<paramgroup>
+				<param> 
+					<name>b2news_facExB_dec</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2news_facExB_inc</name>
+					<default>1.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2news_facExB_start</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2news_facExB_target</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<description>
+					Ramping parameters for facExB, which multiplies the ExB terms. Same treatment as above for facdrift.
+				</description>
+				<category>Run</category>
+			</paramgroup>
+			<paramgroup>
+				<param> 
+					<name>b2news_facvis_dec</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2news_facvis_inc</name>
+					<default>1.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2news_facvis_start</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2news_facvis_target</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<description>
+					Ramping parameters for facvis, which multiplies the drift viscosity terms. Same treatment as above for facdrift.
+				</description>
+				<category>Run</category>
+			</paramgroup>
+			<param> 
+				<name>b2news_guard_flows</name>
+				<description>
+					If guard_flows.eq.0, flows between neighbouring guard cells are blocked.
+					If guard_flows.eq.1, flows between neighbouring guard cells are kept.
+					If guard_flows.eq.2, particle flows between neighbouring guard cells are blocked for density equation and the incorrect corner values are replaced by interpolated values. It is recommended 2.
+				</description>
+				<default>2</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2news_ncallout</name>
+				<description>
+					If the iteration number is equal to ncallout, then several output files ’b2ne_npmo’, ’b2ne_xppb’, ’b2ne_npco’, ’b2ne+nppo’ which detail the convergence behaviour and residuals.
+				</description>
+				<default>-1</default>
+				<type>integer</type>
+				<category>Output</category>
+			</param>
+			<param> 
+				<name>b2news_no_b2sral_call</name>
+				<description>
+					If no_b2sral_call.eq.0, add an additional call to recompute the source in b2news_ to reproduce the behaviour from SOLPS4.
+				</description>
+				<default>1</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2news_no_solve</name>
+				<description>
+					If no_solve.eq.1, then the code is run without actually solving any equations. All secondary and dependent data is computed.
+					The nstg(0:2) array is overwritten to ’1’s.
+					The simulation time will not be updated.
+					The code will compute fluxes, sources, transport coefficients, etc...
+					’ntim’ times but not update the basic plasma quantities. Additionally, if no_solve is set to a negative value, then only some equations are solved (simulation time and nstg arrays will behave normally).
+					no_solve.eq.-1 will activate the parallel momentum equations only.
+					no_solve.eq.-2 will activate the density equations only. no_solve.eq.-4 will activate the potential equation only. (Active only if poteq.eq.1, otherwise, the behaviour dictated by the poteq setting applies).
+					no_solve.eq.-8 will activate the heat equations only.
+					These can be combined. For example, no_solve.eq.-3 will activate the parallel momentum and particle conservation equations.
+					If the no_solve switch requires an equation not to be solved, the settings in the corresponding solvexx arrays from b2.numerics.parameters are moot.
+					The latter are reserved for fine-tuning numerical diagnostics.
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Run</category>
+			</param>
+			<paramgroup>
+				<param> 
+					<name>b2news_nsmin</name>
+					<default>0</default>
+					<type>integer</type>
+				</param>
+				<param> 
+					<name>b2news_nsmax</name>
+					<default>ns</default>
+					<type>integer</type>
+				</param>
+				<description>
+					Allows for solving only for the species range [nsmin:nsmax-1].
+					ns - Number of species
+				</description>
+				<category>Numerics</category>
+			</paramgroup>
+			<param> 
+				<name>b2news_poteq</name>
+				<description>
+					If poteq.eq.0, the potential equation is jumped over and not solved.
+					If poteq.eq.2, the potential is set to 3.1*Te/qe as per SOLPS4.0.
+					If poteq.eq.1, the potential equation is solved according to the no_solve switch settings.
+					If poteq.ne.1, then ’b2tfhe_no_current’must be set to ’1’.
+				</description>
+				<default>1</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+			<paramgroup>
+				<param> 
+					<name>b2news_potit</name>
+					<default>50</default>
+					<type>integer</type>
+				</param>
+				<param> 
+					<name>b2news_potitmin</name>
+					<default>0</default>
+					<type>integer</type>
+				</param>
+				<description>
+					Maximum and minimum number of iterations in the potential equation. It must hold that potitmin &lt; potit.
+				</description>
+				<category>Numerics</category>
+			</paramgroup>
+			<param> 
+				<name>b2news_potok</name>
+				<description>
+					Target residual for the potential equation.
+				</description>
+				<default>1.0e-2</default>
+				<type>real</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2news_ramp_slow</name>
+				<description>
+					If ramp_slow.eq.0 (default), the ExB and diamagnetic drifts multipliers are ramped on each call of b2news, otherwise they are only changed on the first call of the nstg loop on the timestep.
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2news_recalculate_contributions</name>
+				<description>
+					If recalculate_contributions.eq.0, turns off recomputation of sources when wrong_flow flag is active.
+				</description>
+				<default>1</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2news_re_eval_prtls_fluxes</name>
+				<description>
+					If re_eval_prtls_fluxes.eq.1, the particle fluxes are recomputed at the end of b2news_. This is necessary for rescaling of the Eirene sources during coupled runs, so this switch is superceded by use_eirene, and also needed to reproduce SOLPS4 runs.
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2news_vis</name>
+				<description>
+					Alternative name of the variable in the code is fac_vis_scalar
+				</description>
+				<default>0.0</default>
+				<type>real</type>
+				<category>Physics</category>
+			</param>
+			<paramgroup>
+				<param> 
+					<name>b2news_xfm0</name>
+					<default>1.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2news_xfm1</name>
+					<default>1.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2news_xfm2</name>
+					<default>1.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2news_xfm3</name>
+					<default>1.0</default>
+					<type>real</type>
+				</param>
+				<description>
+					Under-relaxation parameters for the parallel momentum, continuity, potential and energy equations respectively.
+				</description>
+				<category>Numerics</category>
+			</paramgroup>
+			<paramgroup>
+				<param> 
+					<name>b2npco_pcm0</name>
+					<default>1.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2npco_pcm1</name>
+					<default>1.0</default>
+					<type>real</type>
+				</param>
+				<description>
+					pcm0 specifies an additional under-relaxation factor that is applied to the velocity correction. It is required that 0.le.pcm0.and.0.le.pcm1.
+				</description>
+				<category>Numerics</category>
+			</paramgroup>
+			<param> 
+				<name>b2npco_rxg</name>
+				<description>
+					rxg specifies a special under-relaxation parameter. A term of the form "abs(residual)/rxg" is added to the diagonal of the matrix of the correction equation, with the effect of limiting the computed correction. rxg is dimensionless and of order unity; smaller values of rxg imply stronger damping.
+				</description>
+				<default>1.0</default>
+				<type>real</type>
+				<category>Numerics</category>
+			</param>
+			<paramgroup>
+				<param> 
+					<name>b2npht_pcm0</name>
+					<default>1.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2npht_pcm1</name>
+					<default>1.0</default>
+					<type>real</type>
+				</param>
+				<description>
+					pcm0 specifies an additional under-relaxation factor that is applied to the temperature correction.
+				</description>
+				<category>Numerics</category>
+			</paramgroup>
+			<param> 
+				<name>b2npht_rxg</name>
+				<description>
+					rxg specifies a special under-relaxation parameter. A term of the form "abs(residual)/rxg" is added to the diagonal of the matrix of the correction equation, with the effect of limiting the computed correction. rxg is dimensionless and of order unity; smaller values of rxg imply stronger damping.
+				</description>
+				<default>1.0</default>
+				<type>real</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2npht_style</name>
+				<description>
+					When set to ’1’, SPb’s form of the program b2sihs_ is called.
+					It is recommended ’1’.
+				</description>
+				<default>1</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2nph9_style</name>
+				<description>
+					When set to ’1’, SPb’s form of the program b2sihs_ is called.
+					It is recommended ’1’.
+				</description>
+				<default>1</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2npmo_b2sifr_</name>
+				<description>
+					When set to ’1’, the new correct form of the friction force is used.
+					The value ’0’ corresponds to the old SOLPS5.0 treatment.
+				</description>
+				<default>1</default>
+				<type>integer</type>
+				<category>Physics</category>
+			</param>
+			<param> 
+				<name>b2npmo_modvis</name>
+				<description>
+					When set to ’1’, the new correct form of viscosity is used. It is important for runs with drifts. It is recommended ’1’.
+					The value ’0’ corresponds to the old SOLPS5.0 treatment.
+				</description>
+				<default>1</default>
+				<type>integer</type>
+				<category>Physics</category>
+			</param>
+			<param> 
+				<name>b2npmo_rxg</name>
+				<description>
+					Normalisation factor for the parallel momentum equation.
+				</description>
+				<default>1.0e6</default>
+				<type>real</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2npp7_style</name>
+				<description>
+					When set to ’1’, SPb’s form of the program b2usp7_ is called.
+					It is recommended ’1’.
+				</description>
+				<default>1</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2nxdv_style</name>
+				<description>
+					When set to ’1’, the total friction force cancel is not calculated at the guard boundary cells.
+					It is recommended ’1’.
+				</description>
+				<default>1</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2nxfc_style</name>
+				<description>
+					style specifies the precise form of interpolation used in the computation of flcb and cvcb. When set to ’1’, SPb’s form of the transport terms in the momentum correction equation is used.
+					It is recommended ’1’.
+				</description>
+				<default>1</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2nxfx_style</name>
+				<description>
+					When set to ’1’, SPb’s form of an expression that occurs in the electron-atom thermal force is used.
+					It is recommended ’1’.
+				</description>
+				<default>1</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2sdia_facgt</name>
+				<description>
+					Multiplier of the contribution to electron and ion heat sources from divergence of the gradTxB heat flux. That contribution is also multiplied by facdrift. This term is no longer needed as it has been transferred from being a source to being included in the flows.
+				</description>
+				<default>0.0</default>
+				<type>real</type>
+				<category>Physics</category>
+			</param>
+
 		</module>
 	</code>
 </solps>
+
+
+
+			<param> 
+				<name></name>
+				<description>
+					
+				</description>
+				<default></default>
+				<type></type>
+				<category></category>
+			</param>
+
+
+			<paramgroup>
+				<param> 
+					<name></name>
+					<default></default>
+					<type></type>
+				</param>
+				<param> 
+					<name></name>
+					<default></default>
+					<type></type>
+				</param>
+				<description>
+					
+				</description>
+				<category></category>
+			</paramgroup>
