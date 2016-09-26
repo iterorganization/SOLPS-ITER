@@ -131,7 +131,7 @@
 			<param> 
 				<name>b2mndr_na0eps</name>
 				<description>
-					This switch from SOLPS5.x has been replaced with ’b2mndr_na_min’ and ’b2mndr_na_new’.
+					This switch from SOLPS5.x has been replaced with 'b2mndr_na_min' and 'b2mndr_na_new'.
 					CHECK VALIDITY!!!
 				</description>
 				<default>1e14</default>
@@ -142,7 +142,7 @@
 				<name>b2mndr_na_min</name>
 				<description>
 					Minimal density maintained in all cells for all species. It must be true that na_min is smaller than na_new, as well as any of the initial densities provided in b2ai.dat.
-					This switch replaces ’b2mndr_na0eps’ from SOLPS5.x.
+					This switch replaces 'b2mndr_na0eps' from SOLPS5.x.
 				</description>
 				<default>1.0e4</default>
 				<type>real</type>
@@ -152,7 +152,7 @@
 				<name>b2mndr_na_new</name>
 				<description>
 					Minimal density maintained in all cells for all species. It must be true that na_min is smaller than na_new, as well as any of the initial densities provided in b2ai.dat.
-					This switch replaces ’b2mndr_na0eps’ from SOLPS5.x.
+					This switch replaces 'b2mndr_na0eps' from SOLPS5.x.
 				</description>
 				<default>1.0e14</default>
 				<type>real</type>
@@ -202,7 +202,7 @@
 					If lluciani.ne.0, then transport coefficients on cells belonging to  closed field lines are modified according to the Luciani model.
 					If lluciani.eq.1, the standard connection length formulation is used.
 					If lluciani.eq.2, the old SOLPS4.0 formulation is used for backward compatibility.
-					If lluciani.eq.3, Spb’s new form Luciani’s coefficient.
+					If lluciani.eq.3, Spb's new form Luciani's coefficient.
 				</description>
 				<default>3</default>
 				<type>integer</type>
@@ -244,7 +244,7 @@
 			<param> 
 				<name>b2trcl_lvis21</name>
 				<description>
-					If lvis21.ne.0, then the viscosities are modified according to the 21-moment approach. This should only be used for multi-fluid runs. This switch should not be used along with ’b2tfhe_vis_par’ to avoid double-counting of classical viscosity effects.
+					If lvis21.ne.0, then the viscosities are modified according to the 21-moment approach. This should only be used for multi-fluid runs. This switch should not be used along with 'b2tfhe_vis_par' to avoid double-counting of classical viscosity effects.
 				</description>
 				<default>0</default>
 				<type>integer</type>
@@ -393,7 +393,7 @@
 				<name>b2stbc_boundary_namelist</name>
 				<description>
 					Namelist file indicators. If xxx_namelist.eq.1, then the code looks for the file b2.xxx.parameters, in which it expects to find the xxx namelist.
-					If ’b2stbc_boundary_namelist’ is set to 1 in b2mn.dat then the boundary conditions are read in fromb2.boundary.parameters instead of being taken from the file created by b2ah and possibly modified in b2mn.dat.
+					If 'b2stbc_boundary_namelist' is set to 1 in b2mn.dat then the boundary conditions are read in fromb2.boundary.parameters instead of being taken from the file created by b2ah and possibly modified in b2mn.dat.
 
 					CHECK VALIDITY!!! (I added 2 descriptions I found)
 				</description>
@@ -746,7 +746,7 @@
 					pit_rescale - real*8.
 					The magnetic field line pitch will be multiplied by pit_rescale.
 					This means that the poloidal field component is multiplied by pit_rescale, while the toroidal field component is left unchanged. To reverse the plasma current direction, set pit_rescale to -1.0.
-					The sign convention used is that a positive poloidal field points in the direction of increasing &lt;ix&gt;. Be mindful however that, when inverting the sign of the poloidal magnetic field, you are also inverting the direction of the parallel velocity. You will then need to use the ’b2mndr_inverse_ua’ switch to correct for that.
+					The sign convention used is that a positive poloidal field points in the direction of increasing &lt;ix&gt;. Be mindful however that, when inverting the sign of the poloidal magnetic field, you are also inverting the direction of the parallel velocity. You will then need to use the 'b2mndr_inverse_ua' switch to correct for that.
 					To be used in b2ag.dat.
 				</description>
 				<default>1.0</default>
@@ -765,7 +765,7 @@
 					<type>real*8</type>
 				</param>
 				<description>
-					xoffset and yoffset are offsets of the basis mesh in the x- and y-direction respectively. The mesh will be translated by (xoffset,yoffset) if any of the two is non-zero from its position given in the local_sonnet (See ’b2agfs_geometry’ above) file.
+					xoffset and yoffset are offsets of the basis mesh in the x- and y-direction respectively. The mesh will be translated by (xoffset,yoffset) if any of the two is non-zero from its position given in the local_sonnet (See 'b2agfs_geometry' above) file.
 					To be used in b2ag.dat.
 				</description>
 				<category>Geometry</category>
@@ -802,7 +802,7 @@
 				<description>
 					If pbs_from_basis_mesh.eq.0, the pbs array is computed from values on the actual working mesh (old treatment).
 					If pbs_from_basis_mesh.eq.1, the pbs array is computed from values on the (possibly) finer basis mesh from the geometry file and the contributions from each basis cell are added to obtain the value on the working mesh.
-					In both cases, mind the value of ’b2news_area_fix’, which should be also declared in b2ag.dat if the non-default behaviour is wanted.
+					In both cases, mind the value of 'b2news_area_fix', which should be also declared in b2ag.dat if the non-default behaviour is wanted.
 				</description>
 				<default>1</default>
 				<type>integer</type>
@@ -855,8 +855,8 @@
 				<description>
 					When changed from 0, and if the ADAS option is in use, then uses the PRB file to add the contribution arising from is--&gt;is-1 processes.
 					This term includes the Bremsstrahlung.
-					The default option (’0’) only contains the Bremsstrahlung for the is--&gt;is-1 process.
-					This option should be used with the ’b2stel_fix_recomb_energy’ option b2mn.dat set to ’1’. See ’Physics’ section.
+					The default option ('0') only contains the Bremsstrahlung for the is--&gt;is-1 process.
+					This option should be used with the 'b2stel_fix_recomb_energy' option b2mn.dat set to '1'. See 'Physics' section.
 					*** Use with caution! ***
 				</description>
 				<default>0</default>
@@ -937,7 +937,7 @@
 			<param> 
 				<name>b2mndr_cpu</name>
 				<description>
-					CPU limit. Is cpu.eq.0.0, no CPU limit is enforced. Otherwise, the code stops smoothly after it has been running for at least ’cpu’ CPU seconds.
+					CPU limit. Is cpu.eq.0.0, no CPU limit is enforced. Otherwise, the code stops smoothly after it has been running for at least 'cpu' CPU seconds.
 					CHECK VALIDITY!!!(changed "is" to "it")
 				</description>
 				<default>0.0</default>
@@ -1029,7 +1029,7 @@
 				<name>b2mndr_elapsed</name>
 				<description>
 					Elapsed time limit. Is elapsed.eq.0.0, no time limit is enforced.
-					Otherwise, the code stops smoothly after is has been running for at least ’elapsed’ wall clock seconds.
+					Otherwise, the code stops smoothly after is has been running for at least 'elapsed' wall clock seconds.
 				</description>
 				<default>0</default>
 				<type>integer</type>
@@ -1067,7 +1067,7 @@
 					<type>string</type>
 				</param>
 				<description>
-					idout0 and idout1 specify the desired selection of output segments; idout0 for output before the calculation and idout1 for output at the conclusion of the calculation. The generic description of either of these ’idout’ variables follows. idout specifies the desired selection of output segments for printed and graphical output. Associated with each segment is a four-character word, which is identified on the printed output. (The same word may be associated with several segments.) A particular segment will be produced only if its associated word has a match, as defined by the routine strmas, in idout.
+					idout0 and idout1 specify the desired selection of output segments; idout0 for output before the calculation and idout1 for output at the conclusion of the calculation. The generic description of either of these 'idout' variables follows. idout specifies the desired selection of output segments for printed and graphical output. Associated with each segment is a four-character word, which is identified on the printed output. (The same word may be associated with several segments.) A particular segment will be produced only if its associated word has a match, as defined by the routine strmas, in idout.
 
 					CHECK VALIDITY!!! (type string ?)
 				</description>
@@ -1076,7 +1076,7 @@
 			<param> 
 				<name>b2mndr_inverse_ua</name>
 				<description>
-					If inverse_ua.eq.1, the code will produce a ’b2fstati_with-ua’ file that contains the same plasma information, but with the opposite sign convention for the parallel velocity. The run will then proceed with the new velocities with their sign inverted.
+					If inverse_ua.eq.1, the code will produce a 'b2fstati_with-ua' file that contains the same plasma information, but with the opposite sign convention for the parallel velocity. The run will then proceed with the new velocities with their sign inverted.
 				</description>
 				<default>0</default>
 				<type>integer</type>
@@ -1109,7 +1109,7 @@
 					<type>integer</type>					
 				</param>
 				<description>
-					Experimental: allows for density feedback of the number of electrons accompanying species ’isfb’ at location (ixfb,iyfb).
+					Experimental: allows for density feedback of the number of electrons accompanying species 'isfb' at location (ixfb,iyfb).
 					Note that ixfb and iyfb are real numbers!
 
 					CHECK VALIDITY!!! (type string, integer ?)
