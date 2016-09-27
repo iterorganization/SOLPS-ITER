@@ -1962,6 +1962,1136 @@
 				<type>real</type>
 				<category>Physics</category>
 			</param>
+			<param> 
+				<name>b2sicf_phm0</name>
+				<description>
+					Multiplier of the centrifugal force term.
+					It is recommended ’1.0’.
+					The value ’0.0’ corresponds to the old SOLPS5.0 treatment.
+				</description>
+				<default>1.0</default>
+				<type>real</type>
+				<category>Physics</category>
+			</param>
+			<param> 
+				<name>b2sicf_phm1</name>
+				<description>
+					Multiplier of the centrifugal force correction term due to linearization.
+					It is recommended ’1.0’.
+					The value ’0.0’ corresponds to the old SOLPS5.0 treatment.
+				</description>
+				<default>1.0</default>
+				<type>real</type>
+				<category>Physics</category>
+			</param>
+			<paramgroup>
+				<param> 
+					<name>b2sifr_limthee</name>
+					<default>0.3</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2sifr_limthii</name>
+					<default>0.3</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2sifr_phm1</name>
+					<default>1.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2trcl_cthe</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2trcl_cthi</name>
+					<default>2.65</default>
+					<type>real</type>
+				</param>
+				<description>
+					Parameters for the computation of the thermal force term.
+				</description>
+				<category>Physics</category>
+			</paramgroup>
+			<param> 
+				<name>b2sifr_phm0</name>
+				<description>
+					Multiplier of the friction term between charged species.
+				</description>
+				<default>1.0</default>
+				<type>real</type>
+				<category>Physics</category>
+			</param>
+			<param> 
+				<name>b2sifr_phm1</name>
+				<description>
+					Multiplier of the ehxp term in the thermal force term.
+				</description>
+				<default>1.0</default>
+				<type>real</type>
+				<category>Physics</category>
+			</param>
+			<param> 
+				<name>b2sifr_phm2</name>
+				<description>
+					Multiplier of the electron thermal gradient term in the thermal force term.
+				</description>
+				<default>1.0</default>
+				<type>real</type>
+				<category>Physics</category>
+			</param>
+			<paramgroup>
+				<param> 
+					<name>b2sifr_styl0</name>
+					<default>0</default>
+					<type>integer</type>
+				</param>
+				<param> 
+					<name>b2sifr_styl1</name>
+					<default>0</default>
+					<type>integer</type>
+				</param>
+				<description>
+					Specify the type of linearisation used in the thermal force term.
+				</description>
+				<category>Numerics</category>
+			</paramgroup>
+			<param> 
+				<name>b2sigp_style</name>
+				<description>
+					When set to ’1’, SPb’s form of the pressure gradient term on the right hand of the momentum balance equation is used.
+					It is recommended ’1’.
+				</description>
+				<default>1</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2sihs_istyle_Joule_heating</name>
+				<description>
+					When set to ’1’, there is no radial contribution in Joule heating because there are no physical reasons to take it into account.
+					The value ’0’ corresponds to the old SOLPS5.0 treatment.
+				</description>
+				<default>1</default>
+				<type>integer</type>
+				<category>Physics</category>
+			</param>
+			<param> 
+				<name>b2sihs_phm0</name>
+				<description>
+					Multiplier of the contribution to electron heat sources from divergence(ue,ve).
+				</description>
+				<default>1.0</default>
+				<type>real</type>
+				<category>Physics</category>
+			</param>
+			<param> 
+				<name>b2sihs_phm1</name>
+				<description>
+					Multiplier of the contribution to ion heat sources from divergence(ua,va).
+					This term is superseded by the BoRiS switch if invoked.
+				</description>
+				<default>1.0</default>
+				<type>real</type>
+				<category>Physics</category>
+			</param>
+			<param> 
+				<name>b2sihs_phm2</name>
+				<description>
+					Multiplier of the contribution to ion heat sources from viscous heating.
+					This term is superseded by the BoRiS switch if invoked.
+				</description>
+				<default>1.0</default>
+				<type>real</type>
+				<category>Physics</category>
+			</param>
+			<param> 
+				<name>b2sihs_phm3</name>
+				<description>
+					Multiplier of the contribution to electron heat sources from Joule heating (electron-ion friction).
+				</description>
+				<default>1.0</default>
+				<type>real</type>
+				<category>Physics</category>
+			</param>
+			<param> 
+				<name>b2sihs_phm4</name>
+				<description>
+					Multiplier of the contribution to ion heat sources from atom-atom friction.
+					This term is superseded by the BoRiS switch if invoked.
+				</description>
+				<default>1.0</default>
+				<type>real</type>
+				<category>Physics</category>
+			</param>
+			<param> 
+				<name>b2sihs_phm5</name>
+				<description>
+					Multiplier of the contribution to electron heat sources from divergence of the electrical drift. That contribution is also multiplied by facExB.
+				</description>
+				<default>1.0</default>
+				<type>real</type>
+				<category>Physics</category>
+			</param>
+			<param> 
+				<name>b2sihs_phm6</name>
+				<description>
+					Multiplier of the contribution to ion heat sources from divergence of the electrical drift. That contribution is also multiplied by facExB.
+				</description>
+				<default>1.0</default>
+				<type>real</type>
+				<category>Physics</category>
+			</param>
+			<param> 
+				<name>b2sihs_phm7</name>
+				<description>
+					Multiplier of the contribution to heat sources from friction due to diamagnetic velocities. Normally already included in ’phm3’ term above.
+				</description>
+				<default>0.0</default>
+				<type>real</type>
+				<category>Physics</category>
+			</param>
+			<paramgroup>
+				<param> 
+					<name>b2sihs_rf0</name>
+					<default>1.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2sihs_rf1</name>
+					<default>1.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2sihs_rf2</name>
+					<default>1.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2sihs_rf3</name>
+					<default>1.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2sihs_rf4</name>
+					<default>1.0</default>
+					<type>real</type>
+				</param>
+				<description>
+					rf0-4 are numerical parameters, see the code. All must be non-negative and of order unity; larger values are meant to provide more stabilisation. Some or all may be set to zero and
+					removed eventually. I have had some experience to indicate that rf0, rf2, rf4 may have a useful function; however, later changes in the code may have made all these parameters superfluous.
+				</description>
+				<category>Numerics</category>
+			</paramgroup>
+			<param> 
+				<name>b2sihs_style</name>
+				<description>
+					style determines the form of the strange electron-atom energy transfer term.
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+			<paramgroup>
+				<param> 
+					<name>b2sqcx_phm0</name>
+					<default>1.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2sqcx_styl0</name>
+					<default>0</default>
+					<type>integer</type>
+				</param>				
+				<description>
+					phm0 : Multiplier to the charge-exchange rate coefficient. Subservient to styl0: only used if styl0.eq.0 or is.lt.2. If styl0.ne.0, the charge-exchange rate coefficients for species of index 2 and above are set to zero.
+				</description>
+				<category>Physics</category>
+			</paramgroup>
+			<param> 
+				<name>b2sqel_artificial_radiation</name>
+				<description>
+					If art_rad.ne.0, then an artificial radiation loss term is added to the electron cooling rate. Art_rad represents the percent fraction of impurities in the plasma.
+				</description>
+				<default>0.0</default>
+				<type>real</type>
+				<category>Physics</category>
+			</param>
+			<param> 
+				<name>b2sqel_phm0</name>
+				<description>
+					Multiplier to the ionisation rate coefficient.
+				</description>
+				<default>1.0</default>
+				<type>real</type>
+				<category>Physics</category>
+			</param>
+			<param> 
+				<name>b2sqel_phm1</name>
+				<description>
+					Multiplier to the recombination rate coefficient.
+				</description>
+				<default>1.0</default>
+				<type>real</type>
+				<category>Physics</category>
+			</param>
+			<param> 
+				<name>b2sqel_phm2</name>
+				<description>
+					Multiplier to the heat loss rate coefficient.
+				</description>
+				<default>1.0</default>
+				<type>real</type>
+				<category>Physics</category>
+			</param>
+			<param> 
+				<name>b2sral_inputfile</name>
+				<description>
+					Profiles file indicator. If b2sral_inputfile.eq.1, then the code looks for the file b2.sources.profile in which it expects to find the ’profile’ namelist.
+					This namelist will contain profiles of sources measured from the location (ixref,iyref) (default is outer midplane separatrix), which is set with the ’set_transport_i[xy]ref’ switches.
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2sral_style</name>
+				<description>
+					When set to ’0’, in the expression of the electron particle flux (fne) the particle flux with drift terms is used and temporary drift velocities on the first call are calculated. When set to ’1’ or ’2’, the particle flux without drift terms is used in fne.
+					It is recommended ’2’.
+				</description>
+				<default>2</default>
+				<type>integer</type>
+				<category>Physics</category>
+			</param>
+			<paramgroup>
+				<param> 
+					<name>b2srdt_numerics_namelist</name>
+					<default>0</default>
+					<type>integer</type>
+				</param>
+				<param> 
+					<name>b2stbc_boundary_namelist</name>
+					<default>0</default>
+					<type>integer</type>
+				</param>				
+				<param> 
+					<name>b2stbr_neutrals_namelist</name>
+					<default>0</default>
+					<type>integer</type>
+				</param>				
+				<param> 
+					<name>b2tqna_transport_namelist</name>
+					<default>0</default>
+					<type>integer</type>
+				</param>
+				<description>
+					Namelist file indicators. If xxx_namelist.eq.1, then the code looks for the file b2.xxx.parameters, in which it expects to find the xxx namelist.
+				</description>
+				<category>Run</category>
+			</paramgroup>
+			<paramgroup>
+				<param> 
+					<name>b2srdt_phm0</name>
+					<default>1.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2srdt_phm1</name>
+					<default>1.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2srdt_phm3</name>
+					<default>1.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2srdt_phm4</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2srdt_phm5</name>
+					<default>1.0</default>
+					<type>real</type>
+				</param>
+				<description>
+					Multipliers to the density, parallel momentum, heat, potential, and electron prticle time-derivative source terms, respectively.
+					’phm4’ is normally zero since the potential equation contains no source terms.
+				</description>
+				<category>Numerics</category>
+			</paramgroup>
+			<param> 
+				<name>b2srsm_diagno</name>
+				<description>
+					Controls level of output in b2srsm. If diagno.ge.2, output will be given on every call. If diagno.eq.1, output will be given on main calls only.
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Output</category>
+			</param>
+			<param> 
+				<name>b2srsm_enable</name>
+				<description>
+					If enable.ne.0, then the sources for particle, parallel momentum, electron and ion heat are rescaled, for non-boundary cells, if the local timestep exceeds the physics timescale implied by those sources.
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+			<paramgroup>
+				<param> 
+					<name>b2srst_rf0</name>
+					<default>1.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2srst_rf1</name>
+					<default>1.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2srst_rf2</name>
+					<default>1.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2srst_rf3</name>
+					<default>1.0</default>
+					<type>real</type>
+				</param>
+				<description>
+					(rf0/1/2/3 for numerical stabilisation)
+				</description>
+				<category>Numerics</category>
+			</paramgroup>
+			<param> 
+				<name>b2stbc_bcpot_16_step</name>
+				<description>
+					Frequency (in number of calls to b2stbc_phys) at which the constant value of the potential at the boundaries where BCPOT=16 is applied will be recomputed.
+				</description>
+				<default>50</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2stbc_cbc</name>
+				<description>
+					Multiplier to the ExB velocity for sheath boundary conditions in b2stbc_spb and BCMOM=13 case of b2stbc_phys.
+				</description>
+				<default>1.0</default>
+				<type>real</type>
+				<category>Run</category>
+			</param>
+			<paramgroup>
+				<param> 
+					<name>b2stbc_cbsnafac</name>
+					<default>0.01</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stbc_fchycore_alpha</name>
+					<default>0.1</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stbc_fheycore_alpha</name>
+					<default>0.1</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stbc_fhiycore_alpha</name>
+					<default>0.1</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stbc_fnaycore_alpha</name>
+					<default>0.1</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stbc_nesepm_alpha</name>
+					<default>1.0e-3</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stbc_nesepm_beta</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stbc_nesepm_gamma</name>
+					<default>0.99</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stbc_volrec_alpha</name>
+					<default>1.0e-3</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stbc_volrec_beta</name>
+					<default>1.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stbr_sput_chem_alpha</name>
+					<default>1.0e-2</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stbr_sput_phys_alpha</name>
+					<default>1.0e-2</default>
+					<type>real</type>
+				</param>				
+				<description>
+					Feedback relaxation parameters. See Physics section for individual feedback quantities.
+				</description>
+				<category>Numerics</category>
+			</paramgroup>
+			<paramgroup>
+				<param> 
+					<name>b2stbc_coreregno</name>
+					<default>integer</default>
+					<type></type>
+				</param>
+				<param> 
+					<name>b2stbc_coreregn2</name>
+					<default>integer</default>
+					<type></type>
+				</param>
+				<description>
+					coreregno is the boundary index of the core boundary in the input files b2ah.dat and b2mn.dat. For a standard single-null case, coreregno is 1. For a straight geometry or limiter case, it is likely that coreregno need be set to 0, depending on the actual geometry details.
+					coreregn2 is the boundary index of the second core boundary in case of a double-null geometry, and is not used otherwise.
+				</description>
+				<category>Geometry</category>
+			</paramgroup>
+			<param> 
+				<name>b2stbc_diagno</name>
+				<description>
+					Controls level of output in b2stbc and subservient routines.
+					Level 1 (diagno.ge.1) output includes wrong_flow warnings, transport coefficients at the (nx/2,ny) basis mesh position, the solution found for the given heat flux at constant temperature bc, and all feedback diagnostics.
+					Level 2 output (diagno.ge.2) includes the integral current correction, the boundary sources on the first call, excessive sound speeds, and the iterative progress to the given heat flux at constant temperature bc. 
+					Level 3 output (diagno.ge.3) includes the boundary sources on each call, and the boundary.prt file listing all boundary cells.
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Output</category>
+			</param>
+			<param> 
+				<name>b2stbc_fchy_dia</name>
+				<description>
+					Multiplier to the neoclassical current and diamagnetic heat flux convective boundary conditions, also multiplied by facdrift.
+					Allows use b2stbc_integral_current is fchy_dia.eq.0, forbids it otherwise.
+				</description>
+				<default>1.0</default>
+				<type>real</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2stbc_fchy_dia_coreonly</name>
+				<description>
+					If fchy_dia_coreonly.eq.1, the neoclassical current and diamagnetic heat flux convective boundary conditions are only applied on the core boundary.
+					If fchy_dia_coreonly.eq.0, those are applied to all boundaries, including PFR, North SOL edge and diverted island center boundary.
+				</description>
+				<default>1</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2stbc_feedback</name>
+				<description>
+					If feedback.eq.1, turns on feedback mode for the boundary conditions.
+					See Physics section for more details. Equivalent to LFEEDBACK=.true. in the b2.boundary.parameters namelist.
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Run</category>
+			</param>
+			<paramgroup>
+				<param> 
+					<name>b2stbc_fchycore</name>
+					<default>-1.0e30</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stbc_fheycore</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stbc_fhiycore</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stbc_fhiycore_kinetic_energy</name>
+					<default>0</default>
+					<type>integer</type>
+				</param>				
+				<param> 
+					<name>b2stbc_fnaycore</name>
+					<default>-1.0e30</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stbc_isfeedback</name>
+					<default>0</default>
+					<type>integer</type>
+				</param>
+				<param> 
+					<name>b2stbc_iyped</name>
+					<default>jsep/2</default>
+					<type>integer</type>
+				</param>
+				<param> 
+					<name>b2stbc_ndes</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stbc_ndes_sol</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stbc_nepedm_sol</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stbc_nesepm</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stbc_nesepm_overshoot</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stbc_nesepm_minpuff</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stbc_nesepm_maxpuff</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stbc_nesepm_pfr</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stbc_nesepm_sol</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stbc_private_flux_puff</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stbc_volrec</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stbc_volrec_overshoot</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>				
+				<param> 
+					<name>eirene_nesepm_istra</name>
+					<default>-1</default>
+					<type>integer</type>
+				</param>
+				<description>
+					The 20 switches above are all feedback switches and require that b2stbc_feedback.ne.0 (See Run section for details) or that lfeedback=.true. in b2.boundary.parameters. The feedback is done as a boundary condition and is under-relaxed using the b2stbc_...._alpha switches (See Numerics section for details).
+					fheycore is the radial electron heat flow entering the core boundary.
+					fhiycore is the radial ion heat flow entering the core boundary.
+					fchycore is the radial current entering the core boundary. fnaycore is the radial flux of species "isfeedback" entering the core boundary.
+					If fhiycore_kinetic_energy.eq.1, the parallel kinetic energy flux is counted as part of the ion energy flux.
+					For double-null cases, the f..ycore variables contain the total flow through both core boundaries taken together. The core boundaries are identified by the coreregno and coreregn2 switches (see Geometry section).
+					The other seven switches are density feedback switches: nesepm is the outer midplane separatrix electron density. (See b2mwti_jxa switch in Geometry section for setting of midplane position). This is controlled through particle input of main plasma species isfeedback through the core boundary (See Geometry section for the core boundary indices coreregno and coreregn2).
+					nesepm_sol is the outer midplane separatrix electron density, but
+					this time controlled through a gas puff outside the SOL region. (See b2mwti_jxa switch in Geometry section for setting of midplane position). This is done through particle input of neutrals species isfeedback through the SOL North boundary (See Geometry section for the SOL North boundary index solregno). If nesepm_overshoot.gt.1.0, the gas puff is turned off when the midplane separatrix density reaches nesepm*nesepm_overshoot. Minimum and maximum values of the feedback gas puff can be set using b2stbc_nesepm_minpuff and b2stbc_nesepm_maxpuff
+					nepedm_sol is similar to nesepm_sol but the feedback is exerted on the electron density at the top of the pedestal, along the outer midplane, at radial position b2stbc_iyped. ndes_sol is the total particle content from the homonuclear sequence of species ’isfeedback’ over the entire simulation domain.
+					It is governed, like nesepm_sol, by nesepm_overshoot and nesepm_alpha and corresponds to a SOL boundary feedback. volrec_sol is the total particle source due to volume recombination coming from Eirene. Its feedback is governed by volrec_overshoot and volrec_alpha and volrec_beta parameters (See Numerics section for the latter two). nesepm_pfr is the outer midplane separatrix electron density, but this time controlled through a gas puff outside the PFR region. (See b2mwti_jxa switch in Geometry section for setting of midplane position). This is done through particle input of neutrals species isfeedback through the private flux boundaries (See Geometry section for the PFR South boundary indices pfrregno1 and pfrregno2).
+					ndes is the total particle (neutrals + ions) content of the species whose neutral species has index isfeedback. This is controlled through particle input of neutrals species isfeedback through the private flux boundaries (See Geometry section for the private flux region boundary indices pfrregno1 and pfrregno2).
+					private_flux_puff is the particle flow of species isfeedback through the private flux region boundary. This is controlled through particle input of neutrals species isfeedback through the private flux boundaris (See Geometry section for the private flux region boundary indices pfrregno1 and pfrregno2). 
+					All but the first of these feedback schemes ("nesepm") can also be run though an Eirene neutral gas puff. In that case, one should set an appropriate gas puffing stratum in the Eirene input file input.dat, as well as in the b2.neutrals.parameters file. The code will assume, unless told otherwise through the use of "eirene_nesepm_istra", that the first stratum of type ’C’ found in b2.neutrals.parameters is the stratum used for the feedback. If "eirene_nesepm_istra" is set to a positive number, the code will consider the feedback stratum to be the stratum in the "eirene_nesepm_istra"-th position in b2.neutrals.parameters.
+				</description>
+				<category>Physics</category>
+			</paramgroup>
+			<param> 
+				<name>b2stbc_fix_fch_in_fhe_sheath</name>
+				<description>
+					If fix_fch_in_fhe_sheath.eq.0, then the wrong (old) implementation of the FCH contribution to FHE used;
+					If fix_fch_in_fhe_sheath.eq.1, then the wrong (second) implementation of the FCH contribution to FHE used;
+					If fix_fch_in_fhe_sheath.eq.2, then the correct implementation of the FCH contribution to FHE used;
+				</description>
+				<default>2</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2stbc_integral_current</name>
+				<description>
+					If integral_current.gt.0, corrects current sources so that there be no surface current at the North and South edges of the edge plasma.
+					The value of integral_current multiplies the correction term added to the current source.
+					This setting is incompatible with the normal use of diamagnetic drift terms (facdrift.gt.0.0 .and. b2stbc_fchy_dia.ne.0.0) or neoclassical boundary conditions (b2stbc_neoclassical.gt.0.0).
+				</description>
+				<default>0.0</default>
+				<type>real</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2stbc_istyle_cur_contr_on_S_and_N</name>
+				<description>
+					When set to ’2’, SPB’s form of adding currents on the South core boundary is included by using BCPOT=12, and on the SOuth PFR and North boundaries by using BCPOT=13. It is recommended ’2’, in conjunction with the BCPOT=12 and BCPOT=13 settings, respectively.
+					When set to ’1’, SPb’s form of adding currents on South and North boundaries is done explicitly in addition to other existing boundary conditions for the potential equation.
+					The old 5.0 calculation is recovered by using the value ’0’.
+				</description>
+				<default>2</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2stbc_istyle_fchi</name>
+				<description>
+					If ’1’, explicitly use the expression (bx*cs*na) of particle flux (fna) from boundary condition instead of fna.
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2stbc_ncallfeedback</name>
+				<description>
+					Timestep index after which the feedback in b2stbc is activated.
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2stbc_neoclassical</name>
+				<description>
+					Real parameter which establishes boundary conditions for radial component of the current for North and South boundaries when these lie on closed flux surfaces.
+					If b2stbc_neoclassical is 0 then the radial component of the current is zero.
+					If b2stbc_neoclassical is not 0 the radial component of the current is given by the neoclassical value. b2stbc_neoclassical is superseded if facdrift.ne.0.
+					This cannot be used in conjunction with b2stbc_integral_current below.
+				</description>
+				<default>0.0</default>
+				<type>real</type>
+				<category>Numerics</category>
+			</param>
+			<paramgroup>
+				<param> 
+					<name>b2stbc_pfrregno1</name>
+					<default>0</default>
+					<type>integer</type>
+				</param>
+				<param> 
+					<name>b2stbc_pfrregno2</name>
+					<default>2</default>
+					<type>integer</type>
+				</param>
+				<description>
+					pfrregno1 is the boundary index of the first half of the private flux region boundary on which feedback is being applied (through b2stbc_ndes or b2stbc_private_flux_puff) in the input files b2ah.dat and b2mn.dat. pfrregno2 is the second half of the same private flux region. For a standard single null, the pair should be (0,2). For a standard double-null, the lower private flux region is labelled with the pair (0,5), and the upper private flux region with the pair (2,3). One can use only one private flux region by setting pfrregno1.eq.pfrregno2.
+				</description>
+				<category>Geometry</category>
+			</paramgroup>
+			<param> 
+				<name>b2stbc_secmodel</name>
+				<description>
+					If secmodel.eq.1, then the secondary electron emission coefficient at the plates is computed locally according to a kinetic model, otherwise the default values of cbsch(7,ireg) and/or gammae are used.
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Physics</category>
+			</param>
+			<param> 
+				<name>b2stbc_sheath_drift_fix</name>
+				<description>
+					If sheath_drift_fix.eq.0, then the drift velocity used in the sheath boundary conditions is the sum of diamagnetic and ExB contributions (old, but likely wrong, treatment). If sheath_drift_fix.eq.1, then the drift velocity used in the sheath boundary conditions is the ExB velocity only (recommended).
+				</description>
+				<default>1</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+			<paramgroup>
+				<param> 
+					<name>b2stbc_she0ep</name>
+					<default>1.0e-36</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stbc_shi0ep</name>
+					<default>1.0e-36</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stbc_sna0ep</name>
+					<default>1.0e-36</default>
+					<type>real</type>
+				</param>
+				<description>
+					Small level sources introduced in all cells.
+				</description>
+				<category>Numerics</category>
+			</paramgroup>
+			<param> 
+				<name>b2stbc_solregno</name>
+				<description>
+					solregno is the boundary index of the SOL North boundary in the input files b2ah.dat and b2mn.dat. For a standard single-null case, solregno is 3. For a standard double-null case, solregno for the outer SOL North boundary would be 7.
+				</description>
+				<default>3</default>
+				<type>integer</type>
+				<category>Geometry</category>
+			</param>
+			<paramgroup>
+				<param> 
+					<name>b2stbc_type13_fac</name>
+					<default>1.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stbc_type13_norm</name>
+					<default>1.0e15</default>
+					<type>real</type>
+				</param>
+				<description>
+					Additional feedback strength adjustment parameters for BCCON=13 boundary condition, density adjusted to match a specific flux.
+					The density is adjusted by a factor of:
+					(1.0_R8+CONPAR(IS,IB,2)*(DFS-FS)/ (abs(DFS)+abs(FS)+abs(type13_norm)+abs(NAS*type13_fac)))
+					where FS is the current particle flux, DFS is the desired particle flux, and NAS the current volume-averaged density. The desired flux DFS is computed as
+					CONPAR(IS,IB,1)+CONPAR(IS,IB,3)
+					where the first number is provided directly by the user in b2.boundary.parameters and the second is internally set to correspond to the re-entry of ionised neutrals that have crossed into the core for cases run with Eirene where eirene_ionising_core is activated.
+					See also the description of ’eirene_ionising_core’.
+				</description>
+				<category>Numerics</category>
+			</paramgroup>
+			<paramgroup>
+				<param> 
+					<name>b2stbc_type13_ref</name>
+					<default>1</default>
+					<type>integer</type>
+				</param>
+				<param> 
+					<name>b2stbc_type16_kinetic_energy</name>
+					<default>0</default>
+					<type>integer</type>
+				</param>
+				<param> 
+					<name>b2stbc_type16_ref</name>
+					<default>1</default>
+					<type>integer</type>
+				</param>
+				<param> 
+					<name>b2stbc_type20_ref</name>
+					<default>1</default>
+					<type>integer</type>
+				</param>
+				<param> 
+					<name>b2stbc_type21_ref</name>
+					<default>1</default>
+					<type>integer</type>
+				</param>				
+				<description>
+					These switches are associated with the boundary condition of type 13, 16, 17, 20 or 21 for particle flux, or electron and ion energy fluxes, i.e. constant density or temperature giving a prescribed flux through a radial surface, located type13_ref or type16_ref radial steps away from the boundary of the computational domain, respectively, and applied type20_ref steps away. See code and description in b2cdcn for details.
+					Type 21 also applies to the electric potential boundary condition.
+					It scales the feedback strength according to the value of the variable on the ring type21_ref steps inside.
+					When type16_ref.gt.1, then the position where the core flux tallies are computed moves along with the boundary condition.
+					If type16_kinetic_energy.eq.1, then the parallel kinetic energy flux is included in the ion heat flux component of type 16 and 17 boundary conditions.
+				</description>
+				<category>Physics</category>
+			</paramgroup>
+			<param> 
+				<name>b2stbm_impgyro_mod</name>
+				<description>
+					Specifies the frequency (in units of full b2 timesteps) at which an externally coupled code providing additional source (for instance a kinetic treatment of trace impurity ions such as IMPGYRO) should be called.
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2stbm_linearisation</name>
+				<description>
+					Same as above, but applied to the sources coming for an externally coupled code providing plasma sources, for instance a kinetic treatment of trace impurity ions. ’b2stbm_linearization’ is an alias for this switch.
+				</description>
+				<default>1.0</default>
+				<type>real</type>
+				<category>Numerics</category>
+			</param>
+			<paramgroup>
+				<param> 
+					<name>b2stbr_alpha</name>
+					<default>0.25</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stbr_plate_model</name>
+					<default>0</default>
+					<type>integer</type>
+				</param>
+				<param> 
+					<name>b2stbr_plate_option</name>
+					<default>3</default>
+					<type>integer</type>
+				</param>
+				<param> 
+					<name>b2stbr_plate_temp</name>
+					<default>300.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stbr_plate_thick</name>
+					<default>0.00</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stbr_redep_alpha</name>
+					<default>0.00</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stbr_sput_chem_model</name>
+					<default>0</default>
+					<type>integer</type>
+				</param>
+				<param> 
+					<name>b2stbr_sput_chem_cutoff_alpha</name>
+					<default>1.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stbr_sput_chem_cutoff_beta</name>
+					<default>3.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stbr_sput_dst</name>
+					<default>-1</default>
+					<type>integer</type>
+				</param>
+				<param> 
+					<name>b2stbr_sput_dst2</name>
+					<default>-1</default>
+					<type>integer</type>
+				</param>
+				<param> 
+					<name>b2stbr_sput_dst3</name>
+					<default>-1</default>
+					<type>integer</type>
+				</param>
+				<param> 
+					<name>b2stbr_sput_frc</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stbr_sput_mixed_alpha</name>
+					<default>1.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stbr_sput_mixed_beta</name>
+					<default>1.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stbr_sput_phys</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stbr_sput_phys_col</name>
+					<default>3</default>
+					<type>integer</type>
+				</param>
+				<param> 
+					<name>b2stbr_sput_phys_model</name>
+					<default>1</default>
+					<type>integer</type>
+				</param>
+				<param> 
+					<name>b2stbr_sput_res</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stbr_sput_src</name>
+					<default>1</default>
+					<type>integer</type>
+				</param>
+				<param> 
+					<name>b2stbr_sputter_energy_on</name>
+					<default>1</default>
+					<type>integer</type>
+				</param>				
+				<param> 
+					<name>b2stbr_therm_evap</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>			
+				<param> 
+					<name>b2stbr_sput_frac_flag</name>
+					<default>0</default>
+					<type>integer</type>
+				</param>			
+				<description>
+					Sputtering model switches. See the code in b2stbr and the b2mod_sputter module for specific implementation details and references.
+					The default values represent the case of Graphite plates. Sput_src is the atomic number of the plasma species which causes chemical sputtering.
+					Sput_dst (when .ge.0) is the species index of the destination species produced by physical sputtering, chemical sputtering and/or RES. If either of the latter two processes are included, the production chemical sputtering and RES rate calculations provided in the code assume that sput_dst points to a Carbon species.
+					Sput_dst2 and sput_dst3 (when .ge.0) represent other species produced by wall interactions for mixed materials scenarios.
+					Sput_frac_flag is the switch to turn on mixed materials scenarios (when sput_frac_flag.eq.1).
+					Plate_model.eq.0 means the 0-D time-independent plate heating model while plate_model.eq.1 indicates the 1-D time-dependent plate heating treatment. Plate_model.eq.2 gives acces to a 2-D time-dependent model.
+					Plate_option chooses the initialisation of the plate temperature profile. If plate_option.eq.1, the profile is set to the constant given in plate_temp. If plate_option.eq.2, the profile is computed to be the 0-D equilibrium profile. If plate_option.eq.3, the profile is read from results of the previous run.
+					Sput_phys_model is a switch for choosing between the TRIM tables (model 1, default) or an empirical formula (model 0). When TRIM data is not available, the empirical formula is automatically used. Extrapolations of low and high energy ranges beyond the TRIM table data is done using the same physical dependencies as the empirical formula. Sput_chem_model is a switch for the chemical sputtering model used. 
+					If sput_chem_model.eq.0 (default), the empirical formula is used.
+					If sput_chem_model.eq.1, a constant with a low energy cut-off is used.
+					The cutoff occurs at approximately sput_chem_cutoff_alpha and the width is determined by sput_chem_cutoff_beta (the larger the value, the narrower the width over which the transition from 0 to 1 occurs).
+					For model 0, sput_frc is a multiplier to the empirical formula, while for model 1, sput_frc is the constant chemical sputtering yield.
+					Sput_frc is superseded by the chem_sput array from b2.neutrals.namelist if the latter is used.
+					For neutrals species, we add a factor of alpha*na*vbar to the particle flux to the plate (used to compute chemical and RES sputtering), where vbar is the average neutral particle speed.
+					Sput_phys turns on physical sputtering when sput_phys.gt.0.0 and contains a (real) multiplier for the physical sputtering rate looked up in the TRIM tables. It is superseded by the phys_sput array in b2.neutrals.parameters if the latter is used.
+					sput_phys_col indicates which column to use in the TRIM table; the default (3) corresponds to 30 degrees incidence. The columns are for 
+					0 15 30 45 55 65 75 80 85
+					degrees. This angle is also used in the empirical formula. Plate_temp is the temperature (in Kelvin) of the COOLED end of the divertor plates. The surface temperature is computed self-consistently (using a 1-D description) according to the incident heat fluxes from the plasma. The plate is assumed to have a thickness of plate_thick, measured in meters. When plate_thick.eq.0 (default), the plate surface temperature is assumed to be the same as plate_temp. Sput_res turns on radiation enhanced sublimation (RES) when .gt.0.0 and is a multiplier to the RES rate.
+					The switch sputter_energy_on turns on the energy contribution from the sputtered particles (physical and chemical).
+					If sputter_energy_on.eq.0, the particles are sputtered cold, with no energy contribution to the ion heat equation. If sputter_energy_on.ne.0 (default), the chemically sputtered particles are re-introduced into the plasma with the thermal energy corresponding to the surface temperature of the material, while physically sputtered particles are re-introduced with the TRIM-calculated energy sputtering yield (if the TRIM model is used).
+					Therm_evap turns on thermal evaporation when .gt.0.0 and is a multiplier to the thermal evaporation rate.
+					Redep_alpha is the multiplier to the reduction of the sputtering yield due to prompt redeposition. The promptly redeposited species is counted as eroded-then-deposited species.
+				</description>
+				<category>Physics</category>
+			</paramgroup>
+			<paramgroup>
+				<param> 
+					<name>b2stbr_b2wall_netcdf</name>
+					<default>0</default>
+					<type>integer</type>
+				</param>
+				<param> 
+					<name>tallies_netcdf</name>
+					<default>0</default>
+					<type>integer</type>
+				</param>
+				<description>
+					If tallies_netcdf.ne.0, the file ’b2tallies.nc’ is created, which contains the regional tallies in CDF format.
+					If b2wall_netcdf.ne.0, the file ’b2wall.nc’ is created, which contains the wall tallies in CDF format [written every b2wall_netcdf "main calls"].
+				</description>
+				<category>Output</category>
+			</paramgroup>
+			<param> 
+				<name>b2stbr_core_sources_rescale</name>
+				<description>
+					Multiplier to the totally ionised species sources at the core boundary.
+				</description>
+				<default>1.0</default>
+				<type>real</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2stbr_eir_src_nhist</name>
+				<description>
+					If b2stbr_eir_src_nhist.gt.1, then Eirene sources are accumulated and a moving average is computed. Note that only one of b2stbr_eir_src_nhist, eirene_neutr_avg, or eirene_underrelax may be nonzero.
+				</description>
+				<default>1</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2stbr_first_flight</name>
+				<description>
+					If first_flight.ne.0, turns on the first flight model. See Physics section for additional details.
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Run</category>
+			</param>
+			<param> 
+				<name>b2stbr_first_flight_dl</name>
+				<description>
+					Step length (in meters) for computing the first flight model chords.
+				</description>
+				<default>0.001</default>
+				<type>real</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2stbr_first_flight_no_of_flights</name>
+				<description>
+					Number of chords started from each start point in the first flight model.
+				</description>
+				<default>9</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2stbr_first_flight_no_of_start_points</name>
+				<description>
+					When the first flight model is turned on, this number must be greater than or equal to the number of boundary cells on the mesh.
+					Only in cases with special geometries (i.e. limiters, islands, ...) need it be increased beyond the default value above. This variable is only used within the first flight module.
+				</description>
+				<default>2*(nx+2)+2*max(nncut,1)*(ny+2)</default>
+				<type>integer</type>
+				<category>Geometry</category>
+			</param>
+			<param> 
+				<name>b2stbr_first_flight_table_size</name>
+				<description>
+					Workspace size given to the first flight table.
+				</description>
+				<default>200000</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+			<paramgroup>
+				<param> 
+					<name>b2srdt_numerics_namelist</name>
+					<default>0</default>
+					<type>integer</type>
+				</param>
+				<param> 
+					<name>b2stbc_boundary_namelist</name>
+					<default>0</default>
+					<type>integer</type>
+				</param>
+				<param> 
+					<name>b2stbr_neutrals_namelist</name>
+					<default>0</default>
+					<type>integer</type>
+				</param>				
+				<param> 
+					<name>b2tqna_transport_namelist</name>
+					<default>0</default>
+					<type>integer</type>
+				</param>
+				<description>
+					Namelist file indicators. If xxx_namelist.eq.1, then the code looks for the file b2.xxx.parameters, in which it expects to find the xxx namelist.
+				</description>
+				<category>Run</category>
+			</paramgroup>
+			<param> 
+				<name>b2stbr_output</name>
+				<description>
+					Output flag for the first_flight model. If output.ge.1, the files start, end, and fort.88 are created, which contain information about the chords used in the model.
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Output</category>
+			</param>
+
+
 
 		</module>
 	</code>
