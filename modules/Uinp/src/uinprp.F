@@ -88,7 +88,7 @@ c*** Modify the toroidal dimension in p1, p2 arrays
       if(zaa.eq.0.) then !{
       	zaa=0.2*3.1415926535898*xlpcntr(1)
 	write(*,*) 'The O-point was taken for the major radius : ',
-     ,	      	      	      	      	      	      	  0.1*xlpcntr(1)
+     ,	      	      	      	      	      	    0.1*xlpcntr(1),' cm.'
       else if(zaa.lt.0.) then !}{
 
 c*** Toroidal geometry
