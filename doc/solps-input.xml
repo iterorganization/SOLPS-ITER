@@ -3090,6 +3090,310 @@
 				<type>integer</type>
 				<category>Output</category>
 			</param>
+			<param> 
+				<name>b2stbr_potential_at_guard_cell</name>
+				<description>
+					If potential_at_guard_cell.eq.1, the electric potential used for the computation of the incident energy for sputtering yields is taken as the value in the guard cell. If potential_at_guard_cell.eq.0, the value from the neighbouring real cell is used instead.
+				</description>
+				<default>1</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+			<paramgroup>
+				<param> 
+					<name>b2stbr_refl_model</name>
+					<default>1</default>
+					<type>integer</type>
+				</param>
+				<param> 
+					<name>b2stbr_reflection_on</name>
+					<default>1</default>
+					<type>integer</type>
+				</param>
+				<description>
+					Reflection model switches. If the recycling coefficients (particle and energy) are set to zero, then the code attempts to use, for surfaces in contact with walls, the TRIM reflection data for particle and energy reflection coefficients, when refl_model.eq.1. If refl_model.eq.0, an empirical formula is used instead. The model switch is subservient to reflection_on.ne.0. If reflection_on.eq.0, then no reflection is used.
+					If reflection_on.eq.1 (default), then the incident species is reflected unchanged. Otherwise, the reflected flux is of the associated neutral species to the incident particles.
+				</description>
+				<category>Physics</category>
+			</paramgroup>
+			<param> 
+				<name>b2stbr_bas_recycled_neutrals_contr</name>
+				<description>
+					Introduced for nulling recycling energy when it is zero.
+					COMMENT: What does "!srv 12.04.08" mean in the manual ?
+				</description>
+				<default>1.0</default>
+				<type>real</type>
+				<category>Physics</category>
+			</param>
+			<param> 
+				<name>b2stcx_rg0</name>
+				<description>
+					(rg0 for numerical stabilisation; needs experiments.)
+				</description>
+				<default>1.0</default>
+				<type>real</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2stcx_styl0</name>
+				<description>
+					Specifies the type of linearisation used in the charge exchange momentum source term.
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2stel_fix_recomb_energy</name>
+				<description>
+					If changed to 1, then the recombination energy (rpi) is added to the electron energy for each recombination. This should only be used if the is--&gt;is-1 energy terms have been included in the electron cooling rates (as done by setting the switch ’b2ardr_fix_recomb’ in b2ar.dat to a non-zero value and recalculating b2frates).
+					See ’Atomic Physics’ section.
+					*** Use with caution! ***
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Physics</category>
+			</param>
+			<param> 
+				<name>b2stel_phm0</name>
+				<description>
+					Multiplier of the recombination contribution to the electron cooling rate (if ADPAK rates are not used because those are already included). Assumes all recombination is three-body.
+				</description>
+				<default>0.0</default>
+				<type>real</type>
+				<category>Physics</category>
+			</param>
+			<paramgroup>
+				<param> 
+					<name>b2stel_rg0</name>
+					<default>1.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stel_rg1</name>
+					<default>1.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stel_rxm0</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stel_rxm1</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stel_rxm2</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stel_rxm3</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2stel_rxm4</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<description>
+					Damping coefficient applied to the atomic physics sources.
+				</description>
+				<category>Numerics</category>
+			</paramgroup>
+			<param> 
+				<name>b2stel_styl0</name>
+				<description>
+					Specifies the type of linearisation used in the charge exchange momentum source term.
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+			<paramgroup>
+				<param> 
+					<name>b2tanml_anomalous</name>
+					<default>1.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2tfhe_anomalous</name>
+					<default>1.0</default>
+					<type>real</type>
+				</param>
+				<description>
+					Real parameter which determines anomalous current.
+					Both b2tfhe_anomalous and b2tanml_anomalous point to the same switch (backward compatibility with SOLPS5.2): b2tfhe_anomalous is checked first and only if it is not found is b2tanml_anomalous looked for.
+					If b2tfhe_anomalous is 0 then anomalous current is switched off otherwise anomalous current is switched on, and the numerical value of b2tfhe_anomalous acts as a multiplier to the anomalous electrical conductivity and thermo-electric coefficients provided.
+
+					COMMENT: Can we delete "real" from the description?
+				</description>
+				<category>Physics</category>
+			</paramgroup>
+			<param> 
+				<name>b2tfcc_xfac</name>
+				<description>
+					Multiplier to the pressure force term.
+				</description>
+				<default>1.0</default>
+				<type>real</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2tfhe_alfTeEh</name>
+				<description>
+					When set to ’0.0’, the old form of the electron heat flux calculation is used.
+					It is recommended to use 1.0.
+				</description>
+				<default>0.0</default>
+				<type>real</type>
+				<category>Physics</category>
+			</param>
+			<param> 
+				<name>b2tfhe_conduction_only</name>
+				<description>
+					When conduction_only.eq.1, convective heat transfer terms are turned off. Only to be used when benchmarking against pure conduction cases.
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Physics</category>
+			</param>
+			<param> 
+				<name>b2tfhe_fch_pTe</name>
+				<description>
+					When set to ’1.0’, the new form of the electron heat flux calculation is used.
+					It is recommended to use 1.0.
+				</description>
+				<default>1.0</default>
+				<type>real</type>
+				<category>Physics</category>
+			</param>
+			<paramgroup>
+				<param> 
+					<name>b2tfhe_hybr2</name>
+					<default>0</default>
+					<type>integer</type>
+				</param>
+				<param> 
+					<name>b2tfhe_no_hybr</name>
+					<default>0</default>
+					<type>integer</type>
+				</param>
+				<param> 
+					<name>b2tfhi_hybr2</name>
+					<default>0</default>
+					<type>integer</type>
+				</param>				
+				<param> 
+					<name>b2tfhi_no_hybr</name>
+					<default>0</default>
+					<type>integer</type>
+				</param>
+				<param> 
+					<name>b2tfnb_no_hybr</name>
+					<default>0</default>
+					<type>integer</type>
+				</param>				
+				<description>
+					Switches to toggle between the standard 5.0 hybrid scheme (no_hybr.eq.0) and the old 4.0 upwind scheme (no_hybr.eq.1).
+					These apply separately to the electron heat, ion heat and particle conservation equations.
+					If hybr2.ne.0, then a mixed scheme is used where only the conductivity is computed according to the 4.0 scheme.
+				</description>
+				<category>Numerics</category>
+			</paramgroup>
+			<param> 
+				<name>b2tfhe_lim_flux</name>
+				<description>
+					If ’0’, flux limit is not applied directly to the electron heat flux but is applied through transport coefficients if ’b2trcl_conductive_limit’ is ’1’.
+					It is recommended ’0’.
+				</description>
+				<default>1</default>
+				<type>integer</type>
+				<category>Physics</category>
+			</param>
+			<param> 
+				<name>b2tfhe_mdf</name>
+				<description>
+					If ’1’, Spb’s new form of calculating electron heat flux is used.
+					It is recommended ’1’ for runs with drifts.
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2tfhe_neutral</name>
+				<description>
+					Real parameter which multiplies ion-neutral current.
+					If b2tfhe_neutral is 0 then ion-neutral current is switched off otherwise ion-neutral current is switched on.
+
+					COMMENT: real in description, yes or no?
+				</description>
+				<default>0.0</default>
+				<type>real</type>
+				<category>Physics</category>
+			</param>
+			<param> 
+				<name>b2tfhe_no_current</name>
+				<description>
+					If no_current.eq.1, all currents are set to zero. The setting no_current.eq.1 must be used if the potential equation is not explicitly solved for, i.e. for b2news_poteq.ne.1.
+				</description>
+				<default>0</default>
+				<type>integer</type>
+				<category>Numerics</category>
+			</param>
+			<paramgroup>
+				<param> 
+					<name>b2tfhe_upwind</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<param> 
+					<name>b2tfhi_upwind</name>
+					<default>0.0</default>
+					<type>real</type>
+				</param>
+				<description>
+					If upwind.ne.0, then the SOLPS4 upwind scheme in b2tfhe_ and b2tfhi_ to obtain the heat fluxes.
+				</description>
+				<category>Numerics</category>
+			</paramgroup>
+			<param> 
+				<name>b2tfhe_vis_par</name>
+				<description>
+					Real parameter which multiplies current driven by parallel viscosity. 
+					If b2tfhe_vis_par is 0 then viscosity-driven current is switched off otherwise viscosity-driven current is switched on.
+
+					COMMENT: real in description, yes or no?
+				</description>
+				<default>0.0</default>
+				<type>real</type>
+				<category>Physics</category>
+			</param>
+			<param> 
+				<name>b2tfhe_vis_per</name>
+				<description>
+					If ’1.0’, the electric potential equation is solved by the subroutine b2npp7 using a 7-point stencil.
+					The value ’1.0’ is recommended for runs with drifts when perpendicular viscosity and corresponding perpendicular viscosity current is taken into account.
+				</description>
+				<default>0.0</default>
+				<type>real</type>
+				<category>Numerics</category>
+			</param>
+			<param> 
+				<name>b2tfhe_vis_q</name>
+				<description>
+					real parameter which multiplies current driven by heat viscosity effects.
+				</description>
+				<default>1.0</default>
+				<type>real</type>
+				<category>Physics</category>
+			</param>
+
 
 
 
