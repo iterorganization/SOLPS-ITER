@@ -14,9 +14,10 @@ c=======================================================================
       integer i,j,k,l,isg,istr,isf
       real*4 hlp,hlp1,hlp2,hlpeps,hlpeps2
       logical ex,uex,streql
-      external streql, xerrab
+      external streql, xerrab, subini, subend
       parameter (hlpeps=1.e-6, hlpeps2=1.e-5)
 c=======================================================================
+      call subini ('uinpsrcg')
 c<<<
       print *,'uinpsrcg: ngpfstr=',ngpfstr
 c>>>
@@ -148,8 +149,9 @@ c*** lstrascl
                 if(streql(spcsncl(k),wrcmstrs(j,istr))) then !{
                   lsgpfstr(i,istr)=k*spcsscn(i)
 #ifdef DBG
-              print *,'uinpsrcg: k,i,j,istr,lsgpfstr,spcsscn=',k,i,j,
-     ,                                 istr,lsgpfstr(i,istr),spcsscn(i)
+                  print *,'uinpsrcg: k,i,j,istr,lsgpfstr,spcsscn=',
+     ,                               k,i,j,istr,lsgpfstr(i,istr),
+     ,                                                   spcsscn(i)
 #endif
                 end if !}
               end do !}
@@ -159,9 +161,11 @@ c*** lstrascl
             uex=.false.
             do k=1,nspcncl !{
               if(igpfstr(k,istr).gt.0) then !{
-                if(.not.ex) lsgpfstr(i,istr)=k*spcsscn(i)
+                if(.not.ex) lsgpfstr(k,istr)=k*spcsscn(k)
                 uex=ex
                 ex=.true.
+              else !}{
+                lsgpfstr(k,istr)=0
               end if !}
             end do !}
             if(uex) then !{
@@ -176,4 +180,6 @@ c*** lstrascl
 
       end do  !} istr
 c=======================================================================
+      call subend ()
+      return
       end

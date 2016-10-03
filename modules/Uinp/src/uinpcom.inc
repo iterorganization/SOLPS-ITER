@@ -150,7 +150,7 @@ c***  	test ions for each entry (always one atom for a GS);
 c***  	atomic mass, nuclear charge, charge state, flux units (nuclei),
 c***  	and '3 secondaries' flag for each entry 
       integer nspdgen,nspdlen
-      parameter (nspdgen=9, nspdlen=65)
+      parameter (nspdgen=11, nspdlen=65)
       character*8 spcdgen(nspdgen)*2,spcdspc(nspdlen),
      ,	spcdrfl(nspdlen),spcdrtl(nspdlen)
       integer lspdgen(nspdgen),nspdpls(nspdgen),nspdmol(nspdgen),
@@ -321,10 +321,11 @@ c***  	deltae, tmin, and tmax from AMDS, energies of the
 c***  	reaction products (for DS), extrapolation coefficients;
 c***  	flag "Use the default model" 
       integer nnrctn,rctngrp(mreac),rctnmsp(mreac),rctnmst(mreac),
-     ,	rctnnmo1(mreac),rctnnmo2(mreac),rctnimn(mreac),rctnimx(mreac)
+     ,	rctnnmo1(mreac),rctnnmo2(mreac),rctnimn(mreac),rctnimx(mreac),
+     ,  rctniz(mreac)
       character*8 rctntyp(mreac)*2,rctndbs(mreac)*6,rctnchp(mreac)*4,
      ,	rctnrct(mreac)*9,rctnptpr(mreac),rctnptin(mreac),
-     ,	rctnpto1(mreac),rctnpto2(mreac)
+     ,	rctnpto1(mreac),rctnpto2(mreac),rctneln(mreac)*2
       real*4 rctndlte(mreac),rctntmin(mreac),rctntmax(mreac),
      ,	rctnenr1(mreac),rctnenr2(mreac),rctnexcf(mreac,6)
       logical rctndflt
@@ -333,14 +334,15 @@ c*** Default reaction lists: the same for each species (nsrctd and
 c***  	spcrctd are the number and the list of default species;
 c***  	primary particle is determined from spcrctd)
       integer nsrctd
-      parameter (nsrctd=12)
+      parameter (nsrctd=14)
       character*8 spcrctd(nsrctd)
       integer nnrctd(nsrctd),rctdgrp(mreac,nsrctd),
      ,	rctdmsp(mreac,nsrctd),rctdmst(mreac,nsrctd)
       character*6 rctdtyp(mreac,nsrctd)*2,rctddbs(mreac,nsrctd),
      ,	rctdchp(mreac,nsrctd)*4,rctdrct(mreac,nsrctd)*9,
      ,	rctdptpr(mreac,nsrctd),rctdptin(mreac,nsrctd),
-     ,	rctdpto1(mreac,nsrctd),rctdpto2(mreac,nsrctd)
+     ,	rctdpto1(mreac,nsrctd),rctdpto2(mreac,nsrctd),
+     ,  rctdeln(mreac,nsrctd)
       real*4 rctddlte(mreac,nsrctd),rctdtmin(mreac,nsrctd),
      ,	rctdtmax(mreac,nsrctd),
      ,	rctdenr1(mreac,nsrctd),rctdenr2(mreac,nsrctd)
@@ -353,7 +355,7 @@ c***  	      	      	  as input from DG
       character chsptgt(nchsppr)*24,chspspt(nchsppr)*8
       
 c-----------------------------------------------------------------------
-c*** Gas-puffing strata: number, corresponding strata, number of surface
+c*** Gas puffing strata: number, corresponding strata, number of surface
 c***  	segments and their lists, angular distribution (namods in 
 c***  	Eirene), first additional cells (NASOR), max. and min. number of
 c***  	histories, RNG initialisation, nuclear composition 
@@ -550,7 +552,7 @@ c     ,  spcifup,spcifua,spcifum,spcifui,
      ,	leebndx,lcobndx,leibndx,lmobndx,lpobndx,kcobndx,kmobndx,
      ,	nrgbndt,nznbndt,lcmbndt,lrfbndt,lrrbndt,lrpbndt,lrsbndt,lzrbndt,
      ,	lzpbndt,
-     ,	nnrctn,rctngrp,rctnmsp,rctnmst,rctnnmo1,rctnnmo2,rctnimn,
+     ,	nnrctn,rctngrp,rctnmsp,rctnmst,rctnnmo1,rctnnmo2,rctnimn,rctniz,
      ,	rctnimx,nnrctd,rctdgrp,rctdmsp,rctdmst,
      ,	nspcncl,nspcpls,nspcatm,nspcmol,nspcion,spcsmsp,spcsmsa,spcsmsm,
      ,	spcsmsi,spcsncp,spcsnca,spcsncm,spcsnci,spcscgp,spcscga,spcscgm,
@@ -588,8 +590,9 @@ c     ,  spcifup,spcifua,spcifum,spcifui,
      ,	crgbndt,cznbndt,ewmbnds,cskbnds,ctxbnds,ewmbndx,escbndx,eswbndx,
      ,	dscbndx,
      ,	rctntyp,rctndbs,rctnchp,rctnrct,rctnptpr,rctnptin,rctnpto1,
-     ,	rctnpto2,spcrctd,rctdtyp,rctddbs,rctdchp,rctdrct,rctdptpr,
-     ,	rctdptin,rctdpto1,rctdpto2,
+     ,	rctnpto2,rctneln,
+     ,  spcrctd,rctdtyp,rctddbs,rctdchp,rctdrct,rctdptpr,
+     ,	rctdptin,rctdpto1,rctdpto2,rctdeln,
      ,	chsptgt,chspspt,made_of,
      ,	crcmstrs,srcmstrs,wrcmstrs,cgpfstrs,sgpfstrs,
      ,	sps_mtrl,sps_id,gpfrgrp,cdnmdlp_sel,

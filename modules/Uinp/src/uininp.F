@@ -15,10 +15,11 @@ c======================================================================
       character*2 listmat(nmtr)
       character*256 solpstop
       external open_file,uinnam,uintrg,uinaux,uiniamd,streql,
-     .         xertst,xerrab
+     .         xertst,xerrab,subini,subend
 c======================================================================
 c*** set up the input routine
 c
+      call subini ('uininp')
       immed=.false.
       keylen=8
       mimp=iunii
@@ -141,7 +142,7 @@ c
 
       do iamd=1,namdf !{
         if(.not.streql(amd_file(iamd),' ')) then !{
-c*** Read the AMDS file if exists
+c*** Read the AMDS file if it exists
           inquire(file=amd_file(iamd), exist=uex)
           if(uex) then !{
             write(*,*) '... opening ',amd_file(iamd)
@@ -167,4 +168,6 @@ c*** Read the AMDS file if exists
         end if !}
       end do !}
 c======================================================================
+      call subend ()
+      return
       end

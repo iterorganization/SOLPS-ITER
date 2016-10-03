@@ -21,7 +21,7 @@ c=======================================================================
       character*20 hlp_frm
       character*60 lblps
       logical uex
-      external uinnam,uintrg,uinaux
+      external prgini,prgend,xerset
 c=======================================================================
 #ifdef USE_MPI
       call mpi_init(ierr_mpi)
@@ -33,6 +33,9 @@ c=======================================================================
         stop 'uinp_mpi_child'
       endif
 #endif
+      call prgini('uinput')
+*   ..mark output unit for error messages
+      call xerset (0)
 c*** Read the input data from various files
       call uininp
 c*** Prepare the constants
@@ -294,6 +297,7 @@ c*** Create additional files with geometry for b2plot
       
       call uib2pl
 c=======================================================================
+      call prgend ()
 #ifdef USE_MPI
       call mpi_barrier(MPI_COMM_WORLD,ierr_mpi)
       call mpi_finalize(ierr_mpi)

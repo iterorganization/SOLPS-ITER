@@ -14,8 +14,9 @@ c=======================================================================
       integer i,j,k,l,m,n,ii,jj,nbc,ispi,ispe
       integer ifl(DEF_NFL)
       logical ex
-      external xerrab
+      external xerrab, subini, subend
 c=======================================================================
+      call subini ('uinprpb2')
 #ifdef DBG
       print *,'Starting uinprpb2'   !###
 #endif
@@ -259,6 +260,8 @@ c*** k, m, n are the numbers of recycling, specified, and all strata
       nmdpr(31,3)=nlimi+nstsi+1
       nmdpr(32,3)=n
       nmdpr(33,3)=n
+      nmdpr(34,3)=nspcmol
+      nmdpr(35,3)=nspcion
       ltrvr(3,3)=.true.
       lrrvr(14,3)=.true.
       lrrvr(15,3)=.true.
@@ -348,9 +351,35 @@ c***  	    crcstra, rcpos, rcstart, rcend
       	iniprm(k,1,1,5,3)=0
       	iniprm(k,1,1,6,3)=0
 
-c***          species_start, species_end
-        iniprm(k,1,1,32,3)=0
-        iniprm(k,1,1,33,3)=0
+c***        species_start, species_end
+        call uinspcid(cgpfstrs(i),l,j)
+        if (l.eq.2) then !}{
+          iatm = 1
+          j = 0
+          do while (iatm.le.nspcatm .and. j.eq.0) !{
+            if(igpfstr(iatm,i).gt.0) j=iatm
+            iatm = iatm+1
+          end do !}
+        end if !}
+        if (j.eq.0) then !{
+          iniprm(k,1,1,32,3)=0
+          iniprm(k,1,1,33,3)=0
+        else !}{
+          ispi=1
+          do iatm = 1, j !{
+            if (iatm.gt.1) ispi=ispe+1
+            ispe=ispi
+            do while (lkindp(min(ispe+1,nplsi)).eq.lkindp(ispi)) !{
+              ispe=ispe+1
+              if (ispe.gt.nplsi) then !{
+                ispe=nplsi
+                exit
+              end if !}
+            end do !}
+          end do !}
+          iniprm(k,1,1,32,3)=ispi+(j-1)-1
+          iniprm(k,1,1,33,3)=ispe+(j-1)
+        end if !}
 
 c***  	    userfluxparm
       	rniprm(k,1,1,15,3)=fgpfstr(i)
@@ -379,9 +408,16 @@ c***  	    crcstra, rcpos, rcstart, rcend
       	iniprm(k,1,1,5,3)=0
       	iniprm(k,1,1,6,3)=0
 
-c***          species_start, species_end
-        iniprm(k,1,1,32,3)=0
-        iniprm(k,1,1,33,3)=0
+c***        species_start, species_end
+        ispi=nspez(k)
+        ispe=nspez(k)
+        do ipl = nspez(k)+1, nspcpls !{
+          if (lkindp(ipl).eq.lkindp(nspez(k))) then !{
+            ispe = ipl
+          end if !}
+        end do !}
+        iniprm(k,1,1,32,3)=ispi+(lkindp(nspez(k))-1)-1
+        iniprm(k,1,1,33,3)=ispe+(lkindp(nspez(k))-1)
 
 c***  	    userfluxparm
       	rniprm(k,1,1,15,3)=0
@@ -526,6 +562,15 @@ c*** Eirene surface data input through B2
           chrpl(i,3)=' '
         end do !}
       end if !}
+
+c*** lmolscl, lionscl
+      do i = 1, nspcmol !{
+        iniprm(i,1,1,34,3)=lkindm(i)
+      end do !}
+      do i = 1, nspcion !{
+        iniprm(i,1,1,35,3)=lkindi(i)
+      end do !}
+
 c-----------------------------------------------------------------------
 c*** Diagnostics
 
@@ -698,4 +743,6 @@ c#endif
       print *,'Leaving uinprpb2'   !###
 #endif 
 c=======================================================================
+      call subend ()
+      return
       end

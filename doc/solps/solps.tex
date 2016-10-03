@@ -6448,7 +6448,7 @@ m_a \frac{\partial n_a V_{\parallel a}}{\partial t} +
 \frac 1{h_z\sqrt g} \frac{\partial}{\partial y} \left( \frac{h_z\sqrt g}{h_y} \Gamma_{ay}^m \right) +
 \frac{b_x}{h_x}\frac{\partial n_a T_i}{\partial x} +
 Z_a e n_a \frac{b_x}{h_x} \frac{\partial \varphi}{\partial x} =\\
-S_{a \parallel}^m + S_{CF_a}^m + S_{fr_a}^m + S_{Term_a}^{m} + S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m
+S_{a \parallel}^m + S_{CF_a}^m + S_{fr_a}^m + S_{Therm_a}^{m} + S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m
 \end{eqnarray*}
 
 \begin{eqnarray*}
@@ -6457,7 +6457,7 @@ m_a \frac{\partial n_a V_{\parallel a}}{\partial t} +
 \frac 1{h_z\sqrt g} \frac{\partial}{\partial y} \left( \frac{h_z \sqrt g}{h_y} \Gamma_{ay}^m \right) +
 \frac{b_x}{h_x} \frac{\partial n_a T_i}{\partial x} +
 \frac{b_x}{h_x} \frac{Z_a n_a \partial n_e T_e}{n_e \partial x} = \\
-= \mbox{old form} = S_{a \parallel}^m + S_{CF_a}^m + S_{fr_a}^m + S_{Term_a}^{m} + S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m
+= \mbox{old form} = S_{a \parallel}^m + S_{CF_a}^m + S_{fr_a}^m + S_{Therm_a}^{m} + S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m
 \end{eqnarray*}
 
 %-------- end of 4th page -------------
@@ -6483,7 +6483,7 @@ B^{\frac 3 2} b_x \frac{\partial}{h_x \partial x}
 
 $S_{CF}^m = m_a b_x n_a V_{\parallel a}^2 \frac 1{h_z h_x} \frac{\partial h_z}{\partial x}$
 
-$S_a^m = S_{fr,a}^m + S_{Term}^m + S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m$,
+$S_a^m = S_{fr,a}^m + S_{Therm}^m + S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m$,
 
 Parallel momentum source due to ionization
 
@@ -6574,7 +6574,7 @@ max \{ 5; 17.3 - 0.5 \cdot log_e \left( \frac{n_e}{10^{20}} \right) + 1.5 \cdot 
 \end{matrix}
 \end{equation}
 
-$S_{Term,a}^m =
+$S_{Therm,a}^m =
 n_a \left(
 	\frac{z_a}{n_e} - \frac{z_a^2}{n_{e^2}}
 \right)
@@ -11369,7 +11369,7 @@ when calculating derived data.
     shi      & \index{b2plot, shi} Ion energy sources $(W)$ \\
     sig      & \index{b2plot, sig} Anomalous conductivity $(\Omega^{-1}.m^{-1})$ \\
     smaf     & \index{b2plot, smaf} Parallel momentum source from friction {\em b2npmo\_smaf} $(N)$ \\
-    smag     & \index{b2plot, smag} Parallel momentum source from thermal force {\em b2npmo\_smag} $(N)$ \\
+    smag     & \index{b2plot, smag} Parallel momentum source from pressure gradient {\em b2npmo\_smag} $(N)$ \\
     smav     & \index{b2plot, smav} Parallel momentum source from additional viscosity {\em b2npmo\_smav} $(N)$ \\
     smfr     & \index{b2plot, smfr} Friction force $(N)$ \\
     smo      & \index{b2plot, smo} Momentum sources $(N)$ \\
@@ -14353,7 +14353,8 @@ in the radial direction not including two guard cells
 %%\item[] the maximum number of
 \end{description}
 
-The current default settings of {\tt DIMENSIONS.F}, corresponding to a D+He+C DN case, are:
+The current default settings of {\tt DIMENSIONS.F}, which allow for a 
+128$\times$36 DN geometry case including species H, D, T, He, Be and C, are:
 \VerbatimInput[fontsize=\footnotesize]{DIMENSIONS.F}
 
 \section{Making movies}

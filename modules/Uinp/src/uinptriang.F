@@ -16,7 +16,9 @@ c***  returns .TRUE. if successful and .FALSE. otherwise
       integer NSS(nsts),nn,i,j,k,l
       logical ex 
       real txmin,txmax,tymin,tymax
+      external subini, subend
     
+      call subini ('uinptriang')
       print *
       print *,'==== Starting uinptriang'
       TriMesh=.TRUE.
@@ -41,7 +43,7 @@ c***  and check if they are closed
       if(nattr.EQ.1.AND.attrib(1).EQ.0) then
        TriMesh=.FALSE.
        write(0,*) 'no TRIA polygons specified'  
-       return
+       goto 9999
       end if 
       do 20 i=1,nattr
        write(*,*) 'chain number, attrib', i, attrib(i)
@@ -56,12 +58,8 @@ c***  and check if they are closed
        nchain=k
        write(*,*) 'nchain',nchain
        IF(nchain.GT.0) then
-         IF(nchain.le.12) then
-           write(*,'(a,12i5)') 'chain',(chain(l),l=1,nchain)
-         ELSE
-           write(*,'(a,12i5)') 'chain',(chain(l),l=1,12)
-           write(*,'(13i5)') (chain(l),l=13,nchain)
-         ENDIF
+         write(*,'(1x,a)') 'chain:'
+         write(*,'(20i5)') (chain(l),l=1,nchain)
        ENDIF
 c***   makes checking and outputs NSS indices if necessary
        call uichkchn(chain,nchain,nsts,NSS,nn,attrib(i))
@@ -70,7 +68,7 @@ c***   makes checking and outputs NSS indices if necessary
        if(nn.LT.0) then 
         write(0,*) 'ERROR in uichkchn, nn', nn
         TriMesh=.FALSE.
-        return
+        goto 9999
        end if
 c***   write intermediate arrays for output
        do 26 j=1,nchain
@@ -100,5 +98,7 @@ c  Prepare data for TRIA input file (header with refinement zones data)
        trixmax(i)=txmax
        triymin(i)=tymin
        triymax(i)=tymax
-   30 continue       
+   30 continue
+ 9999 call subend()
+      return
       end subroutine uinptriang

@@ -31,6 +31,7 @@ EIRDIR  = ${SOLPSTOP}/modules/Eirene
 # uncomment following lines if debug-code needed
 ifdef SOLPS_DEBUG
 EXT_DEBUG = .debug
+USE_DEBUG = -DDBG
 endif
 ifdef USE_MPI
 EXT_MPI = .mpi
@@ -70,14 +71,14 @@ endif
 DEST = $(OBJS:%.o=$(OBJDIR)/%.o)
 
 $(OBJDIR)/%.o : %.F
-	${CPP} -P $(INCLUDE) ${SOLPS_CPP} $< ${OBJDIR}/$*.f
+	${CPP} -P $(INCLUDE) ${SOLPS_CPP} ${USE_DEBUG} $< ${OBJDIR}/$*.f
 	$(COMPILE) ${INCLUDE} -o ${OBJDIR}/$*.o ${OBJDIR}/$*.f
 
 all: VERSION ${OBJDIR}/${PROG} ${OBJDIR}/ub2p
 
 .PHONY: clean depend listobj tags echo VERSION force
 
-${OBJDIR}/${PROG}: ${OBJDIR}/uinput.o ${OBJDIR}/uiblkd.o ${OBJDIR}/uiblb2.o ${OBJDIR}/libui.a ${MNEXTRA} ${OBJDIR}/b2mod_layer.o ${OBJDIR}/b2mod_constants.o ${OBJDIR}/libeirene.a ${OBJDIR}/libgr_dummy.a ${MAKES}
+${OBJDIR}/${PROG}: ${OBJDIR}/uinput.o ${OBJDIR}/uiblkd.o ${OBJDIR}/uiblb2.o ${OBJDIR}/libui.a ${MNEXTRA} ${OBJDIR}/b2mod_layer.o ${OBJDIR}/b2mod_elements.o ${OBJDIR}/b2mod_constants.o ${OBJDIR}/libeirene.a ${OBJDIR}/libgr_dummy.a ${MAKES}
 	${FC} $(FFLAGS) -o ${OBJDIR}/${PROG} ${OBJDIR}/uinput.o ${OBJDIR}/uiblkd.o ${OBJDIR}/uiblb2.o ${OBJDIR}/libui.a ${OBJDIR}/libeirene.a ${OBJDIR}/libgr_dummy.a ${MNEXTRA} ${LDLIBS} $(LDEXTRA)
 
 ${OBJDIR}/ub2p: ${OBJDIR}/ub2p.o ${OBJDIR}/libui.a ${MAKES} ${MNEXTRA}
@@ -87,8 +88,8 @@ ${OBJDIR}/libui.a: ${DEST} ${SRCDIR}/git_version_Uinp.h
 	@ar rucv $@ ${DEST}
 	ranlib $@
 
-${OBJDIR}/libb25.a:
-	@ar rucv $@ ${B2OBJ}/b2mod_constants.o ${B2OBJ}/b2mod_types.o ${B2OBJ}/b2mod_layer.o ${B2OBJ}/ifill.o ${B2OBJ}/len_of_digits.o ${B2OBJ}/lwimai.o ${B2OBJ}/lwmain.o ${B2OBJ}/open_file.o ${B2OBJ}/prvrt.o ${B2OBJ}/prvrti.o ${B2OBJ}/sfill.o ${B2OBJ}/streql.o ${B2OBJ}/subsys.o ${B2OBJ}/xerrab.o ${B2OBJ}/xerset.o ${B2OBJ}/xertst.o
+${OBJDIR}/libb25.a: ${B2OBJ}/b2mod_constants.o ${OBJDIR}/b2mod_elements.o ${B2OBJ}/b2mod_types.o ${B2OBJ}/b2mod_layer.o ${B2OBJ}/chcase.o ${B2OBJ}/ifill.o ${B2OBJ}/ipmain.o ${B2OBJ}/isadigit.o ${B2OBJ}/isplusorminus.o ${B2OBJ}/len_of_digits.o ${B2OBJ}/lwimai.o ${B2OBJ}/lwmain.o ${B2OBJ}/open_file.o ${B2OBJ}/prgend.o ${B2OBJ}/prgini.o ${B2OBJ}/prvrt.o ${B2OBJ}/prvrti.o ${B2OBJ}/sfill.o ${B2OBJ}/streql.o ${B2OBJ}/strip_spaces.o ${B2OBJ}/subsys.o ${B2OBJ}/sysend.o ${B2OBJ}/sysini.o ${B2OBJ}/xerrab.o ${B2OBJ}/xerset.o ${B2OBJ}/xertst.o ${SRCDIR}/.new_routines
+	@ar rucv $@ ${B2OBJ}/b2mod_constants.o ${OBJDIR}/b2mod_elements.o ${B2OBJ}/b2mod_types.o ${B2OBJ}/b2mod_layer.o ${B2OBJ}/chcase.o ${B2OBJ}/ifill.o ${B2OBJ}/ipmain.o ${B2OBJ}/isadigit.o ${B2OBJ}/isplusorminus.o ${B2OBJ}/len_of_digits.o ${B2OBJ}/lwimai.o ${B2OBJ}/lwmain.o ${B2OBJ}/open_file.o ${B2OBJ}/prgend.o ${B2OBJ}/prgini.o ${B2OBJ}/prvrt.o ${B2OBJ}/prvrti.o ${B2OBJ}/sfill.o ${B2OBJ}/streql.o ${B2OBJ}/strip_spaces.o ${B2OBJ}/subsys.o ${B2OBJ}/sysend.o ${B2OBJ}/sysini.o ${B2OBJ}/xerrab.o ${B2OBJ}/xerset.o ${B2OBJ}/xertst.o
 	ranlib $@
 
 ${OBJDIR}/uinput.o: ${OBJDIR}/uiblkd.o
@@ -99,6 +100,9 @@ ${OBJDIR}/b2mod_layer.${MOD}:
 
 ${OBJDIR}/b2mod_constants.${MOD}:
 	ln -sf ${B2OBJ}/b2mod_constants.${MOD} ${OBJDIR}
+
+${OBJDIR}/b2mod_elements.${MOD}:
+	ln -sf ${B2OBJ}/b2mod_elemennts.${MOD} ${OBJDIR}
 endif
 
 ${OBJDIR}/libeirene.a:
@@ -110,6 +114,9 @@ ${OBJDIR}/libgr_dummy.a:
 ${OBJDIR}/b2mod_layer.o:
 	ln -sf ${B2OBJ}/b2mod_layer.o ${OBJDIR}
 
+${OBJDIR}/b2mod_elements.o:
+	ln -sf ${B2OBJ}/b2mod_elements.o ${OBJDIR}
+
 ${OBJDIR}/b2mod_constants.o:
 	ln -sf ${B2OBJ}/b2mod_constants.o ${OBJDIR}
 
@@ -120,7 +127,7 @@ ifneq (${MOD},o)
 endif
 
 depend: ${OBJS:.o=.F} uiblkd.F uinput.F uiblb2.F ub2p.F ${SRCDIR}/git_version_Uinp.h
-	`which makedepend` -p'$${OBJDIR}/' ${SOLPS_CPP} -f- ${INCLUDE} $^ | \
+	`which makedepend` -p'$${OBJDIR}/' ${SOLPS_CPP} ${USE_DEBUG} -f- ${INCLUDE} $^ | \
 	sed 's,^$${OBJDIR}/[^ ][^ ]*/,\$${OBJDIR}/,' | \
 	sed 's,: ${SOLPSTOP},: $${SOLPSTOP},' > ${OBJDIR}/dependencies.${COMPILER}
 

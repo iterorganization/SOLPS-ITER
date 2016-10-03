@@ -7,7 +7,7 @@ FC	     = mpif90
 MPI_CPP ?= `pkg-config mpich2-ch3 --cflags`
 LD_MPI  ?= `pkg-config mpich2-ch3 --libs`
 else
-FC	     = ifort
+FC       = ifort
 endif
 
 ifdef SOLPS_DEBUG
@@ -25,9 +25,9 @@ endif
 endif
 INCLUDE  = -I${SRCDIR} -I${EIRINC} -I${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
-CPP	     = /lib/cpp -C -traditional
+CPP	 = /lib/cpp -C -traditional
 
-MOD 	   = mod
+MOD      = mod
 LDLIBS	 = ${LD_MSCL}
 ifdef USE_MPI
 LDEXTRA  = -i_dynamic ${LD_MPI}

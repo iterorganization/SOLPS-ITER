@@ -19,6 +19,7 @@ c*** List of topologies valid for this routine
       data topo_hlp / 'DNL','DNS','DNU','SNL','SNU' /
 c*** Boundary kinds: 1-core, 2-target, 3-PFR side, 4-outer side
 c=======================================================================
+      call subini ('uinbndrg')
 c*** Check the topology
       ex=.false.
       do i=1,nt_hlp !{
@@ -206,4 +207,6 @@ c!###{
       print *
 c!###}
 c=======================================================================
+      call subend ()
+      return
       end

@@ -24,7 +24,7 @@ c=======================================================================
       logical, allocatable :: done(:)
       character utxthd(34)*71, utxtfl(7)*47, ufnm*(*), ucdnmdl*10
       character utxtgt*71
-      external streql, xerrab
+      external streql, xerrab, subini, subend
       data utxthd /
      1        '** 1. Data for operating mode' ,
      2        '** 2. Data for standard mesh' ,
@@ -71,7 +71,7 @@ c=======================================================================
 c=======================================================================
 
 c*** 0. Prepare some constants
-
+      call subini ('uinout')
       ex=.false.
       if(nstrao.le.0) then !{
         nstrao=nstrai
@@ -425,9 +425,12 @@ c**   atomic reaction cards, nreaci data fields
         iid=ir(j)
         write(iunoo,701) iid,filnam(j),h123(j),reac(j),crc(j),
      ,        	      	    massp(j),masst(j),delpot(j),rcmn(j),rcmx(j)
+        if (streql(filnam(j),'ADAS')) then !{
+          write(iunoo,'(4x,a2,1x,i3)') elname(j),iz(j)
+        end if !}
         if (rcmn(j).gt.0.) write(iunoo,704) ifexmn(j),(fparm(j,i),i=1,3)
         if (rcmx(j).gt.0.) write(iunoo,704) ifexmx(j),(fparm(j,i),i=4,6)
-        if(lconst(j)) write(iunoo,703) (creac(i,j),i=1,9)
+        if (lconst(j)) write(iunoo,703) (creac(i,j),i=1,9)
       end do !}
 
 c**  atomic species cards
@@ -437,7 +440,7 @@ c**  atomic species cards
       do iatm=1,natmi !{
         write(iunoo,708) iatm,texta(iatm),nmassa(iatm),nchara(iatm),
      ,    1,0,isrfa(iatm),isrta(iatm),nmseca(iatm),nrca(iatm),
-     ,    nfola(iatm),ngena(iatm)
+     ,    nfola(iatm),ngena(iatm),nhsta(iatm)
       	do k=1,nrca(iatm) !{
           if(nmseca(iatm).ne.3) then !{
             write(iunoo,707) ireaca(iatm,k),ibulka(iatm,k),
@@ -460,7 +463,8 @@ c**  neutral molecules species cards
       do imol=1,nmoli !{
         write(iunoo,708) imol,textm(imol),nmassm(imol),ncharm(imol),
      ,              nprtm(imol),0,isrfm(imol),isrtm(imol),nmsecm(imol),
-     ,                                nrcm(imol),nfolm(imol),ngenm(imol)
+     ,              nrcm(imol),nfolm(imol),ngenm(imol),nhstm(imol),
+     ,              lkindm(imol)
         do k=1,nrcm(imol) !{
           if(nmsecm(imol).ne.3) then !{
             write(iunoo,707) ireacm(imol,k),ibulkm(imol,k),
@@ -483,7 +487,7 @@ c**  test particle ions species cards
       do iion=1,nioni !{
         write(iunoo,708) iion,texti(iion),nmassi(iion),nchari(iion),
      ,    nprti(iion),nchrgi(iion),isrfi(iion),isrti(iion),nmseci(iion),
-     ,    nrci(iion),nfoli(iion),ngeni(iion)
+     ,    nrci(iion),nfoli(iion),ngeni(iion),nhsti(iion),lkindi(iion)
         do k=1,nrci(iion) !{
           if(nmseci(iion).ne.3) then !{
             write(iunoo,707) ireaci(iion,k),ibulki(iion,k),
@@ -506,7 +510,8 @@ c**  photon species cards
         write(iunoo,707) nphti
         do ipht=1,nphti !{
           write(iunoo,708) ipht,textf(ipht),0,0,0,0,isrff(ipht),
-     ,      isrtf(ipht),nmsecf(ipht),nrcf(ipht),nfolf(ipht),ngenf(ipht)
+     ,      isrtf(ipht),nmsecf(ipht),nrcf(ipht),nfolf(ipht),
+     ,      ngenf(ipht),nhstf(ipht)
           do k=1,nrcf(ipht) !{
             if(nmsecf(ipht).ne.3) then !{
               write(iunoo,707) ireacf(ipht,k),ibulkf(ipht,k),
@@ -538,8 +543,8 @@ c**  bulk ions species cards
       do ipls=1,nplsi !{
         write(iunoo,708) ipls,textp(ipls),nmassp(ipls),
      ,    ncharp(ipls),nprtp(ipls),nchrgp(ipls),isrfp(ipls),
-     ,    isrtp(ipls),nmsecp(ipls),nrcp(ipls),idnslmp(ipls),0,0,0,
-     ,    cdnmdlp(ipls),nrep(ipls)
+     ,    isrtp(ipls),nmsecp(ipls),nrcp(ipls),idnslmp(ipls),
+     ,    0,nhstp(ipls),0,cdnmdlp(ipls),nrep(ipls)
         do k=1,nrcp(ipls) !{
           if(nmsecp(ipls).ne.3) then !{
             write(iunoo,707) ireacp(ipls,k),ibulkp(ipls,k),
@@ -1035,6 +1040,8 @@ c*** segment numbers for the target edges to be modified by geousr
         end do !}
       end if !}
 
+      call subend ()
+      return
 c=======================================================================
   700 format ('*',a71)
   701 format (1p,i3,1x,a6,1x,a4,a9,a3,2i3,3e12.5)

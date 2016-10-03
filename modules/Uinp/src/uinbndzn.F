@@ -16,10 +16,11 @@ c=======================================================================
       integer i_sw(0:nxd+1,nbndrgn,n_hlp),i_tg(0:nyd+1,ntrgts),
      ,	l_hlp(n_hlp),i_cr(0:nxd+1)
       character*10 hlp_txt(n_hlp)
-      external xerrab
+      external xerrab, subini, subend
       data l_hlp /1,3,4/
       data hlp_txt / 'Core','PFR','Outer side' /
 c=======================================================================
+      call subini ('uinbndzn')
 c      print '(a,10i6)','uinbndzn: nx,ny,nncut,mdvbndx,nrgbndt = ',       !###
 c     ,                            nx,ny,nncut,mdvbndx,nrgbndt !###
 
@@ -422,4 +423,6 @@ c!###{
       print *
 c!###}
 c=======================================================================
+      call subend ()
+      return
       end

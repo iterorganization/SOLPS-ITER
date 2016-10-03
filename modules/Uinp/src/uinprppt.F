@@ -1,8 +1,10 @@
       subroutine uinprppt
-       use b2mod_layer
+      use b2mod_elements
+      use b2mod_layer
      , , only: ntrack, nalloys
-       use eirmod_extrab25
+      use eirmod_extrab25
      , , only: msrfclsx, mgwtiesx
+      implicit none
 
 c  version : 27.12.2004 23:24
 
@@ -10,13 +12,15 @@ c======================================================================
 c*** Prepare the particle lists
 c======================================================================
 #include "uinput.inc"
-      integer i,j,k,l,m,n,na,ni,nm,np
+      integer i,j,k,l,m,mm,n,na,ni,nm,np
+      integer find_matching_species, get_atomic_number, lnblnk
       logical ex,streql
-      external streql, xerrab
+      external streql, xerrab, subini, subend
+      external find_matching_species, get_atomic_number, lnblnk
       character*8 c,cc,c0*1
       character*20 hlp_frm
 c======================================================================
-
+      call subini ('uinprppt')
       c0=char(0)
 
 c*** Initialise the counters
@@ -39,15 +43,14 @@ c*** the atoms and nuclei
             if(streql(c,spcsatm(i))) ex=.false.
           end do      !}
           if(ex) then  !{
-            k=0
-            do i=1,nspdgen  !{
-              if(streql(c,spcdgen(i))) k=i
-            end do    !}
+            k=find_matching_species(c)
             if(k.eq.0) then  !{
               write(hlp_frm,'(a,i2,a)') '(a,a8,a,a,',nspdgen,'(a1,a2))'
               write(*,hlp_frm) 'Generic species "',c,'" undefined. ',
-     ,          'Available species are:',(' ',spcdgen(i),i=1,nspdgen)       
-              write(*,*) '  ==> Check the AMDS model'
+     ,          'Available non-default species are:',
+     ,           (' ',spcdgen(i),i=1,nspdgen-2)
+              write(*,*) 'Otherwise should be an element name.'
+              call xerrab ('  ==> Check the DivGeo species list')
             else  !}{
               j=lspdgen(k)
               na=nspcatm+1
@@ -62,12 +65,28 @@ c*** the atoms and nuclei
               spcsncl(nspcncl)=c
               spcsrna(na)=na
               spcsatm(na)=c
-              spcsrfa(na)=spcdrfl(j)
-              spcsrta(na)=spcdrtl(j)
-              spcsmsa(na)=spcdms(j)
-              spcsnca(na)=spcdnc(j)
-              spcscga(na)=spcdcg(j)
-              spcsfua(na)=spcdfu(j)
+              if (k.le.nspdgen-2) then !{
+                spcsrfa(na)=spcdrfl(j)
+                spcsrta(na)=spcdrtl(j)
+                spcsmsa(na)=spcdms(j)
+                spcsnca(na)=spcdnc(j)
+                spcscga(na)=spcdcg(j)
+                spcsfua(na)=spcdfu(j)
+              else if (k.eq.nspdgen-1) then !}{
+                spcsrfa(na)=c
+                spcsrta(na)=c
+                spcsmsa(na)=nuclear_mass(get_atomic_number(c))
+                spcsnca(na)=get_atomic_number(c)
+                spcscga(na)=0
+                spcsfua(na)=1
+              else if (k.eq.nspdgen) then !}{
+                spcsrfa(na)=' '
+                spcsrta(na)=' '
+                spcsmsa(na)=nuclear_mass(get_atomic_number(c))
+                spcsnca(na)=get_atomic_number(c)
+                spcscga(na)=0
+                spcsfua(na)=1
+              end if !}
               if(.not.streql(spcsrfa(na),' ') .and.
      &           .not.streql(spcsrfa(na),c0)) then !{
                 spcsrsa(na)=1
@@ -143,8 +162,38 @@ c*** the atoms and nuclei
               j=j+nspdion(k)
 
               np=nspcpls
-              do m=1,nspdpls(k) !{
-                c=spcdspc(j+m)
+              if (k.le.nspdgen-2) then !{
+                mm=nspdpls(k)
+              else !}{
+                mm=get_atomic_number(spcigen(l))
+              end if !}
+              do m=1,mm !{
+                c=repeat(' ',8)
+                if (k.le.nspdgen-2) then !{
+                  c=spcdspc(j+m)
+                else !}{
+                  if (lnblnk(spcigen(l)).eq.1) then !{
+                    if (m.eq.1) then !{
+                      c=spcigen(l)(1:1)//'+'
+                    else if (m.eq.2) then !}{
+                      c=spcigen(l)(1:1)//'++'
+                    else if (m.le.9) then !}{
+                      write(c,'(a1,i1,a1)') spcigen(l),m,'+'
+                    else !}{
+                      write(c,'(a1,i2,a1)') spcigen(l),m,'+'
+                    end if !}
+                  else !}{
+                    if (m.eq.1) then !{
+                      c=spcigen(l)(1:2)//'+'
+                    else if (m.eq.2) then !}{
+                      c=spcigen(l)(1:2)//'++'
+                    else if (m.le.9) then !}{
+                      write(c,'(a2,i1,a1)') spcigen(l),m,'+'
+                    else !}{
+                      write(c,'(a2,i2,a1)') spcigen(l),m,'+'
+                    end if !}
+                  endif !}
+                end if !}
                 ex=.false.
                 do i=1,nspcpls  !{
                   if(streql(c,spcspls(i))) ex=.true.
@@ -164,21 +213,37 @@ c*** the atoms and nuclei
                 end if !}
                 spcsrnp(np)=nspcncl
                 spcspls(np)=c
-                spcsrfp(np)=spcdrfl(j+m)
-                spcsrtp(np)=spcdrtl(j+m)
-                spcsmsp(np)=spcdms(j+m)
-                spcsncp(np)=spcdnc(j+m)
-                spcscgp(np)=spcdcg(j+m)
-                spcsfup(np)=spcdfu(j+m)
+                if (k.le.nspdgen-2) then !{
+                  spcsrfp(np)=spcdrfl(j+m)
+                  spcsrtp(np)=spcdrtl(j+m)
+                  spcsmsp(np)=spcdms(j+m)
+                  spcsncp(np)=spcdnc(j+m)
+                  spcscgp(np)=spcdcg(j+m)
+                  spcsfup(np)=spcdfu(j+m)
+                else if (k.eq.nspdgen-1) then !}{
+                  spcsrfp(np)=spcigen(l)
+                  spcsrtp(np)=spcigen(l)
+                  spcsmsp(np)=nuclear_mass(mm)
+                  spcsncp(np)=mm
+                  spcscgp(np)=m
+                  spcsfup(np)=1
+                else if (k.eq.nspdgen) then !}{
+                  spcsrfp(np)=' '
+                  spcsrtp(np)=' '
+                  spcsmsp(np)=nuclear_mass(mm)
+                  spcsncp(np)=mm
+                  spcscgp(np)=m
+                  spcsfup(np)=1
+                end if !}
                 if(.not.streql(spcsrfp(np),' ') .and.
      &             .not.streql(spcsrfp(np),c0)) then !{
                   spcsrsp(np)=1
                 else !}{
                   spcsrsp(np)=-1
                 end if !}
-                dpls(np)=1./nspdpls(k)
+                dpls(np)=1./mm
               end do  !}
-              j=j+nspdpls(k)
+              j=j+mm
 
               nspcatm=na
               nspcmol=nm
@@ -190,7 +255,8 @@ c*** the atoms and nuclei
               spcscrf(na)=spcicrf(l)
               spcsscn(na)=spciscn(l)
 #ifdef DBG
-              print *,'uinprppt: l,na,scn,crk,crp,crf=',l,na,
+              print '(a,4i5,1p,2e12.5)',
+     ,                 'uinprppt: l,na,scn,crk,crp,crf=',l,na,
      ,                  spcsscn(na),spcscrk(na),spcscrp(na),spcscrf(na)
 #endif
             end if  !}
@@ -212,7 +278,6 @@ c*** Atoms:
             if(streql(c,spcsatm(i))) ex=.false.
           end do      !}
           if(ex) then  !{
-            j=lspdgen(k)
             nspcatm=nspcatm+1
 	    if(nspcatm.gt.natm) then !{
 	      write(0,*) 'The number of atomic species must not ',
@@ -251,7 +316,6 @@ c*** Molecules:
             if(streql(c,spcsmol(i))) ex=.false.
           end do      !}
           if(ex) then  !{
-            j=lspdgen(k)
             nspcmol=nspcmol+1
 	    if(nspcmol.gt.nmol) then !{
 	      write(0,*) 'The number of molecular species must ',
@@ -490,6 +554,9 @@ cank        isrsa(l)=spcsrsa(l)
       	nmassm(l)=spcsmsm(l)
 	ncharm(l)=spcsncm(l)
 	nprtm(l)=spcsfum(l)
+        do i=1, nspcatm
+          if(-isrta(i).eq.l) lkindm(l)=i
+        end do
       end do !}
 
       nioni=nspcion
@@ -501,6 +568,11 @@ cank        isrsa(l)=spcsrsa(l)
 	nchrgi(l)=spcscgi(l)
 cank        isrsi(l)=spcsrsi(l)
 	nfoli(l)=-1
+        do i=1,nspcmol !{
+          if (nmassi(l).eq.nmassm(i) .and.
+     &        nchari(l).eq.ncharm(i) .and.
+     &        nprti(l).eq.nprtm(i)) lkindi(l)=lkindm(i)
+        end do !}
 
 	k=0
 	c=spcsrfi(l)
@@ -617,19 +689,19 @@ cank        isrsp(l)=spcsrsp(l)
 	end do !}
       end if !}
       if(nmoli.gt.0) then !{
-      	write(*,'(1x,a12,8a8)') 'molecules  ','nmassm','ncharm','nprtm',
-     ,	  'nchrgm','isrfm','isrtm','nmsecm'
+        write(*,'(1x,a12,9a8)') 'molecules  ','nmassm','ncharm','nprtm',
+     ,	  'nchrgm','isrfm','isrtm','nmsecm','lkindm'
       	do i=1,nmoli !{
 	  write(*,'(a12,i7,7i8)') textm(i),nmassm(i),ncharm(i),nprtm(i),
-     ,	    0,0,0,nmsecm(i)
+     ,	    0,0,0,nmsecm(i),lkindm(i)
 	end do !}
       end if !}
       if(nioni.gt.0) then !{
-      	write(*,'(1x,a12,8a8)') 'test ions  ','nmassi','nchari','nprti',
-     ,	  'nchrgi','isrfi','isrti','nmseci','nfoli'
+        write(*,'(1x,a12,9a8)') 'test ions  ','nmassi','nchari','nprti',
+     ,	  'nchrgi','isrfi','isrti','nmseci','nfoli','lkindi'
       	do i=1,nioni !{
-	  write(*,'(a12,i7,7i8)') texti(i),nmassi(i),nchari(i),nprti(i),
-     ,	    nchrgi(i),isrfi(i),isrti(i),nmseci(i),nfoli(i)
+	  write(*,'(a12,i7,8i8)') texti(i),nmassi(i),nchari(i),nprti(i),
+     ,	    nchrgi(i),isrfi(i),isrti(i),nmseci(i),nfoli(i),lkindi(i)
 	end do !}
       end if !}
       if(nplsi.gt.0) then !{
@@ -642,4 +714,6 @@ cank        isrsp(l)=spcsrsp(l)
       end if !}
       write(*,*)
 c======================================================================
+      call subend ()
+      return
       end

@@ -39,7 +39,7 @@ c
       character hlp_frm*14
       integer len_of_digits
       logical streql
-      external len_of_digits, streql
+      external len_of_digits, streql, subini, subend
 c
 c*** Possible forms of the end-of-block line
       integer nfnl
@@ -47,6 +47,7 @@ c*** Possible forms of the end-of-block line
       character ufnl(nfnl)*4
       data ufnl/'&end','/'/
 c=======================================================================
+      call subini ('uicrb2')
 c      print *,'Starting uicrb2' !###
 c*** Initial settings
 c
@@ -119,7 +120,7 @@ c*** Not yet. Proceed with the variables still left to be modified
               write(0,*) 'Unexpected error in uicrb2: unable to ',
      ,  	'complete the block ',jblk,' : ',chrbl(jblk)
               iret =8
-              return
+              goto 9990
             end if !}
           end if !}
 c*** The section is done. Reset the pointer and flags and write the line
@@ -141,7 +142,7 @@ c*** Is a section still open?
           write(0,*) 'Error in the input file: ',
      ,  	       'no section terminator before  ',sw
           iret=1
-          return
+          goto 9990
         end if !}
 
         ubs=.true.
@@ -247,7 +248,7 @@ c*** Left ellipse - array definition?
             write(0,*) 'Error in the input file: double left ellipse'
             write(0,*) ss
             iret=2
-            return
+            goto 9990
           end if !}
           ubr=.true.
 
@@ -258,7 +259,7 @@ c*** Right ellipse - array definition?
             write(0,*) 'Error in the input file: unmatched ellipse'
             write(0,*) ss
             iret=2
-            return
+            goto 9990
           end if !}
           ubr=.false.
 	  urbr=.true.
@@ -310,6 +311,7 @@ c*** The input file is over
 c
  90   iret=0
 c      print *,'*90: leaving uicrb2' !###
+ 9990 call subend ()
       return
 c=======================================================================
  92   write(0,*) 'Error in the input file: a symbol between ) and ='

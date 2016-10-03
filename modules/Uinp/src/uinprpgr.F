@@ -11,7 +11,7 @@ c*** Prepare the grid data - dimensions and cuts
 c=======================================================================
 #include "uinput.inc"
       logical ex
-      external xerrab
+      external xerrab, subini, subend
 c=======================================================================
 c*** Now, unlike the previous version, nrsol, nrpfl, nz[io]dv, nzinn,
 c*** together with nrsol1, nz[io]dv2, and nzinn2, are the numbers of
@@ -91,8 +91,9 @@ c***        ------------------------------
 c***         0 \         nzinn         / \
 c***  	       izc1                 izc2 iztg
 c=======================================================================
-c*** Grig dimensions and cut locations
+c*** Grid dimensions and cut locations
 
+      call subini ('uinprpgr')
       ex=.false.
       if(lm_cnfg) then	!{
 c*** Limiter configuration - a temporary, clumsy solution
@@ -255,4 +256,6 @@ c      print *,'nrpfl,nrsol,nrsol1,irwl,irsp,irsp2 = ',
 c     , nrpfl,nrsol,nrsol1,irwl,irsp,irsp2
 c!###}
 c=======================================================================
+      call subend ()
+      return
       end
