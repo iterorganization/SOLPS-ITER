@@ -291,10 +291,6 @@ cxpb Next line not needed if inherited from UPC instead!
       enddo
 *  ..output
       idout = '....'
-*   ..write dummy b2ag.dat
-      open(unit=70,file='b2ag.dat')
-      write(70,'(a)') 'Dummy file, geometry imported from B2SXDR'
-      close(70)
 *   ..write summary of geometry
       call b2wfgm (nout(0), idout, nx, ny)
 *   ..write version number
@@ -333,6 +329,7 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
 *   ..compute pbs (magnetic field pitch * surface area) at cell faces
       call b2xgbs (nx, ny, wbbl, wbbv, gs, qc, crx, cry, pbs)      
 *   ..save geometry
+      call write_b2ag(nx,ny)
       call b2wugm (nout(1), nx, ny, crx, cry, fpsi,
      &  ffbz, bb, vol, hx, hy, qz, qc, gs, pbs)
 *   ..save parameters
@@ -341,6 +338,10 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
       call cfwure (nout(1), 100, parg, 'parg')
 *   ..in 5.1 and SOLPS-ITER, we need a fort.30 file early to build triangular grids
       call write_f30 (nx, ny)
+*   ..write dummy b2ag.prt
+      open(unit=70,file='b2ag.prt')
+      write(70,'(a)') 'Dummy file, plasma geometry imported from B2SXDR'
+      close(70)
 *   ..write dummy b2ai.dat
       open(unit=70,file='b2ai.dat')
       write(70,'(a)') 'Dummy file, plasma state imported from B2SXDR'

@@ -75,7 +75,7 @@
 
       integer jxa, jxi, jsep
 
-      character*80 label_4
+      character*80 label_4, sonnetfile_4
 
       character*8, allocatable ::
      *  gpfrgrp_4(:), gntrgrp_4(:), sps_id_4(:)
@@ -110,16 +110,16 @@
 #     include <KOPPLDIM.F>
 #     include <COMDIM.F>
 #     include <COMNUM.F>
-#     include <COMPLASMA.F> 
-#     include <COMBOUND.F>           
-#     include <COMNEUT.F> 
-#     include <COMDIAG.F>          
-#     include <COMTRA.F>            
-#     include <COMLAB.F>            
+#     include <COMPLASMA.F>
+#     include <COMBOUND.F>
+#     include <COMNEUT.F>
+#     include <COMDIAG.F>
+#     include <COMTRA.F>
+#     include <COMLAB.F>
 #     include <IMPDIM.F>
-#     include <COMGEO.F>            
-#     include <CCUT.F>  
-#     include <COMUSER.F> 
+#     include <COMGEO.F>
+#     include <CCUT.F>
+#     include <COMUSER.F>
 #     include <EIRSRT.F>
 #     include <CBRAEIR.F>
 
@@ -300,18 +300,19 @@ cxpb
 #     include <DIMENSIONS.F>
 #     include <KOPPLDIM.F>
 #     include <COMDIM.F>
-#     include <COMFEEDBACK.F>            
-#     include <COMPLASMA.F>            
-#     include <COMBOUND.F>            
-#     include <COMINIT.F> 
-#     include <COMNEUT.F>           
-#     include <COMUSER.F>           
+#     include <COMFEEDBACK.F>
+#     include <COMPLASMA.F>
+#     include <COMBOUND.F>
+#     include <COMINIT.F>
+#     include <COMNEUT.F>
+#     include <COMUSER.F>
 #     include <COMDIAG.F>
-#     include <COMTRA.F>            
+#     include <COMTRA.F>
 #     include <IMPDIM.F>
-#     include <COMNUM.F>           
+#     include <COMNUM.F>
+#     include <COMLAB.F>
 #     include <COMEQ.F>
-#     include <CCUT.F> 
+#     include <CCUT.F>
 
       integer is, it, k
       external subini, subend
@@ -386,6 +387,7 @@ cxpb
 *  ..take in b2.parameters data
 *   ..initialisation
       starting_time_4 = starting_time
+      sonnetfile_4 = sonnetfile
 *   ..transport
       parvis_4(1:ns_4) = parvis(1:ns_4)
       dflagkxi_4 = dflagkxi
@@ -1514,6 +1516,24 @@ c Fill out b2mod_user_namelist data
       call subend()
       return
       end subroutine b2conv_input_2
+c
+      subroutine write_b2ag(nx,ny)
+      implicit none
+      integer nx, ny
+      character tab
+
+      tab=char(9)
+      write(*,*) 'Writing b2ag.dat'
+      open(99,file='b2ag.dat',status='unknown')
+      write(99,'(a)') '*dimens     (nx, ny, nx1, ny1; free format)'
+      write(99,'(4(2x,i3))') nx, ny, nx, ny
+      write(99,'(a)') '*param      (param(0:99); free format)'
+      write(99,'(a)') '  -1.0, 99*0.0'
+      write(99,'(3a)')
+     . '''b2agfs_geometry'''//tab//'''',trim(sonnetfile_4),''''
+      close(99)
+      return
+      end subroutine write_b2ag
 c
       subroutine write_b2ah(ns)
       use b2mod_types

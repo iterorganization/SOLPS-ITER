@@ -11031,7 +11031,7 @@ environment. Preprocessing before compilation with {\tt -DPLPLOT} option is then
 (see section \ref{sec:compilingb2} for more details).
 Data from the {\tt B2SXDR}, and, if available, the {\tt B2SDIAG} (for \SOLPSfour runs),
 {\tt b2fstate}, {\tt b2fplasma}, {\tt b2frates}, {\tt b2fgmtry}, {\tt b2mn.dat}
-(for \SOLPSfive runs) and {\tt fort.44} (when running
+(for \SOLPSfive and \SOLPSITER runs) and {\tt fort.44} (when running
 with {\tt Eirene}) files are read in, and then
 commands are read in from {\tt stdin}.
 
@@ -13788,21 +13788,21 @@ It is however not possible to iterate super--/subscript with any of the
 other options like Roman or Greek font type!
 This can be achieved by using $\hat{}$ and $\_$, closing super- or subscript
 with $\backslash n$: \\
-$ \hat{}   \backslash g lt\backslash n\backslash\mbox{r text  expands to }
-^{\lambda\tau} text$
+$ \hat{} ~ \backslash g lt\backslash n\backslash\mbox{r text}$ expands to
+$^{\lambda\tau}$ {\tt text}
 
 Environment variables can also be included by using, for example
 \$\{PWD\}.  {\tt PWD} could be any environment variable except {\tt TIME},
 {\tt LABEL} or {\tt SONNETFILE} (either lower or uppercase) where the
-values stored in the {\tt B2SXDR} file are used.
+values stored in the {\tt B2SXDR} file are used (for \SOLPSfour runs).
 
 Commands to be executed externally by a shell and returning a value can be
-entered between \`s, e.g.
+entered between \`{}s, e.g.
 \begin{verbatim}
 `date`
 \end{verbatim}
 
-See section \ref{sec:stdl} for the label set by {\em stdl} for an example using
+See section \ref{sec:stdl} for the label set by {\bf stdl} for an example using
 environment variables as well as shell expansions.
 
 \subsection{$<$palette file$>$ cltb}\index{b2plot, cltb}\label{sec:cltb}
