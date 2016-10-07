@@ -2386,7 +2386,7 @@ which contains
   \item[16] particle density to achieve specified total flux, used with ASTRA coupling. The total desired flux is summed over all {\tt BCCON=16} core boundaries.
   {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
   \item[18] prescribe total main ion particle flux, used with ASTRA coupling.
-  \item[19] particle flux feedback boundary condition, flux is summed over neutrals and ions, for coupling with ASTRA. The total desired flux is summed over all {\tt BCCON=19} core boundaries.
+  \item[19] particle flux feedback boundary condition, flux is summed over neutrals and ions, for coupling with ASTRA. The total desired flux is summed over all {\tt BCCON=19} core boundaries. This boundary condition applies to ions in their highest ionisation stage.
   {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
   \item[20] constant density feedback condition,
   {\tt CONPAR(,,1)} specifies the desired density in $m^{-3}$.
@@ -2399,12 +2399,11 @@ which contains
   \item[24] constant density feedback scaled by density on the ring {\tt bc\_type21\_ref} away
   {\tt CONPAR(,,1)} specifies the desired density in $m^{-3}$.
   {\tt CONPAR(,,2)} is the strength of the feedback
-  \item[25] Feedback boundary condition: prescribe the average value of the density and add a density perturbation from the neighbouring radial cell. This boundary condition is suitable for any species of a multispecies plasma (i.e. in the case when the condition used in {\tt BCCON=21} fails). It is recommended to use this boundary condition together with the corresponding condition on ion temperature ({\tt BCENI=26,27}).
-  {\tt CONPAR(,,1)} specifies the desired density in $m^{-3}$.
-  \item[26] Feedback boundary condition: prescribe the total ion flux and find
-the average density. A density perturbation is taken from the neighbouring radial cell. This boundary condition is suitable for any species of a multispecies plasma (i.e. in the case when the condition used in {\tt BCCON=22} fails). It is recommended to use this boundary condition together with corresponding condition on ion temperature ({\tt BCENI=26,27}). The total desired flux is summed over all {\tt BCCON=26} core boundaries.
+  \item[25] Feedback boundary condition: prescribe the average value of the density and add a density perturbation from neighbouring radial cell. This boundary condition is suitable for any species of a multi-species plasma (i.e. in the case when the condition used in {\tt BCCON=21} fails). It is recommended to use this boundary condition together with the corresponding condition on ion temperature ({\tt BCENI=26,27}).
+  {\tt CONPAR(,,1)} specifies the desired average density in $m^{-3}$.
+  \item[26] Feedback boundary condition: prescribe the total ion flux and find the average density. A density perturbation is taken from the neighbouring radial cell. This boundary condition is suitable for any species of a multi-species plasma (i.e. in the case when the condition used in {\tt BCCON=22} fails). It is recommended to use this boundary condition together with a corresponding condition on the ion temperature ({\tt BCENI=26,27}). The total desired flux is summed over all {\tt BCCON=26} core boundaries.
   {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
-  \item[27] Feedback boundary condition: prescribe the sum of integrated neutrals and main ion particle fluxes and find the average density. A density perturbation is taken from the neighbouring radial cell. This boundary condition is valid for the main hydrogenic species in a multispecies plasma (i.e. in the case when the condition used in {\tt BCCON=27} fails). It is recommended to use this boundary condition together with corresponding condition on ion temperature ({\tt BCENI=26,27}). The total desired flux is summed over all {\tt BCCON=27} core boundaries.
+  \item[27] Feedback boundary condition: prescribe the particle flux sum for all neutrals and ions belonging to a given isonuclear sequence and find the average density of the highest ionization stage. A density perturbation is taken from the neighbouring radial cell. It is recommended to use this boundary condition together with corresponding condition on ion temperature ({\tt BCENI=25,26}). The total desired flux is summed over all {\tt BCCON=27} core boundaries.
   {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
   \end{description}
 \item[BCMOM]\index{BCMOM} {\tt integer array, length NS * NBC}, specifying
@@ -2516,6 +2515,10 @@ the average density. A density perturbation is taken from the neighbouring radia
   \item[25] constant electron temperature feedback scaled by electron temperature on the ring {\tt bc\_type21\_ref} away,
   {\tt ENEPAR(,1)} specifies the desired electron temperature in $eV$,
   {\tt ENEPAR(,2)} is the strength of the feedback.
+  \item[26] Prescribe the poloidally averaged value of the ion temperature and introduce a poloidal variation in a simplified manner. This boundary condition is suitable for any plasma composition (i.e. when {\tt BCENI=23} fails). It is recommended to use this boundary condition together with a corresponding condition on the ion density ({\tt BCCON = 25,26,27}). The average is taken over all core boundaries with {\tt BCENI=26}.
+  {\tt ENIPAR(,1)} specifies the temperature in $eV$.
+  \item[27] Feedback boundary condition with prescribed total ion heat flux, constant poloidally averaged ion temperature and a poloidal variation in a simplified manner. This boundary condition is suitable for any plasma composition (i.e. when {\tt BCENI=24} fails). It is recommended to use this boundary condition together with a corresponding condition on the ion density ({\tt BCCON = 25,26,27}). The flux is summed over all core boundaries with {\tt BCENI=27}.
+  {\tt ENIPAR(,1)} specifies the energy flux in $W$.
   \end{description}
 \item[BCENI]\index{BCENI} {\tt integer array, length NBC}, specifying the
   type of ion energy or temperature boundary condition for each
