@@ -1,3 +1,9 @@
 #! /bin/tcsh -f
-cat `climb_and_look_for SOLPS_FLUIDS` | awk.transpose | nl -v0 | paste - - - - -
+set solps_fluids=`climb_and_look_for SOLPS_FLUIDS`
+if (-e $solps_fluids) then
+  setenv SOLPS_FLUIDS "`cat $solps_fluids`"
+else
+  setenv SOLPS_FLUIDS "`get_solps_fluids`"
+endif
+echo $SOLPS_FLUIDS | awk.transpose | nl -v0 | paste - - - - -
 

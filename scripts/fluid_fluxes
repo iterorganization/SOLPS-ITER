@@ -172,7 +172,16 @@ switch ($NREG)
 endsw
 
 set file=`climb_and_look_for SOLPS_FLUIDS`
-set label=`cat $file | awk '{print $('$S')"--"$('$E')}'`
+if (-e $file) then
+  setenv SOLPS_FLUIDS "`cat $file`"
+  echo Set SOLPS_FLUIDS to $SOLPS_FLUIDS "(based on $file)"
+  set label=`cat $file | awk '{print $('$S')"--"$('$E')}'`
+else
+  setenv SOLPS_FLUIDS "`get_solps_fluids`"
+  echo Set SOLPS_FLUIDS to $SOLPS_FLUIDS "(based on log file)"
+  set label=`echo $SOLPS_FLUIDS | awk '{print $('$S')"--"$('$E')}'`
+endif
+echo $label
 
 if (-e b2mn.exe.dir/b2tallies.nc) then
   set FILE=b2mn.exe.dir/b2tallies.nc

@@ -14,6 +14,9 @@ set solps_fluids=`climb_and_look_for SOLPS_FLUIDS`
 if (-e $solps_fluids) then
   setenv SOLPS_FLUIDS `cat $solps_fluids`
   echo Set SOLPS_FLUIDS to $SOLPS_FLUIDS "(based on $solps_fluids)"
+else
+  setenv SOLPS_FLUIDS "`get_solps_fluids`"
+  echo Set SOLPS_FLUIDS to $SOLPS_FLUIDS "(based on log file)"
 endif
 set local_fluids=( $SOLPS_FLUIDS )
 echo $#local_fluids
