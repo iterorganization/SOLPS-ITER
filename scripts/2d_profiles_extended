@@ -7,6 +7,10 @@ set nreg=`climb_and_look_for NREG`
 if (-e $nreg) then
   setenv NREG `cat $nreg`
   echo Set NREG to $NREG "(based on $nreg)"
+else
+  set nnreg=`pipe_run.log | grep ^nnreg | head -1`
+  set NREG=$nnreg[2]
+  echo Set NREG to $NREG "(based on log file)"
 endif
 set usual="fn3dl fe3dl fi3dl fc3dl fl3dl fo3dl ft3dl ne3dl te3dl ti3dl po3dl an3dl mn3dl ne3di te3di ti3di po3di an3di mn3di ne3da te3da ti3da po3da an3da mn3da ne3dr te3dr ti3dr po3dr an3dr mn3dr fn3dr fe3dr fi3dr fc3dr fl3dr fo3dr ft3dr dn3di dn3da dp3di dp3da ke3di ke3da ki3di ki3da vx3di vx3da vy3di vy3da vs3di vs3da tp3dl tp3dr"
 set extra=""

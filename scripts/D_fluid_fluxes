@@ -1,11 +1,14 @@
 #! /bin/csh -f
 set nreg=`climb_and_look_for NREG`
+set nnreg=`pipe_run.log | head -10000 | grep -a nreg | head -1`
 if (-e $nreg) then
   setenv NREG `cat $nreg`
   echo Set NREG to $NREG "(based on $nreg)"
+else
+  set NREG=$nnreg[2]
+  echo Set NREG to $NREG "(based on log file)"
 endif
 if (! $?NREG) set NREG = 4
-set nnreg=`pipe_run.log | head -10000 | grep -a nreg | head -1`
 if ("X$nnreg" != "X") then
   if ($NREG != $nnreg[2]) then
     echo "NREG in file ($nnreg[2]) does not match $NREG"

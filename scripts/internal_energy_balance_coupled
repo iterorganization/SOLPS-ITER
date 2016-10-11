@@ -1,8 +1,12 @@
 #! /bin/tcsh -f
 set nreg=`climb_and_look_for NREG`
+set nnreg=`pipe_run.log | grep ^nnreg | head -1`
 if (-e $nreg) then
   setenv NREG `cat $nreg`
-#  echo Set NREG to $NREG "(based on $nreg)"
+  echo Set NREG to $NREG "(based on $nreg)"
+else
+  set NREG=$nnreg[2]
+  echo Set NREG to $NREG "(based on log file)"
 endif
 if (! $?NREG) set NREG=4
 echo "# rsa rra rqa rcx b2divue b2divua b2exbe b2exba b2visa b2joule b2fraa b2wrong1 b2wrong2 b2wrong3 b2bbrhe bb2rhi E N W S E+N+W+S-rsa-rra+rqa-rcx-b2divue-b2divua-b2exbe-b2exba-b2visa-b2joule-b2fraa-b2wrong1-b2wrong2-b2wrong3"
