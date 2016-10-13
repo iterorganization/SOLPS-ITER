@@ -12,9 +12,12 @@ c=======================================================================
 #include "uinput.inc"
 #include "uib2pprm.inc"
       integer i,j,k,l,m,n,ii,jj,nbc,ispi,ispe
-      integer ifl(DEF_NFL)
-      logical ex
-      external xerrab, subini, subend
+      integer ifl(DEF_NFL),cmp_bck(nmol,nmol+nion)
+      logical ex,hlp_ds,hlp_mol(nmol),hlp_ion(nion),
+     .        pass
+      integer idez
+      logical streql
+      external xerrab, subini, subend, idez, streql
 c=======================================================================
       call subini ('uinprpb2')
 #ifdef DBG
@@ -262,6 +265,8 @@ c*** k, m, n are the numbers of recycling, specified, and all strata
       nmdpr(33,3)=n
       nmdpr(34,3)=nspcmol
       nmdpr(35,3)=nspcion
+      nmdpr(36,3)=nspcatm
+      nmdlr(36,3)=nspcmol
       ltrvr(3,3)=.true.
       lrrvr(14,3)=.true.
       lrrvr(15,3)=.true.
@@ -569,6 +574,245 @@ c*** lmolscl, lionscl
       end do !}
       do i = 1, nspcion !{
         iniprm(i,1,1,35,3)=lkindi(i)
+      end do !}
+
+c*** mlcmp
+cxpb We use the dissociative reaction into neutral particles to determine
+cxpb molecular composition. We use one reaction per molecule to avoid double-counting
+      hlp_mol(1:nspcmol)=.true.
+      hlp_ion(1:nspcion)=.false.
+      cmp_bck=0
+      do j = 1, nspcmol !{
+        hlp_ds = .false.
+        do k = 1, nrcm(j) !{
+          if (hlp_ds) cycle
+          if (streql(crc(ireacm(j,k)),'DS')) then !{
+            hlp_ds = .true.
+            if (idez(iscd1m(j,k),1,3).eq.1) then !{
+              i = idez(iscd1m(j,k),3,3)
+              iniprm(i,j,1,36,3)=iniprm(i,j,1,36,3)+
+     .                           idez(iscd1m(j,k),2,3)
+            end if !}
+            if (idez(iscd2m(j,k),1,3).eq.1) then !{
+              i = idez(iscd2m(j,k),3,3)
+              iniprm(i,j,1,36,3)=iniprm(i,j,1,36,3)+
+     .                           idez(iscd2m(j,k),2,3)
+            end if !}
+            if (idez(iscd3m(j,k),1,3).eq.1) then !{
+              i = idez(iscd3m(j,k),3,3)
+              iniprm(i,j,1,36,3)=iniprm(i,j,1,36,3)+
+     .                           idez(iscd3m(j,k),2,3)
+            end if !}
+            if (idez(iscd1m(j,k),1,3).eq.4) then !{
+              i = lkindp(idez(iscd1m(j,k),3,3))
+              iniprm(i,j,1,36,3)=iniprm(i,j,1,36,3)+
+     .                           idez(iscd1m(j,k),2,3)
+            end if !}
+            if (idez(iscd2m(j,k),1,3).eq.4) then !{
+              i = lkindp(idez(iscd2m(j,k),3,3))
+              iniprm(i,j,1,36,3)=iniprm(i,j,1,36,3)+
+     .                           idez(iscd2m(j,k),2,3)
+            end if !}
+            if (idez(iscd3m(j,k),1,3).eq.4) then !{
+              i = lkindp(idez(iscd3m(j,k),3,3))
+              iniprm(i,j,1,36,3)=iniprm(i,j,1,36,3)+
+     .                           idez(iscd3m(j,k),2,3)
+            end if !}
+            if (idez(iscd1m(j,k),1,3).eq.2) then !{
+              l = idez(iscd1m(j,k),3,3)
+              if (hlp_mol(l)) then !{
+                do i = 1, nspcatm !{
+                  iniprm(i,j,1,36,3)=iniprm(i,j,1,36,3)+
+     .             iniprm(i,l,1,36,3)*idez(iscd1m(j,k),2,3)
+                end do !}
+              else !}{
+                hlp_mol(j)=.false.
+                cmp_bck(j,l)=cmp_bck(j,l)+idez(iscd1m(j,k),2,3)
+              end if !}
+            end if !}
+            if (idez(iscd2m(j,k),1,3).eq.2) then !{
+              l = idez(iscd2m(j,k),3,3)
+              if (hlp_mol(l)) then !{
+                do i = 1, nspcatm !{
+                  iniprm(i,j,1,36,3)=iniprm(i,j,1,36,3)+
+     .             iniprm(i,l,1,36,3)*idez(iscd2m(j,k),2,3)
+                end do !}
+              else !}{
+                hlp_mol(j)=.false.
+                cmp_bck(j,l)=cmp_bck(j,l)+idez(iscd2m(j,k),2,3)
+              end if !}
+            end if !}
+            if (idez(iscd3m(j,k),1,3).eq.2) then !{
+              l = idez(iscd3m(j,k),3,3)
+              if (hlp_mol(l)) then !{
+                do i = 1, nspcatm !{
+                  iniprm(i,j,1,36,3)=iniprm(i,j,1,36,3)+
+     .             iniprm(i,l,1,36,3)*idez(iscd3m(j,k),2,3)
+                end do !}
+              else !}{
+                hlp_mol(j)=.false.
+                cmp_bck(j,l)=cmp_bck(j,l)+idez(iscd3m(j,k),2,3)
+              end if !}
+            end if !}
+            if (idez(iscd1m(j,k),1,3).eq.3) then !{
+              i=idez(iscd1m(j,k),3,3)
+              hlp_ion(i)=.true.
+              cmp_bck(j,nmol+i)=cmp_bck(j,nmol+i)+idez(iscd1m(j,k),2,3)
+            end if !}
+            if (idez(iscd2m(j,k),1,3).eq.3) then !{
+              i=idez(iscd2m(j,k),3,3)
+              hlp_ion(i)=.true.
+              cmp_bck(j,nmol+i)=cmp_bck(j,nmol+i)+idez(iscd2m(j,k),2,3)
+            end if !}
+            if (idez(iscd3m(j,k),1,3).eq.3) then !{
+              i=idez(iscd3m(j,k),3,3)
+              hlp_ion(i)=.true.
+              cmp_bck(j,nmol+i)=cmp_bck(j,nmol+i)+idez(iscd3m(j,k),2,3)
+            end if !}
+          end if !}
+        end do !}
+      end do !}
+cxpb Check if we need to do molecular ions
+      pass = .false.
+      do j = 1, nspcion !{
+        pass = pass .or. hlp_ion(j)
+      end do !}
+      do while (pass)
+        do j = 1, nspcion !{
+          if (.not.hlp_ion(j)) cycle
+          k=1
+          if (idez(iscd1i(j,k),1,3).eq.1) then !{
+            i = idez(iscd1i(j,k),3,3)
+            do l = 1, nspcmol !{
+              if (cmp_bck(l,nmol+j).gt.0) then
+                iniprm(i,l,1,36,3)=iniprm(i,l,1,36,3)+
+     .           idez(iscd1i(j,k),2,3)*cmp_bck(l,nmol+j)
+              end if !}
+            end do !}
+          end if !}
+          if (idez(iscd2i(j,k),1,3).eq.1) then !{
+            i = idez(iscd2i(j,k),3,3)
+            do l = 1, nspcmol !{
+              if (cmp_bck(l,nmol+j).gt.0) then
+                iniprm(i,l,1,36,3)=iniprm(i,l,1,36,3)+
+     .           idez(iscd2i(j,k),2,3)*cmp_bck(l,nmol+j)
+              end if !}
+            end do !}
+          end if !}
+          if (idez(iscd3i(j,k),1,3).eq.1) then !{
+            i = idez(iscd3i(j,k),3,3)
+            do l = 1, nspcmol !{
+              if (cmp_bck(l,nmol+j).gt.0) then
+                iniprm(i,l,1,36,3)=iniprm(i,l,1,36,3)+
+     .           idez(iscd3i(j,k),2,3)*cmp_bck(l,nmol+j)
+              end if !}
+            end do !}
+          end if !}
+          if (idez(iscd1i(j,k),1,3).eq.4) then !{
+            i = lkindp(idez(iscd1i(j,k),3,3))
+            do l = 1, nspcmol !{
+              if (cmp_bck(l,nmol+j).gt.0) then
+                iniprm(i,l,1,36,3)=iniprm(i,l,1,36,3)+
+     .           idez(iscd1i(j,k),2,3)*cmp_bck(l,nmol+j)
+              end if !}
+            end do !}
+          end if !}
+          if (idez(iscd2i(j,k),1,3).eq.4) then !{
+            i = lkindp(idez(iscd2i(j,k),3,3))
+            do l = 1, nspcmol !{
+              if (cmp_bck(l,nmol+j).gt.0) then
+                iniprm(i,l,1,36,3)=iniprm(i,l,1,36,3)+
+     .           idez(iscd2i(j,k),2,3)*cmp_bck(l,nmol+j)
+              end if !}
+            end do !}
+          end if !}
+          if (idez(iscd3i(j,k),1,3).eq.4) then !{
+            i = lkindp(idez(iscd3i(j,k),3,3))
+            do l = 1, nspcmol !{
+              if (cmp_bck(l,nmol+j).gt.0) then
+                iniprm(i,l,1,36,3)=iniprm(i,l,1,36,3)+
+     .           idez(iscd3i(j,k),2,3)*cmp_bck(l,nmol+j)
+              end if !}
+            end do !}
+          end if !}
+          if (idez(iscd1i(j,k),1,3).eq.2) then !{
+            i = idez(iscd1i(j,k),3,3)
+            do l = 1, nspcmol !{
+              if (cmp_bck(l,nmol+j).gt.0) cmp_bck(l,i)=cmp_bck(l,i)+
+     .         cmp_bck(l,nmol+j)*idez(iscd1i(j,k),2,3)
+            end do !}
+          end if !}
+          if (idez(iscd2i(j,k),1,3).eq.2) then !{
+            i = idez(iscd2i(j,k),3,3)
+            do l = 1, nspcmol !{
+              if (cmp_bck(l,nmol+j).gt.0) cmp_bck(l,i)=cmp_bck(l,i)+
+     .         cmp_bck(l,nmol+j)*idez(iscd2i(j,k),2,3)
+            end do !}
+          end if !}
+          if (idez(iscd3i(j,k),1,3).eq.2) then !{
+            i = idez(iscd3i(j,k),3,3)
+            do l = 1, nspcmol !{
+              if (cmp_bck(l,nmol+j).gt.0) cmp_bck(l,i)=cmp_bck(l,i)+
+     .         cmp_bck(l,nmol+j)*idez(iscd3i(j,k),2,3)
+            end do !}
+          end if !}
+          if (idez(iscd1i(j,k),1,3).eq.3) then !{
+            i = idez(iscd1i(j,k),3,3)
+            hlp_ion(i)=.true.
+            do l = 1, nspcmol !{
+              if (cmp_bck(l,nmol+j).gt.0) cmp_bck(l,nmol+i)=
+     .         cmp_bck(l,nmol+i)+cmp_bck(l,nmol+j)*idez(iscd1i(j,k),2,3)
+            end do !}
+          end if !}
+          if (idez(iscd2i(j,k),1,3).eq.3) then !{
+            i = idez(iscd2i(j,k),3,3)
+            hlp_ion(i)=.true.
+            do l = 1, nspcmol !{
+              if (cmp_bck(l,nmol+j).gt.0) cmp_bck(l,nmol+i)=
+     .         cmp_bck(l,nmol+i)+cmp_bck(l,nmol+j)*idez(iscd2i(j,k),2,3)
+            end do !}
+          end if !}
+          if (idez(iscd3i(j,k),1,3).eq.3) then !{
+            i = idez(iscd3i(j,k),3,3)
+            hlp_ion(i)=.true.
+            do l = 1, nspcmol !{
+              if (cmp_bck(l,nmol+j).gt.0) cmp_bck(l,nmol+i)=
+     .         cmp_bck(l,nmol+i)+cmp_bck(l,nmol+j)*idez(iscd3i(j,k),2,3)
+            end do !}
+          end if !}
+          hlp_ion(j)=.false.
+        end do !}
+        pass = .false.
+        do j = 1, nspcion !{
+          pass = pass .or. hlp_ion(j)
+        end do !}
+      end do !}
+cxpb Second pass in case the molecules were not sorted in ascending order
+      do while (.not.(all(hlp_mol(1:nspcmol)))) !{
+#ifdef DBG
+        write(*,*) 'hlp_mol : ', (hlp_mol(j),j=1,nspcmol)
+        do j = 1, nspcmol !{
+          write(*,'(a,i2,a,10i3)') 'j,mol,cmp_bck : ',
+     .                j,textm(j),(cmp_bck(j,l),l=1,nmol+nion)
+        end do !}
+#endif
+        do j = 1, nspcmol !{
+          if (hlp_mol(j)) cycle
+          do l = 1, nspcmol !{
+            if (cmp_bck(j,l).eq.0) cycle
+            if (hlp_mol(l)) then !{
+              do i = 1, nspcatm !{
+                iniprm(i,j,1,36,3)=iniprm(i,j,1,36,3)+
+     .           iniprm(i,l,1,36,3)*cmp_bck(j,l)
+              end do !}
+              cmp_bck(j,l)=0
+            end if !}
+          end do !}
+          hlp_mol(j)=.true.
+          do l = 1, nspcmol !{
+            hlp_mol(j)=hlp_mol(j).and.cmp_bck(j,l).gt.0
+          end do !}
+        end do !}
       end do !}
 
 c-----------------------------------------------------------------------
