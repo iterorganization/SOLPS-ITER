@@ -3542,6 +3542,142 @@ Reference \cite{Reiter2005} also provides a useful description.
 See also the next chapter and section \ref{sec:DIMENSIONS} for setting the array sizes
 and useful file links for {\tt Eirene} before compilation.
 
+\section{Specific SOLPS-ITER blocks in the Eirene input file}
+
+In addition to the very complete description of the {\tt Eirene} input file in the {\tt Eirene} online manual, the last part of the {\tt Eirene} input file (blocks 14 and 15) is specific to \SOLPSITER coupling. We therefore document its content here.
+
+\subsection{Block 14. Data for interfacing routine INFUSR}
+
+The data in this block is meant to allow communication between the {\tt B2.5} and {\tt Eirene} halves of \SOLPSITER.
+
+The format of this input block for coupling to \SOLPSITER is as follows:
+
+{\it ***14. Data for interfacing routine "infusr"}
+\begin{verbatim}
+LSYMET  LBALAN  LCHKQUD
+NFLA    NCUTB   NCUTL   IMF   NTRFRM   NFULL   IBRAD   IBPOL   IBTOR
+\end{verbatim}
+{\it read NPLSI species lines}
+\begin{verbatim}
+DO 20, IPL=1,NPLSI
+   I   IFLB   FCTE   BMASS   LKINDP
+20 CONTINUE
+\end{verbatim}
+{\it Recycling target definitions}
+\begin{verbatim}
+NDXA   NDYA
+NTARGI
+NTGPRT(IT), IT=1,NTARGI
+DO 30, IT=1,NTARGI
+   DO 33, IPRT=1,NTGPRT(IT)
+      I NDT    NINCT  NIXY   NTIN   NTEN   NIFLG   NPTC   NPTCM
+        NSPZI  NSPZE  NEMOD
+   33 CONTINUE
+30 CONTINUE
+\end{verbatim}
+{\it Short cycle parameters}
+\begin{verbatim}
+CHGP   CHGEE   CHGEI   CHGMOM
+NAINB  NCOPIB  NCOPEB
+DO 40, IAIN=1,NAINB
+   I   NAINS   NAINT
+   TXTPLS(IAIN,12)
+   TXTPSP(IAIN,12)  TXTPUN(IAIN,12)
+40 CONTINUE
+NAOTB
+DO 50, IAOT=1,NAOTB
+   I   NAOTS   NAOTT
+50 CONTINUE
+\end{verbatim}
+
+{\bf Meaning of the input variables for interfacing routine INFUSR}
+
+We only include here the variables or aspects thereof not already described in the {\tt Eirene} manual, section 2.14.
+
+\begin{description}
+  \item[LCHKQUD] Check quadrangles switch ???
+  \item[NCUTB] For \SOLPSITER couplings, should be 0
+  \item[NCUTL] For \SOLPSITER couplings, should be 1
+  \item[IMF] {\tt fort.30} format switch, should be 0
+  \item[NTRFRM] {\tt fort.33} format switch, should be 0
+  \item[LKINDP] Index of the {\tt Eirene} atom this species is linked to
+  \item[NPTC] In addition to the description in the {\tt Eirene} manual, note that only the value from the first segment of the stratum ({\tt IPRT=1}) is used.
+  \item[NPTCM] This corresponds to the {\tt NMINPTS} flag in input block 7, and is needed only if INDSRC=6, i.e., if the source is specified by data from block 14 alone. As for {\tt NPTC}, only the value from the first stratum segment is used.
+  \item[NEMOD] This corresponds to the {\tt NEMODS} flag in input block 7, and is needed only if INDSRC=6, i.e., if the source is specified by data from block 14 alone. As for {\tt NPTC}, only the value from the first stratum segment is used.
+  \item[NCOPIB] Not in use
+  \item[NCOPEB] Maximum number of additional tallies per plasma background species
+\end{description}
+
+\subsection{Block 15. Data for interfacing routine GEOUSR}
+
+This input block is used to adjust the edges of the additional walls in the {\tt Eirene} description of the vacuum vessel walls to match exactly the location of the grid corners from the plasma solver in {\tt B2.5}. This block may begin with an optional text line containing either {\tt GENERAL} or {\tt BIASED\_GARCHING}, which changes the format below. The \SOLPSITER default is to not include this text line. By default, the grid corners at the targets will be adjusted to the additional surfaces specified, and there should be one such additional surface per grid corner. Each additional surface can only serve for one grid corner adjustment, no more.
+
+{\it ***15. Data for interfacing routine "geousr"}
+
+If there is no preceding text line, the reading format is:
+\begin{verbatim}
+NADMOD   NASMOD
+DO I=1,NADMOD
+   NRS   IPUNKT
+   IF (IPUNKT.LT.0) XPOLPOS   YPOLPOS
+ENDDO
+DO I=1,NASMOD
+   NAS   IPUNKT   NSSIR   NSSIP
+ENDDO
+\end{verbatim}
+
+If the text line is {\tt GENERAL}, the reading format is:
+\begin{verbatim}
+NADMOD   NASMOD   NORMOD
+DO I=1,NADMOD
+   NRS   IPUNKT   XCOOR   YCOOR   ZCOOR
+ENDDO
+DO I=1,NASMOD
+   NAS   IPUNKT   NSSIR   NSSIP
+ENDDO
+DO I=1,NORMOD
+   IDIR  IR   IP 
+ENDDO
+\end{verbatim}
+
+If the text line is {\tt BIASED\_GARCHING}, the reading format is:
+\begin{verbatim}
+DO I=1,max(NPPLG/3,1)*4
+   IPUNKT   NRS
+   IF (IPUNKT.LT.0) XPOLPOS   YPOLPOS
+ENDDO
+\end{verbatim}
+
+{\bf Meaning of the input variables for interfacing routine GEOUSR}
+
+\begin{description}
+  \item[NADMOD] Number of additional surfaces to be modified (should be 2 per divertor target, and 2 for a limiter geometry case)
+  \item[NASMOD] Number of standard surfaces to be modified. Should be 0 for standard \SOLPSITER couplings.
+  \item[NORMOD] Number of cell faces whose normal is to inverted. Should be 0 for standard \SOLPSITER couplings.
+  \item[NRS] Index of the additional surface being modified
+  \item[IPUNKT] {\tt ABS(IPUNKT)} is the index of the vertex of that additional surface being modified
+  \item[XCOOR] New X-coordinate of the point being modified (in cm). Not necessary in standard \SOLPSITER couplings.
+  \item[YCOOR] New Y-coordinate of the point being modified (in cm). Not necessary in standard \SOLPSITER couplings.
+  \item[ZCOOR] New Z-coordinate of the point being modified (in cm). Not necessary in standard \SOLPSITER couplings.
+  \item[XPOLPOS] X-index (poloidal) of the grid cell to which the additional surface vertex must be matched
+  \item[YPOLPOS] Y-index (radial) of the grid cell to which the additional surface vertex must be matched
+  \item[NAS] Index of the standard surface to be modified
+  \item[NSSIR] Radial position of the standard surface to be modified
+  \item[NSSIP] Poloidal position of the standard surface to be modified
+  \item[IDIR] Direction of the face whose normal is being inverted (1 = radial, 2=poloidal)
+  \item[IR] Radial index of the cell where the normal is being inverted
+  \item[IP] Poloidal index of the cell where the normal is being inverted
+\end{description}
+
+\subsection{Information for MPI}
+
+{\it *** INFORMATION\_FOR\_MPI}
+\begin{verbatim}
+AUTOMATIC_DISTRIBUTION
+\end{verbatim}
+
+The name {\tt AUTOMATIC\_DISTRIBUTION} refers to the MPI parallelization strategy chosen. See the {\tt Eirene\_balanced\_MPI document} on the \SOLPSITER web site {\tt Manuals and Documentation} folder for more details.
+
 \chapter{Running the coupled version of B2.5-Eirene}
 \label{cha:coupledb2eirene}
 
