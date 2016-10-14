@@ -578,7 +578,8 @@ c*** lmolscl, lionscl
       end do !}
 
 c*** mlcmp
-cxpb We use the first electron impact reaction to determine molecular composition
+cxpb We use the first electron impact reaction (but not a recombination reaction)
+cxpb to determine molecular composition
 cxpb We use one reaction per molecule to avoid double-counting
       hlp_mol(1:nspcmol)=.true.
       hlp_ion(1:nspcion)=.false.
@@ -587,7 +588,8 @@ cxpb We use one reaction per molecule to avoid double-counting
         hlp_el = .false.
         do k = 1, nrcm(j) !{
           if (hlp_el) cycle
-          if (idez(ibulkm(j,k),1,3).eq.5) then !{
+          if (idez(ibulkm(j,k),1,3).eq.5 .and.
+     .        .not.streql(crc(ireacm(j,k)),'RC')) then !{
             hlp_el = .true.
             if (idez(iscd1m(j,k),1,3).eq.1) then !{
               i = idez(iscd1m(j,k),3,3)
@@ -684,7 +686,8 @@ cxpb Check if we need to do molecular ions
           hlp_el=.false.
           do k = 1, nrci(j) !{
             if (hlp_el) cycle
-            if (idez(ibulki(j,k),1,3).eq.5) then !{
+            if (idez(ibulki(j,k),1,3).eq.5 .and.
+     .        .not.streql(crc(ireaci(j,k)),'RC')) then !{
               hlp_el=.true.
               if (idez(iscd1i(j,k),1,3).eq.1) then !{
                 i = idez(iscd1i(j,k),3,3)
