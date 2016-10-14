@@ -19,8 +19,8 @@ pipe_run.log | \
        /fhmxreg/{for (i=2;i<=NF;i+=nxreg) {W+=-$(i+1);E+=$(i+4)}} \
        /fhmyreg/{for (i=2;i<=NF;i+=nyreg) {S+=-$(i+1)-$(i+2)-$(i+3);N+=$(i+5)+$(i+6)+$(i+7)}} \
        /b2divue/{b2divue=$2}/b2divua/{b2divua=$2}/b2exbe/{b2exbe=$2}/b2exba/{b2exba=$2}/b2visa/{b2visa=$2}/b2joule/{b2joule=$2}/b2fraa/{b2fraa=$2}/b2str/{b2str=$2} \
-       BEGIN{print "#cnt rsa rra rqa rcx rsap rrap E N W S E+N+W+S+rsa+rra+rqa+rcx-rsap+rra b2divue b2divua b2exbe b2exba b2visa b2joule b2fraa b2str b2divue+b2divua+b2exbe+b2exba+b2visa+b2joule+b2fraa+b2str EXT"} \
-       END{print "#cnt rsa rra rqa rcx rsap rrap E N W S E+N+W+S+rsa+rra+rqa+rcx-rsap+rra b2divue b2divua b2exbe b2exba b2visa b2joule b2fraa b2str b2divue+b2divua+b2exbe+b2exba+b2visa+b2joule+b2fraa+b2str EXT"} \
+       BEGIN{print "#cnt rsa rra rqa rcx rsap rrap E N W S E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap b2divue b2divua b2exbe b2exba b2visa b2joule b2fraa b2str b2divue+b2divua+b2exbe+b2exba+b2visa+b2joule+b2fraa+b2str EXT"} \
+       END{print "#cnt rsa rra rqa rcx rsap rrap E N W S E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap b2divue b2divua b2exbe b2exba b2visa b2joule b2fraa b2str b2divue+b2divua+b2exbe+b2exba+b2visa+b2joule+b2fraa+b2str EXT"} \
        /End tallies/{cnt++;print cnt,rsa,rra,rqa,rcx,rsap,rrap,E,N,W,S,E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap,b2divue,b2divua,b2exbe,b2exba,b2visa,b2joule,b2fraa,b2str,b2divue+b2divua+b2exbe+b2exba+b2visa+b2joule+b2fraa+b2str,ext+0}' | \
-  plot xyplot21 rsa rra rqa rcx  rsap rrap E N W S E+N+W+S+rsa+rra+rqa+rcx b2divue b2divua b2exbe b2exba b2visa b2joule b2fraa b2str b2divue+b2divua+b2exbe+b2exba+b2visa+b2joule+b2fraa+b2str EXT iteration 'Power (W)' "`basename $0` `chop_pwd 40`"
+  plot xyplot21 rsa rra rqa rcx  rsap rrap E N W S E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap b2divue b2divua b2exbe b2exba b2visa b2joule b2fraa b2str b2divue+b2divua+b2exbe+b2exba+b2visa+b2joule+b2fraa+b2str EXT iteration 'Power (W)' "`basename $0` `chop_pwd 40`"
 

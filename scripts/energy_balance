@@ -49,10 +49,10 @@ switch ($NREG)
        /fhpyreg/{for (i=2;i<=NF;i+=nyreg) {S+=-$(i+1)-$(i+2)-$(i+3);N+=$(i+5)+$(i+6)+$(i+7)}} \
        /fhmxreg/{for (i=2;i<=NF;i+=nxreg) {W+=-$(i+1);E+=$(i+4)}} \
        /fhmyreg/{for (i=2;i<=NF;i+=nyreg) {S+=-$(i+1)-$(i+2)-$(i+3);N+=$(i+5)+$(i+6)+$(i+7)}} \
-       BEGIN{print "#cnt rsa rra rqa rcx rsap rrap E N W S E+N+W+S+rsa+rra+rqa+rcx-rsap+rra EXT"} \
-       END{print "#cnt rsa rra rqa rcx rsap rrap E N W S E+N+W+S+rsa+rra+rqa+rcx-rsap+rra EXT"} \
+       BEGIN{print "#cnt rsa rra rqa rcx rsap rrap E N W S E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap EXT"} \
+       END{print "#cnt rsa rra rqa rcx rsap rrap E N W S E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap EXT"} \
        /End tallies/{cnt++;print cnt,rsa,rra,rqa,rcx,rsap,rrap,E,N,W,S,E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap,ext+0}' | \
-    plot ${lx}x${ly}yplot12 rsa rra rqa rcx rsap rrap E N W S E+N+W+S+rsa+rra+rqa+rcx EXT iteration 'Power (W)' "`basename $0` `chop_pwd 40`"
+    plot ${lx}x${ly}yplot12 rsa rra rqa rcx rsap rrap E N W S E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap EXT iteration 'Power (W)' "`basename $0` `chop_pwd 40`"
     breaksw
   case "8":
    pipe_run.log | \
@@ -74,10 +74,10 @@ switch ($NREG)
        /fhpyreg/{for (i=2;i<=NF;i+=nyreg) {coreI+=-$(i+2);coreO+=-$(i+9);NI+=$(i+5)+$(i+6)+$(i+7);NO+=$(i+12)+$(i+13)+$(i+14);pfrL+=-$(i+1)-$(i+10);pfrU+=-$(i+3)-$(i+8)}} \
        /fhmxreg/{for (i=2;i<=NF;i+=nxreg) {LI+=-$(i+1);UI+=$(i+4);UO+=-$(i+5);LO+=-$(i+8)}} \
        /fhmyreg/{for (i=2;i<=NF;i+=nyreg) {coreI+=-$(i+2);coreO+=-$(i+9);NI+=$(i+5)+$(i+6)+$(i+7);NO+=$(i+12)+$(i+13)+$(i+14);pfrL+=-$(i+1)-$(i+10);pfrU+=-$(i+3)-$(i+8)}} \
-       BEGIN{print "#cnt rsa rra rqa rcx rsap rrap LI NI UI pfrU UO NO LO pfrL LI+NI+UI+pfrU+UO+NO+LO+pfrL+rsa+rra+rqa+rcx-rsap+rra EXT"} \
-       END{print "#cnt rsa rra rqa rcx rsap rrap LI NI UI pfrU UO NO LO pfrL LI+NI+UI+pfrU+UO+NO+LO+pfrL+rsa+rra+rqa+rcx-rsap+rra EXT"} \
+       BEGIN{print "#cnt rsa rra rqa rcx rsap rrap LI NI UI pfrU UO NO LO pfrL LI+NI+UI+pfrU+UO+NO+LO+pfrL+rsa+rra+rqa+rcx-rsap+rrap EXT"} \
+       END{print "#cnt rsa rra rqa rcx rsap rrap LI NI UI pfrU UO NO LO pfrL LI+NI+UI+pfrU+UO+NO+LO+pfrL+rsa+rra+rqa+rcx-rsap+rrap EXT"} \
        /End tallies/{cnt++;print cnt,rsa,rra,rqa,rcx,rsap,rrap,LI,NI,UI,pfrU,UO,NO,LO,pfrL,LI+NI+UI+pfrU+UO+NO+LO+pfrL+rsa+rra+rqa+rcx-rsap+rrap,ext+0}' | \
-    plot ${lx}x${ly}yplot16 rsa rra rqa rcx rsap rrap LI NI UI pfrU UO NO LO pfrL LI+NI+UI+pfrU+UO+NO+LO+pfrL+rsa+rra+rqa+rcx EXT iteration 'Power (W)' "`basename $0` `chop_pwd 40`"
+    plot ${lx}x${ly}yplot16 rsa rra rqa rcx rsap rrap LI NI UI pfrU UO NO LO pfrL LI+NI+UI+pfrU+UO+NO+LO+pfrL+rsa+rra+rqa+rcx-rsap+rrap EXT iteration 'Power (W)' "`basename $0` `chop_pwd 40`"
     breaksw
   case "5":
    pipe_run.log | \
@@ -99,10 +99,10 @@ switch ($NREG)
        /fhpyreg/{for (i=2;i<=NF;i+=nyreg) {S+=-$(i+1)-$(i+2)-$(i+3);N+=$(i+5)+$(i+8)+$(i+7)}} \
        /fhmxreg/{for (i=2;i<=NF;i+=nxreg) {W+=-$(i+1);E+=$(i+4)}} \
        /fhmyreg/{for (i=2;i<=NF;i+=nyreg) {S+=-$(i+1)-$(i+2)-$(i+3);N+=$(i+5)+$(i+8)+$(i+7)}} \
-       BEGIN{print "#cnt rsa rra rqa rcx rsap rrap E N W S E+N+W+S+rsa+rra+rqa+rcx-rsap+rra EXT"} \
-       END{print "#cnt rsa rra rqa rcx rsap rrap E N W S E+N+W+S+rsa+rra+rqa+rcx-rsap+rra EXT"} \
+       BEGIN{print "#cnt rsa rra rqa rcx rsap rrap E N W S E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap EXT"} \
+       END{print "#cnt rsa rra rqa rcx rsap rrap E N W S E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap EXT"} \
        /End tallies/{cnt++;print cnt,rsa,rra,rqa,rcx,rsap,rrap,E,N,W,S,E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap,ext+0}' | \
-    plot ${lx}x${ly}yplot12 rsa rra rqa rcx rsap rrap E N W S E+N+W+S+rsa+rra+rqa+rcx EXT iteration 'Power (W)' "`basename $0` `chop_pwd 40`"
+    plot ${lx}x${ly}yplot12 rsa rra rqa rcx rsap rrap E N W S E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap EXT iteration 'Power (W)' "`basename $0` `chop_pwd 40`"
     breaksw
   case "2":
    pipe_run.log | \
@@ -124,10 +124,10 @@ switch ($NREG)
        /fhpyreg/{for (i=2;i<=NF;i+=nyreg) {S+=-$(i+1);N+=$(i+3)}} \
        /fhmxreg/{for (i=2;i<=NF;i+=nxreg) {W+=-$(i+1);E+=$(i+2)}} \
        /fhmyreg/{for (i=2;i<=NF;i+=nyreg) {S+=-$(i+1);N+=$(i+3)}} \
-       BEGIN{print "#cnt rsa rra rqa rcx rsap rrap E N W S E+N+W+S+rsa+rra+rqa+rcx-rsap+rra EXT"} \
-       END{print "#cnt rsa rra rqa rcx rsap rrap E N W S E+N+W+S+rsa+rra+rqa+rcx-rsap+rra EXT"} \
+       BEGIN{print "#cnt rsa rra rqa rcx rsap rrap E N W S E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap EXT"} \
+       END{print "#cnt rsa rra rqa rcx rsap rrap E N W S E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap EXT"} \
        /End tallies/{cnt++;print cnt,rsa,rra,rqa,rcx,rsap,rrap,E,N,W,S,E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap,ext+0}' | \
-    plot ${lx}x${ly}yplot12 rsa rra rqa rcx rsap rrap E N W S E+N+W+S+rsa+rra+rqa+rcx EXT iteration 'Power (W)' "`basename $0` `chop_pwd 40`"
+    plot ${lx}x${ly}yplot12 rsa rra rqa rcx rsap rrap E N W S E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap EXT iteration 'Power (W)' "`basename $0` `chop_pwd 40`"
     breaksw
   case "1":
     pipe_run.log | \
@@ -149,10 +149,10 @@ switch ($NREG)
        /fhpyreg/{for (i=2;i<=NF;i+=nyreg) {S+=-$(i+1);N+=$(i+2)}} \
        /fhmxreg/{for (i=2;i<=NF;i+=nxreg) {W+=-$(i+1);E+=$(i+2)}} \
        /fhmyreg/{for (i=2;i<=NF;i+=nyreg) {S+=-$(i+1);N+=$(i+2)}} \
-       BEGIN{print "#cnt rsa rra rqa rcx rsap rrap E N W S E+N+W+S+rsa+rra+rqa+rcx-rsap+rra EXT"} \
-       END{print "#cnt rsa rra rqa rcx rsap rrap E N W S E+N+W+S+rsa+rra+rqa+rcx-rsap+rra EXT"} \
+       BEGIN{print "#cnt rsa rra rqa rcx rsap rrap E N W S E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap EXT"} \
+       END{print "#cnt rsa rra rqa rcx rsap rrap E N W S E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap EXT"} \
        /End tallies/{cnt++;print cnt,rsa,rra,rqa,rcx,rsap,rrap,E,N,W,S,E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap,ext+0}' | \
-    plot ${lx}x${ly}yplot12 rsa rra rqa rcx rsap rrap E N W S E+N+W+S+rsa+rra+rqa+rcx EXT iteration 'Power (W)' "`basename $0` `chop_pwd 40`"
+    plot ${lx}x${ly}yplot12 rsa rra rqa rcx rsap rrap E N W S E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap EXT iteration 'Power (W)' "`basename $0` `chop_pwd 40`"
     breaksw
   default:
     echo "Unusual number of regions: Not sure what to do!"

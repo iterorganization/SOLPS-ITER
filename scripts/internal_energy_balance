@@ -1,4 +1,17 @@
 #! /bin/tcsh -f
+set x=$1
+if ("X$1" == "X-lx") then
+  set lx="l"
+  shift
+else
+  set lx=""
+endif
+if ("X$1" == "X-ly") then
+  set ly="l"
+  shift
+else
+  set ly=""
+endif
 set nreg=`climb_and_look_for NREG`
 set nnreg=`pipe_run.log | grep ^nnreg | head -1`
 if (-e $nreg) then
@@ -9,8 +22,13 @@ else
   echo Set NREG to $NREG "(based on log file)"
 endif
 if (! $?NREG) set NREG=4
-echo "# rsa rra rqa rcx b2divue b2divua b2exbe b2exba b2visa b2joule b2fraa b2wrong1 b2wrong2 b2wrong3 E N W S E+N+W+S-rsa-rra+rqa-rcx-b2divue-b2divua-b2exbe-b2exba-b2visa-b2joule-b2fraa-b2wrong1-b2wrong2-b2wrong3"
-tail -1000 run.log | \
+if ("X$nnreg" != "X") then
+  if ($NREG != $nnreg[2]) then
+    echo "NREG in file ($nnreg[2]) does not match $NREG"
+    exit
+  endif
+endif
+pipe_run.log | \
   sed -e '1,/Start tallies by region/d' | \
   awk 'BEGIN{nrv='$NREG'}\
        /nreg/{nrv=$2;nrx=$3;nry=$4}\
@@ -28,6 +46,10 @@ tail -1000 run.log | \
        /b2wrong1/{b2wrong1=$2} \
        /b2wrong2/{b2wrong2=$2} \
        /b2wrong3/{b2wrong3=$2} \
+       /fhixreg/&&nrv==1{W=-$3;E=$4} \
+       /fhiyreg/&&nrv==1{S=-$3;N=$4} \
+       /fhexreg/&&nrv==1{W+=-$3;E+=$4} \
+       /fheyreg/&&nrv==1{S+=-$3;N+=$4} \
        /fhixreg/&&nrv==2{W=-$3;E=$4} \
        /fhiyreg/&&nrv==2{S=-$3;N=$5} \
        /fhexreg/&&nrv==2{W+=-$3;E+=$4} \
@@ -40,4 +62,7 @@ tail -1000 run.log | \
        /fhiyreg/&&nrv==8{S=-$3-$4-$5-$10-$11-$12;N=$7+$8+$9+$14+$15+$16} \
        /fhexreg/&&nrv==8{W+=-$3-$7;E+=$6+$10} \
        /fheyreg/&&nrv==8{S+=-$3-$4-$5-$10-$11-$12;N+=$7+$8+$9+$14+$15+$16} \
-       /End tallies by region/{print rsa,rra,rqa,rcx,b2divue,b2divua,b2exbe,b2exba,b2visa,b2joule,b2fraa,b2wrong1,b2wrong2,b2wrong3,E,N,W,S,E+N+W+S-rsa-rra+rqa-rcx-b2divue-b2divua-b2exbe-b2exba-b2visa-b2joule-b2fraa-b2wrong1-b2wrong2-b2wrong3}'
+       BEGIN{print "#cnt rsa rra rqa rcx b2divue b2divua b2exbe b2exba b2visa b2joule b2fraa b2wrong1 b2wrong2 b2wrong3 E N W S E+N+W+S-rsa-rra+rqa-rcx-b2divue-b2divua-b2exbe-b2exba-b2visa-b2joule-b2fraa-b2wrong1-b2wrong2-b2wrong3"} \
+       END{print "#cnt rsa rra rqa rcx b2divue b2divua b2exbe b2exba b2visa b2joule b2fraa b2wrong1 b2wrong2 b2wrong3 E N W S E+N+W+S-rsa-rra+rqa-rcx-b2divue-b2divua-b2exbe-b2exba-b2visa-b2joule-b2fraa-b2wrong1-b2wrong2-b2wrong3"} \
+       /End tallies by region/{cnt++;print cnt,rsa,rra,rqa,rcx,b2divue,b2divua,b2exbe,b2exba,b2visa,b2joule,b2fraa,b2wrong1,b2wrong2,b2wrong3,E,N,W,S,E+N+W+S-rsa-rra+rqa-rcx-b2divue-b2divua-b2exbe-b2exba-b2visa-b2joule-b2fraa-b2wrong1-b2wrong2-b2wrong3}' | \
+  plot ${lx}x${ly}yplot19 rsa rra rqa rcx b2divue b2divua b2exbe b2exba b2visa b2joule b2fraa b2wrong1 b2wrong2 b2wrong3 E N W S E+N+W+S-rsa-rra+rqa-rcx-b2divue-b2divua-b2exbe-b2exba-b2visa-b2joule-b2fraa-b2wrong1-b2wrong2-b2wrong3 iteration 'Power (W)' "`basename $0` `chop_pwd 40`"
