@@ -24,6 +24,19 @@ endloop:
   set TIME=time
 
 argloop:
+  if ("X${1}X" == "X-hX") then
+    shift
+    echo 'Usage: b2plot [OPTIONS] > [log file]'
+    echo 'Launches the b2plot '
+    echo ' '
+    echo 'Optional arguments:'
+    echo ' -d <debugger>: launch run with debugger <debugger>.'
+    echo ' -h: Prints this message.'
+    echo ' -n: dry run. Will show the sequences of commands requested by b2sxdr.'
+    echo ' -s: request a stand-alone run (without Eirene).'
+    echo ' '
+    exit
+  endif
   if ("X${1}X" == "X-nX") then
     set debug="-n"
     shift
