@@ -3520,6 +3520,26 @@ Example of the {\tt b2yrp.dat} file:\\
 \label{fig:refplate_cross_section}
 \end{figure}
 
+
+\newpage
+\section{b2ydm, post processing of dome wall loading}
+\label{sec:b2ydm}\index{b2ydm}\index{shotnumber.history}\index{B2.5, recover an archived run}\index{b2fstate}\index{b2fgmtrt}\index{b2fgmtry}
+
+This routine first reads the formatted file {\tt b2ydm.dat}. Then, it reads the file {\tt wlld\_dome.dat} produced by \btwoplot with the {\tt "1000 wlld"} command and writes the unformatted file {\tt dome\_out.dat} in which is stored the coolant temperature at the outlet of the dome hypervapotron cooling system. This temperature can be used as inlet temperature for the outer reflector plate heat transfer model.
+To use the routine:
+\begin{enumerate}
+  \item Define in the {\tt DG} model the plot zone variable for the dome
+  \item Create the file {\tt b2ydm.dat} in the run directory (see below for an example)
+  \item {\tt echo "1000 wlld" | b2plot} will produce the {\tt wlld\_dome.dat} file
+  \item Copy the {\tt wlld\_dome.dat} file in the run directory
+  \item {\tt b2plot b2ydm}
+\end{enumerate}
+
+Example of the {\tt b2ydm.dat} file:\\
+\index{b2ydm.dat}
+\VerbatimInput[fontsize=\footnotesize]{b2ydm.dat}
+
+
 \newpage
 \section{b2xx, the others}
 
@@ -12477,7 +12497,7 @@ If J \textgreater 0, then the codes produces a set of {\tt wlld\_*.dat},
 where the asterisk (*) is the name of each "plot zone" defined in the DG model.
 Each such file contains the power loading onto the set of walls defined in that
 plot zone. If LM = 99 and J \textgreater 0, additional diagnostics are produced that indicate the radiation split by isonuclear sequence.\\
-If the user wants to use the heat transfer model for the monoblock or the reflector plates, then he must define in the DG model the inner/outer target and reflector plate plot zones using the label 'trg[i-o]' and '[i-o]rp' respectively. The {\tt wlld\_*.dat} produced should then be postprocessed by b2ymb (see \ref{sec:b2ymb}) or b2yrp (\ref{sec:b2yrp}).
+If the user wants to use the heat transfer model for the monoblock and/or the reflector plates, then he must define in the DG model the inner/outer target, the reflector plates and dome plot zones using the label 'trg[i-o]', '[i-o]rp' and 'dome' respectively. The {\tt wlld\_*.dat} produced should then be postprocessed by b2ymb (see \ref{sec:b2ymb}), b2yrp (\ref{sec:b2yrp}) and b2ydm (\ref{sec:b2ydm}).
 
 
 \section{Common errors}
@@ -17133,6 +17153,7 @@ JET in 2002.
 \item[b2xd] \index{b2xd} was used in the transition stage from \SOLPSfour to \SOLPSfive
   --- it converts from the \SOLPSfive plasma state file to that used by
   \SOLPSfour
+\item[\textcolor{Red}{b2ydm}] \index{b2ydm} post processes the heat load profiles on the dome and evaluates outlet coolant temperature (see \ref{sec:b2ydm})
 \item[b2yg] \index{b2yg} plots the geometry and magnetic field
 \item[b2yh] \index{b2yh} prints the table of physics parameters
 \item[b2yi] \index{b2yi} plots the plasma state
@@ -17162,6 +17183,7 @@ b2ai.dat \index{b2ai.dat} & formatted &  b2ai \\
 b2ar.dat \index{b2ar.dat} & formatted &  b2ar \\
 b2md.dat \index{b2md.dat} & formatted &  b2md \\
 b2mn.dat \index{b2mn.dat} & formatted &  b2md b2mn b2pl b2yi b2yi\_gnuplot b2yn b2yp b2yt \\
+b2ydm.dat \index{b2ydm.dat} & formatted &  b2ydm \\
 b2yg.dat \index{b2yg.dat} & formatted &  b2yg \\
 b2yh.dat \index{b2yh.dat} & formatted &  b2yh \\
 b2yi.dat \index{b2yi.dat} & formatted &  b2yi \\
@@ -17194,6 +17216,7 @@ b2md.prt \index{b2md.prt} & formatted & b2md \\
 b2mn.prt \index{b2mn.prt} & formatted & b2mn \\
 b2rd.prt \index{b2rd.prt} & formatted & b2rd \\
 b2uf.prt \index{b2uf.prt} & formatted & b2uf \\
+b2ydm.prt \index{b2ydm.prt} & formatted & b2ydm \\
 b2yg.prt \index{b2yg.prt} & formatted & b2yg \\
 b2yh.prt \index{b2yh.prt} & formatted & b2yh \\
 b2yi.prt \index{b2yi.prt} & formatted & b2yi \\
