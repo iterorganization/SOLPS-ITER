@@ -1,0 +1,7 @@
+*idout          (int, char*80, free format)
+  1, 'cpne,cpte,cpti,pf..,pz..'
+*nmbpcc
+  0
+*nmbpdm
+  1
+  0.5 3.0 -1.25 1.25

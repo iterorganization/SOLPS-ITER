@@ -145,6 +145,7 @@
       integer rank_mpi,size_mpi,ierr_mpi
 #endif
       integer is, it, ix, iy, n2
+      real (kind=R8) :: xcnt, ycnt, scale
       real (kind=R8) :: parg(0:99)
       real (kind=R8), allocatable :: wrk(:,:,:) 
       logical ex
@@ -371,6 +372,68 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
 #endif
       if (streql(device,'iter'))
      > write(70,'(a)') '''invert_bpol''       ''1'''
+      close(70)
+*   ..write b2yg.dat
+      open(unit=70,file='b2yg.dat')
+      write(70,'(a)') '*idout          (int, char*80, free format)'
+      write(70,'(i3,a,1x,a)') 0,',','''....'''
+      write(70,'(a)') '*nmbpcc'
+      write(70,'(i3)') 1
+      write(70,'(1x,2f5.2)') 0.5, 0.5
+      write(70,'(a)') '*nmbpdm'
+      write(70,'(i3)') 1
+      xcnt = (minval(crx(1:nx,1:ny,0:4))+
+     &        maxval(crx(1:nx,1:ny,0:4)))/2.0_R8
+      ycnt = (minval(cry(1:nx,1:ny,0:4))+
+     &        maxval(cry(1:nx,1:ny,0:4)))/2.0_R8
+      scale = max(maxval(crx(1:nx,1:ny,0:4))-minval(crx(1:nx,1:ny,0:4)),
+     &            maxval(cry(1:nx,1:ny,0:4))-minval(cry(1:nx,1:ny,0:4)))
+      write(70,'(1x,1p,4f5.2)') xcnt-scale/2.0_R8, xcnt+scale/2.0_R8,
+     &                          ycnt-scale/2.0_R8, ycnt+scale/2.0_R8
+      close(70)
+*   ..write b2yh.dat
+      open(unit=70,file='b2yh.dat')
+      write(70,'(a)') '*style          (integer, free format)'
+      write(70,'(i3)') 1
+      close(70)
+*   ..write b2yi.dat
+      open(unit=70,file='b2yi.dat')
+      write(70,'(a)') '*idout          (int, char*80, free format)'
+      write(70,'(i3,a,1x,a)') 0,',','''....'''
+      close(70)
+*   ..write b2ym.dat
+      open(unit=70,file='b2ym.dat')
+      write(70,'(a)') '*idout          (int, char*80, free format)'
+      write(70,'(i3,a,1x,a)') 0,',','''....'''
+      close(70)
+*   ..write b2yn.dat
+      open(unit=70,file='b2yn.dat')
+      write(70,'(a)') '*idout          (int, char*80, free format)'
+      write(70,'(i3,a,1x,a)') 0,',','''....'''
+      close(70)
+*   ..write b2yp.dat
+      open(unit=70,file='b2yp.dat')
+      write(70,'(a)') '*idout          (int, char*80, free format)'
+      write(70,'(i3,a,1x,a)') 0,',','''....'''
+      write(70,'(a)') '*nmbpcc'
+      write(70,'(i3)') 1
+      write(70,'(1x,2f5.2)') 0.5, 0.5
+      write(70,'(a)') '*nmbpdm'
+      write(70,'(i3)') 1
+      write(70,'(1x,1p,4f5.2)') xcnt-scale/2.0_R8, xcnt+scale/2.0_R8,
+     &                          ycnt-scale/2.0_R8, ycnt+scale/2.0_R8
+      close(70)
+*   ..write b2yp.dat
+      open(unit=70,file='b2yq.dat')
+      do is = 0, ns-1
+        write(70,'(2i6)') 2, 3+is
+      end do
+      do is = 0, ns-1
+        write(70,'(2i6)') 2, 3+ns+is
+      end do
+      write(70,'(2i6)') 2, 4+(2*ns)
+      write(70,'(2i6)') 2, 5+(2*ns)
+      write(70,'(2i6)') 2, 6+(2*ns)
       close(70)
 *   ..write header to converted state file
       idum(0) = nx

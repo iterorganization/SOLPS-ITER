@@ -247,17 +247,17 @@ The Git \SOLPSITER repository is structured as a self-contained whole, but some 
 To best use the \SOLPSITER code suite, the user will need, locally installed:
 
 \begin{description}
-\item[Fortran 90/95 Compiler] the main programs are written in {\tt FORTRAN 90}; some routines still require a "-r8" option
+\item[Fortran 90/95 Compiler] the main programs are written in {\tt FORTRAN} (see Section \ref{sec:platforms} for a list of supported compilers)
 \item[C Compiler] the {\tt DivGeo} code and a few utility routines are written in {\tt C}
 \item[MPI] Parallelization framework (optional)
-\item[NAG]\index{NAG} mathematical library (optional)
-\item[BLAS/LAPACK] mathematical libraries
-\item[NCAR] plotting library
-\item[GR] plotting library (optional)
-\item[GKS] graphical kernel library
-\item[HDF5] data storage library
-\item[NetCDF]\index{netcdf} storage/archival library (optional)
-\item[MSCL] utility library
+\item[NAG]\index{NAG} mathematical library (optional) (available from \href{http://www.nag.com/content/nag-library}{http://www.nag.com/content/nag-library})
+\item[BLAS/LAPACK] mathematical libraries (available from \href{http://www.netlib.org/}{http://www.netlib.org/})
+\item[NCAR] plotting library (available from \href{http://library.ucar.edu}{http://library.ucar.edu})
+\item[GR] plotting library (optional, developed at FZ-J{\"u}lich)
+\item[GKS] graphical kernel library (available from \href{http://ngwww.ucar.edu}{http://ngwww.ucar.edu})
+\item[HDF5] data storage library (available from \href{http://support.hdfgroup.org/HDF5/}{http://support.hdfgroup.org/HDF5/})
+\item[NetCDF]\index{netcdf} storage/archival library (optional) (available from \href{http://www.unidata.ucar.edu/netcdf/}{http://www.unidata.ucar.edu/netcdf/})
+\item[MSCL] utility library (available from the IO Git repository at \href{https://git.iter.org/projects/LIB/repos/mscl/browse}{https://git.iter.org/projects/LIB/repos/mscl/browse})
 \item[makedepend] to build the dependencies needed by the {\tt Makefiles}
 \item[gnuplot] for many analysis scripts
 \item[nc2text] for obtaining time-dependent data traces
@@ -274,8 +274,7 @@ To best use the \SOLPSITER code suite, the user will need, locally installed:
 For all the various libraries, it is recommended that they be installed as modules, so that they
 may be shared amongst multiple users on the same machine, so as not to duplicate large files and to
 centralize their management. Most, but not all, of these libraries are publicly available from the
-Internet. The MSCL library is distributed and can be obtained from the ITER GIT repository at
-\href{https://git.iter.org/projects/LIB/repos/mscl/browse}{https://git.iter.org/projects/LIB/repos/mscl/browse}.
+Internet.
 
 If one uses local copies of these libraries, a copy or link to them should be put in the
 \${\tt \{SOLPSTOP\}/lib/}\${\tt \{HOST\_NAME\}.\allowbreak}\${\tt \{COMPILER\}} directory.
@@ -311,7 +310,7 @@ The current list of recognized hostnames, deduced by means of the {\tt whereami}
 
 If your domain name is not on this list, please add it to {\tt whereami}.
 
-At the moment the following compiler platforms are supported, assuming a Linux work environment:
+At the moment the following compiler platforms are supported, assuming a Linux work environment:\label{sec:platforms}
 \begin{description}\index{Platforms}
   \item[pgf90] Portland Group 32-bit Fortran compiler, in use at JET and ORNL
   \item[ifort64] Intel 64-bit Fortran compiler, in use at ITER and IPP
@@ -2177,30 +2176,6 @@ Supplemental information on atomic physics rates can be found in the file
 \${\tt \{SOLPSTOP\}/doc/SOLPS\_2002\_Course/atomic\_physics.pdf} .
 %% [[[May want to add some stuff from the atomic physics course notes]]]
 
-\section{b2yr, plotting the atomic physics rates}
-\index{b2frates}\label{sec:b2yr}\index{b2yr}
-
-The command
-\begin{verbatim}
-    b2run b2yr
-\end{verbatim}
-will produce a {\tt b2yr.plt} file containing a series of
-plots detailing the dependencies of the atomic rates on density and temperature for
-each isonuclear sequence, as well as a {\tt b2yr.prt} ASCII file containing
-tables of these rates.
-
-The {\tt b2yr.plt} file is an NCAR GKS file. The presence in the run directory of a file called {\tt ncar.cfg}, with the
-first character of the first line non-blank, will cause the program to use
-'publication-ready' settings for the graphs, namely thicker and more visible lines
-and an easier-to-read font.\index{ncar.cfg} The files can be converted into a PostScript file by means of the command:
-\begin{verbatim}
-  ctrans -d ps.mono < b2yr.plt > b2yr.ps
-\end{verbatim}
-
-The user has the option when running the main code to rescale the rates given by {\tt b2ar}
-through the use of the {\tt b2.atomic\_physics\_rescale.parameters} file. See
-\ref{lab:b2:atomic_physics_rescale:parameters} for details.
-
 \newpage
 \section{b2ai, the default initial plasma state}
 \index{b2fstati}\label{sec:b2ai}\index{b2ai}
@@ -3266,6 +3241,376 @@ indexing and naming conventions as \SOLPSfivens.
 \end{table}
 
 \newpage
+\section{b2yg, plotting the geometry}
+\index{b2fgmtry}\label{sec:b2yg}\index{b2yg}
+
+The command
+\begin{verbatim}
+    b2run b2yg
+\end{verbatim}
+will produce a {\tt b2yg.plt} file containing a series of plots giving
+some details about the geometry, as well as a {\tt b2yg.prt} ASCII file
+containing tables of the geometry quantities.
+
+The {\tt b2yg.plt} file is an NCAR GKS file. The presence in the run directory
+of a file called {\tt ncar.cfg}, with the first character of the first line non-blank,
+will cause the program to use 'publication-ready' settings for the graphs, namely
+thicker and more visible lines and an easier-to-read font.\index{ncar.cfg}
+The file can be converted into a PostScript file by means of the command:
+\begin{verbatim}
+  ctrans -d ps.mono b2yg.plt > b2yg.ps
+\end{verbatim}
+
+The input file {\tt b2yg.dat} looks like:
+\VerbatimInput[fontsize=\footnotesize]{b2yg.dat}
+
+The meaning of the variables is:
+\begin{description}
+  \item[iftp] Formatting index for the plot contour lines
+  \item[idout] String specifying the type of data tables requested
+  \item[nmbpcc] Number of computational domain plots requested
+  \item[cwaxr, cwayr] For each computational plot requested, a doublet of numbers
+indicating the $x$ and $y$ relative positions, in computational space, of the reference
+location for these plots
+  \item[nmbpdm] Number of physical domain plots requested
+  \item[cwxmin, cwxmax, cwymin, cwymax] For each physical domain plot requested, a
+quadruplet of coordinates ($x_{min}$, $x_{max}$, $y_{min}$, $y_{max}$) that give
+the bounds of the domain to be plotted
+\end{description}
+
+The data fields that can be requested through {\bf idout} are:
+\begin{description}
+  \item['pgmm'] Print min/max values of the geometry data fields
+  \item['pgcc'] Print geometry data on 5$\times$5 corners
+  \item['pgnl'] Print singular regions data
+  \item['pgmx'] Print $x$-faced data
+  \item['pgmy'] Print $y$-faced data
+  \item['pgso'] Print South boundary data
+  \item['pgno'] Print North boundary data
+  \item['pgwe'] Print West boundary data
+  \item['pgea'] Print East boundary data
+  \item['mpcr'] Plot the geometry and mesh
+  \item['mpff'] Plot the flux functions {\bf fpsi} and {\bf ffbz}
+  \item['mpbb'] Plot the magnetic field
+\end{description}
+A {\tt '.'} can be used as a wild card when specifying {\bf idout}.
+Therefore, the string {\tt '....'} will request all data fields.
+Several fields can be requested through the same {\bf idout} string by listing them
+in sequence with or without some separating character(s).
+
+\newpage
+\section{b2yh, plotting the run parameters}
+\index{b2fpardf}\index{b2fparam}\label{sec:b2yh}\index{b2yh}\index{b2ah}
+
+The command
+\begin{verbatim}
+    b2run b2yh
+\end{verbatim}
+will produce a {\tt b2yh.prt} file containing a description of the run
+parameters: a species list, default boundary conditions
+parameters, and transport coefficients. These parameters will be extracted
+from {\tt b2fparam} if it is present (thereby giving the run parameters
+as they were used by {\tt b2mn}), or from {\tt b2fpardf} which contains
+the default set of parameters built from {\tt b2ah}.
+
+The input file {\tt b2yh.dat} looks like:
+\VerbatimInput[fontsize=\footnotesize]{b2yh.dat}
+
+The only number in that file is a style switch that changes the type of output
+printed out in {\tt b2yh.prt}. Current accepted values are 0 and 1.
+
+\newpage
+\section{b2yi \& b2yp, plotting the plasma state}
+\index{b2fstati}\index{b2fstate}\index{b2specp}\label{sec:b2yi}\label{sec:b2yp}
+\index{b2yi}\index{b2yp}\index{b2ai}\index{b2mn}
+
+The command
+\begin{verbatim}
+    b2run b2yi
+\end{verbatim}
+will produce a {\tt b2yi.plt} file containing a series of plots describing
+the plasma state, as well as a {\tt b2yi.prt} ASCII file
+containing tables of the plasma quantities. The plasma state will be extracted
+from {\tt b2fstate} if it is present (thereby giving the plasma state
+as it was computed by {\tt b2mn}), or from {\tt b2fstati} which contains
+the initial plasma state built from {\tt b2ai}.
+
+Similarly, the command
+\begin{verbatim}
+    b2run b2yp
+\end{verbatim}
+will produce a {\tt b2yp.plt} file with plots describing the plasma state
+computed by {\tt b2mn} and stored in the {\tt b2fstate} file, as well as
+a {\tt b2yp.prt} ASCII file with tables of plasma quantities. {\tt b2yp}
+also produces a {\tt b2specp} file.
+
+The {\tt b2yi.plt} and {\tt b2yp.plt} files are NCAR GKS files. The presence in the
+run directory of a file called {\tt ncar.cfg}, with the first character of the first
+line non-blank, will cause the program to use 'publication-ready' settings for the
+graphs, namely thicker and more visible lines and an easier-to-read font.\index{ncar.cfg}
+The files can be converted into PostScript by means of the commands:
+\begin{verbatim}
+  ctrans -d ps.mono b2yi.plt > b2yi.ps
+  ctrans -d ps.mono b2yp.plt > b2yp.ps
+\end{verbatim}
+
+The input file {\tt b2yi.dat} looks like:
+\VerbatimInput[fontsize=\footnotesize]{b2yi.dat}
+
+The input file {\tt b2yp.dat} looks like:
+\VerbatimInput[fontsize=\footnotesize]{b2yp.dat}
+
+The meaning of the variables is:
+\begin{description}
+  \item[] in both {\tt b2yi.dat} and {\tt b2yp.dat} files:
+    \begin{description}
+      \item[iftp] Formatting index for the plot contour lines
+      \item[idout] String specifying the type of data requested
+    \end{description}
+  \item[] additionally, in {\tt b2yp.dat}:
+    \begin{description}
+      \item[nmbpcc] Number of computational domain plots requested
+  \item[cwaxr, cwayr] For each computational plot requested, a doublet of numbers
+indicating the $x$ and $y$ relative positions, in computational space, of the reference
+location for these plots
+      \item[nmbpdm] Number of physical domain plots requested
+      \item[cwxmin, cwxmax, cwymin, cwymax] For each physical domain plot requested, a
+quadruplet of coordinates ($x_{min}$, $x_{max}$, $y_{min}$, $y_{max}$) that give
+the bounds of the domain to be plotted
+    \end{description}
+\end{description}
+
+The data fields that can be requested through {\bf idout} are:
+\begin{description}
+  \item['pzmm'] Print min/max values of the plasma quantities
+  \item['pfnx'] Print reduced $x$-face particle fluxes
+  \item['pfzx'] Print reduced $x$-face electron and ion fluxes
+  \item['pfny'] Print reduced $y$-face particle fluxes
+  \item['pfzy'] Print reduced $y$-face electron and ion fluxes
+  \item['pzso'] Print South boundary data
+  \item['pzno'] Print North boundary data
+  \item['pzwe'] Print West boundary data
+  \item['pzea'] Print East boundary data
+  \item['cpne'] Plot the electron density
+  \item['cpni'] Plot the total ion density
+  \item['cpte'] Plot the electron temperature
+  \item['cpti'] Plot the ion temperature
+  \item['cppr'] Plot the plasma pressure
+  \item['cppo'] Plot the electric potential
+  \item['cpfn'] Plot the fractional atom density
+  \item['cppe'] Plot the electron pressure
+  \item['cpua'] Plot the parallel velocity
+  \item['cpmc'] Plot the Mach number
+  \item['cphe'] Plot the electron heat flux
+  \item['cphi'] Plot the ion heat flux
+  \item['fnex'] Plot the integrated total particle fluxes as function of $x$
+  \item['fhex'] Plot the integrated heat fluxes as function of $x$
+  \item['fchx'] Plot the integrated electric current as function of $x$
+  \item['fnax'] Plot the integrated ion particle fluxes as function of $x$
+  \item['fney'] Plot the integrated total particle fluxes as function of $y$
+  \item['fhey'] Plot the integrated heat fluxes as function of $y$
+  \item['fchy'] Plot the integrated electric current as function of $y$
+  \item['fnay'] Plot the integrated ion particle fluxes as function of $y$
+\end{description}
+A {\tt '.'} can be used as a wild card when specifying {\bf idout}.
+Therefore, the string {\tt '....'} will request all data fields.
+Several fields can be requested through the same {\bf idout} string by listing them
+in sequence with or without some separating character(s).
+
+\newpage
+\section{b2yr, plotting the atomic physics rates}
+\index{b2frates}\label{sec:b2yr}\index{b2yr}
+
+The command
+\begin{verbatim}
+    b2run b2yr
+\end{verbatim}
+will produce a {\tt b2yr.plt} file containing a series of
+plots detailing the dependencies of the atomic rates on density and temperature for
+each isonuclear sequence, as well as a {\tt b2yr.prt} ASCII file containing
+tables of these rates.
+
+The {\tt b2yr.plt} file is an NCAR GKS file. The presence in the run directory of a file called {\tt ncar.cfg}, with the
+first character of the first line non-blank, will cause the program to use
+'publication-ready' settings for the graphs, namely thicker and more visible lines
+and an easier-to-read font.\index{ncar.cfg} The file can be converted into a PostScript file by means of the command:
+\begin{verbatim}
+  ctrans -d ps.mono b2yr.plt > b2yr.ps
+\end{verbatim}
+
+The user has the option when running the main code to rescale the rates given by {\tt b2ar}
+through the use of the {\tt b2.atomic\_physics\_rescale.parameters} file. See
+\ref{lab:b2:atomic_physics_rescale:parameters} for details.
+
+\newpage
+\section{b2ym, producing movie output}
+\index{b2fmovie}\label{sec:b2ym}\index{b2ym}
+
+The command
+\begin{verbatim}
+    b2run b2ym
+\end{verbatim}
+will produce a {\tt b2ym.plt} file containing a series of movie frames,
+as well as a {\tt b2ym.prt} ASCII file containing some additional output.
+The data for the movie is extracted from the {\tt b2fmovie} file.
+
+The {\tt b2ym.plt} file is an NCAR GKS file. The presence in the run directory of a file
+called {\tt ncar.cfg}, with the first character of the first line non-blank, will cause
+the program to use 'publication-ready' settings for the graphs, namely thicker and more
+isible lines and an easier-to-read font.\index{ncar.cfg} The file can be converted into
+a PostScript file by means of the command:
+\begin{verbatim}
+  ctrans -d ps.mono b2ym.plt > b2ym.ps
+\end{verbatim}
+
+The input file {\tt b2ym.dat} looks like:
+\VerbatimInput[fontsize=\footnotesize]{b2ym.dat}
+
+The meaning of the variables is:
+\begin{description}
+  \item[iftp] Formatting index for the plot contour lines
+  \item[idout] String specifying the type of data requested
+\end{description}
+
+The data fields that can be requested through {\bf idout} are:
+\begin{description}
+  \item['cpne'] Make contour plots of the electron density change
+  \item['cpna'] Make contour plots of the ion density changes
+  \item['cpni'] Make contour plots of the total atom density change
+  \item['cpte'] Make contour plots of the electron temperature change
+  \item['cpti'] Make contour plots of the ion temperature change
+  \item['cppo'] Make contour plots of the electric potential change
+  \item['cpua'] Make contour plots of the ion parallel velocity changes
+\end{description}
+A {\tt '.'} can be used as a wild card when specifying {\bf idout}.
+Therefore, the string {\tt '....'} will request all data fields.
+Several fields can be requested through the same {\bf idout} string by listing them
+in sequence with or without some separating character(s).
+
+\newpage
+\section{b2yn, display the progress of inner B2.5 iterations}
+\index{b2ftrack}\label{sec:b2yn}\index{b2yn}
+
+The command
+\begin{verbatim}
+    b2run b2yn
+\end{verbatim}
+will produce a {\tt b2yn.plt} file containing contour plots of the residuals
+and corrections from the {\tt B2.5} equations,
+as well as a {\tt b2yn.prt} ASCII file containing some additional output.
+The data from the {\tt B2.5} inner iterations is extracted from the {\tt b2ftrack} file.
+
+The {\tt b2yn.plt} file is an NCAR GKS file. The presence in the run directory of a file
+called {\tt ncar.cfg}, with the first character of the first line non-blank, will cause
+the program to use 'publication-ready' settings for the graphs, namely thicker and more
+isible lines and an easier-to-read font.\index{ncar.cfg} The file can be converted into
+a PostScript file by means of the command:
+\begin{verbatim}
+  ctrans -d ps.mono b2yn.plt > b2yn.ps
+\end{verbatim}
+
+The input file {\tt b2yn.dat} looks like:
+\VerbatimInput[fontsize=\footnotesize]{b2yn.dat}
+
+The meaning of the variables is:
+\begin{description}
+  \item[iftp] Formatting index for the plot contour lines
+  \item[idout] String specifying the type of data requested
+\end{description}
+
+The data fields that can be requested through {\bf idout} are:
+\begin{description}
+  \item['cpne'] Make contour plots of electron density residuals and correction
+  \item['cpni'] Make contour plots of total ion density residuals and correction
+  \item['cpte'] Make contour plots of electron temperature residuals and correction
+  \item['cpti'] Make contour plots of ion temperature residuals and correction
+  \item['cppo'] Make contour plots of electric potential residuals and correction
+  \item['cpna'] Make contour plots of ion density residuals and correction
+  \item['cpua'] Make contour plots of ion parallel momentum residuals and correction
+  \item['cput'] Make contour plots of total parallel momentum residuals and correction
+  \item['cppr'] Make contour plots of total pressure correction
+\end{description}
+A {\tt '.'} can be used as a wild card when specifying {\bf idout}.
+Therefore, the string {\tt '....'} will request all data fields.
+Several fields can be requested through the same {\bf idout} string by listing them
+in sequence with or without some separating character(s).
+
+\newpage
+\section{b2yq, display the evolution data}
+\index{b2ftrace}\label{sec:b2yq}\index{b2yq}
+
+The command
+\begin{verbatim}
+    b2run b2yq
+\end{verbatim}
+will produce a {\tt b2yq.plt} file containing a quick display of the
+{\tt B2.5} evolution data, as well as a {\tt b2yq.prt} ASCII file containing
+some additional output.
+The data from {\tt B2.5} is extracted from the {\tt b2ftrace} file.
+
+The input file {\tt b2yq.dat} looks like:
+\VerbatimInput[fontsize=\footnotesize]{b2yq.dat}
+
+Each line of the {\tt b2yq.dat} file contains a doublet of integers:
+\begin{description}
+  \item[indx] Index of the data field in the {\tt b2ftrace} file to use as abscissa
+  \item[indy] Index of the data field in the {\tt b2ftrace} file to use as ordinate
+\end{description}
+
+The number of quantities actually written to the {\tt b2ftrace} file during a
+{\tt B2.5} run depends on the setting of the {\tt b2mwqt\_style} switch in {\tt b2mn.dat}.
+They are, according to {\tt b2mwqt\_style} value:
+\begin{enumerate}
+  \item[style=1] default value
+    \begin{description}
+      \item[1] plasma simulation time
+      \item[2] iteration counter
+      \item[3..ns+2] norms of ion continuity residuals
+      \item[ns+3..2*ns+2] norms of ion momentum residuals
+      \item[2*ns+3] norm of total momentum residual
+      \item[2*ns+4] norm of electron energy equation
+      \item[2*ns+5] norm of ion energy equation
+      \item[2*ns+6] norm of electric potential equation
+      \item[2*ns+7..3*ns+6] norms of ion continuity corrections
+      \item[3*ns+7..4*ns+6] norms of ion momentum corrections
+      \item[4*ns+7] norm of total momentum correction
+      \item[4*ns+8] norm of electron temperature correction
+      \item[4*ns+9] norm of ion temperature correction
+      \item[4*ns+10] norm of electric potential equation
+    \end{description}
+  \item[style=2] all of the above, plus data for 36 grid regions:
+    \begin{description}
+      \item[ 4*ns+11..40*ns+10] total ion particle content per region
+      \item[40*ns+11..40*ns+46] total electron energy content per region
+      \item[40*ns+47..40*ns+82] total ion energy content per region
+      \item[40*ns+83..40*ns+118] total electric energy content per region
+    \end{description}
+  \item[style=3] all of the above, plus 20 integrated cross-region fluxes:
+    \begin{description}
+      \item[40*ns+119..60*ns+118] $x$-directed particle fluxes
+      \item[60*ns+119..80*ns+118] $y$-directed particle fluxes
+      \item[80*ns+119..80*ns+138] $x$-directed electron energy fluxes
+      \item[80*ns+139..80*ns+158] $y$-directed electron energy fluxes
+      \item[80*ns+159..80*ns+178] $x$-directed ion energy fluxes
+      \item[80*ns+179..80*ns+198] $y$-directed ion energy fluxes
+      \item[80*ns+199..80*ns+218] $x$-directed electric current
+      \item[80*ns+219..80*ns+238] $y$-directed electric current
+    \end{description}
+  \item[style=4] all of the above, plus data for 36 grid regions
+    \begin{description}
+      \item[ 80*ns+239..152*ns+238] min/max values of ion densities per region
+      \item[152*ns+239..152*ns+310] min/max values of electron temperature per region
+      \item[152*ns+311..152*ns+382] min/max values of ion temperature per region
+      \item[152*ns+383..152*ns+454] min/max values of electric potential per region
+    \end{description}
+\end{enumerate}
+The grid regions are formed as computational rectangles where the first and last region
+correspond to the domain boundaries ($ix=-1$, $ix=nx$, $iy=-1$ and $iy=ny$) and the
+intermediate regions each cover one fourth of the extent of the computational domain
+($nx/4$ and $ny/4$ respectively). The integrated fluxes are the fluxes connecting
+those regions, excluding the fluxes within boundary regions.
+
+\newpage
 \section{b2yt, changing from one grid size and species set to another}
 \index{b2yt}\index{b2fstatt}\label{sec:b2yt}\index{input.dat}\index{input.dat.2}\index{b2mn.dat}\index{b2fgmtry}
 \index{b2fgmtry.old}\index{b2mn.dat.2}\index{b2.boundary.parameters}\index{b2.boundary.parameters.2}
@@ -3441,7 +3786,25 @@ This procedure will re-start the run from the point at which the {\tt plasmastat
 It is also possible to use the {\tt b2co} utility {\em while} {\tt SOLPS} is running, in order to obtain a {\tt b2fstate} file in the run directory that one may use to plot certain plasma quantities and monitor the current status of the run.
 
 \newpage
-\section{b2rd, fetching an archived run}
+\section{b2uf \& b2fu, converting the plasma output file}
+\label{sec:b2uf}\label{sec:b2fu}\index{b2uf}\index{b2fu}\index{b2fplasma}\index{b2fplasmf}
+
+The command
+\begin{verbatim}
+   b2run b2uf
+\end{verbatim}
+will convert an 'un*formatted' {\tt b2fplasma} file into a 'formatted'
+{\tt b2fplasmf} file. This file contains a full description of the plasma
+solution and derived quantities.
+
+The reverse operation, converting back from {\tt b2fplasmf} to {\tt b2fplasma}, is
+obtained by means of the command:
+\begin{verbatim}
+   b2run b2fu
+\end{verbatim}
+
+\newpage
+\section{b2rd, fetching an archived MDSPLUS run}
 \label{sec:b2rd}\index{b2rd}\index{shotnumber.history}\index{B2.5, recover an archived run}\index{b2fstate}\index{b2fgmtrt}\index{b2fgmtry}
 
 If a run has been archived into the {\tt MDSplus} tree structure (see \ref{cha:MDSplus} for details)
@@ -3489,8 +3852,6 @@ Example of the {\tt b2ymb.dat} file:\\
 \caption{Monoblock tile cross section}
 \label{fig:monoblock_cross_section}
 \end{figure}
-
-
 
 \newpage
 \section{b2yrp, post processing for reflector plates heat transfer model}
@@ -4968,25 +5329,29 @@ But mesh-generation is valid !
 \label{cha:intb2doc}
 
 \section{b2cdca.F}
-\label{lis:b2cdca}\index{b2cdca.F}\index{B2.5, list of routines}
+\label{lis:b2cdca}\index{b2cdca.F}\index{B2.5, code documentation}
 
-\VerbatimInput[fontsize=\footnotesize]{b2cdcr.F}
+\VerbatimInput[fontsize=\footnotesize]{b2cdca.F}
 
+\newpage
 \section{b2cdcr.F}
 \label{lis:b2cdcr}\index{b2cdcr.F}\index{B2.5, list of routines}
 
 \VerbatimInput[fontsize=\footnotesize]{b2cdcr.F}
 
+\newpage
 \section{b2cdcv.F}
 \label{lis:b2cdcv}\index{b2cdcv.F}\index{B2.5, list of variables}
 
 \VerbatimInput[fontsize=\footnotesize]{b2cdcv.F}
 
+\newpage
 \section{b2cdci.F}
 \label{lis:b2cdci}\index{b2cdci.F}\index{B2.5, list of switches}
 
 \VerbatimInput[fontsize=\footnotesize]{b2cdci.F}
 
+\newpage
 \section{b2cdcn.F}
 \label{lis:b2cdcn}\index{b2cdcn.F}\index{B2.5, list of namelists}
 
@@ -7065,7 +7430,7 @@ $Q_R = \sum \limits_{a=0}^{ns-1} r_{Q_a} n_e n_a$ from b2stel
 \end{equation*}
 
 \begin{equation*}
-\widetilde{f}_{ex} = \frac 3 2 \Gamma_{ex} + V_{ex}^{(Str)} n_e - 0.71 \frac{j_{ \left( \parallel \right) }}e
+\widetilde{f}_{ex} = \frac 3 2 \Gamma_{ex} + V_{ex}^{(str)} n_e - 0.71 \frac{j_{ \left( \parallel \right) }}e
 \end{equation*}
 
 \begin{equation*}
@@ -7085,7 +7450,7 @@ q_{ex} =
 	\frac 3 2 \Gamma_{ex} - 0.71 \frac{j^{\left( \parallel \right) }_x} e
 	-
 	\frac 5 2 n_e T_e \frac{B_z}e \frac{\partial}{h_y\partial y} \left( \frac 1{B^2} \right) +
-	V_{ex}^{(Str)} n_e
+	V_{ex}^{(str)} n_e
 \right] T_e
 -
 \kappa_{ex} \frac 1{h_x} \frac{\partial T_e}{\partial x} + 0\cdot \alpha_{ex} T_e \hat E_x
@@ -7108,7 +7473,7 @@ q_{ex} =
 \begin{equation*}
 q_{ex}^{(Eir)} =
 \left[
-	\frac 5 2 \Gamma_{ex}^{(Eir)} + V_{ex}^{(Str)}n_e
+	\frac 5 2 \Gamma_{ex}^{(Eir)} + V_{ex}^{(str)}n_e
 	- 0.71 b_x \frac{\widetilde j_{\parallel}} e
 \right] T_e -
 \kappa_{ex} \frac 1{h_x} \frac{\partial T_e}{\partial x}
@@ -7117,7 +7482,7 @@ q_{ex}^{(Eir)} =
 \begin{equation*}
 q_{ey}^{(Eir)} =
 \left[
-	\frac 5 2 \Gamma_{ex}^{(Eir)} + V_{ey}^{(Str)}n_e
+	\frac 5 2 \Gamma_{ex}^{(Eir)} + V_{ey}^{(str)}n_e
 \right] T_e -
 \kappa_{ey} \frac 1{h_y} \frac{\partial T_e}{\partial y}
 \end{equation*}
@@ -7143,7 +7508,7 @@ D_a^n \frac 1{h_y} \frac{\partial n_a}{\partial y}
 $V_{ex}^{(dia)} = \frac{B_z}{e B^2 n_e} \frac{\partial n_e T_e}{h_y \partial y}$ \ \ \ \ \ \
 $V_{ey}^{(dia)} = -\frac{B_z}{e B^2 n_e} \frac{\partial n_e T_e}{h_x \partial x}$
 
-$V_{ex}^{(Str)} = 0$
+$V_{ex}^{(str)} = 0$
 
 $\kappa_{ex} = \kappa_e^{(AN)} + \widetilde{\widetilde{\kappa}}_{ex}^{(CL)}$,
 
@@ -7354,7 +7719,7 @@ $f_{\alpha} \left( z_{eff} \right) = -\frac{1.25 z_{eff}}{1 + 0.41 z_{eff}}$,
 
 \begin{equation*}
 \widetilde f_{ey} = \frac 3 2 \left(\Gamma_{ey} - \frac 5 3 \frac{j_y^{\left( ST \right)}} e \right) +
-V_{ey}^{(Str)} n_e
+V_{ey}^{(str)} n_e
 \end{equation*}
 
 \begin{equation*}
@@ -7365,7 +7730,7 @@ q_{ey}^{P.Sch} = \frac 5 2 D_{eyx} \frac 1{h_x} \frac{\partial n_e T_e^2}{\parti
 q_{ey} = \left[
 	\frac 3 2 \Gamma_{ey} - \frac 5 2 \frac{j_y^{\left( ST \right)}} e +
 	\frac 5 2 n_e T_e \frac{B_z}e \frac{\partial }{h_x \partial	x}\left( \frac 1{B^2} \right) +
-	V_{ey}^{(Str)} n_e
+	V_{ey}^{(str)} n_e
 \right] T_e -
 \kappa_{ey} \frac 1{h_y} \frac{\partial T_e}{\partial y} + 0 \cdot \alpha_{ey} T_e \hat E_y
 \end{equation*}
@@ -7383,7 +7748,7 @@ q_{ey} = \left[
 
 %-------- end of 13th page -------------
 
-$V_{ey}^{(Str)} = 0$
+$V_{ey}^{(str)} = 0$
 
 $\hat E_y = \frac 1{e n_e h_y} \frac{\partial n_e T_e}{\partial y} - \frac 1{h_y}\frac{\partial \Phi }{\partial y}$,
 
@@ -7511,7 +7876,7 @@ $
 
 $\widetilde q_{ix} = \widetilde f_{ix} T_i - \kappa_{ix} \frac 1{h_x} \frac{\partial T_i}{\partial x} - q_{ix}^{P.Sch}$
 
-$\widetilde f_{ix} = \frac 3 2 \Gamma_{ix} + V_{ix}^{(Str)} n_i$
+$\widetilde f_{ix} = \frac 3 2 \Gamma_{ix} + V_{ix}^{(str)} n_i$
 
 \begin{equation*}
 q_{ix}^{P.Sch} = \frac 5 2 \sum \limits^{ns-1}_{\substack{a = 0,\\ z_a \neq 0}} D_{axy} \frac 1{h_y} \frac{\partial n_a T_i^2}{\partial y}
@@ -7521,7 +7886,7 @@ q_{ix}^{P.Sch} = \frac 5 2 \sum \limits^{ns-1}_{\substack{a = 0,\\ z_a \neq 0}} 
 q_{ix} = \left[
 	\frac 3 2 \Gamma_{ix} -
 	\frac 5 2 \sum \limits^{ns-1}_{\substack{a = 0,\\ z_a \neq 0}} n_a \widetilde V_{ax}^{(dia)} +
-	V_{ix}^{(Str)} n_i
+	V_{ix}^{(str)} n_i
 \right] T_e -
 \kappa_{ix} \frac 1{h_x} \frac{\partial T_i}{\partial x}
 \end{equation*}
@@ -7677,7 +8042,7 @@ from ASTRA we get $T_i/e$ and $\oint q_i^{NEO} dS$ as a functions of $R_{\text{(
 
 $K_{ASTRA} = \frac{-1}{\oint q_i^{NEO} dS} \frac{d(T_i/e)}{dR_{\text{(outer midplane)}}}$ as a function of the flux surface in B2
 
-$V_{ix}^{(Str)}=0$
+$V_{ix}^{(str)}=0$
 
 \begin{equation*}
 \widetilde q_{iy} = \widetilde f_{iy} T_i -
@@ -7686,7 +8051,7 @@ q_{iy}^{P.Sch}
 \end{equation*}
 
 \begin{equation*}
-\widetilde f_{iy} = \frac 3 2 \Gamma_{iy} + V_{iy}^{(Str)} n_i + \frac 3 2 \frac{\left(
+\widetilde f_{iy} = \frac 3 2 \Gamma_{iy} + V_{iy}^{(str)} n_i + \frac 3 2 \frac{\left(
 	j_y^{(AN)} + \widetilde j_y^{(vis \parallel)} + j_y^{(in)}
 \right)} e
 \end{equation*}
@@ -7702,7 +8067,7 @@ q_{iy}^{P.Sch} = -\frac{5}{2} \sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 
 q_{iy} = \left[
 	\frac{3}{2} \Gamma_{iy} +
 	\frac{5}{2} \sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}} n_a \widetilde V_{ay}^{(dia)} +
-	V_{iy}^{(Str)} n_i +
+	V_{iy}^{(str)} n_i +
 	\frac{3}{2} \beta_{Scott} \frac{j_y^{(in)}}{e} +
 	\frac 3 2 \frac{\left(
 		j_y^{(AN)} + \widetilde j_y^{(vis \parallel)} + j_y^{(in)}
@@ -7730,7 +8095,7 @@ q_{iy}^{(Eir)} =
 \kappa_{iy} \frac{1}{h_y} \frac{\partial T_i}{\partial y}
 \end{equation*}
 
-$V_{iy}^{(Str)} = 0$
+$V_{iy}^{(str)} = 0$
 
 $\kappa_{iy} = \kappa_{iy}^{(AN)} + \kappa_{iy}^{(CL)}$,
 
@@ -17244,12 +17609,12 @@ filename & formatted? & written by & read by & contents \\ \hline
 b2fgmtry \index{b2fgmtry} & un*formatted & b2ag & b2ah b2ai b2co b2fu b2md b2mn b2pl b2ts b2uf b2xd b2yg b2yh b2yp b2yt & geometry \\
 b2fmovie \index{b2fmovie} & un*formatted & b2mn & b2ym & movie of plasma evolution \\
 b2fparam \index{b2fparam} & un*formatted & b2mn & b2md b2fu b2pl b2ts b2uf b2xd b2yh b2yp & run parameters used for plotting \\
-b2fpardf \index{b2fpardf} & un*formatted & b2ah & b2co b2mn b2yt & transport parameters \\
+b2fpardf \index{b2fpardf} & un*formatted & b2ah & b2co b2mn b2yh b2yt & transport parameters \\
 b2fplasma \index{b2fplasma} & unformatted & b2fu b2mn & b2md b2pl b2ts b2uf b2xd & plasma state used for plotting \\
 b2fplasmf \index{b2fplasmf} & formatted & b2uf & b2fu & plasma state used for plotting \\
-b2frates \index{b2frates} & un*formatted & b2ar & b2mn b2pl b2yr b2yt b2md & atomic physics rates \\
-b2fstate \index{b2fstate} & un*formatted & b2co b2mn b2rd & b2fu b2md b2pl b2ts b2uf b2xd b2yi b2yi\_gnuplot b2yp b2yt & final plasma state \\
-b2fstati \index{b2fstati} & un*formatted & b2ai & b2co b2mn & initial plasma state \\
+b2frates \index{b2frates} & un*formatted & b2ar & b2md b2mn b2pl b2yn b2yp b2yr b2yt & atomic physics rates \\
+b2fstate \index{b2fstate} & un*formatted & b2co b2mn b2rd & b2fu b2md b2pl b2ts b2uf b2xd b2yi b2yi\_gnuplot b2yp b2yr b2yt & final plasma state \\
+b2fstati \index{b2fstati} & un*formatted & b2ai & b2co b2mn b2yi b2yi\_gnuplot & initial plasma state \\
 b2fstatt \index{b2fstatt} & un*formatted & b2yt & & plasma state on a new grid \\
 b2fgmtrt \index{b2fgmtrt} & un*formatted & b2rd & & recovered geometry file \\
 b2ftrace \index{b2ftrace} & un*formatted & b2mn & b2yq & residuals \\

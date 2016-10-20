@@ -102,7 +102,7 @@ ${OBJDIR}/b2mod_constants.${MOD}:
 	ln -sf ${B2OBJ}/b2mod_constants.${MOD} ${OBJDIR}
 
 ${OBJDIR}/b2mod_elements.${MOD}:
-	ln -sf ${B2OBJ}/b2mod_elemennts.${MOD} ${OBJDIR}
+	ln -sf ${B2OBJ}/b2mod_elements.${MOD} ${OBJDIR}
 endif
 
 ${OBJDIR}/libeirene.a:

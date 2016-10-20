@@ -261,7 +261,7 @@ $(target_rd) : shotnumber.history
 	cd b2rd.exe.dir ; ${TIME} ${B2OBJ}/b2rd.exe ; mv $(target_rd) b2fstate b2fgmtrt .. ; rm -f $(notdir $^)
 	-rmdir b2rd.exe.dir
 
-$(target_ts) : b2fparam b2fgmtry b2fpardf b2fstate b2fplasma
+$(target_ts) : b2fparam b2fgmtry b2fstate b2fplasma
 	rm -rf b2ts.exe.dir >& /dev/null ; mkdir b2ts.exe.dir ; cp $^ b2ts.exe.dir
 	rm -f $(target_ts)
 	cd b2ts.exe.dir ; ${TIME} ${B2OBJ}/b2ts.exe ; mv $(target_ts) b2fstate .. ; rm -f $(notdir $^) .quit
@@ -274,24 +274,34 @@ $(target_yg) : b2yg.dat b2fgmtry
 	cd b2yg.exe.dir ; ${TIME} ${B2OBJ}/b2yg.exe ; mv $(target_yg) .. ; rm -f $(notdir $^)
 	-rmdir b2yg.exe.dir
 
-$(target_yh) : b2yh.dat b2fparam b2fgmtry
+$(target_yh) : b2yh.dat b2fpardf b2fgmtry
 	rm -rf b2yh.exe.dir >& /dev/null ; mkdir b2yh.exe.dir ; cp $^ b2yh.exe.dir
+	-[ -e b2fparam ] && cp b2fparam b2yh.exe.dir || echo > /dev/null
 	rm -f $(target_yh)
 	NCARG_GKS_OUTPUT=b2yh.plt ; export NCARG_GKS_OUTPUT ;\
 	cd b2yh.exe.dir ; ${TIME} ${B2OBJ}/b2yh.exe ; mv $(target_yh) .. ; rm -f $(notdir $^)
+	-[ -e b2yh.exe.dir/b2fparam ] && rm b2yh.exe.dir/b2fparam || echo > /dev/null
 	-rmdir b2yh.exe.dir
 
-$(target_yi) : b2yi.dat b2mn.dat b2fstate b2frates b2fgmtry
+$(target_yi) : b2yi.dat b2fstati b2frates b2fgmtry
 	rm -rf b2yi.exe.dir >& /dev/null ; mkdir b2yi.exe.dir ; cp $^ b2yi.exe.dir
+	-[ -e b2fstate ] && cp b2fstate b2yi.exe.dir || echo > /dev/null
+	-[ -e b2mn.dat ] && cp b2mn.dat b2yi.exe.dir || echo > /dev/null
 	rm -f $(target_yi)
 	NCARG_GKS_OUTPUT=b2yi.plt ; export NCARG_GKS_OUTPUT ;\
 	cd b2yi.exe.dir ; ${TIME} ${B2OBJ}/b2yi.exe ; mv $(target_yi) .. ; rm -f $(notdir $^)
+	-[ -e b2yi.exe.dir/b2fstate ] && rm b2yi.exe.dir/b2fstate || echo > /dev/null
+	-[ -e b2yi.exe.dir/b2mn.dat ] && rm b2yi.exe.dir/b2mn.dat || echo > /dev/null
 	-rmdir b2yi.exe.dir
 
-$(target_yi_gnuplot) : b2mn.dat b2fstate b2frates b2fgmtry
+$(target_yi_gnuplot) : b2fstati b2frates b2fgmtry
 	rm -rf b2yi_gnuplot.exe.dir >& /dev/null ; mkdir b2yi_gnuplot.exe.dir ; cp $^ b2yi_gnuplot.exe.dir
+	-[ -e b2fstate ] && cp b2fstate b2yi_gnuplot.exe.dir || echo > /dev/null
+	-[ -e b2mn.dat ] && cp b2mn.dat b2yi_gnuplot.exe.dir || echo > /dev/null
 	rm -f $(target_yi_gnuplot)
 	cd b2yi_gnuplot.exe.dir ; ${TIME} ${B2OBJ}/b2yi_gnuplot.exe ; mv $(target_yi_gnuplot) .. ; rm -f $(notdir $^)
+	-[ -e b2yi_gnuplot.exe.dir/b2fstate ] && rm b2yi_gnuplot.exe.dir/b2fstate || echo > /dev/null
+	-[ -e b2yi_gnuplot.exe.dir/b2mn.dat ] && rm b2yi_gnuplot.exe.dir/b2mn.dat || echo > /dev/null
 	-rmdir b2yi_gnuplot.exe.dir
 
 $(target_ym) : b2ym.dat b2fmovie
