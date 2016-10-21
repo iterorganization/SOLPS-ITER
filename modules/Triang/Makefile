@@ -69,12 +69,12 @@ MODOBJS = ${MODULES:%=${OBJDIR}/%.o}
 ALLOBJS = ${OBJS:%.o=${OBJDIR}/%.o}
 SRCF = ${OBJS:%.o=%.f}
 
-EXCLUDELIS = tria.o triageom.o
+EXCLUDELIS = tria.o triageom.o triainq.o
 
 DEST = ${filter-out $(MODOBJS),$(OBJS:%.o=$(OBJDIR)/%.o)}
 MAINLIST = $(EXCLUDELIS:.=\.)
 
-all: ${OBJDIR}/tria ${OBJDIR}/triageom
+all: ${OBJDIR}/tria ${OBJDIR}/triageom ${OBJDIR}/triainq
 
 mods: $(MODMODS)
 
@@ -83,6 +83,9 @@ ${OBJDIR}/tria: ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${MAKES}
 
 ${OBJDIR}/triageom: ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${MAKES}
 	${LD} $(LDOPTS) -o ${OBJDIR}/triageom ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${LDLIBS} $(GKS) $(LDEXTRA)
+
+${OBJDIR}/triainq: ${OBJDIR}/triainq.o ${MAKES}
+	${LD} $(LDOPTS) -o ${OBJDIR}/triainq ${OBJDIR}/triainq.o
 
 ${OBJDIR}/libtria.a: ${ALLOBJS}
 	${BLD} $@ ${ALLOBJS}
