@@ -7091,28 +7091,29 @@ Is it important to know, that, in the equations below, the parallel velocity $V_
 
 \begin{equation}
 \begin{matrix}
-\widetilde{ \Gamma}_{ax} =& \left( b_x V_{\parallel a} + V_{ax}^{\left( E \right)} + V_{ax}^{\left( AN \right)} + V^{corr \_ dpc} \right) n_a + \frac{\delta_{1,a}}{e} \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} \right) \\
+\widetilde{ \Gamma}_{ax} =& \left( b_x V_{\parallel a} + V_{ax}^{\left( E \right)} + V_{ax}^{\left( AN \right)} + V^{corr \_ dpc} \right) n_a + \frac{\delta_{1,a}}{e} \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} + \widetilde{j_x}^{\left( s \right)} \right) \\
 &- D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x} - \widetilde{D}_{p,ax} \frac{1}{h_x} \frac{\partial p_a}{\partial x} - D_{axy} \frac{1}{h_y} \frac{\partial n_a T_i}{\partial y}
 \end{matrix}
 \end{equation}
 
 \begin{equation}
 \begin{matrix}
-\widetilde{ \Gamma}_{ay} =& \left( V_{ay}^{\left( E \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \frac{\delta_{1,a}}{e} \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} \right) \\
+\widetilde{ \Gamma}_{ay} =& \left( V_{ay}^{\left( E \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \frac{\delta_{1,a}}{e} \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} + \widetilde{j_y}^{\left( s \right)} \right) \\
 & - D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y} - \widetilde{D}_{p,ay} \frac{1}{h_y} \frac{\partial p_a}{\partial y} + D_{ayx} \frac{1}{h_x} \frac{\partial n_a T_i}{\partial x}
 \end{matrix}
 \end{equation}
 
 \begin{equation}
 \begin{matrix}
-\Gamma_{ax} =& \left( b_x V_{\parallel a} + V_{ax}^{\left( E \right)} + \widetilde{V}_{ax}^{\left( dia \right)} + V_{ax}^{\left( AN \right)} + V^{corr \_ dpc} \right) n_a + \frac{\delta_{1,a}}{e} \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} \right) \\
+\Gamma_{ax} =& \left( b_x V_{\parallel a} + V_{ax}^{\left( E \right)} + \widetilde{V}_{ax}^{\left( dia \right)} + V_{ax}^{\left( AN \right)} + V^{corr \_ dpc} \right) n_a + \frac{\delta_{1,a}}{e} \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} + \widetilde{j_x}^{\left( s \right)} \right) \\
 & - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x} - \widetilde{D}_{p,ax} \frac{1}{h_x} \frac{\partial p_a}{\partial x}
 \end{matrix}
 \end{equation}
 
 \begin{equation}
 \begin{matrix}
-\Gamma_{ay} =& \left( V_{ay}^{\left( E \right)} + \widetilde{V}_{ay}^{\left( dia \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \frac{\delta_{1,a}}{e} \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} \right) \\
+<<<<<<< HEAD
+\Gamma_{ay} =& \left( V_{ay}^{\left( E \right)} + \widetilde{V}_{ay}^{\left( dia \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \frac{\delta_{1,a}}{e} \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} + \widetilde{j_y}^{\left( s \right)} \right) \\
 &- D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y} - \widetilde{D}_{p,ay} \frac{1}{h_y} \frac{\partial p_a}{\partial y}
 \end{matrix}
 \end{equation}
@@ -7180,13 +7181,13 @@ $\begin{matrix}
 
 \begin{equation}
 \begin{matrix}
-\Gamma_{ax}^{\left( Eir \right)} = \left( b_x V_{\parallel a} + V_{ax}^{\left( E \right)} + V_{ax}^{\left( dia \right)} + V_{ax}^{\left( AN \right)} + V^{corr \_ dpc} \right) n_a + \frac{\delta_{1,a}}{e} \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} \right) \\
+\Gamma_{ax}^{\left( Eir \right)} = \left( b_x V_{\parallel a} + V_{ax}^{\left( E \right)} + V_{ax}^{\left( dia \right)} + V_{ax}^{\left( AN \right)} + V^{corr \_ dpc} \right) n_a + \frac{\delta_{1,a}}{e} \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} + \widetilde{j_x}^{\left( s \right)} \right) \\
 - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x}
 \end{matrix}
 \end{equation}
 
 \begin{equation}
-\Gamma_{ay}^{\left( Eir \right)} = \left( V_{ay}^{\left( E \right)} + V_{ya}^{\left( dia \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \frac{\delta_{1,a}}{e} \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y}
+\Gamma_{ay}^{\left( Eir \right)} = \left( V_{ay}^{\left( E \right)} + V_{ya}^{\left( dia \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \frac{\delta_{1,a}}{e} \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} + \widetilde{j_y}^{\left( a \right)}  \right) - D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y}
 \end{equation}
 
 \noindent where
@@ -8593,7 +8594,7 @@ $
 $\widetilde q_{ix} = \widetilde f_{ix} T_i - \kappa_{ix} \frac 1{h_x} \frac{\partial T_i}{\partial x} - q_{ix}^{P.Sch}$
 
 \begin{equation*}
-\widetilde f_{ix} = \frac 3 2 \Gamma_{ix} + V_{ix}^{(str)} n_i + \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)}}{e} \right)
+\widetilde f_{ix} = \frac 3 2 \Gamma_{ix} + V_{ix}^{(str)} n_i + \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} + \widetilde{j_x}^{\left( s \right)}}{e} \right)
 \end{equation*}
 
 \begin{equation*}
@@ -8605,7 +8606,7 @@ q_{ix} = \left[
 	\frac 3 2 \Gamma_{ix} -
 	\frac 5 2 \sum \limits^{ns-1}_{\substack{a = 0,\\ z_a \neq 0}} n_a \widetilde V_{ax}^{(dia)} +
 	V_{ix}^{(str)} n_i +
-        \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)}}{e} \right)
+        \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} + \widetilde{j_x}^{\left( s \right)}}{e} \right) 
 \right] T_e -
 \kappa_{ix} \frac 1{h_x} \frac{\partial T_i}{\partial x}
 \end{equation*}
@@ -8802,7 +8803,7 @@ q_{iy}^{P.Sch}
 
 \begin{equation*}
 \widetilde f_{iy} = \frac 3 2 \Gamma_{iy} + V_{iy}^{(str)} n_i + \frac 3 2 \frac{\left(
-	j_y^{(AN)} + \widetilde j_y^{(vis \parallel)} + \widetilde j_y^{(vis \perp)} + \widetilde j_y^{(visq)} + j_y^{(in)}
+	j_y^{(AN)} + \widetilde j_y^{(vis \parallel)} + \widetilde j_y^{(vis \perp)} + \widetilde j_y^{(visq)} + \widetilde j_y^{(s)} + j_y^{(in)}
 \right)} e
 \end{equation*}
 
@@ -8820,7 +8821,7 @@ q_{iy} = \left[
 	V_{iy}^{(str)} n_i +
 	\frac{3}{2} \beta_{Scott} \frac{j_y^{(in)}}{e} +
 	\frac 3 2 \frac{\left(
-		j_y^{(AN)} + \widetilde j_y^{(vis \parallel)} + \widetilde j_y^{(vis \perp)} + \widetilde j_y^{(visq)} + j_y^{(in)}
+		j_y^{(AN)} + \widetilde j_y^{(vis \parallel)} + \widetilde j_y^{(vis \perp)} + \widetilde j_y^{(visq)} + \widetilde j_y^{(s)} + j_y^{(in)}
 	\right)} e
 \right] T_i -
 \kappa_{iy} \frac{1}{h_y} \frac{\partial T_i}{\partial y}
