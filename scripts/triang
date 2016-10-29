@@ -110,9 +110,17 @@ TRIAINQ="${SOLPSTOP}/modules/Triang/builds/$toolchain/triainq"
 EIRENE="${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.$toolchain/eirobjx"
 
 griddir=${CARRE_GRIDDIR-$SOLPSTOP/modules/Carre/meshes/${DEVICE-iter}}
-modelname=`lln dg.dgo`
-dgname=`basename $modelname`
-carre_stem=`echo $dgname | sed -e 's|\.dgo||' `
+[ -e dg.dgo ] && {
+  modelname=`lln dg.dgo`
+  [ -e $modelname ] && {
+    dgname=`basename $modelname`
+    carre_stem=`echo $dgname | sed -e 's|\.dgo||' `
+  } || {
+    print -u2 -- "No DG model found. Limited capabilities available only"
+  }
+} || {
+  print -u2 -- "No dg.dgo file found. Did you run lns first?"
+}
 [ -d $griddir ] && {
   n=1
   set -- $griddir/$carre_stem.v[0-9][0-9][0-9].geo
@@ -264,7 +272,7 @@ while true; do {
                 }
               } || {
                 print -u2 -- "No $eirinp - run uinp first"
-                q=i
+                q=u
                 [ -L uinput.dg ] && [ -L uinput.trg ] && q=u
               }
               true
@@ -386,6 +394,7 @@ while true; do {
               for x in $TRIATRI; do {
                 ln -sf ${f[i]} $stem.$x || {
                   print -u2 -- "Unable to link ${f[i]} to $stem.$x ==> check the file permissions"
+                  q=q
                   break 2
                 }
                 ((i+=1))
@@ -397,6 +406,7 @@ while true; do {
                   { case $u in
                     ( y|Y ) mkdir -p "$CNVTRIOUT" || {
                             print -u2 -- "Unable to create the directory. Check the permissions in ${CNVDIR}%/*"
+                            q=q
                             break 2
                             };
                             mkdir -p $CNVTRIOUT/templates 
@@ -413,6 +423,7 @@ while true; do {
                   { case $u in
                     ( y|Y ) mkdir -p "$CNVTRIOUT/templates" || {
                             print -u2 -- "Unable to create the directory. Check the permissions in ${CNVDIR}%/*"
+                            q=q
                             break 2
                             };
                             break;;
@@ -424,6 +435,7 @@ while true; do {
               print -u2 -- "Command line: cnvtria $stem"
               cnvtria $stem || {
                 print -u2 -- "Error $? reported from cnvtria"
+                q=g
                 break
               }
               ln -sf $templatedir/$stem.tria $stem.tria.ogr
@@ -466,6 +478,7 @@ while true; do {
               for x in $TRIATRI; do {
                 ln -sf ${f[i]} $stem.$x || {
                   print -u2 -- "Unable to link ${f[i]} to $stem.$x ==> check the file permissions"
+                  q=q
                   break 2
                 }
                 ((i+=1))
@@ -477,6 +490,7 @@ while true; do {
                   { case $u in
                     ( y|Y ) mkdir -p "$CNVTRIOUT" || {
                             print -u2 -- "Unable to create the directory. Check the permissions in ${CNVDIR}%/*"
+                            q=q
                             break 2
                             };
                             mkdir -p $CNVTRIOUT/templates 
@@ -493,6 +507,7 @@ while true; do {
                   { case $u in
                     ( y|Y ) mkdir -p "$CNVTRIOUT/templates" || {
                             print -u2 -- "Unable to create the directory. Check the permissions in ${CNVDIR}%/*"
+                            q=q
                             break 2
                             };
                             break;;
@@ -510,7 +525,7 @@ while true; do {
               for x in $TRIATRI; do {
                 rm -f $stem.$x
               }; done
-              q=g
+              q=q
               true
             unset f 
             break;;
