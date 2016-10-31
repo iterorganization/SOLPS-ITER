@@ -38,3 +38,8 @@
  LDOPTS = -64 -r10000
 
  LCPP = ${LD_SONNET}
+
+!!!Local Variables:
+!!! mode: Makefile
+!!! End:
+

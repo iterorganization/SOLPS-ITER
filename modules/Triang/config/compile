@@ -36,3 +36,8 @@ endif
 	@if [ -f $*.o ] ; then /bin/mv $*.o ${OBJDIR}/ ; fi
 	@if [ -f $*.${MOD} ] ; then /bin/mv $*.${MOD} ${OBJDIR}/ ; fi
 endif
+
+!!!Local Variables:
+!!! mode: Makefile
+!!! End:
+

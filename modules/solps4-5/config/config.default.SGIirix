@@ -30,3 +30,8 @@ LDLIBES = ${LD_NAG} ${LD_NETCDF} ${LD_MSCL}
 LD = f90
 
 LCPP = ${LD_SONNET}
+
+!!!Local Variables:
+!!! mode: Makefile
+!!! End:
+

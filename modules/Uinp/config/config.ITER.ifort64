@@ -34,3 +34,8 @@ LDEXTRA  = -i_dynamic ${LD_MPI}
 else
 LDEXTRA  = -i_dynamic
 endif
+
+!!!Local Variables:
+!!! mode: Makefile
+!!! End:
+

@@ -24,3 +24,8 @@ CPP	 = /lib/cpp
 
 LDLIBS	 = ${LD_SONNET} ${LD_MSCL} -L/usr/local/lib
 LDEXTRA  = -bmap:/builds/${HOST_NAME}.${COMPILER}${EXT_DEBUG}/fxdr.map -bloadmap:builds/${HOST_NAME}.${COMPILER}${EXT_DEBUG}/fxdr.lmp
+
+!!!Local Variables:
+!!! mode: Makefile
+!!! End:
+

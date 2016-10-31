@@ -50,3 +50,8 @@ OBJDEST 	= -o ${OBJDIR}/$*.o
 BLD 		  = ar rcv
 
 LD 		    = gfortran
+
+!!!Local Variables:
+!!! mode: Makefile
+!!! End:
+

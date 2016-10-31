@@ -41,3 +41,8 @@ endif
 GKS		    = ${LD_GR} ${LD_GKS} -lX11 -lXt
 LDLIBS    = 
 LDEXTRA 	=
+
+!!!Local Variables:
+!!! mode: Makefile
+!!! End:
+

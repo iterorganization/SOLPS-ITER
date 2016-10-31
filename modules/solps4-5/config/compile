@@ -45,3 +45,8 @@ ifeq ($(strip $(LINK_MOD)),)
 else
 	@- [ -f $*.${MOD} ] && [ ! -L $*.${MOD} ] && /bin/mv $*.${MOD} ${OBJDIR}/ && /bin/ln -s ${OBJDIR}/$*.${MOD} .
 endif
+
+!!!Local Variables:
+!!! mode: Makefile
+!!! End:
+

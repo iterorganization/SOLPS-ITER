@@ -44,3 +44,8 @@ OBJDEST 	= -module ${OBJDIR} -o ${OBJDIR}/$*.o
 BLD 	    = ar rucv
 
 LD 	      = ifort
+
+!!!Local Variables:
+!!! mode: Makefile
+!!! End:
+

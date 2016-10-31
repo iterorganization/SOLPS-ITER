@@ -122,3 +122,7 @@ testvars :
 	@echo projdir: $(projdir)
 	@echo baserundir: $(baserundir)
 	@echo codedir: $(codedir)
+
+!!!Local Variables:
+!!! mode: Makefile
+!!! End:

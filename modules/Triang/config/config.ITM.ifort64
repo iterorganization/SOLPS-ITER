@@ -55,3 +55,8 @@ OBJDEST 	= -o ${OBJDIR}/$*.o
 BLD 		= ar rcv
 
 LD 		= ifort
+
+!!!Local Variables:
+!!! mode: Makefile
+!!! End:
+

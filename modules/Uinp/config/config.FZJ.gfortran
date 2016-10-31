@@ -18,3 +18,8 @@ CPP	 = /lib/cpp -traditional -ffreestanding
 MOD      = mod
 LDLIBS	 = ${LD_MSCL}
 LDEXTRA  =
+
+!!!Local Variables:
+!!! mode: Makefile
+!!! End:
+

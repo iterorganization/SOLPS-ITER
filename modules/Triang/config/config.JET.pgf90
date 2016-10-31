@@ -38,3 +38,8 @@ endif
 GKS		    = ${LD_GR} ${LD_GKS} -lX11 -lXt
 LDLIBS    = -L/usr/local/lib -L/usr/X11R6/lib
 LDEXTRA 	=
+
+!!!Local Variables:
+!!! mode: Makefile
+!!! End:
+

@@ -23,3 +23,8 @@ CPP	 = /lib/cpp -C -traditional
 
 LDLIBS	 = -L${SOLPSLIB} -lsonnet ${LD_MSCL} -L/usr/local/lib
 LDEXTRA  = 
+
+!!!Local Variables:
+!!! mode: Makefile
+!!! End:
+

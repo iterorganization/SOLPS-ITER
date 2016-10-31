@@ -92,3 +92,8 @@ export SOLPS_CPP
 export B25_DEFINES
 export EIRENE_DEFINES
 
+
+!!!Local Variables:
+!!! mode: Makefile
+!!! End:
+

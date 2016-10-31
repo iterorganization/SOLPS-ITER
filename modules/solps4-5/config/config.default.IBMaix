@@ -40,3 +40,8 @@ LDOPTS = -bloadmap:${OBJDIR}/loadmap -bmap:${OBJDIR}/map -pg
 LDOPTS = -bloadmap:${OBJDIR}/loadmap -bmap:${OBJDIR}/map
 
 LCPP = ${LD_SONNET}
+
+!!!Local Variables:
+!!! mode: Makefile
+!!! End:
+

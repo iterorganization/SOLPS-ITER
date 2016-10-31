@@ -32,3 +32,8 @@ LDOPTS = -l /usr/local/pat/libpat.a /usr/local/pat/pat.cld
 LDOPTS = 
 
 LCPP = ${LD_SONNET}
+
+!!!Local Variables:
+!!! mode: Makefile
+!!! End:
+

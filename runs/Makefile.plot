@@ -218,7 +218,7 @@ $(target_yrp) : b2yrp.dat wlld_irp.dat wlld_orp.dat
 	rm -f $(target_yrp)
 	cd b2yrp.exe.dir ; ${TIME} ${B2OBJ}/b2yrp.exe ; touch b2yrp.prt; mv $(target_yrp) .. ; rm -f $(notdir $^)
 	-rmdir b2yrp.exe.dir
-	
+
 $(target_ydm) : b2ydm.dat wlld_dome.dat
 	rm -rf b2ydm.exe.dir ; mkdir b2ydm.exe.dir ; cp $^ b2ydm.exe.dir
 	rm -f $(target_ydm)
@@ -238,3 +238,7 @@ testvars :
 	@echo projdir: $(projdir)
 	@echo baserundir: $(baserundir)
 	@echo codedir: $(codedir)
+
+!!!Local Variables:
+!!! mode: Makefile
+!!! End:

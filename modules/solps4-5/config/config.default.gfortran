@@ -28,3 +28,8 @@ LD = gfortran
 LDOPTS = 
  
 LCPP = ${LD_SONNET}
+
+!!!Local Variables:
+!!! mode: Makefile
+!!! End:
+

@@ -24,3 +24,8 @@ CPP	 = /lib/cpp -C -traditional
 
 LDLIBS	 = ${LD_SONNET} ${LD_MSCL} -L/usr/local/lib
 LDEXTRA  = 
+
+!!!Local Variables:
+!!! mode: Makefile
+!!! End:
+
