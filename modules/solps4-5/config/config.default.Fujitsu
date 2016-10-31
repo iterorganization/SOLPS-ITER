@@ -40,7 +40,7 @@ LD = f95f
 
 LCPP = ${LD_SONNET}
 
-!!!Local Variables:
-!!! mode: Makefile
-!!! End:
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
 

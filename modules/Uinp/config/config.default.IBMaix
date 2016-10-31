@@ -24,7 +24,7 @@ LDLIBS 	 = ${LD_MSCL}
 # LDEXTRA  = -bmap:$(OBJDIR)/uinp.map -bloadmap:$(OBJDIR)/uinp.lmp -bmaxdata:0x80000000
 LDEXTRA  = -bmap:$(OBJDIR)/uinp.map -bloadmap:$(OBJDIR)/uinp.lmp
 
-!!!Local Variables:
-!!! mode: Makefile
-!!! End:
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
 

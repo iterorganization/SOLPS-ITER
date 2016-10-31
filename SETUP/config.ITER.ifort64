@@ -93,7 +93,7 @@ export B25_DEFINES
 export EIRENE_DEFINES
 export MPI_CPP
 
-!!!Local Variables:
-!!! mode: Makefile
-!!! End:
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
 

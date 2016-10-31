@@ -27,7 +27,7 @@ argloop:
   if ("X${1}X" == "X-hX") then
     shift
     echo 'Usage: b2plot [OPTIONS] > [log file]'
-    echo 'Launches the b2plot '
+    echo 'Launches the b2plot graphical post-processor'
     echo ' '
     echo 'Optional arguments:'
     echo ' -d <debugger>: launch run with debugger <debugger>.'

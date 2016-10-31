@@ -18,7 +18,7 @@ MOD 	  = mod
 LDLIBS	= ${LD_MSCL}
 LDEXTRA	= -Wl,-Map,$(OBJDIR)/map
 
-!!!Local Variables:
-!!! mode: Makefile
-!!! End:
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
 

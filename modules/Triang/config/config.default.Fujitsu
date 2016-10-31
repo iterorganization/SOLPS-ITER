@@ -49,7 +49,7 @@ BLD 		= ar rcv
 
 LD 		= f95f -v 6.2d
 
-!!!Local Variables:
-!!! mode: Makefile
-!!! End:
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
 

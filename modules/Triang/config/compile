@@ -37,7 +37,7 @@ endif
 	@if [ -f $*.${MOD} ] ; then /bin/mv $*.${MOD} ${OBJDIR}/ ; fi
 endif
 
-!!!Local Variables:
-!!! mode: Makefile
-!!! End:
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
 

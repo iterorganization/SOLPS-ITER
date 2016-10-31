@@ -15,7 +15,7 @@ COMPILE  = ${FC} -c ${FFLAGS}
 LDLIBS 	 = ${LD_MSCL}
 LDEXTRA  = 
 
-!!!Local Variables:
-!!! mode: Makefile
-!!! End:
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
 

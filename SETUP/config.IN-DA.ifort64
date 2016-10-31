@@ -89,7 +89,7 @@ export LD_SONNET
 export SOLPS_CPP
 export EIRENE_DEFINES
 
-!!!Local Variables:
-!!! mode: Makefile
-!!! End:
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
 

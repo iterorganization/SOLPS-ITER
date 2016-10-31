@@ -51,7 +51,7 @@ BLD 		  = ar rcv
 
 LD 		    = gfortran
 
-!!!Local Variables:
-!!! mode: Makefile
-!!! End:
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
 

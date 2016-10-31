@@ -46,7 +46,7 @@ else
 	@- [ -f $*.${MOD} ] && [ ! -L $*.${MOD} ] && /bin/mv $*.${MOD} ${OBJDIR}/ && /bin/ln -s ${OBJDIR}/$*.${MOD} .
 endif
 
-!!!Local Variables:
-!!! mode: Makefile
-!!! End:
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
 
