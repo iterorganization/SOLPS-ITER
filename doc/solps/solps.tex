@@ -4068,12 +4068,21 @@ ENDDO
 
 \subsection{Information for MPI}
 
+There is a final optional block in the {\tt Eirene} input file that can be used to choose the MPI parallelization strategy to be applied. Its format is:
+ 
 {\it *** INFORMATION\_FOR\_MPI}
 \begin{verbatim}
 AUTOMATIC_DISTRIBUTION
 \end{verbatim}
 
-The name {\tt AUTOMATIC\_DISTRIBUTION} refers to the MPI parallelization strategy chosen. See the {\tt Eirene\_balanced\_MPI document} on the \SOLPSITER web site {\tt Manuals and Documentation} folder for more details.
+There are currently four possible choices supported. They are:
+\begin{description}
+  \item[BALANCED] A balanced strategy where the work is attempted to be divided evenly among processors (currently the \SOLPSITER default).
+  \item[APCAS] meaning {\it All Processors Compute All Strata}, where the work of each stratum is divided among all processors. Usually involves more communication between processors.
+  \item[ORIGINAL] The original strategy implemented in versions of {\tt Eirene} prior to \SOLPSITER version 3.0.5. In that strategy, each processor is handed either part of a large stratum or one or several full smaller strata. This strategy works well if the number of processors is larger than the number of strata, but is not recommended if the number of strata is larger than the number of processors.
+  \item[AUTOMATIC] tells the code to use the current default, whatever it may be.
+\end{description}
+The format to read the strategy is free-form. The input file is scanned for the words describing the chosen strategy after the title line {\tt *** INFORMATION\_FOR\_MPI} is found. The {\em first} match to an (uppercase) strategy name will be the strategy followed by the code. If the title line is missing or no match is found to any of the strategy names, the default {\bf BALANCED} strategy is used. See the {\tt Eirene\_balanced\_MPI} document on the \SOLPSITER web site {\tt Manuals and Documentation} folder for more details on the performance and algorithm corresponding to each strategy.
 
 \chapter{Running the coupled version of B2.5-Eirene}
 \label{cha:coupledb2eirene}
