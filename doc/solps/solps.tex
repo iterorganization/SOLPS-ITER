@@ -4077,7 +4077,7 @@ AUTOMATIC_DISTRIBUTION
 
 There are currently four possible choices supported. They are:
 \begin{description}
-  \item[BALANCED] A balanced strategy where the work is attempted to be divided evenly among processors (currently the \SOLPSITER default).
+  \item[BALANCED] A balanced strategy where the work is attempted to be divided evenly among processors (currently the \SOLPSITER default). If the initial setup for the {\bf BALANCED} strategy fails, the code then attempts the {\bf APCAS} strategy.
   \item[APCAS] meaning {\it All Processors Compute All Strata}, where the work of each stratum is divided among all processors. Usually involves more communication between processors.
   \item[ORIGINAL] The original strategy implemented in versions of {\tt Eirene} prior to \SOLPSITER version 3.0.5. In that strategy, each processor is handed either part of a large stratum or one or several full smaller strata. This strategy works well if the number of processors is larger than the number of strata, but is not recommended if the number of strata is larger than the number of processors.
   \item[AUTOMATIC] tells the code to use the current default, whatever it may be.
