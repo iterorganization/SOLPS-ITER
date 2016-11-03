@@ -100,7 +100,11 @@ set      AMDS_PATH =  ${SOLPSTOP}/modules/amds/builds/${TOOLCHAIN}
 # Note: in case of name-clash between script and executable, script will be found first
 setenv SOLPS_PATH  ${SCRIPTS_PATH}:${CARRE_PATH}:${DIVGEO_PATH}:${B25EIRENE_PATH}:${EIRENE_PATH}:${B25_PATH}:${UINP_PATH}:${TRIANG_PATH}:${AMDS_PATH}
 setenv PATH        ${SOLPS_PATH}:${PATH}
-setenv LD_LIBRARY_PATH ${SOLPSLIB}:${LD_LIBRARY_PATH}
+if ($?LD_LIBRARY_PATH) then
+  setenv LD_LIBRARY_PATH ${SOLPSLIB}:${LD_LIBRARY_PATH}
+else
+  setenv LD_LIBRARY_PATH ${SOLPSLIB}
+endif
 
 unset TOOLCHAIN CARRE_PATH DIVGEO_PATH EIRENE_PATH B25_PATH B25EIRENE_PATH UINP_PATH TRIANG_PATH AMDS_PATH
 
