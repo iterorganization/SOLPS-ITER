@@ -17,6 +17,10 @@ argloop:
   endif
   if ("X$1X" == "X-mX") then
     shift
+    if (! $?SOLPS_MPI) then
+      source $SOLPSTOP/SETUP/mpi
+      set MPI_SET=yes
+    endif
     set MPIOPTS="$1"
     echo Using MPI options: $MPIOPTS
     set PROCS=`echo $MPIOPTS | awk.transpose | grep -A 1 "\-np" | tail -n 1`

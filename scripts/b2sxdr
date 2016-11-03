@@ -34,7 +34,7 @@ argloop:
     echo 'Optional arguments:'
     echo ' -d <debugger>: launch run with debugger <debugger>.'
     echo ' -h: Prints this message.'
-    echo ' -n: dry run. Will show the sequences of commands requested by b2sxdr.'
+    echo ' -n: dry run. Will show the sequence of commands requested by b2sxdr.'
     echo ' -s: request a stand-alone run (without Eirene).'
     echo ' '
     exit
