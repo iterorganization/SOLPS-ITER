@@ -228,7 +228,7 @@ cxpb Find out the number of passes to do
                     rctnpto1(nnrctn)=elements(nc)
                   end if !}
                   rctnmst(nnrctn)=nuclear_mass(nc)
-                  rctneln(nnrctn)=cc
+                  rctneln(nnrctn)=elements(nc)
                   if(silent_open(99,'ratadas.filelist',
      .             'data.local|modules/B2.5/Database',adasfile)) then !{
                     read(99,1028)

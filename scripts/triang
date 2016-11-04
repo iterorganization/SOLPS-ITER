@@ -238,7 +238,7 @@ while true; do {
               [ -r fort.30 ] && rm fort.30
               gmake -f ${SOLPSTOP}/runs/Makefile b2ag.prt > b2ag.log
               [ -r fort.30 ] && {
-                [ -d b2ag.exe.dir] && rmdir b2ag.exe.dir
+                [ -d b2ag.exe.dir ] && rmdir b2ag.exe.dir
                 print -u2 -- "Produced fort.30 file"
                 q=e
               } || {

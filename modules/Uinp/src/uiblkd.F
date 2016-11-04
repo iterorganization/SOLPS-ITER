@@ -502,19 +502,19 @@ c*** 4
       data (rctdenr2(i,13),i=1,mreac)   / mreac*0 /
       data (rctdenr2(i,14),i=1,mreac)   / mreac*0 /
       data (rctdeln(i,1),i=1,lurctdh)   / lurctdh*'H' /
-      data (rctdeln(i,2),i=1,lurctdh2)  / lurctdh2*'H2' /
+      data (rctdeln(i,2),i=1,lurctdh2)  / lurctdh2*'H' /
       data (rctdeln(i,3),i=1,lurctdhe)  / lurctdhe*'He' /
       data (rctdeln(i,4),i=1,lurctdc)   / lurctdc*'C' /
       data (rctdeln(i,5),i=1,lurctdne)  / lurctdne*'Ne' /
-      data (rctdeln(i,6),i=1,lurctdhp)  / lurctdhp*'H+' /
+      data (rctdeln(i,6),i=1,lurctdhp)  / lurctdhp*'H' /
       data (rctdeln(i,7),i=1,lurctdar)  / lurctdar*'Ar' /
       data (rctdeln(i,8),i=1,lurctdn)   / lurctdn*'N' /
       data (rctdeln(i,9),i=1,lurctdbe)  / lurctdbe*'Be' /
-      data (rctdeln(i,10),i=1,lurctdh2p) / lurctdh2p*'H2+' /
-      data (rctdeln(i,11),i=1,lurctdnp) / lurctdnp*'N+' /
-      data (rctdeln(i,12),i=1,lurctdcp) / lurctdcp*'C+' /
+      data (rctdeln(i,10),i=1,lurctdh2p) / lurctdh2p*'H' /
+      data (rctdeln(i,11),i=1,lurctdnp) / lurctdnp*'N' /
+      data (rctdeln(i,12),i=1,lurctdcp) / lurctdcp*'C' /
       data (rctdeln(i,13),i=1,lurctdx)  / lurctdx*'X' /
-      data (rctdeln(i,14),i=1,lurctdxp) / lurctdxp*'X+' /
+      data (rctdeln(i,14),i=1,lurctdxp) / lurctdxp*'X' /
       data rctdtmin, rctdtmax  / lvrctd*0.0, lvrctd*0.0 /
       
 c      integer lura,lurm,luri,lurf
