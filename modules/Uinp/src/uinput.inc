@@ -340,6 +340,32 @@ c*** 15
       real xcoor(nnadmod),ycoor(nnadmod),zcoor(nnadmod),
      ,  xpolpos(8),ypolpos(8)
 
+c*** b2ah.dat
+
+      integer cbnrmx
+      parameter (cbnrmx=6+2+1+1)
+      integer cbnrso,cbnrno,cbnrwe,cbnrea,
+     ,        cbirso,cbirno,cbirwe,cbirea
+      real cbrbrk(0:cbnrmx-1),
+     ,     cbsna(0:7,0:nsdb2-1,0:cbnrmx-1),
+     ,     cbsmo(0:7,0:nsdb2-1,0:cbnrmx-1),
+     ,     cbshi(0:7,0:nsdb2-1,0:cbnrmx-1),
+     ,     cbrec(0:7,0:nsdb2-1,0:cbnrmx-1),
+     ,     cbmsb(0:7,0:nsdb2-1,0:cbnrmx-1),
+     ,     cbshe(0:7,0:cbnrmx-1),
+     ,     cbsch(0:7,0:cbnrmx-1),
+     ,     cbmsa(0:7,0:cbnrmx-1),
+     ,     cfdf0(0:7,0:nsdb2-1),
+     ,     cfdna(0:7,0:nsdb2-1),
+     ,     cfdpa(0:7,0:nsdb2-1),
+     ,     cfvla(0:7,0:nsdb2-1),
+     ,     cfvsa(0:7,0:nsdb2-1),
+     ,     cfhci(0:7,0:nsdb2-1),
+     ,     cfhce(0:7),
+     ,     cfsig(0:7),
+     ,     cfalf(0:7),
+     ,     cflim(0:7)
+
       common/uinint/
      ,  nmach,nmode,ntcpu,nfile,niter0,niter,ntime0,ntim1,nfullrun,
      ,  noptim,noptm1,ngeom_usr,ncoup_input,nsmstra,
@@ -401,7 +427,9 @@ c*** 15
      ,  lkindm,lkindi,lkindp,
      ,  nadmod,nasmod,nrs,ipunkt,jedge,
      ,  scilref,scilspt,scisrs,scisrc,sclchspnwl,scisrsg,
-     ,  iscrd,jscrd
+     ,  iscrd,jscrd,
+     ,  cbnrso,cbnrno,cbnrwe,cbnrea,
+     ,  cbirso,cbirno,cbirwe,cbirea
   
       common/uinrl/ ria,ragrid,raa,rarefl,ep1in,ep1ot,ep1ch,exep1,
      ,  ellin,ellot,ellch,exell,triin,triot,trich,extri,
@@ -442,7 +470,9 @@ c*** 15
      ,  scxmlim,scewall,scewbin,sctransp,screcycf,screcyct,scrcprm,
      ,  scfsheat,scexppl,scexpel,scexpil,screcycs,scychsptg,
      ,  scechsptg,scfchsptg,scstprm,chmvar,
-     ,  xcoor,ycoor,zcoor,xpolpos,ypolpos 
+     ,  xcoor,ycoor,zcoor,xpolpos,ypolpos,
+     ,  cbrbrk,cbsna,cbsmo,cbshi,cbrec,cbmsb,cbshe,cbsch,cbmsa,
+     ,  cfdf0,cfdna,cfdpa,cfvla,cfvsa,cfhci,cfhce,cfsig,cfalf,cflim
 
       common/uinlog/ 
      ,  nlscl,nltest,nlana,nldrft,nlcrr,nlerg,nlident,nlone,

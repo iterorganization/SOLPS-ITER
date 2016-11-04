@@ -88,13 +88,16 @@ ${OBJDIR}/libui.a: ${DEST} ${SRCDIR}/git_version_Uinp.h
 	@ar rucv $@ ${DEST}
 	ranlib $@
 
-${OBJDIR}/libb25.a: ${B2OBJ}/b2mod_constants.o ${OBJDIR}/b2mod_elements.o ${B2OBJ}/b2mod_types.o ${B2OBJ}/b2mod_layer.o ${B2OBJ}/chcase.o ${B2OBJ}/ifill.o ${B2OBJ}/ipmain.o ${B2OBJ}/isadigit.o ${B2OBJ}/isplusorminus.o ${B2OBJ}/len_of_digits.o ${B2OBJ}/lnblnk.o ${B2OBJ}/lwimai.o ${B2OBJ}/lwmain.o ${B2OBJ}/open_file.o ${B2OBJ}/prgend.o ${B2OBJ}/prgini.o ${B2OBJ}/prvrt.o ${B2OBJ}/prvrti.o ${B2OBJ}/sfill.o ${B2OBJ}/streql.o ${B2OBJ}/strip_spaces.o ${B2OBJ}/subsys.o ${B2OBJ}/sysend.o ${B2OBJ}/sysini.o ${B2OBJ}/xerrab.o ${B2OBJ}/xerset.o ${B2OBJ}/xertst.o ${SRCDIR}/.new_routines
-	@ar rucv $@ ${B2OBJ}/b2mod_constants.o ${OBJDIR}/b2mod_elements.o ${B2OBJ}/b2mod_types.o ${B2OBJ}/b2mod_layer.o ${B2OBJ}/chcase.o ${B2OBJ}/ifill.o ${B2OBJ}/ipmain.o ${B2OBJ}/isadigit.o ${B2OBJ}/isplusorminus.o ${B2OBJ}/len_of_digits.o ${B2OBJ}/lnblnk.o ${B2OBJ}/lwimai.o ${B2OBJ}/lwmain.o ${B2OBJ}/open_file.o ${B2OBJ}/prgend.o ${B2OBJ}/prgini.o ${B2OBJ}/prvrt.o ${B2OBJ}/prvrti.o ${B2OBJ}/sfill.o ${B2OBJ}/streql.o ${B2OBJ}/strip_spaces.o ${B2OBJ}/subsys.o ${B2OBJ}/sysend.o ${B2OBJ}/sysini.o ${B2OBJ}/xerrab.o ${B2OBJ}/xerset.o ${B2OBJ}/xertst.o
+${OBJDIR}/libb25.a: ${B2OBJ}/b2mod_constants.o ${OBJDIR}/b2mod_elements.o ${B2OBJ}/b2mod_types.o ${B2OBJ}/b2mod_layer.o ${B2OBJ}/chcase.o ${B2OBJ}/ifill.o ${B2OBJ}/ipmain.o ${B2OBJ}/isadigit.o ${B2OBJ}/isplusorminus.o ${B2OBJ}/len_of_digits.o ${B2OBJ}/lnblnk.o ${B2OBJ}/lwimai.o ${B2OBJ}/lwmain.o ${B2OBJ}/open_file.o ${B2OBJ}/prgend.o ${B2OBJ}/prgini.o ${B2OBJ}/prvrt.o ${B2OBJ}/prvrti.o ${B2OBJ}/ratio.o ${B2OBJ}/sfill.o ${B2OBJ}/streql.o ${B2OBJ}/strip_spaces.o ${B2OBJ}/subsys.o ${B2OBJ}/sysend.o ${B2OBJ}/sysini.o ${B2OBJ}/xerrab.o ${B2OBJ}/xerset.o ${B2OBJ}/xertst.o ${SRCDIR}/.new_routines
+	@ar rucv $@ ${B2OBJ}/b2mod_constants.o ${OBJDIR}/b2mod_elements.o ${B2OBJ}/b2mod_types.o ${B2OBJ}/b2mod_layer.o ${B2OBJ}/chcase.o ${B2OBJ}/ifill.o ${B2OBJ}/ipmain.o ${B2OBJ}/isadigit.o ${B2OBJ}/isplusorminus.o ${B2OBJ}/len_of_digits.o ${B2OBJ}/lnblnk.o ${B2OBJ}/lwimai.o ${B2OBJ}/lwmain.o ${B2OBJ}/open_file.o ${B2OBJ}/prgend.o ${B2OBJ}/prgini.o ${B2OBJ}/prvrt.o ${B2OBJ}/prvrti.o ${B2OBJ}/ratio.o ${B2OBJ}/sfill.o ${B2OBJ}/streql.o ${B2OBJ}/strip_spaces.o ${B2OBJ}/subsys.o ${B2OBJ}/sysend.o ${B2OBJ}/sysini.o ${B2OBJ}/xerrab.o ${B2OBJ}/xerset.o ${B2OBJ}/xertst.o
 	ranlib $@
 
 ${OBJDIR}/uinput.o: ${OBJDIR}/uiblkd.o
 
 ifneq (${MOD},o)
+${OBJDIR}/b2mod_types.${MOD}:
+	ln -sf ${B2OBJ}/b2mod_types.${MOD} ${OBJDIR}
+
 ${OBJDIR}/b2mod_layer.${MOD}:
 	ln -sf ${B2OBJ}/b2mod_layer.${MOD} ${OBJDIR}
 
@@ -110,6 +113,9 @@ ${OBJDIR}/libeirene.a:
 
 ${OBJDIR}/libgr_dummy.a:
 	ln -sf ${EIROBJ}/libgr_dummy.a ${OBJDIR}
+
+${OBJDIR}/b2mod_types.o:
+	ln -sf ${B2OBJ}/b2mod_types.o ${OBJDIR}
 
 ${OBJDIR}/b2mod_layer.o:
 	ln -sf ${B2OBJ}/b2mod_layer.o ${OBJDIR}

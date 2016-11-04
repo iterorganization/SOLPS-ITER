@@ -18,7 +18,8 @@ c=======================================================================
      ,  lunplt=nptal*nplt,  lu21pr=2*nppart,lvrctd=mreac*nsrctd,
      ,  lu3st=3*n1st,       lugwts=mgwtiesx*ngwtiesx, lusts3=3*lustsr,
      ,  lupw=nlimps*npwinx, lusg=nstep*ngitt,
-     ,  lur9=9*nreac,  lur2=2*nreac, lur6=6*nreac
+     ,  lur9=9*nreac,  lur2=2*nreac, lur6=6*nreac,
+     ,  lcbs=8*nsdb2*cbnrmx, lcbe=8*cbnrmx, lcfs=8*nsdb2
 c=======================================================================
 c*** General information
 
@@ -827,5 +828,17 @@ c*** Data for diagnostic run
 
       data lntspcu,lntsptu,nmcsptu,dgntcpu,dgnptsfc,dgnfile,dgalloc /
      /        1   ,   0   ,   0   ,  1200 ,   10   , 00100 ,  0.5   /
-c=======================================================================
+
+c*** Data for b2ah.dat.stencil file
+
+      data  cbsna , cbsmo , cbshi , cbmsb , cbrec /
+     /     lcbs*0.,lcbs*0.,lcbs*0.,lcbs*0.,lcbs*0./,
+     ,      cbshe , cbsch , cbmsa /
+     /     lcbe*0.,lcbe*0.,lcbe*0./,
+     ,      cfdf0 , cfdna , cfdpa , cfvla , cfvsa , cfhci /
+     /     lcfs*0.,lcfs*0.,lcfs*0.,lcfs*0.,lcfs*0.,lcfs*0./,
+     ,      cfhce , cfsig , cfalf , cflim /
+     /       8*0. ,  8*0. ,  8*0. ,  8*0. /
+
+c======================================================================
       end
