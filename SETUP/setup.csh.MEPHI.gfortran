@@ -1,0 +1,11 @@
+# Load modules 
+
+
+# Set environment variables
+# setenv DEVICE d3d-ap
+
+
+# Debugger (set environment variable DBX)
+# DBX =
+
+# Set LD_LIBRARY_PATH and PATH for dyn. linked libraries
