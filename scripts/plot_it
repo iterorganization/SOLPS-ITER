@@ -243,8 +243,8 @@ shift
       [ -n "$logx" ] && print -u3 "set log x"
       [ -n "$logy" ] && print -u3 "set log y"
       [ -n "$time" ] && print -u3 "set time"
-      echo $CMDFILE
-      cat $CMDFILE
+#      echo $CMDFILE
+#      cat $CMDFILE
       ;;
   ( a )
 #----------------------------------------------------------------------------------------
@@ -252,13 +252,13 @@ shift
 
 #print -u2 -- "&&&& Append the plot data "                    #!!!
       READ="$1"
-      [ -z "$SETFILE" ] || { \
+      [ -s "$SETFILE" ] || { \
 	print "$SETFILE not found or empty. Apparently, the initialisation call was missing"
 	print "$Usage"
 	exit 8
       }
 #  ... and set the defaults
-      . "$SETFILE"
+      . ./"$SETFILE"
       LOGX=$logx
       LOGY=$logy
       DSTYLE="$dstyle"

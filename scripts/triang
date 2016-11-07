@@ -286,6 +286,7 @@ while true; do {
             [ -r "$triain" ] && [ -s "$triain" ] && {
               N=
               print -u2 -- "Starting a TRIA run."
+              print -u2 -- "Command line: $TRIA > $trialog"
               print -u2 -- "If it continues more than a couple of minutes, kill with Ctrl-C"
               print -u2 -- "and check the output - probably, the polygon sides are wrong"
               print -u2 -- "In that case, consider re-running DG and asking for larger triangles"
@@ -294,7 +295,7 @@ while true; do {
               check_files $triaoutlist && q=g || {
                 print -u2 -- "Not all output files, $triaoutlist, are produced"
                 print -u2 -- "    ==> Check $trialog"
-                q=u 
+                q=p
               }
               true
             } || {
@@ -307,6 +308,7 @@ while true; do {
               check_files $triaoutlist && {
                 N=
                 print -u2 -- "Starting a TRIAGEOM run"
+                print -u2 -- "Command line: $TRIAGEOM > $triglog"
                 "$TRIAGEOM" > $triglog
                 [ -s "$gkseps" ] && [ -r "$gkseps" ] && mv "$gkseps" "$trigeps"
                 check_files $trigoutlist && {
@@ -556,18 +558,22 @@ while true; do {
               ) > $TRIPLT.cms
               plot_set $TRIPLT.cms
               [ -s "$TRIPLT.ps" ] && {
-                $GV $TRIPLT.ps & 
+                $GV $TRIPLT.ps &
+                q=t
               } || {
                 print -u2 -- "No $TRIPLT.ps file to plot"
+                q=q
               }
               true
             } || {
               print -u2 -- "The plots were created after the last call to tria - no reason to do it again."
               print -u2 -- "Check the files $STRDAT and $TRIPLT.ps"
+              q=t
             }; unset e; break;;
       (  v  )                                               # view graphical output of TRIA:
             [ -r  "$triaeps" ] && {
               $GV $triaeps &
+              q=q
               true
             } || {
               print -u2 -- "No $triaeps file found - run TRIA first"
@@ -577,6 +583,7 @@ while true; do {
             [ -r  "$trigeps" ] && {
               $GV $trigeps &
               true
+              q=q
             } || {
               print -u2 -- "No $trigeps file found - run TRIAGEOM first or use \"v\" to see the TRIA output"
               q=v
@@ -600,6 +607,7 @@ while true; do {
             w=
             [ -z "$COLUMNS" ] && c=8 || { ((c=($COLUMNS-$m)/($LEN+4))); [ "$c" -lt 1 ] && c=1; w="-w $COLUMNS"; }
             for n in $listo; do echo "$n" | tr _ \ ; done | pr -T $w --columns=$c -o $m
+            q=q
             break;;
       ( r|R )                                               # remove:
             [ -z "$extra" ] && {
@@ -626,11 +634,12 @@ while true; do {
               read u
               { case $u in
                 ( y|Y ) rm -f $TRIADIR/$TRIASTEM.$excom.$tricom $tmplcom
-                         break;;
+                        break;;
                 ( n|N ) q=q; break 2;;
                 (  *  ) print -u2 -n -- "Please answer with either y or n: ";;
               esac; }
             }; done
+            q=l
             break;;
       ( m|M )                                               # remap using b2yt:
             print -u2 -- "Option is not realised yet. Please produce the fort.30 file separately"; break
@@ -657,12 +666,14 @@ while true; do {
             while { print -u2 -- "Enter the coordinates of the reference point [mm] or the cell number to investigate (<Return> to end)"; read u; [ -n "$u" ]; }; do {
               echo "$u" | $TRIAINQ
             }; done
+            q=i
             break;;
       ( q|Q )                                               # quit:
             break 2;;
       (  *  )
             echo 'Illegal response.'
             echo 'Please use letters capitalized in the list or press ENTER for default'
+            q=h
             continue;;
      esac; }
   }; done
