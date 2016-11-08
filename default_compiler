@@ -40,8 +40,8 @@ case "PPPL":
   breaksw
 case "FZJ":
 case "LEUVEN":
-case "WM":
 case "MEPHI":
+case "WM":
   echo gfortran
   breaksw
 default:

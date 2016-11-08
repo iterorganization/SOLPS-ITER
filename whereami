@@ -1,7 +1,7 @@
 #! /bin/csh -f
 set machine_location=`hostname`
 if ("$machine_location" == "head") then 
-set machine_location="cluster21.mephi.ru"
+  set machine_location="cluster21.mephi.ru"
 endif
 set fullhost=`nslookup $machine_location | grep -m 1 Name | awk '/Name:/{print $2}' | tr 'A-Z' 'a-z'`
 switch ($fullhost)
@@ -79,11 +79,11 @@ case "login1.cluster":
 case "n01p*.cluster":
   echo SPBSTU
   breaksw
-case "*.cn":
-  echo CN_UNKNOWN
-  breaksw
 case "*.mephi.ru":
   echo MEPHI
+  breaksw
+case "*.cn":
+  echo CN_UNKNOWN
   breaksw
 case "*.eu":
 case "*.at":
