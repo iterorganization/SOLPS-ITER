@@ -10,6 +10,13 @@ set compress=""
 set MPIOPTS=""
 set standalone="no"
 
+set solpstop=`climb_and_look_for SOLPSTOP`
+if (-e $solpstop) then
+ setenv SOLPSTOP "`cat $solpstop`"
+else
+ setenv SOLPSTOP "`echo $PWD | sed 's:/runs/.*::'`"
+endif
+
 argloop:
   if ("X${1}X" == "X-zX") then
     set compress="-gz"
@@ -36,13 +43,6 @@ argloop:
     shift
     goto argloop
   endif
-
-set solpstop=`climb_and_look_for SOLPSTOP`
-if (-e $solpstop) then
- setenv SOLPSTOP "`cat $solpstop`"
-else
- setenv SOLPSTOP "`echo $PWD | sed 's:/runs/.*::'`"
-endif
 
 if ($1 == "") then
   if (-e input.dat && $standalone == "no") then
@@ -106,6 +106,6 @@ sed -e 's:#PWD#:'$PWD':g' -e 's:#SOLPSTOP#:'$SOLPSTOP':g' -e 's:#EMAIL#:'$EMAIL'
 set msg="Submitted at `date`"
 update_solps_run_status -n ${msg}
 if ($?SOLPS_GUI_IP) then
-  echo ${USER} ${PWD} ${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
+  echo ${USER} ${PWD} ${msg} | netcat -u -v -w 1 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
 endif
 qsub -V -S /usr/bin/tcsh $NAME

@@ -9,6 +9,13 @@ set compress=""
 set MPIOPTS=""
 set standalone="no"
 
+set solpstop=`climb_and_look_for SOLPSTOP`
+if (-e $solpstop) then
+  setenv SOLPSTOP "`cat $solpstop`"
+else
+  setenv SOLPSTOP "`echo $PWD | sed 's:/runs/.*::'`"
+endif
+
 argloop:
   if ("X${1}X" == "X-zX") then
     set compress="-gz"
@@ -36,13 +43,6 @@ argloop:
 #   echo sleep 600 | qsub -q ib_gen8 -lnodes=c05s30:ppn=16,walltime=1000
     goto argloop
   endif
-
-set solpstop=`climb_and_look_for SOLPSTOP`
-if (-e $solpstop) then
-  setenv SOLPSTOP "`cat $solpstop`"
-else
-  setenv SOLPSTOP "`echo $PWD | sed 's:/runs/.*::'`"
-endif
 
 if ($1 == "") then
   if (-e input.dat && $standalone == "no") then

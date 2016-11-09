@@ -1,6 +1,6 @@
 #! /usr/bin/env tcsh
-setenv SHELL `which tcsh` # needed for batch and atd
 set standalone="no"
+set compress="no"
 
 argloop:
   if ("X${1}X" == "X-zX") then
@@ -16,29 +16,43 @@ argloop:
     goto argloop
   endif
 
+# Please note that some atd do not support SHELL environment
+# and always use /bin/sh.
 cat << __EOF__ | batch
-setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}"
-set msg="Started on `hostname` at `date`"
+#!/bin/sh
+LD_LIBRARY_PATH="${LD_LIBRARY_PATH}"
+export LD_LIBRARY_PATH
+
+msg="Started on `hostname` at `date`"
 update_solps_run_status \${msg}
-if ($?SOLPS_GUI_IP) then
-  echo ${USER} ${PWD} \${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
-endif
-if (-e input.dat && $standalone == "no") then
-  if ($compress == "-gz") then
-    time b2run ${argv} b2mn < input.dat | gzip -9 >! run.log.gz
+if test -n "\${SOLPS_GUI_IP}"; then
+  if hash netcat 2> /dev/null; then
+    echo ${USER} ${PWD} \${msg} | netcat -u -v -w 1 \${SOLPS_GUI_IP} \${SOLPS_GUI_PORT}
   else
-    time b2run ${argv} b2mn < input.dat >! run.log
-  endif
+    echo ${USER} ${PWD} \${msg} | nc -u -v -w 0 \${SOLPS_GUI_IP} \${SOLPS_GUI_PORT}
+  fi
+fi
+
+if [ -s input.dat -a ${standalone} == "no" ]; then
+  if [ ${compress} == "-gz" ]; then
+    time b2run ${argv} b2mn < input.dat | gzip -9 > run.log.gz
+  else
+    time b2run ${argv} b2mn < input.dat > run.log
+  fi
 else
-  if ($compress == "-gz") then
-    time b2run ${argv} -s b2mn | gzip -9 >! run.log.gz
+  if [ ${compress} == "-gz" ]; then
+    time b2run ${argv} -s b2mn | gzip -9 > run.log.gz
   else
-    time b2run ${argv} -s b2mn >! run.log
-  endif
-endif
-set msg="Finished on `hostname` at `date`"
-if ($?SOLPS_GUI_IP) then
-  echo ${USER} ${PWD} \${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
-endif
+    time b2run ${argv} -s b2mn > run.log
+  fi
+fi
+msg="Finished on `hostname` at `date`"
 update_solps_run_status \${msg}
+if test -n "\${SOLPS_GUI_IP}"; then
+  if hash netcat 2> /dev/null; then
+    echo ${USER} ${PWD} \${msg} | netcat -u -v -w 1 \${SOLPS_GUI_IP} \${SOLPS_GUI_PORT}
+  else
+    echo ${USER} ${PWD} \${msg} | nc -u -v -w 0 \${SOLPS_GUI_IP} \${SOLPS_GUI_PORT}
+  fi
+fi
 __EOF__

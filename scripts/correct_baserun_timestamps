@@ -6,4 +6,6 @@ touch b2ah.prt b2fpardf
 sleep 1
 touch b2ai.prt b2fstati
 sleep 1
+ln -sf $SOLPSTOP/modules/B2.5/Database/stra.dat .
+ln -sf $SOLPSTOP/modules/B2.5/Database/weis.dat .
 touch b2ar.prt b2frates

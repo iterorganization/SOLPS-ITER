@@ -9,5 +9,18 @@ if ("X-nX" == "X${1}X") then
 endif
 
 echo $argv >! .current_status
-cat .current_status >> .status
+cat .current_status >>! .status
 
+# The following code is normally not executed and can serve for debugging!
+# setenv SOLPS_GUI_MONITORING_FORCED true # to enable it
+if ($?SOLPS_GUI_MONITORING_FORCED && $?SOLPS_GUI_IP ) then
+  if (`where netcat` != "") then
+    echo ${USER} ${PWD} ${argv} | netcat -u -v -w 1 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
+  else
+     if (`where nc` != "") then
+       echo ${USER} ${PWD} ${argv} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
+    else
+       echo "Warning: netcat not available for SOLPS GUI on ${SOLPS_GUI_IP}:${SOLPS_GUI_PORT}"
+     endif
+  endif
+endif
