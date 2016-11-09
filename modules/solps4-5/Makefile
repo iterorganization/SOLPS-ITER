@@ -43,12 +43,10 @@ endif
 ifeq ($(shell [ -d ${INC4LOCAL} ] && echo yes || echo no ),yes)
 INCLUDE += -I${INC4LOCAL}
 TAGSLIST += ${INC4LOCAL}/*.h
-VPATH += ${INC4LOCAL}:
 endif
 ifeq ($(shell [ -d ${INC5LOCAL} ] && echo yes || echo no ),yes)
 INCLUDE += -I${INC5LOCAL}
 TAGSLIST += ${INC5LOCAL}/*.h
-VPATH += ${INC5LOCAL}:
 endif
 ifeq ($(shell [ -d ${B2M5LOCAL} ] && echo yes || echo no ),yes)
 INCLUDE += -I${B2M5LOCAL}
@@ -60,7 +58,10 @@ INCLUDE += -I${EIRMLOCAL}
 TAGSLIST += ${EIRMLOCAL}/*.F
 VPATH += ${EIRMLOCAL}:
 endif
-INCLUDE += -I${SRCDIR}/B2.5_include -I${SRCDIR}/B2.5_commons -I${SRCDIR}/B2_include -I${SRCDIR}/Eirene_commons -I${MDSPLUS_DIR}/include
+ifdef MDSPLUS_DIR
+INCLUDE += -I${MDSPLUS_DIR}/include
+endif
+INCLUDE += -I${SRCDIR}/B2.5_include -I${SRCDIR}/B2.5_commons -I${SRCDIR}/B2_include -I${SRCDIR}/Eirene_commons
 TAGSLIST += ${SRCDIR}/*_commons/*.[hH] ${SRCDIR}/*/*.F ${SRCDIR}/*.F
 VPATH += ${SRCDIR}/B2.5_modules:${SRCDIR}:${SRCDIR}/solps4_B2:${SRCDIR}/solps4_Eirene:${SRCDIR}/solps5
 
@@ -866,17 +867,17 @@ listobj:
 links:
 	[ -L ${SRCDIR}/B2_include ] && rm -Rf ${SRCDIR}/B2_include || echo > /dev/null
 	-mkdir -p ${SRCDIR}/B2_include
-	lndir ${SOLPS4}/src/Braams/b2/include ${SRCDIR}/B2_include
+	[ -r `which lndir` ] && lndir ${SOLPS4}/src/Braams/b2/include ${SRCDIR}/B2_include || ln -sf ${SOLPS4}/src/Braams/b2/include ${SRCDIR}/B2_include
 	[ -L ${SRCDIR}/Eirene_modules ] && rm -Rf ${SRCDIR}/Eirene_modules || echo > /dev/null
 	-mkdir -p ${SRCDIR}/Eirene_modules
-	lndir ${SOLPS4}/src/Eirene/src/modules ${SRCDIR}/Eirene_modules
+	[ -r `which lndir` ] && lndir ${SOLPS4}/src/Eirene/src/modules ${SRCDIR}/Eirene_modules || ln -sf ${SOLPS4}/src/Eirene/src/modules ${SRCDIR}/Eirene_modules
 	-mkdir -p ${SRCDIR}/solps4_B2
 	cat B2_4.3.source_files | sed -e 's:[^ ]*/: ${SRCDIR}/solps4_B2/:' | paste B2_4.3.source_files - | sed -e "s:^:ln -sf ${SOLPS4}/src/Braams/b2/src/:" > B2_links
-	. B2_links
+	. ./B2_links
 	rm B2_links
 	-mkdir -p ${SRCDIR}/solps4_Eirene
 	cat Eirene_4.3.source_files | sed -e 's:[^ ]*/: ${SRCDIR}/solps4_Eirene/:' | paste Eirene_4.3.source_files - | sed -e "s:^:ln -sf ${SOLPS4}/src/Eirene/src/:" > Eirene_links
-	. Eirene_links
+	. ./Eirene_links
 	rm Eirene_links
 
 ${BASEDIR}/LISTOBJ: listobj

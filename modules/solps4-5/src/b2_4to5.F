@@ -1886,12 +1886,12 @@ c
      .   '''b2mndr_b2time'''//tab//tab//tab//'''',lstime_4,''''
       endif
       if (lmovie_4.gt.0) then
-	write(hlp_frm, '(a,i1,a)') 
-     .	 '(a,i',len_of_digits(lmovie_4),',a)'
-	write(99,hlp_frm) 
-     .	 '''b2mndr_mvinc'''//tab//tab//tab//'''',lmovie_4,''''
-	write(98,hlp_frm) 
-     .	 '''b2mndr_mvinc'''//tab//tab//tab//'''',lmovie_4,''''
+        write(hlp_frm, '(a,i1,a)') 
+     .   '(a,i',len_of_digits(lmovie_4),',a)'
+        write(99,hlp_frm) 
+     .   '''b2mndr_mvinc'''//tab//tab//tab//'''',lmovie_4,''''
+        write(98,hlp_frm) 
+     .   '''b2mndr_mvinc'''//tab//tab//tab//'''',lmovie_4,''''
       end if
       write(99,'(a)')
      . '''b2news_area_fix'''//tab//tab//'''3''' 
@@ -2269,18 +2269,18 @@ c
               conpar(1,ib,1) = sepden_4
             end if
             do is = 1, nspecies_4
-	      if (cfb_cntr_4(is).ne.0) then
-	        do is0 = isp(is)+1, isp(is)+nfluids_4(is)-1
-	          if (is0.ge.0) then
-	            bccon(is0,ib) = 11
+              if (cfb_cntr_4(is).ne.0) then
+                do is0 = isp(is)+1, isp(is)+nfluids_4(is)-1
+                  if (is0.ge.0) then
+                    bccon(is0,ib) = 11
                     conpar(is0,ib,1) = 0.0_R8
                     conpar(is0,ib,2) = 0.0_R8
-	          end if
+                  end if
                 end do
                 is0 = isp(is)+nfluids_4(is)
                 bccon(is0,ib) = 11
-		conpar(is0,ib,1) = conpar_4(ifl(is0),ib,1)
-		conpar(is0,ib,2) = 0.0_R8
+                conpar(is0,ib,1) = conpar_4(ifl(is0),ib,1)
+                conpar(is0,ib,2) = 0.0_R8
                 na_feedback_ib(is-1) = ib
               end if
             end do
@@ -2316,13 +2316,13 @@ c
             end if
           end do
           do is = 1, nspecies_4
-	    if (ffb_cntr_4(is).ne.0) then
-	      is0 = isp(is)
-	      if (is0.ge.0) then
-	        bccon(is0,ib) = 11
-		conpar(is0,ib,1) = ffb_const_4(is)
+            if (ffb_cntr_4(is).ne.0) then
+              is0 = isp(is)
+              if (is0.ge.0) then
+                bccon(is0,ib) = 11
+                conpar(is0,ib,1) = ffb_const_4(is)
                 na_feedback_ib(is-1) = ib
-	      end if
+              end if
             end if
           end do
           if (volrecfeedback_4) then
@@ -2343,8 +2343,8 @@ c
       write(35,'(a,i2,a)') 'NBC=', nbc,','
       write(36,'(a,i2,a)') 'NBC=', nbc,','
       write(hlp_frm,'(a,i2,a)') '(a,',nbc,'(1x,a1,a1,a2))'
-      write(35,hlp_frm) 'BCCHAR= ',(('''',bcchar(ib),''','),ib=1,nbc)
-      write(36,hlp_frm) 'BCCHAR= ',(('''',bcchar(ib),''','),ib=1,nbc)
+      write(35,hlp_frm) 'BCCHAR= ',('''',bcchar(ib),''',',ib=1,nbc)
+      write(36,hlp_frm) 'BCCHAR= ',('''',bcchar(ib),''',',ib=1,nbc)
       write(hlp_frm,'(a,i2,a)') '(a,',nbc,'(1x,i3,'',''))'
       write(35, hlp_frm) 'BCPOS=  ',(bcpos(ib)  ,ib=1,nbc)
       write(36, hlp_frm) 'BCPOS=  ',(bcpos(ib)  ,ib=1,nbc)
@@ -2652,7 +2652,7 @@ c
         nstrat = nstrai
       endif
       write(hlp_frm,'(a,i2,a)') '(a,',nstrat,'(1x,a1,a1,a2))'
-      write(34,hlp_frm) 'CRCSTRA=',(('''',crcstra(ib),''','),
+      write(34,hlp_frm) 'CRCSTRA=',('''',crcstra(ib),''',',
      .                                            ib=1,nstrat)
       write(hlp_frm,'(a,i2,a)') '(a,',nstrat,'(1x,i3,'',''))'
       write(*,*) 'hlp_frm: ',hlp_frm
@@ -2786,24 +2786,24 @@ c
         write(hlp_frm,'(a,i3,a)') '(a,',ii(1),'(i3,'',''))'
         write(34,hlp_frm) 'L_SPCSRF=',(l_spcsrf(ib),ib=1,ii(1))
         write(hlp_frm,'(a,i2,a)') '(a,',n_spcsrf_4,'(a1,a8,a2))'
-        write(34,hlp_frm) 'SPS_ID=  ',(('''',sps_id_4(ib),''','),
+        write(34,hlp_frm) 'SPS_ID=  ',('''',sps_id_4(ib),''',',
      .                                               ib=1,n_spcsrf_4)
-	write(hlp_frm,'(a,i2,a)') '(a,',n_spcsrf_4,'(i10,'',''))'
-	write(*,*) 'hlp_frm: ',hlp_frm
-	write(34, hlp_frm) 'I_SPCSRF=',(i_spcsrf(ib),ib=1,n_spcsrf_4)
-	write(34, hlp_frm) 'J_SPCSRF=',(j_spcsrf(ib),ib=1,n_spcsrf_4)
-	write(hlp_frm,'(a,i2,a)') '(a,1p,',n_spcsrf_4,'(e10.3,'',''))'
-	write(*,*) 'hlp_frm: ',hlp_frm
-	write(34, hlp_frm) 'SPS_ABSR=',(sps_absr(ib),ib=1,n_spcsrf_4)
-	write(34, hlp_frm) 'SPS_TRNO=',(sps_trno(ib),ib=1,n_spcsrf_4)
-	write(34, hlp_frm) 'SPS_TRNI=',(sps_trni(ib),ib=1,n_spcsrf_4)
-	write(34, hlp_frm) 'SPS_MTRI=',(sps_mtri(ib),ib=1,n_spcsrf_4)
-	write(34, hlp_frm) 'SPS_TMPR=',(sps_tmpr(ib),ib=1,n_spcsrf_4)
-	write(34, hlp_frm) 'SPS_SPPH=',(sps_spph(ib),ib=1,n_spcsrf_4)
-	write(34, hlp_frm) 'SPS_SPCH=',(sps_spch(ib),ib=1,n_spcsrf_4)
-	write(hlp_frm,'(a,i2,a)') '(a,',n_spcsrf_4,'(i10,'',''))'
-	write(*,*) 'hlp_frm: ',hlp_frm
-	write(34, hlp_frm) 'SPS_SGRP=',(sps_sgrp(ib),ib=1,n_spcsrf_4)
+        write(hlp_frm,'(a,i2,a)') '(a,',n_spcsrf_4,'(i10,'',''))'
+        write(*,*) 'hlp_frm: ',hlp_frm
+        write(34, hlp_frm) 'I_SPCSRF=',(i_spcsrf(ib),ib=1,n_spcsrf_4)
+        write(34, hlp_frm) 'J_SPCSRF=',(j_spcsrf(ib),ib=1,n_spcsrf_4)
+        write(hlp_frm,'(a,i2,a)') '(a,1p,',n_spcsrf_4,'(e10.3,'',''))'
+        write(*,*) 'hlp_frm: ',hlp_frm
+        write(34, hlp_frm) 'SPS_ABSR=',(sps_absr(ib),ib=1,n_spcsrf_4)
+        write(34, hlp_frm) 'SPS_TRNO=',(sps_trno(ib),ib=1,n_spcsrf_4)
+        write(34, hlp_frm) 'SPS_TRNI=',(sps_trni(ib),ib=1,n_spcsrf_4)
+        write(34, hlp_frm) 'SPS_MTRI=',(sps_mtri(ib),ib=1,n_spcsrf_4)
+        write(34, hlp_frm) 'SPS_TMPR=',(sps_tmpr(ib),ib=1,n_spcsrf_4)
+        write(34, hlp_frm) 'SPS_SPPH=',(sps_spph(ib),ib=1,n_spcsrf_4)
+        write(34, hlp_frm) 'SPS_SPCH=',(sps_spch(ib),ib=1,n_spcsrf_4)
+        write(hlp_frm,'(a,i2,a)') '(a,',n_spcsrf_4,'(i10,'',''))'
+        write(*,*) 'hlp_frm: ',hlp_frm
+        write(34, hlp_frm) 'SPS_SGRP=',(sps_sgrp(ib),ib=1,n_spcsrf_4)
         write(hlp_frm,'(a,i2,a)') 
      .   '(a,',n_spcsrf,'('''''''',a8,'''''''','',''))'
         write(34, hlp_frm) 'SPS_MTRL=',(sps_mtrl(ib),ib=1,n_spcsrf)
@@ -3050,35 +3050,35 @@ c
       if (npfrgrp.ne.0) then
         write(38,'(a,i2,a)') 'NPFRGRP=',npfrgrp,','
         write(hlp_frm, '(a,i2,a)') '(a,',npfrgrp,'(i3,'',''))'
-	write(*,*) 'hlp_frm: ',hlp_frm
+        write(*,*) 'hlp_frm: ',hlp_frm
         write(38, hlp_frm) 'IPFRGRP=',(ipfrgrp(is),is=1,npfrgrp)
         write(38, hlp_frm) 'JPFRGRP=',(jpfrgrp(is),is=1,npfrgrp)
         write(hlp_frm,'(a,i2,a)') '(a,',npfrgrp,'(a1,a8,a2))'
-        write(38,hlp_frm) 'GPFRGRP=',(('''',gpfrgrp(is),''','),
+        write(38,hlp_frm) 'GPFRGRP=',('''',gpfrgrp(is),''',',
      .                                             is=1,npfrgrp)
         write(hlp_frm, '(a,i3,a)') '(a,',jpfrgrp(npfrgrp),'(i3,'',''))'
-	write(*,*) 'hlp_frm: ',hlp_frm
+        write(*,*) 'hlp_frm: ',hlp_frm
         write(38, hlp_frm) 'LPFRGRP=',
      .   (lpfrgrp(is),is=1,jpfrgrp(npfrgrp))
       end if
       if (nntrgrp.ne.0) then
         write(38,'(a,i2,a)') 'NNTRGRP=',nntrgrp,','
         write(hlp_frm, '(a,i2,a)') '(a,',nntrgrp,'(i3,'',''))'
-	write(*,*) 'hlp_frm: ',hlp_frm
+        write(*,*) 'hlp_frm: ',hlp_frm
         write(38, hlp_frm) 'INTRGRP=',(intrgrp(is),is=1,nntrgrp)
         write(38, hlp_frm) 'JNTRGRP=',(jntrgrp(is),is=1,nntrgrp)
         write(hlp_frm,'(a,i2,a)') '(a,',nntrgrp,'(a1,a8,a2))'
-        write(38,hlp_frm) 'GNTRGRP=',(('''',gntrgrp(is),''','),
+        write(38,hlp_frm) 'GNTRGRP=',('''',gntrgrp(is),''',',
      .                                             is=1,nntrgrp)
         write(hlp_frm, '(a,i3,a)') '(a,',jntrgrp(nntrgrp),'(i3,'',''))'
-	write(*,*) 'hlp_frm: ',hlp_frm
+        write(*,*) 'hlp_frm: ',hlp_frm
         write(38, hlp_frm) 'LNTRGRP=',
      .   (lntrgrp(is),is=1,jntrgrp(nntrgrp))
       end if
       ii=minloc(lhetrgts)
       if (ii(1).ne.1) then
         write(hlp_frm, '(a,i3,a)') '(a,',ii(1),'(i3,'',''))'
-	write(*,*) 'hlp_frm: ',hlp_frm
+        write(*,*) 'hlp_frm: ',hlp_frm
         write(38, hlp_frm) 'LHETRGTS=',(lhetrgts(is),is=1,ii(1))
       end if
       write(38,'(a)') '/'
