@@ -34,13 +34,13 @@ if test -n "\${SOLPS_GUI_IP}"; then
 fi
 
 if [ -s input.dat -a ${standalone} == "no" ]; then
-  if [ ${compress} == "-gz" ]; then
+  if [ ${compress} = "-gz" ]; then
     time b2run ${argv} b2mn < input.dat | gzip -9 > run.log.gz
   else
     time b2run ${argv} b2mn < input.dat > run.log
   fi
 else
-  if [ ${compress} == "-gz" ]; then
+  if [ ${compress} = "-gz" ]; then
     time b2run ${argv} -s b2mn | gzip -9 > run.log.gz
   else
     time b2run ${argv} -s b2mn > run.log
