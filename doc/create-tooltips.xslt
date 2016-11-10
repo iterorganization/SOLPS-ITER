@@ -3,10 +3,16 @@
 
 <xsl:output method="text" />
 
-<xsl:template match="/"># Generated with create-tooltips.xslt
+<xsl:template match="/"># Generated with create-tooltips.xslt  
 b2mn_tooltips = {
+# Tuples of category, type, default, description
+   <xsl:for-each select="solps/code/module/paramgroup">
+      <xsl:for-each select="param">
+         '<xsl:value-of select="name"/>' : ('<xsl:value-of select="../category"/>', '<xsl:value-of select="type"/>', '<xsl:value-of select="default"/>', """<xsl:value-of select="../description"/>"""),
+      </xsl:for-each>
+   </xsl:for-each>
    <xsl:for-each select="solps/code/module/param">
-'<xsl:value-of select="name"/>' : """<xsl:value-of select="description"/>""",
+      '<xsl:value-of select="name"/>' : ('<xsl:value-of select="category"/>', '<xsl:value-of select="type"/>', '<xsl:value-of select="default"/>', """<xsl:value-of select="description"/>"""),
    </xsl:for-each>
 }
 </xsl:template>
