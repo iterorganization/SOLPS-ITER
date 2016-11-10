@@ -2820,14 +2820,17 @@ See also section \ref{lab:b2:transport:inputfile} for an alternative
 description of the transport coefficients which allows for radial
 variation.
 
+It is important to note that the settings from {\tt b2.transport.parameters} will {\bf NOT} be applied to neutral species!
+
 As stated in the {\tt b2cmpt} block description (Section \ref{lab:b2cmpt}),
 for numerical stability reasons, mechanisms must exist to provide some
 particle transport and establish radial currents. Therefore, the user
 must not, when determining the transport coefficients by use of the
-{\tt b2.transport.parameters} file, set both {\tt parm\_dna} and {\tt parm\_dpa}
-simultaneously to zero when solving density equations. Similarly,
-{\tt parm\_sig} and {\tt parm\_alf} must not simultaneously be set to
-zero when solving the potential equations without drift current terms on.
+{\tt b2.transport.parameters} file, set both {\tt parm\_dna} and
+{\tt parm\_dpa} simultaneously to zero when solving density equations.
+Similarly, {\tt parm\_sig} and {\tt parm\_alf} must not simultaneously
+be set to zero when solving the potential equations without drift current
+terms on.
 The code will fail a transport coefficients test in {\tt b2tral} otherwise.
 
 \subsection{b2.numerics.parameters}
