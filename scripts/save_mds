@@ -23,19 +23,19 @@ argloop:
     goto argloop
   endif
 
-if (-e shotnumber.history) then
+if (-s shotnumber.history) then
   echo "Shotnumber.history already exists in $PWD"
   exit
 endif
 # fs prefetch -w run.log* b2fstat* b2fplasma fort.44
-if (-e b2fstati.gz) gunzip b2fstati.gz
-if (-e b2fstate.gz) gunzip b2fstate.gz
-if (! -e mesh.extra) ln -s ../mesh.extra .
-if (! -e mesh.extra) then
+if (-s b2fstati.gz) gunzip b2fstati.gz
+if (-s b2fstate.gz) gunzip b2fstate.gz
+if (! -s mesh.extra) ln -s ../mesh.extra .
+if (! -s mesh.extra) then
  (cd .. ; ln -s ../mesh.extra .)
 endif
 gmake $debug -f $SOLPSTOP/runs/Makefile.plot b2md.prt > b2md.log
-if (-e shotnumber.history) then
+if (-s shotnumber.history) then
   cat shotnumber.history
   rm -f .save_mds .resave_mds
 else

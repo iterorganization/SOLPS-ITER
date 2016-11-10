@@ -110,16 +110,16 @@ TRIAINQ="${SOLPSTOP}/modules/Triang/builds/$toolchain/triainq"
 EIRENE="${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.$toolchain/eirobjx"
 
 griddir=${CARRE_GRIDDIR-$SOLPSTOP/modules/Carre/meshes/${DEVICE-iter}}
-[ -e dg.dgo ] && {
+[ -s dg.dgo ] && {
   modelname=`lln dg.dgo`
-  [ -e $modelname ] && {
+  [ -s $modelname ] && {
     dgname=`basename $modelname`
     carre_stem=`echo $dgname | sed -e 's|\.dgo||' `
   } || {
-    print -u2 -- "No DG model found. Limited capabilities available only"
+    print -u2 -- "No valid DG model found. Limited capabilities available only"
   }
 } || {
-  print -u2 -- "No dg.dgo file found. Did you run lns first?"
+  print -u2 -- "No valid dg.dgo file found. Did you run lns first?"
 }
 [ -d $griddir ] && {
   n=1

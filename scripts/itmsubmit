@@ -11,7 +11,7 @@ set MPIOPTS=""
 set standalone="no"
 
 set solpstop=`climb_and_look_for SOLPSTOP`
-if (-e $solpstop) then
+if (-s $solpstop) then
  setenv SOLPSTOP "`cat $solpstop`"
 else
  setenv SOLPSTOP "`echo $PWD | sed 's:/runs/.*::'`"
@@ -45,12 +45,12 @@ argloop:
   endif
 
 if ($1 == "") then
-  if (-e input.dat && $standalone == "no") then
+  if (-s input.dat && $standalone == "no") then
     echo Assuming run with Eirene
     echo No argument is specified. Looking for QSUB.itm_coupled$compress
     set QSUB=`climb_and_look_for QSUB.itm_coupled$compress`
     if ($QSUB == "//QSUB.itm_coupled$compress") then
-      if (-e $SOLPSTOP/runs/QSUB.itm_coupled$compress) then
+      if (-s $SOLPSTOP/runs/QSUB.itm_coupled$compress) then
         set QSUB="$SOLPSTOP/runs/QSUB.itm_coupled$compress"
       else
         set QSUB=""
@@ -61,14 +61,14 @@ if ($1 == "") then
     echo No argument is specified. Looking for QSUB.itm$compress
     set QSUB=`climb_and_look_for QSUB.itm$compress`
     if ($QSUB == "//QSUB.itm$compress") then
-      if (-e $SOLPSTOP/runs/QSUB.itm$compress) then
+      if (-s $SOLPSTOP/runs/QSUB.itm$compress) then
         set QSUB="$SOLPSTOP/runs/QSUB.itm$compress"
       else
         set QSUB=""
       endif
     endif
   endif
-else if (-e $1) then
+else if (-s $1) then
   echo Submission file $1 is specified as an argument.
   echo Submission file $1 is found in current directory
   set QSUB=$1
@@ -77,7 +77,7 @@ else
   echo Looking for submission file $1 
   set QSUB=`climb_and_look_for $1`
   if ($QSUB == "//"$1) then
-    if (-e $SOLPSTOP/runs/$1) then
+    if (-s $SOLPSTOP/runs/$1) then
       set QSUB="$SOLPSTOP/runs/$1"
     else
       set QSUB=""

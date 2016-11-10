@@ -2,43 +2,43 @@
 #! /usr/bin/env tcsh
 
 if($?GNUPLOT_TMP) then
-    set tmpdir="$GNUPLOT_TMP/"
+  set tmpdir="$GNUPLOT_TMP/"
 else
-    set tmpdir=""
+  set tmpdir=""
 endif
-if (-e ${tmpdir}GNUPLOT_COUNT) then
-    set GNUPLOT_COUNT=`cat ${tmpdir}GNUPLOT_COUNT`
-    @ GNUPLOT_COUNT += 1
-    rm -f ${tmpdir}GNUPLOT_COUNT
-    echo $GNUPLOT_COUNT >! ${tmpdir}GNUPLOT_COUNT
-    set dfilename=${tmpdir}gnuplot.$GNUPLOT_COUNT.data
-    set cfilename=${tmpdir}gnuplot.cmd
+if (-s ${tmpdir}GNUPLOT_COUNT) then
+  set GNUPLOT_COUNT=`cat ${tmpdir}GNUPLOT_COUNT`
+  @ GNUPLOT_COUNT += 1
+  rm -f ${tmpdir}GNUPLOT_COUNT
+  echo $GNUPLOT_COUNT >! ${tmpdir}GNUPLOT_COUNT
+  set dfilename=${tmpdir}gnuplot.$GNUPLOT_COUNT.data
+  set cfilename=${tmpdir}gnuplot.cmd
 else
-    if($?GNUPLOT_DATA) then
-        set dfilename=${tmpdir}$GNUPLOT_DATA
-    else
-        set dfilename=${tmpdir}gnuplot.data
-    endif
-    if($?GNUPLOT_CMD) then
-        set cfilename=${tmpdir}$GNUPLOT_CMD
-    else
-        set cfilename=${tmpdir}gnuplot.cmd
-    endif
-    set GNUPLOT_COUNT=1
+  if($?GNUPLOT_DATA) then
+    set dfilename=${tmpdir}$GNUPLOT_DATA
+  else
+    set dfilename=${tmpdir}gnuplot.data
+  endif
+  if($?GNUPLOT_CMD) then
+    set cfilename=${tmpdir}$GNUPLOT_CMD
+  else
+    set cfilename=${tmpdir}gnuplot.cmd
+  endif
+  set GNUPLOT_COUNT=1
 endif
 set GNUPLOT=gnuplot
 set echo_style=bsd
 set x='\'
 rm -f $dfilename
 if ($?PLOT_FROM_FILE) then
-   cat ${tmpdir}PLOT_FROM_FILE > $dfilename
-   rm -f ${tmpdir}PLOT_FROM_FILE
+  cat ${tmpdir}PLOT_FROM_FILE > $dfilename
+  rm -f ${tmpdir}PLOT_FROM_FILE
 else
-   sed -e 's/D/E/g' >! $dfilename
+  sed -e 's/D/E/g' >! $dfilename
 endif
 set n=`wc -l < $dfilename`
 if(! $?GNUPLOT_BATCH) then
-    /bin/cp /dev/null $cfilename
+  /bin/cp /dev/null $cfilename
 endif
 if ($?PRINT_PLOT) then
   if(! $?GNUPLOT_POSTSCRIPT_OPTIONS) then
@@ -59,27 +59,27 @@ else
   endif
 endif
 if($n < 1) then
-    exit
+  exit
 endif
 if($n <= 200) then
-    set points='points'
+  set points='points'
 else
-    set points=''
+  set points=''
 endif
 if($?PLOTPOINTS) then
-    set lines=''
+  set lines=''
 else
-    set lines='lines'
+  set lines='lines'
 endif
 if($?GNUPLOT_LINEWIDTH) then
-    set lw=" lw $GNUPLOT_LINEWIDTH"
+  set lw=" lw $GNUPLOT_LINEWIDTH"
 else
-    set lw=''
+  set lw=''
 endif
 if($?GNUPLOT_POINTSIZE) then
-    set ps=" ps $GNUPLOT_POINTSIZE"
+  set ps=" ps $GNUPLOT_POINTSIZE"
 else
-    set ps=''
+  set ps=''
 endif
 set ERRBAR=0
 echo $1 | egrep 'b' > /dev/null
@@ -233,5 +233,5 @@ if($?GNUPLOT_MAX_POINTS) then
   endif
 endif
 if(! $?GNUPLOT_BATCH) then
-    $GNUPLOT $cfilename
+  $GNUPLOT $cfilename
 endif

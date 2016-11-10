@@ -1,6 +1,6 @@
 #! /bin/tcsh -f
-[ -e stra.dat ] || ln -s $SOLPSTOP/modules/B2.5/Database/stra.dat .
-[ -e weis.dat ] || ln -s $SOLPSTOP/modules/B2.5/Database/weis.dat .
+[ -s stra.dat ] || ln -s $SOLPSTOP/modules/B2.5/Database/stra.dat .
+[ -s weis.dat ] || ln -s $SOLPSTOP/modules/B2.5/Database/weis.dat .
 [ -e b2ag.prt ] && touch b2ag.prt || ( [ -e ../baserun/b2ag.prt ] && touch ../baserun/b2ag.prt || touch b2ag.prt )
 [ -e b2fgmtry ] && touch b2fgmtry || ( [ -e ../baserun/b2fgmtry ] && touch ../baserun/b2fgmtry || echo "b2fgmtry file not found" )
 [ -e fort.30 ] && touch fort.30 || ( [ -e ../baserun/fort.30 ] && touch ../baserun/fort.30 || echo "fort.30 file not found" )

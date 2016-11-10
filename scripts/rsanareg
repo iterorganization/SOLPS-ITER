@@ -65,7 +65,7 @@ if ("" == $xreg) set xreg=6
 if ("" == $yreg) set yreg=7
 @ vregP = $vreg + 1
 set solps_fluids=`climb_and_look_for SOLPS_FLUIDS`
-if (-e $solps_fluids) then
+if (-s $solps_fluids) then
   setenv SOLPS_FLUIDS `cat $solps_fluids`
   echo Set SOLPS_FLUIDS to $SOLPS_FLUIDS "(based on $solps_fluids)"
 else
@@ -86,9 +86,9 @@ else
   set region=$1
 endif
 if($?GNUPLOT_TMP) then
-    set tmpdir="$GNUPLOT_TMP/"
+  set tmpdir="$GNUPLOT_TMP/"
 else
-    set tmpdir=""
+  set tmpdir=""
 endif
 setenv PLOT_FROM_FILE "gnuplot.temp"
 pipe_run.log | \

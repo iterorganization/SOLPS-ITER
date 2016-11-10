@@ -1,7 +1,7 @@
 #! /bin/tcsh -f
 
 set solpstop=`climb_and_look_for SOLPSTOP`
-if (-e $solpstop) then
+if (-s $solpstop) then
   setenv SOLPSTOP "`cat $solpstop`"
   set RUNS=$SOLPSTOP/runs
 else
@@ -10,7 +10,7 @@ else
 endif
 
 loop:
-  if(-e $RUNS/Makefile.plot) goto endloop
+  if(-s $RUNS/Makefile.plot) goto endloop
   echo $RUNS
   if ("$RUNS" == "/") then
     echo Makefile.plot not found

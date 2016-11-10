@@ -35,12 +35,12 @@ if ($1 != "") then
 endif
 pwd
 
-if (-e b2md.dat) then
+if (-s b2md.dat) then
   set B2MDDAT=b2md.dat.sav
   mv b2md.dat $B2MDDAT
-else if (-e ../baserun/b2md.dat) then
+else if (-s ../baserun/b2md.dat) then
   set B2MDDAT=../baserun/b2md.dat
-else if (-e $SOLPSTOP/data/mdsplus/b2md.dat) then
+else if (-s $SOLPSTOP/data/mdsplus/b2md.dat) then
   set B2MDDAT=$SOLPSTOP/data/mdsplus/b2md.dat
 else
   echo 'No b2md.dat found'

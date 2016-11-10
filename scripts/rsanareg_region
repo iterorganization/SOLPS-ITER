@@ -110,7 +110,7 @@ else
   set species=$1
 endif
 set solps_fluids=`climb_and_look_for SOLPS_FLUIDS`
-if (-e $solps_fluids) then
+if (-s $solps_fluids) then
   setenv SOLPS_FLUIDS `cat $solps_fluids`
   echo Set SOLPS_FLUIDS to $SOLPS_FLUIDS "(based on $solps_fluids)"
 else
@@ -119,9 +119,9 @@ else
 endif
 set local_fluids=( $SOLPS_FLUIDS )
 if($?GNUPLOT_TMP) then
-    set tmpdir="$GNUPLOT_TMP/"
+  set tmpdir="$GNUPLOT_TMP/"
 else
-    set tmpdir=""
+  set tmpdir=""
 endif
 setenv PLOT_FROM_FILE "gnuplot.temp"
 if($species == 0) then

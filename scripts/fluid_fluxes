@@ -5,7 +5,7 @@
 #  "end species number"
 
 set nreg=`climb_and_look_for NREG`
-if (-e $nreg) then
+if (-s $nreg) then
   setenv NREG `cat $nreg`
   echo Set NREG to $NREG "(based on $nreg)"
 else
@@ -176,7 +176,7 @@ switch ($NREG)
 endsw
 
 set file=`climb_and_look_for SOLPS_FLUIDS`
-if (-e $file) then
+if (-s $file) then
   setenv SOLPS_FLUIDS "`cat $file`"
   echo Set SOLPS_FLUIDS to $SOLPS_FLUIDS "(based on $file)"
   set label=`cat $file | awk '{print $('$S')"--"$('$E')}'`
@@ -187,7 +187,7 @@ else
 endif
 echo $label
 
-if (-e b2mn.exe.dir/b2tallies.nc) then
+if (-s b2mn.exe.dir/b2tallies.nc) then
   set FILE=b2mn.exe.dir/b2tallies.nc
 else
   set FILE=b2tallies.nc

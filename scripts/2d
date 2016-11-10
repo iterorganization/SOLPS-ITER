@@ -14,7 +14,7 @@ endif
 set x=$1
 shift
 set source=b2mn.exe.dir/b2time.nc
-if (! -e $source) set source=b2time.nc
+if (! -s $source) set source=b2time.nc
 if($?GNUPLOT_TMP) then
   set tmpdir="$GNUPLOT_TMP/"
 else

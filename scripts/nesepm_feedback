@@ -6,7 +6,7 @@ setenv GNUPLOT_DATA $dfilename
 setenv PRINT_PLOT $pfilename
 set nreg=`climb_and_look_for NREG`
 set nnreg=`pipe_run.log | grep ^nnreg | head -1`
-if (-e $nreg) then
+if (-s $nreg) then
   setenv NREG `cat $nreg`
   echo Set NREG to $NREG "(based on $nreg)"
 else
@@ -14,7 +14,7 @@ else
   echo Set NREG to $NREG "(based on log file)"
 endif
 if (! $?NREG) set NREG = 4
-if (-e b2mn.dat) then
+if (-s b2mn.dat) then
   set R=`tr \'\" '  ' < b2mn.dat | grep b2mndr_rescale_neutrals_sources | awk 'BEGIN{R=1}{R=$2}END{print R}'`
 else
   set R = 1.0e-10

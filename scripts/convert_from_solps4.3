@@ -3,8 +3,8 @@
 echo "DEVICE = " $DEVICE
 echo "Converting shot number " $1
 [ -d $SOLPSWORK/$DEVICE ] || mkdir $SOLPSWORK/$DEVICE
-if (! -e $SOLPSWORK/$DEVICE/SOLPSTOP ) then
-  if (! -e $SOLPSWORK/SOLPSTOP ) then
+if (! -s $SOLPSWORK/$DEVICE/SOLPSTOP ) then
+  if (! -s $SOLPSWORK/SOLPSTOP ) then
     echo $SOLPSTOP > $SOLPSWORK/SOLPSTOP 
   endif
 endif
@@ -30,7 +30,7 @@ b2run b2yt
 cd ..
 cp convert/b2a?.dat baserun
 cp convert/b2y?.dat baserun
-[ -e convert/b2fgmtry.2 ] && cp convert/b2fgmtry.2 baserun/b2fgmtry || cp convert/b2fgmtry baserun
+[ -s convert/b2fgmtry.2 ] && cp convert/b2fgmtry.2 baserun/b2fgmtry || cp convert/b2fgmtry baserun
 cp convert/b2ag.prt baserun
 cp convert/b2fpardf convert/b2ah.prt baserun
 cp convert/fort.30 baserun

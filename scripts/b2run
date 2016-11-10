@@ -10,7 +10,7 @@
 if (${HOST_NAME} == "JET" && `basename $PWD` != "baserun") then
   echo Special action is being taken since we are running at JET
   foreach i (b2mn.dat b2fgmtry b2fpardf b2fstati b2frates)
-    if (! -e $i) then
+    if (! -s $i) then
       echo Setting up a link to ../baserun/$i
       ln -s ../baserun/$i
     endif
@@ -19,7 +19,7 @@ endif
 # end
 
 set solpstop=`climb_and_look_for SOLPSTOP`
-if (-e $solpstop) then
+if (-s $solpstop) then
   setenv SOLPSTOP "`cat $solpstop`"
   set RUNS=$SOLPSTOP/runs
 else
@@ -29,7 +29,7 @@ endif
 echo Using SOLPSTOP = $SOLPSTOP
 
 loop:
-  if(-e $RUNS/Makefile) goto endloop
+  if(-s $RUNS/Makefile) goto endloop
   if ("$RUNS" == "/") then
     echo Makefile not found
     exit

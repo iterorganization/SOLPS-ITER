@@ -5,20 +5,20 @@
 #  is read from standard input
 if ( "$1" == "") then
   set FILE=""
-else if (-e $1 || -e $1.gz) then
+else if (-s $1 || -s $1.gz) then
   set FILE=$1
-else if (-e $SOLPSTOP/data.local/meshes/$1 || -e $SOLPSTOP/data.local/meshes/$1.gz) then
+else if (-s $SOLPSTOP/data.local/meshes/$1 || -s $SOLPSTOP/data.local/meshes/$1.gz) then
   set FILE=$SOLPSTOP/data.local/meshes/$1
-else if (-e $SOLPSTOP/data/meshes/$1 || -e $SOLPSTOP/data/meshes/$1.gz) then
+else if (-s $SOLPSTOP/data/meshes/$1 || -s $SOLPSTOP/data/meshes/$1.gz) then
   set FILE=$SOLPSTOP/data/meshes/$1
 else
   echo Cannot find $1
   exit
 endif
 if (-X zcat) then
-    set ZCAT="zcat --force"
+  set ZCAT="zcat --force"
 else
-    set ZCAT="gzip --decompress --force --stdout"
+  set ZCAT="gzip --decompress --force --stdout"
 endif
 
 $ZCAT $FILE | \

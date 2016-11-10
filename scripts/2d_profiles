@@ -6,7 +6,7 @@ if ("X$2X" != "XX") set END=$2
 @ NUM = 1 + $END - $NUM
 echo $NUM $END
 set nreg=`climb_and_look_for NREG`
-if (-e $nreg) then
+if (-s $nreg) then
   setenv NREG `cat $nreg`
   echo Set NREG to $NREG "(based on $nreg)"
 else
@@ -28,7 +28,7 @@ else
   set tmpdir=""
 endif
 set source=b2mn.exe.dir/b2time.nc
-if (! -e $source) set source=b2time.nc
+if (! -s $source) set source=b2time.nc
 
 which nc2text > /dev/null && set no_nc2text=0 || set no_nc2text=1
 
@@ -51,7 +51,7 @@ foreach i ($usual $extra)
   set SUFFIXP=`echo $suffix | tr 'a-z' 'A-Z'`P
 #  echo $i $prefix $pr2fix $suffix $SUFFIX $SUFFIXP
   if ($no_nc2text == 1) then
-    if ($prefix == "f" && -e ds$SUFFIX) then
+    if ($prefix == "f" && -s ds$SUFFIX) then
       ncdump $source -f f -v "$i" | awk -v string="$i" 'BEGIN {ORS="";} /data:/{found1=1;next;} $0 ~ string {if (found1==1) {if (found2==1) print $1; else {print $3;found2=1;}}}' | \
       sed 's/,/ /g' | sed 's/;//g' | \
       awk -v nyy="$ny" -v j1=$jstart -v j2=$jend 'BEGIN{ORS=" "} {for (j=j1;j<=j2;j++) {for (i=1;i<=nyy;i++) {k=i+(j-1)*nyy; print $k};print "\n";}}' | head -n -1 | \
@@ -72,14 +72,14 @@ foreach i ($usual $extra)
       awk -v nyy="$ny" -v j1=$jstart -v j2=$jend 'BEGIN{ORS=" "} {for (j=j1;j<=j2;j++) {for (i=1;i<=nyy;i++) {k=i+(j-1)*nyy; print $k};print "\n";}}' | head -n -1 | \
       ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ds$suffix - >! ${tmpdir}$i.last10
     endif
-    if ($prefix == "f" && -e ds$SUFFIXP) then
+    if ($prefix == "f" && -s ds$SUFFIXP) then
       ncdump $source -f f -v "$i" | awk -v string="$i" 'BEGIN {ORS="";} /data:/{found1=1;next;} $0 ~ string {if (found1==1) {if (found2==1) print $1; else {print $3;found2=1;}}}' | \
       sed 's/,/ /g' | sed 's/;//g' | \
       awk -v nyy="$ny" -v j1=$jstart -v j2=$jend 'BEGIN{ORS=" "} {for (j=j1;j<=j2;j++) {for (i=1;i<=nyy;i++) {k=i+(j-1)*nyy; print $k};print "\n";}}' | head -n -1 | \
       ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ds$suffix - ds$SUFFIXP | awk '{print $1,$2/$3}' >! ${tmpdir}$i'P'.last10
     endif
   else
-    if ($prefix == "f" && -e ds$SUFFIX) then
+    if ($prefix == "f" && -s ds$SUFFIX) then
       nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ds$suffix - ds$SUFFIX | awk '{print $1,$2/$3}' >! ${tmpdir}$i.last10
     else if ($prefix == "t" && $pr2fix != "p") then
       nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1/1.602176565e-19}' | paste ds$suffix - >! ${tmpdir}$i.last10
@@ -88,7 +88,7 @@ foreach i ($usual $extra)
     else
       nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ds$suffix - >! ${tmpdir}$i.last10
     endif
-    if ($prefix == "f" && -e ds$SUFFIXP) then
+    if ($prefix == "f" && -s ds$SUFFIXP) then
       nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ds$suffix - ds$SUFFIXP | awk '{print $1,$2/$3}' >! ${tmpdir}$i'P'.last10
     endif
   endif

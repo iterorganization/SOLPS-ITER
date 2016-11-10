@@ -1,5 +1,5 @@
 #! /bin/tcsh -f
-if (-e run.log) then
+if (-s run.log) then
   tail -100000 run.log >! tmp.run.log
 else
   if (-X zcat) then

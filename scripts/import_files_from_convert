@@ -1,6 +1,6 @@
 #! /bin/ksh
 
-[ -e ../convert/b2yt.files ] && {
+[ -s ../convert/b2yt.files ] && {
   echo "First copying the files modified by b2yt"
   files="`cat ../convert/b2yt.files | sed -e 's:../::' | awk.transpose`"
   for fn in $files
@@ -10,48 +10,48 @@
     cp -iv ../convert/$origin $destination
   done
   echo "Now copying unmodified files"
-  [ -e ../convert/b2fgmtry.old ] && {
-    [ -e ../convert/b2ag.dat.2 ] || {
-      [ -e ../convert/b2ag.dat ] && cp -uv ../convert/b2ag.dat .
+  [ -s ../convert/b2fgmtry.old ] && {
+    [ -s ../convert/b2ag.dat.2 ] || {
+      [ -s ../convert/b2ag.dat ] && cp -uv ../convert/b2ag.dat .
     }
-    [ -e ../convert/b2fgmtry ] && cp -uv ../convert/b2fgmtry .
-    [ -e ../convert/fort.30 ] && cp -uv ../convert/fort.30 .
-    [ -e ../convert/fort.33 ] && cp -uv ../convert/fort.33 .
-    [ -e ../convert/fort.34 ] && cp -uv ../convert/fort.34 .
-    [ -e ../convert/fort.35 ] && cp -uv ../convert/fort.35 .
+    [ -s ../convert/b2fgmtry ] && cp -uv ../convert/b2fgmtry .
+    [ -s ../convert/fort.30 ] && cp -uv ../convert/fort.30 .
+    [ -s ../convert/fort.33 ] && cp -uv ../convert/fort.33 .
+    [ -s ../convert/fort.34 ] && cp -uv ../convert/fort.34 .
+    [ -s ../convert/fort.35 ] && cp -uv ../convert/fort.35 .
   }
-  [ -e ../baserun/b2fgmtry ] || {
-     [ -e ../convert/b2ag.dat.2 ] || {
-       [ -e ../convert/b2fgmtry ] && cp -uv ../convert/b2fgmtry .
-       [ -e ../convert/fort.30 ] && cp -uv ../convert/fort.30 .
-       [ -e ../convert/fort.33 ] && cp -uv ../convert/fort.33 .
-       [ -e ../convert/fort.34 ] && cp -uv ../convert/fort.34 .
-       [ -e ../convert/fort.35 ] && cp -uv ../convert/fort.35 .
+  [ -s ../baserun/b2fgmtry ] || {
+     [ -s ../convert/b2ag.dat.2 ] || {
+       [ -s ../convert/b2fgmtry ] && cp -uv ../convert/b2fgmtry .
+       [ -s ../convert/fort.30 ] && cp -uv ../convert/fort.30 .
+       [ -s ../convert/fort.33 ] && cp -uv ../convert/fort.33 .
+       [ -s ../convert/fort.34 ] && cp -uv ../convert/fort.34 .
+       [ -s ../convert/fort.35 ] && cp -uv ../convert/fort.35 .
      }
   }
-  [ -e ../baserun/fort.33 ] || cp -uv ../convert/fort.33 ../baserun
-  [ -e ../baserun/fort.34 ] || cp -uv ../convert/fort.34 ../baserun
-  [ -e ../baserun/fort.35 ] || cp -uv ../convert/fort.35 ../baserun
-  [ -e ../baserun/b2fpardf ] || {
-    [ -e ../convert/b2ah.dat.2 ] || {
-      [ -e ../convert/b2fpardf ] && cp -uv ../convert/b2fpardf .
+  [ -s ../baserun/fort.33 ] || cp -uv ../convert/fort.33 ../baserun
+  [ -s ../baserun/fort.34 ] || cp -uv ../convert/fort.34 ../baserun
+  [ -s ../baserun/fort.35 ] || cp -uv ../convert/fort.35 ../baserun
+  [ -s ../baserun/b2fpardf ] || {
+    [ -s ../convert/b2ah.dat.2 ] || {
+      [ -s ../convert/b2fpardf ] && cp -uv ../convert/b2fpardf .
     }
   }
-  [ -e ../baserun/b2frates ] || {
-    [ -e ../convert/b2ar.dat.2 ] || {
-      [ -e ../convert/b2frates ] && cp -uv ../convert/b2frates .
+  [ -s ../baserun/b2frates ] || {
+    [ -s ../convert/b2ar.dat.2 ] || {
+      [ -s ../convert/b2frates ] && cp -uv ../convert/b2frates .
     }
   }
-  [ -e ../convert/b2.*.parameters ] && cp -uv ../convert/b2.*.parameters .
-  [ -e ../convert/b2.transport.inputfile ] && cp -uv ../convert/b2.transport.inputfile .
-  [ -e ../convert/b2.sources.profile ] && cp -uv ../convert/b2.sources.profile .
-  [ -e ../convert/fort.44 ] && cp -uv ../convert/fort.44 .
-  [ -e ../convert/fort.15 ] && cp -uv ../convert/fort.15 .
-  [ -e ../convert/fort.14 ] && cp -uv ../convert/fort.14 .
-  [ -e ../convert/fort.13 ] && cp -uv ../convert/fort.13 .
-  [ -e ../convert/fort.12 ] && cp -uv ../convert/fort.12 .
-  [ -e ../convert/fort.11 ] && cp -uv ../convert/fort.11 .
-  [ -e ../convert/fort.10 ] && cp -uv ../convert/fort.10 .
+  [ -s ../convert/b2.*.parameters ] && cp -uv ../convert/b2.*.parameters .
+  [ -s ../convert/b2.transport.inputfile ] && cp -uv ../convert/b2.transport.inputfile .
+  [ -s ../convert/b2.sources.profile ] && cp -uv ../convert/b2.sources.profile .
+  [ -s ../convert/fort.44 ] && cp -uv ../convert/fort.44 .
+  [ -s ../convert/fort.15 ] && cp -uv ../convert/fort.15 .
+  [ -s ../convert/fort.14 ] && cp -uv ../convert/fort.14 .
+  [ -s ../convert/fort.13 ] && cp -uv ../convert/fort.13 .
+  [ -s ../convert/fort.12 ] && cp -uv ../convert/fort.12 .
+  [ -s ../convert/fort.11 ] && cp -uv ../convert/fort.11 .
+  [ -s ../convert/fort.10 ] && cp -uv ../convert/fort.10 .
   touch b2fstati
 } || {
   echo 'Did not find b2yt.files list. Exiting ...'

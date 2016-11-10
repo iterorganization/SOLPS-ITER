@@ -2,7 +2,7 @@
 #! /usr/bin/env tcsh
 
 set solpstop=`climb_and_look_for SOLPSTOP`
-if (-e $solpstop) then
+if (-s $solpstop) then
   setenv SOLPSTOP "`cat $solpstop`"
   set RUNS=$SOLPSTOP/runs
 else
@@ -12,7 +12,7 @@ endif
 echo Using SOLPSTOP = $SOLPSTOP
 
 loop:
-  if(-e $RUNS/Makefile.b2sxdr) goto endloop
+  if(-s $RUNS/Makefile.b2sxdr) goto endloop
   echo $RUNS
   if ("$RUNS" == "/") then
     echo Makefile.b2sxdr not found

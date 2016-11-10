@@ -2,7 +2,7 @@
 # determine if b2fstate is OK
 
 set target=b2fstati
-if (!(-e $target)) set target=../baserun/b2fstati
+if (!(-s $target)) set target=../baserun/b2fstati
 
 if (-e b2fstate) then
   set l_i=`wc -l $target  | awk '{print $1}'`

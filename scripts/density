@@ -1,6 +1,6 @@
 #! /bin/csh -f
 set nreg=`climb_and_look_for NREG`
-if (-e $nreg) then
+if (-s $nreg) then
   setenv NREG `cat $nreg`
   echo Set NREG to $NREG "(based on $nreg)"
 else
@@ -11,7 +11,7 @@ endif
 if (! $?NREG) set NREG=4
 @ NREGP = $NREG + 1
 set solps_fluids=`climb_and_look_for SOLPS_FLUIDS`
-if (-e $solps_fluids) then
+if (-s $solps_fluids) then
   setenv SOLPS_FLUIDS `cat $solps_fluids`
   echo Set SOLPS_FLUIDS to $SOLPS_FLUIDS "(based on $solps_fluids)"
 else
