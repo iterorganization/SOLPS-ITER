@@ -2,14 +2,14 @@ EQUIV4 = ${SOLPS_CPP}
 EQUIV5 = ${SOLPS_CPP} ${USE_EIRENE} -Dsdot=ddot -Dsasum=dasum -Dsaxpy=daxpy -Dsscal=dscal -Dsnrm2=dnrm2 -Dscopy=dcopy -Dsgbtrf=dgbtrf -Dsgbtrs=dgbtrs -DGRREAL=4 -DNO_PROCESS -DPSR
 DEFINES += -DS2SUM=D2SUM -DS2MIN=D2MIN -DSASUM=DASUM -DSAXPY=DAXPY -DSDOT=DDOT -DSSCAL=DSCAL -DS2ASUM=D2ASUM -DS2SCAL=D2SCAL -DS2DOT=D2DOT -DSCOPY=DCOPY -DS2COPY=D2COPY
 
-CPP = /lib/cpp
+CPP = /lib/cpp -traditional
 CPP4OPTS = -P -I${srcdir} ${EQUIV4}
 CPP5OPTS = -P -I${srcdir} ${EQUIV5}
 SED = sed s:\#PREC\#:d:g
 LINK_MOD = yes
 
 FC = gfortran
-FCOPTS = -O3 -v -ff90
+FCOPTS = -O3
 
 DBLFC = ${FC}
 DBLOPTION =

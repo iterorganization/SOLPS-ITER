@@ -6,6 +6,9 @@ ifndef LD_MSCL
 endif
 
 FC	     = gfortran
+ifdef USE_MPI
+FC = mpif90
+endif
 ifdef SOLPS_DEBUG
 FFLAGS	 = -g
 else

@@ -29,12 +29,14 @@
 # Remove -DMDSPLUS from SOLPS_CPP
 #
 
-       NCDIR ?= /home/ank/B2E/solps4.0/src/lib/linux.Intel_EM
+       NCDIR ?= /home/aap/lib/libnetcdff/lib
    MSCL_ROOT ?= /home/aap/mscl/linux.gfortran
        H5DIR ?=
      GR_ROOT ?= /home/aap/lib
     GLI_HOME ?= /home/aap/lib
-  NCARG_ROOT ?= /home/aap/ncarg-build/lib
+  NCARG_ROOT ?= /home/aap/lib/libncar/lib
+  CAIRO_ROOT ?= /home/app/lib/libcairo/lib
+  FREE2_ROOT ?= /home/app/lib/libft/lib
       NAGDIR ?= /home/aap/lib
  MDSPLUS_DIR ?=
        MPDIR ?= /usr
@@ -44,7 +46,7 @@
 # Variables for linking
 #
 
-LD_NETCDF  = -L${NCDIR} -lnetcdf
+LD_NETCDF  = -L${NCDIR} -lnetcdf -lnetcdff
 LD_MSCL    = -L${MSCL_ROOT} -lmscl
 LD_GR      = -L${GR_ROOT} -lgr
 LD_GKS     = -L${GLI_HOME} -lgks -lgfortran
@@ -52,7 +54,7 @@ LD_NCARG   = -L${NCARG_ROOT} -lncarg -lncarg_gks -lncarg_c -L/usr/X11R6/lib64 -l
 LD_NAG     = -L${NAGDIR} -llapack -lblas
 #LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
-LD_MPI     = -L${MPDIR}/lib -lmpi
+LD_MPI     = -L${MPDIR} -lmpi
 
 
 #
