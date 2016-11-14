@@ -379,6 +379,15 @@
 					<type>integer</type>
 					<category>Physics</category>
 				</param>
+				<param>
+					<name>b2mndr_b2time</name>
+					<description>
+						Specifies the number of timesteps between writes of the time-dependent file. If b2time.gt.0, always writes out on the last timestep.
+					</description>
+					<default>1</default>
+					<type>integer</type>
+					<category>Output</category>
+				</param>
 				<param> 
 					<name>b2mndr_cdfmovietim</name>
 					<description>
