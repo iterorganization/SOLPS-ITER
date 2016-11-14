@@ -156,6 +156,8 @@ user/prousr.F
 assistent/prttal.F 
 plotting/pside.F 
 mathematic/ranf.F 
+mathematic/ranget.F
+mathematic/ranset.F
 file-handling/rdtrim.F 
 file-handling/read_photdbk.F 
 assistent/readtl.F 
