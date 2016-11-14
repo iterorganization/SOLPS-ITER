@@ -100,6 +100,8 @@ eirene:
 eirene_mpi:
 	cd modules/Eirene; ${MAKE} USE_MPI=-DUSE_MPI
 
+eirene_nox:
+	cd modules/Eirene; ${MAKE} LD_GR="" LD_GKS=""
 
 b25:
 	cd modules/B2.5; ${MAKE}
@@ -110,6 +112,9 @@ b25_all:
 
 b25_mpi:
 	cd modules/B2.5; ${MAKE} USE_MPI=-DUSE_MPI
+
+b25_nox:
+	cd modules/B2.5; ${MAKE} NOPLOT
 
 b25_ig:
 	cd modules/B2.5; ${MAKE} USE_IMPGYRO=-DUSE_IMPGYRO

@@ -43,7 +43,7 @@ endif
 ifeq ($(strip $(LINK_MOD)),)
 	@- if [ -f $*.${MOD} ] ; then /bin/mv $*.${MOD} ${OBJDIR}/ ; fi
 else
-	@- [ -f $*.${MOD} ] && [ ! -L $*.${MOD} ] && /bin/mv $*.${MOD} ${OBJDIR}/ && /bin/ln -s ${OBJDIR}/$*.${MOD} .
+	@- [ -f $*.${MOD} ] && [ ! -L $*.${MOD} ] && /bin/mv $*.${MOD} ${OBJDIR}/ && /bin/ln -s ${OBJDIR}/$*.${MOD} . || echo > /dev/null
 endif
 
 #!!!Local Variables:

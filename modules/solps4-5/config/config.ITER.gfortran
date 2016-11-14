@@ -13,7 +13,7 @@ SED = sed s:\#PREC\#:d:g
 LINK_MOD = yes
 
 FC = gfortran
-FCOPTS = -O3
+FCOPTS = -O3 -fdefault-real-8
 
 DBLFC = ${FC}
 DBLOPTION =
@@ -26,7 +26,7 @@ OBJDEST = -J${OBJDIR}
 BLD = ar rcv
 
 GRLIBES = ${LD_NCARG}
-LDLIBES = ${LD_NAG} ${LD_NETCDF} ${LD_MSCL}
+LDLIBES = ${LD_NAG} ${LD_NETCDF} ${LD_MSCL} -L/archive/1/kukusha/backup/home/wiesens/B2E/solps4.3/src/lib/EIRLIB/libs/bin -leirbase -limf -lm
 
 LD = gfortran
 LDOPTS =

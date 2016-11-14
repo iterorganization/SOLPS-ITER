@@ -109,7 +109,7 @@ EXCLUDELIST = ${patsubst %.exe, %.o, ${PROG_XR}}
 XREXE = ${patsubst %.exe, ${OBJDIR}/%.exe, ${PROG_XR}}
 XROBJ = ${patsubst %.exe, ${OBJDIR}/%.o, ${PROG_XR}}
 
-XREXTRA=${OBJDIR}/b2_4to5.o ${OBJDIR}/xerset_5.o ${OBJDIR}/myblass.o
+XREXTRA=${OBJDIR}/b2_4to5.o ${OBJDIR}/xerset_5.o
 MNEXTRA=
 
 .PHONY: DEFAULT ALL clean depend listobj tags links
@@ -320,7 +320,7 @@ ${OBJDIR}/b2_4to5.o: ${OBJDIR}/eirmod_parmmod.${MOD} ${OBJDIR}/braeir.${MOD} ${O
 
 ${OBJDIR}/b2mod_b2_to_astra.o: ${OBJDIR}/eirmod_extrab25.${MOD} 
 
-${OBJDIR}/b2mod_neutrals_namelist.o: ${OBJDIR}/eirmod_parmmod.${MOD} ${OBJDIR}/braeir.${MOD} ${OBJDIR}/eirdiag.${MOD}
+${OBJDIR}/b2mod_neutrals_namelist.o: ${OBJDIR}/eirmod_parmmod.${MOD} ${OBJDIR}/parmmod.${MOD} ${OBJDIR}/braeir.${MOD} ${OBJDIR}/eirdiag.${MOD} ${OBJDIR}/eirmod_extrab25.${MOD}
 
 ${OBJDIR}/eirmod_parmmod.o: 
 	ln -sf ${OBJDIR}/parmmod.o $@
