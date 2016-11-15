@@ -41,3 +41,4 @@ setenv FC gfortran
 # Other environment variables
 module load solps-gui
 setenv LD_PRELOAD /usr/lib64/libfontconfig.so.1
+setenv SOLPSWORK /work/projects/solps-iter/$USER
