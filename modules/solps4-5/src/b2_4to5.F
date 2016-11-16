@@ -4,14 +4,14 @@
 
       real (kind=R8), allocatable ::
      *  fch_4(:,:,:),  fch_32_4(:,:,:), fch_52_4(:,:,:), fch_p_4(:,:,:),
-     *  fhe_4(:,:,:),  fhi_4(:,:,:), fna_4(:,:,:,:),  
-     *  fne_4(:,:,:),  na_4(:,:,:),  po_4(:,:), fchdia_4(:,:,:),  
+     *  fhe_4(:,:,:),  fhi_4(:,:,:), fna_4(:,:,:,:),
+     *  fne_4(:,:,:),  na_4(:,:,:),  po_4(:,:), fchdia_4(:,:,:),
      *  te_4(:,:),  ti_4(:,:),  ua_4(:,:,:),  uadia_4(:,:,:,:),
      *  mi_4(:), zi_4(:),
      *  crx_4(:,:,:), cry_4(:,:,:), bb_4(:,:,:),
      *  parvis_4(:), travis_4(:), difni_4(:), difpr_4(:), vconv_4(:),
      *  conpar_4(:,:,:), mompar_4(:,:,:), enepar_4(:,:), enipar_4(:,:),
-     *  phiin_4(:), phiout_4(:), 
+     *  phiin_4(:), phiout_4(:),
      *  recyc_4(:,:), userfluxparm_4(:,:), gpfc_4(:,:),
      *  niiso_4(:),
      *  rf_neut_4(:), dtee_4(:), dtei_4(:), dtco_4(:,:), dtmo_4(:,:),
@@ -22,28 +22,28 @@
 
       real (kind=R8) ::
      *  kxe_4, kxi_4, kye_4, kyi_4, flim_4, flimi_4, flimv_4, feqp_4,
-     *  fudgen_4, fudgeb_4, 
-     *  fudgeten_4, fudgeteb_4, fudgetin_4, fudgetib_4, 
+     *  fudgen_4, fudgeb_4,
+     *  fudgeten_4, fudgeteb_4, fudgetin_4, fudgetib_4,
      *  starting_time_4, dflaglnlam_4, neutral_diflimit_4,
      *  gammai_4,
-     *  dt_eirene_fudge_4, eirene_step_cpu_4, 
+     *  dt_eirene_fudge_4, eirene_step_cpu_4,
      *  volrecstart_4, volrecinc_4, volrecwt_4,
      *  teiso_4, tiiso_4,
-     *  cimpef_4, 
+     *  cimpef_4,
      *  rxfi_4, dti_4, dtc_4, dtmin_4, dtmax_4, cpustop_4,
      *  res_limit_nstage_4, res_limit_job_4,
-     *  maxconverge_decrease_timestep_4, 
+     *  maxconverge_decrease_timestep_4,
      *  maxconverge_increase_timestep_4, time_factor_required_4,
      *  fusion_power_4, Spmp_He_to_D_4, Spmp_nom_4,
      *  sepden_4, voldesired_4, volrecfac_4,
      *  time_4
 
-      integer :: 
+      integer ::
      *  nx_4, ny_4, ns_4, nspecies_4, nncut_4, nniso_4, nlmpgs_4,
      *  dflagn_4, dflagte_4, dflagti_4, dflagkxe_4, dflagkxi_4,
      *  dflagvconv_4, ixref_4, iyref_4,
      *  nbc_4, ncbs_4,
-     *  nstrae_4, nstrai_4, nfla_4, eirene_mod_4, 
+     *  nstrae_4, nstrai_4, nfla_4, eirene_mod_4,
      *  ltime_4, lstime_4, lmovie_4, nltrsol_4, jxi_4, jxa_4,
      *  nstepprint_4, nstepout_4,
      *  impflag_4,
@@ -56,16 +56,16 @@
 
       integer, allocatable ::
      *  nfluids_4(:),
-     *  bcpos_4(:), bcstart_4(:), bcend_4(:), 
+     *  bcpos_4(:), bcstart_4(:), bcend_4(:),
      *  bccon_4(:,:), bcmom_4(:,:), bcene_4(:), bceni_4(:), lcbs_4(:),
      *  rcpos_4(:), rcstart_4(:), rcend_4(:), lstrascl_4(:,:),
      *  lmolscl_4(:), ksns_4(:), nspzi_4(:), nspze_4(:),
-     *  lcns_4(:), lsns_4(:), ltns_4(:), msns_4(:,:), mlcmp_4(:,:), 
+     *  lcns_4(:), lsns_4(:), ltns_4(:), msns_4(:,:), mlcmp_4(:,:),
      *  debug_flags_4(:),
      *  nxcut1_4(:), nxcut2_4(:), nycut1_4(:), nycut2_4(:),
      *  nxiso1_4(:), nxiso2_4(:), nyiso1_4(:), nyiso2_4(:),
-     *  lhetrgts_4(:), l_h_mol_4(:), 
-     *  lpfrgrp_4(:), ipfrgrp_4(:), jpfrgrp_4(:), 
+     *  lhetrgts_4(:), l_h_mol_4(:),
+     *  lpfrgrp_4(:), ipfrgrp_4(:), jpfrgrp_4(:),
      *  lntrgrp_4(:), intrgrp_4(:), jntrgrp_4(:),
      *  ffb_cntr_4(:), ffb_strata_4(:), cfb_cntr_4(:)
 
@@ -82,8 +82,8 @@
 
       character*1, allocatable :: bcchar_4(:), crcstra_4(:)
 
-      logical lvis21_4, ni_driven_4, no_thermal_force_4, 
-     *  lbndusr_4, lfeedback_4, 
+      logical lvis21_4, ni_driven_4, no_thermal_force_4,
+     *  lbndusr_4, lfeedback_4,
      *  lreitr_4, lfirstflight_4,
      *  lhalpha_4, lvib_4,
      *  autotimestep_4, scale_He_4, print_isat_4,
@@ -105,6 +105,7 @@
 
       subroutine b2conv_plasma_1
       use braeir
+      use ceirsrt
       implicit none
 #     include <DIMENSIONS.F>
 #     include <KOPPLDIM.F>
@@ -120,14 +121,13 @@
 #     include <COMGEO.F>
 #     include <CCUT.F>
 #     include <COMUSER.F>
-#     include <EIRSRT.F>
 #     include <CBRAEIR.F>
 
       integer is
       external subini, subend
 
-      call subini('b2convp1')  
-      
+      call subini('b2convp1')
+
       nx_4 = nx
       ny_4 = ny
       ns_4 = ns
@@ -191,18 +191,18 @@
       allocate(pw2_cnv_4(1:ns_4))
       allocate(sps_id_4(1:n_spcsrf_4))
 
-      fhe_4(-1:nx_4,-1:ny_4,0) = FEEX(0:nx_4+1,0:ny_4+1)         
-      fhe_4(-1:nx_4,-1:ny_4,1) = FEEY(0:nx_4+1,0:ny_4+1)         
-      fhi_4(-1:nx_4,-1:ny_4,0) = FEIX(0:nx_4+1,0:ny_4+1)         
-      fhi_4(-1:nx_4,-1:ny_4,1) = FEIY(0:nx_4+1,0:ny_4+1)         
-      fch_4(-1:nx_4,-1:ny_4,0) = CC(0:nx_4+1,0:ny_4+1)         
-      fch_4(-1:nx_4,-1:ny_4,1) = DD(0:nx_4+1,0:ny_4+1)         
-      fch_p_4(-1:nx_4,-1:ny_4,0) = CP(0:nx_4+1,0:ny_4+1)         
-      fch_p_4(-1:nx_4,-1:ny_4,1) = 0.0_R8   
-      fchdia_4(-1:nx_4,-1:ny_4,0) = CD(0:nx_4+1,0:ny_4+1)         
-      fchdia_4(-1:nx_4,-1:ny_4,1) = 0.0_R8        
-      fna_4(-1:nx_4,-1:ny_4,0,1:ns_4) = FNIX(0:nx_4+1,0:ny_4+1,1:ns_4)         
-      fna_4(-1:nx_4,-1:ny_4,1,1:ns_4) = FNIY(0:nx_4+1,0:ny_4+1,1:ns_4) 
+      fhe_4(-1:nx_4,-1:ny_4,0) = FEEX(0:nx_4+1,0:ny_4+1)
+      fhe_4(-1:nx_4,-1:ny_4,1) = FEEY(0:nx_4+1,0:ny_4+1)
+      fhi_4(-1:nx_4,-1:ny_4,0) = FEIX(0:nx_4+1,0:ny_4+1)
+      fhi_4(-1:nx_4,-1:ny_4,1) = FEIY(0:nx_4+1,0:ny_4+1)
+      fch_4(-1:nx_4,-1:ny_4,0) = CC(0:nx_4+1,0:ny_4+1)
+      fch_4(-1:nx_4,-1:ny_4,1) = DD(0:nx_4+1,0:ny_4+1)
+      fch_p_4(-1:nx_4,-1:ny_4,0) = CP(0:nx_4+1,0:ny_4+1)
+      fch_p_4(-1:nx_4,-1:ny_4,1) = 0.0_R8
+      fchdia_4(-1:nx_4,-1:ny_4,0) = CD(0:nx_4+1,0:ny_4+1)
+      fchdia_4(-1:nx_4,-1:ny_4,1) = 0.0_R8
+      fna_4(-1:nx_4,-1:ny_4,0,1:ns_4) = FNIX(0:nx_4+1,0:ny_4+1,1:ns_4)
+      fna_4(-1:nx_4,-1:ny_4,1,1:ns_4) = FNIY(0:nx_4+1,0:ny_4+1,1:ns_4)
       na_4(-1:nx_4,-1:ny_4,1:ns_4) = NI(0:nx_4+1,0:ny_4+1,1:ns_4)
       te_4(-1:nx_4,-1:ny_4) = TE(0:nx_4+1,0:ny_4+1)
       ti_4(-1:nx_4,-1:ny_4) = TI(0:nx_4+1,0:ny_4+1)
@@ -230,10 +230,10 @@ cxpb
       cry_4(-1:nx_4,-1:ny_4,2) = BZ(0:nx_4+1,0:ny_4+1,3)
       crx_4(-1:nx_4,-1:ny_4,3) = BR(0:nx_4+1,0:ny_4+1,2)
       cry_4(-1:nx_4,-1:ny_4,3) = BZ(0:nx_4+1,0:ny_4+1,2)
-      bb_4(-1:nx_4,-1:ny_4,0) = 
+      bb_4(-1:nx_4,-1:ny_4,0) =
      .  BB(0:nx_4+1,0:ny_4+1) * PIT(0:nx_4+1,0:ny_4+1)
       bb_4(-1:nx_4,-1:ny_4,1) = 0.0_R8
-      bb_4(-1:nx_4,-1:ny_4,2) = 
+      bb_4(-1:nx_4,-1:ny_4,2) =
      .  BB(0:nx_4+1,0:ny_4+1) * SQRT(1.0_R8-PIT(0:nx_4+1,0:ny_4+1)**2)
       bb_4(-1:nx_4,-1:ny_4,3) = BB(0:nx_4+1,0:ny_4+1)
       nxcut1_4(1:nncut_4) = nxcut1(1:nncut_4)
@@ -282,8 +282,8 @@ cxpb
 
       call subend()
       return
-      end subroutine b2conv_plasma_1    
-      
+      end subroutine b2conv_plasma_1
+
       subroutine b2conv_input_1
       use braeir
      , , only: chemical_sputter_yield, fchar_chemical,
@@ -317,8 +317,8 @@ cxpb
       integer is, it, k
       external subini, subend
 
-      call subini('b2convi1')  
-      
+      call subini('b2convi1')
+
       nfla_4 = nfla
       nlmpgs_4 = nlmpgs
 
@@ -469,7 +469,7 @@ cxpb
       eirene_mod_4 = eirene_mod
       userfluxparm_4(1:nstrai_4,1:2) = userfluxparm(1:nstrai_4,1:2)
       lfirstflight_4 = lfirstflight .and. lfluid.gt.0
-      lstrascl_4(1:nstrai_4,1:nspecies_4) = 
+      lstrascl_4(1:nstrai_4,1:nspecies_4) =
      .  lstrascl(1:nstrai_4,1:nspecies_4)
       l_neutrad_4 = l_neutrad
       l_neutflux_4 = l_neutflux
@@ -483,14 +483,12 @@ cxpb
       volrecstart_4 = volrecstart
       volrecinc_4 = volrecinc
       volrecwt_4 = volrecwt
-#ifndef B25_EIRENE
 #ifndef NO_B2_CHEM_SPUT
       chemical_sputter_yield_4 = chemical_sputter_yield
       fchar_chemical_4 = fchar_chemical
       igass_chemical_4 = igass_chemical
       itsput_chemical_4 = itsput_chemical
       issput_chemical_4 = issput_chemical
-#endif
 #endif
 *   ..diagnostics
       ltime_4 = ltime
@@ -595,8 +593,8 @@ cxpb
 
       call subend()
       return
-      end subroutine b2conv_input_1    
-      
+      end subroutine b2conv_input_1
+
       subroutine b2conv_plasma_2(nx,ny,ns,lblgm)
       use b2mod_types
       use b2mod_geo
@@ -626,7 +624,7 @@ cxpb
       integer ixl,ixr,ireg
       integer, allocatable :: zone(:)
 
-      external subini, subend, xertst 
+      external subini, subend, xertst
       external b2xpne, b2xpni, b2xppb, b2xpfe, b2xpfi, b2agmt
       external init_region
       real (kind=R8) :: rratio
@@ -638,7 +636,7 @@ cxpb
       ny = ny_4
       ns = ns_4 + nspecies_4
       nspecies = nspecies_4
-      
+
       call xertst(1.le.nx.and.nx.le.DEF_NXD,
      . 'Check size of NX !')
       call xertst(1.le.ny.and.ny.le.DEF_NYD,
@@ -667,10 +665,10 @@ cxpb
         end do
         k=k+1
       end do
-      write(*,'(a,50i5)') 'ifl = ',ifl      
+      write(*,'(a,50i5)') 'ifl = ',ifl
       write(*,'(a,50i5)') 'jfl = ',jfl
-      write(*,'(a,50i5)') 'is1 = ',is1 
-      write(*,'(a,50i5)') 'isp = ',isp     
+      write(*,'(a,50i5)') 'is1 = ',is1
+      write(*,'(a,50i5)') 'isp = ',isp
       lblgm = label_4
 
       call alloc_b2mod_geo(nx,ny)
@@ -731,12 +729,12 @@ c Fill out b2mod_indirect arrays
       do ix = -1, nx
         do iy = -1, ny
           do ic = 1, nncut
-            if (ix.eq.leftcut(ic)-1 .and. 
+            if (ix.eq.leftcut(ic)-1 .and.
      &          iy.ge.bottomcut(ic) .and. iy.lt.topcut(ic)) then
               rightix(ix,iy)=rightcut(ic)
               leftix(rightcut(ic),iy)=leftcut(ic)-1
             endif
-            if (ix.eq.leftcut(ic) .and. 
+            if (ix.eq.leftcut(ic) .and.
      &          iy.ge.bottomcut(ic) .and. iy.lt.topcut(ic)) then
               leftix(ix,iy)=rightcut(ic)-1
               rightix(rightcut(ic)-1,iy)=leftcut(ic)
@@ -813,12 +811,12 @@ c Fill out b2mod_indirect arrays
           fchdia(ix,iy,0) = fchdia_4(leftix(ix,iy),leftiy(ix,iy),0)
           do i=0,ns-1
             if(ifl(i).ne.0) then
-              fna(ix,iy,0,i) = 
+              fna(ix,iy,0,i) =
      .         fna_4(leftix(ix,iy),leftiy(ix,iy),0,ifl(i))
             else
               fna(ix,iy,0,i) = 0.0_R8
             endif
-          enddo       
+          enddo
         else
           fhe(ix,iy,0) = 0.0_R8
           fhi(ix,iy,0) = 0.0_R8
@@ -835,12 +833,12 @@ c Fill out b2mod_indirect arrays
           fchdia(ix,iy,1) = fchdia_4(bottomix(ix,iy),bottomiy(ix,iy),1)
           do i=0,ns-1
             if(ifl(i).ne.0) then
-              fna(ix,iy,1,i) = 
+              fna(ix,iy,1,i) =
      .         fna_4(bottomix(ix,iy),bottomiy(ix,iy),1,ifl(i))
             else
               fna(ix,iy,1,i) = 0.0_R8
             endif
-          enddo       
+          enddo
         else
           fhe(ix,iy,1) = 0.0_R8
           fhi(ix,iy,1) = 0.0_R8
@@ -852,29 +850,29 @@ c Fill out b2mod_indirect arrays
        enddo
       enddo
 
-      te(-1:nx,-1:ny) = te_4(-1:nx,-1:ny)       
-      ti(-1:nx,-1:ny) = ti_4(-1:nx,-1:ny)  
-      po(-1:nx,-1:ny) = po_4(-1:nx,-1:ny)  
-      bb(-1:nx,-1:ny,0:3) = bb_4(-1:nx,-1:ny,0:3)   
-      crx(-1:nx,-1:ny,0:3) = crx_4(-1:nx,-1:ny,0:3)   
-      cry(-1:nx,-1:ny,0:3) = cry_4(-1:nx,-1:ny,0:3)   
+      te(-1:nx,-1:ny) = te_4(-1:nx,-1:ny)
+      ti(-1:nx,-1:ny) = ti_4(-1:nx,-1:ny)
+      po(-1:nx,-1:ny) = po_4(-1:nx,-1:ny)
+      bb(-1:nx,-1:ny,0:3) = bb_4(-1:nx,-1:ny,0:3)
+      crx(-1:nx,-1:ny,0:3) = crx_4(-1:nx,-1:ny,0:3)
+      cry(-1:nx,-1:ny,0:3) = cry_4(-1:nx,-1:ny,0:3)
       do i=0,ns-1
         if(ifl(i).ne.0) then
-          na(-1:nx,-1:ny,i) = na_4(-1:nx,-1:ny,ifl(i))       
-          ua(-1:nx,-1:ny,i) = ua_4(-1:nx,-1:ny,ifl(i)) 
-          uadia(-1:nx,-1:ny,0:1,i) = uadia_4(-1:nx,-1:ny,0:1,ifl(i)) 
+          na(-1:nx,-1:ny,i) = na_4(-1:nx,-1:ny,ifl(i))
+          ua(-1:nx,-1:ny,i) = ua_4(-1:nx,-1:ny,ifl(i))
+          uadia(-1:nx,-1:ny,0:1,i) = uadia_4(-1:nx,-1:ny,0:1,ifl(i))
           am(i) = nint(mi_4(ifl(i))/mp)
           zamin(i) = zi_4(ifl(i))
           zamax(i) = zi_4(ifl(i))
           is_neutral(i) = .false.
         else
-          na(-1:nx,-1:ny,i) = 1.0e8_R8   
+          na(-1:nx,-1:ny,i) = 1.0e8_R8
           ua(-1:nx,-1:ny,i) = 0.0_R8
           uadia(-1:nx,-1:ny,0:1,i) = 0.0_R8
           am(i) = nint(mi_4(ifl(i+1))/mp)
-          zamin(i) = 0.0_R8            
-          zamax(i) = 0.0_R8 
-          is_neutral(i) = .true.           
+          zamin(i) = 0.0_R8
+          zamax(i) = 0.0_R8
+          is_neutral(i) = .true.
         end if
         zn(i) = nfluids_4(jfl(i))
         rza(-1:nx,-1:ny,i) = (zamin(i)+zamax(i))/2.0_R8
@@ -884,7 +882,7 @@ c Fill out b2mod_indirect arrays
 
 c Compute geometrical quantities
       call b2agmt(nx, ny, 1, crx, cry, vol, hx, hy, qz, qc, gs,
-     & leftix, bottomiy) 
+     & leftix, bottomiy)
       fpsi = 0.0_R8
       ffbz = 0.0_R8
       periodic_bc = 0
@@ -996,12 +994,12 @@ c Fill out /b2cmpb/ arrays
       if(nncut.eq.2) then
         cbrbrk(cbirno)=rratio(nxiso1_4(1)+nxiso2_4(1)-2,2*nx)
       endif
-      cbrbrk(cbirno+cbnrno-1)=2.0_R8  
-      cbrbrk(cbirwe)=2.0_R8  
+      cbrbrk(cbirno+cbnrno-1)=2.0_R8
+      cbrbrk(cbirwe)=2.0_R8
       cbrbrk(cbirea)=2.0_R8
       do ic = 1, nncut
         do is = 0, ns-1
-          if (is_neutral(is)) then  
+          if (is_neutral(is)) then
             cbsna(2,is,cbirso+(ic-1)*3  )=-1.0e-2_R8
             cbsna(2,is,cbirso+(ic-1)*3+2)=-1.0e-2_R8
             cbsna(2,is,cbirno+(ic-1)    )=-1.0e-2_R8
@@ -1171,7 +1169,7 @@ c Fill out /b2cmpt/ arrays
               write(*,*) 'Using default VCONV value. '
             endif
           endif
-          cfvsa(0,is)= travis_4(ifl(is))        
+          cfvsa(0,is)= travis_4(ifl(is))
         endif
         if (dflagti_4.eq.0) then
           cfhci(0,is)= kyi_4*kxi_4
@@ -1246,22 +1244,22 @@ c Fill out b2mod_sources data
       b2stbc_she = 0.0_R8
       b2stbc_shi = 0.0_R8
       b2stbc_sch = 0.0_R8
-      b2sihs_divue = 0.0_R8      
-      b2sihs_divua = 0.0_R8      
-      b2sihs_exbe = 0.0_R8      
-      b2sihs_exba = 0.0_R8      
-      b2sihs_visa = 0.0_R8      
-      b2sihs_joule = 0.0_R8      
-      b2sihs_fraa = 0.0_R8      
-      b2sihs_str = 0.0_R8      
-      b2npmo_smaf = 0.0_R8      
-      b2npmo_smag = 0.0_R8      
-      b2npmo_smav = 0.0_R8      
-      ext_sna = 0.0_R8      
-      ext_smo = 0.0_R8      
-      ext_she = 0.0_R8      
-      ext_shi = 0.0_R8      
-      ext_sch = 0.0_R8      
+      b2sihs_divue = 0.0_R8
+      b2sihs_divua = 0.0_R8
+      b2sihs_exbe = 0.0_R8
+      b2sihs_exba = 0.0_R8
+      b2sihs_visa = 0.0_R8
+      b2sihs_joule = 0.0_R8
+      b2sihs_fraa = 0.0_R8
+      b2sihs_str = 0.0_R8
+      b2npmo_smaf = 0.0_R8
+      b2npmo_smag = 0.0_R8
+      b2npmo_smav = 0.0_R8
+      ext_sna = 0.0_R8
+      ext_smo = 0.0_R8
+      ext_she = 0.0_R8
+      ext_shi = 0.0_R8
+      ext_sch = 0.0_R8
 
 c Fill out b2mod_transport arrays
       calf = 0.0_R8
@@ -1281,7 +1279,7 @@ c Fill out b2mod_transport arrays
       cthi = 0.0_R8
       csigin = 0.0_R8
       cvsa_cl = cvsa
-      
+
 c Fill out b2mod_anomalous_transport arrays
       sig0 = 0.0_R8
       hce0 = 0.0_R8
@@ -1303,7 +1301,7 @@ c Fill out b2mod_time
 
       call subend()
       return
-      end subroutine b2conv_plasma_2    
+      end subroutine b2conv_plasma_2
 c
       subroutine b2conv_input_2(nx,ny,ns)
       use b2mod_types
@@ -1328,7 +1326,7 @@ c
       lnext(is,js) = zamax(is).lt.zamin(js).and.zn(is).eq.zn(js).and.
      &  abs(am(is)-am(js)).lt.amtol
       intrinsic abs, min, max
-      external subini, subend, xertst 
+      external subini, subend, xertst
 
       call subini('b2convi2')
 
@@ -1381,7 +1379,7 @@ c Fill out b2mod_neutrals_namelist data
       sput_dst2=-1
       sput_dst3=-1
       do is = 0, ns-1
-        if (is_neutral(is) .and. .not. 
+        if (is_neutral(is) .and. .not.
      &   (nint(zn(is)).eq.1 .or. nint(zn(is)).eq.2  .or.
      &    nint(zn(is)).eq.7 .or. nint(zn(is)).eq.10 .or.
      &    nint(zn(is)).eq.18)) then
@@ -1400,7 +1398,7 @@ c Fill out b2mod_neutrals_namelist data
       nflai = nfla_4
       crcstra(1:nstrai) = crcstra_4(1:nstrai)
       do is = 1, nstrai
-        if (rcpos_4(is).eq.0 .and. rcstart_4(is).eq.0 .and. 
+        if (rcpos_4(is).eq.0 .and. rcstart_4(is).eq.0 .and.
      &      rcend_4(is).eq.0) then
           rcpos(is) = rcpos_4(is)
           rcstart(is) = rcstart_4(is)
@@ -1561,7 +1559,7 @@ c
       open(99,file='b2ah.dat',status='unknown')
       write(99,'(a)') '*dimens         (ns; free format)'
       write(99,'(2x,i2)') ns
-      write(99,'(a)') 
+      write(99,'(a)')
      . '*label          (lblps, character*60; free format)'
       write(99,'(2x,a)') ''''//trim(label_4)//''''
       write(99,'(a)') '*b2cmpa         basic parameters'
@@ -1573,23 +1571,23 @@ c
         else
           write(specs(is),'(a,i2,a)')  '''',is,''''
         end if
-        write(99,'(2x,a4,4(4x,f4.1,1x))') 
+        write(99,'(2x,a4,4(4x,f4.1,1x))')
      .   specs(is),zamin(is),zamax(is),zn(is),am(is)
       end do
       write(99,'(a)') '*b2cmpb         boundary conditions'
       write(99,'(a)') '*cbregs'
       write(hlp_frm,'(a,i1,a)') '(a,5x,i1,',cbnrso,'(3x,f7.4))'
       write(99,hlp_frm) '''south''', cbnrso,
-     . (cbrbrk(i),i=cbirso,cbirso+cbnrso-1) 
+     . (cbrbrk(i),i=cbirso,cbirso+cbnrso-1)
       write(hlp_frm,'(a,i1,a)') '(a,5x,i1,',cbnrno,'(3x,f7.4))'
       write(99,hlp_frm) '''north''', cbnrno,
-     . (cbrbrk(i),i=cbirno,cbirno+cbnrno-1) 
+     . (cbrbrk(i),i=cbirno,cbirno+cbnrno-1)
       write(hlp_frm,'(a,i1,a)') '(a,5x,i1,',cbnrwe,'(3x,f7.4))'
       write(99,hlp_frm) '''west'' ', cbnrwe,
-     . (cbrbrk(i),i=cbirwe,cbirwe+cbnrwe-1) 
+     . (cbrbrk(i),i=cbirwe,cbirwe+cbnrwe-1)
       write(hlp_frm,'(a,i1,a)') '(a,5x,i1,',cbnrea,'(3x,f7.4))'
       write(99,hlp_frm) '''east'' ', cbnrea,
-     . (cbrbrk(i),i=cbirea,cbirea+cbnrea-1) 
+     . (cbrbrk(i),i=cbirea,cbirea+cbnrea-1)
       nreg = cbnrso + cbnrno + cbnrwe + cbnrea
       lbreg(cbirso  :cbirso+cbnrso-1:3)='''south, private flux'''
       lbreg(cbirso+1:cbirso+cbnrso-1:3)='''south, core plasma'' '
@@ -1712,7 +1710,7 @@ c
       write(99,'(1p,2e8.1)') nlo, nhi
       write(99,'(a)') '*numnuc         (nnuc; integer, free format)'
       write(99,'(i2)') nspecies_4
-      write(99,'(a)') 
+      write(99,'(a)')
      . '*nucspec       (nz, izlo, izhi; integers, one triplet per line)'
       is = 0
       do i = 1, nspecies_4
@@ -1720,7 +1718,7 @@ c
         write(99,'(i2,2x,i2,2x,i2)') nint(zn(is)),0,nfluids_4(i)
         is = is+1
       end do
-      write(99,'(a)') 
+      write(99,'(a)')
      . '*flag           (either ''adpak'' or ''strahl'', free format)'
       write(99,'(1x,a)') flag
       write(99,'(a)') '*tailep         (real, free format)'
@@ -1749,7 +1747,7 @@ c
       integer i, is, is0, ncall
       integer len_of_digits
       external len_of_digits
-      
+
       tab=char(9)
       write(*,*) 'Writing b2mn.dat.4 and b2mn.dat.5'
       open(99,file='b2mn.dat.4',status='unknown')
@@ -1768,90 +1766,94 @@ c
       write(98,'(a)') '*b2cmpt         transport coefficients'
       write(98,'(a)') '*endphy'
 
-      write(hlp_frm, '(a,i1,a)') 
+      write(hlp_frm, '(a,i1,a)')
      . '(a,i',len_of_digits(istepi_4),',a)'
-      write(99,hlp_frm) 
+      write(99,hlp_frm)
      . '''b2mndr_ntim'''//tab//tab//tab//'''',istepi_4,''''
-      write(98,hlp_frm) 
+      write(98,hlp_frm)
      . '''b2mndr_ntim'''//tab//tab//tab//'''',istepi_4,''''
       if (.not.autotimestep_4) then
-        write(99,'(a,1pe9.2,a)') 
+        write(99,'(a,1pe9.2,a)')
      .   '''b2mndr_dtim'''//tab//tab//tab//'''',dti_4,''''
-        write(98,'(a,1pe9.2,a)') 
+        write(98,'(a,1pe9.2,a)')
      .   '''b2mndr_dtim'''//tab//tab//tab//'''',dti_4,''''
       else
-        write(99,'(a,1pe9.2,a)') 
+        write(99,'(a,1pe9.2,a)')
      .   '''b2mndr_dtim'''//tab//tab//tab//'''',dtc_4,''''
-        write(99,'(a,1pe9.2,a)') 
+        write(99,'(a,1pe9.2,a)')
      .   '''b2mndr_dt_min'''//tab//tab//tab//'''',dtmin_4,''''
-        write(99,'(a,1pe9.2,a)') 
+        write(99,'(a,1pe9.2,a)')
      .   '''b2mndr_dt_max'''//tab//tab//tab//'''',dtmax_4,''''
-        write(99,'(a,1pe9.2,a)') 
+        write(99,'(a,1pe9.2,a)')
      .   '''b2mndr_delta_min'''//tab//tab//'''',
      .   maxconverge_increase_timestep_4,''''
-        write(99,'(a,1pe9.2,a)') 
+        write(99,'(a,1pe9.2,a)')
      .   '''b2mndr_delta_max'''//tab//tab//'''',
      .   maxconverge_decrease_timestep_4,''''
-        write(99,'(a)') 
+        write(99,'(a)')
      .   '''b2mndr_dt_change_dec'''//tab//tab//'''0.5'''
-        write(99,'(a)') 
+        write(99,'(a)')
      .   '''b2mndr_dt_change_inc'''//tab//tab//'''1.1'''
-        write(98,'(a,1pe9.2,a)') 
+        write(98,'(a,1pe9.2,a)')
      .   '''b2mndr_dtim'''//tab//tab//tab//'''',dtc_4,''''
-        write(98,'(a,1pe9.2,a)') 
+        write(98,'(a,1pe9.2,a)')
      .   '''b2mndr_dt_min'''//tab//tab//tab//'''',dtmin_4,''''
-        write(98,'(a,1pe9.2,a)') 
+        write(98,'(a,1pe9.2,a)')
      .   '''b2mndr_dt_max'''//tab//tab//tab//'''',dtmax_4,''''
-        write(98,'(a,1pe9.2,a)') 
+        write(98,'(a,1pe9.2,a)')
      .   '''b2mndr_delta_min'''//tab//tab//'''',
      .   maxconverge_increase_timestep_4,''''
-        write(98,'(a,1pe9.2,a)') 
+        write(98,'(a,1pe9.2,a)')
      .   '''b2mndr_delta_max'''//tab//tab//'''',
      .   maxconverge_decrease_timestep_4,''''
-        write(98,'(a)') 
+        write(98,'(a)')
      .   '''b2mndr_dt_change_dec'''//tab//tab//'''0.5'''
-        write(98,'(a)') 
+        write(98,'(a)')
      .   '''b2mndr_dt_change_inc'''//tab//tab//'''1.1'''
       end if
-      write(99,'(a,1pe9.2,a)') 
-     . '''b2news_potok'''//tab//tab//tab//'''',res_limit_nstage_4,''''
-      write(98,'(a,1pe9.2,a)') 
-     . '''b2news_potok'''//tab//tab//tab//'''',res_limit_nstage_4,''''
-      write(99,'(a,1pe9.2,a)') 
-     . '''b2mndr_min_areshe'''//tab//tab//'''',res_limit_job_4,''''
-      write(98,'(a,1pe9.2,a)') 
-     . '''b2mndr_min_areshe'''//tab//tab//'''',res_limit_job_4,''''
-      write(99,'(a,1pe9.2,a)') 
-     . '''b2mndr_min_areshi'''//tab//tab//'''',res_limit_job_4,''''
-      write(98,'(a,1pe9.2,a)') 
-     . '''b2mndr_min_areshi'''//tab//tab//'''',res_limit_job_4,''''
-      write(99,'(a,1pe9.2,a)') 
-     . '''b2mndr_min_aresco'''//tab//tab//'''',res_limit_job_4,''''
-      write(98,'(a,1pe9.2,a)') 
-     . '''b2mndr_min_aresco'''//tab//tab//'''',res_limit_job_4,''''
+      if (res_limit_nstage_4.gt.0.0_R8) then
+        write(99,'(a,1pe9.2,a)')
+     .   '''b2news_potok'''//tab//tab//tab//'''',res_limit_nstage_4,''''
+        write(98,'(a,1pe9.2,a)')
+     .   '''b2news_potok'''//tab//tab//tab//'''',res_limit_nstage_4,''''
+      end if
+      if (res_limit_job_4.gt.0.0_R8) then
+        write(99,'(a,1pe9.2,a)')
+     .   '''b2mndr_min_areshe'''//tab//tab//'''',res_limit_job_4,''''
+        write(98,'(a,1pe9.2,a)')
+     .   '''b2mndr_min_areshe'''//tab//tab//'''',res_limit_job_4,''''
+        write(99,'(a,1pe9.2,a)')
+     .   '''b2mndr_min_areshi'''//tab//tab//'''',res_limit_job_4,''''
+        write(98,'(a,1pe9.2,a)')
+     .   '''b2mndr_min_areshi'''//tab//tab//'''',res_limit_job_4,''''
+        write(99,'(a,1pe9.2,a)')
+     .   '''b2mndr_min_aresco'''//tab//tab//'''',res_limit_job_4,''''
+        write(98,'(a,1pe9.2,a)')
+     .   '''b2mndr_min_aresco'''//tab//tab//'''',res_limit_job_4,''''
+      end if
       if (cpustop_4.ne.0.0_R8) then
-        write(99,'(a,1pe9.2,a)') 
+        write(99,'(a,1pe9.2,a)')
      .   '''b2mndr_cpu'''//tab//tab//tab//'''',cpustop_4,''''
-        write(98,'(a,1pe9.2,a)') 
+        write(98,'(a,1pe9.2,a)')
      .   '''b2mndr_cpu'''//tab//tab//tab//'''',cpustop_4,''''
       end if
-      write(99,'(a)') 
+      write(99,'(a)')
      . '''b2mndt_nstg0'''//tab//tab//tab//'''1'''
-      write(98,'(a)') 
+      write(98,'(a)')
      . '''b2mndt_nstg0'''//tab//tab//tab//'''1'''
-      write(99,'(a)') 
+      write(99,'(a)')
      . '''b2mndt_nstg1'''//tab//tab//tab//'''1'''
-      write(98,'(a)') 
+      write(98,'(a)')
      . '''b2mndt_nstg1'''//tab//tab//tab//'''1'''
-      write(hlp_frm, '(a,i1,a)') 
+      write(hlp_frm, '(a,i1,a)')
      . '(a,i',len_of_digits(nstagei_4),',a)'
-      write(99,hlp_frm) 
+      write(99,hlp_frm)
      . '''b2mndt_nstg2'''//tab//tab//tab//'''',nstagei_4,''''
-      write(98,hlp_frm) 
+      write(98,hlp_frm)
      . '''b2mndt_nstg2'''//tab//tab//tab//'''',nstagei_4,''''
-      write(99,'(a,1pe9.2,a)') 
+      write(99,'(a,1pe9.2,a)')
      . '''b2mndt_rxf'''//tab//tab//tab//'''',rxfi_4,''''
-      write(98,'(a,1pe9.2,a)') 
+      write(98,'(a,1pe9.2,a)')
      . '''b2mndt_rxf'''//tab//tab//tab//'''',rxfi_4,''''
       if (stylei_4.gt.1) then
         write(99,'(a)')
@@ -1860,43 +1862,43 @@ c
      .   '''b2mndt_moitlv'''//tab//tab//tab//'''1'''
       end if
       if (starting_time_4.ne.0.0_R8 .and. ltime_4.eq.0) then
-        write(99,'(a,1pe9.2,a)') 
+        write(99,'(a,1pe9.2,a)')
      .   '''b2mndr_stim'''//tab//tab//tab//'''',starting_time_4,''''
-        write(98,'(a,1pe9.2,a)') 
+        write(98,'(a,1pe9.2,a)')
      .   '''b2mndr_stim'''//tab//tab//tab//'''',starting_time_4,''''
       else
-        write(99,'(a)') 
+        write(99,'(a)')
      .   '''b2mndr_stim'''//tab//tab//tab//'''-1.0'''
-        write(98,'(a)') 
+        write(98,'(a)')
      .   '''b2mndr_stim'''//tab//tab//tab//'''-1.0'''
       end if
       if (nstepprint_4.ge.1 .and. lstime_4.ge.1) then
-        write(hlp_frm, '(a,i1,a)') 
+        write(hlp_frm, '(a,i1,a)')
      .   '(a,i',len_of_digits(nstepprint_4),',a)'
-        write(99,hlp_frm) 
+        write(99,hlp_frm)
      .   '''b2mndr_b2time'''//tab//tab//tab//'''',nstepprint_4,''''
-        write(98,hlp_frm) 
+        write(98,hlp_frm)
      .   '''b2mndr_b2time'''//tab//tab//tab//'''',nstepprint_4,''''
       else
-        write(hlp_frm, '(a,i1,a)') 
+        write(hlp_frm, '(a,i1,a)')
      .   '(a,i',len_of_digits(lstime_4),',a)'
-        write(99,hlp_frm) 
+        write(99,hlp_frm)
      .   '''b2mndr_b2time'''//tab//tab//tab//'''',lstime_4,''''
-        write(98,hlp_frm) 
+        write(98,hlp_frm)
      .   '''b2mndr_b2time'''//tab//tab//tab//'''',lstime_4,''''
       endif
       if (lmovie_4.gt.0) then
-        write(hlp_frm, '(a,i1,a)') 
+        write(hlp_frm, '(a,i1,a)')
      .   '(a,i',len_of_digits(lmovie_4),',a)'
-        write(99,hlp_frm) 
+        write(99,hlp_frm)
      .   '''b2mndr_mvinc'''//tab//tab//tab//'''',lmovie_4,''''
-        write(98,hlp_frm) 
+        write(98,hlp_frm)
      .   '''b2mndr_mvinc'''//tab//tab//tab//'''',lmovie_4,''''
       end if
       write(99,'(a)')
-     . '''b2news_area_fix'''//tab//tab//'''3''' 
+     . '''b2news_area_fix'''//tab//tab//'''3'''
       write(98,'(a)')
-     . '''b2news_area_fix'''//tab//tab//'''3''' 
+     . '''b2news_area_fix'''//tab//tab//'''3'''
       write(99,'(a)')
      . '''b2tral_mode'''//tab//tab//tab//'''2'''
       write(99,'(a)')
@@ -1907,17 +1909,17 @@ c
      . '''b2tqca_model'''//tab//tab//tab//'''2'''
       write(99,'(a)')
      . '''b2trno_pol_anom_scale'''//tab//tab//'''0.0'''
-      write(99,'(a)') 
+      write(99,'(a)')
      . '''b2tqna_transport_namelist'''//tab//'''1'''
-      write(98,'(a)') 
+      write(98,'(a)')
      . '''b2tqna_transport_namelist'''//tab//'''1'''
-      write(99,'(a)') 
+      write(99,'(a)')
      . '''b2stbc_boundary_namelist'''//tab//'''1'''
-      write(98,'(a)') 
+      write(98,'(a)')
      . '''b2stbc_boundary_namelist'''//tab//'''1'''
-      write(99,'(a)') 
+      write(99,'(a)')
      . '''b2stbr_neutrals_namelist'''//tab//'''1'''
-      write(98,'(a)') 
+      write(98,'(a)')
      . '''b2stbr_neutrals_namelist'''//tab//'''1'''
       if (lreitr_4) then
         write(99,'(a)')
@@ -1955,7 +1957,7 @@ c
         write(98,'(a)')
      .   '''eirene_ank_mods'''//tab//tab//'''1'''
         if (nstepout_4.ge.1) then
-          write(hlp_frm, '(a,i1,a)') 
+          write(hlp_frm, '(a,i1,a)')
      .   '(a,i',len_of_digits(nstepout_4),',a)'
           write(99,hlp_frm)
      .     '''ank_tracing'''//tab//tab//tab//'''',nstepout_4,''''
@@ -1990,9 +1992,9 @@ c
         write(98,'(a)')
      . '''b2trcl_lambda'''//tab//tab//tab//'''12.0'''
       else if (dflaglnlam_4.gt.0.0_R8) then
-        write(99,'(a,1pe9.2,a)') 
+        write(99,'(a,1pe9.2,a)')
      . '''b2trcl_lambda'''//tab//tab//tab//'''',dflaglnlam_4,''''
-        write(98,'(a,1pe9.2,a)') 
+        write(98,'(a,1pe9.2,a)')
      . '''b2trcl_lambda'''//tab//tab//tab//'''',dflaglnlam_4,''''
       endif
       write(99,'(a)')
@@ -2009,77 +2011,77 @@ c
      . '''b2tqna_new_df0'''//tab//tab//'''1'''
       write(98,'(a)')
      . '''b2tqna_new_df0'''//tab//tab//'''1'''
-      write(99,'(a,1pe9.2,a)') 
+      write(99,'(a,1pe9.2,a)')
      . '''b2tqna_max_df0'''//tab//tab//'''',neutral_diflimit_4,''''
-      write(98,'(a,1pe9.2,a)') 
+      write(98,'(a,1pe9.2,a)')
      . '''b2tqna_max_df0'''//tab//tab//'''',neutral_diflimit_4,''''
-      write(hlp_frm, '(a,i1,a)') 
+      write(hlp_frm, '(a,i1,a)')
      . '(a,i',len_of_digits(jxa_4),',a)'
       if (jxa_4.ne.jxa) then
-        write(99,hlp_frm) 
+        write(99,hlp_frm)
      .   '''b2mwti_jxa'''//tab//tab//tab//'''',jxa_4,''''
-        write(98,hlp_frm) 
+        write(98,hlp_frm)
      .   '''b2mwti_jxa'''//tab//tab//tab//'''',jxa_4,''''
       end if
-      write(hlp_frm, '(a,i1,a)') 
+      write(hlp_frm, '(a,i1,a)')
      . '(a,i',len_of_digits(jxi_4),',a)'
       if (jxi_4.ne.jxi) then
-        write(99,hlp_frm) 
+        write(99,hlp_frm)
      .   '''b2mwti_jxi'''//tab//tab//tab//'''',jxi_4,''''
-        write(98,hlp_frm) 
+        write(98,hlp_frm)
      .   '''b2mwti_jxi'''//tab//tab//tab//'''',jxi_4,''''
       end if
-      write(hlp_frm, '(a,i1,a)') 
+      write(hlp_frm, '(a,i1,a)')
      . '(a,i',len_of_digits(ixref_4),',a)'
       if (ixref_4.ne.jxa .and. ixref_4.lt.nx .and. ixref_4.gt.-1) then
-        write(99,hlp_frm) 
+        write(99,hlp_frm)
      .   '''b2tqna_ixref'''//tab//tab//tab//'''',ixref_4,''''
-        write(98,hlp_frm) 
+        write(98,hlp_frm)
      .   '''b2tqna_ixref'''//tab//tab//tab//'''',ixref_4,''''
       end if
       if (no_thermal_force_4) then
-        write(99,'(a)') 
+        write(99,'(a)')
      .   '''b2sifr_phm1'''//tab//tab//tab//'''0.0'''
-        write(98,'(a)') 
+        write(98,'(a)')
      .   '''b2sifr_phm1'''//tab//tab//tab//'''0.0'''
       end if
       if (sput_dst.ne.-1) then
-        write(hlp_frm, '(a,i1,a)') 
+        write(hlp_frm, '(a,i1,a)')
      .   '(a,i',len_of_digits(sput_dst),',a)'
-        write(99,hlp_frm) 
+        write(99,hlp_frm)
      .   '''b2stbr_sput_dst'''//tab//tab//'''',sput_dst,''''
-        write(98,hlp_frm) 
+        write(98,hlp_frm)
      .   '''b2stbr_sput_dst'''//tab//tab//'''',sput_dst,''''
-      endif 
+      endif
       if (sput_dst2.ne.-1) then
-        write(hlp_frm, '(a,i1,a)') 
+        write(hlp_frm, '(a,i1,a)')
      .   '(a,i',len_of_digits(sput_dst2),',a)'
-        write(99,hlp_frm) 
+        write(99,hlp_frm)
      .   '''b2stbr_sput_dst2'''//tab//tab//'''',sput_dst2,''''
-        write(98,hlp_frm) 
+        write(98,hlp_frm)
      .   '''b2stbr_sput_dst2'''//tab//tab//'''',sput_dst2,''''
-      endif 
+      endif
       if (sput_dst3.ne.-1) then
-        write(hlp_frm, '(a,i1,a)') 
+        write(hlp_frm, '(a,i1,a)')
      .   '(a,i',len_of_digits(sput_dst3),',a)'
-        write(99,hlp_frm) 
+        write(99,hlp_frm)
      .   '''b2stbr_sput_dst3'''//tab//tab//'''',sput_dst3,''''
-        write(98,hlp_frm) 
+        write(98,hlp_frm)
      .   '''b2stbr_sput_dst3'''//tab//tab//'''',sput_dst3,''''
-      endif 
+      endif
       if (lfirstflight_4) then
-        write(99,'(a)') 
+        write(99,'(a)')
      .   '''b2stbr_first_flight'''//tab//tab//'''1'''
-        write(98,'(a)') 
+        write(98,'(a)')
      .   '''b2stbr_first_flight'''//tab//tab//'''1'''
       end if
-      write(99,'(a)') 
+      write(99,'(a)')
      . '''b2news_BoRiS'''//tab//tab//tab//'''1.0'''
-      write(99,'(a)') 
+      write(99,'(a)')
      . '''b2tfnb_no_hybr'''//tab//tab//'''1'''
-      write(99,'(a)') 
+      write(99,'(a)')
      . '''b2tfhe_no_hybr'''//tab//tab//'''1'''
-      write(99,'(a)') 
+      write(99,'(a)')
      . '''b2tfhi_no_hybr'''//tab//tab//'''1'''
       if (nlcurr_4.eq.0) then
         write(99,'(a)')
@@ -2101,11 +2103,11 @@ c
         write(98,'(a,1pe9.2,a)')
      .   '''b2sqel_artificial_radiation'''//tab//'''',cimpef_4,''''
       end if
-      write(hlp_frm, '(a,i1,a)') 
+      write(hlp_frm, '(a,i1,a)')
      .   '(a,i',len_of_digits(nlrade_4),',a)'
-      write(99,hlp_frm) 
+      write(99,hlp_frm)
      . '''b2sihs_style'''//tab//tab//tab//'''',nlrade_4,''''
-      write(98,hlp_frm) 
+      write(98,hlp_frm)
      . '''b2sihs_style'''//tab//tab//tab//'''',nlrade_4,''''
       if (lfeedback_4) then
         write(99,'(a)')
@@ -2116,52 +2118,52 @@ c
       if (sepfeedback_4) then
         write(99,'(a,i2,a)')
      .   '''b2stbc_isfeedback'''//tab//tab//'''1'''
-        write(99,'(a,1pe9.2,a)') 
+        write(99,'(a,1pe9.2,a)')
      .   '''b2stbc_feedback_nesepm'''//tab//'''',sepden_4,''''
-        write(99,'(a,i2,a)') 
+        write(99,'(a,i2,a)')
      .   '''eirene_nesepm_istra'''//tab//'''',
      .   user_flux_feedback_stratum_4,''''
         write(98,'(a,i2,a)')
      .   '''b2stbc_isfeedback'''//tab//tab//'''1'''
-        write(98,'(a,1pe9.2,a)') 
+        write(98,'(a,1pe9.2,a)')
      .   '''b2stbc_feedback_nesepm'''//tab//'''',sepden_4,''''
-        write(98,'(a,i2,a)') 
+        write(98,'(a,i2,a)')
      .   '''eirene_nesepm_istra'''//tab//'''',
      .   user_flux_feedback_stratum_4,''''
       end if
       if (sepgasfeedback_4) then
         write(99,'(a,i2,a)')
      .   '''b2stbc_isfeedback'''//tab//tab//'''1'''
-        write(99,'(a,1pe9.2,a)') 
+        write(99,'(a,1pe9.2,a)')
      .   '''b2stbc_feedback_nesepm_sol'''//tab//'''',sepden_4,''''
-        write(99,'(a,i2,a)') 
+        write(99,'(a,i2,a)')
      .   '''eirene_nesepm_istra'''//tab//'''',
      .   user_flux_feedback_stratum_4,''''
         write(98,'(a,i2,a)')
      .   '''b2stbc_isfeedback'''//tab//tab//'''1'''
-        write(98,'(a,1pe9.2,a)') 
+        write(98,'(a,1pe9.2,a)')
      .   '''b2stbc_feedback_nesepm_sol'''//tab//'''',sepden_4,''''
-        write(98,'(a,i2,a)') 
+        write(98,'(a,i2,a)')
      .   '''eirene_nesepm_istra'''//tab//'''',
      .   user_flux_feedback_stratum_4,''''
       end if
       if (volrecfeedback_4) then
         write(99,'(a)')
      .   '''b2stbc_isfeedback'''//tab//tab//'''0'''
-        write(99,'(a,1pe9.2,a)') 
+        write(99,'(a,1pe9.2,a)')
      .   '''b2stbc_volrec_sol'''//tab//tab//'''',voldesired_4,''''
-        write(99,'(a,1pe9.2,a)') 
+        write(99,'(a,1pe9.2,a)')
      .   '''b2stbc_volrec_alpha'''//tab//'''',volrecfac_4,''''
-        write(99,'(a,i2,a)') 
+        write(99,'(a,i2,a)')
      .   '''eirene_nesepm_istra'''//tab//'''',
      .   user_flux_feedback_stratum_4,''''
         write(98,'(a)')
      .   '''b2stbc_isfeedback'''//tab//tab//'''0'''
-        write(98,'(a,1pe9.2,a)') 
+        write(98,'(a,1pe9.2,a)')
      .   '''b2stbc_volrec_sol'''//tab//tab//'''',voldesired_4,''''
-        write(98,'(a,1pe9.2,a)') 
+        write(98,'(a,1pe9.2,a)')
      .   '''b2stbc_volrec_alpha'''//tab//'''',volrecfac_4,''''
-        write(98,'(a,i2,a)') 
+        write(98,'(a,i2,a)')
      .   '''eirene_nesepm_istra'''//tab//'''',
      .   user_flux_feedback_stratum_4,''''
       end if
@@ -2182,19 +2184,19 @@ c
             end do
           end if
           if (ffb_strata_4(is).gt.0) then
-            write(99,'(a,i2,a)') 
+            write(99,'(a,i2,a)')
      .       '''eirene_nesepm_istra'''//tab//'''',
      .       ffb_strata_4(is),''''
-            write(98,'(a,i2,a)') 
+            write(98,'(a,i2,a)')
      .       '''eirene_nesepm_istra'''//tab//'''',
      .       ffb_strata_4(is),''''
           end if
         end if
       end do
       if (dflagvconv_4.eq.-10) then
-        write(98,'(a)') 
+        write(98,'(a)')
      .   '''b2tqna_user_transport'''//tab//'''6'''
-        write(99,'(a)') 
+        write(99,'(a)')
      .   '''b2tqna_user_transport'''//tab//'''6'''
       end if
 
@@ -2364,12 +2366,12 @@ c
         if (bcene(ib).eq.3) enepar(ib,1)=enepar(ib,1)-1.0_R8
       enddo
       write(36, hlp_frm) 'ENEPAR(1,1)=',(enepar(ib,1),ib=1,nbc)
-      if (maxval(abs(enepar(1:nbc,2))).gt.0.0_R8) 
+      if (maxval(abs(enepar(1:nbc,2))).gt.0.0_R8)
      > write(35, hlp_frm) 'ENEPAR(1,2)=',(enepar(ib,2),ib=1,nbc)
-      if (maxval(abs(enepar(1:nbc,2))).gt.0.0_R8) 
+      if (maxval(abs(enepar(1:nbc,2))).gt.0.0_R8)
      > write(36, hlp_frm) 'ENEPAR(1,2)=',(enepar(ib,2),ib=1,nbc)
       write(35, hlp_frm) 'ENIPAR(1,1)=',(enipar(ib,1),ib=1,nbc)
-      if (maxval(abs(enipar(1:nbc,2))).gt.0.0_R8) 
+      if (maxval(abs(enipar(1:nbc,2))).gt.0.0_R8)
      > write(35, hlp_frm) 'ENIPAR(1,2)=',(enipar(ib,2),ib=1,nbc)
       do ib = 1, nbc
         if (bceni(ib).eq.3) then
@@ -2378,61 +2380,61 @@ c
         endif
       enddo
       write(36, hlp_frm) 'ENIPAR(1,1)=',(enipar(ib,1),ib=1,nbc)
-      if (maxval(abs(enipar(1:nbc,2))).gt.0.0_R8) 
+      if (maxval(abs(enipar(1:nbc,2))).gt.0.0_R8)
      > write(36, hlp_frm) 'ENIPAR(1,2)=',(enipar(ib,2),ib=1,nbc)
       write(35, hlp_frm) 'POTPAR(1,1)=',(potpar(ib,1),ib=1,nbc)
       write(36, hlp_frm) 'POTPAR(1,1)=',(potpar(ib,1),ib=1,nbc)
-      if (maxval(abs(potpar(1:nbc,2))).gt.0.0_R8) 
+      if (maxval(abs(potpar(1:nbc,2))).gt.0.0_R8)
      > write(35, hlp_frm) 'POTPAR(1,2)=',(potpar(ib,2),ib=1,nbc)
-      if (maxval(abs(potpar(1:nbc,2))).gt.0.0_R8) 
+      if (maxval(abs(potpar(1:nbc,2))).gt.0.0_R8)
      > write(36, hlp_frm) 'POTPAR(1,2)=',(potpar(ib,2),ib=1,nbc)
       write(hlp_frb,'(a,i2,a)') '(a,i2,a,',ns,'(1x,i3,'',''))'
       write(hlp_frp,'(a,i2,a)') '(a,i2,a,1p,',ns,'(1x,e9.2,'',''))'
       do ib = 1, nbc
-        write(35, hlp_frb) 
+        write(35, hlp_frb)
      .   'BCCON(0,',ib,')=',(bccon(is,ib),is=0,ns-1)
-        write(36, hlp_frb) 
+        write(36, hlp_frb)
      .   'BCCON(0,',ib,')=',(bccon(is,ib),is=0,ns-1)
       end do
       do ib = 1, nbc
-        write(35, hlp_frp) 
+        write(35, hlp_frp)
      .   'CONPAR(0,',ib,',1)=',(conpar(is,ib,1),is=0,ns-1)
-        write(36, hlp_frp) 
+        write(36, hlp_frp)
      .   'CONPAR(0,',ib,',1)=',(conpar(is,ib,1),is=0,ns-1)
-        if (maxval(abs(conpar(0:ns-1,ib,2))).gt.0.0_R8) 
-     >   write(35, hlp_frp) 
+        if (maxval(abs(conpar(0:ns-1,ib,2))).gt.0.0_R8)
+     >   write(35, hlp_frp)
      >    'CONPAR(0,',ib,',2)=',(conpar(is,ib,2),is=0,ns-1)
-        if (maxval(abs(conpar(0:ns-1,ib,2))).gt.0.0_R8) 
-     >   write(36, hlp_frp) 
+        if (maxval(abs(conpar(0:ns-1,ib,2))).gt.0.0_R8)
+     >   write(36, hlp_frp)
      >    'CONPAR(0,',ib,',2)=',(conpar(is,ib,2),is=0,ns-1)
-        if (maxval(abs(conpar(0:ns-1,ib,3))).gt.0.0_R8) 
-     >   write(35, hlp_frp) 
+        if (maxval(abs(conpar(0:ns-1,ib,3))).gt.0.0_R8)
+     >   write(35, hlp_frp)
      >    'CONPAR(0,',ib,',3)=',(conpar(is,ib,3),is=0,ns-1)
-        if (maxval(abs(conpar(0:ns-1,ib,3))).gt.0.0_R8) 
-     >   write(36, hlp_frp) 
+        if (maxval(abs(conpar(0:ns-1,ib,3))).gt.0.0_R8)
+     >   write(36, hlp_frp)
      >    'CONPAR(0,',ib,',3)=',(conpar(is,ib,3),is=0,ns-1)
       end do
       do ib = 1, nbc
-        write(35, hlp_frb) 
+        write(35, hlp_frb)
      .   'BCMOM(0,',ib,')=',(bcmom(is,ib),is=0,ns-1)
-        write(36, hlp_frb) 
+        write(36, hlp_frb)
      .   'BCMOM(0,',ib,')=',(bcmom(is,ib),is=0,ns-1)
       end do
       do ib = 1, nbc
-        write(35, hlp_frp) 
+        write(35, hlp_frp)
      .   'MOMPAR(0,',ib,',1)=',(mompar(is,ib,1),is=0,ns-1)
-        write(36, hlp_frp) 
+        write(36, hlp_frp)
      .   'MOMPAR(0,',ib,',1)=',(mompar(is,ib,1),is=0,ns-1)
-        if (maxval(abs(mompar(0:ns-1,ib,2))).gt.0.0_R8) 
-     >   write(35, hlp_frp) 
+        if (maxval(abs(mompar(0:ns-1,ib,2))).gt.0.0_R8)
+     >   write(35, hlp_frp)
      >    'MOMPAR(0,',ib,',2)=',(mompar(is,ib,2),is=0,ns-1)
-        if (maxval(abs(mompar(0:ns-1,ib,2))).gt.0.0_R8) 
-     >   write(36, hlp_frp) 
+        if (maxval(abs(mompar(0:ns-1,ib,2))).gt.0.0_R8)
+     >   write(36, hlp_frp)
      >    'MOMPAR(0,',ib,',2)=',(mompar(is,ib,2),is=0,ns-1)
       end do
-      write(35,'(a,f10.7,a,1pe9.2,a)') 
+      write(35,'(a,f10.7,a,1pe9.2,a)')
      . 'GAMMAI=',gammai,', GAMMAE=',gammae,','
-      write(36,'(a,f10.7,a,1pe9.2,a)') 
+      write(36,'(a,f10.7,a,1pe9.2,a)')
      . 'GAMMAI=',gammai,', GAMMAE=',gammae,','
       write(35,'(a,l1,a,l1,a)')
      . 'LBNDUSR=',lbndusr,', LFEEDBACK=',lfeedback,','
@@ -2661,10 +2663,10 @@ c
       write(34, hlp_frm) 'RCEND=  ',(rcend(ib)  ,ib=1,nstrat)
       write(hlp_frm,'(a,i2,a)') '(a,i2,a,1p,',ns,'(1x,e9.2,'',''))'
       do ib = 1, nstrai
-        write(34, hlp_frm) 
+        write(34, hlp_frm)
      .   'RECYC(0,',ib,')=',(recyc(is,ib),is=0,ns-1)
       end do
-      if (maxval(species_start).gt.0 .or. 
+      if (maxval(species_start).gt.0 .or.
      &    minval(species_end).lt.ns-1) then
         write(hlp_frm,'(a,i2,a)') "(a,",nstrai,"(1x,i2,','))"
         write(34,hlp_frm) 'SPECIES_START=',species_start(1:nstrai)
@@ -2673,27 +2675,27 @@ c
       write(hlp_frm,'(a,i2,a)') '(a,1p,',nstrai,'(1x,e9.2,'',''))'
       do ib = 1, nstrai
        if (crcstra(ib).eq.'V' .and. volrecstart(ib).ne.1.0e21_R8)
-     >  write(34, '(a,i2,a,1pe9.2,a)') 
+     >  write(34, '(a,i2,a,1pe9.2,a)')
      .  'VOLRECSTART(',ib,')=',volrecstart(ib),','
       end do
-      if (volrecinc.ne.0.0_R8) write(34, '(a,1pe9.2,a)') 
+      if (volrecinc.ne.0.0_R8) write(34, '(a,1pe9.2,a)')
      . 'VOLRECINC=',volrecinc,','
-      write(34, '(a,1pe9.2,a)') 
+      write(34, '(a,1pe9.2,a)')
      . 'VOLRECWT= ',volrecwt,','
       do is = 1, 4
-        if (rf_neut(is).ne.1.0_R8) write(34,'(a,i1,a,1pe9.2,a)') 
+        if (rf_neut(is).ne.1.0_R8) write(34,'(a,i1,a,1pe9.2,a)')
      .   'RF_NEUT(',is,')=',rf_neut(is)
       end do
       do ib = 1, nstrai
-        if (userfluxparm(ib,1).ne.0.0_R8) 
-     >   write(34, '(a,i2,a,1pe9.2,a)') 
+        if (userfluxparm(ib,1).ne.0.0_R8)
+     >   write(34, '(a,i2,a,1pe9.2,a)')
      .   'USERFLUXPARM(',ib,',1)=',userfluxparm(ib,1),','
-        if (userfluxparm(ib,2).ne.0.0_R8) 
-     >   write(34, '(a,i2,a,1pe9.2,a)') 
+        if (userfluxparm(ib,2).ne.0.0_R8)
+     >   write(34, '(a,i2,a,1pe9.2,a)')
      .   'USERFLUXPARM(',ib,',2)=',userfluxparm(ib,2),','
       end do
       do ib = 1, nstrai
-        do is = 1, nspecies_4       
+        do is = 1, nspecies_4
           if (gpfc(is,ib).ne.0.0_R8) write(34,'(a,i1,a,i2,a,f5.2,a)')
      .     'GPFC(',is,',',ib,')=',gpfc(is,ib),','
         end do
@@ -2701,17 +2703,17 @@ c
 #ifndef NO_B2_CHEM_SPUT
       do ib = 0, nlimps
         if (chemical_sputter_yield(ib).ne.0.0_R8)
-     >   write(34,'(a,i3,a,1pe9.2,a)') 
+     >   write(34,'(a,i3,a,1pe9.2,a)')
      .   'CHEMICAL_SPUTTER_YIELD(',ib,')=',
      .   chemical_sputter_yield(ib),','
       end do
       if (fchar_chemical.ne.0.0_R8) write(34, '(a,1pe9.2,a)')
      .   'FCHAR_CHEMICAL= ',fchar_chemical,','
-      if (igass_chemical.ne.0.0_R8) write(34, '(a,i2,a)')
+      if (igass_chemical.ne.0) write(34, '(a,i2,a)')
      .   'IGASS_CHEMICAL= ',igass_chemical,','
-      if (itsput_chemical.ne.0.0_R8) write(34, '(a,i2,a)')
+      if (itsput_chemical.ne.0) write(34, '(a,i2,a)')
      .   'ITSPUT_CHEMICAL=',itsput_chemical,','
-      if (issput_chemical.ne.0.0_R8) write(34, '(a,i2,a)')
+      if (issput_chemical.ne.0) write(34, '(a,i2,a)')
      .   'ISSPUT_CHEMICAL=',issput_chemical,','
 #endif
       write(hlp_frm,'(a,i2,a)') '(a,i1,a,',nstrai,'(1x,i2,'',''))'
@@ -2726,7 +2728,7 @@ c
       if (l_neutflux.ne.-1)
      > write(34,'(a,i2,a)') 'L_NEUTFLUX=',l_neutflux,','
       write(hlp_frm,'(a,i2,a)') '(a,',nmol,'(1x,i2,'',''))'
-      if (maxval(lmolscl).gt.0) 
+      if (maxval(lmolscl).gt.0)
      > write(34,hlp_frm) 'LMOLSCL=',(lmolscl(is),is=1,nmol)
       write(hlp_frm,'(a,i2,a)') '(a,',ns,'(1x,i2,'',''))'
       write(34,hlp_frm) 'B2ESPCR=',(b2espcr(is),is=0,ns-1)
@@ -2735,7 +2737,7 @@ c
       write(hlp_frm,'(a,i2,a)') '(a,i2,a,',nspecies_4,'(1x,i2,'',''))'
       if (maxval(mlcmp).gt.0) then
         do ib = 1, nmol
-          write(34,hlp_frm) 
+          write(34,hlp_frm)
      .     'MLCMP(1,',ib,')=',(mlcmp(is,ib),is=1,nspecies_4)
         end do
       end if
@@ -2770,21 +2772,30 @@ c
         end if
       end do
       write(hlp_frm,'(a,i2,a)') '(a,',nsns,'(1x,i3,'',''))'
-      if (nsns.gt.0 .and. 
+      if (nsns.gt.0 .and.
      &   (maxval(lsns).gt.0 .or. minval(lsns).lt.0)) then
         do ib = 1, nsns
           if (lsns(ib).gt.nlim) lsns(ib)=nlim-lsns(ib)
-        end do 
+        end do
         write(34,hlp_frm) 'LSNS=',(lsns(ib),ib=1,nsns)
       end if
-      if (nsns.gt.0 .and. maxval(ksns).gt.0) 
-     > write(34,hlp_frm) 'KSNS=',(ksns(ib),ib=1,nsns)      
+      if (nsns.gt.0 .and. maxval(ksns).gt.0)
+     > write(34,hlp_frm) 'KSNS=',(ksns(ib),ib=1,nsns)
       write(34,'(a,1pe9.2,a)') 'NEUT_SCL_LIM=',neut_scl_lim,','
       if(n_spcsrf_4.gt.0) then !DPC
         write(34,'(a,i2,a)') 'N_SPCSRF=',n_spcsrf_4,','
         ii=minloc(l_spcsrf)
-        write(hlp_frm,'(a,i3,a)') '(a,',ii(1),'(i3,'',''))'
-        write(34,hlp_frm) 'L_SPCSRF=',(l_spcsrf(ib),ib=1,ii(1))
+        if (ii(1).eq.1) then
+          is = 0
+        else if (l_spcsrf(ii(1)).eq.0) then
+          is = ii(1)-1
+        else
+          is = size(l_spcsrf)
+        end if
+        if (is.gt.0) then
+          write(hlp_frm,'(a,i3,a)') '(a,',is,'(i3,'',''))'
+          write(34,hlp_frm) 'L_SPCSRF=',(l_spcsrf(ib),ib=1,is)
+        end if
         write(hlp_frm,'(a,i2,a)') '(a,',n_spcsrf_4,'(a1,a8,a2))'
         write(34,hlp_frm) 'SPS_ID=  ',('''',sps_id_4(ib),''',',
      .                                               ib=1,n_spcsrf_4)
@@ -2804,9 +2815,9 @@ c
         write(hlp_frm,'(a,i2,a)') '(a,',n_spcsrf_4,'(i10,'',''))'
         write(*,*) 'hlp_frm: ',hlp_frm
         write(34, hlp_frm) 'SPS_SGRP=',(sps_sgrp(ib),ib=1,n_spcsrf_4)
-        write(hlp_frm,'(a,i2,a)') 
-     .   '(a,',n_spcsrf,'('''''''',a8,'''''''','',''))'
-        write(34, hlp_frm) 'SPS_MTRL=',(sps_mtrl(ib),ib=1,n_spcsrf)
+        write(hlp_frm,'(a,i2,a)')
+     .   '(a,',n_spcsrf_4,'('''''''',a8,'''''''','',''))'
+        write(34, hlp_frm) 'SPS_MTRL=',(sps_mtrl(ib),ib=1,n_spcsrf_4)
       endif
       do ib = 1, 100
         if (debug_flags(ib).ne.0) write(34,'(a,i3,a,i2,a)')
@@ -2852,18 +2863,18 @@ c
         do is = 0, ns-1
           needed = needed .or. dtco(is,ireg).ne.1.0_R8
         end do
-        if (needed) 
-     >   write(33, hlp_frm) 
+        if (needed)
+     >   write(33, hlp_frm)
      .   'DTCO(0,',ireg,')=',(dtco(is,ireg),is=0,ns-1)
         needed = .false.
         do is = 0, ns-1
           needed = needed .or. dtmo(is,ireg).ne.1.0_R8
         end do
-        if (needed) 
-     >   write(33, hlp_frm) 
+        if (needed)
+     >   write(33, hlp_frm)
      .   'DTMO(0,',ireg,')=',(dtmo(is,ireg),is=0,ns-1)
       end do
-      if (time_factor_required.ne.0.1_R8) write(33,'(a,1pe9.2,a)') 
+      if (time_factor_required.ne.0.1_R8) write(33,'(a,1pe9.2,a)')
      . 'TIME_FACTOR_REQUIRED=',time_factor_required,','
       write(33,'(a)') '/'
       close(33)
@@ -3026,7 +3037,7 @@ c
       use b2mod_user_namelist
       implicit none
 #     include <KOPPLDIM.F>
-      integer is, ii(1)
+      integer i, is, ii(1)
       character*32 hlp_frm
 
       write(*,*) 'Writing b2.user.parameters'
@@ -3076,10 +3087,17 @@ c
      .   (lntrgrp(is),is=1,jntrgrp(nntrgrp))
       end if
       ii=minloc(lhetrgts)
-      if (ii(1).ne.1) then
-        write(hlp_frm, '(a,i3,a)') '(a,',ii(1),'(i3,'',''))'
+      if (lhetrgts(ii(1)).ne.0) then
+        i = size(lhetrgts)
+      else if (ii(1).ne.1) then
+        i = ii(1)-1
+      else
+        i = 0
+      end if
+      if (i.gt.0) then
+        write(hlp_frm, '(a,i3,a)') '(a,',i,'(i3,'',''))'
         write(*,*) 'hlp_frm: ',hlp_frm
-        write(38, hlp_frm) 'LHETRGTS=',(lhetrgts(is),is=1,ii(1))
+        write(38, hlp_frm) 'LHETRGTS=',(lhetrgts(is),is=1,i)
       end if
       write(38,'(a)') '/'
       close(38)
@@ -3144,8 +3162,8 @@ c
       deallocate(niiso_4)
       deallocate(dtee_4,dtei_4,dtmo_4,dtco_4)
       deallocate(lhetrgts_4,l_h_mol_4)
-      deallocate(lpfrgrp_4,ipfrgrp_4,jpfrgrp_4,gpfrgrp_4) 
-      deallocate(lntrgrp_4,intrgrp_4,jntrgrp_4,gntrgrp_4) 
+      deallocate(lpfrgrp_4,ipfrgrp_4,jpfrgrp_4,gpfrgrp_4)
+      deallocate(lntrgrp_4,intrgrp_4,jntrgrp_4,gntrgrp_4)
 #ifndef NO_B2_CHEM_SPUT
       deallocate(chemical_sputter_yield_4)
 #endif
@@ -3273,7 +3291,7 @@ cxpb  We reverse-engineer the velocities.
           do while (rightix(ix,iy).le.nx)
             do is = 0, ns-1
               if (ifl(is).ne.0) then
-                work(rightix(ix,iy),iy,is) = 
+                work(rightix(ix,iy),iy,is) =
      .           (field(ix,iy,is)*(vol(ix,iy)+vol(rightix(ix,iy),iy))-
      .            work(ix,iy,is)*vol(rightix(ix,iy),iy))/vol(ix,iy)
               endif

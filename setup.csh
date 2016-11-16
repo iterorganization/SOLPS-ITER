@@ -96,9 +96,11 @@ set      UINP_PATH =  ${SOLPSTOP}/modules/Uinp/builds/${TOOLCHAIN}
 set    TRIANG_PATH =  ${SOLPSTOP}/modules/Triang/builds/${TOOLCHAIN}
 set   SCRIPTS_PATH =  ${SOLPSTOP}/scripts.local:${SOLPSTOP}/scripts:${SOLPSTOP}/modules/Eirene/scripts
 set      AMDS_PATH =  ${SOLPSTOP}/modules/amds/builds/${TOOLCHAIN}
+set       S45_PATH =  ${SOLPSTOP}/modules/solps4-5/builds/${TOOLCHAIN}
 
 # Note: in case of name-clash between script and executable, script will be found first
-setenv SOLPS_PATH  ${SCRIPTS_PATH}:${CARRE_PATH}:${DIVGEO_PATH}:${B25EIRENE_PATH}:${EIRENE_PATH}:${B25_PATH}:${UINP_PATH}:${TRIANG_PATH}:${AMDS_PATH}
+setenv SOLPS_PATH  ${SCRIPTS_PATH}:${CARRE_PATH}:${DIVGEO_PATH}:${B25EIRENE_PATH}:${EIRENE_PATH}:${B25_PATH}:${UINP_PATH}:${TRIANG_PATH}:${AMDS_PATH}:${S45_PATH}
+setenv OLD_PATH    ${PATH}
 setenv PATH        ${SOLPS_PATH}:${PATH}
 if ($?LD_LIBRARY_PATH) then
   setenv LD_LIBRARY_PATH ${SOLPSLIB}:${LD_LIBRARY_PATH}
@@ -106,7 +108,7 @@ else
   setenv LD_LIBRARY_PATH ${SOLPSLIB}
 endif
 
-unset TOOLCHAIN CARRE_PATH DIVGEO_PATH EIRENE_PATH B25_PATH B25EIRENE_PATH UINP_PATH TRIANG_PATH AMDS_PATH
+unset TOOLCHAIN SCRIPTS_PATH CARRE_PATH DIVGEO_PATH EIRENE_PATH B25_PATH B25EIRENE_PATH UINP_PATH TRIANG_PATH AMDS_PATH S45_PATH
 
 # Check whether SOLPS_DEBUG and SOLPS_MPI had been set already by the user
 if ($?SOLPS_DEBUG) source $SOLPSTOP/SETUP/debug

@@ -125,7 +125,7 @@
 *     It will hold that 0.le.zamin(is).le.zamax(is), 0.lt.zn(is) and
 *     0.lt.am(is). It is required that neutral species not be bundled
 *     with charged species.
-*     For ns.le.is.lt.nsdecl, zamin(is), zamax(is), zn(is), am(is) 
+*     For ns.le.is.lt.nsdecl, zamin(is), zamax(is), zn(is), am(is)
 *     are undefined.
 *
 *  6. error indicators
@@ -147,7 +147,7 @@
       integer is, it, ix, iy, n2
       real (kind=R8) :: xcnt, ycnt, scale
       real (kind=R8) :: parg(0:99)
-      real (kind=R8), allocatable :: wrk(:,:,:) 
+      real (kind=R8), allocatable :: wrk(:,:,:)
       logical ex
       character filename*80, lblgm*120, lblmn*120, idout*80
       character*8 device
@@ -216,7 +216,7 @@ c
         CALL ALLOC_CLOGAU
         CALL ALLOC_COMPRT
         CALL ALLOC_CESTIM(1)  !VKMPI
-        CALL ALLOC_COMUSR(1)  
+        CALL ALLOC_COMUSR(1) 
         CALL ALLOC_CADGEO
         CALL ALLOC_CAI
 !pb      CALL ALLOC_CGRPTL
@@ -277,17 +277,17 @@ cxpb Next line not needed if inherited from UPC instead!
       wadia = uadia
       vedia = 0.0_R8
       do is = 0, ns-1
-        kinrgy(-1:nx,-1:ny,is) = 
+        kinrgy(-1:nx,-1:ny,is) =
      .   0.5_R8 * am(is) * mp * ua(-1:nx,-1:ny,is)**2
         fmo(-1:nx,-1:ny,0,is) =
      .   am(is) * mp * ua(-1:nx,-1:ny,is) * fna(-1:nx,-1:ny,0,is)
         fmo(-1:nx,-1:ny,1,is) =
      .   am(is) * mp * ua(-1:nx,-1:ny,is) * fna(-1:nx,-1:ny,1,is)
         vedia(-1:nx,-1:ny,0) = vedia(-1:nx,-1:ny,0) +
-     .   uadia(-1:nx,-1:ny,0,is) * 
+     .   uadia(-1:nx,-1:ny,0,is) *
      .   rza(-1:nx,-1:ny,is) * na(-1:nx,-1:ny,is) / ne(-1:nx,-1:ny)
         vedia(-1:nx,-1:ny,1) = vedia(-1:nx,-1:ny,1) +
-     .   uadia(-1:nx,-1:ny,1,is) * 
+     .   uadia(-1:nx,-1:ny,1,is) *
      .   rza(-1:nx,-1:ny,is) * na(-1:nx,-1:ny,is) / ne(-1:nx,-1:ny)
       enddo
 *  ..output
@@ -315,9 +315,9 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
 *   ..extrapolate magnetic field to edges
       do iy = -1, ny
         do ix = -1, nx
-          if (leftix(ix,iy).eq.-2) wbbl(ix,iy,0:2) = 
+          if (leftix(ix,iy).eq.-2) wbbl(ix,iy,0:2) =
      &     bb(ix,iy,0:2) - (wbbr(ix,iy,0:2)-bb(ix,iy,0:2))
-          if (rightix(ix,iy).eq.nx+1) wbbr(ix,iy,0:2) = 
+          if (rightix(ix,iy).eq.nx+1) wbbr(ix,iy,0:2) =
      &     bb(ix,iy,0:2) - (wbbl(ix,iy,0:2)-bb(ix,iy,0:2))
           if (bottomiy(ix,iy).eq.-2) wbbv(ix,iy,0:2) = bb(ix,iy,0:2) -
      &     (wbbv(topix(ix,iy),topiy(ix,iy),0:2)-bb(ix,iy,0:2))
@@ -328,7 +328,7 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
       wbbr(:,:,3)=sqrt(wbbr(:,:,0)**2+wbbr(:,:,1)**2+wbbr(:,:,2)**2)
       wbbv(:,:,3)=sqrt(wbbv(:,:,0)**2+wbbv(:,:,1)**2+wbbv(:,:,2)**2)
 *   ..compute pbs (magnetic field pitch * surface area) at cell faces
-      call b2xgbs (nx, ny, wbbl, wbbv, gs, qc, crx, cry, pbs)      
+      call b2xgbs (nx, ny, wbbl, wbbv, gs, qc, crx, cry, pbs)     
 *   ..save geometry
       call write_b2ag(nx,ny)
       call b2wugm (nout(1), nx, ny, crx, cry, fpsi,
@@ -345,6 +345,10 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
       close(70)
 *   ..write dummy b2ai.dat
       open(unit=70,file='b2ai.dat')
+      write(70,'(a)') 'Dummy file, plasma state imported from B2SXDR'
+      close(70)
+*   ..write dummy b2ai.prt
+      open(unit=70,file='b2ai.prt')
       write(70,'(a)') 'Dummy file, plasma state imported from B2SXDR'
       close(70)
 *   ..write b2yt.dat
@@ -444,7 +448,7 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
       call cfwuch (nout(2), 120, lblmn, 'label')
       call b2wuzd (nout(2), newversion, ns, zamin, zamax, zn, am)
 *   ..write converted initial state file
-      call b2wups (nout(2), nx, ny, ns, ne, na, ua, uadia, te, ti, po, 
+      call b2wups (nout(2), nx, ny, ns, ne, na, ua, uadia, te, ti, po,
      &  fna, fhe, fhi, fch, fch_32, fch_52, fch_p, kinrgy,
      &  fna_mdf, fhe_mdf, fhi_mdf, fna_fcor, fna_nodrift, fna_he,
      &  fnaPSch, fhePSch, fhiPSch, fna_eir, fne_eir, fhe_eir, fhi_eir,
