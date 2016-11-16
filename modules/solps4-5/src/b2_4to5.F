@@ -451,15 +451,15 @@ cxpb
             end do
             nspzi_4(is) = k+1
             nspze_4(is) = k+nfluids(lmolscl(nspez(is)))
-          else if (nlpls(is)) then
-            k = 0
-            it = 1
-            do while (k+nfluids(it).lt.nspez(is) .and. it.le.nspecies)
-              k = k + nfluids(it)
-              it = it + 1
+          else if (nlpls(is).and.nspez(is).eq.-1) then
+            nspzi_4(is) = 1
+            nspze_4(is) = 0
+            do it = 1, nspecies
+              nspze_4(is) = nspze_4(is)+nfluids(it)
             end do
-            nspzi_4(is) = k+1
-            nspze_4(is) = k+nfluids(it)
+          else if (nlpls(is).and.nspez(is).ne.0) then
+            nspzi_4(is) = nspez(is)
+            nspze_4(is) = nspez(is)
           endif
         endif
         ksns_4(is) = ntgprt(is)
@@ -2650,6 +2650,8 @@ c
         rcpos(nstrat) = 0
         rcstart(nstrat) = 0
         rcend(nstrat) = 0
+        species_start(nstrat) = 0
+        species_end(nstrat) = ns-1
       else
         nstrat = nstrai
       endif
@@ -2657,7 +2659,6 @@ c
       write(34,hlp_frm) 'CRCSTRA=',('''',crcstra(ib),''',',
      .                                            ib=1,nstrat)
       write(hlp_frm,'(a,i2,a)') '(a,',nstrat,'(1x,i3,'',''))'
-      write(*,*) 'hlp_frm: ',hlp_frm
       write(34, hlp_frm) 'RCPOS=  ',(rcpos(ib)  ,ib=1,nstrat)
       write(34, hlp_frm) 'RCSTART=',(rcstart(ib),ib=1,nstrat)
       write(34, hlp_frm) 'RCEND=  ',(rcend(ib)  ,ib=1,nstrat)
@@ -2668,9 +2669,9 @@ c
       end do
       if (maxval(species_start).gt.0 .or.
      &    minval(species_end).lt.ns-1) then
-        write(hlp_frm,'(a,i2,a)') "(a,",nstrai,"(1x,i2,','))"
-        write(34,hlp_frm) 'SPECIES_START=',species_start(1:nstrai)
-        write(34,hlp_frm) 'SPECIES_END=  ',species_end(1:nstrai)
+        write(hlp_frm,'(a,i2,a)') "(a,",nstrat,"(1x,i2,','))"
+        write(34,hlp_frm) 'SPECIES_START=',species_start(1:nstrat)
+        write(34,hlp_frm) 'SPECIES_END=  ',species_end(1:nstrat)
       endif
       write(hlp_frm,'(a,i2,a)') '(a,1p,',nstrai,'(1x,e9.2,'',''))'
       do ib = 1, nstrai
@@ -2716,11 +2717,11 @@ c
       if (issput_chemical.ne.0) write(34, '(a,i2,a)')
      .   'ISSPUT_CHEMICAL=',issput_chemical,','
 #endif
-      write(hlp_frm,'(a,i2,a)') '(a,i1,a,',nstrai,'(1x,i2,'',''))'
+      write(hlp_frm,'(a,i2,a)') '(a,i1,a,',nstrat,'(1x,i2,'',''))'
       if (maxval(lstrascl).gt.0) then
         do is = 1, nspecies_4
           write(34, hlp_frm)
-     .     'LSTRASCL(1,',is,')=',(lstrascl(ib,is),ib=1,nstrai)
+     .     'LSTRASCL(1,',is,')=',(lstrascl(ib,is),ib=1,nstrat)
         end do
       end if
       if (l_neutrad.ge.0)
@@ -2800,11 +2801,9 @@ c
         write(34,hlp_frm) 'SPS_ID=  ',('''',sps_id_4(ib),''',',
      .                                               ib=1,n_spcsrf_4)
         write(hlp_frm,'(a,i2,a)') '(a,',n_spcsrf_4,'(i10,'',''))'
-        write(*,*) 'hlp_frm: ',hlp_frm
         write(34, hlp_frm) 'I_SPCSRF=',(i_spcsrf(ib),ib=1,n_spcsrf_4)
         write(34, hlp_frm) 'J_SPCSRF=',(j_spcsrf(ib),ib=1,n_spcsrf_4)
         write(hlp_frm,'(a,i2,a)') '(a,1p,',n_spcsrf_4,'(e10.3,'',''))'
-        write(*,*) 'hlp_frm: ',hlp_frm
         write(34, hlp_frm) 'SPS_ABSR=',(sps_absr(ib),ib=1,n_spcsrf_4)
         write(34, hlp_frm) 'SPS_TRNO=',(sps_trno(ib),ib=1,n_spcsrf_4)
         write(34, hlp_frm) 'SPS_TRNI=',(sps_trni(ib),ib=1,n_spcsrf_4)
@@ -2813,7 +2812,6 @@ c
         write(34, hlp_frm) 'SPS_SPPH=',(sps_spph(ib),ib=1,n_spcsrf_4)
         write(34, hlp_frm) 'SPS_SPCH=',(sps_spch(ib),ib=1,n_spcsrf_4)
         write(hlp_frm,'(a,i2,a)') '(a,',n_spcsrf_4,'(i10,'',''))'
-        write(*,*) 'hlp_frm: ',hlp_frm
         write(34, hlp_frm) 'SPS_SGRP=',(sps_sgrp(ib),ib=1,n_spcsrf_4)
         write(hlp_frm,'(a,i2,a)')
      .   '(a,',n_spcsrf_4,'('''''''',a8,'''''''','',''))'
@@ -2843,7 +2841,6 @@ c
       open(33,file='b2.numerics.parameters')
       write(33,'(a)') '&NUMERICS'
       write(hlp_frm,'(a,i1,a)') '(a,1p,',nnreg(0),'(e9.2,'',''))'
-      write(*,*) 'hlp_frm: ',hlp_frm
       needed = .false.
       do ireg = 1, nnreg(0)
         needed = needed .or. dtee(ireg).ne.1.0_R8
@@ -2857,7 +2854,6 @@ c
       if (needed)
      > write(33, hlp_frm) 'DTEI(1)=',(dtei(ireg),ireg=1,nnreg(0))
       write(hlp_frm,'(a,i2,a)') '(a,i1,a,1p,',ns,'(e9.2,'',''))'
-      write(*,*) 'hlp_frm: ',hlp_frm
       do ireg = 1, nnreg(0)
         needed = .false.
         do is = 0, ns-1
@@ -3047,7 +3043,6 @@ c
       if (j_h_at.ne.0) write(38,'(a,i2,a)') 'J_H_AT=',j_h_at,','
       if (j_he_at.ne.0) write(38,'(a,i2,a)') 'J_HE_AT=',j_he_at,','
       write(hlp_frm, '(a,i2,a)') '(a,',nmol,'(i2,'',''))'
-      write(*,*) 'hlp_frm: ',hlp_frm
       write(38, hlp_frm) 'L_H_MOL=',(l_h_mol(is),is=1,nmol)
       write(38,'(a,1pe9.2,a)') 'Spmp_He_to_D=',Spmp_He_to_D,','
       write(38,'(a,1pe9.2,a)') 'Spmp_nom=',Spmp_nom,','
@@ -3061,28 +3056,24 @@ c
       if (npfrgrp.ne.0) then
         write(38,'(a,i2,a)') 'NPFRGRP=',npfrgrp,','
         write(hlp_frm, '(a,i2,a)') '(a,',npfrgrp,'(i3,'',''))'
-        write(*,*) 'hlp_frm: ',hlp_frm
         write(38, hlp_frm) 'IPFRGRP=',(ipfrgrp(is),is=1,npfrgrp)
         write(38, hlp_frm) 'JPFRGRP=',(jpfrgrp(is),is=1,npfrgrp)
         write(hlp_frm,'(a,i2,a)') '(a,',npfrgrp,'(a1,a8,a2))'
         write(38,hlp_frm) 'GPFRGRP=',('''',gpfrgrp(is),''',',
      .                                             is=1,npfrgrp)
         write(hlp_frm, '(a,i3,a)') '(a,',jpfrgrp(npfrgrp),'(i3,'',''))'
-        write(*,*) 'hlp_frm: ',hlp_frm
         write(38, hlp_frm) 'LPFRGRP=',
      .   (lpfrgrp(is),is=1,jpfrgrp(npfrgrp))
       end if
       if (nntrgrp.ne.0) then
         write(38,'(a,i2,a)') 'NNTRGRP=',nntrgrp,','
         write(hlp_frm, '(a,i2,a)') '(a,',nntrgrp,'(i3,'',''))'
-        write(*,*) 'hlp_frm: ',hlp_frm
         write(38, hlp_frm) 'INTRGRP=',(intrgrp(is),is=1,nntrgrp)
         write(38, hlp_frm) 'JNTRGRP=',(jntrgrp(is),is=1,nntrgrp)
         write(hlp_frm,'(a,i2,a)') '(a,',nntrgrp,'(a1,a8,a2))'
         write(38,hlp_frm) 'GNTRGRP=',('''',gntrgrp(is),''',',
      .                                             is=1,nntrgrp)
         write(hlp_frm, '(a,i3,a)') '(a,',jntrgrp(nntrgrp),'(i3,'',''))'
-        write(*,*) 'hlp_frm: ',hlp_frm
         write(38, hlp_frm) 'LNTRGRP=',
      .   (lntrgrp(is),is=1,jntrgrp(nntrgrp))
       end if
@@ -3096,7 +3087,6 @@ c
       end if
       if (i.gt.0) then
         write(hlp_frm, '(a,i3,a)') '(a,',i,'(i3,'',''))'
-        write(*,*) 'hlp_frm: ',hlp_frm
         write(38, hlp_frm) 'LHETRGTS=',(lhetrgts(is),is=1,i)
       end if
       write(38,'(a)') '/'
