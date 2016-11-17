@@ -386,12 +386,12 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
       write(70,'(1x,2f5.2)') 0.5, 0.5
       write(70,'(a)') '*nmbpdm'
       write(70,'(i3)') 1
-      xcnt = (minval(crx(1:nx,1:ny,0:4))+
-     &        maxval(crx(1:nx,1:ny,0:4)))/2.0_R8
-      ycnt = (minval(cry(1:nx,1:ny,0:4))+
-     &        maxval(cry(1:nx,1:ny,0:4)))/2.0_R8
-      scale = max(maxval(crx(1:nx,1:ny,0:4))-minval(crx(1:nx,1:ny,0:4)),
-     &            maxval(cry(1:nx,1:ny,0:4))-minval(cry(1:nx,1:ny,0:4)))
+      xcnt = (minval(crx(1:nx,1:ny,0:3))+
+     &        maxval(crx(1:nx,1:ny,0:3)))/2.0_R8
+      ycnt = (minval(cry(1:nx,1:ny,0:3))+
+     &        maxval(cry(1:nx,1:ny,0:3)))/2.0_R8
+      scale = max(maxval(crx(1:nx,1:ny,0:3))-minval(crx(1:nx,1:ny,0:3)),
+     &            maxval(cry(1:nx,1:ny,0:3))-minval(cry(1:nx,1:ny,0:3)))
       write(70,'(1x,1p,4f5.2)') xcnt-scale/2.0_R8, xcnt+scale/2.0_R8,
      &                          ycnt-scale/2.0_R8, ycnt+scale/2.0_R8
       close(70)
