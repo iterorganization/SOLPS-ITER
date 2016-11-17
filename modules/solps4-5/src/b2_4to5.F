@@ -457,7 +457,7 @@ cxpb
             do it = 1, nspecies
               nspze_4(is) = nspze_4(is)+nfluids(it)
             end do
-          else if (nlpls(is).and.nspez(is).ne.0) then
+          else if (nlpls(is).and.nspez(is).gt.0) then
             nspzi_4(is) = nspez(is)
             nspze_4(is) = nspez(is)
           endif
@@ -1315,6 +1315,8 @@ c
       use b2mod_b2cmpa
       use b2mod_b2cmpb
       use b2mod_b2cmpt
+      use comsou
+     , , only: nlpls, nspez
       implicit none
 
       integer nx,ny,ns
@@ -1448,7 +1450,8 @@ c Fill out b2mod_neutrals_namelist data
         if (crcstra(is).eq.'V') volrecstart(is) = volrecstart_4
         if (nspzi_4(is).ne.0) species_start(is) = is1(nspzi_4(is))
         if (species_start(is).gt.0 .and. species_start(is).lt.ns) then
-          if (.not.is_neutral(species_start(is))) then
+          if (.not.(nlpls(is).and.nspez(is).gt.0) .and.
+     &        .not.is_neutral(species_start(is))) then
             if (lnext(species_start(is)-1,species_start(is)))
      >       species_start(is) = species_start(is)-1
           endif
