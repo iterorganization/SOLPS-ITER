@@ -56,7 +56,7 @@ LD_UAL     = `pkg-config imas-lowlevel imas-ifort --libs`
 PARAVIEW_MAJOR_VERSION = 5.1
 PARAVIEW_LIBDIR=${PARAVIEW_DIR}/lib/paraview-${PARAVIEW_MAJOR_VERSION}
 LD_CATALYST= ${PARAVIEW_LIBDIR}/libvtkPVPythonCatalyst-pv${PARAVIEW_MAJOR_VERSION}.so.1 \
- 	${PARAVIEW_LIBDIR}/libvtkPVCatalyst-pv${PARAVIEW_MAJOR_VERSION}.so.1 \
+	${PARAVIEW_LIBDIR}/libvtkPVCatalyst-pv${PARAVIEW_MAJOR_VERSION}.so.1 \
 	${PARAVIEW_LIBDIR}/libvtkPVServerManagerApplication-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
 	${PARAVIEW_LIBDIR}/libvtkPVServerManagerCore-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
 	${PARAVIEW_LIBDIR}/libvtkPVServerImplementationCore-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
