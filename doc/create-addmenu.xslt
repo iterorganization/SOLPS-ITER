@@ -7,7 +7,7 @@
 # xsltproc create-addmenu.xslt solps-input.xml > ../../solps-gui/src/widgets/b2menu.py
 b2mn_menu = {
 # Category : ( parameter, type, default, description )
-#            ( parametergroup, [(name, type, default, description)...], description)
+#         or ( parametergroup, 'paramgroup', [(name, type, default, description)...], description)
   <xsl:call-template name="block">
     <xsl:with-param name="category">Run</xsl:with-param>
   </xsl:call-template> 
@@ -35,7 +35,7 @@ b2mn_menu = {
   '<xsl:value-of select="$category"/>': [
   <xsl:for-each select="solps/module/param[category=$category]| solps/module/paramgroup[category=$category]">
 	   <xsl:choose><xsl:when test="name(.)='paramgroup'">
-      ( '<xsl:value-of select="name"/>', [
+      ( '<xsl:value-of select="name"/>', 'paramgroup', [
         <xsl:for-each select="param">
                ('<xsl:value-of select="name"/>', '<xsl:value-of select="type"/>', '<xsl:value-of select="default"/>','''<xsl:value-of select="description"/>'''), 
         </xsl:for-each>],
