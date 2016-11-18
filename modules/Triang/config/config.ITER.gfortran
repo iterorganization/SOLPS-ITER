@@ -21,7 +21,7 @@ LINK_MOD 	=
 FC       	= gfortran
 
 ifdef SOLPS_DEBUG
-FCOPTS 		= -g -C -debug all
+FCOPTS 		= -g -fcheck=all -fbacktrace
 else
 FCOPTS 		= -O3
 endif
@@ -39,7 +39,7 @@ LDEXTRA  	=
 
 INCMOD 		= -I
 MOD 		  = mod
-OBJDEST 	= -o ${OBJDIR}/$*.o
+OBJDEST 	= -J${OBJDIR} -o ${OBJDIR}/$*.o
 
 BLD 		  = ar rcv
 
