@@ -240,3 +240,4 @@ geometry/zshadd.F
 plotting/zylind.F 
 plotting/zylnd2.F 
 plotting/zylpln.F 
+basic/eirarray.F

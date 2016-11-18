@@ -22,7 +22,7 @@ OBJDEST = -J${OBJDIR}
 BLD = ar rcv
 
 GRLIBES = ${LD_NCARG}
-LDLIBES = ${LD_NAG} ${LD_NETCDF} ${LD_MSCL} -L/home/aap/lib/src/EIRLIB/libs/bin -leirbase -lgridman -linspect
+LDLIBES = ${LD_NAG} ${LD_NETCDF} ${LD_MSCL}
 
 LD = gfortran
 LDOPTS = 

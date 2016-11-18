@@ -1,4 +1,13 @@
 
+# Include global SOLPS compiler settings
+ifndef SOLPS_CPP
+ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER} ] && echo yes || echo no ),yes)
+  include ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
+else
+  $(warning ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER} not found.)
+endif
+endif
+
 #SYSNAME should be the output of the 'fs sysname' command
 SYSNAME = amd64_sles11
 

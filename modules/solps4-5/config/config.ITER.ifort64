@@ -41,7 +41,7 @@ LDLIBES = ${LD_NETCDF} ${LD_NAG} ${LD_MSCL}
 LD = ifort
 LDOPTS = -i_dynamic
 
-LCPP = ${LD_SONNET} -L/archive/1/kukusha/backup/home/wiesens/B2E/solps4.3/src/lib/EIRLIB/libs/bin -leirbase
+LCPP = ${LD_SONNET}
 
 
 #!!!Local Variables:
