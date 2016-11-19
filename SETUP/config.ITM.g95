@@ -59,9 +59,10 @@ LD_SONNET  = -L${SOLPSLIB} -lsonnet
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNCAR4 -DMDSPLUS -DNO_F01AAF -DNO_CDF -DNO_NAG -DIMAS
+SOLPS_CPP      = -DNCAR4 -DMDSPLUS -DNO_F01AAF -DNO_CDF -DNO_NAG
 B25_DEFINES    =
 EIRENE_DEFINES =
+
 
 
 #
@@ -90,7 +91,23 @@ export SOLPS_CPP
 export B25_DEFINES
 export EIRENE_DEFINES
 
-#!!!Local Variables:
-#!!! mode: Makefile
-#!!! End:
+# Autodetected optional features:
 
+# Build with Catalyst if ParaView is in PATH
+ifneq (,$(shell which paraview-config))
+  SOLPS_CPP   += -DCATALYST
+  LD_CATALYST=`paraview-config --libs vtkPVPythonCatalyst`
+  export LD_CATALYST
+oendif
+
+# Build with IMAS if imas module is loaded
+ifdef IMAS_PREFIX
+  SOLPS_CPP += -DIMAS
+  LD_UAL     = `pkg-config imas-lowlevel imas-ifort --libs`
+  export LD_UAL
+endif
+
+
+## Local Variables:
+## mode: Makefile
+## End:
