@@ -99,7 +99,7 @@ ifneq (,$(shell which paraview-config))
   SOLPS_CPP   += -DCATALYST
   LD_CATALYST=`paraview-config --libs vtkPVPythonCatalyst`
   export LD_CATALYST
-oendif
+endif
 
 # Build with IMAS if imas module is loaded
 ifdef IMAS_PREFIX
