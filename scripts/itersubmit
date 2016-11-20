@@ -40,7 +40,7 @@ argloop:
     set PROCS=`echo $MPIOPTS | awk.transpose | grep -A 1 "\-np" | tail -n 1`
     echo Asking for $PROCS processors
     shift
-    echo sleep 600 | qsub -q ib_gen8 -lnodes=c05s11:ppn=16,walltime=1000
+    echo sleep 600 | qsub -q ib_gen8 -lnodes=c05s30:ppn=1,walltime=1000
     goto argloop
   endif
 
