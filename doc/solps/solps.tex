@@ -1809,7 +1809,7 @@ for itself by climbing up the tree. You can add options to the {\tt b2run} comma
   \item[-n] Will run the {\tt Makefile} in dry-run mode. This is useful to check that all the needed files for the runs are in the right order of precedence. If they are not, the {\tt correct\_baserun\_timestamps} script can be used to re-order the pre-requisite files found in the associated {\tt baserun} directory
   \item[-m $\backslash$"MPI-launcher + options$\backslash$"] Allows to launch {\tt b2XX} in MPI
     mode with the provided options (example: [the syntax is important, both
-      the slashes and the quotes are needed] {\tt b2run -m \\"mpiexec -np 2\\" b2mn})
+      the slashes and the quotes are needed] \verb!b2run -m \"mpiexec -np 2\" b2mn!)
   \item[-s] Specifies that one wishes to run {\tt B2.5} in stand-alone mode, i.e. without any coupling to {\tt Eirene}.
   \item[-d "debugger\_name"] Allows to run {\tt b2XX} with the named debugger (example: {\tt b2run -d totalview b2mn}). If not debugger name is specified, the debugger defined with the DBX environment variable and specified in the \${\tt \{SOLPSTOP\}/SETUP/setup.csh.}\${\tt \{HOST\_NAME\}.}\${\tt \{COMPILER\}.local} or \${\tt \{SOLPSTOP\}/SETUP\allowbreak/setup.csh.}\${\tt \{HOST\_NAME\}.}\${\tt \{COMPILER\}} files will be used.
 \end{description}

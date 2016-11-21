@@ -141,12 +141,12 @@ c*** 1.  General data for the run
      .                 nloldran,nlcascad,nloctree,nlwrmsh,NEXVS,
      .                 nltrimesh
       handle=.false.
-      do i=1,nreaci
+      do i=1,nrcln
         handle=handle.or.streql(filnam(i),'AMJUEL')
       end do
       if (handle) write(iunoo,720) utxtfl(1)
       handle=.false.
-      do i=1,nreaci
+      do i=1,nrcln
         handle=handle.or.streql(filnam(i),'HYDHEL')
       end do
       if (handle) write(iunoo,720) utxtfl(2)
@@ -158,7 +158,7 @@ c*** 1.  General data for the run
       enddo
       if (carbon) write(iunoo,720) utxtfl(5)
       handle=.false.
-      do i=1,nreaci
+      do i=1,nrcln
         handle=handle.or.streql(filnam(i),'ADAS')
       end do
       if (handle) write(iunoo,720) utxtfl(6)
