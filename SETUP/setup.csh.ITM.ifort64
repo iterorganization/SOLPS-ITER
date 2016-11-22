@@ -9,3 +9,4 @@ endif
 setenv MODULEPATH /afs/ipp/common/usr/modules.2014/@sys/modulefiles/mpi:$MODULEPATH
 module unload impi
 module load impi/5.1.3
+module load solps-gui

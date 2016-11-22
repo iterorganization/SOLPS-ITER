@@ -4,3 +4,4 @@ setenv NCARG_ROOT /pfs/work/dpc/SOLPS-ITER/NCARG
 setenv FC g95
 if ($?TOKAMAKNAME) setenv DEVICE $TOKAMAKNAME
 # load modules
+module load solps-gui
