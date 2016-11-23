@@ -1,6 +1,7 @@
 setenv GLI_HOME /pfs/work/dpc/SOLPS-ITER/gks
 setenv PATH ${PATH}:/pfs/work/dpc/SOLPS-ITER/NETCDF/bin
 setenv NCARG_ROOT /pfs/work/dpc/SOLPS-ITER/NCARG
+setenv PATH ${PATH}:${NCARG_ROOT}/bin
 setenv SOLPSWORK /pfs/work/$USER/SOLPS-ITER
 if ($?TOKAMAKNAME) then
   setenv DEVICE $TOKAMAKNAME

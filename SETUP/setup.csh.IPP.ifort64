@@ -17,7 +17,8 @@ module load impi/5.1.2
 setenv DEVICE upgrade
 setenv GLI_HOME /ptmp1/work/dpc/SOLPS-ITER/gks
 setenv NCARG_ROOT /ptmp1/work/dpc/SOLPS-ITER/NCARG
+setenv PATH ${PATH}
 setenv MDSPLUS_DIR /ptmp1/work/dpc/SOLPS-ITER/MDSPLUS
-setenv PATH ${PATH}:/ptmp1/work/dpc/SOLPS-ITER/NETCDF/bin:${MDSPLUS_DIR}/bin
+setenv PATH ${PATH}:${NCARG_ROOT}/bin:/ptmp1/work/dpc/SOLPS-ITER/NETCDF/bin:${MDSPLUS_DIR}/bin
 setenv MDS_PATH ${MDSPLUS_DIR}/tdi
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${MDSPLUS_DIR}/lib
