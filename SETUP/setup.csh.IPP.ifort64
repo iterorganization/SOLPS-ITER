@@ -12,6 +12,7 @@ module load hdf5-serial
 module load git
 module unload impi
 module load impi/5.1.2
+module load nag_flib/intel/mk24
 
 # Environment variables
 setenv DEVICE upgrade
