@@ -131,7 +131,7 @@ c*** 1.  General data for the run
       utxtgt =
      . " Created with SOLPS-ITER Uinp version "//git_version_Uinp
       write(iunoo,700) utxtgt
-      write(iunoo,700) utxthd(1)   
+      write(iunoo,700) utxthd(1)
       write(iunoo,707) nmach,nmode,ntcpu,nfile,niter0,niter,
      .                 ntime0,ntim1,nfullrun
       write(iunoo,707) noptim,noptm1,ngeom_usr,ncoup_input,
