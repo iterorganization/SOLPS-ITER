@@ -29,6 +29,9 @@
        [ -s ../convert/fort.35 ] && cp -uv ../convert/fort.35 .
      }
   }
+  [ -s ../convert/input.dat.2 ] || {
+    [ -s ../convert/input.dat ] && cp -uv ../convert/input.dat ../baserun
+  }
   [ -s ../baserun/fort.33 ] || cp -uv ../convert/fort.33 ../baserun
   [ -s ../baserun/fort.34 ] || cp -uv ../convert/fort.34 ../baserun
   [ -s ../baserun/fort.35 ] || cp -uv ../convert/fort.35 ../baserun

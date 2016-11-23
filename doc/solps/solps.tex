@@ -1886,6 +1886,12 @@ itersubmit -m "<my MPI options>" <my_optional_submission_file_name>
 \end{verbatim}
 The launching program is identified by the variable \${\tt MPI\_EXEC} inside the submission file, and options can be by hand as well using the \${\tt MPI\_OPTS} variable.
 
+The default job name is {\tt SOLPS-ITER} for coupled jobs and {\tt B2.5} for standalone jobs. It can be changed by means of the
+\begin{verbatim}
+itersubmit -j <my_job_name>
+\end{verbatim}
+command.
+
 The {\tt QSUB.iter} script first of all changes directory to \${\tt \{SOLPSTOP\}}
 with the help of {\tt SOLPSTOP} file
 and executes {\tt setup.csh} there. This is necessary
@@ -2153,7 +2159,7 @@ or, best:
 \item[numnuc] number of distinct species
 \item[nucspec] nuclear charge, lowest charge state, highest charge state
 \item[flag] which atomic physics database to use
-\item[tailep] fraction of supra-thermal electrons used in correcting the rates
+\item[tailep] smoothing parameter for the temperature dependence of some rate coefficients
 \item[switches] optional, described in {\tt b2cdci}, (see Appendix \ref{lis:b2cdci})
 \end{description}
 

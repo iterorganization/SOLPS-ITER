@@ -6,7 +6,7 @@
 #PBS -j oe
 #PBS -M #EMAIL#
 #PBS -m e
-#PBS -N B2.5
+#PBS -N #JOBNAME#
 #PBS -V
 
 # cd "$PBS_O_WORKDIR" || {

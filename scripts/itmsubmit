@@ -3,6 +3,7 @@
 set NAME=/tmp/.run.$$.$USER.`date +%Y%m%d%H%M%S`
 set NAMP=/tmp/.zut.$$.$USER.`date +%Y%m%d%H%M%S`
 set EMAIL=`get_git_email`
+set JOB_NAME="SOLPS-ITER"
 set PROCS=1
 echo Your email is $EMAIL
 
@@ -18,6 +19,13 @@ else
 endif
 
 argloop:
+  if ("X${1}X" == "X-jX") then
+    shift
+    set JOB_NAME="$1"
+    echo Job name is ${JOB_NAME}
+    shift
+    goto argloop
+  endif
   if ("X${1}X" == "X-zX") then
     set compress="-gz"
     echo run.log will be compressed
@@ -26,6 +34,7 @@ argloop:
   endif
   if ("X${1}X" == "X-sX") then
     set standalone="yes"
+    if ($JOB_NAME == "SOLPS-ITER") set JOB_NAME="B2.5"
     echo Asking for a B2.5 standalone run
     shift
     goto argloop
@@ -101,7 +110,7 @@ else
   set NAMP=$QSUB
 endif
 
-sed -e 's:#PWD#:'$PWD':g' -e 's:#SOLPSTOP#:'$SOLPSTOP':g' -e 's:#EMAIL#:'$EMAIL':g' -e "s:#MPIOPTS#:'$MPIOPTS':g" -e 's:#PROCS#:'$PROCS':g' < $NAMP > $NAME
+sed -e 's:#PWD#:'$PWD':g' -e 's:#SOLPSTOP#:'$SOLPSTOP':g' -e 's:#EMAIL#:'$EMAIL':g' -e "s:#MPIOPTS#:'$MPIOPTS':g" -e 's:#PROCS#:'$PROCS':g' -e 's:#JOBNAME#:'$JOB_NAME':g"< $NAMP > $NAME
 
 set msg="Submitted at `date`"
 update_solps_run_status -n ${msg}

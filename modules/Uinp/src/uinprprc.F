@@ -1308,7 +1308,7 @@ c>>>
                   if (lknd.ne.3) then
                     iie=30000
                   else
-                    iie=30002
+                    iie=30300
                   endif
                   if(k2.le.0 .or. k2.gt.nrcln) then !{
                     write(0,*) 'k2 outside the range - internal error ',
@@ -1322,7 +1322,7 @@ c>>>
                   if (lknd.ne.3) then
                     iie=30000
                   else
-                    iie=30002
+                    iie=30300
                   endif
                   if(k4.le.0 .or. k4.gt.nrcln) then !{
                     write(0,*) 'k4 outside the range - internal error ',
@@ -1336,10 +1336,11 @@ c>>>
                   iie=0
                   hlp_ee=-rctndlte(k0)
                 end if !}
-                if(streql(cc,'DS') .or.
-     .           (lknd.eq.3.and.streql(cc,'EI'))) then !{
+                if(streql(cc,'DS')) then !{
                   hlp_e1=rctnenr1(k0)
                   hlp_e2=rctnenr2(k0)
+                else if (lknd.eq.3.and.streql(cc,'EI')) then !}{
+                  hlp_e1=ir(k4)
                 end if !}
               else !}{
                 iie=0

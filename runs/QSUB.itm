@@ -5,7 +5,7 @@
 #$ -M #EMAIL#
 #$ -m e
 #$ -notify
-#$ -N B2.5
+#$ -N #JOBNAME#
 #$ -V
 
 setenv PATH ${PATH}:/afs/ipp-garching.mpg.de/@sys/bin

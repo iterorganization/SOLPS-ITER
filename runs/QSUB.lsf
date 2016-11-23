@@ -1,8 +1,8 @@
 #! /bin/tcsh
 
-#BSUB -e B2.5.e%J.%I
-#BSUB -o B2.5.o%J.%I
-#BSUB -J B2.5
+#BSUB -e #JOBNAME#.e%J.%I
+#BSUB -o #JOBNAME#.o%J.%I
+#BSUB -J #JOBNAME#
 #BSUB -W 36:00
 
 setenv PATH ${PATH}:/afs/ipp-garching.mpg.de/@sys/bin

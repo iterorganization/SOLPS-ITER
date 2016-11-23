@@ -1,8 +1,8 @@
 #! /bin/tcsh
 
-#BSUB -e SOLPS-ITER.e%J.%I
-#BSUB -o SOLPS-ITER.o%J.%I
-#BSUB -J SOLPS-ITER
+#BSUB -e #JOBNAME#.e%J.%I
+#BSUB -o #JOBNAME#.o%J.%I
+#BSUB -J #JOBNAME#
 #BSUB -W 36:00
 
 

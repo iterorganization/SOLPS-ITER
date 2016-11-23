@@ -6,7 +6,7 @@
 #$ -M #EMAIL#
 #$ -m e
 #$ -notify
-#$ -N SOLPS-ITER
+#$ -N #JOBNAME#
 #$ -V
 
 setenv PATH ${PATH}:/afs/ipp-garching.mpg.de/@sys/bin
