@@ -110,7 +110,7 @@ else
   set NAMP=$QSUB
 endif
 
-sed -e 's:#PWD#:'$PWD':g' -e 's:#SOLPSTOP#:'$SOLPSTOP':g' -e 's:#EMAIL#:'$EMAIL':g' -e "s:#MPIOPTS#:'$MPIOPTS':g" -e 's:#PROCS#:'$PROCS':g' -e 's:#JOBNAME#:'$JOB_NAME':g"< $NAMP > $NAME
+sed -e 's:#PWD#:'$PWD':g' -e 's:#SOLPSTOP#:'$SOLPSTOP':g' -e 's:#EMAIL#:'$EMAIL':g' -e "s:#MPIOPTS#:'$MPIOPTS':g" -e 's:#PROCS#:'$PROCS':g' -e "s:#JOBNAME#:'$JOB_NAME':g" < $NAMP > $NAME
 
 set msg="Submitted at `date`"
 update_solps_run_status -n ${msg}
