@@ -296,8 +296,7 @@ c*** 4
      ,  8*1, 5*1 /
       data spcdns / 4*0, 4*0, 4*0, 3*0, 7*0, 11*0, 19*0, 8*0, 5*0 /
 
-      integer, parameter :: lugen=3
-      data nspigen, (spcigen(i),i=1,lugen) / lugen, 'D', 'He', 'C' /
+      data nspigen, (spcigen(i),i=1,3) / 3, 'D', 'He', 'C' /
       data nspipls, nspiatm, nspimol, nspiion /
      /        0   ,    0   ,    0   ,    0    /
 

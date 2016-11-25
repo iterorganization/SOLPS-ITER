@@ -101,12 +101,30 @@ c=======================================================================
     1 call rearre(p1,3*nlim,i)
       call vscale(p1,0.1,p1,i)
       nlimi=i/3
+      if(nlimi.gt.nlim) then !{
+        write(0,*) 'Too many wall elements: maximum ',nlim
+        write(0,*) 'Current number of requested elements: ',nlimi
+        call xerrab
+     .   (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+      end if !}
       goto 9999
     2 call rearre(p2,3*nlim,i)
       call vscale(p2,0.1,p2,i)
       nlimi=i/3
+      if(nlimi.gt.nlim) then !{
+        write(0,*) 'Too many wall elements: maximum ',nlim
+        write(0,*) 'Current number of requested elements: ',nlimi
+        call xerrab
+     .   (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+      end if !}
       goto 9999
     3 call vsend(jadch0,luwrk,luskel)
+      if(luskel+1.gt.nlim) then !{
+        write(0,*) 'Too many wall elements: maximum ',nlim
+        write(0,*) 'Current number of requested elements: ',luskel+1
+        call xerrab
+     .   (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+      end if !}
       call rearri(luwrk(luskel+1),nlim-luskel,i)
       luskel=i+luskel
       call sortia(luwrk,luind,luskel)
@@ -120,44 +138,116 @@ c=======================================================================
       end if
       call sortia(luwrk,luind,i)
       call rshffl(luwrk,luind,jadch1(1,lusgm),i)
+      if(i+1.gt.nlim) then !{
+        write(0,*) 'Too many wall elements: maximum ',nlim
+        write(0,*) 'Current number of requested elements: ',i+i
+        call xerrab
+     .   (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+      end if !}
       if(i.lt.nlim) jadch1(i+1,lusgm)=0
       goto 9999
     5 call rearri(jliin,nlim,i)
       nlimi=i
+      if(nlimi.gt.nlim) then !{
+        write(0,*) 'Too many wall elements: maximum ',nlim
+        write(0,*) 'Current number of requested elements: ',nlimi
+        call xerrab
+     .   (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+      end if !}
       goto 9999
     6 call rearri(jlside,nlim,i)
       nlimi=i
+      if(nlimi.gt.nlim) then !{
+        write(0,*) 'Too many wall elements: maximum ',nlim
+        write(0,*) 'Current number of requested elements: ',nlimi
+        call xerrab
+     .   (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+      end if !}
       goto 9999
     7 call rearri(jadksw,nlim,i)
       nlimi=i
+      if(nlimi.gt.nlim) then !{
+        write(0,*) 'Too many wall elements: maximum ',nlim
+        write(0,*) 'Current number of requested elements: ',nlimi
+        call xerrab
+     .   (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+      end if !}
       goto 9999
     8 call rearri(jadjsw,nlim,i)
       nlimi=i
+      if(nlimi.gt.nlim) then !{
+        write(0,*) 'Too many wall elements: maximum ',nlim
+        write(0,*) 'Current number of requested elements: ',nlimi
+        call xerrab
+     .   (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+      end if !}
       goto 9999
     9 call rearri(jlcol,nlim,i)
       nlimi=i
+      if(nlimi.gt.nlim) then !{
+        write(0,*) 'Too many wall elements: maximum ',nlim
+        write(0,*) 'Current number of requested elements: ',nlimi
+        call xerrab
+     .   (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+      end if !}
       goto 9999
    10 call rearri(jlacll,nlim,i)
       nlimi=i
+      if(nlimi.gt.nlim) then !{
+        write(0,*) 'Too many wall elements: maximum ',nlim
+        write(0,*) 'Current number of requested elements: ',nlimi
+        call xerrab
+     .   (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+      end if !}
       goto 9999
    11 call rearra(umtrl,nlim,i)
       nlimi=i
+      if(nlimi.gt.nlim) then !{
+        write(0,*) 'Too many wall elements: maximum ',nlim
+        write(0,*) 'Current number of requested elements: ',nlimi
+        call xerrab
+     .   (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+      end if !}
       i=0
       call uinmtr(umtrl,i,nlimi)
       goto 9999
    12 call rearre(ewala,nlim,i)
       nlimi=i
+      if(nlimi.gt.nlim) then !{
+        write(0,*) 'Too many wall elements: maximum ',nlim
+        write(0,*) 'Current number of requested elements: ',nlimi
+        call xerrab
+     .   (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+      end if !}
       goto 9999
    13 call rearre(rcycta,nlim,i)
       call vscale(rcycta,-1.,rcycta,i)
       call vbias(rcycta,1.,rcycta,i)
       nlimi=i
+      if(nlimi.gt.nlim) then !{
+        write(0,*) 'Too many wall elements: maximum ',nlim
+        write(0,*) 'Current number of requested elements: ',nlimi
+        call xerrab
+     .   (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+      end if !}
       goto 9999
    14 call rearre(trnspa(1,1),nlim,i)
       nlimi=i
+      if(nlimi.gt.nlim) then !{
+        write(0,*) 'Too many wall elements: maximum ',nlim
+        write(0,*) 'Current number of requested elements: ',nlimi
+        call xerrab
+     .   (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+      end if !}
       goto 9999
    15 call rearre(trnspa(1,2),nlim,i)
       nlimi=i
+      if(nlimi.gt.nlim) then !{
+        write(0,*) 'Too many wall elements: maximum ',nlim
+        write(0,*) 'Current number of requested elements: ',nlimi
+        call xerrab
+     .   (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+      end if !}
       goto 9999
    16 call resimi(lusgm)
       goto 9999
@@ -179,6 +269,12 @@ c=======================================================================
       if(luswch.ge.1 .and. luswch.le.4) jedgeo(luswch)=luwrk(1)
       goto 9999
    23 call rearri(jlref,nlim,i)
+      if(i.gt.nlim) then !{
+        write(0,*) 'Too many wall elements: maximum ',nlim
+        write(0,*) 'Current number of requested elements: ',i
+        call xerrab
+     .   (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+      end if !}
       goto 9999
    24 call resimi(i)
       goto 9999
@@ -187,20 +283,62 @@ c=======================================================================
    26 call skipit
       goto 9999
    27 call rearri(nmvsle,nlim,nnvsle)
+      if(nnvsle.gt.nlim) then !{
+        write(0,*) 'Too many wall elements: maximum ',nlim
+        write(0,*) 'Current number of requested elements: ',nnvsle
+        call xerrab
+     .   (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+      end if !}
       goto 9999
    28 call skipit
       goto 9999
    29 call rearri(jlsptp,nlim,i)
+      if(i.gt.nlim) then !{
+        write(0,*) 'Too many wall elements: maximum ',nlim
+        write(0,*) 'Current number of requested elements: ',i
+        call xerrab
+     .   (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+      end if !}
       goto 9999
    30 call rearri(jlsptc,nlim,i)
+      if(i.gt.nlim) then !{
+        write(0,*) 'Too many wall elements: maximum ',nlim
+        write(0,*) 'Current number of requested elements: ',i
+        call xerrab
+     .   (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+      end if !}
       goto 9999
    31 call rearri(jsrss,nlim,i)
+      if(i.gt.nlim) then !{
+        write(0,*) 'Too many wall elements: maximum ',nlim
+        write(0,*) 'Current number of requested elements: ',i
+        call xerrab
+     .   (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+      end if !}
       goto 9999
    32 call rearri(jsrsg,nlim,i)
+      if(i.gt.nlim) then !{
+        write(0,*) 'Too many wall elements: maximum ',nlim
+        write(0,*) 'Current number of requested elements: ',i
+        call xerrab
+     .   (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+      end if !}
       goto 9999
    33 call rearre(rcycsa,nlim,i)
+      if(i.gt.nlim) then !{
+        write(0,*) 'Too many wall elements: maximum ',nlim
+        write(0,*) 'Current number of requested elements: ',i
+        call xerrab
+     .   (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+      end if !}
       goto 9999
    34 call rearre(rcycca,nlim,i)
+      if(i.gt.nlim) then !{
+        write(0,*) 'Too many wall elements: maximum ',nlim
+        write(0,*) 'Current number of requested elements: ',i
+        call xerrab
+     .   (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+      end if !}
       goto 9999
    36 call resimi(luswch)
       if(.not.tgdtinpt) then
