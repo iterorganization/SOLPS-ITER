@@ -60,7 +60,7 @@ endif
 unexport SOLPS_DEBUG
 unexport SOLPS_MPI
 
-.PHONY: solps solps_mpi all all_mpi carre divgeo b25 b25_mpi eirene eirene_mpi b25eirene b25eirene_mpi b25eirene_ig uinp triang sonnet-light b2sxdr manual local depend tags clean clean_% %_debug VERSION help
+.PHONY: solps solps_mpi all all_mpi carre divgeo b25 b25_mpi eirene eirene_mpi b25eirene b25eirene_mpi b25eirene_ig uinp triang fxdr sonnet-light b2sxdr manual local depend tags clean clean_% %_debug VERSION help
 
 DEFAULT: solps
 
@@ -173,6 +173,9 @@ triang_nox:
 amds:
 	cd modules/amds; ${MAKE}
 
+fxdr:
+	cd modules/fxdr; ${MAKE}
+
 sonnet-light:
 	@-mkdir -p ${SOLPSLIB}
 	cd modules/Sonnet-light; ${MAKE} all INSTALL_USERAREA=${SOLPSLIB}
@@ -205,9 +208,10 @@ tags:
 	cd modules/Uinp;           ${MAKE} tags
 	cd modules/Triang;         ${MAKE} tags
 	cd modules/DivGeo;         ${MAKE} tags
+	cd modules/DivGeo/convert; ${MAKE} tags
 	cd modules/DivGeo/equtrn;  ${MAKE} tags
 #	cd modules/solps4-5;       ${MAKE} tags
-	rm -f TAGS ; etags -o TAGS modules/Carre/src/*/*.F modules/Carre/src/include/*.* modules/Eirene/src/*/*.f modules/Eirene/src/interfaces/couple_SOLPS-ITER/*.f modules/Eirene/src/user-routines/user_iter/*.f modules/Eirene/src/geometry/trc-time-routines/*.f modules/Eirene/src/*/*.[Ff]90 modules/Eirene/src/interfaces/couple_SOLPS-ITER/*.[Ff]90 modules/B2.5/src.local/*.F modules/B2.5/src/*/*.F modules/B2.5/src/*/*.[Hh] modules/B2.5/src/common/*.* modules/B2.5/src/common/COUPLE/*.F modules/Uinp/src/*.F modules/Uinp/src/*.inc modules/Uinp/src/*.h modules/Triang/src/*/*.f modules/DivGeo/equtrn/src/*.f modules/DivGeo/equtrn/src/*.inc modules/DivGeo/convert/src/*.f modules/DivGeo/src/*.[ch] modules/DivGeo/dg.dgc
+	rm -f TAGS ; etags -o TAGS modules/Carre/src/*/*.F modules/Carre/src/include/*.* modules/Eirene/src/*/*.f modules/Eirene/src/interfaces/couple_SOLPS-ITER/*.f modules/Eirene/src/user-routines/user_iter/*.f modules/Eirene/src/geometry/trc-time-routines/*.f modules/Eirene/src/*/*.[Ff]90 modules/Eirene/src/interfaces/couple_SOLPS-ITER/*.[Ff]90 modules/B2.5/src.local/*.F modules/B2.5/src/*/*.F modules/B2.5/src/*/*.[Hh] modules/B2.5/src/common/*.* modules/B2.5/src/common/COUPLE/*.F modules/Uinp/src/*.F modules/Uinp/src/*.inc modules/Uinp/src/*.h modules/Triang/src/*/*.f modules/DivGeo/convert/src/*.f modules/DivGeo/equtrn/src/*.f modules/DivGeo/equtrn/src/*.inc modules/DivGeo/convert/src/*.f modules/DivGeo/src/*.[ch] modules/DivGeo/dg.dgc
 
 listobj:
 	cd modules/Carre;          ${MAKE} listobj
@@ -346,6 +350,9 @@ clean_triang:
 
 clean_amds:
 	cd modules/amds; ${MAKE} clean
+
+clean_fxdr:
+	cd modules/fxdr; ${MAKE} clean
 
 clean_sonnet-light:
 	cd modules/Sonnet-light; ${MAKE} clean

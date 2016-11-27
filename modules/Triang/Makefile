@@ -10,20 +10,32 @@ ifndef SOLPSTOP
   $(error SOLPSTOP not defined)
 endif
 
-# Include global SOLPS compiler settings
-ifndef SOLPS_CPP
-ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER} ] && echo yes || echo no ),yes)
-  include ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
-else
-  $(warning ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER} not found.)
-endif
-endif
-
 SRCTRI   = ${PWD}
 SRCDIR   = ${SRCTRI}/src
 SRCLOCAL = ${SRCTRI}/local
 B2SRC    = ${SOLPSTOP}/modules/B2.5/src
 SRCEIR   = ${SOLPSTOP}/modules/Eirene/src
+
+MAKES = ${SRCTRI}/Makefile 
+# Include global SOLPS compiler settings
+ifndef SOLPS_CPP
+ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER} ] && echo yes || echo no ),yes)
+  include ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
+  MAKES += ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
+  ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local ] && echo yes || echo no ),yes)
+    include ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+    MAKES += ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+  endif
+else
+  $(warning ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER} not found.)
+endif
+else
+  MAKES += ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
+  ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local ] && echo yes || echo no ),yes)
+    include ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+    MAKES += ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+  endif
+endif
 
 # Extension for OBJDIR if debug options are used
 # uncomment following lines if debug-code needed
@@ -34,7 +46,6 @@ endif
 # Directory where objectcode/binaries will be created
 OBJDIR = ${SRCTRI}/builds/${HOST_NAME}.${COMPILER}${EXT_DEBUG}
 
-
 INCLUDE=
 LOCAL=no
 ifneq ($(strip ${SRCLOCAL}), )
@@ -44,7 +55,6 @@ ifeq ($(LOCAL),yes)
 INCLUDE = -I${SRCLOCAL}
 endif
 INCLUDE += -I${OBJDIR} -I${B2SRC}/include.local -I${B2SRC}/include
-
 
 ifeq ($(LOCAL),yes)
 ifeq ($(strip ${LD_GR}),)
@@ -64,7 +74,7 @@ ifeq ($(shell [ -e ${OBJDIR}/LISTOBJ ] && echo yes || echo no ),yes)
 include ${OBJDIR}/LISTOBJ
 endif
 include ${SRCTRI}/config/compile
-MAKES = ${SRCTRI}/Makefile ${SRCTRI}/config/compile ${SRCTRI}/config/config.${HOST_NAME}.${COMPILER}
+MAKES+= ${SRCTRI}/config/compile ${SRCTRI}/config/config.${HOST_NAME}.${COMPILER}
 ifeq ($(shell [ -e ${SRCTRI}/config/config.${HOST_NAME}.${COMPILER}.local ] && echo yes || echo no ),yes)
 include ${SRCTRI}/config/config.${HOST_NAME}.${COMPILER}.local
 MAKES+= ${SRCTRI}/config/config.${HOST_NAME}.${COMPILER}.local

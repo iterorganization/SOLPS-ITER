@@ -1,16 +1,16 @@
 '${HOST} ${PWD} `date` T=${TIME}' extl glob
 a4p 2 2 page
 comp
-feex sumy 19 f.x drop feex 1 nreg 2 nreg m+ m* sumy 19 f.x drop
-feey sumx 57 f.y drop feey 1 nreg 2 nreg m+ m* sumx 57 f.y drop
-feix sumy 19 f.x drop feix 1 nreg 2 nreg m+ m* sumy 19 f.x drop
-feiy sumx 57 f.y drop feiy 1 nreg 2 nreg m+ m* sumx 57 f.y drop
-fnix sumy 19 f.x drop fnix 1 nreg 2 nreg m+ m* sumy 19 f.x drop
-fniy sumx 57 f.y drop fniy 1 nreg 2 nreg m+ m* sumx 57 f.y drop
+fhex sumy 19 f.x drop fhex 1 nreg 2 nreg m+ m* sumy 19 f.x drop
+fhey sumx 57 f.y drop fhey 1 nreg 2 nreg m+ m* sumx 57 f.y drop
+fhix sumy 19 f.x drop fhix 1 nreg 2 nreg m+ m* sumy 19 f.x drop
+fhiy sumx 57 f.y drop fhiy 1 nreg 2 nreg m+ m* sumx 57 f.y drop
+fnax sumy 19 f.x drop fnax 1 nreg 2 nreg m+ m* sumy 19 f.x drop
+fnay sumx 57 f.y drop fnay 1 nreg 2 nreg m+ m* sumx 57 f.y drop
 phys
-fniy 0.0 fmin 0.0 fmax 57 f.y drop
-ni 0.0 fmin 0.0 fmax 57 f.y drop
-feey 0.0 fmin 0.0 fmax 57 f.y drop
+fnay 0.0 fmin 0.0 fmax 57 f.y drop
+na 0.0 fmin 0.0 fmax 57 f.y drop
+fhey 0.0 fmin 0.0 fmax 57 f.y drop
 te 0.0 fmin 0.0 fmax 57 f.y drop
-feiy 0.0 fmin 0.0 fmax 57 f.y drop
+fhiy 0.0 fmin 0.0 fmax 57 f.y drop
 ti 0.0 fmin 0.0 fmax 57 f.y drop

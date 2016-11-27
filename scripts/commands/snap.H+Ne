@@ -6,9 +6,9 @@ logf
 te 1.0 fmin 1e4 fmax cont drop
 ti 1.0 fmin 1e4 fmax cont drop
 ne 1e17 fmin cont drop
-ni 1 1 sumz 1e17 fmin cont drop
+na 1 1 sumz 1e17 fmin cont drop
 
-ni 2 11 sumz 1e17 fmin cont drop
+na 2 11 sumz 1e17 fmin cont drop
 b2ra pvol abs 0 0 sumz 1e4 fmin 1e8 fmax cont drop
 linf zeff cont drop
 mach cont drop

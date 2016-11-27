@@ -12,13 +12,31 @@ ifndef SOLPSTOP
   $(error SOLPSTOP not defined)
 endif
 
+SRCUIN  = ${SOLPSTOP}/modules/Uinp
+SRCDIR  = ${SRCUIN}/src
+BASEDIR = ${SRCUIN}
+B2DIR   = ${SOLPSTOP}/modules/B2.5
+EIRDIR  = ${SOLPSTOP}/modules/Eirene
+
+MAKES = ${BASEDIR}/Makefile
 # Include global SOLPS compiler settings
 ifndef SOLPS_CPP
 ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER} ] && echo yes || echo no ),yes)
   include ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
+  MAKES += ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
+  ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local ] && echo yes || echo no ),yes)
+    include ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+    MAKES += ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+  endif
 else
   $(warning ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER} not found.)
 endif
+else
+  MAKES += ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
+  ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local ] && echo yes || echo no ),yes)
+    include ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+    MAKES += ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+  endif
 endif
 
 ifdef SOLPS_MPI
@@ -28,14 +46,6 @@ ifdef SOLPS_MPI
 endif
 
 PROG = uinp.exe
-
-SRCUIN  = ${SOLPSTOP}/modules/Uinp
-SRCDIR  = ${SRCUIN}/src
-BASEDIR = ${SRCUIN}
-B2DIR   = ${SOLPSTOP}/modules/B2.5
-EIRDIR  = ${SOLPSTOP}/modules/Eirene
-
-
 
 # Extension for OBJDIR if debug or MPI options are used
 # uncomment following lines if debug-code needed
@@ -65,7 +75,7 @@ endif
 EIRINC += -I${EIROBJ}
 
 include ${SRCUIN}/config/config.${HOST_NAME}.${COMPILER}
-MAKES = ${BASEDIR}/Makefile ${SRCUIN}/config/config.${HOST_NAME}.${COMPILER}
+MAKES+= ${SRCUIN}/config/config.${HOST_NAME}.${COMPILER}
 ifeq ($(shell [ -e ${SRCUIN}/config/config.${HOST_NAME}.${COMPILER}.local ] && echo yes || echo no ),yes)
 include ${SRCUIN}/config/config.${HOST_NAME}.${COMPILER}.local
 MAKES+= ${SRCUIN}/config/config.${HOST_NAME}.${COMPILER}.local

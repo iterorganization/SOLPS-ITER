@@ -3643,7 +3643,20 @@ those regions, excluding the fluxes within boundary regions.
 \index{b2.wall\_save.parameters}\index{b2.wall\_save.parameters.2}\index{b2frates}\index{b2fpardf}
 \index{b2.transport.parameters}\index{b2.transport.parameters.2}\index{SOLPS\_FLUIDS}
 
-This utility program allows a user to take a {\tt b2fstate} solution file
+The converter program {\tt b2yt} can be used for a variety of purposes, and 
+prospective users are urged to read the {\em entire} section below carefully
+before proceeding to use it. As a summary, however, the sequence of steps to
+be followed for a succesful conversion is:
+\begin{enumerate}
+  \item[1] Create a new case directory: {\tt \$SOLPSWORK/<my\_new\_case>}
+  \item[2] In the new case directory, create subdirectories {\tt baserun} and {\tt convert} as well as a run subdirectory ({\tt <my\_run>}). {\tt baserun} and {\tt convert} are special names and should not be changed.
+  \item[3] Copy from your old case to the new case's {\tt convert} directory all input and output files you wish to have converted. You may copy {\tt baserun} files that you know will not be converted to the new case's {\tt baserun} directory instead.
+  \item[4] Check and correct as necessary the relative ages of the input files.
+  \item[5] Run the {\tt b2yt} converter
+  \item[6] Displace the converted case input files to the converted case {\tt baserun} and run directories
+\end{enumerate}
+
+The {\tt b2yt} utility program allows a user to take a {\tt b2fstate} solution file
 with size $nx \times ny$ and transform it into an $nx1 \times ny1$ {\tt b2fstatt}
 file, provided the numbers of real cells in both $x$ and
 $y$ directions in the new solution are divisors of the ones in the original mesh. Other
@@ -3689,6 +3702,7 @@ and data files. The switches to obtain this are:
   \item["invert\_bpol" "1"] Inverts the poloidal field and related quantities
   \item["invert\_btor" "1"] Inverts the toroidal field and related quantities
 \end{description}
+This option {\em must} also be used if converting from an older {\bf SOLPS4.3} or {\bf SOLPS5.0} case, if the geometry file has been rebuilt, as the sign convention for the parallel velocity now depends on the sign of the magnetic field in \SOLPSITERns.
 
 {\tt b2yt} may also be used
 to change the order of species (for example changing from $D+C+He$ to $D+He+C$) or for

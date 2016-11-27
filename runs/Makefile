@@ -223,7 +223,7 @@ ifdef SOLPS_MPI
 	-[ -e b2mn.exe.dir/output.0001 ] && mv b2mn.exe.dir/output.* . || echo > /dev/null
 endif
 else
-	cd b2mn.exe.dir ; ${DBX} ${INC} b2mn.exe ; rm -f $(notdir $^) .quit
+	cd b2mn.exe.dir ; ${DBX} ${INC} ${DBGOBJ}/b2mn.exe ; rm -f $(notdir $^) .quit
 endif
 	-[ -e fort.30 ] && echo > /dev/null || mv b2mn.exe.dir/fort.30 .
 	-[ -e b2mn.exe.dir/fort.31 ] && mv b2mn.exe.dir/fort.31 . || echo > /dev/null
@@ -382,11 +382,11 @@ dbx.b2yt : b2yt.dat b2fstate b2mn.dat b2ah.dat b2ai.dat b2ag.dat b2fgmtry b2frat
 	rm -f $(target_yt)
 ifndef STAND_ALONE
 	-cd b2yt.exe.dir ; [ -e ../input.dat ] && ln -s ../input.dat . || echo > /dev/null ; [ -e ../fort.44 ] && ln -s ../fort.44 . || echo > /dev/null ; [ -e ../fort.33 ] && ln -s ../fort.33 . || echo > /dev/null ; [ -e ../fort.34 ] && ln -s ../fort.34 . || echo > /dev/null ; [ -e ../fort.35 ] && ln -s ../fort.35 . || echo > /dev/null
-	cd b2yt.exe.dir ; ${DBX} ${INC} b2yt.exe ; mv $(target_yt) .. ; rm -f $(notdir $^) input.dat fort.44 fort.75
+	cd b2yt.exe.dir ; ${DBX} ${INC} ${DBGOBJ}/b2yt.exe ; mv $(target_yt) .. ; rm -f $(notdir $^) input.dat fort.44 fort.75
 	-[ -e b2yt.exe.dir/input.dat.2 ] && mv b2yt.exe.dir/input.dat.2 . || echo > /dev/null
 	-[ -e b2yt.exe.dir/fort.44.2 ] && mv b2yt.exe.dir/fort.44.2 . || echo > /dev/null
 else
-	cd b2yt.exe.dir ; ${DBX} ${INC} b2yt.exe ; mv $(target_yt) .. ; rm -f $(notdir $^)
+	cd b2yt.exe.dir ; ${DBX} ${INC} ${DBGOBJ}/b2yt.exe ; mv $(target_yt) .. ; rm -f $(notdir $^)
 endif
 	-[ -e b2yt.exe.dir/b2fgmtry.2 ] && mv b2yt.exe.dir/b2fgmtry.2 . || echo > /dev/null
 	-[ -e b2yt.exe.dir/fort.33 ] && rm b2yt.exe.dir/fort.33 || echo > /dev/null

@@ -11,10 +11,10 @@ b2nn pvol 2 2 sumz 0.0 fmin 0.0 fmax surf drop
 b2nn pvol 8 8 sumz 0.0 fmin 0.0 fmax surf drop
 b2nn pvol 18 18 sumz 0.0 fmin 0.0 fmax surf drop
 logf
-! fnix 1 1 sumz dup 1e14 fmin 1e23 fmax 'Positive FNIX' extl cont drop chs 1e14 fmin 1e23 fmax 'Negative FNIX' extl cont drop
-! fnix 2 7 sumz dup 1e14 fmin 1e23 fmax 'Positive FNIX' extl cont drop chs 1e14 fmin 1e23 fmax 'Negative FNIX' extl cont drop
-! fnix 8 17 sumz dup 1e14 fmin 1e23 fmax 'Positive FNIX' extl cont drop chs 1e14 fmin 1e23 fmax 'Negative FNIX' extl cont drop
-! fnix 18 19 sumz dup 1e14 fmin 1e23 fmax 'Positive FNIX' extl cont drop chs 1e14 fmin 1e23 fmax 'Negative FNIX' extl cont drop
+! fnax 1 1 sumz dup 1e14 fmin 1e23 fmax 'Positive FNIX' extl cont drop chs 1e14 fmin 1e23 fmax 'Negative FNIX' extl cont drop
+! fnax 2 7 sumz dup 1e14 fmin 1e23 fmax 'Positive FNIX' extl cont drop chs 1e14 fmin 1e23 fmax 'Negative FNIX' extl cont drop
+! fnax 8 17 sumz dup 1e14 fmin 1e23 fmax 'Positive FNIX' extl cont drop chs 1e14 fmin 1e23 fmax 'Negative FNIX' extl cont drop
+! fnax 18 19 sumz dup 1e14 fmin 1e23 fmax 'Positive FNIX' extl cont drop chs 1e14 fmin 1e23 fmax 'Negative FNIX' extl cont drop
 linf '' extl
 b2ra pvol abs 11 1.0e4 5.0e4 1.0e5 5.0e5 1.0e6 2.0e6 5.0e6 1.0e7 2.0e7 5.0e7 1.0e8 clvs surf drop
 b2ne pvol abs 11 0.0 2.5e5 5.e5 7.5e5 1.e6 1.25e6 1.5e6 1.75e6 2.0e6 2.25e6 2.5e6 clvs surf drop
