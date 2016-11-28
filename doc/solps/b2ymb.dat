@@ -10,6 +10,7 @@ T_GAP       =      0.5e-3,     ! Toroidal gap between monoblocks [m]
 ALPHA       =         0.5,     ! Vertical target tilting [degrees]
 BETA        =         1.0,     ! poloidal chamfer [degrees]
 THETA       =         4.2,     ! Toroidal strike angle of magnetic flux lines [degrees]
+REVERSE     =    0,0,          ! Integer, if >0 reverse the heat flux profile of the inner (first element) or outer (second element) target
 /  
 
 &MESH  
