@@ -149,8 +149,9 @@ c*** Create a b2ah.dat.stencil file
           is=0
           do iatm = 1, natmi
             j=find_matching_species(spcsncl(iatm))
-            write(2,'(2x,a1,i3,a1,5x,a3,6x,a3,6x,i3,6x,i3)')
-     .       '''',is,'''','0.0','0.0',nchara(iatm),nmassa(iatm)
+            write(2,'(2x,a1,i3,a1,5x,a3,6x,a3,4x,i3,a2,4x,i3,a2)')
+     .       '''',is,'''','0.0','0.0',nchara(iatm),'.0',
+     .                                nmassa(iatm),'.0'
 cxpb Default data for neutrals
             do ireg = cbirso, cbirso+cbnrso-1
               if (mod(ireg-cbirso+1,3).eq.2) then ! core boundary

@@ -1247,7 +1247,7 @@ c>>>
 
 c*** Update the particle-related reaction specification
 c<<<
-c             print '(a,10i3)',
+c              print '(a,10i3)',
 c     ,                 'lknd,jspc,m_rct,m_rcn,k0,kk,k1,k2,k3,k4 = ',
 c     ,                  lknd,jspc,m_rct,m_rcn,k0,kk,k1,k2,k3,k4
 c>>>
@@ -1313,7 +1313,7 @@ c>>>
                   if(k2.le.0 .or. k2.gt.nrcln) then !{
                     write(0,*) 'k2 outside the range - internal error ',
      ,                'in uinp.'
-                    write(0,*) 'ipt,irc,k0,kk,k1,k2 = ',
+                    write(0,'(a,6i4)') 'ipt,irc,k0,kk,k1,k2 = ',
      ,                ipt,irc,k0,kk,k1,k2
                     call xerrab ('==> Check the AMDS model')
                   end if !}
@@ -1327,7 +1327,7 @@ c>>>
                   if(k4.le.0 .or. k4.gt.nrcln) then !{
                     write(0,*) 'k4 outside the range - internal error ',
      ,                'in uinp.'
-                    write(0,*) 'ipt,irc,k0,kk,k3,k4 = ',
+                    write(0,'(a,6i4)') 'ipt,irc,k0,kk,k3,k4 = ',
      ,                ipt,irc,k0,kk,k3,k4
                     call xerrab ('==> Check the AMDS model')
                   end if !}
@@ -1340,7 +1340,7 @@ c>>>
                   hlp_e1=rctnenr1(k0)
                   hlp_e2=rctnenr2(k0)
                 else if (lknd.eq.3.and.streql(cc,'EI')) then !}{
-                  hlp_e1=ir(k4)
+                  if (k3.gt.0) hlp_e1=ir(k4)
                 end if !}
               else !}{
                 iie=0
