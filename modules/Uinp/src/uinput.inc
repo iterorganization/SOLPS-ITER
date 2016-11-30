@@ -345,7 +345,8 @@ c*** b2ah.dat
       integer cbnrmx
       parameter (cbnrmx=6+2+1+1)
       integer cbnrso,cbnrno,cbnrwe,cbnrea,
-     ,        cbirso,cbirno,cbirwe,cbirea
+     ,        cbirso,cbirno,cbirwe,cbirea,
+     ,        izamin(0:natm+npls-1),izamax(0:natm+npls-1),nbndl(natm)
       real cbrbrk(0:cbnrmx-1),
      ,     cbsna(0:7,0:nsdb2-1,0:cbnrmx-1),
      ,     cbsmo(0:7,0:nsdb2-1,0:cbnrmx-1),
@@ -365,6 +366,7 @@ c*** b2ah.dat
      ,     cfsig(0:7),
      ,     cfalf(0:7),
      ,     cflim(0:7)
+      logical is_bundled(natm)
 
       common/uinint/
      ,  nmach,nmode,ntcpu,nfile,niter0,niter,ntime0,ntim1,nfullrun,
@@ -429,7 +431,8 @@ c*** b2ah.dat
      ,  scilref,scilspt,scisrs,scisrc,sclchspnwl,scisrsg,
      ,  iscrd,jscrd,
      ,  cbnrso,cbnrno,cbnrwe,cbnrea,
-     ,  cbirso,cbirno,cbirwe,cbirea
+     ,  cbirso,cbirno,cbirwe,cbirea,
+     ,  izamin,izamax,nbndl
   
       common/uinrl/ ria,ragrid,raa,rarefl,ep1in,ep1ot,ep1ch,exep1,
      ,  ellin,ellot,ellch,exell,triin,triot,trich,extri,
@@ -493,7 +496,8 @@ c*** b2ah.dat
      ,  plnums,plarr,lrpscut,pltsrc,pl3a,pl3s,pltl2d,pltl3d,pltllg,
      ,  pltler,lhist2,lsmot2,lhist3,lcntr3,lsmot3,lraps,lvect3,lrpvc3,
      ,  lrps3d,lrpscn,lprad,lppol,lptor,plidl,
-     ,  plchor,plspec,lpw_d,lsymet,lbalan,lchkqud,lfchgs
+     ,  plchor,plspec,lpw_d,lsymet,lbalan,lchkqud,lfchgs,
+     ,  is_bundled
 
       common/uinchr/ txtrun,txtsfl,txtsfa,
      ,  filnam,h123,reac,crc,elname,

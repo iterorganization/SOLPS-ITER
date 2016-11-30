@@ -87,6 +87,7 @@ c***                                                    2:4-used for passes 1:3
 c*** Check whether reactions were specified. If not, take the defaults
 
       hlp_amds = .false.
+      is_bundled = .false.
       do i = 1, nnrctn !{
         c=rctnptpr(i)
         l=get_atomic_number(c)
@@ -325,6 +326,23 @@ c     now read the relevant line
                       rctnrct(nnrctn)=trim(rctdrct(j,l))//NEWDIRprb
                     end if !}
                     call strip_spaces(rctnrct(nnrctn))
+                    if (ibundling.gt.0) then
+                      call xertst(.not.streql(NEWDIRzav,'none'),
+     .                 'No ADAS bundling data!')
+                      if (ipt.le.nspcatm) then
+                        is_bundled(ipt) = .true.
+                      else if (ipt.gt.nspcatm+nspcmol+nspcion .and.
+     .                         ipt.le.nspcatm+nspcmol+nspcion+nspcpls)
+     >                 then
+                        do i = 1, nspcatm
+                          if (nmassp(ipt-nspcatm-nspcmol-nspcion).eq.
+     .                        nmassa(i) .and. nchara(i).eq.
+     .                        ncharp(ipt-nspcatm-nspcmol-nspcion)) then
+                            is_bundled(i) = .true.
+                          end if
+                        end do
+                      end if
+                    end if
                   else !}{
                     write(*,*) 'Could not find ADAS file list file!'
                     write(*,*) '=> Check the ADAS and AMDS models'

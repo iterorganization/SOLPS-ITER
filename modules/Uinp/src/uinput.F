@@ -214,11 +214,11 @@ cxpb Default data for neutrals
             cfvsa(2,is) = 1.0
             cfhci(2,is) = 1.4
             is = is + 1
-            do iss = 1, nchara(iatm)
+            do iss = 1, nbndl(iatm)-1
               write(2,
      .         '(2x,a1,i3,a1,4x,i2,a2,5x,i2,a2,4x,i3,a2,4x,i3,a2)')
-     .         '''',is,'''',iss,'.0',iss,'.0',nchara(iatm),'.0',
-     .                                        nmassa(iatm),'.0'
+     .         '''',is,'''',izamin(is),'.0',izamax(is),'.0',
+     .                    nchara(iatm),'.0',nmassa(iatm),'.0'
 cxpb Default data for ions
               do ireg = cbirso, cbirso+cbnrso-1
                 if (mod(ireg-cbirso+1,3).eq.2) then ! core boundary
@@ -473,19 +473,19 @@ c*** Create the b2ai.dat file
           end do
           lblps(iloc+1:iloc+20) = ', all charge states'''
           write(2,'(2x,a)') lblps(1:iloc+20)
-          write(2,'(a)') '*specs      za       zn       am      za2'
+          write(2,'(a)') '*specs    zamin    zamax       zn      am'
           is=0
           do iatm = 1, natmi
-            write(2,'(2x,a1,i3,a1,5x,a3,5x,i2,a2,4x,i3,a2,6x,a3)') 
-     .       '''',is,'''','0.0',nchara(iatm),'.0',
-     .                          nmassa(iatm),'.0','0.0'
+            write(2,'(2x,a1,i3,a1,5x,a3,6x,a3,4x,i3,a2,4x,i3,a2)')
+     .       '''',is,'''','0.0','0.0',nchara(iatm),'.0',
+     .                                nmassa(iatm),'.0'
             na0(is) = 1.0e12
             is = is + 1
-            do iss = 1, nchara(iatm)
+            do iss = 1, nbndl(iatm)-1
               write(2,
-     .         '(2x,a1,i3,a1,4x,i2,a2,5x,i2,a2,4x,i3,a2,3x,i4,a2)') 
-     .         '''',is,'''',iss,'.0',nchara(iatm),'.0',
-     .                               nmassa(iatm),'.0',iss*iss,'.0'
+     .         '(2x,a1,i3,a1,4x,i2,a2,5x,i2,a2,4x,i3,a2,4x,i3,a2)')
+     .         '''',is,'''',izamin(is),'.0',izamax(is),'.0',
+     .                    nchara(iatm),'.0',nmassa(iatm),'.0'
               if (nchara(iatm).eq.1) then
                 na0(is) = 1.0e19
               else

@@ -248,6 +248,7 @@ c*** Particle and reaction data (sect. 4 and 5)
      
       call uinprppt
       call uinprprc
+      call uinprpbl
 c-----------------------------------------------------------------------
 c*** Grid dimensions and topology (cuts, targets)
       call uinprpgr
