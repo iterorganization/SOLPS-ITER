@@ -171,7 +171,7 @@ To obtain the code a request should be sent to Xavier Bonnin
 
 The first formality will then be for the prospective users to obtain and IDM (ITER Document Management) account, in case they do not have one already. This account request will be done by the RO, and the requesting user will receive an automated electronic message asking for confirmation of the provided e-mail address. With this account, the user will have access to the \SOLPSITER GIT repository (\href{https://git.iter.org/projects/BND/repos/solps-iter/browse}{https://git.iter.org/projects/BND/repos/solps-iter/browse}) maintained at the IO, the \SOLPSITER SharePoint web site hosted by ITER (\href{https://portal.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}{https://portal.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}, works best with Internet Explorer). Links to the IDM-controlled documents related to \SOLPSITER can be found in a centralized folder (\href{https://user.iter.org/?uid=Q92BAQ}{https://user.iter.org/?uid=Q92BAQ}). The account request will also serve for registration of the user to the \SOLPSITER mailing list ({\tt SOLPS-ITER@iter.org}).
 
-The \SOLPSITER Git repository also includes the repositories for {\tt B2.5}, {\tt EIRENE}, {\tt Carre} and {\tt DivGeo} individually as submodules.
+The \SOLPSITER Git repository also includes the repositories for {\tt B2.5}, {\tt EIRENE}, {\tt Carre} and {\tt DivGeo} individually as submodules. Some service libraries (such as MSCL and GR), can be found in the repository in the Libraries section.
 
 One can generally browse the ITER Git repositories here: \href{https://git.iter.org}{https://git.iter.org} and \SOLPSITER specifically here: \href{https://git.iter.org/projects/BND/repos/solps-iter/browse}{https://git.iter.org/projects/BND/repos/solps-iter/browse}, but since these repositories are restricted users will first need to authenticate with their ITER (IDM) username and password - possibly twice, once for the intranet, and once for the Git web front end in the top right-hand corner in the web browser window.
 
@@ -253,7 +253,7 @@ To best use the \SOLPSITER code suite, the user will need, locally installed:
 \item[NAG]\index{NAG} mathematical library (optional) (available from \href{http://www.nag.com/content/nag-library}{http://www.nag.com/content/nag-library})
 \item[BLAS/LAPACK] mathematical libraries (available from \href{http://www.netlib.org/}{http://www.netlib.org/})
 \item[NCAR] plotting library (available from \href{http://library.ucar.edu}{http://library.ucar.edu})
-\item[GR] plotting library (optional, developed at FZ-J{\"u}lich)
+\item[GR] plotting library (optional, developed at FZ-J{\"u}lich, available from the IO Git repository at \href{https://git.iter.org/projects/LIB/repos/gr-software/browse}{https://git.iter.org/projects/LIB/repos/gr-software/browse})
 \item[GKS] graphical kernel library (available from \href{http://ngwww.ucar.edu}{http://ngwww.ucar.edu})
 \item[HDF5] data storage library (available from \href{http://support.hdfgroup.org/HDF5/}{http://support.hdfgroup.org/HDF5/})
 \item[NetCDF]\index{netcdf} storage/archival library (optional) (available from \href{http://www.unidata.ucar.edu/netcdf/}{http://www.unidata.ucar.edu/netcdf/})
@@ -292,23 +292,38 @@ These environment variables are found in files config.\${\tt \{HOST\_NAME\}}.\${
 The current list of recognized hostnames, deduced by means of the {\tt whereami} script, includes:
 \begin{description}\index{Hostnames}
   \item[ASIPP] Academica Sinica, Hefei: *.ipp.cas.cn
-  \item[CCFE] CCFE domain: *.ccfe.ac.uk
-  \item[FZJ] Forschungszentrum J{\"u}lich domain: *.fz-juelich.de, *.ipp.kfa-juelich.de
+  \item[CCFE] Culham Centre for Fusion Energy: *.ccfe.ac.uk
+  \item[FZJ] Forschungszentrum J{\"u}lich: *.fz-juelich.de, *.ipp.kfa-juelich.de
   \item[GA] General Atomics: *.fusion.gat.com
+  \item[IAEA] Internal Atomic Energy Agency: *.iaea.org
   \item[IFERC] IFERC supercomputer: *.iferc-csc.org
-  \item[IPP] IPP-Garching domain: *.ipp.mpg.de, *.ipp-garching.mpg.de, *.rzg.mpg.de
-  \item[IPP-HGW] IPP-Greifswald domain: *.ipp-hgw.mpg.de
+  \item[IN-DA] ITER-India: *.iter-india.org
+  \item[IPP] IPP-Garching: *.ipp.mpg.de, *.ipp-garching.mpg.de, *.rzg.mpg.de
+  \item[IPP-HGW] IPP-Greifswald: *.ipp-hgw.mpg.de
+  \item[IPR] Institute for Plasma Research, Gandhinagar: *.ipr.res.in
   \item[ITER] ITER domain: *.iter.org
   \item[ITM] ITM Gateway machine: *.itm.rzg.mpg.de, *.efda-itm.eu
   \item[JET] JET domain: *.jet.uk
-  \item[LEUVEN] KU-Leuven domain: *.mech.kuleuven.be
+  \item[KEIO] Keio University of Yokohama: *.keio.ac.jp
+  \item[LEUVEN] KU-Leuven: *.mech.kuleuven.be
+  \item[MEPHI] Moscow Engineering Physics Institute: *.mephi.ru
   \item[NERSC] DOE supercomputer center: *.nersc.gov
+  \item[ORNL] Oak Ridge National Laboratory: *.ornl.gov
   \item[PPPL] PPPL domain: *.pppl.gov
+  \item[SPBSTU] St. Petersburg State PolyTechnical University: *.spbau.ru
+  \item[SWIP] SouthWestern Institute of Plasma Physics, Chengdu: *.swip.ac.cn
   \item[WM] College of William and Mary: *.wm.edu
-  \item[default] everywhere else
+  \item[CN\_UNKNOWN] All other domain names from China
+  \item[EU\_UNKNOWN] All other domain names from EURATOM Member countries
+  \item[IN\_UNKNOWN] All other domain names from India
+  \item[JP\_UNKNOWN] All other domain names from Japan
+  \item[KR\_UNKNOWN] All other domain names from the Republic of Korea
+  \item[RU\_UNKNOWN] All other domain names from the Russian Federation
+  \item[US\_UNKNOWN] All other domain names from the United States: *.edu, *.gov, *.us
+  \item[UNKNOWN] everywhere else
 \end{description}
 
-If your domain name is not on this list, please add it to {\tt whereami}.
+If your specific domain name is not on this list, please add it to {\tt whereami}.
 
 At the moment the following compiler platforms are supported, assuming a Linux work environment:\label{sec:platforms}
 \begin{description}\index{Platforms}
