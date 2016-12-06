@@ -1354,11 +1354,16 @@ c>>>
                   iie=0
                   hlp_ee=-rctndlte(k0)
                 end if !}
-                if(streql(cc,'DS')) then !{
-                  hlp_e1=rctnenr1(k0)
-                  hlp_e2=rctnenr2(k0)
-                else if (lknd.eq.3.and.streql(cc,'EI')) then !}{
-                  if (k3.gt.0) hlp_e1=ir(k4)
+                if(streql(cc,'DS').or.
+     ,            (lknd.eq.3.and.streql(cc,'EI'))) then !{
+                  if (iie.eq.0.or.lknd.ne.3) then !{
+                    hlp_e1=rctnenr1(k0)
+                    hlp_e2=rctnenr2(k0)
+                  else if (lknd.eq.3.and.k3.gt.0) then !}{
+                    hlp_e1 = ir(k4)
+                  else if (lknd.eq.3.and.k1.gt.0) then !}{
+                    hlp_e1 = ir(k2)
+                  end if !}
                 end if !}
               else !}{
                 iie=0
