@@ -11638,7 +11638,8 @@ commands are read in from {\tt stdin}.
 
 The basic idea in using \btwoplot is to specify the data quantity, some
 transformations, and then the plot command.  \btwoplot is stack
-based: six different stacks are used\index{b2plot, stacks}.  The most important stack is
+based: seven different stacks are used\index{b2plot, stacks}.
+The most important stack is
 the "matrix" stack which is used to store quantities on the
 computational grid.  These quantities can be $nx \times ny \times
 ns$ where $nx$ and $ny$ are the size of the grid, and $ns$ ranges over
@@ -11647,12 +11648,20 @@ the commands.  A "real" stack is also used to supply arguments for some
 commands and, importantly, for storing values to be used in doing
 arithmetic on the "matrix" stack.  The fourth stack stores
 "string" values, and is also used for supplying data for some
-commands.  The fifth stack is a "wall" stack, which contains
+commands.
+The fifth stack is the "Eirene" stack, which contains quantities related
+to the neutrals, and computed on the {\tt Eirene} triangular grid (only
+for \SOLPSITER runs). The Eirene stack data is of size $ntrii \times ns$,
+where $ntrii$ is the number of triangles in the {\tt Eirene} computational
+grid and $ns$ ranges over the relevant species (atoms, molecules, or test
+ions).
+The sixth stack is a "wall" stack, which contains
 quantities that can be defined only on the edges of the domain.
 The wall data is of size $nbnd \times ns$, where $nbnd$ is the number
 of boundary cells.
-The sixth stack is the "target" stack, which contains data relevant
-to the target deposition and heat transfer models (only for \SOLPSfive runs).
+The seventh stack is the "target" stack, which contains data relevant
+to the target deposition and heat transfer models (only for \SOLPSfive
+and \SOLPSITER runs).
 The target data is of size $nbnd \times ndepth$, where $ndepth$
 is the number of depth discretization points of the target elements in the
 direction normal to the vessel surface.
@@ -11678,12 +11687,12 @@ no longer needed.
 Commands are
 distinguished from strings by the latter being surrounded by single
 quote marks.  Several types of commands are distinguished (sometimes
-somewhat arbitrarily): available data quantities (plasma, wall, or target),
-available commands acting on stack quantities on or the plots,
+somewhat arbitrarily): available data quantities (plasma, neutrals, wall,
+or target), available commands acting on stack quantities on or the plots,
 setting real plot parameters (like maxima and minima), string valued commands,
 and storing constants onto the stacks.
 
-The available data quantities are given in table
+The available plasma data quantities are given in table
 \ref{tab:available-quantities}. These are quantities like the electron
 temperature, or the particle densities and typically store the results
 on the "matrix" stack.  Some of these commands also take arguments
@@ -12087,91 +12096,92 @@ matrix ('m'), wall ('w') and target ('t') stacks. Whenever these stack requireme
 are not met, an error is returned and no action is taken.
 
 \begin{center}\index{b2plot, stack commands}
-  \begin{longtable}{|c|c|c|c|c|c|c|c|l|}
+  \begin{longtable}{|c|c|c|c|c|c|c|c|c|l|}
     \hline
-    \multicolumn{9}{|l|}{\small\sl continued from previous page} \\
-    \hline command & \multicolumn{6}{|c|}{stack requirements} & section & description \\
-    \hline   & 'i' & 'r' & 's' & 'm' & 'w' & 't' &   &   \\
+    \multicolumn{10}{|l|}{\small\sl continued from previous page} \\
+    \hline command & \multicolumn{7}{|c|}{stack requirements} & section & description \\
+    \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
     \hline \endhead
-    \hline command & \multicolumn{6}{|c|}{stack requirements} & section & description \\
-    \hline   & 'i' & 'r' & 's' & 'm' & 'w' & 't' &   &   \\
+    \hline command & \multicolumn{7}{|c|}{stack requirements} & section & description \\
+    \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
     \hline \endfirsthead
     \hline
-    \multicolumn{9}{|l|}{\small\sl continued on next page} \\
+    \multicolumn{10}{|l|}{\small\sl continued on next page} \\
     \hline \endfoot
     \endlastfoot
-    abs \index{b2plot, abs}         & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:abs}   & Absolute value \\
-    arox \index{b2plot, arox}        & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:arox}  & Use as array for arrow $X$-component \\
-    aroy \index{b2plot, aroy}        & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:aroy}  & Use as array for arrow $Y$-component \\
-    ave \index{b2plot, ave}         & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:ave}   & Perform average \\
-    bala \index{b2plot, bala}        & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:bala}  & Compute balance \\
-    chs \index{b2plot, chs}         & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:chs}   & Change sign \\
-    dase \index{b2plot, dase}        & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:dase}  & Set as {\em dab2} array \\
-    ddx \index{b2plot, ddx}         & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:ddx}   & Differentiate with respect to $x$ \\
-    ddy \index{b2plot, ddy}         & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:ddy}   & Differentiate with respect to $y$ \\
-    drop \index{b2plot, drop}        & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:drop}  & Drop array on top of stack \\
-    dup \index{b2plot, dup}         & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:dup}   & Duplicate array on top of stack \\
-    eirc \index{b2plot, eirc}        & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:eirc}  & Copy {\tt Eirene} data onto {\tt B2.5} data \\
-    f.lx \index{b2plot, f.lx}        & 1 & 0 & 0 & 1 & 0 & 0 & \ref{sec:f.lx}  & Plot against $\log(x)$ \\
-    f.ly \index{b2plot, f.ly}        & 1 & 0 & 0 & 1 & 0 & 0 & \ref{sec:f.ly}  & Plot against $\log(y)$ \\
-    f.x \index{b2plot, f.x}         & 1 & 0 & 0 & 1 & 0 & 0 & \ref{sec:f.x}   & Plot against $x$ \\
-    f.y \index{b2plot, f.y}         & 1 & 0 & 0 & 1 & 0 & 0 & \ref{sec:f.y}   & Plot against $y$ \\
-    intx \index{b2plot, intx}        & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:intx}  & Integrate along $x$ \\
-    inty \index{b2plot, inty}        & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:inty}  & Integrate along $y$ \\
-    line \index{b2plot, line}        & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:line}  & Choose $x$- or $y$-directed graphs \\
-    list \index{b2plot, list}        & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:list}  & List the contents of the matrix stack \\
-    ln \index{b2plot, ln}          & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:ln}    & Take natural logarithm of array \\
-    log \index{b2plot, log}         & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:log}   & Take $log_{10}$ of array \\
-    m* \index{b2plot, m*}          & 0 & 0 & 0 & 2 & 0 & 0 & \ref{sec:m*}    & Matrix multiplication\\
-    m+ \index{b2plot, m+}          & 0 & 0 & 0 & 2 & 0 & 0 & \ref{sec:m+}    & Matrix addition \\
-    m- \index{b2plot, m-}          & 0 & 0 & 0 & 2 & 0 & 0 & \ref{sec:m-}    & Matrix subtraction \\
-    m/ \index{b2plot, m/}          & 0 & 0 & 0 & 2 & 0 & 0 & \ref{sec:m/}    & Matrix division \\
-    mdims \index{b2plot, mdims}     & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:mdims} & Prints the dimensions and contents of the matrix stack \\
-    meq \index{b2plot, meq}         & 0 & 0 & 0 & 2 & 0 & 0 & \ref{sec:meq}   & Matrix equal to \\
-    mge \index{b2plot, mge}         & 0 & 0 & 0 & 2 & 0 & 0 & \ref{sec:mge}   & Matrix greater than or equal to \\
-    mgt \index{b2plot, mgt}         & 0 & 0 & 0 & 2 & 0 & 0 & \ref{sec:mgt}   & Matrix greater than \\
-    mle \index{b2plot, mle}         & 0 & 0 & 0 & 2 & 0 & 0 & \ref{sec:mle}   & Matrix less than or equal to \\
-    mlt \index{b2plot, mlt}         & 0 & 0 & 0 & 2 & 0 & 0 & \ref{sec:mlt}   & Matrix less than \\
-    mmax \index{b2plot, mmax}        & 0 & 0 & 0 & 2 & 0 & 0 & \ref{sec:mmax}  & Maximum of two matrices \\
-    mmid \index{b2plot, mmid}        & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:mmid}  & Map data to midplane \\
-    mmin \index{b2plot, mmin}        & 0 & 0 & 0 & 2 & 0 & 0 & \ref{sec:mmin}  & Minimum of two matrices \\
-    mne \index{b2plot, mne}         & 0 & 0 & 0 & 2 & 0 & 0 & \ref{sec:mne}   & Matrix not equal to \\
-    nese \index{b2plot, nese}        & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:nese}  & Overwrite onto electron density array \\
-    nspe \index{b2plot, nspe}, nspec \index{b2plot, nspec} & 3 & 0 & 0 & 0 & 0 & 0 & \ref{sec:nspe}  & New spectrometer \\
-    over \index{b2plot, over}        & 0 & 0 & 0 & 2 & 0 & 0 & \ref{sec:over}  & Copy over second top element of matrix stack \\
-    pne \index{b2plot, pne}         & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:pne}   & Divide by electron density \\
-    pos \index{b2plot, pos}         & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:pos}   & Is positive? \\
-    psx \index{b2plot, psx}         & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:psx}   & Divide by poloidal contact area \\
-    psxperp \index{b2plot, psxperp}         & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:psxperp}   & Divide by area perpendicular to flux tube\\
-    psy \index{b2plot, psy}         & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:psy}   & Divide by radial contact area \\
-    pvol \index{b2plot, pvol}        & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:pvol}  & Divide by cell volume \\
-    rigz \index{b2plot, rigz}        & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:rigz}  & Toggles use of ignorable cells (\SOLPSfour runs) \\
-    rm* \index{b2plot, rm*}         & 0 & 1 & 0 & 1 & 0 & 0 & \ref{sec:rm*}   & Matrix multiplication by real \\
-    rm** \index{b2plot, rm**}        & 0 & 1 & 0 & 1 & 0 & 0 & \ref{sec:rm**}  & Matrix taken to a real power \\
-    rm+ \index{b2plot, rm+}         & 0 & 1 & 0 & 1 & 0 & 0 & \ref{sec:rm+}   & Real added to matrix \\
-    rm- \index{b2plot, rm-}         & 0 & 1 & 0 & 1 & 0 & 0 & \ref{sec:rm-}   & Real substracted from matrix \\
-    rm/ \index{b2plot, rm/}         & 0 & 1 & 0 & 1 & 0 & 0 & \ref{sec:rm/}   & Matrix divided by real \\
-    rmma, rmmax \index{b2plot, rmma}\index{b2plot, rmmax}        & 0 & 1 & 0 & 1 & 0 & 0 & \ref{sec:rmma}  & Maximum between real and matrix \\
-    rmmi, rmmin \index{b2plot, rmmi}\index{b2plot, rmmin}         & 0 & 1 & 0 & 1 & 0 & 0 & \ref{sec:rmmi}  & Minimum between real and matrix \\
-    spec \index{b2plot, spec}        & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:spec}  & Old spectrometer \\
-    sqrt \index{b2plot, sqrt}        & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:sqrt}  & Square root of matrix \\
-    stow \index{b2plot, stow}        & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:stow}  & Copy top of matrix stack to wall stack \\
-    sumx \index{b2plot, sumx}        & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:sumx}  & Sum over $x$ \\
-    sumy \index{b2plot, sumy}        & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:sumy}  & Sum over $y$ \\
-    sumz \index{b2plot, sumz}        & 2 & 0 & 0 & 1 & 0 & 0 & \ref{sec:sumz}  & Sum over species \\
-    swap \index{b2plot, swap}        & 0 & 0 & 0 & 2 & 0 & 0 & \ref{sec:swap}  & Swap top two matrices on stack \\
-    t\_\#p \index{b2plot, t\_\#p}      & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:t_hashp} & Number of trajectories \\
-    tese \index{b2plot, tese}        & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:tese}  & Copy top of stack onto electron temperature \\
-    traj \index{b2plot, traj}        & 7+* & 0 & 0 & 1 & 0 & 0 & \ref{sec:traj}  & Trajectories \\
-    uuse \index{b2plot, uuse}        & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:uuse}  & Set $X$-component of trajectory flows \\
-    vvse \index{b2plot, vvse}        & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:vvse}  & Set $Y$-component of trajectory flows \\
-    wtos \index{b2plot, wtos}        & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wtos}  & Copy wall stack array onto matrix stack \\
-    xsel \index{b2plot, xsel}        & 1 & 0 & 0 & 1 & 0 & 0 & \ref{sec:xsel}  & Select $X$ value \\
-    xtow \index{b2plot, xtow}        & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:xtow}  & Copy $X$-row of matrix onto wall stack \\
-    ysel \index{b2plot, ysel}        & 1 & 0 & 0 & 1 & 0 & 0 & \ref{sec:ysel}  & Select $Y$ value \\
-    ytow \index{b2plot, ytow}        & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:ytow}  & Copy $Y$-column of matrix onto wall stack \\
-    zrng \index{b2plot, zrng}        & 2 & 0 & 0 & 1 & 0 & 0 & \ref{sec:zrng}  & Select species range \\
-    zsel \index{b2plot, zsel}        & 1 & 0 & 0 & 1 & 0 & 0 & \ref{sec:zsel}  & Select species index \\
+    abs \index{b2plot, abs}        & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:abs}   & Absolute value \\
+    arox \index{b2plot, arox}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:arox}  & Use as array for arrow $X$-component \\
+    aroy \index{b2plot, aroy}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:aroy}  & Use as array for arrow $Y$-component \\
+    ave \index{b2plot, ave}        & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:ave}   & Perform average \\
+    bala \index{b2plot, bala}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:bala}  & Compute balance \\
+    chs \index{b2plot, chs}        & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:chs}   & Change sign \\
+    dase \index{b2plot, dase}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:dase}  & Set as {\em dab2} array \\
+    ddx \index{b2plot, ddx}        & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:ddx}   & Differentiate with respect to $x$ \\
+    ddy \index{b2plot, ddy}        & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:ddy}   & Differentiate with respect to $y$ \\
+    drop \index{b2plot, drop}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:drop}  & Drop array on top of stack \\
+    dup \index{b2plot, dup}        & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:dup}   & Duplicate array on top of stack \\
+    eirc \index{b2plot, eirc}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:eirc}  & Copy {\tt Eirene} data onto {\tt B2.5} data \\
+    f.lx \index{b2plot, f.lx}      & 1 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:f.lx}  & Plot against $\log(x)$ \\
+    f.ly \index{b2plot, f.ly}      & 1 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:f.ly}  & Plot against $\log(y)$ \\
+    f.x \index{b2plot, f.x}        & 1 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:f.x}   & Plot against $x$ \\
+    f.y \index{b2plot, f.y}        & 1 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:f.y}   & Plot against $y$ \\
+    intx \index{b2plot, intx}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:intx}  & Integrate along $x$ \\
+    inty \index{b2plot, inty}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:inty}  & Integrate along $y$ \\
+    line \index{b2plot, line}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:line}  & Choose $x$- or $y$-directed graphs \\
+    list \index{b2plot, list}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:list}  & List the contents of the matrix stack \\
+    ln \index{b2plot, ln}          & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:ln}    & Take natural logarithm of array \\
+    log \index{b2plot, log}        & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:log}   & Take $log_{10}$ of array \\
+    m* \index{b2plot, m*}          & 0 & 0 & 0 & 2 & 0 & 0 & 0 & \ref{sec:m*}    & Matrix multiplication\\
+    m+ \index{b2plot, m+}          & 0 & 0 & 0 & 2 & 0 & 0 & 0 & \ref{sec:m+}    & Matrix addition \\
+    m- \index{b2plot, m-}          & 0 & 0 & 0 & 2 & 0 & 0 & 0 & \ref{sec:m-}    & Matrix subtraction \\
+    m/ \index{b2plot, m/}          & 0 & 0 & 0 & 2 & 0 & 0 & 0 & \ref{sec:m/}    & Matrix division \\
+    mdims \index{b2plot, mdims}    & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:mdims} & Prints the dimensions and contents of the matrix stack \\
+    meq \index{b2plot, meq}        & 0 & 0 & 0 & 2 & 0 & 0 & 0 & \ref{sec:meq}   & Matrix equal to \\
+    mge \index{b2plot, mge}        & 0 & 0 & 0 & 2 & 0 & 0 & 0 & \ref{sec:mge}   & Matrix greater than or equal to \\
+    mgt \index{b2plot, mgt}        & 0 & 0 & 0 & 2 & 0 & 0 & 0 & \ref{sec:mgt}   & Matrix greater than \\
+    mle \index{b2plot, mle}        & 0 & 0 & 0 & 2 & 0 & 0 & 0 & \ref{sec:mle}   & Matrix less than or equal to \\
+    mlt \index{b2plot, mlt}        & 0 & 0 & 0 & 2 & 0 & 0 & 0 & \ref{sec:mlt}   & Matrix less than \\
+    mmax \index{b2plot, mmax}      & 0 & 0 & 0 & 2 & 0 & 0 & 0 & \ref{sec:mmax}  & Maximum of two matrices \\
+    mmid \index{b2plot, mmid}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:mmid}  & Map data to midplane \\
+    mmin \index{b2plot, mmin}      & 0 & 0 & 0 & 2 & 0 & 0 & 0 & \ref{sec:mmin}  & Minimum of two matrices \\
+    mne \index{b2plot, mne}        & 0 & 0 & 0 & 2 & 0 & 0 & 0 & \ref{sec:mne}   & Matrix not equal to \\
+    nese \index{b2plot, nese}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:nese}  & Overwrite onto electron density array \\
+    nspe \index{b2plot, nspe}, nspec \index{b2plot, nspec} & 3 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:nspe}  & New spectrometer \\
+    over \index{b2plot, over}      & 0 & 0 & 0 & 2 & 0 & 0 & 0 & \ref{sec:over}  & Copy over second top element of matrix stack \\
+    pne \index{b2plot, pne}        & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:pne}   & Divide by electron density \\
+    pos \index{b2plot, pos}        & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:pos}   & Is positive? \\
+    psx \index{b2plot, psx}        & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:psx}   & Divide by poloidal contact area \\
+    psxperp \index{b2plot, psxperp} & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:psxperp}   & Divide by area perpendicular to flux tube\\
+    psy \index{b2plot, psy}        & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:psy}   & Divide by radial contact area \\
+    pvol \index{b2plot, pvol}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:pvol}  & Divide by cell volume \\
+    rigz \index{b2plot, rigz}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:rigz}  & Toggles use of ignorable cells (\SOLPSfour runs) \\
+    rm* \index{b2plot, rm*}        & 0 & 1 & 0 & 1 & 0 & 0 & 0 & \ref{sec:rm*}   & Matrix multiplication by real \\
+    rm** \index{b2plot, rm**}      & 0 & 1 & 0 & 1 & 0 & 0 & 0 & \ref{sec:rm**}  & Matrix taken to a real power \\
+    rm+ \index{b2plot, rm+}        & 0 & 1 & 0 & 1 & 0 & 0 & 0 & \ref{sec:rm+}   & Real added to matrix \\
+    rm- \index{b2plot, rm-}        & 0 & 1 & 0 & 1 & 0 & 0 & 0 & \ref{sec:rm-}   & Real substracted from matrix \\
+    rm/ \index{b2plot, rm/}        & 0 & 1 & 0 & 1 & 0 & 0 & 0 & \ref{sec:rm/}   & Matrix divided by real \\
+    rmma, rmmax \index{b2plot, rmma}\index{b2plot, rmmax}        & 0 & 1 & 0 & 1 & 0 & 0 & 0 & \ref{sec:rmma}  & Maximum between real and matrix \\
+    rmmi, rmmin \index{b2plot, rmmi}\index{b2plot, rmmin}         & 0 & 1 & 0 & 1 & 0 & 0 & 0 & \ref{sec:rmmi}  & Minimum between real and matrix \\
+    spec \index{b2plot, spec}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:spec}  & Old spectrometer \\
+    sqrt \index{b2plot, sqrt}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:sqrt}  & Square root of matrix \\
+    stoe \index{b2plot, stoe}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:stoe}  & Copy top of matrix stack to Eirene stack \\
+    stow \index{b2plot, stow}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:stow}  & Copy top of matrix stack to wall stack \\
+    sumx \index{b2plot, sumx}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:sumx}  & Sum over $x$ \\
+    sumy \index{b2plot, sumy}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:sumy}  & Sum over $y$ \\
+    sumz \index{b2plot, sumz}      & 2 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:sumz}  & Sum over species \\
+    swap \index{b2plot, swap}      & 0 & 0 & 0 & 2 & 0 & 0 & 0 & \ref{sec:swap}  & Swap top two matrices on stack \\
+    t\_\#p \index{b2plot, t\_\#p}  & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:t_hashp} & Number of trajectories \\
+    tese \index{b2plot, tese}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:tese}  & Copy top of stack onto electron temperature \\
+    traj \index{b2plot, traj}      & 7+* & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:traj}  & Trajectories \\
+    uuse \index{b2plot, uuse}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:uuse}  & Set $X$-component of trajectory flows \\
+    vvse \index{b2plot, vvse}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:vvse}  & Set $Y$-component of trajectory flows \\
+    wtos \index{b2plot, wtos}      & 0 & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wtos}  & Copy wall stack array onto matrix stack \\
+    xsel \index{b2plot, xsel}      & 1 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:xsel}  & Select $X$ value \\
+    xtow \index{b2plot, xtow}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:xtow}  & Copy $X$-row of matrix onto wall stack \\
+    ysel \index{b2plot, ysel}      & 1 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:ysel}  & Select $Y$ value \\
+    ytow \index{b2plot, ytow}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:ytow}  & Copy $Y$-column of matrix onto wall stack \\
+    zrng \index{b2plot, zrng}      & 2 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:zrng}  & Select species range \\
+    zsel \index{b2plot, zsel}      & 1 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:zsel}  & Select species index \\
     \hline
     \caption{Commands acting on the "matrix" stack together with their stack requirements.}
     \label{tab:available-commands}
@@ -12184,140 +12194,144 @@ appearance of the "matrix" stack plot.  Their arguments requirements
 are indicated in the table.
 
 \begin{center}\index{b2plot, plot commands}
-  \begin{longtable}{|c|c|c|c|c|c|c|c|l|}
+  \begin{longtable}{|c|c|c|c|c|c|c|c|c|l|}
     \hline
-    \multicolumn{9}{|l|}{\small\sl continued from previous page} \\
-    \hline command & \multicolumn{6}{|c|}{stack requirements} & section & description \\
-    \hline   & 'i' & 'r' & 's' & 'm' & 'w' & 't' &   &   \\
+    \multicolumn{10}{|l|}{\small\sl continued from previous page} \\
+    \hline command & \multicolumn{7}{|c|}{stack requirements} & section & description \\
+    \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
     \hline \endhead
-    \hline command & \multicolumn{6}{|c|}{stack requirements} & section & description \\
-    \hline   & 'i' & 'r' & 's' & 'm' & 'w' & 't' &   &   \\
+    \hline command & \multicolumn{7}{|c|}{stack requirements} & section & description \\
+    \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
     \hline \endfirsthead
     \hline
-    \multicolumn{9}{|l|}{\small\sl continued on next page} \\
+    \multicolumn{10}{|l|}{\small\sl continued on next page} \\
     \hline \endfoot
     \endlastfoot
-    a4l \index{b2plot, a4l}         & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:a4l}    & A4 landscape \\
-    a4p \index{b2plot, a4p}         & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:a4p}    & A4 portrait \\
-    acol \index{b2plot, acol}        & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:acol}   & Arrow colour \\
-    arow \index{b2plot, arow}        & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:arow}   & Set arrow length scale \\
-    arww \index{b2plot, arww}        & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:arww}   & Set arrow line width \\
-    aspc \index{b2plot, aspc}        & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:aspc}   & Toggle aspect ratio \\
-    bcol \index{b2plot, bcol}        & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:bcol}   & Colour of label bar title \\
-    both \index{b2plot, both}        & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:both}   & Computational and physical domain plots \\
-    bw \index{b2plot, bw}          & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:bw}     & Black-and-white plots only \\
-    clvd \index{b2plot, clvd}        & 0 & 3 & 0 & 0 & 0 & 0 & \ref{sec:clvd}   & Customize contour levels (delta) \\
-    clvl \index{b2plot, clvl}        & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:clvl}   & Turn off contour levels \\
-    clvn \index{b2plot, clvn}        & 1 & 2 & 0 & 0 & 0 & 0 & \ref{sec:clvn}   & Customize contour levels (number) \\
-    clvp \index{b2plot, clvp}        & 2 & 0 & 0 & 1 & 0 & 0 & \ref{sec:clvp}   & Customize contour levels (proportion) \\
-    clvs \index{b2plot, clvs}        & 1 & * & 0 & 0 & 0 & 0 & \ref{sec:clvs}   & Customize contour levels (specified) \\
-    col \index{b2plot, col}         & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:col}    & Colour plots \\
-    comp \index{b2plot, comp}        & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:comp}   & Computational domain plots only \\
-    cont \index{b2plot, cont}        & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:cont}   & Contour plot \\
-    dcol \index{b2plot, dcol}        & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:dcol}   & Colour for matrix data line plots \\
-    eclv \index{b2plot, eclv}        & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:eclv}   & Empty contour levels \\
-    ecol \index{b2plot, ecol}        & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:ecol}   & Experimental data colour \\
-    expl \index{b2plot, expl}        & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:expl}   & Toggle line or scatter experimental data plot \\
-    exps \index{b2plot, exps}        & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:exps}   & Symbol for experimental scatter plot \\
-    ewid \index{b2plot, ewid}        & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:ewid}   & Experimental data line width \\
-    fclv \index{b2plot, fclv}        & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:fclv}   & Fill contour levels \\
-    filo \index{b2plot, filo}        & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:filo}   & Fill option \\
-    font \index{b2plot, font}        & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:font}   & Set font \\
-    gcol \index{b2plot, gcol}        & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:gcol}   & Colour of graph title \\
-    glob \index{b2plot, glob}        & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:glob}   & Copy {\em extralabel} to the global label field \\
-    grid \index{b2plot, grid}        & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:grid}   & Add grid to plot \\
-    hcol \index{b2plot, hcol}        & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:hcol}   & Colour of global header \\
-    i* \index{b2plot, i*}          & 2 & 0 & 0 & 0 & 0 & 0 & \ref{sec:i*}     & Integer multiplication \\
-    i** \index{b2plot, i**}         & 2 & 0 & 0 & 0 & 0 & 0 & \ref{sec:i**}    & Integer to the power \\
-    i+ \index{b2plot, i+}          & 2 & 0 & 0 & 0 & 0 & 0 & \ref{sec:i+}     & Integer addition \\
-    i- \index{b2plot, i-}          & 2 & 0 & 0 & 0 & 0 & 0 & \ref{sec:i-}     & Integer substraction \\
-    i/ \index{b2plot, i/}          & 2 & 0 & 0 & 0 & 0 & 0 & \ref{sec:i/}     & Integer division \\
-    idrop \index{b2plot, idrop}       & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:idrop}  & Drop top element from the integer stack \\
-    idup \index{b2plot, idup}        & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:idup}   & Duplicate top element from the integer stack \\
-    imp \index{b2plot, imp}         & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:imp}    & Set $jxi$ (inner midplane coordinate) \\
-    iover \index{b2plot, iover}       & 2 & 0 & 0 & 0 & 0 & 0 & \ref{sec:iover}  & Copy over second element from the integer stack to top \\
-    iprt \index{b2plot, iprt}        & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:iprt}   & Outputs the integer stack \\
-    iswap \index{b2plot, iswap}       & 2 & 0 & 0 & 0 & 0 & 0 & \ref{sec:iswap}  & Swap top two elements from the integer stack \\
-    itom \index{b2plot, itom}        & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:itom}   & Copy integer onto matrix stack \\
-    itor \index{b2plot, itor}        & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:itom}   & Copy integer onto real stack \\
-    itostr \index{b2plot, itostr}      & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:itom}   & Write integer onto string stack \\
-    itot \index{b2plot, itot}        & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:itom}   & Copy integer onto target stack \\
-    itow \index{b2plot, itow}        & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:itom}   & Copy integer onto wall stack \\
-    lacl \index{b2plot, lacl}        & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:lacl}   & Labels along contour plots \\
-    lbof \index{b2plot, lbof}        & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:lbof}   & Labels off \\
-    lbon \index{b2plot, lbon}        & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:lbon}   & Labels on \\
-    lbsa \index{b2plot, lbsa}        & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:lbsa}   & Toggle label lines \\
-    lbsz \index{b2plot, lbsz}        & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:lbsz}   & Label size \\
-    lfsz \index{b2plot, lfsz}        & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:lfsz}   & Line label font size \\
-    lhor \index{b2plot, lhor}        & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:lhor}   & Horizontal labels \\
-    linf \index{b2plot, linf}        & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:linf}   & Linear functions plot \\
-    lint \index{b2plot, lint}        & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:lint}   & Linear time for trajectories plot \\
-    linx \index{b2plot, linx}        & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:linx}   & Linear $X$ scale \\
-    logf \index{b2plot, logf}        & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:logf}   & Logarithmic functions plot \\
-    logt \index{b2plot, logt}        & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:logt}   & Logarithmic time for trajectories plot \\
-    logx \index{b2plot, logx}        & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:logx}   & Logarithmic $X$ scale \\
-    lwid \index{b2plot, lwid}        & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:lwid}   & Line width \\
-    mcol \index{b2plot, mcol}        & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:mcol}   & Mesh colour \\
-    mesh \index{b2plot, mesh}        & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:mesh}   & Plot mesh \\
-    mvsk \index{b2plot, mvsk}        & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:mvsk}   & Movie skip \\
-    ndec \index{b2plot, ndec}        & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:ndec}   & Number of logarithmic decades \\
-    new \index{b2plot, new}         & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:new}    & New page \\
-    neo\_ic \index{b2plot, neo\_ic}  & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:neoic}   & Option for neoclassical calculation \\
-    noax \index{b2plot, noax}        & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:noax}   & No axes \\
-    nocp \index{b2plot, nocp}        & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:nocp}   & No contour plot \\
-    ocol \index{b2plot, ocol}        & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:ocol}   & Outline colour \\
-    omp \index{b2plot, omp}         & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:omp}    & Set $jxa$ (outer midplane coordinate) \\
-    outl \index{b2plot, outl}        & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:outl}   & Plot outline \\
-    owid \index{b2plot, owid}        & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:owid}   & Outline line width \\
-    page \index{b2plot, page}        & 2 & 0 & 0 & 0 & 0 & 0 & \ref{sec:page}   & Number of graphs per page \\
-    part \index{b2plot, part}        & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:part}   & Partition colour map \\
-    phys \index{b2plot, phys}        & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:phys}   & Physical domain plots only \\
-    r* \index{b2plot, r*}          & 0 & 2 & 0 & 0 & 0 & 0 & \ref{sec:r*}     & Real multiplication \\
-    r** \index{b2plot, r**}         & 0 & 2 & 0 & 0 & 0 & 0 & \ref{sec:r**}    & Real to the power \\
-    r+ \index{b2plot, r+}          & 0 & 2 & 0 & 0 & 0 & 0 & \ref{sec:r+}     & Real addition \\
-    r- \index{b2plot, r-}          & 0 & 2 & 0 & 0 & 0 & 0 & \ref{sec:r-}     & Real substraction \\
-    r/ \index{b2plot, r/}          & 0 & 2 & 0 & 0 & 0 & 0 & \ref{sec:r/}     & Real division \\
-    rdrop \index{b2plot, rdrop}       & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:rdrop}  & Drop top element from the real stack \\
-    rdup \index{b2plot, rdup}        & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:rdup}   & Duplicate top element from the real stack \\
-    reso \index{b2plot, reso}        & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:reso}   & Reset output \\
-    rigz \index{b2plot, rigz}        & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:rigz}   & Toggle use of ignore regions \\
-    rover \index{b2plot, rover}       & 0 & 2 & 0 & 0 & 0 & 0 & \ref{sec:rover}  & Copy over second element from the real stack to top \\
-    rprt \index{b2plot, rprt}        & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:rprt}   & Outputs the real stack \\
-    rswap \index{b2plot, rswap}       & 0 & 2 & 0 & 0 & 0 & 0 & \ref{sec:rswap}  & Swap top two elements from the real stack \\
-    rtom \index{b2plot, rtom}        & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:itom}   & Copy real onto matrix stack \\
-    rtostr \index{b2plot, rtostr}      & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:itom}   & Write real onto string stack \\
-    rtot \index{b2plot, rtot}        & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:itom}   & Copy real onto target stack \\
-    rtow \index{b2plot, rtow}        & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:itom}   & Copy real onto wall stack \\
-    same \index{b2plot, same}        & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:same}   & Next graph on same axes \\
-    scol \index{b2plot, scol}        & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:scol}   & Separatrix colour \\
-    sep \index{b2plot, sep}          & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:sep}    & Plot separatrices \\
-    sepw \index{b2plot, sepw}        & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:sepw}   & Separatrix line width \\
-    shco \index{b2plot, shco}        & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:shco}   & \\
-    spln \index{b2plot, spln}        & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:spln}   & Spline plot \\
-    sq \index{b2plot, sq}            & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:sq}     & Square aspect ratio plot \\
-    stdl \index{b2plot, stdl}        & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:stdl}   & Set standard label as {\em extralabel} \\
-    surf \index{b2plot, surf}        & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:surf}   & Surface plot \\
-    swid \index{b2plot, swid}        & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:swid}   & Set {\tt WINID} \\
-    t\_r+ \index{b2plot, t\_r+}      & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:t_r+}   & Set ratio to {\tt .true.} \\
-    t\_r- \index{b2plot, t\_r-}      & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:t_r-}   & Set ratio to {\tt .false.} \\
-    target \index{b2plot, target}    & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:target} & Add target data to plot \\
-    tcol \index{b2plot, tcol}        & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:tcol}   & Colour for target data line plots \\
-    trgoff \index{b2plot, trgoff}    & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:trgoff} & Turn off target data in plot \\
-    vcol \index{b2plot, vcol}        & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:vcol}   & Vessel colour \\
-    vesl \index{b2plot, vesl}        & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:vesl}   & Plot vessel \\
-    vwid \index{b2plot, vwid}        & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:vwid}   & Vessel line width \\
-    wall \index{b2plot, wall}        & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wall}   & Add wall data to plot \\
-    wcol \index{b2plot, wcol}        & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:wcol}   & Colour for wall data line plots \\
-    writ \index{b2plot, writ}, write \index{b2plot, write} & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:writ}   & Write output file \\
-    xcol \index{b2plot, xcol}        & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:xcol}   & Colour of extra label \\
-    xpar \index{b2plot, xpar}        & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:xpar}   & Set $X$ coordinate to parallel length of fieldline \\
-    xpol \index{b2plot, xpol}        & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:xpol}   & Set $X$ coordinate to poloidal length \\
-    xyrz \index{b2plot, xyrz}        & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:xyrz}   & Output plot ranges and boundaries \\
-    yref \index{b2plot, yref}        & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:yref}   & Set $yref$ (radial reference coordinate) \\
-    ytra \index{b2plot, ytra}        & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:ytra}   & Transform $Y$ coordinate for comparison to experiment \\
-    zcol \index{b2plot, zcol}        & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:zcol}   & Colour of zero axes \\
-    zero \index{b2plot, zero}        & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:zero}   & Add zero axes to plot \\
-    zwid \index{b2plot, zwid}        & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:zwid}   & Zero axes line width \\
+    a4l \index{b2plot, a4l}        & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:a4l}    & A4 landscape \\
+    a4p \index{b2plot, a4p}        & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:a4p}    & A4 portrait \\
+    acol \index{b2plot, acol}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:acol}   & Arrow colour \\
+    arow \index{b2plot, arow}      & 0 & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:arow}   & Set arrow length scale \\
+    arww \index{b2plot, arww}      & 0 & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:arww}   & Set arrow line width \\
+    aspc \index{b2plot, aspc}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:aspc}   & Toggle aspect ratio \\
+    bcol \index{b2plot, bcol}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:bcol}   & Colour of label bar title \\
+    both \index{b2plot, both}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:both}   & Computational and physical domain plots \\
+    bw \index{b2plot, bw}          & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:bw}     & Black-and-white plots only \\
+    clvd \index{b2plot, clvd}      & 0 & 3 & 0 & 0 & 0 & 0 & 0 & \ref{sec:clvd}   & Customize contour levels (delta) \\
+    clvl \index{b2plot, clvl}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:clvl}   & Turn off contour levels \\
+    clvn \index{b2plot, clvn}      & 1 & 2 & 0 & 0 & 0 & 0 & 0 & \ref{sec:clvn}   & Customize contour levels (number) \\
+    clvp \index{b2plot, clvp}      & 2 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:clvp}   & Customize contour levels (proportion) \\
+    clvs \index{b2plot, clvs}      & 1 & * & 0 & 0 & 0 & 0 & 0 & \ref{sec:clvs}   & Customize contour levels (specified) \\
+    col \index{b2plot, col}        & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:col}    & Colour plots \\
+    comp \index{b2plot, comp}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:comp}   & Computational domain plots only \\
+    cont \index{b2plot, cont}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:cont}   & Contour plot \\
+    dcol \index{b2plot, dcol}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:dcol}   & Colour for matrix data line plots \\
+    eclv \index{b2plot, eclv}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:eclv}   & Empty contour levels \\
+    ecol \index{b2plot, ecol}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:ecol}   & Experimental data colour \\
+    expl \index{b2plot, expl}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:expl}   & Toggle line or scatter experimental data plot \\
+    exps \index{b2plot, exps}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:exps}   & Symbol for experimental scatter plot \\
+    ewid \index{b2plot, ewid}      & 0 & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:ewid}   & Experimental data line width \\
+    fclv \index{b2plot, fclv}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:fclv}   & Fill contour levels \\
+    filo \index{b2plot, filo}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:filo}   & Fill option \\
+    font \index{b2plot, font}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:font}   & Set font \\
+    gcol \index{b2plot, gcol}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:gcol}   & Colour of graph title \\
+    glob \index{b2plot, glob}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:glob}   & Copy {\em extralabel} to the global label field \\
+    grid \index{b2plot, grid}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:grid}   & Add grid to plot \\
+    hcol \index{b2plot, hcol}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:hcol}   & Colour of global header \\
+    i* \index{b2plot, i*}          & 2 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:i*}     & Integer multiplication \\
+    i** \index{b2plot, i**}        & 2 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:i**}    & Integer to the power \\
+    i+ \index{b2plot, i+}          & 2 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:i+}     & Integer addition \\
+    i- \index{b2plot, i-}          & 2 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:i-}     & Integer substraction \\
+    i/ \index{b2plot, i/}          & 2 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:i/}     & Integer division \\
+    idrop \index{b2plot, idrop}    & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:idrop}  & Drop top element from the integer stack \\
+    idup \index{b2plot, idup}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:idup}   & Duplicate top element from the integer stack \\
+    imp \index{b2plot, imp}        & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:imp}    & Set $jxi$ (inner midplane coordinate) \\
+    iover \index{b2plot, iover}    & 2 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:iover}  & Copy over second element from the integer stack to top \\
+    iprt \index{b2plot, iprt}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:iprt}   & Outputs the integer stack \\
+    iswap \index{b2plot, iswap}    & 2 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:iswap}  & Swap top two elements from the integer stack \\
+    itoe \index{b2plot, itoe}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:itoe}   & Copy integer onto Eirene stack \\
+    itom \index{b2plot, itom}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:itom}   & Copy integer onto matrix stack \\
+    itor \index{b2plot, itor}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:itom}   & Copy integer onto real stack \\
+    itostr \index{b2plot, itostr}  & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:itom}   & Write integer onto string stack \\
+    itot \index{b2plot, itot}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:itom}   & Copy integer onto target stack \\
+    itow \index{b2plot, itow}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:itom}   & Copy integer onto wall stack \\
+    lacl \index{b2plot, lacl}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:lacl}   & Labels along contour plots \\
+    lbof \index{b2plot, lbof}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:lbof}   & Labels off \\
+    lbon \index{b2plot, lbon}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:lbon}   & Labels on \\
+    lbsa \index{b2plot, lbsa}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:lbsa}   & Toggle label lines \\
+    lbsz \index{b2plot, lbsz}      & 0 & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:lbsz}   & Label size \\
+    lfsz \index{b2plot, lfsz}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:lfsz}   & Line label font size \\
+    lhor \index{b2plot, lhor}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:lhor}   & Horizontal labels \\
+    linf \index{b2plot, linf}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:linf}   & Linear functions plot \\
+    lint \index{b2plot, lint}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:lint}   & Linear time for trajectories plot \\
+    linx \index{b2plot, linx}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:linx}   & Linear $X$ scale \\
+    logf \index{b2plot, logf}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:logf}   & Logarithmic functions plot \\
+    logt \index{b2plot, logt}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:logt}   & Logarithmic time for trajectories plot \\
+    logx \index{b2plot, logx}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:logx}   & Logarithmic $X$ scale \\
+    lwid \index{b2plot, lwid}      & 0 & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:lwid}   & Line width \\
+    mcol \index{b2plot, mcol}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:mcol}   & Mesh (and triangular grid) colour \\
+    mesh \index{b2plot, mesh}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:mesh}   & Plot mesh \\
+    mvsk \index{b2plot, mvsk}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:mvsk}   & Movie skip \\
+    ndec \index{b2plot, ndec}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:ndec}   & Number of logarithmic decades \\
+    new \index{b2plot, new}        & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:new}    & New page \\
+    neo\_ic \index{b2plot, neo\_ic} & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:neoic}   & Option for neoclassical calculation \\
+    noax \index{b2plot, noax}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:noax}   & No axes \\
+    nocp \index{b2plot, nocp}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:nocp}   & No contour plot \\
+    ocol \index{b2plot, ocol}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:ocol}   & Outline colour \\
+    omp \index{b2plot, omp}        & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:omp}    & Set $jxa$ (outer midplane coordinate) \\
+    outl \index{b2plot, outl}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:outl}   & Plot outline \\
+    owid \index{b2plot, owid}      & 0 & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:owid}   & Outline line width \\
+    page \index{b2plot, page}      & 2 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:page}   & Number of graphs per page \\
+    part \index{b2plot, part}      & 0 & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:part}   & Partition colour map \\
+    phys \index{b2plot, phys}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:phys}   & Physical domain plots only \\
+    r* \index{b2plot, r*}          & 0 & 2 & 0 & 0 & 0 & 0 & 0 & \ref{sec:r*}     & Real multiplication \\
+    r** \index{b2plot, r**}        & 0 & 2 & 0 & 0 & 0 & 0 & 0 & \ref{sec:r**}    & Real to the power \\
+    r+ \index{b2plot, r+}          & 0 & 2 & 0 & 0 & 0 & 0 & 0 & \ref{sec:r+}     & Real addition \\
+    r- \index{b2plot, r-}          & 0 & 2 & 0 & 0 & 0 & 0 & 0 & \ref{sec:r-}     & Real substraction \\
+    r/ \index{b2plot, r/}          & 0 & 2 & 0 & 0 & 0 & 0 & 0 & \ref{sec:r/}     & Real division \\
+    rdrop \index{b2plot, rdrop}    & 0 & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:rdrop}  & Drop top element from the real stack \\
+    rdup \index{b2plot, rdup}      & 0 & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:rdup}   & Duplicate top element from the real stack \\
+    reso \index{b2plot, reso}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:reso}   & Reset output \\
+    rigz \index{b2plot, rigz}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:rigz}   & Toggle use of ignore regions \\
+    rover \index{b2plot, rover}    & 0 & 2 & 0 & 0 & 0 & 0 & 0 & \ref{sec:rover}  & Copy over second element from the real stack to top \\
+    rprt \index{b2plot, rprt}      & 0 & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:rprt}   & Outputs the real stack \\
+    rswap \index{b2plot, rswap}    & 0 & 2 & 0 & 0 & 0 & 0 & 0 & \ref{sec:rswap}  & Swap top two elements from the real stack \\
+    rtom \index{b2plot, rtoe}      & 0 & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:itoe}   & Copy real onto Eirene stack \\
+    rtom \index{b2plot, rtom}      & 0 & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:itom}   & Copy real onto matrix stack \\
+    rtostr \index{b2plot, rtostr}  & 0 & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:itom}   & Write real onto string stack \\
+    rtot \index{b2plot, rtot}      & 0 & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:itom}   & Copy real onto target stack \\
+    rtow \index{b2plot, rtow}      & 0 & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:itom}   & Copy real onto wall stack \\
+    same \index{b2plot, same}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:same}   & Next graph on same axes \\
+    scol \index{b2plot, scol}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:scol}   & Separatrix colour \\
+    sep \index{b2plot, sep}        & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:sep}    & Plot separatrices \\
+    sepw \index{b2plot, sepw}      & 0 & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:sepw}   & Separatrix line width \\
+    shco \index{b2plot, shco}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:shco}   & \\
+    spln \index{b2plot, spln}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:spln}   & Spline plot \\
+    sq \index{b2plot, sq}          & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:sq}     & Square aspect ratio plot \\
+    stdl \index{b2plot, stdl}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:stdl}   & Set standard label as {\em extralabel} \\
+    surf \index{b2plot, surf}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:surf}   & Surface plot \\
+    swid \index{b2plot, swid}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:swid}   & Set {\tt WINID} \\
+    t\_r+ \index{b2plot, t\_r+}    & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:t_r+}   & Set ratio to {\tt .true.} \\
+    t\_r- \index{b2plot, t\_r-}    & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:t_r-}   & Set ratio to {\tt .false.} \\
+    target \index{b2plot, target}  & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:target} & Add target data to plot \\
+    tcol \index{b2plot, tcol}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:tcol}   & Colour for target data line plots \\
+    trgoff \index{b2plot, trgoff}  & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:trgoff} & Turn off target data in plot \\
+    trig \index{b2plot, trig}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:trig}   & Add triangular grid to plot \\
+    trigmesh \index{b2plot, trigmesh}  & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:trigmesh} & Plot triangular grid \\
+    vcol \index{b2plot, vcol}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:vcol}   & Vessel colour \\
+    vesl \index{b2plot, vesl}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:vesl}   & Plot vessel \\
+    vwid \index{b2plot, vwid}      & 0 & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:vwid}   & Vessel line width \\
+    wall \index{b2plot, wall}      & 0 & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wall}   & Add wall data to plot \\
+    wcol \index{b2plot, wcol}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:wcol}   & Colour for wall data line plots \\
+    writ \index{b2plot, writ}, write \index{b2plot, write} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:writ}   & Write output file \\
+    xcol \index{b2plot, xcol}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:xcol}   & Colour of extra label \\
+    xpar \index{b2plot, xpar}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:xpar}   & Set $X$ coordinate to parallel length of fieldline \\
+    xpol \index{b2plot, xpol}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:xpol}   & Set $X$ coordinate to poloidal length \\
+    xyrz \index{b2plot, xyrz}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:xyrz}   & Output plot ranges and boundaries \\
+    yref \index{b2plot, yref}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:yref}   & Set $yref$ (radial reference coordinate) \\
+    ytra \index{b2plot, ytra}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:ytra}   & Transform $Y$ coordinate for comparison to experiment \\
+    zcol \index{b2plot, zcol}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:zcol}   & Colour of zero axes \\
+    zero \index{b2plot, zero}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:zero}   & Add zero axes to plot \\
+    zwid \index{b2plot, zwid}      & 0 & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:zwid}   & Zero axes line width \\
     \hline
     \caption{Commands acting on the "matrix" stack plotting together with their stack requirements.}
     \label{tab:matrixplot-commands}
@@ -12343,8 +12357,10 @@ be set by changing the real variables listed in table
     \endlastfoot
     a0 \index{b2plot, a0}      & $R$ radius of the ellipse in {\tt chord.F} $(m)$ \\
     b0 \index{b2plot, b0}      & $R$ radius of the ellipse in {\tt chord.F} $(m)$ \\
-    fmax \index{b2plot, fmax}    & Maximum function value for plotting \\
-    fmin \index{b2plot, fmin}    & Minimum function value for plotting \\
+    emax \index{b2plot, emax}    & Maximum function value for plotting Eirene stack data \\
+    emin \index{b2plot, emin}    & Minimum function value for plotting Eirene stack data \\
+    fmax \index{b2plot, fmax}    & Maximum function value for plotting matrix data \\
+    fmin \index{b2plot, fmin}    & Minimum function value for plotting matrix data \\
     omax \index{b2plot, omax}    & Maximum ordinate for 2-D plots \\
     omin \index{b2plot, omin}    & Minimum ordinate for 2-D plots \\
     r0 \index{b2plot, r0}      & $R$ position of the ellipse in {\tt chord.F} $(m)$ \\
@@ -12390,67 +12406,185 @@ variables often form the argument for a command.  Typically these
 commands take one value off the "string" stack.
 
 \begin{center}\index{b2plot, character commands}
-  \begin{longtable}{|c|c|c|c|c|c|c|c|l|}
+  \begin{longtable}{|c|c|c|c|c|c|c|c|c|l|}
     \hline
-    \multicolumn{9}{|l|}{\small\sl continued from previous page} \\
-    \hline name & \multicolumn{6}{|c|}{stack requirements} & section & use \\
-    \hline   & 'i' & 'r' & 's' & 'm' & 'w' & 't' &   &   \\
+    \multicolumn{10}{|l|}{\small\sl continued from previous page} \\
+    \hline name & \multicolumn{7}{|c|}{stack requirements} & section & use \\
+    \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
     \hline \endhead
-    \hline name & \multicolumn{6}{|c|}{stack requirements} & section & use \\
-    \hline   & 'i' & 'r' & 's' & 'm' & 'w' & 't' &   &   \\
+    \hline name & \multicolumn{7}{|c|}{stack requirements} & section & use \\
+    \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
     \hline \endfirsthead
     \hline
-    \multicolumn{9}{|l|}{\small\sl continued on next page} \\
+    \multicolumn{10}{|l|}{\small\sl continued on next page} \\
     \hline \endfoot
     \endlastfoot
-    adas \index{b2plot, adas}     & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:adas}     & Access {\tt ADAS} data \\
-    amju \index{b2plot, amju}, amjuel \index{b2plot, anjuel} & 0 & 0 & 4 & 0 & 0 & 0 & \ref{sec:amju} & Access {\tt AMJUEL} data \\
-    cam \index{b2plot, cam}      & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:cam}      & Camera plot \\
-    chbx \index{b2plot, chbx}     & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:chbx}     & Boxcar average of chords \\
-    chmp \index{b2plot, chmp}     & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:chmp}     & Chord contributions to the mesh element \\
-    chor \index{b2plot, chor}     & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:chor}     & Filename containing chords (for integration) \\
-    chpl \index{b2plot, chpl}     & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:chpl}     & Filename containing chords (to plot) \\
-    chvl \index{b2plot, chvl}     & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:chvl}     & Value at positions \\
-    cltb \index{b2plot, cltb}     & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:cltb}     & Filename for a colour table \\
-    cmd \index{b2plot, cmd}      & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:cmd}      & Filename from which to take commands \\
-    cmdcdf \index{b2plot, cmdcdf}   & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:cmdcdf}   & Loop command file on {\tt CDF} data \\
-    expf \index{b2plot, expf}     & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:expf}     & Experimental data file \\
-    extl \index{b2plot, extl}     & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:extl}     & Extra label \\
-    flux \index{b2plot, flux}     & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:flux}     & Call {\tt WOSlib} flux routine \\
-    glbl \index{b2plot, glbl}     & 0 & 0 & 1 & 1 & 0 & 0 & \ref{sec:glbl}     & Set graph label \\
-    movi \index{b2plot, movi}     & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:movi}     & Movie \\
-    movie \index{b2plot, movie}, nmovie \index{b2plot, nmovie} & 2 & 0 & 1 & 0 & 0 & 0 & \ref{sec:movie} & New movie option \\
-    mprt \index{b2plot, mprt}     & 0 & 0 & 1 & 1 & 0 & 0 & \ref{sec:mprt}     & Output top of matrix stack to a file \\
-    mtab \index{b2plot, mtab}     & 4 & 0 & 1 & 1 & 0 & 0 & \ref{sec:mtab}     & Output part of the matrix on top of the stack to a file \\
-    omovie \index{b2plot, omovie}   & 2 & 0 & 2 & 0 & 0 & 0 & \ref{sec:omovie}   & Old movie option \\
-    oson \index{b2plot, oson}     & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:oson}     & Output geometry in {\tt Sonnet} format \\
-    outp \index{b2plot, outp}     & 2 & 0 & 1 & 1 & 0 & 0 & \ref{sec:outp}     & Prints value of specific element \\
-    pdev \index{b2plot, pdev}     & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:pdev}     & {\tt PLPLOT} device name \\
-    saw \index{b2plot, saw}      & 2 & 0 & 1 & 0 & 0 & 0 & \ref{sec:saw}      & Read external data onto the matrix stack \\
-    saws \index{b2plot, saws}     & 3 & 0 & 1 & 0 & 0 & 0 & \ref{sec:saws}     & Read external fluid species data onto the matrix stack \\
-    sawx \index{b2plot, sawx}     & 3 & 0 & 1 & 0 & 0 & 0 & \ref{sec:sawx}     & Read external additional species data onto the matrix stack \\
-    scat \index{b2plot, scat}     & 0 & 0 & 2 & 0 & 0 & 0 & \ref{sec:scat}     & Concatenate two strings \\
-    sdrop \index{b2plot, sdrop}    & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:sdrop}    & Drop top of string stack \\
-    sdup \index{b2plot, sdup}     & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:sdup}     & Duplicate top of string stack \\
-    slbl \index{b2plot, slbl}     & 1 & 0 & 1 & 1 & 0 & 0 & \ref{sec:slbl}     & Set species label \\
-    sonn \index{b2plot, sonn}     & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:sonn}     & Read a new {\tt Sonnet} geometry \\
-    sover \index{b2plot, sover}    & 0 & 0 & 2 & 0 & 0 & 0 & \ref{sec:sover}    & Copy over the second element of the string stack \\
-    sprt \index{b2plot, sprt}     & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:sprt}     & Outputs the string stack \\
-    sswap \index{b2plot, sswap}    & 0 & 0 & 2 & 0 & 0 & 0 & \ref{sec:sswap}    & Swap the top two elements of the string stack \\
-    tlbl \index{b2plot, tlbl}     & 0 & 0 & 1 & 0 & 0 & 1 & \ref{sec:tlbl}     & Set target graph label \\
-    trgblbl \index{b2plot, trgblbl}  & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:trgblbl}  & Set target bar label \\
-    trgprt \index{b2plot, trgprt}     & 0 & 0 & 1 & 0 & 0 & 1 & \ref{sec:trgprt}     & Output top of target stack to a file \\
-    trgtab \index{b2plot, trgtab}     & 4 & 0 & 1 & 0 & 0 & 1 & \ref{sec:trgtab}     & Output part of the top of the target stack to a file \\
-    uedgegrd \index{b2plot, uedgegrd} & 0 & 1 & 1 & 0 & 0 & 0 & \ref{sec:uedgegrd} & Output geometry in {\tt UEDGE} format \\
-    wallblbl \index{b2plot, wallblbl} & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:wallblbl} & Set wall bar label \\
-    wlbl \index{b2plot, wlbl}     & 0 & 0 & 1 & 0 & 1 & 0 & \ref{sec:wlbl}     & Set wall graph label \\
-    wprt \index{b2plot, wprt}     & 0 & 0 & 1 & 0 & 1 & 0 & \ref{sec:wprt}     & Output top of wall stack to a file \\
-    wslbl \index{b2plot, wslbl}   & 1 & 0 & 1 & 0 & 1 & 0 & \ref{sec:wslbl}    & Set wall species label \\
-    wtab \index{b2plot, wtab}     & 2 & 0 & 1 & 0 & 1 & 0 & \ref{sec:wtab}     & Output part of the top of the wall stack to a file \\
+    adas \index{b2plot, adas}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:adas}     & Access {\tt ADAS} data \\
+    amju \index{b2plot, amju}, amjuel \index{b2plot, anjuel} & 0 & 0 & 4 & 0 & 0 & 0 & 0 & \ref{sec:amju} & Access {\tt AMJUEL} data \\
+    cam \index{b2plot, cam}      & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:cam}      & Camera plot \\
+    chbx \index{b2plot, chbx}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:chbx}     & Boxcar average of chords \\
+    chmp \index{b2plot, chmp}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:chmp}     & Chord contributions to the mesh element \\
+    chor \index{b2plot, chor}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:chor}     & Filename containing chords (for integration) \\
+    chpl \index{b2plot, chpl}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:chpl}     & Filename containing chords (to plot) \\
+    chvl \index{b2plot, chvl}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:chvl}     & Value at positions \\
+    cltb \index{b2plot, cltb}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:cltb}     & Filename for a colour table \\
+    cmd \index{b2plot, cmd}      & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:cmd}      & Filename from which to take commands \\
+    cmdcdf \index{b2plot, cmdcdf} & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:cmdcdf}   & Loop command file on {\tt CDF} data \\
+    ecam \index{b2plot, ecam}    & 0 & 0 & 1 & 0 & 1 & 0 & 0 & \ref{sec:ecam}     & Camera plot for Eirene stack data \\
+    echbx \index{b2plot, echbx}  & 0 & 0 & 1 & 0 & 1 & 0 & 0 & \ref{sec:echbx}    & Boxcar average of chords for Eirene stack data \\
+    echmp \index{b2plot, echmp}  & 0 & 0 & 1 & 0 & 1 & 0 & 0 & \ref{sec:echmp}    & Chord contributions to the mesh element from Eirene stack data \\
+    echor \index{b2plot, echor}  & 0 & 0 & 1 & 0 & 1 & 0 & 0 & \ref{sec:echor}    & Filename containing chords (for integration of Eirene stack data) \\
+    echvl \index{b2plot, echvl}  & 0 & 0 & 1 & 0 & 1 & 0 & 0 & \ref{sec:echvl}    & Value at positions of Eirene stack data \\
+    expf \index{b2plot, expf}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:expf}     & Experimental data file \\
+    extl \index{b2plot, extl}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:extl}     & Extra label \\
+    flux \index{b2plot, flux}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:flux}     & Call {\tt WOSlib} flux routine \\
+    glbl \index{b2plot, glbl}    & 0 & 0 & 1 & 1 & 0 & 0 & 0 & \ref{sec:glbl}     & Set graph label \\
+    movi \index{b2plot, movi}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:movi}     & Movie \\
+    movie \index{b2plot, movie}, nmovie \index{b2plot, nmovie} & 2 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:movie} & New movie option \\
+    mprt \index{b2plot, mprt}    & 0 & 0 & 1 & 1 & 0 & 0 & 0 & \ref{sec:mprt}     & Output top of matrix stack to a file \\
+    mtab \index{b2plot, mtab}    & 4 & 0 & 1 & 1 & 0 & 0 & 0 & \ref{sec:mtab}     & Output part of the matrix on top of the stack to a file \\
+    omovie \index{b2plot, omovie} & 2 & 0 & 2 & 0 & 0 & 0 & 0 & \ref{sec:omovie}   & Old movie option \\
+    oson \index{b2plot, oson}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:oson}     & Output geometry in {\tt Sonnet} format \\
+    outp \index{b2plot, outp}    & 2 & 0 & 1 & 1 & 0 & 0 & 0 & \ref{sec:outp}     & Prints value of specific element \\
+    pdev \index{b2plot, pdev}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:pdev}     & {\tt PLPLOT} device name \\
+    saw \index{b2plot, saw}      & 2 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:saw}      & Read external data onto the matrix stack \\
+    saws \index{b2plot, saws}    & 3 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:saws}     & Read external fluid species data onto the matrix stack \\
+    sawx \index{b2plot, sawx}    & 3 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:sawx}     & Read external additional species data onto the matrix stack \\
+    scat \index{b2plot, scat}    & 0 & 0 & 2 & 0 & 0 & 0 & 0 & \ref{sec:scat}     & Concatenate two strings \\
+    sdrop \index{b2plot, sdrop}  & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:sdrop}    & Drop top of string stack \\
+    sdup \index{b2plot, sdup}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:sdup}     & Duplicate top of string stack \\
+    slbl \index{b2plot, slbl}    & 1 & 0 & 1 & 1 & 0 & 0 & 0 & \ref{sec:slbl}     & Set species label \\
+    sonn \index{b2plot, sonn}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:sonn}     & Read a new {\tt Sonnet} geometry \\
+    sover \index{b2plot, sover}  & 0 & 0 & 2 & 0 & 0 & 0 & 0 & \ref{sec:sover}    & Copy over the second element of the string stack \\
+    sprt \index{b2plot, sprt}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:sprt}     & Outputs the string stack \\
+    sswap \index{b2plot, sswap}  & 0 & 0 & 2 & 0 & 0 & 0 & 0 & \ref{sec:sswap}    & Swap the top two elements of the string stack \\
+    tlbl \index{b2plot, tlbl}    & 0 & 0 & 1 & 0 & 0 & 0 & 1 & \ref{sec:tlbl}     & Set target graph label \\
+    trgblbl \index{b2plot, trgblbl} & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:trgblbl}  & Set target bar label \\
+    trgprt \index{b2plot, trgprt} & 0 & 0 & 1 & 0 & 0 & 0 & 1 & \ref{sec:trgprt}     & Output top of target stack to a file \\
+    trgtab \index{b2plot, trgtab} & 4 & 0 & 1 & 0 & 0 & 0 & 1 & \ref{sec:trgtab}     & Output part of the top of the target stack to a file \\
+    uedgegrd \index{b2plot, uedgegrd} & 0 & 1 & 1 & 0 & 0 & 0 & 0 & \ref{sec:uedgegrd} & Output geometry in {\tt UEDGE} format \\
+    wallblbl \index{b2plot, wallblbl} & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:wallblbl} & Set wall bar label \\
+    wlbl \index{b2plot, wlbl}    & 0 & 0 & 1 & 0 & 0 & 1 & 0 & \ref{sec:wlbl}     & Set wall graph label \\
+    wprt \index{b2plot, wprt}    & 0 & 0 & 1 & 0 & 0 & 1 & 0 & \ref{sec:wprt}     & Output top of wall stack to a file \\
+    wslbl \index{b2plot, wslbl}  & 1 & 0 & 1 & 0 & 0 & 1 & 0 & \ref{sec:wslbl}    & Set wall species label \\
+    wtab \index{b2plot, wtab}    & 2 & 0 & 1 & 0 & 0 & 1 & 0 & \ref{sec:wtab}     & Output part of the top of the wall stack to a file \\
     \hline
     \caption{Commands taking character strings as parameters.  Note
       that the string should be delimited by single quotes.}
     \label{tab:character-variables}
+  \end{longtable}
+\end{center}
+
+In table \ref{tab:eirenequantities}, we give the list of quantities that
+are available for use on the "Eirene" stack, containing values defined
+on the triangular grid defined for the {\tt Eirene} computations. These
+quantities are only available for coupled \SOLPSITER runs.
+
+\begin{center}\index{b2plot, Eirene quantities}
+  \begin{longtable}{|l|l|}
+    \hline
+    \multicolumn{2}{|l|}{\small\sl continued from previous page} \\
+    \hline name & description $(units)$ \\
+    \hline \endhead
+    \hline name & description $(units)$ \\
+    \hline \endfirsthead
+    \hline
+    \multicolumn{2}{|l|}{\small\sl continued on next page} \\
+    \hline \endfoot
+    \endlastfoot
+    edena \index{b2plot, edena} & Atoms energy density $(eV.m^{-3})$ \\
+    edeni \index{b2plot, edeni} & Test ions energy density $(eV.m^{-3})$ \\
+    edenm \index{b2plot, edenm} & Molecules energy density $(eV.m^{-3})$ \\
+    pdena \index{b2plot, pdena} & Atoms particle density $(m^{-3})$ \\
+    pdeni \index{b2plot, pdeni} & Test ions particle density $(m^{-3})$ \\
+    pdenm \index{b2plot, pdenm} & Molecules particle density $(m^{-3})$ \\
+    triarea \index{b2plot, triarea} & Triangle area $(m^{2})$ \\
+    triavol \index{b2plot, triavol} & Triangle volume $(m^{3})$ \\
+    vxdena \index{b2plot, vxdena} & Atoms X-directed velocity $(m^2.s^{-1})$ \\
+    vxdeni \index{b2plot, vxdeni} & Test ions X-directed velocity $(m^2.s^{-1})$ \\
+    vxdenm \index{b2plot, vxdenm} & Molecules X-directed velocity $(m^2.s^{-1})$ \\
+    vydena \index{b2plot, vydena} & Atoms Y-directed velocity $(m^2.s^{-1})$ \\
+    vydeni \index{b2plot, vydeni} & Test ions Y-directed velocity $(m^2.s^{-1})$ \\
+    vydenm \index{b2plot, vydenm} & Molecules Y-directed velocity $(m^2.s^{-1})$ \\
+    vzdena \index{b2plot, vzdena} & Atoms Z-directed velocity $(m^2.s^{-1})$ \\
+    vzdeni \index{b2plot, vzdeni} & Test ions Z-directed velocity $(m^2.s^{-1})$ \\
+    vzdenm \index{b2plot, vzdenm} & Molecules Z-directed velocity $(m^2.s^{-1})$ \\
+    \hline
+    \caption{Quantities that can be stored in the "Eirene" stack.}
+    \label{tab:eirenequantities}
+  \end{longtable}
+\end{center}
+
+In table \ref{tab:eirenecommands}, we give the list of commands that
+act on the "Eirene" stack or affect graphs of those data.
+
+\begin{center}\index{b2plot, Eirene stack commands}
+  \begin{longtable}{|c|c|c|c|c|c|c|c|c|l|}
+    \hline
+    \multicolumn{10}{|l|}{\small\sl continued from previous page} \\
+    \hline name & \multicolumn{7}{|c|}{stack requirements} & section & use \\
+    \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
+    \hline \endhead
+    \hline name & \multicolumn{7}{|c|}{stack requirements} & section & use \\
+    \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
+    \hline \endfirsthead
+    \hline
+    \multicolumn{10}{|l|}{\small\sl continued on next page} \\
+    \hline \endfoot
+    \endlastfoot
+    eabs \index{b2plot, eabs}      & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:eabs}     & Absolute value \\
+    earow \index{b2plot, earow}    & 0 & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:earow}   & Set arrow length scale for Eirene data plots \\
+    earox \index{b2plot, earox}    & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:earox}  & Use as Eirene array for arrow $X$-component \\
+    earoy \index{b2plot, earoy}    & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:earoy}  & Use as Eirene array for arrow $Y$-component \\
+    echs \index{b2plot, echs}      & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:echs}     & Change sign of Eirene data \\
+    eclvd \index{b2plot, eclvd}    & 0 & 3 & 0 & 0 & 0 & 0 & 0 & \ref{sec:eclvd}    & Customize Eirene contour levels (delta) \\
+    eclvn \index{b2plot, eclvn}    & 1 & 2 & 0 & 0 & 0 & 0 & 0 & \ref{sec:eclvn}    & Customize Eirene contour levels (number) \\
+    eclvp \index{b2plot, eclvp}    & 2 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:eclvp}    & Customize Eirene contour levels (proportion) \\
+    eclvs \index{b2plot, eclvs}    & 1 & * & 0 & 0 & 0 & 0 & 0 & \ref{sec:eclvs}    & Customize Eirene contour levels (specified) \\
+    edims \index{b2plot, edims}    & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:edims}    & Prints the dimensions and contents of the Eirene stack \\
+    edrop \index{b2plot, edrop}    & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:edrop}    & Drop top of Eirene stack \\
+    edup \index{b2plot, edup}      & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:edup}     & Duplicate top of Eirene stack \\
+    eexp \index{b2plot, eexp}      & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:eexp}     & Take exponential of Eirene data \\
+    elist \index{b2plot, elist}    & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:elist}    & Lists the contents of the Eirene stack \\
+    eln \index{b2plot, eln}        & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:eln}      & Take natural logarithm of Eirene data \\
+    elog \index{b2plot, elog}      & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:elog}     & Take $log_{10}$ of Eirene data \\
+    em* \index{b2plot, em*}        & 0 & 0 & 0 & 0 & 2 & 0 & 0 & \ref{sec:em*}      & Eirene stack multiplication \\
+    em+ \index{b2plot, em+}        & 0 & 0 & 0 & 0 & 2 & 0 & 0 & \ref{sec:em+}      & Eirene stack addition \\
+    em- \index{b2plot, em-}        & 0 & 0 & 0 & 0 & 2 & 0 & 0 & \ref{sec:em-}      & Eirene stack substraction \\
+    em/ \index{b2plot, em/}        & 0 & 0 & 0 & 0 & 2 & 0 & 0 & \ref{sec:em/}      & Eirene stack division \\
+    emeq \index{b2plot, emeq}      & 0 & 1 & 0 & 0 & 1 & 0 & 0 & \ref{sec:emeq}     & Eirene matrix element is equal to \\
+    emge \index{b2plot, emge}      & 0 & 1 & 0 & 0 & 1 & 0 & 0 & \ref{sec:emge}     & Eirene matrix element is greater than or equal to \\
+    emgt \index{b2plot, emgt}      & 0 & 1 & 0 & 0 & 1 & 0 & 0 & \ref{sec:emgt}     & Eirene matrix element is greater than \\
+    emle \index{b2plot, emle}      & 0 & 1 & 0 & 0 & 1 & 0 & 0 & \ref{sec:emle}     & Eirene matrix element is less than or equal to \\
+    emlt \index{b2plot, emlt}      & 0 & 1 & 0 & 0 & 1 & 0 & 0 & \ref{sec:emlt}     & Eirene matrix element is less than \\0 & 
+    emmax \index{b2plot, emmax}    & 0 & 0 & 0 & 0 & 2 & 0 & 0 & \ref{sec:emmax}    & Maximum of top two elements on the Eirene stack \\
+    emmin \index{b2plot, emmin}    & 0 & 0 & 0 & 0 & 2 & 0 & 0 & \ref{sec:emmin}    & Minimum of top two elements on the Eirene stack \\
+    emne \index{b2plot, emne}      & 0 & 1 & 0 & 0 & 1 & 0 & 0 & \ref{sec:emne}     & Eirene matrix element is not equal to \\
+    eoutp \index{b2plot, eoutp}    & 1 & 0 & 1 & 0 & 1 & 0 & 0 & \ref{sec:eoutp}    & Output the value of a specific Eirene triangle \\
+    eover \index{b2plot, eover}    & 0 & 0 & 0 & 0 & 2 & 0 & 0 & \ref{sec:eover}    & Copy over the second element of the Eirene stack \\
+    epos \index{b2plot, epos}      & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:epos}     & Is Eirene data element positive? \\
+    eprt \index{b2plot, eprt}      & 0 & 0 & 1 & 0 & 1 & 0 & 0 & \ref{sec:eprt}     & Prints the Eirene data onto a file \\
+    esel \index{b2plot, esel}      & 1 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:esel}     & Select Eirene triangle \\
+    esqrt \index{b2plot, esqrt}    & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:esqrt}    & Take square root of Eirene data \\
+    esumz \index{b2plot, esumz}    & 2 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:esumz}    & Sum over species \\
+    esurf \index{b2plot, esurf}    & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:esurf}    & Plot Eirene data on the triangular grid \\
+    eswap \index{b2plot, eswap}    & 0 & 0 & 0 & 0 & 2 & 0 & 0 & \ref{sec:eswap}    & Swap top two elements of Eirene stack \\
+    etos \index{b2plot, etos}      & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:etos}     & Coey Eirene data onto matrix stack \\
+    wzrng \index{b2plot, ezrng}    & 2 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:ezrng}    & Select species range in Eirene data \\
+    ezsel \index{b2plot, ezsel}    & 1 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:ezsel}    & Select species in Eirene data \\
+    rem* \index{b2plot, rem*}      & 0 & 1 & 0 & 0 & 1 & 0 & 0 & \ref{sec:rem*}     & Eirene data * real \\
+    rem** \index{b2plot, rem**}    & 0 & 1 & 0 & 0 & 1 & 0 & 0 & \ref{sec:rwm**}    & Eirene data ** real \\
+    rem+ \index{b2plot, rem+}      & 0 & 1 & 0 & 0 & 1 & 0 & 0 & \ref{sec:rem+}     & Eirene data + real \\
+    rem- \index{b2plot, rem-}      & 0 & 1 & 0 & 0 & 1 & 0 & 0 & \ref{sec:rem-}     & Eirene data - real \\
+    rem/ \index{b2plot, rem/}      & 0 & 1 & 0 & 0 & 1 & 0 & 0 & \ref{sec:rem*}     & Eirne data / real \\
+    remma \index{b2plot, remma}    & 0 & 1 & 0 & 0 & 1 & 0 & 0 & \ref{sec:remma}    & Maximum of Eirene data and real \\
+    remmi \index{b2plot, remmi}    & 0 & 1 & 0 & 0 & 1 & 0 & 0 & \ref{sec:remmi}    & Minimum of Eirene data and real \\
+    psta \index{b2plot, psta}      & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:psta}     & Divide Eirene data per triangle area \\
+    pstv \index{b2plot, pstv}      & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:pstv}     & Divide Eirene data per triangle volume \\
+    sumt \index{b2plot, sumt}      & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:sumt}     & Sum over triangular grid \\
+    \hline
+    \caption{Commands related to the "Eirene" stack and triangular grid data plots.}
+    \label{tab:eirenecommands}
   \end{longtable}
 \end{center}
 
@@ -12590,79 +12724,79 @@ In table \ref{tab:wallcommands}, we give the list of commands that
 act on the "wall" stack or affect wall graphs.
 
 \begin{center}\index{b2plot, wall commands}
-  \begin{longtable}{|c|c|c|c|c|c|c|c|l|}
+  \begin{longtable}{|c|c|c|c|c|c|c|c|c|l|}
     \hline
-    \multicolumn{9}{|l|}{\small\sl continued from previous page} \\
-    \hline name & \multicolumn{6}{|c|}{stack requirements} & section & use \\
-    \hline   & 'i' & 'r' & 's' & 'm' & 'w' & 't' &   &   \\
+    \multicolumn{10}{|l|}{\small\sl continued from previous page} \\
+    \hline name & \multicolumn{7}{|c|}{stack requirements} & section & use \\
+    \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
     \hline \endhead
-    \hline name & \multicolumn{6}{|c|}{stack requirements} & section & use \\
-    \hline   & 'i' & 'r' & 's' & 'm' & 'w' & 't' &   &   \\
+    \hline name & \multicolumn{7}{|c|}{stack requirements} & section & use \\
+    \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
     \hline \endfirsthead
     \hline
     \multicolumn{9}{|l|}{\small\sl continued on next page} \\
     \hline \endfoot
     \endlastfoot
-    ddw \index{b2plot, ddw}       & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:ddw}      & Take derivative along wall length \\
-    intw \index{b2plot, intw}      & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:intw}     & Integrate over walls (per segment) \\
-    intw* \index{b2plot, intw*}     & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:intw*}    & Integrate over walls (all segments) \\
-    linw \index{b2plot, linw}      & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:linw}     & Use linear scale for wall plot \\
-    linxw \index{b2plot, linxw}     & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:linxw}    & Use linear abscissa for wall plot \\
-    logw \index{b2plot, logw}      & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:logw}     & Use logarithmic scale for wall plot \\
-    logxw \index{b2plot, logxw}     & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:logxw}    & Use logarithmic abscissa for wall plot \\
-    outpw \index{b2plot, outpw}     & 1 & 0 & 1 & 0 & 1 & 0 & \ref{sec:outpw}    & Output the value of a specific wall element \\
-    plwl \index{b2plot, plwl}      & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:plwl}     & Plot in wall domain \\
-    pswa \index{b2plot, pswa}      & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:pswa}     & Divide per wall element area \\
-    pwne \index{b2plot, pwne}      & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:pwne}     & Divide by electron density \\
-    rwm* \index{b2plot, rwm*}      & 0 & 1 & 0 & 0 & 1 & 0 & \ref{sec:rwm*}     & Wall data * real \\
-    rwm** \index{b2plot, rwm**}     & 0 & 1 & 0 & 0 & 1 & 0 & \ref{sec:rwm**}    & Wall data ** real \\
-    rwm+ \index{b2plot, rwm+}      & 0 & 1 & 0 & 0 & 1 & 0 & \ref{sec:rwm+}     & Wall data + real \\
-    rwm- \index{b2plot, rwm-}      & 0 & 1 & 0 & 0 & 1 & 0 & \ref{sec:rwm-}     & Wall data - real \\
-    rwm/ \index{b2plot, rwm/}      & 0 & 1 & 0 & 0 & 1 & 0 & \ref{sec:rwm*}     & Wall data / real \\
-    rwmma \index{b2plot, rwmma}     & 0 & 1 & 0 & 0 & 1 & 0 & \ref{sec:rwmma}    & Maximum of wall data and real \\
-    rwmmi \index{b2plot, rwmmi}     & 0 & 1 & 0 & 0 & 1 & 0 & \ref{sec:rwmmi}    & Minimum of wall data and real \\
-    sumw \index{b2plot, sumw}      & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:sumw}     & Sum over walls \\
-    wabs \index{b2plot, wabs}      & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wabs}     & Absolute value \\
-    wall \index{b2plot, wall}      & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wall}     & Add wall data to contour plot \\
-    wall\_ank \index{b2plot, wall\_ank} & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:wall_ank} & Add ANK wall data to contour plot \\
-    wallf \index{b2plot, wallf}     & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:wallf}    & Add experimental data to wall plot \\
-    wchs \index{b2plot, wchs}      & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wchs}     & Change sign of wall data \\
-    wclvd \index{b2plot, wclvd}     & 0 & 3 & 0 & 0 & 0 & 0 & \ref{sec:wclvd}    & Customize wall contour levels (delta) \\
-    wclvn \index{b2plot, wclvn}     & 1 & 2 & 0 & 0 & 0 & 0 & \ref{sec:wclvn}    & Customize wall contour levels (number) \\
-    wclvp \index{b2plot, wclvp}     & 2 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wclvp}    & Customize wall contour levels (proportion) \\
-    wclvs \index{b2plot, wclvs}     & 1 & * & 0 & 0 & 0 & 0 & \ref{sec:wclvs}    & Customize wall contour levels (specified) \\
-    wdrop \index{b2plot, wdrop}     & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wdrop}    & Drop top of wall stack \\
-    wdup \index{b2plot, wdup}      & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wdup}     & Duplicate top of wall stack \\
-    wexp \index{b2plot, wexp}      & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wexp}     & Take exponential of wall data \\
-    wlist \index{b2plot, wlist}     & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wlist}    & Lists the contents of the wall stack \\
-    wln \index{b2plot, wln}       & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wln}      & Take natural logarithm of wall data \\
-    wlog \index{b2plot, wlog}      & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wlog}     & Take $log_{10}$ of wall data \\
-    wm* \index{b2plot, wm*}       & 0 & 0 & 0 & 0 & 2 & 0 & \ref{sec:wm*}      & Wall stack multiplication \\
-    wm+ \index{b2plot, wm+}       & 0 & 0 & 0 & 0 & 2 & 0 & \ref{sec:wm+}      & Wall stack addition \\
-    wm- \index{b2plot, wm-}       & 0 & 0 & 0 & 0 & 2 & 0 & \ref{sec:wm-}      & Wall stack substraction \\
-    wm/ \index{b2plot, wm/}       & 0 & 0 & 0 & 0 & 2 & 0 & \ref{sec:wm/}      & Wall stack division \\
-    wmeq \index{b2plot, wmeq}      & 0 & 1 & 0 & 0 & 1 & 0 & \ref{sec:wmeq}     & Wall matrix element is equal to \\
-    wmge \index{b2plot, wmge}      & 0 & 1 & 0 & 0 & 1 & 0 & \ref{sec:wmge}     & Wall matrix element is greater than or equal to \\
-    wmgt \index{b2plot, wmgt}      & 0 & 1 & 0 & 0 & 1 & 0 & \ref{sec:wmgt}     & Wall matrix element is greater than \\
-    wmle \index{b2plot, wmle}      & 0 & 1 & 0 & 0 & 1 & 0 & \ref{sec:wmle}     & Wall matrix element is less than or equal to \\
-    wmlt \index{b2plot, wmlt}      & 0 & 1 & 0 & 0 & 1 & 0 & \ref{sec:wmlt}     & Wall matrix element is less than \\
-    wmmax \index{b2plot, wmmax}     & 0 & 0 & 0 & 0 & 2 & 0 & \ref{sec:wmmax}    & Maximum of top two elements on the wall stack \\
-    wmmin \index{b2plot, wmmin}     & 0 & 0 & 0 & 0 & 2 & 0 & \ref{sec:wmmin}    & Minimum of top two elements on the wall stack \\
-    wmne \index{b2plot, wmne}      & 0 & 1 & 0 & 0 & 1 & 0 & \ref{sec:wmne}     & Wall matrix element is not equal to \\
-    woff \index{b2plot, woff}      & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:woff}     & Turn off wall plots \\
-    wover \index{b2plot, wover}     & 0 & 0 & 0 & 0 & 2 & 0 & \ref{sec:wover}    & Copy over the second element of the wall stack \\
-    wpos \index{b2plot, wpos}      & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wpos}     & Is wall data element positive? \\
-    wprt \index{b2plot, wprt}      & 0 & 0 & 1 & 0 & 1 & 0 & \ref{sec:wprt}     & Prints the wall data onto a file \\
-    wsaw \index{b2plot, wsaw}      & 1 & 0 & 1 & 0 & 0 & 0 & \ref{sec:wsaw}     & Read external data onto the wall stack \\
-    wsel \index{b2plot, wsel}      & 1 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wsel}     & Select wall element \\
-    wsqrt \index{b2plot, wsqrt}     & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wsqrt}    & Take square root of wall data \\
-    wsumz \index{b2plot, wsumz}     & 2 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wsumz}    & Sum over species \\
-    wswap \index{b2plot, wswap}     & 0 & 0 & 0 & 0 & 2 & 0 & \ref{sec:wswap}    & Swap top two elements of wall stack \\
-    wtos \index{b2plot, wtos}      & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wtos}     & Copy wall data onto matrix stack \\
-    wtot \index{b2plot, wtot}      & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wtot}     & Copy wall data onto target stack \\
-    wwid \index{b2plot, wwid}      & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:wwid}     & Wall linewidth \\
-    wzrng \index{b2plot, wzrng}     & 2 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wzrng}    & Select species range in wall data \\
-    wzsel \index{b2plot, wzsel}     & 1 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wzsel}    & Select species in wall data \\
+    ddw \index{b2plot, ddw}       & 0 & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:ddw}      & Take derivative along wall length \\
+    intw \index{b2plot, intw}     & 0 & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:intw}     & Integrate over walls (per segment) \\
+    intw* \index{b2plot, intw*}   & 0 & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:intw*}    & Integrate over walls (all segments) \\
+    linw \index{b2plot, linw}     & 0 & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:linw}     & Use linear scale for wall plot \\
+    linxw \index{b2plot, linxw}   & 0 & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:linxw}    & Use linear abscissa for wall plot \\
+    logw \index{b2plot, logw}     & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:logw}     & Use logarithmic scale for wall plot \\
+    logxw \index{b2plot, logxw}   & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:logxw}    & Use logarithmic abscissa for wall plot \\
+    outpw \index{b2plot, outpw}   & 1 & 0 & 1 & 0 & 0 & 1 & 0 & \ref{sec:outpw}    & Output the value of a specific wall element \\
+    plwl \index{b2plot, plwl}     & 0 & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:plwl}     & Plot in wall domain \\
+    pswa \index{b2plot, pswa}     & 0 & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:pswa}     & Divide per wall element area \\
+    pwne \index{b2plot, pwne}     & 0 & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:pwne}     & Divide by electron density \\
+    rwm* \index{b2plot, rwm*}     & 0 & 1 & 0 & 0 & 0 & 1 & 0 & \ref{sec:rwm*}     & Wall data * real \\
+    rwm** \index{b2plot, rwm**}   & 0 & 1 & 0 & 0 & 0 & 1 & 0 & \ref{sec:rwm**}    & Wall data ** real \\
+    rwm+ \index{b2plot, rwm+}     & 0 & 1 & 0 & 0 & 0 & 1 & 0 & \ref{sec:rwm+}     & Wall data + real \\
+    rwm- \index{b2plot, rwm-}     & 0 & 1 & 0 & 0 & 0 & 1 & 0 & \ref{sec:rwm-}     & Wall data - real \\
+    rwm/ \index{b2plot, rwm/}     & 0 & 1 & 0 & 0 & 0 & 1 & 0 & \ref{sec:rwm*}     & Wall data / real \\
+    rwmma \index{b2plot, rwmma}   & 0 & 1 & 0 & 0 & 0 & 1 & 0 & \ref{sec:rwmma}    & Maximum of wall data and real \\
+    rwmmi \index{b2plot, rwmmi}   & 0 & 1 & 0 & 0 & 0 & 1 & 0 & \ref{sec:rwmmi}    & Minimum of wall data and real \\
+    sumw \index{b2plot, sumw}     & 0 & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:sumw}     & Sum over walls \\
+    wabs \index{b2plot, wabs}     & 0 & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wabs}     & Absolute value \\
+    wall \index{b2plot, wall}     & 0 & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wall}     & Add wall data to contour plot \\
+    wall\_ank \index{b2plot, wall\_ank} & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:wall_ank} & Add ANK wall data to contour plot \\
+    wallf \index{b2plot, wallf}   & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:wallf}    & Add experimental data to wall plot \\
+    wchs \index{b2plot, wchs}     & 0 & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wchs}     & Change sign of wall data \\
+    wclvd \index{b2plot, wclvd}   & 0 & 3 & 0 & 0 & 0 & 0 & 0 & \ref{sec:wclvd}    & Customize wall contour levels (delta) \\
+    wclvn \index{b2plot, wclvn}   & 1 & 2 & 0 & 0 & 0 & 0 & 0 & \ref{sec:wclvn}    & Customize wall contour levels (number) \\
+    wclvp \index{b2plot, wclvp}   & 2 & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wclvp}    & Customize wall contour levels (proportion) \\
+    wclvs \index{b2plot, wclvs}   & 1 & * & 0 & 0 & 0 & 0 & 0 & \ref{sec:wclvs}    & Customize wall contour levels (specified) \\
+    wdrop \index{b2plot, wdrop}   & 0 & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wdrop}    & Drop top of wall stack \\
+    wdup \index{b2plot, wdup}     & 0 & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wdup}     & Duplicate top of wall stack \\
+    wexp \index{b2plot, wexp}     & 0 & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wexp}     & Take exponential of wall data \\
+    wlist \index{b2plot, wlist}   & 0 & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wlist}    & Lists the contents of the wall stack \\
+    wln \index{b2plot, wln}       & 0 & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wln}      & Take natural logarithm of wall data \\
+    wlog \index{b2plot, wlog}     & 0 & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wlog}     & Take $log_{10}$ of wall data \\
+    wm* \index{b2plot, wm*}       & 0 & 0 & 0 & 0 & 0 & 2 & 0 & \ref{sec:wm*}      & Wall stack multiplication \\
+    wm+ \index{b2plot, wm+}       & 0 & 0 & 0 & 0 & 0 & 2 & 0 & \ref{sec:wm+}      & Wall stack addition \\
+    wm- \index{b2plot, wm-}       & 0 & 0 & 0 & 0 & 0 & 2 & 0 & \ref{sec:wm-}      & Wall stack substraction \\
+    wm/ \index{b2plot, wm/}       & 0 & 0 & 0 & 0 & 0 & 2 & 0 & \ref{sec:wm/}      & Wall stack division \\
+    wmeq \index{b2plot, wmeq}     & 0 & 1 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wmeq}     & Wall matrix element is equal to \\
+    wmge \index{b2plot, wmge}     & 0 & 1 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wmge}     & Wall matrix element is greater than or equal to \\
+    wmgt \index{b2plot, wmgt}     & 0 & 1 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wmgt}     & Wall matrix element is greater than \\
+    wmle \index{b2plot, wmle}     & 0 & 1 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wmle}     & Wall matrix element is less than or equal to \\
+    wmlt \index{b2plot, wmlt}     & 0 & 1 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wmlt}     & Wall matrix element is less than \\
+    wmmax \index{b2plot, wmmax}   & 0 & 0 & 0 & 0 & 0 & 2 & 0 & \ref{sec:wmmax}    & Maximum of top two elements on the wall stack \\
+    wmmin \index{b2plot, wmmin}   & 0 & 0 & 0 & 0 & 0 & 2 & 0 & \ref{sec:wmmin}    & Minimum of top two elements on the wall stack \\
+    wmne \index{b2plot, wmne}     & 0 & 1 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wmne}     & Wall matrix element is not equal to \\
+    woff \index{b2plot, woff}     & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:woff}     & Turn off wall plots \\
+    wover \index{b2plot, wover}   & 0 & 0 & 0 & 0 & 0 & 2 & 0 & \ref{sec:wover}    & Copy over the second element of the wall stack \\
+    wpos \index{b2plot, wpos}     & 0 & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wpos}     & Is wall data element positive? \\
+    wprt \index{b2plot, wprt}     & 0 & 0 & 1 & 0 & 0 & 1 & 0 & \ref{sec:wprt}     & Prints the wall data onto a file \\
+    wsaw \index{b2plot, wsaw}     & 1 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:wsaw}     & Read external data onto the wall stack \\
+    wsel \index{b2plot, wsel}     & 1 & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wsel}     & Select wall element \\
+    wsqrt \index{b2plot, wsqrt}   & 0 & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wsqrt}    & Take square root of wall data \\
+    wsumz \index{b2plot, wsumz}   & 2 & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wsumz}    & Sum over species \\
+    wswap \index{b2plot, wswap}   & 0 & 0 & 0 & 0 & 0 & 2 & 0 & \ref{sec:wswap}    & Swap top two elements of wall stack \\
+    wtos \index{b2plot, wtos}     & 0 & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wtos}     & Copy wall data onto matrix stack \\
+    wtot \index{b2plot, wtot}     & 0 & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wtot}     & Copy wall data onto target stack \\
+    wwid \index{b2plot, wwid}     & 0 & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:wwid}     & Wall linewidth \\
+    wzrng \index{b2plot, wzrng}   & 2 & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wzrng}    & Select species range in wall data \\
+    wzsel \index{b2plot, wzsel}   & 1 & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wzsel}    & Select species in wall data \\
     \hline
     \caption{Commands related to the "wall" stack and wall plots.}
     \label{tab:wallcommands}
@@ -12750,73 +12884,73 @@ act on the "target" stack or affect target graphs, with their respective
 stack requirements.
 
 \begin{center}\index{b2plot, target commands}
-  \begin{longtable}{|c|c|c|c|c|c|c|c|l|}
+  \begin{longtable}{|c|c|c|c|c|c|c|c|c|l|}
     \hline
-    \multicolumn{9}{|l|}{\small\sl continued from previous page} \\
-    \hline name & \multicolumn{6}{|c|}{stack requirements} & section & use \\
-    \hline   & 'i' & 'r' & 's' & 'm' & 'w' & 't' &   &   \\
+    \multicolumn{10}{|l|}{\small\sl continued from previous page} \\
+    \hline name & \multicolumn{7}{|c|}{stack requirements} & section & use \\
+    \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
     \hline \endhead
-    \hline name & \multicolumn{6}{|c|}{stack requirements} & section & use \\
-    \hline   & 'i' & 'r' & 's' & 'm' & 'w' & 't' &   &   \\
+    \hline name & \multicolumn{7}{|c|}{stack requirements} & section & use \\
+    \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
     \hline \endfirsthead
     \hline
-    \multicolumn{9}{|l|}{\small\sl continued on next page} \\
+    \multicolumn{10}{|l|}{\small\sl continued on next page} \\
     \hline \endfoot
     \endlastfoot
-    inttrgw \index{b2plot, inttrgw}  & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:inttrgw}  & Integrate along walls (all segments) \\
-    inttrgw* \index{b2plot, inttrgw*} & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:inttrgw}  & Integrate along walls (per segment) \\
-    inttrgz \index{b2plot, inttrgz}  & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:inttrgz}  & Integrate in depth \\
-    lintrg \index{b2plot, lintrg}   & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:lintrg}   & Linear target plot \\
-    linxtrg \index{b2plot, linxtrg}  & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:linxtrg}  & Linear abscissae target plot \\
-    logtrg \index{b2plot, logtrg}   & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:logtrg}   & Logarithmic target plot \\
-    logxtrg \index{b2plot, logxtrg}  & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:logxtrg}  & Logarithmic abscissae target plot \\
-    outptrg \index{b2plot, outptrg}  & 2 & 0 & 1 & 0 & 0 & 1 & \ref{sec:outptrg}  & Outputs an element of target data \\
-    rtrgm* \index{b2plot, rtrgm*}   & 0 & 1 & 0 & 0 & 0 & 1 & \ref{sec:rtrgm*}   & Multiply the target data with a real \\
-    rtrgm** \index{b2plot, rtrgm**}  & 0 & 1 & 0 & 0 & 0 & 1 & \ref{sec:rtrgm**}  & Take the target data to a real power \\
-    rtrgm+ \index{b2plot, rtrgm+}   & 0 & 1 & 0 & 0 & 0 & 1 & \ref{sec:rtrgm+}   & Add a real to the target data \\
-    rtrgm- \index{b2plot, rtrgm-}   & 0 & 1 & 0 & 0 & 0 & 1 & \ref{sec:rtrgm-}   & Substract a real from the target data \\
-    rtrgm/ \index{b2plot, rtrgm/}   & 0 & 1 & 0 & 0 & 0 & 1 & \ref{sec:rtrgm/}   & Divide the target data by a real \\
-    rtrgmma \index{b2plot, rtrgmma}  & 0 & 1 & 0 & 0 & 0 & 1 & \ref{sec:rtrgmma}  & Take the maximum of the target data and a real \\
-    rtrgmmi \index{b2plot, rtrgmmi}  & 0 & 1 & 0 & 0 & 0 & 1 & \ref{sec:rtrgmmi}  & Take the minimum of the target data and a real \\
-    sumtrgw \index{b2plot, sumtrgw}  & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:sumtrgw}  & Sum along wall coordinate \\
-    sumtrgz \index{b2plot, sumtrgz}  & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:sumtrgz}  & Sum over target depth \\
-    tclvd \index{b2plot, tclvd}    & 0 & 3 & 0 & 0 & 0 & 0 & \ref{sec:tclvd}    & Customize target contour levels (delta) \\
-    tclvn \index{b2plot, tclvn}    & 1 & 2 & 0 & 0 & 0 & 0 & \ref{sec:tclvn}    & Customize target contour levels (number) \\
-    tclvp \index{b2plot, tclvp}    & 2 & 0 & 0 & 0 & 0 & 1 & \ref{sec:tclvp}    & Customize target contour levels (proportion) \\
-    tclvs \index{b2plot, tclvs}    & 1 & * & 0 & 0 & 0 & 0 & \ref{sec:tclvs}    & Customize target contour levels (specified) \\
-    trg.w \index{b2plot, trg.w}    & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trg.w}    & Line target plot against wall element \\
-    trg.z \index{b2plot, trg.z}    & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trg.z}    & Line target plot against target depth \\
-    trgabs \index{b2plot, trgabs}   & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgabs}   & Absolute value of target data \\
-    trgchs \index{b2plot, trgchs}   & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgchs}   & Change sign of target data \\
-    trgddp \index{b2plot, trgddp}   & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgddp}   & Take derivative of target data along perpendicular direction \\
-    trgddw \index{b2plot, trgddw}   & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgddw}   & Take derivative of target data along wall coordinate \\
-    trgddz \index{b2plot, trgddz}   & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgddz}   & Take derivative of target data along target depth \\
-    trgdrop \index{b2plot, trgdrop}  & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgdrop}  & Drop the top element from the target stack \\
-    trgdup \index{b2plot, trgdup}   & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgdup}   & Duplicate the top element from the target stack \\
-    trgeq \index{b2plot, trgeq}    & 0 & 1 & 0 & 0 & 0 & 1 & \ref{sec:trgeq}    & Target data is equal to \\
-    trgexp \index{b2plot, trgexp}   & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgexp}   & Take exponential of target data \\
-    trgge \index{b2plot, trgge}    & 0 & 1 & 0 & 0 & 0 & 1 & \ref{sec:trgge}    & Target data is greater than or equal to \\
-    trggt \index{b2plot, trggt}    & 0 & 1 & 0 & 0 & 0 & 1 & \ref{sec:trggt}    & Target data is greater than \\
-    trgle \index{b2plot, trgle}    & 0 & 1 & 0 & 0 & 0 & 1 & \ref{sec:trgle}    & Target data is less than or equal to \\
-    trglist \index{b2plot, trglist}  & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trglist}  & List the contents of the target stack \\
-    trgln \index{b2plot, trgln}    & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgln}    & Take natural logarithm of target data \\
-    trglog \index{b2plot, trglog}   & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trglog}   & Take $log_{10}$ of target data \\
-    trglt \index{b2plot, trglt}    & 0 & 1 & 0 & 0 & 0 & 1 & \ref{sec:trglt}    & Target data is less than \\
-    trgm* \index{b2plot, trgm*}    & 0 & 0 & 0 & 0 & 0 & 2 & \ref{sec:trgm*}    & Target stack multiplication \\
-    trgm+ \index{b2plot, trgm+}    & 0 & 0 & 0 & 0 & 0 & 2 & \ref{sec:trgm+}    & Target stack addition \\
-    trgm- \index{b2plot, trgm-}    & 0 & 0 & 0 & 0 & 0 & 2 & \ref{sec:trgm-}    & Target stack substraction \\
-    trgm/ \index{b2plot, trgm/}    & 0 & 0 & 0 & 0 & 0 & 2 & \ref{sec:trgm/}    & Target stack division \\
-    trgmmax \index{b2plot, trgmmax}  & 0 & 0 & 0 & 0 & 0 & 2 & \ref{sec:trgmmax}  & Maximum of top two elements of target stack \\
-    trgmmin \index{b2plot, trgmmin}  & 0 & 0 & 0 & 0 & 0 & 2 & \ref{sec:trgmmin}  & Minimum of top two elements of target stack \\
-    trgne \index{b2plot, trgne}    & 0 & 1 & 0 & 0 & 0 & 1 & \ref{sec:trgne}    & Target data is not equal to \\
-    trgover \index{b2plot, trgover}  & 0 & 0 & 0 & 0 & 0 & 2 & \ref{sec:trgover}  & Copy over second element on top of target stack \\
-    trgpos \index{b2plot, trgpos}   & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgpos}   & Is target data positive? \\
-    trgsqrt \index{b2plot, trgsqrt}  & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgsqrt}  & Take square root of target data \\
-    trgsurf \index{b2plot, trgsurf}  & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgsurf}  & Create target data contour plot \\
-    trgswap \index{b2plot, trgswap}  & 0 & 0 & 0 & 0 & 0 & 2 & \ref{sec:trgswap}  & Swap top two elements of target stack \\
-    trgtow \index{b2plot, trgtow}   & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgtow}   & Copy target data onto wall stack \\
-    trgwsel \index{b2plot, trgwsel}  & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgwsel}  & Select wall element in target data \\
-    trgzsel \index{b2plot, trgzsel}  & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgzsel}  & Select depth element in target data \\
+    inttrgw \index{b2plot, inttrgw}  & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:inttrgw}  & Integrate along walls (all segments) \\
+    inttrgw* \index{b2plot, inttrgw*} & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:inttrgw}  & Integrate along walls (per segment) \\
+    inttrgz \index{b2plot, inttrgz}  & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:inttrgz}  & Integrate in depth \\
+    lintrg \index{b2plot, lintrg}   & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:lintrg}   & Linear target plot \\
+    linxtrg \index{b2plot, linxtrg}  & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:linxtrg}  & Linear abscissae target plot \\
+    logtrg \index{b2plot, logtrg}   & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:logtrg}   & Logarithmic target plot \\
+    logxtrg \index{b2plot, logxtrg}  & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:logxtrg}  & Logarithmic abscissae target plot \\
+    outptrg \index{b2plot, outptrg}  & 2 & 0 & 1 & 0 & 0 & 0 & 1 & \ref{sec:outptrg}  & Outputs an element of target data \\
+    rtrgm* \index{b2plot, rtrgm*}   & 0 & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:rtrgm*}   & Multiply the target data with a real \\
+    rtrgm** \index{b2plot, rtrgm**}  & 0 & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:rtrgm**}  & Take the target data to a real power \\
+    rtrgm+ \index{b2plot, rtrgm+}   & 0 & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:rtrgm+}   & Add a real to the target data \\
+    rtrgm- \index{b2plot, rtrgm-}   & 0 & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:rtrgm-}   & Substract a real from the target data \\
+    rtrgm/ \index{b2plot, rtrgm/}   & 0 & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:rtrgm/}   & Divide the target data by a real \\
+    rtrgmma \index{b2plot, rtrgmma}  & 0 & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:rtrgmma}  & Take the maximum of the target data and a real \\
+    rtrgmmi \index{b2plot, rtrgmmi}  & 0 & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:rtrgmmi}  & Take the minimum of the target data and a real \\
+    sumtrgw \index{b2plot, sumtrgw}  & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:sumtrgw}  & Sum along wall coordinate \\
+    sumtrgz \index{b2plot, sumtrgz}  & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:sumtrgz}  & Sum over target depth \\
+    tclvd \index{b2plot, tclvd}    & 0 & 3 & 0 & 0 & 0 & 0 & 0 & \ref{sec:tclvd}    & Customize target contour levels (delta) \\
+    tclvn \index{b2plot, tclvn}    & 1 & 2 & 0 & 0 & 0 & 0 & 0 & \ref{sec:tclvn}    & Customize target contour levels (number) \\
+    tclvp \index{b2plot, tclvp}    & 2 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:tclvp}    & Customize target contour levels (proportion) \\
+    tclvs \index{b2plot, tclvs}    & 1 & * & 0 & 0 & 0 & 0 & 0 & \ref{sec:tclvs}    & Customize target contour levels (specified) \\
+    trg.w \index{b2plot, trg.w}    & 1 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trg.w}    & Line target plot against wall element \\
+    trg.z \index{b2plot, trg.z}    & 1 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trg.z}    & Line target plot against target depth \\
+    trgabs \index{b2plot, trgabs}   & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgabs}   & Absolute value of target data \\
+    trgchs \index{b2plot, trgchs}   & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgchs}   & Change sign of target data \\
+    trgddp \index{b2plot, trgddp}   & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgddp}   & Take derivative of target data along perpendicular direction \\
+    trgddw \index{b2plot, trgddw}   & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgddw}   & Take derivative of target data along wall coordinate \\
+    trgddz \index{b2plot, trgddz}   & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgddz}   & Take derivative of target data along target depth \\
+    trgdrop \index{b2plot, trgdrop}  & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgdrop}  & Drop the top element from the target stack \\
+    trgdup \index{b2plot, trgdup}   & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgdup}   & Duplicate the top element from the target stack \\
+    trgeq \index{b2plot, trgeq}    & 0 & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgeq}    & Target data is equal to \\
+    trgexp \index{b2plot, trgexp}   & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgexp}   & Take exponential of target data \\
+    trgge \index{b2plot, trgge}    & 0 & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgge}    & Target data is greater than or equal to \\
+    trggt \index{b2plot, trggt}    & 0 & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trggt}    & Target data is greater than \\
+    trgle \index{b2plot, trgle}    & 0 & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgle}    & Target data is less than or equal to \\
+    trglist \index{b2plot, trglist}  & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trglist}  & List the contents of the target stack \\
+    trgln \index{b2plot, trgln}    & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgln}    & Take natural logarithm of target data \\
+    trglog \index{b2plot, trglog}   & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trglog}   & Take $log_{10}$ of target data \\
+    trglt \index{b2plot, trglt}    & 0 & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trglt}    & Target data is less than \\
+    trgm* \index{b2plot, trgm*}    & 0 & 0 & 0 & 0 & 0 & 0 & 2 & \ref{sec:trgm*}    & Target stack multiplication \\
+    trgm+ \index{b2plot, trgm+}    & 0 & 0 & 0 & 0 & 0 & 0 & 2 & \ref{sec:trgm+}    & Target stack addition \\
+    trgm- \index{b2plot, trgm-}    & 0 & 0 & 0 & 0 & 0 & 0 & 2 & \ref{sec:trgm-}    & Target stack substraction \\
+    trgm/ \index{b2plot, trgm/}    & 0 & 0 & 0 & 0 & 0 & 0 & 2 & \ref{sec:trgm/}    & Target stack division \\
+    trgmmax \index{b2plot, trgmmax}  & 0 & 0 & 0 & 0 & 0 & 0 & 2 & \ref{sec:trgmmax}  & Maximum of top two elements of target stack \\
+    trgmmin \index{b2plot, trgmmin}  & 0 & 0 & 0 & 0 & 0 & 0 & 2 & \ref{sec:trgmmin}  & Minimum of top two elements of target stack \\
+    trgne \index{b2plot, trgne}    & 0 & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgne}    & Target data is not equal to \\
+    trgover \index{b2plot, trgover}  & 0 & 0 & 0 & 0 & 0 & 0 & 2 & \ref{sec:trgover}  & Copy over second element on top of target stack \\
+    trgpos \index{b2plot, trgpos}   & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgpos}   & Is target data positive? \\
+    trgsqrt \index{b2plot, trgsqrt}  & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgsqrt}  & Take square root of target data \\
+    trgsurf \index{b2plot, trgsurf}  & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgsurf}  & Create target data contour plot \\
+    trgswap \index{b2plot, trgswap}  & 0 & 0 & 0 & 0 & 0 & 0 & 2 & \ref{sec:trgswap}  & Swap top two elements of target stack \\
+    trgtow \index{b2plot, trgtow}   & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgtow}   & Copy target data onto wall stack \\
+    trgwsel \index{b2plot, trgwsel}  & 1 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgwsel}  & Select wall element in target data \\
+    trgzsel \index{b2plot, trgzsel}  & 1 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgzsel}  & Select depth element in target data \\
     \hline
     \caption{Commands related to the "target" stack and target plots.}
     \label{tab:targetcommands}
@@ -13041,11 +13175,19 @@ or $y$-coordinate ($<$n1$>$=2). Not sure this works.
 Plots the mesh. The colour of the mesh can be chosen
 with the {\bf mcol} (see \ref{sec:mcol}) command.
 
+\subsubsection{trigmesh}\index{b2plot, trigmesh}\label{sec:trigmesh}
+Plots the triangular grid. The colour of the mesh can be chosen
+with the {\bf mcol} (see \ref{sec:mcol}) command.
+
 \subsubsection{surf}\index{b2plot, surf}\label{sec:surf}
 Produces a "patch" plot where each cell is plotted in the
 colour associated with its value.  This can be useful when the data is
 noisy and contour plots take excessive time.  See figure \ref{fig:d3d}.
 Recommended.
+
+\subsubsection{esurf}\index{b2plot, esurf}\label{sec:esurf}
+Produces a "patch" plot where each triangle from the {\tt Eirene} grid
+is plotted in the colour associated with its value.
 
 \subsubsection{trgsurf}\index{b2plot, trgsurf}\label{sec:trgsurf}
 Produces a "patch" plot of the target domain.
@@ -13154,6 +13296,9 @@ be set to be logarithmic (default) with the {\bf logt} command, or linear with t
 \subsubsection{abs}\index{b2plot, abs}\label{sec:abs}
 Take the absolute value of the matrix data values.
 
+\subsubsection{eabs}\index{b2plot, eabs}\label{sec:eabs}
+Take the absolute value of the Eirene data values.
+
 \subsubsection{wabs}\index{b2plot, wabs}\label{sec:wabs}
 Take the absolute value of the wall data values.
 
@@ -13162,6 +13307,9 @@ Take the absolute value of the target data values.
 
 \subsubsection{chs}\index{b2plot, chs}\label{sec:chs}
 Change sign of matrix data.
+
+\subsubsection{echs}\index{b2plot, echs}\label{sec:echs}
+Change sign of Eirene data.
 
 \subsubsection{trgchs}\index{b2plot, trgchs}\label{sec:trgchs}
 Change sign of target data.
@@ -13232,6 +13380,15 @@ $y$-direction.
 \subsubsection{pvol}\index{b2plot, pvol}\label{sec:pvol}
 Divides the matrix data by the volume of the cells.
 
+\subsubsection{psta}\index{b2plot, psta}\label{sec:psta}
+Divides the Eirene data by the triangular element area.
+
+\subsubsection{pstv}\index{b2plot, pstv}\label{sec:pstv}
+Divides the Eirene data by the triangular element volume.
+
+\subsubsection{sumt}\index{b2plot, sumt}\label{sec:sumt}
+Sums the Eirene data over all triangles, and then copies the sum to all elements.
+
 \subsubsection{sumtrgw}\index{b2plot, sumtrgw}\label{sec:sumtrgw}
 Sums the target data along the wall coordinate, and then copies the sum to all elements.
 
@@ -13252,6 +13409,11 @@ Sums the matrix data over the $z$-direction from $<$is$_{start}$$>$ to $<$is$_{e
 sum to the first $z$ position. If $<$is$_{start}$$>$=$<$is$_{end}$$>$=0, then the sum is done
 over all species.
 
+\subsubsection{$<$is$_{start}$,{\bf I}$>$ $<$is$_{end}$,{\bf I}$>$ esumz}\index{b2plot, esumz}\label{sec:esumz}
+Sums the Eirene data over the $z$-direction from $<$is$_{start}$$>$ to $<$is$_{end}$$>$, and then copies the
+sum to the first $z$ position. If $<$is$_{start}$$>$=$<$is$_{end}$$>$=0, then the sum is done
+over all species.
+
 \subsubsection{$<$is$_{start}$,{\bf I}$>$ $<$is$_{end}$,{\bf I}$>$ wsumz}\index{b2plot, wsumz}\label{sec:wsumz}
 Sums the wall data over the $z$-direction from $<$is$_{start}$$>$ to $<$is$_{end}$$>$, and then copies the
 sum to the first $z$ position. If $<$is$_{start}$$>$=$<$is$_{end}$$>$=0, then the sum is done
@@ -13261,9 +13423,16 @@ over all species.
 Selects the subset over species extended from species index $<$is$_{start}$$>$ to
 species index $<$is$_{end}$$>$ from the matrix data.
 
+\subsubsection{$<$is$_{start}$,{\bf I}$>$ $<$is$_{end}$,{\bf I}$>$ ezrng}\index{b2plot, ezrng}\label{sec:ezrng}
+Selects the subset over species extended from species index $<$is$_{start}$$>$ to
+species index $<$is$_{end}$$>$ from the Eirene data.
+
 \subsubsection{$<$is$_{start}$,{\bf I}$>$ $<$is$_{end}$,{\bf I}$>$ wzrng}\index{b2plot, wzrng}\label{sec:wzrng}
 Selects the subset over species extended from species index $<$is$_{start}$$>$ to
 species index $<$is$_{end}$$>$ from the wall data.
+
+\subsubsection{$<$i,{\bf I}$>$ esel}\index{b2plot, esel}\label{sec:esel}
+Propagates the Eirene data value from element $<$i$>$ to all other elements.
 
 \subsubsection{$<$i,{\bf I}$>$ wsel}\index{b2plot, wsel}\label{sec:wsel}
 Propagates the wall data value from element $<$i$>$ to all other elements.
@@ -13280,6 +13449,10 @@ Propagates the matrix data value in the specified position $<$is$>$ to all other
 
 \subsubsection{$<$i,{\bf I}$>$ trgwsel}\index{b2plot, trgwsel}\label{sec:trgwsel}
 Propagates the target data value from the specified element $<$i$>$ to all other elements.
+
+\subsubsection{$<$is,{\bf I}$>$ ezsel}\index{b2plot, ezsel}\label{sec:ezsel}
+Propagates the Eirene data value in the specified position $<$is$>$ to all other $z$
+(species) values.
 
 \subsubsection{$<$iz,{\bf I}$>$ trgzsel}\index{b2plot, trgzsel}\label{sec:trgzsel}
 Propagates the target data value at the specified depth $<$iz$>$ to all other $z$ values.
@@ -13303,6 +13476,18 @@ Takes square root of a matrix.
 
 \subsubsection{exp}\index{b2plot, exp}\label{sec:exp}
 Computes exponential of a matrix.
+
+\subsubsection{elog}\index{b2plot, elog}\label{sec:elog}
+Computes logarithm base 10 of Eirene data.
+
+\subsubsection{eln}\index{b2plot, eln}\label{sec:eln}
+Computes natural logarithm of Eirene data.
+
+\subsubsection{esqrt}\index{b2plot, esqrt}\label{sec:esqrt}
+Takes square root of Eirene data.
+
+\subsubsection{eexp}\index{b2plot, eexp}\label{sec:eexp}
+Computes exponential of Eirene data.
 
 \subsubsection{trglog}\index{b2plot, trglog}\label{sec:trglog}
 Computes logarithm base 10 of target data.
@@ -13343,7 +13528,7 @@ the top.
 Multiplies the two arrays on the top of the matrix stack.
 
 \subsubsection{m/}\index{b2plot, m/}\label{sec:m/}
-Divides the array secod from the top of the matrix stack by the array on
+Divides the array second from the top of the matrix stack by the array on
 the top. Division by a zero element will yield zero.
 
 \subsubsection{mmin}\index{b2plot, mmin}\label{sec:mmin}
@@ -13351,6 +13536,26 @@ Minimum of two top matrices on the stack.
 
 \subsubsection{mmax}\index{b2plot, mmax}\label{sec:mmax}
 Minimum of two top matrices on the stack.
+
+\subsubsection{em+}\index{b2plot, em+}\label{sec:em+}
+Adds the two arrays on the top of the Eirene stack.
+
+\subsubsection{em-}\index{b2plot, em-}\label{sec:em-}
+Subtracts the array on the top of the Eirene stack from the array second from
+the top.
+
+\subsubsection{em*}\index{b2plot, em*}\label{sec:em*}
+Multiplies the two arrays on the top of the Eirene stack.
+
+\subsubsection{em/}\index{b2plot, em/}\label{sec:em/}
+Divides the array second from the top of the Eirene stack by the array on
+the top. Division by a zero element will yield zero.
+
+\subsubsection{emmin}\index{b2plot, emmin}\label{sec:emmin}
+Minimum of two top arrays on the Eirene stack.
+
+\subsubsection{emmax}\index{b2plot, emmax}\label{sec:emmax}
+Minimum of two top arrays on the Eirene stack.
 
 \subsubsection{$<$r1,{\bf R}$>$ $<$r2,{\bf R}$>$ r+}\index{b2plot, r+}\label{sec:r+}
 Adds the two real values $<$r1$>$ and $<$r2$>$ on the top of the real stack.
@@ -13390,6 +13595,28 @@ Minimum of a matrix and $<$number$>$.
 
 \subsubsection{$<$number,{\bf R}$>$ rmma}\index{b2plot, rmma}\label{sec:rmma}
 Maximum of a matrix and $<$number$>$.
+
+\subsubsection{$<$number,{\bf R}$>$ rem+}\index{b2plot, rem+}\label{sec:rem+}
+Adds $<$number$>$ to the array on the top of the Eirene stack.
+
+\subsubsection{$<$number,{\bf R}$>$ rem-}\index{b2plot, rem-}\label{sec:rem-}
+Substracts $<$number$>$ from the array on the top of the Eirene stack.
+
+\subsubsection{$<$number,{\bf R}$>$ rem*}\index{b2plot, rem*}\label{sec:rem*}
+Multiplies the array on the top of the Eirene stack by $<$number$>$.
+
+\subsubsection{$<$number,{\bf R}$>$ rem/}\index{b2plot, rem/}\label{sec:rem/}
+Divides the array on the top of the Eirene stack by $<$number$>$. Division by
+zero will yield an error and do nothing.
+
+\subsubsection{$<$number,{\bf R}$>$ rem**}\index{b2plot, rem**}\label{sec:rem**}
+Raises each element of the array on the top of the Eirene stack to the $<$number$>$-th power. If $<$number$>$=0, the result will be 1.0 for all cells.
+
+\subsubsection{$<$number,{\bf R}$>$ remmi}\index{b2plot, remmi}\label{sec:remmi}
+Minimum of an Eirene array and $<$number$>$.
+
+\subsubsection{$<$number,{\bf R}$>$ remma}\index{b2plot, remma}\label{sec:remma}
+Maximum of an Eirene array and $<$number$>$.
 
 \subsubsection{$<$number,{\bf R}$>$ rtrgm+}\index{b2plot, rtrgm+}\label{sec:rtrgm+}
 Adds $<$number$>$ to the array on the top of the target stack.
@@ -13461,6 +13688,34 @@ Otherwise, sets it to zero.
 
 \subsubsection{pos}\index{b2plot, pos}\label{sec:pos}
 If a matrix element is positive, sets this matrix element to 1.0.
+Otherwise, sets it to zero.
+
+\subsubsection{$<$number,{\bf R}$>$ emeq}\index{b2plot, emeq}\label{sec:emeq}
+If an Eirene array element is equal to $<$number$>$, sets this element to 1.0.
+Otherwise, sets it to zero.
+
+\subsubsection{$<$number,{\bf R}$>$ emne}\index{b2plot, emne}\label{sec:emne}
+If an Eirene array element is not equal to $<$number$>$, sets this element to 1.0.
+Otherwise, sets it to zero.
+
+\subsubsection{$<$number,{\bf R}$>$ emge}\index{b2plot, emge}\label{sec:emge}
+If an Eirene array element is greater than or equal to $<$number$>$, sets this element to 1.0.
+Otherwise, sets it to zero.
+
+\subsubsection{$<$number,{\bf R}$>$ emgt}\index{b2plot, emgt}\label{sec:emgt}
+If an Eirene array element is greater than $<$number$>$, sets this element to 1.0.
+Otherwise, sets it to zero.
+
+\subsubsection{$<$number,{\bf R}$>$ emle}\index{b2plot, emle}\label{sec:emle}
+If an Eirene array element is less than or equal to $<$number$>$, sets this element to 1.0.
+Otherwise, sets it to zero.
+
+\subsubsection{$<$number,{\bf R}$>$ emlt}\index{b2plot, emlt}\label{sec:emlt}
+If an Eirene array element is less than $<$number$>$, sets this element to 1.0.
+Otherwise, sets it to zero.
+
+\subsubsection{epos}\index{b2plot, epos}\label{sec:epos}
+If an Eirene array element is positive, sets this element to 1.0.
 Otherwise, sets it to zero.
 
 \subsubsection{$<$i1,{\bf I}$>$ $<$i2,{\bf I}$>$ i+}\index{b2plot, i+}\label{sec:i+}
@@ -13618,6 +13873,9 @@ Writes the real on top of the real stack to the top of the string stack.
 \subsubsection{rtom}\index{b2plot, rtom}\label{sec:rtom}
 Copies the real on top of the real stack to the top of the matrix stack.
 
+\subsubsection{rtoe}\index{b2plot, rtoe}\label{sec:rtoe}
+Copies the real on top of the real stack to the top of the Eirene stack.
+
 \subsubsection{rtow}\index{b2plot, rtow}\label{sec:rtow}
 Copies the real on top of the real stack to the top of the wall stack.
 
@@ -13649,6 +13907,9 @@ Writes the integer on top of the integer stack to the top of the string stack.
 
 \subsubsection{itom}\index{b2plot, itom}\label{sec:itom}
 Copies the integer on top of the integer stack to the top of the matrix stack.
+
+\subsubsection{itoe}\index{b2plot, itoe}\label{sec:itoe}
+Copies the integer on top of the integer stack to the top of the Eirene stack.
 
 \subsubsection{itow}\index{b2plot, itow}\label{sec:itow}
 Copies the integer on top of the integer stack to the top of the wall stack.
@@ -13697,9 +13958,36 @@ external code to which {\bf SOLPS} is coupled.
 \subsubsection{$<$nwall,{\bf I}$>$ $<$filename,{\bf S}$>$ wsaw}\index{b2plot, wsaw}\label{sec:wsaw}
 Reads the array of size $<$nwall$>$ from file $<$filename$>$ into the wall stack.
 
+\subsubsection{stoe}\index{b2plot, stoe}\label{sec:stoe}
+Copies the array on top of the matrix stack to the Eirene stack. Only the matrix
+elements from internal cells will be copied over, onto the corresponding triangular elements.
+
 \subsubsection{stow}\index{b2plot, stow}\label{sec:stow}
 Copies the array on top of the matrix stack to the wall data stack. Only the matrix
 elements from boundary cells will be copied over, onto the corresponding wall elements.
+
+\subsubsection{edrop}\index{b2plot, edrop}\label{sec:edrop}
+Deletes the array on the top of the Eirene stack.
+
+\subsubsection{edup}\index{b2plot, edup}\label{sec:edup}
+Duplicates the array on the top of the Eirene stack.
+
+\subsubsection{eswap}\index{b2plot, eswap}\label{sec:eswap}
+Swaps the top two arrays on the Eirene stack.
+
+\subsubsection{eover}\index{b2plot, eover}\label{sec:eover}
+Copies the array second from the top to the top of the Eirene stack.
+
+\subsubsection{elist}\index{b2plot, elist}\label{sec:elist}
+Lists the contents of the Eirene stack by printing the titles
+of the stored arrays to {\tt stdout}.
+
+\subsubsection{edims}\index{b2plot, edims}\label{sec:edims}
+Prints the dimensions and contents (i.e. data set titles) of the Eirene
+stack to {\tt stdout}.
+
+\subsubsection{etos}\index{b2plot, etos}\label{sec:etos}
+Copies the array on top of the Eirene stack to the matrix stack. The average value of the Eirene elements from internal cells will be copied over, onto the corresponding matrix elements.
 
 \subsubsection{trgdrop}\index{b2plot, trgdrop}\label{sec:trgdrop}
 Deletes the array on the top of the target stack.
@@ -13984,6 +14272,13 @@ length of $<$length$>$ meters. The use of {\em fnax} and {\em fnay} can be super
 by the the commands {\bf arox} and {\bf aroy}, respectively, which will then use
 data from the matrix stack for computing the arrow directions instead.
 
+\subsubsection{$<$length,{\bf R}$>$ earow}\index{b2plot, earow}\label{sec:earow}\index{b2plot, earox}\label{sec:earox}\index{b2plot, earoy}\label{sec:earoy}
+Produces flow chart of Eirene array {\em vxdena} and {\em vydena} using a
+maximum arrow length of $<$length$>$ meters. The use of {\em vxdena} and
+{\em vydena} can be superseded by the the commands {\bf earox} and {\bf earoy}, 
+respectively, which will then use data from the Eirene stack for computing
+the arrow directions instead.
+
 \subsubsection{$<$widthfactor,{\bf R}$>$ arww}\index{b2plot, arww}\label{sec:arww}
 Changes default arrow width by $<$widthfactor$>$ (default 1.0).
 
@@ -14048,7 +14343,7 @@ Changes the default width of the vessel outline by $<$widthfactor$>$ (default 1.
 Toggles drawing of overlaid mesh.
 
 \subsubsection{$<$ncol,{\bf I}$>$ mcol}\index{b2plot, mcol}\label{sec:mcol}
-Sets colour of overlaid mesh to $<$ncol$>$ (default 1).
+Sets colour of overlaid mesh and triangular grid to $<$ncol$>$ (default 1).
 See {\bf zcol} above for a list of available colours.
 
 \subsubsection{outl}\index{b2plot, outl}\label{sec:outl}
