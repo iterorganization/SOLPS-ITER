@@ -131,13 +131,26 @@ c*** bcpot, potpar
           rniprm(k,2,1,24,2)=bpobnds(i,2,j)
 c*** bccon, conpar, bcmom, mompar
 	  do l=1,nspcpls+nspcncl !{
-            if (ifl(l).eq.0) cycle
-	    iniprm(l,k,1,10,2)=lcobnds(ifl(l),i,j)
-	    rniprm(l,k,1,11,2)=bcobnds(ifl(l),i,1,j)
-	    rniprm(l,k,2,11,2)=bcobnds(ifl(l),i,2,j)
-	    iniprm(l,k,1,12,2)=lmobnds(ifl(l),i,j)
-	    rniprm(l,k,1,13,2)=bmobnds(ifl(l),i,1,j)
-	    rniprm(l,k,2,13,2)=bmobnds(ifl(l),i,2,j)
+            if (ifl(l).eq.0) then !{ default fluid neutral b.c.
+              if (cznbndt(i,j).eq.'W' .or. cznbndt(i,j).eq.'E') then
+                iniprm(l,k,1,10,2)=5
+                iniprm(l,k,1,12,2)=1
+              else if (i.le.nznbndt(1).and.j.eq.1) then !}{ core boundary
+                iniprm(l,k,1,10,2)=8
+                iniprm(l,k,1,12,2)=1
+              else !}{
+                iniprm(l,k,1,10,2)=10
+                rniprm(l,k,1,11,2)=-0.01
+                iniprm(l,k,1,12,2)=1
+              end if !}
+            else !}{
+	      iniprm(l,k,1,10,2)=lcobnds(ifl(l),i,j)
+	      rniprm(l,k,1,11,2)=bcobnds(ifl(l),i,1,j)
+	      rniprm(l,k,2,11,2)=bcobnds(ifl(l),i,2,j)
+	      iniprm(l,k,1,12,2)=lmobnds(ifl(l),i,j)
+	      rniprm(l,k,1,13,2)=bmobnds(ifl(l),i,1,j)
+	      rniprm(l,k,2,13,2)=bmobnds(ifl(l),i,2,j)
+            end if !}
       	  end do !}
       	end do !}
       end do !}
