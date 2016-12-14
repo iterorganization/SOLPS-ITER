@@ -13109,8 +13109,10 @@ computational domain, aspect ratio, linear or logarithmic).
 See also the {\bf chor} (\ref{sec:chor}), {\bf chpl} (\ref{sec:chpl}),
 {\bf chbx} (\ref{sec:chbx}),
 {\bf chvl} (\ref{sec:chvl}), {\bf flux} (\ref{sec:flux}),
-{\bf chmp} (\ref{sec:chmp}), {\bf cam}
-(\ref{sec:cam}) and {\bf movi} (\ref{sec:movi}) commands.
+{\bf chmp} (\ref{sec:chmp}), {\bf cam} (\ref{sec:cam}),
+{\bf ecam} (\ref{sec:ecam}), {\bf echbx} (\ref{sec:echbx}),
+{\bf echmp} (\ref{sec:echmp}), {\bf echor} (\ref{sec:echor}),
+{\bf echvl} (\ref{sec:echvl}) and {\bf movi} (\ref{sec:movi}) commands.
 
 A simple example is:
 \begin{Verbatim}[fontsize=\footnotesize]
@@ -14346,6 +14348,9 @@ Changes the default width of the vessel outline by $<$widthfactor$>$ (default 1.
 \subsubsection{grid}\index{b2plot, grid}\label{sec:grid}
 Toggles drawing of overlaid mesh.
 
+\subsubsection{trig}\index{b2plot, trig}\label{sec:trig}
+Toggles drawing of overlaid triangular grid.
+
 \subsubsection{$<$ncol,{\bf I}$>$ mcol}\index{b2plot, mcol}\label{sec:mcol}
 Sets colour of overlaid mesh and triangular grid to $<$ncol$>$ (default 1).
 See {\bf zcol} above for a list of available colours.
@@ -14422,6 +14427,20 @@ values are treated separately, with $|<$npplvp$>|$ data intervals for
 the positive and $<$npplvm$>$ for the negative data range. In this case,
 if $<$npplvp$>$.ge.0 then 0 is added to the level list, otherwise, the
 negative and positive values closest to zero fall in the same zone.
+
+\subsubsection{$<$level$_{min}$,{\bf R}$>$ $<$level$_{max}$,{\bf R}$>$ $<$delta,{\bf R}$>$ eclvd}\index{b2plot, eclvd}\label{sec:eclvd}
+Starts contour levels at $<$level$_{min}$$>$ increasing by $<$delta$>$ up
+to $<$level$_{max}$$>$ for Eirene data contour plot.
+
+\subsubsection{$<$level$_{min}$,{\bf R}$>$ $<$level$_{max}$,{\bf R}$>$ $<$n,{\bf I}$>$ eclvn}\index{b2plot, eclvn}\label{sec:eclvn}
+Produces $<$n$>$ contour levels going from $<$level$_{min}$$>$ to $<$level$_{max}$$>$ for Eirene data contour plot.
+
+\subsubsection{$<$n,{\bf I}$>$ $<$level$_1$,{\bf R}$>$ ... $<$level$_n$,{\bf R}$>$ eclvs}\index{b2plot, eclvs}\label{sec:eclvs}
+Sets $<$n$>$ contour levels to the values specified by $<$label$_i$$>$ for Eirene data contour plots.
+As above, the command {\tt 0 eclvs} can be used to revert back to default behaviour.
+
+\subsubsection{$<$npplvm,{\bf I}$>$ $<$npplvp,{\bf I}$>$ eclvp}\index{b2plot, eclvp}\label{sec:eclvp}
+Sets up contour levels according to their proportion inside the Eirene domain, as per the {\bf clvp} logic above.
 
 \subsubsection{$<$level$_{min}$,{\bf R}$>$ $<$level$_{max}$,{\bf R}$>$ $<$delta,{\bf R}$>$ tclvd}\index{b2plot, tclvd}\label{sec:tclvd}
 Starts contour levels at $<$level$_{min}$$>$ increasing by $<$delta$>$ up
@@ -14536,6 +14555,9 @@ species (when a match between {\tt B2.5} and {\tt Eirene} species can be found)
 computed from {\tt Eirene} ({\em dab2}) are added to the fluid neutral densities from
 {\tt B2.5} ({\em na}).
 
+\subsubsection{$<$value,{\bf R}$>$ evac}\index{b2plot, evac}\label{sec:evac}
+Assigns real value $<$value$>$ to all triangles from the top of the Eirene data stack that do not map to a {\tt B2.5} grid cell.
+
 \subsubsection{writ}\index{b2plot, writ}\label{sec:writ}
 Writes out the labels and values for all simple 2-D plots to \verb:b2plot.write: (in the \SOLPSfour environment)
 or \verb:b2pl.exe.dir/b2plot.write: (in the \SOLPSfive environment).
@@ -14543,6 +14565,10 @@ or \verb:b2pl.exe.dir/b2plot.write: (in the \SOLPSfive environment).
 
 \subsubsection{$<$filename,{\bf S}$>$ mprt}\index{b2plot, mprt}\label{sec:mprt}
 Writes out the top of the matrix stack to $<$filename$>$ (in the \SOLPSfour environment)
+or (in the \SOLPSfive environment) \verb:b2pl.exe.dir/:$<$filename$>$.
+
+\subsubsection{$<$filename,{\bf S}$>$ eprt}\index{b2plot, eprt}\label{sec:eprt}
+Writes out the top of the Eirene stack to $<$filename$>$ (in the \SOLPSfour environment)
 or (in the \SOLPSfive environment) \verb:b2pl.exe.dir/:$<$filename$>$.
 
 \subsubsection{$<$ix1,{\bf I}$>$ $<$ix2,{\bf I}$>$ $<$iy1,{\bf I}$>$ $<$iy2,{\bf I}$>$ $<$filename,{\bf S}$>$ mtab}\index{b2plot, mtab}\label{sec:mtab}
@@ -14569,15 +14595,19 @@ or (in the \SOLPSfive environment) \verb:b2pl.exe.dir/:$<$filename$>$. $0$ $0$ p
 output the entire wall element or depth ranges, respectively.
 
 \subsubsection{$<$ix,{\bf I}$>$ $<$iy,{\bf I}$>$ $<$filename,{\bf S}$>$ outp}\index{b2plot, outp}\label{sec:outp}
-Writes out element ($<$ix$>$,$<$iy$>$) from the top of the matrix stack to $<$filename$>$ (in the \SOLPSfour environment)
+Writes out data from element ($<$ix$>$,$<$iy$>$) from the top of the matrix stack to $<$filename$>$ (in the \SOLPSfour environment)
+or \verb:b2pl.exe.dir/:$<$filename$>$ (in the \SOLPSfive environment).
+
+\subsubsection{$<$i,{\bf I}$>$ $<$filename,{\bf S}$>$ eoutp}\index{b2plot, eoutp}\label{sec:eoutp}
+Writes out data from triangle element $<$i$>$ from the top of the matrix stack to $<$filename$>$ (in the \SOLPSfour environment)
 or \verb:b2pl.exe.dir/:$<$filename$>$ (in the \SOLPSfive environment).
 
 \subsubsection{$<$i,{\bf I}$>$ $<$iz,{\bf I}$>$ $<$filename,{\bf S}$>$ outptrg}\index{b2plot, outptrg}\label{sec:outptrg}
-Writes out element ($<$i$>$,$<$iz$>$) from the top of the target stack to $<$filename$>$ (in the \SOLPSfour environment)
+Writes out data from element ($<$i$>$,$<$iz$>$) from the top of the target stack to $<$filename$>$ (in the \SOLPSfour environment)
 or \verb:b2pl.exe.dir/:$<$filename$>$ (in the \SOLPSfive environment).
 
 \subsubsection{$<$i,{\bf I}$>$ $<$filename,{\bf S}$>$ outpw}\index{b2plot, outpw}\label{sec:outpw}
-Writes out element $<$i$>$ from the top of the wall stack to $<$filename$>$ (in the \SOLPSfour environment)
+Writes out data from element $<$i$>$ from the top of the wall stack to $<$filename$>$ (in the \SOLPSfour environment)
 or (in the \SOLPSfive environment) to \verb:b2pl.exe.dir/:$<$filename$>$.
 
 \subsubsection{f30}\index{b2plot, f30}\label{sec:f30}
@@ -14762,6 +14792,9 @@ If the file does not exist in the current working directory, the
 directories \${\tt SOLPSTOP/data.local/chords} and
 \${\tt SOLPSTOP/data/chords} are searched in order.
 
+\subsection{$<$chord file$>$ echor}\index{b2plot, echor}\label{sec:echor}\index{b2plot, chord plots}
+Same as {\bf chor} above, but does the line integral over the triangular grid.
+
 \subsection{$<$chord file$>$ chpl}\index{b2plot, chpl}\label{sec:chpl}
 The chords specified by the chord file are plotted in the physical
 plane.  Data format for the file is as for {\bf chor} (see \ref{sec:chor}).
@@ -14850,10 +14883,24 @@ time within the shot, and the diagnostic name.  Then causes the
 equilibrium for this shot to overlay subsequent plots.
 
 \subsection{$<$chord file$>$ chmp}\index{b2plot, chmp}\label{sec:chmp}
-Plots a contour plot of the chord contribution to the mesh element.
+Plots a contour plot of the chord contribution from the mesh elements.
 
 \subsection{$<$chord file$>$ cam}\index{b2plot, cam}\label{sec:cam}
 Camera plot.  The chord file needs to contain some additional
+information on the first line.
+
+\subsection{$<$chord file$>$ echbx}\index{b2plot, echbx}\label{sec:echbx}
+Chord integral Of Eirene data averaged over three chords. Equivalent to
+using the {\bf 3 ave} command.
+
+\subsection{$<$position file$>$ echvl}\index{b2plot, echvl}\label{sec:echvl}
+The Eirene stack data value is plotted at the specified positions.
+
+\subsection{$<$chord file$>$ echmp}\index{b2plot, echmp}\label{sec:echmp}
+Plots a contour plot of the chord contribution from the triangles.
+
+\subsection{$<$chord file$>$ ecam}\index{b2plot, ecam}\label{sec:ecam}
+Camera plot of Eirene data. The chord file needs to contain some additional
 information on the first line.
 
 \subsection{$<$CDF file name$>$ movi}\index{b2plot, movi}\label{sec:movi}
