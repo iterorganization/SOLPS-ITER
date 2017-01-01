@@ -118,6 +118,7 @@ case "*.ro":
 case "*.se":
 case "*.si":
 case "*.sk":
+case "*.ua":
 case "*.uk":
   echo EU_UNKNOWN
   breaksw
