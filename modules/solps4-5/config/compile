@@ -27,6 +27,21 @@ endif
 	@- if [ -f $*.o ] ; then /bin/mv $*.o ${OBJDIR}/ ; fi
 	@- if [ -f $*.${MOD} ] ; then /bin/mv $*.${MOD} ${OBJDIR}/ ; fi
 
+${OBJDIR}/%.o : %.F90
+	@- /bin/rm -f ${OBJDIR}/$*.f90 ${OBJDIR}/$*.o ${OBJDIR}/$*.${MOD}
+ifeq ($(strip $(CPP)),)
+	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV5} ${INCLUDE} -c $<
+else
+ifeq ($(strip $(SED)),)
+	${CPP} ${CPP5OPTS} ${DEFINES} ${INCLUDE} $< ${OBJDIR}/$*.f90
+else
+	${CPP} ${CPP5OPTS} ${DEFINES} ${INCLUDE} $< | ${SED} > ${OBJDIR}/$*.f90
+endif
+	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/$*.o -c ${OBJDIR}/$*.f90
+endif
+	@- if [ -f $*.o ] ; then /bin/mv $*.o ${OBJDIR}/ ; fi
+	@- if [ -f $*.${MOD} ] ; then /bin/mv $*.${MOD} ${OBJDIR}/ ; fi
+
 ${OBJDIR}/%.${MOD} : %.F        # src/B2.5_modules/
 	@- /bin/rm -f ${OBJDIR}/$*.f ${OBJDIR}/$*.o ${OBJDIR}/$*.${MOD}
 ifeq ($(strip $(CPP)),)
@@ -38,6 +53,25 @@ else
 	-${CPP} ${CPP5OPTS} ${DEFINES} ${INCLUDE} $< | ${SED} > ${OBJDIR}/$*.f
 endif
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/$*.o -c ${OBJDIR}/$*.f
+endif
+	@- if [ -f $*.o ] ; then /bin/mv $*.o ${OBJDIR}/ ; fi
+ifeq ($(strip $(LINK_MOD)),)
+	@- if [ -f $*.${MOD} ] ; then /bin/mv $*.${MOD} ${OBJDIR}/ ; fi
+else
+	@- [ -f $*.${MOD} ] && [ ! -L $*.${MOD} ] && /bin/mv $*.${MOD} ${OBJDIR}/ && /bin/ln -s ${OBJDIR}/$*.${MOD} . || echo > /dev/null
+endif
+
+${OBJDIR}/%.${MOD} : %.F90        # src/solps5/b2mod_*.F90
+	@- /bin/rm -f ${OBJDIR}/$*.f90 ${OBJDIR}/$*.o ${OBJDIR}/$*.${MOD}
+ifeq ($(strip $(CPP)),)
+	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV5} ${INCLUDE} -c $<
+else
+ifeq ($(strip $(SED)),)
+	-${CPP} ${CPP5OPTS} ${DEFINES} ${INCLUDE} $< ${OBJDIR}/$*.f90
+else
+	-${CPP} ${CPP5OPTS} ${DEFINES} ${INCLUDE} $< | ${SED} > ${OBJDIR}/$*.f90
+endif
+	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/$*.o -c ${OBJDIR}/$*.f90
 endif
 	@- if [ -f $*.o ] ; then /bin/mv $*.o ${OBJDIR}/ ; fi
 ifeq ($(strip $(LINK_MOD)),)

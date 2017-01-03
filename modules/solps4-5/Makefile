@@ -104,6 +104,7 @@ endif
 PROG_XR = b2sxdr.exe
 MOD4LES = ${patsubst ${SRCDIR}/Eirene_modules/%.F,%.o,${shell echo ${SRCDIR}/Eirene_modules/*.F}}
 MOD5LES = ${patsubst ${SRCDIR}/B2.5_modules/%.F,%.o,${shell echo ${SRCDIR}/B2.5_modules/*.F}}
+MOD5LES += ${patsubst ${SRCDIR}/solps5/%.F90,%.o,${shell echo ${SRCDIR}/solps5/*.F90}}
 MODULES	= ${MOD4LES} ${MOD5LES}
 SOURCB4 = ${patsubst ${SRCDIR}/solps4_B2/%.F,%.o,${shell echo ${SRCDIR}/solps4_B2/*.F}}
 SOURCE4 = ${patsubst ${SRCDIR}/solps4_Eirene/%.F,%.o,${shell echo ${SRCDIR}/solps4_Eirene/*.F}}
@@ -118,15 +119,14 @@ SB4OBJS = ${SOURCB4:%.o=${OBJDIR}/%.o}
 SE4OBJS = ${SOURCE4:%.o=${OBJDIR}/%.o}
 SR5OBJS = ${SOURCE5:%.o=${OBJDIR}/%.o}
 ALLOBJS = ${OBJS:%.o=${OBJDIR}/%.o}
-FFLIST  = ${SRC5LOCAL}/*.F ${SRC4LOCAL}/*.F 
-FFLIST  = ${shell echo ${SRCDIR}/*/*.H ${SRCDIR}/*.F ${SRCDIR}/solps5/*.F ${SRCDIR}/B2.5_modules/*.F ${SRCDIR}/solps4_B2/*.F}
+FFLIST  = ${shell echo ${SRCDIR}/*/*.H ${SRCDIR}/*.F ${SRCDIR}/solps5/*.F ${SRCDIR}/solps5/*.F90 ${SRCDIR}/B2.5_modules/*.F ${SRCDIR}/solps4_B2/*.F}
 ifeq ($(shell [ -d ${SRC4LOCAL} ] && echo yes || echo no ),yes)
 FFLIST  += ${shell echo ${SRC4LOCAL}/*.F}
 endif
 ifeq ($(shell [ -d ${SRC5LOCAL} ] && echo yes || echo no ),yes)
 FFLIST  += ${shell echo ${SRC5LOCAL}/*.F}
 endif
-MODLIST += ${shell echo ${SRCDIR}/B2.5_modules/*.F ${SRCDIR}/b2_4to5.F}
+MODLIST = ${shell echo ${SRCDIR}/B2.5_modules/*.F ${SRCDIR}/b2_4to5.F ${SRCDIR}/solps5/*.F90}
 
 EXCLUDELIST = ${patsubst %.exe, %.o, ${PROG_XR}}
 XREXE = ${patsubst %.exe, ${OBJDIR}/%.exe, ${PROG_XR}}
@@ -449,7 +449,7 @@ ${OBJDIR}/clogau.o: ${SRCDIR}/Eirene_modules/clogau.F
 ${OBJDIR}/comnnl.o: ${OBJDIR}/parmmod.${MOD} ${SRCDIR}/Eirene_modules/comnnl.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/comnnl.o -c ${SRCDIR}/Eirene_modules/comnnl.F
 
-${OBJDIR}/comprt.o: ${OBJDIR}/parmmod.${MOD} ${SRCDIR}/Eirene_modules/comprt.F
+${OBJDIR}/comprt.o: ${OBJDIR}/precision.${MOD} ${OBJDIR}/parmmod.${MOD} ${SRCDIR}/Eirene_modules/comprt.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/comprt.o -c ${SRCDIR}/Eirene_modules/comprt.F
 
 ${OBJDIR}/comsig.o: ${OBJDIR}/parmmod.${MOD} ${SRCDIR}/Eirene_modules/comsig.F
@@ -473,7 +473,7 @@ ${OBJDIR}/comxs.o: ${OBJDIR}/cupd.${MOD} ${OBJDIR}/comprt.${MOD} ${SRCDIR}/Eiren
 ${OBJDIR}/coutau.o: ${SRCDIR}/Eirene_modules/coutau.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/coutau.o -c ${SRCDIR}/Eirene_modules/coutau.F
 
-${OBJDIR}/cpes.o: ${OBJDIR}/ctrcei.${MOD} ${OBJDIR}/eirmod_precision.${MOD} ${SRCDIR}/Eirene_modules/cpes.F
+${OBJDIR}/cpes.o: ${OBJDIR}/comprt.${MOD} ${OBJDIR}/ctrcei.${MOD} ${OBJDIR}/eirmod_precision.${MOD} ${SRCDIR}/Eirene_modules/cpes.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/cpes.o -c ${SRCDIR}/Eirene_modules/cpes.F
 
 ${OBJDIR}/cplmsk.o: ${SRCDIR}/Eirene_modules/cplmsk.F
@@ -732,7 +732,7 @@ ${OBJDIR}/comnnl.${MOD}: ${OBJDIR}/parmmod.${MOD} ${SRCDIR}/Eirene_modules/comnn
 	[ -e $@ ] && rm $@ || echo > /dev/null
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/comnnl.o -c ${SRCDIR}/Eirene_modules/comnnl.F
 
-${OBJDIR}/comprt.${MOD}: ${SRCDIR}/Eirene_modules/comprt.F
+${OBJDIR}/comprt.${MOD}: ${OBJDIR}/parmmod.${MOD} ${OBJDIR}/precision.${MOD} ${SRCDIR}/Eirene_modules/comprt.F
 	[ -e $@ ] && rm $@ || echo > /dev/null
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/comprt.o -c ${SRCDIR}/Eirene_modules/comprt.F
 
@@ -764,7 +764,7 @@ ${OBJDIR}/coutau.${MOD}: ${SRCDIR}/Eirene_modules/coutau.F
 	[ -e $@ ] && rm $@ || echo > /dev/null
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/coutau.o -c ${SRCDIR}/Eirene_modules/coutau.F
 
-${OBJDIR}/cpes.${MOD}: ${OBJDIR}/ctrcei.${MOD} ${OBJDIR}/eirmod_precision.${MOD} ${SRCDIR}/Eirene_modules/cpes.F
+${OBJDIR}/cpes.${MOD}: ${OBJDIR}/comprt.${MOD} ${OBJDIR}/ctrcei.${MOD} ${OBJDIR}/eirmod_precision.${MOD} ${SRCDIR}/Eirene_modules/cpes.F
 	[ -e $@ ] && rm $@ || echo > /dev/null
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/cpes.o -c ${SRCDIR}/Eirene_modules/cpes.F
 
@@ -938,7 +938,7 @@ ifneq (${MOD},o)
 endif
 	egrep -ai '^ {6,}use ' ${FFLIST} | grep -v 'IGNORE' | awk '{sub("\\.F:",".o:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' >> ${OBJDIR}/dependencies
 ifneq (${MOD},o)
-	egrep -ai '^ {6,}use ' ${MODLIST} | grep -v 'IGNORE' | awk '{sub("\\.F:",".${MOD}:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' >> ${OBJDIR}/dependencies
+	egrep -ai '^ *use ' ${MODLIST} | grep -v 'IGNORE' | awk '{sub("\\.F:",".${MOD}:",$$1);sub("\\.F90:",".${MOD}:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' >> ${OBJDIR}/dependencies
 endif
 
 ${BASEDIR}/TAGS: tags
@@ -1003,4 +1003,6 @@ echo:
 	@echo SB4OBJS=${SB4OBJS}
 	@echo SE4OBJS=${SE4OBJS}
 #	@echo SR5OBJS=${SR5OBJS}
+	@echo FFLIST=${FFLIST}
+	@echo MODLIST=${MODLIST}
 

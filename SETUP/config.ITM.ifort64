@@ -63,7 +63,7 @@ LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 SOLPS_CPP      = -DNCAR4 -DMDSPLUS -DNO_F01AAF
 B25_DEFINES    =
 EIRENE_DEFINES =
-MPI_CPP        = `pkg-config mpich2-ch3 --cflags`
+MPI_CPP        =
 
 #
 # Export for use in sub-makefiles
