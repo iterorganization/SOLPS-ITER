@@ -15,8 +15,9 @@ if($1 == "") then
 else
   set count=$1
 endif
+echo Found $count strata
 pipe_run.log | \
-  grep tflux | \
+  grep "tflux:" | \
   awk '{for (i=2;i<=NF;i++) printf " %s",$i;printf "\n"}' | \
   nl | \
   plot xlyplot"$count" `count 1 $count` "iteration number" "tflux (#/s)" $PWD

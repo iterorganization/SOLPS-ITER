@@ -176,7 +176,7 @@ ifndef STAND_ALONE
 	-[ -e b2mn.exe.dir/fort.15 ] && mv b2mn.exe.dir/fort.15 . || echo > /dev/null
 	-[ -e b2mn.exe.dir/fort.44 ] && mv b2mn.exe.dir/fort.44 . || echo > /dev/null
 	-[ -e b2mn.exe.dir/fort.46 ] && mv b2mn.exe.dir/fort.46 . || echo > /dev/null
-	-cd b2mn.exe.dir ; rm -f HYDHEL AMJUEL METHANE SPUTER H2VIBR fort.21 fort.22 graphite_ext.dat mo_ext.dat fort.75 fort.1 fort.29 fort.37 fort.55 vtk.out
+	-cd b2mn.exe.dir ; rm -f HYDHEL AMJUEL METHANE SPUTER H2VIBR fort.21 fort.22 graphite_ext.dat mo_ext.dat fort.75 fort.78 fort.1 fort.29 fort.37 fort.55 vtk.out
 	-[ -e b2mn.exe.dir/fort.33 ] && rm b2mn.exe.dir/fort.33 || echo > /dev/null
 	-[ -e b2mn.exe.dir/fort.34 ] && rm b2mn.exe.dir/fort.34 || echo > /dev/null
 	-[ -e b2mn.exe.dir/fort.35 ] && rm b2mn.exe.dir/fort.35 || echo > /dev/null
@@ -217,7 +217,7 @@ endif
 	-[ -e b2mn.exe.dir/fort.15 ] && mv b2mn.exe.dir/fort.15 . || echo > /dev/null
 	-[ -e b2mn.exe.dir/fort.44 ] && mv b2mn.exe.dir/fort.44 . || echo > /dev/null
 	-[ -e b2mn.exe.dir/fort.46 ] && mv b2mn.exe.dir/fort.46 . || echo > /dev/null
-	-cd b2mn.exe.dir ; rm -f HYDHEL AMJUEL METHANE SPUTER H2VIBR fort.21 fort.22 graphite_ext.dat mo_ext.dat fort.75 fort.1 fort.29 fort.37 fort.55 vtk.out
+	-cd b2mn.exe.dir ; rm -f HYDHEL AMJUEL METHANE SPUTER H2VIBR fort.21 fort.22 graphite_ext.dat mo_ext.dat fort.75 fort.78 fort.1 fort.29 fort.37 fort.55 vtk.out
 	-[ -e b2mn.exe.dir/fort.33 ] && rm b2mn.exe.dir/fort.33 || echo > /dev/null
 	-[ -e b2mn.exe.dir/fort.34 ] && rm b2mn.exe.dir/fort.34 || echo > /dev/null
 	-[ -e b2mn.exe.dir/fort.35 ] && rm b2mn.exe.dir/fort.35 || echo > /dev/null
