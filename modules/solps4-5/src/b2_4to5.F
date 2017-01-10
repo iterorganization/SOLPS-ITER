@@ -1543,25 +1543,27 @@ c
       integer ns
       integer is
       real (kind=R8), allocatable :: na0(:)
-      character*4 specs(0:ns-1)
+      character*5 specs(0:ns-1)
       character*22 hlp_frm
 
       allocate(na0(0:ns-1))
       write(*,*) 'Writing b2ai.dat'
       open(99,file='b2ai.dat',status='unknown')
       write(99,'(a)') '*dimens         (ns; free format)'
-      write(99,'(2x,i2)') ns
+      write(99,'(2x,i3)') ns
       write(99,'(a)')
      . '*label          (lblps, character*60; free format)'
       write(99,'(2x,a)') ''''//trim(label_4)//''''
       write(99,'(a)') '*specs    zamin    zamax       zn      am'
       do is = 0, ns-1
         if (is.lt.10) then
-          write(specs(is),'(a,i1,a)') ' ''',is,''''
+          write(specs(is),'(a,i1,a)') '  ''',is,''''
+        else if (is.lt.100) then
+          write(specs(is),'(a,i2,a)')  ' ''',is,''''
         else
-          write(specs(is),'(a,i2,a)')  '''',is,''''
+          write(specs(is),'(a,i3,a)')   '''',is,''''
         end if
-        write(99,'(2x,a4,4(4x,f4.1,1x))')
+        write(99,'(1x,a5,4(4x,f4.1,1x))')
      .   specs(is),zamin(is),zamax(is),zn(is),am(is)
         if (nint(zn(is)).eq.1.and.zamin(is).gt.0.0_R8) then
           na0(is) = 1.0e19_R8
@@ -1588,7 +1590,7 @@ c
       use b2mod_b2cmpt
       implicit none
       integer ns
-      character*4 specs(-1:ns-1)
+      character*5 specs(-1:ns-1)
       character*27 lbreg(0:cbnrmx-1)
       character*80 column_header
       character*22 hlp_frm
@@ -1606,20 +1608,22 @@ c
       write(*,*) 'Writing b2ah.dat'
       open(99,file='b2ah.dat',status='unknown')
       write(99,'(a)') '*dimens         (ns; free format)'
-      write(99,'(2x,i2)') ns
+      write(99,'(2x,i3)') ns
       write(99,'(a)')
      . '*label          (lblps, character*60; free format)'
       write(99,'(2x,a)') ''''//trim(label_4)//''''
       write(99,'(a)') '*b2cmpa         basic parameters'
       write(99,'(a)') '*specs      zamin    zamax    zn      am'
-      write(specs(-1),'(a)') '''-1'''
+      write(specs(-1),'(a)') ' ''-1'''
       do is = 0, ns-1
         if (is.lt.10) then
-          write(specs(is),'(a,i1,a)') ' ''',is,''''
+          write(specs(is),'(a,i1,a)') '  ''',is,''''
+        else if (is.lt.100) then
+          write(specs(is),'(a,i2,a)')  ' ''',is,''''
         else
-          write(specs(is),'(a,i2,a)')  '''',is,''''
+          write(specs(is),'(a,i3,a)')   '''',is,''''
         end if
-        write(99,'(2x,a4,4(4x,f4.1,1x))')
+        write(99,'(1x,a5,4(4x,f4.1,1x))')
      .   specs(is),zamin(is),zamax(is),zn(is),am(is)
       end do
       write(99,'(a)') '*b2cmpb         boundary conditions'
@@ -1648,81 +1652,81 @@ c
         write(99,'(i2,2x,a)') ireg,lbreg(ireg)
         write(99,'(a)') '*cbsna'//column_header
         do is = 0, ns-1
-          write(99,'(2x,a4,1p,8(1x,e9.2))') specs(is),
+          write(99,'(1x,a5,1p,8(1x,e9.2))') specs(is),
      .     (cbsna(i,is,ireg),i=0,7)
         end do
         write(99,'(a)') '*cbsmo'//column_header
         do is = 0, ns-1
-          write(99,'(2x,a4,1p,8(1x,e9.2))') specs(is),
+          write(99,'(1x,a5,1p,8(1x,e9.2))') specs(is),
      .     (cbsmo(i,is,ireg),i=0,7)
         end do
         write(99,'(a)') '*cbshi'//column_header
         do is = 0, ns-1
-          write(99,'(2x,a4,1p,8(1x,e9.2))') specs(is),
+          write(99,'(1x,a5,1p,8(1x,e9.2))') specs(is),
      .     (cbshi(i,is,ireg),i=0,7)
         end do
         write(99,'(a)') '*cbshe'//column_header
-        write(99,'(2x,a4,1p,8(1x,e9.2))') specs(-1),
+        write(99,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
      .     (cbshe(i,ireg),i=0,7)
         write(99,'(a)') '*cbsch'//column_header
-        write(99,'(2x,a4,1p,8(1x,e9.2))') specs(-1),
+        write(99,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
      .     (cbsch(i,ireg),i=0,7)
         write(99,'(a)') '*cbrec'//column_header
         do is = 0, ns-1
-          write(99,'(2x,a4,1p,8(1x,e9.2))') specs(is),
+          write(99,'(1x,a5,1p,8(1x,e9.2))') specs(is),
      .     (cbrec(i,is,ireg),i=0,7)
         end do
         write(99,'(a)') '*cbmsa'//column_header
-        write(99,'(2x,a4,1p,8(1x,e9.2))') specs(-1),
+        write(99,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
      .     (cbmsa(i,ireg),i=0,7)
         write(99,'(a)') '*cbmsb'//column_header
         do is = 0, ns-1
-          write(99,'(2x,a4,1p,8(1x,e9.2))') specs(is),
+          write(99,'(1x,a5,1p,8(1x,e9.2))') specs(is),
      .     (cbmsb(i,is,ireg),i=0,7)
         end do
       end do
       write(99,'(a)') '*b2cmpt  transport coefficients'
       write(99,'(a)') '*cfdf0'//column_header
       do is = 0, ns-1
-        write(99,'(2x,a4,1p,8(1x,e9.2))') specs(is),
+        write(99,'(1x,a5,1p,8(1x,e9.2))') specs(is),
      .   (cfdf0(i,is),i=0,7)
       end do
       write(99,'(a)') '*cfdna'//column_header
       do is = 0, ns-1
-        write(99,'(2x,a4,1p,8(1x,e9.2))') specs(is),
+        write(99,'(1x,a5,1p,8(1x,e9.2))') specs(is),
      .   (cfdna(i,is),i=0,7)
       end do
       write(99,'(a)') '*cfdpa'//column_header
       do is = 0, ns-1
-        write(99,'(2x,a4,1p,8(1x,e9.2))') specs(is),
+        write(99,'(1x,a5,1p,8(1x,e9.2))') specs(is),
      .   (cfdpa(i,is),i=0,7)
       end do
       write(99,'(a)') '*cfvla'//column_header
       do is = 0, ns-1
-        write(99,'(2x,a4,1p,8(1x,e9.2))') specs(is),
+        write(99,'(1x,a5,1p,8(1x,e9.2))') specs(is),
      .   (cfvla(i,is),i=0,7)
       end do
       write(99,'(a)') '*cfvsa'//column_header
       do is = 0, ns-1
-        write(99,'(2x,a4,1p,8(1x,e9.2))') specs(is),
+        write(99,'(1x,a5,1p,8(1x,e9.2))') specs(is),
      .   (cfvsa(i,is),i=0,7)
       end do
       write(99,'(a)') '*cfhci'//column_header
       do is = 0, ns-1
-        write(99,'(2x,a4,1p,8(1x,e9.2))') specs(is),
+        write(99,'(1x,a5,1p,8(1x,e9.2))') specs(is),
      .   (cfhci(i,is),i=0,7)
       end do
       write(99,'(a)') '*cfhce'//column_header
-      write(99,'(2x,a4,1p,8(1x,e9.2))') specs(-1),
+      write(99,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
      .  (cfhce(i),i=0,7)
       write(99,'(a)') '*cfsig'//column_header
-      write(99,'(2x,a4,1p,8(1x,e9.2))') specs(-1),
+      write(99,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
      .  (cfsig(i),i=0,7)
       write(99,'(a)') '*cfalf'//column_header
-      write(99,'(2x,a4,1p,8(1x,e9.2))') specs(-1),
+      write(99,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
      .  (cfalf(i),i=0,7)
       write(99,'(a)') '*cflim     cflme     cflmi     cflmv      ...'
-      write(99,'(2x,a4,1p,8(1x,e9.2))') specs(-1),
+      write(99,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
      .  (cflim(i),i=0,7)
       write(99,'(a)') '*endphy'
       close(99)
