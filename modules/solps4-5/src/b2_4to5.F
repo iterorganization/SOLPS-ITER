@@ -144,6 +144,7 @@
       nspecies_4 = nspecies
       label_4 = label
       n_spcsrf_4 = n_spcsrf
+      sonnetfile_4 = sonnetfile
 
       allocate(fhe_4(-1:nx_4,-1:ny_4,0:1))
       allocate(fhi_4(-1:nx_4,-1:ny_4,0:1))
@@ -387,7 +388,6 @@ cxpb
 *  ..take in b2.parameters data
 *   ..initialisation
       starting_time_4 = starting_time
-      sonnetfile_4 = sonnetfile
 *   ..transport
       parvis_4(1:ns_4) = parvis(1:ns_4)
       dflagkxi_4 = dflagkxi
@@ -1535,6 +1535,51 @@ c
       close(99)
       return
       end subroutine write_b2ag
+c
+      subroutine write_b2ai(ns)
+      use b2mod_types
+      use b2mod_b2cmpa
+      implicit none
+      integer ns
+      integer is
+      real (kind=R8), allocatable :: na0(:)
+      character*4 specs(0:ns-1)
+      character*22 hlp_frm
+
+      allocate(na0(0:ns-1))
+      write(*,*) 'Writing b2ai.dat'
+      open(99,file='b2ai.dat',status='unknown')
+      write(99,'(a)') '*dimens         (ns; free format)'
+      write(99,'(2x,i2)') ns
+      write(99,'(a)')
+     . '*label          (lblps, character*60; free format)'
+      write(99,'(2x,a)') ''''//trim(label_4)//''''
+      write(99,'(a)') '*specs    zamin    zamax       zn      am'
+      do is = 0, ns-1
+        if (is.lt.10) then
+          write(specs(is),'(a,i1,a)') ' ''',is,''''
+        else
+          write(specs(is),'(a,i2,a)')  '''',is,''''
+        end if
+        write(99,'(2x,a4,4(4x,f4.1,1x))')
+     .   specs(is),zamin(is),zamax(is),zn(is),am(is)
+        if (nint(zn(is)).eq.1.and.zamin(is).gt.0.0_R8) then
+          na0(is) = 1.0e19_R8
+        else if (zamin(is).gt.0.0_R8) then
+          na0(is) = 1.0e16_R8
+        else
+          na0(is) = 1.0e12_R8
+        end if
+      end do
+      write(99,'(a)') '*naini          (na0(0:ns-1); free format)'
+      write(hlp_frm,'(a,i3,a)') '(1p,',ns,'(2x,e8.1))'
+      write(99,hlp_frm) (na0(is),is=0,ns-1)
+      write(99,'(a)') '*ttini          (tt0; free format)'
+      write(99,'(3x,a)') '1.0e2'
+      close(99)
+      deallocate(na0)
+      return
+      end subroutine write_b2ai
 c
       subroutine write_b2ah(ns)
       use b2mod_types

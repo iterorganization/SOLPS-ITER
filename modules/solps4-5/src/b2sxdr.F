@@ -343,10 +343,8 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
       open(unit=70,file='b2ag.prt')
       write(70,'(a)') 'Dummy file, plasma geometry imported from B2SXDR'
       close(70)
-*   ..write dummy b2ai.dat
-      open(unit=70,file='b2ai.dat')
-      write(70,'(a)') 'Dummy file, plasma state imported from B2SXDR'
-      close(70)
+*   ..write b2ai.dat
+      call write_b2ai(ns)
 *   ..write dummy b2ai.prt
       open(unit=70,file='b2ai.prt')
       write(70,'(a)') 'Dummy file, plasma state imported from B2SXDR'
