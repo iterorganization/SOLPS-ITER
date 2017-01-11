@@ -1,4 +1,3 @@
-### eval '(exit $?0)' && eval 'exec tcsh $0 ${1+"$@"}' && eval 'exec tcsh $0 $argv:q'
 #! /usr/bin/env tcsh
 
 set solpstop=`climb_and_look_for SOLPSTOP`

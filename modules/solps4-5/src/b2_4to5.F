@@ -1956,7 +1956,7 @@ c
       write(99,'(a)')
      . '''b2tqce_model'''//tab//tab//tab//'''2'''
       write(98,'(a)')
-     . '''b2tqca_model'''//tab//tab//tab//'''3'''
+     . '''b2tqca_model'''//tab//tab//tab//'''1'''
       write(99,'(a)')
      . '''b2tqca_model'''//tab//tab//tab//'''2'''
       write(99,'(a)')
