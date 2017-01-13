@@ -36,7 +36,7 @@ test: ${FORTRANPRG}.f
 	${FC} -c ../${FORTRANPRG}.f
 	${FC} ${FORTRANPRG}.o ${LIBS}
 
-include $(sources:.cpp=.d)
+-include $(sources:.cpp=.d)
 
 clean:; rm -rf *.[do] *.d.* *.a a.out ../*.xdr
 
