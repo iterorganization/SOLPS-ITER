@@ -6681,6 +6681,8 @@ Is it important to know, that, in the equations below, the parallel velocity $V_
 
 %-------- Equations by S.P. Voskoboynikov ---------
 
+\section{Continuity equations for particle conservation}
+
 \begin{equation}
 \frac{\partial n_a}{\partial t} + \frac{1}{\sqrt g}\frac{\partial}{\partial x}\left( \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \right) +   \frac{1}{\sqrt g}\frac{\partial}{\partial y}\left( \frac{\sqrt g}{h_y} \widetilde{\Gamma}_{ay} \right) = S_a^n, a = 0, 1, \ldots, ns-1
 \end{equation}
@@ -6784,7 +6786,12 @@ V_{ay}^{\left( E \times B \right)} & =
 \end{matrix}$
 \end{tabular}
 
-\subsubsection{Source terms in density equations}
+$n_e = \sum \limits^{ns-1}_{a=0} z_a n_a$, $n_i = \sum \limits^{ns-1}_{a=0} n_a$
+
+$p_a = n_a \left( z_a T_e + T_i \right)$, $p_e=n_e T_e$
+
+\subsection{Source terms in density equations}
+
 {\centering}
 $S_a^n=S_{I_a}^n+S_{I_{a+1}}^n+S_{R_a}^n+S_{R_{a-1}}^n+S_{CX_a}^n+S_{CX_{a-1}}^n$,
 {\centering}
@@ -6862,10 +6869,7 @@ r_{CX_{ab}} = \exp \left(
 \right)
 \end{equation}
 
-$n_e = \sum \limits^{ns-1}_{a=0} z_a n_a$, $n_i = \sum \limits^{ns-1}_{a=0} n_a$
-
-$p_a = n_a \left( z_a T_e + T_i \right)$, $p_e=n_e T_e$
-
+\subsection{Velocities}
 
 \begin{equation}
 V^{corr\_dpc} = \frac{c^{corr\_dpc}}{16} |b_x| \sqrt{\frac{p_a}{m_a n_a}} \frac{\partial
@@ -6917,6 +6921,18 @@ c_{dia} \frac{T_i B_z}{Z_a e}   \frac{\partial}{h_y\partial y} \left(\frac 1{B^2
 \end{matrix} \right.
 \end{matrix}
 \end{equation}
+
+$V_{ax}^{(AN)}=0$
+
+\begin{equation*}
+V_{ay}^{(AN)} = c_{V_a^{(AN)},0} + c_{V_a^{(AN)},1} \frac{10^{20}}{n_e} + c_{V_a^{(AN)},2} D_a^f + c_{V_a^{(AN)},3} \frac{6.25 \cdot 10^{-2}T_e}{e|B|}
+\end{equation*}
+
+$a=0, c_{V_a^{(AN)},0}=0, c_{V_a^{(AN)},1}=0, c_{V_a^{(AN)},2}=0, c_{V_a^{(AN)},3}=0$
+
+$a=1, c_{V_a^{(AN)},0}=0, c_{V_a^{(AN)},1}=0, c_{V_a^{(AN)},2}=0, c_{V_a^{(AN)},3}=0$
+
+\subsection{Particle transport coefficients}
 
 $
 \left\{
@@ -7016,15 +7032,7 @@ a=0,c_{D_a^p,0}=0, c_{D_a^p,1}=0, c_{D_a^p,2}=1, c_{D_a^p,3}=0
 a=1, c_{D_a^p,0}=0, c_{D_a^p,1}=0, c_{D_a^p,2}=0, c_{D_a^p,3}=0
 \end{equation*}
 
-$V_{ax}^{(AN)}=0$
-
-\begin{equation*}
-V_{ay}^{(AN)} = c_{V_a^{(AN)},0} + c_{V_a^{(AN)},1} \frac{10^{20}}{n_e} + c_{V_a^{(AN)},2} D_a^f + c_{V_a^{(AN)},3} \frac{6.25 \cdot 10^{-2}T_e}{e|B|}
-\end{equation*}
-
-$a=0, c_{V_a^{(AN)},0}=0, c_{V_a^{(AN)},1}=0, c_{V_a^{(AN)},2}=0, c_{V_a^{(AN)},3}=0$
-
-$a=1, c_{V_a^{(AN)},0}=0, c_{V_a^{(AN)},1}=0, c_{V_a^{(AN)},2}=0, c_{V_a^{(AN)},3}=0$
+\section{Parallel momentum conservation equations}
 
 \begin{eqnarray*}
 m_a \frac{\partial n_a V_{\parallel a}}{\partial t} +
@@ -7045,6 +7053,8 @@ m_a \frac{\partial n_a V_{\parallel a}}{\partial t} +
 \end{eqnarray*}
 
 %-------- end of 4th page -------------
+
+\subsection{Sources for parallel momentum equations}
 
 $S_{a \parallel}^m = - \left( \nabla \pi_a^{\parallel} \right)_{\parallel}$
 
@@ -7232,7 +7242,9 @@ n_{e^2 }= \sum \limits^{ns-1}_{a=0} z_a^2 n_a, \;\;\;\ l_{t_e}=0.3; \;\;\;\;\; l
 \end{matrix}
 \end{equation}
 
-$c_{th_e,a} = 0, a=0,\ldots,ns-1$ and $c_{th_i,a}=2.65, a=0,\ldots, ns-1$ if 21 moment approximation is not used.
+$c_{th_e,a} = 0, a=0,\ldots,ns-1$ and $c_{th_i,a}=2.65, a=0,\ldots, ns-1$ if the 21-moment approximation is not used.
+
+\subsection{Parallel momentum fluxes}
 
 \begin{equation}
 \Gamma^m_{ax} =
@@ -7250,6 +7262,8 @@ m_a V_{\parallel a} \Gamma_{ay} + m_a V_{\parallel a} \Gamma_{ay}^{\left( dia \r
 $\Gamma^{ \left( dia \right) }_{ax} = n_a \widetilde{V}^{\left( dia \right)}_{\perp a}$,
 
 $\Gamma^{ \left( dia \right) }_{ay} = n_a \widetilde{V}^{\left( dia \right)}_{ya}$,
+
+\subsection{Parallel momentum transport coefficients}
 
 $\eta_{ax} = \eta_{AN_a} + \widetilde{\widetilde{\eta}}_{CL_{ax}}$
 
@@ -7448,6 +7462,8 @@ $c \left( y \right) = \oint h_x |b_x|^{-1}dx$, \ \ \ \
 $\varepsilon = \frac{\left(\oint h_x dx \right)^2}
 {\oint \sqrt g /h_y dx}$
 
+\section{Electron energy equations}
+
 \begin{eqnarray}
 \frac 3 2 \frac{\partial n_e T_e}{\partial t} +
 \frac 1{\sqrt g} \frac{\partial }{\partial x} \left( \frac{\sqrt g}{h_x} \widetilde{q}_{ex} \right) +
@@ -7462,6 +7478,8 @@ $\varepsilon = \frac{\left(\oint h_x dx \right)^2}
 \frac{\widetilde{j}_y^{(st)}}{e n_e} \frac{\partial n_e T_e}{h_y \partial y}
 + j_x \hat E_x + 0 \cdot j_y \hat E_y
 \end{eqnarray}
+
+\subsection{Electron energy sources}
 
 $Q_e = -Q_{\Delta } - Q_R$
 
@@ -7489,6 +7507,8 @@ $
 $Q_R = \sum \limits_{a=0}^{ns-1} r_{Q_a} n_e n_a$ from b2stel
 
  %-------- end of 9th page -------------
+
+\subsection{Poloidal electron energy fluxes}
 
 \begin{equation*}
 \widetilde{q}_{ex} = \widetilde{f}_{ex} T_e - \kappa_{ex} \frac 1{h_x} \frac{\partial T_e} {\partial x} +
@@ -7575,6 +7595,8 @@ $V_{ex}^{(dia)} = \frac{B_z}{e B^2 n_e} \frac{\partial n_e T_e}{h_y \partial y}$
 $V_{ey}^{(dia)} = -\frac{B_z}{e B^2 n_e} \frac{\partial n_e T_e}{h_x \partial x}$
 
 $V_{ex}^{(str)} = 0$
+
+\subsection{Electron energy transport}
 
 $\kappa_{ex} = \kappa_e^{(AN)} + \widetilde{\widetilde{\kappa}}_{ex}^{(CL)}$,
 
@@ -7709,6 +7731,8 @@ new Zhdanov expression
 
 $z_{eff} = \frac{\sum \limits_{a=0}^{ns-1} z_a^2n_a}{n_e}$,
 
+\subsubsection{Electron parallel velocity}
+
 $V_{e \parallel} = \frac 1{e n_e} \left[
 \sum \limits_{a=0}^{ns -1} z_a e n_a V_{a\parallel} - \frac{j^{(\parallel)}_x}{b_x}
 \right]$,
@@ -7777,6 +7801,8 @@ $\alpha_{ANx}=0$,
 $\alpha_{CLx} = b_x^2 \sqrt{\frac 5 2} \frac e{m_e} f_{\alpha} \left(z_{eff} \right) n_e \tau _e$,
 
 $f_{\alpha} \left( z_{eff} \right) = -\frac{1.25 z_{eff}}{1 + 0.41 z_{eff}}$,
+
+\subsection{Radial electron energy fluxes}
 
 \begin{equation*}
 \widetilde q_{ey} = \widetilde f_{ey} T_e - \kappa_{ey} \frac 1{h_y} \frac{\partial T_e}{\partial y} +
@@ -7847,6 +7873,8 @@ $c_{\alpha,0} = 10^{-3}, \;\;\; c_{\alpha,1} = 0,\;\;\; c_{\alpha,3} = 0$
 
 $\alpha _{CLy} = 0$
 
+\section{Ion energy equations}
+
 \begin{equation}
 \begin{matrix}
 \frac{3}{2} \frac{\partial n_i T_i}{\partial t} + \frac{1}{\sqrt g} \frac{\partial}{\partial x} \left(
@@ -7877,6 +7905,8 @@ $\alpha _{CLy} = 0$
 \right) + Q_I^{(i)} + Q_R^{(i)},
 \end{matrix}
 \end{equation}
+
+\subsection{Ion energy sources}
 
 Contribution from friction between charged species
 
@@ -7940,6 +7970,8 @@ $
 \end{matrix}
 $
 
+\subsection{Poloidal ion energy fluxes}
+
 $\widetilde q_{ix} = \widetilde f_{ix} T_i - \kappa_{ix} \frac 1{h_x} \frac{\partial T_i}{\partial x} - q_{ix}^{P.Sch}$
 
 $\widetilde f_{ix} = \frac 3 2 \Gamma_{ix} + V_{ix}^{(str)} n_i$
@@ -7964,6 +7996,8 @@ q_{ix}^{(Eir)} =
 \frac 5 2 \sum \limits^{ns-1}_{\substack{a = 0,\\ z_a \neq 0}} \Gamma_{ax}^{(Eir)} T_i -
 \kappa_{ix} \frac 1{h_x} \frac{\partial T_i}{\partial x}
 \end{equation*}
+
+\subsection{Poloidal ion energy transport coefficients}
 
 $\kappa_{ix} = \kappa_{ix}^{(AN)} + \widetilde{\widetilde{\kappa}}_{ix}^{(CL)}$,
 
@@ -8110,6 +8144,8 @@ $K_{ASTRA} = \frac{-1}{\oint q_i^{NEO} dS} \frac{d(T_i/e)}{dR_{\text{(outer midp
 
 $V_{ix}^{(str)}=0$
 
+\subsection{Radial ion energy fluxes}
+
 \begin{equation*}
 \widetilde q_{iy} = \widetilde f_{iy} T_i -
 \kappa_{iy} \frac 1{h_y} \frac{\partial T_i}{\partial y} -
@@ -8163,6 +8199,8 @@ q_{iy}^{(Eir)} =
 
 $V_{iy}^{(str)} = 0$
 
+\subsection{Radial ion energy transport coefficients}
+
 $\kappa_{iy} = \kappa_{iy}^{(AN)} + \kappa_{iy}^{(CL)}$,
 
 $\kappa_{iy}^{(AN)} = \sum \limits_{a=0}^{ns-1} \widetilde \kappa_{ay}^{(AN)}$,
@@ -8187,10 +8225,14 @@ $\kappa_{iy}^{(AN)} = \sum \limits_{a=0}^{ns-1} \widetilde \kappa_{ay}^{(AN)}$,
 
 $\kappa_{iy}^{(CL)} = 0$
 
+\section{Current continuity equation}
+
 \begin{equation*}
 \frac 1{\sqrt g} \frac{\partial}{\partial x} \left( \frac{\sqrt g}{h_x} j_x \right) +
 \frac 1{\sqrt g} \frac{\partial}{\partial y} \left( \frac{\sqrt g}{h_y} j_y \right) = 0
 \end{equation*}
+
+\subsection{Poloidal currents}
 
 $j_x = j_x^{(AN)} + \widetilde j_x^{(dia)} + j_x^{(in)} + \widetilde j_x^{(vis \parallel)} + \widetilde j_x^{(vis \perp)}
 + \widetilde j_x^{(visq)} + \widetilde j_x^{(s)} + j^{(\parallel)}_x$,
@@ -8262,6 +8304,8 @@ m_a n_a \left\langle V_{a0} \sigma_{ex} n_0 \right\rangle
 $V_{0y} = \frac{\Gamma_{0y} }{n_0}$
 
 $j_x^{(\parallel)}$ - see above
+
+\subsection{Radial currents}
 
 $j_y = j_y^{(AN)} + \widetilde j_y^{(dia)} + j_y^{(in)} + \widetilde j_y^{(vis \parallel)} + \widetilde j_y^{(vis \perp)}
 + \widetilde j_y^{(visq)} + \widetilde j_y^{(s)} + \widetilde j_y^{(st)}$,
@@ -8349,6 +8393,8 @@ V_{a \perp} =
 \end{matrix}
 \end{equation*}
 
+\subsection{Conductivities}
+
 \begin{equation*}
 \begin{matrix}
 \sigma^{(ST)} = &
@@ -8392,14 +8438,17 @@ $c_{\sigma_a,0} = 10^{-6} \div 10^{-3}$,   $c_{\sigma_a,1}=0$,  $c_{\sigma_a,3}=
 $\sigma_{CLy} = 0$
 
 %-------- end of 20th page -------------
+\section{Typical boundary conditions}
 
-\subsubsection{Typical boundary conditions}
-\paragraph{Particle balance equation}
+\subsection{Particle balance equations}
+
 $S_{n_a} = S_{n_a,0} + S_{n_a,1} n_a$
 
-\paragraph{South. Private region}
+\subsubsection{South. Private region}
 
-$z_a = 0$
+\underline{If $z_a = 0$}
+
+{\em For leakage boundary condition:} {\tt BCCON = 10}
 
 \begin{equation}
 \left. \frac{\sqrt g}{h_y}\Gamma_{ay} \right|_{S_0}
@@ -8411,17 +8460,18 @@ p_{n_a,a,1} \frac{\sqrt g}{h_y} \sqrt{\frac{z_a T_e + T_i}{m_a}} n_a
 \max \left\{0, -\frac{\sqrt g}{h_y} \Gamma_{ay} \right\}
 \right] \right|_{S_0}
 \end{equation}
-leakage, BCCON=10
 
 $p_{n_a,a,1} = -10^{-2}, \;\; c_{rec,0,0} = 0,\;\; c_{rec,1,0} = 1$
 
 $\widetilde{\Gamma}_{ay}$ was replaced by $\Gamma_{ay}$
 
-$c_{nsr}$ --- neutral sources rescale coefficient, $1$ --- when working B2 and $10^{-10}$ when Eirene coupling
+$c_{nsr}$ --- neutral sources rescale coefficient, $1$ --- when working with B2.5 stand-alone and $10^{-10}$ when coupling to Eirene
 
-$z_a \neq 0$
+$p_{n_a,a,1}$ is the radial leakage velocity, in units of the local species sound species. Negative velocities are directed out of the plasma.
 
-BCCON = 9 is below
+\underline{If $z_a \neq 0$}
+
+{\em For decay length boundary condition:} {\tt BCCON = 9}
 
 \begin{equation}
 \begin{matrix}
@@ -8452,7 +8502,9 @@ S^{no\_mdf}_{n_a,0} & = 0 \\
 S^{no\_mdf}_{n_a,1} & = - \frac{1}{p_{n_a,a,1}} \frac{\sqrt{g}}{h_y} \left( D^n_{ANa} + D^p_{ANa} \left( z_a T_e + T_i \right) \right)
 \end{align}
 
-BCCON = 10 (leakage) is below
+$p_{n_a,a,1}$ is the density radial decay length of species $a$, in $m$.
+
+{\em For leakage boundary conditions:} {\tt BCCON = 10}
 
 \begin{equation}
 \begin{matrix}
@@ -8476,14 +8528,15 @@ p_{n_a,a,1} \frac{\sqrt g}{h_y} \sqrt{\frac{z_a T_e + T_i}{m_a}} n_a
 \end{matrix}
 \end{equation}
 
-$p_{n_a,a,1} = -10^{-3}$
+$p_{n_a,a,1} = -10^{-3}$ is the radial leakage velocity, in units of the species local sound speed. Negative velocities are directed out of the plasma.
 
 \begin{align}
 S^{no\_mdf}_{n_a,0} & = 0 \\
 S^{no\_mdf}_{n_a,1} & = {p_{n_a,a,1}} \frac{\sqrt{g}}{h_y} \sqrt{\frac{z_a T_e + T_i}{m_a}} n_a
 \end{align}
 
-BCCON = 15 is below
+% -- To be checked --
+{\tt BCCON = 15} is below
 
 \begin{equation}
 \left. -\frac{\sqrt g}{h_y^2} D_{ay}^n \frac{\partial n_a}{\partial y} \right|_{S_0}
@@ -8495,19 +8548,23 @@ c_{n_a,a,2} \frac{\sqrt g}{h_y} \sqrt{\frac{z_a T_e + T_i}{m_a}} n_a
 
 $c_{n_a,a,2} = -10^{-3}$
 
-\paragraph{South 1. Core plasma}
+% -- end --
 
-$z_a = 0$
+\subsubsection{South 1. Core plasma}
+
+\underline{If $z_a = 0$}
 
 %-------- end of 21st page -------------
 
-$\left. \frac{\sqrt g}{h_y} \widetilde{\Gamma}_{ay} \right|_{S_1} = 0$ total particle flux (8), dpc
+{\em Imposing total particle flux:} {\tt BCCON = 8}
+
+$\left. \frac{\sqrt g}{h_y} \widetilde{\Gamma}_{ay} \right|_{S_1} = 0$
 
 $\left. \frac{\sqrt g}{h_y} \Gamma_{ay} \right|_{S_1} = 0$
 
-$z_a \neq 0$
+\underline{If $z_a \neq 0$}
 
-constant density (1)
+{\em Imposing a constant density :} {\tt BCCON = 1}
 
 \begin{equation}
 \left. \frac{\sqrt g}{h_y} \widetilde{\Gamma}_{ay} \right|_{S_1}
@@ -8519,10 +8576,10 @@ constant density (1)
 \;\;
 v_{big} = 10^{18},
 \;\;
-\left. n_a \right|_{S_1} \text{ is a given density}
+\left. n_a \right|_{S_1} \text{ is the desired density in } m^{-3}
 \end{equation}
 
-the total particle flux with constant flux density (8)
+{\em Imposing the total particle flux with constant flux density:} {\tt BCCON = 8}
 
 \begin{equation*}
 \left. \frac{\sqrt g}{h_y} \widetilde{\Gamma}_{ay} \right|_{S_1} =
@@ -8538,9 +8595,13 @@ p_{n,a,0} \frac{
 \left. \frac{\sqrt g}{h_y}V_{ya}^{(E)} n_a \right|_{S_1}
 \end{equation*}
 
-\paragraph{North}
+$p_{n,a,0}$ is the desired total particle flux, per unit time.
 
-$z_a = 0$
+\subsubsection{North}
+
+\underline{If $z_a = 0$}
+
+{\em For leakage boundary condition:} {\tt BCCON = 10}
 
 \begin{equation}
 \left. -\frac{\sqrt g}{h_y} \Gamma_{ay} \right|_{N}
@@ -8548,29 +8609,22 @@ $z_a = 0$
 \left. \left[ \left.
 p_{n_a,a,1} \frac{\sqrt g}{h_y} \sqrt{\frac{z_a T_e + T_i}{m_a}} n_a \right|_N
 +
-\sum \limits_{a=0}^{ns-1} c_{rec,a,0} c_{nsr}
-\max \left\{0, -\frac{\sqrt g}{h_y} \Gamma_{ay} \right\}
+\sum \limits_{a=0}^{ns-1} r_{rec,a,0} c_{nsr}
+\max \left\{0, \frac{\sqrt g}{h_y} \Gamma_{ay} \right\}
 \right] \right|_{N}
 \end{equation}
 
-leakage (10), dpc
+$p_{n_a,a,1} = -10^{-2}, \;\; r_{rec,0,0} = 0,\;\; r_{rec,1,0} = 1$
 
-$p_{n_a,a,1} = 0, \;\; c_{rec,0,0} = 0,\;\; c_{rec,1,0} = 1$
+$c_{nsr}$ --- neutral sources rescale coefficient, $1$ --- when working with B2.5 stand-alone and $10^{-10}$ when coupling to Eirene
 
-\begin{equation}
-\left. - \frac{\sqrt g}{h_y} \widetilde{\Gamma}_{ay} \right|_{N}
-=
-\sum \limits_{a=0}^{ns-1} c_{rec,a,0} c_{nsr}
-\max \left\{0, \frac{\sqrt g}{h_y} \Gamma_{ay} \right\}
-\end{equation}
+$p_{n_a,a,1}$ is the radial leakage velocity, in units of the local species sound species. Negative velocities are directed out of the plasma.
 
 $\widetilde{\Gamma}_{ay}$ was replaced by $\Gamma_{ay}$
 
-$c_{rec,0,0} = 0,\;\; c_{rec,1,0} = 1$
+\underline{If $z_a \neq 0$}
 
-$z_a \neq 0$
-
-BCCON = 9 is below
+{\em For decay length boundary condition:} {\tt BCCON = 9}
 
 \begin{equation}
 \begin{matrix}
@@ -8601,7 +8655,9 @@ S^{no\_mdf}_{n_a,0} & = 0 \\
 S^{no\_mdf}_{n_a,1} & = \frac{1}{p_{n_a,a,1}} \frac{\sqrt{g}}{h_y} \left( D^n_{ANa} + D^p_{ANa} \left( z_a T_e + T_i \right) \right)
 \end{align}
 
-BCCON = 10 (leakage) is below
+$p_{n_a,a,1}$ is the density radial decay length of species $a$, in $m$.
+
+{\em For leakage boundary conditions:} {\tt BCCON = 10}
 
 \begin{equation}
 \begin{matrix}
@@ -8625,10 +8681,15 @@ BCCON = 10 (leakage) is below
 \end{matrix}
 \end{equation}
 
+$p_{n_a,a,1} = -10^{-3}$ is the radial leakage velocity, in units of the species local sound speed. Negative velocities are directed out of the plasma.
+
 \begin{align}
 S^{no\_mdf}_{n_a,0} & = 0 \\
 S^{no\_mdf}_{n_a,1} & = {p_{n_a,a,1}} \frac{\sqrt{g}}{h_y} \sqrt{\frac{z_a T_e + T_i}{m_a}} n_a
 \end{align}
+
+% -- To be checked --
+{\tt BCCON = 15} is below
 
 \begin{equation}
 \left. \frac{\sqrt g}{h_y^2} D_{ay}^n \frac{\partial n_a}{\partial y} \right|_N
@@ -8637,13 +8698,16 @@ S^{no\_mdf}_{n_a,1} & = {p_{n_a,a,1}} \frac{\sqrt{g}}{h_y} \sqrt{\frac{z_a T_e +
 c_{n_a,a,2} \frac{\sqrt g}{h_y} \sqrt{\frac{z_a T_e + T_i}{m_a}} n_a
 \right] \right|_N
 \end{equation}
-BCCON = 15
 
 $c_{n_a, a, 2} = 10^{-3}$
 
-\paragraph{North with puffing}
+% -- end --
 
-$z_a = 0$
+\subsubsection{North with puffing}
+
+\underline{If $z_a = 0$}
+
+{\em Imposing a particle flux per unit area:} {\tt BCCON = 5}
 
 \begin{equation}
 \left. - \frac{\sqrt g}{h_y} \widetilde{\Gamma}_{ay} \right|_N
@@ -8657,17 +8721,25 @@ $z_a = 0$
 \right] \right|_N
 \end{equation}
 
-the particle flux per unit area (5) or
+$c_{nsr}$ --- neutral sources rescale coefficient, $1$ --- when working with B2.5 stand-alone and $10^{-10}$ when coupling to Eirene
+
+$c_{rec,0,0} = 0,\;\; c_{rec,1,0} = 1$
+
+$p_{n,a,0}$ is the desired total particle flux density, in $m^{-2}.s^{-1}$.
 
 $\widetilde{\Gamma}_{ay}$ was replaced by $\Gamma_{ay}$
+
+or
+
+{\em Imposing a total particle flux with constant flux density:} {\tt BCCON = 8}
 
 \begin{equation*}
 \left. - \frac{\sqrt g}{h_y} \widetilde{\Gamma}_{ay} \right|_N =
 \left. \frac{ p_{n,a,0}
 }{
-\sum \limits_{i=0}^{N_x-1} \left(
+\sum \limits_{i=0}^{Nx-1} \left(
 	\frac{\sqrt g}{h_y}
-\right)_{i, N_y}
+\right)_{i, Ny}
 }
 \frac{\sqrt g}{h_y} \right|_N
 +
@@ -8678,30 +8750,21 @@ $\widetilde{\Gamma}_{ay}$ was replaced by $\Gamma_{ay}$
 \right|_N
 \end{equation*}
 
-the total particle flux with constant flux density (8)
+$c_{nsr}$ --- neutral sources rescale coefficient, $1$ --- when working with B2.5 stand-alone and $10^{-10}$ when coupling to Eirene
 
-\begin{equation*}
-\left. - \frac{\sqrt g}{h_y} \widetilde{\Gamma}_{ay} \right|_N = \left.
-	\sum \limits_{a=0}^{ns-1} \left[
-		c_{rec,a,0} c_{nsr}
-		\max \left\{
-			0, \frac{\sqrt g}{h_y} \Gamma_{ay}
-		\right\}
-		+
-		c_{n,a,0} \frac{\sqrt g}{h_y}
-	\right]
-\right|_N
-\end{equation*}
+$c_{rec,0,0} = 0,\;\; c_{rec,1,0} = 1$
+
+$p_{n,a,0}$ is the desired total particle flux, per unit time.
 
 $\widetilde{\Gamma}_{ay}$ was replaced by $\Gamma_{ay}$
 
-$c_{rec,0,0} = 0,\;\; c_{rec,1,0} = 1,\;\; p_{n,0a,0} \approx 10^{21} $
-
-\paragraph{West}
+\subsubsection{West}
 
 %-------- end of 23rd page -------------
 
-$z_a = 0$
+\underline{If $z_a = 0$}
+
+{\em Imposing a given particle flux per unit area:} {\tt BCCON = 5}
 
 \begin{equation}
 \left. \frac{\sqrt g}{h_x} \Gamma_{ax} \right|_W
@@ -8713,8 +8776,6 @@ p_{n,a,1} \frac{\sqrt g}{h_y}
 \max \left\{0, -\frac{\sqrt g}{h_x} \Gamma_{ax} \right\}
 \right] \right|_W
 \end{equation}
-
-particle flux per unit area (5), dpc
 
 $c_{rec,0,0} = 0,\;\; c_{rec,1,0} = 1,\;\; p_{n_a,a,1} = 0 $
 
@@ -8733,7 +8794,9 @@ $\widetilde{\Gamma}_{ax}$ was replaced by $\Gamma_{ax}$ (5)
 
 $c_{rec,0,0} = 0,\;\; c_{rec,1,0} = 1,\;\; p_{n_a,a,1} = 0 $
 
-$z_a \neq 0$
+\underline{If $z_a \neq 0$}
+
+{\em Sheath density boundary condition:} {\tt BCCON = 3}
 
 \begin{equation*}
 \left. \frac{\sqrt g}{h_x} \Gamma_{ax} \right|_W = \left.
@@ -8741,24 +8804,23 @@ $z_a \neq 0$
 \right|_W
 \end{equation*}
 
-sheath density bc (3) dpc
+{\em Imposing a sound speed outgoing flux:} {\tt BCCON = 14}
 
 \begin{equation*}
-\frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax}|_W
+\left. \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \right|_W
 =
 \left. \left[
-c_{n,a,7} \frac{\sqrt g}{h_x} |b_x|
-\sqrt{\frac{\sum \limits_{b=0}^{ns-1} p_b}{\sum \limits_{b=0}^{ns-1} m_b n_b} n_a}
+- c_{n,a,7} \frac{\sqrt g}{h_x} |b_x|
+\sqrt{\frac{\sum \limits_{b=0}^{ns-1} p_b}{\sum \limits_{b=0}^{ns-1} m_b n_b}} n_a
 -
 \frac{\sqrt g}{h_x} D_{axy} \frac 1{h_y} \frac{\partial n_a T_i}{\partial y}
 \right]
 \right|_W
 \end{equation*}
 
-sound speed flux bc (14)
+$c_{n,a,7} = 1 $
 
-$c_{n,1,7} = -1 $
-
+{\em Prescribe the average value of the density:} {\tt BCCON = 25}
 \begin{equation}
 \left. \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \right|_W
 =
@@ -8774,13 +8836,13 @@ $c_{n,1,7} = -1 $
 \right|_W
 \end{equation}
 
-BCCON = 25
+$c_{n,a,7} = -1 $
 
-$c_{n,1,7} = -1 $
+\subsubsection{East}
 
-\paragraph{East}
+\underline{If $z_a = 0$}
 
-$z_a = 0$
+{\em Imposing a given particle flux per unit area:} {\tt BCCON = 5}
 
 \begin{equation}
 \left. - \frac{\sqrt g}{h_x} \Gamma_{ax} \right|_E
@@ -8792,8 +8854,6 @@ p_{n,a,1} \frac{\sqrt g}{h_y}
 \max \left\{0, \frac{\sqrt g}{h_x} \Gamma_{ax} \right\}
 \right] \right|_E
 \end{equation}
-
-particle flux per unit area (5), dpc
 
 $c_{rec,0,0} = 0,\;\; c_{rec,1,0} = 1,\;\; p_{n_a,a,1} = 0 $
 
@@ -8813,7 +8873,9 @@ $\widetilde{\Gamma}_{ax}$ was replaced by $\Gamma_{ax}$ (5)
 
 $c_{rec,0,0} = 0,\;\; c_{rec,1,0} = 1$
 
-$z_a \neq 0$
+\underline{If $z_a \neq 0$}
+
+{\em Sheath density boundary condition:} {\tt BCCON = 3}
 
 \begin{equation*}
 \left. - \frac{\sqrt g}{h_x} \Gamma_{ax} \right|_E =
@@ -8821,23 +8883,23 @@ $z_a \neq 0$
 \right|_E
 \end{equation*}
 
-sheath density bc (3) dpc
+{\em Imposing a sound speed outgoing flux:} {\tt BCCON = 14}
 
 \begin{equation*}
 \left. - \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \right|_E
 =
 \left. \left[
-c_{n,a,7} \frac{\sqrt g}{h_x} |b_x|
-\sqrt{\frac{\sum \limits_{b=0}^{ns-1} p_b}{\sum \limits_{b=0}^{ns-1} m_b n_b} n_a}
+- c_{n,a,7} \frac{\sqrt g}{h_x} |b_x|
+\sqrt{\frac{\sum \limits_{b=0}^{ns-1} p_b}{\sum \limits_{b=0}^{ns-1} m_b n_b}} n_a
 +
 \frac{\sqrt g}{h_x} D_{axy} \frac 1{h_y} \frac{\partial n_a T_i}{\partial y}
 \right]
 \right|_E
 \end{equation*}
 
-sound speed flux bc (14)
+$c_{n,a,7} = 1 $
 
-$c_{n,1,7} = -1 $
+{\em Imposing the average value of the density:} {\tt BCCON = 25}
 
 \begin{equation}
 \left. - \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \right|_E
@@ -8854,25 +8916,25 @@ $c_{n,1,7} = -1 $
 \right|_E
 \end{equation}
 
-BCCON = 25
-
 $c_{n,1,7} = -1 $
 
-\subsubsection{Parallel momentum balance for ions}
+\subsection{Parallel momentum balance for ions}
 
 $S_{m_a} = S_{m_a,0} + S_{m_a,1} u_{\parallel a} + S_{m_a,2} m_a n_a + S_{m_a,3} m_a n_a u_{\parallel a}$
 
-\paragraph{South. Private region}
+\subsubsection{South. Private region}
 
-$z_a = 0$,
+\underline{If $z_a = 0$}
+
+{\em Weakly imposing a velocity:} {\tt BCMOM = 4}
 
 $\left. h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_{S_0} =
 \left. \left[
 p_{m,a,1} p_{m,a,2} h_z \frac{\sqrt g}{h_y} -
 p_{m,a,2} h_z \frac{\sqrt g}{h_y} V_{\parallel a}
-\right] \right|_{S_0}$ weak velocity (4) dpc
+\right] \right|_{S_0}$
 
-$p_{m,a,1}=0,\;\;\;p_{m,a,2}=10^5$
+$p_{m,a,1}=0$ is the imposed velocity, in $m.s^{-1}$, and $p_{m,a,2}=10^5$ is the strength with which this velocity is imposed.
 
 We had these b.c.
 
@@ -8889,9 +8951,11 @@ $\Gamma_{ay}^{(cor)} = \Gamma_{ay} + \Gamma_{ay}^{(dia)}$
 
 $c_{m,a,3} = -10^{10}$, we have $c_{m,a,6}=-1$, but not $c_{m,a,6}=0$
 
-Inserted into {\tt b2stbc\_phys} for {\tt BCMOM=12} as  $c_{m,a,3} \rightarrow p_{m,a,2} = -10^{10},c_{m,a,6} \rightarrow p_{m,a,1} = -1$
+Inserted into {\tt b2stbc\_phys} for {\tt BCMOM=12} as $c_{m,a,3} \rightarrow p_{m,a,2} = -10^{10},c_{m,a,6} \rightarrow p_{m,a,1} = -1$
 
-$z_a\neq 0,$
+\underline{If $z_a \neq 0$}
+
+{\em Weakly imposing a velocity:} {\tt BCMOM = 4}
 
 \begin{equation}
 \left. h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_{S_0} =
@@ -8901,9 +8965,7 @@ $z_a\neq 0,$
 \right] \right|_{S_0},
 \end{equation}
 
-weak velocity (4) dpc
-
-$p_{m,a,1} = 0$, $p_{m,a,2} = 10^5$
+$p_{m,a,1}=0$ is the imposed velocity, in $m.s^{-1}$, and $p_{m,a,2}=10^5$ is the strength with which this velocity is imposed.
 
 \begin{equation}
 \left. h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_{S_0} =
@@ -8921,16 +8983,18 @@ $\Gamma_{ay}^{(cor)} = \Gamma_{ay} + \Gamma_{ay}^{(dia)}$
 
 $c_{m,a,3} = 0$,  $c_{m,a,6} = -1$
 
-\paragraph{South 1. Core}
+\subsubsection{South 1. Core}
 
-$z_a=0$
+\underline{If $z_a = 0$}
+
+{\em Weakly imposing a velocity:} BCMOM = 4
 
 $ \left. h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_{S_1} = \left. \left[
 	p_{m,a,1} p_{m,a,2} h_z \frac{\sqrt g}{h_y} -
 	p_{m,a,2} h_z \frac{\sqrt g}{h_y} V_{\parallel a}
-\right] \right|_{S_1}$ \ \ \ \ \ weak velocity (4) dpc
+\right] \right|_{S_1}$
 
-$p_{m,a,1} = 0,\;\;\;p_{m,a,2} = 10^5$
+$p_{m,a,1}=0$ is the imposed velocity, in $m.s^{-1}$, and $p_{m,a,2}=10^5$ is the strength with which this velocity is imposed.
 
 $ \left. h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_{S_1} = c_{m,a,3} h_z \left. \frac{\sqrt g}{h_y} m_a n_a V_{\parallel a} \right|_{S_1}$
 
@@ -8939,17 +9003,20 @@ $c_{m,a,3} = -10^{10}$
 Inserted into {\tt b2stbc\_phys} for {\tt BCMOM=12} as $c_{m,a,3} \rightarrow p_{m,a,2} = -10^{10},\;c_{m,a,6} \rightarrow
 p_{m,a,1} = 0$
 
-$z_a \neq 0$
+\underline{If $z_a \neq 0$}
 
 %-------- end of 26th page -------------
 
+{\em Weakly imposing a velocity:} {\tt BCMOM = 4}
 
 $ \left. h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_{S_1} = \left. \left[
 	p_{m,a,1} p_{m,a,2} h_z \frac{\sqrt g}{h_y} -
 	p_{m,a,2} \frac{\sqrt g}{h_y} V_{\parallel a}
-\right] \right|_{S_1}$     weak velocity(4) dpc
+\right] \right|_{S_1}$
 
-$p_{m,a,1}=0,\;\;\;p_{m,a,2}=10^5$
+$p_{m,a,1}=0$ is the imposed velocity, in $m.s^{-1}$, and $p_{m,a,2}=10^5$ is the strength with which this velocity is imposed.
+
+{\em b2stbc\_spb style:} {\tt BCMOM = 14}
 
 $\left. h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_{S_1} =
 c_{m,a,3} h_z \left. \frac{\sqrt g}{h_y} m_a n_a V_{\parallel a} \right|_{S_1} + \left. \left[
@@ -8957,11 +9024,9 @@ h_z \frac{\sqrt g}{h_y} m_a \langle n_a \rangle \left( -2 \right)\frac{\langle T
 c_{corflux} h_z \frac{\sqrt g}{h_y}
 \right] \right|_{S_1}$
 
-BCMOM=14
-
 $c_{m,a,3} = -10^{10}$
 
-The value of the parallel velocity as a function of poloidal coordinate
+{\em Prescribe the value of the parallel velocity as a function of poloidal coordinate:} {\tt BCMOM = 15}
 
 $
 \left. h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_{S_1} =
@@ -8973,18 +9038,18 @@ $
 \frac{\iint \limits_{core} B \sqrt g\ dxdy}{\iint \limits_{core} \sqrt g\ dxdy}
 $
 
-BCMOM=15
+\subsubsection{North}
 
-\paragraph{North}
+\underline{If $z_a=0$}
 
-$z_a=0$,
+{\em Weakly imposing a velocity:} {\tt BCMOM = 4}
 
 $ \left. -h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_N = \left. \left[
 	p_{m,a,1} p_{m,a,2} h_z \frac{\sqrt g}{h_y} -
 	p_{m,a,2} h_z \frac{\sqrt g}{h_y} V_{\parallel a}\right]
-\right|_N$ \ \ \ \ \ weak velocity (4) dpc
+\right|_N$
 
-$p_{m,a,1} = 0,\;\;\;p_{m,a,2} = 10^5$
+$p_{m,a,1}=0$ is the imposed velocity, in $m.s^{-1}$, and $p_{m,a,2}=10^5$ is the strength with which this velocity is imposed.
 
 $\left. -h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_N = \left. \left[
 	c_{m,a,3} h_z \frac{\sqrt g}{h_y} m_a n_a V_{\parallel a} +
@@ -9001,16 +9066,18 @@ $c_{m,a,3} = -10^{10}$, we have  $c_{m,a,6} = -1$, but not $c_{m,a,6} = 0$
 Inserted into {\tt b2stbc\_phys} for {\tt BCMOM=12} as $c_{m,a,3} \rightarrow p_{m,a,2} = -10^{10},\;c_{m,a,6} \rightarrow
 p_{m,a,1} = -1$
 
-$z_a \neq 0$,
+\underline{If $z_a \neq 0$}
 
 %-------- end of 27th page -------------
+
+{\em Weakly imposing a velocity:} {\tt BCMOM = 4}
 
 $ \left. -h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_N = \left[
 	p_{m,a,1} p_{m,a,2} h_z \frac{\sqrt g}{h_y} -
 	p_{m,a,2} h_z \frac{\sqrt g}{h_y} V_{\parallel a}
-\right]|_N$     weak velocity(4) dpc
+\right]|_N$
 
-$p_{m,a,1}=0,\;\;\;p_{m,a,2}=10^5$
+$p_{m,a,1}=0$ is the imposed velocity, in $m.s^{-1}$, and $p_{m,a,2}=10^5$ is the strength with which this velocity is imposed.
 
 $\left. -h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_N =
 \left. \left[
@@ -9022,17 +9089,19 @@ c_{m,a,6} \max \left(
 
 $c_{m,a,3} = 0$, $c_{m,a,6} = -1$
 
-\paragraph{West}
+\subsubsection{West}
 
-$z_a=0$, $p_{m,a,1} = 0$
+\underline{If $z_a = 0$}, $p_{m,a,1} = 0$
 
-$z_a \neq 0$, $p_{m,a,1} = 1$
+\underline{If $z_a \neq 0$}, $p_{m,a,1} = 1$
+
+{\em Imposing the b2stbc\_spb style boundary condition on the velocity:} {\tt BCMOM = 13}
 
 $ \left. h_z \frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_W = \left. \left[
 	p_{m,a,1} \frac{u_{big}}{\epsilon^2} V_{West} m_a n_a -
 	\frac{u_{big}}{\epsilon^2} h_z \frac{\sqrt g}{h_x} |b_x| m_a n_a V_{\parallel a}
 \right]
-\right|_W$ \ \ \ \ \ BCMOM = 13
+\right|_W$
 
 $V_{West} =
 - h_z \frac{\sqrt g}{h_x} \frac{|b_x|}{b_x} V_{ax}^{(E \times B)}
@@ -9040,23 +9109,29 @@ $V_{West} =
 \sqrt{\frac{\sum \limits_{a=0}^{ns-1} p_a}
 {\sum \limits_{a=0}^{ns-1} m_a n_a}}$
 
-$z_a = 0$, specified parallel velocity(1) dpc
+\underline{If $z_a = 0$}
+
+{\em Imposing a specified parallel velocity:} {\tt BCMOM = 1}
 
 $\left. \frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_W = \left. \left[
 	u_{big} n_{e00} a_{m, a} \frac{\sqrt{g}}{h_x} p_{m,a,1} -
 	u_{big} n_{e00} a_{m, a} \frac{\sqrt{g}}{h_x} V_{\parallel a}
 \right]
-\right|_W$, $p_{m,a,1}=0$, $u_{big} = 10^{18}$, $n_{e00} = 10^{20}$, dpc
+\right|_W$
 
-$z_a \neq 0$, sheath velocity (3) dpc
+$p_{m,a,1}=0$ is the imposed velocity in $m.s^{-1}$, $u_{big} = 10^{18}$, $n_{e00} = 10^{20}$
 
-$p_{m,a,2} < 0.5$, sound\_model = 0,
+\underline{If $z_a \neq 0$}
+
+{\em Imposing a sheath velocity boundary condition:} {\tt BCMOM = 3}
+
+If $p_{m,a,2} < 0.5$:
 
 $\left. \frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_W = \left. \left[
 	-\frac{u_{big}}{\epsilon^2}  n_a m_a \frac{\sqrt{g}}{h_x} u_{p_{out}}
 	-\frac{u_{big}}{\epsilon^2}  n_a m_a \frac{\sqrt{g}}{h_x} V_{\parallel a}
 \right]
-\right|_W$, dpc
+\right|_W$
 
 %-------- end of 28th page -------------
 
@@ -9064,19 +9139,23 @@ $p_{m,a,1} = 1$, $p_{m,a,2} = 0$, $u_{big} = 10^{18}$, $n_{e00} = 10^{20}$, $\ep
 
 $u_{p_{out}} = \max \left\{ 0, \frac{u_{u_{out}}}{b_x} + \frac{u_a^{(dia)}}{b_x}  \right\}$,
 $u_{u_{out}} = p_{m,a,1} c_s |b_x|$,
-$c_s = \sqrt{\frac{\sum \limits_{a=0}^{ns-1} p_a}{\sum \limits_{a=0}^{ns-1} m_a n_a}}$,
+$c_s = \sqrt{\frac{\sum \limits_{a=0}^{ns-1} p_a}{\sum \limits_{a=0}^{ns-1} m_a n_a}}$
 
-\paragraph{East}
+\subsubsection{East}
 
-$z_a=0$, $p_{m,a,1} = 0$
+\underline{If $z_a = 0$}, $p_{m,a,1} = 0$
 
-$z_a \neq 0$, $p_{m,a,1} = 1$
+\underline{If $z_a \neq 0$}
+
+{\em Imposing the b2stbc\_spb style boundary condition for parallel velocity:} {\tt BCMOM = 13}
+
+$p_{m,a,1} = 1$
 
 $\left. -h_z \frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_E = \left. \left[
 	p_{m,a,1} \frac{u_{big}}{\epsilon^2} V_{East} m_a n_a -
 	\frac{u_{big}}{\epsilon^2} h_z \frac{\sqrt g}{h_x} |b_x| m_a n_a V_{\parallel a}
 \right]
-\right|_W$ \ \ \ \ \ BCMOM = 13
+\right|_W$
 
 $V_{East} =
 - h_z \frac{\sqrt g}{h_x} \frac{|b_x|}{b_x} V_{ax}^{(E \times B)}
@@ -9084,39 +9163,45 @@ $V_{East} =
 \sqrt{\frac{\sum \limits_{a=0}^{ns-1} p_a}
 {\sum \limits_{a=0}^{ns-1} m_a n_a}}$
 
-$z_a = 0$, specified parallel velocity(1) dpc
+\underline{If $z_a = 0$}
+
+{\em Imposing a specified parallel velocity:} {\tt BCMOM = 1}
 
 $\left. -\frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_E = \left. \left[
 	u_{big} n_{e00} a_{m, a} \frac{\sqrt{g}}{h_x} p_{m,a,1} -
 	u_{big} n_{e00} a_{m, a} \frac{\sqrt{g}}{h_x} V_{\parallel a}
 \right]
-\right|_E$, $p_{m,a,1}=0$, $u_{big} = 10^{18}$, $n_{e00} = 10^{20}$, dpc
+\right|_E$
 
-$z_a \neq 0$, sheath velocity (3) dpc
+$p_{m,a,1}=0$ is the imposed parallel velocity in $m.s^{-1}$, $u_{big} = 10^{18}$, $n_{e00} = 10^{20}$
 
-$p_{m,a,2} < 0.5$, sound\_model = 0,
+\underline{If $z_a \neq 0$}
+
+{\em Imposing a sheath velocity boundary condition:} {\tt BCMOM = 3}
+
+If $p_{m,a,2} < 0.5$:
 
 $\left. -\frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_E = \left. \left[
 	-\frac{u_{big}}{\epsilon^2}  n_a m_a \frac{\sqrt{g}}{h_x} u_{p_{out}}
 	-\frac{u_{big}}{\epsilon^2}  n_a m_a \frac{\sqrt{g}}{h_x} V_{\parallel a}
 \right]
-\right|_E$, dpc
+\right|_E$
 
 $p_{m,a,1} = 1$, $p_{m,a,2} = 0$, $u_{big} = 10^{18}$, $n_{e00} = 10^{20}$, $\epsilon = 10^{-10}$
 
 $u_{p_{out}} = \max \left\{ 0, \frac{u_{u_{out}}}{b_x} - \frac{u_a^{(dia)}}{b_x}  \right\}$,
 $u_{u_{out}} = p_{m,a,1} c_s |b_x|$,
-$c_s = \sqrt{\frac{\sum \limits_{a=0}^{ns-1} p_a}{\sum \limits_{a=0}^{ns-1} m_a n_a}}$,
+$c_s = \sqrt{\frac{\sum \limits_{a=0}^{ns-1} p_a}{\sum \limits_{a=0}^{ns-1} m_a n_a}}$
 
 %-------- end of 29th page -------------
 
-\subsubsection{Current continuity equation}
+\subsection{Current continuity equation}
 
 $S_{ch} = S_{ch,0} + S_{ch,1} \Phi + S_{ch,2} n_e + S_{ch,3} n_e \Phi$
 
-\paragraph{South. Private region}
+\subsubsection{South. Private region}
 
-$\left. \frac{\sqrt{g}}{h_y} j_y \right|_{S_0} = 0$, dpc
+$\left. \frac{\sqrt{g}}{h_y} j_y \right|_{S_0} = 0$
 
 \begin{equation*}
 \begin{matrix}
@@ -9134,7 +9219,7 @@ $\left. \frac{\sqrt{g}}{h_y} j_y \right|_{S_0} = 0$, dpc
 \end{matrix}
 \end{equation*}
 
-\paragraph{South 1. Core}
+\subsubsection{South 1. Core}
 
 \begin{equation*}
 \begin{matrix}
@@ -9150,8 +9235,6 @@ $\left. \frac{\sqrt{g}}{h_y} j_y \right|_{S_0} = 0$, dpc
 \end{matrix} \right.
 \end{matrix}
 \end{equation*}
-
-$\left\langle \widetilde j_y^{(dia)} \right\rangle$ ?, dpc
 
 \begin{equation*}
 \begin{matrix}
@@ -9173,7 +9256,8 @@ $\left\langle \widetilde j_y^{(dia)} \right\rangle$ ?, dpc
 \left\langle \widetilde j_y^{(dia)} \right\rangle =
 - \frac{
 	B_z \left\langle
-		\sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}} n_a \left(
+		\sum \limits^{ns-1}_{\substack{a = 0, \\
+                        z_a \neq 0}} n_a \left(
 			z_a T_e + T_i
 		\right)
 	\right\rangle
@@ -9187,12 +9271,12 @@ $\left\langle \widetilde j_y^{(dia)} \right\rangle$ ?, dpc
 - \frac{B_z}{2}
 \frac{\partial}{h_x \partial x}
 \left( \frac{1}{B^2} \right)
-\sum \limits^{ns-1}_{\substack{a = 1, \\ z_a \neq 0}} m_a n_a \left\langle
-	V^2_{a \parallel}
+\sum \limits^{ns-1}_{\substack{a = 1, \\
+    z_a \neq 0}} m_a n_a \left\langle V^2_{a \parallel}
 \right\rangle,
 \end{equation*}
 
-\paragraph{North}
+\subsubsection{North}
 
 \begin{equation*}
 \begin{matrix}
@@ -9209,8 +9293,6 @@ $\left\langle \widetilde j_y^{(dia)} \right\rangle$ ?, dpc
 \end{matrix}
 \end{equation*}
 
-$\left\langle \widetilde j_y^{(dia)} \right\rangle$ ?, dpc
-
 %-------- end of 30th page -------------
 
 \begin{equation*}
@@ -9221,15 +9303,16 @@ $\left\langle \widetilde j_y^{(dia)} \right\rangle$ ?, dpc
 0, & facdrift = 0 \\
 \left. - \frac{\sqrt{g}}{h_y}
 \left(
-	\widetilde j_y^{(dia)} + j_y^{(in)} + \widetilde j_y^{(vis \parallel)} + j_y^{(vis \perp)}
-	+ \widetilde j_y^{(visq)} + \widetilde j_y^{(s)}
+	\widetilde j_y^{(dia)} + j_y^{(in)} +
+        \widetilde j_y^{(vis \parallel)} + j_y^{(vis \perp)} +
+	\widetilde j_y^{(visq)} + \widetilde j_y^{(s)}
 \right) \right|_N
 , & facdrift \neq 0 \\
 \end{matrix} \right.
 \end{matrix}
 \end{equation*}
 
-\paragraph{West} 
+\subsubsection{West} 
 
 \begin{small}
 $\left. \frac{\sqrt g}{h_x} j_x \right|_W =
@@ -9249,16 +9332,17 @@ $\left. \frac{\sqrt g}{h_x} j_x \right|_W =
 \right] \right|_W$, old form
 \end{small}
 
-sheath potential bc (3)
+{\em Imposing a sheath potential boundary condition:} {\tt BCPOT = 3}
 
 $\left. \frac{\sqrt g}{h_x} j_x \right|_W =
 \frac{\sqrt g}{h_x} e \left. \left[
 	\sum \limits_{b=0}^{ns-1} z_a \Gamma_{ax} +
 	\left( 1 - \gamma_e \right) |b_x| n_e \frac 1{\sqrt{2\pi}}
-	\sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2}\right)}{T_e} \right)
-\right] \right|_W$, dpc
+	\sqrt{\frac{T_e}{m_e}}
+        \exp \left( -\frac{e \left( \Phi - p_{\Phi,2}\right)}{T_e} \right)
+\right] \right|_W$
 
-\paragraph{East}
+\subsubsection{East}
 
 \begin{small}
 $\left. -\frac{\sqrt g}{h_x} j_x \right|_E =
@@ -9280,22 +9364,25 @@ $\left. -\frac{\sqrt g}{h_x} j_x \right|_E =
 
 $c_{ch,7} = 1 - \gamma_e $,  $c_{ch,6} = 1$
 
-sheath potential bc (3)
+{\em Imposing a sheath potential boundary condition:} {\tt BCPOT = 3}
 
 $\left. -\frac{\sqrt g}{h_x} j_x \right|_E =
 \frac{\sqrt g}{h_x} e \left. \left[
 	-\sum \limits_{a=0}^{ns-1} z_a \Gamma_{ax} +
 	\left( 1 - \gamma_e \right) |b_x| n_e \frac 1{\sqrt{2\pi}}
-	\sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2}\right)}{T_e} \right)
-\right] \right|_E$, dpc
+	\sqrt{\frac{T_e}{m_e}} 
+        \exp \left( -\frac{e \left( \Phi - p_{\Phi,2}\right)}{T_e} \right)
+\right] \right|_E$
 
 %-------- end of 31st page -------------
 
-\subsubsection{Energy balance equation for electrons}
+\subsection{Energy balance equation for electrons}
 
 $S_{h_e} = S_{h_e,0} + S_{h_e,1} T_e + S_{h_e,2} n_e + S_{h_e,3} n_e T_e$
 
-\paragraph{South. Private region}
+\subsubsection{South. Private region}
+
+{\em Imposing the b2stbc\_spb style boundary condition:} {\tt BCENE = 11}
 
 $\left. \frac{\sqrt g}{h_y} \widetilde q_{ey} \right|_{S_0} = \left. \left[
 	\left(
@@ -9305,14 +9392,15 @@ $\left. \frac{\sqrt g}{h_y} \widetilde q_{ey} \right|_{S_0} = \left. \left[
 	c_{h_e,7} \max \left(
 		0, -\frac{\sqrt g}{h_y} \widetilde f_{ey}
 	\right) T_e - q_{ex}^{P.Sch}
-\right] \right|_{S_0}$, bcene=11
+\right] \right|_{S_0}$
 
 $c_{h_e,2} = -10^{-4}$,  $c_{h_e,7} = -1$,  $c_{h_e,2} \rightarrow p_{h_e,2} = -10^{-4}$,  $c_{h_e,7} \rightarrow p_{h_e,1} = -1$
 
+{\em Imposing a decay length for the electron temperature:} {\tt BCENE = 22}
 
-$\left. -\frac{\sqrt g}{h_y} k_{ey} \frac{\partial T_e}{h_y \partial y} \right|_{S_0} = \left. \left[ \left( p_{h_e,1} \frac{\sqrt g}{h_y}\sqrt{\frac{T_e}{m_e}} \right) T_e n_e \right] \right|_{S_0}$, bcene=22
+$\left. -\frac{\sqrt g}{h_y} k_{ey} \frac{\partial T_e}{h_y \partial y} \right|_{S_0} = \left. \left[ \left( p_{h_e,1} \frac{\sqrt g}{h_y}\sqrt{\frac{T_e}{m_e}} \right) T_e n_e \right] \right|_{S_0}$
 
-BCENE=9 (electron temperature decay length)
+{\em Imposing a decay length for the electron temperature:} {\tt BCENE=9}
 
 \begin{equation*}
 \begin{matrix}
@@ -9343,8 +9431,10 @@ BCENE=9 (electron temperature decay length)
 \end{matrix}
 \end{equation*}
 
-\paragraph{South 1. Core}
+\subsubsection{South 1. Core}
 
+{\em Imposing a total electron energy flux:} {\tt BCENE = 8}
+ 
 $\left. \frac{\sqrt g}{h_y} \widetilde q_{ey} \right|_{S_1} = \left. \left[
 	\left(
 		c_{h_e,0} \frac{\sqrt g}{h_y}
@@ -9355,15 +9445,16 @@ $\left. \frac{\sqrt g}{h_y} \widetilde q_{ey} \right|_{S_1} = \left. \left[
 
 $c_{h_e,0} = 4 \cdot 10^{13}$,  $c_{h_e,a,1} = -10^{30}$,
 
-total electron energy flux (8)
-
 $\left. \frac{\sqrt g}{h_y} q_{ey} \right|_{S_1} = p_{h_e,1} \left. \frac{
 	\frac{\sqrt g}{h_y}}
 	{\sum \limits_{core} \left( \frac{\sqrt g}{h_y} \right)}
-\right|_{S_1},
-\;\;p_{h_e,1} = 8 \cdot 10^5$, dpc
+\right|_{S_1}$
 
-\paragraph{North}
+$p_{h_e,1} = 8 \cdot 10^5$ is the imposed total electron energy flux, in $W$.
+
+\subsubsection{North}
+
+{\em Imposing the b2stbc\_spb style boundary condition:} {\tt BCENE = 11}
 
 $\left. -\frac{\sqrt g}{h_y} \widetilde q_{ey} \right|_N = \left. \left[
 	\left(
@@ -9373,21 +9464,24 @@ $\left. -\frac{\sqrt g}{h_y} \widetilde q_{ey} \right|_N = \left. \left[
 	c_{h_e,7} \max \left(
 		0, \frac{\sqrt g}{h_y} \widetilde f_{ey}
 	\right) T_e - q_{ex}^{P.Sch}
-\right] \right|_N$, bcene=11
+\right] \right|_N$
 
 %-------- end of 32nd page -------------
 
 $c_{h_e,2} = -10^{-4}$,  $c_{h_e,7} = -1$
 
+{\em Imposing a decay length for electron temperature:} {\tt BCENE = 22}
 
-$\left. \frac{\sqrt g}{h_y} k_{ey} \frac{\partial T_e}{h_y \partial y} \right|_N = \left. \left[ \left( p_{h_e,1} \frac{\sqrt g}{h_y}\sqrt{\frac{T_e}{m_e}} \right) T_e n_e \right] \right|_N$, bcene=22
+$\left. \frac{\sqrt g}{h_y} k_{ey} \frac{\partial T_e}{h_y \partial y} \right|_N = \left. \left[ \left( p_{h_e,1} \frac{\sqrt g}{h_y}\sqrt{\frac{T_e}{m_e}} \right) T_e n_e \right] \right|_N$
 
-BCENE=9 (electron temperature decay length) $p_{h_e,1} = 10^{-2}$
+{\em Imposing a decay length for electron temperature:} {\tt BCENE = 9}
+
+$p_{h_e,1} = 10^{-2}$ is the radial electron temperature decay length, in $m$.
 
 \begin{tiny}
 \begin{equation*}
 \begin{matrix}
-\left. -frac{\sqrt g}{h_y} \widetilde q_{ey} \right|_{N}= &
+\left. -\frac{\sqrt g}{h_y} \widetilde q_{ey} \right|_{N}= &
 & \left\{
 \begin{matrix}
 \left. \left[
@@ -9415,9 +9509,11 @@ BCENE=9 (electron temperature decay length) $p_{h_e,1} = 10^{-2}$
 \end{equation*}
 \end{tiny}
 
-\paragraph{West}
+\subsubsection{West}
 
-bcene\_15\_style.eq.0
+{\em Imposing the b2stbc\_spb style boundary condition for electron temperature:} {\tt BCENE = 15}
+
+If bcene\_15\_style.eq.0:
 	
 $\left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \left. \left[
 	-\left(
@@ -9431,7 +9527,7 @@ $\left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \left. \left[
 	\right)
 	-
 	\frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
-\right] \right|_W$ bcene=15
+\right] \right|_W$
 
 $\left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \left. \left[
 	-\left(
@@ -9445,9 +9541,9 @@ $\left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \left. \left[
 	\right) T_e
 	-
 	\frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
-\right] \right|_W$ bcene=15
+\right] \right|_W$
 
-bcene\_15\_style.eq.1
+If bcene\_15\_style.eq.1:
 
 $\left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \left. \left[
 	-\frac{\sqrt g}{h_x} |b_x| \left(
@@ -9457,14 +9553,13 @@ $\left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \left. \left[
 	\sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \Phi}{T_e} \right)
 	-
 	\frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
-\right] \right|_W$, bcene=15
+\right] \right|_W$
 
+{\em Imposing the sheath boundary condition for electron temperature:} {\tt BCENE = 3}
 
-sheath electron (3)
+If $p_{m,a_{main},2} < 0.5$:
 
-$p_{m,a_{main},2} < 0.5$, sound\_model = 0
-
-if $p_{h_e,1} > 0$ then
+If $p_{h_e,1} > 0$ then
 
 $\left. \frac{\sqrt g}{h_x} q_{ex} \right|_W = \left[
 	p_{h_e,1} + e\frac{\Phi - p_{\Phi,2}}{T_e}
@@ -9472,8 +9567,9 @@ $\left. \frac{\sqrt g}{h_x} q_{ex} \right|_W = \left[
 \frac{\sqrt g}{h_x} \nu_{e_{out}} T_e
 - \left.
 \frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
-\right|_W,
-\;\;\;\;\;p_{h_e,1} = 0.9,\;\;\;\;\; p_{\Phi,2} = 0,$
+\right|_W$
+
+$p_{h_e,1} = 0.9$, $p_{\Phi,2} = 0$ is the applied electric potential at the target, in $V$.
 
 %-------- end of 33rd page -------------
 
@@ -9487,9 +9583,11 @@ c_s = \sqrt{\frac{\sum \limits_{a=0}^{ns-1} p_a}{\sum \limits_{a=0}^{ns-1} m_a n
 
 endif
 
-\paragraph{East}
+\subsubsection{East}
 
-bcene\_15\_style.eq.0
+{\em Imposing the b2stbc\_spb style boundary condition for electron temperature:} {\tt BCENE = 15}
+
+If bcene\_15\_style.eq.0:
 	
 $\left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \left. \left[
 	-\left(
@@ -9503,7 +9601,7 @@ $\left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \left. \left[
 	\right)
 	+
 	\frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
-\right] \right|_E$ bcene=15
+\right] \right|_E$
 
 $\left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \left. \left[
 	-\left(
@@ -9517,9 +9615,9 @@ $\left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \left. \left[
 	\right) T_e
 	+
 	\frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
-\right] \right|_E$ bcene=15
+\right] \right|_E$
 
-bcene\_15\_style.eq.1
+If bcene\_15\_style.eq.1:
 
 $\left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \left. \left[
 	-\frac{\sqrt g}{h_x} |b_x| \left(
@@ -9529,13 +9627,13 @@ $\left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \left. \left[
 	\sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \Phi}{T_e} \right)
 	+
 	\frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
-\right] \right|_E$, bcene=15
+\right] \right|_E$
 
-sheath electron (3)
+{\em Imposing the sheath boundary condition for electron temperature:} {\tt BCENE = 3}
 
-$p_{m,a_{main},2} < 0.5$, sound\_model =0,
+If $p_{m,a_{main},2} < 0.5$:
 
-if $p_{h_e,1} > 0$ then
+If $p_{h_e,1} > 0$ then
 
 $\left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = -\left[
 	p_{h_e,1} + e\frac{\Phi - p_{\Phi,2}}{T_e}
@@ -9543,8 +9641,9 @@ $\left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = -\left[
 \frac{\sqrt g}{h_x} \nu_{e_{out}} T_e
 + \left.
 \frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
-\right|_E,
-\;\;\;\;\;p_{h_e,1} = 0.9,\;\;\;\;\; p_{\Phi,2} = 0,$
+\right|_E$
+
+$p_{h_e,1} = 0.9$, $p_{\Phi,2} = 0$ is the applied electric potential at the target, in $V$.
 
 $\nu_{e_{out}} = max \left\{
 	0,u_{u_{out}} n_e - \frac{j_x}e
@@ -9558,15 +9657,19 @@ endif
 
 %-------- end of 34th page -------------
 
-\subsubsection{Energy balance equation for ions}
+\subsection{Energy balance equation for ions}
 
 $S_{h_i} = S_{h_i,0} + S_{h_i,1} T_i + S_{h_i,2} n_i + S_{h_i,3} n_i T_i$
 
-\paragraph{South. Private region}
+\subsubsection{South. Private region}
 
-$p_{h_i,1} = 10^{-2}$, $e_{rec,0} = 0$, $e_{rec,1} = 0.3$, $c_{rec,0,0} = 0$, $c_{rec,1,0} = 1$
+{\em Imposing a decay length for the ion temperature:} {\tt BCENI = 9}
 
-BCENE=9 (ion temperature decay length)
+$p_{h_i,1} = 10^{-2}$ is the radial ion temperature decay length, in $m$.
+
+$e_{rec,0} = 0$ and $e_{rec,1} = 0.3$ are energy recycling coefficients.
+
+$c_{rec,0,0} = 0$ and $c_{rec,1,0} = 1$ are particle recycling coefficients.
 
 \begin{tiny}
 \begin{equation*}
@@ -9627,21 +9730,29 @@ c_{rec,a,0} c_{nsr} \max \left\{
 \end{equation*}
 \end{tiny}
 
+{\em Imposing a constant ion temperature:} {\tt BCENI = 21}
+
 $\left. \frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_{S_0}
 = \left.
 p_{h_i,2} \sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}} \left(
 	\frac{\sqrt g}{h_y} n_a \sqrt{\frac{z_a T_e + T_i}{m_a}}
 \right) T_i \right|_{S_0} + \left.
 p_{h_i,1} \max \left\{0, -\frac{\sqrt g}{h_y} \widetilde f_y^{(E)} \right\} T_i
-\right|_{S_0}$, bceni=21
+\right|_{S_0}$
 
 $p_{h_i,1} = -1$, $p_{h_i,2} = -10^{-2}$
+
+{\em Imposing a decay length for the ion temperature:} {\tt BCENI = 22}
 
 $\left. -\frac{\sqrt g}{h_y} k_{iy} \frac{\partial T_i}{h_y \partial y} \right|_{S_0}
 = \left.
 p_{h_i,1} \sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}} \left(
 	\frac{\sqrt g}{h_y} n_a \sqrt{\frac{z_a T_e + T_i}{m_a}}
-\right) T_i \right|_{S_0}$, bceni=22
+\right) T_i \right|_{S_0}$
+
+$p_{h_i,1}$ is the imposed ion temperature decay length, in $m$.
+
+{\em b2stbc\_spb boundary condition:}
 
 $\left. \frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_{S_0}
 = \left.
@@ -9649,22 +9760,23 @@ $\left. \frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_{S_0}
 	c_{h_i,a,2} \frac{\sqrt g}{h_y} \frac{n_a}{n_i} \sqrt{\frac{z_a T_e + T_i}{m_a}}
 \right) n_i T_i \right|_{S_0}
 + \left.
-c_{h_i,0,7} \max \left\{0, -\frac{\sqrt g}{h_y} \widetilde f_{iy} \right\} T_i
-\right|_{S_0}$, b2stbc\_spb
+c_{h_i,a,7} \max \left\{0, -\frac{\sqrt g}{h_y} \widetilde f_{iy} \right\} T_i
+\right|_{S_0}$
 
 $c_{h_i,a,2} = -10^{-2}$
 
-\paragraph{South 1. Core}
+\subsubsection{South 1. Core}
 
-total ion energy flux (8)
+{\em Imposing a total ion energy flux:} {\tt BCENI = 8}
 
 %-------- end of 35th page -------------
 
 $\left. \frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_{S_1} = \left. p_{h_i,1} \frac{
 	\frac{\sqrt g}{h_y}}
 	{\sum \limits_{core} \left( \frac{\sqrt g}{h_y} \right)}
-\right|_{S_1},
-\;\;p_{h_i,1} = 8 \cdot 10^5$, dpc
+\right|_{S_1}$
+
+$p_{h_i,1} = 8 \cdot 10^5$ is the imposed total ion energy flux, in $W$.
 
 $\left. \frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_{S_1} =
 \sum \limits_{a=0}^{ns-1}
@@ -9676,13 +9788,17 @@ $\left. \frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_{S_1} =
 	\right)
 \right] \right|_{S_1}$
 
-$c_{h_i,a,0} = 4 \cdot 10^{13}$, $c_{h_i,a,1} = -10^{30}, a=0.1$,
+$c_{h_i,a,0} = 4 \cdot 10^{13}$, $c_{h_i,a,1} = -10^{30}, a=0.1$.
 
-\paragraph{North}
+\subsubsection{North}
 
-BCENE = 9 (electron temperature decay length)
+{\em Imposing an ion temperature decay length:} {\tt BCENE = 9}
 
-$p_{h_i,1} = 10^{-2}$, $e_{rec,0} = 0$, $e_{rec,1} = 0.3$, $c_{rec,0,0} = 0$, $c_{rec,1,0} = 1$
+$p_{h_i,1} = 10^{-2}$ is the radial ion temperature decay length, in $m$.
+
+$e_{rec,0} = 0$ and $e_{rec,1} = 0.3$ are energy recycling coefficients.
+
+$c_{rec,0,0} = 0$ and $c_{rec,1,0} = 1$ are particle recycling coefficients.
 
 \begin{tiny}
 \begin{equation*}
@@ -9769,6 +9885,7 @@ c_{rec,a,0} c_{nsr} \max \left\{
 \end{equation*}
 \end{tiny}
 
+{\em Boundary condition from b2stbc\_spb:} {\tt BCENI = 21}
 
 $\left. -\frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_N
 = \left.
@@ -9777,15 +9894,21 @@ p_{h_i,2} \sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}} \left(
 \right) T_i \right|_N
 + \left.
 p_{h_i,1} \max \left\{0, -\frac{\sqrt g}{h_y} \widetilde f_{iy} \right\} T_i
-\right|_N$, bceni=21
+\right|_N$
 
 $p_{h_i,1} = -1$, $p_{h_i,2} = 10^{-2}$
+
+{\em Prescribing a decay length for the ion temperature:} {\tt BCENI = 22}
 
 $\left. \frac{\sqrt g}{h_y} k_{iy} \frac{\partial T_i}{h_y \partial y} \right|_N
 = \left.
 p_{h_i,1} \sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}} \left(
 	\frac{\sqrt g}{h_y} n_a \sqrt{\frac{z_a T_e + T_i}{m_a}}
-\right) T_i \right|_N$, bceni=22
+\right) T_i \right|_N$
+
+$p_{h_i,1}$ is the imposed ion temperature decay length, in $m$.
+
+{\em Boundary condition in b2stbc\_spb:}
 
 $\left. -\frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_N
 = \left.
@@ -9793,14 +9916,16 @@ $\left. -\frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_N
 	c_{h_i,a,2}  \frac{\sqrt g}{h_y} \frac{n_a }{n_i} \sqrt{\frac{z_a T_e + T_i}{m_a}}
 \right) n_i T_i \right|_N
 + \left.
-c_{h_i,0,7} \max \left\{0, -\frac{\sqrt g}{h_y} \widetilde f_{iy} \right\} T_i
-\right|_N$, b2stbc\_spb
+c_{h_i,a,7} \max \left\{0, -\frac{\sqrt g}{h_y} \widetilde f_{iy} \right\} T_i
+\right|_N$
 
 %-------- end of 36th page -------------
 
 $c_{h_i,a,2} = -10^{-2}$
 
-\paragraph{West}
+\subsubsection{West}
+
+{\em Boundary condition from b2stbc\_spb:} {\tt BCENI = 15}
 
 $\left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W = \left.
 \frac{\sqrt g}{h_x} |b_x|
@@ -9808,11 +9933,11 @@ $\left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W = \left.
 \sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}} n_a
 -
 \frac{\sqrt g}{h_x} q_{ix}^{P.Sch}
-\right|_W$ bceni=15
+\right|_W$
 
-sheath ion (3), BCENI = 3
+{\em Imposing a sheath ion boundary condition:} {\tt BCENI = 3}
 
-$p_{m,a_{main},2} < 0.5$, sound\_model = 0,
+If $p_{m,a_{main},2} < 0.5$:
 
 \begin{small}
 \begin{equation*}
@@ -9854,9 +9979,9 @@ $u_{p_{out}} = \max \left\{
 	0, \frac{u_{u_{out}}}{b_x} + \frac{u_{1,x}^{(dia)}}{b_x}
 \right\}$
 
-$u_{u_{out}} = p_{m,a_{main},1} c_s |b_x|$, $c_s = \sqrt{\frac{\sum \limits_{a=0}^{ns-1} p_a}{\sum \limits_{a=0}^{ns-1} m_a n_a}}$, $p_{m,a_{main},1} = 1.0$, \\\\ $p_{m,a_{main},1} = 1.0$
+$u_{u_{out}} = p_{m,a_{main},1} c_s |b_x|$, $c_s = \sqrt{\frac{\sum \limits_{a=0}^{ns-1} p_a}{\sum \limits_{a=0}^{ns-1} m_a n_a}}$, \\\\ $p_{m,a_{main},1} = 1.0$
 
-if neutrals\_namelist.eq.1.or.use\_eirene.ne.0
+If neutrals\_namelist.eq.1.or.use\_eirene.ne.0
 then $e_{rec,0} = 0$, $e_{rec,1} = 0.3$, $c_{rec,0,0} = 0$, $c_{rec,1,0} = 1$
 
 else $c_{rec,0,0} = 0$, $c_{rec,1,0} = 1$, $c_{rec,0,1} = 0$, $c_{rec,1,1} = 0.3$
@@ -9869,7 +9994,9 @@ $p_{h_i,2} = 10^{-3}$ with drifts, should be $p_{h_i,2} = 0$
 
 %-------- end of 37th page -------------
 
-\paragraph{East}
+\subsubsection{East}
+
+{\em Imposing a b2stbc\_spb style boundary condition:} {\tt BCENI = 15}
 
 $\left. -\frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_E = \left.
 p_{h_i,1} \frac{\sqrt g}{h_x} |b_x|
@@ -9877,7 +10004,9 @@ p_{h_i,1} \frac{\sqrt g}{h_x} |b_x|
 \sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}} n_a
 -
 \frac{\sqrt g}{h_x} q_{ix}^{P.Sch}
-\right|_E$ bceni=15
+\right|_E$
+
+{\em Boundary condition from b2stbc\_spb:}
 
 $\left. -\frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_E =
 \sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}}
@@ -9890,13 +10019,13 @@ $\left. -\frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_E =
 	\right) n_i T_i
 	+
 	\frac{\sqrt g}{h_x} q_{ix}^{P.Sch}
-\right] \right|_E$ b2stbc\_spb
+\right] \right|_E$
 
 $p_{h_i,i} = 1.5$
 
-sheath ion (3)
+{\em Imposing a sheath ion boundary condition:} {\tt BCENI = 3}
 
-$p_{m,a_{main},2} < 0.5$, sound\_model = 0,
+If $p_{m,a_{main},2} < 0.5$:
 
 \begin{small}
 \begin{equation*}
@@ -9940,7 +10069,7 @@ $u_{p_{out}} = \max \left\{
 
 $u_{u_{out}} = p_{m,a_{main},1} c_s |b_x|$, $c_s = \sqrt{\frac{\sum \limits_{a=0}^{ns-1} p_a}{\sum \limits_{a=0}^{ns-1} m_a n_a}}$, $p_{m,a_{main},1} = 1.0$
 
-if neutrals\_namelist.eq.1.or.use\_eirene.ne.0
+If neutrals\_namelist.eq.1.or.use\_eirene.ne.0
 then $e_{rec,0} = 0$, $e_{rec,1} = 0.3$, $c_{rec,0,0} = 0$, $c_{rec,1,0} = 1$
 
 else  $c_{rec,0,0} = 0$, $c_{rec,1,0} = 1$, $c_{rec,0,1} = 0$, $c_{rec,1,1} = 0.3$
@@ -9952,7 +10081,7 @@ $p_{h_i,2} = 0$, without drifts
 $p_{h_i,2} = 10^{-3}$ with drifts, should be $p_{h_i,2} =0$,
 %-------- end of 38th page -------------
 
-\paragraph{Appendix}
+\section{Parallel viscosity}
 
 Old form of  $\left( \nabla \pi_a^{\parallel}\right)_{\parallel}$ was
 
@@ -9989,7 +10118,7 @@ Old form of  $\left( \nabla \pi_a^{\parallel}\right)_{\parallel}$ was
 
 Contribution from anomalous viscosity was contained in l.h.s.
 
-Because of  $\eta_{ANa} \ll \widetilde{\widetilde{\eta}}_{CLax}$, $\eta_{ax} \approx \widetilde{\widetilde{\eta}}_{CLax}$ and taking into account $B_x h_x h_y = \text{const}$
+Because of $\eta_{ANa} \ll \widetilde{\widetilde{\eta}}_{CLax}$, $\eta_{ax} \approx \widetilde{\widetilde{\eta}}_{CLax}$ and taking into account $B_x h_x h_y = \text{const}$
 
 \begin{equation}\begin{split}
 -\frac 4 3 b_x B^{\frac 3 2} & \frac{\partial}{h_x \partial x} \left(
@@ -10037,7 +10166,7 @@ New form of $\left( \nabla \pi _a^{\parallel} \right)_{\parallel}$
 \end{matrix}
 \end{equation*}
 
-About scaling of residuals
+\section{Scaling of residuals}
 
 \begin{equation}
 \mbox{Continuity equation residual for species } a \mbox{:}
