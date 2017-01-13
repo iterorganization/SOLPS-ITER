@@ -2388,8 +2388,9 @@ which contains
   $s^{-1}$
   \item[9] prescribe the decay length for the density,
   {\tt CONPAR(,,1)} specifies the gradient length in $m$
-  \item[10] leakage option for density, {\tt CONPAR(,,1)} specifies
-  the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s,a} n_a$
+  \item[10] leakage option for density, recommended for cases with drifts,
+  {\tt CONPAR(,,1)} specifies the leakage factor,
+  $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s,a} n_a$
   \item[11] particle flux feedback boundary condition,
   {\tt CONPAR(,,1)} not used, derived from {\tt CBSNA(0,IS,IREG)}.
   The species used must be declared using the {\tt b2stbc\_isfeedback} switch.
@@ -2405,8 +2406,8 @@ which contains
   {\tt CONPAR(,,2)} is the strength of the feedback.
   \item[14] sound speed velocity flux,
   {\tt CONPAR(,,1)} is a multiplier to the outgoing sound speed $C_{s, \mbox{collective}}$.
-  \item[15] prescribe the decay length for the density with drifts switched on,
-  {\tt CONPAR(,,1)} specifies the gradient length in $m$
+  \item[15] prescribe a radial leakage velocity,
+  {\tt CONPAR(,,1)} specifies the leakage velocity in units of the local thermal velocity.
   \item[16] particle density to achieve specified total flux, used with ASTRA coupling. The total desired flux is summed over all {\tt BCCON=16} core boundaries.
   {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
   \item[18] prescribe total main ion particle flux, used with ASTRA coupling.
@@ -8536,7 +8537,9 @@ S^{no\_mdf}_{n_a,1} & = {p_{n_a,a,1}} \frac{\sqrt{g}}{h_y} \sqrt{\frac{z_a T_e +
 \end{align}
 
 % -- To be checked --
-{\tt BCCON = 15} is below
+{\em Imposing radial leakage:} {\tt BCCON = 15}
+
+When using drifts, one should use {\tt BCCON = 10} instead.
 
 \begin{equation}
 \left. -\frac{\sqrt g}{h_y^2} D_{ay}^n \frac{\partial n_a}{\partial y} \right|_{S_0}
@@ -8546,7 +8549,7 @@ c_{n_a,a,2} \frac{\sqrt g}{h_y} \sqrt{\frac{z_a T_e + T_i}{m_a}} n_a
 \right] \right|_{S_0}
 \end{equation}
 
-$c_{n_a,a,2} = -10^{-3}$
+$c_{n_a,a,2} = -10^{-3}$ is the radial leakage velocity, in units of the species local thermal velocity. Negative velocities are directed out of the plasma.
 
 % -- end --
 
@@ -8689,7 +8692,9 @@ S^{no\_mdf}_{n_a,1} & = {p_{n_a,a,1}} \frac{\sqrt{g}}{h_y} \sqrt{\frac{z_a T_e +
 \end{align}
 
 % -- To be checked --
-{\tt BCCON = 15} is below
+{\em Imposing radial leakage:} {\tt BCCON = 15}
+
+When using drifts, one should use {\tt BCCON = 10} instead.
 
 \begin{equation}
 \left. \frac{\sqrt g}{h_y^2} D_{ay}^n \frac{\partial n_a}{\partial y} \right|_N
@@ -8699,7 +8704,7 @@ c_{n_a,a,2} \frac{\sqrt g}{h_y} \sqrt{\frac{z_a T_e + T_i}{m_a}} n_a
 \right] \right|_N
 \end{equation}
 
-$c_{n_a, a, 2} = 10^{-3}$
+$c_{n_a,a,2} = 10^{-3}$ is the radial leakage velocity, in units of the species local thermal velocity. Negative velocities are directed out of the plasma.
 
 % -- end --
 
@@ -8820,24 +8825,6 @@ $c_{rec,0,0} = 0,\;\; c_{rec,1,0} = 1,\;\; p_{n_a,a,1} = 0 $
 
 $c_{n,a,7} = 1 $
 
-{\em Prescribe the average value of the density:} {\tt BCCON = 25}
-\begin{equation}
-\left. \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \right|_W
-=
-\left. \left[
-\min \left\{
-0, c_{n,a,7} \left(
--\frac{\sqrt g}{h_x} b_x V_{\parallel a} n_a -\frac{\sqrt g}{h_x} V_{ax}^{(E)} n_a
-\right)
-\right\}
--
-\frac{\sqrt g}{h_x} D_{axy} \frac{1}{h_y} \frac{\partial n_a T_i}{\partial y}
-\right]
-\right|_W
-\end{equation}
-
-$c_{n,a,7} = -1 $
-
 \subsubsection{East}
 
 \underline{If $z_a = 0$}
@@ -8898,25 +8885,6 @@ $c_{rec,0,0} = 0,\;\; c_{rec,1,0} = 1$
 \end{equation*}
 
 $c_{n,a,7} = 1 $
-
-{\em Imposing the average value of the density:} {\tt BCCON = 25}
-
-\begin{equation}
-\left. - \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \right|_E
-=
-\left. \left[
-\min \left\{
-0, c_{n,a,7} \left(
-\frac{\sqrt g}{h_x} b_x V_{\parallel a} n_a +\frac{\sqrt g}{h_x} V_{ax}^{(E)} n_a
-\right)
-\right\}
-+
-\frac{\sqrt g}{h_x} D_{axy} \frac{1}{h_y} \frac{\partial n_a T_i}{\partial y}
-\right]
-\right|_E
-\end{equation}
-
-$c_{n,1,7} = -1 $
 
 \subsection{Parallel momentum balance for ions}
 

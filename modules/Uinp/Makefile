@@ -98,8 +98,8 @@ all: VERSION ${OBJDIR}/${PROG} ${OBJDIR}/ub2p
 
 .PHONY: clean depend listobj tags echo VERSION force
 
-${OBJDIR}/${PROG}: ${OBJDIR}/uinput.o ${OBJDIR}/uiblkd.o ${OBJDIR}/uiblb2.o ${OBJDIR}/libui.a ${MNEXTRA} ${OBJDIR}/b2mod_layer.o ${OBJDIR}/b2mod_elements.o ${OBJDIR}/b2mod_constants.o ${OBJDIR}/libeirene.a ${OBJDIR}/libgr_dummy.a ${MAKES}
-	${FC} $(FFLAGS) -o ${OBJDIR}/${PROG} ${OBJDIR}/uinput.o ${OBJDIR}/uiblkd.o ${OBJDIR}/uiblb2.o ${OBJDIR}/libui.a ${OBJDIR}/libeirene.a ${OBJDIR}/libgr_dummy.a ${MNEXTRA} ${LDLIBS} $(LDEXTRA)
+${OBJDIR}/${PROG}: ${OBJDIR}/uinput.o ${OBJDIR}/uiblkd.o ${OBJDIR}/uiblb2.o ${OBJDIR}/libui.a ${MNEXTRA} ${OBJDIR}/b2mod_layer.o ${OBJDIR}/b2mod_elements.o ${OBJDIR}/b2mod_constants.o ${OBJDIR}/libeirene.a ${OBJDIR}/ioflush.o ${OBJDIR}/libgr_dummy.a ${MAKES}
+	${FC} $(FFLAGS) -o ${OBJDIR}/${PROG} ${OBJDIR}/uinput.o ${OBJDIR}/uiblkd.o ${OBJDIR}/uiblb2.o ${OBJDIR}/libui.a ${OBJDIR}/libeirene.a ${OBJDIR}/ioflush.o ${OBJDIR}/libgr_dummy.a ${MNEXTRA} ${LDLIBS} $(LDEXTRA)
 
 ${OBJDIR}/ub2p: ${OBJDIR}/ub2p.o ${OBJDIR}/libui.a ${MAKES} ${MNEXTRA}
 	${FC} $(FFLAGS) -o ${OBJDIR}/ub2p ${OBJDIR}/ub2p.o ${OBJDIR}/libui.a ${MNEXTRA} ${LDLIBS} $(LDEXTRA)
@@ -130,6 +130,9 @@ endif
 
 ${OBJDIR}/libeirene.a:
 	ln -sf ${EIROBJ}/libeirene.a ${OBJDIR}
+
+${OBJDIR}/ioflush.o:
+	ln -sf ${EIROBJ}/ioflush.o ${OBJDIR}
 
 ${OBJDIR}/libgr_dummy.a:
 	ln -sf ${EIROBJ}/libgr_dummy.a ${OBJDIR}
