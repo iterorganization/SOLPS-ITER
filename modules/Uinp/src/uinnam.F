@@ -17,7 +17,7 @@ c=======================================================================
 #include "impcon.inc"
       integer lunm,i,j,l,lusgm,lugpf,lugwt,luvsp,nprnl
       integer, save :: lupfr,luskel,luswch,lurefls
-      real (kind=R8) :: u
+      real (kind=R4) :: u
       parameter (lunm=163)
       character*8 unm(lunm),uun,ubs*1,uam*52
 c...                                                  52=48+4

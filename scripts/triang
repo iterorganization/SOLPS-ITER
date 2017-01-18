@@ -189,7 +189,7 @@ while true; do {
     { case "${u:-$q}" in
       ( h|H )                                               # help:
             echo "$Help"; break;;
-      ( u   )                                               # run uinp to produce the input for Eirene:
+      (  u  )                                               # run uinp to produce the input for Eirene:
             uinp
             N=
             [ -r fort.30 ] && q=e || {
@@ -201,7 +201,7 @@ while true; do {
               q=b
             }
             break;;  
-      ( U   )                                               # run uinp to produce the input for Eirene:
+      (  U  )                                               # run uinp to produce the input for Eirene:
             uinp -l
             [ -L uinput.dg ] && {
               TRIADIR=$TRIADIR_back

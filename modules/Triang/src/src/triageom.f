@@ -588,7 +588,7 @@ c loop over triangles (a) from tria
 c neighr(i,k).ne.0 -> side k of triangle i is on the tria grid edge
 
       DO ITRIA1=1,NTRIA1 !{
-c        dbg0=itria1.eq.1095    !###
+c        dbg0=itria1.eq.1   !###
         if(dbg0) then !{
           print *,'itria1,ntria1,ntria=',itria1,ntria1,ntria
           print *,'neighr=',neighr(itria1,:)
@@ -602,7 +602,7 @@ C         KONTUR
 c loop over triangles (b) inside the b2 grid
 
           DO ITRIA=NTRIA1+1,NTRIA !{
-            dbg=dbg0.and.itria.eq.14768  !###
+c            dbg=dbg0.and.itria.eq.1363  !###
             if(dbg) then !{
               print *,'itria=',itria
               print *,'neighr=',neighr(itria,:)
@@ -837,8 +837,8 @@ c          PARA = ABS(YP2-YP1).LE.ABS(YQ2-YQ1)
 c        ENDIF
 c      ENDIF
 
-      tolx=tol*abs(xp1+xq1+xp2+xq2)
-      toly=tol*abs(yp1+yq1+yp2+yq2)
+      tolx=tol*abs(xp1+xq1+xp2+xq2)/4.
+      toly=tol*abs(yp1+yq1+yp2+yq2)/4.
       tol2=tolx*toly
       para= abs((xp1-xq1)*(yq2-yq1)-(yp1-yq1)*(xq2-xq1)).le.tol2 .and.
      .      abs((xp2-xq1)*(yq2-yq1)-(yp2-yq1)*(xq2-xq1)).le.tol2
