@@ -39,11 +39,8 @@ setenv CC gcc
 setenv FC ifort
 setenv CXX g++
 
-
-# For now we are using locally built ParaView
-setenv PATH "${HOME}/solps-gui/staging/paraview/5.1.2/bin:${PATH}"
-setenv LD_LIBRARY_PATH "${HOME}/solps-gui/staging/qt/4.8.7/lib:${LD_LIBRARY_PATH}"
-# module load paraview
+module load paraview/5.2.0 GCC/4.8.3
+module switch qt/4.8.7
 
 if (`where paraview-config` == "") then
   echo "Warning: ParaView not found. Catalyst will not not be compiled-in!"
@@ -58,5 +55,5 @@ endif
 
 # Other environment variables
 module load solps-gui
-setenv LD_PRELOAD /usr/lib64/libfontconfig.so.1
+setenv LD_PRELOAD /usr/lib64/libfontconfig.so.1 # needed by solps-gui
 setenv SOLPSWORK /work/projects/solps-iter/$USER

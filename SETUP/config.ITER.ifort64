@@ -32,13 +32,10 @@
 MSCL_ROOT ?=
 H5DIR ?=
 GR_ROOT ?= /work/imas/opt/gr/0.0.94
-GLI_HOME ?=
-NCARG_ROOT ?=
+GLI_HOME ?=NCARG_ROOT ?=
 NAGDIR ?=
 MDSPLUS_DIR ?=
-PARAVIEW_DIR ?= ${HOME}/solps-gui/staging/paraview/5.1.2
 
-#
 # Variables of linking, using pkg-config
 #
 
@@ -52,52 +49,7 @@ LD_NAG     = `pkg-config nag --libs`
 LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 LD_MPI     = -L/work/imas/opt/libibverbs/1.1.4/lib `pkg-config mpich2-ch3 --libs`
-LD_UAL     = `pkg-config imas-lowlevel imas-ifort --libs`
-PARAVIEW_MAJOR_VERSION = 5.1
-PARAVIEW_LIBDIR=${PARAVIEW_DIR}/lib/paraview-${PARAVIEW_MAJOR_VERSION}
-LD_CATALYST= ${PARAVIEW_LIBDIR}/libvtkPVPythonCatalyst-pv${PARAVIEW_MAJOR_VERSION}.so.1 \
-	${PARAVIEW_LIBDIR}/libvtkPVCatalyst-pv${PARAVIEW_MAJOR_VERSION}.so.1 \
-	${PARAVIEW_LIBDIR}/libvtkPVServerManagerApplication-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
-	${PARAVIEW_LIBDIR}/libvtkPVServerManagerCore-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
-	${PARAVIEW_LIBDIR}/libvtkPVServerImplementationCore-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
-	${PARAVIEW_LIBDIR}/libvtkPVClientServerCoreCore-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
-	${PARAVIEW_LIBDIR}/libvtkFiltersParallel-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
-	${PARAVIEW_LIBDIR}/libvtkFiltersExtraction-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
-	${PARAVIEW_LIBDIR}/libvtkFiltersStatistics-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
-	${PARAVIEW_LIBDIR}/libvtkImagingFourier-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
-	${PARAVIEW_LIBDIR}/libvtkImagingCore-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
-	${PARAVIEW_LIBDIR}/libvtkalglib-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
-	${PARAVIEW_LIBDIR}/libvtkFiltersModeling-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
-	${PARAVIEW_LIBDIR}/libvtkRenderingCore-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
-	${PARAVIEW_LIBDIR}/libvtkFiltersGeometry-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
-	${PARAVIEW_LIBDIR}/libvtkFiltersSources-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
-	${PARAVIEW_LIBDIR}/libvtkFiltersGeneral-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
-	${PARAVIEW_LIBDIR}/libvtkCommonComputationalGeometry-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
-	${PARAVIEW_LIBDIR}/libvtkCommonColor-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
-	${PARAVIEW_LIBDIR}/libvtkFiltersProgrammable-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
-	${PARAVIEW_LIBDIR}/libvtkPVVTKExtensionsCore-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
-	${PARAVIEW_LIBDIR}/libvtkPVCommon-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
-	${PARAVIEW_LIBDIR}/libvtkClientServer-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
-	${PARAVIEW_LIBDIR}/libvtkIOXMLParser-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
-	${PARAVIEW_LIBDIR}/libvtkFiltersCore-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
-	${PARAVIEW_LIBDIR}/libvtkParallelCore-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
-	${PARAVIEW_LIBDIR}/libvtkIOLegacy-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
-	${PARAVIEW_LIBDIR}/libvtkIOCore-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
-	${PARAVIEW_LIBDIR}/libvtkCommonExecutionModel-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
-	${PARAVIEW_LIBDIR}/libvtkCommonDataModel-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
-	${PARAVIEW_LIBDIR}/libvtkCommonSystem-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
-	${PARAVIEW_LIBDIR}/libvtkCommonTransforms-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
-	${PARAVIEW_LIBDIR}/libvtkCommonMisc-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
-	${PARAVIEW_LIBDIR}/libvtkCommonMath-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
-	${PARAVIEW_LIBDIR}/libprotobuf.so -lpthread  \
-	${PARAVIEW_LIBDIR}/libvtkPythonInterpreter-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
-	${PARAVIEW_LIBDIR}/libvtkWrappingPython27Core-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
-	${PARAVIEW_LIBDIR}/libvtkCommonCore-pv${PARAVIEW_MAJOR_VERSION}.so.1  \
-	/work/imas/opt/python/2.7/11/lib/libpython2.7.so  \
-	${PARAVIEW_LIBDIR}/libvtksys-pv${PARAVIEW_MAJOR_VERSION}.so.1 \
-	-ldl -lstdc++ -Wl,-rpath,${PARAVIEW_LIBDIR}:/work/imas/opt/python/2.7/11/lib:${HOME}/solps-gui/staging/qt/4.8.7/lib:/work/imas/opt/libffi/3.2.1/lib64:/work/imas/opt/openssl/1.0.2g/lib -Wl,-rpath-link,${PARAVIEW_LIBDIR}:${HOME}/solps-gui/staging/qt/4.8.7/lib:/work/imas/opt/libffi/3.2.1/lib64:/work/imas/opt/openssl/1.0.2g/lib
 
-#
 # Preprocessor options
 #
 
@@ -105,6 +57,24 @@ SOLPS_CPP      = -DNCAR4 -DMDSPLUS -DIMAS -DNO_F01AAF -DCDF_MOVIE -DNETCDF4_3 -D
 B25_DEFINES    =
 EIRENE_DEFINES =
 MPI_CPP        = `pkg-config mpich2-ch3 --cflags`
+
+
+# Autodetected optional features...
+
+# Build with Catalyst if ParaView is in PATH
+ifneq (,$(shell which paraview-config))
+  SOLPS_CPP   += -DCATALYST
+  LD_CATALYST=`paraview-config --libs vtkPVPythonCatalyst`
+  export LD_CATALYST
+endif
+
+# Build with IMAS if imas module is loaded
+ifdef IMAS_PREFIX
+  SOLPS_CPP += -DIMAS
+  LD_UAL     = `pkg-config imas-lowlevel imas-ifort --libs`
+  export LD_UAL
+endif
+
 
 #
 # Export for use in sub-makefiles
@@ -130,15 +100,14 @@ export LD_NAG
 export LD_MDSPLUS
 export LD_SONNET
 export LD_MPI
-export LD_UAL
-export LD_CATALYST
 
-export SOLPS_CPP
 export B25_DEFINES
 export EIRENE_DEFINES
 export MPI_CPP
 
+
+
+
 #!!!Local Variables:
 #!!! mode: Makefile
 #!!! End:
-

@@ -23,7 +23,7 @@ module load cairo
 module load mdsplus/3.0.2
 module load make
 module load imas
-module load python/2.7/9
+module load python/2.7/11
 module load totalview
 
 # mpi-library
@@ -39,10 +39,8 @@ setenv CC gcc
 setenv FC gfortran
 setenv CXX g++
 
-# For now we are using locally built ParaView
-setenv PATH "${HOME}/solps-gui/staging/paraview/5.1.2/bin:${PATH}"
-setenv LD_LIBRARY_PATH "${HOME}/solps-gui/staging/qt/4.8.7/lib:${LD_LIBRARY_PATH}"
-# module load paraview
+module load paraview/5.2.0 GCC/4.8.3
+module switch qt/4.8.7
 
 if (`where paraview-config` == "") then
   echo "Warning: ParaView not found. Catalyst will not not be compiled-in!"

@@ -53,7 +53,6 @@ LD_NAG     = `pkg-config nag --libs`
 LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 LD_MPI     = `pkg-config mvapich2 --libs`
-LD_UAL     = `pkg-config imas-gfortran --libs`
 
 
 #
@@ -65,6 +64,21 @@ B25_DEFINES    =
 EIRENE_DEFINES =
 MPI_CPP        = `pkg-config mpich2-ch3 --cflags`
 
+# Autodetected optional features...
+
+# Build with Catalyst if ParaView is in PATH
+ifneq (,$(shell which paraview-config))
+  SOLPS_CPP   += -DCATALYST
+  LD_CATALYST=`paraview-config --libs vtkPVPythonCatalyst`
+  export LD_CATALYST
+endif
+
+# Build with IMAS if imas module is loaded
+ifdef IMAS_PREFIX
+  SOLPS_CPP += -DIMAS
+  LD_UAL     = `pkg-config imas-lowlevel imas-gfortran --libs`
+  export LD_UAL
+endif
 
 #
 # Export for use in sub-makefiles
@@ -88,7 +102,6 @@ export LD_NAG
 export LD_MDSPLUS
 export LD_SONNET
 export LD_MPI
-export LD_UAL
 
 export SOLPS_CPP
 export B25_DEFINES
