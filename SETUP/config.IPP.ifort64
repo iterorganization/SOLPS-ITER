@@ -63,6 +63,21 @@ SOLPS_CPP      = -DNCAR4 -DMDSPLUS -DNO_F01AAF
 B25_DEFINES    =
 EIRENE_DEFINES =
 
+# Autodetected optional features...
+
+# Build with Catalyst if ParaView is in PATH
+ifneq (,$(shell which paraview-config))
+  SOLPS_CPP   += -DCATALYST
+  LD_CATALYST=`paraview-config --libs vtkPVPythonCatalyst`
+  export LD_CATALYST
+endif
+
+# Build with IMAS if imas module is loaded
+ifdef IMAS_PREFIX
+  SOLPS_CPP += -DIMAS
+  LD_UAL     = `pkg-config imas-lowlevel imas-ifort --libs`
+  export LD_UAL
+endif
 
 #
 # Export for use in sub-makefiles

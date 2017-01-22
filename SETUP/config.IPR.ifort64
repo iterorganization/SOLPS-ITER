@@ -54,6 +54,21 @@ LD_NAG     = -L${NAGDIR}/lib -lnag
 LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 
+# Autodetected optional features...
+
+# Build with Catalyst if ParaView is in PATH
+ifneq (,$(shell which paraview-config))
+  SOLPS_CPP   += -DCATALYST
+  LD_CATALYST=`paraview-config --libs vtkPVPythonCatalyst`
+  export LD_CATALYST
+endif
+
+# Build with IMAS if imas module is loaded
+ifdef IMAS_PREFIX
+  SOLPS_CPP += -DIMAS
+  LD_UAL     = `pkg-config imas-lowlevel imas-ifort --libs`
+  export LD_UAL
+endif
 
 #
 # Preprocessor options
