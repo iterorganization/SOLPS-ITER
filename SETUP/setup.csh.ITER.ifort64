@@ -39,8 +39,7 @@ setenv CC gcc
 setenv FC ifort
 setenv CXX g++
 
-module load paraview/5.2.0 GCC/4.8.3
-module switch qt/4.8.7
+module load paraview/5.2.0
 
 if (`where paraview-config` == "") then
   echo "Warning: ParaView not found. Catalyst will not not be compiled-in!"
