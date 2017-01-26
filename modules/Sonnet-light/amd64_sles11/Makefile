@@ -19,7 +19,7 @@ FC = gfortran
 
 .PHONY: all test clean install local_install
 
-all: libsonnet.a
+all: ${INSTALL_USERAREA}/libsonnet.a
 
 %.d: %.cpp
 	@set -e; rm -f $@; \
@@ -31,6 +31,8 @@ libsonnet.a: $(sources:.cpp=.o)
 	ar clq libsonnet.a $(sources:.cpp=.o)
 	${INSTALL} libsonnet.a ${INSTALL_DIR}
 	${INSTALL} libsonnet.a ${INSTALL_USERAREA}
+
+${INSTALL_USERAREA}/libsonnet.a: libsonnet.a
 
 test: ${FORTRANPRG}.f
 	${FC} -c ../${FORTRANPRG}.f

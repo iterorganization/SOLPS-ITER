@@ -41,7 +41,6 @@ $(error Using default file. Provide paths to libraries first.)
  MDSPLUS_DIR ?=
        MPDIR ?=
 
-
 #
 # Variables for linking
 #
@@ -56,7 +55,6 @@ LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 LD_MPI     = -L${MPDIR}/lib -lmpi
 
-
 #
 # Preprocessor options
 #
@@ -65,7 +63,6 @@ SOLPS_CPP      = -DNCAR4 -DMDSPLUS
 B25_DEFINES    =
 EIRENE_DEFINES =
 MPI_CPP        = -I${MPDIR}/include
-
 
 #
 # Export for use in sub-makefiles
@@ -79,7 +76,6 @@ export GLI_HOME
 export NCARG_ROOT
 export NAGDIR
 export MDSPLUS_DIR
-
 
 export LD_NETCDF
 export LD_MSCL

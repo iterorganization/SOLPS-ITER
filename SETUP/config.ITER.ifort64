@@ -29,11 +29,12 @@
 # Remove -DMDSPLUS from SOLPS_CPP
 #
 
-MSCL_ROOT ?=
-H5DIR ?=
-GR_ROOT ?= /work/imas/opt/gr/0.0.94
-GLI_HOME ?=NCARG_ROOT ?=
-NAGDIR ?=
+MSCL_ROOT   ?=
+H5DIR       ?=
+GR_ROOT     ?= /work/imas/opt/gr/0.0.94
+GLI_HOME    ?=
+NCARG_ROOT  ?=
+NAGDIR      ?=
 MDSPLUS_DIR ?=
 
 # Variables of linking, using pkg-config
@@ -53,18 +54,17 @@ LD_MPI     = -L/work/imas/opt/libibverbs/1.1.4/lib `pkg-config mpich2-ch3 --libs
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNCAR4 -DMDSPLUS -DIMAS -DNO_F01AAF -DCDF_MOVIE -DNETCDF4_3 -DCATALYST
+SOLPS_CPP      = -DNCAR4 -DMDSPLUS -DNO_F01AAF -DCDF_MOVIE -DNETCDF4_3
 B25_DEFINES    =
 EIRENE_DEFINES =
 MPI_CPP        = `pkg-config mpich2-ch3 --cflags`
-
 
 # Autodetected optional features...
 
 # Build with Catalyst if ParaView is in PATH
 ifneq (,$(shell which paraview-config))
   SOLPS_CPP   += -DCATALYST
-  LD_CATALYST=`paraview-config --libs vtkPVPythonCatalyst`
+  LD_CATALYST  = `paraview-config --libs vtkPVPythonCatalyst`
   export LD_CATALYST
 endif
 
@@ -74,7 +74,6 @@ ifdef IMAS_PREFIX
   LD_UAL     = `pkg-config imas-lowlevel imas-ifort --libs`
   export LD_UAL
 endif
-
 
 #
 # Export for use in sub-makefiles
@@ -104,9 +103,6 @@ export LD_MPI
 export B25_DEFINES
 export EIRENE_DEFINES
 export MPI_CPP
-
-
-
 
 #!!!Local Variables:
 #!!! mode: Makefile

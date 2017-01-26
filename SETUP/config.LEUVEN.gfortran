@@ -29,7 +29,6 @@
 # Remove -DMDSPLUS from SOLPS_CPP
 #
 
-
        NCDIR ?= /home/fusion/libs/netcdf
    MSCL_ROOT ?= /home/fusion/libs/mscl
        H5DIR ?=
@@ -39,7 +38,6 @@
   NCARG_ROOT ?= /home/fusion/libs/NCARG2
       NAGDIR ?= /home/fusion/libs/blaslapack
  MDSPLUS_DIR ?=
-
 
 #
 # Variables of linking, using pkg-config
@@ -56,8 +54,6 @@ LD_NAG     = -L${NAGDIR} -llapack -lrefblas
 LD_MDSPLUS =
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 
-
-
 #
 # Preprocessor options
 #
@@ -71,7 +67,7 @@ EIRENE_DEFINES =
 # Build with Catalyst if ParaView is in PATH
 ifneq (,$(shell which paraview-config))
   SOLPS_CPP   += -DCATALYST
-  LD_CATALYST=`paraview-config --libs vtkPVPythonCatalyst`
+  LD_CATALYST  = `paraview-config --libs vtkPVPythonCatalyst`
   export LD_CATALYST
 endif
 
@@ -107,7 +103,6 @@ export LD_SONNET
 export SOLPS_CPP
 export B25_DEFINES
 export EIRENE_DEFINES
-
 
 #!!!Local Variables:
 #!!! mode: Makefile

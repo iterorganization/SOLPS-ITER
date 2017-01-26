@@ -38,7 +38,6 @@
       NAGDIR =
  MDSPLUS_DIR =
 
-
 #
 # Variables for linking
 #
@@ -52,7 +51,6 @@ LD_NAG     = -lblas -llapack
 LD_MDSPLUS =
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++ -lC
 
-
 #
 # Preprocessor options
 #
@@ -64,7 +62,7 @@ EIRENE_DEFINES =
 # Build with Catalyst if ParaView is in PATH
 ifneq (,$(shell which paraview-config))
   SOLPS_CPP   += -DCATALYST
-  LD_CATALYST=`paraview-config --libs vtkPVPythonCatalyst`
+  LD_CATALYST  = `paraview-config --libs vtkPVPythonCatalyst`
   export LD_CATALYST
 endif
 

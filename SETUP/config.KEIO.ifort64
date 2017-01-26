@@ -39,7 +39,6 @@
  MDSPLUS_DIR ?=
        MPDIR ?= /opt/mpich2
 
-
 #
 # Variables for linking
 #
@@ -53,7 +52,6 @@ LD_NAG     = -L${NAGDIR} -lnag
 LD_MDSPLUS =
 LD_SONNET  = -L/usr/share/lib/solpslib -lsonnet -lstdc++
 LD_MPI     = -L${MPDIR}/lib -lmpi
-
 
 #
 # Preprocessor options
@@ -69,7 +67,7 @@ MPI_CPP        = -I${MPDIR}/include
 # Build with Catalyst if ParaView is in PATH
 ifneq (,$(shell which paraview-config))
   SOLPS_CPP   += -DCATALYST
-  LD_CATALYST=`paraview-config --libs vtkPVPythonCatalyst`
+  LD_CATALYST  = `paraview-config --libs vtkPVPythonCatalyst`
   export LD_CATALYST
 endif
 
@@ -92,7 +90,6 @@ export GLI_HOME
 export NCARG_ROOT
 export NAGDIR
 export MDSPLUS_DIR
-
 
 export LD_NETCDF
 export LD_MSCL

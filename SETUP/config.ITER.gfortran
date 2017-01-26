@@ -38,29 +38,27 @@
       NAGDIR ?=
  MDSPLUS_DIR ?=
 
-
 #
 # Variables of linking, using pkg-config
 #
-LD_INTEL_LIBS=-L/shared/hpc/compiler/intel/composerxe-2011.2.137/compiler/lib/intel64 -lirc -lirc_s -liomp5 -lifcoremt_pic -lsvml -lifport -lifcore_pic -lpthread
+LD_INTEL_LIBS= -lirc -lirc_s -liomp5 -lifcoremt_pic -lsvml -lifport -limf -lm -lifcore_pic -lpthread
 
 LD_NETCDF  = `nf-config --flibs`
-LD_MSCL    = `pkg-config mscl --libs` -limf # Intel Math must be before -lm
+LD_MSCL    = `pkg-config mscl --libs`
 LD_GR      = -L${GR_ROOT}/lib -lgr
-LD_GKS     = -L${GLI_HOME} -lgks -lgfortran -lX11 -lXt -lXmu ${LD_INTEL_LIBS}
-LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lm -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lz -lpthread -lXrender -lbz2 -lgfortran  ${LD_INTEL_LIBS}# for NCARG v6.x.x
-#LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lm                                                                                                          # for NCARG v4.x.x
+LD_GKS     = -L${GLI_HOME} -lgks -lXmu ${LD_INTEL_LIBS}
+LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lz -lXrender -lbz2 ${LD_INTEL_LIBS} # for NCARG v6.x.x
+#LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11                                                                                                    # for NCARG v4.x.x
 LD_NAG     = `pkg-config nag --libs`
 LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 LD_MPI     = `pkg-config mvapich2 --libs`
 
-
 #
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNCAR4 -DMDSPLUS -DIMAS -DNO_F01AAF -DCDF_MOVIE
+SOLPS_CPP      = -DNCAR4 -DMDSPLUS -DNO_F01AAF -DCDF_MOVIE
 B25_DEFINES    =
 EIRENE_DEFINES =
 MPI_CPP        = `pkg-config mpich2-ch3 --cflags`
@@ -70,7 +68,7 @@ MPI_CPP        = `pkg-config mpich2-ch3 --cflags`
 # Build with Catalyst if ParaView is in PATH
 ifneq (,$(shell which paraview-config))
   SOLPS_CPP   += -DCATALYST
-  LD_CATALYST=`paraview-config --libs vtkPVPythonCatalyst`
+  LD_CATALYST  = `paraview-config --libs vtkPVPythonCatalyst`
   export LD_CATALYST
 endif
 

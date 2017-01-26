@@ -40,7 +40,6 @@ $(error First use of config.ENEA.pgf90. Provide paths to libraries first.)
       NAGDIR ?=
  MDSPLUS_DIR ?=
 
-
 #
 # Variables for linking
 #
@@ -54,8 +53,6 @@ LD_NAG     = -L${NAGDIR}/lib -lnag
 LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 
-
-
 #
 # Preprocessor options
 #
@@ -67,7 +64,7 @@ EIRENE_DEFINES =
 # Build with Catalyst if ParaView is in PATH
 ifneq (,$(shell which paraview-config))
   SOLPS_CPP   += -DCATALYST
-  LD_CATALYST=`paraview-config --libs vtkPVPythonCatalyst`
+  LD_CATALYST  = `paraview-config --libs vtkPVPythonCatalyst`
   export LD_CATALYST
 endif
 

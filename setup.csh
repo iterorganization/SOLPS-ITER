@@ -84,7 +84,7 @@ setenv SOLPSLIB ${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}
 # First, remove the old path to SOLPS if already set
 # (avoid too long paths)
 if ($?SOLPS_PATH) then
-    setenv PATH `echo $PATH | sed "s|${SOLPS_PATH}:||"`
+  setenv PATH `echo $PATH | sed "s|${SOLPS_PATH}:||"`
 endif
 
 # Default PATH: no mpi, no debug

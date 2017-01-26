@@ -40,7 +40,6 @@ $(error First use of config.IPR.ifort64. Provide paths to libraries first.)
       NAGDIR ?=
  MDSPLUS_DIR ?=
 
-
 #
 # Variables for linking
 #
@@ -59,7 +58,7 @@ LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 # Build with Catalyst if ParaView is in PATH
 ifneq (,$(shell which paraview-config))
   SOLPS_CPP   += -DCATALYST
-  LD_CATALYST=`paraview-config --libs vtkPVPythonCatalyst`
+  LD_CATALYST  = `paraview-config --libs vtkPVPythonCatalyst`
   export LD_CATALYST
 endif
 
@@ -77,7 +76,6 @@ endif
 SOLPS_CPP      = -DNCAR4 -DMDSPLUS
 B25_DEFINES    =
 EIRENE_DEFINES =
-
 
 #
 # Export for use in sub-makefiles

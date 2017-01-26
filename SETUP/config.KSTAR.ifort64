@@ -51,7 +51,6 @@
       NAGDIR ?= /home/sunny2216/solps5.0_150821/solps5.0/src/lib/linux.ifort64
  MDSPLUS_DIR ?= /home/sunny2216/solps5.0_old/solps5.0/solps_other/MDSPLUS/linux.ifort64
 
-
 #
 # Variables for linking
 #
@@ -88,7 +87,7 @@ EIRENE_DEFINES =
 # Build with Catalyst if ParaView is in PATH
 ifneq (,$(shell which paraview-config))
   SOLPS_CPP   += -DCATALYST
-  LD_CATALYST=`paraview-config --libs vtkPVPythonCatalyst`
+  LD_CATALYST  = `paraview-config --libs vtkPVPythonCatalyst`
   export LD_CATALYST
 endif
 
@@ -124,7 +123,6 @@ export LD_SONNET
 export SOLPS_CPP
 export B25_DEFINES
 export EIRENE_DEFINES
-
 
 #!!!Local Variables:
 #!!! mode: Makefile
