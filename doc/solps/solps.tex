@@ -6669,7 +6669,7 @@ Zhdanov fit to Braginskii and the \SOLPSfour values.
 
 A note about sign conventions. The radial coordinate $y$ increases as one crosses the separatrix from the core (or private flux) region into the main SOL region (and so is minimum at the magnetic axis). The poloidal coordinate $x$ increases in the {\em clockwise} direction when viewing the poloidal plane with the central axis line on its left. The toroidal magnetic field component $b_z$ is taken as positive if the toroidal magnetic field is directed {\em clockwise} when viewing the tokamak from above. The poloidal magnetic field component $b_x$ follows the same convention as the $x$ component and is positive if when directed in the direction of increasing poloidal index, i.e. {\em clockwise}.
 
-Is it important to know, that, in the equations below, the parallel velocity $V_\parallel$ is a true parallel velocity, i.e. it changes sign if the poloidal magnetic field component does, namely: $V_\parallel = \vec{V} \cdot \vec{B}$. This applies to all species, including electrons, meaning $V_{\parallel a}$ and $V_{\parallel e}$. However, the poloidal projections of the fluxes and currents, such as $\Gamma_{ax}$, are positive when they are colinear with $\vec{e}_x$, i.e. point in the direction of increasing $x$. The exception to this is the parallel current, $j_\parallel$. In the equations below, it has the same sign convention as the parallel velocity. In the actual code, because it is treated as a flux, it follows the sign convention of the fluxes. This therefore means that the code does not follow $j_\parallel$, but rather $j_\parallel \cdot |b_x|/b_x$.
+Is it important to know, that, in the equations below, the parallel velocity $V_\parallel$ is a true parallel velocity, i.e. it changes sign if the poloidal magnetic field component does, namely: $V_\parallel = \vec{V} \cdot \vec{B} / \left| B \right|$. This applies to all species, including electrons, meaning $V_{\parallel a}$ and $V_{\parallel e}$. However, the poloidal projections of the fluxes and currents, such as $\Gamma_{ax}$, are positive when they are colinear with $\vec{e}_x$, i.e. point in the direction of increasing $x$. The exception to this is the parallel current, $j_\parallel$. In the equations below, it has the same sign convention as the parallel velocity. In the actual code, because it is treated as a flux, it follows the sign convention of the fluxes. This therefore means that the code does not follow $j_\parallel$, but rather $j_\parallel \cdot |b_x|/b_x$.
 
 %-------- Equations by S.P. Voskoboynikov ---------
 
@@ -6717,7 +6717,7 @@ $\begin{matrix}
 V_{ax}^{\left( dia \right)} & =
 & \left\{
 \begin{matrix}
--\frac{B_z}{Z_a e B^2 n_a} \frac{\partial n_a T_i}{h_y \partial y} & \ z_a \neq 0 \\
+-\frac{B_z}{z_a e B^2 n_a} \frac{1}{h_y} \frac{\partial n_a T_i}{\partial y} & \ z_a \neq 0 \\
 0, & \ z_a = 0
 \end{matrix} \right.
 \end{matrix}$
@@ -6728,14 +6728,14 @@ $\begin{matrix}
 V_{ay}^{\left( dia \right)} & =
 & \left\{
 \begin{matrix}
-\frac{B_z}{Z_a e B^2 n_a} \frac{\partial n_a T_i}{h_x \partial x} & \ z_a \neq 0 \\
+\frac{B_z}{z_a e B^2 n_a} \frac{1}{h_x} \frac{\partial n_a T_i}{\partial x} & \ z_a \neq 0 \\
 0, & \ z_a = 0
 \end{matrix} \right.
 \end{matrix}$
 \end{tabular}
 
 \begin{equation}
-E_{k,a}=\frac{m_a}2 \left[   u^2_{\parallel a}+\left( W_{a\perp}^{\left( dia \right)}+V_{a\perp}^{\left( E \times B \right)}  \right)^2    +   \left(  W_{ay}^{\left( dia \right)} + V_{ay}^{\left( E \times B \right)} \right)^2    \right]
+E_{k,a}=\frac{m_a}2 \left[   V^2_{\parallel a}+\left( W_{a\perp}^{\left( dia \right)}+V_{a\perp}^{\left( E \times B \right)}  \right)^2    +   \left(  W_{ay}^{\left( dia \right)} + V_{ay}^{\left( E \times B \right)} \right)^2    \right]
 \end{equation}
 
 \begin{tabular}{cc}
@@ -6743,7 +6743,7 @@ $\begin{matrix}
 W_{a \perp}^{\left( dia \right)} & =
 & \left\{
 \begin{matrix}
--\frac{B_z}{Z_a e B^2 n_a} \frac{\partial n_a T_i}{h_y \partial y}, & \ z_a \neq 0 \\
+-\frac{1}{z_a e B n_a} \frac{1}{h_y} \frac{\partial n_a T_i}{\partial y}, & \ z_a \neq 0 \\
 0, & \ z_a = 0
 \end{matrix} \right.
 \end{matrix}$
@@ -6752,7 +6752,7 @@ $\begin{matrix}
 W_{ay}^{\left( dia \right)} & =
 & \left\{
 \begin{matrix}
-\frac{B_z}{Z_a e B^2 n_a} \frac{\partial n_a T_i}{h_x \partial x}, & \ z_a \neq 0 \\
+\frac{B_z}{z_a e B^2 n_a} \frac{1}{h_x} \frac{\partial n_a T_i}{\partial x}, & \ z_a \neq 0 \\
 0, & \ z_a = 0
 \end{matrix} \right.
 \end{matrix}$
@@ -6763,7 +6763,7 @@ $\begin{matrix}
 V_{a \perp}^{\left( E \times B \right)} & =
 & \left\{
 \begin{matrix}
--\frac{B_z}{B^2} \frac{\partial \Phi}{h_y \partial y}, & \ z_a \neq 0 \\
+-\frac{1}{B} \frac{1}{h_y} \frac{\partial \Phi}{\partial y}, & \ z_a \neq 0 \\
 0, & \ z_a = 0
 \end{matrix} \right.
 \end{matrix}$
@@ -6772,15 +6772,21 @@ $\begin{matrix}
 V_{ay}^{\left( E \times B \right)} & =
 & \left\{
 \begin{matrix}
-\frac{B_z}{B^2} \frac{\partial\Phi}{h_x \partial x}, & \ z_a \neq 0 \\
+\frac{B_z}{B^2} \frac{1}{h_x} \frac{\partial \Phi}{\partial x}, & \ z_a \neq 0 \\
 0, & \ z_a = 0
 \end{matrix} \right.
 \end{matrix}$
 \end{tabular}
 
-$n_e = \sum \limits^{ns-1}_{a=0} z_a n_a$, $n_i = \sum \limits^{ns-1}_{a=0} n_a$
+\begin{equation}
+n_e = \sum \limits^{ns-1}_{a=0} z_a n_a, \qquad
+n_i = \sum \limits^{ns-1}_{a=0} n_a
+\end{equation}
 
-$p_a = n_a \left( z_a T_e + T_i \right)$, $p_e=n_e T_e$
+\begin{equation}
+p_a = n_a \left( z_a T_e + T_i \right), \qquad
+p_e = n_e T_e
+\end{equation}
 
 \subsection{Source terms in density equations}
 
@@ -6897,7 +6903,7 @@ c_{E\times B}   \frac{B_z}{B^2}   \frac 1{h_x}   \frac{\partial \Phi }{\partial 
 \widetilde{V}_{ax}^{\left( dia \right)} & =
 & \left\{
 \begin{matrix}
-c_{dia} \frac{T_i B_z}{Z_a e}   \frac{\partial}{h_y\partial y} \left(\frac 1{B^2} \right), & \ z_a \neq 0 \\
+c_{dia} \frac{T_i B_z}{z_a e}   \frac{\partial}{h_y\partial y} \left(\frac 1{B^2} \right), & \ z_a \neq 0 \\
 0, & \ z_a = 0
 \end{matrix} \right.
 \end{matrix}
@@ -6908,7 +6914,7 @@ c_{dia} \frac{T_i B_z}{Z_a e}   \frac{\partial}{h_y\partial y} \left(\frac 1{B^2
 \widetilde{V}_{ay}^{\left( dia \right)} & =
 & \left\{
 \begin{matrix}
--c_{dia} \frac{T_i B_z}{Z_a e}   \frac{\partial}{h_x\partial x} \left(\frac 1{B^2} \right), & \ z_a \neq 0 \\
+-c_{dia} \frac{T_i B_z}{z_a e}   \frac{\partial}{h_x\partial x} \left(\frac 1{B^2} \right), & \ z_a \neq 0 \\
 0, & \ z_a = 0
 \end{matrix} \right.
 \end{matrix}
@@ -12583,23 +12589,35 @@ quantities are only available for coupled \SOLPSITER runs.
     edena \index{b2plot, edena} & Atoms energy density $(eV.m^{-3})$ \\
     edeni \index{b2plot, edeni} & Test ions energy density $(eV.m^{-3})$ \\
     edenm \index{b2plot, edenm} & Molecules energy density $(eV.m^{-3})$ \\
+    massa \index{b2plot, massa} & Atom mass $(kg)$ \\
+    massi \index{b2plot, massi} & Molecular ion mass $(kg)$ \\
+    massm \index{b2plot, massm} & Molecule mass $(kg)$ \\
     pdena \index{b2plot, pdena} & Atoms particle density $(m^{-3})$ \\
     pdeni \index{b2plot, pdeni} & Test ions particle density $(m^{-3})$ \\
     pdenm \index{b2plot, pdenm} & Molecules particle density $(m^{-3})$ \\
     tindex \index{b2plot, tindex} & Triangle index \\
-    tr \index{b2plot,tr} & Triangle centroid R coordinate $(m)$ \\
+    tr \index{b2plot,tr} & Triangle centroid $R$ coordinate $(m)$ \\
     triarea \index{b2plot, triarea} & Triangle area $(m^{2})$ \\
     triavol \index{b2plot, triavol} & Triangle volume $(m^{3})$ \\
-    tz \index{b2plot,tz} & Triangle centroid z coordinate $(m)$ \\
-    vxdena \index{b2plot, vxdena} & Atoms X-directed velocity $(m^2.s^{-1})$ \\
-    vxdeni \index{b2plot, vxdeni} & Test ions X-directed velocity $(m^2.s^{-1})$ \\
-    vxdenm \index{b2plot, vxdenm} & Molecules X-directed velocity $(m^2.s^{-1})$ \\
-    vydena \index{b2plot, vydena} & Atoms Y-directed velocity $(m^2.s^{-1})$ \\
-    vydeni \index{b2plot, vydeni} & Test ions Y-directed velocity $(m^2.s^{-1})$ \\
-    vydenm \index{b2plot, vydenm} & Molecules Y-directed velocity $(m^2.s^{-1})$ \\
-    vzdena \index{b2plot, vzdena} & Atoms Z-directed velocity $(m^2.s^{-1})$ \\
-    vzdeni \index{b2plot, vzdeni} & Test ions Z-directed velocity $(m^2.s^{-1})$ \\
-    vzdenm \index{b2plot, vzdenm} & Molecules Z-directed velocity $(m^2.s^{-1})$ \\
+    tz \index{b2plot,tz} & Triangle centroid $z$ coordinate $(m)$ \\
+    vxa \index{b2plot, vxa} & Atoms $x$-directed velocity $(m.s^{-1})$ \\
+    vxdena \index{b2plot, vxdena} & Atoms $x$-directed momentum density $(kg.m^{-2}.s^{-1})$ \\
+    vxdeni \index{b2plot, vxdeni} & Test ions $x$-directed momentum density $(kg.m^{-2}.s^{-1})$ \\
+    vxdenm \index{b2plot, vxdenm} & Molecules $x$-directed momentum density $(kg.m^{-2}.s^{-1})$ \\
+    vxi \index{b2plot, vxi} & Test ions $x$-directed velocity $(m.s^{-1})$ \\
+    vxm \index{b2plot, vxm} & Molecules $x$-directed velocity $(m.s^{-1})$ \\
+    vya \index{b2plot, vya} & Atoms $y$-directed velocity $(m.s^{-1})$ \\
+    vydena \index{b2plot, vydena} & Atoms $y$-directed momentum density $(kg.m^{-2}.s^{-1})$ \\
+    vydeni \index{b2plot, vydeni} & Test ions $y$-directed momentum density $(kg.m^{-2}.s^{-1})$ \\
+    vydenm \index{b2plot, vydenm} & Molecules $y$-directed momentum density $(kg.m^{-2}.s^{-1})$ \\
+    vyi \index{b2plot, vyi} & Test ions $y$-directed velocity $(m.s^{-1})$ \\
+    vym \index{b2plot, vym} & Molecules $y$-directed velocity $(m.s^{-1})$ \\
+    vza \index{b2plot, vza} & Atoms $z$-directed velocity $(m.s^{-1})$ \\
+    vzdena \index{b2plot, vzdena} & Atoms $z$-directed momentum density $(kg.m^{-2}.s^{-1})$ \\
+    vzdeni \index{b2plot, vzdeni} & Test ions $z$-directed momentum density $(kg.m^{-2}.s^{-1})$ \\
+    vzdenm \index{b2plot, vzdenm} & Molecules $z$-directed momentum density $(kg.m^{-2}.s^{-1})$ \\
+    vzi \index{b2plot, vzi} & Test ions $z$-directed velocity $(m.s^{-1})$ \\
+    vzm \index{b2plot, vzm} & Molecules $z$-directed velocity $(m.s^{-1})$ \\
     \hline
     \caption{Quantities that can be stored in the "Eirene" stack.}
     \label{tab:eirenequantities}
@@ -12625,8 +12643,8 @@ act on the "Eirene" stack or affect graphs of those data.
     \endlastfoot
     eabs \index{b2plot, eabs}      & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:eabs}     & Absolute value \\
     earow \index{b2plot, earow}    & 0 & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:earow}   & Set arrow length scale for Eirene data plots \\
-    earox \index{b2plot, earox}    & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:earox}  & Use as Eirene array for arrow $X$-component \\
-    earoy \index{b2plot, earoy}    & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:earoy}  & Use as Eirene array for arrow $Y$-component \\
+    earox \index{b2plot, earox}    & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:earox}  & Use as Eirene array for arrow $x$-component \\
+    earoy \index{b2plot, earoy}    & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:earoy}  & Use as Eirene array for arrow $y$-component \\
     echs \index{b2plot, echs}      & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:echs}     & Change sign of Eirene data \\
     eclvd \index{b2plot, eclvd}    & 0 & 3 & 0 & 0 & 0 & 0 & 0 & \ref{sec:eclvd}    & Customize Eirene contour levels (delta) \\
     eclvn \index{b2plot, eclvn}    & 1 & 2 & 0 & 0 & 0 & 0 & 0 & \ref{sec:eclvn}    & Customize Eirene contour levels (number) \\
@@ -14361,15 +14379,16 @@ Colour to be used for printing extra label (default 1).
 See {\bf zcol} above for a list of available colours.
 
 \subsubsection{$<$length,{\bf R}$>$ arow}\index{b2plot, arow}\label{sec:arow}\index{b2plot, arox}\label{sec:arox}\index{b2plot, aroy}\label{sec:aroy}
-Produces flow chart of array {\em fnax} and {\em fnay} using a maximum arrow
-length of $<$length$>$ meters. The use of {\em fnax} and {\em fnay} can be superseded
+Produces flow chart of arrays {\em up} and {\em vv} using a maximum arrow
+length of $<$length$>$ meters.
+The use of {\em up} and {\em vv} can be superseded
 by the the commands {\bf arox} and {\bf aroy}, respectively, which will then use
 data from the matrix stack for computing the arrow directions instead.
 
 \subsubsection{$<$length,{\bf R}$>$ earow}\index{b2plot, earow}\label{sec:earow}\index{b2plot, earox}\label{sec:earox}\index{b2plot, earoy}\label{sec:earoy}
-Produces flow chart of Eirene array {\em vxdena} and {\em vydena} using a
-maximum arrow length of $<$length$>$ meters. The use of {\em vxdena} and
-{\em vydena} can be superseded by the the commands {\bf earox} and {\bf earoy}, 
+Produces flow chart of Eirene array {\em vxa} and {\em vya} using a
+maximum arrow length of $<$length$>$ meters. The use of {\em vxa} and
+{\em vya} can be superseded by the the commands {\bf earox} and {\bf earoy},
 respectively, which will then use data from the Eirene stack for computing
 the arrow directions instead.
 
