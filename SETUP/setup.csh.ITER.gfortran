@@ -3,6 +3,7 @@ module use /work/imas/opt/EasyBuild/modules/all
 module load git
 
 # Modules needed by SOLPS-ITER
+module load makedepend
 module load GCC/4.8.3
 module load mscl/1.0.0-GCC-4.8.3
 module load netcdf/4.3.3.1
