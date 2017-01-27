@@ -13,20 +13,20 @@ export SOLPSTOP=$PWD
 export SOLPSWORK=$SOLPSTOP/runs
 
 [ -e whereami ] && {
-  iamat=`./whereami|tail -1`
-  echo Running at $iamat
+iamat=`./whereami|tail -1`
+echo Running at $iamat
 } || {
-  iamat="unknown"
+iamat="unknown"
 }
 
 [ -e SETUP/setup.csh.HOST_NAME.local ] && {
-  echo Loading SETUP/setup.csh.HOST_NAME.local
+echo Loading SETUP/setup.csh.HOST_NAME.local
 } || {
-  if [ $iamat ==  "*UNKNOWN" ]  then
-    export HOST_NAME=default
-  else
-    export HOST_NAME=$iamat
-  fi
+if [ $iamat ==  "*UNKNOWN" ]  then
+  export HOST_NAME=default
+else
+  export HOST_NAME=$iamat
+fi
 }
 
 [ -e setup.ksh.SOLPSMASTER ] && . setup.ksh.SOLPSMASTER
@@ -52,15 +52,15 @@ export SOLPSWORK=$SOLPSTOP/runs
 
 # COMPILER can also be the argument to setup.csh call
 if [ "$1" = "" ] ; then
-  [ -e default_compiler ] && {
-    export COMPILER=`./default_compiler|tail -1`
-    echo Using compiler $COMPILER.
-  } || {
-    export COMPILER=ifort64
-    echo Assuming default compiler ifort64.
-  }
+[ -e default_compiler ] && {
+  export COMPILER=`./default_compiler|tail -1`
+  echo Using compiler $COMPILER.
+} || {
+  export COMPILER=ifort64
+  echo Assuming default compiler ifort64.
+}
 else
-  export COMPILER=$1
+export COMPILER=$1
 fi
 [ -z "$COMPILER" ] && echo 'COMPILER not defined!'
 
@@ -72,14 +72,14 @@ fi
 
 # setup files for combination of HOST_NAME and COMPILER, + local modifications if present
 [ -e SETUP/setup.ksh.${HOST_NAME}.${COMPILER} ] && {
-  echo Loading SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.
-  . SETUP/setup.ksh.${HOST_NAME}.${COMPILER}
+echo Loading SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.
+. SETUP/setup.ksh.${HOST_NAME}.${COMPILER}
 } || {
-  echo File SETUP/setup.ksh.${HOST_NAME}.${COMPILER} not found!
+echo File SETUP/setup.ksh.${HOST_NAME}.${COMPILER} not found!
 }
 [ -e SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.local ] && {
-  echo Loading SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.local.
-  . SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.local
+echo Loading SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.local.
+. SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.local
 }
 
 limit stacksize unlimited
@@ -88,29 +88,29 @@ limit stacksize unlimited
 
 case $OBJECTCODE in
 "IBMaix" )
-  export nOBJECTCODE=Aix
-  ;;
+export nOBJECTCODE=Aix
+;;
 "DECalpha" )
-  export nOBJECTCODE=Alpha
-  ;;
+export nOBJECTCODE=Alpha
+;;
 "SGIirix" )
-  export nOBJECTCODE=Iris
-  ;;
+export nOBJECTCODE=Iris
+;;
 "sun4c" )
-  export nOBJECTCODE=SunOS
-  ;;
+export nOBJECTCODE=SunOS
+;;
 "sun5" )
-  export nOBJECTCODE=Solaris
-  ;;
+export nOBJECTCODE=Solaris
+;;
 "unicos" )
-  export nOBJECTCODE=Unicos
-  ;;
+export nOBJECTCODE=Unicos
+;;
 "linux.ifort64" )
-  export nOBJECTCODE= Intel
-  ;;
+export nOBJECTCODE= Intel
+;;
 * )
-  export nOBJECTCODE=Unknown
-  ;;
+export nOBJECTCODE=Unknown
+;;
 esac
 
 [ -z "$DEVICE" ] && export DEVICE=iter
@@ -189,6 +189,8 @@ alias set_debug='. $SOLPSTOP/debug.ksh'
 alias unset_debug='. $SOLPSTOP/nodebug.ksh'
 alias set_mpi='. $SOLPSTOP/SETUP/mpi'
 alias unset_mpi='. $SOLPSTOP/SETUP/nompi'
+alias set_openmp='. $SOLPSTOP/SETUP/openmp'
+alias unset_openmp='. $SOLPSTOP/SETUP/noopenmp'
 alias set_ig='. $SOLPSTOP/SETUP/ig'
 alias unset_ig='. $SOLPSTOP/SETUP/noig'
 

@@ -55,12 +55,13 @@ ifdef SOLPS_DEBUG
 EXT_DBG=.debug
 endif
 
-# SOLPS_DEBUG and SOLPS_MPI will not be taken from environment,
-# but will be passed by the corresponding make-targets 
+# SOLPS_DEBUG, SOLPS_OPENMP and SOLPS_MPI will not be taken from environment,
+# but will be passed by the corresponding make-targets
+unexport SOLPS_OPENMP
 unexport SOLPS_DEBUG
 unexport SOLPS_MPI
 
-.PHONY: solps solps_mpi nox nox_mpi all all_nox all_mpi carre carre_nox divgeo b25 b25_mpi b25_nox b25_ig b25_all_mpi eirene eirene_mpi eirene_nox b25eirene b25eirene_mpi b25eirene_nox b25eirene_ig b25eirene_all_mpi b25eirene_mpi_nox uinp uinp_nox uinp_mpi triang triang_nox amds fxdr sonnet-light b2sxdr manual local depend depend_nox tags listobj clean clean_% debug %_debug VERSION help nox_build nox_build_mpi
+.PHONY: solps solps_openmp solps_mpi solps_openmp_mpi nox nox_openmp nox_mpi nox_openmp_mpi all all_openmp all_nox all_mpi all_openmp_mpi carre carre_nox divgeo b25 b25_openmp b25_mpi b25_openmp_mpi b25_nox b25_ig b25_all_mpi eirene eirene_mpi eirene_nox b25eirene b25eirene_openmp b25eirene_mpi b25eirene_openmp_mpi b25eirene_nox b25eirene_ig b25eirene_all_mpi b25eirene_mpi_nox uinp uinp_nox uinp_mpi triang triang_nox amds fxdr sonnet-light b2sxdr manual local depend depend_nox tags listobj clean clean_% debug %_debug VERSION help nox_build nox_build_mpi
 
 DEFAULT: solps
 
@@ -73,17 +74,29 @@ DEFAULT: solps
 
 solps:     carre divgeo b25eirene     uinp     triang amds sonnet-light manual
 
+solps_openmp: carre divgeo b25eirene_openmp uinp triang amds sonnet-light manual
+
 solps_mpi: carre divgeo b25eirene_mpi uinp_mpi triang amds sonnet-light manual
+
+solps_openmp_mpi : carre divgeo b25eirene_openmp_mpi uinp_mpi triang amds sonnet-light manual
 
 nox:       carre_nox    b25eirene_nox uinp_nox triang_nox manual
 
+nox_openmp:   carre_nox b25eirene_openmp_nox uinp_nox triang_nox manual
+
 nox_mpi:   carre_nox b25eirene_mpi_nox uinp_mpi_nox triang_nox manual
+
+nox_openmp_mpi:   carre_nox b25eirene_openmp_mpi_nox uinp_mpi_nox triang_nox manual
 
 all:       carre divgeo b25     eirene     b25eirene     uinp     triang amds sonnet-light manual
 
 all_nox:   carre_nox    b25_nox eirene_nox b25eirene_nox uinp_nox triang_nox manual
 
+all_openmp:   carre divgeo b25_openmp eirene b25eirene_openmp uinp triang amds sonnet-light manual
+
 all_mpi:   carre divgeo b25_mpi eirene_mpi b25eirene_mpi uinp_mpi triang amds sonnet-light manual
+
+all_openmp_mpi:   carre divgeo b25_openmp_mpi eirene_mpi b25eirene_openmp_mpi uinp_mpi triang amds sonnet-light manual
 
 carre:
 	cd modules/Carre; ${MAKE}
@@ -112,8 +125,14 @@ b25_all:
 	cd modules/solps4-5; ${MAKE} links
 	cd modules/B2.5;     ${MAKE} ALL
 
+b25_openmp:
+	cd modules/B2.5; ${MAKE} USE_OPENMP=-D_OPENMP
+
 b25_mpi:
 	cd modules/B2.5; ${MAKE} USE_MPI=-DUSE_MPI
+
+b25_openmp_mpi:
+	cd modules/B2.5; ${MAKE} USE_OPENMP=-D_OPENMP USE_MPI=-DUSE_MPI
 
 b25_nox:
 	cd modules/B2.5; ${MAKE} NOPLOT
@@ -121,9 +140,17 @@ b25_nox:
 b25_ig:
 	cd modules/B2.5; ${MAKE} USE_IMPGYRO=-DUSE_IMPGYRO
 
+b25_all_openmp:
+	cd modules/solps4-5; ${MAKE} links
+	cd modules/B2.5;     ${MAKE} USE_OPENMP=-D_OPENMP
+
 b25_all_mpi:
 	cd modules/solps4-5; ${MAKE} links
 	cd modules/B2.5;     ${MAKE} USE_MPI=-DUSE_MPI ALL
+
+b25_all_openmp_mpi:
+	cd modules/solps4-5; ${MAKE} links
+	cd modules/B2.5;     ${MAKE} USE_OPENMP=-D_OPENMP USE_MPI=-DUSE_MPI ALL
 
 b25eirene:
 	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE
@@ -138,22 +165,48 @@ b25eirene_nox:
 	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE LD_GR="" LD_GKS=""
 	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE NOPLOT
 
+b25eirene_openmp:
+	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE    USE_OPENMP=-D_OPENMP
+	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE USE_OPENMP=-D_OPENMP
+
 b25eirene_mpi:
 	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI
 	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
 
+b25eirene_openmp_mpi:
+	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI USE_OPENMP=-D_OPENMP
+	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI USE_OPENMP=-D_OPENMP
+
+b25eirene_openmp_nox:
+	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE LD_GR="" LD_GKS=""
+	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE USE_OPENMP=-D_OPENMP NOPLOT
+
 b25eirene_ig:
 	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE    USE_IMPGYRO=-DUSE_IMPGYRO
 	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO
+
+b25eirene_all_openmp:
+	cd modules/Eirene;   ${MAKE} USE_B25=-DB25_EIRENE
+	cd modules/solps4-5; ${MAKE} links
+	cd modules/B2.5;     ${MAKE} USE_EIRENE=-DB25_EIRENE USE_OPENMP=-D_OPENMP ALL
 
 b25eirene_all_mpi:
 	cd modules/Eirene;   ${MAKE} USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI
 	cd modules/solps4-5; ${MAKE} links
 	cd modules/B2.5;     ${MAKE} USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI ALL
 
+b25eirene_all_openmp_mpi:
+	cd modules/Eirene;   ${MAKE} USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI
+	cd modules/solps4-5; ${MAKE} links
+	cd modules/B2.5;     ${MAKE} USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI USE_OPENMP=-D_OPENMP ALL
+
 b25eirene_mpi_nox:
 	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE LD_GR=""  LD_GKS="" USE_MPI=-DUSE_MPI
 	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI NOPLOT
+
+b25eirene_openmp_mpi_nox:
+	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE LD_GR=""  LD_GKS="" USE_MPI=-DUSE_MPI
+	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI USE_OPENMP=-D_OPENMP NOPLOT
 
 uinp:
 	cd modules/Uinp; ${MAKE}
@@ -235,6 +288,8 @@ depend:
 	cd modules/Eirene;         ${MAKE} depend USE_MPI=-DUSE_MPI
 	cd modules/Eirene;         ${MAKE} depend
 	cd modules/B2.5;           ${MAKE} depend USE_MPI=-DUSE_MPI
+	cd modules/B2.5;           ${MAKE} depend USE_OPENMP=-D_OPENMP
+	cd modules/B2.5;	   ${MAKE} depend USE_OPENMP=-D_OPENMP USE_MPI=-DUSE_MPI
 	cd modules/B2.5;           ${MAKE} depend
 	cd modules/Uinp;           ${MAKE} depend
 	cd modules/Uinp;           ${MAKE} depend USE_MPI=-DUSE_MPI
@@ -246,6 +301,8 @@ depend:
 	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE    USE_IMPGYRO=-DUSE_IMPGYRO
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
+	cd modules/B2.5;	   ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_OPENMP=-D_OPENMP
+	cd modules/B2.5;	   ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_OPENMP=-D_OPENMP USE_MPI=-DUSE_MPI
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO
 	cd modules/amds;           ${MAKE} depend
 #	cd modules/solps4-5;       ${MAKE} depend
@@ -279,6 +336,9 @@ nox_build:     clean_build     listobj depend_nox carre_nox b25eirene_nox     ui
 
 nox_build_mpi: clean_build_mpi listobj depend_nox           b25eirene_mpi_nox uinp_mpi_nox
 
+nox_build_openmp: clean_build_openmp listobj depend  b25eirene_openmp_nox
+
+nox_build_openmp_mpi: clean_build_openmp_mpi listobj depend b25eirene_openmp_mpi_nox
 
 # Clean targets
 #--------------
@@ -290,13 +350,25 @@ clean_solps:     clean_carre clean_divgeo clean_b25eirene     clean_uinp     cle
 
 clean_solps_mpi: clean_carre clean_divgeo clean_b25eirene_mpi clean_uinp_mpi clean_triang clean_sonnet-light clean_manual clean_amds
 
+clean_solps_openmp: clean_carre clean_divgeo clean_b25eirene_openmp clean_uinp clean_triang clean_sonnet-light clean_manual
+
+clean_solps_openmp_mpi: clean_carre clean_divgeo clean_b25eirene_openmp_mpi clean_uinp_mpi clean_triang clean_sonnet-light clean_manual
+
 clean_build:     clean_carre clean_b25eirene clean_uinp clean_triang
 
 clean_build_mpi: clean_b25eirene_mpi clean_uinp_mpi
 
+clean_build_openmp: clean_b25eirene_openmp
+
+clean_build_openmp_mpi: clean_b25eirene_openmp_mpi
+
 clean_all:       clean_carre clean_divgeo clean_b25     clean_eirene     clean_b25eirene     clean_uinp     clean_triang clean_manual
 
 clean_all_mpi:   clean_carre clean_divgeo clean_b25_mpi clean_eirene_mpi clean_b25eirene_mpi clean_uinp_mpi clean_triang clean_manual
+
+clean_all_openmp:   clean_carre clean_divgeo clean_b25_openmp clean_eirene clean_b25eirene_openmp clean_uinp clean_triang clean_manual
+
+clean_all_openmp_mpi:   clean_carre clean_divgeo clean_b25_openmp_mpi clean_eirene_mpi clean_b25eirene_openmp_mpi clean_uinp_mpi clean_triang clean_manual
 
 
 clean_carre:
@@ -319,10 +391,11 @@ clean_eirene_mpi:
 clean_b25:
 	cd modules/B2.5; ${MAKE} clean
 
+clean_b25_openmp:
+	cd modules/B2.5; ${MAKE} clean USE_OPENMP=-D_OPENMP
 
 clean_b25_mpi:
 	cd modules/B2.5; ${MAKE} clean USE_MPI=-DUSE_MPI
-
 
 clean_b25_ig:
 	cd modules/B2.5; ${MAKE} clean USE_IMPGYRO=-DUSE_IMPGYRO
@@ -336,6 +409,14 @@ clean_b25eirene:
 clean_b25eirene_mpi:
 	cd modules/Eirene; ${MAKE} clean USE_B25=-DB25_EIRENE   USE_MPI=-DUSE_MPI
 	cd modules/B2.5;   ${MAKE} clean USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
+
+clean_b25eirene_openmp:
+	cd modules/Eirene; ${MAKE} clean USE_B25=-DB25_EIRENE
+	cd modules/B2.5;   ${MAKE} clean USE_EIRENE=-DB25_EIRENE USE_OPENMP=-D_OPENMP
+
+clean_b25eirene_openmp_mpi:
+	cd modules/Eirene; ${MAKE} clean USE_B25=-DB25_EIRENE   USE_MPI=-DUSE_MPI
+	cd modules/B2.5;   ${MAKE} clean USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI USE_OPENMP=-D_OPENMP
 
 clean_b25eirene_ig:
 	cd modules/Eirene; ${MAKE} clean USE_B25=-DB25_EIRENE    USE_IMPGYRO=-DUSE_IMPGYRO
@@ -368,19 +449,30 @@ clean_manual:
 
 # help
 help:
-	@echo "           solps : compile serial version (main codes)"
-	@echo "       solps_mpi : compile MPI version (main codes)"
-	@echo "      solps_debug : compile debug version (serial) (main codes)"
-	@echo "  solps_mpi_debug : compile debug version (MPI) (main codes)"
-	@echo "              all : compile serial version (all codes)"
-	@echo "          all_mpi : compile MPI version (all codes)"
-	@echo "        all_debug : compile debug version (serial) (all codes)"
-	@echo "    all_mpi_debug : compile debug version (MPI) (all codes)"
-	@echo "              nox : compile serial version (no X main codes)"
-	@echo "          all_nox : compile serial version (all no X codes)"
-	@echo "          nox_mpi : compile MPI version (no X main codes)"
-	@echo "      all_nox_mpi : compile MPI version (all no X codes)"
-	@echo "        nox_debug : compile debug version (serial) (no X main codes)"
-	@echo "    all_nox_debug : compile debug version (serial) (all no X codes)"
-	@echo "    nox_mpi_debug : compile debug version (MPI) (no X main codes)"
-	@echo "all_nox_mpi_debug : compile debug version (MPI) (all no X codes)"
+	@echo "                 solps : compile serial version (main codes)"
+	@echo "             solps_mpi : compile MPI version (main codes)"
+	@echo "          solps_openmp : compile OpenMP version (main codes)"
+	@echo "      solps_openmp_mpi : compile OpenMP+MPI version (main codes)"
+	@echo "           solps_debug : compile debug version (serial) (main codes)"
+	@echo "       solps_mpi_debug : compile debug version (MPI) (main codes)"
+	@echo "    solps_openmp_debug : compile debug version (OpenMP) (main codes)"
+	@echo "solps_openmp_mpi_debug : compile debug version (OpenMP+MPI) (main codes)"
+	@echo "                   all : compile serial version (all codes)"
+	@echo "               all_mpi : compile MPI version (all codes)"
+	@echo "            all_openmp : compile OpenMP version (all codes)"
+	@echo "             all_debug : compile debug version (serial) (all codes)"
+	@echo "         all_mpi_debug : compile debug version (MPI) (all codes)"
+	@echo "      all_openmp_debug : compile debug version (OpenMP) (all codes)"
+	@echo "  all_openmp_mpi_debug : compile debug version (OpenMP+MPI) (all codes)"
+	@echo "                   nox : compile serial version (no X main codes)"
+	@echo "               all_nox : compile serial version (all no X codes)"
+	@echo "               nox_mpi : compile MPI version (no X main codes)"
+	@echo "           all_nox_mpi : compile MPI version (all no X codes)"
+	@echo "            nox_openmp : compile OpenMP version (no X main codes)"
+	@echo "        nox_openmp_mpi : compile OpenMP+MPI version (no X main codes)"
+	@echo "             nox_debug : compile debug version (serial) (no X main codes)"
+	@echo "         all_nox_debug : compile debug version (serial) (all no X codes)"
+	@echo "         nox_mpi_debug : compile debug version (MPI) (no X main codes)"
+	@echo "      nox_openmp_debug : compile debug version (OpenMP) (no X main codes)"
+	@echo "     all_nox_mpi_debug : compile debug version (MPI) (all no X codes)"
+	@echo "  nox_openmp_mpi_debug : compile debug version (OpenMP+MPI) (no X main codes)"

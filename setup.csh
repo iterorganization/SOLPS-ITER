@@ -93,7 +93,7 @@ if ($?SOLPS_PATH) then
   setenv PATH `echo $PATH | sed "s|${SOLPS_PATH}:||"`
 endif
 
-# Default PATH: no mpi, no debug
+# Default PATH: no mpi, no openmp, no debug
 set      TOOLCHAIN =  ${HOST_NAME}.${COMPILER}
 set     CARRE_PATH =  ${SOLPSTOP}/modules/Carre/builds/${TOOLCHAIN}
 set    DIVGEO_PATH =  ${SOLPSTOP}/modules/DivGeo/builds/${TOOLCHAIN}:${SOLPSTOP}/modules/DivGeo/equtrn/builds/${TOOLCHAIN}:${SOLPSTOP}/modules/DivGeo/convert/builds/${TOOLCHAIN}
@@ -118,9 +118,10 @@ endif
 
 unset TOOLCHAIN SCRIPTS_PATH CARRE_PATH DIVGEO_PATH EIRENE_PATH B25_PATH B25EIRENE_PATH UINP_PATH TRIANG_PATH AMDS_PATH S45_PATH
 
-# Check whether SOLPS_DEBUG and SOLPS_MPI had been set already by the user
-if ($?SOLPS_DEBUG) source $SOLPSTOP/SETUP/debug
-if ($?SOLPS_MPI)   source $SOLPSTOP/SETUP/mpi
+# Check whether SOLPS_DEBUG, SOLPS_OPENMP and SOLPS_MPI have been set already by the user
+if ($?SOLPS_OPENMP) source $SOLPSTOP/SETUP/openmp
+if ($?SOLPS_DEBUG)  source $SOLPSTOP/SETUP/debug
+if ($?SOLPS_MPI)    source $SOLPSTOP/SETUP/mpi
 
 
 # Set path to manuals
@@ -194,12 +195,14 @@ alias xlylplot8 plot xlylplot8
 alias xlylplot9 plot xlylplot9
 
 
-alias   set_debug 'source $SOLPSTOP/SETUP/debug'
-alias unset_debug 'source $SOLPSTOP/SETUP/nodebug'
-alias   set_mpi   'source $SOLPSTOP/SETUP/mpi'
-alias unset_mpi   'source $SOLPSTOP/SETUP/nompi'
-alias   set_ig   'source $SOLPSTOP/SETUP/ig'
-alias unset_ig   'source $SOLPSTOP/SETUP/noig'
+alias   set_debug  'source $SOLPSTOP/SETUP/debug'
+alias unset_debug  'source $SOLPSTOP/SETUP/nodebug'
+alias   set_openmp 'source $SOLPSTOP/SETUP/openmp'
+alias unset_openmp 'source $SOLPSTOP/SETUP/noopenmp'
+alias   set_mpi    'source $SOLPSTOP/SETUP/mpi'
+alias unset_mpi    'source $SOLPSTOP/SETUP/nompi'
+alias   set_ig     'source $SOLPSTOP/SETUP/ig'
+alias unset_ig     'source $SOLPSTOP/SETUP/noig'
 
 
 #if (! $?IDL_PATH) setenv IDL_PATH

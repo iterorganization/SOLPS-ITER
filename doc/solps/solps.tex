@@ -480,6 +480,14 @@ Adding the {\tt \_mpi} suffix at the end of any of build targets will execute th
 with MPI parallelization options, when relevant, and put the executables in a separate
 {\tt builds/}\${\tt \{TOOL\_CHAIN\}.mpi} directory.
 
+Adding the {\tt \_openmp} suffix at the end of any of build targets will execute the command
+with OpenMP parallelization options, when relevant, and put the executables in a separate
+{\tt builds/}\${\tt \{TOOL\_CHAIN\}.openmp} directory.
+
+Adding both the {\tt \_openmp} and {\tt \_mpi} suffixes, in that order, i.e. {\tt \_openmp\_mpi}, at the end of any of build targets will execute the command
+with both OpenMP and MPI parallelization options, when relevant, and put the executables in a separate
+{\tt builds/}\${\tt \{TOOL\_CHAIN\}.openmp.mpi} directory.
+
 Adding the {\tt \_debug} suffix at the end of any of build targets will execute the command
 in debug mode, and put the executables in a separate
 {\tt builds/}\${\tt \{TOOL\_CHAIN\}.debug} directory.
@@ -520,7 +528,7 @@ Among other things, these setup files establish some aliases that are useful for
 \end{description}
 
 It is also possible to toggle between versions of the code compiled with and without debug options (array bounds checking, traceback, etc...) by use of the {\tt set\_debug} and {\tt unset\_debug} commands. Similarly, the
-{\tt set\_mpi} and {\tt unset\_mpi} will turn on or off, respectively, compilation with MPI parallelization flags. By default, neither debug nor MPI flags are turned on.
+{\tt set\_mpi} and {\tt unset\_mpi} will turn on or off, respectively, compilation with MPI parallelization flags. Same for {\tt set\_openmp} and {\tt unset\_openmp}, for OpenMP parallelization. By default, neither debug nor parallelization (MPI and OpenMP) flags are turned on.
 
 After activating one of these flags and upon succesful compilation, it is recommended to do:
 \begin{verbatim}
@@ -637,6 +645,8 @@ The {\tt setup.csh} file and its subsidiaries \${\tt \{SOLPSTOP\}/SETUP/setup.cs
   the code ({\tt set\_debug} and {\tt set\_nodebug})
 \item two aliases to swap between the MPI and no\_MPI versions of
   the code ({\tt set\_mpi} and {\tt set\_nompi})
+\item two aliases to swap between the OpenMP and no\_OpenMP versions of
+  the code ({\tt set\_openmp} and {\tt set\_noopenmp})
 \end{enumerate}
 Of course, any additional desired definitions can be added. The preferred place for those is, for those variables that need not be shared by other users, the \${\tt \{SOLPSTOP\}/SETUP/setup.csh.}\${\tt \{HOST\_NAME\}.}\${\tt \{COMPILER\}.local} and \${\tt \{SOLPSTOP\}/SETUP/config.}\${\tt \{HOST\_NAME\}.}\${\tt \{COMPILER\}.local} files. Variables that are needed at compilation time need to appear in the {\tt config.*.*(.local)} file, while variables needed at runtime must appear in {\tt setup.csh.*.*(.local)} file.
 

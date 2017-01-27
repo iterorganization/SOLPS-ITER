@@ -13,8 +13,17 @@ if ($?SOLPS_PATH) then
   setenv   OLD_SOLPS_PATH   $SOLPS_PATH
   setenv   PATH `echo $PATH | sed "s|${SOLPS_PATH}:||"`
   setenv   SOLPS_PATH `echo $SOLPS_PATH | sed 's|.mpi||g'` # remove .mpi if already present
-  setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|standalone.${HOST_NAME}.${COMPILER}|standalone.${HOST_NAME}.${COMPILER}.mpi|g"`
-  setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}|couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}.mpi|g"`
+  if ($?SOLPS_OPENMP) then
+    setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|B2.5/builds/standalone.${HOST_NAME}.${COMPILER}.openmp|B2.5/builds/standalone.${HOST_NAME}.${COMPILER}.openmp.mpi|g"`
+    setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|B2.5/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}.openmp|B2.5/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}.openmp.mpi|g"`
+  endif
+  if ($?SOLPS_DEBUG) then
+    setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|standalone.${HOST_NAME}.${COMPILER}.debug|standalone.${HOST_NAME}.${COMPILER}.mpi.debug|g"`
+    setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}.debug|couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}.mpi.debug|g"`
+  else
+    setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|standalone.${HOST_NAME}.${COMPILER}:|standalone.${HOST_NAME}.${COMPILER}.mpi:|g"`
+    setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}:|couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}.mpi:|g"`
+  endif
   setenv   PATH ${SOLPS_PATH}:${OLD_PATH}
   setenv   SOLPS_MPI yes
   unsetenv OLD_SOLPS_PATH
