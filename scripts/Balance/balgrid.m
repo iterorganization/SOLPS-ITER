@@ -1,0 +1,86 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% balgrid plots the whole grid for a particular simulation, as well as the     %
+% particular volume where integrated balance is to be performed and the        %
+% poloidal cells along which poloidal balance will be performed                % 
+%                                                                              %
+% David Moulton (david.moulton@ccfe.ac.uk) January 2017.                       %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function balgrid(geomb2,indrad,indpol,axgrid,reverse)
+
+axis(axgrid,'equal');
+xlabel(axgrid,'R (m)','interpreter','latex');
+ylabel(axgrid,'Z (m)','interpreter','latex');
+
+rbl = geomb2.r(:,:,1);
+rbr = geomb2.r(:,:,2);
+rtl = geomb2.r(:,:,3);
+rtr = geomb2.r(:,:,4);
+zbl = geomb2.z(:,:,1);
+zbr = geomb2.z(:,:,2);
+ztl = geomb2.z(:,:,3);
+ztr = geomb2.z(:,:,4);
+
+% Plot the grid (including ghost cells):
+patch([reshape(rbl,1,[]);...
+       reshape(rbr,1,[]);...
+       reshape(rtr,1,[]);...
+       reshape(rtl,1,[])],...
+      [reshape(zbl,1,[]);...
+       reshape(zbr,1,[]);...
+       reshape(ztr,1,[]);...
+       reshape(ztl,1,[])],'w','parent',axgrid,'handlevisibility','off');
+
+% Plot the radial balance volume:
+patch([reshape(rbl(indrad),1,[]);...
+       reshape(rbr(indrad),1,[]);...
+       reshape(rtr(indrad),1,[]);...
+       reshape(rtl(indrad),1,[])],...
+      [reshape(zbl(indrad),1,[]);...
+       reshape(zbr(indrad),1,[]);...
+       reshape(ztr(indrad),1,[]);...
+       reshape(ztl(indrad),1,[])],...
+      'y','parent',axgrid);
+
+% Plot the poloidal balance volume:
+patch([reshape(rbl(indpol),1,[]);...
+       reshape(rbr(indpol),1,[]);...
+       reshape(rtr(indpol),1,[]);...
+       reshape(rtl(indpol),1,[])],...
+      [reshape(zbl(indpol),1,[]);...
+       reshape(zbr(indpol),1,[]);...
+       reshape(ztr(indpol),1,[]);...
+       reshape(ztl(indpol),1,[])],...
+      'm','parent',axgrid);
+   
+% Plot the left- and right-most surfaces of the volume of interest
+rleft = [];
+zleft = [];
+rright = [];
+zright = [];
+for iy = 1:geomb2.ny
+    first = find(indrad(:,iy),1,'first');
+    last = find(indrad(:,iy),1,'last');
+    if ~isempty(first)
+        rleft = [rleft,rbl(first,iy),rtl(first,iy)];
+        zleft = [zleft,zbl(first,iy),ztl(first,iy)];
+        rright = [rright,rbr(last,iy),rtr(last,iy)];
+        zright = [zright,zbr(last,iy),ztr(last,iy)];
+    end
+end
+
+cmap = colormap(lines(2));
+if ~reverse
+    plot(rleft,zleft,'color',cmap(1,:),'parent',axgrid);
+    plot(rright,zright,'color',cmap(2,:),'parent',axgrid);
+else
+    plot(rright,zright,'color',cmap(2,:),'parent',axgrid);
+    plot(rleft,zleft,'color',cmap(1,:),'parent',axgrid);
+end
+    
+hl = legend(axgrid, 'radial balance volume',...
+                   'poloidal balance volume',...
+                   'upstream face',...
+                   'downstream face');
+set(hl,'interpreter','latex')
+
+end
