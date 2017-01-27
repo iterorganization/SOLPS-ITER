@@ -19,9 +19,11 @@ if ($?SOLPS_PATH) then
   endif
   if ($?SOLPS_DEBUG) then
     setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|standalone.${HOST_NAME}.${COMPILER}.debug|standalone.${HOST_NAME}.${COMPILER}.mpi.debug|g"`
+    setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|Uinp/builds/${HOST_NAME}.${COMPILER}.debug|Uinp/builds/${HOST_NAME}.${COMPILER}.mpi.debug|g"`
     setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}.debug|couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}.mpi.debug|g"`
   else
     setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|standalone.${HOST_NAME}.${COMPILER}:|standalone.${HOST_NAME}.${COMPILER}.mpi:|g"`
+    setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|Uinp/builds/${HOST_NAME}.${COMPILER}:|Uinp/builds/${HOST_NAME}.${COMPILER}.mpi:|g"`
     setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}:|couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}.mpi:|g"`
   endif
   setenv   PATH ${SOLPS_PATH}:${OLD_PATH}
