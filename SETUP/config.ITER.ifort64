@@ -65,7 +65,9 @@ MPI_CPP        = `pkg-config mpich2-ch3 --cflags`
 ifneq (,$(shell which paraview-config))
   SOLPS_CPP   += -DCATALYST
   LD_CATALYST  = `paraview-config --libs vtkPVPythonCatalyst`
+  PARAVIEW_LIB = `paraview-config --libs --python | sed s/-L//`
   export LD_CATALYST
+  export PARAVIEW_LIB
 endif
 
 # Build with IMAS if imas module is loaded
@@ -87,8 +89,6 @@ export GLI_HOME
 export NCARG_ROOT
 export NAGDIR
 export MDSPLUS_DIR
-export PARAVIEW_DIR
-export PARAVIEW_MAJOR_VERSION 
 
 export LD_NETCDF
 export LD_MSCL

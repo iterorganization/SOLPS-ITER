@@ -68,7 +68,9 @@ MPI_CPP        = -I${MPDIR}/include
 ifneq (,$(shell which paraview-config))
   SOLPS_CPP   += -DCATALYST
   LD_CATALYST  = `paraview-config --libs vtkPVPythonCatalyst`
+  PARAVIEW_LIB = `paraview-config --libs --python | sed s/-L//`
   export LD_CATALYST
+  export PARAVIEW_LIB
 endif
 
 # Build with IMAS if imas module is loaded
