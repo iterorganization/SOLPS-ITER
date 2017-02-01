@@ -61,7 +61,7 @@ LD_MPI     = `pkg-config mvapich2 --libs`
 SOLPS_CPP      = -DNCAR4 -DMDSPLUS -DNO_F01AAF -DCDF_MOVIE
 B25_DEFINES    =
 EIRENE_DEFINES =
-MPI_CPP        = `pkg-config mpich2-ch3 --cflags`
+MPI_CPP        = `pkg-config mvapich2 --cflags`
 
 # Autodetected optional features...
 

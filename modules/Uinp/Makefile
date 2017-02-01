@@ -88,6 +88,11 @@ ifeq ($(shell [ -e ${OBJDIR}/LISTOBJ ] && echo yes || echo no ),yes)
 include ${OBJDIR}/LISTOBJ
 endif
 
+ifdef USE_MPI
+LDLIBS += ${LD_MPI}
+FFLAGS += ${MPI_CPP}
+endif
+
 DEST = $(OBJS:%.o=$(OBJDIR)/%.o)
 
 $(OBJDIR)/%.o : %.F

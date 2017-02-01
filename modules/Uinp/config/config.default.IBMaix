@@ -7,7 +7,6 @@ ifndef LD_MSCL
   $(error LD_MSCL not defined)
 endif
 
-
 FC	     = xlf
 ifndef SOLPS_DEBUG
 FFLAGS	 = -O -g -NA16384 -NQ20000

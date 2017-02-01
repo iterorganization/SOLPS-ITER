@@ -6,7 +6,7 @@ ifndef LD_MSCL
 endif
 
 ifdef USE_MPI
-FC 	 = mpif90
+FC       = mpif90
 else
 FC       = ifort
 endif

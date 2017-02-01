@@ -25,7 +25,7 @@ endif
 endif
 INCLUDE  = -I${SRCDIR} -I${EIRINC} -I${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
-CPP	 = /lib/cpp -C -traditional
+CPP      = /lib/cpp -C -traditional
 
 MOD      = mod
 LDLIBS	 = ${LD_MSCL}
