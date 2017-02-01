@@ -5,9 +5,9 @@
 LD_MSCL ?= `pkg-config mscl --libs`
 
 ifdef USE_MPI
-FC       = gfortran
-else
 FC       = mpif90
+else
+FC       = gfortran
 endif
 ifdef SOLPS_DEBUG
 FFLAGS	 = -g
