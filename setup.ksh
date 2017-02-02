@@ -64,6 +64,12 @@ else
 fi
 [ -z "$COMPILER" ] && echo 'COMPILER not defined!'
 
+[ -z "$PYTHONPATH" ] && {
+  export PYTHONPATH="$SOLPSTOP/lib/python"
+} || {
+  export PYTHONPATH="${PYTHONPATH}:$SOLPSTOP/lib/python"
+}
+
 # setup files for combination of HOST_NAME and COMPILER, + local modifications if present
 [ -e SETUP/setup.ksh.${HOST_NAME}.${COMPILER} ] && {
   echo Loading SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.
@@ -235,12 +241,6 @@ export MANPATH=$NCARG_ROOT/man:${DG}/equtrn/doxygen/man:$MANPATH
   export WSTYPE OBJECTCODE
   [ -n $XLFRTEOPTS ] && export XLFRTEOPTS
   echo "$OBJECTCODE"
-}
-
-[ -z "$PYTHONPATH" ] && {
-  export PYTHONPATH="$SOLPSTOP/lib/python"
-} || {
-  export PYTHONPATH="${PYTHONPATH}:$SOLPSTOP/lib/python"
 }
 
 export PLOT_SET_PATH=":..:../..:$SOLPSTOP/data.local/plot_set:$SOLPSTOP/data/plot_set"
