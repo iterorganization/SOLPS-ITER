@@ -50,6 +50,12 @@ if(! $?COMPILER) then
   echo COMPILER not defined!
 endif
 
+if ($?PYTHONPATH) then
+  setenv PYTHONPATH ${PYTHONPATH}:${SOLPSTOP}/lib/python
+else
+  setenv PYTHONPATH ${SOLPSTOP}/lib/python
+endif
+
 # setup files for combination of HOST_NAME and COMPILER, + local modifications if present
 if (-e SETUP/setup.csh.${HOST_NAME}.${COMPILER}) then
   echo Loading SETUP/setup.csh.${HOST_NAME}.${COMPILER}.
@@ -201,11 +207,7 @@ alias unset_ig   'source $SOLPSTOP/SETUP/noig'
 #
 #
 #
-if ($?PYTHONPATH) then
-  setenv PYTHONPATH ${PYTHONPATH}:${SOLPSTOP}/lib/python
-else
-  setenv PYTHONPATH ${SOLPSTOP}/lib/python
-endif
+
 #
 #setenv PLOT_SET_PATH '..:../..:${SOLPSTOP}/data.local/plot_set:${SOLPSTOP}/data/plot_set'
 
