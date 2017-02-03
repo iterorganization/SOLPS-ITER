@@ -15,7 +15,7 @@
 
 <xsl:template match="/">
    \begin{description}
-   <xsl:for-each select="solps/code/module/param">
+   <xsl:for-each select="solps/module/param">
       <xsl:text>\item[</xsl:text><xsl:value-of select="name"/><xsl:text>] </xsl:text>
       <xsl:text>\message{</xsl:text><xsl:value-of select="name"/> at page \thepage}
       <xsl:value-of select="description"/>

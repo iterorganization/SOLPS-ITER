@@ -11,7 +11,7 @@
       <th>Default</th>
       <th>Description</th>
     </tr>
-    <xsl:for-each select="solps/code/module/param">
+    <xsl:for-each select="solps/module/param">
     <tr>
       <td><xsl:value-of select="name"/></td>
       <td><xsl:value-of select="default"/></td>
