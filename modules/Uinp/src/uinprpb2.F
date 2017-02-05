@@ -244,7 +244,7 @@ c*** k, m, n are the numbers of recycling, specified, and all strata
         write(0,*) 'Too many strata found in uinprpb2: ',n
         write(0,*) 'nlrbnds:'
         do jj=1,nbndknd !{
-    if(nznbndt(jj).gt.0) write(0,
+          if(nznbndt(jj).gt.0) write(0,
      ,          '(1x,a2,1x,50l2/(4x,50l2))') jj,
      ,            (nlrbnds(ii,jj),ii=1,nznbndt(j))
         end do !}
