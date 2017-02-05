@@ -578,7 +578,12 @@ C     FIND NEIGHBOURS
       IMPLICIT NONE
 
       INTEGER I, J, K, L, M, IS, incr /1000/
-      LOGICAL PARA, dbg /.false./,dbg0 /.false./
+      LOGICAL PARA
+#ifdef DBG
+      LOGICAL dbg /.false./, dbg0 /.false./
+#else
+      LOGICAL dbg /.true./, dbg0 /.true./
+#endif
 
       CALL GRSPTS(25)
       CALL GRNWPN(6)

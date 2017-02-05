@@ -16,9 +16,9 @@ DEFINES		=
 EQUIVS 		=
 
 #CPP	 	= -/lib/cpp -C -traditional
-CPP	 	=
-CPPOPTS 	= -C -P -I${srcdir} ${EQUIVS}
-SED 		=
+CPP	 	    = /lib/cpp -traditional
+CPPOPTS 	= -P -I${srcdir} ${EQUIVS}
+SED 		  =
 LINK_MOD 	= 
 
 FC       	= f95f -v 6.2d

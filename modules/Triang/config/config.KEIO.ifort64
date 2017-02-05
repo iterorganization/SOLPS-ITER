@@ -19,7 +19,7 @@ DEFINES		=
 EQUIVS 		=
 
 #CPP	 	= -/lib/cpp -C -traditional
-CPP	 	    =
+CPP	 	    = /lib/cpp -traditional
 CPPOPTS 	= -I${srcdir} ${EQUIVS}
 SED 	  	=
 LINK_MOD 	= 

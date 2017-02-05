@@ -30,10 +30,10 @@ c      integer nniprm(nmxprm,nkwrd,nblck)
       external len_of_digits
       equivalence (ss,s),(s(mxkwln+3),us),(s(2),sss)
       data ss / ' ' /
-c#ifdef DBG
-c      real r
-c      character c*8
-c#endif
+#ifdef DBG
+      real r
+      character c*8
+#endif
 c*** Flag of the first call
       data ufirst / .true. /
       save
@@ -83,7 +83,7 @@ cc>>>
 	do n=1,nn !{
 	  do l=1,ll !{
 	    if(lprdckw(l,n,jvrb,jblk)) then !{
-c#ifdef DBG
+#ifdef DBG
 c            r=0
 c            i=0
 c            c=' '
@@ -98,7 +98,7 @@ c              i=iniprm(1,l,n,jvrb,jblk)
 c            end if !}
 c            print *,'l,n,jvrb,jblk,lprdckw:parm(1) = ',
 c     ,         l,n,jvrb,jblk,lprdckw(l,n,jvrb,jblk),' : ',c,i,r !###
-c#endif
+#endif
               sss=chrpl(jvrb,jblk)
 	      if(nmdlr(jvrb,jblk).gt.0) then !{
                 if(nmdpr(jvrb,jblk).eq.nspcpls+nspcncl) then !{

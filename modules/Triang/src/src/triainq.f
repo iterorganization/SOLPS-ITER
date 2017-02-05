@@ -30,7 +30,11 @@ c*  xr,yr : coordinates of the reference point
       integer cell /0/
       character line*72
       real r,u,xr,yr,xm,xx,ym,yx
+#ifdef DBG
+      logical dbg /.true./
+#else
       logical dbg /.false./
+#endif
 
 c=======================================================================
 c*** Open the data files
@@ -137,7 +141,7 @@ c            write(0,*) 'ltri =',ltri          !###
       else !}{
         ltri=cell
       end if !}
-      dbg=.false.
+c      dbg=.false.      !###
 
       write(0,'(a,t12,i8,2x,3i8)') 'ltri=',ltri,tri(:,ltri)
       if(ltri.gt.0) then !{

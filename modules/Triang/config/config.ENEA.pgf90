@@ -6,12 +6,11 @@ ifndef LD_GKS
   $(error LD_GKS not defined)
 endif
 
-
 DEFINES =
 EQUIVS =
 
-CPP = /lib/cpp -C -traditional
-CPPOPTS = -C -P -I${srcdir} ${EQUIVS}
+CPP = /lib/cpp -traditional
+CPPOPTS = -P -I${srcdir} ${EQUIVS}
 SED = sed s:\#PREC\#:d:g
 LINK_MOD =
 

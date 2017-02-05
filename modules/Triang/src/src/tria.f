@@ -107,7 +107,7 @@ cank{
         close(3)
         go to 51
  50     print *,'error ',hhlp200,
-     ,    'ing tria.dbg - no debugging data to be used'
+     ,    'in tria.dbg - no debugging data to be used'
  51     continue
       end if !}
       open(2,file='tria.in',status='old',action='read')

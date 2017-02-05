@@ -19,9 +19,9 @@ DEFINES		=
 EQUIVS 		=
 
 #CPP	 	= -/lib/cpp -traditional
-CPP	 	=
+CPP       = /lib/cpp -traditional
 CPPOPTS 	= -P -ffreestanding -I${srcdir} ${EQUIVS}
-SED 		=
+SED       =
 LINK_MOD 	= 
 
 FC       	= gfortran
