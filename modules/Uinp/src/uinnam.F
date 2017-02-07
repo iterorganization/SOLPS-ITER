@@ -587,7 +587,8 @@ c      call xerrab (' ==> Corrupted DG output?')
       end if !}
       call resime(ychsptg(nchsppri))
       goto 9999
-   91 if(nchsppri.le.0) then !{
+   91 l=lena
+      if(nchsppri.le.0) then !{
         write(0,*) 'Chemical sputtering data outside the block - ',unn
         call xerrab (' ==> Corrupted DG output?')
       end if !}
