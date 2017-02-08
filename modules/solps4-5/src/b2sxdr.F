@@ -331,8 +331,9 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
       call b2xgbs (nx, ny, wbbl, wbbv, gs, qc, crx, cry, pbs)     
 *   ..save geometry
       call write_b2ag(nx,ny)
-      call b2wugm (nout(1), nx, ny, crx, cry, fpsi,
-     &  ffbz, bb, vol, hx, hy, qz, qc, gs, pbs)
+      call b2wugm (nout(1), nx, ny, crx, cry, fpsi, ffbz, bb,
+     &  vol, hx, hy, qz, qc, qcb, gs, pbs, wbbc,
+     &  cell_width, cell_height)
 *   ..save parameters
       parg(0) = -1.0_R8
       parg(1:99) = 0.0_R8
@@ -390,8 +391,8 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
      &        maxval(cry(1:nx,1:ny,0:3)))/2.0_R8
       scale = max(maxval(crx(1:nx,1:ny,0:3))-minval(crx(1:nx,1:ny,0:3)),
      &            maxval(cry(1:nx,1:ny,0:3))-minval(cry(1:nx,1:ny,0:3)))
-      write(70,'(1x,1p,4f5.2)') xcnt-scale/2.0_R8, xcnt+scale/2.0_R8,
-     &                          ycnt-scale/2.0_R8, ycnt+scale/2.0_R8
+      write(70,'(4(1x,g9.2))') xcnt-scale/2.0_R8, xcnt+scale/2.0_R8,
+     &                         ycnt-scale/2.0_R8, ycnt+scale/2.0_R8
       close(70)
 *   ..write b2yh.dat
       open(unit=70,file='b2yh.dat')
@@ -422,8 +423,8 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
       write(70,'(1x,2f5.2)') 0.5, 0.5
       write(70,'(a)') '*nmbpdm'
       write(70,'(i3)') 1
-      write(70,'(1x,1p,4f5.2)') xcnt-scale/2.0_R8, xcnt+scale/2.0_R8,
-     &                          ycnt-scale/2.0_R8, ycnt+scale/2.0_R8
+      write(70,'(4(1x,g9.2))') xcnt-scale/2.0_R8, xcnt+scale/2.0_R8,
+     &                         ycnt-scale/2.0_R8, ycnt+scale/2.0_R8
       close(70)
 *   ..write b2yp.dat
       open(unit=70,file='b2yq.dat')

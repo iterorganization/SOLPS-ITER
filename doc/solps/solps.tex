@@ -3897,7 +3897,11 @@ Example of the {\tt b2ymb.dat} file:\\
 \VerbatimInput[fontsize=\footnotesize]{b2ymb.dat}
 
 \begin{figure}[hbtp]
-\centerline{\includegraphics[height=8cm]{monoblock_cross_section}}
+\ifpdf
+  \centerline{\includegraphics[height=8cm]{monoblock_cross_section-eps-converted-to.pdf}}
+\else
+  \centerline{\includegraphics[height=8cm]{monoblock_cross_section.eps}}
+\fi
 \caption{Monoblock tile cross section}
 \label{fig:monoblock_cross_section}
 \end{figure}
@@ -3925,7 +3929,11 @@ Example of the {\tt b2yrp.dat} file:\\
 \VerbatimInput[fontsize=\footnotesize]{b2yrp.dat}
 
 \begin{figure}[hbtp]
-\centerline{\includegraphics[height=8cm]{ref_plate}}
+\ifpdf
+  \centerline{\includegraphics[height=8cm]{ref_plate-eps-converted-to.pdf}}
+\else
+  \centerline{\includegraphics[height=8cm]{ref_plate.eps}}
+\fi
 \caption{Reflector plate tile cross section}
 \label{fig:refplate_cross_section}
 \end{figure}
