@@ -23,7 +23,7 @@ module load fontconfig/2.11.93
 module load cairo/1.14.2
 module load MDSplus/7.1.13-goolf-1.5.16-Java-1.6.0_45
 module load make
-module load imas/3.7.3/ual/3.3.14
+module load imas/3.7.3_j1.6/ual/3.3.14
 module load python/2.7/11
 module load totalview
 
