@@ -21,9 +21,12 @@ module load ghostscript
 module load libxml2/2.9.2-GCC-4.8.3
 module load fontconfig/2.11.93
 module load cairo/1.14.2
-module load MDSplus/7.1.13-goolf-1.5.16-Java-1.6.0_45
 module load make
+module unload imas
 module load imas/3.7.3_j1.6/ual/3.3.14
+module unload MDSplus
+module unload Java
+module load MDSplus/7.0.67-goolf-1.5.16-Java-1.7.0_79-Python-2.7.9
 module load python/2.7/11
 module load totalview
 
