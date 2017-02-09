@@ -815,7 +815,7 @@ C     CHECK COLINEARITY OF TWO MARGINS
       FUNCTION PARA(XP2,YP2,XP1,YP1,XQ1,YQ1,XQ2,YQ2)
       IMPLICIT NONE
       double precision tol,tol2,tolx,toly
-      parameter (tol=1.d-4)
+      parameter (tol=1.d-6)
       DOUBLE PRECISION XP2,YP2,XP1,YP1,XQ1,YQ1,XQ2,YQ2
       LOGICAL PARA
 

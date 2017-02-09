@@ -145,7 +145,7 @@ c*** 1
      ,  nfullrun, noptim,noptm1, ngeom_usr, ncoup_input, nsmstra /
      /     0    ,   1   ,   1  ,     0    ,     1      ,    1    /,
      ,   nstoram, ngstal,nrtal1,nreac_add /
-     /      9   ,   1   ,   0  ,     1    /
+     /      9   ,   1   ,   0  ,     7    /
       data nlscl , nltest, nlana ,nldrft, nlcrr , nlerg , nlident/
      /    .true. ,.false.,.false.,.true.,.false.,.false.,.false./,
      ,     nlone , nlmovie,nldfst,nloldran,nlcascad,nloctree/

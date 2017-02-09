@@ -25,6 +25,9 @@ switch ($text)
   case "rqradreg_region":
     set label="radiation"
     breaksw
+  case "rqbrmreg_region":
+    set label="bremsstrahlung"
+    breaksw
   case "b2stbr_she_reg_region":
     set label="electron heat loss (-) or source (+) rate from recycling"
     breaksw
