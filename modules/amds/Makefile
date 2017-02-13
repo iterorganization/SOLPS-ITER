@@ -69,7 +69,7 @@ $(OBJDIR)/vacreate.o:
 	$(CC) -DCbFree=CbFree_ignore -c src/vacreate.c -o $(OBJDIR)/vacreate.o
 
 $(OBJDIR)/%.o : %.c
-	 $(CC) -c $< -o $@
+	$(CC) -c $< -o $@
 
 $(TARGET): $(DEST) $(MAKES)
 	$(CC) $(CFLAGS) -o $@ $(DEST) $(LIBS)
@@ -89,7 +89,8 @@ $(OBJDIR):
 	mkdir -p $(OBJDIR)
 
 clean:
-	 /bin/rm -f $(OBJDIR)/*.o $(OBJDIR)/res2fbr src/x_~fbr.c
+	/bin/rm -f $(OBJDIR)/*.o $(OBJDIR)/res2fbr src/x_~fbr.c \
+	$(OBJDIR)/dependencies* $(OBJDIR)/LISTOBJ
 
 TAGS:	tags
 
