@@ -2,6 +2,7 @@
 
 TARGET=$(OBJDIR)/amds
 RES2FBR=$(OBJDIR)/res2fbr
+CALC=$(OBJDIR)/calc_atomic_data
 VPATH=src
 
 ifndef HOST_NAME
@@ -62,7 +63,7 @@ OBJS=amvald.o amview.o amgraph.o amxvars.o amvars.o amundo.o \
 
 DEST = $(OBJS:%.o=$(OBJDIR)/%.o)
 
-all: $(RES2FBR) $(TARGET)
+all: $(RES2FBR) $(TARGET) $(CALC)
 
 .PHONY: VERSION clean neat all depend listobj force
 
@@ -79,7 +80,11 @@ src/x_~fbr.c: src/amds.xrs $(RES2FBR)
 	$(RES2FBR) amdsResources < src/amds.xrs > src/x_~fbr.c
 
 $(RES2FBR): $(OBJDIR)/res2fbr.o $(MAKES)
-	  cc -o $(RES2FBR) $(OBJDIR)/res2fbr.o
+	cc -o $(RES2FBR) $(OBJDIR)/res2fbr.o
+
+$(CALC): ${B2OBJ}/calc_atomic_data.exe $(MAKES)
+	cp ${B2OBJ}/calc_atomic_data.exe $(CALC)
+	touch $(CALC)
 
 dirs: $(OBJDIR)
 
@@ -90,7 +95,7 @@ $(OBJDIR):
 	mkdir -p $(OBJDIR)
 
 clean:
-	/bin/rm -f $(OBJDIR)/*.o $(OBJDIR)/res2fbr src/x_~fbr.c \
+	/bin/rm -f $(OBJDIR)/*.o src/x_~fbr.c $(TARGET) $(RES2FBR) $(CALC) \
 	$(OBJDIR)/dependencies* $(OBJDIR)/LISTOBJ
 
 TAGS:	tags
