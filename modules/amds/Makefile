@@ -36,6 +36,7 @@ ifdef SOLPS_DEBUG
 EXT_DEBUG = .debug
 endif
 OBJDIR = ${PWD}/builds/${HOST_NAME}.${COMPILER}${EXT_DEBUG}
+B2OBJ = ${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_DEBUG}
 
 ifeq ($(shell [ -e config/config.${HOST_NAME}.${COMPILER} ] && echo yes || echo no ),yes)
 include config/config.${HOST_NAME}.${COMPILER}
@@ -50,12 +51,12 @@ MAKES+= config/config.${HOST_NAME}.${COMPILER}.local
 endif
 
 #OBJS=amvald.o amview.o amgraph.o amxvars.o amvars.o amundo.o \
-#     amfio.o amdbase.o ammenu.o aminfo.o ammain.o vacreate.o\
+#     amfio.o amdbase.o ammenu.o aminfo.o ammain.o vacreate.o \
 #     amfile.o amtext.o calc.o vars.o ngroups.o amdoc.o amxapp.o \
 #     xmform2t.o x_~fbr.o
 
 OBJS=amvald.o amview.o amgraph.o amxvars.o amvars.o amundo.o \
-     amfio.o amdbase.o ammenu.o aminfo.o ammain.o vacreate.o\
+     amfio.o amdbase.o ammenu.o aminfo.o ammain.o vacreate.o \
      amfile.o amtext.o calc.o vars.o ngroups.o amdoc.o amxapp.o \
      x_~fbr.o
 
@@ -75,7 +76,7 @@ $(TARGET): $(DEST) $(MAKES)
 	$(CC) $(CFLAGS) -o $@ $(DEST) $(LIBS)
 
 src/x_~fbr.c: src/amds.xrs $(RES2FBR)
-	 $(RES2FBR) amdsResources < src/amds.xrs > src/x_~fbr.c
+	$(RES2FBR) amdsResources < src/amds.xrs > src/x_~fbr.c
 
 $(RES2FBR): $(OBJDIR)/res2fbr.o $(MAKES)
 	  cc -o $(RES2FBR) $(OBJDIR)/res2fbr.o
@@ -83,7 +84,7 @@ $(RES2FBR): $(OBJDIR)/res2fbr.o $(MAKES)
 dirs: $(OBJDIR)
 
 neat:
-	rm -rf ${OBJDIR}/*.o ${OBJDIR}/*.f
+	rm -rf ${OBJDIR}/*.o src/x_~fbr.c
 
 $(OBJDIR):
 	mkdir -p $(OBJDIR)

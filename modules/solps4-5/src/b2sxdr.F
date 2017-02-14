@@ -341,16 +341,19 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
 *   ..in 5.1 and SOLPS-ITER, we need a fort.30 file early to build triangular grids
       call write_f30 (nx, ny)
 *   ..write dummy b2ag.prt
+      write(*,*) 'Writing b2ag.prt'
       open(unit=70,file='b2ag.prt')
       write(70,'(a)') 'Dummy file, plasma geometry imported from B2SXDR'
       close(70)
 *   ..write b2ai.dat
       call write_b2ai(ns)
 *   ..write dummy b2ai.prt
+      write(*,*) 'Writing b2ai.prt'
       open(unit=70,file='b2ai.prt')
       write(70,'(a)') 'Dummy file, plasma state imported from B2SXDR'
       close(70)
 *   ..write b2yt.dat
+      write(*,*) 'Writing b2yt.dat'
       open(unit=70,file='b2yt.dat')
       write(70,'(a)') '*dimens (nx, ny: free format)'
       write(70,'(2(2x,i4))') nx, ny
@@ -377,6 +380,7 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
      > write(70,'(a)') '''invert_bpol''       ''1'''
       close(70)
 *   ..write b2yg.dat
+      write(*,*) 'Writing b2yg.dat'
       open(unit=70,file='b2yg.dat')
       write(70,'(a)') '*idout          (int, char*80, free format)'
       write(70,'(i3,a,1x,a)') 0,',','''....'''
@@ -395,26 +399,31 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
      &                         ycnt-scale/2.0_R8, ycnt+scale/2.0_R8
       close(70)
 *   ..write b2yh.dat
+      write(*,*) 'Writing b2yh.dat'
       open(unit=70,file='b2yh.dat')
       write(70,'(a)') '*style          (integer, free format)'
       write(70,'(i3)') 1
       close(70)
 *   ..write b2yi.dat
+      write(*,*) 'Writing b2yi.dat'
       open(unit=70,file='b2yi.dat')
       write(70,'(a)') '*idout          (int, char*80, free format)'
       write(70,'(i3,a,1x,a)') 0,',','''....'''
       close(70)
 *   ..write b2ym.dat
+      write(*,*) 'Writing b2ym.dat'
       open(unit=70,file='b2ym.dat')
       write(70,'(a)') '*idout          (int, char*80, free format)'
       write(70,'(i3,a,1x,a)') 0,',','''....'''
       close(70)
 *   ..write b2yn.dat
+      write(*,*) 'Writing b2yn.dat'
       open(unit=70,file='b2yn.dat')
       write(70,'(a)') '*idout          (int, char*80, free format)'
       write(70,'(i3,a,1x,a)') 0,',','''....'''
       close(70)
 *   ..write b2yp.dat
+      write(*,*) 'Writing b2yp.dat'
       open(unit=70,file='b2yp.dat')
       write(70,'(a)') '*idout          (int, char*80, free format)'
       write(70,'(i3,a,1x,a)') 0,',','''....'''
@@ -427,6 +436,7 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
      &                         ycnt-scale/2.0_R8, ycnt+scale/2.0_R8
       close(70)
 *   ..write b2yp.dat
+      write(*,*) 'Writing b2yq.dat'
       open(unit=70,file='b2yq.dat')
       do is = 0, ns-1
         write(70,'(2i6)') 2, 3+is
@@ -437,6 +447,16 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
       write(70,'(2i6)') 2, 4+(2*ns)
       write(70,'(2i6)') 2, 5+(2*ns)
       write(70,'(2i6)') 2, 6+(2*ns)
+      close(70)
+*   ..write b2yr.dat
+      write(*,*) 'Writing b2yr.dat'
+      open(70,file='b2yr.dat')
+      write(70,'(a)') '*nijdis        (integer, free format)'
+      write(70,'(2i4)') 4, 4
+      write(70,'(a)') '*idis          (nidis*integer, free format)'
+      write(70,'(4i4)') 8, 16, 24, 32
+      write(70,'(a)') '*jdis          (njdis*integer, free format)'
+      write(70,'(4i4)') 2, 6, 10, 14
       close(70)
 *   ..write header to converted state file
       idum(0) = nx
