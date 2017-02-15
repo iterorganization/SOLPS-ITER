@@ -1,7 +1,374 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <solps>
-	<module>
-		<name>b2mn.dat</name>
+	<module name="b2ag">
+		<param>
+			<name>dimens</name>
+			<default>None</default>
+			<type>string</type>
+			<description>
+                specifies the size of the grid
+                first pair is NX &amp; NY of the grid you want to produce
+                second pair is the size of the grid that was originally created
+                each needs to be an integer multiple of the corresponding entry of the first pair. Note that for double-null cases, the interior guard cells corresponding to the top divertor boundaries should not be multiplied.
+            </description>
+		</param>
+		<param>
+			<name>param</name>
+			<default>None</default>
+			<type>Integers</type>
+			<description>
+                at least 100 additional numbers, of which only the first is relevant for us
+                -1.0 read the mesh data using the "simplified" Carre format
+                -2.0 read the mesh data using the Sonnet format
+            </description>
+		</param>
+	</module>
+	<module name="b2ah">
+		<param>
+			<name>dimens</name>
+			<default>None</default>
+			<type>Integer</type>
+			<description>
+                the number of charge states
+            </description>
+		</param>
+		<param>
+			<name>label</name>
+			<default>None</default>
+			<type>String</type>
+			<description>
+                specifies, on the next line, a label for the run
+            </description>
+		</param>
+		<param>
+			<name>b2cmpa</name>
+			<default>None</default>
+			<type>String</type>
+			<description>
+                specifies a block of basic parameters.
+            </description>
+		</param>
+		<param>
+			<name>b2cmpb</name>
+			<default>None</default>
+			<type>String</type>
+			<description>
+                specifies a block of boundary conditions
+            </description>
+		</param>
+		<param>
+			<name>b2cmpt</name>
+			<default>None</default>
+			<type>String</type>
+			<description>
+                specifies a block of transport coefficients
+            </description>
+		</param>
+		<param>
+			<name>specs</name>
+			<default></default>
+			<type>Strings</type>
+			<description>
+                atomic charge, nuclear charge, atomic mass and atomic charge squared; this data should match that given in b2ai.dat
+				Starting with code version 01.001.024, an alternative means of describing the plasma species and filling out the
+				b2cmpa block is provided, in order to allow for bundling of charge states, when running cases with high-Z species.
+				The relevant description is then
+				minimum atomic charge of the stage, maximum atomic charge of the stage, nuclear charge, and atomic mass;
+				this data should match that given in b2ai.dat
+				The code can accept indifferently both types of input and makes the appropriate self-consistency checks. It is not
+				permitted to bundle neutral and ionized species together.
+            </description>
+		</param>
+		<param>
+			<name>cbregs</name>
+			<default>None</default>
+			<type>Custom</type>
+			<description>
+                specifies the number of regions where boundary conditions will be specified the &apos;south&apos; boundary is broken into three pieces with one quarter of the cells in the first region, half ofthe cells in the second, and the remaining quarter in the third region (inner target private flux, core, outerprivate flux). This is geometry-dependent information the code will check against the mesh connectivity and return an error if the two do not match
+                the &apos;north&apos;, &apos;west&apos; and &apos;east&apos; are not broken up, and correspond to the SOL boundary, inner target andouter target, respectively. For double-null cases, the north boundary should be split into two sections
+            </description>
+		</param>
+		<param>
+			<name>region</name>
+			<default>None</default>
+			<type>Custom</type>
+			<description>
+                one block for each of the regions containing; the immediately following line being the region dentifier
+            </description>
+		</param>
+		<param>
+			<name>cbsna</name>
+			<default>None</default>
+			<type>Custom</type>
+			<description>
+                boundary conditions for density (1 line per species)
+            </description>
+		</param>
+        <param>
+            <name>cbsmo</name>
+            <default>None</default>
+            <type>String</type>
+            <description>
+                boundary conditions for parallel momentum (1 line per species)
+            </description>
+        </param>
+        <param>
+            <name>cbshi</name>
+            <default>None</default>
+            <type>String</type>
+            <description>
+                ion/neutral (or &quot;atomic&quot;) temperature/energy boundary condition (1 line per species)
+            </description>
+        </param>
+        <param>
+            <name>cbshe</name>
+            <default>None</default>
+            <type>String</type>
+            <description>
+                electron temperature/heat flux boundary condition
+            </description>
+        </param>
+        <param>
+            <name>cbsch</name>
+            <default>None</default>
+            <type>String</type>
+            <description>
+                boundary condition for the electric potential equation
+            </description>
+        </param>
+        <param>
+            <name>cbrec</name>
+            <default>None</default>
+            <type>String</type>
+            <description>
+                recycling coefficients (1 line per species)
+            </description>
+        </param>
+        <param>
+            <name>cbmsa</name>
+            <default>None</default>
+            <type>String</type>
+            <description>
+                [unused]
+            </description>
+        </param>
+        <param>
+            <name>cbmsb</name>
+            <default>None</default>
+            <type>String</type>
+            <description>
+                [unused] (1 line per species)
+            </description>
+        </param>
+	</module>
+    <module name="b2ar">
+        <param>
+            <name>tlohi</name>
+            <default>None</default>
+            <type>Real*2</type>
+            <description>
+                range of temperatures for atomic physics table in eV
+            </description>
+        	<category>basic parameters</category>
+        </param>
+        <param>
+            <name>nlohi</name>
+            <default>None</default>
+            <type>Real*2</type>
+            <description>
+                range of densities for atomic physics table in m^-3
+            </description>
+        	<category>basic parameters</category>
+        </param>
+        <param>
+            <name>numnuc</name>
+            <default>None</default>
+            <type>Integer</type>
+            <description>
+                number of distinct species
+            </description>
+        	<category>basic parameters</category>
+        </param>
+        <param>
+            <name>nucspec</name>
+            <default>None</default>
+            <type>Integer*3</type>
+            <description>
+                nuclear charge, lowest charge state, highest charge state
+            </description>
+        	<category>basic parameters</category>
+        </param>
+        <param>
+            <name>flag</name>
+            <default>adpak or strahl</default>
+            <type>String</type>
+            <description>
+                which atomic physics database to use
+            </description>
+        	<category>basic parameters</category>
+        </param>
+        <param>
+            <name>tailep</name>
+            <default>None</default>
+            <type>Real*2</type>
+            <description>
+                range of temperatures for atomic physics table in eV
+            </description>
+        	<category>basic parameters</category>
+        </param>
+        <param>
+            <name>adpak</name>
+            <default>None</default>
+            <type>Real*2</type>
+            <description>
+                A complete atomic physics package with scaling law rates applicable to all charge states, but not always of high accuracy [1]
+            </description>
+        	<category>basic parameters</category>
+        </param>
+        <param>
+            <name>strahl</name>
+            <default>None</default>
+            <type>Real*2</type>
+            <description>
+                A collisional-radiative package developed at IPP–Garching [2], stored in the stra.dat file
+            </description>
+        	<category>basic parameters</category>
+        </param>
+        <param>
+            <name>adas</name>
+            <default>None</default>
+            <type>Real*2</type>
+            <description>
+                (Atomic Data and Analysis Structure) A complete collisional-radiative atomic physics database, actively being maintained and upgraded [3, 4]. Recommended. Available at http://adas.phys.strath.ac.uk/
+            </description>
+        	<category>basic parameters</category>
+        </param>
+        <param>
+            <name>amns</name>
+            <default>None</default>
+            <type>Real*2</type>
+            <description>
+                (Atomic, Molecular, Nuclear, and Surface data) For ITM-environment runs only, uses access to the ITM AMNS tools and database
+            </description>
+        	<category>basic parameters</category>
+        </param>
+    </module>
+    <module name="b2ai">
+        <param>
+            <name>dimens</name>
+            <default>None</default>
+            <type>Integer</type>
+            <description>
+                the number of charge states
+            </description>
+        	<category>basic parameters</category>
+        </param>
+        <param>
+            <name>label</name>
+            <default>None</default>
+            <type>String</type>
+            <description>a label</description>
+        	<category>basic parameters</category>
+        </param>
+        <param>
+            <name>specs</name>o
+            <default>None</default>
+            <type>String Integer*4</type>
+            <description>
+                atomic charge, nuclear charge, atomic mass and atomic charge squared for each charge stateminimum atomic charge of the stage, maximum atomic charge of the stage, nuclear charge, and atomic mass; this data should match that given in b2ah.dat
+            </description>
+        	<category>basic parameters</category>
+        </param>
+        <param>
+            <name>naini</name>
+            <default>None</default>
+            <type>Real*ns</type>
+            <description>
+                initial densities for each of the charge states, in m^-3
+            </description>
+        	<category>basic parameters</category>
+        </param>
+        <param>
+            <name>ttini</name>
+            <default>None</default>
+            <type>Real</type>
+            <description>
+                initial ion and electron temperature, in eV
+            </description>
+        	<category>basic parameters</category>
+        </param>
+    </module>
+	<module name="b2mn">
+        <paramgroup>
+            <name>b2cmpa_basic_parameters</name>
+            <param>
+                <name>b2cmpa</name>
+                <default>None</default>
+                <type>string</type>
+            </param>
+        	<description>
+        		specifies a block of basic parameters, overriding those specified in the block of the same name in b2ah.dat
+        	</description>
+        	<category>basic parameters</category>
+        </paramgroup>
+        <paramgroup>
+            <name>b2cmpb_boundary_conditions</name>
+            <param>
+                <name>b2cmpb</name>
+                <default>None</default>
+                <type>string</type>
+            </param>
+        	<description>
+        		specifies a block of boundary conditions, overriding those specified in the block of the same name in b2ah.dat
+        	</description>
+        	<category>boundary conditions</category>
+        </paramgroup>
+        <paramgroup>
+            <name>b2cmpt_transport_coefficients</name>
+            <param>
+                <name>b2cmpt</name>
+                <default>None</default>
+                <type>string</type>
+            </param>
+        	<description>
+        		specifies a block of transport coefficients, overriding those specified in the block of the same name in b2ah.dat:
+        		<ul><il>*cfdf0 auxiliary transport quantity (1 line per species)</il>
+        		<il>*cfdna density driven particle diffusion coefficient (1 line per species)</il>
+        		<il>*cfdpa pressure driven particle diffusion coefficient (1 line per species)</il>
+        		<il>*cfvla anomalous ”pinch” velocity (1 line per species)</il>
+        		<il>*cfvsa anomalous transverse momentum diffusivity (1 line per species)</il>
+        		<il>*cfhci anomalous ion/neutral heat diffusivity (1 line per species)</il>
+        		<il>*cfhce anomalous electron heat diffusivity</il>
+        		<il>*cfsig diffusivity corresponding to the anomalous electrical conductivity</il>
+        		<il>*cfalf diffusivity corresponding to the anomalous thermo-electric coefficient</il>
+        		<il>*cflim coefficients for flux limiting</il></ul>
+        	</description>
+        	<category>transport coefficients</category>
+        </paramgroup>
+        <paramgroup>
+            <name>cflim</name>
+            <param>
+                <name>cflim</name>
+                <default>None</default>
+            	<type>real*8 array</type>
+            </param>
+        	<description>
+        		cflim contains coefficients for flux limiting. cflim(0)=cflme
+        		specifies the flux limit factor for poloidal electron heat
+        		transport. cflim(1)=cflmi specifies the flux limit factor for poloidal all atom heat transport. cflim(2)=cflmv specifies the
+        		flux limit factor for poloidal atom momentum transport.
+        		Zero settings turn off these flux limits.
+        		cflim(3:7) are not used in the default version of the code.
+        	</description>
+        </paramgroup>
+		<param>
+			<name>label</name>
+			<default>None</default>
+			<type>String</type>
+			<description>
+				specifies, on the next line, a label for the run
+			</description>
+		</param>
 		<param> 
 			<name>ank_tracing</name>
 			<description>

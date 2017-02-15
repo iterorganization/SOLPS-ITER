@@ -9,12 +9,14 @@
     <tr bgcolor="#9acd32">
       <th>Name</th>
       <th>Default</th>
+      <th>Input File</th>
       <th>Description</th>
     </tr>
     <xsl:for-each select="solps/module/param">
     <tr>
       <td><xsl:value-of select="name"/></td>
       <td><xsl:value-of select="default"/></td>
+      <td><xsl:value-of select="../@name"/></td>
       <td><xsl:value-of select="description"/></td>
     </tr>
     </xsl:for-each>
