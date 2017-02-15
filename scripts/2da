@@ -1,6 +1,6 @@
 #! /bin/csh -f
 set source=b2mn.exe.dir/b2time.nc
-if (! -e $source) set source=b2time.nc
+if (! -s $source) set source=b2time.nc
 if ("X$1" == "X-s") then
   set source=$2
   shift
@@ -11,9 +11,9 @@ set args=""
 set nargs=0
 
 if($?GNUPLOT_TMP) then
-    set tmpdir="$GNUPLOT_TMP/"
+  set tmpdir="$GNUPLOT_TMP/"
 else
-    set tmpdir=""
+  set tmpdir=""
 endif
 
 which nc2text > /dev/null && set no_nc2text=0 || set no_nc2text=1

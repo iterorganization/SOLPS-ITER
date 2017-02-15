@@ -2,7 +2,7 @@
 
 # Test whether necessary variables are defined
 ifndef LD_MSCL
-  LD_MSCL ?= -L${SOLPSLIB} -lmscl
+LD_MSCL ?= -L${SOLPSLIB} -lmscl
 endif
 
 FC	     = g95
@@ -18,3 +18,8 @@ CPP	     = /lib/cpp -C -traditional
 MOD 	   = mod
 LDLIBS	 = ${LD_MSCL}
 LDEXTRA  =
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+

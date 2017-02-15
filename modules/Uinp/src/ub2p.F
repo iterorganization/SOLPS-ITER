@@ -20,7 +20,7 @@ c
 #include "ubpcom.h"
 #include "impcon.inc"
       logical uex
-      external ubpnam
+      external prgini,prgend,xerset,ubpnam
 #ifdef USE_MPI
       integer rank_mpi,size_mpi,ierr_mpi
 #endif
@@ -36,6 +36,8 @@ c*** set up the input routine
         stop 'ub2p_mpi_child'
       endif
 #endif
+      call prgini('ub2p')
+      call xerset(0)
 c
       immed=.false.
       keylen=8
@@ -51,6 +53,7 @@ c*** Create additional files for b2plot
 c
       call ubpb2pl
 c======================================================================
+      call prgend ()
 #ifdef USE_MPI
       call mpi_barrier(MPI_COMM_WORLD,ierr_mpi)
       call mpi_finalize(ierr_mpi)

@@ -12,8 +12,9 @@ c*** sources) for the Eirene input file
 c=======================================================================
 #include "uinput.inc"
       integer i,j,k,l,m,n,ibk,isf,iatm,ispe,ispi
-      external xerrab
+      external xerrab, subini, subend
 c=======================================================================
+      call subini ('uinbnddt')
 
       nstsi=0
       nstrai=0
@@ -185,4 +186,6 @@ c*** ... and then the recycling source if specified
       	end do !}
       end do !}
 c=======================================================================
+      call subend ()
+      return
       end

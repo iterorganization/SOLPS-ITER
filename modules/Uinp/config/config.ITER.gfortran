@@ -4,7 +4,11 @@
 
 LD_MSCL ?= `pkg-config mscl --libs`
 
-FC	     = gfortran
+ifdef USE_MPI
+FC       = mpif90
+else
+FC       = gfortran
+endif
 ifdef SOLPS_DEBUG
 FFLAGS	 = -g
 else
@@ -17,3 +21,8 @@ CPP	     = /lib/cpp -traditional
 MOD 	   = mod
 LDLIBS	 = ${LD_MSCL}
 LDEXTRA  =
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+

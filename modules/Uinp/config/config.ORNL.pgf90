@@ -30,3 +30,8 @@ MOD 	   = mod
 
 LDLIBS 	 = ${LD_MSCL} ${LD_GR} ${LD_GKS} -lX11 -lXt
 LDEXTRA  = 
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+

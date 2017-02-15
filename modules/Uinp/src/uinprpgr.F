@@ -1,4 +1,5 @@
       subroutine uinprpgr
+       use b2mod_types
        use b2mod_layer
      , , only: ntrack, nalloys
        use eirmod_extrab25
@@ -11,7 +12,9 @@ c*** Prepare the grid data - dimensions and cuts
 c=======================================================================
 #include "uinput.inc"
       logical ex
-      external xerrab
+      real (kind=R8) :: rratio
+      external rratio
+      external xerrab, subini, subend
 c=======================================================================
 c*** Now, unlike the previous version, nrsol, nrpfl, nz[io]dv, nzinn,
 c*** together with nrsol1, nz[io]dv2, and nzinn2, are the numbers of
@@ -91,8 +94,9 @@ c***        ------------------------------
 c***         0 \         nzinn         / \
 c***  	       izc1                 izc2 iztg
 c=======================================================================
-c*** Grig dimensions and cut locations
+c*** Grid dimensions and cut locations
 
+      call subini ('uinprpgr')
       ex=.false.
       if(lm_cnfg) then	!{
 c*** Limiter configuration - a temporary, clumsy solution
@@ -244,6 +248,31 @@ c*** Limiter configuration - a temporary, clumsy solution
       ndya=nr1st-1
       npplg = max((nncut/2)*3,1)
       if(lm_cnfg) npplg=1
+
+      cbnrso=npplg
+      cbnrno=max(nncut/2,1)
+      cbnrwe=1
+      cbnrea=1
+      cbirso=0
+      cbirno=cbirso+cbnrso
+      cbirwe=cbirno+cbnrno
+      cbirea=cbirwe+cbnrwe
+      cbrbrk(cbirso+cbnrso-1)=2.
+      cbrbrk(cbirno+cbnrno-1)=2.
+      cbrbrk(cbirwe+cbnrwe-1)=2.
+      cbrbrk(cbirea+cbnrea-1)=2.
+      if (npplg.eq.3) then
+        cbrbrk(0) = rratio(nxcut1(1),nrplg-npplg)
+        cbrbrk(1) = rratio(nxcut1(2),nrplg-npplg)
+      else if (npplg.eq.6) then
+        cbrbrk(0) = rratio(nxcut1(1),nrplg-npplg)
+        cbrbrk(1) = rratio(nxcut1(2),nrplg-npplg)
+        cbrbrk(2) = rratio(nxcut1(2)+nzodv+1,nrplg-npplg)
+        cbrbrk(3) = rratio(nxcut1(3),nrplg-npplg)
+        cbrbrk(4) = rratio(nxcut1(4),nrplg-npplg)
+        cbrbrk(cbirno) = rratio(nxcut1(2)+nzodv+1,nrplg-npplg)
+      end if
+
 c!###{
 c      print *,'uinprpgr: nx,ny,nncut,nxcut{4},nycut{4},nniso,nxiso = ',
 c     , nx,ny,nncut,nxcut1,nycut2,nniso,nxiso1(1)
@@ -255,4 +284,6 @@ c      print *,'nrpfl,nrsol,nrsol1,irwl,irsp,irsp2 = ',
 c     , nrpfl,nrsol,nrsol1,irwl,irsp,irsp2
 c!###}
 c=======================================================================
+      call subend ()
+      return
       end

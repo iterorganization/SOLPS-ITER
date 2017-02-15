@@ -1,0 +1,2 @@
+*idout          (int, char*80, free format)
+  0, 'cpne,cpni,cpte,cpti,fne.,fhe.,pf..,pz..'

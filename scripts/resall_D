@@ -1,18 +1,18 @@
 #! /bin/csh -f
-if (-e b2mn.exe.dir/b2ftrace) then
+if (-s b2mn.exe.dir/b2ftrace) then
   set FILE=b2mn.exe.dir/b2ftrace
 else
   set FILE=b2ftrace
 endif
 if (-X zcat) then
-    set ZCAT="zcat --force"
+  set ZCAT="zcat --force"
 else
-    set ZCAT="gzip --decompress --force --stdout"
+  set ZCAT="gzip --decompress --force --stdout"
 endif
 if($?GNUPLOT_TMP) then
-    set tmpdir="$GNUPLOT_TMP/"
+  set tmpdir="$GNUPLOT_TMP/"
 else
-    set tmpdir=""
+  set tmpdir=""
 endif
 
 setenv PLOT_FROM_FILE "gnuplot.temp"

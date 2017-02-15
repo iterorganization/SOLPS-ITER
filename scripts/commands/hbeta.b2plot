@@ -1,6 +1,6 @@
 stdl glob phys a4l 1.2 rmin 1.7 rmax -1.2 zmin -0.8 zmax vesl outl sep logf 3 ndec
 'AMJUEL' 'H.12' '2.1.5c ' 'OT' amjuel dab2 1 1 zrng m* 8.419e6 rm* 'H0' extl surf  '' extl
-'AMJUEL' 'H.12' '2.1.8c ' 'OT' amjuel ni   1 1 zrng m* 8.419e6 rm* 'H+' extl surf  '' extl
+'AMJUEL' 'H.12' '2.1.8c ' 'OT' amjuel na   1 1 zrng m* 8.419e6 rm* 'H+' extl surf  '' extl
 m+ 'H0 + H+' extl surf '' extl
 'AMJUEL' 'H.12' '2.2.5c ' 'OT' amjuel dmb2 1 1 zrng m* 8.419e6 rm* 'H2' extl surf '' extl
 'AMJUEL' 'H.12' '2.2.14c' 'OT' amjuel dmb2 1 1 zrng m* 'AMJUEL' 'H.12' '2.0b   ' 'OT' amjuel m* 8.419e6 rm* 'H2+' extl surf '' extl

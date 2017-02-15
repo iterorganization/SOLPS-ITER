@@ -40,6 +40,7 @@ case "PPPL":
   breaksw
 case "FZJ":
 case "LEUVEN":
+case "MEPHI":
 case "WM":
   echo gfortran
   breaksw

@@ -13,7 +13,7 @@ else
   set ly=""
 endif
 set source=b2mn.exe.dir/b2time.nc
-if (! -e $source) set source=b2time.nc
+if (! -s $source) set source=b2time.nc
 
 set args=""
 set nargs=0
@@ -62,7 +62,7 @@ start:
     # If the data has more than one column we dump as before, 
     # then assemble data into columns to be processed by awk.transpose
       ncdump $source -f f -v $1 | awk -v string="$1" 'BEGIN {ORS="";} /data:/{found1=1;next;} $0 ~ string {if (found1==1) {if (found2==1) print $1; else {print $3;found2=1;}}}' | \
-      awk 'BEGIN {FS=","} {for (i=1;i<=NF;i++) if (i%2==1) {ORS=" ";print $i;}' | sed 's/;//g' | \
+      awk 'BEGIN {FS=","} {for (i=1;i<=NF;i++) if (i%2==1) {ORS=" ";print $i;}}' | sed 's/;//g' | \
       awk.transpose >> ${tmpdir}gnuplot.data.tmp
     else
       nc2text -n 9999999 $source $1 | awk.transpose >> ${tmpdir}gnuplot.data.tmp

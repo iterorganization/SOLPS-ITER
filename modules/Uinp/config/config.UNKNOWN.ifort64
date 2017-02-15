@@ -6,7 +6,7 @@ ifndef LD_MSCL
 endif
 
 ifdef USE_MPI
-FC 	 = mpif90
+FC       = mpif90
 else
 FC       = ifort
 endif
@@ -22,3 +22,8 @@ CPP      = /lib/cpp -C -traditional -ffreestanding
 MOD      = mod
 LDLIBS	 = ${LD_MSCL}
 LDEXTRA  =
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+

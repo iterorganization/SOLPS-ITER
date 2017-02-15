@@ -40,7 +40,6 @@
  MDSPLUS_DIR ?= ${SOLPSTOP}/../MDSPLUS
        MPDIR ?=
 
-
 #
 # Variables for linking
 #
@@ -56,7 +55,6 @@ LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET  = -L${SOLPSLIB}/lib -lsonnet -lstdc++
 LD_MPI     = -L${MPDIR}/lib -lmpi
 
-
 #
 # Preprocessor options
 #
@@ -66,6 +64,23 @@ B25_DEFINES    =
 EIRENE_DEFINES =
 MPI_CPP        = -I${MPDIR}/include
 
+# Autodetected optional features...
+
+# Build with Catalyst if ParaView is in PATH
+ifneq (,$(shell which paraview-config))
+  SOLPS_CPP   += -DCATALYST
+  LD_CATALYST  = `paraview-config --libs vtkPVPythonCatalyst`
+  PARAVIEW_LIB = `paraview-config --libs --python | sed s/-L//`
+  export LD_CATALYST
+  export PARAVIEW_LIB
+endif
+
+# Build with IMAS if imas module is loaded
+ifdef IMAS_PREFIX
+  SOLPS_CPP += -DIMAS
+  LD_UAL     = `pkg-config imas-lowlevel imas-ifort --libs`
+  export LD_UAL
+endif
 
 #
 # Export for use in sub-makefiles
@@ -79,7 +94,6 @@ export GLI_HOME
 export NCARG_ROOT
 export NAGDIR
 export MDSPLUS_DIR
-
 
 export LD_NETCDF
 export LD_MSCL
@@ -95,3 +109,8 @@ export SOLPS_CPP
 export B25_DEFINES
 export EIRENE_DEFINES
 export MPI_CPP
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+

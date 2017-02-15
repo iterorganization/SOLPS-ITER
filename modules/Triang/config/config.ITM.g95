@@ -17,9 +17,9 @@ DEFINES		=
 EQUIVS 		=
 
 #CPP	 	= -/lib/cpp -C -traditional
-CPP	 	=
-CPPOPTS 	= -C -P -I${srcdir} ${EQUIVS}
-SED 		=
+CPP	 	    = /lib/cpp -traditional
+CPPOPTS 	= -P -I${srcdir} ${EQUIVS}
+SED       =
 LINK_MOD 	= 
 
 FC       	= g95
@@ -48,3 +48,8 @@ OBJDEST 	= -fmod=${OBJDIR} -o ${OBJDIR}/$*.o
 BLD 		= ar rcv
 
 LD 		= g95
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+

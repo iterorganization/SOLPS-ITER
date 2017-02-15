@@ -24,13 +24,16 @@ endif
 ifndef STAND_ALONE
 B2OBJ  = ${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
 EIROBJ = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
+DBGOBJ = ${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}.debug
+EDBOBJ = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}.debug
 ifneq (${DBX},totalview)
-INC = -I ${B2OBJ} -I ${EIROBJ}
+INC = -I ${DBGOBJ} -I ${EDBOBJ}
 endif
 else
 B2OBJ  = ${SOLPSTOP}/modules/B2.5/builds/standalone.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
+DBGOBJ = ${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}.debug
 ifneq (${DBX},totalview)
-INC = -I ${B2OBJ}
+INC = -I ${DBGOBJ}
 endif
 endif
 
@@ -46,6 +49,9 @@ target_yn = b2yn.prt b2yn.plt
 target_md = b2md.prt
 target_md.dbx = b2md.dbx
 target_rd = b2rd.prt
+target_ymb = b2ymb.prt 
+target_yrp = b2yrp.prt
+target_ydm = b2ydm.prt
 
 scandir := $(shell cd .. ; pwd)
 projdir := $(shell cd ../.. ; pwd)
@@ -87,13 +93,13 @@ prt : $(prints)
 .SUFFIXES : $(nil)
 
 $(target_uf) : b2fgmtry b2fparam b2fstate b2fplasma
-	rm -rf b2uf.exe.dir ; mkdir b2uf.exe.dir ; cp $^ b2uf.exe.dir
+	rm -rf b2uf.exe.dir >& /dev/null ; mkdir b2uf.exe.dir ; cp $^ b2uf.exe.dir
 	rm -f $(target_uf)
 	cd b2uf.exe.dir ; ${TIME} ${B2OBJ}/b2uf.exe ; mv $(target_uf) b2fplasmf .. ; rm -f $(notdir $^) .quit
 	-rmdir b2uf.exe.dir
 
 $(target_fu) : b2fgmtry b2fparam b2fstate b2fplasmf
-	rm -rf b2fu.exe.dir ; mkdir b2fu.exe.dir ; cp $^ b2fu.exe.dir
+	rm -rf b2fu.exe.dir >& /dev/null ; mkdir b2fu.exe.dir ; cp $^ b2fu.exe.dir
 	rm -f $(target_fu)
 	cd b2fu.exe.dir ; ${TIME} ${B2OBJ}/b2fu.exe ; mv $(target_fu) b2fplasma .. ; rm -f $(notdir $^) .quit
 	-rmdir b2fu.exe.dir
@@ -103,45 +109,47 @@ $(target_pl) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates b2ftrack f
 else
 $(target_pl) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates b2ftrack
 endif
-	rm -rf b2pl.exe.dir ; mkdir b2pl.exe.dir ; cp $^ b2pl.exe.dir
-	-cp param.dg b2pl.exe.dir/
+	rm -rf b2pl.exe.dir >& /dev/null ; mkdir b2pl.exe.dir ; cp $^ b2pl.exe.dir
+	[ -e param.dg ] && cp param.dg b2pl.exe.dir/ || ( [ -e ../baserun/param.dg ] && cp ../baserun/param.dg b2pl.exe.dir/ || echo > /dev/null )
 ifndef STAND_ALONE
-	-cp fort.44 input.dat b2pl.exe.dir/
+	-cp fort.44 fort.46 input.dat b2pl.exe.dir/
 	-cd b2pl.exe.dir
 endif
 ifeq (${NCAR_VERSION},3)
 	rm -f $(target_pl) gmeta
-	cd b2pl.exe.dir ; ${TIME} ${B2OBJ}/b2pl.exe ; mv -f gmeta .. ; rm -f $(target_pl) $(notdir $^) .quit
+	cd b2pl.exe.dir ; ln -s ../HYDHEL ../AMJUEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ${TIME} ${B2OBJ}/b2pl.exe ; mv -f gmeta .. ; rm -f $(target_pl) $(notdir $^) .quit param.dg
 else
 	rm -f $(target_pl) b2plot.ps
-	cd b2pl.exe.dir ; ${TIME} ${B2OBJ}/b2pl.exe ; mv -f b2plot.ps .. ; rm -f $(target_pl) $(notdir $^) .quit
+	cd b2pl.exe.dir ; ln -s ../HYDHEL ../AMJUEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ${TIME} ${B2OBJ}/b2pl.exe ; mv -f b2plot.ps .. ; rm -f $(target_pl) $(notdir $^) .quit param.dg
 endif
 ifndef STAND_ALONE
-	-rm b2pl.exe.dir/fort.44 b2pl.exe.dir/input.dat b2pl.exe.dir/fort.75
+	-rm b2pl.exe.dir/fort.44 b2pl.exe.dir/fort.46 b2pl.exe.dir/input.dat b2pl.exe.dir/fort.75
 endif
+	-cd b2pl.exe.dir ; rm -f HYDHEL AMJUEL METHANE SPUTER H2VIBR fort.21 fort.22 graphite_ext.dat mo_ext.dat
 	-rmdir b2pl.exe.dir
 
 ifndef STAND_ALONE
-$(target_pl.dbx) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates b2ftrack param.dg fort.33 fort.34 fort.35
+$(target_pl.dbx) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates b2ftrack fort.33 fort.34 fort.35
 else
-$(target_pl.dbx) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates b2ftrack param.dg
+$(target_pl.dbx) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates b2ftrack
 endif
-	rm -rf b2pl.exe.dir ; mkdir b2pl.exe.dir ; cp $^ b2pl.exe.dir
-	-cp param.dg b2pl.exe.dir/
+	rm -rf b2pl.exe.dir >& /dev/null ; mkdir b2pl.exe.dir ; cp $^ b2pl.exe.dir
+	[ -e param.dg ] && cp param.dg b2pl.exe.dir/ || ( [ -e ../baserun/param.dg ] && cp ../baserun/param.dg b2pl.exe.dir/ || echo > /dev/null )
 ifndef STAND_ALONE
-	-cp fort.44 input.dat b2pl.exe.dir/
+	-cp fort.44 fort.46 input.dat b2pl.exe.dir/
 	-cd b2pl.exe.dir
 endif
 ifeq (${NCAR_VERSION},3)
 	rm -f $(target_pl) gmeta
-	cd b2pl.exe.dir ; ${DBX} ${INC} ${B2OBJ}/b2pl.exe ; mv -f gmeta .. ; rm -f $(target_pl) $(notdir $^) .quit
+	cd b2pl.exe.dir ; ln -s ../HYDHEL ../AMJUEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ${DBX} ${INC} ${DBGOBJ}/b2pl.exe ; mv -f gmeta .. ; rm -f $(target_pl) $(notdir $^) .quit param.dg
 else
 	rm -f $(target_pl) b2plot.ps
-	cd b2pl.exe.dir ; ${DBX} ${INC} ${B2OBJ}/b2pl.exe ; mv -f b2plot.ps .. ; rm -f $(target_pl) $(notdir $^) .quit
+	cd b2pl.exe.dir ; ${DBX} ${INC} ${DBGOBJ}/b2pl.exe ; mv -f b2plot.ps .. ; rm -f $(target_pl) $(notdir $^) .quit param.dg
 endif
 ifndef STAND_ALONE
-	-rm b2pl.exe.dir/fort.44 b2pl.exe.dir/input.dat b2pl.exe.dir/fort.75
+	-rm b2pl.exe.dir/fort.44 b2pl.exe.dir/fort.46 b2pl.exe.dir/input.dat b2pl.exe.dir/fort.75
 endif
+	-cd b2pl.exe.dir ; rm -f HYDHEL AMJUEL METHANE SPUTER H2VIBR fort.21 fort.22 graphite_ext.dat mo_ext.dat
 	-rmdir b2pl.exe.dir
 
 ifndef STAND_ALONE
@@ -149,16 +157,17 @@ $(target_md) : b2mn.dat b2fgmtry b2fparam b2frates b2fstati b2fstate mesh.extra 
 else
 $(target_md) : b2mn.dat b2fgmtry b2fparam b2frates b2fstati b2fstate mesh.extra b2md.dat # b2fplasma b2time.nc
 endif
-	rm -rf b2md.exe.dir ; mkdir b2md.exe.dir ; cp $^ ds* b2md.exe.dir
+	rm -rf b2md.exe.dir >& /dev/null ; mkdir b2md.exe.dir ; cp $^ ds* b2md.exe.dir
 ifndef STAND_ALONE
 	-cp fort.44 input.dat b2md.exe.dir/
 	-cd b2md.exe.dir
 endif
 	rm -f $(target_md)
-	cd b2md.exe.dir ; ${SOLPSTOP}/scripts/mds_id | ${TIME} ${B2OBJ}/b2md.exe ; mv $(target_md) .. ; rm -f $(notdir $^) .quit ds*
+	cd b2md.exe.dir ; ln -s ../HYDHEL ../AMJUEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ${SOLPSTOP}/scripts/mds_id | ${TIME} ${B2OBJ}/b2md.exe ; mv $(target_md) .. ; rm -f $(notdir $^) .quit ds*
 ifndef STAND_ALONE
-	-rm b2md.exe.dir/fort.44 b2md.exe.dir/input.dat
+	-rm b2md.exe.dir/fort.44 b2md.exe.dir/input.dat b2md.exe.dir/fort.75
 endif
+	-cd b2md.exe.dir ; rm -f HYDHEL AMJUEL METHANE SPUTER H2VIBR fort.21 fort.22 graphite_ext.dat mo_ext.dat
 	-rmdir b2md.exe.dir
 
 ifndef STAND_ALONE
@@ -166,43 +175,62 @@ $(target_md.dbx) : b2mn.dat b2fgmtry b2fparam b2frates b2fstati b2fstate mesh.ex
 else
 $(target_md.dbx) : b2mn.dat b2fgmtry b2fparam b2frates b2fstati b2fstate mesh.extra b2md.dat # b2fplasma b2time.nc
 endif
-	rm -rf b2md.exe.dir ; mkdir b2md.exe.dir ; cp $^ ds* b2md.exe.dir
+	rm -rf b2md.exe.dir >& /dev/null ; mkdir b2md.exe.dir ; cp $^ ds* b2md.exe.dir
 ifndef STAND_ALONE
 	-cp fort.44 input.dat b2md.exe.dir/
 	-cd b2md.exe.dir
 endif
 	rm -f $(target_md)
-	cd b2md.exe.dir ; ${SOLPSTOP}/scripts/mds_id | ${DBX} ${INC} ${B2OBJ}/b2md.exe ; mv $(target_md) .. ; rm -f $(notdir $^) .quit ds*
+	cd b2md.exe.dir ; ln -s ../HYDHEL ../AMJUEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ${SOLPSTOP}/scripts/mds_id | ${DBX} ${INC} ${DBGOBJ}/b2md.exe ; mv $(target_md) .. ; rm -f $(notdir $^) .quit ds*
 ifndef STAND_ALONE
-	-rm b2md.exe.dir/fort.44 b2md.exe.dir/input.dat
+	-rm b2md.exe.dir/fort.44 b2md.exe.dir/input.dat b2md.exe.dir/fort.75
 endif
+	-cd b2md.exe.dir ; rm -f HYDHEL AMJUEL METHANE SPUTER H2VIBR fort.21 fort.22 graphite_ext.dat mo_ext.dat
 	-rmdir b2md.exe.dir
 
 $(target_rd) : shotnumber.history
-	rm -rf b2rd.exe.dir ; mkdir b2rd.exe.dir ; cp $^ b2rd.exe.dir
+	rm -rf b2rd.exe.dir >& /dev/null ; mkdir b2rd.exe.dir ; cp $^ b2rd.exe.dir
 	rm -f $(target_rd)
 	cd b2rd.exe.dir ; ${TIME} ${B2OBJ}/b2rd.exe ; mv $(target_rd) .. ; rm -f $(notdir $^)
 	-rmdir b2rd.exe.dir
 
 $(target_yi) : b2yi.dat b2mn.dat b2fstate b2frates b2fgmtry
-	rm -rf b2yi.exe.dir ; mkdir b2yi.exe.dir ; cp $^ b2yi.exe.dir
+	rm -rf b2yi.exe.dir >& /dev/null ; mkdir b2yi.exe.dir ; cp $^ b2yi.exe.dir
 	rm -f $(target_yi)
 	NCARG_GKS_OUTPUT=b2yi.plt ; export NCARG_GKS_OUTPUT ;\
 	cd b2yi.exe.dir ; ${TIME} ${B2OBJ}/b2yi.exe ; mv $(target_yi) .. ; rm -f $(notdir $^)
 	-rmdir b2yi.exe.dir
 
 $(target_yi_gnuplot) : b2mn.dat b2fstate b2frates b2fgmtry
-	rm -rf b2yi_gnuplot.exe.dir ; mkdir b2yi_gnuplot.exe.dir ; cp $^ b2yi_gnuplot.exe.dir
+	rm -rf b2yi_gnuplot.exe.dir >& /dev/null ; mkdir b2yi_gnuplot.exe.dir ; cp $^ b2yi_gnuplot.exe.dir
 	rm -f $(target_yi_gnuplot)
 	cd b2yi_gnuplot.exe.dir ; ${TIME} ${B2OBJ}/b2yi_gnuplot.exe ; mv $(target_yi_gnuplot) .. ; rm -f $(notdir $^)
 	-rmdir b2yi_gnuplot.exe.dir
 
 $(target_yn) : b2yn.dat b2mn.dat b2ftrack b2frates b2fstate
-	rm -rf b2yn.exe.dir ; mkdir b2yn.exe.dir ; cp $^ b2yn.exe.dir
+	rm -rf b2yn.exe.dir >& /dev/null ; mkdir b2yn.exe.dir ; cp $^ b2yn.exe.dir
 	rm -f $(target_yn)
 	NCARG_GKS_OUTPUT=b2yn.plt ; export NCARG_GKS_OUTPUT ;\
 	cd b2yn.exe.dir ; ${TIME} ${B2OBJ}/b2yn.exe ; mv $(target_yn) .. ; rm -f $(notdir $^)
 	-rmdir b2yn.exe.dir
+
+$(target_ymb) : b2ymb.dat wlld_trgi.dat wlld_trgo.dat 
+	rm -rf b2ymb.exe.dir ; mkdir b2ymb.exe.dir ; cp $^ b2ymb.exe.dir
+	rm -f $(target_ymb)
+	cd b2ymb.exe.dir ; ${TIME} ${B2OBJ}/b2ymb.exe ; touch b2ymb.prt; mv $(target_ymb) .. ; rm -f $(notdir $^)
+	-rmdir b2ymb.exe.dir
+
+$(target_yrp) : b2yrp.dat wlld_irp.dat wlld_orp.dat
+	rm -rf b2yrp.exe.dir ; mkdir b2yrp.exe.dir ; cp $^ b2yrp.exe.dir
+	rm -f $(target_yrp)
+	cd b2yrp.exe.dir ; ${TIME} ${B2OBJ}/b2yrp.exe ; touch b2yrp.prt; mv $(target_yrp) .. ; rm -f $(notdir $^)
+	-rmdir b2yrp.exe.dir
+
+$(target_ydm) : b2ydm.dat wlld_dome.dat
+	rm -rf b2ydm.exe.dir ; mkdir b2ydm.exe.dir ; cp $^ b2ydm.exe.dir
+	rm -f $(target_ydm)
+	cd b2ydm.exe.dir ; ${TIME} ${B2OBJ}/b2ydm.exe ; touch b2ydm.prt; mv $(target_ydm) .. ; rm -f $(notdir $^)
+	-rmdir b2ydm.exe.dir
 
 clean :
 	rm -f *.prt* *.plt* *~
@@ -217,3 +245,7 @@ testvars :
 	@echo projdir: $(projdir)
 	@echo baserundir: $(baserundir)
 	@echo codedir: $(codedir)
+
+!!!Local Variables:
+!!! mode: Makefile
+!!! End:

@@ -17,7 +17,7 @@ c=======================================================================
       integer i,j,k,l,m,n,iv,nn
       save nn
       logical uex, streql
-      external streql, xerrab
+      external streql, xerrab, subini, subend
       character*8 unm(lunm),uun,s*(luns)
       data unm /
      1  '#'       ,'filevers' ,'reactns'  ,'rctype'   ,'group'	  ,
@@ -28,6 +28,7 @@ c=======================================================================
      6	'exparr3'/
 c=======================================================================
 c
+      call subini ('uiniamd')
 c      print *,'== ',unn,nn,nnrctn
       call locase(unn,uun,8)
       do i=1,lunm !{
@@ -35,12 +36,15 @@ c      print *,'== ',unn,nn,nnrctn
      ,           go to (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,
      ,                  16,17,18,19,20,21,22,23,24,25,26),i
       end do !}
+      call subend ()
       return
 c=======================================================================
   1   call skipit
+      call subend ()
       return
   2   immed=.true.
       call resimi(iv)
+      call subend ()
       return
   3   nn=nnrctn
       call resimi(nnrctn)
@@ -88,6 +92,7 @@ c	      print *,'k,l,m= ',k,l,m
 	print '(i3,7a)',i,':',rctndbs(i),':',rctnchp(i),':',
      ,	  rctnrct(i),':'
       end do !}
+      call subend ()
       return
 c-----------------------------------------------------------------------
   4   do i=nn,nnrctn !{
@@ -206,9 +211,12 @@ c-----------------------------------------------------------------------
       go to 9990
 c=======================================================================
  9990 call skipit
+      call subend ()
       return
 c=======================================================================
  9999 write(0,*) 'Error encountered while reading ',uun
       call xerrab ('==> Corrupted AMDS file')
 c=======================================================================
+      call subend ()
+      return
       end

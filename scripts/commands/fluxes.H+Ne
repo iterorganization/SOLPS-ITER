@@ -1,17 +1,17 @@
 '${HOST} ${PWD} `date` T=${TIME}' extl glob
 a4p 2 2 page writ
 phys
-feex sumy 19 f.x drop feex 1 nreg 2 nreg m+ m* sumy 19 f.x drop
-feey sumx 57 f.y drop feey 1 nreg 2 nreg m+ m* sumx 57 f.y drop
-feix sumy 19 f.x drop feix 1 nreg 2 nreg m+ m* sumy 19 f.x drop
-feiy sumx 57 f.y drop feiy 1 nreg 2 nreg m+ m* sumx 57 f.y drop
-fnix 1 1  sumz sumy 19 f.x drop fnix 1 1  sumz 1 nreg 2 nreg m+ m* sumy 19 f.x drop
-fnix 2 11 sumz sumy 19 f.x drop fnix 2 11 sumz 1 nreg 2 nreg m+ m* sumy 19 f.x drop
-fniy 1 1  sumz sumx 57 f.y drop fniy 1 1  sumz 1 nreg 2 nreg m+ m* sumx 57 f.y drop
-fniy 2 11 sumz sumx 57 f.y drop fniy 2 11 sumz 1 nreg 2 nreg m+ m* sumx 57 f.y drop
+fhex sumy 19 f.x drop fhex 1 nreg 2 nreg m+ m* sumy 19 f.x drop
+fhey sumx 57 f.y drop fhey 1 nreg 2 nreg m+ m* sumx 57 f.y drop
+fhix sumy 19 f.x drop fhix 1 nreg 2 nreg m+ m* sumy 19 f.x drop
+fhiy sumx 57 f.y drop fhiy 1 nreg 2 nreg m+ m* sumx 57 f.y drop
+fnax 1 1  sumz sumy 19 f.x drop fnax 1 1  sumz 1 nreg 2 nreg m+ m* sumy 19 f.x drop
+fnax 2 11 sumz sumy 19 f.x drop fnax 2 11 sumz 1 nreg 2 nreg m+ m* sumy 19 f.x drop
+fnay 1 1  sumz sumx 57 f.y drop fnay 1 1  sumz 1 nreg 2 nreg m+ m* sumx 57 f.y drop
+fnay 2 11 sumz sumx 57 f.y drop fnay 2 11 sumz 1 nreg 2 nreg m+ m* sumx 57 f.y drop
 phys
-ni 1 1 sumz 0.0 fmin 0.0 fmax 57 f.y drop
-ni 2 11 sumz 0.0 fmin 0.0 fmax 57 f.y drop
+na 1 1 sumz 0.0 fmin 0.0 fmax 57 f.y drop
+na 2 11 sumz 0.0 fmin 0.0 fmax 57 f.y drop
 te 0.0 fmin 0.0 fmax 57 f.y drop
 ti 0.0 fmin 0.0 fmax 57 f.y drop
 zeff 0.0 fmin 0.0 fmax 57 f.y drop

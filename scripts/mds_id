@@ -22,9 +22,9 @@ echo b2fstateid:`md5sum b2fstate`
 echo b2fplasmaid:`md5sum ../b2fplasma`
 echo b2fgmtryid:`md5sum b2fgmtry`
 echo b2fratesid:`md5sum b2frates`
-if (-e ../run.log) then
+if (-s ../run.log) then
   echo jxijxajsep:`head -10000 ../run.log | grep jxi | head -1 | sed 's;.*:;;'`
-else if (-e ../run.log.gz) then
+else if (-s ../run.log.gz) then
   echo jxijxajsep:`zcat ../run.log.gz | head -100 | grep jxi | sed 's;.*:;;'`
 else
   echo jxijxajsep:`echo jxi, jxa, jsep :  -2 -2 -2 | sed 's;.*:;;'`

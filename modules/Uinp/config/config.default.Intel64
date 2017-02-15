@@ -5,7 +5,6 @@ ifndef LD_MSCL
   $(error LD_MSCL not defined)
 endif
 
-
 FC	     = f95i
 ifndef SOLPS_DEBUG
 FFLAGS	 = -g -Am -X9 -O0 -fw
@@ -19,3 +18,8 @@ MOD 	   = mod
 
 LDLIBS 	 = ${LD_MSCL}
 LDEXTRA  =
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+

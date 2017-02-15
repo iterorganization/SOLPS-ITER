@@ -68,8 +68,10 @@ c*** free:    one of the ends of the segment is not yet linked
       integer i,j,k,l,i1,i2,ib,ic,ii,iii
       real w
       logical match
+      external subini, subend, xerrab
 c      logical bbb !###
 c=======================================================================
+      call subini ('chkchain')
 c!###{
 c      write(*,*) '=== Starting chkchain: mp,np,ns,nc=',mp,np,ns,nc
 c      write(*,'(1x,a4,20i4/(5x,20i4))') 'ls= ',ls
@@ -87,7 +89,7 @@ c!###}
         call FLUSH(0)
 #endif
         irt=-3
-        return
+        goto 9999
       end if !}
       k=0
       do i=1,ns !{
@@ -114,7 +116,7 @@ c!###}
         call FLUSH(0)
 #endif
         irt=-2
-        return
+        goto 9999
       end if !}
 
       do 100 i=1,ns-1 !{
@@ -407,7 +409,7 @@ c*** This is an end of a chain
             call FLUSH(0)
 #endif
             irt=-1
-            return
+            goto 9999
           end if !}
 
           ib=l+1
@@ -489,10 +491,12 @@ c              write(*,*) 'j = ',j,done(j),next(j),inext(j)
         call FLUSH(0)
 #endif
         irt=-4
-        return
+        goto 9999
       end if !}
       
       irt=ic
       
 c=======================================================================
+ 9999 call subend ()
+      return
       end

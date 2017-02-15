@@ -1,6 +1,6 @@
       PROGRAM TRIANGLE
 
-c  version : 11.02.2006 00:34
+c  version : 01.10.2016 21:09
 
 cank-20041209{
 c*** File opening with the standard names is added to avoid fort.NN
@@ -107,7 +107,7 @@ cank{
         close(3)
         go to 51
  50     print *,'error ',hhlp200,
-     ,    'ing tria.dbg - no debugging data to be used'
+     ,    'in tria.dbg - no debugging data to be used'
  51     continue
       end if !}
       open(2,file='tria.in',status='old',action='read')
@@ -121,13 +121,13 @@ C---- INPUT OF DELTA0
       print *,' delta0=',delta0 !###
 
 C---- INPUT OF REGIONS (for grid refinement - ank)
-      allocate(region(5,1))
+      allocate(region(5,10))
       region = 0.
       READ(2,'(A)',END=99) LINE
       DO WHILE (LINE .NE. ' ')  !{
         NREG = NREG + 1
         IF (NREG .GT. size(region,2)) THEN !{
-           call realloc_creg('region',1)
+           call realloc_creg('region',10)
         ENDIF !}
         READ (LINE,*) (REGION(I,NREG),I=1,5)
         READ(2,'(A)') LINE

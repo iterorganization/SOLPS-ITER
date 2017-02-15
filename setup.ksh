@@ -3,7 +3,9 @@
 echo Welcome to SOLPS-ITER!
 echo Documentation can be found at:
 echo https://portal.iter.org/departments/POP/CM/IMAS/SOLPS-ITER
-echo "(requires ITER IDM account)"
+echo and
+echo https://user.iter.org/\?uid=Q92BAQ
+echo "(both require a valid ITER IDM account)"
 echo The full SOLPS-ITER manual can be found in \$SOLPSTOP/doc/solps/solps.pdf
 echo The Eirene manual is located at http://www.eirene.de/
 
@@ -62,6 +64,12 @@ else
 fi
 [ -z "$COMPILER" ] && echo 'COMPILER not defined!'
 
+[ -z "$PYTHONPATH" ] && {
+  export PYTHONPATH="$SOLPSTOP/lib/python"
+} || {
+  export PYTHONPATH="${PYTHONPATH}:$SOLPSTOP/lib/python"
+}
+
 # setup files for combination of HOST_NAME and COMPILER, + local modifications if present
 [ -e SETUP/setup.ksh.${HOST_NAME}.${COMPILER} ] && {
   echo Loading SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.
@@ -107,11 +115,11 @@ esac
 
 [ -z "$DEVICE" ] && export DEVICE=iter
 
-export B2PLOT_DEV="x11 ps"
-export GLI_HOME=$SOLPSTOP/lib
+[ -z "$B2PLOT_DEV" ] && export B2PLOT_DEV="x11 ps"
+[ -z "$GLI_HOME"] && export GLI_HOME=$SOLPSTOP/lib
 export WSTYPE=$OBJECTCODE
 # export GLI_WSTYPE=210
-export GRSOFT_DEVICE="211 62"
+[ -z "$GRSOFT_DEVICE"] && export GRSOFT_DEVICE="211 62"
 export SonnetTopDirectory=${SOLPSTOP}/src/Sonnet
 export EscapeSonnet=`echo ${SonnetTopDirectory} | sed 's:\/:\\\/:g'`
 
@@ -201,10 +209,12 @@ export       B25_PATH =  ${SOLPSTOP}/modules/B2.5/builds/standalone.${TOOLCHAIN}
 export B25EIRENE_PATH =  ${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${TOOLCHAIN}
 export      UINP_PATH =  ${SOLPSTOP}/modules/Uinp/builds/${TOOLCHAIN}
 export    TRIANG_PATH =  ${SOLPSTOP}/modules/Triang/builds/${TOOLCHAIN}
-export   SCRIPTS_PATH =  ${SOLPSTOP}/scripts.local:${SOLPSTOP}/scripts
+export   SCRIPTS_PATH =  ${SOLPSTOP}/scripts.local:${SOLPSTOP}/scripts:${SOLPSTOP}/modules/Eirene/scripts
 export      AMDS_PATH =  ${SOLPSTOP}/modules/amds/builds/${TOOLCHAIN}
+export       S45_PATH =  ${SOLPSTOP}/modules/solps4-5/builds/${TOOLCHAIN}
 
-export SOLPS_PATH=${SCRIPTS_PATH}:${CARRE_PATH}:${DIVGEO_PATH}:${B25EIRENE_PATH}:${EIRENE_PATH}:${B25_PATH}:${UINP_PATH}:${TRIANG_PATH}:${AMDS_PATH}
+export SOLPS_PATH=${SCRIPTS_PATH}:${CARRE_PATH}:${DIVGEO_PATH}:${B25EIRENE_PATH}:${EIRENE_PATH}:${B25_PATH}:${UINP_PATH}:${TRIANG_PATH}:${AMDS_PATH}:${S45_PATH}
+export OLD_PATH=${PATH}
 export PATH=${SOLPS_PATH}:${PATH}
 
 export PATH=$NCARG_ROOT/bin:$PATH
@@ -231,12 +241,6 @@ export MANPATH=$NCARG_ROOT/man:${DG}/equtrn/doxygen/man:$MANPATH
   export WSTYPE OBJECTCODE
   [ -n $XLFRTEOPTS ] && export XLFRTEOPTS
   echo "$OBJECTCODE"
-}
-
-[ -z "$PYTHONPATH" ] && {
-  export PYTHONPATH="$SOLPSTOP/lib/python"
-} || {
-  export PYTHONPATH="${PYTHONPATH}:$SOLPSTOP/lib/python"
 }
 
 export PLOT_SET_PATH=":..:../..:$SOLPSTOP/data.local/plot_set:$SOLPSTOP/data/plot_set"

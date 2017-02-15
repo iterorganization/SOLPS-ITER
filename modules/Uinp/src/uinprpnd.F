@@ -11,10 +11,11 @@ c*** Prepare the data for the cuts for the Eirene input file
 c=======================================================================
 #include "uinput.inc"
       integer i,j,k
-      external xerrab
+      external xerrab, subini, subend
 c=======================================================================
       RETURN !VK 
 
+      call subini ('uinprpnd')
       k=nstsi
 
       if(lm_cnfg) then	!{
@@ -278,4 +279,6 @@ c***  26: upper left cut, SOL
       nstsi=k
 
 c=======================================================================
+      call subend ()
+      return
       end

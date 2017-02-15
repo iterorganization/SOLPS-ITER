@@ -60,7 +60,7 @@ endif
 unexport SOLPS_DEBUG
 unexport SOLPS_MPI
 
-.PHONY: solps solps_mpi all all_mpi carre divgeo b25 b25_mpi eirene eirene_mpi b25eirene b25eirene_mpi b25eirene_ig uinp triang sonnet-light b2sxdr manual local depend tags clean clean_% %_debug VERSION help
+.PHONY: solps solps_mpi all all_mpi carre divgeo b25 b25_mpi eirene eirene_mpi b25eirene b25eirene_mpi b25eirene_ig uinp triang fxdr sonnet-light b2sxdr manual local depend tags clean clean_% %_debug VERSION help
 
 DEFAULT: solps
 
@@ -71,17 +71,17 @@ DEFAULT: solps
 #----------------------
 
 
-solps:     carre divgeo b25eirene     uinp     triang sonnet-light manual
+solps:     carre divgeo b25eirene     uinp     triang amds sonnet-light manual
 
-solps_mpi: carre divgeo b25eirene_mpi uinp_mpi triang sonnet-light manual
+solps_mpi: carre divgeo b25eirene_mpi uinp_mpi triang amds sonnet-light manual
 
-nox:       carre_nox b25eirene_nox     uinp_nox     triang_nox manual
+nox:       carre_nox    b25eirene_nox uinp_nox triang_nox manual
 
 nox_mpi:   carre_nox b25eirene_mpi_nox uinp_mpi_nox triang_nox manual
 
-all:       carre divgeo b25     eirene     b25eirene     uinp     triang sonnet-light manual
+all:       carre divgeo b25     eirene     b25eirene     uinp     triang amds sonnet-light manual
 
-all_mpi:   carre divgeo b25_mpi eirene_mpi b25eirene_mpi uinp_mpi triang sonnet-light manual
+all_mpi:   carre divgeo b25_mpi eirene_mpi b25eirene_mpi uinp_mpi triang amds sonnet-light manual
 
 carre:
 	cd modules/Carre; ${MAKE}
@@ -100,6 +100,8 @@ eirene:
 eirene_mpi:
 	cd modules/Eirene; ${MAKE} USE_MPI=-DUSE_MPI
 
+eirene_nox:
+	cd modules/Eirene; ${MAKE} LD_GR="" LD_GKS=""
 
 b25:
 	cd modules/B2.5; ${MAKE}
@@ -110,6 +112,9 @@ b25_all:
 
 b25_mpi:
 	cd modules/B2.5; ${MAKE} USE_MPI=-DUSE_MPI
+
+b25_nox:
+	cd modules/B2.5; ${MAKE} NOPLOT
 
 b25_ig:
 	cd modules/B2.5; ${MAKE} USE_IMPGYRO=-DUSE_IMPGYRO
@@ -168,11 +173,12 @@ triang_nox:
 amds:
 	cd modules/amds; ${MAKE}
 
+fxdr:
+	cd modules/fxdr; ${MAKE}
+
 sonnet-light:
 	@-mkdir -p ${SOLPSLIB}
-ifeq ($(shell [ -e ${SOLPSLIB}/libsonnet.a ] && echo yes || echo no ),no)
-	cd modules/Sonnet-light; ${MAKE} all; ${MAKE} install INSTALL_USERAREA=${SOLPSLIB}
-endif
+	cd modules/Sonnet-light; ${MAKE} all INSTALL_USERAREA=${SOLPSLIB}
 
 b2sxdr:
 	cd modules/solps4-5; ${MAKE} links
@@ -202,9 +208,10 @@ tags:
 	cd modules/Uinp;           ${MAKE} tags
 	cd modules/Triang;         ${MAKE} tags
 	cd modules/DivGeo;         ${MAKE} tags
+	cd modules/DivGeo/convert; ${MAKE} tags
 	cd modules/DivGeo/equtrn;  ${MAKE} tags
 #	cd modules/solps4-5;       ${MAKE} tags
-	rm -f TAGS ; etags -o TAGS modules/Carre/src/*/*.F modules/Carre/src/include/*.* modules/Eirene/src/*/*.f modules/Eirene/src/interfaces/*couple_SOLPS-ITER/*.f modules/Eirene/src/user-routines/user_iter/*.f modules/Eirene/src/user-routines/user_general/*.f modules/Eirene/src/geometry/trc-time-routines/*.f modules/Eirene/src/*/*/*.[Ff]90 modules/B2.5/src.local/*.F modules/B2.5/src/*/*.F modules/B2.5/src/*/*.[Hh] modules/B2.5/src/common/*.* modules/B2.5/src/common/COUPLE/*.F modules/Uinp/src/*.F modules/Uinp/src/*.inc modules/Uinp/src/*.h modules/Triang/src/*/*.f modules/DivGeo/equtrn/src/*.f modules/DivGeo/equtrn/src/*.inc modules/DivGeo/convert/src/*.f modules/DivGeo/src/*.[ch] modules/DivGeo/dg.dgc
+	rm -f TAGS ; etags -o TAGS modules/Carre/src/*/*.F modules/Carre/src/include/*.* modules/Eirene/src/*/*.f modules/Eirene/src/interfaces/*couple_SOLPS-ITER/*.f modules/Eirene/src/user-routines/user_iter/*.f modules/Eirene/src/geometry/trc-time-routines/*.f modules/Eirene/src/*/*.[Ff]90 modules/Eirene/src/interfaces/couple_SOLPS-ITER/*.[Ff]90 modules/B2.5/src.local/*.F modules/B2.5/src/*/*.F modules/B2.5/src/*/*.F90 modules/B2.5/src/*/*.[Hh] modules/B2.5/src/common/*.* modules/B2.5/src/common/COUPLE/*.F modules/Uinp/src/*.F modules/Uinp/src/*.inc modules/Uinp/src/*.h modules/Triang/src/*/*.f modules/DivGeo/equtrn/src/*.f modules/DivGeo/equtrn/src/*.inc modules/DivGeo/convert/src/*.f modules/DivGeo/src/*.[ch] modules/DivGeo/dg.dgc
 
 listobj:
 	cd modules/Carre;          ${MAKE} listobj
@@ -241,6 +248,7 @@ depend:
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO
+	cd modules/amds;           ${MAKE} depend
 #	cd modules/solps4-5;       ${MAKE} depend
 
 VERSION:
@@ -276,9 +284,9 @@ nox_build_mpi: clean_build_mpi listobj depend           b25eirene_mpi_nox uinp_m
 
 clean: clean_solps
 
-clean_solps:     clean_carre clean_divgeo clean_b25eirene     clean_uinp     clean_triang clean_sonnet-light clean_manual
+clean_solps:     clean_carre clean_divgeo clean_b25eirene     clean_uinp     clean_triang clean_sonnet-light clean_manual clean_amds
 
-clean_solps_mpi: clean_carre clean_divgeo clean_b25eirene_mpi clean_uinp_mpi clean_triang clean_sonnet-light clean_manual
+clean_solps_mpi: clean_carre clean_divgeo clean_b25eirene_mpi clean_uinp_mpi clean_triang clean_sonnet-light clean_manual clean_amds
 
 clean_build:     clean_carre clean_b25eirene clean_uinp clean_triang
 
@@ -342,6 +350,9 @@ clean_triang:
 
 clean_amds:
 	cd modules/amds; ${MAKE} clean
+
+clean_fxdr:
+	cd modules/fxdr; ${MAKE} clean
 
 clean_sonnet-light:
 	cd modules/Sonnet-light; ${MAKE} clean

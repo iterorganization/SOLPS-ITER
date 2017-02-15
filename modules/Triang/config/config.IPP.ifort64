@@ -19,15 +19,15 @@ DEFINES		=
 EQUIVS 		=
 
 #CPP	 	= -/lib/cpp -C -traditional
-CPP	 	=
-CPPOPTS 	= -C -P -I${srcdir} ${EQUIVS}
-SED 		=
+CPP	 	    = /lib/cpp -traditional
+CPPOPTS 	= -P -I${srcdir} ${EQUIVS}
+SED       =
 LINK_MOD 	= 
 
 FC       	= ifort
 
 ifdef SOLPS_DEBUG
-FCOPTS 		= -g -C -debug all
+FCOPTS 		= -g -C -debug all -traceback
 else
 FCOPTS 		= -O3 -vec_report0
 endif
@@ -50,3 +50,8 @@ OBJDEST 	= -o ${OBJDIR}/$*.o
 BLD 		= ar rcv
 
 LD 		= ifort
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+

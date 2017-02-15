@@ -1,0 +1,9 @@
+#! /usr/bin/env tcsh
+
+echo "1000 wlld" | b2plot
+
+cp ./b2pl.exe.dir/wlld_trg* .
+
+rm b2ymn.prt
+
+b2plot b2ymb

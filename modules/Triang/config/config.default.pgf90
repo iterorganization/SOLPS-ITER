@@ -9,8 +9,8 @@ endif
 DEFINES =
 EQUIVS =
 
-CPP = /lib/cpp -C -traditional
-CPPOPTS = -C -P -I${srcdir} ${EQUIVS}
+CPP = /lib/cpp -traditional
+CPPOPTS = -P -I${srcdir} ${EQUIVS}
 SED = sed s:\#PREC\#:d:g
 LINK_MOD =
 
@@ -42,3 +42,8 @@ endif
 GKS		    = ${LD_GR} ${LD_GKS} -lX11 -lXt
 LDLIBS    = -L/usr/local/lib -L/usr/X11R6/lib
 LDEXTRA 	=
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+

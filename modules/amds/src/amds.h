@@ -1,11 +1,13 @@
 #define AMDS_VERSION 104
+#define MAXDOUBLE DBL_MAX
 
 #include <stdio.h>
 #include <assert.h>
 #include <stdlib.h>
 #include <stdarg.h>
 #include <math.h>
-#include <values.h>
+#include <limits.h>
+#include <float.h>
 
 #include <Xm/Xm.h>
 #include <X11/Shell.h>

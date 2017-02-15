@@ -10,7 +10,6 @@ argloop:
   if ("X${1}X" == "X-sX") then
     shift
     setenv STAND_ALONE yes
-    shift
     goto argloop
   endif
   if ("X${1}X" == "X-dX") then
@@ -36,12 +35,12 @@ if ($1 != "") then
 endif
 pwd
 
-if (-e b2md.dat) then
+if (-s b2md.dat) then
   set B2MDDAT=b2md.dat.sav
   mv b2md.dat $B2MDDAT
-else if (-e ../baserun/b2md.dat) then
+else if (-s ../baserun/b2md.dat) then
   set B2MDDAT=../baserun/b2md.dat
-else if (-e $SOLPSTOP/data/mdsplus/b2md.dat) then
+else if (-s $SOLPSTOP/data/mdsplus/b2md.dat) then
   set B2MDDAT=$SOLPSTOP/data/mdsplus/b2md.dat
 else
   echo 'No b2md.dat found'
@@ -59,8 +58,8 @@ foreach i (`cat shotnumber.history | sort -n | uniq`)
     @ count ++  
     set count_suffix=`echo $count | gawk '{printf "%04i\n",$1}'`
   end
-  mv b2md.prt b2md.prt.$count_suffix
-  mv b2md.log b2md.log.$count_suffix
+  if (-e b2md.prt) mv b2md.prt b2md.prt.$count_suffix
+  if (-e b2md.log) mv b2md.log b2md.log.$count_suffix
   if (-e b2fstate.gz) gunzip b2fstate.gz
   if (-e b2fstati.gz) gunzip b2fstati.gz
   gmake $debug -f $SOLPSTOP/runs/Makefile.plot b2md.prt > b2md.log
@@ -72,5 +71,5 @@ else
   rm b2md.dat
 endif
 
-rm -f .resave_mds
+if (-e .resave_mds) rm -f .resave_mds
 unsetenv STAND_ALONE

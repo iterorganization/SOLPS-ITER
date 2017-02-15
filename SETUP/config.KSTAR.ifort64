@@ -51,7 +51,6 @@
       NAGDIR ?= /home/sunny2216/solps5.0_150821/solps5.0/src/lib/linux.ifort64
  MDSPLUS_DIR ?= /home/sunny2216/solps5.0_old/solps5.0/solps_other/MDSPLUS/linux.ifort64
 
-
 #
 # Variables for linking
 #
@@ -83,6 +82,23 @@ SOLPS_CPP      = -DNCAR4 -DMDSPLUS
 B25_DEFINES    = -DWANT_THIS
 EIRENE_DEFINES = 
 
+# Autodetected optional features...
+
+# Build with Catalyst if ParaView is in PATH
+ifneq (,$(shell which paraview-config))
+  SOLPS_CPP   += -DCATALYST
+  LD_CATALYST  = `paraview-config --libs vtkPVPythonCatalyst`
+  PARAVIEW_LIB = `paraview-config --libs --python | sed s/-L//`
+  export LD_CATALYST
+  export PARAVIEW_LIB
+endif
+
+# Build with IMAS if imas module is loaded
+ifdef IMAS_PREFIX
+  SOLPS_CPP += -DIMAS
+  LD_UAL     = `pkg-config imas-lowlevel imas-ifort --libs`
+  export LD_UAL
+endif
 
 #
 # Export for use in sub-makefiles
@@ -109,4 +125,8 @@ export LD_SONNET
 export SOLPS_CPP
 export B25_DEFINES
 export EIRENE_DEFINES
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
 

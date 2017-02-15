@@ -13,10 +13,14 @@ c=======================================================================
 #include "uib2pprm.inc"
       integer i,j,k,l,luind(nxd),luwrk(nxd)
       logical uex, streql
-      external xerrab, streql
+      external xerrab, streql, subini, subend
 c=======================================================================
+      call subini ('uinprphe')
 
-      if(.not.do_hepdt) return
+      if(.not.do_hepdt) then !{
+        call subend ()
+        return
+      end if !}
 
 c*** Find the species indices
       do i=1,nspigen
@@ -45,6 +49,7 @@ c*** Check the pump location
       else !}{
       	write(*,*) 'No pumping specified: locphep=',locphep
 	locphep=0
+        call subend ()
 	return
       end if !}
 
@@ -155,4 +160,6 @@ c<<<
 c>>>
       end if !}
 c=======================================================================
+      call subend ()
+      return
       end

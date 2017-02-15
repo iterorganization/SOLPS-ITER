@@ -14,7 +14,7 @@ c=======================================================================
      ,  iambg(2,nlim),nambg
       real tol
       logical notyet(nlim),joint
-      external xerrab
+      external xerrab, subini, subend
       data tol / 1.e-2/ ! tolerance for a search for chains
 c=======================================================================
       joint(x1,y1,x2,y2)=abs(x1-x2).le.tol .and. abs(y1-y2).le.tol .and.
@@ -28,6 +28,7 @@ c***  istrt   list of starting points of the chains
 c***  ilen    list of lengths of the chains
 c***  notyet  this segment is not yet in a chain
 
+      call subini ('uinprpla')
       do i=1,nlim !{
         iprv(i)=0
         inxt(i)=0
@@ -183,4 +184,6 @@ c*** Create the list in Eirene numbering
         listadds(i)=k
       end do !}
 c=======================================================================
+      call subend ()
+      return
       end

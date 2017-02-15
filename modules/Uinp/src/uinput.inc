@@ -75,18 +75,18 @@ c*** 3b
 
 c*** 4
 
-      integer nreaci, ir(2*nreac), massp(nreac),
+      integer nreaci, ir(2*nreac), massp(nreac), iz(nreac),
      ,    masst(nreac), ifexmn(nreac), ifexmx(nreac), nrcln
       real delpot(nreac),rcmn(nreac),rcmx(nreac),fparm(nreac,6),
      ,  creac(9,nreac)
       logical lconst(nreac)
       character filnam(2*nreac)*8, h123(2*nreac)*4, reac(2*nreac)*9,
-     ,    crc(2*nreac)*3
+     ,    crc(2*nreac)*3,elname(2*nreac)*2
 
 c*** 4a
 
       integer natmi,nmassa(natm),nchara(natm),isrfa(natm),isrta(natm),
-     ,  nmseca(natm),nrca(natm),nfola(natm),ngena(natm),
+     ,  nmseca(natm),nrca(natm),nfola(natm),ngena(natm),nhsta(natm),
      ,  ireaca(natm,nreac),ibulka(natm,nreac),iscd1a(natm,nreac),
      ,  iscd2a(natm,nreac),iscd3a(natm,nreac),iscdea(natm,nreac),
      ,  iestma(natm,nreac),ibgka(natm,nreac)
@@ -97,7 +97,8 @@ c*** 4a
 c*** 4b
 
       integer nmoli,nmassm(nmol),ncharm(nmol),nprtm(nmol),isrfm(nmol),
-     ,  isrtm(nmol),nmsecm(nmol),nrcm(nmol),nfolm(nmol),ngenm(nmol),
+     ,  isrtm(nmol),nmsecm(nmol),nrcm(nmol),
+     ,  nfolm(nmol),ngenm(nmol),nhstm(nmol),lkindm(nmol),
      ,  ireacm(nmol,nreac),ibulkm(nmol,nreac),iscd1m(nmol,nreac),
      ,  iscd3m(nmol,nreac),iscd2m(nmol,nreac),iscdem(nmol,nreac),
      ,  iestmm(nmol,nreac),ibgkm(nmol,nreac)
@@ -109,7 +110,8 @@ c*** 4c
 
       integer nioni,nmassi(nion),nchari(nion),nprti(nion),nchrgi(nion),
      ,  isrfi(nion),isrti(nion),nmseci(nion),nrci(nion),nfoli(nion),
-     ,  ngeni(nion),ireaci(nion,nreac),ibulki(nion,nreac),
+     ,  ngeni(nion),nhsti(nion),lkindi(nion),
+     ,  ireaci(nion,nreac),ibulki(nion,nreac),
      ,  iscd1i(nion,nreac),iscd2i(nion,nreac),iscd3i(nion,nreac),
      ,  iscdei(nion,nreac),iestmi(nion,nreac),ibgki(nion,nreac)
       real eeleci(nion,nreac), ebulki(nion,nreac), escd1i(nion,nreac),
@@ -119,7 +121,7 @@ c*** 4c
 c*** 4d
 
       integer nphti,isrff(npht),isrtf(npht),nmsecf(npht),
-     ,  nrcf(npht),nfolf(npht),ngenf(npht),
+     ,  nrcf(npht),nfolf(npht),ngenf(npht),nhstf(npht),
      ,  ireacf(npht,nreac),ibulkf(npht,nreac),
      ,  iscd1f(npht,nreac),iscd2f(npht,nreac),iscd3f(npht,nreac),
      ,  iscdef(npht,nreac),iestmf(npht,nreac),ibgkf(npht,nreac)
@@ -132,7 +134,8 @@ c*** 5
 
       integer nplsi,nmassp(npls),ncharp(npls),nprtp(npls),nchrgp(npls),
      ,  isrfp(npls),isrtp(npls),nmsecp(npls),nrcp(npls),idnslmp(npls),
-     ,  nfolp(npls),ngenp(npls),ireacp(npls,nreac),ibulkp(npls,nreac),
+     ,  nfolp(npls),ngenp(npls),nhstp(npls),
+     ,  ireacp(npls,nreac),ibulkp(npls,nreac),
      ,  iscd1p(npls,nreac),iscd2p(npls,nreac),iscd3p(npls,nreac),
      ,  iscdep(npls,nreac),nrep(npls)
       real eelecp(npls,nreac), ebulkp(npls,nreac), escd1p(npls,nreac),
@@ -337,6 +340,34 @@ c*** 15
       real xcoor(nnadmod),ycoor(nnadmod),zcoor(nnadmod),
      ,  xpolpos(8),ypolpos(8)
 
+c*** b2ah.dat
+
+      integer cbnrmx
+      parameter (cbnrmx=6+2+1+1)
+      integer cbnrso,cbnrno,cbnrwe,cbnrea,
+     ,        cbirso,cbirno,cbirwe,cbirea,
+     ,        izamin(0:natm+npls-1),izamax(0:natm+npls-1),nbndl(natm)
+      real cbrbrk(0:cbnrmx-1),
+     ,     cbsna(0:7,0:nsdb2-1,0:cbnrmx-1),
+     ,     cbsmo(0:7,0:nsdb2-1,0:cbnrmx-1),
+     ,     cbshi(0:7,0:nsdb2-1,0:cbnrmx-1),
+     ,     cbrec(0:7,0:nsdb2-1,0:cbnrmx-1),
+     ,     cbmsb(0:7,0:nsdb2-1,0:cbnrmx-1),
+     ,     cbshe(0:7,0:cbnrmx-1),
+     ,     cbsch(0:7,0:cbnrmx-1),
+     ,     cbmsa(0:7,0:cbnrmx-1),
+     ,     cfdf0(0:7,0:nsdb2-1),
+     ,     cfdna(0:7,0:nsdb2-1),
+     ,     cfdpa(0:7,0:nsdb2-1),
+     ,     cfvla(0:7,0:nsdb2-1),
+     ,     cfvsa(0:7,0:nsdb2-1),
+     ,     cfhci(0:7,0:nsdb2-1),
+     ,     cfhce(0:7),
+     ,     cfsig(0:7),
+     ,     cfalf(0:7),
+     ,     cflim(0:7)
+      logical is_bundled(natm)
+
       common/uinint/
      ,  nmach,nmode,ntcpu,nfile,niter0,niter,ntime0,ntim1,nfullrun,
      ,  noptim,noptm1,ngeom_usr,ncoup_input,nsmstra,
@@ -350,17 +381,20 @@ c*** 15
      ,  nlimi,itend,
      ,  itini,jliin,jlside,jlequi,jltor,jlcol,jlfit,jlbox,jlplg,jlref,
      ,  jsrss,jsrc,lchspnwa,jsrsg,
-     ,  jlsptp,jlsptc,nreaci,ir,massp,masst,ifexmn,ifexmx,nrcln,
-     ,  natmi,nmassa,nchara,isrfa,isrta,nmseca,nrca,nfola,ngena,
+     ,  jlsptp,jlsptc,nreaci,ir,massp,masst,ifexmn,ifexmx,iz,nrcln,
+     ,  natmi,nmassa,nchara,isrfa,isrta,nmseca,nrca,nfola,ngena,nhsta,
      ,  ireaca,ibulka,iscd1a,iscd2a,iscd3a,iscdea,iestma,ibgka,
-     ,  nmoli,nmassm,ncharm,nprtm,isrfm,isrtm,nmsecm,nrcm,nfolm,ngenm,
+     ,  nmoli,nmassm,ncharm,nprtm,isrfm,isrtm,
+     ,  nmsecm,nrcm,nfolm,ngenm,nhstm,
      ,  ireacm,ibulkm,iscd1m,iscd2m,iscd3m,iscdem,iestmm,ibgkm,
      ,  nioni,nmassi,nchari,nprti,nchrgi,isrfi,isrti,nmseci,nrci,nfoli,
-     ,  ngeni,ireaci,ibulki,iscd1i,iscd2i,iscd3i,iscdei,iestmi,ibgki,
+     ,  ngeni,nhsti,
+     ,  ireaci,ibulki,iscd1i,iscd2i,iscd3i,iscdei,iestmi,ibgki,
      ,  nphti,isrff,isrtf,nmsecf,nrcf,nfolf,
-     ,  ngenf,ireacf,ibulkf,iscd1f,iscd2f,iscd3f,iscdef,iestmf,ibgkf,
+     ,  ngenf,nhstf,
+     ,  ireacf,ibulkf,iscd1f,iscd2f,iscd3f,iscdef,iestmf,ibgkf,
      ,  nplsi,nmassp,ncharp,nprtp,nchrgp,isrfp,
-     ,  isrtp,nmsecp,nrcp,idnslmp,nfolp,ngenp,ireacp,ibulkp,
+     ,  isrtp,nmsecp,nrcp,idnslmp,nfolp,ngenp,nhstp,ireacp,ibulkp,
      ,  iscd1p,iscd2p,iscd3p,iscdep,nrep,ispcdn,indpro,
      ,  nnftrm,nchsppri,lchsptrg,lchspgrp,lchspprt,lchspprp,lchsptgt,
      ,  lchsptgp,lchspnwl,lchspaux,nchemvar,indchemvar,nnchemvar,
@@ -392,10 +426,13 @@ c*** 15
      ,  iflb,ndxa,ndya,ntargi,ntgprt,ndt2,ninct2,nixy2,
      ,  ntin2,nten2,niflg,nptc,nptcm,nspzi,nspze,nemod,istramin,
      ,  istramax,nainb,ncopib,ncopeb,nains,naint,naotb,naots,naott,
-     ,  lkindp,
+     ,  lkindm,lkindi,lkindp,
      ,  nadmod,nasmod,nrs,ipunkt,jedge,
      ,  scilref,scilspt,scisrs,scisrc,sclchspnwl,scisrsg,
-     ,  iscrd,jscrd
+     ,  iscrd,jscrd,
+     ,  cbnrso,cbnrno,cbnrwe,cbnrea,
+     ,  cbirso,cbirno,cbirwe,cbirea,
+     ,  izamin,izamax,nbndl
   
       common/uinrl/ ria,ragrid,raa,rarefl,ep1in,ep1ot,ep1ch,exep1,
      ,  ellin,ellot,ellch,exell,triin,triot,trich,extri,
@@ -436,7 +473,9 @@ c*** 15
      ,  scxmlim,scewall,scewbin,sctransp,screcycf,screcyct,scrcprm,
      ,  scfsheat,scexppl,scexpel,scexpil,screcycs,scychsptg,
      ,  scechsptg,scfchsptg,scstprm,chmvar,
-     ,  xcoor,ycoor,zcoor,xpolpos,ypolpos 
+     ,  xcoor,ycoor,zcoor,xpolpos,ypolpos,
+     ,  cbrbrk,cbsna,cbsmo,cbshi,cbrec,cbmsb,cbshe,cbsch,cbmsa,
+     ,  cfdf0,cfdna,cfdpa,cfvla,cfvsa,cfhci,cfhce,cfsig,cfalf,cflim
 
       common/uinlog/ 
      ,  nlscl,nltest,nlana,nldrft,nlcrr,nlerg,nlident,nlone,
@@ -457,10 +496,12 @@ c*** 15
      ,  plnums,plarr,lrpscut,pltsrc,pl3a,pl3s,pltl2d,pltl3d,pltllg,
      ,  pltler,lhist2,lsmot2,lhist3,lcntr3,lsmot3,lraps,lvect3,lrpvc3,
      ,  lrps3d,lrpscn,lprad,lppol,lptor,plidl,
-     ,  plchor,plspec,lpw_d,lsymet,lbalan,lchkqud,lfchgs
+     ,  plchor,plspec,lpw_d,lsymet,lbalan,lchkqud,lfchgs,
+     ,  is_bundled
 
-      common/uinchr/ txtrun,txtsfl,txtsfa,filnam,h123,reac,crc,texta,
-     ,  textm,texti,textf,textp,
+      common/uinchr/ txtrun,txtsfl,txtsfa,
+     ,  filnam,h123,reac,crc,elname,
+     ,  texta,textm,texti,textf,textp,
      ,  cdnmdlp,fnamcdn,h2cdn,reaccdn,crcdn,path,filtrm,
      ,  txtsou,txttla,txtspa,txtuna,txttlc,txtspc,txtunc,
      ,  txttlr,txtspr,txtunr,txttld,txtspd,txtund,chrtal,chrtls,

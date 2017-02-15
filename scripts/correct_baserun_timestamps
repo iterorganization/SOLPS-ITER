@@ -1,9 +1,16 @@
 #! /bin/tcsh -f
 cd baserun
-touch b2ag.prt b2fgmtry fort.30
+touch b2ag.prt
+[ -s b2fgmtry ] && touch b2fgmtry || echo 'No valid b2fgmtry file found'
+[ -s fort.30 ] && touch fort.30 || echo 'No valid fort.30 file found'
 sleep 1
-touch b2ah.prt b2fpardf
+touch b2ah.prt
+[ -s b2fpardf ] && touch b2fpardf || echo 'No valid b2fpardf file found'
 sleep 1
-touch b2ai.prt b2fstati
+touch b2ai.prt
+[ -s b2fstati ] && touch b2fstati || echo 'No valid b2fstati file found'
 sleep 1
-touch b2ar.prt b2frates
+ln -sf $SOLPSTOP/modules/B2.5/Database/stra.dat .
+ln -sf $SOLPSTOP/modules/B2.5/Database/weis.dat .
+touch b2ar.prt
+[ -s b2frates ] && touch b2frates || echo 'No valid b2frates file found'

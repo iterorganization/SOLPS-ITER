@@ -1,5 +1,6 @@
 #! /usr/bin/env tcsh
 
+## -h                         print help
 ## -n                         dry run
 ## -s                         run B2.5 applications in stand-alone mode (no Eirene coupling)
 ## -m <mpi-launcher + args>   run mpi-version (example: b2run -m \"mpiexec -np 2\" b2mn)
@@ -9,7 +10,7 @@
 if (${HOST_NAME} == "JET" && `basename $PWD` != "baserun") then
   echo Special action is being taken since we are running at JET
   foreach i (b2mn.dat b2fgmtry b2fpardf b2fstati b2frates)
-    if (! -e $i) then
+    if (! -s $i) then
       echo Setting up a link to ../baserun/$i
       ln -s ../baserun/$i
     endif
@@ -18,7 +19,7 @@ endif
 # end
 
 set solpstop=`climb_and_look_for SOLPSTOP`
-if (-e $solpstop) then
+if (-s $solpstop) then
   setenv SOLPSTOP "`cat $solpstop`"
   set RUNS=$SOLPSTOP/runs
 else
@@ -28,7 +29,7 @@ endif
 echo Using SOLPSTOP = $SOLPSTOP
 
 loop:
-  if(-e $RUNS/Makefile) goto endloop
+  if(-s $RUNS/Makefile) goto endloop
   if ("$RUNS" == "/") then
     echo Makefile not found
     exit
@@ -41,6 +42,45 @@ endloop:
   set TIME=time
 
 argloop:
+  if ("X${1}X" == "X-hX") then
+    shift
+    echo 'Usage: b2run [OPTIONS] [executable] < [Eirene input file] > [log file]'
+    echo 'Launches a SOLPS run'
+    echo ' '
+    echo 'Optional arguments:'
+    echo ' -d <debugger>: launch run with debugger <debugger>.'
+    echo ' -h: Prints this message.'
+    echo ' -m <mpi-launcher + args>: run mpi-version (example: b2run -m \"mpiexec -np 2\" b2mn)'
+    echo ' -n: dry run. Will show the sequences of commands requested by b2run.'
+    echo ' -s: request a B2.5 stand-alone run. No Eirene input file required then.'
+    echo ' '
+    echo 'Executable: One of the following'
+    echo ' b2ag: Build the geometry files b2fgmtry and fort.30'
+    echo ' b2ah: Build the run parameters file b2fpardf'
+    echo ' b2ai: Build the initial state file b2fstati'
+    echo ' b2ar: Build the atomic rates file b2frates'
+    echo ' b2co: Recover from a plasmastate.xxxx file'
+    echo ' b2fu: Convert from b2fplasmf to b2fplasma'
+    echo ' b2md: Archive a run into MDSPLUS'
+    echo ' b2mn: Main SOLPS-ITER run program'
+    echo ' b2pl: Run the b2plot graphical post-processor'
+    echo ' b2rd: Read an MDSPLUS archived run'
+    echo ' b2ts: Generic post-processing program'
+    echo ' b2uf: Convert from b2fplasma to b2fplasmf'
+    echo ' b2xd: Convert to a SOLPS4.0 run'
+    echo ' b2yg: Plot the geometry'
+    echo ' b2yh: Plot the run parameters'
+    echo ' b2yi: Plot the initial state'
+    echo ' b2yi_gnuplot: Plot the initial state (using gnuplot)'
+    echo ' b2ym: Produces movie output'
+    echo ' b2yn: Plot the progress of inner iterations'
+    echo ' b2yp: Plots the plasma state'
+    echo ' b2yq: Plots the time evolution data'
+    echo ' b2yr: Plot the atomic physics rates'
+    echo ' b2yt: Convert a run to a different grid size or species list'
+    echo ' '
+    exit
+  endif
   if ("X${1}X" == "X-nX") then
     shift
     set debug="-n"

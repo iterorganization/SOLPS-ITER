@@ -40,7 +40,7 @@ swap drop m* -1.0 rm**
 
 linf
 
-fnix psx '' extl 1 1 sumz 0.0 fmin 0.0 fmax 96 f.y drop
+fnax psx '' extl 1 1 sumz 0.0 fmin 0.0 fmax 96 f.y drop
 
 logf
 
@@ -80,7 +80,7 @@ swap drop m* m/
 
 linf
 
-fnix psx '' extl 8 17 sumz 0.0 fmin 0.0 fmax 96 f.y drop
+fnax psx '' extl 8 17 sumz 0.0 fmin 0.0 fmax 96 f.y drop
 
 logf
 
@@ -119,4 +119,4 @@ swap drop m* m/
 96 f.y drop 
 
 linf
-fnix psx '' extl 18 19 sumz 0.0 fmin 0.0 fmax 96 f.y drop
+fnax psx '' extl 18 19 sumz 0.0 fmin 0.0 fmax 96 f.y drop

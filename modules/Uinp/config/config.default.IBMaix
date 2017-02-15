@@ -7,7 +7,6 @@ ifndef LD_MSCL
   $(error LD_MSCL not defined)
 endif
 
-
 FC	     = xlf
 ifndef SOLPS_DEBUG
 FFLAGS	 = -O -g -NA16384 -NQ20000
@@ -23,3 +22,8 @@ MOD 	   = mod
 LDLIBS 	 = ${LD_MSCL}
 # LDEXTRA  = -bmap:$(OBJDIR)/uinp.map -bloadmap:$(OBJDIR)/uinp.lmp -bmaxdata:0x80000000
 LDEXTRA  = -bmap:$(OBJDIR)/uinp.map -bloadmap:$(OBJDIR)/uinp.lmp
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+

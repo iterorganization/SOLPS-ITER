@@ -38,7 +38,6 @@
       NAGDIR =
  MDSPLUS_DIR =
 
-
 #
 # Variables for linking
 #
@@ -52,7 +51,6 @@ LD_NAG     = -L${NAGDIR} -lblas -llapack
 LD_MDSPLUS =
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++ -lC
 
-
 #
 # Preprocessor options
 #
@@ -61,6 +59,23 @@ SOLPS_CPP      = -DNCAR4 -DNO_NAG -DNETCDF4_3
 B25_DEFINES    =
 EIRENE_DEFINES =
 
+# Autodetected optional features...
+
+# Build with Catalyst if ParaView is in PATH
+ifneq (,$(shell which paraview-config))
+  SOLPS_CPP   += -DCATALYST
+  LD_CATALYST  =  -lstdc++ -L/usr/lib64/openmpi/lib -lhdf5 `paraview-config --libs vtkPVPythonCatalyst vtkWebCore vtkParaViewWebCore vtkUtilitiesPythonInitializer`
+  PARAVIEW_LIB = `paraview-config --libs --python | sed s/-L//`
+  export LD_CATALYST
+  export PARAVIEW_LIB
+endif
+
+# Build with IMAS if imas module is loaded
+ifdef IMAS_PREFIX
+  SOLPS_CPP += -DIMAS
+  LD_UAL     = `pkg-config imas-lowlevel imas-gfortran --libs`
+  export LD_UAL
+endif
 
 #
 # Export for use in sub-makefiles
@@ -87,3 +102,8 @@ export LD_SONNET
 export SOLPS_CPP
 export B25_DEFINES
 export EIRENE_DEFINES
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+

@@ -1,8 +1,8 @@
 #! /bin/tcsh
 
-#BSUB -e B2.5.e%J.%I
-#BSUB -o B2.5.o%J.%I
-#BSUB -J B2.5
+#BSUB -e #JOBNAME#.e%J.%I
+#BSUB -o #JOBNAME#.o%J.%I
+#BSUB -J #JOBNAME#
 #BSUB -W 36:00
 
 setenv PATH ${PATH}:/afs/ipp-garching.mpg.de/@sys/bin
@@ -26,10 +26,19 @@ if ($?SOLPS_MPI) then
   set USE_MPI=`echo $USE_MPI | sed -e 's:-m :-m ''":' -e 's:$:"'':'`
 endif
 
-update_solps_run_status "Started on `hostname` at `date`"
+update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"
+set msg="Started on `hostname` at `date`"
+update_solps_run_status ${msg}
+if ($?SOLPS_GUI_IP) then
+  echo ${USER} ${PWD} ${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
+endif
 
 time b2run -s ${USE_MPI} b2mn | gzip -9 >! run.log.gz
 
 QSUB.postprocess
 
-update_solps_run_status "Finished on `hostname` at `date`"
+set msg="Finished on `hostname` at `date`"
+update_solps_run_status ${msg}
+if ($?SOLPS_GUI_IP) then
+  echo ${USER} ${PWD} ${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
+endif

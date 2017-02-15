@@ -13,10 +13,12 @@ c=======================================================================
 #include "uinput.inc"
       integer,save :: ntcpu_save, nfile_save, nprnli_save
       integer,save :: npts_save(nstra)
+      external subini, subend
 c=======================================================================
+      call subini ('uinptridg')
       if(lc) then 
 c       call uinptriang(lc)
-       if(.not.lc) return 
+       if(.not.lc) goto 9999
 c       do i=1,nstsi
 c       ilplg(i)=ilplgu(i)      
 c       end do
@@ -45,5 +47,7 @@ c       end do
        nprnli=nprnli_save
        nltrimesh=.false.
       end if !}
+ 9999 call subend ()
+      return
 c=======================================================================
       end
