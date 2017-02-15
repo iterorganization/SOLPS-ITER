@@ -12,15 +12,18 @@
 	exclude-result-prefixes="my">
 
 <xsl:output method="text" version="1.0" encoding="UTF-8" indent="no"/>
+<xsl:template match="solps">
 
-<xsl:template match="/">
-   \begin{description}
-   <xsl:for-each select="solps/module/param">
-      <xsl:text>\item[</xsl:text><xsl:value-of select="name"/><xsl:text>] </xsl:text>
-      <xsl:text>\message{</xsl:text><xsl:value-of select="name"/> at page \thepage}
-      <xsl:value-of select="description"/>
-   </xsl:for-each>
-   \end{description}
+<xsl:for-each select="module">
+Parameters for input file:<xsl:value-of select="@name"/>.dat
+\begin{description}
+<xsl:for-each select="param">
+<xsl:text>\item[</xsl:text><xsl:value-of select="name"/><xsl:text>] </xsl:text>
+<xsl:text>\message{</xsl:text><xsl:value-of select="name"/> at page \thepage}
+<xsl:value-of select="description"/>
+</xsl:for-each>
+\end{description}
+</xsl:for-each>
 </xsl:template>
 
 </xsl:stylesheet>
