@@ -4354,6 +4354,35 @@ show continuation runs.
     \label{fig:tesepm9}
 \end{figure}
 
+A similar study was undertaken using SOLPS-ITER with fluid neutrals, where a subset of the PFR
+region radial particle boundary conditions were set as total particle flux to simulate a
+gas puff. In this case it was found that a time step on the order of $10^{-7}$ was required
+to obtain converged behavior. In particular, large time steps resulted in significant deviation
+in the total number of particles injected after an elapsed time, meaning the effective puff rate
+varied with the value of $\Delta_t$. Figures \ref{fig:tesepm10} and \ref{fig:tmne1} show the evolution
+of the midplane temperature and the total number of electron after the puff B.C. was applied for
+several values of $\Delta_t$.
+
+\begin{figure}[hbtp]
+\ifpdf
+    \centerline{\includegraphics[origin=br,height=8cm]{tesepm_10.pdf}}
+\else
+    \centerline{\includegraphics[origin=br,height=8cm]{tesepm_10.eps}}
+\fi
+    \caption{Upstream electron temperature for several timesteps after puff b.c. applied.}
+    \label{fig:tesepm10}
+\end{figure}
+
+\begin{figure}[hbtp]
+\ifpdf
+    \centerline{\includegraphics[origin=br,height=8cm]{tmne_1.pdf}}
+\else
+    \centerline{\includegraphics[origin=br,height=8cm]{tmne_1.eps}}
+\fi
+    \caption{Upstream electron temperature for several timesteps after puff b.c. applied.}
+    \label{fig:tmne1}
+\end{figure}
+
 \chapter{Using MDSPLUS}
 \index{MDSPLUS}\label{cha:MDSplus}
 
