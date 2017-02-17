@@ -139,7 +139,7 @@ $(target_ai) : b2ag.dat b2ai.dat b2fgmtry
 	cd b2ai.exe.dir ; ${TIME} ${B2OBJ}/b2ai.exe ; mv $(target_ai) .. ; rm -f $(notdir $^)
 	-rmdir b2ai.exe.dir
 
-$(target_ar) : b2ar.dat stra.dat weis.dat b2fpardf b2fgmtry AMJUEL
+$(target_ar) : b2ar.dat stra.dat weis.dat b2fpardf b2fgmtry
 	rm -rf b2ar.exe.dir >& /dev/null ; mkdir b2ar.exe.dir ; cp $^ b2ar.exe.dir
 	rm -f $(target_ar)
 	cd b2ar.exe.dir ; ${TIME} ${B2OBJ}/b2ar.exe ; mv $(target_ar) .. ; rm -f $(notdir $^)
