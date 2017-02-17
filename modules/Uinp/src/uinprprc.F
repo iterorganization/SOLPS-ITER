@@ -76,7 +76,7 @@ c======================================================================
       end if !}
 
 c*** In order to avoid group duplication:
-c***  ngn is the number of non-zero groups treated,
+c***  ngn is the number of nonzero groups treated,
 c***  igd is the last group ID used,
 c***  ign is the list of correspondence of the group IDs: 1-default,
 c***                                                    2:4-used for passes 1:3
@@ -863,8 +863,8 @@ cxpb Here we must keep the first match!
      ,             streql(  reac(ii),rctnrct(irc)) .and.
      ,                     massp(ii).eq.rctnmsp(irc) .and.
      ,                     masst(ii).eq.rctnmst(irc) .and.
-     ,                      rcmn(ii).eq.rctntmin(irc) .and.
-     ,                      rcmx(ii).eq.rctntmax(irc)) kk=ii
+     ,                     rc1mn(ii).eq.rctntmin(irc) .and.
+     ,                     rc1mx(ii).eq.rctntmax(irc)) kk=ii
                 ii=ii+1
               end do !}
 
@@ -903,8 +903,8 @@ cxpb Here we must keep the last match!
      ,                 streql(  reac(ii),rctnrct(k1)) .and.
      ,                      massp(ii).eq.rctnmsp(irc) .and.
      ,                      masst(ii).eq.rctnmst(irc) .and.
-     ,                       rcmn(ii).eq.rctntmin(k1) .and.
-     ,                       rcmx(ii).eq.rctntmin(k1) .and.
+     ,                      rc1mn(ii).eq.rctntmin(k1) .and.
+     ,                      rc1mx(ii).eq.rctntmin(k1) .and.
      ,                     delpot(ii).eq.rctndlte(k1)) k2=ii
                   end do !}
 
@@ -1034,8 +1034,8 @@ cxpb Here we must keep the last match!
      ,                 streql(  reac(ii),rctnrct(k3)) .and.
      ,                      massp(ii).eq.rctnmsp(irc) .and.
      ,                      masst(ii).eq.rctnmst(irc) .and.
-     ,                       rcmn(ii).eq.rctntmin(k3) .and.
-     ,                       rcmx(ii).eq.rctntmin(k3) .and.
+     ,                      rc1mn(ii).eq.rctntmin(k3) .and.
+     ,                      rc1mx(ii).eq.rctntmin(k3) .and.
      ,                     delpot(ii).eq.rctndlte(k3)) k4=ii
                   end do !}
 
@@ -1174,12 +1174,17 @@ c*** Add the primary reaction to the final list
                 elname(nrcln)=rctneln(k0)
                 iz(nrcln)=rctniz(k0)
 c*** Temporary solution: no rcmn,rcmx
-                rcmn(nrcln)=0.0
-                rcmx(nrcln)=0.0
-                ifexmn(nrcln)=0
-                ifexmx(nrcln)=0
+                rc1mn(nrcln)=0.0
+                rc1mx(nrcln)=0.0
+                rc2mn(nrcln)=0.0
+                rc2mx(nrcln)=0.0
+                ifex1mn(nrcln)=0
+                ifex1mx(nrcln)=0
+                ifex2mn(nrcln)=0
+                ifex2mx(nrcln)=0
                 do ii=1,6 !{
-                  fparm(nrcln,ii)=0.0
+                  fp1(nrcln,ii)=0.0
+                  fp2(nrcln,ii)=0.0
                 end do !}
                 l_hlp(k0)=nrcln
                 kk=nrcln
@@ -1207,12 +1212,17 @@ c*** Add the secondary reaction to the final list
 
 c*** Temporary solution: no rcmn,rcmx
 
-                  rcmn(nrcln)=0.0
-                  rcmx(nrcln)=0.0
-                  ifexmn(nrcln)=0
-                  ifexmx(nrcln)=0
+                  rc1mn(nrcln)=0.0
+                  rc1mx(nrcln)=0.0
+                  rc2mn(nrcln)=0.0
+                  rc2mx(nrcln)=0.0
+                  ifex1mn(nrcln)=0
+                  ifex1mx(nrcln)=0
+                  ifex2mn(nrcln)=0
+                  ifex2mx(nrcln)=0
                   do ii=1,6 !{
-                    fparm(nrcln,ii)=0.0
+                    fp1(nrcln,ii)=0.0
+                    fp2(nrcln,ii)=0.0
                   end do !}
                   l_hlp(k1)=nrcln
                   k2=nrcln
@@ -1246,12 +1256,17 @@ c*** Add the tertiary reaction to the final list
 
 c*** Temporary solution: no rcmn,rcmx
 
-                  rcmn(nrcln)=0.0
-                  rcmx(nrcln)=0.0
-                  ifexmn(nrcln)=0
-                  ifexmx(nrcln)=0
+                  rc1mn(nrcln)=0.0
+                  rc1mx(nrcln)=0.0
+                  rc2mn(nrcln)=0.0
+                  rc2mx(nrcln)=0.0
+                  ifex1mn(nrcln)=0
+                  ifex1mx(nrcln)=0
+                  ifex2mn(nrcln)=0
+                  ifex2mx(nrcln)=0
                   do ii=1,6 !{
-                    fparm(nrcln,ii)=0.0
+                    fp1(nrcln,ii)=0.0
+                    fp2(nrcln,ii)=0.0
                   end do !}
                   l_hlp(k3)=nrcln
                   k4=nrcln

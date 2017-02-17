@@ -76,8 +76,12 @@ c*** 3b
 c*** 4
 
       integer nreaci, ir(2*nreac), massp(nreac), iz(nreac),
-     ,    masst(nreac), ifexmn(nreac), ifexmx(nreac), nrcln
-      real delpot(nreac),rcmn(nreac),rcmx(nreac),fparm(nreac,6),
+     ,    masst(nreac),
+     ,    ifex1mn(nreac), ifex1mx(nreac),
+     ,    ifex2mn(nreac), ifex2mx(nreac), nrcln
+      real delpot(nreac),
+     ,  rc1mn(nreac),rc1mx(nreac),rc2mn(nreac),rc2mx(nreac),
+     ,  fp1(nreac,6),fp2(nreac,6),
      ,  creac(9,nreac)
       logical lconst(nreac)
       character filnam(2*nreac)*8, h123(2*nreac)*4, reac(2*nreac)*9,
@@ -381,7 +385,8 @@ c*** b2ah.dat
      ,  nlimi,itend,
      ,  itini,jliin,jlside,jlequi,jltor,jlcol,jlfit,jlbox,jlplg,jlref,
      ,  jsrss,jsrc,lchspnwa,jsrsg,
-     ,  jlsptp,jlsptc,nreaci,ir,massp,masst,ifexmn,ifexmx,iz,nrcln,
+     ,  jlsptp,jlsptc,nreaci,ir,massp,masst,
+     ,  ifex1mn,ifex1mx,ifex2mn,ifex2mx,iz,nrcln,
      ,  natmi,nmassa,nchara,isrfa,isrta,nmseca,nrca,nfola,ngena,nhsta,
      ,  ireaca,ibulka,iscd1a,iscd2a,iscd3a,iscdea,iestma,ibgka,
      ,  nmoli,nmassm,ncharm,nprtm,isrfm,isrtm,
@@ -448,7 +453,7 @@ c*** b2ah.dat
      ,  xmlma,ewala,ewbna,trnspa,rcycca,rcycfa,rcycta,
      ,  rcycsa,exppla,expela,expila,rcprma,sptpra,echspta,fchspta,
      ,  xlcor,ylcor,zlcor,xlref,ylref,zlref,xlrot,ylrot,zlrot,alrot,
-     ,  delpot,rcmn,rcmx,fparm,creac,
+     ,  delpot,rc1mn,rc1mx,rc2mn,rc2mx,fp1,fp2,creac,
      ,  eeleca,ebulka,escd1a,escd2a,freaca,fldlma,
      ,  eelecm,ebulkm,escd1m,escd2m,freacm,
      ,  eeleci,ebulki,escd1i,escd2i,freaci,

@@ -243,10 +243,13 @@ c*** 3b
 
 c*** 4
 
-      data nreaci,nrcln,  ir  , massp , masst , ifexmn, ifexmx,  iz    /
-     /        0  ,  0  ,lur2*0,nreac*0,nreac*0,nreac*0,nreac*0,nreac*1 /
-      data delpot,  rcmn  ,  rcmx  , fparm , creac  /
-     /   nreac*0.,nreac*0.,nreac*0.,lur6*0.,lur9*0. /
+      data nreaci,nrcln,  ir  , massp , masst ,  iz    /
+     /        0  ,  0  ,lur2*0,nreac*0,nreac*0,nreac*1 /
+      data ifex1mn,ifex1mx,ifex2mn,ifex2mx /
+     /     nreac*0,nreac*0,nreac*0,nreac*0 /
+      data delpot,  rc1mn ,  rc1mx ,  rc2mn ,  rc2mx ,  fp1  ,  fp2   /
+     /   nreac*0.,nreac*0.,nreac*0.,nreac*0.,nreac*0.,lur6*0.,lur6*0. /
+      data creac / lur9*0. /
       data lconst / nreac*.false. /
       data filnam ,  h123  ,  reac  ,  crc   , elname  /
      /    lur2*' ',lur2*' ',lur2*' ',lur2*' ',lur2*' ' /
