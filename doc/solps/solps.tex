@@ -20,6 +20,7 @@
 \usepackage{makeidx}
 \usepackage{multirow}
 \usepackage{fullpage}
+\usepackage{relsize}
 \usepackage{drafthead}
 \usepackage{draftcopy}
 \usepackage{supertabular}
@@ -6517,45 +6518,46 @@ represents the energy sources in {\tt Eirene} (and old {\tt B2}) and $H$ the hea
 \hspace*{2cm}
 \begin{minipage}{12cm}
   \begin{align}
-    \mbox{total energy} & \Rightarrow\ S_a^E\ =\ \int \frac{1}{2}m_av_a^2S_a\
-d^3v,\\
-    \mbox{internal energy} & \Rightarrow\ S_a^H\ =\ \int \frac{1}{2}m_a\left(
-v_a-u_a\right)^2S_a\ d^3v,\\
-    & \rightarrow\ S_a^H \ =\ S_a^E-u_a\cdot S_a^{mom}+\frac{1}{2}m_au_a^2
-S_a^{particle}.
+    \mbox{total energy} & \Rightarrow\ S_a^E\ =\ \int \frac{1}{2} m_a v_a^2 S_a \, d^3v,\\
+    \mbox{internal energy} & \Rightarrow\ S_a^H\ =\ \int \frac{1}{2} m_a \left(
+v_a - u_a \right)^2 S_a \, d^3v,\\
+    & \rightarrow\ S_a^H \ =\ S_a^E - u_a \cdot S_a^{mom} + \frac{1}{2} m_a u_a^2 S_a^{particle}.
   \end{align}
 \end{minipage}
 
 The derivation is as follows. The energy source rate from {\tt Eirene} is computed as:
 
 \begin{equation*}
-S_i^E = \sum_a S_a^E = \sum_a \sum_{Ea} \frac{1}{2} m_a v_a^2
+S_i^E = \sum_a S_a^E = \sum_a \sum_{Ea} \iint \frac{1}{2} m_a v_a^2 \, d^3v \, d^3x
 \end{equation*}
 
 where the $\sum_a$ is taken over all species, and $\sum_{Ea}$ over the
-newly ionised particles of species $a$ coming from the {\tt Eirene} strata.
+newly ionised particles of species $a$ coming from the {\tt Eirene} strata,
+and the spatial integral is taken over the cell volume.
 We also define the particle and parallel momentum source rates:
 
 \begin{align*}
-S_i^{particle} = \sum_a S_{Ea}^{particle} &= \sum_a \sum_{Ea} 1 \\
-\vec{S}_i^{mom} = \sum_a \vec{S}_{Ea}^{mom} &= \sum_a \sum_{Ea} m_a \vec{v}_a
+S_i^{particle} = \sum_a S_{Ea}^{particle} &= \sum_a \sum_{Ea} \int 1 \cdot d^3x \\
+\vec{S}_i^{mom} = \sum_a \vec{S}_{Ea}^{mom} &= \sum_a \sum_{Ea} \int m_a \vec{v}_a \, d^3x
 \end{align*}
 
 We need $S_i^H$, which, neglecting all other terms, is defined by:
 
 \begin{equation*}
-\frac {\partial}{\partial t} \left( \frac{3}{2} n_i T_i \right) = \frac {\partial}{\partial t} \left( \sum_a \frac{3}{2} n_a T_a \right) = S_i^H
+\frac {\partial}{\partial t} \left( \int \frac{3}{2} n_i T_i \, d^3x \right) = \frac {\partial}{\partial t} \left( \sum_a \int \frac{3}{2} n_a T_a \, d^3x \right) = S_i^H
 \end{equation*}
 
 Thus,
 
 \begin{equation*}
-\frac{3}{2} \sum_a \left( n_a^{t+\Delta t} T_a^{t+\Delta t} - n_a^t T_a^t \right) = S_i^H \Delta t
+\frac{3}{2} \sum_a \int \left( n_a^{t+\Delta t} T_a^{t+\Delta t} - n_a^t T_a^t \right) d^3x = S_i^H \Delta t
 \end{equation*}
 
 \begin{equation*}
-\frac{3}{2} \sum_a \left[ \left( n_a^t + S_a^{particle} \Delta t \right) T_a^{t+\Delta t} - n_a^t T_a^t \right] = S_i^H \Delta t
+\frac{3}{2} \sum_a \left[ \left( N_a^t + S_a^{particle} \Delta t \right) T_a^{t+\Delta t} - N_a^t T_a^t \right] = S_i^H \Delta t
 \end{equation*}
+
+where $N_a = \int n_a d^3x$ is the cell particle content for species $a$.
 
 For a drifting Maxwellian distribution with drift velocity
 $\vec{u}_a$, the temperature (in energy units) is defined as:
@@ -6567,15 +6569,15 @@ In {\tt B2.5}, we assume $T_a = T_i$ and use $n_i = \sum_a n_a$.
 
 So we can write:
 \begin{equation}\label{eq:heatsources}
-\sum_a \left( n_a^t + S_a^{particle} \Delta t \right)
+\sum_a \left( N_a^t + S_a^{particle} \Delta t \right)
 {\left \langle \frac{1}{2} m_a {\left( \vec{v}_a - \vec{u}_a \right)}^2 \right \rangle}^{t+\Delta t}
-- \sum_a n_a^t {\left \langle \frac{1}{2} m_a {\left( \vec{v}_a - \vec{u}_a \right)}^2 \right \rangle}^t = S_i^H \Delta t
+- \sum_a N_a^t {\left \langle \frac{1}{2} m_a {\left( \vec{v}_a - \vec{u}_a \right)}^2 \right \rangle}^t = S_i^H \Delta t
 \end{equation}
 
 We define:
 \begin{align}
-\vec{u}_a^{t+\Delta t} &= {\left \langle \vec{v}_a \right \rangle}^{t+\Delta t} = \frac{n_a^t\vec{u}_a^t + \frac{1}{m_a} \vec{S}_a^{mom} \Delta t}{n_a^t + S_a^{particle} \Delta t} \\
-\delta\vec{u}_a &= \vec{u}_a^{t+ \Delta t} - \vec{u}_a^t = \frac{\frac{1}{m_a} \vec{S}_a^{mom} \Delta t - \vec{u}_a^t S_a^{particle} \Delta t}{n_a^t + S_a^{particle} \Delta t}
+\vec{u}_a^{t+\Delta t} &= {\left \langle \vec{v}_a \right \rangle}^{t+\Delta t} = \frac{N_a^t\vec{u}_a^t + \frac{1}{m_a} \vec{S}_a^{mom} \Delta t}{N_a^t + S_a^{particle} \Delta t} \\
+\delta\vec{u}_a &= \vec{u}_a^{t+ \Delta t} - \vec{u}_a^t = \frac{\frac{1}{m_a} \vec{S}_a^{mom} \Delta t - \vec{u}_a^t S_a^{particle} \Delta t}{N_a^t + S_a^{particle} \Delta t}
 \end{align}
 
 And make use of:
@@ -6597,26 +6599,26 @@ And make use of:
 Writing out the first average explicitly:
 \begin{align*}
 & {\left \langle \frac{1}{2} m_a {\left( \vec{v}_a - \vec{u}_a^t \right)}^2 \right \rangle}^{t+\Delta t} \\
-& = \frac{\int n_a^t {\left( \frac{m_a}{2 \pi T_a^t} \right)}^{\frac{3}{2}} \frac{1}{2} m_a
-{\left( \vec{v}_a - \vec{u}_a^t \right)}^2 \exp \left( -\frac{1}{2}m_a\frac{{\left( \vec{v}_a - \vec{u}_a^t \right)}^2}{T_a^t} \right) d^3 \vec{v}_a
-+ \sum_a \frac{1}{2}m_a {\left( \vec{v}_a - \vec{u}_a^t \right)}^2 \Delta t }{n_a^t + S_a^{particle} \Delta t} \\
-&= \frac{1}{n_a^t + S_a^{particle} \Delta t} \left[ \frac{3}{2} n_a^t T_a^t + \sum_a \frac{1}{2} m_a v_a^2 \Delta t
+& = \frac{\mathlarger{\iint} n_a^t {\left( \frac{m_a}{2 \pi T_a^t} \right)}^{\frac{3}{2}} \frac{1}{2} m_a
+{\left( \vec{v}_a - \vec{u}_a^t \right)}^2 \exp \left( -\frac{1}{2}m_a\frac{{\left( \vec{v}_a - \vec{u}_a^t \right)}^2}{T_a^t} \right) \, d^3 \vec{v}_a \, d^3x
++ \sum_a \frac{1}{2}m_a {\left( \vec{v}_a - \vec{u}_a^t \right)}^2 \Delta t }{N_a^t + S_a^{particle} \Delta t} \\
+&= \frac{1}{N_a^t + S_a^{particle} \Delta t} \left[ \frac{3}{2} N_a^t T_a^t + \sum_a \int \frac{1}{2} m_a v_a^2 \Delta t \, d^3x
 + \frac{1}{2}m_a {u_a^t}^2 S_a^{particle} \Delta t - \vec{u}_a^t\cdot\vec{S}_a^{mom} \Delta t \right]
 \\
-&= \frac{1}{n_a^t + S_a^{particle} \Delta t} \left[ \frac{3}{2} n_a^t T_a^t + S_a^E \Delta t + \frac{1}{2}m_a{u_a^t}^2S_a^{particle} \Delta t - \vec{u}_a^t\cdot\vec{S}_a^{mom} \Delta t \right]
+&= \frac{1}{N_a^t + S_a^{particle} \Delta t} \left[ \frac{3}{2} N_a^t T_a^t + S_a^E \Delta t + \frac{1}{2}m_a{u_a^t}^2S_a^{particle} \Delta t - \vec{u}_a^t\cdot\vec{S}_a^{mom} \Delta t \right]
 \end{align*}
 
 Putting all this back into Eq.~(\ref{eq:heatsources}), we obtain:
 \begin{align*}
-\sum_a & \left\{ \left[ \frac{3}{2} n_a^t T_a^t + S_a^E \Delta t + \frac{1}{2}m_a{u_a^t}^2S_a^{particle} \Delta t
+\sum_a & \left\{ \left[ \frac{3}{2} N_a^t T_a^t + S_a^E \Delta t + \frac{1}{2}m_a{u_a^t}^2S_a^{particle} \Delta t
 - \vec{u}_a^t\cdot\vec{S}_a^{mom} \Delta t \right] -
-\left( n_a^t + S_a^{particle} \Delta t \right) \frac{1}{2} m_a {(\delta u_a)}^2 \right\} \\
--& \sum_a \frac{3}{2} n_a^t T_a^t = S_i^H \Delta t
+\left( N_a^t + S_a^{particle} \Delta t \right) \frac{1}{2} m_a {(\delta u_a)}^2 \right\} \\
+-& \sum_a \frac{3}{2} N_a^t T_a^t = S_i^H \Delta t
 \end{align*}
 
 Thus:
 \begin{equation}\label{eq:sources}
-S_i^H = \sum_a S_a^E - \sum_a \vec{u}_a^t\cdot\vec{S}_a^{mom} + \sum_a \frac{1}{2} m_a {u_a^t}^2 S_a^{particle} - \sum_a \frac{n_a^t + S_a^{particle} \Delta t}{\Delta t} \frac{1}{2} m_a {(\delta u_a)}^2
+S_i^H = \sum_a S_a^E - \sum_a \vec{u}_a^t\cdot\vec{S}_a^{mom} + \sum_a \frac{1}{2} m_a {u_a^t}^2 S_a^{particle} - \sum_a \frac{N_a^t + S_a^{particle} \Delta t}{\Delta t} \frac{1}{2} m_a {(\delta u_a)}^2
 \end{equation}
 
 In the code, we previously had only the first three terms in the R.H.S. of the final equation above. But for very strong sources, dominating the background plasma, the higher order correction is necessary.
