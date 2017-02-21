@@ -6,9 +6,9 @@ setenv SOLPSWORK /pfs/work/$USER/SOLPS-ITER
 if ($?TOKAMAKNAME) then
   setenv DEVICE $TOKAMAKNAME
 endif
-setenv LD_LIBRARY_PATH ${WORK}/solps-gui/staging/paraview/5.1.2/lib/paraview-5.1:${WORK}/solps-gui/staging/qt/4.8.7/lib:${LD_LIBRARY_PATH}
+#setenv LD_LIBRARY_PATH ${WORK}/solps-gui/staging/paraview/5.1.2/lib/paraview-5.1:${WORK}/solps-gui/staging/qt/4.8.7/lib:${LD_LIBRARY_PATH}
 # load modules
-setenv MODULEPATH /afs/ipp/common/usr/modules.2014/@sys/modulefiles/mpi:$MODULEPATH
+#setenv MODULEPATH /afs/ipp/common/usr/modules.2014/@sys/modulefiles/mpi:$MODULEPATH
 #module unload impi
 #module load impi/5.1.3
 #module load solps-gui
