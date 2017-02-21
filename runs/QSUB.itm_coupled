@@ -1,14 +1,14 @@
 #! /bin/tcsh
 
-#$ -l h_rt=36:00:00,h_vmem=4G
-#$ -cwd
-#$ -M #EMAIL#
-#$ -m e
-#$ -notify
-#$ -N #JOBNAME#
-#$ -V
+#PBS -q xfuagw
+#PBS -l select=1:ncpus=1:mem=4GB
+#PBS -l walltime=24:00:00
+#PBS -M #EMAIL#
+#PBS -m e
+#PBS -N #JOBNAME#
+#PBS -V
 
-setenv PATH ${PATH}:/afs/ipp-garching.mpg.de/@sys/bin
+cd $PBS_O_WORKDIR
 
 pushd #SOLPSTOP#
 source setup.csh

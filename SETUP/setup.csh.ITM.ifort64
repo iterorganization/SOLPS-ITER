@@ -9,26 +9,26 @@ endif
 setenv LD_LIBRARY_PATH ${WORK}/solps-gui/staging/paraview/5.1.2/lib/paraview-5.1:${WORK}/solps-gui/staging/qt/4.8.7/lib:${LD_LIBRARY_PATH}
 # load modules
 setenv MODULEPATH /afs/ipp/common/usr/modules.2014/@sys/modulefiles/mpi:$MODULEPATH
-module unload impi
-module load impi/5.1.3
-module load solps-gui
-module load nag_flib/intel/mk24
-module load intel
+#module unload impi
+#module load impi/5.1.3
+#module load solps-gui
+#module load nag_flib/intel/mk24
+#module load intel
 
 #module load imas
 #imasdb solps-iter
 
-module load itm-paraview
+# module load itm-paraview
 
-if (`where paraview-config` == "") then
-  echo "Warning: ParaView not found. Catalyst will not not be compiled-in!"
-else
-  # See ParaViewCatalystUsersGuide_v2.pdf Sec 3.7.2 Linking with Python ...
-  set PARAVIEW_LIB=`paraview-config --libs --python | sed s/-L//`
-  setenv LD_LIBRARY_PATH "${PARAVIEW_LIB}:${LD_LIBRARY_PATH}"
-  setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages/vtk:${PYTHONPATH}"
-  setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
-endif
+# if (`where paraview-config` == "") then
+#   echo "Warning: ParaView not found. Catalyst will not not be compiled-in!"
+# else
+#   # See ParaViewCatalystUsersGuide_v2.pdf Sec 3.7.2 Linking with Python ...
+#   set PARAVIEW_LIB=`paraview-config --libs --python | sed s/-L//`
+#   setenv LD_LIBRARY_PATH "${PARAVIEW_LIB}:${LD_LIBRARY_PATH}"
+#   setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages/vtk:${PYTHONPATH}"
+#   setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
+# endif
 
 # compilers
 
