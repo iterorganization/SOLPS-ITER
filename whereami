@@ -6,7 +6,10 @@ if ("$mephi_check" == "head" || "$mephi_check" == "node") then
   set machine_location="cluster21.mephi.ru"
   set fullhost=$machine_location
 else
-set fullhost=`nslookup $machine_location | grep -m 1 Name | awk '/Name:/{print $2}' | tr 'A-Z' 'a-z'`
+  set fullhost=`nslookup $machine_location | grep -m 1 Name | awk '/Name:/{print $2}' | tr 'A-Z' 'a-z'`
+  if ("$fullhost" == "") then
+    set fullhost=`hostname -f`
+  endif
 endif
 switch ($fullhost)
 case "*.iter.org":
@@ -20,6 +23,7 @@ case "*.iferc-csc.org":
   breaksw
 case "*.itm.rzg.mpg.de":
 case "*.efda-itm.eu":
+case "*.marconi.cineca.it"
   echo ITM
   breaksw
 case "*.ipp-garching.mpg.de":
