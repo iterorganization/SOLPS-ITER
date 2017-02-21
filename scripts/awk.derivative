@@ -1,0 +1,2 @@
+#! /bin/csh -f
+awk '/^[^#]/&&OK==1{printf "%s",(old[1]+$1)/2;for (i=2;i<=NF;i++) printf " %s",($i-old[i])/($1-old[1]); printf "\n"}/^[^#]/{nf=split($0,old);OK=1}'
