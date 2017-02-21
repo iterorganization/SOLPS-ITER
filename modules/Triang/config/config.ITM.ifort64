@@ -4,17 +4,17 @@
 
 # Test whether necessary variables are defined
 ifndef GLI_HOME
-GLI_HOME   = /pfs/work/dpc/SOLPS-ITER/gks
+GLI_HOME   = /pfs/work/g2dpc/SOLPS-ITER/gks
 endif
 ifndef LD_GR
-GR_ROOT   ?= /pfs/work/dpc/SOLPS-ITER/gr
+GR_ROOT   ?= /pfs/work/g2dpc/SOLPS-ITER/gr
 LD_GR      = -L${GR_ROOT} -lgr  
 endif
 ifndef LD_GKS
 LD_GKS     = -L${GLI_HOME} -lgks -lgfortran
 endif
 ifndef LD_NAG
-NAGDIR    ?= /pfs/work/dpc/SOLPS-ITER/nag
+NAGDIR    ?= /pfs/work/g2dpc/SOLPS-ITER/nag
 LD_NAG     = -L${NAGDIR} -lnag
 endif
 
@@ -23,8 +23,8 @@ endif
 DEFINES		=
 EQUIVS 		=
 
-#CPP	 	= -/lib/cpp -C -traditional
-CPP	 	    = /lib/cpp -traditional
+#CPP	 	= -/lib/cpp -C -traditional -ffreestanding
+CPP	 	    = /lib/cpp -traditional -ffreestanding
 CPPOPTS 	= -P -I${srcdir} ${EQUIVS}
 SED       =
 LINK_MOD 	= 
@@ -34,7 +34,7 @@ FC       	= ifort
 ifdef SOLPS_DEBUG
 FCOPTS 		= -g -C -debug all
 else
-FCOPTS 		= -O3 -vec_report0
+FCOPTS 		= -O3
 endif
 
 #COMPILE  	= ${FC} -c ${FFLAGS}
