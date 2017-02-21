@@ -1,0 +1,7 @@
+#! /bin/csh -f
+awk 'BEGIN{print "$ DATA=CONTOUR"}/jm    =/{nr=$3}/km    =/{nz=$3}/r\(1:jm\)/{print "% nx = "nr"  xgrid=True";ok=NR}/z\(1:km\)/{print "% ny = "nz"  ygrid=True";ok=NR}/psi\(j,k\)-psib/{print "% contfill = T  equalscale = F";ok=NR}ok>0&&NR>ok&&NF>0{print $0}NF==0{ok=0}' $1 >! $1:r.mtv
+if ("" != "$2") then
+  awk 'BEGIN{print "$DATA=CURVE2D";print "%dlinecolor=0";print "%dlinewidth=3"}$1*1>1&&NF==2{print $1/1000,$2/1000}NF==1{printf "\n"}' $2 >> $1:r.mtv
+endif
+echo '$ END' >> $1:r.mtv
+plotmtv -colorps -plotall $1:r.mtv
