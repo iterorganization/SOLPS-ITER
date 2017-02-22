@@ -58,7 +58,7 @@ b2cdca.F:
 	ln -sf ${B25DIR}/src/documentation/b2cdca.F .
 
 b2cdci.F: ${B25DIR}/src/documentation/b2input.xml ${B25DIR}/src/documentation/b2cdci.py
-	cd ${B25DIR}/src/documentation; python b2cdci.py
+	-cd ${B25DIR}/src/documentation; python b2cdci.py
 	ln -sf ${B25DIR}/src/documentation/b2cdci.F .
 
 b2cdcn.F:
