@@ -4232,6 +4232,132 @@ Third, in \SOLPSITERns, the North and South boundaries of the {\tt B2.5} grid ar
 no longer recycling/sputtering surfaces but rather only switching surfaces to the
 triangular grid regions.
 
+\section{Output files}
+\index{fort.44}\index{fort.46}
+
+When running the coupled version of \SOLPSITERns, you will obtain additional output files, named {\tt fort.44} and {\tt fort.46}, which contain data computed from {\tt Eirene}. The contents of the {\tt fort.44} file is a series of data blocks, each starting with a title line, after a header providing the grid size and species list, as well as a format identifier. The relevant dimensions are (please also refer to the {\tt Eirene} manual for further details and to the code for the actual way the arrays are written out):
+
+\begin{description}
+  \item[NDX] Number of poloidal cells in the {\tt Eirene} computational grid
+  \item[NDY] Number of radial cells in the {\tt Eirene} computational grid
+  \item[NATM] Number of atom species declared in the {\tt Eirene} input file
+  \item[NMOL] Number of molecule species declared in the {\tt Eirene} input file
+  \item[NION] Number of test ion species declared in the {\tt Eirene} input file
+  \item[NPLS] Number of plasma background species declared in the {\tt Eirene} input file
+  \item[NSTRA] Number of source strata declared in the {\tt Eirene} input file (Stratum 0 is the sum over strata)
+  \item[NLIM] Number of ``additional surfaces'' (physical walls) declared in block 3B of the {\tt Eirene} input file
+  \item[NSTS] Number of ``non-standard surfaces'' (plasma boundaries) declared in block 3A of the {\tt Eirene} input file
+  \item[NTRII] Number of triangles forming the {\tt Eirene} computational grid
+  \item[NCL] Number of segments for resolved tallies on non-standard surfaces
+\end{description}
+
+The data blocks are:
+
+\begin{description}
+  \item[dab2] Atom density ($m^{-3}$), dimension ({\tt NDX},{\tt NDY},{\tt NATM})
+  \item[tab2] Atom temperature ($eV$), dimension ({\tt NDX},{\tt NDY},{\tt NATM})
+  \item[dmb2] Molecule density ($m^{-3}$), dimension ({\tt NDX},{\tt NDY},{\tt NMOL})
+  \item[tmb2] Molecule temperature ($eV$), dimension ({\tt NDX},{\tt NDY},{\tt NMOL})
+  \item[dib2] Test ion density ($m^{-3}$), dimension ({\tt NDX},{\tt NDY},{\tt NION})
+  \item[tib2] Test ion temperature ($m^{-3}$), dimension ({\tt NDX},{\tt NDY},{\tt NION})
+  \item[rfluxa] Radial flux density of atoms ($m^{-2}.s^{-1}$), dimension ({\tt NDX},{\tt NDY},{\tt NATM})
+  \item[rfluxm] Radial flux density of molecules ($m^{-2}.s^{-1}$), dimension ({\tt NDX},{\tt NDY},{\tt NMOL})
+  \item[pfluxa] Poloidal flux density of atoms ($m^{-2}.s^{-1}$), dimension ({\tt NDX},{\tt NDY},{\tt NATM})
+  \item[pfluxm] Poloidal flux density of molecules ($m^{-2}.s^{-1}$), dimension ({\tt NDX},{\tt NDY},{\tt NMOL})
+  \item[refluxa] Radial energy flux density carried by atoms ($W.m^{-2}$), dimension ({\tt NDX},{\tt NDY},{\tt NATM})
+  \item[refluxm] Radial energy flux density carried by molecules ($W.m^{-2}$), dimension ({\tt NDX},{\tt NDY},{\tt NMOL})
+  \item[pefluxa] Poloidal energy flux density carried by atoms ($W.m^{-2}$), dimension ({\tt NDX},{\tt NDY},{\tt NATM})
+  \item[pefluxm] Poloidal energy flux density carried by molecules ($W.m^{-2}$), dimension ({\tt NDX},{\tt NDY},{\tt NMOL})
+  \item[emiss] $H_\alpha$ emissivity due to atoms ($photons.m^{-3}.s^{-1}$), dimension ({\tt NDX},{\tt NDY})
+  \item[emissmol] $H_\alpha$ emissivity due to molecules and molecular ions ($photons.m^{-3}.s^{-1}$), dimension ({\tt NDX},{\tt NDY})
+  \item[srcml] Molecule particle source ($A$), dimension ({\tt NDX},{\tt NDY},{\tt NMOL})
+  \item[edissml] Energy spent for dissociating hydrogenic molecules ($W$), dimension ({\tt NDX},{\tt NDY},{\tt NMOL})
+  \item[wldnek] Heat transferred by neutrals ($W$), total over strata, dimension ({\tt NLIM}+{\tt NSTS})
+  \item[wldnep] Potential energy released by neutrals ($W$), total over strata, dimension ({\tt NLIM}+{\tt NSTS})
+  \item[wldna] Flux of atoms impinging on surface ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
+  \item[ewlda] Average energy of impinging atoms on surface ($eV$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
+  \item[wldnm] Flux of molecules impinging on surface ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NMOL})
+  \item[ewldm] Average energy of impinging molecules on surface ($eV$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NMOL})
+  \item[p1,p2] Endpoints of surface ($X$ and $Y$ coordinates, in $m$), total over strata, dimension ({\tt NLIM})
+  \item[wldra] Flux of reflected atoms from surface ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
+  \item[wldrm] Flux of reflected molecules from surface ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NMOL})
+  \item[For each stratum $i=1,nstra$] The above data, resolved per stratum:
+  \begin{description}
+    \item[wldnek(i)] Heat transferred by neutrals ($W$), dimension ({\tt NLIM}+{\tt NSTS})
+    \item[wldnep(i)] Potential energy released by neutrals ($W$), dimension ({\tt NLIM}+{\tt NSTS})
+    \item[wldna(i)] Flux of atoms impinging on surface ($A$), dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
+    \item[ewlda(i)] Average energy of impinging atoms on surface ($eV$), dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
+    \item[wldnm(i)] Flux of molecules impinging on surface ($A$), dimension ({\tt NLIM}+{\tt NSTS},{\tt NMOL})
+    \item[ewldm(i)] Average energy of impinging molecules on surface ($eV$), dimension ({\tt NLIM}+{\tt NSTS},{\tt NMOL})
+    \item[wldra(i)] Flux of reflected atoms from surface ($A$), dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
+    \item[wldrm(i)] Flux of reflected molecules from surface ($A$), dimension ({\tt NLIM}+{\tt NSTS},{\tt NMOL})
+  \end{description}
+  \item[wldpp] Flux of plasma ions impinging on surface ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NPLS})
+  \item[wldpa] Net flux of atoms emitted from surface ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
+  \item[wldpm] Net flux of molecules emitted from surface ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NMOL})
+  \item[wldpeb] Power carried by particles emitted from surface ($W$), total over strata, dimension ({\tt NLIM}+{\tt NSTS})
+  \item[wldspt] Flux of sputtered wall material ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS})
+  \item[For each stratum $i=1,nstra$] The above data, resolved per stratum:
+  \begin{description}
+    \item[wldpp(i)] Flux of plasma ions impinging on surface ($A$), dimension ({\tt NLIM}+{\tt NSTS},{\tt NPLS})
+    \item[wldpa(i)] Net flux of atoms emitted from surface ($A$), dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
+    \item[wldpm(i)] Net flux of molecules emitted from surface ($A$), dimension ({\tt NLIM}+{\tt NSTS},{\tt NMOL})
+    \item[wldpeb(i)] Power carried by particles emitted from surface ($W$), dimension ({\tt NLIM}+{\tt NSTS})
+    \item[wldspt(i)] Flux of sputtered wall material ($A$), dimension ({\tt NLIM}+{\tt NSTS})
+  \end{description}
+  \item[isrftype] {\tt ILIIN} surface type variable in {\tt Eirene}, dimension ({\tt NLIM}+{\tt NSTS})
+  \item[wlarea] Surface area ($m^2$), dimension ({\tt NLIM}+{\tt NSTS})
+  \item[wlabsrp(A)] Absorption rate for atoms, dimension ({\tt NLIM}+{\tt NSTS}, {\tt NATM})
+  \item[wlabsrp(M)] Absorption rate for molecules, dimension ({\tt NLIM}+{\tt NSTS}, {\tt NMOL})
+  \item[wlabsrp(I)] Absorption rate for test ions, dimension ({\tt NLIM}+{\tt NSTS}, {\tt NION})
+  \item[wlabsrp(P)] Absorption rate for plasma ions, dimension ({\tt NLIM}+{\tt NSTS}, {\tt NPLS})
+  \item[eneutrad] Radiation rate due to atoms ($W$), dimension ({\tt NDX},{\tt NDY},{\tt NATM})
+  \item[eirdiag\_nds] Indices for segments on resolved non-standard surfaces, dimension ($5 \times$ {\tt NSTS} $+ 1$)
+  \item[sarea\_res] Surface area of surface segment ($m^2$), dimension ({\tt NCL})
+  \item[wldna\_res] Flux of atoms impinging on surface segment ($A$), dimension ({\tt NATM}, {\tt NCL})
+  \item[wldnm\_res] Flux of molecules impinging on surface segment ($A$), dimension ({\tt NMOL}, {\tt NCL})
+  \item[ewlda\_res] Average energy of impinging atoms on surface segment ($eV$), dimension ({\tt NATM}, {\tt NCL})
+  \item[ewldm\_res] Average energy of impinging molecules on surface segment ($eV$), dimension ({\tt NMOL}, {\tt NCL})
+  \item[ewldea\_res] Energy flux carried by emitted atoms from surface segment ($W$), dimension ({\tt NATM}, {\tt NCL})
+  \item[ewldem\_res] Energy flux carried by emitted molecules from surface segment ($W$), dimension ({\tt NMOL}, {\tt NCL})
+  \item[ewldrp\_res] Total energy flux carried by emitted particles from surface segment ($W$), dimension ({\tt NCL})
+  \item[ewldmr\_res] Flux of emitted molecules from recycling atoms ($A$), dimension ({\tt NMOL}, {\tt NCL})
+  \item[pdena\_int] Integral number of atoms over the entire {\tt Eirene} computational grid, dimension ({\tt NATM}, {\tt 0:NSTRA})
+  \item[pdenm\_int] Integral number of molecules over the entire {\tt Eirene} computational grid, dimension ({\tt NMOL}, {\tt 0:NSTRA})
+  \item[pdeni\_int] Integral number of test ions over the entire {\tt Eirene} computational grid, dimension ({\tt NION}, {\tt 0:NSTRA})
+  \item[pdena\_int\_b2] Integral number of atoms over the {\tt B2.5} computational grid, dimension ({\tt NATM}, {\tt 0:NSTRA})
+  \item[pdenm\_int\_b2] Integral number of molecules over the {\tt B2.5} computational grid, dimension ({\tt NMOL}, {\tt 0:NSTRA})
+  \item[pdeni\_int\_b2] Integral number of test ions over the {\tt B2.5} computational grid, dimension ({\tt NION}, {\tt 0:NSTRA})
+  \item[edena\_int] Integral energy carried by atoms over the entire {\tt Eirene} computational grid, dimension ({\tt NATM}, {\tt 0:NSTRA})
+  \item[edenm\_int] Integral energy carried by molecules over the entire {\tt Eirene} computational grid, dimension ({\tt NMOL}, {\tt 0:NSTRA})
+  \item[edeni\_int] Integral energy carried by test ions over the entire {\tt Eirene} computational grid, dimension ({\tt NION}, {\tt 0:NSTRA})
+  \item[edena\_int\_b2] Integral energy carried by atoms over the {\tt B2.5} computational grid, dimension ({\tt NATM}, {\tt 0:NSTRA})
+  \item[edenm\_int\_b2] Integral energy carried by molecules over the {\tt B2.5} computational grid, dimension ({\tt NMOL}, {\tt 0:NSTRA})
+  \item[edeni\_int\_b2] Integral energy carried by test ions over the {\tt B2.5} computational grid, dimension ({\tt NION}, {\tt 0:NSTRA})
+\end{description}
+
+Similarly, the {\tt fort.46} file contains the following data blocks, this time all defined on the {\tt Eirene} triangle grid, which are:
+
+\begin{description}
+  \item[PDENA] Atom particle density (in $cm^{-3}$), dimension ({\tt NTRII},{\tt NATM})
+  \item[PDENM] Molecule particle density (in $cm^{-3}$), dimension ({\tt NTRII},{\tt NMOL})
+  \item[PDENI] Test ion particle density (in $cm^{-3}$), dimension ({\tt NTRII},{\tt NION})
+  \item[EDENA] Energy density carried by atoms (in $eV.cm^{-3}$), dimension ({\tt NTRII},{\tt NATM})
+  \item[EDENM] Energy density carried by molecules (in $eV.cm^{-3}$), dimension ({\tt NTRII},{\tt NMOL})
+  \item[EDENI] Energy density carried by test ions (in $eV.cm^{-3}$), dimension ({\tt NTRII},{\tt NION})
+  \item[VXDENA] $X$-directed momentum density carried by atoms (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NATM})
+  \item[VXDENM] $X$-directed momentum density carried by molecules (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NMOL})
+  \item[VXDENI] $X$-directed momentum density carried by test ions (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NION})
+  \item[VYDENA] $Y$-directed momentum density carried by atoms (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NATM})
+  \item[VYDENM] $Y$-directed momentum density carried by molecules (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NMOL})
+  \item[VYDENI] $Y$-directed momentum density carried by test ions (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NION})
+  \item[VZDENA] $Z$-directed momentum density carried by atoms (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NATM})
+  \item[VZDENM] $Z$-directed momentum density carried by molecules (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NMOL})
+  \item[VZDENI] $Z$-directed momentum density carried by test ions (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NION})
+\end{description}
+
+Please note that, for the momentum densities, the coordinate system used by {\tt Eirene} is Cartesian, i.e. independent of the local magnetic field, and that this data is given in CGS units.
+
 \section{Changing dt}
 
 With \SOLPSfour one was often limited to a timestep of $1 \times

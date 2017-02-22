@@ -52,19 +52,16 @@ switch ($NREG)
        /b2stbr_she_reg/{srcr=0;for (i=2;i<=NF;i+=nreg) srcr+=$i} \
        /b2stbr_shi_reg/{for (i=2;i<=NF;i+=nreg) srcr+=$i} \
        /b2stbr_sna_reg/{for (i=2;i<=NF;i+=nreg) srcr+=$i*pot[int(i/nreg)+2]} \
-       /b2stbc_she_reg/{srcb=0;for (i=2;i<=NF;i+=nreg) srcb+=$i} \
-       /b2stbc_shi_reg/{for (i=2;i<=NF;i+=nreg) srcb+=$i} \
-       /b2stbc_sna_reg/{for (i=2;i<=NF;i+=nreg) srcb+=$i*pot[int(i/nreg)+2]} \
        /b2stbm_she_reg/{srcm=0;for (i=2;i<=NF;i+=nreg) srcm+=$i} \
        /b2stbm_shi_reg/{for (i=2;i<=NF;i+=nreg) srcm+=$i} \
        /b2stbm_sna_reg/{for (i=2;i<=NF;i+=nreg) srcm+=$i*pot[int(i/nreg)+2]} \
        /b2sext_shi_reg/{srce=0;for (i=2;i<=NF;i+=nreg) srce+=$i} \
        /b2sext_shi_reg/{for (i=2;i<=NF;i+=nreg) srce+=$i} \
        /b2sext_sna_reg/{for (i=2;i<=NF;i+=nreg) srce+=$i*pot[int(i/nreg)+2]} \
-       BEGIN{print "#cnt rsa rra rqa rcx rsap rrap E N W S srcr srcb srcm srce E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap+srcr+srcb+srcm+srce EXT"} \
-       END{print "#cnt rsa rra rqa rcx rsap rrap E N W S srcr srcb srcm srce E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap+srcr+srcb+srcm+srce EXT"} \
-       /End tallies/{cnt++;print cnt,rsa,rra,rqa,rcx,rsap,rrap,E,N,W,S,srcr,srcb,srcm,srce,E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap+srcr+srcb+srcm+srce,ext+0}' | \
-    plot ${lx}x${ly}yplot16 rsa rra rqa rcx rsap rrap E N W S srcr srcb srcm srce E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap+srcr+srcb+srcm+srce EXT iteration 'Power (W)' "`basename $0` `chop_pwd 40`"
+       BEGIN{print "#cnt rsa rra rqa rcx rsap rrap E N W S srcr srcm srce E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap+srcr+srcm+srce EXT"} \
+       END{print "#cnt rsa rra rqa rcx rsap rrap E N W S srcr srcm srce E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap+srcr+srcm+srce EXT"} \
+       /End tallies/{cnt++;print cnt,rsa,rra,rqa,rcx,rsap,rrap,E,N,W,S,srcr,srcm,srce,E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap+srcr+srcm+srce,ext+0}' | \
+    plot ${lx}x${ly}yplot15 rsa rra rqa rcx rsap rrap E N W S srcr srcm srce E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap+srcr+srcm+srce EXT iteration 'Power (W)' "`basename $0` `chop_pwd 40`"
     breaksw
   case "8":
    pipe_run.log | \
@@ -89,19 +86,16 @@ switch ($NREG)
        /b2stbr_she_reg/{srcr=0;for (i=2;i<=NF;i+=nreg) srcr+=$i} \
        /b2stbr_shi_reg/{for (i=2;i<=NF;i+=nreg) srcr+=$i} \
        /b2stbr_sna_reg/{for (i=2;i<=NF;i+=nreg) srcr+=$i*pot[int(i/nreg)+2]} \
-       /b2stbc_she_reg/{srcb=0;for (i=2;i<=NF;i+=nreg) srcb+=$i} \
-       /b2stbc_shi_reg/{for (i=2;i<=NF;i+=nreg) srcb+=$i} \
-       /b2stbc_sna_reg/{for (i=2;i<=NF;i+=nreg) srcb+=$i*pot[int(i/nreg)+2]} \
        /b2stbm_she_reg/{srcm=0;for (i=2;i<=NF;i+=nreg) srcm+=$i} \
        /b2stbm_shi_reg/{for (i=2;i<=NF;i+=nreg) srcm+=$i} \
        /b2stbm_sna_reg/{for (i=2;i<=NF;i+=nreg) srcm+=$i*pot[int(i/nreg)+2]} \
        /b2sext_shi_reg/{srce=0;for (i=2;i<=NF;i+=nreg) srce+=$i} \
        /b2sext_shi_reg/{for (i=2;i<=NF;i+=nreg) srce+=$i} \
        /b2sext_sna_reg/{for (i=2;i<=NF;i+=nreg) srce+=$i*pot[int(i/nreg)+2]} \
-       BEGIN{print "#cnt rsa rra rqa rcx rsap rrap LI NI UI pfrU UO NO LO pfrL srcr srcb srcm srce LI+NI+UI+pfrU+UO+NO+LO+pfrL+rsa+rra+rqa+rcx-rsap+rrap+srcr+srcb+srcm+srce EXT"} \
-       END{print "#cnt rsa rra rqa rcx rsap rrap LI NI UI pfrU UO NO LO pfrL srcr srcb srcm srce LI+NI+UI+pfrU+UO+NO+LO+pfrL+rsa+rra+rqa+rcx-rsap+rrap+srcr+srcb+srcm+srce EXT"} \
-       /End tallies/{cnt++;print cnt,rsa,rra,rqa,rcx,rsap,rrap,LI,NI,UI,pfrU,UO,NO,LO,pfrL,srcr,srcb,srcm,srce,LI+NI+UI+pfrU+UO+NO+LO+pfrL+rsa+rra+rqa+rcx-rsap+rrap+srcr+srcb+srcm+srce,ext+0}' | \
-    plot ${lx}x${ly}yplot20 rsa rra rqa rcx rsap rrap LI NI UI pfrU UO NO LO pfrL srcr srcb srcm srce LI+NI+UI+pfrU+UO+NO+LO+pfrL+rsa+rra+rqa+rcx-rsap+rrap+srcr+srcb+srcm+srce EXT iteration 'Power (W)' "`basename $0` `chop_pwd 40`"
+       BEGIN{print "#cnt rsa rra rqa rcx rsap rrap LI NI UI pfrU UO NO LO pfrL srcr srcm srce LI+NI+UI+pfrU+UO+NO+LO+pfrL+rsa+rra+rqa+rcx-rsap+rrap+srcr+srcm+srce EXT"} \
+       END{print "#cnt rsa rra rqa rcx rsap rrap LI NI UI pfrU UO NO LO pfrL srcr srcm srce LI+NI+UI+pfrU+UO+NO+LO+pfrL+rsa+rra+rqa+rcx-rsap+rrap+srcr+srcm+srce EXT"} \
+       /End tallies/{cnt++;print cnt,rsa,rra,rqa,rcx,rsap,rrap,LI,NI,UI,pfrU,UO,NO,LO,pfrL,srcr,srcm,srce,LI+NI+UI+pfrU+UO+NO+LO+pfrL+rsa+rra+rqa+rcx-rsap+rrap+srcr+srcm+srce,ext+0}' | \
+    plot ${lx}x${ly}yplot19 rsa rra rqa rcx rsap rrap LI NI UI pfrU UO NO LO pfrL srcr srcm srce LI+NI+UI+pfrU+UO+NO+LO+pfrL+rsa+rra+rqa+rcx-rsap+rrap+srcr+srcm+srce EXT iteration 'Power (W)' "`basename $0` `chop_pwd 40`"
     breaksw
   case "5":
    pipe_run.log | \
@@ -126,19 +120,16 @@ switch ($NREG)
        /b2stbr_she_reg/{srcr=0;for (i=2;i<=NF;i+=nreg) srcr+=$i} \
        /b2stbr_shi_reg/{for (i=2;i<=NF;i+=nreg) srcr+=$i} \
        /b2stbr_sna_reg/{for (i=2;i<=NF;i+=nreg) srcr+=$i*pot[int(i/nreg)+2]} \
-       /b2stbc_she_reg/{srcb=0;for (i=2;i<=NF;i+=nreg) srcb+=$i} \
-       /b2stbc_shi_reg/{for (i=2;i<=NF;i+=nreg) srcb+=$i} \
-       /b2stbc_sna_reg/{for (i=2;i<=NF;i+=nreg) srcb+=$i*pot[int(i/nreg)+2]} \
        /b2stbm_she_reg/{srcm=0;for (i=2;i<=NF;i+=nreg) srcm+=$i} \
        /b2stbm_shi_reg/{for (i=2;i<=NF;i+=nreg) srcm+=$i} \
        /b2stbm_sna_reg/{for (i=2;i<=NF;i+=nreg) srcm+=$i*pot[int(i/nreg)+2]} \
        /b2sext_shi_reg/{srce=0;for (i=2;i<=NF;i+=nreg) srce+=$i} \
        /b2sext_shi_reg/{for (i=2;i<=NF;i+=nreg) srce+=$i} \
        /b2sext_sna_reg/{for (i=2;i<=NF;i+=nreg) srce+=$i*pot[int(i/nreg)+2]} \
-       BEGIN{print "#cnt rsa rra rqa rcx rsap rrap E N W S srcr srcb srcm srce E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap+srcr+srcb+srcm+srce EXT"} \
-       END{print "#cnt rsa rra rqa rcx rsap rrap E N W S srcr srcb srcm srce E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap+srcr+srcb+srcm+srce EXT"} \
-       /End tallies/{cnt++;print cnt,rsa,rra,rqa,rcx,rsap,rrap,srcr,srcb,srcm,srce,E,N,W,S,E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap+srcr+srcb+srcm+srce,ext+0}' | \
-    plot ${lx}x${ly}yplot16 rsa rra rqa rcx rsap rrap srcr srcb srcm srce E N W S E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap+srcr+srcb+srcm+srce EXT iteration 'Power (W)' "`basename $0` `chop_pwd 40`"
+       BEGIN{print "#cnt rsa rra rqa rcx rsap rrap E N W S srcr srcm srce E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap+srcr+srcm+srce EXT"} \
+       END{print "#cnt rsa rra rqa rcx rsap rrap E N W S srcr srcm srce E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap+srcr+srcm+srce EXT"} \
+       /End tallies/{cnt++;print cnt,rsa,rra,rqa,rcx,rsap,rrap,srcr,srcm,srce,E,N,W,S,E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap+srcr+srcm+srce,ext+0}' | \
+    plot ${lx}x${ly}yplot15 rsa rra rqa rcx rsap rrap srcr srcm srce E N W S E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap+srcr+srcm+srce EXT iteration 'Power (W)' "`basename $0` `chop_pwd 40`"
     breaksw
   case "2":
    pipe_run.log | \
@@ -163,19 +154,16 @@ switch ($NREG)
        /b2stbr_she_reg/{srcr=0;for (i=2;i<=NF;i+=nreg) srcr+=$i} \
        /b2stbr_shi_reg/{for (i=2;i<=NF;i+=nreg) srcr+=$i} \
        /b2stbr_sna_reg/{for (i=2;i<=NF;i+=nreg) srcr+=$i*pot[int(i/nreg)+2]} \
-       /b2stbc_she_reg/{srcb=0;for (i=2;i<=NF;i+=nreg) srcb+=$i} \
-       /b2stbc_shi_reg/{for (i=2;i<=NF;i+=nreg) srcb+=$i} \
-       /b2stbc_sna_reg/{for (i=2;i<=NF;i+=nreg) srcb+=$i*pot[int(i/nreg)+2]} \
        /b2stbm_she_reg/{srcm=0;for (i=2;i<=NF;i+=nreg) srcm+=$i} \
        /b2stbm_shi_reg/{for (i=2;i<=NF;i+=nreg) srcm+=$i} \
        /b2stbm_sna_reg/{for (i=2;i<=NF;i+=nreg) srcm+=$i*pot[int(i/nreg)+2]} \
        /b2sext_shi_reg/{srce=0;for (i=2;i<=NF;i+=nreg) srce+=$i} \
        /b2sext_shi_reg/{for (i=2;i<=NF;i+=nreg) srce+=$i} \
        /b2sext_sna_reg/{for (i=2;i<=NF;i+=nreg) srce+=$i*pot[int(i/nreg)+2]} \
-       BEGIN{print "#cnt rsa rra rqa rcx rsap rrap E N W S srcr srcb srcm srce E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap+srcr+srcb+srcm+srce EXT"} \
-       END{print "#cnt rsa rra rqa rcx rsap rrap E N W S srcr srcb srcm srce E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap+srcr+srcb+srcm+srce EXT"} \
-       /End tallies/{cnt++;print cnt,rsa,rra,rqa,rcx,rsap,rrap,E,N,W,S,srcr,srcb,srcm,srce,E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap+srcr+srcb+srcm+srce,ext+0}' | \
-    plot ${lx}x${ly}yplot16 rsa rra rqa rcx rsap rrap E N W S srcr srcb srcm srce E+N+W+S+rsa+rra+rqa+rcx+srcr+srcb+srcm+srce EXT iteration 'Power (W)' "`basename $0` `chop_pwd 40`"
+       BEGIN{print "#cnt rsa rra rqa rcx rsap rrap E N W S srcr srcm srce E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap+srcr+srcm+srce EXT"} \
+       END{print "#cnt rsa rra rqa rcx rsap rrap E N W S srcr srcm srce E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap+srcr+srcm+srce EXT"} \
+       /End tallies/{cnt++;print cnt,rsa,rra,rqa,rcx,rsap,rrap,E,N,W,S,srcr,srcm,srce,E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap+srcr+srcm+srce,ext+0}' | \
+    plot ${lx}x${ly}yplot15 rsa rra rqa rcx rsap rrap E N W S srcr srcm srce E+N+W+S+rsa+rra+rqa+rcx+srcr+srcm+srce EXT iteration 'Power (W)' "`basename $0` `chop_pwd 40`"
     breaksw
   case "1":
     pipe_run.log | \
@@ -200,19 +188,16 @@ switch ($NREG)
        /b2stbr_she_reg/{srcr=0;for (i=2;i<=NF;i+=nreg) srcr+=$i} \
        /b2stbr_shi_reg/{for (i=2;i<=NF;i+=nreg) srcr+=$i} \
        /b2stbr_sna_reg/{for (i=2;i<=NF;i+=nreg) srcr+=$i*pot[int(i/nreg)+2]} \
-       /b2stbc_she_reg/{srcb=0;for (i=2;i<=NF;i+=nreg) srcb+=$i} \
-       /b2stbc_shi_reg/{for (i=2;i<=NF;i+=nreg) srcb+=$i} \
-       /b2stbc_sna_reg/{for (i=2;i<=NF;i+=nreg) srcb+=$i*pot[int(i/nreg)+2]} \
        /b2stbm_she_reg/{srcm=0;for (i=2;i<=NF;i+=nreg) srcm+=$i} \
        /b2stbm_shi_reg/{for (i=2;i<=NF;i+=nreg) srcm+=$i} \
        /b2stbm_sna_reg/{for (i=2;i<=NF;i+=nreg) srcm+=$i*pot[int(i/nreg)+2]} \
        /b2sext_shi_reg/{srce=0;for (i=2;i<=NF;i+=nreg) srce+=$i} \
        /b2sext_shi_reg/{for (i=2;i<=NF;i+=nreg) srce+=$i} \
        /b2sext_sna_reg/{for (i=2;i<=NF;i+=nreg) srce+=$i*pot[int(i/nreg)+2]} \
-       BEGIN{print "#cnt rsa rra rqa rcx rsap rrap E N W S srcr srcb srcm srce E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap EXT"} \
-       END{print "#cnt rsa rra rqa rcx rsap rrap E N W S srcr srcb srcm srce E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap EXT"} \
-       /End tallies/{cnt++;print cnt,rsa,rra,rqa,rcx,rsap,rrap,E,N,W,S,srcr,srcb,srcm,srce,E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap,ext+0}' | \
-    plot ${lx}x${ly}yplot16 rsa rra rqa rcx rsap rrap E N W S srcr srcb srcm srce E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap+srcr+srcb+srcm+srce EXT iteration 'Power (W)' "`basename $0` `chop_pwd 40`"
+       BEGIN{print "#cnt rsa rra rqa rcx rsap rrap E N W S srcr srcm srce E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap+srcr+srcm+srce EXT"} \
+       END{print "#cnt rsa rra rqa rcx rsap rrap E N W S srcr srcm srce E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap+srcr+srcm+srce EXT"} \
+       /End tallies/{cnt++;print cnt,rsa,rra,rqa,rcx,rsap,rrap,E,N,W,S,srcr,srcm,srce,E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap+srcr+srcm+srce,ext+0}' | \
+    plot ${lx}x${ly}yplot15 rsa rra rqa rcx rsap rrap E N W S srcr srcm srce E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap+srcr+srcm+srce EXT iteration 'Power (W)' "`basename $0` `chop_pwd 40`"
     breaksw
   default:
     echo "Unusual number of regions: Not sure what to do!"
