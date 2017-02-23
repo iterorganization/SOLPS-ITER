@@ -5,20 +5,20 @@
 %                                                                              %
 % David Moulton (david.moulton@ccfe.ac.uk) January 2017.                       %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function balgrid(geomb2,indrad,indpol,axgrid,reverse)
+function balgrid(comuse,indrad,indpol,axgrid,reverse)
 
 axis(axgrid,'equal');
 xlabel(axgrid,'R (m)','interpreter','latex');
 ylabel(axgrid,'Z (m)','interpreter','latex');
 
-rbl = geomb2.r(:,:,1);
-rbr = geomb2.r(:,:,2);
-rtl = geomb2.r(:,:,3);
-rtr = geomb2.r(:,:,4);
-zbl = geomb2.z(:,:,1);
-zbr = geomb2.z(:,:,2);
-ztl = geomb2.z(:,:,3);
-ztr = geomb2.z(:,:,4);
+rbl = comuse.r(:,:,1);
+rbr = comuse.r(:,:,2);
+rtl = comuse.r(:,:,3);
+rtr = comuse.r(:,:,4);
+zbl = comuse.z(:,:,1);
+zbr = comuse.z(:,:,2);
+ztl = comuse.z(:,:,3);
+ztr = comuse.z(:,:,4);
 
 % Plot the grid (including ghost cells):
 patch([reshape(rbl,1,[]);...
@@ -57,7 +57,7 @@ rleft = [];
 zleft = [];
 rright = [];
 zright = [];
-for iy = 1:geomb2.ny
+for iy = 1:comuse.ny
     first = find(indrad(:,iy),1,'first');
     last = find(indrad(:,iy),1,'last');
     if ~isempty(first)

@@ -3,7 +3,7 @@
 %                                                                              %
 % David Moulton (david.moulton@ccfe.ac.uk) January 2017.                       %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [axgrid,axbal] = balfig(type,isplot,geomb2)
+function [axgrid,axbal] = balfig(type,isplot,comuse)
 
 figure('windowstyle','docked');
 margin = 0.04;
@@ -24,27 +24,27 @@ set([axgrid,axbal],'ticklabelinterpreter','latex')
 switch type
     case 'particles'
         if length(isplot)>1
-            strtmp = sprintf('PARTICLE BALANCE SUM OVER (%s',sprintf('%s,',geomb2.species{isplot}));
+            strtmp = sprintf('PARTICLE BALANCE SUM OVER (%s',sprintf('%s,',comuse.species{isplot}));
             strtmp(end) = ')';
         else
-            strtmp = ['PARTICLE BALANCE ',geomb2.species{isplot}];
+            strtmp = ['PARTICLE BALANCE ',comuse.species{isplot}];
         end
         title(axgrid,strtmp,'interpreter','latex');
     case 'momentum'
         if length(isplot)>1
-            strtmp = sprintf('MOMENTUM BALANCE SUM OVER (%s',sprintf('%s,',geomb2.species{isplot}));
+            strtmp = sprintf('MOMENTUM BALANCE SUM OVER (%s',sprintf('%s,',comuse.species{isplot}));
             strtmp(end) = ')';
         else
-            strtmp = ['MOMENTUM BALANCE ',geomb2.species{isplot}];
+            strtmp = ['MOMENTUM BALANCE ',comuse.species{isplot}];
         end
         title(axgrid,strtmp,'interpreter','latex');
     case 'totpress'
         title(axgrid,'TOTAL PRESSURE BALANCE','interpreter','latex');
-    case 'elenergy'
+    case 'elheat'
         title(axgrid,'EL. INTERNAL ENERGY BALANCE','interpreter','latex');
-    case 'ionenergy'
+    case 'ionheat'
         title(axgrid,'ION. INTERNAL ENERGY BALANCE','interpreter','latex');
-    case 'totenergy'
+    case 'totheat'
         title(axgrid,'TOTAL INTERNAL ENERGY BALANCE','interpreter','latex');
     otherwise
         error('Figure type unknown.');

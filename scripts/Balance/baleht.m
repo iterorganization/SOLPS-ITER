@@ -1,92 +1,89 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % baleen plots the electron internal energy balance for a given SOLPS          %
 % simulation.                                                                  %
-% SIMID:       Specifier for the simulation of interest                        %
+% balfile:     Full path to balance.nc file                                    %
 % indbal:      Logical matrix of size nx*ny that is true for cells where       %
 %              balance should be performed                                     %
 % iyplot:      Array of y indices along which poloidal balance will be plotted %
 %              (within the volume specified by indbal)                         %
-% geomb2:      Geometry structure created by b2getgeom                         %
+% comuse:      Structure containing commonly-used variables (from get_comuse)  %
 % axbal:       Array of axes into which balance plots will be placed           %
 % reverse:     True if the right-most end of the balance volume is upstream of %
 %              the left-most end, otherwise false                              %
 % strata_plot: If true then divide the EIRENE source into components from each %
 %              stratum (in a new figure)                                       %
 % axstrat:     Array of aces into which strata plots will be placed            % 
-% resaccuracy: The maximum acceptable percentage difference between the code-  %
-%              calculated and post-calculated residual that will not throw a   %
-%              warning                                                         %
 %                                                                              %
 % David Moulton (david.moulton@ccfe.ac.uk) January 2017.                       %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function baleen(SIMID,b2fpstr,indrad,indpol,geomb2,axbal,reverse,strata_plot,axstrat,resaccuracy)
+function baleht(balfile,indrad,indpol,comuse,axbal,reverse,strata_plot,axstrat)
 
 % Shorthand for geometry variables:
-nx = geomb2.nx;
-ny = geomb2.ny;
-nstra = geomb2.nstra;
-leftix = geomb2.leftix+1;  % Convert to one-based
-leftiy = geomb2.leftiy+1;
-topix = geomb2.topix+1;
-topiy = geomb2.topiy+1;
+nx = comuse.nx;
+ny = comuse.ny;
+nstra = comuse.nstra;
+leftix = comuse.leftix+1;  % Convert to one-based
+leftiy = comuse.leftiy+1;
+topix = comuse.topix+1;
+topiy = comuse.topiy+1;
+
+dv = comuse.dv; % Cell vol.
+hx = comuse.hx; % hx
+B = comuse.bb; % Mag. field
 
 %% Obtain required arrays from the simulation...
-if ~isnumeric(SIMID)
-    dv = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'vol'),nx,ny); % Cell volume
-    hx = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'hx'),nx,ny); % hx
-    B = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'bb'),nx,ny,4);
-    
-    b2stbc_she = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2stbc_she'),nx,ny);
-    eirene_mc_t0_eael = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'eirene_mc_t0_eael'),nx,ny,nstra);
-    eirene_mc_t0_emel = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'eirene_mc_t0_emel'),nx,ny,nstra);
-    eirene_mc_t0_eiel = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'eirene_mc_t0_eiel'),nx,ny,nstra);
-    eirene_mc_t0_epel = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'eirene_mc_t0_epel'),nx,ny,nstra);
-    b2stbm_she = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2stbm_she'),nx,ny);
-    ext_she = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'ext_she'),nx,ny);
-    b2stel_she = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2stel_she'),nx,ny);
-    
-    b2srsm_she = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2srsm_she'),nx,ny);
-    b2srdt_she = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2srdt_she'),nx,ny);
-    b2srst_she = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2srst_she'),nx,ny);
-    
-    b2sihs_diae = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2sihs_diae'),nx,ny);
-    
-    b2sihs_divue = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2sihs_divue'),nx,ny);
-    b2sihs_exbe = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2sihs_exbe'),nx,ny);
-    b2sihs_joule = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2sihs_joule'),nx,ny);
-    
-    b2npht_shei = -reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2npht_shei'),nx,ny);
-
-    tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhe_32'),nx,ny,2);
-    fhex_32 = tmp(:,:,1);
-    fhey_32 = tmp(:,:,2);
-    tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhe_52'),nx,ny,2);
-    fhex_52 = tmp(:,:,1);
-    fhey_52 = tmp(:,:,2);
-    tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhe_thermj'),nx,ny,2);
-    fhex_thermj = tmp(:,:,1);
-    fhey_thermj = tmp(:,:,2);
-    tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhe_cond'),nx,ny,2);
-    fhex_cond = tmp(:,:,1);
-    fhey_cond = tmp(:,:,2);
-    tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhe_dia'),nx,ny,2);
-    fhex_dia = tmp(:,:,1);
-    fhey_dia = tmp(:,:,2);
-    tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhe_ecrb'),nx,ny,2);
-    fhex_ecrb = tmp(:,:,1);
-    fhey_ecrb = tmp(:,:,2);
-    tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhe_strange'),nx,ny,2);
-    fhex_strange = tmp(:,:,1);
-    fhey_strange = tmp(:,:,2);
-    tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhe_pschused'),nx,ny,2);
-    fhex_pschused = tmp(:,:,1);
-    fhey_pschused = tmp(:,:,2);
-
-    reshe = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'reshe'),nx,ny);
+% Fluxes:
+tmp = ncread(balfile,'fhe_32');
+fhex_32 = tmp(:,:,1);
+fhey_32 = tmp(:,:,2);
+tmp = ncread(balfile,'fhe_52');
+fhex_52 = tmp(:,:,1);
+fhey_52 = tmp(:,:,2);
+tmp = ncread(balfile,'fhe_thermj');
+fhex_thermj = tmp(:,:,1);
+fhey_thermj = tmp(:,:,2);
+tmp = ncread(balfile,'fhe_cond');
+fhex_cond = tmp(:,:,1);
+fhey_cond = tmp(:,:,2);
+tmp = ncread(balfile,'fhe_dia');
+fhex_dia = tmp(:,:,1);
+fhey_dia = tmp(:,:,2);
+tmp = ncread(balfile,'fhe_ecrb');
+fhex_ecrb = tmp(:,:,1);
+fhey_ecrb = tmp(:,:,2);
+tmp = ncread(balfile,'fhe_strange');
+fhex_strange = tmp(:,:,1);
+fhey_strange = tmp(:,:,2);
+tmp = ncread(balfile,'fhe_pschused');
+fhex_pschused = tmp(:,:,1);
+fhey_pschused = tmp(:,:,2);
+% Sources:
+b2stbr_she = ncread(balfile,'b2stbr_she_bal');
+b2stbc_she = ncread(balfile,'b2stbc_she_bal');
+if (comuse.b2mndr_eirene~=0)
+    eirene_mc_eael_she = ncread(balfile,'eirene_mc_eael_she_bal');
+    eirene_mc_emel_she = ncread(balfile,'eirene_mc_emel_she_bal');
+    eirene_mc_eiel_she = ncread(balfile,'eirene_mc_eiel_she_bal');
+    eirene_mc_epel_she = ncread(balfile,'eirene_mc_epel_she_bal');
 else
-    % APPROPRIATE ARRAYS STILL NEED TO BE PUT ON THE MDSPLUS SERVER. TO BE
-    % DONE!!!
+    eirene_mc_eael_she = zeros(nx,ny,nstra);
+    eirene_mc_emel_she = zeros(nx,ny,nstra);
+    eirene_mc_eiel_she = zeros(nx,ny,nstra);
+    eirene_mc_epel_she = zeros(nx,ny,nstra);
 end
+b2stbm_she = ncread(balfile,'b2stbm_she_bal');
+ext_she = ncread(balfile,'ext_she_bal');
+b2stel_she = ncread(balfile,'b2stel_she_bal');
+b2srsm_she = ncread(balfile,'b2srsm_she_bal');
+b2srdt_she = ncread(balfile,'b2srdt_she_bal');
+b2srst_she = ncread(balfile,'b2srst_she_bal');
+b2sihs_diae = ncread(balfile,'b2sihs_diae_bal');
+b2sihs_divue = ncread(balfile,'b2sihs_divue_bal');
+b2sihs_exbe = ncread(balfile,'b2sihs_exbe_bal');
+b2sihs_joule = ncread(balfile,'b2sihs_joule_bal');
+b2npht_shei = -ncread(balfile,'b2npht_shei_bal');
+% Residual:
+reshe = ncread(balfile,'reshe');
 %%
 
 %% Parallel area at left edges:
@@ -130,15 +127,20 @@ for iy=1:ny
 end
 %%
 
+%% B2STBR part not from Eirene...
+b2stbr_not_eirene = b2stbr_she-(sum(eirene_mc_eael_she,3)+sum(eirene_mc_emel_she,3)+...
+                                sum(eirene_mc_eiel_she,3)+sum(eirene_mc_epel_she,3));
+%%
+
 %% Make plots...
 areadownrad = radial_balance(...
  cat(3,fhex_32,fhex_52,fhex_cond,fhex_thermj,fhex_dia,fhex_ecrb,fhex_strange,fhex_pschused)/1E6,...
  cat(3,raddive_32,raddive_52,raddive_cond,raddive_thermj,raddive_dia,raddive_ecrb,raddive_strange,raddive_pschused,b2stbc_she,...
-       sum(eirene_mc_t0_eael,3),sum(eirene_mc_t0_emel,3),sum(eirene_mc_t0_eiel,3),sum(eirene_mc_t0_epel,3),...
+       sum(eirene_mc_eael_she,3),sum(eirene_mc_emel_she,3),sum(eirene_mc_eiel_she,3),sum(eirene_mc_epel_she,3),...
        b2stbm_she,ext_she,b2stel_she,...
        b2srsm_she,b2srdt_she,b2srst_she,...
-       b2sihs_diae,b2sihs_divue,b2sihs_exbe,b2sihs_joule,b2npht_shei)/1E6,...
- reshe/1E6,resaccuracy,...
+       b2sihs_diae,b2sihs_divue,b2sihs_exbe,b2sihs_joule,b2npht_shei,b2stbr_not_eirene)/1E6,...
+ reshe/1E6,...
  {'$dA_{xu}\tilde q_{exu}/dA_{\parallel d}$',...
   '$dA_{xd}\tilde q_{exd}/dA_{\parallel d}$',...
   '$\left(\int_d^u S_{\rm{IE}}^edV\right)/dA_{\parallel d}$',...
@@ -149,17 +151,17 @@ areadownrad = radial_balance(...
   'eirene\_mc atm.-plasma el.','eirene\_mc mol.-plasma el.','eirene\_mc t.ion-plasma el.','eirene\_mc recomb. el.',...
   'b2stbm\_she','ext\_she','b2stel\_she',...
   'b2srsm\_she','b2srdt\_she','b2srst\_she',...
-  'b2sihs\_diae','b2sihs\_divue','b2sihs\_exbe','b2sihs\_joule','equipartition'},...
- geomb2,indrad,apllx,reverse,false,axbal(1:4),'MWm$^{-2}$');
+  'b2sihs\_diae','b2sihs\_divue','b2sihs\_exbe','b2sihs\_joule','equipartition','b2stbr not Eirene'},...
+ comuse,indrad,apllx,reverse,false,axbal(1:4),'MWm$^{-2}$');
 
 areadownpol = poloidal_balance(...
  cat(3,fhex_32,fhex_52,fhex_cond,fhex_thermj,fhex_dia,fhex_ecrb,fhex_strange,fhex_pschused)/1E6,...
  cat(3,raddive_32,raddive_52,raddive_cond,raddive_thermj,raddive_dia,raddive_ecrb,raddive_strange,raddive_pschused,b2stbc_she,...
-       sum(eirene_mc_t0_eael,3),sum(eirene_mc_t0_emel,3),sum(eirene_mc_t0_eiel,3),sum(eirene_mc_t0_epel,3),...
+       sum(eirene_mc_eael_she,3),sum(eirene_mc_emel_she,3),sum(eirene_mc_eiel_she,3),sum(eirene_mc_epel_she,3),...
        b2stbm_she,ext_she,b2stel_she,...
        b2srsm_she,b2srdt_she,b2srst_she,...
-       b2sihs_diae,b2sihs_divue,b2sihs_exbe,b2sihs_joule,b2npht_shei)/1E6,...
- reshe/1E6,resaccuracy,...
+       b2sihs_diae,b2sihs_divue,b2sihs_exbe,b2sihs_joule,b2npht_shei,b2stbr_not_eirene)/1E6,...
+ reshe/1E6,...
  {'$dA_x\tilde q_{ex}/dA_{\parallel d}$',...
   '$S_{\rm{IE}}^edV/dA_{\parallel d}$',...
   '${\rm{res.}}dV/dA_{\parallel d}$'},...
@@ -169,14 +171,14 @@ areadownpol = poloidal_balance(...
   'eirene\_mc atm.-plasma el.','eirene\_mc mol.-plasma el.','eirene\_mc t.ion-plasma el.','eirene\_mc recomb. el.',...
   'b2stbm\_she','ext\_she','b2stel\_she',...
   'b2srsm\_she','b2srdt\_she','b2srst\_she',...
-  'b2sihs\_diae','b2sihs\_divue','b2sihs\_exbe','b2sihs\_joule','equipartition'},...
- geomb2,indpol,apllx,reverse,false,axbal(5:7),'MWm$^{-2}$');
+  'b2sihs\_diae','b2sihs\_divue','b2sihs\_exbe','b2sihs\_joule','equipartition','b2stbr not Eirene'},...
+ comuse,indpol,apllx,reverse,false,axbal(5:7),'MWm$^{-2}$');
 
 if strata_plot
-    make_strata_plots({eirene_mc_t0_eael/1E6},{eirene_mc_t0_emel/1E6},{eirene_mc_t0_eiel/1E6},{eirene_mc_t0_epel/1E6},...
+    make_strata_plots({eirene_mc_eael_she/1E6},{eirene_mc_emel_she/1E6},{eirene_mc_eiel_she/1E6},{eirene_mc_epel_she/1E6},...
                       {'Strata decomp. of $\left(\int_d^u S_{e\rm{IE}}^{\rm{EIR}}dV\right)/dA_{\parallel d}$ in radial direction',...
                        'Strata decomp. of $S_{e\rm{IE}}^{\rm{EIR}}dV/dA_{\parallel d}$ in poloidal direction'},...
-                      {''},geomb2,indrad,indpol,nstra,axstrat,axbal,areadownrad,areadownpol,reverse,false);
+                      {''},comuse,indrad,indpol,nstra,axstrat,axbal,areadownrad,areadownpol,reverse,false);
 end              
 %%
 end

@@ -8,9 +8,6 @@
 %              sources into which the total source is decomposed. Comprising   %
 %              the source from each component in the entire grid               %
 % res:         The code residual                                               %
-% resaccuracy: The maximum acceptable percentage difference between the code-  %
-%              calculated and post-calculated residual that will not throw a   %
-%              warning                                                         %
 % totname:     A cell of length 4 with strings stating the names of (1) the    %
 %              upstream flux, (2) the downstream flux, (3) the integrated      %
 %              sources, (4) the integrated residual                            %
@@ -30,7 +27,7 @@
 %                                                                              %
 % David Moulton (david.moulton@ccfe.ac.uk) January 2017.                       %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function areadown = radial_balance(flux,src,res,resaccuracy,totname,fluxname,srcname,geomb2,indrad,area,reverse,ismom,axbal,unitstr)
+function areadown = radial_balance(flux,src,res,totname,fluxname,srcname,geomb2,indrad,area,reverse,ismom,axbal,unitstr)
 
 rightix = geomb2.rightix+1; % Convert to one-based
 rightiy = geomb2.rightiy+1;
@@ -95,15 +92,12 @@ plot(xmxsep,momfac*reversefac*sum(fluxup,2)./areadown','marker','.','parent',axb
 plot(xmxsep,momfac*reversefac*sum(fluxdown,2)./areadown','marker','.','parent',axbal(1),'displayname',totname{2});
 plot(xmxsep,momfac*sum(srcint,2)./areadown','marker','.','parent',axbal(1),'displayname',totname{3});
 coderes = momfac*(resint./areadown)';
-plot(xmxsep,coderes,'-m','parent',axbal(1),'displayname',totname{4});
+plot(xmxsep,coderes,'-m','parent',axbal(1),'displayname',[totname{4},' (code)']);
 
-% Check that post-calculated and code-calculated residuals agree:
+% Check the level of agreement between post-calculated and code-calculated residuals agree:
 postres = momfac*(reversefac*(sum(fluxup,2)-sum(fluxdown,2))+sum(srcint,2))./areadown';
-if any(abs((coderes-postres)./coderes)*100>resaccuracy)
-    warning(['The post-calcuated and code-calculated residuals for radial balance differ by more than the\n\t',...
-             ' stipulated %.2e%%. Plotting the post-calculated residual. Check before using this balance!'],resaccuracy);
-    plot(xmxsep,postres,'-g','parent',axbal(1),'displayname','Post-cal. residual');
-end
+plot(xmxsep,postres,'-g','parent',axbal(1),'displayname',[totname{4},' (post-cal.)']);
+fprintf('Radial balance: the maximum difference between code- and post-calculated residuals is %e%%\n',max(abs((coderes-postres)./coderes)*100));
 
 hl = legend(axbal(1),'show','location','best');
 set(hl,'interpreter','latex');
