@@ -8,9 +8,6 @@
 %              sources into which the total source is decomposed. Comprising   %
 %              the source from each component in the entire grid               %
 % res:         The code residual                                               %
-% resaccuracy: The maximum acceptable percentage difference between the code-  %
-%              calculated and post-calculated residual that will not throw a   %
-%              warning                                                         %
 % totname:     A cell of length 3 with strings stating the names of (1) the    %
 %              flux, (2) the source, (3) the residual                          %
 % fluxname:    A cell of length nd with strings stating the names of each flux %
@@ -29,7 +26,7 @@
 %                                                                              %
 % David Moulton (david.moulton@ccfe.ac.uk) January 2017.                       %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function areadown = poloidal_balance(flux,src,res,resaccuracy,totname,fluxname,srcname,geomb2,indpol,area,reverse,ismom,axbal,unitstr)
+function areadown = poloidal_balance(flux,src,res,totname,fluxname,srcname,geomb2,indpol,area,reverse,ismom,axbal,unitstr)
 
 topix = geomb2.topix+1;
 topiy = geomb2.topiy+1;
@@ -113,15 +110,13 @@ end
 plot(dspolface,momfac*reversefac*sum(fluxedge,2)/areadown,'marker','.','parent',axbal(1),'displayname',totname{1});
 plot(dspol,momfac*sum(srcint,2)/areadown,'marker','.','parent',axbal(1),'displayname',totname{2});
 coderes = momfac*(resint/areadown)';
-plot(dspol,coderes,'-m','parent',axbal(1),'displayname',totname{3});
+plot(dspol,coderes,'-m','parent',axbal(1),'displayname',[totname{3},' (code)']);
 
-% Check that post-calculated and code-calculated residuals agree:
+% Check the level of agreement between post-calculated and code-calculated residuals agree:
 postres = momfac*(sum(srcint,2)-diff(sum(fluxedge,2)))/areadown;
-if any(abs((coderes-postres)./coderes)*100>resaccuracy)
-    warning(['The post-calcuated and code-calculated residuals for radial balance differ by more than the\n\t',...
-             ' stipulated %.2e%%. Plotting the post-calculated residual. Check before using this balance!'],resaccuracy);
-    plot(dspol,postres,'-g','parent',axbal(1),'displayname','Post-cal. residual');
-end
+plot(dspol,postres,'-g','parent',axbal(1),'displayname',[totname{3},' (post-cal.)']);
+fprintf('Poloidal balance: the maximum difference between code- and post-calculated residuals is %e%%\n',max(abs((coderes-postres)./coderes)*100));
+
 hl = legend(axbal(1),'show','location','best');
 set(hl,'interpreter','latex');
 title(axbal(1),'Total poloidal balance','interpreter','latex');

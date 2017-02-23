@@ -1,15 +1,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % balscript controls the balance routines. The variables SIMID, BAL_QUANT,     %
-% SPECIES_INDEX, DEFAULT_REGION, STRATA_PLOT and RESACCURACY should be set by  %
-% the user. If a non-default region is required then this must also be set in  %
+% SPECIES_INDEX, DEFAULT_REGION and STRATA_PLOT should be set by the user. If  %
+% a non-default region is required then this must also be set in               %
 % user_set_region.                                                             %
-% SIMID:          Specifier for the simulation of interest. If reading from    %
-%                 the MDSPlus server then SHOTID should be an integer          %
-%                 specifying the number of the simulation on the MDSPlus       %
-%                 server. Otherwise SHOTID should be a string specifying the   %
-%                 full path name to the simulation directory.                  %
-% BAL_QUANT:      Either 'particles','momentum','totpress','elenergy',         %  
-%                 'ionenergy','totenergy'.                                     % 
+% BALFILE:        Full path to the balance.nc file created by SOLPS-ITER with  %
+%                 balance_netcdf set non-zero in b2mn.dat.                     %
+% BAL_QUANT:      Either 'particles','momentum','totpress','elheat','ionheat', %  
+%                 'totheat'.                                                   %
 % SPECIES_INDEX:  An array specifying the species indeces to be summed over.   %
 %                 Has length 1 for a single species. Only applicable to        %
 %                 'particles' and 'momentum' balances.                         %
@@ -20,63 +17,50 @@
 %                 user_set_region.                                             %
 % STRATA_PLOT:    If true then divide the EIRENE source into components from   %
 %                 each stratum (in a new figure).                              %
-% RESACCURACY:    The maximum acceptable percentage difference between the     %
-%                 code-calculated and post-calculated residual that will not   %
-%                 throw a warning.                                             %
-%                                                                              %
 % David Moulton (david.moulton@ccfe.ac.uk) January 2017.                       %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-SIMID = '/home/david/remote/toks/ptmp1/scratch/dmoulton/solps-iter/runs/mastu_eq1/testrun_bceva_balance/';
-B2FLOC = [SIMID,'b2fplasma'];
-BAL_QUANT = 'totpress';
+% BALFILE = '/home/david/remote/toks/ptmp1/scratch/dmoulton/solps-iter/runs/mastu_eq5/ref_balancetest/b2mn.exe.dir/balance.nc';
+BALFILE = '/tmp/balance.nc';
+BAL_QUANT = 'totheat';
 SPECIES_INDEX = 2;
-DEFAULT_REGION = 'uod';
+DEFAULT_REGION = 'lod';
 STRATA_PLOT = true;
-RESACCURACY = 1E-8;
 
-% If we're reading from a b2fplasma file then read the file into a string once 
-% at the start to save time:
-if ~isnumeric(SIMID)
-    b2fpstr = charfile(B2FLOC);
-else
-    b2fpstr = '';
-end
-
-% Get geometry information for this simulation:
-geomb2 = b2getgeom(SIMID,B2FLOC,b2fpstr);
+% Get commonly used variables for this simulation:
+comuse = get_comuse(BALFILE);
     
 % Specify the volumes where radial and poloidal balance is to be performed by
 % creating a matrix of size nx*ny which is true inside the volumes:
 if ismember(DEFAULT_REGION(1:2),{'li','ui','uo','lo'})
-    [indrad,indpol,reverse] = set_region(DEFAULT_REGION,geomb2);
+    [indrad,indpol,reverse] = set_region(DEFAULT_REGION,comuse);
 else
     display('Default region not used. Balance region set in user_set_region');
-    [indrad,indpol,reverse] = user_set_region(geomb2);
+    [indrad,indpol,reverse] = user_set_region(comuse);
 end
 
 % Lay out the window into which plots will go:
-[axgrid,axbal] = balfig(BAL_QUANT,SPECIES_INDEX,geomb2);
+[axgrid,axbal] = balfig(BAL_QUANT,SPECIES_INDEX,comuse);
 if STRATA_PLOT
     axstrat = stratfig();
 end
 
 % Plot the grid showing where balance will be performed:
-balgrid(geomb2,indrad,indpol,axgrid,reverse);
+balgrid(comuse,indrad,indpol,axgrid,reverse);
 
 % Plot balance of the required quantity
 switch BAL_QUANT
     case 'particles'
-        balpart(SIMID,b2fpstr,indrad,indpol,SPECIES_INDEX,geomb2,axbal,reverse,STRATA_PLOT,axstrat,RESACCURACY);
+        balpart(BALFILE,indrad,indpol,SPECIES_INDEX,comuse,axbal,reverse,STRATA_PLOT,axstrat);
     case 'momentum'
-        balmom(SIMID,b2fpstr,indrad,indpol,SPECIES_INDEX,geomb2,axbal,reverse,STRATA_PLOT,axstrat,RESACCURACY);
+        balmom(BALFILE,indrad,indpol,SPECIES_INDEX,comuse,axbal,reverse,STRATA_PLOT,axstrat);
     case 'totpress'
-        baltotpress(SIMID,b2fpstr,indrad,indpol,geomb2,axbal,reverse,STRATA_PLOT,axstrat,RESACCURACY);
-    case 'elenergy'
-        baleen(SIMID,b2fpstr,indrad,indpol,geomb2,axbal,reverse,STRATA_PLOT,axstrat,RESACCURACY);
-    case 'ionenergy'
-        balien(SIMID,b2fpstr,indrad,indpol,geomb2,axbal,reverse,STRATA_PLOT,axstrat,RESACCURACY);
-    case 'totenergy'
-        baltoten(SIMID,b2fpstr,indrad,indpol,geomb2,axbal,reverse,STRATA_PLOT,axstrat,RESACCURACY);
+        baltotpress(BALFILE,indrad,indpol,comuse,axbal,reverse,STRATA_PLOT,axstrat);
+    case 'elheat'
+        baleht(BALFILE,indrad,indpol,comuse,axbal,reverse,STRATA_PLOT,axstrat);
+    case 'ionheat'
+        baliht(BALFILE,indrad,indpol,comuse,axbal,reverse,STRATA_PLOT,axstrat);
+    case 'totheat'
+        baltotht(BALFILE,indrad,indpol,comuse,axbal,reverse,STRATA_PLOT,axstrat);
     otherwise
         error('Balance quantity ''%s'' not supported.',BAL_QUANT);
 end

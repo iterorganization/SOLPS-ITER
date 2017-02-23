@@ -4,16 +4,16 @@
 %                                                                              %
 % David Moulton (david.moulton@ccfe.ac.uk) January 2017.                       %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [indrad,indpol,reverse] = user_set_region(geomb2)
+function [indrad,indpol,reverse] = user_set_region(comuse)
 
-indrad = false(geomb2.nx,geomb2.ny);
-indpol = false(geomb2.nx,geomb2.ny);
+indrad = false(comuse.nx,comuse.ny);
+indpol = false(comuse.nx,comuse.ny);
 
 % indrad(3:end-1,2:end-1) = true;
 % indpol(3:end-1,12) = true;
 % reverse = false;
 
-xcut = find(diff(geomb2.leftix(:,1))<1);
+xcut = find(diff(comuse.leftix(:,1))<1);
 indrad(xcut(5)+1:end-4,2:end-1) = true;
-indpol(xcut(5)+1:end-4,geomb2.sep-4) = true;
+indpol(xcut(5)+1:end-4,comuse.sep-4) = true;
 reverse = false;
