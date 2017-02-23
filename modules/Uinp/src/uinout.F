@@ -19,7 +19,7 @@ c=======================================================================
 #include "impcon.inc"
 #include "git_version_Uinp.h"
 
-      integer i,j,k,l,m,n,icont
+      integer i,j,k,l,m,n,icont,istep
       logical handle,ulmlti,ex,carbon,moly,streql
       logical, allocatable :: done(:)
       character utxthd(34)*71, utxtfl(8)*47, ufnm*(*), ucdnmdl*10
@@ -665,8 +665,10 @@ c*** 7.  data for primary source
       write(iunoo,707) (indsrc(i),i=1,nstrai)
       write(iunoo,703) alloc
       inum=0
+      istep=0
       do i=1,nstrai !{
         inum=inum+1
+        istep=istep+1
         if(indsrc(i).eq.6) cycle
 
         write(iunoo,709) i,txtsou(i)
@@ -685,7 +687,16 @@ c**  same for point-, line-, surface- and volume sources
         write(iunoo,707) nsrfsi(i)
         do j=1,nsrfsi(i) !{
           if (j.ne.1) inum=inum+1
-          if(nlsrf(i)) sorind(j,i)=inum
+          if (insor(j,i).ne.0) k=indasrfs(insor(j,i))
+          if (nlsrf(i) .and. insor(j,i).ne.0) then !{
+            if (jlplg(k).ne.0) then !{
+              if (j.ne.1) istep=istep+1
+              sorind(j,i)=istep
+            else !}{
+              if (j.eq.1) istep=istep-1
+              sorind(j,i)=0
+            end if !}
+          end if !}
           write(iunoo,707) inum,indim(j,i),insor(j,i),ingrda(j,i,1),
      ,      ingrde(j,i,1),ingrda(j,i,2),ingrde(j,i,2),ingrda(j,i,3),
      ,      ingrde(j,i,3)
