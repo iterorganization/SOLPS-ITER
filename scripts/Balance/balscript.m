@@ -19,9 +19,8 @@
 %                 each stratum (in a new figure).                              %
 % David Moulton (david.moulton@ccfe.ac.uk) January 2017.                       %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% BALFILE = '/home/david/remote/toks/ptmp1/scratch/dmoulton/solps-iter/runs/mastu_eq5/ref_balancetest/b2mn.exe.dir/balance.nc';
 BALFILE = '/tmp/balance.nc';
-BAL_QUANT = 'totheat';
+BAL_QUANT = 'ionheat';
 SPECIES_INDEX = 2;
 DEFAULT_REGION = 'lod';
 STRATA_PLOT = true;
