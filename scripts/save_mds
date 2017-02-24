@@ -28,12 +28,13 @@ if (-s shotnumber.history) then
   exit
 endif
 # fs prefetch -w run.log* b2fstat* b2fplasma fort.44
-if (-s b2fstati.gz) gunzip b2fstati.gz
-if (-s b2fstate.gz) gunzip b2fstate.gz
+if (-e b2fstati.gz) gunzip b2fstati.gz
+if (-e b2fstate.gz) gunzip b2fstate.gz
 if (! -s mesh.extra) ln -s ../mesh.extra .
 if (! -s mesh.extra) then
  (cd .. ; ln -s ../mesh.extra .)
 endif
+if (! -s AMJUEL) ln -s $SOLPSTOP/modules/Eirene/Database/AMJUEL .
 gmake $debug -f $SOLPSTOP/runs/Makefile.plot b2md.prt > b2md.log
 if (-s shotnumber.history) then
   cat shotnumber.history

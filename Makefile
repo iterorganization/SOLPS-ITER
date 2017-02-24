@@ -284,9 +284,9 @@ nox_build_mpi: clean_build_mpi listobj depend           b25eirene_mpi_nox uinp_m
 
 clean: clean_solps
 
-clean_solps:     clean_carre clean_divgeo clean_b25eirene     clean_uinp     clean_triang clean_sonnet-light clean_manual
+clean_solps:     clean_carre clean_divgeo clean_b25eirene     clean_uinp     clean_triang clean_sonnet-light clean_manual clean_amds
 
-clean_solps_mpi: clean_carre clean_divgeo clean_b25eirene_mpi clean_uinp_mpi clean_triang clean_sonnet-light clean_manual
+clean_solps_mpi: clean_carre clean_divgeo clean_b25eirene_mpi clean_uinp_mpi clean_triang clean_sonnet-light clean_manual clean_amds
 
 clean_build:     clean_carre clean_b25eirene clean_uinp clean_triang
 

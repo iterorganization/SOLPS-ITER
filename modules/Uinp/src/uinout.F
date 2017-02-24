@@ -140,11 +140,7 @@ c*** 1.  General data for the run
      .                 nlerg,nlident,nlone,nlmovie,nldfst,
      .                 nloldran,nlcascad,nloctree,nlwrmsh,NEXVS,
      .                 nltrimesh
-      handle=.false.
-      do i=1,nrcln
-        handle=handle.or.streql(filnam(i),'AMJUEL')
-      end do
-      if (handle) write(iunoo,720) utxtfl(1)
+      write(iunoo,720) utxtfl(1) ! AMJUEL needed by default for H-alpha rates
       handle=.false.
       do i=1,nrcln
         handle=handle.or.streql(filnam(i),'HYDHEL')

@@ -36,7 +36,7 @@ endif
 
 prints = b2sxdr.prt
 
-target_sx = b2sxdr.prt b2fgmtry b2fstati b2fparam b2fplasma b2ag.dat b2ag.prt b2ah.dat b2ai.dat b2ai.prt b2ar.dat b2yg.dat b2yh.dat b2yi.dat b2ym.dat b2yn.dat b2yp.dat b2yq.dat b2yt.dat b2.boundary.parameters.4 b2.boundary.parameters.5 b2mn.dat.4 b2mn.dat.5 b2.neutrals.parameters b2.numerics.parameters b2.transport.parameters.4 b2.transport.parameters.5 b2.user.parameters b2.feedback_control.parameters b2.parameters.out
+target_sx = b2sxdr.prt b2fgmtry b2fstati b2fparam b2fplasma b2ag.dat b2ag.prt b2ah.dat b2ai.dat b2ai.prt b2ar.dat b2yg.dat b2yh.dat b2yi.dat b2ym.dat b2yn.dat b2yp.dat b2yq.dat b2yr.dat b2yt.dat b2.boundary.parameters.4 b2.boundary.parameters.5 b2mn.dat.4 b2mn.dat.5 b2.neutrals.parameters b2.numerics.parameters b2.transport.parameters.4 b2.transport.parameters.5 b2.user.parameters b2.feedback_control.parameters b2.parameters.out
 
 scandir := $(shell cd .. ; pwd)
 projdir := $(shell cd ../.. ; pwd)

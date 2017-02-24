@@ -407,14 +407,14 @@ c     now read the relevant line
           end if !} (l)
         end do !}
       end if  !}
-c<<<
-c      print *
-c      print *,'Draft reaction list:'
-c      if(nnrctn.gt.0) print '(a9,a7,a5,a9,a3,3a9,3i3,1p,3e9.2)',
-c     ,  (rctnptpr(i),rctndbs(i),rctnchp(i),rctnrct(i),rctntyp(i),
-c     ,   rctnptin(i),rctnpto1(i),rctnpto2(i),rctngrp(i),rctnmsp(i),
-c     ,    rctnmst(i),rctndlte(i),rctnenr1(i),rctnenr2(i),i=1,nnrctn)
-c>>>
+#ifdef DBG
+      print *
+      print *,'Draft reaction list:'
+      if(nnrctn.gt.0) print '(a9,a7,a5,a9,a3,3a9,3i3,1p,3e9.2)',
+     ,  (rctnptpr(i),rctndbs(i),rctnchp(i),rctnrct(i),rctntyp(i),
+     ,   rctnptin(i),rctnpto1(i),rctnpto2(i),rctngrp(i),rctnmsp(i),
+     ,    rctnmst(i),rctndlte(i),rctnenr1(i),rctnenr2(i),i=1,nnrctn)
+#endif
 c*** Check the reaction type - must be assigned to each reaction
       do i=1,nnrctn !{
         if(streql(rctntyp(i),' ')) then !{

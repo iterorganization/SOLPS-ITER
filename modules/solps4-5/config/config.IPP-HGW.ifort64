@@ -1,6 +1,6 @@
 EQUIV4 = ${SOLPS_CPP} -DNO_USERTIME -DNO_SNAPSHOT -DUSE_CDF_B2STIME -DMA28 -DNO_F01AAF -DNO_LONG_LINES -DNO_B2GXDR # -DNO_CDF -DNO_PROCESS 
 
-EQUIV5 = ${SOLPS_CPP} ${USE_EIRENE} -Dsdot=ddot -Dsasum=dasum -Dsaxpy=daxpy -Dsscal=dscal -Dsnrm2=dnrm2 -Dscopy=dcopy -Dsgbtrf=dgbtrf -Dsgbtrs=dgbtrs -DGRREAL=4 -DDOFLUSH # -DNO_CDF -DNO_PROCESS 
+EQUIV5 = ${SOLPS_CPP} ${USE_EIRENE} -Dsdot=ddot -Dsasum=dasum -Dsaxpy=daxpy -Dsscal=dscal -Dsnrm2=dnrm2 -Dscopy=dcopy -Dsgbtrf=dgbtrf -Dsgbtrs=dgbtrs -DGRREAL=4 -DDOFLUSH -Dsmin=dmin # -DNO_CDF -DNO_PROCESS
 
 DEFINES += -DS2SUM=D2SUM -DS2MIN=D2MIN -DSASUM=DASUM -DSAXPY=DAXPY -DSDOT=DDOT -DSSCAL=DSCAL -DS2ASUM=D2ASUM -DS2SCAL=D2SCAL -DS2DOT=D2DOT -DSCOPY=DCOPY -DS2COPY=D2COPY
 

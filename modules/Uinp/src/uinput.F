@@ -530,6 +530,22 @@ c*** Create the b2ar.dat file
           print *,'    ... b2ar.dat created'
       endif
 
+c*** Create the header for the b2yr.dat file
+      inquire(file='b2yr.dat', exist=uex)
+      if(uex) then
+          print *,'    ... b2yr.dat file already present, not created'
+      else
+          open(2,file='b2yr.dat')
+          write(2,'(a)') '*nijdis        (integer, free format)'
+          write(2,'(2i4)') 4, 4
+          write(2,'(a)') '*idis          (nidis*integer, free format)'
+          write(2,'(4i4)') 8, 16, 24, 32
+          write(2,'(a)') '*jdis          (njdis*integer, free format)'
+          write(2,'(4i4)') 2, 6, 10, 14
+          close(2)
+          print *,'    ... b2yr.dat created'
+      endif
+
 c*** Create the header for the b2yt.dat file
       inquire(file='b2yt.dat', exist=uex)
       if(uex) then
