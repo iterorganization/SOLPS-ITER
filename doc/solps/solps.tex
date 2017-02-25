@@ -1801,20 +1801,21 @@ If one is running {\tt B2.5} in stand-alone mode, it is recommended to set the e
 
 The general way of running any of these programs is by
 \begin{verbatim}
-    gmake -f ../../Makefile b2XX.prt
+    gmake -f $SOLPSTOP/runs/Makefile b2XX.prt
 \end{verbatim}
 or
 \begin{verbatim}
-    gmake -f ../../Makefile b2fYYYYY
+    gmake -f $SOLPSTOP/runs/Makefile b2fYYYYY
 \end{verbatim}
 where {\tt b2XX.exe} would be the program run, and {\tt b2fYYYYY}
-would be one of the output files created by the program.  The number
-of {\tt ../}s in the {\tt ../../Makefile} would reflect how many
+would be one of the output files created by the program. The {\tt Makefile}
+is best accessed via \${\tt \{SOLPSTOP\}/runs/Makefile} in the
+above examples and in the following sections. Alternatively, if you are
+running within the \${tt \{SOLPSTOP\}/runs} tree, the 
+{\tt Makefile} can be found as {\tt ../../Makefile} where the number
+of {\tt ../}s would reflect how many
 levels the actual run directory is below the
-\${\tt \{SOLPSTOP\}/runs} directory (the {\tt Makefile} is in
-\${\tt \{SOLPSTOP\}/runs} and the {\tt Makefile} could also be
-accessed via \${\tt \{SOLPSTOP\}/runs/Makefile} in the
-above examples and in the following sections.
+\${\tt \{SOLPSTOP\}/runs} directory.
 
 A useful shortcut is to use\index{b2run}\label{b2run}
 \begin{verbatim}
@@ -1922,19 +1923,24 @@ and executes the script {\tt b2run}.
 The examples presented below are for a pure D plasma.
 
 \newpage\section{b2ag, setting up the geometry}
-\index{b2fgmtry}\label{sec:b2ag}\index{b2ag}
+\index{b2fgmtry}\label{sec:b2ag}\index{b2ag}\index{fort.30}
 
 {\tt b2ag} prepares the geometry file, {\tt b2fgmtry}, reading the
 input file {\tt b2ag.dat}
 
 It is run by doing
 \begin{verbatim}
-    gmake -f ../../Makefile b2ag.prt
+    gmake -f $SOLPSTOP/runs/Makefile b2ag.prt
 \end{verbatim}
 or
 \begin{verbatim}
-    gmake -f ../../Makefile b2fgmtry
+    gmake -f $SOLPSTOP/runs/Makefile b2fgmtry
 \end{verbatim}
+or
+\begin{verbatim}
+    gmake -f $SOLPSTOP/runs/Makefile fort.30
+\end{verbatim}
+%% $
 or, best:
 \begin{verbatim}
     b2run b2ag
@@ -1992,11 +1998,11 @@ i.e. a {\tt fort.30} file.
 reading the input file {\tt b2ah.dat}
 
 \begin{verbatim}
-    gmake -f ../../Makefile b2ah.prt
+    gmake -f $SOLPSTOP/runs/Makefile b2ah.prt
 \end{verbatim}
 or
 \begin{verbatim}
-    gmake -f ../../Makefile b2fpardf
+    gmake -f $SOLPSTOP/runs/Makefile b2fpardf
 \end{verbatim}
 or, best:
 \begin{verbatim}
@@ -2155,11 +2161,11 @@ The code will fail a transport coefficients test in {\tt b2tral} otherwise.
 reading the input file {\tt b2ar.dat}
 
 \begin{verbatim}
-    gmake -f ../../Makefile b2ar.prt
+    gmake -f $SOLPSTOP/runs/Makefile b2ar.prt
 \end{verbatim}
 or
 \begin{verbatim}
-    gmake -f ../../Makefile b2frates
+    gmake -f $SOLPSTOP/runs/Makefile b2frates
 \end{verbatim}
 or, best:
 \begin{verbatim}
@@ -2210,11 +2216,11 @@ Supplemental information on atomic physics rates can be found in the file
 reading the input file {\tt b2ai.dat}
 
 \begin{verbatim}
-    gmake -f ../../Makefile b2ai.prt
+    gmake -f $SOLPSTOP/runs/Makefile b2ai.prt
 \end{verbatim}
 or
 \begin{verbatim}
-    gmake -f ../../Makefile b2fstati
+    gmake -f $SOLPSTOP/runs/Makefile b2fstati
 \end{verbatim}
 or, best:
 \begin{verbatim}
@@ -2279,21 +2285,20 @@ a flat state for new species declared in the species list from {\tt b2ai.dat}.
 \index{b2ftrace}
 \index{b2ftrack}
 \index{b2fplasma}
-\index{b2time.nc}
 \label{sec:b2mn}
 \index{b2mn}
 
 The program can be run with one of the following
 \begin{verbatim}
-    gmake -f ../../Makefile b2mn.prt
-    gmake -f ../../Makefile b2fparam
-    gmake -f ../../Makefile b2fstate
-    gmake -f ../../Makefile b2fmovie
-    gmake -f ../../Makefile b2ftrace
-    gmake -f ../../Makefile b2ftrack
-    gmake -f ../../Makefile b2fplasma
-    gmake -f ../../Makefile b2time.nc
+    gmake -f $SOLPSTOP/runs/Makefile b2mn.prt
+    gmake -f $SOLPSTOP/runs/Makefile b2fparam
+    gmake -f $SOLPSTOP/runs/Makefile b2fstate
+    gmake -f $SOLPSTOP/runs/Makefile b2fmovie
+    gmake -f $SOLPSTOP/runs/Makefile b2ftrace
+    gmake -f $SOLPSTOP/runs/Makefile b2ftrack
+    gmake -f $SOLPSTOP/runs/Makefile b2fplasma
 \end{verbatim}
+%% $
 or, best:
 \begin{verbatim}
     b2run b2mn
@@ -3281,9 +3286,17 @@ indexing and naming conventions as \SOLPSfivens.
 \section{b2yg, plotting the geometry}
 \index{b2fgmtry}\label{sec:b2yg}\index{b2yg}
 
-The command
+The commands
 \begin{verbatim}
     b2run b2yg
+\end{verbatim}
+or
+\begin{verbatim}
+    gmake -f $SOLPSTOP/runs/Makefile b2yg.prt
+\end{verbatim}
+or
+\begin{verbatim}
+    gmake -f $SOLPSTOP/runs/Makefile b2yg.plt
 \end{verbatim}
 will produce a {\tt b2yg.plt} file containing a series of plots giving
 some details about the geometry, as well as a {\tt b2yg.prt} ASCII file
@@ -3339,10 +3352,15 @@ in sequence with or without some separating character(s).
 \section{b2yh, plotting the run parameters}
 \index{b2fpardf}\index{b2fparam}\label{sec:b2yh}\index{b2yh}\index{b2ah}
 
-The command
+The commands
 \begin{verbatim}
     b2run b2yh
 \end{verbatim}
+or
+\begin{verbatim}
+    gmake -f $SOLPSTOP/runs/Makefile b2yh.prt
+\end{verbatim}
+%% $
 will produce a {\tt b2yh.prt} file containing a description of the run
 parameters: a species list, default boundary conditions
 parameters, and transport coefficients. These parameters will be extracted
@@ -3361,9 +3379,17 @@ printed out in {\tt b2yh.prt}. Current accepted values are 0 and 1.
 \index{b2fstati}\index{b2fstate}\index{b2specp}\label{sec:b2yi}\label{sec:b2yp}
 \index{b2yi}\index{b2yp}\index{b2ai}\index{b2mn}
 
-The command
+The commands
 \begin{verbatim}
     b2run b2yi
+\end{verbatim}
+or
+\begin{verbatim}
+    gmake -f $SOLPSTOP/runs/Makefile.plot b2yi.prt
+\end{verbatim}
+or
+\begin{verbatim}
+    gmake -f $SOLPSTOP/runs/Makefile.plot b2yi.plt
 \end{verbatim}
 will produce a {\tt b2yi.plt} file containing a series of plots describing
 the plasma state, as well as a {\tt b2yi.prt} ASCII file
@@ -3372,10 +3398,17 @@ from {\tt b2fstate} if it is present (thereby giving the plasma state
 as it was computed by {\tt b2mn}), or from {\tt b2fstati} which contains
 the initial plasma state built from {\tt b2ai}.
 
-Similarly, the command
+Similarly, the commands
 \begin{verbatim}
     b2run b2yp
 \end{verbatim}
+or any of
+\begin{verbatim}
+    gmake -f $SOLPSTOP/runs/Makefile b2yp.prt
+    gmake -f $SOLPSTOP/runs/Makefile b2yp.plt
+    gmake -f $SOLPSTOP/runs/Makefile b2specp
+\end{verbatim}
+%% $
 will produce a {\tt b2yp.plt} file with plots describing the plasma state
 computed by {\tt b2mn} and stored in the {\tt b2fstate} file, as well as
 a {\tt b2yp.prt} ASCII file with tables of plasma quantities. {\tt b2yp}
@@ -3458,9 +3491,17 @@ in sequence with or without some separating character(s).
 \section{b2yr, plotting the atomic physics rates}
 \index{b2frates}\label{sec:b2yr}\index{b2yr}
 
-The command
+The commands
 \begin{verbatim}
     b2run b2yr
+\end{verbatim}
+or
+\begin{verbatim}
+    gmake -f $SOLPSTOP/runs/Makefile b2yr.prt
+\end{verbatim}
+or
+\begin{verbatim}
+    gmake -f $SOLPSTOP/runs/Makefile b2yr.plt
 \end{verbatim}
 will produce a {\tt b2yr.plt} file containing a series of
 plots detailing the dependencies of the atomic rates on density and temperature for
@@ -3483,9 +3524,17 @@ through the use of the {\tt b2.atomic\_physics\_rescale.parameters} file. See
 \section{b2ym, producing movie output}
 \index{b2fmovie}\label{sec:b2ym}\index{b2ym}
 
-The command
+The commands
 \begin{verbatim}
     b2run b2ym
+\end{verbatim}
+or
+\begin{verbatim}
+    gmake -f $SOLPSTOP/runs/Makefile b2ym.prt
+\end{verbatim}
+or
+\begin{verbatim}
+    gmake -f $SOLPSTOP/runs/Makefile b2ym.plt
 \end{verbatim}
 will produce a {\tt b2ym.plt} file containing a series of movie frames,
 as well as a {\tt b2ym.prt} ASCII file containing some additional output.
@@ -3528,9 +3577,17 @@ in sequence with or without some separating character(s).
 \section{b2yn, display the progress of inner B2.5 iterations}
 \index{b2ftrack}\label{sec:b2yn}\index{b2yn}
 
-The command
+The commands
 \begin{verbatim}
     b2run b2yn
+\end{verbatim}
+or
+\begin{verbatim}
+    gmake -f $SOLPSTOP/runs/Makefile.plot b2yn.prt
+\end{verbatim}
+or
+\begin{verbatim}
+    gmake -f $SOLPSTOP/runs/Makefile.plot b2yn.plt
 \end{verbatim}
 will produce a {\tt b2yn.plt} file containing contour plots of the residuals
 and corrections from the {\tt B2.5} equations,
@@ -3576,9 +3633,17 @@ in sequence with or without some separating character(s).
 \section{b2yq, display the evolution data}
 \index{b2ftrace}\label{sec:b2yq}\index{b2yq}
 
-The command
+The commands
 \begin{verbatim}
     b2run b2yq
+\end{verbatim}
+or
+\begin{verbatim}
+    gmake -f $SOLPSTOP/runs/Makefile b2yq.prt
+\end{verbatim}
+or
+\begin{verbatim}
+    gmake -f $SOLPSTOP/runs/Makefile b2yq.plt
 \end{verbatim}
 will produce a {\tt b2yq.plt} file containing a quick display of the
 {\tt B2.5} evolution data, as well as a {\tt b2yq.prt} ASCII file containing
@@ -3826,7 +3891,7 @@ a crash, the user should then:
   \item Check for the presence of {\tt plasmastate.XXXX} files in the {\tt b2mn.exe.dir} run subdirectory
   \item If present, check that the most recent file is of the same size as the others (sometimes the crash happens while writing the {\tt plasmastate} file!)
   \item {\tt setenv PLASMASTATE b2mn.exe.dir/plasmastate.XXXX} where {\tt XXXX} is the number of the desired {\tt plasmastate} file
-  \item {\tt b2run b2co} which will create a {\tt b2fstate} file
+  \item {\tt b2run b2co} or {\tt gmake -f \$SOLPSTOP/runs/Makefile b2co.prt} which will create a {\tt b2fstate} file
   \item {\tt mv b2fstate b2fstati}
   \item Re-launch the run
 \end{enumerate}
@@ -3840,19 +3905,29 @@ It is also possible to use the {\tt b2co} utility {\em while} {\tt SOLPS} is run
 \section{b2uf \& b2fu, converting the plasma output file}
 \label{sec:b2uf}\label{sec:b2fu}\index{b2uf}\index{b2fu}\index{b2fplasma}\index{b2fplasmf}
 
-The command
+The commands
 \begin{verbatim}
    b2run b2uf
 \end{verbatim}
+or
+\begin{verbatim}
+    gmake -f $SOLPSTOP/runs/Makefile b2uf.prt
+\end{verbatim}
+%% $
 will convert an 'un*formatted' {\tt b2fplasma} file into a 'formatted'
 {\tt b2fplasmf} file. This file contains a full description of the plasma
 solution and derived quantities.
 
 The reverse operation, converting back from {\tt b2fplasmf} to {\tt b2fplasma}, is
-obtained by means of the command:
+obtained by means of the commands:
 \begin{verbatim}
    b2run b2fu
 \end{verbatim}
+or
+\begin{verbatim}
+    gmake -f $SOLPSTOP/runs/Makefile b2fu.prt
+\end{verbatim}
+%% $
 
 \newpage
 \section{b2rd, fetching an archived MDSPLUS run}
@@ -3865,7 +3940,7 @@ from which to continue the run. To do so, follow the procedure below:
   \item Check for the presence of a {\tt shotnumber.history} file in the run directory
   \item If present, the fetched run will be the one with the run number specified last in {\tt shotnumber.history}
   \item If absent or incorrect, create or modify the {\tt shotnumber.history} file to add an extra line at the end with the run number of the run you which to retrieve
-  \item {\tt b2run b2rd} which will create a {\tt b2fstate} file
+  \item {\tt b2run b2rd} or {\tt gmake -f \$SOLPSTOP/runs/Makefile.plot b2rd.prt} which will create a {\tt b2fstate} file
   \item {\tt mv b2fstate b2fstati}
   \item {\tt mv b2fgmtrt b2fgmtry}
   \item Re-launch the run
