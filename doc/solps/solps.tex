@@ -301,10 +301,11 @@ The current list of recognized hostnames, deduced by means of the {\tt whereami}
   \item[IFERC] IFERC supercomputer: *.iferc-csc.org
   \item[IN-DA] ITER-India: *.iter-india.org
   \item[IPP] IPP-Garching: *.ipp.mpg.de, *.ipp-garching.mpg.de, *.rzg.mpg.de
+  \item[IPPITM] ITM cluster hosted at IPP-Garching: *.itm.rzg.mpg.de
   \item[IPP-HGW] IPP-Greifswald: *.ipp-hgw.mpg.de
   \item[IPR] Institute for Plasma Research, Gandhinagar: *.ipr.res.in
   \item[ITER] ITER domain: *.iter.org
-  \item[ITM] ITM Gateway machine: *.itm.rzg.mpg.de, *.efda-itm.eu
+  \item[ITM] ITM Gateway machine: *.efda-itm.eu, *.marconi.cineca.it
   \item[JET] JET domain: *.jet.uk
   \item[KEIO] Keio University of Yokohama: *.keio.ac.jp
   \item[LEUVEN] KU-Leuven: *.mech.kuleuven.be
@@ -1248,7 +1249,6 @@ welcome!
   \item[append\_table]\index{append\_table}
   \item[awk.average]\index{awk.average}
   \item[awk.derivative]\index{awk.derivative}
-  \item[awk.integrate]\index{awk.integrate}
   \item[awk.mod]\index{awk.mod}
   \item[awk.radial\_average]\index{awk.radial\_average}
   \item[awk.reverse]\index{awk.reverse}
@@ -4397,6 +4397,7 @@ The data blocks are:
   \item[ewldem\_res] Energy flux carried by emitted molecules from surface segment ($W$), dimension ({\tt NMOL}, {\tt NCL})
   \item[ewldrp\_res] Total energy flux carried by emitted particles from surface segment ($W$), dimension ({\tt NCL})
   \item[ewldmr\_res] Flux of emitted molecules from recycling atoms ($A$), dimension ({\tt NMOL}, {\tt NCL})
+  \item[wldspt\_res] Flux of sputtered wall material ($A$), dimension ({\tt NCL})
   \item[pdena\_int] Integral number of atoms over the entire {\tt Eirene} computational grid, dimension ({\tt NATM}, {\tt 0:NSTRA})
   \item[pdenm\_int] Integral number of molecules over the entire {\tt Eirene} computational grid, dimension ({\tt NMOL}, {\tt 0:NSTRA})
   \item[pdeni\_int] Integral number of test ions over the entire {\tt Eirene} computational grid, dimension ({\tt NION}, {\tt 0:NSTRA})
