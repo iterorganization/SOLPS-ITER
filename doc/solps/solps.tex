@@ -1164,7 +1164,8 @@ extracted from the {\tt run.log} file.
   \item[import\_files\_from\_convert]\index{import\_files\_from\_convert}\index{b2yt} Imports and renames the files produced by {\tt b2yt} in a {\tt convert} directory at the same level as the current directory to prepare the new converted case for a run
   \item[input.dat\_to\_mesh.extra]\index{input.dat\_to\_mesh.extra}\index{input.dat}\index{mesh.extra} Converts standard input (usually directed from a {\tt input.dat} file) into a {\tt mesh.extra} file.
   \item[itersubmit]\index{itersubmit} Command file to launch runs on the ITER HPC cluster. See Section \ref{b2run} for details.
-  \item[itmsubmit]\index{itmsubmit} Command file to launch runs on the ITM Gateway machine. See Section \ref{b2run} for details.
+  \item[itmsubmit]\index{itmsubmit} Command file to launch runs on the Marconi ITM Gateway machine. See Section \ref{b2run} for details.
+  \item[ippitmsubmit]\index{ippitmsubmit} Command file to launch runs on the IPP ITM cluster. See Section \ref{b2run} for details.
   \item[jetsubmit]\index{jetsubmit} Command file to launch runs on the JET Analysis Cluster (JAC). See Section \ref{b2run} for details.
   \item[last10]\index{last10} Truncates the {\tt run.log} file to contain only the output from the last 10 written code iterations and stores them in {\tt run.log.last10}.
   \item[localsubmit]\index{localsubmit} Command file to launch runs on the local machine. See Section \ref{b2run} for details.
@@ -1853,8 +1854,9 @@ When submitting jobs in a cluster environment, one will make use of the job subm
 in the \${\tt \{SOLPSTOP\}/runs} directory ({\tt QSUB.*} files). Currently, the following commands
 are provided:
 \begin{description}
+  \item{ippitmsubmit}\index{ippitmsubmit} for submissions on the IPP ITM cluster
   \item{itersubmit}\index{itersubmit} for submissions on the ITER HPC cluster
-  \item{itmsubmit}\index{itmsubmit} for submissions on the ITM Gateway machine
+  \item{itmsubmit}\index{itmsubmit} for submissions on the Marconi ITM Gateway machine
   \item{jetsubmit}\index{jetsubmit} for submissions on the JET Analysis Cluster (JAC)
   \item{localsubmit}\index{localsubmit} for local submission
   \item{sgesubmit}\index{sgesubmit} for submissions on a system running SGE
