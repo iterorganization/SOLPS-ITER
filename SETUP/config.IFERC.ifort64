@@ -61,6 +61,20 @@ SOLPS_CPP      = -DNCAR4 -DMDSPLUS
 B25_DEFINES    =
 EIRENE_DEFINES =
 
+# Autodetected optional features...
+
+# Build with Catalyst if ParaView is in PATH
+ifdef LD_CATALYST
+  SOLPS_CPP   += -DCATALYST
+endif
+
+# Build with IMAS if imas module is loaded
+ifdef IMAS_PREFIX
+  SOLPS_CPP += -DIMAS
+  LD_UAL     = `pkg-config imas-lowlevel imas-ifort --libs`
+  export LD_UAL
+endif
+
 #
 # Export for use in sub-makefiles
 #
