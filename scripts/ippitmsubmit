@@ -1,6 +1,7 @@
 #! /usr/bin/env tcsh
 
 set NAME=/tmp/.run.$$.$USER.`date +%Y%m%d%H%M%S`
+set NAMP=/tmp/.zut.$$.$USER.`date +%Y%m%d%H%M%S`
 set EMAIL=`get_git_email`
 set JOB_NAME="SOLPS-ITER"
 set PROCS=1
@@ -100,7 +101,16 @@ if($QSUB == "") then
 endif
 echo Using submission file template $QSUB
 
-sed -e 's:#PWD#:'$PWD':g' -e 's:#SOLPSTOP#:'$SOLPSTOP':g' -e 's:#EMAIL#:'$EMAIL':g' -e "s:#MPIOPTS#:'$MPIOPTS':g" -e "s:#PROCS#:'$PROCS':g" -e "s:#JOBNAME#:'$JOB_NAME':g" < $QSUB > $NAME
+if ($PROCS != 1) then
+  head -n 2 $QSUB > $NAMP
+  echo "#$ -pe impi_hydra #PROCS#" >> $NAMP
+  set lines = `wc $QSUB | awk '{printf "%s",$1-2;printf "\n"}'`
+  tail --lines=$lines $QSUB >> $NAMP
+else
+  set NAMP=$QSUB
+endif
+
+sed -e 's:#PWD#:'$PWD':g' -e 's:#SOLPSTOP#:'$SOLPSTOP':g' -e 's:#EMAIL#:'$EMAIL':g' -e "s:#MPIOPTS#:'$MPIOPTS':g" -e 's:#PROCS#:'$PROCS':g' -e "s:#JOBNAME#:'$JOB_NAME':g" < $NAMP > $NAME
 
 set msg="Submitted at `date`"
 update_solps_run_status -n ${msg}
