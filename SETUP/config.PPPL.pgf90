@@ -61,7 +61,7 @@ B25_DEFINES    =
 EIRENE_DEFINES =
 
 # Build with Catalyst if ParaView is in PATH
-ifneq (,$(shell which paraview-config))
+ifneq (,$(shell which paraview-config 2> /dev/null ))
   SOLPS_CPP   += -DCATALYST
   LD_CATALYST  = `paraview-config --libs vtkPVPythonCatalyst`
   PARAVIEW_LIB = `paraview-config --libs --python | sed s/-L//`
