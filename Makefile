@@ -87,7 +87,7 @@ carre:
 	cd modules/Carre; ${MAKE}
 
 carre_nox:
-	cd modules/Carre;  ${MAKE} NCARG_ROOT="" LD_NCARG=""
+	cd modules/Carre; ${MAKE} NCARG_ROOT="" LD_NCARG=""
 
 divgeo:
 	cd modules/DivGeo;         ${MAKE}
