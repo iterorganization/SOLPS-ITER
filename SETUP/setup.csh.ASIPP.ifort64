@@ -25,4 +25,5 @@ else
   setenv LD_LIBRARY_PATH "${PARAVIEW_LIB}:${LD_LIBRARY_PATH}"
   setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages/vtk:${PYTHONPATH}"
   setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
+  setenv LD_CATALYST `paraview-config --libs vtkPVPythonCatalyst`
 endif

@@ -62,12 +62,8 @@ EIRENE_DEFINES =
 # Autodetected optional features...
 
 # Build with Catalyst if ParaView is in PATH
-ifneq (,$(shell which paraview-config))
+ifdef LD_CATALYST
   SOLPS_CPP   += -DCATALYST
-  LD_CATALYST  =  -lstdc++ -L/usr/lib64/openmpi/lib -lhdf5 `paraview-config --libs vtkPVPythonCatalyst vtkWebCore vtkParaViewWebCore vtkUtilitiesPythonInitializer`
-  PARAVIEW_LIB = `paraview-config --libs --python | sed s/-L//`
-  export LD_CATALYST
-  export PARAVIEW_LIB
 endif
 
 # Build with IMAS if imas module is loaded

@@ -66,28 +66,8 @@ MPI_CPP        =
 # Autodetected optional features...
 
 # Build with Catalyst if ParaView is in PATH
-ifneq (,$(shell which paraview-config))
+ifdef LD_CATALYST
   SOLPS_CPP   += -DCATALYST
-  LD_CATALYST  = `paraview-config --libs vtkPVPythonCatalyst`
-  PARAVIEW_LIB = `paraview-config --libs --python | sed s/-L//`
-  export LD_CATALYST
-  export PARAVIEW_LIB
-endif
-
-# Build with IMAS if imas module is loaded
-ifdef IMAS_PREFIX
-  SOLPS_CPP += -DIMAS
-  LD_UAL     = `pkg-config imas-lowlevel imas-ifort --libs`
-  export LD_UAL
-endif
-
-# Autodetected optional features:
-
-# Build with Catalyst if ParaView is in PATH
-ifneq (,$(shell which paraview-config))
-  SOLPS_CPP   += -DCATALYST
-  LD_CATALYST  = `paraview-config --libs vtkPVPythonCatalyst`
-  export LD_CATALYST
 endif
 
 # Build with IMAS if imas module is loaded
