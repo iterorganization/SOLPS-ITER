@@ -265,7 +265,7 @@ To best use the \SOLPSITER code suite, the user will need, locally installed:
 \item[plotmtv] for obtaining graphs of the time evolution of various profiles (optional)
 \item[LaTeX interpreter] to produce this manual
 \item[GIT] version control software
-\item[python] scripting language
+\item[python] scripting language (\SOLPSITER needs at least version 2.7)
 \item[/bin/bash] used by some scripts
 \item[/bin/csh] used by some scripts
 \item[/bin/ksh] used by some scripts
@@ -12891,6 +12891,7 @@ act on the "Eirene" stack or affect graphs of those data.
     earow \index{b2plot, earow}    & 0 & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:earow}   & Set arrow length scale for Eirene data plots \\
     earox \index{b2plot, earox}    & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:earox}  & Use as Eirene array for arrow $x$-component \\
     earoy \index{b2plot, earoy}    & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:earoy}  & Use as Eirene array for arrow $y$-component \\
+    eavg \index{b2plot, eavg}    & 0 & 8 & 0 & 0 & 1 & 0 & 0 & \ref{sec:eavg}  & Perform a volume average of Eirene data over a rectangular region \\
     echs \index{b2plot, echs}      & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:echs}     & Change sign of Eirene data \\
     eclvd \index{b2plot, eclvd}    & 0 & 3 & 0 & 0 & 0 & 0 & 0 & \ref{sec:eclvd}    & Customize Eirene contour levels (delta) \\
     eclvn \index{b2plot, eclvn}    & 1 & 2 & 0 & 0 & 0 & 0 & 0 & \ref{sec:eclvn}    & Customize Eirene contour levels (number) \\
@@ -14923,6 +14924,9 @@ or (in the \SOLPSfive environment) \verb:b2pl.exe.dir/:$<$filename$>$.
 \subsubsection{$<$filename,{\bf S}$>$ eprt}\index{b2plot, eprt}\label{sec:eprt}
 Writes out the top of the Eirene stack to $<$filename$>$ (in the \SOLPSfour environment)
 or (in the \SOLPSfive environment) \verb:b2pl.exe.dir/:$<$filename$>$.
+
+\subsubsection{$<$x1,{\bf R}$>$ $<$y1,{\bf R}$>$ $<$x2,{\bf R}$>$ $<$y2,{\bf R}$>$ $<$x3,{\bf R}$>$ $<$y3,{\bf R}$>$ $<$x4,{\bf R}$>$ $<$y4,{\bf R}$>$ eavg}\index{b2plot, eavg}\label{sec:eavg}
+Writes out the volume average of the data on top of the Eirene stack over the rectangular region delimited by the four doublets of coordinates [($x1$,$y1$);($x2$,$y2$);($x3$,$y3$);($x4$,$y4$)].
 
 \subsubsection{$<$ix1,{\bf I}$>$ $<$ix2,{\bf I}$>$ $<$iy1,{\bf I}$>$ $<$iy2,{\bf I}$>$ $<$filename,{\bf S}$>$ mtab}\index{b2plot, mtab}\label{sec:mtab}
 Writes out a table extracted from the matrix on the top of the stack to $<$filename$>$ (in the \SOLPSfour environment)
