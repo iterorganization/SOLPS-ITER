@@ -18,8 +18,6 @@ width2 = (1-width1-5*margin)/3;
 axbal(5) = subplot('position',[width1+2*margin 2*margin width2 height]); box on; hold on; % For poloidal internal energy balance
 axbal(6) = subplot('position',[width1+3*margin+width2 2*margin width2 height]); box on; hold on; % For decomposition of internal energy fluxes
 axbal(7) = subplot('position',[width1+4*margin+2*width2 2*margin width2 height]); box on; hold on; % For decomposition of internal energy sources
-
-set([axgrid,axbal],'ticklabelinterpreter','latex')
             
 switch type
     case 'particles'
@@ -29,7 +27,7 @@ switch type
         else
             strtmp = ['PARTICLE BALANCE ',comuse.species{isplot}];
         end
-        title(axgrid,strtmp,'interpreter','latex');
+        title(axgrid,strtmp,'fontweight','normal');
     case 'momentum'
         if length(isplot)>1
             strtmp = sprintf('MOMENTUM BALANCE SUM OVER (%s',sprintf('%s,',comuse.species{isplot}));
@@ -37,15 +35,15 @@ switch type
         else
             strtmp = ['MOMENTUM BALANCE ',comuse.species{isplot}];
         end
-        title(axgrid,strtmp,'interpreter','latex');
+        title(axgrid,strtmp,'fontweight','normal');
     case 'totpress'
-        title(axgrid,'TOTAL PRESSURE BALANCE','interpreter','latex');
+        title(axgrid,'TOTAL PRESSURE BALANCE','fontweight','normal');
     case 'elheat'
-        title(axgrid,'EL. INTERNAL ENERGY BALANCE','interpreter','latex');
+        title(axgrid,'EL. INTERNAL ENERGY BALANCE','fontweight','normal');
     case 'ionheat'
-        title(axgrid,'ION. INTERNAL ENERGY BALANCE','interpreter','latex');
+        title(axgrid,'ION. INTERNAL ENERGY BALANCE','fontweight','normal');
     case 'totheat'
-        title(axgrid,'TOTAL INTERNAL ENERGY BALANCE','interpreter','latex');
+        title(axgrid,'TOTAL INTERNAL ENERGY BALANCE','fontweight','normal');
     otherwise
         error('Figure type unknown.');
 end

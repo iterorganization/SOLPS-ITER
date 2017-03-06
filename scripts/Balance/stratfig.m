@@ -10,23 +10,23 @@ margin = 0.04;
 width = (1-5*margin)/4;
 height = (1-6*margin)/2;
 axstrat(1) = subplot('position',[margin height+4*margin width height]); box on; hold on;
-title(axstrat(1),'Due to atom-plasma collisions','interpreter','latex');
+title(axstrat(1),'Due to atom-plasma collisions','fontweight','normal');
 axstrat(2) = subplot('position',[width+2*margin height+4*margin width height]); box on; hold on;
-title(axstrat(2),'Due to molecule-plasma collisions','interpreter','latex');
+title(axstrat(2),'Due to molecule-plasma collisions','fontweight','normal');
 axstrat(3) = subplot('position',[2*width+3*margin height+4*margin width height]); box on; hold on;
-title(axstrat(3),'Due to test ion-plasma collisions','interpreter','latex');
+title(axstrat(3),'Due to test ion-plasma collisions','fontweight','normal');
 axstrat(4) = subplot('position',[3*width+4*margin height+4*margin width height]); box on; hold on;
-title(axstrat(4),'Due to recombination','interpreter','latex');
+title(axstrat(4),'Due to recombination','fontweight','normal');
 axstrat(5) = subplot('position',[margin margin width height]); box on; hold on;
-title(axstrat(5),'Due to atom-plasma collisions','interpreter','latex');
+title(axstrat(5),'Due to atom-plasma collisions','fontweight','normal');
 axstrat(6) = subplot('position',[width+2*margin margin width height]); box on; hold on;
-title(axstrat(6),'Due to molecule-plasma collisions','interpreter','latex');
+title(axstrat(6),'Due to molecule-plasma collisions','fontweight','normal');
 axstrat(7) = subplot('position',[2*width+3*margin margin width height]); box on; hold on;
-title(axstrat(7),'Due to test ion-plasma collisions','interpreter','latex');
+title(axstrat(7),'Due to test ion-plasma collisions','fontweight','normal');
 axstrat(8) = subplot('position',[3*width+4*margin margin width height]); box on; hold on; 
-title(axstrat(8),'Due to recombination','interpreter','latex');
-set(axstrat,'ticklabelinterpreter','latex')
-axstrat(9) = subplot('position',[0.5 2*height+5*margin 0 0],'visible','off');
-axstrat(10) = subplot('position',[0.5 height+2*margin 0 0],'visible','off');
+title(axstrat(8),'Due to recombination','fontweight','normal');
+%set(axstrat,'ticklabelinterpreter','latex')
+axstrat(9) = subplot('position',[0.5 2*height+5*margin 0.001 0.001],'visible','off');
+axstrat(10) = subplot('position',[0.5 height+2*margin 0.001 0.001],'visible','off');
 
 end

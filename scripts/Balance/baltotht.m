@@ -92,7 +92,9 @@ tmp = ncread(balfile,'fhi_kevis');
 fhix_kevis = tmp(:,:,1);
 fhiy_kevis = tmp(:,:,2);
 % Sources (electrons):
-b2stbr_she = ncread(balfile,'b2stbr_she_bal');
+b2stbr_phys_she = ncread(balfile,'b2stbr_phys_she_bal');
+b2stbr_bas_she = ncread(balfile,'b2stbr_bas_she_bal');
+b2stbr_first_flight_she = ncread(balfile,'b2stbr_first_flight_she_bal');
 b2stbc_she = ncread(balfile,'b2stbc_she_bal');
 if (comuse.b2mndr_eirene~=0)
     eirene_mc_eael_she = ncread(balfile,'eirene_mc_eael_she_bal');
@@ -116,7 +118,9 @@ b2sihs_divue = ncread(balfile,'b2sihs_divue_bal');
 b2sihs_exbe = ncread(balfile,'b2sihs_exbe_bal');
 b2sihs_joule = ncread(balfile,'b2sihs_joule_bal');
 % Sources (ions):
-b2stbr_shi = ncread(balfile,'b2stbr_shi_bal');
+b2stbr_phys_shi = ncread(balfile,'b2stbr_phys_shi_bal');
+b2stbr_bas_shi = ncread(balfile,'b2stbr_bas_shi_bal');
+b2stbr_first_flight_shi = ncread(balfile,'b2stbr_first_flight_shi_bal');
 b2stbc_shi = ncread(balfile,'b2stbc_shi_bal');
 if (comuse.b2mndr_eirene~=0)
     eirene_mc_eapl_shi = ncread(balfile,'eirene_mc_eapl_shi_bal');
@@ -146,113 +150,6 @@ b2sihs_fraa = ncread(balfile,'b2sihs_fraa_bal');
 reshe = ncread(balfile,'reshe');
 % Residual (ions):
 reshi = ncread(balfile,'reshi');
-
-% if ~isnumeric(SIMID)
-%     dv = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'vol'),nx,ny); % Cell volume
-%     hx = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'hx'),nx,ny); % hx
-%     B = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'bb'),nx,ny,4);
-% 
-%     b2stbr_she = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2stbr_she_bal'),nx,ny);
-%     b2stbr_shi = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2stbr_shi_bal'),nx,ny);
-%     b2stbc_she = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2stbc_she_bal'),nx,ny);
-%     b2stbc_shi = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2stbc_shi_bal'),nx,ny);
-%     eirene_mc_eael_she = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'eirene_mc_eael_she'),nx,ny,nstra);
-%     eirene_mc_emel_she = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'eirene_mc_emel_she'),nx,ny,nstra);
-%     eirene_mc_eiel_she = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'eirene_mc_eiel_she'),nx,ny,nstra);
-%     eirene_mc_epel_she = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'eirene_mc_epel_she'),nx,ny,nstra);
-%     eirene_mc_eapl_shi = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'eirene_mc_eapl_shi'),nx,ny,nstra);
-%     eirene_mc_empl_shi = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'eirene_mc_empl_shi'),nx,ny,nstra);
-%     eirene_mc_eipl_shi = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'eirene_mc_eipl_shi'),nx,ny,nstra);
-%     eirene_mc_eppl_shi = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'eirene_mc_eppl_shi'),nx,ny,nstra);
-%     b2stbm_she = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2stbm_she_bal'),nx,ny);
-%     b2stbm_shi = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2stbm_shi_bal'),nx,ny);
-%     ext_she = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'ext_she_bal'),nx,ny);
-%     ext_shi = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'ext_shi_bal'),nx,ny);
-%     b2stel_she = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2stel_she_bal'),nx,ny);
-%     b2stel_shi_ion = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2stel_shi_ion_bal'),nx,ny);
-%     b2stel_shi_rec = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2stel_shi_rec_bal'),nx,ny);
-%     b2stcx_shi = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2stcx_shi_bal'),nx,ny);
-%     
-%     b2srsm_she = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2srsm_she_bal'),nx,ny);
-%     b2srsm_shi = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2srsm_shi_bal'),nx,ny);
-%     b2srdt_she = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2srdt_she_bal'),nx,ny);
-%     b2srdt_shi = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2srdt_shi_bal'),nx,ny);
-%     b2srst_she = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2srst_she_bal'),nx,ny);
-%     b2srst_shi = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2srst_shi_bal'),nx,ny);
-%     
-%     b2sihs_diae = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2sihs_diae_bal'),nx,ny);
-%     b2sihs_diaa = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2sihs_diaa_bal'),nx,ny);
-%     
-%     b2sihs_divue = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2sihs_divue_bal'),nx,ny);
-%     b2sihs_divua = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2sihs_divua_bal'),nx,ny);
-%     b2sihs_exbe = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2sihs_exbe_bal'),nx,ny);
-%     b2sihs_exba = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2sihs_exba_bal'),nx,ny);
-%     b2sihs_visa = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2sihs_visa_bal'),nx,ny);
-%     b2sihs_joule = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2sihs_joule_bal'),nx,ny);
-%     b2sihs_fraa = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2sihs_fraa_bal'),nx,ny);
-% 
-%     tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhe_32'),nx,ny,2);
-%     fhex_32 = tmp(:,:,1);
-%     fhey_32 = tmp(:,:,2);
-%     tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhi_32'),nx,ny,2);
-%     fhix_32 = tmp(:,:,1);
-%     fhiy_32 = tmp(:,:,2);
-%     tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhe_52'),nx,ny,2);
-%     fhex_52 = tmp(:,:,1);
-%     fhey_52 = tmp(:,:,2);
-%     tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhi_52'),nx,ny,2);
-%     fhix_52 = tmp(:,:,1);
-%     fhiy_52 = tmp(:,:,2);
-%     tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhe_thermj'),nx,ny,2);
-%     fhex_thermj = tmp(:,:,1);
-%     fhey_thermj = tmp(:,:,2);
-%     tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhe_cond'),nx,ny,2);
-%     fhex_cond = tmp(:,:,1);
-%     fhey_cond = tmp(:,:,2);
-%     tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhi_cond'),nx,ny,2);
-%     fhix_cond = tmp(:,:,1);
-%     fhiy_cond = tmp(:,:,2);
-%     tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhe_dia'),nx,ny,2);
-%     fhex_dia = tmp(:,:,1);
-%     fhey_dia = tmp(:,:,2);
-%     tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhi_dia'),nx,ny,2);
-%     fhix_dia = tmp(:,:,1);
-%     fhiy_dia = tmp(:,:,2);
-%     tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhe_ecrb'),nx,ny,2);
-%     fhex_ecrb = tmp(:,:,1);
-%     fhey_ecrb = tmp(:,:,2);
-%     tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhi_ecrb'),nx,ny,2);
-%     fhix_ecrb = tmp(:,:,1);
-%     fhiy_ecrb = tmp(:,:,2);
-%     tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhe_strange'),nx,ny,2);
-%     fhex_strange = tmp(:,:,1);
-%     fhey_strange = tmp(:,:,2);
-%     tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhi_strange'),nx,ny,2);
-%     fhix_strange = tmp(:,:,1);
-%     fhiy_strange = tmp(:,:,2);
-%     tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhe_pschused'),nx,ny,2);
-%     fhex_pschused = tmp(:,:,1);
-%     fhey_pschused = tmp(:,:,2);
-%     tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhi_pschused'),nx,ny,2);
-%     fhix_pschused = tmp(:,:,1);
-%     fhiy_pschused = tmp(:,:,2);
-%     tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhi_inert'),nx,ny,2);
-%     fhix_inert = tmp(:,:,1);
-%     fhiy_inert = tmp(:,:,2);
-%     tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhi_vispar'),nx,ny,2);
-%     fhix_vispar = tmp(:,:,1);
-%     fhiy_vispar = tmp(:,:,2);
-%     tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhi_anml'),nx,ny,2);
-%     fhix_anml = tmp(:,:,1);
-%     fhiy_anml = tmp(:,:,2);
-% 
-%     reshe = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'reshe'),nx,ny);
-%     reshi = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'reshi'),nx,ny);
-% else
-%     % APPROPRIATE ARRAYS STILL NEED TO BE PUT ON THE MDSPLUS SERVER. TO BE
-%     % DONE!!!
-% end
-%%
 
 %% Parallel area at left edges:
 apll = dv./hx.*abs(B(:,:,1)./B(:,:,4));
@@ -324,13 +221,6 @@ for iy=1:ny
 end
 %%
 
-%% B2STBR part not from Eirene...
-b2stbr_not_eirene_she = b2stbr_she-(sum(eirene_mc_eael_she,3)+sum(eirene_mc_emel_she,3)+...
-                                    sum(eirene_mc_eiel_she,3)+sum(eirene_mc_epel_she,3));
-b2stbr_not_eirene_shi = b2stbr_shi-(sum(eirene_mc_eapl_shi,3)+sum(eirene_mc_empl_shi,3)+...
-                                    sum(eirene_mc_eipl_shi,3)+sum(eirene_mc_eppl_shi,3));
-%%
-
 %% Make plots...
 areadownrad = radial_balance(...
  cat(3,fhex_32,fhix_32,fhex_52,fhix_52,fhex_cond,fhix_cond,fhex_thermj,fhex_dia,fhix_dia,fhex_ecrb,fhix_ecrb,fhex_strange,...
@@ -344,12 +234,12 @@ areadownrad = radial_balance(...
        b2stbm_she,b2stbm_shi,ext_she,ext_shi,b2stel_she,...
        b2stel_shi_ion,b2stel_shi_rec,b2stcx_shi,b2srsm_she,b2srsm_shi,b2srdt_she,b2srdt_shi,b2srst_she,b2srst_shi,...
        b2sihs_diae,b2sihs_diaa,b2sihs_divue,b2sihs_divua,b2sihs_exbe,b2sihs_exba,b2sihs_visa,b2sihs_joule,b2sihs_fraa,...
-       b2stbr_not_eirene_she,b2stbr_not_eirene_shi)/1E6,...
+       b2stbr_phys_she,b2stbr_bas_she,b2stbr_first_flight_she,b2stbr_phys_shi,b2stbr_bas_shi,b2stbr_first_flight_shi)/1E6,...
  (reshe+reshi)/1E6,...
- {'$dA_{xu}\left(\tilde q_{exu}+\tilde q_{ixu}\right)/dA_{\parallel d}$',...
-  '$dA_{xd}\left(\tilde q_{exd}+\tilde q_{ixd}\right)/dA_{\parallel d}$',...
-  '$\left(\int_d^u S_{\rm{IE}}^{\rm{tot}}dV\right)/dA_{\parallel d}$',...
-  '$\left(\int_d^u {\rm{res.}}dV\right)/dA_{\parallel d}$'},...
+ {'dA_{xu}(q_{exu}+q_{ixu})/dA_{||d}',...
+  'dA_{xd}(q_{exd}+q_{ixd})/dA_{||d}',...
+  '(\int_d^uS_{IE}^{tot}dV)/dA_{||d}',...
+  '(\int_d^ures.dV)/dA_{||d}'},...
  {'fhex\_32','fhix\_32','fhex\_52','fhix\_52','fhex\_cond','fhix\_cond','fhex\_thermj','fhex\_dia','fhix\_dia','fhex\_ecrb','fhix\_ecrb','fhex\_strange',...
   'fhix\_strange','fhex\_pschused','fhix\_pschused','fhix\_inert','fhix\_vispar','fhix\_anml','fhix\_kevis'},...
  {'rad. diverg. fhey\_32','rad. diverg. fhey\_52','rad. diverg. fhey\_cond','rad. diverg. fhey\_thermj',...
@@ -363,8 +253,8 @@ areadownrad = radial_balance(...
   'b2stbm\_she','b2stbm\_shi','ext\_she','ext\_shi','b2stel\_she',...
   'b2stel\_shi\_ion','b2stel\_shi\_rec','b2stcx\_shi','b2srsm\_she','b2srsm\_shi','b2srdt\_she','b2srdt\_shi','b2srst\_she','b2srst\_shi',...
   'b2sihs\_diae','b2sihs\_diaa','b2sihs\_divue','b2sihs\_divua','b2sihs\_exbe','b2sihs\_exba','b2sihs\_visa','b2sihs\_joule','b2sihs\_fraa',...
-  'b2stbr not Eirene el.','b2stbr not Eirene ion'},...
- comuse,indrad,apllx,reverse,false,axbal(1:4),'MWm$^{-2}$');
+  'b2stbr\_phys el.','b2stbr\_bas el.','b2stbr\_first\_flight el.','b2stbr\_phys ion','b2stbr\_bas ion','b2stbr\_first\_flight ion'},...
+ comuse,indrad,apllx,reverse,false,axbal(1:4),'MWm^{-2}');
 
 areadownpol = poloidal_balance(...
  cat(3,fhex_32,fhix_32,fhex_52,fhix_52,fhex_cond,fhix_cond,fhex_thermj,fhex_dia,fhix_dia,fhex_ecrb,fhix_ecrb,fhex_strange,...
@@ -378,11 +268,11 @@ areadownpol = poloidal_balance(...
        b2stbm_she,b2stbm_shi,ext_she,ext_shi,b2stel_she,...
        b2stel_shi_ion,b2stel_shi_rec,b2stcx_shi,b2srsm_she,b2srsm_shi,b2srdt_she,b2srdt_shi,b2srst_she,b2srst_shi,...
        b2sihs_diae,b2sihs_diaa,b2sihs_divue,b2sihs_divua,b2sihs_exbe,b2sihs_exba,b2sihs_visa,b2sihs_joule,b2sihs_fraa,...
-       b2stbr_not_eirene_she,b2stbr_not_eirene_shi)/1E6,...
+       b2stbr_phys_she,b2stbr_bas_she,b2stbr_first_flight_she,b2stbr_phys_shi,b2stbr_bas_shi,b2stbr_first_flight_shi)/1E6,...
  (reshe+reshi)/1E6,...
- {'$dA_x\left(\tilde q_{ex}+\tilde q_{ix}\right)/dA_{\parallel d}$',...
-  '$S_{\rm{IE}}^{\rm{tot}}dV/dA_{\parallel d}$',...
-  '${\rm{res.}}dV/dA_{\parallel d}$'},...
+ {'dA_x(q_{ex}+q_{ix})/dA_{||d}',...
+  'S_{IE}^{tot}dV/dA_{||d}',...
+  'res.dV/dA_{||d}'},...
  {'fhex\_32','fhix\_32','fhex\_52','fhix\_52','fhex\_cond','fhix\_cond','fhex\_thermj','fhex\_dia','fhix\_dia','fhex\_ecrb','fhix\_ecrb','fhex\_strange',...
   'fhix\_strange','fhex\_pschused','fhix\_pschused','fhix\_inert','fhix\_vispar','fhix\_anml','fhix\_kevis'},...
  {'rad. diverg. fhey\_32','rad. diverg. fhey\_52','rad. diverg. fhey\_cond','rad. diverg. fhey\_thermj',...
@@ -396,16 +286,16 @@ areadownpol = poloidal_balance(...
   'b2stbm\_she','b2stbm\_shi','ext\_she','ext\_shi','b2stel\_she',...
   'b2stel\_shi\_ion','b2stel\_shi\_rec','b2stcx\_shi','b2srsm\_she','b2srsm\_shi','b2srdt\_she','b2srdt\_shi','b2srst\_she','b2srst\_shi',...
   'b2sihs\_diae','b2sihs\_diaa','b2sihs\_divue','b2sihs\_divua','b2sihs\_exbe','b2sihs\_exba','b2sihs\_visa','b2sihs\_joule','b2sihs\_fraa',...
-  'b2stbr not Eirene el.','b2stbr not Eirene ion'},...
- comuse,indpol,apllx,reverse,false,axbal(5:7),'MWm$^{-2}$');
+  'b2stbr\_phys el.','b2stbr\_bas el.','b2stbr\_first\_flight el.','b2stbr\_phys ion','b2stbr\_bas ion','b2stbr\_first\_flight ion'},...
+ comuse,indpol,apllx,reverse,false,axbal(5:7),'MWm^{-2}');
 
 if strata_plot
     make_strata_plots({eirene_mc_eael_she/1E6,eirene_mc_eapl_shi/1E6},{eirene_mc_emel_she/1E6,eirene_mc_empl_shi/1E6},...
                       {eirene_mc_eiel_she/1E6,eirene_mc_eipl_shi/1E6},{eirene_mc_epel_she/1E6,eirene_mc_eppl_shi/1E6},...
-                      {['Strata decomp. of $\left(\int_d^u S_{e\rm{IE}}^{\rm{EIR}}dV\right)/dA_{\parallel d}$ and ',...
-                        '$\left(\int_d^u S_{i\rm{IE}}^{\rm{EIR}}dV\right)/dA_{\parallel d}$ in radial direction'],...
-                       ['Strata decomp. of $S_{e\rm{IE}}^{\rm{EIR}}dV/dA_{\parallel d}$ and ',...
-                        '$S_{i\rm{IE}}^{\rm{EIR}}dV/dA_{\parallel d}$ in poloidal direction']},...
+                      {['Strata decomp. of (\int_d^uS_{eIE}^{EIR}dV)/dA_{||d} and ',...
+                        '(\int_d^uS_{iIE}^{EIR}dV)/dA_{||d} in radial direction'],...
+                       ['Strata decomp. of S_{eIE}^{EIR}dV/dA_{||d}$ and ',...
+                        'S_{iIE}^{EIR}dV/dA_{||d} in poloidal direction']},...
                       {'el','ion'},comuse,indrad,indpol,nstra,axstrat,axbal,areadownrad,areadownpol,reverse,false);
 end              
 %%
