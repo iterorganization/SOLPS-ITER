@@ -1,6 +1,10 @@
 alias gmake make
 setenv PATH ${PATH}:/opt/intel/bin/
-setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/opt/intel/composer_xe_2013_sp1.2.144/compiler/lib/intel64/
+if ($?LD_LIBRARY_PATH) then
+  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/opt/intel/composer_xe_2013_sp1.2.144/compiler/lib/intel64/
+else
+  setenv LD_LIBRARY_PATH /opt/intel/composer_xe_2013_sp1.2.144/compiler/lib/intel64/
+endif
 unsetenv NCARG_ROOT 
 
 # General
