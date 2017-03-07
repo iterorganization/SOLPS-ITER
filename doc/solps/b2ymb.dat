@@ -1,30 +1,33 @@
 &GEOMETRY
-HEIGHT      =     28.0e-3,     ! tile height [m]
-T_LENGTH    =     28.0e-3,     ! tile toroidal length [m]
-CU_TH       =      1.0e-3,     ! Cu interlayer thickness [m]
-CUCRZR_TH   =      1.5e-3,     ! CuCrZr tube thickness [m]
-DIAMETER    =     12.0e-3,     ! CuCrZr tube internal diameter [m]
-W_TH        =      6.0e-3,     ! W armour thickness (from plasma facing surface to Cu interlayer) [m]
-P_LENGTH    =      1.2e-2,     ! tile poloidal length [m]
-T_GAP       =      0.5e-3,     ! Toroidal gap between monoblocks [m]
-ALPHA       =         0.5,     ! Vertical target tilting [degrees]
-BETA        =         1.0,     ! poloidal chamfer [degrees]
-THETA       =         4.2,     ! Toroidal strike angle of magnetic flux lines [degrees]
-REVERSE     =    0,0,          ! Integer, if >0 reverse the heat flux profile of the inner (first element) or outer (second element) target
-/  
 
-&MESH  
-NN	= 100, ! # of mesh points on longest edge
-/  
+HEIGHT      =    28.0e-3,    ! tile heigth [m]
+T_LENGTH    =    28.0e-3,    ! tile toroidal length [m]
+CU_TH       =    1.0e-3,     ! Cu interlayer thickness [m]
+CUCRZR_TH   =    1.5e-3,     ! CuCrZr tube thickness [m]
+DIAMETER    =    12.0e-3,    ! CuCrZr tube internal diameter [m]
+W_TH        =    6.0e-3,     ! W armour thickness (from plasma facing surface to Cu interlayer) [m]
+P_LENGTH    =    1.2e-2,     ! tile poloidal length [m]
+T_GAP		=    0.5e-3,     ! Toroidal gap between monoblocks [m]
+BETA        =    1.0,        ! poloidal chamfer [degrees]
+ALPHA     	=  	 0.5,        ! Vertical target tilting [degrees]
+THETA		=    4.2,		 ! Toroidal strike angle of magnetic flux lines [degrees]
+REVERSE		=    0,          ! Integer, if >0 reverse the heat flux profile from top to bottom 
+/
 
-&COOLANT  
-T_COOLANT 	=    70.0, ! Coolant inlet temperature [°C]
-M_FLOW    	=   0.734, ! Coolant mass flow rate    [kg/s]
-CP_COOLANT	=  4.22e3, ! Coolant specific heat capacity [J/kg/K]
-/  
+&MESH
+
+NN          =    50,         ! # of mesh points on longest edge
+/
+
+&COOLANT
+
+T_COOLANT   =    70.0,       ! Coolant inlet temperature [°C]
+M_FLOW      =    0.734,      ! Coolant mass flow rate    [kg/s]
+CP_COOLANT  =    4.22e3,     ! Coolant specific heat capacity [J/kg/K]
+/
 
 &OUTPUT
 
-NPOINTS     =   5,    ! Number of points for output surface temperature
-LPOINTS     =   0.,7.0e-3,14.0e-3,21.0e-3,28.0e-3,    !Location of output surface temperature
+NPOINTS		=	5,			 						! Number of points for output surface temperature
+LPOINTS		=	0.,7.0e-3,14.0e-3,21.0e-3,28.0e-3,	!Location of output surface temperature
 /

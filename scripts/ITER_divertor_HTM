@@ -1,0 +1,29 @@
+#! /usr/bin/env tcsh
+
+echo "1000 wlld" | b2plot
+
+cp ./b2pl.exe.dir/wlld_trg* .
+
+rm b2ymb.prt
+b2plot b2ymb
+cp ./b2ymb.exe.dir/* .
+
+FreeFem++ $SOLPSTOP/../Windows_shared/THmodel/Monoblock_HTM.edp
+
+rm b2ymb.prt
+b2plot b2ymb
+cp ./b2ymb.exe.dir/* .
+
+FreeFem++ $SOLPSTOP/../Windows_shared/THmodel/Monoblock_HTM.edp
+
+rm b2yrp.prt
+b2plot b2yrp
+cp ./b2yrp.exe.dir/* .
+
+FreeFem++ $SOLPSTOP/../Windows_shared/THmodel/ReflectorPlate_HTM.edp
+
+rm b2yrp.prt
+b2plot b2yrp
+cp ./b2yrp.exe.dir/* .
+
+FreeFem++ $SOLPSTOP/../Windows_shared/THmodel/ReflectorPlate_HTM.edp
