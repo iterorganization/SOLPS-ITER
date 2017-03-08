@@ -11,8 +11,9 @@
 # module load scalapack
 
 # Environment variables
-setenv DEVICE east
-
+if (! $?DEVICE) then
+  setenv DEVICE east
+endif
 
 # Debugger
 # setenv DBX totalview

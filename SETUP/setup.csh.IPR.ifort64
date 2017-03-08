@@ -16,4 +16,6 @@ else
 endif
 
 # Environment variables
-setenv DEVICE sst
+if (! $?DEVICE) then
+  setenv DEVICE sst
+endif

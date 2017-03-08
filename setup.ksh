@@ -36,7 +36,7 @@ export SOLPSWORK=$SOLPSTOP/runs
   case $iamat in
   "IPP" )
     export SOLPSMASTER=/afs/ipp-garching.mpg.de/u/dpc
-    export DEVICE upgrade
+    [ -z "$DEVICE" ] && export DEVICE upgrade
     ;;
   "ITM" | "EU_UNKNOWN" )
     export SOLPSMASTER=/afs/ipp-garching.mpg.de/u/dpc

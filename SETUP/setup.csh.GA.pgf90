@@ -9,8 +9,9 @@
 # module load scalapack
 
 # Environment variables
-setenv DEVICE d3d
-
+if (! $?DEVICE) then
+  setenv DEVICE d3d
+endif
 
 # Debugger
 # setenv DBX totalview

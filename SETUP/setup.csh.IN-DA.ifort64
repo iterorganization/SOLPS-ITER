@@ -5,8 +5,10 @@ module load subversion
 module load totalview
 
 # Environment variables
+if (! $?DEVICE) then
 # setenv DEVICE sst
-setenv DEVICE iter
+  setenv DEVICE iter
+endif
 
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"

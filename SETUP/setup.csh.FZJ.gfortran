@@ -8,7 +8,9 @@
 
 
 # Set environment variables
-# setenv DEVICE iter
+# if (! $?DEVICE) then
+#   setenv DEVICE iter
+# endif
 
 
 

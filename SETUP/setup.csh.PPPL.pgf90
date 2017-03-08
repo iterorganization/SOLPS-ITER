@@ -29,7 +29,9 @@ module load netcdf
 # module load scalapack
 
 # Environment variables
-setenv DEVICE cmod
+if (! $?DEVICE) then
+  setenv DEVICE cmod
+endif
 
 
 # Debugger

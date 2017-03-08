@@ -3,7 +3,9 @@
 
 
 # Set environment variables
-setenv DEVICE iter
+if (! $?DEVICE) then
+  setenv DEVICE iter
+endif
 setenv IFERC  yes
 
 if (`where paraview-config` == "") then

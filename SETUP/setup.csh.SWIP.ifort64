@@ -9,8 +9,9 @@
 # module load scalapack
 
 # Environment variables
-setenv DEVICE hl2m
-
+if (! $?DEVICE) then
+  setenv DEVICE hl2m
+endif
 
 # Debugger
 # setenv DBX totalview

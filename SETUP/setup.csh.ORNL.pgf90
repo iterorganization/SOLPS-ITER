@@ -2,11 +2,13 @@
 module load solps-libs/pgi
 
 if (-e /usr/local/texlive/bin/x86_64-linux) then 
-setenv PATH /usr/local/texlive/bin/x86_64-linux:${PATH}
+  setenv PATH /usr/local/texlive/bin/x86_64-linux:${PATH}
 endif
 
 # Environment variables
-setenv DEVICE d3d
+if (! $?DEVICE) then
+  setenv DEVICE d3d
+endif
 echo $DEVICE
 
 # Debugger

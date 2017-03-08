@@ -2,7 +2,9 @@ setenv GLI_HOME /pfs/work/dpc/SOLPS-ITER/gks
 setenv PATH ${PATH}:/pfs/work/dpc/SOLPS-ITER/NETCDF/bin
 setenv NCARG_ROOT /pfs/work/dpc/SOLPS-ITER/NCARG
 setenv FC g95
-if ($?TOKAMAKNAME) setenv DEVICE $TOKAMAKNAME
+if (! $?DEVICE) then
+  if ($?TOKAMAKNAME) setenv DEVICE $TOKAMAKNAME
+endif
 # load modules
 module load solps-gui
 

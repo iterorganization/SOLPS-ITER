@@ -9,8 +9,9 @@ module load netcdf
 module load scalapack
 
 # Environment variables
-setenv DEVICE mast
-
+if (! $?DEVICE) then
+  setenv DEVICE mast
+endif
 
 # Debugger
 setenv DBX totalview

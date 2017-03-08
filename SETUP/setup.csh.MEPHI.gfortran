@@ -2,8 +2,9 @@
 
 
 # Set environment variables
-# setenv DEVICE d3d-ap
-
+# if (! $?DEVICE) then
+#   setenv DEVICE d3d-ap
+# endif
 
 # Debugger (set environment variable DBX)
 # DBX =

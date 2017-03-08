@@ -15,7 +15,9 @@ module load impi/5.1.2
 module load nag_flib/intel/mk24
 
 # Environment variables
-setenv DEVICE upgrade
+if (! $?DEVICE) then
+  setenv DEVICE upgrade
+endif
 setenv GLI_HOME /ptmp1/work/dpc/SOLPS-ITER/gks
 setenv NCARG_ROOT /ptmp1/work/dpc/SOLPS-ITER/NCARG
 setenv PATH ${PATH}
