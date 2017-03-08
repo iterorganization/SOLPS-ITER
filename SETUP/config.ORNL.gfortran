@@ -28,7 +28,7 @@
 # Remove -DMDSPLUS from SOLPS_CPP
 #
 
-       NCDIR = #/usr/lib64/openmpi/lib
+       NCDIR = /usr/lib64/openmpi/lib
    MSCL_ROOT ?= /usr/local/mscl/linux_gfortran_JDL
        H5DIR =
      GR_ROOT ?= /usr/local/grsource/linux_gfortran_JDL
@@ -41,7 +41,7 @@
 # Variables for linking
 #
 
-LD_NETCDF  = -L${NCDIR} -lnetcdf -lnetcdff -g77libs #-lhdf5
+LD_NETCDF  = -L${NCDIR} -lnetcdf -lnetcdff -lstdc++ -g77libs -lhdf5
 LD_MSCL    = -L${MSCL_ROOT} -lmscl
 LD_GR      = -L${GR_ROOT} -lgr
 LD_GKS     = -L${GLI_HOME} -lgks
