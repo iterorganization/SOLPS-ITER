@@ -4,6 +4,7 @@ B25DIR=${SOLPSTOP}/modules/B2.5
 PATH+=:/usr/bin:/bin
 SVN=svn
 GIT=`which git`
+PYTHON=python
 INCLUDES=b2cdca.F b2cdci.F b2cdcn.F b2cdcr.F b2cdcv.F DIMENSIONS.F B2_5.Makefile B2_5.config.ITER.ifort64 solps-iter_git.log b2plot.commands
 FILES=D/b2ag.dat D/b2ah.dat D/b2ar.dat D/b2ai.dat D/b2mn.dat D+C+He/b2ag.dat D+C+He/b2ah.dat D+C+He/b2ar.dat D+C+He/b2ai.dat D+C+He/b2mn.dat D+C+He/b2.boundary.parameters D+C+He/b2.numerics.parameters D+C+He/b2.transport.parameters D+C+He/b2.neutrals.parameters b2.transport.inputfile b2.sources.profile b2yg.dat b2yh.dat b2yi.dat b2ym.dat b2yn.dat b2yp.dat b2yq.dat b2ymb.dat b2yrp.dat MDSPLUS/b2md.dat MDSPLUS/SOLPS_MODEL.TCL.index MDSPLUS/IDENT_MODEL.TCL.index MDSPLUS/SNAPSHOT_MODEL.TCL.index MDSPLUS/TALLIES_MODEL.TCL.index MDSPLUS/TIMEDEP_MODEL.TCL.index MDSPLUS/DIAG_MODEL.TCL.index shots.python_movie compare_shots.py QSUB.shot.python_movie sql_solps.py Makefile
 
@@ -58,7 +59,7 @@ b2cdca.F:
 	ln -sf ${B25DIR}/src/documentation/b2cdca.F .
 
 b2cdci.F: ${B25DIR}/src/documentation/b2input.xml ${B25DIR}/src/documentation/b2cdci.py
-	-cd ${B25DIR}/src/documentation; python b2cdci.py || echo "! Error building b2cdci.F from b2input.xml" > ${B25DIR}/src/documentation/b2cdci.F
+	-cd ${B25DIR}/src/documentation; ${PYTHON} b2cdci.py || echo "! Error building b2cdci.F from b2input.xml" > ${B25DIR}/src/documentation/b2cdci.F
 	ln -sf ${B25DIR}/src/documentation/b2cdci.F .
 
 b2cdcn.F:
