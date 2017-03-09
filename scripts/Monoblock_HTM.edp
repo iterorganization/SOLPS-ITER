@@ -3,7 +3,7 @@ ifstream inputs("mnb_in.dat");
 real L,D1,D2,D3,Hw,Ltile,Tf,mflow,cpw,L1,aalpha,bbeta,ttheta;
 real sss1,sss2,H,alpha,beta,theta,Tgap,Xshadow;
 int n,npointout;
-int inout;
+int inout,nplots;
 string sinout;
 inputs>>L1;     // tile height
 inputs>>L;      // tile toroidal length
@@ -22,6 +22,8 @@ inputs>>cpw;    // Coolant specific heat
 inputs>>n;      // # of mesh points on longest edge
 inputs>>npointout;      // Number of points for output surface temperature
 inputs>>inout; //defines inner (1) or outer (0)
+inputs>>nplots;//2D plots are produce each nplots cuts
+int iplot=0;
 if (inout==1){
   sinout="i";}
 else{
@@ -97,13 +99,13 @@ border EE(t=0.,2.*pi){x=L/2.+D1/2.*cos(t);y=H+D1/2.*sin(t);};
 border FF(t=0.,2.*pi){x=L/2.+D2/2.*cos(t);y=H+D2/2.*sin(t);};
 border GG(t=0.,2.*pi){x=L/2.+D3/2.*cos(t);y=H+D3/2.*sin(t);};
 mesh block=buildmesh(A(n)+B(n)+C(n)+D(n)+EE(3*n)+FF(2*n)+GG(-2*n));
-plot(block,fill=1,ps="Domain.eps");
+plot(block,fill=1,ps="Domain_VT.eps");
 
 //PROBLEM DEFINITION
 fespace Vh(block,P1);
 Vh T=Tf,v,Told,TTT;
 int ww=block((L-D1)/2.-1e-4,H).region,cu=block((L-D2)/2.-(D1-D2)/4.,H).region,ccz=block((L-D3)/2.-(D2-D3)/4.,H).region;
-Vh kCCZ,kCu,kW,K,htc,HF,qq;
+Vh kCCZ,kCu,kW,K,htc,HF,qq,TMAX;
 
 problem divert(T,v)=int2d(block)(K*(dx(T)*dx(v)+dy(T)*dy(v)))-int1d(block,C)(qq*v)
 				   -int1d(block,GG)(htc*Tf*v)+int1d(block,GG)(htc*T*v);
@@ -112,8 +114,9 @@ real gamma,npoints=300.0,hfmax,hflux,CHF=32.0e6;
 //Loop on the monoblock length
 //ofstream ff00("Qwater.dat");
 //ofstream ff01("Qplasma.dat");
-ofstream ff02("Warning.dat");
+ofstream ff02("warning_VT_"+sinout+".log");
 real flag=0.0;
+TTMAX=0.0;
 for(int jj=0;jj<Ntile;jj+=1){
 	qq=(qpls(jj)/cos(beta+alpha))*(x>=Xshadow)+(qtot(jj)-qpls(jj));
 	real err=1.0,tol=1.e-3;
@@ -160,6 +163,10 @@ for(int jj=0;jj<Ntile;jj+=1){
 	}
 	
 	Tmax(jj)=T[].max;
+    if (Tmax(jj)>=TTMAX){
+      TTMAX=Tmax(jj);
+      TMAX=T;
+    }
 	
 	TTT=0.0*(region==ww)+0.0*(region==ccz)+T*(region==cu);
 	TmaxCU(jj)=TTT[].max;
@@ -179,10 +186,17 @@ for(int jj=0;jj<Ntile;jj+=1){
 		ff02 << "Warning! CuCrZr temperature exceeds properties range of 433 C. Tile number " <<jj<<" T_CCZ= "<< TmaxCCZ(jj)<<" C" <<endl;
 		flag=-9.0;
 	}
-	string name = "Temp2D_VT_"+sinout+"_" + (jj+1) + ".eps";
-	plot(T,fill=1,value=1,ps=name);
+    plot(T,fill=1,value=1);
+    if (jj==iplot){
+      string name = "Temp2D_VT_"+sinout+"_" + (jj+1) + ".eps";
+      plot(T,fill=1,value=1,ps=name);
+      iplot=iplot+nplots;
+    }
 }//end loop on monoblock length
-
+string name = "Temp2D_VT_"+sinout+"_" + Ntile+ ".eps";
+plot(T,fill=1,value=1,ps=name);
+name = "Temp2D_VT_"+sinout+"_MAX.eps";
+plot(TMAX,fill=1,value=1,ps=name);
 ofstream ff1("T_CCZ_VT_"+sinout+".dat");
 ofstream ff2("T_Cu_VT_"+sinout+".dat");
 ofstream ff3("T_W_VT_"+sinout+".dat");
@@ -207,5 +221,5 @@ for(int jj=0;jj<Ntile;jj+=1){
 cout<<"Maximum W temperature is "<<TTMAX<<" C at cut number "<<IMAX<<endl;
 cout<<"Water outlet temperature is "<<Twater(Ntile-1)<<" C"<<endl;
 if(flag<0.0){
-cout<<"WARNING! Something went wrong, please check the file 'warning.dat' for details"<<endl;
+cout<<"WARNING! Something went wrong, please check the file 'warning.log' for details"<<endl;
 }

@@ -18,18 +18,24 @@ REVERSE     =    0,          ! Integer, if >0 reverse the heat flux profile of t
 /
 
 &MESH
-NN        =           15,    ! \# of mesh points on H4
+NN        =           20,    ! \# of mesh points on H4
 /
 
+
+
 &COOLANT
-T_COOLANT     =     70.0,    ! Coolant inlet temperature [°C]
+T_COOLANT   =    128.595,    !Coolant inlet temperature [C]
 M_FLOW        =    0.734,    ! Coolant mass flow rate    [kg/s]
 CP_COOLANT    =   4.22e3,    ! Coolant specific heat capacity [J/kg/K]
 /
 
-&OUTPUT
 
+
+&OUTPUT
 NPOINTS      =    5, ! Number of points for output surface temperature
 LPOINTS      =    0.,7.0e-3,14.0e-3,21.0e-3,28.0e-3,   !Location of output surface temperature
+NPLOTS		=	10,									!Plot the 2D profile each NPLOTS cuts
 /
+
+
 

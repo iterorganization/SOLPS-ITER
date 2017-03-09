@@ -11,7 +11,7 @@ T_GAP		=    0.5e-3,     ! Toroidal gap between monoblocks [m]
 BETA        =    1.0,        ! poloidal chamfer [degrees]
 ALPHA     	=  	 0.5,        ! Vertical target tilting [degrees]
 THETA		=    4.2,		 ! Toroidal strike angle of magnetic flux lines [degrees]
-REVERSE		=    0,          ! Integer, if >0 reverse the heat flux profile from top to bottom 
+REVERSE   =    0,    ! Integer, if >0 reverse the heat flux profile from top to bottom
 /
 
 &MESH
@@ -21,7 +21,7 @@ NN          =    50,         ! # of mesh points on longest edge
 
 &COOLANT
 
-T_COOLANT   =    70.0,       ! Coolant inlet temperature [°C]
+T_COOLANT   =    70.0,    !Coolant inlet temperature [C]
 M_FLOW      =    0.734,      ! Coolant mass flow rate    [kg/s]
 CP_COOLANT  =    4.22e3,     ! Coolant specific heat capacity [J/kg/K]
 /
@@ -30,4 +30,5 @@ CP_COOLANT  =    4.22e3,     ! Coolant specific heat capacity [J/kg/K]
 
 NPOINTS		=	5,			 						! Number of points for output surface temperature
 LPOINTS		=	0.,7.0e-3,14.0e-3,21.0e-3,28.0e-3,	!Location of output surface temperature
+NPLOTS		=	10,									!Plot the 2D profile each NPLOTS cuts
 /

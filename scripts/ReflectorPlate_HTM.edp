@@ -6,7 +6,7 @@ int n,npointout;
 real Tf;
 real Ltile;
 real mflow,cpw;
-int inout;
+int inout,nplots,iplot=0;
 string sinout;
 inputs>>L1;
 inputs>>LL2;
@@ -29,6 +29,7 @@ inputs>>cpw;
 inputs>>n;
 inputs>>npointout;      // Number of points for output surface temperature
 inputs>>inout; //defines inner (1) or outer (0)
+inputs>>nplots;//2D plots are produce each nplots cuts
 if (inout==1){
   sinout="i";}
 else{
@@ -142,7 +143,7 @@ plot(block,ps="domain_RP.eps");
 
 //PROBLEM DEFINITION
 fespace Vh(block,P1);
-Vh T=Tf,v,Told,TTT;
+Vh T=Tf,v,Told,TTT,TMAX;
 Vh kCCZ,kSS,kW,kCu,K,qq;
 int cu1=block(L1/2.,H1+H2+H3+H4/2.).region,cu2=block(L1/2.+L1,H1+H2+H3+H4/2.).region,ww1=block(L1/2.,H1+H2+H3+H4+H5/2.).region,ww2=block(L1/2.+L1,H1+H2+H3+H4+H5/2.).region,ss=block(L1/2.,H1/2.).region,ccz=block(L1/2.,H1+H2+Hhole).region;
 
@@ -153,8 +154,9 @@ problem divert(T,v)=int2d(block)(K*(dx(T)*dx(v)+dy(T)*dy(v)))-int1d(block,DD2,DD
 //Loop on the RP length
 //ofstream ff00("Qwater.dat");
 //ofstream ff01("Qplasma.dat");
-ofstream ff02("Warning.dat");
+ofstream ff02("warning_RP_"+sinout+".log");
 real flag=0.0;
+TTMAX=0.0;
 for(int jj=0;jj<Ntile;jj+=1){
 	qq=(qpls(jj)/cos(beta+alpha))*(x>=Xshadow)+(qtot(jj)-qpls(jj));
 	real err=1.0,tol=1e-6;
@@ -205,6 +207,10 @@ for(int jj=0;jj<Ntile;jj+=1){
 	}
 	
 	Tmax(jj)=T[].max;
+    if (Tmax(jj)>=TTMAX){
+      TTMAX=Tmax(jj);
+      TMAX=T;
+    }
 
 	TTT=0.0*(region==ww1)+0.0*(region==ww2)+0.0*(region==cu1)+0.0*(region==cu2)+0.0*(region==ccz)+T*(region==ss);
 	TmaxSS(jj)=TTT[].max;
@@ -226,13 +232,18 @@ for(int jj=0;jj<Ntile;jj+=1){
 		ff02 << "Warning! Cu temperature exceeds properties range of 700 C. Tile number " <<jj<<" T_Cu= "<< TmaxCU(jj)<<" C" <<endl;
 		flag=-9.0;
 	}
-	string name = "Temp2D_VT_"+sinout+"_" + (jj+1) + ".eps";
-	plot(T,fill=1,value=1,ps=name);
+    plot(T,fill=1,value=1);	
+    if (jj==iplot){
+      string name = "Temp2D_RP_"+sinout+"_" + (jj+1) + ".eps";
+      plot(T,fill=1,value=1,ps=name);
+      iplot=iplot+nplots;
+    }
 }//end loop on RP length
 
-
-
-
+string name = "Temp2D_RP_"+sinout+"_" + Ntile+ ".eps";
+plot(T,fill=1,value=1,ps=name);
+name = "Temp2D_RP_"+sinout+"_MAX.eps";
+plot(TMAX,fill=1,value=1,ps=name);
 ofstream ff1("T_CCZ_RP_"+sinout+".dat");
 ofstream ff2("T_Cu_RP_"+sinout+".dat");
 ofstream ff3("T_W_RP_"+sinout+".dat");
@@ -258,5 +269,5 @@ for(int jj=0;jj<Ntile;jj+=1){
 cout<<"Maximum W temperature is "<<TTMAX<<" C at cut number "<<IMAX<<endl;
 cout<<"Water outlet temperature is "<<Twater(Ntile-1)<<" C"<<endl;
 if(flag<0.0){
-cout<<"WARNING! Something went wrong, please check the file 'warning.dat' for details"<<endl;
+cout<<"WARNING! Something went wrong, please check the file 'warning.log' for details"<<endl;
 }
