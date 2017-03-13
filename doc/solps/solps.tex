@@ -1163,6 +1163,7 @@ extracted from the {\tt run.log} file.
   \item[gtfl]\index{gtfl} [ANK] Replaces the specified links by the files they are linked to. [obsolete]
   \item[import\_files\_from\_convert]\index{import\_files\_from\_convert}\index{b2yt} Imports and renames the files produced by {\tt b2yt} in a {\tt convert} directory at the same level as the current directory to prepare the new converted case for a run
   \item[input.dat\_to\_mesh.extra]\index{input.dat\_to\_mesh.extra}\index{input.dat}\index{mesh.extra} Converts standard input (usually directed from a {\tt input.dat} file) into a {\tt mesh.extra} file.
+  \item[ITER\_divertor\_HTM]\index{ITER\_divertor\_HTM} Performs the thermal calculation of the divertor target monoblocks and reflector plate hypervapotron channels. It requires {\tt b2ymb.dat} and {\tt b2yrp.dat} to be present in the run directory. It runs \btwoplot to produce the heat load profile data of the targets and reflector plates. Then it runs {\tt b2ymb} to produce the input files (see \ref{sec:b2ymb}) for the {\tt FreeFem++}\cite{MR3043640} heat transfer model of the monoblock {\tt Monoblock\_HTM.edp} for the outer target. Afterwards, {\tt b2ymb} is ran again to produce the input files to run {\tt Monoblock\_HTM.edp} for the inner target. When the inner target is completed, {\tt b2yrp} (see \ref{sec:b2yrp}) is run to produce the input files for the inner reflector plate heat transfer model {\tt ReflectorPlate\_HTM.edp}. Finally, {\tt b2yrp} is executed one last time to produce the input files for the thermal analysis of the outer reflector plate.
   \item[itersubmit]\index{itersubmit} Command file to launch runs on the ITER HPC cluster. See Section \ref{b2run} for details.
   \item[itmsubmit]\index{itmsubmit} Command file to launch runs on the Marconi ITM Gateway machine. See Section \ref{b2run} for details.
   \item[ippitmsubmit]\index{ippitmsubmit} Command file to launch runs on the IPP ITM cluster. See Section \ref{b2run} for details.
@@ -1172,7 +1173,6 @@ extracted from the {\tt run.log} file.
   \item[lndr]\index{lndr} [ANK] routine to generate shadow trees.
   \item[mds\_id]\index{mds\_id} Obtains certain data necessary for run identification when saving to the {\tt MDSplus} database.
   \item[min\_ave\_max.awk]\index{min\_ave\_max.awk}
-  \item[monoblock\_ht\_model]\index{monoblock\_ht\_model} Runs the monoblock heat transfer model. It requires {\tt b2ymb.dat} to be present in the run directory. It runs \btwoplot to produce the heat load profile data of the targets, it runs {\tt b2ymb} to produce the input files (see \ref{sec:b2ymb}) and finally runs the {\tt FreeFem++}\cite{MR3043640} heat transfer model of the monoblock.
   \item[n2d]\index{n2d} Converts "Naka" format equilibrium files to {\tt DG} format (see Sec.~\ref{sec:equtrn}).
   \item[nn2d]\index{nn2d} Converts new "Naka" format equilibrium files to {\tt DG} format (see Sec.~\ref{sec:equtrn}).
   \item[nereg]\index{nereg} Shows averaged density per region.
@@ -1185,7 +1185,6 @@ extracted from the {\tt run.log} file.
   \item[QSUB.postprocess]\index{QSUB.postprocess} List of instructions appended to the {\tt B2.5} stand-alone submission scripts for run post-processing
   \item[QSUB.postprocess\_coupled]\index{QSUB.postprocess\_coupled} List of instructions appended to the \SOLPSITER submission scripts for run post-processing
   \item[quote\_pwd]\index{quote\_pwd} Returns the current working directory as a string with quotes (c.f.\ {\tt noquote\_pwd}).
-  \item[refplate\_ht\_model]\index{refplate\_ht\_model} Runs the reflector plate (RP) heat transfer model. It requires {\tt b2yrp.dat} to be present in the run directory. It runs \btwoplot to produce the heat load profile data of the RPs, it runs {\tt b2yrp} to produce the input files (see \ref{sec:b2yrp}) and finally runs the {\tt FreeFem++}\cite{MR3043640} heat transfer model of the RP.
   \item[resave\_mds]\index{resave\_mds} Update an archived {\tt MDSplus} case. A "-n" option allows for dry-run tests. A "-d" option allows to run within the chosen debugger. A "-s" option allows to update a {\tt B2.5} stand-alone case.
   \item[rlndr]\index{rlndr} Replaces a link address by another
   \item[rps]\index{rps} Shifts $\Psi$ values by a given amount within a {\tt DG} equilibrium file (see Sec.~\ref{sec:equtrn}).
@@ -18543,3 +18542,4 @@ introduced a very small effect, seen only as a jump in the residuals.
 \ifpdf
 \else
 \fi
+
