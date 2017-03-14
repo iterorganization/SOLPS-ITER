@@ -451,7 +451,7 @@ c*** names of the models
       
 
 c-----------------------------------------------------------------------
-c*** Data for post-processing windows: max. number of them
+c*** Data for postprocessing windows: max. number of them
       integer npwinx
       parameter (npwinx=16)
 

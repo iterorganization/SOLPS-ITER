@@ -950,7 +950,7 @@ c*** 12.  data for diagnostic module
 
 c*** CH4 - lines go here - TBD !
 
-c*** Post-processing windows
+c*** Postprocessing windows
 
       if(npwin.gt.0) then !{
         write(iunoo,707) npwin
