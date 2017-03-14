@@ -3122,7 +3122,6 @@ c
       use b2mod_types
       use b2mod_user_namelist
       implicit none
-#     include <KOPPLDIM.F>
       integer i, is, ii(1)
       character*32 hlp_frm
 
