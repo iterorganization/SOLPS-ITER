@@ -421,11 +421,16 @@ purpose, a master \SOLPSITER {\tt Makefile} is provided, located at \${\tt \{SOL
   \item[nox] The same as {\bf solps} above, but without linking to any graphical libraries:
     \begin{description}
       \item[carre\_nox] The {\tt Carre} grid generator will not generate graphs
-      \item[b25eirene\_nox] Only the {\tt B2.5-Eirene} executable will be built without graphics
+      \item[b25eirene\_nox] Only the {\tt B2.5-Eirene} executable will be built, without graphics
       \item[triang\_nox] The {\tt tria.eps} and {\tt triageom.eps} files will not be produced
       \item[uinp\_nox] The {\tt Uinp} translator from {\tt DivGeo} output to {\tt B2.5-Eirene} input
       \item[manual] Builds this manual
       \item[libs, divgeo, amds, sonnet-light] Will not be built
+    \end{description}
+  \item[all\_nox] The same as {\bf nox} above, but in addition:
+    \begin{description}
+      \item[b25\_nox] The {\tt B2.5} stand-alone plasma fluid solver and accompanying programs
+      \item[eirene\_nox] The {\tt Eirene} stand-alone Monte-Carlo neutral transport code
     \end{description}
   \item[nox\_build] The same as {\bf nox} above and used for compilation tests on the Continous Integration server:
     \begin{description}

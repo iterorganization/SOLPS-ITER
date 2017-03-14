@@ -60,7 +60,7 @@ endif
 unexport SOLPS_DEBUG
 unexport SOLPS_MPI
 
-.PHONY: solps solps_mpi all all_mpi carre divgeo b25 b25_mpi eirene eirene_mpi b25eirene b25eirene_mpi b25eirene_ig uinp triang fxdr sonnet-light b2sxdr manual local depend tags clean clean_% %_debug VERSION help
+.PHONY: solps solps_mpi nox nox_mpi all all_nox all_mpi carre carre_nox divgeo b25 b25_mpi b25_nox b25_ig b25_all_mpi eirene eirene_mpi eirene_nox b25eirene b25eirene_mpi b25eirene_nox b25eirene_ig b25eirene_all_mpi b25eirene_mpi_nox uinp uinp_nox uinp_mpi triang triang_nox amds fxdr sonnet-light b2sxdr manual local depend tags listobj clean clean_% debug %_debug VERSION help nox_build nox_build_mpi
 
 DEFAULT: solps
 
@@ -80,6 +80,8 @@ nox:       carre_nox    b25eirene_nox uinp_nox triang_nox manual
 nox_mpi:   carre_nox b25eirene_mpi_nox uinp_mpi_nox triang_nox manual
 
 all:       carre divgeo b25     eirene     b25eirene     uinp     triang amds sonnet-light manual
+
+all_nox:   carre_nox    b25_nox eirene_nox b25eirene_nox uinp_nox triang_nox manual
 
 all_mpi:   carre divgeo b25_mpi eirene_mpi b25eirene_mpi uinp_mpi triang amds sonnet-light manual
 
@@ -366,15 +368,19 @@ clean_manual:
 
 # help
 help:
-	@echo "          solps : compile serial version (main codes)"
-	@echo "      solps_mpi : compile MPI version (main codes)"
-	@echo "    solps_debug : compile debug version (serial) (main codes)"
-	@echo "solps_mpi_debug : compile debug version (MPI) (main codes)"
-	@echo "            all : compile serial version (all codes)"
-	@echo "        all_mpi : compile MPI version (all codes)"
-	@echo "      all_debug : compile debug version (serial) (all codes)"
-	@echo "  all_mpi_debug : compile debug version (MPI) (all codes)"
-	@echo "            nox : compile serial version (no X main codes)"
-	@echo "        nox_mpi : compile MPI version (no X main codes)"
-	@echo "      nox_debug : compile debug version (serial) (no X main codes)"
-	@echo "  nox_mpi_debug : compile debug version (MPI) (no X main codes)"
+	@echo "           solps : compile serial version (main codes)"
+	@echo "       solps_mpi : compile MPI version (main codes)"
+	@echo "      solps_debug : compile debug version (serial) (main codes)"
+	@echo "  solps_mpi_debug : compile debug version (MPI) (main codes)"
+	@echo "              all : compile serial version (all codes)"
+	@echo "          all_mpi : compile MPI version (all codes)"
+	@echo "        all_debug : compile debug version (serial) (all codes)"
+	@echo "    all_mpi_debug : compile debug version (MPI) (all codes)"
+	@echo "              nox : compile serial version (no X main codes)"
+	@echo "          all_nox : compile serial version (all no X codes)"
+	@echo "          nox_mpi : compile MPI version (no X main codes)"
+	@echo "      all_nox_mpi : compile MPI version (all no X codes)"
+	@echo "        nox_debug : compile debug version (serial) (no X main codes)"
+	@echo "    all_nox_debug : compile debug version (serial) (all no X codes)"
+	@echo "    nox_mpi_debug : compile debug version (MPI) (no X main codes)"
+	@echo "all_nox_mpi_debug : compile debug version (MPI) (all no X codes)"
