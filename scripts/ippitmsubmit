@@ -103,7 +103,7 @@ echo Using submission file template $QSUB
 
 if ($PROCS != 1) then
   head -n 2 $QSUB > $NAMP
-  echo "#$ -pe impi_hydra #PROCS#" >> $NAMP
+  echo "#$ -pe impi_hydra.* #PROCS#" >> $NAMP
   set lines = `wc $QSUB | awk '{printf "%s",$1-2;printf "\n"}'`
   tail --lines=$lines $QSUB >> $NAMP
 else
