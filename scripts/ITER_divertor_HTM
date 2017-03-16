@@ -1,9 +1,14 @@
 #! /usr/bin/env tcsh
 
-if ((! -s wlld_trgi.dat) | (! -s wlld_trgo.dat) | (! -s wlld_irp.dat) | (! -s wlld_orp.dat))  then
+if ((! -s wlld_trgi.dat) | (! -s wlld_trgo.dat) | (! -s wlld_irp.dat) | (! -s wlld_orp.dat) | \
+    (! -s wlly_trgi.dat) | (! -s wlly_trgo.dat) | (! -s wlly_irp.dat) | (! -s wlly_orp.dat))  then
   echo "1000 wlld" | b2plot
-  cp ./b2pl.exe.dir/wlld_trg* .
-  if ((! -s wlld_trgi.dat) | (! -s wlld_trgo.dat) | (! -s wlld_irp.dat) | (! -s wlld_orp.dat))  then
+  cp ./b2pl.exe.dir/wll*_trgi.dat .
+  cp ./b2pl.exe.dir/wll*_irp.dat .
+  cp ./b2pl.exe.dir/wll*_trgo.dat .
+  cp ./b2pl.exe.dir/wll*_orp.dat .
+  if ((! -s wlld_trgi.dat) | (! -s wlld_trgo.dat) | (! -s wlld_irp.dat) | (! -s wlld_orp.dat) | \
+      (! -s wlly_trgi.dat) | (! -s wlly_trgo.dat) | (! -s wlly_irp.dat) | (! -s wlly_orp.dat))  then
     echo '############ ERROR ##########'
     echo 'Some of the input files are missing. Check the presence of wlld_[irp,orp,trgi,trgo].dat. Calculation aborted'
     exit 1
