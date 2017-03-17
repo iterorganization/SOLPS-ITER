@@ -67,7 +67,8 @@ b2cdci.F: ${B25DIR}/src/documentation/b2input.xml ${B25DIR}/src/documentation/b2
 	-cd ${B25DIR}/src/documentation; ${PYTHON} b2cdci.py || echo "! Error building b2cdci.F from b2input.xml" > ${B25DIR}/src/documentation/b2cdci.F
 	ln -sf ${B25DIR}/src/documentation/b2cdci.F .
 
-b2cdcn.F:
+b2cdcn.F: ${B25DIR}/src/documentation/b2input.xml ${B25DIR}/src/documentation/b2cdcn.py
+	-cd ${B25DIR}/src/documentation; ${PYTHON} b2cdcn.py || echo "! Error building b2cdcn.F from b2input.xml" > ${B25DIR}/src/documentation/b2cdcn.F
 	ln -sf ${B25DIR}/src/documentation/b2cdcn.F .
 
 b2cdcr.F:
