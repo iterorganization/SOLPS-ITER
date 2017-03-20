@@ -13,7 +13,6 @@ GV="gv $GV_OPT"
   read u
   export DEVICE=$u
 }
-[ "$SOLPS_CENTRAL" = 'yes' ] && DEVICE=$DEVICE/$USER
 
 TRIADIR_back=$TRIADIR
 TRIASTEM_back=$TRIASTEM
