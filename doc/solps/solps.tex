@@ -522,8 +522,9 @@ On the \SOLPSITER web site (\href{https://portal.iter.org/departments/POP/CM/IMA
 
 \section{Using a central installation}
 \label{Using a central installation}
+\index{add\_central\_device}\index{setup.csh}
 
-For systems with several users it is advisable to set up a central SOLPS installation that can be maintained by an administrator. The scripts have been set up to allow this by specifying a SOLPSWORK directory that is different from the default \$SOLPSTOP/runs and setting the environment variable SOLPS\_CENTRAL to {\tt 'yes'}.  Each user will then have a directory for their runs, \$SOLPSWORK, which should contain a file named SOLPSTOP which contains the value for \$SOLPSTOP. Using an example where each user has their runs in \$HOME/solps-runs then the central installation could have a setup.csh.local with the following lines:
+For systems with several users it is advisable to set up a central \SOLPSITER installation that can be maintained by an administrator. The scripts have been set up to allow this by specifying a \${\tt SOLPSWORK} directory that is different from the default \${\tt \{SOLPSTOP\}/runs} and setting the environment variable {\tt SOLPS\_CENTRAL} to {\tt 'yes'}.  Each user will then have a directory for their runs, \${\tt SOLPSWORK}, which should contain a file named {\tt SOLPSTOP} which contains the value for \${\tt SOLPSTOP}. Using an example where each user has their runs in \${\tt \{HOME\}/solps-runs} then the central installation could have a {\tt setup.csh.local} with the following lines:
 \begin{verbatim}
 setenv SOLPSWORK /home/$USER/solps-runs
 alias sbr 'cd ${SOLPSWORK}'
@@ -533,9 +534,9 @@ if (-e $SOLPSWORK/setup.csh.local) then
 endif
 setenv SOLPS_CENTRAL "yes"
 \end{verbatim}
-This will set SOLPSWORK, create the appropriate SOLPSTOP file, and load a setup.csh.local for each user if it exists. The scripts such as dg, carre, and triang then check if SOLPS\_CENTRAL is set and will create the meshes, etc under \$DEVICE/\$USER instead of just \$DEVICE. It is therefore important that the DivGeo/device, Carre/meshes and Triang/triangles and each \$DEVICE subdirectory have the permissions set such that each user can write to it. This could be by having a solps group, for example, or by providing write access for all users. To avoid issues where the first user to create a \$DEVICE directory will do so without the correct permissions, a add\_central\_device script has been provided which will create the appropriate directories with write access for all users. The administrator should run this and add each DEVICE that will be used by the group.
+This will set \${\tt SOLPSWORK}, create the appropriate {\tt SOLPSTOP} file, and load a {\tt setup.csh.local} for each user if it exists. The scripts such as {\tt dg}, {\tt carre}, and {\tt triang} then check if {\tt SOLPS\_CENTRAL} is set and will create the meshes, etc under \${\tt \{DEVICE\}/}\${\tt \{USER\}} instead of just \${\tt \{DEVICE\}}. It is therefore important that the {\tt DivGeo/device}, {\tt Carre/meshes} and {\tt Triang/triangles} and each \${\tt \{DEVICE\}} subdirectory have the permissions set such that each user can write to it. This could be by having a {\tt solps} group, for example, or by providing write access for all users. To avoid issues where the first user to create a \${\tt \{DEVICE\}} directory will do so without the correct permissions, a {\tt add\_central\_device} script has been provided which will create the appropriate directories with write access for all users. The administrator should run this and add each {\tt DEVICE} that will be used by the group.
 
-Each user will then cd to the central installation directory, run tcsh; source setup.csh, and the rest of the usage would be standard.
+Each user will then {\tt cd} to the central installation directory, run {\tt tcsh; source setup.csh}, and the rest of the usage would be standard.
 
 \chapter{The structure}
 \label{cha:structure}
@@ -1126,6 +1127,7 @@ the {\tt SOLPS\_FLUIDS} or {\tt NREG} files is not found, the necessary informat
 extracted from the {\tt run.log} file.
 \item Utility
   \begin{description}
+  \item[add\_central\_device DEVICE]\index{add\_central\_device} Creates writeable directories for a given {\tt DEVICE} for a centralized \SOLPSITER installation. 
   \item[ave.awk \#1]\index{ave.awk} Performs an average over the \#1 rows (default all).
   \item[awk.first+even]\index{awk.first+even} Selects the first and every even column from an array of data.
   \item[awk.integrate]\index{awk.integrate} Integrates an array of data.
@@ -17072,7 +17074,7 @@ specified as a third argument:
 \index{cropequ}\index{DG, crop equilibrium}
 
 This is an executable (no corresponding script) that crops a
-{\tt DG} equilibrium file.  The code is invoked with:
+{\tt DG} equilibrium file. The code is invoked with:
 (the file suffixes are recommended for clarity
 and are not enforced):
 \begin{quote}
@@ -17083,11 +17085,37 @@ The code will print out the dimension and spatial extent of the input
 equilibrium grid then request the values for the output grid in the
 order: number of radial grid points, minimum radius, maximum radius,
 number of vertical grid points, minimum vertical coordinate,
-maximum vertical coordinate.  The maximum number of grid points is 257
-(can be increased via a parameter statement in the code).  The code
-will requires the requested spatial extent to lie within that of the
+maximum vertical coordinate. The code
+will require the requested spatial extent to lie within that of the
 input grid.  If it does not, the offending parameter is reset to
 match the corresponding value from the input grid.
+
+The output file will contain a new equilibrium, re-computed with
+the new specified grid dimensions, with interpolation of the data
+to the new grid point locations.
+
+\subsubsection{dgcut}
+\index{dgcut}\index{DG, chop equilibrium}
+
+This is an executable (no corresponding script) that chops a
+{\tt DG} equilibrium file. The code is invoked with:
+(the file suffixes are recommended for clarity
+and are not enforced):
+\begin{quote}
+{\tt dgcut $<$filein$>$.equ $<$fileout$>$.equ}
+\end{quote}
+
+The code will print out the spatial extent of the input
+equilibrium grid then request the values for the output grid in the
+order: minimum radius, maximum radius,
+minimum vertical coordinate, maximum vertical coordinate.
+The code
+will require the requested spatial extent to lie within that of the
+input grid.  If it does not, the offending parameter is reset to
+match the corresponding value from the input grid.
+
+The output file will contain only the data from the original
+input file that is within the new coordinate bounds being prescribed.
 
 \subsubsection{prinequ}
 \index{prinequ}\index{DG, print equilibrium}
