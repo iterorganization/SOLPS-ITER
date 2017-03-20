@@ -42,6 +42,8 @@ the files carre.log and traduit.log, respectively.
   export DEVICE=$u
 }
 
+[ "$SOLPS_CENTRAL" = 'yes' ] && DEVICE=$DEVICE/$USER
+
 # griddir=${CARRE_GRIDDIR-$SOLPSTOP/src/Sonnet/output/ascii/${Model_Class-iter}}
 # griddir=${CARRE_GRIDDIR-$SOLPSTOP/src/Sonnet/output/ascii/${DEVICE-iter}}
 export CARRE_TOPDIR=$SOLPSTOP/modules/Carre

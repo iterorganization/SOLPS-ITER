@@ -27,6 +27,7 @@
   read u
   export DEVICE=$u
 }
+[ "$SOLPS_CENTRAL" = 'yes' ] && DEVICE=$DEVICE/$USER
 
 CLASSDIR=${DG}/device/$DEVICE
 [ -d "$CLASSDIR" ] || {

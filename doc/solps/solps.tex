@@ -520,6 +520,23 @@ to refresh the list of executables to be found with the search path.
 
 On the \SOLPSITER web site (\href{https://portal.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}{https://portal.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}), in the folder {\em Examples}, one can find a few example cases for \SOLPSITER runs, in both {\tt B2.5} stand-alone or {\tt B2.5-Eirene} coupled modes.
 
+\section{Using a central installation}
+\label{Using a central installation}
+
+For systems with several users it is advisable to set up a central SOLPS installation that can be maintained by an administrator. The scripts have been set up to allow this by specifying a SOLPSWORK directory that is different from the default \$SOLPSTOP/runs and setting the environment variable SOLPS\_CENTRAL to {\tt 'yes'}.  Each user will then have a directory for their runs, \$SOLPSWORK, which should contain a file named SOLPSTOP which contains the value for \$SOLPSTOP. Using an example where each user has their runs in \$HOME/solps-runs then the central installation could have a setup.csh.local with the following lines:
+\begin{verbatim}
+setenv SOLPSWORK /home/$USER/solps-runs
+alias sbr 'cd ${SOLPSWORK}'
+echo $SOLPSTOP >! $SOLPSWORK/SOLPSTOP
+if (-e $SOLPSWORK/setup.csh.local) then 
+  source $SOLPSWORK/setup.csh.local
+endif
+setenv SOLPS_CENTRAL "yes"
+\end{verbatim}
+This will set SOLPSWORK, create the appropriate SOLPSTOP file, and load a setup.csh.local for each user if it exists. The scripts such as dg, carre, and triang then check if SOLPS\_CENTRAL is set and will create the meshes, etc under \$DEVICE/\$USER instead of just \$DEVICE. It is therefore important that the DivGeo/device, Carre/meshes and Triang/triangles and each \$DEVICE subdirectory have the permissions set such that each user can write to it. This could be by having a solps group, for example, or by providing write access for all users. To avoid issues where the first user to create a \$DEVICE directory will do so without the correct permissions, a add\_central\_device script has been provided which will create the appropriate directories with write access for all users. The administrator should run this and add each DEVICE that will be used by the group.
+
+Each user will then cd to the central installation directory, run tcsh; source setup.csh, and the rest of the usage would be standard.
+
 \chapter{The structure}
 \label{cha:structure}
 
