@@ -22,7 +22,10 @@ module load fontconfig
 module load cairo
 module load mdsplus
 module load make
-module load imas/3.7.3/ual/3.3.14
+module load imas/3.7.4/ual/3.4.0
+module load fc2k
+module load kepler
+module load xmllib/2.0.0-imas-3.7.4-intel-12.0.2
 module load python/2.7/11
 module load totalview
 
