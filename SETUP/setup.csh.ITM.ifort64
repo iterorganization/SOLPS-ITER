@@ -19,7 +19,8 @@ endif
 module load texlive
 
 #module load imas
-#imasdb solps-iter
+source $ITMSCRIPTDIR/set_tutorial_env.tcsh
+imasdb solps-iter
 
 # module load itm-paraview
 
