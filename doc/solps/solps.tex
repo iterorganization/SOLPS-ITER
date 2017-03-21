@@ -11431,9 +11431,9 @@ fo3dtr \index{fo3dtr}\index{b2time.nc, fo3dtr} & poloidal total ion flux, outboa
   \end{longtable}
 \end{center}
 
-Additional multidimensional writes to b2time.nc can be made using the b2mwti\_2dwrite switch.
-If set to 1 then a few 2D arrays (ne, Te, Ti) are output with each write to b2time.nc. If set
-to 2 then additional quantities such as fluxes are added, see the table below.
+Additional multi-dimensional writes to {\tt b2time.nc} can be made using the ``b2mwti\_2dwrite'' switch.
+If set to ``1'' then a few 2D arrays ($n_e$, $T_e$, $T_i$) are output with each write to {\tt b2time.nc}. If set
+to ``2'' then additional quantities such as fluxes are added, see the table below.
 \begin{center}
     \begin{longtable}{|l|l|l|}
     \hline
@@ -11446,25 +11446,30 @@ to 2 then additional quantities such as fluxes are added, see the table below.
     \multicolumn{3}{|l|}{\small\sl continued on next page} \\
     \hline \endfoot
     \endlastfoot
+    \multicolumn{3}{|c|}{If b2mwti\_2dwrite $\ge$ 1} \\
+    \hline
     ne2d \index{ne2d}\index{b2time.nc, ne2d} & electron density & $m^{-3}$ \\
     te2d \index{te2d}\index{b2time.nc, te2d} & electron temperature & $eV$ \\
     ti2d \index{ti2d}\index{b2time.nc, ti2d} & ion temperature & $eV$ \\
-    po2d \index{po2d}\index{b2time.nc, po2d} & potential & $V$ \\
+    \hline
+    \multicolumn{3}{|c|}{and if b2mwti\_2dwrite = 2} \\
+    \hline
+    po2d \index{po2d}\index{b2time.nc, po2d} & electric potential & $V$ \\
     kin2d \index{kin2d}\index{b2time.nc, kin2d} & parallel kinetic energy & $J$ \\
-    rsahi2d \index{rsahi2d}\index{b2time.nc, rsahi2d} & iz energy source/sink & $W$ \\
-    rsana2d \index{rsana2d}\index{b2time.nc, rsana2d} & iz rate & $s^{-1}$ \\        
-    rrahi2d \index{rrahi2d}\index{b2time.nc, rrahi2d} & rc energy source/sink & $W$ \\
-    rrana2d \index{rrana2d}\index{b2time.nc, rrana2d} & rc rate & $s^{-1}$ \\        
-    rcxhi2d \index{rcxhi2d}\index{b2time.nc, rcxhi2d} & cx energy source/sink & $W$ \\
-    rcxna2d \index{rcxna2d}\index{b2time.nc, rcxna2d} & cx rate & $s^{-1}$ \\        
+    rsahi2d \index{rsahi2d}\index{b2time.nc, rsahi2d} & ionization energy source/sink & $W$ \\
+    rsana2d \index{rsana2d}\index{b2time.nc, rsana2d} & ionization rate & $s^{-1}$ \\        
+    rrahi2d \index{rrahi2d}\index{b2time.nc, rrahi2d} & recombination energy source/sink & $W$ \\
+    rrana2d \index{rrana2d}\index{b2time.nc, rrana2d} & recombination rate & $s^{-1}$ \\        
+    rcxhi2d \index{rcxhi2d}\index{b2time.nc, rcxhi2d} & charge exchange energy source/sink & $W$ \\
+    rcxna2d \index{rcxna2d}\index{b2time.nc, rcxna2d} & charge exchange rate & $s^{-1}$ \\        
     rqrad2d \index{rqrad2d}\index{b2time.nc, rqrad2d} & Line radiation rate & $W$ \\
     rqahe2d \index{rqahe2d}\index{b2time.nc, rqahe2d} & Electron cooling rate & $W$ \\
     fhe2d \index{fhe2d}\index{b2time.nc, fhe2d} & Electron heat flux & $W$ \\
     fhi2d \index{fhi2d}\index{b2time.nc, fhi2d} & Ion heat flux & $W$ \\
-    fch2d \index{fch2d}\index{b2time.nc, fch2d} & Current & $A$ \\
+    fch2d \index{fch2d}\index{b2time.nc, fch2d} & Electric crrent & $A$ \\
     fna2d \index{fna2d}\index{b2time.nc, fna2d} & Particle flux & $s^{-1}$ \\            
     \hline
-    \caption{Multidimensional time dependent quantities stored in b2time.nc}
+    \caption{Multi-dimensional time-dependent quantities stored in b2time.nc}
     \label{tab:5db2time}
   \end{longtable}
 \end{center}
