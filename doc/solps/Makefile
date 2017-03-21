@@ -71,6 +71,9 @@ b2cdcn.F: ${B25DIR}/src/documentation/b2input.xml ${B25DIR}/src/documentation/b2
 	-cd ${B25DIR}/src/documentation; ${PYTHON} b2cdcn.py || echo "! Error building b2cdcn.F from b2input.xml" > ${B25DIR}/src/documentation/b2cdcn.F
 	ln -sf ${B25DIR}/src/documentation/b2cdcn.F .
 
+b2cdcr.F:
+	ln -sf ${B25DIR}/src/documentation/b2cdcr.F .
+
 b2cdcv.F:
 	ln -sf ${B25DIR}/src/documentation/b2cdcv.F .
 
