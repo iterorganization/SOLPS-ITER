@@ -1,0 +1,102 @@
+#! /bin/bash
+
+ACTDIR=`pwd`
+
+# find directory containing running averages
+if [ -d b2mn.exe.dir/run_av ] 
+then
+  RUN_AV_DIR=${ACTDIR}/b2mn.exe.dir/run_av
+  CP_DIR=${ACTDIR}/b2mn.exe.dir
+elif [ -d run_av ] 
+then
+  RUN_AV_DIR=${ACTDIR}/run_av
+  CP_DIR=${ACTDIR}
+else
+  RUN_AV_DIR=${ACTDIR}/
+  CP_DIR=${ACTDIR}
+fi
+
+echo "run_av_dir = " $RUN_AV_DIR
+echo "cp_dir = " $CP_DIR
+
+if [ ! "$(ls -A $RUN_AV_DIR/run_av.*)" ] 
+then
+  echo "no files with averages found"
+  exit
+fi
+
+# make execution directory
+rm -rf res.exe.dir
+
+mkdir res.exe.dir
+cd res.exe.dir
+cp ${CP_DIR}/b2mn.dat .
+
+# prepare B2.5 input file 
+cat << EOF >> b2mn.dat
+'b2mndr_ntim'                        '2'             # number of time steps
+'b2mndt_rxf'                         '0.0'           # under-relaxation factor
+'b2mndr_av_read'                     '1'
+'b2mndr_b2time'                      '100'
+EOF
+
+# copy necessary files
+ln -s ${CP_DIR}/AMJUEL ${CP_DIR}/HYDHEL ${CP_DIR}/METHANE ${CP_DIR}/SPUTER ${CP_DIR}/H2VIBR ${CP_DIR}/fort.21 ${CP_DIR}/fort.22 ${CP_DIR}/graphite_ext.dat ${CP_DIR}/mo_ext.dat ${CP_DIR}/input.dat .
+ln -s ${CP_DIR}/fort.* .
+ln -s ${CP_DIR}/b2fgmtry ${CP_DIR}/b2fpardf ${CP_DIR}/b2frates .
+ln -s $ACTDIR/b2a*.dat $ACTDIR/b2a*.prt $ACTDIR/stra.dat $ACTDIR/weis.dat .
+ln -s $ACTDIR/b2.* .
+
+cp ${CP_DIR}/b2fstati b2fstati
+
+rm b2ftrace_av
+
+# loop over all run_av files
+for i in $RUN_AV_DIR/run_av.*
+do
+
+  ln -s $i b2faveri
+
+# run 2 timesteps on averaged plasma and source profiles
+  b2run b2mn > /dev/null 2>&1
+
+# find index of running average
+  FNAME=$i
+  NO="${FNAME##*.}"
+  CHARS=`printf "%21.13E " $NO`
+  
+  if [ ! -e b2ftrace_av ]
+  then
+# copy header part of b2ftrace into b2ftrace_av
+    awk '/real/ {exit} {print}' b2ftrace > b2ftrace_av
+  fi
+
+# copy last "residual block" of b2ftrace into b2ftrace_av
+
+# reverse b2ftrace
+  tac b2ftrace > ecartf2b
+# write first lines up to keyword "real" into helpfile last
+  cat ecartf2b | awk "flag != 1; /real/ { flag = 1 }; " > last
+# write the line containing "real" into b2ftrace_av
+  tail -1 last >> b2ftrace_av
+# write the second to last line into b2ftrace_av and 
+# replace the iteration number with the running average index
+  tail -2 last | head -1 | awk '{$2 = "'"$CHARS"'"; print $0 }' >> b2ftrace_av
+# reverse last 
+  tac last > tsal
+# write reversed last starting at line 3
+  tail -n +3 tsal >> b2ftrace_av
+  
+  rm b2faveri b2mn.prt ecartf2b last tsal
+done
+
+cp b2ftrace_av b2ftrace
+resall_D
+
+cp b2fstate $ACTDIR/b2fstate_average
+cp b2ftrace_av $ACTDIR
+
+cd $ACTDIR
+rm -rf res.exe.dir
+
+
