@@ -8,6 +8,8 @@ set -A f -- $TRIATRI
 coord=${f[0]}
 elem=${f[1]}
 
+[ "$SOLPS_CENTRAL" = 'yes' ] && DEVICE=$DEVICE/$USER
+
 NAME=${0##*/}
 Usage="$NAME :  conversion of TRIA mesh into DG template.   Usage:
 

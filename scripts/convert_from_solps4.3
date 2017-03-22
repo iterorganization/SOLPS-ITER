@@ -1,5 +1,7 @@
 #! /usr/bin/env ksh
 
+[ "$SOLPS_CENTRAL" = 'yes' ] && DEVICE=$DEVICE/$USER
+
 echo "DEVICE = " $DEVICE
 echo "Converting shot number " $1
 [ -d $SOLPSWORK/$DEVICE ] || mkdir $SOLPSWORK/$DEVICE

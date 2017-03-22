@@ -15,7 +15,7 @@
 %              component                                                       %
 % scrname:     A cell of length nd with strings stating the names of each      %
 %              source component                                                %
-% geomb2:      Geometry structure created by b2getgeom                         %
+% comuse:      Structure containing commonly-used variables (from get_comuse)  %
 % indrad:      Logical matrix of size nx*ny that is true for cells where       %
 %              balance should be performed                                     %
 % area:        The area by which each flux should be divided                   %
@@ -27,10 +27,10 @@
 %                                                                              %
 % David Moulton (david.moulton@ccfe.ac.uk) January 2017.                       %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function areadown = radial_balance(flux,src,res,totname,fluxname,srcname,geomb2,indrad,area,reverse,ismom,axbal,unitstr)
+function areadown = radial_balance(flux,src,res,totname,fluxname,srcname,comuse,indrad,area,reverse,ismom,axbal,unitstr)
 
-rightix = geomb2.rightix+1; % Convert to one-based
-rightiy = geomb2.rightiy+1;
+rightix = comuse.rightix+1; % Convert to one-based
+rightiy = comuse.rightiy+1;
 if ~reverse
     reversefac = 1;
     momfac = 1;
@@ -53,11 +53,11 @@ end
 % Integrated sources:
 srcint = [];
 for i=1:size(src,3)
-    srcint(:,i) = sumpol(src(:,:,i),indrad,geomb2);
+    srcint(:,i) = sumpol(src(:,:,i),indrad,comuse);
 end
 
 % Integrated residual:
-resint = sumpol(res,indrad,geomb2);
+resint = sumpol(res,indrad,comuse);
 
 % Areas at the ends:
 arealeft = findlr(area,indrad,'left');
@@ -66,12 +66,12 @@ arearight = findlr(area,indrad,'right',rightix,rightiy);
 % x - x_sep at outer mid-plane (cm):
 xmxsep = [];
 in = 1;
-x = [zeros(geomb2.nx,1),cumsum(sqrt(diff(geomb2.cr,1,2).^2+diff(geomb2.cz,1,2).^2),2)];
-xompsep = 0.5*(x(geomb2.omp,geomb2.sep+1)+x(geomb2.omp,geomb2.sep+2));
-for iy=1:geomb2.ny
+x = [zeros(comuse.nx,1),cumsum(sqrt(diff(comuse.cr,1,2).^2+diff(comuse.cz,1,2).^2),2)];
+xompsep = 0.5*(x(comuse.omp,comuse.sep+1)+x(comuse.omp,comuse.sep+2));
+for iy=1:comuse.ny
     inds = find(indrad(:,iy));
     if ~isempty(inds)
-        xmxsep(in) = 100*(x(geomb2.omp,iy)-xompsep);
+        xmxsep(in) = 100*(x(comuse.omp,iy)-xompsep);
         in = in+1;
     end
 end
@@ -88,9 +88,10 @@ else
 end
 
 % Total balance with residuals:
-plot(xmxsep,momfac*reversefac*sum(fluxup,2)./areadown','marker','.','parent',axbal(1),'displayname',totname{1});
-plot(xmxsep,momfac*reversefac*sum(fluxdown,2)./areadown','marker','.','parent',axbal(1),'displayname',totname{2});
-plot(xmxsep,momfac*sum(srcint,2)./areadown','marker','.','parent',axbal(1),'displayname',totname{3});
+cmap = comuse.cmap;
+plot(xmxsep,momfac*reversefac*sum(fluxup,2)./areadown','marker','.','parent',axbal(1),'displayname',totname{1},'color',cmap(1,:)); cmap=circshift(cmap,-1);
+plot(xmxsep,momfac*reversefac*sum(fluxdown,2)./areadown','marker','.','parent',axbal(1),'displayname',totname{2},'color',cmap(1,:)); cmap=circshift(cmap,-1);
+plot(xmxsep,momfac*sum(srcint,2)./areadown','marker','.','parent',axbal(1),'displayname',totname{3},'color',cmap(1,:)); cmap=circshift(cmap,-1);
 coderes = momfac*(resint./areadown)';
 plot(xmxsep,coderes,'-m','parent',axbal(1),'displayname',[totname{4},' (code)']);
 
@@ -100,53 +101,52 @@ plot(xmxsep,postres,'-g','parent',axbal(1),'displayname',[totname{4},' (post-cal
 fprintf('Radial balance: the maximum difference between code- and post-calculated residuals is %e%%\n',max(abs((coderes-postres)./coderes)*100));
 
 hl = legend(axbal(1),'show','location','best');
-set(hl,'interpreter','latex');
-title(axbal(1),'Total radial balance','interpreter','latex');
+title(axbal(1),'Total radial balance','fontweight','normal');
 axis(axbal(1),'tight');
-xlabel(axbal(1),'$x-x_{\rm{sep}}$ (cm)','interpreter','latex');
-ylabel(axbal(1),['(',unitstr,')'],'interpreter','latex');
+xlabel(axbal(1),'x-x_{sep} (cm)');
+ylabel(axbal(1),['(',unitstr,')']);
 
 % Decompose upstream fluxes:
+cmap = comuse.cmap;
 for i=1:size(fluxup,2)
     % Only make the plot if the flux is non-zero somewhere
     if any(fluxup(:,i))
-        plot(xmxsep,momfac*reversefac*fluxup(:,i)./areadown','marker','.','parent',axbal(2),'displayname',fluxname{i});
+        plot(xmxsep,momfac*reversefac*fluxup(:,i)./areadown','marker','.','parent',axbal(2),'displayname',fluxname{i},'color',cmap(1,:)); cmap=circshift(cmap,-1);
     end
 end
 hl = legend(axbal(2),'show','location','best');
-set(hl,'interpreter','latex');
-title(axbal(2),['Decomp. of ',totname{1}],'interpreter','latex');
+title(axbal(2),['Decomp. of ',totname{1}],'fontweight','normal');
 axis(axbal(2),'tight');
-xlabel(axbal(2),'$x-x_{\rm{sep}}$ (cm)','interpreter','latex');
-ylabel(axbal(2),['(',unitstr,')'],'interpreter','latex');
+xlabel(axbal(2),'x-x_{sep} (cm)');
+ylabel(axbal(2),['(',unitstr,')']);
 
 % Decompose downstream fluxes:
+cmap = comuse.cmap;
 for i=1:size(fluxdown,2)
     % Only make the plot if the flux is non-zero somewhere
     if any(fluxdown(:,i))
-        plot(xmxsep,momfac*reversefac*fluxdown(:,i)./areadown','marker','.','parent',axbal(3),'displayname',fluxname{i});
+        plot(xmxsep,momfac*reversefac*fluxdown(:,i)./areadown','marker','.','parent',axbal(3),'displayname',fluxname{i},'color',cmap(1,:)); cmap=circshift(cmap,-1);
     end
 end
 hl = legend(axbal(3),'show','location','best');
-set(hl,'interpreter','latex');
-title(axbal(3),['Decomp. of ',totname{2}],'interpreter','latex');
+title(axbal(3),['Decomp. of ',totname{2}],'fontweight','normal');
 axis(axbal(3),'tight');
-xlabel(axbal(3),'$x-x_{\rm{sep}}$ (cm)','interpreter','latex');
-ylabel(axbal(3),['(',unitstr,')'],'interpreter','latex');
+xlabel(axbal(3),'x-x_{sep} (cm)');
+ylabel(axbal(3),['(',unitstr,')']);
 
 % Decompose sources:
+cmap = comuse.cmap;
 for i=1:size(srcint,2)
     % Only make the plot if the integrated source is non-zero somewhere
     if any(srcint(:,i))
-        plot(xmxsep,momfac*srcint(:,i)./areadown','marker','.','parent',axbal(4),'displayname',srcname{i});
+        plot(xmxsep,momfac*srcint(:,i)./areadown','marker','.','parent',axbal(4),'displayname',srcname{i},'color',cmap(1,:)); cmap=circshift(cmap,-1);
     end
 end
 hl = legend(axbal(4),'show','location','best');
-set(hl,'interpreter','latex');
-title(axbal(4),['Decomp. of ',totname{3}],'interpreter','latex');
+title(axbal(4),['Decomp. of ',totname{3}],'fontweight','normal');
 axis(axbal(4),'tight');
-xlabel(axbal(4),'$x-x_{\rm{sep}}$ (cm)','interpreter','latex');
-ylabel(axbal(4),['(',unitstr,')'],'interpreter','latex');
+xlabel(axbal(4),'x-x_{sep} (cm)');
+ylabel(axbal(4),['(',unitstr,')']);
 
 % Set the same axes limits for all radial balance plots:
 ymin = 1E40;

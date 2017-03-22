@@ -214,13 +214,13 @@ $(target_yn) : b2yn.dat b2mn.dat b2ftrack b2frates b2fstate
 	cd b2yn.exe.dir ; ${TIME} ${B2OBJ}/b2yn.exe ; mv $(target_yn) .. ; rm -f $(notdir $^)
 	-rmdir b2yn.exe.dir
 
-$(target_ymb) : b2ymb.dat wlld_trgi.dat wlld_trgo.dat 
+$(target_ymb) : b2ymb.dat wlld_trgi.dat wlld_trgo.dat wlly_trgi.dat wlly_trgo.dat
 	rm -rf b2ymb.exe.dir ; mkdir b2ymb.exe.dir ; cp $^ b2ymb.exe.dir
 	rm -f $(target_ymb)
 	cd b2ymb.exe.dir ; ${TIME} ${B2OBJ}/b2ymb.exe ; touch b2ymb.prt; mv $(target_ymb) .. ; rm -f $(notdir $^)
 	-rmdir b2ymb.exe.dir
 
-$(target_yrp) : b2yrp.dat wlld_irp.dat wlld_orp.dat
+$(target_yrp) : b2yrp.dat wlld_irp.dat wlld_orp.dat wlly_irp.dat wlly_orp.dat
 	rm -rf b2yrp.exe.dir ; mkdir b2yrp.exe.dir ; cp $^ b2yrp.exe.dir
 	rm -f $(target_yrp)
 	cd b2yrp.exe.dir ; ${TIME} ${B2OBJ}/b2yrp.exe ; touch b2yrp.prt; mv $(target_yrp) .. ; rm -f $(notdir $^)

@@ -1,9 +1,0 @@
-#! /usr/bin/env tcsh
-
-echo "1000 wlld" | b2plot
-
-cp ./b2pl.exe.dir/wlld_*rp.dat .
-
-rm b2yrp.prt
-
-b2plot b2yrp

@@ -283,7 +283,7 @@ c*** Surface-particle data (sect. 6C)
 c*** Surface interaction cards
       call uinpscrd
 c-----------------------------------------------------------------------
-c*** Mid-plane location
+c*** Midplane location
 
       jxi=mod(jxi,nx+2)
       jxa=mod(jxa,nx+2)

@@ -1,0 +1,44 @@
+#! /usr/bin/env tcsh
+
+if ((! -s wlld_trgi.dat) | (! -s wlld_trgo.dat) | (! -s wlld_irp.dat) | (! -s wlld_orp.dat) | \
+    (! -s wlly_trgi.dat) | (! -s wlly_trgo.dat) | (! -s wlly_irp.dat) | (! -s wlly_orp.dat))  then
+  echo "1000 wlld" | b2plot
+  cp ./b2pl.exe.dir/wll*_trgi.dat .
+  cp ./b2pl.exe.dir/wll*_irp.dat .
+  cp ./b2pl.exe.dir/wll*_trgo.dat .
+  cp ./b2pl.exe.dir/wll*_orp.dat .
+  if ((! -s wlld_trgi.dat) | (! -s wlld_trgo.dat) | (! -s wlld_irp.dat) | (! -s wlld_orp.dat) | \
+      (! -s wlly_trgi.dat) | (! -s wlly_trgo.dat) | (! -s wlly_irp.dat) | (! -s wlly_orp.dat))  then
+    echo '############ ERROR ##########'
+    echo 'Some of the input files are missing. Check the presence of wlld_[irp,orp,trgi,trgo].dat. Calculation aborted'
+    exit 1
+  endif
+endif
+cat b2ymb.dat | gawk '/REVERSE/{$0="REVERSE   =    0,    \! Integer, if >0 reverse the heat flux profile from top to bottom"};{print}' > b2ymb.dat.tmp; mv b2ymb.dat.tmp b2ymb.dat        
+rm b2ymb.prt
+echo 'o' | b2plot b2ymb
+cp ./b2ymb.exe.dir/* .
+FreeFem++ $SOLPSTOP/scripts/Monoblock_HTM.edp
+
+cat b2ymb.dat | gawk -v temp=`tail -n 1 T_water_VT_o.dat` '/T_COOLANT/{$0="T_COOLANT   =    "temp",    \!Coolant inlet temperature [C]"};{print}' > b2ymb.dat.tmp; mv b2ymb.dat.tmp b2ymb.dat
+cat b2ymb.dat | gawk '/REVERSE/{$0="REVERSE   =    1,    \! Integer, if >0 reverse the heat flux profile from top to bottom"};{print}' > b2ymb.dat.tmp; mv b2ymb.dat.tmp b2ymb.dat        
+rm b2ymb.prt
+echo 'i' | b2plot b2ymb
+cp ./b2ymb.exe.dir/* .
+FreeFem++ $SOLPSTOP/scripts/Monoblock_HTM.edp
+
+
+cat b2ymb.dat | gawk '/REVERSE/{$0="REVERSE   =    0,    \! Integer, if >0 reverse the heat flux profile from top to bottom"};{print}' > b2ymb.dat.tmp; mv b2ymb.dat.tmp b2ymb.dat        
+cat b2ymb.dat | gawk '/T_COOLANT/{$0="T_COOLANT   =    70.0,    \!Coolant inlet temperature [C]"};{print}' > b2ymb.dat.tmp; mv b2ymb.dat.tmp b2ymb.dat
+cat b2yrp.dat | gawk -v temp=`tail -n 1 T_water_VT_i.dat` '/T_COOLANT/{$0="T_COOLANT   =    "temp",    \!Coolant inlet temperature [C]"};{print}' > b2yrp.dat.tmp; mv b2yrp.dat.tmp b2yrp.dat
+cat b2yrp.dat | gawk '/REVERSE/{$0="REVERSE   =    0,    \! Integer, if >0 reverse the heat flux profile from top to bottom"};{print}' > b2yrp.dat.tmp; mv b2yrp.dat.tmp b2yrp.dat 
+rm b2yrp.prt
+echo 'i' | b2plot b2yrp
+cp ./b2yrp.exe.dir/* .
+FreeFem++ $SOLPSTOP/scripts/ReflectorPlate_HTM.edp
+
+cat b2yrp.dat | gawk -v temp=`tail -n 1 T_water_RP_i.dat` '/T_COOLANT/{$0="T_COOLANT   =    "temp",    \!Coolant inlet temperature [C]"};{print}' > b2yrp.dat.tmp; mv b2yrp.dat.tmp b2yrp.dat
+rm b2yrp.prt
+echo 'o' | b2plot b2yrp
+cp ./b2yrp.exe.dir/* .
+FreeFem++ $SOLPSTOP/scripts/ReflectorPlate_HTM.edp

@@ -423,7 +423,7 @@ c*** Data for toroidal geometry specification
       real*4 zaator,roator
       integer nttrator
 
-c*** Mid-plane position in the B2 grid, Eirene time allocation in B2
+c*** Midplane position in the B2 grid, Eirene time allocation in B2
       integer jxi,jxa,ntcpub2
 
 c*** Vessel specification for b2plot: number of segments, index

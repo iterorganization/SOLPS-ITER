@@ -24,6 +24,8 @@ module load cairo/1.14.2
 module load make
 module unload imas
 module load imas/3.7.3_j1.6/ual/3.3.14
+module load fc2k
+module load xmllib/2.0.0-imas-3.7.3-GCC-4.8.3
 module unload MDSplus
 module unload Java
 module load MDSplus/7.0.67-goolf-1.5.16-Java-1.7.0_79-Python-2.7.9
@@ -44,7 +46,7 @@ setenv CXX g++
 module load paraview/5.2.0
 
 if (`where paraview-config` == "") then
-  echo "Warning: ParaView not found. Catalyst will not not be compiled-in!"
+  echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
 else
   # See ParaViewCatalystUsersGuide_v2.pdf Sec 3.7.2 Linking with Python ...
   set PARAVIEW_LIB=`paraview-config --libs --python | sed s/-L//`

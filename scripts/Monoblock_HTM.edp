@@ -1,0 +1,225 @@
+//Load input data and define geometry
+ifstream inputs("mnb_in.dat");
+real L,D1,D2,D3,Hw,Ltile,Tf,mflow,cpw,L1,aalpha,bbeta,ttheta;
+real sss1,sss2,H,alpha,beta,theta,Tgap,Xshadow;
+int n,npointout;
+int inout,nplots;
+string sinout;
+inputs>>L1;     // tile height
+inputs>>L;      // tile toroidal length
+inputs>>sss1;   // Cu interlayer thickness
+inputs>>sss2;   // CuCrZr tube thickness
+inputs>>D3;     // CuCrZr tube internal diameter
+inputs>>Hw;     // W armour thickness (from plasma facing surface to Cu interlayer)
+inputs>>Ltile;  // Tile poloidal length
+inputs>>Tgap;  // Toroidal gap between monoblocks [m]
+inputs>>alpha;   // VT tilting
+inputs>>bbeta;   // Poloidal chamfer
+inputs>>ttheta;   // Toroidal strike angle of magnetic flux lines [degrees]
+inputs>>Tf;     // Coolant inlet temperature
+inputs>>mflow;  // Coolant mass flow rate
+inputs>>cpw;    // Coolant specific heat
+inputs>>n;      // # of mesh points on longest edge
+inputs>>npointout;      // Number of points for output surface temperature
+inputs>>inout; //defines inner (1) or outer (0)
+inputs>>nplots;//2D plots are produce each nplots cuts
+int iplot=0;
+if (inout==1){
+  sinout="i";}
+else{
+if (inout==0){
+  sinout="o";}
+else{
+  sinout="unknown";}
+}
+
+  
+real[int] Lout(npointout);
+for (int kk=1;kk<=npointout;kk+=1){
+inputs>>Lout(kk-1);
+}
+D2=D3+2.0*sss2;
+D1=D2+2.0*sss1;
+H=L1-D1/2.0-Hw;
+
+alpha=aalpha*pi/180.0;
+beta=bbeta*pi/180.0;
+theta=ttheta*pi/180.0;
+Xshadow=(L*tan(beta)-Tgap*tan(theta))/(tan(beta)+tan(theta));
+//MATERIALS DATA
+//Thermal conduct CuCrZr
+real[int] CCZ(4);
+CCZ(0)=5.257798071745529e-07;
+CCZ(1)=-6.451101399520426e-04;
+CCZ(2)=2.576784427085231e-01;
+CCZ(3)=3.129694443435334e+02;
+//THermal cond Cu
+real[int] CU(4);
+CU(0)=3.085132448660574e-08;
+CU(1)=-2.277103401239594e-05;
+CU(2)=-6.686469397617298e-02;
+CU(3)=4.021574134794590e+02;
+//THermal cond W
+real[int] WW(6);
+WW(0)=2.763634292770776e-16;
+WW(1)=-2.020389882180738e-12;
+WW(2)=-2.780235961230648e-09;
+WW(3)=4.516924060319057e-05;
+WW(4)=-1.054501953718856e-01;
+WW(5)=1.750724560926432e+02;             
+
+//Load heat flux profile
+ifstream size1("tg"+sinout+"_size.dat");
+ifstream www1("Wtot_tg"+sinout+".dat");
+ifstream www2("Wpls_tg"+sinout+".dat");
+int Ntile;
+size1>>Ntile;     
+real[int] qtot(Ntile);
+real[int] qpls(Ntile);
+for(int nn=0;nn<Ntile;nn+=1){
+	www1>>qtot(nn);
+	www2>>qpls(nn);
+}
+real[int] Tmax(Ntile);
+real[int] TmaxCU(Ntile);
+real[int] TmaxCCZ(Ntile);
+real[int] TmaxW(Ntile);
+real[int] Twater(Ntile);
+real[int] HTC(Ntile);
+real[int,int] Tout(Ntile,npointout);
+real TTMAX=0.0;
+int IMAX=0;
+
+//Domain generation
+border A(t=0.,L){x=t;y=0.;};
+border B(t=0.,L1){x=L;y=t;};
+border C(t=L,0.){x=t;y=L1+(t-L)*tan(beta);};
+border D(t=L1-L*tan(beta),0.){x=0.0;y=t;};
+border EE(t=0.,2.*pi){x=L/2.+D1/2.*cos(t);y=H+D1/2.*sin(t);};
+border FF(t=0.,2.*pi){x=L/2.+D2/2.*cos(t);y=H+D2/2.*sin(t);};
+border GG(t=0.,2.*pi){x=L/2.+D3/2.*cos(t);y=H+D3/2.*sin(t);};
+mesh block=buildmesh(A(n)+B(n)+C(n)+D(n)+EE(3*n)+FF(2*n)+GG(-2*n));
+plot(block,fill=1,ps="Domain_VT.eps");
+
+//PROBLEM DEFINITION
+fespace Vh(block,P1);
+Vh T=Tf,v,Told,TTT;
+int ww=block((L-D1)/2.-1e-4,H).region,cu=block((L-D2)/2.-(D1-D2)/4.,H).region,ccz=block((L-D3)/2.-(D2-D3)/4.,H).region;
+Vh kCCZ,kCu,kW,K,htc,HF,qq,TMAX;
+
+problem divert(T,v)=int2d(block)(K*(dx(T)*dx(v)+dy(T)*dy(v)))-int1d(block,C)(qq*v)
+				   -int1d(block,GG)(htc*Tf*v)+int1d(block,GG)(htc*T*v);
+real gamma,npoints=300.0,hfmax,hflux,CHF=32.0e6;
+	   
+//Loop on the monoblock length
+//ofstream ff00("Qwater.dat");
+//ofstream ff01("Qplasma.dat");
+ofstream ff02("warning_VT_"+sinout+".log");
+real flag=0.0;
+TTMAX=0.0;
+for(int jj=0;jj<Ntile;jj+=1){
+	qq=(qpls(jj)/cos(beta+alpha))*(x>=Xshadow)+(qtot(jj)-qpls(jj));
+	real err=1.0,tol=1.e-3;
+	Told=Tf;
+	real qwater=0.0,qplasma=0.0;
+	//Solve pseudo transient on the single tile
+
+	while(err>tol){
+		kCCZ=CCZ(0)*T^3.0+CCZ(1)*T^2.0+CCZ(2)*T+CCZ(3);
+		kCu=CU(0)*T^3.0+CU(1)*T^2.0+CU(2)*T+CU(3);
+		kW=WW(0)*T^5.0+WW(1)*T^4.0+WW(2)*T^3.0+WW(3)*T^2.0+WW(4)*T+WW(5);
+		K=kW*(region==ww)+kCu*(region==cu)+kCCZ*(region==ccz);
+		htc=(0.001571305340610*(T^3.0)-0.969922562124876*(T^2.0)+2.647846516393415e+02*T+6.008184472858047e+04)*(T<270.0)+(1.347748889852061e-07*(T^5.0)-2.958948227254278e-04*(T^4.0)+0.245908413167699*(T^3.0)+42.370929182252034*(T^2.0)-5.764308361863856e+04*T+9.109083136201818e+06)*(T>=270.0);
+		divert;
+		err=sqrt(int2d(block)((T-Told)^2.0))/sqrt(int2d(block)(T^2.0));
+		Told=T;
+
+	}//end pseudo transient
+	
+	Twater(jj)=Tf;
+	HTC(jj)=int1d(block,GG)(htc)/int1d(block,GG)(1.0);
+	
+	//Evaluate next T bulk
+	qwater=(-int1d(block,GG)(htc*Tf)+int1d(block,GG)(htc*T))*2.0*Ltile;
+	Tf=Tf+qwater/mflow/cpw;
+
+	//Check for CHF (32 MW/m^2)
+	HF=htc*(T-Tf);
+	hfmax=0.0;
+	for (int ii=0;ii<=npoints;ii+=1.0){
+		gamma=ii/npoints*pi/2.0;
+		hflux=HF(L/2.+D3/2.*cos(pi-gamma),H+D3/2.*sin(pi-gamma));
+		if(hflux>=hfmax){
+			hfmax=hflux;
+		}
+	}
+	if(hfmax>=CHF){
+		ff02 << "Warning! Reached critical heat flux of "<<CHF<<" W/m^2. Tile number " <<jj<<endl;
+		flag=-9.0;
+	}
+
+	for (int ii=1;ii<=npointout;ii+=1){
+		Tout(jj,ii-1)=T(Lout(ii-1),L1+(Lout(ii-1)-L)*tan(beta));	
+	}
+	
+	Tmax(jj)=T[].max;
+    if (Tmax(jj)>=TTMAX){
+      TTMAX=Tmax(jj);
+      TMAX=T;
+    }
+	
+	TTT=0.0*(region==ww)+0.0*(region==ccz)+T*(region==cu);
+	TmaxCU(jj)=TTT[].max;
+	if(TmaxCU(jj)>700.0){
+		ff02 << "Warning! Cu temperature exceeds properties range of 700 C. Tile number " <<jj<<" T_Cu= "<< TmaxCU(jj)<<" C" <<endl;
+		flag=-9.0;
+	}
+	TTT=T*(region==ww)+0.0*(region==ccz)+0.0*(region==cu);
+	TmaxW(jj)=TTT[].max;
+	if(TmaxW(jj)>3200.0){
+		ff02 << "Warning! W temperature exceeds properties range of 3200 C. Tile number " <<jj<<" T_W= "<< TmaxW(jj)<<" C" <<endl;
+		flag=-9.0;
+	}
+	TTT=0.0*(region==ww)+T*(region==ccz)+0.0*(region==cu);
+	TmaxCCZ(jj)=TTT[].max;
+	if(TmaxCCZ(jj)>433.0){
+		ff02 << "Warning! CuCrZr temperature exceeds properties range of 433 C. Tile number " <<jj<<" T_CCZ= "<< TmaxCCZ(jj)<<" C" <<endl;
+		flag=-9.0;
+	}
+    plot(T,fill=1,value=1);
+    if (jj==iplot){
+      string name = "Temp2D_VT_"+sinout+"_" + (jj+1) + ".eps";
+      plot(T,fill=1,value=1,ps=name);
+      iplot=iplot+nplots;
+    }
+}//end loop on monoblock length
+string name = "Temp2D_VT_"+sinout+"_" + Ntile+ ".eps";
+plot(T,fill=1,value=1,ps=name);
+name = "Temp2D_VT_"+sinout+"_MAX.eps";
+plot(TMAX,fill=1,value=1,ps=name);
+ofstream ff1("T_CCZ_VT_"+sinout+".dat");
+ofstream ff2("T_Cu_VT_"+sinout+".dat");
+ofstream ff3("T_W_VT_"+sinout+".dat");
+ofstream ff4("T_water_VT_"+sinout+".dat");
+ofstream ff6("Tout_VT_"+sinout+".dat");
+TTMAX=0.0;
+for(int jj=0;jj<Ntile;jj+=1){
+	ff1<<TmaxCCZ(jj)<<endl;
+	ff2<<TmaxCU(jj)<<endl;
+	ff3<<TmaxW(jj)<<endl;
+    if (TmaxW(jj)>=TTMAX){
+      TTMAX=TmaxW(jj);
+      IMAX=jj;
+    }
+	ff4<<Twater(jj)<<endl;
+	for (int kk=1;kk<npointout;kk+=1){
+		ff6<<Tout(jj,kk-1)<<" ";
+	}
+	ff6<<Tout(jj,npointout-1)<<endl;
+}
+
+cout<<"Maximum W temperature is "<<TTMAX<<" C at cut number "<<IMAX<<endl;
+cout<<"Water outlet temperature is "<<Twater(Ntile-1)<<" C"<<endl;
+if(flag<0.0){
+cout<<"WARNING! Something went wrong, please check the file 'warning.log' for details"<<endl;
+}

@@ -8,8 +8,8 @@
 function balgrid(comuse,indrad,indpol,axgrid,reverse)
 
 axis(axgrid,'equal');
-xlabel(axgrid,'R (m)','interpreter','latex');
-ylabel(axgrid,'Z (m)','interpreter','latex');
+xlabel(axgrid,'R (m)');
+ylabel(axgrid,'Z (m)');
 
 rbl = comuse.r(:,:,1);
 rbr = comuse.r(:,:,2);
@@ -68,7 +68,7 @@ for iy = 1:comuse.ny
     end
 end
 
-cmap = colormap(lines(2));
+cmap = comuse.cmap;
 if ~reverse
     plot(rleft,zleft,'color',cmap(1,:),'parent',axgrid);
     plot(rright,zright,'color',cmap(2,:),'parent',axgrid);
@@ -81,6 +81,5 @@ hl = legend(axgrid, 'radial balance volume',...
                    'poloidal balance volume',...
                    'upstream face',...
                    'downstream face');
-set(hl,'interpreter','latex')
 
 end
