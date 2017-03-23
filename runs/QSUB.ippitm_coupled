@@ -33,9 +33,9 @@ endif
 
 time b2run ${USE_MPI} b2mn < input.dat >! run.log
 
-#QSUB.postprocess_coupled
+QSUB.postprocess_coupled
 
-#preserve_scratch_to_work
+preserve_scratch_to_work
 
 set msg="Finished on `hostname` at `date`"
 update_solps_run_status ${msg}
