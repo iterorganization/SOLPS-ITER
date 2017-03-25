@@ -18,7 +18,7 @@ C---- NCANDI : TOTAL NUMBER OF POSSIBLE POINTS
       integer, allocatable :: ihelp(:)
 
       if (kennung .eq. 'icandi') then
-c         write(6,*) 'vergrößern von ',kennung,' von ',size(icandi),
+c         write(6,*) 'vergroessern von ',kennung,' von ',size(icandi),
 c     .              ' auf ',size(icandi)+incr
          allocate(ihelp(size(icandi)))
          ihelp = icandi
@@ -28,7 +28,7 @@ c     .              ' auf ',size(icandi)+incr
          icandi(1:size(ihelp)) = ihelp
          deallocate(ihelp)
       elseif (kennung .eq. 'radkan') then
-c         write(6,*) 'vergrößern von ',kennung,' von ',size(radkan),
+c         write(6,*) 'vergroessern von ',kennung,' von ',size(radkan),
 c     .              ' auf ',size(radkan)+incr
          allocate(help(size(radkan)))
          help = radkan

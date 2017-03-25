@@ -741,10 +741,10 @@ c*** 11
      /    .false.,.false.,.false.,.false.,.false.,.false.,.false. /,
      ,   plarr ,lrpscut,       pltsrc          ,   pl3a   ,  pl3s    /
      /  .false.,.false., .false.,nstra*.false. , 5*.false.,3*.false. /,
-     ,     pltl2d    ,   pltl3d     , pltllg        , plidl /
-     ,  nptal*.false.,nptal*.true.  ,nptal*.false.  , .false. /,
-     ,     pltler    ,    lhist2    ,    lhist3   ,    lcntr3     /
-     /  nptal*.false., nptal*.false., nptal*.true., nptal*.false. /,
+     ,     pltl2d    ,   pltl3d   , pltllg      , plidl  , plvtk /
+     ,  nptal*.false.,nptal*.true.,nptal*.false., .false.,.false./,
+     ,     pltler    ,    lhist2    ,    lhist3   ,    lcntr3    /
+     /  nptal*.false., nptal*.false., nptal*.true., nptal*.false./,
      ,      lsmot3   ,     lraps   ,   lvect3    ,   lrpvc3    /
      /  nptal*.false.,nptal*.false.,nptal*.false.,nptal*.false./,
      ,     lrps3d    ,   lrpscn    ,   lprad     ,   lppol     /

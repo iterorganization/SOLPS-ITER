@@ -850,6 +850,7 @@ c**  2d geometry plot
       write(iunoo,706) pl1st,pl2nd,pl3rd,pladd,plhst,
      ,                 plcut(1),plcut(2),plcut(3),plbox,plstor,
      ,                 plnumv,plnums,plarr,lrpscut,plidl
+     ,                 plvtk
       write(iunoo,707) nplinr,nplotr,npldlr,nplinp,nplotp,npldlp,
      ,                                      nplint,nplott,npldlt,nsrfcls
       do j=1,abs(nsrfcls) !{

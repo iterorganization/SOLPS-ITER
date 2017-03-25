@@ -288,7 +288,7 @@ c*** 11
      ,  lhist2(nptal),lsmot2(nptal),lhist3(nptal),lcntr3(nptal),
      ,  lsmot3(nptal),lraps(nptal),lvect3(nptal),lrpvc3(nptal),
      ,  lrps3d(nptal),lrpscn(nptal),lprad(nptal),lppol(nptal),
-     ,  lptor(nptal),plidl
+     ,  lptor(nptal),plidl,plvtk
       character textla(5)*24, textls(3)*24
 
 c*** 12
@@ -500,7 +500,7 @@ c*** b2ah.dat
      ,  trcsrc,pl1st,pl2nd,pl3rd,pladd,plhst,plcut,plbox,plstor,plnumv,
      ,  plnums,plarr,lrpscut,pltsrc,pl3a,pl3s,pltl2d,pltl3d,pltllg,
      ,  pltler,lhist2,lsmot2,lhist3,lcntr3,lsmot3,lraps,lvect3,lrpvc3,
-     ,  lrps3d,lrpscn,lprad,lppol,lptor,plidl,
+     ,  lrps3d,lrpscn,lprad,lppol,lptor,plidl,plvtk,
      ,  plchor,plspec,lpw_d,lsymet,lbalan,lchkqud,lfchgs,
      ,  is_bundled
 

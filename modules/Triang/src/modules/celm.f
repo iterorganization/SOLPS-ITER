@@ -23,8 +23,8 @@ C----         DEPENDS ON INDEX OF BOUNDARY
       if (kennung .eq. 'ielm') then
          dim1 = size(ielm,1)
          dim2 = size(ielm,2)
-c         write(6,*) 'vergrößern von ',kennung,' von (',dim1,',',dim2,
-c     .              ') auf (',dim1,',',dim2+incr,')'
+c         write(6,*) 'vergroessern von ',kennung,' von (',dim1,
+c     .              ',',dim2,') auf (',dim1,',',dim2+incr,')'
          allocate(ihelp(dim1,dim2))
          ihelp = ielm
          deallocate (ielm)
