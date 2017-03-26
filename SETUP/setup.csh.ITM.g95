@@ -9,6 +9,7 @@ if (! $?DEVICE) then
 endif
 # load modules
 module load solps-gui
+module load texlive
 
 #module load imas
 source $ITMSCRIPTDIR/set_tutorial_env.tcsh
