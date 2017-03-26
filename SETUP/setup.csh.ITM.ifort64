@@ -1,6 +1,6 @@
-setenv GLI_HOME /pfs/work/g2dpc/SOLPS-ITER/gks
-setenv PATH ${PATH}:/pfs/work/g2dpc/SOLPS-ITER/NETCDF/bin
-setenv NCARG_ROOT /pfs/work/g2dpc/SOLPS-ITER/NCARG
+setenv GLI_HOME /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/gks
+setenv PATH ${PATH}:/pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/NETCDF/bin
+setenv NCARG_ROOT /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/NCARG
 setenv PATH ${PATH}:${NCARG_ROOT}/bin
 setenv SOLPSWORK /pfs/work/$USER/SOLPS-ITER
 if (! $?DEVICE) then
@@ -20,6 +20,7 @@ module load texlive
 
 #module load imas
 source $ITMSCRIPTDIR/set_tutorial_env.tcsh
+echo "imasdb solps-iter"
 imasdb solps-iter
 
 # module load itm-paraview

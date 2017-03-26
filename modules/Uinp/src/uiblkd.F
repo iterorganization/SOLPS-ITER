@@ -12,6 +12,7 @@ c=======================================================================
       implicit none
 #include "uinput.inc"
       integer i,j
+      common /uiblkd_local/ i,j
       integer, parameter :: lurpst=n1st*nplg, luznknd=nbndzon*nbndknd,
      ,  lulim2=nlim*nlim,   lufour=n1st,
      ,  lu9=9*nlim,         lustsr=nsrfs*nstra, luatsr=natm*nstra,   
