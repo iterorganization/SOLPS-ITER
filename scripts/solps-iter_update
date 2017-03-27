@@ -34,7 +34,7 @@ DivGeo:
 ADAS:
   echo "Updating ADAS"
   cd $SOLPSTOP/modules/adas
-  git checkout master && echo "Checked out ADAS master branch" || goto branch
+  git checkout develop && echo "Checked out ADAS develop branch" || goto branch
   git pull && goto compile || goto local
 
 branch:

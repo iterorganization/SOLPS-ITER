@@ -24,4 +24,4 @@
 [submodule "ADAS"]
 	path = modules/adas
 	url = ssh://git@git.iter.org/imex/amns-adas.git
-	branch = master
+	branch = develop
