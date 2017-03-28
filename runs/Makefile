@@ -63,7 +63,7 @@ target_yn = b2yn.prt b2yn.plt
 target_yp = b2yp.prt b2yp.plt b2specp
 target_yq = b2yq.prt b2yq.plt
 target_yr = b2yr.prt b2yr.plt
-target_yt = b2yt.prt b2fstatt b2mn.dat.2 b2ah.dat.2 b2ai.dat.2 b2yt.files
+target_yt = b2yt.prt b2fstatt b2yt.files
 target_xd = B2SXDR
 target_rd = b2rd.prt
 target_ual = b2_ual_write.prt
@@ -193,7 +193,11 @@ endif
 	-[ -e b2mn.exe.dir/b2tallies.nc ] && mv b2mn.exe.dir/b2tallies.nc . || echo > /dev/null
 	-[ -e b2mn.exe.dir/balance.nc ] && mv b2mn.exe.dir/balance.nc . || echo > /dev/null
 	-[ -e b2mn.exe.dir/b2_to_astra.dat ] && mv b2mn.exe.dir/b2_to_astra.dat . || echo > /dev/null
+	-[ -e b2mn.exe.dir/b2.*.parameters ] && mv b2mn.exe.dir/b2.*.parameters . || echo > /dev/null
 	-[ -e b2mn.exe.dir/b2fstate_add ] && mv b2mn.exe.dir/b2fstate_add . || echo > /dev/null
+	-[ -e b2mn.exe.dir/d?? ] && mv b2mn.exe.dir/d?? . || echo > /dev/null
+	-[ -e b2mn.exe.dir/ds?? ] && mv b2mn.exe.dir/ds?? . || echo > /dev/null
+	-[ -e b2mn.exe.dir/ds??? ] && mv b2mn.exe.dir/ds??? . || echo > /dev/null
 	-[ -e b2mn.exe.dir/tran ] && mv b2mn.exe.dir/tran b2mn.exe.dir/tran?? . || echo > /dev/null
 	-[ -e b2mn.exe.dir/tracing ] && rmdir b2mn.exe.dir/tracing || echo > /dev/null
 	-[ -e b2mn.exe.dir/b2fstati_with-ua ] && ( mv b2fstati b2fstati_with+ua ; mv b2mn.exe.dir/b2fstati_with-ua . ; cp -up b2fstati_with-ua b2fstati ; touch b2fstate ) || echo > /dev/null
@@ -238,7 +242,11 @@ endif
 	-[ -e b2mn.exe.dir/b2tallies.nc ] && mv b2mn.exe.dir/b2tallies.nc . || echo > /dev/null
 	-[ -e b2mn.exe.dir/balance.nc ] && mv b2mn.exe.dir/balance.nc . || echo > /dev/null
 	-[ -e b2mn.exe.dir/b2_to_astra.dat ] && mv b2mn.exe.dir/b2_to_astra.dat . || echo > /dev/null
+	-[ -e b2mn.exe.dir/b2.*.parameters ] && mv b2mn.exe.dir/b2.*.parameters . || echo > /dev/null
 	-[ -e b2mn.exe.dir/b2fstate_add ] && mv b2mn.exe.dir/b2fstate_add . || echo > /dev/null
+	-[ -e b2mn.exe.dir/d?? ] && mv b2mn.exe.dir/d?? . || echo > /dev/null
+	-[ -e b2mn.exe.dir/ds?? ] && mv b2mn.exe.dir/ds?? . || echo > /dev/null
+	-[ -e b2mn.exe.dir/ds??? ] && mv b2mn.exe.dir/ds??? . || echo > /dev/null
 	-[ -e b2mn.exe.dir/tran ] && mv b2mn.exe.dir/tran b2mn.exe.dir/tran?? . || echo > /dev/null
 	-[ -e b2mn.exe.dir/tracing ] && rmdir b2mn.exe.dir/tracing || echo > /dev/null
 	-[ -e b2mn.exe.dir/b2fstati_with-ua ] && ( mv b2fstati b2fstati_with+ua ; mv b2mn.exe.dir/b2fstati_with-ua b2fstati ) || echo > /dev/null
@@ -286,6 +294,7 @@ $(target_rd) : shotnumber.history
 	rm -rf b2rd.exe.dir >& /dev/null ; mkdir b2rd.exe.dir ; cp $^ b2rd.exe.dir
 	rm -f $(target_rd)
 	cd b2rd.exe.dir ; ${TIME} ${B2OBJ}/b2rd.exe ; mv $(target_rd) b2fstate b2fgmtrt .. ; rm -f $(notdir $^)
+	-[ -e b2rd.exe.dir/*.txt ] && mv b2rd.exe.dir/*.txt . || echo > /dev/null
 	-rmdir b2rd.exe.dir
 
 $(target_ts) : b2fparam b2fgmtry b2fstate b2fplasma
@@ -372,13 +381,11 @@ $(target_yt) : b2yt.dat b2fstate b2mn.dat b2ah.dat b2ai.dat b2ag.dat b2fgmtry b2
 ifndef STAND_ALONE
 	-cd b2yt.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; [ -e ../input.dat ] && ln -s ../input.dat . || echo > /dev/null ; [ -e ../fort.44 ] && ln -s ../fort.44 . || echo > /dev/null ; [ -e ../fort.33 ] && ln -s ../fort.33 . || echo > /dev/null ; [ -e ../fort.34 ] && ln -s ../fort.34 . || echo > /dev/null ; [ -e ../fort.35 ] && ln -s ../fort.35 . || echo > /dev/null
 	cd b2yt.exe.dir ; ${TIME} ${B2OBJ}/b2yt.exe ; mv $(target_yt) .. ; rm -f $(notdir $^) input.dat fort.44 fort.75
-	-[ -e b2yt.exe.dir/input.dat.2 ] && mv b2yt.exe.dir/input.dat.2 . || echo > /dev/null
-	-[ -e b2yt.exe.dir/fort.44.2 ] && mv b2yt.exe.dir/fort.44.2 . || echo > /dev/null
 else
 	cd b2yt.exe.dir ; ${TIME} ${B2OBJ}/b2yt.exe ; mv $(target_yt) .. ; rm -f $(notdir $^)
 endif
 	-cd b2yt.exe.dir ; rm -f HYDHEL METHANE SPUTER H2VIBR fort.21 fort.22 graphite_ext.dat mo_ext.dat
-	-[ -e b2yt.exe.dir/b2fgmtry.2 ] && mv b2yt.exe.dir/b2fgmtry.2 . || echo > /dev/null
+	-[ -e b2yt.exe.dir/*.2 ] && mv b2yt.exe.dir/*.2 . || echo > /dev/null
 	-[ -e b2yt.exe.dir/fort.33 ] && rm b2yt.exe.dir/fort.33 || echo > /dev/null
 	-[ -e b2yt.exe.dir/fort.34 ] && rm b2yt.exe.dir/fort.34 || echo > /dev/null
 	-[ -e b2yt.exe.dir/fort.35 ] && rm b2yt.exe.dir/fort.35 || echo > /dev/null
@@ -390,13 +397,11 @@ dbx.b2yt : b2yt.dat b2fstate b2mn.dat b2ah.dat b2ai.dat b2ag.dat b2fgmtry b2frat
 ifndef STAND_ALONE
 	-cd b2yt.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; [ -e ../input.dat ] && ln -s ../input.dat . || echo > /dev/null ; [ -e ../fort.44 ] && ln -s ../fort.44 . || echo > /dev/null ; [ -e ../fort.33 ] && ln -s ../fort.33 . || echo > /dev/null ; [ -e ../fort.34 ] && ln -s ../fort.34 . || echo > /dev/null ; [ -e ../fort.35 ] && ln -s ../fort.35 . || echo > /dev/null
 	cd b2yt.exe.dir ; ${DBX} ${INC} ${DBGOBJ}/b2yt.exe ; mv $(target_yt) .. ; rm -f $(notdir $^) input.dat fort.44 fort.75
-	-[ -e b2yt.exe.dir/input.dat.2 ] && mv b2yt.exe.dir/input.dat.2 . || echo > /dev/null
-	-[ -e b2yt.exe.dir/fort.44.2 ] && mv b2yt.exe.dir/fort.44.2 . || echo > /dev/null
 else
 	cd b2yt.exe.dir ; ${DBX} ${INC} ${DBGOBJ}/b2yt.exe ; mv $(target_yt) .. ; rm -f $(notdir $^)
 endif
 	-cd b2yt.exe.dir ; rm -f HYDHEL METHANE SPUTER H2VIBR fort.21 fort.22 graphite_ext.dat mo_ext.dat
-	-[ -e b2yt.exe.dir/b2fgmtry.2 ] && mv b2yt.exe.dir/b2fgmtry.2 . || echo > /dev/null
+	-[ -e b2yt.exe.dir/*.2 ] && mv b2yt.exe.dir/*.2 . || echo > /dev/null
 	-[ -e b2yt.exe.dir/fort.33 ] && rm b2yt.exe.dir/fort.33 || echo > /dev/null
 	-[ -e b2yt.exe.dir/fort.34 ] && rm b2yt.exe.dir/fort.34 || echo > /dev/null
 	-[ -e b2yt.exe.dir/fort.35 ] && rm b2yt.exe.dir/fort.35 || echo > /dev/null
