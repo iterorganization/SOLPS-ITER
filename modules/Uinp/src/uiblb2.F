@@ -5,6 +5,7 @@ c
       implicit none
 #include "uib2pprm.inc"
       integer i
+      common /uiblb2_local/ i
 c=======================================================================
 c*** The list of keywords to work on:
 

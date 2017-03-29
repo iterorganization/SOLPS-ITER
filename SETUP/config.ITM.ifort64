@@ -28,15 +28,15 @@
 # Remove -DMDSPLUS from SOLPS_CPP
 #
 
-       NCDIR ?= /pfs/work/g2dpc/SOLPS-ITER/NETCDF
-   MSCL_ROOT ?= /pfs/work/g2dpc/SOLPS-ITER/mscl
+       NCDIR ?= /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/NETCDF
+   MSCL_ROOT ?= /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/mscl
        H5DIR ?= ${HDF5_HOME}
-     GR_ROOT ?= /pfs/work/g2dpc/SOLPS-ITER/gr
-    GLI_HOME ?= /pfs/work/g2dpc/SOLPS-ITER/gks
-  NCARG_ROOT ?= /pfs/work/g2dpc/SOLPS-ITER/NCARG
+     GR_ROOT ?= /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/gr
+    GLI_HOME ?= /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/gks
+  NCARG_ROOT ?= /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/NCARG
 #      NAGDIR ?= ${NAGFLIB_HOME}
-      NAGDIR ?= /pfs/work/g2dpc/SOLPS-ITER/nag
- MDSPLUS_DIR ?= /pfs/work/g2dpc/SOLPS-ITER/MDSPLUS
+      NAGDIR ?= /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/nag
+ MDSPLUS_DIR ?= /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/MDSPLUS
 
 #
 # Variables for linking

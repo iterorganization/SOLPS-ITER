@@ -27,13 +27,15 @@ c*  xr,yr : coordinates of the reference point
       integer,allocatable :: tri(:,:), neigh(:,:),neigr(:,:),lcell(:,:)
       integer ltri,lneigh(3)
       integer i,j,k,l,m,n,s(3)
-      integer cell /0/
+      integer cell
+      data cell /0/
       character line*72
-      real r,u,xr,yr,xm,xx,ym,yx
+      realg r,u,xr,yr,xm,xx,ym,yx
+      logical dbg
 #ifdef DBG
-      logical dbg /.true./
+      data dbg /.true./
 #else
-      logical dbg /.false./
+      data dbg /.false./
 #endif
 
 c=======================================================================

@@ -251,7 +251,7 @@ c=======================================================================
       goto 9999
    16 call resimi(lusgm)
       goto 9999
-   17 call resima(luwrk)
+   17 call resimi(luwrk)
       goto 9999
    18 call resimi(luwrk)
       luswch=1
@@ -652,9 +652,9 @@ c*** Surface data transfer from B2 to Eirene
         call xerrab (' ==> Corrupted DG output?')
       end if !}
       call resima(sps_mtrl(n_spcsrf))
-      sps_mtri(n_spcsrf)=-1
+      sps_mtri(n_spcsrf)=-1.0
       if(.not.streql(sps_mtrl(n_spcsrf),'-')) 
-     -  call uinmtr(sps_mtrl(n_spcsrf),sps_mtri(n_spcsrf),1)
+     -  call uinmtr(sps_mtrl(n_spcsrf),nint(sps_mtri(n_spcsrf)),1)
       goto 9999
   100 if(n_spcsrf.le.0) then !{
         write(0,*) '"Surface special" data outside the block - ',unn
