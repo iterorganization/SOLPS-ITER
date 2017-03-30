@@ -104,8 +104,7 @@ tags:
 	rm -f TAGS ; etags src/*.c src/*.h
 
 depend: ${OBJS:.o=.c}
-	-mkdir -p ${OBJDIR}
-	$(CC) -M $^ | sed '/^[^ ]*.o: / s|^|${OBJDIR}/|' | \
+	@$(CC) -M $^ | sed '/^[^ ]*.o: / s|^|${OBJDIR}/|' | \
 	sed -e 's,^${OBJDIR}/,\$${OBJDIR}/,' | \
 	sed 's,: ${SOLPSTOP},: $${SOLPSTOP},' > ${OBJDIR}/dependencies.${COMPILER}
 

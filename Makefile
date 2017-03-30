@@ -60,7 +60,7 @@ endif
 unexport SOLPS_DEBUG
 unexport SOLPS_MPI
 
-.PHONY: solps solps_mpi nox nox_mpi all all_nox all_mpi carre carre_nox divgeo b25 b25_mpi b25_nox b25_ig b25_all_mpi eirene eirene_mpi eirene_nox b25eirene b25eirene_mpi b25eirene_nox b25eirene_ig b25eirene_all_mpi b25eirene_mpi_nox uinp uinp_nox uinp_mpi triang triang_nox amds fxdr sonnet-light b2sxdr manual local depend tags listobj clean clean_% debug %_debug VERSION help nox_build nox_build_mpi
+.PHONY: solps solps_mpi nox nox_mpi all all_nox all_mpi carre carre_nox divgeo b25 b25_mpi b25_nox b25_ig b25_all_mpi eirene eirene_mpi eirene_nox b25eirene b25eirene_mpi b25eirene_nox b25eirene_ig b25eirene_all_mpi b25eirene_mpi_nox uinp uinp_nox uinp_mpi triang triang_nox amds fxdr sonnet-light b2sxdr manual local depend depend_nox tags listobj clean clean_% debug %_debug VERSION help nox_build nox_build_mpi
 
 DEFAULT: solps
 
@@ -250,6 +250,9 @@ depend:
 	cd modules/amds;           ${MAKE} depend
 #	cd modules/solps4-5;       ${MAKE} depend
 
+depend_nox:
+	${MAKE} depend LD_GR="" LD_GKS=""
+
 VERSION:
 	cd modules/B2.5;   ${MAKE} VERSION
 	cd modules/Eirene; ${MAKE} VERSION
@@ -272,9 +275,9 @@ debug: solps_debug
 
 # Dependencies are not duplicated across build targets
 
-nox_build:     clean_build     listobj depend carre_nox b25eirene_nox     uinp_nox     triang_nox
+nox_build:     clean_build     listobj depend_nox carre_nox b25eirene_nox     uinp_nox     triang_nox
 
-nox_build_mpi: clean_build_mpi listobj depend           b25eirene_mpi_nox uinp_mpi_nox
+nox_build_mpi: clean_build_mpi listobj depend_nox           b25eirene_mpi_nox uinp_mpi_nox
 
 
 # Clean targets
