@@ -1617,6 +1617,9 @@ SOLPSTOP
 |   |   |   +---transport
 |   |   |   +---common
 |   |   |   +---equations
+|   |   |   +---catalyst
+|   |   |   +---ids
+|   |   |   +---mpi_dummy
 |   |   +---Database
 |   |   |   +---Bulk_properties
 |   |   |   +---Surface_properties
@@ -1625,14 +1628,6 @@ SOLPSTOP
 |   |   |   |   +---refl.data
 |   |   |   |   +---sputter.data
 |   |   +---builds
-|   |   |   +---couple_Eirene.ITER.ifort64
-|   |   |   +---standalone.ITER.ifort64
-|   |   |   +---couple_Eirene.ITER.ifort64.mpi
-|   |   |   +---standalone.ITER.ifort64.mpi
-|   |   |   +---couple_Eirene.ITER.ifort64.debug
-|   |   |   +---standalone.ITER.ifort64.debug
-|   |   |   +---couple_Eirene.ITER.ifort64.mpi.debug
-|   |   |   +---standalone.ITER.ifort64.mpi.debug
 \end{verbatim}
 
 Similarly to the {\tt src.local} directory, two additional local directories are provided
@@ -1658,54 +1653,52 @@ temperatures, etc...
 SOLPSTOP
 +---modules
 |   +---Eirene
-|   |   +---broadcast
-|   |   +---mathematics
-|   |   +---tetrahedrons
-|   |   +---broadcast_dummy
-|   |   +---startup-routines
-|   |   +---diagno
-|   |   +---assistant
-|   |   +---plotting
-|   |   +---geometry
-|   |   |   +---trc-time-routines
-|   |   |   +---time-routines
-|   |   +---file-handling
-|   |   +---surface-processes
-|   |   +---photons
-|   |   +---volume-processes
-|   |   +---sampling
-|   |   +---xdr-dummy
+|   |   +---builds
 |   |   +---config
-|   |   +---output
-|   |   +---grsoft-dummy
-|   |   +---main-routines
-|   |   +---modules
-|   |   +---iterate
-|   |   +---particle-tracing
-|   |   +---ioflush
-|   |   +---plot_dummy
-|   |   +---scoring
-|   |   +---interfaces
-|   |   |   +---couple_Dummy
-|   |   |   +---couple_Tria
-|   |   |   +---couple_SOLPS-ITER
-|   |   +---user-routines
-|   |   |   +---user_general
-|   |   |   +---user_iter
-|   |   +---local
 |   |   +---Database
 |   |   |   +---AMdata
-|   |   |   +---Surfacedata
+|   |   |   +---SurfaceData
 |   |   |   |   +---TRIM
-|   |   +---builds
-|   |   |   +---couple_SOLPS-ITER.ITER.ifort64
-|   |   |   +---standalone.ITER.ifort64
-|   |   |   +---couple_SOLPS-ITER.ITER.ifort64.mpi
-|   |   |   +---standalone.ITER.ifort64.mpi
-|   |   |   +---couple_SOLPS-ITER.ITER.ifort64.debug
-|   |   |   +---standalone.ITER.ifort64.debug
-|   |   |   +---couple_SOLPS-ITER.ITER.ifort64.mpi.debug
-|   |   |   +---standalone.ITER.ifort64.mpi.debug
+|   |   |   |   |   +---10_bins
+|   |   +---scripts
+|   |   +---src.local
+|   |   +---src
+|   |   |   +---broadcast
+|   |   |   +---mathematics
+|   |   |   +---tetrahedrons
+|   |   |   +---broadcast_dummy
+|   |   |   +---startup-routines
+|   |   |   +---diagno
+|   |   |   +---assistant
+|   |   |   +---plotting
+|   |   |   +---geometry
+|   |   |   |   +---trc-time-routines
+|   |   |   |   +---time-routines
+|   |   |   +---file-handling
+|   |   |   +---surface-processes
+|   |   |   +---photons
+|   |   |   +---volume-processes
+|   |   |   +---sampling
+|   |   |   +---xdr-dummy
+|   |   |   +---output
+|   |   |   +---grsoft-dummy
+|   |   |   +---main-routines
+|   |   |   +---modules
+|   |   |   +---iterate
+|   |   |   +---particle-tracing
+|   |   |   +---ioflush
+|   |   |   +---plot_dummy
+|   |   |   +---scoring
+|   |   |   +---interfaces
+|   |   |   |   +---couple_B2
+|   |   |   |   +---couple_B2_parallel
+|   |   |   |   +---couple_Dummy
+|   |   |   |   +---couple_Tria
+|   |   |   |   +---couple_SOLPS-ITER
+|   |   |   +---user-routines
+|   |   |   |   +---user_default
+|   |   |   |   +---user_generalized_interface
+|   |   |   |   +---user_iter
 \end{verbatim}
 
 The command\index{sei}
