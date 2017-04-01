@@ -11,6 +11,9 @@ endif
 module load solps-gui
 module load texlive
 
+# Debugger (set environment variable DBX)
+setenv DBX totalview
+
 #module load imas
 source $ITMSCRIPTDIR/set_tutorial_env.tcsh
 echo "imasdb solps-iter"
