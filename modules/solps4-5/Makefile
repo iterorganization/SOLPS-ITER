@@ -143,7 +143,7 @@ DEFAULT: ${XREXE}
 
 b2sxdr: ${XREXE}
 
-${XREXE}: ${XROBJ} ${XREXTRA} ${OBJDIR}/libb2_solps5.a ${OBJDIR}/libb2_solps4.a ${MNEXTRA} 
+${XREXE}: ${XROBJ} ${XREXTRA} ${OBJDIR}/libb2_solps5.a ${OBJDIR}/libb2_solps4.a ${MNEXTRA}
 	${LD} ${LDOPTS} $^ -o $@ ${LDLIBES} ${LCPP} ${LDOPTSend}
 
 ${OBJDIR}/allocate_modules.o: ${OBJDIR}/braeir.${MOD} ${OBJDIR}/cadgeo.${MOD} ${OBJDIR}/cai.${MOD} ${OBJDIR}/ccflux.${MOD} ${OBJDIR}/ccona.${MOD} ${OBJDIR}/cestim.${MOD} ${OBJDIR}/cgeom.${MOD} ${OBJDIR}/clast.${MOD} ${OBJDIR}/clena.${MOD} ${OBJDIR}/clogau.${MOD} ${OBJDIR}/comnnl.${MOD} ${OBJDIR}/comspl.${MOD} ${OBJDIR}/comusr.${MOD} ${OBJDIR}/comxs.${MOD} ${OBJDIR}/coutau.${MOD} ${OBJDIR}/cpes.${MOD} ${OBJDIR}/cplot.${MOD} ${OBJDIR}/cpolyg.${MOD} ${OBJDIR}/cref.${MOD} ${OBJDIR}/crefmod.${MOD} ${OBJDIR}/csdvi.${MOD} ${OBJDIR}/csdvi_bgk.${MOD} ${OBJDIR}/csdvi_cop.${MOD} ${OBJDIR}/cspei.${MOD} ${OBJDIR}/cspez.${MOD} ${OBJDIR}/cstep.${MOD} ${OBJDIR}/ctetra.${MOD} ${OBJDIR}/ctext.${MOD} ${OBJDIR}/cupd.${MOD} ${OBJDIR}/czt1.${MOD} ${OBJDIR}/eirbra.${MOD} ${OBJDIR}/photon.${MOD}
@@ -928,17 +928,17 @@ ${OBJDIR}/libb2_solps5.a: ${MD5OBJS} ${SR5OBJS}
 	${BLD} $@ $?
 
 depend: ${BASEDIR}/LISTOBJ ${OBJS:.o=.F} ${EXCLUDELIST:.o=.F}
-	`which makedepend` -p'$${OBJDIR}/' ${DEFINES} -f- ${INCLUDE} $^ | \
+	@`which makedepend` -p'$${OBJDIR}/' ${DEFINES} -f- ${INCLUDE} $^ | \
 	sed 's,^$${OBJDIR}/[^ ][^ ]*/,\$${OBJDIR}/,' | \
         sed 's,: ${SOLPSTOP},: $${SOLPSTOP},' > ${OBJDIR}/dependencies
 ifneq (${MOD},o)
-	`which makedepend` -p'$${OBJDIR}/' ${DEFINES} -f- ${INCLUDE} $^ -o.${MOD} | \
+	@`which makedepend` -p'$${OBJDIR}/' ${DEFINES} -f- ${INCLUDE} $^ -o.${MOD} | \
 	sed 's,^$${OBJDIR}/[^ ][^ ]*/,\$${OBJDIR}/,' | \
         sed 's,: ${SOLPSTOP},: $${SOLPSTOP},' >> ${OBJDIR}/dependencies
 endif
-	egrep -ai '^ {6,}use ' ${FFLIST} | grep -v 'IGNORE' | awk '{sub("\\.F:",".o:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' >> ${OBJDIR}/dependencies
+	@egrep -ai '^ {6,}use ' ${FFLIST} | grep -v 'IGNORE' | awk '{sub("\\.F:",".o:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' >> ${OBJDIR}/dependencies
 ifneq (${MOD},o)
-	egrep -ai '^ *use ' ${MODLIST} | grep -v 'IGNORE' | awk '{sub("\\.F:",".${MOD}:",$$1);sub("\\.F90:",".${MOD}:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' >> ${OBJDIR}/dependencies
+	@egrep -ai '^ *use ' ${MODLIST} | grep -v 'IGNORE' | awk '{sub("\\.F:",".${MOD}:",$$1);sub("\\.F90:",".${MOD}:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' >> ${OBJDIR}/dependencies
 endif
 
 ${BASEDIR}/TAGS: tags
@@ -965,23 +965,23 @@ listobj:
 	echo "$$l" | eval sed "$$E" > ${BASEDIR}/LISTOBJ
 
 links:
-	[ -L ${SRCDIR}/B2_include.local ] && rm -Rf ${SRCDIR}/B2_include.local || echo > /dev/null
+	@[ -L ${SRCDIR}/B2_include.local ] && rm -Rf ${SRCDIR}/B2_include.local || echo > /dev/null
 	-mkdir -p ${SRCDIR}/B2_include.local
-	[ -r `which lndir` ] && lndir ${SOLPS4}/src/Braams/b2/include.local ${SRCDIR}/B2_include.local || ln -sf ${SOLPS4}/src/Braams/b2/include.local/* ${SRCDIR}/B2_include.local/
-	[ -L ${SRCDIR}/B2_include ] && rm -Rf ${SRCDIR}/B2_include || echo > /dev/null
+	@[ -r `which lndir` ] && lndir ${SOLPS4}/src/Braams/b2/include.local ${SRCDIR}/B2_include.local || ln -sf ${SOLPS4}/src/Braams/b2/include.local/* ${SRCDIR}/B2_include.local/
+	@[ -L ${SRCDIR}/B2_include ] && rm -Rf ${SRCDIR}/B2_include || echo > /dev/null
 	-mkdir -p ${SRCDIR}/B2_include
-	[ -r `which lndir` ] && lndir ${SOLPS4}/src/Braams/b2/include ${SRCDIR}/B2_include || ln -sf ${SOLPS4}/src/Braams/b2/include/* ${SRCDIR}/B2_include/
-	[ -L ${SRCDIR}/Eirene_modules ] && rm -Rf ${SRCDIR}/Eirene_modules || echo > /dev/null
+	@[ -r `which lndir` ] && lndir ${SOLPS4}/src/Braams/b2/include ${SRCDIR}/B2_include || ln -sf ${SOLPS4}/src/Braams/b2/include/* ${SRCDIR}/B2_include/
+	@[ -L ${SRCDIR}/Eirene_modules ] && rm -Rf ${SRCDIR}/Eirene_modules || echo > /dev/null
 	-mkdir -p ${SRCDIR}/Eirene_modules
-	[ -r `which lndir` ] && lndir ${SOLPS4}/src/Eirene/src/modules ${SRCDIR}/Eirene_modules || ln -sf ${SOLPS4}/src/Eirene/src/modules/* ${SRCDIR}/Eirene_modules/
+	@[ -r `which lndir` ] && lndir ${SOLPS4}/src/Eirene/src/modules ${SRCDIR}/Eirene_modules || ln -sf ${SOLPS4}/src/Eirene/src/modules/* ${SRCDIR}/Eirene_modules/
 	-mkdir -p ${SRCDIR}/solps4_B2
-	cat B2_4.3.source_files | sed -e 's:[^ ]*/: ${SRCDIR}/solps4_B2/:' | paste B2_4.3.source_files - | sed -e "s:^:ln -sf ${SOLPS4}/src/Braams/b2/src/:" > B2_links
+	@cat B2_4.3.source_files | sed -e 's:[^ ]*/: ${SRCDIR}/solps4_B2/:' | paste B2_4.3.source_files - | sed -e "s:^:ln -sf ${SOLPS4}/src/Braams/b2/src/:" > B2_links
 	. ./B2_links
-	rm B2_links
+	@rm B2_links
 	-mkdir -p ${SRCDIR}/solps4_Eirene
-	cat Eirene_4.3.source_files | sed -e 's:[^ ]*/: ${SRCDIR}/solps4_Eirene/:' | paste Eirene_4.3.source_files - | sed -e "s:^:ln -sf ${SOLPS4}/src/Eirene/src/:" > Eirene_links
+	@cat Eirene_4.3.source_files | sed -e 's:[^ ]*/: ${SRCDIR}/solps4_Eirene/:' | paste Eirene_4.3.source_files - | sed -e "s:^:ln -sf ${SOLPS4}/src/Eirene/src/:" > Eirene_links
 	. ./Eirene_links
-	rm Eirene_links
+	@rm Eirene_links
 
 ${BASEDIR}/LISTOBJ: listobj
 
