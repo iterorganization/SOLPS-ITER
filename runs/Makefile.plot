@@ -160,13 +160,13 @@ $(target_md) : b2mn.dat b2fgmtry b2fparam b2frates b2fstati b2fstate mesh.extra 
 endif
 	rm -rf b2md.exe.dir >& /dev/null ; mkdir b2md.exe.dir ; cp $^ ds* b2md.exe.dir
 ifndef STAND_ALONE
-	-cp fort.44 input.dat b2md.exe.dir/
+	-cp fort.44 input.dat b2md.exe.dir/ >& /dev/null
 	-cd b2md.exe.dir
 endif
 	rm -f $(target_md)
-	cd b2md.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ${SOLPSTOP}/scripts/mds_id | ${TIME} ${B2OBJ}/b2md.exe ${RUN_OPTIONS} ; mv $(target_md) .. ; rm -f $(notdir $^) .quit ds*
+	cd b2md.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ${SOLPSTOP}/scripts/mds_id | ${TIME} ${B2OBJ}/b2md.exe ${RUN_OPTIONS} ; mv $(target_md) .. ; mv shotnumber.history .. ; rm -f $(notdir $^) .quit ds*
 ifndef STAND_ALONE
-	-rm b2md.exe.dir/fort.44 b2md.exe.dir/input.dat b2md.exe.dir/fort.75
+	-rm b2md.exe.dir/fort.44 b2md.exe.dir/input.dat b2md.exe.dir/fort.75 >& /dev/null
 endif
 	-cd b2md.exe.dir ; rm -f HYDHEL METHANE SPUTER H2VIBR fort.21 fort.22 graphite_ext.dat mo_ext.dat
 	-rmdir b2md.exe.dir
@@ -178,13 +178,13 @@ $(target_md.dbx) : b2mn.dat b2fgmtry b2fparam b2frates b2fstati b2fstate mesh.ex
 endif
 	rm -rf b2md.exe.dir >& /dev/null ; mkdir b2md.exe.dir ; cp $^ ds* b2md.exe.dir
 ifndef STAND_ALONE
-	-cp fort.44 input.dat b2md.exe.dir/
+	-cp fort.44 input.dat b2md.exe.dir/ >& /dev/null
 	-cd b2md.exe.dir
 endif
 	rm -f $(target_md)
-	cd b2md.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ${SOLPSTOP}/scripts/mds_id | ${DBX} ${INC} ${DBGOBJ}/b2md.exe ${RUN_OPTIONS} ; mv $(target_md) .. ; rm -f $(notdir $^) .quit ds*
+	cd b2md.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ${SOLPSTOP}/scripts/mds_id | ${DBX} ${INC} ${DBGOBJ}/b2md.exe ${RUN_OPTIONS} ; mv $(target_md) .. ; mv shotnumber.history .. ; rm -f $(notdir $^) .quit ds*
 ifndef STAND_ALONE
-	-rm b2md.exe.dir/fort.44 b2md.exe.dir/input.dat b2md.exe.dir/fort.75
+	-rm b2md.exe.dir/fort.44 b2md.exe.dir/input.dat b2md.exe.dir/fort.75 >& /dev/null
 endif
 	-cd b2md.exe.dir ; rm -f HYDHEL METHANE SPUTER H2VIBR fort.21 fort.22 graphite_ext.dat mo_ext.dat
 	-rmdir b2md.exe.dir
