@@ -137,11 +137,11 @@ c*** bccon, conpar, bcmom, mompar
                 iniprm(l,k,1,12,2)=1
               else if (i.le.nznbndt(1).and.j.eq.1) then !}{ core boundary
                 iniprm(l,k,1,10,2)=8
-                iniprm(l,k,1,12,2)=1
+                iniprm(l,k,1,12,2)=2
               else !}{
                 iniprm(l,k,1,10,2)=10
                 rniprm(l,k,1,11,2)=-0.01
-                iniprm(l,k,1,12,2)=1
+                iniprm(l,k,1,12,2)=2
               end if !}
             else !}{
               iniprm(l,k,1,10,2)=lcobnds(ifl(l),i,j)
