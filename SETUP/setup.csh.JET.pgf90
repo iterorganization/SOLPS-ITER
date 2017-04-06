@@ -8,6 +8,8 @@ module load MUMPS
 module load netcdf
 module load NAG
 module load scalapack
+module unload python
+module load python/2.7.3
 
 
 # Environment variables
@@ -21,6 +23,7 @@ endif
 if(! $?FLUSH) then
   setenv FLUSH $SIMDIR/flush
 endif
+setenv SOLPSWORK /work/$USER/solps-iter
 
 # Debugger
 setenv DBX totalview

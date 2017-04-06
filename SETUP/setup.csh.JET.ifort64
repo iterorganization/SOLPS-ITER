@@ -1,6 +1,10 @@
 setenv GLI_HOME /common/SOLPS-ITER/OBJECTCODE/ifort64/gks
 setenv PATH ${PATH}:/common/SOLPS-ITER/OBJECTCODE/ifort64/NETCDF/bin
 setenv NCARG_ROOT /common/SOLPS-ITER/OBJECTCODE/ifort64/NCARG
+setenv SOLPSWORK /work/$USER/solps-iter
+if(! $?DEVICE) then
+  setenv DEVICE jet
+endif
 if(! $?SIMDIR) then
   setenv SIMDIR /u/sim
 endif
@@ -9,6 +13,8 @@ if(! $?FLUSH) then
 endif
 # load modules
 module load ifort
+module unload python
+module load python/2.7.3
 
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"

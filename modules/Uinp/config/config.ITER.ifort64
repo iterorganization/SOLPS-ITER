@@ -3,7 +3,7 @@
 LD_MSCL ?= `pkg-config mscl --libs`
 
 ifdef USE_MPI
-FC	     = mpif90
+FC       = mpif90
 MPI_CPP ?= `pkg-config mpich2-ch3 --cflags`
 LD_MPI  ?= `pkg-config mpich2-ch3 --libs`
 else
@@ -23,7 +23,7 @@ else
 FFLAGS   =
 endif
 endif
-INCLUDE  = -I${SRCDIR} -I${EIRINC} -I${B2INC}
+INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
 CPP      = /lib/cpp -C -traditional
 

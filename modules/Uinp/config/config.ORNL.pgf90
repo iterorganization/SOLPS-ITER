@@ -12,9 +12,9 @@ LD_GR   ?= -L${GR_ROOT} -lgr
 LD_GKS  ?= -L${GLI_HOME} -lgks 
 
 ifdef USE_MPI
-FC	     = mpif90
+FC	 = mpif90
 else
-FC	     = pgf90
+FC	 = pgf90
 endif
 
 ifdef SOLPS_DEBUG
@@ -23,10 +23,10 @@ else
 FFLAGS	 = -O 
 endif
 
-INCLUDE  = -I${SRCDIR} -I${EIRINC} -I${B2INC}
+INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
-CPP	     = /lib/cpp -traditional
-MOD 	   = mod
+CPP	 = /lib/cpp -traditional
+MOD 	 = mod
 
 LDLIBS 	 = ${LD_MSCL} ${LD_GR} ${LD_GKS} -lX11 -lXt
 LDEXTRA  = 
