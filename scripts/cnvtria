@@ -3,12 +3,11 @@
 #  VERSION : 05.02.2005 17:55
 
 . triang.conf
+
 set -A f -- $TRIATRI
 
 coord=${f[0]}
 elem=${f[1]}
-
-[ "$SOLPS_CENTRAL" = 'yes' ] && DEVICE=$DEVICE/$USER
 
 NAME=${0##*/}
 Usage="$NAME :  conversion of TRIA mesh into DG template.   Usage:
