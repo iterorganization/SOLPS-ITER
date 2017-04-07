@@ -103,6 +103,7 @@ endif
 
 PROG_XR = b2sxdr.exe
 MOD4LES = ${patsubst ${SRCDIR}/Eirene_modules/%.F,%.o,${shell echo ${SRCDIR}/Eirene_modules/*.F}}
+MOD4LES+= ${patsubst ${SRCDIR}/Eirene_modules/%.F90,%.o,${shell echo ${SRCDIR}/Eirene_modules/*.F90}}
 MOD5LES = ${patsubst ${SRCDIR}/B2.5_modules/%.F,%.o,${shell echo ${SRCDIR}/B2.5_modules/*.F}}
 MOD5LES += ${patsubst ${SRCDIR}/solps5/%.F90,%.o,${shell echo ${SRCDIR}/solps5/*.F90}}
 MODULES	= ${MOD4LES} ${MOD5LES}
@@ -353,16 +354,22 @@ ${OBJDIR}/eirmod_precision.o:
 ${OBJDIR}/eirmod_braeir.o: 
 	ln -sf ${EIRDIR}/eirmod_braeir.o ${OBJDIR}
 
+${OBJDIR}/eirmod_comxs.o:
+	ln -sf ${EIRDIR}/eirmod_comxs.o ${OBJDIR}
+
 ${OBJDIR}/eirmod_ctrig.o:
 	ln -sf ${EIRDIR}/eirmod_ctrig.o ${OBJDIR}
 
-${OBJDIR}/eirmod_extrab25.o: 
+${OBJDIR}/eirmod_extrab25.o: ${OBJDIR}/eirmod_comxs.${MOD}
 	ln -sf ${EIRDIR}/eirmod_extrab25.o ${OBJDIR}
+
+${OBJDIR}/eirmod_mpi.o: ${OBJDIR}/comprt.${MOD} ${OBJDIR}/precision.${MOD} ${SRCDIR}/Eirene_modules/eirmod_mpi.F90
+	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/eirmod_mpi.o -c ${SRCDIR}/Eirene_modules/eirmod_mpi.F90
 
 ${OBJDIR}/eirmod_octree.o: ${SRCDIR}/Eirene_modules/eirmod_octree.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/eirmod_octree.o -c ${SRCDIR}/Eirene_modules/eirmod_octree.F
 
-${OBJDIR}/adsp.o: ${OBJDIR}/cpes.${MOD} ${SRCDIR}/Eirene_modules/adsp.F
+${OBJDIR}/adsp.o: ${OBJDIR}/cpes.${MOD} ${OBJDIR}/eirmod_mpi.${MOD} ${SRCDIR}/Eirene_modules/adsp.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/adsp.o -c ${SRCDIR}/Eirene_modules/adsp.F
 
 ${OBJDIR}/amark_mod.o: ${SRCDIR}/Eirene_modules/amark_mod.F
@@ -473,7 +480,7 @@ ${OBJDIR}/comxs.o: ${OBJDIR}/cupd.${MOD} ${OBJDIR}/comprt.${MOD} ${SRCDIR}/Eiren
 ${OBJDIR}/coutau.o: ${SRCDIR}/Eirene_modules/coutau.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/coutau.o -c ${SRCDIR}/Eirene_modules/coutau.F
 
-${OBJDIR}/cpes.o: ${OBJDIR}/comprt.${MOD} ${OBJDIR}/ctrcei.${MOD} ${OBJDIR}/eirmod_precision.${MOD} ${SRCDIR}/Eirene_modules/cpes.F
+${OBJDIR}/cpes.o: ${OBJDIR}/comprt.${MOD} ${OBJDIR}/ctrcei.${MOD} ${OBJDIR}/eirmod_precision.${MOD} ${OBJDIR}/eirmod_mpi.${MOD} ${SRCDIR}/Eirene_modules/cpes.F
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/cpes.o -c ${SRCDIR}/Eirene_modules/cpes.F
 
 ${OBJDIR}/cplmsk.o: ${SRCDIR}/Eirene_modules/cplmsk.F
@@ -600,10 +607,13 @@ ${OBJDIR}/b2mod_neutrals_namelist.${MOD}: ${OBJDIR}/eirmod_parmmod.${MOD} ${OBJD
 ${OBJDIR}/eirmod_braeir.${MOD}:
 	ln -sf ${EIRDIR}/eirmod_braeir.${MOD} ${OBJDIR}
 
+${OBJDIR}/eirmod_comxs.${MOD}:
+	ln -sf ${EIRDIR}/eirmod_comxs.${MOD} ${OBJDIR}
+
 ${OBJDIR}/eirmod_ctrig.${MOD}:
 	ln -sf ${EIRDIR}/eirmod_ctrig.${MOD} ${OBJDIR}
 
-${OBJDIR}/eirmod_extrab25.${MOD}:
+${OBJDIR}/eirmod_extrab25.${MOD}: ${OBJDIR}/eirmod_comxs.${MOD}
 	ln -sf ${EIRDIR}/eirmod_extrab25.${MOD} ${OBJDIR}
 
 ${OBJDIR}/eirmod_parmmod.${MOD}: ${OBJDIR}/parmmod.${MOD}
@@ -612,11 +622,15 @@ ${OBJDIR}/eirmod_parmmod.${MOD}: ${OBJDIR}/parmmod.${MOD}
 ${OBJDIR}/eirmod_precision.${MOD}: ${OBJDIR}/precision.${MOD}
 	ln -sf ${OBJDIR}/precision.${MOD} $@
 
+${OBJDIR}/eirmod_mpi.${MOD}: ${OBJDIR}/comprt.${MOD} ${OBJDIR}/precision.${MOD} ${SRCDIR}/Eirene_modules/eirmod_mpi.F90
+	[ -e $@ ] && rm $@ || echo > /dev/null
+	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/eirmod_mpi.o -c ${SRCDIR}/Eirene_modules/eirmod_mpi.F90
+
 ${OBJDIR}/eirmod_octree.${MOD}: ${SRCDIR}/Eirene_modules/eirmod_octree.F
 	[ -e $@ ] && rm $@ || echo > /dev/null
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/eirmod_octree.o -c ${SRCDIR}/Eirene_modules/eirmod_octree.F
 
-${OBJDIR}/adsp.${MOD}: ${OBJDIR}/cpes.${MOD} ${SRCDIR}/Eirene_modules/adsp.F
+${OBJDIR}/adsp.${MOD}: ${OBJDIR}/cpes.${MOD} ${OBJDIR}/eirmod_mpi.${MOD} ${SRCDIR}/Eirene_modules/adsp.F
 	[ -e $@ ] && rm $@ || echo > /dev/null
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/adsp.o -c ${SRCDIR}/Eirene_modules/adsp.F
 
@@ -764,7 +778,7 @@ ${OBJDIR}/coutau.${MOD}: ${SRCDIR}/Eirene_modules/coutau.F
 	[ -e $@ ] && rm $@ || echo > /dev/null
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/coutau.o -c ${SRCDIR}/Eirene_modules/coutau.F
 
-${OBJDIR}/cpes.${MOD}: ${OBJDIR}/comprt.${MOD} ${OBJDIR}/ctrcei.${MOD} ${OBJDIR}/eirmod_precision.${MOD} ${SRCDIR}/Eirene_modules/cpes.F
+${OBJDIR}/cpes.${MOD}: ${OBJDIR}/comprt.${MOD} ${OBJDIR}/ctrcei.${MOD} ${OBJDIR}/eirmod_precision.${MOD} ${OBJDIR}/eirmod_mpi.${MOD} ${SRCDIR}/Eirene_modules/cpes.F
 	[ -e $@ ] && rm $@ || echo > /dev/null
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/cpes.o -c ${SRCDIR}/Eirene_modules/cpes.F
 
