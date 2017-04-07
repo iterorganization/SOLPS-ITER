@@ -42,3 +42,5 @@ rm b2yrp.prt
 echo 'o' | b2plot b2yrp
 cp ./b2yrp.exe.dir/* .
 FreeFem++ $SOLPSTOP/scripts/ReflectorPlate_HTM.edp
+
+summarize_HTM
