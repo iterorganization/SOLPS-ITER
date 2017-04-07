@@ -940,12 +940,11 @@ c*** Helium pumping data
         lrrvr(1,7)=.true.
         lrrvr(2,7)=.true.
 
-c*** location, fusion_power, ratio of pumping speeds, j_he_at, j_h_at
+c*** location, fusion_power, ratio of pumping speeds, j_he_at
         iniprm(1,1,1,11,7)=locphep
         rniprm(1,1,1,1,7)=pwrhepdt
         rniprm(1,1,1,2,7)=pmphepdt
         iniprm(1,1,1,8,7)=j_he_at
-        iniprm(1,1,1,9,7)=j_h_at
 c*** lpfrb, lpfrt
         if(locphep.eq.1) then !{
           iniprm(1,1,1,4,7)=lstclhep(1)
@@ -968,7 +967,11 @@ c*** lhetrgts
             iniprm(i,1,1,3,7)=0
           end if !}
         end do !}
-c*** l_h_mol
+      end if !}
+c*** j_h_at,l_h_mol
+      if (j_h_at.ne.0) then !{
+        ex=.false.
+        iniprm(1,1,1,9,7)=j_h_at
         nmdpr(10,7)=nmoli
         do i=1,nmoli !{
           iniprm(i,1,1,10,7)=l_h_mol(i)
