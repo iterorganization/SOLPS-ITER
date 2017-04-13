@@ -11,6 +11,7 @@ if ("X$1X" == "X-rX") then
   ln -sf `climb_and_look_for -r modules/Eirene/Database/AMdata/h2vibr.tex` H2VIBR  
   ln -sf `climb_and_look_for -r modules/Eirene/Database/AMdata/hydhel.tex` HYDHEL  
   ln -sf `climb_and_look_for -r modules/Eirene/Database/AMdata/methane.tex` METHANE
+  ln -sf `climb_and_look_for -r modules/Eirene/Database/AMdata/ammoniaex.tex` AMMONX
   ln -sf `climb_and_look_for -r modules/Eirene/Database/PHOTON`         
   ln -sf `climb_and_look_for -r modules/Eirene/Database/Surfacedata/SPUTER`        
   ln -sf `climb_and_look_for -r modules/Eirene/Database/Surfacedata/TRIM/trim.dat` fort.21   
@@ -22,6 +23,7 @@ else
   ln -sf ${datapath}/AMdata/h2vibr.tex H2VIBR
   ln -sf ${datapath}/AMdata/hydhel.tex HYDHEL
   ln -sf ${datapath}/AMdata/methane.tex METHANE
+  ln -sf ${datapath}/AMdata/ammoniaex.tex AMMONX
   ln -sf ${datapath}/PHOTON
   ln -sf ${datapath}/Surfacedata/SPUTER
   ln -sf ${datapath}/Surfacedata/TRIM/trim.dat fort.21

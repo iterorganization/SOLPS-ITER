@@ -163,7 +163,7 @@ endif
 	[ -s b2.neutrals_save.parameters ] && cp b2.neutrals_save.parameters b2.neutrals_save.parameters.i || echo > /dev/null
 	[ -s b2.sputter_save.parameters ] && cp b2.sputter_save.parameters b2.sputter_save.parameters.i || echo > /dev/null
 	[ -s b2.transport_models_save.parameters ] && cp b2.transport_models_save.parameters b2.transport_models_save.parameters.i || echo > /dev/null
-	-cd b2mn.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ln -s ../input.dat fort.1 ; [ -e ../fort.15 ] && cp -p ../fort.15 . || echo > /dev/null ; [ -e ../fort.14 ] && cp -p ../fort.14 . || echo > /dev/null ; [ -e ../fort.13 ] && cp -p ../fort.13 . || echo > /dev/null ; [ -e ../fort.12 ] && cp -p ../fort.12 . || echo > /dev/null ; [ -e ../fort.11 ] && cp -p ../fort.11 . || echo > /dev/null ; [ -e ../fort.10 ] && cp -p ../fort.10 . || echo > /dev/null ; [ -e ../fort.44 ] && cp -p ../fort.44 . || echo > /dev/null ; [ -e ../fort.33 ] && cp -p ../fort.33 . || echo > /dev/null ; [ -e ../fort.34 ] && cp -p ../fort.34 . || echo > /dev/null ; [ -e ../fort.35 ] && cp -p ../fort.35 . || echo > /dev/null
+	-cd b2mn.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ln -s ../input.dat fort.1 ; [ -e ../fort.15 ] && cp -p ../fort.15 . || echo > /dev/null ; [ -e ../fort.14 ] && cp -p ../fort.14 . || echo > /dev/null ; [ -e ../fort.13 ] && cp -p ../fort.13 . || echo > /dev/null ; [ -e ../fort.12 ] && cp -p ../fort.12 . || echo > /dev/null ; [ -e ../fort.11 ] && cp -p ../fort.11 . || echo > /dev/null ; [ -e ../fort.10 ] && cp -p ../fort.10 . || echo > /dev/null ; [ -e ../fort.44 ] && cp -p ../fort.44 . || echo > /dev/null ; [ -e ../fort.33 ] && cp -p ../fort.33 . || echo > /dev/null ; [ -e ../fort.34 ] && cp -p ../fort.34 . || echo > /dev/null ; [ -e ../fort.35 ] && cp -p ../fort.35 . || echo > /dev/null
 endif
 ifdef USE_IMPGYRO
 	-cd b2mn.exe.dir ; touch b2ig.conf ; echo "-n ${NPE_B2} : ${B2OBJ}/b2mn.exe" >> b2ig.conf ; echo "-n ${NPE_EXT} : ${EXE_EXT}" >> b2ig.conf ; ln -s ../config ../pre . ; mkdir tracing ;\
@@ -185,7 +185,7 @@ ifndef STAND_ALONE
 	-[ -e b2mn.exe.dir/fort.15 ] && mv b2mn.exe.dir/fort.15 . || echo > /dev/null
 	-[ -e b2mn.exe.dir/fort.44 ] && mv b2mn.exe.dir/fort.44 . || echo > /dev/null
 	-[ -e b2mn.exe.dir/fort.46 ] && mv b2mn.exe.dir/fort.46 . || echo > /dev/null
-	-cd b2mn.exe.dir ; rm -f HYDHEL METHANE SPUTER H2VIBR fort.21 fort.22 graphite_ext.dat mo_ext.dat fort.75 fort.78 fort.1 fort.29 fort.37 fort.55 vtk.out
+	-cd b2mn.exe.dir ; rm -f HYDHEL METHANE SPUTER H2VIBR AMMONX fort.21 fort.22 graphite_ext.dat mo_ext.dat fort.75 fort.78 fort.1 fort.29 fort.37 fort.55 vtk.out
 	-[ -e b2mn.exe.dir/fort.33 ] && rm b2mn.exe.dir/fort.33 || echo > /dev/null
 	-[ -e b2mn.exe.dir/fort.34 ] && rm b2mn.exe.dir/fort.34 || echo > /dev/null
 	-[ -e b2mn.exe.dir/fort.35 ] && rm b2mn.exe.dir/fort.35 || echo > /dev/null
@@ -224,7 +224,7 @@ endif
 	[ -s b2.neutrals_save.parameters ] && cp b2.neutrals_save.parameters b2.neutrals_save.parameters.i || echo > /dev/null
 	[ -s b2.sputter_save.parameters ] && cp b2.sputter_save.parameters b2.sputter_save.parameters.i || echo > /dev/null
 	[ -s b2.transport_models_save.parameters ] && cp b2.transport_models_save.parameters b2.transport_models_save.parameters.i || echo > /dev/null
-	-cd b2mn.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ln -s ../input.dat fort.1 ; [ -e ../fort.15 ] && cp -p ../fort.15 . || echo > /dev/null ; [ -e ../fort.14 ] && cp -p ../fort.14 . || echo > /dev/null ; [ -e ../fort.13 ] && cp -p ../fort.13 . || echo > /dev/null ; [ -e ../fort.12 ] && cp -p ../fort.12 . || echo > /dev/null ; [ -e ../fort.11 ] && cp -p ../fort.11 . || echo > /dev/null ; [ -e ../fort.10 ] && cp -p ../fort.10 . || echo > /dev/null ; [ -e ../fort.44 ] && cp -p ../fort.44 . || echo > /dev/null ; [ -e ../fort.33 ] && cp -p ../fort.33 . || echo > /dev/null ; [ -e ../fort.34 ] && cp -p ../fort.34 . || echo > /dev/null ; [ -e ../fort.35 ] && cp -p ../fort.35 . || echo > /dev/null
+	-cd b2mn.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ln -s ../input.dat fort.1 ; [ -e ../fort.15 ] && cp -p ../fort.15 . || echo > /dev/null ; [ -e ../fort.14 ] && cp -p ../fort.14 . || echo > /dev/null ; [ -e ../fort.13 ] && cp -p ../fort.13 . || echo > /dev/null ; [ -e ../fort.12 ] && cp -p ../fort.12 . || echo > /dev/null ; [ -e ../fort.11 ] && cp -p ../fort.11 . || echo > /dev/null ; [ -e ../fort.10 ] && cp -p ../fort.10 . || echo > /dev/null ; [ -e ../fort.44 ] && cp -p ../fort.44 . || echo > /dev/null ; [ -e ../fort.33 ] && cp -p ../fort.33 . || echo > /dev/null ; [ -e ../fort.34 ] && cp -p ../fort.34 . || echo > /dev/null ; [ -e ../fort.35 ] && cp -p ../fort.35 . || echo > /dev/null
 	cd b2mn.exe.dir ; mkdir tracing ; ${DBX} ${INC} ${DBGOBJ}/b2mn.exe ${RUN_OPTIONS} ; mv $(target_mn) .. >& /dev/null ; [ -d ../tracing ] || mkdir ../tracing ; mv -f tracing/* ../tracing ; [ -e ../fort.30 ] || mv fort.30 .. ; rm -f $(notdir $^) .quit ; mv d?? ds?? ds??? b2.*.parameters .. >& /dev/null
 	-[ -e b2mn.exe.dir/fort.10 ] && mv b2mn.exe.dir/fort.10 . || echo > /dev/null
 	-[ -e b2mn.exe.dir/fort.11 ] && mv b2mn.exe.dir/fort.11 . || echo > /dev/null
@@ -234,7 +234,7 @@ endif
 	-[ -e b2mn.exe.dir/fort.15 ] && mv b2mn.exe.dir/fort.15 . || echo > /dev/null
 	-[ -e b2mn.exe.dir/fort.44 ] && mv b2mn.exe.dir/fort.44 . || echo > /dev/null
 	-[ -e b2mn.exe.dir/fort.46 ] && mv b2mn.exe.dir/fort.46 . || echo > /dev/null
-	-cd b2mn.exe.dir ; rm -f HYDHEL METHANE SPUTER H2VIBR fort.21 fort.22 graphite_ext.dat mo_ext.dat fort.75 fort.78 fort.1 fort.29 fort.37 fort.55 vtk.out
+	-cd b2mn.exe.dir ; rm -f HYDHEL METHANE SPUTER H2VIBR AMMONX fort.21 fort.22 graphite_ext.dat mo_ext.dat fort.75 fort.78 fort.1 fort.29 fort.37 fort.55 vtk.out
 	-[ -e b2mn.exe.dir/fort.33 ] && rm b2mn.exe.dir/fort.33 || echo > /dev/null
 	-[ -e b2mn.exe.dir/fort.34 ] && rm b2mn.exe.dir/fort.34 || echo > /dev/null
 	-[ -e b2mn.exe.dir/fort.35 ] && rm b2mn.exe.dir/fort.35 || echo > /dev/null
@@ -245,7 +245,7 @@ else
 	cd b2mn.exe.dir ; ${DBX} ${INC} ${DBGOBJ}/b2mn.exe ${RUN_OPTIONS} ; rm -f $(notdir $^) .quit ; mv d?? ds?? ds??? b2.*.parameters .. >& /dev/null
 endif
 	-[ -e fort.30 ] && echo > /dev/null || mv b2mn.exe.dir/fort.30 .
-	-cd b2mn.exe.dir ; rm -f HYDHEL METHANE SPUTER H2VIBR fort.21 fort.22 graphite_ext.dat mo_ext.dat
+	-cd b2mn.exe.dir ; rm -f HYDHEL METHANE SPUTER H2VIBR AMMONX fort.21 fort.22 graphite_ext.dat mo_ext.dat
 	-[ -e b2mn.exe.dir/fort.31 ] && mv b2mn.exe.dir/fort.31 . || echo > /dev/null
 	-[ -e b2mn.exe.dir/b2time.nc ] && mv b2mn.exe.dir/b2time.nc . || echo > /dev/null
 	-[ -e b2mn.exe.dir/b2wall.nc ] && mv b2mn.exe.dir/b2wall.nc . || echo > /dev/null
@@ -386,12 +386,12 @@ $(target_yt) : b2yt.dat b2fstate b2mn.dat b2ah.dat b2ai.dat b2ag.dat b2fgmtry b2
 	rm -rf b2yt.exe.dir >& /dev/null ; mkdir b2yt.exe.dir ; cp $^ b2yt.exe.dir
 	rm -f $(target_yt)
 ifndef STAND_ALONE
-	-cd b2yt.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; [ -e ../input.dat ] && ln -s ../input.dat . || echo > /dev/null ; [ -e ../fort.44 ] && ln -s ../fort.44 . || echo > /dev/null ; [ -e ../fort.33 ] && ln -s ../fort.33 . || echo > /dev/null ; [ -e ../fort.34 ] && ln -s ../fort.34 . || echo > /dev/null ; [ -e ../fort.35 ] && ln -s ../fort.35 . || echo > /dev/null
+	-cd b2yt.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; [ -e ../input.dat ] && ln -s ../input.dat . || echo > /dev/null ; [ -e ../fort.44 ] && ln -s ../fort.44 . || echo > /dev/null ; [ -e ../fort.33 ] && ln -s ../fort.33 . || echo > /dev/null ; [ -e ../fort.34 ] && ln -s ../fort.34 . || echo > /dev/null ; [ -e ../fort.35 ] && ln -s ../fort.35 . || echo > /dev/null
 	cd b2yt.exe.dir ; ${TIME} ${B2OBJ}/b2yt.exe ${RUN_OPTIONS} ; mv $(target_yt) .. ; rm -f $(notdir $^) input.dat fort.44 fort.75 ; mv *.2 ..
 else
 	cd b2yt.exe.dir ; ${TIME} ${B2OBJ}/b2yt.exe ${RUN_OPTIONS} ; mv $(target_yt) .. ; rm -f $(notdir $^); mv *.2 ..
 endif
-	-cd b2yt.exe.dir ; rm -f HYDHEL METHANE SPUTER H2VIBR fort.21 fort.22 graphite_ext.dat mo_ext.dat
+	-cd b2yt.exe.dir ; rm -f HYDHEL METHANE SPUTER H2VIBR AMMONX fort.21 fort.22 graphite_ext.dat mo_ext.dat
 	-[ -e b2yt.exe.dir/fort.33 ] && rm b2yt.exe.dir/fort.33 || echo > /dev/null
 	-[ -e b2yt.exe.dir/fort.34 ] && rm b2yt.exe.dir/fort.34 || echo > /dev/null
 	-[ -e b2yt.exe.dir/fort.35 ] && rm b2yt.exe.dir/fort.35 || echo > /dev/null
@@ -401,12 +401,12 @@ dbx.b2yt : b2yt.dat b2fstate b2mn.dat b2ah.dat b2ai.dat b2ag.dat b2fgmtry b2frat
 	rm -rf b2yt.exe.dir >& /dev/null ; mkdir b2yt.exe.dir ; cp $^ b2yt.exe.dir
 	rm -f $(target_yt)
 ifndef STAND_ALONE
-	-cd b2yt.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; [ -e ../input.dat ] && ln -s ../input.dat . || echo > /dev/null ; [ -e ../fort.44 ] && ln -s ../fort.44 . || echo > /dev/null ; [ -e ../fort.33 ] && ln -s ../fort.33 . || echo > /dev/null ; [ -e ../fort.34 ] && ln -s ../fort.34 . || echo > /dev/null ; [ -e ../fort.35 ] && ln -s ../fort.35 . || echo > /dev/null
+	-cd b2yt.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; [ -e ../input.dat ] && ln -s ../input.dat . || echo > /dev/null ; [ -e ../fort.44 ] && ln -s ../fort.44 . || echo > /dev/null ; [ -e ../fort.33 ] && ln -s ../fort.33 . || echo > /dev/null ; [ -e ../fort.34 ] && ln -s ../fort.34 . || echo > /dev/null ; [ -e ../fort.35 ] && ln -s ../fort.35 . || echo > /dev/null
 	cd b2yt.exe.dir ; ${DBX} ${INC} ${DBGOBJ}/b2yt.exe ${RUN_OPTIONS} ; mv $(target_yt) .. ; rm -f $(notdir $^) input.dat fort.44 fort.75 ; mv *.2 ..
 else
 	cd b2yt.exe.dir ; ${DBX} ${INC} ${DBGOBJ}/b2yt.exe ${RUN_OPTIONS} ; mv $(target_yt) .. ; rm -f $(notdir $^); mv *.2 ..
 endif
-	-cd b2yt.exe.dir ; rm -f HYDHEL METHANE SPUTER H2VIBR fort.21 fort.22 graphite_ext.dat mo_ext.dat
+	-cd b2yt.exe.dir ; rm -f HYDHEL METHANE SPUTER H2VIBR AMMONX fort.21 fort.22 graphite_ext.dat mo_ext.dat
 	-[ -e b2yt.exe.dir/fort.33 ] && rm b2yt.exe.dir/fort.33 || echo > /dev/null
 	-[ -e b2yt.exe.dir/fort.34 ] && rm b2yt.exe.dir/fort.34 || echo > /dev/null
 	-[ -e b2yt.exe.dir/fort.35 ] && rm b2yt.exe.dir/fort.35 || echo > /dev/null
