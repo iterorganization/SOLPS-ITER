@@ -49,9 +49,6 @@ theta=ttheta*pi/180.0;
 Xshadow=(2*L1*tan(beta)-Tgap*tan(theta))/(tan(beta)+tan(theta));
 
 real Htot=H1+H2+H3+H4+H5;
-ifstream size1("irp_size.dat");
-ifstream www1("Wtot_irp.dat");
-ifstream www2("Wpls_irp.dat");
 //MATERIALS DATA
 //Thermal conduct CuCrZr
 real[int] CCZ(4);
@@ -79,6 +76,9 @@ WW(4)=-1.054501953718856e-01;
 WW(5)=1.750724560926432e+02;
 
 //Load heat flux profile
+ifstream size1(sinout+"rp_size.dat");
+ifstream www1("Wtot_"+sinout+"rp.dat");
+ifstream www2("Wpls_"+sinout+"rp.dat");
 int Ntile;
 size1>>Ntile;     
 real[int] qtot(Ntile);
@@ -93,6 +93,7 @@ real[int] TmaxCCZ(Ntile);
 real[int] TmaxW(Ntile);
 real[int] TmaxCU(Ntile);
 real[int] Twater(Ntile);
+real[int] Qreal(Ntile);
 real[int] HTC(Ntile);
 real[int,int] Tout(Ntile,npointout);
 real TTMAX=0.0;
@@ -159,6 +160,7 @@ real flag=0.0;
 TTMAX=0.0;
 for(int jj=0;jj<Ntile;jj+=1){
 	qq=(qpls(jj)/cos(beta+alpha))*(x>=Xshadow)+(qtot(jj)-qpls(jj));
+    Qreal(jj)=qpls(jj)/cos(beta+alpha)+qtot(jj)-qpls(jj);
 	real err=1.0,tol=1e-6;
 	Told=Tf;
 	real qwater=0.0,qplasma=0.0;
@@ -232,7 +234,7 @@ for(int jj=0;jj<Ntile;jj+=1){
 		ff02 << "Warning! Cu temperature exceeds properties range of 700 C. Tile number " <<jj<<" T_Cu= "<< TmaxCU(jj)<<" C" <<endl;
 		flag=-9.0;
 	}
-    plot(T,fill=1,value=1);	
+     plot(T,fill=1,value=1);	
     if (jj==iplot){
       string name = "Temp2D_RP_"+sinout+"_" + (jj+1) + ".eps";
       plot(T,fill=1,value=1,ps=name);
@@ -250,7 +252,11 @@ ofstream ff3("T_W_RP_"+sinout+".dat");
 ofstream ff4("T_water_RP_"+sinout+".dat");
 ofstream ff6("T_SS_RP_"+sinout+".dat");
 ofstream ff7("Tout_RP_"+sinout+".dat");
+ofstream ff8("Q_RP_"+sinout+".dat");
+ofstream ff9("XT_RP_"+sinout+".dat");
+ifstream ff10("X_"+sinout+"rp.dat");
 TTMAX=0.0;
+real X;
 for(int jj=0;jj<Ntile;jj+=1){
 	ff1<<TmaxCCZ(jj)<<endl;
 	ff2<<TmaxCU(jj)<<endl;
@@ -261,10 +267,14 @@ for(int jj=0;jj<Ntile;jj+=1){
 		ff7<<Tout(jj,kk-1)<<" ";
 	}
 	ff7<<Tout(jj,npointout-1)<<endl;
+    ff8<<Qreal(jj)<<endl;
     if (TmaxW(jj)>=TTMAX){
       TTMAX=TmaxW(jj);
       IMAX=jj;
     }
+    ff10>>X;
+	ff9<<X<<" "<<TmaxCCZ(jj)<<" "<<TmaxCU(jj)<<" "<<TmaxW(jj)<<" "<<Qreal(jj)<<endl;
+	ff10>>X;ff10>>X;
 }
 cout<<"Maximum W temperature is "<<TTMAX<<" C at cut number "<<IMAX<<endl;
 cout<<"Water outlet temperature is "<<Twater(Ntile-1)<<" C"<<endl;

@@ -1,0 +1,6 @@
+#! /bin/tcsh -f
+ echo "Plotting " $1 $2
+ set filename="XT_"$1"_"$2".dat"
+ set fileplot="profile_"$1"_"$2".ps"
+ awk '{print $1,$2,$3,$4}' $filename | \
+ plot x$1yplot3 T_CuCrZr T_Cu T_W 'Coordinate along wall (m)' 'Maximum temperature (C)' "$1 $2   `chop_pwd 40`"

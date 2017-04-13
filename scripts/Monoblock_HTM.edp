@@ -85,6 +85,7 @@ real[int] TmaxCU(Ntile);
 real[int] TmaxCCZ(Ntile);
 real[int] TmaxW(Ntile);
 real[int] Twater(Ntile);
+real[int] Qreal(Ntile);
 real[int] HTC(Ntile);
 real[int,int] Tout(Ntile,npointout);
 real TTMAX=0.0;
@@ -99,7 +100,7 @@ border EE(t=0.,2.*pi){x=L/2.+D1/2.*cos(t);y=H+D1/2.*sin(t);};
 border FF(t=0.,2.*pi){x=L/2.+D2/2.*cos(t);y=H+D2/2.*sin(t);};
 border GG(t=0.,2.*pi){x=L/2.+D3/2.*cos(t);y=H+D3/2.*sin(t);};
 mesh block=buildmesh(A(n)+B(n)+C(n)+D(n)+EE(3*n)+FF(2*n)+GG(-2*n));
-plot(block,fill=1,ps="Domain_VT.eps");
+plot(block,fill=1,ps="Domain_V.eps");
 
 //PROBLEM DEFINITION
 fespace Vh(block,P1);
@@ -119,6 +120,7 @@ real flag=0.0;
 TTMAX=0.0;
 for(int jj=0;jj<Ntile;jj+=1){
 	qq=(qpls(jj)/cos(beta+alpha))*(x>=Xshadow)+(qtot(jj)-qpls(jj));
+    Qreal(jj)=qpls(jj)/cos(beta+alpha)+qtot(jj)-qpls(jj);
 	real err=1.0,tol=1.e-3;
 	Told=Tf;
 	real qwater=0.0,qplasma=0.0;
@@ -187,7 +189,7 @@ for(int jj=0;jj<Ntile;jj+=1){
 		flag=-9.0;
 	}
     plot(T,fill=1,value=1);
-    if (jj==iplot){
+	if (jj==iplot){
       string name = "Temp2D_VT_"+sinout+"_" + (jj+1) + ".eps";
       plot(T,fill=1,value=1,ps=name);
       iplot=iplot+nplots;
@@ -202,6 +204,10 @@ ofstream ff2("T_Cu_VT_"+sinout+".dat");
 ofstream ff3("T_W_VT_"+sinout+".dat");
 ofstream ff4("T_water_VT_"+sinout+".dat");
 ofstream ff6("Tout_VT_"+sinout+".dat");
+ofstream ff7("Q_VT_"+sinout+".dat");
+ofstream ff8("XT_VT_"+sinout+".dat");
+ifstream ff9("X_tg"+sinout+".dat");
+real X;
 TTMAX=0.0;
 for(int jj=0;jj<Ntile;jj+=1){
 	ff1<<TmaxCCZ(jj)<<endl;
@@ -216,6 +222,10 @@ for(int jj=0;jj<Ntile;jj+=1){
 		ff6<<Tout(jj,kk-1)<<" ";
 	}
 	ff6<<Tout(jj,npointout-1)<<endl;
+    ff7<<Qreal(jj)<<endl;
+	ff9>>X;
+	ff8<<X<<" "<<TmaxCCZ(jj)<<" "<<TmaxCU(jj)<<" "<<TmaxW(jj)<<" "<<Qreal(jj)<<endl;
+	ff9>>X;ff9>>X;
 }
 
 cout<<"Maximum W temperature is "<<TTMAX<<" C at cut number "<<IMAX<<endl;
