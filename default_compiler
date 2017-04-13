@@ -39,6 +39,8 @@ case "PPPL":
   echo pgf90
   breaksw
 case "FZJ":
+  echo ifort64
+  breaksw
 case "LEUVEN":
 case "MEPHI":
 case "WM":
