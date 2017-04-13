@@ -362,7 +362,9 @@ Reaction AMJUEL_H.4_2.3.5B0 0
 Reaction AMJUEL_H.4_2.3.5B1 0
 Reaction AMJUEL_H.4_2.3.6A0 0
 Reaction AMJUEL_H.4_2.3.6B0 0
-Reaction AMJUEL_H.4_2.3.7A0 0
+Reaction AMJUEL_H.4_2.3.7A0 2
+N+
+e
 Reaction AMJUEL_H.4_2.3.10B0 0
 Reaction AMJUEL_H.4_2.3.10B1 0
 Reaction AMJUEL_H.4_2.3.13a 0
@@ -372,7 +374,9 @@ Reaction AMJUEL_H.4_2.3.13d 0
 Reaction AMJUEL_H.4_2.3.18B0 0
 Reaction AMJUEL_H.4_2.3.18B1 0
 Reaction AMJUEL_H.4_2.6A0 0
-Reaction AMJUEL_H.4_2.7A0 0
+Reaction AMJUEL_H.4_2.7A0 2
+e
+N
 Reaction AMJUEL_H.4_7.2.3a 0
 Reaction AMJUEL_H.4_7.2.3b 0
 Reaction AMJUEL_H.8_2.2.14 0
@@ -397,11 +401,15 @@ Reaction AMJUEL_H.10_2.1.5o 0
 Reaction AMJUEL_H.10_2.1.8 0
 Reaction AMJUEL_H.10_2.1.8o 0
 Reaction AMJUEL_H.10_2.3.6A0 0
-Reaction AMJUEL_H.10_2.3.7A0 0
+Reaction AMJUEL_H.10_2.3.7A0 2
+N+
+e
 Reaction AMJUEL_H.10_2.3.9a 0
 Reaction AMJUEL_H.10_2.3.13a 0
 Reaction AMJUEL_H.10_2.6A0 0
-Reaction AMJUEL_H.10_2.7A0 0
+Reaction AMJUEL_H.10_2.7A0 2
+e
+N
 Reaction AMJUEL_H.11_2.0a 0
 Reaction AMJUEL_H.11_2.2B0 0
 Reaction AMJUEL_H.11_2.4B0 0
@@ -520,7 +528,9 @@ Reaction METHANE_H.3_3.1.2 0
 Reaction METHANE_H.3_3.1.3 0
 Reaction METHANE_H.3_3.1.4 0
 Reaction METHANE_H.3_3.2 0
-Reaction AMMONX_H.2_ZN 0
+Reaction AMMONX_H.2_ZN 2
+H2+
+N
 Vars1 471
 Reaction HYDHEL_H.1_2.1.1 2
 
@@ -6201,7 +6211,7 @@ RC
 
 
 He+
-e
+
 He
 
 
@@ -6723,7 +6733,7 @@ RC
 
 
 H+
-e
+
 H
 
 
@@ -8883,9 +8893,9 @@ EI
 
 
 C
-e
+
 C+
-2e
+
 
 
 
