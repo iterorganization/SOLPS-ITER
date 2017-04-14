@@ -5,9 +5,9 @@ LD_MSCL ?= -L${SOLPSLIB} -lmscl
 
 FC	 = g95
 ifdef SOLPS_DEBUG
-FFLAGS	 = -g -fbounds-check -ftrace=full
+FFLAGS	 = -g -fbounds-check -ftrace=full -fno-second-underscore
 else
-FFLAGS   =
+FFLAGS   = -fno-second-underscore
 endif
 INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
