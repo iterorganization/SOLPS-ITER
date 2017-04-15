@@ -15094,6 +15094,34 @@ Sets value of {\tt WIN\_ID} environment variable (part of {\tt TCL/TK} interface
 \subsubsection{xyrz}\index{b2plot, xyrz}\label{sec:xyrz}
 Outputs {\em xmin}, {\em xmax}, {\em ymin}, {\em ymax}, {\em rmin}, {\em rmax}, {\em zmin}, and {\em zmax} to stdout.
 
+\subsubsection{$<$ig,{\bf I}$>$ user}\index{b2plot, user}\label{sec:user}
+Optional user routine. The choice of user routine is governed by $<$ig$>$.
+Currently coded functions are:
+\begin{description}
+  \item[ig = -19] Produces a file {\tt brooks.dat} with coordinates of the grid cell centers and the plasma parameters (density, temperatures, drift velocity) in these points
+  \item[ig = -18] Produces input files for a DIVIMP run (not yet available). Requires one field on the matrix stack and one filename on the string stack to indicate which field is to be produced and where it is to be written
+  \item[ig = -17] Prints detailed particle balance for the cells around the lower x-point in file {\tt x-point.dat}
+  \item[ig = -16] Produces a file {\tt krieger.dat} with the plasma densities, temperatures, fluid velocities in the cell centers
+  \item[ig = -15] Produces data files for the neutral fluxes on the specified surfaces. File names are {\tt ndt\_*.dat} (not yet available)
+  \item[ig = -14] Produces data files for the cell-face-integrated fluxes of ions on every target. File names are {\tt fi\_tg\_*.dat}
+  \item[ig = -13] Produces a file {\tt radsources.dat} with coordinates of the grid cell centers and the radiation intensity (total and components) in these points - for bolometry optimisation
+  \item[ig = -12] Produces a file with coordinates of the grid cell centers ({\tt wuerz-g.dat}) and the plasma parameters (densities, temperatures, fluid velocities) ({\tt wuerz-d.dat}) in the outer divertor
+  \item[ig = -11] Creates tables with coordinates of the grid cell corners along the separatrices and along the magnetic surfaces, together with the wall geometry in specified zones for separate plotting, in files {\tt gm\_sep.dat}, {\tt gm\_sep\_i.dat}, {\tt gm\_sep\_o.dat}, {\tt gm\_SOL.dat}, {\tt gm\_SOL\_i.dat}, {\tt gm\_SOL\_o.dat}, {\tt gm\_PFR.dat}, {\tt gm\_PFR\_u.dat}, and {\tt gm\_core.dat}, according to magnetic topology
+  \item[ig = -10] Creates table of fluxes and temperatures at the grid edges in file {\tt gridedge.dat}
+  \item[ig = -9] Prints out the total number of nuclei of each kind in the system in file {\tt nuclei.tot}
+  \item[ig = -8] Creates files {\tt pr.dat} (plasma pressure), {\tt prn.dat} (neutral pressure), {\tt prt.dat} (total pressure) and {\tt sm.dat} (neutral momentum source)
+  \item[ig = -7] Prints out the neutral data read from {\tt fort.44} for debugging
+  \item[ig = -6] Produces a file {\tt zaveraev.dat} with coordinates of the grid cell centers and the plasma parameters (density, temperatures, neutral density) in these points
+  \item[ig = -5] Writes the C{\sc II} sources in the plasma for DIVIMP in file {\tt CII\_source.dvi}
+  \item[ig = -4] Produces a map of model radiation emissivity on a rectangular grid for 3D calculation of the wall loading in files {\tt fpri.dat}, {\tt fpro.dat}, {\tt fprp.dat}, {\tt plenter.dat}, {\tt plenter.grd}. Requires 11 numbers on the real stack for providing the emissivity profile shape and overall magnitude (see code in {\tt b2pplent.F} routine for details)
+  \item[ig = -3] Prints out the particle flux integrals onto the targets in file {\tt particle.flx}
+  \item[ig = -2] Produces a file {\tt horton.dat} with coordinates of the grid cell centers and the plasma parameters (density, temperatures, neutral density, and so on) in these points
+  \item[ig = -1] Produces a file {\tt abramov.dat} with coordinates of the grid cell centers and the plasma parameters (density, temperatures, neutral density) in these points
+  \item[0 $\le$ ig $<$ nx] Produces a file {\tt oleg.dat} with plasma parameters (density, temperature, parallel flow velocity, parallel heat flux) against the distance along the magnetic field along flux surface index $<$ig$>$
+  \item[nx $\le$ ig $<$ 1000] Produces two files with estimated helium concentration ({\tt fraction.he}) and neutral pressure ({\tt pressure.ntr}) in the PFR for summary plots
+  \item[ig $\ge$ 1000] Adds a line to the file {\tt ../sum\_tmp/spec\_pwr.dat} with the power entering both divertors, power radiated along the divertor legs, power radiated near the targets, areas of the separatrix branches and mean specific power radiated along the divertor legs per square meter. $<$ig$>$-1000 cells are treated as "close to the targets"
+\end{description}
+
 
 \subsection{Still need to do}
 
@@ -15105,9 +15133,6 @@ Outputs {\em xmin}, {\em xmax}, {\em ymin}, {\em ymax}, {\em rmin}, {\em rmax}, 
 \item[part] \index{b2plot, part}\label{sec:part} partition colour map
 \item[wall\_ank] \index{b2plot, wall\_ank}\label{sec:wall_ank} Add ANK wall data to contour plot
 \end{description}
-
-\subsubsection{user}\index{b2plot, user}\label{sec:user}
-Optional user routine.
 
 \subsubsection{eof, exit, quit, end}\index{b2plot, eof}\label{sec:eof}\index{b2plot, exit}\label{sec:exit}\index{b2plot, quit}\label{sec:quit}\index{b2plot, end}\label{sec:end}
 Use of any of {\bf eof}, {\bf exit}, {\bf end} or {\bf quit} will terminate the \btwoplot run.
