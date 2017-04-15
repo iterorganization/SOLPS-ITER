@@ -17,6 +17,7 @@ endif
 # List of default compilers per HOST_NAME
 switch ($HOST_NAME)
 case "ASIPP":
+case "FZJ":
 case "GA":
 case "IFERC":
 case "IN-DA":
@@ -37,9 +38,6 @@ case "JET":
 case "ORNL":
 case "PPPL":
   echo pgf90
-  breaksw
-case "FZJ":
-  echo ifort64
   breaksw
 case "LEUVEN":
 case "MEPHI":
