@@ -1040,6 +1040,7 @@ negative quantities on the same scale and "M" the absolute values of negative qu
     {\tt b2time.nc} (Appendix \ref{cha:b2time}), 2$^{nd}$, 3$^{rd}$ {\it etc.\ versus} the 1$^{st}$ argument.
   \item[2dt]\index{2dt} plots time dependent quantities from
     {\tt b2time.nc} (Appendix \ref{cha:b2time}) versus time.
+  \item[2dvi]\index{2dvi} prepares a \btwoplot command file {\tt TDV/contr.b2p} for production of input files to start a {\tt DIVIMP} run.
   \item[2d\_plots]\label{script:2dplots}\index{2d\_plots} prepares {\tt b2time.ps} from
     {\tt b2time.nc} (Appendix \ref{cha:b2time}).  This uses the batch
     feature of the {\tt plot} command.
@@ -1185,6 +1186,7 @@ extracted from the {\tt run.log} file.
   \item[eirobjx]\index{eirobjx} Alias to run {\tt Eirene} standalone without graphics.
   \item[first\_setup]\index{first\_setup} Creates the {\tt config.}\${\tt {HOST\_NAME}.}\${\tt {COMPILER}} files in each of the \SOLPSITER submodules.
   \item[get\_git\_email]\index{get\_git\_email} Finds the user's email address from the {\tt .gitconfig} file.
+  \item[get\_parm.bpl]\index{get\_parm.bpl} extracts certain useful quantities from a run input and output files for use in later scripts, particularly those building \btwoplot command files.
   \item[gtdr]\index{gtdr} Script to make a directory tree local. [obsolete]
   \item[gtfl]\index{gtfl} [ANK] Replaces the specified links by the files they are linked to. [obsolete]
   \item[import\_files\_from\_convert]\index{import\_files\_from\_convert}\index{b2yt} Imports and renames the files produced by {\tt b2yt} in a {\tt convert} directory at the same level as the current directory to prepare the new converted case for a run

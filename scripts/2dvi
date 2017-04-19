@@ -1,0 +1,93 @@
+#! /bin/ksh
+
+#  VERSION : 04.04.2012 16:33
+
+# Plasma parameters for Steve
+
+NAME=${0##*/}
+
+LK=TDV
+
+[ -d $LK ] && rm -rf $LK
+mkdir -p $LK || {
+  echo "Unable to make a directory $LK - check the permissions"
+  exit 4
+} 
+
+# Determine the basic variables
+
+
+. get_parm.bpl
+
+B="'$LL' extl"
+BBB="comp"
+ST="lbof sep clvl vesl phys 1.2 lbsz"
+
+rm -f gmeta $LK/contr.b2p ${LK}/${L}.ps.legend ${LK}/b2p.log b2plot.ps 2>/dev/null
+ic=0
+im=0
+ib=0
+echo "$ST $BB writ" > ${LK}/contr.h
+
+unset ss sf kw
+
+# Prepare the control file
+
+echo "phys $B" >> $LK/contr.b2p
+
+let "im=im+1"
+echo "$B
+      te -18 '$LK/te$L.txt' user drop" >> $LK/contr.b2p
+echo -e "te\t$im" >> ${LK}/${L}.ps.legend
+
+let "im=im+1"
+echo "$B
+      ne -18 '$LK/ne$L.txt' user drop" >> $LK/contr.b2p
+echo -e "ne\t$im" >> ${LK}/${L}.ps.legend
+
+let "im=im+1"
+echo "$B
+      ti -18 '$LK/ti$L.txt' user drop" >> $LK/contr.b2p
+echo -e "ti\t$im" >> ${LK}/${L}.ps.legend
+
+let "im=im+1"
+echo "$B
+      ni -18 '$LK/ni$L.txt' user drop" >> $LK/contr.b2p
+echo -e "ni\t$im" >> ${LK}/${L}.ps.legend
+
+let "im=im+1"
+echo "$B
+      up -18 '$LK/up$L.txt' user drop" >> $LK/contr.b2p
+echo -e "up\t$im" >> ${LK}/${L}.ps.legend
+
+let "im=im+1"
+echo "$B
+      dab2 -18 '$LK/na$L.txt' user drop" >> $LK/contr.b2p
+echo -e "na\t$im" >> ${LK}/${L}.ps.legend
+
+let "im=im+1"
+echo "$B
+      dmb2 -18 '$LK/nm$L.txt' user drop" >> $LK/contr.b2p
+echo -e "nm\t$im" >> ${LK}/${L}.ps.legend
+
+# Produce the plots from the prepared control files
+
+[ -s $LK/contr.b2p ] && {
+  cat $LK/contr.b2p >> $LK/contr.h
+  mv $LK/contr.h $LK/contr.b2p
+  b2plot < $LK/contr.b2p >> ${LK}/b2p.log 2>&1
+
+  [ -s gmeta ] && {
+    ctrans -d ps.color -outfile ${LK}/${L}.ps gmeta
+    ln -s $PWD/VarID $LK
+    [ -s b2plot.write ] && mv b2plot.write $LK && (cd $LK && parse_b2pw)
+    (cd $LK && ps_GV ${L}.ps && mv ${L}_GV.ps ${L}.ps && ps_mac ${L}.ps)
+    rm gmeta
+  }
+
+  [ -s gmeta ] && mv gmeta ${LK}/gmeta
+  true
+} || {
+  rm $LK/contr.h 2>/dev/null
+}
+[ -a b2plot.write ] && [ ! -s b2plot.write ] && rm b2plot.write
