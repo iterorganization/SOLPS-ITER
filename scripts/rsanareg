@@ -4,17 +4,26 @@ switch ($text)
   case "rsanareg":
     set label="ionization rate"
     breaksw
+  case "rsamoreg":
+    set label="ionization momentum"
+    breaksw
   case "rsahireg":
     set label="ionization energy"
     breaksw
   case "rranareg":
     set label="recombination rate"
     breaksw
+  case "rramoreg":
+    set label="recombination momentum"
+    breaksw
   case "rrahireg":
     set label="recombination energy"
     breaksw
   case "rcxnareg":
     set label="charge exchange rate"
+    breaksw
+  case "rcxmoreg":
+    set label="charge exchange momentum"
     breaksw
   case "rcxhireg":
     set label="charge exchange energy"

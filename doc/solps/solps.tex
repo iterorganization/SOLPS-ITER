@@ -846,13 +846,16 @@ The options are applied in that order independently of the order in which they w
   \item[b2stbr\_smo\_reg \#1]\index{b2stbr\_smo\_reg} Recycling parallel momentum sources for region \#1 (default 0)
   \item[b2stbm\_smo\_reg \#1]\index{b2stbm\_smo\_reg} Additional parallel momentum sources for region \#1 (default 0)
   \item[rcxhireg \#1]\index{rcxhireg} charge exchange energy for region \#1 (default 0)
+  \item[rcxmoreg \#1]\index{rcxmoreg} charge exchange parallel momentum for region \#1 (default 0)
   \item[rcxnareg \#1]\index{rcxnareg} charge exchange rate for region \#1 (default 0)
   \item[rqahereg \#1]\index{rqahereg} electron heat loss for region \#1 (default 0)
   \item[rqbrmreg \#1]\index{rqbrmreg} bremsstrahlung losses for region \#1 (default 0)
   \item[rqradreg \#1]\index{rqradreg} total radiation rate for region \#1 (default 0)
   \item[rrahireg \#1]\index{rrahireg} recombination energy for region \#1 (default 0)
+  \item[rramoreg \#1]\index{rramoreg} recombination parallel momentum for region \#1 (default 0)
   \item[rranareg \#1]\index{rranareg} recombination rate for region \#1 (default 0)
   \item[rsahireg \#1]\index{rsahireg} ionization energy for region \#1 (default 0)
+  \item[rsamoreg \#1]\index{rsamoreg} ionization parallel momentum for region \#1 (default 0)
   \item[rsanareg \#1]\index{rsanareg} ionization rate for region \#1 (default 0)
   \item[b2stbc\_she\_reg\_region \#1]\index{b2stbc\_she\_reg\_region} Boundary electron heat sources, by
     region, for species  \#1 (default 0)
@@ -892,6 +895,8 @@ The options are applied in that order independently of the order in which they w
     region, for species  \#1 (default 0)
   \item[rcxhireg\_region \#1]\index{rcxhireg\_region} charge exchange
     energy, by region, for species  \#1 (default 0)
+  \item[rcxmoreg\_region \#1]\index{rcxmoreg\_region} charge exchange
+    parallel momentum, by region, for species  \#1 (default 0)
   \item[rcxnareg\_region \#1]\index{rcxnareg\_region} charge exchange
     rate, by region, for species  \#1 (default 0)
   \item[rqahereg\_region \#1]\index{rqahereg\_region} electron heat loss,
@@ -902,10 +907,14 @@ The options are applied in that order independently of the order in which they w
     by region, for species  \#1 (default 0)
   \item[rrahireg\_region \#1]\index{rrahireg\_region} recombination
     energy, by region, for species  \#1 (default 0)
+  \item[rramoreg\_region \#1]\index{rramoreg\_region} recombination
+    parallel momentum, by region, for species  \#1 (default 0)
   \item[rranareg\_region \#1]\index{rranareg\_region} recombination rate,
     by region, for species  \#1 (default 0)
   \item[rsahireg\_region \#1]\index{rsahireg\_region} ionization energy,
     by region, for species  \#1 (default 0)
+  \item[rsamoreg\_region \#1]\index{rsamoreg\_region} ionization
+    parallel momentum, by region, for species  \#1 (default 0)
   \item[rsanareg\_region \#1]\index{rsanareg\_region} ionization rate, by
     region, for species  \#1 (default 0)
   \end{description}
@@ -3770,7 +3779,7 @@ with any optional switches mentioned afterwards, to create a solution on an $8 \
 A solution for non-commensurate grids is also available, requiring
 instead that the topology of the two solutions be the same, and works by 2-D
 interpolation of the plasma data in the computational domain, by region. This is
-activated with the 'b2ytdr\_non\_commensurate' option set to '1' in {\tt b2yt.dat}.
+activated with the 'b2ytdr\_non\_commensurate' option set to '1' in {\tt b2yt.dat}. This option should also be used when the overall grid size remains the same but the location and/or depth of the cuts has changed.
 
 The conversion of the {\tt Eirene} input file additionally requires for the converter program to know the original version of {\tt Eirene} with which the input file was used, and this is provided by means of the 'eirene\_format' switch. Its possible values (case-insensitive) are:
 \begin{description}
