@@ -5,13 +5,6 @@ $(error First use of config.CCFE.pgf90. Provide paths to libraries first.)
 #
 # Special notes:
 #
-# If you do not have the NetCDF library on your system:
-# Leave LD_NETCDF blank
-# Add -DNO_CDF to SOLPS_CPP
-#
-# If you do have NetCDF on your system:
-# Add -DCDF_MOVIE to SOLPS_CPP to be able to produce movies
-#
 # If you have NCAR version 3 on your system:
 # Remove -DNCAR4 from SOLPS_CPP
 #
@@ -24,10 +17,6 @@ $(error First use of config.CCFE.pgf90. Provide paths to libraries first.)
 #
 # If you have NAG Mark 22 or greater on your system:
 # Add -DNAG22 to SOLPS_CPP
-#
-# If you do not have MDSplus on your system:
-# Leave LD_MDSPLUS blank
-# Remove -DMDSPLUS from SOLPS_CPP
 #
 
        NCDIR ?=
@@ -56,9 +45,23 @@ LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNCAR4 -DMDSPLUS -DJET
+SOLPS_CPP      = -DNCAR4 -DJET
 B25_DEFINES    =
 EIRENE_DEFINES =
+
+# Autodetected optional features...
+
+# Build with NetCDF tools if available
+ifdef LD_NETCDF
+  SOLPS_CPP   += -DCDF_MOVIE
+else
+  SOLPS_CPP   += -DNO_CDF
+endif
+
+# Build with MDSplus tools if MDSplus is present
+ifdef LD_MDSPLUS
+  SOLPS_CPP   += -DMDSPLUS
+endif
 
 # Build with Catalyst if ParaView is in PATH
 ifdef LD_CATALYST

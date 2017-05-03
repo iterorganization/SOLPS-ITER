@@ -590,28 +590,35 @@ chosen Fortran compiler ({\it e.g.} {\tt ifort64}).
 
 The {\tt setup.csh} file and its subsidiaries \${\tt \{SOLPSTOP\}/SETUP/setup.csh.}\${\tt \{HOST\_NAME\}.}\${\tt \{COMPILER\}} and \${\tt \{SOLPSTOP\}/SETUP/config.}\${\tt \{HOST\_NAME\}.}\${\tt \{COMPILER\}} are used to load any modules packages useful for the local \SOLPSITER run environment and the following environment variables:
 \begin{enumerate}
+\item {\tt B25\_DEFINES}\index{B25\_DEFINES}, an environment variable containing the additional
+  "defines" to use during compilation of {\tt B2.5}
 \item {\tt DBX}\index{DBX}, the name of the debugger to be used
-\item {\tt NCARG\_ROOT}\index{NCARG\_ROOT}, the root of the {\tt NCAR} tree, and
-  {\tt LD\_NCARG}, the appropriate loader instruction to load {\tt NCAR}
-\item {\tt NETCDF\_ROOT}\index{NETCDF\_ROOT}, the root of the {\tt NetCDF} tree, and
-  {\tt LD\_NETCDF}, the appropriate loader instruction to load {\tt NetCDF}
-\item {\tt MSCL\_ROOT}\index{MSCL\_ROOT}, the root of the {\tt mscl} tree, and
-  {\tt LD\_MSCL}, the appropriate loader instruction to load the {\tt mscl} library
-\item {\tt GR\_ROOT}\index{GR\_ROOT}, the root of the {\tt GR} tree, and
-  {\tt LD\_GR}, the appropriate loader instruction to load the {\tt GR} library (a graphics package produced by FZ-J{\"u}lich and used by {\tt Eirene})
+\item {\tt DEVICE}\index{DEVICE} the name of the fusion device most likely to be simulated for this {\tt HOST\_NAME} (see \ref{cha:divgeo} for available choices)
+\item {\tt EIRENE\_DEFINES}\index{EIRENE\_DEFINES}, an environment variable containing the additional
+  "defines" to use during compilation of {\tt Eirene}
 \item {\tt GKS\_ROOT}\index{GKS\_ROOT}, the root of the {\tt GKS} tree, and
   {\tt LD\_GKS}, the appropriate loader instruction to load the {\tt GKS} library
-\item {\tt NAGDIR}\index{NAGDIR}, the root of the {\tt NAG} tree, and
-  {\tt LD\_NAG}, the appropriate loader instruction to load the {\tt NAG} library
+\item {\tt GLI\_HOME}\index{GLI\_HOME}, the location of the {\tt gksfont.dat} file (this definition must appear in both the {\tt setup.csh.*.*} and {\tt config.*.*} files as it used both during compilation and at runtime
+\item {\tt GR\_ROOT}\index{GR\_ROOT}, the root of the {\tt GR} tree, and
+  {\tt LD\_GR}, the appropriate loader instruction to load the {\tt GR} library (a graphics package produced by FZ-J{\"u}lich and used by {\tt Eirene})
+\item {\tt H5DIR}\index{H5DIR}, the root directory for the HDF5 utility library
+\item {\tt LD\_CATALYST}, the appropriate loader instruction to load the Paraview Catalyst utility
+\item {\tt LD\_SONNET}, the appropriate loader instruction to load the {\tt Sonnet-light} library
+\item {\tt LD\_UAL}\index{IMAS}\index{UAL}, the appropriate loader instruction to load the Integrated Modelling and Analysis Suite (IMAS) Universal Access Layer (UAL) library
 \item {\tt MDSPLUS\_DIR}\index{MDSPLUS\_DIR}, the root of the {\tt MDSplus} tree, and
   {\tt LD\_MDSPLUS}, the appropriate loader instruction to load {\tt MDSplus}
-\item {\tt DEVICE}\index{DEVICE} the name of the fusion device most likely to be simulated for this {\tt HOST\_NAME} (see \ref{cha:divgeo} for available choices)
+\item {\tt MSCL\_ROOT}\index{MSCL\_ROOT}, the root of the {\tt mscl} tree, and
+  {\tt LD\_MSCL}, the appropriate loader instruction to load the {\tt mscl} library
+\item {\tt NAGDIR}\index{NAGDIR}, the root of the {\tt NAG} tree, and
+  {\tt LD\_NAG}, the appropriate loader instruction to load the {\tt NAG} library
+\item {\tt NCARG\_ROOT}\index{NCARG\_ROOT}, the root of the {\tt NCAR} tree, and
+  {\tt LD\_NCARG}, the appropriate loader instruction to load {\tt NCAR}
+\item {\tt NCDIR}\index{NCDIR}, the root of the {\tt NetCDF} tree, and
+  {\tt LD\_NETCDF}, the appropriate loader instruction to load {\tt NetCDF}
 \item {\tt PERFMON}\index{PERFMON}, an environment variable used by
   the compiler to know whether to enable the performance monitoring libraries
 \item {\tt SOLPS\_CPP}\index{SOLPS\_CPP}, an environment variable containing the global "defines"
   to use during compilation of {\tt SOLPS} code components
-\item {\tt EIRENE\_DEFINES}\index{EIRENE\_DEFINES}, an environment variable containing the additional
-  "defines" to use during compilation of {\tt Eirene}
 \item some aliases to move around the tree ({\tt sbb}, {\tt sei},
   {\it etc.})
 \item some aliases for plotting ({\tt xyplot}, etc...)
@@ -620,7 +627,7 @@ The {\tt setup.csh} file and its subsidiaries \${\tt \{SOLPSTOP\}/SETUP/setup.cs
 \item two aliases to swap between the MPI and no\_MPI versions of
   the code ({\tt set\_mpi} and {\tt set\_nompi})
 \end{enumerate}
-Of course, any additional desired definitions can be added. The preferred place for those is, for those variables that need not be shared by other users, the \${\tt \{SOLPSTOP\}/SETUP/setup.csh.}\${\tt \{HOST\_NAME\}.}\${\tt \{COMPILER\}.local} file.
+Of course, any additional desired definitions can be added. The preferred place for those is, for those variables that need not be shared by other users, the \${\tt \{SOLPSTOP\}/SETUP/setup.csh.}\${\tt \{HOST\_NAME\}.}\${\tt \{COMPILER\}.local} and \${\tt \{SOLPSTOP\}/SETUP/config.}\${\tt \{HOST\_NAME\}.}\${\tt \{COMPILER\}.local} files. Variables that are needed at compilation time need to appear in the {\tt config.*.*(.local)} file, while variables needed at runtime must appear in {\tt setup.csh.*.*(.local)} file.
 
 However, the \SOLPSITER GIT server
 holds several examples in the \${\tt \{SOLPSTOP\}/SETUP/} directory.
@@ -4635,25 +4642,27 @@ several values of $\Delta_t$.
 \index{MDSPLUS}\label{cha:MDSplus}
 
 A routine has been added, {\tt b2md}\index{b2md}, which allows one to save
-the output from \SOLPSfive to an {\tt MDSplus} server in Garching.  (For more
+the output from \SOLPSfive and \SOLPSITER to an {\tt MDSplus} server in Garching.  (For more
 information about {\tt MDSplus} see the Web site at {\tt www.mdsplus.org}.)
 
 The reverse operation, namely recovering an archived run from the {\tt MDSplus}
 server, is performed by {\tt b2rd}\index{b2rd}.
 
-In order to use this facility, you need to ask David Coster at IPP-Garching to
+In order to use this facility, you need to ask David Coster at IPP-Garching
+({\tt david.coster@ipp.mpg.de}) to
 add you to the list of authorized {\tt MDSplus} writers, supplying the username
 which will be used, as well as the machine/domain.
 
-In order to compile the code with {\tt MDSplus}, the environment variable
-{\tt SOLPS\_CPP}\index{SOLPS\_CPP} should contain
-{\tt -DMDSPLUS}\index{-DMDSPLUS}, and a
+In order to compile the code with {\tt MDSplus}, the {\tt MDSPLUS\_DIR} environment
+needs to be set, as well as the compiler linking instruction {\tt LD\_MDSPLUS} ---
+consult your systems people about this, or the
+{\tt MDSplus} documentation. Both of these variables should be set in your
+\${\tt \{SOLPSTOP\}/SETUP/config.}\${\tt \{HOST\_NAME\}.}\${\tt \{COMPILER\}(.local)} file.
+Then, a full recompilation with
 \begin{verbatim}
 sbb ; gmake clean ; gmake depend ; gmake
 \end{verbatim}
-is safest.  Before doing this, the {\tt MDSPLUS\_DIR} environment
-needs to be set --- consult your systems people about this, or the
-{\tt MDSplus} documentation.
+is safest.
 
 [At IPP on the TOK Linux cluster, add the following to {\tt .login}:
 \begin{verbatim}
@@ -4661,16 +4670,10 @@ setenv MDSPLUS_DIR /afs/ipp-garching.mpg.de/home/d/dpc/@sys/mdsplus
 source $MDSPLUS_DIR/setup.csh
 \end{verbatim}
 %% $
-and add
-\begin{verbatim}
-setenv SOLPS_CPP '-DMDSPLUS'
-\end{verbatim}
-to one of the {\tt setup.csh.*} files in \${\tt SOLPSTOP/SETUP}.]
 
 {\tt b2md} requires as input {\tt b2md.dat} and this is searched for in the
-present working directory, the {\tt baserun} directory, and in the
-\${\tt SOLPSTOP/data.local/mdsplus} and \${\tt SOLPSTOP/data/mdsplus} directories,
-if present, in order. See Appendix \ref{lis:b2cdcn} for a content description.
+present working directory, then the {\tt baserun} directory, in order.
+See Appendix \ref{lis:b2cdcn} for a content description.
 
 An example {\tt b2md.dat} is:
 \VerbatimInput[fontsize=\footnotesize]{MDSPLUS/b2md.dat}
@@ -15717,6 +15720,7 @@ The quantities defined in {\tt DIMENSIONS.F} are:
 \begin{description}
 \item[DEF\_ISOEXTRA]\index{DEF\_ISOEXTRA}\index{ISOEXTRA} the maximum
 number of extra isolating cells
+\item[DEF\_MAXCHORDS] \index{DEF\_MAXCHORDS} Maximum number of chords to be considered (optional, internal default value is 10000)
 \item[DEF\_NADD]\index{DEF\_NADD}\index{NADD} the maximum number of
 additional vacuum cells outside the gridded domain in {\tt Eirene}
 \item[DEF\_NATM]\index{DEF\_NATM}\index{NATM} the maximum number of
@@ -15767,6 +15771,7 @@ in the $x$ (parallel or poloidal) direction not including two guard
 cells
 \item[DEF\_NYD]\index{DEF\_NYD}\index{NYD} the maximum number of cells
 in the radial direction not including two guard cells
+\item[HITS\_PER\_CHORD] \index{HITS\_PER\_CHORD} Maximum number of chord points per cell (optional, internal default value is 50)
 %%\item[] the maximum number of
 %%\item[] the maximum number of
 \end{description}
@@ -15801,21 +15806,38 @@ they need only contain the modified definitions.
 
 \section{Defines}
 
-\subsection{B2.5-Eirene}
-\index{DEFINES, used in compiling B2.5-Eirene}
+\subsection{SOLPS-ITER}
+\index{DEFINES, used throughout SOLPS-ITER}
 
 We list here the possible compiler options that can be used when compiling the
-coupled version of {\tt B2.5-Eirene}. These options are shared across both the
-{\tt B2.5} and {\tt Eirene} source codes.
+various components of the \SOLPSITER code suite. The options below must therefore,
+if desired, be declared as part of the \${\tt SOLPS\_CPP} environment variable,
+which is defined in the
+\${\tt SOLPSTOP/SETUP/config.}\${\tt {HOST\_NAME}.}\${\tt {COMPILER}(.local)} files.
 
 \begin{description}
-\item[ALLOCATE\_AND\_NAMELIST] \index{ALLOCATE\_AND\_NAMELIST} To be used if the compiler allows dynamically allocated namelist arrays
-\item[B25\_EIRENE] \index{B25\_EIRENE} Set internally by the {\tt Makefile} and used to identify differences between source code for stand-alone {\tt B2.5} and coupled {\tt B2.5-Eirene} applications
-\item[NO\_B2\_CHEM\_SPUT] \index{NO\_B2\_CHEM\_SPUT} Used to indicate that chemical sputtering is specified through {\tt Eirene} arrays instead of {\tt B2.5}.
+\item[CATALYST] \index{CATALYST} Turns on the Paraview Catalyst utility (see the SOLPS-GUI manual for full details)
+\item[DBG] \index{DBG} Turns on additional debugging output (set internally by the {\tt Makefile} when requesting a {\tt \_debug} compilation)
+\item[FLUSH] \index{FLUSH} Allows for flushing of some output files
+\item[F2003] \index{F2003} To be used if the compiler is compatible with {\tt Fortran 2003}
+\item[F77] \index{F77} Identifies specific code to {\tt Fortran-77} compilers
+\item[GFORTRAN] \index{GFORTRAN} To be used with {\tt gfortran} compilation
+\item[HPUX] \index{HPUX} To be used when compiling on HP Unix systems
+\item[IBMaix] \index{IBMaix} To be used when compiling on IBM AIX computers
+\item[IMAS] \index{IMAS} To be used when compiling within the IMAS framework
+\item[ITM] \index{ITM} To be used when compiling within the ITM framework
+\item[MDSPLUS] \index{MDSPLUS} Enables use of {\tt MDSplus} trees
+\item[NAGF95] \index{NAGF95} To be used when compiling with the {\tt NAG} F95 compiler
+\item[NAG22] \index{NAG22} Specific to using the Nag Mark 22 or higher mathematical library
+\item[NCAR4] \index{NCAR4} Used to specify NCAR4 rather than NCAR3
+\item[NO\_CDF] \index{NO\_CDF} No {\tt CDF} library available
 \item[NO\_GETENV] \index{NO\_GETENV} No {\tt GETENV} system call available
+\item[NO\_LONG\_LINES] \index{NO\_LONG\_LINES} Identify those compilers which have a limitation to relatively short output lines
+\item[NO\_NAG] \index{NO\_NAG} No {\tt NAG} libraries available
+\item[PSR] \index{PSR} Specific to the Pacific Sierra VAST compiler
 \item[USE\_MPI] \index{USE\_MPI} Set internally by the {\tt Makefile} and used to identify code necessary for MPI applications
-\item[USE\_PXFGETENV] \index{USE\_PXFGETENV} Uses {\tt PXFGETENV}
-  instead of {\tt GETENV}
+\item[USE\_PXFGETENV] \index{USE\_PXFGETENV} Uses {\tt PXFGETENV} instead of {\tt GETENV}
+\item[WINDOWS] \index{WINDOWS} To be used when compiling on a Windows system
 \end{description}
 
 \index{SOLPS\_CPP}
@@ -15838,6 +15860,10 @@ routines are affected, recompile them all with
   setenv SOLPS_CPP "$SOLPS_CPP -DOPTION"
 \end{verbatim}
 %% $
+or
+\begin{verbatim}
+  SOLPS_CPP += -DOPTION
+\end{verbatim}
 so that the new option is added to the list. (Unsupported {\tt ksh}
 or {\tt bash} users would use something like
 \begin{verbatim}
@@ -15846,53 +15872,141 @@ or {\tt bash} users would use something like
 %%$
 ).
 
+\subsection{Carre}
+\index{DEFINES, used in compiling Carre}
+
+%%grep #if $SOLPSTOP/modules/Carre/src/*/*.F | awk '{print $2}' | sort | uniq
+
+We list here additional possible compiler options that can be used when compiling {\tt Carre}.
+
+\begin{description}
+\item[BUILDING\_CARRE] \index{BUILDING\_CARRE} Flags code for extended grids handling routine specific to {\tt Carre}
+\item[EXTRA\_GRAPHS] \index{EXTRA\_GRAPHS} Turns on additional graphical output of intermediate steps of the {\tt Carre} grid generation
+\item[MODIF] \index{MODIF} Allows for manual modifications to the grid generation process during the {\tt Carre} run
+\item[READOPT] \index{READOPT} Allows for format-free keyboard input
+\end{description}
+
+%%grep #if $SOLPSTOP/modules/Carre/src/*/*.F | awk '{print $2,$1}' | sort | uniq
+
+We list below where the {\tt Carre} compilation switches are used.
+
+\begin{center}
+  \begin{longtable}{|l|l|}
+    \hline
+    \multicolumn{2}{|l|}{\small\sl continued from previous page} \\
+    \hline name & used in \\
+    \hline \endhead
+    \hline name & used in \\
+    \hline \endfirsthead
+    \hline
+    \multicolumn{2}{|l|}{\small\sl continued on next page} \\
+    \hline \endfoot
+    \endlastfoot
+DBG & carre/doubld.F \\
+DBG & carre/saute.F \\
+DBG & fcrr/fcrprp.F \\
+EXTRA\_GRAPHS & carre/carre.F \\
+GFORTRAN & carre/rdfrin.F \\
+GFORTRAN & carre/rdfrre.F \\
+MODIF & carre/maille.F \\
+MODIF & carre/mailrg.F \\
+READOPT & carre/rdfrch.F \\
+READOPT & carre/rdfrin.F \\
+READOPT & carre/rdfrre.F \\
+    \hline
+    \caption{Defines for Carre and where they are used.}
+    \label{tab:B2defines}
+  \end{longtable}
+\end{center}
+
+\subsection{B2.5-Eirene}
+\index{DEFINES, used in compiling B2.5-Eirene}
+
+We list here the possible compiler options that can be used when compiling the
+coupled version of {\tt B2.5-Eirene}. These options are shared across both the
+{\tt B2.5} and {\tt Eirene} source codes. The options below must therefore,
+if desired, be declared as part of the \${\tt SOLPS\_CPP} environment variable,
+which is defined in the
+\${\tt SOLPSTOP/SETUP/config.\allowbreak}\${\tt {HOST\_NAME}.}\${\tt {COMPILER}(.local)} files.
+
+\begin{description}
+\item[ALLOCATE\_AND\_NAMELIST] \index{ALLOCATE\_AND\_NAMELIST} To be used if the compiler allows dynamically allocated namelist arrays
+\item[B25\_EIRENE] \index{B25\_EIRENE} Set internally by the {\tt Makefile} and used to identify differences between source code for stand-alone {\tt B2.5} and coupled {\tt B2.5-Eirene} applications
+\item[NO\_B2\_CHEM\_SPUT] \index{NO\_B2\_CHEM\_SPUT} Used to indicate that chemical sputtering is specified through {\tt Eirene} arrays instead of {\tt B2.5}
+\item[NO\_SAVE] \index{NO\_SAVE} Turning off static save of some common blocks
+\item[SOLPS4\_3] \index{SOLPS4\_3} Set internally by the {\tt Makefile} to activates code specific to the {\tt SOLPS4-5 b2sxdr} converter
+\item[USE\_IMPGYRO] \index{USE\_IMPGYRO} Used when coupling to IMPGYRO
+\end{description}
+
 \subsection{B2.5}
 \index{DEFINES, used in compiling B2.5}
 
 %%grep #if $SOLPSTOP/modules/B2.5/src/*/*.F | awk '{print $2}' | sort | uniq
 
 We list here the additional compiler options available that only affect compilation of
-{\tt B2.5}.
+{\tt B2.5}. The options below must therefore,
+if desired, be declared as part of either the \${\tt SOLPS\_CPP} or the
+\${\tt B25\_DEFINES} environment variable, which are defined in the
+\${\tt SOLPSTOP/SETUP/config.}\${\tt {HOST\_NAME}.}\${\tt {COMPILER}(.local)} files.
 
 \begin{description}
 \item[ASTRA] \index{ASTRA} To be used if one wishes to run in coupled mode with the core transport code ASTRA
-\item[CDF\_MOVIE] \index{CDF\_MOVIE} To be used if {\tt CDF} movie output is desired
+\item[BLOCK] \index{BLOCK} Can be used to implement blocking instructions
+\item[CDF\_MOVIE] \index{CDF\_MOVIE} To be used if {\tt CDF} movie output is desired (turned on by default if the NetCDF library is present)
 \item[CLASSICAL\_CURRENT] \index{CLASSICAL\_CURRENT} Turns on classical current drift term
-\item[COMPLICATED] \index{COMPLICATED} Uses a more "complicated" model for chord integration
-\item[DEF\_MAXCHORDS] \index{DEF\_MAXCHORDS} Maximum number of chords to be considered (default 10000)
-\item[F77] index{F77} Identifies specific code to {\tt Fortran-77} compilers
-\item[HITS\_PER\_CHORD] \index{HITS\_PER\_CHORD} Maximum number of chord points per cell? (default 50)
-\item[HPUX] \index{HPUX} Specific to HP computers
-\item[IBMaix] \index{IBMaix} Specific to IBM AIX computers
+\item[COMPLICATED] \index{COMPLICATED} Uses a more "complicated" model for feedback schemes
+\item[EASY] \index{EASY} Uses the "easy" model for chord integration
+\item[GOT\_AMNSPROTO] \index{GOT\_AMNSPROTO} Links to AMNS database
 \item[JET] \index{JET} Enables some additional output for coupling to the JET post-processor
-\item[MDSPLUS] \index{MDSPLUS} Enables {\tt MDSplus} output
-\item[NAG22] \index{NAG22} Specific to using the Nag Mark 22 or higher mathematical library
-\item[NAGF95] \index{NAGF95} Specific to the {\tt NAG} F95 compiler
-\item[NCAR4] \index{NCAR4} Used to specify NCAR4 rather than NCAR3
 \item[NO\_21] \index{NO\_21} Do not use 21-moment model for thermal and viscous forces
-\item[NO\_CDF] \index{NO\_CDF} No {\tt CDF} library available
-\item[NO\_F01AAF] \index{NO\_F01AAF} No {\tt NAG} routine {\tt F01AAF} --- uses
-  its replacement instead (needed if linking with Version 17 or later of {\tt NAG})
-\item[NO\_LONG\_LINES] \index{NO\_LONG\_LINES} Identify those
-  compilers which have a limitation to relatively short output lines
-\item[NO\_NAG] \index{NO\_NAG} No {\tt NAG} libraries available
+\item[NO\_IEEE] \index{NO\_IEEE} Provides replacements to IEEE non-standard arithmetic routines
+\item[NO\_F01AAF] \index{NO\_F01AAF} No {\tt NAG} routine {\tt F01AAF} --- uses its replacement instead (needed if linking with Version 17 or later of {\tt NAG})
 \item[NO\_OPT] \index{NO\_OPT} No compiler optimization
 \item[PAR\_OPT] \index{PAR\_OPT} Runs the code in a special interpretive parameter optimization mode
 \item[PERFMON] \index{PERFMON} Enable performance monitoring
 \item[PLPLOT] \index{PLPLOT} Use {\tt PLPLOT} instead of {\tt NCAR} for plotting
-\item[PSR] \index{PSR} Specific to the Pacific Sierra VAST compiler
-\item[SCL\_IMP\_RCI] \index{SCL\_IMP\_RCI} Toggles scaling of impurities tallies
+%\item[SCL\_IMP\_RCI] \index{SCL\_IMP\_RCI} Toggles scaling of impurities tallies
 \item[USE\_CDF\_B2STIME] \index{USE\_CDF\_B2STIME} Specific for \SOLPSfour {\tt CDF} tallies
-\item[WANT\_PROCESS] \index{WANT\_PROCESS} Enables the code for the
-  \SOLPSfive to \SOLPSfour converter.
-\item[WANT\_THIS] \index{WANT\_THIS} (default) Adds some boundary condition treatments
-\item[WINDOWS] \index{WINDOWS} Specific to Windows implementations
-\item[WOS] \index{WOS} Uses the {\tt WOS} libraries for accessing
-  experimental data at IPP.
+\item[WANT\_PROCESS] \index{WANT\_PROCESS} Enables the code for the \SOLPSfive to \SOLPSfour converter
+\item[WOS] \index{WOS} Uses the {\tt WOS} libraries for accessing experimental data at IPP
 \end{description}
+
+\index{SOLPS\_CPP}\index{B25\_DEFINES}
+If you want to activate any of these options, you should add
+{\tt -DOPTION} (where {\tt OPTION} might, for example, be
+{\tt CLASSICAL\_CURRENT}) to either the {\tt SOLPS\_CPP}
+or the {\tt B25\_DEFINES} environment variable with
+\begin{verbatim}
+  setenv B25_DEFINES '-DOPTION'
+\end{verbatim}
+and then recompile all of the routines affected (if unsure which
+routines are affected, recompile them all with
+\begin{verbatim}
+  gmake clean
+  gmake depend
+  gmake
+\end{verbatim}
+).  If {\tt B25\_DEFINES} already had a value, you would want to do
+\begin{verbatim}
+  setenv B25_DEFINES "$B25_DEFINES -DOPTION"
+\end{verbatim}
+%% $
+or
+\begin{verbatim}
+  B25_DEFINES += -DOPTION
+\end{verbatim}
+so that the new option is added to the list. (Unsupported {\tt ksh}
+or {\tt bash} users would use something like
+\begin{verbatim}
+  export B25_DEFINES="$B25_DEFINES -DOPTION"
+\end{verbatim}
+%% $
+). If choosing to use {\tt SOLPS\_CPP} instead, the procedure is the same as
+in the previous section.
 
 %%grep #if $SOLPSTOP/modules/B2.5/src/*/*.F | awk '{print $2,$1}' | sort | uniq
 
+We list below where the {\tt B2.5} compilation switches are used.
 
 \begin{center}
   \begin{longtable}{|l|l|}
@@ -15924,28 +16038,42 @@ ASTRA & sources/b2stbc\_phys.F \\
 ASTRA & sources/b2stbr.F \\
 ASTRA & sources/b2stcx.F \\
 ASTRA & sources/b2stel.F \\
-ASTRA & transport/b2strcl.F \\
+ASTRA & transport/b2trcl.F \\
 B25\_EIRENE & b2plot/b2pinp.F \\
 B25\_EIRENE & b2plot/b2plot.F \\
 B25\_EIRENE & b2plot/b2pnwl.F \\
 B25\_EIRENE & b2plot/b2ptrgl.F \\
 B25\_EIRENE & b2plot/b2pwinm.F \\
+B25\_EIRENE & b2plot/b2pwldw.F \\
 B25\_EIRENE & b2plot/b2pwlprp.F \\
 B25\_EIRENE & b2plot/b2pwsort.F \\
+B25\_EIRENE & b2plot/clvp.F \\
+B25\_EIRENE & b2plot/copy.F \\
 B25\_EIRENE & b2plot/get\_from\_movie\_cdf.F \\
+B25\_EIRENE & b2plot/map\_eirene\_chords.F \\
 B25\_EIRENE & b2plot/ngread.F \\
+B25\_EIRENE & b2plot/ntread.F \\
+B25\_EIRENE & b2plot/pltoutline.F \\
+B25\_EIRENE & b2plot/plttriang.F \\
+B25\_EIRENE & b2plot/process\_eirene\_chords\_boxcar.F \\
+B25\_EIRENE & b2plot/process\_eirene\_chords.F \\
+B25\_EIRENE & b2plot/process\_eirene\_chord\_slice.F \\
+B25\_EIRENE & b2plot/psta.F \\
+B25\_EIRENE & b2plot/pstv.F \\
+B25\_EIRENE & b2plot/triangle\_surf.F \\
+B25\_EIRENE & b2plot/trigmesh.F \\
 B25\_EIRENE & convert/b2mds.F \\
-B25\_EIRENE & driver/b2mndr.F \\
-B25\_EIRENE & driver/b2mn.F \\
-B25\_EIRENE & driver/b2mwti.F \\
-B25\_EIRENE & postprocessing/b2ytdr.F \\
-B25\_EIRENE & sources/b2stbr.F \\
-B25\_EIRENE & modules/b2mod\_astra\_to\_b2.F \\
-B25\_EIRENE & modules/b2mod\_diag.F \\
+B25\_EIRENE & convert/b2yt\_ngread.F \\
+B25\_EIRENE & convert/b2yt\_ntread.F \\
+B25\_EIRENE & driver/b2mod\_driver.F \\
+B25\_EIRENE & driver/b2mod\_main.F \\
+B25\_EIRENE & modules/b2mod\_b2\_to\_astra.F \\
+B25\_EIRENE & modules/b2mod\_mwti.F90 \\
 B25\_EIRENE & modules/b2mod\_neutrals\_namelist.F \\
-B25\_EIRENE & modules/b2mod\_work.F \\
+B25\_EIRENE & modules/b2mod\_user\_namelist.F \\
 B25\_EIRENE & output/b2wdat.F \\
 B25\_EIRENE & postprocessing/b2ytdr.F \\
+B25\_EIRENE & sources/b2stbc\_fb.F \\
 B25\_EIRENE & sources/b2stbc\_phys.F \\
 B25\_EIRENE & sources/b2stbm.F \\
 B25\_EIRENE & sources/b2stbr.F \\
@@ -15961,27 +16089,73 @@ B25\_EIRENE & user/b2usrtrc.F \\
 B25\_EIRENE & user/b2wrint.F \\
 B25\_EIRENE & user/b2wrsep.F \\
 B25\_EIRENE & user/cdfmovie.F \\
+B25\_EIRENE & user/eirflux\_map.F \\
+B25\_EIRENE & utility/gfsub2.F \\
 B25\_EIRENE & utility/rdneutrs.F \\
+B25\_EIRENE & utility/xertst.F \\
+BUILDING\_CARRE & ids/b2mod\_connectivity.F90 \\
+CATALYST & driver/b2mod\_driver.F \\
 CDF\_MOVIE & b2plot/caltraj.F \\
 CDF\_MOVIE & b2plot/process\_chords.F \\
 CLASSICAL\_CURRENT & transport/b2tfch.F \\
 CLASSICAL\_CURRENT & transport/b2tfhe.F \\
 COMPLICATED & sources/b2stbc\_fb.F \\
+DBG & b2plot/fill.F \\
+DBG & b2plot/init\_wall.F \\
+DBG & b2plot/plotcontour.F \\
+DBG & b2plot/rlcomp.F \\
+DBG & equations/b2news\_.F \\
+DBG & modules/b2mod\_input\_profile.F \\
+DBG & user/b2usrtrc.F \\
 DEF\_MAXCHORDS & b2plot/process\_chords.F \\
+DEF\_MAXCHORDS & b2plot/process\_eirene\_chords.F \\
 EASY & b2plot/chord.F \\
+EASY & b2plot/chord\_triangle.F \\
+F2003 & convert/b2cdftallies2mds.F \\
 F77 & user/b2file.F \\
+GOT\_AMNSPROTO & utility/ratadas.F \\
 HITS\_PER\_CHORD & b2plot/process\_chords.F \\
-HPUX & convert/b2mds.F \\
+HITS\_PER\_CHORD & b2plot/process\_eirene\_chords.F \\
 HPUX & b2plot/b2plot.F \\
-IBMaix & driver/b2mwti.F \\
+HPUX & convert/b2mds.F \\
+HPUX & driver/b2mod\_driver.F \\
 IBMaix & b2plot/b2plot.F \\
 IBMaix & postprocessing/b2ytdr.F \\
 IBMaix & user/b2file.F \\
-JET & driver/b2mn.F \\
-JET & driver/b2mndr.F \\
-JET & driver/b2mnds.F \\
+IMAS & ids/b2mod\_ual.F90 \\
+IMAS & ids/b2mod\_ual\_io\_data.F90 \\
+IMAS & ids/b2mod\_ual\_io\_grid.F90 \\
+IMAS & ids/b2mod\_ual\_io.F90 \\
+IMAS & ids/b2\_ual\_write.F90 \\
+IMAS & ids/ggd\_access.F90 \\
+IMAS & ids/ggd\_data.F90 \\
+IMAS & ids/ggd\_object.F90 \\
+IMAS & ids/ggd\_objectlist.F90 \\
+IMAS & ids/ggd\_structured.F90 \\
+IMAS & ids/ggd\_subgrid.F90 \\
+IMAS & ids/ggd\_transform.F90 \\
+IMAS & ids/ggd.F90 \\
+ITM & ids/b2mod\_ual.F90 \\
+ITM & ids/b2mod\_ual\_io\_data.F90 \\
+ITM & ids/b2mod\_ual\_io\_grid.F90 \\
+ITM & ids/b2mod\_ual\_io.F90 \\
+ITM & ids/b2\_ual\_write.F90 \\
+ITM & ids/ggd\_access.F90 \\
+ITM & ids/ggd\_data.F90 \\
+ITM & ids/ggd\_object.F90 \\
+ITM & ids/ggd\_objectlist.F90 \\
+ITM & ids/ggd\_structured.F90 \\
+ITM & ids/ggd\_subgrid.F90 \\
+ITM & ids/ggd\_transform.F90 \\
+ITM & ids/ggd.F90 \\
+ITM & preprocessing/b2ardr.F \\
+ITM & preprocessing/b2arin.F \\
+ITM & utility/ratadas.F \\
 JET & driver/b2mnastra.F \\
+JET & driver/b2mnds.F \\
 JET & driver/b2mn\_opt.F \\
+JET & driver/b2mod\_driver.F \\
+JET & driver/b2mod\_main.F \\
 JET & modules/b2mod\_ppout.F \\
 JET & preprocessing/b2ardr.F \\
 MDSPLUS & convert/b2cdf2mds.F \\
@@ -15993,18 +16167,19 @@ MDSPLUS & driver/b2rd.F \\
 MDSPLUS & modules/b2mod\_mdsplus.F \\
 MDSPLUS & utility/mds\_routines.F \\
 NAG22 & b2plot/caltraj.F \\
-NAGF95 & convert/b2mds.F \\
-NAGF95 & driver/b2co.F \\
-NAGF95 & output/b2wgpj\_gnuplot.F \\
-NAGF95 & modules/b2mod\_ppout.F \\
-NAGF95 & modules/b2mod\_solpstop.F \\
-NAGF95 & utility/open\_file.F \\
-NAGF95 & utility/usrnam.F \\
 NAGF95 & b2plot/b2plot.F \\
 NAGF95 & b2plot/dhdata.F \\
 NAGF95 & b2plot/initialize\_plotting.F \\
 NAGF95 & b2plot/set\_extralabel.F \\
 NAGF95 & b2plot/spect.F \\
+NAGF95 & convert/b2mds.F \\
+NAGF95 & driver/b2co.F \\
+NAGF95 & modules/b2mod\_ppout.F \\
+NAGF95 & modules/b2mod\_solpstop.F \\
+NAGF95 & output/b2wgpj\_gnuplot.F \\
+NAGF95 & preprocessing/b2agfs.F \\
+NAGF95 & utility/open\_file.F \\
+NAGF95 & utility/usrnam.F \\
 NCAR4 & b2plot/end\_page.F \\
 NCAR4 & b2plot/initialize\_plotting.F \\
 NCAR4 & b2plot/terminate\_plotting.F \\
@@ -16012,36 +16187,44 @@ NO\_21 & transport/b2trcl.F \\
 NO\_B2\_CHEM\_SPUT & modules/b2mod\_neutrals\_namelist.F \\
 NO\_B2\_CHEM\_SPUT & postprocessing/b2ytdr.F \\
 NO\_B2\_CHEM\_SPUT & sources/eirene\_mc.F \\
+NO\_CDF & b2plot/b2plot.F \\
+NO\_CDF & b2plot/caltraj.F \\
+NO\_CDF & b2plot/get\_from\_movie\_cdf.F \\
+NO\_CDF & b2plot/process\_chords.F \\
 NO\_CDF & convert/b2cdf2mds.F \\
 NO\_CDF & convert/b2cdfmovies2mds.F \\
 NO\_CDF & convert/b2cdftallies2mds.F \\
 NO\_CDF & convert/process.F \\
-NO\_CDF & driver/b2mndr.F \\
-NO\_CDF & driver/b2mwti.F \\
+NO\_CDF & driver/b2mod\_driver.F \\
+NO\_CDF & modules/b2mod\_balance.F \\
 NO\_CDF & modules/b2mod\_movies.F \\
+NO\_CDF & modules/b2mod\_mwti.F \\
 NO\_CDF & modules/b2mod\_tallies.F \\
 NO\_CDF & modules/b2mod\_wall.F \\
 NO\_CDF & output/tallies.F \\
 NO\_CDF & sources/b2stbr.F \\
-NO\_CDF & b2plot/b2plot.F \\
-NO\_CDF & b2plot/get\_from\_movie\_cdf.F \\
 NO\_CDF & user/cdfmovie.F \\
 NO\_CDF & utility/cdf\_routines.F \\
 NO\_F01AAF & transport/b2tr21.F \\
-NO\_GETENV & convert/b2mds.F \\
-NO\_GETENV & modules/b2mod\_ppout.F \\
-NO\_GETENV & modules/b2mod\_solpstop.F \\
 NO\_GETENV & b2plot/b2plot.F \\
 NO\_GETENV & b2plot/dhdata.F \\
 NO\_GETENV & b2plot/spect.F \\
+NO\_GETENV & convert/b2mds.F \\
+NO\_GETENV & modules/b2mod\_ppout.F \\
+NO\_GETENV & modules/b2mod\_solpstop.F \\
+NO\_GETENV & preprocessing/b2agfs.F \\
 NO\_GETENV & utility/open\_file.F \\
+NO\_IEEE & utility/nancheck.F \\
 NO\_LONG\_LINES & output/tallies.F \\
+NO\_NAG & b2plot/caltraj.F \\
 NO\_NAG & sources/heatdiff1D.F \\
 NO\_NAG & transport/b2tr21.F \\
-NO\_NAG & b2plot/caltraj.F \\
 NO\_NAG & utility/nagsubst.F \\
 NO\_OPT & b2plot/b2plot.F \\
 NO\_OPT & postprocessing/b2ytdr.F \\
+NO\_SAVE & include/BRAEIR.H \\
+NO\_SAVE & include/EIRBRA.H \\
+NO\_SAVE & include/EIRDIAG.H \\
 PAR\_OPT & sources/b2stbc\_phys.F \\
 PAR\_OPT & transport/b2tqna.F \\
 PERFMON & utility/prgend.F \\
@@ -16054,17 +16237,19 @@ PLPLOT & b2plot/font.F \\
 PLPLOT & b2plot/fx.F \\
 PLPLOT & b2plot/fy.F \\
 PLPLOT & b2plot/gslwsc\_d.F \\
-PLPLOT & b2plot/init\_page.F \\
 PLPLOT & b2plot/initialize\_plotting.F \\
+PLPLOT & b2plot/init\_page.F \\
 PLPLOT & b2plot/lined\_d.F \\
 PLPLOT & b2plot/mesh.F \\
 PLPLOT & b2plot/meshit.F \\
 PLPLOT & b2plot/plotpatch.F \\
 PLPLOT & b2plot/plottarget.F \\
+PLPLOT & b2plot/plottripatch.F \\
 PLPLOT & b2plot/plot\_wall\_elements.F \\
 PLPLOT & b2plot/pltoutline.F \\
 PLPLOT & b2plot/pltsptrix.F \\
 PLPLOT & b2plot/plttarget.F \\
+PLPLOT & b2plot/plttriang.F \\
 PLPLOT & b2plot/pltvessel.F \\
 PLPLOT & b2plot/pltwall.F \\
 PLPLOT & b2plot/set\_a4l.F \\
@@ -16073,6 +16258,7 @@ PLPLOT & b2plot/set\_extralabel.F \\
 PLPLOT & b2plot/terminate\_plotting.F \\
 PLPLOT & b2plot/trgw.F \\
 PLPLOT & b2plot/trgz.F \\
+PLPLOT & b2plot/trigmesh.F \\
 PLPLOT & utility/lbfill.F \\
 PLPLOT & utility/ncardummy.F \\
 PLPLOT & utility/pagdef.F \\
@@ -16081,22 +16267,74 @@ PLPLOT & utility/pagini.F \\
 PSR & modules/b2mod\_b2plot.F \\
 PSR & modules/b2mod\_elements.F \\
 PSR & modules/b2mod\_sputter.F \\
-SCL\_IMP\_RCI & user/b2wrint.F \\
+%SCL\_IMP\_RCI & user/b2wrint.F \\
+SOLPS4\_3 & modules/b2mod\_b2\_to\_astra.F \\
+SOLPS4\_3 & modules/b2mod\_diag.F \\
+SOLPS4\_3 & modules/b2mod\_mwti.F90 \\
+SOLPS4\_3 & modules/b2mod\_neutrals\_namelist.F \\
+SOLPS4\_3 & sources/eirene\_f30f31.F \\
 USE\_CDF\_B2STIME & modules/b2mod\_comtimpl.F \\
-USE\_MPI & driver/b2mn.F \\
-USE\_PXFGETENV & convert/b2mds.F \\
+USE\_CDF\_B2STIME & common/COUPLE/COMTIMPL.F \\
+USE\_IMPGYRO & driver/b2mod\_driver.F \\
+USE\_IMPGYRO & driver/b2mod\_main.F \\
+USE\_IMPGYRO & modules/b2mod\_impgyro.F \\
+USE\_MPI & convert/b2mddr.F \\
+USE\_MPI & convert/b2xd.F \\
+USE\_MPI & driver/b2co.F \\
+USE\_MPI & driver/b2fu.F \\
+USE\_MPI & driver/b2md.F \\
+USE\_MPI & driver/b2mnastra.F \\
+USE\_MPI & driver/b2mn\_opt.F \\
+USE\_MPI & driver/b2mod\_driver.F \\
+USE\_MPI & driver/b2mod\_main.F \\
+USE\_MPI & driver/b2op.F \\
+USE\_MPI & driver/b2pl.F \\
+USE\_MPI & driver/b2rd.F \\
+USE\_MPI & driver/b2ts.F \\
+USE\_MPI & driver/b2uf.F \\
+USE\_MPI & modules/b2mod\_boundary\_namelist.F \\
+USE\_MPI & modules/b2mod\_feedback.F \\
+USE\_MPI & modules/b2mod\_impgyro.F \\
+USE\_MPI & modules/b2mod\_input\_profile.F \\
+USE\_MPI & modules/b2mod\_neutrals\_namelist.F \\
+USE\_MPI & modules/b2mod\_numerics\_namelist.F \\
+USE\_MPI & modules/b2mod\_sputter.F \\
+USE\_MPI & modules/b2mod\_transpbgr\_namelist.F \\
+USE\_MPI & modules/b2mod\_transport\_models.F \\
+USE\_MPI & modules/b2mod\_transport\_namelist.F \\
+USE\_MPI & modules/b2mod\_user\_namelist.F \\
+USE\_MPI & modules/b2mod\_wall.F \\
+USE\_MPI & postprocessing/b2yg.F \\
+USE\_MPI & postprocessing/b2yh.F \\
+USE\_MPI & postprocessing/b2yi.F \\
+USE\_MPI & postprocessing/b2yi\_gnuplot.F \\
+USE\_MPI & postprocessing/b2ym.F \\
+USE\_MPI & postprocessing/b2yn.F \\
+USE\_MPI & postprocessing/b2yp.F \\
+USE\_MPI & postprocessing/b2yq.F \\
+USE\_MPI & postprocessing/b2yr.F \\
+USE\_MPI & postprocessing/b2ytdr.F \\
+USE\_MPI & postprocessing/b2yt.F \\
+USE\_MPI & postprocessing/b2yv.F \\
+USE\_MPI & preprocessing/b2ag.F \\
+USE\_MPI & preprocessing/b2ah.F \\
+USE\_MPI & preprocessing/b2ai.F \\
+USE\_MPI & preprocessing/b2ar.F \\
+USE\_MPI & preprocessing/b2fgmtry\_mod.F \\
+USE\_MPI & utility/xertst.F \\
 USE\_PXFGETENV & b2plot/b2plot.F \\
 USE\_PXFGETENV & b2plot/dhdata.F \\
 USE\_PXFGETENV & b2plot/initialize\_plotting.F \\
 USE\_PXFGETENV & b2plot/set\_extralabel.F \\
 USE\_PXFGETENV & b2plot/spect.F \\
+USE\_PXFGETENV & convert/b2mds.F \\
 USE\_PXFGETENV & driver/b2co.F \\
 USE\_PXFGETENV & modules/b2mod\_ppout.F \\
 USE\_PXFGETENV & modules/b2mod\_solpstop.F \\
+USE\_PXFGETENV & preprocessing/b2agfs.F \\
 USE\_PXFGETENV & utility/open\_file.F \\
 USE\_PXFGETENV & utility/usrnam.F \\
 WANT\_PROCESS & convert/process.F \\
-WANT\_THIS & sources/b2stbc\_phys.F \\
 WINDOWS & b2plot/initialize\_plotting.F \\
 WINDOWS & driver/b2obeq.F \\
 WINDOWS & driver/b2obfn.F \\
@@ -16104,7 +16342,7 @@ WINDOWS & driver/b2oblm.F \\
 WINDOWS & driver/b2op.F \\
 WINDOWS & modules/b2mod\_b2plot\_values.F \\
 WINDOWS & modules/b2mod\_sputter.F \\
-WINDOWS & postprocessing/.F \\
+WINDOWS & postprocessing/b2yv.F \\
 WOS & b2plot/additional\_elements.F \\
 WOS & b2plot/flux.F \\
     \hline
@@ -16113,13 +16351,29 @@ WOS & b2plot/flux.F \\
   \end{longtable}
 \end{center}
 
-\index{SOLPS\_CPP}\index{B25\_DEFINES}
+\subsection{Eirene}
+\index{DEFINES, used in compiling Eirene}
+
+%%grep #if $SOLPSTOP/modules/Eirene/*/*.[Ff] $SOLPSTOP/modules/Eirene/*/*/*.[Ff]* | grep -v builds | awk '{print $2,$1}' | sort | uniq
+
+We list here the possible compiler options that can be used when compiling {\tt Eirene}.
+The options below must therefore,
+if desired, be declared as part of either the \${\tt SOLPS\_CPP} or the
+\${\tt EIRENE\_DEFINES} environment variable, which are defined in the
+\${\tt SOLPSTOP/SETUP/config.}\${\tt {HOST\_NAME}.}\${\tt {COMPILER}(.local)} files.
+
+\begin{description}
+\item[MPI\_VERSION] \index{MPI\_VERSION} Index of MPI version (set internally by the {\tt Makefile})
+\item[TRACE] \index{TRACE} Turns on tracing output in geometry routines (set internally by the {\tt Makefile} when requesting a {\tt \_debug} compilation)
+\end{description}
+
+\index{SOLPS\_CPP}\index{EIRENE\_DEFINES}
 If you want to activate any of these options, you should add
 {\tt -DOPTION} (where {\tt OPTION} might, for example, be
 {\tt CLASSICAL\_CURRENT}) to either the {\tt SOLPS\_CPP}
-or the {\tt B25\_DEFINES} environment variable with
+or the {\tt EIRENE\_DEFINES} environment variable with
 \begin{verbatim}
-  setenv B25_DEFINES '-DOPTION'
+  setenv EIRENE_DEFINES '-DOPTION'
 \end{verbatim}
 and then recompile all of the routines affected (if unsure which
 routines are affected, recompile them all with
@@ -16128,26 +16382,25 @@ routines are affected, recompile them all with
   gmake depend
   gmake
 \end{verbatim}
-).  If {\tt B25\_DEFINES} already had a value, you would want to do
+).  If {\tt EIRENE\_DEFINES} already had a value, you would want to do
 \begin{verbatim}
-  setenv B25_DEFINES "$B25_DEFINES -DOPTION"
+  setenv EIRENE_DEFINES "$EIRENE_DEFINES -DOPTION"
 \end{verbatim}
 %% $
+or
+\begin{verbatim}
+  EIRENE_DEFINES += -DOPTION
+\end{verbatim}
 so that the new option is added to the list. (Unsupported {\tt ksh}
 or {\tt bash} users would use something like
 \begin{verbatim}
-  export B25_DEFINES="$B25_DEFINES -DOPTION"
+  export EIRENE_DEFINES="$EIRENE_DEFINES -DOPTION"
 \end{verbatim}
 %% $
 ). If choosing to use {\tt SOLPS\_CPP} instead, the procedure is the same as
 in the previous section.
 
-\subsection{Eirene}
-\index{DEFINES, used in compiling Eirene}
-
-%%grep #if $SOLPSTOP/modules/Eirene/*/*.[Ff] $SOLPSTOP/modules/Eirene/*/*/*.[Ff]* | grep -v builds | awk '{print $2,$1}' | sort | uniq
-
-There are currently no additional compiler options exclusive to {\tt Eirene}, but we list below where the joint {\tt B2.5-Eirene} switches are used.
+We list below where the {\tt Eirene} compilation switches are used.
 
 \begin{center}
   \begin{longtable}{|l|l|}
@@ -16162,17 +16415,25 @@ There are currently no additional compiler options exclusive to {\tt Eirene}, bu
     \hline \endfoot
     \endlastfoot
 ALLOCATE\_AND\_NAMELIST & startup-routines/find\_param.F \\
+B25\_EIRENE & main-routines/eirene.f \\
+B25\_EIRENE & interfaces/couple\_SOLPS-ITER/eirmod\_extrab25.F90 \\
 B25\_EIRENE & startup-routines/find\_param.f \\
-NO\_B2\_CHEM\_SPUT & interfaces/couple\_SOLPS-ITER/eirmod\_extrab25.F90 \\
-NO\_B2\_CHEM\_SPUT & interfaces/couple\_SOLPS-ITER/infcop.F \\
+DBG & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.F \\
+HPUX & interfaces/couple\_SOLPS-ITER/eirmod\_extrab25.F90 \\
+MPI\_VERSION & modules/eirmod\_mpi.F90 \\
+NO\_B2\_CHEM\_SPUT & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.F \\
 NO\_GETENV & file-handling/get\_solpstop.f \\
-USE\_MPI & interfaces/couple\_SOLPS-ITER/eirsrt.f \\
-USE\_MPI & interfaces/couple\_SOLPS-ITER/infcop.f \\
-USE\_MPI & main-routines/eirene.f \\
-USE\_MPI & main-routines/mcarlo.f \\
-USE\_MPI & modules/eirmod\_eirbra.f \\
+TRACE & geometry/time-routines/checks.F \\
+TRACE & geometry/time-routines/timea.F \\
+TRACE & geometry/time-routines/timep.F \\
+TRACE & geometry/time-routines/timer.F \\
+TRACE & geometry/time-routines/timet.F \\
+USE\_MPI & assistant/exit\_own.f \\
+USE\_MPI & modules/eirmod\_mpi.F90 \\
+USE\_MPI & photons/eirmod\_phot\_reflec.f \\
 USE\_MPI & startup-routines/input.f \\
 USE\_PXFGETENV & file-handling/get\_solpstop.f \\
+WINDOWS & main-routines/eirene.f \\
     \hline
     \caption{Defines for Eirene and where they are used.}
     \label{tab:Eirdefines}
@@ -16199,6 +16460,10 @@ routines are affected, recompile them all with
   setenv EIRENE_DEFINES "$EIRENE_DEFINES -DOPTION"
 \end{verbatim}
 %% $
+or
+\begin{verbatim}
+  EIRENE_DEFINES += -DOPTION
+\end{verbatim}
 so that the new option is added to the list. (Unsupported {\tt ksh}
 or {\tt bash} users would use something like
 \begin{verbatim}
@@ -16216,9 +16481,18 @@ in the previous section.
 
 The NAG calls from {\tt B2.5} are given in table \ref{tab:nagb2}.
 
-\begin{table}[hbtp]
-  \centering
-  \begin{tabular}{|c|c|p{10cm}|} \hline
+\begin{center}
+  \begin{longtable}[hbtp]{|c|c|p{10cm}|}
+    \hline
+    \multicolumn{3}{|l|}{\small\sl continued from previous page} \\
+    \hline caller routine & calling & function \\
+    \hline \endhead
+    \hline caller routine & calling & function \\
+    \hline \endfirsthead
+    \hline
+    \multicolumn{2}{|l|}{\small\sl continued on next page} \\
+    \hline \endfoot
+    \endlastfoot
 b2mndr.f                &  X05BAF & returns the amount of processor time used since an unspecified previous time, via the routine name \\ \hline
 b2mod\_input\_profile.f &  E01BEF & computes a monotonicity-preserving piecewise cubic Hermite interpolant to a set of data points \\ \hline
 b2mod\_input\_profile.f &  E01BFF & evaluates a piecewise cubic Hermite interpolant, as computed by E01BEF \\ \hline
@@ -16237,11 +16511,12 @@ daytim.f                &  X05ABF & converts from a seven-integer format time an
 heatdiff1D.f            &  D03PCF & integrates a system of linear or nonlinear parabolic partial differential equations (PDEs) in one space variable. \\ \hline
 ilutern\_7\_solps.f     &  X05BAF & returns the amount of processor time used since an unspecified previous time, via the routine name \\ \hline
 macheps.f               &  X02AJF & returns the machine precision \\ \hline
-machsfr.f               &  X02AMF & returns the safe range of floating-point arithmetic \\ \hline
-  \end{tabular}
+machsfr.f               &  X02AMF & returns the safe range of floating-point arithmetic \\
+  \hline
   \caption{NAG calls from B2.5}
   \label{tab:nagb2}
-\end{table}
+  \end{longtable}
+\end{center}
 
 \subsection{EIRENE}
 \index{NAG calls in EIRENE}
