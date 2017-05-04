@@ -23,7 +23,7 @@ module load fontconfig/2.11.93
 module load cairo/1.14.2
 module load make
 module load fc2k
-module load xmllib/2.0.0-imas-3.7.3-GCC-4.8.3
+module load xmllib/2.0.0-imas-3.9.0-GCC-4.8.3
 module load python/2.7/11
 module load totalview
 
