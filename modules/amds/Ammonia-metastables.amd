@@ -544,14 +544,18 @@ NH3
 Reaction AMMONX_H.2_12 2
 e
 NH3
-Reaction AMMONX_H.2_14 0
+Reaction AMMONX_H.2_14 2
+e
+N2
 Reaction AMMONX_H.2_18 2
 e
 NH3
 Reaction AMMONX_H.2_ZE 2
 e
 NH3
-Reaction AMMONX_H.2_23 0
+Reaction AMMONX_H.2_23 2
+e
+N2+
 Reaction AMMONX_H.2_24 2
 e
 NH+
@@ -621,14 +625,30 @@ NH+
 Reaction AMMONX_H.2_50 2
 H2
 NH2+
-Reaction AMMONX_H.2_EK 0
-Reaction AMMONX_H.2_EM 0
-Reaction AMMONX_H.2_DB 0
-Reaction AMMONX_H.2_DD 0
-Reaction AMMONX_H.2_DE 0
-Reaction AMMONX_H.2_DF 0
-Reaction AMMONX_H.2_EA 0
-Reaction AMMONX_H.2_EC 0
+Reaction AMMONX_H.2_EK 2
+e
+N2
+Reaction AMMONX_H.2_EM 2
+e
+N
+Reaction AMMONX_H.2_DB 2
+N2*(A)
+N*(4S)
+Reaction AMMONX_H.2_DD 2
+NH3
+N2*(A)
+Reaction AMMONX_H.2_DE 2
+H
+N2*(A)
+Reaction AMMONX_H.2_DF 2
+H2
+N2*(A)
+Reaction AMMONX_H.2_EA 2
+H2
+N2*(A)
+Reaction AMMONX_H.2_EC 2
+NH3
+N*(2D)
 Reaction AMMONX_H.2_20 2
 e
 H2+
