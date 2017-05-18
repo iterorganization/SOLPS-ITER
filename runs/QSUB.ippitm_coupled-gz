@@ -32,7 +32,7 @@ if ($?SOLPS_GUI_IP) then
   echo ${USER} ${PWD} ${msg} | netcat -u -v -w 1 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
 endif
 
-time b2run ${USE_MPI} b2mn < input.dat | gzip -9 >! run.log.gz
+time b2run ${USE_MPI} b2mn | gzip -9 >! run.log.gz
 
 QSUB.postprocess_coupled
 

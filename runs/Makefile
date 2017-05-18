@@ -161,7 +161,7 @@ endif
 ifdef USE_IMPGYRO
 	-cd b2mn.exe.dir ; touch b2ig.conf ; echo "-n ${NPE_B2} : ${B2OBJ}/b2mn.exe" >> b2ig.conf ; echo "-n ${NPE_EXT} : ${EXE_EXT}" >> b2ig.conf ; ln -s ../config ../pre . ; mkdir tracing ;\
 	touch use_impgyro ; [ -e ../restart_ext ] && cp ../restart_ext . || echo > /dev/null ; [ -e ../restart ] && cp ../restart . && cp ${WD_EXT}/.st.?* . || echo > /dev/null ;\
-	mpiexec -verbose -config b2ig.conf;\
+	mpiexec -verbose -config b2ig.conf ;\
 	mv $(target_mn) .. >& /dev/null ; [ -d ../tracing ] || mkdir ../tracing ; mv -f tracing/* ../tracing ; [ -e ../fort.30 ] || mv fort.30 .. ; \
 	rm -f $(notdir $^) .quit ; rm -f b2ig.conf use_impgyro config pre ; [ -e restart_ext ] && cp restart_ext ../. || echo > /dev/null ;\
 	mv .*.?* ${WD_EXT}/. ; mv fort.150 ${WD_EXT}/. ;\

@@ -55,7 +55,7 @@ if ($?SOLPS_GUI_IP) then
   echo ${USER} ${PWD} ${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
 endif
 
-time b2run ${USE_MPI} b2mn < input.dat >! run.log
+time b2run ${USE_MPI} b2mn >! run.log
 
 QSUB.postprocess_coupled
 
