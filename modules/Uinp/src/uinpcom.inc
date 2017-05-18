@@ -587,7 +587,7 @@ c     ,  spcifup,spcifua,spcifum,spcifui,
      ,  ttcblph,ttctal,ttcdbg2,ttcdbge,ttcdbgm,ttcdbgf,ttcdbgl,ttcdbgs,
      ,  ttcdbgg,ttcdbgmpi,ttcdbgc,
      ,  ttpl1st,ttpl2nd,ttpladd,ttplhst,ttplcut,ttplnums,tttest,
-     ,  lm_cnfg,l_ammon, ammonx_used
+     ,  lm_cnfg,l_ammon,ammonx_used
 
       common/uinptxt/topo,amd_file,
      ,  spcsncl,spcspls,spcsatm,spcsmol,spcsion,spcsrfp,spcsrfa,spcsrfm,

@@ -552,7 +552,7 @@ c*** hlp_h shows the species equivalent to the default ones
      ,  'NH3', 'NH+', 'NH2+', 'NH3+', 'NH4+', 'N2H+',
      ,  'H', 'H+', 'H2', 'H2+', '2H', '2H+', 'H3+', '3H', 'NH', 'NH2',
      ,  'NH3', 'NH+', 'NH2+', 'NH3+', 'NH4+', 'N2H+'/
-      data hlp_h_m / 1, 1, 2, 2, 2, 2, 3, 3, 1, 2, 3, 1, 2, 3, 4, 1/
+      data hlp_h_m / 1, 1, 2, 2, 1, 1, 3, 1, 1, 2, 3, 1, 2, 3, 4, 1/
       
 c      integer lura,lurm,luri,lurf
       integer, parameter :: lura=nreac*natm, lurm=nreac*nmol,
