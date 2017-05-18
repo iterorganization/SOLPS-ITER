@@ -140,6 +140,7 @@ c
       end if !}
       nnftrm = nnftrm+ifile
 
+      ammonx_used=.false.
       do iamd=1,namdf !{
         if(.not.streql(amd_file(iamd),' ')) then !{
 c*** Read the AMDS file if it exists

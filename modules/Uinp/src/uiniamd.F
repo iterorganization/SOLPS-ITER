@@ -91,6 +91,7 @@ c	      print *,'k,l,m= ',k,l,m
 	end if !}
 	print '(i3,7a)',i,':',rctndbs(i),':',rctnchp(i),':',
      ,	  rctnrct(i),':'
+        if (streql(rctndbs(i),'AMMONX')) ammonx_used=.true.
       end do !}
       call subend ()
       return

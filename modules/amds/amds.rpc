@@ -9320,21 +9320,21 @@ Particle e
 Reaction AMMONX_H.2_ZN 2
   
 
-1
-28
-DS
+14
+2
+CX
 
 
-e
-N2
-N+
 N
+H2+
+N+
+H2
 
 
 
 
-Particle H2+
 Particle N
+Particle H2+
 Reaction AMMONX_H.2_32 2
   
 
@@ -9351,8 +9351,8 @@ Reaction AMMONX_H.2_32 2
 
 
 
-Particle H+
 Particle NH3
+Particle H+
 Reaction AMMONX_H.2_ZL 2
   
 

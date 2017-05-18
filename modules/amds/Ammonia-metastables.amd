@@ -289,9 +289,7 @@ Reaction AMJUEL_H.1_3.1.8J 0
 Reaction AMJUEL_H.2_2.1.5FJ 2
 e
 H
-Reaction AMJUEL_H.2_2.2.5 2
-e
-H2
+Reaction AMJUEL_H.2_2.2.5 0
 Reaction AMJUEL_H.2_2.2.17 0
 Reaction AMJUEL_H.2_2.2B0 0
 Reaction AMJUEL_H.2_2.2B1 0
@@ -342,7 +340,9 @@ Reaction AMJUEL_H.4_2.1.8a 0
 Reaction AMJUEL_H.4_2.1.8b 0
 Reaction AMJUEL_H.4_2.1.8FU 0
 Reaction AMJUEL_H.4_2.2C 0
-Reaction AMJUEL_H.4_2.2.5 0
+Reaction AMJUEL_H.4_2.2.5 2
+e
+H2
 Reaction AMJUEL_H.4_2.2.5g 0
 Reaction AMJUEL_H.4_2.2.9 0
 Reaction AMJUEL_H.4_2.2.10 0
@@ -575,50 +575,50 @@ Reaction AMMONX_H.2_31 2
 N2H+
 e
 Reaction AMMONX_H.2_ZN 2
-H2+
 N
+H2+
 Reaction AMMONX_H.2_32 2
-H+
 NH3
+H+
 Reaction AMMONX_H.2_ZL 2
-H+
 NH2
+H+
 Reaction AMMONX_H.2_ZM 2
+NH
 H+
-NH
 Reaction AMMONX_H.2_35 2
-H2+
 NH3
+H2+
 Reaction AMMONX_H.2_36 2
-H2+
 N2
+H2+
 Reaction AMMONX_H.2_ZO 2
-H2+
 N
+H2+
 Reaction AMMONX_H.2_ZR 2
-H2+
 NH2
+H2+
 Reaction AMMONX_H.2_ZT 2
+NH
 H2+
-NH
 Reaction AMMONX_H.2_39 2
-H3+
 NH3
+H3+
 Reaction AMMONX_H.2_ZU 2
-H3+
 NH2
+H3+
 Reaction AMMONX_H.2_ZV 2
-H3+
 NH
-Reaction AMMONX_H.2_40 2
 H3+
+Reaction AMMONX_H.2_40 2
 N2
+H3+
 Reaction AMMONX_H.2_41 2
+N+
 H2
-N+
 Reaction AMMONX_H.2_ZZ 2
-H
 N+
+H
 Reaction AMMONX_H.2_46 2
 NH+
 H2
@@ -660,11 +660,11 @@ Reaction AMMONX_H.2_22 2
 H3+
 e
 Reaction AMMONX_H.2_33 2
-H2+
 H
-Reaction AMMONX_H.2_34 2
 H2+
+Reaction AMMONX_H.2_34 2
 H2
+H2+
 Reaction AMMONX_H.2_06 2
 e
 H2
@@ -4910,8 +4910,8 @@ DS
 
 H2
 H
-H
 
+2
 
 
 
@@ -5821,16 +5821,16 @@ Reaction AMJUEL_H.4_2.2.5 2
 
 
 
+0
+2
+DS
 
 
 
+H2
+H
 
-
-
-
-
-
-
+2
 
 
 Particle e
@@ -6348,7 +6348,7 @@ RC
 
 
 He+
-
+e
 He
 
 
@@ -6870,7 +6870,7 @@ RC
 
 
 H+
-
+e
 H
 
 
@@ -9030,9 +9030,9 @@ EI
 
 
 C
-
+e
 C+
-
+2e
 
 
 
@@ -9312,8 +9312,8 @@ Particle e
 Reaction AMMONX_H.2_24 2
 
 
-15
 0
+15
 DS
 
 
@@ -9330,8 +9330,8 @@ Particle e
 Reaction AMMONX_H.2_25 2
 
 
-16
 0
+16
 DS
 
 
@@ -9348,8 +9348,8 @@ Particle e
 Reaction AMMONX_H.2_27 2
 
 
-17
 0
+17
 DS
 
 
@@ -9366,8 +9366,8 @@ Particle e
 Reaction AMMONX_H.2_28 2
 
 
-17
 0
+17
 DS
 
 
@@ -9384,8 +9384,8 @@ Particle e
 Reaction AMMONX_H.2_29 2
 
 
-18
 0
+18
 DS
 
 
@@ -9402,8 +9402,8 @@ Particle e
 Reaction AMMONX_H.2_31 2
 
 
-29
 0
+29
 DS
 
 
@@ -9425,16 +9425,16 @@ Reaction AMMONX_H.2_ZN 2
 CX
 
 
-H2+
 N
+H2+
 N+
 H2
 
 
 
 
-Particle H2+
 Particle N
+Particle H2+
 Reaction AMMONX_H.2_32 2
   
 
@@ -9443,16 +9443,16 @@ Reaction AMMONX_H.2_32 2
 CX
 
 
-H+
 NH3
+H+
 NH3+
 H
 
 
 
 
-Particle H+
 Particle NH3
+Particle H+
 Reaction AMMONX_H.2_ZL 2
   
 
@@ -9461,16 +9461,16 @@ Reaction AMMONX_H.2_ZL 2
 CX
 
 
-H+
 NH2
+H+
 NH2+
 H
 
 
 
 
-Particle H+
 Particle NH2
+Particle H+
 Reaction AMMONX_H.2_ZM 2
   
 
@@ -9479,16 +9479,16 @@ Reaction AMMONX_H.2_ZM 2
 CX
 
 
-H+
 NH
+H+
 NH+
 H
 
 
 
 
-Particle H+
 Particle NH
+Particle H+
 Reaction AMMONX_H.2_35 2
   
 
@@ -9497,16 +9497,16 @@ Reaction AMMONX_H.2_35 2
 CX
 
 
-H2+
 NH3
+H2+
 NH3+
 H2
 
 
 
 
-Particle H2+
 Particle NH3
+Particle H2+
 Reaction AMMONX_H.2_36 2
   
 
@@ -9515,16 +9515,16 @@ Reaction AMMONX_H.2_36 2
 II
 
 
-H2+
 N2
+H2+
 N2H+
 H
 
 
 
 
-Particle H2+
 Particle N2
+Particle H2+
 Reaction AMMONX_H.2_ZO 2
   
 
@@ -9533,16 +9533,16 @@ Reaction AMMONX_H.2_ZO 2
 II
 
 
-H2+
 N
+H2+
 NH+
 H
 
 
 
 
-Particle H2+
 Particle N
+Particle H2+
 Reaction AMMONX_H.2_ZR 2
   
 
@@ -9551,16 +9551,16 @@ Reaction AMMONX_H.2_ZR 2
 CX
 
 
-H2+
 NH2
+H2+
 NH2+
 H2
 
 
 
 
-Particle H2+
 Particle NH2
+Particle H2+
 Reaction AMMONX_H.2_ZT 2
   
 
@@ -9569,16 +9569,16 @@ Reaction AMMONX_H.2_ZT 2
 CX
 
 
-H2+
 NH
+H2+
 NH+
 H2
 
 
 
 
-Particle H2+
 Particle NH
+Particle H2+
 Reaction AMMONX_H.2_39 2
   
 
@@ -9587,16 +9587,16 @@ Reaction AMMONX_H.2_39 2
 II
 
 
-H3+
 NH3
+H3+
 NH4+
 H2
 
 
 
 
-Particle H3+
 Particle NH3
+Particle H3+
 Reaction AMMONX_H.2_ZU 2
   
 
@@ -9605,16 +9605,16 @@ Reaction AMMONX_H.2_ZU 2
 II
 
 
-H3+
 NH2
+H3+
 NH3+
 H2
 
 
 
 
-Particle H3+
 Particle NH2
+Particle H3+
 Reaction AMMONX_H.2_ZV 2
   
 
@@ -9623,16 +9623,16 @@ Reaction AMMONX_H.2_ZV 2
 II
 
 
-H3+
 NH
+H3+
 NH2+
 H2
 
 
 
 
-Particle H3+
 Particle NH
+Particle H3+
 Reaction AMMONX_H.2_40 2
   
 
@@ -9641,16 +9641,16 @@ Reaction AMMONX_H.2_40 2
 II
 
 
-H3+
 N2
+H3+
 N2H+
 H2
 
 
 
 
-Particle H3+
 Particle N2
+Particle H3+
 Reaction AMMONX_H.2_41 2
   
 
@@ -9659,16 +9659,16 @@ Reaction AMMONX_H.2_41 2
 II
 
 
-H2
 N+
+H2
 NH+
 H
 
 
 
 
-Particle H2
 Particle N+
+Particle H2
 Reaction AMMONX_H.2_ZZ 2
   
 
@@ -9677,28 +9677,28 @@ Reaction AMMONX_H.2_ZZ 2
 CX
 
 
-H
 N+
+H
 N
 H+
 
 
 
 
-Particle H
 Particle N+
+Particle H
 Reaction AMMONX_H.2_46 2
   
 
-15
 2
+15
 II
 
 
 NH+
 H2
-H
 NH2+
+H
 
 
 
@@ -9708,15 +9708,15 @@ Particle H2
 Reaction AMMONX_H.2_50 2
   
 
-16
 2
+16
 II
 
 
 NH2+
 H2
-H
 NH3+
+H
 
 
 
@@ -9870,16 +9870,16 @@ Particle N*(2D)
 Reaction AMMONX_H.2_20 2
 
 
-2
 0
+2
 DS
 
 
 H2+
 
 H
-H
 
+2
 
 
 
@@ -9893,11 +9893,11 @@ Reaction AMMONX_H.2_13 2
 DS
 
 
-
 H2
-H
+
 H
 
+2
 
 
 
@@ -9906,17 +9906,17 @@ Particle H2
 Reaction AMMONX_H.2_21 2
   
 
-3
 0
+3
 DS
 
 
 H3+
 
-
 H
 
 3
+
 
 
 Particle H3+
@@ -9924,8 +9924,8 @@ Particle e
 Reaction AMMONX_H.2_22 2
   
 
-3
 0
+3
 DS
 
 
@@ -9938,7 +9938,7 @@ H
 
 
 Particle H3+
-Particle 
+Particle e
 Reaction AMMONX_H.2_33 2
   
 
@@ -9947,10 +9947,10 @@ Reaction AMMONX_H.2_33 2
 CX
 
 
-H2+
 H
-H+
+H2+
 H2
+H+
 
 
 
@@ -9965,16 +9965,16 @@ Reaction AMMONX_H.2_34 2
 II
 
 
-H2+
 H2
-H3+
+H2+
 H
+H3+
 
 
 
 
-Particle H2+
 Particle H2
+Particle H2+
 Reaction AMMONX_H.2_06 2
   
 

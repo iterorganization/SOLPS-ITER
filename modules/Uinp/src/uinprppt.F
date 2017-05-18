@@ -97,6 +97,7 @@ c*** the atoms and nuclei
 
               nm=nspcmol
               do m=1,nspdmol(k) !{
+                if (l_ammon(j+m).and..not.ammonx_used) cycle
                 c=spcdspc(j+m)
                 ex=.false.
                 do i=1,nspcmol  !{
@@ -155,6 +156,7 @@ c*** the atoms and nuclei
 
               ni=nspcion
               do m=1,nspdion(k) !{
+                if (l_ammon(j+m).and..not.ammonx_used) cycle
                 c=spcdspc(j+m)
                 ex=.false.
                 do i=1,nspcion  !{

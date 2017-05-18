@@ -617,8 +617,8 @@ Reaction AMMONX H.2 27       : NH3+ e            : NH 2H           : DS
 Reaction AMMONX H.2 28       : NH3+ e            : NH2 H           : DS
 Reaction AMMONX H.2 29       : NH4+ e            : NH3 H           : DS
 Reaction AMMONX H.2 31       : N2H+ e            : N2 H            : DS
-Reaction AMMONX H.2 ZN       : H2+ N             : N+ H2           : CX
-Reaction AMMONX H.2 32       : H+ NH3            : NH3+ H          : CX
+Reaction AMMONX H.2 ZN       : N H2+             : N+ H2           : CX
+Reaction AMMONX H.2 32       : NH3 H+            : NH3+ H          : CX
 Reaction AMMONX H.2 ZL       : H+ NH2            : NH2+ H          : CX
 Reaction AMMONX H.2 ZM       : H+ NH             : NH+ H           : CX
 Reaction AMMONX H.2 35       : H2+ NH3           : NH3+ H2         : CX

@@ -154,12 +154,13 @@ c***    test ions for each entry (always one atom for a GS);
 c***    atomic mass, nuclear charge, charge state, flux units (nuclei),
 c***    and '3 secondaries' flag for each entry 
       integer nspdgen,nspdlen
-      parameter (nspdgen=11, nspdlen=65)
+      parameter (nspdgen=11, nspdlen=78)
       character*8 spcdgen(nspdgen)*2,spcdspc(nspdlen),
      ,  spcdrfl(nspdlen),spcdrtl(nspdlen)
       integer lspdgen(nspdgen),nspdpls(nspdgen),nspdmol(nspdgen),
      ,  nspdion(nspdgen),spcdms(nspdlen),spcdnc(nspdlen),
      ,  spcdcg(nspdlen),spcdfu(nspdlen),spcdns(nspdlen)
+      logical l_ammon(nspdlen), ammonx_used
       
 c-----------------------------------------------------------------------
 c*** Boundary conditions at the grid edge.
@@ -351,7 +352,7 @@ c***    primary particle is determined from spcrctd)
      ,  rctdtmax(mreac,nsrctd),
      ,  rctdenr1(mreac,nsrctd),rctdenr2(mreac,nsrctd)
       integer n_hlp_h,m_hlp_h
-      parameter (n_hlp_h=6, m_hlp_h=3)
+      parameter (n_hlp_h=16, m_hlp_h=3)
       integer hlp_h_m(n_hlp_h)
       character*4 hlp_h(n_hlp_h,m_hlp_h,2)
 
@@ -586,7 +587,7 @@ c     ,  spcifup,spcifua,spcifum,spcifui,
      ,  ttcblph,ttctal,ttcdbg2,ttcdbge,ttcdbgm,ttcdbgf,ttcdbgl,ttcdbgs,
      ,  ttcdbgg,ttcdbgmpi,ttcdbgc,
      ,  ttpl1st,ttpl2nd,ttpladd,ttplhst,ttplcut,ttplnums,tttest,
-     ,  lm_cnfg
+     ,  lm_cnfg,l_ammon, ammonx_used
 
       common/uinptxt/topo,amd_file,
      ,  spcsncl,spcspls,spcsatm,spcsmol,spcsion,spcsrfp,spcsrfa,spcsrfm,
