@@ -22,11 +22,7 @@ c======================================================================
       character*8 c,cc,ccc,c0*1,f_hlp*12
       logical h_collision, todo
       logical hlp_amds(natm+nmol+nion+npls), need_dflt
-c*** hlp_h shows the species equivalent to the default ones
-      integer n_hlp_h,m_hlp_h
       integer maxne, quote_count, iquote, iyear, ibundling
-      parameter (n_hlp_h=6, m_hlp_h=3)
-      character*4 hlp_h(n_hlp_h,m_hlp_h,2)
       character*256 adasfile
       character SUBDIRrec*4,SUBDIRion*4,SUBDIRcex*4
       character SUBDIRprb*4,SUBDIRplt*4,SUBDIRzav*4
@@ -37,7 +33,9 @@ c*** hlp_h shows the species equivalent to the default ones
       character ES*2, EB*2, Bdescr*8
       character ZEILE*80
       integer ign(mreac,1+m_hlp_h)
+      integer ndup
       logical h_iso_used(m_hlp_h)
+      logical, allocatable :: ldup(:)
       integer find_matching_reagent, find_matching_species,
      ,        get_atomic_number, lnblnk
       logical streql, silent_open, isadigit, isplusorminus
@@ -45,13 +43,6 @@ c*** hlp_h shows the species equivalent to the default ones
       external find_matching_reagent, find_matching_species,
      ,         get_atomic_number, lnblnk, isadigit, isplusorminus
       external silent_open
-      data hlp_h /
-     /  'H', 'H+', 'H2', 'H2+', '2H', '2H+',
-     ,  'D', 'D+', 'D2', 'D2+', '2D', '2D+',
-     ,  'T', 'T+', 'T2', 'T2+', '2T', '2T+',
-     ,  'H', 'H+', 'H2', 'H2+', '2H', '2H+',
-     ,  'H', 'H+', 'H2', 'H2+', '2H', '2H+',
-     ,  'H', 'H+', 'H2', 'H2+', '2H', '2H+'/
 c======================================================================
       call subini ('uinprprc')
       c0=char(0)
@@ -75,6 +66,59 @@ c======================================================================
      .   'This problem contains ',nisotopes,' hydrogenic isotope'
       end if !}
 
+c*** Remove reaction duplicates, if any
+      ndup = 0
+      allocate(ldup(nnrctn))
+      ldup = .false.
+      do i = 1, nnrctn-1 !{
+        do j = i+1, nnrctn !{
+          if (streql(rctnptpr(i),rctnptpr(j)).and.
+     .        streql(rctnptin(i),rctnptin(j)).and.
+     .        streql(rctntyp(i) ,rctntyp(j) ).and.
+     .        streql(rctndbs(i) ,rctndbs(j) ).and.
+     .        streql(rctnchp(i) ,rctnchp(j) ).and.
+     .        streql(rctnrct(i) ,rctnrct(j) ).and.
+     .        streql(rctnpto1(i),rctnpto1(j)).and.
+     .        streql(rctnpto2(i),rctnpto2(j)).and.
+     .        rctntmin(i).eq.rctntmin(j).and.
+     .        rctntmax(i).eq.rctntmax(j).and.
+     .        rctnenr1(i).eq.rctnenr1(j).and.
+     .        rctnenr2(i).eq.rctnenr2(j)) then !{
+            ndup = ndup + 1
+            ldup(j) = .true.
+          end if !}
+        end do !}
+      end do !}
+      if (ndup.gt.0) then !{
+        do i = 1, nnrctn !{
+          if (ldup(i)) then !{
+            do j = i+1, nnrctn !{
+              rctntyp(j-1) =rctntyp(j)
+              rctndbs(j-1) =rctndbs(j)
+              rctnchp(j-1) =rctnchp(j)
+              rctnrct(j-1) =rctnrct(j)
+              rctnptpr(j-1)=rctnptpr(j)
+              rctnptin(j-1)=rctnptin(j)
+              rctnpto1(j-1)=rctnpto1(j)
+              rctnpto2(j-1)=rctnpto2(j)
+              rctngrp(j-1) =rctngrp(j)
+              rctnmsp(j-1) =rctnmsp(j)
+              rctnmst(j-1) =rctnmst(j)
+              rctnnmo1(j-1)=rctnnmo1(j)
+              rctnnmo2(j-1)=rctnnmo2(j)
+              rctndlte(j-1)=rctndlte(j)
+              rctntmin(j-1)=rctntmin(j)
+              rctntmax(j-1)=rctntmax(j)
+              rctnenr1(j-1)=rctnenr1(j)
+              rctnenr2(j-1)=rctnenr2(j)
+              rctneln(j-1) =rctneln(j)
+            end do !}
+          end if !}
+        end do !}
+      end if !}
+      nnrctn = nnrctn - ndup
+      deallocate(ldup)
+
 c*** In order to avoid group duplication:
 c***  ngn is the number of nonzero groups treated,
 c***  igd is the last group ID used,
@@ -91,6 +135,11 @@ c*** Check whether reactions were specified. If not, take the defaults
       do i = 1, nnrctn !{
         c=rctnptpr(i)
         l=get_atomic_number(c)
+        if (l.eq.-1.or.streql(c,' ')) then !invert order of reactants
+          cc=rctnptin(i)
+          rctnptin(i)=rctnptpr(i)
+          rctnptpr(i)=cc
+        endif
         cc=c
         do ii=1,n_hlp_h !{
           do jj=1,m_hlp_h !{
@@ -543,14 +592,14 @@ cxpb Now check if we need to rename some isotopes for AMDS reactions
 
       end do !} (irc)
 
-c<<<
-c      print *
-c      print *,'Draft reaction list after parsing and renaming:'
-c      if(nnrctn.gt.0) print '(a9,a7,a5,a9,a3,3a9,3i3,1p,3e9.2)',
-c     ,  (rctnptpr(i),rctndbs(i),rctnchp(i),rctnrct(i),rctntyp(i),
-c     ,   rctnptin(i),rctnpto1(i),rctnpto2(i),rctngrp(i),rctnmsp(i),
-c     ,    rctnmst(i),rctndlte(i),rctnenr1(i),rctnenr2(i),i=1,nnrctn)
-c>>>
+#ifdef DBG
+      print *
+      print *,'Draft reaction list after parsing and renaming:'
+      if(nnrctn.gt.0) print '(a9,a7,a5,a9,a3,3a9,3i3,1p,3e9.2)',
+     ,  (rctnptpr(i),rctndbs(i),rctnchp(i),rctnrct(i),rctntyp(i),
+     ,   rctnptin(i),rctnpto1(i),rctnpto2(i),rctngrp(i),rctnmsp(i),
+     ,    rctnmst(i),rctndlte(i),rctnenr1(i),rctnenr2(i),i=1,nnrctn)
+#endif
 
       if(.not.rctndflt .and. nisotopes.gt.1) then !{ duplicate reactions
 

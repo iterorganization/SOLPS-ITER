@@ -350,6 +350,10 @@ c***    primary particle is determined from spcrctd)
       real*4 rctddlte(mreac,nsrctd),rctdtmin(mreac,nsrctd),
      ,  rctdtmax(mreac,nsrctd),
      ,  rctdenr1(mreac,nsrctd),rctdenr2(mreac,nsrctd)
+      integer n_hlp_h,m_hlp_h
+      parameter (n_hlp_h=6, m_hlp_h=3)
+      integer hlp_h_m(n_hlp_h)
+      character*4 hlp_h(n_hlp_h,m_hlp_h,2)
 
 c-----------------------------------------------------------------------
 c*** Chemical sputtering: pairs projectile-wall and sputtered particle 
@@ -597,6 +601,7 @@ c     ,  spcifup,spcifua,spcifum,spcifui,
      ,  rctnpto2,rctneln,
      ,  spcrctd,rctdtyp,rctddbs,rctdchp,rctdrct,rctdptpr,
      ,  rctdptin,rctdpto1,rctdpto2,rctdeln,
+     ,  hlp_h,
      ,  chsptgt,chspspt,made_of,
      ,  crcmstrs,srcmstrs,wrcmstrs,cgpfstrs,sgpfstrs,
      ,  sps_mtrl,sps_id,gpfrgrp,cdnmdlp_sel,

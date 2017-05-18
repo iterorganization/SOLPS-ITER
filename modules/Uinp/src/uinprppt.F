@@ -12,7 +12,7 @@ c======================================================================
 c*** Prepare the particle lists
 c======================================================================
 #include "uinput.inc"
-      integer i,j,k,l,m,mm,n,na,ni,nm,np
+      integer i,ii,iii,j,jj,jjj,k,l,m,mm,n,na,ni,nm,np,ipt
       integer find_matching_species, get_atomic_number, lnblnk
       logical ex,streql
       external streql, xerrab, subini, subend
@@ -116,10 +116,35 @@ c*** the atoms and nuclei
                   call xerrab ('Too many molecular species')
                 end if !}
                 spcscmm(nspcncl,nm)=spcdfu(j+m)
-                spcsmol(nm)=c
+                ipt=0
+                cc=c
                 spcsrfm(nm)=spcdrfl(j+m)
                 spcsrtm(nm)=spcdrtl(j+m)
                 spcsmsm(nm)=spcdms(j+m)
+                do ii=1,nspcatm !{
+                  do jj=1,m_hlp_h !{
+                    if(streql(spcsatm(ii),hlp_h(1,jj,1))) then !{
+                      if (ipt.eq.0) ipt=jj
+                    end if !}
+                  end do !}
+                end do !}
+                if (ipt.gt.0) then !{
+                  do ii=1,n_hlp_h !{
+                    do jj=1,m_hlp_h !{
+                      if(streql(c,hlp_h(ii,jj,2))) then !{
+                        cc=hlp_h(ii,ipt,1)
+                        spcsmsm(nm)=spcdms(j+m)+(ipt-1)*hlp_h_m(ii)
+                        do iii=1,n_hlp_h !{
+                          if(streql(spcdrfl(j+m),hlp_h(iii,1,2)))
+     >                      spcsrfm(nm)=hlp_h(iii,ipt,1)
+                          if(streql(spcdrtl(j+m),hlp_h(iii,1,2)))
+     >                      spcsrtm(nm)=hlp_h(iii,ipt,1)
+                        end do !}
+                      end if !}
+                    end do !}
+                  end do !}
+                end if !}
+                spcsmol(nm)=cc
                 spcsncm(nm)=spcdnc(j+m)
                 spcscgm(nm)=spcdcg(j+m)
                 spcsfum(nm)=spcdfu(j+m)
@@ -149,10 +174,37 @@ c*** the atoms and nuclei
                   call xerrab ('Too many test ion species')
                 end if !}
                 spcscmi(nspcncl,ni)=spcdfu(j+m)
-                spcsion(ni)=c
+                ipt=0
+                cc=c
                 spcsrfi(ni)=spcdrfl(j+m)
                 spcsrti(ni)=spcdrtl(j+m)
                 spcsmsi(ni)=spcdms(j+m)
+                do ii=1,nspcatm !{
+                  do jj=1,m_hlp_h !{
+                    if(streql(spcsatm(ii),hlp_h(1,jj,1))) then !{
+                      if (ipt.eq.0) ipt=jj
+                    end if !}
+                  end do !}
+                end do !}
+                if (ipt.gt.0) then !{
+                  do ii=1,n_hlp_h !{
+                    do jj=1,m_hlp_h !{
+                      if(streql(c,hlp_h(ii,jj,2))) then !{
+                        cc=hlp_h(ii,ipt,1)
+                        spcsmsi(ni)=spcdms(j+m)+(ipt-1)*hlp_h_m(ii)
+                        do iii=1,n_hlp_h !{
+                          do jjj=1,m_hlp_h !{
+                            if(streql(spcdrfl(j+m),hlp_h(iii,jjj,2)))
+     >                        spcsrfi(ni)=hlp_h(iii,ipt,1)
+                            if(streql(spcdrtl(j+m),hlp_h(iii,jjj,2)))
+     >                        spcsrti(ni)=hlp_h(iii,ipt,1)
+                          end do !}
+                        end do !}
+                      end if !}
+                    end do !}
+                  end do !}
+                end if !}
+                spcsion(ni)=cc
                 spcsnci(ni)=spcdnc(j+m)
                 spcscgi(ni)=spcdcg(j+m)
                 spcsfui(ni)=spcdfu(j+m)
@@ -554,7 +606,24 @@ cank        isrsa(l)=spcsrsa(l)
       	nmassm(l)=spcsmsm(l)
 	ncharm(l)=spcsncm(l)
 	nprtm(l)=spcsfum(l)
-        do i=1, nspcatm
+
+	k=0
+	c=spcsrtm(l)
+	if(.not.streql(c,' ')) then !{
+          do i=1,nspcmol !{
+            if(streql(c,spcsmol(i))) k=i
+          end do !}
+          write(6,*) 'Molecule ',l,textm(l),spcsrtm(l),k
+	  if(k.eq.0) then !{
+	    write(0,*) 'Re-emitted thermal particle not found: ',c,
+     ,	      ' for ',spcsmol(l)
+	  end if !}
+	  isrtm(l)=k
+	else !}{
+	  isrtm(l)=0
+	end if !}
+
+        do i=1,nspcatm
           if(-isrta(i).eq.l) lkindm(l)=i
         end do
       end do !}
@@ -693,7 +762,7 @@ cank        isrsp(l)=spcsrsp(l)
      ,	  'nchrgm','isrfm','isrtm','nmsecm','lkindm'
       	do i=1,nmoli !{
 	  write(*,'(a12,i7,7i8)') textm(i),nmassm(i),ncharm(i),nprtm(i),
-     ,	    0,0,0,nmsecm(i),lkindm(i)
+     ,	    0,0,isrtm(i),nmsecm(i),lkindm(i)
 	end do !}
       end if !}
       if(nioni.gt.0) then !{

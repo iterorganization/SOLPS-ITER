@@ -285,8 +285,8 @@ c*** 4
      ,  'Be','Be+','Be++','Be3+','Be4+' /
       data spcdrfl / 'H',' ',' ','H', 'D',' ',' ','D', 'T',' ',' ','T',
      ,  3*'He', 7*' ', 11*'Ne', 19*'Ar', 8*'N', 5*' ' /
-      data spcdrtl / 'H2',' ','H2','H2', 'D2',' ','D2','D2',
-     ,  'T2',' ','T2','T2', 'He','He','He', 7*' ', 11*'Ne' , 19*'Ar',
+      data spcdrtl / 'H2','H2','H2','H2', 'D2','D2','D2','D2',
+     ,  'T2','T2','T2','T2', 'He','He','He', 7*' ', 11*'Ne' , 19*'Ar',
      ,  8*'N', 5*' ' /
       data spcdms / 1,2,2,1, 2,4,4,2, 3,6,6,3, 3*4, 7*12, 11*20, 19*40,
      ,  8*14, 5*9 /
@@ -519,6 +519,16 @@ c*** 4
       data (rctdeln(i,13),i=1,lurctdx)  / lurctdx*'X' /
       data (rctdeln(i,14),i=1,lurctdxp) / lurctdxp*'X' /
       data rctdtmin, rctdtmax  / lvrctd*0.0, lvrctd*0.0 /
+c
+c*** hlp_h shows the species equivalent to the default ones
+      data hlp_h /
+     /  'H', 'H+', 'H2', 'H2+', '2H', '2H+',
+     ,  'D', 'D+', 'D2', 'D2+', '2D', '2D+',
+     ,  'T', 'T+', 'T2', 'T2+', '2T', '2T+',
+     ,  'H', 'H+', 'H2', 'H2+', '2H', '2H+',
+     ,  'H', 'H+', 'H2', 'H2+', '2H', '2H+',
+     ,  'H', 'H+', 'H2', 'H2+', '2H', '2H+'/
+      data hlp_h_m / 1, 1, 2, 2, 1, 1/
       
 c      integer lura,lurm,luri,lurf
       integer, parameter :: lura=nreac*natm, lurm=nreac*nmol,
@@ -533,7 +543,7 @@ c      integer lura,lurm,luri,lurf
       data eeleca, ebulka, escd1a, escd2a, freaca, fldlma /
      /    lura*0.,lura*0.,lura*0.,lura*0.,lura*0.,lura*0. /
       data nmassm,ncharm, nprtm, isrfm, isrtm,nmsecm, nrcm , nfolm /
-     /     nmol*0,nmol*0,nmol*0,nmol*0,nmol*1,nmol*0,nmol*0,nmol*0 /,
+     /     nmol*0,nmol*0,nmol*0,nmol*0,nmol*0,nmol*0,nmol*0,nmol*0 /,
      ,  ngenm,nhstm,lkindm /
      / nmol*0,nmol*0,nmol*0 /,
      , ireacm,ibulkm,iscd1m,iscd2m,iscd3m,iscdem,iestmm,ibgkm /

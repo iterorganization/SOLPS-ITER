@@ -386,7 +386,7 @@ c*** b2ah.dat
      ,  itini,jliin,jlside,jlequi,jltor,jlcol,jlfit,jlbox,jlplg,jlref,
      ,  jsrss,jsrc,lchspnwa,jsrsg,
      ,  jlsptp,jlsptc,nreaci,ir,massp,masst,
-     ,  ifex1mn,ifex1mx,ifex2mn,ifex2mx,iz,nrcln,
+     ,  ifex1mn,ifex1mx,ifex2mn,ifex2mx,iz,nrcln,hlp_h_m,
      ,  natmi,nmassa,nchara,isrfa,isrta,nmseca,nrca,nfola,ngena,nhsta,
      ,  ireaca,ibulka,iscd1a,iscd2a,iscd3a,iscdea,iestma,ibgka,
      ,  nmoli,nmassm,ncharm,nprtm,isrfm,isrtm,

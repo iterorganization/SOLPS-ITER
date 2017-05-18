@@ -297,6 +297,7 @@ c=======================================================================
 #     include "uinpcom.inc"
       character*8 name, species_name
       integer i, j
+      integer nplus
       integer lnblnk
       logical streql, isplusorminus, isadigit
       external streql, lnblnk, isplusorminus, isadigit, strip_spaces
@@ -308,6 +309,7 @@ c=======================================================================
           return
         end if
       end do
+      nplus=0
       if (index(name,'+').eq.0) then
         do i = 1, 92
           if(streql(name,elements(i))) then
@@ -317,15 +319,16 @@ c=======================================================================
       else if (index(name,'+').gt.0) then
         species_name=repeat(' ',8)
         do i = 1, lnblnk(name)
-          if (isplusorminus(name(i:i)) .or. isadigit(name(i:i))) then
-            species_name(i:i) = ' '
+          if (isplusorminus(name(i:i))) then
+            if (nplus.eq.0) species_name(i:i) = ' '
+            nplus=nplus+1
           else
             species_name(i:i) = name(i:i)
           end if
         end do
         call strip_spaces(species_name)
         do i = 1, 92
-          if(streql(species_name(1:2),elements(i))) then
+          if(streql(species_name(1:2),elements(i)).and.nplus.eq.1) then
             find_matching_reagent = nsrctd
           end if
         end do
