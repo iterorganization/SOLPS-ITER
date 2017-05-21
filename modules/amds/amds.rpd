@@ -611,6 +611,7 @@ Reaction AMMONX H.2 14       : e N2              : N N*(2D) e      : DS
 Reaction AMMONX H.2 18       : e NH3             : NH2 H e         : DS
 Reaction AMMONX H.2 ZE       : e NH3             : NH 2H e         : DS
 Reaction AMMONX H.2 23       : N2+ e             : N*(2D) N        : DS
+Reaction AMMONX H.2 23s      : N2+ e             : N N             : DS
 Reaction AMMONX H.2 24       : NH+ e             : N H             : DS
 Reaction AMMONX H.2 25       : NH2+ e            : NH H            : DS
 Reaction AMMONX H.2 27       : NH3+ e            : NH 2H           : DS

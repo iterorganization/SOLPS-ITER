@@ -49,7 +49,7 @@ E prod 1
 +r-p-n float
 eprdct2
 E prod 2
-EnabledParticles1 518
+EnabledParticles1 519
 Reaction HYDHEL_H.1_2.1.1 0
 Reaction HYDHEL_H.1_2.1.2 0
 Reaction HYDHEL_H.1_2.1.3 0
@@ -552,6 +552,9 @@ Reaction AMMONX_H.2_ZE 2
 e
 NH3
 Reaction AMMONX_H.2_23 0
+Reaction AMMONX_H.2_23s 2
+N2+
+e
 Reaction AMMONX_H.2_24 2
 NH+
 e
@@ -648,7 +651,7 @@ H2+
 Reaction AMMONX_H.2_06 2
 e
 H2
-Vars1 518
+Vars1 519
 Reaction HYDHEL_H.1_2.1.1 2
 
 
@@ -9282,6 +9285,24 @@ DS
 N2+
 
 N*(2D)
+N
+
+
+
+
+Particle N2+
+Particle e
+Reaction AMMONX_H.2_23s 2
+
+
+28
+0
+DS
+
+
+N2+
+
+N
 N
 
 
