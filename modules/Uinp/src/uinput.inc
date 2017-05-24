@@ -136,7 +136,8 @@ c*** 4d
 
 c*** 5
 
-      integer nplsi,nmassp(npls),ncharp(npls),nprtp(npls),nchrgp(npls),
+      integer nplsi,nbgk,
+     ,  nmassp(npls),ncharp(npls),nprtp(npls),nchrgp(npls),
      ,  isrfp(npls),isrtp(npls),nmsecp(npls),nrcp(npls),idnslmp(npls),
      ,  nfolp(npls),ngenp(npls),nhstp(npls),
      ,  ireacp(npls,nreac),ibulkp(npls,nreac),
@@ -398,7 +399,7 @@ c*** b2ah.dat
      ,  nphti,isrff,isrtf,nmsecf,nrcf,nfolf,
      ,  ngenf,nhstf,
      ,  ireacf,ibulkf,iscd1f,iscd2f,iscd3f,iscdef,iestmf,ibgkf,
-     ,  nplsi,nmassp,ncharp,nprtp,nchrgp,isrfp,
+     ,  nplsi,nbgk,nmassp,ncharp,nprtp,nchrgp,isrfp,
      ,  isrtp,nmsecp,nrcp,idnslmp,nfolp,ngenp,nhstp,ireacp,ibulkp,
      ,  iscd1p,iscd2p,iscd3p,iscdep,nrep,ispcdn,indpro,
      ,  nnftrm,nchsppri,lchsptrg,lchspgrp,lchspprt,lchspprp,lchsptgt,

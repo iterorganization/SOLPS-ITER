@@ -572,6 +572,7 @@ c*** 5
       integer lurp,lurc,lup6
       parameter (lurp=nreac*npls, lurc=nrcdn*npls, lup6=6*npls)
       data nplsi / 0 /
+      data nbgk / 0 /
       data nmassp,ncharp, nprtp,nchrgp, isrfp, isrtp,nmsecp, nrcp  /
      /     npls*0,npls*0,npls*0,npls*0,npls*0,npls*0,npls*0,npls*0 /,
      , idnslmp, nfolp, ngenp,nhstp /
@@ -745,7 +746,7 @@ c*** 11
      ,    trcdumm,trcdbg2,trcdbge,trcdbgm,trcdbgf,trcdbgl /
      /    .false.,.false.,.false.,.false.,.false.,.false. /,
      ,     trcdbgs,trcdbgg,trcdbgmpi,trcdbgc,     trcsrc           /
-     /    .false. ,.false.,.false.  ,.false.,.false.,nstra*.false. /,
+     /    .false. ,.false.,.false.  ,.false.,.true.,nstra*.false. /,
      ,     pl1st , pl2nd , pl3rd , pladd , plhst /
      ,    .false.,.false.,.false.,.false.,.false./,
      ,             plcut         , plbox , plstor, plnumv, plnums /

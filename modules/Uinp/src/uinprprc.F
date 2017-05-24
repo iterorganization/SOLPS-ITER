@@ -13,13 +13,13 @@ c======================================================================
       implicit none
 #include "uinput.inc"
       integer i,j,k,l,m,n,ic,ii,jj,kk,k0,k1,k2,k3,k4,
-     ,  iib,iie,iir,ii1,ii2,
+     ,  iib,iie,iir,iik,ii1,ii2,ibgk,ipls,
      ,  ipt,irc,m_rct,m_rcn,n_ptc,l_hlp(mreac),igd,ngn,nrc,jrc,niso,
      ,  ic0,ic9,ig,jspc,lknd,npass,nnn,nisotopes,gpass,group_found,
      ,  iii,kkk,nc,z
       logical ex,e_hlp
       real hlp_ee,hlp_eb,hlp_e1,hlp_e2,hlp_fr
-      character*8 c,cc,ccc,c0*1,f_hlp*12
+      character*8 c,cc,ccc,cbgk,c0*1,f_hlp*12
       logical h_collision, todo
       logical hlp_amds(natm+nmol+nion+npls), need_dflt
       integer maxne, quote_count, iquote, iyear, ibundling
@@ -704,15 +704,15 @@ cxpb Now check if we need to rename some isotopes for AMDS reactions
         end do !} (irc)
         nnrctn=nrc
 
-c<<<
-c        print *
-c        print *,
-c     ,   'Draft reaction list after duplicating H-isotope primaries:'
-c        if(nnrctn.gt.0) print '(a9,a7,a5,a9,a3,3a9,3i3,1p,3e9.2)',
-c     ,    (rctnptpr(i),rctndbs(i),rctnchp(i),rctnrct(i),rctntyp(i),
-c     ,     rctnptin(i),rctnpto1(i),rctnpto2(i),rctngrp(i),rctnmsp(i),
-c     ,      rctnmst(i),rctndlte(i),rctnenr1(i),rctnenr2(i),i=1,nnrctn)
-c>>>
+#ifdef DBG
+        print *
+        print *,
+     ,   'Draft reaction list after duplicating H-isotope primaries:'
+        if(nnrctn.gt.0) print '(a9,a7,a5,a9,a3,3a9,3i3,1p,3e9.2)',
+     ,    (rctnptpr(i),rctndbs(i),rctnchp(i),rctnrct(i),rctntyp(i),
+     ,     rctnptin(i),rctnpto1(i),rctnpto2(i),rctngrp(i),rctnmsp(i),
+     ,      rctnmst(i),rctndlte(i),rctnenr1(i),rctnenr2(i),i=1,nnrctn)
+#endif
 
         do irc=1,nnrctn !{ reactions with second partner an H isotope
           h_collision = .false.
@@ -1336,18 +1336,85 @@ c>>>
 
               iir=ir(kk)
               cc=crc(kk)
+              iie=0
+              iik=0
               if(streql(cc,'CX') .or. streql(cc,'II') .or.
      ,           streql(cc,'EL')) then !{
                 call uinspcid(rctnptin(k0),l,k)
-                if(l.ne.4) then !{
-                  write(0,*) 'The bulk particle must be a plasma ',
-     ,              'ion: ',l,k0,'  ',rctnptin(k0)
+                if(l.le.0.or.l.gt.4) then !{
+                  write(0,*) 'The bulk particle must be an heavy ',
+     ,              'particle : ',l,k0,'  ',rctnptin(k0)
                   call xerrab ('==> Check the AMDS model')
                 end if !}
                 if(k.le.0) then !{
                   write(0,*) 'Wrong specification of a bulk ',
      ,              'particle: ',k0,'  ',rctnptin(k0)
                   call xerrab ('==> Check the AMDS model')
+                end if !}
+                if (l.ne.4) then !{
+                  if (streql(rctnptin(k0),rctnptpr(k0))) then !{
+                    cbgk=trim(rctnptpr(k0))//'(B)'
+                  else !}{
+                    cbgk=trim(rctnptin(k0))//trim(rctnptpr(k0))//'(B)'
+                  endif !}
+                  ibgk = 0
+                  do i=1,nbgk !{
+                    if (ibgk.ne.0) cycle
+                    if (streql(textp(nplsi+i),cbgk)) then
+                      ibgk=i
+                    end if
+                  end do !}
+                  if (ibgk.eq.0) then !{
+                    nbgk=nbgk+1
+                    ibgk=nbgk
+                    write(6,*)
+     ,               'Bulk particle is not a background ion: ',
+     ,               'creating the BGK particle ', cbgk
+                    ipls=nplsi+ibgk
+                    textp(ipls)=cbgk
+                    if (l.eq.1) then !{
+                      nmassp(ipls)=nmassa(k)
+                      ncharp(ipls)=nchara(k)
+                      nprtp(ipls)=1
+                      nchrgp(ipls)=0
+                      isrfp(ipls)=isrfa(k)
+                      isrtp(ipls)=isrta(k)
+                      nmsecp(ipls)=nmseca(k)
+                      nhstp(ipls)=nhsta(k)
+                      lkindp(ipls)=k
+                    else if (l.eq.2) then !}{
+                      nmassp(ipls)=nmassm(k)
+                      ncharp(ipls)=ncharm(k)
+                      nprtp(ipls)=nprtm(k)
+                      nchrgp(ipls)=0
+                      isrfp(ipls)=isrfm(k)
+                      isrtp(ipls)=isrtm(k)
+                      nmsecp(ipls)=nmsecm(k)
+                      nhstp(ipls)=nhstm(k)
+                      lkindp(ipls)=lkindm(k)
+                    else if (l.eq.3) then !}{
+                      nmassp(ipls)=nmassi(k)
+                      ncharp(ipls)=nchari(k)
+                      nprtp(ipls)=nprti(k)
+                      nchrgp(ipls)=nchrgi(k)
+                      isrfp(ipls)=isrfi(k)
+                      isrtp(ipls)=isrti(k)
+                      nmsecp(ipls)=nmseci(k)
+                      nhstp(ipls)=nhsti(k)
+                      lkindp(ipls)=lkindi(k)
+                    end if !}
+                    nrcp(ipls)=0
+                    idnslmp(ipls)=0
+                    cdnmdlp(ipls)=' '
+                    nrep(ipls)=0
+                    iflb(ipls)=-13
+                    fcte(ipls)=0.
+                    dpls(ipls)=0.
+                    bmass(ipls)=real(nmassp(ipls))
+                  end if !}
+                  iie=1001
+                  iik=100*k+10+l
+                  k=nplsi+ibgk
                 end if !}
                 iib=100*k+14
               else !}{
@@ -1376,7 +1443,6 @@ c>>>
                 ii2=0
               end if !}
 
-              iie=0
               hlp_ee=0.0
               hlp_e1=0.0
               hlp_e2=0.0
@@ -1429,8 +1495,6 @@ c>>>
                     hlp_e1 = ir(k2)
                   end if !}
                 end if !}
-              else !}{
-                iie=0
               end if !}
 
               m_rcn=m_rcn+1
@@ -1440,6 +1504,7 @@ c>>>
                 iscd1a(jspc,m_rcn)=ii1
                 iscd2a(jspc,m_rcn)=ii2
                 iscdea(jspc,m_rcn)=iie
+                ibgka(jspc,m_rcn)=iik
                 eeleca(jspc,m_rcn)=hlp_ee
                 ebulka(jspc,m_rcn)=hlp_eb
                 escd1a(jspc,m_rcn)=hlp_e1
@@ -1451,6 +1516,7 @@ c>>>
                 iscd1m(jspc,m_rcn)=ii1
                 iscd2m(jspc,m_rcn)=ii2
                 iscdem(jspc,m_rcn)=iie
+                ibgkm(jspc,m_rcn)=iik
                 eelecm(jspc,m_rcn)=hlp_ee
                 ebulkm(jspc,m_rcn)=hlp_eb
                 escd1m(jspc,m_rcn)=hlp_e1
@@ -1462,6 +1528,7 @@ c>>>
                 iscd1i(jspc,m_rcn)=ii1
                 iscd2i(jspc,m_rcn)=ii2
                 iscdei(jspc,m_rcn)=iie
+                ibgki(jspc,m_rcn)=iik
                 eeleci(jspc,m_rcn)=hlp_ee
                 ebulki(jspc,m_rcn)=hlp_eb
                 escd1i(jspc,m_rcn)=hlp_e1
@@ -1502,6 +1569,7 @@ c>>>
           call xerrab ('Wrong lknd value')
         end if !}
       end do !} #0  (ipt: particles)
+      if (nbgk.gt.0) write(6,1028)
 
 c*** Check the number of reactions of certain kinds
 

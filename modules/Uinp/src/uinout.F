@@ -116,10 +116,10 @@ c*** 0. Prepare some constants
         end if !}
       end if !}
       if(nplso.le.0) then !{
-        nplso=max(nplsi,1)
+        nplso=max(nplsi+nbgk,1)
         if(nplso.gt.npls) then !{
-          write(0,*) '### uinout: nplso > npls. nplso,npls,nplsi=',
-     ,                                                  nplso,npls,nplsi
+          write(0,*) '### uinout: nplso > npls. nplso,npls,nplsi,nbgk=',
+     ,                                             nplso,npls,nplsi,nbgk
           ex=.true.
         end if !}
       end if !}
@@ -552,8 +552,8 @@ c*** 5.  data for plasma background
 
 c**  bulk ions species cards
 
-      write(iunoo,707) nplsi
-      do ipls=1,nplsi !{
+      write(iunoo,707) nplsi+nbgk
+      do ipls=1,nplsi+nbgk !{
         write(iunoo,708) ipls,textp(ipls),nmassp(ipls),
      ,    ncharp(ipls),nprtp(ipls),nchrgp(ipls),isrfp(ipls),
      ,    isrtp(ipls),nmsecp(ipls),nrcp(ipls),idnslmp(ipls),
@@ -634,7 +634,7 @@ c*** 6a.  data for reflection model
       write(iunoo,703) (datm(iatm),iatm=1,natmi)
       write(iunoo,703) (dmol(imol),imol=1,nmoli)
       write(iunoo,703) (dion(iion),iion=1,nioni)
-      write(iunoo,703) (dpls(ipls),ipls=1,nplsi)
+      write(iunoo,703) (dpls(ipls),ipls=1,nplsi+nbgk)
       write(iunoo,703) ermin,ercut,rprob0,rinteg,einteg,ainteg
 c*** surface cards
       k=0
@@ -999,7 +999,7 @@ c*** 14.  data for interfacing subroutine infcop
         write(iunoo,706) lsymet,lbalan,lchkqud
         write(iunoo,707) nfla,ncutb,ncutl,imf,
      .                   ntrfrm,nfull,ibrad,ibpol,ibtor
-        do i=1,nplsi !{
+        do i=1,nplsi+nbgk !{
           write(iunoo,710) i,iflb(i),fcte(i),bmass(i),lkindp(i)
         end do !}
         write(iunoo,707) ndxa,ndya

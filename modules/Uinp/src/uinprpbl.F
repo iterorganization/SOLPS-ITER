@@ -83,7 +83,7 @@ c======================================================================
      .         spcsfub(nplsi),spcsrsb(nplsi),spcsplb(nplsi))
       allocate(nprtb(nplsi),nmassb(nplsi),ncharb(nplsi),nchrgb(nplsi),
      .         iflbb(nplsi),lkindb(nplsi),textb(nplsi),
-     .         isrfb(nplsi),isrtb(nplsi),ipls1(nplsi),
+     .         isrfb(nplsi),isrtb(nplsi),ipls1(nplsi+nbgk),
      .         dplsb(nplsi),bmasb(nplsi),fctb(nplsi),nmsecb(nplsi))
       allocate(nrcb(nplsi),nreb(nplsi),idnslmb(nplsi),
      .         nfolb(nplsi),ngenb(nplsi),nhstb(nplsi),
@@ -114,6 +114,9 @@ c======================================================================
       escd1b = 0.0_R8
       escd2b = 0.0_R8
       freacb = 0.0_R8
+      do l=1,nbgk !{
+        ipls1(nplsi+l)=nplsi+l
+      end do !}
       do l=1,nspigen !{
         if (l.gt.1) then !{
           nc = get_atomic_number(spcigen(l-1))
@@ -432,7 +435,7 @@ cxpb   jend(l) is the number of the last bundled ion of sequence l in the new li
             freacp(i,1:nreac) = freacb(i,1:nreac)
             done(i) = .true.
           end do !}
-          do i = iend+1, nplsi !{ Shift up whatever follows
+          do i = iend+1, nplsi+nbgk !{ Shift up whatever follows
             j = jend(l) + i - iend
             spcsrnp(j) = spcsrnp(i)
             spcspls(nspcatm+nspcmol+nspcion+j) =
@@ -482,7 +485,7 @@ cxpb   jend(l) is the number of the last bundled ion of sequence l in the new li
         write(6,*) 'New ion list after mapping: '
       	write(*,'(1x,a12,9a8)') 'plasma ions','nmassp','ncharp','nprtp',
      ,	  'nchrgp','isrfp','isrtp','nmsecp','spcsrnp'
-      	do i=1,nplsi !{
+        do i=1,nplsi+nbgk !{
 	  write(*,'(a12,i7,8i8)') textp(i),nmassp(i),ncharp(i),nprtp(i),
      ,	    nchrgp(i),isrfp(i),isrtp(i),nmsecp(i),spcsrnp(i)
 	end do !}
