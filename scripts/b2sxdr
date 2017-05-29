@@ -4,6 +4,8 @@ set solpstop=`climb_and_look_for SOLPSTOP`
 if (-s $solpstop) then
   setenv SOLPSTOP "`cat $solpstop`"
   set RUNS=$SOLPSTOP/runs
+else if ($SOLPSTOP != "") then
+  set RUNS=$SOLPSTOP/runs
 else
   setenv SOLPSTOP "`echo $PWD | sed 's:/runs/.*::'`"
   set RUNS=$PWD

@@ -13,7 +13,7 @@ set standalone="no"
 set solpstop=`climb_and_look_for SOLPSTOP`
 if (-s $solpstop) then
   setenv SOLPSTOP "`cat $solpstop`"
-else
+else if ($SOLPSTOP == "") then
   setenv SOLPSTOP "`echo $PWD | sed 's:/runs/.*::'`"
 endif
 
