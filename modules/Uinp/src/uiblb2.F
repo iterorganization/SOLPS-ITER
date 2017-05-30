@@ -44,8 +44,8 @@ c*** The list of keywords to work on:
 
 c*** Initialisation of the control data
       data nmdpr, nmdlr, nmdbr / nnmdf*1, nnmdf*0, nnmdf*0 /
-      data ltrvr,       lt8rvr,           lrrvr     / 
-     ,  nnmdf*.false., nnmdf*.false., nnmdf*.false. /
+      data ltrvr,       lt8rvr,           lrrvr,        lspvr      /
+     ,  nnmdf*.false., nnmdf*.false., nnmdf*.false., nnmdf*.false. /
 
       data lbmdf / nnmdf*.false. /
       data  lbusr, lbb, lbv / 3*.false. /

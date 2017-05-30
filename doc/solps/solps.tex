@@ -8395,7 +8395,7 @@ K_2 = \frac{
 	0.66 + 1.88 \cdot \sqrt{\varepsilon} - 1.54 \cdot \varepsilon
 }
 {
-	1 + 1.03 \cdot \nu_{\ast }^{1/2} + 0.31 \cdot \nu_{\ast}
+	1 + 1.03 \cdot \nu_{\ast}^{1/2} + 0.31 \cdot \nu_{\ast}
 }
 +
 \frac{
@@ -9775,7 +9775,7 @@ If bcene\_15\_style.eq.0:
 	
 $\left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \left. \left[
 	-\left(
-		\frac{1 + \gamma}{1 -\gamma} T_e + e\Phi
+		\frac{1 + \gamma_e}{1 -\gamma_e} T_e + e\Phi
 	\right)
 	\max \left(
 		0,\frac{\sqrt g}{h_x} |b_x| n_e
@@ -9789,7 +9789,7 @@ $\left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \left. \left[
 
 $\left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \left. \left[
 	-\left(
-		\frac{1 + \gamma}{1 -\gamma} + \frac{e\Phi}{T_e}
+		\frac{1 + \gamma_e}{1 -\gamma_e} + \frac{e\Phi}{T_e}
 	\right)
 	\max \left(
 		0,\frac{\sqrt g}{h_x} |b_x| n_e
@@ -9822,7 +9822,7 @@ If $p_{h_e,1} > 0$ then
 $\left. \frac{\sqrt g}{h_x} q_{ex} \right|_W = \left[
 	p_{h_e,1} + e\frac{\Phi - p_{\Phi,2}}{T_e}
 \right]
-\frac{\sqrt g}{h_x} \nu_{e_{out}} T_e
+\frac{\sqrt g}{h_x} v_{e_{out}} T_e
 - \left.
 \frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
 \right|_W$
@@ -9831,7 +9831,7 @@ $p_{h_e,1} = 0.9$, $p_{\Phi,2} = 0$ is the applied electric potential at the tar
 
 %-------- end of 33rd page -------------
 
-$\nu_{e_{out}} = \min \left\{
+$v_{e_{out}} = \min \left\{
 	0,-u_{u_{out}} n_e - \frac{j_x}e
 \right\}
 ,\;\;\;\;\;\;\;\;\;
@@ -9849,7 +9849,7 @@ If bcene\_15\_style.eq.0:
 	
 $\left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \left. \left[
 	-\left(
-		\frac{1 + \gamma}{1 -\gamma} T_e + e\Phi
+		\frac{1 + \gamma_e}{1 -\gamma_e} T_e + e\Phi
 	\right)
 	\max \left(
 		0,\frac{\sqrt g}{h_x} |b_x| n_e
@@ -9863,7 +9863,7 @@ $\left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \left. \left[
 
 $\left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \left. \left[
 	-\left(
-		\frac{1 + \gamma}{1 -\gamma} + \frac{e\Phi}{T_e}
+		\frac{1 + \gamma_e}{1 -\gamma_e} + \frac{e\Phi}{T_e}
 	\right)
 	\max \left(
 		0,\frac{\sqrt g}{h_x} |b_x| n_e
@@ -9896,14 +9896,14 @@ If $p_{h_e,1} > 0$ then
 $\left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = -\left[
 	p_{h_e,1} + e\frac{\Phi - p_{\Phi,2}}{T_e}
 \right]
-\frac{\sqrt g}{h_x} \nu_{e_{out}} T_e
+\frac{\sqrt g}{h_x} v_{e_{out}} T_e
 + \left.
 \frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
 \right|_E$
 
 $p_{h_e,1} = 0.9$, $p_{\Phi,2} = 0$ is the applied electric potential at the target, in $V$.
 
-$\nu_{e_{out}} = max \left\{
+$v_{e_{out}} = max \left\{
 	0,u_{u_{out}} n_e - \frac{j_x}e
 \right\}
 ,\;\;\;\;\;\;\;\;\;
@@ -10186,12 +10186,29 @@ $c_{h_i,a,2} = -10^{-2}$
 {\em Boundary condition from b2stbc\_spb:} {\tt BCENI = 15}
 
 $\left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W = \left.
-\frac{\sqrt g}{h_x} |b_x|
+p_{h_i,1} \frac{\sqrt g}{h_x} |b_x|
 \sqrt{\frac{\sum \limits_{a=0}^{ns-1} p_a}{\sum \limits_{a=0}^{ns-1} m_a n_a}} T_i
 \sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}} n_a
 -
 \frac{\sqrt g}{h_x} q_{ix}^{P.Sch}
 \right|_W$
+
+$p_{h_i,1} = 1.5$
+
+{\em Boundary condition from b2stbc\_spb:}
+
+$\left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W =
+\sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}}
+\left. \left[
+	\left(
+		c_{h_i,a,7}
+		\frac{\sqrt g}{h_x} |b_x|
+		\sqrt{\frac{\sum \limits_{a=0}^{ns-1} p_a}{\sum \limits_{a=0}^{ns-1} m_a n_a}}
+		\frac{n_a}{n_i}
+	\right) n_i T_i
+	-
+	\frac{\sqrt g}{h_x} q_{ix}^{P.Sch}
+\right] \right|_W$
 
 {\em Imposing a sheath ion boundary condition:} {\tt BCENI = 3}
 
@@ -10264,6 +10281,8 @@ p_{h_i,1} \frac{\sqrt g}{h_x} |b_x|
 \frac{\sqrt g}{h_x} q_{ix}^{P.Sch}
 \right|_E$
 
+$p_{h_i,1} = 1.5$
+
 {\em Boundary condition from b2stbc\_spb:}
 
 $\left. -\frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_E =
@@ -10278,8 +10297,6 @@ $\left. -\frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_E =
 	+
 	\frac{\sqrt g}{h_x} q_{ix}^{P.Sch}
 \right] \right|_E$
-
-$p_{h_i,i} = 1.5$
 
 {\em Imposing a sheath ion boundary condition:} {\tt BCENI = 3}
 

@@ -96,12 +96,13 @@ c              r=rniprm(1,l,n,jvrb,jblk)
 c            else !}{
 c              i=iniprm(1,l,n,jvrb,jblk)
 c            end if !}
-c            print *,'l,n,jvrb,jblk,lprdckw:parm(1) = ',
+c            write(6,'(a,4i4,1x,l1,a,a,i4,e12.5)')
+c     ,        'l,n,jvrb,jblk,lprdckw:parm(1) = ',
 c     ,         l,n,jvrb,jblk,lprdckw(l,n,jvrb,jblk),' : ',c,i,r !###
 #endif
               sss=chrpl(jvrb,jblk)
 	      if(nmdlr(jvrb,jblk).gt.0) then !{
-                if(nmdpr(jvrb,jblk).eq.nspcpls+nspcncl) then !{
+                if(lspvr(jvrb,jblk)) then !{
                   s0='0'
                 else !}{
                   s0='1'

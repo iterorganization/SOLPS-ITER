@@ -60,6 +60,8 @@ c*** mi, zi
         iniprm(i,1,1,4,1)=spcscgp(k)
         iniprm(i,1,1,5,1)=spcsmsp(k)
       end do !}
+      lspvr(4,1)=.true.
+      lspvr(5,1)=.true.
 
 c-----------------------------------------------------------------------
 c*** Boundary
@@ -81,6 +83,7 @@ c*** Boundary
       do i=10,13 !{
         nmdlr(i,2)=nbc
         nmdpr(i,2)=nspcpls+nspcncl
+        lspvr(i,2)=.true.
       end do !}
       nmdbr(11,2)=2
       nmdbr(13,2)=2
@@ -175,6 +178,7 @@ c*** niiso, tiiso, teiso
       rniprm(1,1,1,22,2)=0.1
       nmdpr(20,2)=nspcpls+nspcncl
       lrrvr(20,2)=.true.
+      lspvr(20,2)=.true.
       lrrvr(21,2)=.true.
       lrrvr(22,2)=.true.
 
@@ -283,8 +287,10 @@ c*** k, m, n are the numbers of recycling, specified, and all strata
       nmdlr(36,3)=nspcmol
       ltrvr(3,3)=.true.
       lrrvr(14,3)=.true.
+      lspvr(14,3)=.true.
       lrrvr(15,3)=.true.
       lrrvr(16,3)=.true.
+      lspvr(17,3)=.true.
       lrrvr(31,3)=.true.
 
 c*** nstrai
@@ -885,6 +891,7 @@ c*** niiso, tiiso, teiso
       rniprm(1,1,1,15,5)=0.1
       nmdpr(13,5)=nspcpls+nspcncl
       lrrvr(13,5)=.true.
+      lspvr(13,5)=.true.
       lrrvr(14,5)=.true.
       lrrvr(15,5)=.true.
 

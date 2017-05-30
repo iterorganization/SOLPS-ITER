@@ -69,7 +69,7 @@
      *  lhetrgts_4(:), l_h_mol_4(:),
      *  lpfrgrp_4(:), ipfrgrp_4(:), jpfrgrp_4(:),
      *  lntrgrp_4(:), intrgrp_4(:), jntrgrp_4(:),
-     *  i_spcsrf_4(:), j_spcsrf_4(:), sps_sgrp_4(:),
+     *  i_spcsrf_4(:), j_spcsrf_4(:), l_spcsrf_4(:), sps_sgrp_4(:),
      *  ffb_cntr_4(:), ffb_strata_4(:), cfb_cntr_4(:)
 
       integer, allocatable :: ifl(:), jfl(:), is1(:), isp(:)
@@ -359,6 +359,7 @@ cxpb
       allocate(sps_id_4(1:n_spcsrf_4))
       allocate(i_spcsrf_4(1:n_spcsrf_4))
       allocate(j_spcsrf_4(1:n_spcsrf_4))
+      allocate(l_spcsrf_4(1:nlim+nsts))
       allocate(sps_absr_4(1:n_spcsrf_4))
       allocate(sps_trno_4(1:n_spcsrf_4))
       allocate(sps_trni_4(1:n_spcsrf_4))
@@ -507,6 +508,7 @@ cxpb
       sps_id_4(1:n_spcsrf_4) = sps_id(1:n_spcsrf_4)
       i_spcsrf_4(1:n_spcsrf_4) = i_spcsrf(1:n_spcsrf_4)
       j_spcsrf_4(1:n_spcsrf_4) = j_spcsrf(1:n_spcsrf_4)
+      l_spcsrf_4(1:nlim+nsts) = l_spcsrf(1:nlim+nsts)
       sps_absr_4(1:n_spcsrf_4) = sps_absr(1:n_spcsrf_4)
       sps_trni_4(1:n_spcsrf_4) = sps_trni(1:n_spcsrf_4)
       sps_trno_4(1:n_spcsrf_4) = sps_trno(1:n_spcsrf_4)
@@ -2864,17 +2866,17 @@ c
       write(34,'(a,1pe9.2,a)') 'NEUT_SCL_LIM=',neut_scl_lim,','
       if(n_spcsrf_4.gt.0) then !DPC
         write(34,'(a,i2,a)') 'N_SPCSRF=',n_spcsrf_4,','
-        ii=minloc(l_spcsrf)
+        ii=minloc(l_spcsrf_4)
         if (ii(1).eq.1) then
           is = 0
-        else if (l_spcsrf(ii(1)).eq.0) then
+        else if (l_spcsrf_4(ii(1)).eq.0) then
           is = ii(1)-1
         else
-          is = size(l_spcsrf)
+          is = size(l_spcsrf_4)
         end if
         if (is.gt.0) then
           write(hlp_frm,'(a,i3,a)') '(a,',is,'(i3,'',''))'
-          write(34,hlp_frm) 'L_SPCSRF=',(l_spcsrf(ib),ib=1,is)
+          write(34,hlp_frm) 'L_SPCSRF=',(l_spcsrf_4(ib),ib=1,is)
         end if
         write(hlp_frm,'(a,i2,a)') '(a,',n_spcsrf_4,'(a1,a8,a2))'
         write(34,hlp_frm) 'SPS_ID=  ',('''',sps_id_4(ib),''',',
@@ -2905,6 +2907,7 @@ c
       deallocate(sps_id_4)
       deallocate(i_spcsrf_4)
       deallocate(j_spcsrf_4)
+      deallocate(l_spcsrf_4)
       deallocate(sps_absr_4)
       deallocate(sps_trno_4)
       deallocate(sps_trni_4)
