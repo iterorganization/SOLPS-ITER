@@ -156,6 +156,8 @@ endif
 	[ -s fort.33 ] || ( [ -s $(baserundir)/fort.33 ] && ln -sf $(baserundir)/fort.33 . || ( [ -s $(triangdir)/fort.33 ] && ln -sf $(triangdir)/fort.33 . || echo > /dev/null ) )
 	[ -s fort.34 ] || ( [ -s $(baserundir)/fort.34 ] && ln -sf $(baserundir)/fort.34 . || ( [ -s $(triangdir)/fort.34 ] && ln -sf $(triangdir)/fort.34 . || echo > /dev/null ) )
 	[ -s fort.35 ] || ( [ -s $(baserundir)/fort.35 ] && ln -sf $(baserundir)/fort.35 . || ( [ -s $(triangdir)/fort.35 ] && ln -sf $(triangdir)/fort.35 . || echo > /dev/null ) )
+	[ -s fort.44 ] && cp fort.44 fort.44.i
+	[ -s fort.46 ] && cp fort.46 fort.46.i
 	-cd b2mn.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ln -s ../input.dat fort.1 ; [ -e ../fort.15 ] && cp -p ../fort.15 . || echo > /dev/null ; [ -e ../fort.14 ] && cp -p ../fort.14 . || echo > /dev/null ; [ -e ../fort.13 ] && cp -p ../fort.13 . || echo > /dev/null ; [ -e ../fort.12 ] && cp -p ../fort.12 . || echo > /dev/null ; [ -e ../fort.11 ] && cp -p ../fort.11 . || echo > /dev/null ; [ -e ../fort.10 ] && cp -p ../fort.10 . || echo > /dev/null ; [ -e ../fort.44 ] && cp -p ../fort.44 . || echo > /dev/null ; [ -e ../fort.33 ] && cp -p ../fort.33 . || echo > /dev/null ; [ -e ../fort.34 ] && cp -p ../fort.34 . || echo > /dev/null ; [ -e ../fort.35 ] && cp -p ../fort.35 . || echo > /dev/null
 endif
 ifdef USE_IMPGYRO
@@ -210,6 +212,8 @@ endif
 	[ -s fort.33 ] || ( [ -s $(baserundir)/fort.33 ] && ln -sf $(baserundir)/fort.33 . || ( [ -s $(triangdir)/fort.33 ] && ln -sf $(triangdir)/fort.33 . || echo > /dev/null ) )
 	[ -s fort.34 ] || ( [ -s $(baserundir)/fort.34 ] && ln -sf $(baserundir)/fort.34 . || ( [ -s $(triangdir)/fort.34 ] && ln -sf $(triangdir)/fort.34 . || echo > /dev/null ) )
 	[ -s fort.35 ] || ( [ -s $(baserundir)/fort.35 ] && ln -sf $(baserundir)/fort.35 . || ( [ -s $(triangdir)/fort.35 ] && ln -sf $(triangdir)/fort.35 . || echo > /dev/null ) )
+	[ -s fort.44 ] && cp fort.44 fort.44.i
+	[ -s fort.46 ] && cp fort.46 fort.46.i
 	-cd b2mn.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ln -s ../input.dat fort.1 ; [ -e ../fort.15 ] && cp -p ../fort.15 . || echo > /dev/null ; [ -e ../fort.14 ] && cp -p ../fort.14 . || echo > /dev/null ; [ -e ../fort.13 ] && cp -p ../fort.13 . || echo > /dev/null ; [ -e ../fort.12 ] && cp -p ../fort.12 . || echo > /dev/null ; [ -e ../fort.11 ] && cp -p ../fort.11 . || echo > /dev/null ; [ -e ../fort.10 ] && cp -p ../fort.10 . || echo > /dev/null ; [ -e ../fort.44 ] && cp -p ../fort.44 . || echo > /dev/null ; [ -e ../fort.33 ] && cp -p ../fort.33 . || echo > /dev/null ; [ -e ../fort.34 ] && cp -p ../fort.34 . || echo > /dev/null ; [ -e ../fort.35 ] && cp -p ../fort.35 . || echo > /dev/null
 	cd b2mn.exe.dir ; mkdir tracing ; ${DBX} ${INC} ${DBGOBJ}/b2mn.exe ${RUN_OPTIONS} ; mv $(target_mn) .. >& /dev/null ; [ -d ../tracing ] || mkdir ../tracing ; mv -f tracing/* ../tracing ; [ -e ../fort.30 ] || mv fort.30 .. ; rm -f $(notdir $^) .quit ; mv d?? ds?? ds??? b2.*.parameters .. >& /dev/null
 	-[ -e b2mn.exe.dir/fort.10 ] && mv b2mn.exe.dir/fort.10 . || echo > /dev/null
