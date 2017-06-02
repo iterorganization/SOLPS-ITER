@@ -531,7 +531,7 @@ For systems with several users it is advisable to set up a central \SOLPSITER in
 setenv SOLPSWORK /home/$USER/solps-runs
 alias sbr 'cd ${SOLPSWORK}'
 echo $SOLPSTOP >! $SOLPSWORK/SOLPSTOP
-if (-e $SOLPSWORK/setup.csh.local) then 
+if (-e $SOLPSWORK/setup.csh.local) then
   source $SOLPSWORK/setup.csh.local
 endif
 setenv SOLPS_CENTRAL "yes"
@@ -1146,7 +1146,7 @@ the {\tt SOLPS\_FLUIDS} or {\tt NREG} files is not found, the necessary informat
 extracted from the {\tt run.log} file.
 \item Utility
   \begin{description}
-  \item[add\_central\_device DEVICE]\index{add\_central\_device} Creates writeable directories for a given {\tt DEVICE} for a centralized \SOLPSITER installation. 
+  \item[add\_central\_device DEVICE]\index{add\_central\_device} Creates writeable directories for a given {\tt DEVICE} for a centralized \SOLPSITER installation.
   \item[ave.awk \#1]\index{ave.awk} Performs an average over the \#1 rows (default all).
   \item[awk.first+even]\index{awk.first+even} Selects the first and every even column from an array of data.
   \item[awk.integrate]\index{awk.integrate} Integrates an array of data.
@@ -3757,7 +3757,7 @@ those regions, excluding the fluxes within boundary regions.
 \index{b2.wall\_save.parameters}\index{b2.wall\_save.parameters.2}\index{b2frates}\index{b2fpardf}
 \index{b2.transport.parameters}\index{b2.transport.parameters.2}\index{SOLPS\_FLUIDS}
 
-The converter program {\tt b2yt} can be used for a variety of purposes, and 
+The converter program {\tt b2yt} can be used for a variety of purposes, and
 prospective users are urged to read the {\em entire} section below carefully
 before proceeding to use it. As a summary, however, the sequence of steps to
 be followed for a succesful conversion is:
@@ -3994,7 +3994,7 @@ values will be the ones stored in the appropriate namelists from the {\tt b2.*.p
 
 This routine first reads the formatted file {\tt b2ymb.dat} and writes the unformatted file {\tt mnb\_in.dat} that is needed by the {\tt FreeFem++}(\href{http://www.freefem.org}{http://www.freefem.org})\cite{MR3043640} heat transfer model of the monoblock.
 Then, it reads the files {\tt wlld\_trg[i-o].dat} produced by \btwoplot with the {\tt "1000 wlld"} command and writes the unformatted files {\tt W\_tg[i-o].dat}, {\tt X\_tg[i-o].dat} and {\tt tg[i-o]\_size.dat} that are needed  by the {\tt FreeFem++} heat transfer model of the monoblock.
-In {\tt W\_tg[i-o].dat} is stored the value of the heat flux for each tile of the monoblock in Watts. 
+In {\tt W\_tg[i-o].dat} is stored the value of the heat flux for each tile of the monoblock in Watts.
 In {\tt X\_tg[i-o].dat} is stored the value of the poloidal coordinate of the center of each tile along the monoblock axis (in meters).
 In {\tt tg[i-o]\_size.dat} is stored the number of points (i.e. tiles) in which the inner/outer monoblocks have been subdivided according to the assigned tile poloidal length, which is read from the {\tt b2ymb.dat} file.
 To use the routine:
@@ -4026,7 +4026,7 @@ Example of the {\tt b2ymb.dat} file:\\
 
 This routine first reads the formatted file {\tt b2yrp.dat} and writes the unformatted file {\tt rps\_in.dat} that is needed by the {\tt FreeFem++}(\href{http://www.freefem.org}{http://www.freefem.org})\cite{MR3043640} heat transfer model of the reflector plates.
 Then, it reads the files {\tt wlld\_[i-o]rp.dat} produced by \btwoplot with the {\tt "1000 wlld"} command and writes the unformatted files {\tt W\_[i-o]rp.dat}, {\tt X\_[i-o]rp.dat} and {\tt [i-o]rp\_size.dat} that are needed by the {\tt FreeFem++} heat transfer model.
-In {\tt W\_[i-o]rp.dat} is stored the value of the heat flux for each tile of the RPs in Watts. 
+In {\tt W\_[i-o]rp.dat} is stored the value of the heat flux for each tile of the RPs in Watts.
 In {\tt X\_[i-o]rp.dat} is stored the value of the poloidal coordinate of the center of each tile along the RPs axis (in meters).
 In {\tt [i-o]rp\_size.dat} is stored the number of points (i.e. tiles) in which the inner/outer RPs have been subdivided according to the assigned tile poloidal length, which is read from the {\tt b2yrp.dat} file.
 To use the routine:
@@ -4190,7 +4190,7 @@ DO I=1,NASMOD
    NAS   IPUNKT   NSSIR   NSSIP
 ENDDO
 DO I=1,NORMOD
-   IDIR  IR   IP 
+   IDIR  IR   IP
 ENDDO
 \end{verbatim}
 
@@ -4226,7 +4226,7 @@ ENDDO
 \subsection{Information for MPI}
 
 There is a final optional block in the {\tt Eirene} input file that can be used to choose the MPI parallelization strategy to be applied. Its format is:
- 
+
 {\it *** INFORMATION\_FOR\_MPI}
 \begin{verbatim}
 AUTOMATIC_DISTRIBUTION
@@ -5463,7 +5463,7 @@ Requesting shot 8650 of AUGD:YGC 8650
  Entering sptris: npx=  1
 
  ipx,ix,jx,ptx,pty =  1  26  28    1.5217840062009  -0.85776841963238
- psi(ix,jx),CCW =   -7.9810600000000D-04    8.9943400000000D-05 
+ psi(ix,jx),CCW =   -7.9810600000000D-04    8.9943400000000D-05
      4.3189500000000D-04    -1.7131000000000D-03
  fctpx =   -1.5440357642937D-04
 
@@ -7488,7 +7488,7 @@ n_{e^2 }= \sum \limits^{ns-1}_{a=0} z_a^2 n_a, \;\;\;\ l_{t_e}=0.3; \;\;\;\;\; l
 
 \left|
 	\min \left\{
-		\left| \frac{\partial T_e}{h_x \partial x} \right|, 
+		\left| \frac{\partial T_e}{h_x \partial x} \right|,
 		       \frac{l_{t_e} T_e}{z_{\lambda_e}|b_x|}
 	\right\}
 \right|,
@@ -7497,7 +7497,7 @@ n_{e^2 }= \sum \limits^{ns-1}_{a=0} z_a^2 n_a, \;\;\;\ l_{t_e}=0.3; \;\;\;\;\; l
 -\left|
 	\min \left\{
 		\left|
-			\frac{\partial T_e}{h_x \partial x} \right|, 
+			\frac{\partial T_e}{h_x \partial x} \right|,
 		        \frac{l_{t_e} T_e}{z_{\lambda_e}|b_x|}			
 	\right\}
 \right|,
@@ -8743,7 +8743,7 @@ $S_{n_a} = S_{n_a,0} + S_{n_a,1} n_a$
 \left. \frac{\sqrt g}{h_y}\Gamma_{ay} \right|_{S_0}
 =
 \left. \left[
-p_{n_a,a,1} \frac{\sqrt g}{h_y} \sqrt{\frac{z_a T_e + T_i}{m_a}} n_a 
+p_{n_a,a,1} \frac{\sqrt g}{h_y} \sqrt{\frac{z_a T_e + T_i}{m_a}} n_a
 +
 \sum \limits_{a=0}^{ns-1} c_{rec,a,0} c_{nsr}
 \max \left\{0, -\frac{\sqrt g}{h_y} \Gamma_{ay} \right\}
@@ -8874,15 +8874,17 @@ v_{big} = 10^{18},
 
 \begin{equation*}
 \left. \frac{\sqrt g}{h_y} \widetilde{\Gamma}_{ay} \right|_{S_1} =
-p_{n,a,0} \frac{ 
+\left. p_{n,a,0} \frac{
 \frac{\sqrt g}{h_y}
-}{ \left.
+} {
 \sum \limits_i \left(
 	\frac{\sqrt g}{h_y}
-\right)_{i, -1} \right|_{S_1}
-}
+\right)_{i, -1}
+} \right|_{S_1}
 +
-\frac{\sqrt g}{h_y} D_{ayx} \frac 1{h_x} \frac{\partial n_a T_i}{\partial x} +
+\left.
+\frac{\sqrt g}{h_y} D_{ayx} \frac 1{h_x} \frac{\partial n_a T_i}{\partial x}
+\right|_{S_1} +
 \left. \frac{\sqrt g}{h_y}V_{ya}^{(E)} n_a \right|_{S_1}
 \end{equation*}
 
@@ -8897,8 +8899,8 @@ $p_{n,a,0}$ is the desired total particle flux, per unit time.
 \begin{equation}
 \left. -\frac{\sqrt g}{h_y} \Gamma_{ay} \right|_{N}
 =
-\left. \left[ \left.
-p_{n_a,a,1} \frac{\sqrt g}{h_y} \sqrt{\frac{z_a T_e + T_i}{m_a}} n_a \right|_N
+\left. \left[
+p_{n_a,a,1} \frac{\sqrt g}{h_y} \sqrt{\frac{z_a T_e + T_i}{m_a}} n_a
 +
 \sum \limits_{a=0}^{ns-1} r_{rec,a,0} c_{nsr}
 \max \left\{0, \frac{\sqrt g}{h_y} \Gamma_{ay} \right\}
@@ -9570,7 +9572,7 @@ $\left. \frac{\sqrt{g}}{h_y} j_y \right|_{S_0} = 0$
 \end{matrix}
 \end{equation*}
 
-\subsubsection{West} 
+\subsubsection{West}
 
 \begin{small}
 $\left. \frac{\sqrt g}{h_x} j_x \right|_W =
@@ -9628,7 +9630,7 @@ $\left. -\frac{\sqrt g}{h_x} j_x \right|_E =
 \frac{\sqrt g}{h_x} e \left. \left[
 	-\sum \limits_{a=0}^{ns-1} z_a \Gamma_{ax} +
 	\left( 1 - \gamma_e \right) |b_x| n_e \frac 1{\sqrt{2\pi}}
-	\sqrt{\frac{T_e}{m_e}} 
+	\sqrt{\frac{T_e}{m_e}}
         \exp \left( -\frac{e \left( \Phi - p_{\Phi,2}\right)}{T_e} \right)
 \right] \right|_E$
 
@@ -9692,7 +9694,7 @@ $\left. -\frac{\sqrt g}{h_y} k_{ey} \frac{\partial T_e}{h_y \partial y} \right|_
 \subsubsection{South 1. Core}
 
 {\em Imposing a total electron energy flux:} {\tt BCENE = 8}
- 
+
 $\left. \frac{\sqrt g}{h_y} \widetilde q_{ey} \right|_{S_1} = \left. \left[
 	\left(
 		c_{h_e,0} \frac{\sqrt g}{h_y}
@@ -9819,19 +9821,19 @@ If $p_{m,a_{main},2} < 0.5$:
 
 If $p_{h_e,1} > 0$ then
 
-$\left. \frac{\sqrt g}{h_x} q_{ex} \right|_W = \left[
-	p_{h_e,1} + e\frac{\Phi - p_{\Phi,2}}{T_e}
-\right]
-\frac{\sqrt g}{h_x} v_{e_{out}} T_e
+$\left. \frac{\sqrt g}{h_x} q_{ex} \right|_W = \left[ \left(
+	p_{h_e,1} + \frac{ e \left( \Phi - p_{\Phi,2} \right) }{T_e}
+\right)
+\frac{\sqrt g}{h_x} \nu_{e_{out}} T_e
 - \left.
 \frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
-\right|_W$
+\right] \right|_W$
 
 $p_{h_e,1} = 0.9$, $p_{\Phi,2} = 0$ is the applied electric potential at the target, in $V$.
 
 %-------- end of 33rd page -------------
 
-$v_{e_{out}} = \min \left\{
+$\nu_{e_{out}} = \min \left\{
 	0,-u_{u_{out}} n_e - \frac{j_x}e
 \right\}
 ,\;\;\;\;\;\;\;\;\;
@@ -9893,17 +9895,17 @@ If $p_{m,a_{main},2} < 0.5$:
 
 If $p_{h_e,1} > 0$ then
 
-$\left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = -\left[
-	p_{h_e,1} + e\frac{\Phi - p_{\Phi,2}}{T_e}
-\right]
-\frac{\sqrt g}{h_x} v_{e_{out}} T_e
+$\left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = -\left[ \left(
+	p_{h_e,1} + \frac{e \left( \Phi - p_{\Phi,2} \right) }{T_e}
+\right)
+\frac{\sqrt g}{h_x} \nu_{e_{out}} T_e
 + \left.
 \frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
-\right|_E$
+\right] \right|_E$
 
 $p_{h_e,1} = 0.9$, $p_{\Phi,2} = 0$ is the applied electric potential at the target, in $V$.
 
-$v_{e_{out}} = max \left\{
+$\nu_{e_{out}} = max \left\{
 	0,u_{u_{out}} n_e - \frac{j_x}e
 \right\}
 ,\;\;\;\;\;\;\;\;\;
@@ -9936,11 +9938,12 @@ $c_{rec,0,0} = 0$ and $c_{rec,1,0} = 1$ are particle recycling coefficients.
 & \left\{
 \begin{matrix}
 \begin{matrix}
-\frac 5 2 \sum \limits_{a=0}^{ns-1} S_{n_a,0}^{no\_mdf} T_i
+\left[ \frac 5 2 \sum \limits_{a=0}^{ns-1} S_{n_a,0}^{no\_mdf} T_i
 -
 \frac{\sqrt g}{h_y} \frac{\kappa_i^{(AN)}}{p_{h_i,1}} T_i
 +
-\frac 5 2 \sum \limits_{a=0}^{ns-1} S_{n_a,1}^{no\_mdf} n_a T_i+ \\
+\frac 5 2 \sum \limits_{a=0}^{ns-1} S_{n_a,1}^{no\_mdf} n_a T_i+
+\right. \\ \left.
 + \left. \sum \limits_{a=0}^{ns-1} \max \left\{
 	e_{rec,a} \left(
 		\frac{3}{2} + BoRiS
@@ -9952,13 +9955,13 @@ $c_{rec,0,0} = 0$ and $c_{rec,1,0} = 1$ are particle recycling coefficients.
 \right\}
 c_{rec,a,0} c_{nsr} \max \left\{
 	0, -\frac{\sqrt g}{h_y} \Gamma_{ay}
-\right\}
+\right\} \right]
 \right|_{S_0},
 \end{matrix}
 %& mdf_\fhi = 0
 \\
 \begin{matrix}
-\frac 5 2 \sum \limits_{a=0}^{ns-1} S_{n_a,0}^{no\_mdf} T_i
+\left[ \frac 5 2 \sum \limits_{a=0}^{ns-1} S_{n_a,0}^{no\_mdf} T_i
 -
 \frac{\sqrt g}{h_y} \frac{\kappa_i^{(AN)}}{p_{h_i,1}} T_i
 +
@@ -9967,7 +9970,7 @@ c_{rec,a,0} c_{nsr} \max \left\{
 q_{iy}^{P.Sch}
 +
 \frac{\sqrt g}{h_y} \frac 3 2 \sum \limits_{a=0}^{ns-1} V_{ay}^{(E)} n_a T_i
-+ \\
++ \right. \\ \left.
 +\left. \sum \limits_{a=0}^{ns-1} \max \left\{
 	e_{rec,a} \left(
 		\frac{3}{2} + BoRiS
@@ -9979,7 +9982,7 @@ q_{iy}^{P.Sch}
 \right\}
 c_{rec,a,0} c_{nsr} \max \left\{
 	0, -\frac{\sqrt g}{h_y} \Gamma_{ay}
-\right\}
+\right\} \right]
 \right|_{S_0},
 \end{matrix}
 %& mdf_\fhi = 0
@@ -10065,11 +10068,12 @@ $c_{rec,0,0} = 0$ and $c_{rec,1,0} = 1$ are particle recycling coefficients.
 & \left\{
 \begin{matrix}
 \begin{matrix}
-\frac 5 2 \sum \limits_{a=0}^{ns-1} S_{n_a,0}^{no\_mdf} T_i
+\left[ \frac 5 2 \sum \limits_{a=0}^{ns-1} S_{n_a,0}^{no\_mdf} T_i
 -
 \frac{\sqrt g}{h_y} \frac{\kappa_i^{(AN)}}{p_{h_i,1}} T_i
 +
-\frac 5 2 \sum \limits_{a=0}^{ns-1} S_{n_a,1}^{no\_mdf} n_a T_i+ \\
+\frac 5 2 \sum \limits_{a=0}^{ns-1} S_{n_a,1}^{no\_mdf} n_a T_i+
+\right. \\ \left.
 +\left. \sum \limits_{a=0}^{ns-1} \max \left\{
 	e_{rec,a} \left(
 		\frac{3}{2} + BoRiS
@@ -10081,13 +10085,13 @@ $c_{rec,0,0} = 0$ and $c_{rec,1,0} = 1$ are particle recycling coefficients.
 \right\}
 c_{rec,a,0} c_{nsr} \max \left\{
 	0, -\frac{\sqrt g}{h_y} \Gamma_{ay}
-\right\}
+\right\} \right]
 \right|_{N},
 \end{matrix}
 %& mdf_\fhi = 0
 \\
 \begin{matrix}
-\frac 5 2 \sum \limits_{a=0}^{ns-1} S_{n_a,0}^{no\_mdf} T_i
+\left[ \frac 5 2 \sum \limits_{a=0}^{ns-1} S_{n_a,0}^{no\_mdf} T_i
 -
 \frac{\sqrt g}{h_y} \frac{\kappa_i^{(AN)}}{p_{h_i,1}} T_i
 +
@@ -10096,7 +10100,7 @@ c_{rec,a,0} c_{nsr} \max \left\{
 q_{iy}^{P.Sch}
 +
 \frac{\sqrt g}{h_y} \frac 3 2 \sum \limits_{a=0}^{ns-1} V_{ay}^{(E)} n_a T_i
-+ \\
++ \right. \\ \left.
 +\left. \sum \limits_{a=0}^{ns-1} \max \left\{
 	e_{rec,a} \left(
 		\frac{3}{2} + BoRiS
@@ -10108,7 +10112,7 @@ q_{iy}^{P.Sch}
 \right\}
 c_{rec,a,0} c_{nsr} \max \left\{
 	0, -\frac{\sqrt g}{h_y} \Gamma_{ay}
-\right\}
+\right\} \right]
 \right|_{N},
 \end{matrix}
 %& mdf_\fhi = 0
@@ -10785,7 +10789,7 @@ S_{hi2}=0   \label{32}
 
 \begin{equation}\begin{split}
 S_{hi3}=\sum_{\alpha}\Bigl[ ~ & C_{hi2\alpha}t_{\alpha}c_{s\alpha}S_{0}+C_{hi3\alpha}
-t_{\alpha}c_{s\alpha}S_{1}+C_{hi4\alpha}t_{\alpha}c_{st}S_{0}+  \\ 
+t_{\alpha}c_{s\alpha}S_{1}+C_{hi4\alpha}t_{\alpha}c_{st}S_{0}+  \\
 ~ & C_{hi5\alpha}t_{\alpha}c_{st}S_{1}+C_{hi7\alpha}
 \frac{\max\left(0,-\Gamma_{\alpha y}\right) }{n_{i}}\Bigr]   \label{33}
 \end{split}\end{equation}
@@ -11496,17 +11500,17 @@ to ``2'' then additional quantities such as fluxes are added, see the table belo
     po2d \index{po2d}\index{b2time.nc, po2d} & electric potential & $V$ \\
     kin2d \index{kin2d}\index{b2time.nc, kin2d} & parallel kinetic energy & $J$ \\
     rsahi2d \index{rsahi2d}\index{b2time.nc, rsahi2d} & ionization energy source/sink & $W$ \\
-    rsana2d \index{rsana2d}\index{b2time.nc, rsana2d} & ionization rate & $s^{-1}$ \\        
+    rsana2d \index{rsana2d}\index{b2time.nc, rsana2d} & ionization rate & $s^{-1}$ \\
     rrahi2d \index{rrahi2d}\index{b2time.nc, rrahi2d} & recombination energy source/sink & $W$ \\
-    rrana2d \index{rrana2d}\index{b2time.nc, rrana2d} & recombination rate & $s^{-1}$ \\        
+    rrana2d \index{rrana2d}\index{b2time.nc, rrana2d} & recombination rate & $s^{-1}$ \\
     rcxhi2d \index{rcxhi2d}\index{b2time.nc, rcxhi2d} & charge exchange energy source/sink & $W$ \\
-    rcxna2d \index{rcxna2d}\index{b2time.nc, rcxna2d} & charge exchange rate & $s^{-1}$ \\        
+    rcxna2d \index{rcxna2d}\index{b2time.nc, rcxna2d} & charge exchange rate & $s^{-1}$ \\
     rqrad2d \index{rqrad2d}\index{b2time.nc, rqrad2d} & Line radiation rate & $W$ \\
     rqahe2d \index{rqahe2d}\index{b2time.nc, rqahe2d} & Electron cooling rate & $W$ \\
     fhe2d \index{fhe2d}\index{b2time.nc, fhe2d} & Electron heat flux & $W$ \\
     fhi2d \index{fhi2d}\index{b2time.nc, fhi2d} & Ion heat flux & $W$ \\
     fch2d \index{fch2d}\index{b2time.nc, fch2d} & Electric crrent & $A$ \\
-    fna2d \index{fna2d}\index{b2time.nc, fna2d} & Particle flux & $s^{-1}$ \\            
+    fna2d \index{fna2d}\index{b2time.nc, fna2d} & Particle flux & $s^{-1}$ \\
     \hline
     \caption{Multi-dimensional time-dependent quantities stored in b2time.nc}
     \label{tab:5db2time}
@@ -12536,7 +12540,7 @@ with which the logical comparison is done. If the comparison test is true, the a
 will contain 1.0, otherwise they will contain zero.
 
 Please note that the sign convention for the parallel ion ({\bf ua}) and electron ({\bf ue}) velocity depends on the sign of the poloidal magnetic field. The poloidal field is positive if it points if the direction of increasing poloidal index $ix$. The parallel velocities are positive if they point in the {\em same direction as the poloidal magnetic field}. Note further that this sign convention {\em does not apply} to the parallel current {\bf fchp}, for which the standard sign convention applies, i.e. it is positive if pointing in the direction of increasing poloidal index $ix$.
- 
+
 The commands acting on the matrix stack are given in table
 \ref{tab:available-commands}. These involve some manipulation or use of
 the data on the "matrix" stack.  The stack requirements of each command
@@ -15236,8 +15240,8 @@ directories \${\tt SOLPSTOP/data.local/palettes},
 \${\tt SOLPSTOP/scripts/palettes} are searched in order.
 
 Many different palettes are available and the user can easily create its own.
-For instance, the 'blue\_to\_red' color maps are useful for data fields that 
-have a zero in the middle (such as Mach numbers or velocities). The 
+For instance, the 'blue\_to\_red' color maps are useful for data fields that
+have a zero in the middle (such as Mach numbers or velocities). The
 integer number at the end of the filename indicates how many colours the
 palette contains. Figure~\ref{fig:palette} was produced using the commands below,
 and shows examples of the 'jet', 'blue\_to\_red', and 'rainbow' palettes.
@@ -15255,7 +15259,7 @@ ti
 surf
 
 mach
--1.2 1.2 17 clvn 
+-1.2 1.2 17 clvn
 'rainbow_16' cltb 'rainbow palette' extl
 surf
 \end{verbatim}
@@ -15793,7 +15797,7 @@ in the radial direction not including two guard cells
 %%\item[] the maximum number of
 \end{description}
 
-The current default settings of {\tt DIMENSIONS.F}, which allow for a 
+The current default settings of {\tt DIMENSIONS.F}, which allow for a
 128$\times$36 DN geometry case including species H, D, T, He, Be and C, are:
 \VerbatimInput[fontsize=\footnotesize]{DIMENSIONS.F}
 
