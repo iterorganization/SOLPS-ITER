@@ -38,6 +38,8 @@ cat << EOF >> b2mn.dat
 'b2mndt_rxf'                         '0.0'           # under-relaxation factor
 'b2mndr_av_read'                     '1'
 'b2mndr_b2time'                      '100'
+'b2mndt_av_continue'                 '1'
+'b2mndt_ntim_step_out'               '1'
 EOF
 
 # copy necessary files
@@ -58,7 +60,7 @@ do
   ln -s $i b2faveri
 
 # run 2 timesteps on averaged plasma and source profiles
-  b2run b2mn > /dev/null 2>&1
+  b2run b2mn > res.log 2>&1
 
 # find index of running average
   FNAME=$i
