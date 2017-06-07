@@ -396,7 +396,18 @@ then do the following:
 \end{verbatim}
 and edit the file {\tt include.local/DIMENSIONS.F} so that the
 dimensions (mainly used for the namelists in {\tt B2.5}) are
-big enough (see the description of the relevant variables in section \ref{sec:DIMENSIONS}).
+big enough (see the description of the relevant variables in section \ref{sec:DIMENSIONS}). Once you have edited that file, you will need to recompile with:
+\begin{verbatim}
+  stop
+  gmake listobj
+  gmake tags
+  gmake depend
+  gmake
+\end{verbatim}
+so that your local file will be used. The last {\tt gmake} command may of
+course be replaced by {\tt gmake solps(\_debug)},
+{\tt gmake solps\_mpi(\_debug)}, {\tt gmake all(\_debug)} or
+{\tt gmake all\_mpi(\_debug)} as needed.
 
 Once the config files and dimensions have been filled in with the appropriate information for the
 local implementation desired, one proceeds with the compilation of the code. For this
@@ -585,7 +596,7 @@ to the top level directory, {\tt HOST\_NAME} which tells \SOLPSITER in
 which environment it is running and {\tt COMPILER} which identifies the
 chosen Fortran compiler ({\it e.g.} {\tt ifort64}).
 
-\section{setup.csh}
+\section{Setup and configuration files}
 \index{setup.csh}\label{sec:setup}
 
 The {\tt setup.csh} file and its subsidiaries \${\tt \{SOLPSTOP\}/SETUP/setup.csh.}\${\tt \{HOST\_NAME\}.}\${\tt \{COMPILER\}} and \${\tt \{SOLPSTOP\}/SETUP/config.}\${\tt \{HOST\_NAME\}.}\${\tt \{COMPILER\}} are used to load any modules packages useful for the local \SOLPSITER run environment and the following environment variables:
@@ -638,129 +649,6 @@ The command\index{stop}
 \end{verbatim}
 will take you to \${\tt \{SOLPSTOP\}}.
 
-\newpage\section{data}
-\index{data}
-
-Contrary to previous {\bf SOLPS} versions, there is no more centralized
-version-controlled \${\tt \{SOLPSTOP\}/data} directory. The user may create
-one if needed, and use it a similar structure as in the past.
-
-For data files that are still experimental in nature, the option
-to create a parallel {\tt data.local} directory, with
-the same structure (only putting in the needed new files and subdirectories),
-at the level \${\tt \{SOLPSTOP\}/data.local} is also still available.
-The code routinely checks for
-the existence of local data before relying on the presence of Master copies.
-
-Because the \SOLPSITER distribution is split into submodules, the data files
-that are accessed exclusively by either {\tt Eirene} or {\tt B2.5} are now
-placed in directories named {\tt Database} and placed in the corresponding
-\${\tt \{SOLPSTOP\}/modules} directory. Files that were needed by the
-post-processing or analysis scripts are now placed within the
-\${\tt \{SOLPSTOP\}/scripts} directory. The files described in this paragraph
-are still version-controlled.
-
-The most important of these data files are:
-\begin{description}
-\item[AMJUEL] \index{AMJUEL} is an {\tt Eirene} input file containing atomic
-  physics rates
-\item[H2VIBR] \index{H2VIBR} is an {\tt Eirene} input file containing atomic
-  physics rates for the vibrational states of hydrogen molecules
-\item[HYDHEL] \index{HYDHEL} is an {\tt Eirene} input file containing atomic
-  physics rates for hydrogen and helium
-\item[MARLOWE] \index{MARLOWE} is an {\tt Eirene} input file containing
-  surface data
-\item[METHANE] \index{METHANE} is an {\tt Eirene} input file containing atomic
-  physics rate for methane
-\item[SPUTER] \index{SPUTER} is an {\tt Eirene} input file containing
-  sputtering data
-\item[STRAHL] \index{STRAHL} is a {\tt B2} and {\tt B2.5} input file containing atomic
-  physics rates
-\item[TRIM] \index{TRIM} is an {\tt Eirene} input file containing atomic
-  physics rate for methane
-\item[ionization\_potentials] \index{ionization\_potentials} is a {\tt B2} and {\tt B2.5}
-  input file containing ionization potentials
-\item[incatm] \index{incatm} is a {\tt B2.5} input file containing data for
-  atomic mass, surface binding energy and density of all elements
-\item[ratadas.filelist] \index{ratadas.filelist}\index{b2ar}\index{ADAS} is a {\tt B2.5} input file
-  containing information used to index into the ADAS files when the
-  "adas" option is used in {\tt b2ar} (see section \ref{sec:b2ar})
-\item[stra.dat] \index{stra.dat}\index{b2ar}\index{baserun}\index{STRAHL} is a file containing {\tt STRAHL}
-  atomic data results for use by {\tt b2ar} when building {\tt b2frates} files where the 'strahl' data
-  option is chosen. Must be copied to the local {\tt baserun} directory.
-\item[weis.dat] \index{weis.dat}\index{b2ar}\index{baserun} is a file containing atomic data
-  results for hydrogen by Weisheit {\it et al.} for use by {\tt b2ar} when building {\tt b2frates} files.
-  Must be copied to the local {\tt baserun} directory.
-\end{description}
-
-\subsection{adas}
-\index{adas}\index{ADAS}
-The {\tt modules/adas} subdirectory contains files which are used to tell various programs
-which {\tt ADAS} files to use.
-
-{\tt source.location} indicates which class of lines to use ("pjr"
-currently) and the name of the other index file ({\tt ratadas.filelist}
-currently).
-
-{\tt ratadas.filelist} indicates the global source of the {\tt ADAS} files,
-and which "years" to use.
-
-\subsection{AMDS}
-\index{AMDS}
-
-Contains atomic and molecular data necessary for {\tt DG}.
-
-\subsection{Bulk\_properties}
-\index{Bulk\_properties}
-
-Contains data for bulk properties of different target materials.
-A sample file to be filled by the user for additional materials
-is contained in {\tt blank}.
-
-This directory is now located in {\tt modules/B2.5/Database}.
-
-\subsection{scripts/commands}
-\index{commands}
-
-Contains various \btwoplot commands.
-
-\subsection{scripts/matlab}
-\index{Matlab}
-
-Contains various {\tt Matlab} routines provided by users for data analysis and post-processing.
-
-\subsection{scripts/palettes}
-\index{palettes}
-
-Contains the palettes that can be used by \btwoplot and {\tt mtv\_3d} scripts.
-
-\subsection{Surface\_properties}
-\index{Surface\_properties}
-
-Contains data for surface properties of different target materials.
-A sample file to be filled by the user for additional materials
-is contained in {\tt blank}.
-
-This directory is now located in {\tt modules/B2.5/Database}.
-
-\subsection{TRIM}
-\index{TRIM}
-
-Contains {\tt TRIM} data used by {\tt Eirene}, pointed to by a {\tt cpath}
-instruction in the {\tt Eirene} input file.
-
-This directory is now located in {\tt modules/Eirene/Database/Surfacedata}.
-
-\subsection{trim.data}
-\index{trim.data}
-
-Subdivided into {\tt range.data}, {\tt refl.data} and {\tt sputter.data}
-directories. They contain the {\tt TRIM} range, reflection and sputtering
-data used by {\tt B2.5}. Files ending in {\tt e} are for energy, in
-{\tt n} are for particles.
-
-This directory is now located in {\tt modules/B2.5/Database}.
-
 \newpage
 \section{modules}
 \index{modules}\index{include}
@@ -793,6 +681,435 @@ of atomic physics blocks for {\tt Eirene},
 {\tt modules/solps4-5} for the {\tt b2sxdr} converter from
 \SOLPSfour to \SOLPSITERns, and {\tt modules/Sonnet-light} for the {\tt Sonnet} library in use
 for \SOLPSfour grids.
+
+\newpage\subsection{modules/B2.5}
+\index{B2.5}\label{sec:b2}
+
+The different versions of {\tt B2.5} are shown below:
+
+%%find $SOLPSTOP/modules/B2.5 -follow -maxdepth 1 -type d -print | sed -e "s:${SOLPSTOP}:SOLPSTOP:" | sed -e 's:[^/]*/:|   :g' | sed 's:\(\(|   \)*\)|   :\1+---:'
+
+\begin{verbatim}
+SOLPSTOP
++---modules
+|   +---B2.5
+|   |   +---config
+|   |   +---src
+|   |   +---src.local (optional)
+|   |   +---builds
+\end{verbatim}
+
+\begin{description}
+\item[config] \index{config} contains compiler option files
+\item[src.local] \index{src.local}\index{B2.5,
+    local}\label{src.local} is an optional location which can contain locally modified source files (not version-controlled)
+\item[src] \index{src}\index{B2.5, src}\label{b2.5_src}
+  contains the {\tt B2.5} source code files
+\item[builds]\index{builds}\index{B2.5, builds} contains the compiled object files for building the {\tt B2.5} executables.
+\end{description}
+
+A more varied selection of {\tt B2.5} historical versions is available within the {\bf SOLPS5.0} distribution.
+
+The commands\index{ssb}\index{sb2}
+\begin{verbatim}
+    ssb
+\end{verbatim}
+or
+\begin{verbatim}
+    sb2
+\end{verbatim}
+will take you to \${\tt \{SOLPSTOP\}/modules/B2.5}.
+
+\subsubsection{Local modifications to the B2.5 source}
+\label{b2codemodifications}\index{B2.5, modifying the
+  source}\index{modifying the source of B2.5}
+
+With the installation instructions from Section~\ref{solpsdistribution},
+users get a local clone of the {\tt B2.5} GIT submodule, and
+{\bf this is the only supported option!}
+The files in {\tt src} will be version-controlled and updated whenever the
+user will pull in new code version.
+If, however, one wishes to make local changes to a file and protect those from
+GIT updates, the procedure for that purpose is to copy the file you want to change to
+{\tt src.local} and then edit that file.  You will then need to do
+\begin{verbatim}
+  sbb
+  gmake local
+\end{verbatim}
+to create the {\tt src.local} directory. Once you have copied and edited the
+file(s) you need to change in {\tt src.local}, you should recompile with:
+\begin{verbatim}
+  stop
+  gmake listobj
+  gmake tags
+  gmake depend
+  gmake
+\end{verbatim}
+so that the local file is used. The last {\tt gmake} command may of course be
+replaced by {\tt gmake solps(\_debug)}, {\tt gmake solps\_mpi(\_debug)},
+{\tt gmake all(\_debug)} or {\tt gmake all\_mpi(\_debug)} as needed.
+
+If this local change should no longer
+be needed, then it should be removed from {\tt src.local} and the
+following performed:
+\begin{verbatim}
+  stop
+  gmake clean
+  gmake listobj
+  gmake tags
+  gmake depend
+  gmake
+\end{verbatim}
+If you want to avoid a long recompilation, you need to remove from the {\tt builds/*/}
+directories , the object and module files corresponding to your locally changed file(s),
+and then ask for a normal recompilation with a single {\tt gmake} command.
+
+If the user wishes to modify the compiling options used, the creation
+of a {\tt config.}\${\tt {HOST\_NAME}.}\${\tt {COMPILER}.local} file in the
+{\tt config} subdirectory is recommended. Since the {\tt Makefile}
+reads those after the {\tt config.}\${\tt {HOST\_NAME}.\allowbreak}\${\tt {COMPILER}} file,
+they need only contain the modified definitions.
+
+If you just want to compile {\tt b2mn.exe}, you can do
+\begin{verbatim}
+    gmake MAIN
+\end{verbatim}
+or to compile all but the graphics programs
+\begin{verbatim}
+    gmake NOPLOT
+\end{verbatim}
+To compile everything, including the converters from \SOLPSfive to
+and from \SOLPSfour (which might not function as they require a complicated
+combination of options), you can
+\begin{verbatim}
+    gmake ALL
+\end{verbatim}
+The default compiles all but the \SOLPSfive to \SOLPSfour converters.
+
+If you wish to submit code changes for a pull request so that they may be inserted in the
+general \SOLPSITER distribution or to have them version-controlled within your own topical
+branches, the locally modified files need to remain in the {\tt src}
+version-controlled directories.
+
+\newpage\subsubsection{modules/B2.5/src}
+
+Within the {\tt modules/B2.5/src} source directory, we have:
+
+%%find $SOLPSTOP/modules/B2.5/src -follow -maxdepth 2 -type d -print | sed -e "s:${SOLPSTOP}:SOLPSTOP:" | sed -e 's:[^/]*/:|   :g' | sed 's:\(\(|   \)*\)|   :\1+---:'
+
+\begin{verbatim}
+SOLPSTOP
++---modules
+|   +---B2.5
+|   |   +---src.local
+|   |   +---src
+|   |   |   +---b2aux
+|   |   |   +---solvers
+|   |   |   +---sources
+|   |   |   +---include
+|   |   |   +---include.local (optional)
+|   |   |   +---documentation
+|   |   |   +---postprocessing
+|   |   |   +---user
+|   |   |   +---driver
+|   |   |   +---utility
+|   |   |   +---output
+|   |   |   +---input
+|   |   |   +---preprocessing
+|   |   |   +---b2plot
+|   |   |   +---modules
+|   |   |   +---modules.local (optional)
+|   |   |   +---convert
+|   |   |   +---transport
+|   |   |   +---common
+|   |   |   +---equations
+|   |   |   +---catalyst
+|   |   |   +---ids
+|   |   |   +---mpi_dummy
+|   |   +---Database
+|   |   |   +---Bulk_properties
+|   |   |   +---Surface_properties
+|   |   |   +---trim.data
+|   |   |   |   +---range.data
+|   |   |   |   +---refl.data
+|   |   |   |   +---sputter.data
+|   |   +---builds
+\end{verbatim}
+
+Similarly to the {\tt src.local} directory, two additional local directories are provided
+{\tt src/include.local} and {\tt src/modules.local} for locally modified include files
+and modules, respectively, that the user does not wish to have updated by the version
+control software. The same compilation instructions as in previous
+Section~\ref{b2codemodifications} apply.
+
+The user wanting to delve deeper into the source code is directed to the detailed routine
+listing in Appendix \ref{lis:b2cdcr}.
+
+\subsubsection{modules/B2.5/Database}
+
+The {\tt Database} directory contain the data files which {\tt B2.5}
+relies on to compute things such as reaction rates, wall element surface
+temperatures, etc...
+
+These data files include:
+\begin{description}
+\item[ionization\_potentials] \index{ionization\_potentials} is a {\tt B2} and {\tt B2.5}
+  input file containing ionization potentials
+\item[incatm] \index{incatm} is a {\tt B2.5} input file containing data for
+  atomic mass, surface binding energy and density of all elements
+\item[ratadas.filelist] \index{ratadas.filelist}\index{b2ar}\index{ADAS} is a {\tt B2.5} input file
+  containing information used to index into the ADAS files when the
+  "adas" option is used in {\tt b2ar} (see section \ref{sec:b2ar})
+\item[stra.dat] \index{stra.dat}\index{b2ar}\index{baserun}\index{STRAHL} is a file containing {\tt STRAHL}
+  atomic data results for use by {\tt b2ar} when building {\tt b2frates} files where the 'strahl' data
+  option is chosen. Must be copied to the local {\tt baserun} directory.
+\item[weis.dat] \index{weis.dat}\index{b2ar}\index{baserun} is a file containing atomic data
+  results for hydrogen by Weisheit {\it et al.} for use by {\tt b2ar} when building {\tt b2frates} files.
+  Must be copied to the local {\tt baserun} directory.
+\end{description}
+
+\subsubsection{modules/B2.5/Database/Bulk\_properties}
+\index{Bulk\_properties}
+
+Contains data for bulk properties of different target materials.
+A sample file to be filled by the user for additional materials
+is contained in {\tt blank}.
+
+\subsubsection{modules/B2.5/Database/Surface\_properties}
+\index{Surface\_properties}
+
+Contains data for surface properties of different target materials.
+A sample file to be filled by the user for additional materials
+is contained in {\tt blank}.
+
+\subsubsection{modules/B2.5/Database/trim.data}
+\index{trim.data}
+
+Subdivided into {\tt range.data}, {\tt refl.data} and {\tt sputter.data}
+directories. They contain the {\tt TRIM} range, reflection and sputtering
+data used by {\tt B2.5}. Files ending in {\tt e} are for energy, in
+{\tt n} are for particles.
+
+\newpage
+\subsection{modules/Eirene}
+\index{Eirene}\label{cha:eirene}
+
+%%find $SOLPSTOP/modules/Eirene -follow -maxdepth 3 -type d -print | sed -e "s:${SOLPSTOP}:SOLPSTOP:" | sed -e 's:[^/]*/:|   :g' | sed 's:\(\(|   \)*\)|   :\1+---:'
+
+\begin{verbatim}
+SOLPSTOP
++---modules
+|   +---Eirene
+|   |   +---builds
+|   |   +---config
+|   |   +---Database
+|   |   |   +---AMdata
+|   |   |   +---SurfaceData
+|   |   |   |   +---TRIM
+|   |   |   |   |   +---10_bins
+|   |   +---scripts
+|   |   +---src.local
+|   |   +---src
+|   |   |   +---broadcast
+|   |   |   +---mathematics
+|   |   |   +---tetrahedrons
+|   |   |   +---broadcast_dummy
+|   |   |   +---startup-routines
+|   |   |   +---diagno
+|   |   |   +---assistant
+|   |   |   +---plotting
+|   |   |   +---geometry
+|   |   |   |   +---time-routines
+|   |   |   +---file-handling
+|   |   |   +---surface-processes
+|   |   |   +---photons
+|   |   |   +---volume-processes
+|   |   |   +---sampling
+|   |   |   +---xdr-dummy
+|   |   |   +---output
+|   |   |   +---grsoft-dummy
+|   |   |   +---main-routines
+|   |   |   +---modules
+|   |   |   +---iterate
+|   |   |   +---particle-tracing
+|   |   |   +---ioflush
+|   |   |   +---plot_dummy
+|   |   |   +---scoring
+|   |   |   +---interfaces
+|   |   |   |   +---couple_B2
+|   |   |   |   +---couple_B2_parallel
+|   |   |   |   +---couple_Dummy
+|   |   |   |   +---couple_Tria
+|   |   |   |   +---couple_SOLPS-ITER
+|   |   |   +---user-routines
+|   |   |   |   +---user_default
+|   |   |   |   +---user_generalized_interface
+|   |   |   |   +---user_iter
+\end{verbatim}
+
+The command\index{sei}
+\begin{verbatim}
+    sei
+\end{verbatim}
+will take you to \${\tt \{SOLPSTOP\}/modules/Eirene}.
+
+Because {\tt Eirene} is distributed as a stand-alone submodule and is being maintained
+by FZ-J{\"u}lich, some of the directories found above correspond to {\tt Eirene}
+implementations other than that used in \SOLPSITERns. These are the subdirectories
+within {\tt interfaces} and {\tt user-routines}. \SOLPSITER uses only the code found in
+the {\tt interfaces/couple\_SOLPS-ITER} and {\tt user-routines/user\_iter} subdirectories.
+The other are included for compatibility with the FZ-J{\"u}lich master {\tt Eirene}
+repository.
+
+Additionally, the {\tt Database} directory contain the data files which {\tt Eirene}
+relies on to compute things such as backscattering coefficients, atomic reactions, etc...
+
+As with {\tt B2.5}, a {\tt local} directory for the user that wishes to make code
+changes sheltered from GIT updates. The same procedures apply.
+
+Note that if you want to use the coupled version of the code, you
+should compile {\tt Eirene} first.
+
+If routines have been added or removed, if the dependencies have been
+altered or if this is the first compilation in a new tree, and you are not
+compiling using the \SOLPSITER master {\tt Makefile}, you should do
+\index{Eirene, compilation}
+\begin{verbatim}
+    gmake depend
+    gmake listobj
+    gmake tags
+    gmake depend
+    gmake
+\end{verbatim}
+The first {\tt gmake depend} is only needed for a brand new compilation.
+The {\tt gmake listobj} command is needed for a first-time compilation or if
+a new source file has been added.
+The {\tt gmake tags} command is needed if this is the first compilation or new
+files are added or a new routine has been added within an existing source file.
+The second {\tt gmake depend} is needed if this is the first compilation or
+if the dependencies have been altered.
+
+If the user wishes to modify the compiling options used, the creation
+of a {\tt config.}\${\tt {HOST\_NAME}.}\${\tt {COMPILER}.local} file in the
+{\tt config} subdirectory is recommended. Since the {\tt Makefile}
+reads those after the {\tt config.}\${\tt {HOST\_NAME}.\allowbreak}\${\tt {COMPILER}} file,
+they need only contain the modified definitions.
+
+If you are having problems (you've tried to be clever with altering
+files, or the {\tt SOLPS} administrator has), you might need to do
+\begin{verbatim}
+    gmake clean
+    rm builds/*/LISTOBJ
+    gmake depend
+    gmake listobj
+    gmake tags
+    gmake depend
+    gmake
+\end{verbatim}
+
+\subsubsection{modules/Eirene/Database}
+
+Data files needed by {\tt Eirene} are stroed in this directory.
+The most important of these data files are:
+\begin{description}
+\item[AMJUEL] \index{AMJUEL} is an {\tt Eirene} input file containing atomic
+  physics rates
+\item[H2VIBR] \index{H2VIBR} is an {\tt Eirene} input file containing atomic
+  physics rates for the vibrational states of hydrogen molecules
+\item[HYDHEL] \index{HYDHEL} is an {\tt Eirene} input file containing atomic
+  physics rates for hydrogen and helium
+\item[METHANE] \index{METHANE} is an {\tt Eirene} input file containing atomic
+  physics rate for methane
+\item[SPUTER] \index{SPUTER} is an {\tt Eirene} input file containing
+  sputtering data
+\item[TRIM] \index{TRIM} is an {\tt Eirene} input file containing atomic
+  physics rate for methane
+\end{description}
+
+\subsubsection{modules/Eirene/Database/Surfacedata/TRIM}
+\index{TRIM}
+
+Contains {\tt TRIM} data used by {\tt Eirene}, pointed to by a {\tt cpath}
+instruction in the {\tt Eirene} input file.
+
+This directory is now located in {\tt modules/Eirene/Database/Surfacedata}.
+
+\subsection{modules/amds}
+\index{AMDS}
+
+Allows for the provision of chemistry set files to be used by {\tt Eirene}, through selection in {\tt DG} and
+pre-processing by {\tt Uinp}. See the dedicated manual \${\tt {SOLPSTOP}/modules/amds/doc/manual.pdf} for full
+details.
+
+The {\tt AMDS} program can be called by use of the {\tt amds} script.
+
+\subsection{modules/adas}
+\index{adas}\index{ADAS}
+
+The {\tt modules/adas} subdirectory contains files which are used to tell various programs
+which {\tt ADAS} files to use.
+
+{\tt source.location} indicates which class of lines to use ("pjr"
+currently) and the name of the other index file ({\tt ratadas.filelist}
+currently).
+
+{\tt ratadas.filelist} indicates the global source of the {\tt ADAS} files,
+and which "years" to use.
+
+\newpage \section{lib}
+
+%%find $SOLPSTOP/lib -follow -maxdepth 2 -type d -print | sed -e "s:${SOLPSTOP}:SOLPSTOP:" | sed -e 's:[^/]*/:|   :g' | sed 's:\(\(|   \)*\)|   :\1+---:'
+
+The {\tt lib} subtree contains libraries used during compilation.
+
+\begin{verbatim}
+SOLPSTOP
++---lib
+|   +---ITER.ifort64
+\end{verbatim}
+
+Since most of the libraries are now expected to be provided as modules, only the
+{\tt Sonnet} library, {\tt libsonnet.a}, needs to be stored here. However, local
+copies of the required libraries can also be put there at the user´s convenience.
+
+The command\index{slib}
+\begin{verbatim}
+    slib
+\end{verbatim}
+will take you to \${\tt \{SOLPSTOP\}/lib/}\${\tt {HOST\_NAME}.}\${\tt {COMPILER}}.
+
+\section{runs}
+\index{B2.5, runs}\label{sec:b2runs}
+
+The runs for \SOLPSITER are done in {\tt runs}.
+
+%%find $SOLPSTOP/runs -follow -maxdepth 2 -type d -print | sed -e "s:${SOLPSTOP}:SOLPSTOP:" | sed -e 's:[^/]*/:|   :g' | sed 's:\(\(|   \)*\)|   :\1+---:'
+
+\begin{verbatim}
+SOLPSTOP
++---runs
+\end{verbatim}
+
+The commands\index{srun}
+\begin{verbatim}
+    srun
+\end{verbatim}
+and\index{sbr}
+\begin{verbatim}
+    sbr
+\end{verbatim}
+will take you to \${\tt \{SOLPSTOP\}/runs}.
+
+Usually a "case series" would be run in a sub-directory of
+\${\tt \{SOLPSTOP\}/runs}.  Sometimes, further subdirectories are created to
+separate categories of runs --- the depth of sub-directories is a
+matter of taste!  In each of the directories, a {\tt baserun}
+sub-directory is created, and then, at the same level, run directories.
+The {\tt baserun}
+directory contains the defaults for all of the other directories at
+its same level, and typically the grid generation steps and the input build programs
+{\tt b2ag}, {\tt b2ah}, {\tt b2ar}
+and {\tt b2ai} are run in this directory (see chapter \ref{cha:standaloneb2}).
 
 \newpage\section{scripts}
 \label{sec:scripts}
@@ -1472,348 +1789,42 @@ welcome!
   \item[watch.XDR]\index{watch.XDR}
 \end{description}
 
-\newpage\section{lib}
+\subsection{scripts/commands}
+\index{commands}
 
-%%find $SOLPSTOP/lib -follow -maxdepth 2 -type d -print | sed -e "s:${SOLPSTOP}:SOLPSTOP:" | sed -e 's:[^/]*/:|   :g' | sed 's:\(\(|   \)*\)|   :\1+---:'
+Contains various \btwoplot command files.
 
-The {\tt lib} subtree contains libraries used during compilation.
+\subsection{scripts/matlab}
+\index{Matlab}
 
-\begin{verbatim}
-SOLPSTOP
-+---lib
-|   +---ITER.ifort64
-\end{verbatim}
+Contains various {\tt Matlab} routines provided by users for data analysis and post-processing.
 
-Since most of the libraries are now expected to be provided as modules, only the
-{\tt Sonnet} library, {\tt libsonnet.a}, needs to be stored here. However, local
-copies of the required libraries can also be put there at the user´s convenience.
+\subsection{scripts/palettes}
+\index{palettes}
 
-The command\index{slib}
-\begin{verbatim}
-    slib
-\end{verbatim}
-will take you to \${\tt \{SOLPSTOP\}/lib/}\${\tt {HOST\_NAME}.}\${\tt {COMPILER}}.
+Contains the palettes that can be used by \btwoplot and {\tt mtv\_3d} scripts.
 
-\newpage\subsection{modules/B2.5}
-\index{B2.5}\label{sec:b2}
+\newpage\section{data}
+\index{data}
 
-The different versions of {\tt B2.5} are shown below:
+Contrary to previous {\bf SOLPS} versions, there is no more centralized
+version-controlled \${\tt \{SOLPSTOP\}/data} directory. The user may create
+one if needed, and use it a similar structure as in the past.
 
-%%find $SOLPSTOP/modules/B2.5 -follow -maxdepth 1 -type d -print | sed -e "s:${SOLPSTOP}:SOLPSTOP:" | sed -e 's:[^/]*/:|   :g' | sed 's:\(\(|   \)*\)|   :\1+---:'
+For data files that are still experimental in nature, the option
+to create a parallel {\tt data.local} directory, with
+the same structure (only putting in the needed new files and subdirectories),
+at the level \${\tt \{SOLPSTOP\}/data.local} is also still available.
+The code routinely checks for
+the existence of local data before relying on the presence of Master copies.
 
-\begin{verbatim}
-SOLPSTOP
-+---modules
-|   +---B2.5
-|   |   +---config
-|   |   +---src
-|   |   +---src.local (optional)
-|   |   +---builds
-\end{verbatim}
-
-\begin{description}
-\item[config] \index{config} contains compiler option files
-\item[src.local] \index{src.local}\index{B2.5,
-    local}\label{src.local} is an optional location which can contain locally modified source files (not version-controlled)
-\item[src] \index{src}\index{B2.5, src}\label{b2.5_src}
-  contains the {\tt B2.5} source code files
-\item[builds]\index{builds}\index{B2.5, builds} contains the compiled object files for building the {\tt B2.5} executables.
-\end{description}
-
-A more varied selection of {\tt B2.5} historical versions is available within the {\bf SOLPS5.0} distribution.
-
-The commands\index{ssb}\index{sb2}
-\begin{verbatim}
-    ssb
-\end{verbatim}
-or
-\begin{verbatim}
-    sb2
-\end{verbatim}
-will take you to \${\tt \{SOLPSTOP\}/modules/B2.5}.
-
-\subsubsection{Local modifications to the B2.5 source}
-\label{b2codemodifications}\index{B2.5, modifying the
-  source}\index{modifying the source of B2.5}
-
-With the installation instructions from Section~\ref{solpsdistribution},
-users get a local clone of the {\tt B2.5} GIT submodule, and
-{\bf this is the only supported option!}
-The files in {\tt src} will be version-controlled and updated whenever the
-user will pull in new code version.
-If, however, one wishes to make local changes to a file and protect those from
-GIT updates, the procedure for that purpose is to copy the file you want to change to
-{\tt src.local} and then edit that file.  You will then need to do
-\begin{verbatim}
-  sbb
-  gmake local
-\end{verbatim}
-to create the {\tt src.local} directory. Once you have copied and edited the
-file(s) you need to change in {\tt src.local}, you should recompile with:
-\begin{verbatim}
-  stop
-  gmake listobj
-  gmake tags
-  gmake depend
-  gmake
-\end{verbatim}
-so that the local file is used. The last {\tt gmake} command may of course be
-replaced by {\tt gmake solps(\_debug)}, {\tt gmake solps\_mpi(\_debug)},
-{\tt gmake all(\_debug)} or {\tt gmake all\_mpi(\_debug)} as needed.
-
-If this local change should no longer
-be needed, then it should be removed from {\tt src.local} and the
-following performed:
-\begin{verbatim}
-  stop
-  gmake clean
-  gmake listobj
-  gmake tags
-  gmake depend
-  gmake
-\end{verbatim}
-If you want to avoid a long recompilation, you need to remove from the {\tt builds/*/}
-directories , the object and module files corresponding to your locally changed file(s),
-and then ask for a normal recompilation with a single {\tt gmake} command.
-
-If the user wishes to modify the compiling options used, the creation
-of a {\tt config.}\${\tt {HOST\_NAME}.}\${\tt {COMPILER}.local} file in the
-{\tt config} subdirectory is recommended. Since the {\tt Makefile}
-reads those after the {\tt config.}\${\tt {HOST\_NAME}.\allowbreak}\${\tt {COMPILER}} file,
-they need only contain the modified definitions.
-
-If you just want to compile {\tt b2mn.exe}, you can do
-\begin{verbatim}
-    gmake MAIN
-\end{verbatim}
-or to compile all but the graphics programs
-\begin{verbatim}
-    gmake NOPLOT
-\end{verbatim}
-To compile everything, including the converters from \SOLPSfive to
-and from \SOLPSfour (which might not function as they require a complicated
-combination of options), you can
-\begin{verbatim}
-    gmake ALL
-\end{verbatim}
-The default compiles all but the \SOLPSfive to \SOLPSfour converters.
-
-If you wish to submit code changes for a pull request so that they may be inserted in the
-general \SOLPSITER distribution or to have them version-controlled within your own topical
-branches, the locally modified files need to remain in the {\tt src}
-version-controlled directories.
-
-\newpage\subsubsection{modules/B2.5/src}
-
-Within the {\tt modules/B2.5/src} source directory, we have:
-
-%%find $SOLPSTOP/modules/B2.5/src -follow -maxdepth 2 -type d -print | sed -e "s:${SOLPSTOP}:SOLPSTOP:" | sed -e 's:[^/]*/:|   :g' | sed 's:\(\(|   \)*\)|   :\1+---:'
-
-\begin{verbatim}
-SOLPSTOP
-+---modules
-|   +---B2.5
-|   |   +---src.local
-|   |   +---src
-|   |   |   +---b2aux
-|   |   |   +---solvers
-|   |   |   +---sources
-|   |   |   +---include
-|   |   |   +---include.local (optional)
-|   |   |   +---documentation
-|   |   |   +---postprocessing
-|   |   |   +---user
-|   |   |   +---driver
-|   |   |   +---utility
-|   |   |   +---output
-|   |   |   +---input
-|   |   |   +---preprocessing
-|   |   |   +---b2plot
-|   |   |   +---modules
-|   |   |   +---modules.local (optional)
-|   |   |   +---convert
-|   |   |   +---transport
-|   |   |   +---common
-|   |   |   +---equations
-|   |   |   +---catalyst
-|   |   |   +---ids
-|   |   |   +---mpi_dummy
-|   |   +---Database
-|   |   |   +---Bulk_properties
-|   |   |   +---Surface_properties
-|   |   |   +---trim.data
-|   |   |   |   +---range.data
-|   |   |   |   +---refl.data
-|   |   |   |   +---sputter.data
-|   |   +---builds
-\end{verbatim}
-
-Similarly to the {\tt src.local} directory, two additional local directories are provided
-{\tt src/include.local} and {\tt src/modules.local} for locally modified include files
-and modules, respectively, that the user does not wish to have updated by the version
-control software. The same compilation instructions as in previous
-Section~\ref{b2codemodifications} apply.
-
-The user wanting to delve deeper into the source code is directed to the detailed routine
-listing in Appendix \ref{lis:b2cdcr}.
-
-The {\tt Database} directory contain the data files which {\tt B2.5}
-relies on to compute things such as reaction rates, wall element surface
-temperatures, etc...
-
-\newpage
-\subsection{modules/Eirene}
-\index{Eirene}\label{cha:eirene}
-
-%%find $SOLPSTOP/modules/Eirene -follow -maxdepth 3 -type d -print | sed -e "s:${SOLPSTOP}:SOLPSTOP:" | sed -e 's:[^/]*/:|   :g' | sed 's:\(\(|   \)*\)|   :\1+---:'
-
-\begin{verbatim}
-SOLPSTOP
-+---modules
-|   +---Eirene
-|   |   +---builds
-|   |   +---config
-|   |   +---Database
-|   |   |   +---AMdata
-|   |   |   +---SurfaceData
-|   |   |   |   +---TRIM
-|   |   |   |   |   +---10_bins
-|   |   +---scripts
-|   |   +---src.local
-|   |   +---src
-|   |   |   +---broadcast
-|   |   |   +---mathematics
-|   |   |   +---tetrahedrons
-|   |   |   +---broadcast_dummy
-|   |   |   +---startup-routines
-|   |   |   +---diagno
-|   |   |   +---assistant
-|   |   |   +---plotting
-|   |   |   +---geometry
-|   |   |   |   +---time-routines
-|   |   |   +---file-handling
-|   |   |   +---surface-processes
-|   |   |   +---photons
-|   |   |   +---volume-processes
-|   |   |   +---sampling
-|   |   |   +---xdr-dummy
-|   |   |   +---output
-|   |   |   +---grsoft-dummy
-|   |   |   +---main-routines
-|   |   |   +---modules
-|   |   |   +---iterate
-|   |   |   +---particle-tracing
-|   |   |   +---ioflush
-|   |   |   +---plot_dummy
-|   |   |   +---scoring
-|   |   |   +---interfaces
-|   |   |   |   +---couple_B2
-|   |   |   |   +---couple_B2_parallel
-|   |   |   |   +---couple_Dummy
-|   |   |   |   +---couple_Tria
-|   |   |   |   +---couple_SOLPS-ITER
-|   |   |   +---user-routines
-|   |   |   |   +---user_default
-|   |   |   |   +---user_generalized_interface
-|   |   |   |   +---user_iter
-\end{verbatim}
-
-The command\index{sei}
-\begin{verbatim}
-    sei
-\end{verbatim}
-will take you to \${\tt \{SOLPSTOP\}/modules/Eirene}.
-
-Because {\tt Eirene} is distributed as a stand-alone submodule and is being maintained
-by FZ-J{\"u}lich, some of the directories found above correspond to {\tt Eirene}
-implementations other than that used in \SOLPSITERns. These are the subdirectories
-within {\tt interfaces} and {\tt user-routines}. \SOLPSITER uses only the code found in
-the {\tt interfaces/couple\_SOLPS-ITER} and {\tt user-routines/user\_iter} subdirectories.
-The other are included for compatibility with the FZ-J{\"u}lich master {\tt Eirene}
-repository.
-
-Additionally, the {\tt Database} directory contain the data files which {\tt Eirene}
-relies on to compute things such as backscattering coefficients, atomic reactions, etc...
-
-As with {\tt B2.5}, a {\tt local} directory for the user that wishes to make code
-changes sheltered from GIT updates. The same procedures apply.
-
-Note that if you want to use the coupled version of the code, you
-should compile {\tt Eirene} first.
-
-If routines have been added or removed, if the dependencies have been
-altered or if this is the first compilation in a new tree, and you are not
-compiling using the \SOLPSITER master {\tt Makefile}, you should do
-\index{Eirene, compilation}
-\begin{verbatim}
-    gmake depend
-    gmake listobj
-    gmake tags
-    gmake depend
-    gmake
-\end{verbatim}
-The first {\tt gmake depend} is only needed for a brand new compilation.
-The {\tt gmake listobj} command is needed for a first-time compilation or if
-a new source file has been added.
-The {\tt gmake tags} command is needed if this is the first compilation or new
-files are added or a new routine has been added within an existing source file.
-The second {\tt gmake depend} is needed if this is the first compilation or
-if the dependencies have been altered.
-
-If the user wishes to modify the compiling options used, the creation
-of a {\tt config.}\${\tt {HOST\_NAME}.}\${\tt {COMPILER}.local} file in the
-{\tt config} subdirectory is recommended. Since the {\tt Makefile}
-reads those after the {\tt config.}\${\tt {HOST\_NAME}.\allowbreak}\${\tt {COMPILER}} file,
-they need only contain the modified definitions.
-
-If you are having problems (you've tried to be clever with altering
-files, or the {\tt SOLPS} administrator has), you might need to do
-\begin{verbatim}
-    gmake clean
-    rm builds/*/LISTOBJ
-    gmake depend
-    gmake listobj
-    gmake tags
-    gmake depend
-    gmake
-\end{verbatim}
-
-\newpage
-
-As distributed:
-
-\section{runs}
-\index{B2.5, runs}\label{sec:b2runs}
-
-The runs for \SOLPSITER are done in {\tt runs}.
-
-%%find $SOLPSTOP/runs -follow -maxdepth 2 -type d -print | sed -e "s:${SOLPSTOP}:SOLPSTOP:" | sed -e 's:[^/]*/:|   :g' | sed 's:\(\(|   \)*\)|   :\1+---:'
-
-\begin{verbatim}
-SOLPSTOP
-+---runs
-\end{verbatim}
-
-The commands\index{srun}
-\begin{verbatim}
-    srun
-\end{verbatim}
-and\index{sbr}
-\begin{verbatim}
-    sbr
-\end{verbatim}
-will take you to \${\tt \{SOLPSTOP\}/runs}.
-
-Usually a "case series" would be run in a sub-directory of
-\${\tt \{SOLPSTOP\}/runs}.  Sometimes, further subdirectories are created to
-separate categories of runs --- the depth of sub-directories is a
-matter of taste!  In each of the directories, a {\tt baserun}
-sub-directory is created, and then, at the same level, run directories.
-The {\tt baserun}
-directory contains the defaults for all of the other directories at
-its same level, and typically the grid generation steps and the input build programs
-{\tt b2ag}, {\tt b2ah}, {\tt b2ar}
-and {\tt b2ai} are run in this directory (see chapter \ref{cha:standaloneb2}).
+Because the \SOLPSITER distribution is split into submodules, the data files
+that are accessed exclusively by either {\tt Eirene} or {\tt B2.5} are now
+placed in directories named {\tt Database} and placed in the corresponding
+\${\tt \{SOLPSTOP\}/modules} directory. Files that were needed by the
+post-processing or analysis scripts are now placed within the
+\${\tt \{SOLPSTOP\}/scripts} directory. Please refer to the appropriate sections
+above for more details.
 
 \chapter{Running the standalone version of B2.5}
 \label{cha:standaloneb2}
@@ -6500,7 +6511,7 @@ is usually fulfilled in edge plasmas with the following possible exceptions:
 \begin{enumerate}
   \item at low temperatures, e.g.
            near the target in the divertor,
-           steeper gradients result in non--local heat flux contributions. In general,
+           steeper gradients result in non-local heat flux contributions. In general,
            a non-local description might be necessary
             (weighted mean of temperature profile over
            five mean free lengths of electrons or ions). However, a simpler correction
@@ -6579,7 +6590,7 @@ and mean free path of tail electrons
   \mbox{m}^{-3}).
 \end{gather}
 
-Fokker--Planck computer simulations of electron heat transport in laser
+Fokker-Planck computer simulations of electron heat transport in laser
 plasmas
 \cite{LLE91}
 show that a better description is obtained for a linear
@@ -6592,15 +6603,15 @@ correction:
 Applying these limits for the core, convergence behaviour of the code
 improves significantly.\\
 A more correct kinetic limit would imply a
-non--local heat transport (and viscosity,...) description.
-The parallel heat--flux at a point should be determined by
+non-local heat transport (and viscosity,...) description.
+The parallel heat flux at a point should be determined by
 classical fluxes at points
-up to typically five mean--free paths away. As an additional feature, one
+up to typically five mean free paths away. As an additional feature, one
 would get
-pre--heating effects by fast electrons, maybe important for the ELMs.
+pre-heating effects by fast electrons, maybe important for the ELMs.
 Work is necessary to generalize this to the SOL
 \cite{KRASH92A,YURI91A}
-and this has to be cross--checked
+and this has to be cross-checked
 with kinetic calculations \cite{Abou-Assaleh92}. Also, numerical problems due
 to this non--local description have to be solved \cite{PRASAD91A}.
 
@@ -15736,6 +15747,19 @@ that determine
 the sizes of arrays that can be defined by namelists
 in {\tt b2.*.parameters} files (for compatibility with
 certain compilers).
+
+Upon the first creation of the local version of the {\tt DIMENSIONS.F} file,
+one must make the {\tt Makefile} aware of its presence by doing the following:
+\begin{verbatim}
+  stop
+  gmake listobj
+  gmake tags
+  gmake depend
+  gmake
+\end{verbatim}
+so that the local file is used. The last {\tt gmake} command may of course be
+replaced by {\tt gmake solps(\_debug)}, {\tt gmake solps\_mpi(\_debug)},
+{\tt gmake all(\_debug)} or {\tt gmake all\_mpi(\_debug)} as needed.
 
 The quantities defined in {\tt DIMENSIONS.F} are:
 \begin{description}
