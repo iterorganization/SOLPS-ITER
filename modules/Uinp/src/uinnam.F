@@ -266,7 +266,15 @@ c=======================================================================
       luswch=4
       goto 9999
    22 call rearri(luwrk,nlim,i)
-      if(luswch.ge.1 .and. luswch.le.4) jedgeo(luswch)=luwrk(1)
+      if(luswch.ge.1 .and. luswch.le.4) then !{
+        if(luwrk(1).gt.nlim) then !{
+          write(0,*) 'Too many wall elements: maximum ',nlim
+          write(0,*) 'Current number of requested elements: ',luwrk(1)
+          call xerrab
+     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+        end if !}
+        jedgeo(luswch)=luwrk(1)
+      end if !}
       goto 9999
    23 call rearri(jlref,nlim,i)
       if(i.gt.nlim) then !{
@@ -346,9 +354,27 @@ c=======================================================================
         ntrgtm=max(ntrgtm,luswch)
       end if
       goto 9999
-   37 if(.not.tgdtinpt) call resimi(jedgec(luswch))
+   37 if(.not.tgdtinpt) then !{
+        call resimi(jedgec(luswch))
+        if(jedgec(luswch).gt.nlim) then !{
+          write(0,*) 'Too many wall elements: maximum ',nlim
+          write(0,*) 'Current number of requested elements: ',
+     .     jedgec(luswch)
+          call xerrab
+     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+        end if !}
+      end if !}
       goto 9999
-   38 if(.not.tgdtinpt) call resimi(jedgep(luswch))
+   38 if(.not.tgdtinpt) then !{
+        call resimi(jedgep(luswch))
+        if(jedgep(luswch).gt.nlim) then !{
+          write(0,*) 'Too many wall elements: maximum ',nlim
+          write(0,*) 'Current number of requested elements: ',
+     .     jedgep(luswch)
+          call xerrab
+     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+        end if !}
+       end if !}
       goto 9999
    39 call resimi(luswch)
       if(.not.tgdtinpt) then
@@ -361,8 +387,22 @@ c=======================================================================
       tgdtinpt=.true.
       goto 9999
    40 call resimi(jedgec(luswch))
+      if(jedgec(luswch).gt.nlim) then !{
+        write(0,*) 'Too many wall elements: maximum ',nlim
+        write(0,*) 'Current number of requested elements: ',
+     .   jedgec(luswch)
+        call xerrab
+     .   (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+      end if !}
       goto 9999
    41 call resimi(jedgep(luswch))
+      if(jedgep(luswch).gt.nlim) then !{
+        write(0,*) 'Too many wall elements: maximum ',nlim
+        write(0,*) 'Current number of requested elements: ',
+     .   jedgep(luswch)
+        call xerrab
+     .   (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+      end if !}
       goto 9999
    42 i=lena
       lena=8
