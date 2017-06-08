@@ -17,11 +17,11 @@ endif
 #module load nag_flib/intel/mk24
 #module load intel
 
-module load intel py27-python py27-numpy py27-dateutil qt py27-pyqt py27-tornado py27-matplotlib py27-scipy py27-pyqt py27-mysql-connector
+module load intel/17.0 py27-python py27-numpy py27-dateutil qt py27-pyqt py27-tornado py27-matplotlib py27-scipy py27-pyqt py27-mysql-connector
 module load zeromq py27-pyzmq py27-pygments py27-ipython
 module load texlive
 module load doxygen
-module load impi/5.1.3
+module load impi/2017
 
 #module load imas
 #imasdb solps-iter
