@@ -150,7 +150,7 @@ c*** 1
       data nlscl , nltest, nlana ,nldrft, nlcrr , nlerg , nlident/
      /    .true. ,.false.,.false.,.true.,.false.,.false.,.false./,
      ,     nlone , nlmovie,nldfst,nloldran,nlcascad,nloctree/
-     /    .false.,.false.,.false.,.false.,.false.,.false./,
+     /    .false.,.false.,.false.,.true.,.false.,.false./,
      /    nlwrmsh, nexvs ,nltrimesh/
      ,    .true. ,.false.,.false./
       data  txtrun / ' EIRENE input file generated with uinp v. 2.2' /
