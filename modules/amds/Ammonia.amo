@@ -1,10 +1,7 @@
 # Output file produced by amds version 1.04
 filevers 1
-reactns 41
+reactns 37
 HYDHEL H.2 2.2.10
-AMJUEL H.2 2.1.5FJ
-AMJUEL H.4 2.2.5
-AMMONX H.2 01
 AMMONX H.2 02
 AMMONX H.2 03
 AMMONX H.2 07
@@ -41,12 +38,8 @@ AMMONX H.2 21
 AMMONX H.2 22
 AMMONX H.2 33
 AMMONX H.2 34
-AMMONX H.2 06
 group
 0
-
-
-
 
 
 
@@ -83,13 +76,8 @@ group
   
   
   
-  
 deltae
 25
-
-
-
-
 
 
 
@@ -138,9 +126,6 @@ massp
 0
 0
 0
-28
-0
-0
 0
 0
 0
@@ -158,21 +143,17 @@ massp
 3
 3
 3
-2
-1
-2
-2
-0
-0
-0
+14
+14
 2
 2
 0
+0
+0
+2
+2
 masst
 2
-1
-2
-14
 28
 28
 15
@@ -180,7 +161,7 @@ masst
 17
 17
 17
-0
+28
 15
 16
 17
@@ -200,8 +181,8 @@ masst
 16
 15
 28
-14
-14
+2
+1
 15
 16
 2
@@ -209,12 +190,8 @@ masst
 3
 1
 2
-2
 rctype
 DS
-EI
-DS
-EI
 DS
 EI
 EI
@@ -251,12 +228,7 @@ DS
 DS
 CX
 II
-EI
 tmin
-
-
-
-
 
 
 
@@ -332,15 +304,8 @@ tmax
 
 
 
-
-
-
-
 primpart
 H2
-
-
-
 
 
 
@@ -353,7 +318,7 @@ NH+
 NH2+
 NH3+
 NH3+
-N4H+
+NH4+
 N2H+
 N
 NH3
@@ -368,8 +333,8 @@ NH3
 NH2
 NH
 N2
-N+
-N+
+H2
+H
 NH+
 NH2+
 H2+
@@ -377,12 +342,8 @@ H3+
 H3+
 H
 H2
-
 intrpart
 
-H
-H2
-N
 N2
 N2
 NH
@@ -410,8 +371,8 @@ H3+
 H3+
 H3+
 H3+
-H2
-H
+N+
+N+
 H2
 H2
 
@@ -419,12 +380,8 @@ H2
 
 H2+
 H2+
-H2
 product1
 H
-H+
-H
-N+
 N+
 N2+
 NH+
@@ -439,6 +396,44 @@ NH
 NH2
 NH3
 N2
+H2
+H
+H
+H
+H2
+H
+H
+H2
+H2
+H2
+H2
+H2
+H2
+NH+
+N
+H
+H
+H
+H
+H2
+H2
+H3+
+product2
+H+
+N
+
+
+
+H
+H
+H
+
+H
+H
+H
+H
+H
+H
 N+
 NH3+
 NH2+
@@ -452,71 +447,25 @@ NH4+
 NH3+
 NH2+
 N2H+
-NH+
-N
+H
+H+
 NH2+
 NH3+
-H
-H
-H2
-H2
-H
-H2+
-product2
-H+
-
-
-
-N
-
-
-
-H
-H
-H
-N
-H
-H
-H
-H
-H
-H
-H2
-H
-H
-H
-H2
-H
-H
-H2
-H2
-H2
-H2
-H2
-H2
-H
-H+
-H
-H
 
 
 H
 H+
-H3+
-
+H
 nprdct1
 
 
+
+
+
+
+
+
 2
-
-
-
-
-
-
-
-
-
 
 
 
@@ -545,7 +494,6 @@ nprdct1
 
 
 
-
 nprdct2
 
 
@@ -554,15 +502,11 @@ nprdct2
 
 
 
-
-
-
 2
 
 
 
 2
-
 
 
 
@@ -626,16 +570,8 @@ eprdct1
 
 
 
-
-
-
-
 eprdct2
 5
-
-
-
-
 
 
 
