@@ -26,12 +26,12 @@ cp /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D/16151_1.6MW_2.0e19_D
 cp /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D/16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2mn.dat .
 setup_baserun_eirene_links
 b2run -s b2mn > run.log
+check_b2_output /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D/16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2fstate b2fstate
 setenv PRINT_PLOT resall_D.ps ; resall_D
 set maxres=`tail -1 gnuplot.data | awk.transpose | tail -8 | min_ave_max.awk | awk '{if ($3 > 1.0e-6) {print 1} }'`
 if ( $maxres == 1 ) then
  exit 1
 endif
-check_b2_output /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D/16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2fstate b2fstate
 cd ..
 [ -d coupled ] || mkdir coupled
 cd coupled
@@ -41,12 +41,12 @@ cp /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D/16151_1.6MW_2.0e19_D
 cp /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D/16151_1.6MW_2.0e19_D=0.4_chi=1.6_pump=0.90/input.dat .
 setup_baserun_eirene_links
 b2run b2mn > run.log
+check_b2_output /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D/16151_1.6MW_2.0e19_D=0.4_chi=1.6_pump=0.90/b2fstate b2fstate
 setenv PRINT_PLOT resall_D.ps ; resall_D
 set maxres=`tail -1 gnuplot.data | awk.transpose | tail -8 | min_ave_max.awk | awk '{if ($3 > 1.0e6) {print 1} }'`
 if ( $maxres == 1 ) then
  exit 1
 endif
-check_b2_output /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D/16151_1.6MW_2.0e19_D=0.4_chi=1.6_pump=0.90/b2fstate b2fstate
 cd ../..
 [ -d $SOLPSTOP/runs/bench_mark/AUG_16151_D+C+He ] || mkdir $SOLPSTOP/runs/$VERSION/AUG_16151_D+C+He
 [ -d $SOLPSTOP/runs/bench_mark/AUG_16151_D+C+He/baserun ] || mkdir $SOLPSTOP/runs/$VERSION/AUG_16151_D+C+He/baserun
@@ -68,6 +68,7 @@ cp /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D+C+He/16151_1.6MW_2.0
 cp /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D+C+He/16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2mn.dat .
 setup_baserun_eirene_links
 b2run -s b2mn > run.log
+check_b2_output /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D+C+He/16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2fstate b2fstate
 setenv PRINT_PLOT resco.ps ; resco
 set maxres=`tail -1 gnuplot.data | awk.transpose | tail -12 | min_ave_max.awk | awk '{if ($3 > 1.0e-6) {print 1} }'`
 if ( $maxres == 1 ) then
@@ -83,7 +84,6 @@ set maxres=`tail -1 gnuplot.data | awk.transpose | tail -4 | min_ave_max.awk | a
 if ( $maxres == 1 ) then
  exit 1
 endif
-check_b2_output /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D+C+He/16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2fstate b2fstate
 cd ..
 [ -d coupled ] || mkdir coupled
 cd coupled
@@ -93,6 +93,7 @@ cp /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D+C+He/16151_1.6MW_2.0
 cp /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D+C+He/16151_1.6MW_2.0e19_D=0.4_chi=1.6_pump=0.90/input.dat .
 setup_baserun_eirene_links
 b2run b2mn > run.log
+check_b2_output /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D+C+He/16151_1.6MW_2.0e19_D=0.4_chi=1.6_pump=0.90/b2fstate b2fstate
 setenv PRINT_PLOT resco.ps ; resco
 set maxres=`tail -1 gnuplot.data | awk.transpose | tail -12 | min_ave_max.awk | awk '{if ($3 > 1.0e6) {print 1} }'`
 if ( $maxres == 1 ) then
@@ -108,5 +109,4 @@ set maxres=`tail -1 gnuplot.data | awk.transpose | tail -4 | min_ave_max.awk | a
 if ( $maxres == 1 ) then
  exit 1
 endif
-check_b2_output /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D+C+He/16151_1.6MW_2.0e19_D=0.4_chi=1.6_pump=0.90/b2fstate b2fstate
 
