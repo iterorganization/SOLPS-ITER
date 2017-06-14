@@ -571,7 +571,7 @@ while true; do {
               q=t
             }; unset e; break;;
       (  v  )                                               # view graphical output of TRIA:
-            [ -r  "$triaeps" ] && {
+            [ -r "$triaeps" ] && {
               $GV $triaeps &
               q=q
               true
@@ -580,7 +580,7 @@ while true; do {
               q=t
             }; break;;
       (  V  )                                               # view graphical output of TRIA:
-            [ -r  "$trigeps" ] && {
+            [ -r "$trigeps" ] && {
               $GV $trigeps &
               true
               q=q

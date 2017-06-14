@@ -1,0 +1,3 @@
+#! /usr/bin/env ksh
+
+check_b2_output.exe $1 $2
