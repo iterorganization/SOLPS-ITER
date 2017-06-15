@@ -75,6 +75,7 @@ case "mgmt":
 case "*.ipr.res.in":
   echo IPR
   breaksw
+case "iter-india.org":
 case "*.iter-india.org":
   echo IN-DA
   breaksw
