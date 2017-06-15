@@ -146,6 +146,12 @@ case "*.edu":
 case "*.us":
   echo USA_UNKNOWN
   breaksw
+case "*.au":
+  echo AU_UNKNOWN
+  breaksw
+case "*.kz":
+  echo KZ_UNKNOWN
+  breaksw
 default:
   echo UNKNOWN
 endsw
