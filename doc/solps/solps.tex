@@ -1550,6 +1550,7 @@ extracted from the {\tt run.log} file.
   \item[QSUB.postprocess]\index{QSUB.postprocess} List of instructions appended to the {\tt B2.5} stand-alone submission scripts for run post-processing
   \item[QSUB.postprocess\_coupled]\index{QSUB.postprocess\_coupled} List of instructions appended to the \SOLPSITER submission scripts for run post-processing
   \item[quote\_pwd]\index{quote\_pwd} Returns the current working directory as a string with quotes (c.f.\ {\tt noquote\_pwd}).
+  \item[res\_av]\index{res\_av} Special script to reduce residuals in the finalization step of the {\tt Eirene} sources averaging scheme (see Section \ref{sec:B2Eirene:averaging} for details).
   \item[resave\_mds]\index{resave\_mds} Update an archived {\tt MDSplus} case. A "-n" option allows for dry-run tests. A "-d" option allows to run within the chosen debugger. A "-s" option allows to update a {\tt B2.5} stand-alone case.
   \item[rlndr]\index{rlndr} Replaces a link address by another
   \item[rps]\index{rps} Shifts $\Psi$ values by a given amount within a {\tt DG} equilibrium file (see Sec.~\ref{sec:equtrn}).
@@ -4665,10 +4666,10 @@ averaging scheme detailed in \${\tt SOLPSTOP/doc/SOLPS-ITER\_Eirene\_averaging.p
 run speed-up and lower the statistical error introduced by the {\tt Eirene} Monte-Carlo noise, as well as provide means to estimate the errors on the solution, following the formalism detailed in \cite{Ghoos_PET2016, Ghoos_JCP2016}.
 
 The averaging scheme works in three stages:
-\begin{enumerate}
+\begin{enumerate}\index{res\_av}
   \item{A transient phase} during which the code is run normally, until all the short transients die out and the solution approaches its steady state.
   \item{An averaging phase}, turned on by means of the {\tt "b2mndt\_av"} switch in the {\tt b2mn.dat} input file, usually with a smaller number of {\tt Eirene} trajectories, during which batch averaging will be done to obtain an averaged steady-state solution
-  \item{A finalization phase} where the averaged steady-state solution is used for a small number of timesteps, and a larger number of {\tt Eirene} trajectories, to reduce statistical noise.
+  \item{A finalization phase} where the averaged steady-state solution is used for a small number of timesteps, and a larger number of {\tt Eirene} trajectories, to reduce statistical noise. This is done by running the {\tt res\_av} script.
 \end{enumerate}
 
 \chapter{Using MDSPLUS}
