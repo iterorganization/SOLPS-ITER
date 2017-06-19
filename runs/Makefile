@@ -82,6 +82,10 @@ fort44file := $(shell echo ${PLASMASTATE} | sed -e 's:plasmastate:fort.44:')
 ifeq ($(shell [ -e $(fort44file) ] && echo yes || echo no ),yes)
 savefiles += $(fort44file)
 endif
+avgfile := $(shell echo ${PLASMASTATE} | sed -e 's:plasmastate:run_av/run_av:')
+ifeq ($(shell [ -e $(avgfile) ] && echo yes || echo no ),yes)
+savefiles += $(avgfile)
+endif
 
 echo:
 	@echo scandir=${scandir}
