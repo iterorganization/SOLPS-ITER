@@ -72,18 +72,34 @@ c*** Produce the input file for Eirene diagnostics run
 c*** Produce the input file for Eirene for TRIA mesh generation
       uex=.true.
       call uinptridg(uex)
-      if(uex) then
+      if(uex) then !{
        call uinout('triang.eir')
        print *,'    ... triang.eir created'
        call triaout('triang.hed')
        call uinptridg(.FALSE.)
-      end if 
+      end if !}
+
+c*** Produce the input files for Eirene for averaging scheme runs
+      uex=.true.
+      call uinpavgdg(uex)
+      if(uex) then !{
+        call uinout('input_avg.eir')
+        print *,'    ... input_avg.eir created'
+        call uinpavgdg(.false.)
+      end if !}
+      uex=.true.
+      call uinpfindg(uex)
+      if(uex) then !{
+        call uinout('input_fin.eir')
+        print *,'    ... input_fin.eir created'
+        call uinpfindg(.false.)
+      end if !}
 
 c*** Create the header for the b2ag.dat file
       inquire(file='b2ag.dat', exist=uex)
-      if(uex) then
+      if(uex) then !{
           print *,'    ... b2ag.dat file already present, not created'
-      else
+      else !}{
           open(2,file='b2ag.dat')
           write(2,'(a)')
      .     '*dimens         (nx, ny, nx1, ny1; free format)'
@@ -93,7 +109,7 @@ c*** Create the header for the b2ag.dat file
           write(2,'(a)') '''b2agfs_min_pitch''    ''0.01'''
           close(2)
           print *,'    ... b2ag.dat created'
-      endif
+      endif !}
 
 c*** Create a b2ah.dat.stencil file
       inquire(file='b2ah.dat.stencil', exist=uex)

@@ -16,8 +16,31 @@ else
   CP_DIR=${ACTDIR}
 fi
 
+# find Eirene input file for final stage
+[ -s b2mn.exe.dir/input_fin.eir ] && {
+  input=b2mn.exe.dir/input_fin.eir
+  found=1
+} || {
+  [ -s ${ACTDIR}/input_fin.eir ] && {
+    input=${ACTDIR}/input_fin.eir
+    found=1
+  } || {
+    [ -s ${ACTDIR}/../baserun/input_fin.eir ] && {
+      input=${ACTDIR}/../baserun/input_fin.eir
+      found=1
+    } || {
+      input=${ACTDIR}/input.dat
+      found=0
+    }
+  }
+}  
+[ $found -eq 1 ] && {
+  [ -s ${ACTDIR}/input_avg.eir ] || mv ${ACTDIR}/input.dat ${ACTDIR}/input_avg.eir
+}
+
 echo "run_av_dir = " $RUN_AV_DIR
 echo "cp_dir = " $CP_DIR
+echo "input = " $input
 
 if [ ! "$(ls -A $RUN_AV_DIR/run_av.*)" ] 
 then
@@ -43,7 +66,8 @@ cat << EOF >> b2mn.dat
 EOF
 
 # copy necessary files
-ln -s ${CP_DIR}/AMJUEL ${CP_DIR}/HYDHEL ${CP_DIR}/METHANE ${CP_DIR}/SPUTER ${CP_DIR}/H2VIBR ${CP_DIR}/fort.21 ${CP_DIR}/fort.22 ${CP_DIR}/graphite_ext.dat ${CP_DIR}/mo_ext.dat ${CP_DIR}/input.dat .
+ln -s ${CP_DIR}/AMJUEL ${CP_DIR}/HYDHEL ${CP_DIR}/METHANE ${CP_DIR}/SPUTER ${CP_DIR}/H2VIBR ${CP_DIR}/fort.21 ${CP_DIR}/fort.22 ${CP_DIR}/graphite_ext.dat ${CP_DIR}/mo_ext.dat .
+ln -s ${input} input.dat
 ln -s ${CP_DIR}/fort.* .
 ln -s ${CP_DIR}/b2fgmtry ${CP_DIR}/b2fpardf ${CP_DIR}/b2frates .
 ln -s $ACTDIR/b2a*.dat $ACTDIR/b2a*.prt $ACTDIR/stra.dat $ACTDIR/weis.dat .

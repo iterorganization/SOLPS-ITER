@@ -1,0 +1,30 @@
+#! /bin/bash
+
+ACTDIR=`pwd`
+
+# find Eirene input file for running averages
+[ -s ${ACTDIR}/input_avg.eir ] && {
+  input=${ACTDIR}/input_avg.eir
+  found=1
+} || {
+  [ -s ${ACTDIR}/../baserun/input_avg.eir ] && {
+    input=${ACTDIR}/../baserun/input_avg.eir
+    found=1
+  } || {
+    input=${ACTDIR}/input.dat
+    found=0
+  }
+}
+[ $found -eq 1 ] && {
+  [ -s ${ACTDIR}/input.dat ] || mv ${ACTDIR}/input.dat ${ACTDIR}/input.eir
+}
+ln -s ${input} input.dat
+
+echo "input = " $input
+# prepare B2.5 input file 
+cat << EOF >> b2mn.dat
+'b2mndt_av'                          '1'             # perform running averages
+EOF
+
+
+

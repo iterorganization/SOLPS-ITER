@@ -1554,6 +1554,7 @@ extracted from the {\tt run.log} file.
   \item[resave\_mds]\index{resave\_mds} Update an archived {\tt MDSplus} case. A "-n" option allows for dry-run tests. A "-d" option allows to run within the chosen debugger. A "-s" option allows to update a {\tt B2.5} stand-alone case.
   \item[rlndr]\index{rlndr} Replaces a link address by another
   \item[rps]\index{rps} Shifts $\Psi$ values by a given amount within a {\tt DG} equilibrium file (see Sec.~\ref{sec:equtrn}).
+  \item[run\_av]\index{run\_av} Special script to prepare the averaging step of the {\tt Eirene} sources averaging scheme (see Section \ref{sec:B2Eirene:averaging} for details).
   \item[save\_mds]\index{save\_mds} Archive an {\tt MDSplus} case. A "-n" option allows for dry-run tests. A "-d" option allows to run within the chosen debugger. A "-s" option allows to archive a {\tt B2.5} stand-alone case.
   \item[setup\_baserun\_eirene\_links]\index{setup\_baserun\_eirene\_links} Prepares the run directory before a {\tt B2.5-Eirene} run by settings up links to the proper data files.
   \item[sgesubmit]\index{sgesubmit} Command file to launch runs on an SGE system. See Section \ref{b2run} for details.
@@ -4316,6 +4317,9 @@ for those are:
   \item[b2stbr\_eir\_src\_nhist] The neutral sources are averaged over the last $nhist$ {\tt Eirene} calls (moving average scheme).
 \end{description}
 
+In addition to those, please see the recommended averaging scheme described in
+Section \ref{sec:B2Eirene:averaging}.
+
 \subsection{b2.boundary.parameters}
 \index{b2.boundary.parameters, D+C+He example}
 \VerbatimInput[fontsize=\footnotesize]{D+C+He/b2.boundary.parameters}
@@ -4666,10 +4670,10 @@ averaging scheme detailed in \${\tt SOLPSTOP/doc/SOLPS-ITER\_Eirene\_averaging.p
 run speed-up and lower the statistical error introduced by the {\tt Eirene} Monte-Carlo noise, as well as provide means to estimate the errors on the solution, following the formalism detailed in \cite{Ghoos_PET2016, Ghoos_JCP2016}.
 
 The averaging scheme works in three stages:
-\begin{enumerate}\index{res\_av}
+\begin{enumerate}\index{res\_av}\index{run\_av}
   \item{A transient phase} during which the code is run normally, until all the short transients die out and the solution approaches its steady state.
-  \item{An averaging phase}, turned on by means of the {\tt "b2mndt\_av"} switch in the {\tt b2mn.dat} input file, usually with a smaller number of {\tt Eirene} trajectories, during which batch averaging will be done to obtain an averaged steady-state solution
-  \item{A finalization phase} where the averaged steady-state solution is used for a small number of timesteps, and a larger number of {\tt Eirene} trajectories, to reduce statistical noise. This is done by running the {\tt res\_av} script.
+  \item{An averaging phase}, turned on by means of the {\tt "b2mndt\_av"} switch in the {\tt b2mn.dat} input file, usually with a smaller number of {\tt Eirene} trajectories, during which batch averaging will be done to obtain an averaged steady-state solution. This stage can be prepared by means of the {\tt run\_av} script and uses the {\tt input\_avg.eir Eirene} input file prepared by {\tt Uinp} if available.
+  \item{A finalization phase} where the averaged steady-state solution is used for a small number of timesteps, and a larger number of {\tt Eirene} trajectories, to reduce statistical noise. This is done by running the {\tt res\_av} scriptand uses the {\tt input\_fin.eir Eirene} input file prepared by {\tt Uinp} if available.
 \end{enumerate}
 
 \chapter{Using MDSPLUS}
@@ -11501,7 +11505,9 @@ fo3dr \index{fo3dr}\index{b2time.nc, fo3dr} & poloidal total ion flux, outboard 
 
 In the case of double-null geometries, additional quantities are
 created related to the inboard top ({\tt tl}) and
-outboard top ({\tt tr}) divertors. These are listed below.
+outboard top ({\tt tr}) divertors. These are listed below in
+Table \ref{tab:4db2time}.
+
 \begin{center}
     \begin{longtable}{|l|l|l|}
     \hline
@@ -11550,7 +11556,9 @@ fo3dtr \index{fo3dtr}\index{b2time.nc, fo3dtr} & poloidal total ion flux, outboa
 
 Additional multi-dimensional writes to {\tt b2time.nc} can be made using the ``b2mwti\_2dwrite'' switch.
 If set to ``1'' then a few 2D arrays ($n_e$, $T_e$, $T_i$) are output with each write to {\tt b2time.nc}. If set
-to ``2'' then additional quantities such as fluxes are added, see the table below.
+to ``2'' then additional quantities such as fluxes are added, see below Table
+\ref{tab:5db2time}.
+
 \begin{center}
     \begin{longtable}{|l|l|l|}
     \hline
@@ -11594,7 +11602,9 @@ to ``2'' then additional quantities such as fluxes are added, see the table belo
 When using the averaging scheme for {\tt Eirene} coupled runs
 (see Section \ref{sec:B2Eirene:averaging}), obtained by
 activating the ``b2mndt\_av'' switch, the {\tt b2time.nc} file will also
-contain some averaged data, listed in the table below.
+contain some averaged data, listed below in table \ref{tab:b2timeav}.
+These quantities can be visualized by means of the {\tt 2dt\_av} script.
+\index{2dt\_av}
 
 \begin{center}
     \begin{longtable}{|l|l|l|}
@@ -18973,7 +18983,7 @@ tran \index{tran} & formatted & b2mn & & plasma state used for archiving at JET 
 
 \section{Changes in output for the AUG\_16151\_D test case}
 
-Whenever the code is changed, small changes can appear in the results of a simulation.  In this section we look at some changes that have appeared as a result of the changes between r1360 and r1463.
+Whenever the code is changed, small changes can appear in the results of a simulation.  In this section we look at some changes that have appeared as a result of the changes between {\bf SOLPS 5.0} revisions r1360 and r1463.
 
 The base case was stored as revision 1360 at 2008-01-30 13:39:40 GMT
 and saved in MDSplus as 21393.  This forms the {\bf REF} case for the
