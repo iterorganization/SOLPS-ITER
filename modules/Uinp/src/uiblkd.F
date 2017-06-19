@@ -639,7 +639,7 @@ c*** 7
      /   nstra*' ',    0   ,nstra*4001 /
 
       data  nstrai,alloc,indsrc ,  npts  , ninitl, nemods , namods  /
-     /         0  , 0.5 ,nstra*6,nstra*-1,nstra*0, nstra*6, nstra*1 /,
+     /         0  , 0.5 ,nstra*6,nstra*-1,nstra*-1, nstra*6, nstra*1 /,
      , nminpts, ivlsf , iscls , isclt , iscl1 , iscl2 , iscl3 , isclb /
      / nstra*0,nstra*0,nstra*0,nstra*0,nstra*0,nstra*0,nstra*0,nstra*0/
       data iscla , nspez  , nsrfsi,  indim ,  insor ,  nrsor  , npsor  /
@@ -790,8 +790,8 @@ c*** 12
 
 c*** 13
 
-      data nprnli, ntmstp , nptst /
-     /        0  ,    1   ,   0   /,
+      data nprnli, ntmstp , nptst  , ninitl_read /
+     /        0  ,    1   ,   0    ,   -1        /,
      ,      nsnvi,  isnve ,  isnvs ,  isnvt ,  isnrc /
      ,        0  , nsnv*0 , nsnv*0 , nsnv*0 , nsnv*0 /
       data dtimv , time0 /
