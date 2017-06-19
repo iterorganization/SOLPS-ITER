@@ -16,9 +16,9 @@ ACTDIR=`pwd`
   }
 }
 [ $found -eq 1 ] && {
-  [ -s ${ACTDIR}/input.dat ] || mv ${ACTDIR}/input.dat ${ACTDIR}/input.eir
+  [ -s ${ACTDIR}/input.dat ] && mv ${ACTDIR}/input.dat ${ACTDIR}/input.eir
+  ln -s ${input} input.dat
 }
-ln -s ${input} input.dat
 
 echo "input = " $input
 # prepare B2.5 input file 
