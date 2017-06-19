@@ -169,18 +169,41 @@ endif
 	[ -s b2.neutrals_save.parameters ] && cp b2.neutrals_save.parameters b2.neutrals_save.parameters.i || echo > /dev/null
 	[ -s b2.sputter_save.parameters ] && cp b2.sputter_save.parameters b2.sputter_save.parameters.i || echo > /dev/null
 	[ -s b2.transport_models_save.parameters ] && cp b2.transport_models_save.parameters b2.transport_models_save.parameters.i || echo > /dev/null
-	-cd b2mn.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ln -s ../input.dat fort.1 ; [ -e ../fort.15 ] && cp -p ../fort.15 . || echo > /dev/null ; [ -e ../fort.14 ] && cp -p ../fort.14 . || echo > /dev/null ; [ -e ../fort.13 ] && cp -p ../fort.13 . || echo > /dev/null ; [ -e ../fort.12 ] && cp -p ../fort.12 . || echo > /dev/null ; [ -e ../fort.11 ] && cp -p ../fort.11 . || echo > /dev/null ; [ -e ../fort.10 ] && cp -p ../fort.10 . || echo > /dev/null ; [ -e ../fort.44 ] && cp -p ../fort.44 . || echo > /dev/null ; [ -e ../fort.33 ] && cp -p ../fort.33 . || echo > /dev/null ; [ -e ../fort.34 ] && cp -p ../fort.34 . || echo > /dev/null ; [ -e ../fort.35 ] && cp -p ../fort.35 . || echo > /dev/null ; [ -e ../aver.dat ] && cp -p ../aver.dat . || echo > /dev/null
+	-cd b2mn.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ln -s ../input.dat fort.1 ; \
+	[ -e ../fort.15 ] && cp -p ../fort.15 . || echo > /dev/null ; \
+	[ -e ../fort.14 ] && cp -p ../fort.14 . || echo > /dev/null ; \
+	[ -e ../fort.13 ] && cp -p ../fort.13 . || echo > /dev/null ; \
+	[ -e ../fort.12 ] && cp -p ../fort.12 . || echo > /dev/null ; \
+	[ -e ../fort.11 ] && cp -p ../fort.11 . || echo > /dev/null ; \
+	[ -e ../fort.10 ] && cp -p ../fort.10 . || echo > /dev/null ; \
+	[ -e ../fort.44 ] && cp -p ../fort.44 . || echo > /dev/null ; \
+	[ -e ../fort.33 ] && cp -p ../fort.33 . || echo > /dev/null ; \
+	[ -e ../fort.34 ] && cp -p ../fort.34 . || echo > /dev/null ; \
+	[ -e ../fort.35 ] && cp -p ../fort.35 . || echo > /dev/null ; \
+	[ -e ../b2faveri ] && cp -p ../b2faveri . || echo > /dev/null
 endif
 ifdef USE_IMPGYRO
-	-cd b2mn.exe.dir ; touch b2ig.conf ; echo "-n ${NPE_B2} : ${B2OBJ}/b2mn.exe" >> b2ig.conf ; echo "-n ${NPE_EXT} : ${EXE_EXT}" >> b2ig.conf ; ln -s ../config ../pre . ; mkdir tracing ;\
-	touch use_impgyro ; [ -e ../restart_ext ] && cp ../restart_ext . || echo > /dev/null ; [ -e ../restart ] && cp ../restart . && cp ${WD_EXT}/.st.?* . || echo > /dev/null ;\
-	mpiexec -verbose -config b2ig.conf ;\
+	-cd b2mn.exe.dir ; touch b2ig.conf ; echo "-n ${NPE_B2} : ${B2OBJ}/b2mn.exe" >> b2ig.conf ; echo "-n ${NPE_EXT} : ${EXE_EXT}" >> b2ig.conf ; ln -s ../config ../pre . ; mkdir tracing ; mkdir batch_av ; mkdir run_av ; \
+	touch use_impgyro ; [ -e ../restart_ext ] && cp ../restart_ext . || echo > /dev/null ; [ -e ../restart ] && cp ../restart . && cp ${WD_EXT}/.st.?* . || echo > /dev/null ; \
+	mpiexec -verbose -config b2ig.conf ; \
 	mv $(target_mn) .. >& /dev/null ; [ -d ../tracing ] || mkdir ../tracing ; mv -f tracing/* ../tracing ; [ -e ../fort.30 ] || mv fort.30 .. ; \
-	rm -f $(notdir $^) .quit ; rm -f b2ig.conf use_impgyro config pre ; [ -e restart_ext ] && cp restart_ext ../. || echo > /dev/null ;\
-	mv .*.?* ${WD_EXT}/. ; mv fort.150 ${WD_EXT}/. ;\
+	[ "$(ls -A ./batch_av)" ] || mkdir -p ../batch_av ; \
+	[ -d ../batch_av ] && mv -f batch_av/* ../batch_av ; \
+	[ "$(ls -A ./run_av)" ] || mkdir -p ../run_av ; \
+	[ -d ../run_av ] && mv -f run_av/* ../run_av ; \
+	rm -f $(notdir $^) .quit ; rm -f b2ig.conf use_impgyro config pre ; [ -e restart_ext ] && cp restart_ext ../. || echo > /dev/null ; \
+	mv .*.?* ${WD_EXT}/. ; mv fort.150 ${WD_EXT}/. ; \
 	mv impgyro.* ${WD_EXT}/. ; mv preg ${WD_EXT}/. ; cp restart ${WD_EXT}/. ; mv restart ../. ; mv d?? ds?? ds??? b2.*.parameters .. >& /dev/null
 else
-	-cd b2mn.exe.dir ; mkdir tracing ; ${TIME} ${B2OBJ}/b2mn.exe ${RUN_OPTIONS} ; mv $(target_mn) .. >& /dev/null ; [ -d ../tracing ] || mkdir ../tracing ; mv -f tracing/* ../tracing ; [ -e ../fort.30 ] || mv fort.30 .. ; rm -f $(notdir $^) .quit ; mv d?? ds?? ds??? b2.*.parameters .. >& /dev/null
+	-cd b2mn.exe.dir ; mkdir tracing ; mkdir batch_av ; mkdir run_av ; ${TIME} ${B2OBJ}/b2mn.exe ${RUN_OPTIONS} ; mv $(target_mn) .. >& /dev/null ; \
+	[ -d ../tracing ] || mkdir ../tracing ; mv -f tracing/* ../tracing ; \
+	[ "$(ls -A ./batch_av)" ] || mkdir -p ../batch_av ; \
+	[ -d ../batch_av ] && mv -f batch_av/* ../batch_av ; \
+	[ "$(ls -A ./run_av)" ] || mkdir -p ../run_av ; \
+	[ -d ../run_av ] && mv -f run_av/* ../run_av ; \
+	[ -e ../fort.30 ] || mv fort.30 .. ; \
+	[ -e ../b2faveri ] || mv b2faveri .. ; \
+	rm -f $(notdir $^) .quit ; mv d?? ds?? ds??? b2.*.parameters .. >& /dev/null
 endif
 ifndef STAND_ALONE
 	-[ -e b2mn.exe.dir/fort.10 ] && mv b2mn.exe.dir/fort.10 . || echo > /dev/null
@@ -208,11 +231,12 @@ endif
 	-[ -e b2mn.exe.dir/balance.nc ] && mv b2mn.exe.dir/balance.nc . || echo > /dev/null
 	-[ -e b2mn.exe.dir/b2_to_astra.dat ] && mv b2mn.exe.dir/b2_to_astra.dat . || echo > /dev/null
 	-[ -e b2mn.exe.dir/b2fstate_add ] && mv b2mn.exe.dir/b2fstate_add . || echo > /dev/null
-	-[ -e b2mn.exe.dir/aver.dat ] && mv b2mn.exe.dir/aver.dat . || echo > /dev/null
-	-[ -e b2mn.exe.dir/prof.out ] && mv b2mn.exe.dir/prof.out . || echo > /dev/null
+	-[ -e b2mn.exe.dir/b2favere ] && mv b2mn.exe.dir/b2favere . || echo > /dev/null
 	-[ -e b2mn.exe.dir/b2fplasmf.0000 ] && rm b2mn.exe.dir/b2fplasmf.* . || echo > /dev/null
 	-[ -e b2mn.exe.dir/tran ] && mv b2mn.exe.dir/tran b2mn.exe.dir/tran?? . || echo > /dev/null
 	-[ -e b2mn.exe.dir/tracing ] && rmdir b2mn.exe.dir/tracing || echo > /dev/null
+	-[ -e b2mn.exe.dir/batch_av ] && rmdir b2mn.exe.dir/batch_av || echo > /dev/null
+	-[ -e b2mn.exe.dir/run_av ] && rmdir b2mn.exe.dir/run_av || echo > /dev/null
 	-[ -e b2mn.exe.dir/b2fstati_with-ua ] && ( mv b2fstati b2fstati_with+ua ; mv b2mn.exe.dir/b2fstati_with-ua . ; cp -up b2fstati_with-ua b2fstati ; touch b2fstate ) || echo > /dev/null
 	-rmdir b2mn.exe.dir
 
@@ -239,8 +263,27 @@ endif
 	[ -s b2.neutrals_save.parameters ] && cp b2.neutrals_save.parameters b2.neutrals_save.parameters.i || echo > /dev/null
 	[ -s b2.sputter_save.parameters ] && cp b2.sputter_save.parameters b2.sputter_save.parameters.i || echo > /dev/null
 	[ -s b2.transport_models_save.parameters ] && cp b2.transport_models_save.parameters b2.transport_models_save.parameters.i || echo > /dev/null
-	-cd b2mn.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ln -s ../input.dat fort.1 ; [ -e ../fort.15 ] && cp -p ../fort.15 . || echo > /dev/null ; [ -e ../fort.14 ] && cp -p ../fort.14 . || echo > /dev/null ; [ -e ../fort.13 ] && cp -p ../fort.13 . || echo > /dev/null ; [ -e ../fort.12 ] && cp -p ../fort.12 . || echo > /dev/null ; [ -e ../fort.11 ] && cp -p ../fort.11 . || echo > /dev/null ; [ -e ../fort.10 ] && cp -p ../fort.10 . || echo > /dev/null ; [ -e ../fort.44 ] && cp -p ../fort.44 . || echo > /dev/null ; [ -e ../fort.33 ] && cp -p ../fort.33 . || echo > /dev/null ; [ -e ../fort.34 ] && cp -p ../fort.34 . || echo > /dev/null ; [ -e ../fort.35 ] && cp -p ../fort.35 . || echo > /dev/null ; [ -e ../aver.dat ] && cp -p ../aver.dat . || echo > /dev/null
-	cd b2mn.exe.dir ; mkdir tracing ; ${DBX} ${INC} ${DBGOBJ}/b2mn.exe ${RUN_OPTIONS} ; mv $(target_mn) .. >& /dev/null ; [ -d ../tracing ] || mkdir ../tracing ; mv -f tracing/* ../tracing ; [ -e ../fort.30 ] || mv fort.30 .. ; rm -f $(notdir $^) .quit ; mv d?? ds?? ds??? b2.*.parameters .. >& /dev/null
+	-cd b2mn.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ln -s ../input.dat fort.1 ; \
+	[ -e ../fort.15 ] && cp -p ../fort.15 . || echo > /dev/null ; \
+	[ -e ../fort.14 ] && cp -p ../fort.14 . || echo > /dev/null ; \
+	[ -e ../fort.13 ] && cp -p ../fort.13 . || echo > /dev/null ; \
+	[ -e ../fort.12 ] && cp -p ../fort.12 . || echo > /dev/null ; \
+	[ -e ../fort.11 ] && cp -p ../fort.11 . || echo > /dev/null ; \
+	[ -e ../fort.10 ] && cp -p ../fort.10 . || echo > /dev/null ; \
+	[ -e ../fort.44 ] && cp -p ../fort.44 . || echo > /dev/null ; \
+	[ -e ../fort.33 ] && cp -p ../fort.33 . || echo > /dev/null ; \
+	[ -e ../fort.34 ] && cp -p ../fort.34 . || echo > /dev/null ; \
+	[ -e ../fort.35 ] && cp -p ../fort.35 . || echo > /dev/null ; \
+	[ -e ../b2faveri ] && cp -p ../b2faveri . || echo > /dev/null
+	cd b2mn.exe.dir ; mkdir tracing ; mkdir batch_av ; mkdir run_av ; ${DBX} ${INC} ${DBGOBJ}/b2mn.exe ${RUN_OPTIONS} ; mv $(target_mn) .. >& /dev/null ; \
+	[ -d ../tracing ] || mkdir ../tracing ; mv -f tracing/* ../tracing ; \
+	[ "$(ls -A ./batch_av)" ] || mkdir -p ../batch_av ; \
+	[ -d ../batch_av ] && mv -f batch_av/* ../batch_av ; \
+	[ "$(ls -A ./run_av)" ] || mkdir -p ../run_av ; \
+	[ -d ../run_av ] && mv -f run_av/* ../run_av ; \
+	[ -e ../fort.30 ] || mv fort.30 .. ; \
+	[ -e ../b2faveri ] || mv b2faveri .. ; \
+	rm -f $(notdir $^) .quit ; mv d?? ds?? ds??? b2.*.parameters .. >& /dev/null
 	-[ -e b2mn.exe.dir/fort.10 ] && mv b2mn.exe.dir/fort.10 . || echo > /dev/null
 	-[ -e b2mn.exe.dir/fort.11 ] && mv b2mn.exe.dir/fort.11 . || echo > /dev/null
 	-[ -e b2mn.exe.dir/fort.12 ] && mv b2mn.exe.dir/fort.12 . || echo > /dev/null
@@ -269,11 +312,12 @@ endif
 	-[ -e b2mn.exe.dir/balance.nc ] && mv b2mn.exe.dir/balance.nc . || echo > /dev/null
 	-[ -e b2mn.exe.dir/b2_to_astra.dat ] && mv b2mn.exe.dir/b2_to_astra.dat . || echo > /dev/null
 	-[ -e b2mn.exe.dir/b2fstate_add ] && mv b2mn.exe.dir/b2fstate_add . || echo > /dev/null
-	-[ -e b2mn.exe.dir/aver.dat ] && mv b2mn.exe.dir/aver.dat . || echo > /dev/null
-	-[ -e b2mn.exe.dir/prof.out ] && mv b2mn.exe.dir/prof.out . || echo > /dev/null
+	-[ -e b2mn.exe.dir/b2favere ] && mv b2mn.exe.dir/b2favere . || echo > /dev/null
 	-[ -e b2mn.exe.dir/b2fplasmf.0000 ] && rm b2mn.exe.dir/b2fplasmf.* . || echo > /dev/null
 	-[ -e b2mn.exe.dir/tran ] && mv b2mn.exe.dir/tran b2mn.exe.dir/tran?? . || echo > /dev/null
 	-[ -e b2mn.exe.dir/tracing ] && rmdir b2mn.exe.dir/tracing || echo > /dev/null
+	-[ -e b2mn.exe.dir/batch_av ] && rmdir b2mn.exe.dir/batch_av || echo > /dev/null
+	-[ -e b2mn.exe.dir/run_av ] && rmdir b2mn.exe.dir/run_av || echo > /dev/null
 	-[ -e b2mn.exe.dir/b2fstati_with-ua ] && ( mv b2fstati b2fstati_with+ua ; mv b2mn.exe.dir/b2fstati_with-ua b2fstati ) || echo > /dev/null
 	-rmdir b2mn.exe.dir
 
