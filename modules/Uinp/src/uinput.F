@@ -85,7 +85,8 @@ c*** Create the header for the b2ag.dat file
           print *,'    ... b2ag.dat file already present, not created'
       else
           open(2,file='b2ag.dat')
-          write(2,'(a)') '*dimens         (nx, ny; free format)'
+          write(2,'(a)')
+     .     '*dimens         (nx, ny, nx1, ny1; free format)'
           write(2,'(4(3x,i4))') nrplg-npplg, ndya, nrplg-npplg, ndya
           write(2,'(a)') '*param          (param(0:99); free format)'
           write(2,'(a)') ' -1.0, 99*0.0'
