@@ -1375,6 +1375,8 @@ negative quantities on the same scale and "M" the absolute values of negative qu
     {\tt b2time.nc} (Appendix \ref{cha:b2time}), 2$^{nd}$, 3$^{rd}$ {\it etc.\ versus} the 1$^{st}$ argument.
   \item[2dt]\index{2dt} plots time dependent quantities from
     {\tt b2time.nc} (Appendix \ref{cha:b2time}) versus time.
+  \item[2dt\_av]\index{2dt\_av} plots averaged time dependent quantities from
+    {\tt b2time.nc} (Appendix \ref{cha:b2time}) versus time.
   \item[2dvi]\index{2dvi} prepares a \btwoplot command file {\tt TDV/contr.b2p} for production of input files to start a {\tt DIVIMP} run.
   \item[2d\_plots]\label{script:2dplots}\index{2d\_plots} prepares {\tt b2time.ps} from
     {\tt b2time.nc} (Appendix \ref{cha:b2time}).  This uses the batch
@@ -4654,6 +4656,20 @@ several values of $\Delta_t$.
     \caption{Upstream electron temperature for several timesteps after puff b.c. applied.}
     \label{fig:tmne1}
 \end{figure}
+
+\section{Averaging scheme}
+\label{sec:B2Eirene:averaging}\index{Averaging}
+
+When running a coupled \SOLPSITER case to obtain a steady-state solution, it is recommended to use the source
+averaging scheme detailed in \${\tt SOLPSTOP/doc/SOLPS-ITER\_Eirene\_averaging.pdf} and references therein. This averaging scheme is meant to yield significant
+run speed-up and lower the statistical error introduced by the {\tt Eirene} Monte-Carlo noise, as well as provide means to estimate the errors on the solution, following the formalism detailed in \cite{Ghoos_PET2016, Ghoos_JCP2016}.
+
+The averaging scheme works in three stages:
+\begin{enumerate}
+  \item{A transient phase} during which the code is run normally, until all the short transients die out and the solution approaches its steady state.
+  \item{An averaging phase}, turned on by means of the {\tt "b2mndt\_av"} switch in the {\tt b2mn.dat} input file, usually with a smaller number of {\tt Eirene} trajectories, during which batch averaging will be done to obtain an averaged steady-state solution
+  \item{A finalization phase} where the averaged steady-state solution is used for a small number of timesteps, and a larger number of {\tt Eirene} trajectories, to reduce statistical noise.
+\end{enumerate}
 
 \chapter{Using MDSPLUS}
 \index{MDSPLUS}\label{cha:MDSplus}
@@ -11574,6 +11590,50 @@ to ``2'' then additional quantities such as fluxes are added, see the table belo
   \end{longtable}
 \end{center}
 
+When using the averaging scheme for {\tt Eirene} coupled runs
+(see Section \ref{sec:B2Eirene:averaging}), obtained by
+activating the ``b2mndt\_av'' switch, the {\tt b2time.nc} file will also
+contain some averaged data, listed in the table below.
+
+\begin{center}
+    \begin{longtable}{|l|l|l|}
+    \hline
+    \multicolumn{3}{|l|}{\small\sl continued from previous page} \\
+    \hline quantity & description & units \\
+    \hline \endhead
+    \hline quantity & description & units \\
+    \hline \endfirsthead
+    \hline
+    \multicolumn{3}{|l|}{\small\sl continued on next page} \\
+    \hline \endfoot
+    \endlastfoot
+nastep \index{nastep}\index{b2time.nc, nastep} & timestep index & $  $ \\
+batchsa \index{batchsa}\index{b2time.nc, batchsa} & time stamp for averaged batch & $s $ \\
+nesepi\_av \index{nesepi\_av}\index{b2time.nc, nesepi\_av} & averaged separatrix electron density, inboard divertor & $m^{-3}$ \\
+tesepi\_av \index{tesepi\_av}\index{b2time.nc, tesepi\_av} & averaged separatrix electron temperature, inboard divertor & $eV$ \\
+tisepi\_av \index{tisepi\_av}\index{b2time.nc, tisepi\_av} & averaged separatrix ion temperature, inboard divertor & $eV$ \\
+posepi\_av \index{posepi\_av}\index{b2time.nc, posepi\_av} & averaged separatrix potential, inboard divertor & $V $ \\
+nesepm\_av \index{nesepm\_av}\index{b2time.nc, nesepm\_av} & averaged separatrix electron density, outer midplane & $m^{-3}$ \\
+tesepm\_av \index{tesepm\_av}\index{b2time.nc, tesepm\_av} & averaged separatrix electron temperature, outer midplane & $eV$ \\
+tisepm\_av \index{tisepm\_av}\index{b2time.nc, tisepm\_av} & averaged separatrix ion temperature, outer midplane & $eV$ \\
+posepm\_av \index{posepm\_av}\index{b2time.nc, posepm\_av} & averaged separatrix potential, outer midplane & $V $ \\
+nesepa\_av \index{nesepa\_av}\index{b2time.nc, nesepa\_av} & averaged separatrix electron density, outboard divertor & $m^{-3}$ \\
+tesepa\_av \index{tesepa\_av}\index{b2time.nc, tesepa\_av} & averaged separatrix electron temperature, outboard divertor & $eV$ \\
+tisepa\_av \index{tisepa\_av}\index{b2time.nc, tisepa\_av} & averaged separatrix ion temperature, outboard divertor & $eV$ \\
+posepa\_av \index{posepa\_av}\index{b2time.nc, posepa\_av} & averaged separatrix potential, outboard divertor max & $V $ \\
+nemxip\_av \index{nemxip\_av}\index{b2time.nc, nemxip\_av} & averaged maximum electron density, inboard divertor & $m^{-3}$ \\
+temxip\_av \index{temxip\_av}\index{b2time.nc, temxip\_av} & averaged maximum electron temperature, inboard divertor & $eV$ \\
+timxip\_av \index{timxip\_av}\index{b2time.nc, timxip\_av} & averaged maximum ion temperature, inboard divertor & $eV$ \\
+pomxip\_av \index{pomxip\_av}\index{b2time.nc, pomxip\_av} & averaged maximum potential, inboard divertor & $V $ \\
+nemxap\_av \index{nemxap\_av}\index{b2time.nc, nemxap\_av} & averaged maximum electron density, outboard divertor & $m^{-3}$ \\
+temxap\_av \index{temxap\_av}\index{b2time.nc, temxap\_av} & averaged maximum electron temperature, outboard divertor & $eV$ \\
+timxap\_av \index{timxap\_av}\index{b2time.nc, timxap\_av} & averaged maximum ion temperature, outboard divertor  & $eV$ \\
+pomxap\_av \index{pomxap\_av}\index{b2time.nc, pomxap\_av} & averaged maximum potential, outboard divertor & $V $ \\
+    \hline
+    \caption{Scalar batch-averaged time dependent quantities stored in b2time.nc}
+    \label{tab:b2timeav}
+  \end{longtable}
+\end{center}
 
 \clearpage
 
