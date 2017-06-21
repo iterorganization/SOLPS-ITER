@@ -1495,6 +1495,8 @@ extracted from the {\tt run.log} file.
 \item Others
   \begin{description}
   \item[b2]\index{b2} Shortcut to {\tt B2}.
+  \item[b2favere\_OK]\index{b2favere\_OK} Checks that the {\tt b2favere} file
+    is of correct size and content.
   \item[b2fstate\_OK]\index{b2fstate\_OK} Checks that the {\tt b2fstate} file
     is of correct size and content.
   \item[b2p]\index{b2p} Script to obtain a standard series of \btwoplot graphs.
@@ -3773,7 +3775,7 @@ those regions, excluding the fluxes within boundary regions.
 \newpage
 \section{b2yt, changing from one grid size and species set to another}
 \index{b2yt}\index{b2fstatt}\label{sec:b2yt}\index{input.dat}\index{input.dat.2}\index{b2mn.dat}\index{b2fgmtry}
-\index{b2fgmtry.old}\index{b2mn.dat.2}\index{b2.boundary.parameters}\index{b2.boundary.parameters.2}
+\index{b2fgmtry.old}\index{b2mn.dat.2}\index{b2.boundary.parameters}\index{b2.boundary.parameters.2}\index{b2favere.2}
 \index{b2.neutrals.parameters}\index{b2.neutrals.parameters.2}\index{b2ah.dat}\index{b2ah.dat.2}
 \index{b2.wall\_save.parameters}\index{b2.wall\_save.parameters.2}\index{b2frates}\index{b2fpardf}
 \index{b2.transport.parameters}\index{b2.transport.parameters.2}\index{SOLPS\_FLUIDS}
@@ -3902,7 +3904,7 @@ in the working directory, files {\tt b2.boundary.parameters.2} and
 {\tt b2.neutrals.parameters.2},
 respectively, will contain the updated namelist variables. The program will also create
 a new {\tt b2.wall\_save.parameters.2} file containing the new wall namelist settings
-when appropriate. Other {\tt B2.5} input files are treated in the same fashion. The
+ and a new {\tt b2favere.2} file containing the new averaged solution, when appropriate. Other {\tt B2.5} input files are treated in the same fashion. The
 code will also attempt to create a new {\tt SOLPS\_FLUIDS.2} file appropriate for the
 new species list.
 
@@ -11640,6 +11642,26 @@ nemxap\_av \index{nemxap\_av}\index{b2time.nc, nemxap\_av} & averaged maximum el
 temxap\_av \index{temxap\_av}\index{b2time.nc, temxap\_av} & averaged maximum electron temperature, outboard divertor & $eV$ \\
 timxap\_av \index{timxap\_av}\index{b2time.nc, timxap\_av} & averaged maximum ion temperature, outboard divertor  & $eV$ \\
 pomxap\_av \index{pomxap\_av}\index{b2time.nc, pomxap\_av} & averaged maximum potential, outboard divertor & $V $ \\
+nesepi\_std \index{nesepi\_std}\index{b2time.nc, nesepi\_std} & averaged separatrix electron density, inboard divertor & $m^{-3}$ \\
+tesepi\_std \index{tesepi\_std}\index{b2time.nc, tesepi\_std} & averaged separatrix electron temperature, inboard divertor & $eV$ \\
+tisepi\_std \index{tisepi\_std}\index{b2time.nc, tisepi\_std} & averaged separatrix ion temperature, inboard divertor & $eV$ \\
+posepi\_std \index{posepi\_std}\index{b2time.nc, posepi\_std} & averaged separatrix potential, inboard divertor & $V $ \\
+nesepm\_std \index{nesepm\_std}\index{b2time.nc, nesepm\_std} & variance for separatrix electron density, outer midplane & $m^{-3}$ \\
+tesepm\_std \index{tesepm\_std}\index{b2time.nc, tesepm\_std} & variance for separatrix electron temperature, outer midplane & $eV$ \\
+tisepm\_std \index{tisepm\_std}\index{b2time.nc, tisepm\_std} & variance for separatrix ion temperature, outer midplane & $eV$ \\
+posepm\_std \index{posepm\_std}\index{b2time.nc, posepm\_std} & variance for separatrix potential, outer midplane & $V $ \\
+nesepa\_std \index{nesepa\_std}\index{b2time.nc, nesepa\_std} & variance for separatrix electron density, outboard divertor & $m^{-3}$ \\
+tesepa\_std \index{tesepa\_std}\index{b2time.nc, tesepa\_std} & variance for separatrix electron temperature, outboard divertor & $eV$ \\
+tisepa\_std \index{tisepa\_std}\index{b2time.nc, tisepa\_std} & variance for separatrix ion temperature, outboard divertor & $eV$ \\
+posepa\_std \index{posepa\_std}\index{b2time.nc, posepa\_std} & variance for separatrix potential, outboard divertor max & $V $ \\
+nemxip\_std \index{nemxip\_std}\index{b2time.nc, nemxip\_std} & variance for maximum electron density, inboard divertor & $m^{-3}$ \\
+temxip\_std \index{temxip\_std}\index{b2time.nc, temxip\_std} & variance for maximum electron temperature, inboard divertor & $eV$ \\
+timxip\_std \index{timxip\_std}\index{b2time.nc, timxip\_std} & variance for maximum ion temperature, inboard divertor & $eV$ \\
+pomxip\_std \index{pomxip\_std}\index{b2time.nc, pomxip\_std} & variance for maximum potential, inboard divertor & $V $ \\
+nemxap\_std \index{nemxap\_std}\index{b2time.nc, nemxap\_std} & variance for maximum electron density, outboard divertor & $m^{-3}$ \\
+temxap\_std \index{temxap\_std}\index{b2time.nc, temxap\_std} & variance for maximum electron temperature, outboard divertor & $eV$ \\
+timxap\_std \index{timxap\_std}\index{b2time.nc, timxap\_std} & variance for maximum ion temperature, outboard divertor  & $eV$ \\
+pomxap\_std \index{pomxap\_std}\index{b2time.nc, pomxap\_std} & variance for maximum potential, outboard divertor & $V $ \\
     \hline
     \caption{Scalar batch-averaged time dependent quantities stored in b2time.nc}
     \label{tab:b2timeav}

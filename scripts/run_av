@@ -25,6 +25,3 @@ echo "input = " $input
 cat << EOF >> b2mn.dat
 'b2mndt_av'                          '1'             # perform running averages
 EOF
-
-
-

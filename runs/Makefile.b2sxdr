@@ -75,7 +75,7 @@ ifndef STAND_ALONE
 	-cd b2sx.exe.dir ; ln -s ../HYDHEL ../AMJUEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ln -s ../input.dat fort.1 ; [ -e ../fort.15 ] && cp -p ../fort.15 . || echo > /dev/null ; [ -e ../fort.14 ] && cp -p ../fort.14 . || echo > /dev/null ; [ -e ../fort.13 ] && cp -p ../fort.13 . || echo > /dev/null ; [ -e ../fort.12 ] && cp -p ../fort.12 . || echo > /dev/null ; [ -e ../fort.11 ] && cp -p ../fort.11 . || echo > /dev/null ; [ -e ../fort.10 ] && cp -p ../fort.10 . || echo > /dev/null ; [ -e ../fort.44 ] && cp -p ../fort.44 . || echo > /dev/null
 	cd b2sx.exe.dir ; [ -e ../fort.33 ] && cp -p ../fort.33 . || echo > /dev/null ; [ -e ../fort.34 ] && cp -p ../fort.34 . || echo > /dev/null ; [ -e ../fort.35 ] && cp -p ../fort.35 . || echo > /dev/null
 endif
-	cd b2sx.exe.dir ; [ -e ../fort.30 ] && cp -p ../fort.30 . || echo > /dev/null ; [ -e ../fort.31 ] && cp -p ../fort.31 . || echo > /dev/null ; ${TIME} ${SOLPSTOP}/modules/solps4-5/builds/${TOOL_CHAIN}/b2sxdr.exe ${RUN_OPTIONS} ; mv $(target_sx) .. >& /dev/null ; [ -e ../fort.30 ] && rm fort.30 || mv fort.30 .. ; [ -e ../fort.31 ] && rm fort.31 || mv fort.31 .. ; rm -f $(notdir $^)
+	cd b2sx.exe.dir ; [ -e ../fort.30 ] && cp -p ../fort.30 . || echo > /dev/null ; [ -e ../fort.31 ] && cp -p ../fort.31 . || echo > /dev/null ; ${TIME} ${SOLPSTOP}/modules/solps4-5/builds/${TOOL_CHAIN}/b2sxdr.exe ${RUN_OPTIONS} ; mv $(target_sx) .. >& /dev/null ; [ -e ../fort.30 ] && rm fort.30 || mv fort.30 .. ; [ -e ../fort.31 ] && rm fort.31 || mv fort.31 .. ; rm -f $(notdir $^) >& /dev/null
 ifndef STAND_ALONE 
 	-[ -e b2sx.exe.dir/fort.10 ] && mv b2sx.exe.dir/fort.10 . || echo > /dev/null
 	-[ -e b2sx.exe.dir/fort.11 ] && mv b2sx.exe.dir/fort.11 . || echo > /dev/null
@@ -102,7 +102,7 @@ ifndef STAND_ALONE
 	-cd b2sx.exe.dir ; ln -s ../HYDHEL ../AMJUEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ln -s ../input.dat fort.1 ; [ -e ../fort.15 ] && cp -p ../fort.15 . || echo > /dev/null ; [ -e ../fort.14 ] && cp -p ../fort.14 . || echo > /dev/null ; [ -e ../fort.13 ] && cp -p ../fort.13 . || echo > /dev/null ; [ -e ../fort.12 ] && cp -p ../fort.12 . || echo > /dev/null ; [ -e ../fort.11 ] && cp -p ../fort.11 . || echo > /dev/null ; [ -e ../fort.10 ] && cp -p ../fort.10 . || echo > /dev/null ; [ -e ../fort.44 ] && cp -p ../fort.44 . || echo > /dev/null
 	cd b2sx.exe.dir ; [ -e ../fort.33 ] && cp -p ../fort.33 . || echo > /dev/null ; [ -e ../fort.34 ] && cp -p ../fort.34 . || echo > /dev/null ; [ -e ../fort.35 ] && cp -p ../fort.35 . || echo > /dev/null
 endif
-	cd b2sx.exe.dir ; [ -e ../fort.30 ] && cp -p ../fort.30 . || echo > /dev/null ; [ -e ../fort.31 ] && cp -p ../fort.31 . || echo > /dev/null ; ${DBX} ${INC} ${S45DBG}/b2sxdr.exe ${RUN_OPTIONS} ; mv $(target_sx) .. >& /dev/null ; [ -e ../fort.30 ] && rm fort.30 || mv fort.30 .. ; [ -e ../fort.31 ] && rm fort.31 || mv fort.31 .. ; rm -f $(notdir $^)
+	cd b2sx.exe.dir ; [ -e ../fort.30 ] && cp -p ../fort.30 . || echo > /dev/null ; [ -e ../fort.31 ] && cp -p ../fort.31 . || echo > /dev/null ; ${DBX} ${INC} ${S45DBG}/b2sxdr.exe ${RUN_OPTIONS} ; mv $(target_sx) .. >& /dev/null ; [ -e ../fort.30 ] && rm fort.30 || mv fort.30 .. ; [ -e ../fort.31 ] && rm fort.31 || mv fort.31 .. ; rm -f $(notdir $^) >& /dev/null
 ifndef STAND_ALONE 
 	-[ -e b2sx.exe.dir/fort.10 ] && mv b2sx.exe.dir/fort.10 . || echo > /dev/null
 	-[ -e b2sx.exe.dir/fort.11 ] && mv b2sx.exe.dir/fort.11 . || echo > /dev/null

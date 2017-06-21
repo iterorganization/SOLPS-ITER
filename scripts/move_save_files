@@ -12,4 +12,3 @@ foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:run_av/run_av:'`)
 set recoverfile=`echo $i:t:r`
 [ -e $recoverfile ] && mv -v `basename $i` ../b2favere || echo > /dev/null
 end
-
