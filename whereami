@@ -88,6 +88,7 @@ case "kraken01":
 case "*.spbau.ru":
 case "login1.cluster":
 case "n01p*.cluster":
+case "PLASMATHEORY08":
   echo SPBSTU
   breaksw
 case "*.mephi.ru":
