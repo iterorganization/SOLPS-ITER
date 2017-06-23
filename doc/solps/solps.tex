@@ -4725,7 +4725,9 @@ Then, a full recompilation with
 \begin{verbatim}
 sbb ; gmake clean ; gmake depend ; gmake
 \end{verbatim}
-is safest.
+is safest.  Before doing this, the {\tt MDSPLUS\_DIR} environment
+needs to be set --- consult your systems people about this, or the
+{\tt MDSplus} documentation.
 
 [At IPP on the TOK Linux cluster, add the following to {\tt .login}:
 \begin{verbatim}
@@ -7182,6 +7184,8 @@ p_a = n_a \left( z_a T_e + T_i \right), \qquad
 p_e = n_e T_e
 \end{equation}
 
+and $\delta_{a,b}$ is the Kronecker delta (1 if $a=b$, 0 otherwise).
+
 \subsection{Source terms in density equations}
 
 {\centering}
@@ -7856,20 +7860,20 @@ $\varepsilon = \frac{\left(\oint h_x dx \right)^2}
 
 \section{Electron energy equations}
 
-\begin{eqnarray}
-\frac 3 2 \frac{\partial n_e T_e}{\partial t} +
+\begin{align}
+\frac 3 2 \frac{\partial n_e T_e}{\partial t} &+
 \frac 1{\sqrt g} \frac{\partial }{\partial x} \left( \frac{\sqrt g}{h_x} \widetilde{q}_{ex} \right) +
 \frac 1{\sqrt g} \frac{\partial }{\partial y} \left( \frac{\sqrt g}{h_y} \widetilde{q}_{ey} \right) +
-\frac{n_e T_e}{\sqrt g} \frac{\partial}{\partial x} \left(\frac{\sqrt g}{h_x} b_x V_{e \parallel} \right) =\\
-= Q_e + c_{E\times B} n_e T_e B_z \frac 1{h_x h_y}
+\frac{n_e T_e}{\sqrt g} \frac{\partial}{\partial x} \left(\frac{\sqrt g}{h_x} b_x V_{e \parallel} \right) = \notag \\
+= Q_e &+ c_{E\times B} n_e T_e B_z \frac 1{h_x h_y}
 \left(
 	\frac{\partial \Phi }{\partial y} \frac{\partial }{\partial x} \left(\frac 1{B^2} \right) -
 	\frac{\partial \Phi }{\partial x} \frac{\partial }{\partial y} \left(\frac 1{B^2} \right)
 \right)
 -
 \frac{\widetilde{j}_y^{(st)}}{e n_e} \frac{\partial n_e T_e}{h_y \partial y}
-+ j_x \hat E_x + 0 \cdot j_y \hat E_y
-\end{eqnarray}
++ j_x \hat E_x
+\end{align}
 
 \subsection{Electron energy sources}
 
@@ -7903,8 +7907,7 @@ $Q_R = \sum \limits_{a=0}^{ns-1} r_{Q_a} n_e n_a$ from b2stel
 \subsection{Poloidal electron energy fluxes}
 
 \begin{equation*}
-\widetilde{q}_{ex} = \widetilde{f}_{ex} T_e - \kappa_{ex} \frac 1{h_x} \frac{\partial T_e} {\partial x} +
-0 \cdot \alpha_{ex} T_e \hat E_x - q_{ex}^{P.Sch}
+\widetilde{q}_{ex} = \widetilde{f}_{ex} T_e - \kappa_{ex} \frac 1{h_x} \frac{\partial T_e} {\partial x} - q_{ex}^{P.Sch}
 \end{equation*}
 
 \begin{equation*}
@@ -7931,7 +7934,7 @@ q_{ex} =
 	V_{ex}^{(str)} n_e
 \right] T_e
 -
-\kappa_{ex} \frac 1{h_x} \frac{\partial T_e}{\partial x} + 0\cdot \alpha_{ex} T_e \hat E_x
+\kappa_{ex} \frac 1{h_x} \frac{\partial T_e}{\partial x}
 \end{equation*}
 
 \begin{equation*}
@@ -8129,7 +8132,7 @@ $V_{e \parallel} = \frac 1{e n_e} \left[
 \sum \limits_{a=0}^{ns -1} z_a e n_a V_{a\parallel} - \frac{j^{(\parallel)}_x}{b_x}
 \right]$,
 
-$j^{(\parallel)}_x = \sigma_{\parallel} \hat E_x - \alpha_{ex} \frac 1{h_x} \frac{\partial T_e}{\partial x}$,
+$j^{(\parallel)}_x = \sigma_{\parallel} \left( \frac{1}{e n_e h_x} \frac{\partial n_e T_e}{\partial x} - \frac{1}{h_x} \frac{\partial \Phi}{\partial x} \right) - \alpha_{ex} \frac{1}{h_x} \frac{\partial T_e}{\partial x}$,
 
 $\hat E_x = \frac 1{en_e h_x} \frac{\partial n_e T_e}{\partial x} - \frac 1{h_x} \frac{\partial \Phi}{\partial x}$,
 
@@ -8197,8 +8200,7 @@ $f_{\alpha} \left( z_{eff} \right) = -\frac{1.25 z_{eff}}{1 + 0.41 z_{eff}}$,
 \subsection{Radial electron energy fluxes}
 
 \begin{equation*}
-\widetilde q_{ey} = \widetilde f_{ey} T_e - \kappa_{ey} \frac 1{h_y} \frac{\partial T_e}{\partial y} +
-0 \cdot \alpha_{ey} T_e \hat E_y - q_{ey}^{P.Sch}
+\widetilde q_{ey} = \widetilde f_{ey} T_e - \kappa_{ey} \frac 1{h_y} \frac{\partial T_e}{\partial y} - q_{ey}^{P.Sch}
 \end{equation*}
 
 \begin{equation*}
@@ -8216,7 +8218,7 @@ q_{ey} = \left[
 	\frac 5 2 n_e T_e \frac{B_z}e \frac{\partial }{h_x \partial	x}\left( \frac 1{B^2} \right) +
 	V_{ey}^{(str)} n_e
 \right] T_e -
-\kappa_{ey} \frac 1{h_y} \frac{\partial T_e}{\partial y} + 0 \cdot \alpha_{ey} T_e \hat E_y
+\kappa_{ey} \frac 1{h_y} \frac{\partial T_e}{\partial y}
 \end{equation*}
 
 \begin{equation*}
