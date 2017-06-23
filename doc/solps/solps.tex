@@ -6563,9 +6563,9 @@ Boundary conditions for the current continuity equation at the plates
 correspond to sheath current-voltage characteristics
 \begin{equation}\label{eq:sheath-voltage}
 j_x = en\left(b_x c_s - b_x \frac{1}{\sqrt{2 \pi}} \sqrt{\frac{T_e}{m_e}}
-      \exp \left(- \frac{e \Phi}{T_e}\right) \left(1 - \gamma\right)\right),
+      \exp \left(- \frac{e \Phi}{T_e}\right) \left(1 - \gamma_e\right)\right),
 \end{equation}
-where $\gamma$ is the secondary electron emission coefficient. At the inner
+where $\gamma_e$ is the secondary electron emission coefficient. At the inner
 (core) flux surface the currents are set either to the divergent part
 of the diamagnetic current or to zero. Both variants give the same result
 and both guarantee that the net current integrated over the inner flux surface
@@ -6575,11 +6575,11 @@ components were imposed as for the inner core.
 The electron and ion heat fluxes to the target plates are
 \begin{equation}\label{eq:target_qe}
 \tilde q_{ex} = b_x \frac{n}{\sqrt{2 \pi}} \sqrt{\frac{T_e}{m_e}}
-     \exp \left(- \frac{e \Phi}{T_e}\right) \left(1 - \gamma\right)
-     \left(T_e \frac{1+\gamma}{1-\gamma} + e \Phi\right),
+     \exp \left(- \frac{e \Phi}{T_e}\right) \left(1 - \gamma_e\right)
+     \left(T_e \frac{1+\gamma_e}{1-\gamma_e} + e \Phi\right),
 \end{equation}
 \begin{equation}\label{eq:target_qi}
-\tilde q_{ex} = \frac{3}{2}n T_i c_s b_x.
+\tilde q_{ix} = \frac{3}{2}n T_i c_s b_x.
 \end{equation}
 
 The question of kinetic
@@ -7430,23 +7430,35 @@ a=1, c_{D_a^p,0}=0, c_{D_a^p,1}=0, c_{D_a^p,2}=0, c_{D_a^p,3}=0
 
 \section{Parallel momentum conservation equations}
 
-\begin{eqnarray*}
+The standard form of the parallel momentum conservation equation, 
+Eq. (\ref{eq:mom_new}), as implemented in the code
+for the default choice of {\tt b2sigp\_style} set to {\tt '2'}, is:
+
+\begin{align}\label{eq:mom_new}
 m_a \frac{\partial n_a V_{\parallel a}}{\partial t} +
-\frac 1{h_z\sqrt g} \frac{\partial}{\partial x} \left( \frac{h_z\sqrt g}{h_x} \Gamma_{ax}^m \right) +
+\frac 1{h_z\sqrt g} \frac{\partial}{\partial x} \left( \frac{h_z\sqrt g}{h_x} \Gamma_{ax}^m \right) &+
 \frac 1{h_z\sqrt g} \frac{\partial}{\partial y} \left( \frac{h_z\sqrt g}{h_y} \Gamma_{ay}^m \right) +
 \frac{b_x}{h_x}\frac{\partial n_a T_i}{\partial x} +
-Z_a e n_a \frac{b_x}{h_x} \frac{\partial \Phi}{\partial x} =\\
-S_{a \parallel}^m + S_{CF_a}^m + S_{fr_a}^m + S_{Therm_a}^{m} + S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m
-\end{eqnarray*}
+Z_a e n_a \frac{b_x}{h_x} \frac{\partial \Phi}{\partial x} = \notag \\
+S_{a \parallel}^m + S_{CF_a}^m + S_{fr_a}^m &+ S_{Therm_a}^{m} + S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m
+\end{align}
 
-\begin{eqnarray*}
+However, one can also use the formulation given as Eq. (\ref{eq:mom_old}),
+by setting {\tt b2sigp\_style} set to {\tt '1'}:
+
+\begin{align}\label{eq:mom_old}
 m_a \frac{\partial n_a V_{\parallel a}}{\partial t} +
-\frac 1{h_z\sqrt g} \frac{\partial}{\partial x} \left( \frac{h_z \sqrt g}{h_x} \Gamma_{ax}^m \right) +
+\frac 1{h_z\sqrt g} \frac{\partial}{\partial x} \left( \frac{h_z \sqrt g}{h_x} \Gamma_{ax}^m \right) &+
 \frac 1{h_z\sqrt g} \frac{\partial}{\partial y} \left( \frac{h_z \sqrt g}{h_y} \Gamma_{ay}^m \right) +
 \frac{b_x}{h_x} \frac{\partial n_a T_i}{\partial x} +
-\frac{b_x}{h_x} \frac{Z_a n_a \partial n_e T_e}{n_e \partial x} = \\
-= \mbox{old form} = S_{a \parallel}^m + S_{CF_a}^m + S_{fr_a}^m + S_{Therm_a}^{m} + S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m
-\end{eqnarray*}
+\frac{b_x}{h_x} \frac{Z_a n_a \partial n_e T_e}{n_e \partial x} = \notag \\
+S_{a \parallel}^m + S_{CF_a}^m + S_{fr_a}^m &+ S_{Therm_a}^{m} + S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m
+\end{align}
+
+The treatment using Eq. (\ref{eq:mom_new}) is recommended for cases with a
+single main hydrogenic ion and an arbitrary amount of impurities. For cases
+with hydrogenic ion mixtures or non-hydrogenic plasmas, the use of Eq.
+(\ref{eq:mom_old}) is preferred.
 
 %-------- end of 4th page -------------
 
@@ -7911,7 +7923,7 @@ $Q_R = \sum \limits_{a=0}^{ns-1} r_{Q_a} n_e n_a$ from b2stel
 \end{equation*}
 
 \begin{equation*}
-\widetilde{f}_{ex} = \frac 3 2 \Gamma_{ex} + V_{ex}^{(str)} n_e - 0.71 \frac{j_{ \left( \parallel \right) }}e
+\widetilde{f}_{ex} = \frac 3 2 \Gamma_{ex} + V_{ex}^{(str)} n_e - 0.71 \frac{j^{ \left( \parallel \right) }_x}e
 \end{equation*}
 
 \begin{equation*}
@@ -7938,7 +7950,7 @@ q_{ex} =
 \end{equation*}
 
 \begin{equation*}
-\Gamma_{ex} = \sum \limits_{a=0}^{ns-1} z_a \Gamma_{ax}^{(he)} - \frac{j^{\parallel}_x} e
+\Gamma_{ex} = \sum \limits_{a=0}^{ns-1} z_a \Gamma_{ax}^{(he)} - \frac{j^{\left( \parallel \right)}_x} e
 \end{equation*}
 
 \begin{equation*}
@@ -8132,7 +8144,11 @@ $V_{e \parallel} = \frac 1{e n_e} \left[
 \sum \limits_{a=0}^{ns -1} z_a e n_a V_{a\parallel} - \frac{j^{(\parallel)}_x}{b_x}
 \right]$,
 
-$j^{(\parallel)}_x = \sigma_{\parallel} \left( \frac{1}{e n_e h_x} \frac{\partial n_e T_e}{\partial x} - \frac{1}{h_x} \frac{\partial \Phi}{\partial x} \right) - \alpha_{ex} \frac{1}{h_x} \frac{\partial T_e}{\partial x}$,
+\begin{equation}\label{eq:fch_p}
+j^{(\parallel)}_x = \sigma_{\parallel} \left( \frac{1}{e n_e h_x} \frac{\partial n_e T_e}{\partial x} - \frac{1}{h_x} \frac{\partial \Phi}{\partial x} \right) - \alpha_{ex} \frac{1}{h_x} \frac{\partial T_e}{\partial x} - \frac{e b_x}{z_{eff}} \sum \limits_{a=0}^{ns-1} n_a V_{a \parallel} \left( z_a^2 - z_a z_{eff} \right)
+\end{equation}
+
+The last term in Eq. (\ref{eq:fch_p}) is activated with the switch {\tt b2sigp\_style} set to {\tt '2'}.
 
 $\hat E_x = \frac 1{en_e h_x} \frac{\partial n_e T_e}{\partial x} - \frac 1{h_x} \frac{\partial \Phi}{\partial x}$,
 
@@ -10053,7 +10069,7 @@ $c_{rec,0,0} = 0$ and $c_{rec,1,0} = 1$ are particle recycling coefficients.
 	e_{rec,a} \left(
 		\frac{3}{2} + BoRiS
 	\right)\left(
-		z_{a,f} T_{e,f} + T_{i,f}
+		T_i + z_a \left( \Phi - p_{\Phi,2} \right)
 	\right),\left(
 		\frac{3}{2} + BoRiS
 	\right) T_{surf} k_B
@@ -10080,7 +10096,7 @@ q_{iy}^{P.Sch}
 	e_{rec,a} \left(
 		\frac{3}{2} + BoRiS
 	\right)\left(
-		z_{a,f} T_{e,f} + T_{i,f}
+		T_i + z_a \left( \Phi - p_{\Phi,2} \right)
 	\right),\left(
 		\frac{3}{2} + BoRiS
 	\right) T_{surf} k_B
@@ -10183,7 +10199,7 @@ $c_{rec,0,0} = 0$ and $c_{rec,1,0} = 1$ are particle recycling coefficients.
 	e_{rec,a} \left(
 		\frac{3}{2} + BoRiS
 	\right)\left(
-		z_{a,f} T_{e,f} + T_{i,f}
+		T_i + z_a \left( \Phi - p_{\Phi,2} \right)
 	\right),\left(
 		\frac{3}{2} + BoRiS
 	\right) T_{surf} k_B
@@ -10210,7 +10226,7 @@ q_{iy}^{P.Sch}
 	e_{rec,a} \left(
 		\frac{3}{2} + BoRiS
 	\right)\left(
-		z_{a,f} T_{e,f} + T_{i,f}
+		T_i + z_a \left( \Phi - p_{\Phi,2} \right)
 	\right),\left(
 		\frac{3}{2} + BoRiS
 	\right) T_{surf} k_B
@@ -10239,7 +10255,7 @@ c_{rec,a,0} c_{nsr} \max \left\{
 	e_{rec,a} \left(
 		\frac{3}{2} + BoRiS
 	\right)\left(
-		z_{a,f} T_{e,f} + T_{i,f}
+		T_i + z_a \left( \Phi - p_{\Phi,2} \right)
 	\right),\left(
 		\frac{3}{2} + BoRiS
 	\right) T_{surf} k_B
@@ -10344,7 +10360,7 @@ If $p_{m,a_{main},2} < 0.5$:
 	c_{rec,a,1} \left(
 		\frac{3}{2} + BoRiS
 	\right)\left(
-		z_{a,f} T_{e,f} + T_{i,f}
+		T_i + z_a \left( \Phi - p_{\Phi,2} \right)
 	\right),\left(
 		\frac{3}{2} + BoRiS
 	\right) T_{surf} k_B
@@ -10432,7 +10448,7 @@ If $p_{m,a_{main},2} < 0.5$:
 	c_{rec,a,1} \left(
 		\frac{3}{2} + BoRiS
 	\right)\left(
-		z_{a,f} T_{e,f} + T_{i,f}
+		T_i + z_a \left( \Phi - p_{\Phi,2} \right)
 	\right),\left(
 		\frac{3}{2} + BoRiS
 	\right) T_{surf} k_B
