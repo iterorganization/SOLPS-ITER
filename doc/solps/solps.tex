@@ -130,7 +130,7 @@ example of the consequences.
   \item The velocities are computed on cell faces in {\tt B2} and on cell centres in {\tt B2.5}.
   \item The current continuity equation is solved by default in {\tt B2.5}, but not in {\tt B2}.
   \item The treatment of drifts and currents is much more complete in {\tt B2.5} than in {\tt B2}.
-  \item Classical transport in {\tt B2.5} follows the Balescu treatment by default, while it uses
+  \item Classical transport in {\tt B2.5} follows the Zhdanov and Balescu treatments by default, while it uses
 Braginskii in {\tt B2} (see \ref{sec:balescubraginskii} for a comparison).
   \item Some variables names and indexing have changed. See section \ref{sec:b2pl} for a partial list.
   \item The run parameters to {\tt B2.5} are split into several input files. See sections
@@ -6985,47 +6985,49 @@ necessary to rescale these. A scheme to do so was developed by A. Kukushkin for 
 and can be activated using the 'eirene\_ank\_mods' switch. See the listing in Appendix \ref{lis:b2cdci}
 and the additional description in the \${\tt \{SOLPSTOP\}/doc/Source\_Scaling\_in\_B2.pdf} file.
 
-\section{Classical transport: Braginskii vs Balescu}
-\index{Classical transport}\index{Braginskii}\index{Balescu}\label{sec:balescubraginskii}
+\section{Classical transport: Braginskii, Balescu and Zhdanov formulations}
+\index{Classical transport}\index{Braginskii}\index{Balescu}\index{Zhdanov}\label{sec:balescubraginskii}
 
 In \SOLPSfour the classical transport coefficients were derived from Braginskii \cite{Braginskii65}.
-In \SOLPSfive these have been replaced with expressions from Balescu \cite{BALESCUA98A}, sometimes fitted
+In \SOLPSfive these have been replaced with expressions from Balescu \cite{BALESCUA98A}, completed in \SOLPSITER with expressions derived from the work of Zhdanov \cite{ZHDANOV2002}, sometimes fitted
 as a function of the local $Z_{eff}$.
-The table below provides the differences between the two models.
+Table \ref{tab:comparetransport} summarizes the differences between the Braginskii and Balescu models.
 It is possible in the code to use either model, or even the full Balescu 21-moment expressions, as well as
 a Zhdanov fit to the table published in the Braginskii paper as a function of $Z_{eff}$.
-See the use of the switches 'b2tqce\_model' and 'b2tqca\_model' as described in Appendix \ref{lis:b2cdci}.
+See the use of the switches {\tt 'b2tqce\_model'}, {\tt 'b2tqca\_model'} and {\tt 'b2sigp\_style'} as described in Appendix \ref{lis:b2cdci}.
 
 \begin{center}
-    \begin{longtable}{|l|l|l|l|}
+    \begin{longtable}{|l|l|l|l|l|}
     \hline
-    \multicolumn{4}{|l|}{\small\sl continued from previous page} \\
-    \hline quantity & functional dependence & \multicolumn{2}{|c|}{changing prefactor} \\
-    \hline          &                       & Braginskii & fits to Balescu \\
+    \multicolumn{5}{|l|}{\small\sl continued from previous page} \\
+    \hline quantity & functional dependence & \multicolumn{3}{|c|}{numerical prefactor} \\
+    \hline          &                       & Braginskii & fits to Balescu & fits to Zhdanov \\
     \hline \endhead
-    \hline quantity & functional dependence & \multicolumn{2}{|c|}{prefactor} \\
-    \hline          &                       & Braginskii & fits to Balescu \\
+    \hline quantity & functional dependence & \multicolumn{3}{|c|}{numerical prefactor} \\
+    \hline          &                       & Braginskii & fits to Balescu & fits to Zhdanov \\
+    \hline          & default in            & \SOLPSfour & \SOLPSfive & \SOLPSITER \\
     \hline \endfirsthead
     \hline
-    \multicolumn{3}{|l|}{\small\sl continued on next page} \\
+    \multicolumn{5}{|l|}{\small\sl continued on next page} \\
     \hline \endfoot
     \endlastfoot
-$\kappa _{e \parallel}$ & $\frac{T_e^{5/2}}{m_e \ln \Lambda}$ & 3.16 & $\frac{5}{2} \frac{2.16 Z_{eff}}{1 + 0.27 Z_{eff}} \approx 4.25 \; \mbox{for} \; Z_{eff} = 1$ \\
-$\kappa _{i \parallel}$ & $\frac{T_i^{5/2}}{m_i Z_i^2 \ln \Lambda}$ & 3.9 & 3.98 \\
-$\eta _{i \parallel}$ & $\frac{T_i^{5/2}}{m_i Z_i^2 \ln \Lambda}$ & 1.92 & $\frac{4}{3} \sqrt{2} \; 0.96 \approx 1.81 $ \\
+$\kappa _{e \parallel}$ & $\frac{T_e^{5/2} n_e}{\ln \Lambda \sum \limits_a Z_a^2 n_a}$ & 3.16 & $\frac{5}{2} \frac{2.16 Z_{eff}}{1 + 0.27 Z_{eff}}$ & $\frac{\left( 3.9 +\frac{2.3}{Z_{eff}} \right)}{0.31+\frac{1.2}{Z_{eff}}+\frac{0.41}{Z_{eff}^2}}$ \\ \hline
+$\kappa _{i \parallel}$ & $\frac{T_i^{5/2}}{\ln \Lambda}\sum \limits_a \frac{n_a}{Z_a^2}$ & $\frac{3.9}{\mathlarger{\sum \limits_b} Z_b^2 n_b \sqrt{\frac{2 m_a m_b}{m_a + m_b}}}$ & \multicolumn{2}{|c|}{$\frac{3.95}{\sqrt{m_a} \sum \limits_b Z_b^2 n_b}$} \\ \hline
+$\eta _{a \parallel}$ & $\frac{T_i^{5/2}}{\ln \Lambda}\frac{n_a}{Z_a^2}$ & $\frac{1.37}{\mathlarger{\sum \limits_b} \frac{Z_b^2 n_b}{\sqrt{\frac{m_a + m_b}{2}}}}$ & \multicolumn{2}{|c|}{$\frac{\sqrt{2} \; 0.96 \sqrt{m_a}}{\sum \limits_b Z_b^2 n_b}$} \\ \hline
+$\sigma_\parallel$ & $\frac{n_e T_e^{3/2}}{\ln \Lambda \sum \limits_a Z_a^2 n_a}$ & \multicolumn{2}{|c|}{$\frac{4.95 Z_{eff}}{1 + 1.54 Z_{eff}}$} & $\frac{(1+0.24 Z_{eff})(1+0.93 Z_{eff})}{(1+2.56 Z_{eff})(1+0.29 Z_{eff})}$ \\ \hline
+$\alpha_{e \parallel}$ & $\frac{n_e T_e^{3/2}}{\ln \Lambda \sum \limits_a Z_a^2 n_a}$ & \multicolumn{2}{|c|}{$-\sqrt{\frac{5}{2}}\frac{1.25 Z_{eff}}{1+0.41 Z_{eff}}$} & $-\frac{1.56 Z_{eff} \frac{\left( 1+1.4 Z_{eff} \right) \left( 1+0.52 Z_{eff} \right)}{\left( 1+2.56 Z_{eff} \right) \left( 1+0.29 Z_{eff} \right)} \frac{1}{Z_{eff} + \frac{\sqrt{2}}{2}}}{\frac{\left( 1+0.24 Z_{eff} \right) \left( 1+0.93 Z_{eff} \right)}{\left( 1+2.56 Z_{eff} \right) \left( 1+0.29 Z_{eff} \right)}}$ \\
     \hline
-    \caption{Comparison of prefactors in Balescu and Braginskii classical transport coefficients}
+    \caption{Comparison of classical transport coefficients according to the Braginskii, Balescu and Zhdanov formulations}
     \label{tab:comparetransport}
   \end{longtable}
 \end{center}
 
-Note that this table does not contain the full prefactors, but only the physically meaningful changing pieces
-between the models.
+Note that this table does not contain the full prefactors, but only the numerically changing pieces between the models.
 
 In figures \ref{fig:hce} to \ref{fig:alf},
 we illustrate the dependencies of the electronic classical transport coefficients as a
-function of $Z_{eff}$ , comparing the \SOLPSfive fit used by default, the exact 21-moment Balescu expressions, the
-Zhdanov fit to Braginskii and the \SOLPSfour values.
+function of $Z_{eff}$ , comparing the \SOLPSfive and \SOLPSITER fit used by default (to the 29-moment Balescu result), the exact 21-moment Balescu expressions, the
+Zhdanov fit to Braginskii and the \SOLPSfour values. 
 
 \begin{figure}[bt]
 \ifpdf
@@ -7044,7 +7046,7 @@ Zhdanov fit to Braginskii and the \SOLPSfour values.
 \else
     \centerline{\includegraphics[angle=-90,width=11cm]{sig.epsi}}
 \fi
-\caption{Dependence of the various models for the $\sigma_{\parallel}$ prefactor as a function of $Z_{eff}$.}
+\caption{Dependence of the various models for the parallel electron conductivity $\sigma_{\parallel}$ prefactor as a function of $Z_{eff}$.}
 \label{fig:sig}
 \vspace*{1cm}
 \end{figure}
@@ -7055,7 +7057,7 @@ Zhdanov fit to Braginskii and the \SOLPSfour values.
 \else
     \centerline{\includegraphics[angle=-90,width=11cm]{alf.epsi}}
 \fi
-\caption{Dependence of the various models for the $\alpha_{e \parallel}$ prefactor as a function of $Z_{eff}$.}
+\caption{Dependence of the various models for the thermo-electric coefficient $\alpha_{e \parallel}$ prefactor as a function of $Z_{eff}$.}
 \label{fig:alf}
 \vspace*{1cm}
 \end{figure}
@@ -8125,18 +8127,15 @@ c \left( y \right) & =
 $
 
 $\kappa_{ex}^{(CL)} = \frac 5 2\frac{T_e}{m_e} f_{k_e}
-\left( z_{eff} \right) n_e \tau_e$, old form
+\left( z_{eff} \right) n_e \tau_e$ (Balescu formulation), with
+$f_{k_e} \left( z_{eff} \right) = \frac{2.16 z_{eff}}{1 + 0.27 z_{eff}}$
 
-$f_{k_e} \left( z_{eff} \right) = \frac{2.16 z_{eff}}{1 + 0.27 z_{eff}}$,
-old form
-
-$\kappa_{ex}^{(CL)} = \frac{T_e}{m_e} f_{k_e} \left( z_{eff} \right) n_e \tau_e$, new form
-
+$\kappa_{ex}^{(CL)} = \frac{T_e}{m_e} f_{k_e} \left( z_{eff} \right) n_e \tau_e$ (Zhadnov formulation), with
 $f_{k_e}\left( z_{eff} \right )=
-\frac{3.9 + 2.3/z_{eff}}{0.31 + 1.2/z_{eff} + 0.41/z_{eff}^2}$,
-new Zhdanov expression
+\frac{3.9 + 2.3/z_{eff}}{0.31 + 1.2/z_{eff} + 0.41/z_{eff}^2}$
 
-$z_{eff} = \frac{\sum \limits_{a=0}^{ns-1} z_a^2n_a}{n_e}$,
+and
+$z_{eff} = \frac{1}{n_e} \sum \limits_{a=0}^{ns-1} z_a^2 n_a$
 
 \subsubsection{Electron parallel velocity}
 
@@ -8159,6 +8158,41 @@ $\sigma_{AN \parallel} = 0$
 \begin{equation*}
 \widetilde{\sigma}_{CL \parallel} = c_{\sigma_{CL \parallel}}^{(Luciani)}\sigma_{CL \parallel}
 \end{equation*}
+
+The classical parallel conductivity is given as:
+\index{Zhdanov}\index{Balescu}
+$\sigma_{CL \parallel} = b_x^2 \frac{e^2}{m_e} f_{\sigma_e} \left( z_{eff} \right) n_e \tau_e$,
+
+where the electron form factor is
+$f_{\sigma_e} \left( z_{eff} \right) = \frac{1}{c_e^{(1)}}$
+when {\tt 'b2sigp\_style'} is set to {\tt '2'} (Zhdanov formulation), and
+$f_{\sigma_e} \left( z_{eff} \right) = \frac{4.95 z_{eff}}{1 + 1.54 z_{eff}}$
+otherwise (Balescu formulation). The parameter $c_e^{(1)}$ is given by:
+
+$c_e^{(1)} = \frac{( 1 + 0.24 z_{eff} ) ( 1 + 0.93 z_{eff} )}
+                  {( 1 + 2.56 z_{eff} ) ( 1 + 0.29 z_{eff} )}$.
+See also Section \ref{sec:balescubraginskii}.
+
+$\alpha_{ex} = \alpha_{ANx} + \widetilde{\widetilde{\alpha}}_{CLx}$,
+
+$\alpha_{ANx}=0$,
+
+\begin{equation*}
+\widetilde{\widetilde{\alpha}}_{CLx} = c_{k_e}^{(F\text{lim})} \widetilde{\alpha}_{CLx}
+\end{equation*}
+
+\begin{equation*}
+\widetilde{\alpha}_{CLx} = c_{k^{(CL)_{ex}}}^{(Luciani)} \alpha_{CLx}
+\end{equation*}
+
+The classical thermo-electric coefficient $\alpha_{CLx}$ is given as:
+$\alpha_{CLx} = - b_x^2 \frac{e}{m_e} \frac{\widetilde{c_e}^{(2)}}{c_e^{(1)}} n_e \tau_e$
+when {\tt 'b2sigp\_style'} is set to {\tt '2'} (Zhdanov formulation), and
+$\alpha_{CLx} = b_x^2 \frac{e}{m_e} \sqrt{\frac 5 2} f_{\alpha} \left(z_{eff} \right) n_e \tau _e$ otherwise (Balescu formulation).
+The parameter $\widetilde{c_e}^{(2)}$ is given by:
+$\widetilde{c_e}^{(2)} = \frac{c_e^{(2)}}{\left( z_{eff} + \frac{\sqrt{2}}{2} \right)} = 1.56 \frac{(1 + 1.4 z_{eff})(1 + 0.52 z_{eff})}{(1 + 2.56 z_{eff})( 1 + 0.29 z_{eff})}\frac{1}{\left( z_{eff} + \frac{\sqrt{2}}{2} \right)}$, and
+$f_{\alpha} \left( z_{eff} \right) = -\frac{1.25 z_{eff}}{1 + 0.41 z_{eff}}$,
+See also Section \ref{sec:balescubraginskii}.
 
 For plateau and banana correction 'b2trcl\_lluciani' '3'
 
@@ -8192,26 +8226,6 @@ c_{\sigma_{CL \parallel}^{(Luciani)}} & =
 \end{matrix} \right.
 \end{matrix}
 $
-
-$\sigma_{CL \parallel} = b_x^2 \frac{e^2}{m_e} f_{\sigma_e} \left( z_{eff} \right) n_e \tau_e$,
-
-$f_{\sigma_e} \left( z_{eff} \right) = \frac{4.95 z_{eff}}{1 + 1.54 z_{eff}}$,
-
-$\alpha_{ex} = \alpha_{ANx} + \widetilde{\widetilde{\alpha}}_{CLx}$,
-
-$\alpha_{ANx}=0$,
-
-\begin{equation*}
-\widetilde{\widetilde{\alpha}}_{CLx} = c_{k_e}^{(F\text{lim})} \widetilde{\alpha}_{CLx}
-\end{equation*}
-
-\begin{equation*}
-\widetilde{\alpha}_{CLx} = c_{k^{(CL)_{ex}}}^{(Luciani)} \alpha_{CLx}
-\end{equation*}
-
-$\alpha_{CLx} = b_x^2 \sqrt{\frac 5 2} \frac e{m_e} f_{\alpha} \left(z_{eff} \right) n_e \tau _e$,
-
-$f_{\alpha} \left( z_{eff} \right) = -\frac{1.25 z_{eff}}{1 + 0.41 z_{eff}}$,
 
 \subsection{Radial electron energy fluxes}
 
