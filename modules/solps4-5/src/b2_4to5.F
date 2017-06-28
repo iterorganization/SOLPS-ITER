@@ -1236,6 +1236,7 @@ c Fill out /b2cmpt/ arrays
       cflim(0)= flim_4
       cflim(1)= flimi_4
       cflim(2)= flimv_4
+      cflim(3)= flim_4
 
 c Fill out b2mod_residuals data
       resco = 0.0_R8
@@ -1775,7 +1776,8 @@ c
       write(99,'(a)') '*cfalf'//column_header
       write(99,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
      .  (cfalf(i),i=0,7)
-      write(99,'(a)') '*cflim     cflme     cflmi     cflmv      ...'
+      write(99,'(a)')
+     .  '*cflim     cflme     cflmi     cflmv     cflal     ...'
       write(99,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
      .  (cflim(i),i=0,7)
       write(99,'(a)') '*endphy'

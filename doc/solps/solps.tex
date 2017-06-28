@@ -7002,6 +7002,7 @@ See the use of the switches {\tt 'b2tqce\_model'}, {\tt 'b2tqca\_model'} and {\t
     \multicolumn{5}{|l|}{\small\sl continued from previous page} \\
     \hline quantity & functional dependence & \multicolumn{3}{|c|}{numerical prefactor} \\
     \hline          &                       & Braginskii & fits to Balescu & fits to Zhdanov \\
+    \hline          & default in            & \SOLPSfour & \SOLPSfive & \SOLPSITER \\
     \hline \endhead
     \hline quantity & functional dependence & \multicolumn{3}{|c|}{numerical prefactor} \\
     \hline          &                       & Braginskii & fits to Balescu & fits to Zhdanov \\
@@ -7566,14 +7567,14 @@ z_a^2 z_b^2 n_b n_a \left( V_{b \parallel} - V_{a \parallel} \right)
 \end{equation}
 
 $\tau_p = \frac 3{4\sqrt{2\pi}}
-\frac{\sqrt{m_p}T_i^{\frac 3 2}}{\Lambda}
-\left(\frac{4 \pi \varepsilon_0}{e^2}\right)^2$, where the Coulomb logarithm  $\Lambda $ can be chosen as
+\frac{\sqrt{m_p}T_i^{\frac 3 2}}{\ln \Lambda}
+\left(\frac{4 \pi \varepsilon_0}{e^2}\right)^2$, where the Coulomb logarithm $\ln \Lambda $ can be chosen as
 
 %-------- end of 5th page -------------
 
 \begin{equation}
 \begin{matrix}
-\Lambda & =
+\ln \Lambda & =
 & \left\{
 \begin{matrix}
 12 \\
@@ -7734,7 +7735,7 @@ $V_{m_a}^{(max)} = c_{f \; lim_2} \frac{\sqrt g}{h_x} |b_x| n_a T_i$
 
 $\widetilde{\eta }_{CLax} = c_{\eta_{ax}^{(CL)}}^{Luciani} \eta_{CLax}$
 
-'b2trcl\_lluciani' '1'
+If {\tt 'b2trcl\_lluciani'} is set to {\tt '1'}, the Luciani flux limiter is given by:
 
 $\begin{matrix}
 c_{\eta_{ax}^{(CL)}}^{Luciani} & =
@@ -7745,12 +7746,12 @@ c_{\eta_{ax}^{(CL)}}^{Luciani} & =
 7.5 \cdot 10^{16} \left( \frac{T_i} e \right)^2}
 {c(y) \sum \limits_{a=0}^{ns-1} z_a^2 n_a}
 }
-, & \ z_a \neq 0 \; \text{and only for inner flux surfaces,} \\
-1, &  \text{for all other cases} \\
+, & \text{for hydrogenic ions on inner flux surfaces,} \\
+1, & \text{for all other cases} \\
 \end{matrix} \right.
 \end{matrix}$
 
-For plateau and banana correction 'b2trcl\_lluciani' '3'
+For the plateau and banana transport regimes, the correction, with {\tt 'b2trcl\_lluciani'} set to {\tt '3'} (default), is given by:
 
 %-------- end of 7th page -------------
 
@@ -7766,8 +7767,8 @@ c_{\eta_{ax}^{(CL)}}^{Luciani} & =
 \frac 1{1 +
 \frac{15.12 \cdot 10^{16} \cdot \varepsilon^{3/2} \left( \frac{T_i} e \right)^2}
 {c(y)\sum \limits_{a=0}^{ns-1} z_a^2 n_a}}
-, & \ z_a \neq 0 \; \text{and only for inner flux surfaces,} \\
-1, &  \text{for all other cases} \\
+, & \text{for hydrogenic ions on inner flux surfaces,} \\
+1, & \text{for all other cases} \\
 \end{matrix} \right.
 \end{matrix}
 $
@@ -7790,13 +7791,13 @@ $
 $\eta = 0.96$,
 
 $\tau _a = \frac 3{4 \sqrt{2\pi}}
-\frac {\sqrt{m_a} T_i^{\frac 3 2}} {z_a^2 z_{eff} n_e \Lambda}
-\left( \frac{4 \pi \varepsilon_0}{e^2} \right)^2$, where the Coulomb logarithm  $\Lambda $
+\frac {\sqrt{m_a} T_i^{\frac 3 2}} {z_a^2 z_{eff} n_e \ln \Lambda}
+\left( \frac{4 \pi \varepsilon_0}{e^2} \right)^2$, where the Coulomb logarithm $\ln \Lambda $
 can be chosen as
 
 $
 \begin{matrix}
-\Lambda & =
+\ln \Lambda & =
 & \left\{
 \begin{matrix}
 12 \\
@@ -7811,7 +7812,7 @@ $\eta_{ay} = \eta_{AN_a} + \eta_{CL_{ay}}$
 
 $\widetilde{q}^{(0)} = q^{(1)} \arctan \left( \frac{q^{(0)}}{q^{(1)}} \right), \; q^{(1)} = c_{q1} n_i T_i \sqrt{\frac{T_i + T_e}{m_i}}$
 
-$c_{ql} = 0.5$ or 'b2siav\_cqip1'  '0.1' in b2mn.dat
+$c_{q1} = 0.5$ or 'b2siav\_cqip1'  '0.1' in b2mn.dat
 
 the three-point smoothing procedure is imposed twice on $\widetilde{q}^{(0)}$ along x-direction
 
@@ -7830,7 +7831,7 @@ q^{(0)} = q_{a\parallel}^{(0)} +
 \end{matrix}
 $
 
-in case if b2siav\_style\_qip 1 in b2mn.dat
+in case if 'b2siav\_style\_qip' '1' in b2mn.dat
 
 %-------- end of 8th page -------------
 
@@ -7893,17 +7894,17 @@ $\varepsilon = \frac{\left(\oint h_x dx \right)^2}
 
 $Q_e = -Q_{\Delta } - Q_R$
 
-$Q_{\Delta} = c_{eqp} \Lambda e^{\frac 3 2}
+$Q_{\Delta} = c_{eqp} \ln \Lambda e^{\frac 3 2}
 \frac{
 	\sum \limits_{a=0}^{ns-1}\frac{z_a^2 m_p}{m_a}n_a
 	}
 	{n_i}
 \frac{n_e n_i}{T_e^{\frac 3 2}}
-(T_e - T_i),\;\;\; c_{eqp}=4.8 \cdot 10^{-15},\;\;$ where  $\Lambda $ can be chosen as
+(T_e - T_i),\;\;\; c_{eqp}=4.8 \cdot 10^{-15},\;\;$ where $\ln \Lambda $ can be chosen as
 
 $
 \begin{matrix}
-\Lambda & =
+\ln \Lambda & =
 & \left\{
 \begin{matrix}
 12 \\
@@ -7925,7 +7926,7 @@ $Q_R = \sum \limits_{a=0}^{ns-1} r_{Q_a} n_e n_a$ from b2stel
 \end{equation*}
 
 \begin{equation*}
-\widetilde{f}_{ex} = \frac 3 2 \Gamma_{ex} + V_{ex}^{(str)} n_e - 0.71 \frac{j^{ \left( \parallel \right) }_x}e
+\widetilde{f}_{ex} = \frac 3 2 \Gamma_{ex} + V_{ex}^{(str)} n_e - \widetilde{c_e}^{(2)} \frac{j^{ \left( \parallel \right) }_x}e
 \end{equation*}
 
 \begin{equation*}
@@ -7942,7 +7943,7 @@ $D_{eyx} = \left( \frac 1{B^2} - \frac 1{\langle B^2 \rangle} \right) \frac{B_z}
 \begin{equation*}
 q_{ex} =
 \left[
-	\frac 3 2 \Gamma_{ex} - 0.71 \frac{j^{\left( \parallel \right) }_x} e
+	\frac 3 2 \Gamma_{ex} - \widetilde{c_e}^{(2)} \frac{j^{\left( \parallel \right) }_x} e
 	-
 	\frac 5 2 n_e T_e \frac{B_z}e \frac{\partial}{h_y\partial y} \left( \frac 1{B^2} \right) +
 	V_{ex}^{(str)} n_e
@@ -7969,7 +7970,7 @@ q_{ex} =
 q_{ex}^{(Eir)} =
 \left[
 	\frac 5 2 \Gamma_{ex}^{(Eir)} + V_{ex}^{(str)}n_e
-	- 0.71 b_x \frac{\widetilde j_{\parallel}} e
+	- \widetilde{c_e}^{(2)} b_x \frac{\widetilde j_{\parallel}} e
 \right] T_e -
 \kappa_{ex} \frac 1{h_x} \frac{\partial T_e}{\partial x}
 \end{equation*}
@@ -8004,6 +8005,11 @@ $V_{ex}^{(dia)} = \frac{B_z}{e B^2 n_e} \frac{\partial n_e T_e}{h_y \partial y}$
 $V_{ey}^{(dia)} = -\frac{B_z}{e B^2 n_e} \frac{\partial n_e T_e}{h_x \partial x}$
 
 $V_{ex}^{(str)} = 0$
+
+The parameter $\widetilde{c_e}^{(2)}$ is given by:
+$\widetilde{c_e}^{(2)} = \frac{c_e^{(2)}}{\left( z_{eff} + \frac{\sqrt{2}}{2} \right)} = 1.56 \frac{(1 + 1.4 z_{eff})(1 + 0.52 z_{eff})}{(1 + 2.56 z_{eff})( 1 + 0.29 z_{eff})}\frac{1}{\left( z_{eff} + \frac{\sqrt{2}}{2} \right)}$
+when {\tt 'b2sigp\_style'} is set to {\tt '2'} (default) or to its limiting
+value at $z_{eff} = 1$ of 0.71 otherwise.
 
 \subsection{Electron energy transport}
 
@@ -8055,7 +8061,18 @@ $
 $V_{h_e}^{(max)} = c_{f lim_0} \frac{\sqrt g}{h_x}|b_x| \sqrt{\frac{T_e}{m_e}}$,\\\\
 $\widetilde{\kappa}_{ex}^{(CL)} = c_{\kappa_{ex}^{(CL)}}^{(Luciani)} \kappa_{ex}^{(CL)} b_x^2$
 
-For plateau and banana correction 'b2trcl\_lluciani' '3'
+The classical electron thermal diffusivity is expressed as:
+$\kappa_{ex}^{(CL)} = \frac{T_e}{m_e} f_{k_e} \left( z_{eff} \right) n_e \tau_e$ (Zhdanov formulation, default, {\tt 'b2tqce\_fke\_Zhdanov'} set to {\tt '1'}), with
+$f_{k_e}\left( z_{eff} \right )=
+\frac{3.9 + 2.3/z_{eff}}{0.31 + 1.2/z_{eff} + 0.41/z_{eff}^2}$,
+or
+$\kappa_{ex}^{(CL)} = \frac 5 2\frac{T_e}{m_e} f_{k_e}
+\left( z_{eff} \right) n_e \tau_e$ (Balescu formulation, {\tt 'b2tqce\_fke\_Zhdanov'} set to {\tt '0'}), with
+$f_{k_e} \left( z_{eff} \right) = \frac{2.16 z_{eff}}{1 + 0.27 z_{eff}}$
+and
+$z_{eff} = \frac{1}{n_e} \sum \limits_{a=0}^{ns-1} z_a^2 n_a$.
+
+If the plateau and banana transport regimes correction is applied (default, {\tt 'b2trcl\_lluciani'} set to {\tt '3'}), one has:
 
 $
 \begin{matrix}
@@ -8068,39 +8085,11 @@ c_{\kappa_{ex}^{(CL)}}^{(Luciani)} & =
 \end{matrix}
 $
 
-\begin{equation*}
-K_1 = \frac 1{1 + 2.01 \cdot \nu_{\ast e}^{1/2} + 1.53 \cdot \nu_{\ast e}} +
-\frac{0.52 \cdot \varepsilon^3 \cdot \nu_{\ast e}}{1 + 0.89 \cdot \varepsilon^{3/2} \cdot \nu_{\ast e}}
-\end{equation*}
-
-$\nu_{\ast e} = \frac{c \left( y \right)}{2 \pi \varepsilon^{3/2} \tau_e \sqrt{T_e/m_e}}$,
-
-
-$\tau_e = \frac 3{4\sqrt{2\pi}}
-\frac{\sqrt{m_e} T_e^{\frac 3 2}} {z_{eff} n_e \Lambda}
-\left( \frac{4 \pi \varepsilon_0}{e^2}\right)^2$, where the Coulomb logarithm $\Lambda $ can
-be chosen as
+If {\tt 'b2trcl\_luciani'} is set to {\tt '1'}, one gets instead:
 
 $
 \begin{matrix}
-\Lambda & =
-& \left\{
-\begin{matrix}
-12 \\
-\max \{ 5; 23.4 - 1.15 \cdot \log_{10} \left( \frac{n_e}{10^6} \right) + 3.45 \cdot \log_{10} \left( \frac{T_e}e \right)  \}, & \frac{T_e}{e} \leq 50 & \text{Braginsky formula} \\
-\max \{ 5; 25.3 - 1.15 \cdot \log_{10} \left( \frac{n_e}{10^6} \right) + 2.30 \cdot \log_{10} \left( \frac{T_e}e \right)  \}, & \frac{T_e}{e} > 50  \\
-\max \{ 5; 14.9 - 0.5 \cdot \ln \left( \frac{n_e}{10^{20}} \right) + \ln \left( \frac{T_e}{e \cdot 10^3} \right)  \} && \text{Wesson formula for electron-electron collisions} \\
-\end{matrix} \right.
-\end{matrix}
-$
-
-%-------- end of 11th page -------------
-
-but it was as below
-
-$
-\begin{matrix}
-c_{\kappa_{ex}^{(CL)}}^{Luciani} & =
+c_{\kappa_{ex}^{(CL)}}^{(Luciani)} & =
 & \left\{
 \begin{matrix}
 \frac 1 {
@@ -8114,28 +8103,62 @@ c_{\kappa_{ex}^{(CL)}}^{Luciani} & =
 \end{matrix}
 $
 
+If {\tt 'b2trcl\_luciani'} is set to {\tt '2'}, the \SOLPSfour formulation is used:
+
+$
+\begin{matrix}
+c_{\kappa_{ex}^{(CL)}}^{(Luciani)} & =
+& \left\{
+\begin{matrix}
+\frac 1 {
+1 + \frac{
+0.3 \cdot 10^{16} \left( \frac{T_e} e \right)^2}
+{\sum \limits_{a=0}^{ns-1} z_a^2 n_a}
+}
+, &  \text{only for inner flux surfaces,} \\
+1, &  \text{for all other cases} \\
+\end{matrix} \right.
+\end{matrix}
+$
+
+\begin{equation*}
+K_1 = \frac 1{1 + 2.01 \cdot \nu_{\ast e}^{1/2} + 1.53 \cdot \nu_{\ast e}} +
+\frac{0.52 \cdot \varepsilon^3 \cdot \nu_{\ast e}}{1 + 0.89 \cdot \varepsilon^{3/2} \cdot \nu_{\ast e}}
+\end{equation*}
+
+$\nu_{\ast e} = \frac{c \left( y \right)}{2 \pi \varepsilon^{3/2} \tau_e \sqrt{T_e/m_e}}$,
+
+$\tau_e = \frac 3{4\sqrt{2\pi}}
+\frac{\sqrt{m_e} T_e^{\frac 3 2}} {\ln \Lambda \sum \limits_{a=0}^{ns-1} z_a^2 n_a}
+\left( \frac{4 \pi \varepsilon_0}{e^2}\right)^2$,
+where the Coulomb logarithm $\ln \Lambda $ can be chosen as
+
+$
+\begin{matrix}
+\ln \Lambda & =
+& \left\{
+\begin{matrix}
+12 \\
+\max \{ 5; 23.4 - 1.15 \cdot \log_{10} \left( \frac{n_e}{10^6} \right) + 3.45 \cdot \log_{10} \left( \frac{T_e}e \right)  \}, & \frac{T_e}{e} \leq 50 & \text{Braginsky formula} \\
+\max \{ 5; 25.3 - 1.15 \cdot \log_{10} \left( \frac{n_e}{10^6} \right) + 2.30 \cdot \log_{10} \left( \frac{T_e}e \right)  \}, & \frac{T_e}{e} > 50  \\
+\max \{ 5; 14.9 - 0.5 \cdot \ln \left( \frac{n_e}{10^{20}} \right) + \ln \left( \frac{T_e}{e \cdot 10^3} \right)  \} && \text{Wesson formula for electron-electron collisions} \\
+\end{matrix} \right.
+\end{matrix}
+$
+
+%-------- end of 11th page -------------
+
 $
 \begin{matrix}
 c \left( y \right) & =
 & \left\{
 \begin{matrix}
-\int \frac{h_x \left( x,y \right)}{|b_x|}dx
+\mathlarger{\int} \frac{h_x \left( x,y \right)}{|b_x|}dx
 , &  \text{for inner flux surfaces,} \\
 0, &  \text{for other} \\
 \end{matrix} \right.
 \end{matrix}
 $
-
-$\kappa_{ex}^{(CL)} = \frac 5 2\frac{T_e}{m_e} f_{k_e}
-\left( z_{eff} \right) n_e \tau_e$ (Balescu formulation), with
-$f_{k_e} \left( z_{eff} \right) = \frac{2.16 z_{eff}}{1 + 0.27 z_{eff}}$
-
-$\kappa_{ex}^{(CL)} = \frac{T_e}{m_e} f_{k_e} \left( z_{eff} \right) n_e \tau_e$ (Zhadnov formulation), with
-$f_{k_e}\left( z_{eff} \right )=
-\frac{3.9 + 2.3/z_{eff}}{0.31 + 1.2/z_{eff} + 0.41/z_{eff}^2}$
-
-and
-$z_{eff} = \frac{1}{n_e} \sum \limits_{a=0}^{ns-1} z_a^2 n_a$
 
 \subsubsection{Electron parallel velocity}
 
@@ -8156,7 +8179,7 @@ $\sigma_{\parallel} = \sigma_{AN \parallel} + \widetilde{\sigma}_{CL \parallel}$
 $\sigma_{AN \parallel} = 0$
 
 \begin{equation*}
-\widetilde{\sigma}_{CL \parallel} = c_{\sigma_{CL \parallel}}^{(Luciani)}\sigma_{CL \parallel}
+\widetilde{\sigma}_{CL \parallel} = c_{\kappa_{ex}^{(CL)}}^{(Luciani)} \sigma_{CL \parallel}
 \end{equation*}
 
 The classical parallel conductivity is given as:
@@ -8173,59 +8196,44 @@ $c_e^{(1)} = \frac{( 1 + 0.24 z_{eff} ) ( 1 + 0.93 z_{eff} )}
                   {( 1 + 2.56 z_{eff} ) ( 1 + 0.29 z_{eff} )}$.
 See also Section \ref{sec:balescubraginskii}.
 
+%-------- end of 12th page -------------
+
 $\alpha_{ex} = \alpha_{ANx} + \widetilde{\widetilde{\alpha}}_{CLx}$,
 
 $\alpha_{ANx}=0$,
 
-\begin{equation*}
-\widetilde{\widetilde{\alpha}}_{CLx} = c_{k_e}^{(F\text{lim})} \widetilde{\alpha}_{CLx}
-\end{equation*}
-
-\begin{equation*}
-\widetilde{\alpha}_{CLx} = c_{k^{(CL)_{ex}}}^{(Luciani)} \alpha_{CLx}
-\end{equation*}
-
 The classical thermo-electric coefficient $\alpha_{CLx}$ is given as:
 $\alpha_{CLx} = - b_x^2 \frac{e}{m_e} \frac{\widetilde{c_e}^{(2)}}{c_e^{(1)}} n_e \tau_e$
-when {\tt 'b2sigp\_style'} is set to {\tt '2'} (Zhdanov formulation), and
-$\alpha_{CLx} = b_x^2 \frac{e}{m_e} \sqrt{\frac 5 2} f_{\alpha} \left(z_{eff} \right) n_e \tau _e$ otherwise (Balescu formulation).
-The parameter $\widetilde{c_e}^{(2)}$ is given by:
-$\widetilde{c_e}^{(2)} = \frac{c_e^{(2)}}{\left( z_{eff} + \frac{\sqrt{2}}{2} \right)} = 1.56 \frac{(1 + 1.4 z_{eff})(1 + 0.52 z_{eff})}{(1 + 2.56 z_{eff})( 1 + 0.29 z_{eff})}\frac{1}{\left( z_{eff} + \frac{\sqrt{2}}{2} \right)}$, and
-$f_{\alpha} \left( z_{eff} \right) = -\frac{1.25 z_{eff}}{1 + 0.41 z_{eff}}$,
+when {\tt 'b2sigp\_style'} is set to {\tt '2'} (Zhdanov formulation, default), and
+$\alpha_{CLx} = b_x^2 \frac{e}{m_e} \sqrt{\frac 5 2} f_{\alpha} \left(z_{eff} \right) n_e \tau _e$ otherwise (Balescu formulation), and
+$f_{\alpha} \left( z_{eff} \right) = -\frac{1.25 z_{eff}}{1 + 0.41 z_{eff}}$.
 See also Section \ref{sec:balescubraginskii}.
 
-For plateau and banana correction 'b2trcl\_lluciani' '3'
-
-$
+A conductive flux limit is applied to the thermo-electric coefficient, as follows.
+If {\tt 'b2sigp\_style'} is set to {\tt '2'} (default):
+\begin{equation*}
+\widetilde{\widetilde{\alpha}}_{CLx} = c_{\alpha_{ex}}^{(F\text{lim})} \widetilde{\alpha}_{CLx}
+\end{equation*}
+\begin{equation*}
+\widetilde{\alpha}_{CLx} = c_{\kappa_{ex}^{(CL)}}^{(Luciani)} \alpha_{CLx}
+\end{equation*}
+\begin{equation*}
+c_{\alpha_{ex}}^{(F\text{lim})} = \left\{
 \begin{matrix}
-c_{\sigma_{CL \parallel}^{(Luciani)}} & =
-& \left\{
-\begin{matrix}
-0.58 \varepsilon^{\frac{3}{2}}/K_1, & \text{only for inner flux surfaces,} \\
-1, &  \text{for other flux surfaces} \\
+1, & \text{inside the separatrix} \\
+\frac{1}{1+\left|\frac{\alpha_{CLx} \frac{1}{h_x} \frac{\partial T_e}{\partial x}}{c_{flmal} j_{e \max}}\right|}, & \text{outside the separatrix} \\
 \end{matrix} \right.
-\end{matrix}
-$
-
-But it was as below
-
-%-------- end of 12th page -------------
-
-$
-\begin{matrix}
-c_{\sigma_{CL \parallel}^{(Luciani)}} & =
-& \left\{
-\begin{matrix}
-\frac 1 {
-1 + \frac{
-7.5 \cdot 10^{16} \left( \frac{T_e} e \right)^2}
-{c(y) \sum \limits_{a=0}^{ns-1} z_a^2 n_a}
-}
-, &  \text{only for inner flux surfaces,} \\
-1, &  \text{for all other cases} \\
-\end{matrix} \right.
-\end{matrix}
-$
+\end{equation*}
+\begin{equation*}
+j_{e \max} = \left| b_x \right| e n_e \sqrt{\frac{T_e}{m_e}}
+\end{equation*}
+If {\tt 'b2sigp\_style'} is set to {\tt '1'}:
+\begin{equation*}
+\widetilde{\widetilde{\alpha}}_{CLx} = c_{\kappa_{ex}}^{(F\text{lim})} \widetilde{\alpha}_{CLx}
+\end{equation*}
+\begin{equation*}
+\widetilde{\alpha}_{CLx} = c_{\kappa_{ex}^{(CL)}}^{(Luciani)} \alpha_{CLx}
+\end{equation*}
 
 \subsection{Radial electron energy fluxes}
 
@@ -8379,11 +8387,11 @@ r_{R_a} n_e n_a \left( \frac{m_a + m_{a-1}}4 \right)
 \end{matrix}
 $
 
-$\tau_p = \frac 3{4\sqrt{2\pi }} \frac{\sqrt{m_p} T_i^{\frac 3 2}}{\Lambda} \left( \frac{4 \pi \varepsilon_0}{e^2}\right)^2$, where the Coulomb logarithm  $\Lambda $ can be chosen as
+$\tau_p = \frac 3{4\sqrt{2\pi }} \frac{\sqrt{m_p} T_i^{\frac 3 2}}{\ln \Lambda} \left( \frac{4 \pi \varepsilon_0}{e^2}\right)^2$, where the Coulomb logarithm $\ln \Lambda $ can be chosen as
 
 $
 \begin{matrix}
-\Lambda & =
+\ln \Lambda & =
 & \left\{
 \begin{matrix}
 12 \\
@@ -8477,7 +8485,7 @@ $\widetilde{\widetilde{\kappa}}_{ix}^{(CL)} = c_{k_{ix}}^{(flim)} \widetilde{\ka
 
 $
 \begin{matrix}
-c_{k_{ix}}^{flim} & =
+c_{\kappa_{ix}}^{flim} & =
 & \left\{
 \begin{matrix}
 1, & \text{for inner flux surfaces,} \\
@@ -8499,15 +8507,26 @@ $V_{h_i}^{(ax)} = c_{flim,1} \frac{\sqrt g}{h_x} |b_x| \sqrt{\frac{T_i}{m_p}}
 
 $c_{flim,1} = 0.15$
 
-$\tilde{\kappa}_{ix}^{(CL)} = c_{k_{ix}}^{(Luciani)} \kappa_{ix}^{(CL)}$,
+$\tilde{\kappa}_{ix}^{(CL)} = c_{\kappa_{ix}^{(CL)}}^{(Luciani)} \kappa_{ix}^{(CL)}$,
 
-'b2trcl\_lluciani' '1'
-
-%-------- end of 16th page -------------
+If the plateau and banana transport regimes correction is applied (default, {\tt 'b2trcl\_lluciani'} set to {\tt '3'}), one has:
 
 $
 \begin{matrix}
-c_{k_{ix}^{(Luciani)}} & =
+c_{\kappa_{ix}^{(CL)}}^{(Luciani)} & =
+& \left\{
+\begin{matrix}
+1.6 \varepsilon^{\frac{3}{2}}/K_2, & \text{only for inner flux surfaces,} \\
+1, &  \text{for other flux surfaces} \\
+\end{matrix} \right.
+\end{matrix}
+$
+
+If {\tt 'b2trcl\_luciani'} is set to {\tt '1'}, one gets instead:
+
+$
+\begin{matrix}
+c_{\kappa_{ix}^{(CL)}}^{(Luciani)} & =
 & \left\{
 \begin{matrix}
 \frac 1 {
@@ -8515,15 +8534,31 @@ c_{k_{ix}^{(Luciani)}} & =
 7.5 \cdot 10^{16} \left( \frac{T_i} e \right)^2}
 {c(y) \sum \limits_{a=0}^{ns-1} z_a^2 n_a}
 }
-, &  \text{for inner flux surfaces,} \\
+, &  \text{only for inner flux surfaces,} \\
 1, &  \text{for all other cases} \\
 \end{matrix} \right.
 \end{matrix}
 $
 
-For plateau and banana correction 'b2trcl\_lluciani' '3'
+If {\tt 'b2trcl\_luciani'} is set to {\tt '2'}, the \SOLPSfour formulation is used:
 
-$c_{k_{ix}^{(Luciani)}} = 1.6 \cdot \varepsilon^{3/2} / K_2$,
+$
+\begin{matrix}
+c_{\kappa_{ix}^{(CL)}}^{(Luciani)} & =
+& \left\{
+\begin{matrix}
+\frac 1 {
+1 + \frac{
+0.3 \cdot 10^{16} \left( \frac{T_i} e \right)^2}
+{\sum \limits_{a=0}^{ns-1} z_a^2 n_a}
+}
+, &  \text{only for inner flux surfaces,} \\
+1, &  \text{for all other cases} \\
+\end{matrix} \right.
+\end{matrix}
+$
+
+%-------- end of 16th page -------------
 
 \begin{equation*}
 K_2 = \frac{
