@@ -5329,6 +5329,42 @@ If {\tt Carre} is not yet compiled, you will need to do \index{Carre, compiling}
   gmake
 \end{verbatim}
 
+With the installation instructions from Section~\ref{solpsdistribution},
+users get a local clone of the {\tt Carre} GIT submodule, and
+{\bf this is the only supported option!}
+The files in {\tt src} will be version-controlled and updated whenever the
+user will pull in new code version.
+If, however, one wishes to make local changes to a file and protect those from
+GIT updates, the procedure for that purpose is to copy the file you want to change to
+{\tt src.local} and then edit that file. Once you have copied and edited the
+file(s) you need to change in {\tt src.local}, you should recompile with:
+\begin{verbatim}
+  stop
+  gmake listobj
+  gmake tags
+  gmake depend
+  gmake (carre)
+\end{verbatim}
+so that the local file is used. The last {\tt gmake} command may of course be
+replaced by {\tt gmake carre(\_debug)}, {\tt gmake solps(\_debug)},
+{\tt gmake solps\_mpi(\_debug)}, {\tt gmake all(\_debug)} or
+{\tt gmake all\_mpi(\_debug)} as needed.
+
+If this local change should no longer
+be needed, then it should be removed from {\tt src.local} and the
+following performed:
+\begin{verbatim}
+  stop
+  gmake clean(_carre)
+  gmake listobj
+  gmake tags
+  gmake depend
+  gmake (carre)
+\end{verbatim}
+If you want to avoid a long recompilation, you need to remove from the {\tt builds/*/}
+directories , the object and module files corresponding to your locally changed file(s),
+and then ask for a normal recompilation with a single {\tt gmake} command.
+
 To run {\tt Carre}, assuming that you are working on a case from {\tt DG},
 you would then need to do
 \begin{verbatim}
