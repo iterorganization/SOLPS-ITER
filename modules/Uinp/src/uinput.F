@@ -353,6 +353,7 @@ cxpb Default data for ions
           cflim(0) = 0.15
           cflim(1) = 0.15
           cflim(2) = 0.5
+          cflim(3) = 0.5
           write(2,'(a)') '*b2cmpb         boundary conditions'
           write(2,'(a)') '*cbregs'
           write(hlp_frm,'(a,i1,a)') '(a,5x,i1,',cbnrso,'(3x,f7.4))'
@@ -452,7 +453,8 @@ cxpb Default data for ions
           write(2,'(a)') '*cfalf'//column_header
           write(2,'(2x,a4,1p,8(1x,e9.2))') specs(-1),
      .     (cfalf(i),i=0,7)
-          write(2,'(a)') '*cflim     cflme     cflmi     cflmv      ...'
+          write(2,'(a)')
+     .     '*cflim     cflme     cflmi     cflmv     cflal     ...'
           write(2,'(2x,a4,1p,8(1x,e9.2))') specs(-1),
      .     (cflim(i),i=0,7)
           write(2,'(a)') '*endphy'

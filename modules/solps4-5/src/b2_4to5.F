@@ -1236,7 +1236,7 @@ c Fill out /b2cmpt/ arrays
       cflim(0)= flim_4
       cflim(1)= flimi_4
       cflim(2)= flimv_4
-      cflim(3)= flim_4
+      cflim(3)= 0.5_R8
 
 c Fill out b2mod_residuals data
       resco = 0.0_R8
