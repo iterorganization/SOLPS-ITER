@@ -233,7 +233,7 @@ cxpb Find out the number of passes to do
                   write(0,*) 'Too many reaction datasets specified:',
      .                                                           nnrctn
                   call xerrab
-     .             ('==> Check the AMDS model and NREAC in KOPPLDIM.F')
+     .     ('==> Check the AMDS model and DEF_NREAC in DIMENSIONS.F')
                 end if !}
                 ii=rctdgrp(j,l)
                 if(ii.ne.0) then !{
@@ -987,7 +987,13 @@ c*** appear first
                       end if !}
                     elseif(streql(rctnchp(irc),'H.1')) then !}{
                       if(.not.(streql(rctnchp(k1),'H.3').or.
+     .  (streql(rctnchp(k1),'H.2').and.streql(rctntyp(irc),'II')).or.
      .                         streql(rctnchp(k1),'H.0'))) then !{
+                        ex=.true.
+                      end if !}
+                    else if(streql(rctnchp(irc),'H.2')) then !}{
+                      if(.not.(streql(rctnchp(k1),'H.1').and.
+     &                         streql(rctntyp(irc),'II'))) then !{
                         ex=.true.
                       end if !}
                     else if(streql(rctnchp(irc),'H.3')) then !}{
@@ -1006,8 +1012,9 @@ c*** appear first
                       ex=.true.
                     end if !}
                     if(ex) then !{
-                      write(0,*) 'Inconsistent reaction data. ',
-     ,                  '"H.0", "H.1" and "H.3" should be grouped for ',
+                      write(0,'(5a)') 'Inconsistent reaction data. ',
+     ,                  '"H.0", "H.1" and "H.3" or "H.1" and "H.2" ',
+     ,                  'should be grouped for ',
      ,                  rctntyp(irc), ' type'
                       write(0,*)
      ,                 'Error occured when treating reaction ',irc
@@ -1052,7 +1059,8 @@ c*** appear first
                       ex=.true.
                     end if !}
                     if(ex) then !{
-                      write(0,*) 'Inconsistent reaction data. H.4 ',
+                      write(0,'(5a)')
+     ,                  'Inconsistent reaction data. H.4 ',
      ,                  'or H.2 should be grouped with',
 !cxpb     ,                  ', correspondingly,',
      ,                  ' H.10 or H.8 for a ',
@@ -1118,7 +1126,13 @@ c*** appear first
                       end if !}
                     elseif(streql(rctnchp(irc),'H.1')) then !}{
                       if(.not.(streql(rctnchp(k3),'H.3').or.
+     .  (streql(rctnchp(k3),'H.2').and.streql(rctntyp(irc),'II')).or.
      .                         streql(rctnchp(k3),'H.0'))) then !{
+                        ex=.true.
+                      end if !}
+                    else if(streql(rctnchp(irc),'H.2')) then !}{
+                      if(.not.(streql(rctnchp(k3),'H.1').and.
+     &                         streql(rctntyp(irc),'II'))) then !{
                         ex=.true.
                       end if !}
                     else if(streql(rctnchp(irc),'H.3')) then !}{
@@ -1137,8 +1151,9 @@ c*** appear first
                       ex=.true.
                     end if !}
                     if(ex) then !{
-                      write(0,*) 'Inconsistent reaction data. ',
-     ,                  '"H.0", "H.1" and "H.3" should be grouped for ',
+                      write(0,'(5a)') 'Inconsistent reaction data. ',
+     ,                  '"H.0", "H.1" and "H.3" or "H.1" and "H.2" ',
+     ,                  'should be grouped for ',
      ,                  rctntyp(irc), ' type'
                       write(0,*)
      ,                 'Error occured when treating reaction ', irc
@@ -1173,7 +1188,8 @@ c*** appear first
                       ex=.true.
                     end if !}
                     if(ex) then !{
-                      write(0,*) 'Inconsistent reaction data. H.4 ',
+                      write(0,'(4a)')
+     ,                  'Inconsistent reaction data. H.4 ',
      ,                  'or H.2 should be grouped with H.10 for a ',
      ,                  rctntyp(irc), ' reaction'
                       write(0,*)
@@ -1186,7 +1202,8 @@ c*** appear first
                     write(0,*) '  H.4 or H.2 with H.10 for ',
      ,                'EI, RC, or DS reaction, or'
                     write(0,*) '  H.0 and H.1 with H.3 for ',
-     ,                'CX, II, or EL reaction'
+     ,                'CX, II, or EL reaction, or'
+                    write(0,*) '  H.1 with H.2 for II reaction'
                     write(0,*)
      ,               'Error occured when treating reaction ', irc
                     call xerrab ('==> Check the AMDS model')

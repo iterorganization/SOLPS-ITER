@@ -75,17 +75,17 @@ c*** 3b
 
 c*** 4
 
-      integer nreaci, ir(2*nreac), massp(nreac), iz(nreac),
-     ,    masst(nreac),
-     ,    ifex1mn(nreac), ifex1mx(nreac),
-     ,    ifex2mn(nreac), ifex2mx(nreac), nrcln
-      real delpot(nreac),
-     ,  rc1mn(nreac),rc1mx(nreac),rc2mn(nreac),rc2mx(nreac),
-     ,  fp1(nreac,6),fp2(nreac,6),
-     ,  creac(9,nreac)
-      logical lconst(nreac)
-      character filnam(2*nreac)*8, h123(2*nreac)*4, reac(2*nreac)*9,
-     ,    crc(2*nreac)*3,elname(2*nreac)*2
+      integer nreaci, ir(mreac), massp(mreac), iz(mreac),
+     ,    masst(mreac),
+     ,    ifex1mn(mreac), ifex1mx(mreac),
+     ,    ifex2mn(mreac), ifex2mx(mreac), nrcln
+      real delpot(mreac),
+     ,  rc1mn(mreac),rc1mx(mreac),rc2mn(mreac),rc2mx(mreac),
+     ,  fp1(mreac,6),fp2(mreac,6),
+     ,  creac(9,mreac)
+      logical lconst(mreac)
+      character filnam(mreac)*8, h123(mreac)*4, reac(mreac)*9,
+     ,    crc(mreac)*3,elname(mreac)*2
 
 c*** 4a
 

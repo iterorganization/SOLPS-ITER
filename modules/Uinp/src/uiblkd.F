@@ -19,7 +19,7 @@ c=======================================================================
      ,  lunplt=nptal*nplt,  lu21pr=2*nppart,lvrctd=mreac*nsrctd,
      ,  lu3st=3*n1st,       lugwts=mgwtiesx*ngwtiesx, lusts3=3*lustsr,
      ,  lupw=nlimps*npwinx, lusg=nstep*ngitt,
-     ,  lur9=9*nreac,  lur2=2*nreac, lur6=6*nreac,
+     ,  lur9=9*mreac,  lur6=6*mreac,
      ,  lcbs=8*nsdb2*cbnrmx, lcbe=8*cbnrmx, lcfs=8*nsdb2
 c=======================================================================
 c*** General information
@@ -244,16 +244,16 @@ c*** 3b
 
 c*** 4
 
-      data nreaci,nrcln,  ir  , massp , masst ,  iz    /
-     /        0  ,  0  ,lur2*0,nreac*0,nreac*0,nreac*1 /
+      data nreaci,nrcln,  ir   , massp , masst ,  iz    /
+     /        0  ,  0  ,mreac*0,mreac*0,mreac*0,mreac*1 /
       data ifex1mn,ifex1mx,ifex2mn,ifex2mx /
-     /     nreac*0,nreac*0,nreac*0,nreac*0 /
+     /     mreac*0,mreac*0,mreac*0,mreac*0 /
       data delpot,  rc1mn ,  rc1mx ,  rc2mn ,  rc2mx ,  fp1  ,  fp2   /
-     /   nreac*0.,nreac*0.,nreac*0.,nreac*0.,nreac*0.,lur6*0.,lur6*0. /
+     /    mreac*0.,mreac*0.,mreac*0.,mreac*0.,mreac*0.,lur6*0.,lur6*0./
       data creac / lur9*0. /
-      data lconst / nreac*.false. /
-      data filnam ,  h123  ,  reac  ,  crc   , elname  /
-     /    lur2*' ',lur2*' ',lur2*' ',lur2*' ',lur2*' ' /
+      data lconst / mreac*.false. /
+      data filnam ,    h123  ,   reac  ,   crc   , elname   /
+     /    mreac*' ',mreac*' ',mreac*' ',mreac*' ',mreac*' ' /
 
       data rctndflt / .true. /, 
      ,  rctntyp , rctndbs , rctnchp , rctnrct , rctnptpr, rctnptin /
