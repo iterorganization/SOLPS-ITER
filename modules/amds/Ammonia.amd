@@ -49,7 +49,7 @@ E prod 1
 +r-p-n float
 eprdct2
 E prod 2
-EnabledParticles1 519
+EnabledParticles1 529
 Reaction HYDHEL_H.1_2.1.1 0
 Reaction HYDHEL_H.1_2.1.2 0
 Reaction HYDHEL_H.1_2.1.3 0
@@ -124,7 +124,9 @@ Reaction HYDHEL_H.1_3.3.7b 0
 Reaction HYDHEL_H.1_4.2.1 0
 Reaction HYDHEL_H.1_4.3.1 0
 Reaction HYDHEL_H.1_4.3.2 0
-Reaction HYDHEL_H.1_4.3.3 0
+Reaction HYDHEL_H.1_4.3.3 2
+H2
+H2+
 Reaction HYDHEL_H.1_4.4.1 0
 Reaction HYDHEL_H.1_5.2.1 0
 Reaction HYDHEL_H.1_5.2.2 0
@@ -591,7 +593,13 @@ H2+
 Reaction AMMONX_H.2_36 2
 N2
 H2+
+Reaction AMMONX_H.1_36 2
+N2
+H2+
 Reaction AMMONX_H.2_ZO 2
+N
+H2+
+Reaction AMMONX_H.1_ZO 2
 N
 H2+
 Reaction AMMONX_H.2_ZR 2
@@ -603,16 +611,31 @@ H2+
 Reaction AMMONX_H.2_39 2
 NH3
 H3+
+Reaction AMMONX_H.1_39 2
+NH3
+H3+
 Reaction AMMONX_H.2_ZU 2
+NH2
+H3+
+Reaction AMMONX_H.1_ZU 2
 NH2
 H3+
 Reaction AMMONX_H.2_ZV 2
 NH
 H3+
+Reaction AMMONX_H.1_ZV 2
+NH
+H3+
 Reaction AMMONX_H.2_40 2
 N2
 H3+
+Reaction AMMONX_H.1_40 2
+N2
+H3+
 Reaction AMMONX_H.2_41 2
+H2
+N+
+Reaction AMMONX_H.1_41 2
 H2
 N+
 Reaction AMMONX_H.2_ZZ 2
@@ -621,7 +644,13 @@ N+
 Reaction AMMONX_H.2_46 2
 NH+
 H2
+Reaction AMMONX_H.1_46 2
+NH+
+H2
 Reaction AMMONX_H.2_50 2
+NH2+
+H2
+Reaction AMMONX_H.1_50 2
 NH2+
 H2
 Reaction AMMONX_H.2_EK 0
@@ -648,10 +677,11 @@ H2+
 Reaction AMMONX_H.2_34 2
 H2
 H2+
+Reaction AMMONX_H.1_34 0
 Reaction AMMONX_H.2_06 2
 e
 H2
-Vars1 519
+Vars1 529
 Reaction HYDHEL_H.1_2.1.1 2
 
 
@@ -1985,23 +2015,23 @@ Reaction HYDHEL_H.1_4.3.2 2
 Particle H2+
 Particle H2
 Reaction HYDHEL_H.1_4.3.3 2
+59
+
+2
+2
+II
+
+
+H2
+H2+
+H3+
+H
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-Particle H2+
 Particle H2
+Particle H2+
 Reaction HYDHEL_H.1_4.4.1 2
 
 
@@ -9509,7 +9539,25 @@ NH3+
 Particle NH3
 Particle H2+
 Reaction AMMONX_H.2_36 2
-  
+50 
+
+2
+28
+II
+
+
+N2
+H2+
+H
+N2H+
+
+
+
+
+Particle N2
+Particle H2+
+Reaction AMMONX_H.1_36 2
+50
 
 2
 28
@@ -9527,7 +9575,25 @@ N2H+
 Particle N2
 Particle H2+
 Reaction AMMONX_H.2_ZO 2
-  
+51
+
+2
+14
+II
+
+
+N
+H2+
+H
+NH+
+
+
+
+
+Particle N
+Particle H2+
+Reaction AMMONX_H.1_ZO 2
+51
 
 2
 14
@@ -9581,7 +9647,25 @@ NH+
 Particle NH
 Particle H2+
 Reaction AMMONX_H.2_39 2
-  
+52
+
+3
+17
+II
+
+
+NH3
+H3+
+H2
+NH4+
+
+
+
+
+Particle NH3
+Particle H3+
+Reaction AMMONX_H.1_39 2
+52
 
 3
 17
@@ -9599,7 +9683,25 @@ NH4+
 Particle NH3
 Particle H3+
 Reaction AMMONX_H.2_ZU 2
-  
+53
+
+3
+16
+II
+
+
+NH2
+H3+
+H2
+NH3+
+
+
+
+
+Particle NH2
+Particle H3+
+Reaction AMMONX_H.1_ZU 2
+53
 
 3
 16
@@ -9617,7 +9719,25 @@ NH3+
 Particle NH2
 Particle H3+
 Reaction AMMONX_H.2_ZV 2
-  
+54
+
+3
+15
+II
+
+
+NH
+H3+
+H2
+NH2+
+
+
+
+
+Particle NH
+Particle H3+
+Reaction AMMONX_H.1_ZV 2
+54
 
 3
 15
@@ -9635,7 +9755,25 @@ NH2+
 Particle NH
 Particle H3+
 Reaction AMMONX_H.2_40 2
-  
+55
+
+3
+28
+II
+
+
+N2
+H3+
+H2
+N2H+
+
+
+
+
+Particle N2
+Particle H3+
+Reaction AMMONX_H.1_40 2
+55
 
 3
 28
@@ -9653,7 +9791,25 @@ N2H+
 Particle N2
 Particle H3+
 Reaction AMMONX_H.2_41 2
-  
+56
+
+14
+2
+II
+
+
+H2
+N+
+NH+
+H
+
+
+
+
+Particle H2
+Particle N+
+Reaction AMMONX_H.1_41 2
+56
 
 14
 2
@@ -9689,7 +9845,25 @@ H+
 Particle H
 Particle N+
 Reaction AMMONX_H.2_46 2
-  
+57
+
+2
+15
+II
+
+
+NH+
+H2
+H
+NH2+
+
+
+
+
+Particle NH+
+Particle H2
+Reaction AMMONX_H.1_46 2
+57
 
 2
 15
@@ -9707,7 +9881,25 @@ NH2+
 Particle NH+
 Particle H2
 Reaction AMMONX_H.2_50 2
-  
+58
+
+2
+16
+II
+
+
+NH2+
+H2
+H
+NH3+
+
+
+
+
+Particle NH2+
+Particle H2
+Reaction AMMONX_H.1_50 2
+58
 
 2
 16
@@ -9959,7 +10151,25 @@ H+
 Particle H
 Particle H2+
 Reaction AMMONX_H.2_34 2
-  
+59
+
+2
+2
+II
+
+
+H2
+H2+
+H3+
+H
+
+
+
+
+Particle H2
+Particle H2+
+Reaction AMMONX_H.1_34 2
+59
 
 2
 2
