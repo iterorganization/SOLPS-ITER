@@ -128,7 +128,7 @@ c>>>
             ingrde(isf,nstrai,2)=0
             sorad1(isf,nstrai)=p1(1,i)
             sorad2(isf,nstrai)=p2(1,i)
-            if (sorad1(isf,nstrai).eq.sorad1(isf,nstrai)) then !{
+            if (sorad1(isf,nstrai).eq.sorad2(isf,nstrai)) then !{
               sorlim(isf,nstrai)=1
             else !}{
               sorlim(isf,nstrai)=2
