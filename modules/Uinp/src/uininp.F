@@ -24,6 +24,9 @@ c
       keylen=8
       mimp=iunii
       lena=8
+      jmess=2
+      lfin=72
+      promp(1:2)=1.d0
       fixkey=.false.
 c
 c*** Read the data from dg output

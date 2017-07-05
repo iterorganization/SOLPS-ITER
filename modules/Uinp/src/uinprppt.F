@@ -58,6 +58,8 @@ c*** the atoms and nuclei
               if(na.gt.natm) then !{
                 write(0,*) 'The number of atomic species must ',
      ,            'not exceed ',natm
+                write(0,*) 'Current requested number of atomic ',
+     ,            'species is ',na
                 write(0,*) 'STOP ==> Check the AMDS model - or ',
      ,            'increase DEF_NATM in DIMENSIONS.F'
                 call xerrab ('Too many atomic species')
@@ -111,6 +113,8 @@ c*** the atoms and nuclei
                 if(nm.gt.nmol) then !{
                   write(0,*) 'The number of molecular species must ',
      ,              'not exceed ',nmol
+                  write(0,*) 'Current requested number of molecular ',
+     ,              'species is ',nm
                   write(0,*) 'STOP ==> Check the AMDS model - or ',
      ,              'increase DEF_NMOL in DIMENSIONS.F'
                   call xerrab ('Too many molecular species')
@@ -169,6 +173,8 @@ c*** the atoms and nuclei
                 if(ni.gt.nion) then !{
                   write(0,*) 'The number of test ion species must ',
      ,              'not exceed ',nion
+                  write(0,*) 'Current requested number of test ion ',
+     ,              'species is ',ni
                   write(0,*) 'STOP ==> Check the AMDS model - or ',
      ,              'increase DEF_NION in DIMENSIONS.F'
                   call xerrab ('Too many test ion species')
@@ -259,6 +265,8 @@ c*** the atoms and nuclei
                 if(np.gt.npls) then !{
                   write(0,*) 'The number of plasma species must ',
      ,              'not exceed ',npls
+                  write(0,*) 'Current requested number of plasma ',
+     ,              'species is ',np
                   write(0,*) 'STOP ==> Check the AMDS model - or ',
      ,              'increase DEF_NPLS in DIMENSIONS.F'
                   call xerrab ('Too many plasma species')
@@ -334,6 +342,8 @@ c*** Atoms:
 	    if(nspcatm.gt.natm) then !{
 	      write(0,*) 'The number of atomic species must not ',
      ,	      	'exceed ',natm
+              write(0,*) 'Current requested number of atomic ',
+     ,          'species is ',nspcatm
 	      write(0,*) 'STOP ==> Check the AMDS model - or increase ',
      ,	      	'DEF_NATM in DIMENSIONS.F'
 	      call xerrab ('Too many atomic species')
@@ -372,6 +382,8 @@ c*** Molecules:
 	    if(nspcmol.gt.nmol) then !{
 	      write(0,*) 'The number of molecular species must ',
      ,	      	'not exceed ',nmol
+              write(0,*) 'Current requested number of molecular ',
+     ,          'species is ',nspcmol
 	      write(0,*) 'STOP ==> Check the AMDS model - or increase ',
      ,	      	'DEF_NMOL in DIMENSIONS.F'
 	      call xerrab ('Too many molecular species')
@@ -424,6 +436,8 @@ c*** Test ions:
 	    if(nspcion.gt.nion) then !{
 	      write(0,*) 'The number of test ion species must ',
      ,	      	'not exceed ',nion
+              write(0,*) 'Current requested number of test ion ',
+     ,          'species is ',nspcion
 	      write(0,*) 'STOP ==> Check the AMDS model - or increase ',
      ,	      	'DEF_NION in DIMENSIONS.F'
 	      call xerrab ('Too many test ion species')
@@ -475,6 +489,8 @@ c*** Plasma ions:
 	    if(nspcpls.gt.npls) then !{
 	      write(0,*) 'The number of plasma ion species must ',
      ,	      	'not exceed ',npls
+              write(0,*) 'Current requested number of atomic ',
+     ,          'species is ',nspcpls
 	      write(0,*) 'STOP ==> Check the AMDS model - or increase ',
      ,	      	'DEF_NPLS in DIMENSIONS.F'
 	      call xerrab ('Too many plasma ion species')
