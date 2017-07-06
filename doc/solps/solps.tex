@@ -3539,7 +3539,7 @@ in sequence with or without some separating character(s).
 
 \newpage
 \section{b2yr, plotting the atomic physics rates}
-\index{b2frates}\label{sec:b2yr}\index{b2yr}
+\index{b2frates}\index{b2yr.dat}\label{sec:b2yr}\index{b2yr}
 
 The commands
 \begin{verbatim}
@@ -3566,6 +3566,10 @@ and an easier-to-read font.\index{ncar.cfg} The file can be converted into a Pos
   ctrans -d ps.mono b2yr.plt > b2yr.ps
 \end{verbatim}
 
+The input file for {\tt b2yr} is {\tt b2yr.dat}, and an example is provided below:
+\VerbatimInput[fontsize=\footnotesize]{b2yr.dat}
+The first set of integer is the number of density and temperature slices, respectively, that will be plotted, and the next two sets of integers are the indices within the density and temperatures tables in {\tt b2frates} that are being plotted.
+ 
 The user has the option when running the main code to rescale the rates given by {\tt b2ar}
 through the use of the {\tt b2.atomic\_physics\_rescale.parameters} file. See
 \ref{lab:b2:atomic_physics_rescale:parameters} for details.
