@@ -102,7 +102,7 @@ c*** spcscrp - the value of flux or density for the highest ion
 c*** spcscrf - flux fraction across the inboard CEI (DN only)
 
       integer nspcncl,nspcpls,nspcatm,nspcmol,nspcion
-      character*8 spcsncl(natm)*2,spcspls(npls)*6,spcsatm(natm)*2,
+      character*8 spcsncl(natm),spcspls(npls),spcsatm(natm),
      ,  spcsmol(nmol),spcsion(nion),
      ,  spcsrfp(npls),spcsrfa(natm),spcsrfm(nmol),spcsrfi(nion),
      ,  spcsrtp(npls),spcsrta(natm),spcsrtm(nmol),spcsrti(nion)
@@ -154,13 +154,15 @@ c***    test ions for each entry (always one atom for a GS);
 c***    atomic mass, nuclear charge, charge state, flux units (nuclei),
 c***    and '3 secondaries' flag for each entry 
       integer nspdgen,nspdlen
-      parameter (nspdgen=11, nspdlen=78)
+      parameter (nspdgen=11, nspdlen=83)
       character*8 spcdgen(nspdgen)*2,spcdspc(nspdlen),
      ,  spcdrfl(nspdlen),spcdrtl(nspdlen)
-      integer lspdgen(nspdgen),nspdpls(nspdgen),nspdmol(nspdgen),
+      integer lspdgen(nspdgen),nspdpls(nspdgen),
+     ,  nspdatm(nspdgen),nspdmol(nspdgen),
      ,  nspdion(nspdgen),spcdms(nspdlen),spcdnc(nspdlen),
      ,  spcdcg(nspdlen),spcdfu(nspdlen),spcdns(nspdlen)
       logical l_ammon(nspdlen), ammonx_used
+      logical l_meta(nspdlen), meta_used, is_meta(natm)
       
 c-----------------------------------------------------------------------
 c*** Boundary conditions at the grid edge.
@@ -549,7 +551,8 @@ c     ,  spcifup,spcifua,spcifum,spcifui,
      ,  spcirsm,spcirsi,spcinnm,spcinni,spcicrk,spciscn,spcidlp,spcifla,
      ,  spciflm,spcifli,spcinsp,spcinsa,spcinsm,spcinsi,spcinga,spcingm,
      ,  spcingi,spcicmm,spcicmi,lspdgen,
-     ,  nspdpls,nspdmol,nspdion,spcdms,spcdnc,spcdcg,spcdfu,spcdns,
+     ,  nspdpls,nspdatm,nspdmol,nspdion,
+     ,  spcdms,spcdnc,spcdcg,spcdfu,spcdns,
      ,  jskbnds,jcpbnds,jc1bnds,jc2bnds,jclbnds,jdrbnds,jrfbnds,jcsbnds,
      ,  jcgbnds,jpsbnds,jppbnds,jnpbnds,jmpbnds,jnibnds,jnebnds,
      ,  nwllmrk,nedgmrk,ntrgmrk,ledgmrk,ltrgmrk,lwllmrk,ledgdfl,
@@ -587,7 +590,7 @@ c     ,  spcifup,spcifua,spcifum,spcifui,
      ,  ttcblph,ttctal,ttcdbg2,ttcdbge,ttcdbgm,ttcdbgf,ttcdbgl,ttcdbgs,
      ,  ttcdbgg,ttcdbgmpi,ttcdbgc,
      ,  ttpl1st,ttpl2nd,ttpladd,ttplhst,ttplcut,ttplnums,tttest,
-     ,  lm_cnfg,l_ammon,ammonx_used
+     ,  lm_cnfg,l_ammon,l_meta,ammonx_used,meta_used,is_meta
 
       common/uinptxt/topo,amd_file,
      ,  spcsncl,spcspls,spcsatm,spcsmol,spcsion,spcsrfp,spcsrfa,spcsrfm,

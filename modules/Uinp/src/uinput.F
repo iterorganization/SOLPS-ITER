@@ -111,7 +111,7 @@ c*** Create a b2ah.dat.stencil file
             len=len+3
           end do
           write(2,'(a)') '*dimens         (ns; free format)'
-          write(2,'(3x,i4)') natmi+nplsi
+          write(2,'(3x,i4)') natmi-nmeta+nplsi
           write(2,'(a)')
      .     '*label          (lblps, character*60; free format)'
           if (texta(1)(2:2).eq.' ') then
@@ -124,6 +124,7 @@ c*** Create a b2ah.dat.stencil file
             iloc = 36
           endif
           do is = 2, natmi
+            if (is_meta(is)) cycle
             if (texta(is)(2:2).eq.' ') then
               lblps(iloc+1:iloc+3) = '+'//texta(is)(1:1)
               iloc = iloc+2
@@ -136,7 +137,7 @@ c*** Create a b2ah.dat.stencil file
           write(2,'(2x,a)') lblps(1:iloc+20)
           write(2,'(a)') '*b2cmpa         basic parameters'
           write(2,'(a)') '*specs    zamin    zamax       zn      am'
-          ns = natmi+nplsi
+          ns = natmi-nmeta+nplsi
           allocate(specs(-1:ns-1))
           write(specs(-1),'(a)') '''-1'''
           do is = 0, ns-1
@@ -148,6 +149,7 @@ c*** Create a b2ah.dat.stencil file
           end do
           is=0
           do iatm = 1, natmi
+            if (is_meta(iatm)) cycle
             j=find_matching_species(spcsncl(iatm))
             write(2,'(2x,a1,i3,a1,5x,a3,6x,a3,4x,i3,a2,4x,i3,a2)')
      .       '''',is,'''','0.0','0.0',nchara(iatm),'.0',
@@ -449,10 +451,10 @@ c*** Create the b2ai.dat file
       if(uex) then
           print *,'    ... b2ai.dat file already present, not created'
       else
-          allocate(na0(0:natmi+nplsi-1))
+          allocate(na0(0:natmi-nmeta+nplsi-1))
           open(2,file='b2ai.dat')
           write(2,'(a)') '*dimens         (ns; free format)'
-          write(2,'(3x,i4)') natmi+nplsi
+          write(2,'(3x,i4)') natmi-nmeta+nplsi
           write(2,'(a)') 
      .     '*label          (lblps, character*60; free format)'
           if (texta(1)(2:2).eq.' ') then
@@ -463,6 +465,7 @@ c*** Create the b2ai.dat file
             iloc = 26
           endif
           do is = 2, natmi
+            if (is_meta(is)) cycle
             if (texta(is)(2:2).eq.' ') then
               lblps(iloc+1:iloc+3) = '+'//texta(is)(1:1)
               iloc = iloc+2
@@ -476,6 +479,7 @@ c*** Create the b2ai.dat file
           write(2,'(a)') '*specs    zamin    zamax       zn      am'
           is=0
           do iatm = 1, natmi
+            if (is_meta(iatm)) cycle
             write(2,'(2x,a1,i3,a1,5x,a3,6x,a3,4x,i3,a2,4x,i3,a2)')
      .       '''',is,'''','0.0','0.0',nchara(iatm),'.0',
      .                                nmassa(iatm),'.0'
@@ -495,8 +499,9 @@ c*** Create the b2ai.dat file
             end do
           end do
           write(2,'(a)') '*naini          (na0(0:ns-1); free format)'
-          write(hlp_frm,'(a,i3,a)') '(1p,',natmi+nplsi,'(2x,e8.1))'
-          write(2,hlp_frm) (na0(is),is=0,natmi+nplsi-1)
+          write(hlp_frm,'(a,i3,a)')
+     .                   '(1p,',natmi-nmeta+nplsi,'(2x,e8.1))'
+          write(2,hlp_frm) (na0(is),is=0,natmi-nmeta+nplsi-1)
           write(2,'(a)') '*ttini          (tt0; free format)'
           write(2,'(3x,a)') '1.0e2'
           close(2)
@@ -515,11 +520,12 @@ c*** Create the b2ar.dat file
           write(2,'(a)') '*nlohi          (nlo, nhi; real, free format)'
           write(2,'(1p,2(2x,e8.1))') 1.0e17, 1.0e22
           write(2,'(a)') '*numnuc         (nnuc; integer, free format)'
-          write(2,'(2x,i2)') natmi
+          write(2,'(2x,i2)') natmi-nmeta
           write(2,'(a)') '*nucspec        '//
      .     '(nz, izlo, izhi; integers, one triplet per line)'
           do iatm = 1, natmi
-            write(2,'(2x,3i3)') nchara(iatm), 0, nchara(iatm)
+            if (.not.is_meta(iatm))
+     >       write(2,'(2x,3i3)') nchara(iatm), 0, nchara(iatm)
           end do
           write(2,'(a)') '*flag           '//
      .     '(''adpak'', ''strahl'', ''adas'' or ''amds'', free format)'

@@ -89,7 +89,8 @@ c*** 4
 
 c*** 4a
 
-      integer natmi,nmassa(natm),nchara(natm),isrfa(natm),isrta(natm),
+      integer natmi,nmeta,
+     ,  nmassa(natm),nchara(natm),isrfa(natm),isrta(natm),
      ,  nmseca(natm),nrca(natm),nfola(natm),ngena(natm),nhsta(natm),
      ,  ireaca(natm,nreac),ibulka(natm,nreac),iscd1a(natm,nreac),
      ,  iscd2a(natm,nreac),iscd3a(natm,nreac),iscdea(natm,nreac),
@@ -388,7 +389,8 @@ c*** b2ah.dat
      ,  jsrss,jsrc,lchspnwa,jsrsg,
      ,  jlsptp,jlsptc,nreaci,ir,massp,masst,
      ,  ifex1mn,ifex1mx,ifex2mn,ifex2mx,iz,nrcln,hlp_h_m,
-     ,  natmi,nmassa,nchara,isrfa,isrta,nmseca,nrca,nfola,ngena,nhsta,
+     ,  natmi,nmeta,
+     ,  nmassa,nchara,isrfa,isrta,nmseca,nrca,nfola,ngena,nhsta,
      ,  ireaca,ibulka,iscd1a,iscd2a,iscd3a,iscdea,iestma,ibgka,
      ,  nmoli,nmassm,ncharm,nprtm,isrfm,isrtm,
      ,  nmsecm,nrcm,nfolm,ngenm,nhstm,

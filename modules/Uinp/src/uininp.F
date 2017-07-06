@@ -144,6 +144,7 @@ c
       nnftrm = nnftrm+ifile
 
       ammonx_used=.false.
+      meta_used=.false.
       do iamd=1,namdf !{
         if(.not.streql(amd_file(iamd),' ')) then !{
 c*** Read the AMDS file if it exists
@@ -171,6 +172,7 @@ c*** Read the AMDS file if it exists
           end if !}
         end if !}
       end do !}
+      if (meta_used) write(6,*) 'This case includes metastable species'
 c======================================================================
       call subend ()
       return

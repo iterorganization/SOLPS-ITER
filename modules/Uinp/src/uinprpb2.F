@@ -238,7 +238,7 @@ c*** k, m, n are the numbers of recycling, specified, and all strata
       k=0
       do j=1,nbndknd !{
         do i=1,nznbndt(j) !{
-          if(nlrbnds(i,j)) k=k+natmi
+          if(nlrbnds(i,j)) k=k+(natmi-nmeta)
         end do !}
       end do !}
       m=k+ngpfstr+nrcmstr
@@ -307,6 +307,7 @@ c*** Recycling sources
           if(nlrbnds(i,j)) then !{
             ispe=0
             do iatm=1,natmi !{
+              if (is_meta(iatm)) cycle
               ispi=ispe+1
               ispe=ispi
               do while (lkindp(min(ispe+1,nplsi)).eq.lkindp(ispi)) !{
@@ -699,6 +700,13 @@ cxpb Check if we need to do molecular ions
       do j = 1, nspcion !{
         pass = pass .or. hlp_ion(j)
       end do !}
+#ifdef DBG
+      write(*,*) 'hlp_ion : ', (hlp_ion(j),j=1,nspcion)
+      do j = 1, nspcmol !{
+        write(*,'(a,i2,a,20i3)') 'j,mol,cmp_bck : ',
+     .              j,textm(j),(cmp_bck(j,l),l=1,nmol+nion)
+      end do !}
+#endif
       do while (pass)
         do j = 1, nspcion !{
           if (.not.hlp_ion(j)) cycle
@@ -765,22 +773,31 @@ cxpb Check if we need to do molecular ions
               if (idez(iscd1i(j,k),1,3).eq.2) then !{
                 i = idez(iscd1i(j,k),3,3)
                 do l = 1, nspcmol !{
-                  if (cmp_bck(l,nmol+j).gt.0) cmp_bck(l,i)=cmp_bck(l,i)+
-     .             cmp_bck(l,nmol+j)*idez(iscd1i(j,k),2,3)
+                  if (cmp_bck(l,nmol+j).gt.0) then !{
+                    cmp_bck(l,i)=cmp_bck(l,i)+
+     .               cmp_bck(l,nmol+j)*idez(iscd1i(j,k),2,3)
+                    hlp_mol(l)=.false.
+                  end if !}
                 end do !}
               end if !}
               if (idez(iscd2i(j,k),1,3).eq.2) then !{
                 i = idez(iscd2i(j,k),3,3)
                 do l = 1, nspcmol !{
-                  if (cmp_bck(l,nmol+j).gt.0) cmp_bck(l,i)=cmp_bck(l,i)+
-     .             cmp_bck(l,nmol+j)*idez(iscd2i(j,k),2,3)
+                  if (cmp_bck(l,nmol+j).gt.0) then !{
+                    cmp_bck(l,i)=cmp_bck(l,i)+
+     .               cmp_bck(l,nmol+j)*idez(iscd2i(j,k),2,3)
+                    hlp_mol(l)=.false.
+                  end if !}
                 end do !}
               end if !}
               if (idez(iscd3i(j,k),1,3).eq.2) then !{
                 i = idez(iscd3i(j,k),3,3)
                 do l = 1, nspcmol !{
-                  if (cmp_bck(l,nmol+j).gt.0) cmp_bck(l,i)=cmp_bck(l,i)+
-     .             cmp_bck(l,nmol+j)*idez(iscd3i(j,k),2,3)
+                  if (cmp_bck(l,nmol+j).gt.0) then !{
+                    cmp_bck(l,i)=cmp_bck(l,i)+
+     .               cmp_bck(l,nmol+j)*idez(iscd3i(j,k),2,3)
+                    hlp_mol(l)=.false.
+                  end if !}
                 end do !}
               end if !}
               if (idez(iscd1i(j,k),1,3).eq.3) then !{
@@ -820,14 +837,14 @@ cxpb Check if we need to do molecular ions
         end do !}
       end do !}
 cxpb Second pass in case the molecules were not sorted in ascending order
-      do while (.not.(all(hlp_mol(1:nspcmol)))) !{
 #ifdef DBG
-        write(*,*) 'hlp_mol : ', (hlp_mol(j),j=1,nspcmol)
-        do j = 1, nspcmol !{
-          write(*,'(a,i2,a,10i3)') 'j,mol,cmp_bck : ',
+      write(*,*) 'hlp_mol : ', (hlp_mol(j),j=1,nspcmol)
+      do j = 1, nspcmol !{
+        write(*,'(a,i2,a,20i3)') 'j,mol,cmp_bck : ',
      .                j,textm(j),(cmp_bck(j,l),l=1,nmol+nion)
-        end do !}
+      end do !}
 #endif
+      do while (.not.(all(hlp_mol(1:nspcmol)))) !{
         do j = 1, nspcmol !{
           if (hlp_mol(j)) cycle
           do l = 1, nspcmol !{
@@ -842,7 +859,7 @@ cxpb Second pass in case the molecules were not sorted in ascending order
           end do !}
           hlp_mol(j)=.true.
           do l = 1, nspcmol !{
-            hlp_mol(j)=hlp_mol(j).and.cmp_bck(j,l).gt.0
+            hlp_mol(j)=hlp_mol(j).and.cmp_bck(j,l).eq.0
           end do !}
         end do !}
       end do !}

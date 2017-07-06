@@ -96,6 +96,7 @@ c*** Save the variables to be changed
         if(txtmtra(1).ne.' ') then !{
           ex=.true.
           do i=1,natmi !{
+            if (is_meta(i)) cycle
             if(ex) then !{
               if(streql(txtmtra(1),texta(i))) then !{
                 ex=.false.

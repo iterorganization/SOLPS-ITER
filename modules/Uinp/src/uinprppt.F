@@ -53,58 +53,79 @@ c*** the atoms and nuclei
               call xerrab ('  ==> Check the DivGeo species list')
             else  !}{
               j=lspdgen(k)
-              na=nspcatm+1
-              nspcncl=na
-              if(na.gt.natm) then !{
-                write(0,*) 'The number of atomic species must ',
-     ,            'not exceed ',natm
-                write(0,*) 'Current requested number of atomic ',
-     ,            'species is ',na
-                write(0,*) 'STOP ==> Check the AMDS model - or ',
-     ,            'increase DEF_NATM in DIMENSIONS.F'
-                call xerrab ('Too many atomic species')
-              end if !}
-              spcsncl(nspcncl)=c
-              spcsrna(na)=na
-              spcsatm(na)=c
-              if (k.le.nspdgen-2) then !{
-                spcsrfa(na)=spcdrfl(j)
-                spcsrta(na)=spcdrtl(j)
-                spcsmsa(na)=spcdms(j)
-                spcsnca(na)=spcdnc(j)
-                spcscga(na)=spcdcg(j)
-                spcsfua(na)=spcdfu(j)
-              else if (k.eq.nspdgen-1) then !}{
-                spcsrfa(na)=c
-                spcsrta(na)=c
-                spcsmsa(na)=nuclear_mass(get_atomic_number(c))
-                spcsnca(na)=get_atomic_number(c)
-                spcscga(na)=0
-                spcsfua(na)=1
-              else if (k.eq.nspdgen) then !}{
-                spcsrfa(na)=' '
-                spcsrta(na)=' '
-                spcsmsa(na)=nuclear_mass(get_atomic_number(c))
-                spcsnca(na)=get_atomic_number(c)
-                spcscga(na)=0
-                spcsfua(na)=1
-              end if !}
-              if(.not.streql(spcsrfa(na),' ') .and.
-     &           .not.streql(spcsrfa(na),c0)) then !{
-                spcsrsa(na)=1
-              else !}{
-                spcsrsa(na)=-1
-              end if !}
-              datm(na)=1
+              na=nspcatm
+              do m=0,nspdatm(k)-1 !{
+                if (l_ammon(j+m).and..not.ammonx_used) cycle
+                if (l_meta(j+m).and..not.meta_used) cycle
+                c=spcdspc(j+m)
+                ex=.false.
+                do i=1,nspcatm !{
+                  if(streql(c,spcsatm(i))) ex=.true.
+                end do !}
+                if(ex) then !{
+                  write(0,*) 'Ambiguous atom name "',c,
+     ,              '" - internal error in UINP!!!'
+                  call xerrab ('Ambiguous atom name')
+                end if  !}
+                na=na+1
+                if(na.gt.natm) then !{
+                  write(0,*) 'The number of atomic species must ',
+     ,              'not exceed ',natm
+                  write(0,*) 'Current requested number of atomic ',
+     ,              'species is ',na
+                  write(0,*) 'STOP ==> Check the AMDS model - or ',
+     ,              'increase DEF_NATM in DIMENSIONS.F'
+                  call xerrab ('Too many atomic species')
+                end if !}
+                if(.not.l_meta(j+m)) then
+                  nspcncl=nspcncl+1
+                  spcsncl(nspcncl)=c
+                end if
+                spcsrna(na)=na
+                spcsatm(na)=c
+                is_meta(na)=l_meta(j+m)
+                if (l_meta(j+m)) nmeta=nmeta+1
+                if (k.le.nspdgen-2) then !{
+                  spcsrfa(na)=spcdrfl(j+m)
+                  spcsrta(na)=spcdrtl(j+m)
+                  spcsmsa(na)=spcdms(j+m)
+                  spcsnca(na)=spcdnc(j+m)
+                  spcscga(na)=spcdcg(j+m)
+                  spcsfua(na)=spcdfu(j+m)
+                else if (k.eq.nspdgen-1) then !}{
+                  spcsrfa(na)=c
+                  spcsrta(na)=c
+                  spcsmsa(na)=nuclear_mass(get_atomic_number(c))
+                  spcsnca(na)=get_atomic_number(c)
+                  spcscga(na)=0
+                  spcsfua(na)=1
+                else if (k.eq.nspdgen) then !}{
+                  spcsrfa(na)=' '
+                  spcsrta(na)=' '
+                  spcsmsa(na)=nuclear_mass(get_atomic_number(c))
+                  spcsnca(na)=get_atomic_number(c)
+                  spcscga(na)=0
+                  spcsfua(na)=1
+                end if !}
+                if(.not.streql(spcsrfa(na),' ') .and.
+     &             .not.streql(spcsrfa(na),c0)) then !{
+                  spcsrsa(na)=1
+                else !}{
+                  spcsrsa(na)=-1
+                end if !}
+                datm(na)=1
+              end do !}
+              j=j+nspdatm(k)-1
 
               nm=nspcmol
               do m=1,nspdmol(k) !{
                 if (l_ammon(j+m).and..not.ammonx_used) cycle
+                if (l_meta(j+m).and..not.meta_used) cycle
                 c=spcdspc(j+m)
                 ex=.false.
-                do i=1,nspcmol  !{
+                do i=1,nspcmol !{
                   if(streql(c,spcsmol(i))) ex=.true.
-                end do  !}
+                end do !}
                 if(ex) then !{
                   write(0,*) 'Ambiguous molecule name "',c,
      ,              '" - internal error in UINP!!!'
@@ -126,6 +147,11 @@ c*** the atoms and nuclei
                 spcsrfm(nm)=spcdrfl(j+m)
                 spcsrtm(nm)=spcdrtl(j+m)
                 spcsmsm(nm)=spcdms(j+m)
+                l_h_mol(nm)=spcdns(j+m)
+                do ii=1,na !{
+                  if(streql(spcsatm(ii),spcdspc(lspdgen(k))))
+     >             lkindm(nm)=ii
+                end do !}
                 do ii=1,nspcatm !{
                   do jj=1,m_hlp_h !{
                     if(streql(spcsatm(ii),hlp_h(1,jj,1))) then !{
@@ -161,6 +187,7 @@ c*** the atoms and nuclei
               ni=nspcion
               do m=1,nspdion(k) !{
                 if (l_ammon(j+m).and..not.ammonx_used) cycle
+                if (l_meta(j+m).and..not.meta_used) cycle
                 c=spcdspc(j+m)
                 ex=.false.
                 do i=1,nspcion  !{
@@ -187,6 +214,10 @@ c*** the atoms and nuclei
                 spcsrfi(ni)=spcdrfl(j+m)
                 spcsrti(ni)=spcdrtl(j+m)
                 spcsmsi(ni)=spcdms(j+m)
+                do ii=1,na !{
+                  if(streql(spcsatm(ii),spcdspc(lspdgen(k))))
+     >             lkindi(ni)=ii
+                end do !}
                 do ii=1,nspcatm !{
                   do jj=1,m_hlp_h !{
                     if(streql(spcsatm(ii),hlp_h(1,jj,1))) then !{
@@ -640,10 +671,6 @@ cank        isrsa(l)=spcsrsa(l)
 	else !}{
 	  isrtm(l)=0
 	end if !}
-
-        do i=1,nspcatm
-          if(-isrta(i).eq.l) lkindm(l)=i
-        end do
       end do !}
 
       nioni=nspcion
@@ -655,11 +682,6 @@ cank        isrsa(l)=spcsrsa(l)
 	nchrgi(l)=spcscgi(l)
 cank        isrsi(l)=spcsrsi(l)
 	nfoli(l)=-1
-        do i=1,nspcmol !{
-          if (nmassi(l).eq.nmassm(i) .and.
-     &        nchari(l).eq.ncharm(i) .and.
-     &        nprti(l).eq.nprtm(i)) lkindi(l)=lkindm(i)
-        end do !}
 
 	k=0
 	c=spcsrfi(l)
@@ -685,7 +707,9 @@ cank        isrsi(l)=spcsrsi(l)
 	c=spcsrti(l)
 	if(.not.streql(c,' ')) then !{
           do i=1,nspcatm !{
-            if(streql(c,spcsatm(i))) k=i
+            if(streql(c,spcsatm(i))) then !{
+              k=i
+            end if !}
           end do !}
           if(k.eq.0) then !{
             do i=1,nspcmol !{
