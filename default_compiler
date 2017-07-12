@@ -30,11 +30,11 @@ case "KEIO":
 case "KSTAR":
 case "SPBSTU":
 case "SWIP":
+case "JET":
   echo ifort64
   breaksw
 case "CCFE":
 case "ENEA":
-case "JET":
 case "ORNL":
 case "PPPL":
   echo pgf90
