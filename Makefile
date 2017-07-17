@@ -290,7 +290,7 @@ clean_solps:     clean_carre clean_divgeo clean_b25eirene     clean_uinp     cle
 
 clean_solps_mpi: clean_carre clean_divgeo clean_b25eirene_mpi clean_uinp_mpi clean_triang clean_sonnet-light clean_manual clean_amds
 
-clean_build:     clean_carre clean_b25eirene clean_uinp clean_triang
+clean_build:     clean_carre clean_b25eirene clean_uinp clean_triang_nox
 
 clean_build_mpi: clean_b25eirene_mpi clean_uinp_mpi
 
@@ -349,6 +349,9 @@ clean_uinp_mpi:
 
 clean_triang:
 	cd modules/Triang; ${MAKE} clean
+
+clean_triang_nox:
+	cd modules/Triang; ${MAKE} LD_GR="" LD_GKS="" clean
 
 clean_amds:
 	cd modules/amds; ${MAKE} clean
