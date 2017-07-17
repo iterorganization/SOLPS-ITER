@@ -112,12 +112,9 @@ ${OBJDIR}/libtria.a: ${ALLOBJS}
 	ranlib $@
 
 clean:
-	rm -rf ${OBJDIR}/*.o ${OBJDIR}/libtria.a ${OBJDIR}/tria ${OBJDIR}/triageom ${OBJDIR}/LISTOBJ ${OBJDIR}/dependencies
+	rm -rf ${OBJDIR}/*.f ${OBJDIR}/*.o ${OBJDIR}/libtria.a ${OBJDIR}/tria ${OBJDIR}/triageom ${OBJDIR}/triainq ${OBJDIR}/LISTOBJ ${OBJDIR}/dependencies
 ifneq (${MOD},o)
 	rm -rf ${OBJDIR}/*.${MOD}
-endif
-ifneq ($(strip $(SED)),)
-	rm -rf ${OBJDIR}/*.f
 endif
 
 depend: ${OBJS:.o=.f} ${EXCLUDELIS:.o=.f}
