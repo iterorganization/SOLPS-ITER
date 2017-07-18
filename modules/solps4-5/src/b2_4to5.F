@@ -1551,6 +1551,12 @@ c
       implicit none
       integer nx, ny
       character tab
+      character*8 device
+#ifdef USE_PXFGETENV
+      integer lenval, ierror
+#endif
+      logical streql
+      external streql
 
       tab=char(9)
       write(*,*) 'Writing b2ag.dat'
@@ -1558,9 +1564,24 @@ c
       write(99,'(a)') '*dimens     (nx, ny, nx1, ny1; free format)'
       write(99,'(4(2x,i3))') nx, ny, nx, ny
       write(99,'(a)') '*param      (param(0:99); free format)'
-      write(99,'(a)') '  -1.0, 99*0.0'
+      write(99,'(a)') '  -2.0, 99*0.0'
       write(99,'(3a)')
      . '''b2agfs_geometry'''//tab//'''',trim(sonnetfile_4),''''
+#ifdef NO_GETENV
+#ifdef JET
+      device='jet'
+#else
+      device='iter'
+#endif
+#else
+#ifdef USE_PXFGETENV
+      CALL PXFGETENV ('DEVICE', 0, device, lenval, ierror)
+#else
+      call getenv ('DEVICE', device)
+#endif
+#endif
+      if (streql(device,'iter'))
+     > write(99,'(a)') '''b2agfs_pit_rescale''       ''-1.0'''
       close(99)
       return
       end subroutine write_b2ag
