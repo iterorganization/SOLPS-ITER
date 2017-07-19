@@ -41,9 +41,9 @@ else
 LDOPTS = -tp px # "-tp px" to fix a compiler bug at JET
 endif
 
-GKS		    = ${LD_GR} ${LD_GKS} -lX11 -lXt
-LDLIBS    = -L/usr/local/lib -L/usr/X11R6/lib
-LDEXTRA 	=
+GKS       = ${LD_GR} ${LD_GKS} -lX11 -lXt
+LDLIBS    =
+LDEXTRA   =
 
 #!!!Local Variables:
 #!!! mode: Makefile
