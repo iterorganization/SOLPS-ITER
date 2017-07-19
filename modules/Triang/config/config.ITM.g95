@@ -11,43 +11,43 @@ ifndef LD_NAG
   LD_NAG = -L${SOLPSLIB} -lblaslapack
 endif
 
-#DEFINES		= ${SOLPS_CPP} ${EIRENE_DEFINES} -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
-#DEFINES		= ${SOLPS_CPP} ${EIRENE_DEFINES} -DTRIANG -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
-DEFINES		=
-EQUIVS 		=
+#DEFINES  = ${SOLPS_CPP} ${EIRENE_DEFINES} -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
+#DEFINES  = ${SOLPS_CPP} ${EIRENE_DEFINES} -DTRIANG -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
+DEFINES   =
+EQUIVS    =
 
-#CPP	 	= -/lib/cpp -C -traditional
-CPP             = /lib/cpp -C -traditional -ffreestanding
-CPPOPTS 	= -P -I${srcdir} ${EQUIVS}
+#CPP      = -/lib/cpp -C -traditional
+CPP       = /lib/cpp -C -traditional -ffreestanding
+CPPOPTS   = -P -I${srcdir} ${EQUIVS}
 SED       =
-LINK_MOD 	= 
+LINK_MOD  =
 
-FC       	= g95
+FC        = g95
 
 ifdef SOLPS_DEBUG
-FCOPTS 		= -g -C -fbounds-check -ftrace=full
+FCOPTS    = -g -C -fbounds-check -ftrace=full
 else
-FCOPTS 		= -O3
+FCOPTS    = -O3
 endif
 
-#COMPILE  	= ${FC} -c ${FFLAGS}
+#COMPILE  = ${FC} -c ${FFLAGS}
 
-NAG		= ${LD_NAG}
-GKS		= ${LD_GR} ${LD_GKS} -lX11 -lXt -lXmu
+NAG       = ${LD_NAG}
+GKS       = ${LD_GR} ${LD_GKS} -lX11 -lXt -lXmu
 
-#LDLIBS		= ${LD_MSCL}-L/usr/local/lib -L/usr/X11R6/lib64
-LDLIBS		= -L/usr/local/lib -L/usr/X11R6/lib64
-LDEXTRA  	= 
+#LDLIBS   = ${LD_MSCL}-L/usr/local/lib -L/usr/X11R6/lib64
+LDLIBS    =
+LDEXTRA   =
 
 # new
 
-INCMOD 		= -I
-MOD 		= mod
-OBJDEST 	= -fmod=${OBJDIR} -o ${OBJDIR}/$*.o
+INCMOD    = -I
+MOD       = mod
+OBJDEST   = -fmod=${OBJDIR} -o ${OBJDIR}/$*.o
 
-BLD 		= ar rcv
+BLD       = ar rcv
 
-LD 		= g95
+LD        = g95
 
 #!!!Local Variables:
 #!!! mode: Makefile
