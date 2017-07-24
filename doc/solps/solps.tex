@@ -7558,19 +7558,96 @@ S_{CX_b}^q = - \sum \limits^{ns-1}_{\substack{a=0 \\ b \neq a-1}} r_{CX_{ab}} n_
 S_{CX_{b+1}}^q = \sum \limits^{ns-1}_{\substack{a=0 \\ b \neq a-1}} r_{CX_{ab}} n_a n_b \left( \frac{m_b+m_{b+1}}{2} \right) V_{b \parallel}
 \end{eqnarray}
 
+%-------- end of 5th page -------------
+
+If using Eq. (\ref{eq:mom_new}), the thermal and friction forces have two parts:
+
+$S_{Therm,a}^m = S_{Therm,ea}^m + S_{Therm,ia}^m$
+
+$S_{fr,a}^m = S_{fr,ea}^m + S_{fr,ia}^m$
+
+The electron contributions are:
+
+$S_{Therm,ea}^m = - \alpha_{ex} c_e^{(1)} \frac{n_a z_a^2 m_e}{b_x e \zeta_e} \frac{1}{c_{\sigma_{CL \parallel}}^{(Luciani)}} \frac{\partial T_e}{h_x \partial
+x}, ~ z_a \ne 0$
+
+$S_{fr,ea}^m = \frac{b_x^2 e^2 z_a^2}{\sigma_\parallel z_{eff}} n_e n_a \left( V_{e \parallel} - V_{a \parallel} \right), ~ z_a \ne 0$
+
+and the ion contributions are:
+
+$S_{Therm,ia}^m = \sum \limits_{b=0, b \ne a}^{ns - 1} c_{\alpha_{ab}}^{(Flim)} z_a^2 z_b^2 \frac{m_p}{\zeta_p e} \frac{n_a n_b}{n_a + n_b} \alpha_{ab} \frac{\partial T_i}{h_x \partial x}, ~z_a \ne 0$
+
+$S_{fr,ia}^m = \sum \limits_{b=0, b \ne a}^{ns - 1} R_{ab}^{(V_\parallel)} = \sum \limits_{b=0, b \ne a}^{ns - 1} \frac{1}{\zeta_p} m_p \sqrt{\frac{\frac{m_a}{m_p} \frac{m_b}{m_p}}{\frac{m_a}{m_p} + \frac{m_b}{m_p}}} z_a^2 z_b^2 n_a n_b K_{ab}^{(V_\parallel)} \left( V_{b \parallel} - V_{a \parallel} \right)$ 
+
+where
+
+$\alpha_{ab} = \frac{\zeta_p e \left( n_a + n_b \right)}{\sqrt{m_p}} \sqrt{\frac{\frac{m_a}{m_p} \frac{m_b}{m_p}}{\frac{m_a}{m_p} + \frac{m_b}{m_p}}} \left( \frac{K_{ab}^{(Therm)}}{\kappa_b} - \frac{K_{ba}^{(Therm)}}{\kappa_a} \right) b_x, ~ z_a \ne 0$
+
+$\zeta_e = \frac{3}{4 \sqrt{2 \pi}} \frac{\sqrt{m_e} T_e^{\frac{3}{2}}}{\ln \Lambda} {\left( \frac{4 \pi \epsilon_0}{e^2} \right)}^2$, ~ $\tau_e = \frac{\zeta_e}{z_{eff} n_e}$
+
+$\zeta_p = \frac{3}{4 \sqrt{2 \pi}} \frac{\sqrt{m_p} T_i^{\frac{3}{2}}}{\ln \Lambda} {\left( \frac{4 \pi \epsilon_0}{e^2} \right)}^2$, ~ $\tau_a = \frac{\zeta_p}{z_a^2 z_{eff} n_e} \sqrt{\frac{m_a}{m_p}}$
+
+$c_e^{(1)} = \frac{\left( 1 + 0.24 z_{eff} \right) \left( 1 + 0.93 z_{eff} \right)}{\left( 1 + 2.56 z_{eff} \right) \left( 1 + 0.29 z_{eff} \right)}$, ~ $c_e^{(2)} = 1.56 \frac{\left( 1 + 1.4 z_{eff} \right) \left( 1 + 0.52 z_{eff} \right)}{\left( 1 + 2.56 z_{eff} \right) \left( 1 + 0.29 z_{eff} \right)}$
+
+$\kappa_a = \sum \limits_{r=0}^{ns - 1} z_a^2 z_r^2 n_r \sqrt{m_p} \sqrt{\frac{\frac{m_a}{m_p} \frac{m_r}{m_p}}{\frac{m_a}{m_p} + \frac{m_r}{m_p}}}$
+
+
+$K_{rs}^{(Therm)} = \left\{
+\begin{matrix}
+c_{imp}^{(2)}, & s \ne r, & s = s_{main}, & z_r \ne 0, & z_s \ne 0, \\
+0, & r \ne r_{main}, & s \ne s_{main}, & z_r \ne 0, & z_s \ne 0, \\
+0, & r = r_{main}, & \forall s & &
+\end{matrix}
+\right.
+$
+
+$K_{rs}^{(V_\parallel)} = \left\{
+\begin{matrix}
+c_{imp}^{(1)}, & r = r_{main}, & s \ne r, & z_r \ne 0, & z_s \ne 0, \\
+c_{imp}^{(1)}, & s = s_{main}, & r \ne s, & z_r \ne 0, & z_s \ne 0, \\
+1, & r \ne r_{main}, & s \ne s_{main}, & z_r \ne 0, & z_s \ne 0, \\
+0, & r = s, & or & z_r = 0, & z_s = 0
+\end{matrix}
+\right.
+$
+
+$c_{imp}^{(1)} = \frac{\left( 1 + 0.24 z_{eff\_imp} \right) \left( 1 + 0.93 z_{eff\_imp} \right)}{\left( 1 + 2.56 z_{eff\_imp} \right) \left( 1 + 0.29 z_{eff\_imp} \right)}$, ~ $c_{imp}^{(2)} = 1.56 \frac{\left( 1 + 1.4 z_{eff\_imp} \right) \left( 1 + 0.52 z_{eff\_imp} \right)}{\left( 1 + 2.56 z_{eff\_imp} \right) \left( 1 + 0.29 z_{eff\_imp} \right)}$
+
+$z_{eff\_imp} = \frac{\sum \limits_{a=0, a \ne a_{main}}^{ns - 1} n_a z_a^2}{n_{a_{main}} z_{a_{main}}^2}$, ~ $c_{\sigma_{CL \parallel}}^{(Luciani)} = c_{\kappa_{ex}^{(CL)}}^{(Luciani)}$
+
+$c_{\alpha_{ab}}^{(F \lim)} = \left\{
+\begin{matrix}
+1, & \mbox{inside the separatrix} \\
+\frac{1}{1+\frac{\left| \alpha_{ab} \frac{\partial T_i}{h_x \partial x} \right|}{c_{flab} j_{ab, \max}}}, & \mbox{outside the separatrix}
+\end{matrix}
+\right.
+$, ~ $j_{ab, \max} = e K_{ab}^{(V_\parallel)} \sqrt{\frac{T_i}{m_p}} \left( n_a + n_b \right)$
+
+Otherwise, when using Eq. (\ref{eq:mom_old}), the thermal and friction force term expressions are:
+ 
+$S_{Therm,a}^m =
+n_a \left(
+	\frac{z_a}{n_e} - \frac{z_a^2}{n_{e^2}}
+\right)
+b_x e
+\left[
+	\hat E_x - \frac{n_e}{e} \left(
+		c_{th_e,a} \Delta_{T_e} + c_{th_i,a} \Delta_{T_i}
+	\right)
+\right],$
+
 \begin{equation}
 S^m_{fr,a} =
 \sum \limits^{ns-1}_{\substack{b = 0, \\ b\neq a, z_a \neq 0, z_b \neq 0}} \frac 1{\tau_p} m_p
 \sqrt{ \frac {\frac{m_a}{m_p} \frac{m_b}{m_p}} {\frac{m_a}{m_p} + \frac{m_b}{m_p}} }
 z_a^2 z_b^2 n_b n_a \left( V_{b \parallel} - V_{a \parallel} \right)
-\text{- friction force (b2sifr)}
 \end{equation}
+
+where
 
 $\tau_p = \frac 3{4\sqrt{2\pi}}
 \frac{\sqrt{m_p}T_i^{\frac 3 2}}{\ln \Lambda}
 \left(\frac{4 \pi \varepsilon_0}{e^2}\right)^2$, where the Coulomb logarithm $\ln \Lambda $ can be chosen as
-
-%-------- end of 5th page -------------
 
 \begin{equation}
 \begin{matrix}
@@ -7584,17 +7661,6 @@ $\tau_p = \frac 3{4\sqrt{2\pi}}
 \end{matrix} \right.
 \end{matrix}
 \end{equation}
-
-$S_{Therm,a}^m =
-n_a \left(
-	\frac{z_a}{n_e} - \frac{z_a^2}{n_{e^2}}
-\right)
-n_e b_x e
-\left[
-	\hat E_x - \frac 1 e \left(
-		c_{th_e,a} \Delta_{T_e} + c_{th_i,a} \Delta_{T_i}
-	\right)
-\right],$ thermal force (b2sifr)
 
 \begin{equation*}
 n_{e^2 }= \sum \limits^{ns-1}_{a=0} z_a^2 n_a, \;\;\;\ l_{t_e}=0.3; \;\;\;\;\; l_{t_i}=0.3; \;\;\;\;\; z_{\lambda_e}=\frac{1.5\cdot
@@ -8221,7 +8287,7 @@ If {\tt 'b2sigp\_style'} is set to {\tt '2'} (default):
 c_{\alpha_{ex}}^{(F\text{lim})} = \left\{
 \begin{matrix}
 1, & \text{inside the separatrix} \\
-\frac{1}{1+\left|\frac{\alpha_{CLx} \frac{1}{h_x} \frac{\partial T_e}{\partial x}}{c_{flmal} j_{e \max}}\right|}, & \text{outside the separatrix} \\
+\frac{1}{1+\left|\frac{\alpha_{CLx} \frac{1}{h_x} \frac{\partial T_e}{\partial x}}{c_{flal} j_{e \max}}\right|}, & \text{outside the separatrix} \\
 \end{matrix} \right.
 \end{equation*}
 \begin{equation*}
