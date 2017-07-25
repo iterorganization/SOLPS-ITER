@@ -1378,8 +1378,11 @@ negative quantities on the same scale and "M" the absolute values of negative qu
   \item[2dt\_av]\index{2dt\_av} plots averaged time dependent quantities from
     {\tt b2time.nc} (Appendix \ref{cha:b2time}) versus time.
   \item[2dvi]\index{2dvi} prepares a \btwoplot command file {\tt TDV/contr.b2p} for production of input files to start a {\tt DIVIMP} run.
-  \item[2d\_plots]\label{script:2dplots}\index{2d\_plots} prepares {\tt b2time.ps} from
+  \item[2d\_plots]\label{script:2dplots}\index{2d\_plots} prepares {\tt b2time2d.ps} from
     {\tt b2time.nc} (Appendix \ref{cha:b2time}).  This uses the batch
+    feature of the {\tt plot} command.
+  \item[2d\_plots\_av]\index{2d\_plots\_av} prepares {\tt b2time2d\_av.ps} from
+    averaged values in {\tt b2time.nc} (Appendix \ref{cha:b2time}).  This uses the batch
     feature of the {\tt plot} command.
   \item[2d\_profiles]\index{2d\_profiles} creates {\tt *.last10} files for plotting.
     When processing fluxes, divides them by the area of contact to the neighbouring cell.
