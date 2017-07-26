@@ -7,6 +7,7 @@
 SHELL = /usr/bin/env sh
 TIME = time
 RUN_OPTIONS =
+BLANK =
 
 # Default debugger
 DBX ?= dbx
@@ -199,18 +200,12 @@ else
 	-cd b2mn.exe.dir ; mkdir tracing ; mkdir batch_av ; mkdir run_av ; ${TIME} ${B2OBJ}/b2mn.exe ${RUN_OPTIONS} ; mv $(target_mn) .. >& /dev/null
 endif
 	-cd b2mn.exe.dir ; [ -d ../tracing ] || mkdir ../tracing
-	[ ${shell echo `( ( ls b2mn.exe.dir/tracing/ > /dev/tty ) >& /dev/null ) | wc -l`} -gt 0 ] && mv -f b2mn.exe.dir/tracing/* tracing || echo > /dev/null
-	[ -d b2mn.exe.dir/batch_av ] && ( [ ${shell echo `( ( ls b2mn.exe.dir/batch_av/ > /dev/tty ) >& /dev/null ) | wc -l`} -gt 0 ] || mkdir -p batch_av )
-	[ -d batch_av ] && ( [ ${shell echo `( ( ls b2mn.exe.dir/batch_av/ > /dev/tty ) >& /dev/null ) | wc -l`} -gt 0 ] && mv -f b2mn.exe.dir/batch_av/* batch_av || echo > /dev/null )
+	-cd b2mn.exe.dir ; [ -d ../batch_av ] || mkdir ../batch_av
 	-cd b2mn.exe.dir ; [ -e ../fort.30 ] || ( [ -e fort.30 ] && mv -f fort.30 .. || echo > /dev/null )
 	-cd b2mn.exe.dir ; [ -e ../b2faveri ] || ( [ -e b2faveri ] && mv -f b2faveri .. || echo > /dev/null )
-	[ ${shell echo `( ( ls b2mn.exe.dir/run_av/ > /dev/tty ) >& /dev/null ) | wc -l`} -gt 0 ] || mkdir -p run_av
-	[ -d run_av ] && ( [ ${shell echo `( ( ls b2mn.exe.dir/run_av/ > /dev/tty ) >& /dev/null ) | wc -l`} -gt 0 ] && mv -f b2mn.exe.dir/run_av/* run_av || echo > /dev/null )
+	-cd b2mn.exe.dir ; [ -d ../run_av ] || mkdir ../run_av
 	-cd b2mn.exe.dir ; rm -f $(notdir $^) .quit >& /dev/null
-	[ ${shell echo `( ( ls b2mn.exe.dir/d?? > /dev/tty ) >& /dev/null ) | wc -l`} -gt 0 ] && mv b2mn.exe.dir/d?? . || echo > /dev/null
-	[ ${shell echo `( ( ls b2mn.exe.dir/ds?? > /dev/tty ) >& /dev/null ) | wc -l`} -gt 0 ] && mv b2mn.exe.dir/ds?? . || echo > /dev/null
-	[ ${shell echo `( ( ls b2mn.exe.dir/ds??? > /dev/tty ) >& /dev/null ) | wc -l`} -gt 0 ] && mv b2mn.exe.dir/ds??? . || echo > /dev/null
-	[ ${shell echo `( ( ls b2mn.exe.dir/b2.*.parameters > /dev/tty ) >& /dev/null ) | wc -l`} -gt 0 ] && mv b2mn.exe.dir/b2.*.parameters . || echo > /dev/null
+	-move_optional_files
 ifndef STAND_ALONE
 	-[ -e b2mn.exe.dir/fort.10 ] && mv b2mn.exe.dir/fort.10 . || echo > /dev/null
 	-[ -e b2mn.exe.dir/fort.11 ] && mv b2mn.exe.dir/fort.11 . || echo > /dev/null
@@ -284,19 +279,13 @@ endif
 	[ -e ../fort.35 ] && cp -p ../fort.35 . || echo > /dev/null
 endif
 	cd b2mn.exe.dir ; mkdir tracing ; mkdir batch_av ; mkdir run_av ; ${DBX} ${INC} ${DBGOBJ}/b2mn.exe ${RUN_OPTIONS} ; mv $(target_mn) .. >& /dev/null ; \
-	[ -d ../tracing ] || mkdir ../tracing
-	[ ${shell echo `( ( ls b2mn.exe.dir/tracing/ > /dev/tty ) >& /dev/null ) | wc -l`} -gt 0 ] && mv -f b2mn.exe.dir/tracing/* tracing || echo > /dev/null
-	[ ${shell echo `( ( ls b2mn.exe.dir/batch_av/ > /dev/tty ) >& /dev/null ) | wc -l`} -gt 0 ] || mkdir -p batch_av
-	[ -d batch_av ] && ( [ ${shell echo `( ( ls b2mn.exe.dir/batch_av/ > /dev/tty ) >& /dev/null ) | wc -l`} -gt 0 ] && mv -f b2mn.exe.dir/batch_av/* batch_av || echo > /dev/null )
-	[ ${shell echo `( ( ls b2mn.exe.dir/run_av/ > /dev/tty ) >& /dev/null ) | wc -l`} -gt 0 ] || mkdir -p run_av
-	[ -d run_av ] && ( [ ${shell echo `( ( ls b2mn.exe.dir/run_av/ > /dev/tty ) >& /dev/null ) | wc -l`} -gt 0 ] && mv -f b2mn.exe.dir/run_av/* run_av || echo > /dev/null )
+	-cd b2mn.exe.dir ; [ -d ../tracing ] || mkdir ../tracing
+	-cd b2mn.exe.dir ; [ -d ../batch_av ] || mkdir ../batch_av
 	-cd b2mn.exe.dir ; [ -e ../fort.30 ] || ( [ -e fort.30 ] && mv -f fort.30 .. || echo > /dev/null )
 	-cd b2mn.exe.dir ; [ -e ../b2faveri ] || ( [ -e b2faveri ] && mv -f b2faveri .. || echo > /dev/null )
+	-cd b2mn.exe.dir ; [ -d ../run_av ] || mkdir ../run_av
 	-cd b2mn.exe.dir ; rm -f $(notdir $^) .quit >& /dev/null
-	[ ${shell echo `( ( ls b2mn.exe.dir/d?? > /dev/tty ) >& /dev/null ) | wc -l`} -gt 0 ] && mv b2mn.exe.dir/d?? . || echo > /dev/null
-	[ ${shell echo `( ( ls b2mn.exe.dir/ds?? > /dev/tty ) >& /dev/null ) | wc -l`} -gt 0 ] && mv b2mn.exe.dir/ds?? . || echo > /dev/null
-	[ ${shell echo `( ( ls b2mn.exe.dir/ds??? > /dev/tty ) >& /dev/null ) | wc -l`} -gt 0 ] && mv b2mn.exe.dir/ds??? . || echo > /dev/null
-	[ ${shell echo `( ( ls b2mn.exe.dir/b2.*.parameters > /dev/tty ) >& /dev/null ) | wc -l`} -gt 0 ] && mv b2mn.exe.dir/b2.*.parameters . || echo > /dev/null
+	-move_optional_files
 ifndef STAND_ALONE
 	-[ -e b2mn.exe.dir/fort.10 ] && mv b2mn.exe.dir/fort.10 . || echo > /dev/null
 	-[ -e b2mn.exe.dir/fort.11 ] && mv b2mn.exe.dir/fort.11 . || echo > /dev/null
