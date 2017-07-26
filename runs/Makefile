@@ -167,12 +167,12 @@ endif
 	[ -s fort.33 ] || ( [ -s $(baserundir)/fort.33 ] && ln -sf $(baserundir)/fort.33 . || ( [ -s $(triangdir)/fort.33 ] && ln -sf $(triangdir)/fort.33 . || echo > /dev/null ) )
 	[ -s fort.34 ] || ( [ -s $(baserundir)/fort.34 ] && ln -sf $(baserundir)/fort.34 . || ( [ -s $(triangdir)/fort.34 ] && ln -sf $(triangdir)/fort.34 . || echo > /dev/null ) )
 	[ -s fort.35 ] || ( [ -s $(baserundir)/fort.35 ] && ln -sf $(baserundir)/fort.35 . || ( [ -s $(triangdir)/fort.35 ] && ln -sf $(triangdir)/fort.35 . || echo > /dev/null ) )
-	[ -s fort.10 ] && cp fort.44 fort.10.i || echo > /dev/null
-	[ -s fort.11 ] && cp fort.44 fort.11.i || echo > /dev/null
-	[ -s fort.12 ] && cp fort.44 fort.12.i || echo > /dev/null
-	[ -s fort.13 ] && cp fort.44 fort.13.i || echo > /dev/null
-	[ -s fort.14 ] && cp fort.44 fort.14.i || echo > /dev/null
-	[ -s fort.15 ] && cp fort.44 fort.15.i || echo > /dev/null
+	[ -s fort.10 ] && cp fort.10 fort.10.i || echo > /dev/null
+	[ -s fort.11 ] && cp fort.11 fort.11.i || echo > /dev/null
+	[ -s fort.12 ] && cp fort.12 fort.12.i || echo > /dev/null
+	[ -s fort.13 ] && cp fort.13 fort.13.i || echo > /dev/null
+	[ -s fort.14 ] && cp fort.14 fort.14.i || echo > /dev/null
+	[ -s fort.15 ] && cp fort.15 fort.15.i || echo > /dev/null
 	[ -s fort.44 ] && cp fort.44 fort.44.i || echo > /dev/null
 	[ -s fort.46 ] && cp fort.46 fort.46.i || echo > /dev/null
 	-cd b2mn.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ln -s ../input.dat fort.1 ; \
@@ -257,12 +257,12 @@ endif
 	[ -s fort.33 ] || ( [ -s $(baserundir)/fort.33 ] && ln -sf $(baserundir)/fort.33 . || ( [ -s $(triangdir)/fort.33 ] && ln -sf $(triangdir)/fort.33 . || echo > /dev/null ) )
 	[ -s fort.34 ] || ( [ -s $(baserundir)/fort.34 ] && ln -sf $(baserundir)/fort.34 . || ( [ -s $(triangdir)/fort.34 ] && ln -sf $(triangdir)/fort.34 . || echo > /dev/null ) )
 	[ -s fort.35 ] || ( [ -s $(baserundir)/fort.35 ] && ln -sf $(baserundir)/fort.35 . || ( [ -s $(triangdir)/fort.35 ] && ln -sf $(triangdir)/fort.35 . || echo > /dev/null ) )
-	[ -s fort.10 ] && cp fort.44 fort.10.i || echo > /dev/null
-	[ -s fort.11 ] && cp fort.44 fort.11.i || echo > /dev/null
-	[ -s fort.12 ] && cp fort.44 fort.12.i || echo > /dev/null
-	[ -s fort.13 ] && cp fort.44 fort.13.i || echo > /dev/null
-	[ -s fort.14 ] && cp fort.44 fort.14.i || echo > /dev/null
-	[ -s fort.15 ] && cp fort.44 fort.15.i || echo > /dev/null
+	[ -s fort.10 ] && cp fort.10 fort.10.i || echo > /dev/null
+	[ -s fort.11 ] && cp fort.11 fort.11.i || echo > /dev/null
+	[ -s fort.12 ] && cp fort.12 fort.12.i || echo > /dev/null
+	[ -s fort.13 ] && cp fort.13 fort.13.i || echo > /dev/null
+	[ -s fort.14 ] && cp fort.14 fort.14.i || echo > /dev/null
+	[ -s fort.15 ] && cp fort.15 fort.15.i || echo > /dev/null
 	[ -s fort.44 ] && cp fort.44 fort.44.i || echo > /dev/null
 	[ -s fort.46 ] && cp fort.46 fort.46.i || echo > /dev/null
 	-cd b2mn.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ln -s ../input.dat fort.1 ; \
