@@ -1548,6 +1548,7 @@ extracted from the {\tt run.log} file.
   \item[QSUB.postprocess]\index{QSUB.postprocess} List of instructions appended to the {\tt B2.5} stand-alone submission scripts for run post-processing
   \item[QSUB.postprocess\_coupled]\index{QSUB.postprocess\_coupled} List of instructions appended to the \SOLPSITER submission scripts for run post-processing
   \item[quote\_pwd]\index{quote\_pwd} Returns the current working directory as a string with quotes (c.f.\ {\tt noquote\_pwd}).
+  \item[recover\_initial\_files]\index{recover\_initial\_files} For use to copy back the stored initial case files ({\tt .i} extension) before a run restart.
   \item[resave\_mds]\index{resave\_mds} Update an archived {\tt MDSplus} case. A "-n" option allows for dry-run tests. A "-d" option allows to run within the chosen debugger. A "-s" option allows to update a {\tt B2.5} stand-alone case.
   \item[rlndr]\index{rlndr} Replaces a link address by another
   \item[rps]\index{rps} Shifts $\Psi$ values by a given amount within a {\tt DG} equilibrium file (see Sec.~\ref{sec:equtrn}).
@@ -1710,6 +1711,8 @@ welcome!
   \item[lndr.old]\index{lndr.old}
   \item[losses]\index{losses}
   \item[maxconverge]\index{maxconverge}
+  \item[move\_optional\_files]\index{move\_optional\_files}
+  \item[move\_save\_files]\index{move\_save\_files}
   \item[mtv.BOL]\index{mtv.BOL}
   \item[mtv.HAL\_8Co\_atm]\index{mtv.HAL\_8Co\_atm}
   \item[mtv.lines]\index{mtv.lines}
@@ -3930,7 +3933,7 @@ are always welcome.
 
 \newpage
 \section{b2co, recovering from a crash}
-\label{sec:b2co}\index{b2co}\index{plasmastate}\index{B2.5, run recovery}\index{b2fstate}
+\label{sec:b2co}\index{b2co}\index{plasmastate}\index{B2.5, run recovery}\index{b2fstate}\index{recover\_initial\_files}
 
 In case of a computer crash during a run, it may be possible to recover
 the results and continue the simulation. The code writes, at regular
@@ -3949,6 +3952,8 @@ a crash, the user should then:
   \item {\tt mv b2fstate b2fstati}
   \item Re-launch the run
 \end{enumerate}
+
+If the crash happened early on in the simulation and one wishes to return to the initial state of the simulation to re-launch the run cleanly, one may use the {\tt recover\_initial\_files} script instead.
 
 This procedure will re-start the run from the point at which the {\tt plasmastate} file was written. In cases with feedback schemes active, the feedback values will be grabbed from the relevant {\tt b2.*\_save.parameters.XXXX} files and a new set of
 {\tt b2.*\_save.parameters} files will be created.
