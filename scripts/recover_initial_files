@@ -1,0 +1,6 @@
+#! /usr/bin/env tcsh
+
+foreach i (`ls *.i`)
+set recoverfile=`echo $i:t:r`
+cp -i $i $recoverfile
+end
