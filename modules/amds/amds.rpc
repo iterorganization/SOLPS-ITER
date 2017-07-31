@@ -49,7 +49,7 @@ E prod 1
 +r-p-n float
 eprdct2
 E prod 2
-EnabledParticles1 529
+EnabledParticles1 538
 Reaction HYDHEL_H.1_2.1.1 0
 Reaction HYDHEL_H.1_2.1.2 0
 Reaction HYDHEL_H.1_2.1.3 0
@@ -566,11 +566,17 @@ Reaction AMMONX_H.1_50 0
 Reaction AMMONX_H.2_EK 0
 Reaction AMMONX_H.2_EM 0
 Reaction AMMONX_H.2_DB 0
+Reaction AMMONX_H.1_DB 0
 Reaction AMMONX_H.2_DD 0
+Reaction AMMONX_H.1_DD 0
 Reaction AMMONX_H.2_DE 0
+Reaction AMMONX_H.1_DE 0
 Reaction AMMONX_H.2_DF 0
+Reaction AMMONX_H.1_DF 0
 Reaction AMMONX_H.2_EA 0
+Reaction AMMONX_H.1_EA 0
 Reaction AMMONX_H.2_EC 0
+Reaction AMMONX_H.1_EC 0
 Reaction AMMONX_H.2_20 0
 Reaction AMMONX_H.2_13 0
 Reaction AMMONX_H.2_21 0
@@ -579,7 +585,10 @@ Reaction AMMONX_H.2_33 0
 Reaction AMMONX_H.2_34 0
 Reaction AMMONX_H.1_34 0
 Reaction AMMONX_H.2_06 0
-Vars1 529
+Reaction AMMONX_H.2_09 0
+Reaction AMMONX_H.2_17 0
+Reaction AMMONX_H.2_ZH 0
+Vars1 538
 Reaction HYDHEL_H.1_2.1.1 2
 
 
@@ -9868,7 +9877,43 @@ Reaction AMMONX_H.2_DB 2
 
 Particle N2*(A)
 Particle N*(4S)
+Reaction AMMONX_H.1_DB 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle N2*(A)
+Particle N*(4S)
 Reaction AMMONX_H.2_DD 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle NH3
+Particle N2*(A)
+Reaction AMMONX_H.1_DD 2
 
 
 
@@ -9904,7 +9949,43 @@ Reaction AMMONX_H.2_DE 2
 
 Particle H
 Particle N2*(A)
+Reaction AMMONX_H.1_DE 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H
+Particle N2*(A)
 Reaction AMMONX_H.2_DF 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H2
+Particle N2*(A)
+Reaction AMMONX_H.1_DF 2
 
 
 
@@ -9940,7 +10021,43 @@ Reaction AMMONX_H.2_EA 2
 
 Particle H2
 Particle N*(2D)
+Reaction AMMONX_H.1_EA 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H2
+Particle N*(2D)
 Reaction AMMONX_H.2_EC 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle NH3
+Particle N*(2D)
+Reaction AMMONX_H.1_EC 2
 
 
 
@@ -10102,6 +10219,60 @@ Reaction AMMONX_H.2_06 2
 
 Particle e
 Particle H2
+Reaction AMMONX_H.2_09 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle NH2
+Reaction AMMONX_H.2_17 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle NH2
+Reaction AMMONX_H.2_ZH 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle N2*(A)
 StartupParticles2 3
 H
 H2
