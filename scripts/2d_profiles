@@ -34,7 +34,7 @@ which nc2text > /dev/null && set no_nc2text=0 || set no_nc2text=1
 
 if ($no_nc2text == 1) then
   # get array size and set indices
-  set ny = `ncdump $source -f f -v fn3dl | sed -n 'x;$p' | awk -F '[(,]' '{print $2;}'`
+  set ny = `ncdump $source -f f -v fn3dl | sed -n 's/.*ny[ \t]*=[ \t]*\([0-9]\{1,\}\).*/\1/p'`
   set nt = `ncdump $source -f f -v fn3dl | sed -n 'x;$p' | awk -F '[,)]' '{print $2;}'`
 #  echo "ny $ny"
 #  echo "nt $nt"
