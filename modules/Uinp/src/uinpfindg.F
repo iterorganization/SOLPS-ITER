@@ -11,7 +11,7 @@ c*** Prepare the data for the final stage of Eirene averaging
 c=======================================================================
       logical lc
 #include "uinput.inc"
-      integer, save :: nprnli_save, ntcpu_save
+      integer, save :: nprnli_save, ntcpu_save, nfile_save
       integer, save :: npts_save(nstra)
       external subini, subend
 c=======================================================================
@@ -23,10 +23,13 @@ c=======================================================================
        npts=npts*10
        nprnli_save=nprnli
        nprnli=nprnli*10
+       nfile_save=nfile
+       nfile=30000+mod(nfile_save,10000)
       else !}{
        ntcpu=ntcpu_save
        npts=npts_save
        nprnli=nprnli_save
+       nfile=nfile_save
       end if !}
       call subend ()
       return

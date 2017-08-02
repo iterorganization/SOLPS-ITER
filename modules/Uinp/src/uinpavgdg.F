@@ -11,7 +11,7 @@ c*** Prepare the data for the averaged Eirene run
 c=======================================================================
       logical lc
 #include "uinput.inc"
-      integer, save :: nprnli_save
+      integer, save :: nprnli_save, nfile_save
       integer, save :: npts_save(nstra)
       external subini, subend
 c=======================================================================
@@ -21,9 +21,12 @@ c=======================================================================
        npts=npts/100
        nprnli_save=nprnli
        nprnli=nprnli/100
+       nfile_save=nfile
+       nfile=30000+mod(nfile_save,10000)
       else !}{
        npts=npts_save
        nprnli=nprnli_save
+       nfile=nfile_save
       end if !}
       call subend ()
       return
