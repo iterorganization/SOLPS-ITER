@@ -128,7 +128,9 @@ argloop:
     goto argloop 
   endif
   if ("X${argv}X" == "XX") set argv="b2mn"
+  echo "argument= " $argv
   set CMD=`echo $argv" " | sed -e 's: :.prt :g'`
+  echo $CMD
   make $debug TIME="$TIME" -f $RUNS/Makefile $CMD
   unsetenv STAND_ALONE
   if ($?MPI_SET)   source $SOLPSTOP/SETUP/nompi

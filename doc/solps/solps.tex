@@ -4677,7 +4677,7 @@ several values of $\Delta_t$.
 
 When running a coupled \SOLPSITER case to obtain a steady-state solution, it is recommended to use the source
 averaging scheme detailed in \${\tt SOLPSTOP/doc/SOLPS-ITER\_Eirene\_averaging.pdf} and references therein. This averaging scheme is meant to yield significant
-run speed-up and lower the statistical error introduced by the {\tt Eirene} Monte-Carlo noise, as well as provide means to estimate the errors on the solution, following the formalism detailed in \cite{Ghoos_PET2016, Ghoos_JCP2016}.
+run speed-up and lower the statistical error introduced by the {\tt Eirene} Monte-Carlo noise, as well as provide means to estimate the errors on the solution, following the formalism detailed in \cite{Ghoos_PET2016, Ghoos_JCP2016}. Error estimates are obtained by means of the {\tt b2ye} program (See Section \ref{sec:b2ye} below).
 
 The averaging scheme works in three stages:
 \begin{enumerate}\index{res\_av}\index{run\_av}
@@ -4685,6 +4685,21 @@ The averaging scheme works in three stages:
   \item{An averaging phase}, turned on by means of the {\tt "b2mndt\_av"} switch in the {\tt b2mn.dat} input file, usually with a smaller number of {\tt Eirene} trajectories, during which batch averaging will be done to obtain an averaged steady-state solution. This stage can be prepared by means of the {\tt run\_av} script and uses the {\tt input\_avg.eir Eirene} input file prepared by {\tt Uinp} if available.
   \item{A finalization phase} where the averaged steady-state solution is used for a small number of timesteps, and a larger number of {\tt Eirene} trajectories, to reduce statistical noise. This is done by running the {\tt res\_av} scriptand uses the {\tt input\_fin.eir Eirene} input file prepared by {\tt Uinp} if available.
 \end{enumerate}
+
+\section{b2ye, error assessment}
+\label{sec:b2ye}\index{b2ye}\index{error assessment}\index{b2time.nc}\index{b2favere}
+
+The program {\tt b2ye} is meant for computing error assessment of a coupled {\tt B2.5-Eirene} run where the averaging scheme described in Section \ref{sec:B2Eirene:averaging} above has been used. It is called by means of the command:
+\begin{verbatim}
+    b2run b2ye
+\end{verbatim}
+or
+\begin{verbatim}
+    gmake -f $SOLPSTOP/runs/Makefile b2ye.prt
+\end{verbatim}
+%% $
+
+It uses the data in the {\tt b2time.nc} and {\tt b2favere} files and calculates statistical errors based on averaged quantities collected during the averaging phase of a {\tt B2.5-Eirene} calculation.
 
 \chapter{Using MDSPLUS}
 \index{MDSPLUS}\label{cha:MDSplus}
@@ -18895,6 +18910,7 @@ JET in 2002.
   --- it converts from the \SOLPSfive plasma state file to that used by
   \SOLPSfour
 \item[\textcolor{Red}{b2ydm}] \index{b2ydm} post processes the heat load profiles on the dome and evaluates outlet coolant temperature (see \ref{sec:b2ydm})
+\item[b2ye] \index{b2ye} computes an error assessment of a coupled {\tt B2.5-Eirene} run
 \item[b2yg] \index{b2yg} plots the geometry and magnetic field
 \item[b2yh] \index{b2yh} prints the table of physics parameters
 \item[b2yi] \index{b2yi} plots the plasma state
@@ -18958,6 +18974,7 @@ b2mn.prt \index{b2mn.prt} & formatted & b2mn \\
 b2rd.prt \index{b2rd.prt} & formatted & b2rd \\
 b2uf.prt \index{b2uf.prt} & formatted & b2uf \\
 b2ydm.prt \index{b2ydm.prt} & formatted & b2ydm \\
+b2ye.prt \index{b2ye.prt} & formatted & b2ye \\
 b2yg.prt \index{b2yg.prt} & formatted & b2yg \\
 b2yh.prt \index{b2yh.prt} & formatted & b2yh \\
 b2yi.prt \index{b2yi.prt} & formatted & b2yi \\
@@ -18996,8 +19013,8 @@ b2fgmtrt \index{b2fgmtrt} & un*formatted & b2rd & & recovered geometry file \\
 b2ftrace \index{b2ftrace} & un*formatted & b2mn & b2yq & residuals \\
 b2ftrack \index{b2ftrack} & un*formatted & b2mn & b2yn & residuals \\
 b2specp \index{b2specp} & formatted & b2yp & & sources \\
-b2faveri \index{b2faveri} & formatted & & b2mn & initial averaged plasma solution \\ 
-b2favere \index{b2favere} & formatted & b2mn & & final averaged plasma solution \\ 
+b2faveri \index{b2faveri} & formatted & & b2mn & initial averaged plasma solution \\
+b2favere \index{b2favere} & formatted & b2mn & b2ye & final averaged plasma solution \\
 tran \index{tran} & formatted & b2mn & & plasma state used for archiving at JET \\
 \end{tabular}
   \end{center}

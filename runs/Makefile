@@ -40,7 +40,7 @@ endif
 
 
 prints = b2ag.prt b2ah.prt b2ai.prt b2ar.prt b2mn.prt \
- b2yg.prt b2yh.prt b2yi.prt b2ym.prt b2yn.prt b2yp.prt b2yq.prt \
+ b2ye.prt b2yg.prt b2yh.prt b2yi.prt b2ym.prt b2yn.prt b2yp.prt b2yq.prt \
  b2yr.prt b2yt.prt b2yi_gnuplot.prt
 
 target_ag = b2ag.prt b2fgmtry fort.30
@@ -56,6 +56,7 @@ target_fu = b2fu.prt
 target_co = b2co.prt
 target_pl = b2pl.prt b2plot.ps
 target_ts = b2ts.prt
+target_ye = b2ye.prt
 target_yg = b2yg.prt b2yg.plt
 target_yh = b2yh.prt
 target_yi = b2yi.prt b2yi.plt
@@ -65,7 +66,7 @@ target_yn = b2yn.prt b2yn.plt
 target_yp = b2yp.prt b2yp.plt b2specp
 target_yq = b2yq.prt b2yq.plt
 target_yr = b2yr.prt b2yr.plt
-target_yt = b2yt.prt b2fstatt b2yt.files
+target_yt = b2yt.prt b2fstatt b2mn.dat.2 b2ah.dat.2 b2ai.dat.2 b2yt.files
 target_xd = B2SXDR
 target_rd = b2rd.prt
 target_ual = b2_ual_write.prt
@@ -372,6 +373,15 @@ $(target_ts) : b2fparam b2fgmtry b2fstate b2fplasma
 	cd b2ts.exe.dir ; ${TIME} ${B2OBJ}/b2ts.exe ${RUN_OPTIONS} ; mv $(target_ts) b2fstate .. ; rm -f $(notdir $^) .quit >& /dev/null
 	-rmdir b2ts.exe.dir
 
+$(target_ye) : 
+	echo in b2ye.prt
+	rm -rf b2ye.exe.dir >& /dev/null ; mkdir b2ye.exe.dir 
+	-[ -e b2favere ] && cp b2favere b2ye.exe.dir || echo > /dev/null
+	-[ -e b2time.nc ] && cp b2time.nc b2ye.exe.dir || echo > /dev/null
+	echo "B2OBJ=" ${B2OBJ}
+	cd b2ye.exe.dir ; ${TIME} ${B2OBJ}/b2ye.exe ${RUN_OPTIONS} ; mv b2ye.prt .. ; rm b2favere b2time.nc 
+	-rmdir b2ye.exe.dir
+
 $(target_yg) : b2yg.dat b2fgmtry
 	rm -rf b2yg.exe.dir >& /dev/null ; mkdir b2yg.exe.dir ; cp $^ b2yg.exe.dir
 	rm -f $(target_yg)
@@ -498,7 +508,7 @@ clean :
 	rm -rf *.exe.dir
 
 realclean : clean
-	rm -f b2fgmtry b2fpar* b2frates b2fstat* b2ftra* b2fmovie b2specp
+	rm -f b2fgmtry b2fpar* b2frates b2fstat* b2ftra* b2fmovie b2specp b2faver* b2time.nc
 
 # The target testvars is present only for testing purposes.
 testvars :
@@ -531,6 +541,8 @@ help help.prt:
 	@echo "     runs b2plot"
 	@echo "  ${target_ts} : "
 	@echo "     runs a dummy example of a post-processor"
+	@echo "  ${target_ye} : "
+	@echo "     provides an error assessment for a coupled run"
 	@echo "  ${target_yg} : "
 	@echo "     displays geometry and magnetic field"
 	@echo "  ${target_yh} : "
