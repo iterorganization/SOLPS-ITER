@@ -20,6 +20,7 @@ c=======================================================================
 c*** Find the species indices
       do i=1,nspigen
         if (streql(spcigen(i),'He')) j_he_at = i
+        if (streql(spcigen(i),'Ne')) j_ne_at = i
         if (streql(spcigen(i),'H') .or.
      .      streql(spcigen(i),'D') .or.
      .      streql(spcigen(i),'T')) j_h_at = i

@@ -473,7 +473,8 @@ c***    list of cell numbers indicating the pump and their number,
 c***    list of wall segments indicating the pump and their number
       logical do_hepdt
       real*4 pwrhepdt,pmphepdt
-      integer locphep,lpbihep,lpbohep,lptihep,lptohep,j_he_at,j_h_at,
+      integer locphep,lpbihep,lpbohep,lptihep,lptohep,
+     ,  j_he_at,j_h_at,j_ne_at,
      ,  l_h_mol(nmol),lstclhep(nxd),nstclhep,lhetrgts(nlim),nhetrgts   
 
 c-----------------------------------------------------------------------
@@ -580,7 +581,8 @@ c     ,  spcifup,spcifua,spcifum,spcifui,
      ,  ntrgte,jedgep,jedgec,jedgeo,ntrgto,ntrgtm,
      ,  tgrefsw,tgsppsw,tgspcsw,tgsppsp,tgspcgr,tgnhst,tgmhst,tgnini,
      ,  ilplgu,jlplgu,ilplgdg,trirefel,trirefcn,ntriref,
-     ,  locphep,lpbihep,lpbohep,lptihep,lptohep,j_he_at,j_h_at,l_h_mol,
+     ,  locphep,lpbihep,lpbohep,lptihep,lptohep,
+     ,  j_he_at,j_h_at,j_ne_at,l_h_mol,
      ,  lstclhep,nstclhep,lhetrgts,nhetrgts,
      ,  n_spcsrf,k_spcsrf,sps_sgrp,i_spcsrf,j_spcsrf,l_spcsrf,ll_spcsrf,
      ,  npfrgrp,lpfrgrp,ipfrgrp,jpfrgrp,lm_vhst,lm_whst,

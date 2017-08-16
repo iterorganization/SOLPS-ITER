@@ -703,7 +703,7 @@ cxpb Check if we need to do molecular ions
 #ifdef DBG
       write(*,*) 'hlp_ion : ', (hlp_ion(j),j=1,nspcion)
       do j = 1, nspcmol !{
-        write(*,'(a,i2,a,20i3)') 'j,mol,cmp_bck : ',
+        write(*,'(a,i2,1x,a,20i3)') 'j,mol,cmp_bck : ',
      .              j,textm(j),(cmp_bck(j,l),l=1,nmol+nion)
       end do !}
 #endif
@@ -840,7 +840,7 @@ cxpb Second pass in case the molecules were not sorted in ascending order
 #ifdef DBG
       write(*,*) 'hlp_mol : ', (hlp_mol(j),j=1,nspcmol)
       do j = 1, nspcmol !{
-        write(*,'(a,i2,a,20i3)') 'j,mol,cmp_bck : ',
+        write(*,'(a,i2,1x,a,20i3)') 'j,mol,cmp_bck : ',
      .                j,textm(j),(cmp_bck(j,l),l=1,nmol+nion)
       end do !}
 #endif
@@ -964,11 +964,12 @@ c*** Helium pumping data
         lrrvr(1,7)=.true.
         lrrvr(2,7)=.true.
 
-c*** location, fusion_power, ratio of pumping speeds, j_he_at
+c*** location, fusion_power, ratio of pumping speeds, j_he_at, j_ne_at
         iniprm(1,1,1,11,7)=locphep
         rniprm(1,1,1,1,7)=pwrhepdt
         rniprm(1,1,1,2,7)=pmphepdt
         iniprm(1,1,1,8,7)=j_he_at
+        iniprm(1,1,1,17,7)=j_ne_at
 c*** lpfrb, lpfrt
         if(locphep.eq.1) then !{
           iniprm(1,1,1,4,7)=lstclhep(1)

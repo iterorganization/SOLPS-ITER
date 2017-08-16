@@ -40,7 +40,7 @@ c*** The list of keywords to work on:
      /  'fusion_power','Spmp_He_to_D','lhetrgts','lpfrb_i','lpfrb_o',
      ,	'lpfrt_i','lpfrt_o','j_he_at','j_h_at','l_h_mol',
      ,	'lpfrs_pmp','npfrgrp','lpfrgrp','ipfrgrp','jpfrgrp',
-     ,	'gpfrgrp',20*' '/
+     ,	'gpfrgrp','j_ne_at',19*' '/
 
 c*** Initialisation of the control data
       data nmdpr, nmdlr, nmdbr / nnmdf*1, nnmdf*0, nnmdf*0 /

@@ -123,8 +123,10 @@ c*** Additional data for strata
 
 c*** He pumping data
 
-      data locphep,lpbihep,lpbohep,lptihep,lptohep,j_he_at,j_h_at /
-     /        0   ,   0   ,   0   ,   0   ,   0   ,   0   ,  0    /,
+      data locphep,lpbihep,lpbohep,lptihep,lptohep/
+     /        0   ,   0   ,   0   ,   0   ,   0   /,
+     ,  j_he_at , j_h_at , j_ne_at /
+     /     0    ,   0    ,    0   /,
      ,  pwrhepdt,pmphepdt,nstclhep,nhetrgts/
      /    570.  ,   0.8  ,    0   ,   0    /
 
