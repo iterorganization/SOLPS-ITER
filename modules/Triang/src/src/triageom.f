@@ -835,7 +835,7 @@ c     .      abs((xp2-xq1)*(yq2-yq1)-(yp2-yq1)*(xq2-xq1)).le.tol2
         IF (ABS(YQ1-YQ2) .GT. TOLY) THEN
           IF (ABS(ABS((YP2-YP1)/(YQ1-YQ2)) -
      .            ABS((XP2-XP1)/(XQ1-XQ2))) .LT. TOL) THEN
-            PARA = ABS(XP2-XP1).LE.ABS(XQ2-XQ1)
+            PARA = ABS(XP2-XP1).LE.ABS(XQ2-XQ1)+TOLX
           ELSE
             PARA = .FALSE.
           ENDIF
@@ -843,10 +843,10 @@ c     .      abs((xp2-xq1)*(yq2-yq1)-(yp2-yq1)*(xq2-xq1)).le.tol2
           PARA = ABS(YP1-YP2) .LE. TOLY
         ENDIF
       ELSE
-        IF (ABS(YQ1-YQ2) .GT. TOLY) THEN
+        IF (ABS(XP1-XP2) .GT. TOLX) THEN
           PARA = .FALSE.
         ELSE
-          PARA = ABS(YP2-YP1).LE.ABS(YQ2-YQ1)
+          PARA = ABS(YP2-YP1).LE.ABS(YQ2-YQ1)+TOLY
         ENDIF
       ENDIF
 cank }
