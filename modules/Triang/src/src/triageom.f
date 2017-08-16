@@ -824,32 +824,31 @@ C     CHECK COLINEARITY OF TWO MARGINS
 cxpb  We need to have not only (P1,P2) parallel to (Q1,Q2) but
 cxpb  also (P1,P2) shorter than (Q1,Q2)
  
-cank  The segments must be not only parallel, but colinear {
-c      IF (ABS(XP2-XP1) .GT. 1.E-6) THEN
-c        IF (ABS(XQ1-XQ2) .GT. 1.E-6) THEN
-c          IF (ABS(ABS((YP2-YP1)/((YQ1-YQ2)+1.e-20)) -
-c     .            ABS((XP2-XP1)/(XQ1-XQ2))) .LT. 1.E-6) THEN
-c            PARA = ABS(XP2-XP1).LE.ABS(XQ2-XQ1)
-c          ELSE
-c            PARA = .FALSE.
-c          ENDIF
-c        ELSE
-c          PARA = .FALSE.
-c        ENDIF
-c      ELSE
-c        IF (ABS(XQ1-XQ2) .GT. 1.E-6) THEN
-c          PARA = .FALSE.
-c        ELSE
-c          PARA = ABS(YP2-YP1).LE.ABS(YQ2-YQ1)
-c        ENDIF
-c      ENDIF
-
       tolx=tol*abs(xp1+xq1+xp2+xq2)/4.
       toly=tol*abs(yp1+yq1+yp2+yq2)/4.
       tol2=tolx*toly
-      para= abs((xp1-xq1)*(yq2-yq1)-(yp1-yq1)*(xq2-xq1)).le.tol2 .and.
-     .      abs((xp2-xq1)*(yq2-yq1)-(yp2-yq1)*(xq2-xq1)).le.tol2
 
+cank  The segments must be not only parallel, but colinear {
+c      para= abs((xp1-xq1)*(yq2-yq1)-(yp1-yq1)*(xq2-xq1)).le.tol2 .and.
+c     .      abs((xp2-xq1)*(yq2-yq1)-(yp2-yq1)*(xq2-xq1)).le.tol2
+      IF (ABS(XQ2-XQ1) .GT. TOLX) THEN
+        IF (ABS(YQ1-YQ2) .GT. TOLY) THEN
+          IF (ABS(ABS((YP2-YP1)/(YQ1-YQ2)) -
+     .            ABS((XP2-XP1)/(XQ1-XQ2))) .LT. TOL) THEN
+            PARA = ABS(XP2-XP1).LE.ABS(XQ2-XQ1)
+          ELSE
+            PARA = .FALSE.
+          ENDIF
+        ELSE
+          PARA = ABS(YP1-YP2) .LE. TOLY
+        ENDIF
+      ELSE
+        IF (ABS(YQ1-YQ2) .GT. TOLY) THEN
+          PARA = .FALSE.
+        ELSE
+          PARA = ABS(YP2-YP1).LE.ABS(YQ2-YQ1)
+        ENDIF
+      ENDIF
 cank }
 c DPC: additional constraint - (p1,p2) should be contained by (q1,q2)
 cank: need to introduce tolerance here, 
