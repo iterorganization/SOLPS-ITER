@@ -1,7 +1,8 @@
 # Output file produced by amds version 1.04
 filevers 1
-reactns 60
+reactns 69
 HYDHEL H.1 4.3.3
+HYDHEL H.2 2.2.9
 HYDHEL H.2 2.2.10
 AMJUEL H.2 2.1.5FJ
 AMJUEL H.4 2.2.5
@@ -50,19 +51,28 @@ AMMONX H.1 50
 AMMONX H.2 EK
 AMMONX H.2 EM
 AMMONX H.2 DB
+AMMONX H.1 DB
 AMMONX H.2 DD
+AMMONX H.1 DD
 AMMONX H.2 DE
+AMMONX H.1 DE
 AMMONX H.2 DF
+AMMONX H.1 DF
 AMMONX H.2 EA
+AMMONX H.1 EA
 AMMONX H.2 EC
+AMMONX H.1 EC
 AMMONX H.2 20
 AMMONX H.2 21
 AMMONX H.2 22
 AMMONX H.2 33
 AMMONX H.2 34
-AMMONX H.2 06
+AMMONX H.2 09
+AMMONX H.2 17
+AMMONX H.2 ZH
 group
 59
+0
 0
 
 
@@ -87,7 +97,7 @@ group
   
   
   
-50
+50 
 50
 51
 51
@@ -110,21 +120,38 @@ group
 58
     
   
- 
-  
-  
-  
-  
-  
+60
+60
+61
+61
+62
+63
+63
+63
+64
+64
+65
+65
 
   
   
   
 59
   
+  
+  
 deltae
 
+15.4
 25
+
+
+
+
+
+
+
+
 
 
 
@@ -187,7 +214,6 @@ massp
 2
 0
 0
-
 0
 0
 0
@@ -197,68 +223,9 @@ massp
 0
 0
 0
-28
-0
-0
-0
-0
-0
-0
-2
-1
-1
-1
-2
-2
-2
-2
-2
-2
-2
-3
-3
-3
-3
-3
-3
-3
-3
-14
-14
-14
-2
-2
-2
-2
 0
 0
 28
-17
-1
-2
-2
-17
-0
-0
-0
-2
-2
-0
-masst
-2
-2
-1
-0
-14
-28
-28
-15
-17
-17
-28
-17
-17
-0
 15
 16
 17
@@ -291,30 +258,109 @@ masst
 15
 16
 16
-28
-14
-14
-28
+0
+0
 28
 28
-14
-14
-2
-3
-3
+17
+17
+1
 1
 2
 2
+2
+2
+17
+17
+2
+0
+0
+1
+2
+0
+0
+0
+masst
+2
+2
+2
+1
+2
+14
+28
+28
+15
+17
+17
+28
+17
+17
+0
+0
+0
+0
+0
+0
+0
+2
+1
+1
+1
+2
+2
+2
+2
+2
+2
+2
+3
+3
+3
+3
+3
+3
+3
+3
+14
+14
+14
+2
+2
+2
+2
+28
+14
+14
+14
+28
+28
+28
+28
+28
+28
+14
+14
+14
+14
+0
+3
+3
+2
+2
+16
+16
+28
 rctype
 II
-DS
-EI
-2
 EI
 DS
 EI
+DS
+EI
+DS
 EI
 EI
+EI
 DS
 DS
 DS
@@ -360,17 +406,34 @@ II
 II
 II
 II
+II
+II
+II
+II
+II
+II
 DS
 DS
 DS
 CX
 II
+EI
+EI
 EI
 tmin
 
 
 
-DS
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -488,8 +551,18 @@ tmax
 
 
 
+
+
+
+
+
+
+
+
+
 primpart
 H2
+
 H2
 
 
@@ -538,22 +611,31 @@ NH2+
 
 
 N2*(A)
+N2*(A)
 NH3
+NH3
+H
 H
 H2
 H2
+H2
+H2
+NH3
 NH3
 H2+
 H3+
 H3+
 H
 H2
+
+
 
 intrpart
 H2+
+H2
 
 H
-
+H2
 N
 N2
 N2
@@ -599,9 +681,15 @@ H2
 N2
 N
 N*(4S)
+N*(4S)
 N2*(A)
 N2*(A)
 N2*(A)
+N2*(A)
+N2*(A)
+N2*(A)
+N*(2D)
+N*(2D)
 N*(2D)
 N*(2D)
 
@@ -609,12 +697,15 @@ N*(2D)
 
 H2+
 H2+
-H2
+NH2
+NH2
+N2*(A)
 product1
 H3+
+H2+
 H
 H+
-H2
+H
 N+
 N+
 N2+
@@ -632,7 +723,7 @@ NH2
 NH3
 N2
 H2
-H+
+H
 H
 H
 H2
@@ -660,9 +751,15 @@ H
 N2*(A)
 N*(2D)
 N*(2P)
+N*(2P)
 N2*(X)
 N2*(X)
 N2*(X)
+N2*(X)
+N2*(X)
+N2*(X)
+NH
+NH
 NH
 NH
 H
@@ -670,12 +767,15 @@ H
 H2
 H2
 H3+
-H2+
+NH2+
+NH
+N2+
 product2
 H
+
 H+
 
-H
+
 
 N
 
@@ -721,10 +821,16 @@ NH3+
 
 
 N2*(X)
+N2*(X)
+NH2
 NH2
 H
 H
 H
+H
+H
+H
+NH2
 NH2
 
 
@@ -732,7 +838,16 @@ H
 H+
 H
 
+H
+
 nprdct1
+
+
+
+
+2
+
+
 
 
 
@@ -793,48 +908,12 @@ nprdct1
 
 
 
+
+
 nprdct2
 
 
 
-2
-
-
-
-
-
-
-
-
-2
-
-
-
-2
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -846,6 +925,53 @@ nprdct2
 
 
 2
+
+
+
+2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+2
+2
+
+
+
+
 
 
 
@@ -856,7 +982,16 @@ nprdct2
 
 eprdct1
 
+
 5
+
+
+
+
+
+
+
+
 
 
 
@@ -917,7 +1052,16 @@ eprdct1
 
 eprdct2
 
+
 5
+
+
+
+
+
+
+
+
 
 
 
