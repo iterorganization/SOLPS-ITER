@@ -475,13 +475,18 @@ c**  atomic species cards
      ,    1,0,isrfa(iatm),isrta(iatm),nmseca(iatm),nrca(iatm),
      ,    nfola(iatm),ngena(iatm),nhsta(iatm)
       	do k=1,nrca(iatm) !{
-          if(nmseca(iatm).ne.3) then !{
+          if(nmseca(iatm).le.2) then !{
             write(iunoo,707) ireaca(iatm,k),ibulka(iatm,k),
      ,                 iscd1a(iatm,k),iscd2a(iatm,k),
      ,                 iscdea(iatm,k),iestma(iatm,k),ibgka(iatm,k)
-          else !}{
+          else if (nmseca(iatm).eq.3) then !}{
             write(iunoo,707) ireaca(iatm,k),ibulka(iatm,k),
      ,                     iscd1a(iatm,k),iscd2a(iatm,k),iscd3a(iatm,k),
+     ,                     iscdea(iatm,k),iestma(iatm,k),ibgka(iatm,k)
+          else if (nmseca(iatm).eq.4) then !}{
+            write(iunoo,707) ireaca(iatm,k),ibulka(iatm,k),
+     ,                     iscd1a(iatm,k),iscd2a(iatm,k),
+     ,                     iscd3a(iatm,k),iscd4a(iatm,k),
      ,                     iscdea(iatm,k),iestma(iatm,k),ibgka(iatm,k)
           end if !}
           write(iunoo,703) eeleca(iatm,k),ebulka(iatm,k),escd1a(iatm,k),
@@ -499,13 +504,18 @@ c**  neutral molecules species cards
      ,              nrcm(imol),nfolm(imol),ngenm(imol),nhstm(imol),
      ,              lkindm(imol)
         do k=1,nrcm(imol) !{
-          if(nmsecm(imol).ne.3) then !{
+          if(nmsecm(imol).le.2) then !{
             write(iunoo,707) ireacm(imol,k),ibulkm(imol,k),
      ,                 iscd1m(imol,k),iscd2m(imol,k),
      ,                 iscdem(imol,k),iestmm(imol,k),ibgkm(imol,k)
-          else !}{
+          else if(nmsecm(imol).eq.3) then!}{
             write(iunoo,707) ireacm(imol,k),ibulkm(imol,k),
      ,                 iscd1m(imol,k),iscd2m(imol,k),iscd3m(imol,k),
+     ,                 iscdem(imol,k),iestmm(imol,k),ibgkm(imol,k)
+          else if(nmsecm(imol).eq.4) then!}{
+            write(iunoo,707) ireacm(imol,k),ibulkm(imol,k),
+     ,                 iscd1m(imol,k),iscd2m(imol,k),
+     ,                 iscd3m(imol,k),iscd4m(imol,k),
      ,                 iscdem(imol,k),iestmm(imol,k),ibgkm(imol,k)
           end if !}
           write(iunoo,703) eelecm(imol,k),ebulkm(imol,k),
@@ -522,13 +532,18 @@ c**  test particle ions species cards
      ,    nprti(iion),nchrgi(iion),isrfi(iion),isrti(iion),nmseci(iion),
      ,    nrci(iion),nfoli(iion),ngeni(iion),nhsti(iion),lkindi(iion)
         do k=1,nrci(iion) !{
-          if(nmseci(iion).ne.3) then !{
+          if(nmseci(iion).le.2) then !{
             write(iunoo,707) ireaci(iion,k),ibulki(iion,k),
      ,  	       iscd1i(iion,k),iscd2i(iion,k),
      ,  	       iscdei(iion,k),iestmi(iion,k),ibgki(iion,k)
-          else !}{
+          else if(nmseci(iion).eq.3) then !}{
             write(iunoo,707) ireaci(iion,k),ibulki(iion,k),
      ,  	       iscd1i(iion,k),iscd2i(iion,k),iscd3i(iion,k),
+     ,  	       iscdei(iion,k),iestmi(iion,k),ibgki(iion,k)
+          else if(nmseci(iion).eq.4) then !}{
+            write(iunoo,707) ireaci(iion,k),ibulki(iion,k),
+     ,  	       iscd1i(iion,k),iscd2i(iion,k),
+     ,                 iscd3i(iion,k),iscd4i(iion,k),
      ,  	       iscdei(iion,k),iestmi(iion,k),ibgki(iion,k)
           end if !}
           write(iunoo,703) eeleci(iion,k),ebulki(iion,k),
@@ -546,13 +561,18 @@ c**  photon species cards
      ,      isrtf(ipht),nmsecf(ipht),nrcf(ipht),nfolf(ipht),
      ,      ngenf(ipht),nhstf(ipht)
           do k=1,nrcf(ipht) !{
-            if(nmsecf(ipht).ne.3) then !{
+            if(nmsecf(ipht).le.2) then !{
               write(iunoo,707) ireacf(ipht,k),ibulkf(ipht,k),
      ,  	       iscd1f(ipht,k),iscd2f(ipht,k),
      ,  	       iscdef(ipht,k),iestmf(ipht,k),ibgkf(ipht,k)
-            else !}{
+            else if(nmsecf(ipht).eq.3) then !}{
               write(iunoo,707) ireacf(ipht,k),ibulkf(ipht,k),
      ,  	       iscd1f(ipht,k),iscd2f(ipht,k),iscd3f(ipht,k),
+     ,  	       iscdef(ipht,k),iestmf(ipht,k),ibgkf(ipht,k)
+            else if(nmsecf(ipht).eq.4) then !}{
+              write(iunoo,707) ireacf(ipht,k),ibulkf(ipht,k),
+     ,  	       iscd1f(ipht,k),iscd2f(ipht,k),
+     ,                 iscd3f(ipht,k),iscd4f(ipht,k),
      ,  	       iscdef(ipht,k),iestmf(ipht,k),ibgkf(ipht,k)
             end if !}
             write(iunoo,703) eelecf(ipht,k),ebulkf(ipht,k),
@@ -579,13 +599,17 @@ c**  bulk ions species cards
      ,    isrtp(ipls),nmsecp(ipls),nrcp(ipls),idnslmp(ipls),
      ,    0,nhstp(ipls),0,cdnmdlp(ipls),nrep(ipls)
         do k=1,nrcp(ipls) !{
-          if(nmsecp(ipls).ne.3) then !{
+          if(nmsecp(ipls).le.2) then !{
             write(iunoo,707) ireacp(ipls,k),ibulkp(ipls,k),
      ,        iscd1p(ipls,k),iscd2p(ipls,k),iscdep(ipls,k)
-          else !}{
+          else if(nmsecp(ipls).eq.3) then !}{
             write(iunoo,707) ireacp(ipls,k),ibulkp(ipls,k),
      ,        iscd1p(ipls,k),iscd2p(ipls,k),iscd3p(ipls,k),
      ,        iscdep(ipls,k)
+          else if(nmsecp(ipls).eq.4) then !}{
+            write(iunoo,707) ireacp(ipls,k),ibulkp(ipls,k),
+     ,        iscd1p(ipls,k),iscd2p(ipls,k),iscd3p(ipls,k),
+     ,        iscd4p(ipls,k),iscdep(ipls,k)
           end if !}
           write(iunoo,703) eelecp(ipls,k),ebulkp(ipls,k),
      .          	   escd1p(ipls,k),escd2p(ipls,k),freacp(ipls,k)

@@ -22,7 +22,8 @@ c======================================================================
      .                        nrcb(:), nreb(:), idnslmb(:),
      .                        nfolb(:), ngenb(:), nhstb(:),
      .                        ireacb(:,:), ibulkb(:,:), iscdeb(:,:),
-     .                        iscd1b(:,:), iscd2b(:,:), iscd3b(:,:)
+     .                        iscd1b(:,:), iscd2b(:,:), iscd3b(:,:),
+     .                        iscd4b(:,:)
       real (kind=R8), allocatable :: dplsb(:), bmasb(:), fctb(:),
      .                               eelecb(:,:), ebulkb(:,:),
      .                               escd1b(:,:), escd2b(:,:),
@@ -89,7 +90,8 @@ c======================================================================
      .         nfolb(nplsi),ngenb(nplsi),nhstb(nplsi),
      .         ireacb(nplsi,nreac), ibulkb(nplsi,nreac),
      .         iscd1b(nplsi,nreac), iscd2b(nplsi,nreac),
-     .         iscd3b(nplsi,nreac), iscdeb(nplsi,nreac),
+     .         iscd3b(nplsi,nreac), iscd4b(nplsi,nreac),
+     .         iscdeb(nplsi,nreac),
      .         eelecb(nplsi,nreac), ebulkb(nplsi,nreac),
      .         escd1b(nplsi,nreac), escd2b(nplsi,nreac),
      .         freacb(nplsi,nreac))
@@ -106,6 +108,7 @@ c======================================================================
       iscd1b = 0
       iscd2b = 0
       iscd3b = 0
+      iscd4b = 0
       iscdeb = 0
       izamin = 0
       izamax = 0
@@ -325,7 +328,7 @@ cxpb   jend(l) is the number of the last bundled ion of sequence l in the new li
             iflbb(iplsb) = iplsb
             isrfb(iplsb) = isrfp(ja)
             isrtb(iplsb) = isrtp(ja)
-            nmsecb(iplsb) = nmsecp(ja)
+            nmsecb(iplsb) = maxval(nmsecp(ja:je))
             idnslmb(iplsb) = idnslmp(ja)
             nfolb(iplsb) = nfolp(ja)
             ngenb(iplsb) = ngenp(ja)
@@ -343,6 +346,7 @@ cxpb   jend(l) is the number of the last bundled ion of sequence l in the new li
                 iscd1b(iplsb,jreac) = iscd1p(j,ireac)
                 iscd2b(iplsb,jreac) = iscd2p(j,ireac)
                 iscd3b(iplsb,jreac) = iscd3p(j,ireac)
+                iscd4b(iplsb,jreac) = iscd4p(j,ireac)
                 iscdeb(iplsb,jreac) = iscdep(j,ireac)
                 eelecb(iplsb,jreac) = eelecp(j,ireac)
                 ebulkb(iplsb,jreac) = ebulkp(j,ireac)
@@ -427,6 +431,7 @@ cxpb   jend(l) is the number of the last bundled ion of sequence l in the new li
             iscd1p(i,1:nreac) = iscd1b(i,1:nreac)
             iscd2p(i,1:nreac) = iscd2b(i,1:nreac)
             iscd3p(i,1:nreac) = iscd3b(i,1:nreac)
+            iscd4p(i,1:nreac) = iscd4b(i,1:nreac)
             iscdep(i,1:nreac) = iscdeb(i,1:nreac)
             eelecp(i,1:nreac) = eelecb(i,1:nreac)
             ebulkp(i,1:nreac) = ebulkb(i,1:nreac)
@@ -471,6 +476,7 @@ cxpb   jend(l) is the number of the last bundled ion of sequence l in the new li
             iscd1p(j,1:nreac) = iscd1p(i,1:nreac)
             iscd2p(j,1:nreac) = iscd2p(i,1:nreac)
             iscd3p(j,1:nreac) = iscd3p(i,1:nreac)
+            iscd4p(j,1:nreac) = iscd4p(i,1:nreac)
             iscdep(j,1:nreac) = iscdep(i,1:nreac)
             eelecp(j,1:nreac) = eelecp(i,1:nreac)
             ebulkp(j,1:nreac) = ebulkp(i,1:nreac)
@@ -498,7 +504,7 @@ cxpb   jend(l) is the number of the last bundled ion of sequence l in the new li
       deallocate(nprtb,nmassb,ncharb,nchrgb,iflbb,lkindb,textb,
      .           isrfb,isrtb,dplsb,bmasb,fctb)
       deallocate(nrcb,nreb,idnslmb,nfolb,ngenb,nhstb,
-     .           ireacb, ibulkb, iscd1b, iscd2b, iscd3b, iscdeb,
+     .           ireacb, ibulkb, iscd1b, iscd2b, iscd3b, iscd4b, iscdeb,
      .           eelecb, ebulkb, escd1b, escd2b, freacb)
 
 cxpb Now we renumber the reaction particles if needed
@@ -528,6 +534,12 @@ cxpb Now we renumber the reaction particles if needed
             if (ipls1(ipls).gt.0) iscd3a(i,ireac) =
      .       mod(iscd3a(i,ireac),100) + ipls1(ipls)*100
           end if !}
+          iknd = mod(iscd4a(i,ireac),10)
+          if (iknd.eq.4) then !{
+            ipls = iscd4a(i,ireac)/100
+            if (ipls1(ipls).gt.0) iscd4a(i,ireac) =
+     .       mod(iscd4a(i,ireac),100) + ipls1(ipls)*100
+          end if !}
         end do !}
       end do !}
       do i = 1, nspcmol !{
@@ -555,6 +567,12 @@ cxpb Now we renumber the reaction particles if needed
             ipls = iscd3m(i,ireac)/100
             if (ipls1(ipls).gt.0) iscd3m(i,ireac) =
      .       mod(iscd3m(i,ireac),100) + ipls1(ipls)*100
+          end if !}
+          iknd = mod(iscd4m(i,ireac),10)
+          if (iknd.eq.4) then !{
+            ipls = iscd4m(i,ireac)/100
+            if (ipls1(ipls).gt.0) iscd4m(i,ireac) =
+     .       mod(iscd4m(i,ireac),100) + ipls1(ipls)*100
           end if !}
         end do !}
       end do !}
@@ -584,6 +602,12 @@ cxpb Now we renumber the reaction particles if needed
             if (ipls1(ipls).gt.0) iscd3i(i,ireac) =
      .       mod(iscd3i(i,ireac),100) + ipls1(ipls)*100
           end if !}
+          iknd = mod(iscd4i(i,ireac),10)
+          if (iknd.eq.4) then !{
+            ipls = iscd4i(i,ireac)/100
+            if (ipls1(ipls).gt.0) iscd4i(i,ireac) =
+     .       mod(iscd4i(i,ireac),100) + ipls1(ipls)*100
+          end if !}
         end do !}
       end do !}
       do i = 1, nspcpls !{
@@ -611,6 +635,12 @@ cxpb Now we renumber the reaction particles if needed
             ipls = iscd3p(i,ireac)/100
             if (ipls1(ipls).gt.0) iscd3p(i,ireac) =
      .       mod(iscd3p(i,ireac),100) + ipls1(ipls)*100
+          end if !}
+          iknd = mod(iscd4p(i,ireac),10)
+          if (iknd.eq.4) then !{
+            ipls = iscd4p(i,ireac)/100
+            if (ipls1(ipls).gt.0) iscd4p(i,ireac) =
+     .       mod(iscd4p(i,ireac),100) + ipls1(ipls)*100
           end if !}
         end do !}
       end do !}

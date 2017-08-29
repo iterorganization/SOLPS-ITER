@@ -173,6 +173,14 @@ c*** Read the AMDS file if it exists
         end if !}
       end do !}
       if (meta_used) write(6,*) 'This case includes metastable species'
+c*** Add explicitly 3rd product in selected reactions
+      do i=1,nnrctn !{
+        if (streql(rctndbs(i),'AMMONX') .and.
+     &      streql(rctnrct(i),'DD')) then !{
+          rctnpto3(i)='H'
+          rctnnmo3(i)=1
+        end if !}
+      end do !}
 c======================================================================
       call subend ()
       return

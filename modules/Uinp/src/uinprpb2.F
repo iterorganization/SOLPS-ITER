@@ -15,10 +15,12 @@ c=======================================================================
       integer i,j,k,kk,l,m,n,ii,jj,nbc,iatm,ipl,ispi,ispe
       integer ifl(DEF_NFL),cmp_bck(nmol,nmol+nion)
       logical ex,hlp_el,hlp_mol(nmol),hlp_ion(nion),
-     .        pass
+     .        pass, found
       integer idez
       logical streql
       external xerrab, subini, subend, idez, streql
+      integer find_matching_species, get_atomic_number
+      external find_matching_species, get_atomic_number
 c=======================================================================
       call subini ('uinprpb2')
 #ifdef DBG
@@ -285,12 +287,16 @@ c*** k, m, n are the numbers of recycling, specified, and all strata
       nmdpr(35,3)=nspcion
       nmdpr(36,3)=nspcatm
       nmdlr(36,3)=nspcmol
+      nmdpr(37,3)=nspcatm
+      nmdpr(38,3)=nspcatm
+      nmdpr(39,3)=nspcpls+nspcncl
       ltrvr(3,3)=.true.
       lrrvr(14,3)=.true.
       lspvr(14,3)=.true.
       lrrvr(15,3)=.true.
       lrrvr(16,3)=.true.
       lspvr(17,3)=.true.
+      lspvr(39,3)=.true.
       lrrvr(31,3)=.true.
 
 c*** nstrai
@@ -514,12 +520,20 @@ c***        recyc
         end do !}
       end do !}
 
-c*** B2 and Eirene species counter
+c*** B2 and Eirene species counters
 
       do i=1,nspcpls+nspcncl !{
         k=ifl(i)
         if (k.eq.0) k=ifl(i+1)
         iniprm(i,1,1,17,3)=lkindp(k)
+        found = .false.
+        do j=1,nspcatm !{
+          if (found) cycle
+          found = ncharp(k).eq.nchara(j) .and.
+     &            spcsmsp(k).eq.nmassa(j)
+          if (found) iniprm(i,1,1,39,3)=j
+        end do !}
+        if (.not.found) iniprm(i,1,1,39,3)=0
       end do !}
       do i=1,nspcncl !{
         if (i.eq.1) then !{
@@ -531,6 +545,19 @@ c*** B2 and Eirene species counter
           end do !}
           iniprm(i,1,1,7,3)=iniprm(i-1,1,1,7,3)+k+1
         end if !}
+      end do !}
+      do i=1,nspcatm !{
+        iniprm(i,1,1,37,3)=0
+        j=find_matching_species(spcsatm(i)(1:2))
+        k=get_atomic_number(spcsatm(i))
+        do l=1,nspcpls !{
+          if (iniprm(i,1,1,37,3).ne.0) cycle
+          m=find_matching_species(spcspls(l)(1:2))
+          n=get_atomic_number(spcspls(l))
+          if (j.eq.m.and.k.eq.n) then
+            iniprm(i,1,1,37,3)=iniprm(lkindp(l),1,1,7,3)
+          end if
+        end do !}
       end do !}
 
 c*** Eirene surface data input through B2
@@ -589,7 +616,10 @@ c*** Eirene surface data input through B2
         end do !}
       end if !}
 
-c*** lmolscl, lionscl
+c*** latmscl, lmolscl, lionscl
+      do i = 1, nspcatm !{
+        iniprm(i,1,1,38,3)=iniprm(iniprm(i,1,1,37,3)+1,1,1,17,3)
+      end do !}
       do i = 1, nspcmol !{
         iniprm(i,1,1,34,3)=lkindm(i)
       end do !}
@@ -626,6 +656,11 @@ cxpb We use one reaction per molecule to avoid double-counting
               iniprm(i,j,1,36,3)=iniprm(i,j,1,36,3)+
      .                           idez(iscd3m(j,k),2,3)
             end if !}
+            if (idez(iscd4m(j,k),1,3).eq.1) then !{
+              i = idez(iscd4m(j,k),3,3)
+              iniprm(i,j,1,36,3)=iniprm(i,j,1,36,3)+
+     .                           idez(iscd4m(j,k),2,3)
+            end if !}
             if (idez(iscd1m(j,k),1,3).eq.4) then !{
               i = lkindp(idez(iscd1m(j,k),3,3))
               iniprm(i,j,1,36,3)=iniprm(i,j,1,36,3)+
@@ -640,6 +675,11 @@ cxpb We use one reaction per molecule to avoid double-counting
               i = lkindp(idez(iscd3m(j,k),3,3))
               iniprm(i,j,1,36,3)=iniprm(i,j,1,36,3)+
      .                           idez(iscd3m(j,k),2,3)
+            end if !}
+            if (idez(iscd4m(j,k),1,3).eq.4) then !{
+              i = lkindp(idez(iscd4m(j,k),3,3))
+              iniprm(i,j,1,36,3)=iniprm(i,j,1,36,3)+
+     .                           idez(iscd4m(j,k),2,3)
             end if !}
             if (idez(iscd1m(j,k),1,3).eq.2) then !{
               l = idez(iscd1m(j,k),3,3)
@@ -677,6 +717,18 @@ cxpb We use one reaction per molecule to avoid double-counting
                 cmp_bck(j,l)=cmp_bck(j,l)+idez(iscd3m(j,k),2,3)
               end if !}
             end if !}
+            if (idez(iscd4m(j,k),1,3).eq.2) then !{
+              l = idez(iscd4m(j,k),3,3)
+              if (hlp_mol(l)) then !{
+                do i = 1, nspcatm !{
+                  iniprm(i,j,1,36,3)=iniprm(i,j,1,36,3)+
+     .             iniprm(i,l,1,36,3)*idez(iscd4m(j,k),2,3)
+                end do !}
+              else !}{
+                hlp_mol(j)=.false.
+                cmp_bck(j,l)=cmp_bck(j,l)+idez(iscd4m(j,k),2,3)
+              end if !}
+            end if !}
             if (idez(iscd1m(j,k),1,3).eq.3) then !{
               i=idez(iscd1m(j,k),3,3)
               hlp_ion(i)=.true.
@@ -691,6 +743,11 @@ cxpb We use one reaction per molecule to avoid double-counting
               i=idez(iscd3m(j,k),3,3)
               hlp_ion(i)=.true.
               cmp_bck(j,nmol+i)=cmp_bck(j,nmol+i)+idez(iscd3m(j,k),2,3)
+            end if !}
+            if (idez(iscd4m(j,k),1,3).eq.3) then !{
+              i=idez(iscd4m(j,k),3,3)
+              hlp_ion(i)=.true.
+              cmp_bck(j,nmol+i)=cmp_bck(j,nmol+i)+idez(iscd4m(j,k),2,3)
             end if !}
           end if !}
         end do !}
@@ -743,6 +800,15 @@ cxpb Check if we need to do molecular ions
                   end if !}
                 end do !}
               end if !}
+              if (idez(iscd4i(j,k),1,3).eq.1) then !{
+                i = idez(iscd4i(j,k),3,3)
+                do l = 1, nspcmol !{
+                  if (cmp_bck(l,nmol+j).gt.0) then !{
+                    iniprm(i,l,1,36,3)=iniprm(i,l,1,36,3)+
+     .               idez(iscd4i(j,k),2,3)*cmp_bck(l,nmol+j)
+                  end if !}
+                end do !}
+              end if !}
               if (idez(iscd1i(j,k),1,3).eq.4) then !{
                 i = lkindp(idez(iscd1i(j,k),3,3))
                 do l = 1, nspcmol !{
@@ -767,6 +833,15 @@ cxpb Check if we need to do molecular ions
                   if (cmp_bck(l,nmol+j).gt.0) then !{
                     iniprm(i,l,1,36,3)=iniprm(i,l,1,36,3)+
      .               idez(iscd3i(j,k),2,3)*cmp_bck(l,nmol+j)
+                  end if !}
+                end do !}
+              end if !}
+              if (idez(iscd4i(j,k),1,3).eq.4) then !{
+                i = lkindp(idez(iscd4i(j,k),3,3))
+                do l = 1, nspcmol !{
+                  if (cmp_bck(l,nmol+j).gt.0) then !{
+                    iniprm(i,l,1,36,3)=iniprm(i,l,1,36,3)+
+     .               idez(iscd4i(j,k),2,3)*cmp_bck(l,nmol+j)
                   end if !}
                 end do !}
               end if !}
@@ -800,6 +875,16 @@ cxpb Check if we need to do molecular ions
                   end if !}
                 end do !}
               end if !}
+              if (idez(iscd4i(j,k),1,3).eq.2) then !{
+                i = idez(iscd4i(j,k),3,3)
+                do l = 1, nspcmol !{
+                  if (cmp_bck(l,nmol+j).gt.0) then !{
+                    cmp_bck(l,i)=cmp_bck(l,i)+
+     .               cmp_bck(l,nmol+j)*idez(iscd4i(j,k),2,3)
+                    hlp_mol(l)=.false.
+                  end if !}
+                end do !}
+              end if !}
               if (idez(iscd1i(j,k),1,3).eq.3) then !{
                 i = idez(iscd1i(j,k),3,3)
                 hlp_ion(i)=.true.
@@ -825,6 +910,15 @@ cxpb Check if we need to do molecular ions
                    if (cmp_bck(l,nmol+j).gt.0) cmp_bck(l,nmol+i)=
      .              cmp_bck(l,nmol+i)+
      .              cmp_bck(l,nmol+j)*idez(iscd3i(j,k),2,3)
+                end do !}
+              end if !}
+              if (idez(iscd4i(j,k),1,3).eq.3) then !{
+                i = idez(iscd4i(j,k),3,3)
+                hlp_ion(i)=.true.
+                do l = 1, nspcmol !{
+                   if (cmp_bck(l,nmol+j).gt.0) cmp_bck(l,nmol+i)=
+     .              cmp_bck(l,nmol+i)+
+     .              cmp_bck(l,nmol+j)*idez(iscd4i(j,k),2,3)
                 end do !}
               end if !}
               hlp_ion(j)=.false.

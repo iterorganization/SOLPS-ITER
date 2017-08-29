@@ -328,11 +328,12 @@ c***    deltae, tmin, and tmax from AMDS, energies of the
 c***    reaction products (for DS), extrapolation coefficients;
 c***    flag "Use the default model" 
       integer nnrctn,rctngrp(mreac),rctnmsp(mreac),rctnmst(mreac),
-     ,  rctnnmo1(mreac),rctnnmo2(mreac),rctnimn(mreac),rctnimx(mreac),
-     ,  rctniz(mreac)
+     ,  rctnnmo1(mreac),rctnnmo2(mreac),rctnnmo3(mreac),
+     ,  rctnimn(mreac),rctnimx(mreac),rctniz(mreac)
       character*8 rctntyp(mreac)*2,rctndbs(mreac)*6,rctnchp(mreac)*4,
      ,  rctnrct(mreac)*9,rctnptpr(mreac),rctnptin(mreac),
-     ,  rctnpto1(mreac),rctnpto2(mreac),rctneln(mreac)*2
+     ,  rctnpto1(mreac),rctnpto2(mreac),rctnpto3(mreac),
+     ,  rctneln(mreac)*2
       real*4 rctndlte(mreac),rctntmin(mreac),rctntmax(mreac),
      ,  rctnenr1(mreac),rctnenr2(mreac),rctnexcf(mreac,6)
       logical rctndflt
@@ -349,7 +350,7 @@ c***    primary particle is determined from spcrctd)
      ,  rctdchp(mreac,nsrctd)*4,rctdrct(mreac,nsrctd)*9,
      ,  rctdptpr(mreac,nsrctd),rctdptin(mreac,nsrctd),
      ,  rctdpto1(mreac,nsrctd),rctdpto2(mreac,nsrctd),
-     ,  rctdeln(mreac,nsrctd)
+     ,  rctdpto3(mreac,nsrctd),rctdeln(mreac,nsrctd)
       real*4 rctddlte(mreac,nsrctd),rctdtmin(mreac,nsrctd),
      ,  rctdtmax(mreac,nsrctd),
      ,  rctdenr1(mreac,nsrctd),rctdenr2(mreac,nsrctd)
@@ -565,8 +566,8 @@ c     ,  spcifup,spcifua,spcifum,spcifui,
      ,  leebndx,lcobndx,leibndx,lmobndx,lpobndx,kcobndx,kmobndx,
      ,  nrgbndt,nznbndt,lcmbndt,lrfbndt,lrrbndt,lrpbndt,lrsbndt,lzrbndt,
      ,  lzpbndt,
-     ,  nnrctn,rctngrp,rctnmsp,rctnmst,rctnnmo1,rctnnmo2,rctnimn,rctniz,
-     ,  rctnimx,nnrctd,rctdgrp,rctdmsp,rctdmst,
+     ,  nnrctn,rctngrp,rctnmsp,rctnmst,rctnnmo1,rctnnmo2,rctnnmo3,
+     ,  rctnimn,rctniz,rctnimx,nnrctd,rctdgrp,rctdmsp,rctdmst,
      ,  nspcncl,nspcpls,nspcatm,nspcmol,nspcion,spcsmsp,spcsmsa,spcsmsm,
      ,  spcsmsi,spcsncp,spcsnca,spcsncm,spcsnci,spcscgp,spcscga,spcscgm,
      ,  spcscgi,spcsfup,spcsfua,spcsfum,spcsfui,spcsrsp,spcsrsa,spcsrsm,
@@ -604,9 +605,9 @@ c     ,  spcifup,spcifua,spcifum,spcifui,
      ,  crgbndt,cznbndt,ewmbnds,cskbnds,ctxbnds,ewmbndx,escbndx,eswbndx,
      ,  dscbndx,
      ,  rctntyp,rctndbs,rctnchp,rctnrct,rctnptpr,rctnptin,rctnpto1,
-     ,  rctnpto2,rctneln,
+     ,  rctnpto2,rctnpto3,rctneln,
      ,  spcrctd,rctdtyp,rctddbs,rctdchp,rctdrct,rctdptpr,
-     ,  rctdptin,rctdpto1,rctdpto2,rctdeln,
+     ,  rctdptin,rctdpto1,rctdpto2,rctdpto3,rctdeln,
      ,  hlp_h,
      ,  chsptgt,chspspt,made_of,
      ,  crcmstrs,srcmstrs,wrcmstrs,cgpfstrs,sgpfstrs,

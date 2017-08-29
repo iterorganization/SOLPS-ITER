@@ -689,10 +689,10 @@ H2
 N2*(A)
 Reaction AMMONX_H.2_EA 2
 H2
-N2*(A)
+N*(2D)
 Reaction AMMONX_H.1_EA 2
 H2
-N2*(A)
+N*(2D)
 Reaction AMMONX_H.2_EC 2
 NH3
 N*(2D)
@@ -10088,7 +10088,7 @@ H
 Particle H
 Particle N2*(A)
 Reaction AMMONX_H.1_DE 2
-63
+62
 
 1
 28

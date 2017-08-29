@@ -13,7 +13,7 @@ c======================================================================
       implicit none
 #include "uinput.inc"
       integer i,j,k,l,m,n,ic,ii,jj,kk,k0,k1,k2,k3,k4,
-     ,  iib,iie,iir,iik,ii1,ii2,ibgk,ipls,
+     ,  iib,iie,iir,iik,ii1,ii2,ii3,ibgk,ipls,
      ,  ipt,irc,m_rct,m_rcn,n_ptc,l_hlp(mreac),igd,ngn,nrc,jrc,niso,
      ,  ic0,ic9,ig,jspc,lknd,npass,nnn,nisotopes,gpass,group_found,
      ,  iii,kkk,nc,z
@@ -80,6 +80,7 @@ c*** Remove reaction duplicates, if any
      .        streql(rctnrct(i) ,rctnrct(j) ).and.
      .        streql(rctnpto1(i),rctnpto1(j)).and.
      .        streql(rctnpto2(i),rctnpto2(j)).and.
+     .        streql(rctnpto3(i),rctnpto3(j)).and.
      .        rctntmin(i).eq.rctntmin(j).and.
      .        rctntmax(i).eq.rctntmax(j).and.
      .        rctnenr1(i).eq.rctnenr1(j).and.
@@ -101,11 +102,13 @@ c*** Remove reaction duplicates, if any
               rctnptin(j-1)=rctnptin(j)
               rctnpto1(j-1)=rctnpto1(j)
               rctnpto2(j-1)=rctnpto2(j)
+              rctnpto3(j-1)=rctnpto3(j)
               rctngrp(j-1) =rctngrp(j)
               rctnmsp(j-1) =rctnmsp(j)
               rctnmst(j-1) =rctnmst(j)
               rctnnmo1(j-1)=rctnnmo1(j)
               rctnnmo2(j-1)=rctnnmo2(j)
+              rctnnmo3(j-1)=rctnnmo3(j)
               rctndlte(j-1)=rctndlte(j)
               rctntmin(j-1)=rctntmin(j)
               rctntmax(j-1)=rctntmax(j)
@@ -401,6 +404,7 @@ c     now read the relevant line
                 rctnptpr(nnrctn)=c
                 rctnptin(nnrctn)=rctdptin(j,l)
                 rctnpto2(nnrctn)=rctdpto2(j,l)
+                rctnpto3(nnrctn)=rctdpto3(j,l)
                 if (nnn.gt.1) then !}{ D or T isotope reaction partners
                   do i=1,n_hlp_h !{
                     if(streql(rctdptin(j,l),hlp_h(i,nnn,2)))
@@ -411,6 +415,8 @@ c     now read the relevant line
                 end if !}
                 if(.not.streql(c,cc)) then !{ D or T isotope reactants
                   do i=1,n_hlp_h !{
+                    if(streql(rctdpto3(j,l),hlp_h(i,ic,2)))
+     ,                        rctnpto3(nnrctn)=hlp_h(i,ic,1)
                     if(streql(rctdpto2(j,l),hlp_h(i,ic,2)))
      ,                        rctnpto2(nnrctn)=hlp_h(i,ic,1)
                     if(streql(rctdpto1(j,l),hlp_h(i,ic,2)))
@@ -459,10 +465,11 @@ c     now read the relevant line
 #ifdef DBG
       print *
       print *,'Draft reaction list:'
-      if(nnrctn.gt.0) print '(a9,a7,a5,a9,a3,3a9,3i3,1p,3e9.2)',
+      if(nnrctn.gt.0) print '(a9,a7,a5,a9,a3,4a9,3i3,1p,3e9.2)',
      ,  (rctnptpr(i),rctndbs(i),rctnchp(i),rctnrct(i),rctntyp(i),
-     ,   rctnptin(i),rctnpto1(i),rctnpto2(i),rctngrp(i),rctnmsp(i),
-     ,    rctnmst(i),rctndlte(i),rctnenr1(i),rctnenr2(i),i=1,nnrctn)
+     ,   rctnptin(i),rctnpto1(i),rctnpto2(i),rctnpto3(i),
+     ,   rctngrp(i),rctnmsp(i),rctnmst(i),
+     ,   rctndlte(i),rctnenr1(i),rctnenr2(i),i=1,nnrctn)
 #endif
 c*** Check the reaction type - must be assigned to each reaction
       do i=1,nnrctn !{
@@ -543,6 +550,37 @@ c*** Parse the multiple output particles, if any (e.g., 2H)
           ex=.true.
         end if !}
 
+        m=0
+        do j=1,len(rctnpto3) !{
+          k=ichar(rctnpto3(irc)(j:j))
+          if((k.lt.ic0 .or. k.gt.ic9)
+     ,      .and. rctnpto3(irc)(j:j).ne.' ' .and. m.eq.0) m=j
+        end do !}
+        if(m.eq.0) then !{
+          if(streql(rctnpto3(irc),' ')) then !{
+            rctnnmo3(irc)=0
+          else !}{
+            write(0,*) 'Wrong 3rd output particle specification: ',
+     ,                                                     rctnpto3(irc)
+            write(0,*) 'Error occurred treating reaction ',irc
+            ex=.true.
+          end if !}
+        else !}{
+          if(m.gt.1) then !{
+            write(f_hlp,'(2h(i,i1,1h))') m-1
+            read(rctnpto3(irc),f_hlp) k
+            rctnnmo3(irc)=max(1,k)
+            rctnpto3(irc)=rctnpto3(irc)(m:len(rctnpto3))
+          else !}{
+            if(rctnnmo3(irc).le.0) rctnnmo3(irc)=1
+          end if !}
+        end if !} (m)
+        if(rctnnmo3(irc).gt.9) then !{
+          write(0,*) 'A repetition counter for an output particle in ',
+     ,      'a reaction can only be one digit. Reaction ',irc
+          ex=.true.
+        end if !}
+
 cxpb Now check if we need to rename some isotopes for AMDS reactions
         if(.not.rctndflt .and. nisotopes.eq.1) then !{
 
@@ -587,6 +625,15 @@ cxpb Now check if we need to rename some isotopes for AMDS reactions
               end do !}
             end do !}
           end if !}
+          call uinspcid(rctnpto3(irc),l,j)
+          if(l.eq.-1) then !{
+            do i=1,n_hlp_h !{
+              do k=1,m_hlp_h !{
+                if(streql(rctnpto3(irc),hlp_h(i,k,1)))
+     ,                    rctnpto3(irc)=hlp_h(i,ii,1)
+              end do !}
+            end do !}
+          end if !}
 
         end if !}
 
@@ -595,10 +642,11 @@ cxpb Now check if we need to rename some isotopes for AMDS reactions
 #ifdef DBG
       print *
       print *,'Draft reaction list after parsing and renaming:'
-      if(nnrctn.gt.0) print '(a9,a7,a5,a9,a3,3a9,3i3,1p,3e9.2)',
+      if(nnrctn.gt.0) print '(a9,a7,a5,a9,a3,4a9,3i3,1p,3e9.2)',
      ,  (rctnptpr(i),rctndbs(i),rctnchp(i),rctnrct(i),rctntyp(i),
-     ,   rctnptin(i),rctnpto1(i),rctnpto2(i),rctngrp(i),rctnmsp(i),
-     ,    rctnmst(i),rctndlte(i),rctnenr1(i),rctnenr2(i),i=1,nnrctn)
+     ,   rctnptin(i),rctnpto1(i),rctnpto2(i),rctnpto3(i),
+     ,   rctngrp(i),rctnmsp(i),
+     ,   rctnmst(i),rctndlte(i),rctnenr1(i),rctnenr2(i),i=1,nnrctn)
 #endif
 
       if(.not.rctndflt .and. nisotopes.gt.1) then !{ duplicate reactions
@@ -672,6 +720,8 @@ cxpb Now check if we need to rename some isotopes for AMDS reactions
                       end if !}
                       if (streql(rctnpto2(irc),hlp_h(ii,kk,1)))
      .                  rctnpto2(jrc)=hlp_h(ii,j,1)
+                      if (streql(rctnpto3(irc),hlp_h(ii,kk,1)))
+     .                  rctnpto3(jrc)=hlp_h(ii,j,1)
                     end do !}
                   end do !}
                   if (rctngrp(jrc).ne.0) then !{
@@ -693,8 +743,9 @@ cxpb Now check if we need to rename some isotopes for AMDS reactions
                   if (jrc.ne.irc) then !{
                     rctnnmo1(jrc)=rctnnmo1(irc)
                     rctnnmo2(jrc)=rctnnmo2(irc)
+                    rctnnmo3(jrc)=rctnnmo3(irc)
                     rctndlte(jrc)=rctndlte(irc)
-                    rctnenr1(jrc)=rctnenr2(irc)
+                    rctnenr1(jrc)=rctnenr1(irc)
                     rctnenr2(jrc)=rctnenr2(irc)
                   end if !}
                 end do !} j
@@ -708,10 +759,11 @@ cxpb Now check if we need to rename some isotopes for AMDS reactions
         print *
         print *,
      ,   'Draft reaction list after duplicating H-isotope primaries:'
-        if(nnrctn.gt.0) print '(a9,a7,a5,a9,a3,3a9,3i3,1p,3e9.2)',
+        if(nnrctn.gt.0) print '(a9,a7,a5,a9,a3,4a9,3i3,1p,3e9.2)',
      ,    (rctnptpr(i),rctndbs(i),rctnchp(i),rctnrct(i),rctntyp(i),
-     ,     rctnptin(i),rctnpto1(i),rctnpto2(i),rctngrp(i),rctnmsp(i),
-     ,      rctnmst(i),rctndlte(i),rctnenr1(i),rctnenr2(i),i=1,nnrctn)
+     ,     rctnptin(i),rctnpto1(i),rctnpto2(i),rctnpto3(i),
+     ,     rctngrp(i),rctnmsp(i),
+     ,     rctnmst(i),rctndlte(i),rctnenr1(i),rctnenr2(i),i=1,nnrctn)
 #endif
 
         do irc=1,nnrctn !{ reactions with second partner an H isotope
@@ -752,6 +804,7 @@ cxpb Now check if we need to rename some isotopes for AMDS reactions
                     rctntyp(jrc)=rctntyp(irc)
                     rctnpto1(jrc)=rctnpto1(irc)
                     rctnpto2(jrc)=rctnpto2(irc)
+                    rctnpto3(jrc)=rctnpto3(irc)
                     rctngrp(jrc)=rctngrp(irc)
                     rctnmst(jrc)=rctnmst(irc)
                     rctnmsp(jrc)=rctnmsp(irc)
@@ -762,6 +815,8 @@ cxpb Now check if we need to rename some isotopes for AMDS reactions
                     do kk = 1, m_hlp_h !{
                       if (streql(rctnpto2(irc),hlp_h(ii,kk,1)))
      .                  rctnpto2(jrc)=hlp_h(ii,j,1)
+                      if (streql(rctnpto3(irc),hlp_h(ii,kk,1)))
+     .                  rctnpto3(jrc)=hlp_h(ii,j,1)
                     end do !}
                   end do !}
                   do ii = 1, n_hlp_h !{
@@ -779,6 +834,8 @@ cxpb Now check if we need to rename some isotopes for AMDS reactions
                           do kkk = 1, m_hlp_h !{
                             if (streql(rctnpto2(jrc),hlp_h(iii,kkk,1)))
      .                                 rctnpto2(jrc)=hlp_h(iii,kk,1)
+                            if (streql(rctnpto3(jrc),hlp_h(iii,kkk,1)))
+     .                                 rctnpto3(jrc)=hlp_h(iii,kk,1)
                           end do !}
                         end do !}
                       end if !}
@@ -820,8 +877,9 @@ cxpb Now check if we need to rename some isotopes for AMDS reactions
                   end if !}
                   rctnnmo1(jrc)=rctnnmo1(irc)
                   rctnnmo2(jrc)=rctnnmo2(irc)
+                  rctnnmo3(jrc)=rctnnmo3(irc)
                   rctndlte(jrc)=rctndlte(irc)
-                  rctnenr1(jrc)=rctnenr2(irc)
+                  rctnenr1(jrc)=rctnenr1(irc)
                   rctnenr2(jrc)=rctnenr2(irc)
                 end do !} j
               end if !}
@@ -836,12 +894,14 @@ cxpb Now check if we need to rename some isotopes for AMDS reactions
       write(*,*) 'Raw reaction list:',nnrctn
       write(*,*)
       if(nnrctn.gt.0) then !{
-        write(*,'(4x,a7,22x,3a9,4x,5a3,a7,2a9)') 'species','bulk',
-     ,    'out1','out2','ig','mp','mt','N1','N2','dlte','enr1','enr2'
-        write(*,'(1x,i3,a9,a7,a5,a9,a3,3a9,5i3,1p,3e9.2)')
+        write(*,'(4x,a7,22x,4a9,4x,6a3,a7,2a9)') 'species','bulk',
+     ,    'out1','out2','out3','ig','mp','mt',
+     ,    'N1','N2','N3','dlte','enr1','enr2'
+        write(*,'(1x,i3,a9,a7,a5,a9,a3,4a9,6i3,1p,3e9.2)')
      -    (i,rctnptpr(i),rctndbs(i),rctnchp(i),rctnrct(i),rctntyp(i),
-     ,     rctnptin(i),rctnpto1(i),rctnpto2(i),rctngrp(i),rctnmsp(i),
-     ,      rctnmst(i),rctnnmo1(i),rctnnmo2(i),
+     ,     rctnptin(i),rctnpto1(i),rctnpto2(i),rctnpto3(i),
+     ,     rctngrp(i),rctnmsp(i),
+     ,     rctnmst(i),rctnnmo1(i),rctnnmo2(i),rctnnmo3(i),
      ,     rctndlte(i),rctnenr1(i),rctnenr2(i),i=1,nnrctn)
         write(*,*)
       end if !}
@@ -1460,6 +1520,28 @@ c>>>
                 ii2=0
               end if !}
 
+              call uinspcid(rctnpto3(k0),l,k)
+              if(l.lt.0) then !{
+                write(0,*) 'Output particle 3 not on the list: ',
+     ,            l,k0,'  ',rctnpto3(k0)
+                call xerrab ('==> Check the AMDS model')
+              else if(l.gt.0) then !}{
+                ii3=100*k+10*rctnnmo3(k0)+l
+              else !}{
+                ii3=0
+              end if !}
+              if (ii3.gt.0) then !{
+                if(lknd.eq.1) then !{
+                  nmseca(jspc)=max(nmseca(jspc),3)
+                else if (lknd.eq.2) then !}{
+                  nmsecm(jspc)=max(nmsecm(jspc),3)
+                else if (lknd.eq.3) then !}{
+                  nmseci(jspc)=max(nmseci(jspc),3)
+                else if (lknd.eq.4) then !}{
+                  nmsecp(jspc)=max(nmsecp(jspc),3)
+                end if !}
+              end if !}
+
               hlp_ee=0.0
               hlp_e1=0.0
               hlp_e2=0.0
@@ -1520,6 +1602,7 @@ c>>>
                 ibulka(jspc,m_rcn)=iib
                 iscd1a(jspc,m_rcn)=ii1
                 iscd2a(jspc,m_rcn)=ii2
+                iscd3a(jspc,m_rcn)=ii3
                 iscdea(jspc,m_rcn)=iie
                 ibgka(jspc,m_rcn)=iik
                 eeleca(jspc,m_rcn)=hlp_ee
@@ -1532,6 +1615,7 @@ c>>>
                 ibulkm(jspc,m_rcn)=iib
                 iscd1m(jspc,m_rcn)=ii1
                 iscd2m(jspc,m_rcn)=ii2
+                iscd3m(jspc,m_rcn)=ii3
                 iscdem(jspc,m_rcn)=iie
                 ibgkm(jspc,m_rcn)=iik
                 eelecm(jspc,m_rcn)=hlp_ee
@@ -1544,6 +1628,7 @@ c>>>
                 ibulki(jspc,m_rcn)=iib
                 iscd1i(jspc,m_rcn)=ii1
                 iscd2i(jspc,m_rcn)=ii2
+                iscd3i(jspc,m_rcn)=ii3
                 iscdei(jspc,m_rcn)=iie
                 ibgki(jspc,m_rcn)=iik
                 eeleci(jspc,m_rcn)=hlp_ee
@@ -1556,6 +1641,7 @@ c>>>
                 ibulkp(jspc,m_rcn)=iib
                 iscd1p(jspc,m_rcn)=ii1
                 iscd2p(jspc,m_rcn)=ii2
+                iscd3p(jspc,m_rcn)=ii3
                 iscdep(jspc,m_rcn)=iie
                 eelecp(jspc,m_rcn)=hlp_ee
                 ebulkp(jspc,m_rcn)=hlp_eb

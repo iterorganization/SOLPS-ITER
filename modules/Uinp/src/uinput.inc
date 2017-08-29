@@ -93,8 +93,8 @@ c*** 4a
      ,  nmassa(natm),nchara(natm),isrfa(natm),isrta(natm),
      ,  nmseca(natm),nrca(natm),nfola(natm),ngena(natm),nhsta(natm),
      ,  ireaca(natm,nreac),ibulka(natm,nreac),iscd1a(natm,nreac),
-     ,  iscd2a(natm,nreac),iscd3a(natm,nreac),iscdea(natm,nreac),
-     ,  iestma(natm,nreac),ibgka(natm,nreac)
+     ,  iscd2a(natm,nreac),iscd3a(natm,nreac),iscd4a(natm,nreac),
+     ,  iscdea(natm,nreac),iestma(natm,nreac),ibgka(natm,nreac)
       real eeleca(natm,nreac), ebulka(natm,nreac), escd1a(natm,nreac),
      ,     escd2a(natm,nreac), freaca(natm,nreac), fldlma(natm,nreac)
       character texta(natm)*8
@@ -105,8 +105,8 @@ c*** 4b
      ,  isrtm(nmol),nmsecm(nmol),nrcm(nmol),
      ,  nfolm(nmol),ngenm(nmol),nhstm(nmol),lkindm(nmol),
      ,  ireacm(nmol,nreac),ibulkm(nmol,nreac),iscd1m(nmol,nreac),
-     ,  iscd3m(nmol,nreac),iscd2m(nmol,nreac),iscdem(nmol,nreac),
-     ,  iestmm(nmol,nreac),ibgkm(nmol,nreac)
+     ,  iscd2m(nmol,nreac),iscd3m(nmol,nreac),iscd4m(nmol,nreac),
+     ,  iscdem(nmol,nreac),iestmm(nmol,nreac),ibgkm(nmol,nreac)
       real eelecm(nmol,nreac), ebulkm(nmol,nreac), escd1m(nmol,nreac),
      ,     escd2m(nmol,nreac), freacm(nmol,nreac)
       character textm(nmol)*8
@@ -118,6 +118,7 @@ c*** 4c
      ,  ngeni(nion),nhsti(nion),lkindi(nion),
      ,  ireaci(nion,nreac),ibulki(nion,nreac),
      ,  iscd1i(nion,nreac),iscd2i(nion,nreac),iscd3i(nion,nreac),
+     ,  iscd4i(nion,nreac),
      ,  iscdei(nion,nreac),iestmi(nion,nreac),ibgki(nion,nreac)
       real eeleci(nion,nreac), ebulki(nion,nreac), escd1i(nion,nreac),
      ,     escd2i(nion,nreac), freaci(nion,nreac)
@@ -129,6 +130,7 @@ c*** 4d
      ,  nrcf(npht),nfolf(npht),ngenf(npht),nhstf(npht),
      ,  ireacf(npht,nreac),ibulkf(npht,nreac),
      ,  iscd1f(npht,nreac),iscd2f(npht,nreac),iscd3f(npht,nreac),
+     ,  iscd4f(npht,nreac),
      ,  iscdef(npht,nreac),iestmf(npht,nreac),ibgkf(npht,nreac)
       real eelecf(npht,nreac),ebulkf(npht,nreac),escd1f(npht,nreac),
      ,     escd2f(npht,nreac),freacf(npht,nreac),fldlmf(npht,nreac)
@@ -143,7 +145,7 @@ c*** 5
      ,  nfolp(npls),ngenp(npls),nhstp(npls),
      ,  ireacp(npls,nreac),ibulkp(npls,nreac),
      ,  iscd1p(npls,nreac),iscd2p(npls,nreac),iscd3p(npls,nreac),
-     ,  iscdep(npls,nreac),nrep(npls)
+     ,  iscd4p(npls,nreac),iscdep(npls,nreac),nrep(npls)
       real eelecp(npls,nreac), ebulkp(npls,nreac), escd1p(npls,nreac),
      ,     escd2p(npls,nreac), freacp(npls,nreac)
       integer ispcdn(npls,nrcdn)
@@ -391,19 +393,19 @@ c*** b2ah.dat
      ,  ifex1mn,ifex1mx,ifex2mn,ifex2mx,iz,nrcln,hlp_h_m,
      ,  natmi,nmeta,
      ,  nmassa,nchara,isrfa,isrta,nmseca,nrca,nfola,ngena,nhsta,
-     ,  ireaca,ibulka,iscd1a,iscd2a,iscd3a,iscdea,iestma,ibgka,
+     ,  ireaca,ibulka,iscd1a,iscd2a,iscd3a,iscd4a,iscdea,iestma,ibgka,
      ,  nmoli,nmassm,ncharm,nprtm,isrfm,isrtm,
      ,  nmsecm,nrcm,nfolm,ngenm,nhstm,
-     ,  ireacm,ibulkm,iscd1m,iscd2m,iscd3m,iscdem,iestmm,ibgkm,
+     ,  ireacm,ibulkm,iscd1m,iscd2m,iscd3m,iscd4m,iscdem,iestmm,ibgkm,
      ,  nioni,nmassi,nchari,nprti,nchrgi,isrfi,isrti,nmseci,nrci,nfoli,
      ,  ngeni,nhsti,
-     ,  ireaci,ibulki,iscd1i,iscd2i,iscd3i,iscdei,iestmi,ibgki,
+     ,  ireaci,ibulki,iscd1i,iscd2i,iscd3i,iscd4i,iscdei,iestmi,ibgki,
      ,  nphti,isrff,isrtf,nmsecf,nrcf,nfolf,
      ,  ngenf,nhstf,
-     ,  ireacf,ibulkf,iscd1f,iscd2f,iscd3f,iscdef,iestmf,ibgkf,
+     ,  ireacf,ibulkf,iscd1f,iscd2f,iscd3f,iscd4f,iscdef,iestmf,ibgkf,
      ,  nplsi,nbgk,nmassp,ncharp,nprtp,nchrgp,isrfp,
      ,  isrtp,nmsecp,nrcp,idnslmp,nfolp,ngenp,nhstp,ireacp,ibulkp,
-     ,  iscd1p,iscd2p,iscd3p,iscdep,nrep,ispcdn,indpro,
+     ,  iscd1p,iscd2p,iscd3p,iscd4p,iscdep,nrep,ispcdn,indpro,
      ,  nnftrm,nchsppri,lchsptrg,lchspgrp,lchspprt,lchspprp,lchsptgt,
      ,  lchsptgp,lchspnwl,lchspaux,nchemvar,indchemvar,nnchemvar,
      ,  nstrai,indsrc,npts,ninitl,nemods,namods,nminpts,nspez,ivlsf,
