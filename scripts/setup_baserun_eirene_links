@@ -96,3 +96,5 @@ endif
 if (! -s b2.log) ln -sf run.log b2.log
 if (! -s b2.log.gz) ln -sf run.log.gz b2.log.gz
 if (! -d tracing) mkdir tracing
+if (! -d batch_av) mkdir batch_av
+if (! -d run_av) mkdir run_av

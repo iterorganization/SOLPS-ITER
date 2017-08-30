@@ -173,7 +173,7 @@ endif
 update:
 	cd $(SOLPSTOP); gmake update
 
-listobj:
+${OBJDIR}/LISTOBJ:
 	@rm -f ${OBJDIR}/LISTOBJ ; touch ${OBJDIR}/LISTOBJ ; l="OBJS =" ; \
 	for d in `echo "$(VPATH)" | tr : \ `; do \
 		l="$$l `(cd $$d > /dev/null; echo *.f)`"; \
@@ -190,7 +190,7 @@ else
 	rm -f ${SRCTRI}/TAGS ; etags -o ${SRCTRI}/TAGS ${SRCDIR}/*/*.f
 endif
 
-${OBJDIR}/LISTOBJ: listobj
+listobj: ${OBJDIR}/LISTOBJ
 
 ${OBJDIR}/dependencies: 
 	-mkdir -p ${OBJDIR}

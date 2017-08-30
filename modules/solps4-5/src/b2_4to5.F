@@ -1236,6 +1236,8 @@ c Fill out /b2cmpt/ arrays
       cflim(0)= flim_4
       cflim(1)= flimi_4
       cflim(2)= flimv_4
+      cflim(3)= 0.5_R8
+      cflim(4)= 0.5_R8
 
 c Fill out b2mod_residuals data
       resco = 0.0_R8
@@ -1551,6 +1553,12 @@ c
       implicit none
       integer nx, ny
       character tab
+      character*8 device
+#ifdef USE_PXFGETENV
+      integer lenval, ierror
+#endif
+      logical streql
+      external streql
 
       tab=char(9)
       write(*,*) 'Writing b2ag.dat'
@@ -1558,9 +1566,24 @@ c
       write(99,'(a)') '*dimens     (nx, ny, nx1, ny1; free format)'
       write(99,'(4(2x,i3))') nx, ny, nx, ny
       write(99,'(a)') '*param      (param(0:99); free format)'
-      write(99,'(a)') '  -1.0, 99*0.0'
+      write(99,'(a)') '  -2.0, 99*0.0'
       write(99,'(3a)')
      . '''b2agfs_geometry'''//tab//'''',trim(sonnetfile_4),''''
+#ifdef NO_GETENV
+#ifdef JET
+      device='jet'
+#else
+      device='iter'
+#endif
+#else
+#ifdef USE_PXFGETENV
+      CALL PXFGETENV ('DEVICE', 0, device, lenval, ierror)
+#else
+      call getenv ('DEVICE', device)
+#endif
+#endif
+      if (streql(device,'iter'))
+     > write(99,'(a)') '''b2agfs_pit_rescale''       ''-1.0'''
       close(99)
       return
       end subroutine write_b2ag
@@ -1754,7 +1777,8 @@ c
       write(99,'(a)') '*cfalf'//column_header
       write(99,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
      .  (cfalf(i),i=0,7)
-      write(99,'(a)') '*cflim     cflme     cflmi     cflmv      ...'
+      write(99,'(a)') '*cflim'//
+     .  '     cflme     cflmi     cflmv     cflal     cflab     ...'
       write(99,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
      .  (cflim(i),i=0,7)
       write(99,'(a)') '*endphy'

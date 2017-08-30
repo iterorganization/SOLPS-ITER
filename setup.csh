@@ -230,5 +230,3 @@ endif
 if (-e module) then
   module list
 endif
-
-  

@@ -59,4 +59,5 @@ endif
 # Other environment variables
 module load solps-gui
 setenv LD_PRELOAD /usr/lib64/libfontconfig.so.1 # needed by solps-gui
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/usr/lib64
 setenv SOLPSWORK /work/projects/solps-iter/$USER
