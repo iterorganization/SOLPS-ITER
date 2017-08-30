@@ -1,4 +1,4 @@
-#! /usr/bin/tcsh -f
+#! /bin/tcsh -f
 
 ## -h                         print help
 ## -n                         dry run
