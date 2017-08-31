@@ -9,6 +9,8 @@ module load GCC/4.8.3
 module load mscl/1.0.0-GCC-4.8.3
 module load netcdf/4.3.3.1-goolf-1.5.16
 module load netcdf-fortran/4.4.2-goolf-1.5.16
+module load libpng/1.6.16-goolf-1.5.16
+module unload zlib
 module load gr/0.0.94
 module load gks/4.4.74
 module load ncl/6.3.0-intel-12.0.2

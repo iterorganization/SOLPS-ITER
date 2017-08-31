@@ -10,7 +10,6 @@ module load netcdf
 module load gr/0.0.94
 module load gks/4.4.74
 module load ncl
-module load nag
 module load hdf5
 module load flex
 module load doxygen
@@ -21,7 +20,7 @@ module load fontconfig
 module load cairo
 module load mdsplus
 module load make
-module load imas
+module load imas/3.8.0/ual/3.5.0
 module load fc2k
 module load kepler
 module load xmllib
