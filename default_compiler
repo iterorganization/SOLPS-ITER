@@ -28,6 +28,7 @@ case "ITER":
 case "ITM":
 case "KEIO":
 case "KSTAR":
+case "LEUVEN":
 case "SPBSTU":
 case "SWIP":
 case "JET":
@@ -39,7 +40,6 @@ case "ORNL":
 case "PPPL":
   echo pgf90
   breaksw
-case "LEUVEN":
 case "MEPHI":
 case "WM":
   echo gfortran

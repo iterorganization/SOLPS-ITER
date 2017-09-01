@@ -48,6 +48,7 @@ case "*.hpc.l":
   echo JET
   breaksw
 case "*.mech.kuleuven.be":
+case "*.icts.leuven.vsc":
   echo LEUVEN
   breaksw
 case "*.pppl.gov":
