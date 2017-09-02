@@ -3,22 +3,26 @@ setenv PATH ${PATH}:/pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/NETCDF/bin
 setenv NCARG_ROOT /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/NCARG
 setenv SOLPSWORK /pfs/work/$USER/solps-iter/runs
 setenv FC g95
+
+# Debugger (set environment variable DBX)
+setenv DBX totalview
+
+source $ITMSCRIPTDIR/set_tutorial_env.tcsh
+
+# The script above overwrites $PATH, so modules must be loaded afterwards!!!
+# load modules
+module load solps-gui
+module load texlive
+
+#module load imas
+echo "imasdb solps-iter"
+imasdb solps-iter
+
 if (! $?DEVICE) then
   if ($?TOKAMAKNAME) then
     setenv DEVICE $TOKAMAKNAME
   endif
 endif
-# load modules
-module load solps-gui
-module load texlive
-
-# Debugger (set environment variable DBX)
-setenv DBX totalview
-
-#module load imas
-source $ITMSCRIPTDIR/set_tutorial_env.tcsh
-echo "imasdb solps-iter"
-imasdb solps-iter
 
 module load itm-paraview
 
