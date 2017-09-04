@@ -1622,7 +1622,7 @@ c
         else if (zamin(is).gt.0.0_R8) then
           na0(is) = 1.0e16_R8
         else
-          na0(is) = 1.0e12_R8
+          na0(is) = 1.0e8_R8
         end if
       end do
       write(99,'(a)') '*naini          (na0(0:ns-1); free format)'

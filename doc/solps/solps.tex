@@ -7511,7 +7511,9 @@ m_a \frac{\partial n_a V_{\parallel a}}{\partial t} +
 
 The treatment using Eq. (\ref{eq:mom_new}) is recommended for cases with a
 single main hydrogenic ion (or at least where the main species is the lightest
-one) and an arbitrary amount of impurities. For cases
+one) and an arbitrary amount of impurities. It also requires the current
+continuity equation (\ref{eq:pot_eq}) to be solved simulatenously for $\Phi$
+(i.e. {\tt 'b2news\_poteq'} set to {\tt '1'}). For cases
 with hydrogenic ion mixtures or non-hydrogenic plasmas, the use of Eq.
 (\ref{eq:mom_old}) is preferred.
 
@@ -8834,10 +8836,10 @@ $\kappa_{iy}^{(CL)} = 0$
 
 \section{Current continuity equation}
 
-\begin{equation*}
+\begin{equation}\label{eq:pot_eq}
 \frac 1{\sqrt g} \frac{\partial}{\partial x} \left( \frac{\sqrt g}{h_x} j_x \right) +
 \frac 1{\sqrt g} \frac{\partial}{\partial y} \left( \frac{\sqrt g}{h_y} j_y \right) = 0
-\end{equation*}
+\end{equation}
 
 \subsection{Poloidal currents}
 
