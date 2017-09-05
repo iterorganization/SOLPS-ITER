@@ -11,7 +11,7 @@ source $ITMSCRIPTDIR/set_tutorial_env.tcsh
 
 # The script above overwrites $PATH, so modules must be loaded afterwards!!!
 # load modules
-module load solps-gui
+# module load solps-gui
 module load texlive
 
 #module load imas
@@ -24,7 +24,7 @@ if (! $?DEVICE) then
   endif
 endif
 
-#module load itm-paraview
+# module load itm-paraview
 
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
