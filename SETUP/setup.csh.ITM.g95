@@ -24,7 +24,7 @@ if (! $?DEVICE) then
   endif
 endif
 
-module load itm-paraview
+#module load itm-paraview
 
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
