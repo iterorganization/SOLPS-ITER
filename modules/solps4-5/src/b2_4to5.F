@@ -724,14 +724,25 @@ c Fill out b2mod_indirect arrays
 !xpb careful about the change of meaning of nniso between 4.x and 5.x
 !xpb In 4.x: a DN geometry needs an isolating cut, which will be the first of the list
 !xpb In 5.x: no isolating cut is needed for DN geometries
-      if (nncut.ge.2) nniso = nniso_4-(nncut-1)
+      if (nncut.ge.2) then
+        nniso = nniso_4-(nncut-1)
+      else
+        nniso = nniso_4
+      end if
       call xertst(0.le.nniso.and.nniso.le.nnisod,
      . 'Check size of NNISO !')
       if (nniso.gt.0) then
-        nxiso1(1:nniso) = nxiso1_4(1:nniso)-1
-        nxiso2(1:nniso) = nxiso2_4(1:nniso)-1
-        nyiso1(1:nniso) = nyiso1_4(1:nniso)-1
-        nyiso2(1:nniso) = nyiso2_4(1:nniso)-1
+        if (nncut.ge.2) then
+          nxiso1(1:nniso) = nxiso1_4(nncut:nniso_4)-1
+          nxiso2(1:nniso) = nxiso2_4(nncut:nniso_4)-1
+          nyiso1(1:nniso) = nyiso1_4(nncut:nniso_4)-1
+          nyiso2(1:nniso) = nyiso2_4(nncut:nniso_4)-1
+        else
+          nxiso1(1:nniso) = nxiso1_4(1:nniso)
+          nxiso2(1:nniso) = nxiso2_4(1:nniso)
+          nyiso1(1:nniso) = nyiso1_4(1:nniso)
+          nyiso2(1:nniso) = nyiso2_4(1:nniso)
+        end if
       end if
       if(nncut.eq.0) write(*,*) 'No cuts found'
       if(nncut.ge.1) write(*,'(a,4i5)')
