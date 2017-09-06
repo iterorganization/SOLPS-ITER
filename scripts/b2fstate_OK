@@ -1,4 +1,4 @@
-#! /bin/tcsh
+#! /bin/csh -f
 # determine if b2fstate is OK
 
 set target=b2fstati
