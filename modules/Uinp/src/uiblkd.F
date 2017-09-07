@@ -760,8 +760,8 @@ c*** 9
 
 c*** 10
 
-      data nadvi, nclvi, nalvi, nadsi, nalsi /
-     /       0  ,   0  ,   0  ,   0  ,   0   /
+      data nadvi, nclvi, nalvi, nadsi, nalsi, nadspc /
+     /       0  ,   0  ,   0  ,   0  ,   0  ,   0    /
 c*** 10a
       data iadve , iadvs , iadvt , iadrc , txttla , txtspa , txtuna  /
      /     nadv*0, nadv*0, nadv*0, nadv*0,nadv*' ',nadv*' ',nadv*' ' /
@@ -781,6 +781,13 @@ c*** 10d
 c*** 10e
       data   chrtls ,  txtsps ,  txttls ,  txtuns  /
      /      nals*' ', nals*' ', nals*' ', nals*' ' /
+c*** 10f
+      data  ispsrf, iptyp , ipspz , isptyp,  nsps , isrfcl, idirec /
+     /      nasp*0, nasp*0, nasp*0, nasp*0, nasp*0, nasp*0, nasp*0 /
+      data  spcmn , spcmx , spcsh , spcpx , spcpy , spcps /
+     /     nasp*0.,nasp*0.,nasp*0.,nasp*0.,nasp*0.,nasp*0./
+      data  spcvx , spcvy , spcvz /
+     /     nasp*0.,nasp*0.,nasp*0./
 
 c*** 11
 

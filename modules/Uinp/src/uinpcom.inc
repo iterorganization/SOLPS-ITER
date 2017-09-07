@@ -45,13 +45,13 @@ c***  nsrfclsx  max. number of views
       integer nreac, nchor, lntsputx, nsrfclsx
       parameter (nreac=DEF_NREAC, nchor=250, lntsputx=4, nsrfclsx=12)
       integer nrad, nadd, nplt, nsd, nsdw, ncv, nsnv
-      integer nadv, nclv, nalv, nads, nals
+      integer nadv, nclv, nalv, nads, nals, nasp
       integer nhd6, nmtr, nain
       parameter (nadd=DEF_NADD)
       parameter (nrad=n1st*n2nd*n3rd+nadd+1)
       parameter (nplt=5, nsd=1, nsdw=1, ncv=1, nsnv=1)
       parameter (nadv=4*(DEF_NATM+DEF_NMOL))
-      parameter (nads=1, nclv=1, nalv=1, nals=1)
+      parameter (nads=1, nclv=1, nalv=1, nals=1, nasp=1)
       parameter (nmtr=6, nain=1)
       parameter (nhd6=DEF_NATM*nmtr)
 

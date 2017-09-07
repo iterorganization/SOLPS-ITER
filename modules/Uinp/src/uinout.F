@@ -22,7 +22,7 @@ c=======================================================================
       integer i,j,k,l,m,n,icont,istep
       logical handle,ulmlti,ex,carbon,nitrogen,moly,streql
       logical, allocatable :: done(:)
-      character utxthd(34)*71, utxtfl(9)*47, ufnm*(*), ucdnmdl*10
+      character utxthd(35)*71, utxtfl(9)*47, ufnm*(*), ucdnmdl*10
       character utxtgt*71
       external streql, xerrab, subini, subend
       data utxthd /
@@ -55,11 +55,12 @@ c=======================================================================
      7        '** 15. Data for interfacing routine "geousr"' ,
      8        '* 6c. Data for chemical sputtering' ,
      9        '* 2d. Data for mesh multiplication' ,
-     o        '* 2e. Data for additional cells outside standard mesh',
-     1        '* 5b. Plasma background data',
-     2        '* Data for source correction',
-     3        '* 4d. Photon species',
-     4        '* 5a. Bulk ion species' /
+     o        '* 2e. Data for additional cells outside standard mesh' ,
+     1        '* 5b. Plasma background data' ,
+     2        '* Data for source correction' ,
+     3        '* 4d. Photon species' ,
+     4        '* 5a. Bulk ion species' ,
+     5        '* 10f. Data for energy spectra' /
       data utxtfl /
      1        'CFILE AMJUEL Database/AMdata/amjuel.tex        ',
      2        'CFILE HYDHEL Database/AMdata/hydhel.tex        ',
@@ -822,7 +823,7 @@ c*** 9.  data for statistics and nonanalog model
 c*** 10. data for additional and surface averaged tallies
 
       write(iunoo,700) utxthd(11)
-      write(iunoo,707) nadvi,nclvi,nalvi,nadsi,nalsi
+      write(iunoo,707) nadvi,nclvi,nalvi,nadsi,nalsi,nadspc
 
 c*** 10a.
 
@@ -867,6 +868,18 @@ c*** 10e.
         write(iunoo,700) chrtls(j)
         write(iunoo,711) txttls(j)
         write(iunoo,712) txtsps(j),txtuns(j)
+      end do !}
+
+c*** 10f.
+
+      write(iunoo,700) utxthd(35)
+      do j=1,nadspc !{
+        write(iunoo,707) ispsrf(j), iptyp(j), ipspz(j),
+     .                   isptyp(j), nsps(j), isrfcl(j), idirec(j)
+        write(iunoo,703) spcmn(j), spcmx(j), spcsh(j),
+     .                   spcpx(j), spcpy(j), spcps(j)
+        if (idirec(j).ne.0)
+     >   write(iunoo,703) spcvx(j), spcvy(j), spcvz(j)
       end do !}
 
 c*** 11.   data for numerical and graphical output

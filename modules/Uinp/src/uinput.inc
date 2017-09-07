@@ -234,7 +234,7 @@ c*** 9
 
 c*** 10
 
-      integer nadvi, nclvi, nalvi, nadsi, nalsi
+      integer nadvi, nclvi, nalvi, nadsi, nalsi, nadspc
 
 c*** 10a
 
@@ -260,6 +260,14 @@ c*** 10e
 
       character chrtls(nals)*71, txtsps(nals)*24, txttls(nals)*72,
      ,    txtuns(nals)*24
+
+c*** 10f
+
+      integer ispsrf(nads), iptyp(nads), ipspz(nads), isptyp(nads),
+     ,        nsps(nads), isrfcl(nads), idirec(nads)
+      real spcmn(nads), spcmx(nads), spcsh(nads), spcpx(nads),
+     ,     spcpy(nads), spcps(nads), spcvx(nads), spcvy(nads),
+     ,     spcvz(nads)
 
 c*** 11
 
@@ -414,9 +422,11 @@ c*** b2ah.dat
      ,  istor,nzadd,ini,ine,
      ,  nprcsf,iprcsf,maxlev,maxrad,maxpol,maxtor,maxadd,nssplr,nssplp,
      ,  nssplt,nsspla,nsigvi,nsigsi,nsigci,nsigi_bgk,nsigi_cop,igh,iih,
-     ,  ighw,iihw,ighc,iihc,nadvi,nclvi,nalvi,nadsi,
-     ,  nalsi,iadve,iadvs,iadvt,iadrc,iclve,iclvs,iclvt,iclrc,iadse,
-     ,  iadss,iadst,iadsc,nvolpr,ntlv,nflgv,nspzv1,nspzv2,ntlvf,nsurpr,
+     ,  ighw,iihw,ighc,iihc,nadvi,nclvi,nalvi,nadsi,nalsi,nadspc,
+     ,  iadve,iadvs,iadvt,iadrc,iclve,iclvs,iclvt,iclrc,iadse,
+     ,  iadss,iadst,iadsc,
+     ,  ispsrf,iptyp,ipspz,isptyp,nsps,isrfcl,idirec,
+     ,  nvolpr,ntlv,nflgv,nspzv1,nspzv2,ntlvf,nsurpr,
      ,  nsrf,nflgs,nspzs1,nspzs2,nsptal,ntls,nplinr,nplotr,npldlr,
      ,  nplinp,nplotp,npldlp,
      ,  nplint,nplott,npldlt,iplta,iplaa,iplea,iplts,iplas,
@@ -475,6 +485,7 @@ c*** b2ah.dat
      ,  sorad2,sorad3,sorad4,sorad5,sorad6,soreni,sorene,sorvdx,
      ,  sorvdy,sorvdz,sorcos,sormax,sorctx,sorcty,sorctz,
      ,  prmrspl,prmpspl,prmtspl,prmaspl,wminv,wmins,wminc,splpar,
+     ,  spcmn,spcmx,spcsh,spcpx,spcpy,spcps,spcvx,spcvy,spcvz,
      ,  ch2mx,ch2my,ch2x0,ch2y0,ch2z0,ch3mx,
      ,  ch3my,ch3mz,ch3x0,ch3y0,ch3z0,angle1,angle2,angle3,cutplane,
      ,  talzmi,talzma,talxmi,talxma,talymi,talyma,talw1,talw2,fcabs1,
