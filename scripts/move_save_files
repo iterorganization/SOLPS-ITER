@@ -1,5 +1,6 @@
 #! /usr/bin/env tcsh
 
+cd ../b2mn.exe.dir
 foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:b2.*_save.parameters:'`)
 set recoverfile=`echo $i:t:r`
 if ($recoverfile != 'b2.dummy_save.parameters') mv -v `basename $i` ../$recoverfile
@@ -20,3 +21,4 @@ foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:run_av/run_av:'`)
 set recoverfile=`echo $i:t:r`
 [ -e $recoverfile ] && mv -v `basename $i` ../b2favere || echo > /dev/null
 end
+cd ../b2co.exe.dir
