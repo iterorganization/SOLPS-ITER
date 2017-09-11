@@ -17,9 +17,9 @@ endif
 
 all: solps.pdf solps.ps 
 
-.PHONY: bibtex thumb update_log complete
+.PHONY: thumb update_log complete
 
-solps.dvi: solps.tex ${INCLUDES} ${FILES} solps.ind # DPC: remove 1st # for index dependency
+solps.dvi: solps.tex ${INCLUDES} ${FILES} solps.ind solps.bbl
 	@echo 'Building DVI manual'
 	latex -output-format dvi solps
 	-grep 'Label(s) may have changed' solps.log && latex -output-format dvi solps
@@ -42,21 +42,20 @@ solps.idx: solps.tex
 	-grep 'Label(s) may have changed' solps.log && pdflatex solps
 	touch solps.idx ; sleep 1 ; touch solps.ind ; sleep 1 ; touch solps.pdf
 
-bibtex: solps.tex ${BIBFILES}
+solps.bbl: solps.tex ${BIBFILES}
 	@echo 'Building bibliography'
 	pdflatex solps
 	-grep 'Label(s) may have changed' solps.log && pdflatex solps
 	bibtex solps
 	pdflatex solps
 	-grep 'Label(s) may have changed' solps.log && pdflatex solps
+	touch solps.idx ; sleep 1 ; touch solps.ind ; sleep 1 ; touch solps.pdf
 
-solps.pdf: solps.tex ${INCLUDES} ${FILES} solps.ind # DPC: remove 1st # for index dependency
+solps.pdf: solps.tex ${INCLUDES} ${FILES} solps.ind solps.bbl
 	@echo 'Building PDF manual'
 	pdflatex solps
 	-grep 'Label(s) may have changed' solps.log && pdflatex solps
 	touch solps.idx ; sleep 1 ; touch solps.ind ; sleep 1 ; touch $@
-
-solps.bbl: bibtex
 
 thumb: solps.pdf
 	@echo 'Building thumbnails'
