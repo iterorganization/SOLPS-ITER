@@ -1,7 +1,7 @@
 #! /usr/bin/env tcsh
 
 cd $SOLPSTOP
-echo "Updating to SOLPS-ITER master"
+echo "Switching to SOLPS-ITER master branch"
 git fetch --prune
 git checkout master && echo "Checked out SOLPS-ITER master branch" || goto branch
 git pull && goto b25 || goto local

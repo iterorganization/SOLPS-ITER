@@ -1,44 +1,44 @@
 #! /usr/bin/env tcsh
 
 cd $SOLPSTOP
-echo "Updating to SOLPS-ITER master"
+echo "Switching to SOLPS-ITER develop branch"
 git fetch --prune
-git checkout master && echo "Checked out SOLPS-ITER master branch" || goto branch
+git checkout develop && echo "Checked out SOLPS-ITER develop branch" || goto branch
 git pull && goto b25 || goto local
 
 b25:
   git submodule update
   echo "Updating B2.5"
   cd $SOLPSTOP/modules/B2.5
-  git checkout master && echo "Checked out B2.5 master branch" || goto branch
+  git checkout develop && echo "Checked out B2.5 develop branch" || goto branch
   git pull && goto Eirene || goto local
 
 Eirene:
   echo "Updating Eirene"
   cd $SOLPSTOP/modules/Eirene
-  git checkout SOLPS-master && echo "Checked out Eirene SOLPS-master branch" || goto branch
+  git checkout ITER-develop && echo "Checked out Eirene ITER-develop branch" || goto branch
   git pull && goto Carre || goto local
 
 Carre:
   echo "Updating Carre"
   cd $SOLPSTOP/modules/Carre
-  git checkout SOLPS-master && echo "Checked out Carre SOLPS-master branch" || goto branch
+  git checkout ITER-develop && echo "Checked out Carre ITER-develop branch" || goto branch
   git pull && goto DivGeo || goto local
 
 DivGeo:
   echo "Updating DivGeo"
   cd $SOLPSTOP/modules/DivGeo
-  git checkout SOLPS-master && echo "Checked out DivGeo SOLPS-master branch" || goto branch
+  git checkout ITER-develop && echo "Checked out DivGeo ITER-develop branch" || goto branch
   git pull && goto ADAS || goto local
 
 ADAS:
   echo "Updating ADAS"
   cd $SOLPSTOP/modules/adas
-  git checkout SOLPS-master && echo "Checked out ADAS SOLPS-master branch" || goto branch
+  git checkout ITER-develop && echo "Checked out ADAS ITER-develop branch" || goto branch
   git pull && goto compile || goto local
 
 branch:
-  echo "You are not on the master branch."
+  echo "You are not on the main development branch."
 
 local:
   echo "You have local files under version control which"
@@ -55,3 +55,6 @@ compile:
   gmake depend depend_debug
   gmake tags
   gmake solps
+
+
+
