@@ -17,7 +17,7 @@ endif
 
 all: solps.pdf solps.ps 
 
-.PHONY: thumb update_log complete
+.PHONY: bibtex thumb update_log complete
 
 solps.dvi: solps.tex ${INCLUDES} ${FILES} solps.ind solps.bbl
 	@echo 'Building DVI manual'
@@ -62,6 +62,8 @@ thumb: solps.pdf
 	thumbpdf solps.pdf
 	pdflatex solps.tex
 	-grep 'Label(s) may have changed' solps.log && pdflatex solps
+
+bibtex: solps.bbl
 
 b2cdca.F:
 	ln -sf ${B25DIR}/src/documentation/b2cdca.F .
