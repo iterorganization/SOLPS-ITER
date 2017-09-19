@@ -26,6 +26,9 @@ module load kepler
 module load xmllib
 module load python/2.7/11
 module load totalview
+if (`hostname` == "hpc-app1.iter.org") then
+  module load matlab/2013a
+endif
 
 # mpi-library
 module unload mpich2
