@@ -41,6 +41,8 @@ end
 [axgrid,axbal] = balfig(BAL_QUANT,SPECIES_INDEX,comuse);
 if STRATA_PLOT
     axstrat = stratfig();
+else
+    axstrat = 0;
 end
 
 % Plot the grid showing where balance will be performed:
