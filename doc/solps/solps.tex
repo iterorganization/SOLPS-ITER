@@ -8015,7 +8015,7 @@ When Eq. (\ref{eq:mom_new}) is used ({\tt 'b2sigp\_style'} set to {\tt '2'}), we
 	\frac{\partial \Phi }{\partial x} \frac{\partial }{\partial y} \left(\frac 1{B^2} \right)
 \right)
 -
-\frac{\widetilde{j}_y^{(ST)}}{e n_e} \frac{\partial n_e T_e}{h_y \partial y}
+\frac{j_y^{(ST)}}{e n_e} \frac{\partial n_e T_e}{h_y \partial y}
 + Q_{Fei}
 \end{align}
 
@@ -8032,7 +8032,7 @@ Otherwise, with Eq. (\ref{eq:mom_old}):
 	\frac{\partial \Phi }{\partial x} \frac{\partial }{\partial y} \left(\frac 1{B^2} \right)
 \right)
 -
-\frac{\widetilde{j}_y^{(ST)}}{e n_e} \frac{\partial n_e T_e}{h_y \partial y}
+\frac{j_y^{(ST)}}{e n_e} \frac{\partial n_e T_e}{h_y \partial y}
 + j_x \hat E_x
 \end{align}
 
@@ -8926,7 +8926,7 @@ $j_x^{(\parallel)}$ - see above
 \subsection{Radial currents}
 
 $j_y = j_y^{(AN)} + \widetilde j_y^{(dia)} + j_y^{(in)} + \widetilde j_y^{(vis \parallel)} + \widetilde j_y^{(vis \perp)}
-+ \widetilde j_y^{(visq)} + \widetilde j_y^{(s)} + \widetilde j_y^{(st)}$,
++ \widetilde j_y^{(visq)} + \widetilde j_y^{(s)} + j_y^{(ST)}$,
 
 $j_y^{(AN)} = - \sigma^{(AN)} \frac{\partial \Phi}{h_y \partial y} $
 
@@ -8999,7 +8999,7 @@ For definition of $q^{(0)}$, see Eqs. (\ref{eq:q0-0}) and (\ref{eq:q0-1}).
 
 \begin{equation*}
 \begin{matrix}
-\widetilde j_y^{(st)} = &
+j_y^{(ST)} = &
 & \left\{
 \begin{matrix}
 -\sigma^{(ST)}\left(
@@ -9922,15 +9922,21 @@ $\left. \frac{\sqrt g}{h_x} j_x \right|_W =
 	\right) +
 	\left( 1 - \gamma_e \right) |b_x| n_e \frac 1{\sqrt{2\pi}}
 	\sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right)}{T_e} \right)
-\right] \right|_W$, if {\tt 'b2stbc\_istyle\_fchi'} is {\tt '1'}, or
+\right] \right|_W$
+\end{small}
 
+if {\tt 'b2stbc\_istyle\_fchi'} is {\tt '1'}, or
+
+\begin{small}
 $\left. \frac{\sqrt g}{h_x} j_x \right|_W =
 \frac{\sqrt g}{h_x} e \left. \left[
 	\sum \limits_{a=0}^{ns-1} z_a \Gamma_{ax} +
 	\left( 1 - \gamma_e \right) |b_x| n_e \frac 1{\sqrt{2\pi}}
 	\sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right)}{T_e} \right)
-\right] \right|_W$, if {\tt 'b2stbc\_istyle\_fchi'} is {\tt '0'}.
+\right] \right|_W$
 \end{small}
+
+if {\tt 'b2stbc\_istyle\_fchi'} is {\tt '0'}.
 
 {\em Imposing a sheath potential boundary condition:} {\tt BCPOT = 3}
 
@@ -9954,15 +9960,21 @@ $\left. -\frac{\sqrt g}{h_x} j_x \right|_E =
 	\right) +
 	\left( 1 - \gamma_e \right) |b_x| n_e \frac 1{\sqrt{2\pi}}
 	\sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right)}{T_e} \right)
-\right] \right|_E$, if {\tt 'b2stbc\_istyle\_fchi'} is {\tt '1'}, or
+\right] \right|_E$
+\end{small}
 
+if {\tt 'b2stbc\_istyle\_fchi'} is {\tt '1'}, or
+
+\begin{small}
 $\left. -\frac{\sqrt g}{h_x} j_x \right|_E =
 \frac{\sqrt g}{h_x} e \left. \left[
 	- \sum \limits_{a=0}^{ns-1} z_a \Gamma_{ax} +
 	\left( 1 - \gamma_e \right) |b_x| n_e \frac 1{\sqrt{2\pi}}
 	\sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi -p_{\Phi,2} \right)}{T_e} \right)
-\right] \right|_E$, if {\tt 'b2stbc\_istyle\_fchi'} is {\tt '0'}.
+\right] \right|_E$
 \end{small}
+
+if {\tt 'b2stbc\_istyle\_fchi'} is {\tt '0'}.
 
 {\em Imposing a sheath potential boundary condition:} {\tt BCPOT = 3}
 
@@ -10122,8 +10134,9 @@ $\left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \left. \left[
 		\frac{1 + \gamma_e}{1 -\gamma_e} T_e + e\Phi
 	\right)
 	\max \left(
-		0, p_{n,a,1} \frac{\sqrt g}{h_x} |b_x| n_e
-		\sqrt{\frac{\sum \limits_{a=0}^{ns-1} p_a}{\sum \limits_{a=0}^{ns-1} m_a n_a}}
+		0, \frac{\sqrt g}{h_x}
+                \sum \limits_{a=0}^{ns-1} z_a p_{n,a,1} |b_x|
+		\sqrt{\frac{\sum \limits_{b=0}^{ns-1} p_b}{\sum \limits_{b=0}^{ns-1} m_b n_b}} n_a
 		+
 		\frac{\sqrt g}{h_x} \frac{j_{\parallel}}e
 	\right)
@@ -10175,15 +10188,16 @@ endif
 
 {\em Imposing the {\tt b2stbc\_spb} style boundary condition for electron temperature:} {\tt BCENE = 15}
 
-If {\tt 'bcene\_15\_style} is set to {\tt '0'}:
+If {\tt 'bcene\_15\_style} is set to {\tt '0'} (to be used in conjunction with {\tt BCCON = 14}):
 	
 $\left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \left. \left[
 	-\left(
 		\frac{1 + \gamma_e}{1 -\gamma_e} T_e + e\Phi
 	\right)
 	\max \left(
-		0, p_{n,a,1} \frac{\sqrt g}{h_x} |b_x| n_e
-		\sqrt{\frac{\sum \limits_{b=0}^{ns-1} p_b}{\sum \limits_{b=0}^{ns-1} m_b n_b}}
+		0, \frac{\sqrt g}{h_x}
+                \sum \limits_{a=0}^{ns-1} z_a p_{n,a,1} |b_x|
+		\sqrt{\frac{\sum \limits_{b=0}^{ns-1} p_b}{\sum \limits_{b=0}^{ns-1} m_b n_b}} n_a
 		-
 		\frac{\sqrt g}{h_x} b_x \frac{j_{\parallel}}e
 	\right)
@@ -10503,12 +10517,12 @@ $c_{h_i,a,2} = -10^{-2}$
 
 \subsubsection{West}
 
-{\em Boundary condition from {\tt b2stbc\_spb}:} {\tt BCENI = 15}
+{\em Boundary condition from {\tt b2stbc\_spb}:} {\tt BCENI = 15} (to be used in association with {\tt BCCON = 14})
 
 $\left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W = \left.
 - p_{h_i,1} \frac{\sqrt g}{h_x} |b_x|
-\sqrt{\frac{\sum \limits_{a=0}^{ns-1} p_a}{\sum \limits_{a=0}^{ns-1} m_a n_a}} T_i
-\sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}} n_a
+\sqrt{\frac{\sum \limits_{b=0}^{ns-1} p_b}{\sum \limits_{b=0}^{ns-1} m_b n_b}} T_i
+\sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}} p_{n,a,1} n_a
 -
 \frac{\sqrt g}{h_x} q_{ix}^{P.Sch}
 \right|_W$
@@ -10591,12 +10605,12 @@ $p_{h_i,2} = 10^{-3}$ with drifts, should be $p_{h_i,2} = 0$
 
 \subsubsection{East}
 
-{\em Imposing a {\tt b2stbc\_spb} style boundary condition:} {\tt BCENI = 15}
+{\em Imposing a {\tt b2stbc\_spb} style boundary condition:} {\tt BCENI = 15} (to be used in association with {\tt BCCON = 14})
 
 $\left. -\frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_E = \left.
 - p_{h_i,1} \frac{\sqrt g}{h_x} |b_x|
-\sqrt{\frac{\sum \limits_{a=0}^{ns-1} p_a}{\sum \limits_{a=0}^{ns-1} m_a n_a}} T_i
-\sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}} n_a
+\sqrt{\frac{\sum \limits_{b=0}^{ns-1} p_b}{\sum \limits_{b=0}^{ns-1} m_b n_b}} T_i
+\sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}} p_{n,a,1} n_a
 -
 \frac{\sqrt g}{h_x} q_{ix}^{P.Sch}
 \right|_E$
