@@ -24,6 +24,7 @@ Eirene:
 Carre:
   echo "Updating Carre"
   cd $SOLPSTOP/modules/Carre
+  git fetch --prune
   git checkout SOLPS-master && echo "Checked out Carre SOLPS-master branch" || goto branch
   git pull && goto DivGeo || goto local
 
