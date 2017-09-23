@@ -457,7 +457,7 @@ cxpb Default data for ions
           write(2,'(2x,a4,1p,8(1x,e9.2))') specs(-1),
      .     (cfalf(i),i=0,7)
           write(2,'(a)') '*cflim'//
-     .     '     cflme     cflmi     cflmv     cflal     cflab     ...'
+     .     '    cflme     cflmi     cflmv     cflal     cflab     ...'
           write(2,'(2x,a4,1p,8(1x,e9.2))') specs(-1),
      .     (cflim(i),i=0,7)
           write(2,'(a)') '*endphy'
