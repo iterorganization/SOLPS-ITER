@@ -10,12 +10,14 @@ b25:
   git submodule update
   echo "Updating B2.5"
   cd $SOLPSTOP/modules/B2.5
+  git fetch --prune
   git checkout master && echo "Checked out B2.5 master branch" || goto branch
   git pull && goto Eirene || goto local
 
 Eirene:
   echo "Updating Eirene"
   cd $SOLPSTOP/modules/Eirene
+  git fetch --prune
   git checkout SOLPS-master && echo "Checked out Eirene SOLPS-master branch" || goto branch
   git pull && goto Carre || goto local
 
@@ -28,12 +30,14 @@ Carre:
 DivGeo:
   echo "Updating DivGeo"
   cd $SOLPSTOP/modules/DivGeo
+  git fetch --prune
   git checkout SOLPS-master && echo "Checked out DivGeo SOLPS-master branch" || goto branch
   git pull && goto ADAS || goto local
 
 ADAS:
   echo "Updating ADAS"
   cd $SOLPSTOP/modules/adas
+  git fetch --prune
   git checkout SOLPS-master && echo "Checked out ADAS SOLPS-master branch" || goto branch
   git pull && goto compile || goto local
 

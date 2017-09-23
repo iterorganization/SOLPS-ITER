@@ -10,30 +10,35 @@ b25:
   git submodule update
   echo "Updating B2.5"
   cd $SOLPSTOP/modules/B2.5
+  git fetch --prune
   git checkout develop && echo "Checked out B2.5 develop branch" || goto branch
   git pull && goto Eirene || goto local
 
 Eirene:
   echo "Updating Eirene"
   cd $SOLPSTOP/modules/Eirene
+  git fetch --prune
   git checkout ITER-develop && echo "Checked out Eirene ITER-develop branch" || goto branch
   git pull && goto Carre || goto local
 
 Carre:
   echo "Updating Carre"
   cd $SOLPSTOP/modules/Carre
+  git fetch --prune
   git checkout ITER-develop && echo "Checked out Carre ITER-develop branch" || goto branch
   git pull && goto DivGeo || goto local
 
 DivGeo:
   echo "Updating DivGeo"
   cd $SOLPSTOP/modules/DivGeo
+  git fetch --prune
   git checkout ITER-develop && echo "Checked out DivGeo ITER-develop branch" || goto branch
   git pull && goto ADAS || goto local
 
 ADAS:
   echo "Updating ADAS"
   cd $SOLPSTOP/modules/adas
+  git fetch --prune
   git checkout ITER-develop && echo "Checked out ADAS ITER-develop branch" || goto branch
   git pull && goto compile || goto local
 
