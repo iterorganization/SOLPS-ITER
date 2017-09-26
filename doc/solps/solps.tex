@@ -7501,7 +7501,7 @@ m_a \frac{\partial n_a V_{\parallel a}}{\partial t} +
 \frac 1{h_z\sqrt g} \frac{\partial}{\partial y} \left( \frac{h_z\sqrt g}{h_y} \Gamma_{ay}^m \right) +
 \frac{b_x}{h_x}\frac{\partial n_a T_i}{\partial x} +
 Z_a e n_a \frac{b_x}{h_x} \frac{\partial \Phi}{\partial x} = \notag \\
-= S_{a \parallel}^m + S_{CF_a}^m + S_{fr_a}^m &+ S_{Therm_a}^{m} + S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m
+= S_{a \parallel}^m + S_{CF_a}^m + S_{fr_a}^m &+ S_{Therm_a}^{m} + S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m + S_{AN_a}^m
 \end{align}
 
 However, one can also use the formulation given as Eq. (\ref{eq:mom_old}),
@@ -7513,7 +7513,7 @@ m_a \frac{\partial n_a V_{\parallel a}}{\partial t} +
 \frac 1{h_z\sqrt g} \frac{\partial}{\partial y} \left( \frac{h_z \sqrt g}{h_y} \Gamma_{ay}^m \right) +
 \frac{b_x}{h_x} \frac{\partial n_a T_i}{\partial x} +
 \frac{b_x}{h_x} \frac{Z_a n_a \partial n_e T_e}{n_e \partial x} = \notag \\
-= S_{a \parallel}^m + S_{CF_a}^m + S_{fr_a}^m &+ S_{Therm_a}^{m} + S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m
+= S_{a \parallel}^m + S_{CF_a}^m + S_{fr_a}^m &+ S_{Therm_a}^{m} + S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m + S_{AN_a}^m
 \end{align}
 
 The treatment using Eq. (\ref{eq:mom_new}) is recommended for cases with a
@@ -7549,6 +7549,17 @@ B^{\frac 3 2} b_x \frac{\partial}{h_x \partial x}
 
 $S_{CF}^m = m_a b_x n_a V_{\parallel a}^2 \frac 1{h_z h_x} \frac{\partial h_z}{\partial x}$
 
+$S_{AN_a}^m$ is a correcting source due to the radial anomalous current (here assumed to be carried by hydrogenic ions only):
+
+\begin{equation*}
+S_{AN_a}^m = \left\{
+\begin{matrix}
+0, & z_a \ne 1 or z_{n,a} \ne 1 \\
+- j_y^{(AN)} \frac{B B_x}{B_z}, & z_a = 1 and z_{n,a} = 1 \\
+\end{matrix}
+\right.
+\end{equation*}
+
 $S_a^m = S_{fr,a}^m + S_{Therm}^m + S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m$,
 
 Parallel momentum source due to ionization
@@ -7562,7 +7573,7 @@ S_{I_a}^m = S_{I_a}^q + S_{I_{a+1}}^q
 S_{I_a}^q & =
 & \left\{
 \begin{matrix}
--r_{I_a} n_e n_a \left( \frac{m_a+m_{a+1}}2 \right) V_{\parallel a}, & \ a=0,\ldots,ns-2, & \ z_a < z_{a+1} \mbox{ and } z_{n_a}= z_{n_{a+1}}, \\
+-r_{I_a} n_e n_a \left( \frac{m_a+m_{a+1}}2 \right) V_{\parallel a}, & \ a=0,\ldots,ns-2, & \ z_a < z_{a+1} \mbox{ and } z_{n_a} = z_{n_{a+1}}, \\
 0, \\
 \end{matrix} \right.
 \end{matrix}
@@ -7573,7 +7584,7 @@ S_{I_a}^q & =
 S_{I_{a+1}}^q & =
 & \left\{
 \begin{matrix}
-r_{I_a} n_e n_a \left( \frac{m_a+m_{a+1}}2 \right) V_{\parallel a}, & \ a=0,\ldots,ns-2, & \ z_a < z_{a+1} \text{ and } z_{n_a}= z_{n_{a+1}}, \\
+r_{I_a} n_e n_a \left( \frac{m_a+m_{a+1}}2 \right) V_{\parallel a}, & \ a=0,\ldots,ns-2, & \ z_a < z_{a+1} \text{ and } z_{n_a} = z_{n_{a+1}}, \\
 0, \\
 \end{matrix} \right.
 \end{matrix}
