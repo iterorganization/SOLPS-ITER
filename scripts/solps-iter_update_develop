@@ -55,11 +55,11 @@ local:
 compile:
   cd $SOLPSTOP
   rehash
-  gmake VERSION
-  gmake listobj listobj_debug
-  gmake depend depend_debug
-  gmake tags
-  gmake solps
+  ${MAKE} VERSION
+  ${MAKE} listobj listobj_debug
+  ${MAKE} depend depend_debug
+  ${MAKE} tags
+  ${MAKE} solps
 
 
 

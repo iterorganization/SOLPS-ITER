@@ -49,6 +49,11 @@ endif
 if(! $?COMPILER) then
   echo COMPILER not defined!
 endif
+if (-x `which gmake`) then
+  setenv MAKE `which gmake`
+else
+  setenv MAKE `which make`
+endif
 
 if ($?PYTHONPATH) then
   setenv PYTHONPATH ${PYTHONPATH}:${SOLPSTOP}/lib/python

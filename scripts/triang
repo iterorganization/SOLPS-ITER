@@ -141,7 +141,7 @@ griddir=${CARRE_GRIDDIR-$SOLPSTOP/modules/Carre/meshes/${DEVICE-iter}}
                print -u2 -- "Unable to create the directory. Check the permissions in ${griddir}%/*"
                break 2
                }; break;;
-       ( n|N ) ; break 2;;
+       ( n|N ) break 2;;
        (  *  ) print -u2 -n -- "Please answer with either y or n: ";;
     esac; }
   }; done
@@ -233,10 +233,10 @@ while true; do {
                 q=u
               }
             } || {
-              print -u2 -- "Command line: gmake -f ${SOLPSTOP}/runs/Makefile b2ag.prt > b2ag.log"
+              print -u2 -- "Command line: ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2ag.prt > b2ag.log"
               [ -r b2ag.prt ] && rm b2ag.prt
               [ -r fort.30 ] && rm fort.30
-              gmake -f ${SOLPSTOP}/runs/Makefile b2ag.prt > b2ag.log
+              ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2ag.prt > b2ag.log
               [ -r fort.30 ] && {
                 [ -d b2ag.exe.dir ] && rmdir b2ag.exe.dir
                 print -u2 -- "Produced fort.30 file"

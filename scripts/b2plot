@@ -65,6 +65,6 @@ argloop:
   endif
   if ("X${argv}X" == "XX") set argv="b2pl"
   set CMD=`echo $argv" " | sed -e 's: :.prt :g'`
-  gmake $debug TIME="$TIME" -f $RUNS/Makefile.plot $CMD
+  ${MAKE} $debug TIME="$TIME" -f $RUNS/Makefile.plot $CMD
   unsetenv STAND_ALONE
   if ($?DEBUG_SET) source $SOLPSTOP/SETUP/nodebug
