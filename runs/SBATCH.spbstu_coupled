@@ -1,6 +1,6 @@
 #! /bin/tcsh
 
-#SBATCH -N 8
+#SBATCH -N 1
 #SBATCH -J #JOBNAME#
 #SBATCH --ntasks-per-node=28
 #SBATCH -o testjob-%j.out
@@ -8,10 +8,9 @@
 #SBATCH -t 336:00:00
 scontrol show hostnames
 
-echo Using SOLPSTOP = $SOLPSTOP
-
-pushd $SOLPSTOP
+pushd #SOLPSTOP#
 source setup.csh
+echo Using SOLPSTOP = #SOLPSTOP#
 popd
 
 set USE_MPI=""
@@ -23,22 +22,23 @@ if ($?SOLPS_MPI) then
   set USE_MPI=`echo $USE_MPI | sed -e 's:-m :-m ''":' -e 's:$:"'':'`
 endif
 
-echo $USE_MPI
+#echo $USE_MPI
 
+update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"
 set msg="Started on `hostname` at `date`"
 update_solps_run_status ${msg}
-if ($?SOLPS_GUI_IP) then
-  echo ${USER} ${PWD} ${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
-endif
+#if ($?SOLPS_GUI_IP) then
+#  echo ${USER} ${PWD} ${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
+#endif
 
 time b2run ${USE_MPI} b2mn >& run.log
 
-#QSUB.postprocess_coupled
+QSUB.postprocess_coupled
 
-#preserve_scratch_to_work
+preserve_scratch_to_work
 
 set msg="Finished on `hostname` at `date`"
 update_solps_run_status ${msg}
-if ($?SOLPS_GUI_IP) then
-  echo ${USER} ${PWD} ${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
-endif
+#if ($?SOLPS_GUI_IP) then
+#  echo ${USER} ${PWD} ${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
+#endif
