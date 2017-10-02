@@ -35,7 +35,7 @@ if (! -s mesh.extra) then
  (cd .. ; ln -s ../mesh.extra .)
 endif
 if (! -s AMJUEL) ln -s $SOLPSTOP/modules/Eirene/Database/AMJUEL .
-gmake $debug -f $SOLPSTOP/runs/Makefile.plot b2md.prt > b2md.log
+${MAKE} $debug -f $SOLPSTOP/runs/Makefile.plot b2md.prt > b2md.log
 if (-s shotnumber.history) then
   cat shotnumber.history
   rm -f .save_mds .resave_mds
