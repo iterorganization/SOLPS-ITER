@@ -63,5 +63,7 @@ if (`grep " stopping because itim" run.log.last10` != "") then
   set NOW = `date +"%d.%m.%Y_%T"`  
   mv b2fstati b2fstati_$NOW
   mv b2fstate b2fstati
+  if (-s b2faveri) mv b2faveri b2faveri_$NOW
+  if (-s b2favere) mv b2favere b2faveri
   itmsubmit QSUB.itm_loop
 endif
