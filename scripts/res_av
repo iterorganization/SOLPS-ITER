@@ -66,9 +66,15 @@ cat << EOF >> b2mn.dat
 EOF
 
 # copy necessary files
+if [ ${COMPILER} == "HP" ]
+then
+ln -s ${CP_DIR}/AMJUEL ${CP_DIR}/HYDHEL ${CP_DIR}/METHANE ${CP_DIR}/SPUTER ${CP_DIR}/H2VIBR ${CP_DIR}/ftn21 ${CP_DIR}/ftn22 ${CP_DIR}/graphite_ext.dat ${CP_DIR}/mo_ext.dat .
+ln -s ${CP_DIR}/ftn* .
+else
 ln -s ${CP_DIR}/AMJUEL ${CP_DIR}/HYDHEL ${CP_DIR}/METHANE ${CP_DIR}/SPUTER ${CP_DIR}/H2VIBR ${CP_DIR}/fort.21 ${CP_DIR}/fort.22 ${CP_DIR}/graphite_ext.dat ${CP_DIR}/mo_ext.dat .
-ln -s ${input} input.dat
 ln -s ${CP_DIR}/fort.* .
+fi
+ln -s ${input} input.dat
 ln -s ${CP_DIR}/b2fgmtry ${CP_DIR}/b2fpardf ${CP_DIR}/b2frates .
 ln -s $ACTDIR/b2a*.dat $ACTDIR/b2a*.prt $ACTDIR/stra.dat $ACTDIR/weis.dat .
 ln -s $ACTDIR/b2.* .

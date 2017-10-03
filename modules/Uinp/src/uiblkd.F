@@ -653,7 +653,11 @@ c*** 5
       data eelecp, ebulkp, escd1p, escd2p, freacp /
      /    lurp*0.,lurp*0.,lurp*0.,lurp*0.,lurp*0. /
       data  textp   / npls*' ' /
+#ifndef HPUX
       data cdnmdlp_sel/'fort.13','saha','boltzmann','corona','colrad'/
+#else
+      data cdnmdlp_sel/'ftn13','saha','boltzmann','corona','colrad'/
+#endif
       data cdnmdlp / npls*' ' /
       data nrep, ispcdn / npls*0, lurc*0 /
       data bltzcdn,dltecdn,acrncdn/

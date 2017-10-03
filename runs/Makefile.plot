@@ -78,9 +78,15 @@ vpath b2fgmtry .:$(baserundir)
 vpath b2fpardf .:$(baserundir)
 vpath b2fstati .:$(baserundir)
 vpath b2frates .:$(baserundir)
+ifneq (${COMPILER},HP)
 vpath fort.33  .:$(baserundir):$(triangdir)
 vpath fort.34  .:$(baserundir):$(triangdir)
 vpath fort.35  .:$(baserundir):$(triangdir)
+else
+vpath ftn33    .:$(baserundir):$(triangdir)
+vpath ftn34    .:$(baserundir):$(triangdir)
+vpath ftn35    .:$(baserundir):$(triangdir)
+endif
 
 #-----------------------------------------------------------------------
 # Rules.
@@ -106,16 +112,25 @@ $(target_fu) : b2fgmtry b2fparam b2fstate b2fplasmf
 	-rmdir b2fu.exe.dir
 
 ifndef STAND_ALONE
+ifneq (${COMPILER},HP)
 $(target_pl) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates b2ftrack AMJUEL fort.33 fort.34 fort.35
+else
+$(target_pl) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates b2ftrack AMJUEL ftn33 ftn34 ftn35
+endif
 else
 $(target_pl) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates b2ftrack AMJUEL
 endif
 	rm -rf b2pl.exe.dir >& /dev/null ; mkdir b2pl.exe.dir ; cp $^ b2pl.exe.dir
 	[ -e param.dg ] && cp param.dg b2pl.exe.dir/ || ( [ -e ../baserun/param.dg ] && cp ../baserun/param.dg b2pl.exe.dir/ || echo > /dev/null )
 ifndef STAND_ALONE
+ifneq (${COMPILER},HP)
 	-cp fort.44 fort.46 input.dat b2pl.exe.dir/
+else
+	-cp ftn44 ftn46 input.dat b2pl.exe.dir/
+endif
 	-cd b2pl.exe.dir
 endif
+ifneq (${COMPILER},HP)
 ifeq (${NCAR_VERSION},3)
 	rm -f $(target_pl) gmeta
 	cd b2pl.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ${TIME} ${B2OBJ}/b2pl.exe ${RUN_OPTIONS} ; mv -f gmeta .. ; rm -f $(target_pl) $(notdir $^) .quit param.dg >& /dev/null
@@ -127,19 +142,41 @@ ifndef STAND_ALONE
 	-rm b2pl.exe.dir/fort.44 b2pl.exe.dir/fort.46 b2pl.exe.dir/input.dat b2pl.exe.dir/fort.75
 endif
 	-cd b2pl.exe.dir ; rm -f HYDHEL METHANE SPUTER H2VIBR AMMONX fort.21 fort.22 graphite_ext.dat mo_ext.dat
+else
+ifeq (${NCAR_VERSION},3)
+	rm -f $(target_pl) gmeta
+	cd b2pl.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../ftn21 ../ftn22 ../graphite_ext.dat ../mo_ext.dat . ; ${TIME} ${B2OBJ}/b2pl.exe ${RUN_OPTIONS} ; mv -f gmeta .. ; rm -f $(target_pl) $(notdir $^) .quit param.dg >& /dev/null
+else
+	rm -f $(target_pl) b2plot.ps
+	cd b2pl.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../ftn21 ../ftn22 ../graphite_ext.dat ../mo_ext.dat . ; ${TIME} ${B2OBJ}/b2pl.exe ${RUN_OPTIONS} ; mv -f b2plot.ps .. ; rm -f $(target_pl) $(notdir $^) .quit param.dg >& /dev/null
+endif
+ifndef STAND_ALONE
+	-rm b2pl.exe.dir/ftn44 b2pl.exe.dir/ftn46 b2pl.exe.dir/input.dat b2pl.exe.dir/ftn75
+endif
+	-cd b2pl.exe.dir ; rm -f HYDHEL METHANE SPUTER H2VIBR AMMONX ftn21 ftn22 graphite_ext.dat mo_ext.dat
+endif
 	-rmdir b2pl.exe.dir
 
 ifndef STAND_ALONE
+ifneq (${COMPILER},HP)
 $(target_pl.dbx) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates b2ftrack AMJUEL fort.33 fort.34 fort.35
+else
+$(target_pl.dbx) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates b2ftrack AMJUEL ftn33 ftn34 ftn35
+endif
 else
 $(target_pl.dbx) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates b2ftrack AMJUEL
 endif
 	rm -rf b2pl.exe.dir >& /dev/null ; mkdir b2pl.exe.dir ; cp $^ b2pl.exe.dir
 	[ -e param.dg ] && cp param.dg b2pl.exe.dir/ || ( [ -e ../baserun/param.dg ] && cp ../baserun/param.dg b2pl.exe.dir/ || echo > /dev/null )
 ifndef STAND_ALONE
+ifneq (${COMPILER},HP)
 	-cp fort.44 fort.46 input.dat b2pl.exe.dir/
+else
+	-cp ftn44 ftn46 input.dat b2pl.exe.dir/
+endif
 	-cd b2pl.exe.dir
 endif
+ifneq (${COMPILER},HP)
 ifeq (${NCAR_VERSION},3)
 	rm -f $(target_pl) gmeta
 	cd b2pl.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ${DBX} ${INC} ${DBGOBJ}/b2pl.exe ${RUN_OPTIONS} ; mv -f gmeta .. ; rm -f $(target_pl) $(notdir $^) .quit param.dg >& /dev/null
@@ -151,42 +188,87 @@ ifndef STAND_ALONE
 	-rm b2pl.exe.dir/fort.44 b2pl.exe.dir/fort.46 b2pl.exe.dir/input.dat b2pl.exe.dir/fort.75
 endif
 	-cd b2pl.exe.dir ; rm -f HYDHEL METHANE SPUTER H2VIBR AMMONX fort.21 fort.22 graphite_ext.dat mo_ext.dat
+else
+ifeq (${NCAR_VERSION},3)
+	rm -f $(target_pl) gmeta
+	cd b2pl.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../ftn21 ../ftn22 ../graphite_ext.dat ../mo_ext.dat . ; ${DBX} ${INC} ${DBGOBJ}/b2pl.exe ${RUN_OPTIONS} ; mv -f gmeta .. ; rm -f $(target_pl) $(notdir $^) .quit param.dg >& /dev/null
+else
+	rm -f $(target_pl) b2plot.ps
+	cd b2pl.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../ftn21 ../ftn22 ../graphite_ext.dat ../mo_ext.dat . ; ${DBX} ${INC} ${DBGOBJ}/b2pl.exe ${RUN_OPTIONS} ; mv -f b2plot.ps .. ; rm -f $(target_pl) $(notdir $^) .quit param.dg >& /dev/null
+endif
+ifndef STAND_ALONE
+	-rm b2pl.exe.dir/ftn44 b2pl.exe.dir/ftn46 b2pl.exe.dir/input.dat b2pl.exe.dir/ftn75
+endif
+	-cd b2pl.exe.dir ; rm -f HYDHEL METHANE SPUTER H2VIBR AMMONX ftn21 ftn22 graphite_ext.dat mo_ext.dat
+endif
 	-rmdir b2pl.exe.dir
 
 ifndef STAND_ALONE
+ifneq (${COMPILER},HP)
 $(target_md) : b2mn.dat b2fgmtry b2fparam b2frates b2fstati b2fstate mesh.extra b2md.dat AMJUEL fort.33 fort.34 fort.35 # b2fplasma b2time.nc
+else
+$(target_md) : b2mn.dat b2fgmtry b2fparam b2frates b2fstati b2fstate mesh.extra b2md.dat AMJUEL ftn33 ftn34 ftn35 # b2fplasma b2time.nc
+endif
 else
 $(target_md) : b2mn.dat b2fgmtry b2fparam b2frates b2fstati b2fstate mesh.extra b2md.dat AMJUEL # b2fplasma b2time.nc
 endif
 	rm -rf b2md.exe.dir >& /dev/null ; mkdir b2md.exe.dir ; cp $^ ds* b2md.exe.dir
 ifndef STAND_ALONE
+ifneq (${COMPILER},HP)
 	-cp fort.44 input.dat b2md.exe.dir/ >& /dev/null
+else
+	-cp ftn44 input.dat b2md.exe.dir/ >& /dev/null
+endif
 	-cd b2md.exe.dir
 endif
 	rm -f $(target_md)
+ifneq (${COMPILER},HP)
 	cd b2md.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ${SOLPSTOP}/scripts/mds_id | ${TIME} ${B2OBJ}/b2md.exe ${RUN_OPTIONS} ; mv $(target_md) .. ; mv shotnumber.history .. ; rm -f $(notdir $^) .quit ds* >& /dev/null
 ifndef STAND_ALONE
 	-rm b2md.exe.dir/fort.44 b2md.exe.dir/input.dat b2md.exe.dir/fort.75 >& /dev/null
 endif
 	-cd b2md.exe.dir ; rm -f HYDHEL METHANE SPUTER H2VIBR AMMONX fort.21 fort.22 graphite_ext.dat mo_ext.dat
+else
+	cd b2md.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../ftn21 ../ftn22 ../graphite_ext.dat ../mo_ext.dat . ; ${SOLPSTOP}/scripts/mds_id | ${TIME} ${B2OBJ}/b2md.exe ${RUN_OPTIONS} ; mv $(target_md) .. ; mv shotnumber.history .. ; rm -f $(notdir $^) .quit ds* >& /dev/null
+ifndef STAND_ALONE
+	-rm b2md.exe.dir/ftn44 b2md.exe.dir/input.dat b2md.exe.dir/ftn75 >& /dev/null
+endif
+	-cd b2md.exe.dir ; rm -f HYDHEL METHANE SPUTER H2VIBR AMMONX ftn21 ftn22 graphite_ext.dat mo_ext.dat
+endif
 	-rmdir b2md.exe.dir
 
 ifndef STAND_ALONE
+ifneq (${COMPILER},HP)
 $(target_md.dbx) : b2mn.dat b2fgmtry b2fparam b2frates b2fstati b2fstate mesh.extra b2md.dat AMJUEL fort.33 fort.34 fort.35 # b2fplasma b2time.nc
+else
+$(target_md.dbx) : b2mn.dat b2fgmtry b2fparam b2frates b2fstati b2fstate mesh.extra b2md.dat AMJUEL ftn33 ftn34 ftn35 # b2fplasma b2time.nc
+endif
 else
 $(target_md.dbx) : b2mn.dat b2fgmtry b2fparam b2frates b2fstati b2fstate mesh.extra b2md.dat AMJUEL # b2fplasma b2time.nc
 endif
 	rm -rf b2md.exe.dir >& /dev/null ; mkdir b2md.exe.dir ; cp $^ ds* b2md.exe.dir
 ifndef STAND_ALONE
+ifneq (${COMPILER},HP)
 	-cp fort.44 input.dat b2md.exe.dir/ >& /dev/null
+else
+	-cp ftn44 input.dat b2md.exe.dir/ >& /dev/null
+endif
 	-cd b2md.exe.dir
 endif
 	rm -f $(target_md)
+ifneq (${COMPILER},HP)
 	cd b2md.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ${SOLPSTOP}/scripts/mds_id | ${DBX} ${INC} ${DBGOBJ}/b2md.exe ${RUN_OPTIONS} ; mv $(target_md) .. ; mv shotnumber.history .. ; rm -f $(notdir $^) .quit ds* >& /dev/null
 ifndef STAND_ALONE
 	-rm b2md.exe.dir/fort.44 b2md.exe.dir/input.dat b2md.exe.dir/fort.75 >& /dev/null
 endif
 	-cd b2md.exe.dir ; rm -f HYDHEL METHANE SPUTER H2VIBR AMMONX fort.21 fort.22 graphite_ext.dat mo_ext.dat
+else
+	cd b2md.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../ftn21 ../ftn22 ../graphite_ext.dat ../mo_ext.dat . ; ${SOLPSTOP}/scripts/mds_id | ${DBX} ${INC} ${DBGOBJ}/b2md.exe ${RUN_OPTIONS} ; mv $(target_md) .. ; mv shotnumber.history .. ; rm -f $(notdir $^) .quit ds* >& /dev/null
+ifndef STAND_ALONE
+	-rm b2md.exe.dir/ftn44 b2md.exe.dir/input.dat b2md.exe.dir/ftn75 >& /dev/null
+endif
+	-cd b2md.exe.dir ; rm -f HYDHEL METHANE SPUTER H2VIBR AMMONX ftn21 ftn22 graphite_ext.dat mo_ext.dat
+endif
 	-rmdir b2md.exe.dir
 
 $(target_rd) : shotnumber.history
