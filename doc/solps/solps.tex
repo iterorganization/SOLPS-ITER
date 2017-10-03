@@ -4516,6 +4516,11 @@ Similarly, the {\tt fort.46} file contains the following data blocks, this time 
   \item[VZDENA] $Z$-directed momentum density carried by atoms (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NATM})
   \item[VZDENM] $Z$-directed momentum density carried by molecules (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NMOL})
   \item[VZDENI] $Z$-directed momentum density carried by test ions (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NION})
+  \item[VOL] Triangle volumes (in $cm^3$), dimension ({\tt NTRII})
+  \item[PUX] $X$-component of the poloidal unit vector at the triangle center
+  \item[PUY] $Y$-component of the poloidal unit vector at the triangle center
+  \item[PVX] $X$-component of the radial unit vector at the triangle center
+  \item[PVY] $Y$-component of the radial unit vector at the triangle center
 \end{description}
 
 Please note that, for the momentum densities, the coordinate system used by {\tt Eirene} is Cartesian, i.e. independent of the local magnetic field, and that this data is given in CGS units.
@@ -11933,7 +11938,7 @@ pomxap\_std \index{pomxap\_std}\index{b2time.nc, pomxap\_std} & variance for max
 \label{cha:b2tallies}\index{b2tallies.nc, quantities stored
   in}\index{time-dependent quantities, b2tallies.nc}\index{b2tallies.nc}
 
-These are the tallies stored in {\tt b2time.nc}.
+These are the tallies stored in {\tt b2tallies.nc}.
 
 Note: some of the descriptions are wrong and need to be updated!
 Please check in subroutine {\tt b2tallies.F}!
@@ -13373,6 +13378,10 @@ quantities are only available for coupled \SOLPSITER runs.
     pdena \index{b2plot, pdena} & Atoms particle density $(m^{-3})$ \\
     pdeni \index{b2plot, pdeni} & Test ions particle density $(m^{-3})$ \\
     pdenm \index{b2plot, pdenm} & Molecules particle density $(m^{-3})$ \\
+    pux \index{b2plot, pux} & $x$-component of poloidal unit vector at triangle center \\
+    puy \index{b2plot, puy} & $y$-component of poloidal unit vector at triangle center \\
+    pvx \index{b2plot, pvx} & $x$-component of radial unit vector at triangle center \\
+    pvy \index{b2plot, pvy} & $y$-component of radial unit vector at triangle center \\
     tindex \index{b2plot, tindex} & Triangle index \\
     tr \index{b2plot,tr} & Triangle centroid $R$ coordinate $(m)$ \\
     triarea \index{b2plot, triarea} & Triangle area $(m^{2})$ \\
