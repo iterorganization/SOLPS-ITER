@@ -240,7 +240,7 @@ endif
 endif
 ifdef USE_IMPGYRO
 ifneq (${COMPILER},HP)
-	-cd b2mn.exe.dir ; touch b2ig.conf ; echo "-n ${NPE_B2} : ${B2OBJ}/b2mn.exe" >> b2ig.conf ; echo "-n ${NPE_EXT} : ${EXE_EXT}" >> b2ig.conf ; ln -s ../config ../pre . ; mkdir tracing ; cp ../tracing/* tracing/ || echo > /dev/null ; mkdir batch_av ; mkdir run_av ; \
+	-cd b2mn.exe.dir ; touch b2ig.conf ; echo "-n ${NPE_B2} : ${B2OBJ}/b2mn.exe" >> b2ig.conf ; echo "-n ${NPE_EXT} : ${EXE_EXT}" >> b2ig.conf ; ln -s ../config ../pre . ; mkdir tracing ; mkdir output ; cp ../tracing/* tracing/ || echo > /dev/null ; mkdir batch_av ; mkdir run_av ; \
 	touch use_impgyro ; [ -e ../restart_ext ] && cp ../restart_ext . || echo > /dev/null ; [ -e ../restart ] && cp ../restart . && cp ${WD_EXT}/.st.?* . || echo > /dev/null ; \
 	mpiexec -verbose -config b2ig.conf ; \
 	mv $(target_mn) .. >& /dev/null ; \
@@ -248,7 +248,7 @@ ifneq (${COMPILER},HP)
 	mv .*.?* ${WD_EXT}/. ; mv fort.150 ${WD_EXT}/. ; \
 	mv impgyro.* ${WD_EXT}/. ; mv preg ${WD_EXT}/. ; cp restart ${WD_EXT}/. ; mv restart ../.
 else
-	-cd b2mn.exe.dir ; touch b2ig.conf ; echo "-n ${NPE_B2} : ${B2OBJ}/b2mn.exe" >> b2ig.conf ; echo "-n ${NPE_EXT} : ${EXE_EXT}" >> b2ig.conf ; ln -s ../config ../pre . ; mkdir tracing ; cp ../tracing/* tracing/ || echo > /dev/null ; mkdir batch_av ; mkdir run_av ; \
+	-cd b2mn.exe.dir ; touch b2ig.conf ; echo "-n ${NPE_B2} : ${B2OBJ}/b2mn.exe" >> b2ig.conf ; echo "-n ${NPE_EXT} : ${EXE_EXT}" >> b2ig.conf ; ln -s ../config ../pre . ; mkdir tracing ; mkdir output ; cp ../tracing/* tracing/ || echo > /dev/null ; mkdir batch_av ; mkdir run_av ; \
 	touch use_impgyro ; [ -e ../restart_ext ] && cp ../restart_ext . || echo > /dev/null ; [ -e ../restart ] && cp ../restart . && cp ${WD_EXT}/.st.?* . || echo > /dev/null ; \
 	mpiexec -verbose -config b2ig.conf ; \
 	mv $(target_mn) .. >& /dev/null ; \
@@ -257,7 +257,7 @@ else
 	mv impgyro.* ${WD_EXT}/. ; mv preg ${WD_EXT}/. ; cp restart ${WD_EXT}/. ; mv restart ../.
 endif
 else
-	-cd b2mn.exe.dir ; mkdir tracing ; cp ../tracing/* tracing/ || echo > /dev/null ; mkdir batch_av ; mkdir run_av ; ${TIME} ${B2OBJ}/b2mn.exe ${RUN_OPTIONS} ; mv $(target_mn) .. >& /dev/null
+	-cd b2mn.exe.dir ; mkdir tracing ; mkdir output ; cp ../tracing/* tracing/ || echo > /dev/null ; mkdir batch_av ; mkdir run_av ; ${TIME} ${B2OBJ}/b2mn.exe ${RUN_OPTIONS} ; mv $(target_mn) .. >& /dev/null
 endif
 	-cd b2mn.exe.dir ; [ -d ../tracing ] || mkdir ../tracing
 	-cd b2mn.exe.dir ; [ -d ../batch_av ] || mkdir ../batch_av
@@ -400,7 +400,7 @@ else
 	[ -e ../ftn35 ] && cp -p ../ftn35 . || echo > /dev/null
 endif
 endif
-	cd b2mn.exe.dir ; mkdir tracing ; mkdir batch_av ; mkdir run_av ; ${DBX} ${INC} ${DBGOBJ}/b2mn.exe ${RUN_OPTIONS} ; mv $(target_mn) .. >& /dev/null ; \
+	cd b2mn.exe.dir ; mkdir tracing ; mkdir output ; cp ../tracing/* tracing/ || echo > /dev/null ; mkdir batch_av ; mkdir run_av ; ${DBX} ${INC} ${DBGOBJ}/b2mn.exe ${RUN_OPTIONS} ; mv $(target_mn) .. >& /dev/null ; \
 	-cd b2mn.exe.dir ; [ -d ../tracing ] || mkdir ../tracing
 	-cd b2mn.exe.dir ; [ -d ../batch_av ] || mkdir ../batch_av
 ifneq (${COMPILER},HP)
