@@ -26,7 +26,6 @@ module load cairo/1.14.2
 module load make
 module load fc2k
 module load xmllib/2.1.1-imas-3.9.0-GCC-4.8.3
-module load python/2.7/11
 module load totalview
 if (`hostname` == "hpc-app1.iter.org") then
   module load matlab/2013a
@@ -44,6 +43,7 @@ setenv FC gfortran
 setenv CXX g++
 
 module load paraview/5.4.1
+module load python/2.7/11
 
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
