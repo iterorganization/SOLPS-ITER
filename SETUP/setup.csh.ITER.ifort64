@@ -48,7 +48,7 @@ setenv CC gcc
 setenv FC ifort
 setenv CXX g++
 
-module load paraview/5.2.0
+module load paraview/5.4.1
 
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
