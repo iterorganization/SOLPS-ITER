@@ -145,6 +145,7 @@ c
 
       ammonx_used=.false.
       meta_used=.false.
+      n2_model=.true.
       do iamd=1,namdf !{
         if(.not.streql(amd_file(iamd),' ')) then !{
 c*** Read the AMDS file if it exists
@@ -172,7 +173,10 @@ c*** Read the AMDS file if it exists
           end if !}
         end if !}
       end do !}
-      if (meta_used) write(6,*) 'This case includes metastable species'
+      if (n2_model)
+     > write(6,*) 'This case contains the N2 molecular model'
+      if (meta_used)
+     > write(6,*) 'This case includes metastable species'
 c*** Add explicitly 3rd product in selected reactions
       do i=1,nnrctn !{
         if (streql(rctndbs(i),'AMMONX') .and.

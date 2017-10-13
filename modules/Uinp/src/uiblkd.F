@@ -329,6 +329,17 @@ c*** 4
       data spcdns / 1,2,2,3,1, 1,2,2,3,1, 1,2,2,3,1,
      ,  3*0, 7*0, 11*0, 19*0,
      ,  4*0,0,0,0,1,2,3,1,2,3,4,0,1,7*0, 5*0 /
+      data l_n2 /
+     ,  3*.true.,.false.,.true.,
+     ,  3*.true.,.false.,.true.,
+     ,  3*.true.,.false.,.true.,
+     ,  3*.true.,
+     ,  7*.true.,
+     , 11*.true.,
+     , 19*.true.,
+     ,    .true.,3*.false.,.true.,5*.false.,4*.false.,.true.,.false.,
+     ,  7*.true.,
+     ,  5*.true. /
       data l_ammon /
      ,  3*.false.,.true.,.false.,
      ,  3*.false.,.true.,.false.,
