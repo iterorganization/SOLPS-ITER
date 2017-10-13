@@ -49,7 +49,7 @@ E prod 1
 +r-p-n float
 eprdct2
 E prod 2
-EnabledParticles1 538
+EnabledParticles1 540
 Reaction HYDHEL_H.1_2.1.1 0
 Reaction HYDHEL_H.1_2.1.2 0
 Reaction HYDHEL_H.1_2.1.3 0
@@ -573,8 +573,8 @@ Reaction AMMONX_H.2_DE 0
 Reaction AMMONX_H.1_DE 0
 Reaction AMMONX_H.2_DF 0
 Reaction AMMONX_H.1_DF 0
-Reaction AMMONX_H.2_EA 0
-Reaction AMMONX_H.1_EA 0
+Reaction AMMONX_H.2_EB 0
+Reaction AMMONX_H.1_EB 0
 Reaction AMMONX_H.2_EC 0
 Reaction AMMONX_H.1_EC 0
 Reaction AMMONX_H.2_20 0
@@ -588,7 +588,9 @@ Reaction AMMONX_H.2_06 0
 Reaction AMMONX_H.2_09 0
 Reaction AMMONX_H.2_17 0
 Reaction AMMONX_H.2_ZH 0
-Vars1 538
+Reaction AMMONX_H.2_ZI 0
+Reaction AMMONX_H.2_ZJ 0
+Vars1 540
 Reaction HYDHEL_H.1_2.1.1 2
 
 
@@ -9876,7 +9878,7 @@ Reaction AMMONX_H.2_DB 2
 
 
 Particle N2*(A)
-Particle N*(4S)
+Particle N
 Reaction AMMONX_H.1_DB 2
 
 
@@ -9894,7 +9896,7 @@ Reaction AMMONX_H.1_DB 2
 
 
 Particle N2*(A)
-Particle N*(4S)
+Particle N
 Reaction AMMONX_H.2_DD 2
 
 
@@ -10003,7 +10005,7 @@ Reaction AMMONX_H.1_DF 2
 
 Particle H2
 Particle N2*(A)
-Reaction AMMONX_H.2_EA 2
+Reaction AMMONX_H.2_EB 2
 
 
 
@@ -10021,7 +10023,7 @@ Reaction AMMONX_H.2_EA 2
 
 Particle H2
 Particle N*(2D)
-Reaction AMMONX_H.1_EA 2
+Reaction AMMONX_H.1_EB 2
 
 
 
@@ -10273,6 +10275,42 @@ Reaction AMMONX_H.2_ZH 2
 
 Particle e
 Particle N2*(A)
+Reaction AMMONX_H.2_ZI 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle N*(2D)
+Reaction AMMONX_H.2_ZJ 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle N*(2P)
 StartupParticles2 3
 H
 H2
