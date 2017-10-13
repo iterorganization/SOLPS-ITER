@@ -111,7 +111,6 @@ Particle CH3+                :  CH3 CH+
 Particle CH4+                :  CH4 CH+
 
 Particle N*(2D)              :  N*
-Particle N*(4S)              :  N*
 Particle N*(2P)              :  N*
 Particle NH                  :  N H
 Particle NH+                 :  NH
@@ -123,7 +122,6 @@ Particle NH4+                :  NH3 NH+
 Particle N2                  :  N
 Particle N2*                 :  N2
 Particle N2*(A)              :  N2*
-Particle N2*(X)              :  N2*
 Particle N2+                 :  N2
 Particle N2H+                :  N2 NH+
 
@@ -646,16 +644,16 @@ Reaction AMMONX H.2 50       : NH2+ H2           : H NH3+          : II
 Reaction AMMONX H.1 50       : NH2+ H2           : H NH3+          : II
 Reaction AMMONX H.2 EK       : e N2              : N2*(A) e        : EI
 Reaction AMMONX H.2 EM       : e N               : N*(2D) e        : EI
-Reaction AMMONX H.2 DB       : N2*(A) N*(4S)     : N*(2P) N2*(X)   : II
-Reaction AMMONX H.1 DB       : N2*(A) N*(4S)     : N*(2P) N2*(X)   : II
-Reaction AMMONX H.2 DD       : NH3 N2*(A)        : N2*(X) NH2 H    : II
-Reaction AMMONX H.1 DD       : NH3 N2*(A)        : N2*(X) NH2 H    : II
-Reaction AMMONX H.2 DE       : H N2*(A)          : N2*(X) H        : II
-Reaction AMMONX H.1 DE       : H N2*(A)          : N2*(X) H        : II
-Reaction AMMONX H.2 DF       : H2 N2*(A)         : N2*(X) 2H       : II
-Reaction AMMONX H.1 DF       : H2 N2*(A)         : N2*(X) 2H       : II
-Reaction AMMONX H.2 EA       : H2 N*(2D)         : NH H            : II
-Reaction AMMONX H.1 EA       : H2 N*(2D)         : NH H            : II
+Reaction AMMONX H.2 DB       : N2*(A) N          : N*(2P) N2       : II
+Reaction AMMONX H.1 DB       : N2*(A) N          : N*(2P) N2       : II
+Reaction AMMONX H.2 DD       : NH3 N2*(A)        : N2 NH2 H        : II
+Reaction AMMONX H.1 DD       : NH3 N2*(A)        : N2 NH2 H        : II
+Reaction AMMONX H.2 DE       : H N2*(A)          : N2 H            : II
+Reaction AMMONX H.1 DE       : H N2*(A)          : N2 H            : II
+Reaction AMMONX H.2 DF       : H2 N2*(A)         : N2 2H           : II
+Reaction AMMONX H.1 DF       : H2 N2*(A)         : N2 2H           : II
+Reaction AMMONX H.2 EB       : H2 N*(2D)         : NH H            : II
+Reaction AMMONX H.1 EB       : H2 N*(2D)         : NH H            : II
 Reaction AMMONX H.2 EC       : NH3 N*(2D)        : NH NH2          : II
 Reaction AMMONX H.1 EC       : NH3 N*(2D)        : NH NH2          : II
 Reaction AMMONX H.2 20       : H2+ e		 : H H             : DS
@@ -669,3 +667,5 @@ Reaction AMMONX H.2 06       : e H2              : H2+ 2e          : EI
 Reaction AMMONX H.2 09       : e NH2             : NH2+ 2e         : EI
 Reaction AMMONX H.2 17       : e NH2             : NH H e          : EI
 Reaction AMMONX H.2 ZH       : e N2*(A)          : N2+ 2e          : EI
+Reaction AMMONX H.2 ZI       : e N*(2D)          : N+ 2e           : EI
+Reaction AMMONX H.2 ZJ       : e N*(2P)          : N+ 2e           : EI
