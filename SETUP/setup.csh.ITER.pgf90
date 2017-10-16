@@ -20,7 +20,7 @@ module load fontconfig
 module load cairo
 module load mdsplus
 module load make
-module load imas/3.8.0/ual/3.5.0
+module load imas/3.11.0/ual/3.6.2
 module load fc2k
 module load kepler
 module load xmllib
