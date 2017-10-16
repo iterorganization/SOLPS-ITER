@@ -92,6 +92,7 @@ c>>>
         do isf=1,nsrfsi(nstrai) !{
           isg=isg+1
           k=lgpfstr(isg)
+          i=indasrfs(indasrfe(k))
           if(k.le.0) then !{
             write(0,*) 'Wrong segment specification for gas puffing ',
      ,                 'source',istr,', segment',isf,' : ',k
@@ -105,20 +106,71 @@ c>>>
      ,             '"Elements not for Eirene"'
             call xerrab ('==> Check the DG model')
           end if !}
-          indim(isf,nstrai)=4
           insor(isf,nstrai)=indasrfe(k)
-          ingrda(isf,nstrai,1)=1
-          ingrde(isf,nstrai,1)=1
-          ingrda(isf,nstrai,2)=1
-          ingrde(isf,nstrai,2)=1
+          if (jlplg(i).ne.0) then !{ gas puff source on contour
+            indim(isf,nstrai)=4
+            ingrda(isf,nstrai,1)=1
+            ingrde(isf,nstrai,1)=1
+            ingrda(isf,nstrai,2)=1
+            ingrde(isf,nstrai,2)=1
+            nasor(isf,nstrai)=0
+            sorlim(isf,nstrai)=4
+            sorad1(isf,nstrai)=0
+            sorad2(isf,nstrai)=0
+            sorad3(isf,nstrai)=0
+            sorad4(isf,nstrai)=0
+          else !}{ gas puff source on free-floating surface
+            indim(isf,nstrai)=0
+            nrsor(isf,nstrai)=0
+            ingrda(isf,nstrai,1)=0
+            ingrde(isf,nstrai,1)=0
+            ingrda(isf,nstrai,2)=0
+            ingrde(isf,nstrai,2)=0
+            if (p1(1,i).eq.p2(1,i)) then !{
+              if (p1(2,i).le.p2(2,i)) then !{
+                sorad1(isf,nstrai)=p1(1,i)
+                sorad2(isf,nstrai)=p2(1,i)
+                sorad3(isf,nstrai)=p1(2,i)
+                sorad4(isf,nstrai)=p2(2,i)
+              else !}{
+                sorad1(isf,nstrai)=p2(1,i)
+                sorad2(isf,nstrai)=p1(1,i)
+                sorad3(isf,nstrai)=p2(2,i)
+                sorad4(isf,nstrai)=p1(2,i)
+              end if !}
+              sorlim(isf,nstrai)=1
+            else
+              if (p1(1,i).le.p2(1,i)) then !{
+                sorad1(isf,nstrai)=p1(1,i)
+                sorad2(isf,nstrai)=p2(1,i)
+                sorad3(isf,nstrai)=p1(2,i)
+                sorad4(isf,nstrai)=p2(2,i)
+              else !}{
+                sorad1(isf,nstrai)=p2(1,i)
+                sorad2(isf,nstrai)=p1(1,i)
+                sorad3(isf,nstrai)=p2(2,i)
+                sorad4(isf,nstrai)=p1(2,i)
+              end if !}
+              if (p1(2,i).eq.p2(2,i)) then !{
+                sorlim(isf,nstrai)=2
+              else !}{
+                sorlim(isf,nstrai)=0
+              end if !}
+            end if !}  
+            if (sorad3(isf,nstrai).eq.sorad4(isf,nstrai)) then !{
+              sorlim(isf,nstrai)=sorlim(isf,nstrai)+10
+            else !}{
+              sorlim(isf,nstrai)=sorlim(isf,nstrai)+20
+            end if !}
+          end if !}
+          if (nltrz) then !{
+            sorlim(isf,nstrai)=sorlim(isf,nstrai)+100
+          else !}{
+            sorlim(isf,nstrai)=sorlim(isf,nstrai)+200
+            sorad5(isf,nstrai)=0.0
+            sorad6(isf,nstrai)=360.0
+          end if !}
           sorifl(isf,nstrai)=1000
-          nrsor(isf,nstrai)=-1
-          nasor(isf,nstrai)=0
-          sorlim(isf,nstrai)=104
-          sorad1(isf,nstrai)=0
-          sorad2(isf,nstrai)=0
-          sorad3(isf,nstrai)=0
-          sorad4(isf,nstrai)=0
         end do !}
 c*** Source composition - for gpfc
         do i=1,nspcncl !{

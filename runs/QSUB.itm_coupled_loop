@@ -1,0 +1,74 @@
+#! /bin/tcsh
+
+#PBS -q xfuagw
+#PBS -l select=1:ncpus=#PROCS#:mem=12GB
+#PBS -l walltime=48:00:00
+#PBS -M #EMAIL#
+#PBS -m e
+#PBS -N #JOBNAME#
+#PBS -V
+
+cd $PBS_O_WORKDIR
+
+pushd #SOLPSTOP#
+source setup.csh
+echo Using SOLPSTOP = #SOLPSTOP#
+popd
+
+set USE_MPI=""
+if ($?SOLPS_MPI) then
+  module load intelmpi
+  set MPI_EXEC=mpirun
+  set MPI_OPTS=#MPIOPTS#
+  set USE_MPI="-m ${MPI_EXEC} ${MPI_OPTS}"
+  set USE_MPI=`echo $USE_MPI | sed -e 's:-m :-m ''":' -e 's:$:"'':'`
+endif
+
+update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"
+set msg="Started on `hostname` at `date`"
+update_solps_run_status ${msg}
+if ($?SOLPS_GUI_IP) then
+  echo ${USER} ${PWD} ${msg} | netcat -u -v -w 1 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
+endif
+
+rm -f run.KAPUTT
+time b2run ${USE_MPI} b2mn >& run.log
+
+QSUB.postprocess_coupled
+
+preserve_scratch_to_work
+
+set msg="Finished on `hostname` at `date`"
+update_solps_run_status ${msg}
+if ($?SOLPS_GUI_IP) then
+  echo ${USER} ${PWD} ${msg} | netcat -u -v -w 1 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
+endif
+
+#set NORMAL_FINISH=`grep " stopping because " run.log.last10`
+#echo ${NORMAL_FINISH} >> run.log.last10
+if (`grep " stopping because " run.log.last10` == "") then
+  update_solps_run_status "run KAPUTT at `date`"
+  echo KAPUTT > run.KAPUTT
+endif
+#set NORMAL_FINISH=`grep " stopping because .quit" run.log.last10`
+if (`grep " stopping because .quit" run.log.last10` != "") then
+  update_solps_run_status "Breaking the loop by .quit at `date`"
+endif
+#set NORMAL_FINISH=`grep " stopping because _quit" run.log.last10`
+if (`grep " stopping because _quit" run.log.last10` != "") then
+  update_solps_run_status "Breaking the loop by _quit at `date`"
+endif
+#set NORMAL_FINISH=`grep " stopping because itim" run.log.last10`
+if (`grep " stopping because itim" run.log.last10` != "") then
+  set msg="Resubmitting inside the loop at `date`"
+  update_solps_run_status ${msg}
+  rm -f run.log* b2mn.prt b2.log*
+  set NOW = `date +"%d.%m.%Y_%T"`  
+  mv b2fstati b2fstati_$NOW
+  mv b2fstate b2fstati
+  if (-s b2faveri) mv b2faveri b2faveri_$NOW
+  if (-s b2favere) mv b2favere b2faveri
+  itmsubmit -m "-np 24 -l" QSUB.itm_coupled_loop
+endif
+
+

@@ -1,4 +1,4 @@
-#! /usr/bin/env tcsh
+#! /bin/tcsh -f
 
 ## -h                         print help
 ## -n                         dry run
@@ -7,20 +7,23 @@
 ## -d <debugger>              use debugger <debugger>
 
 # if we are running at JET then do not rely on the automatic feature of searching in ../baserun, instead setup links
-if (${HOST_NAME} == "JET" && `basename $PWD` != "baserun") then
-  echo Special action is being taken since we are running at JET
-  foreach i (b2mn.dat b2fgmtry b2fpardf b2fstati b2frates)
-    if (! -s $i) then
-      echo Setting up a link to ../baserun/$i
-      ln -s ../baserun/$i
-    endif
-  end
-endif
+# XPB: not sure this is still needed
+# if (${HOST_NAME} == "JET" && `basename $PWD` != "baserun") then
+#   echo Special action is being taken since we are running at JET
+#   foreach i (b2mn.dat b2fgmtry b2fpardf b2fstati b2frates)
+#     if (! -s $i) then
+#       echo Setting up a link to ../baserun/$i
+#       ln -s ../baserun/$i
+#     endif
+#   end
+# endif
 # end
 
 set solpstop=`climb_and_look_for SOLPSTOP`
 if (-s $solpstop) then
   setenv SOLPSTOP "`cat $solpstop`"
+  set RUNS=$SOLPSTOP/runs
+else if ($SOLPSTOP != "") then
   set RUNS=$SOLPSTOP/runs
 else
   setenv SOLPSTOP "`echo $PWD | sed 's:/runs/.*::'`"
@@ -125,7 +128,9 @@ argloop:
     goto argloop 
   endif
   if ("X${argv}X" == "XX") set argv="b2mn"
+  echo "argument= " $argv
   set CMD=`echo $argv" " | sed -e 's: :.prt :g'`
+  echo $CMD
   make $debug TIME="$TIME" -f $RUNS/Makefile $CMD
   unsetenv STAND_ALONE
   if ($?MPI_SET)   source $SOLPSTOP/SETUP/nompi

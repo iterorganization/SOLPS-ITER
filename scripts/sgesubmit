@@ -13,7 +13,7 @@ set standalone="no"
 set solpstop=`climb_and_look_for SOLPSTOP`
 if (-s $solpstop) then
  setenv SOLPSTOP "`cat $solpstop`"
-else
+else if ($SOLPSTOP == "") then
  setenv SOLPSTOP "`echo $PWD | sed 's:/runs/.*::'`"
 endif
 
@@ -105,4 +105,4 @@ update_solps_run_status -n ${msg}
 if ($?SOLPS_GUI_IP) then
   echo ${USER} ${PWD} ${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
 endif
-qsub -V -S /usr/bin/tcsh $NAME
+qsub -V -S /bin/tcsh $NAME

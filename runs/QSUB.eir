@@ -30,5 +30,10 @@ else
   set USE_MPI=""
 endif
 
-${MPI_EXEC} ${MPI_OPTS} $SOLPSTOP/modules/Eirene/builds/standalone.ITER.ifort64${USE_MPI}/eirobjx < input.dat
+if ($COMPILER == "HP") then
+  ln -sf input.dat ftn1
+else
+  ln -sf input.dat fort.1
+endif
+${MPI_EXEC} ${MPI_OPTS} $SOLPSTOP/modules/Eirene/builds/standalone.ITER.ifort64${USE_MPI}/eirobjx
 

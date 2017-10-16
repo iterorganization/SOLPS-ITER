@@ -17,7 +17,7 @@
       integer, allocatable :: ihelp(:)
 
       if (kennung .eq. 'cut') then
-c         write(6,*) 'vergrößern von ',kennung,' von ',size(nxcut1),
+c         write(6,*) 'vergroessern von ',kennung,' von ',size(nxcut1),
 c     .              ' auf ',size(nxcut1)+incr
          allocate(ihelp(size(nxcut1)))
          ihelp = nxcut1

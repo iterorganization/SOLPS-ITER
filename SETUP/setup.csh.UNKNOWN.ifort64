@@ -1,6 +1,10 @@
 alias gmake make
 setenv PATH ${PATH}:/opt/intel/bin/
-setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/opt/intel/composer_xe_2013_sp1.2.144/compiler/lib/intel64/
+if ($?LD_LIBRARY_PATH) then
+  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/opt/intel/composer_xe_2013_sp1.2.144/compiler/lib/intel64/
+else
+  setenv LD_LIBRARY_PATH /opt/intel/composer_xe_2013_sp1.2.144/compiler/lib/intel64/
+endif
 unsetenv NCARG_ROOT 
 
 # General
@@ -39,13 +43,14 @@ unsetenv NCARG_ROOT
 setenv DBX idb
 
 if (`where paraview-config` == "") then
-  echo "Warning: ParaView not found. Catalyst will not not be compiled-in!"
+  echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
 else
   # See ParaViewCatalystUsersGuide_v2.pdf Sec 3.7.2 Linking with Python ...
   set PARAVIEW_LIB=`paraview-config --libs --python | sed s/-L//`
   setenv LD_LIBRARY_PATH "${PARAVIEW_LIB}:${LD_LIBRARY_PATH}"
   setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages/vtk:${PYTHONPATH}"
   setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
+  setenv LD_CATALYST `paraview-config --libs vtkPVPythonCatalyst`
 endif
 
 # Other environment variables

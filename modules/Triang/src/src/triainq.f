@@ -27,20 +27,28 @@ c*  xr,yr : coordinates of the reference point
       integer,allocatable :: tri(:,:), neigh(:,:),neigr(:,:),lcell(:,:)
       integer ltri,lneigh(3)
       integer i,j,k,l,m,n,s(3)
-      integer cell /0/
+      integer cell
+      data cell /0/
       character line*72
-      real r,u,xr,yr,xm,xx,ym,yx
+      realg r,u,xr,yr,xm,xx,ym,yx
+      logical dbg
 #ifdef DBG
-      logical dbg /.true./
+      data dbg /.true./
 #else
-      logical dbg /.false./
+      data dbg /.false./
 #endif
 
 c=======================================================================
 c*** Open the data files
+#ifndef HPUX
       open(21,file='fort.34',status='old',action='read')
       open(22,file='fort.33',status='old',action='read')
       open(23,file='fort.35',status='old',action='read')
+#else
+      open(21,file='ftn34',status='old',action='read')
+      open(22,file='ftn33',status='old',action='read')
+      open(23,file='ftn35',status='old',action='read')
+#endif
 
 c*** Read the data from the input files
 
@@ -62,7 +70,11 @@ c*** Read the data from the input files
       read(21,*) ntria
       read(23,*) k
       if(k.ne.ntria) then !{
+#ifndef HPUX
         stop 'ntria values in fort.34 and fort.35 files differ'
+#else
+        stop 'ntria values in ftn34 and ftn35 files differ'
+#endif
       end if !}
       if(cell.gt.ntria) then !{
         write(0,*) 'cell > ntria :',cell,ntria
@@ -78,14 +90,22 @@ c*** read nodes
 
       read(22,*) px
       read(22,*) py
+#ifndef HPUX
       write(0,*) '    reading fort.33 is finished'
+#else
+      write(0,*) '    reading ftn33 is finished'
+#endif
 
 c*** read elements 
 
       do i=1,ntria   
         read(21,*) j,(tri(l,i),l=1,3)
-      end do 
+      end do
+#ifndef HPUX
       write(0,*) '    reading fort.34 is finished'
+#else
+      write(0,*) '    reading ftn34 is finished'
+#endif
 c!###{
 c      do i=1,1   
 c      write(0,'(a,t12,4i8,1p/(2e17.8))') 'triangle',i,tri(1:3,i),
@@ -96,8 +116,12 @@ c*** read neighbours
 
       do i=1,ntria   
         read(23,*) j,(neigh(k,i),j,neigr(k,i),k=1,3),lcell(:,i)
-      end do 
+      end do
+#ifndef HPUX
       write(0,*) '    reading fort.35 is finished'
+#else
+      write(0,*) '    reading ftn35 is finished'
+#endif
 c!###{
 c      do i=1,1   
 c      write(0,'(a,t12,4i8,1p/(2e17.8))') 'triangle',i,tri(1:3,i),

@@ -61,13 +61,13 @@ EIROBJ  = ${EIRDIR}/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}$
 B2OBJ   = ${B2DIR}/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_DEBUG}
 
 ifeq ($(shell [ -e ${B2DIR}/src/include.local ] && echo yes || echo no ),yes)
-B2INC = ${B2DIR}/src/include.local -I${B2DIR}/src/include -I${B2DIR}/src/common
+B2INC = -I${B2DIR}/src/include.local -I${B2DIR}/src/include -I${B2DIR}/src/common
 else
-B2INC = ${B2DIR}/src/include -I${B2DIR}/src/common
+B2INC = -I${B2DIR}/src/include -I${B2DIR}/src/common
 endif
 B2INC += -I${B2OBJ}
 ifeq ($(shell [ -e ${EIRDIR}/src/local ] && echo yes || echo no ),yes)
-EIRINC += ${EIRDIR}/src/local
+EIRINC += -I${EIRDIR}/src/local
 endif
 ifeq ($(shell [ -e ${EIRDIR}/src/common ] && echo yes || echo no ),yes)
 EIRINC += -I${EIRDIR}/src/common
@@ -161,7 +161,7 @@ ifneq (${MOD},o)
 endif
 
 depend: ${OBJS:.o=.F} uiblkd.F uinput.F uiblb2.F ub2p.F ${SRCDIR}/git_version_Uinp.h
-	`which makedepend` -p'$${OBJDIR}/' ${SOLPS_CPP} ${USE_DEBUG} -f- ${INCLUDE} $^ | \
+	@`which makedepend` -p'$${OBJDIR}/' ${SOLPS_CPP} ${USE_DEBUG} -f- ${INCLUDE} $^ | \
 	sed 's,^$${OBJDIR}/[^ ][^ ]*/,\$${OBJDIR}/,' | \
 	sed 's,: ${SOLPSTOP},: $${SOLPSTOP},' > ${OBJDIR}/dependencies.${COMPILER}
 

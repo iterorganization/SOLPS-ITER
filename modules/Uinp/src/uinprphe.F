@@ -17,28 +17,19 @@ c=======================================================================
 c=======================================================================
       call subini ('uinprphe')
 
-      if(.not.do_hepdt) then !{
-        call subend ()
-        return
-      end if !}
-
 c*** Find the species indices
       do i=1,nspigen
         if (streql(spcigen(i),'He')) j_he_at = i
+        if (streql(spcigen(i),'Ne')) j_ne_at = i
         if (streql(spcigen(i),'H') .or.
      .      streql(spcigen(i),'D') .or.
      .      streql(spcigen(i),'T')) j_h_at = i
       end do
 
-c*** Hydrogenic inventory in the molecules
-
-      do i=1,nmoli !{
-      	k=0
-	do j=1,nspcncl !{
-	  if(spcsnca(j).eq.1) k=k+spcscmm(j,i)
-	end do !}
-	l_h_mol(i)=k
-      end do !}
+      if(.not.do_hepdt) then !{
+        call subend ()
+        return
+      end if !}
 
 c*** Check the pump location
 

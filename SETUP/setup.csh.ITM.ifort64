@@ -1,33 +1,47 @@
-setenv GLI_HOME /pfs/work/dpc/SOLPS-ITER/gks
-setenv PATH ${PATH}:/pfs/work/dpc/SOLPS-ITER/NETCDF/bin
-setenv NCARG_ROOT /pfs/work/dpc/SOLPS-ITER/NCARG
+setenv GLI_HOME /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/gks
+setenv PATH ${PATH}:/pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/NETCDF/bin
+setenv NCARG_ROOT /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/NCARG
 setenv PATH ${PATH}:${NCARG_ROOT}/bin
-setenv SOLPSWORK /pfs/work/$USER/SOLPS-ITER
-if ($?TOKAMAKNAME) then
-  setenv DEVICE $TOKAMAKNAME
-endif
-setenv LD_LIBRARY_PATH ${WORK}/solps-gui/staging/paraview/5.1.2/lib/paraview-5.1:${WORK}/solps-gui/staging/qt/4.8.7/lib:${LD_LIBRARY_PATH}
+setenv SOLPSWORK /pfs/work/$USER/solps-iter/runs
+
+module load imasenv/3.9.1
+
+# The script above overwrites $PATH, so modules must be loaded afterwards!!!
 # load modules
-setenv MODULEPATH /afs/ipp/common/usr/modules.2014/@sys/modulefiles/mpi:$MODULEPATH
-module unload impi
-module load impi/5.1.3
-module load solps-gui
-module load nag_flib/intel/mk24
-module load intel
+#setenv MODULEPATH /afs/ipp/common/usr/modules.2014/@sys/modulefiles/mpi:$MODULEPATH
+#module unload impi
+#module load impi/5.1.3
+#module load solps-gui
+#module load nag_flib/intel/mk24
+#module load intel
+module load texlive
 
 #module load imas
-#imasdb solps-iter
+echo "imasdb solps-iter"
+imasdb solps-iter
 
-module load itm-paraview
+if (! $?DEVICE) then
+  if ($?TOKAMAKNAME) then
+    setenv DEVICE $TOKAMAKNAME
+  endif
+endif
+#setenv LD_LIBRARY_PATH ${WORK}/solps-gui/staging/paraview/5.1.2/lib/paraview-5.1:${WORK}/solps-gui/staging/qt/4.8.7/lib:${LD_LIBRARY_PATH}
+
+module load paraview
 
 if (`where paraview-config` == "") then
-  echo "Warning: ParaView not found. Catalyst will not not be compiled-in!"
+  echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
 else
   # See ParaViewCatalystUsersGuide_v2.pdf Sec 3.7.2 Linking with Python ...
   set PARAVIEW_LIB=`paraview-config --libs --python | sed s/-L//`
-  setenv LD_LIBRARY_PATH "${PARAVIEW_LIB}:${LD_LIBRARY_PATH}"
+  if ($?LD_LIBRARY_PATH) then
+    setenv LD_LIBRARY_PATH "${PARAVIEW_LIB}:${LD_LIBRARY_PATH}"
+  else
+    setenv LD_LIBRARY_PATH ${PARAVIEW_LIB}
+  endif
   setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages/vtk:${PYTHONPATH}"
   setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
+  setenv LD_CATALYST "`paraview-config --libs vtkPVPythonCatalyst` -lstdc++"
 endif
 
 # compilers

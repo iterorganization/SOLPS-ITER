@@ -18,7 +18,9 @@
      *  sclstra_4(:,:), sclrtio_4(:,:),
      *  vout_cnv_4(:), pw0_cnv_4(:), pw1_cnv_4(:), pw2_cnv_4(:),
      *  ffb_const_4(:), ffb_rate_4(:), ffb_start_4(:), ffb_smax_4(:),
-     *  ffb_over_4(:), cfb_core_4(:), cfb_over_4(:), cfb_smax_4(:)
+     *  ffb_over_4(:), cfb_core_4(:), cfb_over_4(:), cfb_smax_4(:),
+     *  sps_absr_4(:), sps_trno_4(:), sps_trni_4(:), sps_mtri_4(:),
+     *  sps_tmpr_4(:), sps_spph_4(:), sps_spch_4(:)
 
       real (kind=R8) ::
      *  kxe_4, kxi_4, kye_4, kyi_4, flim_4, flimi_4, flimv_4, feqp_4,
@@ -67,6 +69,7 @@
      *  lhetrgts_4(:), l_h_mol_4(:),
      *  lpfrgrp_4(:), ipfrgrp_4(:), jpfrgrp_4(:),
      *  lntrgrp_4(:), intrgrp_4(:), jntrgrp_4(:),
+     *  i_spcsrf_4(:), j_spcsrf_4(:), l_spcsrf_4(:), sps_sgrp_4(:),
      *  ffb_cntr_4(:), ffb_strata_4(:), cfb_cntr_4(:)
 
       integer, allocatable :: ifl(:), jfl(:), is1(:), isp(:)
@@ -78,7 +81,7 @@
       character*80 label_4, sonnetfile_4
 
       character*8, allocatable ::
-     *  gpfrgrp_4(:), gntrgrp_4(:), sps_id_4(:)
+     *  gpfrgrp_4(:), gntrgrp_4(:), sps_id_4(:), sps_mtrl_4(:)
 
       character*1, allocatable :: bcchar_4(:), crcstra_4(:)
 
@@ -143,7 +146,6 @@
       endif
       nspecies_4 = nspecies
       label_4 = label
-      n_spcsrf_4 = n_spcsrf
       sonnetfile_4 = sonnetfile
 
       allocate(fhe_4(-1:nx_4,-1:ny_4,0:1))
@@ -190,7 +192,6 @@
       allocate(pw0_cnv_4(1:ns_4))
       allocate(pw1_cnv_4(1:ns_4))
       allocate(pw2_cnv_4(1:ns_4))
-      allocate(sps_id_4(1:n_spcsrf_4))
 
       fhe_4(-1:nx_4,-1:ny_4,0) = FEEX(0:nx_4+1,0:ny_4+1)
       fhe_4(-1:nx_4,-1:ny_4,1) = FEEY(0:nx_4+1,0:ny_4+1)
@@ -277,7 +278,6 @@ cxpb
       pw0_cnv_4(1:ns_4) = pw0_cnv(1:ns_4)
       pw1_cnv_4(1:ns_4) = pw1_cnv(1:ns_4)
       pw2_cnv_4(1:ns_4) = pw2_cnv(1:ns_4)
-      sps_id_4(1:n_spcsrf_4) = sps_id(1:n_spcsrf_4)
 
       time_4 = time
 
@@ -297,6 +297,7 @@ cxpb
      , , only: nlatm, nlmol, nlpls, nspez
       use cinit
      , , only: indsrc
+      use ceirsrt
       implicit none
 #     include <DIMENSIONS.F>
 #     include <KOPPLDIM.F>
@@ -322,6 +323,7 @@ cxpb
 
       nfla_4 = nfla
       nlmpgs_4 = nlmpgs
+      n_spcsrf_4 = n_spcsrf
 
       allocate(parvis_4(1:ns_4))
       allocate(bcpos_4(1:nbc_4))
@@ -354,6 +356,19 @@ cxpb
       allocate(mlcmp_4(1:natm,1:nmol))
       allocate(gpfc_4(1:natm,1:nstrai_4))
       allocate(debug_flags_4(1:100))
+      allocate(sps_id_4(1:n_spcsrf_4))
+      allocate(i_spcsrf_4(1:n_spcsrf_4))
+      allocate(j_spcsrf_4(1:n_spcsrf_4))
+      allocate(l_spcsrf_4(1:nlim+nsts))
+      allocate(sps_absr_4(1:n_spcsrf_4))
+      allocate(sps_trno_4(1:n_spcsrf_4))
+      allocate(sps_trni_4(1:n_spcsrf_4))
+      allocate(sps_mtri_4(1:n_spcsrf_4))
+      allocate(sps_tmpr_4(1:n_spcsrf_4))
+      allocate(sps_spph_4(1:n_spcsrf_4))
+      allocate(sps_spch_4(1:n_spcsrf_4))
+      allocate(sps_sgrp_4(1:n_spcsrf_4))
+      allocate(sps_mtrl_4(1:n_spcsrf_4))
       allocate(niiso_4(1:ns_4))
       allocate(rf_neut_4(1:4))
       allocate(dtee_4(1:nregionv))
@@ -490,6 +505,19 @@ cxpb
       itsput_chemical_4 = itsput_chemical
       issput_chemical_4 = issput_chemical
 #endif
+      sps_id_4(1:n_spcsrf_4) = sps_id(1:n_spcsrf_4)
+      i_spcsrf_4(1:n_spcsrf_4) = i_spcsrf(1:n_spcsrf_4)
+      j_spcsrf_4(1:n_spcsrf_4) = j_spcsrf(1:n_spcsrf_4)
+      l_spcsrf_4(1:nlim+nsts) = l_spcsrf(1:nlim+nsts)
+      sps_absr_4(1:n_spcsrf_4) = sps_absr(1:n_spcsrf_4)
+      sps_trni_4(1:n_spcsrf_4) = sps_trni(1:n_spcsrf_4)
+      sps_trno_4(1:n_spcsrf_4) = sps_trno(1:n_spcsrf_4)
+      sps_mtri_4(1:n_spcsrf_4) = sps_mtri(1:n_spcsrf_4)
+      sps_tmpr_4(1:n_spcsrf_4) = sps_tmpr(1:n_spcsrf_4)
+      sps_spph_4(1:n_spcsrf_4) = sps_spph(1:n_spcsrf_4)
+      sps_spch_4(1:n_spcsrf_4) = sps_spch(1:n_spcsrf_4)
+      sps_sgrp_4(1:n_spcsrf_4) = sps_sgrp(1:n_spcsrf_4)
+      sps_mtrl_4(1:n_spcsrf_4) = sps_mtrl(1:n_spcsrf_4)
 *   ..diagnostics
       ltime_4 = ltime
       lstime_4 = lstime
@@ -696,14 +724,25 @@ c Fill out b2mod_indirect arrays
 !xpb careful about the change of meaning of nniso between 4.x and 5.x
 !xpb In 4.x: a DN geometry needs an isolating cut, which will be the first of the list
 !xpb In 5.x: no isolating cut is needed for DN geometries
-      if (nncut.ge.2) nniso = nniso_4-(nncut-1)
+      if (nncut.ge.2) then
+        nniso = nniso_4-(nncut-1)
+      else
+        nniso = nniso_4
+      end if
       call xertst(0.le.nniso.and.nniso.le.nnisod,
      . 'Check size of NNISO !')
       if (nniso.gt.0) then
-        nxiso1(1:nniso) = nxiso1_4(1:nniso)-1
-        nxiso2(1:nniso) = nxiso2_4(1:nniso)-1
-        nyiso1(1:nniso) = nyiso1_4(1:nniso)-1
-        nyiso2(1:nniso) = nyiso2_4(1:nniso)-1
+        if (nncut.ge.2) then
+          nxiso1(1:nniso) = nxiso1_4(nncut:nniso_4)-1
+          nxiso2(1:nniso) = nxiso2_4(nncut:nniso_4)-1
+          nyiso1(1:nniso) = nyiso1_4(nncut:nniso_4)-1
+          nyiso2(1:nniso) = nyiso2_4(nncut:nniso_4)-1
+        else
+          nxiso1(1:nniso) = nxiso1_4(1:nniso)
+          nxiso2(1:nniso) = nxiso2_4(1:nniso)
+          nyiso1(1:nniso) = nyiso1_4(1:nniso)
+          nyiso2(1:nniso) = nyiso2_4(1:nniso)
+        end if
       end if
       if(nncut.eq.0) write(*,*) 'No cuts found'
       if(nncut.ge.1) write(*,'(a,4i5)')
@@ -881,8 +920,9 @@ c Fill out b2mod_indirect arrays
       call alloc_b2mod_elements(ns, zn, am)
 
 c Compute geometrical quantities
-      call b2agmt(nx, ny, 1, crx, cry, vol, hx, hy, qz, qc, gs,
-     & leftix, bottomiy)
+      call b2agmt(nx, ny, 1,
+     & crx, cry, vol, hx, hy, qz, qc, qcb, gs,
+     & cell_width, cell_height, leftix, bottomiy)
       fpsi = 0.0_R8
       ffbz = 0.0_R8
       periodic_bc = 0
@@ -1207,6 +1247,8 @@ c Fill out /b2cmpt/ arrays
       cflim(0)= flim_4
       cflim(1)= flimi_4
       cflim(2)= flimv_4
+      cflim(3)= 0.5_R8
+      cflim(4)= 0.5_R8
 
 c Fill out b2mod_residuals data
       resco = 0.0_R8
@@ -1522,6 +1564,12 @@ c
       implicit none
       integer nx, ny
       character tab
+      character*8 device
+#ifdef USE_PXFGETENV
+      integer lenval, ierror
+#endif
+      logical streql
+      external streql
 
       tab=char(9)
       write(*,*) 'Writing b2ag.dat'
@@ -1529,9 +1577,24 @@ c
       write(99,'(a)') '*dimens     (nx, ny, nx1, ny1; free format)'
       write(99,'(4(2x,i3))') nx, ny, nx, ny
       write(99,'(a)') '*param      (param(0:99); free format)'
-      write(99,'(a)') '  -1.0, 99*0.0'
+      write(99,'(a)') '  -2.0, 99*0.0'
       write(99,'(3a)')
      . '''b2agfs_geometry'''//tab//'''',trim(sonnetfile_4),''''
+#ifdef NO_GETENV
+#ifdef JET
+      device='jet'
+#else
+      device='iter'
+#endif
+#else
+#ifdef USE_PXFGETENV
+      CALL PXFGETENV ('DEVICE', 0, device, lenval, ierror)
+#else
+      call getenv ('DEVICE', device)
+#endif
+#endif
+      if (streql(device,'iter'))
+     > write(99,'(a)') '''b2agfs_pit_rescale''       ''-1.0'''
       close(99)
       return
       end subroutine write_b2ag
@@ -1570,7 +1633,7 @@ c
         else if (zamin(is).gt.0.0_R8) then
           na0(is) = 1.0e16_R8
         else
-          na0(is) = 1.0e12_R8
+          na0(is) = 1.0e8_R8
         end if
       end do
       write(99,'(a)') '*naini          (na0(0:ns-1); free format)'
@@ -1725,7 +1788,8 @@ c
       write(99,'(a)') '*cfalf'//column_header
       write(99,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
      .  (cfalf(i),i=0,7)
-      write(99,'(a)') '*cflim     cflme     cflmi     cflmv      ...'
+      write(99,'(a)') '*cflim'//
+     .  '     cflme     cflmi     cflmv     cflal     cflab     ...'
       write(99,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
      .  (cflim(i),i=0,7)
       write(99,'(a)') '*endphy'
@@ -2837,37 +2901,37 @@ c
       write(34,'(a,1pe9.2,a)') 'NEUT_SCL_LIM=',neut_scl_lim,','
       if(n_spcsrf_4.gt.0) then !DPC
         write(34,'(a,i2,a)') 'N_SPCSRF=',n_spcsrf_4,','
-        ii=minloc(l_spcsrf)
+        ii=minloc(l_spcsrf_4)
         if (ii(1).eq.1) then
           is = 0
-        else if (l_spcsrf(ii(1)).eq.0) then
+        else if (l_spcsrf_4(ii(1)).eq.0) then
           is = ii(1)-1
         else
-          is = size(l_spcsrf)
+          is = size(l_spcsrf_4)
         end if
         if (is.gt.0) then
           write(hlp_frm,'(a,i3,a)') '(a,',is,'(i3,'',''))'
-          write(34,hlp_frm) 'L_SPCSRF=',(l_spcsrf(ib),ib=1,is)
+          write(34,hlp_frm) 'L_SPCSRF=',(l_spcsrf_4(ib),ib=1,is)
         end if
         write(hlp_frm,'(a,i2,a)') '(a,',n_spcsrf_4,'(a1,a8,a2))'
         write(34,hlp_frm) 'SPS_ID=  ',('''',sps_id_4(ib),''',',
      .                                               ib=1,n_spcsrf_4)
         write(hlp_frm,'(a,i2,a)') '(a,',n_spcsrf_4,'(i10,'',''))'
-        write(34, hlp_frm) 'I_SPCSRF=',(i_spcsrf(ib),ib=1,n_spcsrf_4)
-        write(34, hlp_frm) 'J_SPCSRF=',(j_spcsrf(ib),ib=1,n_spcsrf_4)
+        write(34, hlp_frm) 'I_SPCSRF=',(i_spcsrf_4(ib),ib=1,n_spcsrf_4)
+        write(34, hlp_frm) 'J_SPCSRF=',(j_spcsrf_4(ib),ib=1,n_spcsrf_4)
         write(hlp_frm,'(a,i2,a)') '(a,1p,',n_spcsrf_4,'(e10.3,'',''))'
-        write(34, hlp_frm) 'SPS_ABSR=',(sps_absr(ib),ib=1,n_spcsrf_4)
-        write(34, hlp_frm) 'SPS_TRNO=',(sps_trno(ib),ib=1,n_spcsrf_4)
-        write(34, hlp_frm) 'SPS_TRNI=',(sps_trni(ib),ib=1,n_spcsrf_4)
-        write(34, hlp_frm) 'SPS_MTRI=',(sps_mtri(ib),ib=1,n_spcsrf_4)
-        write(34, hlp_frm) 'SPS_TMPR=',(sps_tmpr(ib),ib=1,n_spcsrf_4)
-        write(34, hlp_frm) 'SPS_SPPH=',(sps_spph(ib),ib=1,n_spcsrf_4)
-        write(34, hlp_frm) 'SPS_SPCH=',(sps_spch(ib),ib=1,n_spcsrf_4)
+        write(34, hlp_frm) 'SPS_ABSR=',(sps_absr_4(ib),ib=1,n_spcsrf_4)
+        write(34, hlp_frm) 'SPS_TRNO=',(sps_trno_4(ib),ib=1,n_spcsrf_4)
+        write(34, hlp_frm) 'SPS_TRNI=',(sps_trni_4(ib),ib=1,n_spcsrf_4)
+        write(34, hlp_frm) 'SPS_MTRI=',(sps_mtri_4(ib),ib=1,n_spcsrf_4)
+        write(34, hlp_frm) 'SPS_TMPR=',(sps_tmpr_4(ib),ib=1,n_spcsrf_4)
+        write(34, hlp_frm) 'SPS_SPPH=',(sps_spph_4(ib),ib=1,n_spcsrf_4)
+        write(34, hlp_frm) 'SPS_SPCH=',(sps_spch_4(ib),ib=1,n_spcsrf_4)
         write(hlp_frm,'(a,i2,a)') '(a,',n_spcsrf_4,'(i10,'',''))'
-        write(34, hlp_frm) 'SPS_SGRP=',(sps_sgrp(ib),ib=1,n_spcsrf_4)
+        write(34, hlp_frm) 'SPS_SGRP=',(sps_sgrp_4(ib),ib=1,n_spcsrf_4)
         write(hlp_frm,'(a,i2,a)')
      .   '(a,',n_spcsrf_4,'('''''''',a8,'''''''','',''))'
-        write(34, hlp_frm) 'SPS_MTRL=',(sps_mtrl(ib),ib=1,n_spcsrf_4)
+        write(34, hlp_frm) 'SPS_MTRL=',(sps_mtrl_4(ib),ib=1,n_spcsrf_4)
       endif
       do ib = 1, 100
         if (debug_flags(ib).ne.0) write(34,'(a,i3,a,i2,a)')
@@ -2876,6 +2940,18 @@ c
       write(34,'(a)') '/'
       close(34)
       deallocate(sps_id_4)
+      deallocate(i_spcsrf_4)
+      deallocate(j_spcsrf_4)
+      deallocate(l_spcsrf_4)
+      deallocate(sps_absr_4)
+      deallocate(sps_trno_4)
+      deallocate(sps_trni_4)
+      deallocate(sps_mtri_4)
+      deallocate(sps_tmpr_4)
+      deallocate(sps_spph_4)
+      deallocate(sps_spch_4)
+      deallocate(sps_sgrp_4)
+      deallocate(sps_mtrl_4)
       return
       end subroutine write_neutrals_namelist
 c
@@ -3084,7 +3160,6 @@ c
       use b2mod_types
       use b2mod_user_namelist
       implicit none
-#     include <KOPPLDIM.F>
       integer i, is, ii(1)
       character*32 hlp_frm
 

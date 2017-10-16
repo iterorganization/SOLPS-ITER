@@ -62,7 +62,12 @@ foreach i (`cat shotnumber.history | sort -n | uniq`)
   if (-e b2md.log) mv b2md.log b2md.log.$count_suffix
   if (-e b2fstate.gz) gunzip b2fstate.gz
   if (-e b2fstati.gz) gunzip b2fstati.gz
-  gmake $debug -f $SOLPSTOP/runs/Makefile.plot b2md.prt > b2md.log
+  if (! -s mesh.extra) ln -s ../mesh.extra .
+  if (! -s mesh.extra) then
+   (cd .. ; ln -s ../mesh.extra .)
+  endif
+  if (! -s AMJUEL) ln -s $SOLPSTOP/modules/Eirene/Database/AMJUEL .
+  ${MAKE} $debug -f $SOLPSTOP/runs/Makefile.plot b2md.prt > b2md.log
 end
 
 if ($B2MDDAT == b2md.dat.sav) then

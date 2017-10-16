@@ -1,0 +1,39 @@
+#! /usr/bin/env ksh
+
+NAME=/tmp/.files.$$.$USER.`date +%Y%m%d%H%M%S`
+typeset -i nfiles
+
+( ls -1 b2mn.exe.dir/tracing/* | wc -l > $NAME ) 2> /dev/null
+nfiles=`cat $NAME`
+echo "tracing : found" $nfiles "files"
+[ $nfiles -gt 0 ] && mv b2mn.exe.dir/tracing/* tracing 2> /dev/null || echo > /dev/null
+
+( ls -1 b2mn.exe.dir/batch_av/* | wc -l > $NAME ) 2> /dev/null
+nfiles=`cat $NAME`
+echo "batch_av : found" $nfiles "files"
+[ $nfiles -gt 0 ] && mv b2mn.exe.dir/batch_av/* batch_av 2> /dev/null || echo > /dev/null
+
+( ls -1 b2mn.exe.dir/run_av/* | wc -l > $NAME ) 2> /dev/null
+nfiles=`cat $NAME`
+echo "run_av : found" $nfiles "files"
+[ $nfiles -gt 0 ] && mv b2mn.exe.dir/run_av/* batch_av 2> /dev/null || echo > /dev/null
+
+( ls -1 b2mn.exe.dir/d?? | wc -l > $NAME ) 2> /dev/null
+nfiles=`cat $NAME`
+echo "d?? : found" $nfiles "files"
+[ $nfiles -gt 0 ] && mv b2mn.exe.dir/d?? . 2> /dev/null || echo > /dev/null
+
+( ls -1 b2mn.exe.dir/ds?? | wc -l > $NAME ) 2> /dev/null
+nfiles=`cat $NAME`
+echo "ds?? : found" $nfiles "files"
+[ $nfiles -gt 0 ] && mv b2mn.exe.dir/ds?? . 2> /dev/null || echo > /dev/null
+
+( ls -1 b2mn.exe.dir/ds??? | wc -l > $NAME ) 2> /dev/null
+nfiles=`cat $NAME`
+echo "ds??? : found" $nfiles "files"
+[ $nfiles -gt 0 ] && mv b2mn.exe.dir/ds??? . 2> /dev/null || echo > /dev/null
+
+( ls -1 b2mn.exe.dir/b2.*.parameters | wc -l > $NAME ) 2> /dev/null
+nfiles=`cat $NAME`
+echo "b2.*.parameters : found" $nfiles "files"
+[ $nfiles -gt 0 ] && mv b2mn.exe.dir/b2.*.parameters . 2> /dev/null || echo > /dev/null

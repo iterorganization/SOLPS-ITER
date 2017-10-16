@@ -100,6 +100,7 @@ c*** ... and then the recycling source if specified
 	  if(nlrbnds(isf,ibk)) then !{
            ispe=0
            do iatm=1,natmi !{ Split the strata per species
+            if(is_meta(iatm)) cycle
             nstrai=nstrai+1
             ispi=ispe+1
             ispe=ispi

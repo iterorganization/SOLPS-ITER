@@ -251,7 +251,7 @@ c=======================================================================
       goto 9999
    16 call resimi(lusgm)
       goto 9999
-   17 call resima(luwrk)
+   17 call resimi(luwrk)
       goto 9999
    18 call resimi(luwrk)
       luswch=1
@@ -266,7 +266,15 @@ c=======================================================================
       luswch=4
       goto 9999
    22 call rearri(luwrk,nlim,i)
-      if(luswch.ge.1 .and. luswch.le.4) jedgeo(luswch)=luwrk(1)
+      if(luswch.ge.1 .and. luswch.le.4) then !{
+        if(luwrk(1).gt.nlim) then !{
+          write(0,*) 'Too many wall elements: maximum ',nlim
+          write(0,*) 'Current number of requested elements: ',luwrk(1)
+          call xerrab
+     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+        end if !}
+        jedgeo(luswch)=luwrk(1)
+      end if !}
       goto 9999
    23 call rearri(jlref,nlim,i)
       if(i.gt.nlim) then !{
@@ -346,9 +354,27 @@ c=======================================================================
         ntrgtm=max(ntrgtm,luswch)
       end if
       goto 9999
-   37 if(.not.tgdtinpt) call resimi(jedgec(luswch))
+   37 if(.not.tgdtinpt) then !{
+        call resimi(jedgec(luswch))
+        if(jedgec(luswch).gt.nlim) then !{
+          write(0,*) 'Too many wall elements: maximum ',nlim
+          write(0,*) 'Current number of requested elements: ',
+     .     jedgec(luswch)
+          call xerrab
+     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+        end if !}
+      end if !}
       goto 9999
-   38 if(.not.tgdtinpt) call resimi(jedgep(luswch))
+   38 if(.not.tgdtinpt) then !{
+        call resimi(jedgep(luswch))
+        if(jedgep(luswch).gt.nlim) then !{
+          write(0,*) 'Too many wall elements: maximum ',nlim
+          write(0,*) 'Current number of requested elements: ',
+     .     jedgep(luswch)
+          call xerrab
+     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+        end if !}
+       end if !}
       goto 9999
    39 call resimi(luswch)
       if(.not.tgdtinpt) then
@@ -361,8 +387,22 @@ c=======================================================================
       tgdtinpt=.true.
       goto 9999
    40 call resimi(jedgec(luswch))
+      if(jedgec(luswch).gt.nlim) then !{
+        write(0,*) 'Too many wall elements: maximum ',nlim
+        write(0,*) 'Current number of requested elements: ',
+     .   jedgec(luswch)
+        call xerrab
+     .   (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+      end if !}
       goto 9999
    41 call resimi(jedgep(luswch))
+      if(jedgep(luswch).gt.nlim) then !{
+        write(0,*) 'Too many wall elements: maximum ',nlim
+        write(0,*) 'Current number of requested elements: ',
+     .   jedgep(luswch)
+        call xerrab
+     .   (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+      end if !}
       goto 9999
    42 i=lena
       lena=8
@@ -587,7 +627,8 @@ c      call xerrab (' ==> Corrupted DG output?')
       end if !}
       call resime(ychsptg(nchsppri))
       goto 9999
-   91 if(nchsppri.le.0) then !{
+   91 l=lena
+      if(nchsppri.le.0) then !{
         write(0,*) 'Chemical sputtering data outside the block - ',unn
         call xerrab (' ==> Corrupted DG output?')
       end if !}
@@ -651,9 +692,9 @@ c*** Surface data transfer from B2 to Eirene
         call xerrab (' ==> Corrupted DG output?')
       end if !}
       call resima(sps_mtrl(n_spcsrf))
-      sps_mtri(n_spcsrf)=-1
+      sps_mtri(n_spcsrf)=-1.0
       if(.not.streql(sps_mtrl(n_spcsrf),'-')) 
-     -  call uinmtr(sps_mtrl(n_spcsrf),sps_mtri(n_spcsrf),1)
+     -  call uinmtr(sps_mtrl(n_spcsrf),nint(sps_mtri(n_spcsrf)),1)
       goto 9999
   100 if(n_spcsrf.le.0) then !{
         write(0,*) '"Surface special" data outside the block - ',unn

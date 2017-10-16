@@ -577,12 +577,14 @@ C     FIND NEIGHBOURS
       use ccuts
       IMPLICIT NONE
 
-      INTEGER I, J, K, L, M, IS, incr /1000/
+      INTEGER I, J, K, KK, L, M, IS, INCR
+      DATA INCR /1000/
       LOGICAL PARA
+      LOGICAL DBG, DBG0
 #ifdef DBG
-      LOGICAL dbg /.false./, dbg0 /.false./
+      DATA DBG /.false./, DBG0 /.false./
 #else
-      LOGICAL dbg /.true./, dbg0 /.true./
+      DATA DBG /.true./, DBG0 /.true./
 #endif
 
       CALL GRSPTS(25)
@@ -596,8 +598,8 @@ c neighr(i,k).ne.0 -> side k of triangle i is on the tria grid edge
 c        dbg0=itria1.eq.1   !###
         if(dbg0) then !{
           print *,'itria1,ntria1,ntria=',itria1,ntria1,ntria
-          print *,'neighr=',neighr(itria1,:)
-          print *,'neighb=',neighb(itria1,:)
+          print *,'neighr=',(neighr(itria1,k),k=1,3)
+          print *,'neighb=',(neighb(itria1,k),k=1,3)
         end if !}
         IF (ABS(NEIGHR(ITRIA1,1))+ABS(NEIGHR(ITRIA1,2))+
      .      ABS(NEIGHR(ITRIA1,3)) .NE. 0) THEN !{
@@ -610,8 +612,8 @@ c loop over triangles (b) inside the b2 grid
 c            dbg=dbg0.and.itria.eq.1363  !###
             if(dbg) then !{
               print *,'itria=',itria
-              print *,'neighr=',neighr(itria,:)
-              print *,'neighb=',neighb(itria,:)
+              print *,'neighr=',(neighr(itria,k),k=1,3)
+              print *,'neighb=',(neighb(itria,k),k=1,3)
             end if !}
             IF (ABS(NEIGHR(ITRIA,1))+ABS(NEIGHR(ITRIA,2))+
      .          ABS(NEIGHR(ITRIA,3)).NE.0) THEN !{
@@ -629,7 +631,8 @@ c loop over the sides of triangle (b)
                   IF (M .EQ. 4) M = 1
                   if(dbg) then !{
                     print '(a,t12,3i8/t12,3i8)','triangles',
-     ,                tria(itria1,:),tria(itria,:)
+     ,                (tria(itria1,kk),kk=1,3),
+     ,                (tria(itria ,kk),kk=1,3)
                   end if !}
                   IF ((TRIA(ITRIA1,I) .EQ. TRIA(ITRIA,L)) .AND.
      .                (TRIA(ITRIA1,J) .EQ. TRIA(ITRIA,K))) THEN !{
@@ -815,39 +818,38 @@ C     CHECK COLINEARITY OF TWO MARGINS
       FUNCTION PARA(XP2,YP2,XP1,YP1,XQ1,YQ1,XQ2,YQ2)
       IMPLICIT NONE
       double precision tol,tol2,tolx,toly
-      parameter (tol=1.d-4)
+      parameter (tol=1.d-6)
       DOUBLE PRECISION XP2,YP2,XP1,YP1,XQ1,YQ1,XQ2,YQ2
       LOGICAL PARA
 
 cxpb  We need to have not only (P1,P2) parallel to (Q1,Q2) but
 cxpb  also (P1,P2) shorter than (Q1,Q2)
  
-cank  The segments must be not only parallel, but colinear {
-c      IF (ABS(XP2-XP1) .GT. 1.E-6) THEN
-c        IF (ABS(XQ1-XQ2) .GT. 1.E-6) THEN
-c          IF (ABS(ABS((YP2-YP1)/((YQ1-YQ2)+1.e-20)) -
-c     .            ABS((XP2-XP1)/(XQ1-XQ2))) .LT. 1.E-6) THEN
-c            PARA = ABS(XP2-XP1).LE.ABS(XQ2-XQ1)
-c          ELSE
-c            PARA = .FALSE.
-c          ENDIF
-c        ELSE
-c          PARA = .FALSE.
-c        ENDIF
-c      ELSE
-c        IF (ABS(XQ1-XQ2) .GT. 1.E-6) THEN
-c          PARA = .FALSE.
-c        ELSE
-c          PARA = ABS(YP2-YP1).LE.ABS(YQ2-YQ1)
-c        ENDIF
-c      ENDIF
-
       tolx=tol*abs(xp1+xq1+xp2+xq2)/4.
       toly=tol*abs(yp1+yq1+yp2+yq2)/4.
       tol2=tolx*toly
-      para= abs((xp1-xq1)*(yq2-yq1)-(yp1-yq1)*(xq2-xq1)).le.tol2 .and.
-     .      abs((xp2-xq1)*(yq2-yq1)-(yp2-yq1)*(xq2-xq1)).le.tol2
 
+cank  The segments must be not only parallel, but colinear {
+c      para= abs((xp1-xq1)*(yq2-yq1)-(yp1-yq1)*(xq2-xq1)).le.tol2 .and.
+c     .      abs((xp2-xq1)*(yq2-yq1)-(yp2-yq1)*(xq2-xq1)).le.tol2
+      IF (ABS(XQ2-XQ1) .GT. TOLX) THEN
+        IF (ABS(YQ1-YQ2) .GT. TOLY) THEN
+          IF (ABS(ABS((YP2-YP1)/(YQ1-YQ2)) -
+     .            ABS((XP2-XP1)/(XQ1-XQ2))) .LT. TOL) THEN
+            PARA = ABS(XP2-XP1).LE.ABS(XQ2-XQ1)+TOLX
+          ELSE
+            PARA = .FALSE.
+          ENDIF
+        ELSE
+          PARA = ABS(YP1-YP2) .LE. TOLY
+        ENDIF
+      ELSE
+        IF (ABS(XP1-XP2) .GT. TOLX) THEN
+          PARA = .FALSE.
+        ELSE
+          PARA = ABS(YP2-YP1).LE.ABS(YQ2-YQ1)+TOLY
+        ENDIF
+      ENDIF
 cank }
 c DPC: additional constraint - (p1,p2) should be contained by (q1,q2)
 cank: need to introduce tolerance here, 

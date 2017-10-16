@@ -4,17 +4,26 @@ switch ($text)
   case "rsanareg_region":
     set label="ionization rate"
     breaksw
+  case "rsamoreg_region":
+    set label="ionization momentum"
+    breaksw
   case "rsahireg_region":
     set label="ionization energy"
     breaksw
   case "rranareg_region":
     set label="recombination rate"
     breaksw
+  case "rramoreg_region":
+    set label="recombination momentum"
+    breaksw
   case "rrahireg_region":
     set label="recombination energy"
     breaksw
   case "rcxnareg_region":
     set label="charge exchange rate"
+    breaksw
+  case "rcxmoreg_region":
+    set label="charge exchange momentum"
     breaksw
   case "rcxhireg_region":
     set label="charge exchange energy"
@@ -24,6 +33,9 @@ switch ($text)
     breaksw
   case "rqradreg_region":
     set label="radiation"
+    breaksw
+  case "rqbrmreg_region":
+    set label="bremsstrahlung"
     breaksw
   case "b2stbr_she_reg_region":
     set label="electron heat loss (-) or source (+) rate from recycling"

@@ -75,6 +75,9 @@ doc/solps/B2_5.Makefile
 doc/solps/b2plot.commands
 doc/solps/DIMENSIONS.F
 
+# auxiliary files for AMDS
+modules/amds/src/x_~fbr.c
+
 # Triangular grid files
 modules/Triang/triangles/
 

@@ -50,6 +50,11 @@ c=======================================================================
       call resimi(nnrctn)
       print *,uun,' : ',nnrctn
       nnrctn=nn+nnrctn
+      if(nnrctn.gt.nreac) then !{
+        write(0,*) 'Too many reaction datasets specified:',nnrctn
+        call xerrab
+     .   ('==> Check the AMDS model and DEF_NREAC in DIMENSIONS.F')
+      end if !}
       nn=nn+1
       do i=nn,nnrctn !{
       	read(iunii,'(a)',end=9999) s
@@ -91,6 +96,7 @@ c	      print *,'k,l,m= ',k,l,m
 	end if !}
 	print '(i3,7a)',i,':',rctndbs(i),':',rctnchp(i),':',
      ,	  rctnrct(i),':'
+        if (streql(rctndbs(i),'AMMONX')) ammonx_used=.true.
       end do !}
       call subend ()
       return
@@ -122,21 +128,45 @@ c-----------------------------------------------------------------------
 
   9   do i=nn,nnrctn !{
       	read(iunii,'(a)',end=9999) rctnptpr(i)
+        do j = 1, nspdlen !{
+          if (streql(rctnptpr(i),spcdspc(j))) then !{
+            n2_model = n2_model .and. l_n2(j)
+            if (.not.meta_used .and. l_meta(j)) meta_used = .true.
+          end if !}
+        end do !}
       end do !}
       go to 9990
 
  10   do i=nn,nnrctn !{
       	read(iunii,'(a)',end=9999) rctnptin(i)
+        do j = 1, nspdlen !{
+          if (streql(rctnptin(i),spcdspc(j))) then !{
+            n2_model = n2_model .and. l_n2(j)
+            if (.not.meta_used .and. l_meta(j)) meta_used = .true.
+          end if !}
+        end do !}
       end do !}
       go to 9990
 
  11   do i=nn,nnrctn !{
       	read(iunii,'(a)',end=9999) rctnpto1(i)
+        do j = 1, nspdlen !{
+          if (streql(rctnpto1(i),spcdspc(j))) then !{
+            n2_model = n2_model .and. l_n2(j)
+            if (.not.meta_used .and. l_meta(j)) meta_used = .true.
+          end if !}
+        end do !}
       end do !}
       go to 9990
 
  12   do i=nn,nnrctn !{
       	read(iunii,'(a)',end=9999) rctnpto2(i)
+        do j = 1, nspdlen !{
+          if (streql(rctnpto2(i),spcdspc(j))) then !{
+            n2_model = n2_model .and. l_n2(j)
+            if (.not.meta_used .and. l_meta(j)) meta_used = .true.
+          end if !}
+        end do !}
       end do !}
       go to 9990
 

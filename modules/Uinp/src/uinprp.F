@@ -256,6 +256,18 @@ c*** Grid dimensions and topology (cuts, targets)
 c*** Boundary conditions at the grid edges (including recycling)
       call uinprpbn
 
+c*** Prepare the data for triangular mesh
+c***                               - needed also for regular input files
+      call uinptriang(uex)
+c      if(uex) then !{
+        do i=1,nstsi
+          ilplg(i)=ilplgu(i)
+        end do !}
+        do i=1,nlim
+          jlplg(i)=jlplgu(i)
+        end do !}
+c      end if !}
+
 c*** Neutral sources due to gas puffing
       call uinpsrcg
 
@@ -271,7 +283,7 @@ c*** Surface-particle data (sect. 6C)
 c*** Surface interaction cards
       call uinpscrd
 c-----------------------------------------------------------------------
-c*** Mid-plane location
+c*** Midplane location
 
       jxi=mod(jxi,nx+2)
       jxa=mod(jxa,nx+2)
@@ -428,18 +440,6 @@ c*** Set the VSP data for input.eir
           lsrfcls(i,k)=lsrfclu(i,k,1)
         end do !}
       end do !}
-
-c*** Prepare the data for triangular mesh
-c***                               - needed also for regular input files
-      call uinptriang(uex)
-c      if(uex) then !{
-        do i=1,nstsi
-          ilplg(i)=ilplgu(i)      
-        end do !}
-        do i=1,nlim
-          jlplg(i)=jlplgu(i)
-        end do !}
-c      end if !}
 
 c=======================================================================
       call subend ()

@@ -22,7 +22,7 @@ C---- NPARTFR : TOTAL NUMBER OF FRONTIER-PARTS
       integer dim1, dim2
 
       if (kennung .eq. 'delfro') then
-c         write(6,*) 'vergrößern von ',kennung,' von ',size(delfro),
+c         write(6,*) 'vergroessern von ',kennung,' von ',size(delfro),
 c     .              ' auf ',size(delfro)+incr
          allocate(help(size(delfro)))
          help = delfro
@@ -34,8 +34,8 @@ c     .              ' auf ',size(delfro)+incr
       elseif (kennung .eq. 'ifront') then
          dim1 = size(ifront,1)
          dim2 = size(ifront,2)
-c         write(6,*) 'vergrößern von ',kennung,' von (',dim1,',',dim2,
-c     .              ') auf (',dim1,',',dim2+incr,')'
+c         write(6,*) 'vergroessern von ',kennung,' von (',dim1,
+c     .              ',',dim2,') auf (',dim1,',',dim2+incr,')'
          allocate(ihelp(dim1,dim2))
          ihelp = ifront
          deallocate (ifront)

@@ -1,6 +1,6 @@
 #! /bin/tcsh
 
-#$ -l h_rt=36:00:00,h_vmem=1500M
+#$ -l h_rt=168:00:00,h_vmem=4000M
 #$ -cwd
 #$ -M #EMAIL#
 #$ -m e

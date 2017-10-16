@@ -60,7 +60,7 @@ endif
 unexport SOLPS_DEBUG
 unexport SOLPS_MPI
 
-.PHONY: solps solps_mpi all all_mpi carre divgeo b25 b25_mpi eirene eirene_mpi b25eirene b25eirene_mpi b25eirene_ig uinp triang fxdr sonnet-light b2sxdr manual local depend tags clean clean_% %_debug VERSION help
+.PHONY: solps solps_mpi nox nox_mpi all all_nox all_mpi carre carre_nox divgeo b25 b25_mpi b25_nox b25_ig b25_all_mpi eirene eirene_mpi eirene_nox b25eirene b25eirene_mpi b25eirene_nox b25eirene_ig b25eirene_all_mpi b25eirene_mpi_nox uinp uinp_nox uinp_mpi triang triang_nox amds fxdr sonnet-light b2sxdr manual local depend depend_nox tags listobj listobj_nox clean clean_% debug %_debug VERSION help nox_build nox_build_mpi
 
 DEFAULT: solps
 
@@ -81,13 +81,15 @@ nox_mpi:   carre_nox b25eirene_mpi_nox uinp_mpi_nox triang_nox manual
 
 all:       carre divgeo b25     eirene     b25eirene     uinp     triang amds sonnet-light manual
 
+all_nox:   carre_nox    b25_nox eirene_nox b25eirene_nox uinp_nox triang_nox manual
+
 all_mpi:   carre divgeo b25_mpi eirene_mpi b25eirene_mpi uinp_mpi triang amds sonnet-light manual
 
 carre:
 	cd modules/Carre; ${MAKE}
 
 carre_nox:
-	cd modules/Carre;  ${MAKE} NCARG_ROOT="" LD_NCARG=""
+	cd modules/Carre; ${MAKE} NCARG_ROOT="" LD_NCARG=""
 
 divgeo:
 	cd modules/DivGeo;         ${MAKE}
@@ -193,9 +195,6 @@ ifeq ($(shell [ -e ${SOLPSTOP}/doc/solps/b2cdci.F ] && echo yes || echo no ),no)
 else
 	cd doc/solps; ${MAKE} 
 endif
-ifeq ($(shell [ -d ${SOLPSTOP}/modules/DivGeo/equtrn/doxygen ] && echo yes || echo no ),no)
-	cd modules/DivGeo/equtrn ; ${MAKE} DOC
-endif
 
 local:
 	cd modules/Eirene; ${MAKE} local
@@ -211,7 +210,7 @@ tags:
 	cd modules/DivGeo/convert; ${MAKE} tags
 	cd modules/DivGeo/equtrn;  ${MAKE} tags
 #	cd modules/solps4-5;       ${MAKE} tags
-	rm -f TAGS ; etags -o TAGS modules/Carre/src/*/*.F modules/Carre/src/include/*.* modules/Eirene/src/*/*.f modules/Eirene/src/interfaces/*couple_SOLPS-ITER/*.f modules/Eirene/src/user-routines/user_iter/*.f modules/Eirene/src/geometry/trc-time-routines/*.f modules/Eirene/src/*/*.[Ff]90 modules/Eirene/src/interfaces/couple_SOLPS-ITER/*.[Ff]90 modules/B2.5/src.local/*.F modules/B2.5/src/*/*.F modules/B2.5/src/*/*.F90 modules/B2.5/src/*/*.[Hh] modules/B2.5/src/common/*.* modules/B2.5/src/common/COUPLE/*.F modules/Uinp/src/*.F modules/Uinp/src/*.inc modules/Uinp/src/*.h modules/Triang/src/*/*.f modules/DivGeo/equtrn/src/*.f modules/DivGeo/equtrn/src/*.inc modules/DivGeo/convert/src/*.f modules/DivGeo/src/*.[ch] modules/DivGeo/dg.dgc
+	rm -f TAGS ; etags -o TAGS modules/Carre/src.local/*.F modules/Carre/src/*/*.F modules/Carre/src/include/*.* modules/Eirene/src.local/*.f modules/Eirene/src/*/*.f modules/Eirene/src/interfaces/couple_SOLPS-ITER/*.f modules/Eirene/src/user-routines/user_iter/*.f modules/Eirene/src/geometry/time-routines/*.F modules/Eirene/src/*/*.[Ff]90 modules/Eirene/src/interfaces/couple_SOLPS-ITER/*.[Ff]90 modules/B2.5/src.local/*.F modules/B2.5/src/*/*.F modules/B2.5/src/*/*.F90 modules/B2.5/src/*/*.[Hh] modules/B2.5/src/common/*.* modules/B2.5/src/common/COUPLE/*.F modules/B2.5/src/documentation/*.xml modules/Uinp/src/*.F modules/Uinp/src/*.inc modules/Uinp/src/*.h modules/Triang/src/*/*.f modules/DivGeo/equtrn/src/*.f modules/DivGeo/equtrn/src/*.inc modules/DivGeo/convert/src/*.f modules/DivGeo/src/*.[ch] modules/DivGeo/dg.dgc
 
 listobj:
 	cd modules/Carre;          ${MAKE} listobj
@@ -226,6 +225,23 @@ listobj:
 	cd modules/Eirene;         ${MAKE} listobj USE_B25=-DB25_EIRENE
 	cd modules/Eirene;         ${MAKE} listobj USE_B25=-DB25_EIRENE USE_MPI=-DUSE_MPI
 	cd modules/Eirene;         ${MAKE} listobj USE_B25=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO
+	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE
+	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
+	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO
+#	cd modules/solps4-5;       ${MAKE} listobj
+
+listobj_nox:
+	cd modules/Carre;          ${MAKE} listobj NCARG_ROOT="" LD_NCARG=""
+	cd modules/Eirene;         ${MAKE} listobj USE_MPI=-DUSE_MPI LD_GR="" LD_GKS=""
+	cd modules/Eirene;         ${MAKE} listobj LD_GR="" LD_GKS=""
+	cd modules/B2.5;           ${MAKE} listobj USE_MPI=-DUSE_MPI
+	cd modules/B2.5;           ${MAKE} listobj
+	cd modules/Uinp;           ${MAKE} listobj
+	cd modules/Uinp;           ${MAKE} listobj USE_MPI=-DUSE_MPI
+	cd modules/Triang;         ${MAKE} listobj LD_GR="" LD_GKS=""
+	cd modules/Eirene;         ${MAKE} listobj USE_B25=-DB25_EIRENE LD_GR="" LD_GKS=""
+	cd modules/Eirene;         ${MAKE} listobj USE_B25=-DB25_EIRENE USE_MPI=-DUSE_MPI LD_GR="" LD_GKS=""
+	cd modules/Eirene;         ${MAKE} listobj USE_B25=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO LD_GR="" LD_GKS=""
 	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE
 	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
 	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO
@@ -251,6 +267,9 @@ depend:
 	cd modules/amds;           ${MAKE} depend
 #	cd modules/solps4-5;       ${MAKE} depend
 
+depend_nox:
+	${MAKE} depend LD_GR="" LD_GKS=""
+
 VERSION:
 	cd modules/B2.5;   ${MAKE} VERSION
 	cd modules/Eirene; ${MAKE} VERSION
@@ -269,13 +288,13 @@ debug: solps_debug
 
 
 # CI build tests
-#--------------_
+#---------------
 
 # Dependencies are not duplicated across build targets
 
-nox_build:     clean_build     listobj depend carre_nox b25eirene_nox     uinp_nox     triang_nox
+nox_build:     clean_build     listobj_nox depend_nox carre_nox b25eirene_nox     uinp_nox     triang_nox
 
-nox_build_mpi: clean_build_mpi listobj depend           b25eirene_mpi_nox uinp_mpi_nox
+nox_build_mpi: clean_build_mpi listobj_nox depend_nox           b25eirene_mpi_nox uinp_mpi_nox
 
 
 # Clean targets
@@ -284,11 +303,11 @@ nox_build_mpi: clean_build_mpi listobj depend           b25eirene_mpi_nox uinp_m
 
 clean: clean_solps
 
-clean_solps:     clean_carre clean_divgeo clean_b25eirene     clean_uinp     clean_triang clean_sonnet-light clean_manual
+clean_solps:     clean_carre clean_divgeo clean_b25eirene     clean_uinp     clean_triang clean_sonnet-light clean_manual clean_amds
 
-clean_solps_mpi: clean_carre clean_divgeo clean_b25eirene_mpi clean_uinp_mpi clean_triang clean_sonnet-light clean_manual
+clean_solps_mpi: clean_carre clean_divgeo clean_b25eirene_mpi clean_uinp_mpi clean_triang clean_sonnet-light clean_manual clean_amds
 
-clean_build:     clean_carre clean_b25eirene clean_uinp clean_triang
+clean_build:     clean_carre clean_b25eirene clean_uinp clean_triang_nox
 
 clean_build_mpi: clean_b25eirene_mpi clean_uinp_mpi
 
@@ -348,6 +367,9 @@ clean_uinp_mpi:
 clean_triang:
 	cd modules/Triang; ${MAKE} clean
 
+clean_triang_nox:
+	cd modules/Triang; ${MAKE} LD_GR="" LD_GKS="" clean
+
 clean_amds:
 	cd modules/amds; ${MAKE} clean
 
@@ -366,15 +388,19 @@ clean_manual:
 
 # help
 help:
-	@echo "          solps : compile serial version (main codes)"
-	@echo "      solps_mpi : compile MPI version (main codes)"
-	@echo "    solps_debug : compile debug version (serial) (main codes)"
-	@echo "solps_mpi_debug : compile debug version (MPI) (main codes)"
-	@echo "            all : compile serial version (all codes)"
-	@echo "        all_mpi : compile MPI version (all codes)"
-	@echo "      all_debug : compile debug version (serial) (all codes)"
-	@echo "  all_mpi_debug : compile debug version (MPI) (all codes)"
-	@echo "            nox : compile serial version (no X main codes)"
-	@echo "        nox_mpi : compile MPI version (no X main codes)"
-	@echo "      nox_debug : compile debug version (serial) (no X main codes)"
-	@echo "  nox_mpi_debug : compile debug version (MPI) (no X main codes)"
+	@echo "           solps : compile serial version (main codes)"
+	@echo "       solps_mpi : compile MPI version (main codes)"
+	@echo "      solps_debug : compile debug version (serial) (main codes)"
+	@echo "  solps_mpi_debug : compile debug version (MPI) (main codes)"
+	@echo "              all : compile serial version (all codes)"
+	@echo "          all_mpi : compile MPI version (all codes)"
+	@echo "        all_debug : compile debug version (serial) (all codes)"
+	@echo "    all_mpi_debug : compile debug version (MPI) (all codes)"
+	@echo "              nox : compile serial version (no X main codes)"
+	@echo "          all_nox : compile serial version (all no X codes)"
+	@echo "          nox_mpi : compile MPI version (no X main codes)"
+	@echo "      all_nox_mpi : compile MPI version (all no X codes)"
+	@echo "        nox_debug : compile debug version (serial) (no X main codes)"
+	@echo "    all_nox_debug : compile debug version (serial) (all no X codes)"
+	@echo "    nox_mpi_debug : compile debug version (MPI) (no X main codes)"
+	@echo "all_nox_mpi_debug : compile debug version (MPI) (all no X codes)"

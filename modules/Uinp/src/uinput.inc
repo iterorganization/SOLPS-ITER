@@ -75,21 +75,26 @@ c*** 3b
 
 c*** 4
 
-      integer nreaci, ir(2*nreac), massp(nreac), iz(nreac),
-     ,    masst(nreac), ifexmn(nreac), ifexmx(nreac), nrcln
-      real delpot(nreac),rcmn(nreac),rcmx(nreac),fparm(nreac,6),
-     ,  creac(9,nreac)
-      logical lconst(nreac)
-      character filnam(2*nreac)*8, h123(2*nreac)*4, reac(2*nreac)*9,
-     ,    crc(2*nreac)*3,elname(2*nreac)*2
+      integer nreaci, ir(mreac), massp(mreac), iz(mreac),
+     ,    masst(mreac),
+     ,    ifex1mn(mreac), ifex1mx(mreac),
+     ,    ifex2mn(mreac), ifex2mx(mreac), nrcln
+      real delpot(mreac),
+     ,  rc1mn(mreac),rc1mx(mreac),rc2mn(mreac),rc2mx(mreac),
+     ,  fp1(mreac,6),fp2(mreac,6),
+     ,  creac(9,mreac)
+      logical lconst(mreac)
+      character filnam(mreac)*8, h123(mreac)*4, reac(mreac)*9,
+     ,    crc(mreac)*3,elname(mreac)*2
 
 c*** 4a
 
-      integer natmi,nmassa(natm),nchara(natm),isrfa(natm),isrta(natm),
+      integer natmi,nmeta,
+     ,  nmassa(natm),nchara(natm),isrfa(natm),isrta(natm),
      ,  nmseca(natm),nrca(natm),nfola(natm),ngena(natm),nhsta(natm),
      ,  ireaca(natm,nreac),ibulka(natm,nreac),iscd1a(natm,nreac),
-     ,  iscd2a(natm,nreac),iscd3a(natm,nreac),iscdea(natm,nreac),
-     ,  iestma(natm,nreac),ibgka(natm,nreac)
+     ,  iscd2a(natm,nreac),iscd3a(natm,nreac),iscd4a(natm,nreac),
+     ,  iscdea(natm,nreac),iestma(natm,nreac),ibgka(natm,nreac)
       real eeleca(natm,nreac), ebulka(natm,nreac), escd1a(natm,nreac),
      ,     escd2a(natm,nreac), freaca(natm,nreac), fldlma(natm,nreac)
       character texta(natm)*8
@@ -100,8 +105,8 @@ c*** 4b
      ,  isrtm(nmol),nmsecm(nmol),nrcm(nmol),
      ,  nfolm(nmol),ngenm(nmol),nhstm(nmol),lkindm(nmol),
      ,  ireacm(nmol,nreac),ibulkm(nmol,nreac),iscd1m(nmol,nreac),
-     ,  iscd3m(nmol,nreac),iscd2m(nmol,nreac),iscdem(nmol,nreac),
-     ,  iestmm(nmol,nreac),ibgkm(nmol,nreac)
+     ,  iscd2m(nmol,nreac),iscd3m(nmol,nreac),iscd4m(nmol,nreac),
+     ,  iscdem(nmol,nreac),iestmm(nmol,nreac),ibgkm(nmol,nreac)
       real eelecm(nmol,nreac), ebulkm(nmol,nreac), escd1m(nmol,nreac),
      ,     escd2m(nmol,nreac), freacm(nmol,nreac)
       character textm(nmol)*8
@@ -113,6 +118,7 @@ c*** 4c
      ,  ngeni(nion),nhsti(nion),lkindi(nion),
      ,  ireaci(nion,nreac),ibulki(nion,nreac),
      ,  iscd1i(nion,nreac),iscd2i(nion,nreac),iscd3i(nion,nreac),
+     ,  iscd4i(nion,nreac),
      ,  iscdei(nion,nreac),iestmi(nion,nreac),ibgki(nion,nreac)
       real eeleci(nion,nreac), ebulki(nion,nreac), escd1i(nion,nreac),
      ,     escd2i(nion,nreac), freaci(nion,nreac)
@@ -124,6 +130,7 @@ c*** 4d
      ,  nrcf(npht),nfolf(npht),ngenf(npht),nhstf(npht),
      ,  ireacf(npht,nreac),ibulkf(npht,nreac),
      ,  iscd1f(npht,nreac),iscd2f(npht,nreac),iscd3f(npht,nreac),
+     ,  iscd4f(npht,nreac),
      ,  iscdef(npht,nreac),iestmf(npht,nreac),ibgkf(npht,nreac)
       real eelecf(npht,nreac),ebulkf(npht,nreac),escd1f(npht,nreac),
      ,     escd2f(npht,nreac),freacf(npht,nreac),fldlmf(npht,nreac)
@@ -132,12 +139,13 @@ c*** 4d
 
 c*** 5
 
-      integer nplsi,nmassp(npls),ncharp(npls),nprtp(npls),nchrgp(npls),
+      integer nplsi,nbgk,
+     ,  nmassp(npls),ncharp(npls),nprtp(npls),nchrgp(npls),
      ,  isrfp(npls),isrtp(npls),nmsecp(npls),nrcp(npls),idnslmp(npls),
      ,  nfolp(npls),ngenp(npls),nhstp(npls),
      ,  ireacp(npls,nreac),ibulkp(npls,nreac),
      ,  iscd1p(npls,nreac),iscd2p(npls,nreac),iscd3p(npls,nreac),
-     ,  iscdep(npls,nreac),nrep(npls)
+     ,  iscd4p(npls,nreac),iscdep(npls,nreac),nrep(npls)
       real eelecp(npls,nreac), ebulkp(npls,nreac), escd1p(npls,nreac),
      ,     escd2p(npls,nreac), freacp(npls,nreac)
       integer ispcdn(npls,nrcdn)
@@ -226,7 +234,7 @@ c*** 9
 
 c*** 10
 
-      integer nadvi, nclvi, nalvi, nadsi, nalsi
+      integer nadvi, nclvi, nalvi, nadsi, nalsi, nadspc
 
 c*** 10a
 
@@ -252,6 +260,14 @@ c*** 10e
 
       character chrtls(nals)*71, txtsps(nals)*24, txttls(nals)*72,
      ,    txtuns(nals)*24
+
+c*** 10f
+
+      integer ispsrf(nads), iptyp(nads), ipspz(nads), isptyp(nads),
+     ,        nsps(nads), isrfcl(nads), idirec(nads)
+      real spcmn(nads), spcmx(nads), spcsh(nads), spcpx(nads),
+     ,     spcpy(nads), spcps(nads), spcvx(nads), spcvy(nads),
+     ,     spcvz(nads)
 
 c*** 11
 
@@ -284,7 +300,7 @@ c*** 11
      ,  lhist2(nptal),lsmot2(nptal),lhist3(nptal),lcntr3(nptal),
      ,  lsmot3(nptal),lraps(nptal),lvect3(nptal),lrpvc3(nptal),
      ,  lrps3d(nptal),lrpscn(nptal),lprad(nptal),lppol(nptal),
-     ,  lptor(nptal),plidl
+     ,  lptor(nptal),plidl,plvtk
       character textla(5)*24, textls(3)*24
 
 c*** 12
@@ -310,8 +326,8 @@ c*** 12
 
 c*** 13
 
-      integer nprnli, ntmstp, nptst, nsnvi, isnve(nsnv), isnvs(nsnv),
-     ,                                         isnvt(nsnv), isnrc(nsnv)
+      integer nprnli, ntmstp, nptst, nsnvi, ninitl_read,
+     ,  isnve(nsnv), isnvs(nsnv), isnvt(nsnv), isnrc(nsnv)
       real dtimv, time0
       character txttlv(nsnv)*71, txtspv(nsnv)*24, txtunv(nsnv)*24
 
@@ -381,21 +397,23 @@ c*** b2ah.dat
      ,  nlimi,itend,
      ,  itini,jliin,jlside,jlequi,jltor,jlcol,jlfit,jlbox,jlplg,jlref,
      ,  jsrss,jsrc,lchspnwa,jsrsg,
-     ,  jlsptp,jlsptc,nreaci,ir,massp,masst,ifexmn,ifexmx,iz,nrcln,
-     ,  natmi,nmassa,nchara,isrfa,isrta,nmseca,nrca,nfola,ngena,nhsta,
-     ,  ireaca,ibulka,iscd1a,iscd2a,iscd3a,iscdea,iestma,ibgka,
+     ,  jlsptp,jlsptc,nreaci,ir,massp,masst,
+     ,  ifex1mn,ifex1mx,ifex2mn,ifex2mx,iz,nrcln,hlp_h_m,
+     ,  natmi,nmeta,
+     ,  nmassa,nchara,isrfa,isrta,nmseca,nrca,nfola,ngena,nhsta,
+     ,  ireaca,ibulka,iscd1a,iscd2a,iscd3a,iscd4a,iscdea,iestma,ibgka,
      ,  nmoli,nmassm,ncharm,nprtm,isrfm,isrtm,
      ,  nmsecm,nrcm,nfolm,ngenm,nhstm,
-     ,  ireacm,ibulkm,iscd1m,iscd2m,iscd3m,iscdem,iestmm,ibgkm,
+     ,  ireacm,ibulkm,iscd1m,iscd2m,iscd3m,iscd4m,iscdem,iestmm,ibgkm,
      ,  nioni,nmassi,nchari,nprti,nchrgi,isrfi,isrti,nmseci,nrci,nfoli,
      ,  ngeni,nhsti,
-     ,  ireaci,ibulki,iscd1i,iscd2i,iscd3i,iscdei,iestmi,ibgki,
+     ,  ireaci,ibulki,iscd1i,iscd2i,iscd3i,iscd4i,iscdei,iestmi,ibgki,
      ,  nphti,isrff,isrtf,nmsecf,nrcf,nfolf,
      ,  ngenf,nhstf,
-     ,  ireacf,ibulkf,iscd1f,iscd2f,iscd3f,iscdef,iestmf,ibgkf,
-     ,  nplsi,nmassp,ncharp,nprtp,nchrgp,isrfp,
+     ,  ireacf,ibulkf,iscd1f,iscd2f,iscd3f,iscd4f,iscdef,iestmf,ibgkf,
+     ,  nplsi,nbgk,nmassp,ncharp,nprtp,nchrgp,isrfp,
      ,  isrtp,nmsecp,nrcp,idnslmp,nfolp,ngenp,nhstp,ireacp,ibulkp,
-     ,  iscd1p,iscd2p,iscd3p,iscdep,nrep,ispcdn,indpro,
+     ,  iscd1p,iscd2p,iscd3p,iscd4p,iscdep,nrep,ispcdn,indpro,
      ,  nnftrm,nchsppri,lchsptrg,lchspgrp,lchspprt,lchspprp,lchsptgt,
      ,  lchsptgp,lchspnwl,lchspaux,nchemvar,indchemvar,nnchemvar,
      ,  nstrai,indsrc,npts,ninitl,nemods,namods,nminpts,nspez,ivlsf,
@@ -404,9 +422,11 @@ c*** b2ah.dat
      ,  istor,nzadd,ini,ine,
      ,  nprcsf,iprcsf,maxlev,maxrad,maxpol,maxtor,maxadd,nssplr,nssplp,
      ,  nssplt,nsspla,nsigvi,nsigsi,nsigci,nsigi_bgk,nsigi_cop,igh,iih,
-     ,  ighw,iihw,ighc,iihc,nadvi,nclvi,nalvi,nadsi,
-     ,  nalsi,iadve,iadvs,iadvt,iadrc,iclve,iclvs,iclvt,iclrc,iadse,
-     ,  iadss,iadst,iadsc,nvolpr,ntlv,nflgv,nspzv1,nspzv2,ntlvf,nsurpr,
+     ,  ighw,iihw,ighc,iihc,nadvi,nclvi,nalvi,nadsi,nalsi,nadspc,
+     ,  iadve,iadvs,iadvt,iadrc,iclve,iclvs,iclvt,iclrc,iadse,
+     ,  iadss,iadst,iadsc,
+     ,  ispsrf,iptyp,ipspz,isptyp,nsps,isrfcl,idirec,
+     ,  nvolpr,ntlv,nflgv,nspzv1,nspzv2,ntlvf,nsurpr,
      ,  nsrf,nflgs,nspzs1,nspzs2,nsptal,ntls,nplinr,nplotr,npldlr,
      ,  nplinp,nplotp,npldlp,
      ,  nplint,nplott,npldlt,iplta,iplaa,iplea,iplts,iplas,
@@ -419,7 +439,8 @@ c*** b2ah.dat
      ,  nlstadds,mtreadds,listadds,listaddg,ngwties,kgwties,mgwties,
      ,  lgwties,npwin,npwsurf,npwtally,pwsurf,pwtally,pwspecy,
      ,  pwtally_d,pwspecy_d,
-     ,  nprnli,ntmstp,nptst,nsnvi,isnve,isnvs,isnvt,isnrc,
+     ,  nprnli,ntmstp,nptst,ninitl_read,
+     ,  nsnvi,isnve,isnvs,isnvt,isnrc,
      ,  jadch0,jadch1,jadnsw,jadmsw,jadlsw,jadksw,jadjsw,jadisw,
      ,  jlblck,jlacll,nclmi,nblcki,nprnvi,nprtvi,nprdvi,nfla,
      ,  ncutb,ncutl,imf,ntrfrm,nfull,ibrad,ibpol,ibtor,
@@ -448,7 +469,7 @@ c*** b2ah.dat
      ,  xmlma,ewala,ewbna,trnspa,rcycca,rcycfa,rcycta,
      ,  rcycsa,exppla,expela,expila,rcprma,sptpra,echspta,fchspta,
      ,  xlcor,ylcor,zlcor,xlref,ylref,zlref,xlrot,ylrot,zlrot,alrot,
-     ,  delpot,rcmn,rcmx,fparm,creac,
+     ,  delpot,rc1mn,rc1mx,rc2mn,rc2mx,fp1,fp2,creac,
      ,  eeleca,ebulka,escd1a,escd2a,freaca,fldlma,
      ,  eelecm,ebulkm,escd1m,escd2m,freacm,
      ,  eeleci,ebulki,escd1i,escd2i,freaci,
@@ -464,6 +485,7 @@ c*** b2ah.dat
      ,  sorad2,sorad3,sorad4,sorad5,sorad6,soreni,sorene,sorvdx,
      ,  sorvdy,sorvdz,sorcos,sormax,sorctx,sorcty,sorctz,
      ,  prmrspl,prmpspl,prmtspl,prmaspl,wminv,wmins,wminc,splpar,
+     ,  spcmn,spcmx,spcsh,spcpx,spcpy,spcps,spcvx,spcvy,spcvz,
      ,  ch2mx,ch2my,ch2x0,ch2y0,ch2z0,ch3mx,
      ,  ch3my,ch3mz,ch3x0,ch3y0,ch3z0,angle1,angle2,angle3,cutplane,
      ,  talzmi,talzma,talxmi,talxma,talymi,talyma,talw1,talw2,fcabs1,
@@ -495,7 +517,7 @@ c*** b2ah.dat
      ,  trcsrc,pl1st,pl2nd,pl3rd,pladd,plhst,plcut,plbox,plstor,plnumv,
      ,  plnums,plarr,lrpscut,pltsrc,pl3a,pl3s,pltl2d,pltl3d,pltllg,
      ,  pltler,lhist2,lsmot2,lhist3,lcntr3,lsmot3,lraps,lvect3,lrpvc3,
-     ,  lrps3d,lrpscn,lprad,lppol,lptor,plidl,
+     ,  lrps3d,lrpscn,lprad,lppol,lptor,plidl,plvtk,
      ,  plchor,plspec,lpw_d,lsymet,lbalan,lchkqud,lfchgs,
      ,  is_bundled
 

@@ -1,0 +1,4 @@
+Balance routines are run from balscript.m.
+Problems/comments should be sent to david.moulton@ukaea.uk.
+6/3/2017 - Known issue running total pressure balance in regions where leftix.eq.-1 (e.g. lower inner target) when
+           b2sigp_style.eq.0. Workaraound: use b2sigp_style.ne.0 (default)

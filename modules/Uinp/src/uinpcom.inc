@@ -45,13 +45,13 @@ c***  nsrfclsx  max. number of views
       integer nreac, nchor, lntsputx, nsrfclsx
       parameter (nreac=DEF_NREAC, nchor=250, lntsputx=4, nsrfclsx=12)
       integer nrad, nadd, nplt, nsd, nsdw, ncv, nsnv
-      integer nadv, nclv, nalv, nads, nals
+      integer nadv, nclv, nalv, nads, nals, nasp
       integer nhd6, nmtr, nain
       parameter (nadd=DEF_NADD)
       parameter (nrad=n1st*n2nd*n3rd+nadd+1)
       parameter (nplt=5, nsd=1, nsdw=1, ncv=1, nsnv=1)
       parameter (nadv=4*(DEF_NATM+DEF_NMOL))
-      parameter (nads=1, nclv=1, nalv=1, nals=1)
+      parameter (nads=1, nclv=1, nalv=1, nals=1, nasp=1)
       parameter (nmtr=6, nain=1)
       parameter (nhd6=DEF_NATM*nmtr)
 
@@ -102,7 +102,7 @@ c*** spcscrp - the value of flux or density for the highest ion
 c*** spcscrf - flux fraction across the inboard CEI (DN only)
 
       integer nspcncl,nspcpls,nspcatm,nspcmol,nspcion
-      character*8 spcsncl(natm)*2,spcspls(npls)*6,spcsatm(natm)*2,
+      character*8 spcsncl(natm),spcspls(npls),spcsatm(natm),
      ,  spcsmol(nmol),spcsion(nion),
      ,  spcsrfp(npls),spcsrfa(natm),spcsrfm(nmol),spcsrfi(nion),
      ,  spcsrtp(npls),spcsrta(natm),spcsrtm(nmol),spcsrti(nion)
@@ -154,12 +154,15 @@ c***    test ions for each entry (always one atom for a GS);
 c***    atomic mass, nuclear charge, charge state, flux units (nuclei),
 c***    and '3 secondaries' flag for each entry 
       integer nspdgen,nspdlen
-      parameter (nspdgen=11, nspdlen=65)
+      parameter (nspdgen=11, nspdlen=83)
       character*8 spcdgen(nspdgen)*2,spcdspc(nspdlen),
      ,  spcdrfl(nspdlen),spcdrtl(nspdlen)
-      integer lspdgen(nspdgen),nspdpls(nspdgen),nspdmol(nspdgen),
+      integer lspdgen(nspdgen),nspdpls(nspdgen),
+     ,  nspdatm(nspdgen),nspdmol(nspdgen),
      ,  nspdion(nspdgen),spcdms(nspdlen),spcdnc(nspdlen),
      ,  spcdcg(nspdlen),spcdfu(nspdlen),spcdns(nspdlen)
+      logical l_n2(nspdlen), n2_model, l_ammon(nspdlen), ammonx_used
+      logical l_meta(nspdlen), meta_used, is_meta(natm)
       
 c-----------------------------------------------------------------------
 c*** Boundary conditions at the grid edge.
@@ -325,11 +328,12 @@ c***    deltae, tmin, and tmax from AMDS, energies of the
 c***    reaction products (for DS), extrapolation coefficients;
 c***    flag "Use the default model" 
       integer nnrctn,rctngrp(mreac),rctnmsp(mreac),rctnmst(mreac),
-     ,  rctnnmo1(mreac),rctnnmo2(mreac),rctnimn(mreac),rctnimx(mreac),
-     ,  rctniz(mreac)
+     ,  rctnnmo1(mreac),rctnnmo2(mreac),rctnnmo3(mreac),
+     ,  rctnimn(mreac),rctnimx(mreac),rctniz(mreac)
       character*8 rctntyp(mreac)*2,rctndbs(mreac)*6,rctnchp(mreac)*4,
      ,  rctnrct(mreac)*9,rctnptpr(mreac),rctnptin(mreac),
-     ,  rctnpto1(mreac),rctnpto2(mreac),rctneln(mreac)*2
+     ,  rctnpto1(mreac),rctnpto2(mreac),rctnpto3(mreac),
+     ,  rctneln(mreac)*2
       real*4 rctndlte(mreac),rctntmin(mreac),rctntmax(mreac),
      ,  rctnenr1(mreac),rctnenr2(mreac),rctnexcf(mreac,6)
       logical rctndflt
@@ -346,10 +350,14 @@ c***    primary particle is determined from spcrctd)
      ,  rctdchp(mreac,nsrctd)*4,rctdrct(mreac,nsrctd)*9,
      ,  rctdptpr(mreac,nsrctd),rctdptin(mreac,nsrctd),
      ,  rctdpto1(mreac,nsrctd),rctdpto2(mreac,nsrctd),
-     ,  rctdeln(mreac,nsrctd)
+     ,  rctdpto3(mreac,nsrctd),rctdeln(mreac,nsrctd)
       real*4 rctddlte(mreac,nsrctd),rctdtmin(mreac,nsrctd),
      ,  rctdtmax(mreac,nsrctd),
      ,  rctdenr1(mreac,nsrctd),rctdenr2(mreac,nsrctd)
+      integer n_hlp_h,m_hlp_h
+      parameter (n_hlp_h=16, m_hlp_h=3)
+      integer hlp_h_m(n_hlp_h)
+      character*4 hlp_h(n_hlp_h,m_hlp_h,2)
 
 c-----------------------------------------------------------------------
 c*** Chemical sputtering: pairs projectile-wall and sputtered particle 
@@ -423,7 +431,7 @@ c*** Data for toroidal geometry specification
       real*4 zaator,roator
       integer nttrator
 
-c*** Mid-plane position in the B2 grid, Eirene time allocation in B2
+c*** Midplane position in the B2 grid, Eirene time allocation in B2
       integer jxi,jxa,ntcpub2
 
 c*** Vessel specification for b2plot: number of segments, index
@@ -451,7 +459,7 @@ c*** names of the models
       
 
 c-----------------------------------------------------------------------
-c*** Data for post-processing windows: max. number of them
+c*** Data for postprocessing windows: max. number of them
       integer npwinx
       parameter (npwinx=16)
 
@@ -466,7 +474,8 @@ c***    list of cell numbers indicating the pump and their number,
 c***    list of wall segments indicating the pump and their number
       logical do_hepdt
       real*4 pwrhepdt,pmphepdt
-      integer locphep,lpbihep,lpbohep,lptihep,lptohep,j_he_at,j_h_at,
+      integer locphep,lpbihep,lpbohep,lptihep,lptohep,
+     ,  j_he_at,j_h_at,j_ne_at,
      ,  l_h_mol(nmol),lstclhep(nxd),nstclhep,lhetrgts(nlim),nhetrgts   
 
 c-----------------------------------------------------------------------
@@ -544,7 +553,8 @@ c     ,  spcifup,spcifua,spcifum,spcifui,
      ,  spcirsm,spcirsi,spcinnm,spcinni,spcicrk,spciscn,spcidlp,spcifla,
      ,  spciflm,spcifli,spcinsp,spcinsa,spcinsm,spcinsi,spcinga,spcingm,
      ,  spcingi,spcicmm,spcicmi,lspdgen,
-     ,  nspdpls,nspdmol,nspdion,spcdms,spcdnc,spcdcg,spcdfu,spcdns,
+     ,  nspdpls,nspdatm,nspdmol,nspdion,
+     ,  spcdms,spcdnc,spcdcg,spcdfu,spcdns,
      ,  jskbnds,jcpbnds,jc1bnds,jc2bnds,jclbnds,jdrbnds,jrfbnds,jcsbnds,
      ,  jcgbnds,jpsbnds,jppbnds,jnpbnds,jmpbnds,jnibnds,jnebnds,
      ,  nwllmrk,nedgmrk,ntrgmrk,ledgmrk,ltrgmrk,lwllmrk,ledgdfl,
@@ -556,8 +566,8 @@ c     ,  spcifup,spcifua,spcifum,spcifui,
      ,  leebndx,lcobndx,leibndx,lmobndx,lpobndx,kcobndx,kmobndx,
      ,  nrgbndt,nznbndt,lcmbndt,lrfbndt,lrrbndt,lrpbndt,lrsbndt,lzrbndt,
      ,  lzpbndt,
-     ,  nnrctn,rctngrp,rctnmsp,rctnmst,rctnnmo1,rctnnmo2,rctnimn,rctniz,
-     ,  rctnimx,nnrctd,rctdgrp,rctdmsp,rctdmst,
+     ,  nnrctn,rctngrp,rctnmsp,rctnmst,rctnnmo1,rctnnmo2,rctnnmo3,
+     ,  rctnimn,rctniz,rctnimx,nnrctd,rctdgrp,rctdmsp,rctdmst,
      ,  nspcncl,nspcpls,nspcatm,nspcmol,nspcion,spcsmsp,spcsmsa,spcsmsm,
      ,  spcsmsi,spcsncp,spcsnca,spcsncm,spcsnci,spcscgp,spcscga,spcscgm,
      ,  spcscgi,spcsfup,spcsfua,spcsfum,spcsfui,spcsrsp,spcsrsa,spcsrsm,
@@ -572,7 +582,8 @@ c     ,  spcifup,spcifua,spcifum,spcifui,
      ,  ntrgte,jedgep,jedgec,jedgeo,ntrgto,ntrgtm,
      ,  tgrefsw,tgsppsw,tgspcsw,tgsppsp,tgspcgr,tgnhst,tgmhst,tgnini,
      ,  ilplgu,jlplgu,ilplgdg,trirefel,trirefcn,ntriref,
-     ,  locphep,lpbihep,lpbohep,lptihep,lptohep,j_he_at,j_h_at,l_h_mol,
+     ,  locphep,lpbihep,lpbohep,lptihep,lptohep,
+     ,  j_he_at,j_h_at,j_ne_at,l_h_mol,
      ,  lstclhep,nstclhep,lhetrgts,nhetrgts,
      ,  n_spcsrf,k_spcsrf,sps_sgrp,i_spcsrf,j_spcsrf,l_spcsrf,ll_spcsrf,
      ,  npfrgrp,lpfrgrp,ipfrgrp,jpfrgrp,lm_vhst,lm_whst,
@@ -582,7 +593,8 @@ c     ,  spcifup,spcifua,spcifum,spcifui,
      ,  ttcblph,ttctal,ttcdbg2,ttcdbge,ttcdbgm,ttcdbgf,ttcdbgl,ttcdbgs,
      ,  ttcdbgg,ttcdbgmpi,ttcdbgc,
      ,  ttpl1st,ttpl2nd,ttpladd,ttplhst,ttplcut,ttplnums,tttest,
-     ,  lm_cnfg
+     ,  lm_cnfg,l_n2,l_ammon,l_meta,
+     ,  n2_model,ammonx_used,meta_used,is_meta
 
       common/uinptxt/topo,amd_file,
      ,  spcsncl,spcspls,spcsatm,spcsmol,spcsion,spcsrfp,spcsrfa,spcsrfm,
@@ -594,9 +606,10 @@ c     ,  spcifup,spcifua,spcifum,spcifui,
      ,  crgbndt,cznbndt,ewmbnds,cskbnds,ctxbnds,ewmbndx,escbndx,eswbndx,
      ,  dscbndx,
      ,  rctntyp,rctndbs,rctnchp,rctnrct,rctnptpr,rctnptin,rctnpto1,
-     ,  rctnpto2,rctneln,
+     ,  rctnpto2,rctnpto3,rctneln,
      ,  spcrctd,rctdtyp,rctddbs,rctdchp,rctdrct,rctdptpr,
-     ,  rctdptin,rctdpto1,rctdpto2,rctdeln,
+     ,  rctdptin,rctdpto1,rctdpto2,rctdpto3,rctdeln,
+     ,  hlp_h,
      ,  chsptgt,chspspt,made_of,
      ,  crcmstrs,srcmstrs,wrcmstrs,cgpfstrs,sgpfstrs,
      ,  sps_mtrl,sps_id,gpfrgrp,cdnmdlp_sel,

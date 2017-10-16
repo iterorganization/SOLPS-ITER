@@ -24,6 +24,9 @@ c
       keylen=8
       mimp=iunii
       lena=8
+      jmess=2
+      lfin=72
+      promp(1:2)=1.d0
       fixkey=.false.
 c
 c*** Read the data from dg output
@@ -140,6 +143,9 @@ c
       end if !}
       nnftrm = nnftrm+ifile
 
+      ammonx_used=.false.
+      meta_used=.false.
+      n2_model=.true.
       do iamd=1,namdf !{
         if(.not.streql(amd_file(iamd),' ')) then !{
 c*** Read the AMDS file if it exists
@@ -165,6 +171,18 @@ c*** Read the AMDS file if it exists
      ,                          'or the current directory'
             call xerrab ('AMDS file not found')
           end if !}
+        end if !}
+      end do !}
+      if (n2_model)
+     > write(6,*) 'This case contains the N2 molecular model'
+      if (meta_used)
+     > write(6,*) 'This case includes metastable species'
+c*** Add explicitly 3rd product in selected reactions
+      do i=1,nnrctn !{
+        if (streql(rctndbs(i),'AMMONX') .and.
+     &      streql(rctnrct(i),'DD')) then !{
+          rctnpto3(i)='H'
+          rctnnmo3(i)=1
         end if !}
       end do !}
 c======================================================================

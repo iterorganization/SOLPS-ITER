@@ -11,10 +11,10 @@ FFLAGS	 = -g -Am -X9 -O0 -fw
 else
 FFLAGS	 = -Am -X9 -fw -Kfast,eval -x- -O
 endif
-INCLUDE  = -I${SRCDIR} -I${EIRINC} -I${B2INC}
+INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
 CPP	     = /lib/cpp -C -traditional
-MOD 	   = mod
+MOD      = mod
 
 LDLIBS 	 = ${LD_MSCL}
 LDEXTRA  =

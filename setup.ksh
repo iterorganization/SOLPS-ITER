@@ -22,11 +22,11 @@ export SOLPSWORK=$SOLPSTOP/runs
 [ -e SETUP/setup.csh.HOST_NAME.local ] && {
   echo Loading SETUP/setup.csh.HOST_NAME.local
 } || {
-  if [ $iamat ==  "*UNKNOWN" ]  then
+  [ $iamat ==  "*UNKNOWN" ] && {
     export HOST_NAME=default
-  else
+  } || {
     export HOST_NAME=$iamat
-  fi
+  }
 }
 
 [ -e setup.ksh.SOLPSMASTER ] && . setup.ksh.SOLPSMASTER
@@ -36,7 +36,7 @@ export SOLPSWORK=$SOLPSTOP/runs
   case $iamat in
   "IPP" )
     export SOLPSMASTER=/afs/ipp-garching.mpg.de/u/dpc
-    export DEVICE upgrade
+    [ -z "$DEVICE" ] && export DEVICE upgrade
     ;;
   "ITM" | "EU_UNKNOWN" )
     export SOLPSMASTER=/afs/ipp-garching.mpg.de/u/dpc
@@ -51,7 +51,7 @@ export SOLPSWORK=$SOLPSTOP/runs
 }
 
 # COMPILER can also be the argument to setup.csh call
-if [ "$1" = "" ] ; then
+[ "$1" = "" ] && {
   [ -e default_compiler ] && {
     export COMPILER=`./default_compiler|tail -1`
     echo Using compiler $COMPILER.
@@ -59,10 +59,15 @@ if [ "$1" = "" ] ; then
     export COMPILER=ifort64
     echo Assuming default compiler ifort64.
   }
-else
+} || {
   export COMPILER=$1
-fi
+}
 [ -z "$COMPILER" ] && echo 'COMPILER not defined!'
+[ -x `which gmake` ] && {
+  export MAKE=`which gmake`
+} || {
+  export MAKE=`which make`
+}
 
 [ -z "$PYTHONPATH" ] && {
   export PYTHONPATH="$SOLPSTOP/lib/python"
@@ -81,8 +86,6 @@ fi
   echo Loading SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.local.
   . SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.local
 }
-
-limit stacksize unlimited
 
 [ -z "$GRAPHCAP" ] && export GRAPHCAP=X11
 
@@ -115,11 +118,11 @@ esac
 
 [ -z "$DEVICE" ] && export DEVICE=iter
 
-export B2PLOT_DEV="x11 ps"
-export GLI_HOME=$SOLPSTOP/lib
+[ -z "$B2PLOT_DEV" ] && export B2PLOT_DEV="x11 ps"
+[ -z "$GLI_HOME"] && export GLI_HOME=$SOLPSTOP/lib
 export WSTYPE=$OBJECTCODE
 # export GLI_WSTYPE=210
-export GRSOFT_DEVICE="211 62"
+[ -z "$GRSOFT_DEVICE"] && export GRSOFT_DEVICE="211 62"
 export SonnetTopDirectory=${SOLPSTOP}/src/Sonnet
 export EscapeSonnet=`echo ${SonnetTopDirectory} | sed 's:\/:\\\/:g'`
 
@@ -201,17 +204,17 @@ alias unset_ig='. $SOLPSTOP/SETUP/noig'
 [ -e setup.ksh.$USER ] && . setup.ksh.$USER
 [ -e setup.ksh.$USER.$OBJECTCODE ] && . setup.ksh.$USER.$OBJECTCODE
 
-export      TOOLCHAIN =  ${HOST_NAME}.${COMPILER}
-export     CARRE_PATH =  ${SOLPSTOP}/modules/Carre/builds/${TOOLCHAIN}
-export    DIVGEO_PATH =  ${SOLPSTOP}/modules/DivGeo/builds/${TOOLCHAIN}:${SOLPSTOP}/modules/DivGeo/equtrn/builds/${TOOLCHAIN}:${SOLPSTOP}/modules/DivGeo/convert/builds/${TOOLCHAIN}
-export    EIRENE_PATH =  ${SOLPSTOP}/modules/Eirene/builds/standalone.${TOOLCHAIN}
-export       B25_PATH =  ${SOLPSTOP}/modules/B2.5/builds/standalone.${TOOLCHAIN}
-export B25EIRENE_PATH =  ${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${TOOLCHAIN}
-export      UINP_PATH =  ${SOLPSTOP}/modules/Uinp/builds/${TOOLCHAIN}
-export    TRIANG_PATH =  ${SOLPSTOP}/modules/Triang/builds/${TOOLCHAIN}
-export   SCRIPTS_PATH =  ${SOLPSTOP}/scripts.local:${SOLPSTOP}/scripts:${SOLPSTOP}/modules/Eirene/scripts
-export      AMDS_PATH =  ${SOLPSTOP}/modules/amds/builds/${TOOLCHAIN}
-export       S45_PATH =  ${SOLPSTOP}/modules/solps4-5/builds/${TOOLCHAIN}
+export      TOOLCHAIN=${HOST_NAME}.${COMPILER}
+export     CARRE_PATH=${SOLPSTOP}/modules/Carre/builds/${TOOLCHAIN}
+export    DIVGEO_PATH=${SOLPSTOP}/modules/DivGeo/builds/${TOOLCHAIN}:${SOLPSTOP}/modules/DivGeo/equtrn/builds/${TOOLCHAIN}:${SOLPSTOP}/modules/DivGeo/convert/builds/${TOOLCHAIN}
+export    EIRENE_PATH=${SOLPSTOP}/modules/Eirene/builds/standalone.${TOOLCHAIN}
+export       B25_PATH=${SOLPSTOP}/modules/B2.5/builds/standalone.${TOOLCHAIN}
+export B25EIRENE_PATH=${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${TOOLCHAIN}
+export      UINP_PATH=${SOLPSTOP}/modules/Uinp/builds/${TOOLCHAIN}
+export    TRIANG_PATH=${SOLPSTOP}/modules/Triang/builds/${TOOLCHAIN}
+export   SCRIPTS_PATH=${SOLPSTOP}/scripts.local:${SOLPSTOP}/scripts:${SOLPSTOP}/modules/Eirene/scripts
+export      AMDS_PATH=${SOLPSTOP}/modules/amds/builds/${TOOLCHAIN}
+export       S45_PATH=${SOLPSTOP}/modules/solps4-5/builds/${TOOLCHAIN}
 
 export SOLPS_PATH=${SCRIPTS_PATH}:${CARRE_PATH}:${DIVGEO_PATH}:${B25EIRENE_PATH}:${EIRENE_PATH}:${B25_PATH}:${UINP_PATH}:${TRIANG_PATH}:${AMDS_PATH}:${S45_PATH}
 export OLD_PATH=${PATH}

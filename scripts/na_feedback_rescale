@@ -1,6 +1,6 @@
 #! /bin/tcsh -f
 if (! -e .na_feedback) then
-  grep na_feedback_rescale run.log | awk '{print $2}' | sort | uniq | wc -l > .na_feedback
+  pipe_run.log | grep na_feedback_rescale | awk '{print $2}' | sort | uniq | wc -l > .na_feedback
 endif
 set NNA=`cat .na_feedback`
 

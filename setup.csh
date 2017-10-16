@@ -49,6 +49,11 @@ endif
 if(! $?COMPILER) then
   echo COMPILER not defined!
 endif
+if (-x `which gmake`) then
+  setenv MAKE `which gmake`
+else
+  setenv MAKE `which make`
+endif
 
 if ($?PYTHONPATH) then
   setenv PYTHONPATH ${PYTHONPATH}:${SOLPSTOP}/lib/python
@@ -72,8 +77,8 @@ limit stacksize unlimited
 
 if (! $?GRAPHCAP) setenv GRAPHCAP X11
 
-setenv B2PLOT_DEV "x11 ps" 
-setenv GRSOFT_DEVICE "211 62"
+if (! $?B2PLOT_DEV) setenv B2PLOT_DEV "x11 ps" 
+if (! $?GRSOFT_DEVICE) setenv GRSOFT_DEVICE "211 62"
 setenv SonnetTopDirectory ${SOLPSTOP}/modules/Sonnet-light
 setenv EscapeSonnet `echo ${SonnetTopDirectory} | sed 's:\/:\\\/:g'`
 
@@ -230,5 +235,3 @@ endif
 if (-e module) then
   module list
 endif
-
-  

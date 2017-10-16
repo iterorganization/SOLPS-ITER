@@ -1,5 +1,10 @@
 #! /bin/tcsh -f
 set datapath=`echo $PWD/ | sed -e "s|$SOLPSTOP||" -e 's|[^/]*/|../|g' -e 's|$|modules/Eirene/Database|'`
+if (${COMPILER} == "HP") then
+  set filestem="ftn"
+else
+  set filestem="fort."
+endif
 if (! -s ${datapath}/PHOTON) then
   set datapath=`canonical $SOLPSTOP`/modules/Eirene/Database
   if (! -s ${datapath}/PHOTON) then
@@ -11,10 +16,11 @@ if ("X$1X" == "X-rX") then
   ln -sf `climb_and_look_for -r modules/Eirene/Database/AMdata/h2vibr.tex` H2VIBR  
   ln -sf `climb_and_look_for -r modules/Eirene/Database/AMdata/hydhel.tex` HYDHEL  
   ln -sf `climb_and_look_for -r modules/Eirene/Database/AMdata/methane.tex` METHANE
+  ln -sf `climb_and_look_for -r modules/Eirene/Database/AMdata/ammoniaex.tex` AMMONX
   ln -sf `climb_and_look_for -r modules/Eirene/Database/PHOTON`         
   ln -sf `climb_and_look_for -r modules/Eirene/Database/Surfacedata/SPUTER`        
-  ln -sf `climb_and_look_for -r modules/Eirene/Database/Surfacedata/TRIM/trim.dat` fort.21   
-  ln -sf `climb_and_look_for -r modules/Eirene/Database/Surfacedata/TRIM/marlow.dat` fort.22
+  ln -sf `climb_and_look_for -r modules/Eirene/Database/Surfacedata/TRIM/trim.dat` "$filestem"21
+  ln -sf `climb_and_look_for -r modules/Eirene/Database/Surfacedata/TRIM/marlow.dat` "$filestem"22
   ln -sf `climb_and_look_for -r modules/Eirene/Database/graphite_ext.dat` graphite_ext.dat
   ln -sf `climb_and_look_for -r modules/Eirene/Database/mo_ext.dat` mo_ext.dat
 else
@@ -22,10 +28,11 @@ else
   ln -sf ${datapath}/AMdata/h2vibr.tex H2VIBR
   ln -sf ${datapath}/AMdata/hydhel.tex HYDHEL
   ln -sf ${datapath}/AMdata/methane.tex METHANE
+  ln -sf ${datapath}/AMdata/ammoniaex.tex AMMONX
   ln -sf ${datapath}/PHOTON
   ln -sf ${datapath}/Surfacedata/SPUTER
-  ln -sf ${datapath}/Surfacedata/TRIM/trim.dat fort.21
-  ln -sf ${datapath}/Surfacedata/TRIM/marlow.dat fort.22
+  ln -sf ${datapath}/Surfacedata/TRIM/trim.dat "$filestem"21
+  ln -sf ${datapath}/Surfacedata/TRIM/marlow.dat "$filestem"22
   ln -sf ${datapath}/graphite_ext.dat .
   ln -sf ${datapath}/mo_ext.dat .
 endif
@@ -54,21 +61,21 @@ if (! -s input.dat) then
     endif
   endif
 endif
-ln -sf input.dat fort.1
-if (! -s fort.33) then
-  if (-s ../TRIANG/fort.33) then
-    ln -s ../TRIANG/fort.33 .
-    ln -s ../TRIANG/fort.34 .
-    ln -s ../TRIANG/fort.35 .
-  else if (-s ../baserun/fort.33) then
-    ln -s ../baserun/fort.33 .
-    ln -s ../baserun/fort.34 .
-    ln -s ../baserun/fort.35 .
+ln -sf input.dat "$filestem"1
+if (! -s "$filestem"33) then
+  if (-s ../TRIANG/"$filestem"33) then
+    ln -s ../TRIANG/"$filestem"33 .
+    ln -s ../TRIANG/"$filestem"34 .
+    ln -s ../TRIANG/"$filestem"35 .
+  else if (-s ../baserun/"$filestem"33) then
+    ln -s ../baserun/"$filestem"33 .
+    ln -s ../baserun/"$filestem"34 .
+    ln -s ../baserun/"$filestem"35 .
   endif
 endif
-if (! -s fort.30) then
-  if (-s ../baserun/fort.30) then
-    ln -s ../baserun/fort.30 .
+if (! -s "$filestem"30) then
+  if (-s ../baserun/"$filestem"30) then
+    ln -s ../baserun/"$filestem"30 .
   endif
 endif
 if (! -s mesh.extra) then
@@ -94,3 +101,5 @@ endif
 if (! -s b2.log) ln -sf run.log b2.log
 if (! -s b2.log.gz) ln -sf run.log.gz b2.log.gz
 if (! -d tracing) mkdir tracing
+if (! -d batch_av) mkdir batch_av
+if (! -d run_av) mkdir run_av
