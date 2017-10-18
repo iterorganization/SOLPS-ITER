@@ -7,7 +7,7 @@ endif
 
 FC       = gfortran
 ifdef SOLPS_DEBUG
-FFLAGS	 = -g
+FFLAGS	 = -g -ffpe-trap=denormal
 else
 FFLAGS   =
 endif
