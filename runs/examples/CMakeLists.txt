@@ -4,21 +4,21 @@ include(ExternalData)
 set(LOCAL_CACHE "")
 
 function(probe_for_cache cache_dir)
-    execute_process(COMMAND install -m 777 -d ${cache_dir}/MD5
-	COMMAND touch ${cache_dir}/MD5/.$ENV{USER} 
-	COMMAND rm ${cache_dir}/MD5/.$ENV{USER}
-	RESULT_VARIABLE is_writable ERROR_QUIET)
+    execute_process(COMMAND sh -c "install -m 777 -d ${cache_dir}/MD5"
+        COMMAND sh -c "touch ${cache_dir}/MD5/.$ENV{USER}"
+        COMMAND sh -c "rm ${cache_dir}/MD5/.$ENV{USER}"
+        RESULT_VARIABLE is_writable ERROR_QUIET)
 
     if(${is_writable} EQUAL 0)
-	message("Assets cache ${cache_dir} is writable.")
-	set(LOCAL_CACHE ${LOCAL_CACHE} ${cache_dir} PARENT_SCOPE)
+        message("Assets cache ${cache_dir} is writable.")
+        set(LOCAL_CACHE ${LOCAL_CACHE} ${cache_dir} PARENT_SCOPE)
     else()
-	message("Assets cache ${cache_dir} is not writable.")
+        message("Assets cache ${cache_dir} is not writable.")
     endif()
 endfunction(probe_for_cache)
 
 # We probe for the following cache direstories in order of importance
-probe_for_cache("/work/imas/shared/boundary/solps-iter")
+probe_for_cache("/work/imas/shared/boundary/solps-iter/assets")
 probe_for_cache("/tmp/assets")
 probe_for_cache("$ENV{HOME}/assets")
 
