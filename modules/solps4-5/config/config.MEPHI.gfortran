@@ -9,7 +9,11 @@ SED = sed s:\#PREC\#:d:g
 LINK_MOD = yes
 
 FC = gfortran
+ifdef SOLPS_DEBUG
+FCOPTS = -g -fbounds-check -fbacktrace -fdefault-real-8 -ffpe-trap=denormal
+else
 FCOPTS = -O3 -fdefault-real-8 -ffixed-line-length-80
+endif
 
 DBLFC = ${FC}
 DBLOPTION =

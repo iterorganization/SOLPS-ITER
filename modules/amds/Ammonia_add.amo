@@ -1,8 +1,7 @@
 # Output file produced by amds version 1.04
 filevers 1
-reactns 49
+reactns 48
 HYDHEL H.1 4.3.3
-AMMONX H.2 01
 AMMONX H.2 02
 AMMONX H.2 03
 AMMONX H.2 07
@@ -52,7 +51,6 @@ AMMONX H.2 09
 AMMONX H.2 17
 group
 59
-
 
 
 
@@ -149,10 +147,8 @@ deltae
 
 
 
-
 massp
 2
-0
 0
 0
 0
@@ -202,7 +198,6 @@ massp
 0
 masst
 2
-14
 28
 28
 15
@@ -252,7 +247,6 @@ masst
 16
 rctype
 II
-EI
 DS
 EI
 EI
@@ -301,7 +295,6 @@ II
 EI
 EI
 tmin
-
 
 
 
@@ -399,10 +392,8 @@ tmax
 
 
 
-
 primpart
 H2
-
 
 
 
@@ -452,7 +443,6 @@ H2
 
 intrpart
 H2+
-N
 N2
 N2
 NH
@@ -503,7 +493,6 @@ NH2
 product1
 H3+
 N+
-N+
 N2+
 NH+
 NH3+
@@ -552,7 +541,6 @@ NH2+
 NH
 product2
 H
-
 N
 
 
@@ -609,7 +597,6 @@ nprdct1
 
 
 
-
 2
 
 
@@ -651,7 +638,6 @@ nprdct1
 
 
 nprdct2
-
 
 
 
@@ -749,9 +735,7 @@ eprdct1
 
 
 
-
 eprdct2
-
 
 
 

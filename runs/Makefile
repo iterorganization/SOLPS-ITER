@@ -317,9 +317,11 @@ endif
 	-[ -e b2mn.exe.dir/b2_to_astra.dat ] && mv b2mn.exe.dir/b2_to_astra.dat . || echo > /dev/null
 	-[ -e b2mn.exe.dir/b2fstate_add ] && mv b2mn.exe.dir/b2fstate_add . || echo > /dev/null
 	-[ -e b2mn.exe.dir/b2favere ] && mv b2mn.exe.dir/b2favere . || echo > /dev/null
-	-[ -e b2mn.exe.dir/b2fplasmf.0000 ] && rm b2mn.exe.dir/b2fplasmf.* . || echo > /dev/null
+	-[ -e b2mn.exe.dir/b2fplasmf.0000 ] && mv b2mn.exe.dir/b2fplasmf.* . || echo > /dev/null
 	-[ -e b2mn.exe.dir/tran ] && mv b2mn.exe.dir/tran b2mn.exe.dir/tran?? . || echo > /dev/null
 	-[ -e b2mn.exe.dir/tracing ] && rmdir b2mn.exe.dir/tracing || echo > /dev/null
+	-[ -e b2mn.exe.dir/output/__1__.dat ] && rm b2mn.exe.dir/output/__1__.dat || echo > /dev/null
+	-[ -e b2mn.exe.dir/output ] && rmdir b2mn.exe.dir/output || echo > /dev/null
 	-[ -e b2mn.exe.dir/batch_av ] && rmdir b2mn.exe.dir/batch_av || echo > /dev/null
 	-[ -e b2mn.exe.dir/run_av ] && rmdir b2mn.exe.dir/run_av || echo > /dev/null
 	-[ -e b2mn.exe.dir/b2fstati_with-ua ] && ( mv b2fstati b2fstati_with+ua ; mv b2mn.exe.dir/b2fstati_with-ua . ; cp -up b2fstati_with-ua b2fstati ; touch b2fstate ) || echo > /dev/null
@@ -459,9 +461,11 @@ endif
 	-[ -e b2mn.exe.dir/b2_to_astra.dat ] && mv b2mn.exe.dir/b2_to_astra.dat . || echo > /dev/null
 	-[ -e b2mn.exe.dir/b2fstate_add ] && mv b2mn.exe.dir/b2fstate_add . || echo > /dev/null
 	-[ -e b2mn.exe.dir/b2favere ] && mv b2mn.exe.dir/b2favere . || echo > /dev/null
-	-[ -e b2mn.exe.dir/b2fplasmf.0000 ] && rm b2mn.exe.dir/b2fplasmf.* . || echo > /dev/null
+	-[ -e b2mn.exe.dir/b2fplasmf.0000 ] && mv b2mn.exe.dir/b2fplasmf.* . || echo > /dev/null
 	-[ -e b2mn.exe.dir/tran ] && mv b2mn.exe.dir/tran b2mn.exe.dir/tran?? . || echo > /dev/null
 	-[ -e b2mn.exe.dir/tracing ] && rmdir b2mn.exe.dir/tracing || echo > /dev/null
+	-[ -e b2mn.exe.dir/output/__1__.dat ] && rm b2mn.exe.dir/output/__1__.dat || echo > /dev/null
+	-[ -e b2mn.exe.dir/output ] && rmdir b2mn.exe.dir/output || echo > /dev/null
 	-[ -e b2mn.exe.dir/batch_av ] && rmdir b2mn.exe.dir/batch_av || echo > /dev/null
 	-[ -e b2mn.exe.dir/run_av ] && rmdir b2mn.exe.dir/run_av || echo > /dev/null
 	-[ -e b2mn.exe.dir/b2fstati_with-ua ] && ( mv b2fstati b2fstati_with+ua ; mv b2mn.exe.dir/b2fstati_with-ua b2fstati ) || echo > /dev/null
