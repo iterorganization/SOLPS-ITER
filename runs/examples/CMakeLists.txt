@@ -17,7 +17,11 @@ function(probe_for_cache cache_dir)
     endif()
 endfunction(probe_for_cache)
 
-# We probe for the following cache direstories in order of importance
+# We probe for the following cache direstories in order of importance.
+# Many different possible cluster locations writtable by users can be
+# listed here. The benefit is to have cluster wide caches. Two fallback
+# locations (/tmp/assets and $HOME/assets) are last resort where these
+# "temporary" files can be stored for reuse by all users on the machine.
 probe_for_cache("/work/imas/shared/boundary/solps-iter/assets")
 probe_for_cache("/tmp/assets")
 probe_for_cache("$ENV{HOME}/assets")
@@ -34,9 +38,13 @@ set(ExternalData_OBJECT_STORES
 
 # Where too look externally if hashed files can't be found in the cache
 set(ExternalData_URL_TEMPLATES
+    "http://static.iter.org/imas/assets/%(algo)/%(hash)"
     "http://viz.hpc.fs.uni-lj.si/assets/solps-iter/%(algo)/%(hash)"
-#   "file://work/imas/shared/boundary/solps-iter"
-#   "file://$ENV{HOME}/assets/%(algo)/%(hash)"
+    "file://$ENV{HOME}/assets/%(algo)/%(hash)"
+    # The last asset template in user's home directory is only meaningful
+    # when the user extracted assests he got as a bunch for local use or
+    # for the case when he/she is preparing the case for upload to real
+    # web servers above.
 )
 
 # Location of *.md5 files to be scanned and replaced from external sources
