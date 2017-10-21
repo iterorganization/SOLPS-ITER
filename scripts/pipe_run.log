@@ -2,16 +2,16 @@
 if ($?LAST10) then
   set FILE=run.log.last10
 else
-  if (-e run.log.gz) then
+  if (-s run.log.gz) then
     set FILE=run.log.gz
   else
     set FILE=run.log
   endif
 endif
 if (-X zcat) then
-    set ZCAT="zcat --force"
+  set ZCAT="zcat --force"
 else
-    set ZCAT="gzip --decompress --force --stdout"
+  set ZCAT="gzip --decompress --force --stdout"
 endif
 if (`$ZCAT $FILE | sed -e '1,/Start tallies by region/d' -e '/End tallies by region/,$d' | grep -c ^+` == "0") then
   $ZCAT $FILE

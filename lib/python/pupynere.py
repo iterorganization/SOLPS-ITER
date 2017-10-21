@@ -103,7 +103,7 @@ TYPEMAP = { NC_BYTE:   ('b', 1),
             NC_SHORT:  ('h', 2),
             NC_INT:    ('i', 4),
             NC_FLOAT:  ('f', 4),
-            NC_DOUBLE: ('d', 8) }
+            NC_DOUBLE: ('f', 8) }   # was 'd'
 
 REVERSE = { 'b': NC_BYTE,
             'c': NC_CHAR,

@@ -1,0 +1,49 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% balfig creates axis handles for balance routines.                            %
+%                                                                              %
+% David Moulton (david.moulton@ccfe.ac.uk) January 2017.                       %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function [axgrid,axbal] = balfig(type,isplot,comuse)
+
+figure('windowstyle','docked');
+margin = 0.04;
+width1 = (1-6*margin)/5;
+height = (1-5*margin)/2;
+axgrid = subplot('position',[margin 2*margin width1 1-3*margin]); box on; hold on;
+axbal(1) = subplot('position',[width1+2*margin height+4*margin width1 height]); box on; hold on; % For integrated internal energy balance
+axbal(2) = subplot('position',[2*width1+3*margin height+4*margin width1 height]); box on; hold on; % For decomposition of upstream internal energy fluxes
+axbal(3) = subplot('position',[3*width1+4*margin height+4*margin width1 height]); box on; hold on; % For decomposition of downstream internal energy fluxes
+axbal(4) = subplot('position',[4*width1+5*margin height+4*margin width1 height]); box on; hold on; % For decomposition of internal energy sources
+width2 = (1-width1-5*margin)/3;
+axbal(5) = subplot('position',[width1+2*margin 2*margin width2 height]); box on; hold on; % For poloidal internal energy balance
+axbal(6) = subplot('position',[width1+3*margin+width2 2*margin width2 height]); box on; hold on; % For decomposition of internal energy fluxes
+axbal(7) = subplot('position',[width1+4*margin+2*width2 2*margin width2 height]); box on; hold on; % For decomposition of internal energy sources
+            
+switch type
+    case 'particles'
+        if length(isplot)>1
+            strtmp = sprintf('PARTICLE BALANCE SUM OVER (%s',sprintf('%s,',comuse.species{isplot}));
+            strtmp(end) = ')';
+        else
+            strtmp = ['PARTICLE BALANCE ',comuse.species{isplot}];
+        end
+        title(axgrid,strtmp,'fontweight','normal');
+    case 'momentum'
+        if length(isplot)>1
+            strtmp = sprintf('MOMENTUM BALANCE SUM OVER (%s',sprintf('%s,',comuse.species{isplot}));
+            strtmp(end) = ')';
+        else
+            strtmp = ['MOMENTUM BALANCE ',comuse.species{isplot}];
+        end
+        title(axgrid,strtmp,'fontweight','normal');
+    case 'totpress'
+        title(axgrid,'TOTAL PRESSURE BALANCE','fontweight','normal');
+    case 'elheat'
+        title(axgrid,'EL. INTERNAL ENERGY BALANCE','fontweight','normal');
+    case 'ionheat'
+        title(axgrid,'ION. INTERNAL ENERGY BALANCE','fontweight','normal');
+    case 'totheat'
+        title(axgrid,'TOTAL INTERNAL ENERGY BALANCE','fontweight','normal');
+    otherwise
+        error('Figure type unknown.');
+end

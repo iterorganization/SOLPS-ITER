@@ -4,6 +4,7 @@
       program b2sxdr
       use b2mod_types
       use b2mod_geo
+      use b2mod_work
       use b2mod_rates
       use b2mod_plasma
       use b2mod_indirect
@@ -124,7 +125,7 @@
 *     It will hold that 0.le.zamin(is).le.zamax(is), 0.lt.zn(is) and
 *     0.lt.am(is). It is required that neutral species not be bundled
 *     with charged species.
-*     For ns.le.is.lt.nsdecl, zamin(is), zamax(is), zn(is), am(is) 
+*     For ns.le.is.lt.nsdecl, zamin(is), zamax(is), zn(is), am(is)
 *     are undefined.
 *
 *  6. error indicators
@@ -144,8 +145,9 @@
       integer rank_mpi,size_mpi,ierr_mpi
 #endif
       integer is, it, ix, iy, n2
+      real (kind=R8) :: xcnt, ycnt, scale
       real (kind=R8) :: parg(0:99)
-      real (kind=R8), allocatable :: wrk(:,:,:) 
+      real (kind=R8), allocatable :: wrk(:,:,:)
       logical ex
       character filename*80, lblgm*120, lblmn*120, idout*80
       character*8 device
@@ -214,7 +216,7 @@ c
         CALL ALLOC_CLOGAU
         CALL ALLOC_COMPRT
         CALL ALLOC_CESTIM(1)  !VKMPI
-        CALL ALLOC_COMUSR(1)  
+        CALL ALLOC_COMUSR(1) 
         CALL ALLOC_CADGEO
         CALL ALLOC_CAI
 !pb      CALL ALLOC_CGRPTL
@@ -271,21 +273,25 @@ cxpb Next line not needed if inherited from UPC instead!
       deallocate(wrk)
       ua0 = ua
       uap = ua
+      vadia = uadia
       wadia = uadia
+      vedia = 0.0_R8
       do is = 0, ns-1
-        kinrgy(-1:nx,-1:ny,is) = 
+        kinrgy(-1:nx,-1:ny,is) =
      .   0.5_R8 * am(is) * mp * ua(-1:nx,-1:ny,is)**2
         fmo(-1:nx,-1:ny,0,is) =
      .   am(is) * mp * ua(-1:nx,-1:ny,is) * fna(-1:nx,-1:ny,0,is)
         fmo(-1:nx,-1:ny,1,is) =
      .   am(is) * mp * ua(-1:nx,-1:ny,is) * fna(-1:nx,-1:ny,1,is)
+        vedia(-1:nx,-1:ny,0) = vedia(-1:nx,-1:ny,0) +
+     .   uadia(-1:nx,-1:ny,0,is) *
+     .   rza(-1:nx,-1:ny,is) * na(-1:nx,-1:ny,is) / ne(-1:nx,-1:ny)
+        vedia(-1:nx,-1:ny,1) = vedia(-1:nx,-1:ny,1) +
+     .   uadia(-1:nx,-1:ny,1,is) *
+     .   rza(-1:nx,-1:ny,is) * na(-1:nx,-1:ny,is) / ne(-1:nx,-1:ny)
       enddo
 *  ..output
       idout = '....'
-*   ..write dummy b2ag.dat
-      open(unit=70,file='b2ag.dat')
-      write(70,'(a)') 'Dummy file, geometry imported from B2SXDR'
-      close(70)
 *   ..write summary of geometry
       call b2wfgm (nout(0), idout, nx, ny)
 *   ..write version number
@@ -309,9 +315,9 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
 *   ..extrapolate magnetic field to edges
       do iy = -1, ny
         do ix = -1, nx
-          if (leftix(ix,iy).eq.-2) wbbl(ix,iy,0:2) = 
+          if (leftix(ix,iy).eq.-2) wbbl(ix,iy,0:2) =
      &     bb(ix,iy,0:2) - (wbbr(ix,iy,0:2)-bb(ix,iy,0:2))
-          if (rightix(ix,iy).eq.nx+1) wbbr(ix,iy,0:2) = 
+          if (rightix(ix,iy).eq.nx+1) wbbr(ix,iy,0:2) =
      &     bb(ix,iy,0:2) - (wbbl(ix,iy,0:2)-bb(ix,iy,0:2))
           if (bottomiy(ix,iy).eq.-2) wbbv(ix,iy,0:2) = bb(ix,iy,0:2) -
      &     (wbbv(topix(ix,iy),topiy(ix,iy),0:2)-bb(ix,iy,0:2))
@@ -322,21 +328,32 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
       wbbr(:,:,3)=sqrt(wbbr(:,:,0)**2+wbbr(:,:,1)**2+wbbr(:,:,2)**2)
       wbbv(:,:,3)=sqrt(wbbv(:,:,0)**2+wbbv(:,:,1)**2+wbbv(:,:,2)**2)
 *   ..compute pbs (magnetic field pitch * surface area) at cell faces
-      call b2xgbs (nx, ny, wbbl, wbbv, gs, qc, crx, cry, pbs)      
+      call b2xgbs (nx, ny, wbbl, wbbv, gs, qc, crx, cry, pbs)     
 *   ..save geometry
-      call b2wugm (nout(1), nx, ny, crx, cry, fpsi,
-     &  ffbz, bb, vol, hx, hy, qz, qc, gs, pbs)
+      call write_b2ag(nx,ny)
+      call b2wugm (nout(1), nx, ny, crx, cry, fpsi, ffbz, bb,
+     &  vol, hx, hy, qz, qc, qcb, gs, pbs, wbbc,
+     &  cell_width, cell_height)
 *   ..save parameters
       parg(0) = -1.0_R8
       parg(1:99) = 0.0_R8
       call cfwure (nout(1), 100, parg, 'parg')
 *   ..in 5.1 and SOLPS-ITER, we need a fort.30 file early to build triangular grids
       call write_f30 (nx, ny)
-*   ..write dummy b2ai.dat
-      open(unit=70,file='b2ai.dat')
+*   ..write dummy b2ag.prt
+      write(*,*) 'Writing b2ag.prt'
+      open(unit=70,file='b2ag.prt')
+      write(70,'(a)') 'Dummy file, plasma geometry imported from B2SXDR'
+      close(70)
+*   ..write b2ai.dat
+      call write_b2ai(ns)
+*   ..write dummy b2ai.prt
+      write(*,*) 'Writing b2ai.prt'
+      open(unit=70,file='b2ai.prt')
       write(70,'(a)') 'Dummy file, plasma state imported from B2SXDR'
       close(70)
 *   ..write b2yt.dat
+      write(*,*) 'Writing b2yt.dat'
       open(unit=70,file='b2yt.dat')
       write(70,'(a)') '*dimens (nx, ny: free format)'
       write(70,'(2(2x,i4))') nx, ny
@@ -362,6 +379,85 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
       if (streql(device,'iter'))
      > write(70,'(a)') '''invert_bpol''       ''1'''
       close(70)
+*   ..write b2yg.dat
+      write(*,*) 'Writing b2yg.dat'
+      open(unit=70,file='b2yg.dat')
+      write(70,'(a)') '*idout          (int, char*80, free format)'
+      write(70,'(i3,a,1x,a)') 0,',','''....'''
+      write(70,'(a)') '*nmbpcc'
+      write(70,'(i3)') 1
+      write(70,'(1x,2f5.2)') 0.5, 0.5
+      write(70,'(a)') '*nmbpdm'
+      write(70,'(i3)') 1
+      xcnt = (minval(crx(1:nx,1:ny,0:3))+
+     &        maxval(crx(1:nx,1:ny,0:3)))/2.0_R8
+      ycnt = (minval(cry(1:nx,1:ny,0:3))+
+     &        maxval(cry(1:nx,1:ny,0:3)))/2.0_R8
+      scale = max(maxval(crx(1:nx,1:ny,0:3))-minval(crx(1:nx,1:ny,0:3)),
+     &            maxval(cry(1:nx,1:ny,0:3))-minval(cry(1:nx,1:ny,0:3)))
+      write(70,'(4(1x,g9.2))') xcnt-scale/2.0_R8, xcnt+scale/2.0_R8,
+     &                         ycnt-scale/2.0_R8, ycnt+scale/2.0_R8
+      close(70)
+*   ..write b2yh.dat
+      write(*,*) 'Writing b2yh.dat'
+      open(unit=70,file='b2yh.dat')
+      write(70,'(a)') '*style          (integer, free format)'
+      write(70,'(i3)') 1
+      close(70)
+*   ..write b2yi.dat
+      write(*,*) 'Writing b2yi.dat'
+      open(unit=70,file='b2yi.dat')
+      write(70,'(a)') '*idout          (int, char*80, free format)'
+      write(70,'(i3,a,1x,a)') 0,',','''....'''
+      close(70)
+*   ..write b2ym.dat
+      write(*,*) 'Writing b2ym.dat'
+      open(unit=70,file='b2ym.dat')
+      write(70,'(a)') '*idout          (int, char*80, free format)'
+      write(70,'(i3,a,1x,a)') 0,',','''....'''
+      close(70)
+*   ..write b2yn.dat
+      write(*,*) 'Writing b2yn.dat'
+      open(unit=70,file='b2yn.dat')
+      write(70,'(a)') '*idout          (int, char*80, free format)'
+      write(70,'(i3,a,1x,a)') 0,',','''....'''
+      close(70)
+*   ..write b2yp.dat
+      write(*,*) 'Writing b2yp.dat'
+      open(unit=70,file='b2yp.dat')
+      write(70,'(a)') '*idout          (int, char*80, free format)'
+      write(70,'(i3,a,1x,a)') 0,',','''....'''
+      write(70,'(a)') '*nmbpcc'
+      write(70,'(i3)') 1
+      write(70,'(1x,2f5.2)') 0.5, 0.5
+      write(70,'(a)') '*nmbpdm'
+      write(70,'(i3)') 1
+      write(70,'(4(1x,g9.2))') xcnt-scale/2.0_R8, xcnt+scale/2.0_R8,
+     &                         ycnt-scale/2.0_R8, ycnt+scale/2.0_R8
+      close(70)
+*   ..write b2yp.dat
+      write(*,*) 'Writing b2yq.dat'
+      open(unit=70,file='b2yq.dat')
+      do is = 0, ns-1
+        write(70,'(2i6)') 2, 3+is
+      end do
+      do is = 0, ns-1
+        write(70,'(2i6)') 2, 3+ns+is
+      end do
+      write(70,'(2i6)') 2, 4+(2*ns)
+      write(70,'(2i6)') 2, 5+(2*ns)
+      write(70,'(2i6)') 2, 6+(2*ns)
+      close(70)
+*   ..write b2yr.dat
+      write(*,*) 'Writing b2yr.dat'
+      open(70,file='b2yr.dat')
+      write(70,'(a)') '*nijdis        (integer, free format)'
+      write(70,'(2i4)') 4, 4
+      write(70,'(a)') '*idis          (nidis*integer, free format)'
+      write(70,'(4i4)') 8, 16, 24, 32
+      write(70,'(a)') '*jdis          (njdis*integer, free format)'
+      write(70,'(4i4)') 2, 6, 10, 14
+      close(70)
 *   ..write header to converted state file
       idum(0) = nx
       idum(1) = ny
@@ -371,8 +467,13 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
       call cfwuch (nout(2), 120, lblmn, 'label')
       call b2wuzd (nout(2), newversion, ns, zamin, zamax, zn, am)
 *   ..write converted initial state file
-      call b2wups (nout(2), nx, ny, ns, ne, na, ua, uadia, te, ti, po, 
-     &  fna, fhe, fhi, fch, fch_32, fch_52, fch_p, kinrgy)
+      call b2wups (nout(2), nx, ny, ns, ne, na, ua, uadia, te, ti, po,
+     &  fna, fhe, fhi, fch, fch_32, fch_52, fch_p, kinrgy,
+     &  fna_mdf, fhe_mdf, fhi_mdf, fna_fcor, fna_nodrift, fna_he,
+     &  fnaPSch, fhePSch, fhiPSch, fna_eir, fne_eir, fhe_eir, fhi_eir,
+     &  fna_32, fna_52, fni_32, fni_52, fne_32, fne_52,
+     &  fchdia, fchin, fchvispar, fchvisper, fchvisq, fchinert,
+     &  vaecrb, vadia, wadia, veecrb, vedia, floe_noc, floi_noc)
 *   ..write header to nout(3)
       call cfverw (nout(3), newversion)
       idum(0) = ns

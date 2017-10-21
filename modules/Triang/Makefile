@@ -16,15 +16,36 @@ SRCLOCAL = ${SRCTRI}/local
 B2SRC    = ${SOLPSTOP}/modules/B2.5/src
 SRCEIR   = ${SOLPSTOP}/modules/Eirene/src
 
+MAKES = ${SRCTRI}/Makefile 
+# Include global SOLPS compiler settings
+ifndef SOLPS_CPP
+ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER} ] && echo yes || echo no ),yes)
+  include ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
+  MAKES += ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
+  ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local ] && echo yes || echo no ),yes)
+    include ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+    MAKES += ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+  endif
+else
+  $(warning ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER} not found.)
+endif
+else
+  MAKES += ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
+  ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local ] && echo yes || echo no ),yes)
+    include ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+    MAKES += ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+  endif
+endif
+
 # Extension for OBJDIR if debug options are used
 # uncomment following lines if debug-code needed
 ifdef SOLPS_DEBUG
 EXT_DEBUG = .debug
+DEFINES  += -DDBG
 endif
 
 # Directory where objectcode/binaries will be created
 OBJDIR = ${SRCTRI}/builds/${HOST_NAME}.${COMPILER}${EXT_DEBUG}
-
 
 INCLUDE=
 LOCAL=no
@@ -35,7 +56,6 @@ ifeq ($(LOCAL),yes)
 INCLUDE = -I${SRCLOCAL}
 endif
 INCLUDE += -I${OBJDIR} -I${B2SRC}/include.local -I${B2SRC}/include
-
 
 ifeq ($(LOCAL),yes)
 ifeq ($(strip ${LD_GR}),)
@@ -55,7 +75,7 @@ ifeq ($(shell [ -e ${OBJDIR}/LISTOBJ ] && echo yes || echo no ),yes)
 include ${OBJDIR}/LISTOBJ
 endif
 include ${SRCTRI}/config/compile
-MAKES = ${SRCTRI}/Makefile ${SRCTRI}/config/compile ${SRCTRI}/config/config.${HOST_NAME}.${COMPILER}
+MAKES+= ${SRCTRI}/config/compile ${SRCTRI}/config/config.${HOST_NAME}.${COMPILER}
 ifeq ($(shell [ -e ${SRCTRI}/config/config.${HOST_NAME}.${COMPILER}.local ] && echo yes || echo no ),yes)
 include ${SRCTRI}/config/config.${HOST_NAME}.${COMPILER}.local
 MAKES+= ${SRCTRI}/config/config.${HOST_NAME}.${COMPILER}.local
@@ -69,58 +89,84 @@ MODOBJS = ${MODULES:%=${OBJDIR}/%.o}
 ALLOBJS = ${OBJS:%.o=${OBJDIR}/%.o}
 SRCF = ${OBJS:%.o=%.f}
 
-EXCLUDELIS = tria.o triageom.o
+EXCLUDELIS = tria.o triageom.o triainq.o
 
 DEST = ${filter-out $(MODOBJS),$(OBJS:%.o=$(OBJDIR)/%.o)}
 MAINLIST = $(EXCLUDELIS:.=\.)
 
-all: ${OBJDIR}/tria ${OBJDIR}/triageom
+ifeq ($(strip ${LD_GR}),)
+all: ${OBJDIR}/tria ${OBJDIR}/triageom ${OBJDIR}/triainq ${OBJDIR}/.nox
+else
+all: ${OBJDIR}/tria ${OBJDIR}/triageom ${OBJDIR}/triainq ${OBJDIR}/.x
+endif
 
 mods: $(MODMODS)
 
-${OBJDIR}/tria: ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${MAKES}
-	${LD} $(LDOPTS) -o ${OBJDIR}/tria ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${LDLIBS} $(GKS) $(LDEXTRA)
+ifeq ($(strip ${LD_GR}),)
+${OBJDIR}/tria ${OBJDIR}/.nox: ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${MAKES}
+	rm -f ${OBJDIR}/tria 2> /dev/null; \
+	rm -f ${OBJDIR}/.x 2> /dev/null; \
+	${LD} $(LDOPTS) -o ${OBJDIR}/tria ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${LDLIBS} $(LDEXTRA) && touch ${OBJDIR}/.nox
+
+${OBJDIR}/triageom: ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${MAKES}
+	${LD} $(LDOPTS) -o ${OBJDIR}/triageom ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${LDLIBS} $(LDEXTRA)
+else
+${OBJDIR}/tria ${OBJDIR}/.x: ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${MAKES}
+	rm -f ${OBJDIR}/tria 2> /dev/null; \
+	rm -f ${OBJDIR}/.nox 2> /dev/null; \
+	${LD} $(LDOPTS) -o ${OBJDIR}/tria ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${LDLIBS} $(GKS) $(LDEXTRA) && touch ${OBJDIR}/.x
 
 ${OBJDIR}/triageom: ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${MAKES}
 	${LD} $(LDOPTS) -o ${OBJDIR}/triageom ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${LDLIBS} $(GKS) $(LDEXTRA)
+endif
+
+${OBJDIR}/triainq: ${OBJDIR}/triainq.o ${MAKES}
+	${LD} $(LDOPTS) -o ${OBJDIR}/triainq ${OBJDIR}/triainq.o
 
 ${OBJDIR}/libtria.a: ${ALLOBJS}
 	${BLD} $@ ${ALLOBJS}
 	ranlib $@
 
 clean:
-	rm -rf ${OBJDIR}/*.o ${OBJDIR}/libtria.a ${OBJDIR}/tria ${OBJDIR}/triageom ${OBJDIR}/LISTOBJ ${OBJDIR}/dependencies
+	rm -rf ${OBJDIR}/*.f ${OBJDIR}/*.o ${OBJDIR}/libtria.a ${OBJDIR}/tria ${OBJDIR}/triageom ${OBJDIR}/triainq ${OBJDIR}/LISTOBJ ${OBJDIR}/dependencies
 ifneq (${MOD},o)
 	rm -rf ${OBJDIR}/*.${MOD}
 endif
-ifneq ($(strip $(SED)),)
-	rm -rf ${OBJDIR}/*.f
-endif
 
-depend: ${OBJS:.o=.f} ${EXCLUDELIS:.o=.f} ${OBJDIR}/dependencies
-	`which makedepend` -p'$${OBJDIR}/' ${DEFINES} -f- ${INCLUDE} $^ | \
+depend: ${OBJS:.o=.f} ${EXCLUDELIS:.o=.f}
+	@`which makedepend` -p'$${OBJDIR}/' ${DEFINES} -f- ${INCLUDE} $^ | \
 	sed 's,^$${OBJDIR}/[^ ][^ ]*/,\$${OBJDIR}/,' | \
         sed 's,: ${SOLPSTOP},: $${SOLPSTOP},' > ${OBJDIR}/dependencies
+	@echo '# 1' >> ${OBJDIR}/dependencies
 ifneq (${MOD},o)
-	`which makedepend` -p'$${OBJDIR}/' ${DEFINES} -f- ${INCLUDE} $^ -o.${MOD} | \
+	@`which makedepend` -p'$${OBJDIR}/' ${DEFINES} -f- ${INCLUDE} $^ -o.${MOD} | \
 	sed 's,^$${OBJDIR}/[^ ][^ ]*/,\$${OBJDIR}/,' | \
         sed 's,: ${SOLPSTOP},: $${SOLPSTOP},' >> ${OBJDIR}/dependencies
+	@echo '# 2' >> ${OBJDIR}/dependencies
 endif
 ifeq ($(LOCAL),yes)
-	egrep -ai '^[ 	]+use ' ${SRCLOCAL}/*.f ${SRCDIR}/*/*.f | grep -v 'IGNORE' | tr , ' ' | \
+	@egrep -ai '^[ 	]+use ' ${SRCLOCAL}/*.f ${SRCDIR}/*/*.f | grep -v 'IGNORE' | tr , ' ' | \
           awk '{sub("\\.f:",".o:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' | sort -u >> ${OBJDIR}/dependencies
-	egrep -ai '^[ 	]+use ' ${SRCLOCAL}/*.f ${SRCDIR}/modules/*.f | grep -v 'IGNORE'  | tr , ' ' | awk '{sub("\\.f:",".${MOD}:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' >> ${OBJDIR}/dependencies
+	@echo '# 3b' >> ${OBJDIR}/dependencies
+	@egrep -ai '^[ 	]+use ' ${SRCLOCAL}/*.f ${SRCDIR}/modules/*.f | grep -v 'IGNORE'  | tr , ' ' | awk '{sub("\\.f:",".${MOD}:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' >> ${OBJDIR}/dependencies
+	@echo '# 4b' >> ${OBJDIR}/dependencies
 ifneq (${MOD},o)
-	egrep -ai '^[ 	]+use ' ${SRCLOCAL}/*.f ${SRCDIR}/*/*.f | grep -v 'IGNORE' | tr , ' ' | awk '{sub("\\.f:",".o:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".o"}' >> ${OBJDIR}/dependencies
-	egrep -ai '^[ 	]+use ' ${SRCLOCAL}/*.f ${SRCDIR}/modules/*.f | grep -v 'IGNORE'  | tr , ' ' | awk '{sub("\\.f:",".${MOD}:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".o"}' >> ${OBJDIR}/dependencies
+	@egrep -ai '^[ 	]+use ' ${SRCLOCAL}/*.f ${SRCDIR}/*/*.f | grep -v 'IGNORE' | tr , ' ' | awk '{sub("\\.f:",".o:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".o"}' >> ${OBJDIR}/dependencies
+	@echo '# 5b' >> ${OBJDIR}/dependencies
+	@egrep -ai '^[ 	]+use ' ${SRCLOCAL}/*.f ${SRCDIR}/modules/*.f | grep -v 'IGNORE'  | tr , ' ' | awk '{sub("\\.f:",".${MOD}:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".o"}' >> ${OBJDIR}/dependencies
+	@echo '# 6b' >> ${OBJDIR}/dependencies
 endif
 else
-	egrep -ai '^[ 	]+use ' ${SRCDIR}/*/*.f | grep -v 'IGNORE' | tr , ' '  | \
+	@egrep -ai '^[ 	]+use ' ${SRCDIR}/*/*.f | grep -v 'IGNORE' | tr , ' '  | \
           awk '{sub("\\.f:",".o:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' | sort -u >> ${OBJDIR}/dependencies
-	egrep -ai '^[ 	]+use ' ${SRCDIR}/modules/*.f | grep -v 'IGNORE' | tr , ' '  | awk '{sub("\\.f:",".${MOD}:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' >> ${OBJDIR}/dependencies
+	@echo '# 3b' >> ${OBJDIR}/dependencies
+	@egrep -ai '^[ 	]+use ' ${SRCDIR}/modules/*.f | grep -v 'IGNORE' | tr , ' '  | awk '{sub("\\.f:",".${MOD}:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' >> ${OBJDIR}/dependencies
+	@echo '# 4b' >> ${OBJDIR}/dependencies
 ifneq (${MOD},o)
-	egrep -ai '^[ 	]+use ' ${SRCDIR}/*/*.f | grep -v 'IGNORE' | tr , ' '  | awk '{sub("\\.f:",".o:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".o"}' >> ${OBJDIR}/dependencies
-	egrep -ai '^[ 	]+use ' ${SRCDIR}/modules/*.f | grep -v 'IGNORE' | tr , ' '  | awk '{sub("\\.f:",".${MOD}:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".o"}' >> ${OBJDIR}/dependencies
+	@egrep -ai '^[ 	]+use ' ${SRCDIR}/*/*.f | grep -v 'IGNORE' | tr , ' '  | awk '{sub("\\.f:",".o:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".o"}' >> ${OBJDIR}/dependencies
+	@echo '# 5b' >> ${OBJDIR}/dependencies
+	@egrep -ai '^[ 	]+use ' ${SRCDIR}/modules/*.f | grep -v 'IGNORE' | tr , ' '  | awk '{sub("\\.f:",".${MOD}:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".o"}' >> ${OBJDIR}/dependencies
+	@echo '# 6b' >> ${OBJDIR}/dependencies
 endif
 endif
 

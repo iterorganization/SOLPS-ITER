@@ -1,0 +1,7 @@
+#! /usr/bin/env tcsh
+
+setenv GNUPLOT_POSTSCRIPT_OPTIONS 'color solid'
+setenv PRINT_PLOT profile_VT_o.ps ; plot_HTM VT o && rm -f gnuplot.data gnuplot.cmd
+setenv PRINT_PLOT profile_VT_i.ps ; plot_HTM VT i && rm -f gnuplot.data gnuplot.cmd
+setenv PRINT_PLOT profile_RP_o.ps ; plot_HTM RP o && rm -f gnuplot.data gnuplot.cmd
+setenv PRINT_PLOT profile_RP_i.ps ; plot_HTM RP i && rm -f gnuplot.data gnuplot.cmd

@@ -11,15 +11,19 @@ c***      and followed by 0 if there are less than n of them.
 c======================================================================
       integer mm(*)
       character uss*68,uhd*4,utr*16
-c      logical udbg
+      logical udbg
 c======================================================================
 c<<<
 c      if(mm(1).gt.0) print *,'uichwr: start. n=',n
-c      udbg=.true.
-c      do i=1,n
-c        if(udbg) print *,mm(i)
-c        udbg = udbg .and. mm(i).gt.0
-c      end do
+#ifdef DBG
+       udbg=.true.
+#else
+       udbg=.false.
+#endif
+      do i=1,n
+        if(udbg) print *,mm(i)
+        udbg = udbg .and. mm(i).gt.0
+      end do
 c>>>
       write(uhd,'(2hCH,i1)') ic
       uss=' '

@@ -6,6 +6,7 @@
   read u
   export DEVICE=$u
 }
+[ "$SOLPS_CENTRAL" = 'yes' ] && DEVICE=$DEVICE/$USER
 
 export DGSONNETMASK="$DG/device/$DEVICE/*.sno"
 export DG_MESH_MASK="$DG/device/$DEVICE/*.sno"

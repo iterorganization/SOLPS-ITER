@@ -12,8 +12,9 @@ c*** sources) for the Eirene input file
 c=======================================================================
 #include "uinput.inc"
       integer i,j,k,l,m,n,ibk,isf,iatm,ispe,ispi
-      external xerrab
+      external xerrab, subini, subend
 c=======================================================================
+      call subini ('uinbnddt')
 
       nstsi=0
       nstrai=0
@@ -99,6 +100,7 @@ c*** ... and then the recycling source if specified
 	  if(nlrbnds(isf,ibk)) then !{
            ispe=0
            do iatm=1,natmi !{ Split the strata per species
+            if(is_meta(iatm)) cycle
             nstrai=nstrai+1
             ispi=ispe+1
             ispe=ispi
@@ -185,4 +187,6 @@ c*** ... and then the recycling source if specified
       	end do !}
       end do !}
 c=======================================================================
+      call subend ()
+      return
       end

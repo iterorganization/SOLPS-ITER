@@ -1,20 +1,23 @@
 #  VERSION : 28.07.99 20:34
 
 # Test whether necessary variables are defined
-ifndef LD_MSCL
-  LD_MSCL ?= -L${SOLPSLIB} -lmscl
-endif
+LD_MSCL ?= -L${SOLPSLIB} -lmscl
 
-FC	     = g95
+FC       = g95
 ifdef SOLPS_DEBUG
-FFLAGS	 = -g -fbounds-check -ftrace=full
+FFLAGS	 = -g -fbounds-check -ftrace=full -fno-second-underscore
 else
-FFLAGS   =
+FFLAGS   = -fno-second-underscore
 endif
-INCLUDE  = -I${SRCDIR} -I${EIRINC} -I${B2INC}
+INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
-CPP	     = /lib/cpp -C -traditional
+CPP	     = /lib/cpp -C -traditional -ffreestanding
 
-MOD 	   = mod
+MOD      = mod
 LDLIBS	 = ${LD_MSCL}
 LDEXTRA  =
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+

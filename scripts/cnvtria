@@ -3,6 +3,7 @@
 #  VERSION : 05.02.2005 17:55
 
 . triang.conf
+
 set -A f -- $TRIATRI
 
 coord=${f[0]}

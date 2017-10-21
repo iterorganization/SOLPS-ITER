@@ -15,7 +15,6 @@
 'b2mndr_mvinc'    '1'
 'b2mndr_mvnum'    '0'
 'b2mndr_b2time'   '1'
-'b2mndr_na0eps'   '1e14'
 'b2mndr_cpu'      '82800.0'
 'b2mndr_savecpu'  '0.0'
 'tallies_netcdf'  '1'

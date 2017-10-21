@@ -1,0 +1,106 @@
+function h = plotgrid(gmtry,varargin)
+% h = plotgrid(gmtry,options)
+%
+% Routine to plot grid.
+%
+% Input arguments:
+%
+% - gmtry   : struct read from b2fgmtry-file
+% - options : list of plot options compatible with Matlab plot command
+%
+% Output arguments:
+%
+% - h       : struct with vectors of handles to the plot objects,
+%             case gmtry.nncut = 0:
+%                 h(1): poloidal surfaces
+%                 h(2): radial surfaces
+%             case gmtry.nncut = 1:
+%                 h(1): poloidal surfaces, core 
+%                 h(2): poloidal surfaces, SOL
+%                 h(3): poloidal surfaces, PFR
+%                 h(4): separatrix
+%                 h(5): radial surfaces, all
+%             general case:
+%                 h(...) per cell face segment...
+%
+
+% Author: Wouter Dekeyser
+% E-mail: wouter.dekeyser@kuleuven.be
+% November 2016
+
+% Check current status of hold
+hs = ishold;
+
+% Init output
+h  = struct('h',[]);
+
+% For speed, special treatment for nncut = 0 and nncut = 1
+% General cases treated as well, but leads to a heavy plot!
+switch gmtry.nncut
+    
+    case 0 % no cuts
+        
+        rco  = [gmtry.crx(:,:,1),gmtry.crx(:,end,3);...
+                  gmtry.crx(end,:,2),gmtry.crx(end,end,4)];
+        zco  = [gmtry.cry(:,:,1),gmtry.cry(:,end,3);...
+                  gmtry.cry(end,:,2),gmtry.cry(end,end,4)];
+                    
+        h(1).h = plot(rco ,zco ,varargin{:}); hold on; % poloidal surfaces
+        h(2).h = plot(rco',zco',varargin{:});          % radial surfaces
+        
+    case 1 % standard single null configuration
+        
+        
+        % SOL, poloidal
+        polfr  = [gmtry.crx(1:end,gmtry.topcut(1)+3:end,1),gmtry.crx(1:end,end,3);...
+            gmtry.crx(end,gmtry.topcut(1)+3:end,2),gmtry.crx(end,end,4)];
+        polfz  = [gmtry.cry(1:end,gmtry.topcut(1)+3:end,1),gmtry.cry(1:end,end,3);...
+            gmtry.cry(end,gmtry.topcut(1)+3:end,2),gmtry.cry(end,end,4)];
+        h(2).h = plot(polfr,polfz,varargin{:});
+        
+        hold on;
+        
+        
+        % Core, poloidal
+        polfr  = [gmtry.crx(gmtry.leftcut(1)+2:gmtry.rightcut(1)+1,1:gmtry.topcut(1)+1,1);gmtry.crx(gmtry.leftcut(1)+2,1:gmtry.topcut(1)+1,1)];
+        polfz  = [gmtry.cry(gmtry.leftcut(1)+2:gmtry.rightcut(1)+1,1:gmtry.topcut(1)+1,1);gmtry.cry(gmtry.leftcut(1)+2,1:gmtry.topcut(1)+1,1)];
+        h(1).h = plot(polfr,polfz,varargin{:});
+        
+        
+        % PFR, poloidal
+        polfr  = [gmtry.crx(1:gmtry.leftcut(1)+1,1:gmtry.topcut(1)+1,1);gmtry.crx(gmtry.rightcut(1)+2:end,1:gmtry.topcut(1)+1,1);gmtry.crx(end,1:gmtry.topcut(1)+1,2)];
+        polfz  = [gmtry.cry(1:gmtry.leftcut(1)+1,1:gmtry.topcut(1)+1,1);gmtry.cry(gmtry.rightcut(1)+2:end,1:gmtry.topcut(1)+1,1);gmtry.cry(end,1:gmtry.topcut(1)+1,2)];
+        h(3).h = plot(polfr,polfz,varargin{:});
+        
+        
+        % all, radial
+        radfr  = [gmtry.crx(:,:,1),gmtry.crx(:,end,3);gmtry.crx(end,:,2),gmtry.crx(end,end,4)]';
+        radfz  = [gmtry.cry(:,:,1),gmtry.cry(:,end,3);gmtry.cry(end,:,2),gmtry.cry(end,end,4)]';
+        h(5).h = plot(radfr,radfz,varargin{:});
+        
+        
+        % Separatrix
+        h(4).h = plotsep(gmtry,varargin{:});
+        
+    otherwise % general case
+        
+        % Plot all cells as individual polygons
+        nx = size(gmtry.crx,1);
+        ny = size(gmtry.crx,2);
+        for j = 1:ny
+            for i = 1:nx
+                k = i + (j-1)*nx;
+                rco    = [gmtry.crx(i,j,1),gmtry.crx(i,j,2),gmtry.crx(i,j,4),gmtry.crx(i,j,3),gmtry.crx(i,j,1)];
+                zco    = [gmtry.cry(i,j,1),gmtry.cry(i,j,2),gmtry.cry(i,j,4),gmtry.cry(i,j,3),gmtry.cry(i,j,1)];
+                h(k).h = plot(rco,zco,varargin{:});hold on;
+            end
+        end
+        
+end
+
+
+% Reset status of hold
+if ~hs, hold off; end;
+
+
+

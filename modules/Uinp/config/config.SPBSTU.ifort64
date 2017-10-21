@@ -6,8 +6,8 @@ ifndef LD_MSCL
 endif
 
 ifdef USE_MPI
-FC 	 = mpif90
-FC 		= mpiifort
+FC       = mpif90
+FC       = mpiifort
 else
 FC       = ifort
 endif
@@ -16,7 +16,7 @@ FFLAGS	 = -g -C -traceback -debug all -check all
 else
 FFLAGS   =
 endif
-INCLUDE  = -I${SRCDIR} -I${EIRINC} -I${B2INC}
+INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
 CPP      = /lib/cpp -C -traditional
 CPP      = /lib/cpp  -traditional
@@ -24,3 +24,8 @@ CPP      = /lib/cpp  -traditional
 MOD      = mod
 LDLIBS	 = ${LD_MSCL}
 LDEXTRA  =
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+

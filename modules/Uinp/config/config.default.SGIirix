@@ -9,9 +9,14 @@ endif
 
 FC       = f77
 FFLAGS   = -static -O2 -nocpp
-INCLUDE  = -I${SRCDIR} -I${EIRINC} -I${B2INC}
+INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
 CPP	     = /lib/cpp
-MOD 	   = mod
+MOD      = mod
 LDLIBS 	 = ${LD_MSCL}
 LDEXTRA  =
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+

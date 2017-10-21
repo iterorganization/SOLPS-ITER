@@ -1,44 +1,63 @@
 # General
+module use /work/imas/etc/modules/all
 module use /work/imas/opt/EasyBuild/modules/all
-module load git
 
 # Modules needed by SOLPS-ITER
+module load git
+module load makedepend/1.0.4-goolf-1.5.16
 module load GCC/4.8.3
-module load makedepend/1.0.0
 module load mscl/1.0.0-GCC-4.8.3
-module load netcdf/4.3.3.1
-module load netcdf-fortran/4.2-GCC-4.1.2
+module load netcdf/4.3.3.1-goolf-1.5.16
+module load netcdf-fortran/4.4.2-goolf-1.5.16
+module load libpng/1.6.16-goolf-1.5.16
+module unload zlib
 module load gr/0.0.94
 module load gks/4.4.74
-module load ncl/6.2.1
-module load nag/15
-module load hdf5/1.8.15
-module load flex
+module load ncl/6.3.0-intel-12.0.2
+# module load nag/15
+module load HDF5/1.8.9-goolf-1.5.16
+module load flex/2.6.0
 module load doxygen
 module load texlive
 module load ghostscript
-module load libxml2
-module load fontconfig
-module load cairo
-module load mdsplus/3.0.2
+module load libxml2/2.9.2-GCC-4.8.3
+module load fontconfig/2.11.93
+module load cairo/1.14.2
 module load make
-module load imas
-module load python/2.7/9
+module load fc2k
+module load xmllib/2.1.1-imas-3.9.0-GCC-4.8.3
+module load totalview
+if (`hostname` == "hpc-app1.iter.org") then
+  module load matlab/2013a
+endif
 
 # mpi-library
-# module load mpich2/3.1.3-intel
-module unload mpich2
-module load mvapich2/1.3.2-gnu
+module load MVAPICH2/2.2b-GCC-4.8.3
 
 # Debugger (set environment variable DBX)
-setenv DBX gdb
+setenv DBX totalview
 
 # Compilers
 setenv CC gcc
 setenv FC gfortran
 setenv CXX g++
 
+module load paraview/5.4.1
+module load python/2.7/11
+
+if (`where paraview-config` == "") then
+  echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
+else
+  # See ParaViewCatalystUsersGuide_v2.pdf Sec 3.7.2 Linking with Python ...
+  set PARAVIEW_LIB=`paraview-config --libs --python | sed s/-L//`
+  setenv LD_LIBRARY_PATH "${PARAVIEW_LIB}:${LD_LIBRARY_PATH}"
+  setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages/vtk:${PYTHONPATH}"
+  setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
+  setenv LD_CATALYST `paraview-config --libs vtkPVPythonCatalyst`
+endif
+
 # Other environment variables
 module load solps-gui
-setenv LD_PRELOAD /usr/lib64/libfontconfig.so.1
+setenv LD_PRELOAD /usr/lib64/libfontconfig.so.1 # needed by solps-gui
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/usr/lib64
 setenv SOLPSWORK /work/projects/solps-iter/$USER

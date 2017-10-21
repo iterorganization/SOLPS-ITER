@@ -3,14 +3,6 @@
 #
 # Special notes:
 #
-# If you do not have the NetCDF library on your system:
-# Leave LD_NETCDF blank
-# Add -DNO_CDF to SOLPS_CPP
-#
-# If you do have NetCDF on your system:
-# Add -DCDF_MOVIE to SOLPS_CPP to be able to produce movies
-# Add -DNETCDF4_3 to SOLPS_CPP if you are linking to NetCDF version 4.3 or newer
-#
 # If you have NCAR version 3 on your system:
 # Remove -DNCAR4 from SOLPS_CPP
 #
@@ -24,10 +16,6 @@
 # If you have NAG Mark 22 or greater on your system:
 # Add -DNAG22 to SOLPS_CPP
 #
-# If you do not have MDSplus on your system:
-# Leave LD_MDSPLUS blank
-# Remove -DMDSPLUS from SOLPS_CPP
-#
 
        NCDIR ?= ${NETCDF_DIR}
    MSCL_ROOT ?= /p/solps/solps_other/mscl/linux_pgf90
@@ -37,8 +25,6 @@
   NCARG_ROOT ?=
       NAGDIR ?= ${NAG_ROOT}
  MDSPLUS_DIR ?=
-
-
 
 #
 # Variables for linking
@@ -54,15 +40,39 @@ LD_NAG     = -L${NAGDIR}/lib -lnag
 LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 
-
 #
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNCAR4 -DMDSPLUS -DJET -DCDF_MOVIE -DNO_F01AAF
+SOLPS_CPP      = -DNCAR4 -DJET -DNO_F01AAF
 B25_DEFINES    =
 EIRENE_DEFINES =
 
+# Autodetected optional features...
+
+# Build with NetCDF tools if available
+ifdef LD_NETCDF
+  SOLPS_CPP   += -DCDF_MOVIE
+else
+  SOLPS_CPP   += -DNO_CDF
+endif
+
+# Build with MDSplus tools if MDSplus is present
+ifdef LD_MDSPLUS
+  SOLPS_CPP   += -DMDSPLUS
+endif
+
+# Build with Catalyst if ParaView is in PATH
+ifdef LD_CATALYST
+  SOLPS_CPP   += -DCATALYST
+endif
+
+# Build with IMAS if imas module is loaded
+ifdef IMAS_PREFIX
+  SOLPS_CPP += -DIMAS
+  LD_UAL     = `pkg-config imas-lowlevel imas-pgf90 --libs`
+  export LD_UAL
+endif
 
 #
 # Export for use in sub-makefiles
@@ -89,4 +99,8 @@ export LD_SONNET
 export SOLPS_CPP
 export B25_DEFINES
 export EIRENE_DEFINES
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
 

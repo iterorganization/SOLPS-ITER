@@ -2,6 +2,7 @@
 
 set NAME=/tmp/.run.$$.$USER.`date +%Y%m%d%H%M%S`
 set EMAIL=`get_git_email`
+set JOB_NAME="SOLPS-ITER"
 set PROCS=1
 echo Your email is $EMAIL
 
@@ -9,7 +10,21 @@ set compress=""
 set MPIOPTS=""
 set standalone="no"
 
+set solpstop=`climb_and_look_for SOLPSTOP`
+if (-s $solpstop) then
+  setenv SOLPSTOP "`cat $solpstop`"
+else if ($SOLPSTOP == "") then
+  setenv SOLPSTOP "`echo $PWD | sed 's:/runs/.*::'`"
+endif
+
 argloop:
+  if ("X${1}X" == "X-jX") then
+    shift
+    set JOB_NAME="$1"
+    echo Job name is ${JOB_NAME}
+    shift
+    goto argloop
+  endif
   if ("X${1}X" == "X-zX") then
     set compress="-gz"
     echo run.log will be compressed
@@ -18,35 +33,33 @@ argloop:
   endif
   if ("X${1}X" == "X-sX") then
     set standalone="yes"
-    echo Asking for a standalone run
+    if ($JOB_NAME == "SOLPS-ITER") set JOB_NAME="B2.5"
+    echo Asking for a B2.5 standalone run
     shift
     goto argloop
   endif
   if ("X${1}X" == "X-mX") then
     shift
+    if (! $?SOLPS_MPI) then
+      source $SOLPSTOP/SETUP/mpi
+      set MPI_SET=yes
+    endif
     set MPIOPTS="$1"
     echo Using MPI options: $MPIOPTS
     set PROCS=`echo $MPIOPTS | awk.transpose | grep -A 1 "\-np" | tail -n 1`
     echo Asking for $PROCS processors
     shift
-#   echo sleep 600 | qsub -q ib_gen8 -lnodes=c05s30:ppn=16,walltime=1000
+    echo sleep 600 | qsub -q ib_gen8 -lnodes=c05s30:ppn=1,walltime=1000
     goto argloop
   endif
 
-set solpstop=`climb_and_look_for SOLPSTOP`
-if (-e $solpstop) then
-  setenv SOLPSTOP "`cat $solpstop`"
-else
-  setenv SOLPSTOP "`echo $PWD | sed 's:/runs/.*::'`"
-endif
-
 if ($1 == "") then
-  if (-e input.dat && $standalone == "no") then
+  if (-s input.dat && $standalone == "no") then
     echo Assuming run with Eirene
     echo No argument is specified. Looking for QSUB.iter_coupled$compress
     set QSUB=`climb_and_look_for QSUB.iter_coupled$compress`
     if ($QSUB == "//QSUB.iter_coupled$compress") then
-      if (-e $SOLPSTOP/runs/QSUB.iter_coupled$compress) then
+      if (-s $SOLPSTOP/runs/QSUB.iter_coupled$compress) then
         set QSUB="$SOLPSTOP/runs/QSUB.iter_coupled$compress"
       else
         set QSUB=""
@@ -57,14 +70,14 @@ if ($1 == "") then
     echo No argument is specified. Looking for QSUB.iter$compress
     set QSUB=`climb_and_look_for QSUB.iter$compress`
     if ($QSUB == "//QSUB.iter$compress") then
-      if (-e $SOLPSTOP/runs/QSUB.iter$compress) then
+      if (-s $SOLPSTOP/runs/QSUB.iter$compress) then
         set QSUB="$SOLPSTOP/runs/QSUB.iter$compress"
       else
         set QSUB=""
       endif
     endif
   endif
-else if (-e $1) then
+else if (-s $1) then
   echo Submission file $1 is specified as an argument.
   echo Submission file $1 is found in current directory
   set QSUB=$1
@@ -73,7 +86,7 @@ else
   echo Looking for submission file $1 
   set QSUB=`climb_and_look_for $1`
   if ($QSUB == "//"$1) then
-    if (-e $SOLPSTOP/runs/$1) then
+    if (-s $SOLPSTOP/runs/$1) then
       set QSUB="$SOLPSTOP/runs/$1"
     else
       set QSUB=""
@@ -88,11 +101,11 @@ if($QSUB == "") then
 endif
 echo Using submission file template $QSUB
 
-sed -e 's:#PWD#:'$PWD':g' -e 's:#SOLPSTOP#:'$SOLPSTOP':g' -e 's:#EMAIL#:'$EMAIL':g' -e "s:#MPIOPTS#:'$MPIOPTS':g" -e "s:#PROCS#:'$PROCS':g" < $QSUB > $NAME
+sed -e 's:#PWD#:'$PWD':g' -e 's:#SOLPSTOP#:'$SOLPSTOP':g' -e 's:#EMAIL#:'$EMAIL':g' -e "s:#MPIOPTS#:'$MPIOPTS':g" -e "s:#PROCS#:'$PROCS':g" -e "s:#JOBNAME#:'$JOB_NAME':g" < $QSUB > $NAME
 
 set msg="Submitted at `date`"
 update_solps_run_status -n ${msg}
 if ($?SOLPS_GUI_IP) then
   echo ${USER} ${PWD} ${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
 endif
-qsub -V -S /usr/bin/tcsh $NAME
+qsub -V -S /bin/tcsh $NAME

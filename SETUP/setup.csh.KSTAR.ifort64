@@ -21,9 +21,25 @@
 # mpi-library
 #module load mpich2/3.1.3-intel
 
-
-setenv DEVICE KSTAR
+if (! $?DEVICE) then
+  setenv DEVICE KSTAR
+endif
 source /opt/app/intel/bin/compilervars.csh intel64
 setenv PATH ${PATH}:${HOME}/bin
 setenv GLI_HOME /home/sunny2216/solps5.0_old/solps5.0/solps5.0/src/lib
 setenv NCARG_ROOT /home/sunny2216/solps5.0_old/solps5.0/solps_other/NCARG/linux.ifort64
+
+if (`where paraview-config` == "") then
+  echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
+else
+  # See ParaViewCatalystUsersGuide_v2.pdf Sec 3.7.2 Linking with Python ...
+  set PARAVIEW_LIB=`paraview-config --libs --python | sed s/-L//`
+  if ($?LD_LIBRARY_PATH) then
+    setenv LD_LIBRARY_PATH "${PARAVIEW_LIB}:${LD_LIBRARY_PATH}"
+  else
+    setenv LD_LIBRARY_PATH ${PARAVIEW_LIB}
+  endif
+  setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages/vtk:${PYTHONPATH}"
+  setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
+  setenv LD_CATALYST `paraview-config --libs vtkPVPythonCatalyst`
+endif

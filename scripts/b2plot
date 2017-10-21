@@ -1,8 +1,10 @@
 #! /bin/tcsh -f
 
 set solpstop=`climb_and_look_for SOLPSTOP`
-if (-e $solpstop) then
+if (-s $solpstop) then
   setenv SOLPSTOP "`cat $solpstop`"
+  set RUNS=$SOLPSTOP/runs
+else if ($SOLPSTOP != "") then
   set RUNS=$SOLPSTOP/runs
 else
   setenv SOLPSTOP "`echo $PWD | sed 's:/runs/.*::'`"
@@ -10,7 +12,7 @@ else
 endif
 
 loop:
-  if(-e $RUNS/Makefile.plot) goto endloop
+  if(-s $RUNS/Makefile.plot) goto endloop
   echo $RUNS
   if ("$RUNS" == "/") then
     echo Makefile.plot not found
@@ -24,6 +26,19 @@ endloop:
   set TIME=time
 
 argloop:
+  if ("X${1}X" == "X-hX") then
+    shift
+    echo 'Usage: b2plot [OPTIONS] > [log file]'
+    echo 'Launches the b2plot graphical post-processor'
+    echo ' '
+    echo 'Optional arguments:'
+    echo ' -d <debugger>: launch run with debugger <debugger>.'
+    echo ' -h: Prints this message.'
+    echo ' -n: dry run. Will show the sequence of commands requested by b2plot.'
+    echo ' -s: request a stand-alone run (without Eirene).'
+    echo ' '
+    exit
+  endif
   if ("X${1}X" == "X-nX") then
     set debug="-n"
     shift
@@ -50,6 +65,6 @@ argloop:
   endif
   if ("X${argv}X" == "XX") set argv="b2pl"
   set CMD=`echo $argv" " | sed -e 's: :.prt :g'`
-  gmake $debug TIME="$TIME" -f $RUNS/Makefile.plot $CMD
+  ${MAKE} $debug TIME="$TIME" -f $RUNS/Makefile.plot $CMD
   unsetenv STAND_ALONE
   if ($?DEBUG_SET) source $SOLPSTOP/SETUP/nodebug

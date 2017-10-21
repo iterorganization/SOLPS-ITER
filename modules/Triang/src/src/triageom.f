@@ -1,6 +1,6 @@
       PROGRAM TRIAGEOM
 
-c  version : 11.02.2006 00:32
+c  version : 26.09.2016 20:42
 
 cank-20041209{
 c*** File opening with the standard names is added to avoid fort.NN
@@ -203,176 +203,179 @@ C     READ TRIANGLE MESH
 104   FORMAT(I5,2X,3(I6,2I3,2X))
 
       READ(22,*) NCOORD
+      print *,'ncoord=',ncoord  !###
       allocate(xcoord(ncoord))
       allocate(ycoord(ncoord))
-      READ(22,*) (XCOORD(ICOORD),ICOORD=1,NCOORD)
-      READ(22,*) (YCOORD(ICOORD),ICOORD=1,NCOORD)
+      if(ncoord.gt.0) then !{
+        READ(22,*) (XCOORD(ICOORD),ICOORD=1,NCOORD)
+        READ(22,*) (YCOORD(ICOORD),ICOORD=1,NCOORD)
+      end if !}
       NTRIA1 = NTRIA
       END
 
-*//SONIN//
-C=======================================================================
-C          S U B R O U T I N E  S O N I N
-C=======================================================================
-C     READ PHYSICAL COORDINATES FROM SONNET FILE TO XCOORD, YCOORD
-
-      SUBROUTINE SONIN
-      use cdimen
-      use ctria
-      use ccuts
-      IMPLICIT NONE
-
-      DOUBLEPRECISION, allocatable :: BR(:,:,:), BZ(:,:,:)
-      doubleprecision  CR, CZ, PIT
-      doubleprecision, allocatable :: help3(:,:,:)
-      INTEGER I0, I0E, I1, I2, I3, I4, IX0
-      integer dim1, dim2
-      CHARACTER*110 ZEILE
-
-*  READ PHYSICAL COORDINATES FROM SONNET FILE
-*  ---------------------------------------------------------------------
-*  INFORMATION FOR EACH CELL
-*
-*     NO. OF CELL     (IX,IY)     (BR(4),BZ(4))       (BR(3),BZ(3))
-*
-*            PITCH                             (CR,CZ)
-*
-*                                 (BR(1),BZ(1))       (BR(2),BZ(2))
-      
-      allocate(br(0:10,0:10,4))
-      allocate(bz(0:10,0:10,4))
-      read (20,*)
-      read (20,*)
-      read (20,*)
-      read (20,*)
-
-4711  continue
-
-*  READ FIRST LINE OF CELL DATA
-      read (20,'(a110)',end=99) zeile
-      i0=index(zeile,'(')
-      i0e=index(zeile,')')
-      read (zeile(i0+1:i0e-1),*) ix,iy
-
-      if (ix .ge. size(br,1)) then
-         dim1 = size(br,1)
-         dim2 = size(br,2)
-         allocate(help3(dim1,dim2,4))
-         
-         help3(1:dim1,1:dim2,1:4) = br(0:dim1-1,0:dim2-1,1:4)
-         deallocate(br)
-         allocate(br(0:dim1-1+10,0:dim2-1,4))
-         br = 0.
-         br(0:dim1-1,0:dim2-1,1:4) = help3(1:dim1,1:dim2,1:4)
-         
-         help3(1:dim1,1:dim2,1:4) = bz(0:dim1-1,0:dim2-1,1:4)
-         deallocate(bz)
-         allocate(bz(0:dim1-1+10,0:dim2-1,4))
-         bz = 0.
-         bz(0:dim1-1,0:dim2-1,1:4) = help3(1:dim1,1:dim2,1:4)
-         
-         deallocate(help3)
-      endif
-      if (iy .ge. size(br,2)) then
-         dim1 = size(br,1)
-         dim2 = size(br,2)
-         allocate(help3(dim1,dim2,4))
-         
-         help3(1:dim1,1:dim2,1:4) = br(0:dim1-1,0:dim2-1,1:4)
-         deallocate(br)
-         allocate(br(0:dim1-1,0:dim2-1+10,4))
-         br = 0.
-         br(0:dim1-1,0:dim2-1,1:4) = help3(1:dim1,1:dim2,1:4)
-         
-         help3(1:dim1,1:dim2,1:4) = bz(0:dim1-1,0:dim2-1,1:4)
-         deallocate(bz)
-         allocate(bz(0:dim1-1,0:dim2-1+10,4))
-         bz = 0.
-         bz(0:dim1-1,0:dim2-1,1:4) = help3(1:dim1,1:dim2,1:4)
-         
-         deallocate(help3)
-      endif
-      
-      i1=index(zeile,': (')
-      i2=index(zeile(i1+3:),')')+i1+2
-      read (zeile(i1+3:i2-1),*) br(ix,iy,4),bz(ix,iy,4)
-      i3=index(zeile(i2+1:),'(')+i2
-      i4=i3+index(zeile(i3+1:),')')
-      read (zeile(i3+1:i4-1),*) br(ix,iy,3),bz(ix,iy,3)
-      
-*     READ SECOND LINE OF CELL DATA
-      read (20,'(a110)') zeile
-
-*     READ THIRD LINE OF CELL DATA
-      read (20,'(a110)') zeile
-      i1=index(zeile,'(')
-      i2=index(zeile,')')
-      read (zeile(i1+1:i2-1),*) br(ix,iy,1),bz(ix,iy,1)
-      i3=i2+index(zeile(i2+1:),'(')
-      i4=i2+index(zeile(i2+1:),')')
-      read (zeile(i3+1:i4-1),*) br(ix,iy,2),bz(ix,iy,2)
-
-      read (20,*,end=99)
-
-      goto 4711
-
-99    continue
-      NX=IX-1
-      NY=IY-1
-C     SEARCHING FOR CUTS
-      NNCUT=0
-      DO IX=0,NX
-        IF (ABS(BR(IX,0,2)-BR(IX+1,0,1)) .GT. 1E-6 .OR.
-     .      ABS(BZ(IX,0,2)-BZ(IX+1,0,1)) .GT. 1E-6 .OR.
-     .      ABS(BR(IX,0,3)-BR(IX+1,0,4)) .GT. 1E-6 .OR.
-     .      ABS(BZ(IX,0,3)-BZ(IX+1,0,4)) .GT. 1E-6) THEN
-          if (allocated(nxcut1)) then
-             call realloc_ccuts('cut',1)
-          else
-             allocate(nxcut1(1))
-             allocate(nxcut2(1))
-             allocate(nycut1(1))
-             allocate(nycut2(1))
-          endif
-          NNCUT=NNCUT+1
-          NXCUT1(NNCUT)=IX
-          DO IX0=0,NX
-            IF (ABS(BR(IX,0,2)-BR(IX0,0,1)) .LT. 1E-6 .AND.
-     .          ABS(BZ(IX,0,2)-BZ(IX0,0,1)) .LT. 1E-6 .AND.
-     .          ABS(BR(IX,0,3)-BR(IX0,0,4)) .LT. 1E-6 .AND.
-     .          ABS(BZ(IX,0,3)-BZ(IX0,0,4)) .LT. 1E-6) THEN
-              NXCUT2(NNCUT)=IX0
-            ENDIF
-          ENDDO
-          NYCUT1(NNCUT)=0
-        ENDIF
-      ENDDO
-      IF (NNCUT .GT. 0) THEN
-        DO ICUT=1,NNCUT
-          DO IY=0,NY+1
-            IF (ABS(BR(NXCUT1(ICUT),IY,2)-
-     .              BR(NXCUT1(ICUT)+1,IY,1)) .LT. 1E-6 .AND.
-     .          ABS(BZ(NXCUT1(ICUT),IY,2)-
-     .              BZ(NXCUT1(ICUT)+1,IY,1)) .LT. 1E-6 .AND.
-     .          ABS(BR(NXCUT1(ICUT),IY,3)-
-     .              BR(NXCUT1(ICUT)+1,IY,4)) .LT. 1E-6 .AND.
-     .          ABS(BZ(NXCUT1(ICUT),IY,3)-
-     .              BZ(NXCUT1(ICUT)+1,IY,4)) .LT. 1E-6) THEN
-              NYCUT2(ICUT)=IY-1
-              GOTO 10
-            ENDIF
-          ENDDO
-10      ENDDO
-      ENDIF
-
-      call realloc_ctria('xycoord',(nx+1)*(ny+1))
-      DO IY=1,NY+1
-        DO IX=1,NX+1
-          XCOORD((IY-1)*(NX+1)+IX+NCOORD)=BR(IX,IY,1)*100.
-          YCOORD((IY-1)*(NX+1)+IX+NCOORD)=BZ(IX,IY,1)*100.
-        ENDDO
-      ENDDO
-      END
+c*//SONIN//
+cC=======================================================================
+cC          S U B R O U T I N E  S O N I N
+cC=======================================================================
+cC     READ PHYSICAL COORDINATES FROM SONNET FILE TO XCOORD, YCOORD
+c
+c      SUBROUTINE SONIN
+c      use cdimen
+c      use ctria
+c      use ccuts
+c      IMPLICIT NONE
+c
+c      DOUBLEPRECISION, allocatable :: BR(:,:,:), BZ(:,:,:)
+c      doubleprecision  CR, CZ, PIT
+c      doubleprecision, allocatable :: help3(:,:,:)
+c      INTEGER I0, I0E, I1, I2, I3, I4, IX0
+c      integer dim1, dim2
+c      CHARACTER*110 ZEILE
+c
+c*  READ PHYSICAL COORDINATES FROM SONNET FILE
+c*  ---------------------------------------------------------------------
+c*  INFORMATION FOR EACH CELL
+c*
+c*     NO. OF CELL     (IX,IY)     (BR(4),BZ(4))       (BR(3),BZ(3))
+c*
+c*            PITCH                             (CR,CZ)
+c*
+c*                                 (BR(1),BZ(1))       (BR(2),BZ(2))
+c      
+c      allocate(br(0:10,0:10,4))
+c      allocate(bz(0:10,0:10,4))
+c      read (20,*)
+c      read (20,*)
+c      read (20,*)
+c      read (20,*)
+c
+c4711  continue
+c
+c*  READ FIRST LINE OF CELL DATA
+c      read (20,'(a110)',end=99) zeile
+c      i0=index(zeile,'(')
+c      i0e=index(zeile,')')
+c      read (zeile(i0+1:i0e-1),*) ix,iy
+c
+c      if (ix .ge. size(br,1)) then
+c         dim1 = size(br,1)
+c         dim2 = size(br,2)
+c         allocate(help3(dim1,dim2,4))
+c         
+c         help3(1:dim1,1:dim2,1:4) = br(0:dim1-1,0:dim2-1,1:4)
+c         deallocate(br)
+c         allocate(br(0:dim1-1+10,0:dim2-1,4))
+c         br = 0.
+c         br(0:dim1-1,0:dim2-1,1:4) = help3(1:dim1,1:dim2,1:4)
+c         
+c         help3(1:dim1,1:dim2,1:4) = bz(0:dim1-1,0:dim2-1,1:4)
+c         deallocate(bz)
+c         allocate(bz(0:dim1-1+10,0:dim2-1,4))
+c         bz = 0.
+c         bz(0:dim1-1,0:dim2-1,1:4) = help3(1:dim1,1:dim2,1:4)
+c         
+c         deallocate(help3)
+c      endif
+c      if (iy .ge. size(br,2)) then
+c         dim1 = size(br,1)
+c         dim2 = size(br,2)
+c         allocate(help3(dim1,dim2,4))
+c         
+c         help3(1:dim1,1:dim2,1:4) = br(0:dim1-1,0:dim2-1,1:4)
+c         deallocate(br)
+c         allocate(br(0:dim1-1,0:dim2-1+10,4))
+c         br = 0.
+c         br(0:dim1-1,0:dim2-1,1:4) = help3(1:dim1,1:dim2,1:4)
+c         
+c         help3(1:dim1,1:dim2,1:4) = bz(0:dim1-1,0:dim2-1,1:4)
+c         deallocate(bz)
+c         allocate(bz(0:dim1-1,0:dim2-1+10,4))
+c         bz = 0.
+c         bz(0:dim1-1,0:dim2-1,1:4) = help3(1:dim1,1:dim2,1:4)
+c         
+c         deallocate(help3)
+c      endif
+c      
+c      i1=index(zeile,': (')
+c      i2=index(zeile(i1+3:),')')+i1+2
+c      read (zeile(i1+3:i2-1),*) br(ix,iy,4),bz(ix,iy,4)
+c      i3=index(zeile(i2+1:),'(')+i2
+c      i4=i3+index(zeile(i3+1:),')')
+c      read (zeile(i3+1:i4-1),*) br(ix,iy,3),bz(ix,iy,3)
+c      
+c*     READ SECOND LINE OF CELL DATA
+c      read (20,'(a110)') zeile
+c
+c*     READ THIRD LINE OF CELL DATA
+c      read (20,'(a110)') zeile
+c      i1=index(zeile,'(')
+c      i2=index(zeile,')')
+c      read (zeile(i1+1:i2-1),*) br(ix,iy,1),bz(ix,iy,1)
+c      i3=i2+index(zeile(i2+1:),'(')
+c      i4=i2+index(zeile(i2+1:),')')
+c      read (zeile(i3+1:i4-1),*) br(ix,iy,2),bz(ix,iy,2)
+c
+c      read (20,*,end=99)
+c
+c      goto 4711
+c
+c99    continue
+c      NX=IX-1
+c      NY=IY-1
+cC     SEARCHING FOR CUTS
+c      NNCUT=0
+c      DO IX=0,NX
+c        IF (ABS(BR(IX,0,2)-BR(IX+1,0,1)) .GT. 1E-6 .OR.
+c     .      ABS(BZ(IX,0,2)-BZ(IX+1,0,1)) .GT. 1E-6 .OR.
+c     .      ABS(BR(IX,0,3)-BR(IX+1,0,4)) .GT. 1E-6 .OR.
+c     .      ABS(BZ(IX,0,3)-BZ(IX+1,0,4)) .GT. 1E-6) THEN
+c          if (allocated(nxcut1)) then
+c             call realloc_ccuts('cut',1)
+c          else
+c             allocate(nxcut1(1))
+c             allocate(nxcut2(1))
+c             allocate(nycut1(1))
+c             allocate(nycut2(1))
+c          endif
+c          NNCUT=NNCUT+1
+c          NXCUT1(NNCUT)=IX
+c          DO IX0=0,NX
+c            IF (ABS(BR(IX,0,2)-BR(IX0,0,1)) .LT. 1E-6 .AND.
+c     .          ABS(BZ(IX,0,2)-BZ(IX0,0,1)) .LT. 1E-6 .AND.
+c     .          ABS(BR(IX,0,3)-BR(IX0,0,4)) .LT. 1E-6 .AND.
+c     .          ABS(BZ(IX,0,3)-BZ(IX0,0,4)) .LT. 1E-6) THEN
+c              NXCUT2(NNCUT)=IX0
+c            ENDIF
+c          ENDDO
+c          NYCUT1(NNCUT)=0
+c        ENDIF
+c      ENDDO
+c      IF (NNCUT .GT. 0) THEN
+c        DO ICUT=1,NNCUT
+c          DO IY=0,NY+1
+c            IF (ABS(BR(NXCUT1(ICUT),IY,2)-
+c     .              BR(NXCUT1(ICUT)+1,IY,1)) .LT. 1E-6 .AND.
+c     .          ABS(BZ(NXCUT1(ICUT),IY,2)-
+c     .              BZ(NXCUT1(ICUT)+1,IY,1)) .LT. 1E-6 .AND.
+c     .          ABS(BR(NXCUT1(ICUT),IY,3)-
+c     .              BR(NXCUT1(ICUT)+1,IY,4)) .LT. 1E-6 .AND.
+c     .          ABS(BZ(NXCUT1(ICUT),IY,3)-
+c     .              BZ(NXCUT1(ICUT)+1,IY,4)) .LT. 1E-6) THEN
+c              NYCUT2(ICUT)=IY-1
+c              GOTO 10
+c            ENDIF
+c          ENDDO
+c10      ENDDO
+c      ENDIF
+c
+c      call realloc_ctria('xycoord',(nx+1)*(ny+1))
+c      DO IY=1,NY+1
+c        DO IX=1,NX+1
+c          XCOORD((IY-1)*(NX+1)+IX+NCOORD)=BR(IX,IY,1)*100.
+c          YCOORD((IY-1)*(NX+1)+IX+NCOORD)=BZ(IX,IY,1)*100.
+c        ENDDO
+c      ENDDO
+c      END
 
 *//TRIANG//
 C=======================================================================
@@ -574,65 +577,132 @@ C     FIND NEIGHBOURS
       use ccuts
       IMPLICIT NONE
 
-      INTEGER I, J, K, L, M, IS
+      INTEGER I, J, K, KK, L, M, IS, INCR
+      DATA INCR /1000/
       LOGICAL PARA
+      LOGICAL DBG, DBG0
+#ifdef DBG
+      DATA DBG /.false./, DBG0 /.false./
+#else
+      DATA DBG /.true./, DBG0 /.true./
+#endif
 
       CALL GRSPTS(25)
       CALL GRNWPN(6)
 13    CONTINUE
-      DO ITRIA1=1,NTRIA1
+
+c loop over triangles (a) from tria
+c neighr(i,k).ne.0 -> side k of triangle i is on the tria grid edge
+
+      DO ITRIA1=1,NTRIA1 !{
+c        dbg0=itria1.eq.1   !###
+        if(dbg0) then !{
+          print *,'itria1,ntria1,ntria=',itria1,ntria1,ntria
+          print *,'neighr=',(neighr(itria1,k),k=1,3)
+          print *,'neighb=',(neighb(itria1,k),k=1,3)
+        end if !}
         IF (ABS(NEIGHR(ITRIA1,1))+ABS(NEIGHR(ITRIA1,2))+
-     .      ABS(NEIGHR(ITRIA1,3)) .NE. 0) THEN
+     .      ABS(NEIGHR(ITRIA1,3)) .NE. 0) THEN !{
 C         ELEMENT ITRIA1 HAT MINDESTENS EINE SEITE AUF BEGRENZUNGS-
 C         KONTUR
-          DO ITRIA=NTRIA1+1,NTRIA
+
+c loop over triangles (b) inside the b2 grid
+
+          DO ITRIA=NTRIA1+1,NTRIA !{
+c            dbg=dbg0.and.itria.eq.1363  !###
+            if(dbg) then !{
+              print *,'itria=',itria
+              print *,'neighr=',(neighr(itria,k),k=1,3)
+              print *,'neighb=',(neighb(itria,k),k=1,3)
+            end if !}
             IF (ABS(NEIGHR(ITRIA,1))+ABS(NEIGHR(ITRIA,2))+
-     .          ABS(NEIGHR(ITRIA,3)).NE.0) THEN
+     .          ABS(NEIGHR(ITRIA,3)).NE.0) THEN !{
 C             ELEMENT ITRIA HAT MINDESTENS EINE SEITE AUF BEGRENZUNGS-
 C             KONTUR
-              DO I=1,3
+c loop over the sides of triangle (a)
+              DO I=1,3 !{
                 J=I+1
                 IF (J .EQ. 4) J = 1
-                DO K=1,3
+c loop over the sides of triangle (b)
+                DO K=1,3 !{
                   L=K+1
                   IF (L .EQ. 4) L = 1
                   M=L+1
                   IF (M .EQ. 4) M = 1
+                  if(dbg) then !{
+                    print '(a,t12,3i8/t12,3i8)','triangles',
+     ,                (tria(itria1,kk),kk=1,3),
+     ,                (tria(itria ,kk),kk=1,3)
+                  end if !}
                   IF ((TRIA(ITRIA1,I) .EQ. TRIA(ITRIA,L)) .AND.
-     .                (TRIA(ITRIA1,J) .EQ. TRIA(ITRIA,K))) THEN
+     .                (TRIA(ITRIA1,J) .EQ. TRIA(ITRIA,K))) THEN !{
+c two corners of triangle (b) coincide with two corners of triangle (a)
                     NEIGHB(ITRIA1,I) = ITRIA
                     NEIGHS(ITRIA1,I) = K
                     NEIGHR(ITRIA1,I) = 0
                     NEIGHB(ITRIA,K) = ITRIA1
                     NEIGHS(ITRIA,K) = I
                     NEIGHR(ITRIA,K) = 0
+                    if(dbg) then !{
+                      
+                    end if !}
                     CALL GRJMP(REAL(XCOORD(TRIA(ITRIA1,I))),
      .                         REAL(YCOORD(TRIA(ITRIA1,I))))
                     CALL GRDRW(REAL(XCOORD(TRIA(ITRIA1,J))),
      .                         REAL(YCOORD(TRIA(ITRIA1,J))))
-                  ENDIF
+                  ENDIF !}
+                  if(dbg) then !{
+                    print *,'neighr1',neighr(itria1,i),neighr(itria,k)
+                  end if !}
                   IF ((NEIGHR(ITRIA1,I) .NE. 0) .AND.
-     .                (NEIGHR(ITRIA,K) .NE. 0) .AND.
-     .                (PARA(XCOORD(TRIA(ITRIA1,J)),
+     .                (NEIGHR(ITRIA,K) .NE. 0)) then !{
+c edges (i) and (k) of triangles (a) and (b) are of different length 
+c but still have unindentified neighbors
+                  if(dbg) then !{
+                    print *,'tria j k i l:',TRIA(ITRIA1,J),
+     ,                        TRIA(ITRIA,K),TRIA(ITRIA1,I),TRIA(ITRIA,L)
+                    print *,'para: ',PARA(XCOORD(TRIA(ITRIA1,J)),
+     .                                    YCOORD(TRIA(ITRIA1,J)),
+     .                                    XCOORD(TRIA(ITRIA1,I)),
+     .                                    YCOORD(TRIA(ITRIA1,I)),
+     .                                    XCOORD(TRIA(ITRIA,K)),
+     .                                    YCOORD(TRIA(ITRIA,K)),
+     .                                    XCOORD(TRIA(ITRIA,L)),
+     .                                    YCOORD(TRIA(ITRIA,L)))
+                    print '(2a17)','xcoord','ycoord'
+                    print '(a,1p,t4,2e17.8)',
+     ,                           'j',xcoord(tria(itria1,j))*10.,
+     ,                                ycoord(tria(itria1,j))*10.,
+     ,                           'i',xcoord(tria(itria1,i))*10.,
+     ,                                ycoord(tria(itria1,i))*10.,
+     ,                           'k',xcoord(tria(itria,k))*10.,
+     ,                                ycoord(tria(itria,k))*10.,
+     ,                           'l',xcoord(tria(itria,l))*10.,
+     ,                                ycoord(tria(itria,l))*10.
+                  end if !}
+                  if(PARA(XCOORD(TRIA(ITRIA1,J)),
      .                      YCOORD(TRIA(ITRIA1,J)),
      .                      XCOORD(TRIA(ITRIA1,I)),
      .                      YCOORD(TRIA(ITRIA1,I)),
      .                      XCOORD(TRIA(ITRIA,K)),
      .                      YCOORD(TRIA(ITRIA,K)),
      .                      XCOORD(TRIA(ITRIA,L)),
-     .                      YCOORD(TRIA(ITRIA,L)))) .AND.
+     .                      YCOORD(TRIA(ITRIA,L))) .AND.
      .                (TRIA(ITRIA1,J) .EQ. TRIA(ITRIA,K)) .AND.
-     .                (TRIA(ITRIA1,I) .NE. TRIA(ITRIA,L))) THEN
+     .                (TRIA(ITRIA1,I) .NE. TRIA(ITRIA,L))) THEN !{
                     NTRIA = NTRIA + 1
-                    call realloc_ctria('neigh',1)
-                    call realloc_ctria('tria',1)
-                    call realloc_ctria('trixy',1)
-                    DO IS=1,3
+                    if(dbg) print *,'ntria,size',ntria,size(tria,1)
+                    if(size(tria,1).lt.ntria) then !{
+                      call realloc_ctria('neigh',incr)
+                      call realloc_ctria('tria',incr)
+                      call realloc_ctria('trixy',incr)
+                    end if !}
+                    DO IS=1,3 !{
                       TRIA(NTRIA,IS) = TRIA(ITRIA,IS)
                       NEIGHB(NTRIA,IS) = NEIGHB(ITRIA,IS)
                       NEIGHS(NTRIA,IS) = NEIGHS(ITRIA,IS)
                       NEIGHR(NTRIA,IS) = NEIGHR(ITRIA,IS)
-                    ENDDO
+                    ENDDO !}
                     TRIA(NTRIA,K) = TRIA(ITRIA1,I)
                     NEIGHB(NTRIA,M) = ITRIA
                     NEIGHS(NTRIA,M) = L
@@ -666,7 +736,11 @@ C             KONTUR
      .                         REAL(YCOORD(TRIA(ITRIA,L))))
                     CALL GRNWPN(6)
                     GOTO 13
-                  ENDIF
+                  ENDIF !}
+                  end if !}
+                  if(dbg) then !{
+                    print *,'neighr2',neighr(itria1,i),neighr(itria,k)
+                  end if !}
                   IF ((NEIGHR(ITRIA1,I) .NE. 0) .AND.
      .                (NEIGHR(ITRIA,K) .NE. 0) .AND.
      .                (PARA(XCOORD(TRIA(ITRIA1,I)),
@@ -678,17 +752,20 @@ C             KONTUR
      .                      XCOORD(TRIA(ITRIA,K)),
      .                      YCOORD(TRIA(ITRIA,K)))) .AND.
      .                (TRIA(ITRIA1,I) .EQ. TRIA(ITRIA,L)) .AND.
-     .                (TRIA(ITRIA1,J) .NE. TRIA(ITRIA,K))) THEN
+     .                (TRIA(ITRIA1,J) .NE. TRIA(ITRIA,K))) THEN !{
                     NTRIA = NTRIA + 1
-                    call realloc_ctria('neigh',1)
-                    call realloc_ctria('tria',1)
-                    call realloc_ctria('trixy',1)
-                    DO IS=1,3
+                    if(dbg) print *,'ntria,size',ntria,size(tria,1)
+                    if(size(tria,1).lt.ntria) then !{
+                      call realloc_ctria('neigh',incr)
+                      call realloc_ctria('tria',incr)
+                      call realloc_ctria('trixy',incr)
+                    end if !}
+                    DO IS=1,3 !{
                       TRIA(NTRIA,IS) = TRIA(ITRIA,IS)
                       NEIGHB(NTRIA,IS) = NEIGHB(ITRIA,IS)
                       NEIGHS(NTRIA,IS) = NEIGHS(ITRIA,IS)
                       NEIGHR(NTRIA,IS) = NEIGHR(ITRIA,IS)
-                    ENDDO
+                    ENDDO !}
                     TRIA(NTRIA,L) = TRIA(ITRIA1,J)
                     NEIGHB(NTRIA,L) = ITRIA
                     NEIGHS(NTRIA,L) = M
@@ -722,52 +799,66 @@ C             KONTUR
      .                         REAL(YCOORD(TRIA(ITRIA,L))))
                     CALL GRNWPN(6)
                     GOTO 13
-                  ENDIF
-                ENDDO
-              ENDDO
-            ENDIF
-          ENDDO
-        ENDIF
-      ENDDO
+                  ENDIF !}
+                ENDDO !}
+              ENDDO !}
+            ENDIF !}
+          ENDDO !}
+        ENDIF !}
+        dbg=.false.
+      ENDDO !}
       END
 
 *//PARA//
 C=======================================================================
 C          F U N C T I O N  P A R A
 C=======================================================================
-C     CHECK PARALLELISM OF TWO MARGINS
+C     CHECK COLINEARITY OF TWO MARGINS
 
       FUNCTION PARA(XP2,YP2,XP1,YP1,XQ1,YQ1,XQ2,YQ2)
       IMPLICIT NONE
+      double precision tol,tol2,tolx,toly
+      parameter (tol=1.d-6)
       DOUBLE PRECISION XP2,YP2,XP1,YP1,XQ1,YQ1,XQ2,YQ2
       LOGICAL PARA
 
 cxpb  We need to have not only (P1,P2) parallel to (Q1,Q2) but
 cxpb  also (P1,P2) shorter than (Q1,Q2)
  
-      IF (ABS(XP2-XP1) .GT. 1.E-6) THEN
-        IF (ABS(XQ1-XQ2) .GT. 1.E-6) THEN
-          IF (ABS(ABS((YP2-YP1)/((YQ1-YQ2)+1.e-20)) -
-     .            ABS((XP2-XP1)/(XQ1-XQ2))) .LT. 1.E-6) THEN
-            PARA = ABS(XP2-XP1).LE.ABS(XQ2-XQ1)
+      tolx=tol*abs(xp1+xq1+xp2+xq2)/4.
+      toly=tol*abs(yp1+yq1+yp2+yq2)/4.
+      tol2=tolx*toly
+
+cank  The segments must be not only parallel, but colinear {
+c      para= abs((xp1-xq1)*(yq2-yq1)-(yp1-yq1)*(xq2-xq1)).le.tol2 .and.
+c     .      abs((xp2-xq1)*(yq2-yq1)-(yp2-yq1)*(xq2-xq1)).le.tol2
+      IF (ABS(XQ2-XQ1) .GT. TOLX) THEN
+        IF (ABS(YQ1-YQ2) .GT. TOLY) THEN
+          IF (ABS(ABS((YP2-YP1)/(YQ1-YQ2)) -
+     .            ABS((XP2-XP1)/(XQ1-XQ2))) .LT. TOL) THEN
+            PARA = ABS(XP2-XP1).LE.ABS(XQ2-XQ1)+TOLX
           ELSE
             PARA = .FALSE.
           ENDIF
         ELSE
-          PARA = .FALSE.
+          PARA = ABS(YP1-YP2) .LE. TOLY
         ENDIF
       ELSE
-        IF (ABS(XQ1-XQ2) .GT. 1.E-6) THEN
+        IF (ABS(XP1-XP2) .GT. TOLX) THEN
           PARA = .FALSE.
         ELSE
-          PARA = ABS(YP2-YP1).LE.ABS(YQ2-YQ1)
+          PARA = ABS(YP2-YP1).LE.ABS(YQ2-YQ1)+TOLY
         ENDIF
       ENDIF
+cank }
 c DPC: additional constraint - (p1,p2) should be contained by (q1,q2)
-      if(para) para=min(xp1,xp2).ge.min(xq1,xq2)
-      if(para) para=min(yp1,yp2).ge.min(yq1,yq2)
-      if(para) para=max(xp1,xp2).le.max(xq1,xq2)
-      if(para) para=max(yp1,yp2).le.max(yq1,yq2)
+cank: need to introduce tolerance here, 
+c     otherwise some corners are not detected
+
+      if(para) para=min(xp1,xp2)+tolx.ge.min(xq1,xq2)
+      if(para) para=min(yp1,yp2)+toly.ge.min(yq1,yq2)
+      if(para) para=max(xp1,xp2)-tolx.le.max(xq1,xq2)
+      if(para) para=max(yp1,yp2)-toly.le.max(yq1,yq2)
 
       END
 

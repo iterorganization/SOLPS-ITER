@@ -1,6 +1,6 @@
 #! /usr/bin/env ksh
 
-#  VERSION : 25.07.2008 
+#  VERSION : 18.10.2016 21:48
 
 . functions.ksh
 
@@ -23,7 +23,15 @@ set -A f -- $TRIATRI
 gkseps=gli.eps
 eirinp=triang.eir
 eirhed=triang.hed
-eirout=fort.78
+[ "$COMPILER" = 'HP' ] && {
+  b2agout=ftn30
+  eirout=ftn78
+  eirlink=ftn1
+} || {
+  b2agout=fort.30
+  eirout=fort.78
+  eirlink=fort.1
+}
 eirlog=eirtria.log
 triain=tria.in
 trialog=tria.log
@@ -49,6 +57,11 @@ unset f
 
 triaoutlist="$trianodes $triacells $trialinks"
 trigoutlist="$trignodes $trigcells $triglinks"
+[ "$COMPILER" = 'HP' ] && {
+triglnklist="ftn33 ftn34 ftn35"
+} || {
+triglnklist="fort.33 fort.34 fort.35"
+}
 
 NAME=`basename $0`
 stty erase ^H
@@ -57,7 +70,7 @@ Help="
 Uinp    (u) run uinp to produce the input files for the initial short run of Eirene;
         (U) run uinp -l to make first the necessary links to the DG output (run first the 
             lns command from the DG environment to link the DG output to the standard place);
-B2ag    (b) run b2ag to produce the fort.30 file;
+B2ag    (b) run b2ag to produce the $b2agout file;
 Eirene  (e) run eirobjx to produce the geometry data for tria;
 Tria    (t) run tria to generate the triangular mesh outside the regular B2.5 grid;
 triaGeom(g) run triageom to combine the triangular mesh with the regular B2.5 grid;
@@ -67,8 +80,9 @@ Store   (s) store the combined mesh, giving it a serial number and linking to fo
 Convert (c) convert the triangular (c) or combined (C) mesh into a DG template;
 List    (l) list the meshes present in the archive;
 Remove  (r) remove the specified meshes from the archive;
-reMap   (m) run b2yt to remap the B2.5 data on a new grid and to produce a new fort.30 file (TBD!);
+reMap   (m) run b2yt to remap the B2.5 data on a new grid and to produce a new $b2agout file (TBD!);
 trAp    (a) set a trap in tria for debugging purposes;
+Inquire (i) inquire about a reference point in the triangulation;
 Quit    (q) quit.
 
 Options C, l, r can contain an argument separated by \"-\". This argument for C is the serial
@@ -104,12 +118,21 @@ $Help"
 
 TRIA="${SOLPSTOP}/modules/Triang/builds/$toolchain/tria"
 TRIAGEOM="${SOLPSTOP}/modules/Triang/builds/$toolchain/triageom"
+TRIAINQ="${SOLPSTOP}/modules/Triang/builds/$toolchain/triainq"
 EIRENE="${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.$toolchain/eirobjx"
 
 griddir=${CARRE_GRIDDIR-$SOLPSTOP/modules/Carre/meshes/${DEVICE-iter}}
-modelname=`lln dg.dgo`
-dgname=`basename $modelname`
-carre_stem=`echo $dgname | sed -e 's|\.dgo||' `
+[ -s dg.dgo ] && {
+  modelname=`lln dg.dgo`
+  [ -s $modelname ] && {
+    dgname=`basename $modelname`
+    carre_stem=`echo $dgname | sed -e 's|\.dgo||' `
+  } || {
+    print -u2 -- "No valid DG model found. Limited capabilities available only"
+  }
+} || {
+  print -u2 -- "No valid dg.dgo file found. Did you run lns first?"
+}
 [ -d $griddir ] && {
   n=1
   set -- $griddir/$carre_stem.v[0-9][0-9][0-9].geo
@@ -130,7 +153,7 @@ carre_stem=`echo $dgname | sed -e 's|\.dgo||' `
                print -u2 -- "Unable to create the directory. Check the permissions in ${griddir}%/*"
                break 2
                }; break;;
-       ( n|N ) ; break 2;;
+       ( n|N ) break 2;;
        (  *  ) print -u2 -n -- "Please answer with either y or n: ";;
     esac; }
   }; done
@@ -147,6 +170,10 @@ e=
 }
 [ -x "$TRIAGEOM" ] || {
   print -u2 -- "$NAME: $TRIAGEOM not found. Check run environment settings"
+  e=y
+}
+[ -x "$TRIAINQ" ] || {
+  print -u2 -- "$NAME: $TRIAINQ not found. Check run environment settings"
   e=y
 }
 [ -x "$EIRENE" ] || {
@@ -166,7 +193,7 @@ export PLOT_IT_STEM='tria'
 N=
 
 while true; do {
-  print -u2 -n -- "Help, Uinp, B2ag, Eirene, Tria, triaGeom, Plot, View, Store, Convert, List, Remove, reMap, Quit ? ($q)"
+  print -u2 -n -- "Help, Uinp, B2ag, Eirene, Tria, triaGeom, Plot, View, Store, Convert, List, Remove, reMap, Inquire, Quit ? ($q)"
   while true; do {
     read u
     extra="${u#*-}"
@@ -174,10 +201,10 @@ while true; do {
     { case "${u:-$q}" in
       ( h|H )                                               # help:
             echo "$Help"; break;;
-      ( u   )                                               # run uinp to produce the input for Eirene:
+      (  u  )                                               # run uinp to produce the input for Eirene:
             uinp
             N=
-            [ -r fort.30 ] && q=e || {
+            [ -r $b2agout ] && q=e || {
               [ -r b2ag.dat ] && {
                 ln -sf $griddir/$carre_stem.v$n.geo .
                 /bin/echo -e "The last grid found is : $carrename"
@@ -186,7 +213,7 @@ while true; do {
               q=b
             }
             break;;  
-      ( U   )                                               # run uinp to produce the input for Eirene:
+      (  U  )                                               # run uinp to produce the input for Eirene:
             uinp -l
             [ -L uinput.dg ] && {
               TRIADIR=$TRIADIR_back
@@ -194,7 +221,7 @@ while true; do {
               . triang.conf
             }
             N=
-            [ -r fort.30 ] && q=e || {
+            [ -r $b2agout ] && q=e || {
               [ -r b2ag.dat ] && {
                 ln -sf $griddir/$carre_stem.v$n.geo .
                 /bin/echo -e "The last grid found is : $carrename"
@@ -206,28 +233,28 @@ while true; do {
       ( b|B )                                               # run b2ag to produce fort.30 file:
             [ -r b2fplasma ] && {
               print -u2 -- "Command line: echo f30 | b2plot > b2pl.prt"
-              [ -r fort.30 ] && rm fort.30
+              [ -r $b2agout ] && rm $b2agout
               echo f30 | b2plot > b2pl.prt
-              [ -r b2pl.exe.dir/fort.30 ] && {
-                mv b2pl.exe.dir/fort.30 .
+              [ -r b2pl.exe.dir/$b2agout ] && {
+                mv b2pl.exe.dir/$b2agout .
                 rmdir b2pl.exe.dir
-                print -u2 -- "Produced fort.30 file"
+                print -u2 -- "Produced $b2agout file"
                 q=e
               } || {
-                print -u2 -- "Could not produce the fort.30 file. Please provide separately"
+                print -u2 -- "Could not produce the $b2agout file. Please provide separately"
                 q=u
               }
             } || {
-              print -u2 -- "Command line: gmake -f ${SOLPSTOP}/runs/Makefile b2ag.prt > b2ag.log"
+              print -u2 -- "Command line: ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2ag.prt > b2ag.log"
               [ -r b2ag.prt ] && rm b2ag.prt
-              [ -r fort.30 ] && rm fort.30
-              gmake -f ${SOLPSTOP}/runs/Makefile b2ag.prt > b2ag.log
-              [ -r fort.30 ] && {
-                rmdir b2ag.exe.dir
-                print -u2 -- "Produced fort.30 file"
+              [ -r $b2agout ] && rm $b2aagout
+              ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2ag.prt > b2ag.log
+              [ -r $b2agout ] && {
+                [ -d b2ag.exe.dir ] && rmdir b2ag.exe.dir
+                print -u2 -- "Produced $b2agout file"
                 q=e
               } || {
-                print -u2 -- "Could not produce the fort.30 file. Please provide separately"
+                print -u2 -- "Could not produce the $b2agout file. Please provide separately"
                 q=u
               }
             }
@@ -236,15 +263,15 @@ while true; do {
             [ -r AMJUEL ] || {
               setup_baserun_eirene_links
             } 
-            [ -r fort.30 ] && {
+            [ -r $b2agout ] && {
               [ -r $eirinp ] && {
                 N=
                 print -u2 -- "Starting Eirene - may take a while..."
                 print -u2 -- "Command line: $EIRENE < triang.eir > $eirlog"
                 [ -r $eirout ] && rm $eirout
-                ln -sf "$eirinp" fort.1
+                ln -sf "$eirinp" "$eirlink"
                 $EIRENE < triang.eir > "$eirlog"
-                rm fort.1
+                rm $eirlink
                 [ -s "$eirout" ] && [ -r "$eirout" ] && {
                   (cat "$eirhed"; tail --lines=+2 "$eirout") > "$triain" && q=t || {
                     print -u2 -- "Something is wrong with $eirout ==> Check $eirlog"
@@ -262,7 +289,7 @@ while true; do {
               }
               true
             } || {
-              print -u2 -- "No fort.30 - run b2ag or b2plot first"
+              print -u2 -- "No $b2agout - run b2ag or b2plot first"
               q=b
               [ -s b2mn.dat ] && [ -r b2mn.dat ] && q=m
             }
@@ -271,6 +298,7 @@ while true; do {
             [ -r "$triain" ] && [ -s "$triain" ] && {
               N=
               print -u2 -- "Starting a TRIA run."
+              print -u2 -- "Command line: $TRIA > $trialog"
               print -u2 -- "If it continues more than a couple of minutes, kill with Ctrl-C"
               print -u2 -- "and check the output - probably, the polygon sides are wrong"
               print -u2 -- "In that case, consider re-running DG and asking for larger triangles"
@@ -279,7 +307,7 @@ while true; do {
               check_files $triaoutlist && q=g || {
                 print -u2 -- "Not all output files, $triaoutlist, are produced"
                 print -u2 -- "    ==> Check $trialog"
-                q=u 
+                q=p
               }
               true
             } || {
@@ -288,13 +316,20 @@ while true; do {
             } 
             break;;
       ( g|G )                                               # run TRIAGEOM to make combined mesh:  
-            [ -r fort.30 ] && [ -s fort.30 ] && {
+            [ -r $b2agout ] && [ -s $b2agout ] && {
               check_files $triaoutlist && {
                 N=
                 print -u2 -- "Starting a TRIAGEOM run"
+                print -u2 -- "Command line: $TRIAGEOM > $triglog"
                 "$TRIAGEOM" > $triglog
                 [ -s "$gkseps" ] && [ -r "$gkseps" ] && mv "$gkseps" "$trigeps"
-                check_files $trigoutlist && q=s || {
+                check_files $trigoutlist && {
+                  q=s
+                  set -A L -- $triglnklist
+                  ln -sf $trignodes ${L[0]}
+                  ln -sf $trigcells ${L[1]}
+                  ln -sf $triglinks ${L[2]}
+                } || {
                   print -u2 -- "Not all output files, $trigoutlist, are produced"
                   print -u2 -- "    ==> Check $triglog"
                   q=u
@@ -307,7 +342,7 @@ while true; do {
               }
               true
             } || {
-              print -u2 -- "No valid fort.30 file is found. Run b2ag or b2plot first"
+              print -u2 -- "No valid $b2agout file is found. Run b2ag or b2plot first"
               q=b
             }
             break;;
@@ -374,6 +409,7 @@ while true; do {
               for x in $TRIATRI; do {
                 ln -sf ${f[i]} $stem.$x || {
                   print -u2 -- "Unable to link ${f[i]} to $stem.$x ==> check the file permissions"
+                  q=q
                   break 2
                 }
                 ((i+=1))
@@ -385,6 +421,7 @@ while true; do {
                   { case $u in
                     ( y|Y ) mkdir -p "$CNVTRIOUT" || {
                             print -u2 -- "Unable to create the directory. Check the permissions in ${CNVDIR}%/*"
+                            q=q
                             break 2
                             };
                             mkdir -p $CNVTRIOUT/templates 
@@ -401,6 +438,7 @@ while true; do {
                   { case $u in
                     ( y|Y ) mkdir -p "$CNVTRIOUT/templates" || {
                             print -u2 -- "Unable to create the directory. Check the permissions in ${CNVDIR}%/*"
+                            q=q
                             break 2
                             };
                             break;;
@@ -412,6 +450,7 @@ while true; do {
               print -u2 -- "Command line: cnvtria $stem"
               cnvtria $stem || {
                 print -u2 -- "Error $? reported from cnvtria"
+                q=g
                 break
               }
               ln -sf $templatedir/$stem.tria $stem.tria.ogr
@@ -454,6 +493,7 @@ while true; do {
               for x in $TRIATRI; do {
                 ln -sf ${f[i]} $stem.$x || {
                   print -u2 -- "Unable to link ${f[i]} to $stem.$x ==> check the file permissions"
+                  q=q
                   break 2
                 }
                 ((i+=1))
@@ -465,6 +505,7 @@ while true; do {
                   { case $u in
                     ( y|Y ) mkdir -p "$CNVTRIOUT" || {
                             print -u2 -- "Unable to create the directory. Check the permissions in ${CNVDIR}%/*"
+                            q=q
                             break 2
                             };
                             mkdir -p $CNVTRIOUT/templates 
@@ -481,6 +522,7 @@ while true; do {
                   { case $u in
                     ( y|Y ) mkdir -p "$CNVTRIOUT/templates" || {
                             print -u2 -- "Unable to create the directory. Check the permissions in ${CNVDIR}%/*"
+                            q=q
                             break 2
                             };
                             break;;
@@ -529,18 +571,22 @@ while true; do {
               ) > $TRIPLT.cms
               plot_set $TRIPLT.cms
               [ -s "$TRIPLT.ps" ] && {
-                $GV $TRIPLT.ps& 
+                $GV $TRIPLT.ps &
+                q=t
               } || {
                 print -u2 -- "No $TRIPLT.ps file to plot"
+                q=q
               }
               true
             } || {
               print -u2 -- "The plots were created after the last call to tria - no reason to do it again."
               print -u2 -- "Check the files $STRDAT and $TRIPLT.ps"
+              q=t
             }; unset e; break;;
       (  v  )                                               # view graphical output of TRIA:
             [ -r  "$triaeps" ] && {
               $GV $triaeps &
+              q=q
               true
             } || {
               print -u2 -- "No $triaeps file found - run TRIA first"
@@ -550,6 +596,7 @@ while true; do {
             [ -r  "$trigeps" ] && {
               $GV $trigeps &
               true
+              q=q
             } || {
               print -u2 -- "No $trigeps file found - run TRIAGEOM first or use \"v\" to see the TRIA output"
               q=v
@@ -573,6 +620,7 @@ while true; do {
             w=
             [ -z "$COLUMNS" ] && c=8 || { ((c=($COLUMNS-$m)/($LEN+4))); [ "$c" -lt 1 ] && c=1; w="-w $COLUMNS"; }
             for n in $listo; do echo "$n" | tr _ \ ; done | pr -T $w --columns=$c -o $m
+            q=q
             break;;
       ( r|R )                                               # remove:
             [ -z "$extra" ] && {
@@ -599,14 +647,15 @@ while true; do {
               read u
               { case $u in
                 ( y|Y ) rm -f $TRIADIR/$TRIASTEM.$excom.$tricom $tmplcom
-                         break;;
+                        break;;
                 ( n|N ) q=q; break 2;;
                 (  *  ) print -u2 -n -- "Please answer with either y or n: ";;
               esac; }
             }; done
+            q=l
             break;;
       ( m|M )                                               # remap using b2yt:
-            print -u2 -- "Option is not realised yet. Please produce the fort.30 file separately"; break
+            print -u2 -- "Option is not realised yet. Please produce the $b2agout file separately"; break
             ####
             break;;
       ( a|A  )                                               # Trap for tria:
@@ -620,11 +669,24 @@ while true; do {
             }
             q=t
             break;;
+      ( i|I )                                               # inquire:
+            check_files $triglnklist && q=q || {
+              print -u2 -- "Not all output files, $triglnklist, are produced"
+              print -u2 -- "Probably, some of the previous steps forgotten?"
+              q=g
+              break
+            }
+            while { print -u2 -- "Enter the coordinates of the reference point [mm] or the cell number to investigate (<Return> to end)"; read u; [ -n "$u" ]; }; do {
+              echo "$u" | $TRIAINQ
+            }; done
+            q=i
+            break;;
       ( q|Q )                                               # quit:
             break 2;;
       (  *  )
             echo 'Illegal response.'
             echo 'Please use letters capitalized in the list or press ENTER for default'
+            q=h
             continue;;
      esac; }
   }; done

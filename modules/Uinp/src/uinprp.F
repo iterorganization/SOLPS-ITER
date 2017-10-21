@@ -16,12 +16,13 @@ c=======================================================================
       real u,uzdim,rm_hlp,rx_hlp,zm_hlp,zx_hlp
       parameter (uzdim=1.e20)
       character utxsfa*44
-      external xerrab, xertst
+      external xerrab, xertst, subini, subend
       data utxsfa / ' - target edge (to be modified by GEOUSR)' /
       data m_hlp / n_hlp*0 /
 c=======================================================================
 c*** Check some dimensions
 
+      call subini ('uinprp')
       uex=.false.
       if(index(topo,'SN').eq.1) then !{
       	if(mnpr.ne.3) then !{
@@ -87,8 +88,9 @@ c*** Modify the toroidal dimension in p1, p2 arrays
 
       if(zaa.eq.0.) then !{
       	zaa=0.2*3.1415926535898*xlpcntr(1)
-	write(*,*) 'The O-point was taken for the major radius : ',
-     ,	      	      	      	      	      	      	  0.1*xlpcntr(1)
+	write(*,'(1x,a,f11.4,a)')
+     ,   'The O-point was taken for the major radius : ',
+     ,	       	      	        	    0.1*xlpcntr(1),' cm.'
       else if(zaa.lt.0.) then !}{
 
 c*** Toroidal geometry
@@ -246,12 +248,25 @@ c*** Particle and reaction data (sect. 4 and 5)
      
       call uinprppt
       call uinprprc
+      call uinprpbl
 c-----------------------------------------------------------------------
 c*** Grid dimensions and topology (cuts, targets)
       call uinprpgr
 
 c*** Boundary conditions at the grid edges (including recycling)
       call uinprpbn
+
+c*** Prepare the data for triangular mesh
+c***                               - needed also for regular input files
+      call uinptriang(uex)
+c      if(uex) then !{
+        do i=1,nstsi
+          ilplg(i)=ilplgu(i)
+        end do !}
+        do i=1,nlim
+          jlplg(i)=jlplgu(i)
+        end do !}
+c      end if !}
 
 c*** Neutral sources due to gas puffing
       call uinpsrcg
@@ -268,7 +283,7 @@ c*** Surface-particle data (sect. 6C)
 c*** Surface interaction cards
       call uinpscrd
 c-----------------------------------------------------------------------
-c*** Mid-plane location
+c*** Midplane location
 
       jxi=mod(jxi,nx+2)
       jxa=mod(jxa,nx+2)
@@ -377,7 +392,7 @@ c*** Additional tallies
 c*** Prepare the data for visualisation of the surface properties
 
 #ifdef DBG
-      print *,'uinprp: nsrfcls,msrfcls=',nsrfcls,msrfcls
+      print '(a,20i4)','uinprp: nsrfcls,msrfcls=',nsrfcls,msrfcls
       print *,'isrfclu'
       do j=1,nsrfclsx !{
         print '(8x,20i4)',(isrfclu(j,i),i=1,nvspfls)
@@ -426,17 +441,7 @@ c*** Set the VSP data for input.eir
         end do !}
       end do !}
 
-c*** Prepare the data for triangular mesh
-c***                               - needed also for regular input files
-      call uinptriang(uex)
-c      if(uex) then !{
-        do i=1,nstsi
-          ilplg(i)=ilplgu(i)      
-        end do !}
-        do i=1,nlim
-          jlplg(i)=jlplgu(i)
-        end do !}
-c      end if !}
-
 c=======================================================================
+      call subend ()
+      return
       end

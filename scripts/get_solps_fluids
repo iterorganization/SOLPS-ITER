@@ -1,0 +1,2 @@
+#! /bin/tcsh -f
+pipe_run.log | egrep -m 1 '^species' | awk '{for (j=3;j<=NF;j++) {printf $j; print "\t"}}' | awk.transpose

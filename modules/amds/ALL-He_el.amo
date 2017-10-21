@@ -1,8 +1,7 @@
 # Output file produced by amds version 1.04
 filevers 1
-reactns 33
+reactns 32
 HYDHEL H.1 3.1.8
-HYDHEL H.2 2.2.5
 HYDHEL H.2 2.2.9
 HYDHEL H.2 2.2.10
 HYDHEL H.2 2.3.9
@@ -39,7 +38,6 @@ group
 0
 0
 0
-0
 3
 6
 8
@@ -70,7 +68,6 @@ group
 11
 deltae
 0
-10.5
 15.4
 25
 24.55
@@ -107,7 +104,6 @@ massp
 0
 0
 0
-0
 1
 1
 1
@@ -138,7 +134,6 @@ massp
 1
 masst
 1
-2
 2
 2
 4
@@ -172,7 +167,6 @@ masst
 12
 rctype
 CX
-DS
 EI
 DS
 EI
@@ -205,7 +199,6 @@ EI
 CX
 CX
 tmin
-
 
 
 
@@ -271,10 +264,8 @@ tmax
 
 
 
-
 primpart
 H
-H2
 H2
 H2
 He
@@ -311,7 +302,6 @@ H+
 
 
 
-
 H+
 H+
 H+
@@ -342,7 +332,6 @@ H+
 H+
 product1
 H 
-H
 H2+
 H
 He+
@@ -377,7 +366,6 @@ H
 product2
 H+
 
-
 H+
 
 H+
@@ -410,7 +398,6 @@ C+
 C+
 nprdct1
 
-2
 
 
 
@@ -475,10 +462,8 @@ nprdct2
 
 
 
-
 eprdct1
 
-3
 
 5
 
@@ -511,7 +496,6 @@ eprdct1
 
 
 eprdct2
-
 
 
 5

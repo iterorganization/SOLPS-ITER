@@ -3,7 +3,7 @@ c  VERSION : 14.08.2003 23:15
 #include "DIMENSIONS.F"
 
 c*** The numbers of input blocks and variables to work on in one block
-      integer, parameter :: nblck=7, nkwrd=33, nnmdf=nblck*nkwrd
+      integer, parameter :: nblck=7, nkwrd=39, nnmdf=nblck*nkwrd
 
 c*** The maximum length of the keyword
       integer, parameter :: mxkwln=22
@@ -36,12 +36,14 @@ c***  lbusr   : the "user" section is to be modified
 c***  ltrvr   : the corresponding variable is text
 c***  lt8rvr  : the corresponding variable is text*8
 c***  lrrvr   : the corresponding variable is real
+c***  lspvr   : the corresponding variable is species-dependent
 c***  lprdckw : produce the corresponding line 
 
       logical lbb,lbv,lbusr,
-     ,	lbmdf(nkwrd,nblck),ltrvr(nkwrd,nblck),lt8rvr(nkwrd,nblck),
-     ,	lrrvr(nkwrd,nblck),lprdckw(nmxlyr,nmxblk,nkwrd,nblck)
+     ,  lbmdf(nkwrd,nblck),ltrvr(nkwrd,nblck),lt8rvr(nkwrd,nblck),
+     ,  lrrvr(nkwrd,nblck),lprdckw(nmxlyr,nmxblk,nkwrd,nblck),
+     ,  lspvr(nkwrd,nblck)
 
       common/uib2il/rniprm,iniprm,nmdbr,nmdlr,nmdpr,
-     ,	lbb,lbv,lbmdf,lbusr,ltrvr,lt8rvr,lrrvr,lprdckw
+     ,  lbb,lbv,lbmdf,lbusr,ltrvr,lt8rvr,lrrvr,lprdckw,lspvr
       common/uib2ch/chrbl,chrpl,cniprm,c8niprm

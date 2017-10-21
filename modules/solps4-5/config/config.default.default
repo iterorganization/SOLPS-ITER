@@ -19,3 +19,8 @@ LD = 			# loader
 LDOPTS = 		# options for loader
 
 LCPP =			# linking to Sonnet library and dependencies
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+

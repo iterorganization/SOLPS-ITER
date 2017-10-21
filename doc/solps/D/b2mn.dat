@@ -35,7 +35,6 @@
 'b2mndr_mvinc'     '1'
 'b2mndr_mvnum'     '0'
 'b2mndr_b2time'    '10'
-'b2mndr_na0eps'    '1e14'
 'b2mndr_cpu'       '182800.0'
 'b2mndr_savecpu'   '3600.0'
 'b2ux5p_nltrsol'   '0'    

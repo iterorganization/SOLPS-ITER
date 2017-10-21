@@ -1,2 +1,2 @@
 #! /bin/csh -f
-echo $argv | awk '{print 1.2398e-6*1.602176565e-19/$1}'
+echo $argv | awk '{print 1.239841815e-6*1.602176565e-19/$1}'

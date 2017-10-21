@@ -42,6 +42,8 @@ the files carre.log and traduit.log, respectively.
   export DEVICE=$u
 }
 
+[ "$SOLPS_CENTRAL" = 'yes' ] && DEVICE=$DEVICE/$USER
+
 # griddir=${CARRE_GRIDDIR-$SOLPSTOP/src/Sonnet/output/ascii/${Model_Class-iter}}
 # griddir=${CARRE_GRIDDIR-$SOLPSTOP/src/Sonnet/output/ascii/${DEVICE-iter}}
 export CARRE_TOPDIR=$SOLPSTOP/modules/Carre
@@ -186,9 +188,11 @@ do {
                 /bin/echo -e "DG model `basename $modelname` copied to $dgdir" >> CARRE.HISTORY
                 mv -f traduit.out $griddir/$grid_stem.v$m.geo && \
                   /bin/echo -e "The grid in B2.5 format is stored as $griddir/$grid_stem.v$m.geo"
-                ctrans -d ps.mono gmeta > $griddir/$grid_stem.v$m.ps && \
+                [ -x ctrans ] && {
+                  ctrans -d ps.mono gmeta > $griddir/$grid_stem.v$m.ps && \
                   /bin/echo -e "You can view the grid in PostScript format as $griddir/$grid_stem.v$m.ps"
-		/bin/echo -e "The grid is stored as $griddir/$grid_stem.v$m".geo >> CARRE.HISTORY
+                }
+		            /bin/echo -e "The grid is stored as $griddir/$grid_stem.v$m".geo >> CARRE.HISTORY
                 [ -n "$stordir" ] && {
                   [ -d "$stordir" ] || {
                     [ -a "$stordir" ] && {

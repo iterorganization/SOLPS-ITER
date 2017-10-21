@@ -24,7 +24,7 @@ C---- IKONT  : TOTAL NUMBER OF POINTS FOR EACH FRONTIER
       double precision, allocatable :: help(:)
       integer, allocatable :: ihelp(:)
       if (kennung .eq. 'xy') then
-c         write(6,*) 'vergrößern von ',kennung,' von ',size(x),
+c         write(6,*) 'vergroessern von ',kennung,' von ',size(x),
 c     .              ' auf ',size(x)+incr
          allocate(help(size(x)))
 
@@ -42,7 +42,7 @@ c     .              ' auf ',size(x)+incr
 
          deallocate(help)
       elseif (kennung .eq. 'ikont') then
-c         write(6,*) 'vergrößern von ',kennung,' von ',size(ikont),
+c         write(6,*) 'vergroessern von ',kennung,' von ',size(ikont),
 c     .              ' auf ',size(ikont)+incr
          allocate(ihelp(size(ikont)))
          ihelp = ikont

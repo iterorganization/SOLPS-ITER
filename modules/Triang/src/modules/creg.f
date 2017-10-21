@@ -27,8 +27,8 @@ C---- NREG : TOTAL NUMBER OF REGIONS
       if (kennung .eq. 'region') then
          dim1 = size(region,1)
          dim2 = size(region,2)
-c         write(6,*) 'vergrößern von ',kennung,' von (',dim1,',',dim2,
-c     .              ') auf (',dim1,',',dim2+incr,')'
+c         write(6,*) 'vergroessern von ',kennung,' von (',dim1,
+c     .              ',',dim2,') auf (',dim1,',',dim2+incr,')'
          allocate(help(dim1,dim2))
          help = region
          deallocate (region)

@@ -1,0 +1,17 @@
+# Load modules 
+# module load doxygen
+# module load netcdf
+# module load ncl_ncarg/5.2.1
+# module load texlive/2008
+# module load cairo
+
+
+
+# Set environment variables
+# setenv DEVICE iter
+
+
+
+# Debugger (set environment variable DBX)
+setenv DBX totalview
+

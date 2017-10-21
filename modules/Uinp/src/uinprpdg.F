@@ -1,7 +1,8 @@
       subroutine uinprpdg(lc)
-       use b2mod_layer
+      use b2mod_constants
+      use b2mod_layer
      , , only: ntrack, nalloys
-       use eirmod_extrab25
+      use eirmod_extrab25
      , , only: msrfclsx, mgwtiesx
 c
 c  version : 28.04.2003 23:32
@@ -9,21 +10,27 @@ c
 c=======================================================================
 c*** Prepare the data for the diagnostic Eirene run
 c=======================================================================
+      implicit none
       logical lc
 #include "uinput.inc"
-      integer i,j,k,l,m,iy,iz,ntcpu_b,nfile_b,npts_b(nstra),lntspec_b,
+      integer i,j,k,l,m,iy,ix,ntcpu_b,nfile_b,npts_b(nstra),lntspec_b,
      ,  lntsput_b,nmcsput_b,ngwties_b,lgwt_h(ngwtiesx),kgwt_h(ngwtiesx),
+     ,  nlstadds_b,nlstadu_b,mtreadds_b,
      ,  l_pfr,l_wll
+      integer mesh_cell_ind
       logical ex,streql
-      external streql
+      external streql, subini, subend, mesh_cell_ind
       real w,alloc_b,flux_b(nstra)
       save alloc_b,flux_b,
-     ,  ntcpu_b,nfile_b,npts_b,lntspec_b,lntsput_b,nmcsput_b,ngwties_b
+     ,  ntcpu_b,nfile_b,npts_b,lntspec_b,lntsput_b,nmcsput_b,ngwties_b,
+     ,  nlstadds_b,nlstadu_b,mtreadds_b
 c=======================================================================
+      call subini ('uinprpdg')
       if(lc) then !{
 
         if(lntsptu.le.0) then !{
           lc=.false.
+          call subend ()
           return
         end if !}
 
@@ -45,6 +52,7 @@ c*** Change to the new numeration and exclude "Elements not for Eirene"
           write(*,*) '==> Check the DG model: "Material templates" ',
      ,                   'cannot point to the "Elements not for Eirene"'
           lc=.false.
+          call subend ()
           return
         end if !}
         
@@ -83,11 +91,12 @@ c*** Save the variables to be changed
         end do !}
         do i=1,ngpfstr !{
           j=ingpfstr(i)
-          flux(j)=1.6e-19*fgpfstr(i)
+          flux(j)=qe*fgpfstr(i)
         end do !}
         if(txtmtra(1).ne.' ') then !{
           ex=.true.
           do i=1,natmi !{
+            if (is_meta(i)) cycle
             if(ex) then !{
               if(streql(txtmtra(1),texta(i))) then !{
                 ex=.false.
@@ -139,7 +148,7 @@ c*** Prepare the data on grid-wall ties, if specified
   !###}
 #endif 
           do k=1,ngwtiesi !{
-            if(mesh_cell_ind(kgwties(k),iy,iz).ne.0) then !{
+            if(mesh_cell_ind(kgwties(k),iy,ix).ne.0) then !{
               write(0,*) 'uinprpdg: incomprehencible cell index ',
      ,                                            kgwties(k),' for k=',k
               write(0,*) ' ==> could be an internal error in uinp - ',
@@ -147,46 +156,46 @@ c*** Prepare the data on grid-wall ties, if specified
               ngwtiesi=0
             else !}{
               if(iy.le.l_pfr) then !{                             PFR?
-                if(iz.gt.0 .and. iz.lt.izc1-1) then !{
-                  kgwties(k)=nzidv+1-iz
+                if(ix.gt.0 .and. ix.lt.izc1-1) then !{
+                  kgwties(k)=nzidv+1-ix
                 else if(izci.gt.0) then !}{
-                  if(iz.ge.izc3 .and. iz.lt.izci) then !{
-                    kgwties(k)=(izci-1)+2*ny+nzidv+nzodv+1-iz
-                  else if(iz.ge.izci+3 .and. iz.lt.izc4) then !}{
-                    kgwties(k)=(izci-1)+2*ny+nzidv+nzodv+nzidv2+1-iz
-                  else if(iz.ge.izc2 .and. iz.lt.iztg) then !}{
-                    kgwties(k)=nx+4*ny+nzidv+nzodv+nzidv2+nx-3+1-iz
+                  if(ix.ge.izc3 .and. ix.lt.izci) then !{
+                    kgwties(k)=(izci-1)+2*ny+nzidv+nzodv+1-ix
+                  else if(ix.ge.izci+3 .and. ix.lt.izc4) then !}{
+                    kgwties(k)=(izci-1)+2*ny+nzidv+nzodv+nzidv2+1-ix
+                  else if(ix.ge.izc2 .and. ix.lt.iztg) then !}{
+                    kgwties(k)=nx+4*ny+nzidv+nzodv+nzidv2+nx-3+1-ix
                   else !}{
                     kgwties(k)=0
                   end if !}
                 else !}{
-                  if(iz.ge.izc2-1 .and. iz.lt.iztg-2) then !{
-                    kgwties(k)=nx+2*ny+nzidv+nx+1-iz
+                  if(ix.ge.izc2-1 .and. ix.lt.iztg-2) then !{
+                    kgwties(k)=nx+2*ny+nzidv+nx+1-ix
                   else !}{
                     kgwties(k)=0
                   end if !}
                 end if !}
               else if(iy.gt.l_wll) then !}{                 outer wall?
                 if(izci.gt.0) then !{
-                  if(iz.ge.izci+3) then !{
-                    kgwties(k)=nx+nzidv+nzodv+nzidv2+3*ny+iz
-                  else if(iz.gt.0 .and. iz.lt.izci) then !}{
-                    kgwties(k)=nzidv+ny+iz
+                  if(ix.ge.izci+3) then !{
+                    kgwties(k)=nx+nzidv+nzodv+nzidv2+3*ny+ix
+                  else if(ix.gt.0 .and. ix.lt.izci) then !}{
+                    kgwties(k)=nzidv+ny+ix
                   else !}{
                     kgwties(k)=0
                   end if !}
                 else !}{
-                  kgwties(k)=nzidv+ny+iz
+                  kgwties(k)=nzidv+ny+ix
                 end if !}
               else !}{
                 kgwties(k)=0
               end if !}
-              if(kgwties(k).eq.0) write(0,*) 'uinprpgrd: wrong ',
+              if(kgwties(k).eq.0) write(0,*) 'uinprpdg: wrong ',
      ,          'position of a grid marker for a grid-wall tie. ',
-     ,          'ix,iy= ',iz,iy
+     ,          'ix,iy= ',ix,iy
             end if !}
 #ifdef DBG
-            print '(1x,4i6)', k,iy,iz,kgwties(k)  !###
+            print '(1x,4i6)', k,iy,ix,kgwties(k)  !###
 #endif 
           end do !}
         end if !}
@@ -242,4 +251,6 @@ c*** Set the VSP data for diag2.eir
         end do !}
       end if !}
 c=======================================================================
+      call subend ()
+      return
       end

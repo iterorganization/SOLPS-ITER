@@ -5,7 +5,7 @@
 #$ -M #EMAIL#
 #$ -m e
 #$ -notify
-#$ -N B2.5
+#$ -N #JOBNAME#
 #$ -V
 
 setenv PATH ${PATH}:/afs/ipp-garching.mpg.de/@sys/bin
@@ -24,7 +24,11 @@ if ($?SOLPS_MPI) then
 endif
 
 update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"
-update_solps_run_status "Started on `hostname` at `date`"
+set msg="Started on `hostname` at `date`"
+update_solps_run_status ${msg}
+if ($?SOLPS_GUI_IP) then
+  echo ${USER} ${PWD} ${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
+endif
 
 time b2run -s ${USE_MPI} b2mn | gzip -9 >! run.log.gz
 
@@ -32,4 +36,8 @@ QSUB.postprocess
 
 preserve_scratch_to_work
 
-update_solps_run_status "Finished on `hostname` at `date`"
+set msg="Finished on `hostname` at `date`"
+update_solps_run_status ${msg}
+if ($?SOLPS_GUI_IP) then
+  echo ${USER} ${PWD} ${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
+endif

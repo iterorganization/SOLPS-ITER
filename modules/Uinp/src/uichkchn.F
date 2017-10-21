@@ -44,13 +44,14 @@ c=======================================================================
      ,  kbnd(nnptseg),lbnd(nnptseg)
       integer ip,iz1,iz2,ik,loff(nbndknd),nz,lz(nnptseg)
       logical er,ex,lw(iztg,2)
-      external xerrab
+      external subini,subend,xerrab
 c*** mtge(i): target edge connected to the target edge i 
       data mtge / 7, 4, 5, 2, 3, 8, 1, 6 /
       data mtgb / 1, 2, 3, 2, 4, 5, 6, 5 /
       data kbnd / 3, 4, 3, 3, 4, 3 /  ! kind of boundary (PFR vs. SOL)
       data lbnd / 6, 0, 4, 3, 0, 1 /  ! adjacent zone
 c=======================================================================
+      call subini ('uichkchn')
 !###{
       print *
       print *,'Starting uichkchn: label,nni,nnx= ',label,nni,nnx
@@ -72,7 +73,7 @@ c*** Check some dimensions
 #ifdef FLUSH
         call FLUSH(0)
 #endif
-        return
+        goto 9999
       end if !}
       
 c-----------------------------------------------------------------------
@@ -89,7 +90,7 @@ c*** Check whether the specified chain consists of valid elements
           call FLUSH(0)
 #endif
           nno=-2
-          return
+          goto 9999
         end if !}
         if(indasrfe(j).le.0 .or. indasrfe(j).gt.nlimi) then !{
 #ifdef FLUSH
@@ -101,7 +102,7 @@ c*** Check whether the specified chain consists of valid elements
           call FLUSH(0)
 #endif
           nno=-2
-          return
+          goto 9999
         end if !}
       end do !}
 
@@ -119,7 +120,7 @@ c*** Order the chain and check it for continuity
         call FLUSH(0)
 #endif
         nno=-100
-        return
+        goto 9999
       end if !}
 
 c*** ind is now organised in sections corresponding to the found chains.
@@ -151,7 +152,7 @@ c*** Closed polygon in a multiple chain - error!
       if(k.lt.0) then !{
 c*** The chain is closed
         nno=0
-        return
+        goto 9999
       else if(k.eq.0) then !}{
 #ifdef FLUSH
         call FLUSH(6)
@@ -162,7 +163,7 @@ c*** The chain is closed
         call FLUSH(0)
 #endif
         nno=-100
-        return
+        goto 9999
       end if !}
 
 c*** Check whether all the chains end with "target edges"
@@ -264,10 +265,10 @@ c***                                      1   7
       mtge(3)=ntg-3
       mtgb(3)=mnptseg
 !###{
-      print '(a,(12i5))','ntg= ',ntg
-      print '(a,(12i5))','mtge= ',mtge
-      print '(a,(12i5))','mtgb= ',mtgb
-      print '(a,(12i5))','ltge= ',ltge
+      print '(1x,a,(12i5))','ntg = ',ntg
+      print '(1x,a,(12i5))','mtge= ',mtge
+      print '(1x,a,(12i5))','mtgb= ',mtgb
+      print '(1x,a,(12i5))','ltge= ',ltge
 !###}
       ip=0
       ik=0
@@ -404,7 +405,7 @@ c!###}
         call FLUSH(0)
 #endif
         nno=-100-nno
-        return
+        goto 9999
       end if !}
 
       if(.not.ex) then !{
@@ -424,9 +425,9 @@ c!###}
         call FLUSH(0)
 #endif
         nno=-6
-        return
+        goto 9999
       end if !}
-      return
+      goto 9999
 c=======================================================================
 c*** Error in the segment chains
  900  continue
@@ -450,6 +451,7 @@ c*** Error in the segment chains
 #ifdef FLUSH
       call FLUSH(0)
 #endif
+ 9999 call subend()
       return
 c=======================================================================
       end

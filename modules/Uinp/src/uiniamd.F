@@ -17,7 +17,7 @@ c=======================================================================
       integer i,j,k,l,m,n,iv,nn
       save nn
       logical uex, streql
-      external streql, xerrab
+      external streql, xerrab, subini, subend
       character*8 unm(lunm),uun,s*(luns)
       data unm /
      1  '#'       ,'filevers' ,'reactns'  ,'rctype'   ,'group'	  ,
@@ -28,6 +28,7 @@ c=======================================================================
      6	'exparr3'/
 c=======================================================================
 c
+      call subini ('uiniamd')
 c      print *,'== ',unn,nn,nnrctn
       call locase(unn,uun,8)
       do i=1,lunm !{
@@ -35,17 +36,25 @@ c      print *,'== ',unn,nn,nnrctn
      ,           go to (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,
      ,                  16,17,18,19,20,21,22,23,24,25,26),i
       end do !}
+      call subend ()
       return
 c=======================================================================
   1   call skipit
+      call subend ()
       return
   2   immed=.true.
       call resimi(iv)
+      call subend ()
       return
   3   nn=nnrctn
       call resimi(nnrctn)
       print *,uun,' : ',nnrctn
       nnrctn=nn+nnrctn
+      if(nnrctn.gt.nreac) then !{
+        write(0,*) 'Too many reaction datasets specified:',nnrctn
+        call xerrab
+     .   ('==> Check the AMDS model and DEF_NREAC in DIMENSIONS.F')
+      end if !}
       nn=nn+1
       do i=nn,nnrctn !{
       	read(iunii,'(a)',end=9999) s
@@ -87,7 +96,9 @@ c	      print *,'k,l,m= ',k,l,m
 	end if !}
 	print '(i3,7a)',i,':',rctndbs(i),':',rctnchp(i),':',
      ,	  rctnrct(i),':'
+        if (streql(rctndbs(i),'AMMONX')) ammonx_used=.true.
       end do !}
+      call subend ()
       return
 c-----------------------------------------------------------------------
   4   do i=nn,nnrctn !{
@@ -117,21 +128,45 @@ c-----------------------------------------------------------------------
 
   9   do i=nn,nnrctn !{
       	read(iunii,'(a)',end=9999) rctnptpr(i)
+        do j = 1, nspdlen !{
+          if (streql(rctnptpr(i),spcdspc(j))) then !{
+            n2_model = n2_model .and. l_n2(j)
+            if (.not.meta_used .and. l_meta(j)) meta_used = .true.
+          end if !}
+        end do !}
       end do !}
       go to 9990
 
  10   do i=nn,nnrctn !{
       	read(iunii,'(a)',end=9999) rctnptin(i)
+        do j = 1, nspdlen !{
+          if (streql(rctnptin(i),spcdspc(j))) then !{
+            n2_model = n2_model .and. l_n2(j)
+            if (.not.meta_used .and. l_meta(j)) meta_used = .true.
+          end if !}
+        end do !}
       end do !}
       go to 9990
 
  11   do i=nn,nnrctn !{
       	read(iunii,'(a)',end=9999) rctnpto1(i)
+        do j = 1, nspdlen !{
+          if (streql(rctnpto1(i),spcdspc(j))) then !{
+            n2_model = n2_model .and. l_n2(j)
+            if (.not.meta_used .and. l_meta(j)) meta_used = .true.
+          end if !}
+        end do !}
       end do !}
       go to 9990
 
  12   do i=nn,nnrctn !{
       	read(iunii,'(a)',end=9999) rctnpto2(i)
+        do j = 1, nspdlen !{
+          if (streql(rctnpto2(i),spcdspc(j))) then !{
+            n2_model = n2_model .and. l_n2(j)
+            if (.not.meta_used .and. l_meta(j)) meta_used = .true.
+          end if !}
+        end do !}
       end do !}
       go to 9990
 
@@ -206,9 +241,12 @@ c-----------------------------------------------------------------------
       go to 9990
 c=======================================================================
  9990 call skipit
+      call subend ()
       return
 c=======================================================================
  9999 write(0,*) 'Error encountered while reading ',uun
       call xerrab ('==> Corrupted AMDS file')
 c=======================================================================
+      call subend ()
+      return
       end

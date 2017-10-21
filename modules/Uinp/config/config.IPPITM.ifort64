@@ -1,0 +1,27 @@
+#  VERSION : 28.07.99 20:34
+
+MSCL_ROOT ?= /tokp/work/dpc/SOLPS-ITER/mscl
+LD_MSCL ?= -L${MSCL_ROOT} -lmscl
+
+ifdef USE_MPI
+FC 	     = mpiifort
+else
+FC       = ifort
+endif
+ifdef SOLPS_DEBUG
+FFLAGS	 = -g -C -traceback -debug all -check all
+else
+FFLAGS   =
+endif
+INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
+COMPILE  = ${FC} -c ${FFLAGS}
+CPP      = /lib/cpp -C -traditional -ffreestanding
+
+MOD      = mod
+LDLIBS	 = ${LD_MSCL}
+LDEXTRA  =
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+

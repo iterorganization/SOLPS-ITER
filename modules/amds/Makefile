@@ -2,6 +2,7 @@
 
 TARGET=$(OBJDIR)/amds
 RES2FBR=$(OBJDIR)/res2fbr
+CALC=$(OBJDIR)/calc_atomic_data
 VPATH=src
 
 ifndef HOST_NAME
@@ -11,64 +12,91 @@ ifndef COMPILER
   $(error COMPILER not defined)
 endif
 
+MAKES = Makefile 
+# Include global SOLPS compiler settings
+ifndef SOLPS_CPP
+ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER} ] && echo yes || echo no ),yes)
+  include ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
+  MAKES += ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
+  ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local ] && echo yes || echo no ),yes)
+    include ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+    MAKES += ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+  endif
+else
+  $(warning ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER} not found.)
+endif
+else
+  MAKES += ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
+  ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local ] && echo yes || echo no ),yes)
+    include ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+    MAKES += ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+  endif
+endif
+
 ifdef SOLPS_DEBUG
 EXT_DEBUG = .debug
 endif
 OBJDIR = ${PWD}/builds/${HOST_NAME}.${COMPILER}${EXT_DEBUG}
+B2OBJ = ${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_DEBUG}
 
 ifeq ($(shell [ -e config/config.${HOST_NAME}.${COMPILER} ] && echo yes || echo no ),yes)
 include config/config.${HOST_NAME}.${COMPILER}
+MAKES+= config/config.${HOST_NAME}.${COMPILER}
 else
 $(error config/config.${HOST_NAME}.${COMPILER} not found)
 endif
 
 ifeq ($(shell [ -e config/config.${HOST_NAME}.${COMPILER}.local ] && echo yes || echo no ),yes)
 include config/config.${HOST_NAME}.${COMPILER}.local
+MAKES+= config/config.${HOST_NAME}.${COMPILER}.local
 endif
 
-
-
 #OBJS=amvald.o amview.o amgraph.o amxvars.o amvars.o amundo.o \
-#     amfio.o amdbase.o ammenu.o aminfo.o ammain.o vacreate.o\
+#     amfio.o amdbase.o ammenu.o aminfo.o ammain.o vacreate.o \
 #     amfile.o amtext.o calc.o vars.o ngroups.o amdoc.o amxapp.o \
 #     xmform2t.o x_~fbr.o
 
 OBJS=amvald.o amview.o amgraph.o amxvars.o amvars.o amundo.o \
-     amfio.o amdbase.o ammenu.o aminfo.o ammain.o vacreate.o\
+     amfio.o amdbase.o ammenu.o aminfo.o ammain.o vacreate.o \
      amfile.o amtext.o calc.o vars.o ngroups.o amdoc.o amxapp.o \
      x_~fbr.o
 
 DEST = $(OBJS:%.o=$(OBJDIR)/%.o)
 
-$(OBJDIR)/%.o : %.c
-	 $(CC) -c $< -o $@
-
-all: dirs $(RES2FBR) $(TARGET)
+all: $(RES2FBR) $(TARGET) $(CALC)
 
 .PHONY: VERSION clean neat all depend listobj force
 
-$(TARGET): $(DEST)
+$(OBJDIR)/vacreate.o:
 	$(CC) -DCbFree=CbFree_ignore -c src/vacreate.c -o $(OBJDIR)/vacreate.o
+
+$(OBJDIR)/%.o : %.c
+	$(CC) -c $< -o $@
+
+$(TARGET): $(DEST) $(MAKES)
 	$(CC) $(CFLAGS) -o $@ $(DEST) $(LIBS)
 
-$(DEST): src/*.h
-
 src/x_~fbr.c: src/amds.xrs $(RES2FBR)
-	 $(RES2FBR) amdsResources <src/amds.xrs >src/x_~fbr.c
+	$(RES2FBR) amdsResources < src/amds.xrs > src/x_~fbr.c
 
-$(RES2FBR):  $(OBJDIR)/res2fbr.o
-	  cc -o $(RES2FBR) $(OBJDIR)/res2fbr.o
+$(RES2FBR): $(OBJDIR)/res2fbr.o $(MAKES)
+	cc -o $(RES2FBR) $(OBJDIR)/res2fbr.o
+
+$(CALC): ${B2OBJ}/calc_atomic_data.exe $(MAKES)
+	cp ${B2OBJ}/calc_atomic_data.exe $(CALC)
+	touch $(CALC)
 
 dirs: $(OBJDIR)
 
 neat:
-	rm -rf ${OBJDIR}/*.o ${OBJDIR}/*.f
+	rm -rf ${OBJDIR}/*.o src/x_~fbr.c
 
 $(OBJDIR):
 	mkdir -p $(OBJDIR)
 
 clean:
-	 /bin/rm -f $(OBJDIR)/*.o $(OBJDIR)/res2fbr src/x_~fbr.c
+	/bin/rm -f $(OBJDIR)/*.o src/x_~fbr.c $(TARGET) $(RES2FBR) $(CALC) \
+	$(OBJDIR)/dependencies* $(OBJDIR)/LISTOBJ
 
 TAGS:	tags
 
@@ -76,8 +104,7 @@ tags:
 	rm -f TAGS ; etags src/*.c src/*.h
 
 depend: ${OBJS:.o=.c}
-	-mkdir -p ${OBJDIR}
-	$(CC) -M $^ | sed '/^[^ ]*.o: / s|^|${OBJDIR}/|' | \
+	@$(CC) -M $^ | sed '/^[^ ]*.o: / s|^|${OBJDIR}/|' | \
 	sed -e 's,^${OBJDIR}/,\$${OBJDIR}/,' | \
 	sed 's,: ${SOLPSTOP},: $${SOLPSTOP},' > ${OBJDIR}/dependencies.${COMPILER}
 
@@ -102,5 +129,3 @@ ${OBJDIR}/dependencies.${COMPILER}:
 	${MAKE} depend
 
 include ${OBJDIR}/dependencies.${COMPILER}
-
-

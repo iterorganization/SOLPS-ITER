@@ -1,6 +1,16 @@
 #! /bin/csh -f
 set machine_location=`hostname`
-set fullhost=`nslookup $machine_location | grep -m 1 Name | awk '/Name:/{print $2}' | tr 'A-Z' 'a-z'`
+set mephi_check=`echo $machine_location | cut -c1-4` 
+if ("$mephi_check" == "head" || "$mephi_check" == "node") then 
+  echo "mephi_check = $mephi_check - special mephi cluster treatment applies"
+  set machine_location="cluster21.mephi.ru"
+  set fullhost=$machine_location
+else
+  set fullhost=`nslookup $machine_location | grep -m 1 Name | awk '/Name:/{print $2}' | tr 'A-Z' 'a-z'`
+  if ("$fullhost" == "") then
+    set fullhost=`hostname -f`
+  endif
+endif
 switch ($fullhost)
 case "*.iter.org":
   echo ITER
@@ -12,7 +22,10 @@ case "*.iferc-csc.org":
   echo IFERC
   breaksw
 case "*.itm.rzg.mpg.de":
+  echo IPPITM
+  breaksw
 case "*.efda-itm.eu":
+case "*.marconi.cineca.it"
   echo ITM
   breaksw
 case "*.ipp-garching.mpg.de":
@@ -35,6 +48,7 @@ case "*.hpc.l":
   echo JET
   breaksw
 case "*.mech.kuleuven.be":
+case "*.icts.leuven.vsc":
   echo LEUVEN
   breaksw
 case "*.pppl.gov":
@@ -62,6 +76,7 @@ case "mgmt":
 case "*.ipr.res.in":
   echo IPR
   breaksw
+case "iter-india.org":
 case "*.iter-india.org":
   echo IN-DA
   breaksw
@@ -73,7 +88,12 @@ case "kraken01":
   breaksw
 case "*.spbau.ru":
 case "login1.cluster":
+case "n01p*.cluster":
+case "PLASMATHEORY08":
   echo SPBSTU
+  breaksw
+case "*.mephi.ru":
+  echo MEPHI
   breaksw
 case "*.cn":
   echo CN_UNKNOWN
@@ -107,6 +127,7 @@ case "*.ro":
 case "*.se":
 case "*.si":
 case "*.sk":
+case "*.ua":
 case "*.uk":
   echo EU_UNKNOWN
   breaksw
@@ -126,6 +147,12 @@ case "*.gov":
 case "*.edu":
 case "*.us":
   echo USA_UNKNOWN
+  breaksw
+case "*.au":
+  echo AU_UNKNOWN
+  breaksw
+case "*.kz":
+  echo KZ_UNKNOWN
   breaksw
 default:
   echo UNKNOWN

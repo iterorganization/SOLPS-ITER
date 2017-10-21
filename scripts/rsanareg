@@ -4,17 +4,26 @@ switch ($text)
   case "rsanareg":
     set label="ionization rate"
     breaksw
+  case "rsamoreg":
+    set label="ionization momentum"
+    breaksw
   case "rsahireg":
     set label="ionization energy"
     breaksw
   case "rranareg":
     set label="recombination rate"
     breaksw
+  case "rramoreg":
+    set label="recombination momentum"
+    breaksw
   case "rrahireg":
     set label="recombination energy"
     breaksw
   case "rcxnareg":
     set label="charge exchange rate"
+    breaksw
+  case "rcxmoreg":
+    set label="charge exchange momentum"
     breaksw
   case "rcxhireg":
     set label="charge exchange energy"
@@ -65,9 +74,12 @@ if ("" == $xreg) set xreg=6
 if ("" == $yreg) set yreg=7
 @ vregP = $vreg + 1
 set solps_fluids=`climb_and_look_for SOLPS_FLUIDS`
-if (-e $solps_fluids) then
+if (-s $solps_fluids) then
   setenv SOLPS_FLUIDS `cat $solps_fluids`
   echo Set SOLPS_FLUIDS to $SOLPS_FLUIDS "(based on $solps_fluids)"
+else
+  setenv SOLPS_FLUIDS "`get_solps_fluids`"
+  echo Set SOLPS_FLUIDS to $SOLPS_FLUIDS "(based on log file)"
 endif
 set nplts=`echo $SOLPS_FLUIDS | wc -w`
 @ nplts += 1
@@ -83,9 +95,9 @@ else
   set region=$1
 endif
 if($?GNUPLOT_TMP) then
-    set tmpdir="$GNUPLOT_TMP/"
+  set tmpdir="$GNUPLOT_TMP/"
 else
-    set tmpdir=""
+  set tmpdir=""
 endif
 setenv PLOT_FROM_FILE "gnuplot.temp"
 pipe_run.log | \

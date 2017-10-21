@@ -26,13 +26,17 @@ c=======================================================================
 #include "uinput.inc"
       integer i,j,k,l,m,im,knd_hlp(nedgmrkd,nwllmrkd)
       logical ex
-      external xerrab
+      external xerrab, subini, subend
 c=======================================================================
+      call subini ('uinprpge')
 
       write(*,*) 'Grid edge material markers:'
       write(*,*) '          nwllmrk=',nwllmrk
 
-      if(nwllmrk.le.0) return   ! no material templates specified
+      if(nwllmrk.le.0) then !{
+        call subend ()
+        return   ! no material templates specified
+      end if !}
 
       write(*,*) '          nedgmrk=',(nedgmrk(l),l=1,nwllmrk)
       write(*,*) '          ntrgmrk=',(ntrgmrk(l),l=1,nwllmrk)
@@ -222,4 +226,6 @@ c            print *,'j,k,bbliin(j,k)=',j,k,bbliin(j,k)  !###
         end do !}
       end if !}
 c=======================================================================
+      call subend ()
+      return
       end

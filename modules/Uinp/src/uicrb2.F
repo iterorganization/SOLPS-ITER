@@ -39,7 +39,7 @@ c
       character hlp_frm*14
       integer len_of_digits
       logical streql
-      external len_of_digits, streql
+      external len_of_digits, streql, subini, subend
 c
 c*** Possible forms of the end-of-block line
       integer nfnl
@@ -47,6 +47,7 @@ c*** Possible forms of the end-of-block line
       character ufnl(nfnl)*4
       data ufnl/'&end','/'/
 c=======================================================================
+      call subini ('uicrb2')
 c      print *,'Starting uicrb2' !###
 c*** Initial settings
 c
@@ -107,19 +108,19 @@ c*** No. Variable in work?
               if(lbv) then !{
                 call uimdvr(lout,jblk,jvrb,ufs)
 c*** Is the section done now?
-        	if(lbb) go to 15
+                if(lbb) go to 15
               end if !}
             end if !}
 c*** Not yet. Proceed with the variables still left to be modified
             do j=1,nkwrd !{
               if(chrpl(j,jblk).ne.' ' .and. .not.lbmdf(j,jblk))
-     -  	              	      	    call uimdvr(lout,jblk,j,ufs)
+     -         call uimdvr(lout,jblk,j,ufs)
             end do !}
             if(.not.lbb) then !{
               write(0,*) 'Unexpected error in uicrb2: unable to ',
-     ,  	'complete the block ',jblk,' : ',chrbl(jblk)
+     ,          'complete the block ',jblk,' : ',chrbl(jblk)
               iret =8
-              return
+              goto 9990
             end if !}
           end if !}
 c*** The section is done. Reset the pointer and flags and write the line
@@ -139,9 +140,9 @@ c        print *,'&&& ',sw(1:len_trim(sw)),':  ubs= ',ubs !###
 c*** Is a section still open?
         if(ubs) then !{
           write(0,*) 'Error in the input file: ',
-     ,  	       'no section terminator before  ',sw
+     ,                 'no section terminator before  ',sw
           iret=1
-          return
+          goto 9990
         end if !}
 
         ubs=.true.
@@ -173,8 +174,8 @@ c*** Parse the string, looking for the specified keywords and separators
 c*** like ' ' ( ) = ,
 
 c*** Below, k counts bytes in the current field,
-c***  	    kb keeps the position of the last delimiter,
-c***  	    hh accumulates the potential keywords
+c***        kb keeps the position of the last delimiter,
+c***        hh accumulates the potential keywords
  40   k=0
       kb=0
       hh=' '
@@ -185,12 +186,12 @@ c***  	    hh accumulates the potential keywords
       do 100 i=1,mxslen !{
 
 c*** Skip spaces and text variables
-	if(s(i).eq.'''') then !{
+        if(s(i).eq.'''') then !{
           if(urbr) then !{
-	  end if !}
-	  uba=.not.uba
-	  go to 100 ! -> fetch the next character
-	end if !}
+          end if !}
+          uba=.not.uba
+          go to 100 ! -> fetch the next character
+        end if !}
         if(streql(s(i),' ') .or. streql(s(i),utb) .or. uba) go to 100
 
 c*** Look for a delimiter
@@ -200,7 +201,7 @@ c*** Look for a delimiter
 c*** The equal sign closes a keyword. Is any modification pending?
 
           urbr=.false.
-	  if(lbv) then !{
+          if(lbv) then !{
             call uimdvr(lout,jblk,jvrb,ufs)
 c*** Is it the first field of the line?
             if(kb.gt.0) then !{
@@ -228,7 +229,7 @@ c              nprm=nmdpr(j,jblk)
 
               if(ubt) then !{
 c*** split the line before the keyword
-          	call uisswr(lout,s,ss,kb,ufs)
+                call uisswr(lout,s,ss,kb,ufs)
               end if !}
               go to 50
             end if !}
@@ -247,7 +248,7 @@ c*** Left ellipse - array definition?
             write(0,*) 'Error in the input file: double left ellipse'
             write(0,*) ss
             iret=2
-            return
+            goto 9990
           end if !}
           ubr=.true.
 
@@ -258,10 +259,10 @@ c*** Right ellipse - array definition?
             write(0,*) 'Error in the input file: unmatched ellipse'
             write(0,*) ss
             iret=2
-            return
+            goto 9990
           end if !}
           ubr=.false.
-	  urbr=.true.
+          urbr=.true.
 
         else if(.not.ubr .and. streql(s(i),',')) then !}{
 
@@ -295,9 +296,9 @@ c*** Some other symbol
           if(urbr) go to 92 ! -> error
 
           if(.not.ubr) then !{
-	    k=k+1
+            k=k+1
             h(k)=s(i)
-	  end if !}
+          end if !}
         end if !}
  100  continue !}
  
@@ -310,6 +311,7 @@ c*** The input file is over
 c
  90   iret=0
 c      print *,'*90: leaving uicrb2' !###
+ 9990 call subend ()
       return
 c=======================================================================
  92   write(0,*) 'Error in the input file: a symbol between ) and ='

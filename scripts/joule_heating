@@ -1,8 +1,12 @@
 #! /bin/csh -f
 set nreg=`climb_and_look_for NREG`
-if (-e $nreg) then
+set nnreg=`pipe_run.log | grep ^nnreg | head -1`
+if (-s $nreg) then
   setenv NREG `cat $nreg`
   echo Set NREG to $NREG "(based on $nreg)"
+else
+  set NREG=$nnreg[2]
+  echo Set NREG to $NREG "(based on log file)"
 endif
 if (! $?NREG) set NREG=4
 @ NREGP = $NREG + 1

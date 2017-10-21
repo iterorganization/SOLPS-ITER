@@ -1,0 +1,39 @@
+#! /bin/tcsh
+
+#PBS -q ib_gen8
+#PBS -l nodes=1:ppn=16
+#PBS -l walltime=24:00:00
+#PBS -j oe
+#PBS -M xavier.bonnin@iter.org
+#PBS -m e
+#PBS -N EIRENE
+#PBS -V
+
+cd "$PBS_O_WORKDIR"
+
+set solpstop=`climb_and_look_for SOLPSTOP`
+if (-e $solpstop) then
+ setenv SOLPSTOP "`cat $solpstop`"
+else
+ setenv SOLPSTOP "`echo $PWD | sed 's:/runs/.*::'`"
+endif
+
+echo Using SOLPSTOP = $SOLPSTOP
+
+if ($?SOLPS_MPI) then
+  set MPI_EXEC=mpiexec
+  set MPI_OPTS="-np 16"
+  set USE_MPI=".mpi"
+else
+  set MPI_EXEC=time
+  set MPI_OPTS=""
+  set USE_MPI=""
+endif
+
+if ($COMPILER == "HP") then
+  ln -sf input.dat ftn1
+else
+  ln -sf input.dat fort.1
+endif
+${MPI_EXEC} ${MPI_OPTS} $SOLPSTOP/modules/Eirene/builds/standalone.ITER.ifort64${USE_MPI}/eirobjx
+

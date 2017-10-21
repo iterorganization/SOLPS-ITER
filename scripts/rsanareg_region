@@ -4,17 +4,26 @@ switch ($text)
   case "rsanareg_region":
     set label="ionization rate"
     breaksw
+  case "rsamoreg_region":
+    set label="ionization momentum"
+    breaksw
   case "rsahireg_region":
     set label="ionization energy"
     breaksw
   case "rranareg_region":
     set label="recombination rate"
     breaksw
+  case "rramoreg_region":
+    set label="recombination momentum"
+    breaksw
   case "rrahireg_region":
     set label="recombination energy"
     breaksw
   case "rcxnareg_region":
     set label="charge exchange rate"
+    breaksw
+  case "rcxmoreg_region":
+    set label="charge exchange momentum"
     breaksw
   case "rcxhireg_region":
     set label="charge exchange energy"
@@ -24,6 +33,9 @@ switch ($text)
     breaksw
   case "rqradreg_region":
     set label="radiation"
+    breaksw
+  case "rqbrmreg_region":
+    set label="bremsstrahlung"
     breaksw
   case "b2stbr_she_reg_region":
     set label="electron heat loss (-) or source (+) rate from recycling"
@@ -110,15 +122,18 @@ else
   set species=$1
 endif
 set solps_fluids=`climb_and_look_for SOLPS_FLUIDS`
-if (-e $solps_fluids) then
+if (-s $solps_fluids) then
   setenv SOLPS_FLUIDS `cat $solps_fluids`
   echo Set SOLPS_FLUIDS to $SOLPS_FLUIDS "(based on $solps_fluids)"
+else
+  setenv SOLPS_FLUIDS "`get_solps_fluids`"
+  echo Set SOLPS_FLUIDS to $SOLPS_FLUIDS "(based on log file)"
 endif
 set local_fluids=( $SOLPS_FLUIDS )
 if($?GNUPLOT_TMP) then
-    set tmpdir="$GNUPLOT_TMP/"
+  set tmpdir="$GNUPLOT_TMP/"
 else
-    set tmpdir=""
+  set tmpdir=""
 endif
 setenv PLOT_FROM_FILE "gnuplot.temp"
 if($species == 0) then

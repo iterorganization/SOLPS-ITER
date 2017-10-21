@@ -1,53 +1,73 @@
-#! /bin/tcsh
+#! /usr/bin/env ksh
 
-echo "DEVICE = " $DEVICE
+[ "$DEVICE" = '' ] && {
+  print -u2 -n -- "No DEVICE selected. Please provide a device name\n "
+  read u
+  export DEVICE=$u
+} || {
+  echo "DEVICE = " $DEVICE
+}
+[ "$SOLPS_CENTRAL" = 'yes' ] && DEVICE=$DEVICE/$USER
 echo "Converting shot number " $1
 [ -d $SOLPSWORK/$DEVICE ] || mkdir $SOLPSWORK/$DEVICE
-if (! -e $SOLPSWORK/$DEVICE/SOLPSTOP ) then
-  if (! -e $SOLPSWORK/SOLPSTOP ) then
-    echo $SOLPSTOP > $SOLPSWORK/SOLPSTOP 
-  endif
-endif
-mkdir $SOLPSWORK/$DEVICE/$1
+[ -s $SOLPSWORK/$DEVICE/SOLPSTOP ] || {
+  [ -s $SOLPSWORK/SOLPSTOP ] || echo $SOLPSTOP > $SOLPSWORK/SOLPSTOP 
+}
+[ -d $SOLPSWORK/$DEVICE/$1 ] && {
+  print -u2 -n -- "The directory $SOLPSWORK/$DEVICE/$1 already exists. Proceed anyway? (y/n)"
+  while true; do {
+    read u
+    { case $u in
+       ( y|Y ) break;;
+       ( n|N ) exit;;
+       (  *  ) print -u2 -n -- "Please answer with either y or n: ";;
+    esac; }
+  }; done
+} || {
+  mkdir $SOLPSWORK/$DEVICE/$1
+}
 cd $SOLPSWORK/$DEVICE/$1
-mkdir convert
-mkdir baserun
+mkdir -p convert
+mkdir -p baserun
 cd convert
 cp /archive/1/kukusha/archive/extra/arch_2/B2E/b2arch/$DEVICE/$1/* .
 cp b2.parameters b2.parameters.src
 mv b2.parameters.out b2.parameters.out.4.3
-mv fort.31 fort.31.4.3
+cp fort.31 fort.31.4.3
 cp input.eir input.dat
 setup_baserun_eirene_links
-b2sxdr > b2sx.log
+rm -f b2sxdr.prt
+$SOLPSTOP/scripts/b2sxdr > b2sx.log
 cp b2.boundary.parameters.5 b2.boundary.parameters
 cp b2.transport.parameters.5 b2.transport.parameters
 cp b2mn.dat.5 b2mn.dat
 b2run b2ah
 b2run b2ar
 correct_b2yt_timestamps
+rm -f b2yt.prt b2yt.files *.2
 b2run b2yt
 cd ..
 cp convert/b2a?.dat baserun
-[ -e convert/b2fgmtry.2 ] && cp convert/b2fgmtry.2 baserun/b2fgmtry || cp convert/b2fgmtry baserun
+cp convert/b2y?.dat baserun
+[ -s convert/b2fgmtry.2 ] && cp convert/b2fgmtry.2 baserun/b2fgmtry || cp convert/b2fgmtry baserun
 cp convert/b2ag.prt baserun
 cp convert/b2fpardf convert/b2ah.prt baserun
 cp convert/fort.30 baserun
 cd baserun
 cp ../convert/b2ai.prt .
 cp ../convert/b2fstatt b2fstati
-ln -s $SOLPSTOP/modules/B2.5/Database/stra.dat .
-ln -s $SOLPSTOP/modules/B2.5/Database/weis.dat .
+ln -sf $SOLPSTOP/modules/B2.5/Database/stra.dat .
+ln -sf $SOLPSTOP/modules/B2.5/Database/weis.dat .
 cp ../convert/b2frates ../convert/b2ar.prt .
 cp ../convert/input.dat.2 input.dat
 cp ../convert/fort.3[3-5] .
 cp ../convert/param.dg .
 cp ../convert/mesh.extra ../
-ln -s ../mesh.extra .
+ln -sf ../mesh.extra .
 cp ../convert/SOLPS_FLUIDS ../
 cp ../convert/NREG ../
 cd ..
-mkdir run5
+mkdir -p run5
 cd run5
 import_files_from_convert
 setup_baserun_eirene_links
@@ -56,4 +76,5 @@ cd ..
 correct_baserun_timestamps
 cd run5
 touch b2fstati
+echo 'Case conversion finished!'
 

@@ -15,8 +15,9 @@ c=======================================================================
       integer nlpw_hlp
       parameter (nlpw_hlp=16)
       character hlp_prj*8,hlp_wll*(nlpw_hlp),hlp_prw*(nlpw_hlp+8)
-      external xerrab
+      external xerrab, subini, subend
 c=======================================================================
+      call subini ('uinprpsf')
 
       do j=1,nchsppri !{
 
@@ -115,4 +116,6 @@ c<<<
 c>>>
       end do !}     
 c=======================================================================
+      call subend ()
+      return
       end

@@ -3,14 +3,6 @@
 #
 # Special notes:
 #
-# If you do not have the NetCDF library on your system:
-# Leave LD_NETCDF blank
-# Add -DNO_CDF to SOLPS_CPP
-#
-# If you do have NetCDF on your system:
-# Add -DCDF_MOVIE to SOLPS_CPP to be able to produce movies
-# Add -DNETCDF4_3 to SOLPS_CPP if you are linking to NetCDF version 4.3 or newer
-#
 # If you have NCAR version 3 on your system:
 # Remove -DNCAR4 from SOLPS_CPP
 #
@@ -24,10 +16,6 @@
 # If you have NAG Mark 22 or greater on your system:
 # Add -DNAG22 to SOLPS_CPP
 #
-# If you do not have MDSplus on your system:
-# Leave LD_MDSPLUS blank
-# Remove -DMDSPLUS from SOLPS_CPP
-#
 
        NCDIR ?= /opt/NetCDF4
    MSCL_ROOT ?= /usr/share/lib/solpslib
@@ -38,7 +26,6 @@
       NAGDIR ?= /usr/share/lib/solpslib
  MDSPLUS_DIR ?=
        MPDIR ?= /opt/mpich2
-
 
 #
 # Variables for linking
@@ -54,16 +41,40 @@ LD_MDSPLUS =
 LD_SONNET  = -L/usr/share/lib/solpslib -lsonnet -lstdc++
 LD_MPI     = -L${MPDIR}/lib -lmpi
 
-
 #
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNO_NAG -DNETCDF4_3 -DCDF_MOVIE #-DNO_NAG -DNCAR4
+SOLPS_CPP      = -DNO_NAG # -DNCAR4
 B25_DEFINES    =
 EIRENE_DEFINES =
 MPI_CPP        = -I${MPDIR}/include
 
+# Autodetected optional features...
+
+# Build with NetCDF tools if available
+ifdef LD_NETCDF
+  SOLPS_CPP   += -DCDF_MOVIE
+else
+  SOLPS_CPP   += -DNO_CDF
+endif
+
+# Build with MDSplus tools if MDSplus is present
+ifdef LD_MDSPLUS
+  SOLPS_CPP   += -DMDSPLUS
+endif
+
+# Build with Catalyst if ParaView is in PATH
+ifdef LD_CATALYST
+  SOLPS_CPP   += -DCATALYST
+endif
+
+# Build with IMAS if imas module is loaded
+ifdef IMAS_PREFIX
+  SOLPS_CPP += -DIMAS
+  LD_UAL     = `pkg-config imas-lowlevel imas-ifort --libs`
+  export LD_UAL
+endif
 
 #
 # Export for use in sub-makefiles
@@ -77,7 +88,6 @@ export GLI_HOME
 export NCARG_ROOT
 export NAGDIR
 export MDSPLUS_DIR
-
 
 export LD_NETCDF
 export LD_MSCL
@@ -93,3 +103,8 @@ export SOLPS_CPP
 export B25_DEFINES
 export EIRENE_DEFINES
 export MPI_CPP
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+

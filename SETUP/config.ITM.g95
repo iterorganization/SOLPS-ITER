@@ -3,14 +3,6 @@
 #
 # Special notes:
 #
-# If you do not have the NetCDF library on your system:
-# Leave LD_NETCDF blank
-# Add -DNO_CDF to SOLPS_CPP
-#
-# If you do have NetCDF on your system:
-# Add -DCDF_MOVIE to SOLPS_CPP to be able to produce movies
-# Add -DNETCDF4_3 to SOLPS_CPP if you are linking to NetCDF version 4.3 or newer
-#
 # If you have NCAR version 3 on your system:
 # Remove -DNCAR4 from SOLPS_CPP
 #
@@ -24,21 +16,16 @@
 # If you have NAG Mark 22 or greater on your system:
 # Add -DNAG22 to SOLPS_CPP
 #
-# If you do not have MDSplus on your system:
-# Leave LD_MDSPLUS blank
-# Remove -DMDSPLUS from SOLPS_CPP
-#
 
-       NCDIR ?= /pfs/work/dpc/SOLPS-ITER/NETCDF
-   MSCL_ROOT ?= /pfs/work/dpc/SOLPS-ITER/mscl
+       NCDIR ?= /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/NETCDF
+   MSCL_ROOT ?= /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/mscl
        H5DIR ?= ${HDF5_HOME}
-     GR_ROOT ?= /pfs/work/dpc/SOLPS-ITER/gr
-    GLI_HOME ?= /pfs/work/dpc/SOLPS-ITER/gks
-  NCARG_ROOT ?= /pfs/work/dpc/SOLPS-ITER/NCARG
+     GR_ROOT ?= /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/gr
+    GLI_HOME ?= /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/gks
+  NCARG_ROOT ?= /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/NCARG
 #      NAGDIR ?= ${NAGFLIB_HOME}
-#      NAGDIR ?= /pfs/work/dpc/SOLPS-ITER/nag
- MDSPLUS_DIR ?= /pfs/work/dpc/SOLPS-ITER/MDSPLUS
-
+#      NAGDIR ?= /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/nag
+ MDSPLUS_DIR ?= /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/MDSPLUS
 
 #
 # Variables for linking
@@ -54,15 +41,39 @@ LD_NAG     = -L${SOLPSLIB} -lblaslapack # -L${NAGDIR} -lnag
 LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET  = -L${SOLPSLIB} -lsonnet
 
-
 #
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNCAR4 -DMDSPLUS -DNO_F01AAF -DNO_CDF -DNO_NAG -DITM
+SOLPS_CPP      = -DNCAR4 -DNO_NAG -DF2003 -DITM
 B25_DEFINES    =
 EIRENE_DEFINES =
 
+# Autodetected optional features
+
+# Build with NetCDF tools if available
+ifdef LD_NETCDF
+  SOLPS_CPP   += -DCDF_MOVIE
+else
+  SOLPS_CPP   += -DNO_CDF
+endif
+
+# Build with MDSplus tools if MDSplus is present
+ifdef LD_MDSPLUS
+  SOLPS_CPP   += -DMDSPLUS
+endif
+
+# Build with Catalyst if ParaView is in PATH
+ifdef LD_CATALYST
+  SOLPS_CPP   += -DCATALYST
+endif
+
+# Build with IMAS if imas module is loaded
+ifdef IMAS_PREFIX
+  SOLPS_CPP += -DIMAS
+  LD_UAL     = `pkg-config --libs imas-g95`
+  export LD_UAL
+endif
 
 #
 # Export for use in sub-makefiles
@@ -89,3 +100,7 @@ export LD_SONNET
 export SOLPS_CPP
 export B25_DEFINES
 export EIRENE_DEFINES
+
+## Local Variables:
+## mode: Makefile
+## End:
