@@ -31,7 +31,7 @@ c*** Initialization
 
       lprdckw=.true.
       do k=1,nmxlyr !{
-        lprdckw(k,1,16,3)=.false.
+        lprdckw(k,1,20,3)=.false.
       end do !}
 
       nmdpr(4,1)=nspcpls+nspcncl
@@ -72,30 +72,26 @@ c*** Boundary
       do i=1,nbndknd !{
         nbc=nbc+nznbndt(i)
       end do !}
-      do i=2,9 !{
+      do i=2,11 !{
         nmdpr(i,2)=nbc
       end do !}
-      do i=23,24 !{
-        nmdpr(i,2)=nbc
-      end do !}
-      do i=8,9 !{
+      do i=9,11 !{
         nmdlr(i,2)=2
       end do !}
-      nmdlr(24,2)=2
-      do i=10,13 !{
+      do i=12,15 !{
         nmdlr(i,2)=nbc
         nmdpr(i,2)=nspcpls+nspcncl
         lspvr(i,2)=.true.
       end do !}
-      nmdbr(11,2)=2
       nmdbr(13,2)=2
-      nmdpr(14,2)=nznbndt(1)
+      nmdbr(15,2)=2
+      nmdpr(16,2)=nznbndt(1)
       ltrvr(2,2)=.true.
-      lrrvr(8,2)=.true.
       lrrvr(9,2)=.true.
+      lrrvr(10,2)=.true.
       lrrvr(11,2)=.true.
       lrrvr(13,2)=.true.
-      lrrvr(24,2)=.true.
+      lrrvr(15,2)=.true.
 
       if(glb2read) then !{
         if(nznbndt(1).eq.1) then !{
@@ -119,70 +115,69 @@ c*** nbc
       do j=1,nbndknd !{
         do i=1,nznbndt(j) !{
           k=k+1
-c*** bcchar, bcpos, bcstart, bcend, bcene, bceni, enepar, enipar
+c*** bcchar, bcpos, bcstart, bcend, bcene, bceni, bcpot, enepar, enipar, potpar
           cniprm(k,1,1,2,2)=cznbndt(i,j)
           iniprm(k,1,1,3,2)=lcpbnds(i,j)-1
           iniprm(k,1,1,4,2)=lc1bnds(i,j)-1
           iniprm(k,1,1,5,2)=lc2bnds(i,j)-1
           iniprm(k,1,1,6,2)=leebnds(i,j)
           iniprm(k,1,1,7,2)=leibnds(i,j)
-          rniprm(k,1,1,8,2)=beebnds(i,1,j)
-          rniprm(k,1,1,9,2)=beibnds(i,1,j)
-          rniprm(k,2,1,8,2)=beebnds(i,2,j)
-          rniprm(k,2,1,9,2)=beibnds(i,2,j)
-c*** bcpot, potpar
-          iniprm(k,1,1,23,2)=lpobnds(i,j)
-          rniprm(k,1,1,24,2)=bpobnds(i,1,j)
-          rniprm(k,2,1,24,2)=bpobnds(i,2,j)
+          iniprm(k,1,1,8,2)=lpobnds(i,j)
+          rniprm(k,1,1,9,2)=beebnds(i,1,j)
+          rniprm(k,1,1,10,2)=beibnds(i,1,j)
+          rniprm(k,2,1,9,2)=beebnds(i,2,j)
+          rniprm(k,2,1,10,2)=beibnds(i,2,j)
+          rniprm(k,1,1,11,2)=bpobnds(i,1,j)
+          rniprm(k,2,1,11,2)=bpobnds(i,2,j)
 c*** bccon, conpar, bcmom, mompar
           do l=1,nspcpls+nspcncl !{
             if (ifl(l).eq.0) then !{ default fluid neutral b.c.
               if (cznbndt(i,j).eq.'W' .or. cznbndt(i,j).eq.'E') then
-                iniprm(l,k,1,10,2)=5
-                iniprm(l,k,1,12,2)=1
+                iniprm(l,k,1,12,2)=5
+                iniprm(l,k,1,14,2)=1
               else if (i.le.nznbndt(1).and.j.eq.1) then !}{ core boundary
-                iniprm(l,k,1,10,2)=8
-                iniprm(l,k,1,12,2)=2
+                iniprm(l,k,1,12,2)=8
+                iniprm(l,k,1,14,2)=2
               else !}{
-                iniprm(l,k,1,10,2)=10
-                rniprm(l,k,1,11,2)=-0.01
-                iniprm(l,k,1,12,2)=2
+                iniprm(l,k,1,12,2)=10
+                rniprm(l,k,1,13,2)=-0.01
+                iniprm(l,k,1,14,2)=2
               end if !}
             else !}{
-              iniprm(l,k,1,10,2)=lcobnds(ifl(l),i,j)
-              rniprm(l,k,1,11,2)=bcobnds(ifl(l),i,1,j)
-              rniprm(l,k,2,11,2)=bcobnds(ifl(l),i,2,j)
-              iniprm(l,k,1,12,2)=lmobnds(ifl(l),i,j)
-              rniprm(l,k,1,13,2)=bmobnds(ifl(l),i,1,j)
-              rniprm(l,k,2,13,2)=bmobnds(ifl(l),i,2,j)
+              iniprm(l,k,1,12,2)=lcobnds(ifl(l),i,j)
+              rniprm(l,k,1,13,2)=bcobnds(ifl(l),i,1,j)
+              rniprm(l,k,2,13,2)=bcobnds(ifl(l),i,2,j)
+              iniprm(l,k,1,14,2)=lmobnds(ifl(l),i,j)
+              rniprm(l,k,1,15,2)=bmobnds(ifl(l),i,1,j)
+              rniprm(l,k,2,15,2)=bmobnds(ifl(l),i,2,j)
             end if !}
           end do !}
         end do !}
       end do !}
 c*** lcbs
       do i=1,nznbndt(1) !{
-        iniprm(i,1,1,14,2)=i
+        iniprm(i,1,1,16,2)=i
       end do !}
 c*** nniso
-      iniprm(1,1,1,15,2)=nniso
+      iniprm(1,1,1,17,2)=nniso
 c*** ntiso, nxiso1, nxiso2, nyiso1, nyiso2
       do i=1,nniso !{
-        iniprm(i,1,1,16,2)=nxiso1(i)
-        iniprm(i,1,1,17,2)=nxiso2(i)
-        iniprm(i,1,1,18,2)=nyiso1(i)
-        iniprm(i,1,1,19,2)=nyiso2(i)
+        iniprm(i,1,1,18,2)=nxiso1(i)
+        iniprm(i,1,1,19,2)=nxiso2(i)
+        iniprm(i,1,1,20,2)=nyiso1(i)
+        iniprm(i,1,1,21,2)=nyiso2(i)
       end do !}
 c*** niiso, tiiso, teiso
       do i=1,nspcpls+nspcncl !{
-        rniprm(i,1,1,20,2)=1.e5
+        rniprm(i,1,1,22,2)=1.e5
       end do !}
-      rniprm(1,1,1,21,2)=0.1
-      rniprm(1,1,1,22,2)=0.1
-      nmdpr(20,2)=nspcpls+nspcncl
-      lrrvr(20,2)=.true.
-      lspvr(20,2)=.true.
-      lrrvr(21,2)=.true.
+      rniprm(1,1,1,23,2)=0.1
+      rniprm(1,1,1,24,2)=0.1
+      nmdpr(22,2)=nspcpls+nspcncl
       lrrvr(22,2)=.true.
+      lspvr(22,2)=.true.
+      lrrvr(23,2)=.true.
+      lrrvr(24,2)=.true.
 
 #ifdef DBG
       print *,'Boundary: nbc,k = ',nbc,k !###
@@ -191,46 +186,46 @@ c*** niiso, tiiso, teiso
 c*** Redundancy check
 
 c*** enepar, enipar, potpar
-      lprdckw(2,1,8,2)=.false.
       lprdckw(2,1,9,2)=.false.
-      lprdckw(2,1,24,2)=.false.
+      lprdckw(2,1,10,2)=.false.
+      lprdckw(2,1,11,2)=.false.
       do k=1,nbc !{
-        if(iniprm(k,1,1,6,2).eq.4) lprdckw(2,1,8,2)=.true.
-        if(iniprm(k,1,1,7,2).eq.3) lprdckw(2,1,9,2)=.true.
-        if(iniprm(k,1,1,7,2).eq.4) lprdckw(2,1,9,2)=.true.
+        if(iniprm(k,1,1,6,2).eq.4) lprdckw(2,1,9,2)=.true.
+        if(iniprm(k,1,1,7,2).eq.3) lprdckw(2,1,10,2)=.true.
+        if(iniprm(k,1,1,7,2).eq.4) lprdckw(2,1,10,2)=.true.
         if((iniprm(k,1,1,6,2).eq.3 .or. iniprm(k,1,1,6,2).eq.15) .and.
-     .     rniprm(k,2,1,24,2).ne.0) lprdckw(2,1,24,2)=.true.
-        if((iniprm(k,1,1,23,2).eq.3 .or. iniprm(k,1,1,23,2).eq.11) .and.
-     .     rniprm(k,2,1,24,2).ne.0) lprdckw(2,1,24,2)=.true.
-        if(iniprm(k,1,1,23,2).eq.4) lprdckw(2,1,24,2)=.true.
-        if(iniprm(k,1,1,23,2).eq.21) lprdckw(2,1,24,2)=.true.
+     .     rniprm(k,2,1,11,2).ne.0) lprdckw(2,1,11,2)=.true.
+        if((iniprm(k,1,1,8,2).eq.3 .or. iniprm(k,1,1,8,2).eq.11) .and.
+     .     rniprm(k,2,1,11,2).ne.0) lprdckw(2,1,11,2)=.true.
+        if(iniprm(k,1,1,8,2).eq.4) lprdckw(2,1,11,2)=.true.
+        if(iniprm(k,1,1,8,2).eq.21) lprdckw(2,1,11,2)=.true.
 c*** conpar, mompar
-        lprdckw(k,1,11,2)=.false.
-        lprdckw(k,1,13,2)=iniprm(k,1,1,6,2).eq.3 .or.
+        lprdckw(k,1,13,2)=.false.
+        lprdckw(k,1,15,2)=iniprm(k,1,1,6,2).eq.3 .or.
      .                                            iniprm(k,1,1,7,2).eq.3
-        lprdckw(k,2,11,2)=.false.
         lprdckw(k,2,13,2)=.false.
+        lprdckw(k,2,15,2)=.false.
         do l=1,nspcpls+nspcncl !{
           if (ifl(l).eq.0) cycle
-          if(iniprm(l,k,1,10,2).ne.3) lprdckw(k,1,11,2)=.true.
-          if(iniprm(l,k,1,12,2).ne.8) lprdckw(k,1,13,2)=.true.
-          if(iniprm(l,k,1,10,2).eq.4) lprdckw(k,2,11,2)=.true.
-          if(iniprm(l,k,1,10,2).eq.7) lprdckw(k,2,11,2)=.true.
-          if(iniprm(l,k,1,12,2).eq.3) lprdckw(k,2,13,2)=.true.
+          if(iniprm(l,k,1,12,2).ne.3) lprdckw(k,1,13,2)=.true.
+          if(iniprm(l,k,1,14,2).ne.8) lprdckw(k,1,15,2)=.true.
           if(iniprm(l,k,1,12,2).eq.4) lprdckw(k,2,13,2)=.true.
-          if(iniprm(l,k,1,12,2).eq.6) lprdckw(k,2,13,2)=.true.
           if(iniprm(l,k,1,12,2).eq.7) lprdckw(k,2,13,2)=.true.
+          if(iniprm(l,k,1,14,2).eq.3) lprdckw(k,2,15,2)=.true.
+          if(iniprm(l,k,1,14,2).eq.4) lprdckw(k,2,15,2)=.true.
+          if(iniprm(l,k,1,14,2).eq.6) lprdckw(k,2,15,2)=.true.
+          if(iniprm(l,k,1,14,2).eq.7) lprdckw(k,2,15,2)=.true.
         end do !}
       end do !}
 c*** niiso, tiiso, teiso
-      if(iniprm(1,1,1,15,2).eq.0) then !{
-        lprdckw(1,1,16,2)=.false.
-        lprdckw(1,1,17,2)=.false.
+      if(iniprm(1,1,1,17,2).eq.0) then !{
         lprdckw(1,1,18,2)=.false.
         lprdckw(1,1,19,2)=.false.
         lprdckw(1,1,20,2)=.false.
         lprdckw(1,1,21,2)=.false.
         lprdckw(1,1,22,2)=.false.
+        lprdckw(1,1,23,2)=.false.
+        lprdckw(1,1,24,2)=.false.
       end if !}
 
 c-----------------------------------------------------------------------
@@ -261,43 +256,42 @@ c*** k, m, n are the numbers of recycling, specified, and all strata
       print *,'Neutrals: k,m,n = ',k,m,n !###
 #endif
 
-      do i=3,6 !{
+      do i=2,7 !{
         nmdpr(i,3)=n
       end do !}
-      nmdpr(7,3)=nspcncl
-      nmdpr(8,3)=n
-      nmdlr(8,3)=nspcncl
-      do i=9,11,2 !{
+      nmdpr(8,3)=nspcncl
+      nmdpr(9,3)=nspcatm
+      nmdpr(10,3)=nspcpls+nspcncl
+      nmdpr(11,3)=nspcpls+nspcncl
+      nmdpr(12,3)=n
+      nmdlr(12,3)=nspcncl
+      do i=13,15,2 !{
         nmdpr(i,3)=k
       end do !}
-      nmdpr(10,3)=0
-      nmdpr(12,3)=nznbndt(1)
-      nmdpr(13,3)=nznbndt(2)
-      nmdpr(14,3)=nspcpls+nspcncl
-      nmdlr(14,3)=n
-      nmdpr(15,3)=m
-      nmdlr(15,3)=1
-      nmdpr(16,3)=nspcncl
-      nmdlr(16,3)=m
-      nmdpr(17,3)=nspcpls+nspcncl
-      nmdpr(31,3)=nlimi+nstsi+1
-      nmdpr(32,3)=n
-      nmdpr(33,3)=n
-      nmdpr(34,3)=nspcmol
-      nmdpr(35,3)=nspcion
-      nmdpr(36,3)=nspcatm
-      nmdlr(36,3)=nspcmol
-      nmdpr(37,3)=nspcatm
-      nmdpr(38,3)=nspcatm
-      nmdpr(39,3)=nspcpls+nspcncl
-      ltrvr(3,3)=.true.
-      lrrvr(14,3)=.true.
-      lspvr(14,3)=.true.
-      lrrvr(15,3)=.true.
-      lrrvr(16,3)=.true.
-      lspvr(17,3)=.true.
-      lspvr(39,3)=.true.
-      lrrvr(31,3)=.true.
+      nmdpr(14,3)=0
+      nmdpr(16,3)=nznbndt(1)
+      nmdpr(17,3)=nznbndt(2)
+      nmdpr(18,3)=nspcpls+nspcncl
+      nmdlr(18,3)=n
+      nmdpr(19,3)=m
+      nmdlr(19,3)=1
+      nmdpr(20,3)=nspcncl
+      nmdlr(20,3)=m
+      nmdpr(25,3)=nlimi+nstsi+1
+      nmdpr(22,3)=nspcmol
+      nmdpr(23,3)=nspcion
+      nmdpr(24,3)=nspcatm
+      nmdlr(24,3)=nspcmol
+      nmdpr(21,3)=nspcatm
+
+      ltrvr(2,3)=.true.
+      lspvr(10,3)=.true.
+      lspvr(11,3)=.true.
+      lrrvr(18,3)=.true.
+      lspvr(18,3)=.true.
+      lrrvr(19,3)=.true.
+      lrrvr(20,3)=.true.
+      lrrvr(25,3)=.true.
 
 c*** nstrai
 
@@ -337,30 +331,30 @@ c*** Recycling sources
               end if !}
 
 c***          crcstra, rcpos, rcstart, rcend
-              cniprm(k,1,1,3,3)=cznbndt(i,j)
-              iniprm(k,1,1,4,3)=lcpbnds(i,j)-1
-              iniprm(k,1,1,5,3)=ls1bnds(i,j)-1
-              iniprm(k,1,1,6,3)=ls2bnds(i,j)-1
+              cniprm(k,1,1,2,3)=cznbndt(i,j)
+              iniprm(k,1,1,3,3)=lcpbnds(i,j)-1
+              iniprm(k,1,1,4,3)=ls1bnds(i,j)-1
+              iniprm(k,1,1,5,3)=ls2bnds(i,j)-1
 
 c***          species_start, species_end
-              iniprm(k,1,1,32,3)=ispi-1+(iatm-1)
-              iniprm(k,1,1,33,3)=ispe+(iatm-1)
+              iniprm(k,1,1,6,3)=ispi-1+(iatm-1)
+              iniprm(k,1,1,7,3)=ispe+(iatm-1)
 
 c***          lstrascl
               do l=1,nspcncl !{
-                if (l.eq.iatm) iniprm(k,l,1,8,3)=lscbnds(l,i,j)
+                if (l.eq.iatm) iniprm(k,l,1,12,3)=lscbnds(l,i,j)
               end do !}
 
 c***          lsns, ksns
-              iniprm(k,1,1,9,3)=kk
-              iniprm(k,1,1,11,3)=1
+              iniprm(k,1,1,13,3)=kk
+              iniprm(k,1,1,15,3)=1
 
 c***          userfluxparm
-              rniprm(k,1,1,15,3)=0
+              rniprm(k,1,1,19,3)=0.
 
 c***          gpfc
               do l=1,nspcncl !{
-                rniprm(l,k,1,16,3)=0
+                rniprm(l,k,1,20,3)=0.
               end do !}
             end do !}
           end if !}
@@ -378,10 +372,10 @@ c*** Gas puffing sources
         end if !}
 
 c***      crcstra, rcpos, rcstart, rcend
-        cniprm(k,1,1,3,3)='C'
+        cniprm(k,1,1,2,3)='C'
+        iniprm(k,1,1,3,3)=0
         iniprm(k,1,1,4,3)=0
         iniprm(k,1,1,5,3)=0
-        iniprm(k,1,1,6,3)=0
 
 c***        species_start, species_end
         call uinspcid(cgpfstrs(i),l,j)
@@ -394,8 +388,8 @@ c***        species_start, species_end
           end do !}
         end if !}
         if (j.eq.0) then !{
-          iniprm(k,1,1,32,3)=0
-          iniprm(k,1,1,33,3)=0
+          iniprm(k,1,1,6,3)=0
+          iniprm(k,1,1,7,3)=0
         else !}{
           ispi=1
           do iatm = 1, j !{
@@ -409,19 +403,19 @@ c***        species_start, species_end
               end if !}
             end do !}
           end do !}
-          iniprm(k,1,1,32,3)=ispi+(j-1)-1
-          iniprm(k,1,1,33,3)=ispe+(j-1)
+          iniprm(k,1,1,6,3)=ispi+(j-1)-1
+          iniprm(k,1,1,7,3)=ispe+(j-1)
         end if !}
 
 c***              userfluxparm
-        rniprm(k,1,1,15,3)=fgpfstr(i)
+        rniprm(k,1,1,19,3)=fgpfstr(i)
 
 c***      lstrascl,gpfc
         do l=1,nspcncl !{
-          iniprm(k,l,1,8,3)=lsgpfstr(l,i)
-          rniprm(l,k,1,16,3)=igpfstr(l,i)
+          iniprm(k,l,1,12,3)=lsgpfstr(l,i)
+          rniprm(l,k,1,20,3)=igpfstr(l,i)
         end do !}
-        lprdckw(k,1,16,3)=.true.
+        lprdckw(k,1,20,3)=.true.
       end do !}
 
 c*** Recombination sources
@@ -435,10 +429,10 @@ c*** Recombination sources
         end if !}
 
 c***        crcstra, rcpos, rcstart, rcend
-        cniprm(k,1,1,3,3)='V'
+        cniprm(k,1,1,2,3)='V'
+        iniprm(k,1,1,3,3)=0
         iniprm(k,1,1,4,3)=0
         iniprm(k,1,1,5,3)=0
-        iniprm(k,1,1,6,3)=0
 
 c***        species_start, species_end
         ispi=nspez(k)
@@ -448,16 +442,16 @@ c***        species_start, species_end
             ispe = ipl
           end if !}
         end do !}
-        iniprm(k,1,1,32,3)=ispi+(lkindp(nspez(k))-1)-1
-        iniprm(k,1,1,33,3)=ispe+(lkindp(nspez(k))-1)
+        iniprm(k,1,1,6,3)=ispi+(lkindp(nspez(k))-1)-1
+        iniprm(k,1,1,7,3)=ispe+(lkindp(nspez(k))-1)
 
 c***        userfluxparm
-        rniprm(k,1,1,15,3)=0
+        rniprm(k,1,1,19,3)=0.
 
 c***        lstrascl, gpfc
         do l=1,nspcncl !{
-          iniprm(k,l,1,8,3)=lsrcmstr(l,i)
-          rniprm(l,k,1,16,3)=0
+          iniprm(k,l,1,12,3)=lsrcmstr(l,i)
+          rniprm(l,k,1,20,3)=0.
         end do !}
       end do !}
 
@@ -479,27 +473,27 @@ c*** Time-dependent stratum
         end if !}
 
 c***          crcstra, rcpos, rcstart, rcend
-        cniprm(k,1,1,3,3)='T'
+        cniprm(k,1,1,2,3)='T'
+        iniprm(k,1,1,3,3)=0
         iniprm(k,1,1,4,3)=0
         iniprm(k,1,1,5,3)=0
-        iniprm(k,1,1,6,3)=0
 
 c***          species_start, species_end
-        iniprm(k,1,1,32,3)=0
-        iniprm(k,1,1,33,3)=0
+        iniprm(k,1,1,6,3)=0
+        iniprm(k,1,1,7,3)=0
 
 c***          lstrascl
         do l=1,nspcncl !{
-          iniprm(k,l,1,8,3)=0
+          iniprm(k,l,1,12,3)=0
         end do !}
       end if !}
 
 c***        lcns, ltns
       do i=1,nznbndt(1) !{
-        iniprm(i,1,1,12,3)=i
+        iniprm(i,1,1,16,3)=i
       end do !}
       do i=1,nznbndt(2) !{
-        iniprm(i,1,1,13,3)=nznbndt(1)+i
+        iniprm(i,1,1,17,3)=nznbndt(1)+i
       end do !}
 
 c***        recyc
@@ -507,15 +501,15 @@ c***        recyc
         do i=1,nspcpls+nspcncl !{
           k=ifl(i)
           if (k.eq.0) then !{
-            rniprm(i,j,1,14,3)=0
+            rniprm(i,j,1,18,3)=0.
           elseif (ncharp(k).eq.1 .or. ncharp(k).eq.2 .or.
      .            ncharp(k).eq.7 .or. ncharp(k).eq.8 .or.
      .            ncharp(k).eq.10.or. ncharp(k).eq.18.or.
      .            ncharp(k).eq.36.or. ncharp(k).eq.54.or.
      .            ncharp(k).eq.86) then !}{
-            rniprm(i,j,1,14,3)=1
+            rniprm(i,j,1,18,3)=1.
           else !}{
-            rniprm(i,j,1,14,3)=0
+            rniprm(i,j,1,18,3)=0.
           end if !}
         end do !}
       end do !}
@@ -525,106 +519,50 @@ c*** B2 and Eirene species counters
       do i=1,nspcpls+nspcncl !{
         k=ifl(i)
         if (k.eq.0) k=ifl(i+1)
-        iniprm(i,1,1,17,3)=lkindp(k)
+        iniprm(i,1,1,10,3)=lkindp(k)
         found = .false.
         do j=1,nspcatm !{
           if (found) cycle
           found = ncharp(k).eq.nchara(j) .and.
      &            spcsmsp(k).eq.nmassa(j)
-          if (found) iniprm(i,1,1,39,3)=j
+          if (found) iniprm(i,1,1,11,3)=j
         end do !}
-        if (.not.found) iniprm(i,1,1,39,3)=0
+        if (.not.found) iniprm(i,1,1,11,3)=0
       end do !}
       do i=1,nspcncl !{
         if (i.eq.1) then !{
-          iniprm(i,1,1,7,3)=0
+          iniprm(i,1,1,8,3)=0
         else !}{
           k=0
           do j=1,nspcpls !{
             if (lkindp(j).eq.i-1) k=k+1
           end do !}
-          iniprm(i,1,1,7,3)=iniprm(i-1,1,1,7,3)+k+1
+          iniprm(i,1,1,8,3)=iniprm(i-1,1,1,8,3)+k+1
         end if !}
       end do !}
       do i=1,nspcatm !{
-        iniprm(i,1,1,37,3)=0
+        iniprm(i,1,1,9,3)=0
         j=find_matching_species(spcsatm(i)(1:2))
         k=get_atomic_number(spcsatm(i))
         do l=1,nspcpls !{
-          if (iniprm(i,1,1,37,3).ne.0) cycle
+          if (iniprm(i,1,1,9,3).ne.0) cycle
           m=find_matching_species(spcspls(l)(1:2))
           n=get_atomic_number(spcspls(l))
           if (j.eq.m.and.k.eq.n) then
-            iniprm(i,1,1,37,3)=iniprm(lkindp(l),1,1,7,3)
+            iniprm(i,1,1,9,3)=iniprm(lkindp(l),1,1,8,3)
           end if
         end do !}
       end do !}
 
-c*** Eirene surface data input through B2
-
-      if(n_spcsrf.gt.0) then !{
-        iniprm(1,1,1,18,3)=n_spcsrf
-        k=0
-        do i=1,n_spcsrf !{
-          i_spcsrf(i)=k+1
-          k=k+k_spcsrf(i)
-          j_spcsrf(i)=k
-          do j=1,k_spcsrf(i) !{
-            n=ll_spcsrf(j,i)
-            do m=1,i-1 !{
-              do l=1,k_spcsrf(m) !{
-                if(n.eq.ll_spcsrf(l,m)) then !{
-                  write(0,*) '### Surface special: common segment',n,
-     ,              ' in two groups: ',sps_id(m),' and ',sps_id(i)
-                end if !}
-              end do !}
-            end do !}
-            if(n.gt.0) then !{
-              l_spcsrf(i_spcsrf(i)+j-1)=indasrfe(n)
-            else !}{
-              l_spcsrf(i_spcsrf(i)+j-1)=0
-            end if !}
-          end do !}
-        end do !}
-        nmdpr(19,3)=k           ! l_spcsrf
-        do i=1,k !{
-          iniprm(i,1,1,19,3)=l_spcsrf(i)
-        end do !}
-        do i=20,30 !{
-          nmdpr(i,3)=n_spcsrf
-        end do !}
-        lt8rvr(20,3)=.true.     ! sps_id
-        do i=23,29 !{
-          lrrvr(i,3)=.true.
-        end do !}
-        do i=1,n_spcsrf !{
-          c8niprm(i,1,1,20,3)=sps_id(i)
-          iniprm(i,1,1,21,3)=i_spcsrf(i)
-          iniprm(i,1,1,22,3)=j_spcsrf(i)
-          rniprm(i,1,1,23,3)=sps_absr(i)
-          rniprm(i,1,1,24,3)=sps_trno(i)
-          rniprm(i,1,1,25,3)=sps_trni(i)
-          rniprm(i,1,1,26,3)=sps_mtri(i)
-          rniprm(i,1,1,27,3)=sps_tmpr(i)
-          rniprm(i,1,1,28,3)=sps_spph(i)
-          rniprm(i,1,1,29,3)=sps_spch(i)
-          iniprm(i,1,1,30,3)=sps_sgrp(i)
-        end do !}
-      else !}{
-        do i=18,30 !{
-          chrpl(i,3)=' '
-        end do !}
-      end if !}
-
 c*** latmscl, lmolscl, lionscl
       do i = 1, nspcatm !{
-        iniprm(i,1,1,38,3)=iniprm(iniprm(i,1,1,37,3)+1,1,1,17,3)
+        iniprm(i,1,1,21,3)=iniprm(iniprm(i,1,1,9,3)+1,1,1,10,3)
       end do !}
       do i = 1, nspcmol !{
-        iniprm(i,1,1,34,3)=lkindm(i)
+        iniprm(i,1,1,22,3)=lkindm(i)
       end do !}
       do i = 1, nspcion !{
-        iniprm(i,1,1,35,3)=lkindi(i)
+        iniprm(i,1,1,23,3)=lkindi(i)
       end do !}
 
 c*** mlcmp
@@ -643,50 +581,50 @@ cxpb We use one reaction per molecule to avoid double-counting
             hlp_el = .true.
             if (idez(iscd1m(j,k),1,3).eq.1) then !{
               i = idez(iscd1m(j,k),3,3)
-              iniprm(i,j,1,36,3)=iniprm(i,j,1,36,3)+
+              iniprm(i,j,1,24,3)=iniprm(i,j,1,24,3)+
      .                           idez(iscd1m(j,k),2,3)
             end if !}
             if (idez(iscd2m(j,k),1,3).eq.1) then !{
               i = idez(iscd2m(j,k),3,3)
-              iniprm(i,j,1,36,3)=iniprm(i,j,1,36,3)+
+              iniprm(i,j,1,24,3)=iniprm(i,j,1,24,3)+
      .                           idez(iscd2m(j,k),2,3)
             end if !}
             if (idez(iscd3m(j,k),1,3).eq.1) then !{
               i = idez(iscd3m(j,k),3,3)
-              iniprm(i,j,1,36,3)=iniprm(i,j,1,36,3)+
+              iniprm(i,j,1,24,3)=iniprm(i,j,1,24,3)+
      .                           idez(iscd3m(j,k),2,3)
             end if !}
             if (idez(iscd4m(j,k),1,3).eq.1) then !{
               i = idez(iscd4m(j,k),3,3)
-              iniprm(i,j,1,36,3)=iniprm(i,j,1,36,3)+
+              iniprm(i,j,1,24,3)=iniprm(i,j,1,24,3)+
      .                           idez(iscd4m(j,k),2,3)
             end if !}
             if (idez(iscd1m(j,k),1,3).eq.4) then !{
               i = lkindp(idez(iscd1m(j,k),3,3))
-              iniprm(i,j,1,36,3)=iniprm(i,j,1,36,3)+
+              iniprm(i,j,1,24,3)=iniprm(i,j,1,24,3)+
      .                           idez(iscd1m(j,k),2,3)
             end if !}
             if (idez(iscd2m(j,k),1,3).eq.4) then !{
               i = lkindp(idez(iscd2m(j,k),3,3))
-              iniprm(i,j,1,36,3)=iniprm(i,j,1,36,3)+
+              iniprm(i,j,1,24,3)=iniprm(i,j,1,24,3)+
      .                           idez(iscd2m(j,k),2,3)
             end if !}
             if (idez(iscd3m(j,k),1,3).eq.4) then !{
               i = lkindp(idez(iscd3m(j,k),3,3))
-              iniprm(i,j,1,36,3)=iniprm(i,j,1,36,3)+
+              iniprm(i,j,1,24,3)=iniprm(i,j,1,24,3)+
      .                           idez(iscd3m(j,k),2,3)
             end if !}
             if (idez(iscd4m(j,k),1,3).eq.4) then !{
               i = lkindp(idez(iscd4m(j,k),3,3))
-              iniprm(i,j,1,36,3)=iniprm(i,j,1,36,3)+
+              iniprm(i,j,1,24,3)=iniprm(i,j,1,24,3)+
      .                           idez(iscd4m(j,k),2,3)
             end if !}
             if (idez(iscd1m(j,k),1,3).eq.2) then !{
               l = idez(iscd1m(j,k),3,3)
               if (hlp_mol(l)) then !{
                 do i = 1, nspcatm !{
-                  iniprm(i,j,1,36,3)=iniprm(i,j,1,36,3)+
-     .             iniprm(i,l,1,36,3)*idez(iscd1m(j,k),2,3)
+                  iniprm(i,j,1,24,3)=iniprm(i,j,1,24,3)+
+     .             iniprm(i,l,1,24,3)*idez(iscd1m(j,k),2,3)
                 end do !}
               else !}{
                 hlp_mol(j)=.false.
@@ -697,8 +635,8 @@ cxpb We use one reaction per molecule to avoid double-counting
               l = idez(iscd2m(j,k),3,3)
               if (hlp_mol(l)) then !{
                 do i = 1, nspcatm !{
-                  iniprm(i,j,1,36,3)=iniprm(i,j,1,36,3)+
-     .             iniprm(i,l,1,36,3)*idez(iscd2m(j,k),2,3)
+                  iniprm(i,j,1,24,3)=iniprm(i,j,1,24,3)+
+     .             iniprm(i,l,1,24,3)*idez(iscd2m(j,k),2,3)
                 end do !}
               else !}{
                 hlp_mol(j)=.false.
@@ -709,8 +647,8 @@ cxpb We use one reaction per molecule to avoid double-counting
               l = idez(iscd3m(j,k),3,3)
               if (hlp_mol(l)) then !{
                 do i = 1, nspcatm !{
-                  iniprm(i,j,1,36,3)=iniprm(i,j,1,36,3)+
-     .             iniprm(i,l,1,36,3)*idez(iscd3m(j,k),2,3)
+                  iniprm(i,j,1,24,3)=iniprm(i,j,1,24,3)+
+     .             iniprm(i,l,1,24,3)*idez(iscd3m(j,k),2,3)
                 end do !}
               else !}{
                 hlp_mol(j)=.false.
@@ -721,8 +659,8 @@ cxpb We use one reaction per molecule to avoid double-counting
               l = idez(iscd4m(j,k),3,3)
               if (hlp_mol(l)) then !{
                 do i = 1, nspcatm !{
-                  iniprm(i,j,1,36,3)=iniprm(i,j,1,36,3)+
-     .             iniprm(i,l,1,36,3)*idez(iscd4m(j,k),2,3)
+                  iniprm(i,j,1,24,3)=iniprm(i,j,1,24,3)+
+     .             iniprm(i,l,1,24,3)*idez(iscd4m(j,k),2,3)
                 end do !}
               else !}{
                 hlp_mol(j)=.false.
@@ -777,7 +715,7 @@ cxpb Check if we need to do molecular ions
                 i = idez(iscd1i(j,k),3,3)
                 do l = 1, nspcmol !{
                   if (cmp_bck(l,nmol+j).gt.0) then !{
-                    iniprm(i,l,1,36,3)=iniprm(i,l,1,36,3)+
+                    iniprm(i,l,1,24,3)=iniprm(i,l,1,24,3)+
      .               idez(iscd1i(j,k),2,3)*cmp_bck(l,nmol+j)
                  end if !}
                 end do !}
@@ -786,7 +724,7 @@ cxpb Check if we need to do molecular ions
                 i = idez(iscd2i(j,k),3,3)
                 do l = 1, nspcmol !{
                   if (cmp_bck(l,nmol+j).gt.0) then !{
-                    iniprm(i,l,1,36,3)=iniprm(i,l,1,36,3)+
+                    iniprm(i,l,1,24,3)=iniprm(i,l,1,24,3)+
      .               idez(iscd2i(j,k),2,3)*cmp_bck(l,nmol+j)
                   end if !}
                 end do !}
@@ -795,7 +733,7 @@ cxpb Check if we need to do molecular ions
                 i = idez(iscd3i(j,k),3,3)
                 do l = 1, nspcmol !{
                   if (cmp_bck(l,nmol+j).gt.0) then !{
-                    iniprm(i,l,1,36,3)=iniprm(i,l,1,36,3)+
+                    iniprm(i,l,1,24,3)=iniprm(i,l,1,24,3)+
      .               idez(iscd3i(j,k),2,3)*cmp_bck(l,nmol+j)
                   end if !}
                 end do !}
@@ -804,7 +742,7 @@ cxpb Check if we need to do molecular ions
                 i = idez(iscd4i(j,k),3,3)
                 do l = 1, nspcmol !{
                   if (cmp_bck(l,nmol+j).gt.0) then !{
-                    iniprm(i,l,1,36,3)=iniprm(i,l,1,36,3)+
+                    iniprm(i,l,1,24,3)=iniprm(i,l,1,24,3)+
      .               idez(iscd4i(j,k),2,3)*cmp_bck(l,nmol+j)
                   end if !}
                 end do !}
@@ -813,7 +751,7 @@ cxpb Check if we need to do molecular ions
                 i = lkindp(idez(iscd1i(j,k),3,3))
                 do l = 1, nspcmol !{
                   if (cmp_bck(l,nmol+j).gt.0) then !{
-                    iniprm(i,l,1,36,3)=iniprm(i,l,1,36,3)+
+                    iniprm(i,l,1,24,3)=iniprm(i,l,1,24,3)+
      .               idez(iscd1i(j,k),2,3)*cmp_bck(l,nmol+j)
                   end if !}
                 end do !}
@@ -822,7 +760,7 @@ cxpb Check if we need to do molecular ions
                 i = lkindp(idez(iscd2i(j,k),3,3))
                 do l = 1, nspcmol !{
                   if (cmp_bck(l,nmol+j).gt.0) then !{
-                    iniprm(i,l,1,36,3)=iniprm(i,l,1,36,3)+
+                    iniprm(i,l,1,24,3)=iniprm(i,l,1,24,3)+
      .               idez(iscd2i(j,k),2,3)*cmp_bck(l,nmol+j)
                   end if !}
                 end do !}
@@ -831,7 +769,7 @@ cxpb Check if we need to do molecular ions
                 i = lkindp(idez(iscd3i(j,k),3,3))
                 do l = 1, nspcmol !{
                   if (cmp_bck(l,nmol+j).gt.0) then !{
-                    iniprm(i,l,1,36,3)=iniprm(i,l,1,36,3)+
+                    iniprm(i,l,1,24,3)=iniprm(i,l,1,24,3)+
      .               idez(iscd3i(j,k),2,3)*cmp_bck(l,nmol+j)
                   end if !}
                 end do !}
@@ -840,7 +778,7 @@ cxpb Check if we need to do molecular ions
                 i = lkindp(idez(iscd4i(j,k),3,3))
                 do l = 1, nspcmol !{
                   if (cmp_bck(l,nmol+j).gt.0) then !{
-                    iniprm(i,l,1,36,3)=iniprm(i,l,1,36,3)+
+                    iniprm(i,l,1,24,3)=iniprm(i,l,1,24,3)+
      .               idez(iscd4i(j,k),2,3)*cmp_bck(l,nmol+j)
                   end if !}
                 end do !}
@@ -945,8 +883,8 @@ cxpb Second pass in case the molecules were not sorted in ascending order
             if (cmp_bck(j,l).eq.0) cycle
             if (hlp_mol(l)) then !{
               do i = 1, nspcatm !{
-                iniprm(i,j,1,36,3)=iniprm(i,j,1,36,3)+
-     .           iniprm(i,l,1,36,3)*cmp_bck(j,l)
+                iniprm(i,j,1,24,3)=iniprm(i,j,1,24,3)+
+     .           iniprm(i,l,1,24,3)*cmp_bck(j,l)
               end do !}
               cmp_bck(j,l)=0
             end if !}
@@ -957,6 +895,62 @@ cxpb Second pass in case the molecules were not sorted in ascending order
           end do !}
         end do !}
       end do !}
+
+*** Eirene surface data input through B2
+
+      if(n_spcsrf.gt.0) then !{
+        iniprm(1,1,1,26,3)=n_spcsrf
+        k=0
+        do i=1,n_spcsrf !{
+          i_spcsrf(i)=k+1
+          k=k+k_spcsrf(i)
+          j_spcsrf(i)=k
+          do j=1,k_spcsrf(i) !{
+            n=ll_spcsrf(j,i)
+            do m=1,i-1 !{
+              do l=1,k_spcsrf(m) !{
+                if(n.eq.ll_spcsrf(l,m)) then !{
+                  write(0,*) '### Surface special: common segment',n,
+     ,              ' in two groups: ',sps_id(m),' and ',sps_id(i)
+                end if !}
+              end do !}
+            end do !}
+            if(n.gt.0) then !{
+              l_spcsrf(i_spcsrf(i)+j-1)=indasrfe(n)
+            else !}{
+              l_spcsrf(i_spcsrf(i)+j-1)=0
+            end if !}
+          end do !}
+        end do !}
+        nmdpr(27,3)=k           ! l_spcsrf
+        do i=1,k !{
+          iniprm(i,1,1,27,3)=l_spcsrf(i)
+        end do !}
+        do i=28,38 !{
+          nmdpr(i,3)=n_spcsrf
+        end do !}
+        lt8rvr(28,3)=.true.     ! sps_id
+        do i=31,37 !{
+          lrrvr(i,3)=.true.
+        end do !}
+        do i=1,n_spcsrf !{
+          c8niprm(i,1,1,28,3)=sps_id(i)
+          iniprm(i,1,1,29,3)=i_spcsrf(i)
+          iniprm(i,1,1,30,3)=j_spcsrf(i)
+          rniprm(i,1,1,31,3)=sps_absr(i)
+          rniprm(i,1,1,32,3)=sps_trno(i)
+          rniprm(i,1,1,33,3)=sps_trni(i)
+          rniprm(i,1,1,34,3)=sps_mtri(i)
+          rniprm(i,1,1,35,3)=sps_tmpr(i)
+          rniprm(i,1,1,36,3)=sps_spph(i)
+          rniprm(i,1,1,37,3)=sps_spch(i)
+          iniprm(i,1,1,38,3)=sps_sgrp(i)
+        end do !}
+      else !}{
+        do i=26,38 !{
+          chrpl(i,3)=' '
+        end do !}
+      end if !}
 
 c-----------------------------------------------------------------------
 c*** Diagnostics
@@ -1059,11 +1053,11 @@ c*** Helium pumping data
         lrrvr(2,7)=.true.
 
 c*** location, fusion_power, ratio of pumping speeds, j_he_at, j_ne_at
-        iniprm(1,1,1,11,7)=locphep
+        iniprm(1,1,1,12,7)=locphep
         rniprm(1,1,1,1,7)=pwrhepdt
         rniprm(1,1,1,2,7)=pmphepdt
-        iniprm(1,1,1,8,7)=j_he_at
-        iniprm(1,1,1,17,7)=j_ne_at
+        iniprm(1,1,1,9,7)=j_he_at
+        iniprm(1,1,1,10,7)=j_ne_at
 c*** lpfrb, lpfrt
         if(locphep.eq.1) then !{
           iniprm(1,1,1,4,7)=lstclhep(1)
@@ -1090,13 +1084,14 @@ c*** lhetrgts
 c*** j_h_at,l_h_mol
       if (j_h_at.ne.0) then !{
         ex=.false.
-        iniprm(1,1,1,9,7)=j_h_at
-        nmdpr(10,7)=nmoli
+        iniprm(1,1,1,8,7)=j_h_at
+        nmdpr(11,7)=nmoli
         do i=1,nmoli !{
-          iniprm(i,1,1,10,7)=l_h_mol(i)
+          iniprm(i,1,1,11,7)=l_h_mol(i)
         end do !}
       end if !}
       if(npfrgrp.gt.0) then !{
+        ex=.false.
 #ifdef DBG
         print *,'uinprpb2: PFR fluxes',npfrgrp
         if(npfrgrp.gt.0) then !{
@@ -1110,22 +1105,22 @@ c*** j_h_at,l_h_mol
      ,                      'lpfrgrp',(lpfrgrp(i),i=1,jpfrgrp(npfrgrp))
         end if !}
 #endif
-        iniprm(1,1,1,12,7)=npfrgrp
-        nmdpr(13,7)=jpfrgrp(npfrgrp)
+        iniprm(1,1,1,13,7)=npfrgrp
+        nmdpr(14,7)=jpfrgrp(npfrgrp)
         do i=1,jpfrgrp(npfrgrp) !{
-          iniprm(i,1,1,13,7)=indasrfe(lpfrgrp(i))
+          iniprm(i,1,1,14,7)=indasrfe(lpfrgrp(i))
         end do !}
-        nmdpr(14,7)=npfrgrp
         nmdpr(15,7)=npfrgrp
         nmdpr(16,7)=npfrgrp
-        lt8rvr(16,7)=.true.
+        nmdpr(17,7)=npfrgrp
+        lt8rvr(17,7)=.true.
         do i=1,npfrgrp !{
-          iniprm(i,1,1,14,7)=ipfrgrp(i)
-          iniprm(i,1,1,15,7)=jpfrgrp(i)
-          c8niprm(i,1,1,16,7)=gpfrgrp(i)
+          iniprm(i,1,1,15,7)=ipfrgrp(i)
+          iniprm(i,1,1,16,7)=jpfrgrp(i)
+          c8niprm(i,1,1,17,7)=gpfrgrp(i)
         end do !}
       else !}{
-        do i=12,16 !{
+        do i=13,17 !{
           chrpl(i,7)=' '
         end do !}
       end if !}
