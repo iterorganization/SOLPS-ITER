@@ -18,7 +18,7 @@ c      implicit none
       integer nnms
       parameter (nnms=2)
       integer i
-      character*8 unm(nnms), uline*16
+      character*8 name, unm(nnms), uline*16
       logical streql
       external streql
 c*** List of the valid input keywords
@@ -26,9 +26,9 @@ c*** List of the valid input keywords
      1    'npr     ','nptseg  '/
 c======================================================================
 
-      call locase(nam,nam,8)
+      call locase(nam,name,8)
       do i=1,nnms
-        if(streql(nam,unm(i))) go to (10,20),i
+        if(streql(name,unm(i))) go to (10,20),i
       end do
       call skipit
       return

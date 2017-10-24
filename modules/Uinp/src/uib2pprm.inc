@@ -3,7 +3,7 @@ c  VERSION : 14.08.2003 23:15
 #include "DIMENSIONS.F"
 
 c*** The numbers of input blocks and variables to work on in one block
-      integer, parameter :: nblck=7, nkwrd=39, nnmdf=nblck*nkwrd
+      integer, parameter :: nblck=7, nkwrd=38, nnmdf=nblck*nkwrd
 
 c*** The maximum length of the keyword
       integer, parameter :: mxkwln=22

@@ -10,10 +10,11 @@ c
 c=======================================================================
 c*** Input of user data from the file AUX
 c=======================================================================
+      character*8 nam
 #include "uinput.inc"
 #include "impcon.inc"
       parameter (nnms=38)
-      character*8 nam, unm(nnms)
+      character*8 name, unm(nnms)
       integer itrsrc(0:nstra),iitalv(ntalv),iiiplt(5)
       integer nfiles
       logical ublplt(5)
@@ -33,15 +34,15 @@ c*** List of the valid input keywords
 c=======================================================================
 c
       call subini('uinaux')
-      call locase(nam,nam,8)
+      call locase(nam,name,8)
       do 1000 i=1,nnms
-          if(streql(nam,unm(i))) 
+          if(streql(name,unm(i)))
      ,             go to (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,
      ,                    16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,
      ,                                       31,32,33,34,35,36,37,38),i
  1000 continue
 c      call skipit
-      print *,'uinaux: variable name ',nam,' is not foreseen - ',
+      print *,'uinaux: variable name ',name,' is not foreseen - ',
      ,  'check the $DEVICE.aux file'
       call xerrab ('Unknown variable name in $DEVICE.aux file')
       goto 9999

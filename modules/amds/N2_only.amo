@@ -1,14 +1,12 @@
 # Output file produced by amds version 1.04
 filevers 1
-reactns 6
-AMMONX H.2 01
+reactns 5
 AMMONX H.2 02
 AMMONX H.2 03
 AMMONX H.2 23s
 AMMONX H.2 ZN
 AMMONX H.2 ZZ
 group
-
 
 
 
@@ -20,23 +18,19 @@ deltae
 
 
 
-
 massp
-0
 0
 0
 28
 14
 1
 masst
-14
 28
 28
 0
 2
 14
 rctype
-EI
 DS
 EI
 DS
@@ -48,9 +42,7 @@ tmin
 
 
 
-
 tmax
-
 
 
 
@@ -59,12 +51,10 @@ tmax
 primpart
 
 
-
 N2+
 N
 H
 intrpart
-N
 N2
 N2
 
@@ -72,20 +62,17 @@ H2+
 N+
 product1
 N+
-N+
 N2+
 N
 H2
 N
 product2
-
 N
 
 
 N+
 H+
 nprdct1
-
 
 
 2
@@ -97,16 +84,13 @@ nprdct2
 
 
 
-
 eprdct1
 
 
 
 
 
-
 eprdct2
-
 
 
 

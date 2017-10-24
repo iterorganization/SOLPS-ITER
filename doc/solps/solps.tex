@@ -1653,6 +1653,7 @@ welcome!
   \item[commands.help]\index{commands.help}
   \item[comp\_prf]\index{comp\_prf}
   \item[convert\_to\_jpg]\index{convert\_to\_jpg}
+  \item[copy\_tracing\_files]\index{copy\_tracing\_files}
   \item[cuttrc]\index{cuttrc}
   \item[elements\_to\_plot\_segments]\index{elements\_to\_plot\_segments}
   \item[exp\_data]\index{exp\_data}
@@ -2251,7 +2252,7 @@ or, best:
 \begin{description}
 \item[tlohi] range of temperatures for atomic physics table in $eV$
 \item[nlohi] range of densities for atomic physics table in $m^{-3}$
-\item[numnuc] number of distinct species
+\item[numnuc] number of distinct isonuclear sequences
 \item[nucspec] nuclear charge, lowest charge state, highest charge state
 \item[flag] which atomic physics database to use
 \item[tailep] smoothing parameter for the temperature dependence of some rate coefficients
@@ -7099,35 +7100,35 @@ Is it important to know, that, in the equations below, the parallel velocity $V_
 
 \begin{equation}
 \begin{matrix}
-\widetilde{ \Gamma}_{ax} =& \left( b_x V_{\parallel a} + V_{ax}^{\left( E \right)} + V_{ax}^{\left( AN \right)} + V^{corr \_ dpc} \right) n_a + 0 \cdot \frac{\delta_{1,a}}{e} \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + 0 \cdot \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} + \widetilde{j_x}^{\left( s \right)} \right) \\
+\widetilde{ \Gamma}_{ax} =& \left( b_x V_{\parallel a} + V_{ax}^{\left( E \right)} + V_{ax}^{\left( AN \right)} + V_a^{corr\_dpc} \right) n_a + 0 \cdot \frac{\delta_{1,a}}{e} \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + 0 \cdot \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} \right) \\
 &- D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x} - \widetilde{D}_{p,ax} \frac{1}{h_x} \frac{\partial p_a}{\partial x} - D_{axy} \frac{1}{h_y} \frac{\partial n_a T_i}{\partial y}
 \end{matrix}
 \end{equation}
 
 \begin{equation}
 \begin{matrix}
-\widetilde{ \Gamma}_{ay} =& \left( V_{ay}^{\left( E \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \frac{\delta_{1,a}}{e} \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + 0 \cdot \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} + \widetilde{j_y}^{\left( s \right)} \right) \\
+\widetilde{ \Gamma}_{ay} =& \left( V_{ay}^{\left( E \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \frac{\delta_{1,a}}{e} \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + 0 \cdot \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} \right) \\
 & - D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y} - \widetilde{D}_{p,ay} \frac{1}{h_y} \frac{\partial p_a}{\partial y} + D_{ayx} \frac{1}{h_x} \frac{\partial n_a T_i}{\partial x}
 \end{matrix}
 \end{equation}
 
 \begin{equation}
 \begin{matrix}
-\Gamma_{ax} =& \left( b_x V_{\parallel a} + V_{ax}^{\left( E \right)} + \widetilde{V}_{ax}^{\left( dia \right)} + V_{ax}^{\left( AN \right)} + V^{corr \_ dpc} \right) n_a + \\
-0 \cdot \frac{\delta_{1,a}}{e} & \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + 0 \cdot \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} + \widetilde{j_x}^{\left( s \right)} \right) - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x} - \widetilde{D}_{p,ax} \frac{1}{h_x} \frac{\partial p_a}{\partial x}
+\Gamma_{ax} =& \left( b_x V_{\parallel a} + V_{ax}^{\left( E \right)} + \widetilde{V}_{ax}^{\left( dia \right)} + V_{ax}^{\left( AN \right)} + V_a^{corr\_dpc} \right) n_a + \\
+0 \cdot \frac{\delta_{1,a}}{e} & \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + 0 \cdot \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x} - \widetilde{D}_{p,ax} \frac{1}{h_x} \frac{\partial p_a}{\partial x}
 \end{matrix}
 \end{equation}
 
 \begin{equation}
 \begin{matrix}
-\Gamma_{ay} =& \left( V_{ay}^{\left( E \right)} + \widetilde{V}_{ay}^{\left( dia \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \frac{\delta_{1,a}}{e} \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + 0 \cdot \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} + \widetilde{j_y}^{\left( s \right)} \right) \\
+\Gamma_{ay} =& \left( V_{ay}^{\left( E \right)} + \widetilde{V}_{ay}^{\left( dia \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \frac{\delta_{1,a}}{e} \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + 0 \cdot \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} \right) \\
 &- D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y} - \widetilde{D}_{p,ay} \frac{1}{h_y} \frac{\partial p_a}{\partial y}
 \end{matrix}
 \end{equation}
 
 \begin{equation}
 \begin{matrix}
-\Gamma_{ax}^{Cor} =& \left( b_x V_{\parallel a} + V_{ax}^{\left( E \right)} + 2 \widetilde{V}_{ax}^{\left( dia \right)} + V_{ax}^{\left( AN \right)} + V^{corr \_ dpc} \right) n_a + \\
+\Gamma_{ax}^{Cor} =& \left( b_x V_{\parallel a} + V_{ax}^{\left( E \right)} + 2 \widetilde{V}_{ax}^{\left( dia \right)} + V_{ax}^{\left( AN \right)} + V_a^{corr\_dpc} \right) n_a + \\
 0 \cdot \frac{\delta_{1,a}}{e} & \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + 0 \cdot \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x} - \widetilde{D}_{p,ax} \frac{1}{h_x} \frac{\partial p_a}{\partial x}
 \end{matrix}
 \end{equation}
@@ -7140,7 +7141,7 @@ Is it important to know, that, in the equations below, the parallel velocity $V_
 \end{equation}
 
 \begin{equation}
-\Gamma_{ax}^{ \left( \text{no drift} \right)} = \left( b_x V_{\parallel a} + V_{ax}^{\left( AN \right)} + 0 \cdot V^{corr \_ dpc} \right) n_a
+\Gamma_{ax}^{ \left( \text{no drift} \right)} = \left( b_x V_{\parallel a} + V_{ax}^{\left( AN \right)} + 0 \cdot V_a^{corr\_dpc} \right) n_a
 \end{equation}
 
 \begin{equation}
@@ -7194,15 +7195,15 @@ $\begin{matrix}
 
 \begin{equation}
 \begin{matrix}
-\Gamma_{ax}^{\left( Eir \right)} =& \left( b_x V_{\parallel a} + V_{ax}^{\left( E \right)} + V_{ax}^{\left( dia \right)} + V_{ax}^{\left( AN \right)} + V^{corr \_ dpc} \right) n_a + \\
-0 \cdot \frac{\delta_{1,a}}{e} & \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + 0 \cdot \widetilde{j_x}^{\left( visq \right)} + \widetilde{j_x}^{\left( s \right)} \right) - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x}
+\Gamma_{ax}^{\left( Eir \right)} =& \left( b_x V_{\parallel a} + V_{ax}^{\left( E \right)} + V_{ax}^{\left( dia \right)} + V_{ax}^{\left( AN \right)} + V_a^{corr\_dpc} \right) n_a + \\
+0 \cdot \frac{\delta_{1,a}}{e} & \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + 0 \cdot \widetilde{j_x}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x}
 \end{matrix}
 \end{equation}
 
 \begin{equation}
 \begin{matrix}
 \Gamma_{ay}^{\left( Eir \right)} =& \left( V_{ay}^{\left( E \right)} + V_{ya}^{\left( dia \right)} + V_{ay}^{\left( AN \right)} \right) n_a \\
-+ \frac{\delta_{1,a}}{e} & \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + 0 \cdot \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} + \widetilde{j_y}^{\left( a \right)}  \right) - D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y}
++ \frac{\delta_{1,a}}{e} & \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + 0 \cdot \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y}
 \end{matrix}
 \end{equation}
 
@@ -7283,7 +7284,7 @@ p_a = n_a \left( z_a T_e + T_i \right), \qquad
 p_e = n_e T_e
 \end{equation}
 
-and $\delta_{a,b}$ is the Kronecker delta (1 if $a=b$, 0 otherwise).
+and $\delta_{a,b}$ is the Kronecker delta (1 if $a=b$, 0 otherwise). Here, it is used as shortcut to identify the one hydrogenic species with $z_a = 1$ and $z_{n,a} = 1$. If the code contains multiple hydrogenic species, an error will be reported to avoid double-counting of the current contributions.
 
 \subsection{Source terms in density equations}
 
@@ -7295,14 +7296,14 @@ $S_a^n=S_{I_a}^n+S_{I_{a+1}}^n+S_{R_a}^n+S_{R_{a-1}}^n+S_{CX_a}^n+S_{CX_{a-1}}^n
 %-------- end of 1st page -------------
 
 $z_a$ --- the atomic charge of species $a$,
-$z_{n_a}$ --- the nuclear charge of species $a$
+$z_{n,a}$ --- the nuclear charge of species $a$
 
 \begin{equation}
 \begin{matrix}
 S_{I_a}^n & =
 & \left\{
 \begin{matrix}
--r_{I_a} n_e n_a, & \ a=0,\ldots,ns-2, z_a < z_{a+1} \mbox{ and } z_{n_a}=z_{n_{a+1}}\\
+-r_{I_a} n_e n_a, & \ a=0,\ldots,ns-2, z_a < z_{a+1} \mbox{ and } z_{n,a}=z_{n,a+1}\\
 
 \end{matrix} \right.
 \end{matrix}
@@ -7313,7 +7314,7 @@ S_{I_a}^n & =
 S_{I_{a+1}}^n & =
 & \left\{
 \begin{matrix}
-r_{I_a} n_e n_a, & \ a=0,\ldots,ns-2, z_a < z_{a+1} \mbox{ and } z_{n_a}=z_{n_{a+1}}\\
+r_{I_a} n_e n_a, & \ a=0,\ldots,ns-2, z_a < z_{a+1} \mbox{ and } z_{n,a}=z_{n,a+1}\\
 0
 \end{matrix} \right.
 \end{matrix}
@@ -7328,7 +7329,7 @@ r_{I_a} = \exp \left( r_{0,I_a}+r_{1,I_a} \ln\left(\frac{T_e}e\right)\right)
 S_{R_a}^n & =
 & \left\{
 \begin{matrix}
--r_{R_a} n_e n_a, & \ a=1,\ldots,ns-1, z_{a-1} < z_a \text{ and } z_{{n-1}_a}=z_{n_a}\\
+-r_{R_a} n_e n_a, & \ a=1,\ldots,ns-1, z_{a-1} < z_a \text{ and } z_{n-1,a}=z_{n,a}\\
 0
 \end{matrix} \right.
 \end{matrix}
@@ -7339,7 +7340,7 @@ S_{R_a}^n & =
 S_{R_{a-1}}^n & =
 & \left\{
 \begin{matrix}
-r_{R_a} n_e n_a, & \ a=1,\ldots,ns-1, z_{a-1} < z_a \text{ and } z_{{n-1}_a}=z_{n_a}\\
+r_{R_a} n_e n_a, & \ a=1,\ldots,ns-1, z_{a-1} < z_a \text{ and } z_{n-1,a}=z_{n,a}\\
 0
 \end{matrix} \right.
 \end{matrix}
@@ -7367,7 +7368,7 @@ r_{CX_{ab}} = \exp \left(
 \subsection{Velocities}
 
 \begin{equation}
-V^{corr\_dpc} = \frac{c^{corr\_dpc}}{16} |b_x| \sqrt{\frac{p_a}{m_a n_a}} \frac{\partial
+V_a^{corr\_dpc} = \frac{c^{corr\_dpc}}{16} |b_x| \sqrt{\frac{p_a}{m_a n_a}} \frac{\partial
 ^2}{\partial x^2} \left( \frac 1{p_a} \frac{\partial p_a}{\partial x} \right)
 \end{equation}
 
@@ -7572,14 +7573,14 @@ $S_{a \parallel}^m = - \left( \nabla \pi_a^{\parallel} \right)_{\parallel}$
 \left( \nabla \pi_a^{\parallel} \right)_{\parallel} & =
 & \left\{
 \begin{matrix}
-0, & \ z_a \neq 1 \\
 - \frac{\partial}{h_z\sqrt g\partial x}
-\left(\frac{h_z\sqrt g}{h_x} \frac 4 3 \eta_{ax}
+\left(\frac{h_z\sqrt g}{h_x} \frac 4 3 \widetilde{\widetilde{\eta}}_{CLax}
 \frac{\partial \ln \left( h_z B^{\frac 1 2} \right) }{B^{\frac 1 2} h_x \partial x}\right)
 B^{\frac 1 2} V_{\parallel a} -
 B^{\frac 3 2} b_x \frac{\partial}{h_x \partial x}
-\left( \alpha^{NEO} \frac{b_x \tilde {\tau}_a}{B^2} \frac{\partial \left(B^{\frac 1 2} \tilde q^{(0)} \right)}{h_x \partial x}\right),
-& \ z_a = 1 \\
+\left( \alpha^{NEO} \frac{b_x \tilde {\tau}_a}{B^2} \frac{\partial \left(B^{\frac 1 2} \tilde q_a^{(0)} \right)}{h_x \partial x}\right),
+& \ z_a = 1~\&~z_{n,a} = 1 \\
+0, & \mbox{otherwise} \\
 \end{matrix} \right.
 \end{matrix}
 \end{equation}
@@ -7608,7 +7609,7 @@ S_{I_a}^m = S_{I_a}^q + S_{I_{a+1}}^q
 S_{I_a}^q & =
 & \left\{
 \begin{matrix}
--r_{I_a} n_e n_a \left( \frac{m_a+m_{a+1}}2 \right) V_{\parallel a}, & \ a=0,\ldots,ns-2, & \ z_a < z_{a+1} \mbox{ and } z_{n_a} = z_{n_{a+1}}, \\
+-r_{I_a} n_e n_a \left( \frac{m_a+m_{a+1}}2 \right) V_{\parallel a}, & \ a=0,\ldots,ns-2, & \ z_a < z_{a+1} \mbox{ and } z_{n,a} = z_{n,a+1}, \\
 0, \\
 \end{matrix} \right.
 \end{matrix}
@@ -7619,7 +7620,7 @@ S_{I_a}^q & =
 S_{I_{a+1}}^q & =
 & \left\{
 \begin{matrix}
-r_{I_a} n_e n_a \left( \frac{m_a+m_{a+1}}2 \right) V_{\parallel a}, & \ a=0,\ldots,ns-2, & \ z_a < z_{a+1} \text{ and } z_{n_a} = z_{n_{a+1}}, \\
+r_{I_a} n_e n_a \left( \frac{m_a+m_{a+1}}2 \right) V_{\parallel a}, & \ a=0,\ldots,ns-2, & \ z_a < z_{a+1} \text{ and } z_{n,a} = z_{n,a+1}, \\
 0, \\
 \end{matrix} \right.
 \end{matrix}
@@ -7636,7 +7637,7 @@ S_{R_a}^m = S_{R_a}^q + S_{R_{a-1}}^q
 S_{R_a}^q & =
 & \left\{
 \begin{matrix}
--r_{R_a} n_e n_a \left( \frac{m_a+m_{a-1}}2 \right) V_{\parallel a}, & \ a=0,\ldots,ns-1, & \ z_{a-1} < z_a \text{ and } z_{n_{a-1}}= z_{n_a}, \\
+-r_{R_a} n_e n_a \left( \frac{m_a+m_{a-1}}2 \right) V_{\parallel a}, & \ a=0,\ldots,ns-1, & \ z_{a-1} < z_a \text{ and } z_{n,a-1}= z_{n,a}, \\
 0, \\
 \end{matrix} \right.
 \end{matrix}
@@ -7647,7 +7648,7 @@ S_{R_a}^q & =
 S_{R_{a-1}}^q & =
 & \left\{
 \begin{matrix}
-r_{R_a} n_e n_a \left( \frac{m_a+m_{a+1}}2 \right) V_{\parallel a}, & \ a=0,\ldots,ns-1, & \ z_{a-1} < z_a \text{ and } z_{n_{a-1}}= z_{n_a}, \\
+r_{R_a} n_e n_a \left( \frac{m_a+m_{a+1}}2 \right) V_{\parallel a}, & \ a=0,\ldots,ns-1, & \ z_{a-1} < z_a \text{ and } z_{n,a-1}= z_{n,a}, \\
 0, \\
 \end{matrix} \right.
 \end{matrix}
@@ -7681,9 +7682,9 @@ $S_{fr,ea}^m = \frac{b_x^2 e^2 z_a^2}{\sigma_\parallel z_{eff}} n_e n_a \left( V
 
 and the ion contributions are:
 
-$S_{Therm,ia}^m = \sum \limits_{\substack{b=0, \\ b \ne a}}^{ns - 1} c_{\alpha_{ab}}^{(Flim)} z_a^2 z_b^2 \frac{m_p}{\zeta_p e} \frac{n_a n_b}{n_a + n_b} \alpha_{ab} \frac{\partial T_i}{h_x \partial x}, ~z_a \ne 0$
+$S_{Therm,ia}^m = \sum \limits_{\substack{b=0 \\ b \ne a}}^{ns - 1} c_{\alpha_{ab}}^{(Flim)} z_a^2 z_b^2 \frac{m_p}{\zeta_p e} \frac{n_a n_b}{n_a + n_b} \alpha_{ab} \frac{\partial T_i}{h_x \partial x}, ~z_a \ne 0$
 
-$S_{fr,ia}^m = \sum \limits_{\substack{b=0, \\ b \ne a}}^{ns - 1} R_{ab}^{(V_\parallel)} = \sum \limits_{\substack{b=0, \\ b \ne a}}^{ns - 1} \frac{1}{\zeta_p} m_p \sqrt{\frac{\frac{m_a}{m_p} \frac{m_b}{m_p}}{\frac{m_a}{m_p} + \frac{m_b}{m_p}}} z_a^2 z_b^2 n_a n_b K_{ab}^{(V_\parallel)} \left( V_{b \parallel} - V_{a \parallel} \right)$ 
+$S_{fr,ia}^m = \sum \limits_{\substack{b=0 \\ b \ne a}}^{ns - 1} R_{ab}^{(V_\parallel)} = \sum \limits_{\substack{b=0 \\ b \ne a}}^{ns - 1} \frac{1}{\zeta_p} m_p \sqrt{\frac{\frac{m_a}{m_p} \frac{m_b}{m_p}}{\frac{m_a}{m_p} + \frac{m_b}{m_p}}} z_a^2 z_b^2 n_a n_b K_{ab}^{(V_\parallel)} \left( V_{b \parallel} - V_{a \parallel} \right)$
 
 where
 
@@ -7719,7 +7720,7 @@ $
 
 $c_{imp}^{(1)} = \frac{\left( 1 + 0.24 z_{eff\_imp} \right) \left( 1 + 0.93 z_{eff\_imp} \right)}{\left( 1 + 2.56 z_{eff\_imp} \right) \left( 1 + 0.29 z_{eff\_imp} \right)}$, ~ $c_{imp}^{(2)} = 1.56 \frac{\left( 1 + 1.4 z_{eff\_imp} \right) \left( 1 + 0.52 z_{eff\_imp} \right)}{\left( 1 + 2.56 z_{eff\_imp} \right) \left( 1 + 0.29 z_{eff\_imp} \right)}$
 
-$z_{eff\_imp} = \frac{\sum \limits_{\substack{a=0, \\ a \ne a_{main}}}^{ns - 1} n_a z_a^2}{n_{a_{main}} z_{a_{main}}^2}$, ~ $c_{\sigma^{(CL)}_{\parallel}}^{(Luciani)} = c_{\kappa_{ex}^{(CL)}}^{(Luciani)}$
+$z_{eff\_imp} = \frac{\sum \limits_{\substack{a=0 \\ a \ne a_{main}}}^{ns - 1} n_a z_a^2}{n_{a_{main}} z_{a_{main}}^2}$, ~ $c_{\sigma^{(CL)}_{\parallel}}^{(Luciani)} = c_{\kappa_{ex}^{(CL)}}^{(Luciani)}$
 
 $c_{\alpha_{ab}}^{(F \lim)} = \left\{
 \begin{matrix}
@@ -7744,7 +7745,7 @@ b_x e
 
 \begin{equation}
 S^m_{fr,a} =
-\sum \limits^{ns-1}_{\substack{b = 0, \\ b\neq a, z_a \neq 0, z_b \neq 0}} \frac 1{\tau_p} m_p
+\sum \limits^{ns-1}_{\substack{b = 0 \\ b\neq a, z_a \neq 0, z_b \neq 0}} \frac 1{\tau_p} m_p
 \sqrt{ \frac {\frac{m_a}{m_p} \frac{m_b}{m_p}} {\frac{m_a}{m_p} + \frac{m_b}{m_p}} }
 z_a^2 z_b^2 n_b n_a \left( V_{b \parallel} - V_{a \parallel} \right)
 \end{equation}
@@ -7833,10 +7834,10 @@ $c_{th_e,a} = 0, a=0,\ldots,ns-1$ and $c_{th_i,a}=2.65, a=0,\ldots, ns-1$ if the
 \Gamma^m_{ax} = \left\{
 \begin{matrix}
 m_a V_{\parallel a} \Gamma_{ax}^{Cor} +
-\frac 4 3 \eta_{ax} \frac{\partial \ln h_z}{h_x \partial x} V_{\parallel a} -
-\frac 4 3 \eta_{ax} \frac{\partial V_{\parallel a}}{h_x \partial x}, & z_a = 1 \\
+\frac 4 3 \widetilde{\widetilde{\eta}}_{CLax} \frac{\partial \ln h_z}{h_x \partial x} V_{\parallel a} -
+\eta_{ax} \frac{\partial V_{\parallel a}}{h_x \partial x}, & z_a = 1~\&~z_{n,a} = 1 \\
 m_a V_{\parallel a} \Gamma_{ax}^{Cor} -
-\frac 4 3 \eta_{ax} \frac{\partial V_{\parallel a}}{h_x \partial x}, & z_a \neq 1 \\
+\eta_{ax} \frac{\partial V_{\parallel a}}{h_x \partial x}, & \mbox{otherwise} \\
 \end{matrix}
 \right.
 \end{equation}
@@ -7849,7 +7850,7 @@ m_a V_{\parallel a} \Gamma_{ay}^{Cor} -
 
 \subsection{Parallel momentum transport coefficients}
 
-$\eta_{ax} = \eta^{(AN)}_a + \widetilde{\widetilde{\eta}}^{(CL)}_{ax}$
+$\eta_{ax} = \eta_{ANa} + \frac{4}{3} \widetilde{\widetilde{\eta}}_{CLax}$
 
 %-------- end of 6th page -------------
 
@@ -7983,7 +7984,7 @@ $
 
 $\eta_{ay} = \eta^{(AN)}_a + \eta^{(CL)}_{ay}$
 
-$\widetilde{q}^{(0)} = q^{(1)} \arctan \left( \frac{q^{(0)}}{q^{(1)}} \right), \; q^{(1)} = c_{q1} n_i T_i \sqrt{\frac{T_i + T_e}{m_i}}$
+$\widetilde{q}_a^{(0)} = q^{(1)} \arctan \left( \frac{q_a^{(0)}}{q^{(1)}} \right), \; q^{(1)} = c_{q1} n_i T_i \sqrt{\frac{T_i + T_e}{m_i}}$
 
 $c_{q1} = 0.5$ or 'b2siav\_cqip1'  '0.1' in b2mn.dat
 
@@ -7993,12 +7994,12 @@ in case if 'b2siav\_style\_qip'  '0' in b2mn.dat
 
 \begin{equation}\label{eq:q0-0}
 \begin{matrix}
-q^{(0)} = q_{a\parallel}^{(0)} +
+q_a^{(0)} = q_{a\parallel}^{(0)} +
 \frac B{B_x} q_{ax}^{(dia)} & =
 & \left\{
 \begin{matrix}
 0 & \text{outside the separatrix} \\
--\frac 5 2 \frac{B_z B}{B_x \left\langle B^2 \right\rangle} \frac{nT_i}e \frac{\partial T_i}{h_y \partial y}
+-\frac 5 2 \frac{B_z B}{B_x \left\langle B^2 \right\rangle} \frac{n_a T_i}e \frac{\partial T_i}{h_y \partial y}
 & \text{inside the separatrix}
 \end{matrix} \right.
 \end{matrix}
@@ -8010,13 +8011,13 @@ in case if 'b2siav\_style\_qip' '1' in b2mn.dat
 
 \begin{equation}\label{eq:q0-1}
 \begin{matrix}
-q^{(0)} = q_{a\parallel}^{(0)} +
+q_a^{(0)} = q_{a\parallel}^{(0)} +
 \frac B{B_x} q_{ax}^{(dia)} & =
 & \left\{
 \begin{matrix}
 0 & \text{outside the separatrix} \\
 -\widetilde{\widetilde{k}}_{ix}^{(CL)} b_x \frac{ \partial T_i}{h_x \partial x}
--\frac 5 2 \frac{B_z B}{B_x \left\langle B^2 \right\rangle} \frac{nT_i}e \frac{\partial T_i}{h_y \partial y}
+-\frac 5 2 \frac{B_z B}{B_x \left\langle B^2 \right\rangle} \frac{n_a T_i}e \frac{\partial T_i}{h_y \partial y}
 & \text{inside the separatrix}
 \end{matrix} \right.
 \end{matrix}
@@ -8109,7 +8110,7 @@ $
 
 $Q_R = \sum \limits_{a=0}^{ns-1} r_{Q_a} n_e n_a$ from b2stel
 
-$Q_{Fei} = V_{e \parallel} \sum \limits_{\substack{a=0, \\ z_a \neq 0}}^{ns - 1}
+$Q_{Fei} = V_{e \parallel} \sum \limits_{\substack{a=0 \\ z_a \neq 0}}^{ns - 1}
 \left( S^m_{fr,ea} + S^m_{Therm,ea} \right)$
 
  %-------- end of 9th page -------------
@@ -8154,7 +8155,7 @@ q_{ex} =
 \begin{equation*}
 \Gamma_{ax}^{(he)} =
 \left(
-	b_x V_{a \parallel} + V_{ax}^{(E)} + \frac 5 3 V_a^{(AN)} + V^{corr\_dpc}
+	b_x V_{a \parallel} + V_{ax}^{(E)} + \frac 5 3 V_a^{(AN)} + V_a^{corr\_dpc}
 \right) n_a -
 \frac 5 3 \left[
 	D_{n,a} \frac 1{h_x} \frac{\partial n_a}{\partial x} + \widetilde{D}_{p,ax} \frac{1}{h_x} \frac{\partial p_a}{\partial x}
@@ -8522,33 +8523,38 @@ $\alpha^{(CL)}_{y} = 0$
 		\frac{1}{B^2}
 	\right)
 \right)
-\sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}} n_a +
+\sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a +
 \\
-+ \sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}} \left(
-	\frac{4}{3} \eta_{ax} \left(
++ \sum \limits_{fluid~species} \left(
+	\left(
+                \frac{4}{3} \widetilde{\widetilde{\eta}}_{CLax} + \eta_{ANa}
+        \right)
+        \left(
 		\frac{\partial V_{a \parallel}}{h_x \partial x}
 	\right)^2
-	+ \eta^{(AN)}_{a} \left(
+	+ \eta_{ANa} \left(
 		\frac{\partial V_{a \parallel}}{h_y \partial y}
 	\right)^2
 \right) + Q_I^{(i)} + Q_R^{(i)},
 \end{matrix}
 \end{equation}
 
+The 'sum over fluid species' above means the species index $a$ ranges from $0$ to $ns - 1$ for {\bf B2.5} standalone runs and only over charged species for coupled \SOLPSITER runs.
+
 \subsection{Ion energy sources}
 
-When Eq. (\ref{eq:mom_new}) is used ({\tt 'b2sigp\_style'} set to {\tt '2'}), the contribution from friction between charged species is given as:
+When Eq.~(\ref{eq:mom_new}) is used ({\tt 'b2sigp\_style'} set to {\tt '2'}), the contribution from friction between charged species is given as:
 
 \begin{equation*}
-Q_{F_{ab}} = - \sum \limits_{\substack{a=0, \\ z_a \neq 0}}^{ns - 1} V_{a \parallel} \left( S^m_{fr,a} + S^m_{Therm,a} \right)
+Q_{F_{ab}} = - \sum \limits_{\substack{a=0 \\ z_a \neq 0}}^{ns - 1} V_{a \parallel} \left( S^m_{fr,a} + S^m_{Therm,a} \right)
 \end{equation*}
 
 Otherwise, it is:
 
 \begin{equation*}
 Q_{F_{ab}} =
-\sum \limits^{ns-1}_{\substack{b = 0,\\ z_b \neq 0}}
-\sum \limits^{ns-1}_{\substack{a = b + 1, \\ z_a \neq 0}}
+\sum \limits^{ns-1}_{\substack{b = 0 \\ z_b \neq 0}}
+\sum \limits^{ns-1}_{\substack{a = b + 1 \\ z_a \neq 0}}
 \frac 1{4 \tau_p} m_p
 \sqrt{ \frac {\frac{m_a}{m_p} \frac{m_b}{m_p}} {\frac{m_a}{m_p} + \frac{m_b}{m_p}} }
 z_a^2 z_b^2 n_b n_a \left( V_{a \parallel} - V_{b \parallel} \right)^2
@@ -8614,14 +8620,14 @@ $\widetilde q_{ix} = \widetilde f_{ix} T_i - \kappa_{ix} \frac 1{h_x} \frac{\par
 \end{equation*}
 
 \begin{equation*}
-q_{ix}^{P.Sch} = \frac 5 2 \sum \limits^{ns-1}_{\substack{a = 0,\\ z_a \neq 0}} D_{axy} \frac 1{h_y} \frac{\partial n_a T_i^2}{\partial y}
+q_{ix}^{P.Sch} = \frac 5 2 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} D_{axy} \frac 1{h_y} \frac{\partial n_a T_i^2}{\partial y}
 \end{equation*}
 
 \begin{equation*}
 \begin{matrix}
 q_{ix} =& \left[
 	\frac 3 2 \Gamma_{ix} -
-	\frac 5 2 \sum \limits^{ns-1}_{\substack{a = 0,\\ z_a \neq 0}} n_a \widetilde V_{ax}^{(dia)} +
+	\frac 5 2 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \widetilde V_{ax}^{(dia)} +
 	V_{ix}^{(str)} n_i +
         0 \cdot \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + 0 \cdot \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} + \widetilde{j_x}^{\left( s \right)}}{e} \right)
 \right] T_e \\
@@ -8633,7 +8639,7 @@ $\Gamma_{ix} = \sum \limits^{ns-1}_{a = 0} \Gamma_{ax}^{(he)}$
 
 \begin{equation*}
 q_{ix}^{(Eir)} =
-\frac 5 2 \sum \limits^{ns-1}_{\substack{a = 0,\\ z_a \neq 0}} \Gamma_{ax}^{(Eir)} T_i -
+\frac 5 2 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} \Gamma_{ax}^{(Eir)} T_i -
 \kappa_{ix} \frac 1{h_x} \frac{\partial T_i}{\partial x}
 \end{equation*}
 
@@ -8786,7 +8792,7 @@ K_2 = \frac{
 
 $
 \kappa_{ix}^{(CL)} =
-\frac 5 2 b_x^2 \sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}} \frac{T_i}{m_a} n_a f_{k_i} \tau_a,
+\frac 5 2 b_x^2 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} \frac{T_i}{m_a} n_a f_{k_i} \tau_a,
 $
 
 $f_{k_i} = 2.253$
@@ -8821,36 +8827,33 @@ q_{iy}^{P.Sch}
 
 \begin{equation*}
 \widetilde f_{iy} = \frac 3 2 \Gamma_{iy} + V_{iy}^{(str)} n_i + \frac 3 2 \frac{\left(
-	j_y^{(AN)} + \widetilde j_y^{(vis \parallel)} + 0 \cdot \widetilde j_y^{(vis \perp)} + \widetilde j_y^{(visq)} + \widetilde j_y^{(s)} + j_y^{(in)}
+	j_y^{(AN)} + \widetilde j_y^{(vis \parallel)} + 0 \cdot \widetilde j_y^{(vis \perp)} + \widetilde j_y^{(visq)} + j_y^{(in)}
 \right)} e
 \end{equation*}
 
 \begin{equation*}
-q_{iy}^{P.Sch} = -\frac{5}{2} \sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}} D_{ayx}
+q_{iy}^{P.Sch} = -\frac{5}{2} \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} D_{ayx}
 \frac{1}{h_x} \frac{\partial n_a T^2_i}{\partial x}
 \end{equation*}
 
 %-------- end of 17th page -------------
 
 \begin{equation*}
-\begin{matrix}
-q_{iy} =& \left[
+q_{iy} = \left[
 	\frac{3}{2} \Gamma_{iy} +
-	\frac{5}{2} \sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}} n_a \widetilde V_{ay}^{(dia)} +
+	\frac{5}{2} \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \widetilde V_{ay}^{(dia)} +
 	V_{iy}^{(str)} n_i +
 	\frac 3 2 \frac{\left(
-		j_y^{(AN)} + \widetilde j_y^{(vis \parallel)} + 0 \cdot \widetilde j_y^{(vis \perp)} + \widetilde j_y^{(visq)} + \widetilde j_y^{(s)} + j_y^{(in)}
+		j_y^{(AN)} + \widetilde j_y^{(vis \parallel)} + 0 \cdot \widetilde j_y^{(vis \perp)} + \widetilde j_y^{(visq)} + j_y^{(in)}
 	\right)} e
-\right] T_i \\
-&- \kappa_{iy} \frac{1}{h_y} \frac{\partial T_i}{\partial y}
-\end{matrix}
+\right] T_i - \kappa_{iy} \frac{1}{h_y} \frac{\partial T_i}{\partial y}
 \end{equation*}
 
 $\Gamma_{iy} = \sum \limits_{a = 0}^{ns -1} \Gamma_{ay}^{(he)}$
 
 \begin{equation*}
 q_{iy}^{(Eir)} =
-\frac{5}{2} \sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}} \Gamma_{ay}^{(Eir)} T_i -
+\frac{5}{2} \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} \Gamma_{ay}^{(Eir)} T_i -
 \kappa_{iy} \frac{1}{h_y} \frac{\partial T_i}{\partial y}
 \end{equation*}
 
@@ -8898,7 +8901,7 @@ $j_x^{(AN)} = - \sigma^{(AN)} \frac{\partial \Phi}{h_x \partial x}$
 
 \begin{equation}
 \widetilde j_x^{(dia)} = B_z \frac{
-	\sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}} n_a \left(
+	\sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \left(
 		z_aT_e + T_i
 	\right)
 }{h_y}
@@ -8909,7 +8912,7 @@ $j_x^{(AN)} = - \sigma^{(AN)} \frac{\partial \Phi}{h_x \partial x}$
 \begin{equation}
 \widetilde j_x^{(in)} = \frac{B_z}2 \frac{\partial}{h_y \partial y}
 \left( \frac{1}{B^2} \right)
-\sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}} m_a n_a V^2_{a \parallel},
+\sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} m_a n_a V^2_{a \parallel},
 \end{equation}
 
 %-------- end of 18th page -------------
@@ -8919,7 +8922,8 @@ $j_x^{(AN)} = - \sigma^{(AN)} \frac{\partial \Phi}{h_x \partial x}$
 - \frac{b_z B_x}{3 B^{\frac{1}{2}}}
 \frac{\partial}{h_y \partial y}
 \left( \frac{1}{B^2} \right)
-\sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}}\eta_{ax}
+\sum \limits^{ns-1}_{\substack{a = 0 \\ z_a = 1~\&~z_{n,a} = 1 }}
+\widetilde{\widetilde{\eta}}_{CLax}
 \frac{\partial \left( \sqrt{B} V_{a \parallel} \right)}{h_x \partial x},
 \end{equation}
 
@@ -8929,38 +8933,43 @@ $j_x^{(AN)} = - \sigma^{(AN)} \frac{\partial \Phi}{h_x \partial x}$
 
 \begin{equation}
 \widetilde j_x^{(visq)} =
-- 0.24 \alpha^{NEO} \widetilde{\tau}_a b_z
+- 0.24 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a = 1~\&~z_{n,a} = 1 }}
+\alpha^{NEO} \widetilde{\tau}_a b_z
 \frac{B_x}{B^{\frac{1}{2}}}
 \frac{\partial}{h_y \partial y}
 \left( \frac{1}{B^2} \right)
-\frac{\partial \left( q^{(0)} B^{\frac{1}{2}} \right)}{h_x \partial x}
-\text{ , } z_a = 1 \text{ and } z_n =1
+\frac{\partial \left( \widetilde{q}_a^{(0)} B^{\frac{1}{2}} \right)}{h_x \partial x}
 \end{equation}
 
-For definition of $q^{(0)}$, see Eqs. (\ref{eq:q0-0}) and (\ref{eq:q0-1}).
+For definition of $\widetilde{q}_a^{(0)}$, see Eqs. (\ref{eq:q0-0}) and (\ref{eq:q0-1}).
 
 \begin{equation}
 \widetilde j_x^{(s)} =
-- \sigma_{a0} b_z^2 \frac{\partial \Phi}{h_x \partial x}
-- \sigma_{a0} b_z^2 \frac{1}{Z_a e n_a} \frac{\partial n_a T_i}{h_x \partial x}
-+ \sigma_{a0} b_z^2  B_z V_{0y}
-\text{ , } z_a = 1, \;\;\;\;\;\;\;?
+\sum \limits^{ns-1}_{\substack{a_0 = 0 \\ z_{a_0} = 0~\&~z_{n,a_0} = 1 }}
+\sum \limits^{ns-1}_{\substack{a = 0 \\ z_{a} = 1~\&~z_{n,a} = 1 }}
+\left(
+- \sigma_{aa_0} b_z^2 \frac{\partial \Phi}{h_x \partial x}
+- \sigma_{aa_0} b_z^2 \frac{1}{z_a e n_a} \frac{\partial n_a T_i}{h_x \partial x}
++ \sigma_{aa_0} B_z V_{a_{0}y}
+\right)
 \end{equation}
 
 \begin{equation}
-\sigma_{a0} =
-\frac{
-m_a n_a \left\langle V_{a0} \sigma_{ex} \right\rangle n_0 
-}
-{2 B^2}
-\text{ , } z_a = 1,\;\;\;\;\;\;\;?
+\sigma_{aa_0} =
+\left\{
+\begin{matrix}
+\frac{m_a n_a \left\langle V_{aa_0} \sigma_{ex} \right\rangle n_{a_0}}{2 B^2}, &
+z_{a_0} = 0 ~ \& ~ z_{n,a_0} = 1, z_a \ne 0 ~ \& ~z_{n_a} = 1 \\
+0, & \text{otherwise}
+\end{matrix}
+\right.
 \end{equation}
 
 \begin{equation}
-\left\langle V_{a0} \sigma_{ex} \right\rangle = 3.2 \cdot 10^{-15} \sqrt{\frac{T_i}{0.026e}}
+\left\langle V_{aa_0} \sigma_{ex} \right\rangle = 3.2 \cdot 10^{-15} \sqrt{\frac{T_i}{0.026e}}
 \end{equation}
 
-$V_{0y} = \frac{\Gamma_{0y} }{n_0}$
+$V_{a_{0}y} = \frac{\Gamma_{a_{0}y} }{n_{a_0}}$
 
 $j_x^{(\parallel)}$ - see above
 
@@ -8973,7 +8982,7 @@ $j_y^{(AN)} = - \sigma^{(AN)} \frac{\partial \Phi}{h_y \partial y} $
 
 \begin{equation}
 \widetilde j_y^{(dia)} = - B_z \frac{
-	\sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}} n_a \left(
+	\sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \left(
 		z_a T_e + T_i
 	\right)
 }{h_x}
@@ -8984,7 +8993,7 @@ $j_y^{(AN)} = - \sigma^{(AN)} \frac{\partial \Phi}{h_y \partial y} $
 \begin{equation}
 j_y^{(in)} = - \frac{B_z}2 \frac{\partial}{h_x \partial x}
 \left( \frac{1}{B^2} \right)
-\sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}} m_a n_a V^2_{a \parallel},
+\sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} m_a n_a V^2_{a \parallel},
 \end{equation}
 
 \begin{equation}
@@ -8992,7 +9001,8 @@ j_y^{(in)} = - \frac{B_z}2 \frac{\partial}{h_x \partial x}
 \frac{b_z B_x}{3 B^{\frac{1}{2}}}
 \frac{\partial}{h_x \partial x}
 \left( \frac{1}{B^2} \right)
-\sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}}\eta_{ax}
+\sum \limits^{ns-1}_{\substack{a = 0 \\ z_a = 1~\&~z_{n,a} = 1}}
+\widetilde{\widetilde{\eta}}_{CLax}
 \frac{\partial \left( \sqrt{B} V_{a \parallel} \right)}{h_x \partial x},
 \end{equation}
 
@@ -9000,14 +9010,14 @@ not agreed with parallel momentum balance?
 
 \begin{equation}
 \widetilde j_y^{(vis \perp)} =
-- \frac{1}{B \sqrt{g}}
+- \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a = 1~\&~z_{n,a} = 1}}
+\frac{1}{B \sqrt{g}}
 \frac{\partial}{\partial y}
 \left(
 	\frac{\sqrt{g}}{h_y}
-	\frac{\eta^{(AN)}_{a}}{4}
+	\frac{\eta_{ANa}}{4}
 	\frac{\partial V_{a \perp}}{h_y \partial y}
 \right)
-\text{ , } a = a_{main},
 \end{equation}
 
 %-------- end of 19th page -------------
@@ -9020,22 +9030,25 @@ V_{a \perp} =
 
 \begin{equation}
 \widetilde j_y^{(visq)} =
-0.24 \alpha^{NEO} \widetilde{\tau}_a b_z
+0.24 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a = 1~\&~z_{n,a} = 1}}
+\alpha^{NEO} \widetilde{\tau}_a b_z
 \frac{B_x}{B^{\frac{1}{2}}}
 \frac{\partial}{h_y \partial y}
 \left( \frac{1}{B^2} \right)
-\frac{\partial \left( q^{(0)} B^{\frac{1}{2}} \right)}{h_x \partial x}
-\text{ , } z_a = 1 \text{ and } z_n = 1
+\frac{\partial \left( \widetilde{q}_a^{(0)} B^{\frac{1}{2}} \right)}{h_x \partial x}
 \end{equation}
 
-For definition of $q^{(0)}$, see Eqs. (\ref{eq:q0-0}) and (\ref{eq:q0-1}).
+For definition of $\widetilde{q}_a^{(0)}$, see Eqs. (\ref{eq:q0-0}) and (\ref{eq:q0-1}).
 
 \begin{equation}
 \widetilde j_y^{(s)} =
-- \sigma_{a0} \frac{\partial \Phi}{h_y \partial y}
-- \sigma_{a0} \frac{1}{Z_a e n_a} \frac{\partial n_a T_i}{h_y \partial y}
-- \sigma_{a0} B_z V_{0x}
-\text{ , } a = 1, \mbox{    ?}
+\sum \limits^{ns-1}_{\substack{a_0 = 0 \\ z_{a_0} = 0~\&~z_{n,a_0} = 1 }}
+\sum \limits^{ns-1}_{\substack{a = 0 \\ z_a = 1~\&~z_{n,a} = 1}}
+\left(
+- \sigma_{aa_0} \frac{\partial \Phi}{h_y \partial y}
+- \sigma_{aa_0} \frac{1}{z_a e n_a} \frac{\partial n_a T_i}{h_y \partial y}
+- \sigma_{aa_0} B_z V_{a_{0}x}
+\right)
 \end{equation}
 
 \begin{equation*}
@@ -9054,6 +9067,10 @@ j_y^{(ST)} = &
 \end{matrix}
 \end{equation*}
 
+$V_{a_{0}x}=\frac{\Gamma_{a_{0}x}}{n_{a_0}}$
+
+$\sigma_{aa_0}$ see above
+
 \subsection{Conductivities}
 
 \begin{equation*}
@@ -9067,8 +9084,6 @@ c_{\sigma^{(ST)}} e n_e
 \end{matrix} \right.
 \end{matrix}
 \end{equation*}
-
-$V_{0x}=\frac{\Gamma_{0x}}{n_0}$
 
 $\sigma_y=\sigma^{(AN)} + \sigma^{(CL)}_{y}$
 
@@ -9895,7 +9910,7 @@ $\left. \frac{\sqrt{g}}{h_y} j_y \right|_{S_0} = 0$
 \left\langle \widetilde j_y^{(dia)} \right\rangle =
 - \frac{
 	B_z \left\langle
-		\sum \limits^{ns-1}_{\substack{a = 0, \\
+		\sum \limits^{ns-1}_{\substack{a = 0 \\
                         z_a \neq 0}} n_a \left(
 			z_a T_e + T_i
 		\right)
@@ -9910,7 +9925,7 @@ $\left. \frac{\sqrt{g}}{h_y} j_y \right|_{S_0} = 0$
 - \frac{B_z}{2}
 \frac{\partial}{h_x \partial x}
 \left( \frac{1}{B^2} \right)
-\sum \limits^{ns-1}_{\substack{a = 1, \\
+\sum \limits^{ns-1}_{\substack{a = 1 \\
     z_a \neq 0}} m_a n_a \left\langle V^2_{a \parallel}
 \right\rangle,
 \end{equation*}
@@ -10364,7 +10379,7 @@ r_{rec,a,0} c_{nsr} \max \left\{
 
 $\left. \frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_{S_0}
 = \left.
-p_{h_i,2} \sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}} \left(
+p_{h_i,2} \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} \left(
 	\frac{\sqrt g}{h_y} n_a \sqrt{\frac{z_a T_e + T_i}{m_a}}
 \right) T_i \right|_{S_0} + \left.
 p_{h_i,1} \max \left\{0, -\frac{\sqrt g}{h_y} \widetilde f_{iy}^{(E)} \right\} T_i
@@ -10376,7 +10391,7 @@ $p_{h_i,1} = -1$, $p_{h_i,2} = -10^{-2}$
 
 $\left. -\frac{\sqrt g}{h_y} \kappa_{iy} \frac{\partial T_i}{h_y \partial y} \right|_{S_0}
 = \left.
-p_{h_i,1} \sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}} \left(
+p_{h_i,1} \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} \left(
 	\frac{\sqrt g}{h_y} n_a \sqrt{\frac{z_a T_e + T_i}{m_a}}
 \right) T_i \right|_{S_0}$
 
@@ -10386,7 +10401,7 @@ $p_{h_i,1}$ is the imposed ion temperature decay length, in $m$.
 
 $\left. \frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_{S_0}
 = \left.
-\sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}} \left(
+\sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} \left(
 	c_{h_i,a,2} \frac{\sqrt g}{h_y} \frac{n_a}{n_i} \sqrt{\frac{z_a T_e + T_i}{m_a}}
 \right) n_i T_i \right|_{S_0}
 + \left.
@@ -10401,10 +10416,12 @@ $c_{h_i,a,2} = -10^{-2}$
 
 %-------- end of 35th page -------------
 
-$\left. \frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_{S_1} = \left. p_{h_i,1} \frac{
+$\left. \frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_{S_1} = \left. \left[ p_{h_i,1} \frac{
 	\frac{\sqrt g}{h_y}}
 	{\sum \limits_{core} \left( \frac{\sqrt g}{h_y} \right)}
-\right|_{S_1}$
+        - q_{iy}^{P.Sch}
+        + \frac{3}{2} \frac{\left( j_y^{(AN)} + j_y^{(in)} + \widetilde{j}_y^{(vis \parallel)} + \widetilde{j}_y^{(visq)} + 0 \cdot j_y^{(vis \perp)} \right)}{e} T_i
+\right] \right|_{S_1}$
 
 $p_{h_i,1} = 8 \cdot 10^5$ is the imposed total ion energy flux, in $W$.
 
@@ -10522,7 +10539,7 @@ r_{rec,a,0} c_{nsr} \max \left\{
 
 $\left. -\frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_N
 = \left.
-p_{h_i,2} \sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}} \left(
+p_{h_i,2} \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} \left(
 	\frac{\sqrt g}{h_y} n_a \sqrt{\frac{z_a T_e + T_i}{m_a}}
 \right) T_i \right|_N
 + \left.
@@ -10535,7 +10552,7 @@ $p_{h_i,1} = -1$, $p_{h_i,2} = 10^{-2}$
 
 $\left. \frac{\sqrt g}{h_y} k_{iy} \frac{\partial T_i}{h_y \partial y} \right|_N
 = \left.
-p_{h_i,1} \sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}} \left(
+p_{h_i,1} \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} \left(
 	\frac{\sqrt g}{h_y} n_a \sqrt{\frac{z_a T_e + T_i}{m_a}}
 \right) T_i \right|_N$
 
@@ -10545,7 +10562,7 @@ $p_{h_i,1}$ is the imposed ion temperature decay length, in $m$.
 
 $\left. -\frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_N
 = \left.
-\sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}} \left(
+\sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} \left(
 	c_{h_i,a,2}  \frac{\sqrt g}{h_y} \frac{n_a }{n_i} \sqrt{\frac{z_a T_e + T_i}{m_a}}
 \right) n_i T_i \right|_N
 + \left.
@@ -10563,7 +10580,7 @@ $c_{h_i,a,2} = -10^{-2}$
 $\left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W = \left.
 - p_{h_i,1} \frac{\sqrt g}{h_x} |b_x|
 \sqrt{\frac{\sum \limits_{b=0}^{ns-1} p_b}{\sum \limits_{b=0}^{ns-1} m_b n_b}} T_i
-\sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}} p_{n,a,1} n_a
+\sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} p_{n,a,1} n_a
 -
 \frac{\sqrt g}{h_x} q_{ix}^{P.Sch}
 \right|_W$
@@ -10573,7 +10590,7 @@ $p_{h_i,1} = +1.5$
 {\em Boundary condition from {\tt b2stbc\_spb}:}
 
 $\left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W =
-\sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}}
+\sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}}
 \left. \left[
 	\left(
 		c_{h_i,a,7}
@@ -10651,7 +10668,7 @@ $p_{h_i,2} = 10^{-3}$ with drifts, should be $p_{h_i,2} = 0$
 $\left. -\frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_E = \left.
 - p_{h_i,1} \frac{\sqrt g}{h_x} |b_x|
 \sqrt{\frac{\sum \limits_{b=0}^{ns-1} p_b}{\sum \limits_{b=0}^{ns-1} m_b n_b}} T_i
-\sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}} p_{n,a,1} n_a
+\sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} p_{n,a,1} n_a
 -
 \frac{\sqrt g}{h_x} q_{ix}^{P.Sch}
 \right|_E$
@@ -10661,7 +10678,7 @@ $p_{h_i,1} = +1.5$
 {\em Boundary condition from {\tt b2stbc\_spb}:}
 
 $\left. -\frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_E =
-\sum \limits^{ns-1}_{\substack{a = 0, \\ z_a \neq 0}}
+\sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}}
 \left. \left[
 	-\left(
 		c_{h_i,a,7}
@@ -16593,6 +16610,8 @@ DBG & b2plot/rlcomp.F \\
 DBG & equations/b2news\_.F \\
 DBG & modules/b2mod\_input\_profile.F \\
 DBG & user/b2usrtrc.F \\
+DBG & utility/ma28.F \\
+DBG & utility/ma28copy.F \\
 DEF\_MAXCHORDS & b2plot/process\_chords.F \\
 DEF\_MAXCHORDS & b2plot/process\_eirene\_chords.F \\
 EASY & b2plot/chord.F \\

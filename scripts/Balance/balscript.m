@@ -19,10 +19,10 @@
 %                 each stratum (in a new figure).                              %
 % David Moulton (david.moulton@ccfe.ac.uk) January 2017.                       %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-BALFILE = '/marconi_work/eufus_gw/scratch/g2dmoult/solps-iter/runs/AUG_16151_D+C+He/16151_1.6MW_2.0e19_D=0.4_chi=1.6_pump=0.90/balance.nc';
+BALFILE = './balance.nc';
 BAL_QUANT = 'totheat';
 SPECIES_INDEX = 2;
-DEFAULT_REGION = 'lid';
+DEFAULT_REGION = 'lod';
 STRATA_PLOT = true;
 
 % Get commonly used variables for this simulation:

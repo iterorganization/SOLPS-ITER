@@ -154,7 +154,7 @@ c***    test ions for each entry (always one atom for a GS);
 c***    atomic mass, nuclear charge, charge state, flux units (nuclei),
 c***    and '3 secondaries' flag for each entry 
       integer nspdgen,nspdlen
-      parameter (nspdgen=11, nspdlen=83)
+      parameter (nspdgen=11, nspdlen=81)
       character*8 spcdgen(nspdgen)*2,spcdspc(nspdlen),
      ,  spcdrfl(nspdlen),spcdrtl(nspdlen)
       integer lspdgen(nspdgen),nspdpls(nspdgen),
