@@ -40,6 +40,12 @@ ADAS:
   cd $SOLPSTOP/modules/adas
   git fetch --prune
   git checkout SOLPS-master && echo "Checked out ADAS SOLPS-master branch" || goto branch
+  git pull && goto GGD || goto local
+
+GGD:
+  echo "Updating GGD"
+  cd $SOLPSTOP/modules/ggd
+  git checkout feature/IDS && echo "Checked out GGD feature/IDS branch"|| goto branch
   git pull && goto compile || goto local
 
 branch:

@@ -419,6 +419,7 @@ purpose, a master \SOLPSITER {\tt Makefile} is provided, located at \${\tt \{SOL
       \item[libs] Installs the needed libraries according to config file
       \item[carre] The {\tt Carre} grid generator and associated translators
       \item[divgeo] The {\tt DivGeo} graphical input file builder and accompanying equilibrium and template converters
+      \item[ggd] The Generalized Grid Description ({\tt GGD}) package from IMAS
       \item[b25eirene] The {\tt B2.5-Eirene} main code and accompanying programs
       \item[uinp] The {\tt Uinp} translator from {\tt DivGeo} output to {\tt B2.5-Eirene} input
       \item[sonnet-light] The {\tt Sonnet} library
@@ -455,6 +456,7 @@ purpose, a master \SOLPSITER {\tt Makefile} is provided, located at \${\tt \{SOL
     \end{description}
   \item[carre] The {\tt Carre} grid generator and associated translators only
   \item[divgeo] The {\tt DivGeo} graphical input file builder and accompanying equilibrium and template converters only
+  \item[ggd] The Generalized Grid Description ({\tt GGD}) package from IMAS
   \item[b25] The {\tt B2.5} stand-alone plasma fluid solver and accompanying programs only
   \item[b25\_nox] The {\tt B2.5} stand-alone plasma fluid solver and accompanying programs, not using NCAR Graphics
   \item[b25\_all] The {\tt B2.5} stand-alone plasma fluid solver and accompanying programs only, plus {\tt b2xd} the \SOLPSfive to \SOLPSfour converter
@@ -580,6 +582,7 @@ SOLPSTOP
 |   +---solps4-5
 |   +---DivGeo
 |   +---Eirene
+|   +---ggd
 +---lib
 |   +---ITER.ifort64
 +---runs
@@ -677,8 +680,8 @@ the grid generator and associated converter,
 to the grid preprocessor, {\tt modules/Triang} for the {\tt Eirene} triangular mesh generator,
 {\tt modules/Uinp} for the {\tt Uinp} input file generator,
 {\tt modules/adas} for the ADAS atomic data files,
-{\tt modules/amds} for the automated generator
-of atomic physics blocks for {\tt Eirene},
+{\tt modules/amds} for the automated generator of atomic physics blocks for {\tt Eirene},
+{\tt modules/ggd} for the Generalized Grid Description utility library,
 {\tt modules/solps4-5} for the {\tt b2sxdr} converter from
 \SOLPSfour to \SOLPSITERns, and {\tt modules/Sonnet-light} for the {\tt Sonnet} library in use
 for \SOLPSfour grids.
@@ -1056,6 +1059,11 @@ currently).
 
 {\tt ratadas.filelist} indicates the global source of the {\tt ADAS} files,
 and which "years" to use.
+
+\subsection{modules/ggd}
+\index{ggd}\index{GGD}\index{IDS}
+
+The {\tt modules/ggd} subdirectory contains the Generalized Grid Description utility routines which are needed for use of \SOLPSITER with IMAS and the production, archival and retrieval of code runs in Interface Data Structure (IDS) format.
 
 \newpage \section{lib}
 
