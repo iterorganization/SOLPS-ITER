@@ -15606,6 +15606,7 @@ Outputs {\em xmin}, {\em xmax}, {\em ymin}, {\em ymax}, {\em rmin}, {\em rmax}, 
 Optional user routine. The choice of user routine is governed by $\langle$ig$\rangle$.
 Currently coded functions are:
 \begin{description}
+  \item[ig = -20] Produces a file {\tt diagno.dat} with coordinates of the grid cell centers and densities, temperatures for all species
   \item[ig = -19] Produces a file {\tt brooks.dat} with coordinates of the grid cell centers and the plasma parameters (density, temperatures, drift velocity) in these points
   \item[ig = -18] Produces input files for a DIVIMP run. Requires one field on the matrix stack and one filename on the string stack to indicate which field is to be produced and where it is to be written
   \item[ig = -17] Prints detailed particle balance for the cells around the lower x-point in file {\tt x-point.dat}
