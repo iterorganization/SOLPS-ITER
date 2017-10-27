@@ -1,0 +1,29 @@
+#  VERSION : 28.07.99 20:34
+
+# Test whether necessary variables are defined
+ifndef LD_MSCL
+  $(error LD_MSCL not defined)
+endif
+
+ifdef USE_MPI
+FC 	     = mpiifort
+else
+FC	     = ifort
+endif
+ifdef SOLPS_DEBUG
+FFLAGS	 = -g -C -traceback -debug all -check all
+else
+FFLAGS   =
+endif
+INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
+COMPILE  = ${FC} -c ${FFLAGS}
+CPP	     = /lib/cpp -C -traditional
+
+MOD 	   = mod
+LDLIBS	 = ${LD_MSCL}
+LDEXTRA  =
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+

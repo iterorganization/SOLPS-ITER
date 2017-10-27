@@ -107,4 +107,4 @@ update_solps_run_status -n ${msg}
 if ($?SOLPS_GUI_IP) then
   echo ${USER} ${PWD} ${msg} | netcat -u -v -w 1 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
 endif
-qsub -V -S /usr/bin/tcsh $NAME
+qsub -V -S /bin/tcsh $NAME

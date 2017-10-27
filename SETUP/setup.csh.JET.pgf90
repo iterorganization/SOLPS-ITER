@@ -1,22 +1,22 @@
 # Load modules
-module load lapack
+#module load lapack
 module load gnuplot
-module load blas
-module load globus
-module load hdf5/1.8.9
-module load MUMPS
+#module load blas
+#module load globus
+module load hdf5/1.8.13
+#module load MUMPS
 module load netcdf
-module load NAG
-module load scalapack
+module load nag
+#module load scalapack
 module unload python
-module load python/2.7.3
+module load python/2.7.5
 
 
 # Environment variables
 if (! $?DEVICE) then
   setenv DEVICE jet
 endif
-setenv GLI_HOME /common/SOLPS-ITER/OBJECTCODE/pgf90/gks
+setenv GLI_HOME /common/SOLPS-ITER/OBJECTCODE/linux_pgf95/gks
 if(! $?SIMDIR) then
   setenv SIMDIR /u/sim
 endif

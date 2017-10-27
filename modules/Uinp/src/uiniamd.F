@@ -51,7 +51,7 @@ c=======================================================================
       print *,uun,' : ',nnrctn
       nnrctn=nn+nnrctn
       if(nnrctn.gt.nreac) then !{
-        write(0,*) 'Too many reaction datasets specified:',nnrctn
+        write(0,*) 'Too many reaction datasets requested:',nnrctn
         call xerrab
      .   ('==> Check the AMDS model and DEF_NREAC in DIMENSIONS.F')
       end if !}
@@ -128,49 +128,45 @@ c-----------------------------------------------------------------------
 
   9   do i=nn,nnrctn !{
       	read(iunii,'(a)',end=9999) rctnptpr(i)
-        if (.not.meta_used) then !{
-          do j = 1, nspdlen !{
-            if (streql(rctnptpr(i),spcdspc(j))) then !{
-              if (l_meta(j)) meta_used = .true.
-            end if !}
-          end do !}
-        end if !}
+        do j = 1, nspdlen !{
+          if (streql(rctnptpr(i),spcdspc(j))) then !{
+            n2_model = n2_model .and. l_n2(j)
+            if (.not.meta_used .and. l_meta(j)) meta_used = .true.
+          end if !}
+        end do !}
       end do !}
       go to 9990
 
  10   do i=nn,nnrctn !{
       	read(iunii,'(a)',end=9999) rctnptin(i)
-        if (.not.meta_used) then !{
-          do j = 1, nspdlen !{
-            if (streql(rctnptin(i),spcdspc(j))) then !{
-              if (l_meta(j)) meta_used = .true.
-            end if !}
-          end do !}
-        end if !}
+        do j = 1, nspdlen !{
+          if (streql(rctnptin(i),spcdspc(j))) then !{
+            n2_model = n2_model .and. l_n2(j)
+            if (.not.meta_used .and. l_meta(j)) meta_used = .true.
+          end if !}
+        end do !}
       end do !}
       go to 9990
 
  11   do i=nn,nnrctn !{
       	read(iunii,'(a)',end=9999) rctnpto1(i)
-        if (.not.meta_used) then !{
-          do j = 1, nspdlen !{
-            if (streql(rctnpto1(i),spcdspc(j))) then !{
-              if (l_meta(j)) meta_used = .true.
-            end if !}
-          end do !}
-        end if !}
+        do j = 1, nspdlen !{
+          if (streql(rctnpto1(i),spcdspc(j))) then !{
+            n2_model = n2_model .and. l_n2(j)
+            if (.not.meta_used .and. l_meta(j)) meta_used = .true.
+          end if !}
+        end do !}
       end do !}
       go to 9990
 
  12   do i=nn,nnrctn !{
       	read(iunii,'(a)',end=9999) rctnpto2(i)
-        if (.not.meta_used) then !{
-          do j = 1, nspdlen !{
-            if (streql(rctnpto2(i),spcdspc(j))) then !{
-              if (l_meta(j)) meta_used = .true.
-            end if !}
-          end do !}
-        end if !}
+        do j = 1, nspdlen !{
+          if (streql(rctnpto2(i),spcdspc(j))) then !{
+            n2_model = n2_model .and. l_n2(j)
+            if (.not.meta_used .and. l_meta(j)) meta_used = .true.
+          end if !}
+        end do !}
       end do !}
       go to 9990
 

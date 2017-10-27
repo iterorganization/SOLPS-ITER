@@ -45,13 +45,13 @@ c***  nsrfclsx  max. number of views
       integer nreac, nchor, lntsputx, nsrfclsx
       parameter (nreac=DEF_NREAC, nchor=250, lntsputx=4, nsrfclsx=12)
       integer nrad, nadd, nplt, nsd, nsdw, ncv, nsnv
-      integer nadv, nclv, nalv, nads, nals
+      integer nadv, nclv, nalv, nads, nals, nasp
       integer nhd6, nmtr, nain
       parameter (nadd=DEF_NADD)
       parameter (nrad=n1st*n2nd*n3rd+nadd+1)
       parameter (nplt=5, nsd=1, nsdw=1, ncv=1, nsnv=1)
       parameter (nadv=4*(DEF_NATM+DEF_NMOL))
-      parameter (nads=1, nclv=1, nalv=1, nals=1)
+      parameter (nads=1, nclv=1, nalv=1, nals=1, nasp=1)
       parameter (nmtr=6, nain=1)
       parameter (nhd6=DEF_NATM*nmtr)
 
@@ -154,14 +154,14 @@ c***    test ions for each entry (always one atom for a GS);
 c***    atomic mass, nuclear charge, charge state, flux units (nuclei),
 c***    and '3 secondaries' flag for each entry 
       integer nspdgen,nspdlen
-      parameter (nspdgen=11, nspdlen=83)
+      parameter (nspdgen=11, nspdlen=81)
       character*8 spcdgen(nspdgen)*2,spcdspc(nspdlen),
      ,  spcdrfl(nspdlen),spcdrtl(nspdlen)
       integer lspdgen(nspdgen),nspdpls(nspdgen),
      ,  nspdatm(nspdgen),nspdmol(nspdgen),
      ,  nspdion(nspdgen),spcdms(nspdlen),spcdnc(nspdlen),
      ,  spcdcg(nspdlen),spcdfu(nspdlen),spcdns(nspdlen)
-      logical l_ammon(nspdlen), ammonx_used
+      logical l_n2(nspdlen), n2_model, l_ammon(nspdlen), ammonx_used
       logical l_meta(nspdlen), meta_used, is_meta(natm)
       
 c-----------------------------------------------------------------------
@@ -593,7 +593,8 @@ c     ,  spcifup,spcifua,spcifum,spcifui,
      ,  ttcblph,ttctal,ttcdbg2,ttcdbge,ttcdbgm,ttcdbgf,ttcdbgl,ttcdbgs,
      ,  ttcdbgg,ttcdbgmpi,ttcdbgc,
      ,  ttpl1st,ttpl2nd,ttpladd,ttplhst,ttplcut,ttplnums,tttest,
-     ,  lm_cnfg,l_ammon,l_meta,ammonx_used,meta_used,is_meta
+     ,  lm_cnfg,l_n2,l_ammon,l_meta,
+     ,  n2_model,ammonx_used,meta_used,is_meta
 
       common/uinptxt/topo,amd_file,
      ,  spcsncl,spcspls,spcsatm,spcsmol,spcsion,spcsrfp,spcsrfa,spcsrfm,

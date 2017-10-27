@@ -48,6 +48,7 @@ case "*.hpc.l":
   echo JET
   breaksw
 case "*.mech.kuleuven.be":
+case "*.icts.leuven.vsc":
   echo LEUVEN
   breaksw
 case "*.pppl.gov":
@@ -88,6 +89,7 @@ case "kraken01":
 case "*.spbau.ru":
 case "login1.cluster":
 case "n01p*.cluster":
+case "PLASMATHEORY08":
   echo SPBSTU
   breaksw
 case "*.mephi.ru":

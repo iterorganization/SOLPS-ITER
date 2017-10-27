@@ -577,7 +577,7 @@ C     FIND NEIGHBOURS
       use ccuts
       IMPLICIT NONE
 
-      INTEGER I, J, K, L, M, IS, INCR
+      INTEGER I, J, K, KK, L, M, IS, INCR
       DATA INCR /1000/
       LOGICAL PARA
       LOGICAL DBG, DBG0
@@ -598,8 +598,8 @@ c neighr(i,k).ne.0 -> side k of triangle i is on the tria grid edge
 c        dbg0=itria1.eq.1   !###
         if(dbg0) then !{
           print *,'itria1,ntria1,ntria=',itria1,ntria1,ntria
-          print *,'neighr=',neighr(itria1,:)
-          print *,'neighb=',neighb(itria1,:)
+          print *,'neighr=',(neighr(itria1,k),k=1,3)
+          print *,'neighb=',(neighb(itria1,k),k=1,3)
         end if !}
         IF (ABS(NEIGHR(ITRIA1,1))+ABS(NEIGHR(ITRIA1,2))+
      .      ABS(NEIGHR(ITRIA1,3)) .NE. 0) THEN !{
@@ -612,8 +612,8 @@ c loop over triangles (b) inside the b2 grid
 c            dbg=dbg0.and.itria.eq.1363  !###
             if(dbg) then !{
               print *,'itria=',itria
-              print *,'neighr=',neighr(itria,:)
-              print *,'neighb=',neighb(itria,:)
+              print *,'neighr=',(neighr(itria,k),k=1,3)
+              print *,'neighb=',(neighb(itria,k),k=1,3)
             end if !}
             IF (ABS(NEIGHR(ITRIA,1))+ABS(NEIGHR(ITRIA,2))+
      .          ABS(NEIGHR(ITRIA,3)).NE.0) THEN !{
@@ -631,7 +631,8 @@ c loop over the sides of triangle (b)
                   IF (M .EQ. 4) M = 1
                   if(dbg) then !{
                     print '(a,t12,3i8/t12,3i8)','triangles',
-     ,                tria(itria1,:),tria(itria,:)
+     ,                (tria(itria1,kk),kk=1,3),
+     ,                (tria(itria ,kk),kk=1,3)
                   end if !}
                   IF ((TRIA(ITRIA1,I) .EQ. TRIA(ITRIA,L)) .AND.
      .                (TRIA(ITRIA1,J) .EQ. TRIA(ITRIA,K))) THEN !{

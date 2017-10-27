@@ -5,15 +5,15 @@ ifndef LD_MSCL
   $(error LD_MSCL not defined)
 endif
 
-FC	 = gfortran
+FC       = gfortran
 ifdef SOLPS_DEBUG
-FFLAGS	 = -g
+FFLAGS	 = -g -ffpe-trap=denormal
 else
 FFLAGS   =
 endif
 INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
-CPP	 = /lib/cpp -traditional -ffreestanding
+CPP	     = /lib/cpp -traditional -ffreestanding
 
 MOD      = mod
 LDLIBS	 = ${LD_MSCL}

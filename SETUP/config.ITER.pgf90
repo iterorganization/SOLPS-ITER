@@ -22,7 +22,7 @@ H5DIR       ?=
 GR_ROOT     ?= /work/imas/opt/gr/0.0.94
 GLI_HOME    ?=
 NCARG_ROOT  ?=
-NAGDIR      ?=
+NAGDIR      ?= /work/imas/opt/nag/15
 MDSPLUS_DIR ?=
 
 # Variables of linking, using pkg-config
@@ -69,7 +69,7 @@ endif
 # Build with IMAS if imas module is loaded
 ifdef IMAS_PREFIX
   SOLPS_CPP += -DIMAS
-  LD_UAL     = `pkg-config imas-lowlevel imas-ifort --libs`
+  LD_UAL     = `pkg-config imas-lowlevel imas-pgi --libs`
   export LD_UAL
 endif
 

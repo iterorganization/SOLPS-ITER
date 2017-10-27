@@ -126,17 +126,37 @@ c>>>
             ingrde(isf,nstrai,1)=0
             ingrda(isf,nstrai,2)=0
             ingrde(isf,nstrai,2)=0
-            sorad1(isf,nstrai)=p1(1,i)
-            sorad2(isf,nstrai)=p2(1,i)
-            sorad3(isf,nstrai)=p1(2,i)
-            sorad4(isf,nstrai)=p2(2,i)
-            if (sorad1(isf,nstrai).eq.sorad2(isf,nstrai)) then !{
+            if (p1(1,i).eq.p2(1,i)) then !{
+              if (p1(2,i).le.p2(2,i)) then !{
+                sorad1(isf,nstrai)=p1(1,i)
+                sorad2(isf,nstrai)=p2(1,i)
+                sorad3(isf,nstrai)=p1(2,i)
+                sorad4(isf,nstrai)=p2(2,i)
+              else !}{
+                sorad1(isf,nstrai)=p2(1,i)
+                sorad2(isf,nstrai)=p1(1,i)
+                sorad3(isf,nstrai)=p2(2,i)
+                sorad4(isf,nstrai)=p1(2,i)
+              end if !}
               sorlim(isf,nstrai)=1
-            else if (sorad3(isf,nstrai).eq.sorad4(isf,nstrai)) then !}{
-              sorlim(isf,nstrai)=2
-            else !}{
-              sorlim(isf,nstrai)=0
-            end if !}
+            else
+              if (p1(1,i).le.p2(1,i)) then !{
+                sorad1(isf,nstrai)=p1(1,i)
+                sorad2(isf,nstrai)=p2(1,i)
+                sorad3(isf,nstrai)=p1(2,i)
+                sorad4(isf,nstrai)=p2(2,i)
+              else !}{
+                sorad1(isf,nstrai)=p2(1,i)
+                sorad2(isf,nstrai)=p1(1,i)
+                sorad3(isf,nstrai)=p2(2,i)
+                sorad4(isf,nstrai)=p1(2,i)
+              end if !}
+              if (p1(2,i).eq.p2(2,i)) then !{
+                sorlim(isf,nstrai)=2
+              else !}{
+                sorlim(isf,nstrai)=0
+              end if !}
+            end if !}  
             if (sorad3(isf,nstrai).eq.sorad4(isf,nstrai)) then !{
               sorlim(isf,nstrai)=sorlim(isf,nstrai)+10
             else !}{

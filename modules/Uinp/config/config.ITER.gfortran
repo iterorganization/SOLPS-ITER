@@ -10,15 +10,15 @@ else
 FC       = gfortran
 endif
 ifdef SOLPS_DEBUG
-FFLAGS	 = -g
+FFLAGS	 = -g -ffpe-trap=denormal
 else
 FFLAGS   =
 endif
 INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
-CPP	 = /lib/cpp -traditional
+CPP	     = /lib/cpp -traditional
 
-MOD 	 = mod
+MOD      = mod
 LDLIBS	 = ${LD_MSCL}
 LDEXTRA  =
 
