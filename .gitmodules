@@ -28,4 +28,4 @@
 [submodule "modules/ggd"]
 	path = modules/ggd
 	url = ssh://git@git.iter.org/imex/ggd.git
-	branch = feature/IDS
+	branch = develop
