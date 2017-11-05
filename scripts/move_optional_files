@@ -10,33 +10,40 @@ echo "tracing : found" $nfiles "files"
 [ $nfiles -gt 0 ] && for i in $ncfiles; do {
 	mv $i tracing 2> /dev/null || echo > /dev/null
     }; done
+rm $NAME
 
 ( ls -l b2mn.exe.dir/batch_av/* | grep -v 'total ' | grep -v ' 0 ' | wc -l > $NAME ) 2> /dev/null
 nfiles=`cat $NAME`
 echo "batch_av : found" $nfiles "files"
 [ $nfiles -gt 0 ] && mv b2mn.exe.dir/batch_av/* batch_av 2> /dev/null || echo > /dev/null
+rm $NAME
 
 ( ls -l b2mn.exe.dir/run_av/* | grep -v 'total ' | grep -v ' 0 ' | wc -l > $NAME ) 2> /dev/null
 nfiles=`cat $NAME`
 echo "run_av : found" $nfiles "files"
 [ $nfiles -gt 0 ] && mv b2mn.exe.dir/run_av/* batch_av 2> /dev/null || echo > /dev/null
+rm $NAME
 
 ( ls -l b2mn.exe.dir/d?? | grep -v 'total ' | grep -v ' 0 ' | wc -l > $NAME ) 2> /dev/null
 nfiles=`cat $NAME`
 echo "d?? : found" $nfiles "files"
 [ $nfiles -gt 0 ] && mv b2mn.exe.dir/d?? . 2> /dev/null || echo > /dev/null
+rm $NAME
 
 ( ls -l b2mn.exe.dir/ds?? | grep -v 'total ' | grep -v ' 0 ' | wc -l > $NAME ) 2> /dev/null
 nfiles=`cat $NAME`
 echo "ds?? : found" $nfiles "files"
 [ $nfiles -gt 0 ] && mv b2mn.exe.dir/ds?? . 2> /dev/null || echo > /dev/null
+rm $NAME
 
 ( ls -l b2mn.exe.dir/ds??? | grep -v 'total ' | grep -v ' 0 ' | grep -vwc -l > $NAME ) 2> /dev/null
 nfiles=`cat $NAME`
 echo "ds??? : found" $nfiles "files"
 [ $nfiles -gt 0 ] && mv b2mn.exe.dir/ds??? . 2> /dev/null || echo > /dev/null
+rm $NAME
 
 ( ls -l b2mn.exe.dir/b2.*.parameters | grep -v 'total ' | grep -v ' 0 ' | wc -l > $NAME ) 2> /dev/null
 nfiles=`cat $NAME`
 echo "b2.*.parameters : found" $nfiles "files"
 [ $nfiles -gt 0 ] && mv b2mn.exe.dir/b2.*.parameters . 2> /dev/null || echo > /dev/null
+rm $NAME

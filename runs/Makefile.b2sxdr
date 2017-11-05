@@ -110,6 +110,7 @@ ifndef STAND_ALONE
 	-[ -e b2sx.exe.dir/ftn44 ] && mv b2sx.exe.dir/ftn44 . || echo > /dev/null
 	-cd b2sx.exe.dir ; rm -f HYDHEL AMJUEL METHANE SPUTER H2VIBR AMMONX ftn21 ftn22 graphite_ext.dat mo_ext.dat ftn75 ftn1 ftn29 ftn37 ftn55 ftn78 vtk.out
 endif
+endif
 	-rmdir b2sx.exe.dir
 
 ifndef STAND_ALONE

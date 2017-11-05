@@ -49,6 +49,7 @@ setenv FC ifort
 setenv CXX g++
 
 module unload zlib
+module unload Anaconda3
 module load paraview/5.4.1
 module load python/2.7/11
 

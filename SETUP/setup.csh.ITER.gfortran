@@ -43,6 +43,7 @@ setenv CC gcc
 setenv FC gfortran
 setenv CXX g++
 
+module unload Anaconda3
 module load paraview/5.4.1
 module load python/2.7/11
 
