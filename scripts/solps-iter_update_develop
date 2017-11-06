@@ -45,6 +45,7 @@ ADAS:
 GGD:
   echo "Updating GGD"
   cd $SOLPSTOP/modules/ggd
+  git fetch --prune
   git checkout develop && echo "Checked out GGD develop branch"|| goto branch
   git pull && goto compile || goto local
 
