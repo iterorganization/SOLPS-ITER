@@ -200,7 +200,8 @@ c=======================================================================
      .   (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
       end if !}
       goto 9999
-   11 call rearra(umtrl,nlim,i)
+   11 umtrl(1:nlim) = 'dummy'
+      call rearra(umtrl,nlim,i)
       nlimi=i
       if(nlimi.gt.nlim) then !{
         write(0,*) 'Too many wall elements: maximum ',nlim

@@ -48,6 +48,7 @@ setenv FC ifort
 setenv CXX g++
 
 module unload zlib
+module unload Anaconda3
 module load paraview/5.4.1
 
 if (`where paraview-config` == "") then
