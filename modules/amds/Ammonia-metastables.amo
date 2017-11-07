@@ -1,6 +1,6 @@
 # Output file produced by amds version 1.04
 filevers 1
-reactns 69
+reactns 71
 HYDHEL H.1 4.3.3
 HYDHEL H.2 2.2.9
 HYDHEL H.2 2.2.10
@@ -58,8 +58,8 @@ AMMONX H.2 DE
 AMMONX H.1 DE
 AMMONX H.2 DF
 AMMONX H.1 DF
-AMMONX H.2 EA
-AMMONX H.1 EA
+AMMONX H.2 EB
+AMMONX H.1 EB
 AMMONX H.2 EC
 AMMONX H.1 EC
 AMMONX H.2 20
@@ -70,6 +70,8 @@ AMMONX H.2 34
 AMMONX H.2 09
 AMMONX H.2 17
 AMMONX H.2 ZH
+AMMONX H.2 ZI
+AMMONX H.2 ZJ
 group
 59
 0
@@ -140,10 +142,14 @@ group
   
   
   
+  
+  
 deltae
 
 15.4
 25
+
+
 
 
 
@@ -280,6 +286,8 @@ massp
 0
 0
 0
+0
+0
 masst
 2
 2
@@ -350,6 +358,8 @@ masst
 16
 16
 28
+14
+14
 rctype
 II
 EI
@@ -420,7 +430,11 @@ II
 EI
 EI
 EI
+EI
+EI
 tmin
+
+
 
 
 
@@ -560,6 +574,8 @@ tmax
 
 
 
+
+
 primpart
 H2
 
@@ -630,6 +646,8 @@ H2
 
 
 
+
+
 intrpart
 H2+
 H2
@@ -680,8 +698,8 @@ H2
 H2
 N2
 N
-N*(4S)
-N*(4S)
+N
+N
 N2*(A)
 N2*(A)
 N2*(A)
@@ -700,6 +718,8 @@ H2+
 NH2
 NH2
 N2*(A)
+N*(2D)
+N*(2P)
 product1
 H3+
 H2+
@@ -752,12 +772,12 @@ N2*(A)
 N*(2D)
 N*(2P)
 N*(2P)
-N2*(X)
-N2*(X)
-N2*(X)
-N2*(X)
-N2*(X)
-N2*(X)
+N2
+N2
+N2
+N2
+N2
+N2
 NH
 NH
 NH
@@ -770,6 +790,8 @@ H3+
 NH2+
 NH
 N2+
+N+
+N+
 product2
 H
 
@@ -820,8 +842,8 @@ NH3+
 NH3+
 
 
-N2*(X)
-N2*(X)
+N2
+N2
 NH2
 NH2
 H
@@ -839,6 +861,8 @@ H+
 H
 
 H
+
+
 
 nprdct1
 
@@ -910,6 +934,8 @@ nprdct1
 
 
 
+
+
 nprdct2
 
 
@@ -968,6 +994,8 @@ nprdct2
 
 2
 2
+
+
 
 
 
@@ -1050,10 +1078,14 @@ eprdct1
 
 
 
+
+
 eprdct2
 
 
 5
+
+
 
 
 
