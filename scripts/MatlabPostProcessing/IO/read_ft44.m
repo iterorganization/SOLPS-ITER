@@ -36,9 +36,12 @@ nx   = dims(1);
 ny   = dims(2);
 ver  = dims(3);
 
-if ver ~= 20081111 && ver ~= 20160829
+if ver ~= 20081111 && ver ~= 20160829 && ver ~= 20170328
     error('read_ft44: unknown format of fort.44 file');
 end
+
+% go to new line (skip reading a possible git-hash)
+fgetl(fid);
 
 % natm, nmol, nion
 dims = fscanf(fid,'%d',3);
