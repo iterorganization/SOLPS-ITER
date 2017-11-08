@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+from __future__ import print_function
 import pupynere
 import os
 import matplotlib
@@ -15,7 +16,7 @@ else:
 times=f.variables['times']
 rqradreg=f.variables['rqradreg']
 species_names=f.variables['species']
-species=[''.join(species_names[i,:]).strip() for i in range(species_names.shape[0])]
+species=[b''.join(species_names[i,:]).strip().decode('utf-8') for i in range(species_names.shape[0])]
 
 elements=[re.sub('[-+0-9]','',species[i]) for i in range(len(species))]
 
@@ -36,12 +37,12 @@ if nargs > 1: S=int(sys.argv[1])
 if S == 0:
   for R in range(rqradreg.shape[2]):
     plt.plot(times[:],numpy.sum(rqradreg[:,:,R],axis=1), label=str(R))
-    print 'RQRADREG(%s) = %s' % (R,numpy.sum(rqradreg[-1,:,R],axis=0))
+    print('RQRADREG(%s) = %s' % (R,numpy.sum(rqradreg[-1,:,R],axis=0)))
   plt.ylabel('rqradreg by region for SUM')
 else:
   for R in range(rqradreg.shape[2]):
     plt.plot(times[:],numpy.sum(rqradreg[:,bounds[S][0]:bounds[S][1],R],axis=1), label=str(R))
-    print 'RQRADREG(%s) = %s' % (R,numpy.sum(rqradreg[-1,bounds[S][0]:bounds[S][1],R],axis=0))
+    print('RQRADREG(%s) = %s' % (R,numpy.sum(rqradreg[-1,bounds[S][0]:bounds[S][1],R],axis=0)))
   plt.ylabel('rqradreg by region for %s' % (elements[bounds[S][0]],) )
 
 if  matplotlib.__version__ <=  '0.98.1':

@@ -98,7 +98,7 @@ except ImportError:
 import numpy as np
 from numpy.compat import asbytes, asstr
 from numpy import fromstring, ndarray, dtype, empty, array, asarray
-
+from functools import reduce
 
 ABSENT       = asbytes('\x00\x00\x00\x00\x00\x00\x00\x00')
 ZERO         = asbytes('\x00\x00\x00\x00')

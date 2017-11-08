@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+from __future__ import print_function
 import pupynere
 import os
 import matplotlib
@@ -15,7 +16,7 @@ else:
 times=f.variables['times']
 nareg=f.variables['nareg']
 species_names=f.variables['species']
-species=[''.join(species_names[i,:]).strip() for i in range(species_names.shape[0])]
+species=[b''.join(species_names[i,:]).strip().decode('utf-8') for i in range(species_names.shape[0])]
 
 elements=[re.sub('[-+0-9]','',species[i]) for i in range(len(species))]
 
@@ -43,9 +44,9 @@ if os.getenv('SOLPS_PYTHON_SAVE'):
 
 for i in range(len(bounds)):
   plt.semilogy(times[:],nareg_species[:,i,R], label=elements[bounds[i][0]])
-  print 'NAREG(%s) = %s' % (elements[bounds[i][0]],nareg_species[-1,i,R])
+  print('NAREG(%s) = %s' % (elements[bounds[i][0]],nareg_species[-1,i,R]))
 plt.semilogy(times[:],nareg_species[:,len(bounds),R], label='Sum')
-print 'NAREG(SUM) = %s' % (nareg_species[-1,len(bounds),R])
+print('NAREG(SUM) = %s' % (nareg_species[-1,len(bounds),R]))
 
 if  matplotlib.__version__ <=  '0.98.1':
   plt.legend(loc=0)

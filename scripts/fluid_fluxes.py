@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+from __future__ import print_function
 import pupynere
 import os
 import matplotlib
@@ -21,7 +22,7 @@ fnaxreg=f.variables['fnaxreg']
 fnayreg=f.variables['fnayreg']
 extsnareg=f.variables['b2sext_sna_reg']
 species_names=f.variables['species']
-species=[''.join(species_names[i,:]).strip() for i in range(species_names.shape[0])]
+species=[b''.join(species_names[i,:]).strip().decode('utf-8') for i in range(species_names.shape[0])]
 
 nargs=len(sys.argv)
 S=0
@@ -29,7 +30,7 @@ E=len(species)-1
 if nargs > 1: S=int(sys.argv[1])
 if nargs > 2: E=int(sys.argv[2])
 
-print species[S],species[E]
+print(species[S],species[E])
 
 if vreg == 2:
 
@@ -84,12 +85,12 @@ if vreg == 2:
   EXT=numpy.sum(extsnareg[-1,S:E+1,0],axis=0)
   SUM=WEST+EAST+SOUTH+NORTH+EXT
 
-  print 'South(%s--%s) = %s' % (species[S],species[E],SOUTH)
-  print 'North(%s--%s) = %s' % (species[S],species[E],NORTH)
-  print 'East(%s--%s) = %s' % (species[S],species[E],EAST)
-  print 'West(%s--%s) = %s' % (species[S],species[E],WEST)
-  print 'Ext(%s--%s) = %s' % (species[S],species[E],EXT)
-  print 'Sum(%s--%s) = %s' % (species[S],species[E],SUM)
+  print('South(%s--%s) = %s' % (species[S],species[E],SOUTH))
+  print('North(%s--%s) = %s' % (species[S],species[E],NORTH))
+  print('East(%s--%s) = %s' % (species[S],species[E],EAST))
+  print('West(%s--%s) = %s' % (species[S],species[E],WEST))
+  print('Ext(%s--%s) = %s' % (species[S],species[E],EXT))
+  print('Sum(%s--%s) = %s' % (species[S],species[E],SUM))
 
 elif vreg == 5:
 
@@ -106,19 +107,19 @@ elif vreg == 5:
   EXTCORE=numpy.sum(extsnareg[-1,S:E+1,1],axis=0)
   SUM=WEST+EAST+CORE+PFLXL+PFLXR+NORTH+EXT
 
-  print 'Core(%s--%s) = %s' % (species[S],species[E],CORE)
-  print 'Sep(%s--%s) = %s' % (species[S],species[E],SEP)
-  print 'North(%s--%s) = %s' % (species[S],species[E],NORTH)
-  print 'East(%s--%s) = %s' % (species[S],species[E],EAST)
-  print 'east(%s--%s) = %s' % (species[S],species[E],east)
-  print 'west(%s--%s) = %s' % (species[S],species[E],west)
-  print 'West(%s--%s) = %s' % (species[S],species[E],WEST)
-  print 'Pflxl(%s--%s) = %s' % (species[S],species[E],PFLXL)
-  print 'Pflxr(%s--%s) = %s' % (species[S],species[E],PFLXR)
-  print 'Ext(%s--%s) = %s' % (species[S],species[E],EXT)
-  print 'Sum(%s--%s) = %s' % (species[S],species[E],SUM)
-  print 'ExtCore(%s--%s) = %s' % (species[S],species[E],EXTCORE)
-  print 'SumCore(%s--%s) = %s' % (species[S],species[E],CORE-SEP+EXTCORE)
+  print('Core(%s--%s) = %s' % (species[S],species[E],CORE))
+  print('Sep(%s--%s) = %s' % (species[S],species[E],SEP))
+  print('North(%s--%s) = %s' % (species[S],species[E],NORTH))
+  print('East(%s--%s) = %s' % (species[S],species[E],EAST))
+  print('east(%s--%s) = %s' % (species[S],species[E],east))
+  print('west(%s--%s) = %s' % (species[S],species[E],west))
+  print('West(%s--%s) = %s' % (species[S],species[E],WEST))
+  print('Pflxl(%s--%s) = %s' % (species[S],species[E],PFLXL))
+  print('Pflxr(%s--%s) = %s' % (species[S],species[E],PFLXR))
+  print('Ext(%s--%s) = %s' % (species[S],species[E],EXT))
+  print('Sum(%s--%s) = %s' % (species[S],species[E],SUM))
+  print('ExtCore(%s--%s) = %s' % (species[S],species[E],EXTCORE))
+  print('SumCore(%s--%s) = %s' % (species[S],species[E],CORE-SEP+EXTCORE))
 
 else:
 
@@ -144,26 +145,26 @@ else:
   EXTCORE=numpy.sum(extsnareg[-1,S:E+1,1],axis=0)
   SUM=WEST1+EAST1+CORE1+PFLXL1+PFLXR1+NORTH1+WEST2+EAST2+CORE2+PFLXL2+PFLXR2+NORTH2+EXT
 
-  print 'Core1(%s--%s) = %s' % (species[S],species[E],CORE1)
-  print 'Sep1(%s--%s) = %s' % (species[S],species[E],SEP1)
-  print 'North1(%s--%s) = %s' % (species[S],species[E],NORTH1)
-  print 'East1(%s--%s) = %s' % (species[S],species[E],EAST1)
-  print 'east1(%s--%s) = %s' % (species[S],species[E],east1)
-  print 'west1(%s--%s) = %s' % (species[S],species[E],west1)
-  print 'West1(%s--%s) = %s' % (species[S],species[E],WEST1)
-  print 'Core2(%s--%s) = %s' % (species[S],species[E],CORE2)
-  print 'Sep2(%s--%s) = %s' % (species[S],species[E],SEP2)
-  print 'North2(%s--%s) = %s' % (species[S],species[E],NORTH2)
-  print 'East2(%s--%s) = %s' % (species[S],species[E],EAST2)
-  print 'east2(%s--%s) = %s' % (species[S],species[E],east2)
-  print 'west2(%s--%s) = %s' % (species[S],species[E],west2)
-  print 'West2(%s--%s) = %s' % (species[S],species[E],WEST2)
-  print 'Ext(%s--%s) = %s' % (species[S],species[E],EXT)
-  print 'Sum(%s--%s) = %s' % (species[S],species[E],SUM)
-  print 'ExtCore(%s--%s) = %s' % (species[S],species[E],EXTCORE)
-  print 'SumCore(%s--%s) = %s' % (species[S],species[E],CORE1+CORE2-SEP1-SEP2+EXTCORE)
+  print('Core1(%s--%s) = %s' % (species[S],species[E],CORE1))
+  print('Sep1(%s--%s) = %s' % (species[S],species[E],SEP1))
+  print('North1(%s--%s) = %s' % (species[S],species[E],NORTH1))
+  print('East1(%s--%s) = %s' % (species[S],species[E],EAST1))
+  print('east1(%s--%s) = %s' % (species[S],species[E],east1))
+  print('west1(%s--%s) = %s' % (species[S],species[E],west1))
+  print('West1(%s--%s) = %s' % (species[S],species[E],WEST1))
+  print('Core2(%s--%s) = %s' % (species[S],species[E],CORE2))
+  print('Sep2(%s--%s) = %s' % (species[S],species[E],SEP2))
+  print('North2(%s--%s) = %s' % (species[S],species[E],NORTH2))
+  print('East2(%s--%s) = %s' % (species[S],species[E],EAST2))
+  print('east2(%s--%s) = %s' % (species[S],species[E],east2))
+  print('west2(%s--%s) = %s' % (species[S],species[E],west2))
+  print('West2(%s--%s) = %s' % (species[S],species[E],WEST2))
+  print('Ext(%s--%s) = %s' % (species[S],species[E],EXT))
+  print('Sum(%s--%s) = %s' % (species[S],species[E],SUM))
+  print('ExtCore(%s--%s) = %s' % (species[S],species[E],EXTCORE))
+  print('SumCore(%s--%s) = %s' % (species[S],species[E],CORE1+CORE2-SEP1-SEP2+EXTCORE))
 
-# print 'SumSOL(%s--%s) = %s' % (species[S],species[E],SEP-numpy.sum(fnayreg[-1,S:E+1,6],axis=0)+west+east)
+# print('SumSOL(%s--%s) = %s' % (species[S],species[E],SEP-numpy.sum(fnayreg[-1,S:E+1,6],axis=0)+west+east))
 
 cwd=os.getcwd()
 l=0

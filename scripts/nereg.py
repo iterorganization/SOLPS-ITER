@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+from __future__ import print_function
 import pupynere
 import os
 import matplotlib
@@ -16,7 +17,7 @@ times=f.variables['times']
 nereg=f.variables['nereg']
 volreg=f.variables['volreg']
 species_names=f.variables['species']
-species=[''.join(species_names[i,:]).strip() for i in range(species_names.shape[0])]
+species=[b''.join(species_names[i,:]).strip().decode('utf-8') for i in range(species_names.shape[0])]
 
 for i in range(nereg.shape[1]):
   plt.plot(times[:],nereg[:,i], label=str(i))
