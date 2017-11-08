@@ -40,13 +40,6 @@ ADAS:
   cd $SOLPSTOP/modules/adas
   git fetch --prune
   git checkout ITER-develop && echo "Checked out ADAS ITER-develop branch" || goto branch
-  git pull && goto GGD || goto local
-
-GGD:
-  echo "Updating GGD"
-  cd $SOLPSTOP/modules/ggd
-  git fetch --prune
-  git checkout develop && echo "Checked out GGD develop branch"|| goto branch
   git pull && goto compile || goto local
 
 branch:

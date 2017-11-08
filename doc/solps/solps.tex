@@ -198,8 +198,6 @@ It is best afterwards to position oneself on the main develop braches, which is 
 > git checkout ITER-develop
 > cd ../adas
 > git checkout develop
-> cd ../ggd
-> git checkout develop
 \end{verbatim}
 
 Since the user-id is immutably encoded into any changes, it is always a good idea to properly configure a local installation of Git on all the systems on which one plans on making code revisions with, e.g.:
@@ -281,6 +279,8 @@ Internet.
 
 If one uses local copies of these libraries, a copy or link to them should be put in the
 \${\tt \{SOLPSTOP\}/lib/}\${\tt \{HOST\_NAME\}.\allowbreak}\${\tt \{COMPILER\}} directory.
+
+For fuller code capability, it is also recommended to load the IMAS (Integrated Modelling and Analysis Suite)\index{IMAS} environment, provided by the IO, whenever possible.
 
 \section{Initial set-up}
 \index{Initial set-up}
@@ -421,7 +421,6 @@ purpose, a master \SOLPSITER {\tt Makefile} is provided, located at \${\tt \{SOL
       \item[libs] Installs the needed libraries according to config file
       \item[carre] The {\tt Carre} grid generator and associated translators
       \item[divgeo] The {\tt DivGeo} graphical input file builder and accompanying equilibrium and template converters
-      \item[ggd] The Generalized Grid Description ({\tt GGD}) package from IMAS
       \item[b25eirene] The {\tt B2.5-Eirene} main code and accompanying programs
       \item[uinp] The {\tt Uinp} translator from {\tt DivGeo} output to {\tt B2.5-Eirene} input
       \item[sonnet-light] The {\tt Sonnet} library
@@ -458,7 +457,6 @@ purpose, a master \SOLPSITER {\tt Makefile} is provided, located at \${\tt \{SOL
     \end{description}
   \item[carre] The {\tt Carre} grid generator and associated translators only
   \item[divgeo] The {\tt DivGeo} graphical input file builder and accompanying equilibrium and template converters only
-  \item[ggd] The Generalized Grid Description ({\tt GGD}) package from IMAS
   \item[b25] The {\tt B2.5} stand-alone plasma fluid solver and accompanying programs only
   \item[b25\_nox] The {\tt B2.5} stand-alone plasma fluid solver and accompanying programs, not using NCAR Graphics
   \item[b25\_all] The {\tt B2.5} stand-alone plasma fluid solver and accompanying programs only, plus {\tt b2xd} the \SOLPSfive to \SOLPSfour converter
@@ -584,7 +582,6 @@ SOLPSTOP
 |   +---solps4-5
 |   +---DivGeo
 |   +---Eirene
-|   +---ggd
 +---lib
 |   +---ITER.ifort64
 +---runs
@@ -683,7 +680,6 @@ to the grid preprocessor, {\tt modules/Triang} for the {\tt Eirene} triangular m
 {\tt modules/Uinp} for the {\tt Uinp} input file generator,
 {\tt modules/adas} for the ADAS atomic data files,
 {\tt modules/amds} for the automated generator of atomic physics blocks for {\tt Eirene},
-{\tt modules/ggd} for the Generalized Grid Description utility library,
 {\tt modules/solps4-5} for the {\tt b2sxdr} converter from
 \SOLPSfour to \SOLPSITERns, and {\tt modules/Sonnet-light} for the {\tt Sonnet} library in use
 for \SOLPSfour grids.
@@ -1061,11 +1057,6 @@ currently).
 
 {\tt ratadas.filelist} indicates the global source of the {\tt ADAS} files,
 and which "years" to use.
-
-\subsection{modules/ggd}
-\index{ggd}\index{GGD}\index{IDS}
-
-The {\tt modules/ggd} subdirectory contains the Generalized Grid Description utility routines which are needed for use of \SOLPSITER with IMAS and the production, archival and retrieval of code runs in Interface Data Structure (IDS) format.
 
 \newpage \section{lib}
 
@@ -16644,27 +16635,11 @@ IMAS & ids/b2mod\_ual\_io\_data.F90 \\
 IMAS & ids/b2mod\_ual\_io\_grid.F90 \\
 IMAS & ids/b2mod\_ual\_io.F90 \\
 IMAS & ids/b2\_ual\_write.F90 \\
-IMAS & ids/ggd\_access.F90 \\
-IMAS & ids/ggd\_data.F90 \\
-IMAS & ids/ggd\_object.F90 \\
-IMAS & ids/ggd\_objectlist.F90 \\
-IMAS & ids/ggd\_structured.F90 \\
-IMAS & ids/ggd\_subgrid.F90 \\
-IMAS & ids/ggd\_transform.F90 \\
-IMAS & ids/ggd.F90 \\
 ITM & ids/b2mod\_ual.F90 \\
 ITM & ids/b2mod\_ual\_io\_data.F90 \\
 ITM & ids/b2mod\_ual\_io\_grid.F90 \\
 ITM & ids/b2mod\_ual\_io.F90 \\
 ITM & ids/b2\_ual\_write.F90 \\
-ITM & ids/ggd\_access.F90 \\
-ITM & ids/ggd\_data.F90 \\
-ITM & ids/ggd\_object.F90 \\
-ITM & ids/ggd\_objectlist.F90 \\
-ITM & ids/ggd\_structured.F90 \\
-ITM & ids/ggd\_subgrid.F90 \\
-ITM & ids/ggd\_transform.F90 \\
-ITM & ids/ggd.F90 \\
 ITM & preprocessing/b2ardr.F \\
 ITM & preprocessing/b2arin.F \\
 ITM & utility/ratadas.F \\

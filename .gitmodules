@@ -25,7 +25,3 @@
 	path = modules/adas
 	url = ssh://git@git.iter.org/imex/amns-adas.git
 	branch = develop
-[submodule "modules/ggd"]
-	path = modules/ggd
-	url = ssh://git@git.iter.org/imex/ggd.git
-	branch = develop
