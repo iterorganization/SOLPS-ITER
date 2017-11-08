@@ -10,7 +10,7 @@ function field = read_ft44_rfield(fid,ver,fieldname,dims)
 
 % Verion 20160829: field label and size are specified in fort.44
 % Do consistency check on the data
-if ver == 20160829
+if ver >= 20160829
     % Search the file until identifier 'fieldname' is found
     line = fgetl(fid);
     while isempty(strfind(line,fieldname))
