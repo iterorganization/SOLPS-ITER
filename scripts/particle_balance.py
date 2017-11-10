@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+from __future__ import print_function
 import pupynere
 import os
 import matplotlib
@@ -20,7 +21,7 @@ ns = f.dimensions['ns']
 time = f.dimensions['time']
 times = f.variables['times']
 species_names=f.variables['species']
-species=[''.join(species_names[i,:]).strip() for i in range(species_names.shape[0])]
+species=[b''.join(species_names[i,:]).strip().decode('utf-8') for i in range(species_names.shape[0])]
 elements=[re.sub('[-+0-9]','',species[i]) for i in range(len(species))]
 mask=[re.match('[a-zA-Z]+0$',species[i])!=None for i in range(len(species))]
 s=0
@@ -48,7 +49,7 @@ for i in range(len(bounds)):
     b2stbr[:,0] = 0
     b2stbr = b2stbr.sum(axis=1)
     fna_norm = numpy.max([numpy.max(numpy.abs(fnaxreg[:,bounds[i][0]:bounds[i][1],:])),numpy.max(numpy.abs(fnayreg[:,bounds[i][0]:bounds[i][1],:]))])
-    print elements[bounds[i][0]], fna_norm, (fnax+fnay+b2stbr).mean(), ((fnax+fnay+b2stbr)/fna_norm).mean()
+    print(elements[bounds[i][0]], fna_norm, (fnax+fnay+b2stbr).mean(), ((fnax+fnay+b2stbr)/fna_norm).mean())
     plt.plot(times[:],((fnax+fnay+b2stbr)/fna_norm), label=elements[bounds[i][0]])
 plt.xlabel('time [s]')
 plt.ylabel('normalised particle error')

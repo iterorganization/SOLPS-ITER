@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+from __future__ import print_function
 import pupynere
 import os
 import matplotlib
@@ -15,7 +16,7 @@ else:
 times=f.variables['times']
 b2stbr_sna_reg=f.variables['b2stbr_sna_reg']
 species_names=f.variables['species']
-species=[''.join(species_names[i,:]).strip() for i in range(species_names.shape[0])]
+species=[b''.join(species_names[i,:]).strip().decode('utf-8') for i in range(species_names.shape[0])]
 
 elements=[re.sub('[-+0-9]','',species[i]) for i in range(len(species))]
 
@@ -35,9 +36,9 @@ if nargs > 1: R=int(sys.argv[1])
 
 for i in range(len(bounds)):
   plt.plot(times[:],numpy.sum(b2stbr_sna_reg[:,bounds[i][0]:bounds[i][1],R],axis=1), label=elements[bounds[i][0]])
-  print 'B2STBR_SNA_REG(%s) = %s' % (elements[bounds[i][0]],numpy.sum(b2stbr_sna_reg[-1,bounds[i][0]:bounds[i][1],R],axis=0))
+  print('B2STBR_SNA_REG(%s) = %s' % (elements[bounds[i][0]],numpy.sum(b2stbr_sna_reg[-1,bounds[i][0]:bounds[i][1],R],axis=0)))
 plt.plot(times[:],numpy.sum(b2stbr_sna_reg[:,:,R],axis=1), label='Sum')
-print 'B2STBR_SNA_REG(SUM) = %s' % (numpy.sum(b2stbr_sna_reg[-1,:,R],axis=0))
+print('B2STBR_SNA_REG(SUM) = %s' % (numpy.sum(b2stbr_sna_reg[-1,:,R],axis=0)))
 
 if  matplotlib.__version__ <=  '0.98.1':
   plt.legend(loc=0)

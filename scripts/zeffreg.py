@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+from __future__ import print_function
 import pupynere
 import os
 import matplotlib
@@ -19,7 +20,7 @@ ne2reg=f.variables['ne2reg']
 
 for i in numpy.arange(0, vreg):
     plt.plot(times[:], ne2reg[:,i]/nereg[:,i], label=str(i))
-    print "zeff(%s) = %s" % (i, ne2reg[-1,i]/nereg[-1,i])
+    print("zeff(%s) = %s" % (i, ne2reg[-1,i]/nereg[-1,i]))
 
 if  matplotlib.__version__ <=  '0.98.1':
   plt.legend(loc=0)

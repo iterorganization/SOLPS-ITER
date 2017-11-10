@@ -73,6 +73,11 @@ ifdef IMAS_PREFIX
   SOLPS_CPP += -DIMAS
   LD_UAL     = `pkg-config --libs imas-g95`
   export LD_UAL
+else
+ifdef ITM_ENVIRONMENT_LOADED
+  LD_UAL = -L${UAL}/lib -Wl,-rpath=${ITM_ITMTYPES_DIR}/${ITM_ITMTYPES_VERSION}/lib/amd64_g95_0.93 -L${ITM_ITMTYPES_DIR}/${ITM_ITMTYPES_VERSION}/lib/amd64_g95_0.93 -litmtypes
+  export LD_UAL
+endif
 endif
 
 #
