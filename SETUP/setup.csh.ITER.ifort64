@@ -50,9 +50,6 @@ setenv CXX g++
 module unload zlib
 module unload Anaconda3
 module load paraview/5.4.1
-# The following is needed in order to overwrite broken Anaconda3 ABI for protobuf
-# /work/imas/opt/EasyBuild/software/Anaconda3/4.4.0/lib/libprotobuf.so.14: ELF file OS ABI invalid
-setenv LD_PRELOAD /work/imas/opt/paraview/5.4.1/lib/paraview-5.4/libprotobuf.so
 
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
@@ -75,3 +72,7 @@ module load solps-gui
 setenv LD_PRELOAD /usr/lib64/libfontconfig.so.1 # needed by solps-gui
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/usr/lib64
 setenv SOLPSWORK /work/projects/solps-iter/$USER
+
+# The following is needed in order to overwrite broken Anaconda3 ABI for protobuf
+# /work/imas/opt/EasyBuild/software/Anaconda3/4.4.0/lib/libprotobuf.so.14: ELF file OS ABI invalid
+setenv LD_PRELOAD /work/imas/opt/paraview/5.4.1/lib/paraview-5.4/libprotobuf.so
