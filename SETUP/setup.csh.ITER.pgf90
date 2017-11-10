@@ -3,6 +3,8 @@ module use /work/imas/etc/modulefiles
 module load git
 
 # Modules needed by SOLPS-ITER
+module load imas/3.12.0/ual/3.6.3
+module switch Anaconda2 Anaconda3
 # module load pgf90
 module load makedepend
 module load mscl
@@ -20,7 +22,6 @@ module load fontconfig
 module load cairo
 module load mdsplus
 module load make
-module load imas/3.12.0/ual/3.6.3
 module load fc2k
 module load kepler
 module load xmllib
@@ -41,7 +42,6 @@ setenv CC gcc
 setenv FC ifort
 setenv CXX g++
 
-module unload Anaconda3
 module load paraview/5.4.1
 
 if (`where paraview-config` == "") then
