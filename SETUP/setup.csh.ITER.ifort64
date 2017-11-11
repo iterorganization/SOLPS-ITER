@@ -17,10 +17,11 @@ module load flex
 module load doxygen
 module load texlive
 module load ghostscript
-# module load libxml2 ! already included in IMAS module
+module unload libxml2
+module load libxml2/2.9.2 # wrong version included in IMAS module
 module load fontconfig
 module load cairo
-module load mdsplus
+# module load mdsplus ! already included in IMAS module
 module load make
 module load imas/3.12.0/ual/3.6.3
 module load fc2k
@@ -50,6 +51,7 @@ setenv CXX g++
 module unload zlib
 module unload Anaconda3
 module load paraview/5.4.1
+module load zlib
 
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
