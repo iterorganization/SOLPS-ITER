@@ -3,6 +3,8 @@ module use /work/imas/etc/modulefiles
 module load git
 
 # Modules needed by SOLPS-ITER
+module load imas/3.12.0/ual/3.6.3
+module switch Anaconda2 Anaconda3
 module load intel/12.0.2
 module load makedepend
 module load mscl/1.0.0-intel-12.0.2
@@ -23,7 +25,6 @@ module load fontconfig
 module load cairo
 # module load mdsplus ! already included in IMAS module
 module load make
-module load imas/3.12.0/ual/3.6.3
 module load fc2k
 module load kepler
 module load xmllib/2.0.0-imas-3.7.4-intel-12.0.2
@@ -49,7 +50,6 @@ setenv FC ifort
 setenv CXX g++
 
 module unload zlib
-module unload Anaconda3
 module load paraview/5.4.1
 module load zlib
 
