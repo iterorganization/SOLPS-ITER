@@ -3,14 +3,15 @@ module use /work/imas/etc/modules/all
 module use /work/imas/opt/EasyBuild/modules/all
 
 # Modules needed by SOLPS-ITER
+module load imas/3.12.0/ual/3.6.3
+module switch Anaconda2 Anaconda3
 module load git
 module load makedepend/1.0.4-goolf-1.5.16
 module load GCC/4.8.3
 module load mscl/1.0.0-GCC-4.8.3
 module load netcdf/4.3.3.1-goolf-1.5.16
 module load netcdf-fortran/4.4.2-goolf-1.5.16
-module load libpng/1.6.16-goolf-1.5.16
-module unload zlib
+# module load libpng/1.6.17-goolf-1.5.16 ! creates a zlib conflict
 module load gr/0.0.94
 module load gks/4.4.74
 module load ncl/6.3.0-intel-12.0.2
@@ -43,9 +44,7 @@ setenv CC gcc
 setenv FC gfortran
 setenv CXX g++
 
-module unload Anaconda3
 module load paraview/5.4.1
-module load python/2.7/11
 
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"

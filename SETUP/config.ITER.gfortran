@@ -100,6 +100,7 @@ export LD_NAG
 export LD_MDSPLUS
 export LD_SONNET
 export LD_MPI
+export LD_UAL
 
 export SOLPS_CPP
 export B25_DEFINES

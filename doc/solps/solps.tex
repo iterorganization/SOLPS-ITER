@@ -171,7 +171,7 @@ To obtain the code a request should be sent to Xavier Bonnin
 
 The first formality will then be for the prospective users to obtain and IDM (ITER Document Management) account, in case they do not have one already. This account request will be done by the RO, and the requesting user will receive an automated electronic message asking for confirmation of the provided e-mail address. With this account, the user will have access to the \SOLPSITER GIT repository (\href{https://git.iter.org/projects/BND/repos/solps-iter/browse}{https://git.iter.org/projects/BND/repos/solps-iter/browse}) maintained at the IO, the \SOLPSITER SharePoint web site hosted by ITER (\href{https://portal.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}{https://portal.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}, works best with Internet Explorer). Links to the IDM-controlled documents related to \SOLPSITER can be found in a centralized folder (\href{https://user.iter.org/?uid=Q92BAQ}{https://user.iter.org/?uid=Q92BAQ}). The account request will also serve for registration of the user to the \SOLPSITER mailing list ({\tt SOLPS-ITER@iter.org}).
 
-The \SOLPSITER Git repository also includes the repositories for {\tt B2.5}, {\tt EIRENE}, {\tt Carre} and {\tt DivGeo} individually as submodules. Some service libraries (such as MSCL and GR), can be found in the repository in the Libraries section.
+The \SOLPSITER Git repository also includes the repositories for {\tt B2.5}, {\tt EIRENE}, {\tt Carre} and {\tt DivGeo} individually as submodules. Some service libraries (such as the GGD, MSCL and GR service libraries), can be found in the repository in the IMAS Extra and Libraries section.
 
 One can generally browse the ITER Git repositories here: \href{https://git.iter.org}{https://git.iter.org} and \SOLPSITER specifically here: \href{https://git.iter.org/projects/BND/repos/solps-iter/browse}{https://git.iter.org/projects/BND/repos/solps-iter/browse}, but since these repositories are restricted users will first need to authenticate with their ITER (IDM) username and password - possibly twice, once for the intranet, and once for the Git web front end in the top right-hand corner in the web browser window.
 
@@ -211,7 +211,7 @@ Users all have write access to these repositories although not to the {\tt devel
 
 Issues are handled using JIRA (\href{https://jira.iter.org/browse/IMAS}{https://jira.iter.org/browse/IMAS}) and users should feel encouraged to create new issues associated with \SOLPSITER (selected from the drop-down list of components) if they have any problems or suggestions. (Please ignore the options associated with resource estimates and sprints.)
 
-For more general help with Git, we can recommend the documentation here (\href{http://git-scm.com/}{http://git-scm.com/}) and the Pro Git book (linked from there) in particular.
+For more general help with Git, we can recommend the documentation here (\href{http://git-scm.com/}{http://git-scm.com/}) and the Pro Git book (linked from there) in particular. Another useful resource for novice Git users is the tutorial from Codecademy available at \href{https://www.codecademy.com/learn/learn-git}{https://www.codecademy.com/learn/learn-git}.
 
 When using Git, the command
 \begin{verbatim}
@@ -279,6 +279,8 @@ Internet.
 
 If one uses local copies of these libraries, a copy or link to them should be put in the
 \${\tt \{SOLPSTOP\}/lib/}\${\tt \{HOST\_NAME\}.\allowbreak}\${\tt \{COMPILER\}} directory.
+
+For fuller code capability, it is also recommended to load the IMAS (Integrated Modelling and Analysis Suite)\index{IMAS} environment, provided by the IO, whenever possible.
 
 \section{Initial set-up}
 \index{Initial set-up}
@@ -677,8 +679,7 @@ the grid generator and associated converter,
 to the grid preprocessor, {\tt modules/Triang} for the {\tt Eirene} triangular mesh generator,
 {\tt modules/Uinp} for the {\tt Uinp} input file generator,
 {\tt modules/adas} for the ADAS atomic data files,
-{\tt modules/amds} for the automated generator
-of atomic physics blocks for {\tt Eirene},
+{\tt modules/amds} for the automated generator of atomic physics blocks for {\tt Eirene},
 {\tt modules/solps4-5} for the {\tt b2sxdr} converter from
 \SOLPSfour to \SOLPSITERns, and {\tt modules/Sonnet-light} for the {\tt Sonnet} library in use
 for \SOLPSfour grids.
@@ -1530,6 +1531,7 @@ extracted from the {\tt run.log} file.
   \item[get\_parm.bpl]\index{get\_parm.bpl} extracts certain useful quantities from a run input and output files for use in later scripts, particularly those building \btwoplot command files.
   \item[gtdr]\index{gtdr} Script to make a directory tree local. [obsolete]
   \item[gtfl]\index{gtfl} [ANK] Replaces the specified links by the files they are linked to. [obsolete]
+  \item[imasdb\_solps-iter]\index{imasdb\_solps-iter}\index{IMAS} Script to load the IMAS ITER scenario database and the \SOLPSITER IMAS database archives
   \item[import\_files\_from\_convert]\index{import\_files\_from\_convert}\index{b2yt} Imports and renames the files produced by {\tt b2yt} in a {\tt convert} directory at the same level as the current directory to prepare the new converted case for a run
   \item[input.dat\_to\_mesh.extra]\index{input.dat\_to\_mesh.extra}\index{input.dat}\index{mesh.extra} Converts standard input (usually directed from a {\tt input.dat} file) into a {\tt mesh.extra} file.
   \item[ITER\_divertor\_HTM]\index{ITER\_divertor\_HTM} Performs the thermal calculation of the divertor target monoblocks and reflector plate hypervapotron channels. It requires {\tt b2ymb.dat} and {\tt b2yrp.dat} to be present in the run directory. It runs \btwoplot to produce the heat load profile data of the targets and reflector plates. Then it runs {\tt b2ymb} to produce the input files (see \ref{sec:b2ymb}) for the {\tt FreeFem++}\cite{MR3043640} heat transfer model of the monoblock {\tt Monoblock\_HTM.edp} for the outer target. Afterwards, {\tt b2ymb} is ran again to produce the input files to run {\tt Monoblock\_HTM.edp} for the inner target. When the inner target is completed, {\tt b2yrp} (see \ref{sec:b2yrp}) is run to produce the input files for the inner reflector plate heat transfer model {\tt ReflectorPlate\_HTM.edp}. Finally, {\tt b2yrp} is executed one last time to produce the input files for the thermal analysis of the outer reflector plate.
@@ -8518,10 +8520,7 @@ $\alpha^{(CL)}_{y} = 0$
 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a +
 \\
 + \sum \limits_{fluid~species} \left(
-	\left(
-                \frac{4}{3} \widetilde{\widetilde{\eta}}_{CLax} + \eta_{ANa}
-        \right)
-        \left(
+	  \eta_{ax} \left(
 		\frac{\partial V_{a \parallel}}{h_x \partial x}
 	\right)^2
 	+ \eta_{ANa} \left(
@@ -16593,8 +16592,7 @@ BUILDING\_CARRE & ids/b2mod\_connectivity.F90 \\
 CATALYST & driver/b2mod\_driver.F \\
 CDF\_MOVIE & b2plot/caltraj.F \\
 CDF\_MOVIE & b2plot/process\_chords.F \\
-CLASSICAL\_CURRENT & transport/b2tfch.F \\
-CLASSICAL\_CURRENT & transport/b2tfhe.F \\
+CLASSICAL\_CURRENT & transport/b2tdia.F \\
 COMPLICATED & sources/b2stbc\_fb.F \\
 DBG & b2plot/fill.F \\
 DBG & b2plot/init\_wall.F \\
@@ -16634,27 +16632,11 @@ IMAS & ids/b2mod\_ual\_io\_data.F90 \\
 IMAS & ids/b2mod\_ual\_io\_grid.F90 \\
 IMAS & ids/b2mod\_ual\_io.F90 \\
 IMAS & ids/b2\_ual\_write.F90 \\
-IMAS & ids/ggd\_access.F90 \\
-IMAS & ids/ggd\_data.F90 \\
-IMAS & ids/ggd\_object.F90 \\
-IMAS & ids/ggd\_objectlist.F90 \\
-IMAS & ids/ggd\_structured.F90 \\
-IMAS & ids/ggd\_subgrid.F90 \\
-IMAS & ids/ggd\_transform.F90 \\
-IMAS & ids/ggd.F90 \\
 ITM & ids/b2mod\_ual.F90 \\
 ITM & ids/b2mod\_ual\_io\_data.F90 \\
 ITM & ids/b2mod\_ual\_io\_grid.F90 \\
 ITM & ids/b2mod\_ual\_io.F90 \\
 ITM & ids/b2\_ual\_write.F90 \\
-ITM & ids/ggd\_access.F90 \\
-ITM & ids/ggd\_data.F90 \\
-ITM & ids/ggd\_object.F90 \\
-ITM & ids/ggd\_objectlist.F90 \\
-ITM & ids/ggd\_structured.F90 \\
-ITM & ids/ggd\_subgrid.F90 \\
-ITM & ids/ggd\_transform.F90 \\
-ITM & ids/ggd.F90 \\
 ITM & preprocessing/b2ardr.F \\
 ITM & preprocessing/b2arin.F \\
 ITM & utility/ratadas.F \\

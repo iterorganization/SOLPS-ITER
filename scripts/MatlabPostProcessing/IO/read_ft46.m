@@ -22,9 +22,12 @@ end
 ntri = fscanf(fid,'%d',1);
 ver  = fscanf(fid,'%d',1);
 
-if ver ~= 20160513 && ver ~= 20160829
+if ver ~= 20160513 && ver ~= 20160829 && ver ~= 20170930
     error('read_ft46: unknown format of fort.46 file');
 end
+
+% go to new line (skip reading a possible git-hash)
+fgetl(fid);
 
 % natm, nmol, nion
 dims = fscanf(fid,'%d',3);

@@ -3,6 +3,8 @@ module use /work/imas/etc/modulefiles
 module load git
 
 # Modules needed by SOLPS-ITER
+module load imas/3.12.0/ual/3.6.3
+module switch Anaconda2 Anaconda3
 module load intel/12.0.2
 module load makedepend
 module load mscl/1.0.0-intel-12.0.2
@@ -17,12 +19,12 @@ module load flex
 module load doxygen
 module load texlive
 module load ghostscript
-# module load libxml2 ! already included in IMAS module
+module unload libxml2
+module load libxml2/2.9.2 # wrong version included in IMAS module
 module load fontconfig
 module load cairo
-module load mdsplus
+# module load mdsplus ! already included in IMAS module
 module load make
-module load imas/3.8.0/ual/3.5.0
 module load fc2k
 module load kepler
 module load xmllib/2.0.0-imas-3.7.4-intel-12.0.2
@@ -49,9 +51,8 @@ setenv FC ifort
 setenv CXX g++
 
 module unload zlib
-module unload Anaconda3
 module load paraview/5.4.1
-module load python/2.7/11
+module load zlib
 
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
@@ -64,8 +65,17 @@ else
   setenv LD_CATALYST `paraview-config --libs vtkPVPythonCatalyst`
 endif
 
+# Compilers
+setenv CC gcc
+setenv FC ifort
+setenv CXX g++
+
 # Other environment variables
 module load solps-gui
 setenv LD_PRELOAD /usr/lib64/libfontconfig.so.1 # needed by solps-gui
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/usr/lib64
 setenv SOLPSWORK /work/projects/solps-iter/$USER
+
+# The following is needed in order to overwrite broken Anaconda3 ABI for protobuf
+# /work/imas/opt/EasyBuild/software/Anaconda3/4.4.0/lib/libprotobuf.so.14: ELF file OS ABI invalid
+setenv LD_PRELOAD /work/imas/opt/paraview/5.4.1/lib/paraview-5.4/libprotobuf.so

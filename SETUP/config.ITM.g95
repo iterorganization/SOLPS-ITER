@@ -45,7 +45,7 @@ LD_SONNET  = -L${SOLPSLIB} -lsonnet
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNCAR4 -DNO_NAG -DF2003
+SOLPS_CPP      = -DNCAR4 -DNO_NAG -DF2003 -DITM
 B25_DEFINES    =
 EIRENE_DEFINES =
 
@@ -73,6 +73,11 @@ ifdef IMAS_PREFIX
   SOLPS_CPP += -DIMAS
   LD_UAL     = `pkg-config --libs imas-g95`
   export LD_UAL
+else
+ifdef ITM_ENVIRONMENT_LOADED
+  LD_UAL = -L${UAL}/lib -Wl,-rpath=${ITM_ITMTYPES_DIR}/${ITM_ITMTYPES_VERSION}/lib/amd64_g95_0.93 -L${ITM_ITMTYPES_DIR}/${ITM_ITMTYPES_VERSION}/lib/amd64_g95_0.93 -litmtypes
+  export LD_UAL
+endif
 endif
 
 #

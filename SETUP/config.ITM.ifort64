@@ -46,7 +46,7 @@ LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNCAR4 -DNO_F01AAF
+SOLPS_CPP      = -DNCAR4 -DNO_F01AAF -DITM
 B25_DEFINES    =
 EIRENE_DEFINES =
 MPI_CPP        =
@@ -75,6 +75,11 @@ ifdef IMAS_PREFIX
   SOLPS_CPP += -DIMAS
   LD_UAL     = `pkg-config imas-lowlevel imas-ifort --libs`
   export LD_UAL
+else
+ifdef ITM_ENVIRONMENT_LOADED
+  LD_UAL = -L${UAL}/lib -Wl,-rpath=${ITM_ITMTYPES_DIR}/${ITM_ITMTYPES_VERSION}/lib/amd64_intel_17 -L${ITM_ITMTYPES_DIR}/${ITM_ITMTYPES_VERSION}/lib/amd64_intel_17 -litmtypes
+  export LD_UAL
+endif
 endif
 
 #

@@ -77,7 +77,7 @@ solps_mpi: carre divgeo b25eirene_mpi uinp_mpi triang amds sonnet-light manual
 
 nox:       carre_nox    b25eirene_nox uinp_nox triang_nox manual
 
-nox_mpi:   carre_nox b25eirene_mpi_nox uinp_mpi_nox triang_nox manual
+nox_mpi:   carre_nox    b25eirene_mpi_nox uinp_mpi_nox triang_nox manual
 
 all:       carre divgeo b25     eirene     b25eirene     uinp     triang amds sonnet-light manual
 
@@ -315,16 +315,13 @@ clean_all:       clean_carre clean_divgeo clean_b25     clean_eirene     clean_b
 
 clean_all_mpi:   clean_carre clean_divgeo clean_b25_mpi clean_eirene_mpi clean_b25eirene_mpi clean_uinp_mpi clean_triang clean_manual
 
-
 clean_carre:
 	cd modules/Carre; ${MAKE} clean
-
 
 clean_divgeo:
 	cd modules/DivGeo;         ${MAKE} clean
 	cd modules/DivGeo/equtrn;  ${MAKE} clean
 	cd modules/DivGeo/convert; ${MAKE} clean
-
 
 clean_eirene:
 	cd modules/Eirene; ${MAKE} clean
@@ -332,23 +329,18 @@ clean_eirene:
 clean_eirene_mpi:
 	cd modules/Eirene; ${MAKE} clean USE_MPI=-DUSE_MPI
 
-
 clean_b25:
 	cd modules/B2.5; ${MAKE} clean
-
 
 clean_b25_mpi:
 	cd modules/B2.5; ${MAKE} clean USE_MPI=-DUSE_MPI
 
-
 clean_b25_ig:
 	cd modules/B2.5; ${MAKE} clean USE_IMPGYRO=-DUSE_IMPGYRO
-
 
 clean_b25eirene:
 	cd modules/Eirene; ${MAKE} clean USE_B25=-DB25_EIRENE
 	cd modules/B2.5;   ${MAKE} clean USE_EIRENE=-DB25_EIRENE
-
 
 clean_b25eirene_mpi:
 	cd modules/Eirene; ${MAKE} clean USE_B25=-DB25_EIRENE   USE_MPI=-DUSE_MPI

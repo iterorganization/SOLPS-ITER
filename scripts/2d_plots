@@ -1,5 +1,5 @@
 ### eval '(exit $?0)' && eval 'exec tcsh $0 ${1+"$@"}' && eval 'exec tcsh $0 $argv:q'
-#! /usr/bin/env tcsh
+#! /bin/tcsh -f
 
 if($?GNUPLOT_TMP) then
     set tmpdir="$GNUPLOT_TMP/"
