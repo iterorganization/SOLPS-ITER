@@ -39,3 +39,4 @@ module load allinea-forge/6.0
 setenv DBX ddt
 
 # Other environment variables
+setenv STGDIR /staging/leuven/stg_00030/SOLPS/lib/LEUVEN.ifort64
