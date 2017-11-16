@@ -12,25 +12,28 @@ echo The Eirene manual is located at http://www.eirene.de/
 export SOLPSTOP=$PWD
 export SOLPSWORK=$SOLPSTOP/runs
 
-[ -e whereami ] && {
+[ -s whereami ] && {
   iamat=`./whereami|tail -1`
   echo Running at $iamat
 } || {
-  iamat="unknown"
+  iamat="UNKNOWN"
 }
 
-[ -e SETUP/setup.csh.HOST_NAME.local ] && {
+[ -s SETUP/setup.csh.HOST_NAME.local ] && {
   echo Loading SETUP/setup.csh.HOST_NAME.local
 } || {
-  [ $iamat ==  "*UNKNOWN" ] && {
-    export HOST_NAME=default
-  } || {
+  case $iamat in
+  *UNKNOWN )
+    export HOST_NAME=UNKNOWN
+    ;;
+  * )
     export HOST_NAME=$iamat
-  }
+    ;;
+  esac
 }
 
-[ -e setup.ksh.SOLPSMASTER ] && . setup.ksh.SOLPSMASTER
-[ -e setup.ksh.SOLPSMASTER.local ] && . setup.ksh.SOLPSMASTER.local
+[ -s setup.ksh.SOLPSMASTER ] && . setup.ksh.SOLPSMASTER
+[ -s setup.ksh.SOLPSMASTER.local ] && . setup.ksh.SOLPSMASTER.local
 
 [ -z "$SOLPSMASTER" ] && {
   case $iamat in
@@ -52,7 +55,7 @@ export SOLPSWORK=$SOLPSTOP/runs
 
 # COMPILER can also be the argument to setup.csh call
 [ "$1" = "" ] && {
-  [ -e default_compiler ] && {
+  [ -s default_compiler ] && {
     export COMPILER=`./default_compiler|tail -1`
     echo Using compiler $COMPILER.
   } || {
@@ -76,13 +79,13 @@ export SOLPSWORK=$SOLPSTOP/runs
 }
 
 # setup files for combination of HOST_NAME and COMPILER, + local modifications if present
-[ -e SETUP/setup.ksh.${HOST_NAME}.${COMPILER} ] && {
+[ -s SETUP/setup.ksh.${HOST_NAME}.${COMPILER} ] && {
   echo Loading SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.
   . SETUP/setup.ksh.${HOST_NAME}.${COMPILER}
 } || {
   echo File SETUP/setup.ksh.${HOST_NAME}.${COMPILER} not found!
 }
-[ -e SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.local ] && {
+[ -s SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.local ] && {
   echo Loading SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.local.
   . SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.local
 }
@@ -195,14 +198,13 @@ alias unset_mpi='. $SOLPSTOP/SETUP/nompi'
 alias set_ig='. $SOLPSTOP/SETUP/ig'
 alias unset_ig='. $SOLPSTOP/SETUP/noig'
 
-
-[ -e setup.ksh.$OBJECTCODE ] && . setup.ksh.$OBJECTCODE
-[ -e setup.ksh.local ] && . setup.ksh.local
-[ -e setup.ksh.local.$OBJECTCODE ] && . setup.ksh.local.$OBJECTCODE
-[ -e setup.ksh.mdsplus ] && . setup.ksh.mdsplus
-[ -e setup.ksh.mdsplus.$OBJECTCODE ] && . setup.ksh.mdsplus.$OBJECTCODE
-[ -e setup.ksh.$USER ] && . setup.ksh.$USER
-[ -e setup.ksh.$USER.$OBJECTCODE ] && . setup.ksh.$USER.$OBJECTCODE
+[ -s setup.ksh.$OBJECTCODE ] && . setup.ksh.$OBJECTCODE
+[ -s setup.ksh.local ] && . setup.ksh.local
+[ -s setup.ksh.local.$OBJECTCODE ] && . setup.ksh.local.$OBJECTCODE
+[ -s setup.ksh.mdsplus ] && . setup.ksh.mdsplus
+[ -s setup.ksh.mdsplus.$OBJECTCODE ] && . setup.ksh.mdsplus.$OBJECTCODE
+[ -s setup.ksh.$USER ] && . setup.ksh.$USER
+[ -s setup.ksh.$USER.$OBJECTCODE ] && . setup.ksh.$USER.$OBJECTCODE
 
 export      TOOLCHAIN=${HOST_NAME}.${COMPILER}
 export     CARRE_PATH=${SOLPSTOP}/modules/Carre/builds/${TOOLCHAIN}
@@ -229,7 +231,7 @@ export MANPATH=$NCARG_ROOT/man:${DG}/equtrn/doxygen/man:$MANPATH
   export IDL_PATH="+$SOLPSTOP/data/IDL:${IDL_PATH}"
 }
 
-[ -e $SOLPSLIB/libnetcdf.a ] && export NETCDF=-lnetcdf
+[ -s $SOLPSLIB/libnetcdf.a ] && export NETCDF=-lnetcdf
 
 [ -z "$LD_LIBRARY_PATH" ] && {
     export LD_LIBRARY_PATH=${SOLPSLIB}
@@ -241,9 +243,8 @@ export MANPATH=$NCARG_ROOT/man:${DG}/equtrn/doxygen/man:$MANPATH
   [ -n "$dbg" ] && {
     . debug.ksh
   }
-  export WSTYPE OBJECTCODE
+  export WSTYPE=${COMPILER}
   [ -n $XLFRTEOPTS ] && export XLFRTEOPTS
-  echo "$OBJECTCODE"
 }
 
 export PLOT_SET_PATH=":..:../..:$SOLPSTOP/data.local/plot_set:$SOLPSTOP/data/plot_set"

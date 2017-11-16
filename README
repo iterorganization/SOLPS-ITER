@@ -100,19 +100,19 @@ In order to compile SOLPS-ITER, type either
 make
 make solps
 This will compile the modules:
-carre, divgeo, b25eirene, uinp, triang, sonnet-light
+carre, divgeo, b25eirene, uinp, triang, amds, sonnet-light
 and build the SOLPS-ITER manual.
 
 In order to compile SOLPS-ITER using MPI, type
 make solps_mpi
 This will compile the modules:
-carre, divgeo, b25eirene_mpi, uinp_mpi, triang, sonnet-light
+carre, divgeo, b25eirene_mpi, uinp_mpi, triang, amds, sonnet-light
 and build the SOLPS-ITER manual.
 
 In order to compile only a particular module, type
 make <module>
 where <module> is either
-carre, divgeo, b25, eirene, b25eirene, uinp, triang
+carre, divgeo, b25, eirene, b25eirene, uinp, amds, triang
 
 To create the sonnet-light library, type
 make sonnet-light

@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+from __future__ import print_function
 # Definition of the class structures in file imas.py
 import imas
 import numpy
@@ -30,15 +31,15 @@ def read_ids():
     my_ids_obj.open()  # Open the database
 
     if my_ids_obj.isConnected():
-        print 'open OK!'
+        print('open OK!')
     else:
-        print 'open FAILED!'
+        print('open FAILED!')
         sys.exit()
 
     my_ids_obj.edge_profiles.get()
 
-    print '   my_ids_obj = '
-    print my_ids_obj.edge_profiles
+    print('   my_ids_obj = ')
+    print(my_ids_obj.edge_profiles)
 
     my_ids_obj.close()
 

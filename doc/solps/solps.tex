@@ -7278,6 +7278,10 @@ p_a = n_a \left( z_a T_e + T_i \right), \qquad
 p_e = n_e T_e
 \end{equation}
 
+\begin{equation}
+V_a^{corr\_dpc} = \frac{c^{corr\_dpc}}{16} \left| b_x \right| \sqrt{ \frac{p_a}{m_a n_a} } \frac{\partial^2}{\partial x^2} \left( \frac{1}{p_a} \frac{\partial p_a}{\partial x} \right)
+\end{equation}
+
 and $\delta_{a,b}$ is the Kronecker delta (1 if $a=b$, 0 otherwise). Here, it is used as shortcut to identify the one hydrogenic species with $z_a = 1$ and $z_{n,a} = 1$. If the code contains multiple hydrogenic species, an error will be reported to avoid double-counting of the current contributions.
 
 \subsection{Source terms in density equations}
@@ -8607,7 +8611,7 @@ $
 $\widetilde q_{ix} = \widetilde f_{ix} T_i - \kappa_{ix} \frac 1{h_x} \frac{\partial T_i}{\partial x} - q_{ix}^{P.Sch}$
 
 \begin{equation*}
-\widetilde f_{ix} = \frac 3 2 \Gamma_{ix} + V_{ix}^{(str)} n_i + 0 \cdot \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + 0 \cdot \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} + \widetilde{j_x}^{\left( s \right)}}{e} \right)
+\widetilde f_{ix} = \frac 3 2 \Gamma_{ix} + V_{ix}^{(str)} n_i + 0 \cdot \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + 0 \cdot \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)}}{e} \right)
 \end{equation*}
 
 \begin{equation*}
@@ -8615,15 +8619,13 @@ q_{ix}^{P.Sch} = \frac 5 2 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} 
 \end{equation*}
 
 \begin{equation*}
-\begin{matrix}
-q_{ix} =& \left[
-	\frac 3 2 \Gamma_{ix} -
+q_{ix} = \left[
+	\frac 3 2 \Gamma_{ix} +
 	\frac 5 2 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \widetilde V_{ax}^{(dia)} +
 	V_{ix}^{(str)} n_i +
-        0 \cdot \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + 0 \cdot \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} + \widetilde{j_x}^{\left( s \right)}}{e} \right)
-\right] T_e \\
-&- \kappa_{ix} \frac 1{h_x} \frac{\partial T_i}{\partial x}
-\end{matrix}
+        0 \cdot \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + 0 \cdot \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)}}{e} \right)
+\right] T_i
+- \kappa_{ix} \frac 1{h_x} \frac{\partial T_i}{\partial x}
 \end{equation*}
 
 $\Gamma_{ix} = \sum \limits^{ns-1}_{a = 0} \Gamma_{ax}^{(he)}$

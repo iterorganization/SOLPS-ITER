@@ -41,7 +41,7 @@ export SOLPSLIB ?= ${PWD}/lib/${HOST_NAME}.${COMPILER}
 ifeq ($(shell [ -e SETUP/config.${HOST_NAME}.${COMPILER} ] && echo yes || echo no ),yes)
   include SETUP/config.${HOST_NAME}.${COMPILER}
 else
-  $(warning  SETUP/config.${HOST_NAME}.${COMPILER} not found.)
+  $(warning SETUP/config.${HOST_NAME}.${COMPILER} not found.)
 endif
 
 # Include local compiler settings, if present
