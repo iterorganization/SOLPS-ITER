@@ -1,4 +1,4 @@
-#! /usr/bin/env tcsh
+#! /bin/tcsh -f
 
 setenv GNUPLOT_POSTSCRIPT_OPTIONS 'color solid'
 setenv PRINT_PLOT resrest.ps ; resrest && rm -f gnuplot.data gnuplot.cmd
