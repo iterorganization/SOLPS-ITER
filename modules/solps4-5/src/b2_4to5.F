@@ -78,6 +78,8 @@
 
       integer jxa, jxi, jsep
 
+      integer ank_mods, ionising_core
+
       character*80 label_4, sonnetfile_4
 
       character*8, allocatable ::
@@ -252,7 +254,7 @@ cxpb
       difni_4(1:ns_4) = difni(1:ns_4)
       difpr_4(1:ns_4) = difpr(1:ns_4)
       vconv_4(1:ns_4) = vconv(1:ns_4)
-      travis_4(1:ns_4) =travis(1:ns_4)
+      travis_4(1:ns_4)= travis(1:ns_4)
       kye_4 = kye
       kxe_4 = kxe
       kyi_4 = kyi
@@ -316,7 +318,7 @@ cxpb
 #     include <COMEQ.F>
 #     include <CCUT.F>
 
-      integer is, it, k
+      integer is, it, ib, k
       external subini, subend
 
       call subini('b2convi1')
@@ -614,9 +616,33 @@ cxpb
       cfb_core_4(1:nspecies_4) = cfb_core(1:nspecies_4)
       cfb_over_4(1:nspecies_4) = cfb_over(1:nspecies_4)
       cfb_smax_4(1:nspecies_4) = cfb_smax(1:nspecies_4)
+      ank_mods = 1
+      ionising_core = 0
       do is = 1, nspecies_4
         lfeedback_4 = lfeedback_4 .or. ffb_cntr_4(is).ne.0 .or.
      .                                 cfb_cntr_4(is).ne.0
+        if (ionising_core.lt.0) cycle
+        if (cfb_cntr_4(is).ne.0 .and. ffb_cntr_4(is).ne.0) then
+          ank_mods = 0
+          do ib = 1, nbc
+            if (bcchar_4(ib).eq.'S') then
+              if (nncut_4.eq.2) then
+                if (bcstart_4(ib).gt.nxcut1_4(1) .and.
+     &              bcstart_4(ib).le.nxcut1_4(2)) then
+                  ionising_core = -ib
+                end if
+              else if (nncut_4.eq.4) then
+                if (bcstart_4(ib).gt.nxcut1_4(1) .and.
+     &              bcstart_4(ib).le.nxcut1_4(2)) then
+                  ionising_core = -ib
+                else if (bcstart_4(ib).gt.nxcut1_4(3) .and.
+     &                   bcstart_4(ib).le.nxcut1_4(4)) then
+                  ionising_core = -ib
+                end if
+              end if
+            end if
+          end do
+        end if
       end do
 
       call subend()
@@ -2054,8 +2080,10 @@ c
      .   '''eirene_fixmap'''//tab//tab//tab//'''1'''
         write(99,'(a)')
      .   '''eirene_fixuub'''//tab//tab//tab//'''2'''
-        write(99,'(a)')
-     .   '''eirene_ank_mods'''//tab//tab//'''1'''
+        write(99,'(a,i1,a)')
+     .   '''eirene_ank_mods'''//tab//tab//'''',ank_mods,''''
+        write(99,'(a,i3,a)')
+     .   '''eirene_ionising_core'''//tab//tab//'''',ionising_core,''''
         write(98,'(a)')
      .   '''b2mndr_eirene'''//tab//tab//tab//'''1'''
         write(98,'(a)')
@@ -2070,8 +2098,10 @@ c
      .   '''eirene_extrap'''//tab//tab//tab//'''0'''
         write(98,'(a)')
      .   '''eirene_fixmap'''//tab//tab//tab//'''1'''
-        write(98,'(a)')
-     .   '''eirene_ank_mods'''//tab//tab//'''1'''
+        write(98,'(a,i1,a)')
+     .   '''eirene_ank_mods'''//tab//tab//'''',ank_mods,''''
+        write(98,'(a,i3,a)')
+     .   '''eirene_ionising_core'''//tab//tab//'''',ionising_core,''''
         if (nstepout_4.ge.1) then
           write(hlp_frm, '(a,i1,a)')
      .   '(a,i',len_of_digits(nstepout_4),',a)'
@@ -2329,7 +2359,7 @@ c
       use b2mod_b2cmpa
       implicit none
       integer ns
-      integer ib, is, is0
+      integer ib, is, is0, iss
       character*32 hlp_frm, hlp_frp, hlp_frb
       character*80 boundary_filename_4, boundary_filename_5
       intrinsic mod
@@ -2386,20 +2416,39 @@ c
               bccon(1,ib) = 12
               conpar(1,ib,1) = sepden_4
             end if
+cxpb Careful here for the case where both core and fuel feedback schemes
+cxpb are turned on simultaneously for the same isonuclear sequence
             do is = 1, nspecies_4
               if (cfb_cntr_4(is).ne.0) then
                 do is0 = isp(is)+1, isp(is)+nfluids_4(is)-1
                   if (is0.ge.0) then
-                    bccon(is0,ib) = 11
+                    if (ffb_cntr_4(is).ne.0) then
+                      bccon(is0,ib) = 8
+                    else
+                      bccon(is0,ib) = 11
+                    end if
                     conpar(is0,ib,1) = 0.0_R8
                     conpar(is0,ib,2) = 0.0_R8
                   end if
                 end do
                 is0 = isp(is)+nfluids_4(is)
-                bccon(is0,ib) = 11
-                conpar(is0,ib,1) = conpar_4(ifl(is0),ib,1)
-                conpar(is0,ib,2) = 0.0_R8
-                na_feedback_ib(is-1) = ib
+                if (ffb_cntr_4(is).ne.0) then
+                  bccon(is0,ib) = 13
+                  if (cfb_over_4(is).ne.0.0_R8) then
+                    conpar(is0,ib,2) = cfb_over_4(is)
+                  else
+                    conpar(is0,ib,2) = 0.01_R8
+                  end if
+                else
+                  bccon(is0,ib) = 11
+                  conpar(is0,ib,2) = 0.0_R8
+                  na_feedback_ib(is-1) = ib
+                end if
+                conpar(is0,ib,1) = cfb_core_4(is)
+                do iss = isp(is)+1, isp(is)+nfluids_4(is)
+                  conpar(is0,ib,1) = conpar(is0,ib,1) +
+     .                               conpar_4(ifl(iss),ib,1)
+                end do
               end if
             end do
           else

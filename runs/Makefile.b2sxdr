@@ -93,7 +93,7 @@ ifndef STAND_ALONE
 	-[ -e b2sx.exe.dir/fort.34 ] && mv b2sx.exe.dir/fort.34 . || echo > /dev/null
 	-[ -e b2sx.exe.dir/fort.35 ] && mv b2sx.exe.dir/fort.35 . || echo > /dev/null
 	-[ -e b2sx.exe.dir/fort.44 ] && mv b2sx.exe.dir/fort.44 . || echo > /dev/null
-	-cd b2sx.exe.dir ; rm -f HYDHEL AMJUEL METHANE SPUTER H2VIBR AMMONX fort.21 fort.22 graphite_ext.dat mo_ext.dat fort.75 fort.1 fort.29 fort.37 fort.55 fort.78 vtk.out
+	-cd b2sx.exe.dir ; rm -f HYDHEL AMJUEL METHANE SPUTER H2VIBR AMMONX fort.21 fort.22 graphite_ext.dat mo_ext.dat fort.85 fort.1 fort.29 fort.37 fort.55 fort.78 vtk.out
 endif
 else
 	cd b2sx.exe.dir ; [ -e ../ftn30 ] && cp -p ../ftn30 . || echo > /dev/null ; [ -e ../ftn31 ] && cp -p ../ftn31 . || echo > /dev/null ; ${TIME} ${SOLPSTOP}/modules/solps4-5/builds/${TOOL_CHAIN}/b2sxdr.exe ${RUN_OPTIONS} ; mv $(target_sx) .. >& /dev/null ; [ -e ../ftn30 ] && rm ftn30 || mv ftn30 .. ; [ -e ../ftn31 ] && rm ftn31 || mv ftn31 .. ; rm -f $(notdir $^) >& /dev/null
@@ -108,7 +108,7 @@ ifndef STAND_ALONE
 	-[ -e b2sx.exe.dir/ftn34 ] && mv b2sx.exe.dir/ftn34 . || echo > /dev/null
 	-[ -e b2sx.exe.dir/ftn35 ] && mv b2sx.exe.dir/ftn35 . || echo > /dev/null
 	-[ -e b2sx.exe.dir/ftn44 ] && mv b2sx.exe.dir/ftn44 . || echo > /dev/null
-	-cd b2sx.exe.dir ; rm -f HYDHEL AMJUEL METHANE SPUTER H2VIBR AMMONX ftn21 ftn22 graphite_ext.dat mo_ext.dat ftn75 ftn1 ftn29 ftn37 ftn55 ftn78 vtk.out
+	-cd b2sx.exe.dir ; rm -f HYDHEL AMJUEL METHANE SPUTER H2VIBR AMMONX ftn21 ftn22 graphite_ext.dat mo_ext.dat ftn85 ftn1 ftn29 ftn37 ftn55 ftn78 vtk.out
 endif
 endif
 	-rmdir b2sx.exe.dir
@@ -137,7 +137,7 @@ ifndef STAND_ALONE
 	-[ -e b2sx.exe.dir/fort.34 ] && mv b2sx.exe.dir/fort.34 . || echo > /dev/null
 	-[ -e b2sx.exe.dir/fort.35 ] && mv b2sx.exe.dir/fort.35 . || echo > /dev/null
 	-[ -e b2sx.exe.dir/fort.44 ] && mv b2sx.exe.dir/fort.44 . || echo > /dev/null
-	-cd b2sx.exe.dir ; rm -f HYDHEL AMJUEL METHANE SPUTER H2VIBR AMMONX fort.21 fort.22 graphite_ext.dat mo_ext.dat fort.75 fort.1 fort.29 fort.37 fort.55 fort.78 vtk.out
+	-cd b2sx.exe.dir ; rm -f HYDHEL AMJUEL METHANE SPUTER H2VIBR AMMONX fort.21 fort.22 graphite_ext.dat mo_ext.dat fort.85 fort.1 fort.29 fort.37 fort.55 fort.78 vtk.out
 endif
 else
 ifndef STAND_ALONE
@@ -156,7 +156,7 @@ ifndef STAND_ALONE
 	-[ -e b2sx.exe.dir/ftn34 ] && mv b2sx.exe.dir/ftn34 . || echo > /dev/null
 	-[ -e b2sx.exe.dir/ftn35 ] && mv b2sx.exe.dir/ftn35 . || echo > /dev/null
 	-[ -e b2sx.exe.dir/ftn44 ] && mv b2sx.exe.dir/ftn44 . || echo > /dev/null
-	-cd b2sx.exe.dir ; rm -f HYDHEL AMJUEL METHANE SPUTER H2VIBR AMMONX ftn21 ftn22 graphite_ext.dat mo_ext.dat ftn75 ftn1 ftn29 ftn37 ftn55 ftn78 vtk.out
+	-cd b2sx.exe.dir ; rm -f HYDHEL AMJUEL METHANE SPUTER H2VIBR AMMONX ftn21 ftn22 graphite_ext.dat mo_ext.dat ftn85 ftn1 ftn29 ftn37 ftn55 ftn78 vtk.out
 endif
 endif
 	-rmdir b2sx.exe.dir
