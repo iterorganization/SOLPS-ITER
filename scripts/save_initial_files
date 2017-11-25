@@ -1,0 +1,47 @@
+#! /usr/bin/env ksh
+
+[ -s b2.wall_save.parameters ] && cp b2.wall_save.parameters b2.wall_save.parameters.i || echo > /dev/null
+[ -s b2.feedback_save.parameters ] && cp b2.feedback_save.parameters b2.feedback_save.parameters.i || echo > /dev/null
+[ -s b2.neutrals_save.parameters ] && cp b2.neutrals_save.parameters b2.neutrals_save.parameters.i || echo > /dev/null
+[ -s b2.sputter_save.parameters ] && cp b2.sputter_save.parameters b2.sputter_save.parameters.i || echo > /dev/null
+[ -s b2.transport_models_save.parameters ] && cp b2.transport_models_save.parameters b2.transport_models_save.parameters.i || echo > /dev/null
+[ -s b2time.nc ] && cp b2time.nc b2time.nc.i || echo > /dev/null
+[ -s b2wall.nc ] && cp b2wall.nc b2wall.nc.i || echo > /dev/null
+[ -s b2movies.nc ] && cp b2movies.nc b2movies.nc.i || echo > /dev/null
+[ -s b2tallies.nc ] && cp b2tallies.nc b2tallies.nc.i || echo > /dev/null
+[ -z "$STAND_ALONE" ] && {
+  [ $COMPILER != "HP" ] && {
+    [ -s fort.10 ] && cp fort.10 fort.10.i || echo > /dev/null
+    [ -s fort.11 ] && cp fort.11 fort.11.i || echo > /dev/null
+    [ -s fort.12 ] && cp fort.12 fort.12.i || echo > /dev/null
+    [ -s fort.13 ] && cp fort.13 fort.13.i || echo > /dev/null
+    [ -s fort.14 ] && cp fort.14 fort.14.i || echo > /dev/null
+    [ -s fort.15 ] && cp fort.15 fort.15.i || echo > /dev/null
+    [ -s fort.44 ] && cp fort.44 fort.44.i || echo > /dev/null
+    [ -s fort.46 ] && cp fort.46 fort.46.i || echo > /dev/null
+  } || {
+    [ -s ftn10 ] && cp ftn10 ftn10.i || echo > /dev/null
+    [ -s ftn11 ] && cp ftn11 ftn11.i || echo > /dev/null
+    [ -s ftn12 ] && cp ftn12 ftn12.i || echo > /dev/null
+    [ -s ftn13 ] && cp ftn13 ftn13.i || echo > /dev/null
+    [ -s ftn14 ] && cp ftn14 ftn14.i || echo > /dev/null
+    [ -s ftn15 ] && cp ftn15 ftn15.i || echo > /dev/null
+    [ -s ftn44 ] && cp ftn44 ftn44.i || echo > /dev/null
+    [ -s ftn46 ] && cp ftn46 ftn46.i || echo > /dev/null
+  }
+}
+
+NAME=/tmp/.files.$$.$USER.`date +%Y%m%d%H%M%S`
+( ls -l tracing/*.trc tracing/user.trc.n.?? | grep -v 'total ' | grep -v ' 0 ' | wc -l > $NAME ) 2> /dev/null
+nfiles=`cat $NAME`
+[ $nfiles -gt 0 ] && {
+  filelist=`ls -1 tracing/*.trc tracing/user.trc.n.??`
+  set -A f -- $filelist
+  i=0
+  for z in $filelist; do {
+    ff=${f[i]}.i
+    cp ${f[i]} $ff
+    ((i+=1))
+  }; done
+}
+rm $NAME
