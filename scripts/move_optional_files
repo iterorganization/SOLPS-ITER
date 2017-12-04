@@ -11,6 +11,7 @@ echo "tracing : found" $nfiles "files"
 [ $nfiles -gt 0 ] && {
   [ -d ../tracing ] || mkdir ../tracing
   mv tracing/* ../tracing 2> /dev/null || echo > /dev/null
+  [ -s ../tracing/user.trc.n.01 ] && mv ../tracing/user.trc.n.01 ../tracing/user.trc
 }
 rm $NAME
 

@@ -1508,7 +1508,7 @@ extracted from the {\tt run.log} file.
   \item[b2plot]\index{b2plot} Shortcut to \btwoplotns. A "-n" option allows for dry-run tests.A "-d" option allows to run within the chosen debugger. A "-s" option allows to run \btwoplot with coupling to {\tt Eirene} data. A "-h" option prints a help description.
   \item[b2pp]\index{b2pp} Script to obtain a standard series of \btwoplot graphs.
   \item[b2pt]\index{b2pt} Script to obtain a standard series of \btwoplot graphs.
-  \item[b2run]\index{b2run} Shortcut to the {\tt Makefile} launching {\tt B2.5}. A "-n" option allows for dry-run tests. A "-d" option allows to run within the chosen debugger. A "-s" option allows to run {\tt B2.5} in stand-alone mode. A "-m" option allows to run with MPI options. A "-h" option prints a help description. (See \ref{b2run} for fuller details)
+  \item[b2run]\index{b2run}\index{b2co}\index{b2fstate} Shortcut to the {\tt Makefile} launching {\tt B2.5}. A "-n" option allows for dry-run tests. A "-d" option allows to run within the chosen debugger. A "-s" option allows to run {\tt B2.5} in stand-alone mode. A "-m" option allows to run with MPI options. A "-b" option can be used when invoking the {\tt b2co} program to obtain a provisional {\tt b2fstate} file while the main code is running. A "-h" option prints a help description. (See \ref{b2run} for fuller details)
   \item[b2run\_hgw\_cluster]\index{b2run\_hgw\_clus} Shortcut to the {\tt Makefile} launching {\tt B2.5} for the IPP--Greifswald cluster. A "-n" option allows for dry-run tests.
   \item[b2sxdr]\index{b2sxdr} Shortcut to the \SOLPSfour to \SOLPSfive
     converter. A "-n" option allows for dry-run tests. A "-d" option allows to run within the chosen debugger. A "-s" option allows to specify the run to convert was not coupled to {\tt Eirene}. A "-h" option prints a help description.
@@ -1543,7 +1543,8 @@ extracted from the {\tt run.log} file.
   \item[localsubmit]\index{localsubmit} Command file to launch runs on the local machine. See Section \ref{b2run} for details.
   \item[lndr]\index{lndr} [ANK] routine to generate shadow trees.
   \item[mds\_id]\index{mds\_id} Obtains certain data necessary for run identification when saving to the {\tt MDSplus} database.
-  \item[min\_ave\_max.awk]\index{min\_ave\_max.awk}
+  \item[move\_optional\_files]\index{move\_optional\_files} Script used by the run Makefile to check for the existence of optional output files and, upon succesful termination of a run, move these files to the run directory.
+  \item[move\_save\_files]\index{move\_save\_files}\index{b2co} Script used by the crash recovery program {\tt b2co} to replace optional run output files with their recovered versions.
   \item[n2d]\index{n2d} Converts "Naka" format equilibrium files to {\tt DG} format (see Sec.~\ref{sec:equtrn}).
   \item[nn2d]\index{nn2d} Converts new "Naka" format equilibrium files to {\tt DG} format (see Sec.~\ref{sec:equtrn}).
   \item[nereg]\index{nereg} Shows averaged density per region.
@@ -1556,7 +1557,7 @@ extracted from the {\tt run.log} file.
   \item[QSUB.postprocess]\index{QSUB.postprocess} List of instructions appended to the {\tt B2.5} stand-alone submission scripts for run post-processing
   \item[QSUB.postprocess\_coupled]\index{QSUB.postprocess\_coupled} List of instructions appended to the \SOLPSITER submission scripts for run post-processing
   \item[quote\_pwd]\index{quote\_pwd} Returns the current working directory as a string with quotes (c.f.\ {\tt noquote\_pwd}).
-  \item[recover\_initial\_files]\index{recover\_initial\_files} For use to copy back the stored initial case files ({\tt .i} extension) before a run restart.
+  \item[recover\_initial\_files]\index{recover\_initial\_files}\index{b2co}\index{plasmastate} For use to copy back the stored initial case files ({\tt .i} extension) before a run restart, or when use of {\tt b2co} is not possible because the run crash happened too early for {\tt plasmastate} files to be written.
   \item[res\_av]\index{res\_av} Special script to reduce residuals in the finalization step of the {\tt Eirene} sources averaging scheme (see Section \ref{sec:B2Eirene:averaging} for details).
   \item[resave\_mds]\index{resave\_mds} Update an archived {\tt MDSplus} case. A "-n" option allows for dry-run tests. A "-d" option allows to run within the chosen debugger. A "-s" option allows to update a {\tt B2.5} stand-alone case.
   \item[rlndr]\index{rlndr} Replaces a link address by another
@@ -1572,11 +1573,11 @@ extracted from the {\tt run.log} file.
   \item[str2ogr]\index{str2ogr} Converts a .str structure file into a {\tt DG} .ogr template file.
   \item[summarize\_run]\index{summarize\_run} List of instructions provided during job submission for obtaining a standard set of run diagnostics
   \item[switch\_to\_master]\index{switch\_to\_master} Script to switch to the up-to-date \SOLPSITER master branch.
+  \item[truncate\_tracing\_files]\index{truncate\_tracing\_files}\index{b2co} Script used by the crash recovery program {\tt b2co} to truncate the optional tracing files so that they stay synchronized with the recovered plasma state.
   \item[update\_eirene]\index{update\_eirene} Updates the \${\tt SOLPSTOP/modules/Eirene} directory.
   \item[update\_libs]\index{update\_libs} Updates the \${\tt SOLPSTOP/src/lib} directory.
   \item[update\_links]\index{update\_links} Updates linked files to the {\tt SOLPS} Master in the current directory structure.
   \item[v2d]\index{v2d} Converts {\tt Carre} format equilibrium files to {\tt DG} format (see Sec.~\ref{sec:equtrn}).
-  \item[]
   \end{description}
 \end{itemize}
 
@@ -1618,18 +1619,12 @@ welcome!
   \item[copy\_tracing\_files]\index{copy\_tracing\_files}
   \item[get\_parm.bpl]\index{get\_parm.bpl}
   \item[lln]\index{lln}
-  \item[move\_optional\_files]\index{move\_optional\_files}
-  \item[move\_save\_files]\index{move\_save\_files}
+  \item[min\_ave\_max.awk]\index{min\_ave\_max.awk}
   \item[plot\_bc\_conpar13]\index{plot\_bc\_conpar13}
   \item[plotdg]\index{plotdg}
   \item[regxy\_sum\_over\_species]\index{regxy\_sum\_over\_species}
   \item[triang]\index{triang}
   \item[triang.conf]\index{triang.conf}
-  \item[update.b2.parameters]\index{update.b2.parameters}
-  \item[update\_execs]\index{update\_execs}
-  \item[watch]\index{watch}
-  \item[watch.FRM]\index{watch.FRM}
-  \item[watch.XDR]\index{watch.XDR}
 \end{description}
 
 \subsection{scripts/commands}
@@ -1720,6 +1715,7 @@ for itself by climbing up the tree. You can add options to the {\tt b2run} comma
     mode with the provided options (example: [the syntax is important, both
       the slashes and the quotes are needed] \verb!b2run -m \"mpiexec -np 2\" b2mn!)
   \item[-s] Specifies that one wishes to run {\tt B2.5} in stand-alone mode, i.e. without any coupling to {\tt Eirene}.
+  \item[-b]\index{b2co}\index{b2fstate} Specifies, when calling the {\tt b2co} program, that only the {\tt b2fstate} file should be produced. To be used when invoking {\tt b2co} while the main code is running.
   \item[-d "debugger\_name"] Allows to run {\tt b2XX} with the named debugger (example: {\tt b2run -d totalview b2mn}). If not debugger name is specified, the debugger defined with the DBX environment variable and specified in the \${\tt \{SOLPSTOP\}/SETUP/setup.csh.}\${\tt \{HOST\_NAME\}.}\${\tt \{COMPILER\}.local} or \${\tt \{SOLPSTOP\}/SETUP\allowbreak/setup.csh.}\${\tt \{HOST\_NAME\}.}\${\tt \{COMPILER\}} files will be used.
 \end{description}
 
@@ -1814,7 +1810,7 @@ and executes the script {\tt b2run}.
 The examples presented below are for a pure D plasma.
 
 \newpage\section{b2ag, setting up the geometry}
-\index{b2fgmtry}\label{sec:b2ag}\index{b2ag}\index{fort.30}
+\index{b2fgmtry}\label{sec:b2ag}\index{b2ag}\index{fort.30}\index{b2run}
 
 {\tt b2ag} prepares the geometry file, {\tt b2fgmtry}, reading the
 input file {\tt b2ag.dat}
@@ -1883,7 +1879,7 @@ as {\tt jet.50401.58000.geo}, identify it as being of size $96 \times
 i.e. a {\tt fort.30} file.
 
 \newpage\section{b2ah, setting up the default physics parameters}
-\index{b2fpardf}\label{sec:b2ah}\index{b2ah}
+\index{b2fpardf}\label{sec:b2ah}\index{b2ah}\index{b2run}
 
 {\tt b2ah} prepares the default physics file, {\tt b2fpardf},
 reading the input file {\tt b2ah.dat}
@@ -2046,7 +2042,7 @@ The code will fail a transport coefficients test in {\tt b2tral} otherwise.
 
 \newpage
 \section{b2ar, setting up the atomic physics rates}
-\index{b2frates}\label{sec:b2ar}\index{b2ar}
+\index{b2frates}\label{sec:b2ar}\index{b2ar}\index{b2run}
 
 {\tt b2ar} prepares the default atomic physics rates file, {\tt b2frates},
 reading the input file {\tt b2ar.dat}
@@ -2101,7 +2097,7 @@ Supplemental information on atomic physics rates can be found in the file
 
 \newpage
 \section{b2ai, the default initial plasma state}
-\index{b2fstati}\label{sec:b2ai}\index{b2ai}
+\index{b2fstati}\label{sec:b2ai}\index{b2ai}\index{b2run}
 
 {\tt b2ai} prepares the default initial plasma state file, {\tt b2fstati},
 reading the input file {\tt b2ai.dat}
@@ -2178,6 +2174,7 @@ a flat state for new species declared in the species list from {\tt b2ai.dat}.
 \index{b2fplasma}
 \label{sec:b2mn}
 \index{b2mn}
+\index{b2run}
 
 The program can be run with one of the following
 \begin{verbatim}
@@ -3175,7 +3172,7 @@ indexing and naming conventions as \SOLPSfivens.
 
 \newpage
 \section{b2yg, plotting the geometry}
-\index{b2fgmtry}\label{sec:b2yg}\index{b2yg}
+\index{b2fgmtry}\label{sec:b2yg}\index{b2yg}\index{b2run}
 
 The commands
 \begin{verbatim}
@@ -3241,7 +3238,7 @@ in sequence with or without some separating character(s).
 
 \newpage
 \section{b2yh, plotting the run parameters}
-\index{b2fpardf}\index{b2fparam}\label{sec:b2yh}\index{b2yh}\index{b2ah}
+\index{b2fpardf}\index{b2fparam}\label{sec:b2yh}\index{b2yh}\index{b2ah}\index{b2run}
 
 The commands
 \begin{verbatim}
@@ -3268,7 +3265,7 @@ printed out in {\tt b2yh.prt}. Current accepted values are 0 and 1.
 \newpage
 \section{b2yi \& b2yp, plotting the plasma state}
 \index{b2fstati}\index{b2fstate}\index{b2specp}\label{sec:b2yi}\label{sec:b2yp}
-\index{b2yi}\index{b2yp}\index{b2ai}\index{b2mn}
+\index{b2yi}\index{b2yp}\index{b2ai}\index{b2mn}\index{b2run}
 
 The commands
 \begin{verbatim}
@@ -3380,7 +3377,7 @@ in sequence with or without some separating character(s).
 
 \newpage
 \section{b2yr, plotting the atomic physics rates}
-\index{b2frates}\index{b2yr.dat}\label{sec:b2yr}\index{b2yr}
+\index{b2frates}\index{b2yr.dat}\label{sec:b2yr}\index{b2yr}\index{b2run}
 
 The commands
 \begin{verbatim}
@@ -3417,7 +3414,7 @@ through the use of the {\tt b2.atomic\_physics\_rescale.parameters} file. See
 
 \newpage
 \section{b2ym, producing movie output}
-\index{b2fmovie}\label{sec:b2ym}\index{b2ym}
+\index{b2fmovie}\label{sec:b2ym}\index{b2ym}\index{b2run}
 
 The commands
 \begin{verbatim}
@@ -3470,7 +3467,7 @@ in sequence with or without some separating character(s).
 
 \newpage
 \section{b2yn, display the progress of inner B2.5 iterations}
-\index{b2ftrack}\label{sec:b2yn}\index{b2yn}
+\index{b2ftrack}\label{sec:b2yn}\index{b2yn}\index{b2run}
 
 The commands
 \begin{verbatim}
@@ -3526,7 +3523,7 @@ in sequence with or without some separating character(s).
 
 \newpage
 \section{b2yq, display the evolution data}
-\index{b2ftrace}\label{sec:b2yq}\index{b2yq}
+\index{b2ftrace}\label{sec:b2yq}\index{b2yq}\index{b2run}
 
 The commands
 \begin{verbatim}
@@ -3609,7 +3606,7 @@ those regions, excluding the fluxes within boundary regions.
 
 \newpage
 \section{b2yt, changing from one grid size and species set to another}
-\index{b2yt}\index{b2fstatt}\label{sec:b2yt}\index{input.dat}\index{input.dat.2}\index{b2mn.dat}\index{b2fgmtry}
+\index{b2yt}\index{b2fstatt}\label{sec:b2yt}\index{input.dat}\index{input.dat.2}\index{b2mn.dat}\index{b2fgmtry}\index{b2run}
 \index{b2fgmtry.old}\index{b2mn.dat.2}\index{b2.boundary.parameters}\index{b2.boundary.parameters.2}\index{b2favere.2}
 \index{b2.neutrals.parameters}\index{b2.neutrals.parameters.2}\index{b2ah.dat}\index{b2ah.dat.2}
 \index{b2.wall\_save.parameters}\index{b2.wall\_save.parameters.2}\index{b2frates}\index{b2fpardf}
@@ -3771,7 +3768,7 @@ are always welcome.
 
 \newpage
 \section{b2co, recovering from a crash}
-\label{sec:b2co}\index{b2co}\index{plasmastate}\index{B2.5, run recovery}\index{b2fstate}\index{recover\_initial\_files}
+\label{sec:b2co}\index{b2co}\index{plasmastate}\index{B2.5, run recovery}\index{b2fstate}\index{recover\_initial\_files}\index{tracing}\index{b2movies.nc}\index{b2tallies.nc}\index{b2wall.nc}\index{b2time.nc}\index{b2run}
 
 In case of a computer crash during a run, it may be possible to recover
 the results and continue the simulation. The code writes, at regular
@@ -3793,14 +3790,17 @@ a crash, the user should then:
 
 If the crash happened early on in the simulation and one wishes to return to the initial state of the simulation to re-launch the run cleanly, one may use the {\tt recover\_initial\_files} script instead.
 
-This procedure will re-start the run from the point at which the {\tt plasmastate} file was written. In cases with feedback schemes active, the feedback values will be grabbed from the relevant {\tt b2.*\_save.parameters.XXXX} files and a new set of
-{\tt b2.*\_save.parameters} files will be created.
+This procedure will produce the files necessary to re-start the run from the point at which the {\tt plasmastate} file was written. In cases with feedback schemes active, the feedback values will be grabbed from the relevant {\tt b2.*\_save.parameters.XXXX} files and a new set of {\tt b2.*\_save.parameters} files will be created. Optional output files (i.e the NetCDF files {\tt b2time.nc}, {\tt b2tallies.nc}, {\tt b2wall.nc}, and {\tt b2movies.nc}, as well as the {\tt *.trc} files in the {\tt tracing} directory), if present, will be truncated to be synchronized with the recovered plasma state file.
 
-It is also possible to use the {\tt b2co} utility {\em while} {\tt SOLPS} is running, in order to obtain a {\tt b2fstate} file in the run directory that one may use to plot certain plasma quantities and monitor the current status of the run.
+It is also possible to use the {\tt b2co} utility {\em while} {\tt SOLPS} is running, in order to obtain a {\tt b2fstate} file in the run directory that one may use to plot certain plasma quantities and monitor the current status of the run. However, to do this and not overwrite the current tracing files, {\tt b2co} {\em must} be invoked as follows:
+\begin{enumerate}
+  \item {\tt setenv PLASMASTATE b2mn.exe.dir/plasmastate.XXXX} where {\tt XXXX} is the number of the desired {\tt plasmastate} file
+  \item {\tt b2run -b b2co} or {\tt gmake -f \$SOLPSTOP/runs/Makefile b2co.prt B2FSTATE\_ONLY='yes'} which will create the provisional {\tt b2fstate} file
+\end{enumerate}
 
 \newpage
 \section{b2uf \& b2fu, converting the plasma output file}
-\label{sec:b2uf}\label{sec:b2fu}\index{b2uf}\index{b2fu}\index{b2fplasma}\index{b2fplasmf}
+\label{sec:b2uf}\label{sec:b2fu}\index{b2uf}\index{b2fu}\index{b2fplasma}\index{b2fplasmf}\index{b2run}
 
 The commands
 \begin{verbatim}
@@ -3828,7 +3828,7 @@ or
 
 \newpage
 \section{b2rd, fetching an archived MDSPLUS run}
-\label{sec:b2rd}\index{b2rd}\index{shotnumber.history}\index{B2.5, recover an archived run}\index{b2fstate}\index{b2fgmtrt}\index{b2fgmtry}
+\label{sec:b2rd}\index{b2rd}\index{shotnumber.history}\index{B2.5, recover an archived run}\index{b2fstate}\index{b2fgmtrt}\index{b2fgmtry}\index{b2run}
 
 If a run has been archived into the {\tt MDSplus} tree structure (see \ref{cha:MDSplus} for details)
 it is possible to extract from the tree the information necessary to obtain {\tt b2fstate} and {\tt b2fgmtry} files
@@ -4521,7 +4521,7 @@ The averaging scheme works in three stages:
 \end{enumerate}
 
 \section{b2ye, error assessment}
-\label{sec:b2ye}\index{b2ye}\index{error assessment}\index{b2time.nc}\index{b2favere}
+\label{sec:b2ye}\index{b2ye}\index{error assessment}\index{b2time.nc}\index{b2favere}\index{b2run}
 
 The program {\tt b2ye} is meant for computing error assessment of a coupled {\tt B2.5-Eirene} run where the averaging scheme described in Section \ref{sec:B2Eirene:averaging} above has been used. It is called by means of the command:
 \begin{verbatim}
@@ -11432,6 +11432,8 @@ time, or
 \end{verbatim}
 to plot the midplane separatrix electron temperature versus the midplane separatrix electron density.
 
+If {\tt 'b2mndr\_stim'} is set to a negative value, data from the current \SOLPSITER run will be appended to the existing {\tt b2time.nc} file, otherwise the file is created anew.
+
 In the case of double-null runs, the divertor and separatrix quantities are given in pairs. For the midplane quantities,
 the first value is for the outer midplane, and the second value for the inner midplane. Divertor quantities show
 first the bottom then the top divertor.
@@ -11802,8 +11804,7 @@ pomxap\_std \index{pomxap\_std}\index{b2time.nc, pomxap\_std} & variance for max
 
 These are the tallies stored in {\tt b2tallies.nc}.
 
-Note: some of the descriptions are wrong and need to be updated!
-Please check in subroutine {\tt b2tallies.F}!
+If {\tt 'b2mndr\_stim'} is set to a negative value, data from the current \SOLPSITER run will be appended to the existing {\tt b2tallies.nc} file, otherwise the file is created anew.
 
 The meaning of the dimensions are:
 \begin{description}
@@ -16384,6 +16385,7 @@ B25\_EIRENE & b2plot/psta.F \\
 B25\_EIRENE & b2plot/pstv.F \\
 B25\_EIRENE & b2plot/triangle\_surf.F \\
 B25\_EIRENE & b2plot/trigmesh.F \\
+B25\_EIRENE & convert/b2co.F \\
 B25\_EIRENE & convert/b2mds.F \\
 B25\_EIRENE & convert/b2yt\_ngread.F \\
 B25\_EIRENE & convert/b2yt\_ntread.F \\
@@ -16410,6 +16412,7 @@ B25\_EIRENE & user/b2trace.F \\
 B25\_EIRENE & user/b2usrtrc.F \\
 B25\_EIRENE & user/b2wrint.F \\
 B25\_EIRENE & user/b2wrsep.F \\
+B25\_EIRENE & user/b2wrsrt.F \\
 B25\_EIRENE & user/cdfmovie.F \\
 B25\_EIRENE & user/eirflux\_map.F \\
 B25\_EIRENE & utility/gfsub2.F \\
@@ -16510,6 +16513,10 @@ NO\_CDF & b2plot/process\_chords.F \\
 NO\_CDF & convert/b2cdf2mds.F \\
 NO\_CDF & convert/b2cdfmovies2mds.F \\
 NO\_CDF & convert/b2cdftallies2mds.F \\
+NO\_CDF & convert/b2co\_movies\_cdf.F \\
+NO\_CDF & convert/b2co\_tally\_cdf.F \\
+NO\_CDF & convert/b2co\_time\_cdf.F \\
+NO\_CDF & convert/b2co\_wall\_cdf.F \\
 NO\_CDF & convert/process.F \\
 NO\_CDF & driver/b2mod\_driver.F \\
 NO\_CDF & modules/b2mod\_balance.F \\
@@ -16525,6 +16532,10 @@ NO\_F01AAF & transport/b2tr21.F \\
 NO\_GETENV & b2plot/b2plot.F \\
 NO\_GETENV & b2plot/dhdata.F \\
 NO\_GETENV & b2plot/spect.F \\
+NO\_GETENV & convert/b2co\_movies\_cdf.F \\
+NO\_GETENV & convert/b2co\_tally\_cdf.F \\
+NO\_GETENV & convert/b2co\_time\_cdf.F \\
+NO\_GETENV & convert/b2co\_wall\_cdf.F \\
 NO\_GETENV & convert/b2mds.F \\
 NO\_GETENV & modules/b2mod\_ppout.F \\
 NO\_GETENV & modules/b2mod\_solpstop.F \\
@@ -16644,6 +16655,10 @@ USE\_PXFGETENV & b2plot/initialize\_plotting.F \\
 USE\_PXFGETENV & b2plot/set\_extralabel.F \\
 USE\_PXFGETENV & b2plot/spect.F \\
 USE\_PXFGETENV & convert/b2mds.F \\
+USE\_PXFGETENV & convert/b2co\_movies\_cdf.F \\
+USE\_PXFGETENV & convert/b2co\_tally\_cdf.F \\
+USE\_PXFGETENV & convert/b2co\_time\_cdf.F \\
+USE\_PXFGETENV & convert/b2co\_wall\_cdf.F \\
 USE\_PXFGETENV & driver/b2co.F \\
 USE\_PXFGETENV & modules/b2mod\_ppout.F \\
 USE\_PXFGETENV & modules/b2mod\_solpstop.F \\
