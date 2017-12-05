@@ -26,12 +26,12 @@ case "IPP-HGW":
 case "IPR":
 case "ITER":
 case "ITM":
+case "JET":
 case "KEIO":
 case "KSTAR":
 case "LEUVEN":
 case "SPBSTU":
 case "SWIP":
-case "JET":
   echo ifort64
   breaksw
 case "CCFE":

@@ -1,4 +1,4 @@
-#! /bin/tcsh -f
+#! /usr/bin/env tcsh
 
 set NAME=/tmp/.run.$$.$USER.`date +%Y%m%d%H%M%S`
 set EMAIL=`get_git_email`
@@ -12,9 +12,9 @@ set standalone="no"
 
 set solpstop=`climb_and_look_for SOLPSTOP`
 if (-s $solpstop) then
- setenv SOLPSTOP "`cat $solpstop`"
-else if ($SOLPSTOP == "") then
- setenv SOLPSTOP "`echo $PWD | sed 's:/runs/.*::'`"
+  setenv SOLPSTOP "`cat $solpstop`"
+else
+  setenv SOLPSTOP "`echo $PWD | sed 's:/runs/.*::'`"
 endif
 
 argloop:
@@ -49,28 +49,29 @@ argloop:
     set PROCS=`echo $MPIOPTS | awk.transpose | grep -A 1 "\-np" | tail -n 1`
     echo Asking for $PROCS processors
     shift
+    echo sleep 600 | qsub -q ib_gen8 -lnodes=c05s30:ppn=1,walltime=1000
     goto argloop
   endif
 
 if ($1 == "") then
   if (-s input.dat && $standalone == "no") then
     echo Assuming run with Eirene
-    echo No argument is specified. Looking for QSUB.itm_coupled$compress
-    set QSUB=`climb_and_look_for QSUB.itm_coupled$compress`
-    if ($QSUB == "//QSUB.itm_coupled$compress") then
-      if (-s $SOLPSTOP/runs/QSUB.itm_coupled$compress) then
-        set QSUB="$SOLPSTOP/runs/QSUB.itm_coupled$compress"
+    echo No argument is specified. Looking for QSUB.leuven_coupled$compress
+    set QSUB=`climb_and_look_for QSUB.leuven_coupled$compress`
+    if ($QSUB == "//QSUB.leuven_coupled$compress") then
+      if (-s $SOLPSTOP/runs/QSUB.leuven_coupled$compress) then
+        set QSUB="$SOLPSTOP/runs/QSUB.leuven_coupled$compress"
       else
         set QSUB=""
       endif
     endif
   else
     if ($standalone == "no") echo Assuming standalone run
-    echo No argument is specified. Looking for QSUB.itm$compress
-    set QSUB=`climb_and_look_for QSUB.itm$compress`
-    if ($QSUB == "//QSUB.itm$compress") then
-      if (-s $SOLPSTOP/runs/QSUB.itm$compress) then
-        set QSUB="$SOLPSTOP/runs/QSUB.itm$compress"
+    echo No argument is specified. Looking for QSUB.leuven$compress
+    set QSUB=`climb_and_look_for QSUB.leuven$compress`
+    if ($QSUB == "//QSUB.leuven$compress") then
+      if (-s $SOLPSTOP/runs/QSUB.leuven$compress) then
+        set QSUB="$SOLPSTOP/runs/QSUB.leuven$compress"
       else
         set QSUB=""
       endif
@@ -95,7 +96,7 @@ else
   endif
 endif
 if($QSUB == "") then
-  echo No ITM submission file $1 found. Exiting.
+  echo No ITER submission file $1 found. Exiting.
   exit
 endif
 echo Using submission file template $QSUB
@@ -105,6 +106,6 @@ sed -e 's:#PWD#:'$PWD':g' -e 's:#SOLPSTOP#:'$SOLPSTOP':g' -e 's:#EMAIL#:'$EMAIL'
 set msg="Submitted at `date`"
 update_solps_run_status -n ${msg}
 if ($?SOLPS_GUI_IP) then
-  echo ${USER} ${PWD} ${msg} | netcat -u -v -w 1 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
+  echo ${USER} ${PWD} ${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
 endif
 qsub -V -S /bin/tcsh $NAME

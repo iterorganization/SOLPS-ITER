@@ -1,4 +1,4 @@
-#! /usr/bin/env csh
+#! /bin/tcsh -f
 ###eval '(exit $?0)' && eval 'exec tcsh $0 ${1+"$@"}' && eval 'exec tcsh $0 $argv:q'
 ###! /bin/tcsh
 

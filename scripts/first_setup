@@ -1,73 +1,88 @@
 #! /usr/bin/env ksh
+OLD_PWD=$PWD
+filename=setup.csh.${HOST_NAME}.${COMPILER}
+echo ${filename}
+cd $SOLPSTOP/SETUP
+[ -s ${filename} ] && {
+  echo "Non-empty ${filename} already present in $PWD: nothing done"
+} || {
+  cp setup.csh.default.default ${filename}
+  echo "Created ${filename} from setup.csh.default.default in $PWD: please modify if needed"
+}
 filename=config.${HOST_NAME}.${COMPILER}
 echo ${filename}
-OLD_PWD=$PWD
+[ -s ${filename} ] && {
+  echo "Non-empty ${filename} already present in $PWD: nothing done"
+} || {
+  cp config.default.default ${filename}
+  echo "Created ${filename} from config.default.default in $PWD: please modify if needed"
+}
 cd $SOLPSTOP/modules/B2.5/config
-[ -e ${filename} ] && { 
-  echo "${filename} already present in $PWD: nothing done"
+[ -s ${filename} ] && {
+  echo "Non-empty ${filename} already present in $PWD: nothing done"
 } || {
   cp config.default.$COMPILER ${filename}
   echo "Created ${filename} from config.default.$COMPILER in $PWD: please modify if needed"
 }
 cd $SOLPSTOP/modules/Eirene/config
-[ -e ${filename} ] && { 
-  echo "${filename} already present in $PWD: nothing done"
+[ -s ${filename} ] && {
+  echo "Non-empty ${filename} already present in $PWD: nothing done"
 } || {
   cp config.default.$COMPILER ${filename}
   echo "Created ${filename} from config.default.$COMPILER in $PWD: please modify if needed"
 }
 cd $SOLPSTOP/modules/Carre/config
-[ -e ${filename} ] && { 
-  echo "${filename} already present in $PWD: nothing done"
+[ -s ${filename} ] && {
+  echo "Non-empty ${filename} already present in $PWD: nothing done"
 } || {
   cp config.default.$COMPILER ${filename}
   echo "Created ${filename} from config.default.$COMPILER in $PWD: please modify if needed"
 }
 cd $SOLPSTOP/modules/DivGeo/config
-[ -e ${filename} ] && { 
-  echo "${filename} already present in $PWD: nothing done"
+[ -s ${filename} ] && {
+  echo "Non-empty ${filename} already present in $PWD: nothing done"
 } || {
   cp config.default.$COMPILER ${filename}
   echo "Created ${filename} from config.default.$COMPILER in $PWD: please modify if needed"
 }
 cd $SOLPSTOP/modules/DivGeo/convert/config
-[ -e ${filename} ] && { 
-  echo "${filename} already present in $PWD: nothing done"
+[ -s ${filename} ] && {
+  echo "Non-empty ${filename} already present in $PWD: nothing done"
 } || {
   cp config.default.$COMPILER ${filename}
   echo "Created ${filename} from config.default.$COMPILER in $PWD: please modify if needed"
 }
 cd $SOLPSTOP/modules/DivGeo/equtrn/config
-[ -e ${filename} ] && { 
-  echo "${filename} already present in $PWD: nothing done"
+[ -s ${filename} ] && {
+  echo "Non-empty ${filename} already present in $PWD: nothing done"
 } || {
   cp config.default.$COMPILER ${filename}
   echo "Created ${filename} from config.default.$COMPILER in $PWD: please modify if needed"
 }
 cd $SOLPSTOP/modules/Uinp/config
-[ -e ${filename} ] && { 
-  echo "${filename} already present in $PWD: nothing done"
+[ -s ${filename} ] && {
+  echo "Non-empty ${filename} already present in $PWD: nothing done"
 } || {
   cp config.default.$COMPILER ${filename}
   echo "Created ${filename} from config.default.$COMPILER in $PWD: please modify if needed"
 }
 cd $SOLPSTOP/modules/Triang/config
-[ -e ${filename} ] && { 
-  echo "${filename} already present in $PWD: nothing done"
+[ -s ${filename} ] && {
+  echo "Non-empty ${filename} already present in $PWD: nothing done"
 } || {
   cp config.default.$COMPILER ${filename}
   echo "Created ${filename} from config.default.$COMPILER in $PWD: please modify if needed"
 }
 cd $SOLPSTOP/modules/solps4-5/config
-[ -e ${filename} ] && { 
-  echo "${filename} already present in $PWD: nothing done"
+[ -s ${filename} ] && {
+  echo "Non-empty ${filename} already present in $PWD: nothing done"
 } || {
   cp config.default.$COMPILER ${filename}
   echo "Created ${filename} from config.default.$COMPILER in $PWD: please modify if needed"
 }
 cd $SOLPSTOP/modules/amds/config
-[ -e ${filename} ] && { 
-  echo "${filename} already present in $PWD: nothing done"
+[ -s ${filename} ] && {
+  echo "Non-empty ${filename} already present in $PWD: nothing done"
 } || {
   cp config.default.$COMPILER ${filename}
   echo "Created ${filename} from config.default.$COMPILER in $PWD: please modify if needed"

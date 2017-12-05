@@ -4,3 +4,8 @@ foreach i (`ls *.i`)
 set recoverfile=`echo $i:t:r`
 cp -i $i $recoverfile
 end
+
+foreach i (`ls tracing/*.i`)
+set recoverfile=`echo $i:r`
+cp -i $i $recoverfile
+end
