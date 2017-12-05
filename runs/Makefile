@@ -57,7 +57,7 @@ target_mn += restart_ext
 endif
 target_uf = b2uf.prt
 target_fu = b2fu.prt
-target_co = b2co.prt
+target_co = b2co.prt b2co.files
 target_pl = b2pl.prt b2plot.ps
 target_ts = b2ts.prt
 target_ye = b2ye.prt
@@ -85,12 +85,36 @@ endif
 baserundir := $(shell cd $(scandir)/baserun ; pwd)
 savefiles := $(shell echo ${PLASMASTATE} | sed -e 's:plasmastate:b2.*_save.parameters:')
 ifneq (${COMPILER},HP)
+fort13file := $(shell echo ${PLASMASTATE} | sed -e 's:plasmastate:fort.13:')
+else
+fort13file := $(shell echo ${PLASMASTATE} | sed -e 's:plasmastate:ftn13:')
+endif
+ifneq (${COMPILER},HP)
+fort15file := $(shell echo ${PLASMASTATE} | sed -e 's:plasmastate:fort.15:')
+else
+fort15file := $(shell echo ${PLASMASTATE} | sed -e 's:plasmastate:ftn15:')
+endif
+ifneq (${COMPILER},HP)
 fort44file := $(shell echo ${PLASMASTATE} | sed -e 's:plasmastate:fort.44:')
 else
 fort44file := $(shell echo ${PLASMASTATE} | sed -e 's:plasmastate:ftn44:')
 endif
+ifneq (${COMPILER},HP)
+fort46file := $(shell echo ${PLASMASTATE} | sed -e 's:plasmastate:fort.46:')
+else
+fort46file := $(shell echo ${PLASMASTATE} | sed -e 's:plasmastate:ftn46:')
+endif
+ifeq ($(shell [ -e $(fort13file) ] && echo yes || echo no ),yes)
+savefiles += $(fort13file)
+endif
+ifeq ($(shell [ -e $(fort15file) ] && echo yes || echo no ),yes)
+savefiles += $(fort15file)
+endif
 ifeq ($(shell [ -e $(fort44file) ] && echo yes || echo no ),yes)
 savefiles += $(fort44file)
+endif
+ifeq ($(shell [ -e $(fort46file) ] && echo yes || echo no ),yes)
+savefiles += $(fort46file)
 endif
 
 echo:
@@ -308,9 +332,9 @@ dbx.b2mn : b2mn.dat b2fgmtry b2fpardf b2fstati b2frates ftn30 AMJUEL
 endif
 	-rm -rf b2mn.exe.dir >& /dev/null ; mkdir b2mn.exe.dir ; cp $^ b2mn.exe.dir
 ifneq (${COMPILER},HP)
-	-rm -f $(target_mn) fort.31 b2tallies.nc balance.nc b2_to_astra.dat >& /dev/null
+	-rm -f $(target_mn) fort.31 balance.nc b2_to_astra.dat >& /dev/null
 else
-	-rm -f $(target_mn) ftn31 b2tallies.nc balance.nc b2_to_astra.dat >& /dev/null
+	-rm -f $(target_mn) ftn31 balance.nc b2_to_astra.dat >& /dev/null
 endif
 	save_initial_files
 	-cd b2mn.exe.dir ; [ -s ../b2faveri ] && cp -p ../b2faveri . || echo > /dev/null
@@ -427,15 +451,25 @@ else
 $(target_co) : b2mn.dat b2fgmtry b2fpardf b2fstati ${PLASMASTATE} ${savefiles}
 endif
 	-rm -rf b2co.exe.dir >& /dev/null ; mkdir b2co.exe.dir ; cp $^ b2co.exe.dir
-	-cd b2co.exe.dir ; copy_tracing_files
+	-cd b2co.exe.dir ; mkdir tracing ; copy_tracing_files
 	rm -f $(target_co)
+	cd b2co.exe.dir ; ${TIME} ${B2OBJ}/b2co.exe ${RUN_OPTIONS} `basename ${PLASMASTATE}` ; truncate_tracing_files ; mv $(target_co) b2fstate .. ; move_save_files ; rm -f $(notdir $^) ds? .quit >& /dev/null
 ifndef STAND_ALONE
-	-cd b2co.exe.dir ; ln -s ../input.dat .
+	cd b2co.exe.dir ; rm -f fort.85 >& /dev/null
 endif
-	cd b2co.exe.dir ; ${TIME} ${B2OBJ}/b2co.exe ${RUN_OPTIONS} `basename ${PLASMASTATE}` ; mv $(target_co) b2fstate .. ; move_save_files ; rm -f $(notdir $^) .quit >& /dev/null
-ifndef STAND_ALONE
-	-[ -e b2co.exe.dir/input.dat ] && rm b2co.exe.dir/input.dat
+ifdef B2FSTATE_ONLY
+	-[ -e b2co.exe.dir/tracing/blne.trc ] && rm b2co.exe.dir/tracing/blne.trc || echo > /dev/null
+	-[ -e b2co.exe.dir/tracing/blnm.trc ] && rm b2co.exe.dir/tracing/blnm.trc || echo > /dev/null
+	-[ -e b2co.exe.dir/tracing/blnn.trc ] && rm b2co.exe.dir/tracing/blnn.trc || echo > /dev/null
+	-[ -e b2co.exe.dir/tracing/integral.trc ] && rm b2co.exe.dir/tracing/integral.trc || echo > /dev/null
+	-[ -e b2co.exe.dir/tracing/intshrt.trc ] && rm b2co.exe.dir/tracing/intshrt.trc || echo > /dev/null
+	-[ -e b2co.exe.dir/tracing/sepdata.trc ] && rm b2co.exe.dir/tracing/sepdata.trc || echo > /dev/null
 endif
+	-[ -e b2co.exe.dir/tracing/residuals.trc ] && rm b2co.exe.dir/tracing/residuals.trc || echo > /dev/null
+	-[ -e b2co.exe.dir/tracing/sources.trc ] && rm b2co.exe.dir/tracing/sources.trc || echo > /dev/null
+	-[ -e b2co.exe.dir/tracing/test.trc ] && rm b2co.exe.dir/tracing/test.trc || echo > /dev/null
+	-[ -e b2co.exe.dir/tracing/user.trc ] && rm b2co.exe.dir/tracing/user.trc || echo > /dev/null
+	-[ -e b2co.exe.dir/tracing ] && rmdir b2co.exe.dir/tracing || echo > /dev/null
 	-rmdir b2co.exe.dir
 
 $(target_uf) : b2fgmtry b2fparam b2fstate b2fplasma
