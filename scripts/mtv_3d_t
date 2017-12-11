@@ -47,8 +47,8 @@ else
   echo '%' contfill = T  equalscale = F nsteps=20 toplabel=$field >> $tfilename
 endif
 if ($no_nc2text == 1) then
-  ( cat dsL | tr '\n' ' ' ; echo " " ; ncdump $file -f f -v ${field}3dl | awk -v string="${field}3dl" 'BEGIN {ORS="";} /data:/{found1=1;next;} $0 ~ string {if (found1==1) {if (found2==1) print ${field}3dl; else {print $3;found2=1;}}}' | awk 'BEGIN {FS=","} {for (i=1;i<=NF;i++) if (i%2==1) {ORS=" ";print $i;}' | sed 's/;//g' ) >! $tfilenam1
-  ( cat dsR | tr '\n' ' ' ; echo " " ; ncdump $file -f f -v ${field}3dl | awk -v string="${field}3dl" 'BEGIN {ORS="";} /data:/{found1=1;next;} $0 ~ string {if (found1==1) {if (found2==1) print ${field}3dl; else {print $3;found2=1;}}}' | awk 'BEGIN {FS=","} {for (i=1;i<=NF;i++) if (i%2==1) {ORS=" ";print $i;}' | sed 's/;//g' ) >! $tfilenam2
+  ( cat dsL | tr '\n' ' ' ; echo " " ; ncdump $file -f f -v ${field}3dl | awk -v string="${field}3dl" 'BEGIN {ORS="";} /data:/{found1=1;next;} $0 ~ string {if (found1==1) {if (found2==1) print ${field}3dl; else {print $3;found2=1;}}}' | awk 'BEGIN {FS=","} {for (i=1;i<=NF;i++) if (i%2==1) {ORS=" ";print $i;}}' | sed 's/;//g' ) >! $tfilenam1
+  ( cat dsR | tr '\n' ' ' ; echo " " ; ncdump $file -f f -v ${field}3dl | awk -v string="${field}3dl" 'BEGIN {ORS="";} /data:/{found1=1;next;} $0 ~ string {if (found1==1) {if (found2==1) print ${field}3dl; else {print $3;found2=1;}}}' | awk 'BEGIN {FS=","} {for (i=1;i<=NF;i++) if (i%2==1) {ORS=" ";print $i;}}' | sed 's/;//g' ) >! $tfilenam2
 else
   ( cat dsL | tr '\n' ' ' ; echo " " ; nc2text -n 999999 $file ${field}3dl ) >! $tfilenam1
   ( cat dsR | tr '\n' ' ' ; echo " " ; nc2text -n 999999 $file ${field}3dr ) >! $tfilenam2
