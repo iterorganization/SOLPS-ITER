@@ -469,6 +469,7 @@ endif
 	-[ -e b2co.exe.dir/tracing/sources.trc ] && rm b2co.exe.dir/tracing/sources.trc || echo > /dev/null
 	-[ -e b2co.exe.dir/tracing/test.trc ] && rm b2co.exe.dir/tracing/test.trc || echo > /dev/null
 	-[ -e b2co.exe.dir/tracing/user.trc ] && rm b2co.exe.dir/tracing/user.trc || echo > /dev/null
+	-[ -e b2co.exe.dir/tracing/user.trc.n.01 ] && rm b2co.exe.dir/tracing/user.trc.n.01 || echo > /dev/null
 	-[ -e b2co.exe.dir/tracing ] && rmdir b2co.exe.dir/tracing || echo > /dev/null
 	-rmdir b2co.exe.dir
 
