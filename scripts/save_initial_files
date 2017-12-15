@@ -32,10 +32,10 @@
 }
 
 NAME=/tmp/.files.$$.$USER.`date +%Y%m%d%H%M%S`
-( ls -l tracing/*.trc tracing/user.trc.n.?? | grep -v 'total ' | grep -v ' 0 ' | wc -l > $NAME ) 2> /dev/null
+( ls -l tracing/*.trc | grep -v 'total ' | grep -v ' 0 ' | wc -l > $NAME ) 2> /dev/null
 nfiles=`cat $NAME`
 [ $nfiles -gt 0 ] && {
-  filelist=`ls -1 tracing/*.trc tracing/user.trc.n.??`
+  filelist=`ls -1 tracing/*.trc`
   set -A f -- $filelist
   i=0
   for z in $filelist; do {

@@ -44,6 +44,9 @@ else
   setenv LD_CATALYST "`paraview-config --libs vtkPVPythonCatalyst` -lstdc++"
 endif
 
+# Debugger (set environment variable DBX)
+setenv DBX totalview
+
 # compilers
 
 #setenv CC gcc

@@ -827,15 +827,12 @@ cxpb  also (P1,P2) shorter than (Q1,Q2)
  
       tolx=tol*abs(xp1+xq1+xp2+xq2)/4.
       toly=tol*abs(yp1+yq1+yp2+yq2)/4.
-      tol2=tolx*toly
+      tol2=sqrt(tolx*toly)
 
 cank  The segments must be not only parallel, but colinear {
-c      para= abs((xp1-xq1)*(yq2-yq1)-(yp1-yq1)*(xq2-xq1)).le.tol2 .and.
-c     .      abs((xp2-xq1)*(yq2-yq1)-(yp2-yq1)*(xq2-xq1)).le.tol2
       IF (ABS(XQ2-XQ1) .GT. TOLX) THEN
         IF (ABS(YQ1-YQ2) .GT. TOLY) THEN
-          IF (ABS(ABS((YP2-YP1)/(YQ1-YQ2)) -
-     .            ABS((XP2-XP1)/(XQ1-XQ2))) .LT. TOL) THEN
+          IF (ABS((XP1-XP2)*(YQ1-YQ2)-(YP1-YP2)*(XQ1-XQ2)).LT.TOL2) THEN
             PARA = ABS(XP2-XP1).LE.ABS(XQ2-XQ1)+TOLX
           ELSE
             PARA = .FALSE.
