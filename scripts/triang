@@ -267,10 +267,10 @@ while true; do {
               [ -r $eirinp ] && {
                 N=
                 print -u2 -- "Starting Eirene - may take a while..."
-                print -u2 -- "Command line: $EIRENE < triang.eir > $eirlog"
+                print -u2 -- "Command line: $EIRENE > $eirlog"
                 [ -r $eirout ] && rm $eirout
                 ln -sf "$eirinp" "$eirlink"
-                $EIRENE < triang.eir > "$eirlog"
+                $EIRENE > "$eirlog"
                 rm $eirlink
                 [ -s "$eirout" ] && [ -r "$eirout" ] && {
                   (cat "$eirhed"; tail --lines=+2 "$eirout") > "$triain" && q=t || {

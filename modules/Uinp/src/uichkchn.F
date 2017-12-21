@@ -184,7 +184,7 @@ c*** and prepare the "connection table"
 #endif
           write(0,*) 'uichkchn: unexpected error - end index ',
      ,             'outside the DG range after chkchain.'
-          write(0,*) 'label,j,nlim,k1,k2= ',label,j,nlim,k1,k2
+          write(0,'(a,5i5)') 'label,j,nlim,k1,k2= ',label,j,nlim,k1,k2
 #ifdef FLUSH
           call FLUSH(0)
 #endif
@@ -200,7 +200,7 @@ c*** and prepare the "connection table"
 #endif
           write(0,*) 'uichkchn: unexpected error - end index ',
      ,                   'outside the Eirene range after chkchain.'
-          write(0,*) 'label,j,nlim,i1,i2= ',label,j,nlim,i1,i2
+          write(0,'(a,5i5)') 'label,j,nlim,i1,i2= ',label,j,nlim,i1,i2
 #ifdef FLUSH
           call FLUSH(0)
 #endif
@@ -219,7 +219,7 @@ c*** and prepare the "connection table"
 #endif
           write(0,*) 
      .     'uichkchn: the chain does not end at the target edges.'
-          write(0,*) 'label,j,j1,j2= ',label,j,j1,j2
+          write(0,'(a,4i5)') 'label,j,j1,j2= ',label,j,j1,j2
 #ifdef FLUSH
           call FLUSH(0)
 #endif
