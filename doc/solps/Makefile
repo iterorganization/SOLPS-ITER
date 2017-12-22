@@ -96,11 +96,12 @@ B2_5.config.ITER.ifort64:
 	ln -sf ${B25DIR}/config/config.ITER.ifort64 B2_5.config.ITER.ifort64
 
 SOLPS_versions: force
-	( cd ${SOLPSTOP} ; git describe --always | awk '{print "SOLPS-ITER version : ",$$1}' ) > SOLPS_versions
-	( cd ${SOLPSTOP}/modules/B2.5 ; git describe --always | awk '{print "B2.5 version : ",$$1}') >> SOLPS_versions
-	( cd ${SOLPSTOP}/modules/Eirene ; git describe --always | awk '{print "Eirene version : ",$$1}' ) >> SOLPS_versions
-	( cd ${SOLPSTOP}/modules/Carre ; git describe --always | awk '{print "Carre version : ",$$1}' ) >> SOLPS_versions
-	( cd ${SOLPSTOP}/modules/DivGeo ; git describe --always | awk '{print "DivGeo version : ",$$1}' ) >> SOLPS_versions
+	@( cd ${SOLPSTOP} ; git describe --always | awk '{print "SOLPS-ITER version : ",$$1}' ) > SOLPS_versions_new
+	@( cd ${SOLPSTOP}/modules/B2.5 ; git describe --always | awk '{print "B2.5 version : ",$$1}') >> SOLPS_versions_new
+	@( cd ${SOLPSTOP}/modules/Eirene ; git describe --always | awk '{print "Eirene version : ",$$1}' ) >> SOLPS_versions_new
+	@( cd ${SOLPSTOP}/modules/Carre ; git describe --always | awk '{print "Carre version : ",$$1}' ) >> SOLPS_versions_new
+	@( cd ${SOLPSTOP}/modules/DivGeo ; git describe --always | awk '{print "DivGeo version : ",$$1}' ) >> SOLPS_versions_new
+	@if cmp -s SOLPS_versions_new SOLPS_versions ; then rm SOLPS_versions_new ; else mv SOLPS_versions_new SOLPS_versions ; fi
 
 solps-iter_git.log: 
 	( cd ${SOLPSTOP} ; ${GIT} log --oneline ) > solps-iter_git.log
@@ -120,7 +121,7 @@ complete:
 	${MAKE} solps.pdf
 
 clean: 
-	rm -f solps.pdf solps.ps solps.dvi solps.aux solps.ilg solps.ind solps.idx solps.lof solps.log solps.lot solps.out solps.toc b2cdca.F b2cdci.F b2cdcn.F b2cdcr.F b2cdcv.F solps_data_git.log solps-iter_git.log B2_5.config.ITER.ifort64 B2_5.Makefile DIMENSIONS.F solps.bbl solps.blg solps.brf solps.tpt
+	rm -f solps.pdf solps.ps solps.dvi solps.aux solps.ilg solps.ind solps.idx solps.lof solps.log solps.lot solps.out solps.toc b2cdca.F b2cdci.F b2cdcn.F b2cdcr.F b2cdcv.F solps_data_git.log solps-iter_git.log B2_5.config.ITER.ifort64 B2_5.Makefile DIMENSIONS.F SOLPS_versions solps.bbl solps.blg solps.brf solps.tpt
 
 ### WORK
 COMPARE_10814_TESEPM=/scratch/dpc/solps5.0_HD+C+He/src/Braams/b2/runs/D+C+He/2MW/compare_10814_tesepm.ps
