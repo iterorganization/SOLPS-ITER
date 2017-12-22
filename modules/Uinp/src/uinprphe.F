@@ -21,9 +21,9 @@ c*** Find the species indices
       do i=1,nspigen
         if (streql(spcigen(i),'He')) j_he_at = i
         if (streql(spcigen(i),'Ne')) j_ne_at = i
-        if (streql(spcigen(i),'H') .or.
-     .      streql(spcigen(i),'D') .or.
-     .      streql(spcigen(i),'T')) j_h_at = i
+        if (streql(spcigen(i),'H')) j_h_at(1) = i
+        if (streql(spcigen(i),'D')) j_h_at(2) = i
+        if (streql(spcigen(i),'T')) j_h_at(3) = i
       end do
 
       if(.not.do_hepdt) then !{

@@ -58,7 +58,7 @@ c*** the atoms and nuclei
                 if (n2_model.and..not.l_n2(j+m)) cycle
                 if (l_ammon(j+m).and..not.ammonx_used) cycle
                 if (l_meta(j+m).and..not.meta_used) cycle
-                c=spcdspc(j+m)
+                if (k.le.nspdgen-2) c=spcdspc(j+m)
                 ex=.false.
                 do i=1,nspcatm !{
                   if(streql(c,spcsatm(i))) ex=.true.
@@ -149,10 +149,12 @@ c*** the atoms and nuclei
                 spcsrfm(nm)=spcdrfl(j+m)
                 spcsrtm(nm)=spcdrtl(j+m)
                 spcsmsm(nm)=spcdms(j+m)
-                l_h_mol(nm)=spcdns(j+m)
                 do ii=1,na !{
-                  if(streql(spcsatm(ii),spcdspc(lspdgen(k))))
-     >             lkindm(nm)=ii
+                  if(streql(spcsatm(ii),spcdspc(lspdgen(k)))) then !{
+                    lkindm(nm)=ii
+                    if (spcdns(j+m).gt.0)
+     >               l_h_mol(nm,spcsmsa(ii))=spcdns(j+m)
+                  end if !}
                 end do !}
                 do ii=1,nspcatm !{
                   do jj=1,m_hlp_h !{
