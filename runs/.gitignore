@@ -9,6 +9,5 @@
 !README.EXAMPLES
 !examples/
 !*.md5
-!CMakeLists.txt
-examples/Makefile
+!examples/Makefile
 

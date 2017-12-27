@@ -159,7 +159,6 @@ prt : $(prints)
 
 
 fetch:
-	cd examples && cmake .
 	make -C examples
 
 $(target_xd) : b2fgmtry b2fparam b2fstate b2fplasma

@@ -29,8 +29,8 @@ physics model.
 
 Large file examples are available by typing in the `runs/examples`:
 
-        module load cmake
-        cmake . && make
+        make help
+        make
 
 or
 
@@ -40,6 +40,10 @@ and then extract `*.tar.gz` linked examples that appear nearby
 `*.tar.gz.md5` files by:
 
         tar xvzf of_example_available.tar.gz
+
+We commend to use `make help` and prepare the example with command such as:
+
+        make tutorial-DivGeo_ITER_baseline_scenario
         
 For example, in the directory `~/solps-iter/runs/examples` a link with the
 name `AUG_16151_D+C+He.tar.gz` should apper. This links points to the
@@ -71,17 +75,9 @@ with the MD5 hash.
        /work/imas/shared/external/assets/solps-iter/assets/MD5/
 
 Above directory is synched to
-http://static.iter.org/imas/assets/solps-iter/%(algo)/%(hash) There can be
-many web servers from which users can fetch assets from. Other sites may
-then just copy them to its shared directory too. For example, the server at
-the university of Ljubljana now shares
-http://viz.hpc.fs.uni-lj.si/assets/solps-iter/MD5.
+http://static.iter.org/imas/assets/solps-iter/%(algo)/%(hash) 
 
-Additional servers can share it's examples by adding the URL to
-`ExternalData_URL_TEMPLATES` in `CMakeListsxt.txt` file.
-
-
-# How to tell CMake to download the stored files
+# How to tell Make to download the stored files
 
 Now we want to include the example `AUG_16151_D+C+He.tar.gz` to the
 repository, so it is available to other users.
@@ -101,16 +97,14 @@ data.
 
 # Local and cluster caches
 
-It needs to be noted that CMake firstly searches for LOCAL_CACHES before it
+It needs to be noted that Make firstly searches for ASSETDIR before it
 tries to fetch the *ExternalData*. If it finds it, it checks if MD5 hashes
 from $HOME/solps-iter/runs/examples/*.tar.gz.md5 matches with the file
-names inside the `LOCAL_CACHE`. If it does, it will only create a link and
-with the name *.tar.gz and pointing to the file in the `LOCAL_CACHE`. With
+names inside the `ASSETDIR`. If it does, it will only create a link and
+with the name *.tar.gz and pointing to the file in the `ASSETDIR`. With
 this we can also control the versions of the file since if a user changes
 the examples and want to store it, the MD5 hash will also change. If there
-are no matching files, `EXTERNAL_CACHES` will be searched.
+are no matching files, `EXTERNALDATA` will be searched.
 
 Local caches needs to be writable by users on the machine in order to share
-downloads. For that several directories are tried on the cluster. See
-`CMakeLists.txt` where one can prepare common writable directory on the
-cluser for assets sharing.
+downloads.
