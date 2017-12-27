@@ -556,7 +556,7 @@ c*** B2 and Eirene species counters
 
 c*** latmscl, lmolscl, lionscl
       do i = 1, nspcatm !{
-        iniprm(i,1,1,21,3)=iniprm(iniprm(i,1,1,9,3)+1,1,1,10,3)
+        iniprm(i,1,1,21,3)=iniprm(iniprm(i,1,1,8,3)+1,1,1,10,3)
       end do !}
       do i = 1, nspcmol !{
         iniprm(i,1,1,22,3)=lkindm(i)
@@ -1082,12 +1082,18 @@ c*** lhetrgts
         end do !}
       end if !}
 c*** j_h_at,l_h_mol
-      if (j_h_at.ne.0) then !{
+      if (maxval(j_h_at).gt.0) then !{
         ex=.false.
-        iniprm(1,1,1,8,7)=j_h_at
+        nmdpr(8,7)=3
+        do i=1,3
+          iniprm(i,1,1,8,7)=j_h_at(i)
+        end do
         nmdpr(11,7)=nmoli
+        nmdlr(11,7)=3
         do i=1,nmoli !{
-          iniprm(i,1,1,11,7)=l_h_mol(i)
+          do j=1,3 !{
+            iniprm(i,j,1,11,7)=l_h_mol(i,j)
+          end do !}
         end do !}
       end if !}
       if(npfrgrp.gt.0) then !{

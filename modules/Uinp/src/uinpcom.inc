@@ -154,7 +154,7 @@ c***    test ions for each entry (always one atom for a GS);
 c***    atomic mass, nuclear charge, charge state, flux units (nuclei),
 c***    and '3 secondaries' flag for each entry 
       integer nspdgen,nspdlen
-      parameter (nspdgen=11, nspdlen=81)
+      parameter (nspdgen=11, nspdlen=83)
       character*8 spcdgen(nspdgen)*2,spcdspc(nspdlen),
      ,  spcdrfl(nspdlen),spcdrtl(nspdlen)
       integer lspdgen(nspdgen),nspdpls(nspdgen),
@@ -475,8 +475,8 @@ c***    list of wall segments indicating the pump and their number
       logical do_hepdt
       real*4 pwrhepdt,pmphepdt
       integer locphep,lpbihep,lpbohep,lptihep,lptohep,
-     ,  j_he_at,j_h_at,j_ne_at,
-     ,  l_h_mol(nmol),lstclhep(nxd),nstclhep,lhetrgts(nlim),nhetrgts   
+     ,  j_he_at,j_h_at(3),j_ne_at,
+     ,  l_h_mol(nmol,3),lstclhep(nxd),nstclhep,lhetrgts(nlim),nhetrgts
 
 c-----------------------------------------------------------------------
 c*** Data substitution for the Eirene test run

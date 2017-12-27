@@ -1574,8 +1574,8 @@ c Fill out b2mod_user_namelist data
       lpfrt_o = lpfrt_o_4
       lpfrs_pmp =  lpfrs_pmp_4
       j_he_at = j_he_at_4
-      j_h_at = j_h_at_4
-      l_h_mol = l_h_mol_4
+      j_h_at(1) = j_h_at_4
+      l_h_mol(1:nmol,1) = l_h_mol_4(1:nmol)
       fusion_power = fusion_power_4
       Spmp_He_to_D = Spmp_He_to_D_4
       Spmp_nom = Spmp_nom_4
@@ -3216,10 +3216,10 @@ c
       open(38,file='b2.user.parameters')
       write(38,'(a)') '&USER'
       write(38,'(a,1pe9.2,a)') 'FUSION_POWER=',fusion_power,','
-      if (j_h_at.ne.0) write(38,'(a,i2,a)') 'J_H_AT=',j_h_at,','
+      if (j_h_at(1).ne.0) write(38,'(a,i2,a)') 'J_H_AT=',j_h_at(1),','
       if (j_he_at.ne.0) write(38,'(a,i2,a)') 'J_HE_AT=',j_he_at,','
       write(hlp_frm, '(a,i2,a)') '(a,',nmol,'(i2,'',''))'
-      write(38, hlp_frm) 'L_H_MOL=',(l_h_mol(is),is=1,nmol)
+      write(38, hlp_frm) 'L_H_MOL=',(l_h_mol(is,1),is=1,nmol)
       write(38,'(a,1pe9.2,a)') 'Spmp_He_to_D=',Spmp_He_to_D,','
       write(38,'(a,1pe9.2,a)') 'Spmp_nom=',Spmp_nom,','
       write(38,'(a,l1,a)') 'SCALE_HE= ',scale_He,','
