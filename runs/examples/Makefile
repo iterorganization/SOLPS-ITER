@@ -46,6 +46,7 @@ depend:
 clean:
 	rm -f *.md5-stamp depend
 
+# Do not use unless really necessary
 realclean: clean
 	rm -rf $(ASSETDIR) $(ASSETS)
 
@@ -76,7 +77,6 @@ help :
 	@echo "You can also: "
 	@echo
 	@echo "    make clean"
-	@echo "    make realclean"
 	@echo "    make publish dir=yourdir # on ITER cluster"
 	@echo
 	@echo "or simply"
