@@ -11,17 +11,7 @@ FC       = ifort
 endif
 
 ifdef SOLPS_DEBUG
-ifdef USE_MPI
-FCOPTS   = -g -C -traceback ${MPI_CPP}
-else
 FFLAGS	 = -g -C -traceback -debug all -check all
-endif
-else
-ifdef USE_MPI
-FFLAGS   = ${MPI_CPP}
-else
-FFLAGS   =
-endif
 endif
 INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
@@ -29,11 +19,7 @@ CPP      = /lib/cpp -C -traditional
 
 MOD      = mod
 LDLIBS	 = ${LD_MSCL}
-ifdef USE_MPI
-LDEXTRA  = -i_dynamic ${LD_MPI}
-else
 LDEXTRA  = -i_dynamic
-endif
 
 #!!!Local Variables:
 #!!! mode: Makefile
