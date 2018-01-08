@@ -21,7 +21,8 @@ all : $(ASSETS)
 -include depend
 
 % : %.tar.gz
-	tar xzf $^
+	tar xmzf $^
+
 
 % : %.md5-stamp
 
