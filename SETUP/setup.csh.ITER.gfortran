@@ -28,7 +28,6 @@ module load make
 module load fc2k
 module load xmllib/2.1.1-imas-3.9.0-GCC-4.8.3
 module load totalview
-module load CMake
 if (`hostname` == "hpc-app1.iter.org") then
   module load matlab/2013a
 endif
