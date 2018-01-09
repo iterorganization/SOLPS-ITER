@@ -74,14 +74,17 @@
 \listoftables
 
 \chapter*{Preface}
+This manual is built from the following code repository versions:
+\VerbatimInput{SOLPS_versions}
+
 This is the combined work of many authors.  Started by D.P.~Coster, it
 includes contributions from
 \begin{itemize}
-\item D.P~Coster and O.~Wenisch, the original \btwoplot manual
-\item K.~and A.S.~Kukushkin, the {\tt DG} manual, with revisions by A.~Chin and D.~Stotler
-\item M.~Stanojevic, on boundary conditions
+\item D.P~Coster and O.~Wenisch, the original \btwoplot manual (Appendix \ref{cha:b2plotmanual})
+\item K.~and A.S.~Kukushkin, the {\tt DG} manual (Appendix \ref{cha:dgmanual}), with revisions by A.~Chin and D.~Stotler
+\item M.~Stanojevic, Appendix \ref{cha:Mladen} on boundary conditions
 \item X.~Bonnin, for many contributions and the \SOLPSITER updates
-\item S.~Voskoboynikov, for the \SOLPSITER model equations
+\item S.~Voskoboynikov, for the \SOLPSITER model equations (Appendix \ref{cha:equations})
 \end{itemize}
 All errors, omissions {\it etc.} should be e-mailed to {\tt Xavier.Bonnin@iter.org}.
 
@@ -7397,7 +7400,7 @@ $S_{a \parallel}^m = - \left( \nabla \pi_a^{\parallel} \right)_{\parallel}$
 & \left\{
 \begin{matrix}
 - \frac{\partial}{h_z\sqrt g\partial x}
-\left(\frac{h_z\sqrt g}{h_x} \frac 4 3 \widetilde{\widetilde{\eta}}_{CLax}
+\left(\frac{h_z\sqrt g}{h_x} \frac 4 3 \widetilde{\widetilde{\eta}}^{(CL)}_{ax}
 \frac{\partial \ln \left( h_z B^{\frac 1 2} \right) }{B^{\frac 1 2} h_x \partial x}\right)
 B^{\frac 1 2} V_{\parallel a} -
 B^{\frac 3 2} b_x \frac{\partial}{h_x \partial x}
@@ -7657,7 +7660,7 @@ $c_{th_e,a} = 0, a=0,\ldots,ns-1$ and $c_{th_i,a}=2.65, a=0,\ldots, ns-1$ if the
 \Gamma^m_{ax} = \left\{
 \begin{matrix}
 m_a V_{\parallel a} \Gamma_{ax}^{Cor} +
-\frac 4 3 \widetilde{\widetilde{\eta}}_{CLax} \frac{\partial \ln h_z}{h_x \partial x} V_{\parallel a} -
+\frac 4 3 \widetilde{\widetilde{\eta}}^{(CL)}_{ax} \frac{\partial \ln h_z}{h_x \partial x} V_{\parallel a} -
 \eta_{ax} \frac{\partial V_{\parallel a}}{h_x \partial x}, & z_a = 1~\&~z_{n,a} = 1 \\
 m_a V_{\parallel a} \Gamma_{ax}^{Cor} -
 \eta_{ax} \frac{\partial V_{\parallel a}}{h_x \partial x}, & \mbox{otherwise} \\
@@ -7673,7 +7676,7 @@ m_a V_{\parallel a} \Gamma_{ay}^{Cor} -
 
 \subsection{Parallel momentum transport coefficients}
 
-$\eta_{ax} = \eta_{ANa} + \frac{4}{3} \widetilde{\widetilde{\eta}}_{CLax}$
+$\eta_{ax} = \eta^{(AN)}_{a} + \frac{4}{3} \widetilde{\widetilde{\eta}}^{(CL)}_{ax}$
 
 %-------- end of 6th page -------------
 
@@ -8352,7 +8355,7 @@ $\alpha^{(CL)}_{y} = 0$
 	  \eta_{ax} \left(
 		\frac{\partial V_{a \parallel}}{h_x \partial x}
 	\right)^2
-	+ \eta_{ANa} \left(
+	+ \eta^{(AN)}_{a} \left(
 		\frac{\partial V_{a \parallel}}{h_y \partial y}
 	\right)^2
 \right) + Q_I^{(i)} + Q_R^{(i)},
@@ -8741,7 +8744,7 @@ $j_x^{(AN)} = - \sigma^{(AN)} \frac{\partial \Phi}{h_x \partial x}$
 \frac{\partial}{h_y \partial y}
 \left( \frac{1}{B^2} \right)
 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a = 1~\&~z_{n,a} = 1 }}
-\widetilde{\widetilde{\eta}}_{CLax}
+\widetilde{\widetilde{\eta}}^{(CL)}_{ax}
 \frac{\partial \left( \sqrt{B} V_{a \parallel} \right)}{h_x \partial x},
 \end{equation}
 
@@ -8820,7 +8823,7 @@ j_y^{(in)} = - \frac{B_z}2 \frac{\partial}{h_x \partial x}
 \frac{\partial}{h_x \partial x}
 \left( \frac{1}{B^2} \right)
 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a = 1~\&~z_{n,a} = 1}}
-\widetilde{\widetilde{\eta}}_{CLax}
+\widetilde{\widetilde{\eta}}^{(CL)}_{ax}
 \frac{\partial \left( \sqrt{B} V_{a \parallel} \right)}{h_x \partial x},
 \end{equation}
 
@@ -8833,7 +8836,7 @@ not agreed with parallel momentum balance?
 \frac{\partial}{\partial y}
 \left(
 	\frac{\sqrt{g}}{h_y}
-	\frac{\eta_{ANa}}{4}
+	\frac{\eta^{(AN)}_{a}}{4}
 	\frac{\partial V_{a \perp}}{h_y \partial y}
 \right)
 \end{equation}
@@ -13784,7 +13787,7 @@ In table \ref{tab:extracommands} some additional commands are given.
     f30 \index{b2plot, f30}         & Create a {\tt fort.30} file \\
     f31 \index{b2plot, f31}         & Create a {\tt fort.31} file \\
     help \index{b2plot, help}        & Print available commands \\
-    tranprof \index{b2plot, tranprof}    & Create {\tt b2.transport.parameters} file \\
+    tranprof \index{b2plot, tranprof}    & Create {\tt b2.transport.inputfile} file\index{b2.transport.inputfile} \\
     user \index{b2plot, user}        & Available for user-defined functions \\
     wlld \index{b2plot, wlld}        & Produces ANK wall loading files \\
     quit \index{b2plot, quit}, exit, end \index{b2plot, exit}\index{b2plot, end} & Terminate program \\

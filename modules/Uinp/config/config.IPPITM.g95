@@ -8,8 +8,6 @@ endif
 FC	     = g95
 ifdef SOLPS_DEBUG
 FFLAGS	 = -g -fbounds-check -ftrace=full
-else
-FFLAGS   =
 endif
 INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}

@@ -375,7 +375,8 @@ c=======================================================================
           return
         end if
       end do
-      if (streql(name,'D') .or. streql(name,'T')) get_atomic_number=1
+      if (streql(species_name,'D').or.
+     &    streql(species_name,'T')) get_atomic_number=1
 
       return
       end function get_atomic_number

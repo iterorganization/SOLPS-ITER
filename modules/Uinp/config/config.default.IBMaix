@@ -9,7 +9,7 @@ endif
 
 FC	     = xlf
 ifndef SOLPS_DEBUG
-FFLAGS	 = -O -g -NA16384 -NQ20000
+FFLAGS	 = -O -NA16384 -NQ20000
 else
 FFLAGS	 = -g -C -NA16384 -NQ20000
 endif
