@@ -56,7 +56,7 @@ publish:
 		echo Publishing $(dir); \
 		tar czf $(dir).tar.gz $(dir); \
 		md5=$$(md5sum $(dir).tar.gz | cut -c 1-32);\
-		echo "$${md5}> $(dir).tar.gz.md5" ;\
+		echo "$${md5} > $(dir).tar.gz.md5" ;\
 		echo cp $(dir).tar.gz $(EXTERNALDIR)/$${md5} ;\
 		rm -f $(dir).tar.gz ;\
 		echo "Do not forget to git add $(dir).tar.gz.md5" ;\
