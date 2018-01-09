@@ -32,7 +32,7 @@ INC = -I ${DBGOBJ} -I ${EDBOBJ}
 endif
 else
 B2OBJ = ${SOLPSTOP}/modules/B2.5/builds/standalone.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
-DBGOBJ = ${SOLPSTOP}/modules/B2.5/builds/standalone.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}.debug
+DBGOBJ = ${SOLPSTOP}/modules/B2.5/builds/standalone.${HOST_NAME}.${COMPILER}${E XT_MPI}${EXT_IMPGYRO}.debug
 ifneq (${DBX},totalview)
 INC = -I ${DBGOBJ}
 endif
@@ -647,16 +647,26 @@ else
 endif
 	-rmdir b2yt.exe.dir
 
-$(target_ual) : AMJUEL
-	rm -rf b2_ual_write.exe.dir ; mkdir b2_ual_write.exe.dir ; cp b2fstate b2_ual_write.exe.dir/b2fstati ; cp input.dat b2_ual_write.exe.dir/ ; cp b2mn.dat b2_ual_write.exe.dir/
+$(target_ual) :
+	rm -rf b2_ual_write.exe.dir ; mkdir b2_ual_write.exe.dir
+	cp b2fstate b2_ual_write.exe.dir/b2fstati
+	cp b2fparam b2_ual_write.exe.dir/b2fpardf
+	cp b2mn.dat b2_ual_write.exe.dir/
+	cp b2fgmtry b2_ual_write.exe.dir/
+	cp b2fplasma b2_ual_write.exe.dir/
 
+ifndef STAND_ALONE
+	cp input.dat b2_ual_write.exe.dir/
+	cp AMJUEL b2_ual_write.exe.dir/
+endif
 	-cd b2_ual_write.exe.dir ; [ -e ../b2faveri ] && cp -p ../b2faveri . || echo > /dev/null
 
+ifndef STAND_ALONE
 ifneq (${COMPILER},HP)
 	[ -s fort.33 ] || ( [ -s $(baserundir)/fort.33 ] && ln -sf $(baserundir)/fort.33 . || ( [ -s $(triangdir)/fort.33 ] && ln -sf $(triangdir)/fort.33 . || echo > /dev/null ) )
 	[ -s fort.34 ] || ( [ -s $(baserundir)/fort.34 ] && ln -sf $(baserundir)/fort.34 . || ( [ -s $(triangdir)/fort.34 ] && ln -sf $(triangdir)/fort.34 . || echo > /dev/null ) )
 	[ -s fort.35 ] || ( [ -s $(baserundir)/fort.35 ] && ln -sf $(baserundir)/fort.35 . || ( [ -s $(triangdir)/fort.35 ] && ln -sf $(triangdir)/fort.35 . || echo > /dev/null ) )
-	-cd b2_ual_write.exe.dir ; ln -s ../AMJUEL ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ln -s ../input.dat fort.1 ; \
+	-cd b2_ual_write.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ln -s ../input.dat fort.1 ; \
 	[ -s ../fort.15 ] && cp -p ../fort.15 . || echo > /dev/null ; \
 	[ -s ../fort.14 ] && cp -p ../fort.14 . || echo > /dev/null ; \
 	[ -s ../fort.13 ] && cp -p ../fort.13 . || echo > /dev/null ; \
@@ -672,7 +682,7 @@ else
 	[ -s ftn33 ] || ( [ -s $(baserundir)/ftn33 ] && ln -sf $(baserundir)/ftn33 . || ( [ -s $(triangdir)/ftn33 ] && ln -sf $(triangdir)/ftn33 . || echo > /dev/null ) )
 	[ -s ftn34 ] || ( [ -s $(baserundir)/ftn34 ] && ln -sf $(baserundir)/ftn34 . || ( [ -s $(triangdir)/ftn34 ] && ln -sf $(triangdir)/ftn34 . || echo > /dev/null ) )
 	[ -s ftn35 ] || ( [ -s $(baserundir)/ftn35 ] && ln -sf $(baserundir)/ftn35 . || ( [ -s $(triangdir)/ftn35 ] && ln -sf $(triangdir)/ftn35 . || echo > /dev/null ) )
-	-cd b2_ual_write.exe.dir ; ln -s ../AMJUEL ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../ftn21 ../ftn22 ../graphite_ext.dat ../mo_ext.dat . ; ln -s ../input.dat ftn1 ; \
+	-cd b2_ual_write.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../ftn21 ../ftn22 ../graphite_ext.dat ../mo_ext.dat . ; ln -s ../input.dat ftn1 ; \
 	[ -s ../ftn15 ] && cp -p ../ftn15 . || echo > /dev/null ; \
 	[ -s ../ftn14 ] && cp -p ../ftn14 . || echo > /dev/null ; \
 	[ -s ../ftn13 ] && cp -p ../ftn13 . || echo > /dev/null ; \
@@ -685,11 +695,10 @@ else
 	[ -s ../ftn34 ] && cp -p ../ftn34 . || echo > /dev/null ; \
 	[ -s ../ftn35 ] && cp -p ../ftn35 . || echo > /dev/null
 endif
+endif
 
-
-	rm -f $(target_ual)
-	cd b2_ual_write.exe.dir ; ${TIME} ${B2OBJ}/b2_ual_write.exe ${RUN_OPTIONS} ; mv $(target_ual) .. ;# rm -f $(notdir $^) >& /dev/null
-	-rmdir b2_ual_write.exe.dir
+	cd b2_ual_write.exe.dir ; ${TIME} ${B2OBJ}/b2_ual_write.exe ${RUN_OPTIONS}
+	rm -rf b2_ual_write.exe.dir
 
 stra.dat :
 	ln -s ${SOLPSTOP}/modules/B2.5/Database/stra.dat .
