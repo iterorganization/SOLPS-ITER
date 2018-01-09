@@ -153,9 +153,13 @@ default : b2mn.prt
 all : $(prints)
 prt : $(prints)
 
-.PHONY : default all prt clean realclean testvars
+.PHONY : default all prt clean realclean testvars fetch
 .PRECIOUS : $(prints)
 .SUFFIXES : $(nil)
+
+
+fetch:
+	make -C examples
 
 $(target_xd) : b2fgmtry b2fparam b2fstate b2fplasma
 	rm -rf b2xd.exe.dir >& /dev/null ; mkdir b2xd.exe.dir ; cp $^ b2xd.exe.dir

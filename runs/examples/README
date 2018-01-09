@@ -1,9 +1,0 @@
-Some complete cases are available are starting points at the web location:
-https://portal.iter.org/departments/POP/CM/IMAS/SOLPS-ITER/
-then inside the "Examples" folder.
-
-The files contained in this directory are GIT version-controlled and thus only small addenda to the full cases above.
-
-The set of switches necessary to add to a b2mn.dat file to reproduce 5.0 behaviour are given in the b2mn.dat.5.0 file.
-The b2mn.dat.5.2 file contains the set of switches necessary to run the 5.2 model.
-The b2mn.dat.drifts file is a stencil containing the recommended set of switches necessary for setting up a case with full drifts, using the 5.2 physics model. 
