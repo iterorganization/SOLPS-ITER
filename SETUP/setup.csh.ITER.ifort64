@@ -32,7 +32,6 @@ module load bzip2
 module unload zlib
 module load libpng/1.6.16-goolf-1.5.16
 module load totalview
-module load CMake
 if (`hostname` == "hpc-app1.iter.org") then
   module load matlab/2013a
 endif

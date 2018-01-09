@@ -26,7 +26,6 @@ module load fc2k
 module load kepler
 module load xmllib
 module load totalview
-module load CMake
 if (`hostname` == "hpc-app1.iter.org") then
   module load matlab/2013a
 endif
