@@ -12,7 +12,7 @@ echo "tracing : found" $nfiles "files"
   set -A f -- $filelist
   i=0
   for z in $filelist; do {
-    cp ${f[i]} tracing/ 2> /dev/null || echo > /dev/null
+    mv ${f[i]} tracing/ 2> /dev/null || echo > /dev/null
     ((i+=1))
   }; done
 }
