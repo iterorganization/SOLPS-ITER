@@ -658,6 +658,8 @@ $(target_ual) :
 ifndef STAND_ALONE
 	cp input.dat b2_ual_write.exe.dir/
 	cp AMJUEL b2_ual_write.exe.dir/
+else
+	cp b2frates b2_ual_write.exe.dir/
 endif
 	-cd b2_ual_write.exe.dir ; [ -e ../b2faveri ] && cp -p ../b2faveri . || echo > /dev/null
 
