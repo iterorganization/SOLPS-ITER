@@ -15,7 +15,7 @@ DBX ?= dbx
 ifdef SOLPS_MPI
 EXT_MPI = .mpi
 endif
-ifdef USE_IMPGYRO 
+ifdef USE_IMPGYRO
 EXT_IMPGYRO = .ig
 endif
 ifdef SOLPS_DEBUG
@@ -512,13 +512,13 @@ $(target_ts) : b2fparam b2fgmtry b2fstate b2fplasma
 	cd b2ts.exe.dir ; ${TIME} ${B2OBJ}/b2ts.exe ${RUN_OPTIONS} ; mv $(target_ts) b2fstate .. ; rm -f $(notdir $^) .quit >& /dev/null
 	-rmdir b2ts.exe.dir
 
-$(target_ye) : 
+$(target_ye) :
 	echo in b2ye.prt
-	rm -rf b2ye.exe.dir >& /dev/null ; mkdir b2ye.exe.dir 
+	rm -rf b2ye.exe.dir >& /dev/null ; mkdir b2ye.exe.dir
 	-[ -e b2favere ] && cp b2favere b2ye.exe.dir || echo > /dev/null
 	-[ -e b2time.nc ] && cp b2time.nc b2ye.exe.dir || echo > /dev/null
 	echo "B2OBJ=" ${B2OBJ}
-	cd b2ye.exe.dir ; ${TIME} ${B2OBJ}/b2ye.exe ${RUN_OPTIONS} ; mv b2ye.prt .. ; rm b2favere b2time.nc 
+	cd b2ye.exe.dir ; ${TIME} ${B2OBJ}/b2ye.exe ${RUN_OPTIONS} ; mv b2ye.prt .. ; rm b2favere b2time.nc
 	-rmdir b2ye.exe.dir
 
 $(target_yg) : b2yg.dat b2fgmtry
@@ -647,10 +647,48 @@ else
 endif
 	-rmdir b2yt.exe.dir
 
-$(target_ual) : b2fgmtry b2fstate
-	rm -rf b2_ual_write.exe.dir ; mkdir b2_ual_write.exe.dir ; cp $^ b2_ual_write.exe.dir
+$(target_ual) : AMJUEL
+	rm -rf b2_ual_write.exe.dir ; mkdir b2_ual_write.exe.dir ; cp b2fstate b2_ual_write.exe.dir/b2fstati ; cp input.dat b2_ual_write.exe.dir/ ; cp b2mn.dat b2_ual_write.exe.dir/
+
+	-cd b2_ual_write.exe.dir ; [ -e ../b2faveri ] && cp -p ../b2faveri . || echo > /dev/null
+
+ifneq (${COMPILER},HP)
+	[ -s fort.33 ] || ( [ -s $(baserundir)/fort.33 ] && ln -sf $(baserundir)/fort.33 . || ( [ -s $(triangdir)/fort.33 ] && ln -sf $(triangdir)/fort.33 . || echo > /dev/null ) )
+	[ -s fort.34 ] || ( [ -s $(baserundir)/fort.34 ] && ln -sf $(baserundir)/fort.34 . || ( [ -s $(triangdir)/fort.34 ] && ln -sf $(triangdir)/fort.34 . || echo > /dev/null ) )
+	[ -s fort.35 ] || ( [ -s $(baserundir)/fort.35 ] && ln -sf $(baserundir)/fort.35 . || ( [ -s $(triangdir)/fort.35 ] && ln -sf $(triangdir)/fort.35 . || echo > /dev/null ) )
+	-cd b2_ual_write.exe.dir ; ln -s ../AMJUEL ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ln -s ../input.dat fort.1 ; \
+	[ -s ../fort.15 ] && cp -p ../fort.15 . || echo > /dev/null ; \
+	[ -s ../fort.14 ] && cp -p ../fort.14 . || echo > /dev/null ; \
+	[ -s ../fort.13 ] && cp -p ../fort.13 . || echo > /dev/null ; \
+	[ -s ../fort.12 ] && cp -p ../fort.12 . || echo > /dev/null ; \
+	[ -s ../fort.11 ] && cp -p ../fort.11 . || echo > /dev/null ; \
+	[ -s ../fort.10 ] && cp -p ../fort.10 . || echo > /dev/null ; \
+	[ -s ../fort.44 ] && cp -p ../fort.44 . || echo > /dev/null ; \
+	[ -s ../fort.46 ] && cp -p ../fort.46 . || echo > /dev/null ; \
+	[ -s ../fort.33 ] && cp -p ../fort.33 . || echo > /dev/null ; \
+	[ -s ../fort.34 ] && cp -p ../fort.34 . || echo > /dev/null ; \
+	[ -s ../fort.35 ] && cp -p ../fort.35 . || echo > /dev/null
+else
+	[ -s ftn33 ] || ( [ -s $(baserundir)/ftn33 ] && ln -sf $(baserundir)/ftn33 . || ( [ -s $(triangdir)/ftn33 ] && ln -sf $(triangdir)/ftn33 . || echo > /dev/null ) )
+	[ -s ftn34 ] || ( [ -s $(baserundir)/ftn34 ] && ln -sf $(baserundir)/ftn34 . || ( [ -s $(triangdir)/ftn34 ] && ln -sf $(triangdir)/ftn34 . || echo > /dev/null ) )
+	[ -s ftn35 ] || ( [ -s $(baserundir)/ftn35 ] && ln -sf $(baserundir)/ftn35 . || ( [ -s $(triangdir)/ftn35 ] && ln -sf $(triangdir)/ftn35 . || echo > /dev/null ) )
+	-cd b2_ual_write.exe.dir ; ln -s ../AMJUEL ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../ftn21 ../ftn22 ../graphite_ext.dat ../mo_ext.dat . ; ln -s ../input.dat ftn1 ; \
+	[ -s ../ftn15 ] && cp -p ../ftn15 . || echo > /dev/null ; \
+	[ -s ../ftn14 ] && cp -p ../ftn14 . || echo > /dev/null ; \
+	[ -s ../ftn13 ] && cp -p ../ftn13 . || echo > /dev/null ; \
+	[ -s ../ftn12 ] && cp -p ../ftn12 . || echo > /dev/null ; \
+	[ -s ../ftn11 ] && cp -p ../ftn11 . || echo > /dev/null ; \
+	[ -s ../ftn10 ] && cp -p ../ftn10 . || echo > /dev/null ; \
+	[ -s ../ftn44 ] && cp -p ../ftn44 . || echo > /dev/null ; \
+	[ -s ../ftn46 ] && cp -p ../ftn46 . || echo > /dev/null ; \
+	[ -s ../ftn33 ] && cp -p ../ftn33 . || echo > /dev/null ; \
+	[ -s ../ftn34 ] && cp -p ../ftn34 . || echo > /dev/null ; \
+	[ -s ../ftn35 ] && cp -p ../ftn35 . || echo > /dev/null
+endif
+
+
 	rm -f $(target_ual)
-	cd b2_ual_write.exe.dir ; ${TIME} ${B2OBJ}/b2_ual_write.exe ${RUN_OPTIONS} ; mv $(target_ual) .. ; rm -f $(notdir $^) >& /dev/null
+	cd b2_ual_write.exe.dir ; ${TIME} ${B2OBJ}/b2_ual_write.exe ${RUN_OPTIONS} ; mv $(target_ual) .. ;# rm -f $(notdir $^) >& /dev/null
 	-rmdir b2_ual_write.exe.dir
 
 stra.dat :
