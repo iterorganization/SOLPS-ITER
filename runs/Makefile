@@ -657,12 +657,11 @@ $(target_ual) :
 	cp b2fparam b2_ual_write.exe.dir/b2fpardf
 	cp b2mn.dat b2_ual_write.exe.dir/
 	[ -s b2fgmtry ] && cp b2fgmtry b2_ual_write.exe.dir/ || ( [ -s $(baserundir)/b2fgmtry ] && cp $(baserundir)/b2fgmtry b2_ual_write.exe.dir/ )
+	[ -s b2frates ] && cp b2frates b2_ual_write.exe.dir/ || ( [ -s $(baserundir)/b2frates ] && cp $(baserundir)/b2frates b2_ual_write.exe.dir/ )
 	cp b2fplasma b2_ual_write.exe.dir/
 ifndef STAND_ALONE
 	cp input.dat b2_ual_write.exe.dir/
 	cp AMJUEL b2_ual_write.exe.dir/
-else
-	[ -s b2frates ] && cp b2frates b2_ual_write.exe.dir/ || ( [ -s $(baserundir)/b2frates ] && cp $(baserundir)/b2frates b2_ual_write.exe.dir/ )
 endif
 	-cd b2_ual_write.exe.dir ; [ -e ../b2faveri ] && cp -p ../b2faveri . || echo > /dev/null
 ifndef STAND_ALONE
