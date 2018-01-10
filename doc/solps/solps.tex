@@ -539,7 +539,7 @@ to refresh the list of executables to be found with the search path.
 
 On the \SOLPSITER web site (\href{https://portal.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}{https://portal.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}), in the folder {\em Examples}, one can find a few example cases for \SOLPSITER runs, in both {\tt B2.5} stand-alone or {\tt B2.5-Eirene} coupled modes.
 
-There is also a dedicated directory \${\tt SOLPSTOP/runs/examples} which contains links to a series of sample cases. These are actually stored in the {\tt /work/imas/shared/boundary/solps-iter/assets/MD5} directory hosted at the IO, and the means to retrieve these cases is detailed in the \${\tt SOLPSTOP/runs/examples/README} file. Following the instructions therein will extract an archived file in gzipped tar format containing a {\tt baserun} and one or more run directories and associated files. In some cases, a {\tt DIMENSIONS.F} file is also provided, which shows the dimensions necessary to run those cases (see Appendix \ref{sec:DIMENSIONS} for full details about the contents of such files).
+There is also a dedicated directory \${\tt SOLPSTOP/runs/examples} which contains links to a series of sample cases. These are actually stored in the {\tt /work/imas/shared/boundary/solps-iter/assets/MD5} directory hosted at the IO, and the means to retrieve these cases is detailed in the \${\tt SOLPSTOP/runs/examples/README.md} file. Following the instructions therein will extract an archived file in gzipped tar format containing a {\tt baserun} and one or more run directories and associated files. In some cases, a {\tt DIMENSIONS.F} file is also provided, which shows the dimensions necessary to run those cases (see Appendix \ref{sec:DIMENSIONS} for full details about the contents of such files).
 
 The cases stored for retrieval include:
 \begin{description}
@@ -16499,7 +16499,9 @@ JET & driver/b2mnds.F \\
 JET & driver/b2mn\_opt.F \\
 JET & driver/b2mod\_driver.F \\
 JET & driver/b2mod\_main.F \\
+JET & ids/b2\_ual\_write.F90 \\
 JET & modules/b2mod\_ppout.F \\
+JET & preprocessing/b2agfs.F \\
 JET & preprocessing/b2ardr.F \\
 MDSPLUS & convert/b2cdf2mds.F \\
 MDSPLUS & convert/b2cdfmovies2mds.F \\
@@ -16561,6 +16563,7 @@ NO\_GETENV & convert/b2co\_tally\_cdf.F \\
 NO\_GETENV & convert/b2co\_time\_cdf.F \\
 NO\_GETENV & convert/b2co\_wall\_cdf.F \\
 NO\_GETENV & convert/b2mds.F \\
+NO\_GETENV & ids/b2\_ual\_write.F90 \\
 NO\_GETENV & modules/b2mod\_ppout.F \\
 NO\_GETENV & modules/b2mod\_solpstop.F \\
 NO\_GETENV & preprocessing/b2agfs.F \\
@@ -16684,6 +16687,7 @@ USE\_PXFGETENV & convert/b2co\_tally\_cdf.F \\
 USE\_PXFGETENV & convert/b2co\_time\_cdf.F \\
 USE\_PXFGETENV & convert/b2co\_wall\_cdf.F \\
 USE\_PXFGETENV & driver/b2co.F \\
+USE\_PXFGETENV & ids/b2\_ual\_write.F90 \\
 USE\_PXFGETENV & modules/b2mod\_ppout.F \\
 USE\_PXFGETENV & modules/b2mod\_solpstop.F \\
 USE\_PXFGETENV & preprocessing/b2agfs.F \\

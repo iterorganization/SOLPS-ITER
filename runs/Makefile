@@ -656,17 +656,15 @@ $(target_ual) :
 	cp b2fstate b2_ual_write.exe.dir/b2fstati
 	cp b2fparam b2_ual_write.exe.dir/b2fpardf
 	cp b2mn.dat b2_ual_write.exe.dir/
-	cp b2fgmtry b2_ual_write.exe.dir/
+	[ -s b2fgmtry ] && cp b2fgmtry b2_ual_write.exe.dir/ || ( [ -s $(baserundir)/b2fgmtry ] && cp $(baserundir)/b2fgmtry b2_ual_write.exe.dir/ )
 	cp b2fplasma b2_ual_write.exe.dir/
-
 ifndef STAND_ALONE
 	cp input.dat b2_ual_write.exe.dir/
 	cp AMJUEL b2_ual_write.exe.dir/
 else
-	cp b2frates b2_ual_write.exe.dir/
+	[ -s b2frates ] && cp b2frates b2_ual_write.exe.dir/ || ( [ -s $(baserundir)/b2frates ] && cp $(baserundir)/b2frates b2_ual_write.exe.dir/ )
 endif
 	-cd b2_ual_write.exe.dir ; [ -e ../b2faveri ] && cp -p ../b2faveri . || echo > /dev/null
-
 ifndef STAND_ALONE
 ifneq (${COMPILER},HP)
 	[ -s fort.33 ] || ( [ -s $(baserundir)/fort.33 ] && ln -sf $(baserundir)/fort.33 . || ( [ -s $(triangdir)/fort.33 ] && ln -sf $(triangdir)/fort.33 . || echo > /dev/null ) )
@@ -702,7 +700,6 @@ else
 	[ -s ../ftn35 ] && cp -p ../ftn35 . || echo > /dev/null
 endif
 endif
-
 	cd b2_ual_write.exe.dir ; ${TIME} ${B2OBJ}/b2_ual_write.exe ${RUN_OPTIONS}
 	rm -rf b2_ual_write.exe.dir
 
