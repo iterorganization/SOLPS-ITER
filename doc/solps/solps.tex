@@ -3430,7 +3430,7 @@ and an easier-to-read font.\index{ncar.cfg} The file can be converted into a Pos
 The input file for {\tt b2yr} is {\tt b2yr.dat}, and an example is provided below:
 \VerbatimInput[fontsize=\footnotesize]{b2yr.dat}
 The first set of integer is the number of density and temperature slices, respectively, that will be plotted, and the next two sets of integers are the indices within the density and temperatures tables in {\tt b2frates} that are being plotted.
- 
+
 The user has the option when running the main code to rescale the rates given by {\tt b2ar}
 through the use of the {\tt b2.atomic\_physics\_rescale.parameters} file. See
 \ref{lab:b2:atomic_physics_rescale:parameters} for details.
@@ -3954,6 +3954,34 @@ Example of the {\tt b2ydm.dat} file:\\
 \index{b2ydm.dat}
 \VerbatimInput[fontsize=\footnotesize]{b2ydm.dat}
 
+\newpage
+\section{b2\_ual\_write, writing last state to IDS}
+\label{sec:b2_ual_write}\index{b2\_ual\_write}
+
+The program can be run with one of the following
+\begin{verbatim}
+  gmake -f $SOLPSTOP/runs/Makefile b2_ual_write.prt
+\end{verbatim}
+or
+\begin{verbatim}
+  b2run b2_ual_write
+\end{verbatim}
+
+This routine saves the final output state of a run into an IDS.
+
+It reads the {\tt b2mndr\_id*} switchgroup, defined in {\tt b2mn.dat}:
+\begin{itemize}
+  \item {\tt b2mndr\_user} defines the user value and it should be the same as
+    {\tt \$USER} environment variable.
+  \item {\tt b2mndr\_device} defines the device variable and it should be
+  	{\tt solps-iter}
+  \item {\tt b2mndr\_shot\_number} defines the shot number
+  \item {\tt b2mndr\_run\_number} defines the run number
+\end{itemize}
+These switches are used as identification parameters for IDS. Afterwards, a
+b2mn run is being initialized but {\em not} started, so that the final
+output state data is read. Then the data is written to IDS, with the
+{\tt b2mndr\_id*} switchgroup used as id descriptors.
 
 \newpage
 \section{b2xx, the others}
@@ -4557,6 +4585,9 @@ or
 %% $
 
 It uses the data in the {\tt b2time.nc} and {\tt b2favere} files and calculates statistical errors based on averaged quantities collected during the averaging phase of a {\tt B2.5-Eirene} calculation.
+
+\section{b2\_ual\_write, writing last state to IDS}
+Same descriptions as in \ref{sec:b2_ual_write}.
 
 \chapter{Using MDSPLUS}
 \index{MDSPLUS}\label{cha:MDSplus}
@@ -6886,7 +6917,7 @@ Note that this table does not contain the full prefactors, but only the numerica
 In figures \ref{fig:hce} to \ref{fig:alf},
 we illustrate the dependencies of the electronic classical transport coefficients as a
 function of $Z_{eff}$ , comparing the \SOLPSfive and \SOLPSITER fit used by default (to the 29-moment Balescu result), the exact 21-moment Balescu expressions, the
-Zhdanov fit to Braginskii and the \SOLPSfour values. 
+Zhdanov fit to Braginskii and the \SOLPSfour values.
 
 \begin{figure}[bt]
 \ifpdf
@@ -7375,7 +7406,7 @@ a=1, c_{D_{p,a},0}=0, c_{D_{p,a},1}=0, c_{D_{p,a},2}=0, c_{D_{p,a},3}=0
 
 \section{Parallel momentum conservation equations}
 
-The standard form of the parallel momentum conservation equation, 
+The standard form of the parallel momentum conservation equation,
 Eq. (\ref{eq:mom_new}), as implemented in the code
 for the default choice of {\tt b2sigp\_style} set to {\tt '2'}, is:
 
@@ -7577,7 +7608,7 @@ $c_{\alpha_{ab}}^{(F \lim)} = \left\{
 $, ~ $j_{ab, \max} = e K_{ab}^{(V_\parallel)} \sqrt{\frac{T_i}{m_p}} \left( n_a + n_b \right)$, ~ $c_{flab} = c_{flim_4} = 0.5$
 
 Otherwise, when using Eq. (\ref{eq:mom_old}), the thermal and friction force term expressions are:
- 
+
 $S_{Therm,a}^m =
 n_a \left(
 	\frac{z_a}{n_e} - \frac{z_a^2}{n_{e^2}}
@@ -7639,7 +7670,7 @@ n_{e^2 }= \sum \limits^{ns-1}_{a=0} z_a^2 n_a, \;\;\;\ l_{t_e}=0.3; \;\;\;\;\; l
 	\min \left\{
 		\left|
 			\frac{\partial T_e}{h_x \partial x} \right|,
-		        \frac{l_{t_e} T_e}{z_{\lambda_e}|b_x|}			
+		        \frac{l_{t_e} T_e}{z_{\lambda_e}|b_x|}
 	\right\}
 \right|,
 & \frac{\partial T_e}{h_x \partial x} < 0, & l_{t_e} > 0
@@ -7656,7 +7687,7 @@ n_{e^2 }= \sum \limits^{ns-1}_{a=0} z_a^2 n_a, \;\;\;\ l_{t_e}=0.3; \;\;\;\;\; l
 \left|
 	\min \left\{
 		\left| \frac{\partial T_i}{h_x \partial x}
-		\right|, \frac{l_{t_i} T_i}{z_{\lambda_i}|b_x|} 				
+		\right|, \frac{l_{t_i} T_i}{z_{\lambda_i}|b_x|}
 	\right\}
 \right|,
 & \frac{\partial T_i}{h_x \partial x} \ge 0, & l_{t_i}>0 \\
@@ -8103,7 +8134,7 @@ $
 $V_{h_e}^{(max)} = c_{flim_0} \frac{\sqrt g}{h_x}|b_x| \sqrt{\frac{T_e}{m_e}}$,\\\\
 $\widetilde{\kappa}_{ex}^{(CL)} = c_{\kappa_{ex}^{(CL)}}^{(Luciani)} \kappa_{ex}^{(CL)} b_x^2$
 
-$c_{flim_0} = 0.15$ is the electron heat flux limiter coefficient. 
+$c_{flim_0} = 0.15$ is the electron heat flux limiter coefficient.
 
 The classical electron thermal diffusivity is expressed as:
 $\kappa_{ex}^{(CL)} = \frac{T_e}{m_e} f_{k_e} \left( z_{eff} \right) n_e \tau_e$ (Zhdanov formulation, default, {\tt 'b2tqce\_fke\_Zhdanov'} set to {\tt '1'}), with
@@ -10025,7 +10056,7 @@ $p_{h_e,1} = 10^{-2}$ is the radial electron temperature decay length, in $m$.
 {\em Imposing the {\tt b2stbc\_spb} style boundary condition for electron temperature:} {\tt BCENE = 15}
 
 If {\tt 'bcene\_15\_style'} is set to {\tt '0'} (to be used in conjunction with {\tt BCCON = 14}) :
-	
+
 $\left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \left. \left[
 	-\left(
 		\frac{1 + \gamma_e}{1 -\gamma_e} T_e + e\Phi
@@ -10086,7 +10117,7 @@ endif
 {\em Imposing the {\tt b2stbc\_spb} style boundary condition for electron temperature:} {\tt BCENE = 15}
 
 If {\tt 'bcene\_15\_style} is set to {\tt '0'} (to be used in conjunction with {\tt BCCON = 14}):
-	
+
 $\left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \left. \left[
 	-\left(
 		\frac{1 + \gamma_e}{1 -\gamma_e} T_e + e\Phi
@@ -16415,6 +16446,7 @@ B25\_EIRENE & convert/b2yt\_ngread.F \\
 B25\_EIRENE & convert/b2yt\_ntread.F \\
 B25\_EIRENE & driver/b2mod\_driver.F \\
 B25\_EIRENE & driver/b2mod\_main.F \\
+B25\_EIRENE & ids/b2mod\_ual\_io.F90 \\
 B25\_EIRENE & modules/b2mod\_b2\_to\_astra.F \\
 B25\_EIRENE & modules/b2mod\_mwti.F90 \\
 B25\_EIRENE & modules/b2mod\_neutrals\_namelist.F \\
