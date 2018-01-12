@@ -1803,7 +1803,7 @@ and submits the job to the cluster by the command
 \begin{verbatim}
 qsub -S /usr/bin/tcsh $QSUB
 \end{verbatim}
-%%$
+%% $
 or stops if the submission file is not found.
 
 If {\tt <<Submission\_file>>} is not specified, {\tt itersubmit} looks for {\tt QSUB.iter\_coupled} or
@@ -3956,32 +3956,31 @@ Example of the {\tt b2ydm.dat} file:\\
 
 \newpage
 \section{b2\_ual\_write, writing last state to IDS}
-\label{sec:b2_ual_write}\index{b2\_ual\_write}
+\label{sec:b2_ual_write}\index{b2\_ual\_write}\index{IDS, Interface Data Structues}
 
 The program can be run with one of the following
 \begin{verbatim}
   gmake -f $SOLPSTOP/runs/Makefile b2_ual_write.prt
 \end{verbatim}
+%% $
 or
 \begin{verbatim}
   b2run b2_ual_write
 \end{verbatim}
 
-This routine saves the final output state of a run into an IDS.
+This routine saves the final output state of a run into an IDS (Interface Data Structure).
 
-It reads the {\tt b2mndr\_id*} switchgroup, defined in {\tt b2mn.dat}:
+It reads the {\tt b2mndr\_id*} switch group, defined in {\tt b2mn.dat}:
 \begin{itemize}
-  \item {\tt b2mndr\_user} defines the user value and it should be the same as
-    {\tt \$USER} environment variable.
-  \item {\tt b2mndr\_device} defines the device variable and it should be
-  	{\tt \$DEVICE} environment variable.
+  \item {\tt b2mndr\_user} defines the user name and it is set by default to be the same as the \${\tt USER} environment variable.
+  \item {\tt b2mndr\_device} defines the device name and it is set by default to be the same as the \${\tt DEVICE} environment variable.
   \item {\tt b2mndr\_shot\_number} defines the shot number
   \item {\tt b2mndr\_run\_number} defines the run number
 \end{itemize}
-These switches are used as identification parameters for IDS. Afterwards, a
-b2mn run is being initialized but {\em not} started, so that the final
-output state data is read. Then the data is written to IDS, with the
-{\tt b2mndr\_id*} switchgroup used as id descriptors.
+These switches are used as identification parameters for the IDS. Afterwards, a
+{\tt b2mn} run is being initialized but {\em not} started, so that the final
+output state data is read. Then the data is written to an IDS, with the
+{\tt b2mndr\_id*} switchgroup used as identification descriptors.
 
 \newpage
 \section{b2xx, the others}
@@ -4194,7 +4193,7 @@ web site
 \index{b2mn.dat, D+C+He example}
 \VerbatimInput[fontsize=\footnotesize]{D+C+He/b2mn.dat}
 
-To activate a coupled run, the master switch is 'b2mndr\_eirene' which should be set to '1'. In addition, the densities of the fluid neutral species need to be scaled down, along with the sources that affect them. This is achieved, respectively, by use of the switches 'b2mndr\_rescale\_neutrals' and 'b2mndr\_rescale\_neutral\_sources'. Typically, it is recommended to use a value of the order of $10^{-10}$ for scaling down the fluid neutral sources. For the fluid neutral densities, one can scale them down only on the first run, by the same amount as the sources, and then turn off the rescaling, as they are no longer being replenished.
+To activate a coupled run, the master switch is {\tt 'b2mndr\_eirene'} which should be set to {\tt '1'}. In addition, the densities of the fluid neutral species need to be scaled down, along with the sources that affect them. This is achieved, respectively, by use of the switches {\tt 'b2mndr\_rescale\_neutrals'} and {\tt 'b2mndr\_rescale\_neutral\_sources'}. Typically, it is recommended to use a value of the order of $10^{-10}$ for scaling down the fluid neutral sources. For the fluid neutral densities, one can scale them down only on the first run, by the same amount as the sources, and then turn off the rescaling, as they are no longer being replenished.
 
 In order to attempt to improve convergence of coupled \SOLPSITER runs, currently three
 averaging schemes are available to reduce the impact of the Monte-Carlo noise intrinsic
@@ -4567,7 +4566,7 @@ run speed-up and lower the statistical error introduced by the {\tt Eirene} Mont
 The averaging scheme works in three stages:
 \begin{enumerate}\index{res\_av}\index{run\_av}
   \item{A transient phase} during which the code is run normally, until all the short transients die out and the solution approaches its steady state.
-  \item{An averaging phase}, turned on by means of the {\tt "b2mndt\_av"} switch in the {\tt b2mn.dat} input file, usually with a smaller number of {\tt Eirene} trajectories, during which batch averaging will be done to obtain an averaged steady-state solution. This stage can be prepared by means of the {\tt run\_av} script and uses the {\tt input\_avg.eir Eirene} input file prepared by {\tt Uinp} if available.
+  \item{An averaging phase}, turned on by means of the {\tt 'b2mndt\_av'} switch in the {\tt b2mn.dat} input file, usually with a smaller number of {\tt Eirene} trajectories, during which batch averaging will be done to obtain an averaged steady-state solution. This stage can be prepared by means of the {\tt run\_av} script and uses the {\tt input\_avg.eir Eirene} input file prepared by {\tt Uinp} if available.
   \item{A finalization phase} where the averaged steady-state solution is used for a small number of timesteps, and a larger number of {\tt Eirene} trajectories, to reduce statistical noise. This is done by running the {\tt res\_av} script and uses the {\tt input\_fin.eir Eirene} input file prepared by {\tt Uinp} if available.
 \end{enumerate}
 
@@ -4585,9 +4584,6 @@ or
 %% $
 
 It uses the data in the {\tt b2time.nc} and {\tt b2favere} files and calculates statistical errors based on averaged quantities collected during the averaging phase of a {\tt B2.5-Eirene} calculation.
-
-\section{b2\_ual\_write, writing last state to IDS}
-Same descriptions as in \ref{sec:b2_ual_write}.
 
 \chapter{Using MDSPLUS}
 \index{MDSPLUS}\label{cha:MDSplus}
@@ -7863,11 +7859,11 @@ $\eta_{ay} = \eta^{(AN)}_a + \eta^{(CL)}_{ay}$
 
 $\widetilde{q}_a^{(0)} = q^{(1)} \arctan \left( \frac{q_a^{(0)}}{q^{(1)}} \right), \; q^{(1)} = c_{q1} n_i T_i \sqrt{\frac{T_i + T_e}{m_i}}$
 
-$c_{q1} = 0.5$ or 'b2siav\_cqip1'  '0.1' in b2mn.dat
+$c_{q1} = 0.5$ or {\tt 'b2siav\_cqip1'} set to {\tt '0.1'} in {\tt b2mn.dat}
 
-the three-point smoothing procedure is imposed twice on $\widetilde{q}^{(0)}$ along x-direction
+The three-point smoothing procedure is imposed twice on $\widetilde{q}^{(0)}$ along x-direction.
 
-in case if 'b2siav\_style\_qip'  '0' in b2mn.dat
+In case {\tt 'b2siav\_style\_qip'} is set to {\tt '0'} in {\tt b2mn.dat}:
 
 \begin{equation}\label{eq:q0-0}
 \begin{matrix}
@@ -7882,9 +7878,9 @@ q_a^{(0)} = q_{a\parallel}^{(0)} +
 \end{matrix}
 \end{equation}
 
-in case if 'b2siav\_style\_qip' '1' in b2mn.dat
-
 %-------- end of 8th page -------------
+
+In case {\tt 'b2siav\_style\_qip'} is set to {\tt '1'} in {\tt b2mn.dat}:
 
 \begin{equation}\label{eq:q0-1}
 \begin{matrix}
@@ -11785,7 +11781,7 @@ to ``2'' then additional quantities such as fluxes are added, see below Table
 
 When using the averaging scheme for {\tt Eirene} coupled runs
 (see Section \ref{sec:B2Eirene:averaging}), obtained by
-activating the ``b2mndt\_av'' switch, the {\tt b2time.nc} file will also
+activating the {\tt 'b2mndt\_av'} switch, the {\tt b2time.nc} file will also
 contain some averaged data, listed below in table \ref{tab:b2timeav}.
 These quantities can be visualized by means of the {\tt 2dt\_av} script.
 \index{2dt\_av}
@@ -16248,7 +16244,7 @@ or {\tt bash} users would use something like
 \begin{verbatim}
   export SOLPS_CPP="$SOLPS_CPP -DOPTION"
 \end{verbatim}
-%%$
+%% $
 ).
 
 \subsection{Carre}
@@ -19114,6 +19110,7 @@ JET in 2002.
 \item[b2yr] \index{b2yr} plots the atomic rate coefficients
 \item[\textcolor{Red}{b2yrp}] \index{b2yrp} post processes the heat load profiles on the reflector plates and creates input files for the RPs heat transfer model (see \ref{sec:b2yrp})
 \item[\textcolor{Red}{b2yt}] \index{b2yt} transfers the plasma from one mesh to another mesh of a different size (see \ref{sec:b2yt})
+\item[\textcolor{Red}{b2\_ual\_write}] \index{\b2\_ual\_write} writes out the plasma state in IDS format (see \ref{sec:b2_ual_write})
 \end{description}
 
 \clearpage
@@ -19130,7 +19127,7 @@ b2ah.dat \index{b2ah.dat} & formatted &  b2ah \\
 b2ai.dat \index{b2ai.dat} & formatted &  b2ai \\
 b2ar.dat \index{b2ar.dat} & formatted &  b2ar \\
 b2md.dat \index{b2md.dat} & formatted &  b2md \\
-b2mn.dat \index{b2mn.dat} & formatted &  b2md b2mn b2pl b2yi b2yi\_gnuplot b2yn b2yp b2yt \\
+b2mn.dat \index{b2mn.dat} & formatted &  b2md b2mn b2pl b2yi b2yi\_gnuplot b2yn b2yp b2yt b2\_ual\_write \\
 b2ydm.dat \index{b2ydm.dat} & formatted &  b2ydm \\
 b2yg.dat \index{b2yg.dat} & formatted &  b2yg \\
 b2yh.dat \index{b2yh.dat} & formatted &  b2yh \\
@@ -19190,14 +19187,14 @@ b2yt.prt \index{b2yt.prt} & formatted & b2yt \\
   \begin{center}
 \begin{tabular}{l|l|l|p{4cm}|p{4cm}}
 filename & formatted? & written by & read by & contents \\ \hline
-b2fgmtry \index{b2fgmtry} & un*formatted & b2ag & b2ah b2ai b2co b2fu b2md b2mn b2pl b2ts b2uf b2xd b2yg b2yh b2yp b2yt & geometry \\
+b2fgmtry \index{b2fgmtry} & un*formatted & b2ag & b2ah b2ai b2co b2fu b2md b2mn b2pl b2ts b2uf b2xd b2yg b2yh b2yp b2yt b2\_ual\_write & geometry \\
 b2fmovie \index{b2fmovie} & un*formatted & b2mn & b2ym & movie of plasma evolution \\
-b2fparam \index{b2fparam} & un*formatted & b2mn & b2md b2fu b2pl b2ts b2uf b2xd b2yh b2yp & run parameters used for plotting \\
+b2fparam \index{b2fparam} & un*formatted & b2mn & b2md b2fu b2pl b2ts b2uf b2xd b2yh b2yp b2\_ual\_write & run parameters used for plotting \\
 b2fpardf \index{b2fpardf} & un*formatted & b2ah & b2co b2mn b2yh b2yt & transport parameters \\
-b2fplasma \index{b2fplasma} & unformatted & b2fu b2mn & b2md b2pl b2ts b2uf b2xd & plasma state used for plotting \\
+b2fplasma \index{b2fplasma} & unformatted & b2fu b2mn & b2md b2pl b2ts b2uf b2xd b2\_ual\_write & plasma state used for plotting \\
 b2fplasmf \index{b2fplasmf} & formatted & b2uf & b2fu & plasma state used for plotting \\
-b2frates \index{b2frates} & un*formatted & b2ar & b2md b2mn b2pl b2yn b2yp b2yr b2yt & atomic physics rates \\
-b2fstate \index{b2fstate} & un*formatted & b2co b2mn b2rd & b2fu b2md b2pl b2ts b2uf b2xd b2yi b2yi\_gnuplot b2yp b2yr b2yt & final plasma state \\
+b2frates \index{b2frates} & un*formatted & b2ar & b2md b2mn b2pl b2yn b2yp b2yr b2yt b2\_ual\_write & atomic physics rates \\
+b2fstate \index{b2fstate} & un*formatted & b2co b2mn b2rd & b2fu b2md b2pl b2ts b2uf b2xd b2yi b2yi\_gnuplot b2yp b2yr b2yt b2\_ual\_write & final plasma state \\
 b2fstati \index{b2fstati} & un*formatted & b2ai & b2co b2mn b2yi b2yi\_gnuplot & initial plasma state \\
 b2fstatt \index{b2fstatt} & un*formatted & b2yt & & plasma state on a new grid \\
 b2fgmtrt \index{b2fgmtrt} & un*formatted & b2rd & & recovered geometry file \\
@@ -19228,7 +19225,7 @@ and saved in MDSplus as 21393.  This forms the {\bf REF} case for the
 following discussion.
 
 The first variant, {\bf 000} looked at used the r1463 for all files
-except for b2mod\_constants.F, where the r1403 version was used.
+except for {\tt b2mod\_constants.F}, where the r1403 version was used.
 (r1404 introduced a new more accurate set of physics constants.)
 
 The second variant, {\bf 001}, used the r1463 revision for all files,
