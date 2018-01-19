@@ -19,8 +19,8 @@ export SOLPSWORK=$SOLPSTOP/runs
   iamat="UNKNOWN"
 }
 
-[ -s SETUP/setup.csh.HOST_NAME.local ] && {
-  echo Loading SETUP/setup.csh.HOST_NAME.local
+[ -s SETUP/setup.ksh.HOST_NAME.local ] && {
+  echo Loading SETUP/setup.ksh.HOST_NAME.local
 } || {
   case $iamat in
   *UNKNOWN )
@@ -126,23 +126,23 @@ esac
 export WSTYPE=$OBJECTCODE
 # export GLI_WSTYPE=210
 [ -z "$GRSOFT_DEVICE"] && export GRSOFT_DEVICE="211 62"
-export SonnetTopDirectory=${SOLPSTOP}/src/Sonnet
+export SonnetTopDirectory=${SOLPSTOP}/modules/Sonnet-light
 export EscapeSonnet=`echo ${SonnetTopDirectory} | sed 's:\/:\\\/:g'`
 
 export DG=${SOLPSTOP}/modules/DivGeo
 export SOLPSLIB=${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}
 export CARRE_STOREDIR=${SOLPSTOP}/modules/Carre/meshes
 
-alias sb2='cd ${SOLPSTOP}/src/b2'
-alias sbb='cd ${SOLPSTOP}/src/b2'
-alias sei='cd ${SOLPSTOP}/src/Eirene'
-alias ssw='cd ${SOLPSTOP}/src/Sonnet'
-alias ssd='cd ${SOLPSTOP}/src/DivGeo'
-alias ssc='cd ${SOLPSTOP}/src/Carre'
-alias sst='cd ${SOLPSTOP}/src/Triang'
-alias ssu='cd ${SOLPSTOP}/src/uinp'
-alias sbin='cd ${SOLPSTOP}/bin/${OBJECTCODE}'sbb
-alias slib='cd ${SOLPSTOP}/lib/${OBJECTCODE}'
+alias sb2='cd ${SOLPSTOP}/modules/B2.5'
+alias sbb='cd ${SOLPSTOP}/modules/B2.5'
+alias sei='cd ${SOLPSTOP}/modules/Eirene'
+alias ssw='cd ${SOLPSTOP}/modules/Sonnet-light'
+alias ssd='cd ${SOLPSTOP}/modules/DivGeo'
+alias ssc='cd ${SOLPSTOP}/modules/Carre'
+alias sst='cd ${SOLPSTOP}/modules/Triang'
+alias ssu='cd ${SOLPSTOP}/modules/Uinp'
+alias sbin='cd ${SOLPSTOP}/scripts'
+alias slib='cd ${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}'
 alias srun='cd ${SOLPSTOP}/runs'
 alias sbr='cd ${SOLPSTOP}/runs'
 alias scr='cd ${SOLPSTOP}/scripts'
@@ -226,9 +226,9 @@ export PATH=$NCARG_ROOT/bin:$PATH
 export MANPATH=$NCARG_ROOT/man:${DG}/equtrn/doxygen/man:$MANPATH
 
 [ -z "$IDL_PATH" ] && {
-  export IDL_PATH="+$SOLPSTOP/data/IDL"
+  export IDL_PATH="+$SOLPSTOP/scripts/IDL"
 } || {
-  export IDL_PATH="+$SOLPSTOP/data/IDL:${IDL_PATH}"
+  export IDL_PATH="+$SOLPSTOP/scripts/IDL:${IDL_PATH}"
 }
 
 [ -s $SOLPSLIB/libnetcdf.a ] && export NETCDF=-lnetcdf
@@ -247,6 +247,6 @@ export MANPATH=$NCARG_ROOT/man:${DG}/equtrn/doxygen/man:$MANPATH
   [ -n $XLFRTEOPTS ] && export XLFRTEOPTS
 }
 
-export PLOT_SET_PATH=":..:../..:$SOLPSTOP/data.local/plot_set:$SOLPSTOP/data/plot_set"
+export PLOT_SET_PATH=":..:../..:$SOLPSTOP/data.local/plot_set:$SOLPSTOP/scripts/plot_set"
 
 [ -x module ] && module list

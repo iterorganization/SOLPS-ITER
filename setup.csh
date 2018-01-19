@@ -139,7 +139,7 @@ endif
 alias sb2  'cd ${SOLPSTOP}/modules/B2.5'
 alias sbb  'cd ${SOLPSTOP}/modules/B2.5'
 alias sei  'cd ${SOLPSTOP}/modules/Eirene'
-alias ssw  'cd ${SOLPSTOP}/modules/Sonnet'
+alias ssw  'cd ${SOLPSTOP}/modules/Sonnet-light'
 alias sst  'cd ${SOLPSTOP}/modules/Triang'
 alias ssd  'cd ${SOLPSTOP}/modules/DivGeo'
 alias ssc  'cd ${SOLPSTOP}/modules/Carre'
@@ -202,13 +202,13 @@ alias   set_ig   'source $SOLPSTOP/SETUP/ig'
 alias unset_ig   'source $SOLPSTOP/SETUP/noig'
 
 #if (! $?IDL_PATH) setenv IDL_PATH
-#setenv IDL_PATH +$SOLPSTOP/data/IDL:${IDL_PATH}
+#setenv IDL_PATH +$SOLPSTOP/scripts/IDL:${IDL_PATH}
 #
 #
 #
 
 #
-#setenv PLOT_SET_PATH '..:../..:${SOLPSTOP}/data.local/plot_set:${SOLPSTOP}/data/plot_set'
+#setenv PLOT_SET_PATH '..:../..:${SOLPSTOP}/data.local/plot_set:${SOLPSTOP}/scripts/plot_set'
 
 # Add any local settings if present
 if (-s SETUP/setup.csh.local) then
