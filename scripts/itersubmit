@@ -88,6 +88,7 @@ else
   if ($QSUB == "//"$1) then
     if (-s $SOLPSTOP/runs/$1) then
       set QSUB="$SOLPSTOP/runs/$1"
+      echo Submission file $QSUB is found
     else
       set QSUB=""
     endif
