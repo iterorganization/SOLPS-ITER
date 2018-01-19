@@ -188,21 +188,23 @@ To do this, one must upload a copy of their public ssh key here: \href{https://g
 > git submodule update
 \end{verbatim}
 
-It is best afterwards to position oneself on the main develop braches, which is achieved by:
+It is best afterwards to position oneself on the master braches, which is achieved by:
 
 \begin{verbatim}
-> git checkout develop
+> git checkout master
 > cd modules/B2.5
-> git checkout develop
+> git checkout master
 > cd ../Eirene
-> git checkout ITER-develop
+> git checkout SOLPS-master
 > cd ../DivGeo
-> git checkout ITER-develop
+> git checkout SOLPS-master
 > cd ../Carre
-> git checkout ITER-develop
+> git checkout SOLPS-master
 > cd ../adas
-> git checkout develop
+> git checkout master
 \end{verbatim}
+
+For later updates, it is recommended you use the {\tt solps-iter\_update} script. If you are planning to do code development, your starting point should be the develop branches, which you can upload by using the {\tt solps-iter\_update\_develop} script instead.
 
 Since the user-id is immutably encoded into any changes, it is always a good idea to properly configure a local installation of Git on all the systems on which one plans on making code revisions with, e.g.:
 
