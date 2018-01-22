@@ -122,10 +122,10 @@ esac
 [ -z "$DEVICE" ] && export DEVICE=iter
 
 [ -z "$B2PLOT_DEV" ] && export B2PLOT_DEV="x11 ps"
-[ -z "$GLI_HOME"] && export GLI_HOME=$SOLPSTOP/lib
+[ -z "$GLI_HOME" ] && export GLI_HOME=$SOLPSTOP/lib
 export WSTYPE=$OBJECTCODE
 # export GLI_WSTYPE=210
-[ -z "$GRSOFT_DEVICE"] && export GRSOFT_DEVICE="211 62"
+[ -z "$GRSOFT_DEVICE" ] && export GRSOFT_DEVICE="211 62"
 export SonnetTopDirectory=${SOLPSTOP}/modules/Sonnet-light
 export EscapeSonnet=`echo ${SonnetTopDirectory} | sed 's:\/:\\\/:g'`
 
