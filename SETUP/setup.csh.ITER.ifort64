@@ -6,7 +6,7 @@ module load git
 module load imas/3.12.0/ual/3.6.3
 module switch Anaconda2 Anaconda3
 module load intel/12.0.2
-module load makedepend
+module load makedepend/1.0.0
 module load mscl/1.0.0-intel-12.0.2
 module load netcdf/4.3.3.1
 module load netcdf-fortran/4.4.2-intel-12.0.2
@@ -21,8 +21,8 @@ module load texlive
 module load ghostscript
 module unload libxml2
 module load libxml2/2.9.2 # wrong version included in IMAS module
-module load fontconfig
-module load cairo
+module load fontconfig/2.11.93
+module load cairo/1.14.2
 # module load mdsplus ! already included in IMAS module
 module load make
 module load fc2k
