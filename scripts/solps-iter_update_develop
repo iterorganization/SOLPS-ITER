@@ -18,28 +18,28 @@ Eirene:
   echo "Updating Eirene"
   cd $SOLPSTOP/modules/Eirene
   git fetch --prune
-  git checkout ITER-develop && echo "Checked out Eirene ITER-develop branch" || goto branch
+  git checkout develop && echo "Checked out Eirene develop branch" || goto branch
   git pull && goto Carre || goto local
 
 Carre:
   echo "Updating Carre"
   cd $SOLPSTOP/modules/Carre
   git fetch --prune
-  git checkout ITER-develop && echo "Checked out Carre ITER-develop branch" || goto branch
+  git checkout develop && echo "Checked out Carre develop branch" || goto branch
   git pull && goto DivGeo || goto local
 
 DivGeo:
   echo "Updating DivGeo"
   cd $SOLPSTOP/modules/DivGeo
   git fetch --prune
-  git checkout ITER-develop && echo "Checked out DivGeo ITER-develop branch" || goto branch
+  git checkout develop && echo "Checked out DivGeo develop branch" || goto branch
   git pull && goto ADAS || goto local
 
 ADAS:
   echo "Updating ADAS"
   cd $SOLPSTOP/modules/adas
   git fetch --prune
-  git checkout ITER-develop && echo "Checked out ADAS ITER-develop branch" || goto branch
+  git checkout develop && echo "Checked out ADAS develop branch" || goto branch
   git pull && goto compile || goto local
 
 branch:
