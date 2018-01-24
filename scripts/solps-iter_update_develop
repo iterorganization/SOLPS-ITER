@@ -7,6 +7,7 @@ git checkout develop && echo "Checked out SOLPS-ITER develop branch" || goto bra
 git pull && goto b25 || goto local
 
 b25:
+  cp .gitmodules_develop .gitmodules
   git submodule update
   echo "Updating B2.5"
   cd $SOLPSTOP/modules/B2.5
