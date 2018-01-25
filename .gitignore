@@ -1,5 +1,4 @@
 # files ignored in git repository
-.gitmodules
 
 # backup files
 *~
