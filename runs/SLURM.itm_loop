@@ -1,0 +1,68 @@
+#! /bin/tcsh
+
+#SBATCH --ntasks=#PROCS#
+#SBATCH -A #USER#
+#SBATCH -p knl_usr_prod
+#SBATCH --time=48:00:00
+#SBATCH --mem=4GB
+#SBATCH --job-name=#JOBNAME#
+#SBATCH --mail-type=END
+#SBATCH --mail-user=#EMAIL#
+
+pushd #SOLPSTOP#
+source setup.csh
+echo Using SOLPSTOP = #SOLPSTOP#
+popd
+
+set USE_MPI=""
+if ($?SOLPS_MPI) then
+  #module load impi/5.1.3
+  set MPI_EXEC=mpirun
+  set MPI_OPTS=#MPIOPTS#
+  set USE_MPI="--mpi=pmi2 -m ${MPI_EXEC} ${MPI_OPTS}"
+  set USE_MPI=`echo $USE_MPI | sed -e 's:-m :-m ''":' -e 's:$:"'':'`
+endif
+
+update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"
+set msg="Started on `hostname` at `date`"
+update_solps_run_status ${msg}
+if ($?SOLPS_GUI_IP) then
+  echo ${USER} ${PWD} ${msg} | netcat -u -v -w 1 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
+endif
+
+time srun b2run -s ${USE_MPI} >& run.log
+
+QSUB.postprocess
+
+preserve_scratch_to_work
+
+set msg="Finished on `hostname` at `date`"
+update_solps_run_status ${msg}
+if ($?SOLPS_GUI_IP) then
+  echo ${USER} ${PWD} ${msg} | netcat -u -v -w 1 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
+endif
+
+if (`grep " stopping because " run.log.last10` == "") then
+  update_solps_run_status "run KAPUTT at `date`"
+  echo KAPUTT > run.KAPUTT
+endif
+#set NORMAL_FINISH=`grep " stopping because .quit" run.log.last10`
+if (`grep " stopping because .quit" run.log.last10` != "") then
+  update_solps_run_status "Breaking the loop by .quit at `date`"
+endif
+#set NORMAL_FINISH=`grep " stopping because _quit" run.log.last10`
+if (`grep " stopping because _quit" run.log.last10` != "") then
+  update_solps_run_status "Breaking the loop by _quit at `date`"
+endif
+#set NORMAL_FINISH=`grep " stopping because itim" run.log.last10`
+if (`grep " stopping because itim" run.log.last10` != "") then
+  set msg="Resubmitting inside the loop at `date`"
+  update_solps_run_status ${msg}
+  rm -f run.log* b2mn.prt b2.log*;
+  set NOW = `date +"%d.%m.%Y_%T"`  
+  mv b2fstati b2fstati_$NOW
+  mv b2fstate b2fstati
+  if (-s b2faveri) mv b2faveri b2faveri_$NOW
+  if (-s b2favere) mv b2favere b2faveri
+  itmsubmit SLURM.itm_loop
+endif
