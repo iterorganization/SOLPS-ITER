@@ -55,22 +55,22 @@ argloop:
 if ($1 == "") then
   if (-s input.dat && $standalone == "no") then
     echo Assuming run with Eirene
-    echo No argument is specified. Looking for QSUB.itm_coupled$compress
-    set QSUB=`climb_and_look_for QSUB.itm_coupled$compress`
-    if ($QSUB == "//QSUB.itm_coupled$compress") then
-      if (-s $SOLPSTOP/runs/QSUB.itm_coupled$compress) then
-        set QSUB="$SOLPSTOP/runs/QSUB.itm_coupled$compress"
+    echo No argument is specified. Looking for SLURM.itm_coupled$compress
+    set QSUB=`climb_and_look_for SLURM.itm_coupled$compress`
+    if ($QSUB == "//SLURM.itm_coupled$compress") then
+      if (-s $SOLPSTOP/runs/SLURM.itm_coupled$compress) then
+        set QSUB="$SOLPSTOP/runs/SLURM.itm_coupled$compress"
       else
         set QSUB=""
       endif
     endif
   else
     if ($standalone == "no") echo Assuming standalone run
-    echo No argument is specified. Looking for QSUB.itm$compress
-    set QSUB=`climb_and_look_for QSUB.itm$compress`
-    if ($QSUB == "//QSUB.itm$compress") then
-      if (-s $SOLPSTOP/runs/QSUB.itm$compress) then
-        set QSUB="$SOLPSTOP/runs/QSUB.itm$compress"
+    echo No argument is specified. Looking for SLURM.itm$compress
+    set QSUB=`climb_and_look_for SLURM.itm$compress`
+    if ($QSUB == "//SLURM.itm$compress") then
+      if (-s $SOLPSTOP/runs/SLURM.itm$compress) then
+        set QSUB="$SOLPSTOP/runs/SLURM.itm$compress"
       else
         set QSUB=""
       endif
@@ -87,6 +87,7 @@ else
   if ($QSUB == "//"$1) then
     if (-s $SOLPSTOP/runs/$1) then
       set QSUB="$SOLPSTOP/runs/$1"
+      echo Submission file $QSUB is found
     else
       set QSUB=""
     endif
@@ -100,11 +101,11 @@ if($QSUB == "") then
 endif
 echo Using submission file template $QSUB
 
-sed -e 's:#PWD#:'$PWD':g' -e 's:#SOLPSTOP#:'$SOLPSTOP':g' -e 's:#EMAIL#:'$EMAIL':g' -e "s:#MPIOPTS#:'$MPIOPTS':g" -e "s:#PROCS#:'$PROCS':g" -e "s:#JOBNAME#:'$JOB_NAME':g" < $QSUB > $NAME
+sed -e 's:#PWD#:'$PWD':g' -e 's:#SOLPSTOP#:'$SOLPSTOP':g' -e 's:#EMAIL#:'$EMAIL':g' -e "s:#MPIOPTS#:'$MPIOPTS':g" -e 's:#PROCS#:'$PROCS':g' -e 's:#JOBNAME#:'$JOB_NAME':g' -e 's:#USER#:'$USER':g' < $QSUB > $NAME
 
 set msg="Submitted at `date`"
 update_solps_run_status -n ${msg}
 if ($?SOLPS_GUI_IP) then
   echo ${USER} ${PWD} ${msg} | netcat -u -v -w 1 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
 endif
-qsub -V -S /bin/tcsh $NAME
+sbatch $NAME
