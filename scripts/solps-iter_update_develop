@@ -25,7 +25,13 @@ Carre:
   echo "Updating Carre"
   cd $SOLPSTOP/modules/Carre
   git fetch --prune
-  git branch -D develop
+  set old_exists=`git branch | grep svn_develop`
+  if ($old_exists == "") then
+    echo "Moving old Carre develop branch to svn_develop"
+    git branch -m develop svn_develop
+  else
+    echo "Old Carre develop branch already present"
+  endif
   git checkout develop && echo "Checked out Carre develop branch" || goto branch
   git pull && goto DivGeo || goto local
 
@@ -33,7 +39,13 @@ DivGeo:
   echo "Updating DivGeo"
   cd $SOLPSTOP/modules/DivGeo
   git fetch --prune
-  git branch -D develop
+  set old_exists=`git branch | grep svn_develop`
+  if ($old_exists == "") then
+    echo "Moving old DivGeo develop branch to svn_develop"
+    git branch -m develop svn_develop
+  else
+    echo "Old DivGeo develop branch already present"
+  endif
   git checkout develop && echo "Checked out DivGeo develop branch" || goto branch
   git pull && goto ADAS || goto local
 
