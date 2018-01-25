@@ -102,11 +102,11 @@ if($QSUB == "") then
 endif
 echo Using submission file template $QSUB
 
-sed -e 's:#PWD#:'$PWD':g' -e 's:#SOLPSTOP#:'$SOLPSTOP':g' -e 's:#EMAIL#:'$EMAIL':g' -e "s:#MPIOPTS#:'$MPIOPTS':g" -e "s:#PROCS#:'$PROCS':g" -e "s:#JOBNAME#:'$JOB_NAME':g" < $QSUB > $NAME
+sed -e 's:#PWD#:'$PWD':g' -e 's:#SOLPSTOP#:'$SOLPSTOP':g' -e 's:#EMAIL#:'$EMAIL':g' -e "s:#MPIOPTS#:'$MPIOPTS':g" -e "s:#PROCS#:'$PROCS':g" -e "s:#JOBNAME#:'$JOB_NAME':g" -e 's:#USER#:'$USER':g' < $QSUB > $NAME
 
 set msg="Submitted at `date`"
 update_solps_run_status -n ${msg}
 if ($?SOLPS_GUI_IP) then
   echo ${USER} ${PWD} ${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
 endif
-qsub -V -S /bin/tcsh $NAME
+sbatch $NAME
