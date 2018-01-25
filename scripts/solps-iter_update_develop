@@ -25,6 +25,7 @@ Carre:
   echo "Updating Carre"
   cd $SOLPSTOP/modules/Carre
   git fetch --prune
+  git branch -D develop
   git checkout develop && echo "Checked out Carre develop branch" || goto branch
   git pull && goto DivGeo || goto local
 
@@ -32,6 +33,7 @@ DivGeo:
   echo "Updating DivGeo"
   cd $SOLPSTOP/modules/DivGeo
   git fetch --prune
+  git branch -D develop
   git checkout develop && echo "Checked out DivGeo develop branch" || goto branch
   git pull && goto ADAS || goto local
 
