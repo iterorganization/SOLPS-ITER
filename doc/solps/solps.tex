@@ -657,15 +657,12 @@ The {\tt setup.csh} file and its subsidiaries \${\tt \{SOLPSTOP\}/SETUP/setup.cs
   {\tt LD\_NETCDF}, the appropriate loader instruction to load {\tt NetCDF}
 \item {\tt PERFMON}\index{PERFMON}, an environment variable used by
   the compiler to know whether to enable the performance monitoring libraries
-\item {\tt SOLPS\_CPP}\index{SOLPS\_CPP}, an environment variable containing the global "defines"
-  to use during compilation of {\tt SOLPS} code components
+\item {\tt SOLPS\_CPP}\index{SOLPS\_CPP}, an environment variable containing the global "defines" to use during compilation of {\tt SOLPS} code components
 \item some aliases to move around the tree ({\tt sbb}, {\tt sei},
   {\it etc.})
 \item some aliases for plotting ({\tt xyplot}, etc...)
-\item two aliases to swap between the debug and no\_debug versions of
-  the code ({\tt set\_debug} and {\tt set\_nodebug})
-\item two aliases to swap between the MPI and no\_MPI versions of
-  the code ({\tt set\_mpi} and {\tt set\_nompi})
+\item two aliases to swap between the debug and no\_debug versions of the code ({\tt set\_debug} and {\tt set\_nodebug})
+\item two aliases to swap between the MPI and no\_MPI versions of the code ({\tt set\_mpi} and {\tt set\_nompi})
 \end{enumerate}
 Of course, any additional desired definitions can be added. The preferred place for those is, for those variables that need not be shared by other users, the \${\tt \{SOLPSTOP\}/SETUP/setup.csh.}\${\tt \{HOST\_NAME\}.}\${\tt \{COMPILER\}.local} and \${\tt \{SOLPSTOP\}/SETUP/config.}\${\tt \{HOST\_NAME\}.}\${\tt \{COMPILER\}.local} files. Variables that are needed at compilation time need to appear in the {\tt config.*.*(.local)} file, while variables needed at runtime must appear in {\tt setup.csh.*.*(.local)} file.
 
@@ -16212,6 +16209,7 @@ which is defined in the
 \item[NO\_GETENV] \index{NO\_GETENV} No {\tt GETENV} system call available
 \item[NO\_LONG\_LINES] \index{NO\_LONG\_LINES} Identify those compilers which have a limitation to relatively short output lines
 \item[NO\_NAG] \index{NO\_NAG} No {\tt NAG} libraries available
+\item[PGF90] \index{PGF90} To be used when compiling with the Portland Group {\tt Fortran-90} compiler
 \item[PSR] \index{PSR} Specific to the Pacific Sierra VAST compiler
 \item[USE\_MPI] \index{USE\_MPI} Set internally by the {\tt Makefile} and used to identify code necessary for MPI applications
 \item[USE\_PXFGETENV] \index{USE\_PXFGETENV} Uses {\tt PXFGETENV} instead of {\tt GETENV}
@@ -16615,6 +16613,7 @@ PAR\_OPT & transport/b2tqna.F \\
 PERFMON & utility/prgend.F \\
 PERFMON & utility/prgini.F \\
 PERFMON & utility/subsys.F \\
+PGF90 & modules/b2mod\_types.F \\
 PLPLOT & b2plot/b2plot.F \\
 PLPLOT & b2plot/color.F \\
 PLPLOT & b2plot/end\_page.F \\
