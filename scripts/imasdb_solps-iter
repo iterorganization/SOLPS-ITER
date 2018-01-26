@@ -5,6 +5,8 @@ echo "Linking to the IMAS ITER scenario database"
 imasdb /work/imas/shared/iterdb/3
 echo "Setting an IMAS solps-iter directory"
 imasdb solps-iter
-echo "Setting an IMAS ${DEVICE} directory"
-imasdb ${DEVICE}
+[ -n ${DEVICE} ] && {
+  echo "Setting an IMAS ${DEVICE} directory"
+  imasdb ${DEVICE}
+}
 
