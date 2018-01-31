@@ -43,6 +43,13 @@ endif
 module unload mpich2
 if (`hostname` != "hpc-login01.iter.org") then
   module load mvapich2/1.3.2-intel
+else
+  setenv MPDIR /shared/libraries/mpi/mvapich2/2.3b-intel2017
+  setenv PATH ${MPDIR}/bin:${PATH}
+  setenv CPATH ${MPDIR}/include:${CPATH}
+  setenv MANPATH ${MPDIR}/share/man:${MANPATH}
+  setenv LD_LIBRARY_PATH ${MPDIR}/lib:${LD_LIBRARY_PATH}
+  setenv PKG_CONFIG_PATH ${MPDIR}/lib/pkgconfig:${PKG_CONFIG_PATH}
 endif
 
 # Debugger (set environment variable DBX)

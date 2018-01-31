@@ -39,6 +39,7 @@
 \fi
 \usepackage{color}
 \usepackage{fixltx2e}
+\usepackage{alltt}
 
 \def\topfraction{.9}
 \def\bottomfraction{.9}
@@ -76,7 +77,9 @@
 
 \chapter*{Preface}
 This manual is built from the following code repository versions:
-\VerbatimInput{SOLPS_versions}
+\begin{alltt}
+\input{SOLPS_versions}
+\end{alltt}
 
 This is the combined work of many authors.  Started by D.P.~Coster, it
 includes contributions from
