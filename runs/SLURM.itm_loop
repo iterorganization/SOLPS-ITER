@@ -7,6 +7,9 @@
 #SBATCH --job-name=#JOBNAME#
 #SBATCH --mail-type=END
 #SBATCH --mail-user=#EMAIL#
+#SBATCH -o SLURM-%j.out
+#SBATCH -e SLURM-%j.err
+
 
 pushd #SOLPSTOP#
 source setup.csh
@@ -52,6 +55,10 @@ endif
 #set NORMAL_FINISH=`grep " stopping because _quit" run.log.last10`
 if (`grep " stopping because _quit" run.log.last10` != "") then
   update_solps_run_status "Breaking the loop by _quit at `date`"
+endif
+#set NORMAL_FINISH=`grep " stopping because tim >= etim" run.log.last10`
+if (`grep " stopping because tim >= etim" run.log.last10` != "") then
+  update_solps_run_status "Breaking the loop because the end time is reached at `date`"
 endif
 #set NORMAL_FINISH=`grep " stopping because itim" run.log.last10`
 if (`grep " stopping because itim" run.log.last10` != "") then

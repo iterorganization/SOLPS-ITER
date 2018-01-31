@@ -7,6 +7,9 @@
 #SBATCH --job-name=#JOBNAME#
 #SBATCH --mail-type=END
 #SBATCH --mail-user=#EMAIL#
+#SBATCH -o SLURM-%j.out
+#SBATCH -e SLURM-%j.err
+
 
 pushd #SOLPSTOP#
 source setup.csh
