@@ -7,6 +7,8 @@
 #SBATCH --job-name=#JOBNAME#
 #SBATCH --mail-type=END
 #SBATCH --mail-user=#EMAIL#
+#SBATCH -o SLURM-%j.out
+#SBATCH -e SLURM-%j.err
 
 pushd #SOLPSTOP#
 source setup.csh
@@ -17,9 +19,11 @@ set USE_MPI=""
 if ($?SOLPS_MPI) then
   set MPI_EXEC=mpirun
   set MPI_OPTS=#MPIOPTS#
-  set USE_MPI="--mpi=pmi2 -m ${MPI_EXEC} ${MPI_OPTS}"
+  set MPI_PREFLAGS="--mpi=mpi2"
+  set USE_MPI="-m ${MPI_EXEC} ${MPI_OPTS}"
   set USE_MPI=`echo $USE_MPI | sed -e 's:-m :-m ''":' -e 's:$:"'':'`
 endif
+set TIME="time srun ${MPI_PREFLAGS}"
 
 update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"
 set msg="Started on `hostname` at `date`"
@@ -28,7 +32,7 @@ if ($?SOLPS_GUI_IP) then
   echo ${USER} ${PWD} ${msg} | netcat -u -v -w 1 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
 endif
 
-time srun b2run -s ${USE_MPI} b2mn | gzip -9 >! run.log.gz
+b2run -s ${USE_MPI} b2mn | gzip -9 >! run.log.gz
 
 QSUB.postprocess
 
