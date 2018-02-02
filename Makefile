@@ -60,7 +60,7 @@ endif
 unexport SOLPS_DEBUG
 unexport SOLPS_MPI
 
-.PHONY: solps solps_mpi nox nox_mpi all all_nox all_mpi carre carre_nox divgeo b25 b25_mpi b25_nox b25_ig b25_all_mpi eirene eirene_mpi eirene_nox b25eirene b25eirene_mpi b25eirene_nox b25eirene_ig b25eirene_all_mpi b25eirene_mpi_nox uinp uinp_nox uinp_mpi triang triang_nox amds fxdr sonnet-light b2sxdr manual local depend depend_nox tags listobj listobj_nox clean clean_% debug %_debug VERSION help nox_build nox_build_mpi
+.PHONY: solps solps_mpi nox nox_mpi all all_nox all_mpi carre carre_nox divgeo b25 b25_mpi b25_nox b25_ig b25_all_mpi eirene eirene_mpi eirene_nox b25eirene b25eirene_mpi b25eirene_nox b25eirene_ig b25eirene_all_mpi b25eirene_mpi_nox uinp uinp_nox uinp_mpi triang triang_nox amds amds_mpi fxdr sonnet-light b2sxdr manual local depend depend_nox tags listobj listobj_nox clean clean_% debug %_debug VERSION help nox_build nox_build_mpi
 
 DEFAULT: solps
 
@@ -71,9 +71,9 @@ DEFAULT: solps
 #----------------------
 
 
-solps:     carre divgeo b25eirene     uinp     triang amds sonnet-light manual
+solps:     carre divgeo b25eirene     uinp     triang amds     sonnet-light manual
 
-solps_mpi: carre divgeo b25eirene_mpi uinp_mpi triang amds sonnet-light manual
+solps_mpi: carre divgeo b25eirene_mpi uinp_mpi triang amds_mpi sonnet-light manual
 
 nox:       carre_nox    b25eirene_nox uinp_nox triang_nox manual
 
@@ -83,7 +83,7 @@ all:       carre divgeo b25     eirene     b25eirene     uinp     triang amds so
 
 all_nox:   carre_nox    b25_nox eirene_nox b25eirene_nox uinp_nox triang_nox manual
 
-all_mpi:   carre divgeo b25_mpi eirene_mpi b25eirene_mpi uinp_mpi triang amds sonnet-light manual
+all_mpi:   carre divgeo b25_mpi eirene_mpi b25eirene_mpi uinp_mpi triang amds_mpi sonnet-light manual
 
 carre:
 	cd modules/Carre; ${MAKE}
@@ -174,6 +174,9 @@ triang_nox:
 
 amds:
 	cd modules/amds; ${MAKE}
+
+amds_mpi:
+	cd modules/amds; ${MAKE} USE_MPI=-DUSE_MPI
 
 fxdr:
 	cd modules/fxdr; ${MAKE}
