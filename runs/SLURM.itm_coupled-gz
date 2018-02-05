@@ -3,7 +3,7 @@
 #SBATCH --ntasks=#PROCS#
 #SBATCH -p bdw_fua_gw
 #SBATCH --time=24:00:00
-#SBATCH --mem=4GB
+#SBATCH --mem=12GB
 #SBATCH --job-name=#JOBNAME#
 #SBATCH --mail-type=END
 #SBATCH --mail-user=#EMAIL#

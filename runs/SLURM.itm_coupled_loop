@@ -94,6 +94,6 @@ if ("$End_by_ntim" != "" || "$End_by_cputime" != "" || "$End_by_walltime" != "")
   mv b2fstate b2fstati
   if (-s b2faveri) mv b2faveri b2faveri_$NOW
   if (-s b2favere) mv b2favere b2faveri
-  itmsubmit SLURM.itm_loop
+  itmsubmit SLURM.itm_coupled_loop
 endif
 
