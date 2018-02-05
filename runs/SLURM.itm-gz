@@ -22,6 +22,8 @@ if ($?SOLPS_MPI) then
   set MPI_PREFLAGS="--mpi=mpi2"
   set USE_MPI="-m ${MPI_EXEC} ${MPI_OPTS}"
   set USE_MPI=`echo $USE_MPI | sed -e 's:-m :-m ''":' -e 's:$:"'':'`
+else
+  set MPI_PREFLAGS=""
 endif
 set TIME="time srun ${MPI_PREFLAGS}"
 

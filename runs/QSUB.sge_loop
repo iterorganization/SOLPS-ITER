@@ -7,6 +7,19 @@
 #$ -notify
 #$ -N #JOBNAME#
 
+### This scripts submits the job, which launches SOLPS-ITER code, to HPC cluster,
+### and resubmits the job again after successful finish of SOLPS-ITER in a loop manner.
+###
+### Successful finish means that either the prescribed (by 'b2mndr_ntim) number of steps is reached
+### or the prescribed (by 'b2mndr_cpu' or 'b2mndr_elapsed') time of run is elapsed.
+###
+### If the .quit (or _quit) is seen, or end time (specified by 'b2mndr_etim') is reached, then
+### the loop breakes, i.e. the job is not resubmitted again.
+###
+### Usage: 
+###   Submit the job:     `sgesubmit QSUB.sge_loop`
+###   Stop the run:       `touch b2mn.exe.dir/.quit`
+
 setenv PATH ${PATH}:/afs/ipp-garching.mpg.de/@sys/bin
 
 set solpstop=`climb_and_look_for SOLPSTOP`
@@ -64,8 +77,15 @@ if (`grep " stopping because tim >= etim" run.log.last10` != "") then
   update_solps_run_status "Breaking the loop because the end time is reached at `date`"
 endif
 
-#set NORMAL_FINISH=`grep " stopping because itim" run.log.last10`
-if (`grep " stopping because itim" run.log.last10` != "") then
+set End_by_ntim = `grep " stopping because itim" run.log.last10`
+set End_by_cputime = `grep " stopping because cpu" run.log.last10`
+set End_by_walltime = `grep " stopping because elapsed" run.log.last10`
+
+#echo $End_by_ntim
+#echo $End_by_cputime
+#echo $End_by_walltime
+
+if ("$End_by_ntim" != "" || "$End_by_cputime" != "" || "$End_by_walltime" != "") then
   set msg="Resubmitting inside the loop at `date`"
   update_solps_run_status ${msg}
   rm -f run.log* b2mn.prt b2.log*;
@@ -74,5 +94,6 @@ if (`grep " stopping because itim" run.log.last10` != "") then
   mv b2fstate b2fstati
   if (-s b2faveri) mv b2faveri b2faveri_$NOW
   if (-s b2favere) mv b2favere b2faveri
-  itmsubmit QSUB.itm_loop
+  itmsubmit SLURM.itm_loop
 endif
+
