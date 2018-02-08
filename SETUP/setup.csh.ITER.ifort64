@@ -1,7 +1,9 @@
 # General
 module use /work/imas/etc/modulefiles
 module use /work/imas/etc/modules/all
-module load git
+if (`hostname` != "hpc-login01.iter.org") then
+  module load git
+endif
 
 # Modules needed by SOLPS-ITER
 module load imas/3.12.0/ual/3.6.3
@@ -73,6 +75,9 @@ else
   setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages/vtk:${PYTHONPATH}"
   setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
   setenv LD_CATALYST `paraview-config --libs vtkPVPythonCatalyst`
+  if (`hostname` == "hpc-login01.iter.org") then
+    setenv LD_CATALYST "${LD_CATALYST} -lssl -lcrypto -lstdc++"
+  endif
 endif
 
 # Other environment variables

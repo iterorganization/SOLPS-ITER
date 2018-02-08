@@ -388,7 +388,6 @@ clean_b2sxdr:
 clean_manual:
 	cd doc/solps; ${MAKE} clean
 
-
 # help
 help:
 	@echo "           solps : compile serial version (main codes)"
