@@ -1535,6 +1535,7 @@ extracted from the {\tt run.log} file.
   \item[b2run\_hgw\_cluster]\index{b2run\_hgw\_clus} Shortcut to the {\tt Makefile} launching {\tt B2.5} for the IPP--Greifswald cluster. A "-n" option allows for dry-run tests.
   \item[b2sxdr]\index{b2sxdr} Shortcut to the \SOLPSfour to \SOLPSfive
     converter. A "-n" option allows for dry-run tests. A "-d" option allows to run within the chosen debugger. A "-s" option allows to specify the run to convert was not coupled to {\tt Eirene}. A "-h" option prints a help description.
+  \item[copy\_tracing\_files]\index{copy\_tracing\_files} Script to bring tracing files to temporary run directory, if present.
   \item[correct\_baserun\_timestamps]\index{correct\_baserun\_timestamps}
     Makes sure the timestamps for the start-up files in the {\tt baserun}
     directory are in the right chronological order.
@@ -1572,6 +1573,7 @@ extracted from the {\tt run.log} file.
   \item[nn2d]\index{nn2d} Converts new "Naka" format equilibrium files to {\tt DG} format (see Sec.~\ref{sec:equtrn}).
   \item[nereg]\index{nereg} Shows averaged density per region.
   \item[noquote\_pwd]\index{noquote\_pwd} Returns the current working directory as a string without quotes (c.f.\ {\tt quote\_pwd}).
+  \item[obtain\_tracing\_files]\index{obtain\_tracing\_files} Script to grab the last version of the tracing files for run recovery.
   \item[pipe\_b2.log]\index{pipe\_b2.log} Prepares the {\tt B2} log file for use by other scripts.
   \item[pipe\_run.log]\index{pipe\_run.log} Prepares the {\tt B2.5} log file for use by other scripts.
   \item[plot\_mesh \#1 \#2]\index{plot\_mesh} Plots the mesh specified as \#1 accompanied by the {\tt mesh.extra} file specified as \#2 as \#1.ps.
@@ -1639,7 +1641,6 @@ welcome!
   \item[chop\_pwd]\index{chop\_pwd}
   \item[climb\_and\_look\_for]\index{climb\_and\_look\_for}
   \item[cnvtria]\index{cnvtria}
-  \item[copy\_tracing\_files]\index{copy\_tracing\_files}
   \item[get\_parm.bpl]\index{get\_parm.bpl}
   \item[lln]\index{lln}
   \item[min\_ave\_max.awk]\index{min\_ave\_max.awk}
@@ -7351,7 +7352,7 @@ $D_{f,a}=c_{D_{f,a},0} + c_{D_{f,a},1} \frac{10^{20}}{n_i}
 	c_{D_{f,a},3} n_i + c_{D_{f,a},4} n_e
 },$
 
-\begin{table}[h]
+\begin{table}[ht]
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
 \hline
 $a$ & $c_{D_{f,a},0}$ & $c_{D_{f,a},1}$ & $c_{D_{f,a},2}$ & $c_{D_{f,a},3}$ & $c_{D_{f,a},4}$ & $c_{D_{f,a},5}$ & $c_{D_{f,a},6}$ & $c_{D_{f,a},7}$ \\ \hline
@@ -14967,6 +14968,9 @@ Sets standard label as {\em extralabel}:
 \subsubsection{$<$label, {\bf S}$>$ glbl}\index{b2plot, glbl}\label{sec:glbl}
 Sets the current graph label to $\langle$label$\rangle$.
 
+\subsubsection{$<$label, {\bf S}$>$ elbl}\index{b2plot, elbl}\label{sec:elbl}
+Sets the current Eirene data graph label to $\langle$label$\rangle$.
+
 \subsubsection{$<$number,{\bf I}$>$ $<$label, {\bf S}$>$ slbl}\index{b2plot, slbl}\label{sec:slbl}
 Sets the species label of species index $\langle$number$\rangle$ to $\langle$label$\rangle$ for the current graph.
 
@@ -16594,6 +16598,7 @@ NO\_GETENV & convert/b2co\_tally\_cdf.F \\
 NO\_GETENV & convert/b2co\_time\_cdf.F \\
 NO\_GETENV & convert/b2co\_wall\_cdf.F \\
 NO\_GETENV & convert/b2mds.F \\
+NO\_GETENV & driver/b2co.F \\
 NO\_GETENV & ids/b2\_ual\_write.F90 \\
 NO\_GETENV & modules/b2mod\_ppout.F \\
 NO\_GETENV & modules/b2mod\_solpstop.F \\

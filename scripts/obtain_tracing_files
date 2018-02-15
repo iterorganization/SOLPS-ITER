@@ -1,0 +1,42 @@
+#! /usr/bin/env ksh
+
+NAME=/tmp/.files.$$.$USER.`date +%Y%m%d%H%M%S`
+typeset -i nfiles
+
+[ -d b2mn.exe.dir/tracing ] && {
+  ( ls -l b2mn.exe.dir/tracing/*.trc b2mn.exe.dir/tracing/user.trc.n.01 | grep -v 'total ' | grep -v ' 0 ' | wc -l > $NAME ) 2> /dev/null
+  nfiles=`cat $NAME`
+  ncfiles=`ls -l b2mn.exe.dir/tracing/*.trc b2mn.exe.dir/tracing/user.trc.n.01 | grep -v 'total ' | grep -v ' 0 ' | awk '{printf "%s ",$NF,"\n"}'`
+  echo "tracing : found" $nfiles "non-empty files in b2mn.exe.dir"
+} || {
+  nfiles=0
+}
+
+[ $nfiles -gt 0 ] && {
+  filelist=`ls -1s b2mn.exe.dir/tracing/*.trc b2mn.exe.dir/tracing/user.trc.n.01 | grep -v '0 ' | awk '{printf "%s ",$NF,"\n"}'`
+  set -A f -- $filelist
+  i=0
+  for z in $filelist; do {
+    ln -sf ../../${f[i]} b2co.exe.dir/tracing/ 2> /dev/null || echo > /dev/null
+    ((i+=1))
+  }; done
+  [ -s b2mn.exe.dir/tracing/user.trc.n.01 ] && {
+    ln -sf ../../b2mn.exe.dir/tracing/user.trc.n.01 b2co.exe.dir/tracing/user.trc
+    rm b2co.exe.dir/tracing/user.trc.n.01
+  }
+} || {
+  ( ls -l tracing/*.trc | grep -v 'total ' | grep -v ' 0 ' | wc -l > $NAME ) 2> /dev/null
+  n2files=`cat $NAME`
+  ncfiles=`ls -l tracing/*.trc | grep -v 'total ' | grep -v ' 0 ' | awk '{printf "%s ",$NF,"\n"}'`
+  echo "tracing : found" $n2files "non-empty files in run directory"
+  [ $n2files -gt 0 ] && {
+    filelist=`ls -1s tracing/*.trc | grep -v '0 ' | awk '{printf "%s ",$NF,"\n"}'`
+    set -A f -- $filelist
+    i=0
+    for z in $filelist; do {
+      ln -sf ../../${f[i]} b2co.exe.dir/tracing/ 2> /dev/null || echo > /dev/null
+      ((i+=1))
+    }; done
+  }
+}
+rm $NAME

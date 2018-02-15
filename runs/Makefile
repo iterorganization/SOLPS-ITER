@@ -455,7 +455,8 @@ else
 $(target_co) : b2mn.dat b2fgmtry b2fpardf b2fstati ${PLASMASTATE} ${savefiles}
 endif
 	-rm -rf b2co.exe.dir >& /dev/null ; mkdir b2co.exe.dir ; cp $^ b2co.exe.dir
-	-cd b2co.exe.dir ; mkdir tracing ; copy_tracing_files
+	-cd b2co.exe.dir ; mkdir tracing
+	obtain_tracing_files
 	rm -f $(target_co)
 	cd b2co.exe.dir ; ${TIME} ${B2OBJ}/b2co.exe ${RUN_OPTIONS} `basename ${PLASMASTATE}` ; truncate_tracing_files ; mv $(target_co) b2fstate .. ; move_save_files ; rm -f $(notdir $^) ds? .quit >& /dev/null
 ifndef STAND_ALONE
