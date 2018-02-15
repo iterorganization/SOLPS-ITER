@@ -33,9 +33,6 @@ FFLAGS	  = -g -C -traceback -debug all -check all -fPIC -assume no2underscore
 else
 FFLAGS    = -O2 -vec_report0 -fPIC -fp-model precise -assume no2underscore
 endif
-ifdef USE_MPI
-FFLAGS   += ${MPI_CPP}
-endif
 INCLUDE   = -I${SRCDIR} ${EIRINC} ${B2INC}
 COMPILE   = ${FC} -c ${FFLAGS}
 CPP       = /lib/cpp -C -traditional -ffreestanding
