@@ -13,7 +13,7 @@ typeset -i nfiles
 }
 
 [ $nfiles -gt 0 ] && {
-  filelist=`ls -1s b2mn.exe.dir/tracing/*.trc b2mn.exe.dir/tracing/user.trc.n.01 | grep -v '0 ' | awk '{printf "%s ",$NF,"\n"}'`
+  filelist=`ls -1s b2mn.exe.dir/tracing/*.trc b2mn.exe.dir/tracing/user.trc.n.01 | grep -v ' 0 ' | grep -v '^0 ' | awk '{printf "%s ",$NF,"\n"}'`
   set -A f -- $filelist
   i=0
   for z in $filelist; do {
@@ -30,7 +30,7 @@ typeset -i nfiles
   ncfiles=`ls -l tracing/*.trc | grep -v 'total ' | grep -v ' 0 ' | awk '{printf "%s ",$NF,"\n"}'`
   echo "tracing : found" $n2files "non-empty files in run directory"
   [ $n2files -gt 0 ] && {
-    filelist=`ls -1s tracing/*.trc | grep -v '0 ' | awk '{printf "%s ",$NF,"\n"}'`
+    filelist=`ls -1s tracing/*.trc | grep -v ' 0 ' | grep -v '^0 ' | awk '{printf "%s ",$NF,"\n"}'`
     set -A f -- $filelist
     i=0
     for z in $filelist; do {
