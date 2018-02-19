@@ -26,12 +26,17 @@ LD_MPI   += -Wl,-rpath,${MPDIR}/lib
 endif
 else
 FC        = ifort
+FC_VERSION = $(shell echo `ifort --version | head -1 | awk '{printf "%s ",$$3,"\n"}'`)
 endif
 
 ifdef SOLPS_DEBUG
 FFLAGS	  = -g -C -traceback -debug all -check all -fPIC -assume no2underscore
 else
+ifeq (${FC_VERSION},18.0.1)
+FFLAGS    = -O2 -fPIC -fp-model precise -assume no2underscore
+else
 FFLAGS    = -O2 -vec_report0 -fPIC -fp-model precise -assume no2underscore
+endif
 endif
 INCLUDE   = -I${SRCDIR} ${EIRINC} ${B2INC}
 COMPILE   = ${FC} -c ${FFLAGS}
@@ -39,7 +44,9 @@ CPP       = /lib/cpp -C -traditional -ffreestanding
 
 MOD       = mod
 LDLIBS	  = ${LD_MSCL}
+ifneq (${FC_VERSION},18.0.1)
 LDEXTRA   = -i_dynamic
+endif
 
 #!!!Local Variables:
 #!!! mode: Makefile
