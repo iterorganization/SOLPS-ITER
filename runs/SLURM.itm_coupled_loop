@@ -25,10 +25,10 @@
 ###   Submit the job:     `itmsubmit SLURM.itm_loop`
 ###   Stop the run:       `touch b2mn.exe.dir/.quit`
 
-pushd #SOLPSTOP#
-source setup.csh
-echo Using SOLPSTOP = #SOLPSTOP#
-popd
+###pushd #SOLPSTOP#
+###source setup.csh
+###echo Using SOLPSTOP = #SOLPSTOP#
+###popd
 
 set USE_MPI=""
 if ($?SOLPS_MPI) then
