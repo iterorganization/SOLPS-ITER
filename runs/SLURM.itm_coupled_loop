@@ -9,7 +9,8 @@
 #SBATCH --mail-user=#EMAIL#
 #SBATCH -o SLURM-%j.out
 #SBATCH -e SLURM-%j.err
-#SBATCH -N 2
+######SBATCH -N 2
+######SBATCH --ntasks-per-node=36
 
 ### This scripts submits the job, which launches SOLPS-ITER code, to HPC cluster,
 ### and resubmits the job again after successful finish of SOLPS-ITER in a loop manner.
@@ -36,6 +37,7 @@ if ($?SOLPS_MPI) then
   set MPI_OPTS=#MPIOPTS#
   set MPI_PREFLAGS="--mpi=mpi2"
   set USE_MPI="-m ${MPI_EXEC} ${MPI_OPTS}"
+  set RESUBMIT_OPTS="-m ${MPI_OPTS}"
   set USE_MPI=`echo $USE_MPI | sed -e 's:-m :-m ''":' -e 's:$:"'':'`
 else
   set MPI_PREFLAGS=""
@@ -62,8 +64,6 @@ if ($?SOLPS_GUI_IP) then
   echo ${USER} ${PWD} ${msg} | netcat -u -v -w 1 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
 endif
 
-#set NORMAL_FINISH=`grep " stopping because " run.log.last10`
-#echo ${NORMAL_FINISH} >> run.log.last10
 if (`grep " stopping because " run.log.last10` == "") then
   update_solps_run_status "run KAPUTT at `date`"
   echo KAPUTT > run.KAPUTT
@@ -75,6 +75,14 @@ endif
 #set NORMAL_FINISH=`grep " stopping because _quit" run.log.last10`
 if (`grep " stopping because _quit" run.log.last10` != "") then
   update_solps_run_status "Breaking the loop by _quit at `date`"
+endif
+#set NORMAL_FINISH=`grep " stopping because tim >= etim" run.log.last10`
+if (`grep " stopping because tim >= etim" run.log.last10` != "") then
+  update_solps_run_status "Breaking the loop because the end time is reached at `date`"
+endif
+#set NORMAL_FINISH=`grep " stopping because min_residual" run.log.last10`
+if (`grep " stopping because min_residual" run.log.last10` != "") then
+  update_solps_run_status "Breaking the loop because required residual is reached at `date`"
 endif
 
 set End_by_ntim = `grep " stopping because itim" run.log.last10`
@@ -94,6 +102,7 @@ if ("$End_by_ntim" != "" || "$End_by_cputime" != "" || "$End_by_walltime" != "")
   mv b2fstate b2fstati
   if (-s b2faveri) mv b2faveri b2faveri_$NOW
   if (-s b2favere) mv b2favere b2faveri
-  itmsubmit SLURM.itm_coupled_loop
+  echo itmsubmit #LOOPOPTS# SLURM.itm_coupled_loop
+  itmsubmit #LOOPOPTS# SLURM.itm_coupled_loop
 endif
 

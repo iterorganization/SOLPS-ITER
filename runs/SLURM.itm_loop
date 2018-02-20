@@ -3,7 +3,7 @@
 #SBATCH --ntasks=#PROCS#
 #SBATCH -p bdw_fua_gw
 #SBATCH --time=48:00:00
-#SBATCH --mem=12GB
+#SBATCH --mem=4GB
 #SBATCH --job-name=#JOBNAME#
 #SBATCH --mail-type=END
 #SBATCH --mail-user=#EMAIL#
@@ -48,7 +48,7 @@ if ($?SOLPS_GUI_IP) then
   echo ${USER} ${PWD} ${msg} | netcat -u -v -w 1 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
 endif
 
-b2run -s ${USE_MPI} >& run.log
+b2run -s ${USE_MPI} >! run.log
 
 QSUB.postprocess
 
@@ -76,6 +76,10 @@ endif
 if (`grep " stopping because tim >= etim" run.log.last10` != "") then
   update_solps_run_status "Breaking the loop because the end time is reached at `date`"
 endif
+#set NORMAL_FINISH=`grep " stopping because min_residual" run.log.last10`
+if (`grep " stopping because min_residual" run.log.last10` != "") then
+  update_solps_run_status "Breaking the loop because required residual is reached at `date`"
+endif
 
 set End_by_ntim = `grep " stopping because itim" run.log.last10`
 set End_by_cputime = `grep " stopping because cpu" run.log.last10`
@@ -94,5 +98,5 @@ if ("$End_by_ntim" != "" || "$End_by_cputime" != "" || "$End_by_walltime" != "")
   mv b2fstate b2fstati
   if (-s b2faveri) mv b2faveri b2faveri_$NOW
   if (-s b2favere) mv b2favere b2faveri
-  itmsubmit SLURM.itm_loop
+  itmsubmit #LOOPOPTS# SLURM.itm_loop
 endif
