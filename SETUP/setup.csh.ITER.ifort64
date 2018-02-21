@@ -1,13 +1,13 @@
 # General
 module use /work/imas/etc/modulefiles
 module use /work/imas/etc/modules/all
-if (`hostname` != "hpc-login01.iter.org") then
+if (`hostname` != "hpc-login01.iter.org") the6
   module load git
 endif
 
 # Modules needed by SOLPS-ITER
 module unload intel
-module load imas/3.12.0/ual/3.6.3
+module load imas/3.16.0/ual/3.7.1
 module switch Anaconda2 Anaconda3/5.0.1
 if (`hostname` != "hpc-login01.iter.org") then
   module load intel/12.0.2
@@ -27,24 +27,10 @@ if (`hostname` != "hpc-login01.iter.org") then
   module use /work/imas/opt/EasyBuild/modules/all
   module load libpng/1.6.16-goolf-1.5.16
 else
-  module unload GCC
-  module unload zlib
-  module unload HDF5
-  module unload Szip
-  module unload FFTW
-  module unload intel
-  module unload hwloc
-  module unload gompi
-  module unload libxml2
-  module unload ncurses
-  module unload OpenMPI
-  module unload OpenBLAS
-  module unload ScaLAPACK
-  module unload libreadline
-  module load intel/2018a
+  unsetenv IMAS_VERSION
   module load makedepend/1.0.5-GCCcore-6.4.0
-  module load netCDF/4.6.0-intel-2018a-HDF5-1.10.1
   module load netCDF-Fortran/4.4.4-intel-2018a-HDF5-1.10.1
+  setenv NCDIR /work/imas/opt/EasyBuild/software/netCDF-Fortran/4.4.3-foss-2016a
   module load NCL/6.4.0-intel-2018a
   module load NAG/26-GCC-6.4.0-2.28
   module load flex/2.6.4-GCCcore-6.4.0
@@ -52,6 +38,7 @@ else
   module load fontconfig/2.12.4-GCCcore-6.4.0
   module load cairo/1.14.10-GCCcore-6.4.0
   module load libpng/1.6.32-GCCcore-6.4.0
+  module load motif/2.3.8-intel-2018a
 endif
 module load mscl/1.0.0-intel-12.0.2
 module load gr/0.0.94
@@ -96,6 +83,7 @@ if (`hostname` != "hpc-login01.iter.org") then
   module load zlib
 else
   module load paraview/5.4.1
+  module unload git
 endif
 
 if (`where paraview-config` == "") then

@@ -1,39 +1,60 @@
 # General
+module use /work/imas/etc/modulefiles
 module use /work/imas/etc/modules/all
 if (`hostname` != "hpc-login01.iter.org") then
   module load git
 endif
 
 # Modules needed by SOLPS-ITER
-module load imas/3.12.0/ual/3.6.3
-module switch Anaconda2 Anaconda3
-module load makedepend/1.0.4-goolf-1.5.16
-module load GCC/4.8.3
-module load mscl/1.0.0-GCC-4.8.3
-module load netcdf/4.3.3.1-goolf-1.5.16
-module load netcdf-fortran/4.4.2-goolf-1.5.16
+module unload intel
+module load imas/3.16.0/ual/3.7.1
+module switch Anaconda2 Anaconda3/5.0.1
+if (`hostname` != "hpc-login01.iter.org") then
+  module load GCC/4.8.3
+  module load makedepend/1.0.4-goolf-1.5.16
+  module load netcdf/4.3.3.1-goolf-1.5.16
+  module load netcdf-fortran/4.4.2-goolf-1.5.16
+  module load flex/2.5.39-GCC-4.8.3
+  module load libxml2/2.9.2-GCC-4.8.3
+  module load doxygen
+  module load fontconfig/2.11.93
+  module load cairo/1.14.2
+  module load xmllib/2.1.1-imas-3.9.0-GCC-4.8.3
+  module load ncl/6.3.0-intel-12.0.2
+  module load make
+else
+  module load makedepend/1.0.5-GCCcore-6.4.0
+  module load flex/2.6.4-GCCcore-6.4.0
+  module load Doxygen/1.8.13-GCCcore-6.4.0
+  module load fontconfig/2.12.4-GCCcore-6.4.0
+  module load cairo/1.14.10-GCCcore-6.4.0
+  module load NCL/6.4.0-intel-2018a
+  module load motif/2.3.8-intel-2018a
+endif
 # module load libpng/1.6.17-goolf-1.5.16 ! creates a zlib conflict
+module load mscl/1.0.0-GCC-4.8.3
 module load gr/0.0.94
 module load gks/4.4.74
-module load ncl/6.3.0-intel-12.0.2
 # module load nag/15
-module load flex/2.5.39-GCC-4.8.3
-module load doxygen
 module load texlive
 module load ghostscript
-module load libxml2/2.9.2-GCC-4.8.3
-module load fontconfig/2.11.93
-module load cairo/1.14.2
-module load make
 module load fc2k
-module load xmllib/2.1.1-imas-3.9.0-GCC-4.8.3
 module load totalview
 if (`hostname` == "hpc-app1.iter.org") then
   module load matlab/2013a
 endif
 
 # mpi-library
-module load MVAPICH2/2.2b-GCC-4.8.3
+if (`hostname` != "hpc-login01.iter.org") then
+  module load MVAPICH2/2.2b-GCC-4.8.3
+else
+  setenv MPDIR /shared/libraries/mpi/mvapich2/2.3b-gcc4.8.5
+  setenv PATH ${MPDIR}/bin:${PATH}
+  setenv CPATH ${MPDIR}/include:${CPATH}
+  setenv MANPATH ${MPDIR}/share/man:${MANPATH}
+  setenv LD_LIBRARY_PATH ${MPDIR}/lib:${LD_LIBRARY_PATH}
+  setenv PKG_CONFIG_PATH ${MPDIR}/lib/pkgconfig:${PKG_CONFIG_PATH}
+endif
 
 # Debugger (set environment variable DBX)
 setenv DBX totalview
@@ -54,6 +75,9 @@ else
   setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages/vtk:${PYTHONPATH}"
   setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
   setenv LD_CATALYST `paraview-config --libs vtkPVPythonCatalyst`
+  if (`hostname` == "hpc-login01.iter.org") then
+    setenv LD_CATALYST "${LD_CATALYST} -lstdc++"
+  endif
 endif
 
 # Other environment variables

@@ -5,29 +5,38 @@ if (`hostname` != "hpc-login01.iter.org") then
 endif
 
 # Modules needed by SOLPS-ITER
-module load imas/3.12.0/ual/3.6.3
-module switch Anaconda2 Anaconda3
+module unload intel
+module load imas/3.16.0/ual/3.7.1
+module switch Anaconda2 Anaconda3/5.0.1
 # module load pgf90
-module load makedepend/1.0.0
-module load mscl
-module load netcdf
+if (`hostname` != "hpc-login01.iter.org") then
+  module load makedepend/1.0.0
+  module load netcdf/4.3.3.1
+  module load netcdf-fortran/4.4.2-intel-12.0.2
+  module load ncl/6.3.0-intel-12.0.2
+  module load hdf5/1.8.15
+  module load flex/2.5.39-GCC-4.8.3
+  module load doxygen
+  module load xmllib/2.0.0-imas-3.7.4-intel-12.0.2
+  module load fontconfig/2.11.93
+  module load cairo/1.14.2
+  module unload pixman
+else
+  module load makedepend/1.0.5-GCCcore-6.4.0
+  module load netCDF-Fortran/4.4.4-intel-2018a-HDF5-1.10.1
+  setenv NCDIR /work/imas/opt/EasyBuild/software/netCDF-Fortran/4.4.3-foss-2016a
+  module load NCL/6.4.0-intel-2018a
+  module load flex/2.6.4-GCCcore-6.4.0
+  module load Doxygen/1.8.13-GCCcore-6.4.0
+endif
+module load mscl/1.0.0-intel-12.0.2
 module load gr/0.0.94
 module load gks/4.4.74
-module load ncl
-module load hdf5
-module load flex
-module load doxygen
 module load texlive
 module load ghostscript
-# module load libxml2 ! already included in IMAS module
-module load fontconfig/2.11.93
-module unload pixman
-module load cairo/1.14.2
-# module load mdsplus ! already included in IMAS module
-module load make
+module load make/4.1
 module load fc2k
 module load kepler
-module load xmllib
 module load totalview
 if (`hostname` == "hpc-app1.iter.org") then
   module load matlab/2013a
@@ -42,7 +51,7 @@ setenv DBX totalview
 
 # Compilers
 setenv CC gcc
-setenv FC ifort
+setenv FC pgf90
 setenv CXX g++
 
 module load paraview/5.4.1
@@ -56,6 +65,9 @@ else
   setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages/vtk:${PYTHONPATH}"
   setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
   setenv LD_CATALYST `paraview-config --libs vtkPVPythonCatalyst`
+  if (`hostname` == "hpc-login01.iter.org") then
+    setenv LD_CATALYST "${LD_CATALYST} -lstdc++"
+  endif
 endif
 
 # Other environment variables

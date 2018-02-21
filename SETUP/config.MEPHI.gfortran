@@ -72,7 +72,7 @@ ifdef LD_CATALYST
 endif
 
 # Build with IMAS if imas module is loaded
-ifdef IMAS_PREFIX
+ifdef IMAS_VERSION
   SOLPS_CPP += -DIMAS
   LD_UAL     = `pkg-config imas-lowlevel imas-gfortran --libs`
   export LD_UAL

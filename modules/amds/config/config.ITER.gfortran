@@ -1,6 +1,6 @@
 CC = cc
 CFLAGS = -g
-LIBS = -lXm -lXt -lX11 -lXext -lXmuu -lXp -lpthread -lm
+LIBS = -lXm -lXt -lX11 -lXext -lXmuu -lpthread -lm
 
 #!!!Local Variables:
 #!!! mode: Makefile

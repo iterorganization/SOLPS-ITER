@@ -42,11 +42,13 @@ LD_NAG     = `pkg-config nag --libs`
 LD_MPI    ?= -L/work/imas/opt/libibverbs/1.1.4/lib `pkg-config mpich2-ch3 --libs`
 MPI_CPP   ?= `pkg-config mpich2-ch3 --cflags`
 SOLPS_CPP  = -DNCAR4 -DNO_F01AAF
+NCDIR     ?= /work/imas/opt/netcdf-fortran/4.4.2-intel-12.0.2
 else
 LD_NAG     = -lnag_nag
 LD_MPI    ?= -L/work/imas/opt/libibverbs/1.1.4/lib `pkg-config mvapich2 --libs`
 MPI_CPP   ?= `pkg-config mvapich2 --cflags`
 SOLPS_CPP  = -DNCAR4 -DNO_F01AAF -DNAG22
+NCDIR     ?= /work/imas/opt/EasyBuild/software/netCDF-Fortran/4.4.3-foss-2016a
 endif
 
 # Preprocessor options
@@ -75,7 +77,7 @@ ifdef LD_CATALYST
 endif
 
 # Build with IMAS if imas module is loaded
-ifdef IMAS_PREFIX
+ifdef IMAS_VERSION
   SOLPS_CPP += -DIMAS
   LD_UAL     = `pkg-config imas-lowlevel imas-ifort --libs` -Wl,-rpath,${IMAS_PREFIX}/lib
   export LD_UAL
