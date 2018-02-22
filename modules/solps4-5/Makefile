@@ -498,7 +498,7 @@ ${OBJDIR}/cpolyg.o: ${OBJDIR}/parmmod.${MOD} ${SRCDIR}/Eirene_modules/cpolyg.F $
 ${OBJDIR}/crand.o: ${SRCDIR}/Eirene_modules/crand.F ${MAKES}
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/crand.o -c ${SRCDIR}/Eirene_modules/crand.F
 
-${OBJDIR}/crech.o: ${SRCDIR}/Eirene_modules/crech.F ${MAKES}
+${OBJDIR}/crech.o: ${SRCDIR}/Eirene_modules/crech.F ${OBJDIR}/precision.${MOD} ${MAKES}
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/crech.o -c ${SRCDIR}/Eirene_modules/crech.F
 
 ${OBJDIR}/cref.o: ${SRCDIR}/Eirene_modules/cref.F ${MAKES}
@@ -806,7 +806,7 @@ ${OBJDIR}/cref.${MOD}: ${SRCDIR}/Eirene_modules/cref.F ${MAKES}
 	[ -e $@ ] && rm $@ || echo > /dev/null
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/cref.o -c ${SRCDIR}/Eirene_modules/cref.F
 
-${OBJDIR}/crech.${MOD}: ${SRCDIR}/Eirene_modules/crech.F ${MAKES}
+${OBJDIR}/crech.${MOD}: ${SRCDIR}/Eirene_modules/crech.F ${OBJDIR}/precision.${MOD} ${MAKES}
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/crech.o -c ${SRCDIR}/Eirene_modules/crech.F
 
 ${OBJDIR}/crefmod.${MOD}: ${SRCDIR}/Eirene_modules/crefmod.F ${MAKES}

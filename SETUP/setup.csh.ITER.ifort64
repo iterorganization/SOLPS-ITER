@@ -33,7 +33,7 @@ else
   module load netCDF-Fortran/4.4.4-intel-2018a-HDF5-1.10.1
   setenv NCDIR /work/imas/opt/EasyBuild/software/netCDF-Fortran/4.4.3-foss-2016a
   module load NCL/6.4.0-intel-2018a
-  module load NAG/26-GCC-6.4.0-2.28
+  module load NAG/26-intel-2018a
   module load flex/2.6.4-GCCcore-6.4.0
   module load Doxygen/1.8.13-GCCcore-6.4.0
   module load fontconfig/2.12.4-GCCcore-6.4.0
@@ -82,6 +82,7 @@ if (`hostname` != "hpc-login01.iter.org") then
   module unload zlib
   module load paraview/5.4.1
   module load zlib
+  setenv LD_PRELOAD /work/imas/opt/paraview/5.4.1/lib/paraview-5.4/libprotobuf.so
 else
   module load paraview/5.4.1
   module unload git
@@ -106,7 +107,3 @@ module load solps-gui
 setenv LD_PRELOAD /usr/lib64/libfontconfig.so.1 # needed by solps-gui
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/usr/lib64
 setenv SOLPSWORK /work/projects/solps-iter/$USER
-
-# The following is needed in order to overwrite broken Anaconda3 ABI for protobuf
-# /work/imas/opt/EasyBuild/software/Anaconda3/4.4.0/lib/libprotobuf.so.14: ELF file OS ABI invalid
-setenv LD_PRELOAD /work/imas/opt/paraview/5.4.1/lib/paraview-5.4/libprotobuf.so

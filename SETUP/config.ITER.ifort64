@@ -44,7 +44,7 @@ MPI_CPP   ?= `pkg-config mpich2-ch3 --cflags`
 SOLPS_CPP  = -DNCAR4 -DNO_F01AAF
 NCDIR     ?= /work/imas/opt/netcdf-fortran/4.4.2-intel-12.0.2
 else
-LD_NAG     = -lnag_nag
+LD_NAG     = -L${NAGDIR}/lib -lnag_nag
 LD_MPI    ?= -L/work/imas/opt/libibverbs/1.1.4/lib `pkg-config mvapich2 --libs`
 MPI_CPP   ?= `pkg-config mvapich2 --cflags`
 SOLPS_CPP  = -DNCAR4 -DNO_F01AAF -DNAG22

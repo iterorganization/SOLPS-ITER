@@ -245,8 +245,8 @@ listobj_nox:
 	cd modules/Carre;          ${MAKE} listobj NCARG_ROOT="" LD_NCARG=""
 	cd modules/Eirene;         ${MAKE} listobj USE_MPI=-DUSE_MPI LD_GR="" LD_GKS=""
 	cd modules/Eirene;         ${MAKE} listobj LD_GR="" LD_GKS=""
-	cd modules/B2.5;           ${MAKE} listobj USE_MPI=-DUSE_MPI
-	cd modules/B2.5;           ${MAKE} listobj
+	cd modules/B2.5;           ${MAKE} listobj USE_MPI=-DUSE_MPI LD_GR="" LD_GKS=""
+	cd modules/B2.5;           ${MAKE} listobj LD_GR="" LD_GKS=""
 	cd modules/Uinp;           ${MAKE} listobj
 	cd modules/Uinp;           ${MAKE} listobj USE_MPI=-DUSE_MPI
 	cd modules/Triang;         ${MAKE} listobj LD_GR="" LD_GKS=""
@@ -279,7 +279,21 @@ depend:
 #	cd modules/solps4-5;       ${MAKE} depend
 
 depend_nox:
-	${MAKE} depend LD_GR="" LD_GKS=""
+	cd modules/Carre;          ${MAKE} depend NCARG_ROOT="" LD_NCARG=""
+	cd modules/Eirene;         ${MAKE} depend USE_MPI=-DUSE_MPI LD_GR="" LD_GKS=""
+	cd modules/Eirene;         ${MAKE} depend LD_GR="" LD_GKS=""
+	cd modules/B2.5;           ${MAKE} depend USE_MPI=-DUSE_MPI LD_GR="" LD_GKS=""
+	cd modules/B2.5;           ${MAKE} depend LD_GR="" LD_GKS=""
+	cd modules/Uinp;           ${MAKE} depend
+	cd modules/Uinp;           ${MAKE} depend USE_MPI=-DUSE_MPI
+	cd modules/Triang;         ${MAKE} depend LD_GR="" LD_GKS=""
+	cd modules/DivGeo/equtrn;  ${MAKE} depend
+	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE LD_GR="" LD_GKS=""
+	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE USE_MPI=-DUSE_MPI LD_GR="" LD_GKS=""
+	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO LD_GR="" LD_GKS=""
+	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE LD_GR="" LD_GKS=""
+	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI LD_GR="" LD_GKS=""
+	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO LD_GR="" LD_GKS=""
 
 VERSION:
 	cd modules/B2.5;   ${MAKE} VERSION
