@@ -21,6 +21,11 @@ FC_VERSION = $(shell echo `ifort --version | head -1 | awk '{printf "%s ",$$3,"\
 
 ifdef SOLPS_DEBUG
 FCOPTS = -g -C -debug all -traceback
+ifeq (${FC_VERSION},18.0.1)
+LDOPTS =
+else
+LDOPTS = -i_dynamic
+endif
 else
 ifeq (${FC_VERSION},18.0.1)
 FFLAGS = -O3
