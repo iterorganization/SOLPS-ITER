@@ -3695,7 +3695,7 @@ and data files. The switches to obtain this are:
   \item["invert\_bpol" "1"] Inverts the poloidal field and related quantities
   \item["invert\_btor" "1"] Inverts the toroidal field and related quantities
 \end{description}
-This is important because the parallel velocity is co-aligned with the magnetic field in \SOLPSITER, which was not the case in earlier code versions (please consult Section~\ref{sec:signs} for a full description of the sign conventions used in \SOLPSITERns). For instance, if you are converting from an older {\bf SOLPS4.3} case (where the magnetic field components were always positive by default), you need to use these switches to adapt the plasma solution and the geometry files. This is done automatically for ITER cases when using the {\tt convert\_from\_solps4.3} script.
+This is important because the parallel velocity is co-aligned with the magnetic field in \SOLPSITERns, which was not the case in earlier code versions (please consult Section~\ref{sec:signs} for a full description of the sign conventions used in \SOLPSITERns). For instance, if you are converting from an older {\bf SOLPS4.3} case (where the magnetic field components were always positive by default), you need to use these switches to adapt the plasma solution and the geometry files. This is done automatically for ITER cases when using the {\tt convert\_from\_solps4.3} script.
 
 {\tt b2yt} may also be used
 to change the order of species (for example changing from $D+C+He$ to $D+He+C$) or for
@@ -6954,7 +6954,7 @@ Zhdanov fit to Braginskii and the \SOLPSfour values.
 
 The version of the equations shown in this Appendix represents the best available description of the standard recommended settings for the \SOLPSITER physics model, built upon the original work on {\bf SOLPS5.2} from the St. Petersburg group \cite{ROZHANSKY2009}. This Appendix is not meant as an exhaustive registry of the capabilities of the code, for which the reader is encouraged to peruse Chapters \ref{cha:standaloneb2} and \ref{cha:coupledb2eirene} as well as the list of switches in Appendix \ref{lis:b2cdci} and of namelist variables in Appendix \ref{lis:b2cdcn}.
 
-\section*{Sign conventions}\index{sign conventions}\label{sec:signs}
+\section{Sign conventions}\index{sign conventions}\label{sec:signs}
 
 The radial coordinate $y$ increases as one crosses the separatrix from the core (or private flux) region into the main SOL region (and so is minimum at the magnetic axis). The poloidal coordinate $x$ increases in the {\em clockwise} direction when viewing the poloidal plane with the central axis line on its left. The toroidal magnetic field component $b_z$ is taken as positive if the toroidal magnetic field is directed {\em clockwise} when viewing the tokamak from above. The poloidal magnetic field component $b_x$ follows the same convention as the $x$ component and is positive when directed in the direction of increasing poloidal index, i.e. {\em clockwise}.
 
