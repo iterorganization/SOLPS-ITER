@@ -89,7 +89,6 @@ include ${OBJDIR}/LISTOBJ
 endif
 
 ifdef USE_MPI
-LDLIBS += ${LD_MPI}
 FFLAGS += ${MPI_CPP}
 endif
 

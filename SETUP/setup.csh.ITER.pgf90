@@ -21,7 +21,7 @@ if (`hostname` != "hpc-login01.iter.org") then
   module unload pixman
 else
   module unload intel
-  module load imas/3.16.0/ual/3.7.1
+  module load imas/3.16.0-new/ual/3.7.1
   module switch Anaconda2 Anaconda3/5.0.1
   module load makedepend/1.0.5-GCCcore-6.4.0
   module load netCDF-Fortran/4.4.4-intel-2018a-HDF5-1.10.1
@@ -45,7 +45,11 @@ endif
 
 # mpi-library
 module unload mpich2
-module load mvapich2
+if (`hostname` != "hpc-login01.iter.org") then
+  module load mvapich2
+else
+  module load OpenMPI/2.1.2-GCC-6.4.0-2.28
+endif
 
 # Debugger (set environment variable DBX)
 setenv DBX totalview

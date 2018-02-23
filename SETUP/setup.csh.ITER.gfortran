@@ -23,7 +23,7 @@ if (`hostname` != "hpc-login01.iter.org") then
   module load make
 else
   module unload intel
-  module load imas/3.16.0/ual/3.7.1
+  module load imas/3.16.0-new/ual/3.7.1
   module switch Anaconda2 Anaconda3/5.0.1
   module load makedepend/1.0.5-GCCcore-6.4.0
   module load flex/2.6.4-GCCcore-6.4.0
@@ -50,12 +50,7 @@ endif
 if (`hostname` != "hpc-login01.iter.org") then
   module load MVAPICH2/2.2b-GCC-4.8.3
 else
-  setenv MPDIR /shared/libraries/mpi/mvapich2/2.3b-gcc4.8.5
-  setenv PATH ${MPDIR}/bin:${PATH}
-  setenv CPATH ${MPDIR}/include:${CPATH}
-  setenv MANPATH ${MPDIR}/share/man:${MANPATH}
-  setenv LD_LIBRARY_PATH ${MPDIR}/lib:${LD_LIBRARY_PATH}
-  setenv PKG_CONFIG_PATH ${MPDIR}/lib/pkgconfig:${PKG_CONFIG_PATH}
+  module load OpenMPI/2.1.1-GCC-6.4.0-2.28
 endif
 
 # Debugger (set environment variable DBX)

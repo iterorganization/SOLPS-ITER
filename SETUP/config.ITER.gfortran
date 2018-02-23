@@ -35,7 +35,7 @@ LD_NETCDF  = `nf-config --flibs`
 LD_MSCL    = `pkg-config mscl --libs`
 LD_GR      = -L${GR_ROOT}/lib -lgr
 LD_GKS     = -L${GLI_HOME} -lgks -lXmu -lX11 -lXt ${LD_INTEL_LIBS} -ldl
-#LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11                                                                                                    # for NCARG v4.x.x
+#LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 # for NCARG v4.x.x
 #LD_NAG     = `pkg-config nag --libs`
 LD_NAG     = -L${SOLPSLIB} -lblaslapack
 LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
@@ -55,7 +55,11 @@ endif
 # Preprocessor options
 #
 
+ifneq (${NODENAME},hpc-login01.iter.org)
 SOLPS_CPP      = -DNCAR4 -DNO_NAG
+else
+SOLPS_CPP      = -DNCAR4 -DNO_NAG `pkg-config netcdf-fortran --cflags`
+endif
 B25_DEFINES    =
 EIRENE_DEFINES =
 

@@ -17,6 +17,7 @@
 # Add -DNAG22 to SOLPS_CPP
 #
 
+NODENAME    ?= $(shell echo `hostname`)
 MSCL_ROOT   ?=
 H5DIR       ?=
 GR_ROOT     ?= /work/imas/opt/gr/0.0.94
@@ -28,6 +29,9 @@ MDSPLUS_DIR ?=
 # Variables of linking, using pkg-config
 #
 
+ifdef USE_MPI
+SOLPSLIB   = ${SOLPSTOP}/lib/${HOST_NAME}.gfortran
+endif
 LD_NETCDF  =
 LD_MSCL    = `pkg-config mscl --libs`
 LD_GR      = -L${GR_ROOT}/lib -lgr
@@ -37,15 +41,21 @@ LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lm -lX11 -lXext 
 LD_NAG     = -L${SOLPSLIB} -lblaslapack
 LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
-LD_MPI     = -L/work/imas/opt/libibverbs/1.1.4/lib `pkg-config mpich2-ch3 --libs`
 
 # Preprocessor options
 #
 
+ifneq (${NODENAME},hpc-login01.iter.org)
 SOLPS_CPP      = -DNO_NAG -DPGF90
+MPI_CPP        = `pkg-config mpich2-ch3 --cflags`
+LD_MPI         = -L/work/imas/opt/libibverbs/1.1.4/lib `pkg-config mpich2-ch3 --libs`
+else
+SOLPS_CPP      = -DNO_NAG -DPGF90 `pkg-config netcdf-fortran --cflags`
+MPI_CPP        = `pkg-config ompi --cflags`
+LD_MPI         = `pkg-config ompi --libs`
+endif
 B25_DEFINES    = -DNO_21
 EIRENE_DEFINES =
-MPI_CPP        = `pkg-config mpich2-ch3 --cflags`
 
 # Autodetected optional features...
 

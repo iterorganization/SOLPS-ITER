@@ -47,7 +47,7 @@ else
 LD_NAG     = -L${NAGDIR}/lib -lnag_nag
 LD_MPI    ?= -L/work/imas/opt/libibverbs/1.1.4/lib `pkg-config mvapich2 --libs`
 MPI_CPP   ?= `pkg-config mvapich2 --cflags`
-SOLPS_CPP  = -DNCAR4 -DNO_F01AAF -DNAG22
+SOLPS_CPP  = -DNCAR4 -DNO_F01AAF -DNAG22 `pkg-config netcdf-fortran --cflags`
 NCDIR     ?= /work/imas/opt/EasyBuild/software/netCDF-Fortran/4.4.3-foss-2016a
 endif
 
