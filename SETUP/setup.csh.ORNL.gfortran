@@ -1,9 +1,6 @@
 # Load modules
 module load solps-libs/gcc
 
-set machine_location=`hostname`
-setenv MYMACHINE `nslookup $machine_location | grep -m 1 Name | awk '/Name:/{print $2}' | tr 'A-Z' 'a-z'`
-
 if (-e /usr/local/texlive/bin/x86_64-linux) then 
   setenv PATH /usr/local/texlive/bin/x86_64-linux:${PATH}
 endif
