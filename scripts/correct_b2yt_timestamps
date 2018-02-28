@@ -1,4 +1,5 @@
 #! /bin/tcsh -f
+[ -s AMJUEL   ] || ln -s $SOLPSTOP/modules/Eirene/Database/AMJUEL .
 [ -s stra.dat ] || ln -s $SOLPSTOP/modules/B2.5/Database/stra.dat .
 [ -s weis.dat ] || ln -s $SOLPSTOP/modules/B2.5/Database/weis.dat .
 [ -e b2ag.prt ] && touch b2ag.prt || ( [ -e ../baserun/b2ag.prt ] && touch ../baserun/b2ag.prt || touch b2ag.prt )
