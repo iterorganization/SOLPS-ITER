@@ -17,9 +17,9 @@
   echo "Now copying unmodified files"
   [ -s ../convert/b2fgmtry.old ] && {
     [ -s ../convert/b2ag.dat.2 ] || {
-      [ -s ../convert/b2ag.dat ] && cp -uv ../convert/b2ag.dat .
+      [ -s ../convert/b2ag.dat ] && cp -uv ../convert/b2ag.dat ../baserun
     }
-    [ -s ../convert/b2fgmtry ] && cp -uv ../convert/b2fgmtry .
+    [ -s ../convert/b2fgmtry ] && cp -uv ../convert/b2fgmtry ../baserun
     [ -s ../convert/"$filestem"30 ] && cp -uv ../convert/"$filestem"30 .
     [ -s ../convert/"$filestem"33 ] && cp -uv ../convert/"$filestem"33 .
     [ -s ../convert/"$filestem"34 ] && cp -uv ../convert/"$filestem"34 .
@@ -27,7 +27,8 @@
   }
   [ -s ../baserun/b2fgmtry ] || {
      [ -s ../convert/b2ag.dat.2 ] || {
-       [ -s ../convert/b2fgmtry ] && cp -uv ../convert/b2fgmtry .
+       [ -s ../convert/b2ag.dat ] && cp -uv ../convert/b2ag.dat ../baserun
+       [ -s ../convert/b2fgmtry ] && cp -uv ../convert/b2fgmtry ../baserun
        [ -s ../convert/"$filestem"30 ] && cp -uv ../convert/"$filestem"30 .
        [ -s ../convert/"$filestem"33 ] && cp -uv ../convert/"$filestem"33 .
        [ -s ../convert/"$filestem"34 ] && cp -uv ../convert/"$filestem"34 .
@@ -37,6 +38,7 @@
   [ -s ../convert/input.dat.2 ] || {
     [ -s ../convert/input.dat ] && cp -uv ../convert/input.dat ../baserun
   }
+  [ -s ../baserun/"$filestem"30 ] || cp -uv ../convert/"$filestem"30 ../baserun
   [ -s ../baserun/"$filestem"33 ] || cp -uv ../convert/"$filestem"33 ../baserun
   [ -s ../baserun/"$filestem"34 ] || cp -uv ../convert/"$filestem"34 ../baserun
   [ -s ../baserun/"$filestem"35 ] || cp -uv ../convert/"$filestem"35 ../baserun
@@ -47,18 +49,26 @@
       [ -s ../convert/b2fpardf ] && cp -uv ../convert/b2fpardf .
     }
   }
+  [ -s ../baserun/b2fstati ] || {
+    [ -s ../convert/b2ai.dat.2 ] && {
+      cp -uv ../convert/b2ai.dat.2 ../baserun/b2ai.dat
+    } || {
+      [ -s ../convert/b2ai.dat ] && cp -uv ../convert/b2ai.dat ../baserun
+      [ -s ../convert/b2fstati ] && cp -uv ../convert/b2fstati ../baserun
+    }
+  }
   [ -s ../baserun/b2frates ] || {
     [ -s ../convert/b2ar.dat.2 ] && {
       cp -uv ../convert/b2ar.dat.2 ../baserun/b2ar.dat
     } || {
       [ -s ../convert/b2ar.dat ] && cp -uv ../convert/b2ar.dat ../baserun
-      [ -s ../convert/b2frates ] && cp -uv ../convert/b2frates .
     }
     [ -s ../convert/b2frates ] && cp -uv ../convert/b2frates ../baserun
   }
   [ -s ../convert/b2.*.parameters ] && cp -uv ../convert/b2.*.parameters .
   [ -s ../convert/b2.transport.inputfile ] && cp -uv ../convert/b2.transport.inputfile .
   [ -s ../convert/b2.sources.profile ] && cp -uv ../convert/b2.sources.profile .
+  [ -s ../convert/"$filestem"46 ] && cp -uv ../convert/"$filestem"46 .
   [ -s ../convert/"$filestem"44 ] && cp -uv ../convert/"$filestem"44 .
   [ -s ../convert/"$filestem"30 ] && cp -uv ../convert/"$filestem"30 .
   [ -s ../convert/"$filestem"15 ] && cp -uv ../convert/"$filestem"15 .
