@@ -46,6 +46,7 @@ endif
 
 # Directory where objectcode/binaries will be created
 OBJDIR = ${SRCTRI}/builds/${HOST_NAME}.${COMPILER}${EXT_DEBUG}
+EIROBJ = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_DEBUG}
 
 INCLUDE=
 LOCAL=no

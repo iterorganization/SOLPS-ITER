@@ -6,8 +6,7 @@
      .                                      neighs(:,:), neighr(:,:),
      .                                      trix(:), triy(:)
 
-      INTEGER, public, save :: NCOORD, NTRIA, NTRIA1, ICOORD, 
-     .                         ITRIA, ITRIA1
+      INTEGER, public, save :: NCOORD, NTRIA, NTRIA1
 
       contains
       subroutine realloc_ctria(kennung,incr)

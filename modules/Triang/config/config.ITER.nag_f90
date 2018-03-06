@@ -36,7 +36,7 @@ endif
 
 GKS = ${LD_GR} ${LD_GKS} -lX11 -lXt
 LDLIBS =
-LDEXTRA =
+LDEXTRA = ${EIROBJ}/ioflush.o
 
 #!!!Local Variables:
 #!!! mode: Makefile

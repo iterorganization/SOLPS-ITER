@@ -22,7 +22,7 @@ cank}
 
 C     VARIABLES FOR PLOTS
       REAL XMIN,XMAX,YMIN,YMAX,DELTAX,DELTAY,DELTA,XCM,YCM
-      INTEGER IS, ISP
+      INTEGER IS, IX, IY, ISP, ITRIA, ITRIA1
 
 cank{
       open(21,file='tria.elemente',status='old',action='read')
@@ -92,7 +92,7 @@ C     PLOT THE GRIDS
       CALL GR90DG
       CALL GRSCLC(5.,1.,5.+XCM,1.+YCM)
       CALL GRSCLV(XMIN,YMIN,XMAX,YMAX)
-C     PLOT THE OLD TRIANGLE-MESH
+C     PLOT THE OLD TRIANGLE MESH
       DO ITRIA1=1,NTRIA1
         CALL GRJMP(REAL(XCOORD(TRIA(ITRIA1,1))),
      .             REAL(YCOORD(TRIA(ITRIA1,1))))
@@ -103,7 +103,7 @@ C     PLOT THE OLD TRIANGLE-MESH
         CALL GRDRW(REAL(XCOORD(TRIA(ITRIA1,1))),
      .             REAL(YCOORD(TRIA(ITRIA1,1))))
       ENDDO
-C     PLOT THE NEW TRIANGLE-MESH
+C     PLOT THE NEW TRIANGLE MESH
       CALL GRNWPN(5)
       DO ITRIA=NTRIA1+1,NTRIA
         CALL GRJMP(REAL(XCOORD(TRIA(ITRIA,1))),
@@ -115,7 +115,7 @@ C     PLOT THE NEW TRIANGLE-MESH
         CALL GRDRW(REAL(XCOORD(TRIA(ITRIA,1))),
      .             REAL(YCOORD(TRIA(ITRIA,1))))
       ENDDO
-C     PLOT THE MARGIN OF THE NEW TRIANGLE-GRID
+C     PLOT THE MARGIN OF THE NEW TRIANGLE GRID
       CALL GRSPTS(25)
       DO ITRIA=NTRIA1+1,NTRIA
         DO IS=1,3
@@ -151,17 +151,12 @@ C     INITIALIZE THE VARIABLES OF THE COMMON BLOCKS
       IMPLICIT NONE
 
       NCOORD = 0
-      ICOORD = 0
 
       NTRIA = 0
       NTRIA1 = 0
-      ITRIA = 0
-      ITRIA1 = 0
 
       NNCUT = 0
-      ICUT = 0
       NNISO = 0
-      IISO = 0
       END
 
 *//TRIIN//
@@ -175,7 +170,7 @@ C     READ TRIANGLE MESH
       use ctria
       IMPLICIT NONE
 
-      INTEGER IDUMMY
+      INTEGER IDUMMY, ICOORD, ITRIA
 
       READ(21,*) NTRIA
       READ(23,*) idummy
@@ -228,7 +223,7 @@ c
 c      DOUBLEPRECISION, allocatable :: BR(:,:,:), BZ(:,:,:)
 c      doubleprecision  CR, CZ, PIT
 c      doubleprecision, allocatable :: help3(:,:,:)
-c      INTEGER I0, I0E, I1, I2, I3, I4, IX0
+c      INTEGER I0, I0E, I1, I2, I3, I4, IX, IY, IX0
 c      integer dim1, dim2
 c      CHARACTER*110 ZEILE
 c
@@ -389,7 +384,7 @@ C     CREATE TRIANGLE MESH
       use ccuts
       IMPLICIT NONE
 
-      INTEGER IX1
+      INTEGER IX, IY, IX1, ICUT, IISO
 
       call realloc_ctria('tria',2*n2eff+ntria1-size(tria,1))
       call realloc_ctria('neigh',2*n2eff+ntria1-size(neighb,1))
@@ -523,7 +518,7 @@ C     ELIMINATE DOUBLE COORDINATES
       IMPLICIT NONE
 
       integer, allocatable :: ico(:)
-      INTEGER L,I,J, K, ANZCOORD
+      INTEGER L,I,J, K, ICOORD, ANZCOORD, ITRIA
 
       allocate(ico(ncoord+(nx+1)*(ny+1)))
       DO J=1,NCOORD+(NX+1)*(NY+1)
@@ -577,7 +572,7 @@ C     FIND NEIGHBOURS
       use ccuts
       IMPLICIT NONE
 
-      INTEGER I, J, K, KK, L, M, IS, INCR
+      INTEGER I, J, K, KK, L, M, IS, INCR, ITRIA, ITRIA1
       DATA INCR /1000/
       LOGICAL PARA
       LOGICAL DBG, DBG0
@@ -869,6 +864,7 @@ C     WRITE NEW GRID
       use cdimen
       use ctria
       IMPLICIT NONE
+      INTEGER ICOORD, ITRIA
 
       WRITE(9,*) NCOORD
       WRITE(9,'(1P,4E19.8)') (XCOORD(ICOORD),ICOORD=1,NCOORD)
