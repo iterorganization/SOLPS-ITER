@@ -6,7 +6,7 @@
       integer, allocatable, public, save :: nxiso1(:), nxiso2(:),
      .                                      nyiso1(:), nyiso2(:)
 
-      INTEGER, public, save :: NNCUT, NNISO, ICUT, IISO
+      INTEGER, public, save :: NNCUT, NNISO
       INTEGER, ALLOCATABLE, PUBLIC, SAVE :: NCELL(:,:)
 
       contains

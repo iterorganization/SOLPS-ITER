@@ -19,9 +19,8 @@ c=======================================================================
       implicit none
       integer jc,kc
       integer igivelun
-      logical ex
       integer i,j,lun,lex(2)
-      real*8 d,x0,y0,x1,y1
+      double precision d,x0,y0,x1,y1
       parameter (d=0.2)
       character*10 fns(4),fn*14
       data fns / 'structures', 'frontier', 'triangles', 'curtrngl' /
@@ -38,7 +37,7 @@ c=======================================================================
 c** First call - output the structures (initial frontier)
         fn=trim(fns(1))//'.dat'
         open(lun,file=fn,err=900)
-        write(lun,'(1h#,6(7x,a2,6x))') 'x','y','xo','yo','xs','ys'
+        write(lun,'(a1,6(7x,a2,6x))') '#','x','y','xo','yo','xs','ys'
         do i=1,npartfr !{
           x0=0.5*(x(ifront(1,i))+x(ifront(2,i)))
           y0=0.5*(y(ifront(1,i))+y(ifront(2,i)))
@@ -61,7 +60,7 @@ c          write(lun,'(1p,2e15.6)') x1,y1
 c** Output the current frontier
         fn=trim(fns(2))//'.dat'
         open(lun,file=fn,err=900)
-        write(lun,'(1h#,2(8x,a1,6x))') 'x','y'
+        write(lun,'(a1,2(8x,a1,6x))') '#','x','y'
         do i=1,npartfr !{
           x0=0.5*(x(ifront(1,i))+x(ifront(2,i)))
           y0=0.5*(y(ifront(1,i))+y(ifront(2,i)))
@@ -76,7 +75,7 @@ c** Output the current frontier
 c** Output the triangles created by now
         fn=trim(fns(3))//'.dat'
         open(lun,file=fn,err=900)
-        write(lun,'(1h#,2(8x,a1,6x))') 'x','y'
+        write(lun,'(a1,2(8x,a1,6x))') '#','x','y'
         do i=1,nelm !{
           write(lun,*)
           write(lun,'(1p,2e15.6)') (x(ielm(j,i)),y(ielm(j,i)),j=1,3)
@@ -85,7 +84,7 @@ c** Output the triangles created by now
 c** Output the current triangle which apparently causes the problem
         fn=trim(fns(4))//'.dat'
         open(lun,file=fn,err=900)
-        write(lun,'(1h#,2(8x,a1,6x),2(7x,a2,6x))') 'x','y','xc','yc'
+        write(lun,'(a1,2(8x,a1,6x),2(7x,a2,6x))') '#','x','y','xc','yc'
         if(kc.gt.0) then !{
           x0=0.5*(x(ia)+x(ib))
           y0=0.5*(y(ia)+y(ib))

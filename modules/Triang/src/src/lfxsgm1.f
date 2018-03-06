@@ -7,11 +7,11 @@ c** This function returns .true. if the segments (x0,y0) and (x1,y1)
 c** intersect each other. (xs,ys) is the intersection point.
 c=======================================================================
       implicit none
-      real*8 x0(2),y0(2),x1(2),y1(2),xs,ys
-      real*8 a11,a12,a21,a22,b1,b2,d,t1,t2
-      real*8 tol,tol2
+      double precision x0(2),y0(2),x1(2),y1(2),xs,ys
+      double precision a11,a12,a21,a22,b1,b2,d,t1,t2
+      double precision tol,tol2
       parameter (tol=1.e-30, tol2=1.e-12)
-      integer i,j,inx,iny,ixx,ixy,jnx,jny,jxx,jxy
+      integer inx,iny,ixx,ixy,jnx,jny,jxx,jxy
 c=======================================================================
 
       lfxsgm1=.false.

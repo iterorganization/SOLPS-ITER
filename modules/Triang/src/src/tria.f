@@ -25,10 +25,10 @@ cank}
 
 C---- DECLARATIONS
 C---- VARIABLES FOR SORTING
-C---- BOUND,IND1,IND2 : LOOP VARIABLES
+C---- BOUND,IND1,IND2,IREG : LOOP VARIABLES
 C---- IHELP : VARIABLE FOR EXCHANGE
 C---- HELP  : VARIABLE FOR EXCHANGE
-      INTEGER BOUND,IND1,IND2,IHELP
+      INTEGER BOUND,IND1,IND2,IREG,IHELP
       DOUBLE PRECISION HELP
 
 C---- VARIABLES FOR GRAPHICS
@@ -53,11 +53,11 @@ C---- FOUND  : INDICATES IF THE THIRD TRIANGLE POINT WAS FOUND
 cank-20051101{
       integer npn_hlp,ihlp200,jhlp200,khlp200,mhlp200,nhlp200,
      ,  kchn_hlp,mchn_hlp,nchn_hlp
-      logical lhlp200,bhlp200,ex
+      logical lhlp200,ex
       integer, allocatable :: ichn_hlp(:),jchn_hlp(:,:)
       logical, allocatable :: lchn_hlp(:)
       character*4 hhlp200
-      real*8 dx,dy,d,dxmn,dxmx,dymn,dymx,sx,sy
+      double precision dx,dy,d,dxmn,dxmx,dymn,dymx,sx,sy
       character*10 hs(6)
 
       ihlp200=0
@@ -66,7 +66,6 @@ cank-20051101{
       mhlp200=0
       nhlp200=10
       lhlp200=.false.
-      bhlp200=.false.
 cank}
 
 C---- INITIALISATION
@@ -476,7 +475,6 @@ C---- SORTS THE FRONTIER PARTS FROM LONGEST TO SHORTEST
       ihlp200=ihlp200+1
       khlp200=max(khlp200,jhlp200)
       jhlp200=0
-      bhlp200=lhlp200
       lhlp200=ihlp200.eq.mhlp200
 c      lhlp200=ihlp200.eq.281 !###
       print *

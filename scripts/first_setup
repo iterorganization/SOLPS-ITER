@@ -21,71 +21,111 @@ cd $SOLPSTOP/modules/B2.5/config
 [ -s ${filename} ] && {
   echo "Non-empty ${filename} already present in $PWD: nothing done"
 } || {
-  cp config.default.$COMPILER ${filename}
-  echo "Created ${filename} from config.default.$COMPILER in $PWD: please modify if needed"
+  [ -s config.default.$COMPILER ] && {
+    cp config.default.$COMPILER ${filename}
+    echo "Created ${filename} from config.default.$COMPILER in $PWD: please modify if needed"
+  } || {
+  echo "No config.default.$COMPILER file available in $PWD: nothing done"
+  }
 }
 cd $SOLPSTOP/modules/Eirene/config
 [ -s ${filename} ] && {
   echo "Non-empty ${filename} already present in $PWD: nothing done"
 } || {
-  cp config.default.$COMPILER ${filename}
-  echo "Created ${filename} from config.default.$COMPILER in $PWD: please modify if needed"
+  [ -s config.default.$COMPILER ] && {
+    cp config.default.$COMPILER ${filename}
+    echo "Created ${filename} from config.default.$COMPILER in $PWD: please modify if needed"
+  } || {
+    echo "No config.default.$COMPILER file available in $PWD: nothing done"
+  }
 }
 cd $SOLPSTOP/modules/Carre/config
 [ -s ${filename} ] && {
   echo "Non-empty ${filename} already present in $PWD: nothing done"
 } || {
-  cp config.default.$COMPILER ${filename}
-  echo "Created ${filename} from config.default.$COMPILER in $PWD: please modify if needed"
+  [ -s config.default.$COMPILER ] && {
+    cp config.default.$COMPILER ${filename}
+    echo "Created ${filename} from config.default.$COMPILER in $PWD: please modify if needed"
+  } || {
+    echo "No config.default.$COMPILER file available in $PWD: nothing done"
+  }
 }
 cd $SOLPSTOP/modules/DivGeo/config
 [ -s ${filename} ] && {
   echo "Non-empty ${filename} already present in $PWD: nothing done"
 } || {
-  cp config.default.$COMPILER ${filename}
-  echo "Created ${filename} from config.default.$COMPILER in $PWD: please modify if needed"
+  [ -s config.default.$COMPILER ] && {
+    cp config.default.$COMPILER ${filename}
+    echo "Created ${filename} from config.default.$COMPILER in $PWD: please modify if needed"
+  } || {
+    echo "No config.default.$COMPILER file available in $PWD: nothing done"
+  }
 }
 cd $SOLPSTOP/modules/DivGeo/convert/config
 [ -s ${filename} ] && {
   echo "Non-empty ${filename} already present in $PWD: nothing done"
 } || {
-  cp config.default.$COMPILER ${filename}
-  echo "Created ${filename} from config.default.$COMPILER in $PWD: please modify if needed"
+  [ -s config.default.$COMPILER ] && {
+    cp config.default.$COMPILER ${filename}
+    echo "Created ${filename} from config.default.$COMPILER in $PWD: please modify if needed"
+  } || {
+    echo "No config.default.$COMPILER file available in $PWD: nothing done"
+  }
 }
 cd $SOLPSTOP/modules/DivGeo/equtrn/config
 [ -s ${filename} ] && {
   echo "Non-empty ${filename} already present in $PWD: nothing done"
 } || {
-  cp config.default.$COMPILER ${filename}
-  echo "Created ${filename} from config.default.$COMPILER in $PWD: please modify if needed"
+  [ -s config.default.$COMPILER ] && {
+    cp config.default.$COMPILER ${filename}
+    echo "Created ${filename} from config.default.$COMPILER in $PWD: please modify if needed"
+  } || {
+    echo "No config.default.$COMPILER file available in $PWD: nothing done"
+  }
 }
 cd $SOLPSTOP/modules/Uinp/config
 [ -s ${filename} ] && {
   echo "Non-empty ${filename} already present in $PWD: nothing done"
 } || {
-  cp config.default.$COMPILER ${filename}
-  echo "Created ${filename} from config.default.$COMPILER in $PWD: please modify if needed"
+  [ -s config.default.$COMPILER ] && {
+    cp config.default.$COMPILER ${filename}
+    echo "Created ${filename} from config.default.$COMPILER in $PWD: please modify if needed"
+  } || {
+    echo "No config.default.$COMPILER file available in $PWD: nothing done"
+  }
 }
 cd $SOLPSTOP/modules/Triang/config
 [ -s ${filename} ] && {
   echo "Non-empty ${filename} already present in $PWD: nothing done"
 } || {
-  cp config.default.$COMPILER ${filename}
-  echo "Created ${filename} from config.default.$COMPILER in $PWD: please modify if needed"
+  [ -s config.default.$COMPILER ] && {
+    cp config.default.$COMPILER ${filename}
+    echo "Created ${filename} from config.default.$COMPILER in $PWD: please modify if needed"
+  } || {
+    echo "No config.default.$COMPILER file available in $PWD: nothing done"
+  }
 }
 cd $SOLPSTOP/modules/solps4-5/config
 [ -s ${filename} ] && {
   echo "Non-empty ${filename} already present in $PWD: nothing done"
 } || {
-  cp config.default.$COMPILER ${filename}
-  echo "Created ${filename} from config.default.$COMPILER in $PWD: please modify if needed"
+  [ -s config.default.$COMPILER ] && {
+    cp config.default.$COMPILER ${filename}
+    echo "Created ${filename} from config.default.$COMPILER in $PWD: please modify if needed"
+  } || {
+    echo "No config.default.$COMPILER file available in $PWD: nothing done"
+  }
 }
 cd $SOLPSTOP/modules/amds/config
 [ -s ${filename} ] && {
   echo "Non-empty ${filename} already present in $PWD: nothing done"
 } || {
-  cp config.default.$COMPILER ${filename}
-  echo "Created ${filename} from config.default.$COMPILER in $PWD: please modify if needed"
+  [ -s config.default.$COMPILER ] && {
+    cp config.default.$COMPILER ${filename}
+    echo "Created ${filename} from config.default.$COMPILER in $PWD: please modify if needed"
+  } || {
+    echo "No config.default.$COMPILER file available in $PWD: nothing done"
+  }
 }
 cd $OLD_PWD
 [ -d $SOLPSTOP/lib/${HOST_NAME}.${COMPILER} ] || mkdir $SOLPSTOP/lib/${HOST_NAME}.${COMPILER}

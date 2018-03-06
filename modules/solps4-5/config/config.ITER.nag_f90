@@ -8,7 +8,7 @@ CPP5OPTS = -C -P -I${srcdir} ${EQUIV5}
 SED = sed s:\#PREC\#:d:g
 
 FC     = nagfor
-FCOPTS = -O -Nl99 -x77 # -mismatch
+FCOPTS = -O -x77 # -mismatch
 INCMOD = -I
 MOD = mod
 

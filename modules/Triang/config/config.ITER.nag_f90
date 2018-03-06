@@ -1,0 +1,44 @@
+# Test whether necessary variables are defined
+LD_GR  ?= -L${GR_ROOT}/lib -lgr
+LD_GKS ?= -L${GLI_HOME} -lgks -lXmu -lX11 -lXt
+
+DEFINES =
+EQUIVS =
+
+CPP = /lib/cpp -traditional
+CPPOPTS = -P -I${srcdir} ${EQUIVS}
+SED = sed s:\#PREC\#:d:g
+LINK_MOD =
+
+FC = nagfor
+ifdef SOLPS_DEBUG
+FCOPTS = -C -g
+else
+FCOPTS = -O2
+endif
+
+DBLFC = ${FC}
+DBLOPTION =
+DBLSED = sed -e s:\#PREC\#:d:g
+
+INCMOD = -I
+MOD = mod
+OBJDEST = -o ${OBJDIR}/$*.o
+
+BLD = ar rcv
+
+LD = nagfor
+ifdef SOLPS_DEBUG
+LDOPTS = -g -C
+else
+LDOPTS =
+endif
+
+GKS = ${LD_GR} ${LD_GKS} -lX11 -lXt
+LDLIBS =
+LDEXTRA =
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+

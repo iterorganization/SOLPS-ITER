@@ -15,7 +15,6 @@
       integer incr
 
       double precision, allocatable :: help(:,:), help1(:)
-      integer, allocatable :: ihelp(:,:)
       integer dim1, dim2
 
       if (kennung .eq. 'xycoord') then
