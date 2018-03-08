@@ -7,8 +7,8 @@
 
 [submodule "B2.5"]
 	path = modules/B2.5
-	url = ssh://git@git.iter.org/bnd/b2.5.git
-	branch = develop
+        url = git@gitlab.mech.kuleuven.be:tme-fusion-b2-eirene/b2.5.git
+	branch = develop-Leuven
 [submodule "Carre"]
 	path = modules/Carre
 	url = ssh://git@git.iter.org/bnd/carre.git
@@ -19,8 +19,8 @@
 	branch = ITER-develop
 [submodule "Eirene"]
 	path = modules/Eirene
-	url = ssh://git@git.iter.org/bnd/eirene.git
-	branch = ITER-develop
+	url = git@gitlab.mech.kuleuven.be:tme-fusion-b2-eirene/eirene.git
+	branch = ITER-develop-Leuven
 [submodule "ADAS"]
 	path = modules/adas
 	url = ssh://git@git.iter.org/imex/amns-adas.git
