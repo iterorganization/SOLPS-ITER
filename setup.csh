@@ -23,22 +23,20 @@ else
   set iamat="UNKNOWN"
 endif
 
-if (-s SETUP/setup.csh.HOST_NAME.local) then
+if (-e SETUP/setup.csh.HOST_NAME.local) then
   echo Loading SETUP/setup.csh.HOST_NAME.local
   setenv HOST_NAME `cat SETUP/setup.csh.HOST_NAME.local`
 else
-  switch ($iamat)
-  case "*UNKNOWN":
-    setenv HOST_NAME UNKNOWN
-    breaksw
-  default:
+  if ( $iamat == "*UNKNOWN" ) then
+    setenv HOST_NAME default
+  else
     setenv HOST_NAME ${iamat}
-  endsw
+  endif
 endif
 
 # COMPILER can also be the argument to setup.csh call
 if($1 == "") then
-  if (-s default_compiler) then
+  if (-e default_compiler) then
     setenv COMPILER `./default_compiler|tail -1`
     echo Using compiler $COMPILER.
   else
@@ -64,13 +62,13 @@ else
 endif
 
 # setup files for combination of HOST_NAME and COMPILER, + local modifications if present
-if (-s SETUP/setup.csh.${HOST_NAME}.${COMPILER}) then
+if (-e SETUP/setup.csh.${HOST_NAME}.${COMPILER}) then
   echo Loading SETUP/setup.csh.${HOST_NAME}.${COMPILER}.
   source SETUP/setup.csh.${HOST_NAME}.${COMPILER}
 else
   echo File SETUP/setup.csh.${HOST_NAME}.${COMPILER} not found!
 endif
-if (-s SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local) then
+if (-e SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local) then
   echo Loading SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local.
   source SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
 endif
@@ -87,6 +85,9 @@ setenv EscapeSonnet `echo ${SonnetTopDirectory} | sed 's:\/:\\\/:g'`
 setenv DG ${SOLPSTOP}/modules/DivGeo
 setenv SOLPSLIB ${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}
 #setenv CARRE_STOREDIR $SOLPSTOP/modules/Carre/meshes
+
+
+
 
 # Set path to scripts and executables
 #------------------------------------
@@ -136,6 +137,16 @@ else
   setenv MANPATH ${SonnetTopDirectory}/man:${DG}/equtrn/doxygen/man
 endif
 
+# Remove double entries from some environment variables, if there are any
+
+setenv PATH  `echo $PATH | awk -v RS=: -v ORS= '\\!a[$0]++ {if (NR>1) printf(":"); printf("%s",$0) }'`
+setenv LD_LIBRARY_PATH  `echo $LD_LIBRARY_PATH | awk -v RS=: -v ORS= '\\!a[$0]++ {if (NR>1) printf(":"); printf("%s",$0) }'`
+setenv MANPATH  `echo $MANPATH | awk -v RS=: -v ORS= '\\!a[$0]++ {if (NR>1) printf(":"); printf("%s",$0) }'`
+setenv PYTHONPATH  `echo $PYTHONPATH | awk -v RS=: -v ORS= '\\!a[$0]++ {if (NR>1) printf(":"); printf("%s",$0) }'`
+setenv OLD_PATH  `echo $OLD_PATH | awk -v RS=: -v ORS= '\\!a[$0]++ {if (NR>1) printf(":"); printf("%s",$0) }'`
+
+
+
 alias sb2  'cd ${SOLPSTOP}/modules/B2.5'
 alias sbb  'cd ${SOLPSTOP}/modules/B2.5'
 alias sei  'cd ${SOLPSTOP}/modules/Eirene'
@@ -152,6 +163,7 @@ alias stop 'cd ${SOLPSTOP}'
 
 alias sdg 'cd ${SOLPSTOP}/modules/DivGeo/device/${DEVICE}'
 alias ssf 'cd ${SOLPSTOP}/modules/DivGeo/device/${DEVICE}'
+
 
 alias xyplot plot xyplot
 alias xyplot2 plot xyplot2
@@ -194,12 +206,14 @@ alias xlylplot8 plot xlylplot8
 alias xlylplot8 plot xlylplot8
 alias xlylplot9 plot xlylplot9
 
+
 alias   set_debug 'source $SOLPSTOP/SETUP/debug'
 alias unset_debug 'source $SOLPSTOP/SETUP/nodebug'
 alias   set_mpi   'source $SOLPSTOP/SETUP/mpi'
 alias unset_mpi   'source $SOLPSTOP/SETUP/nompi'
 alias   set_ig   'source $SOLPSTOP/SETUP/ig'
 alias unset_ig   'source $SOLPSTOP/SETUP/noig'
+
 
 #if (! $?IDL_PATH) setenv IDL_PATH
 #setenv IDL_PATH +$SOLPSTOP/data/IDL:${IDL_PATH}
@@ -210,8 +224,9 @@ alias unset_ig   'source $SOLPSTOP/SETUP/noig'
 #
 #setenv PLOT_SET_PATH '..:../..:${SOLPSTOP}/data.local/plot_set:${SOLPSTOP}/data/plot_set'
 
+
 # Add any local settings if present
-if (-s SETUP/setup.csh.local) then
+if (-e SETUP/setup.csh.local) then
   echo Loading SETUP/setup.csh.local.
   source SETUP/setup.csh.local
 endif
