@@ -542,18 +542,21 @@ to refresh the list of executables to be found with the search path.
 
 On the \SOLPSITER web site (\href{https://portal.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}{https://portal.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}), in the folder {\em Examples}, one can find a few example cases for \SOLPSITER runs, in both {\tt B2.5} stand-alone or {\tt B2.5-Eirene} coupled modes.
 
-There is also a dedicated directory \${\tt SOLPSTOP/runs/examples} which contains links to a series of sample cases. These are actually stored in the {\tt /work/imas/shared/boundary/solps-iter/assets/MD5} directory hosted at the IO, and the means to retrieve these cases is detailed in the \${\tt SOLPSTOP/runs/examples/README.md} file. Following the instructions therein will extract an archived file in gzipped tar format containing a {\tt baserun} and one or more run directories and associated files. In some cases, a {\tt DIMENSIONS.F} file is also provided, which shows the dimensions necessary to run those cases (see Appendix \ref{sec:DIMENSIONS} for full details about the contents of such files).
+There is also a dedicated directory \${\tt SOLPSTOP/runs/examples} which contains links to a series of sample cases. These are actually stored in the {\tt /work/imas/shared/external/assets/solps-iter/MD5} directory hosted at the IO, and the means to retrieve these cases is detailed in the \${\tt SOLPSTOP/runs/examples/README.md} file. Following the instructions therein will extract an archived file in gzipped tar format containing a {\tt baserun} and one or more run directories and associated files. In some cases, a {\tt DIMENSIONS.F} file is also provided, which shows the dimensions necessary to run those cases (see Appendix \ref{sec:DIMENSIONS} for full details about the contents of such files).
 
 The cases stored for retrieval include:
 \begin{description}
   \item[AUG\_16151\_D] ASDEX-Upgrade D-only benchmark cases, including {\tt B2.5} standalone, coupled and single {\tt Eirene} call run directories
   \item[AUG\_16151\_D+C+He] ASDEX-Upgrade multi-fluid benchmark cases, including {\tt B2.5} standalone, coupled and single {\tt Eirene} call run directories
   \item[ITER\_2171\_D+He+Be+Ne] ITER full performance case with Ne injection
+  \item[ITER\_2264\_0.6Ne\_100MW] Another ITER full perfomance case with Ne injection
   \item[ITER\_2292\_Honly\_20MW] ITER low power case at low density
   \item[ITER\_2294\_Honly\_20MW] Same as above, but increasing density
   \item[ITER\_2296\_Honly\_20MW] Same as above, but continuing density scan
-  \item[ITER\_2297\_Honly\_20MW] Same as above, continuing scan, reaching detachment
+  \item[ITER\_2297\_Honly\_20MW] Same as above, continuing scan
+  \item[ITER\_2299\_Honly\_20MW] Same as above, continuing scan, reaching detachment
   \item[ITER\_2308\_Honly\_20MW] Same as above, continuing scan, detached conditions
+  \item[ITER\_2360\_0.95He+0.05H\_40MW] ITER Helium plasma case at mid-power
   \item[ITER\_2588\_D+He+N] ITER full power case with N injection
   \item[ITER\_2588\_drifts] ITER {\tt B2.5} stand-alone D-only demonstration case with and without drifts
   \item[ITER\_535\_D+He+Ar] ITER full power case with Ar injection
@@ -561,6 +564,8 @@ The cases stored for retrieval include:
 \end{description}
 as well as additional partial cases used in tutorials when learning how to build a case using the {\tt DivGeo} and {\tt SOLPS-GUI} utilities.
 Other cases can be added at the suggestion of users, if available.
+
+After the cases have been downloaded to your system, make sure that the timestamps of the various input files are in the proper chronological order (using the {\tt correct\_baserun\_timestamps} and {\tt touch bf2tstati} instructions as necessary) before attempting to launch any actual runs. Also, the links to database files are not provided within these examples, and they can be set up using the {\tt setup\_baserun\_eirene\_links} script.
 
 \section{Using a central installation}
 \label{Using a central installation}
@@ -3695,7 +3700,7 @@ and data files. The switches to obtain this are:
   \item["invert\_bpol" "1"] Inverts the poloidal field and related quantities
   \item["invert\_btor" "1"] Inverts the toroidal field and related quantities
 \end{description}
-This option {\em must} also be used if converting from an older {\bf SOLPS4.3} or {\bf SOLPS5.0} case, if the geometry file has been rebuilt, as the sign convention for the parallel velocity now depends on the sign of the magnetic field in \SOLPSITERns.
+This is important because the parallel velocity is co-aligned with the magnetic field in \SOLPSITERns, which was not the case in earlier code versions (please consult Section~\ref{sec:signs} for a full description of the sign conventions used in \SOLPSITERns). For instance, if you are converting from an older {\bf SOLPS4.3} case (where the magnetic field components were always positive by default), you need to use these switches to adapt the plasma solution and the geometry files. This is done automatically for ITER cases when using the {\tt convert\_from\_solps4.3} script.
 
 {\tt b2yt} may also be used
 to change the order of species (for example changing from $D+C+He$ to $D+He+C$) or for
@@ -6954,7 +6959,7 @@ Zhdanov fit to Braginskii and the \SOLPSfour values.
 
 The version of the equations shown in this Appendix represents the best available description of the standard recommended settings for the \SOLPSITER physics model, built upon the original work on {\bf SOLPS5.2} from the St. Petersburg group \cite{ROZHANSKY2009}. This Appendix is not meant as an exhaustive registry of the capabilities of the code, for which the reader is encouraged to peruse Chapters \ref{cha:standaloneb2} and \ref{cha:coupledb2eirene} as well as the list of switches in Appendix \ref{lis:b2cdci} and of namelist variables in Appendix \ref{lis:b2cdcn}.
 
-\section*{Sign conventions}\index{sign conventions}
+\section{Sign conventions}\index{sign conventions}\label{sec:signs}
 
 The radial coordinate $y$ increases as one crosses the separatrix from the core (or private flux) region into the main SOL region (and so is minimum at the magnetic axis). The poloidal coordinate $x$ increases in the {\em clockwise} direction when viewing the poloidal plane with the central axis line on its left. The toroidal magnetic field component $b_z$ is taken as positive if the toroidal magnetic field is directed {\em clockwise} when viewing the tokamak from above. The poloidal magnetic field component $b_x$ follows the same convention as the $x$ component and is positive when directed in the direction of increasing poloidal index, i.e. {\em clockwise}.
 
