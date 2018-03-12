@@ -16,27 +16,29 @@ setenv SOLPSWORK ${SOLPSTOP}/runs
 # Set HOST_NAME and COMPILER, which will determine setup-files to be used
 #------------------------------------------------------------------------
 
-if (-e whereami) then
+if (-s whereami) then
   set iamat=`./whereami|tail -1`
   echo Running at $iamat.
 else
   set iamat="UNKNOWN"
 endif
 
-if (-e SETUP/setup.csh.HOST_NAME.local) then
+if (-s SETUP/setup.csh.HOST_NAME.local) then
   echo Loading SETUP/setup.csh.HOST_NAME.local
   setenv HOST_NAME `cat SETUP/setup.csh.HOST_NAME.local`
 else
-  if ( $iamat == "*UNKNOWN" ) then
-    setenv HOST_NAME default
-  else
+  switch ($iamat)
+  case "*UNKNOWN":
+    setenv HOST_NAME UNKNOWN
+    breaksw
+  default:
     setenv HOST_NAME ${iamat}
-  endif
+  endsw
 endif
 
 # COMPILER can also be the argument to setup.csh call
 if($1 == "") then
-  if (-e default_compiler) then
+  if (-s default_compiler) then
     setenv COMPILER `./default_compiler|tail -1`
     echo Using compiler $COMPILER.
   else
@@ -62,13 +64,13 @@ else
 endif
 
 # setup files for combination of HOST_NAME and COMPILER, + local modifications if present
-if (-e SETUP/setup.csh.${HOST_NAME}.${COMPILER}) then
+if (-s SETUP/setup.csh.${HOST_NAME}.${COMPILER}) then
   echo Loading SETUP/setup.csh.${HOST_NAME}.${COMPILER}.
   source SETUP/setup.csh.${HOST_NAME}.${COMPILER}
 else
   echo File SETUP/setup.csh.${HOST_NAME}.${COMPILER} not found!
 endif
-if (-e SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local) then
+if (-s SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local) then
   echo Loading SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local.
   source SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
 endif
@@ -226,7 +228,7 @@ alias unset_ig   'source $SOLPSTOP/SETUP/noig'
 
 
 # Add any local settings if present
-if (-e SETUP/setup.csh.local) then
+if (-s SETUP/setup.csh.local) then
   echo Loading SETUP/setup.csh.local.
   source SETUP/setup.csh.local
 endif
