@@ -1,7 +1,8 @@
       subroutine uininp
-       use b2mod_layer
+      use b2mod_types
+      use b2mod_layer
      , , only: ntrack, nalloys
-       use eirmod_extrab25
+      use eirmod_extrab25
      , , only: msrfclsx, mgwtiesx
 c
 c  version : 23.04.99 14:36
@@ -13,7 +14,6 @@ c======================================================================
       integer i,j,iamd,ifile,imat,nmat,isp
       logical uex,open_file,streql,match_found,skip_wall
       character*2 listmat(nmtr)
-      character*256 solpstop
       external open_file,uinnam,uintrg,uinaux,uiniamd,streql,
      .         xertst,xerrab,subini,subend
 c======================================================================

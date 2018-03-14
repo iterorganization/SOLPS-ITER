@@ -2,7 +2,7 @@
 LD_GR  ?= -L${GR_ROOT}/lib -lgr
 LD_GKS ?= -L${GLI_HOME} -lgks -lXmu -lX11 -lXt
 
-DEFINES =
+DEFINES = ${SOLPS_CPP}
 EQUIVS =
 
 CPP = /lib/cpp -traditional
@@ -36,7 +36,7 @@ endif
 
 GKS = ${LD_GR} ${LD_GKS} -lX11 -lXt
 LDLIBS =
-LDEXTRA = ${EIROBJ}/ioflush.o
+LDEXTRA =
 
 #!!!Local Variables:
 #!!! mode: Makefile

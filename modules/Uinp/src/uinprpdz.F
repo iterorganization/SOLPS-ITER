@@ -1,8 +1,9 @@
       subroutine uinprpdz(lmrk,nmrk,kmrk)
-       use b2mod_layer
+      use b2mod_types
+      use b2mod_layer
      , , only: ntrack, nalloys
-       use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use eirmod_extrab25
+     , , only: msrfclsx
 
 c  version : 24.01.2003 17:55
 
@@ -19,10 +20,13 @@ c***  lmrk  boundary zone indices
 c***  kmrk  corresponding boundary kinds
 c***  nmrk  number of marked boundary zones
 c=======================================================================
+      implicit none
       integer nmrk,lmrk(*),kmrk(*)
 #include "uinpcom.inc"
       integer i,j,k,l,m,n,ir,iz,it,l_pfr,l_wll
       logical ex,hlp_trg
+      integer mesh_cell_ind
+      external mesh_cell_ind
 
 c*** Here we use the data on grid cell numbers between the separatrices
 c*** and grid edges (nrpfl, nrsol1 - see uinprpgr for detail),

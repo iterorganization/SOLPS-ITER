@@ -1,4 +1,5 @@
        block data uiblkd
+       use b2mod_types
        use b2mod_layer
      , , only: ntrack, nalloys
        use eirmod_extrab25
@@ -14,7 +15,7 @@ c=======================================================================
       integer i,j
       common /uiblkd_local/ i,j
       integer, parameter :: lurpst=n1st*nplg, luznknd=nbndzon*nbndknd,
-     ,  lulim2=nlim*nlim,   lufour=n1st,
+     ,  lulim2=nlim*nlim,
      ,  lu9=9*nlim,         lustsr=nsrfs*nstra, luatsr=natm*nstra,   
      ,  lunplt=nptal*nplt,  lu21pr=2*nppart,lvrctd=mreac*nsrctd,
      ,  lu3st=3*n1st,       lugwts=mgwtiesx*ngwtiesx, lusts3=3*lustsr,
@@ -138,8 +139,7 @@ c*** Data for visualisation of the surface properties
 
 c*** Data for TRIA mesh
       data ilplgdg,ntriref /
-     /      nlim*0,   0    /
-                 
+     /      nlim*0,   0    /                
  
 c*** 1
 
@@ -694,8 +694,8 @@ c*** 5
 
 c*** 6
 
-      integer luftrm,luchsi,luchsr,lvchsi,lvchsr
-      parameter (luftrm=1, luchsi=5, luchsr=3)
+      integer luchsi,luchsr,lvchsi,lvchsr
+      parameter (luchsi=5, luchsr=3)
       parameter (lvchsi=luchsi*nchsppr, lvchsr=luchsr*nchsppr)
       data nltrim / .true. /
       data path,(filtrm(i),i=1,luftrm)     /

@@ -57,8 +57,6 @@ c     log10 of densities (in 1/cm3), temperatures (in eV)
       real (kind=R8) ::
      *   DDENSDzav(iddimd),DTEVDzav(itdimd)
 c     log10 of rate coefficients (in cm3/s)
-      real (kind=R8) :: DTMP1(itdimd,iddimd)
-c     effective coefficients
 c     effective coefficients
       real (kind=R8) :: DZAV(isdimd,itdimd,iddimd)
 c     helpers for composing filenames
@@ -366,16 +364,16 @@ cxpb   jend(l) is the number of the last bundled ion of sequence l in the new li
 cxpb Now we remap the arrays
       if (nplsb.ne.nspcpls.and.nplsb.gt.0) then !{
         write(6,*) 'New ion list after bundling to be mapped: '
-      	write(*,'(1x,a12,9a8)') 'plasma ions','nmassb','ncharb','nprtb',
-     ,	  'nchrgb','isrfb','isrtb','nmsecb','spcsrnb'
-      	do i=1,nplsb !{
+        write(*,'(1x,a12,9a8)') 'plasma ions','nmassb','ncharb','nprtb',
+     ,    'nchrgb','isrfb','isrtb','nmsecb','spcsrnb'
+        do i=1,nplsb !{
           if (spcsrnb(i).eq.0) cycle
           if (is_bundled(spcsrnb(i))) then !{
-	    write(*,'(4x,a8,i7,8i8)') textb(i),
+            write(*,'(4x,a8,i7,8i8)') textb(i),
      ,       nmassb(i),ncharb(i),nprtb(i),
-     ,	     nchrgb(i),isrfb(i),isrtb(i),nmsecb(i),spcsrnb(i)
+     ,       nchrgb(i),isrfb(i),isrtb(i),nmsecb(i),spcsrnb(i)
           end if !}
-	end do !}
+        end do !}
         write(6,1028)
         ianf = 0
         iend = 0
@@ -489,12 +487,12 @@ cxpb   jend(l) is the number of the last bundled ion of sequence l in the new li
         end do !}
         deallocate(done)
         write(6,*) 'New ion list after mapping: '
-      	write(*,'(1x,a12,9a8)') 'plasma ions','nmassp','ncharp','nprtp',
-     ,	  'nchrgp','isrfp','isrtp','nmsecp','spcsrnp'
+        write(*,'(1x,a12,9a8)') 'plasma ions','nmassp','ncharp','nprtp',
+     ,    'nchrgp','isrfp','isrtp','nmsecp','spcsrnp'
         do i=1,nplsi+nbgk !{
-	  write(*,'(a12,i7,8i8)') textp(i),nmassp(i),ncharp(i),nprtp(i),
-     ,	    nchrgp(i),isrfp(i),isrtp(i),nmsecp(i),spcsrnp(i)
-	end do !}
+          write(*,'(a12,i7,8i8)') textp(i),nmassp(i),ncharp(i),nprtp(i),
+     ,      nchrgp(i),isrfp(i),isrtp(i),nmsecp(i),spcsrnp(i)
+        end do !}
         nspcpls=nplsi
         write(*,1028)
       end if !}

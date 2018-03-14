@@ -177,7 +177,7 @@ C     READ TRIANGLE MESH
       if (ntria .ne. idummy) then
          write(6,*) '*.elemente and *.neighbor files differ in number',
      .              ' of triangles'
-         call exit
+         stop
       endif
       allocate(tria(ntria,3))
       allocate(neighb(ntria,3))
@@ -518,7 +518,7 @@ C     ELIMINATE DOUBLE COORDINATES
       IMPLICIT NONE
 
       integer, allocatable :: ico(:)
-      INTEGER L,I,J, K, ICOORD, ANZCOORD, ITRIA
+      INTEGER J, K, ICOORD, ANZCOORD, ITRIA
 
       allocate(ico(ncoord+(nx+1)*(ny+1)))
       DO J=1,NCOORD+(NX+1)*(NY+1)

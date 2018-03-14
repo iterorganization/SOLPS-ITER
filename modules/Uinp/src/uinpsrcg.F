@@ -1,7 +1,8 @@
       subroutine uinpsrcg
-       use b2mod_layer
+      use b2mod_types
+      use b2mod_layer
      , , only: ntrack, nalloys
-       use eirmod_extrab25
+      use eirmod_extrab25
      , , only: msrfclsx, mgwtiesx
 c
 c  version : 01.04.2005 00:51
@@ -12,10 +13,8 @@ c=======================================================================
       implicit none
 #include "uinput.inc"
       integer i,j,k,l,isg,istr,isf
-      real*4 hlp,hlp1,hlp2,hlpeps,hlpeps2
       logical ex,uex,streql
       external streql, xerrab, subini, subend
-      parameter (hlpeps=1.e-6, hlpeps2=1.e-5)
 c=======================================================================
       call subini ('uinpsrcg')
 c<<<

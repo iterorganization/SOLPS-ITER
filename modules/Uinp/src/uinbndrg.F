@@ -1,14 +1,16 @@
       subroutine uinbndrg
-       use b2mod_layer
+      use b2mod_types
+      use b2mod_layer
      , , only: ntrack, nalloys
-       use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use eirmod_extrab25
+     , , only: msrfclsx
 c
 c  version : 15.03.2001 00:57
 c
 c=======================================================================
 c*** Determine the gross boundary regions
 c=======================================================================
+      implicit none
 #include "uinpcom.inc"
       integer i,j,k,l,nt_hlp
       logical ex
@@ -23,14 +25,14 @@ c=======================================================================
 c*** Check the topology
       ex=.false.
       do i=1,nt_hlp !{
-      	ex= ex .or. topo.eq.topo_hlp(i)
+        ex= ex .or. topo.eq.topo_hlp(i)
       end do !}
       if(.not.ex) then !{
-      	write(0,*) 'Invalid topology name ( ',topo,') found in ',
-     ,	      'uinbndrg - must be one of: ',(' ',topo_hlp(i),i=1,nt_hlp)
-      	call xerrab ('==> Check the topology name in the DG model')
+        write(0,*) 'Invalid topology name ( ',topo,') found in ',
+     ,        'uinbndrg - must be one of: ',(' ',topo_hlp(i),i=1,nt_hlp)
+        call xerrab ('==> Check the topology name in the DG model')
       end if !}
-      if(lm_cnfg) then	!{
+      if(lm_cnfg) then  !{
 c*** Core
         crgbndt(1,1)='S'
         lrsbndt(1,1)=0
@@ -60,11 +62,11 @@ c*** Wall
         lrrbndt(1,4,1)=nrpfl+1
         lrrbndt(1,4,2)=irwl
 
-      	ntrgdflt=2
-      	nrgbndt(1)=1
-      	nrgbndt(2)=2
-      	nrgbndt(3)=0
-      	nrgbndt(4)=1
+        ntrgdflt=2
+        nrgbndt(1)=1
+        nrgbndt(2)=2
+        nrgbndt(3)=0
+        nrgbndt(4)=1
 
       else !}{
 c*** Target 1
@@ -117,20 +119,20 @@ c*** Wall 1
         ex=.false.
         if(index(topo,'DN').gt.0) then  !{
 
-      	  ntrgdflt=4
-	  nrgbndt(1)=2
-      	  nrgbndt(2)=4
-      	  nrgbndt(3)=4
-      	  nrgbndt(4)=2
-	  lcmbndt(2,3)=3
-	  lcmbndt(3,3)=2
-	  lcmbndt(1,4)=2
-	  lcmbndt(2,4)=1
+          ntrgdflt=4
+          nrgbndt(1)=2
+          nrgbndt(2)=4
+          nrgbndt(3)=4
+          nrgbndt(4)=2
+          lcmbndt(2,3)=3
+          lcmbndt(3,3)=2
+          lcmbndt(1,4)=2
+          lcmbndt(2,4)=1
 c*** Target 3
           crgbndt(3,2)='W'
           k=k+1
-	  l=k
-	  j=l
+          l=k
+          j=l
           lrpbndt(3,2,1)=k
           lrsbndt(3,2)=k
           k=k+nzidv2
@@ -154,7 +156,7 @@ c*** Core 2
           lrrbndt(2,1,2)=nrpfl
 c*** Target 4
           crgbndt(4,2)='E'
-	  j=k+1
+          j=k+1
           lrpbndt(4,2,1)=j
           k=k+nzodv2+1
           lrpbndt(4,2,2)=k
@@ -176,20 +178,20 @@ c*** Wall 2
           lrrbndt(2,4,1)=nrpfl+nrsol1+1
           lrrbndt(2,4,2)=irwl
 
-	  if(topo.eq.'DNU') then	!{
-      	    lrrbndt(1,3,2)=nrpfl
-      	    lrrbndt(2,3,2)=nrpfl+nrsol1
+          if(topo.eq.'DNU') then        !{
+            lrrbndt(1,3,2)=nrpfl
+            lrrbndt(2,3,2)=nrpfl+nrsol1
             lrrbndt(3,3,2)=nrpfl
             lrrbndt(4,3,2)=nrpfl+nrsol1
-	  end if	!}
+          end if        !}
 
         else if(index(topo,'SN').gt.0) then !}{
 
-      	  ntrgdflt=2
-      	  nrgbndt(1)=1
-      	  nrgbndt(2)=2
-      	  nrgbndt(3)=2
-      	  nrgbndt(4)=1
+          ntrgdflt=2
+          nrgbndt(1)=1
+          nrgbndt(2)=2
+          nrgbndt(3)=2
+          nrgbndt(4)=1
         end if  !}
       end if  !}
 c!###{
@@ -197,12 +199,12 @@ c!###{
       print *
       print *,'knd reg    pos loc_pol loc_rad cmb'
       do k=1,nbndknd !{
-      	print *
-	do j=1,nrgbndt(k) !{
-	  print '(2i4,1x,a1,1x,6i4)',k,j,crgbndt(j,k),lrsbndt(j,k),
-     ,	    lrpbndt(j,k,1),lrpbndt(j,k,2),lrrbndt(j,k,1),lrrbndt(j,k,2),
-     ,	    lcmbndt(j,k)
-	end do !}
+        print *
+        do j=1,nrgbndt(k) !{
+          print '(2i4,1x,a1,1x,6i4)',k,j,crgbndt(j,k),lrsbndt(j,k),
+     ,      lrpbndt(j,k,1),lrpbndt(j,k,2),lrrbndt(j,k,1),lrrbndt(j,k,2),
+     ,      lcmbndt(j,k)
+        end do !}
       end do !}
       print *
 c!###}

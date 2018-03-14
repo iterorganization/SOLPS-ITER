@@ -8,7 +8,7 @@ endif
 # Modules needed by SOLPS-ITER
 if (`hostname` != "hpc-login01.iter.org") then
   module load imas/3.12.0/ual/3.6.3
-  module switch Anaconda2 Anaconda3/5.0.1
+  module switch Anaconda2 Anaconda3/4.4.0
   module load makedepend/1.0.0
   module load netcdf/4.3.3.1
   module load netcdf-fortran/4.4.2-intel-12.0.2
@@ -17,17 +17,16 @@ if (`hostname` != "hpc-login01.iter.org") then
   module load hdf5/1.8.15
   module load flex/2.5.39-GCC-4.8.3
   module load doxygen
-  module unload zlib
-  module unload bzip2
   module load fontconfig/2.11.93
   module load cairo/1.14.2
   module load xmllib/2.0.0-imas-3.7.4-intel-12.0.2
   module use /work/imas/opt/EasyBuild/modules/all
+  module unload zlib
   module load libpng/1.6.16-goolf-1.5.16
 else
   module unload intel
   module load imas/3.16.0-new/ual/3.7.1
-  module switch Anaconda2 Anaconda3/5.0.1
+  module switch Anaconda2 Anaconda3/4.4.0
   unsetenv IMAS_VERSION
   module load makedepend/1.0.5-GCCcore-6.4.0
   module load netCDF-Fortran/4.4.4-intel-2018a-HDF5-1.10.1

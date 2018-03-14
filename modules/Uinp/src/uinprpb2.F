@@ -1,7 +1,8 @@
       subroutine uinprpb2
-       use b2mod_layer
+      use b2mod_types
+      use b2mod_layer
      , , only: ntrack, nalloys
-       use eirmod_extrab25
+      use eirmod_extrab25
      , , only: msrfclsx, mgwtiesx
 c
 c  version : 15.08.2003 18:26

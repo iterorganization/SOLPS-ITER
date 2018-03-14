@@ -165,7 +165,10 @@ c*** 5
 
 c*** 6
 
-      integer nnftrm, nchsppri, lchsptrg(nchsppr), lchspgrp(nchsppr),
+      integer luftrm
+      parameter (luftrm=1)
+      integer nnftrm, nchsppri,
+     ,     lchsptrg(nchsppr), lchspgrp(nchsppr),
      ,     lchspprt(nchsppr), lchspprp(nchsppr), lchsptgt(nchsppr),
      ,     lchsptgp(nchsppr), lchspnwl(nchsppr), lchspaux(5,nchsppr)
       real datm(natm), dmol(nmol), dion(nion), dpls(npls), ermin,
@@ -398,7 +401,7 @@ c*** b2ah.dat
      ,  itini,jliin,jlside,jlequi,jltor,jlcol,jlfit,jlbox,jlplg,jlref,
      ,  jsrss,jsrc,lchspnwa,jsrsg,
      ,  jlsptp,jlsptc,nreaci,ir,massp,masst,
-     ,  ifex1mn,ifex1mx,ifex2mn,ifex2mx,iz,nrcln,hlp_h_m,
+     ,  ifex1mn,ifex1mx,ifex2mn,ifex2mx,iz,nrcln,
      ,  natmi,nmeta,
      ,  nmassa,nchara,isrfa,isrta,nmseca,nrca,nfola,ngena,nhsta,
      ,  ireaca,ibulka,iscd1a,iscd2a,iscd3a,iscd4a,iscdea,iestma,ibgka,
@@ -414,7 +417,8 @@ c*** b2ah.dat
      ,  nplsi,nbgk,nmassp,ncharp,nprtp,nchrgp,isrfp,
      ,  isrtp,nmsecp,nrcp,idnslmp,nfolp,ngenp,nhstp,ireacp,ibulkp,
      ,  iscd1p,iscd2p,iscd3p,iscd4p,iscdep,nrep,ispcdn,indpro,
-     ,  nnftrm,nchsppri,lchsptrg,lchspgrp,lchspprt,lchspprp,lchsptgt,
+     ,  nnftrm,nchsppri,
+     ,  lchsptrg,lchspgrp,lchspprt,lchspprp,lchsptgt,
      ,  lchsptgp,lchspnwl,lchspaux,nchemvar,indchemvar,nnchemvar,
      ,  nstrai,indsrc,npts,ninitl,nemods,namods,nminpts,nspez,ivlsf,
      ,  iscls,isclt,iscl1,iscl2,iscl3,isclb,iscla,nsrfsi,

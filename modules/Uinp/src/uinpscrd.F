@@ -1,7 +1,8 @@
       subroutine uinpscrd
-       use b2mod_layer
+      use b2mod_types
+      use b2mod_layer
      , , only: ntrack, nalloys
-       use eirmod_extrab25
+      use eirmod_extrab25
      , , only: msrfclsx, mgwtiesx
 
 c  version : 04.02.2005 18:37
@@ -9,8 +10,9 @@ c  version : 04.02.2005 18:37
 c=======================================================================
 c  Produce surface interaction cards 
 c=======================================================================
+      implicit none
 #include "uinput.inc"
-      integer i,j,k,kk,kkk,nn 
+      integer i,ii,j,k,kk,kkk,nn,ind 
 cank      logical checknds,checkas
       integer chemindex(maxchmvar)
       logical streql
@@ -187,7 +189,7 @@ c        character*(72) cardname
 c=======================================================================
 c***  check if surface card for AS k is already present in the list   
        logical function checkas(k,i) !{
-        integer k,ists
+        integer k,i
 
         checkas=.TRUE.
         ii=10*jlsptc(i)+jlsptp(i)
@@ -260,7 +262,7 @@ c=======================================================================
 c***   makes table of additional variables for 
 c***   chemical sputtering
        subroutine initchemspt !{
-       integer i,k,spz
+       integer i,k,itp,spz
        character*(8) speciename
        k=0 
        do 10 i=1,nchsppri !{

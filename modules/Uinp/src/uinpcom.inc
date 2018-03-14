@@ -8,7 +8,6 @@ c=======================================================================
 c*** Temporary assignment - the max. number of photon species
       integer, parameter :: npht=1
 
-c
 c*** Unit numbers for output and input of the files
       integer, parameter :: iunoo=2, iunii=1
 
@@ -74,7 +73,7 @@ c***    (see uinprpgr.F for detail)
      ,  nxiso1(nxd),nxiso2(nxd),nyiso1(nxd),nyiso2(nxd),nx,ny
       integer izc1,izc2,izc3,izc4,izci,iztg,irsp,irsp2,irwl,
      ,  nrsol,nrsol1,nrpfl,nzidv,nzinn,nzodv,nzidv2,nzinn2,nzodv2
-      real*4 niiso(nsdb2),tiiso,teiso
+      real(kind=R4) niiso(nsdb2),tiiso,teiso
      
 c-----------------------------------------------------------------------
 c*** Species lists: number of different nuclei, plasma ions, atoms,
@@ -116,7 +115,7 @@ c*** spcscrf - flux fraction across the inboard CEI (DN only)
      ,  spcsnsp(npls),spcsnsa(natm),spcsnsm(nmol),spcsnsi(nion),
      ,  spcsnga(natm),spcsngm(nmol),spcsngi(nion),
      ,  spcscmm(natm,nmol),spcscmi(natm,nion)
-      real*4 spcscrp(natm),spcscrf(natm)
+      real(kind=R4) spcscrp(natm),spcscrf(natm)
 
 c*** Input species lists: the same + generic species (the whole chain
 c***                      related to the same atom)
@@ -143,7 +142,8 @@ c     ,  spcifup(npls),spcifua(natm),spcifum(nmol),spcifui(nion),
      ,  spcinsp(npls),spcinsa(natm),spcinsm(nmol),spcinsi(nion),
      ,  spcinga(natm),spcingm(nmol),spcingi(nion),
      ,  spcicmm(natm,nmol),spcicmi(natm,nion)
-      real*4 spcidsp(npls),spcidsa(natm),spcidsm(nmol),spcidsi(nion),
+      real(kind=R4)
+     ,  spcidsp(npls),spcidsa(natm),spcidsm(nmol),spcidsi(nion),
      ,  spcicrp(natm),spcicrf(natm)
 
 c*** Default particle chains for the generic species
@@ -170,9 +170,8 @@ c*** Boundary conditions at the grid edge.
 c***  Maximum numbers of divides, kinds of boundaries (core, target, 
 c***     PFR side, outer side), boundary regions of each type, 
 c***     boundary zones of each kind, markers for each zone
-      integer nbnddvd,nbndknd,nbndrgn,nbndzon,nbndmrk
-      parameter (nbnddvd=400, nbndknd=4, nbndrgn=12, 
-     ,  nbndzon=20, nbndmrk=100)
+      integer nbnddvd,nbndknd,nbndrgn,nbndzon
+      parameter (nbnddvd=400, nbndknd=4, nbndrgn=12, nbndzon=20)
 
 c*** Eirene data: surface type, position, start, end, plotting color,
 c***    direction (W,S: -1; E,N: 1), reflection model
@@ -191,7 +190,8 @@ c***    flag "recycling surface"; surface material
      ,        jppbnds(nbndzon,nbndknd), jnpbnds(nbndzon,nbndknd),
      ,        jmpbnds(nbndzon,nbndknd), jnibnds(nbndzon,nbndknd),
      ,        jnebnds(nbndzon,nbndknd)
-      real*4  etfbnds(nbndzon,nbndknd), etbbnds(nbndzon,nbndknd),
+      real(kind=R4)
+     ,        etfbnds(nbndzon,nbndknd), etbbnds(nbndzon,nbndknd),
      ,        easbnds(nbndzon,nbndknd), eewbnds(nbndzon,nbndknd),
      ,        efpbnds(nbndzon,nbndknd), efcbnds(nbndzon,nbndknd),
      ,        esibnds(nbndzon,nbndknd), esebnds(nbndzon,nbndknd)
@@ -210,7 +210,7 @@ c***    flags "insert material specification" for each non-def. surface
       integer nwllmrk,nedgmrk(nwllmrkd),ntrgmrk(nwllmrkd),
      ,  ledgmrk(nedgmrkd,nwllmrkd),ltrgmrk(nedgmrkd,nwllmrkd),
      ,  lwllmrk(nwllmrkd),ledgdfl
-      real*4 wlmbnds(nbndzon,nbndknd)
+      real(kind=R4) wlmbnds(nbndzon,nbndknd)
       logical bliin(nsts),bbliin(nbndzon,nbndknd)
 
 c*** B2 data: position, start, end, neutral penetration range, 
@@ -224,7 +224,7 @@ c***         parameters for boundary conditions for Te, Ti, n, and v
      ,        leebnds(nbndzon,nbndknd), lcobnds(nsdb2,nbndzon,nbndknd), 
      ,        leibnds(nbndzon,nbndknd), lmobnds(nsdb2,nbndzon,nbndknd),
      ,        lpobnds(nbndzon,nbndknd), lscbnds(natm,nbndzon,nbndknd)
-      real*4  
+      real(kind=R4)  
      ,  beebnds(nbndzon,2,nbndknd),bcobnds(nsdb2,nbndzon,2,nbndknd),
      ,  beibnds(nbndzon,2,nbndknd),bmobnds(nsdb2,nbndzon,2,nbndknd),
      ,  bpobnds(nbndzon,2,nbndknd)
@@ -255,7 +255,8 @@ c***                    Below, index "0" corresponds to a group default
      ,        jppbndx(0:nbndzon,nbndknd), nlrbndx(0:nbndzon,nbndknd),
      ,        jnpbndx(0:nbndzon,nbndknd), jmpbndx(0:nbndzon,nbndknd),
      ,        jnibndx(0:nbndzon,nbndknd), jnebndx(0:nbndzon,nbndknd)
-      real*4  etfbndx(0:nbndzon,nbndknd), etbbndx(0:nbndzon,nbndknd),
+      real(kind=R4)
+     ,        etfbndx(0:nbndzon,nbndknd), etbbndx(0:nbndzon,nbndknd),
      ,        easbndx(0:nbndzon,nbndknd), eewbndx(0:nbndzon,nbndknd),
      ,        efpbndx(0:nbndzon,nbndknd), efcbndx(0:nbndzon,nbndknd),
      ,        esibndx(0:nbndzon,nbndknd), esebndx(0:nbndzon,nbndknd)
@@ -266,20 +267,21 @@ c***                    Below, index "0" corresponds to a group default
      ,  leebndx(0:nbndzon,nbndknd), lcobndx(nsdb2,0:nbndzon,nbndknd), 
      ,  leibndx(0:nbndzon,nbndknd), lmobndx(nsdb2,0:nbndzon,nbndknd),
      ,  lpobndx(0:nbndzon,nbndknd)
-      real*4  
+      real(kind=R4)  
      ,  beebndx(0:nbndzon,2,nbndknd),bcobndx(nsdb2,0:nbndzon,2,nbndknd),
      ,  beibndx(0:nbndzon,2,nbndknd),bmobndx(nsdb2,0:nbndzon,2,nbndknd),
      ,  bpobndx(0:nbndzon,2,nbndknd)
 c*** Default boundary conditions for generic species. Index order:
 c*** species, [parameter], boundary kind, ion(2-the highest, 1-the rest)
       integer kcobndx(nspdgen,nbndknd,2),   kmobndx(nspdgen,nbndknd,2)
-      real*4 dcobndx(nspdgen,2,nbndknd,2), dmobndx(nspdgen,2,nbndknd,2)
+      real(kind=R4)
+     ,  dcobndx(nspdgen,2,nbndknd,2), dmobndx(nspdgen,2,nbndknd,2)
       character*2 dscbndx(nspdgen)
 c*** Flags "B2 global data read" and "use time stratum";
 c*** total power influx [MW] with electrons and ions, its fraction 
 c*** across the inner CEI (DN only).
       logical glb2read,usetmstr
-      real*4 pwrcrtte,pwrcrtti,pwrcrfri
+      real(kind=R4) pwrcrtte,pwrcrtti,pwrcrfri
 
 c*** Technical data: numbers of regions and zones of each kind,
 c***             region which can be combined with each region,
@@ -311,7 +313,8 @@ c***           material; flag "target data was read"
       integer tgrefsw(ntrgts),tgsppsw(ntrgts),tgspcsw(ntrgts),
      ,  tgsppsp(ntrgts),tgspcgr(ntrgts),tgnhst(ntrgts),tgmhst(ntrgts),
      ,  tgnini(ntrgts)
-      real*4 tgsppff(ntrgts),tgspcff(ntrgts),tgewall(ntrgts),
+      real(kind=R4)
+     ,  tgsppff(ntrgts),tgspcff(ntrgts),tgewall(ntrgts),
      ,  tgabsrp(ntrgts),tgtrnsf(ntrgts),tgtrnsb(ntrgts)
       character*8 made_of(ntrgts)
       logical tgdtinpt
@@ -334,7 +337,8 @@ c***    flag "Use the default model"
      ,  rctnrct(mreac)*9,rctnptpr(mreac),rctnptin(mreac),
      ,  rctnpto1(mreac),rctnpto2(mreac),rctnpto3(mreac),
      ,  rctneln(mreac)*2
-      real*4 rctndlte(mreac),rctntmin(mreac),rctntmax(mreac),
+      real(kind=R4)
+     ,  rctndlte(mreac),rctntmin(mreac),rctntmax(mreac),
      ,  rctnenr1(mreac),rctnenr2(mreac),rctnexcf(mreac,6)
       logical rctndflt
 
@@ -351,7 +355,8 @@ c***    primary particle is determined from spcrctd)
      ,  rctdptpr(mreac,nsrctd),rctdptin(mreac,nsrctd),
      ,  rctdpto1(mreac,nsrctd),rctdpto2(mreac,nsrctd),
      ,  rctdpto3(mreac,nsrctd),rctdeln(mreac,nsrctd)
-      real*4 rctddlte(mreac,nsrctd),rctdtmin(mreac,nsrctd),
+      real(kind=R4) 
+     ,  rctddlte(mreac,nsrctd),rctdtmin(mreac,nsrctd),
      ,  rctdtmax(mreac,nsrctd),
      ,  rctdenr1(mreac,nsrctd),rctdenr2(mreac,nsrctd)
       integer n_hlp_h,m_hlp_h
@@ -379,7 +384,7 @@ c***    angular distribution, and source strength
      ,  jgpfstr(nstra),mgpfstr(nstra),npgpfstr(nstra),mpgpfstr(nstra),
      ,  nigpfstr(nstra),igpfstr(natm,nstra),lsgpfstr(natm,nstra)
       character*12 cgpfstrs(nstra),sgpfstrs(natm,nstra)*2
-      real*4 tgpfstr(nstra),tgpfstd,pgpfstr(nstra),fgpfstr(nstra)
+      real(kind=R4) tgpfstr(nstra),tgpfstd,pgpfstr(nstra),fgpfstr(nstra)
 
 c*** Recombination strata: number of strata, starting/ending cells in
 c***    radial and poloidal directions, number of
@@ -404,7 +409,7 @@ c***    nlstadu   becomes nlstadds
 c***    ngwtiesi  becomes ngwties
       integer lntspcu,lntsptu,nmcsptu,nlstadu,dgntcpu,dgnptsfc,
      ,  dgnfile,listaddi(nlim),ngwtiesi
-      real*4 dgalloc
+      real(kind=R4) dgalloc
           
 c-----------------------------------------------------------------------
 c*** Data for visualisation of the surface properties in Eirene for all
@@ -425,10 +430,10 @@ c***    indasrfs(i) is the old number for a new number i
       integer laddsrfs, indasrfe(0:nlim), indasrfs(0:nlim)
 
 c*** Coordinates of the O-point
-      real*4 xlpcntr(3)
+      real(kind=R4) xlpcntr(3)
 
 c*** Data for toroidal geometry specification 
-      real*4 zaator,roator
+      real(kind=R4) zaator,roator
       integer nttrator
 
 c*** Midplane position in the B2 grid, Eirene time allocation in B2
@@ -473,7 +478,7 @@ c***    atoms in the list, amount of hydrogenic nuclei in the molecules,
 c***    list of cell numbers indicating the pump and their number,
 c***    list of wall segments indicating the pump and their number
       logical do_hepdt
-      real*4 pwrhepdt,pmphepdt
+      real(kind=R4) pwrhepdt,pmphepdt
       integer locphep,lpbihep,lpbohep,lptihep,lptohep,
      ,  j_he_at,j_h_at(3),j_ne_at,
      ,  l_h_mol(nmol,3),lstclhep(nxd),nstclhep,lhetrgts(nlim),nhetrgts
@@ -481,7 +486,7 @@ c***    list of wall segments indicating the pump and their number
 c-----------------------------------------------------------------------
 c*** Data substitution for the Eirene test run
       integer ttntcpu,ttnfile,ttnpts(nstra)
-      real*4 ttalloc
+      real(kind=R4) ttalloc
       logical ttchst,ttcref,ttcint,ttcamd,ttcsou,ttcbla,ttcblm,ttcbli,
      ,  ttcblp,ttcble,ttcblph,ttctal,ttcdbg2,ttcdbge,ttcdbgm,ttcdbgf,
      ,  ttcdbgl,ttcdbgs,ttcdbgg,ttcdbgmpi,ttcdbgc,ttcsrc,
@@ -500,7 +505,8 @@ c***      surface material in human notation, group identifier
       integer n_spcsrf, k_spcsrf(DEF_NSPCSRFG), sps_sgrp(DEF_NSPCSRFG),
      ,  i_spcsrf(DEF_NSPCSRFG), j_spcsrf(DEF_NSPCSRFG),
      ,  l_spcsrf(DEF_NSPCSRFG), ll_spcsrf(nlimps,DEF_NSPCSRFG)
-      real*4 sps_absr(DEF_NSPCSRFG), sps_trno(DEF_NSPCSRFG), 
+      real(kind=R4)
+     ,  sps_absr(DEF_NSPCSRFG), sps_trno(DEF_NSPCSRFG), 
      ,  sps_trni(DEF_NSPCSRFG), sps_mtri(DEF_NSPCSRFG),
      ,  sps_tmpr(DEF_NSPCSRFG), sps_spph(DEF_NSPCSRFG),
      ,  sps_spch(DEF_NSPCSRFG)
@@ -543,7 +549,7 @@ c=======================================================================
      ,  nttrator,jxi,jxa,ntcpub2,nnvsle,nmvsle,ttntcpu,ttnfile,ttnpts,
      ,  ntrgdflt,namdf,nncut,nxcut1,nycut2,nniso,ntiso,nxiso1,nxiso2,
      ,  nyiso1,nyiso2,nx,ny,
-     ,  izc1,izc2,izc3,izc4,izci,iztg,irsp,irsp2,irwl,
+     ,  izc1,izc2,izc3,izc4,izci,iztg,irsp,irsp2,irwl,hlp_h_m,
      ,  nrsol,nrsol1,nrpfl,nzidv,nzinn,nzodv,nzidv2,nzinn2,nzodv2,
      ,  nspipls,nspiatm,nspimol,nspiion,nspigen,nspignp,spcimsp,spcimsa,
      ,  spcimsm,spcimsi,spcincp,spcinca,spcincm,spcinci,spcicgp,spcicga,

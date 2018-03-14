@@ -1,4 +1,5 @@
       program ub2p
+      use b2mod_types
       implicit none
 #ifdef USE_MPI
       include 'mpif.h'
@@ -19,7 +20,6 @@ c  version : 25.08.97 15:04
 c
 #include "ubpcom.h"
 #include "impcon.inc"
-      logical uex
       external prgini,prgend,xerset,ubpnam
 #ifdef USE_MPI
       integer rank_mpi,size_mpi,ierr_mpi

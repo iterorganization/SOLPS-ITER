@@ -1,7 +1,8 @@
       subroutine uinpsrcv
-       use b2mod_layer
+      use b2mod_types
+      use b2mod_layer
      , , only: ntrack, nalloys
-       use eirmod_extrab25
+      use eirmod_extrab25
      , , only: msrfclsx, mgwtiesx
 c
 c  version : 13.02.2005 20:02
@@ -13,7 +14,7 @@ c*** was set in DG
 c=======================================================================
       implicit none
 #include "uinput.inc"
-      integer i,j,k,l,n,ka,ipl,ipt,irc,krc,nrc,istr,irce(nstra)
+      integer i,k,l,n,ka,ipl,ipt,irc,krc,nrc,istr,irce(nstra)
       character*12 hlp_frm
       logical ex,l_hlp,hlp_err
       external xerrab, xertst, subini, subend

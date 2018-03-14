@@ -1,7 +1,8 @@
       subroutine uinprptt(lc)
-       use b2mod_layer
+      use b2mod_types
+      use b2mod_layer
      , , only: ntrack, nalloys
-       use eirmod_extrab25
+      use eirmod_extrab25
      , , only: msrfclsx, mgwtiesx
 c
 c  version : 01.04.2005 00:25
@@ -9,9 +10,8 @@ c
 c=======================================================================
 c*** Prepare the data for the test Eirene run
 c=======================================================================
-       Implicit None
-       Save
-       logical lc
+      implicit none
+      logical lc
 #include "uinput.inc"
       integer :: i,k,ntcpu_b,nfile_b,i1trc_b,i2trc_b,npts_b(nstra),
      ,  mpts_b(nstra),isyplt_b(8),nptc_b(nstep),nptcm_b(nstep)
@@ -21,6 +21,7 @@ c=======================================================================
      ,  trcdbge_b,trcdbgm_b,trcdbgf_b,trcdbgl_b,trcdbgs_b,
      ,  trcdbgg_b,trcdbgmpi_b,trcdbgc_b,trcsrc_b,
      ,  pl1st_b,pl2nd_b,pladd_b,plhst_b,plcut_b(3),plnums_b,nltest_b
+      save
 c=======================================================================
       if(lc) then !{
         ntcpu_b=ntcpu
@@ -29,8 +30,8 @@ c=======================================================================
         i1trc_b=i1trc
         i2trc_b=i2trc
         do i=1,nstrai !{
-      	  npts_b(i)=npts(i)
-      	  mpts_b(i)=nminpts(i)
+          npts_b(i)=npts(i)
+          mpts_b(i)=nminpts(i)
         end do !}
         do i=1,ntargi !{
           nptc_b(i)=nptc(i,1)
@@ -74,9 +75,9 @@ c=======================================================================
         i1trc=1
         i2trc=0
         do i=1,nstrai !{
-      	  npts(i)=ttnpts(i)
+          npts(i)=ttnpts(i)
           nminpts(i)=0
-	  i2trc=i2trc+npts(i)
+          i2trc=i2trc+npts(i)
         end do !}
         do i=1,ntargi !{
           nptc(i,1)=ttnpts(i)
@@ -137,8 +138,8 @@ c*** Set the VSP data for test.eir
         i1trc=i1trc_b
         i2trc=i2trc_b
         do i=1,nstrai !{
-      	  npts(i)=npts_b(i)
-      	  nminpts(i)=mpts_b(i)
+          npts(i)=npts_b(i)
+          nminpts(i)=mpts_b(i)
         end do !}
         do i=1,ntargi !{
           nptc(i,1)=nptc_b(i)

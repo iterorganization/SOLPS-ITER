@@ -1,16 +1,18 @@
       subroutine uinbndfl
+      use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
       use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+     , , only: msrfclsx
 c
 c  version : 01.04.2005 14:27
 c
 c=======================================================================
 c*** Fill in the default boundary data
 c=======================================================================
+      implicit none
 #include "uinpcom.inc"
-      integer i,j,k,l,m,n,isp,iknd,izn,igs_hlp(nspdgen)
+      integer i,j,k,l,n,isp,iknd,izn,igs_hlp(nspdgen)
       logical ex,uex,hlp_fl1,hlp_fl2
       real hlp_f1
       character hlp_c*2
@@ -254,10 +256,11 @@ c=======================================================================
       end
 
       integer function find_matching_species(name)
+      use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
       use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+     , , only: msrfclsx
       use b2mod_elements
       implicit none
 #     include "uinpcom.inc"
@@ -291,19 +294,20 @@ c=======================================================================
       end function find_matching_species
 
       integer function find_matching_reagent(name)
+      use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
       use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+     , , only: msrfclsx
       use b2mod_elements
       implicit none
 #     include "uinpcom.inc"
       character*8 name, species_name
-      integer i, j
+      integer i
       integer nplus
       integer lnblnk
-      logical streql, isplusorminus, isadigit
-      external streql, lnblnk, isplusorminus, isadigit, strip_spaces
+      logical streql, isplusorminus
+      external streql, lnblnk, isplusorminus, strip_spaces
 
       find_matching_reagent = 0
       do i = 1, nsrctd

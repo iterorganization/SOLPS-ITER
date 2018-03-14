@@ -14,13 +14,13 @@ c=======================================================================
       logical lc
 #include "uinput.inc"
       integer i,j,k,l,m,iy,ix,ntcpu_b,nfile_b,npts_b(nstra),lntspec_b,
-     ,  lntsput_b,nmcsput_b,ngwties_b,lgwt_h(ngwtiesx),kgwt_h(ngwtiesx),
+     ,  lntsput_b,nmcsput_b,ngwties_b,
      ,  nlstadds_b,nlstadu_b,mtreadds_b,
      ,  l_pfr,l_wll
       integer mesh_cell_ind
       logical ex,streql
       external streql, subini, subend, mesh_cell_ind
-      real w,alloc_b,flux_b(nstra)
+      real alloc_b,flux_b(nstra)
       save alloc_b,flux_b,
      ,  ntcpu_b,nfile_b,npts_b,lntspec_b,lntsput_b,nmcsput_b,ngwties_b,
      ,  nlstadds_b,nlstadu_b,mtreadds_b

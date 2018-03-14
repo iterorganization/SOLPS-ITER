@@ -1,7 +1,8 @@
       program uinput
-       use b2mod_layer
+      use b2mod_types
+      use b2mod_layer
      , , only: ntrack, nalloys
-       use eirmod_extrab25
+      use eirmod_extrab25
      , , only: msrfclsx, mgwtiesx
 
 c  version : 28.01.2003 18:08
@@ -18,7 +19,7 @@ c=======================================================================
       integer rank_mpi,size_mpi,ierr_mpi
 #endif
       integer ns, i, j, ireg, nreg, len
-      real*8, allocatable :: na0(:)
+      real(kind=R8), allocatable :: na0(:)
       character*4, allocatable :: specs(:)
       character*22 hlp_frm
       character*27 lbreg(0:cbnrmx-1)

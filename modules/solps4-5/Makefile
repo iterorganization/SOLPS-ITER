@@ -961,7 +961,7 @@ tags:
 	rm -f ${BASEDIR}/TAGS ; etags ${TAGSLIST}
 
 clean:
-	rm -f ${OBJDIR}/*.f ${OBJDIR}/*.o ${OBJDIR}/*.${MOD} ${OBJDIR}/*.a ${OBJDIR}/*.exe
+	rm -f ${OBJDIR}/*.f ${OBJDIR}/*.f90 ${OBJDIR}/*.o ${OBJDIR}/*.${MOD} ${OBJDIR}/*.a ${OBJDIR}/*.exe
 	rm -Rf ${SRCDIR}/B2_include
 	rm -Rf ${SRCDIR}/B2_include.local
 	rm -Rf ${SRCDIR}/Eirene_modules
