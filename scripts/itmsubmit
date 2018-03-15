@@ -9,6 +9,7 @@ echo Your email is $EMAIL
 set compress=""
 set MPIOPTS=""
 set standalone="no"
+set LOOP_OPTS=""
 
 set solpstop=`climb_and_look_for SOLPSTOP`
 if (-s $solpstop) then
@@ -23,12 +24,16 @@ argloop:
     set JOB_NAME="$1"
     echo Job name is ${JOB_NAME}
     shift
+    set HELP_STRING=\"${JOB_NAME}\"
+#    echo $HELP_STRING
+    set LOOP_OPTS="-j ${HELP_STRING} ${LOOP_OPTS}" 
     goto argloop
   endif
   if ("X${1}X" == "X-zX") then
     set compress="-gz"
     echo run.log will be compressed
     shift
+    set LOOP_OPTS="-gz ${LOOP_OPTS}" 
     goto argloop
   endif
   if ("X${1}X" == "X-sX") then
@@ -36,6 +41,7 @@ argloop:
     if ($JOB_NAME == "SOLPS-ITER") set JOB_NAME="B2.5"
     echo Asking for a B2.5 standalone run
     shift
+    set LOOP_OPTS="-s ${LOOP_OPTS}" 
     goto argloop
   endif
   if ("X${1}X" == "X-mX") then
@@ -49,6 +55,9 @@ argloop:
     set PROCS=`echo $MPIOPTS | awk.transpose | grep -A 1 "\-np" | tail -n 1`
     echo Asking for $PROCS processors
     shift
+    set HELP_STRING=`echo \"$MPIOPTS\"`
+#    echo $HELP_STRING
+    set LOOP_OPTS="-m ${HELP_STRING} ${LOOP_OPTS}" 
     goto argloop
   endif
 
@@ -100,8 +109,9 @@ if($QSUB == "") then
   exit
 endif
 echo Using submission file template $QSUB
+echo For loop resubmission following options will be used: $LOOP_OPTS
 
-sed -e 's:#PWD#:'$PWD':g' -e 's:#SOLPSTOP#:'$SOLPSTOP':g' -e 's:#EMAIL#:'$EMAIL':g' -e "s:#MPIOPTS#:'$MPIOPTS':g" -e 's:#PROCS#:'$PROCS':g' -e 's:#JOBNAME#:'$JOB_NAME':g' -e 's:#USER#:'$USER':g' < $QSUB > $NAME
+sed -e 's:#PWD#:'$PWD':g' -e 's:#SOLPSTOP#:'$SOLPSTOP':g' -e 's:#EMAIL#:'$EMAIL':g' -e "s:#MPIOPTS#:'$MPIOPTS':g" -e 's:#PROCS#:'$PROCS':g' -e 's:#JOBNAME#:'$JOB_NAME':g' -e 's:#USER#:'$USER':g' -e 's:#LOOPOPTS#:'"$LOOP_OPTS"':g'  < $QSUB > $NAME
 
 set msg="Submitted at `date`"
 update_solps_run_status -n ${msg}
