@@ -88,9 +88,6 @@ setenv DG ${SOLPSTOP}/modules/DivGeo
 setenv SOLPSLIB ${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}
 #setenv CARRE_STOREDIR $SOLPSTOP/modules/Carre/meshes
 
-
-
-
 # Set path to scripts and executables
 #------------------------------------
 
@@ -146,8 +143,6 @@ setenv LD_LIBRARY_PATH  `echo $LD_LIBRARY_PATH | awk -v RS=: -v ORS= '\\!a[$0]++
 setenv MANPATH  `echo $MANPATH | awk -v RS=: -v ORS= '\\!a[$0]++ {if (NR>1) printf(":"); printf("%s",$0) }'`
 setenv PYTHONPATH  `echo $PYTHONPATH | awk -v RS=: -v ORS= '\\!a[$0]++ {if (NR>1) printf(":"); printf("%s",$0) }'`
 setenv OLD_PATH  `echo $OLD_PATH | awk -v RS=: -v ORS= '\\!a[$0]++ {if (NR>1) printf(":"); printf("%s",$0) }'`
-
-
 
 alias sb2  'cd ${SOLPSTOP}/modules/B2.5'
 alias sbb  'cd ${SOLPSTOP}/modules/B2.5'
@@ -215,17 +210,6 @@ alias   set_mpi   'source $SOLPSTOP/SETUP/mpi'
 alias unset_mpi   'source $SOLPSTOP/SETUP/nompi'
 alias   set_ig   'source $SOLPSTOP/SETUP/ig'
 alias unset_ig   'source $SOLPSTOP/SETUP/noig'
-
-
-#if (! $?IDL_PATH) setenv IDL_PATH
-#setenv IDL_PATH +$SOLPSTOP/data/IDL:${IDL_PATH}
-#
-#
-#
-
-#
-#setenv PLOT_SET_PATH '..:../..:${SOLPSTOP}/data.local/plot_set:${SOLPSTOP}/data/plot_set'
-
 
 # Add any local settings if present
 if (-s SETUP/setup.csh.local) then
