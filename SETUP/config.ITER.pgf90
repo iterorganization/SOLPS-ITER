@@ -106,6 +106,8 @@ export LD_MDSPLUS
 export LD_SONNET
 export LD_MPI
 
+export NODENAME
+export SOLPS_CPP
 export B25_DEFINES
 export EIRENE_DEFINES
 export MPI_CPP
