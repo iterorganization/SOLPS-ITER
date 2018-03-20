@@ -10,9 +10,9 @@ FC	 = nagfor
 endif
 
 ifdef SOLPS_DEBUG
-FFLAGS	 = -g 
+FFLAGS	 = -g -PIC -compatible
 else
-FFLAGS	 = -O 
+FFLAGS	 = -O -PIC -compatible
 endif
 
 INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
