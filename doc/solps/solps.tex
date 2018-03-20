@@ -545,7 +545,7 @@ to refresh the list of executables to be found with the search path.
 
 On the \SOLPSITER web site (\href{https://portal.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}{https://portal.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}), in the folder {\em Examples}, one can find a few example cases for \SOLPSITER runs, in both {\tt B2.5} stand-alone or {\tt B2.5-Eirene} coupled modes.
 
-There is also a dedicated directory \${\tt SOLPSTOP/runs/examples} which contains links to a series of sample cases. These are actually stored in the {\tt /work/imas/shared/boundary/solps-iter/assets/MD5} directory hosted at the IO, and the means to retrieve these cases is detailed in the \${\tt SOLPSTOP/runs/examples/README.md} file. Following the instructions therein will extract an archived file in gzipped tar format containing a {\tt baserun} and one or more run directories and associated files. In some cases, a {\tt DIMENSIONS.F} file is also provided, which shows the dimensions necessary to run those cases (see Appendix \ref{sec:DIMENSIONS} for full details about the contents of such files).
+There is also a dedicated directory \${\tt SOLPSTOP/runs/examples} which contains links to a series of sample cases. These are actually stored in the {\tt /work/imas/shared/external/assets/solps-iter/MD5} directory hosted at the IO, and the means to retrieve these cases is detailed in the \${\tt SOLPSTOP/runs/examples/README.md} file. Following the instructions therein will extract an archived file in gzipped tar format containing a {\tt baserun} and one or more run directories and associated files. In some cases, a {\tt DIMENSIONS.F} file is also provided, which shows the dimensions necessary to run those cases (see Appendix \ref{sec:DIMENSIONS} for full details about the contents of such files).
 
 The cases stored for retrieval include:
 \begin{description}
@@ -556,7 +556,8 @@ The cases stored for retrieval include:
   \item[ITER\_2292\_Honly\_20MW] ITER low power case at low density
   \item[ITER\_2294\_Honly\_20MW] Same as above, but increasing density
   \item[ITER\_2296\_Honly\_20MW] Same as above, but continuing density scan
-  \item[ITER\_2297\_Honly\_20MW] Same as above, continuing scan, reaching detachment
+  \item[ITER\_2297\_Honly\_20MW] Same as above, continuing scan
+  \item[ITER\_2299\_Honly\_20MW] Same as above, continuing scan, reaching detachment
   \item[ITER\_2308\_Honly\_20MW] Same as above, continuing scan, detached conditions
   \item[ITER\_2360\_0.95He+0.05H\_40MW] ITER Helium plasma case at mid-power
   \item[ITER\_2588\_D+He+N] ITER full power case with N injection
@@ -566,6 +567,8 @@ The cases stored for retrieval include:
 \end{description}
 as well as additional partial cases used in tutorials when learning how to build a case using the {\tt DivGeo} and {\tt SOLPS-GUI} utilities.
 Other cases can be added at the suggestion of users, if available.
+
+After the cases have been downloaded to your system, make sure that the timestamps of the various input files are in the proper chronological order (using the {\tt correct\_baserun\_timestamps} and {\tt touch bf2tstati} instructions as necessary) before attempting to launch any actual runs. Also, the links to database files are not provided within these examples, and they can be set up using the {\tt setup\_baserun\_eirene\_links} script.
 
 \section{Using a central installation}
 \label{Using a central installation}
