@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python
 #
 # run as, for example: 2dt.py "nesepa nesepm nesepi"
 #
@@ -17,7 +17,7 @@ def main(plotvars):
     try:
         ncIn = Dataset(file_in)
     except:
-        print "Error: Could not open "+file_in
+        print("Error: Could not open "+file_in)
         exit(0)
         
     timesa = ncIn.variables['timesa'][:]
@@ -27,10 +27,10 @@ def main(plotvars):
         try:
             myvar[item] = ncIn.variables[item][:]
         except:
-            print "Error: Could not load variable "+item
+            print("Error: Could not load variable "+item)
             exit(0)
 
-#    print np.shape(myvar[plotvars[0]])
+#    print(np.shape(myvar[plotvars[0]]))
     plt.figure()
     for i,item in enumerate(plotvars):
         plt.plot(timesa,np.squeeze(myvar[plotvars[i]]),label=item,marker='x')
@@ -40,13 +40,10 @@ def main(plotvars):
     plt.show()
     
 if __name__ == '__main__':
-	import argparse
-	import textwrap
-	parser = argparse.ArgumentParser(description = 'Python alternative to 2dt', 
-				formatter_class = argparse.RawDescriptionHelpFormatter,
-				epilog = '')
+    import argparse
+    import textwrap
+    parser = argparse.ArgumentParser()
+    parser.add_argument('plotvars', help = 'List of variables to plot from b2time.nc', type = str)
+    args = parser.parse_args()
 
-        parser.add_argument('plotvars', help = 'List of variables to plot from b2time.nc', type = str)
-	args = parser.parse_args()
-	
-	main(args.plotvars)
+    main(args.plotvars)
