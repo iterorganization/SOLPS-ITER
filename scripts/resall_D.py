@@ -1,8 +1,8 @@
 #!/usr/bin/env python2.7
 #
-# run as, for example, 2dt.py "nesepa nesepm nesepi"
+# run as:  resall_D.py [-l N]
 #
-# Have not checked yet against >2d arrays
+# optional argument -l N ==> display last N points
 #
 # JDL
 import os.path
