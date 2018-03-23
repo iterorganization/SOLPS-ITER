@@ -30,9 +30,10 @@ def main(plotvars):
             print "Error: Could not load variable "+item
             exit(0)
 
+#    print np.shape(myvar[plotvars[0]])
     plt.figure()
     for i,item in enumerate(plotvars):
-        plt.plot(timesa,myvar[plotvars[i]][:,0],label=item,marker='x')
+        plt.plot(timesa,np.squeeze(myvar[plotvars[i]]),label=item,marker='x')
         
     plt.xlabel("time (s)")
     plt.legend(loc="best")
