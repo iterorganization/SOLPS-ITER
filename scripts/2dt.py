@@ -1,6 +1,6 @@
 #!/usr/bin/env python2.7
 #
-# run as, for example, 2dt.py "nesepa nesepm nesepi"
+# run as, for example: 2dt.py "nesepa nesepm nesepi"
 #
 # Have not checked yet against >2d arrays
 #
