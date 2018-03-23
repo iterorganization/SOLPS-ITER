@@ -45,7 +45,7 @@ if __name__ == '__main__':
 				formatter_class = argparse.RawDescriptionHelpFormatter,
 				epilog = '')
 
-        parser.add_argument('plotvars', help = 'EFIT geqdsk file name or (full or rel.) pathname', type = str)
+        parser.add_argument('plotvars', help = 'List of variables to plot from b2time.nc', type = str)
 	args = parser.parse_args()
 	
 	main(args.plotvars)
