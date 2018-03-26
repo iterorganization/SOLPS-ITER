@@ -34,6 +34,7 @@ endif
 
 # mpi-library
 module load MVAPICH2/2.2b-GCC-4.8.3
+setenv MV2_SMP_USE_CMA 0
 
 # Debugger (set environment variable DBX)
 setenv DBX totalview

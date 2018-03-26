@@ -7,6 +7,10 @@ if (! $?DEVICE) then
 endif
 # load modules
 module load solps-gui
+module load git
+module load totalview
+
+setenv DBX totalview
 
 #module load imas
 #imasdb solps-iter
