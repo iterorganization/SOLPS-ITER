@@ -47,6 +47,7 @@ if($1 == "") then
   endif
 else
   setenv COMPILER $1
+  echo Using specified compiler $1.
 endif
 if(! $?COMPILER) then
   echo COMPILER not defined!
