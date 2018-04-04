@@ -25,9 +25,8 @@ if (`hostname` != "hpc-login01.iter.org") then
   module load libpng/1.6.16-goolf-1.5.16
 else
   module unload intel
-  module load imas/3.16.0-new/ual/3.7.1
+  module load imas/3.17.0/ual/0a2346
   module switch Anaconda2 Anaconda3/4.4.0
-  unsetenv IMAS_VERSION
   module load makedepend/1.0.5-GCCcore-6.4.0
   module load netCDF-Fortran/4.4.4-intel-2018a-HDF5-1.10.1
   setenv NCDIR /work/imas/opt/EasyBuild/software/netCDF-Fortran/4.4.3-foss-2016a

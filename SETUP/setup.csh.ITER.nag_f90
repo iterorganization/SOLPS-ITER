@@ -5,7 +5,7 @@ module use /work/imas/etc/modules/all
 # Modules needed by SOLPS-ITER
 module unload intel
 module load nagfor/6.2
-module load imas/3.16.0-new/ual/3.7.1
+module load imas/3.17.0/ual/0a2346
 module switch Anaconda2 Anaconda3/4.4.0
 module load makedepend/1.0.5-GCCcore-6.4.0
 module load flex/2.6.4-GCCcore-6.4.0
