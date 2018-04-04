@@ -553,7 +553,8 @@ The cases stored for retrieval include:
   \item[AUG\_16151\_D+C+He] ASDEX-Upgrade multi-fluid benchmark cases, including {\tt B2.5} standalone, coupled and single {\tt Eirene} call run directories
   \item[ITER\_2171\_D+He+Be+Ne] ITER full performance case with Ne injection
   \item[ITER\_2264\_0.6Ne\_100MW] Another ITER full perfomance case with Ne injection
-  \item[ITER\_2292\_Honly\_20MW] ITER low power case at low density
+  \item[ITER\_2275\_Donly\_20MW] ITER low power case at low density (D-fuelled)
+  \item[ITER\_2292\_Honly\_20MW] ITER low power case at low density (H-fuelled)
   \item[ITER\_2294\_Honly\_20MW] Same as above, but increasing density
   \item[ITER\_2296\_Honly\_20MW] Same as above, but continuing density scan
   \item[ITER\_2297\_Honly\_20MW] Same as above, continuing scan
@@ -1157,7 +1158,7 @@ The number of scripts developed for various {\bf SOLPS} versions is very large. 
 \begin{itemize}
 \item the residuals can be plotted with
   \begin{description}
-  \item[resall\_D]\index{resall\_D} all residuals for a $D$-only case
+  \item[resall\_D]\index{resall\_D} all residuals for a $D$-only case. A python version of this script also exists (Python 2.7 and 3.5 compatible).
   \item[resall\_D+\_only]\index{resall\_D+\_only} all residuals for a $D^+$-only case
   \item[resall\_D+D]\index{resall\_D+D} all residuals for test cases where we treat two separate $D$ sequences
   \item[resall\_D+T]\index{resall\_D+T} all residuals for a $D+T$ case
@@ -1401,11 +1402,11 @@ logarithmic $y$ scale by use of an additional "l" argument while "L" also plots 
 negative quantities on the same scale and "M" the absolute values of negative quantities in a separate plot)
   \begin{description}
   \item[2d]\index{2d} plots time dependent quantities from
-    {\tt b2time.nc} (Appendix \ref{cha:b2time}), 2$^{nd}$, 3$^{rd}$ {\it etc.\ versus} the 1$^{st}$ argument.
+    {\tt b2time.nc} (Appendix \ref{cha:b2time}), 2$^{nd}$, 3$^{rd}$ {\it etc.\ versus} the 1$^{st}$ argument. 
   \item[2da]\index{2da} prints time dependent quantities from
     {\tt b2time.nc} (Appendix \ref{cha:b2time}), 2$^{nd}$, 3$^{rd}$ {\it etc.\ versus} the 1$^{st}$ argument.
   \item[2dt]\index{2dt} plots time dependent quantities from
-    {\tt b2time.nc} (Appendix \ref{cha:b2time}) versus time.
+    {\tt b2time.nc} (Appendix \ref{cha:b2time}) versus time. A python version of this script also exists (Python 2.7 and 3.5 compatible).
   \item[2dt\_av]\index{2dt\_av} plots averaged time dependent quantities from
     {\tt b2time.nc} (Appendix \ref{cha:b2time}) versus time.
   \item[2dvi]\index{2dvi} prepares a \btwoplot command file {\tt TDV/contr.b2p} for production of input files to start a {\tt DIVIMP} run.
@@ -12707,7 +12708,7 @@ when calculating derived data.
     ne       & \index{b2plot, ne} Electron density $(m^{-3})$ \\
     ne2      & \index{b2plot, ne2} ne2 $(m^{-3})$ \\
     ne\_ext  & \index{b2plot, ne\_ext} Electron density associated with external species $(m^{-3})$ \\
-    neutrad  & \index{b2plot, neutrad} Total power loss due to atom radiation $(W)$ \\
+    neutrad  & \index{b2plot, neutrad} Power loss due to atom radiation $(W)$ \\
     nflfhix  & \index{b2plot, nflfhix} Neutral flux limits for poloidal ion energy flux \\
     nflfhiy  & \index{b2plot, nflfhiy} Neutral flux limits for radial ion energy flux \\
     nflfnax  & \index{b2plot, nflfnax} Neutral flux limits for poloidal particle flux \\
@@ -12787,7 +12788,7 @@ when calculating derived data.
     smq      & \index{b2plot, smq} Total momentum sources $(N)$ \\
     smth     & \index{b2plot, smth} Thermal force $(N)$ \\
     sna      & \index{b2plot, sna} Particle sources $(particles.s^{-1})$ \\
-    srcml    & \index{b2plot, srcml} 'Molecule dissociation rate $(molecules.s^{-1})$ \\
+    srcml    & \index{b2plot, srcml} Molecule dissociation rate $(molecules.s^{-1})$ \\
     str      & \index{b2plot, str} Heating from strange term {\em b2sihs\_str} $(W)$ \\
     sx       & \index{b2plot, sx} Poloidal area of contact for cell $(m^2)$ \\
     sxperp   & \index{b2plot, sxperp} Poloidal area perpendicular to $x$-direction $(m^2)$ \\
@@ -13808,8 +13809,11 @@ in the table \ref{tab:b2plotconstants}.
     me \index{b2plot, me}     & Electron mass $m_e$ $(kg)$ \\
     mp \index{b2plot, mp}     & Proton mass $m_p$ $(kg)$ \\
     mu0 \index{b2plot, mu0}    & Magnetic permittivity of vacuum $\mu_0$ $(F.m^{-1})$ \\
+    natm \index{b2plot, natm}   & Number of atomic species followed by {\tt Eirene} \\
     nbnd \index{b2plot, nbnd}   & Number of boundary cells \\
     ndepth \index{b2plot, ndepth} & Size of target arrays in depth direction \\
+    nion \index{b2plot, nion}   & Number of molecular ion species followed by {\tt Eirene} \\
+    nmol \index{b2plot, nmol}   & Number of molecular species followed by {\tt Eirene} \\
     ns \index{b2plot, ns}     & Number of species \\
     nspecies \index{b2plot, nspecies}     & Number of homonuclear sequences \\
     nx \index{b2plot, nx}     & Mesh size in poloidal direction \\

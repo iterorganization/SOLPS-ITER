@@ -23,6 +23,7 @@ module load zeromq py27-pyzmq py27-pygments py27-ipython
 module load texlive
 module load doxygen
 module load impi/2017
+module load git
 
 #module load imas
 #imasdb solps-iter
@@ -45,3 +46,6 @@ module load impi/2017
 #setenv CC gcc
 #setenv FC ifort
 #setenv CXX g++
+
+setenv DBX totalview
+module load totalview

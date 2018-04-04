@@ -5,7 +5,7 @@
 NODENAME  ?= $(shell echo `hostname`)
 $(info $$NODENAME is [${NODENAME}])
 
-ifneq (,$(findstring fusion3,$(NODENAME))))
+ifneq (,$(findstring fusion3,$(NODENAME)))
        NCDIR = /usr/lib/x86_64-linux-gnu/hdf5/openmpi
 else
        NCDIR = /usr/lib64/openmpi/lib
@@ -23,7 +23,7 @@ endif
 #
 # Variables for linking
 #
-ifneq (,$(findstring fusion3,$(NODENAME))))
+ifneq (,$(findstring fusion3,$(NODENAME)))
   LD_NETCDF  = -L${NCDIR} -lnetcdf -lnetcdff -lstdc++ -g77libs -lhdf5
 else
   LD_NETCDF  = -L${NCDIR} -lnetcdf -lnetcdff -lstdc++ -lhdf5

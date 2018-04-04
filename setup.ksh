@@ -64,6 +64,7 @@ export SOLPSWORK=$SOLPSTOP/runs
   }
 } || {
   export COMPILER=$1
+  echo Using specified compiler $1.
 }
 [ -z "$COMPILER" ] && echo 'COMPILER not defined!'
 [ -x `which gmake` ] && {

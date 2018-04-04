@@ -40,8 +40,8 @@ case "PPPL":
   echo pgf90
   breaksw
 case "MEPHI":
-case "WM":
 case "ORNL":
+case "WM":
   echo gfortran
   breaksw
 default:
