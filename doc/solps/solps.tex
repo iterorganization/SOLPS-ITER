@@ -17610,7 +17610,7 @@ irregular points. It is convenient to display only irregular points
 while correcting a converted template, because irregularities can be
 seen very easily.
 
-\section{Rotating the view}
+\subsection{Rotating the view}
 \label{sec:rotateview}\index{DG, rotating view}
 
 The display may now be viewed at any angle of rotation. The user may
@@ -17640,7 +17640,7 @@ the rotation angle.
 \label{fig:rotate30}
 \end{figure}
 
-\section{Stretching and shrinking the view}
+\subsection{Stretching and shrinking the view}
 \label{sec:stretchview}\index{DG, stretching and shrinking view}
 
 The aspect ratio may be "unlocked" by enabling the
@@ -17693,7 +17693,7 @@ the aspect ratio, but does not disable {\tt Stretch} mode.
 % We still have Alan's description of the application of the stretch and
 % rotation capability to manipulate mesh cells. Suggest putting it later
 % with mesh related stuff or perhaps in an appendix.
-\section{Top-down view}
+\subsection{Top-down view}
 \label{sec:topdownview}\index{DG, top-down view}
 
 To facilitate visualization and specification of chords
@@ -18025,14 +18025,14 @@ absolute deviation from the separatrix flux.
 
 With this procedure, it is clear that the outermost level must be a flux
 extremum of some element of the structure; we call this element the
-"bounding element". The capability was added to {\tt DG} to record this bounding
-element during surface creation and mark it from within the
+"bounding element". The capability was added to {\tt DG} to record this
+bounding element during surface creation and mark it from within the
 {\tt Create Surface(s)...} dialog. See, e.g., Fig.~\ref{fig:boundingelement}.
 Note that the core region has no bounding
 element. By
-identifying what {\tt DG} considers as the bounding element, we may easily adjust
-the extent of the flux surfaces by moving the bounding element to change the
-level of its extremum. Note that once the structure is
+identifying what {\tt DG} considers as the bounding element, we may easily
+adjust the extent of the flux surfaces by moving the bounding element to
+change the level of its extremum. Note that once the structure is
 changed, the bounding element might different than before.
 
 \begin{figure}[hbtp]
@@ -18118,11 +18118,11 @@ To delete all surfaces, use the {\tt Edit|Delete|Surfaces} menu command.
 \subsection{Defining the X-point}
 \index{DG, X-point}
 
-In some older {\tt DG} version, you must define the X-point before working with grid points. This is
-necessary if version of {\tt DG} used cannot detect the X-point
-location automatically. By defining it, you give {\tt DG} a hint how to
-display grid points and process user input. {\tt DG} does not write the
-X-point location into the output file.
+In some older {\tt DG} version, you must define the X-point before
+working with grid points. This is necessary if version of {\tt DG} used
+cannot detect the X-point location automatically. By defining it, you
+give {\tt DG} a hint how to display grid points and process user input.
+{\tt DG} does not write the X-point location into the output file.
 
 For performance reasons, the separatrix is drawn as series of line
 segments. Because of this, it is not displayed very accurately,
@@ -18142,6 +18142,72 @@ intersecting line segments that could even intersect with surfaces!
 
 With an X-point defined, you can use the {\tt Set X Point} tool to
 redefine it.
+
+\subsection{Limiter configurations}
+\index{DG, limiter configurations}
+
+If you are dealing with a limiter configuration, {\tt DG} needs to be
+"tricked", because its internal algorithm requires some quantities that
+can only be computed in a divertor topology. The implemented solution
+is to provide two sets of variables, one of which is a dummy only used
+to satisfy the {\tt DG} internal requirements, and another set that
+provides the actual equilibrium information.
+
+The procedure to follow is:
+\begin{enumerate}
+  \item {\tt Import} a single-null {\tt Equilibrium}. The best would be
+something of a very different size, so that it lies completely outside the
+geometry you really want to model. {\tt Import} the single-null
+{\tt Topology}. {\tt Create} a {\tt Surface} in the core region of the
+diverted equilibrium as usual - preferably at about the same depth that you
+will want for the limiter case grid. Create also two closed polygons
+to act as targets for this SN equilibrium. Declare them as {\tt Inner target}
+and {\tt Outer target}, and include them as part of the {\tt Structure}
+in the usual way, as decribed in Section~\ref{sec:createsurfaces}.
+  \item {\tt Add} a {\tt Limiter configuration} variable, and cut and paste the
+name of the limiter configuration equilibrium file into the
+{\tt Real equilibrium} there. Specify the depth of the grid you wish to obtain
+by setting the {\tt Core width} (in units of $m$).
+  \item Include the limiter walls in the {\tt Structure}, plus some
+grid-limiting parts if needed.
+  \item Provide the material and recycling settings for the limiter targets
+as usual with the {\tt Target specification} variables.
+{\tt Targets \#1} and {\tt \#2} should be positioned so that you travel
+clockwise around the plasma when going from {\tt Target \#1} to
+{\tt Target \#2}. Use the real elements you want to be reconnected to the
+grid corners as the {\tt SOL edges}. For the {\tt PFR edges}, create two
+fake elements and specify 0 as the {\tt Surface Type} in the
+{\tt General Surface Data} for these two elements. Although these may be
+fictitious elemens, they must NOT be included in the
+{\tt Elements not for Eirene} list.
+  \item Create the {\tt Surfaces} and {\tt Grid points} as usual.
+Only the {\tt Core} zone for the {\tt Grid points} and the {\tt SOL} and
+{\tt Core} areas for the {\tt Surfaces} are meaningful.
+  \item In {\tt Global Eirene data}, make sure that the {\tt Major radius}
+is set to its real positive value (in units of $cm$).
+  \item As usual, define all other variables ({\tt Surface data},
+{\tt Gas puff}, {\tt Plasma species}, etc...) as needed. When defining the
+{\tt TRIA-EIRENE parameters}, define the contour indices as they pertain to
+the limiter configuration equilibrium.
+\end{enumerate}
+
+\index{lns}
+Once you are finished setting up all the case variables, follow the
+usual procedure: {\tt Output} the case files, use the {\tt lns} script to
+establish the necessary symbolic links (the scripts checks if you are doing
+a limiter case, and, if so, will have {\tt dg.equ} link to the
+file you indicated as the {\tt Real equilibrium}), then use the {\tt carre -}
+script to create the grid, {\tt Import} the {\tt Grid} and inspect it.
+You may have to play with the usual settings for the grid generation,
+such as the {\tt Surfaces} and {\tt Grid points} together with the
+{\tt Carre guard length} in the {\tt Target specifications}, and also with
+the {\tt Core width} in the {\tt Limiter configuration} in order to get the
+grid which suits you and is acceptable for the plasma modelling code (no pink
+segments in the grid). If you find it impossible to create the necessary
+distribution of the surfaces or the grid points because of local extrema
+appearing on the visualisation curve, then try to adjust the
+{\tt Radial scale} or {\tt Poloidal scale} in the {\tt Limiter configuration}
+layer.
 
 \subsection{Creating and editing grid points}
 \index{DG, grid points}

@@ -1110,13 +1110,18 @@ c*** 15. additional information for geousr
 c*** segment numbers for the target edges to be modified by geousr
 
       write(iunoo,700) utxthd(27)
-      write(iunoo,707) nadmod,ntrgte
+      if(lm_cnfg) then
+        write(iunoo,707) nadmod,ntrgte/2
+      else
+        write(iunoo,707) nadmod,ntrgte
+      endif
       do i=1,nadmod !{
         write (iunoo,'(2i6,1p,3e12.5)') nrs(i),ipunkt(i),
      ,                                        xcoor(i),ycoor(i),zcoor(i)
       end do !}
       if(ntrgte.gt.0) then !{
         do i=1,ntrgte !{
+          if (lm_cnfg.and.mod(i,2).eq.1) cycle
       	  write(iunoo,'(2i6,1p,2e12.5)') jedge(2,i),jedge(1,i),
      ,                                             xpolpos(i),ypolpos(i)
         end do !}
