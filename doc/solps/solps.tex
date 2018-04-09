@@ -18171,9 +18171,10 @@ name of the limiter configuration equilibrium file into the
 by setting the {\tt Core width} (in units of $m$).
   \item Include the limiter walls in the {\tt Structure}, plus some
 grid-limiting parts if needed.
-  \item Provide the material and recycling settings for the limiter targets
-as usual with the {\tt Target specification} variables.
-{\tt Targets \#1} and {\tt \#2} should be positioned so that you travel
+  \item The {\tt Target specification} variables refer to the
+two halves of the limiter on either side of the tangency point. Provide there
+all relevant material and sputtering properties. {\tt Targets \#1} and 
+{\tt \#2} should be positioned so that you travel
 clockwise around the plasma when going from {\tt Target \#1} to
 {\tt Target \#2}. Use the real elements you want to be reconnected to the
 grid corners as the {\tt SOL edges}. For the {\tt PFR edges}, create two
