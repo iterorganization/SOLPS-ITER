@@ -29,7 +29,7 @@ FC        = ifort
 ifdef SOLPS_DEBUG
 FCOPTS    = -g -C -debug all
 else
-FCOPTS    = -O3 -vec_report0
+FCOPTS    = -O3
 endif
 
 #COMPILE  = ${FC} -c ${FFLAGS}

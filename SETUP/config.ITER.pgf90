@@ -42,7 +42,7 @@ LD_MPI     = -L/work/imas/opt/libibverbs/1.1.4/lib `pkg-config mpich2-ch3 --libs
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNO_NAG -DPGF90
+SOLPS_CPP      = -DNO_NAG -DPGF90 -DNOQUAD
 B25_DEFINES    = -DNO_21
 EIRENE_DEFINES =
 MPI_CPP        = `pkg-config mpich2-ch3 --cflags`

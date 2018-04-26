@@ -198,6 +198,9 @@ case "*.hm":
 case "*.nf":
   echo AU_UNKNOWN
   breaksw
+case "*.ca":
+  echo CA_UNKNOWN
+  breaksw
 case "*.kz":
   echo KZ_UNKNOWN
   breaksw

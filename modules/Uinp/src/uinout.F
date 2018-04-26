@@ -19,7 +19,7 @@ c=======================================================================
 #include "impcon.inc"
 #include "git_version_Uinp.h"
 
-      integer i,j,k,l,m,n,icont,istep
+      integer i,j,k,l,m,n,icont,istep,jsurpr
       logical handle,ulmlti,ex,carbon,nitrogen,moly,streql
       logical, allocatable :: done(:)
       character utxthd(35)*71, utxtfl(9)*47, ufnm*(*), ucdnmdl*10
@@ -347,6 +347,7 @@ c*** 3b.  data for additional surfaces
 c***  "ch0-cards"
       call uichwr(iunoo,0,jadch0,nlimi)
       icopy=0
+      jsurpr=nsurpr
       do 360 k=laddsrfs+1,nlimi !{
         i=indasrfs(k)
 	if(i.eq.0) go to 360
@@ -368,6 +369,10 @@ c*** "ch2-cards" here !
         jlcell=jlacll(i)+1000*jlblck(i)
         write(iunoo,707) jliin(i),jlside(i),jlswch,jlequi(i),
      ,    jltor(i),jlcol(i),jlfit(i),jlcell,jlbox(i),jlplg(i)
+        if(jliin(i).lt.0) then
+          jsurpr=jsurpr+1
+          nsrf(jsurpr)=k
+        end if
 
 c**  Surface coefficients
 
@@ -417,30 +422,30 @@ c**  Boundary data
 
 c**  Local reflection model ?
 
-      if(jscrd(i).GT.0) then !{
-        write(iunoo,715) scard_name(jscrd(i))
-      else if (jliin(i).eq.1) then !}{
-        ii=10*jlsptc(i)+jlsptp(i)
-        write(iunoo,707) jlref(i),ii,jsrss(i),jsrc(i),lchspnwa(i)
-        write(iunoo,703) xmlma(i),ewala(i),ewbna(i),
+        if(jscrd(i).GT.0) then !{
+          write(iunoo,715) scard_name(jscrd(i))
+        else if (jliin(i).eq.1) then !}{
+          ii=10*jlsptc(i)+jlsptp(i)
+          write(iunoo,707) jlref(i),ii,jsrss(i),jsrc(i),lchspnwa(i)
+          write(iunoo,703) xmlma(i),ewala(i),ewbna(i),
      ,                trnspa(i,1),trnspa(i,2),fsheata(i)
-        write(iunoo,703) rcycfa(i),rcycta(i),rcprma(i),
+          write(iunoo,703) rcycfa(i),rcycta(i),rcprma(i),
      ,  		exppla(i),expela(i),expila(i)
-        write(iunoo,703) rcycsa(i),rcycca(i),
+          write(iunoo,703) rcycsa(i),rcycca(i),
      ,  		echspta(i),fchspta(i),sptpra(i)
-      end if !}
+        end if !}
 
 c* Transform from convenient coordinate system to Eirene coordinate
 c* system. This is possible for all surfaces written by now, i.e.
 c* from itini=1 to itend=i
 
-      if(itini(i).ge.0) then !{
-        write(iunoo,'(a)') 'TRANSFORM'
-        write(iunoo,707) itini(i),itend(i)
-        write(iunoo,703) xlcor(i),ylcor(i),zlcor(i)
-        write(iunoo,703) xlref(i),ylref(i),zlref(i)
-        write(iunoo,703) xlrot(i),ylrot(i),zlrot(i),alrot(i)
-      end if !}
+        if(itini(i).ge.0) then !{
+          write(iunoo,'(a)') 'TRANSFORM'
+          write(iunoo,707) itini(i),itend(i)
+          write(iunoo,703) xlcor(i),ylcor(i),zlcor(i)
+          write(iunoo,703) xlref(i),ylref(i),zlref(i)
+          write(iunoo,703) xlrot(i),ylrot(i),zlrot(i),alrot(i)
+        end if !}
 
   360 continue !}
 
@@ -897,8 +902,8 @@ c*** 11.   data for numerical and graphical output
       do j=1,nvolpr !{
         write(iunoo,707) ntlv(j),nflgv(j),nspzv1(j),nspzv2(j),ntlvf(j)
       end do !}
-      write(iunoo,707) nsurpr
-      do j=1,nsurpr !{
+      write(iunoo,707) jsurpr
+      do j=1,jsurpr !{
         write(iunoo,707) nsrf(j),ntls(j),nflgs(j),nspzs1(j),nspzs2(j)
       end do !}
 

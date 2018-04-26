@@ -63,6 +63,7 @@ if ($?PYTHONPATH) then
 else
   setenv PYTHONPATH ${SOLPSTOP}/lib/python
 endif
+setenv SOLPSLIB ${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}
 
 # setup files for combination of HOST_NAME and COMPILER, + local modifications if present
 if (-s SETUP/setup.csh.${HOST_NAME}.${COMPILER}) then
@@ -86,7 +87,6 @@ setenv SonnetTopDirectory ${SOLPSTOP}/modules/Sonnet-light
 setenv EscapeSonnet `echo ${SonnetTopDirectory} | sed 's:\/:\\\/:g'`
 
 setenv DG ${SOLPSTOP}/modules/DivGeo
-setenv SOLPSLIB ${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}
 #setenv CARRE_STOREDIR $SOLPSTOP/modules/Carre/meshes
 
 # Set path to scripts and executables
