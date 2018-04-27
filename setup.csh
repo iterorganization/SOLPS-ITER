@@ -220,7 +220,7 @@ endif
 
 # Add links to the IMAS solps-iter database
 
-if ($HOST_NAME == "ITER") then
+if ($?IMAS_VERSION) then
   source scripts/imasdb_solps-iter
   module list
 endif

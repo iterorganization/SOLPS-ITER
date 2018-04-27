@@ -6,7 +6,7 @@ endif
 
 # Modules needed by SOLPS-ITER
 if (`hostname` != "hpc-login01.iter.org") then
-  module load imas/3.17.0/ual/3.8.0
+  module load imas/3.17.2/ual/3.8.1
   module switch Anaconda2 Anaconda3/4.4.0
   module load makedepend/1.0.0
   module load netcdf/4.3.3.1

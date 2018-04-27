@@ -9,6 +9,9 @@ endif
 module load solps-gui
 module load git
 module load totalview
+module load intel
+module load impi
+module load fftw-mpi
 
 setenv DBX totalview
 

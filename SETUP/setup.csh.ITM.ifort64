@@ -4,7 +4,7 @@ setenv NCARG_ROOT /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/NCARG
 setenv PATH ${PATH}:${NCARG_ROOT}/bin
 setenv SOLPSWORK /pfs/work/$USER/solps-iter/runs
 
-module load imasenv/3.12.1
+module load imasenv/3.17.1
 
 # The script above overwrites $PATH, so modules must be loaded afterwards!!!
 # load modules
