@@ -15,17 +15,17 @@ c=======================================================================
 #include "uinput.inc"
       integer imtrl
       parameter (imtrl=2)
-      character*(imtrl) ucm(nmtr),ucr
+      character*(imtrl) ucm(0:nmtr),ucr
       character*(*) cmt(ncmt)
       integer i,j
       logical ex
       logical streql
       external streql
-      real uz(nmtr)
+      real uz(0:nmtr)
       data ucm /
-     /        'c'   , 'ss' , 'be'  , 'mo'  , 'w'   , 'fe'  /
+     /        '  ', 'c'   , 'ss' , 'be'  , 'mo'  , 'w'   , 'fe'  /
       data uz /
-     /        1206. , 5626.,  904. , 9642. , 18474., 5626. /
+     /          0., 1206. , 5626.,  904. , 9642. , 18474., 5626. /
 c=======================================================================
 
       if(n.lt.0) then !{
@@ -52,7 +52,7 @@ c*** Additional surfaces
           do j=1,nmtr !{
             if(streql(ucr,ucm(j))) go to 10
           end do !}
-          j=1
+          j=0
  10       xmlma(i)=uz(j)
         end do !}
       else !}{
@@ -63,7 +63,7 @@ c*** Non-default surface (target)
         do j=1,nmtr !{
           if(streql(ucr,ucm(j))) go to 20
         end do !}
-        j=1
+        j=0
  20     xmlim(n)=uz(j)
 
       end if !}

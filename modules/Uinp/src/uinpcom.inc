@@ -161,7 +161,7 @@ c***    and '3 secondaries' flag for each entry
      ,  nspdatm(nspdgen),nspdmol(nspdgen),
      ,  nspdion(nspdgen),spcdms(nspdlen),spcdnc(nspdlen),
      ,  spcdcg(nspdlen),spcdfu(nspdlen),spcdns(nspdlen)
-      logical l_n2(nspdlen), n2_model, l_ammon(nspdlen), ammonx_used
+      logical no_n2(nspdlen), no_n2_model, l_ammon(nspdlen), ammonx_used
       logical l_meta(nspdlen), meta_used, is_meta(natm)
       
 c-----------------------------------------------------------------------
@@ -599,8 +599,8 @@ c     ,  spcifup,spcifua,spcifum,spcifui,
      ,  ttcblph,ttctal,ttcdbg2,ttcdbge,ttcdbgm,ttcdbgf,ttcdbgl,ttcdbgs,
      ,  ttcdbgg,ttcdbgmpi,ttcdbgc,
      ,  ttpl1st,ttpl2nd,ttpladd,ttplhst,ttplcut,ttplnums,tttest,
-     ,  lm_cnfg,l_n2,l_ammon,l_meta,
-     ,  n2_model,ammonx_used,meta_used,is_meta
+     ,  lm_cnfg,no_n2,l_ammon,l_meta,
+     ,  no_n2_model,ammonx_used,meta_used,is_meta
 
       common/uinptxt/topo,amd_file,
      ,  spcsncl,spcspls,spcsatm,spcsmol,spcsion,spcsrfp,spcsrfa,spcsrfm,

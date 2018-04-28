@@ -199,6 +199,7 @@ c!###{
       print *
       print *,'knd reg    pos loc_pol loc_rad cmb'
       do k=1,nbndknd !{
+        if (nrgbndt(k).eq.0) cycle
         print *
         do j=1,nrgbndt(k) !{
           print '(2i4,1x,a1,1x,6i4)',k,j,crgbndt(j,k),lrsbndt(j,k),

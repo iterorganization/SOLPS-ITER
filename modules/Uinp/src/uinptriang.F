@@ -39,7 +39,7 @@ c*** makes list of polygon indices present in the input data
       nattr=k
 c***  makes sets of elements with certain attribute
 c***  and check if they are closed
-      write(*,*) 'nattr',nattr
+      write(*,*) 'nattr ',nattr
       IF(nattr.GT.0) write(*,*) 'attrib', (attrib(l),l=1,nattr)
       if(nattr.EQ.1.AND.attrib(1).EQ.0) then
        TriMesh=.FALSE.
@@ -64,7 +64,7 @@ c***  and check if they are closed
        ENDIF
 c***   makes checking and outputs NSS indices if necessary
        call uichkchn(chain,nchain,nsts,NSS,nn,attrib(i))
-       write(*,*) 'nn',nn
+       write(*,*) 'nn ',nn
        IF(nn.GT.0)  write(*,*) 'NSS', (NSS(l),l=1,nn)
        if(nn.LT.0) then 
         write(0,*) 'ERROR in uichkchn, nn', nn

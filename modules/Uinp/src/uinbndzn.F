@@ -516,6 +516,7 @@ c!###{
       print *,'knd  zone  ref pos  range  jdr jcp jc1 jc2 lcp lc1 lc2',
      ,  ' ls1 ls2'
       do k=1,nbndknd !{
+        if (nznbndt(k).eq.0) cycle
         print *
         do j=1,nznbndt(k) !{
           print '(2i4,1x,a1,1x,13i4)',k,j,cznbndt(j,k),lrfbndt(j,k),

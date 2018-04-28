@@ -33,9 +33,9 @@
 \usepackage{tocbibind}
 \ifpdf
 \usepackage{thumbpdf}
-\usepackage[pageanchor,pdftex,backref,hyperindex,colorlinks,bookmarks,bookmarksnumbered,pdfencoding=auto]{hyperref} %bookmarksopen,
+\usepackage[pageanchor,pdftex,backref,hyperindex,colorlinks,bookmarks,bookmarksnumbered]{hyperref} %bookmarksopen,
 \else
-\usepackage[pdfencoding=auto]{hyperref}
+\usepackage{hyperref}
 \fi
 \usepackage{color}
 \usepackage{fixltx2e}
@@ -327,6 +327,7 @@ The current list of recognized hostnames, deduced by means of the {\tt whereami}
   \item[SWIP] SouthWestern Institute of Plasma Physics, Chengdu: *.swip.ac.cn
   \item[WM] College of William and Mary: *.wm.edu
   \item[AU\_UNKNOWN] All other domain names from Australia
+  \item[CA\_UNKNOWN] All other domain names from Canada
   \item[CN\_UNKNOWN] All other domain names from China
   \item[EU\_UNKNOWN] All other domain names from EURATOM Member countries
   \item[IN\_UNKNOWN] All other domain names from India
@@ -558,10 +559,11 @@ The cases stored for retrieval include:
   \item[ITER\_2294\_Honly\_20MW] Same as above, but increasing density
   \item[ITER\_2296\_Honly\_20MW] Same as above, but continuing density scan
   \item[ITER\_2297\_Honly\_20MW] Same as above, continuing scan
+  \item[ITER\_2298\_Honly\_20MW] Same as above, continuing scan
   \item[ITER\_2299\_Honly\_20MW] Same as above, continuing scan, reaching detachment
   \item[ITER\_2308\_Honly\_20MW] Same as above, continuing scan, detached conditions
   \item[ITER\_2360\_0.95He+0.05H\_40MW] ITER Helium plasma case at mid-power
-  \item[ITER\_2588\_D+He+N] ITER full power case with N injection
+  \item[ITER\_2588\_D+He+N] ITER full power case with N injection and gas puff feedback on SOL D particle content
   \item[ITER\_2588\_drifts] ITER {\tt B2.5} stand-alone D-only demonstration case with and without drifts
   \item[ITER\_535\_D+He+Ar] ITER full power case with Ar injection
   \item[ITER\_Be-W\_D+T+He+Ne] ITER full power case with 98 species
@@ -1562,8 +1564,8 @@ extracted from the {\tt run.log} file.
   \item[first\_setup]\index{first\_setup} Creates the {\tt config.}\${\tt {HOST\_NAME}.}\${\tt {COMPILER}} files in each of the \SOLPSITER submodules.
   \item[get\_git\_email]\index{get\_git\_email} Finds the user's email address from the {\tt .gitconfig} file.
   \item[get\_parm.bpl]\index{get\_parm.bpl} extracts certain useful quantities from a run input and output files for use in later scripts, particularly those building \btwoplot command files.
-  \item[gtdr]\index{gtdr} Script to make a directory tree local. [obsolete]
-  \item[gtfl]\index{gtfl} [ANK] Replaces the specified links by the files they are linked to. [obsolete]
+  \item[gtdr]\index{gtdr} Script to make a directory tree local.
+  \item[gtfl]\index{gtfl} Replaces the specified links by the files they are linked to.
   \item[imasdb\_solps-iter]\index{imasdb\_solps-iter}\index{IMAS} Script to load the IMAS ITER scenario database and the \SOLPSITER IMAS database archives
   \item[import\_files\_from\_convert]\index{import\_files\_from\_convert}\index{b2yt} Imports and renames the files produced by {\tt b2yt} in a {\tt convert} directory at the same level as the current directory to prepare the new converted case for a run
   \item[input.dat\_to\_mesh.extra]\index{input.dat\_to\_mesh.extra}\index{input.dat}\index{mesh.extra} Converts standard input (usually directed from a {\tt input.dat} file) into a {\tt mesh.extra} file.
@@ -1574,13 +1576,12 @@ extracted from the {\tt run.log} file.
   \item[jetsubmit]\index{jetsubmit} Command file to launch runs on the JET Analysis Cluster (JAC). See Section \ref{b2run} for details.
   \item[last10]\index{last10} Truncates the {\tt run.log} file to contain only the output from the last 10 written code iterations and stores them in {\tt run.log.last10}.
   \item[localsubmit]\index{localsubmit} Command file to launch runs on the local machine. See Section \ref{b2run} for details.
-  \item[lndr]\index{lndr} [ANK] routine to generate shadow trees.
+  \item[lndr]\index{lndr} routine to generate shadow trees.
   \item[mds\_id]\index{mds\_id} Obtains certain data necessary for run identification when saving to the {\tt MDSplus} database.
   \item[move\_optional\_files]\index{move\_optional\_files} Script used by the run Makefile to check for the existence of optional output files and, upon succesful termination of a run, move these files to the run directory.
   \item[move\_save\_files]\index{move\_save\_files}\index{b2co} Script used by the crash recovery program {\tt b2co} to replace optional run output files with their recovered versions.
   \item[n2d]\index{n2d} Converts "Naka" format equilibrium files to {\tt DG} format (see Sec.~\ref{sec:equtrn}).
   \item[nn2d]\index{nn2d} Converts new "Naka" format equilibrium files to {\tt DG} format (see Sec.~\ref{sec:equtrn}).
-  \item[nereg]\index{nereg} Shows averaged density per region.
   \item[noquote\_pwd]\index{noquote\_pwd} Returns the current working directory as a string without quotes (c.f.\ {\tt quote\_pwd}).
   \item[obtain\_tracing\_files]\index{obtain\_tracing\_files} Script to grab the last version of the tracing files for run recovery.
   \item[pipe\_b2.log]\index{pipe\_b2.log} Prepares the {\tt B2} log file for use by other scripts.
@@ -1608,9 +1609,6 @@ extracted from the {\tt run.log} file.
   \item[summarize\_run]\index{summarize\_run} List of instructions provided during job submission for obtaining a standard set of run diagnostics
   \item[switch\_to\_master]\index{switch\_to\_master} Script to switch to the up-to-date \SOLPSITER master branch.
   \item[truncate\_tracing\_files]\index{truncate\_tracing\_files}\index{b2co} Script used by the crash recovery program {\tt b2co} to truncate the optional tracing files so that they stay synchronized with the recovered plasma state.
-  \item[update\_eirene]\index{update\_eirene} Updates the \${\tt SOLPSTOP/modules/Eirene} directory.
-  \item[update\_libs]\index{update\_libs} Updates the \${\tt SOLPSTOP/src/lib} directory.
-  \item[update\_links]\index{update\_links} Updates linked files to the {\tt SOLPS} Master in the current directory structure.
   \item[v2d]\index{v2d} Converts {\tt Carre} format equilibrium files to {\tt DG} format (see Sec.~\ref{sec:equtrn}).
   \end{description}
 \end{itemize}
@@ -1650,7 +1648,6 @@ welcome!
   \item[chop\_pwd]\index{chop\_pwd}
   \item[climb\_and\_look\_for]\index{climb\_and\_look\_for}
   \item[cnvtria]\index{cnvtria}
-  \item[get\_parm.bpl]\index{get\_parm.bpl}
   \item[lln]\index{lln}
   \item[min\_ave\_max.awk]\index{min\_ave\_max.awk}
   \item[plot\_bc\_conpar13]\index{plot\_bc\_conpar13}
@@ -2752,6 +2749,10 @@ which contains
   multiplier to the ion flux limit
 \item[CFLMV]\index{CFLMV} {\tt real},
   multiplier to the viscosity flux limit
+\item[CFLAL]\index{CFLAL} {\tt real},
+  multiplier to the thermo-electric coefficient flux limit
+\item[CFLAB]\index{CFLAB} {\tt real},
+  multiplier to the friction force flux limit
 \item[TRANSPORT\_FILENAME]\index{TRANSPORT\_FILENAME} {\tt filename}, the name of a new
   transport input file that will be read based on a condition
   determined by $\mod(${\tt TIM},{\tt TRANSPORT\_TIME\_MOD}$)>${\tt TRANSPORT\_TIME\_SWITCH}
@@ -2808,6 +2809,8 @@ See also Appendix \ref{lis:b2cdcn} for a more up-to-date description.
 \item[TIME\_FACTOR\_REQUIRED]\index{TIME\_FACTOR\_REQUIRED}
   {\tt real}, related to local source re-scaling
   (see routine {\tt b2srsm.F})
+\item[CORR\_CORE\_DN]\index{CORR\_CORE\_DN} {\tt real array, length NS}, damping parameter for speed-up of the density equations in the core when drifts are activated
+\item[CORR\_CORE\_DN]\index{CORR\_CORE\_DT} {\tt real}, damping parameter for speed-up of the temperature equations in the core when drifts are activated
 \item[CORE\_DT\_SUPPRESSION]\index{CORE\_DT\_SUPPRESSION} {\tt real},
   multiplier to the timestep for the innermost core ring of cells
 \item[CORE\_DT\_FACTOR]\index{CORE\_DT\_FACTOR} {\tt real},
@@ -11490,7 +11493,7 @@ time, or
 \begin{verbatim}
   2d nesepm tesepm
 \end{verbatim}
-to plot the midplane separatrix electron temperature versus the midplane separatrix electron density.
+to plot the midplane separatrix electron temperature versus the midplane separatrix electron density. The frequency at which (and whether) these quantities are written out is controlled by the {\tt 'b2mndr\_b2time'} switch.
 
 If {\tt 'b2mndr\_stim'} is set to a negative value, data from the current \SOLPSITER run will be appended to the existing {\tt b2time.nc} file, otherwise the file is created anew.
 
@@ -11862,7 +11865,7 @@ pomxap\_std \index{pomxap\_std}\index{b2time.nc, pomxap\_std} & variance for max
 \label{cha:b2tallies}\index{b2tallies.nc, quantities stored
   in}\index{time-dependent quantities, b2tallies.nc}\index{b2tallies.nc}
 
-These are the tallies stored in {\tt b2tallies.nc}.
+These are the tallies stored in {\tt b2tallies.nc}. The frequency at which (and whether) these quantities are written out is controlled by the {\tt 'tallies\_netcdf'} switch.
 
 If {\tt 'b2mndr\_stim'} is set to a negative value, data from the current \SOLPSITER run will be appended to the existing {\tt b2tallies.nc} file, otherwise the file is created anew.
 
@@ -13074,6 +13077,7 @@ are indicated in the table.
     ndec \index{b2plot, ndec}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:ndec}   & Number of logarithmic decades \\
     new \index{b2plot, new}        & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:new}    & New page \\
     neo\_ic \index{b2plot, neo\_ic} & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:neoic}   & Option for neoclassical calculation \\
+    nice \index{b2plot, nice}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:nice}   & Toggle whether nice axes will be used \\
     noax \index{b2plot, noax}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:noax}   & No axes \\
     nocp \index{b2plot, nocp}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:nocp}   & No contour plot \\
     ocol \index{b2plot, ocol}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:ocol}   & Outline colour \\
@@ -15011,6 +15015,9 @@ Sets label size to $\langle$factor$\rangle$ times default size (default = 1.0).
 Sets line label font size to $\langle$number$\rangle$ (default = 0). If $\langle$number$\rangle$ is between 0 and 3, then the size
 represents 1., 1.5, 2., and 3. times an 8-plotter address unit width. Otherwise, it represents the character
 width in plotter address units.
+
+\subsubsection{nice}\index{b2plot, nice}\label{sec:nice}
+Toggles whether graphs will use nice axes with rounded values ({\tt .true.} by default).
 
 \subsubsection{noax}\index{b2plot, noax}\label{sec:noax}
 Does not plot axes.
@@ -17635,7 +17642,7 @@ irregular points. It is convenient to display only irregular points
 while correcting a converted template, because irregularities can be
 seen very easily.
 
-\section{Rotating the view}
+\subsection{Rotating the view}
 \label{sec:rotateview}\index{DG, rotating view}
 
 The display may now be viewed at any angle of rotation. The user may
@@ -17665,7 +17672,7 @@ the rotation angle.
 \label{fig:rotate30}
 \end{figure}
 
-\section{Stretching and shrinking the view}
+\subsection{Stretching and shrinking the view}
 \label{sec:stretchview}\index{DG, stretching and shrinking view}
 
 The aspect ratio may be "unlocked" by enabling the
@@ -17718,7 +17725,7 @@ the aspect ratio, but does not disable {\tt Stretch} mode.
 % We still have Alan's description of the application of the stretch and
 % rotation capability to manipulate mesh cells. Suggest putting it later
 % with mesh related stuff or perhaps in an appendix.
-\section{Top-down view}
+\subsection{Top-down view}
 \label{sec:topdownview}\index{DG, top-down view}
 
 To facilitate visualization and specification of chords
@@ -18050,14 +18057,14 @@ absolute deviation from the separatrix flux.
 
 With this procedure, it is clear that the outermost level must be a flux
 extremum of some element of the structure; we call this element the
-"bounding element". The capability was added to {\tt DG} to record this bounding
-element during surface creation and mark it from within the
+"bounding element". The capability was added to {\tt DG} to record this
+bounding element during surface creation and mark it from within the
 {\tt Create Surface(s)...} dialog. See, e.g., Fig.~\ref{fig:boundingelement}.
 Note that the core region has no bounding
 element. By
-identifying what {\tt DG} considers as the bounding element, we may easily adjust
-the extent of the flux surfaces by moving the bounding element to change the
-level of its extremum. Note that once the structure is
+identifying what {\tt DG} considers as the bounding element, we may easily
+adjust the extent of the flux surfaces by moving the bounding element to
+change the level of its extremum. Note that once the structure is
 changed, the bounding element might different than before.
 
 \begin{figure}[hbtp]
@@ -18143,11 +18150,11 @@ To delete all surfaces, use the {\tt Edit|Delete|Surfaces} menu command.
 \subsection{Defining the X-point}
 \index{DG, X-point}
 
-In some older {\tt DG} version, you must define the X-point before working with grid points. This is
-necessary if version of {\tt DG} used cannot detect the X-point
-location automatically. By defining it, you give {\tt DG} a hint how to
-display grid points and process user input. {\tt DG} does not write the
-X-point location into the output file.
+In some older {\tt DG} version, you must define the X-point before
+working with grid points. This is necessary if version of {\tt DG} used
+cannot detect the X-point location automatically. By defining it, you
+give {\tt DG} a hint how to display grid points and process user input.
+{\tt DG} does not write the X-point location into the output file.
 
 For performance reasons, the separatrix is drawn as series of line
 segments. Because of this, it is not displayed very accurately,
@@ -18167,6 +18174,73 @@ intersecting line segments that could even intersect with surfaces!
 
 With an X-point defined, you can use the {\tt Set X Point} tool to
 redefine it.
+
+\subsection{Limiter configurations}
+\index{DG, limiter configurations}
+
+If you are dealing with a limiter configuration, {\tt DG} needs to be
+"tricked", because its internal algorithm requires some quantities that
+can only be computed in a divertor topology. The implemented solution
+is to provide two sets of variables, one of which is a dummy only used
+to satisfy the {\tt DG} internal requirements, and another set that
+provides the actual equilibrium information.
+
+The procedure to follow is:
+\begin{enumerate}
+  \item {\tt Import} a single-null {\tt Equilibrium}. The best would be
+something of a very different size, so that it lies completely outside the
+geometry you really want to model. {\tt Import} the single-null
+{\tt Topology}. {\tt Create} a {\tt Surface} in the core region of the
+diverted equilibrium as usual - preferably at about the same depth that you
+will want for the limiter case grid. Create also two closed polygons
+to act as targets for this SN equilibrium. Declare them as {\tt Inner target}
+and {\tt Outer target}, and include them as part of the {\tt Structure}
+in the usual way, as decribed in Section~\ref{sec:createsurfaces}.
+  \item {\tt Add} a {\tt Limiter configuration} variable, and cut and paste the
+name of the limiter configuration equilibrium file into the
+{\tt Real equilibrium} there. Specify the depth of the grid you wish to obtain
+by setting the {\tt Core width} (in units of $m$).
+  \item Include the limiter walls in the {\tt Structure}, plus some
+grid-limiting parts if needed.
+  \item The {\tt Target specification} variables refer to the
+two halves of the limiter on either side of the tangency point. Provide there
+all relevant material and sputtering properties. {\tt Targets \#1} and 
+{\tt \#2} should be positioned so that you travel
+clockwise around the plasma when going from {\tt Target \#1} to
+{\tt Target \#2}. Use the real elements you want to be reconnected to the
+grid corners as the {\tt SOL edges}. For the {\tt PFR edges}, create two
+fake elements and specify 0 as the {\tt Surface Type} in the
+{\tt General Surface Data} for these two elements. Although these may be
+fictitious elemens, they must NOT be included in the
+{\tt Elements not for Eirene} list.
+  \item Create the {\tt Surfaces} and {\tt Grid points} as usual.
+Only the {\tt Core} zone for the {\tt Grid points} and the {\tt SOL} and
+{\tt Core} areas for the {\tt Surfaces} are meaningful.
+  \item In {\tt Global Eirene data}, make sure that the {\tt Major radius}
+is set to its real positive value (in units of $cm$).
+  \item As usual, define all other variables ({\tt Surface data},
+{\tt Gas puff}, {\tt Plasma species}, etc...) as needed. When defining the
+{\tt TRIA-EIRENE parameters}, define the contour indices as they pertain to
+the limiter configuration equilibrium.
+\end{enumerate}
+
+\index{lns}
+Once you are finished setting up all the case variables, follow the
+usual procedure: {\tt Output} the case files, use the {\tt lns} script to
+establish the necessary symbolic links (the scripts checks if you are doing
+a limiter case, and, if so, will have {\tt dg.equ} link to the
+file you indicated as the {\tt Real equilibrium}), then use the {\tt carre -}
+script to create the grid, {\tt Import} the {\tt Grid} and inspect it.
+You may have to play with the usual settings for the grid generation,
+such as the {\tt Surfaces} and {\tt Grid points} together with the
+{\tt Carre guard length} in the {\tt Target specifications}, and also with
+the {\tt Core width} in the {\tt Limiter configuration} in order to get the
+grid which suits you and is acceptable for the plasma modelling code (no pink
+segments in the grid). If you find it impossible to create the necessary
+distribution of the surfaces or the grid points because of local extrema
+appearing on the visualisation curve, then try to adjust the
+{\tt Radial scale} or {\tt Poloidal scale} in the {\tt Limiter configuration}
+layer.
 
 \subsection{Creating and editing grid points}
 \index{DG, grid points}

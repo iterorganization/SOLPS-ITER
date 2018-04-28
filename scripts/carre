@@ -36,6 +36,11 @@ the files carre.log and traduit.log, respectively.
 "
 [ -z "$1" ] && { /bin/echo -e "$Usage"; exit 4; }
 
+solpstop=`climb_and_look_for SOLPSTOP`
+[ -s $solpstop ] && {
+  SOLPSTOP="`cat $solpstop`"
+}
+
 [ "$DEVICE" = '' ] && {
   print -u2 -n -- "No DEVICE selected. Please provide a device name\n "
   read u

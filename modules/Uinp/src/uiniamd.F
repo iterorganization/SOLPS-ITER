@@ -132,7 +132,7 @@ c-----------------------------------------------------------------------
         read(iunii,'(a)',end=9999) rctnptpr(i)
         do j = 1, nspdlen !{
           if (streql(rctnptpr(i),spcdspc(j))) then !{
-            n2_model = n2_model .and. l_n2(j)
+            no_n2_model = no_n2_model .and. no_n2(j)
             if (.not.meta_used .and. l_meta(j)) meta_used = .true.
           end if !}
         end do !}
@@ -143,7 +143,7 @@ c-----------------------------------------------------------------------
         read(iunii,'(a)',end=9999) rctnptin(i)
         do j = 1, nspdlen !{
           if (streql(rctnptin(i),spcdspc(j))) then !{
-            n2_model = n2_model .and. l_n2(j)
+            no_n2_model = no_n2_model .and. no_n2(j)
             if (.not.meta_used .and. l_meta(j)) meta_used = .true.
           end if !}
         end do !}
@@ -154,7 +154,7 @@ c-----------------------------------------------------------------------
         read(iunii,'(a)',end=9999) rctnpto1(i)
         do j = 1, nspdlen !{
           if (streql(rctnpto1(i),spcdspc(j))) then !{
-            n2_model = n2_model .and. l_n2(j)
+            no_n2_model = no_n2_model .and. no_n2(j)
             if (.not.meta_used .and. l_meta(j)) meta_used = .true.
           end if !}
         end do !}
@@ -165,7 +165,7 @@ c-----------------------------------------------------------------------
         read(iunii,'(a)',end=9999) rctnpto2(i)
         do j = 1, nspdlen !{
           if (streql(rctnpto2(i),spcdspc(j))) then !{
-            n2_model = n2_model .and. l_n2(j)
+            no_n2_model = no_n2_model .and. no_n2(j)
             if (.not.meta_used .and. l_meta(j)) meta_used = .true.
           end if !}
         end do !}

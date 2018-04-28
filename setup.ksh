@@ -78,6 +78,7 @@ export SOLPSWORK=$SOLPSTOP/runs
 } || {
   export PYTHONPATH="${PYTHONPATH}:$SOLPSTOP/lib/python"
 }
+export SOLPSLIB=${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}
 
 # setup files for combination of HOST_NAME and COMPILER, + local modifications if present
 [ -s SETUP/setup.ksh.${HOST_NAME}.${COMPILER} ] && {
@@ -131,7 +132,6 @@ export SonnetTopDirectory=${SOLPSTOP}/modules/Sonnet-light
 export EscapeSonnet=`echo ${SonnetTopDirectory} | sed 's:\/:\\\/:g'`
 
 export DG=${SOLPSTOP}/modules/DivGeo
-export SOLPSLIB=${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}
 export CARRE_STOREDIR=${SOLPSTOP}/modules/Carre/meshes
 
 alias sb2='cd ${SOLPSTOP}/modules/B2.5'

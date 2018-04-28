@@ -50,7 +50,7 @@ c     helpers for reading in data
       integer iblmx,ismax
       integer isppr(isdimd),ispbr(isdimd),isstgr(isdimd)
       integer IDMAXDzav,ITMAXDzav
-      logical lres,lstan,lptn
+      logical lres,lstan,lptn,ex
       real (kind=R8) :: dnr_ams
       integer, allocatable :: izpmin(:), izpmax(:)
 c     log10 of densities (in 1/cm3), temperatures (in eV)
@@ -63,7 +63,7 @@ c     helpers for composing filenames
       character SUBDIRrec*4,SUBDIRion*4,SUBDIRcex*4
       character SUBDIRprb*4,SUBDIRplt*4,SUBDIRzav*4
       character SUBDIRpot*4
-      character ES*2, EB*2, YEAR*2, Bdescr*8
+      character ES*2, EB*2, YEAR*2, Bdescr*8, filename*256
 c     procedures
       integer get_atomic_number
       real (kind=R8) :: rratio
@@ -150,7 +150,9 @@ c======================================================================
         write(6,*) 'Bundling ',spcigen(l)
         write(6,*) spcigen(l), ianf, iend
         allocate(izpmin(0:nc), izpmax(0:nc))
-        if(silent_open(99,'ratadas.filelist',
+        filename='ratadas.filelist'
+        call find_file(filename,ex)
+        if(silent_open(99,filename,
      .             'data.local|modules/B2.5/Database',adasfile)) then !{
           read(99,*) uidin
           read(99,*) maxne

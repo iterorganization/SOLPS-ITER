@@ -83,9 +83,9 @@ c       if(scxmlim(i).1206) call checkforcarbon(i)
 c   40 continue  !}     
 
       if (nscards.ne.1) then !{
-        write(*,*) '  ',nscards,'surface interaction cards are prepared'
+        write(*,*) nscards,' surface interaction cards are prepared'
       else !}{
-        write(*,*) '  ',nscards,'surface interaction card is prepared'
+        write(*,*) nscards,' surface interaction card is prepared'
       endif !}
 
 c=======================================================================
