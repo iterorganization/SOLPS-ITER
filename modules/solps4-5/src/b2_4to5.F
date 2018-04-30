@@ -1,6 +1,7 @@
       module b2_4to5
       use b2mod_types
       implicit none
+#     include "DIMENSIONS.F"
 
       real (kind=R8), allocatable ::
      *  fch_4(:,:,:),  fch_32_4(:,:,:), fch_52_4(:,:,:), fch_p_4(:,:,:),
@@ -112,7 +113,6 @@
       use braeir
       use ceirsrt
       implicit none
-#     include <DIMENSIONS.F>
 #     include <KOPPLDIM.F>
 #     include <COMDIM.F>
 #     include <COMNUM.F>
@@ -301,7 +301,6 @@ cxpb
      , , only: indsrc
       use ceirsrt
       implicit none
-#     include <DIMENSIONS.F>
 #     include <KOPPLDIM.F>
 #     include <COMDIM.F>
 #     include <COMFEEDBACK.F>
@@ -671,6 +670,7 @@ cxpb
       use b2mod_b2cmpt
       use b2mod_external
       implicit none
+#     include "DIMENSIONS.F"
 
       integer nx, ny, ns
       character*120 lblgm
@@ -890,7 +890,7 @@ c Fill out b2mod_indirect arrays
           fchdia(ix,iy,0) = 0.0_R8
           fna(ix,iy,0,0:ns-1) = 0.0_R8
         endif
- 7      if (bottomiy(ix,iy).ne.-2) then
+    7   if (bottomiy(ix,iy).ne.-2) then
           fhe(ix,iy,1) = fhe_4(bottomix(ix,iy),bottomiy(ix,iy),1)
           fhi(ix,iy,1) = fhi_4(bottomix(ix,iy),bottomiy(ix,iy),1)
           fch(ix,iy,1) = fch_4(bottomix(ix,iy),bottomiy(ix,iy),1)
@@ -1388,14 +1388,14 @@ c
       implicit none
 
       integer nx,ny,ns
-      integer is, js, ib, it, ireg, ireg_4
+      integer is, js, ib, ireg, ireg_4
 
       real (kind=R8) :: amtol
       parameter (amtol=1.0e-2_R8)
       logical lnext
       lnext(is,js) = zamax(is).lt.zamin(js).and.zn(is).eq.zn(js).and.
      &  abs(am(is)-am(js)).lt.amtol
-      intrinsic abs, min, max
+      intrinsic abs
       external subini, subend, xertst
 
       call subini('b2convi2')
@@ -1886,7 +1886,7 @@ c
       integer nx, ny, ns
       character tab
       character*10 hlp_frm
-      integer i, is, is0, ncall
+      integer i, is, is0
       integer len_of_digits
       external len_of_digits
 

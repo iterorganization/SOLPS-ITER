@@ -16,8 +16,8 @@
  endif
  FC = fort77
  CPP = /lib/cpp
- CPP4OPTS = -C -P -I$(srcdir) $(EQUIV4)
- CPP5OPTS = -C -P -I$(srcdir) $(EQUIV5)
+ CPP4OPTS = -C -P -I$(SRCDIR) $(EQUIV4)
+ CPP5OPTS = -C -P -I$(SRCDIR) $(EQUIV5)
  BLD = ar rcv
  ifeq ($(HOST_NAME),NERSC)
   LAPACK = -lblaslapack

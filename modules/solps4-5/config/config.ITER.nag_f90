@@ -2,15 +2,16 @@ EQUIV4 = ${SOLPS_CPP} -DNO_CDF
 EQUIV5 = ${SOLPS_CPP} ${USE_EIRENE} -Dsdot=ddot -Dsasum=dasum -Dsaxpy=daxpy -Dsscal=dscal -Dsnrm2=dnrm2 -Dscopy=dcopy -Dsgbtrf=dgbtrf -Dsgbtrs=dgbtrs -DGRREAL=1 -DNO_PROCESS -DNO_CDF -Dsmin=dmin
 DEFINES += -DS2SUM=D2SUM -DS2MIN=D2MIN -DSASUM=DASUM -DSAXPY=DAXPY -DSDOT=DDOT -DSSCAL=DSCAL -DS2ASUM=D2ASUM -DS2SCAL=D2SCAL -DS2DOT=D2DOT -DSCOPY=DCOPY -DS2COPY=D2COPY
 
-CPP = /lib/cpp -C
-CPP4OPTS = -C -P -I${srcdir} ${EQUIV4}
-CPP5OPTS = -C -P -I${srcdir} ${EQUIV5}
+CPP = /lib/cpp -C -ffreestanding -traditional
+CPP4OPTS = -P -I${SRCDIR} ${EQUIV4}
+CPP5OPTS = -P -I${SRCDIR} ${EQUIV5}
 SED = sed s:\#PREC\#:d:g
 
 FC     = nagfor
 FCOPTS = -O -x77 # -mismatch
 INCMOD = -I
 MOD = mod
+OBJDEST = -mdir ${OBJDIR}
 
 BLD = ar rcv
 
@@ -22,7 +23,7 @@ LD = nagfor
 LDOPTS = 
 
 # LDEXTRA  = env.o
- 
+
 LCPP = ${LD_SONNET}
 
 #!!!Local Variables:
