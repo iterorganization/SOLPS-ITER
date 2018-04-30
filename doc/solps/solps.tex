@@ -15525,9 +15525,9 @@ Currently coded functions are:
   \item[ig = -3] Prints out the particle flux integrals onto the targets in file {\tt particle.flx}
   \item[ig = -2] Produces a file {\tt horton.dat} with coordinates of the grid cell centers and the plasma parameters (density, temperatures, neutral density, and so on) in these points
   \item[ig = -1] Produces a file {\tt abramov.dat} with coordinates of the grid cell centers and the plasma parameters (density, temperatures, neutral density) in these points
-  \item[0 < ig $\le$ nx] Produces a file {\tt oleg.dat} with plasma parameters (density, temperature, parallel flow velocity, parallel heat flux) against the distance along the magnetic field along flux surface index $\langle$ig$\rangle$
-  \item[nx < ig < 1000] Produces two files with estimated helium concentration ({\tt fraction.he}) and neutral pressure ({\tt pressure.ntr}) in the PFR for summary plots
-  \item[ig > 1000] Adds a line to the file {\tt ../sum\_tmp/spec\_pwr.dat} with the power entering both divertors, power radiated along the divertor legs, power radiated near the targets, areas of the separatrix branches and mean specific power radiated along the divertor legs per square meter. $\langle$ig$\rangle$ -1000 cells are treated as "close to the targets"
+  \item[0 $\le$ ig $\le$ ny] Produces a file {\tt oleg.dat} with plasma parameters (density, temperature, parallel flow velocity, parallel heat flux) against the distance along the magnetic field along flux surface index $\langle$ig$\rangle$
+  \item[ny $<$ ig $<$ 1000] Produces two files with estimated helium concentration ({\tt fraction.he}) and neutral pressure ({\tt pressure.ntr}) in the PFR for summary plots
+  \item[ig $\ge$ 1000] Adds a line to the file {\tt ../sum\_tmp/spec\_pwr.dat} with the power entering both divertors, power radiated along the divertor legs, power radiated near the targets, areas of the separatrix branches and mean specific power radiated along the divertor legs per square meter. $\langle$ig$\rangle$ -1000 cells are treated as "close to the targets"
 \end{description}
 
 
