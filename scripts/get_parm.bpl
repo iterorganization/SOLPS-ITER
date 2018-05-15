@@ -3,8 +3,8 @@
 #  VERSION : 16.09.2013 01:59
 
 # This script extracts some parameters necessary for any script calling b2plot
-# It should be invoked in the same shell, i. e. ". get_parm.bpl", and it results
-# in assigning the values to the following variables
+# It should be invoked in the same shell, i. e. ". get_parm.bpl", and it
+# results in assigning the values to the following variables
 
 # The basic variables (to be found from b2.parameters):
 
