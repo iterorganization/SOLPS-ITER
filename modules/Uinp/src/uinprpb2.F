@@ -556,7 +556,7 @@ c*** B2 and Eirene species counters
 
 c*** latmscl, lmolscl, lionscl
       do i = 1, nspcatm !{
-        iniprm(i,1,1,21,3)=iniprm(iniprm(i,1,1,8,3)+1,1,1,10,3)
+        iniprm(i,1,1,21,3)=iniprm(iniprm(i,1,1,9,3)+1,1,1,11,3)
       end do !}
       do i = 1, nspcmol !{
         iniprm(i,1,1,22,3)=lkindm(i)
@@ -572,6 +572,7 @@ cxpb We use one reaction per molecule to avoid double-counting
       hlp_mol(1:nspcmol)=.true.
       hlp_ion(1:nspcion)=.false.
       cmp_bck=0
+      iniprm(:,:,1,24,3)=0
       do j = 1, nspcmol !{
         hlp_el = .false.
         do k = 1, nrcm(j) !{
@@ -893,6 +894,11 @@ cxpb Second pass in case the molecules were not sorted in ascending order
           do l = 1, nspcmol !{
             hlp_mol(j)=hlp_mol(j).and.cmp_bck(j,l).eq.0
           end do !}
+        end do !}
+      end do !}
+      do j = 1, nspcmol !{
+        do i = 1, nspcatm !{
+          if(spcsmsa(i).le.3) l_h_mol(j,spcsmsa(i))=iniprm(i,j,1,24,3)
         end do !}
       end do !}
 
