@@ -150,7 +150,7 @@ u=`grep -A1 nncut $file | tail -1 | awk '{print $1}'`
 }
 
 u=`grep -A1 label b2fstate | tail -1`
-L=`echo $u | cut -f1 -d_ | cut -f2 -d#`
+L=`echo $u | cut -f1 -d_ | cut -f2 -d# | sed -e 's: :_:g' -e 's:/:-:g' `
 LL=`echo $u | tr _ ' ' | awk '{for (i=8;i<=NF;i++) printf "%s ",$i}'`
 u=`grep -A1 time b2fstate | tail -1 | awk '{printf "%f\n", $1*1000}'`
 let "t=$u"
