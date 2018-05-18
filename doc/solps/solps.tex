@@ -1508,6 +1508,7 @@ extracted from the {\tt run.log} file.
   \item[awk.mesh]\index{awk.mesh} Outputs the {\tt mesh.extra} file data in a form usable for {\tt xyplot}.
   \item[awk.notfirst]\index{awk.notfirst} Removes the first column from an array of data.
   \item[awk.plot\_mesh \#1]\index{awk.plot\_mesh} Outputs the mesh specified as \#1 in a form usable for {\tt xyplot}.
+  \item[awk.reverse]\index{awk.reverse} Outputs a file in reverse order.
   \item[awk.transpose]\index{awk.transpose} Transposes an array of data.
   \item[convert\_from\_solps4.3 \#1]\index{convert\_from\_solps4.3} Converts run number \#1 from \${\tt DEVICE} from the SOLPS4.3 ITER archive to a \SOLPSITER run in directory \${\tt SOLPSTOP/runs/}\${\tt DEVICE/}\#1 .
   \item[fixbb]\index{fixbb} A utility script to properly define the bounding box of PostScript files.
@@ -4294,7 +4295,7 @@ The data blocks are:
   \item[dmb2] Molecule density ($m^{-3}$), dimension ({\tt NDX},{\tt NDY},{\tt NMOL})
   \item[tmb2] Molecule temperature ($eV$), dimension ({\tt NDX},{\tt NDY},{\tt NMOL})
   \item[dib2] Test ion density ($m^{-3}$), dimension ({\tt NDX},{\tt NDY},{\tt NION})
-  \item[tib2] Test ion temperature ($m^{-3}$), dimension ({\tt NDX},{\tt NDY},{\tt NION})
+  \item[tib2] Test ion temperature ($eV$), dimension ({\tt NDX},{\tt NDY},{\tt NION})
   \item[rfluxa] Radial flux density of atoms ($m^{-2}.s^{-1}$), dimension ({\tt NDX},{\tt NDY},{\tt NATM})
   \item[rfluxm] Radial flux density of molecules ($m^{-2}.s^{-1}$), dimension ({\tt NDX},{\tt NDY},{\tt NMOL})
   \item[pfluxa] Poloidal flux density of atoms ($m^{-2}.s^{-1}$), dimension ({\tt NDX},{\tt NDY},{\tt NATM})
@@ -4346,14 +4347,14 @@ The data blocks are:
   \end{description}
   \item[isrftype] {\tt ILIIN} surface type variable in {\tt Eirene}, dimension ({\tt NLIM}+{\tt NSTS})
   \item[wlarea] Surface area ($m^2$), dimension ({\tt NLIM}+{\tt NSTS})
-  \item[wlabsrp(A)] Absorption rate for atoms, dimension ({\tt NLIM}+{\tt NSTS}, {\tt NATM})
-  \item[wlabsrp(M)] Absorption rate for molecules, dimension ({\tt NLIM}+{\tt NSTS}, {\tt NMOL})
-  \item[wlabsrp(I)] Absorption rate for test ions, dimension ({\tt NLIM}+{\tt NSTS}, {\tt NION})
-  \item[wlabsrp(P)] Absorption rate for plasma ions, dimension ({\tt NLIM}+{\tt NSTS}, {\tt NPLS})
-  \item[wlpump(A)] Pumped flux per atom ($A$), dimension ({\tt NLIM}+{\tt NSTS}, {\tt NATM})
-  \item[wlpump(M)] Pumped flux per molecule ($A$), dimension ({\tt NLIM}+{\tt NSTS}, {\tt NMOL})
-  \item[wlpump(I)] Pumped flux per test ion ($A$), dimension ({\tt NLIM}+{\tt NSTS}, {\tt NION})
-  \item[wlpump(P)] Pumped flux per plasma ion ($A$), dimension ({\tt NLIM}+{\tt NSTS}, {\tt NPLS})
+  \item[wlabsrp(A)] Absorption rate for atoms, dimension ({\tt NATM}, {\tt NLIM}+{\tt NSTS})
+  \item[wlabsrp(M)] Absorption rate for molecules, dimension ({\tt NMOL}, {\tt NLIM}+{\tt NSTS})
+  \item[wlabsrp(I)] Absorption rate for test ions, dimension ({\tt NION}, {\tt NLIM}+{\tt NSTS})
+  \item[wlabsrp(P)] Absorption rate for plasma ions, dimension ({\tt NPLS}, {\tt NLIM}+{\tt NSTS})
+  \item[wlpump(A)] Pumped flux per atom ($A$), dimension ({\tt NATM}, {\tt NLIM}+{\tt NSTS})
+  \item[wlpump(M)] Pumped flux per molecule ($A$), dimension ({\tt NMOL}, {\tt NLIM}+{\tt NSTS})
+  \item[wlpump(I)] Pumped flux per test ion ($A$), dimension ({\tt NION}, {\tt NLIM}+{\tt NSTS})
+  \item[wlpump(P)] Pumped flux per plasma ion ($A$), dimension ({\tt NPLS}, {\tt NLIM}+{\tt NSTS})
   \item[eneutrad] Radiation rate due to atoms ($W$), dimension ({\tt NDX},{\tt NDY},{\tt NATM})
   \item[eirdiag\_nds] Indices for segments on resolved non-standard surfaces, dimension ($5 \times$ {\tt NSTS} $+ 1$)
   \item[sarea\_res] Surface area of surface segment ($m^2$), dimension ({\tt NCL})
@@ -7110,7 +7111,7 @@ V_{ay}^{\left( dia \right)} & =
 \end{tabular}
 
 \begin{equation}
-E_{k,a}=\frac{m_a}2 \left[   V^2_{\parallel a}+\left( W_{a\perp}^{\left( dia \right)}+V_{a\perp}^{\left( E \times B \right)}  \right)^2    +   \left(  W_{ay}^{\left( dia \right)} + V_{ay}^{\left( E \times B \right)} \right)^2    \right]
+E_{k,a}=\frac{m_a}2 V^2_{\parallel a}
 \end{equation}
 
 \begin{tabular}{cc}
@@ -8911,7 +8912,7 @@ V_{a \perp} =
 0.24 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a = 1~\&~z_{n,a} = 1}}
 \alpha^{NEO} \widetilde{\tau}_a b_z
 \frac{B_x}{B^{\frac{1}{2}}}
-\frac{\partial}{h_y \partial y}
+\frac{\partial}{h_x \partial x}
 \left( \frac{1}{B^2} \right)
 \frac{\partial \left( \widetilde{q}_a^{(0)} B^{\frac{1}{2}} \right)}{h_x \partial x}
 \end{equation}
@@ -15248,7 +15249,7 @@ Sets up contour levels according to their proportion inside the plasma domain.
 The levels are arranged so that the integral of the absolute value of
 the data over the region between each two neighbouring level lines is the same.
 If $\langle$npplvm$\rangle$.lt.0, then this integral is equal (approximately)
-to $frac{1}{\|\langle\text{npplvp}\rangle\|}$ of the integral over the whole volume.
+to $\frac{1}{\|\langle\text{npplvp}\rangle\|}$ of the integral over the whole volume.
 If $\langle$npplvm$\rangle$.ge.0, then the regions of positive and negative data
 values are treated separately, with $\|\langle$npplvp$\rangle\|$ data intervals for
 the positive and $\langle$npplvm$\rangle$ for the negative data range. In this case,

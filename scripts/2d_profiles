@@ -49,47 +49,53 @@ foreach i ($usual $extra)
   set suffix=`echo $i | cut -c5-`
   set SUFFIX=`echo $suffix | tr 'a-z' 'A-Z'`
   set SUFFIXP=`echo $suffix | tr 'a-z' 'A-Z'`P
-#  echo $i $prefix $pr2fix $suffix $SUFFIX $SUFFIXP
+  set dsfile=b2mn.exe.dir/ds$suffix
+  if (! -s $dsfile) set dsfile=ds$suffix
+  set dsFILE=b2mn.exe.dir/ds$SUFFIX
+  if (! -s $dsFILE) set dsFILE=ds$SUFFIX
+  set dsFILEP=b2mn.exe.dir/ds$SUFFIXP
+  if (! -s $dsFILEP) set dsFILEP=ds$SUFFIXP
+#  echo $i $prefix $pr2fix $suffix $SUFFIX $SUFFIXP $dsfile $dsFILE $dsFILEP
   if ($no_nc2text == 1) then
-    if ($prefix == "f" && -s ds$SUFFIX) then
+    if ($prefix == "f" && -s $dsFILE) then
       ncdump $source -f f -v "$i" | awk -v string="$i" 'BEGIN {ORS="";} /data:/{found1=1;next;} $0 ~ string {if (found1==1) {if (found2==1) print $1; else {print $3;found2=1;}}}' | \
       sed 's/,/ /g' | sed 's/;//g' | \
       awk -v nyy="$ny" -v j1=$jstart -v j2=$jend 'BEGIN{ORS=" "} {for (j=j1;j<=j2;j++) {for (i=1;i<=nyy;i++) {k=i+(j-1)*nyy; print $k};print "\n";}}' | head -n -1 | \
-      ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ds$suffix - ds$SUFFIX | awk '{print $1,$2/$3}' >! ${tmpdir}$i.last10
+      ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste $dsfile - $dsFILE | awk '{print $1,$2/$3}' >! ${tmpdir}$i.last10
     else if ($prefix == "t" && $pr2fix != "p") then
       ncdump $source -f f -v "$i" | awk -v string="$i" 'BEGIN {ORS="";} /data:/{found1=1;next;} $0 ~ string {if (found1==1) {if (found2==1) print $1; else {print $3;found2=1;}}}' | \
       sed 's/,/ /g' | sed 's/;//g' | \
       awk -v nyy="$ny" -v j1=$jstart -v j2=$jend 'BEGIN{ORS=" "} {for (j=j1;j<=j2;j++) {for (i=1;i<=nyy;i++) {k=i+(j-1)*nyy; print $k};print "\n";}}' | head -n -1 | \
-      ave.awk | tr ' ' '\n' | awk 'NF>0{print $1/1.6021766028e-19}' | paste ds$suffix - >! ${tmpdir}$i.last10
+      ave.awk | tr ' ' '\n' | awk 'NF>0{print $1/1.6021766028e-19}' | paste $dsfile - >! ${tmpdir}$i.last10
     else if ($prefix == "t" && $pr2fix == "p") then
       ncdump $source -f f -v "$i" | awk -v string="$i" 'BEGIN {ORS="";} /data:/{found1=1;next;} $0 ~ string {if (found1==1) {if (found2==1) print $1; else {print $3;found2=1;}}}' | \
       sed 's/,/ /g' | sed 's/;//g' | \
       awk -v nyy="$ny" -v j1=$jstart -v j2=$jend 'BEGIN{ORS=" "} {for (j=j1;j<=j2;j++) {for (i=1;i<=nyy;i++) {k=i+(j-1)*nyy; print $k};print "\n";}}' | head -n -1 | \
-      ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ds$suffix - >! ${tmpdir}$i.last10
+      ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste $dsfile - >! ${tmpdir}$i.last10
     else
       ncdump $source -f f -v "$i" | awk -v string="$i" 'BEGIN {ORS="";} /data:/{found1=1;next;} $0 ~ string {if (found1==1) {if (found2==1) print $1; else {print $3;found2=1;}}}' | \
       sed 's/,/ /g' | sed 's/;//g' | \
       awk -v nyy="$ny" -v j1=$jstart -v j2=$jend 'BEGIN{ORS=" "} {for (j=j1;j<=j2;j++) {for (i=1;i<=nyy;i++) {k=i+(j-1)*nyy; print $k};print "\n";}}' | head -n -1 | \
-      ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ds$suffix - >! ${tmpdir}$i.last10
+      ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste $dsfile - >! ${tmpdir}$i.last10
     endif
-    if ($prefix == "f" && -s ds$SUFFIXP) then
+    if ($prefix == "f" && -s $dsFILEP) then
       ncdump $source -f f -v "$i" | awk -v string="$i" 'BEGIN {ORS="";} /data:/{found1=1;next;} $0 ~ string {if (found1==1) {if (found2==1) print $1; else {print $3;found2=1;}}}' | \
       sed 's/,/ /g' | sed 's/;//g' | \
       awk -v nyy="$ny" -v j1=$jstart -v j2=$jend 'BEGIN{ORS=" "} {for (j=j1;j<=j2;j++) {for (i=1;i<=nyy;i++) {k=i+(j-1)*nyy; print $k};print "\n";}}' | head -n -1 | \
-      ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ds$suffix - ds$SUFFIXP | awk '{print $1,$2/$3}' >! ${tmpdir}$i'P'.last10
+      ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste $dsfile - $dsFILEP | awk '{print $1,$2/$3}' >! ${tmpdir}$i'P'.last10
     endif
   else
-    if ($prefix == "f" && -s ds$SUFFIX) then
-      nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ds$suffix - ds$SUFFIX | awk '{print $1,$2/$3}' >! ${tmpdir}$i.last10
+    if ($prefix == "f" && -s $dsFILE) then
+      nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste $dsfile - $dsFILE | awk '{print $1,$2/$3}' >! ${tmpdir}$i.last10
     else if ($prefix == "t" && $pr2fix != "p") then
-      nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1/1.6021766028e-19}' | paste ds$suffix - >! ${tmpdir}$i.last10
+      nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1/1.6021766028e-19}' | paste $dsfile - >! ${tmpdir}$i.last10
     else if ($prefix == "t" && $pr2fix == "p") then
-      nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ds$suffix - >! ${tmpdir}$i.last10
+      nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste $dsfile - >! ${tmpdir}$i.last10
     else
-      nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ds$suffix - >! ${tmpdir}$i.last10
+      nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste $dsfile - >! ${tmpdir}$i.last10
     endif
-    if ($prefix == "f" && -s ds$SUFFIXP) then
-      nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ds$suffix - ds$SUFFIXP | awk '{print $1,$2/$3}' >! ${tmpdir}$i'P'.last10
+    if ($prefix == "f" && -s $dsFILEP) then
+      nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste $dsfile - $dsFILEP | awk '{print $1,$2/$3}' >! ${tmpdir}$i'P'.last10
     endif
   endif
 end

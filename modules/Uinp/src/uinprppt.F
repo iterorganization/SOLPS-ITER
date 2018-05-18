@@ -152,8 +152,6 @@ c*** the atoms and nuclei
                 do ii=1,na !{
                   if(streql(spcsatm(ii),spcdspc(lspdgen(k)))) then !{
                     lkindm(nm)=ii
-                    if (spcdns(j+m).gt.0)
-     >               l_h_mol(nm,spcsmsa(ii))=spcdns(j+m)
                   end if !}
                 end do !}
                 do ii=1,nspcatm !{
