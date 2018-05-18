@@ -36,37 +36,30 @@ unset ss sf kw
 echo "phys $B" >> $LK/contr.b2p
 
 let "im=im+1"
-echo "$B"
 echo "te -18 '$LK/te$L.txt' user drop" >> $LK/contr.b2p
 echo -e "te\t$im" >> ${LK}/${L}.ps.legend
 
 let "im=im+1"
-echo "$B"
 echo "ne -18 '$LK/ne$L.txt' user drop" >> $LK/contr.b2p
 echo -e "ne\t$im" >> ${LK}/${L}.ps.legend
 
 let "im=im+1"
-echo "$B"
 echo "ti -18 '$LK/ti$L.txt' user drop" >> $LK/contr.b2p
 echo -e "ti\t$im" >> ${LK}/${L}.ps.legend
 
 let "im=im+1"
-echo "$B"
 echo "ni -18 '$LK/ni$L.txt' user drop" >> $LK/contr.b2p
 echo -e "ni\t$im" >> ${LK}/${L}.ps.legend
 
 let "im=im+1"
-echo "$B"
 echo "up -18 '$LK/up$L.txt' user drop" >> $LK/contr.b2p
 echo -e "up\t$im" >> ${LK}/${L}.ps.legend
 
 let "im=im+1"
-echo "$B"
 echo "dab2 -18 '$LK/na$L.txt' user drop" >> $LK/contr.b2p
 echo -e "na\t$im" >> ${LK}/${L}.ps.legend
 
 let "im=im+1"
-echo "$B"
 echo "dmb2 -18 '$LK/nm$L.txt' user drop" >> $LK/contr.b2p
 echo -e "nm\t$im" >> ${LK}/${L}.ps.legend
 
