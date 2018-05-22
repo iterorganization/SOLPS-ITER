@@ -336,7 +336,11 @@ The current list of recognized hostnames, deduced by means of the {\tt whereami}
   \item[UNKNOWN] everywhere else
 \end{description}
 
-If your specific domain name is not on this list, please add it to {\tt whereami}.
+If your specific domain name is not on this list, please add it to {\tt whereami}. In cases where the {\tt hostname} and {\tt nslookup} commands used by {\tt whereami} do not provide the desired \${\tt HOST\_NAME} value, you can specify it explicitly by means of a \${\tt SOLPSTOP/SETUP/setup.csh.HOST\_NAME.local} file, which should contain:
+
+\begin{verbatim}
+setenv HOST_NAME <your_desired_HOST_NAME_value>
+\end{verbatim}
 
 At the moment the following compiler platforms are supported, assuming a Linux work environment:\label{sec:platforms}
 \begin{description}\index{Platforms}
