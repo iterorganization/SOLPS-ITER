@@ -5910,7 +5910,7 @@ as the inertia terms.
 Parallel viscosity is represented
 by the fourth and fifth terms in the r.h.s.
 The former is the Balescu
-parallel viscosity with coefficient $\eta _0 = \dfrac{4}{3} 0.96 \sqrt{2} n T_i / \nu_{ii}$.
+parallel viscosity with coefficient $\eta _0 = \dfrac{4}{3} 0.96 \sqrt{2} n T_i / \nu_{ii}$. A detailed derivation is given at the end of this section, see~\ref{sec:viscosity}.
 The latter corresponds to the parallel viscosity driven
 by parallel ion heat flux
 $q_{i\parallel}^{\left( 0 \right)} =
@@ -6432,6 +6432,56 @@ In {\tt B2.5} only the contribution
 from anomalous radial particle flux to the convective heat flux are left
 in the expressions for $\tilde{q}_{e,i}$. In the term
 $p_i \nabla \cdot \vec{V}_i$ the anomalous particle flux is absent.
+
+\subsection{Derivation of parallel viscosity term in momentum equation}
+\index{parallel viscosity}\label{sec:viscosity}
+
+To evaluate the parallel viscosity contribution we should start from the general expressions, which can be transformed and simplified in arbitrary Cartesian coordinate system assuming only parallel velocity. The Braginskii description for parallel viscosity in Cartesian corrodinates is:
+
+\begin{equation*}
+\pi_{\alpha \beta} = \frac{3}{2} \eta_0 \left( b_\alpha b_\beta - \frac{1}{3} \delta_{\alpha \beta} \right) \left( b_\mu b_\nu - \frac{1}{3} \delta_{\mu \nu} \right) W_{\mu \nu}
+\end{equation*}
+
+where
+
+\begin{equation*}
+W_{\mu \nu} = \frac{\partial V_\mu}{\partial x_\nu} + \frac{\partial V_\nu}{\partial x_\mu} - \frac{2}{3} \delta_{\mu \nu} \frac{\partial V_i}{\partial x_i}, ~\vec{b} = \vec{B}/B .
+\end{equation*}
+
+The parallel momentum balance component is:
+
+\begin{equation*}
+\vec{b} \cdot \left( \nabla \cdot \overleftrightarrow{\pi} \right) = b_\alpha \frac{\partial \pi_{\alpha \beta}}{\partial x_\beta} = b_\alpha \frac{\partial}{\partial x_\beta} \left[ \frac{3}{2} \eta_0 \left( b_\alpha b_\beta - \frac{1}{3} \delta_{\alpha \beta} \right) \left( b_\mu b_\nu - \frac{1}{3} \delta_{\mu \nu} \right) W_{\mu \nu} \right]
+\end{equation*}
+
+We can evaluate the scalar value separately:
+
+\begin{align*}
+\pi_0 &= \frac{3}{2} \eta_0 W_{\parallel \parallel} = \frac{3}{2} \eta_0 \left( b_\mu b_\nu - \frac{1}{3} \delta_{\mu \nu} \right) W_{\mu \nu} \\
+&= \frac{3}{2} \eta_0 \left(  b_\mu b_\nu - \frac{1}{3} \delta_{\mu \nu} \right) \left( \frac{\partial V_\mu}{\partial x_\nu} + \frac{\partial V_\nu}{\partial x_\mu} - \frac{2}{3} \delta_{\mu \nu} \frac{\partial V_i}{\partial x_i} \right) = 3 \eta_0 \left(  b_\mu b_\nu - \frac{1}{3} \delta_{\mu \nu} \right) \left( \frac{\partial V_\mu}{\partial x_\nu} - \frac{1}{3} \delta_{\mu \nu} \frac{\partial V_i}{\partial x_i} \right) \\
+&= 3 \eta_0 \left( b_\mu b_\nu \frac{\partial V_\mu}{\partial x_\nu} - \frac{1}{3} \frac{\partial V_i}{\partial x_i} \right) = 3 \eta_0 \left( b_\mu b_\nu \frac{\partial V_\parallel b_\mu}{\partial x_\nu} - \frac{1}{3} \frac{\partial V_\parallel b_\nu}{\partial x_\nu} \right) \\ 
+&= 3 \eta_0 \left( \frac{B_\nu}{B} \frac{\partial V_\parallel}{\partial x_\nu} - \frac{1}{3} B_\nu \frac{\partial V_\parallel / B}{\partial x_\nu} \right) = \eta_0 \frac{B_\nu}{B} \left( 2 \frac{\partial V_\parallel}{\partial x_\nu} + \frac{V_\parallel}{B} \frac{\partial B}{\partial x_\nu} \right) \\
+&= 2 \eta_0 \frac{B_\nu}{B} \frac{1}{\sqrt{B}} \frac{\partial V_\parallel \sqrt{B}}{\partial x_\nu} = 2 \eta_0 \frac{1}{\sqrt{B}} \vec{b} \cdot \nabla \left ( V_\parallel \sqrt{B} \right)
+\end{align*}
+
+The projection of the viscosity divergence on the parallel direction is then:
+
+\begin{align*}
+\vec{b} \cdot \left( \nabla \cdot \overleftrightarrow{\pi} \right) &= b_\alpha \frac{\partial}{\partial x_\beta} \left[ \pi_0 \left( b_\alpha b_\beta - \frac{1}{3} \delta_{\alpha \beta} \right) \right] = \frac{\partial \pi_0 b_\alpha}{\partial x_\alpha} - \frac{1}{3} b_\alpha \frac{\partial \pi_0}{\partial x_\alpha} = B_\alpha \frac{\partial \pi_0 / B}{\partial x_\alpha} - \frac{1}{3} b_\alpha \frac{\partial \pi_0}{\partial x_\alpha} \\
+&= \frac{2}{3} b_\alpha \frac{\partial \pi_0}{\partial x_\alpha} - \pi_0 \frac{b_\alpha}{B} \frac{\partial B}{\partial x_\alpha} = \frac{2}{3} B^{3/2} b_\alpha \frac{\partial \pi_0 B^{-3/2}}{\partial x_\alpha} = \frac{2}{3} B^{3/2} \vec{b} \cdot \nabla \left( \pi_0 B^{-3/2} \right)
+\end{align*}
+
+Then the parallel viscosity in the parallel momentum balance is:
+
+\begin{equation*}
+\vec{b} \cdot \left( \nabla \cdot \overleftrightarrow{\pi} \right) = \frac{4}{3} B^{3/2} \vec{b} \cdot \nabla \left( \frac{\eta_0}{B^2} \vec{b} \cdot \nabla \left( V_\parallel \sqrt{B} \right) \right), ~ \mbox{where} ~ V_\parallel = \vec{b} \cdot \vec{V}
+\end{equation*}
+
+For \SOLPSITERns, the orthogonal coordinates $(x,r,z)$ are more convenient for further evaluations than the non-orthogonal coordinates $(x,y,z)$. In these coordinates, it is readily seen that $\vec{b} \cdot \nabla f = b_x \frac{\partial f}{h_x \partial x}$ for any scalar function $f$. The viscosity can be finally written as:
+
+\begin{equation*}
+\vec{b} \cdot \left( \nabla \cdot \overleftrightarrow{\pi} \right) = \frac{4}{3} b_x B^{\frac{3}{2}} \frac{\partial}{h_x \partial x} \left( \frac{\eta_0 b_x}{B} \frac{\partial \left( B^{\frac{1}{2}} V_\parallel \right)}{h_x \partial x} \right)
+\end{equation*}  
 
 \section{Boundary conditions with drifts and currents}
 \index{drifts and currents, boundary conditions}
