@@ -1209,6 +1209,7 @@ The options are applied in that order independently of the order in which they w
   \item[rcxhireg \#1]\index{rcxhireg} charge exchange energy for region \#1 (default 0)
   \item[rcxmoreg \#1]\index{rcxmoreg} charge exchange parallel momentum for region \#1 (default 0)
   \item[rcxnareg \#1]\index{rcxnareg} charge exchange rate for region \#1 (default 0)
+  \item[rdneureg \#1]\index{rdneureg} radiation rate from {\tt Eirene} neutrals for region \#1 (default 0)
   \item[rqahereg \#1]\index{rqahereg} electron heat loss for region \#1 (default 0)
   \item[rqbrmreg \#1]\index{rqbrmreg} bremsstrahlung losses for region \#1 (default 0)
   \item[rqradreg \#1]\index{rqradreg} total radiation rate for region \#1 (default 0)
@@ -12015,6 +12016,7 @@ respo\_reg \index{respo\_reg}\index{b2tallies.nc, respo\_reg}                   
 rqahereg \index{rqahereg}\index{b2tallies.nc, rqahereg}                          & vreg, ns, time & $W$           & Electron cooling rate \\
 rqbrmreg \index{rqbrmreg}\index{b2tallies.nc, rqbrmreg}                          & vreg, ns, time & $W$           & Bremsstrahlung \\
 rqradreg \index{rqradreg}\index{b2tallies.nc, rqradreg}                          & vreg, ns, time & $W$           & Line radiation \\
+rdneureg \index{rdneureg}\index{b2tallies.nc, rdneureg}                          & vreg, time     & $W$           & Radiation rate from {\tt Eirene} neutrals \\
 rrahireg \index{rrahireg}\index{b2tallies.nc, rrahireg}                          & vreg, ns, time & $W$           & Recombination ion heat source \\
 rramoreg \index{rramoreg}\index{b2tallies.nc, rramoreg}                          & vreg, ns, time & $kg.m.s^{-1}$ & Recombination parallel momentum source \\
 rranareg \index{rranareg}\index{b2tallies.nc, rranareg}                          & vreg, ns, time & $s^{-1}$      & Recombination particle source \\
@@ -13927,7 +13929,7 @@ The higher the value of $\langle$level$\rangle$, the more output is produced.
 
 The {\bf wlld} command requires an integer argument $\langle$ig$\rangle$. Let
 $\langle$ig$\rangle$ = JKLM. If M \textgreater 0, then the file {\tt radsrc.b2e} is produced,
-containing the radiation sources (in $MW/m^2$). If L \textgreater 0, then the
+containing the radiation sources (in $MW/m^3$). If L \textgreater 0, then the
 file {\em wlld.dat} is produced, which contains the power loading
 from the plasma onto the Eirene walls (this description does not include
 splitting of the targets by the grid and is obsolete). If K \textgreater 0, then a
@@ -15802,7 +15804,7 @@ Camera plot.  The chord file needs to contain some additional
 information on the first line.
 
 \subsection{$<$chord file$>$ echbx}\index{b2plot, echbx}\label{sec:echbx}
-Chord integral Of Eirene data averaged over three chords. Equivalent to
+Chord integral of Eirene data averaged over three chords. Equivalent to
 using the {\bf 3 ave} command.
 
 \subsection{$<$position file$>$ echvl}\index{b2plot, echvl}\label{sec:echvl}
