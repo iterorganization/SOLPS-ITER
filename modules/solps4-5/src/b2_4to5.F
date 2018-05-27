@@ -575,10 +575,26 @@ cxpb
       jntrgrp_4 = jntrgrp
       gntrgrp_4 = gntrgrp
       lhetrgts_4 = lhetrgts
-      lpfrb_i_4 = lpfrb_i
-      lpfrb_o_4 = lpfrb_o
-      lpfrt_i_4 = lpfrt_i
-      lpfrt_o_4 = lpfrt_o
+      if (lpfrb_i.ge.0) then
+        lpfrb_i_4 = lpfrb_i-1
+      else
+        lpfrb_i_4 = lpfrb_i
+      end if
+      if (lpfrb_o_4.ge.0) then
+        lpfrb_o_4 = lpfrb_o-1
+      else
+        lpfrb_o_4 = lpfrb_o
+      end if
+      if (lpfrt_i_4.ge.0) then
+        lpfrt_i_4 = lpfrt_i-1
+      else
+        lpfrt_i_4 = lpfrt_i
+      end if
+      if (lpfrt_o_4.ge.0) then
+        lpfrt_o_4 = lpfrt_o-1
+      else
+        lpfrt_o_4 = lpfrt_o
+      end if
       lpfrs_pmp_4 =  lpfrs_pmp
       j_he_at_4 = j_he_at
       j_h_at_4 = j_h_at
