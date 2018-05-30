@@ -267,13 +267,12 @@ cxpb Find out the number of passes to do
                 rctndbs(nnrctn)=rctddbs(j,l)
                 rctnchp(nnrctn)=rctdchp(j,l)
                 rctniz(nnrctn)=1
+                nc = get_atomic_number(cc)
                 if (l.le.nsrctd-2) then !{
-                  rctnrct(nnrctn)=rctdrct(j,l)
                   rctnpto1(nnrctn)=rctdpto1(j,l)
                   rctnmst(nnrctn)=rctdmst(j,l)
                   rctneln(nnrctn)=rctdeln(j,l)
                 else !}{
-                  nc = get_atomic_number(cc)
                   if (l.eq.nsrctd-1) then !{
                     rctnpto1(nnrctn)=
      .               elements(nc)(1:lnblnk(elements(nc)))//'+'
@@ -282,6 +281,8 @@ cxpb Find out the number of passes to do
                   end if !}
                   rctnmst(nnrctn)=nuclear_mass(nc)
                   rctneln(nnrctn)=elements(nc)
+                end if !}
+                if (streql(rctddbs(j,l),'ADAS')) then
                   filename='ratadas.filelist'
                   call find_file(filename,ex)
                   if(silent_open(99,filename,
@@ -402,7 +403,9 @@ c     now read the relevant line
                     write(*,*) '=> Check the ADAS and AMDS models'
                     call xerrab ('File "ratadas.filelist" not found')
                   end if !}
-                end if !}
+                else
+                  rctnrct(nnrctn)=rctdrct(j,l)
+                endif                  
                 rctnptpr(nnrctn)=c
                 rctnptin(nnrctn)=rctdptin(j,l)
                 rctnpto2(nnrctn)=rctdpto2(j,l)

@@ -108,6 +108,8 @@ c*** Create the header for the b2ag.dat file
           write(2,'(a)') '*param          (param(0:99); free format)'
           write(2,'(a)') ' -1.0, 99*0.0'
           write(2,'(a)') '''b2agfs_min_pitch''    ''0.01'''
+          if (lm_cnfg) write(2,'(a)')
+     .                   '''b2agfs_periodic_bc''  ''1'''
           close(2)
           print *,'    ... b2ag.dat created'
       endif !}
