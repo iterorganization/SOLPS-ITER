@@ -1531,7 +1531,7 @@ extracted from the {\tt run.log} file.
     The location of these files can be modified by use of the {\tt GNUPLOT\_TMP} variable.
   \item[plot\_set]\index{plot\_set} Utility script preparing files for complex plots.
   \item[species]\index{species} Obtains the list of species from {\tt SOLPS\_FLUIDS}.
-  \item[wavelength\_to\_energy]\index{wavelength\_to\_energy} Converts a wavelength (in $m$) to an energy (in $eV$).
+  \item[wavelength\_to\_energy]\index{wavelength\_to\_energy} Converts a wavelength (in $m$) to an energy (in $eV$) (and the reverse).
   \end{description}
 \item Others
   \begin{description}
@@ -15518,7 +15518,10 @@ Resets plotting output.
 
 \subsubsection{spec}\index{b2plot, spec}\label{sec:spec}
 Generates the spectral line emissivities from the Summers' data stored
-in \${\tt SOLPSTOP/data/summers}.
+in \${\tt SOLPSTOP/modules/B2.5/Database/Summers} (which can be superseded
+by the contents of \${\tt SOLPSTOP/data.local/Summers}). One pre-selected
+diagnostic line per ionization stage is provided. Data is only provided for
+Helium, Boron, Carbon, Oxygen and Neon.
 
 \subsubsection{$<$is,{\bf I}$>$ $<$lambda,{\bf I}$>$ $<$delta,{\bf I}$>$ nspe}\index{b2plot, nspe}\label{sec:nspe}\index{ADAS}
 Generates the spectral line emissivities according to the {\tt ADAS} database \cite{ADAS}, stored in \${\tt SOLPSTOP/modules/adas}
@@ -16674,7 +16677,6 @@ NO\_CDF & user/cdfmovie.F \\
 NO\_CDF & utility/cdf\_routines.F \\
 NO\_F01AAF & transport/b2tr21.F \\
 NO\_GETENV & b2plot/b2plot.F \\
-NO\_GETENV & b2plot/dhdata.F \\
 NO\_GETENV & b2plot/spect.F \\
 NO\_GETENV & convert/b2co\_movies\_cdf.F \\
 NO\_GETENV & convert/b2co\_tally\_cdf.F \\
@@ -16797,7 +16799,6 @@ USE\_MPI & preprocessing/b2ar.F \\
 USE\_MPI & preprocessing/b2fgmtry\_mod.F \\
 USE\_MPI & utility/xertst.F \\
 USE\_PXFGETENV & b2plot/b2plot.F \\
-USE\_PXFGETENV & b2plot/dhdata.F \\
 USE\_PXFGETENV & b2plot/initialize\_plotting.F \\
 USE\_PXFGETENV & b2plot/set\_extralabel.F \\
 USE\_PXFGETENV & b2plot/spect.F \\
