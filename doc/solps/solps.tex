@@ -3171,7 +3171,7 @@ quantities that can be plotted in this way.
 \section{b2pl, the plotting program}
 \index{b2pl}\index{b2plot}\label{sec:b2pl}
 
-%%sed 's:^     [^ ]:@@@:' $SOLPSTOP/modules/B2.5/src/b2plot/b2plot.F | awk 'BEGIN{save=""}/^[^@][^@][^@]/&&save!=""{print save}/^[^@][^@][^@]/{save=$0}/^@@@/{save=save" "$0}END{print save}' | sed 's; *@@@ *;;g' | egrep "case *\( *'|description *=" | sed -e "s;.*case *('\(.*\)');cmd: \1;" -e "s; *description *= *'\(.*\)';desc: \1;" -e "s;' //';;" | awk -F: 'BEGIN{save=""}/^cmd/&&save!=""{print save}/^cmd:/{save=$2}/^desc/{save=save"\t "$2}END{print save}' | sed 's:\! ::' | sed "s:',':,:g" | sed "s:'':':g" | expand >! b2plot.commands
+%%sed 's:^     [^ ]:@@@:' $SOLPSTOP/modules/B2.5/src/b2plot/b2plot.F | awk 'BEGIN{save=""}/^[^@][^@][^@]/&&save!=""{print save}/^[^@][^@][^@]/{save=$0}/^@@@/{save=save" "$0}END{print save}' | sed 's; *@@@ *;;g' | grep -v "IGNORE" | egrep "case *\( *'|description *=" | sed -e "s;.*case *('\(.*\)');cmd: \1;" -e "s; *description *= *'\(.*\)';desc: \1;" -e "s;' //';;" | awk -F: 'BEGIN{save=""}/^cmd/&&save!=""{print save}/^cmd:/{save=$2}/^desc/{save=save"\t "$2}END{print save}' | sed 's:\! ::' | sed "s:',':,:g" | sed "s:'':':g" | expand >! b2plot.commands
 
 The following commands apply:
 
@@ -12925,10 +12925,10 @@ Note that the {\bf nreg}, {\bf niso}, {\bf xreg}, and {\bf yreg} commands requir
 argument $\langle$ireg$\rangle$. If $\langle$ireg$\rangle$=0, the arrays will contain the region
 number of each cell. If $\langle$ireg$\rangle$ is greater than 0, the cells in region with index $\langle$ireg$\rangle$ will contain 1.0, and the rest will contain zero. If $\langle$ireg$\rangle$ is less than 0, the cells in region with index --$\langle$ireg$\rangle$ will contain zero, and the rest will contain 1.0.
 
-Similarly, the source arrays {\bf sna}, {\bf smo}, {\bf smq}, {\bf she}, {\bf shi}, and
-{\bf sch} require an integer argument $\langle$isel$\rangle$, varying from 0 to 3 (0 to 1 for {\bf sna}). Then the data
-stack contains the linearized source data according to the description found in Appendix \ref{lis:b2cdcv}.
-The same treatment applies to {\bf smaf}, {\bf smag} and {\bf smav}.
+The source arrays {\bf sna}, {\bf smo}, {\bf smq}, {\bf she}, {\bf shi}, and
+{\bf sch} can take an optional integer argument $\langle$isel$\rangle$, varying from 0 to 3 (0 to 1 for {\bf sna}). Then the data
+stack contains the linearized source data according to the description found in Appendix \ref{lis:b2cdcv}. In the absence of this integer argument, the data stack will contain the total source terms.
+The same treatment applies to {\bf smaf}, {\bf smag}, and {\bf smav}.
 
 For the corner coordinates arrays {\bf crx} and {\bf cry}, an integer argument must be provided to determine the corner
 index according to the following\index{cell corner indices}:
