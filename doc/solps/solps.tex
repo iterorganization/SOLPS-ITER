@@ -554,6 +554,7 @@ There is also a dedicated directory \${\tt SOLPSTOP/runs/examples} which contain
 
 The cases stored for retrieval include:
 \begin{description}
+  \item[test\_slab\_ortho\_standalone] An orthogonal slab test case for {\tt B2.5} standalone
   \item[AUG\_16151\_D] ASDEX-Upgrade D-only benchmark cases, including {\tt B2.5} standalone, coupled and single {\tt Eirene} call run directories
   \item[AUG\_16151\_D+C+He] ASDEX-Upgrade multi-fluid benchmark cases, including {\tt B2.5} standalone, coupled and single {\tt Eirene} call run directories
   \item[ITER\_2171\_D+He+Be+Ne] ITER full performance case with Ne injection
@@ -1533,7 +1534,7 @@ extracted from the {\tt run.log} file.
     The location of these files can be modified by use of the {\tt GNUPLOT\_TMP} variable.
   \item[plot\_set]\index{plot\_set} Utility script preparing files for complex plots.
   \item[species]\index{species} Obtains the list of species from {\tt SOLPS\_FLUIDS}.
-  \item[wavelength\_to\_energy]\index{wavelength\_to\_energy} Converts a wavelength (in $m$) to an energy (in $eV$).
+  \item[wavelength\_to\_energy]\index{wavelength\_to\_energy} Converts a wavelength (in $m$) to an energy (in $eV$) (and the reverse).
   \end{description}
 \item Others
   \begin{description}
@@ -3173,7 +3174,7 @@ quantities that can be plotted in this way.
 \section{b2pl, the plotting program}
 \index{b2pl}\index{b2plot}\label{sec:b2pl}
 
-%%sed 's:^     [^ ]:@@@:' $SOLPSTOP/modules/B2.5/src/b2plot/b2plot.F | awk 'BEGIN{save=""}/^[^@][^@][^@]/&&save!=""{print save}/^[^@][^@][^@]/{save=$0}/^@@@/{save=save" "$0}END{print save}' | sed 's; *@@@ *;;g' | egrep "case *\( *'|description *=" | sed -e "s;.*case *('\(.*\)');cmd: \1;" -e "s; *description *= *'\(.*\)';desc: \1;" -e "s;' //';;" | awk -F: 'BEGIN{save=""}/^cmd/&&save!=""{print save}/^cmd:/{save=$2}/^desc/{save=save"\t "$2}END{print save}' | sed 's:\! ::' | sed "s:',':,:g" | sed "s:'':':g" | expand >! b2plot.commands
+%%sed 's:^     [^ ]:@@@:' $SOLPSTOP/modules/B2.5/src/b2plot/b2plot.F | awk 'BEGIN{save=""}/^[^@][^@][^@]/&&save!=""{print save}/^[^@][^@][^@]/{save=$0}/^@@@/{save=save" "$0}END{print save}' | sed 's; *@@@ *;;g' | grep -v "IGNORE" | egrep "case *\( *'|description *=" | sed -e "s;.*case *('\(.*\)');cmd: \1;" -e "s; *description *= *'\(.*\)';desc: \1;" -e "s;' //';;" | awk -F: 'BEGIN{save=""}/^cmd/&&save!=""{print save}/^cmd:/{save=$2}/^desc/{save=save"\t "$2}END{print save}' | sed 's:\! ::' | sed "s:',':,:g" | sed "s:'':':g" | expand >! b2plot.commands
 
 The following commands apply:
 
@@ -3992,7 +3993,7 @@ This routine saves the final output state of a run into an IDS (Interface Data S
 It reads the {\tt b2mndr\_id*} switch group, defined in {\tt b2mn.dat}:
 \begin{itemize}
   \item {\tt b2mndr\_user} defines the user name and it is set by default to be the same as the \${\tt USER} environment variable.
-  \item {\tt b2mndr\_device} defines the device name and it is set by default to be the same as the \${\tt DEVICE} environment variable.
+  \item {\tt b2mndr\_device} defines the device name and it is set by default to be the same as the \${\tt DEVICE} environment variable. If {\tt DEVICE} has been left undefined, the device will be noted as {\tt 'solps-iter'}.
   \item {\tt b2mndr\_shot\_number} defines the shot number
   \item {\tt b2mndr\_run\_number} defines the run number
 \end{itemize}
@@ -4000,6 +4001,8 @@ These switches are used as identification parameters for the IDS. Afterwards, a
 {\tt b2mn} run is being initialized but {\em not} started, so that the final
 output state data is read. Then the data is written to an IDS, with the
 {\tt b2mndr\_id*} switchgroup used as identification descriptors.
+
+Concerning the assignment of shot and run numbers, the following rules are in effect. The shot number is a six digit number between 1 and 214748. ITER shot numbers shall start with a 1, the second digit represents the majority fuelling species (0:H, 1:He, 2:D, 3:D-T, 4:T, 5:others, the sequence reflecting the order in which fuel gases are expected to be used in the ITER Research Plan), and the last four digits identify the simulation. Because multiple codes are all writing to the same database and we want to avoid clashes, different "slices" of numbers have been assigned for various codes. We will use numbers {\tt 1x2000} to {\tt 1x2999} for transferring existing simulations from the {\bf SOLPS 4.3} database to IMAS, and {\tt 1x3000} to {\tt 1x3499} for new \SOLPSITER cases. Run numbers should start at 1, and be incremented every time a new version of the same simulation (say after a re-run because a bug in the code was fixed) is being stored in the archive. When changing important run parameters such as gas puffing rates, turning on drifts, etc..., a new shot number should be used. Until a more automatic way of assigning numbers (and a better overall scheme) can be implemented, please send an email to the IO code responsible officer ({\tt Xavier.Bonnin@iter.org}), when you wish to obtain a new shot number, as the IO will keep track of those already assigned. IMPORTANT: {\em When publishing SOLPS-ITER results with IO co-authors involved, archiving into the public IMAS database of the simulations on which the published work is based is mandatory.}
 
 \newpage
 \section{b2xx, the others}
@@ -6440,7 +6443,7 @@ $p_i \nabla \cdot \vec{V}_i$ the anomalous particle flux is absent.
 \subsection{Derivation of parallel viscosity term in momentum equation}
 \index{parallel viscosity}\label{sec:viscosity}
 
-To evaluate the parallel viscosity contribution we should start from the general expressions, which can be transformed and simplified in arbitrary Cartesian coordinate system assuming only parallel velocity. The Braginskii description for parallel viscosity in Cartesian corrodinates is:
+To evaluate the parallel viscosity contribution we should start from the general expressions, which can be transformed and simplified in arbitrary Cartesian coordinate system assuming only parallel velocity. The Braginskii description for parallel viscosity in Cartesian coordinates is:
 
 \begin{equation*}
 \pi_{\alpha \beta} = \frac{3}{2} \eta_0 \left( b_\alpha b_\beta - \frac{1}{3} \delta_{\alpha \beta} \right) \left( b_\mu b_\nu - \frac{1}{3} \delta_{\mu \nu} \right) W_{\mu \nu}
@@ -12010,6 +12013,8 @@ qconviyreg \index{qconviyreg}\index{b2tallies.nc, qconviyreg}                   
 rcxhireg \index{rcxhireg}\index{b2tallies.nc, rcxhireg}                          & vreg, ns, time & $W$           & Charge-exchange ion energy source \\
 rcxmoreg \index{rcxmoreg}\index{b2tallies.nc, rcxmoreg}                          & vreg, ns, time & $kg.m.s^{-1}$ & Charge-exchange ion parallel momentum source \\
 rcxnareg \index{rcxnareg}\index{b2tallies.nc, rcxnareg}                          & vreg, ns, time & $s^{-1}$      & Charge-exchange particle source \\
+rdneureg \index{rdenureg}\index{b2tallies.nc, rdneureg}
+ & vreg, time     & $W$           & Total radiation from {\tt Eirene} neutrals \\
 resco\_reg \index{resco\_reg}\index{b2tallies.nc, resco\_reg}                    & vreg, ns, time &               & Continuity equation residuals \\
 reshe\_reg \index{reshe\_reg}\index{b2tallies.nc, reshe\_reg}                    & vreg, time     & $W$           & Electron heat equation residuals \\
 reshi\_reg \index{reshi\_reg}\index{b2tallies.nc, reshi\_reg}                    & vreg, time     & $W$           & Ion heat equation residuals \\
@@ -12923,10 +12928,10 @@ Note that the {\bf nreg}, {\bf niso}, {\bf xreg}, and {\bf yreg} commands requir
 argument $\langle$ireg$\rangle$. If $\langle$ireg$\rangle$=0, the arrays will contain the region
 number of each cell. If $\langle$ireg$\rangle$ is greater than 0, the cells in region with index $\langle$ireg$\rangle$ will contain 1.0, and the rest will contain zero. If $\langle$ireg$\rangle$ is less than 0, the cells in region with index --$\langle$ireg$\rangle$ will contain zero, and the rest will contain 1.0.
 
-Similarly, the source arrays {\bf sna}, {\bf smo}, {\bf smq}, {\bf she}, {\bf shi}, and
-{\bf sch} require an integer argument $\langle$isel$\rangle$, varying from 0 to 3 (0 to 1 for {\bf sna}). Then the data
-stack contains the linearized source data according to the description found in Appendix \ref{lis:b2cdcv}.
-The same treatment applies to {\bf smaf}, {\bf smag} and {\bf smav}.
+The source arrays {\bf sna}, {\bf smo}, {\bf smq}, {\bf she}, {\bf shi}, and
+{\bf sch} can take an optional integer argument $\langle$isel$\rangle$, varying from 0 to 3 (0 to 1 for {\bf sna}). Then the data
+stack contains the linearized source data according to the description found in Appendix \ref{lis:b2cdcv}. In the absence of this integer argument, the data stack will contain the total source terms.
+The same treatment applies to {\bf smaf}, {\bf smag}, and {\bf smav}.
 
 For the corner coordinates arrays {\bf crx} and {\bf cry}, an integer argument must be provided to determine the corner
 index according to the following\index{cell corner indices}:
@@ -13950,7 +13955,7 @@ where the asterisk (*) stands for {\em i} (inner target), {\em iu} (inner upper 
 If J \textgreater 0, then the codes produces a set of {\tt wlld\_*.dat},
 where the asterisk (*) is the name of each "plot zone" defined in the DG model.
 Each such file contains the power loading onto the set of walls defined in that
-plot zone. If LM = 99 and J \textgreater 0, additional diagnostics are produced that indicate the radiation split by isonuclear sequence.\\
+plot zone. If LM = 99 and J \textgreater 0, additional diagnostics are produced that indicate the radiation split by isonuclear sequence. If LM = 98 and J \textgreater 0, additional diagnostics are produced that indicate the radiation coming from the core additional sources. \\
 If the user wants to use the heat transfer model for the monoblock and/or the reflector plates, then he must define in the DG model the inner/outer target, the reflector plates and dome plot zones using the label 'trg[i-o]', '[i-o]rp' and 'dome' respectively. The {\tt wlld\_*.dat} produced should then be postprocessed by b2ymb (see \ref{sec:b2ymb}), b2yrp (\ref{sec:b2yrp}) and b2ydm (\ref{sec:b2ydm}).
 
 
@@ -15516,7 +15521,10 @@ Resets plotting output.
 
 \subsubsection{spec}\index{b2plot, spec}\label{sec:spec}
 Generates the spectral line emissivities from the Summers' data stored
-in \${\tt SOLPSTOP/data/summers}.
+in \${\tt SOLPSTOP/modules/B2.5/Database/Summers} (which can be superseded
+by the contents of \${\tt SOLPSTOP/data.local/Summers}). One pre-selected
+diagnostic line per ionization stage is provided. Data is only provided for
+Helium, Boron, Carbon, Oxygen and Neon.
 
 \subsubsection{$<$is,{\bf I}$>$ $<$lambda,{\bf I}$>$ $<$delta,{\bf I}$>$ nspe}\index{b2plot, nspe}\label{sec:nspe}\index{ADAS}
 Generates the spectral line emissivities according to the {\tt ADAS} database \cite{ADAS}, stored in \${\tt SOLPSTOP/modules/adas}
@@ -16560,6 +16568,9 @@ CDF\_MOVIE & b2plot/caltraj.F \\
 CDF\_MOVIE & b2plot/process\_chords.F \\
 CLASSICAL\_CURRENT & transport/b2tdia.F \\
 COMPLICATED & sources/b2stbc\_fb.F \\
+DBG & b2plot/b2ptrdl.F \\
+DBG & b2plot/b2ptrgl.F \\
+DBG & b2plot/b2pwrdld.F \\
 DBG & b2plot/fill.F \\
 DBG & b2plot/init\_wall.F \\
 DBG & b2plot/plotcontour.F \\
@@ -16689,7 +16700,6 @@ NO\_CDF & user/cdfmovie.F \\
 NO\_CDF & utility/cdf\_routines.F \\
 NO\_F01AAF & transport/b2tr21.F \\
 NO\_GETENV & b2plot/b2plot.F \\
-NO\_GETENV & b2plot/dhdata.F \\
 NO\_GETENV & b2plot/spect.F \\
 NO\_GETENV & convert/b2co\_movies\_cdf.F \\
 NO\_GETENV & convert/b2co\_tally\_cdf.F \\
@@ -16812,7 +16822,6 @@ USE\_MPI & preprocessing/b2ar.F \\
 USE\_MPI & preprocessing/b2fgmtry\_mod.F \\
 USE\_MPI & utility/xertst.F \\
 USE\_PXFGETENV & b2plot/b2plot.F \\
-USE\_PXFGETENV & b2plot/dhdata.F \\
 USE\_PXFGETENV & b2plot/initialize\_plotting.F \\
 USE\_PXFGETENV & b2plot/set\_extralabel.F \\
 USE\_PXFGETENV & b2plot/spect.F \\
