@@ -323,7 +323,7 @@ c-----------------------------------------------------------------------
       integer mreac
       parameter (mreac=2*nreac)
 
-c*** Reaction lists: number of data sets, groups, massp, masst,
+c*** Reaction lists: number of datasets, groups, massp, masst,
 c***    number of the output particles, extrapolation modes;
 c***    reaction type, database, chapter and reaction;
 c***    input and output particles (AMDS notation);  
