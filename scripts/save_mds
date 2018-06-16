@@ -18,8 +18,8 @@ argloop:
       set debug="$debug TIME=$DBX"
     else
       set debug="$debug TIME=$1"
+      shift
     endif
-    shift
     goto argloop
   endif
 
