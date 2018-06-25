@@ -476,6 +476,7 @@ endif
 	-[ -e b2co.exe.dir/tracing/user.trc ] && rm b2co.exe.dir/tracing/user.trc || echo > /dev/null
 	-[ -e b2co.exe.dir/tracing/user.trc.n.01 ] && rm b2co.exe.dir/tracing/user.trc.n.01 || echo > /dev/null
 	-[ -e b2co.exe.dir/tracing ] && rmdir b2co.exe.dir/tracing || echo > /dev/null
+	-[ -e b2co.exe.dir/b2time.nc ] && rm b2co.exe.dir/b2time.nc || echo > /dev/null
 	-rmdir b2co.exe.dir
 
 $(target_uf) : b2fgmtry b2fparam b2fstate b2fplasma
