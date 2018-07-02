@@ -60,7 +60,7 @@ endif
 unexport SOLPS_DEBUG
 unexport SOLPS_MPI
 
-.PHONY: solps solps_mpi nox nox_mpi all all_nox all_mpi carre carre_nox divgeo b25 b25_mpi b25_nox b25_ig b25_all_mpi eirene eirene_mpi eirene_nox b25eirene b25eirene_mpi b25eirene_nox b25eirene_ig b25eirene_all_mpi b25eirene_mpi_nox uinp uinp_nox uinp_mpi triang triang_nox amds amds_mpi fxdr sonnet-light b2sxdr manual local depend depend_nox tags listobj listobj_nox clean clean_% debug %_debug VERSION help nox_build nox_build_mpi
+.PHONY: solps solps_mpi nox nox_mpi all all_nox all_mpi carre carre_nox divgeo divgeo_nox b25 b25_mpi b25_nox b25_ig b25_all_mpi eirene eirene_mpi eirene_nox b25eirene b25eirene_mpi b25eirene_nox b25eirene_ig b25eirene_all_mpi b25eirene_mpi_nox uinp uinp_nox uinp_mpi triang triang_nox amds amds_mpi fxdr sonnet-light b2sxdr manual local depend depend_nox tags listobj listobj_nox clean clean_% debug %_debug VERSION help nox_build nox_build_mpi
 
 DEFAULT: solps
 
@@ -75,13 +75,13 @@ solps:     carre divgeo b25eirene     uinp     triang amds     sonnet-light manu
 
 solps_mpi: carre divgeo b25eirene_mpi uinp_mpi triang amds_mpi sonnet-light manual
 
-nox:       carre_nox    b25eirene_nox uinp_nox triang_nox manual
+nox:       carre_nox divgeo_nox b25eirene_nox uinp_nox triang_nox manual
 
-nox_mpi:   carre_nox    b25eirene_mpi_nox uinp_mpi_nox triang_nox manual
+nox_mpi:   carre_nox divgeo_nox b25eirene_mpi_nox uinp_mpi_nox triang_nox manual
 
 all:       carre divgeo b25     eirene     b25eirene     uinp     triang amds sonnet-light manual
 
-all_nox:   carre_nox    b25_nox eirene_nox b25eirene_nox uinp_nox triang_nox manual
+all_nox:   carre_nox divgeo_nox b25_nox eirene_nox b25eirene_nox uinp_nox triang_nox manual
 
 all_mpi:   carre divgeo b25_mpi eirene_mpi b25eirene_mpi uinp_mpi triang amds_mpi sonnet-light manual
 
@@ -93,6 +93,10 @@ carre_nox:
 
 divgeo:
 	cd modules/DivGeo;         ${MAKE}
+	cd modules/DivGeo/equtrn;  ${MAKE}
+	cd modules/DivGeo/convert; ${MAKE}
+
+divgeo_nox:
 	cd modules/DivGeo/equtrn;  ${MAKE}
 	cd modules/DivGeo/convert; ${MAKE}
 
@@ -295,9 +299,9 @@ debug: solps_debug
 
 # Dependencies are not duplicated across build targets
 
-nox_build:     clean_build     listobj_nox depend_nox carre_nox b25eirene_nox     uinp_nox     triang_nox
+nox_build:     clean_build     listobj_nox depend_nox carre_nox divgeo_nox b25eirene_nox     uinp_nox     triang_nox
 
-nox_build_mpi: clean_build_mpi listobj_nox depend_nox           b25eirene_mpi_nox uinp_mpi_nox
+nox_build_mpi: clean_build_mpi listobj_nox depend_nox           divgeo_nox b25eirene_mpi_nox uinp_mpi_nox
 
 
 # Clean targets
