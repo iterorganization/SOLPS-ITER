@@ -18,4 +18,4 @@ F='field.snn'; [ -n "$3" ] && F=$3
 # [ -a fort.2 ] || rm -f fort.2
 # ln -sf $1 fort.1
 [ -r $F ] || dg2vr $1 $2 && dg2vr $1 $2 $F
-#        && { [ -L fort.2 ] && { rm -f fort.2; true; } || mv fort.2 $2 ; rm -f fort.1; }
+#        && { [ -L fort.2 ] && { rm -f fort.2; true; } || { [ -e fort.2] && mv fort.2 $2 ; rm -f fort.1; } }
