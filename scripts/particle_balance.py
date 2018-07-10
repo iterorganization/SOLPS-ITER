@@ -39,6 +39,9 @@ b2stbr_sna_reg = f.variables['b2stbr_sna_reg']
 if vreg == 5:
     FULL_X = numpy.array([0,1,0,0,-1,0,0])
     FULL_Y = numpy.array([0,1,1,1,0,-1,-1,-1])
+elif vreg ==2:
+    FULL_X = numpy.array([0,1,-1])
+    FULL_Y = numpy.array([0,1,-1])
 else:
     raise ValueError('Value of vreg=%s not currently coded' % vreg)
 

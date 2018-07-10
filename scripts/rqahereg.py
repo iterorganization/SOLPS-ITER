@@ -24,9 +24,9 @@ if nargs > 1: R=int(sys.argv[1])
 
 for i in range(rqahereg.shape[1]):
   plt.plot(times[:],rqahereg[:,i,R], label=species[i])
-  print(species[i], rqahereg[-1,i,R])
+  print('%8s : %8.2e' % (species[i], rqahereg[-1,i,R]))
 plt.plot(times[:],numpy.sum(rqahereg[:,:,R],axis=1), label='Sum')
-print('Sum', numpy.sum(rqahereg[-1,:,R],axis=0))
+print('%8s : %8.2e' % ('Sum', numpy.sum(rqahereg[-1,:,R],axis=0)))
 
 ncol=max(1,rqahereg.shape[1]/10)
 

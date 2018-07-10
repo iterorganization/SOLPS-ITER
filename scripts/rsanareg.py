@@ -23,7 +23,9 @@ R=0
 if nargs > 1: R=int(sys.argv[1])
 
 for i in range(rsanareg.shape[1]):
+  print ('%8s : %8.2e' % (species[i],rsanareg[-1,i,R]))
   plt.plot(times[:],rsanareg[:,i,R], label=species[i])
+print ('%8s : %8.2e' % ('Sum',numpy.sum(rsanareg[-1,:,R],axis=0)))
 plt.plot(times[:],numpy.sum(rsanareg[:,:,R],axis=1), label='Sum')
 
 ncol=max(1,rsanareg.shape[1]/10)
