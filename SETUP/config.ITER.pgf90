@@ -45,7 +45,7 @@ LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 # Preprocessor options
 #
 
-ifneq (${NODENAME},hpc-login01.iter.org)
+ifeq (,$(findstring hpc-login0,$(NODENAME)))
 SOLPS_CPP      = -DNO_NAG -DPGF90 -DNOQUAD
 MPI_CPP        = `pkg-config mpich2-ch3 --cflags`
 LD_MPI         = -L/work/imas/opt/libibverbs/1.1.4/lib `pkg-config mpich2-ch3 --libs`

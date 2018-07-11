@@ -1,57 +1,55 @@
 # General
 module use /work/imas/etc/modulefiles
 module use /work/imas/etc/modules/all
-if (`hostname` != "hpc-login01.iter.org") then
-  module load git
-endif
-
 # Modules needed by SOLPS-ITER
-if (`hostname` != "hpc-login01.iter.org") then
-  module load imas/3.18.0/ual/3.8.1
-  module switch Anaconda2 Anaconda3/4.4.0
-  module load GCC/4.8.3
-  module load makedepend/1.0.4-goolf-1.5.16
-  module load netcdf/4.3.3.1-goolf-1.5.16
-  module load netcdf-fortran/4.4.2-goolf-1.5.16
-  module load flex/2.5.39-GCC-4.8.3
-  module load libxml2/2.9.2-GCC-4.8.3
-  module load doxygen
-  module load fontconfig/2.11.93
-  module load cairo/1.14.2
-  module load xmllib/2.3.0-imas-3.16.0-GCC-4.8.3
-  module load ncl/6.3.0
-  module load make
-else
-  module unload intel
-  module load imas/3.17.0/ual/0a2346
-  module switch Anaconda2 Anaconda3/4.4.0
-  module load makedepend/1.0.5-GCCcore-6.4.0
-  module load flex/2.6.4-GCCcore-6.4.0
-  module load Doxygen/1.8.13-GCCcore-6.4.0
-  module load fontconfig/2.12.4-GCCcore-6.4.0
-  module load cairo/1.14.10-GCCcore-6.4.0
-  module load NCL/6.4.0-intel-2018a
-  module load motif/2.3.8-intel-2018a
-endif
-# module load libpng/1.6.17-goolf-1.5.16 ! creates a zlib conflict
+set nodename=`hostname`
+switch ($nodename)
+  case "hpc-login0*.iter.org":
+    echo "Using new cluster modules"
+    set cluster="new"
+    module unload intel
+    module load imas/3.17.0/ual/0a2346
+    module switch Anaconda2 Anaconda3/4.4.0
+    module load makedepend/1.0.5-GCCcore-6.4.0
+    module load flex/2.6.4-GCCcore-6.4.0
+    module load Doxygen/1.8.13-GCCcore-6.4.0
+    module load cairo/1.14.10-GCCcore-6.4.0
+    module load NCL/6.4.0-intel-2018a
+    module load motif/2.3.8-intel-2018a
+    module load ParaView/5.4.1-intel-2018a-mpi
+    module load OpenMPI/2.1.1-GCC-6.4.0-2.28
+    breaksw
+  default:
+    echo "Using old cluster modules"
+    set cluster="old"
+    module load git
+    module load imas/3.19.1/ual/3.8.2
+    module switch Anaconda2 Anaconda3/4.4.0
+    module load GCC/4.8.3
+    module load makedepend/1.0.4-goolf-1.5.16
+    module load netcdf/4.3.3.1-goolf-1.5.16
+    module load netcdf-fortran/4.4.2-goolf-1.5.16
+    module load flex/2.5.39-GCC-4.8.3
+    module load libxml2/2.9.2-GCC-4.8.3
+    module load doxygen
+    module load fontconfig/2.11.93
+    module load cairo/1.14.2
+    module load xmllib/2.3.0-imas-3.16.0-GCC-4.8.3
+    module load ncl/6.3.0
+    module load make
+    module load paraview/5.4.1
+    module load MVAPICH2/2.2b-GCC-4.8.3
+    setenv MV2_SMP_USE_CMA 0
+endsw
 module load mscl/1.0.0-GCC-4.8.3
 module load gr/0.0.94
 module load gks/4.4.74
-# module load nag/15
 module load texlive
 module load ghostscript
 module load fc2k
 module load totalview
 if (`hostname` == "hpc-app1.iter.org") then
   module load matlab/2013a
-endif
-
-# mpi-library
-if (`hostname` != "hpc-login01.iter.org") then
-  module load MVAPICH2/2.2b-GCC-4.8.3
-  setenv MV2_SMP_USE_CMA 0
-else
-  module load OpenMPI/2.1.1-GCC-6.4.0-2.28
 endif
 
 # Debugger (set environment variable DBX)
@@ -62,8 +60,6 @@ setenv CC gcc
 setenv FC gfortran
 setenv CXX g++
 
-module load paraview/5.4.1
-
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
 else
@@ -73,7 +69,7 @@ else
   setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages/vtk:${PYTHONPATH}"
   setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
   setenv LD_CATALYST `paraview-config --libs vtkPVPythonCatalyst`
-  if (`hostname` == "hpc-login01.iter.org") then
+  if ($cluster == "new") then
     setenv LD_CATALYST "${LD_CATALYST} -lstdc++"
   endif
 endif

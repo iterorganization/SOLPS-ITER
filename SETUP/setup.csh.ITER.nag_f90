@@ -5,13 +5,12 @@ module use /work/imas/etc/modules/all
 # Modules needed by SOLPS-ITER
 module unload intel
 module load nagfor/6.2
-module load imas/3.17.0/ual/0a2346
-module switch Anaconda2 Anaconda3/4.4.0
 module load makedepend/1.0.5-GCCcore-6.4.0
 module load flex/2.6.4-GCCcore-6.4.0
-module load Doxygen/1.8.13-GCCcore-6.4.0
 module load fontconfig/2.12.4-GCCcore-6.4.0
 module load cairo/1.14.10-GCCcore-6.4.0
+module load netCDF-Fortran/4.4.4-intel-2018a
+setenv NCDIR /work/imas/opt/EasyBuild/software/netCDF-Fortran/4.4.4-intel-2018a
 module load NCL/6.4.0-intel-2018a
 module load motif/2.3.8-intel-2018a
 module load mscl/1.0.0-GCC-4.8.3
@@ -20,7 +19,6 @@ module load gr/0.0.94
 module load gks/4.4.74
 module load texlive
 module load ghostscript
-module load fc2k
 module load totalview
 if (`hostname` == "hpc-app1.iter.org") then
   module load matlab/2013a
@@ -37,7 +35,7 @@ setenv CC gcc
 setenv FC nagfor
 setenv CXX g++
 
-module load paraview/5.4.1
+module load ParaView/5.4.1-intel-2018a-mpi
 
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
@@ -48,13 +46,10 @@ else
   setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages/vtk:${PYTHONPATH}"
   setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
   setenv LD_CATALYST `paraview-config --libs vtkPVPythonCatalyst`
-  if (`hostname` == "hpc-login01.iter.org") then
-    setenv LD_CATALYST "${LD_CATALYST} -lstdc++"
-  endif
+  setenv LD_CATALYST "${LD_CATALYST} -lstdc++"
 endif
 
 # Other environment variables
-module load solps-gui
 setenv LD_PRELOAD /usr/lib64/libfontconfig.so.1 # needed by solps-gui
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/usr/lib64
 setenv SOLPSWORK /work/projects/solps-iter/$USER
