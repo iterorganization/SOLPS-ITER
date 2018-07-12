@@ -85,8 +85,6 @@ all_nox:     carre_nox divgeo_nox b25_nox eirene_nox b25eirene_nox uinp_nox tria
 
 all_mpi:     carre divgeo b25_mpi eirene_mpi b25eirene_mpi uinp_mpi triang amds_mpi sonnet-light manual
 
-all_nox_mpi: carre_nox    b25_nox_mpi eirene_nox_mpi b25eirene_nox_mpi uinp_mpi triang_nox manual
-
 all_nox_mpi: carre_nox divgeo_nox b25_nox_mpi eirene_nox_mpi b25eirene_nox_mpi uinp_nox_mpi triang_nox manual
 
 carre:
@@ -129,9 +127,6 @@ b25_mpi:
 b25_nox:
 	cd modules/B2.5; ${MAKE} NOPLOT
 
-b25_nox_mpi:
-	cd modules/B2.5; ${MAKE} NOPLOT USE_MPI=-DUSE_MPI
-
 b25_ig:
 	cd modules/B2.5; ${MAKE} USE_IMPGYRO=-DUSE_IMPGYRO
 
@@ -171,10 +166,6 @@ b25eirene_all_mpi:
 	cd modules/Eirene;   ${MAKE} USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI
 	cd modules/solps4-5; ${MAKE} links
 	cd modules/B2.5;     ${MAKE} USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI ALL
-
-b25eirene_nox_mpi:
-	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE LD_GR=""  LD_GKS="" USE_MPI=-DUSE_MPI
-	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI NOPLOT
 
 uinp:
 	cd modules/Uinp; ${MAKE}
@@ -396,7 +387,6 @@ clean_b25eirene_nox:
 
 clean_b25eirene_ig:
 	cd modules/Eirene; ${MAKE} clean USE_B25=-DB25_EIRENE    USE_IMPGYRO=-DUSE_IMPGYRO
-	
 
 clean_uinp:
 	cd modules/Uinp; ${MAKE} clean
