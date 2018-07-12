@@ -37,23 +37,23 @@ fnayreg = f.variables['fnayreg']
 b2stbr_sna_reg = f.variables['b2stbr_sna_reg']
 
 if vreg == 5:
-    FULL_X = numpy.array([0,1,0,0,-1,0,0])
-    FULL_Y = numpy.array([0,1,1,1,0,-1,-1,-1])
+    FULL_X = numpy.array([0,0,0,0,0,0,0])
+    FULL_Y = numpy.array([0,0,1,0,-1,0,0,0])
 else:
     raise ValueError('Value of vreg=%s not currently coded' % vreg)
 
 for i in range(len(bounds)):
     fnax = (fnaxreg[:,bounds[i][0]:bounds[i][1],:].sum(axis=1)*FULL_X).sum(axis=1)
     fnay = (fnayreg[:,bounds[i][0]:bounds[i][1],:].sum(axis=1)*FULL_Y).sum(axis=1)
-    b2stbr = b2stbr_sna_reg[:,bounds[i][0]:bounds[i][1],0].copy()
+    b2stbr = b2stbr_sna_reg[:,bounds[i][0]:bounds[i][1],1].copy()
     b2stbr[:,0] = 0 # remove the neutral
     if b2stbr.shape[1] > 2: b2stbr[:,-1] = 0 # remove the fully stripped species for He and up
     b2stbr = b2stbr.sum(axis=1)
     fna_norm = numpy.max([numpy.max(numpy.abs(fnaxreg[:,bounds[i][0]:bounds[i][1],:])),numpy.max(numpy.abs(fnayreg[:,bounds[i][0]:bounds[i][1],:]))])
-    print(elements[bounds[i][0]], fna_norm, (fnax+fnay+b2stbr).mean(), ((fnax+fnay+b2stbr)/fna_norm).mean())
+    print(elements[bounds[i][0]], fna_norm, (fnax+fnay+b2stbr).mean(), ((fnax+fnay+b2stbr)/fna_norm).mean(), (fnax+fnay).mean(), (b2stbr).mean())
     plt.plot(times[:],((fnax+fnay+b2stbr)/fna_norm), label=elements[bounds[i][0]])
 plt.xlabel('time [s]')
 plt.ylabel('normalised particle error')
-plt.title('Normalised particle error')
+plt.title('Normalised particle error (core)')
 plt.legend(loc=0)
 plt.show()

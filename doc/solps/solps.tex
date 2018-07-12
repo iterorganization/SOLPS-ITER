@@ -450,6 +450,7 @@ purpose, a master \SOLPSITER {\tt Makefile} is provided, located at \${\tt \{SOL
   \item[nox] The same as {\bf solps} above, but without linking to any graphical libraries:
     \begin{description}
       \item[carre\_nox] The {\tt Carre} grid generator will not generate graphs
+      \item[divgeo\_nox] Equilibrium and template converters for {\tt DivGeo}
       \item[b25eirene\_nox] Only the {\tt B2.5-Eirene} executable will be built, without graphics
       \item[triang\_nox] The {\tt tria.eps} and {\tt triageom.eps} files will not be produced
       \item[uinp\_nox] The {\tt Uinp} translator from {\tt DivGeo} output to {\tt B2.5-Eirene} input
@@ -464,6 +465,7 @@ purpose, a master \SOLPSITER {\tt Makefile} is provided, located at \${\tt \{SOL
   \item[nox\_build] The same as {\bf nox} above and used for compilation tests on the Continous Integration server:
     \begin{description}
       \item[carre\_nox] The {\tt Carre} grid generator will not generate graphs
+      \item[divgeo\_nox] Equilibrium and template converters for {\tt DivGeo}
       \item[b25eirene\_nox] Only the {\tt B2.5-Eirene} executable will be built without graphics
       \item[triang\_nox] The {\tt tria.eps} and {\tt triageom.eps} files will not be produced
       \item[uinp\_nox] The {\tt Uinp} translator from {\tt DivGeo} output to {\tt B2.5-Eirene} input
@@ -471,6 +473,7 @@ purpose, a master \SOLPSITER {\tt Makefile} is provided, located at \${\tt \{SOL
     \end{description}
   \item[carre] The {\tt Carre} grid generator and associated translators only
   \item[divgeo] The {\tt DivGeo} graphical input file builder and accompanying equilibrium and template converters only
+  \item[divgeo\_nox] Equilibrium and template converters for {\tt DivGeo}
   \item[b25] The {\tt B2.5} stand-alone plasma fluid solver and accompanying programs only
   \item[b25\_nox] The {\tt B2.5} stand-alone plasma fluid solver and accompanying programs, not using NCAR Graphics
   \item[b25\_all] The {\tt B2.5} stand-alone plasma fluid solver and accompanying programs only, plus {\tt b2xd} the \SOLPSfive to \SOLPSfour converter
@@ -12094,6 +12097,8 @@ $Y$-directed regions:
 region 1 === core boundary
 region 3 === SOL boundary
 \end{verbatim}
+
+In cases where the problem of interest has only one target and a plasma entry surface, the target should be located to the right of the domain and the plasma should enter from the left.
 
 \clearpage
 \section{Regions for limiter cases}
