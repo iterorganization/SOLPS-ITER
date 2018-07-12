@@ -49,29 +49,37 @@ argloop:
     set PROCS=`echo $MPIOPTS | awk.transpose | grep -A 1 "\-np" | tail -n 1`
     echo Asking for $PROCS processors
     shift
-    echo sleep 600 | qsub -q ib_gen8 -lnodes=c05s30:ppn=1,walltime=1000
     goto argloop
   endif
+
+set nodename=`hostname`
+switch ($nodename)
+  case "hpc-login0*.iter.org":
+    set job_prefix="SLURM"
+    breaksw
+  default:
+    set job_prefix="QSUB"
+endsw
 
 if ($1 == "") then
   if (-s input.dat && $standalone == "no") then
     echo Assuming run with Eirene
-    echo No argument is specified. Looking for QSUB.iter_coupled$compress
-    set QSUB=`climb_and_look_for QSUB.iter_coupled$compress`
-    if ($QSUB == "//QSUB.iter_coupled$compress") then
-      if (-s $SOLPSTOP/runs/QSUB.iter_coupled$compress) then
-        set QSUB="$SOLPSTOP/runs/QSUB.iter_coupled$compress"
+    echo No argument is specified. Looking for $job_prefix.iter_coupled$compress
+    set QSUB=`climb_and_look_for $job_prefix.iter_coupled$compress`
+    if ($QSUB == "//$job_prefix.iter_coupled$compress") then
+      if (-s $SOLPSTOP/runs/$job_prefix.iter_coupled$compress) then
+        set QSUB="$SOLPSTOP/runs/$job_prefix.iter_coupled$compress"
       else
         set QSUB=""
       endif
     endif
   else
     if ($standalone == "no") echo Assuming standalone run
-    echo No argument is specified. Looking for QSUB.iter$compress
-    set QSUB=`climb_and_look_for QSUB.iter$compress`
-    if ($QSUB == "//QSUB.iter$compress") then
-      if (-s $SOLPSTOP/runs/QSUB.iter$compress) then
-        set QSUB="$SOLPSTOP/runs/QSUB.iter$compress"
+    echo No argument is specified. Looking for $job_prefix.iter$compress
+    set QSUB=`climb_and_look_for $job_prefix.iter$compress`
+    if ($QSUB == "//$job_prefix.iter$compress") then
+      if (-s $SOLPSTOP/runs/$job_prefix.iter$compress) then
+        set QSUB="$SOLPSTOP/runs/$job_prefix.iter$compress"
       else
         set QSUB=""
       endif
@@ -109,4 +117,9 @@ update_solps_run_status -n ${msg}
 if ($?SOLPS_GUI_IP) then
   echo ${USER} ${PWD} ${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
 endif
-sbatch $NAME
+switch ($nodename)
+  case "hpc-login0*.iter.org":
+    sbatch $NAME
+  default:
+    qsub -V -S /bin/tcsh $NAME
+endsw
