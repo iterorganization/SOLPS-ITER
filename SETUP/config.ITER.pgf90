@@ -50,7 +50,7 @@ SOLPS_CPP      = -DNO_NAG -DPGF90 -DNOQUAD
 MPI_CPP        = `pkg-config mpich2-ch3 --cflags`
 LD_MPI         = -L/work/imas/opt/libibverbs/1.1.4/lib `pkg-config mpich2-ch3 --libs`
 else
-SOLPS_CPP      = -DNO_NAG -DPGF90 -DNOQUAD `pkg-config netcdf-fortran --cflags`
+SOLPS_CPP      = -DNO_NAG -DPGF90 -DNOQUAD
 MPI_CPP        = `pkg-config ompi --cflags`
 LD_MPI         = `pkg-config ompi --libs`
 endif
