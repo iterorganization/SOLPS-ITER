@@ -57,6 +57,12 @@ case "*.pppl.gov":
 case "*.fusion.gat.com":
   echo GA
   breaksw
+case "iris*.cluster":
+  echo GA
+  breaksw
+case "saturn*.cluster":
+  echo GA
+  breaksw
 case "*.wm.edu":
   echo WM
   breaksw
