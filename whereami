@@ -1,15 +1,20 @@
 #! /bin/csh -f
 set machine_location=`hostname`
+set fullhost=`nslookup $machine_location | grep -m 1 Name | awk '/Name:/{print $2}' | tr 'A-Z' 'a-z'`
+if ("$fullhost" == "") then
+  set fullhost=`hostname -f`
+endif
+# special handling of hostnames head*, node* that keeps mephi_check working
 set mephi_check=`echo $machine_location | cut -c1-4` 
 if ("$mephi_check" == "head" || "$mephi_check" == "node") then 
-  echo "mephi_check = $mephi_check - special mephi cluster treatment applies"
-  set machine_location="cluster21.mephi.ru"
-  set fullhost=$machine_location
-else
-  set fullhost=`nslookup $machine_location | grep -m 1 Name | awk '/Name:/{print $2}' | tr 'A-Z' 'a-z'`
-  if ("$fullhost" == "") then
-    set fullhost=`hostname -f`
-  endif
+  switch ($fullhost)
+  case "*.cm.cluster":
+    breaksw
+  default:
+    echo "mephi_check = $mephi_check - special mephi cluster treatment applies"
+    set machine_location="cluster21.mephi.ru"
+    set fullhost=$machine_location
+  endsw
 endif
 switch ($fullhost)
 case "*.iter.org":
@@ -69,6 +74,8 @@ case "*.nersc.gov":
   echo NERSC
   breaksw
 case "*.ornl.gov":
+case "megabucky*":
+case "*.cm.cluster":
   echo ORNL
   breaksw
 case "*.ipp.cas.cn":
@@ -202,6 +209,9 @@ case "*.cx":
 case "*.hm":
 case "*.nf":
   echo AU_UNKNOWN
+  breaksw
+case "*.ca":
+  echo CA_UNKNOWN
   breaksw
 case "*.kz":
   echo KZ_UNKNOWN

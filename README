@@ -68,7 +68,7 @@ At first compilation
 ====================
 
 Check whether your <HOST_NAME> is included in whereami.
-Add new <HOST_NAME> if necessary.
+Add new <HOST_NAME> if necessary or specify it using a SETUP/setup.csh.HOST_NAME.local file.
 
 Check whether default compiler for your <HOST_NAME> is set in default_compiler.
 Add new default <COMPILER> for your <HOST_NAME> if necessary.
@@ -76,7 +76,7 @@ Add new default <COMPILER> for your <HOST_NAME> if necessary.
 Check default SOLPS-ITER compiler settings for your <HOST_NAME> and <COMPILER> in SETUP/config.<HOST_NAME>.<COMPILER>.
 Create this config-file if necessary (example config-file: config.default.default).
 If local modifications to these default compiler options are needed, 
-create a config-file SETUP/config.<HOST_NAME>.<COMPILER>.local.
+create a config-file SETUP/config.<HOST_NAME>.<COMPILER>.local file.
 
 Run the following script:
 first_setup

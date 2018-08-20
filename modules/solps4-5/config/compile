@@ -4,9 +4,9 @@ ${OBJDIR}/%.o : %.F
 	@- /bin/rm -f ${OBJDIR}/$*.f ${OBJDIR}/$*.o ${OBJDIR}/$*.${MOD}
 ifeq ($(strip $(CPP)),)
 	case $< in \
-		${S45DIR}/src/solps4_*/* ) ${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} -c $< ;; \
-		${S45DIR}/local_4/* ) ${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} -c $< ;; \
-                * ) ${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV5} ${INCLUDE} -c $< ;; \
+		${S45DIR}/src/solps4_*/* ) ${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -c $< ;; \
+		${S45DIR}/local_4/* ) ${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -c $< ;; \
+                * ) ${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV5} ${INCLUDE} ${OBJDEST} -c $< ;; \
         esac
 else
 ifeq ($(strip $(SED)),)
@@ -30,7 +30,7 @@ endif
 ${OBJDIR}/%.o : %.F90
 	@- /bin/rm -f ${OBJDIR}/$*.f90 ${OBJDIR}/$*.o ${OBJDIR}/$*.${MOD}
 ifeq ($(strip $(CPP)),)
-	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV5} ${INCLUDE} -c $<
+	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV5} ${INCLUDE} ${OBJDEST} -c $<
 else
 ifeq ($(strip $(SED)),)
 	${CPP} ${CPP5OPTS} ${DEFINES} ${INCLUDE} $< ${OBJDIR}/$*.f90
@@ -45,7 +45,7 @@ endif
 ${OBJDIR}/%.${MOD} : %.F        # src/B2.5_modules/
 	@- /bin/rm -f ${OBJDIR}/$*.f ${OBJDIR}/$*.o ${OBJDIR}/$*.${MOD}
 ifeq ($(strip $(CPP)),)
-	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV5} ${INCLUDE} -c $<
+	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV5} ${INCLUDE} ${OBJDEST} -c $<
 else
 ifeq ($(strip $(SED)),)
 	-${CPP} ${CPP5OPTS} ${DEFINES} ${INCLUDE} $< ${OBJDIR}/$*.f
@@ -64,7 +64,7 @@ endif
 ${OBJDIR}/%.${MOD} : %.F90        # src/solps5/b2mod_*.F90
 	@- /bin/rm -f ${OBJDIR}/$*.f90 ${OBJDIR}/$*.o ${OBJDIR}/$*.${MOD}
 ifeq ($(strip $(CPP)),)
-	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV5} ${INCLUDE} -c $<
+	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV5} ${INCLUDE} ${OBJDEST} -c $<
 else
 ifeq ($(strip $(SED)),)
 	-${CPP} ${CPP5OPTS} ${DEFINES} ${INCLUDE} $< ${OBJDIR}/$*.f90

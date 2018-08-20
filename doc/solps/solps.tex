@@ -33,9 +33,9 @@
 \usepackage{tocbibind}
 \ifpdf
 \usepackage{thumbpdf}
-\usepackage[pageanchor,pdftex,backref,hyperindex,colorlinks,bookmarks,bookmarksnumbered,pdfencoding=auto]{hyperref} %bookmarksopen,
+\usepackage[pageanchor,pdftex,backref,hyperindex,colorlinks,bookmarks,bookmarksnumbered]{hyperref} %bookmarksopen,
 \else
-\usepackage[pdfencoding=auto]{hyperref}
+\usepackage{hyperref}
 \fi
 \usepackage{color}
 \usepackage{fixltx2e}
@@ -324,6 +324,7 @@ The current list of recognized hostnames, deduced by means of the {\tt whereami}
   \item[SWIP] SouthWestern Institute of Plasma Physics, Chengdu: *.swip.ac.cn
   \item[WM] College of William and Mary: *.wm.edu
   \item[AU\_UNKNOWN] All other domain names from Australia
+  \item[CA\_UNKNOWN] All other domain names from Canada
   \item[CN\_UNKNOWN] All other domain names from China
   \item[EU\_UNKNOWN] All other domain names from EURATOM Member countries
   \item[IN\_UNKNOWN] All other domain names from India
@@ -335,7 +336,11 @@ The current list of recognized hostnames, deduced by means of the {\tt whereami}
   \item[UNKNOWN] everywhere else
 \end{description}
 
-If your specific domain name is not on this list, please add it to {\tt whereami}.
+If your specific domain name is not on this list, please add it to {\tt whereami}. In cases where the {\tt hostname} and {\tt nslookup} commands used by {\tt whereami} do not provide the desired \${\tt HOST\_NAME} value, you can specify it explicitly by means of a \${\tt SOLPSTOP/SETUP/setup.csh.HOST\_NAME.local} file, which should contain:
+
+\begin{verbatim}
+setenv HOST_NAME <your_desired_HOST_NAME_value>
+\end{verbatim}
 
 At the moment the following compiler platforms are supported, assuming a Linux work environment:\label{sec:platforms}
 \begin{description}\index{Platforms}
@@ -442,6 +447,7 @@ purpose, a master \SOLPSITER {\tt Makefile} is provided, located at \${\tt \{SOL
   \item[nox] The same as {\bf solps} above, but without linking to any graphical libraries:
     \begin{description}
       \item[carre\_nox] The {\tt Carre} grid generator will not generate graphs
+      \item[divgeo\_nox] Equilibrium and template converters for {\tt DivGeo}
       \item[b25eirene\_nox] Only the {\tt B2.5-Eirene} executable will be built, without graphics
       \item[triang\_nox] The {\tt tria.eps} and {\tt triageom.eps} files will not be produced
       \item[uinp\_nox] The {\tt Uinp} translator from {\tt DivGeo} output to {\tt B2.5-Eirene} input
@@ -456,6 +462,7 @@ purpose, a master \SOLPSITER {\tt Makefile} is provided, located at \${\tt \{SOL
   \item[nox\_build] The same as {\bf nox} above and used for compilation tests on the Continous Integration server:
     \begin{description}
       \item[carre\_nox] The {\tt Carre} grid generator will not generate graphs
+      \item[divgeo\_nox] Equilibrium and template converters for {\tt DivGeo}
       \item[b25eirene\_nox] Only the {\tt B2.5-Eirene} executable will be built without graphics
       \item[triang\_nox] The {\tt tria.eps} and {\tt triageom.eps} files will not be produced
       \item[uinp\_nox] The {\tt Uinp} translator from {\tt DivGeo} output to {\tt B2.5-Eirene} input
@@ -463,6 +470,7 @@ purpose, a master \SOLPSITER {\tt Makefile} is provided, located at \${\tt \{SOL
     \end{description}
   \item[carre] The {\tt Carre} grid generator and associated translators only
   \item[divgeo] The {\tt DivGeo} graphical input file builder and accompanying equilibrium and template converters only
+  \item[divgeo\_nox] Equilibrium and template converters for {\tt DivGeo}
   \item[b25] The {\tt B2.5} stand-alone plasma fluid solver and accompanying programs only
   \item[b25\_nox] The {\tt B2.5} stand-alone plasma fluid solver and accompanying programs, not using NCAR Graphics
   \item[b25\_all] The {\tt B2.5} stand-alone plasma fluid solver and accompanying programs only, plus {\tt b2xd} the \SOLPSfive to \SOLPSfour converter
@@ -542,25 +550,33 @@ to refresh the list of executables to be found with the search path.
 
 On the \SOLPSITER web site (\href{https://portal.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}{https://portal.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}), in the folder {\em Examples}, one can find a few example cases for \SOLPSITER runs, in both {\tt B2.5} stand-alone or {\tt B2.5-Eirene} coupled modes.
 
-There is also a dedicated directory \${\tt SOLPSTOP/runs/examples} which contains links to a series of sample cases. These are actually stored in the {\tt /work/imas/shared/boundary/solps-iter/assets/MD5} directory hosted at the IO, and the means to retrieve these cases is detailed in the \${\tt SOLPSTOP/runs/examples/README.md} file. Following the instructions therein will extract an archived file in gzipped tar format containing a {\tt baserun} and one or more run directories and associated files. In some cases, a {\tt DIMENSIONS.F} file is also provided, which shows the dimensions necessary to run those cases (see Appendix \ref{sec:DIMENSIONS} for full details about the contents of such files).
+There is also a dedicated directory \${\tt SOLPSTOP/runs/examples} which contains links to a series of sample cases. These are actually stored in the {\tt /work/imas/shared/external/assets/solps-iter/MD5} directory hosted at the IO, and the means to retrieve these cases is detailed in the \${\tt SOLPSTOP/runs/examples/README.md} file. Following the instructions therein will extract an archived file in gzipped tar format containing a {\tt baserun} and one or more run directories and associated files. In some cases, a {\tt DIMENSIONS.F} file is also provided, which shows the dimensions necessary to run those cases (see Appendix \ref{sec:DIMENSIONS} for full details about the contents of such files).
 
 The cases stored for retrieval include:
 \begin{description}
+  \item[test\_slab\_ortho\_standalone] An orthogonal slab test case for {\tt B2.5} standalone
   \item[AUG\_16151\_D] ASDEX-Upgrade D-only benchmark cases, including {\tt B2.5} standalone, coupled and single {\tt Eirene} call run directories
   \item[AUG\_16151\_D+C+He] ASDEX-Upgrade multi-fluid benchmark cases, including {\tt B2.5} standalone, coupled and single {\tt Eirene} call run directories
   \item[ITER\_2171\_D+He+Be+Ne] ITER full performance case with Ne injection
-  \item[ITER\_2292\_Honly\_20MW] ITER low power case at low density
+  \item[ITER\_2264\_0.6Ne\_100MW] Another ITER full perfomance case with Ne injection
+  \item[ITER\_2275\_Donly\_20MW] ITER low power case at low density (D-fuelled)
+  \item[ITER\_2292\_Honly\_20MW] ITER low power case at low density (H-fuelled)
   \item[ITER\_2294\_Honly\_20MW] Same as above, but increasing density
   \item[ITER\_2296\_Honly\_20MW] Same as above, but continuing density scan
-  \item[ITER\_2297\_Honly\_20MW] Same as above, continuing scan, reaching detachment
+  \item[ITER\_2297\_Honly\_20MW] Same as above, continuing scan
+  \item[ITER\_2298\_Honly\_20MW] Same as above, continuing scan
+  \item[ITER\_2299\_Honly\_20MW] Same as above, continuing scan, reaching detachment
   \item[ITER\_2308\_Honly\_20MW] Same as above, continuing scan, detached conditions
-  \item[ITER\_2588\_D+He+N] ITER full power case with N injection
+  \item[ITER\_2360\_0.95He+0.05H\_40MW] ITER Helium plasma case at mid-power
+  \item[ITER\_2588\_D+He+N] ITER full power case with N injection and gas puff feedback on SOL D particle content
   \item[ITER\_2588\_drifts] ITER {\tt B2.5} stand-alone D-only demonstration case with and without drifts
   \item[ITER\_535\_D+He+Ar] ITER full power case with Ar injection
   \item[ITER\_Be-W\_D+T+He+Ne] ITER full power case with 98 species
 \end{description}
 as well as additional partial cases used in tutorials when learning how to build a case using the {\tt DivGeo} and {\tt SOLPS-GUI} utilities.
 Other cases can be added at the suggestion of users, if available.
+
+After the cases have been downloaded to your system, make sure that the timestamps of the various input files are in the proper chronological order (using the {\tt correct\_baserun\_timestamps} and {\tt touch bf2tstati} instructions as necessary) before attempting to launch any actual runs. Also, the links to database files are not provided within these examples, and they can be set up using the {\tt setup\_baserun\_eirene\_links} script.
 
 \section{Using a central installation}
 \label{Using a central installation}
@@ -1149,7 +1165,7 @@ The number of scripts developed for various {\bf SOLPS} versions is very large. 
 \begin{itemize}
 \item the residuals can be plotted with
   \begin{description}
-  \item[resall\_D]\index{resall\_D} all residuals for a $D$-only case
+  \item[resall\_D]\index{resall\_D} all residuals for a $D$-only case. A python version of this script also exists (Python 2.7 and 3.5 compatible).
   \item[resall\_D+\_only]\index{resall\_D+\_only} all residuals for a $D^+$-only case
   \item[resall\_D+D]\index{resall\_D+D} all residuals for test cases where we treat two separate $D$ sequences
   \item[resall\_D+T]\index{resall\_D+T} all residuals for a $D+T$ case
@@ -1197,6 +1213,7 @@ The options are applied in that order independently of the order in which they w
   \item[rcxhireg \#1]\index{rcxhireg} charge exchange energy for region \#1 (default 0)
   \item[rcxmoreg \#1]\index{rcxmoreg} charge exchange parallel momentum for region \#1 (default 0)
   \item[rcxnareg \#1]\index{rcxnareg} charge exchange rate for region \#1 (default 0)
+  \item[rdneureg \#1]\index{rdneureg} radiation rate from {\tt Eirene} neutrals for region \#1 (default 0)
   \item[rqahereg \#1]\index{rqahereg} electron heat loss for region \#1 (default 0)
   \item[rqbrmreg \#1]\index{rqbrmreg} bremsstrahlung losses for region \#1 (default 0)
   \item[rqradreg \#1]\index{rqradreg} total radiation rate for region \#1 (default 0)
@@ -1393,11 +1410,11 @@ logarithmic $y$ scale by use of an additional "l" argument while "L" also plots 
 negative quantities on the same scale and "M" the absolute values of negative quantities in a separate plot)
   \begin{description}
   \item[2d]\index{2d} plots time dependent quantities from
-    {\tt b2time.nc} (Appendix \ref{cha:b2time}), 2$^{nd}$, 3$^{rd}$ {\it etc.\ versus} the 1$^{st}$ argument.
+    {\tt b2time.nc} (Appendix \ref{cha:b2time}), 2$^{nd}$, 3$^{rd}$ {\it etc.\ versus} the 1$^{st}$ argument. 
   \item[2da]\index{2da} prints time dependent quantities from
     {\tt b2time.nc} (Appendix \ref{cha:b2time}), 2$^{nd}$, 3$^{rd}$ {\it etc.\ versus} the 1$^{st}$ argument.
   \item[2dt]\index{2dt} plots time dependent quantities from
-    {\tt b2time.nc} (Appendix \ref{cha:b2time}) versus time.
+    {\tt b2time.nc} (Appendix \ref{cha:b2time}) versus time. A python version of this script also exists (Python 2.7 and 3.5 compatible).
   \item[2dt\_av]\index{2dt\_av} plots averaged time dependent quantities from
     {\tt b2time.nc} (Appendix \ref{cha:b2time}) versus time.
   \item[2dvi]\index{2dvi} prepares a \btwoplot command file {\tt TDV/contr.b2p} for production of input files to start a {\tt DIVIMP} run.
@@ -1500,6 +1517,7 @@ extracted from the {\tt run.log} file.
   \item[awk.mesh]\index{awk.mesh} Outputs the {\tt mesh.extra} file data in a form usable for {\tt xyplot}.
   \item[awk.notfirst]\index{awk.notfirst} Removes the first column from an array of data.
   \item[awk.plot\_mesh \#1]\index{awk.plot\_mesh} Outputs the mesh specified as \#1 in a form usable for {\tt xyplot}.
+  \item[awk.reverse]\index{awk.reverse} Outputs a file in reverse order.
   \item[awk.transpose]\index{awk.transpose} Transposes an array of data.
   \item[convert\_from\_solps4.3 \#1]\index{convert\_from\_solps4.3} Converts run number \#1 from \${\tt DEVICE} from the SOLPS4.3 ITER archive to a \SOLPSITER run in directory \${\tt SOLPSTOP/runs/}\${\tt DEVICE/}\#1 .
   \item[fixbb]\index{fixbb} A utility script to properly define the bounding box of PostScript files.
@@ -1516,7 +1534,7 @@ extracted from the {\tt run.log} file.
     The location of these files can be modified by use of the {\tt GNUPLOT\_TMP} variable.
   \item[plot\_set]\index{plot\_set} Utility script preparing files for complex plots.
   \item[species]\index{species} Obtains the list of species from {\tt SOLPS\_FLUIDS}.
-  \item[wavelength\_to\_energy]\index{wavelength\_to\_energy} Converts a wavelength (in $m$) to an energy (in $eV$).
+  \item[wavelength\_to\_energy]\index{wavelength\_to\_energy} Converts a wavelength (in $m$) to an energy (in $eV$) (and the reverse).
   \end{description}
 \item Others
   \begin{description}
@@ -1535,6 +1553,7 @@ extracted from the {\tt run.log} file.
   \item[b2run\_hgw\_cluster]\index{b2run\_hgw\_clus} Shortcut to the {\tt Makefile} launching {\tt B2.5} for the IPP--Greifswald cluster. A "-n" option allows for dry-run tests.
   \item[b2sxdr]\index{b2sxdr} Shortcut to the \SOLPSfour to \SOLPSfive
     converter. A "-n" option allows for dry-run tests. A "-d" option allows to run within the chosen debugger. A "-s" option allows to specify the run to convert was not coupled to {\tt Eirene}. A "-h" option prints a help description.
+  \item[copy\_tracing\_files]\index{copy\_tracing\_files} Script to bring tracing files to temporary run directory, if present.
   \item[correct\_baserun\_timestamps]\index{correct\_baserun\_timestamps}
     Makes sure the timestamps for the start-up files in the {\tt baserun}
     directory are in the right chronological order.
@@ -1552,8 +1571,8 @@ extracted from the {\tt run.log} file.
   \item[first\_setup]\index{first\_setup} Creates the {\tt config.}\${\tt {HOST\_NAME}.}\${\tt {COMPILER}} files in each of the \SOLPSITER submodules.
   \item[get\_git\_email]\index{get\_git\_email} Finds the user's email address from the {\tt .gitconfig} file.
   \item[get\_parm.bpl]\index{get\_parm.bpl} extracts certain useful quantities from a run input and output files for use in later scripts, particularly those building \btwoplot command files.
-  \item[gtdr]\index{gtdr} Script to make a directory tree local. [obsolete]
-  \item[gtfl]\index{gtfl} [ANK] Replaces the specified links by the files they are linked to. [obsolete]
+  \item[gtdr]\index{gtdr} Script to make a directory tree local.
+  \item[gtfl]\index{gtfl} Replaces the specified links by the files they are linked to.
   \item[imasdb\_solps-iter]\index{imasdb\_solps-iter}\index{IMAS} Script to load the IMAS ITER scenario database and the \SOLPSITER IMAS database archives
   \item[import\_files\_from\_convert]\index{import\_files\_from\_convert}\index{b2yt} Imports and renames the files produced by {\tt b2yt} in a {\tt convert} directory at the same level as the current directory to prepare the new converted case for a run
   \item[input.dat\_to\_mesh.extra]\index{input.dat\_to\_mesh.extra}\index{input.dat}\index{mesh.extra} Converts standard input (usually directed from a {\tt input.dat} file) into a {\tt mesh.extra} file.
@@ -1564,14 +1583,14 @@ extracted from the {\tt run.log} file.
   \item[jetsubmit]\index{jetsubmit} Command file to launch runs on the JET Analysis Cluster (JAC). See Section \ref{b2run} for details.
   \item[last10]\index{last10} Truncates the {\tt run.log} file to contain only the output from the last 10 written code iterations and stores them in {\tt run.log.last10}.
   \item[localsubmit]\index{localsubmit} Command file to launch runs on the local machine. See Section \ref{b2run} for details.
-  \item[lndr]\index{lndr} [ANK] routine to generate shadow trees.
+  \item[lndr]\index{lndr} routine to generate shadow trees.
   \item[mds\_id]\index{mds\_id} Obtains certain data necessary for run identification when saving to the {\tt MDSplus} database.
   \item[move\_optional\_files]\index{move\_optional\_files} Script used by the run Makefile to check for the existence of optional output files and, upon succesful termination of a run, move these files to the run directory.
   \item[move\_save\_files]\index{move\_save\_files}\index{b2co} Script used by the crash recovery program {\tt b2co} to replace optional run output files with their recovered versions.
   \item[n2d]\index{n2d} Converts "Naka" format equilibrium files to {\tt DG} format (see Sec.~\ref{sec:equtrn}).
   \item[nn2d]\index{nn2d} Converts new "Naka" format equilibrium files to {\tt DG} format (see Sec.~\ref{sec:equtrn}).
-  \item[nereg]\index{nereg} Shows averaged density per region.
   \item[noquote\_pwd]\index{noquote\_pwd} Returns the current working directory as a string without quotes (c.f.\ {\tt quote\_pwd}).
+  \item[obtain\_tracing\_files]\index{obtain\_tracing\_files} Script to grab the last version of the tracing files for run recovery.
   \item[pipe\_b2.log]\index{pipe\_b2.log} Prepares the {\tt B2} log file for use by other scripts.
   \item[pipe\_run.log]\index{pipe\_run.log} Prepares the {\tt B2.5} log file for use by other scripts.
   \item[plot\_mesh \#1 \#2]\index{plot\_mesh} Plots the mesh specified as \#1 accompanied by the {\tt mesh.extra} file specified as \#2 as \#1.ps.
@@ -1597,9 +1616,6 @@ extracted from the {\tt run.log} file.
   \item[summarize\_run]\index{summarize\_run} List of instructions provided during job submission for obtaining a standard set of run diagnostics
   \item[switch\_to\_master]\index{switch\_to\_master} Script to switch to the up-to-date \SOLPSITER master branch.
   \item[truncate\_tracing\_files]\index{truncate\_tracing\_files}\index{b2co} Script used by the crash recovery program {\tt b2co} to truncate the optional tracing files so that they stay synchronized with the recovered plasma state.
-  \item[update\_eirene]\index{update\_eirene} Updates the \${\tt SOLPSTOP/modules/Eirene} directory.
-  \item[update\_libs]\index{update\_libs} Updates the \${\tt SOLPSTOP/src/lib} directory.
-  \item[update\_links]\index{update\_links} Updates linked files to the {\tt SOLPS} Master in the current directory structure.
   \item[v2d]\index{v2d} Converts {\tt Carre} format equilibrium files to {\tt DG} format (see Sec.~\ref{sec:equtrn}).
   \end{description}
 \end{itemize}
@@ -1639,8 +1655,6 @@ welcome!
   \item[chop\_pwd]\index{chop\_pwd}
   \item[climb\_and\_look\_for]\index{climb\_and\_look\_for}
   \item[cnvtria]\index{cnvtria}
-  \item[copy\_tracing\_files]\index{copy\_tracing\_files}
-  \item[get\_parm.bpl]\index{get\_parm.bpl}
   \item[lln]\index{lln}
   \item[min\_ave\_max.awk]\index{min\_ave\_max.awk}
   \item[plot\_bc\_conpar13]\index{plot\_bc\_conpar13}
@@ -2742,6 +2756,10 @@ which contains
   multiplier to the ion flux limit
 \item[CFLMV]\index{CFLMV} {\tt real},
   multiplier to the viscosity flux limit
+\item[CFLAL]\index{CFLAL} {\tt real},
+  multiplier to the thermo-electric coefficient flux limit
+\item[CFLAB]\index{CFLAB} {\tt real},
+  multiplier to the friction force flux limit
 \item[TRANSPORT\_FILENAME]\index{TRANSPORT\_FILENAME} {\tt filename}, the name of a new
   transport input file that will be read based on a condition
   determined by $\mod(${\tt TIM},{\tt TRANSPORT\_TIME\_MOD}$)>${\tt TRANSPORT\_TIME\_SWITCH}
@@ -2798,6 +2816,8 @@ See also Appendix \ref{lis:b2cdcn} for a more up-to-date description.
 \item[TIME\_FACTOR\_REQUIRED]\index{TIME\_FACTOR\_REQUIRED}
   {\tt real}, related to local source re-scaling
   (see routine {\tt b2srsm.F})
+\item[CORR\_CORE\_DN]\index{CORR\_CORE\_DN} {\tt real array, length NS}, damping parameter for speed-up of the density equations in the core when drifts are activated
+\item[CORR\_CORE\_DN]\index{CORR\_CORE\_DT} {\tt real}, damping parameter for speed-up of the temperature equations in the core when drifts are activated
 \item[CORE\_DT\_SUPPRESSION]\index{CORE\_DT\_SUPPRESSION} {\tt real},
   multiplier to the timestep for the innermost core ring of cells
 \item[CORE\_DT\_FACTOR]\index{CORE\_DT\_FACTOR} {\tt real},
@@ -3154,7 +3174,7 @@ quantities that can be plotted in this way.
 \section{b2pl, the plotting program}
 \index{b2pl}\index{b2plot}\label{sec:b2pl}
 
-%%sed 's:^     [^ ]:@@@:' $SOLPSTOP/modules/B2.5/src/b2plot/b2plot.F | awk 'BEGIN{save=""}/^[^@][^@][^@]/&&save!=""{print save}/^[^@][^@][^@]/{save=$0}/^@@@/{save=save" "$0}END{print save}' | sed 's; *@@@ *;;g' | egrep "case *\( *'|description *=" | sed -e "s;.*case *('\(.*\)');cmd: \1;" -e "s; *description *= *'\(.*\)';desc: \1;" -e "s;' //';;" | awk -F: 'BEGIN{save=""}/^cmd/&&save!=""{print save}/^cmd:/{save=$2}/^desc/{save=save"\t "$2}END{print save}' | sed 's:\! ::' | sed "s:',':,:g" | sed "s:'':':g" | expand >! b2plot.commands
+%%sed 's:^     [^ ]:@@@:' $SOLPSTOP/modules/B2.5/src/b2plot/b2plot.F | awk 'BEGIN{save=""}/^[^@][^@][^@]/&&save!=""{print save}/^[^@][^@][^@]/{save=$0}/^@@@/{save=save" "$0}END{print save}' | sed 's; *@@@ *;;g' | grep -v "IGNORE" | egrep "case *\( *'|description *=" | sed -e "s;.*case *('\(.*\)');cmd: \1;" -e "s; *description *= *'\(.*\)';desc: \1;" -e "s;' //';;" | awk -F: 'BEGIN{save=""}/^cmd/&&save!=""{print save}/^cmd:/{save=$2}/^desc/{save=save"\t "$2}END{print save}' | sed 's:\! ::' | sed "s:',':,:g" | sed "s:'':':g" | expand >! b2plot.commands
 
 The following commands apply:
 
@@ -3694,7 +3714,7 @@ and data files. The switches to obtain this are:
   \item["invert\_bpol" "1"] Inverts the poloidal field and related quantities
   \item["invert\_btor" "1"] Inverts the toroidal field and related quantities
 \end{description}
-This option {\em must} also be used if converting from an older {\bf SOLPS4.3} or {\bf SOLPS5.0} case, if the geometry file has been rebuilt, as the sign convention for the parallel velocity now depends on the sign of the magnetic field in \SOLPSITERns.
+This is important because the parallel velocity is co-aligned with the magnetic field in \SOLPSITERns, which was not the case in earlier code versions (please consult Section~\ref{sec:signs} for a full description of the sign conventions used in \SOLPSITERns). For instance, if you are converting from an older {\bf SOLPS4.3} case (where the magnetic field components were always positive by default), you need to use these switches to adapt the plasma solution and the geometry files. This is done automatically for ITER cases when using the {\tt convert\_from\_solps4.3} script.
 
 {\tt b2yt} may also be used
 to change the order of species (for example changing from $D+C+He$ to $D+He+C$) or for
@@ -3973,7 +3993,7 @@ This routine saves the final output state of a run into an IDS (Interface Data S
 It reads the {\tt b2mndr\_id*} switch group, defined in {\tt b2mn.dat}:
 \begin{itemize}
   \item {\tt b2mndr\_user} defines the user name and it is set by default to be the same as the \${\tt USER} environment variable.
-  \item {\tt b2mndr\_device} defines the device name and it is set by default to be the same as the \${\tt DEVICE} environment variable.
+  \item {\tt b2mndr\_device} defines the device name and it is set by default to be the same as the \${\tt DEVICE} environment variable. If {\tt DEVICE} has been left undefined, the device will be noted as {\tt 'solps-iter'}.
   \item {\tt b2mndr\_shot\_number} defines the shot number
   \item {\tt b2mndr\_run\_number} defines the run number
 \end{itemize}
@@ -3981,6 +4001,8 @@ These switches are used as identification parameters for the IDS. Afterwards, a
 {\tt b2mn} run is being initialized but {\em not} started, so that the final
 output state data is read. Then the data is written to an IDS, with the
 {\tt b2mndr\_id*} switchgroup used as identification descriptors.
+
+Concerning the assignment of shot and run numbers, the following rules are in effect. The shot number is a six digit number between 1 and 214748. ITER shot numbers shall start with a 1, the second digit represents the majority fuelling species (0:H, 1:He, 2:D, 3:D-T, 4:T, 5:others, the sequence reflecting the order in which fuel gases are expected to be used in the ITER Research Plan), and the last four digits identify the simulation. Because multiple codes are all writing to the same database and we want to avoid clashes, different "slices" of numbers have been assigned for various codes. We will use numbers {\tt 1x2000} to {\tt 1x2999} for transferring existing simulations from the {\bf SOLPS 4.3} database to IMAS, and {\tt 1x3000} to {\tt 1x3499} for new \SOLPSITER cases. Run numbers should start at 1, and be incremented every time a new version of the same simulation (say after a re-run because a bug in the code was fixed) is being stored in the archive. When changing important run parameters such as gas puffing rates, turning on drifts, etc..., a new shot number should be used. Until a more automatic way of assigning numbers (and a better overall scheme) can be implemented, please send an email to the IO code responsible officer ({\tt Xavier.Bonnin@iter.org}), when you wish to obtain a new shot number, as the IO will keep track of those already assigned. IMPORTANT: {\em When publishing SOLPS-ITER results with IO co-authors involved, archiving into the public IMAS database of the simulations on which the published work is based is mandatory.}
 
 \newpage
 \section{b2xx, the others}
@@ -4284,7 +4306,7 @@ The data blocks are:
   \item[dmb2] Molecule density ($m^{-3}$), dimension ({\tt NDX},{\tt NDY},{\tt NMOL})
   \item[tmb2] Molecule temperature ($eV$), dimension ({\tt NDX},{\tt NDY},{\tt NMOL})
   \item[dib2] Test ion density ($m^{-3}$), dimension ({\tt NDX},{\tt NDY},{\tt NION})
-  \item[tib2] Test ion temperature ($m^{-3}$), dimension ({\tt NDX},{\tt NDY},{\tt NION})
+  \item[tib2] Test ion temperature ($eV$), dimension ({\tt NDX},{\tt NDY},{\tt NION})
   \item[rfluxa] Radial flux density of atoms ($m^{-2}.s^{-1}$), dimension ({\tt NDX},{\tt NDY},{\tt NATM})
   \item[rfluxm] Radial flux density of molecules ($m^{-2}.s^{-1}$), dimension ({\tt NDX},{\tt NDY},{\tt NMOL})
   \item[pfluxa] Poloidal flux density of atoms ($m^{-2}.s^{-1}$), dimension ({\tt NDX},{\tt NDY},{\tt NATM})
@@ -4336,14 +4358,14 @@ The data blocks are:
   \end{description}
   \item[isrftype] {\tt ILIIN} surface type variable in {\tt Eirene}, dimension ({\tt NLIM}+{\tt NSTS})
   \item[wlarea] Surface area ($m^2$), dimension ({\tt NLIM}+{\tt NSTS})
-  \item[wlabsrp(A)] Absorption rate for atoms, dimension ({\tt NLIM}+{\tt NSTS}, {\tt NATM})
-  \item[wlabsrp(M)] Absorption rate for molecules, dimension ({\tt NLIM}+{\tt NSTS}, {\tt NMOL})
-  \item[wlabsrp(I)] Absorption rate for test ions, dimension ({\tt NLIM}+{\tt NSTS}, {\tt NION})
-  \item[wlabsrp(P)] Absorption rate for plasma ions, dimension ({\tt NLIM}+{\tt NSTS}, {\tt NPLS})
-  \item[wlpump(A)] Pumped flux per atom ($A$), dimension ({\tt NLIM}+{\tt NSTS}, {\tt NATM})
-  \item[wlpump(M)] Pumped flux per molecule ($A$), dimension ({\tt NLIM}+{\tt NSTS}, {\tt NMOL})
-  \item[wlpump(I)] Pumped flux per test ion ($A$), dimension ({\tt NLIM}+{\tt NSTS}, {\tt NION})
-  \item[wlpump(P)] Pumped flux per plasma ion ($A$), dimension ({\tt NLIM}+{\tt NSTS}, {\tt NPLS})
+  \item[wlabsrp(A)] Absorption rate for atoms, dimension ({\tt NATM}, {\tt NLIM}+{\tt NSTS})
+  \item[wlabsrp(M)] Absorption rate for molecules, dimension ({\tt NMOL}, {\tt NLIM}+{\tt NSTS})
+  \item[wlabsrp(I)] Absorption rate for test ions, dimension ({\tt NION}, {\tt NLIM}+{\tt NSTS})
+  \item[wlabsrp(P)] Absorption rate for plasma ions, dimension ({\tt NPLS}, {\tt NLIM}+{\tt NSTS})
+  \item[wlpump(A)] Pumped flux per atom ($A$), dimension ({\tt NATM}, {\tt NLIM}+{\tt NSTS})
+  \item[wlpump(M)] Pumped flux per molecule ($A$), dimension ({\tt NMOL}, {\tt NLIM}+{\tt NSTS})
+  \item[wlpump(I)] Pumped flux per test ion ($A$), dimension ({\tt NION}, {\tt NLIM}+{\tt NSTS})
+  \item[wlpump(P)] Pumped flux per plasma ion ($A$), dimension ({\tt NPLS}, {\tt NLIM}+{\tt NSTS})
   \item[eneutrad] Radiation rate due to atoms ($W$), dimension ({\tt NDX},{\tt NDY},{\tt NATM})
   \item[eirdiag\_nds] Indices for segments on resolved non-standard surfaces, dimension ($5 \times$ {\tt NSTS} $+ 1$)
   \item[sarea\_res] Surface area of surface segment ($m^2$), dimension ({\tt NCL})
@@ -4557,7 +4579,7 @@ several values of $\Delta_t$.
 \end{figure}
 
 \section{Averaging scheme}
-\label{sec:B2Eirene:averaging}\index{Averaging}
+\label{sec:B2Eirene:averaging}\index{Averaging}\index{b2faveri}\index{b2favere}\index{b2fstate}\index{b2fstati}
 
 When running a coupled \SOLPSITER case to obtain a steady-state solution, it is recommended to use the source
 averaging scheme detailed in \${\tt SOLPSTOP/doc/SOLPS-ITER\_Eirene\_averaging.pdf} and references therein. This averaging scheme is meant to yield significant
@@ -4566,7 +4588,7 @@ run speed-up and lower the statistical error introduced by the {\tt Eirene} Mont
 The averaging scheme works in three stages:
 \begin{enumerate}\index{res\_av}\index{run\_av}
   \item{A transient phase} during which the code is run normally, until all the short transients die out and the solution approaches its steady state.
-  \item{An averaging phase}, turned on by means of the {\tt 'b2mndt\_av'} switch in the {\tt b2mn.dat} input file, usually with a smaller number of {\tt Eirene} trajectories, during which batch averaging will be done to obtain an averaged steady-state solution. This stage can be prepared by means of the {\tt run\_av} script and uses the {\tt input\_avg.eir Eirene} input file prepared by {\tt Uinp} if available.
+  \item{An averaging phase}, turned on by means of the {\tt 'b2mndt\_av'} switch in the {\tt b2mn.dat} input file, usually with a smaller number of {\tt Eirene} trajectories, during which batch averaging will be done to obtain an averaged steady-state solution. This stage can be prepared by means of the {\tt run\_av} script and uses the {\tt input\_avg.eir Eirene} input file prepared by {\tt Uinp} if available. When continuing a run in this phase, the user needs to provide both the instantaneous and averaged solutions from the previous run, i.e. do {\tt mv b2favere b2faveri} in addition to {\tt mv b2fstate b2fstati}.
   \item{A finalization phase} where the averaged steady-state solution is used for a small number of timesteps, and a larger number of {\tt Eirene} trajectories, to reduce statistical noise. This is done by running the {\tt res\_av} script and uses the {\tt input\_fin.eir Eirene} input file prepared by {\tt Uinp} if available.
 \end{enumerate}
 
@@ -5895,7 +5917,7 @@ as the inertia terms.
 Parallel viscosity is represented
 by the fourth and fifth terms in the r.h.s.
 The former is the Balescu
-parallel viscosity with coefficient $\eta _0 = \dfrac{4}{3} 0.96 \sqrt{2} n T_i / \nu_{ii}$.
+parallel viscosity with coefficient $\eta _0 = \dfrac{4}{3} 0.96 \sqrt{2} n T_i / \nu_{ii}$. A detailed derivation is given at the end of this section, see~\ref{sec:viscosity}.
 The latter corresponds to the parallel viscosity driven
 by parallel ion heat flux
 $q_{i\parallel}^{\left( 0 \right)} =
@@ -6417,6 +6439,56 @@ In {\tt B2.5} only the contribution
 from anomalous radial particle flux to the convective heat flux are left
 in the expressions for $\tilde{q}_{e,i}$. In the term
 $p_i \nabla \cdot \vec{V}_i$ the anomalous particle flux is absent.
+
+\subsection{Derivation of parallel viscosity term in momentum equation}
+\index{parallel viscosity}\label{sec:viscosity}
+
+To evaluate the parallel viscosity contribution we should start from the general expressions, which can be transformed and simplified in arbitrary Cartesian coordinate system assuming only parallel velocity. The Braginskii description for parallel viscosity in Cartesian coordinates is:
+
+\begin{equation*}
+\pi_{\alpha \beta} = \frac{3}{2} \eta_0 \left( b_\alpha b_\beta - \frac{1}{3} \delta_{\alpha \beta} \right) \left( b_\mu b_\nu - \frac{1}{3} \delta_{\mu \nu} \right) W_{\mu \nu}
+\end{equation*}
+
+where
+
+\begin{equation*}
+W_{\mu \nu} = \frac{\partial V_\mu}{\partial x_\nu} + \frac{\partial V_\nu}{\partial x_\mu} - \frac{2}{3} \delta_{\mu \nu} \frac{\partial V_i}{\partial x_i}, ~\vec{b} = \vec{B}/B .
+\end{equation*}
+
+The parallel momentum balance component is:
+
+\begin{equation*}
+\vec{b} \cdot \left( \nabla \cdot \overleftrightarrow{\pi} \right) = b_\alpha \frac{\partial \pi_{\alpha \beta}}{\partial x_\beta} = b_\alpha \frac{\partial}{\partial x_\beta} \left[ \frac{3}{2} \eta_0 \left( b_\alpha b_\beta - \frac{1}{3} \delta_{\alpha \beta} \right) \left( b_\mu b_\nu - \frac{1}{3} \delta_{\mu \nu} \right) W_{\mu \nu} \right]
+\end{equation*}
+
+We can evaluate the scalar value separately:
+
+\begin{align*}
+\pi_0 &= \frac{3}{2} \eta_0 W_{\parallel \parallel} = \frac{3}{2} \eta_0 \left( b_\mu b_\nu - \frac{1}{3} \delta_{\mu \nu} \right) W_{\mu \nu} \\
+&= \frac{3}{2} \eta_0 \left(  b_\mu b_\nu - \frac{1}{3} \delta_{\mu \nu} \right) \left( \frac{\partial V_\mu}{\partial x_\nu} + \frac{\partial V_\nu}{\partial x_\mu} - \frac{2}{3} \delta_{\mu \nu} \frac{\partial V_i}{\partial x_i} \right) = 3 \eta_0 \left(  b_\mu b_\nu - \frac{1}{3} \delta_{\mu \nu} \right) \left( \frac{\partial V_\mu}{\partial x_\nu} - \frac{1}{3} \delta_{\mu \nu} \frac{\partial V_i}{\partial x_i} \right) \\
+&= 3 \eta_0 \left( b_\mu b_\nu \frac{\partial V_\mu}{\partial x_\nu} - \frac{1}{3} \frac{\partial V_i}{\partial x_i} \right) = 3 \eta_0 \left( b_\mu b_\nu \frac{\partial V_\parallel b_\mu}{\partial x_\nu} - \frac{1}{3} \frac{\partial V_\parallel b_\nu}{\partial x_\nu} \right) \\ 
+&= 3 \eta_0 \left( \frac{B_\nu}{B} \frac{\partial V_\parallel}{\partial x_\nu} - \frac{1}{3} B_\nu \frac{\partial V_\parallel / B}{\partial x_\nu} \right) = \eta_0 \frac{B_\nu}{B} \left( 2 \frac{\partial V_\parallel}{\partial x_\nu} + \frac{V_\parallel}{B} \frac{\partial B}{\partial x_\nu} \right) \\
+&= 2 \eta_0 \frac{B_\nu}{B} \frac{1}{\sqrt{B}} \frac{\partial V_\parallel \sqrt{B}}{\partial x_\nu} = 2 \eta_0 \frac{1}{\sqrt{B}} \vec{b} \cdot \nabla \left ( V_\parallel \sqrt{B} \right)
+\end{align*}
+
+The projection of the viscosity divergence on the parallel direction is then:
+
+\begin{align*}
+\vec{b} \cdot \left( \nabla \cdot \overleftrightarrow{\pi} \right) &= b_\alpha \frac{\partial}{\partial x_\beta} \left[ \pi_0 \left( b_\alpha b_\beta - \frac{1}{3} \delta_{\alpha \beta} \right) \right] = \frac{\partial \pi_0 b_\alpha}{\partial x_\alpha} - \frac{1}{3} b_\alpha \frac{\partial \pi_0}{\partial x_\alpha} = B_\alpha \frac{\partial \pi_0 / B}{\partial x_\alpha} - \frac{1}{3} b_\alpha \frac{\partial \pi_0}{\partial x_\alpha} \\
+&= \frac{2}{3} b_\alpha \frac{\partial \pi_0}{\partial x_\alpha} - \pi_0 \frac{b_\alpha}{B} \frac{\partial B}{\partial x_\alpha} = \frac{2}{3} B^{3/2} b_\alpha \frac{\partial \pi_0 B^{-3/2}}{\partial x_\alpha} = \frac{2}{3} B^{3/2} \vec{b} \cdot \nabla \left( \pi_0 B^{-3/2} \right)
+\end{align*}
+
+Then the parallel viscosity in the parallel momentum balance is:
+
+\begin{equation*}
+\vec{b} \cdot \left( \nabla \cdot \overleftrightarrow{\pi} \right) = \frac{4}{3} B^{3/2} \vec{b} \cdot \nabla \left( \frac{\eta_0}{B^2} \vec{b} \cdot \nabla \left( V_\parallel \sqrt{B} \right) \right), ~ \mbox{where} ~ V_\parallel = \vec{b} \cdot \vec{V}
+\end{equation*}
+
+For \SOLPSITERns, the orthogonal coordinates $(x,r,z)$ are more convenient for further evaluations than the non-orthogonal coordinates $(x,y,z)$. In these coordinates, it is readily seen that $\vec{b} \cdot \nabla f = b_x \frac{\partial f}{h_x \partial x}$ for any scalar function $f$. The viscosity can be finally written as:
+
+\begin{equation*}
+\vec{b} \cdot \left( \nabla \cdot \overleftrightarrow{\pi} \right) = \frac{4}{3} b_x B^{\frac{3}{2}} \frac{\partial}{h_x \partial x} \left( \frac{\eta_0 b_x}{B} \frac{\partial \left( B^{\frac{1}{2}} V_\parallel \right)}{h_x \partial x} \right)
+\end{equation*}  
 
 \section{Boundary conditions with drifts and currents}
 \index{drifts and currents, boundary conditions}
@@ -6953,7 +7025,7 @@ Zhdanov fit to Braginskii and the \SOLPSfour values.
 
 The version of the equations shown in this Appendix represents the best available description of the standard recommended settings for the \SOLPSITER physics model, built upon the original work on {\bf SOLPS5.2} from the St. Petersburg group \cite{ROZHANSKY2009}. This Appendix is not meant as an exhaustive registry of the capabilities of the code, for which the reader is encouraged to peruse Chapters \ref{cha:standaloneb2} and \ref{cha:coupledb2eirene} as well as the list of switches in Appendix \ref{lis:b2cdci} and of namelist variables in Appendix \ref{lis:b2cdcn}.
 
-\section*{Sign conventions}\index{sign conventions}
+\section{Sign conventions}\index{sign conventions}\label{sec:signs}
 
 The radial coordinate $y$ increases as one crosses the separatrix from the core (or private flux) region into the main SOL region (and so is minimum at the magnetic axis). The poloidal coordinate $x$ increases in the {\em clockwise} direction when viewing the poloidal plane with the central axis line on its left. The toroidal magnetic field component $b_z$ is taken as positive if the toroidal magnetic field is directed {\em clockwise} when viewing the tokamak from above. The poloidal magnetic field component $b_x$ follows the same convention as the $x$ component and is positive when directed in the direction of increasing poloidal index, i.e. {\em clockwise}.
 
@@ -6969,14 +7041,14 @@ Is it important to know, that, in the equations below, the parallel velocity $V_
 
 \begin{equation}
 \begin{matrix}
-\widetilde{ \Gamma}_{ax} =& \left( b_x V_{\parallel a} + V_{ax}^{\left( E \right)} + V_{ax}^{\left( AN \right)} + V_a^{corr\_dpc} \right) n_a + 0 \cdot \frac{\delta_{1,a}}{e} \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + 0 \cdot \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} \right) \\
+\widetilde{ \Gamma}_{ax} =& \left( b_x V_{\parallel a} + V_{ax}^{\left( E \right)} + V_{ax}^{\left( AN \right)} + V_a^{corr\_dpc} \right) n_a + 0 \cdot \frac{\delta_{1,a}}{e} \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} \right) \\
 &- D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x} - \widetilde{D}_{p,ax} \frac{1}{h_x} \frac{\partial p_a}{\partial x} - D_{axy} \frac{1}{h_y} \frac{\partial n_a T_i}{\partial y}
 \end{matrix}
 \end{equation}
 
 \begin{equation}
 \begin{matrix}
-\widetilde{ \Gamma}_{ay} =& \left( V_{ay}^{\left( E \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \frac{\delta_{1,a}}{e} \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + 0 \cdot \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} \right) \\
+\widetilde{ \Gamma}_{ay} =& \left( V_{ay}^{\left( E \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \frac{\delta_{1,a}}{e} \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} \right) \\
 & - D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y} - \widetilde{D}_{p,ay} \frac{1}{h_y} \frac{\partial p_a}{\partial y} + D_{ayx} \frac{1}{h_x} \frac{\partial n_a T_i}{\partial x}
 \end{matrix}
 \end{equation}
@@ -6984,13 +7056,13 @@ Is it important to know, that, in the equations below, the parallel velocity $V_
 \begin{equation}
 \begin{matrix}
 \Gamma_{ax} =& \left( b_x V_{\parallel a} + V_{ax}^{\left( E \right)} + \widetilde{V}_{ax}^{\left( dia \right)} + V_{ax}^{\left( AN \right)} + V_a^{corr\_dpc} \right) n_a + \\
-0 \cdot \frac{\delta_{1,a}}{e} & \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + 0 \cdot \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x} - \widetilde{D}_{p,ax} \frac{1}{h_x} \frac{\partial p_a}{\partial x}
+& 0 \cdot \frac{\delta_{1,a}}{e} \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x} - \widetilde{D}_{p,ax} \frac{1}{h_x} \frac{\partial p_a}{\partial x}
 \end{matrix}
 \end{equation}
 
 \begin{equation}
 \begin{matrix}
-\Gamma_{ay} =& \left( V_{ay}^{\left( E \right)} + \widetilde{V}_{ay}^{\left( dia \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \frac{\delta_{1,a}}{e} \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + 0 \cdot \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} \right) \\
+\Gamma_{ay} =& \left( V_{ay}^{\left( E \right)} + \widetilde{V}_{ay}^{\left( dia \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \frac{\delta_{1,a}}{e} \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} \right) \\
 &- D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y} - \widetilde{D}_{p,ay} \frac{1}{h_y} \frac{\partial p_a}{\partial y}
 \end{matrix}
 \end{equation}
@@ -6998,14 +7070,14 @@ Is it important to know, that, in the equations below, the parallel velocity $V_
 \begin{equation}
 \begin{matrix}
 \Gamma_{ax}^{Cor} =& \left( b_x V_{\parallel a} + V_{ax}^{\left( E \right)} + 2 \widetilde{V}_{ax}^{\left( dia \right)} + V_{ax}^{\left( AN \right)} + V_a^{corr\_dpc} \right) n_a + \\
-0 \cdot \frac{\delta_{1,a}}{e} & \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + 0 \cdot \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x} - \widetilde{D}_{p,ax} \frac{1}{h_x} \frac{\partial p_a}{\partial x}
+& 0 \cdot \frac{\delta_{1,a}}{e} \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x} - \widetilde{D}_{p,ax} \frac{1}{h_x} \frac{\partial p_a}{\partial x}
 \end{matrix}
 \end{equation}
 
 \begin{equation}
 \begin{matrix}
 \Gamma_{ay}^{Cor} =& \left( V_{ay}^{\left( E \right)} + 2 \widetilde{V}_{ay}^{\left( dia \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \\
-\frac{\delta_{1,a}}{e} & \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + 0 \cdot \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y} - \widetilde{D}_{p,ay} \frac{1}{h_y} \frac{\partial p_a}{\partial y}
+& \frac{\delta_{1,a}}{e} \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y} - \widetilde{D}_{p,ay} \frac{1}{h_y} \frac{\partial p_a}{\partial y}
 \end{matrix}
 \end{equation}
 
@@ -7065,14 +7137,14 @@ $\begin{matrix}
 \begin{equation}
 \begin{matrix}
 \Gamma_{ax}^{\left( Eir \right)} =& \left( b_x V_{\parallel a} + V_{ax}^{\left( E \right)} + V_{ax}^{\left( dia \right)} + V_{ax}^{\left( AN \right)} + V_a^{corr\_dpc} \right) n_a + \\
-0 \cdot \frac{\delta_{1,a}}{e} & \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + 0 \cdot \widetilde{j_x}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x}
+& 0 \cdot \frac{\delta_{1,a}}{e} \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x}
 \end{matrix}
 \end{equation}
 
 \begin{equation}
 \begin{matrix}
-\Gamma_{ay}^{\left( Eir \right)} =& \left( V_{ay}^{\left( E \right)} + V_{ya}^{\left( dia \right)} + V_{ay}^{\left( AN \right)} \right) n_a \\
-+ \frac{\delta_{1,a}}{e} & \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + 0 \cdot \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y}
+\Gamma_{ay}^{\left( Eir \right)} =& \left( V_{ay}^{\left( E \right)} + V_{ya}^{\left( dia \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \\
+& \frac{\delta_{1,a}}{e} \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y}
 \end{matrix}
 \end{equation}
 
@@ -7100,7 +7172,7 @@ V_{ay}^{\left( dia \right)} & =
 \end{tabular}
 
 \begin{equation}
-E_{k,a}=\frac{m_a}2 \left[   V^2_{\parallel a}+\left( W_{a\perp}^{\left( dia \right)}+V_{a\perp}^{\left( E \times B \right)}  \right)^2    +   \left(  W_{ay}^{\left( dia \right)} + V_{ay}^{\left( E \times B \right)} \right)^2    \right]
+E_{k,a}=\frac{m_a}2 V^2_{\parallel a}
 \end{equation}
 
 \begin{tabular}{cc}
@@ -7351,7 +7423,7 @@ $D_{f,a}=c_{D_{f,a},0} + c_{D_{f,a},1} \frac{10^{20}}{n_i}
 	c_{D_{f,a},3} n_i + c_{D_{f,a},4} n_e
 },$
 
-\begin{table}[h]
+\begin{table}[ht]
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
 \hline
 $a$ & $c_{D_{f,a},0}$ & $c_{D_{f,a},1}$ & $c_{D_{f,a},2}$ & $c_{D_{f,a},3}$ & $c_{D_{f,a},4}$ & $c_{D_{f,a},5}$ & $c_{D_{f,a},6}$ & $c_{D_{f,a},7}$ \\ \hline
@@ -8486,7 +8558,7 @@ $
 $\widetilde q_{ix} = \widetilde f_{ix} T_i - \kappa_{ix} \frac 1{h_x} \frac{\partial T_i}{\partial x} - q_{ix}^{P.Sch}$
 
 \begin{equation*}
-\widetilde f_{ix} = \frac 3 2 \Gamma_{ix} + V_{ix}^{(str)} n_i + 0 \cdot \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + 0 \cdot \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)}}{e} \right)
+\widetilde f_{ix} = \frac 3 2 \Gamma_{ix} + V_{ix}^{(str)} n_i + 0 \cdot \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)}}{e} \right)
 \end{equation*}
 
 \begin{equation*}
@@ -8498,7 +8570,7 @@ q_{ix} = \left[
 	\frac 3 2 \Gamma_{ix} +
 	\frac 5 2 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \widetilde V_{ax}^{(dia)} +
 	V_{ix}^{(str)} n_i +
-        0 \cdot \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + 0 \cdot \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)}}{e} \right)
+        0 \cdot \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)}}{e} \right)
 \right] T_i
 - \kappa_{ix} \frac 1{h_x} \frac{\partial T_i}{\partial x}
 \end{equation*}
@@ -8695,7 +8767,7 @@ q_{iy}^{P.Sch}
 
 \begin{equation*}
 \widetilde f_{iy} = \frac 3 2 \Gamma_{iy} + V_{iy}^{(str)} n_i + \frac 3 2 \frac{\left(
-	j_y^{(AN)} + \widetilde j_y^{(vis \parallel)} + 0 \cdot \widetilde j_y^{(vis \perp)} + \widetilde j_y^{(visq)} + j_y^{(in)}
+	j_y^{(AN)} + \widetilde j_y^{(vis \parallel)} + \widetilde j_y^{(vis \perp)} + \widetilde j_y^{(visq)} + j_y^{(in)}
 \right)} e
 \end{equation*}
 
@@ -8712,7 +8784,7 @@ q_{iy} = \left[
 	\frac{5}{2} \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \widetilde V_{ay}^{(dia)} +
 	V_{iy}^{(str)} n_i +
 	\frac 3 2 \frac{\left(
-		j_y^{(AN)} + \widetilde j_y^{(vis \parallel)} + 0 \cdot \widetilde j_y^{(vis \perp)} + \widetilde j_y^{(visq)} + j_y^{(in)}
+		j_y^{(AN)} + \widetilde j_y^{(vis \parallel)} + \widetilde j_y^{(vis \perp)} + \widetilde j_y^{(visq)} + j_y^{(in)}
 	\right)} e
 \right] T_i - \kappa_{iy} \frac{1}{h_y} \frac{\partial T_i}{\partial y}
 \end{equation*}
@@ -8901,7 +8973,7 @@ V_{a \perp} =
 0.24 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a = 1~\&~z_{n,a} = 1}}
 \alpha^{NEO} \widetilde{\tau}_a b_z
 \frac{B_x}{B^{\frac{1}{2}}}
-\frac{\partial}{h_y \partial y}
+\frac{\partial}{h_x \partial x}
 \left( \frac{1}{B^2} \right)
 \frac{\partial \left( \widetilde{q}_a^{(0)} B^{\frac{1}{2}} \right)}{h_x \partial x}
 \end{equation}
@@ -11480,7 +11552,7 @@ time, or
 \begin{verbatim}
   2d nesepm tesepm
 \end{verbatim}
-to plot the midplane separatrix electron temperature versus the midplane separatrix electron density.
+to plot the midplane separatrix electron temperature versus the midplane separatrix electron density. The frequency at which (and whether) these quantities are written out is controlled by the {\tt 'b2mndr\_b2time'} switch.
 
 If {\tt 'b2mndr\_stim'} is set to a negative value, data from the current \SOLPSITER run will be appended to the existing {\tt b2time.nc} file, otherwise the file is created anew.
 
@@ -11852,7 +11924,7 @@ pomxap\_std \index{pomxap\_std}\index{b2time.nc, pomxap\_std} & variance for max
 \label{cha:b2tallies}\index{b2tallies.nc, quantities stored
   in}\index{time-dependent quantities, b2tallies.nc}\index{b2tallies.nc}
 
-These are the tallies stored in {\tt b2tallies.nc}.
+These are the tallies stored in {\tt b2tallies.nc}. The frequency at which (and whether) these quantities are written out is controlled by the {\tt 'tallies\_netcdf'} switch.
 
 If {\tt 'b2mndr\_stim'} is set to a negative value, data from the current \SOLPSITER run will be appended to the existing {\tt b2tallies.nc} file, otherwise the file is created anew.
 
@@ -11941,6 +12013,8 @@ qconviyreg \index{qconviyreg}\index{b2tallies.nc, qconviyreg}                   
 rcxhireg \index{rcxhireg}\index{b2tallies.nc, rcxhireg}                          & vreg, ns, time & $W$           & Charge-exchange ion energy source \\
 rcxmoreg \index{rcxmoreg}\index{b2tallies.nc, rcxmoreg}                          & vreg, ns, time & $kg.m.s^{-1}$ & Charge-exchange ion parallel momentum source \\
 rcxnareg \index{rcxnareg}\index{b2tallies.nc, rcxnareg}                          & vreg, ns, time & $s^{-1}$      & Charge-exchange particle source \\
+rdneureg \index{rdenureg}\index{b2tallies.nc, rdneureg}
+ & vreg, time     & $W$           & Total radiation from {\tt Eirene} neutrals \\
 resco\_reg \index{resco\_reg}\index{b2tallies.nc, resco\_reg}                    & vreg, ns, time &               & Continuity equation residuals \\
 reshe\_reg \index{reshe\_reg}\index{b2tallies.nc, reshe\_reg}                    & vreg, time     & $W$           & Electron heat equation residuals \\
 reshi\_reg \index{reshi\_reg}\index{b2tallies.nc, reshi\_reg}                    & vreg, time     & $W$           & Ion heat equation residuals \\
@@ -11950,6 +12024,7 @@ respo\_reg \index{respo\_reg}\index{b2tallies.nc, respo\_reg}                   
 rqahereg \index{rqahereg}\index{b2tallies.nc, rqahereg}                          & vreg, ns, time & $W$           & Electron cooling rate \\
 rqbrmreg \index{rqbrmreg}\index{b2tallies.nc, rqbrmreg}                          & vreg, ns, time & $W$           & Bremsstrahlung \\
 rqradreg \index{rqradreg}\index{b2tallies.nc, rqradreg}                          & vreg, ns, time & $W$           & Line radiation \\
+rdneureg \index{rdneureg}\index{b2tallies.nc, rdneureg}                          & vreg, time     & $W$           & Radiation rate from {\tt Eirene} neutrals \\
 rrahireg \index{rrahireg}\index{b2tallies.nc, rrahireg}                          & vreg, ns, time & $W$           & Recombination ion heat source \\
 rramoreg \index{rramoreg}\index{b2tallies.nc, rramoreg}                          & vreg, ns, time & $kg.m.s^{-1}$ & Recombination parallel momentum source \\
 rranareg \index{rranareg}\index{b2tallies.nc, rranareg}                          & vreg, ns, time & $s^{-1}$      & Recombination particle source \\
@@ -12019,6 +12094,8 @@ $Y$-directed regions:
 region 1 === core boundary
 region 3 === SOL boundary
 \end{verbatim}
+
+In cases where the problem of interest has only one target and a plasma entry surface, the target should be located to the right of the domain and the plasma should enter from the left.
 
 \clearpage
 \section{Regions for limiter cases}
@@ -12641,8 +12718,10 @@ when calculating derived data.
     fnay32   & \index{b2plot, fnay32} Convective radial particle flux $(s^{-1})$ \\
     fnay52   & \index{b2plot, fnay52} Conductive radial particle flux $(s^{-1})$ \\
     fnaynodr & \index{b2plot, fnaynodr} Radial particle flux without drifts $(s^{-1})$ \\
+    fnex     & \index{b2plot, fnex} Poloidal electron flux $(s^{-1})$ \\
     fnex32   & \index{b2plot, fnex32} Convective poloidal electron flux $(s^{-1})$ (Does not include drift contributions) \\
     fnex52   & \index{b2plot, fnex52} Conductive poloidal electron flux $(s^{-1})$ (Does not include drift contributions) \\
+    fney     & \index{b2plot, fney} Radial electron flux $(s^{-1})$ \\
     fney32   & \index{b2plot, fney32} Convective radial electron flux $(s^{-1})$ (Does not include drift contributions) \\
     fney52   & \index{b2plot, fney52} Conductive radial electron flux $(s^{-1})$ (Does not include drift contributions) \\
     fnix32   & \index{b2plot, fnix32} Convective poloidal total ion flux $(s^{-1})$ (Does not include drift contributions) \\
@@ -12698,7 +12777,7 @@ when calculating derived data.
     ne       & \index{b2plot, ne} Electron density $(m^{-3})$ \\
     ne2      & \index{b2plot, ne2} ne2 $(m^{-3})$ \\
     ne\_ext  & \index{b2plot, ne\_ext} Electron density associated with external species $(m^{-3})$ \\
-    neutrad  & \index{b2plot, neutrad} Total power loss due to atom radiation $(W)$ \\
+    neutrad  & \index{b2plot, neutrad} Power loss due to atom radiation $(W)$ \\
     nflfhix  & \index{b2plot, nflfhix} Neutral flux limits for poloidal ion energy flux \\
     nflfhiy  & \index{b2plot, nflfhiy} Neutral flux limits for radial ion energy flux \\
     nflfnax  & \index{b2plot, nflfnax} Neutral flux limits for poloidal particle flux \\
@@ -12778,7 +12857,7 @@ when calculating derived data.
     smq      & \index{b2plot, smq} Total momentum sources $(N)$ \\
     smth     & \index{b2plot, smth} Thermal force $(N)$ \\
     sna      & \index{b2plot, sna} Particle sources $(particles.s^{-1})$ \\
-    srcml    & \index{b2plot, srcml} 'Molecule dissociation rate $(molecules.s^{-1})$ \\
+    srcml    & \index{b2plot, srcml} Molecule dissociation rate $(molecules.s^{-1})$ \\
     str      & \index{b2plot, str} Heating from strange term {\em b2sihs\_str} $(W)$ \\
     sx       & \index{b2plot, sx} Poloidal area of contact for cell $(m^2)$ \\
     sxperp   & \index{b2plot, sxperp} Poloidal area perpendicular to $x$-direction $(m^2)$ \\
@@ -12851,10 +12930,10 @@ Note that the {\bf nreg}, {\bf niso}, {\bf xreg}, and {\bf yreg} commands requir
 argument $\langle$ireg$\rangle$. If $\langle$ireg$\rangle$=0, the arrays will contain the region
 number of each cell. If $\langle$ireg$\rangle$ is greater than 0, the cells in region with index $\langle$ireg$\rangle$ will contain 1.0, and the rest will contain zero. If $\langle$ireg$\rangle$ is less than 0, the cells in region with index --$\langle$ireg$\rangle$ will contain zero, and the rest will contain 1.0.
 
-Similarly, the source arrays {\bf sna}, {\bf smo}, {\bf smq}, {\bf she}, {\bf shi}, and
-{\bf sch} require an integer argument $\langle$isel$\rangle$, varying from 0 to 3 (0 to 1 for {\bf sna}). Then the data
-stack contains the linearized source data according to the description found in Appendix \ref{lis:b2cdcv}.
-The same treatment applies to {\bf smaf}, {\bf smag} and {\bf smav}.
+The source arrays {\bf sna}, {\bf smo}, {\bf smq}, {\bf she}, {\bf shi}, and
+{\bf sch} can take an optional integer argument $\langle$isel$\rangle$, varying from 0 to 3 (0 to 1 for {\bf sna}). Then the data
+stack contains the linearized source data according to the description found in Appendix \ref{lis:b2cdcv}. In the absence of this integer argument, the data stack will contain the total source terms.
+The same treatment applies to {\bf smaf}, {\bf smag}, and {\bf smav}.
 
 For the corner coordinates arrays {\bf crx} and {\bf cry}, an integer argument must be provided to determine the corner
 index according to the following\index{cell corner indices}:
@@ -13064,6 +13143,7 @@ are indicated in the table.
     ndec \index{b2plot, ndec}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:ndec}   & Number of logarithmic decades \\
     new \index{b2plot, new}        & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:new}    & New page \\
     neo\_ic \index{b2plot, neo\_ic} & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:neoic}   & Option for neoclassical calculation \\
+    nice \index{b2plot, nice}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:nice}   & Toggle whether nice axes will be used \\
     noax \index{b2plot, noax}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:noax}   & No axes \\
     nocp \index{b2plot, nocp}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:nocp}   & No contour plot \\
     ocol \index{b2plot, ocol}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:ocol}   & Outline colour \\
@@ -13355,6 +13435,7 @@ act on the "Eirene" stack or affect graphs of those data.
     edrop \index{b2plot, edrop}    & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:edrop}    & Drop top of Eirene stack \\
     edup \index{b2plot, edup}      & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:edup}     & Duplicate top of Eirene stack \\
     eexp \index{b2plot, eexp}      & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:eexp}     & Take exponential of Eirene data \\
+    elbl \index{b2plot, elbl}      & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:elbl}     & Provide a label for the Eirene data graph \\
     elist \index{b2plot, elist}    & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:elist}    & Lists the contents of the Eirene stack \\
     eln \index{b2plot, eln}        & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:eln}      & Take natural logarithm of Eirene data \\
     elog \index{b2plot, elog}      & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:elog}     & Take $log_{10}$ of Eirene data \\
@@ -13798,8 +13879,11 @@ in the table \ref{tab:b2plotconstants}.
     me \index{b2plot, me}     & Electron mass $m_e$ $(kg)$ \\
     mp \index{b2plot, mp}     & Proton mass $m_p$ $(kg)$ \\
     mu0 \index{b2plot, mu0}    & Magnetic permittivity of vacuum $\mu_0$ $(F.m^{-1})$ \\
+    natm \index{b2plot, natm}   & Number of atomic species followed by {\tt Eirene} \\
     nbnd \index{b2plot, nbnd}   & Number of boundary cells \\
     ndepth \index{b2plot, ndepth} & Size of target arrays in depth direction \\
+    nion \index{b2plot, nion}   & Number of molecular ion species followed by {\tt Eirene} \\
+    nmol \index{b2plot, nmol}   & Number of molecular species followed by {\tt Eirene} \\
     ns \index{b2plot, ns}     & Number of species \\
     nspecies \index{b2plot, nspecies}     & Number of homonuclear sequences \\
     nx \index{b2plot, nx}     & Mesh size in poloidal direction \\
@@ -13855,7 +13939,7 @@ The higher the value of $\langle$level$\rangle$, the more output is produced.
 
 The {\bf wlld} command requires an integer argument $\langle$ig$\rangle$. Let
 $\langle$ig$\rangle$ = JKLM. If M \textgreater 0, then the file {\tt radsrc.b2e} is produced,
-containing the radiation sources (in $MW/m^2$). If L \textgreater 0, then the
+containing the radiation sources (in $MW/m^3$). If L \textgreater 0, then the
 file {\em wlld.dat} is produced, which contains the power loading
 from the plasma onto the Eirene walls (this description does not include
 splitting of the targets by the grid and is obsolete). If K \textgreater 0, then a
@@ -13873,7 +13957,7 @@ where the asterisk (*) stands for {\em i} (inner target), {\em iu} (inner upper 
 If J \textgreater 0, then the codes produces a set of {\tt wlld\_*.dat},
 where the asterisk (*) is the name of each "plot zone" defined in the DG model.
 Each such file contains the power loading onto the set of walls defined in that
-plot zone. If LM = 99 and J \textgreater 0, additional diagnostics are produced that indicate the radiation split by isonuclear sequence.\\
+plot zone. If LM = 99 and J \textgreater 0, additional diagnostics are produced that indicate the radiation split by isonuclear sequence. If LM = 98 and J \textgreater 0, additional diagnostics are produced that indicate the radiation coming from the core additional sources. \\
 If the user wants to use the heat transfer model for the monoblock and/or the reflector plates, then he must define in the DG model the inner/outer target, the reflector plates and dome plot zones using the label 'trg[i-o]', '[i-o]rp' and 'dome' respectively. The {\tt wlld\_*.dat} produced should then be postprocessed by b2ymb (see \ref{sec:b2ymb}), b2yrp (\ref{sec:b2yrp}) and b2ydm (\ref{sec:b2ydm}).
 
 
@@ -14966,6 +15050,9 @@ Sets standard label as {\em extralabel}:
 \subsubsection{$<$label, {\bf S}$>$ glbl}\index{b2plot, glbl}\label{sec:glbl}
 Sets the current graph label to $\langle$label$\rangle$.
 
+\subsubsection{$<$label, {\bf S}$>$ elbl}\index{b2plot, elbl}\label{sec:elbl}
+Sets the current Eirene data graph label to $\langle$label$\rangle$.
+
 \subsubsection{$<$number,{\bf I}$>$ $<$label, {\bf S}$>$ slbl}\index{b2plot, slbl}\label{sec:slbl}
 Sets the species label of species index $\langle$number$\rangle$ to $\langle$label$\rangle$ for the current graph.
 
@@ -14994,6 +15081,9 @@ Sets label size to $\langle$factor$\rangle$ times default size (default = 1.0).
 Sets line label font size to $\langle$number$\rangle$ (default = 0). If $\langle$number$\rangle$ is between 0 and 3, then the size
 represents 1., 1.5, 2., and 3. times an 8-plotter address unit width. Otherwise, it represents the character
 width in plotter address units.
+
+\subsubsection{nice}\index{b2plot, nice}\label{sec:nice}
+Toggles whether graphs will use nice axes with rounded values ({\tt .true.} by default).
 
 \subsubsection{noax}\index{b2plot, noax}\label{sec:noax}
 Does not plot axes.
@@ -15225,7 +15315,7 @@ Sets up contour levels according to their proportion inside the plasma domain.
 The levels are arranged so that the integral of the absolute value of
 the data over the region between each two neighbouring level lines is the same.
 If $\langle$npplvm$\rangle$.lt.0, then this integral is equal (approximately)
-to $frac{1}{\|\langle\text{npplvp}\rangle\|}$ of the integral over the whole volume.
+to $\frac{1}{\|\langle\text{npplvp}\rangle\|}$ of the integral over the whole volume.
 If $\langle$npplvm$\rangle$.ge.0, then the regions of positive and negative data
 values are treated separately, with $\|\langle$npplvp$\rangle\|$ data intervals for
 the positive and $\langle$npplvm$\rangle$ for the negative data range. In this case,
@@ -15433,7 +15523,10 @@ Resets plotting output.
 
 \subsubsection{spec}\index{b2plot, spec}\label{sec:spec}
 Generates the spectral line emissivities from the Summers' data stored
-in \${\tt SOLPSTOP/data/summers}.
+in \${\tt SOLPSTOP/modules/B2.5/Database/Summers} (which can be superseded
+by the contents of \${\tt SOLPSTOP/data.local/Summers}). One pre-selected
+diagnostic line per ionization stage is provided. Data is only provided for
+Helium, Boron, Carbon, Oxygen and Neon.
 
 \subsubsection{$<$is,{\bf I}$>$ $<$lambda,{\bf I}$>$ $<$delta,{\bf I}$>$ nspe}\index{b2plot, nspe}\label{sec:nspe}\index{ADAS}
 Generates the spectral line emissivities according to the {\tt ADAS} database \cite{ADAS}, stored in \${\tt SOLPSTOP/modules/adas}
@@ -15504,9 +15597,9 @@ Currently coded functions are:
   \item[ig = -3] Prints out the particle flux integrals onto the targets in file {\tt particle.flx}
   \item[ig = -2] Produces a file {\tt horton.dat} with coordinates of the grid cell centers and the plasma parameters (density, temperatures, neutral density, and so on) in these points
   \item[ig = -1] Produces a file {\tt abramov.dat} with coordinates of the grid cell centers and the plasma parameters (density, temperatures, neutral density) in these points
-  \item[0 < ig $\le$ nx] Produces a file {\tt oleg.dat} with plasma parameters (density, temperature, parallel flow velocity, parallel heat flux) against the distance along the magnetic field along flux surface index $\langle$ig$\rangle$
-  \item[nx < ig < 1000] Produces two files with estimated helium concentration ({\tt fraction.he}) and neutral pressure ({\tt pressure.ntr}) in the PFR for summary plots
-  \item[ig > 1000] Adds a line to the file {\tt ../sum\_tmp/spec\_pwr.dat} with the power entering both divertors, power radiated along the divertor legs, power radiated near the targets, areas of the separatrix branches and mean specific power radiated along the divertor legs per square meter. $\langle$ig$\rangle$ -1000 cells are treated as "close to the targets"
+  \item[0 $\le$ ig $\le$ ny] Produces a file {\tt oleg.dat} with plasma parameters (density, temperature, parallel flow velocity, parallel heat flux) against the distance along the magnetic field along flux surface index $\langle$ig$\rangle$
+  \item[ny $<$ ig $<$ 1000] Produces two files with estimated helium concentration ({\tt fraction.he}) and neutral pressure ({\tt pressure.ntr}) in the PFR for summary plots
+  \item[ig $\ge$ 1000] Adds a line to the file {\tt ../sum\_tmp/spec\_pwr.dat} with the power entering both divertors, power radiated along the divertor legs, power radiated near the targets, areas of the separatrix branches and mean specific power radiated along the divertor legs per square meter. $\langle$ig$\rangle$ -1000 cells are treated as "close to the targets"
 \end{description}
 
 
@@ -15724,7 +15817,7 @@ Camera plot.  The chord file needs to contain some additional
 information on the first line.
 
 \subsection{$<$chord file$>$ echbx}\index{b2plot, echbx}\label{sec:echbx}
-Chord integral Of Eirene data averaged over three chords. Equivalent to
+Chord integral of Eirene data averaged over three chords. Equivalent to
 using the {\bf 3 ave} command.
 
 \subsection{$<$position file$>$ echvl}\index{b2plot, echvl}\label{sec:echvl}
@@ -16477,6 +16570,9 @@ CDF\_MOVIE & b2plot/caltraj.F \\
 CDF\_MOVIE & b2plot/process\_chords.F \\
 CLASSICAL\_CURRENT & transport/b2tdia.F \\
 COMPLICATED & sources/b2stbc\_fb.F \\
+DBG & b2plot/b2ptrdl.F \\
+DBG & b2plot/b2ptrgl.F \\
+DBG & b2plot/b2pwrdld.F \\
 DBG & b2plot/fill.F \\
 DBG & b2plot/init\_wall.F \\
 DBG & b2plot/plotcontour.F \\
@@ -16586,13 +16682,13 @@ NO\_CDF & user/cdfmovie.F \\
 NO\_CDF & utility/cdf\_routines.F \\
 NO\_F01AAF & transport/b2tr21.F \\
 NO\_GETENV & b2plot/b2plot.F \\
-NO\_GETENV & b2plot/dhdata.F \\
 NO\_GETENV & b2plot/spect.F \\
 NO\_GETENV & convert/b2co\_movies\_cdf.F \\
 NO\_GETENV & convert/b2co\_tally\_cdf.F \\
 NO\_GETENV & convert/b2co\_time\_cdf.F \\
 NO\_GETENV & convert/b2co\_wall\_cdf.F \\
 NO\_GETENV & convert/b2mds.F \\
+NO\_GETENV & driver/b2co.F \\
 NO\_GETENV & ids/b2\_ual\_write.F90 \\
 NO\_GETENV & modules/b2mod\_ppout.F \\
 NO\_GETENV & modules/b2mod\_solpstop.F \\
@@ -16708,7 +16804,6 @@ USE\_MPI & preprocessing/b2ar.F \\
 USE\_MPI & preprocessing/b2fgmtry\_mod.F \\
 USE\_MPI & utility/xertst.F \\
 USE\_PXFGETENV & b2plot/b2plot.F \\
-USE\_PXFGETENV & b2plot/dhdata.F \\
 USE\_PXFGETENV & b2plot/initialize\_plotting.F \\
 USE\_PXFGETENV & b2plot/set\_extralabel.F \\
 USE\_PXFGETENV & b2plot/spect.F \\
@@ -17595,7 +17690,7 @@ irregular points. It is convenient to display only irregular points
 while correcting a converted template, because irregularities can be
 seen very easily.
 
-\section{Rotating the view}
+\subsection{Rotating the view}
 \label{sec:rotateview}\index{DG, rotating view}
 
 The display may now be viewed at any angle of rotation. The user may
@@ -17625,7 +17720,7 @@ the rotation angle.
 \label{fig:rotate30}
 \end{figure}
 
-\section{Stretching and shrinking the view}
+\subsection{Stretching and shrinking the view}
 \label{sec:stretchview}\index{DG, stretching and shrinking view}
 
 The aspect ratio may be "unlocked" by enabling the
@@ -17678,7 +17773,7 @@ the aspect ratio, but does not disable {\tt Stretch} mode.
 % We still have Alan's description of the application of the stretch and
 % rotation capability to manipulate mesh cells. Suggest putting it later
 % with mesh related stuff or perhaps in an appendix.
-\section{Top-down view}
+\subsection{Top-down view}
 \label{sec:topdownview}\index{DG, top-down view}
 
 To facilitate visualization and specification of chords
@@ -18010,14 +18105,14 @@ absolute deviation from the separatrix flux.
 
 With this procedure, it is clear that the outermost level must be a flux
 extremum of some element of the structure; we call this element the
-"bounding element". The capability was added to {\tt DG} to record this bounding
-element during surface creation and mark it from within the
+"bounding element". The capability was added to {\tt DG} to record this
+bounding element during surface creation and mark it from within the
 {\tt Create Surface(s)...} dialog. See, e.g., Fig.~\ref{fig:boundingelement}.
 Note that the core region has no bounding
 element. By
-identifying what {\tt DG} considers as the bounding element, we may easily adjust
-the extent of the flux surfaces by moving the bounding element to change the
-level of its extremum. Note that once the structure is
+identifying what {\tt DG} considers as the bounding element, we may easily
+adjust the extent of the flux surfaces by moving the bounding element to
+change the level of its extremum. Note that once the structure is
 changed, the bounding element might different than before.
 
 \begin{figure}[hbtp]
@@ -18103,11 +18198,11 @@ To delete all surfaces, use the {\tt Edit|Delete|Surfaces} menu command.
 \subsection{Defining the X-point}
 \index{DG, X-point}
 
-In some older {\tt DG} version, you must define the X-point before working with grid points. This is
-necessary if version of {\tt DG} used cannot detect the X-point
-location automatically. By defining it, you give {\tt DG} a hint how to
-display grid points and process user input. {\tt DG} does not write the
-X-point location into the output file.
+In some older {\tt DG} version, you must define the X-point before
+working with grid points. This is necessary if version of {\tt DG} used
+cannot detect the X-point location automatically. By defining it, you
+give {\tt DG} a hint how to display grid points and process user input.
+{\tt DG} does not write the X-point location into the output file.
 
 For performance reasons, the separatrix is drawn as series of line
 segments. Because of this, it is not displayed very accurately,
@@ -18127,6 +18222,73 @@ intersecting line segments that could even intersect with surfaces!
 
 With an X-point defined, you can use the {\tt Set X Point} tool to
 redefine it.
+
+\subsection{Limiter configurations}
+\index{DG, limiter configurations}
+
+If you are dealing with a limiter configuration, {\tt DG} needs to be
+"tricked", because its internal algorithm requires some quantities that
+can only be computed in a divertor topology. The implemented solution
+is to provide two sets of variables, one of which is a dummy only used
+to satisfy the {\tt DG} internal requirements, and another set that
+provides the actual equilibrium information.
+
+The procedure to follow is:
+\begin{enumerate}
+  \item {\tt Import} a single-null {\tt Equilibrium}. The best would be
+something of a very different size, so that it lies completely outside the
+geometry you really want to model. {\tt Import} the single-null
+{\tt Topology}. {\tt Create} a {\tt Surface} in the core region of the
+diverted equilibrium as usual - preferably at about the same depth that you
+will want for the limiter case grid. Create also two closed polygons
+to act as targets for this SN equilibrium. Declare them as {\tt Inner target}
+and {\tt Outer target}, and include them as part of the {\tt Structure}
+in the usual way, as decribed in Section~\ref{sec:createsurfaces}.
+  \item {\tt Add} a {\tt Limiter configuration} variable, and cut and paste the
+name of the limiter configuration equilibrium file into the
+{\tt Real equilibrium} there. Specify the depth of the grid you wish to obtain
+by setting the {\tt Core width} (in units of $m$).
+  \item Include the limiter walls in the {\tt Structure}, plus some
+grid-limiting parts if needed.
+  \item The {\tt Target specification} variables refer to the
+two halves of the limiter on either side of the tangency point. Provide there
+all relevant material and sputtering properties. {\tt Targets \#1} and 
+{\tt \#2} should be positioned so that you travel
+clockwise around the plasma when going from {\tt Target \#1} to
+{\tt Target \#2}. Use the real elements you want to be reconnected to the
+grid corners as the {\tt SOL edges}. For the {\tt PFR edges}, create two
+fake elements and specify 0 as the {\tt Surface Type} in the
+{\tt General Surface Data} for these two elements. Although these may be
+fictitious elemens, they must NOT be included in the
+{\tt Elements not for Eirene} list.
+  \item Create the {\tt Surfaces} and {\tt Grid points} as usual.
+Only the {\tt Core} zone for the {\tt Grid points} and the {\tt SOL} and
+{\tt Core} areas for the {\tt Surfaces} are meaningful.
+  \item In {\tt Global Eirene data}, make sure that the {\tt Major radius}
+is set to its real positive value (in units of $cm$).
+  \item As usual, define all other variables ({\tt Surface data},
+{\tt Gas puff}, {\tt Plasma species}, etc...) as needed. When defining the
+{\tt TRIA-EIRENE parameters}, define the contour indices as they pertain to
+the limiter configuration equilibrium.
+\end{enumerate}
+
+\index{lns}
+Once you are finished setting up all the case variables, follow the
+usual procedure: {\tt Output} the case files, use the {\tt lns} script to
+establish the necessary symbolic links (the scripts checks if you are doing
+a limiter case, and, if so, will have {\tt dg.equ} link to the
+file you indicated as the {\tt Real equilibrium}), then use the {\tt carre -}
+script to create the grid, {\tt Import} the {\tt Grid} and inspect it.
+You may have to play with the usual settings for the grid generation,
+such as the {\tt Surfaces} and {\tt Grid points} together with the
+{\tt Carre guard length} in the {\tt Target specifications}, and also with
+the {\tt Core width} in the {\tt Limiter configuration} in order to get the
+grid which suits you and is acceptable for the plasma modelling code (no pink
+segments in the grid). If you find it impossible to create the necessary
+distribution of the surfaces or the grid points because of local extrema
+appearing on the visualisation curve, then try to adjust the
+{\tt Radial scale} or {\tt Poloidal scale} in the {\tt Limiter configuration}
+layer.
 
 \subsection{Creating and editing grid points}
 \index{DG, grid points}

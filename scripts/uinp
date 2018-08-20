@@ -2,6 +2,11 @@
 
 #  VERSION : 03.08.2000 17:07
 
+solpstop=`climb_and_look_for SOLPSTOP`
+[ -s $solpstop ] && {
+  SOLPSTOP="`cat $solpstop`"
+}
+
 while true; do {
   [ "$1" = '' ] && break
   { case $1 in

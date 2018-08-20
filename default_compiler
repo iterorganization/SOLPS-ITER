@@ -36,11 +36,11 @@ case "SWIP":
   breaksw
 case "CCFE":
 case "ENEA":
-case "ORNL":
 case "PPPL":
   echo pgf90
   breaksw
 case "MEPHI":
+case "ORNL":
 case "WM":
   echo gfortran
   breaksw

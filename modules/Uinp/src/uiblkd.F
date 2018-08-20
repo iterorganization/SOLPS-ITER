@@ -332,7 +332,7 @@ c*** 4
       data spcdns / 1,2,2,3,1, 1,2,2,3,1, 1,2,2,3,1,
      ,  3*0, 7*0, 11*0, 19*0,
      ,  3*0,0,0,1,2,3,1,2,3,4,0,1,7*0, 5*0, 0,0 /
-      data l_n2 /
+      data no_n2 /
      ,  3*.true.,.false.,.true.,
      ,  3*.true.,.false.,.true.,
      ,  3*.true.,.false.,.true.,
@@ -410,8 +410,8 @@ c*** 4
       data (rctddbs(i,8),i=1,lurctdn)  / 2*'AMJUEL' /
       data (rctddbs(i,9),i=1,lurctdbe) / 2*'AMJUEL' /
       data (rctddbs(i,10),i=1,lurctdh2p) / 4*'AMJUEL' /
-      data (rctddbs(i,11),i=1,lurctdnp) / 2*'AMJUEL' /
-      data (rctddbs(i,12),i=1,lurctdcp) / 2*'AMJUEL' /
+      data (rctddbs(i,11),i=1,lurctdnp) / 2*'ADAS' /
+      data (rctddbs(i,12),i=1,lurctdcp) / 2*'ADAS' /
       data (rctddbs(i,13),i=1,lurctdx) / 2*'ADAS' /
       data (rctddbs(i,14),i=1,lurctdxp) / 2*'ADAS' /
       data (rctdchp(i,1),i=1,lurctdh)  / 'H.4','H.10','H.1','H.3' /
@@ -441,8 +441,8 @@ c*** 4
       data (rctdrct(i,9),i=1,lurctdbe) / 2*'2.4B0' /
       data (rctdrct(i,10),i=1,lurctdh2p) 
      .                        / '2.2.12','2.2.11',2*'2.2.14' /
-      data (rctdrct(i,11),i=1,lurctdnp) / 2*'2.3.7A0' /
-      data (rctdrct(i,12),i=1,lurctdcp) / 2*'2.3.6A0' /
+      data (rctdrct(i,11),i=1,lurctdnp) / 'acd', 'prb' /
+      data (rctdrct(i,12),i=1,lurctdcp) / 'acd', 'prb' /
       data (rctdrct(i,13),i=1,lurctdx) / 'scd', 'plt' /
       data (rctdrct(i,14),i=1,lurctdxp) / 'acd', 'prb' /
       data (rctdptin(i,1),i=1,lurctdh)  / 2*' ', 2*'H+' /

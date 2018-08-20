@@ -1,12 +1,12 @@
-#! /bin/bash
+#! /bin/tcsh -f
 
 # IMAS Database setting
 echo "Linking to the IMAS ITER scenario database"
 imasdb /work/imas/shared/iterdb/3
 echo "Setting an IMAS solps-iter directory"
 imasdb solps-iter
-[ -n ${DEVICE} ] && {
+if ($?DEVICE) then
   echo "Setting an IMAS ${DEVICE} directory"
   imasdb ${DEVICE}
-}
+endif
 

@@ -455,7 +455,8 @@ else
 $(target_co) : b2mn.dat b2fgmtry b2fpardf b2fstati ${PLASMASTATE} ${savefiles}
 endif
 	-rm -rf b2co.exe.dir >& /dev/null ; mkdir b2co.exe.dir ; cp $^ b2co.exe.dir
-	-cd b2co.exe.dir ; mkdir tracing ; copy_tracing_files
+	-cd b2co.exe.dir ; mkdir tracing
+	obtain_tracing_files
 	rm -f $(target_co)
 	cd b2co.exe.dir ; ${TIME} ${B2OBJ}/b2co.exe ${RUN_OPTIONS} `basename ${PLASMASTATE}` ; truncate_tracing_files ; mv $(target_co) b2fstate .. ; move_save_files ; rm -f $(notdir $^) ds? .quit >& /dev/null
 ifndef STAND_ALONE
@@ -475,6 +476,7 @@ endif
 	-[ -e b2co.exe.dir/tracing/user.trc ] && rm b2co.exe.dir/tracing/user.trc || echo > /dev/null
 	-[ -e b2co.exe.dir/tracing/user.trc.n.01 ] && rm b2co.exe.dir/tracing/user.trc.n.01 || echo > /dev/null
 	-[ -e b2co.exe.dir/tracing ] && rmdir b2co.exe.dir/tracing || echo > /dev/null
+	-[ -e b2co.exe.dir/b2time.nc ] && rm b2co.exe.dir/b2time.nc || echo > /dev/null
 	-rmdir b2co.exe.dir
 
 $(target_uf) : b2fgmtry b2fparam b2fstate b2fplasma
@@ -742,38 +744,38 @@ help help.prt:
 	@echo "  ${target_mn} : "
 	@echo "     run the main code"
 	@echo "  ${target_co} : "
-	@echo "     prepares a b2fstate file from a plasmastate file"
+	@echo "     prepare a b2fstate file from a plasmastate file"
 	@echo "  ${target_rd} : "
-	@echo "     prepares a b2fstate file from a saved MDSPLUS archive"
+	@echo "     prepare a b2fstate file from a saved MDSPLUS archive"
 	@echo "  ${target_uf} : "
-	@echo "     converts an unformatted b2fplasma file to a formatted version"
+	@echo "     convert an unformatted b2fplasma file to a formatted b2fplasmf file"
 	@echo "  ${target_fu} : "
-	@echo "     converts a formatted b2fplasma file to an unformatted version"
+	@echo "     convert a formatted b2fplasmf file to an unformatted b2fplasma file"
 	@echo "  ${target_pl} : "
-	@echo "     runs b2plot"
+	@echo "     run b2plot"
 	@echo "  ${target_ts} : "
-	@echo "     runs a dummy example of a post-processor"
+	@echo "     run a dummy example of a post-processor"
 	@echo "  ${target_ye} : "
-	@echo "     provides an error assessment for a coupled run"
+	@echo "     provide an error assessment for a coupled run"
 	@echo "  ${target_yg} : "
-	@echo "     displays geometry and magnetic field"
+	@echo "     display geometry and magnetic field"
 	@echo "  ${target_yh} : "
-	@echo "     displays the physics parameters"
+	@echo "     display the physics parameters"
 	@echo "  ${target_yi} : "
-	@echo "     displays the plasma state"
+	@echo "     display the plasma state"
 	@echo "  ${target_yi_gnuplot} : "
-	@echo "     displays the plasma state vis gnuplot"
+	@echo "     display the plasma state via gnuplot"
 	@echo "  ${target_ym} : "
-	@echo "     displays a movie [not tested]"
+	@echo "     display a movie [not tested]"
 	@echo "  ${target_yn} : "
-	@echo "     displays the progress of the inner b2 iterations"
+	@echo "     display the progress of the inner b2 iterations"
 	@echo "  ${target_yp} : "
-	@echo "     displays the plasma state"
+	@echo "     display the plasma state"
 	@echo "  ${target_yq} : "
-	@echo "     displays a quick display of the evolution data"
+	@echo "     display a quick view of the evolution data"
 	@echo "  ${target_yr} : "
-	@echo "     displays the atomic physics rates"
+	@echo "     display the atomic physics rates"
 	@echo "  ${target_yt} : "
-	@echo "     transfers the plasma state to a mesh of a different size"
+	@echo "     transfer the plasma state to a mesh of a different size"
 	@echo "  ${target_xd} : "
-	@echo "     converts the plasma state to a SOLPS4.0 B2SXDR file [no longer functional]"
+	@echo "     convert the plasma state to a SOLPS4.0 B2SXDR file [no longer functional]"

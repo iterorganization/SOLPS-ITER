@@ -1,8 +1,21 @@
 # Load modules
 module load solps-libs/gcc
+set fullhost=`hostname -f`
+switch ($fullhost)
+  case "megabucky*":
+  case "node*":
+    module load gcc
+    module load openmpi/gcc_6.3.0
+    module load scalapack
+    module load blas
+    module load solps-libs/gcc
+    module load lapack/gcc
+    module load netcdf-with-fortran
+    module load hdf5_18
+endsw
 
-if (-e /usr/local/texlive/bin/x86_64-linux) then 
-  setenv PATH /usr/local/texlive/bin/x86_64-linux:${PATH}
+if (-e /cm/shared/apps/texlive/2017/bin/x86_64-linux) then 
+  setenv PATH /cm/shared/apps/texlive/2017/bin/x86_64-linux:${PATH}
 endif
 
 # Environment variables
@@ -13,13 +26,14 @@ endif
 # Debugger
 setenv DBX gdb
 
-if (`where paraview-config` == "") then
-  echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
-else
-  # See ParaViewCatalystUsersGuide_v2.pdf Sec 3.7.2 Linking with Python ...
-  set PARAVIEW_LIB=`paraview-config --libs --python | sed s/-L//`
-  setenv LD_LIBRARY_PATH "${PARAVIEW_LIB}:${LD_LIBRARY_PATH}"
-  setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages/vtk:${PYTHONPATH}"
-  setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
-  setenv LD_CATALYST `paraview-config --libs vtkPVPythonCatalyst`
-endif
+echo "Not using ParaView with Catalyst!"
+#if (`where paraview-config` == "") then
+#  echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
+#else
+#  # See ParaViewCatalystUsersGuide_v2.pdf Sec 3.7.2 Linking with Python ...
+#  set PARAVIEW_LIB=`paraview-config --libs --python | sed s/-L//`
+#  setenv LD_LIBRARY_PATH "${PARAVIEW_LIB}:${LD_LIBRARY_PATH}"
+#  setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages/vtk:${PYTHONPATH}"
+#  setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
+#  setenv LD_CATALYST `paraview-config --libs vtkPVPythonCatalyst`
+#endif

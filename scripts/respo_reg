@@ -13,6 +13,9 @@ switch ($text)
   case "respo_reg":
     set label="potential residual"
     breaksw
+  case "rdneureg":
+    set label="neutral radiation"
+    breaksw
   default:
     echo invalid quantity $text
     exit

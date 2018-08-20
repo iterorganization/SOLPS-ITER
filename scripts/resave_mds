@@ -18,8 +18,8 @@ argloop:
       set debug="$debug TIME=$DBX"
     else
       set debug="$debug TIME=$1"
+      shift
     endif
-    shift
     goto argloop
   endif
 
@@ -40,8 +40,8 @@ if (-s b2md.dat) then
   mv b2md.dat $B2MDDAT
 else if (-s ../baserun/b2md.dat) then
   set B2MDDAT=../baserun/b2md.dat
-else if (-s $SOLPSTOP/data/mdsplus/b2md.dat) then
-  set B2MDDAT=$SOLPSTOP/data/mdsplus/b2md.dat
+else if (-s $SOLPSTOP/data.local/mdsplus/b2md.dat) then
+  set B2MDDAT=$SOLPSTOP/data.local/mdsplus/b2md.dat
 else
   echo 'No b2md.dat found'
   exit

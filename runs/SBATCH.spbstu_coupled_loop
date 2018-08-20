@@ -1,6 +1,6 @@
 #! /bin/tcsh
 
-#SBATCH -N 1
+#SBATCH -N 2
 #SBATCH -J #JOBNAME#
 #SBATCH --ntasks-per-node=28
 #SBATCH -o testjob-%j.out
@@ -73,6 +73,14 @@ endif
 if (`grep " stopping because _quit" run.log.last10` != "") then
   update_solps_run_status "Breaking the loop by _quit at `date`"
 endif
+#set NORMAL_FINISH=`grep " stopping because tim >= etim" run.log.last10`
+if (`grep " stopping because tim >= etim" run.log.last10` != "") then
+  update_solps_run_status "Breaking the loop because the end time is reached at `date`"
+endif
+#set NORMAL_FINISH=`grep " stopping because min_residual" run.log.last10`
+if (`grep " stopping because min_residual" run.log.last10` != "") then
+  update_solps_run_status "Breaking the loop because required residual is reached at `date`"
+endif
 
 set End_by_ntim = `grep " stopping because itim" run.log.last10`
 set End_by_cputime = `grep " stopping because cpu" run.log.last10`
@@ -91,6 +99,6 @@ if ("$End_by_ntim" != "" || "$End_by_cputime" != "" || "$End_by_walltime" != "")
   mv b2fstate b2fstati
   if (-s b2faveri) mv b2faveri b2faveri_$NOW
   if (-s b2favere) mv b2favere b2faveri
-  itmsubmit SLURM.itm_loop
+  echo spbstusubmit #LOOPOPTS# SBATCH.spbstu_coupled_loop
+  spbstusubmit #LOOPOPTS# SBATCH.spbstu_coupled_loop
 endif
-
