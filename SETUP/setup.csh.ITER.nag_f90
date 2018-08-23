@@ -1,28 +1,26 @@
 # General
+module use $HOME/privatemodules
 module use /work/imas/etc/modulefiles
 module use /work/imas/etc/modules/all
 
 # Modules needed by SOLPS-ITER
 module unload intel
 module load nagfor/6.2
+module load XMLlib/3.0.0-rc1-GCCcore-6.4.0
 module load makedepend/1.0.5-GCCcore-6.4.0
+module load MSCL/1.0.0-GCCcore-6.4.0
+module load GR/0.0.94-GCCcore-6.4.0
+module load GLI/4.5.30-GCCcore-6.4.0
+setenv GLI_HOME ${EBROOTGLI}
 module load flex/2.6.4-GCCcore-6.4.0
-module load fontconfig/2.12.4-GCCcore-6.4.0
-module load cairo/1.14.10-GCCcore-6.4.0
 module load netCDF-Fortran/4.4.4-intel-2018a
 setenv NCDIR /work/imas/opt/EasyBuild/software/netCDF-Fortran/4.4.4-intel-2018a
 module load NCL/6.4.0-intel-2018a
-module load motif/2.3.8-intel-2018a
-module load mscl/1.0.0-GCC-4.8.3
+module load TotalView/2017.1.21_linux_x86-64
+module load Ghostscript/9.23-GCCcore-6.4.0
 module load nag/26-nagfor-6.2
-module load gr/0.0.94
-module load gks/4.4.74
 module load texlive
-module load ghostscript
-module load totalview
-if (`hostname` == "hpc-app1.iter.org") then
-  module load matlab/2013a
-endif
+module load MATLAB/2017a
 
 # mpi-library
 module load OpenMPI/2.1.1-GCC-6.4.0-2.28
@@ -50,6 +48,5 @@ else
 endif
 
 # Other environment variables
-setenv LD_PRELOAD /usr/lib64/libfontconfig.so.1 # needed by solps-gui
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/usr/lib64
 setenv SOLPSWORK /work/projects/solps-iter/$USER

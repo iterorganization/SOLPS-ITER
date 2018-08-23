@@ -1,4 +1,5 @@
 # General
+module use $HOME/privatemodules
 module use /work/imas/etc/modulefiles
 module use /work/imas/etc/modules/all
 # Modules needed by SOLPS-ITER
@@ -7,12 +8,12 @@ switch ($nodename)
   case "hpc-login0*.iter.org":
     echo "Using new cluster modules"
     set cluster="new"
-
+    module unload intel
     module load IMAS/3.20.0-3.8.3
     module load XMLlib/3.0.0-rc1-GCCcore-6.4.0
     module load Kepler
     module load FC2K
-
+    module load XMLlib/3.0.0-rc1-GCCcore-6.4.0
     module load makedepend/1.0.5-GCCcore-6.4.0
     module load MSCL/1.0.0-GCCcore-6.4.0
     module load GR/0.0.94-GCCcore-6.4.0
@@ -20,15 +21,16 @@ switch ($nodename)
     module load NCL/6.4.0-intel-2018a
     module load NAG/26-intel-2018a
     module load TotalView/2017.1.21_linux_x86-64
-
-    module load flex/2.6.4-GCCcore-6.4.0
-    module load Doxygen/1.8.13-GCCcore-6.4.0
-    module load texlive
     module load Ghostscript/9.23-GCCcore-6.4.0
+    module load Doxygen/1.8.13-GCCcore-6.4.0
     module load ParaView/5.4.1-intel-2018a-mpi
-
-#   module load MATLAB/2017a
-
+    module load flex/2.6.4-GCCcore-6.4.0
+    setenv GLI_HOME ${EBROOTGLI}
+    module load netCDF-Fortran/4.4.4-intel-2018a
+    setenv NCDIR ${EBROOTNETCDFMINFORTRAN}
+    setenv MPDIR ${EBROOTIMPI}
+    module load GGD/1.8.0-intel-2018a
+    module load MATLAB/2017a
     breaksw
   default:
     echo "Using old cluster modules"
@@ -56,16 +58,16 @@ switch ($nodename)
     module load paraview/5.4.1
     module load zlib
     setenv LD_PRELOAD /work/imas/opt/paraview/5.4.1/lib/paraview-5.4/libprotobuf.so
-    module load totalview
     module load mscl/1.0.0-intel-12.0.2
     module load gr/0.0.94
-    module load gks/4.4.74
-    module load texlive
+    module load totalview
     module load ghostscript
-    module load make/4.1
+    module load gks/4.4.74
     module load fc2k
     module load kepler
 endsw
+module load texlive
+module load make/4.1
 
 if (`hostname` == "hpc-app1.iter.org") then
   module load matlab/2013a
@@ -94,7 +96,7 @@ else
 endif
 
 # Other environment variables
-#module load solps-gui
-#setenv LD_PRELOAD /usr/lib64/libfontconfig.so.1 # needed by solps-gui
-
+# module load solps-gui
+# setenv LD_PRELOAD /usr/lib64/libfontconfig.so.1 # needed by solps-gui
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/usr/lib64
 setenv SOLPSWORK /work/projects/solps-iter/$USER

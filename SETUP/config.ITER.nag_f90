@@ -32,7 +32,7 @@
 LD_INTEL_LIBS= -lirc -lirc_s -liomp5 -lifcoremt_pic -lsvml -lifport -limf -lm -lifcore_pic -lpthread
 
 LD_NETCDF  =
-LD_MSCL    = `pkg-config mscl --libs`
+LD_MSCL    = -lmscl -lgfortran
 LD_GR      = -L${GR_ROOT}/lib -lgr
 LD_GKS     = -L${GLI_HOME} -lgks -lXmu -lX11 -lXt
 LD_NAG     = -L${NAGDIR}/lib -lnag_nag
@@ -72,7 +72,7 @@ endif
 # Build with IMAS if imas module is loaded
 ifdef IMAS_VERSION
   SOLPS_CPP += -DIMAS
-  LD_UAL     = `pkg-config imas-lowlevel imas-gfortran --libs`
+  LD_UAL     = `pkg-config imas-lowlevel imas-gfortran --libs` `pkg-config ggd --libs`
   export LD_UAL
 endif
 

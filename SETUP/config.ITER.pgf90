@@ -17,30 +17,29 @@
 # Add -DNAG22 to SOLPS_CPP
 #
 
-NODENAME    ?= $(shell echo `hostname`)
-MSCL_ROOT   ?=
-H5DIR       ?=
-GR_ROOT     ?= /work/imas/opt/gr/0.0.94
-GLI_HOME    ?=
-NCARG_ROOT  ?=
-NAGDIR      ?= /work/imas/opt/nag/15
-MDSPLUS_DIR ?=
+NODENAME      ?= $(shell echo `hostname`)
+MSCL_ROOT     ?=
+H5DIR         ?=
+GR_ROOT       ?= /work/imas/opt/gr/0.0.94
+GLI_HOME      ?=
+NCARG_ROOT    ?=
+NAGDIR        ?= /work/imas/opt/nag/15
+MDSPLUS_DIR   ?=
 
 # Variables of linking, using pkg-config
 #
 
 ifdef USE_MPI
-SOLPSLIB   = ${SOLPSTOP}/lib/${HOST_NAME}.gfortran
+SOLPSLIB       = ${SOLPSTOP}/lib/${HOST_NAME}.gfortran
 endif
-LD_NETCDF  =
-LD_MSCL    = `pkg-config mscl --libs`
-LD_GR      = -L${GR_ROOT}/lib -lgr
-LD_GKS     = -L${GLI_HOME} -lgks -lX11 -lXt
-LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lm -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lz -lpthread -lXrender -lbz2 -lgfortran # for NCARG v6.x.x
-#LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lm                                                                                                          # for NCARG v4.x.x
-LD_NAG     = -L${SOLPSLIB} -lblaslapack
-LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
-LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
+LD_NETCDF      =
+LD_GR          = -L${GR_ROOT}/lib -lgr
+LD_GKS         = -L${GLI_HOME} -lgks -lX11 -lXt
+LD_NCARG       = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lm -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lz -lpthread -lXrender -lbz2 -lgfortran # for NCARG v6.x.x
+#LD_NCARG      = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lm                                                                                                          # for NCARG v4.x.x
+LD_NAG         = -L${SOLPSLIB} -lblaslapack
+LD_MDSPLUS     = -L${MDSPLUS_DIR}/lib -lMdsLib_client
+LD_SONNET      = -L${SOLPSLIB} -lsonnet -lstdc++
 
 # Preprocessor options
 #
@@ -49,10 +48,12 @@ ifeq (,$(findstring hpc-login0,$(NODENAME)))
 SOLPS_CPP      = -DNO_NAG -DPGF90 -DNOQUAD
 MPI_CPP        = `pkg-config mpich2-ch3 --cflags`
 LD_MPI         = -L/work/imas/opt/libibverbs/1.1.4/lib `pkg-config mpich2-ch3 --libs`
+LD_MSCL        = `pkg-config mscl --libs`
 else
 SOLPS_CPP      = -DNO_NAG -DPGF90 -DNOQUAD
 MPI_CPP        = `pkg-config ompi --cflags`
 LD_MPI         = `pkg-config ompi --libs`
+LD_MSCL        = -lmscl -lgfortran
 endif
 B25_DEFINES    = -DNO_21
 EIRENE_DEFINES =
@@ -79,7 +80,7 @@ endif
 # Build with IMAS if imas module is loaded
 ifdef IMAS_VERSION
   SOLPS_CPP += -DIMAS
-  LD_UAL     = `pkg-config imas-lowlevel imas-pgi --libs`
+  LD_UAL     = `pkg-config imas-lowlevel imas-pgi --libs` `pkg-config ggd --libs`
   export LD_UAL
 endif
 

@@ -1,6 +1,8 @@
 # Test whether necessary variables are defined
-ifndef LD_MSCL
-  $(error LD_MSCL not defined)
+ifeq (,$(findstring hpc-login0,$(NODENAME)))
+LD_MSCL ?= `pkg-config mscl --libs`
+else
+LD_MSCL ?= -lmscl -lgfortran
 endif
 
 ifdef USE_MPI
