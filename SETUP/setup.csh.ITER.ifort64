@@ -1,4 +1,5 @@
 # General
+module use $HOME/privatemodules
 module use /work/imas/etc/modulefiles
 module use /work/imas/etc/modules/all
 # Modules needed by SOLPS-ITER
@@ -8,27 +9,26 @@ switch ($nodename)
     echo "Using new cluster modules"
     set cluster="new"
     module unload intel
-    module load imas/3.17.0/ual/0a2346
-    module switch Anaconda2 Anaconda3/4.4.0
+    module load IMAS/3.20.0-3.8.3
+    module load XMLlib/3.0.0-rc1-GCCcore-6.4.0
     module load makedepend/1.0.5-GCCcore-6.4.0
+    module load MSCL/1.0.0-GCCcore-6.4.0
+    module load GR/0.0.94-GCCcore-6.4.0
+    module load GLI/4.5.30-GCCcore-6.4.0
+    setenv GLI_HOME ${EBROOTGLI}
     module load netCDF-Fortran/4.4.4-intel-2018a
     setenv NCDIR /work/imas/opt/EasyBuild/software/netCDF-Fortran/4.4.4-intel-2018a
     module load NCL/6.4.0-intel-2018a
     module load NAG/26-intel-2018a
+    module load TotalView/2017.1.21_linux_x86-64
+    module load Ghostscript/9.23-GCCcore-6.4.0
     module load flex/2.6.4-GCCcore-6.4.0
     module load Doxygen/1.8.13-GCCcore-6.4.0
-    module load fontconfig/2.12.4-GCCcore-6.4.0
-    module load cairo/1.14.10-GCCcore-6.4.0
-    module load libpng/1.6.32-GCCcore-6.4.0
-    module load motif/2.3.8-intel-2018a
+    module load GGD/1.8.0-intel-2018a
     module unload mpich2
-    setenv MPDIR /shared/libraries/mpi/mvapich2/2.3b-intel2017
-    setenv PATH ${MPDIR}/bin:${PATH}
-    setenv CPATH ${MPDIR}/include:${CPATH}
-    setenv MANPATH ${MPDIR}/share/man:${MANPATH}
-    setenv LD_LIBRARY_PATH ${MPDIR}/lib:${LD_LIBRARY_PATH}
-    setenv PKG_CONFIG_PATH ${MPDIR}/lib/pkgconfig:${PKG_CONFIG_PATH}
+    setenv MPDIR ${EBROOTIMPI}
     module load ParaView/5.4.1-intel-2018a-mpi
+    module load MATLAB/2017a
     module unload git
     breaksw
   default:
@@ -57,17 +57,17 @@ switch ($nodename)
     module load paraview/5.4.1
     module load zlib
     setenv LD_PRELOAD /work/imas/opt/paraview/5.4.1/lib/paraview-5.4/libprotobuf.so
+    module load mscl/1.0.0-intel-12.0.2
+    module load gr/0.0.94
+    module load gks/4.4.74
+    module load fc2k
+    module load kepler
+    module load ghostscript
+    module load totalview
 endsw
-module load mscl/1.0.0-intel-12.0.2
-module load gr/0.0.94
-module load gks/4.4.74
 module load texlive
-module load ghostscript
 module load make/4.1
-module load fc2k
-module load kepler
 
-module load totalview
 if (`hostname` == "hpc-app1.iter.org") then
   module load matlab/2013a
 endif
@@ -95,7 +95,7 @@ else
 endif
 
 # Other environment variables
-module load solps-gui
-setenv LD_PRELOAD /usr/lib64/libfontconfig.so.1 # needed by solps-gui
+# module load solps-gui
+# setenv LD_PRELOAD /usr/lib64/libfontconfig.so.1 # needed by solps-gui
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/usr/lib64
 setenv SOLPSWORK /work/projects/solps-iter/$USER

@@ -1,4 +1,5 @@
 # General
+module use $HOME/privatemodules
 module use /work/imas/etc/modulefiles
 # Modules needed by SOLPS-ITER
 set nodename=`hostname`
@@ -8,19 +9,26 @@ switch ($nodename)
     set cluster="new"
     module unload intel
     module load PGI/18.4-GCC-6.4.0-2.28
-    module load imas/3.17.0/ual/0a2346
-    module switch Anaconda2 Anaconda3/4.4.0
+    module load IMAS/3.20.0-3.8.3
     module load makedepend/1.0.5-GCCcore-6.4.0
     module load netCDF-Fortran/4.4.4-intel-2018a
     setenv NCDIR /work/imas/opt/EasyBuild/software/netCDF-Fortran/4.4.4-intel-2018a
+    module load MSCL/1.0.0-GCCcore-6.4.0
+    module load GR/0.0.94-GCCcore-6.4.0
+    module load GLI/4.5.30-GCCcore-6.4.0
+    setenv GLI_HOME ${EBROOTGLI}
     module load NCL/6.4.0-intel-2018a
     module load nag/26-GCC-6.4.0-2.28
     module load flex/2.6.4-GCCcore-6.4.0
     module load Doxygen/1.8.13-GCCcore-6.4.0
+    module load TotalView/2017.1.21_linux_x86-64
+    module load Ghostscript/9.23-GCCcore-6.4.0
+    module load MATLAB/2017a
     module load hdf5
     module load ParaView/5.4.1-intel-2018a-mpi
     module unload mpich2
     module load OpenMPI/2.1.2-GCC-6.4.0-2.28
+    module load GGD/1.8.0-PGI-18.4-GCC-6.4.0-2.28
     breaksw
   default:
     echo "Using old cluster modules"
@@ -43,16 +51,16 @@ switch ($nodename)
     module load paraview/5.4.1
     module unload mpich2
     module load mvapich2
-endsw
-module load mscl/1.0.0-intel-12.0.2
-module load gr/0.0.94
-module load gks/4.4.74
-module load texlive
+    module load mscl/1.0.0-intel-12.0.2
+    module load gr/0.0.94
+    module load gks/4.4.74
+    module load fc2k
+    module load kepler
+    module load totalview
 module load ghostscript
+endsw
+module load texlive
 module load make/4.1
-module load fc2k
-module load kepler
-module load totalview
 if (`hostname` == "hpc-app1.iter.org") then
   module load matlab/2013a
 endif
@@ -80,6 +88,6 @@ else
 endif
 
 # Other environment variables
-module load solps-gui
-setenv LD_PRELOAD /usr/lib64/libfontconfig.so.1 # needed by solps-gui
+# module load solps-gui
+# setenv LD_PRELOAD /usr/lib64/libfontconfig.so.1 # needed by solps-gui
 setenv SOLPSWORK /work/projects/solps-iter/$USER
