@@ -120,6 +120,7 @@ endif
 switch ($nodename)
   case "hpc-login0*.iter.org":
     sbatch $NAME
+    breaksw
   default:
     qsub -V -S /bin/tcsh $NAME
 endsw

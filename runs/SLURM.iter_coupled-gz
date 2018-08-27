@@ -1,13 +1,10 @@
 #! /bin/tcsh
 
-#SBATCH  --constraint=ib_qdr
-#SBATCH  --account #USER#
 #SBATCH  --ntasks=#PROCS#
 #SBATCH  --time=24:00:00
 #SBATCH  --mail-user=#EMAIL#
 #SBATCH  --mail-type=END
 #SBATCH  --job-name=#JOBNAME#
-#SBATCH  --kill-on-bad-exit
 
 # set solpstop=`climb_and_look_for SOLPSTOP`
 # if (-e $solpstop) then

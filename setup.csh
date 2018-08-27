@@ -162,7 +162,6 @@ alias stop 'cd ${SOLPSTOP}'
 alias sdg 'cd ${SOLPSTOP}/modules/DivGeo/device/${DEVICE}'
 alias ssf 'cd ${SOLPSTOP}/modules/DivGeo/device/${DEVICE}'
 
-
 alias xyplot plot xyplot
 alias xyplot2 plot xyplot2
 alias xyplot3 plot xyplot3
@@ -203,7 +202,6 @@ alias xlylplot7 plot xlylplot7
 alias xlylplot8 plot xlylplot8
 alias xlylplot8 plot xlylplot8
 alias xlylplot9 plot xlylplot9
-
 
 alias   set_debug 'source $SOLPSTOP/SETUP/debug'
 alias unset_debug 'source $SOLPSTOP/SETUP/nodebug'
