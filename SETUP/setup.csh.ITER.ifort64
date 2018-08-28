@@ -8,8 +8,8 @@ switch ($nodename)
   case "hpc-login0*.iter.org":
     echo "Using new cluster modules"
     set cluster="new"
-    module unload intel
     module load IMAS/3.20.0-3.8.3
+    module load GGD/1.8.0-intel-2018a
     module load XMLlib/3.0.0-rc1-GCCcore-6.4.0
     module load Kepler
     module load FC2K
@@ -21,15 +21,14 @@ switch ($nodename)
     module load NCL/6.4.0-intel-2018a
     module load NAG/26-intel-2018a
     module load TotalView/2017.1.21_linux_x86-64
+    module load texlive
     module load Ghostscript/9.23-GCCcore-6.4.0
     module load Doxygen/1.8.13-GCCcore-6.4.0
     module load ParaView/5.4.1-intel-2018a-mpi
-    module load flex/2.6.4-GCCcore-6.4.0
+    module load motif/2.3.8-intel-2018a
     setenv GLI_HOME ${EBROOTGLI}
-    module load netCDF-Fortran/4.4.4-intel-2018a
     setenv NCDIR ${EBROOTNETCDFMINFORTRAN}
     setenv MPDIR ${EBROOTIMPI}
-    module load GGD/1.8.0-intel-2018a
     module load MATLAB/2017a
     breaksw
   default:
