@@ -1,4 +1,5 @@
 LD_NETCDF ?= `pkg-config netcdf-fortran --libs`
+LD_MSCL   ?= `pkg-config mscl --libs`
 LD_NAG    ?= `pkg-config nag --libs`
 LD_SONNET ?= -L${SOLPSLIB} -lsonnet -lstdc++
 

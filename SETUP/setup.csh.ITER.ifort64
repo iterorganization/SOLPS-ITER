@@ -7,10 +7,8 @@ switch ($nodename)
     set cluster="new"
     module load IMAS/3.20.0-3.8.3
     module load GGD/1.8.0-intel-2018a
-    module load XMLlib/3.0.0-rc1-GCCcore-6.4.0
     module load Kepler
     module load FC2K
-    module load XMLlib/3.0.0-rc1-GCCcore-6.4.0
     module load makedepend/1.0.5-GCCcore-6.4.0
     module load MSCL/1.1.0-GCCcore-6.4.0
     module load GR/0.0.94-GCCcore-6.4.0

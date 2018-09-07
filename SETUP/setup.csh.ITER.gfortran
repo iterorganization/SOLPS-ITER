@@ -13,9 +13,8 @@ switch ($nodename)
     module load GGD/1.8.0-GCC-6.4.0-2.28
     module load Kepler
     module load FC2K
-    module load XMLlib/3.0.0-rc1-GCCcore-6.4.0
     module load makedepend/1.0.5-GCCcore-6.4.0
-    module load MSCL/1.0.0-GCCcore-6.4.0
+    module load MSCL/1.1.0-GCCcore-6.4.0
     module load GR/0.0.94-GCCcore-6.4.0
     module load GLI/4.5.30-GCCcore-6.4.0
     setenv GLI_HOME ${EBROOTGLI}

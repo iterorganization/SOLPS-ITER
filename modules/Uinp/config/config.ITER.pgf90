@@ -2,7 +2,7 @@
 ifeq (,$(findstring hpc-login0,$(NODENAME)))
 LD_MSCL ?= `pkg-config mscl --libs`
 else
-LD_MSCL ?= -lmscl -lgfortran
+LD_MSCL ?= `pkg-config mscl --libs` -lgfortran
 endif
 
 ifdef USE_MPI

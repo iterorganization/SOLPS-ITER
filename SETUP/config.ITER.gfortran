@@ -47,7 +47,7 @@ LD_MPI     = `pkg-config mvapich2 --libs`
 MPI_CPP    = `pkg-config mvapich2 --cflags`
 LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lz -lXrender -lbz2 ${LD_INTEL_LIBS} # for NCARG v6.x.x
 else
-LD_MSCL    = -lmscl -lgfortran
+LD_MSCL    = `pkg-config mscl --libs` -lgfortran
 NCDIR     ?= /work/imas/opt/EasyBuild/software/netCDF-Fortran/4.4.4-intel-2018a
 LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lz -lXrender -lbz2 ${LD_INTEL_LIBS} -ldl # for NCARG v6.x.x
 LD_MPI     = -lmpi2

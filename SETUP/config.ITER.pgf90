@@ -53,7 +53,7 @@ else
 SOLPS_CPP      = -DNO_NAG -DPGF90 -DNOQUAD
 MPI_CPP        = `pkg-config ompi --cflags`
 LD_MPI         = `pkg-config ompi --libs`
-LD_MSCL        = -lmscl -lgfortran
+LD_MSCL        = `pkg-config mscl --libs` -lgfortran
 endif
 B25_DEFINES    = -DNO_21
 EIRENE_DEFINES =
