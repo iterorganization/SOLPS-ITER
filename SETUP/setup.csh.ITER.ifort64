@@ -64,8 +64,8 @@ switch ($nodename)
     module load gks/4.4.74
     module load fc2k
     module load kepler
+    module load texlive
 endsw
-module load texlive
 module load make/4.1
 
 if (`hostname` == "hpc-app1.iter.org") then

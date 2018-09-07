@@ -15,6 +15,7 @@ if ($?SOLPS_PATH) then
   export   SOLPS_PATH=`echo $SOLPS_PATH | sed "s|${HOST_NAME}.${COMPILER}:|${HOST_NAME}.${COMPILER}.debug:|g"`.debug
   export   PATH=`echo $PATH | sed "s|${OLD_SOLPS_PATH}|${SOLPS_PATH}|"`
   export   SOLPS_DEBUG=yes
+  export   PMI_DEBUG=1
   unset    OLD_SOLPS_PATH
 else
   echo "SOLPS_PATH not set. Exiting."

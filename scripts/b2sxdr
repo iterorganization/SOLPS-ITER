@@ -25,6 +25,7 @@ loop:
 endloop:
   set debug=""
   set TIME=time
+  set RUN_OPTIONS=""
 
 argloop:
   if ("X${1}X" == "X-hX") then
@@ -59,13 +60,25 @@ argloop:
     if ($1 == "") then
       set TIME="$DBX"
     else
-      set TIME="$1"
-      shift
+      set next=$1
+      set begin_next=`printf '%s' $next | cut -c1`
+      if ("X${begin_next}X" == "X-X") then
+        set TIME="$DBX"
+      else
+        set TIME="$1"
+        shift
+      endif
     endif
+    goto argloop
+  endif
+  if ("X${1}X" == "X-oX") then
+    shift
+    set RUN_OPTIONS="$RUN_OPTIONS $1"
+    shift
     goto argloop
   endif
   if ("X${argv}X" == "XX") set argv="b2sxdr"
   set CMD=`echo $argv" " | sed -e 's: :.prt :g'`
-  ${MAKE} $debug TIME="$TIME" -f $RUNS/Makefile.b2sxdr $CMD
+  ${MAKE} $debug TIME="$TIME" RUN_OPTIONS="$RUN_OPTIONS" -f $RUNS/Makefile.b2sxdr $CMD
   unsetenv STAND_ALONE
   if ($?DEBUG_SET) source $SOLPSTOP/SETUP/nodebug

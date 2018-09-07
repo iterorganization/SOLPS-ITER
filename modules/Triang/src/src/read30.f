@@ -85,9 +85,11 @@ C     READ PHYSICAL COORDINATES FROM FORT.30 FILE TO XCOORD, YCOORD
       endif
       backspace(30)
 #ifndef HPUX
-      write(*,*) 'Detected fort.30 is using ', format_string(new_format)
+      write(*,*) 'Detected fort.30 is using ',
+     . trim(format_string(new_format))
 #else
-      write(*,*) 'Detected ftn30 is using ', format_string(new_format)
+      write(*,*) 'Detected ftn30 is using ',
+     . trim(format_string(new_format))
 #endif
       do ix=1,nx
         do iy=1,ny

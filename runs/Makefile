@@ -705,13 +705,13 @@ endif
 	rm -rf b2_ual_write.exe.dir
 
 stra.dat :
-	ln -s ${SOLPSTOP}/modules/B2.5/Database/stra.dat .
+	ln -sf ${SOLPSTOP}/modules/B2.5/Database/stra.dat .
 
 weis.dat :
-	ln -s ${SOLPSTOP}/modules/B2.5/Database/weis.dat .
+	ln -sf ${SOLPSTOP}/modules/B2.5/Database/weis.dat .
 
 AMJUEL:
-	ln -s ${SOLPSTOP}/modules/Eirene/Database/AMJUEL .
+	ln -sf ${SOLPSTOP}/modules/Eirene/Database/AMJUEL .
 
 $(savefiles):
 	touch $(shell echo ${PLASMASTATE} | sed -e 's:plasmastate:b2.dummy_save.parameters:')

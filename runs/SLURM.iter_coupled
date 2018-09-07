@@ -1,23 +1,10 @@
 #! /bin/tcsh
 
-#SBATCH  --ntasks=#PROCS#
+#SBATCH  --tasks-per-node=#PROCS#
 #SBATCH  --time=24:00:00
 #SBATCH  --mail-user=#EMAIL#
 #SBATCH  --mail-type=END
 #SBATCH  --job-name=#JOBNAME#
-
-# set solpstop=`climb_and_look_for SOLPSTOP`
-# if (-e $solpstop) then
-#  setenv SOLPSTOP "`cat $solpstop`"
-# else
-#  setenv SOLPSTOP "`echo $PWD | sed 's:/runs/.*::'`"
-# endif
-
-# cd $SOLPSTOP || {
-#  echo "Unable to switch to the SOLPSTOP directory $SOLPSTOP"
-#  env
-#  exit
-# }
 
 # source setup.csh
 echo Using SOLPSTOP = #SOLPSTOP#
@@ -26,7 +13,8 @@ set USE_MPI=""
 if ($?SOLPS_MPI) then
   set MPI_EXEC=mpiexec
   set MPI_OPTS=#MPIOPTS#
-  set USE_MPI="--mpi=pmi2 -m ${MPI_EXEC} ${MPI_OPTS}"
+  set TIME="srun --mpi=pmi2"
+  set USE_MPI="-m ${MPI_EXEC} ${MPI_OPTS}"
   set USE_MPI=`echo $USE_MPI | sed -e 's:-m :-m ''":' -e 's:$:"'':'`
 endif
 
@@ -37,7 +25,7 @@ if ($?SOLPS_GUI_IP) then
   echo ${USER} ${PWD} ${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
 endif
 
-time srun b2run ${USE_MPI} b2mn >! run.log
+time b2run ${USE_MPI} b2mn >! run.log
 
 QSUB.postprocess_coupled
 

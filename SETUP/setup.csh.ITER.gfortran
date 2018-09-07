@@ -10,6 +10,9 @@ switch ($nodename)
     set cluster="new"
     module unload intel
     module load IMAS/3.20.0-3.8.3
+    module load GGD/1.8.0-GCC-6.4.0-2.28
+    module load Kepler
+    module load FC2K
     module load XMLlib/3.0.0-rc1-GCCcore-6.4.0
     module load makedepend/1.0.5-GCCcore-6.4.0
     module load MSCL/1.0.0-GCCcore-6.4.0
@@ -23,8 +26,10 @@ switch ($nodename)
     module load Ghostscript/9.23-GCCcore-6.4.0
     module load ParaView/5.4.1-intel-2018a-mpi
     module load OpenMPI/2.1.1-GCC-6.4.0-2.28
+    module load motif/2.3.8-intel-2018a
     module load MATLAB/2017a
-    module load GGD/1.8.0-GCC-6.4.0-2.28
+    setenv NCDIR ${EBROOTNETCDFMINFORTRAN}
+    setenv MPDIR ${EBROOTIMPI}
     breaksw
   default:
     echo "Using old cluster modules"

@@ -534,7 +534,7 @@ Among other things, these setup files establish some aliases that are useful for
   \item[ssu] Goes to \${\tt \{SOLPSTOP\}/modules/Uinp}, the {\tt Uinp} top directory
   \item[ssw] Goes to \${\tt \{SOLPSTOP\}/modules/Sonnet}, the {\tt Sonnet} top directory
   \item[slib] Goes to \${\tt \{SOLPSTOP\}/lib/}\${\tt {HOST\_NAME}.}\${\tt {COMPILER}}, the directory where libraries are stored
-  \item[srun, sbr] Go to \${\tt \{SOLPSTOP\}/runs/}, the top run directory
+  \item[sbr] Go to \${\tt \{SOLPSTOP\}/runs/}, the top run directory
   \item[scr] Goes to \${\tt \{SOLPSTOP\}/scripts}, the directory where the scripts are stored
   \item[\$DG] The location of the {\tt DivGeo} top directory
 \end{description}
@@ -1134,11 +1134,7 @@ SOLPSTOP
 +---runs
 \end{verbatim}
 
-The commands\index{srun}
-\begin{verbatim}
-    srun
-\end{verbatim}
-and\index{sbr}
+The command\index{sbr}
 \begin{verbatim}
     sbr
 \end{verbatim}
@@ -1552,10 +1548,10 @@ extracted from the {\tt run.log} file.
   \item[b2plot]\index{b2plot} Shortcut to \btwoplotns. A "-n" option allows for dry-run tests.A "-d" option allows to run within the chosen debugger. A "-s" option allows to run \btwoplot with coupling to {\tt Eirene} data. A "-h" option prints a help description.
   \item[b2pp]\index{b2pp} Script to obtain a standard series of \btwoplot graphs.
   \item[b2pt]\index{b2pt} Script to obtain a standard series of \btwoplot graphs.
-  \item[b2run]\index{b2run}\index{b2co}\index{b2fstate} Shortcut to the {\tt Makefile} launching {\tt B2.5}. A "-n" option allows for dry-run tests. A "-d" option allows to run within the chosen debugger. A "-s" option allows to run {\tt B2.5} in stand-alone mode. A "-m" option allows to run with MPI options. A "-b" option can be used when invoking the {\tt b2co} program to obtain a provisional {\tt b2fstate} file while the main code is running. A "-h" option prints a help description. (See \ref{b2run} for fuller details)
+  \item[b2run]\index{b2run}\index{b2co}\index{b2fstate} Shortcut to the {\tt Makefile} launching {\tt B2.5}. A "-n" option allows for dry-run tests. A "-d" option allows to run within the chosen debugger. A "-s" option allows to run {\tt B2.5} in stand-alone mode. A "-m" option allows to run with MPI options. A "-o" option adds any other desired run options. The options can be grouped together inside quotes or given individually with multiple "-o" instances. A "-b" option can be used when invoking the {\tt b2co} program to obtain a provisional {\tt b2fstate} file while the main code is running. A "-h" option prints a help description. (See \ref{b2run} for fuller details)
   \item[b2run\_hgw\_cluster]\index{b2run\_hgw\_clus} Shortcut to the {\tt Makefile} launching {\tt B2.5} for the IPP--Greifswald cluster. A "-n" option allows for dry-run tests.
   \item[b2sxdr]\index{b2sxdr} Shortcut to the \SOLPSfour to \SOLPSfive
-    converter. A "-n" option allows for dry-run tests. A "-d" option allows to run within the chosen debugger. A "-s" option allows to specify the run to convert was not coupled to {\tt Eirene}. A "-h" option prints a help description.
+    converter. A "-n" option allows for dry-run tests. A "-d" option allows to run within the chosen debugger. A "-s" option allows to specify the run to convert was not coupled to {\tt Eirene}. A "-o" option adds any other desired run options. The options can be grouped together inside quotes or given individually with multiple "-o" instances. A "-h" option prints a help description.
   \item[copy\_tracing\_files]\index{copy\_tracing\_files} Script to bring tracing files to temporary run directory, if present.
   \item[correct\_baserun\_timestamps]\index{correct\_baserun\_timestamps}
     Makes sure the timestamps for the start-up files in the {\tt baserun}
@@ -1711,7 +1707,7 @@ The compilation of {\tt B2.5} is described in section \ref{sec:b2} on page
 \pageref{sec:b2}.
 
 The run directory is described in section \ref{sec:b2runs} on page
-\pageref{sec:b2runs}. It is accessible with the {\tt sbr} and {\tt srun} commands.
+\pageref{sec:b2runs}. It is accessible with the {\tt sbr} command.
 
 The main code is {\tt b2mn.exe} but it needs input files written
 by {\tt b2ag.exe}, {\tt b2ah.exe}, {\tt b2ar.exe} and
@@ -1755,6 +1751,7 @@ for itself by climbing up the tree. You can add options to the {\tt b2run} comma
     mode with the provided options (example: [the syntax is important, both
       the slashes and the quotes are needed] \verb!b2run -m \"mpiexec -np 2\" b2mn!)
   \item[-s] Specifies that one wishes to run {\tt B2.5} in stand-alone mode, i.e. without any coupling to {\tt Eirene}.
+  \item[-o "run options"] Allows to launch {\tt b2XX} with additional run options. The options can be grouped together inside quotes or given individually with multiple "-o" instances.
   \item[-b]\index{b2co}\index{b2fstate} Specifies, when calling the {\tt b2co} program, that only the {\tt b2fstate} file should be produced. To be used when invoking {\tt b2co} while the main code is running.
   \item[-d "debugger\_name"] Allows to run {\tt b2XX} with the named debugger (example: {\tt b2run -d totalview b2mn}). If not debugger name is specified, the debugger defined with the DBX environment variable and specified in the \${\tt \{SOLPSTOP\}/SETUP/setup.csh.}\${\tt \{HOST\_NAME\}.}\${\tt \{COMPILER\}.local} or \${\tt \{SOLPSTOP\}/SETUP\allowbreak/setup.csh.}\${\tt \{HOST\_NAME\}.}\${\tt \{COMPILER\}} files will be used.
 \end{description}

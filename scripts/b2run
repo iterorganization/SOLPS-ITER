@@ -43,6 +43,7 @@ loop:
 endloop:
   set debug=""
   set TIME=time
+  set RUN_OPTIONS=""
 
 argloop:
   if ("X${1}X" == "X-hX") then
@@ -106,8 +107,13 @@ argloop:
       source $SOLPSTOP/SETUP/mpi
       set MPI_SET=yes
     endif
-    set TIME=`echo $argv | sed -e 's:^"::' -e 's:" .*::'`
-    set nargs=`echo $TIME | awk '{print split($0,args," ")}'`
+    set TMPI=`echo $argv | sed -e 's:^"::' -e 's:" .*::' -e 's:"$::' `
+    set nargs=`echo $TMPI | awk '{print split($0,args," ")}'`
+    if ("X${TIME}X" == "XtimeX") then
+      set TIME="$TMPI"
+    else
+      set TIME="$TIME $TMPI"
+    endif
     mpiloop:
       if ($nargs > 0) then
         shift
@@ -125,19 +131,34 @@ argloop:
       source $SOLPSTOP/SETUP/debug
       set DEBUG_SET=yes
     endif
-    if ($1 == "") then 
-      set TIME="$DBX"
-    else  
-      set TIME="$1"
-      shift
+    if ("X${1}X" == "XX") then
+      if ("X${TIME}X" == "XtimeX") then
+        set TIME="$DBX"
+      else
+        set TIME="$DBX $TIME"
+      endif
+    else
+      set next=$1
+      set begin_next=`printf '%s' $next | cut -c1`
+      if ("X${begin_next}X" == "X-X") then
+        set TIME="$DBX"
+      else
+        set TIME="$1"
+        shift
+      endif
     endif
     goto argloop 
   endif
+  if ("X${1}X" == "X-oX") then
+    shift
+    set RUN_OPTIONS="$RUN_OPTIONS $1"
+    shift
+    goto argloop
+  endif
   if ("X${argv}X" == "XX") set argv="b2mn"
-  echo "argument= " $argv
+  echo "argument = "$argv
   set CMD=`echo $argv" " | sed -e 's: :.prt :g'`
-  echo $CMD
-  make $debug TIME="$TIME" -f $RUNS/Makefile $CMD
+  ${MAKE} $debug TIME="$TIME" RUN_OPTIONS="$RUN_OPTIONS" -f $RUNS/Makefile $CMD
   unsetenv STAND_ALONE
   unsetenv B2FSTATE_ONLY
   if ($?MPI_SET)   source $SOLPSTOP/SETUP/nompi
