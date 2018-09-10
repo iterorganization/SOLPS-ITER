@@ -4579,7 +4579,7 @@ several values of $\Delta_t$.
 \end{figure}
 
 \section{Averaging scheme}
-\label{sec:B2Eirene:averaging}\index{Averaging}
+\label{sec:B2Eirene:averaging}\index{Averaging}\index{b2faveri}\index{b2favere}\index{b2fstate}\index{b2fstati}
 
 When running a coupled \SOLPSITER case to obtain a steady-state solution, it is recommended to use the source
 averaging scheme detailed in \${\tt SOLPSTOP/doc/SOLPS-ITER\_Eirene\_averaging.pdf} and references therein. This averaging scheme is meant to yield significant
@@ -4588,7 +4588,7 @@ run speed-up and lower the statistical error introduced by the {\tt Eirene} Mont
 The averaging scheme works in three stages:
 \begin{enumerate}\index{res\_av}\index{run\_av}
   \item{A transient phase} during which the code is run normally, until all the short transients die out and the solution approaches its steady state.
-  \item{An averaging phase}, turned on by means of the {\tt 'b2mndt\_av'} switch in the {\tt b2mn.dat} input file, usually with a smaller number of {\tt Eirene} trajectories, during which batch averaging will be done to obtain an averaged steady-state solution. This stage can be prepared by means of the {\tt run\_av} script and uses the {\tt input\_avg.eir Eirene} input file prepared by {\tt Uinp} if available.
+  \item{An averaging phase}, turned on by means of the {\tt 'b2mndt\_av'} switch in the {\tt b2mn.dat} input file, usually with a smaller number of {\tt Eirene} trajectories, during which batch averaging will be done to obtain an averaged steady-state solution. This stage can be prepared by means of the {\tt run\_av} script and uses the {\tt input\_avg.eir Eirene} input file prepared by {\tt Uinp} if available. When continuing a run in this phase, the user needs to provide both the instantaneous and averaged solutions from the previous run, i.e. do {\tt mv b2favere b2faveri} in addition to {\tt mv b2fstate b2fstati}.
   \item{A finalization phase} where the averaged steady-state solution is used for a small number of timesteps, and a larger number of {\tt Eirene} trajectories, to reduce statistical noise. This is done by running the {\tt res\_av} script and uses the {\tt input\_fin.eir Eirene} input file prepared by {\tt Uinp} if available.
 \end{enumerate}
 

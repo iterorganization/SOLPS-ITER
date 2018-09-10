@@ -59,7 +59,12 @@ case "*.icts.leuven.vsc":
 case "*.pppl.gov":
   echo PPPL
   breaksw
-case "*.fusion.gat.com":
+case "*.gat.com":
+case "irisa.cluster":
+case "irisb.cluster":
+case "irisc.cluster":
+case "irisd.cluster":
+case "saturn.cluster":
   echo GA
   breaksw
 case "*.wm.edu":
