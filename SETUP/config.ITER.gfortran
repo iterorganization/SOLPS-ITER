@@ -45,11 +45,11 @@ NCDIR     ?= /work/imas/opt/netcdf-fortran/4.4.2
 LD_MSCL    = `pkg-config mscl --libs`
 LD_MPI     = `pkg-config mvapich2 --libs`
 MPI_CPP    = `pkg-config mvapich2 --cflags`
-LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lz -lXrender -lbz2 ${LD_INTEL_LIBS} # for NCARG v6.x.x
+LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lz -lXrender -lbz2 -lgfortran # for NCARG v6.x.x
 else
 LD_MSCL    = `pkg-config mscl --libs` -lgfortran
 NCDIR     ?= /work/imas/opt/EasyBuild/software/netCDF-Fortran/4.4.4-intel-2018a
-LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lz -lXrender -lbz2 ${LD_INTEL_LIBS} -ldl # for NCARG v6.x.x
+LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lz -lXrender -lbz2 -ldl # for NCARG v6.x.x
 LD_MPI     = -lmpi2
 endif
 
@@ -87,7 +87,11 @@ endif
 # Build with IMAS if imas module is loaded
 ifdef IMAS_VERSION
   SOLPS_CPP += -DIMAS
-  LD_UAL     = `pkg-config imas-gfortran ggd --libs`
+  ifeq (,$(findstring hpc-login0,$(NODENAME)))
+    LD_UAL   = `pkg-config imas-gfortran ggd-gfortran --libs`
+  else
+    LD_UAL   = `pkg-config imas-gfortran ggd --libs`
+  endif
   export LD_UAL
 endif
 

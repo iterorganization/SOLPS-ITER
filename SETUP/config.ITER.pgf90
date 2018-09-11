@@ -80,7 +80,11 @@ endif
 # Build with IMAS if imas module is loaded
 ifdef IMAS_VERSION
   SOLPS_CPP += -DIMAS
-  LD_UAL     = `pkg-config imas-pgi ggd --libs`
+  ifeq (,$(findstring hpc-login0,$(NODENAME)))
+    LD_UAL   = `pkg-config imas-pgi ggd-pgi --libs`
+  else
+    LD_UAL   = `pkg-config imas-pgi ggd --libs`
+  endif
   export LD_UAL
 endif
 

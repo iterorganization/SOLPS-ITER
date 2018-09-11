@@ -80,7 +80,11 @@ endif
 # Build with IMAS if imas module is loaded
 ifdef IMAS_VERSION
   SOLPS_CPP += -DIMAS
-  LD_UAL     = `pkg-config imas-ifort ggd --libs` -Wl,-rpath,${IMAS_PREFIX}/lib
+  ifeq (,$(findstring hpc-login0,$(NODENAME)))
+    LD_UAL   = `pkg-config imas-ifort ggd-ifort --libs` -Wl,-rpath,${IMAS_PREFIX}/lib
+  else
+    LD_UAL   = `pkg-config imas-ifort ggd --libs` -Wl,-rpath,${IMAS_PREFIX}/lib
+  endif
   export LD_UAL
 endif
 
