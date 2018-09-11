@@ -26,6 +26,9 @@ endif
 endif
 	@- if [ -f $*.o ] ; then /bin/mv $*.o ${OBJDIR}/ ; fi
 	@- if [ -f $*.${MOD} ] ; then /bin/mv $*.${MOD} ${OBJDIR}/ ; fi
+ifneq ($(COMPILER),nag_f90)
+	@if [ -f ${OBJDIR}/$*.${MOD} ] ; then touch ${OBJDIR}/$*.${MOD} ; fi
+endif
 
 ${OBJDIR}/%.o : %.F90
 	@- /bin/rm -f ${OBJDIR}/$*.f90 ${OBJDIR}/$*.o ${OBJDIR}/$*.${MOD}
@@ -41,6 +44,9 @@ endif
 endif
 	@- if [ -f $*.o ] ; then /bin/mv $*.o ${OBJDIR}/ ; fi
 	@- if [ -f $*.${MOD} ] ; then /bin/mv $*.${MOD} ${OBJDIR}/ ; fi
+ifneq ($(COMPILER),nag_f90)
+	@if [ -f ${OBJDIR}/$*.${MOD} ] ; then touch ${OBJDIR}/$*.${MOD} ; fi
+endif
 
 ${OBJDIR}/%.${MOD} : %.F        # src/B2.5_modules/
 	@- /bin/rm -f ${OBJDIR}/$*.f ${OBJDIR}/$*.o ${OBJDIR}/$*.${MOD}
@@ -60,6 +66,9 @@ ifeq ($(strip $(LINK_MOD)),)
 else
 	@- [ -f $*.${MOD} ] && [ ! -L $*.${MOD} ] && /bin/mv $*.${MOD} ${OBJDIR}/ && /bin/ln -s ${OBJDIR}/$*.${MOD} . || echo > /dev/null
 endif
+ifneq ($(COMPILER),nag_f90)
+	@if [ -f ${OBJDIR}/$*.${MOD} ] ; then touch ${OBJDIR}/$*.${MOD} ; fi
+endif
 
 ${OBJDIR}/%.${MOD} : %.F90        # src/solps5/b2mod_*.F90
 	@- /bin/rm -f ${OBJDIR}/$*.f90 ${OBJDIR}/$*.o ${OBJDIR}/$*.${MOD}
@@ -78,6 +87,9 @@ ifeq ($(strip $(LINK_MOD)),)
 	@- if [ -f $*.${MOD} ] ; then /bin/mv $*.${MOD} ${OBJDIR}/ ; fi
 else
 	@- [ -f $*.${MOD} ] && [ ! -L $*.${MOD} ] && /bin/mv $*.${MOD} ${OBJDIR}/ && /bin/ln -s ${OBJDIR}/$*.${MOD} . || echo > /dev/null
+endif
+ifneq ($(COMPILER),nag_f90)
+	@if [ -f ${OBJDIR}/$*.${MOD} ] ; then touch ${OBJDIR}/$*.${MOD} ; fi
 endif
 
 #!!!Local Variables:
