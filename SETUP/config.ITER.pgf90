@@ -18,11 +18,11 @@
 #
 
 NODENAME      ?= $(shell echo `hostname`)
-MSCL_ROOT     ?=
-H5DIR         ?=
+MSCL_ROOT     ?= ${EBROOTMSCL}
+H5DIR         ?= ${EBROOTHDF5}
 GR_ROOT       ?= ${EBROOTGR}
-GLI_HOME      ?=
-NCARG_ROOT    ?=
+GLI_HOME      ?= ${EBROOTGLI}
+NCARG_ROOT    ?= ${EBROOTNCL}
 NAGDIR        ?= /work/imas/opt/nag/15
 MDSPLUS_DIR   ?=
 
