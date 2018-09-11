@@ -807,6 +807,7 @@ ${OBJDIR}/cref.${MOD}: ${SRCDIR}/Eirene_modules/cref.F ${MAKES}
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/cref.o -c ${SRCDIR}/Eirene_modules/cref.F
 
 ${OBJDIR}/crech.${MOD}: ${SRCDIR}/Eirene_modules/crech.F ${OBJDIR}/precision.${MOD} ${MAKES}
+	[ -e $@ ] && rm $@ || echo > /dev/null
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/crech.o -c ${SRCDIR}/Eirene_modules/crech.F
 
 ${OBJDIR}/crefmod.${MOD}: ${SRCDIR}/Eirene_modules/crefmod.F ${MAKES}
