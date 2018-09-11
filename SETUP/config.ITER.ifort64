@@ -20,7 +20,7 @@
 NODENAME    ?= $(shell echo `hostname`)
 MSCL_ROOT   ?=
 H5DIR       ?=
-GR_ROOT     ?= /work/imas/opt/gr/0.0.94
+GR_ROOT     ?= ${EBROOTGR}
 GLI_HOME    ?=
 NCARG_ROOT  ?=
 NAGDIR      ?=
