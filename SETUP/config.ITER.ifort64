@@ -18,11 +18,17 @@
 #
 
 NODENAME    ?= $(shell echo `hostname`)
+ifeq (,$(findstring hpc-login0,$(NODENAME)))
+MSCL_ROOT   ?= /work/imas/opt/mscl/1.0.0-intel-12.0.2
+GR_ROOT     ?= /work/imas/opt/gr/0.0.94
+GLI_HOME    ?= /work/imas/opt/gks/4.4.74/lib
+else
 MSCL_ROOT   ?= ${EBROOTMSCL}
-H5DIR       ?= ${EBROOTHDF5}
 GR_ROOT     ?= ${EBROOTGR}
 GLI_HOME    ?= ${EBROOTGLI}
+endif
 NCARG_ROOT  ?= ${EBROOTNCL}
+H5DIR       ?= ${EBROOTHDF5}
 NAGDIR      ?=
 MDSPLUS_DIR ?=
 
