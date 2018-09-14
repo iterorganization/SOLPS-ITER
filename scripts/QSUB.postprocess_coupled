@@ -13,4 +13,4 @@ tar_important_files
 
 summarize_run
 
-gzip -9 -f run.log
+[ -e run.log ] && gzip -9 -f run.log
