@@ -30,6 +30,7 @@ switch ($nodename)
     module load OpenMPI/2.1.2-GCC-6.4.0-2.28
     module load GGD/1.8.0-PGI-18.4-GCC-6.4.0-2.28
     module load motif/2.3.8-intel-2018a
+    module load gnuplot/5.2.2-intel-2018a
     breaksw
   default:
     echo "Using old cluster modules"

@@ -20,6 +20,7 @@ switch ($nodename)
     module load Doxygen/1.8.13-GCCcore-6.4.0
     module load ParaView/5.4.1-intel-2018a-mpi
     module load motif/2.3.8-intel-2018a
+    module load gnuplot/5.2.2-intel-2018a
     setenv GLI_HOME ${EBROOTGLI}
     setenv NCDIR ${EBROOTNETCDFMINFORTRAN}
     setenv MPDIR ${EBROOTIMPI}

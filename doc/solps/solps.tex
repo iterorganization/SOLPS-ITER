@@ -12590,11 +12590,11 @@ when calculating derived data.
     bcna     & \index{b2plot, bcna} Boundary particle source {\em b2stbc\_sna} $(particles.s^{-1})$ \\
     bix      & \index{b2plot, bix} Bottom neighbour {\em ix} coordinate \\
     biy      & \index{b2plot, biy} Bottom neighbour {\em iy} coordinate  \\
-    brch     & \index{b2plot, brch} Recycling charge source {\em b2stbr\_sch} $(A)$ \\
-    brhe     & \index{b2plot, brhe} Recycling electron heat source {\em b2stbr\_she} $(W)$ \\
-    brhi     & \index{b2plot, brhi} Recycling ion heat source {\em b2stbr\_shi} $(W)$ \\
-    brmo     & \index{b2plot, brmo} Recycling parallel momentum source {\em b2stbr\_smo} $(N)$ \\
-    brna     & \index{b2plot, brna} Recycling particle source {\em b2stbr\_sna} $(particles.s^{-1})$ \\
+    brch     & \index{b2plot, brch} Recycling charge source {\em b2stbr\_sch} $(A)$ (including any {\tt Eirene} contributions) \\
+    brhe     & \index{b2plot, brhe} Recycling electron heat source {\em b2stbr\_she} $(W)$ (including any {\tt Eirene} contributions) \\
+    brhi     & \index{b2plot, brhi} Recycling ion heat source {\em b2stbr\_shi} $(W)$ (including any {\tt Eirene} contributions) \\
+    brmo     & \index{b2plot, brmo} Recycling parallel momentum source {\em b2stbr\_smo} $(N)$ (including any {\tt Eirene} contributions) \\
+    brna     & \index{b2plot, brna} Recycling particle source {\em b2stbr\_sna} $(particles.s^{-1})$ (including any {\tt Eirene} contributions) \\
     bvis     & \index{b2plot, bvis} Braams viscosity piece $(m.kg^{-1}.s^{-1})$ \\
     bx, bpol       & \index{b2plot, bx} Poloidal magnetic field $(T)$ \index{b2plot, bpol} \\
     by, brad       & \index{b2plot, by} Radial magnetic field $(T)$ \index{b2plot, brad} \\
@@ -12771,7 +12771,7 @@ when calculating derived data.
     mhal     & \index{b2plot, mhal} Molecular $H_\alpha$ emissivity $(photons.m^{-3}.s^{-1})$ \\
     mi       & \index{b2plot, mi} Ion mass $(kg)$ \\
     mi\_ext  & \index{b2plot, mi\_ext} External species mass $(kg)$ \\
-    na       & \index{b2plot, na} Ion density $(m^{-3})$ (\SOLPSfive runs) \\
+    na       & \index{b2plot, na} Ion density $(m^{-3})$ (\SOLPSfive and \SOLPSITER runs) \\
     na0      & \index{b2plot, na0} Ion density {\em na} at previous time step $(m^{-3})$ \\
     na\_ext  & \index{b2plot, na\_ext} External species density $(m^{-3})$ \\
     ne       & \index{b2plot, ne} Electron density $(m^{-3})$ \\
@@ -12783,7 +12783,7 @@ when calculating derived data.
     nflfnax  & \index{b2plot, nflfnax} Neutral flux limits for poloidal particle flux \\
     nflfnay  & \index{b2plot, nflfnay} Neutral flux limits for radial particle flux \\
     nh       & \index{b2plot, nh} Total atomic hydrogen density $(m^{-3})$ \\
-    ni       & \index{b2plot, ni} Total density $(m^{-3})$ (\SOLPSfive runs) \\
+    ni       & \index{b2plot, ni} Total density $(m^{-3})$ (\SOLPSfive and \SOLPSITER runs) \\
     ni       & \index{b2plot, ni} Ion density $(m^{-3})$ (\SOLPSfour runs) \\
     ni0      & \index{b2plot, ni0} Density {\em ni} at previous time step $(m^{-3})$ \\
     niso     & \index{b2plot, niso} Isolating region number \\
@@ -12873,13 +12873,13 @@ when calculating derived data.
     tix      & \index{b2plot, tix} Top neighbour poloidal index {\em topix} \\
     tiy      & \index{b2plot, tiy} Top neighbour radial index {\em topiy} \\
     tmb2     & \index{b2plot, tmb2} Neutral molecule temperature $(eV)$ \\
-    ua       & \index{b2plot, ua} Parallel velocity ({\em ua}) $(m.s^{-1})$ (\SOLPSfive runs) \\
+    ua       & \index{b2plot, ua} Parallel velocity ({\em ua}) $(m.s^{-1})$ (\SOLPSfive and \SOLPSITER runs) \\
     ua0      & \index{b2plot, ua0} Parallel velocity {\em ua} at previous time step $(m.s^{-1})$ \\
     ua\_ext  & \index{b2plot, ua\_ext} External species parallel velocity $(m.s^{-1})$ \\
     ud       & \index{b2plot, ud} Poloidal component of drift velocity $(m.s^{-1})$ \\
     ue       & \index{b2plot, ue} Parallel electron velocity ({\em ue}) $(m.s^{-1})$ \\
     up       & \index{b2plot, up} Parallel velocity ({\em up}) $(m.s^{-1})$ (\SOLPSfour runs) \\
-    up       & \index{b2plot, up} Poloidal velocity ({\em up}) $(m.s^{-1})$ (\SOLPSfive runs) \\
+    up       & \index{b2plot, up} Poloidal velocity ({\em up}) $(m.s^{-1})$ (\SOLPSfive and \SOLPSITER runs) \\
     uu       & \index{b2plot, uu} Poloidal velocity ({\em uu}) $(m.s^{-1})$ (\SOLPSfour runs) \\
     vadia.x  & \index{b2plot, vadia.x} Poloidal component of divergent part of ion diamagnetic drift velocity $(m.s^{-1})$ \\
     vadia.y  & \index{b2plot, vadia.y} Radial component of divergent part of ion diamagnetic drift velocity $(m.s^{-1})$ \\

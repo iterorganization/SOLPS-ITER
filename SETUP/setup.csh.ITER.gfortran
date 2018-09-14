@@ -26,6 +26,7 @@ switch ($nodename)
     module load OpenMPI/2.1.2-GCC-6.4.0-2.28
     module load netCDF-Fortran/4.4.4-intel-2018a
     module load motif/2.3.8-intel-2018a
+    module load gnuplot/5.2.2-intel-2018a
     module load MATLAB/2017a
     setenv NCDIR ${EBROOTNETCDFMINFORTRAN}
     setenv MPDIR ${EBROOTIMPI}
