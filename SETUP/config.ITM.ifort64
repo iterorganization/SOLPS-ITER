@@ -73,7 +73,7 @@ endif
 # Build with IMAS if imas module is loaded
 ifdef IMAS_VERSION
   SOLPS_CPP += -DIMAS
-  LD_UAL     = `pkg-config imas-lowlevel imas-ifort --libs` -lxml2
+  LD_UAL     = `pkg-config imas-ifort --libs` -lxml2
   export LD_UAL
 else
 ifdef ITM_ENVIRONMENT_LOADED
