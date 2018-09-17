@@ -21,6 +21,7 @@ switch ($nodename)
     module load Doxygen/1.8.13-GCCcore-6.4.0
     module load TotalView/2017.1.21_linux_x86-64
     module load Ghostscript/9.23-GCCcore-6.4.0
+    module unload LibTIFF/4.0.9-GCCcore-6.4.0
     module load ParaView/5.4.1-intel-2018a-mpi
     module load OpenMPI/2.1.2-GCC-6.4.0-2.28
     module load netCDF-Fortran/4.4.4-intel-2018a
