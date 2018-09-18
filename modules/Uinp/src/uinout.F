@@ -601,10 +601,17 @@ c**  bulk ions species cards
 
       write(iunoo,707) nplsi+nbgk
       do ipls=1,nplsi+nbgk !{
-        write(iunoo,708) ipls,textp(ipls),nmassp(ipls),
+        if (ipls.lt.100) then !{
+         write(iunoo,708) ipls,textp(ipls),nmassp(ipls),
      ,    ncharp(ipls),nprtp(ipls),nchrgp(ipls),isrfp(ipls),
      ,    isrtp(ipls),nmsecp(ipls),nrcp(ipls),idnslmp(ipls),
      ,    0,nhstp(ipls),0,cdnmdlp(ipls),nrep(ipls)
+        else !}{
+         write(iunoo,7080) mod(ipls,100),textp(ipls),nmassp(ipls),
+     ,    ncharp(ipls),nprtp(ipls),nchrgp(ipls),isrfp(ipls),
+     ,    isrtp(ipls),nmsecp(ipls),nrcp(ipls),idnslmp(ipls),
+     ,    0,nhstp(ipls),0,cdnmdlp(ipls),nrep(ipls)
+        end if !}
         do k=1,nrcp(ipls) !{
           if(nmsecp(ipls).le.2) then !{
             write(iunoo,707) ireacp(ipls,k),ibulkp(ipls,k),
@@ -1145,6 +1152,7 @@ c=======================================================================
   706 format (12(5l1,1x))
   707 format (12i6)
   708 format (i2,1x,a8,12i3,1x,a10,1x,i2)
+ 7080 format (i2.2,1x,a8,12i3,1x,a10,1x,i2)
   709 format ('* ',i3,' : ',a64)
   710 format (1p,2i6,2e12.5,i6)
   711 format (a72)
