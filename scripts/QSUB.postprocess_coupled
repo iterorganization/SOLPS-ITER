@@ -1,4 +1,4 @@
-#! /usr/bin/env tcsh
+#! /bin/tcsh -f
 
 echo ""
 echo "This file can be used for post-processing commands after a coupled batch job."
@@ -13,4 +13,4 @@ tar_important_files
 
 summarize_run
 
-gzip -9 -f run.log
+[ -e run.log ] && gzip -9 -f run.log

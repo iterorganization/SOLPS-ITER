@@ -22,7 +22,7 @@ cank}
 
 C     VARIABLES FOR PLOTS
       REAL XMIN,XMAX,YMIN,YMAX,DELTAX,DELTAY,DELTA,XCM,YCM
-      INTEGER IS, ISP
+      INTEGER IS, IX, IY, ISP, ITRIA, ITRIA1
 
 cank{
       open(21,file='tria.elemente',status='old',action='read')
@@ -92,7 +92,7 @@ C     PLOT THE GRIDS
       CALL GR90DG
       CALL GRSCLC(5.,1.,5.+XCM,1.+YCM)
       CALL GRSCLV(XMIN,YMIN,XMAX,YMAX)
-C     PLOT THE OLD TRIANGLE-MESH
+C     PLOT THE OLD TRIANGLE MESH
       DO ITRIA1=1,NTRIA1
         CALL GRJMP(REAL(XCOORD(TRIA(ITRIA1,1))),
      .             REAL(YCOORD(TRIA(ITRIA1,1))))
@@ -103,7 +103,7 @@ C     PLOT THE OLD TRIANGLE-MESH
         CALL GRDRW(REAL(XCOORD(TRIA(ITRIA1,1))),
      .             REAL(YCOORD(TRIA(ITRIA1,1))))
       ENDDO
-C     PLOT THE NEW TRIANGLE-MESH
+C     PLOT THE NEW TRIANGLE MESH
       CALL GRNWPN(5)
       DO ITRIA=NTRIA1+1,NTRIA
         CALL GRJMP(REAL(XCOORD(TRIA(ITRIA,1))),
@@ -115,7 +115,7 @@ C     PLOT THE NEW TRIANGLE-MESH
         CALL GRDRW(REAL(XCOORD(TRIA(ITRIA,1))),
      .             REAL(YCOORD(TRIA(ITRIA,1))))
       ENDDO
-C     PLOT THE MARGIN OF THE NEW TRIANGLE-GRID
+C     PLOT THE MARGIN OF THE NEW TRIANGLE GRID
       CALL GRSPTS(25)
       DO ITRIA=NTRIA1+1,NTRIA
         DO IS=1,3
@@ -151,17 +151,12 @@ C     INITIALIZE THE VARIABLES OF THE COMMON BLOCKS
       IMPLICIT NONE
 
       NCOORD = 0
-      ICOORD = 0
 
       NTRIA = 0
       NTRIA1 = 0
-      ITRIA = 0
-      ITRIA1 = 0
 
       NNCUT = 0
-      ICUT = 0
       NNISO = 0
-      IISO = 0
       END
 
 *//TRIIN//
@@ -175,14 +170,14 @@ C     READ TRIANGLE MESH
       use ctria
       IMPLICIT NONE
 
-      INTEGER IDUMMY
+      INTEGER IDUMMY, ICOORD, ITRIA
 
       READ(21,*) NTRIA
       READ(23,*) idummy
       if (ntria .ne. idummy) then
          write(6,*) '*.elemente and *.neighbor files differ in number',
      .              ' of triangles'
-         call exit
+         stop
       endif
       allocate(tria(ntria,3))
       allocate(neighb(ntria,3))
@@ -228,7 +223,7 @@ c
 c      DOUBLEPRECISION, allocatable :: BR(:,:,:), BZ(:,:,:)
 c      doubleprecision  CR, CZ, PIT
 c      doubleprecision, allocatable :: help3(:,:,:)
-c      INTEGER I0, I0E, I1, I2, I3, I4, IX0
+c      INTEGER I0, I0E, I1, I2, I3, I4, IX, IY, IX0
 c      integer dim1, dim2
 c      CHARACTER*110 ZEILE
 c
@@ -389,7 +384,7 @@ C     CREATE TRIANGLE MESH
       use ccuts
       IMPLICIT NONE
 
-      INTEGER IX1
+      INTEGER IX, IY, IX1, ICUT, IISO
 
       call realloc_ctria('tria',2*n2eff+ntria1-size(tria,1))
       call realloc_ctria('neigh',2*n2eff+ntria1-size(neighb,1))
@@ -523,7 +518,7 @@ C     ELIMINATE DOUBLE COORDINATES
       IMPLICIT NONE
 
       integer, allocatable :: ico(:)
-      INTEGER L,I,J, K, ANZCOORD
+      INTEGER J, K, ICOORD, ANZCOORD, ITRIA
 
       allocate(ico(ncoord+(nx+1)*(ny+1)))
       DO J=1,NCOORD+(NX+1)*(NY+1)
@@ -577,7 +572,7 @@ C     FIND NEIGHBOURS
       use ccuts
       IMPLICIT NONE
 
-      INTEGER I, J, K, L, M, IS, INCR
+      INTEGER I, J, K, KK, L, M, IS, INCR, ITRIA, ITRIA1
       DATA INCR /1000/
       LOGICAL PARA
       LOGICAL DBG, DBG0
@@ -598,8 +593,8 @@ c neighr(i,k).ne.0 -> side k of triangle i is on the tria grid edge
 c        dbg0=itria1.eq.1   !###
         if(dbg0) then !{
           print *,'itria1,ntria1,ntria=',itria1,ntria1,ntria
-          print *,'neighr=',neighr(itria1,:)
-          print *,'neighb=',neighb(itria1,:)
+          print *,'neighr=',(neighr(itria1,k),k=1,3)
+          print *,'neighb=',(neighb(itria1,k),k=1,3)
         end if !}
         IF (ABS(NEIGHR(ITRIA1,1))+ABS(NEIGHR(ITRIA1,2))+
      .      ABS(NEIGHR(ITRIA1,3)) .NE. 0) THEN !{
@@ -612,8 +607,8 @@ c loop over triangles (b) inside the b2 grid
 c            dbg=dbg0.and.itria.eq.1363  !###
             if(dbg) then !{
               print *,'itria=',itria
-              print *,'neighr=',neighr(itria,:)
-              print *,'neighb=',neighb(itria,:)
+              print *,'neighr=',(neighr(itria,k),k=1,3)
+              print *,'neighb=',(neighb(itria,k),k=1,3)
             end if !}
             IF (ABS(NEIGHR(ITRIA,1))+ABS(NEIGHR(ITRIA,2))+
      .          ABS(NEIGHR(ITRIA,3)).NE.0) THEN !{
@@ -631,7 +626,8 @@ c loop over the sides of triangle (b)
                   IF (M .EQ. 4) M = 1
                   if(dbg) then !{
                     print '(a,t12,3i8/t12,3i8)','triangles',
-     ,                tria(itria1,:),tria(itria,:)
+     ,                (tria(itria1,kk),kk=1,3),
+     ,                (tria(itria ,kk),kk=1,3)
                   end if !}
                   IF ((TRIA(ITRIA1,I) .EQ. TRIA(ITRIA,L)) .AND.
      .                (TRIA(ITRIA1,J) .EQ. TRIA(ITRIA,K))) THEN !{
@@ -824,32 +820,28 @@ C     CHECK COLINEARITY OF TWO MARGINS
 cxpb  We need to have not only (P1,P2) parallel to (Q1,Q2) but
 cxpb  also (P1,P2) shorter than (Q1,Q2)
  
-cank  The segments must be not only parallel, but colinear {
-c      IF (ABS(XP2-XP1) .GT. 1.E-6) THEN
-c        IF (ABS(XQ1-XQ2) .GT. 1.E-6) THEN
-c          IF (ABS(ABS((YP2-YP1)/((YQ1-YQ2)+1.e-20)) -
-c     .            ABS((XP2-XP1)/(XQ1-XQ2))) .LT. 1.E-6) THEN
-c            PARA = ABS(XP2-XP1).LE.ABS(XQ2-XQ1)
-c          ELSE
-c            PARA = .FALSE.
-c          ENDIF
-c        ELSE
-c          PARA = .FALSE.
-c        ENDIF
-c      ELSE
-c        IF (ABS(XQ1-XQ2) .GT. 1.E-6) THEN
-c          PARA = .FALSE.
-c        ELSE
-c          PARA = ABS(YP2-YP1).LE.ABS(YQ2-YQ1)
-c        ENDIF
-c      ENDIF
-
       tolx=tol*abs(xp1+xq1+xp2+xq2)/4.
       toly=tol*abs(yp1+yq1+yp2+yq2)/4.
-      tol2=tolx*toly
-      para= abs((xp1-xq1)*(yq2-yq1)-(yp1-yq1)*(xq2-xq1)).le.tol2 .and.
-     .      abs((xp2-xq1)*(yq2-yq1)-(yp2-yq1)*(xq2-xq1)).le.tol2
+      tol2=sqrt(tolx*toly)
 
+cank  The segments must be not only parallel, but colinear {
+      IF (ABS(XQ2-XQ1) .GT. TOLX) THEN
+        IF (ABS(YQ1-YQ2) .GT. TOLY) THEN
+          IF (ABS((XP1-XP2)*(YQ1-YQ2)-(YP1-YP2)*(XQ1-XQ2)).LT.TOL2) THEN
+            PARA = ABS(XP2-XP1).LE.ABS(XQ2-XQ1)+TOLX
+          ELSE
+            PARA = .FALSE.
+          ENDIF
+        ELSE
+          PARA = ABS(YP1-YP2) .LE. TOLY
+        ENDIF
+      ELSE
+        IF (ABS(XP1-XP2) .GT. TOLX) THEN
+          PARA = .FALSE.
+        ELSE
+          PARA = ABS(YP2-YP1).LE.ABS(YQ2-YQ1)+TOLY
+        ENDIF
+      ENDIF
 cank }
 c DPC: additional constraint - (p1,p2) should be contained by (q1,q2)
 cank: need to introduce tolerance here, 
@@ -872,6 +864,7 @@ C     WRITE NEW GRID
       use cdimen
       use ctria
       IMPLICIT NONE
+      INTEGER ICOORD, ITRIA
 
       WRITE(9,*) NCOORD
       WRITE(9,'(1P,4E19.8)') (XCOORD(ICOORD),ICOORD=1,NCOORD)

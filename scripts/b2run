@@ -1,4 +1,4 @@
-#! /usr/bin/tcsh -f
+#! /bin/tcsh -f
 
 ## -h                         print help
 ## -n                         dry run
@@ -7,15 +7,16 @@
 ## -d <debugger>              use debugger <debugger>
 
 # if we are running at JET then do not rely on the automatic feature of searching in ../baserun, instead setup links
-if (${HOST_NAME} == "JET" && `basename $PWD` != "baserun") then
-  echo Special action is being taken since we are running at JET
-  foreach i (b2mn.dat b2fgmtry b2fpardf b2fstati b2frates)
-    if (! -s $i) then
-      echo Setting up a link to ../baserun/$i
-      ln -s ../baserun/$i
-    endif
-  end
-endif
+# XPB: not sure this is still needed
+# if (${HOST_NAME} == "JET" && `basename $PWD` != "baserun") then
+#   echo Special action is being taken since we are running at JET
+#   foreach i (b2mn.dat b2fgmtry b2fpardf b2fstati b2frates)
+#     if (! -s $i) then
+#       echo Setting up a link to ../baserun/$i
+#       ln -s ../baserun/$i
+#     endif
+#   end
+# endif
 # end
 
 set solpstop=`climb_and_look_for SOLPSTOP`
@@ -42,6 +43,7 @@ loop:
 endloop:
   set debug=""
   set TIME=time
+  set RUN_OPTIONS=""
 
 argloop:
   if ("X${1}X" == "X-hX") then
@@ -50,6 +52,7 @@ argloop:
     echo 'Launches a SOLPS run'
     echo ' '
     echo 'Optional arguments:'
+    echo ' -b: for use with b2co to produce a provisional b2fstate file while the main code is running'
     echo ' -d <debugger>: launch run with debugger <debugger>.'
     echo ' -h: Prints this message.'
     echo ' -m <mpi-launcher + args>: run mpi-version (example: b2run -m \"mpiexec -np 2\" b2mn)'
@@ -88,6 +91,11 @@ argloop:
     set debug="-n"
     goto argloop
   endif
+  if ("X${1}X" == "X-bX") then
+    shift
+    setenv B2FSTATE_ONLY yes
+    goto argloop
+  endif
   if ("X${1}X" == "X-sX") then
     shift
     setenv STAND_ALONE yes
@@ -99,8 +107,13 @@ argloop:
       source $SOLPSTOP/SETUP/mpi
       set MPI_SET=yes
     endif
-    set TIME=`echo $argv | sed -e 's:^"::' -e 's:" .*::'`
-    set nargs=`echo $TIME | awk '{print split($0,args," ")}'`
+    set TMPI=`echo $argv | sed -e 's:^"::' -e 's:" .*::' -e 's:"$::' `
+    set nargs=`echo $TMPI | awk '{print split($0,args," ")}'`
+    if ("X${TIME}X" == "XtimeX") then
+      set TIME="$TMPI"
+    else
+      set TIME="$TIME $TMPI"
+    endif
     mpiloop:
       if ($nargs > 0) then
         shift
@@ -118,18 +131,36 @@ argloop:
       source $SOLPSTOP/SETUP/debug
       set DEBUG_SET=yes
     endif
-    if ($1 == "") then 
-      set TIME="$DBX"
-    else  
-      set TIME="$1"
-      shift
+    if ("X${1}X" == "XX") then
+      if ("X${TIME}X" == "XtimeX") then
+        set TIME="$DBX"
+      else
+        set TIME="$DBX $TIME"
+      endif
+    else
+      set next=$1
+      set begin_next=`printf '%s' $next | cut -c1`
+      if ("X${begin_next}X" == "X-X") then
+        set TIME="$DBX"
+      else
+        set TIME="$1"
+        shift
+      endif
     endif
     goto argloop 
   endif
+  if ("X${1}X" == "X-oX") then
+    shift
+    set RUN_OPTIONS="$RUN_OPTIONS $1"
+    shift
+    goto argloop
+  endif
   if ("X${argv}X" == "XX") set argv="b2mn"
+  echo "argument = "$argv
   set CMD=`echo $argv" " | sed -e 's: :.prt :g'`
-  make $debug TIME="$TIME" -f $RUNS/Makefile $CMD
+  ${MAKE} $debug TIME="$TIME" RUN_OPTIONS="$RUN_OPTIONS" -f $RUNS/Makefile $CMD
   unsetenv STAND_ALONE
+  unsetenv B2FSTATE_ONLY
   if ($?MPI_SET)   source $SOLPSTOP/SETUP/nompi
   if ($?DEBUG_SET) source $SOLPSTOP/SETUP/nodebug
   

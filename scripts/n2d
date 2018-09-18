@@ -14,4 +14,4 @@ Usage: $Name Naka-file DG-file
 # rm -f fort.2 > /dev/null
 # ln -sf $1 fort.1
 nk2dg $1 $2
-#      && { mv fort.2 $2; rm -f fort.1; }
+#      && { [ -e fort.2 ] && mv fort.2 $2; rm -f fort.1; }

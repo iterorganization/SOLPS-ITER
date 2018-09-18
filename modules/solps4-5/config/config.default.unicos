@@ -4,7 +4,7 @@ EQUIV4 = ${EQUIVS}
 EQUIV5 = ${EQUIVS} -Dsmin=dmin
 
 CPP = /usr/lib/gpp -F
-CPPOPTS = -C -P -N -I$(srcdir) $(EQUIVS)
+CPPOPTS = -C -P -N -I$(SRCDIR) $(EQUIVS)
 CPP4OPTS = ${CPPOPTS}
 CPP5OPTS = ${CPPOPTS}
 

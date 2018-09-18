@@ -1,0 +1,18 @@
+#! /bin/ksh
+
+[ -z "$B2FSTATE_ONLY" ] && {
+  extension=`echo $PLASMASTATE | awk -F . '{print $NF}'`
+  echo extension is $extension
+  [ -s b2co.files ] && {
+    echo "Truncating tracing files"
+    cat b2co.files | awk '{print "cat "$1" | head --line="$2" > "$1".$extension"}' > /tmp/b2co.$extension
+    cat b2co.files | awk '{print "rm "$1""}' >> /tmp/b2co.$extension
+    cat b2co.files | awk '{print "mv -v "$1".$extension ../"$1" "}' >> /tmp/b2co.$extension
+    . /tmp/b2co.$extension
+    rm /tmp/b2co.$extension
+  } || {
+    echo 'Did not find non-empty b2co.files list. Nothing else to do ...'
+  }
+} || {
+  echo 'B2FSTATE_ONLY set. Skipping tracing files...'
+}

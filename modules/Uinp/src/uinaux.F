@@ -10,12 +10,17 @@ c
 c=======================================================================
 c*** Input of user data from the file AUX
 c=======================================================================
+      implicit none
+      character*8 nam
 #include "uinput.inc"
 #include "impcon.inc"
+      integer nnms
       parameter (nnms=38)
-      character*8 nam, unm(nnms)
-      integer itrsrc(0:nstra),iitalv(ntalv),iiiplt(5)
-      integer nfiles
+      character*8 name, unm(nnms)
+      integer i,j,l,itrsrc(0:nstra),iitalv(ntalv),iiiplt(5),idum(11)
+      integer nfiles,ntimv
+      real u
+      real rdum(6)
       logical ublplt(5)
       equivalence (ublplt,pl1st)
       logical streql
@@ -33,15 +38,15 @@ c*** List of the valid input keywords
 c=======================================================================
 c
       call subini('uinaux')
-      call locase(nam,nam,8)
+      call locase(nam,name,8)
       do 1000 i=1,nnms
-          if(streql(nam,unm(i))) 
+          if(streql(name,unm(i)))
      ,             go to (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,
      ,                    16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,
      ,                                       31,32,33,34,35,36,37,38),i
  1000 continue
 c      call skipit
-      print *,'uinaux: variable name ',nam,' is not foreseen - ',
+      print *,'uinaux: variable name ',name,' is not foreseen - ',
      ,  'check the $DEVICE.aux file'
       call xerrab ('Unknown variable name in $DEVICE.aux file')
       goto 9999
@@ -56,17 +61,34 @@ c
       goto 9999
  4    call resimi(ntimv)
       goto 9999
- 5    call rearre(dtimv,2,i)
+ 5    call rearre(rdum,2,i)
+      dtimv=rdum(1)
+      time0=rdum(2)
       goto 9999
  6    continue
       goto 9999
- 7    call rearre(ch2mx,5,i)
+ 7    call rearre(rdum,5,i)
+      ch2mx=rdum(1)
+      ch2my=rdum(2)
+      ch2x0=rdum(3)
+      ch2y0=rdum(4)
+      ch2z0=rdum(5)
       goto 9999
- 8    call rearre(ch3mx,6,i)
+ 8    call rearre(rdum,6,i)
+      ch3mx=rdum(1)
+      ch3my=rdum(2)
+      ch3mz=rdum(3)
+      ch3x0=rdum(4)
+      ch3y0=rdum(5)
+      ch3z0=rdum(6)
       goto 9999
  9    call rearri(ntls,nlimps,nsurpr)
       goto 9999
- 10   call rearri(i1trc,11,i)
+ 10   call rearri(idum,11,i)
+      i1trc=idum(1)
+      i2trc=idum(2)
+      isyplt(1:8)=idum(3:10)
+      ilinie=idum(11)
       goto 9999
  11   call resimi(ntcpu)
       goto 9999

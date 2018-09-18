@@ -12,25 +12,28 @@ echo The Eirene manual is located at http://www.eirene.de/
 export SOLPSTOP=$PWD
 export SOLPSWORK=$SOLPSTOP/runs
 
-[ -e whereami ] && {
-iamat=`./whereami|tail -1`
-echo Running at $iamat
+[ -s whereami ] && {
+  iamat=`./whereami|tail -1`
+  echo Running at $iamat
 } || {
-iamat="unknown"
+  iamat="UNKNOWN"
 }
 
-[ -e SETUP/setup.csh.HOST_NAME.local ] && {
-echo Loading SETUP/setup.csh.HOST_NAME.local
+[ -s SETUP/setup.ksh.HOST_NAME.local ] && {
+  echo Loading SETUP/setup.ksh.HOST_NAME.local
 } || {
-if [ $iamat ==  "*UNKNOWN" ]  then
-  export HOST_NAME=default
-else
-  export HOST_NAME=$iamat
-fi
+  case $iamat in
+  *UNKNOWN )
+    export HOST_NAME=UNKNOWN
+    ;;
+  * )
+    export HOST_NAME=$iamat
+    ;;
+  esac
 }
 
-[ -e setup.ksh.SOLPSMASTER ] && . setup.ksh.SOLPSMASTER
-[ -e setup.ksh.SOLPSMASTER.local ] && . setup.ksh.SOLPSMASTER.local
+[ -s setup.ksh.SOLPSMASTER ] && . setup.ksh.SOLPSMASTER
+[ -s setup.ksh.SOLPSMASTER.local ] && . setup.ksh.SOLPSMASTER.local
 
 [ -z "$SOLPSMASTER" ] && {
   case $iamat in
@@ -51,38 +54,43 @@ fi
 }
 
 # COMPILER can also be the argument to setup.csh call
-if [ "$1" = "" ] ; then
-[ -e default_compiler ] && {
-  export COMPILER=`./default_compiler|tail -1`
-  echo Using compiler $COMPILER.
+[ "$1" = "" ] && {
+  [ -s default_compiler ] && {
+    export COMPILER=`./default_compiler|tail -1`
+    echo Using compiler $COMPILER.
+  } || {
+    export COMPILER=ifort64
+    echo Assuming default compiler ifort64.
+  }
 } || {
-  export COMPILER=ifort64
-  echo Assuming default compiler ifort64.
+  export COMPILER=$1
+  echo Using specified compiler $1.
 }
-else
-export COMPILER=$1
-fi
 [ -z "$COMPILER" ] && echo 'COMPILER not defined!'
+[ -x `which gmake` ] && {
+  export MAKE=`which gmake`
+} || {
+  export MAKE=`which make`
+}
 
 [ -z "$PYTHONPATH" ] && {
   export PYTHONPATH="$SOLPSTOP/lib/python"
 } || {
   export PYTHONPATH="${PYTHONPATH}:$SOLPSTOP/lib/python"
 }
+export SOLPSLIB=${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}
 
 # setup files for combination of HOST_NAME and COMPILER, + local modifications if present
-[ -e SETUP/setup.ksh.${HOST_NAME}.${COMPILER} ] && {
-echo Loading SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.
-. SETUP/setup.ksh.${HOST_NAME}.${COMPILER}
+[ -s SETUP/setup.ksh.${HOST_NAME}.${COMPILER} ] && {
+  echo Loading SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.
+  . SETUP/setup.ksh.${HOST_NAME}.${COMPILER}
 } || {
 echo File SETUP/setup.ksh.${HOST_NAME}.${COMPILER} not found!
 }
-[ -e SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.local ] && {
-echo Loading SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.local.
-. SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.local
+[ -s SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.local ] && {
+  echo Loading SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.local.
+  . SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.local
 }
-
-limit stacksize unlimited
 
 [ -z "$GRAPHCAP" ] && export GRAPHCAP=X11
 
@@ -116,28 +124,26 @@ esac
 [ -z "$DEVICE" ] && export DEVICE=iter
 
 [ -z "$B2PLOT_DEV" ] && export B2PLOT_DEV="x11 ps"
-[ -z "$GLI_HOME"] && export GLI_HOME=$SOLPSTOP/lib
+[ -z "$GLI_HOME" ] && export GLI_HOME=$SOLPSTOP/lib
 export WSTYPE=$OBJECTCODE
 # export GLI_WSTYPE=210
-[ -z "$GRSOFT_DEVICE"] && export GRSOFT_DEVICE="211 62"
-export SonnetTopDirectory=${SOLPSTOP}/src/Sonnet
+[ -z "$GRSOFT_DEVICE" ] && export GRSOFT_DEVICE="211 62"
+export SonnetTopDirectory=${SOLPSTOP}/modules/Sonnet-light
 export EscapeSonnet=`echo ${SonnetTopDirectory} | sed 's:\/:\\\/:g'`
 
 export DG=${SOLPSTOP}/modules/DivGeo
-export SOLPSLIB=${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}
 export CARRE_STOREDIR=${SOLPSTOP}/modules/Carre/meshes
 
-alias sb2='cd ${SOLPSTOP}/src/b2'
-alias sbb='cd ${SOLPSTOP}/src/b2'
-alias sei='cd ${SOLPSTOP}/src/Eirene'
-alias ssw='cd ${SOLPSTOP}/src/Sonnet'
-alias ssd='cd ${SOLPSTOP}/src/DivGeo'
-alias ssc='cd ${SOLPSTOP}/src/Carre'
-alias sst='cd ${SOLPSTOP}/src/Triang'
-alias ssu='cd ${SOLPSTOP}/src/uinp'
-alias sbin='cd ${SOLPSTOP}/bin/${OBJECTCODE}'sbb
-alias slib='cd ${SOLPSTOP}/lib/${OBJECTCODE}'
-alias srun='cd ${SOLPSTOP}/runs'
+alias sb2='cd ${SOLPSTOP}/modules/B2.5'
+alias sbb='cd ${SOLPSTOP}/modules/B2.5'
+alias sei='cd ${SOLPSTOP}/modules/Eirene'
+alias ssw='cd ${SOLPSTOP}/modules/Sonnet-light'
+alias ssd='cd ${SOLPSTOP}/modules/DivGeo'
+alias ssc='cd ${SOLPSTOP}/modules/Carre'
+alias sst='cd ${SOLPSTOP}/modules/Triang'
+alias ssu='cd ${SOLPSTOP}/modules/Uinp'
+alias sbin='cd ${SOLPSTOP}/scripts'
+alias slib='cd ${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}'
 alias sbr='cd ${SOLPSTOP}/runs'
 alias scr='cd ${SOLPSTOP}/scripts'
 alias stop='cd ${SOLPSTOP}'
@@ -194,26 +200,25 @@ alias unset_openmp='. $SOLPSTOP/SETUP/noopenmp'
 alias set_ig='. $SOLPSTOP/SETUP/ig'
 alias unset_ig='. $SOLPSTOP/SETUP/noig'
 
+[ -s setup.ksh.$OBJECTCODE ] && . setup.ksh.$OBJECTCODE
+[ -s setup.ksh.local ] && . setup.ksh.local
+[ -s setup.ksh.local.$OBJECTCODE ] && . setup.ksh.local.$OBJECTCODE
+[ -s setup.ksh.mdsplus ] && . setup.ksh.mdsplus
+[ -s setup.ksh.mdsplus.$OBJECTCODE ] && . setup.ksh.mdsplus.$OBJECTCODE
+[ -s setup.ksh.$USER ] && . setup.ksh.$USER
+[ -s setup.ksh.$USER.$OBJECTCODE ] && . setup.ksh.$USER.$OBJECTCODE
 
-[ -e setup.ksh.$OBJECTCODE ] && . setup.ksh.$OBJECTCODE
-[ -e setup.ksh.local ] && . setup.ksh.local
-[ -e setup.ksh.local.$OBJECTCODE ] && . setup.ksh.local.$OBJECTCODE
-[ -e setup.ksh.mdsplus ] && . setup.ksh.mdsplus
-[ -e setup.ksh.mdsplus.$OBJECTCODE ] && . setup.ksh.mdsplus.$OBJECTCODE
-[ -e setup.ksh.$USER ] && . setup.ksh.$USER
-[ -e setup.ksh.$USER.$OBJECTCODE ] && . setup.ksh.$USER.$OBJECTCODE
-
-export      TOOLCHAIN =  ${HOST_NAME}.${COMPILER}
-export     CARRE_PATH =  ${SOLPSTOP}/modules/Carre/builds/${TOOLCHAIN}
-export    DIVGEO_PATH =  ${SOLPSTOP}/modules/DivGeo/builds/${TOOLCHAIN}:${SOLPSTOP}/modules/DivGeo/equtrn/builds/${TOOLCHAIN}:${SOLPSTOP}/modules/DivGeo/convert/builds/${TOOLCHAIN}
-export    EIRENE_PATH =  ${SOLPSTOP}/modules/Eirene/builds/standalone.${TOOLCHAIN}
-export       B25_PATH =  ${SOLPSTOP}/modules/B2.5/builds/standalone.${TOOLCHAIN}
-export B25EIRENE_PATH =  ${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${TOOLCHAIN}
-export      UINP_PATH =  ${SOLPSTOP}/modules/Uinp/builds/${TOOLCHAIN}
-export    TRIANG_PATH =  ${SOLPSTOP}/modules/Triang/builds/${TOOLCHAIN}
-export   SCRIPTS_PATH =  ${SOLPSTOP}/scripts.local:${SOLPSTOP}/scripts:${SOLPSTOP}/modules/Eirene/scripts
-export      AMDS_PATH =  ${SOLPSTOP}/modules/amds/builds/${TOOLCHAIN}
-export       S45_PATH =  ${SOLPSTOP}/modules/solps4-5/builds/${TOOLCHAIN}
+export      TOOLCHAIN=${HOST_NAME}.${COMPILER}
+export     CARRE_PATH=${SOLPSTOP}/modules/Carre/builds/${TOOLCHAIN}
+export    DIVGEO_PATH=${SOLPSTOP}/modules/DivGeo/builds/${TOOLCHAIN}:${SOLPSTOP}/modules/DivGeo/equtrn/builds/${TOOLCHAIN}:${SOLPSTOP}/modules/DivGeo/convert/builds/${TOOLCHAIN}
+export    EIRENE_PATH=${SOLPSTOP}/modules/Eirene/builds/standalone.${TOOLCHAIN}
+export       B25_PATH=${SOLPSTOP}/modules/B2.5/builds/standalone.${TOOLCHAIN}
+export B25EIRENE_PATH=${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${TOOLCHAIN}
+export      UINP_PATH=${SOLPSTOP}/modules/Uinp/builds/${TOOLCHAIN}
+export    TRIANG_PATH=${SOLPSTOP}/modules/Triang/builds/${TOOLCHAIN}
+export   SCRIPTS_PATH=${SOLPSTOP}/scripts.local:${SOLPSTOP}/scripts:${SOLPSTOP}/modules/Eirene/scripts
+export      AMDS_PATH=${SOLPSTOP}/modules/amds/builds/${TOOLCHAIN}
+export       S45_PATH=${SOLPSTOP}/modules/solps4-5/builds/${TOOLCHAIN}
 
 export SOLPS_PATH=${SCRIPTS_PATH}:${CARRE_PATH}:${DIVGEO_PATH}:${B25EIRENE_PATH}:${EIRENE_PATH}:${B25_PATH}:${UINP_PATH}:${TRIANG_PATH}:${AMDS_PATH}:${S45_PATH}
 export OLD_PATH=${PATH}
@@ -223,12 +228,12 @@ export PATH=$NCARG_ROOT/bin:$PATH
 export MANPATH=$NCARG_ROOT/man:${DG}/equtrn/doxygen/man:$MANPATH
 
 [ -z "$IDL_PATH" ] && {
-  export IDL_PATH="+$SOLPSTOP/data/IDL"
+  export IDL_PATH="+$SOLPSTOP/scripts/IDL"
 } || {
-  export IDL_PATH="+$SOLPSTOP/data/IDL:${IDL_PATH}"
+  export IDL_PATH="+$SOLPSTOP/scripts/IDL:${IDL_PATH}"
 }
 
-[ -e $SOLPSLIB/libnetcdf.a ] && export NETCDF=-lnetcdf
+[ -s $SOLPSLIB/libnetcdf.a ] && export NETCDF=-lnetcdf
 
 [ -z "$LD_LIBRARY_PATH" ] && {
     export LD_LIBRARY_PATH=${SOLPSLIB}
@@ -240,11 +245,10 @@ export MANPATH=$NCARG_ROOT/man:${DG}/equtrn/doxygen/man:$MANPATH
   [ -n "$dbg" ] && {
     . debug.ksh
   }
-  export WSTYPE OBJECTCODE
+  export WSTYPE=${COMPILER}
   [ -n $XLFRTEOPTS ] && export XLFRTEOPTS
-  echo "$OBJECTCODE"
 }
 
-export PLOT_SET_PATH=":..:../..:$SOLPSTOP/data.local/plot_set:$SOLPSTOP/data/plot_set"
+export PLOT_SET_PATH=":..:../..:$SOLPSTOP/data.local/plot_set:$SOLPSTOP/scripts/plot_set"
 
 [ -x module ] && module list

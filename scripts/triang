@@ -8,6 +8,11 @@
 
 GV="gv $GV_OPT"
 
+solpstop=`climb_and_look_for SOLPSTOP`
+[ -s $solpstop ] && {
+  SOLPSTOP="`cat $solpstop`"
+}
+
 [ "$DEVICE" = '' ] && {
   print -u2 -n -- "No DEVICE selected. Please provide a device name\n "
   read u
@@ -23,7 +28,15 @@ set -A f -- $TRIATRI
 gkseps=gli.eps
 eirinp=triang.eir
 eirhed=triang.hed
-eirout=fort.78
+[ "$COMPILER" = 'HP' ] && {
+  b2agout=ftn30
+  eirout=ftn78
+  eirlink=ftn1
+} || {
+  b2agout=fort.30
+  eirout=fort.78
+  eirlink=fort.1
+}
 eirlog=eirtria.log
 triain=tria.in
 trialog=tria.log
@@ -49,7 +62,11 @@ unset f
 
 triaoutlist="$trianodes $triacells $trialinks"
 trigoutlist="$trignodes $trigcells $triglinks"
+[ "$COMPILER" = 'HP' ] && {
+triglnklist="ftn33 ftn34 ftn35"
+} || {
 triglnklist="fort.33 fort.34 fort.35"
+}
 
 NAME=`basename $0`
 stty erase ^H
@@ -58,7 +75,7 @@ Help="
 Uinp    (u) run uinp to produce the input files for the initial short run of Eirene;
         (U) run uinp -l to make first the necessary links to the DG output (run first the 
             lns command from the DG environment to link the DG output to the standard place);
-B2ag    (b) run b2ag to produce the fort.30 file;
+B2ag    (b) run b2ag to produce the $b2agout file;
 Eirene  (e) run eirobjx to produce the geometry data for tria;
 Tria    (t) run tria to generate the triangular mesh outside the regular B2.5 grid;
 triaGeom(g) run triageom to combine the triangular mesh with the regular B2.5 grid;
@@ -68,7 +85,7 @@ Store   (s) store the combined mesh, giving it a serial number and linking to fo
 Convert (c) convert the triangular (c) or combined (C) mesh into a DG template;
 List    (l) list the meshes present in the archive;
 Remove  (r) remove the specified meshes from the archive;
-reMap   (m) run b2yt to remap the B2.5 data on a new grid and to produce a new fort.30 file (TBD!);
+reMap   (m) run b2yt to remap the B2.5 data on a new grid and to produce a new $b2agout file (TBD!);
 trAp    (a) set a trap in tria for debugging purposes;
 Inquire (i) inquire about a reference point in the triangulation;
 Quit    (q) quit.
@@ -141,7 +158,7 @@ griddir=${CARRE_GRIDDIR-$SOLPSTOP/modules/Carre/meshes/${DEVICE-iter}}
                print -u2 -- "Unable to create the directory. Check the permissions in ${griddir}%/*"
                break 2
                }; break;;
-       ( n|N ) ; break 2;;
+       ( n|N ) break 2;;
        (  *  ) print -u2 -n -- "Please answer with either y or n: ";;
     esac; }
   }; done
@@ -192,7 +209,7 @@ while true; do {
       (  u  )                                               # run uinp to produce the input for Eirene:
             uinp
             N=
-            [ -r fort.30 ] && q=e || {
+            [ -r $b2agout ] && q=e || {
               [ -r b2ag.dat ] && {
                 ln -sf $griddir/$carre_stem.v$n.geo .
                 /bin/echo -e "The last grid found is : $carrename"
@@ -209,7 +226,7 @@ while true; do {
               . triang.conf
             }
             N=
-            [ -r fort.30 ] && q=e || {
+            [ -r $b2agout ] && q=e || {
               [ -r b2ag.dat ] && {
                 ln -sf $griddir/$carre_stem.v$n.geo .
                 /bin/echo -e "The last grid found is : $carrename"
@@ -221,28 +238,28 @@ while true; do {
       ( b|B )                                               # run b2ag to produce fort.30 file:
             [ -r b2fplasma ] && {
               print -u2 -- "Command line: echo f30 | b2plot > b2pl.prt"
-              [ -r fort.30 ] && rm fort.30
+              [ -r $b2agout ] && rm $b2agout
               echo f30 | b2plot > b2pl.prt
-              [ -r b2pl.exe.dir/fort.30 ] && {
-                mv b2pl.exe.dir/fort.30 .
+              [ -r b2pl.exe.dir/$b2agout ] && {
+                mv b2pl.exe.dir/$b2agout .
                 rmdir b2pl.exe.dir
-                print -u2 -- "Produced fort.30 file"
+                print -u2 -- "Produced $b2agout file"
                 q=e
               } || {
-                print -u2 -- "Could not produce the fort.30 file. Please provide separately"
+                print -u2 -- "Could not produce the $b2agout file. Please provide separately"
                 q=u
               }
             } || {
-              print -u2 -- "Command line: gmake -f ${SOLPSTOP}/runs/Makefile b2ag.prt > b2ag.log"
+              print -u2 -- "Command line: ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2ag.prt > b2ag.log"
               [ -r b2ag.prt ] && rm b2ag.prt
-              [ -r fort.30 ] && rm fort.30
-              gmake -f ${SOLPSTOP}/runs/Makefile b2ag.prt > b2ag.log
-              [ -r fort.30 ] && {
+              [ -r $b2agout ] && rm $b2aagout
+              ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2ag.prt > b2ag.log
+              [ -r $b2agout ] && {
                 [ -d b2ag.exe.dir ] && rmdir b2ag.exe.dir
-                print -u2 -- "Produced fort.30 file"
+                print -u2 -- "Produced $b2agout file"
                 q=e
               } || {
-                print -u2 -- "Could not produce the fort.30 file. Please provide separately"
+                print -u2 -- "Could not produce the $b2agout file. Please provide separately"
                 q=u
               }
             }
@@ -251,15 +268,15 @@ while true; do {
             [ -r AMJUEL ] || {
               setup_baserun_eirene_links
             } 
-            [ -r fort.30 ] && {
+            [ -r $b2agout ] && {
               [ -r $eirinp ] && {
                 N=
                 print -u2 -- "Starting Eirene - may take a while..."
-                print -u2 -- "Command line: $EIRENE < triang.eir > $eirlog"
+                print -u2 -- "Command line: $EIRENE > $eirlog"
                 [ -r $eirout ] && rm $eirout
-                ln -sf "$eirinp" fort.1
-                $EIRENE < triang.eir > "$eirlog"
-                rm fort.1
+                ln -sf "$eirinp" "$eirlink"
+                $EIRENE > "$eirlog"
+                rm $eirlink
                 [ -s "$eirout" ] && [ -r "$eirout" ] && {
                   (cat "$eirhed"; tail --lines=+2 "$eirout") > "$triain" && q=t || {
                     print -u2 -- "Something is wrong with $eirout ==> Check $eirlog"
@@ -277,7 +294,7 @@ while true; do {
               }
               true
             } || {
-              print -u2 -- "No fort.30 - run b2ag or b2plot first"
+              print -u2 -- "No $b2agout - run b2ag or b2plot first"
               q=b
               [ -s b2mn.dat ] && [ -r b2mn.dat ] && q=m
             }
@@ -304,7 +321,7 @@ while true; do {
             } 
             break;;
       ( g|G )                                               # run TRIAGEOM to make combined mesh:  
-            [ -r fort.30 ] && [ -s fort.30 ] && {
+            [ -r $b2agout ] && [ -s $b2agout ] && {
               check_files $triaoutlist && {
                 N=
                 print -u2 -- "Starting a TRIAGEOM run"
@@ -313,9 +330,10 @@ while true; do {
                 [ -s "$gkseps" ] && [ -r "$gkseps" ] && mv "$gkseps" "$trigeps"
                 check_files $trigoutlist && {
                   q=s
-                  ln -sf $trignodes fort.33
-                  ln -sf $trigcells fort.34
-                  ln -sf $triglinks fort.35
+                  set -A L -- $triglnklist
+                  ln -sf $trignodes ${L[0]}
+                  ln -sf $trigcells ${L[1]}
+                  ln -sf $triglinks ${L[2]}
                 } || {
                   print -u2 -- "Not all output files, $trigoutlist, are produced"
                   print -u2 -- "    ==> Check $triglog"
@@ -329,7 +347,7 @@ while true; do {
               }
               true
             } || {
-              print -u2 -- "No valid fort.30 file is found. Run b2ag or b2plot first"
+              print -u2 -- "No valid $b2agout file is found. Run b2ag or b2plot first"
               q=b
             }
             break;;
@@ -642,7 +660,7 @@ while true; do {
             q=l
             break;;
       ( m|M )                                               # remap using b2yt:
-            print -u2 -- "Option is not realised yet. Please produce the fort.30 file separately"; break
+            print -u2 -- "Option is not realised yet. Please produce the $b2agout file separately"; break
             ####
             break;;
       ( a|A  )                                               # Trap for tria:
@@ -678,3 +696,5 @@ while true; do {
      esac; }
   }; done
 }; done
+stty sane
+

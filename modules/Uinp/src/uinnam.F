@@ -22,7 +22,7 @@ c=======================================================================
       character*8 unm(lunm),uun,ubs*1,uam*52
 c...                                                  52=48+4
       integer luwrk(nlim),luind(nlim)
-      logical hlp_spc,hlp_imm,streql
+      logical hlp_spc,streql
       external streql, xerrab, xertst, subini, subend
 c*** lusgm: segment number for the list of invisibles;
 c*** luswch: switch for the input of element lists (obsolete)
@@ -200,7 +200,8 @@ c=======================================================================
      .   (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
       end if !}
       goto 9999
-   11 call rearra(umtrl,nlim,i)
+   11 umtrl(1:nlim) = 'dummy'
+      call rearra(umtrl,nlim,i)
       nlimi=i
       if(nlimi.gt.nlim) then !{
         write(0,*) 'Too many wall elements: maximum ',nlim
@@ -251,18 +252,18 @@ c=======================================================================
       goto 9999
    16 call resimi(lusgm)
       goto 9999
-   17 call resimi(luwrk)
+   17 call resimi(luwrk(1))
       goto 9999
-   18 call resimi(luwrk)
+   18 call resimi(luwrk(1))
       luswch=1
       goto 9999
-   19 call resimi(luwrk)
+   19 call resimi(luwrk(1))
       luswch=2
       goto 9999
-   20 call resimi(luwrk)
+   20 call resimi(luwrk(1))
       luswch=3
       goto 9999
-   21 call resimi(luwrk)
+   21 call resimi(luwrk(1))
       luswch=4
       goto 9999
    22 call rearri(luwrk,nlim,i)
@@ -615,8 +616,6 @@ c*** Chemical sputtering
       l=lena
       lena=24
       call resima(chsptgt(nchsppri))
-c      read(iunii,'(2x,a)',end=9989) chsptgt(nchsppri)
-c      immed=hlp_imm
       lena=l
       goto 9999
 c 9989 write(0,*) 'Unexpected end-of-file encountered in uinnam'

@@ -1,4 +1,4 @@
-$(error First use of config.IN-DA.ifort64. Provide paths to libraries first.)
+#$(error First use of config.IN-DA.ifort64. Provide paths to libraries first.)
 
 #
 # Specify paths to root-directories of following libraries on your system
@@ -19,13 +19,13 @@ $(error First use of config.IN-DA.ifort64. Provide paths to libraries first.)
 # Add -DNAG22 to SOLPS_CPP
 #
 
-       NCDIR ?=
-   MSCL_ROOT ?=
+       NCDIR ?=/usr/local
+   MSCL_ROOT ?=/home/solps/solps-iter/solpslib
        H5DIR ?=
-     GR_ROOT ?=
-    GLI_HOME ?=
-  NCARG_ROOT ?=
-      NAGDIR ?=
+     GR_ROOT ?=/home/solps/solps-iter/solpslib
+    GLI_HOME ?=/home/solps/solps-iter/solpslib
+  NCARG_ROOT ?=/home/solps/solps-iter/solpslib/lib/NCARG
+      NAGDIR ?=/home/solps/solps-iter/solpslib
  MDSPLUS_DIR ?=
 
 #
@@ -69,7 +69,7 @@ ifdef LD_CATALYST
 endif
 
 # Build with IMAS if imas module is loaded
-ifdef IMAS_PREFIX
+ifdef IMAS_VERSION
   SOLPS_CPP += -DIMAS
   LD_UAL     = `pkg-config imas-lowlevel imas-ifort --libs`
   export LD_UAL

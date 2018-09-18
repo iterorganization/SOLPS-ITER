@@ -1,8 +1,13 @@
 #! /usr/bin/env ksh
 
+[ "$DEVICE" = '' ] && {
+  print -u2 -n -- "No DEVICE selected. Please provide a device name\n "
+  read u
+  export DEVICE=$u
+} || {
+  echo "DEVICE = " $DEVICE
+}
 [ "$SOLPS_CENTRAL" = 'yes' ] && DEVICE=$DEVICE/$USER
-
-echo "DEVICE = " $DEVICE
 echo "Converting shot number " $1
 [ -d $SOLPSWORK/$DEVICE ] || mkdir $SOLPSWORK/$DEVICE
 [ -s $SOLPSWORK/$DEVICE/SOLPSTOP ] || {

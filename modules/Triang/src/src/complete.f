@@ -11,7 +11,7 @@ c  version : 19.09.2005 18:04
       use celm
       implicit none
 
-      integer u,i
+      integer i
 
 c---- the new element is the triangle limited by the points ia, ib and
 c---- inodcon

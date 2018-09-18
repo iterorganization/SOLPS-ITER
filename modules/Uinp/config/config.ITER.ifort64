@@ -1,38 +1,50 @@
 #  VERSION : 28.07.99 20:34
-
-LD_MSCL ?= `pkg-config mscl --libs`
+NODENAME ?= $(shell echo `hostname`)
+ifeq (,$(findstring hpc-login0,${NODENAME}))
+LD_MSCL  ?= `pkg-config mscl --libs`
+else
+LD_MSCL  ?= `pkg-config mscl --libs` -lgfortran
+endif
 
 ifdef USE_MPI
-FC       = mpif90
-MPI_CPP ?= `pkg-config mpich2-ch3 --cflags`
-LD_MPI  ?= `pkg-config mpich2-ch3 --libs`
+ifeq (,$(findstring hpc-login0,${NODENAME}))
+FC        = mpif90
+MPI_CPP  ?= `pkg-config mpich2-ch3 --cflags`
+LD_MPI   ?= -L/work/imas/opt/libibverbs/1.1.4/lib `pkg-config mpich2-ch3 --libs`
 else
-FC       = ifort
+FC        = mpiifort
 endif
+ifndef MPDIR
+ifeq (,$(findstring hpc-login0,${NODENAME}))
+MPDIR     = /work/imas/opt/mvapich2-intel/1.3.2
+LD_MPI   += -Wl,-rpath,${MPDIR}/lib
+else
+MPDIR     = ${EBROOTIMPI}
+LD_MPI   += -Wl,-rpath,${MPDIR}/lib64
+endif
+endif
+else
+FC        = ifort
+endif
+FC_VERSION = $(shell echo `ifort --version | head -1 | awk '{printf "%s ",$$3,"\n"}'`)
 
 ifdef SOLPS_DEBUG
-ifdef USE_MPI
-FCOPTS   = -g -C -traceback ${MPI_CPP}
+FFLAGS	  = -g -C -traceback -debug all -check all -fPIC -assume no2underscore
 else
-FFLAGS	 = -g -C -traceback -debug all -check all
-endif
+ifeq (${FC_VERSION},12.0.2)
+FFLAGS    = -O2 -vec_report0 -fPIC -fp-model precise -assume no2underscore
 else
-ifdef USE_MPI
-FFLAGS   = ${MPI_CPP}
-else
-FFLAGS   =
+FFLAGS    = -O2 -fPIC -fp-model precise -assume no2underscore
 endif
 endif
-INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
-COMPILE  = ${FC} -c ${FFLAGS}
-CPP      = /lib/cpp -C -traditional
+INCLUDE   = -I${SRCDIR} ${EIRINC} ${B2INC}
+COMPILE   = ${FC} -c ${FFLAGS}
+CPP       = /lib/cpp -C -traditional -ffreestanding
 
-MOD      = mod
-LDLIBS	 = ${LD_MSCL}
-ifdef USE_MPI
-LDEXTRA  = -i_dynamic ${LD_MPI}
-else
-LDEXTRA  = -i_dynamic
+MOD       = mod
+LDLIBS	  = ${LD_MSCL}
+ifeq (${FC_VERSION},12.0.2)
+LDEXTRA   = -i_dynamic
 endif
 
 #!!!Local Variables:

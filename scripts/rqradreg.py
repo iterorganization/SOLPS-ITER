@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+from __future__ import print_function
 import pupynere
 import os
 import matplotlib
@@ -15,7 +16,7 @@ else:
 times=f.variables['times']
 rqradreg=f.variables['rqradreg']
 species_names=f.variables['species']
-species=[''.join(species_names[i,:]).strip() for i in range(species_names.shape[0])]
+species=[b''.join(species_names[i,:]).strip().decode('utf-8') for i in range(species_names.shape[0])]
 
 elements=[re.sub('[-+0-9]','',species[i]) for i in range(len(species))]
 
@@ -43,9 +44,9 @@ if os.getenv('SOLPS_PYTHON_SAVE'):
 
 for i in range(len(bounds)):
   plt.plot(times[:],rqradreg_species[:,i,R], label=elements[bounds[i][0]])
-  print 'RQRADREG(%s) = %s' % (elements[bounds[i][0]],rqradreg_species[-1,i,R])
+  print('RQRADREG(%s) = %s' % (elements[bounds[i][0]],rqradreg_species[-1,i,R]))
 plt.plot(times[:],rqradreg_species[:,len(bounds),R], label='Sum')
-print 'RQRADREG(SUM) = %s' % (rqradreg_species[-1,len(bounds),R])
+print('RQRADREG(SUM) = %s' % (rqradreg_species[-1,len(bounds),R]))
 
 if  matplotlib.__version__ <=  '0.98.1':
   plt.legend(loc=0)

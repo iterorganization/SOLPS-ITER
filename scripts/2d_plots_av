@@ -1,0 +1,75 @@
+### eval '(exit $?0)' && eval 'exec tcsh $0 ${1+"$@"}' && eval 'exec tcsh $0 $argv:q'
+#! /bin/tcsh -f
+
+if($?GNUPLOT_TMP) then
+    set tmpdir="$GNUPLOT_TMP/"
+else
+    set tmpdir=""
+endif
+setenv GNUPLOT_BATCH yes
+setenv GNUPLOT_POSTSCRIPT_OPTIONS 'color solid'
+setenv PRINT_PLOT b2time2d_av.ps
+rm -f ${tmpdir}GNUPLOT_COUNT ${tmpdir}gnuplot.cmd
+echo 0 > ${tmpdir}GNUPLOT_COUNT
+
+set nreg=`climb_and_look_for NREG`
+set nnreg=`pipe_run.log | grep ^nnreg | head -1`
+if (-s $nreg) then
+  setenv NREG `cat $nreg`
+  echo Set NREG to $NREG "(based on $nreg)"
+else
+  set NREG=$nnreg[2]
+  echo Set NREG to $NREG "(based on log file)"
+endif
+if (! $?NREG) set NREG = 4
+if ("X$nnreg" != "X") then
+  if ($NREG != $nnreg[2]) then
+    echo "NREG in file ($nnreg[2]) does not match $NREG"
+    exit
+  endif
+endif
+
+2dt_av nesepm
+2dt_av tesepm tisepm
+2dt_av nesepi nemxip nesepa nemxap
+2dt_av tesepi temxip tesepa temxap
+2dt_av tisepi timxip tisepa timxap
+2dt_av fnixip fnixap
+2dt_av feexip feexap
+2dt_av feixip feixap
+switch ($NREG)
+  case "8":
+    2dt_av fniyip fniyap
+    2dt_av feeyip feeyap
+    2dt_av feiyip feiyap
+  breaksw
+  case "5":
+    2dt_av fniyip fniyap
+    2dt_av feeyip feeyap
+    2dt_av feiyip feiyap
+  breaksw
+  case "4":
+    2dt_av fniyip fniyap
+    2dt_av feeyip feeyap
+    2dt_av feiyip feiyap
+  breaksw
+  case "2":
+    2dt_av fniyip
+    2dt_av feeyip
+    2dt_av feiyip
+  breaksw   
+  case "1":
+    2dt_av fniyip
+    2dt_av feeyip
+    2dt_av feiyip
+  breaksw   
+  default:
+    echo "Unusual number of regions: Not sure what to do!"
+    echo "NREG = " $NREG
+endsw
+2dt_av pwmxip pwmxap
+2dt_av tmne
+2dt_av tmte tmti
+
+gnuplot ${tmpdir}gnuplot.cmd
+rm ${tmpdir}GNUPLOT_COUNT ${tmpdir}gnuplot.*data ${tmpdir}gnuplot.cmd

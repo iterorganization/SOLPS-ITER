@@ -4,14 +4,12 @@ MSCL_ROOT ?= /tokp/work/dpc/SOLPS-ITER/mscl
 LD_MSCL ?= -L${MSCL_ROOT} -lmscl
 
 ifdef USE_MPI
-FC 	 = mpiifort
+FC       = mpiifort
 else
 FC       = ifort
 endif
 ifdef SOLPS_DEBUG
 FFLAGS	 = -g -C -traceback -debug all -check all
-else
-FFLAGS   =
 endif
 INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}

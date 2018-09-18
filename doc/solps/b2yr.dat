@@ -1,0 +1,6 @@
+*nijdis        (integer, free format)
+   4   4
+*idis          (nidis*integer, free format)
+   8  16  24  32
+*jdis          (njdis*integer, free format)
+   2   6  10  14

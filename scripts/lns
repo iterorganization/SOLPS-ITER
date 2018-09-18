@@ -55,6 +55,24 @@ ln -sf `pwd`/"$1".dgo dg.dgo
 ln -sf `pwd`/"$1".dgo param.dg
 
 e=`cat $1.trg | grep '# equil' | cut -f3 -d' '`
+
+# check in case we are doing a limiter configuration
+# and must fetch the real equilibrium from the .dgo file
+typeset -i z
+NAME=/tmp/lns.$USER.`date +%Y%m%d%H%M%S`
+cat $1.dgo | grep 'lm_equ' | wc -l > $NAME
+z=`cat $NAME`
+[ $z -gt 0 ] && {
+  l=`cat $1.dgo | grep 'lm_equ' | cut -f4 -d' '`
+  [ -s $l ] && {
+    echo Linking to limiter equilibrium $l
+    e=$l
+  } || {
+    echo Limiter equilibrium file $l not found!
+  }
+}
+rm $NAME
+
 case $e in
   ( ''   ) echo "$1.trg is in old format - no information on the equilibrium there"
            [ -r default.equ ] && { \

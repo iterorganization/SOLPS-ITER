@@ -1,0 +1,31 @@
+# Test whether necessary variables are defined
+ifeq (,$(findstring hpc-login0,$(NODENAME)))
+LD_MSCL ?= `pkg-config mscl --libs`
+else
+LD_MSCL ?= `pkg-config mscl --libs` -lgfortran
+endif
+
+ifdef USE_MPI
+FC       = mpif90
+else
+FC       = pgf90
+endif
+
+ifdef SOLPS_DEBUG
+FFLAGS   = -g
+else
+FFLAGS   = -O
+endif
+
+INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
+COMPILE  = ${FC} -c ${FFLAGS}
+CPP      = /lib/cpp -traditional
+MOD      = mod
+
+LDLIBS   = ${LD_MSCL}
+LDEXTRA  = 
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+

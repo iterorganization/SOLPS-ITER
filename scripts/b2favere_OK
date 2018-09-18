@@ -1,0 +1,24 @@
+#! /bin/tcsh
+# determine if b2fstate is OK
+
+set target=b2faveri
+if (!(-s $target)) set target=../baserun/b2faveri
+
+if (-e $target) then
+  if (-e b2favere) then
+    set l_i=`wc -l $target  | awk '{print $1}'`
+    set l_e=`wc -l b2favere | awk '{print $1}'`
+
+    set c_i=`wc -c $target  | awk '{print $1}'`
+    set c_e=`wc -c b2favere | awk '{print $1}'`
+
+    set cf_i=`grep -c '*cf' $target`
+    set cf_e=`grep -c '*cf' b2favere`
+
+    [ $l_e -ge $l_i ] && [ $c_e -ge $c_i ] && [ $cf_e -ge $cf_i ] && [ $cf_e -gt 10 ] && echo "yes" || echo "no"
+  else
+    echo "no"
+  endif
+else
+  echo "no b2faveri file available for comparison"
+endif

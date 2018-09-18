@@ -1,16 +1,18 @@
       subroutine uinbndfl
+      use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
       use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+     , , only: msrfclsx
 c
 c  version : 01.04.2005 14:27
 c
 c=======================================================================
 c*** Fill in the default boundary data
 c=======================================================================
+      implicit none
 #include "uinpcom.inc"
-      integer i,j,k,l,m,n,isp,iknd,izn,igs_hlp(nspdgen)
+      integer i,j,k,l,n,isp,iknd,izn,igs_hlp(nspdgen)
       logical ex,uex,hlp_fl1,hlp_fl2
       real hlp_f1
       character hlp_c*2
@@ -254,27 +256,31 @@ c=======================================================================
       end
 
       integer function find_matching_species(name)
+      use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
       use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+     , , only: msrfclsx
       use b2mod_elements
       implicit none
 #     include "uinpcom.inc"
-      character*2 name
+      character*2 name, str_name
       integer i
-      logical streql
-      external streql
+      logical streql, isadigit, isplusorminus
+      external streql, isadigit, isplusorminus
 
       find_matching_species = 0
+      str_name = name
+      if (name(2:2).eq.'*'.or.isadigit(name(2:2)).or.
+     &    isplusorminus(name(2:2))) str_name(2:2)=' '
       do i = 1, nspdgen-2
-        if(streql(name,spcdgen(i))) then
+        if(streql(str_name,spcdgen(i))) then
           find_matching_species = i
           return
         end if
       end do
       do i = 1, 92
-        if(streql(name,elements(i))) then
+        if(streql(str_name,elements(i))) then
           if (i.eq. 8 .or. i.eq.16 .or. i.eq.17 .or.
      &        i.eq.36 .or. i.eq.54 .or. i.eq.88) then ! gases: O, Cl, Ar, Kr, Xe, Ra
             find_matching_species = nspdgen-1
@@ -288,19 +294,20 @@ c=======================================================================
       end function find_matching_species
 
       integer function find_matching_reagent(name)
+      use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
       use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+     , , only: msrfclsx
       use b2mod_elements
       implicit none
 #     include "uinpcom.inc"
       character*8 name, species_name
-      integer i, j
+      integer i
       integer nplus
       integer lnblnk
-      logical streql, isplusorminus, isadigit
-      external streql, lnblnk, isplusorminus, isadigit, strip_spaces
+      logical streql, isplusorminus
+      external streql, lnblnk, isplusorminus, strip_spaces
 
       find_matching_reagent = 0
       do i = 1, nsrctd
@@ -343,15 +350,27 @@ c=======================================================================
       character*(*) name
       character*8 species_name
       integer i
+      logical skip, openp
       integer lnblnk
       logical streql, isadigit, isplusorminus
       external streql, lnblnk, isadigit, isplusorminus, strip_spaces
 
       get_atomic_number = 0
       species_name = repeat(' ',8)
+      openp = .false.
       do i = 1, lnblnk(name)
-        if (.not.(isadigit(name(i:i)).or.isplusorminus(name(i:i))))
-     >   species_name(i:i) = name(i:i)
+        if (.not.openp) then
+          skip = .false.
+          skip = skip .or. isadigit(name(i:i))
+          skip = skip .or. isplusorminus(name(i:i))
+          skip = skip .or. name(i:i).eq.'*'
+          openp = name(i:i).eq.'('
+        else
+          openp = name(i:i).ne.')'
+          skip = .true.
+        endif
+        skip = skip .or. openp
+        if (.not.skip) species_name(i:i) = name(i:i)
       end do
       call strip_spaces(species_name)
       do i = 1, 92
@@ -360,7 +379,8 @@ c=======================================================================
           return
         end if
       end do
-      if (streql(name,'D') .or. streql(name,'T')) get_atomic_number=1
+      if (streql(species_name,'D').or.
+     &    streql(species_name,'T')) get_atomic_number=1
 
       return
       end function get_atomic_number

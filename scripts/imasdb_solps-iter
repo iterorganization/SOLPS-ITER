@@ -1,6 +1,14 @@
-#! /bin/bash
+#! /bin/tcsh -f
 
 # IMAS Database setting
+if ($HOST_NAME == " ITER") then
+  echo "Linking to the IMAS ITER scenario database"
+  imasdb /work/imas/shared/iterdb/3
+endif
 echo "Setting an IMAS solps-iter directory"
 imasdb solps-iter
+if ($?DEVICE) then
+  echo "Setting an IMAS ${DEVICE} directory"
+  imasdb ${DEVICE}
+endif
 

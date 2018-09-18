@@ -9,12 +9,8 @@ C     READ PHYSICAL COORDINATES FROM FORT.30 FILE TO XCOORD, YCOORD
       use ccuts
       IMPLICIT NONE
 
-      DOUBLEPRECISION, allocatable :: BR(:,:,:), BZ(:,:,:)
-      doubleprecision  CR, CZ, PIT
-      doubleprecision, allocatable :: help3(:,:,:)
-      INTEGER I,I0, I0E, I1, I2, I3, I4, IX0, ICELL
-      integer dim1, dim2
-      CHARACTER*110 ZEILE
+      DOUBLE PRECISION, allocatable :: BR(:,:,:), BZ(:,:,:)
+      INTEGER I, IX, IY, ICELL, IISO
       character*80 line
       LOGICAL INISO
 
@@ -25,8 +21,6 @@ C     READ PHYSICAL COORDINATES FROM FORT.30 FILE TO XCOORD, YCOORD
       data format_string/ 
      . '(T2,1E15.7,T17,1E15.7,T32,1E15.7,T47,1E15.7)',
      . '(T2,1E16.8,T18,1E16.8,T34,1E16.8,T50,1E16.8)' /
-
-      DOUBLEPRECISION DUMMI(4)
 
 *  READ PHYSICAL COORDINATES FROM FORT.30 FILE
 *  ---------------------------------------------------------------------
@@ -83,10 +77,20 @@ C     READ PHYSICAL COORDINATES FROM FORT.30 FILE TO XCOORD, YCOORD
       else if (exp_location.eq.13) then
         new_format = 2
       else
+#ifndef HPUX
         stop "Unrecognized format in fort.30 file"
+#else
+        stop "Unrecognized format in ftn30 file"
+#endif
       endif
       backspace(30)
-      write(*,*) 'Detected fort.30 is using ', format_string(new_format)
+#ifndef HPUX
+      write(*,*) 'Detected fort.30 is using ',
+     . trim(format_string(new_format))
+#else
+      write(*,*) 'Detected ftn30 is using ',
+     . trim(format_string(new_format))
+#endif
       do ix=1,nx
         do iy=1,ny
          read (30,format_string(new_format)) (br(ix,iy,i),i=1,4)

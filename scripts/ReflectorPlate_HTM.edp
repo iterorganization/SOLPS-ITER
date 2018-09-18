@@ -144,7 +144,7 @@ plot(block,ps="domain_RP.eps");
 
 //PROBLEM DEFINITION
 fespace Vh(block,P1);
-Vh T=Tf,v,Told,TTT,TMAX;
+Vh T=Tf,v,Told,TTT,TMAX,HF;
 Vh kCCZ,kSS,kW,kCu,K,qq;
 int cu1=block(L1/2.,H1+H2+H3+H4/2.).region,cu2=block(L1/2.+L1,H1+H2+H3+H4/2.).region,ww1=block(L1/2.,H1+H2+H3+H4+H5/2.).region,ww2=block(L1/2.+L1,H1+H2+H3+H4+H5/2.).region,ss=block(L1/2.,H1/2.).region,ccz=block(L1/2.,H1+H2+Hhole).region;
 
@@ -159,8 +159,8 @@ ofstream ff02("warning_RP_"+sinout+".log");
 real flag=0.0;
 TTMAX=0.0;
 for(int jj=0;jj<Ntile;jj+=1){
-	qq=(qpls(jj)/cos(beta+alpha))*(x>=Xshadow)+(qtot(jj)-qpls(jj));
-    Qreal(jj)=qpls(jj)/cos(beta+alpha)+qtot(jj)-qpls(jj);
+	qq=(qpls(jj)*sin(theta+alpha+beta)/sin(theta))*(x>=Xshadow)+(qtot(jj)-qpls(jj));
+    Qreal(jj)=qpls(jj)*sin(theta+alpha+beta)/sin(theta)+qtot(jj)-qpls(jj);
 	real err=1.0,tol=1e-6;
 	Told=Tf;
 	real qwater=0.0,qplasma=0.0;
@@ -188,13 +188,69 @@ for(int jj=0;jj<Ntile;jj+=1){
 	//qplasma=int1d(block,DD2,DD5)(qq)*Ltile;
 	//ff01<<qplasma<<endl;
 	Tf=Tf+qwater/mflow/cpw;
-	/*
-	//Check for CHF (32 MW/m^2)
-	HF=htc*(T-Tf);
-	hfmax=0.0;
-	for (int ii=0;ii<=npoints;ii+=1.0){
+
+	//Check for CHF (20 MW/m^2)
+	real hfmax=0.0,hflux, npoints=300, CHF=20.0e6;
+    HF=htc*(T-Tf);
+	for (int ii=0;ii<=npoints;ii+=1.0){//border AA6
+		theta=H2/npoints*ii;
+		hflux=HF(L2,H1+theta);
+		if(hflux>=hfmax){
+			hfmax=hflux;
+		}
+	}
+	for (int ii=0;ii<=npoints;ii+=1.0){//border BB1
+		theta=Hhole/npoints*ii;
+		hflux=HF(L2,H1+H2+theta);
+		if(hflux>=hfmax){
+			hfmax=hflux;
+		}
+	}
+	for (int ii=0;ii<=npoints;ii+=1.0){//border BB2
 		theta=ii/npoints*pi/2.0;
-		hflux=HF(L/2.+D3/2.*cos(pi-theta),H+D3/2.*sin(pi-theta));
+		hflux=HF(L2+Rh+Rh*cos(pi/2.-theta),H1+H2+Hhole+Rh*sin(pi/2.-theta));
+		if(hflux>=hfmax){
+			hfmax=hflux;
+		}
+	}
+	for (int ii=0;ii<=npoints;ii+=1.0){//border BB3
+		theta=Hhole/npoints*ii;
+		hflux=HF(L2+2.*Rh,H1+H2+theta);
+		if(hflux>=hfmax){
+			hfmax=hflux;
+		}
+	}
+	for (int ii=0;ii<=npoints;ii+=1.0){//border BB4
+		theta=(2.*L1-2.*L2-4.*Rh)/npoints*ii;
+		hflux=HF(L2+2.*Rh+theta,H1+H2);
+		if(hflux>=hfmax){
+			hfmax=hflux;
+		}
+	}
+	for (int ii=0;ii<=npoints;ii+=1.0){//border BB5
+		theta=Hhole/npoints*ii;
+		hflux=HF(2.*L1-L2-2.*Rh,H1+H2+theta);
+		if(hflux>=hfmax){
+			hfmax=hflux;
+		}
+	}
+	for (int ii=0;ii<=npoints;ii+=1.0){//border BB6
+		theta=ii/npoints*pi/2.0;
+		hflux=HF(2.*L1-L2-Rh+Rh*cos(pi/2.-theta),H1+H2+Hhole+Rh*sin(pi/2.-theta));
+		if(hflux>=hfmax){
+			hfmax=hflux;
+		}
+	}
+	for (int ii=0;ii<=npoints;ii+=1.0){//border BB7
+		theta=Hhole/npoints*ii;
+		hflux=HF(2.*L1-L2,H1+H2+theta);
+		if(hflux>=hfmax){
+			hfmax=hflux;
+		}
+	}
+	for (int ii=0;ii<=npoints;ii+=1.0){//border AA4
+		theta=H2/npoints*ii;
+		hflux=HF(2.*L1-L2,H1+theta);
 		if(hflux>=hfmax){
 			hfmax=hflux;
 		}
@@ -202,7 +258,7 @@ for(int jj=0;jj<Ntile;jj+=1){
 	if(hfmax>=CHF){
 		ff02 << "Warning! Reached critical heat flux of "<<CHF<<" W/m^2. Tile number " <<jj<<endl;
 		flag=-9.0;
-	}*/
+	}
 		
 	for (int ii=1;ii<=npointout;ii+=1){
 		Tout(jj,ii-1)=T(Lout(ii-1),Htot-(2.*L1-Lout(ii-1))*tan(beta));	

@@ -1,34 +1,68 @@
 # General
+module use $HOME/privatemodules
+module use /work/imas/etc/modulefiles
 module use /work/imas/etc/modules/all
-module use /work/imas/opt/EasyBuild/modules/all
-
 # Modules needed by SOLPS-ITER
-module load git
-module load makedepend/1.0.4-goolf-1.5.16
-module load GCC/4.8.3
-module load mscl/1.0.0-GCC-4.8.3
-module load netcdf/4.3.3.1-goolf-1.5.16
-module load netcdf-fortran/4.4.2-goolf-1.5.16
-module load gr/0.0.94
-module load gks/4.4.74
-module load ncl/6.3.0-intel-12.0.2
-# module load nag/15
-module load HDF5/1.8.9-goolf-1.5.16
-module load flex/2.6.0
-module load doxygen
+set nodename=`hostname`
+switch ($nodename)
+  case "hpc-login0*.iter.org":
+    echo "Using new cluster modules"
+    set cluster="new"
+    module load IMAS/3.20.0-3.8.3
+    module load GGD/1.8.0-GCC-6.4.0-2.28
+    module load Kepler
+    module load FC2K
+    module load makedepend/1.0.5-GCCcore-6.4.0
+    module load MSCL/1.1.0-GCCcore-6.4.0
+    module load GR/0.0.94-GCCcore-6.4.0
+    module load GLI/4.5.30-GCCcore-6.4.0
+    setenv GLI_HOME ${EBROOTGLI}
+    module load flex/2.6.4-GCCcore-6.4.0
+    module load Doxygen/1.8.13-GCCcore-6.4.0
+    module load TotalView/2017.1.21_linux_x86-64
+    module load Ghostscript/9.23-GCCcore-6.4.0
+    module unload LibTIFF/4.0.9-GCCcore-6.4.0
+    module load ParaView/5.4.1-intel-2018a-mpi
+    module load OpenMPI/2.1.2-GCC-6.4.0-2.28
+    module load netCDF-Fortran/4.4.4-intel-2018a
+    module load motif/2.3.8-intel-2018a
+    module load gnuplot/5.2.2-intel-2018a
+    module load MATLAB/2017a
+    setenv NCDIR ${EBROOTNETCDFMINFORTRAN}
+    setenv MPDIR ${EBROOTIMPI}
+    breaksw
+  default:
+    echo "Using old cluster modules"
+    set cluster="old"
+    module load git
+    module load imas/3.12.0/ual/3.6.3
+    module switch Anaconda2 Anaconda3/4.4.0
+    module load GCC/4.8.3
+    module load makedepend/1.0.4-goolf-1.5.16
+    module load netcdf/4.3.3.1-goolf-1.5.16
+    module load netcdf-fortran/4.4.2-goolf-1.5.16
+    module load flex/2.5.39-GCC-4.8.3
+    module load libxml2/2.9.2-GCC-4.8.3
+    module load doxygen
+    module load fontconfig/2.11.93
+    module load cairo/1.14.2
+    module load xmllib/2.3.0-imas-3.16.0-GCC-4.8.3
+    module load ncl/6.3.0
+    module load make
+    module load paraview/5.4.1
+    module load MVAPICH2/2.2b-GCC-4.8.3
+    setenv MV2_SMP_USE_CMA 0
+    module load mscl/1.0.0-GCC-4.8.3
+    module load gr/0.0.94
+    module load gks/4.4.74
+    module load ghostscript
+    module load fc2k
+    module load totalview
+endsw
 module load texlive
-module load ghostscript
-module load libxml2/2.9.2-GCC-4.8.3
-module load fontconfig/2.11.93
-module load cairo/1.14.2
-module load make
-module load fc2k
-module load xmllib/2.1.1-imas-3.9.0-GCC-4.8.3
-module load python/2.7/11
-module load totalview
-
-# mpi-library
-module load MVAPICH2/2.2b-GCC-4.8.3
+if (`hostname` == "hpc-app1.iter.org") then
+  module load matlab/2013a
+endif
 
 # Debugger (set environment variable DBX)
 setenv DBX totalview
@@ -37,8 +71,6 @@ setenv DBX totalview
 setenv CC gcc
 setenv FC gfortran
 setenv CXX g++
-
-module load paraview/5.2.0
 
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
@@ -49,9 +81,13 @@ else
   setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages/vtk:${PYTHONPATH}"
   setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
   setenv LD_CATALYST `paraview-config --libs vtkPVPythonCatalyst`
+  if ($cluster == "new") then
+    setenv LD_CATALYST "${LD_CATALYST} -lstdc++"
+  endif
 endif
 
 # Other environment variables
-module load solps-gui
-setenv LD_PRELOAD /usr/lib64/libfontconfig.so.1 # needed by solps-gui
+# module load solps-gui
+# setenv LD_PRELOAD /usr/lib64/libfontconfig.so.1 # needed by solps-gui
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/usr/lib64
 setenv SOLPSWORK /work/projects/solps-iter/$USER

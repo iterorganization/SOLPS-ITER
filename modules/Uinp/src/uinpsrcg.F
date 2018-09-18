@@ -1,7 +1,8 @@
       subroutine uinpsrcg
-       use b2mod_layer
+      use b2mod_types
+      use b2mod_layer
      , , only: ntrack, nalloys
-       use eirmod_extrab25
+      use eirmod_extrab25
      , , only: msrfclsx, mgwtiesx
 c
 c  version : 01.04.2005 00:51
@@ -12,10 +13,8 @@ c=======================================================================
       implicit none
 #include "uinput.inc"
       integer i,j,k,l,isg,istr,isf
-      real*4 hlp,hlp1,hlp2,hlpeps,hlpeps2
       logical ex,uex,streql
       external streql, xerrab, subini, subend
-      parameter (hlpeps=1.e-6, hlpeps2=1.e-5)
 c=======================================================================
       call subini ('uinpsrcg')
 c<<<
@@ -126,15 +125,37 @@ c>>>
             ingrde(isf,nstrai,1)=0
             ingrda(isf,nstrai,2)=0
             ingrde(isf,nstrai,2)=0
-            sorad1(isf,nstrai)=p1(1,i)
-            sorad2(isf,nstrai)=p2(1,i)
-            if (sorad1(isf,nstrai).eq.sorad1(isf,nstrai)) then !{
+            if (p1(1,i).eq.p2(1,i)) then !{
+              if (p1(2,i).le.p2(2,i)) then !{
+                sorad1(isf,nstrai)=p1(1,i)
+                sorad2(isf,nstrai)=p2(1,i)
+                sorad3(isf,nstrai)=p1(2,i)
+                sorad4(isf,nstrai)=p2(2,i)
+              else !}{
+                sorad1(isf,nstrai)=p2(1,i)
+                sorad2(isf,nstrai)=p1(1,i)
+                sorad3(isf,nstrai)=p2(2,i)
+                sorad4(isf,nstrai)=p1(2,i)
+              end if !}
               sorlim(isf,nstrai)=1
-            else !}{
-              sorlim(isf,nstrai)=2
-            end if !}
-            sorad3(isf,nstrai)=p1(2,i)
-            sorad4(isf,nstrai)=p2(2,i)
+            else
+              if (p1(1,i).le.p2(1,i)) then !{
+                sorad1(isf,nstrai)=p1(1,i)
+                sorad2(isf,nstrai)=p2(1,i)
+                sorad3(isf,nstrai)=p1(2,i)
+                sorad4(isf,nstrai)=p2(2,i)
+              else !}{
+                sorad1(isf,nstrai)=p2(1,i)
+                sorad2(isf,nstrai)=p1(1,i)
+                sorad3(isf,nstrai)=p2(2,i)
+                sorad4(isf,nstrai)=p1(2,i)
+              end if !}
+              if (p1(2,i).eq.p2(2,i)) then !{
+                sorlim(isf,nstrai)=2
+              else !}{
+                sorlim(isf,nstrai)=0
+              end if !}
+            end if !}  
             if (sorad3(isf,nstrai).eq.sorad4(isf,nstrai)) then !{
               sorlim(isf,nstrai)=sorlim(isf,nstrai)+10
             else !}{

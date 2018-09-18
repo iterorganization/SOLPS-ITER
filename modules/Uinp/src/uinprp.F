@@ -1,19 +1,22 @@
       subroutine uinprp
-       use b2mod_layer
+      use b2mod_types
+      use b2mod_layer
      , , only: ntrack, nalloys
-       use eirmod_extrab25
+      use eirmod_extrab25
      , , only: msrfclsx, mgwtiesx
+      use b2mod_constants
 
 c  version : 16.03.2005 23:56
 
 c=======================================================================
 c*** Prepare the data for the B2-Eirene input files
 c=======================================================================
+      implicit none
 #include "uinput.inc"
-      integer i,j,k,l,lunplt,m_hlp(nlim,nlim),n_hlp
+      integer i,j,k,l,m,lunplt,m_hlp(nlim,nlim),n_hlp
       parameter (n_hlp=nlim*nlim)
       logical uex,hlp_l
-      real u,uzdim,rm_hlp,rx_hlp,zm_hlp,zx_hlp
+      real uzdim,rm_hlp,rx_hlp,zm_hlp,zx_hlp
       parameter (uzdim=1.e20)
       character utxsfa*44
       external xerrab, xertst, subini, subend
@@ -25,39 +28,39 @@ c*** Check some dimensions
       call subini ('uinprp')
       uex=.false.
       if(index(topo,'SN').eq.1) then !{
-      	if(mnpr.ne.3) then !{
-	  uex=.true.
-	  write(0,*) 'Inconsistent number of radial zones for ',topo,
-     ,	      	      '  (',mnpr,' )'
-	end if !}
-      	if(mnptseg.ne.3) then !{
-	  uex=.true.
-	  write(0,*) 'Inconsistent number of poloidal zones for ',topo,
-     ,	      	      '  (',mnptseg,' )'
-	end if !}
+        if(mnpr.ne.3) then !{
+          uex=.true.
+          write(0,*) 'Inconsistent number of radial zones for ',topo,
+     ,                '  (',mnpr,' )'
+        end if !}
+        if(mnptseg.ne.3) then !{
+          uex=.true.
+          write(0,*) 'Inconsistent number of poloidal zones for ',topo,
+     ,                '  (',mnptseg,' )'
+        end if !}
       else if(index(topo,'DN').eq.1) then !}{
-      	if(topo.eq.'DNS') then !{
-      	  if(mnpr.ne.5) then !{
-	    uex=.true.
-	    write(0,*) 'Inconsistent number of radial zones for ',topo,
-     ,	  		'  (',mnpr,' )'
-	  end if !}
-	else !}{
-      	  if(mnpr.ne.6) then !{
-	    uex=.true.
-	    write(0,*) 'Inconsistent number of radial zones for ',topo,
-     ,	  		'  (',mnpr,' )'
-	  end if !}
-	end if !}
-      	if(mnptseg.ne.6) then !{
-	  uex=.true.
-	  write(0,*) 'Inconsistent number of poloidal zones for ',topo,
-     ,		      '  (',mnptseg,' )'
-	end if !}
+        if(topo.eq.'DNS') then !{
+          if(mnpr.ne.5) then !{
+            uex=.true.
+            write(0,*) 'Inconsistent number of radial zones for ',topo,
+     ,                  '  (',mnpr,' )'
+          end if !}
+        else !}{
+          if(mnpr.ne.6) then !{
+            uex=.true.
+            write(0,*) 'Inconsistent number of radial zones for ',topo,
+     ,                  '  (',mnpr,' )'
+          end if !}
+        end if !}
+        if(mnptseg.ne.6) then !{
+          uex=.true.
+          write(0,*) 'Inconsistent number of poloidal zones for ',topo,
+     ,                '  (',mnptseg,' )'
+        end if !}
       else !}{
-      	write(0,*) 'Unknown topology keyword "',topo,'".'
-      	write(0,*) '  ==> check the topology name in DG'
-	call xerrab ('Unknown topology')
+        write(0,*) 'Unknown topology keyword "',topo,'".'
+        write(0,*) '  ==> check the topology name in DG'
+        call xerrab ('Unknown topology')
       end if !}
       call xertst(.not.uex, 'Topological inconsistency found in uinp')
       
@@ -87,10 +90,10 @@ c*** Modify the toroidal dimension in p1, p2 arrays
       end do !}
 
       if(zaa.eq.0.) then !{
-      	zaa=0.2*3.1415926535898*xlpcntr(1)
-	write(*,'(1x,a,f11.4,a)')
+        zaa=0.2*pi*xlpcntr(1)
+        write(*,'(1x,a,f11.4,a)')
      ,   'The O-point was taken for the major radius : ',
-     ,	       	      	        	    0.1*xlpcntr(1),' cm.'
+     ,                                       0.1*xlpcntr(1),' cm.'
       else if(zaa.lt.0.) then !}{
 
 c*** Toroidal geometry
@@ -107,23 +110,23 @@ c*** Prepare index of valid additional surfaces
       k=laddsrfs
       l=1
       do i=1,nlimi !{
-      	uex=.false.
-	if(jadch0(l).eq.i) then !{
-	  l=l+1
-	  indasrfe(i)=0
-	else !}{
-	  k=k+1
-	  if(k.gt.nlim) then !{
-	    write(0,*) 'Insufficient space for "additional surfaces" ',
-     ,	      'in Eirene.'
-	    write(0,*) 'Maximum ',nlim,',  DG model ',nlimi,
-     ,	      '  reserved ',laddsrfs
-	    call xerrab
+        uex=.false.
+        if(jadch0(l).eq.i) then !{
+          l=l+1
+          indasrfe(i)=0
+        else !}{
+          k=k+1
+          if(k.gt.nlim) then !{
+            write(0,*) 'Insufficient space for "additional surfaces" ',
+     ,        'in Eirene.'
+            write(0,*) 'Maximum ',nlim,',  DG model ',nlimi,
+     ,        '  reserved ',laddsrfs
+            call xerrab
      .       ('==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
-	  end if !}
-	  indasrfe(i)=k
-	  indasrfs(k)=i
-	end if !}
+          end if !}
+          indasrfe(i)=k
+          indasrfs(k)=i
+        end if !}
       end do !}
 c!###{
 c      print *,'indasrfs:', k
@@ -153,77 +156,77 @@ c*** Check for zero length additional surfaces
 c*** Correct jadch1 (not tested yet!!!)
 
       do j=1,nlim !{
-      	if(indasrfe(j).gt.0) then !{
+        if(indasrfe(j).gt.0) then !{
           l=indasrfe(j)
-	  if(jadch1(1,j).gt.0) then !{
+          if(jadch1(1,j).gt.0) then !{
             k=0
             uex=.true.
-	    do i=1,nlim !{
-	      if(uex) then !{
-	      	m=jadch1(i,j)
-		if(m.le.0) then !{
-		  uex=.false.
-		else !}{
-	          m=indasrfe(m)
-	          if(m.gt.0) then !{
-	            k=k+1
-	            m_hlp(k,l)=m
-	          end if !}
-	      	end if !}
-	      end if !}
-	    end do !}
+            do i=1,nlim !{
+              if(uex) then !{
+                m=jadch1(i,j)
+                if(m.le.0) then !{
+                  uex=.false.
+                else !}{
+                  m=indasrfe(m)
+                  if(m.gt.0) then !{
+                    k=k+1
+                    m_hlp(k,l)=m
+                  end if !}
+                end if !}
+              end if !}
+            end do !}
           end if !}
-	end if !}
+        end if !}
       end do !}
       do j=1,nlim !{
-	do i=1,nlim !{
-	  jadch1(i,j)=m_hlp(i,j)
-	end do !}
+        do i=1,nlim !{
+          jadch1(i,j)=m_hlp(i,j)
+        end do !}
       end do !}
 
 c*** Prepare index of additional surfaces to be modified in geousr
 
       if(ntrgte.gt.0) then
-     	k=0
-	l=2
-	do i=1,ntrgte
-     	  l=3-l
-	  j=l
-	  jedge(1,k+1)=j
-	  jedge(2,k+1)=indasrfe(jedgep(i))
-	  jedge(1,k+2)=3-j
-	  jedge(2,k+2)=indasrfe(jedgec(i))
-	  j=3-j
-	  k=k+2
-     	end do
-	ntrgte=k
+        k=0
+        l=2
+        do i=1,ntrgte
+          l=3-l
+          j=l
+          jedge(1,k+1)=j
+          jedge(2,k+1)=indasrfe(jedgep(i))
+          jedge(1,k+2)=3-j
+          jedge(2,k+2)=indasrfe(jedgec(i))
+          j=3-j
+          k=k+2
+        end do
+        ntrgte=k
       else if(ntrgto.gt.0) then
-     	k=0
-	l=2
-	do i=1,2
-     	  l=3-l
-	  j=l
-	  jedge(1,k+1)=j
-	  jedge(1,k+2)=3-j
-	  j=3-j
-	  k=k+2
-     	end do
-	do i=1,k
-	  jedge(2,i)=indasrfe(jedgeo(i))
-     	end do
-	ntrgte=k
+        k=0
+        l=2
+        do i=1,2
+          l=3-l
+          j=l
+          jedge(1,k+1)=j
+          jedge(1,k+2)=3-j
+          j=3-j
+          k=k+2
+        end do
+        do i=1,k
+          jedge(2,i)=indasrfe(jedgeo(i))
+        end do
+        ntrgte=k
       end if
       if(ntrgte.le.0) then !{
-      	write(0,*) 'Undefined target edges'
-	call xerrab ('==> Check the specification in the DG model')
+        write(0,*) 'Undefined target edges'
+        call xerrab ('==> Check the specification in the DG model')
       end if !}
       uex=.false.
       do i=1,k !{
         if(jedge(2,i).le.0) then !{
           uex = .true.
-	  write(0,*) '"Target edge"',i,'  is specified as "Not for ',
-     ,	      	      	      	      	      	      	      'Eirene"'
-	end if !}
+          write(0,*) '"Target edge"',i,'  is specified as "Not for ',
+     ,                                                        'Eirene"'
+        end if !}
       end do !}
       call xertst (.not.uex,
      . '==> Check the specification in the DG model')
@@ -301,23 +304,23 @@ c*** Output control
       lunplt=nptal*nplt
       call vfill(nplot2,lunplt,irwl)
       if(ch2mx.le.0. .or. ch2my.le.0.) then !{
-      	rm_hlp=uzdim
-      	zm_hlp=uzdim
-      	rx_hlp=-uzdim
-      	zx_hlp=-uzdim
-	do i=1,nlimi !{
-	  j=indasrfs(i)
-	  rm_hlp=min(rm_hlp,p1(1,j),p2(1,j))
-	  zm_hlp=min(zm_hlp,p1(2,j),p2(2,j))
-	  rx_hlp=max(rx_hlp,p1(1,j),p2(1,j))
-	  zx_hlp=max(zx_hlp,p1(2,j),p2(2,j))
-	end do !}
-	ch2x0=0.5*(rm_hlp+rx_hlp)
-	ch2y0=0.5*(zm_hlp+zx_hlp)
-	ch2mx=0.5*(rx_hlp-rm_hlp)*1.05
-	ch2my=0.5*(zx_hlp-zm_hlp)*1.05
-	ch2mx=max(ch2mx,ch2my)
-	ch2my=ch2mx
+        rm_hlp=uzdim
+        zm_hlp=uzdim
+        rx_hlp=-uzdim
+        zx_hlp=-uzdim
+        do i=1,nlimi !{
+          j=indasrfs(i)
+          rm_hlp=min(rm_hlp,p1(1,j),p2(1,j))
+          zm_hlp=min(zm_hlp,p1(2,j),p2(2,j))
+          rx_hlp=max(rx_hlp,p1(1,j),p2(1,j))
+          zx_hlp=max(zx_hlp,p1(2,j),p2(2,j))
+        end do !}
+        ch2x0=0.5*(rm_hlp+rx_hlp)
+        ch2y0=0.5*(zm_hlp+zx_hlp)
+        ch2mx=0.5*(rx_hlp-rm_hlp)*1.05
+        ch2my=0.5*(zx_hlp-zm_hlp)*1.05
+        ch2mx=max(ch2mx,ch2my)
+        ch2my=ch2mx
       end if !}
 
 c-----------------------------------------------------------------------

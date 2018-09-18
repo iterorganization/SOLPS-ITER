@@ -1,0 +1,57 @@
+#! /usr/bin/env tcsh
+
+cd $SOLPSTOP
+echo "Switching to SOLPS-ITER master branch"
+git fetch --prune
+git checkout master && echo "Checked out SOLPS-ITER master branch" || goto branch
+git pull && goto b25 || goto local
+
+b25:
+  git submodule update
+  echo "Updating B2.5"
+  cd $SOLPSTOP/modules/B2.5
+  git checkout master && echo "Checked out B2.5 master branch" || goto branch
+  git pull && goto Eirene || goto local
+
+Eirene:
+  echo "Updating Eirene"
+  cd $SOLPSTOP/modules/Eirene
+  git checkout master && echo "Checked out Eirene master branch" || goto branch
+  git pull && goto Carre || goto local
+
+Carre:
+  echo "Updating Carre"
+  cd $SOLPSTOP/modules/Carre
+  git checkout master && echo "Checked out Carre master branch" || goto branch
+  git pull && goto DivGeo || goto local
+
+DivGeo:
+  echo "Updating DivGeo"
+  cd $SOLPSTOP/modules/DivGeo
+  git checkout master && echo "Checked out DivGeo master branch" || goto branch
+  git pull && goto ADAS || goto local
+
+ADAS:
+  echo "Updating ADAS"
+  cd $SOLPSTOP/modules/adas
+  git checkout master && echo "Checked out ADAS master branch" || goto branch
+  git pull && goto compile || goto local
+
+branch:
+  echo "You are not on the master branch."
+
+local:
+  echo "You have local files under version control which"
+  echo "would cause a conflict during the update."
+  echo "Please modify, delete, rename, stash these files or"
+  echo "commit them to a local branch before proceeding with the update."
+  exit
+
+compile:
+  cd $SOLPSTOP
+  rehash
+  ${MAKE} VERSION
+  ${MAKE} listobj listobj_debug
+  ${MAKE} depend depend_debug
+  ${MAKE} tags
+  ${MAKE} solps

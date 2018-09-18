@@ -7,43 +7,48 @@ LD_GKS   ?= -L/work/imas/opt/gks/4.4.74/lib -lgks -lgfortran -lX11 -lXt -lXmu
 LD_NAG   ?= `pkg-config nag --libs`
 GLI_HOME ?= /work/imas/opt/gks/4.4.74/lib
 
-#DEFINES		= ${SOLPS_CPP} ${EIRENE_DEFINES} -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
-#DEFINES		= ${SOLPS_CPP} ${EIRENE_DEFINES} -DTRIANG -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
-DEFINES		=
-EQUIVS 		=
+#DEFINES  = ${SOLPS_CPP} ${EIRENE_DEFINES} -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
+#DEFINES  = ${SOLPS_CPP} ${EIRENE_DEFINES} -DTRIANG -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
+DEFINES   =
+EQUIVS    =
 
-#CPP	 	= -/lib/cpp -C -traditional
+#CPP      = -/lib/cpp -C -traditional
 CPP       = /lib/cpp -traditional
-CPPOPTS  	= -P -I${srcdir} ${EQUIVS} ${DEFINES}
-SED 	   	=
-LINK_MOD 	= 
+CPPOPTS   = -P -I${srcdir} ${EQUIVS} ${DEFINES}
+SED       =
+LINK_MOD  =
 
-FC       	= ifort
+FC        = ifort
+FC_VERSION = $(shell echo `ifort --version | head -1 | awk '{printf "%s ",$$3,"\n"}'`)
 
 ifdef SOLPS_DEBUG
-FCOPTS 		= -g -C -traceback -debug all -check all
+FCOPTS    = -g -C -traceback -debug all -check all
 else
-FCOPTS 		= -O3 -vec_report0
+ifeq (${FC_VERSION},12.0.2)
+FCOPTS    = -O3 -vec_report0
+else
+FCOPTS    = -O3
+endif
 endif
 
-#COMPILE  	= ${FC} -c ${FFLAGS}
+#COMPILE  = ${FC} -c ${FFLAGS}
 
-NAG	    	= ${LD_NAG}  
-GKS		    = ${LD_GR} ${LD_GKS}
+NAG       = ${LD_NAG}
+GKS       = ${LD_GR} ${LD_GKS}
 
-#LDLIBS		= ${LD_MSCL} -L/usr/local/lib -L/usr/X11R6/lib64
-LDLIBS		= -L/usr/local/lib -L/usr/X11R6/lib64
-LDEXTRA  	= 
+#LDLIBS   = ${LD_MSCL} -L/usr/local/lib -L/usr/X11R6/lib64
+LDLIBS    =
+LDEXTRA   =
 
 # new
 
-INCMOD 		= -I
-MOD 		  = mod
-OBJDEST 	= -module ${OBJDIR} -o ${OBJDIR}/$*.o
+INCMOD    = -I
+MOD       = mod
+OBJDEST   = -module ${OBJDIR} -o ${OBJDIR}/$*.o
 
-BLD 	    = ar rucv
+BLD       = ar rucv
 
-LD 	      = ifort
+LD        = ifort
 
 #!!!Local Variables:
 #!!! mode: Makefile

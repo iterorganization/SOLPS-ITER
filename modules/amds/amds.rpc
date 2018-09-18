@@ -49,7 +49,7 @@ E prod 1
 +r-p-n float
 eprdct2
 E prod 2
-EnabledParticles1 470
+EnabledParticles1 540
 Reaction HYDHEL_H.1_2.1.1 0
 Reaction HYDHEL_H.1_2.1.2 0
 Reaction HYDHEL_H.1_2.1.3 0
@@ -520,7 +520,77 @@ Reaction METHANE_H.3_3.1.2 0
 Reaction METHANE_H.3_3.1.3 0
 Reaction METHANE_H.3_3.1.4 0
 Reaction METHANE_H.3_3.2 0
-Vars1 470
+Reaction AMMONX_H.2_01 0
+Reaction AMMONX_H.2_02 0
+Reaction AMMONX_H.2_03 0
+Reaction AMMONX_H.2_07 0
+Reaction AMMONX_H.2_11 0
+Reaction AMMONX_H.2_12 0
+Reaction AMMONX_H.2_14 0
+Reaction AMMONX_H.2_18 0
+Reaction AMMONX_H.2_ZE 0
+Reaction AMMONX_H.2_23 0
+Reaction AMMONX_H.2_23s 0
+Reaction AMMONX_H.2_24 0
+Reaction AMMONX_H.2_25 0
+Reaction AMMONX_H.2_27 0
+Reaction AMMONX_H.2_28 0
+Reaction AMMONX_H.2_29 0
+Reaction AMMONX_H.2_31 0
+Reaction AMMONX_H.2_ZN 0
+Reaction AMMONX_H.2_32 0
+Reaction AMMONX_H.2_ZL 0
+Reaction AMMONX_H.2_ZM 0
+Reaction AMMONX_H.2_35 0
+Reaction AMMONX_H.2_36 0
+Reaction AMMONX_H.1_36 0
+Reaction AMMONX_H.2_ZO 0
+Reaction AMMONX_H.1_ZO 0
+Reaction AMMONX_H.2_ZR 0
+Reaction AMMONX_H.2_ZT 0
+Reaction AMMONX_H.2_39 0
+Reaction AMMONX_H.1_39 0
+Reaction AMMONX_H.2_ZU 0
+Reaction AMMONX_H.1_ZU 0
+Reaction AMMONX_H.2_ZV 0
+Reaction AMMONX_H.1_ZV 0
+Reaction AMMONX_H.2_40 0
+Reaction AMMONX_H.1_40 0
+Reaction AMMONX_H.2_41 0
+Reaction AMMONX_H.1_41 0
+Reaction AMMONX_H.2_ZZ 0
+Reaction AMMONX_H.2_46 0
+Reaction AMMONX_H.1_46 0
+Reaction AMMONX_H.2_50 0
+Reaction AMMONX_H.1_50 0
+Reaction AMMONX_H.2_EK 0
+Reaction AMMONX_H.2_EM 0
+Reaction AMMONX_H.2_DB 0
+Reaction AMMONX_H.1_DB 0
+Reaction AMMONX_H.2_DD 0
+Reaction AMMONX_H.1_DD 0
+Reaction AMMONX_H.2_DE 0
+Reaction AMMONX_H.1_DE 0
+Reaction AMMONX_H.2_DF 0
+Reaction AMMONX_H.1_DF 0
+Reaction AMMONX_H.2_EB 0
+Reaction AMMONX_H.1_EB 0
+Reaction AMMONX_H.2_EC 0
+Reaction AMMONX_H.1_EC 0
+Reaction AMMONX_H.2_20 0
+Reaction AMMONX_H.2_13 0
+Reaction AMMONX_H.2_21 0
+Reaction AMMONX_H.2_22 0
+Reaction AMMONX_H.2_33 0
+Reaction AMMONX_H.2_34 0
+Reaction AMMONX_H.1_34 0
+Reaction AMMONX_H.2_06 0
+Reaction AMMONX_H.2_09 0
+Reaction AMMONX_H.2_17 0
+Reaction AMMONX_H.2_ZH 0
+Reaction AMMONX_H.2_ZI 0
+Reaction AMMONX_H.2_ZJ 0
+Vars1 540
 Reaction HYDHEL_H.1_2.1.1 2
 
 
@@ -8973,7 +9043,7 @@ CX
 
 C
 H+
-H 
+H
 C+
 
 
@@ -8981,6 +9051,1266 @@ C+
 
 Particle H+
 Particle C
+Reaction AMMONX_H.2_01 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle N
+Reaction AMMONX_H.2_02 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle N2
+Reaction AMMONX_H.2_03 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle N2
+Reaction AMMONX_H.2_07 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle NH
+Reaction AMMONX_H.2_11 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle NH3
+Reaction AMMONX_H.2_12 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle NH3
+Reaction AMMONX_H.2_14 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle N2
+Reaction AMMONX_H.2_18 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle NH3
+Reaction AMMONX_H.2_ZE 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle NH3
+Reaction AMMONX_H.2_23 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle N2+
+Particle e
+Reaction AMMONX_H.2_23s 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle N2+
+Reaction AMMONX_H.2_24 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle NH+
+Particle e
+Reaction AMMONX_H.2_25 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle NH2+
+Particle e
+Reaction AMMONX_H.2_27 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle NH3+
+Particle e
+Reaction AMMONX_H.2_28 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle NH3+
+Particle e
+Reaction AMMONX_H.2_29 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle NH4+
+Particle e
+Reaction AMMONX_H.2_31 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle N2H+
+Particle e
+Reaction AMMONX_H.2_ZN 2
+
+
+14
+2
+CX
+
+
+N
+H2+
+N+
+H2
+
+
+
+
+Particle N
+Particle H2+
+Reaction AMMONX_H.2_32 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle NH3
+Particle H+
+Reaction AMMONX_H.2_ZL 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H+
+Particle NH2
+Reaction AMMONX_H.2_ZM 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H+
+Particle NH
+Reaction AMMONX_H.2_35 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H2+
+Particle NH3
+Reaction AMMONX_H.2_36 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H2+
+Particle N2
+Reaction AMMONX_H.1_36 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H2+
+Particle N2
+Reaction AMMONX_H.2_ZO 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H2+
+Particle N
+Reaction AMMONX_H.1_ZO 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H2+
+Particle N
+Reaction AMMONX_H.2_ZR 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H2+
+Particle NH2
+Reaction AMMONX_H.2_ZT 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H2+
+Particle NH
+Reaction AMMONX_H.2_39 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H3+
+Particle NH3
+Reaction AMMONX_H.1_39 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H3+
+Particle NH3
+Reaction AMMONX_H.2_ZU 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H3+
+Particle NH2
+Reaction AMMONX_H.1_ZU 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H3+
+Particle NH2
+Reaction AMMONX_H.2_ZV 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H3+
+Particle NH
+Reaction AMMONX_H.1_ZV 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H3+
+Particle NH
+Reaction AMMONX_H.2_40 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H3+
+Particle N2
+Reaction AMMONX_H.1_40 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H3+
+Particle N2
+Reaction AMMONX_H.2_41 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H2
+Particle N+
+Reaction AMMONX_H.1_41 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H2
+Particle N+
+Reaction AMMONX_H.2_ZZ 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H
+Particle N+
+Reaction AMMONX_H.2_46 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle NH+
+Particle H2
+Reaction AMMONX_H.1_46 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle NH+
+Particle H2
+Reaction AMMONX_H.2_50 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle NH2+
+Particle H2
+Reaction AMMONX_H.1_50 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle NH2+
+Particle H2
+Reaction AMMONX_H.2_EK 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle N2
+Reaction AMMONX_H.2_EM 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle N
+Reaction AMMONX_H.2_DB 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle N2*(A)
+Particle N
+Reaction AMMONX_H.1_DB 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle N2*(A)
+Particle N
+Reaction AMMONX_H.2_DD 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle NH3
+Particle N2*(A)
+Reaction AMMONX_H.1_DD 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle NH3
+Particle N2*(A)
+Reaction AMMONX_H.2_DE 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H
+Particle N2*(A)
+Reaction AMMONX_H.1_DE 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H
+Particle N2*(A)
+Reaction AMMONX_H.2_DF 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H2
+Particle N2*(A)
+Reaction AMMONX_H.1_DF 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H2
+Particle N2*(A)
+Reaction AMMONX_H.2_EB 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H2
+Particle N*(2D)
+Reaction AMMONX_H.1_EB 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H2
+Particle N*(2D)
+Reaction AMMONX_H.2_EC 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle NH3
+Particle N*(2D)
+Reaction AMMONX_H.1_EC 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle NH3
+Particle N*(2D)
+Reaction AMMONX_H.2_20 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H2+
+Particle e
+Reaction AMMONX_H.2_13 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle H2
+Reaction AMMONX_H.2_21 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H3+
+Particle e
+Reaction AMMONX_H.2_22 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H3+
+Particle e
+Reaction AMMONX_H.2_33 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H2+
+Particle H
+Reaction AMMONX_H.2_34 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H2+
+Particle H2
+Reaction AMMONX_H.1_34 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle H2+
+Particle H2
+Reaction AMMONX_H.2_06 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle H2
+Reaction AMMONX_H.2_09 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle NH2
+Reaction AMMONX_H.2_17 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle NH2
+Reaction AMMONX_H.2_ZH 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle N2*(A)
+Reaction AMMONX_H.2_ZI 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle N*(2D)
+Reaction AMMONX_H.2_ZJ 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle e
+Particle N*(2P)
 StartupParticles2 3
 H
 H2

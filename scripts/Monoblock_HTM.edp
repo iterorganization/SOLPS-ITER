@@ -110,7 +110,7 @@ Vh kCCZ,kCu,kW,K,htc,HF,qq,TMAX;
 
 problem divert(T,v)=int2d(block)(K*(dx(T)*dx(v)+dy(T)*dy(v)))-int1d(block,C)(qq*v)
 				   -int1d(block,GG)(htc*Tf*v)+int1d(block,GG)(htc*T*v);
-real gamma,npoints=300.0,hfmax,hflux,CHF=32.0e6;
+real gamma,npoints=300.0,hfmax,hflux,CHF=40.0e6;
 	   
 //Loop on the monoblock length
 //ofstream ff00("Qwater.dat");
@@ -119,8 +119,8 @@ ofstream ff02("warning_VT_"+sinout+".log");
 real flag=0.0;
 TTMAX=0.0;
 for(int jj=0;jj<Ntile;jj+=1){
-	qq=(qpls(jj)/cos(beta+alpha))*(x>=Xshadow)+(qtot(jj)-qpls(jj));
-    Qreal(jj)=qpls(jj)/cos(beta+alpha)+qtot(jj)-qpls(jj);
+	qq=(qpls(jj)*sin(theta+alpha+beta)/sin(theta))*(x>=Xshadow)+(qtot(jj)-qpls(jj));
+    Qreal(jj)=qpls(jj)*sin(theta+alpha+beta)/sin(theta)+qtot(jj)-qpls(jj);
 	real err=1.0,tol=1.e-3;
 	Told=Tf;
 	real qwater=0.0,qplasma=0.0;
@@ -131,7 +131,7 @@ for(int jj=0;jj<Ntile;jj+=1){
 		kCu=CU(0)*T^3.0+CU(1)*T^2.0+CU(2)*T+CU(3);
 		kW=WW(0)*T^5.0+WW(1)*T^4.0+WW(2)*T^3.0+WW(3)*T^2.0+WW(4)*T+WW(5);
 		K=kW*(region==ww)+kCu*(region==cu)+kCCZ*(region==ccz);
-		htc=(0.001571305340610*(T^3.0)-0.969922562124876*(T^2.0)+2.647846516393415e+02*T+6.008184472858047e+04)*(T<270.0)+(1.347748889852061e-07*(T^5.0)-2.958948227254278e-04*(T^4.0)+0.245908413167699*(T^3.0)+42.370929182252034*(T^2.0)-5.764308361863856e+04*T+9.109083136201818e+06)*(T>=270.0);
+		htc=(2.1415e-3*(T^3.0)-1.2231*(T^2.0)+2.6941e2*T+5.6162e+04)*(T<270.0)+(-2.6549e-07*(T^5.0)+4.6179e-04*(T^4.0)-0.32055*(T^3.0)+2.4134e2*(T^2.0)-8.9665e+04*T+1.0945e+07)*(T>=270.0);
 		divert;
 		err=sqrt(int2d(block)((T-Told)^2.0))/sqrt(int2d(block)(T^2.0));
 		Told=T;
@@ -142,15 +142,15 @@ for(int jj=0;jj<Ntile;jj+=1){
 	HTC(jj)=int1d(block,GG)(htc)/int1d(block,GG)(1.0);
 	
 	//Evaluate next T bulk
-	qwater=(-int1d(block,GG)(htc*Tf)+int1d(block,GG)(htc*T))*2.0*Ltile;
+	qwater=(-int1d(block,GG)(htc*Tf)+int1d(block,GG)(htc*T))*Ltile;
 	Tf=Tf+qwater/mflow/cpw;
 
-	//Check for CHF (32 MW/m^2)
-	HF=htc*(T-Tf);
+	//Check for CHF (40 MW/m^2)
+    HF=htc*(T-Tf);
 	hfmax=0.0;
 	for (int ii=0;ii<=npoints;ii+=1.0){
 		gamma=ii/npoints*pi/2.0;
-		hflux=HF(L/2.+D3/2.*cos(pi-gamma),H+D3/2.*sin(pi-gamma));
+		hflux=HF(L/2.+D3/2.*cos(pi/2.-gamma),H+D3/2.*sin(pi/2.-gamma));
 		if(hflux>=hfmax){
 			hfmax=hflux;
 		}

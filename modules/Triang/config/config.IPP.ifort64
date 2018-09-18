@@ -13,43 +13,43 @@ ifndef LD_NAG
   $(error LD_NAG not defined)
 endif
 
-#DEFINES		= ${SOLPS_CPP} ${EIRENE_DEFINES} -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
-#DEFINES		= ${SOLPS_CPP} ${EIRENE_DEFINES} -DTRIANG -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
-DEFINES		=
-EQUIVS 		=
+#DEFINES  = ${SOLPS_CPP} ${EIRENE_DEFINES} -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
+#DEFINES  = ${SOLPS_CPP} ${EIRENE_DEFINES} -DTRIANG -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
+DEFINES   =
+EQUIVS    =
 
-#CPP	 	= -/lib/cpp -C -traditional
-CPP	 	    = /lib/cpp -traditional
-CPPOPTS 	= -P -I${srcdir} ${EQUIVS}
+#CPP      = -/lib/cpp -C -traditional
+CPP       = /lib/cpp -traditional
+CPPOPTS   = -P -I${srcdir} ${EQUIVS}
 SED       =
-LINK_MOD 	= 
+LINK_MOD  =
 
-FC       	= ifort
+FC        = ifort
 
 ifdef SOLPS_DEBUG
-FCOPTS 		= -g -C -debug all -traceback
+FCOPTS    = -g -C -debug all -traceback
 else
-FCOPTS 		= -O3 -vec_report0
+FCOPTS    = -O3 -vec_report0
 endif
 
-#COMPILE  	= ${FC} -c ${FFLAGS}
+#COMPILE  = ${FC} -c ${FFLAGS}
 
-NAG		= ${LD_NAG}
-GKS		= ${LD_GR} ${LD_GKS} -lX11 -lXt -lXmu
+NAG       = ${LD_NAG}
+GKS       = ${LD_GR} ${LD_GKS} -lX11 -lXt -lXmu
 
-#LDLIBS		= ${LD_MSCL}-L/usr/local/lib -L/usr/X11R6/lib64
-LDLIBS		= -L/usr/local/lib -L/usr/X11R6/lib64
-LDEXTRA  	= 
+#LDLIBS   = ${LD_MSCL}-L/usr/local/lib -L/usr/X11R6/lib64
+LDLIBS    =
+LDEXTRA   =
 
 # new
 
-INCMOD 		= -I
-MOD 		= mod
-OBJDEST 	= -o ${OBJDIR}/$*.o
+INCMOD    = -I
+MOD       = mod
+OBJDEST   = -o ${OBJDIR}/$*.o
 
-BLD 		= ar rcv
+BLD       = ar rcv
 
-LD 		= ifort
+LD        = ifort
 
 #!!!Local Variables:
 #!!! mode: Makefile

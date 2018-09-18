@@ -1,9 +1,14 @@
 #! /bin/tcsh -f
+[ -s AMJUEL   ] || ln -s $SOLPSTOP/modules/Eirene/Database/AMJUEL .
 [ -s stra.dat ] || ln -s $SOLPSTOP/modules/B2.5/Database/stra.dat .
 [ -s weis.dat ] || ln -s $SOLPSTOP/modules/B2.5/Database/weis.dat .
 [ -e b2ag.prt ] && touch b2ag.prt || ( [ -e ../baserun/b2ag.prt ] && touch ../baserun/b2ag.prt || touch b2ag.prt )
 [ -s b2fgmtry ] && touch b2fgmtry || ( [ -s ../baserun/b2fgmtry ] && touch ../baserun/b2fgmtry || echo "No valid b2fgmtry file found" )
-[ -s fort.30 ] && touch fort.30 || ( [ -s ../baserun/fort.30 ] && touch ../baserun/fort.30 || echo "No valid fort.30 file found" )
+if (${COMPILER} == "HP" ) then
+  [ -s ftn30 ] && touch ftn30 || ( [ -s ../baserun/ftn30 ] && touch ../baserun/ftn30 || echo "No valid ftn30 file found" )
+else
+  [ -s fort.30 ] && touch fort.30 || ( [ -s ../baserun/fort.30 ] && touch ../baserun/fort.30 || echo "No valid fort.30 file found" )
+endif
 sleep 1
 [ -e b2ah.prt ] && touch b2ah.prt || ( [ -e ../baserun/b2ah.prt ] && touch ../baserun/b2ah.prt || touch b2ah.prt )
 [ -s b2fpardf ] && touch b2fpardf || ( [ -s ../baserun/b2fpardf ] && touch ../baserun/b2fpardf || echo "No valid b2fpardf file found" )

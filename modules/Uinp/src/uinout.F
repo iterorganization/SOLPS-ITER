@@ -1,7 +1,8 @@
       subroutine uinout(ufnm)
-       use b2mod_layer
+      use b2mod_types
+      use b2mod_layer
      , , only: ntrack, nalloys
-       use eirmod_extrab25
+      use eirmod_extrab25
      , , only: msrfclsx, mgwtiesx
 
 c  version : 05.02.2005 00:46
@@ -19,10 +20,10 @@ c=======================================================================
 #include "impcon.inc"
 #include "git_version_Uinp.h"
 
-      integer i,j,k,l,m,n,icont,istep
-      logical handle,ulmlti,ex,carbon,moly,streql
+      integer i,j,k,l,m,n,icont,istep,jsurpr
+      logical handle,ulmlti,ex,carbon,nitrogen,moly,streql
       logical, allocatable :: done(:)
-      character utxthd(34)*71, utxtfl(8)*47, ufnm*(*), ucdnmdl*10
+      character utxthd(35)*71, utxtfl(9)*47, ufnm*(*)
       character utxtgt*71
       external streql, xerrab, subini, subend
       data utxthd /
@@ -55,20 +56,22 @@ c=======================================================================
      7        '** 15. Data for interfacing routine "geousr"' ,
      8        '* 6c. Data for chemical sputtering' ,
      9        '* 2d. Data for mesh multiplication' ,
-     o        '* 2e. Data for additional cells outside standard mesh',
-     1        '* 5b. Plasma background data',
-     2        '* Data for source correction',
-     3        '* 4d. Photon species',
-     4        '* 5a. Bulk ion species' /
+     o        '* 2e. Data for additional cells outside standard mesh' ,
+     1        '* 5b. Plasma background data' ,
+     2        '* Data for source correction' ,
+     3        '* 4d. Photon species' ,
+     4        '* 5a. Bulk ion species' ,
+     5        '* 10f. Data for energy spectra' /
       data utxtfl /
      1        'CFILE AMJUEL Database/AMdata/amjuel.tex        ',
      2        'CFILE HYDHEL Database/AMdata/hydhel.tex        ',
      3        'CFILE SPUTER Database/Surfacedata/SPUTER       ',
      4        'CFILE TRIM   Database/Surfacedata/TRIM/trim.dat',
      5        'CFILE METHAN Database/AMdata/methane.tex       ',
-     6        'CFILE ADAS   modules/adas/adf11                ',
-     7        'CFILE gr_ext Database/graphite_ext.dat         ',
-     8        'CFILE mo_ext Database/mo_ext.dat               '/
+     6        'CFILE AMMONX Database/AMdata/ammoniaex.tex     ',
+     7        'CFILE ADAS   modules/adas/adf11                ',
+     8        'CFILE gr_ext Database/graphite_ext.dat         ',
+     9        'CFILE mo_ext Database/mo_ext.dat               '/
 c=======================================================================
 
 c*** 0. Prepare some constants
@@ -132,6 +135,20 @@ c*** 1.  General data for the run
      . " Created with SOLPS-ITER Uinp version "//git_version_Uinp
       write(iunoo,700) utxtgt
       write(iunoo,700) utxthd(1)
+      if (nbgk.gt.0) then
+        j=nfile/10000
+        k=(nfile-j*10000)/1000
+        l=(nfile-j*10000-k*1000)/100
+        m=(nfile-j*10000-k*1000-l*100)/10
+        n=mod(nfile,10)
+        if (l.le.2) then
+          l=4
+        else if (l.eq.6.or.l.eq.7) then
+          l=9
+        endif
+        if (n.ne.1) n=6
+        nfile=j*10000+k*1000+l*100+m*10+n
+      end if
       write(iunoo,707) nmach,nmode,ntcpu,nfile,niter0,niter,
      .                 ntime0,ntim1,nfullrun
       write(iunoo,707) noptim,noptm1,ngeom_usr,ncoup_input,
@@ -153,11 +170,16 @@ c*** 1.  General data for the run
         carbon=carbon.or.streql(spcigen(i),spcdgen(5))
       enddo
       if (carbon) write(iunoo,720) utxtfl(5)
+      nitrogen = .false.
+      do i=1,nspigen
+        nitrogen=nitrogen.or.streql(spcigen(i),spcdgen(8))
+      enddo
+      if (nitrogen) write(iunoo,720) utxtfl(6)
       handle=.false.
       do i=1,nrcln
         handle=handle.or.streql(filnam(i),'ADAS')
       end do
-      if (handle) write(iunoo,720) utxtfl(6)
+      if (handle) write(iunoo,720) utxtfl(7)
       carbon = .false.
       do i=1,ntrgdflt
         carbon=carbon.or.streql(made_of(i),'C')
@@ -165,7 +187,7 @@ c*** 1.  General data for the run
       do i=1,n_spcsrf
         carbon=carbon.or.streql(sps_mtrl(i),'C')
       end do
-      if (carbon.or..true.) write(iunoo,720) utxtfl(7)
+      if (carbon.or..true.) write(iunoo,720) utxtfl(8)
       moly=.false.
       do i=1,ntrgdflt
         moly=moly.or.streql(made_of(i),'Mo')
@@ -173,7 +195,7 @@ c*** 1.  General data for the run
       do i=1,n_spcsrf
         moly=moly.or.streql(sps_mtrl(i),'Mo')
       end do
-      if (moly.or..true.) write(iunoo,720) utxtfl(8)
+      if (moly.or..true.) write(iunoo,720) utxtfl(9)
 
 c*** 2.  data for standard mesh
 
@@ -203,7 +225,7 @@ c**  radial mesh
             write(iunoo,707) (npoin1(1,j),npoin1(2,j),j=1,npplg)
             do i=1,nr1st !{
               write(iunoo,703) (xpol(i,j),ypol(i,j),j=1,nrplg)
-      	    end do !}
+            end do !}
           end if !}
           if (nlfem) then !{
             write(iunoo,703) xpcor,ypcor,zpcor
@@ -326,10 +348,11 @@ c*** 3b.  data for additional surfaces
 c***  "ch0-cards"
       call uichwr(iunoo,0,jadch0,nlimi)
       icopy=0
+      jsurpr=nsurpr
       do 360 k=laddsrfs+1,nlimi !{
         i=indasrfs(k)
-	if(i.eq.0) go to 360
-	write(iunoo,714) k,i,txtsfa(k)
+        if(i.eq.0) go to 360
+        write(iunoo,714) k,i,txtsfa(k)
 
         icopy=icopy-1
         if (icopy.ge.1) goto 360
@@ -343,39 +366,43 @@ c*** "ch2-cards" here !
 
         write(iunoo,703) rlb(i),sarea(i),rlwmn(i),rlwmx(i)
         jlswch=jadnsw(i)+10*jadmsw(i)+100*jadlsw(i)+1000*jadksw(i)+
-     +  			     10000*jadjsw(i)+100000*jadisw(i)
+     +                               10000*jadjsw(i)+100000*jadisw(i)
         jlcell=jlacll(i)+1000*jlblck(i)
         write(iunoo,707) jliin(i),jlside(i),jlswch,jlequi(i),
      ,    jltor(i),jlcol(i),jlfit(i),jlcell,jlbox(i),jlplg(i)
+        if(jliin(i).lt.0) then
+          jsurpr=jsurpr+1
+          nsrf(jsurpr)=k
+        end if
 
 c**  Surface coefficients
 
         if (rlb(i).lt.2.) then !{
           write(iunoo,703) a0lm(i),a1lm(i),a2lm(i),
-     ,          			    a3lm(i),a4lm(i),a5lm(i)
+     ,                                      a3lm(i),a4lm(i),a5lm(i)
           write(iunoo,703) a6lm(i),a7lm(i),a8lm(i),a9lm(i)
         else if (rlb(i).lt.3.) then !}{
           write(iunoo,703) p1(1,i),p1(2,i),p1(3,i),
-     ,          			    p2(1,i),p2(2,i),p2(3,i)
+     ,                                      p2(1,i),p2(2,i),p2(3,i)
         else if (rlb(i).lt.5.) then !}{
           write(iunoo,703) p1(1,i),p1(2,i),p1(3,i),
-     ,          			    p2(1,i),p2(2,i),p2(3,i)
+     ,                                      p2(1,i),p2(2,i),p2(3,i)
           write(iunoo,703) p3(1,i),p3(2,i),p3(3,i),
-     ,          			    p4(1,i),p4(2,i),p4(3,i)
+     ,                                      p4(1,i),p4(2,i),p4(3,i)
         else if (rlb(i).lt.7.) then !}{
           write(iunoo,703) p1(1,i),p1(2,i),p1(3,i),
-     ,          			    p2(1,i),p2(2,i),p2(3,i)
+     ,                                      p2(1,i),p2(2,i),p2(3,i)
           write(iunoo,703) p3(1,i),p3(2,i),p3(3,i),
-     ,          			    p4(1,i),p4(2,i),p4(3,i)
+     ,                                      p4(1,i),p4(2,i),p4(3,i)
           write(iunoo,703) p5(1,i),p5(2,i),p5(3,i),
-     ,          			    p6(1,i),p6(2,i),p6(3,i)
+     ,                                      p6(1,i),p6(2,i),p6(3,i)
         end if !}
 
 c**  Boundary data
 
         if (rlb(i).gt.0..and.rlb(i).lt.2.) then !{
           write(iunoo,703) xlims1(i,1),ylims1(i,1),
-     ,  	      zlims1(i,1),xlims2(i,1),ylims2(i,1),zlims2(i,1)
+     ,                zlims1(i,1),xlims2(i,1),ylims2(i,1),zlims2(i,1)
         else if (rlb(i).le.0.) then !}{
           imrlb=-rlb(i)
           ih=mod(imrlb,100)
@@ -384,42 +411,42 @@ c**  Boundary data
           iuscn=idez(ih,2,2)
           do j=1,iulin !{
             write(iunoo,703) alims(i,j),xlims(i,j),
-     ,  					  ylims(i,j),zlims(i,j)
+     ,                                            ylims(i,j),zlims(i,j)
           end do !}
           do j=1,iuscn !{
             write(iunoo,703) alims0(i,j),xlims1(i,j),
-     ,  	      ylims1(i,j),zlims1(i,j),xlims2(i,j),ylims2(i,j)
+     ,                ylims1(i,j),zlims1(i,j),xlims2(i,j),ylims2(i,j)
             write(iunoo,703) zlims2(i,j),xlims3(i,j),
-     ,  				      ylims3(i,j),zlims3(i,j)
+     ,                                        ylims3(i,j),zlims3(i,j)
           end do !}
         end if !}
 
 c**  Local reflection model ?
 
-      if(jscrd(i).GT.0) then !{
-        write(iunoo,715) scard_name(jscrd(i))
-      else if (jliin(i).eq.1) then !}{
-        ii=10*jlsptc(i)+jlsptp(i)
-        write(iunoo,707) jlref(i),ii,jsrss(i),jsrc(i),lchspnwa(i)
-        write(iunoo,703) xmlma(i),ewala(i),ewbna(i),
+        if(jscrd(i).GT.0) then !{
+          write(iunoo,715) scard_name(jscrd(i))
+        else if (jliin(i).eq.1) then !}{
+          ii=10*jlsptc(i)+jlsptp(i)
+          write(iunoo,707) jlref(i),ii,jsrss(i),jsrc(i),lchspnwa(i)
+          write(iunoo,703) xmlma(i),ewala(i),ewbna(i),
      ,                trnspa(i,1),trnspa(i,2),fsheata(i)
-        write(iunoo,703) rcycfa(i),rcycta(i),rcprma(i),
-     ,  		exppla(i),expela(i),expila(i)
-        write(iunoo,703) rcycsa(i),rcycca(i),
-     ,  		echspta(i),fchspta(i),sptpra(i)
-      end if !}
+          write(iunoo,703) rcycfa(i),rcycta(i),rcprma(i),
+     ,                exppla(i),expela(i),expila(i)
+          write(iunoo,703) rcycsa(i),rcycca(i),
+     ,                echspta(i),fchspta(i),sptpra(i)
+        end if !}
 
 c* Transform from convenient coordinate system to Eirene coordinate
 c* system. This is possible for all surfaces written by now, i.e.
 c* from itini=1 to itend=i
 
-      if(itini(i).ge.0) then !{
-        write(iunoo,'(a)') 'TRANSFORM'
-        write(iunoo,707) itini(i),itend(i)
-        write(iunoo,703) xlcor(i),ylcor(i),zlcor(i)
-        write(iunoo,703) xlref(i),ylref(i),zlref(i)
-        write(iunoo,703) xlrot(i),ylrot(i),zlrot(i),alrot(i)
-      end if !}
+        if(itini(i).ge.0) then !{
+          write(iunoo,'(a)') 'TRANSFORM'
+          write(iunoo,707) itini(i),itend(i)
+          write(iunoo,703) xlcor(i),ylcor(i),zlcor(i)
+          write(iunoo,703) xlref(i),ylref(i),zlref(i)
+          write(iunoo,703) xlrot(i),ylrot(i),zlrot(i),alrot(i)
+        end if !}
 
   360 continue !}
 
@@ -434,7 +461,7 @@ c**   atomic reaction cards, nreaci data fields
       do j=1,nrcln !{
         iid=ir(j)
         write(iunoo,701) iid,filnam(j),h123(j),reac(j),crc(j),
-     ,        	      	 massp(j),masst(j),delpot(j),rc1mn(j),rc1mx(j),
+     ,                   massp(j),masst(j),delpot(j),rc1mn(j),rc1mx(j),
      ,                                               rc2mn(j),rc2mx(j)
         if (streql(filnam(j),'ADAS')) then !{
           write(iunoo,'(4x,a2,1x,i3)') elname(j),iz(j)
@@ -454,14 +481,19 @@ c**  atomic species cards
         write(iunoo,708) iatm,texta(iatm),nmassa(iatm),nchara(iatm),
      ,    1,0,isrfa(iatm),isrta(iatm),nmseca(iatm),nrca(iatm),
      ,    nfola(iatm),ngena(iatm),nhsta(iatm)
-      	do k=1,nrca(iatm) !{
-          if(nmseca(iatm).ne.3) then !{
+        do k=1,nrca(iatm) !{
+          if(nmseca(iatm).le.2) then !{
             write(iunoo,707) ireaca(iatm,k),ibulka(iatm,k),
      ,                 iscd1a(iatm,k),iscd2a(iatm,k),
      ,                 iscdea(iatm,k),iestma(iatm,k),ibgka(iatm,k)
-          else !}{
+          else if (nmseca(iatm).eq.3) then !}{
             write(iunoo,707) ireaca(iatm,k),ibulka(iatm,k),
      ,                     iscd1a(iatm,k),iscd2a(iatm,k),iscd3a(iatm,k),
+     ,                     iscdea(iatm,k),iestma(iatm,k),ibgka(iatm,k)
+          else if (nmseca(iatm).eq.4) then !}{
+            write(iunoo,707) ireaca(iatm,k),ibulka(iatm,k),
+     ,                     iscd1a(iatm,k),iscd2a(iatm,k),
+     ,                     iscd3a(iatm,k),iscd4a(iatm,k),
      ,                     iscdea(iatm,k),iestma(iatm,k),ibgka(iatm,k)
           end if !}
           write(iunoo,703) eeleca(iatm,k),ebulka(iatm,k),escd1a(iatm,k),
@@ -479,13 +511,18 @@ c**  neutral molecules species cards
      ,              nrcm(imol),nfolm(imol),ngenm(imol),nhstm(imol),
      ,              lkindm(imol)
         do k=1,nrcm(imol) !{
-          if(nmsecm(imol).ne.3) then !{
+          if(nmsecm(imol).le.2) then !{
             write(iunoo,707) ireacm(imol,k),ibulkm(imol,k),
      ,                 iscd1m(imol,k),iscd2m(imol,k),
      ,                 iscdem(imol,k),iestmm(imol,k),ibgkm(imol,k)
-          else !}{
+          else if(nmsecm(imol).eq.3) then!}{
             write(iunoo,707) ireacm(imol,k),ibulkm(imol,k),
      ,                 iscd1m(imol,k),iscd2m(imol,k),iscd3m(imol,k),
+     ,                 iscdem(imol,k),iestmm(imol,k),ibgkm(imol,k)
+          else if(nmsecm(imol).eq.4) then!}{
+            write(iunoo,707) ireacm(imol,k),ibulkm(imol,k),
+     ,                 iscd1m(imol,k),iscd2m(imol,k),
+     ,                 iscd3m(imol,k),iscd4m(imol,k),
      ,                 iscdem(imol,k),iestmm(imol,k),ibgkm(imol,k)
           end if !}
           write(iunoo,703) eelecm(imol,k),ebulkm(imol,k),
@@ -502,17 +539,22 @@ c**  test particle ions species cards
      ,    nprti(iion),nchrgi(iion),isrfi(iion),isrti(iion),nmseci(iion),
      ,    nrci(iion),nfoli(iion),ngeni(iion),nhsti(iion),lkindi(iion)
         do k=1,nrci(iion) !{
-          if(nmseci(iion).ne.3) then !{
+          if(nmseci(iion).le.2) then !{
             write(iunoo,707) ireaci(iion,k),ibulki(iion,k),
-     ,  	       iscd1i(iion,k),iscd2i(iion,k),
-     ,  	       iscdei(iion,k),iestmi(iion,k),ibgki(iion,k)
-          else !}{
+     ,                 iscd1i(iion,k),iscd2i(iion,k),
+     ,                 iscdei(iion,k),iestmi(iion,k),ibgki(iion,k)
+          else if(nmseci(iion).eq.3) then !}{
             write(iunoo,707) ireaci(iion,k),ibulki(iion,k),
-     ,  	       iscd1i(iion,k),iscd2i(iion,k),iscd3i(iion,k),
-     ,  	       iscdei(iion,k),iestmi(iion,k),ibgki(iion,k)
+     ,                 iscd1i(iion,k),iscd2i(iion,k),iscd3i(iion,k),
+     ,                 iscdei(iion,k),iestmi(iion,k),ibgki(iion,k)
+          else if(nmseci(iion).eq.4) then !}{
+            write(iunoo,707) ireaci(iion,k),ibulki(iion,k),
+     ,                 iscd1i(iion,k),iscd2i(iion,k),
+     ,                 iscd3i(iion,k),iscd4i(iion,k),
+     ,                 iscdei(iion,k),iestmi(iion,k),ibgki(iion,k)
           end if !}
           write(iunoo,703) eeleci(iion,k),ebulki(iion,k),
-     ,  		    escd1i(iion,k),escd2i(iion,k),freaci(iion,k)
+     ,                      escd1i(iion,k),escd2i(iion,k),freaci(iion,k)
         end do !}
       end do !}
 
@@ -526,14 +568,19 @@ c**  photon species cards
      ,      isrtf(ipht),nmsecf(ipht),nrcf(ipht),nfolf(ipht),
      ,      ngenf(ipht),nhstf(ipht)
           do k=1,nrcf(ipht) !{
-            if(nmsecf(ipht).ne.3) then !{
+            if(nmsecf(ipht).le.2) then !{
               write(iunoo,707) ireacf(ipht,k),ibulkf(ipht,k),
-     ,  	       iscd1f(ipht,k),iscd2f(ipht,k),
-     ,  	       iscdef(ipht,k),iestmf(ipht,k),ibgkf(ipht,k)
-            else !}{
+     ,                 iscd1f(ipht,k),iscd2f(ipht,k),
+     ,                 iscdef(ipht,k),iestmf(ipht,k),ibgkf(ipht,k)
+            else if(nmsecf(ipht).eq.3) then !}{
               write(iunoo,707) ireacf(ipht,k),ibulkf(ipht,k),
-     ,  	       iscd1f(ipht,k),iscd2f(ipht,k),iscd3f(ipht,k),
-     ,  	       iscdef(ipht,k),iestmf(ipht,k),ibgkf(ipht,k)
+     ,                 iscd1f(ipht,k),iscd2f(ipht,k),iscd3f(ipht,k),
+     ,                 iscdef(ipht,k),iestmf(ipht,k),ibgkf(ipht,k)
+            else if(nmsecf(ipht).eq.4) then !}{
+              write(iunoo,707) ireacf(ipht,k),ibulkf(ipht,k),
+     ,                 iscd1f(ipht,k),iscd2f(ipht,k),
+     ,                 iscd3f(ipht,k),iscd4f(ipht,k),
+     ,                 iscdef(ipht,k),iestmf(ipht,k),ibgkf(ipht,k)
             end if !}
             write(iunoo,703) eelecf(ipht,k),ebulkf(ipht,k),
      ,       escd1f(ipht,k),escd2f(ipht,k),freacf(ipht,k),fldlmf(ipht,k)
@@ -554,21 +601,32 @@ c**  bulk ions species cards
 
       write(iunoo,707) nplsi+nbgk
       do ipls=1,nplsi+nbgk !{
-        write(iunoo,708) ipls,textp(ipls),nmassp(ipls),
+        if (ipls.lt.100) then !{
+         write(iunoo,708) ipls,textp(ipls),nmassp(ipls),
      ,    ncharp(ipls),nprtp(ipls),nchrgp(ipls),isrfp(ipls),
      ,    isrtp(ipls),nmsecp(ipls),nrcp(ipls),idnslmp(ipls),
      ,    0,nhstp(ipls),0,cdnmdlp(ipls),nrep(ipls)
+        else !}{
+         write(iunoo,7080) mod(ipls,100),textp(ipls),nmassp(ipls),
+     ,    ncharp(ipls),nprtp(ipls),nchrgp(ipls),isrfp(ipls),
+     ,    isrtp(ipls),nmsecp(ipls),nrcp(ipls),idnslmp(ipls),
+     ,    0,nhstp(ipls),0,cdnmdlp(ipls),nrep(ipls)
+        end if !}
         do k=1,nrcp(ipls) !{
-          if(nmsecp(ipls).ne.3) then !{
+          if(nmsecp(ipls).le.2) then !{
             write(iunoo,707) ireacp(ipls,k),ibulkp(ipls,k),
      ,        iscd1p(ipls,k),iscd2p(ipls,k),iscdep(ipls,k)
-          else !}{
+          else if(nmsecp(ipls).eq.3) then !}{
             write(iunoo,707) ireacp(ipls,k),ibulkp(ipls,k),
      ,        iscd1p(ipls,k),iscd2p(ipls,k),iscd3p(ipls,k),
      ,        iscdep(ipls,k)
+          else if(nmsecp(ipls).eq.4) then !}{
+            write(iunoo,707) ireacp(ipls,k),ibulkp(ipls,k),
+     ,        iscd1p(ipls,k),iscd2p(ipls,k),iscd3p(ipls,k),
+     ,        iscd4p(ipls,k),iscdep(ipls,k)
           end if !}
           write(iunoo,703) eelecp(ipls,k),ebulkp(ipls,k),
-     .          	   escd1p(ipls,k),escd2p(ipls,k),freacp(ipls,k)
+     .                     escd1p(ipls,k),escd2p(ipls,k),freacp(ipls,k)
         end do !}
         if (len_trim(cdnmdlp(ipls)).gt.0) then !{
           call upcase(cdnmdlp(ipls),cdnmdlp(ipls),ldnmdlp)
@@ -606,7 +664,7 @@ c** To be done (in Eirene first)
       if (iabs(indpro(2)).le.5 .and. nplsi.gt.0) then !{
         if (ulmlti) then !{
           write(iunoo,703) (ti0(i),ti1(i),ti2(i),ti3(i),ti4(i),ti5(i),
-     ,                                        	      	      i=1,nplsi)
+     ,                                                        i=1,nplsi)
         else !}{
           write(iunoo,703) ti0(1),ti1(1),ti2(1),ti3(1),ti4(1),ti5(1)
         end if !}
@@ -615,11 +673,11 @@ c** To be done (in Eirene first)
      ,                                   di3(i),di4(i),di5(i),i=1,nplsi)
       if (abs(indpro(4)).le.5) then !{
         write(iunoo,703) (vx0(i),vx1(i),vx2(i),vx3(i),vx4(i),vx5(i),
-     ,                                        	      	      i=1,nplsi)
+     ,                                                        i=1,nplsi)
         write(iunoo,703) (vy0(i),vy1(i),vy2(i),vy3(i),vy4(i),vy5(i),
-     ,                                        	      	      i=1,nplsi)
+     ,                                                        i=1,nplsi)
         write(iunoo,703) (vz0(i),vz1(i),vz2(i),vz3(i),vz4(i),vz5(i),
-     ,                                        	      	      i=1,nplsi)
+     ,                                                        i=1,nplsi)
       end if !}
       if (indpro(5).le.5) write(iunoo,703) b0,b1,b2,b3,b4,b5
       if (indpro(12).le.5) write(iunoo,703) vl0,vl1,vl2,vl3,vl4,vl5
@@ -716,7 +774,7 @@ c**  velocity space distribution
         write(iunoo,703) soreni(i),sorene(i),sorvdx(i),sorvdy(i),
      ,                                                 sorvdz(i)
         write(iunoo,703) sorcos(i),sormax(i),sorctx(i),sorcty(i),
-     ,          	    	      	      	       sorctz(i)
+     ,                                                sorctz(i)
 
       end do !}
 
@@ -778,7 +836,7 @@ c*** 9.  data for statistics and nonanalog model
 c*** 10. data for additional and surface averaged tallies
 
       write(iunoo,700) utxthd(11)
-      write(iunoo,707) nadvi,nclvi,nalvi,nadsi,nalsi
+      write(iunoo,707) nadvi,nclvi,nalvi,nadsi,nalsi,nadspc
 
 c*** 10a.
 
@@ -825,6 +883,18 @@ c*** 10e.
         write(iunoo,712) txtsps(j),txtuns(j)
       end do !}
 
+c*** 10f.
+
+      write(iunoo,700) utxthd(35)
+      do j=1,nadspc !{
+        write(iunoo,707) ispsrf(j), iptyp(j), ipspz(j),
+     .                   isptyp(j), nsps(j), isrfcl(j), idirec(j)
+        write(iunoo,703) spcmn(j), spcmx(j), spcsh(j),
+     .                   spcpx(j), spcpy(j), spcps(j)
+        if (idirec(j).ne.0)
+     >   write(iunoo,703) spcvx(j), spcvy(j), spcvz(j)
+      end do !}
+
 c*** 11.   data for numerical and graphical output
 
       write(iunoo,700) utxthd(17)
@@ -840,8 +910,8 @@ c*** 11.   data for numerical and graphical output
       do j=1,nvolpr !{
         write(iunoo,707) ntlv(j),nflgv(j),nspzv1(j),nspzv2(j),ntlvf(j)
       end do !}
-      write(iunoo,707) nsurpr
-      do j=1,nsurpr !{
+      write(iunoo,707) jsurpr
+      do j=1,jsurpr !{
         write(iunoo,707) nsrf(j),ntls(j),nflgs(j),nspzs1(j),nspzs2(j)
       end do !}
 
@@ -881,7 +951,7 @@ c**  particle history plots in 2d or 3d geometry plots
       write(iunoo,707) nvolpl
       if(nvolpl.gt.0) then !{
 
-      	write(iunoo,706) (pltsrc(j),j=0,nstrao)
+        write(iunoo,706) (pltsrc(j),j=0,nstrao)
         if (lrpscut) then !{
           write(iunoo,703) cutplane
         end if !}
@@ -894,20 +964,20 @@ c**  particle history plots in 2d or 3d geometry plots
             write(iunoo,706) lhist2(j),lsmot2(j)
             do i=1,nsptal(j) !{
               write(iunoo,707) ispzt2(j,i),nptal2(j,i),
-     ,      			nplin2(j,i),nplot2(j,i),npldl2(j,i)
+     ,                         nplin2(j,i),nplot2(j,i),npldl2(j,i)
             end do !}
           end if !}
           if (pltl3d(j)) then !{
             write(iunoo,706) lhist3(j),lcntr3(j),lsmot3(j),lraps(j),
-     ,      		      lvect3(j),lrpvc3(j),lrps3d(j),lrpscn(j)
+     ,                       lvect3(j),lrpvc3(j),lrps3d(j),lrpscn(j)
             write(iunoo,706) lprad(j),lppol(j),lptor(j)
             do i=1,nsp(j) !{
               write(iunoo,707) ispzt3(j,i),nptal3(j,i),iproj3(j,i),
-     ,      	npli13(j,i),nplo13(j,i),npli23(j,i),nplo23(j,i),
-     ,      	ipln(j,i)
+     ,         npli13(j,i),nplo13(j,i),npli23(j,i),nplo23(j,i),
+     ,         ipln(j,i)
             end do !}
             write(iunoo,703) talw1(j),talw2(j),
-     ,      	                            fcabs1(j),fcabs2(j),rpsdl(j)
+     ,                                     fcabs1(j),fcabs2(j),rpsdl(j)
           end if !}
         end do !}
       end if !}
@@ -922,14 +992,14 @@ c*** 12.  data for diagnostic module
           write(iunoo,700) txtsig(ichori)
           write(iunoo,707) nchtal(ichori),nspscl(ichori),nspnew(ichori)
           write(iunoo,707) nspstr(ichori),nspspz(ichori),
-     ,  		    nspini(ichori),nspend(ichori),
-     ,  		    nspblc(ichori),nspadd(ichori),masloc(ichori)
+     ,                      nspini(ichori),nspend(ichori),
+     ,                      nspblc(ichori),nspadd(ichori),masloc(ichori)
           write(iunoo,703) emin1(ichori),emax1(ichori)
           write(iunoo,704) ipivot(ichori),xpivot(ichori),
-     ,  		      	      	  ypivot(ichori),zpivot(ichori)
+     ,                                    ypivot(ichori),zpivot(ichori)
           write(iunoo,704) ichord(ichori),xchord(ichori),
-     ,  		      	      	  ychord(ichori),zchord(ichori)
-      	end do !}
+     ,                                    ychord(ichori),zchord(ichori)
+        end do !}
         write(iunoo,706) plchor,plspec
       end if !}
       if(lntspec.gt.0) write(iunoo,'(1p,2e12.5,4i6)') emnspc,emxspc,
@@ -975,7 +1045,7 @@ c*** 13.  data for nonlinear and time dep. option
 
 c*** the number of histories to be saved
 
-      write(iunoo,707) nprnli
+      write(iunoo,707) nprnli, ninitl_read
       if(nprnli.gt.0) then !{
 
 c*** the number of timesteps in Eirene, the timestep, and starting time
@@ -1053,14 +1123,19 @@ c*** 15. additional information for geousr
 c*** segment numbers for the target edges to be modified by geousr
 
       write(iunoo,700) utxthd(27)
-      write(iunoo,707) nadmod,ntrgte
+      if(lm_cnfg) then
+        write(iunoo,707) nadmod,ntrgte/2
+      else
+        write(iunoo,707) nadmod,ntrgte
+      endif
       do i=1,nadmod !{
         write (iunoo,'(2i6,1p,3e12.5)') nrs(i),ipunkt(i),
      ,                                        xcoor(i),ycoor(i),zcoor(i)
       end do !}
       if(ntrgte.gt.0) then !{
         do i=1,ntrgte !{
-      	  write(iunoo,'(2i6,1p,2e12.5)') jedge(2,i),jedge(1,i),
+          if (lm_cnfg.and.mod(i,2).eq.1) cycle
+          write(iunoo,'(2i6,1p,2e12.5)') jedge(2,i),jedge(1,i),
      ,                                             xpolpos(i),ypolpos(i)
         end do !}
       end if !}
@@ -1077,6 +1152,7 @@ c=======================================================================
   706 format (12(5l1,1x))
   707 format (12i6)
   708 format (i2,1x,a8,12i3,1x,a10,1x,i2)
+ 7080 format (i2.2,1x,a8,12i3,1x,a10,1x,i2)
   709 format ('* ',i3,' : ',a64)
   710 format (1p,2i6,2e12.5,i6)
   711 format (a72)

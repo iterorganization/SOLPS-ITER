@@ -1,8 +1,9 @@
       subroutine uinbndzn
-       use b2mod_layer
+      use b2mod_types
+      use b2mod_layer
      , , only: ntrack, nalloys
-       use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use eirmod_extrab25
+     , , only: msrfclsx
 c
 c  version : 15.03.2001 17:12
 c
@@ -515,6 +516,7 @@ c!###{
       print *,'knd  zone  ref pos  range  jdr jcp jc1 jc2 lcp lc1 lc2',
      ,  ' ls1 ls2'
       do k=1,nbndknd !{
+        if (nznbndt(k).eq.0) cycle
         print *
         do j=1,nznbndt(k) !{
           print '(2i4,1x,a1,1x,13i4)',k,j,cznbndt(j,k),lrfbndt(j,k),

@@ -7,10 +7,10 @@ CUCRZR_TH   =    1.5e-3,     ! CuCrZr tube thickness [m]
 DIAMETER    =    12.0e-3,    ! CuCrZr tube internal diameter [m]
 W_TH        =    6.0e-3,     ! W armour thickness (from plasma facing surface to Cu interlayer) [m]
 P_LENGTH    =    1.2e-2,     ! tile poloidal length [m]
-T_GAP		=    0.5e-3,     ! Toroidal gap between monoblocks [m]
-BETA        =    1.0,        ! poloidal chamfer [degrees]
-ALPHA     	=  	 0.5,        ! Vertical target tilting [degrees]
-THETA		=    4.2,		 ! Toroidal strike angle of magnetic flux lines [degrees]
+T_GAP		=	0.5e-3,	! Toroidal gap between monoblocks [m]
+BETA		=	1.0,	! poloidal chamfer [degrees]
+ALPHA		=	0.5,	! Vertical target tilting [degrees]
+THETA		=	4.2,	! Toroidal strike angle of magnetic flux lines [degrees]
 REVERSE   =    0,    ! Integer, if >0 reverse the heat flux profile from top to bottom
 /
 
@@ -28,7 +28,7 @@ CP_COOLANT  =    4.22e3,     ! Coolant specific heat capacity [J/kg/K]
 
 &OUTPUT
 
-NPOINTS		=	5,			 						! Number of points for output surface temperature
-LPOINTS		=	0.,7.0e-3,14.0e-3,21.0e-3,28.0e-3,	!Location of output surface temperature
-NPLOTS		=	10,									!Plot the 2D profile each NPLOTS cuts
+NPOINTS		=	2,	! Number of points for output surface temperature
+LPOINTS		=	0.,14.0e-3,	!Location of output surface temperature
+NPLOTS		=	10,	!Plot the 2D profile each NPLOTS cuts
 /

@@ -14,7 +14,7 @@ T_GAP      =      1.0e-3,    ! Toroidal gap between hypervapotron cahnnels [m]
 ALPHA      =         0.5,    ! Reflector plate tilting [degrees]
 BETA       =         1.0,    ! poloidal chamfer [degrees]
 THETA      =         4.2,    ! Toroidal strike angle of magnetic flux lines [degrees]
-REVERSE     =    0,          ! Integer, if >0 reverse the heat flux profile of the inner (first element) or outer (second element) target
+REVERSE   =    0,    ! Integer, if >0 reverse the heat flux profile from top to bottom
 /
 
 &MESH
@@ -32,10 +32,7 @@ CP_COOLANT    =   4.22e3,    ! Coolant specific heat capacity [J/kg/K]
 
 
 &OUTPUT
-NPOINTS      =    5, ! Number of points for output surface temperature
-LPOINTS      =    0.,7.0e-3,14.0e-3,21.0e-3,28.0e-3,   !Location of output surface temperature
-NPLOTS		=	10,									!Plot the 2D profile each NPLOTS cuts
+NPOINTS      =    2, ! Number of points for output surface temperature
+LPOINTS      =    0.,14.0e-3,   !Location of output surface temperature
+NPLOTS		=	10,	!Plot the 2D profile each NPLOTS cuts
 /
-
-
-

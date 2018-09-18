@@ -44,7 +44,7 @@ LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNCAR4 -DJET -DNO_F01AAF
+SOLPS_CPP      = -DNCAR4 -DNO_F01AAF -DPGF90 -DNOQUAD
 B25_DEFINES    =
 EIRENE_DEFINES =
 
@@ -68,9 +68,9 @@ ifdef LD_CATALYST
 endif
 
 # Build with IMAS if imas module is loaded
-ifdef IMAS_PREFIX
+ifdef IMAS_VERSION
   SOLPS_CPP += -DIMAS
-  LD_UAL     = `pkg-config imas-lowlevel imas-pgf90 --libs`
+  LD_UAL     = `pkg-config imas-lowlevel imas-pgi --libs`
   export LD_UAL
 endif
 

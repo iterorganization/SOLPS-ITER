@@ -1,6 +1,7 @@
       module b2_4to5
       use b2mod_types
       implicit none
+#     include "DIMENSIONS.F"
 
       real (kind=R8), allocatable ::
      *  fch_4(:,:,:),  fch_32_4(:,:,:), fch_52_4(:,:,:), fch_p_4(:,:,:),
@@ -78,6 +79,8 @@
 
       integer jxa, jxi, jsep
 
+      integer ank_mods, ionising_core
+
       character*80 label_4, sonnetfile_4
 
       character*8, allocatable ::
@@ -110,7 +113,6 @@
       use braeir
       use ceirsrt
       implicit none
-#     include <DIMENSIONS.F>
 #     include <KOPPLDIM.F>
 #     include <COMDIM.F>
 #     include <COMNUM.F>
@@ -252,7 +254,7 @@ cxpb
       difni_4(1:ns_4) = difni(1:ns_4)
       difpr_4(1:ns_4) = difpr(1:ns_4)
       vconv_4(1:ns_4) = vconv(1:ns_4)
-      travis_4(1:ns_4) =travis(1:ns_4)
+      travis_4(1:ns_4)= travis(1:ns_4)
       kye_4 = kye
       kxe_4 = kxe
       kyi_4 = kyi
@@ -299,7 +301,6 @@ cxpb
      , , only: indsrc
       use ceirsrt
       implicit none
-#     include <DIMENSIONS.F>
 #     include <KOPPLDIM.F>
 #     include <COMDIM.F>
 #     include <COMFEEDBACK.F>
@@ -316,7 +317,7 @@ cxpb
 #     include <COMEQ.F>
 #     include <CCUT.F>
 
-      integer is, it, k
+      integer is, it, ib, k
       external subini, subend
 
       call subini('b2convi1')
@@ -573,10 +574,26 @@ cxpb
       jntrgrp_4 = jntrgrp
       gntrgrp_4 = gntrgrp
       lhetrgts_4 = lhetrgts
-      lpfrb_i_4 = lpfrb_i
-      lpfrb_o_4 = lpfrb_o
-      lpfrt_i_4 = lpfrt_i
-      lpfrt_o_4 = lpfrt_o
+      if (lpfrb_i.gt.0) then
+        lpfrb_i_4 = lpfrb_i-1
+      else
+        lpfrb_i_4 = lpfrb_i
+      end if
+      if (lpfrb_o.gt.0) then
+        lpfrb_o_4 = lpfrb_o-1
+      else
+        lpfrb_o_4 = lpfrb_o
+      end if
+      if (lpfrt_i.gt.0) then
+        lpfrt_i_4 = lpfrt_i-1
+      else
+        lpfrt_i_4 = lpfrt_i
+      end if
+      if (lpfrt_o.gt.0) then
+        lpfrt_o_4 = lpfrt_o-1
+      else
+        lpfrt_o_4 = lpfrt_o
+      end if
       lpfrs_pmp_4 =  lpfrs_pmp
       j_he_at_4 = j_he_at
       j_h_at_4 = j_h_at
@@ -614,9 +631,33 @@ cxpb
       cfb_core_4(1:nspecies_4) = cfb_core(1:nspecies_4)
       cfb_over_4(1:nspecies_4) = cfb_over(1:nspecies_4)
       cfb_smax_4(1:nspecies_4) = cfb_smax(1:nspecies_4)
+      ank_mods = 1
+      ionising_core = 0
       do is = 1, nspecies_4
         lfeedback_4 = lfeedback_4 .or. ffb_cntr_4(is).ne.0 .or.
      .                                 cfb_cntr_4(is).ne.0
+        if (ionising_core.lt.0) cycle
+        if (cfb_cntr_4(is).ne.0 .and. ffb_cntr_4(is).ne.0) then
+          ank_mods = 0
+          do ib = 1, nbc
+            if (bcchar_4(ib).eq.'S') then
+              if (nncut_4.eq.2) then
+                if (bcstart_4(ib).gt.nxcut1_4(1) .and.
+     &              bcstart_4(ib).le.nxcut1_4(2)) then
+                  ionising_core = -ib
+                end if
+              else if (nncut_4.eq.4) then
+                if (bcstart_4(ib).gt.nxcut1_4(1) .and.
+     &              bcstart_4(ib).le.nxcut1_4(2)) then
+                  ionising_core = -ib
+                else if (bcstart_4(ib).gt.nxcut1_4(3) .and.
+     &                   bcstart_4(ib).le.nxcut1_4(4)) then
+                  ionising_core = -ib
+                end if
+              end if
+            end if
+          end do
+        end if
       end do
 
       call subend()
@@ -645,6 +686,7 @@ cxpb
       use b2mod_b2cmpt
       use b2mod_external
       implicit none
+#     include "DIMENSIONS.F"
 
       integer nx, ny, ns
       character*120 lblgm
@@ -724,14 +766,25 @@ c Fill out b2mod_indirect arrays
 !xpb careful about the change of meaning of nniso between 4.x and 5.x
 !xpb In 4.x: a DN geometry needs an isolating cut, which will be the first of the list
 !xpb In 5.x: no isolating cut is needed for DN geometries
-      if (nncut.ge.2) nniso = nniso_4-(nncut-1)
+      if (nncut.ge.2) then
+        nniso = nniso_4-(nncut-1)
+      else
+        nniso = nniso_4
+      end if
       call xertst(0.le.nniso.and.nniso.le.nnisod,
      . 'Check size of NNISO !')
       if (nniso.gt.0) then
-        nxiso1(1:nniso) = nxiso1_4(1:nniso)-1
-        nxiso2(1:nniso) = nxiso2_4(1:nniso)-1
-        nyiso1(1:nniso) = nyiso1_4(1:nniso)-1
-        nyiso2(1:nniso) = nyiso2_4(1:nniso)-1
+        if (nncut.ge.2) then
+          nxiso1(1:nniso) = nxiso1_4(nncut:nniso_4)-1
+          nxiso2(1:nniso) = nxiso2_4(nncut:nniso_4)-1
+          nyiso1(1:nniso) = nyiso1_4(nncut:nniso_4)-1
+          nyiso2(1:nniso) = nyiso2_4(nncut:nniso_4)-1
+        else
+          nxiso1(1:nniso) = nxiso1_4(1:nniso)
+          nxiso2(1:nniso) = nxiso2_4(1:nniso)
+          nyiso1(1:nniso) = nyiso1_4(1:nniso)
+          nyiso2(1:nniso) = nyiso2_4(1:nniso)
+        end if
       end if
       if(nncut.eq.0) write(*,*) 'No cuts found'
       if(nncut.ge.1) write(*,'(a,4i5)')
@@ -853,7 +906,7 @@ c Fill out b2mod_indirect arrays
           fchdia(ix,iy,0) = 0.0_R8
           fna(ix,iy,0,0:ns-1) = 0.0_R8
         endif
- 7      if (bottomiy(ix,iy).ne.-2) then
+    7   if (bottomiy(ix,iy).ne.-2) then
           fhe(ix,iy,1) = fhe_4(bottomix(ix,iy),bottomiy(ix,iy),1)
           fhi(ix,iy,1) = fhi_4(bottomix(ix,iy),bottomiy(ix,iy),1)
           fch(ix,iy,1) = fch_4(bottomix(ix,iy),bottomiy(ix,iy),1)
@@ -1236,6 +1289,8 @@ c Fill out /b2cmpt/ arrays
       cflim(0)= flim_4
       cflim(1)= flimi_4
       cflim(2)= flimv_4
+      cflim(3)= 0.5_R8
+      cflim(4)= 0.5_R8
 
 c Fill out b2mod_residuals data
       resco = 0.0_R8
@@ -1349,14 +1404,14 @@ c
       implicit none
 
       integer nx,ny,ns
-      integer is, js, ib, it, ireg, ireg_4
+      integer is, js, ib, ireg, ireg_4
 
       real (kind=R8) :: amtol
       parameter (amtol=1.0e-2_R8)
       logical lnext
       lnext(is,js) = zamax(is).lt.zamin(js).and.zn(is).eq.zn(js).and.
      &  abs(am(is)-am(js)).lt.amtol
-      intrinsic abs, min, max
+      intrinsic abs
       external subini, subend, xertst
 
       call subini('b2convi2')
@@ -1535,8 +1590,8 @@ c Fill out b2mod_user_namelist data
       lpfrt_o = lpfrt_o_4
       lpfrs_pmp =  lpfrs_pmp_4
       j_he_at = j_he_at_4
-      j_h_at = j_h_at_4
-      l_h_mol = l_h_mol_4
+      j_h_at(1) = j_h_at_4
+      l_h_mol(1:nmol,1) = l_h_mol_4(1:nmol)
       fusion_power = fusion_power_4
       Spmp_He_to_D = Spmp_He_to_D_4
       Spmp_nom = Spmp_nom_4
@@ -1551,6 +1606,12 @@ c
       implicit none
       integer nx, ny
       character tab
+      character*8 device
+#ifdef USE_PXFGETENV
+      integer lenval, ierror
+#endif
+      logical streql
+      external streql
 
       tab=char(9)
       write(*,*) 'Writing b2ag.dat'
@@ -1558,9 +1619,24 @@ c
       write(99,'(a)') '*dimens     (nx, ny, nx1, ny1; free format)'
       write(99,'(4(2x,i3))') nx, ny, nx, ny
       write(99,'(a)') '*param      (param(0:99); free format)'
-      write(99,'(a)') '  -1.0, 99*0.0'
+      write(99,'(a)') '  -2.0, 99*0.0'
       write(99,'(3a)')
      . '''b2agfs_geometry'''//tab//'''',trim(sonnetfile_4),''''
+#ifdef NO_GETENV
+#ifdef JET
+      device='jet'
+#else
+      device='iter'
+#endif
+#else
+#ifdef USE_PXFGETENV
+      CALL PXFGETENV ('DEVICE', 0, device, lenval, ierror)
+#else
+      call getenv ('DEVICE', device)
+#endif
+#endif
+      if (streql(device,'iter'))
+     > write(99,'(a)') '''b2agfs_pit_rescale''       ''-1.0'''
       close(99)
       return
       end subroutine write_b2ag
@@ -1599,7 +1675,7 @@ c
         else if (zamin(is).gt.0.0_R8) then
           na0(is) = 1.0e16_R8
         else
-          na0(is) = 1.0e12_R8
+          na0(is) = 1.0e8_R8
         end if
       end do
       write(99,'(a)') '*naini          (na0(0:ns-1); free format)'
@@ -1754,7 +1830,8 @@ c
       write(99,'(a)') '*cfalf'//column_header
       write(99,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
      .  (cfalf(i),i=0,7)
-      write(99,'(a)') '*cflim     cflme     cflmi     cflmv      ...'
+      write(99,'(a)') '*cflim'//
+     .  '     cflme     cflmi     cflmv     cflal     cflab     ...'
       write(99,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
      .  (cflim(i),i=0,7)
       write(99,'(a)') '*endphy'
@@ -1825,7 +1902,7 @@ c
       integer nx, ny, ns
       character tab
       character*10 hlp_frm
-      integer i, is, is0, ncall
+      integer i, is, is0
       integer len_of_digits
       external len_of_digits
 
@@ -2019,8 +2096,10 @@ c
      .   '''eirene_fixmap'''//tab//tab//tab//'''1'''
         write(99,'(a)')
      .   '''eirene_fixuub'''//tab//tab//tab//'''2'''
-        write(99,'(a)')
-     .   '''eirene_ank_mods'''//tab//tab//'''1'''
+        write(99,'(a,i1,a)')
+     .   '''eirene_ank_mods'''//tab//tab//'''',ank_mods,''''
+        write(99,'(a,i3,a)')
+     .   '''eirene_ionising_core'''//tab//tab//'''',ionising_core,''''
         write(98,'(a)')
      .   '''b2mndr_eirene'''//tab//tab//tab//'''1'''
         write(98,'(a)')
@@ -2035,8 +2114,10 @@ c
      .   '''eirene_extrap'''//tab//tab//tab//'''0'''
         write(98,'(a)')
      .   '''eirene_fixmap'''//tab//tab//tab//'''1'''
-        write(98,'(a)')
-     .   '''eirene_ank_mods'''//tab//tab//'''1'''
+        write(98,'(a,i1,a)')
+     .   '''eirene_ank_mods'''//tab//tab//'''',ank_mods,''''
+        write(98,'(a,i3,a)')
+     .   '''eirene_ionising_core'''//tab//tab//'''',ionising_core,''''
         if (nstepout_4.ge.1) then
           write(hlp_frm, '(a,i1,a)')
      .   '(a,i',len_of_digits(nstepout_4),',a)'
@@ -2294,7 +2375,7 @@ c
       use b2mod_b2cmpa
       implicit none
       integer ns
-      integer ib, is, is0
+      integer ib, is, is0, iss
       character*32 hlp_frm, hlp_frp, hlp_frb
       character*80 boundary_filename_4, boundary_filename_5
       intrinsic mod
@@ -2351,20 +2432,39 @@ c
               bccon(1,ib) = 12
               conpar(1,ib,1) = sepden_4
             end if
+cxpb Careful here for the case where both core and fuel feedback schemes
+cxpb are turned on simultaneously for the same isonuclear sequence
             do is = 1, nspecies_4
               if (cfb_cntr_4(is).ne.0) then
                 do is0 = isp(is)+1, isp(is)+nfluids_4(is)-1
                   if (is0.ge.0) then
-                    bccon(is0,ib) = 11
+                    if (ffb_cntr_4(is).ne.0) then
+                      bccon(is0,ib) = 8
+                    else
+                      bccon(is0,ib) = 11
+                    end if
                     conpar(is0,ib,1) = 0.0_R8
                     conpar(is0,ib,2) = 0.0_R8
                   end if
                 end do
                 is0 = isp(is)+nfluids_4(is)
-                bccon(is0,ib) = 11
-                conpar(is0,ib,1) = conpar_4(ifl(is0),ib,1)
-                conpar(is0,ib,2) = 0.0_R8
-                na_feedback_ib(is-1) = ib
+                if (ffb_cntr_4(is).ne.0) then
+                  bccon(is0,ib) = 13
+                  if (cfb_over_4(is).ne.0.0_R8) then
+                    conpar(is0,ib,2) = cfb_over_4(is)
+                  else
+                    conpar(is0,ib,2) = 0.01_R8
+                  end if
+                else
+                  bccon(is0,ib) = 11
+                  conpar(is0,ib,2) = 0.0_R8
+                  na_feedback_ib(is-1) = ib
+                end if
+                conpar(is0,ib,1) = cfb_core_4(is)
+                do iss = isp(is)+1, isp(is)+nfluids_4(is)
+                  conpar(is0,ib,1) = conpar(is0,ib,1) +
+     .                               conpar_4(ifl(iss),ib,1)
+                end do
               end if
             end do
           else
@@ -3132,10 +3232,10 @@ c
       open(38,file='b2.user.parameters')
       write(38,'(a)') '&USER'
       write(38,'(a,1pe9.2,a)') 'FUSION_POWER=',fusion_power,','
-      if (j_h_at.ne.0) write(38,'(a,i2,a)') 'J_H_AT=',j_h_at,','
+      if (j_h_at(1).ne.0) write(38,'(a,i2,a)') 'J_H_AT=',j_h_at(1),','
       if (j_he_at.ne.0) write(38,'(a,i2,a)') 'J_HE_AT=',j_he_at,','
       write(hlp_frm, '(a,i2,a)') '(a,',nmol,'(i2,'',''))'
-      write(38, hlp_frm) 'L_H_MOL=',(l_h_mol(is),is=1,nmol)
+      write(38, hlp_frm) 'L_H_MOL=',(l_h_mol(is,1),is=1,nmol)
       write(38,'(a,1pe9.2,a)') 'Spmp_He_to_D=',Spmp_He_to_D,','
       write(38,'(a,1pe9.2,a)') 'Spmp_nom=',Spmp_nom,','
       write(38,'(a,l1,a)') 'SCALE_HE= ',scale_He,','

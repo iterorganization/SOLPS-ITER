@@ -16,12 +16,14 @@ endif
 #module load solps-gui
 #module load nag_flib/intel/mk24
 #module load intel
+module unload intel
 
 module load intel/17.0 py27-python py27-numpy py27-dateutil qt py27-pyqt py27-tornado py27-matplotlib py27-scipy py27-pyqt py27-mysql-connector
 module load zeromq py27-pyzmq py27-pygments py27-ipython
 module load texlive
 module load doxygen
 module load impi/2017
+module load git
 
 #module load imas
 #imasdb solps-iter
@@ -44,3 +46,6 @@ module load impi/2017
 #setenv CC gcc
 #setenv FC ifort
 #setenv CXX g++
+
+setenv DBX totalview
+module load totalview

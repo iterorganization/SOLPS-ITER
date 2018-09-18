@@ -5,8 +5,10 @@ PATH+=:/usr/bin:/bin
 SVN=svn
 GIT=`which git`
 PYTHON=python
-INCLUDES=b2cdca.F b2cdci.F b2cdcn.F b2cdcr.F b2cdcv.F DIMENSIONS.F B2_5.Makefile B2_5.config.ITER.ifort64 solps-iter_git.log b2plot.commands
-FILES=D/b2ag.dat D/b2ah.dat D/b2ar.dat D/b2ai.dat D/b2mn.dat D+C+He/b2ag.dat D+C+He/b2ah.dat D+C+He/b2ar.dat D+C+He/b2ai.dat D+C+He/b2mn.dat D+C+He/b2.boundary.parameters D+C+He/b2.numerics.parameters D+C+He/b2.transport.parameters D+C+He/b2.neutrals.parameters b2.transport.inputfile b2.sources.profile b2yg.dat b2yh.dat b2yi.dat b2ym.dat b2yn.dat b2yp.dat b2yq.dat b2ymb.dat b2yrp.dat MDSPLUS/b2md.dat MDSPLUS/SOLPS_MODEL.TCL.index MDSPLUS/IDENT_MODEL.TCL.index MDSPLUS/SNAPSHOT_MODEL.TCL.index MDSPLUS/TALLIES_MODEL.TCL.index MDSPLUS/TIMEDEP_MODEL.TCL.index MDSPLUS/DIAG_MODEL.TCL.index shots.python_movie compare_shots.py QSUB.shot.python_movie sql_solps.py Makefile
+INCLUDES=b2cdca.F b2cdci.F b2cdcn.F b2cdcr.F b2cdcv.F DIMENSIONS.F B2_5.Makefile B2_5.config.ITER.ifort64 solps-iter_git.log b2plot.commands SOLPS_versions
+BIBFILES=aps.bib aug.bib divgas.bib extern.bib general.bib main.bib mnw.bib model.bib tok.bib WebofScience.bib xpb.bib
+STYFILES=drafthead.sty fullpage.sty relsize.sty subfigure.sty
+FILES=D/b2ag.dat D/b2ah.dat D/b2ar.dat D/b2ai.dat D/b2mn.dat D+C+He/b2ag.dat D+C+He/b2ah.dat D+C+He/b2ar.dat D+C+He/b2ai.dat D+C+He/b2mn.dat D+C+He/b2.boundary.parameters D+C+He/b2.numerics.parameters D+C+He/b2.transport.parameters D+C+He/b2.neutrals.parameters b2.transport.inputfile b2.sources.profile b2yg.dat b2yh.dat b2yi.dat b2ym.dat b2yn.dat b2yp.dat b2yq.dat b2yr.dat b2ymb.dat b2yrp.dat MDSPLUS/b2md.dat MDSPLUS/SOLPS_MODEL.TCL.index MDSPLUS/IDENT_MODEL.TCL.index MDSPLUS/SNAPSHOT_MODEL.TCL.index MDSPLUS/TALLIES_MODEL.TCL.index MDSPLUS/TIMEDEP_MODEL.TCL.index MDSPLUS/DIAG_MODEL.TCL.index shots.python_movie compare_shots.py QSUB.shot.python_movie sql_solps.py Makefile ${BIBFILES} ${STYFILES}
 
 ifeq ($(shell [ -e Makefile.local ] && echo yes || echo no ),yes)
   include Makefile.local
@@ -15,9 +17,9 @@ endif
 
 all: solps.pdf solps.ps 
 
-.PHONY: bibtex thumb update_log complete
+.PHONY: bibtex thumb update_log complete force
 
-solps.dvi: solps.tex ${INCLUDES} ${FILES} solps.ind # DPC: remove 1st # for index dependency
+solps.dvi: solps.tex ${INCLUDES} ${FILES} solps.ind solps.bbl
 	@echo 'Building DVI manual'
 	latex -output-format dvi solps
 	-grep 'Label(s) may have changed' solps.log && latex -output-format dvi solps
@@ -40,15 +42,16 @@ solps.idx: solps.tex
 	-grep 'Label(s) may have changed' solps.log && pdflatex solps
 	touch solps.idx ; sleep 1 ; touch solps.ind ; sleep 1 ; touch solps.pdf
 
-bibtex: solps.tex
+solps.bbl: solps.tex ${BIBFILES}
 	@echo 'Building bibliography'
 	pdflatex solps
 	-grep 'Label(s) may have changed' solps.log && pdflatex solps
 	bibtex solps
 	pdflatex solps
 	-grep 'Label(s) may have changed' solps.log && pdflatex solps
+	touch solps.idx ; sleep 1 ; touch solps.ind ; sleep 1 ; touch solps.pdf
 
-solps.pdf: solps.tex ${INCLUDES} ${FILES} solps.ind # DPC: remove 1st # for index dependency
+solps.pdf: solps.tex ${INCLUDES} ${FILES} solps.ind solps.bbl
 	@echo 'Building PDF manual'
 	pdflatex solps
 	-grep 'Label(s) may have changed' solps.log && pdflatex solps
@@ -59,6 +62,8 @@ thumb: solps.pdf
 	thumbpdf solps.pdf
 	pdflatex solps.tex
 	-grep 'Label(s) may have changed' solps.log && pdflatex solps
+
+bibtex: solps.bbl
 
 b2cdca.F:
 	ln -sf ${B25DIR}/src/documentation/b2cdca.F .
@@ -79,7 +84,7 @@ b2cdcv.F:
 
 b2plot.commands: ${B25DIR}/src/b2plot/b2plot.F
 	-[ -e b2plot.commands ] && rm b2plot.commands || echo > /dev/null
-	sed 's:^     [^ ]:@@@:' ${B25DIR}/src/b2plot/b2plot.F | awk 'BEGIN{save=""}/^[^@][^@][^@]/&&save!=""{print save}/^[^@][^@][^@]/{save=$$0}/^@@@/{save=save" "$$0}END{print save}' | sed 's; *@@@ *;;g' | egrep "case *\( *'|description *=" | sed -e "s;.*case *('\(.*\)');cmd: \1;" -e "s; *description *= *'\(.*\)';desc: \1;" -e "s;' //';;" | awk -F: 'BEGIN{save=""}/^cmd/&&save!=""{print save}/^cmd:/{save=$$2}/^desc/{save=save"\t "$$2}END{print save}' | sed 's:\! ::' | sed "s:',':,:g" | sed "s:'':':g" | expand > b2plot.commands
+	sed 's:^     [^ ]:@@@:' ${B25DIR}/src/b2plot/b2plot.F | awk 'BEGIN{save=""}/^[^@][^@][^@]/&&save!=""{print save}/^[^@][^@][^@]/{save=$$0}/^@@@/{save=save" "$$0}END{print save}' | sed 's; *@@@ *;;g' | grep -v "IGNORE" | egrep "case *\( *'|description *=" | sed -e "s;.*case *('\(.*\)');cmd: \1;" -e "s; *description *= *'\(.*\)';desc: \1;" -e "s;' //';;" | awk -F: 'BEGIN{save=""}/^cmd/&&save!=""{print save}/^cmd:/{save=$$2}/^desc/{save=save"\t "$$2}END{print save}' | sed 's:\! ::' | sed "s:',':,:g" | sed "s:'':':g" | expand > b2plot.commands
 
 DIMENSIONS.F:
 	ln -sf ${B25DIR}/src/include/DIMENSIONS.F .
@@ -89,6 +94,14 @@ B2_5.Makefile:
 
 B2_5.config.ITER.ifort64:
 	ln -sf ${B25DIR}/config/config.ITER.ifort64 B2_5.config.ITER.ifort64
+
+SOLPS_versions: force
+	@( cd ${SOLPSTOP} ; git describe --always | awk '{print "SOLPS-ITER version : ",$$1}' ) > SOLPS_versions_new
+	@( cd ${SOLPSTOP}/modules/B2.5 ; git describe --always | awk '{print "B2.5 version : ",$$1}') >> SOLPS_versions_new
+	@( cd ${SOLPSTOP}/modules/Eirene ; git describe --always | awk '{print "Eirene version : ",$$1}' ) >> SOLPS_versions_new
+	@( cd ${SOLPSTOP}/modules/Carre ; git describe --always | awk '{print "Carre version : ",$$1}' ) >> SOLPS_versions_new
+	@( cd ${SOLPSTOP}/modules/DivGeo ; git describe --always | awk '{print "DivGeo version : ",$$1}' ) >> SOLPS_versions_new
+	@if cmp -s SOLPS_versions_new SOLPS_versions ; then rm SOLPS_versions_new ; else mv SOLPS_versions_new SOLPS_versions ; fi
 
 solps-iter_git.log: 
 	( cd ${SOLPSTOP} ; ${GIT} log --oneline ) > solps-iter_git.log
@@ -108,7 +121,7 @@ complete:
 	${MAKE} solps.pdf
 
 clean: 
-	rm -f solps.pdf solps.ps solps.dvi solps.aux solps.ilg solps.ind solps.idx solps.lof solps.log solps.lot solps.out solps.toc b2cdca.F b2cdci.F b2cdcn.F b2cdcr.F b2cdcv.F solps_data_git.log solps-iter_git.log B2_5.config.ITER.ifort64 B2_5.Makefile DIMENSIONS.F solps.bbl solps.blg solps.brf solps.tpt
+	rm -f solps.pdf solps.ps solps.dvi solps.aux solps.ilg solps.ind solps.idx solps.lof solps.log solps.lot solps.out solps.toc b2cdca.F b2cdci.F b2cdcn.F b2cdcr.F b2cdcv.F solps_data_git.log solps-iter_git.log B2_5.config.ITER.ifort64 B2_5.Makefile DIMENSIONS.F SOLPS_versions solps.bbl solps.blg solps.brf solps.tpt
 
 ### WORK
 COMPARE_10814_TESEPM=/scratch/dpc/solps5.0_HD+C+He/src/Braams/b2/runs/D+C+He/2MW/compare_10814_tesepm.ps

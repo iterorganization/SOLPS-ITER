@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+from __future__ import print_function
 import pupynere
 import os
 import matplotlib
@@ -15,14 +16,16 @@ else:
 times=f.variables['times']
 rranareg=f.variables['rranareg']
 species_names=f.variables['species']
-species=[''.join(species_names[i,:]).strip() for i in range(species_names.shape[0])]
+species=[b''.join(species_names[i,:]).strip().decode('utf-8') for i in range(species_names.shape[0])]
 
 nargs=len(sys.argv)
 R=0
 if nargs > 1: R=int(sys.argv[1])
 
 for i in range(rranareg.shape[1]):
+  print ('%8s : %8.2e' % (species[i],rranareg[-1,i,R]))
   plt.plot(times[:],rranareg[:,i,R], label=species[i])
+print ('%8s : %8.2e' % ('Sum',numpy.sum(rranareg[-1,:,R],axis=0)))
 plt.plot(times[:],numpy.sum(rranareg[:,:,R],axis=1), label='Sum')
 
 ncol=max(1,rranareg.shape[1]/10)

@@ -1,0 +1,73 @@
+#! /usr/bin/env ksh
+
+NAME=/tmp/.files.$$.$USER.`date +%Y%m%d%H%M%S`
+typeset -i nfiles
+run_ok=`b2fstate_OK`
+[ $run_ok == 'yes' ] && {
+
+( ls -l tracing/* | grep -v 'total ' | grep -v ' 0 ' | wc -l > $NAME ) 2> /dev/null
+nfiles=`cat $NAME`
+echo "tracing : found" $nfiles "files"
+[ $nfiles -gt 0 ] && {
+  [ -d ../tracing ] || mkdir ../tracing
+  mv tracing/* ../tracing 2> /dev/null || echo > /dev/null
+  [ -s ../tracing/user.trc.n.01 ] && mv ../tracing/user.trc.n.01 ../tracing/user.trc
+}
+rm $NAME
+
+( ls -l batch_av/* | grep -v 'total ' | grep -v ' 0 ' | wc -l > $NAME ) 2> /dev/null
+nfiles=`cat $NAME`
+echo "batch_av : found" $nfiles "files"
+[ $nfiles -gt 0 ] && {
+  [ -d ../batch_av ] || mkdir ../batch_av
+  mv batch_av/* ../batch_av 2> /dev/null || echo > /dev/null
+}
+rm $NAME
+
+( ls -l run_av/* | grep -v 'total ' | grep -v ' 0 ' | wc -l > $NAME ) 2> /dev/null
+nfiles=`cat $NAME`
+echo "run_av : found" $nfiles "files"
+[ $nfiles -gt 0 ] && {
+  [ -d ../run_av ] || mkdir ../run_av
+  mv run_av/* ../run_av 2> /dev/null || echo > /dev/null
+}
+rm $NAME
+
+( ls -l output/* | grep -v 'total ' | grep -v ' 0 ' | wc -l > $NAME ) 2> /dev/null
+nfiles=`cat $NAME`
+echo "output : found" $nfiles "files"
+[ $nfiles -gt 0 ] && {
+  [ -d ../output ] || mkdir ../output
+  mv output/* ../output 2> /dev/null || echo > /dev/null
+}
+rm $NAME
+
+( ls -l d?? | grep -v 'total ' | grep -v ' 0 ' | wc -l > $NAME ) 2> /dev/null
+nfiles=`cat $NAME`
+echo "d?? : found" $nfiles "files"
+[ $nfiles -gt 0 ] && mv d?? ../ 2> /dev/null || echo > /dev/null
+rm $NAME
+
+( ls -l ds?? | grep -v 'total ' | grep -v ' 0 ' | wc -l > $NAME ) 2> /dev/null
+nfiles=`cat $NAME`
+echo "ds?? : found" $nfiles "files"
+[ $nfiles -gt 0 ] && mv ds?? ../ 2> /dev/null || echo > /dev/null
+rm $NAME
+
+( ls -l ds??? | grep -v 'total ' | grep -v ' 0 ' | grep -vwc -l > $NAME ) 2> /dev/null
+nfiles=`cat $NAME`
+echo "ds??? : found" $nfiles "files"
+[ $nfiles -gt 0 ] && mv ds??? ../ 2> /dev/null || echo > /dev/null
+rm $NAME
+
+( ls -l b2.*.parameters | grep -v 'total ' | grep -v ' 0 ' | wc -l > $NAME ) 2> /dev/null
+nfiles=`cat $NAME`
+echo "b2.*.parameters : found" $nfiles "files"
+[ $nfiles -gt 0 ] && mv b2.*.parameters ../ 2> /dev/null || echo > /dev/null
+rm $NAME
+
+} || {
+
+echo "Run apparently failed: Optional files not moved"
+
+}

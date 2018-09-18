@@ -1,0 +1,19 @@
+#! /usr/bin/env ksh
+
+NAME=/tmp/.files.$$.$USER.`date +%Y%m%d%H%M%S`
+typeset -i nfiles
+
+( ls -l ../tracing/*.trc | grep -v 'total ' | grep -v ' 0 ' | wc -l > $NAME ) 2> /dev/null
+nfiles=`cat $NAME`
+ncfiles=`ls -l ../tracing/*.trc | grep -v 'total ' | grep -v ' 0 ' | awk '{printf "%s ",$NF,"\n"}'`
+echo "tracing : found" $nfiles "files"
+[ $nfiles -gt 0 ] && {
+  filelist=`ls -1 ../tracing/*.trc`
+  set -A f -- $filelist
+  i=0
+  for z in $filelist; do {
+    mv ${f[i]} tracing/ 2> /dev/null || echo > /dev/null
+    ((i+=1))
+  }; done
+}
+rm $NAME

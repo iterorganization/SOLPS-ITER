@@ -7,5 +7,7 @@
 !Makefile.b2sxdr
 !Makefile.plot
 !README.EXAMPLES
-
+!examples/
+!*.md5
+!examples/Makefile
 

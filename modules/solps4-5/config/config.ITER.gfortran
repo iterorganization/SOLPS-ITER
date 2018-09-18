@@ -1,4 +1,5 @@
 LD_NETCDF ?= `pkg-config netcdf-fortran --libs`
+LD_MSCL   ?= `pkg-config mscl --libs`
 LD_NAG    ?= `pkg-config nag --libs`
 LD_SONNET ?= -L${SOLPSLIB} -lsonnet -lstdc++
 
@@ -7,14 +8,14 @@ EQUIV5 = ${SOLPS_CPP} ${USE_EIRENE} -Dsdot=ddot -Dsasum=dasum -Dsaxpy=daxpy -Dss
 DEFINES += -DS2SUM=D2SUM -DS2MIN=D2MIN -DSASUM=DASUM -DSAXPY=DAXPY -DSDOT=DDOT -DSSCAL=DSCAL -DS2ASUM=D2ASUM -DS2SCAL=D2SCAL -DS2DOT=D2DOT -DSCOPY=DCOPY -DS2COPY=D2COPY
 
 CPP = /lib/cpp
-CPP4OPTS = -P -traditional -I${srcdir} ${EQUIV4}
-CPP5OPTS = -P -traditional -I${srcdir} ${EQUIV5}
+CPP4OPTS = -P -traditional -I${SRCDIR} ${EQUIV4}
+CPP5OPTS = -P -traditional -I${SRCDIR} ${EQUIV5}
 SED = sed s:\#PREC\#:d:g
 LINK_MOD = yes
 
 FC = gfortran
 ifdef SOLPS_DEBUG
-FCOPTS = -g -fbounds-check -fbacktrace -fdefault-real-8
+FCOPTS = -g -fbounds-check -fbacktrace -fdefault-real-8 -ffpe-trap=denormal
 else
 FCOPTS = -O3 -fdefault-real-8
 endif
