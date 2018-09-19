@@ -80,6 +80,15 @@ c*** the atoms and nuclei
                 end if !}
                 if(.not.l_meta(j+m)) then
                   nspcncl=nspcncl+1
+                  if(nspcpls+nspcncl.gt.nsdb2) then !{
+                    write(0,*) 'The total number of B2.5 species must ',
+     ,               'not exceed ',nsdb2
+                    write(0,*) 'Current requested number of B2.5 ',
+     ,               'species is ',nspcpls+nspcncl
+                    write(0,*) 'STOP ==> Check the AMDS model - ',
+     ,               'or increase DEF_NSD in DIMENSIONS.F'
+                    call xerrab ('Too many B2.5 species')
+                  end if !}
                   spcsncl(nspcncl)=c
                 end if
                 spcsrna(na)=na
@@ -530,6 +539,15 @@ c*** Plasma ions:
               write(0,*) 'STOP ==> Check the AMDS model - or increase ',
      ,          'DEF_NPLS in DIMENSIONS.F'
               call xerrab ('Too many plasma ion species')
+            end if !}
+            if(nspcpls+nspcncl.gt.nsdb2) then !{
+              write(0,*) 'The total number of B2.5 species must ',
+     ,          'not exceed ',nsdb2
+              write(0,*) 'Current requested number of B2.5 ',
+     ,          'species is ',nspcpls+nspcncl
+              write(0,*) 'STOP ==> Check the AMDS model - or increase ',
+     ,          'DEF_NSD in DIMENSIONS.F'
+              call xerrab ('Too many B2.5 species')
             end if !}
             cc=spcirnp(l)
             j=0
