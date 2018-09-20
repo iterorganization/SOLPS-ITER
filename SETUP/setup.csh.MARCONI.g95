@@ -1,0 +1,40 @@
+setenv GLI_HOME /marconi_work/FUSIO_ALL/SOLPS-ITER/${COMPILER}/gks
+setenv PATH ${PATH}:/marconi_work/FUSIO_ALL/SOLPS-ITER/${COMPILER}/NETCDF/bin
+setenv NCARG_ROOT /marconi_work/FUSIO_ALL/SOLPS-ITER/${COMPILER}/NCARG
+setenv SOLPSWORK /pfs/work/$USER/solps-iter/runs
+setenv SOLPSWORK ${SOLPSTOP}/runs
+setenv FC g95
+
+# Debugger (set environment variable DBX)
+setenv DBX totalview
+
+module load imasenv/3.12.1
+
+# The script above overwrites $PATH, so modules must be loaded afterwards!!!
+# load modules
+# module load solps-gui
+#module load texlive
+
+#module load imas
+#echo "imasdb solps-iter"
+#imasdb solps-iter
+
+if (! $?DEVICE) then
+  if ($?TOKAMAKNAME) then
+    setenv DEVICE $TOKAMAKNAME
+  endif
+endif
+
+module load paraview
+
+if (`where paraview-config` == "") then
+  echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
+  setenv LD_LIBRARY_PATH "/usr/lib64:${LD_LIBRARY_PATH}"
+else
+  # See ParaViewCatalystUsersGuide_v2.pdf Sec 3.7.2 Linking with Python ...
+  set PARAVIEW_LIB=`paraview-config --libs --python | sed s/-L//`
+  setenv LD_LIBRARY_PATH "/usr/lib64:${PARAVIEW_LIB}:${LD_LIBRARY_PATH}"
+  setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages/vtk:${PYTHONPATH}"
+  setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
+  setenv LD_CATALYST "`paraview-config --libs vtkPVPythonCatalyst` -lstdc++"
+endif
