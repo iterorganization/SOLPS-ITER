@@ -16,6 +16,7 @@ setenv SOLPSWORK ${SOLPSTOP}/runs
 #module load nag_flib/intel/mk24
 #module load intel
 module load intel/pe-xe-2018--binary
+module load intelmpi/2018--binary
 #module load texlive
 
 #module load imas
