@@ -1,0 +1,531 @@
+%From sharrock@castle.edinburgh.ac.uk Mon Sep 27 05:39:25 1993
+%Subject: supertabular
+%To: rags@triples.Math.McGill.CA
+%Here is the sty file. I am sending the tex file as well cos it has a few
+%examples in it. Ask if you want the doc file too.
+%dave
+%
+%%% 
+%% This is file `supertabular.sty', generated 
+%% on <1992/7/10> with the docstrip utility (2.0n).
+%% 
+%% The original source files were:
+%% 
+%% supertabular.doc 
+%% 
+%% Copyright (C) 1988-92 by Theo Jurriens, Johanes Braams (90-92). 
+%% All rights reserved. 
+%% 
+%% IMPORTANT NOTICE: 
+%% 
+%% You are not allowed to change this file. You may however copy this file 
+%% to a file with a different name and then change the copy. 
+%% 
+%% You are NOT ALLOWED to distribute this file alone. You are NOT ALLOWED 
+%% to take money for the distribution or use of this file (or a changed 
+%% version) except for a nominal charge for copying etc. 
+%% 
+%% You are allowed to distribute this file under the condition that it is 
+%% distributed together with all files mentioned below. 
+%% 
+%% If you receive only some of these files from someone, complain! 
+%% 
+%% Error Reports in case of UNCHANGED versions to either of 
+%% 
+%% J. Braams 
+%% PTT Research, dr Neher Laboratorium 
+%% P.O. box 421 
+%% 2260 AK Leidschendam 
+%% The Netherlands 
+%% Internet: <J.L.Braams@research.ptt.nl> 
+%% 
+%% Theo Jurriens 
+%% Rijks Universiteit Groningen 
+%% P.O Box 800, 
+%% 9700 AV Groningen 
+%% The Netherlands 
+%% Internet: <TAJ@rug.nl> 
+%% 
+\newif\if@topcaption \@topcaptiontrue
+\def\topcaption{\@topcaptiontrue\tablecaption}
+\def\bottomcaption{\@topcaptionfalse\tablecaption}
+\long\def\tablecaption{\refstepcounter{table} \@dblarg{\@xtablecaption}}
+\long\def\@xtablecaption[#1]#2{%
+  \long\gdef\@process@tablecaption{\@stcaption{table}[#1]{#2}}}
+\global\let\@process@tablecaption\relax
+\long\def\@stcaption#1[#2]#3{\par%
+    \addcontentsline{\csname ext@#1\endcsname}{#1}%
+        {\protect\numberline{\csname the#1\endcsname}{\ignorespaces #2}}
+  \begingroup
+    \@parboxrestore
+    \normalsize
+    \if@topcaption \vskip -10pt \fi % 'fix'
+    \@makecaption{\csname fnum@#1\endcsname}{\ignorespaces #3}\par
+    \if@topcaption \vskip 10pt \fi % 'fix'
+  \endgroup}
+\def\@tablehead{}
+\def\tablehead#1{\gdef\@tablehead{#1}}
+\def\tablefirsthead#1{\gdef\@table@first@head{#1}}
+\def\@tabletail{}
+\def\tabletail#1{%
+    \gdef\@tabletail{\noalign{\global\let\@savcr=\\\global\let\\=\cr}%
+                     #1\noalign{\global\let\\=\@savcr}}}
+\def\tablelasttail#1{\gdef\@table@last@tail{#1}}
+\newdimen\maxsize            % maximum pagesize
+\newdimen\actsize            % actual pagesize
+\newdimen\twocolsize         % needed for correct max height if twocolumn
+\newdimen\parboxheight       % height plus depth of a parbox-argument
+\newdimen\addspace           % stores the value of \\[#1]
+\newdimen\midlineheight      % estimated size of a normal line
+\newdimen\pargcorrection     % to set page height tolerance if p-arg
+\newdimen\computedimens      % computation variable
+\newbox\tabparbox
+\def\@stabularcr{{\ifnum0=`}\fi\@ifstar{\@sxtabularcr}{\@sxtabularcr}}
+\def\@sxtabularcr{\@ifnextchar[{\@sargtabularcr}%
+                 {\ifnum0=`{\fi}\cr\nextline}}
+\def\@sargtabularcr[#1]{\ifnum0=`{\fi}\ifdim #1>\z@
+    \unskip\@sxargarraycr{#1}\else \@syargarraycr{#1}\fi}
+\def\@sxargarraycr#1{\@tempdima #1\advance\@tempdima \dp \@arstrutbox
+    \vrule \@height\z@ \@depth\@tempdima \@width\z@ \cr
+    \noalign{\global\addspace=#1}\nextline}
+\def\@syargarraycr#1{\cr\noalign{\vskip #1\global\addspace=#1}\nextline}
+\def\@sstartpbox#1{\global\advance\maxsize by -\pargcorrection
+                   \global\pargcorrection=0pt
+                   \setbox\tabparbox%
+                          \vtop\bgroup\hsize#1\@arrayparboxrestore}
+\def\@sastartpbox#1{\bgroup\hsize#1%
+                    \global\advance\maxsize by -\pargcorrection
+                    \global\pargcorrection=0pt
+                    \setbox\tabparbox
+                          \vtop\bgroup\hsize#1\@arrayparboxrestore}
+\def\@sendpbox{\unskip\strut\par\egroup
+               \computedimens=\ht\tabparbox
+               \advance\computedimens by \dp\tabparbox
+               \ifnum\parboxheight<\computedimens
+                  \global\parboxheight=\computedimens
+               \fi
+               \computedimens=\z@
+               \box\tabparbox\hfil}
+\def\@saendpbox{\unskip\strut\par\egroup
+                \computedimens=\ht\tabparbox
+                \advance\computedimens by \dp\tabparbox
+                \ifnum\parboxheight<\computedimens
+                   \global\parboxheight=\computedimens
+                \fi
+                \computedimens=\z@
+                \unvbox\tabparbox\egroup}
+\def\calmidlineheight{\midlineheight=\arraystretch \baslineskp
+                      \global\advance\midlineheight by 1\p@
+                      \global\pargcorrection=4\midlineheight}
+\def\calpage{\global\actsize=\pagetotal  % where am I on the actual page?
+             \twocolsize=\textheight            %  added 06.06.89
+             \advance\twocolsize by -\@colroom  %        "
+             \advance\actsize by \twocolsize    %        "
+             \global\advance\actsize by \midlineheight
+             \maxsize=\textheight        % start a new page when 90% of
+             \multiply \maxsize by 9     % the page are used
+             \divide\maxsize by 10
+             \advance\actsize 2\midlineheight
+             \ifnum\actsize > \maxsize
+                   \clearpage
+                   \global\actsize=\pagetotal
+             \fi
+             \maxsize=\textheight       % now set \maxsize with tolerance
+             \setbox\@tempboxa=\vbox{\@arrayparboxrestore%
+                    \expandafter\tabular\expandafter{\tableformat}
+                    \@tabletail\endtabular}
+             \global\advance\maxsize by-\ht\@tempboxa}
+                             % Here is the definition of supertabular
+\def\supertabular#1 {\def\tableformat{#1}         % store preamble
+    \global\starfalse % remember this is the normal version
+    \if@topcaption\@process@tablecaption
+    \fi
+    \global\let\@oldcr=\\
+    \def\baslineskp{\baselineskip}%
+    \calmidlineheight% estimate height of a normal line
+    \calpage         % calculate max. pagesize and startpoint
+    \ifx\undefined\@classix      % then array.sty is not loaded
+      \let\@@tabularcr\@tabularcr%             Added JB 4/2/91
+      \let\@tabularcr\@stabularcr
+      \let\@@startpbox=\@sstartpbox
+      \let\@@endpbox=\@sendpbox
+    \else
+      \let\@@tabularcr\@arraycr
+      \let\@arraycr\@stabularcr
+      \let\org@startpbox=\@startpbox
+      \let\org@endpbox=\@endpbox
+      \let\@startpbox=\@sastartpbox
+      \let\@endpbox=\@saendpbox
+    \fi
+    \ifx\@table@first@head\undefined
+        \let\@@tablehead=\@tablehead
+    \else
+        \let\@@tablehead=\@table@first@head
+    \fi%                                     Added JB 4/2/91
+    \expandafter\tabular\expandafter{\tableformat}
+    \@@tablehead}%   Added JB 15/2/91
+\def\endsupertabular{%
+    \ifx\@table@last@tail\undefined
+        \@tabletail
+    \else
+        \@table@last@tail
+    \fi%                                     Added JB 4/2/91
+    \endtabular
+    \ifx\undefined\@classix      % then array.sty is not loaded
+      \let\@tabularcr\@@tabularcr             % Added JB 4/2/91
+    \else
+      \let\@arraycr\@@tabularcr
+      \let\@startpbox=\org@startpbox
+      \let\@endpbox=\org@endpbox
+    \fi
+    \if@topcaption
+    \else
+        \@process@tablecaption
+        \@topcaptiontrue
+    \fi
+    \global\let\\=\@oldcr
+    \let\@table@first@head\undefined        % For the next ocurrence
+    \let\@table@last@tail\undefined         % of this environment
+    \global\let\@process@tablecaption\relax
+}
+\newif\ifstar
+\newdimen\tabularwidth
+\@namedef{supertabular*}#1#2 {\def\tableformat{#2}          % store preamble
+    \tabularwidth=#1 % The total width of the tabular
+    \global\startrue % remember this is the *-version
+    \if@topcaption\@process@tablecaption\fi
+    \def\baslineskp{\baselineskip}%
+    \calmidlineheight% estimate height of a normal line
+    \calpage         % calculate max. pagesize and startpoint
+    \ifx\undefined\@classix      % then array.sty is not loaded
+      \let\@@tabularcr\@tabularcr%             Added JB 4/2/91
+      \let\@tabularcr\@stabularcr
+      \let\@@startpbox=\@sstartpbox
+      \let\@@endpbox=\@sendpbox
+    \else
+      \let\@@tabularcr\@arraycr
+      \let\@arraycr\@stabularcr
+      \let\org@startpbox=\@startpbox
+      \let\org@endpbox=\@endpbox
+      \let\@startpbox=\@sastartpbox
+      \let\@endpbox=\@saendpbox
+    \fi
+    \ifx\@table@first@head\undefined
+        \let\@@tablehead\@tablehead
+    \else
+        \let\@@tablehead\@table@first@head
+    \fi%                                     Added JB 4/2/91
+    \expandafter\csname tabular*\expandafter\endcsname
+    \expandafter{\expandafter\tabularwidth\expandafter}%
+    \expandafter{\tableformat}%
+    \@@tablehead}%
+\@namedef{endsupertabular*}{%
+    \ifx\@table@last@tail\undefined
+        \@tabletail
+    \else
+        \@table@last@tail
+    \fi%                                     Added JB 4/2/91
+    \csname endtabular*\endcsname
+    \ifx\undefined\@classix      % then array.sty is not loaded
+      \let\@tabularcr\@@tabularcr             % Added JB 4/2/91
+    \else
+      \let\@arraycr\@@tabularcr
+      \let\@startpbox=\org@startpbox
+      \let\@endpbox=\org@endpbox
+    \fi
+                                 % Check if we have to insert a caption
+    \if@topcaption
+    \else
+        \@process@tablecaption
+                                 % restore to default behaviour
+        \@topcaptiontrue
+    \fi
+    \global\let\\=\@oldcr
+    \let\@table@first@head\undefined        % For the next ocurrence
+    \let\@table@last@tail\undefined         % of this environment
+    \global\let\@process@tablecaption\relax}
+\def\nextline{%           %%% algorithm to calculate the pagebreaks %%%
+    \noalign{\ifnum\parboxheight<\midlineheight
+                   \advance\actsize by \midlineheight
+                   \global\advance\actsize by \addspace
+             \else
+                   \global\advance\actsize by \parboxheight
+                   \divide\parboxheight by 11\relax
+                   \global\advance\actsize by \parboxheight%
+                   \global\parboxheight=0pt
+             \fi
+             \global\addspace=0pt}%
+    \ifnum\actsize<\maxsize
+    \noalign{\global\let\next\@empty}%
+    \else
+         \@tabletail
+         \ifstar%                     % Added 16-10-90
+           \csname endtabular*\endcsname
+         \else
+           \endtabular
+         \fi
+         \if@twocolumn%                        % added 10.05.89
+            \if@firstcolumn%                   %
+               \newpage%                       %
+            \else%                             %
+               \clearpage%                     %
+            \fi%                               %
+            \twocolsize=\textheight%           % added 06.06.89
+            \advance\twocolsize by -\@colroom% %       "
+            \global\actsize=\twocolsize%       %       "
+            \global\advance\actsize by \midlineheight
+         \else                                 %
+            \clearpage                         %
+            \global\actsize=\midlineheight
+         \fi                                   %
+         \let\next\@tablehead%                 % Added 15.2.91
+         \ifstar%                              % Added 16-10-90
+           \expandafter\csname tabular*\expandafter\endcsname
+           \expandafter{\expandafter\tabularwidth\expandafter}%
+           \expandafter{\tableformat}%
+         \else
+           \expandafter\tabular\expandafter{\tableformat}%
+         \fi
+    \fi\next}%                                % Added \next 15.2.91
+\endinput
+%% 
+%% End of file `supertabular.sty'.
+
+----------------8<------------------------------------------------
+TEK FILE FOLLOWS
+----------8<------------------------------------------------------
+%format latex
+\documentstyle[11pt,supertabular]{article}
+%  4-FEB-91     JLB     Adapted this file to the additions made to the
+%                       style file.
+\topmargin 0cm
+\oddsidemargin 0cm
+\textheight 23cm
+\textwidth 15cm
+\newcommand{\tbsp}{\rule{0pt}{18pt}}
+                  % I use \tbsp to get a vertical distance after \hline
+\begin{document}
+\section{The Supertabular}
+Here is the description of a new style file called \verb|supertab|.
+This new style offers a new environment, the \verb|supertabular|
+environment. As the name says it is an extension of the normal
+\verb|tabular| environment.
+ 
+With the original \verb|tabular| environment a tabular must always fit
+on {\it one} page. If the tabular becomes too large the text overwrites
+the page's bottom margin and you get an \verb|Overfull vbox| message.
+ 
+The \verb|supertabular| environment uses the \verb|tabular| environment
+internally, but it evaluates the used space every time it gets a
+\verb|\\| command. If the tabular reaches the textheight,
+it automatically inserts an \verb|\end{tabular}| command, starts a new
+page and inserts the tablehead on the new page continuing the tabular.
+ 
+New commands to use with \verb|supertabular| are:
+\begin{center}
+\begin{tabular}{l p{8cm}}
+\verb|\tablefirsthead{...}| & defines the contents of the first occurence of
+                            the tabular head.
+                            The use of this command is optional.
+                         Don't forget to close the head by a \verb|\\|
+                         or \verb|\newline|.                        \\
+\verb|\tablehead{...}| & defines the contents of all subsequent ocurrences of
+                         the tabular head.
+                         Don't forget to close the head by a \verb|\\|
+                         or \verb|\newline|.                        \\
+\verb|\tabletail{...}| & defines something which should be inserted
+                         before each \verb|\end{tabular}|, except the last.\\
+\verb|\tablelasttail{...}| & defines something which should be inserted
+                             before the last \verb|\end{tabular}|.
+                             The use of this command is optional.\\
+\verb|\topcaption{...}|     &\\
+\verb|\bottomcaption{...}|  &\\
+\verb|\tablecaption{...}|   & Provide a caption for the super-table, either
+                              at the top or at the bottom of the table. When
+                              \verb|\tablecaption| is used the caption will
+                              be placed at the default location, which is at
+                              the top.\\
+\end{tabular}
+\end{center}
+Note that you define new lines inside the supertabular as normal by
+\verb|\\| or \verb|\\[...pt]|. All column definition commands can be
+used, including \verb|@{...}| and \verb|p{...}|. You can {\it not} use
+the optional positioning argument and the width argument which are
+possible with the \verb|\begin{tabular}| command.
+ 
+Here is an example of a supertabular. You will find the definitions at
+the end of the supertabular.
+\begin{center}
+\tablefirsthead{\hline  \multicolumn{1}{|c}{\tbsp Number}
+                       & \multicolumn{1}{c}{Number$~2$}
+                       & Number$~4$
+                       & \multicolumn{1}{c|}{Number!} \\ \hline\tbsp  }
+\tablehead{\hline \multicolumn{4}{|l|}{\small\sl continued from previous page}\\
+           \hline \multicolumn{1}{|c}{\tbsp Number}
+                       & \multicolumn{1}{c}{Number$~2$}
+                       & Number$~4$
+                       & \multicolumn{1}{c|}{Number!} \\ \hline\tbsp  }
+\tabletail{\hline\multicolumn{4}{|r|}{\small\sl continued on next page}\\\hline}
+\tablelasttail{\hline}
+\bottomcaption{This table is split across pages}
+\par
+\begin{supertabular}{| r@{\hspace{6.5mm}}| r@{\hspace{5.5mm}}| r | r|}
+1   &     1  &        1  &           1    \\
+2   &     4  &       16  &           2    \\
+3   &     9  &       81  &           6    \\
+4   &    16  &      256  &          24    \\[5mm]
+5   &    25  &      625  &         120    \\
+6   &    36  &     1296  &         720    \\
+7   &    49  &     2401  &        5040    \\
+8   &    64  &     4096  &       40320    \\
+9   &    81  &     6561  &      362880    \\
+10  &   100  &    10000  &     3628800    \\
+11  &   121  &    14641  &    39916800    \\
+12  &   144  &    20736  &   479001600    \\[.5cm]
+\hline & & & \\
+13  &   169  &    28561  &  6.22702080E+9 \\[1cm]
+14  &   196  &    38416  &  8.71782912E+10\\
+15  &   225  &    50625  &  1.30767437E+12\\
+16  &   256  &    65536  &  2.09227899E+13\\
+17  &   289  &    83521  &  3.55687428E+14\\[5mm]
+18  &   324  &   104976  &  6.40237370E+15\\
+19  &   361  &   130321  &  1.21645100E+17\\
+20  &   400  &   160000  &  2.43290200E+18\\
+\end{supertabular}
+\end{center}
+And here are the definitions:
+\begin{verbatim}
+\newcommand{\tbsp}{\rule{0pt}{18pt}}
+                  % I use \tbsp to get a vertical distance after \hline
+\tablefirsthead{\hline  \multicolumn{1}{|c}{\tbsp Number}
+                       & \multicolumn{1}{c}{Number$~2$}
+                       & Number$~4$
+                       & \multicolumn{1}{c|}{Number!} \\ \hline\tbsp  }
+\tablehead{\hline \multicolumn{4}{|l|}%
+                {\small\sl continued from previous page}\\
+           \hline \multicolumn{1}{|c}{\tbsp Number}
+                       & \multicolumn{1}{c}{Number$~2$}
+                       & Number$~4$
+                       & \multicolumn{1}{c|}{Number!} \\ \hline\tbsp  }
+\tabletail{\hline\multicolumn{4}{|r|}%
+                {\small\sl continued on next page}\\\hline}
+\tablelasttail{\hline}
+\bottomcaption{This table is split across pages}
+\begin{supertabular}{| r@{\hspace{6.5mm}}| r@{\hspace{5.5mm}}| r | r|}
+1   &     1  &        1  &           1    \\
+2   &     4  &       16  &           2    \\
+3   &     9  &       81  &           6    \\
+4   &    16  &      256  &          24    \\[5mm]
+...
+19  &   361  &   130321  &  1.21645100E+17\\
+20  &   400  &   160000  &  2.43290200E+18\\
+\end{supertabular}
+\end{verbatim}
+ 
+Here is another example whith a {\tt p} column-definition. The tablehead
+is the same as above. The tabletail is a double \verb|\hline|
+\verb|\arraystretch| is set to {\tt 1.5} and font size is \verb|\small|.
+\begin{center}
+\tablelasttail{\hline\hline}
+\topcaption{This table should also be split accross pages.}
+\renewcommand{\arraystretch}{1.5}
+\small
+\begin{supertabular}{| r@{\hspace{6.5mm}}| r@{\hspace{5.5mm}}| r p{5cm}|}
+1  &  1  &  1  &  here is a relative short entry \\
+2  &  1  &  1  &  and here is a long entry, where line breaks and line
+                  breaks and line breaks have to occur \\
+3  &  1  &  1  &  here is also a long entry, where also a line break
+                  should occur\\
+4  &  1  &  1  &  here is also a long entry, where also a line break
+                  should occur\\
+5  &  1  &  1  &  here is a relative short entry \\
+6  &  1  &  1  &  here is also a long entry, where also a line break
+                  should occur\\
+7  &  1  &  1  &  here is also a long entry, where also a line break
+                  should occur\\
+8  &  1  &  1  &  and here is a long entry, where line breaks and line
+                  breaks and line breaks have to occur \\
+9  &  1  &  1  &  and here is a long entry, where line breaks and line
+                  breaks and line breaks have to occur \\
+10 &  1  &  1  &  here is also a long entry, where also a line break
+                  should occur\\
+11 &  1  &  1  &  here is also a long entry, where also a line break
+                  should occur\\
+12 &  1  &  1  &  here is a relative short entry \\
+13 &  1  &  1  &  here is also a long entry, where also a line break
+                  should occur\\
+14 &  1  &  1  &  and here is a long entry, where line breaks and line
+                  breaks and line breaks have to occur \\
+15 &  1  &  1  &  and here is a long entry, where line breaks and line
+                  breaks and line breaks have to occur \\
+16 &  1  &  1  &  here is also a long entry, where also a line break
+                  should occur\\
+17 &  1  &  1  &  and here is a long entry, where line breaks and line
+                  breaks and line breaks have to occur \\
+18 &  1  &  1  &  and here is a long entry, where line breaks and line
+                  breaks and line breaks have to occur \\
+\end{supertabular}
+\end{center}
+ 
+Here is the same table again, but this time using the supertabular*
+environment and stretching the table to the full width of the text.
+ 
+\begin{center}
+\tablelasttail{\hline\hline}
+\renewcommand{\arraystretch}{1.5}
+\small
+\begin{supertabular*}{\textwidth}%
+                     {| r@{\extracolsep{6.5mm plus 1fil}}|
+                        r@{\extracolsep{5.5mm plus 0.5fil}}|
+                        r@{\extracolsep{0mm plus 0.1fil}} p{5cm}|}
+1  &  1  &  1  &  here is a relative short entry \\
+2  &  1  &  1  &  and here is a long entry, where line breaks and line
+                  breaks and line breaks have to occur \\
+3  &  1  &  1  &  here is also a long entry, where also a line break
+                  should occur\\
+4  &  1  &  1  &  here is also a long entry, where also a line break
+                  should occur\\
+5  &  1  &  1  &  here is a relative short entry \\
+6  &  1  &  1  &  here is also a long entry, where also a line break
+                  should occur\\
+7  &  1  &  1  &  here is also a long entry, where also a line break
+                  should occur\\
+8  &  1  &  1  &  and here is a long entry, where line breaks and line
+                  breaks and line breaks have to occur \\
+9  &  1  &  1  &  and here is a long entry, where line breaks and line
+                  breaks and line breaks have to occur \\
+10 &  1  &  1  &  here is also a long entry, where also a line break
+                  should occur\\
+11 &  1  &  1  &  here is also a long entry, where also a line break
+                  should occur\\
+12 &  1  &  1  &  here is a relative short entry \\
+13 &  1  &  1  &  here is also a long entry, where also a line break
+                  should occur\\
+14 &  1  &  1  &  and here is a long entry, where line breaks and line
+                  breaks and line breaks have to occur \\
+15 &  1  &  1  &  and here is a long entry, where line breaks and line
+                  breaks and line breaks have to occur \\
+\end{supertabular*}
+\end{center}
+ 
+\section{Known problems}
+ 
+\begin{itemize}
+\item When a float occurs on the same page as the start of a supertabular you
+can expect unexpected results.
+ 
+When the float was defined on the same page you might end up with the first
+part of the supertabular on a page by its own.
+When the list of unprocessed floats is not empty it will be made empty by the
+first part of the supertabular (if it is split across pages that is) because it
+calls \verb=\clearpage=.
+\item You should not use the supertabular {\em inside\/} a floating-environment
+such as {\tt table} as this will result in \TeX\ trying to put the whole
+supertabular on {\em one\/} page.
+\item In some instances you might still end up with overfull \verb=\vbox=
+messages. These instances are described in the (documented version of) the
+style file itself.
+\end{itemize}
+ 
+\end{document}
+
