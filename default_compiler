@@ -32,9 +32,9 @@ case "KSTAR":
 case "LEUVEN":
 case "SPBSTU":
 case "SWIP":
+case "CCFE":
   echo ifort64
   breaksw
-case "CCFE":
 case "ENEA":
 case "PPPL":
   echo pgf90

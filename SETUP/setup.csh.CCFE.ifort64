@@ -1,0 +1,54 @@
+# Load modules needed by SOLPS-ITER
+set machine_location=`hostname`
+set fullhost=`nslookup $machine_location | grep -m 1 Name | awk '/Name:/{print $2}' | tr 'A-Z' 'a-z'`
+
+switch ($fullhost)
+  case "*cumulus.hpc.l" 
+    echo "Running on the CUMULUS cluster" 
+    set cluster="cumulus"
+    module load pgi
+    module load ifort/12.0.1.107
+    module load hdf5
+    module load mscl
+    module load nag
+    module load mdsplus
+    module load gnuplot
+    breaksw
+  default: 
+    echo "Running on the Freia cluster" 
+    set cluster="Freia" 
+    module unload pgi
+    module load imas-modules
+    module load imas/3.17.1
+    module load ifort
+    module unload python
+    module load python/2.7.5
+    module load texlive
+    module swap mdsplus/7.7.11
+    module load pyual
+
+    setenv _JAVA_OPTIONS "-Xss20m -Xms1g -Xmx4g"
+
+    # work around a problem at JET where the modules are reloaded in a sub-shell
+    setenv LOADL_ACTIVE 1
+
+    if (`where paraview-config` == "") then
+       echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
+    else
+      # See ParaViewCatalystUsersGuide_v2.pdf Sec 3.7.2 Linking with Python ...
+      set PARAVIEW_LIB=`paraview-config --libs --python | sed s/-L//`
+      if ($?LD_LIBRARY_PATH) then
+         setenv LD_LIBRARY_PATH "${PARAVIEW_LIB}:${LD_LIBRARY_PATH}"
+      else
+       	 setenv LD_LIBRARY_PATH ${PARAVIEW_LIB}
+      endif
+      setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages/vtk:${PYTHONPATH}"
+      setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
+      setenv LD_CATALYST `paraview-config --libs vtkPVPythonCatalyst`
+    endif
+endsw
+
+# Compilers
+setenv CC gcc
+setenv FC ifort
+#setenv CXX g++

@@ -31,7 +31,7 @@ case "*.itm.rzg.mpg.de":
   breaksw
 case "*.efda-itm.eu":
 case "*.marconi.cineca.it"
-  [ -d /afs ] && echo ITM || echo MARCONI
+  echo ITM
   breaksw
 case "*.ipp-garching.mpg.de":
 case "*.ipp.mpg.de":
@@ -46,10 +46,10 @@ case "*.ipp.kfa-juelich.de":
   echo FZJ
   breaksw
 case "*.ccfe.ac.uk":
+case "*.hpc.l":
   echo CCFE
   breaksw
 case "*.jet.uk":
-case "*.hpc.l":
   echo JET
   breaksw
 case "*.mech.kuleuven.be":
