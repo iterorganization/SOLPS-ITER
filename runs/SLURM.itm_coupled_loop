@@ -43,6 +43,11 @@ else
 endif
 set TIME="time srun ${MPI_PREFLAGS}"
 
+if ($?SOLPS_OPENMP) then
+  setenv OMP_NUM_THREADS #THREADS#
+  setenv KMP_AFFINITY compact
+endif
+
 update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"
 set msg="Started on `hostname` at `date`"
 update_solps_run_status ${msg}

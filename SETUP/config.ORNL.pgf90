@@ -73,6 +73,11 @@ ifdef IMAS_VERSION
   export LD_UAL
 endif
 
+# Build with OpenMP if requested
+ifdef USE_OPENMP
+  B25_DEFINES += -D_OPENMP
+endif
+
 #
 # Export for use in sub-makefiles
 #

@@ -1,6 +1,8 @@
 #! /bin/tcsh
 
 #SBATCH  --ntasks=1
+#SBATCH  --ntasks-per-node=1
+#SBATCH  --cpus-per-task=#THREADS#
 #SBATCH  --time=24:00:00
 #SBATCH  --mail-user=#EMAIL#
 #SBATCH  --mail-type=END
@@ -16,6 +18,11 @@ if ($?SOLPS_MPI) then
   set TIME="srun --mpi=pmi2"
   set USE_MPI="-m ${MPI_EXEC} ${MPI_OPTS}"
   set USE_MPI=`echo $USE_MPI | sed -e 's:-m :-m ''":' -e 's:$:"'':'`
+endif
+
+if ($?SOLPS_OPENMP) then
+  setenv OMP_NUM_THREADS #THREADS#
+  setenv KMP_AFFINITY compact
 endif
 
 update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"

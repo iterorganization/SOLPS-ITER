@@ -20,8 +20,6 @@
 \usepackage{makeidx}
 \usepackage{fullpage}
 \usepackage{relsize}
-\usepackage{drafthead}
-\usepackage{draftcopy}
 \usepackage{supertabular}
 \usepackage{parskip}
 \usepackage{multicol}
@@ -1558,7 +1556,7 @@ extracted from the {\tt run.log} file.
   \item[b2plot]\index{b2plot} Shortcut to \btwoplotns. A "-n" option allows for dry-run tests.A "-d" option allows to run within the chosen debugger. A "-s" option allows to run \btwoplot with coupling to {\tt Eirene} data. A "-h" option prints a help description.
   \item[b2pp]\index{b2pp} Script to obtain a standard series of \btwoplot graphs.
   \item[b2pt]\index{b2pt} Script to obtain a standard series of \btwoplot graphs.
-  \item[b2run]\index{b2run}\index{b2co}\index{b2fstate} Shortcut to the {\tt Makefile} launching {\tt B2.5}. A "-n" option allows for dry-run tests. A "-d" option allows to run within the chosen debugger. A "-s" option allows to run {\tt B2.5} in stand-alone mode. A "-m" option allows to run with MPI options. A "-o" option adds any other desired run options. The options can be grouped together inside quotes or given individually with multiple "-o" instances. A "-b" option can be used when invoking the {\tt b2co} program to obtain a provisional {\tt b2fstate} file while the main code is running. A "-h" option prints a help description. (See \ref{b2run} for fuller details)
+  \item[b2run]\index{b2run}\index{b2co}\index{b2fstate} Shortcut to the {\tt Makefile} launching {\tt B2.5}. A "-n" option allows for dry-run tests. A "-d" option allows to run within the chosen debugger. A "-s" option allows to run {\tt B2.5} in stand-alone mode. A "-m" option allows to run with MPI options. A "-o" option adds any other desired run options. The options can be grouped together inside quotes or given individually with multiple "-o" instances. A "-t \#" option allows to request an OpenMP run with \# threads. A "-b" option can be used when invoking the {\tt b2co} program to obtain a provisional {\tt b2fstate} file while the main code is running. A "-h" option prints a help description. (See \ref{b2run} for fuller details)
   \item[b2run\_hgw\_cluster]\index{b2run\_hgw\_clus} Shortcut to the {\tt Makefile} launching {\tt B2.5} for the IPP--Greifswald cluster. A "-n" option allows for dry-run tests.
   \item[b2sxdr]\index{b2sxdr} Shortcut to the \SOLPSfour to \SOLPSfive
     converter. A "-n" option allows for dry-run tests. A "-d" option allows to run within the chosen debugger. A "-s" option allows to specify the run to convert was not coupled to {\tt Eirene}. A "-o" option adds any other desired run options. The options can be grouped together inside quotes or given individually with multiple "-o" instances. A "-h" option prints a help description.
@@ -1763,8 +1761,9 @@ for itself by climbing up the tree. You can add options to the {\tt b2run} comma
       the slashes and the quotes are needed] \verb!b2run -m \"mpiexec -np 2\" b2mn!)
   \item[-s] Specifies that one wishes to run {\tt B2.5} in stand-alone mode, i.e. without any coupling to {\tt Eirene}.
   \item[-o "run options"] Allows to launch {\tt b2XX} with additional run options. The options can be grouped together inside quotes or given individually with multiple "-o" instances.
+  \item[-t \#] Requests an OpenMP run using \# threads.
   \item[-b]\index{b2co}\index{b2fstate} Specifies, when calling the {\tt b2co} program, that only the {\tt b2fstate} file should be produced. To be used when invoking {\tt b2co} while the main code is running.
-  \item[-d "debugger\_name"] Allows to run {\tt b2XX} with the named debugger (example: {\tt b2run -d totalview b2mn}). If not debugger name is specified, the debugger defined with the DBX environment variable and specified in the \${\tt \{SOLPSTOP\}/SETUP/setup.csh.}\${\tt \{HOST\_NAME\}.}\${\tt \{COMPILER\}.local} or \${\tt \{SOLPSTOP\}/SETUP\allowbreak/setup.csh.}\${\tt \{HOST\_NAME\}.}\${\tt \{COMPILER\}} files will be used.
+  \item[-d "debugger\_name"] Allows to run {\tt b2XX} with the named debugger (example: {\tt b2run -d totalview b2mn}). If no debugger name is specified, the debugger defined with the DBX environment variable and specified in the \${\tt \{SOLPSTOP\}/SETUP/setup.csh.}\${\tt \{HOST\_NAME\}.}\${\tt \{COMPILER\}.local} or \${\tt \{SOLPSTOP\}/SETUP\allowbreak/setup.csh.}\${\tt \{HOST\_NAME\}.}\${\tt \{COMPILER\}} files will be used.
 \end{description}
 
 \index{SOLPSTOP file}
@@ -1784,7 +1783,7 @@ produce all the output files in an orderly fashion, which then can be post-proce
 with the usual tools.
 
 When submitting jobs in a cluster environment, one will make use of the job submission commands provided
-in the \${\tt \{SOLPSTOP\}/runs} directory ({\tt QSUB.*} files). Currently, the following commands
+in the \${\tt \{SOLPSTOP\}/runs} directory ({\tt QSUB.*} and {\tt SLURM.*} files). Currently, the following commands
 are provided:
 \begin{description}
   \item{ippitmsubmit}\index{ippitmsubmit} for submissions on the IPP ITM cluster
@@ -1796,14 +1795,14 @@ are provided:
 \end{description}
 Users on other systems are encouraged to recopy these command scripts (found in \${\tt \{SOLPSTOP\}/scripts})
 and adapt them to their local environment, along
-with the needed modifications to the \${\tt \{SOLPSTOP\}/runs/QSUB.*} actual submission scripts.
+with the needed modifications to the \${\tt \{SOLPSTOP\}/runs/QSUB.*} or \${\tt \{SOLPSTOP\}/runs/SLURM.*} actual submission scripts.
 Each submission command file can handle five possible cases:
 \begin{description}\index{QSUB files}
-  \item{QSUB.*} Runs a stand-alone {\tt B2.5} case.
-  \item{QSUB.*-gz} Runs a stand-alone {\tt B2.5} case where the output log file has been compressed (activated with the "-z" option).
-  \item{QSUB.*\_coupled} Runs a coupled \SOLPSITER case.
-  \item{QSUB.*\_coupled-gz} Runs a coupled \SOLPSITER case where the output log file has been compressed (activated with the "-z" option).
-  \item{ } Any otherwise named file specified by the user and given as an argument to the submission command (in which case the "-z" option is ineffective). The specified file must be located in the \${\tt \{SOLPSTOP\}/runs} directory, or in the actual run directory on one above it.
+  \item{QSUB.*, SLURM.*} Runs a stand-alone {\tt B2.5} case.
+  \item{QSUB.*-gz, SLURM.*-gz} Runs a stand-alone {\tt B2.5} case where the output log file has been compressed (activated with the "-z" option).
+  \item{QSUB.*\_coupled, SLURM.*\_coupled} Runs a coupled \SOLPSITER case.
+  \item{QSUB.*\_coupled-gz, SLURM.*\_coupled-gz} Runs a coupled \SOLPSITER case where the output log file has been compressed (activated with the "-z" option).
+  \item{ } Any otherwise named file specified by the user and given as an argument to the submission command. The specified file must be located in the \${\tt \{SOLPSTOP\}/runs} directory, or in the actual run directory on one above it.
 \end{description}
 where "*" stands for "iter", "itm", "jet", "lsf", or "sge", referring to the machine system on which the
 submission script is to be used. The "\_coupled" scripts are used when the presence of an {\tt Eirene}
@@ -1811,7 +1810,7 @@ submission script is to be used. The "\_coupled" scripts are used when the prese
 All the submission scripts make use of {\tt b2run} so the same possibility of submitting runs from
 outside the \${\tt SOLPSTOP} file space is available.
 
-If, for instance, one is running on the ITER cluster, then, the instructions to follow would be to run the script
+If, for instance, one is running on one of the ITER clusters, then, the instructions to follow would be to run the script
 \begin{verbatim}
 itersubmit
 \end{verbatim}
@@ -1826,13 +1825,16 @@ itersubmit <<Submission_file>>
 from your current run directory. This script climbs up the tree looking for {\tt <<Submission\_file>>},
 and submits the job to the cluster by the command
 \begin{verbatim}
-qsub -S /usr/bin/tcsh $QSUB
+qsub -S /usr/bin/tcsh $NAME
 \end{verbatim}
-%% $
-or stops if the submission file is not found.
+or
+\begin{verbatim}
+sbatch $NAME
+\end{verbatim}
+depending on which cluster you are on, or stops if the submission file is not found, where \${\tt NAME} stands for the name of the submission file used.
 
-If {\tt <<Submission\_file>>} is not specified, {\tt itersubmit} looks for {\tt QSUB.iter\_coupled} or
-for {\tt QSUB.iter} depending on whether a coupled or a standalone run is required. To request a stand-alone run explicitly, the user can use the "-s" option. Otherwise, the script will assume a coupled run is requested if an {\tt Eirene} {\tt input.dat} file is present in the run directory, and a stand-alone run otherwise.
+If {\tt <<Submission\_file>>} is not specified, {\tt itersubmit} looks for {\tt QSUB.iter\_coupled} (or {\tt SLURM.iter\_coupled}) or
+for {\tt QSUB.iter} (or {\tt SLURM.iter}) depending on whether a coupled or a standalone run is required (and to which cluster you are submitting). To request a stand-alone run explicitly, the user can use the "-s" option. Otherwise, the script will assume a coupled run is requested if an {\tt Eirene} {\tt input.dat} file is present in the run directory, and a stand-alone run otherwise.
 
 In the case one wishes to run the code with MPI and needs to pass MPI options to the launching program, this is achieved by means of the "-m" option, followed by the desired options inside double quotes, as follows:
 \begin{verbatim}
@@ -1840,20 +1842,23 @@ itersubmit -m "<my MPI options>" <my_optional_submission_file_name>
 \end{verbatim}
 The launching program is identified by the variable \${\tt MPI\_EXEC} inside the submission file, and options can be by hand as well using the \${\tt MPI\_OPTS} variable.
 
+If the user wishes to submit an OpenMP job, this is done by use of the "-t" option, followed by the number of desired CPU threads.
+
 The default job name is {\tt SOLPS-ITER} for coupled jobs and {\tt B2.5} for standalone jobs. It can be changed by means of the
 \begin{verbatim}
 itersubmit -j <my_job_name>
 \end{verbatim}
 command.
 
-The {\tt QSUB.iter} script first of all changes directory to \${\tt \{SOLPSTOP\}}
+The {\tt QSUB.iter} and {\tt SLURM.iter} scripts first of all
+change directory to \${\tt \{SOLPSTOP\}}
 with the help of {\tt SOLPSTOP} file
-and executes {\tt setup.csh} there. This is necessary
+and execute {\tt setup.csh} there. This is necessary
 to set up environment variables for the cluster node
 which would actually execute the job, since that machine
 does not necessarily coincide with one from which the job was submitted.
-Then the {\tt QSUB.iter} script returns back to the current run directory
-and executes the script {\tt b2run}.
+Then the {\tt QSUB.iter} and {\tt SLURM.iter} scripts return back to the
+current run directory and execute the script {\tt b2run}.
 
 The examples presented below are for a pure D plasma.
 

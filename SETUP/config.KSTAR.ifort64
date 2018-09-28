@@ -19,7 +19,7 @@
 # If you have NAG Mark 22 or greater on your system:
 # Add -DNAG22 to SOLPS_CPP
 #
- 
+
 #       NCDIR ?= 
 #   MSCL_ROOT ?=
 #       H5DIR ?= 
@@ -94,6 +94,11 @@ ifdef IMAS_VERSION
   SOLPS_CPP += -DIMAS
   LD_UAL     = `pkg-config imas-lowlevel imas-ifort --libs`
   export LD_UAL
+endif
+
+# Build with OpenMP if requested
+ifdef USE_OPENMP
+  B25_DEFINES += -D_OPENMP
 endif
 
 #

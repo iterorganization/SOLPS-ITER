@@ -5,6 +5,7 @@ set NAMP=/tmp/.zut.$$.$USER.`date +%Y%m%d%H%M%S`
 set EMAIL=`get_git_email`
 set JOB_NAME="SOLPS-ITER"
 set PROCS=1
+set THREADS=1
 echo Your email is $EMAIL
 
 set compress=""
@@ -48,7 +49,17 @@ argloop:
     set MPIOPTS="$1"
     echo Using MPI options: $MPIOPTS
     set PROCS=`echo $MPIOPTS | awk.transpose | grep -A 1 "\-np" | tail -n 1`
-    echo Asking for $PROCS processors
+    echo Asking for MPI run with $PROCS processors
+    shift
+    goto argloop
+  endif
+  if ("X${1}X" == "X-tX") then
+    shift
+    if (! $?SOLPS_OPENMP) then
+      source $SOLPSTOP/SETUP/openmp
+    endif
+    set THREADS="$1"
+    echo Asking for OpenMP run with $THREADS threads
     shift
     goto argloop
   endif
@@ -110,7 +121,7 @@ else
   set NAMP=$QSUB
 endif
 
-sed -e 's:#PWD#:'$PWD':g' -e 's:#SOLPSTOP#:'$SOLPSTOP':g' -e 's:#EMAIL#:'$EMAIL':g' -e "s:#MPIOPTS#:'$MPIOPTS':g" -e 's:#PROCS#:'$PROCS':g' -e "s:#JOBNAME#:'$JOB_NAME':g" < $NAMP > $NAME
+sed -e 's:#PWD#:'$PWD':g' -e 's:#SOLPSTOP#:'$SOLPSTOP':g' -e 's:#EMAIL#:'$EMAIL':g' -e "s:#MPIOPTS#:'$MPIOPTS':g" -e 's:#PROCS#:'$PROCS':g' -e 's:#THREADS#:'$THREADS':g -e "s:#JOBNAME#:'$JOB_NAME':g" < $NAMP > $NAME
 
 set msg="Submitted at `date`"
 update_solps_run_status -n ${msg}

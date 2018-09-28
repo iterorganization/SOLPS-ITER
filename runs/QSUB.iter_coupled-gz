@@ -47,6 +47,12 @@ if ($?SOLPS_MPI) then
   set MPI_OPTS=#MPIOPTS#
   set USE_MPI="-m ${MPI_EXEC} ${MPI_OPTS}"
   set USE_MPI=`echo $USE_MPI | sed -e 's:-m :-m ''":' -e 's:$:"'':'`
+  setenv I_MPI_PIN_PROCESSOR_LIST 15
+endif
+
+if ($?SOLPS_OPENMP) then
+  setenv OMP_NUM_THREADS #THREADS#
+  setenv KMP_AFFINITY compact,norespect
 endif
 
 update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"

@@ -47,7 +47,7 @@ argloop:
     set MPIOPTS="$1"
     echo Using MPI options: $MPIOPTS
     set PROCS=`echo $MPIOPTS | awk.transpose | grep -A 1 "\-np" | tail -n 1`
-    echo Asking for $PROCS processors
+    echo Asking for MPI run with $PROCS processors
     shift
     echo sleep 600 | qsub -q ib_gen8 -lnodes=c05s30:ppn=1,walltime=1000
     goto argloop

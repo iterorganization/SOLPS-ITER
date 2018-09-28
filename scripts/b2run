@@ -53,11 +53,13 @@ argloop:
     echo ' '
     echo 'Optional arguments:'
     echo ' -b: for use with b2co to produce a provisional b2fstate file while the main code is running'
-    echo ' -d <debugger>: launch run with debugger <debugger>.'
-    echo ' -h: Prints this message.'
+    echo ' -d <debugger>: launch run with debugger <debugger> (or with $DBX if <debugger> not specified)'
+    echo ' -h: Prints this message'
     echo ' -m <mpi-launcher + args>: run mpi-version (example: b2run -m \"mpiexec -np 2\" b2mn)'
     echo ' -n: dry run. Will show the sequences of commands requested by b2run.'
+    echo ' -o <options>: any additional run options'
     echo ' -s: request a B2.5 stand-alone run. No Eirene input file required then.'
+    echo ' -t <number-of-threads> : request an OpenMP run with <number-of-threads> threads'
     echo ' '
     echo 'Executable: One of the following'
     echo ' b2ag: Build the geometry files b2fgmtry and fort.30'
@@ -123,6 +125,16 @@ argloop:
       endif
       goto mpiloop
     mpiloopend:
+    goto argloop
+  endif
+  if ("X${1}X" == "X-tX") then
+    shift
+    if (! $?SOLPS_OPENMP) then
+      source $SOLPSTOP/SETUP/openmp
+    endif
+    set OMP_NUM_THREADS=$1
+    set KMP_AFFINITY=compact
+    shift
     goto argloop
   endif
   if ("X${1}X" == "X-dX") then

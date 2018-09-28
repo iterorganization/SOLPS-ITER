@@ -67,6 +67,11 @@ B25_DEFINES    =
 EIRENE_DEFINES =
 MPI_CPP        = 
 
+# Build with OpenMP if requested
+ifdef USE_OPENMP
+  B25_DEFINES += -D_OPENMP
+endif
+
 
 #
 # Export for use in sub-makefiles

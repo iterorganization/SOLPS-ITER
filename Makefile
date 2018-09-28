@@ -61,7 +61,7 @@ unexport SOLPS_OPENMP
 unexport SOLPS_DEBUG
 unexport SOLPS_MPI
 
-.PHONY: solps solps_openmp solps_mpi solps_openmp_mpi nox nox_openmp nox_mpi nox_openmp_mpi all all_openmp all_nox all_mpi all_openmp_mpi all_nox_mpi carre carre_nox divgeo divgeo_nox b25 b25_openmp b25_mpi b25_openmp_mpi b25_nox b25_nox_mpi b25_ig b25_all_mpi eirene eirene_mpi eirene_nox eirene_nox_mpi b25eirene b25eirene_openmp b25eirene_mpi b25eirene_openmp_mpi b25eirene_nox b25eirene_nox_mpi b25eirene_ig b25eirene_all_mpi b25eirene_nox_mpi uinp uinp_nox uinp_mpi uinp_nox_mpi triang triang_nox amds amds_mpi fxdr sonnet-light b2sxdr manual local depend depend_nox tags listobj listobj_nox clean clean_% debug %_debug VERSION help nox_build nox_build_mpi
+.PHONY: solps solps_openmp solps_mpi solps_openmp_mpi nox nox_openmp nox_mpi nox_openmp_mpi all all_openmp all_nox all_mpi all_openmp_mpi all_nox_openmp all_nox_mpi carre carre_nox divgeo divgeo_nox b25 b25_openmp b25_mpi b25_openmp_mpi b25_nox b25_nox_openmp b25_nox_mpi b25_ig b25_all_mpi eirene eirene_mpi eirene_nox eirene_nox_mpi b25eirene b25eirene_openmp b25eirene_mpi b25eirene_openmp_mpi b25eirene_nox b25eirene_nox_mpi b25eirene_ig b25eirene_all_mpi b25eirene_nox_mpi uinp uinp_nox uinp_mpi uinp_nox_mpi triang triang_nox amds amds_mpi fxdr sonnet-light b2sxdr manual local depend depend_nox tags listobj listobj_nox clean clean_% debug %_debug VERSION help nox_build nox_build_mpi
 
 DEFAULT: solps
 
@@ -95,6 +95,8 @@ all_nox:     carre_nox divgeo_nox b25_nox eirene_nox b25eirene_nox uinp_nox tria
 all_openmp:   carre divgeo b25_openmp eirene b25eirene_openmp uinp triang amds sonnet-light manual
 
 all_mpi:   carre divgeo b25_mpi eirene_mpi b25eirene_mpi uinp_mpi triang amds sonnet-light manual
+
+all_nox_openmp: carre_nox divgeo_nox b25_nox_openmp eirene_nox b25eirene_nox_openmp uinp_nox triang_nox manual
 
 all_nox_mpi: carre_nox divgeo_nox b25_nox_mpi eirene_nox_mpi b25eirene_nox_mpi uinp_nox_mpi triang_nox manual
 
@@ -152,6 +154,9 @@ b25_ig:
 b25_all_openmp:
 	cd modules/solps4-5; ${MAKE} links
 	cd modules/B2.5;     ${MAKE} USE_OPENMP=-D_OPENMP
+
+b25_nox_openmp:
+	cd modules/B2.5; ${MAKE} USE_OPENMP=-D_OPENMP NOPLOT
 
 b25_nox_mpi:
 	cd modules/B2.5; ${MAKE} USE_MPI=-DUSE_MPI NOPLOT

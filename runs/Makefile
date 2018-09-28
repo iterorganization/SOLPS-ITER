@@ -12,6 +12,9 @@ BLANK =
 # Default debugger
 DBX ?= dbx
 
+ifdef SOLPS_OPENMP
+EXT_OPENMP = .openmp
+endif
 ifdef SOLPS_MPI
 EXT_MPI = .mpi
 endif
@@ -23,16 +26,16 @@ EXT_DEBUG = .debug
 endif
 
 ifndef STAND_ALONE
-B2OBJ = ${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
+B2OBJ = ${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_OPENMP}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
 EIROBJ = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
-DBGOBJ = ${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}.debug
+DBGOBJ = ${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_OPENMP}${EXT_MPI}${EXT_IMPGYRO}.debug
 EDBOBJ = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}.debug
 ifneq (${DBX},totalview)
 INC = -I ${DBGOBJ} -I ${EDBOBJ}
 endif
 else
-B2OBJ = ${SOLPSTOP}/modules/B2.5/builds/standalone.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
-DBGOBJ = ${SOLPSTOP}/modules/B2.5/builds/standalone.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}.debug
+B2OBJ = ${SOLPSTOP}/modules/B2.5/builds/standalone.${HOST_NAME}.${COMPILER}${EXT_OPENMP}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
+DBGOBJ = ${SOLPSTOP}/modules/B2.5/builds/standalone.${HOST_NAME}.${COMPILER}${EXT_OPENMP}${EXT_MPI}${EXT_IMPGYRO}.debug
 ifneq (${DBX},totalview)
 INC = -I ${DBGOBJ}
 endif
@@ -477,6 +480,7 @@ endif
 	-[ -e b2co.exe.dir/tracing/user.trc.n.01 ] && rm b2co.exe.dir/tracing/user.trc.n.01 || echo > /dev/null
 	-[ -e b2co.exe.dir/tracing ] && rmdir b2co.exe.dir/tracing || echo > /dev/null
 	-[ -e b2co.exe.dir/b2time.nc ] && rm b2co.exe.dir/b2time.nc || echo > /dev/null
+	-[ -e b2co.exe.dir/b2tallies.nc ] && rm b2co.exe.dir/b2tallies.nc || echo > /dev/null
 	-rmdir b2co.exe.dir
 
 $(target_uf) : b2fgmtry b2fparam b2fstate b2fplasma
