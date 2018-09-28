@@ -20,7 +20,7 @@ c=======================================================================
 #endif
       integer ns, i, j, ireg, nreg, len
       real(kind=R8), allocatable :: na0(:)
-      character*4, allocatable :: specs(:)
+      character*5, allocatable :: specs(:)
       character*22 hlp_frm
       character*27 lbreg(0:cbnrmx-1)
       character*120 lblps
@@ -96,6 +96,18 @@ c*** Produce the input files for Eirene for averaging scheme runs
         call uinpfindg(.false.)
       end if !}
 
+      ns = natmi-nmeta+nplsi
+      allocate(specs(-1:ns-1))
+      write(specs(-1),'(a)') ' ''-1'''
+      do is = 0, ns-1
+        if (is.lt.10) then
+          write(specs(is),'(a,i1,a)') '  ''',is,''''
+        else if (is.lt.100) then
+          write(specs(is),'(a,i2,a)')  ' ''',is,''''
+        else
+          write(specs(is),'(a,i3,a)')   '''',is,''''
+        end if
+      end do
 c*** Create the header for the b2ag.dat file
       inquire(file='b2ag.dat', exist=uex)
       if(uex) then !{
@@ -157,23 +169,13 @@ c*** Create a b2ah.dat.stencil file
           write(2,'(2x,a)') lblps(1:iloc+20)
           write(2,'(a)') '*b2cmpa         basic parameters'
           write(2,'(a)') '*specs    zamin    zamax       zn      am'
-          ns = natmi-nmeta+nplsi
-          allocate(specs(-1:ns-1))
-          write(specs(-1),'(a)') '''-1'''
-          do is = 0, ns-1
-            if (is.lt.10) then
-              write(specs(is),'(a,i1,a)') ' ''',is,''''
-            else
-              write(specs(is),'(a,i2,a)')  '''',is,''''
-            end if
-          end do
           is=0
           do iatm = 1, natmi
             if (is_meta(iatm)) cycle
             j=find_matching_species(spcsncl(iatm))
-            write(2,'(2x,a1,i3,a1,5x,a3,6x,a3,4x,i3,a2,4x,i3,a2)')
-     .       '''',is,'''','0.0','0.0',nchara(iatm),'.0',
-     .                                nmassa(iatm),'.0'
+            write(2,'(1x,a5,5x,a3,6x,a3,4x,i3,a2,4x,i3,a2)')
+     .       specs(is),'0.0','0.0',nchara(iatm),'.0',
+     .                             nmassa(iatm),'.0'
 cxpb Default data for neutrals
             do ireg = cbirso, cbirso+cbnrso-1
               if (mod(ireg-cbirso+1,3).eq.2) then ! core boundary
@@ -238,8 +240,8 @@ cxpb Default data for neutrals
             is = is + 1
             do iss = 1, nbndl(iatm)-1
               write(2,
-     .         '(2x,a1,i3,a1,4x,i2,a2,5x,i2,a2,4x,i3,a2,4x,i3,a2)')
-     .         '''',is,'''',izamin(is),'.0',izamax(is),'.0',
+     .         '(1x,a5,4x,i2,a2,5x,i2,a2,4x,i3,a2,4x,i3,a2)')
+     .            specs(is),izamin(is),'.0',izamax(is),'.0',
      .                    nchara(iatm),'.0',nmassa(iatm),'.0'
 cxpb Default data for ions
               do ireg = cbirso, cbirso+cbnrso-1
@@ -386,86 +388,85 @@ cxpb Default data for ions
             write(2,'(i2,2x,a)') ireg,lbreg(ireg)
             write(2,'(a)') '*cbsna'//column_header
             do is = 0, ns-1
-              write(2,'(2x,a4,1p,8(1x,e9.2))') specs(is),
+              write(2,'(1x,a5,1p,8(1x,e9.2))') specs(is),
      .         (cbsna(i,is,ireg),i=0,7)
             end do
             write(2,'(a)') '*cbsmo'//column_header
             do is = 0, ns-1
-              write(2,'(2x,a4,1p,8(1x,e9.2))') specs(is),
+              write(2,'(1x,a5,1p,8(1x,e9.2))') specs(is),
      .         (cbsmo(i,is,ireg),i=0,7)
             end do
             write(2,'(a)') '*cbshi'//column_header
             do is = 0, ns-1
-              write(2,'(2x,a4,1p,8(1x,e9.2))') specs(is),
+              write(2,'(1x,a5,1p,8(1x,e9.2))') specs(is),
      .         (cbshi(i,is,ireg),i=0,7)
             end do
             write(2,'(a)') '*cbshe'//column_header
-            write(2,'(2x,a4,1p,8(1x,e9.2))') specs(-1),
+            write(2,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
      .       (cbshe(i,ireg),i=0,7)
             write(2,'(a)') '*cbsch'//column_header
-            write(2,'(2x,a4,1p,8(1x,e9.2))') specs(-1),
+            write(2,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
      .       (cbsch(i,ireg),i=0,7)
             write(2,'(a)') '*cbrec'//column_header
             do is = 0, ns-1
-              write(2,'(2x,a4,1p,8(1x,e9.2))') specs(is),
+              write(2,'(1x,a5,1p,8(1x,e9.2))') specs(is),
      .         (cbrec(i,is,ireg),i=0,7)
             end do
             write(2,'(a)') '*cbmsa'//column_header
-            write(2,'(2x,a4,1p,8(1x,e9.2))') specs(-1),
+            write(2,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
      .       (cbmsa(i,ireg),i=0,7)
             write(2,'(a)') '*cbmsb'//column_header
             do is = 0, ns-1
-              write(2,'(2x,a4,1p,8(1x,e9.2))') specs(is),
+              write(2,'(1x,a5,1p,8(1x,e9.2))') specs(is),
      .         (cbmsb(i,is,ireg),i=0,7)
             end do
           end do
           write(2,'(a)') '*b2cmpt  transport coefficients'
           write(2,'(a)') '*cfdf0'//column_header
           do is = 0, ns-1
-            write(2,'(2x,a4,1p,8(1x,e9.2))') specs(is),
+            write(2,'(1x,a5,1p,8(1x,e9.2))') specs(is),
      .       (cfdf0(i,is),i=0,7)
           end do
           write(2,'(a)') '*cfdna'//column_header
           do is = 0, ns-1
-            write(2,'(2x,a4,1p,8(1x,e9.2))') specs(is),
+            write(2,'(1x,a5,1p,8(1x,e9.2))') specs(is),
      .       (cfdna(i,is),i=0,7)
           end do
           write(2,'(a)') '*cfdpa'//column_header
           do is = 0, ns-1
-            write(2,'(2x,a4,1p,8(1x,e9.2))') specs(is),
+            write(2,'(1x,a5,1p,8(1x,e9.2))') specs(is),
      .       (cfdpa(i,is),i=0,7)
           end do
           write(2,'(a)') '*cfvla'//column_header
           do is = 0, ns-1
-            write(2,'(2x,a4,1p,8(1x,e9.2))') specs(is),
+            write(2,'(1x,a5,1p,8(1x,e9.2))') specs(is),
      .       (cfvla(i,is),i=0,7)
           end do
           write(2,'(a)') '*cfvsa'//column_header
           do is = 0, ns-1
-            write(2,'(2x,a4,1p,8(1x,e9.2))') specs(is),
+            write(2,'(1x,a5,1p,8(1x,e9.2))') specs(is),
      .       (cfvsa(i,is),i=0,7)
           end do
           write(2,'(a)') '*cfhci'//column_header
           do is = 0, ns-1
-            write(2,'(2x,a4,1p,8(1x,e9.2))') specs(is),
+            write(2,'(1x,a5,1p,8(1x,e9.2))') specs(is),
      .       (cfhci(i,is),i=0,7)
           end do
           write(2,'(a)') '*cfhce'//column_header
-          write(2,'(2x,a4,1p,8(1x,e9.2))') specs(-1),
+          write(2,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
      .     (cfhce(i),i=0,7)
           write(2,'(a)') '*cfsig'//column_header
-          write(2,'(2x,a4,1p,8(1x,e9.2))') specs(-1),
+          write(2,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
      .     (cfsig(i),i=0,7)
           write(2,'(a)') '*cfalf'//column_header
-          write(2,'(2x,a4,1p,8(1x,e9.2))') specs(-1),
+          write(2,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
      .     (cfalf(i),i=0,7)
           write(2,'(a)') '*cflim'//
      .     '    cflme     cflmi     cflmv     cflal     cflab     ...'
-          write(2,'(2x,a4,1p,8(1x,e9.2))') specs(-1),
+          write(2,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
      .     (cflim(i),i=0,7)
           write(2,'(a)') '*endphy'
           close(2)
-          deallocate(specs)
           print *,'    ... b2ah.dat.stencil created'
       endif
 
@@ -503,15 +504,15 @@ c*** Create the b2ai.dat file
           is=0
           do iatm = 1, natmi
             if (is_meta(iatm)) cycle
-            write(2,'(2x,a1,i3,a1,5x,a3,6x,a3,4x,i3,a2,4x,i3,a2)')
-     .       '''',is,'''','0.0','0.0',nchara(iatm),'.0',
-     .                                nmassa(iatm),'.0'
+            write(2,'(1x,a5,5x,a3,6x,a3,4x,i3,a2,4x,i3,a2)')
+     .       specs(is),'0.0','0.0',nchara(iatm),'.0',
+     .                             nmassa(iatm),'.0'
             na0(is) = 1.0e12
             is = is + 1
             do iss = 1, nbndl(iatm)-1
               write(2,
-     .         '(2x,a1,i3,a1,4x,i2,a2,5x,i2,a2,4x,i3,a2,4x,i3,a2)')
-     .         '''',is,'''',izamin(is),'.0',izamax(is),'.0',
+     .         '(1x,a5,4x,i2,a2,5x,i2,a2,4x,i3,a2,4x,i3,a2)')
+     .            specs(is),izamin(is),'.0',izamax(is),'.0',
      .                    nchara(iatm),'.0',nmassa(iatm),'.0'
               if (nchara(iatm).eq.1) then
                 na0(is) = 1.0e19
@@ -587,6 +588,7 @@ c*** Create the header for the b2yt.dat file
           print *,'    ... b2yt.dat created'
       endif
 
+      deallocate(specs)
 
 c-----------------------------------------------------------------------
 c*** Modify the input file for B2, if possible
