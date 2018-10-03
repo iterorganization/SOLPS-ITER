@@ -98,7 +98,7 @@ case "*.keio.ac.jp":
 case "kraken01":
   echo KSTAR
   breaksw
-case "*.spbau.ru":
+case "*.spbstu.ru":
 case "login1.cluster":
 case "n01p*.cluster":
 case "PLASMATHEORY08":
