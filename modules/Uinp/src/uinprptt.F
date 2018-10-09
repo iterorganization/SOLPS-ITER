@@ -19,7 +19,7 @@ c=======================================================================
       logical trchst_b,trcint_b,trcamd_b,trcsou_b,trcbla_b,trcblm_b,
      ,  trcbli_b,trcblp_b,trcble_b,trcblph_b,trctal_b,trcdbg2_b,
      ,  trcdbge_b,trcdbgm_b,trcdbgf_b,trcdbgl_b,trcdbgs_b,
-     ,  trcdbgg_b,trcdbgmpi_b,trcdbgc_b,trcsrc_b,
+     ,  trcdbgg_b,trcdbgmpi_b,trcdbgc_b,trcsrc_b,trcsur_b,
      ,  pl1st_b,pl2nd_b,pladd_b,plhst_b,plcut_b(3),plnums_b,nltest_b
       save
 c=======================================================================
@@ -44,6 +44,7 @@ c=======================================================================
         trcint_b=trcint
         trcamd_b=trcamd
         trcsou_b=trcsou
+        trcsur_b=trcsur
         trcbla_b=trcbla
         trcblm_b=trcblm
         trcbli_b=trcbli
@@ -95,6 +96,7 @@ c=======================================================================
         trcint=ttcint
         trcamd=ttcint
         trcsou=ttcsou
+        trcsur=ttcsur
         trcbla=ttcbla
         trcblm=ttcblm
         trcbli=ttcbli
@@ -152,6 +154,7 @@ c*** Set the VSP data for test.eir
         trcint=trcint_b
         trcamd=trcamd_b
         trcsou=trcsou_b
+        trcsur=trcsur_b
         trcbla=trcbla_b
         trcblm=trcblm_b
         trcbli=trcbli_b

@@ -926,8 +926,9 @@ c*** 15
 
 c*** Data for Eirene test run
 
-      data ttntcpu,ttnfile, ttnpts, ttalloc,tttest,ttcsrc,ttcint /
-     /        50  , 10100 , nstra*5,   0.  ,.true.,.true.,.true. /,
+      data
+     , ttntcpu,ttnfile, ttnpts, ttalloc,tttest,ttcsrc,ttcsur,ttcint /
+     /    50  , 10100 , nstra*5,   0.  ,.true.,.true.,.true.,.true. /,
      , ttchst,ttcref,ttcamd,ttcsou,ttcbla,ttcblm,ttcbli,ttcblp,ttcble /
      / .true.,.true.,.true.,.true.,.true.,.true.,.true.,.true.,.true. /,
      , ttcblph,ttctal,ttcdbg2,ttcdbge,ttcdbgm,ttcdbgf,ttcdbgl,ttcdbgs/

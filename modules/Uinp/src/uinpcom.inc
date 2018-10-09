@@ -487,7 +487,8 @@ c-----------------------------------------------------------------------
 c*** Data substitution for the Eirene test run
       integer ttntcpu,ttnfile,ttnpts(nstra)
       real(kind=R4) ttalloc
-      logical ttchst,ttcref,ttcint,ttcamd,ttcsou,ttcbla,ttcblm,ttcbli,
+      logical
+     ,  ttchst,ttcref,ttcint,ttcamd,ttcsou,ttcsur,ttcbla,ttcblm,ttcbli,
      ,  ttcblp,ttcble,ttcblph,ttctal,ttcdbg2,ttcdbge,ttcdbgm,ttcdbgf,
      ,  ttcdbgl,ttcdbgs,ttcdbgg,ttcdbgmpi,ttcdbgc,ttcsrc,
      ,  ttpl1st,ttpl2nd,ttpladd,ttplhst,ttplcut(3),ttplnums,tttest
@@ -595,7 +596,7 @@ c     ,  spcifup,spcifua,spcifum,spcifui,
      ,  npfrgrp,lpfrgrp,ipfrgrp,jpfrgrp,lm_vhst,lm_whst,
      l  nlrbnds,bliin,bbliin,dfrbndx,glb2read,usetmstr,bxsbndt,rxsbndt,
      ,  rctndflt,tgdtinpt,srcvdflt,do_hepdt,ttcsrc,ttcint,ttchst,ttcref,
-     ,  ttcamd,ttcsou,ttcbla,ttcblm,ttcbli,ttcblp,ttcble,
+     ,  ttcamd,ttcsou,ttcsur,ttcbla,ttcblm,ttcbli,ttcblp,ttcble,
      ,  ttcblph,ttctal,ttcdbg2,ttcdbge,ttcdbgm,ttcdbgf,ttcdbgl,ttcdbgs,
      ,  ttcdbgg,ttcdbgmpi,ttcdbgc,
      ,  ttpl1st,ttpl2nd,ttpladd,ttplhst,ttplcut,ttplnums,tttest,
