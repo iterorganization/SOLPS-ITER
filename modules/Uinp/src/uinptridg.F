@@ -15,7 +15,7 @@ c=======================================================================
 #include "uinput.inc"
       integer, save :: ntcpu_save, nfile_save, nprnli_save
       integer, save :: npts_save(nstra)
-      logical, save :: trcdbgg_save
+      logical, save :: trcdbgg_save, trcsur_save
       external subini, subend
 c=======================================================================
       call subini ('uinptridg')
@@ -29,6 +29,8 @@ c=======================================================================
        npts=0
        nprnli_save=nprnli
        nprnli=0
+       trcsur_save=trcsur
+       trcsur=.true.
        trcdbgg_save=trcdbgg
        trcdbgg=.true.
       else !}{
@@ -37,6 +39,7 @@ c=======================================================================
        npts=npts_save
        nprnli=nprnli_save
        nltrimesh=.false.
+       trcsur=trcsur_save
        trcdbgg=trcdbgg_save
       end if !}
  9999 call subend ()

@@ -2036,6 +2036,7 @@ For double-null cases, the "south" boundary must be split in six pieces,
 and the "north" boundary in two. However, the {\tt b2ah} format does
 not allow for the specification of additional "east" or "west" boundaries,
 so double-null users {\bf must} use the "physics" formulation in addition.
+The code enforces this requirement.
 
 The boundary condition implemented arises from numerical combinations
 of the eight parameters with various quantities from the code.
@@ -2282,6 +2283,10 @@ If {\tt 'b2stbc\_boundary\_namelist'} is set to 1 in {\tt b2mn.dat}
 then the boundary conditions are read in from
 {\tt b2.boundary.parameters} instead of being taken from the file
 created by {\tt b2ah} and possibly modified in {\tt b2mn.dat}.
+For cases with a double-null topology, use of {\tt b2.boundary.parameters} 
+is required, and will be enforced irrespective of the value of the
+{\tt 'b2stbc\_boundary\_namelist'} switch.
+
 The boundary conditions are specified by the {\tt boundary} namelist
 which contains
 \begin{description}
@@ -6510,7 +6515,7 @@ For \SOLPSITERns, the orthogonal coordinates $(x,r,z)$ are more convenient for f
 \index{drifts and currents, boundary conditions}
 \index{boundary conditions, drifts and currents}
 
-Whether one deals with the diamagnetic or $\bf{E}\times\bf{B}$ perpendicular
+Whether one deals with the diamagnetic or ${\bf E}\times{\bf B}$ perpendicular
 drift velocity, special care must be taken to avoid unphysical flows
 at the plates. The standard boundary condition is to require that the flow be
 at least sonic at the sheath entrance \cite{STANGEBY95B},
