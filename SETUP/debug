@@ -18,6 +18,7 @@ if ($?SOLPS_PATH) then
   setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|${HOST_NAME}.${COMPILER}:|${HOST_NAME}.${COMPILER}.debug:|g"`.debug
   setenv   PATH ${SOLPS_PATH}:${OLD_PATH}
   setenv   SOLPS_DEBUG yes
+  setenv   I_MPI_DEBUG 5
   setenv   PMI_DEBUG 1
   unsetenv OLD_SOLPS_PATH
   echo "SOLPS-ITER debug mode turned on"
