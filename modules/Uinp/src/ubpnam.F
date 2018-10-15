@@ -36,16 +36,35 @@ c*** p1
       call vscale(pp1,0.001,pp1,i)
       nlimi=i/3
 c      print *,'p1: nlimi = ',nlimi !###
+      if(nlimi.gt.nlim) then !{
+        write(0,*) 'Too many wall elements: maximum ',nlim
+        write(0,*) 'Current number of requested elements: ',nlimi
+        call xerrab
+     .   (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+      end if !}
       return
 c*** p2
   2   call rearre(pp2,3*nlim,i)
       call vscale(pp2,0.001,pp2,i)
       nlimi=i/3
 c      print *,'p2: nlimi = ',nlimi !###
+      if(nlimi.gt.nlim) then !{
+        write(0,*) 'Too many wall elements: maximum ',nlim
+        write(0,*) 'Current number of requested elements: ',nlimi
+        call xerrab
+     .   (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+      end if !}
       return
 c*** vessel
   3   call rearri(nmvsle,nlim,nnvsle)
 c      print *,'vessel: nnvsle = ',nnvsle !###
+      if(maxval(nmvsle).gt.nlim) then !{
+        write(0,*) 'Too many wall elements: maximum ',nlim
+        write(0,*) 'Current number of requested elements: ',
+     .   maxval(nmvsle)
+        call xerrab
+     .   (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+      end if !}
       return
 c*** data_id
   4   call resima(uuc)
