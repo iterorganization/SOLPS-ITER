@@ -209,7 +209,7 @@ while true; do {
       (  u  )                                               # run uinp to produce the input for Eirene:
             uinp
             N=
-            [ -r $b2agout ] && {
+            [ -r $b2agout ] && [ b2ag.dat -nt structure.dat ] && {
               [ -r $eirinp ] && q=e || q=q
             } || {
               [ -r b2ag.dat ] && {
