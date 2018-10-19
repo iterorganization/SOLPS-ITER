@@ -8,7 +8,7 @@ if (-s $nreg) then
   setenv NREG `cat $nreg`
   echo Set NREG to $NREG "(based on $nreg)"
 else
-  set nnreg=`pipe_run.log | grep ^nnreg | head -1`
+  set nnreg=`pipe_run.log | grep -a ^nnreg | head -1`
   set NREG=$nnreg[2]
   echo Set NREG to $NREG "(based on log file)"
 endif

@@ -23,7 +23,7 @@ c======================================================================
 #include "uib2pprm.inc"
       logical ufirst
 c      integer nniprm(nmxprm,nkwrd,nblck)
-      integer i,j,k,l,m,n,ll,nn
+      integer i,j,k,l,m,n,ll,nn,len
       character ss*(mxslen),s(mxslen),us*(mxslen-mxkwln-1),
      ,  sss*(mxslen-1),ufi*24,ufc*24,ufa*20,ufg*24,s0
       character hlp_frm*30
@@ -125,6 +125,12 @@ c     ,         l,n,jvrb,jblk,lprdckw(l,n,jvrb,jblk),' : ',c,i,r !###
               else if(lt8rvr(jvrb,jblk)) then !}{
                 write(ufc,710) '(',nmdpr(jvrb,jblk)
   710           format(a1,i3,17h(1x,1h',a8,2h',)))
+                do i=1,m
+                  len=lnblnk(c8niprm(i,l,n,jvrb,jblk))
+                  if (len.lt.8) then
+                    c8niprm(i,l,n,jvrb,jblk)(len+1:8)=repeat(' ',8-len)
+                  endif
+                enddo
                 write(ss(k:mxslen),ufc) (c8niprm(i,l,n,jvrb,jblk),i=1,m)
               else if(lrrvr(jvrb,jblk)) then !}{
                 write(ss(k:mxslen),ufg) (rniprm(i,l,n,jvrb,jblk),i=1,m)
