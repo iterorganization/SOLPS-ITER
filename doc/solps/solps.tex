@@ -13112,6 +13112,7 @@ are indicated in the table.
     font \index{b2plot, font}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:font}   & Set font \\
     gcol \index{b2plot, gcol}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:gcol}   & Colour of graph title \\
     glob \index{b2plot, glob}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:glob}   & Copy {\em extralabel} to the global label field \\
+    glsz \index{b2plot, glsz}      & 0 & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:glsz}   & Global header font size \\
     grid \index{b2plot, grid}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:grid}   & Add grid to plot \\
     hcol \index{b2plot, hcol}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:hcol}   & Colour of global header \\
     i* \index{b2plot, i*}          & 2 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:i*}     & Integer multiplication \\
@@ -15082,8 +15083,11 @@ Sets the current wall bar label to $\langle$label$\rangle$.
 \subsubsection{glob}\index{b2plot, glob}\label{sec:glob}
 Copies the contents of {\em extralabel} into the global header for all graphs.
 
+\subsubsection{$<$factor,{\bf R}$>$ glsz}\index{b2plot, glsz}\label{sec:glsz}
+Sets font size for global header to $\langle$factor$\rangle$ times default size (default = 1.0).
+
 \subsubsection{$<$factor,{\bf R}$>$ lbsz}\index{b2plot, lbsz}\label{sec:lbsz}
-Sets label size to $\langle$factor$\rangle$ times default size (default = 1.0).
+Sets label size to $\langle$factor$\rangle$ times default size (default = 1.0). Does not apply to the global header.
 
 \subsubsection{$<$number,{\bf I}$>$ lfsz}\index{b2plot, lfsz}\label{sec:lfsz}
 Sets line label font size to $\langle$number$\rangle$ (default = 0). If $\langle$number$\rangle$ is between 0 and 3, then the size
