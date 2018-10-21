@@ -27,8 +27,8 @@ c      integer nniprm(nmxprm,nkwrd,nblck)
       character ss*(mxslen),s(mxslen),us*(mxslen-mxkwln-1),
      ,  sss*(mxslen-1),ufi*24,ufc*24,ufa*20,ufg*24,s0
       character hlp_frm*30
-      integer len_of_digits
-      external len_of_digits
+      integer len_of_digits, lnblnk
+      external len_of_digits, lnblnk
       equivalence (ss,s),(s(mxkwln+3),us),(s(2),sss)
       data ss / ' ' /
 #ifdef DBG
