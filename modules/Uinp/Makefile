@@ -170,7 +170,7 @@ listobj:
 	sed -e 's/ub2p.o//' -e 's/uinput.o//' -e 's/uiblkd.o//' -e 's/uiblb2.o//' > ${OBJDIR}/LISTOBJ
 
 tags:
-	rm -f ${BASEDIR}/TAGS ; etags -o ${BASEDIR}/TAGS ${SRCDIR}/*.F ${SRCDIR}/*.h ${SRCDIR}/*.inc
+	rm -f ${BASEDIR}/TAGS ; etags -o ${BASEDIR}/TAGS ${SRCDIR}/*.F ${SRCDIR}/*.h ${SRCDIR}/*.inc || touch ${BASEDIR}/TAGS
 
 ${OBJDIR}/LISTOBJ: listobj
 
