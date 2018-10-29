@@ -4600,10 +4600,10 @@ The averaging scheme works in three stages:
   \item{A finalization phase} where the averaged steady-state solution is used for a small number of timesteps, and a larger number of {\tt Eirene} trajectories, to reduce statistical noise. This is done by running the {\tt res\_av} script and uses the {\tt input\_fin.eir Eirene} input file prepared by {\tt Uinp} if available.
 \end{enumerate}
 
-\section{b2ye, error assessment}
+\section{b2ye, statistical error assessment}
 \label{sec:b2ye}\index{b2ye}\index{error assessment}\index{b2time.nc}\index{b2favere}\index{b2run}
 
-The program {\tt b2ye} is meant for computing error assessment of a coupled {\tt B2.5-Eirene} run where the averaging scheme described in Section \ref{sec:B2Eirene:averaging} above has been used. It is called by means of the command:
+The program {\tt b2ye} is meant for computing statistical error assessment according to \cite{Ghoos_MC2017} of a coupled {\tt B2.5-Eirene} run where the averaging scheme described in Section \ref{sec:B2Eirene:averaging} above has been used. It is called by means of the command:
 \begin{verbatim}
     b2run b2ye
 \end{verbatim}
@@ -4614,6 +4614,13 @@ or
 %% $
 
 It uses the data in the {\tt b2time.nc} and {\tt b2favere} files and calculates statistical errors based on averaged quantities collected during the averaging phase of a {\tt B2.5-Eirene} calculation.
+For each averaged quantity stored in {\tt b2time.nc} it evaluates:
+\begin{itemize}
+\item The sample mean. 
+\item The correlation time according to the {\it batching} method.
+\item The correlation time according to the {\it autocorrelation} method.
+\item The statistical error $\sigma_{s}$ according to the maximum of the two correlation times.
+\end{itemize}
 
 \chapter{Using MDSPLUS}
 \index{MDSPLUS}\label{cha:MDSplus}

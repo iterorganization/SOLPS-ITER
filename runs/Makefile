@@ -518,8 +518,7 @@ $(target_ts) : b2fparam b2fgmtry b2fstate b2fplasma
 	cd b2ts.exe.dir ; ${TIME} ${B2OBJ}/b2ts.exe ${RUN_OPTIONS} ; mv $(target_ts) b2fstate .. ; rm -f $(notdir $^) .quit >& /dev/null
 	-rmdir b2ts.exe.dir
 
-$(target_ye) :
-	echo in b2ye.prt
+$(target_ye) : b2favere b2time.nc
 	rm -rf b2ye.exe.dir >& /dev/null ; mkdir b2ye.exe.dir
 	-[ -e b2favere ] && cp b2favere b2ye.exe.dir || echo > /dev/null
 	-[ -e b2time.nc ] && cp b2time.nc b2ye.exe.dir || echo > /dev/null
@@ -779,3 +778,4 @@ help help.prt:
 	@echo "     transfer the plasma state to a mesh of a different size"
 	@echo "  ${target_xd} : "
 	@echo "     convert the plasma state to a SOLPS4.0 B2SXDR file [no longer functional]"
+
