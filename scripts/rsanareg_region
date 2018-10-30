@@ -102,7 +102,7 @@ switch ($text)
     exit
 endsw
 set text=`echo $text | sed 's:_region::'`
-set nnreg=`pipe_run.log | grep ^nnreg | head -1`
+set nnreg=`pipe_run.log | grep -a ^nnreg | head -1`
 set vreg=$nnreg[2]
 set xreg=$nnreg[3]
 set yreg=$nnreg[4]

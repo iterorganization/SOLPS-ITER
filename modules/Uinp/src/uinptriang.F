@@ -69,7 +69,7 @@ c***   makes checking and outputs NSS indices if necessary
        if(nn.LT.0) then 
         write(0,*) 'ERROR in uichkchn, nn', nn
         TriMesh=.FALSE.
-        goto 9999
+        call xerrab('Contours did not close. Stopping.')
        end if
 c***   write intermediate arrays for output
        do 26 j=1,nchain

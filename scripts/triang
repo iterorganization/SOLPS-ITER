@@ -209,13 +209,15 @@ while true; do {
       (  u  )                                               # run uinp to produce the input for Eirene:
             uinp
             N=
-            [ -r $b2agout ] && q=e || {
+            [ -r $b2agout ] && [ b2ag.dat -nt structure.dat ] && {
+              [ -r $eirinp ] && q=e || q=q
+            } || {
               [ -r b2ag.dat ] && {
                 ln -sf $griddir/$carre_stem.v$n.geo .
                 /bin/echo -e "The last grid found is : $carrename"
                 echo -e "'b2agfs_geometry'\t'$carrename'" >> b2ag.dat
               }
-              q=b
+              [ -r $eirinp ] && q=b || q=q
             }
             break;;  
       (  U  )                                               # run uinp to produce the input for Eirene:
@@ -226,13 +228,15 @@ while true; do {
               . triang.conf
             }
             N=
-            [ -r $b2agout ] && q=e || {
+            [ -r $b2agout ] && [ b2ag.dat -nt structure.dat ] && {
+              [ -r $eirinp ] && q=e || q=q
+            } || {
               [ -r b2ag.dat ] && {
                 ln -sf $griddir/$carre_stem.v$n.geo .
                 /bin/echo -e "The last grid found is : $carrename"
                 echo -e "'b2agfs_geometry'\t'$carrename'" >> b2ag.dat
               }
-              q=b
+              [ -r $eirinp ] && q=b || q=q
             }
             break;;  
       ( b|B )                                               # run b2ag to produce fort.30 file:

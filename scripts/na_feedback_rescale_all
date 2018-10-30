@@ -1,10 +1,10 @@
 #! /bin/tcsh -f
 if (! -e .na_feedback) then
-  pipe_run.log | grep na_feedback_rescale | awk '{print $2}' | sort | uniq | wc -l > .na_feedback
+  pipe_run.log | grep -a na_feedback_rescale | awk '{print $2}' | sort | uniq | wc -l > .na_feedback
 endif
 set NNA=`cat .na_feedback`
 
 pipe_run.log | \
-  grep na_feedback_rescale | \
+  grep -a na_feedback_rescale | \
   awk 'BEGIN{N=1; printf "%s",N}NR>1&&$2<=L{N++; printf "\n%s",N}{printf " %s",$3/$4;L=$2}END{printf "\n"}' | \
   x"$1"yplot$NNA `count 0 $NNA | sed '$d'`

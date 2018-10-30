@@ -66,6 +66,11 @@
 \mbox{}
 \vfill
 {\Huge \hfill \SOLPSITER \hfill}
+
+\vspace*{3\baselineskip}
+
+{\Large \hfill \today \hfill}
+
 \vfill
 
 \newpage
@@ -174,7 +179,7 @@ The next section discusses obtaining and updating the code.
 To obtain the code a request should be sent to Xavier Bonnin
 ({\tt Xavier.Bonnin@iter.org}) at ITER, the code Responsible Officer (RO).
 
-The first formality will then be for the prospective users to obtain and IDM (ITER Document Management) account, in case they do not have one already. This account request will be done by the RO, and the requesting user will receive an automated electronic message asking for confirmation of the provided e-mail address. With this account, the user will have access to the \SOLPSITER GIT repository (\href{https://git.iter.org/projects/BND/repos/solps-iter/browse}{https://git.iter.org/projects/BND/repos/solps-iter/browse}) maintained at the IO, the \SOLPSITER SharePoint web site hosted by ITER (\href{https://portal.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}{https://portal.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}, works best with Internet Explorer). Links to the IDM-controlled documents related to \SOLPSITER can be found in a centralized folder (\href{https://user.iter.org/?uid=Q92BAQ}{https://user.iter.org/?uid=Q92BAQ}). The account request will also serve for registration of the user to the \SOLPSITER mailing list ({\tt SOLPS-ITER@iter.org}).
+The first formality will then be for the prospective users to obtain an IDM (ITER Document Management) account, in case they do not have one already. This account request will be done by the RO, and the requesting user will receive an automated electronic message asking for confirmation of the provided e-mail address. With this account, the user will have access to the \SOLPSITER GIT repository (\href{https://git.iter.org/projects/BND/repos/solps-iter/browse}{https://git.iter.org/projects/BND/repos/solps-iter/browse}) maintained at the IO, the \SOLPSITER SharePoint web site hosted by ITER (\href{https://portal.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}{https://portal.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}, works best with Internet Explorer). Links to the IDM-controlled documents related to \SOLPSITER can be found in a centralized folder (\href{https://user.iter.org/?uid=Q92BAQ}{https://user.iter.org/?uid=Q92BAQ}). The account request will also serve for registration of the user to the \SOLPSITER mailing list ({\tt SOLPS-ITER@iter.org}). Lastly, there is a Confluence Wiki page located at \href{https://confluence.iter.org/display/IMP/SOLPS-ITER}{https://confluence.iter.org/display/IMP/SOLPS-ITER} for the purpose of collecting user contributions to the body of knowledge about the code.
 
 The \SOLPSITER Git repository also includes the repositories for {\tt B2.5}, {\tt EIRENE}, {\tt Carre} and {\tt DivGeo} individually as submodules. Some service libraries (such as the GGD, MSCL and GR service libraries), can be found in the repository in the IMAS Extra and Libraries section.
 
@@ -321,7 +326,7 @@ The current list of recognized hostnames, deduced by means of the {\tt whereami}
   \item[NERSC] DOE supercomputer center: *.nersc.gov
   \item[ORNL] Oak Ridge National Laboratory: *.ornl.gov
   \item[PPPL] PPPL domain: *.pppl.gov
-  \item[SPBSTU] St. Petersburg State PolyTechnical University: *.spbau.ru
+  \item[SPBSTU] St. Petersburg State PolyTechnical University: *.spbstu.ru
   \item[SWIP] SouthWestern Institute of Plasma Physics, Chengdu: *.swip.ac.cn
   \item[WM] College of William and Mary: *.wm.edu
   \item[AU\_UNKNOWN] All other domain names from Australia
@@ -4613,10 +4618,10 @@ The averaging scheme works in three stages:
   \item{A finalization phase} where the averaged steady-state solution is used for a small number of timesteps, and a larger number of {\tt Eirene} trajectories, to reduce statistical noise. This is done by running the {\tt res\_av} script and uses the {\tt input\_fin.eir Eirene} input file prepared by {\tt Uinp} if available.
 \end{enumerate}
 
-\section{b2ye, error assessment}
+\section{b2ye, statistical error assessment}
 \label{sec:b2ye}\index{b2ye}\index{error assessment}\index{b2time.nc}\index{b2favere}\index{b2run}
 
-The program {\tt b2ye} is meant for computing error assessment of a coupled {\tt B2.5-Eirene} run where the averaging scheme described in Section \ref{sec:B2Eirene:averaging} above has been used. It is called by means of the command:
+The program {\tt b2ye} is meant for computing statistical error assessment according to \cite{Ghoos_MC2017} of a coupled {\tt B2.5-Eirene} run where the averaging scheme described in Section \ref{sec:B2Eirene:averaging} above has been used. It is called by means of the command:
 \begin{verbatim}
     b2run b2ye
 \end{verbatim}
@@ -4627,6 +4632,13 @@ or
 %% $
 
 It uses the data in the {\tt b2time.nc} and {\tt b2favere} files and calculates statistical errors based on averaged quantities collected during the averaging phase of a {\tt B2.5-Eirene} calculation.
+For each averaged quantity stored in {\tt b2time.nc} it evaluates:
+\begin{itemize}
+\item The sample mean. 
+\item The correlation time according to the {\it batching} method.
+\item The correlation time according to the {\it autocorrelation} method.
+\item The statistical error $\sigma_{s}$ according to the maximum of the two correlation times.
+\end{itemize}
 
 \chapter{Using MDSPLUS}
 \index{MDSPLUS}\label{cha:MDSplus}
@@ -13125,6 +13137,7 @@ are indicated in the table.
     font \index{b2plot, font}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:font}   & Set font \\
     gcol \index{b2plot, gcol}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:gcol}   & Colour of graph title \\
     glob \index{b2plot, glob}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:glob}   & Copy {\em extralabel} to the global label field \\
+    glsz \index{b2plot, glsz}      & 0 & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:glsz}   & Global header font size \\
     grid \index{b2plot, grid}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:grid}   & Add grid to plot \\
     hcol \index{b2plot, hcol}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:hcol}   & Colour of global header \\
     i* \index{b2plot, i*}          & 2 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:i*}     & Integer multiplication \\
@@ -15097,8 +15110,11 @@ Sets the current wall bar label to $\langle$label$\rangle$.
 \subsubsection{glob}\index{b2plot, glob}\label{sec:glob}
 Copies the contents of {\em extralabel} into the global header for all graphs.
 
+\subsubsection{$<$factor,{\bf R}$>$ glsz}\index{b2plot, glsz}\label{sec:glsz}
+Sets font size for global header to $\langle$factor$\rangle$ times default size (default = 1.0).
+
 \subsubsection{$<$factor,{\bf R}$>$ lbsz}\index{b2plot, lbsz}\label{sec:lbsz}
-Sets label size to $\langle$factor$\rangle$ times default size (default = 1.0).
+Sets label size to $\langle$factor$\rangle$ times default size (default = 1.0). Does not apply to the global header.
 
 \subsubsection{$<$number,{\bf I}$>$ lfsz}\index{b2plot, lfsz}\label{sec:lfsz}
 Sets line label font size to $\langle$number$\rangle$ (default = 0). If $\langle$number$\rangle$ is between 0 and 3, then the size

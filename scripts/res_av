@@ -75,9 +75,27 @@ ln -s ${CP_DIR}/AMJUEL ${CP_DIR}/HYDHEL ${CP_DIR}/METHANE ${CP_DIR}/SPUTER ${CP_
 ln -s ${CP_DIR}/fort.* .
 fi
 ln -s ${input} input.dat
-ln -s ${CP_DIR}/b2fgmtry ${CP_DIR}/b2fpardf ${CP_DIR}/b2frates .
+if [ -s ${CP_DIR}/b2fgmtry ] 
+then
+  ln -s ${CP_DIR}/b2fgmtry .
+else
+ln -s ${CP_DIR}/../baserun/b2fgmtry .
+fi
+if [ -s ${CP_DIR}/b2fpardf ] 
+then
+  ln -s ${CP_DIR}/b2fpardf .
+else
+ln -s ${CP_DIR}/../baserun/b2fpardf .
+fi
+if [ -s ${CP_DIR}/b2frates ] 
+then
+  ln -s ${CP_DIR}/b2frates .
+else
+ln -s ${CP_DIR}/../baserun/b2frates .
+fi
 ln -s $ACTDIR/b2a*.dat $ACTDIR/b2a*.prt $ACTDIR/stra.dat $ACTDIR/weis.dat .
 ln -s $ACTDIR/b2.* .
+ln -s $ACTDIR/../baserun $ACTDIR/baserun
 
 cp ${CP_DIR}/b2fstati b2fstati
 
@@ -131,4 +149,4 @@ cp b2ftrace_av $ACTDIR
 cd $ACTDIR
 rm -rf res.exe.dir
 
-
+rm $ACTDIR/baserun

@@ -186,9 +186,9 @@ listobj:
 
 tags:
 ifeq ($(LOCAL),yes)
-	rm -f ${SRCTRI}/TAGS ; etags -o ${SRCTRI}/TAGS ${SRCLOCAL}/*.f ${SRCDIR}/*/*.F
+	rm -f ${SRCTRI}/TAGS ; etags -o ${SRCTRI}/TAGS ${SRCLOCAL}/*.f ${SRCDIR}/*/*.F || touch ${SRCTRI}/TAGS
 else
-	rm -f ${SRCTRI}/TAGS ; etags -o ${SRCTRI}/TAGS ${SRCDIR}/*/*.f
+	rm -f ${SRCTRI}/TAGS ; etags -o ${SRCTRI}/TAGS ${SRCDIR}/*/*.f || touch ${SCRTRI}/TAGS
 endif
 
 ${OBJDIR}/LISTOBJ: listobj

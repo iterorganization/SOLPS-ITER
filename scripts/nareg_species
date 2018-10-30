@@ -20,7 +20,7 @@ else
 endif
 set local_fluids=( $SOLPS_FLUIDS )
 echo $#local_fluids
-set nnreg=`pipe_run.log | grep ^nnreg | head -1`
+set nnreg=`pipe_run.log | grep -a ^nnreg | head -1`
 set vreg=$nnreg[2]
 set xreg=$nnreg[3]
 set yreg=$nnreg[4]

@@ -125,6 +125,13 @@ c=======================================================================
         call xerrab
      .   (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
       end if !}
+      if(maxval(jadch0).gt.nlim) then !{
+        write(0,*) 'Too many wall elements: maximum ',nlim
+        write(0,*) 'Current number of requested elements: ',
+     .   maxval(jadch0)
+        call xerrab
+     .   (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+      end if !}
       call rearri(luwrk(luskel+1),nlim-luskel,i)
       luskel=i+luskel
       call sortia(luwrk,luind,luskel)
@@ -295,6 +302,13 @@ c=======================================================================
       if(nnvsle.gt.nlim) then !{
         write(0,*) 'Too many wall elements: maximum ',nlim
         write(0,*) 'Current number of requested elements: ',nnvsle
+        call xerrab
+     .   (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+      end if !}
+      if(maxval(nmvsle).gt.nlim) then !{
+        write(0,*) 'Too many wall elements: maximum ',nlim
+        write(0,*) 'Current number of requested elements: ',
+     .   maxval(nmvsle)
         call xerrab
      .   (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
       end if !}
@@ -484,6 +498,18 @@ c=======================================================================
      ,    ' stratum',ngpfstr
         call xerrab
      .   (' ==> Check the "Gas puff" variables in the DG model')
+      end if !}
+      if(i.ge.nsrfs) then !{
+        write(0,*) 'uinnam: too many segments for gas puff'
+        call xerrab
+     .   (' ==> Check the DG model and DEF_NSRFS in DIMENSIONS.F')
+      end if !}
+      if(maxval(lgpfstr).gt.nlim) then !{
+        write(0,*) 'Too many wall elements: maximum ',nlim
+        write(0,*) 'Current number of requested elements: ',
+     .   maxval(lgpfstr)
+        call xerrab
+     .   (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
       end if !}
       kgpfstr(ngpfstr)=i
       lugpf=lugpf+i
@@ -724,6 +750,13 @@ c*** Surface data transfer from B2 to Eirene
         call xerrab (' ==> Corrupted DG output?')
       end if !}
       call rearri(ll_spcsrf(1,n_spcsrf),nlimps,k_spcsrf(n_spcsrf))
+      if(maxval(ll_spcsrf).gt.nlim) then !{
+        write(0,*) 'Too many wall elements: maximum ',nlim
+        write(0,*) 'Current number of requested elements: ',
+     .   maxval(ll_spcsrf)
+        call xerrab
+     .   (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+      end if !}
       goto 9999
   105 if(n_spcsrf.le.0) then !{
         write(0,*) '"Surface special" data outside the block - ',unn
@@ -908,12 +941,25 @@ c***  input index of rectangle
   150 call resimi(ntriref)
       goto 9999
 c***  input mesh size for current rectangle
-  151 call xertst (ntriref.gt.0.and.ntriref.le.ntrimax,
+  151 call xertst (ntriref.gt.0,
      ,  'uinnam: wrong index of TRIA regions - corrupted DG output???')
+      if(ntriref.gt.ntrimax) then !{
+        write(0,*) 'Too many TRIA regions: maximum ',ntrimax
+        write(0,*) 'Current number of requested regions: ',ntriref
+        call xerrab
+     .   (' ==> Check the DG model and ntrimax in uinpcom.inc')
+      end if !}
       call resime(trisize(ntriref))
       goto 9999
 c***  input elements indices for current rectangle
   152 call rearri(trirefel(lurefls+1),ntrimax-lurefls,trirefcn(ntriref))
+      if(maxval(trirefel).gt.nlim) then !{
+        write(0,*) 'Too many wall elements: maximum ',nlim
+        write(0,*) 'Current number of requested elements: ',
+     .   maxval(trirefel)
+        call xerrab
+     .   (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+      end if !}
       lurefls=lurefls+trirefcn(ntriref)
       goto 9999
   153 glb2read=.true.

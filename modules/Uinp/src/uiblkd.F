@@ -133,7 +133,7 @@ c*** He pumping data
 
 c*** Data for visualisation of the surface properties
 
-      Integer, parameter :: luvsp=nsrfclsx*nvspfls
+      integer, parameter :: luvsp=nsrfclsx*nvspfls
       data nsrfclu  , nsrfcls, isrfclu, msrfclu,  msrfcls   /
      /    nvspfls*0 ,    0   , luvsp*0, luvsp*0, nsrfclsx*0 /
 
