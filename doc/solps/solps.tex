@@ -7,6 +7,7 @@
 %%   \pdfoutput=1 % we are running PDFLaTeX
 %% \pdftrue
 %% \fi
+% !TEX encoding = UTF-8
 \ifpdf
   \usepackage[pdftex]{graphicx}
   \pdfcompresslevel=9
@@ -1117,7 +1118,7 @@ SOLPSTOP
 
 Since most of the libraries are now expected to be provided as modules, only the
 {\tt Sonnet} library, {\tt libsonnet.a}, needs to be stored here. However, local
-copies of the required libraries can also be put there at the user´s convenience.
+copies of the required libraries can also be put there at the user's convenience.
 
 The command\index{slib}
 \begin{verbatim}
@@ -2852,8 +2853,8 @@ Fig.~\ref{fig:DN_regions}. Details for other geometries can be found in the
   \subfigure[Computational domain]{\label{fig:SN_comp}\includegraphics[height=7cm]{SN_comp.pdf}}
   \subfigure[Physics domain]{\label{fig:SN_phys}\includegraphics[height=7cm]{SN_phys.pdf}}
 \else
-  \subfigure[Computational domain]{\label{fig:SN_comp}\includegraphics[height=7cm]{SN_comp.epsi}}
-  \subfigure[Physics domain]{\label{fig:SN_phys}\includegraphics[height=7cm]{SN_phys.epsi}}
+  \subfigure[Computational domain]{\label{fig:SN_comp}\includegraphics[height=7cm]{SN_comp.eps}}
+  \subfigure[Physics domain]{\label{fig:SN_phys}\includegraphics[height=7cm]{SN_phys.eps}}
 \fi
   \caption{Region numbers for single-null geometries.}\label{fig:SN_regions}
 \end{figure}
@@ -2864,8 +2865,8 @@ Fig.~\ref{fig:DN_regions}. Details for other geometries can be found in the
   \subfigure[Computational domain]{\label{fig:DN_comp}\includegraphics[height=7cm]{DN_comp.pdf}}
   \subfigure[Physics domain]{\label{fig:DN_phys}\includegraphics[height=7cm]{DN_phys.pdf}}
 \else
-  \subfigure[Computational domain]{\label{fig:DN_comp}\includegraphics[height=7cm]{DN_comp.epsi}}
-  \subfigure[Physics domain]{\label{fig:DN_phys}\includegraphics[height=7cm]{DN_phys.epsi}}
+  \subfigure[Computational domain]{\label{fig:DN_comp}\includegraphics[height=7cm]{DN_comp.eps}}
+  \subfigure[Physics domain]{\label{fig:DN_phys}\includegraphics[height=7cm]{DN_phys.eps}}
 \fi
   \caption{Region numbers for double-null geometries.}\label{fig:DN_regions}
 \end{figure}
@@ -4802,7 +4803,7 @@ Adding {\tt te:ompsep} and {\tt ti:ompsep}, the graph in figure
   \ifpdf
     \centerline{\includegraphics[origin=bl,angle=+90,height=8cm]{MDSPLUS/jetdsp_mdsplus_example.pdf}}
 \else
-    \centerline{\includegraphics[origin=bl,angle=+90,height=8cm]{MDSPLUS/jetdsp_mdsplus_example.epsi}}
+    \centerline{\includegraphics[origin=bl,angle=+90,height=8cm]{MDSPLUS/jetdsp_mdsplus_example.eps}}
 \fi
   \caption{Using JETDSP to access SOLPS MDSplus data.}
   \label{fig:jetdspsolpsmdsplus}
@@ -5748,7 +5749,7 @@ $z$ is the toroidal direction.
 \ifpdf
 \includegraphics[width=8.0cm]{b2plot_1.pdf}
 \else
-\includegraphics[width=8.0cm]{b2plot.1.epsi}
+\includegraphics[width=8.0cm]{b2plot_1.eps}
 \fi
 }
 \caption{Coordinate system: $x$ is the poloidal coordinate,
@@ -7006,7 +7007,7 @@ Zhdanov fit to Braginskii and the \SOLPSfour values.
 \ifpdf
     \centerline{\includegraphics[angle=-90,width=11cm]{hce.pdf}}
 \else
-    \centerline{\includegraphics[angle=-90,width=11cm]{hce.epsi}}
+    \centerline{\includegraphics[angle=-90,width=11cm]{hce.eps}}
 \fi
 \caption{Dependence of the various models for the $\kappa _{e \parallel}$ prefactor as a function of $Z_{eff}$.}
 \label{fig:hce}
@@ -7017,7 +7018,7 @@ Zhdanov fit to Braginskii and the \SOLPSfour values.
 \ifpdf
     \centerline{\includegraphics[width=11cm]{sig.pdf}}
 \else
-    \centerline{\includegraphics[angle=-90,width=11cm]{sig.epsi}}
+    \centerline{\includegraphics[angle=-90,width=11cm]{sig.eps}}
 \fi
 \caption{Dependence of the various models for the parallel electron conductivity $\sigma_{\parallel}$ prefactor as a function of $Z_{eff}$.}
 \label{fig:sig}
@@ -7028,7 +7029,7 @@ Zhdanov fit to Braginskii and the \SOLPSfour values.
 \ifpdf
     \centerline{\includegraphics[width=11cm]{alf.pdf}}
 \else
-    \centerline{\includegraphics[angle=-90,width=11cm]{alf.epsi}}
+    \centerline{\includegraphics[angle=-90,width=11cm]{alf.eps}}
 \fi
 \caption{Dependence of the various models for the thermo-electric coefficient $\alpha_{e \parallel}$ prefactor as a function of $Z_{eff}$.}
 \label{fig:alf}
@@ -14032,7 +14033,7 @@ which produced figure \ref{fig:d3d}.
 \ifpdf
     \centerline{\includegraphics[angle=90,height=8cm]{b2plot_d3d.pdf}}
 \else
-    \centerline{\includegraphics[angle=90,height=8cm]{b2plot_d3d.epsi}}
+    \centerline{\includegraphics[angle=90,height=8cm]{b2plot_d3d.eps}}
 \fi
     \caption{Ion and atomic densities for DIII--D.}
     \label{fig:d3d}
@@ -14120,7 +14121,7 @@ produced the results shown in figure \ref{fig:traj}.
 \ifpdf
     \centerline{\includegraphics[height=8cm]{b2plot_70_1_70_36_1000.pdf}}
 \else
-    \centerline{\includegraphics[height=8cm]{b2plot_70_1_70_36_1000.epsi}}
+    \centerline{\includegraphics[height=8cm]{b2plot_70_1_70_36_1000.eps}}
 \fi
     \caption{Trajectory plot.}
     \label{fig:traj}
@@ -15778,10 +15779,10 @@ ahal mhal m+ 'HAL.chords' chor
   \subfigure[DCN.chords]{\label{fig:DCN}\includegraphics[height=6cm]{DCN_chords.pdf}}
   \subfigure[DIV.chords]{\label{fig:DIV}\includegraphics[height=6cm]{DIV_chords.pdf}}
 \else
-  \subfigure[BLS.chords]{\label{fig:BLS}\includegraphics[height=6cm]{BLS.chords.epsi}}
-  \subfigure[BOL.chords]{\label{fig:BOL}\includegraphics[height=6cm]{BOL.chords.epsi}}
-  \subfigure[DCN.chords]{\label{fig:DCN}\includegraphics[height=6cm]{DCN.chords.epsi}}
-  \subfigure[DIV.chords]{\label{fig:DIV}\includegraphics[height=6cm]{DIV.chords.epsi}}
+  \subfigure[BLS.chords]{\label{fig:BLS}\includegraphics[height=6cm]{BLS_chords.eps}}
+  \subfigure[BOL.chords]{\label{fig:BOL}\includegraphics[height=6cm]{BOL_chords.eps}}
+  \subfigure[DCN.chords]{\label{fig:DCN}\includegraphics[height=6cm]{DCN_chords.eps}}
+  \subfigure[DIV.chords]{\label{fig:DIV}\includegraphics[height=6cm]{DIV_chords.eps}}
 \fi
   \caption{BLS, BOL, DCN and DIV chords.}
 \end{figure}
@@ -15795,11 +15796,11 @@ ahal mhal m+ 'HAL.chords' chor
   \subfigure[HAL\_6Bu.chords]{\label{fig:HAL_6Bu}\includegraphics[height=7cm]{HAL_6Bu_chords.pdf}}
   \subfigure[HAL\_8Co.chords]{\label{fig:HAL_8Co}\includegraphics[height=7cm]{HAL_8Co_chords.pdf}}
 \else
-  \subfigure[HAL.chords]{\label{fig:HAL}\includegraphics[height=7cm]{HAL.chords.epsi}}
-  \subfigure[HAL\_13.chords]{\label{fig:HAL_13}\includegraphics[height=7cm]{HAL_13.chords.epsi}}
-  \subfigure[HAL\_6Bo.chords]{\label{fig:HAL_6Bo}\includegraphics[height=7cm]{HAL_6Bo.chords.epsi}}
-  \subfigure[HAL\_6Bu.chords]{\label{fig:HAL_6Bu}\includegraphics[height=7cm]{HAL_6Bu.chords.epsi}}
-  \subfigure[HAL\_8Co.chords]{\label{fig:HAL_8Co}\includegraphics[height=7cm]{HAL_8Co.chords.epsi}}
+  \subfigure[HAL.chords]{\label{fig:HAL}\includegraphics[height=7cm]{HAL_chords.eps}}
+  \subfigure[HAL\_13.chords]{\label{fig:HAL_13}\includegraphics[height=7cm]{HAL_13_chords.eps}}
+  \subfigure[HAL\_6Bo.chords]{\label{fig:HAL_6Bo}\includegraphics[height=7cm]{HAL_6Bo_chords.eps}}
+  \subfigure[HAL\_6Bu.chords]{\label{fig:HAL_6Bu}\includegraphics[height=7cm]{HAL_6Bu_chords.eps}}
+  \subfigure[HAL\_8Co.chords]{\label{fig:HAL_8Co}\includegraphics[height=7cm]{HAL_8Co_chords.eps}}
 \fi
   \caption{HAL chords.}
 \end{figure}
@@ -15915,8 +15916,8 @@ the commands used to obtain them.
   \subfigure[comp a4p mesh]{\label{fig:comp}\includegraphics[height=6cm]{comp.pdf}}
   \subfigure[phys a4p mesh]{\label{fig:phys}\includegraphics[height=6cm]{phys.pdf}}
 \else
-  \subfigure[comp a4p mesh]{\label{fig:comp}\includegraphics[height=6cm]{comp.epsi}}
-  \subfigure[phys a4p mesh]{\label{fig:phys}\includegraphics[height=6cm]{phys.epsi}}
+  \subfigure[comp a4p mesh]{\label{fig:comp}\includegraphics[height=6cm]{comp.eps}}
+  \subfigure[phys a4p mesh]{\label{fig:phys}\includegraphics[height=6cm]{phys.eps}}
 \fi
   \caption{Mesh plots.}
   \label{fig:mesh}
@@ -15933,8 +15934,8 @@ Data from the plasma solution, stored on the "matrix" stack, can be visualized a
   \subfigure[comp a4p te surf]{\label{fig:tecomp}\includegraphics[height=6cm]{Te_comp.pdf}}
   \subfigure[phys a4p -2.2 zmin 2.2 zmax 2.0 lbsz sep outl vesl logf 3 ndec te surf]{\label{fig:tephys}\includegraphics[height=6cm]{Te_phys.pdf}}
 \else
-  \subfigure[comp a4p te surf]{\label{fig:tecomp}\includegraphics[height=6cm]{Te_comp.epsi}}
-  \subfigure[phys a4p -2.2 zmin 2.2 zmax 2.0 lbsz sep outl vesl logf 3 ndec te surf]{\label{fig:tephys}\includegraphics[height=6cm]{Te_phys.epsi}}
+  \subfigure[comp a4p te surf]{\label{fig:tecomp}\includegraphics[height=6cm]{Te_comp.eps}}
+  \subfigure[phys a4p -2.2 zmin 2.2 zmax 2.0 lbsz sep outl vesl logf 3 ndec te surf]{\label{fig:tephys}\includegraphics[height=6cm]{Te_phys.eps}}
 \fi
   \caption{Electron temperature plots.}
   \label{fig:te}
@@ -15955,8 +15956,8 @@ Other examples:
   \subfigure[phys a4p noax 0 nreg]{\label{fig:noax}\includegraphics[height=6cm]{noax.pdf}}
   \subfigure[phys a4p ti te m/ surf]{\label{fig:tioverte}\includegraphics[height=6cm]{Ti_Te.pdf}}
 \else
-  \subfigure[phys a4p noax 0 nreg]{\label{fig:noax}\includegraphics[height=6cm]{noax.epsi}}
-  \subfigure[phys a4p ti te m/ surf]{\label{fig:tioverte}\includegraphics[height=6cm]{Ti_Te.epsi}}
+  \subfigure[phys a4p noax 0 nreg]{\label{fig:noax}\includegraphics[height=6cm]{noax.eps}}
+  \subfigure[phys a4p ti te m/ surf]{\label{fig:tioverte}\includegraphics[height=6cm]{Ti_Te.eps}}
 \fi
   \caption{Other solution data plots.}
   \label{fig:otherdata}
@@ -15978,8 +15979,8 @@ In figure \ref{fig:JETchords} we have an example of chord plots as applied to th
   \subfigure[a4p vesl outl sep 'JET/KL2.chords' chpl]{\label{fig:chpl}\includegraphics[height=6cm]{chpl.pdf}}
   \subfigure[a4l phys 3 6581 1 nspec '658 nm CII' extl 'JET/KL2.chords' chor]{\label{fig:chor}\includegraphics[angle=90,height=6cm]{chor.pdf}}
 \else
-  \subfigure[a4p vesl outl sep 'JET/KL2.chords' chpl]{\label{fig:chpl}\includegraphics[height=6cm]{chpl.epsi}}
-  \subfigure[a4l phys 3 6581 1 nspec '658 nm CII' extl 'JET/KL2.chords' chor]{\label{fig:chor}\includegraphics[angle=90,height=6cm]{chor.epsi}}
+  \subfigure[a4p vesl outl sep 'JET/KL2.chords' chpl]{\label{fig:chpl}\includegraphics[height=6cm]{chpl.eps}}
+  \subfigure[a4l phys 3 6581 1 nspec '658 nm CII' extl 'JET/KL2.chords' chor]{\label{fig:chor}\includegraphics[angle=90,height=6cm]{chor.eps}}
 \fi
   \caption{Chord plots applied to JET.}
   \label{fig:JETchords}
@@ -16003,8 +16004,8 @@ In figure \ref{fig:wallplots}, we show examples of wall plots.
   \subfigure[phys 0 nseg 4 1. 2. 3. 4. wclvs 10.0 wwid wall mesh]{\label{fig:nseg}\includegraphics[height=6cm]{nseg.pdf}}
   \subfigure[vesl sep phys wall 10.0 wwid sputchem 1 wzsel 3 ndec logw fnax 1 zsel 'Ychem D+' wallblbl surf]{\label{fig:Ychem}\includegraphics[height=6cm]{Ychem.pdf}}
 \else
-  \subfigure[phys 0 nseg 4 1. 2. 3. 4. wclvs 10.0 wwid wall mesh]{\label{fig:nseg}\includegraphics[height=6cm]{nseg.epsi}}
-  \subfigure[vesl sep phys wall 10.0 wwid sputchem 1 wzsel 3 ndec logw fnax 1 zsel 'Ychem D+' wallblbl surf]{\label{fig:Ychem}\includegraphics[height=6cm]{Ychem.epsi}}
+  \subfigure[phys 0 nseg 4 1. 2. 3. 4. wclvs 10.0 wwid wall mesh]{\label{fig:nseg}\includegraphics[height=6cm]{nseg.eps}}
+  \subfigure[vesl sep phys wall 10.0 wwid sputchem 1 wzsel 3 ndec logw fnax 1 zsel 'Ychem D+' wallblbl surf]{\label{fig:Ychem}\includegraphics[height=6cm]{Ychem.eps}}
 \fi
   \caption{Wall plots.}
   \label{fig:wallplots}
@@ -16034,8 +16035,8 @@ In figure \ref{fig:targetplots}, we show examples of target plots.
   \subfigure[comp sep 10.0 wwid wallhflx wall kappa trgsurf]{\label{fig:Kappa}\includegraphics[height=6cm]{Kappa.pdf}}
   \subfigure[a4l outl vesl 2.2 rmin 3.2 rmax -1.0 zmax -1.75 zmin sep 8.0 wwid logw te logf 5 ndec cooltemp wtot trgm- phys 'Tp-Tc (K)' trgblbl wallflux 1 wzsel 'D+ wall flux' wallblbl wall target logtrg surf]{\label{fig:Triple}\includegraphics[angle=90,height=6cm]{Triple.pdf}}
 \else
-  \subfigure[comp sep 10.0 wwid wallhflx wall kappa trgsurf]{\label{fig:Kappa}\includegraphics[height=6cm]{Kappa.epsi}}
-  \subfigure[a4l outl vesl 2.2 rmin 3.2 rmax -1.0 zmax -1.75 zmin sep 8.0 wwid logw te logf 5 ndec cooltemp wtot trgm- phys 'Tp-Tc (K)' trgblbl wallflux 1 wzsel 'D+ wall flux' wallblbl wall target logtrg surf]{\label{fig:Triple}\includegraphics[angle=90,height=6cm]{Triple.epsi}}
+  \subfigure[comp sep 10.0 wwid wallhflx wall kappa trgsurf]{\label{fig:Kappa}\includegraphics[height=6cm]{Kappa.eps}}
+  \subfigure[a4l outl vesl 2.2 rmin 3.2 rmax -1.0 zmax -1.75 zmin sep 8.0 wwid logw te logf 5 ndec cooltemp wtot trgm- phys 'Tp-Tc (K)' trgblbl wallflux 1 wzsel 'D+ wall flux' wallblbl wall target logtrg surf]{\label{fig:Triple}\includegraphics[angle=90,height=6cm]{Triple.eps}}
 \fi
   \caption{Target plots.}
   \label{fig:targetplots}
@@ -16092,7 +16093,7 @@ labelling the graphs "Carbon" and "Neon" respectively.
 \ifpdf
     \centerline{\includegraphics[angle=90,height=10cm]{b2plot_b2rad.pdf}}
 \else
-    \centerline{\includegraphics[angle=90,height=10cm]{b2plot_b2rad.epsi}}
+    \centerline{\includegraphics[angle=90,height=10cm]{b2plot_b2rad.eps}}
 \fi
     \caption{C and Ne radiation.}
     \label{fig:b2rad}
@@ -16165,11 +16166,11 @@ scaling is done on all of the data.
   \subfigure[Page 4]{\label{fig:fluxes_p4}\includegraphics[height=7cm]{b2plot_fluxes_4.pdf}}
   \subfigure[Page 5]{\label{fig:fluxes_p5}\includegraphics[height=7cm]{b2plot_fluxes_5.pdf}}
 \else
-  \subfigure[Page 1]{\label{fig:fluxes_p1}\includegraphics[height=7cm]{b2plot_fluxes_1.epsi}}
-  \subfigure[Page 2]{\label{fig:fluxes_p2}\includegraphics[height=7cm]{b2plot_fluxes_2.epsi}}
-  \subfigure[Page 3]{\label{fig:fluxes_p3}\includegraphics[height=7cm]{b2plot_fluxes_3.epsi}}
-  \subfigure[Page 4]{\label{fig:fluxes_p4}\includegraphics[height=7cm]{b2plot_fluxes_4.epsi}}
-  \subfigure[Page 5]{\label{fig:fluxes_p5}\includegraphics[height=7cm]{b2plot_fluxes_5.epsi}}
+  \subfigure[Page 1]{\label{fig:fluxes_p1}\includegraphics[height=7cm]{b2plot_fluxes_1.eps}}
+  \subfigure[Page 2]{\label{fig:fluxes_p2}\includegraphics[height=7cm]{b2plot_fluxes_2.eps}}
+  \subfigure[Page 3]{\label{fig:fluxes_p3}\includegraphics[height=7cm]{b2plot_fluxes_3.eps}}
+  \subfigure[Page 4]{\label{fig:fluxes_p4}\includegraphics[height=7cm]{b2plot_fluxes_4.eps}}
+  \subfigure[Page 5]{\label{fig:fluxes_p5}\includegraphics[height=7cm]{b2plot_fluxes_5.eps}}
 \fi
   \caption{Line plots of fluxes and other quantities.}\label{fig:fluxes}
 \end{figure}
@@ -17097,7 +17098,7 @@ gmake
 \ifpdf
   \centerline{\includegraphics[height=12.0cm]{nstx_22_dg.pdf}}
 \else
-  \centerline{\includegraphics[height=12.0cm]{nstx_22_dg.epsi}}
+  \centerline{\includegraphics[height=12.0cm]{nstx_22_dg.eps}}
 \fi
 \end{figure}
 
@@ -17755,7 +17756,7 @@ the rotation angle.
 \ifpdf
   \centerline{\includegraphics[width=15.0cm]{rotation_30.pdf}}
 \else
-  \centerline{\includegraphics[width=15.0cm]{rotation_30.epsi}}
+  \centerline{\includegraphics[width=15.0cm]{rotation_30.eps}}
 \fi
 \caption{Demonstration of a rotated view with associated dialog box and tear-off menu.}
 \label{fig:rotate30}
@@ -17789,7 +17790,7 @@ preserves the ratio in future changes of view.
 \ifpdf
   \centerline{\includegraphics[width=15.0cm]{stretch_2x_5y.pdf}}
 \else
-  \centerline{\includegraphics[width=15.0cm]{stretch_2x_5y.epsi}}
+  \centerline{\includegraphics[width=15.0cm]{stretch_2x_5y.eps}}
 \fi
 \caption{Demonstration of the variable aspect ratio capability along with
 the associated tear-off menu.}
@@ -18111,7 +18112,7 @@ import the parameters describing these surfaces.
 \ifpdf
   \centerline{\includegraphics[width=15.0cm]{bde_structure.pdf}}
 \else
-  \centerline{\includegraphics[width=15.0cm]{bde_structure.epsi}}
+  \centerline{\includegraphics[width=15.0cm]{bde_structure.eps}}
 \fi
 \caption{{\tt Create Surface(s)...} dialog with highlighted {\tt Structures}.}
 \label{fig:createsurfacesfig}
@@ -18160,7 +18161,7 @@ changed, the bounding element might different than before.
 \ifpdf
   \centerline{\includegraphics[width=15.0cm]{bde_pfr_zoom.pdf}}
 \else
-  \centerline{\includegraphics[width=15.0cm]{bde_pfr_zoom.epsi}}
+  \centerline{\includegraphics[width=15.0cm]{bde_pfr_zoom.eps}}
 \fi
 \caption{Zoom of the PFR showing the highlighted "bounding element".}
 \label{fig:boundingelement}
@@ -18623,7 +18624,7 @@ tool to manually repair the cells.
 \ifpdf
   \centerline{\includegraphics[width=15.0cm]{twisted_nostretch.pdf}}
 \else
-  \centerline{\includegraphics[width=15.0cm]{twisted_nostretch.epsi}}
+  \centerline{\includegraphics[width=15.0cm]{twisted_nostretch.eps}}
 \fi
 \caption{Zoom of the twisted mesh cells near the inner divertor target of an NSTX geometry.}
 \label{fig:twisted}
@@ -18633,7 +18634,7 @@ tool to manually repair the cells.
 \ifpdf
   \centerline{\includegraphics[width=15.0cm]{twisted_top_rotate_stretch.pdf}}
 \else
-  \centerline{\includegraphics[width=15.0cm]{twisted_top_rotate_stretch.epsi}}
+  \centerline{\includegraphics[width=15.0cm]{twisted_top_rotate_stretch.eps}}
 \fi
 \caption{After stretching and rotation, the overlapping of the cells in
 the upper part of the region cells depicted in Fig.~\ref{fig:twisted} becomes
@@ -19461,19 +19462,19 @@ calculated {\tt b2frates} and {\tt b2fpardf}.
     \ifpdf
     \includegraphics[width=6.0cm]{resall_D_REF.pdf}
     \else
-    \includegraphics[origin=br,angle=-90,width=6.0cm]{resall_D_REF.epsi}
+    \includegraphics[origin=br,angle=-90,width=6.0cm]{resall_D_REF.eps}
     \fi
     \hfill
     \ifpdf
     \includegraphics[width=6.0cm]{resall_D_000.pdf}
     \else
-    \includegraphics[origin=br,angle=-90,width=6.0cm]{resall_D_000.epsi}
+    \includegraphics[origin=br,angle=-90,width=6.0cm]{resall_D_000.eps}
     \fi
     \hfill
     \ifpdf
     \includegraphics[width=6.0cm]{resall_D_001.pdf}
     \else
-    \includegraphics[origin=br,angle=-90,width=6.0cm]{resall_D_001.epsi}
+    \includegraphics[origin=br,angle=-90,width=6.0cm]{resall_D_001.eps}
     \fi
   }
   \centerline{
@@ -19489,19 +19490,19 @@ calculated {\tt b2frates} and {\tt b2fpardf}.
     \ifpdf
     \includegraphics[width=6.0cm]{resall_D_002.pdf}
     \else
-    \includegraphics[origin=br,angle=-90,width=6.0cm]{resall_D_002.epsi}
+    \includegraphics[origin=br,angle=-90,width=6.0cm]{resall_D_002.eps}
     \fi
     \hfill
     \ifpdf
     \includegraphics[width=6.0cm]{resall_D_002a.pdf}
     \else
-    \includegraphics[origin=br,angle=-90,width=6.0cm]{resall_D_002a.epsi}
+    \includegraphics[origin=br,angle=-90,width=6.0cm]{resall_D_002a.eps}
     \fi
     \hfill
     \ifpdf
     \includegraphics[width=6.0cm]{resall_D_002b.pdf}
     \else
-    \includegraphics[origin=br,angle=-90,width=6.0cm]{resall_D_002b.epsi}
+    \includegraphics[origin=br,angle=-90,width=6.0cm]{resall_D_002b.eps}
     \fi
   }
   \caption{Residuals of the AUG\_16151\_D standard case for different code versions and options.}
