@@ -4,7 +4,7 @@ B25DIR=${SOLPSTOP}/modules/B2.5
 PATH+=:/usr/bin:/bin
 SVN=svn
 GIT=`which git`
-LATEX=`which_latex`
+LATEX := $(shell which_latex)
 PYTHON=python
 INCLUDES=b2cdca.F b2cdci.F b2cdcn.F b2cdcr.F b2cdcv.F DIMENSIONS.F B2_5.Makefile B2_5.config.ITER.ifort64 solps-iter_git.log b2plot.commands SOLPS_versions
 BIBFILES=aps.bib aug.bib divgas.bib extern.bib general.bib main.bib mnw.bib model.bib tok.bib WebofScience.bib xpb.bib
@@ -22,8 +22,13 @@ all: solps.pdf solps.ps
 
 solps.dvi: solps.tex ${INCLUDES} ${FILES} solps.ind solps.bbl
 	@echo 'Building DVI manual'
-	latex -output-format dvi solps
-	-grep 'Label(s) may have changed' solps.log && latex -output-format dvi solps
+ifeq (${LATEX}, xelatex)
+	${LATEX} -no-pdf solps
+	-grep 'Label(s) may have changed' solps.log && ${LATEX} -no-pdf dvi solps
+else
+	${LATEX} -output-format dvi solps
+	-grep 'Label(s) may have changed' solps.log && ${LATEX} -output-format dvi solps
+endif
 	touch solps.idx ; sleep 1 ; touch solps.ind ; sleep 1 ; touch $@
 	[ -e solps.pdf ] && touch solps.pdf
 
