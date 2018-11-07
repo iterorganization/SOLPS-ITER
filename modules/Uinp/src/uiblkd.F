@@ -628,7 +628,7 @@ c      integer lura,lurm,luri,lurf
      / natm*0,natm*0/,
      ,  ireaca,ibulka,iscd1a,iscd2a,iscd3a,iscd4a,iscdea,iestma,ibgka /
      /  lura*0,lura*0,lura*0,lura*0,lura*0,lura*0,lura*0,lura*0,lura*0/
-      data eeleca, ebulka, escd1a, escd2a, freaca, fldlma /
+      data eeleca, ebulka, escd1a, escd2a, freaca, edpota /
      /    lura*0.,lura*0.,lura*0.,lura*0.,lura*0.,lura*0. /
       data nmassm,ncharm, nprtm, isrfm, isrtm,nmsecm, nrcm , nfolm /
      /     nmol*0,nmol*0,nmol*0,nmol*0,nmol*0,nmol*0,nmol*0,nmol*0 /,
@@ -840,10 +840,10 @@ c*** 11
      /    .false.,.false.,.false.,.false.,.false.,.false.,.false. /,
      ,     trclst, trcbla, trcblm, trcbli, trcblp, trcble,trcblph /
      /    .false.,.false.,.false.,.false.,.false.,.false.,.false. /,
-     ,     trctal, trcoct, trccen/
-     /    .false.,.false.,.false./,
-     ,    trcdumm,trcdbg2,trcdbge,trcdbgm,trcdbgf,trcdbgl /
-     /    .false.,.false.,.false.,.false.,.false.,.false. /,
+     ,     trctal, trcoct, trccen, trcrnf/
+     /    .false.,.false.,.false.,.false./,
+     ,     trcdbg2,trcdbge,trcdbgm,trcdbgf,trcdbgl /
+     /    .false.,.false.,.false.,.false.,.false. /,
      ,     trcdbgs,trcdbgg,trcdbgmpi,trcdbgc,     trcsrc           /
      /    .false. ,.false.,.false.  ,.false.,.true.,nstra*.false. /,
      ,     pl1st , pl2nd , pl3rd , pladd , plhst /
@@ -882,8 +882,8 @@ c*** 12
      /    nchor*0.,nchor*0.,nchor*0.,nchor*0.,  0.5 , 5000. /,
      ,     zpivot , xchord , ychord , zchord  /
      /    nchor*0.,nchor*0.,nchor*0.,nchor*0. /
-      data plchor, plspec,    lpw_d     /
-     /    .false.,.false.,npwinx*.false./
+      data plchor, plspec, prspec, plargl, prargl,    lpw_d     /
+     /    .false.,.false.,.false.,.false.,.false.,npwinx*.false./
       data txtsig  ,   txtmtmp  ,   txtmtra   /
      /    nchor*' ',lntsputx*' ',lntsputx*' ' /
 

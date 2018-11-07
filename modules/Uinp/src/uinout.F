@@ -143,8 +143,10 @@ c*** 1.  General data for the run
         n=mod(nfile,10)
         if (l.le.2) then
           l=4
-        else if (l.eq.6.or.l.eq.7) then
-          l=9
+        else if (l.eq.6.or.l.eq.7.or.l.eq.9) then
+          l=4
+        else if (l.eq.8) then
+          l=3
         endif
         if (n.ne.1) n=6
         nfile=j*10000+k*1000+l*100+m*10+n
@@ -155,7 +157,7 @@ c*** 1.  General data for the run
      .                 nsmstra,nstoram,ngstal,nrtal1,nreac_add
       write(iunoo,706) nlscl,nltest,nlana,nldrft,nlcrr,
      .                 nlerg,nlident,nlone,nlmovie,nldfst,
-     .                 nloldran,nlcascad,nloctree,nlwrmsh,NEXVS,
+     .                 nloldran,nlcascad,nloctree,nlwrmsh,nexvs,
      .                 nltrimesh
       write(iunoo,720) utxtfl(1) ! AMJUEL needed by default for H-alpha rates
       handle=.false.
@@ -497,7 +499,7 @@ c**  atomic species cards
      ,                     iscdea(iatm,k),iestma(iatm,k),ibgka(iatm,k)
           end if !}
           write(iunoo,703) eeleca(iatm,k),ebulka(iatm,k),escd1a(iatm,k),
-     ,                     escd2a(iatm,k),freaca(iatm,k),fldlma(iatm,k)
+     ,                     escd2a(iatm,k),freaca(iatm,k),edpota(iatm,k)
         end do !}
       end do !}
 
@@ -583,7 +585,7 @@ c**  photon species cards
      ,                 iscdef(ipht,k),iestmf(ipht,k),ibgkf(ipht,k)
             end if !}
             write(iunoo,703) eelecf(ipht,k),ebulkf(ipht,k),
-     ,       escd1f(ipht,k),escd2f(ipht,k),freacf(ipht,k),fldlmf(ipht,k)
+     ,       escd1f(ipht,k),escd2f(ipht,k),freacf(ipht,k),edpotf(ipht,k)
           end do !}
         end do !}
       end if !}
@@ -833,7 +835,7 @@ c*** 9.  data for statistics and nonanalog model
         write(iunoo,706) ((nlpbls(i,j),i=1,natmo),j=1,nstrao)
       end if !}
 
-c*** 10. data for additional and surface averaged tallies
+c*** 10. data for additional and surface-averaged tallies
 
       write(iunoo,700) utxthd(11)
       write(iunoo,707) nadvi,nclvi,nalvi,nadsi,nalsi,nadspc
@@ -902,7 +904,7 @@ c*** 11.   data for numerical and graphical output
      ,                 trcgrd,trcsur,trcref,trcfle,trcamd,
      ,                 trcint,trclst,trcsou,trcrec,trctim,
      ,                 trcbla,trcblm,trcbli,trcblp,trcble,
-     ,                 trcblph,trctal,trcoct,trccen,trcdumm,
+     ,                 trcblph,trctal,trcoct,trccen,trcrnf,
      ,                 trcdbg2,trcdbge,trcdbgm,trcdbgf,trcdbgl,
      ,                 trcdbgs,trcdbgg,trcdbgmpi,trcdbgc
       write(iunoo,706) (trcsrc(j),j=0,nstrao)
@@ -1000,7 +1002,7 @@ c*** 12.  data for diagnostic module
           write(iunoo,704) ichord(ichori),xchord(ichori),
      ,                                    ychord(ichori),zchord(ichori)
         end do !}
-        write(iunoo,706) plchor,plspec
+        write(iunoo,706) plchor,plspec,prspec,plargl,prargl
       end if !}
       if(lntspec.gt.0) write(iunoo,'(1p,2e12.5,4i6)') emnspc,emxspc,
      ,                                   npspcen,iatspec,npspctt,npspcfi

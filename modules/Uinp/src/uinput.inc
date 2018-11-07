@@ -96,7 +96,7 @@ c*** 4a
      ,  iscd2a(natm,nreac),iscd3a(natm,nreac),iscd4a(natm,nreac),
      ,  iscdea(natm,nreac),iestma(natm,nreac),ibgka(natm,nreac)
       real eeleca(natm,nreac), ebulka(natm,nreac), escd1a(natm,nreac),
-     ,     escd2a(natm,nreac), freaca(natm,nreac), fldlma(natm,nreac)
+     ,     escd2a(natm,nreac), freaca(natm,nreac), edpota(natm,nreac)
       character texta(natm)*8
 
 c*** 4b
@@ -133,7 +133,7 @@ c*** 4d
      ,  iscd4f(npht,nreac),
      ,  iscdef(npht,nreac),iestmf(npht,nreac),ibgkf(npht,nreac)
       real eelecf(npht,nreac),ebulkf(npht,nreac),escd1f(npht,nreac),
-     ,     escd2f(npht,nreac),freacf(npht,nreac),fldlmf(npht,nreac)
+     ,     escd2f(npht,nreac),freacf(npht,nreac),edpotf(npht,nreac)
       character textf(npht)*8
 
 
@@ -294,8 +294,8 @@ c*** 11
       logical trcplt, trchst, trcnal, trcmod, trcsig, trcgrd, trcsur,
      ,  trcref, trcfle, trcamd, trcint, trctim, trcsou, trcrec,
      ,  trclst, trcbla, trcblm, trcbli, trcblp, trcble, 
-     ,  trcblph,trctal, trcoct, trccen,
-     ,  trcdumm,trcdbg2,trcdbge,trcdbgm,trcdbgf,trcdbgl,
+     ,  trcblph,trctal, trcoct, trccen, trcrnf,
+     ,  trcdbg2,trcdbge,trcdbgm,trcdbgf,trcdbgl,
      ,  trcdbgs,trcdbgg,trcdbgmpi,trcdbgc,
      ,  trcsrc(0:nstra),pl1st,pl2nd,pl3rd,pladd,plhst,plcut(3),plbox,
      ,  plstor,plnumv,plnums,plarr,lrpscut,pltsrc(0:nstra),pl3a(5),
@@ -324,7 +324,7 @@ c*** 12
       real emin1(nchor), emax1(nchor), xpivot(nchor), ypivot(nchor),
      ,     zpivot(nchor), xchord(nchor), ychord(nchor), zchord(nchor),
      ,     emnspc, emxspc
-      logical plchor,plspec,lpw_d(npwinx)
+      logical plchor,plspec,prspec,plargl,prargl,lpw_d(npwinx)
       character txtsig(nchor)*71,txtmtmp(lntsputx)*2,txtmtra(lntsputx)*2
 
 c*** 13
@@ -474,10 +474,10 @@ c*** b2ah.dat
      ,  rcycsa,exppla,expela,expila,rcprma,sptpra,echspta,fchspta,
      ,  xlcor,ylcor,zlcor,xlref,ylref,zlref,xlrot,ylrot,zlrot,alrot,
      ,  delpot,rc1mn,rc1mx,rc2mn,rc2mx,fp1,fp2,creac,
-     ,  eeleca,ebulka,escd1a,escd2a,freaca,fldlma,
+     ,  eeleca,ebulka,escd1a,escd2a,freaca,edpota,
      ,  eelecm,ebulkm,escd1m,escd2m,freacm,
      ,  eeleci,ebulki,escd1i,escd2i,freaci,
-     ,  eelecf,ebulkf,escd1f,escd2f,freacf,fldlmf,
+     ,  eelecf,ebulkf,escd1f,escd2f,freacf,edpotf,
      ,  eelecp,ebulkp,escd1p,escd2p,freacp,bltzcdn,dltecdn,acrncdn,
      ,  te0,te1,te2,te3,te4,te5,ti0,ti1,ti2,ti3,ti4,ti5,di0,di1,di2,di3,
      ,  di4,di5,vx0,vx1,vx2,vx3,vx4,vx5,vy0,vy1,vy2,vy3,vy4,vy5,vz0,vz1,
@@ -515,14 +515,15 @@ c*** b2ah.dat
      ,  trcplt,trchst,trcnal,trcmod,
      ,  trcsig,trcgrd,trcsur,trcref,trcfle,trcamd,trcint,trctim,
      ,  trcsou,trcrec,trclst,trcbla,trcblm,trcbli,trcblp,trcble,
-     ,  trcblph,trctal,trcoct,trccen,
-     ,  trcdumm,trcdbg2,trcdbge,trcdbgm,trcdbgf,trcdbgl,
+     ,  trcblph,trctal,trcoct,trccen,trcrnf,
+     ,  trcdbg2,trcdbge,trcdbgm,trcdbgf,trcdbgl,
      ,  trcdbgs,trcdbgg,trcdbgmpi,trcdbgc,
      ,  trcsrc,pl1st,pl2nd,pl3rd,pladd,plhst,plcut,plbox,plstor,plnumv,
      ,  plnums,plarr,lrpscut,pltsrc,pl3a,pl3s,pltl2d,pltl3d,pltllg,
      ,  pltler,lhist2,lsmot2,lhist3,lcntr3,lsmot3,lraps,lvect3,lrpvc3,
      ,  lrps3d,lrpscn,lprad,lppol,lptor,plidl,plvtk,
-     ,  plchor,plspec,lpw_d,lsymet,lbalan,lchkqud,lfchgs,
+     ,  plchor,plspec,prspec,plargl,prargl,lpw_d,
+     ,  lsymet,lbalan,lchkqud,lfchgs,
      ,  is_bundled
 
       common/uinchr/ txtrun,txtsfl,txtsfa,
