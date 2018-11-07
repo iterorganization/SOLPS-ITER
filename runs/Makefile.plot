@@ -221,6 +221,7 @@ else
 endif
 	-cd b2md.exe.dir
 endif
+	[ -e shotnumber.history ] && cp shotnumber.history b2md.exe.dir/ || echo > /dev/null
 	rm -f $(target_md)
 ifneq (${COMPILER},HP)
 	cd b2md.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ${SOLPSTOP}/scripts/mds_id | ${TIME} ${B2OBJ}/b2md.exe ${RUN_OPTIONS} ; mv $(target_md) .. ; rm -f $(notdir $^) .quit ds* >& /dev/null
@@ -235,6 +236,7 @@ ifndef STAND_ALONE
 endif
 	-cd b2md.exe.dir ; rm -f HYDHEL METHANE SPUTER H2VIBR AMMONX ftn21 ftn22 graphite_ext.dat mo_ext.dat
 endif
+	-[ -s b2md.exe.dir/shotnumber.history ] && mv b2md.exe.dir/shotnumber.history . || echo > /dev/null 
 	-rmdir b2md.exe.dir
 
 ifndef STAND_ALONE
