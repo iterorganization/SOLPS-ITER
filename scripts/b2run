@@ -41,6 +41,7 @@ loop:
   goto loop
 
 endloop:
+  set b2ex=""
   set debug=""
   set TIME=time
   set RUN_OPTIONS=""
@@ -163,7 +164,11 @@ argloop:
     goto argloop
   endif
   if ("X${b2ex}X" == "XX") then
-    if ("X${argv}X" == "XX") set b2ex="b2mn"
+    if ("X${argv}X" == "XX") then
+      set b2ex="b2mn"
+    else
+      set b2ex=${argv}
+    endif
   endif
   echo "argument = "$b2ex
   set CMD=`echo $b2ex" " | sed -e 's: :.prt :g'`
