@@ -4,6 +4,7 @@ B25DIR=${SOLPSTOP}/modules/B2.5
 PATH+=:/usr/bin:/bin
 SVN=svn
 GIT=`which git`
+LATEX := $(shell which_latex)
 PYTHON=python
 INCLUDES=b2cdca.F b2cdci.F b2cdcn.F b2cdcr.F b2cdcv.F DIMENSIONS.F B2_5.Makefile B2_5.config.ITER.ifort64 solps-iter_git.log b2plot.commands SOLPS_versions
 BIBFILES=aps.bib aug.bib divgas.bib extern.bib general.bib main.bib mnw.bib model.bib tok.bib WebofScience.bib xpb.bib
@@ -21,8 +22,13 @@ all: solps.pdf solps.ps
 
 solps.dvi: solps.tex ${INCLUDES} ${FILES} solps.ind solps.bbl
 	@echo 'Building DVI manual'
-	latex -output-format dvi solps
-	-grep 'Label(s) may have changed' solps.log && latex -output-format dvi solps
+ifeq (${LATEX}, xelatex)
+	${LATEX} -no-pdf solps
+	-grep 'Label(s) may have changed' solps.log && ${LATEX} -no-pdf dvi solps
+else
+	${LATEX} -output-format dvi solps
+	-grep 'Label(s) may have changed' solps.log && ${LATEX} -output-format dvi solps
+endif
 	touch solps.idx ; sleep 1 ; touch solps.ind ; sleep 1 ; touch $@
 	[ -e solps.pdf ] && touch solps.pdf
 
@@ -35,33 +41,33 @@ solps.ind: solps.idx
 solps.idx: solps.tex
 	@echo 'Building index'
 	[ -e solps.ind ] || touch solps.ind
-	pdflatex solps
-	-grep 'Label(s) may have changed' solps.log && pdflatex solps
+	${LATEX} solps
+	-grep 'Label(s) may have changed' solps.log && ${LATEX} solps
 	makeindex solps
-	pdflatex solps
-	-grep 'Label(s) may have changed' solps.log && pdflatex solps
+	${LATEX} solps
+	-grep 'Label(s) may have changed' solps.log && ${LATEX} solps
 	touch solps.idx ; sleep 1 ; touch solps.ind ; sleep 1 ; touch solps.pdf
 
 solps.bbl: solps.tex ${BIBFILES}
 	@echo 'Building bibliography'
-	pdflatex solps
-	-grep 'Label(s) may have changed' solps.log && pdflatex solps
+	${LATEX} solps
+	-grep 'Label(s) may have changed' solps.log && ${LATEX} solps
 	bibtex solps
-	pdflatex solps
-	-grep 'Label(s) may have changed' solps.log && pdflatex solps
+	${LATEX} solps
+	-grep 'Label(s) may have changed' solps.log && ${LATEX} solps
 	touch solps.idx ; sleep 1 ; touch solps.ind ; sleep 1 ; touch solps.pdf
 
 solps.pdf: solps.tex ${INCLUDES} ${FILES} solps.ind solps.bbl
 	@echo 'Building PDF manual'
-	pdflatex solps
-	-grep 'Label(s) may have changed' solps.log && pdflatex solps
+	${LATEX} solps
+	-grep 'Label(s) may have changed' solps.log && ${LATEX} solps
 	touch solps.idx ; sleep 1 ; touch solps.ind ; sleep 1 ; touch $@
 
 thumb: solps.pdf
 	@echo 'Building thumbnails'
 	thumbpdf solps.pdf
-	pdflatex solps.tex
-	-grep 'Label(s) may have changed' solps.log && pdflatex solps
+	${LATEX} solps.tex
+	-grep 'Label(s) may have changed' solps.log && ${LATEX} solps
 
 bibtex: solps.bbl
 
@@ -149,3 +155,7 @@ compare_10814_tesepm_%.pdf: compare_10814_tesepm_%.ps
 	epstopdf $<
 
 compare_10814_tesepm: compare_10814_tesepm_1.pdf compare_10814_tesepm_2.pdf compare_10814_tesepm_3.pdf compare_10814_tesepm_4.pdf compare_10814_tesepm_5.pdf compare_10814_tesepm_6.pdf compare_10814_tesepm_7.pdf compare_10814_tesepm_8.pdf compare_10814_tesepm_9.pdf
+
+echo:
+	@echo LATEX=${LATEX}
+	@echo GIT=${GIT}

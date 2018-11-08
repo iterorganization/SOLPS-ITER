@@ -41,6 +41,7 @@ loop:
   goto loop
 
 endloop:
+  set b2ex=""
   set debug=""
   set TIME=time
   set RUN_OPTIONS=""
@@ -152,11 +153,18 @@ argloop:
     else
       set next=$1
       set begin_next=`printf '%s' $next | cut -c1`
+      set b2gin_next=`printf '%s' $next | cut -c-2`
       if ("X${begin_next}X" == "X-X") then
         set TIME="$DBX"
       else
-        set TIME="$1"
-        shift
+        if ("X${b2gin_next}X" == "Xb2X") then
+          set b2ex="$1"
+          set TIME="$DBX"
+          shift
+        else
+          set TIME="$1"
+          shift
+        endif
       endif
     endif
     goto argloop 
@@ -167,9 +175,15 @@ argloop:
     shift
     goto argloop
   endif
-  if ("X${argv}X" == "XX") set argv="b2mn"
-  echo "argument = "$argv
-  set CMD=`echo $argv" " | sed -e 's: :.prt :g'`
+  if ("X${b2ex}X" == "XX") then
+    if ("X${argv}X" == "XX") then
+      set b2ex="b2mn"
+    else
+      set b2ex=${argv}
+    endif
+  endif
+  echo "argument = "$b2ex
+  set CMD=`echo $b2ex" " | sed -e 's: :.prt :g'`
   ${MAKE} $debug TIME="$TIME" RUN_OPTIONS="$RUN_OPTIONS" -f $RUNS/Makefile $CMD
   unsetenv STAND_ALONE
   unsetenv B2FSTATE_ONLY

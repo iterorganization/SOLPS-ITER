@@ -6,7 +6,7 @@ switch ($nodename)
     echo "Using new cluster modules"
     set cluster="new"
     module load IMAS/3.20.0-3.8.3
-    module load GGD/1.8.0-intel-2018a
+    module load GGD/1.8.1-intel-2018a
     module load Kepler
     module load FC2K
     module load makedepend/1.0.5-GCCcore-6.4.0

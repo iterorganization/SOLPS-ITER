@@ -3,7 +3,7 @@
 set debug=""
 argloop:
   if ("X${1}X" == "X-nX") then
-    set debug="-n"
+    set debug="$debug -n"
     shift
     goto argloop
   endif
@@ -14,11 +14,21 @@ argloop:
   endif
   if ("X${1}X" == "X-dX") then
     shift
+    if (! $?SOLPS_DEBUG) then
+      source $SOLPSTOP/SETUP/debug
+      set DEBUG_SET=yes
+    endif
     if ($1 == "") then
       set debug="$debug TIME=$DBX"
     else
-      set debug="$debug TIME=$1"
-      shift
+      set next=$1
+      set begin_next=`printf '%s' $next | cut -c1`
+      if ("X${begin_next}X" == "X-X") then
+        set debug="$debug TIME=$DBX"
+      else
+        set debug="$debug TIME=$1"
+        shift
+      endif
     endif
     goto argloop
   endif
