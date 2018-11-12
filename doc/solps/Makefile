@@ -16,24 +16,33 @@ ifeq ($(shell [ -e Makefile.local ] && echo yes || echo no ),yes)
   FILES += Makefile.local
 endif
 
-all: solps.pdf solps.ps 
+all: solps.pdf solps.ps
 
 .PHONY: bibtex thumb update_log complete force
 
+ifeq (${LATEX}, xelatex)
+solps.xdv: solps.tex ${INCLUDES} ${FILES} solps.ind solps.bbl
+	@echo 'Building XDV manual'
+	${LATEX} -no-pdf solps
+	-grep 'Label(s) may have changed' solps.log && ${LATEX} -no-pdf solps
+	touch solps.idx ; sleep 1 ; touch solps.ind ; sleep 1 ; touch $@
+	[ -e solps.pdf ] && touch solps.pdf
+
+solps.ps: solps.pdf
+	pdftops solps.pdf solps.ps
+
+else
 solps.dvi: solps.tex ${INCLUDES} ${FILES} solps.ind solps.bbl
 	@echo 'Building DVI manual'
-ifeq (${LATEX}, xelatex)
-	${LATEX} -no-pdf solps
-	-grep 'Label(s) may have changed' solps.log && ${LATEX} -no-pdf dvi solps
-else
 	${LATEX} -output-format dvi solps
 	-grep 'Label(s) may have changed' solps.log && ${LATEX} -output-format dvi solps
-endif
 	touch solps.idx ; sleep 1 ; touch solps.ind ; sleep 1 ; touch $@
 	[ -e solps.pdf ] && touch solps.pdf
 
 solps.ps: solps.dvi
 	dvips -o -ta4 solps
+
+endif
 
 solps.ind: solps.idx
 	makeindex solps
@@ -127,7 +136,7 @@ complete:
 	${MAKE} solps.pdf
 
 clean: 
-	rm -f solps.pdf solps.ps solps.dvi solps.aux solps.ilg solps.ind solps.idx solps.lof solps.log solps.lot solps.out solps.toc b2cdca.F b2cdci.F b2cdcn.F b2cdcr.F b2cdcv.F solps_data_git.log solps-iter_git.log B2_5.config.ITER.ifort64 B2_5.Makefile DIMENSIONS.F SOLPS_versions solps.bbl solps.blg solps.brf solps.tpt
+	rm -f solps.pdf solps.ps solps.dvi solps.xdv solps.aux solps.ilg solps.ind solps.idx solps.lof solps.log solps.lot solps.out solps.toc b2cdca.F b2cdci.F b2cdcn.F b2cdcr.F b2cdcv.F solps_data_git.log solps-iter_git.log B2_5.config.ITER.ifort64 B2_5.Makefile DIMENSIONS.F SOLPS_versions solps.bbl solps.blg solps.brf solps.tpt
 
 ### WORK
 COMPARE_10814_TESEPM=/scratch/dpc/solps5.0_HD+C+He/src/Braams/b2/runs/D+C+He/2MW/compare_10814_tesepm.ps
