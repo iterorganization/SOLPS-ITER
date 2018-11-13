@@ -11,7 +11,7 @@ FFLAGS 	= -O --tpp
 
 INCLUDE	= -I${SRCDIR} ${EIRINC} ${B2INC}
 COMPILE = ${FC} -c ${FFLAGS}
-CPP	    = /lib/cpp -C -traditional
+CPP     = /lib/cpp -C -traditional
 MOD     = mod
 
 LDLIBS	= ${LD_MSCL}

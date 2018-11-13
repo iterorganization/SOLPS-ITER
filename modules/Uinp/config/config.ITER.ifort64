@@ -46,6 +46,9 @@ LDLIBS	  = ${LD_MSCL}
 ifeq (${FC_VERSION},12.0.2)
 LDEXTRA   = -i_dynamic
 endif
+ifdef USE_MPI
+LDLIBS   += ${LD_MPI}
+endif
 
 #!!!Local Variables:
 #!!! mode: Makefile

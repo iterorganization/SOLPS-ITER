@@ -7,7 +7,7 @@ ifndef LD_MSCL
   $(error LD_MSCL not defined)
 endif
 
-FC	     = xlf
+FC       = xlf
 ifndef SOLPS_DEBUG
 FFLAGS	 = -O -NA16384 -NQ20000
 else
@@ -15,7 +15,7 @@ FFLAGS	 = -g -C -NA16384 -NQ20000
 endif
 INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
-CPP	     = /lib/cpp
+CPP      = /lib/cpp
 MOD      = mod
 
 # LDLIBS = -L${SOLPSLIB}
