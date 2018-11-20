@@ -74,6 +74,7 @@ target_yt = b2yt.prt b2fstatt b2mn.dat.2 b2ah.dat.2 b2ai.dat.2 b2yt.files
 target_xd = B2SXDR
 target_rd = b2rd.prt
 target_ual = b2_ual_write.prt
+target_us = b2us.prt b2fstati_us b2fgmtry_us b2us.boundary.parameters b2us.neutrals.parameters
 
 scandir := $(shell cd .. ; pwd)
 projdir := $(shell cd ../.. ; pwd)
@@ -657,6 +658,12 @@ $(target_ual) : b2fgmtry b2fstate
 	cd b2_ual_write.exe.dir ; ${TIME} ${B2OBJ}/b2_ual_write.exe ${RUN_OPTIONS} ; mv $(target_ual) .. ; rm -f $(notdir $^) >& /dev/null
 	-rmdir b2_ual_write.exe.dir
 
+$(target_us) : b2fstati b2fgmtry b2fpardf b2mn.dat
+	rm -rf b2us.exe.dir >& /dev/null ; mkdir b2us.exe.dir ; cp $^ b2us.exe.dir
+	rm -f $(target_us)
+	cd b2us.exe.dir ; ${TIME} ${B2OBJ}/b2us.exe ${RUN_OPTIONS} ; mv $(target_us) .. ; rm -f $(notdir $^) >& /dev/null
+	-rmdir b2us.exe.dir
+
 stra.dat :
 	ln -s ${SOLPSTOP}/modules/B2.5/Database/stra.dat .
 
@@ -732,3 +739,5 @@ help help.prt:
 	@echo "     transfers the plasma state to a mesh of a different size"
 	@echo "  ${target_xd} : "
 	@echo "     converts the plasma state to a SOLPS4.0 B2SXDR file [no longer functional]"
+	@echo "  ${target_us} : "
+	@echo "     converts the b2fstati and b2fgmtry files to unstructured format (version 03.002.000)"
