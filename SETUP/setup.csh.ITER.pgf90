@@ -60,7 +60,7 @@ switch ($nodename)
     module load fc2k
     module load kepler
     module load totalview
-module load ghostscript
+    module load ghostscript
 endsw
 module load texlive
 module load make/4.1

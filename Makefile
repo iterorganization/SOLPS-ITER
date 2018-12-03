@@ -52,7 +52,7 @@ endif
 # Setup debug flag
 EXT_DBG =
 ifdef SOLPS_DEBUG
-EXT_DBG=.debug
+EXT_DBG = .debug
 endif
 
 # SOLPS_DEBUG and SOLPS_MPI will not be taken from environment,
@@ -417,8 +417,8 @@ clean_manual:
 
 # help
 help:
-	@echo "           solps : compile serial version (main codes)"
-	@echo "       solps_mpi : compile MPI version (main codes)"
+	@echo "            solps : compile serial version (main codes)"
+	@echo "        solps_mpi : compile MPI version (main codes)"
 	@echo "      solps_debug : compile debug version (serial) (main codes)"
 	@echo "  solps_mpi_debug : compile debug version (MPI) (main codes)"
 	@echo "              all : compile serial version (all codes)"

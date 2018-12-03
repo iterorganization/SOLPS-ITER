@@ -23,28 +23,30 @@ MSCL_ROOT     ?= /work/imas/opt/mscl/1.0.0-intel-12.0.2
 GR_ROOT       ?= /work/imas/opt/gr/0.0.94
 GLI_HOME      ?= /work/imas/opt/gks/4.4.74/lib
 NCARG_ROOT    ?= /work/imas/opt/ncl/6.3.0-intel-12.0.2
+NAGDIR        ?= /work/imas/opt/nag/15
 else
 MSCL_ROOT     ?= ${EBROOTMSCL}
 GR_ROOT       ?= ${EBROOTGR}
 GLI_HOME      ?= ${EBROOTGLI}
 NCARG_ROOT    ?= ${EBROOTNCL}
+NAGDIR        ?= ${EBROOTNAG}
 endif
 H5DIR         ?= ${EBROOTHDF5}
-NAGDIR        ?= /work/imas/opt/nag/15
 MDSPLUS_DIR   ?=
 
 # Variables of linking, using pkg-config
 #
 
-ifdef USE_MPI
-SOLPSLIB       = ${SOLPSTOP}/lib/${HOST_NAME}.gfortran
-endif
 LD_NETCDF      =
 LD_GR          = -L${GR_ROOT}/lib -lgr
 LD_GKS         = -L${GLI_HOME} -lgks -lX11 -lXt
 LD_NCARG       = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lm -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lz -lpthread -lXrender -lbz2 -lgfortran # for NCARG v6.x.x
 #LD_NCARG      = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lm                                                                                                          # for NCARG v4.x.x
+ifdef USE_MPI
+LD_NAG         = -L${SOLPSTOP}/lib/${HOST_NAME}.gfortran -lblaslapack
+else
 LD_NAG         = -L${SOLPSLIB} -lblaslapack
+endif
 LD_MDSPLUS     = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET      = -L${SOLPSLIB} -lsonnet -lstdc++
 
@@ -90,7 +92,11 @@ ifdef IMAS_VERSION
   ifeq (,$(findstring hpc-login0,$(NODENAME)))
     LD_UAL   = `pkg-config imas-pgi ggd-pgi --libs`
   else
-    LD_UAL   = `pkg-config imas-pgi ggd --libs`
+    ifdef USE_MPI
+      LD_UAL = `pkg-config imas-gfortran --libs` -L/work/imas/opt/EasyBuild/software/GGD/1.8.1-GCC-6.4.0-2.28/lib -lggd
+    else
+      LD_UAL = `pkg-config imas-pgi ggd --libs`
+    endif
   endif
   export LD_UAL
 endif
