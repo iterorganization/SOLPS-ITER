@@ -542,7 +542,7 @@ c*** Create the b2ar.dat file
           write(2,'(a)') '*tlohi          (tlo, thi; real, free format)'
           write(2,'(1p,2(2x,e8.1))') 0.1, 1.0e4
           write(2,'(a)') '*nlohi          (nlo, nhi; real, free format)'
-          write(2,'(1p,2(2x,e8.1))') 1.0e17, 1.0e22
+          write(2,'(1p,2(2x,e8.1))') 1.0e14, 1.0e22
           write(2,'(a)') '*numnuc         (nnuc; integer, free format)'
           write(2,'(2x,i2)') natmi-nmeta
           write(2,'(a)') '*nucspec        '//
@@ -571,7 +571,7 @@ c*** Create the header for the b2yr.dat file
           write(2,'(a)') '*idis          (nidis*integer, free format)'
           write(2,'(4i4)') 8, 16, 24, 32
           write(2,'(a)') '*jdis          (njdis*integer, free format)'
-          write(2,'(4i4)') 2, 6, 10, 14
+          write(2,'(4i4)') 4, 12, 20, 28
           close(2)
           print *,'    ... b2yr.dat created'
       endif
