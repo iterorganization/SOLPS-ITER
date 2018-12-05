@@ -16621,18 +16621,7 @@ F77 & user/b2file.F \\
 GOT\_AMNSPROTO & utility/ratadas.F \\
 HITS\_PER\_CHORD & b2plot/process\_chords.F \\
 HITS\_PER\_CHORD & b2plot/process\_eirene\_chords.F \\
-HPUX & b2plot/b2plot.F \\
-HPUX & b2plot/b2ptrgl.F \\
-HPUX & b2plot/b2pwldw.F \\
-HPUX & b2plot/ngread.F \\
-HPUX & b2plot/ntread.F \\
-HPUX & convert/b2co.F \\
-HPUX & convert/b2mds.F \\
-HPUX & convert/b2yt\_ngread.F \\
-HPUX & convert/b2yt\_ntread.F \\
-HPUX & driver/b2mod\_driver.F \\
-HPUX & postprocessing/b2ytdr.F \\
-HPUX & sources/eirene\_f30f31.F \\
+HPUX & modules/b2mod\_eirbra.F \\
 IBMaix & b2plot/b2plot.F \\
 IBMaix & postprocessing/b2ytdr.F \\
 IBMaix & user/b2file.F \\
@@ -16916,7 +16905,7 @@ routines are affected, recompile them all with
   gmake depend
   gmake
 \end{verbatim}
-).  If {\tt EIRENE\_DEFINES} already had a value, you would want to do
+). If {\tt EIRENE\_DEFINES} already has a value, you would want to do
 \begin{verbatim}
   setenv EIRENE_DEFINES "$EIRENE_DEFINES -DOPTION"
 \end{verbatim}
@@ -16954,14 +16943,7 @@ B25\_EIRENE & interfaces/couple\_SOLPS-ITER/eirmod\_extrab25.F90 \\
 B25\_EIRENE & startup-routines/find\_param.f \\
 DBG & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.F \\
 GFORTRAN & modules/eirmod\_mpi.F90 \\
-HPUX & file-handling/wrmesh.f \\
-HPUX & file-handling/wrplam.f \\
-HPUX & file-handling/wrplam\_long.f \\
-HPUX & file-handling/wrplam\_shrt.f \\
-HPUX & file-handling/wrplam\_xdr\_shrt.f \\
-HPUX & interfaces/couple\_SOLPS-ITER/eirmod\_extrab25.F90 \\
-HPUX & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.F \\
-HPUX & user-routines/user\_iter/geomd\_linda.F \\
+HPUX & modules/eirmod\_cinit.F \\
 MPI\_VERSION & modules/eirmod\_mpi.F90 \\
 NAGFOR & file-handling/get\_solpstop.f \\
 NO\_B2\_CHEM\_SPUT & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.F \\
@@ -17015,6 +16997,39 @@ or {\tt bash} users would use something like
 %% $
 ). If choosing to use {\tt SOLPS\_CPP} instead, the procedure is the same as
 in the previous section.
+
+\subsection{Uinp}
+\index{DEFINES, used in compiling Uinp}
+
+%%grep #if $SOLPSTOP/modules/Uinp/*/*.[Ff]* | grep -v builds | awk '{print $2,$1}' | sort | uniq
+
+We list here the possible compiler options that can be used when compiling {\tt Uinp}.
+The options below must therefore, if desired, be declared as part of the \${\tt SOLPS\_CPP} environment variable, which is defined in the
+\${\tt SOLPSTOP/SETUP/config.}\${\tt {HOST\_NAME}.}\${\tt {COMPILER}(.local)} files.
+
+%%grep #if $SOLPSTOP/modules/Uinp/src/*.F | awk '{print $2,$1}' | sort | uniq
+
+We list below where the {\tt Uinp} compilation switches are used.
+
+\begin{center}
+  \begin{longtable}{|l|l|}
+    \hline
+    \multicolumn{2}{|l|}{\small\sl continued from previous page} \\
+    \hline name & used in \\
+    \hline \endhead
+    \hline name & used in \\
+    \hline \endfirsthead
+    \hline
+    \multicolumn{2}{|l|}{\small\sl continued on next page} \\
+    \hline \endfoot
+    \endlastfoot
+HPUX & uiblkd.F \\
+    \hline
+    \caption{Defines for Uinp and where they are used.}
+    \label{tab:Uinpdefines}
+  \end{longtable}
+\end{center}
+
 
 \section{NAG calls in SOLPS}
 \index{NAG calls in SOLPS}

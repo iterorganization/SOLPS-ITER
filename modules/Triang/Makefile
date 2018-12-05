@@ -10,11 +10,23 @@ ifndef SOLPSTOP
   $(error SOLPSTOP not defined)
 endif
 
+# Extensions for OBJDIR if mpi and/or debug options are used
+ifdef USE_MPI
+EXT_MPI = .mpi
+endif
+ifdef USE_IMPGYRO
+EXT_IMPGYRO = .ig
+endif
+ifdef SOLPS_DEBUG
+EXT_DEBUG = .debug
+endif
+
 SRCTRI   = ${PWD}
 SRCDIR   = ${SRCTRI}/src
 SRCLOCAL = ${SRCTRI}/local
 B2SRC    = ${SOLPSTOP}/modules/B2.5/src
 SRCEIR   = ${SOLPSTOP}/modules/Eirene/src
+EIRDIR   = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
 
 MAKES = ${SRCTRI}/Makefile 
 # Include global SOLPS compiler settings
@@ -101,6 +113,14 @@ all: ${OBJDIR}/tria ${OBJDIR}/triageom ${OBJDIR}/triainq ${OBJDIR}/.x
 endif
 
 mods: $(MODMODS)
+
+ifneq (${MOD},o)
+${OBJDIR}/eirmod_cinit.${MOD}:
+	ln -sf ${EIRDIR}/eirmod_cinit.${MOD} ${OBJDIR}
+endif
+
+${OBJDIR}/eirmod_cinit.o:
+	ln -sf ${EIRDIR}/eirmod_cinit.o ${OBJDIR}
 
 ifeq ($(strip ${LD_GR}),)
 ${OBJDIR}/tria ${OBJDIR}/.nox: ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${MAKES}

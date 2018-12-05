@@ -353,6 +353,9 @@ ${OBJDIR}/eirmod_precision.o:
 ${OBJDIR}/eirmod_braeir.o: 
 	ln -sf ${EIRDIR}/eirmod_braeir.o ${OBJDIR}
 
+${OBJDIR}/eirmod_cinit.o:
+	ln -sf ${EIRDIR}/eirmod_cinit.o ${OBJDIR}
+
 ${OBJDIR}/eirmod_comxs.o:
 	ln -sf ${EIRDIR}/eirmod_comxs.o ${OBJDIR}
 
@@ -605,6 +608,9 @@ ${OBJDIR}/b2mod_neutrals_namelist.${MOD}: ${OBJDIR}/parmmod.${MOD} ${OBJDIR}/bra
 
 ${OBJDIR}/eirmod_braeir.${MOD}:
 	ln -sf ${EIRDIR}/eirmod_braeir.${MOD} ${OBJDIR}
+
+${OBJDIR}/eirmod_cinit.${MOD}:
+	ln -sf ${EIRDIR}/eirmod_cinit.${MOD} ${OBJDIR}
 
 ${OBJDIR}/eirmod_comxs.${MOD}:
 	ln -sf ${EIRDIR}/eirmod_comxs.${MOD} ${OBJDIR}
@@ -950,9 +956,9 @@ ifneq (${MOD},o)
 	sed 's,^$${OBJDIR}/[^ ][^ ]*/,\$${OBJDIR}/,' | \
         sed 's,: ${SOLPSTOP},: $${SOLPSTOP},' >> ${OBJDIR}/dependencies
 endif
-	@egrep -ai '^ {6,}use ' ${FFLIST} | grep -v 'IGNORE' | awk '{sub("\\.F:",".o:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' >> ${OBJDIR}/dependencies
+	@egrep -ai '^ {6,}use ' ${FFLIST} | grep -v 'IGNORE' | tr , ' ' | awk '{sub("\\.F:",".o:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' >> ${OBJDIR}/dependencies
 ifneq (${MOD},o)
-	@egrep -ai '^ *use ' ${MODLIST} | grep -v 'IGNORE' | awk '{sub("\\.F:",".${MOD}:",$$1);sub("\\.F90:",".${MOD}:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' >> ${OBJDIR}/dependencies
+	@egrep -ai '^ *use ' ${MODLIST} | grep -v 'IGNORE' | tr , ' ' | awk '{sub("\\.F:",".${MOD}:",$$1);sub("\\.F90:",".${MOD}:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' >> ${OBJDIR}/dependencies
 endif
 
 ${BASEDIR}/TAGS: tags
