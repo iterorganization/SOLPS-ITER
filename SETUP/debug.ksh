@@ -10,7 +10,7 @@ if ($?SOLPS_PATH) then
   endif
 
   export   OLD_SOLPS_PATH=$SOLPS_PATH
-  export   SOLPS_PATH=`echo $SOLPS_PATH | sed 's|.debug||g'`
+  export   SOLPS_PATH=`echo $SOLPS_PATH | sed 's|\.debug||g'`
   export   SOLPS_PATH=`echo $SOLPS_PATH | sed "s|${HOST_NAME}.${COMPILER}.mpi|${HOST_NAME}.${COMPILER}.mpi.debug|g"`
   export   SOLPS_PATH=`echo $SOLPS_PATH | sed "s|${HOST_NAME}.${COMPILER}:|${HOST_NAME}.${COMPILER}.debug:|g"`.debug
   export   PATH=`echo $PATH | sed "s|${OLD_SOLPS_PATH}|${SOLPS_PATH}|"`

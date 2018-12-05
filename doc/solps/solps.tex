@@ -213,6 +213,8 @@ It is best afterwards to position oneself on the master braches, which is achiev
 
 For later updates, it is recommended you use the {\tt solps-iter\_update} script. If you are planning to do code development, your starting point should be the develop branches, which you can upload by using the {\tt solps-iter\_update\_develop} script instead.
 
+Please note that because of the way some of the \SOLPSITER utility scripts function, the path to the \SOLPSITER top directory must not contain any of the strings {\tt .debug}, {\tt .mpi}, {\tt .openmp}, or {\tt .ig}. 
+
 Since the user-id is immutably encoded into any changes, it is always a good idea to properly configure a local installation of Git on all the systems on which one plans on making code revisions with, e.g.:
 
 \begin{verbatim}
