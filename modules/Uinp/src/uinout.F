@@ -21,9 +21,9 @@ c=======================================================================
 #include "git_version_Uinp.h"
 
       integer i,j,k,l,m,n,icont,istep,jsurpr
-      logical handle,ulmlti,ex,carbon,nitrogen,moly,streql
+      logical handle,ulmlti,ex,carbon,nitrogen,streql
       logical, allocatable :: done(:)
-      character utxthd(35)*71, utxtfl(9)*47, ufnm*(*)
+      character utxthd(35)*71, utxtfl(7)*47, ufnm*(*)
       character utxtgt*71
       external streql, xerrab, subini, subend
       data utxthd /
@@ -69,9 +69,7 @@ c=======================================================================
      4        'CFILE TRIM   Database/Surfacedata/TRIM/trim.dat',
      5        'CFILE METHAN Database/AMdata/methane.tex       ',
      6        'CFILE AMMONX Database/AMdata/ammoniaex.tex     ',
-     7        'CFILE ADAS   modules/adas/adf11                ',
-     8        'CFILE gr_ext Database/graphite_ext.dat         ',
-     9        'CFILE mo_ext Database/mo_ext.dat               '/
+     7        'CFILE ADAS   modules/adas/adf11                '/
 c=======================================================================
 
 c*** 0. Prepare some constants
@@ -182,22 +180,6 @@ c*** 1.  General data for the run
         handle=handle.or.streql(filnam(i),'ADAS')
       end do
       if (handle) write(iunoo,720) utxtfl(7)
-      carbon = .false.
-      do i=1,ntrgdflt
-        carbon=carbon.or.streql(made_of(i),'C')
-      end do
-      do i=1,n_spcsrf
-        carbon=carbon.or.streql(sps_mtrl(i),'C')
-      end do
-      if (carbon.or..true.) write(iunoo,720) utxtfl(8)
-      moly=.false.
-      do i=1,ntrgdflt
-        moly=moly.or.streql(made_of(i),'Mo')
-      end do
-      do i=1,n_spcsrf
-        moly=moly.or.streql(sps_mtrl(i),'Mo')
-      end do
-      if (moly.or..true.) write(iunoo,720) utxtfl(9)
 
 c*** 2.  data for standard mesh
 
