@@ -1,26 +1,26 @@
 #  VERSION : 28.07.99 20:34
 NODENAME ?= $(shell echo `hostname`)
-ifeq (,$(findstring hpc-login0,${NODENAME}))
-LD_MSCL  ?= `pkg-config mscl --libs`
-else
+ifneq (,$(findstring hpc-login0,${NODENAME}))
 LD_MSCL  ?= `pkg-config mscl --libs` -lgfortran
+else
+LD_MSCL  ?= `pkg-config mscl --libs`
 endif
 
 ifdef USE_MPI
-ifeq (,$(findstring hpc-login0,${NODENAME}))
+ifneq (,$(findstring hpc-login0,${NODENAME}))
+FC        = mpiifort
+else
 FC        = mpif90
 MPI_CPP  ?= `pkg-config mpich2-ch3 --cflags`
 LD_MPI   ?= -L/work/imas/opt/libibverbs/1.1.4/lib `pkg-config mpich2-ch3 --libs`
-else
-FC        = mpiifort
 endif
 ifndef MPDIR
-ifeq (,$(findstring hpc-login0,${NODENAME}))
-MPDIR     = /work/imas/opt/mvapich2-intel/1.3.2
-LD_MPI   += -Wl,-rpath,${MPDIR}/lib
-else
+ifneq (,$(findstring hpc-login0,${NODENAME}))
 MPDIR     = ${EBROOTIMPI}
 LD_MPI   += -Wl,-rpath,${MPDIR}/lib64
+else
+MPDIR     = /work/imas/opt/mvapich2-intel/1.3.2
+LD_MPI   += -Wl,-rpath,${MPDIR}/lib
 endif
 endif
 else
