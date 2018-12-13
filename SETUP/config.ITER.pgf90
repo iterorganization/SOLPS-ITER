@@ -18,19 +18,11 @@
 #
 
 NODENAME      ?= $(shell echo `hostname`)
-ifeq (,$(findstring hpc-login0,$(NODENAME)))
-MSCL_ROOT     ?= /work/imas/opt/mscl/1.0.0-intel-12.0.2
-GR_ROOT       ?= /work/imas/opt/gr/0.0.94
-GLI_HOME      ?= /work/imas/opt/gks/4.4.74/lib
-NCARG_ROOT    ?= /work/imas/opt/ncl/6.3.0-intel-12.0.2
-NAGDIR        ?= /work/imas/opt/nag/15
-else
 MSCL_ROOT     ?= ${EBROOTMSCL}
 GR_ROOT       ?= ${EBROOTGR}
 GLI_HOME      ?= ${EBROOTGLI}
 NCARG_ROOT    ?= ${EBROOTNCL}
 NAGDIR        ?= ${EBROOTNAG}
-endif
 H5DIR         ?= ${EBROOTHDF5}
 MDSPLUS_DIR   ?=
 
@@ -53,17 +45,10 @@ LD_SONNET      = -L${SOLPSLIB} -lsonnet -lstdc++
 # Preprocessor options
 #
 
-ifeq (,$(findstring hpc-login0,$(NODENAME)))
-SOLPS_CPP      = -DNO_NAG -DPGF90 -DNOQUAD
-MPI_CPP        = `pkg-config mpich2-ch3 --cflags`
-LD_MPI         = -L/work/imas/opt/libibverbs/1.1.4/lib `pkg-config mpich2-ch3 --libs`
-LD_MSCL        = `pkg-config mscl --libs`
-else
 SOLPS_CPP      = -DNO_NAG -DPGF90 -DNOQUAD
 MPI_CPP        = `pkg-config ompi --cflags`
 LD_MPI         = `pkg-config ompi --libs`
 LD_MSCL        = `pkg-config mscl --libs` -lgfortran
-endif
 B25_DEFINES    = -DNO_21
 EIRENE_DEFINES =
 
@@ -89,14 +74,10 @@ endif
 # Build with IMAS if imas module is loaded
 ifdef IMAS_VERSION
   SOLPS_CPP += -DIMAS
-  ifeq (,$(findstring hpc-login0,$(NODENAME)))
-    LD_UAL   = `pkg-config imas-pgi ggd-pgi --libs`
+  ifdef USE_MPI
+    LD_UAL = `pkg-config imas-gfortran --libs` -L/work/imas/opt/EasyBuild/software/GGD/1.8.1-GCC-6.4.0-2.28/lib -lggd
   else
-    ifdef USE_MPI
-      LD_UAL = `pkg-config imas-gfortran --libs` -L/work/imas/opt/EasyBuild/software/GGD/1.8.1-GCC-6.4.0-2.28/lib -lggd
-    else
-      LD_UAL = `pkg-config imas-pgi ggd --libs`
-    endif
+    LD_UAL = `pkg-config imas-pgi ggd --libs`
   endif
   export LD_UAL
 endif
