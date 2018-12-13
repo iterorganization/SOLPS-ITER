@@ -52,7 +52,7 @@ endif
 # Setup debug flag
 EXT_DBG =
 ifdef SOLPS_DEBUG
-EXT_DBG=.debug
+EXT_DBG = .debug
 endif
 
 # SOLPS_DEBUG, SOLPS_OPENMP and SOLPS_MPI will not be taken from environment,

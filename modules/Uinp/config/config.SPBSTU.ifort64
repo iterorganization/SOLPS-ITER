@@ -22,6 +22,9 @@ CPP      = /lib/cpp  -traditional
 MOD      = mod
 LDLIBS	 = ${LD_MSCL}
 LDEXTRA  =
+ifdef USE_MPI
+LDLIBS  += ${LD_MPI}
+endif
 
 #!!!Local Variables:
 #!!! mode: Makefile

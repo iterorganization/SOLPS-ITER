@@ -6,7 +6,7 @@ ifndef LD_MSCL
 endif
 
 ifdef USE_MPI
-FC 	     = mpiifort
+FC       = mpiifort
 else
 FC       = ifort
 endif
@@ -15,11 +15,14 @@ FFLAGS	 = -g -C -traceback -debug all -check all
 endif
 INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
-CPP	     = /lib/cpp -C -traditional
+CPP      = /lib/cpp -C -traditional
 
 MOD      = mod
 LDLIBS	 = ${LD_MSCL}
 LDEXTRA  =
+ifdef USE_MPI
+LDLIBS  += ${LD_MPI}
+endif
 
 #!!!Local Variables:
 #!!! mode: Makefile

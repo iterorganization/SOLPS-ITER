@@ -1032,7 +1032,7 @@ c*** Postprocessing windows
           write(iunoo,707) (100*pwtally(j,i)+pwspecy(j,i),
      ,                                                  j=1,npwtally(i))
           if(lpw_d(i)) then !{
-            write(iunoo,'(3h///)')
+            write(iunoo,'(a3)') '///'
             write(iunoo,707) (100*pwtally_d(j,i)+pwspecy_d(j,i),
      ,                                                  j=1,npwtally(i))
           end if !}

@@ -9,10 +9,10 @@ if ($?SOLPS_PATH) then
     exit 1
   endif
   
-  # Pragmatic approach: assume only Eirene, B2.5 and B25Eirene will require mpi-versions
+  # Pragmatic approach: assume only Uinp, Eirene, B2.5 and B25Eirene will require mpi-versions
   setenv   OLD_SOLPS_PATH   $SOLPS_PATH
   setenv   PATH `echo $PATH | sed "s|${SOLPS_PATH}:||"`
-  setenv   SOLPS_PATH `echo $SOLPS_PATH | sed 's|.mpi||g'` # remove .mpi if already present
+  setenv   SOLPS_PATH `echo $SOLPS_PATH | sed 's|\.mpi||g'` # remove .mpi if already present
   if ($?SOLPS_OPENMP) then
     setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|B2.5/builds/standalone.${HOST_NAME}.${COMPILER}.openmp|B2.5/builds/standalone.${HOST_NAME}.${COMPILER}.openmp.mpi|g"`
     setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|B2.5/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}.openmp|B2.5/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}.openmp.mpi|g"`

@@ -68,6 +68,7 @@ src/uinp/triang.hed
 doc/solps/solps_data_git.log
 doc/solps/solps-iter_git.log
 doc/solps/solps.*
+doc/solps/solps-*.svg
 !doc/solps/solps.tex
 doc/solps/b2cdc?.F
 doc/solps/B2_5.config.ITER.ifort64

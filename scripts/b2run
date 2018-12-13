@@ -158,7 +158,7 @@ argloop:
         set TIME="$DBX"
       else
         if ("X${b2gin_next}X" == "Xb2X") then
-          set b2ex="$1"
+          set b2ex="${argv}"
           set TIME="$DBX"
           shift
         else
@@ -179,7 +179,7 @@ argloop:
     if ("X${argv}X" == "XX") then
       set b2ex="b2mn"
     else
-      set b2ex=${argv}
+      set b2ex="${argv}"
     endif
   endif
   echo "argument = "$b2ex

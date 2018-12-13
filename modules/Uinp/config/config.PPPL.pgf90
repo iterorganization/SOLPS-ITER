@@ -24,6 +24,9 @@ MOD      = mod
 LDLIBS 	 = ${LD_MSCL}
 #LDLIBS   = ${LD_MSCL} -L${EIROBJ} -leirene
 LDEXTRA  = 
+ifdef USE_MPI
+LDLIBS  += ${LD_MPI}
+endif
 
 #!!!Local Variables:
 #!!! mode: Makefile

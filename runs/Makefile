@@ -465,14 +465,12 @@ endif
 ifndef STAND_ALONE
 	cd b2co.exe.dir ; rm -f fort.85 >& /dev/null
 endif
-ifdef B2FSTATE_ONLY
 	-[ -e b2co.exe.dir/tracing/blne.trc ] && rm b2co.exe.dir/tracing/blne.trc || echo > /dev/null
 	-[ -e b2co.exe.dir/tracing/blnm.trc ] && rm b2co.exe.dir/tracing/blnm.trc || echo > /dev/null
 	-[ -e b2co.exe.dir/tracing/blnn.trc ] && rm b2co.exe.dir/tracing/blnn.trc || echo > /dev/null
 	-[ -e b2co.exe.dir/tracing/integral.trc ] && rm b2co.exe.dir/tracing/integral.trc || echo > /dev/null
 	-[ -e b2co.exe.dir/tracing/intshrt.trc ] && rm b2co.exe.dir/tracing/intshrt.trc || echo > /dev/null
 	-[ -e b2co.exe.dir/tracing/sepdata.trc ] && rm b2co.exe.dir/tracing/sepdata.trc || echo > /dev/null
-endif
 	-[ -e b2co.exe.dir/tracing/residuals.trc ] && rm b2co.exe.dir/tracing/residuals.trc || echo > /dev/null
 	-[ -e b2co.exe.dir/tracing/sources.trc ] && rm b2co.exe.dir/tracing/sources.trc || echo > /dev/null
 	-[ -e b2co.exe.dir/tracing/test.trc ] && rm b2co.exe.dir/tracing/test.trc || echo > /dev/null
