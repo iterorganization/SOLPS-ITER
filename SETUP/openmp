@@ -12,7 +12,7 @@ if ($?SOLPS_PATH) then
   # Pragmatic approach: assume only B2.5 and B2.5-Eirene will require OpenMP versions
   setenv   OLD_SOLPS_PATH   $SOLPS_PATH
   setenv   PATH `echo $PATH | sed "s|${SOLPS_PATH}:||"`
-  setenv   SOLPS_PATH `echo $SOLPS_PATH | sed 's|.openmp||g'` # remove .openmp if already present
+  setenv   SOLPS_PATH `echo $SOLPS_PATH | sed 's|\.openmp||g'` # remove .openmp if already present
   setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|B2.5/builds/standalone.${HOST_NAME}.${COMPILER}|B2.5/builds/standalone.${HOST_NAME}.${COMPILER}.openmp|g"`
   setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|B2.5/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}|B2.5/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}.openmp|g"`
   setenv   PATH ${SOLPS_PATH}:${OLD_PATH}

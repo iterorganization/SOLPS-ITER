@@ -16,7 +16,7 @@ ifeq ($(shell [ -e Makefile.local ] && echo yes || echo no ),yes)
   FILES += Makefile.local
 endif
 
-all: solps.pdf solps.ps 
+all: solps.pdf solps.ps
 
 .PHONY: bibtex thumb update_log complete force
 
