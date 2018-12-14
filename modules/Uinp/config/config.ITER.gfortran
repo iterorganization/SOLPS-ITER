@@ -12,7 +12,7 @@ endif
 FC_VERSION = $(shell echo `gfortran --version | head -1 | awk '{printf "%s ",$$3,"\n"}'`)
 
 ifdef SOLPS_DEBUG
-FFLAGS	 = -g -ffpe-trap=denormal
+FFLAGS   = -g -ffpe-trap=denormal
 else
 FFLAGS   =
 endif
@@ -24,7 +24,7 @@ COMPILE  = ${FC} -c ${FFLAGS}
 CPP      = /lib/cpp -traditional
 
 MOD      = mod
-LDLIBS	 = ${LD_MSCL}
+LDLIBS   = ${LD_MSCL}
 LDEXTRA  =
 
 #!!!Local Variables:
