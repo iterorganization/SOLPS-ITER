@@ -47,7 +47,7 @@ LD_MPI     = -L${MPDIR} -lmpi
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNCAR4 -DNO_NAG
+SOLPS_CPP      = -DNCAR4 -DNO_NAG -DGFORTRAN
 B25_DEFINES    =
 EIRENE_DEFINES =
 MPI_CPP        = -I${MPDIR}/include
