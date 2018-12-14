@@ -50,9 +50,7 @@ else
   setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages/vtk:${PYTHONPATH}"
   setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
   setenv LD_CATALYST `paraview-config --libs vtkPVPythonCatalyst`
-  if ($cluster == "new") then
-    setenv LD_CATALYST "${LD_CATALYST} -lstdc++"
-  endif
+  setenv LD_CATALYST "${LD_CATALYST} -lstdc++"
 endif
 
 # Other environment variables
