@@ -55,6 +55,18 @@ ifdef SOLPS_DEBUG
 EXT_DBG = .debug
 endif
 
+# Setup MPI flag
+EXT_MPI =
+ifdef SOLPS_MPI
+EXT_DBG = .mpi
+endif
+
+# Setup OpenMP flag
+EXT_OPENMP =
+ifdef SOLPS_OPENMP
+EXT_DBG = .openmp
+endif
+
 # SOLPS_DEBUG, SOLPS_OPENMP and SOLPS_MPI will not be taken from environment,
 # but will be passed by the corresponding make-targets
 unexport SOLPS_OPENMP
@@ -131,13 +143,13 @@ eirene:
 	cd modules/Eirene; ${MAKE}
 
 eirene_mpi:
-	cd modules/Eirene; ${MAKE} USE_MPI=-DUSE_MPI
+	cd modules/Eirene; ${MAKE} USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 
 eirene_nox:
 	cd modules/Eirene; ${MAKE} LD_GR="" LD_GKS=""
 
 eirene_nox_mpi:
-	cd modules/Eirene; ${MAKE} USE_MPI=-DUSE_MPI LD_GR="" LD_GKS=""
+	cd modules/Eirene; ${MAKE} USE_MPI=-DUSE_MPI LD_GR="" LD_GKS="" SOLPS_MPI=yes
 
 b25:
 	cd modules/B2.5; ${MAKE}
@@ -147,13 +159,13 @@ b25_all:
 	cd modules/B2.5;     ${MAKE} ALL
 
 b25_openmp:
-	cd modules/B2.5; ${MAKE} USE_OPENMP=-D_OPENMP
+	cd modules/B2.5; ${MAKE} USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes
 
 b25_mpi:
-	cd modules/B2.5; ${MAKE} USE_MPI=-DUSE_MPI
+	cd modules/B2.5; ${MAKE} USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 
 b25_openmp_mpi:
-	cd modules/B2.5; ${MAKE} USE_OPENMP=-D_OPENMP USE_MPI=-DUSE_MPI
+	cd modules/B2.5; ${MAKE} USE_OPENMP=-D_OPENMP USE_MPI=-DUSE_MPI SOLPS_MPI=yes SOLPS_OPENMP=yes
 
 b25_mpi_openmp: b25_openmp_mpi
 
@@ -164,27 +176,27 @@ b25_ig:
 	cd modules/B2.5; ${MAKE} USE_IMPGYRO=-DUSE_IMPGYRO
 
 b25_all_openmp:
-	cd modules/solps4-5; ${MAKE} links
-	cd modules/B2.5;     ${MAKE} USE_OPENMP=-D_OPENMP
+	cd modules/solps4-5; ${MAKE} SOLPS_OPENMP=yes links
+	cd modules/B2.5;     ${MAKE} USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes
 
 b25_nox_openmp:
-	cd modules/B2.5; ${MAKE} USE_OPENMP=-D_OPENMP NOPLOT
+	cd modules/B2.5; ${MAKE} USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes NOPLOT
 
 b25_nox_mpi:
-	cd modules/B2.5; ${MAKE} USE_MPI=-DUSE_MPI NOPLOT
+	cd modules/B2.5; ${MAKE} USE_MPI=-DUSE_MPI SOLPS_MPI=yes NOPLOT
 
 b25_nox_openmp_mpi:
-	cd modules/B2.5; ${MAKE} USE_OPENMP=-D_OPENMP USE=-DUSE_MPI NOPLOT
+	cd modules/B2.5; ${MAKE} USE_OPENMP=-D_OPENMP USE_MPI=-DUSE_MPI SOLPS_MPI=yes SOLPS_OPENMP=yes NOPLOT
 
 b25_nox_mpi_openmp: b25_nox_openmp_mpi
 
 b25_all_mpi:
-	cd modules/solps4-5; ${MAKE} links
-	cd modules/B2.5;     ${MAKE} USE_MPI=-DUSE_MPI ALL
+	cd modules/solps4-5; ${MAKE} SOLPS_MPI=yes links
+	cd modules/B2.5;     ${MAKE} USE_MPI=-DUSE_MPI SOLPS_MPI=yes ALL
 
 b25_all_openmp_mpi:
-	cd modules/solps4-5; ${MAKE} links
-	cd modules/B2.5;     ${MAKE} USE_OPENMP=-D_OPENMP USE_MPI=-DUSE_MPI ALL
+	cd modules/solps4-5; ${MAKE} SOLPS_MPI=yes SOLPS_OPENMP=yes links
+	cd modules/B2.5;     ${MAKE} USE_OPENMP=-D_OPENMP USE_MPI=-DUSE_MPI SOLPS_MPI=yes SOLPS_OPENMP=yes ALL
 
 b25_all_mpi_openmp: b25_all_openmp_mpi
 
@@ -202,51 +214,51 @@ b25eirene_nox:
 	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE NOPLOT
 
 b25eirene_openmp:
-	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE    USE_OPENMP=-D_OPENMP
-	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE USE_OPENMP=-D_OPENMP
+	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE    USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes
+	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes
 
 b25eirene_mpi:
-	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI
-	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
+	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI SOLPS_MPI=yes
+	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 
 b25eirene_openmp_mpi:
-	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI USE_OPENMP=-D_OPENMP
-	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI USE_OPENMP=-D_OPENMP
+	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI USE_OPENMP=-D_OPENMP SOLPS_MPI=yes SOLPS_OPENMP=yes
+	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI USE_OPENMP=-D_OPENMP SOLPS_MPI=yes SOLPS_OPENMP=yes
 
 b25eirene_mpi_openmp: b25eirene_openmp_mpi
 
 b25eirene_nox_openmp:
-	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE LD_GR="" LD_GKS=""
-	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE USE_OPENMP=-D_OPENMP NOPLOT
+	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE LD_GR="" LD_GKS="" SOLPS_OPENMP=yes
+	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes NOPLOT
 
 b25eirene_nox_mpi:
-	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI LD_GR="" LD_GKS=""
-	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI NOPLOT
+	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI LD_GR="" LD_GKS="" SOLPS_MPI=yes
+	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI SOLPS_MPI=yes NOPLOT
 
 b25eirene_ig:
 	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE    USE_IMPGYRO=-DUSE_IMPGYRO
 	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO
 
 b25eirene_all_openmp:
-	cd modules/Eirene;   ${MAKE} USE_B25=-DB25_EIRENE
-	cd modules/solps4-5; ${MAKE} links
-	cd modules/B2.5;     ${MAKE} USE_EIRENE=-DB25_EIRENE USE_OPENMP=-D_OPENMP ALL
+	cd modules/Eirene;   ${MAKE} USE_B25=-DB25_EIRENE SOLPS_OPENMP=yes
+	cd modules/solps4-5; ${MAKE} SOLPS_OPENMP=yes links
+	cd modules/B2.5;     ${MAKE} USE_EIRENE=-DB25_EIRENE USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes ALL
 
 b25eirene_all_mpi:
-	cd modules/Eirene;   ${MAKE} USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI
-	cd modules/solps4-5; ${MAKE} links
-	cd modules/B2.5;     ${MAKE} USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI ALL
+	cd modules/Eirene;   ${MAKE} USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI SOLPS_MPI=yes
+	cd modules/solps4-5; ${MAKE} SOLPS_MPI=yes links
+	cd modules/B2.5;     ${MAKE} USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI SOLPS_MPI=yes ALL
 
 b25eirene_all_openmp_mpi:
-	cd modules/Eirene;   ${MAKE} USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI
-	cd modules/solps4-5; ${MAKE} links
-	cd modules/B2.5;     ${MAKE} USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI USE_OPENMP=-D_OPENMP ALL
+	cd modules/Eirene;   ${MAKE} USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI SOLPS_MPI=yes SOLPS_OPENMP=yes
+	cd modules/solps4-5; ${MAKE} SOLPS_MPI=yes SOLPS_OPENMP=yes links
+	cd modules/B2.5;     ${MAKE} USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI USE_OPENMP=-D_OPENMP SOLPS_MPI=yes SOLPS_OPENMP=yes ALL
 
 b25eirene_all_mpi_openmp: b25eirene_all_openmp_mpi
 
 b25eirene_nox_openmp_mpi:
-	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE LD_GR=""  LD_GKS="" USE_MPI=-DUSE_MPI
-	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI USE_OPENMP=-D_OPENMP NOPLOT
+	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE LD_GR=""  LD_GKS="" USE_MPI=-DUSE_MPI SOLPS_MPI=yes SOLPS_OPENMP=yes
+	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI USE_OPENMP=-D_OPENMP SOLPS_MPI=yes SOLPS_OPENMP=yes NOPLOT
 
 b25eirene_nox_mpi_openmp: b25eirene_nox_openmp_mpi
 
@@ -256,7 +268,7 @@ uinp:
 uinp_nox: uinp
 
 uinp_mpi:
-	cd modules/Uinp; ${MAKE} USE_MPI=-DUSE_MPI
+	cd modules/Uinp; ${MAKE} USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 
 uinp_nox_mpi: uinp_mpi
 
@@ -271,7 +283,7 @@ amds:
 	cd modules/amds; ${MAKE}
 
 amds_mpi:
-	cd modules/amds; ${MAKE} USE_MPI=-DUSE_MPI
+	cd modules/amds; ${MAKE} USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 
 fxdr:
 	cd modules/fxdr; ${MAKE}
@@ -312,78 +324,84 @@ tags:
 
 listobj:
 	cd modules/Carre;          ${MAKE} listobj
-	cd modules/Eirene;         ${MAKE} listobj USE_MPI=-DUSE_MPI
+	cd modules/Eirene;         ${MAKE} listobj USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 	cd modules/Eirene;         ${MAKE} listobj
-	cd modules/B2.5;           ${MAKE} listobj USE_MPI=-DUSE_MPI
+	cd modules/B2.5;           ${MAKE} listobj USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 	cd modules/B2.5;           ${MAKE} listobj
 	cd modules/Uinp;           ${MAKE} listobj
-	cd modules/Uinp;           ${MAKE} listobj USE_MPI=-DUSE_MPI
+	cd modules/Uinp;           ${MAKE} listobj USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 	cd modules/Triang;         ${MAKE} listobj
 	cd modules/DivGeo;         ${MAKE} listobj
 	cd modules/Eirene;         ${MAKE} listobj USE_B25=-DB25_EIRENE
-	cd modules/Eirene;         ${MAKE} listobj USE_B25=-DB25_EIRENE USE_MPI=-DUSE_MPI
+	cd modules/Eirene;         ${MAKE} listobj USE_B25=-DB25_EIRENE USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 	cd modules/Eirene;         ${MAKE} listobj USE_B25=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO
 	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE
-	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
+	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI SOLPS_MPI=yes
+	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE USE_OPENMP=-DUSE_OPENMP SOLPS_OPENMP=yes
+	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI USE_OPENMP=-DUSE_OPENMP SOLPS_OPENMP=yes SOLPS_MPI=yes
 	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO
 #	cd modules/solps4-5;       ${MAKE} listobj
 
 listobj_nox:
 	cd modules/Carre;          ${MAKE} listobj NCARG_ROOT="" LD_NCARG=""
-	cd modules/Eirene;         ${MAKE} listobj USE_MPI=-DUSE_MPI LD_GR="" LD_GKS=""
+	cd modules/Eirene;         ${MAKE} listobj USE_MPI=-DUSE_MPI LD_GR="" LD_GKS="" SOLPS_MPI=yes
 	cd modules/Eirene;         ${MAKE} listobj LD_GR="" LD_GKS=""
-	cd modules/B2.5;           ${MAKE} listobj USE_MPI=-DUSE_MPI LD_GR="" LD_GKS=""
+	cd modules/B2.5;           ${MAKE} listobj USE_MPI=-DUSE_MPI LD_GR="" LD_GKS="" SOLPS_MPI=yes
 	cd modules/B2.5;           ${MAKE} listobj LD_GR="" LD_GKS=""
 	cd modules/Uinp;           ${MAKE} listobj
-	cd modules/Uinp;           ${MAKE} listobj USE_MPI=-DUSE_MPI
+	cd modules/Uinp;           ${MAKE} listobj USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 	cd modules/Triang;         ${MAKE} listobj LD_GR="" LD_GKS=""
 	cd modules/Eirene;         ${MAKE} listobj USE_B25=-DB25_EIRENE LD_GR="" LD_GKS=""
-	cd modules/Eirene;         ${MAKE} listobj USE_B25=-DB25_EIRENE USE_MPI=-DUSE_MPI LD_GR="" LD_GKS=""
+	cd modules/Eirene;         ${MAKE} listobj USE_B25=-DB25_EIRENE USE_MPI=-DUSE_MPI LD_GR="" LD_GKS="" SOLPS_MPI=yes
 	cd modules/Eirene;         ${MAKE} listobj USE_B25=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO LD_GR="" LD_GKS=""
 	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE
-	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
+	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI SOLPS_MPI=yes
+	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes
+	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI SOLPS_OPENMP=-D_OPENMP SOLPS_MPI=yes SOLPS_OPENMP=yes
 	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO
 #	cd modules/solps4-5;       ${MAKE} listobj
 
 depend:
 	cd modules/Carre;          ${MAKE} depend
-	cd modules/Eirene;         ${MAKE} depend USE_MPI=-DUSE_MPI
+	cd modules/Eirene;         ${MAKE} depend USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 	cd modules/Eirene;         ${MAKE} depend
-	cd modules/B2.5;           ${MAKE} depend USE_MPI=-DUSE_MPI
+	cd modules/B2.5;           ${MAKE} depend USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 	cd modules/B2.5;           ${MAKE} depend USE_OPENMP=-D_OPENMP
-	cd modules/B2.5;	   ${MAKE} depend USE_OPENMP=-D_OPENMP USE_MPI=-DUSE_MPI
+	cd modules/B2.5;	   ${MAKE} depend USE_OPENMP=-D_OPENMP USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 	cd modules/B2.5;           ${MAKE} depend
 	cd modules/Uinp;           ${MAKE} depend
-	cd modules/Uinp;           ${MAKE} depend USE_MPI=-DUSE_MPI
+	cd modules/Uinp;           ${MAKE} depend USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 	cd modules/Triang;         ${MAKE} depend
 	cd modules/DivGeo;         ${MAKE} depend
 	cd modules/DivGeo/equtrn;  ${MAKE} depend
 	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE 
-	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI
+	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE    USE_IMPGYRO=-DUSE_IMPGYRO
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE
-	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
-	cd modules/B2.5;	   ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_OPENMP=-D_OPENMP
-	cd modules/B2.5;	   ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_OPENMP=-D_OPENMP USE_MPI=-DUSE_MPI
+	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI SOLPS_MPI=yes
+	cd modules/B2.5;	   ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes
+	cd modules/B2.5;	   ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_OPENMP=-D_OPENMP USE_MPI=-DUSE_MPI SOLPS_MPI=yes SOLPS_OPENMP=yes
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO
 	cd modules/amds;           ${MAKE} depend
 #	cd modules/solps4-5;       ${MAKE} depend
 
 depend_nox:
 	cd modules/Carre;          ${MAKE} depend NCARG_ROOT="" LD_NCARG=""
-	cd modules/Eirene;         ${MAKE} depend USE_MPI=-DUSE_MPI LD_GR="" LD_GKS=""
+	cd modules/Eirene;         ${MAKE} depend USE_MPI=-DUSE_MPI LD_GR="" LD_GKS="" SOLPS_MPI=yes
 	cd modules/Eirene;         ${MAKE} depend LD_GR="" LD_GKS=""
-	cd modules/B2.5;           ${MAKE} depend USE_MPI=-DUSE_MPI LD_GR="" LD_GKS=""
+	cd modules/B2.5;           ${MAKE} depend USE_MPI=-DUSE_MPI LD_GR="" LD_GKS="" SOLPS_MPI=yes
 	cd modules/B2.5;           ${MAKE} depend LD_GR="" LD_GKS=""
 	cd modules/Uinp;           ${MAKE} depend
-	cd modules/Uinp;           ${MAKE} depend USE_MPI=-DUSE_MPI
+	cd modules/Uinp;           ${MAKE} depend USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 	cd modules/Triang;         ${MAKE} depend LD_GR="" LD_GKS=""
 	cd modules/DivGeo/equtrn;  ${MAKE} depend
 	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE LD_GR="" LD_GKS=""
-	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE USE_MPI=-DUSE_MPI LD_GR="" LD_GKS=""
+	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE USE_MPI=-DUSE_MPI LD_GR="" LD_GKS="" SOLPS_MPI=yes
 	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO LD_GR="" LD_GKS=""
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE LD_GR="" LD_GKS=""
-	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI LD_GR="" LD_GKS=""
+	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI LD_GR="" LD_GKS="" SOLPS_MPI=yes
+	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_OPENMP=-D_OPENMP LD_GR="" LD_GKS="" SOLPS_OPENMP=yes
+	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI USE_OPENMP=-D_OPENMP LD_GR="" LD_GKS="" SOLPS_MPI=yes SOLPS_OPENMP=yes
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO LD_GR="" LD_GKS=""
 
 VERSION:
@@ -469,16 +487,16 @@ clean_eirene_nox:
 	cd modules/Eirene; ${MAKE} clean LD_GR="" LD_GKS=""
 
 clean_eirene_mpi:
-	cd modules/Eirene; ${MAKE} clean USE_MPI=-DUSE_MPI
+	cd modules/Eirene; ${MAKE} clean USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 
 clean_b25:
 	cd modules/B2.5; ${MAKE} clean
 
 clean_b25_openmp:
-	cd modules/B2.5; ${MAKE} clean USE_OPENMP=-D_OPENMP
+	cd modules/B2.5; ${MAKE} clean USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes
 
 clean_b25_mpi:
-	cd modules/B2.5; ${MAKE} clean USE_MPI=-DUSE_MPI
+	cd modules/B2.5; ${MAKE} clean USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 
 clean_b25_nox:
 	cd modules/B2.5; ${MAKE} clean LD_GR="" LD_GKS=""
@@ -491,16 +509,16 @@ clean_b25eirene:
 	cd modules/B2.5;   ${MAKE} clean USE_EIRENE=-DB25_EIRENE
 
 clean_b25eirene_mpi:
-	cd modules/Eirene; ${MAKE} clean USE_B25=-DB25_EIRENE   USE_MPI=-DUSE_MPI
-	cd modules/B2.5;   ${MAKE} clean USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
+	cd modules/Eirene; ${MAKE} clean USE_B25=-DB25_EIRENE   USE_MPI=-DUSE_MPI SOLPS_MPI=yes
+	cd modules/B2.5;   ${MAKE} clean USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 
 clean_b25eirene_openmp:
-	cd modules/Eirene; ${MAKE} clean USE_B25=-DB25_EIRENE
-	cd modules/B2.5;   ${MAKE} clean USE_EIRENE=-DB25_EIRENE USE_OPENMP=-D_OPENMP
+	cd modules/Eirene; ${MAKE} clean USE_B25=-DB25_EIRENE SOLPS_OPENMP=yes
+	cd modules/B2.5;   ${MAKE} clean USE_EIRENE=-DB25_EIRENE USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes
 
 clean_b25eirene_openmp_mpi:
-	cd modules/Eirene; ${MAKE} clean USE_B25=-DB25_EIRENE   USE_MPI=-DUSE_MPI
-	cd modules/B2.5;   ${MAKE} clean USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI USE_OPENMP=-D_OPENMP
+	cd modules/Eirene; ${MAKE} clean USE_B25=-DB25_EIRENE   USE_MPI=-DUSE_MPI SOLPS_MPI=yes SOLPS_OPENMP=yes
+	cd modules/B2.5;   ${MAKE} clean USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI USE_OPENMP=-D_OPENMP SOLPS_MPI=yes SOLPS_OPENMP=yes
 
 clean_b25eirene_mpi_openmp: clean_b25eirene_openmp_mpi
 
@@ -515,7 +533,7 @@ clean_uinp:
 	cd modules/Uinp; ${MAKE} clean
 
 clean_uinp_mpi:
-	cd modules/Uinp; ${MAKE} clean USE_MPI=-DUSE_MPI
+	cd modules/Uinp; ${MAKE} clean USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 
 clean_triang:
 	cd modules/Triang; ${MAKE} clean

@@ -68,7 +68,7 @@ EIRENE_DEFINES =
 MPI_CPP        = 
 
 # Build with OpenMP if requested
-ifdef USE_OPENMP
+ifdef SOLPS_OPENMP
   B25_DEFINES += -D_OPENMP
 endif
 

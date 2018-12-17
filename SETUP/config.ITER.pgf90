@@ -34,7 +34,7 @@ LD_GR          = -L${GR_ROOT}/lib -lgr
 LD_GKS         = -L${GLI_HOME} -lgks -lX11 -lXt
 LD_NCARG       = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lm -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lz -lpthread -lXrender -lbz2 -lgfortran # for NCARG v6.x.x
 #LD_NCARG      = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lm                                                                                                          # for NCARG v4.x.x
-ifdef USE_MPI
+ifdef SOLPS_MPI
 LD_NAG         = -L${SOLPSTOP}/lib/${HOST_NAME}.gfortran -lblaslapack
 else
 LD_NAG         = -L${SOLPSLIB} -lblaslapack
@@ -45,7 +45,11 @@ LD_SONNET      = -L${SOLPSLIB} -lsonnet -lstdc++
 # Preprocessor options
 #
 
+ifdef SOLPS_MPI
+SOLPS_CPP      = -DNO_NAG -DGFORTRAN
+else
 SOLPS_CPP      = -DNO_NAG -DPGF90 -DNOQUAD
+endif
 MPI_CPP        = `pkg-config ompi --cflags`
 LD_MPI         = `pkg-config ompi --libs`
 LD_MSCL        = `pkg-config mscl --libs` -lgfortran
@@ -74,7 +78,7 @@ endif
 # Build with IMAS if imas module is loaded
 ifdef IMAS_VERSION
   SOLPS_CPP += -DIMAS
-  ifdef USE_MPI
+  ifdef SOLPS_MPI
     LD_UAL = `pkg-config imas-gfortran --libs` -L/work/imas/opt/EasyBuild/software/GGD/1.8.1-GCC-6.4.0-2.28/lib -lggd
   else
     LD_UAL = `pkg-config imas-pgi ggd --libs`
@@ -83,7 +87,7 @@ ifdef IMAS_VERSION
 endif
 
 # Build with OpenMP if requested
-ifdef USE_OPENMP
+ifdef SOLPS_OPENMP
   B25_DEFINES += -D_OPENMP
 endif
 
