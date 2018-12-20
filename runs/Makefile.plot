@@ -12,6 +12,7 @@ nil =
 # Default debugger
 DBX ?= dbx
 
+# Extensions for object directories when various options are used
 ifdef SOLPS_OPENMP
 EXT_OPENMP = .openmp
 endif

@@ -112,19 +112,24 @@ $Help"
 #  location="${SOLPSTOP%/*}/$u/scripts"
 #}
 
-[ "$SOLPS_MPI" = ' ' ] && {
-  toolchain=${HOST_NAME}.${COMPILER}.mpi
+toolchain=${HOST_NAME}.${COMPILER}
+[ "${SOLPS_MPI}" = '' ] && {
+  eirchain=${HOST_NAME}.${COMPILER}
 } || {
-  toolchain=${HOST_NAME}.${COMPILER}
+  eirchain=${HOST_NAME}.${COMPILER}.mpi
 }  
-[ "$SOLPS_DEBUG" = '' ] || {
+[ "${USE_IMPGYRO}" = '' ] || {
+  eirchain=$eirchain.ig
+}
+[ "${SOLPS_DEBUG}" = '' ] || {
+  eirchain=$eirchain.debug
   toolchain=$toolchain.debug
 }
 
 TRIA="${SOLPSTOP}/modules/Triang/builds/$toolchain/tria"
 TRIAGEOM="${SOLPSTOP}/modules/Triang/builds/$toolchain/triageom"
 TRIAINQ="${SOLPSTOP}/modules/Triang/builds/$toolchain/triainq"
-EIRENE="${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.$toolchain/eirobjx"
+EIRENE="${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.$eirchain/eirobjx"
 
 griddir=${CARRE_GRIDDIR-$SOLPSTOP/modules/Carre/meshes/${DEVICE-iter}}
 [ -s dg.dgo ] && {

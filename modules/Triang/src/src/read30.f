@@ -14,7 +14,7 @@ C     READ PHYSICAL COORDINATES FROM FORT.30 FILE TO XCOORD, YCOORD
       character*80 line
       LOGICAL INISO
 
-      character*54 format_string(2)
+      character*44 format_string(2)
       integer, save :: new_format, exp_location
 
       data new_format/1/

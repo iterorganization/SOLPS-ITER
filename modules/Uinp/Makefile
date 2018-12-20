@@ -39,15 +39,12 @@ ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local ] && 
 endif
 
 ifdef SOLPS_MPI
-  ifndef USE_MPI
-    USE_MPI = -DUSE_MPI
-  endif
+  USE_MPI ?= -DUSE_MPI
 endif
 
 PROG = uinp.exe
 
 # Extension for OBJDIR if debug or MPI options are used
-# uncomment following lines if debug-code needed
 ifdef SOLPS_DEBUG
 EXT_DEBUG = .debug
 USE_DEBUG = -DDBG
@@ -55,9 +52,16 @@ endif
 ifdef USE_MPI
 EXT_MPI = .mpi
 endif
+ifdef USE_OPENMP
+EXT_OPENMP = .openmp
+endif
+ifdef USE_IMPGYRO
+EXT_IMPGYRO = .ig
+endif
+
 OBJDIR  = ${SRCUIN}/builds/${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_DEBUG}
-EIROBJ  = ${EIRDIR}/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_DEBUG}
-B2OBJ   = ${B2DIR}/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_DEBUG}
+EIROBJ  = ${EIRDIR}/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
+B2OBJ   = ${B2DIR}/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_OPENMP}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
 
 ifeq ($(shell [ -e ${B2DIR}/src/include.local ] && echo yes || echo no ),yes)
 B2INC = -I${B2DIR}/src/include.local -I${B2DIR}/src/include -I${B2DIR}/src/common

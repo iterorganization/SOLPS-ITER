@@ -36,8 +36,16 @@ ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local ] && 
   MAKES += ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
 endif
 
-# Extension for OBJDIR if debug options are used
-# uncomment following lines if debug-code needed
+# Extensions for object directories when various options are used
+ifdef USE_MPI
+EXT_MPI = .mpi
+endif
+ifdef USE_OPENMP
+EXT_OPENMP = .openmp
+endif
+ifdef USE_IMPGYRO
+EXT_IMPGYRO = .ig
+endif
 ifdef SOLPS_DEBUG
 EXT_DEBUG = .debug
 DEFINES  += -DDBG
@@ -45,7 +53,7 @@ endif
 
 # Directory where objectcode/binaries will be created
 OBJDIR = ${SRCTRI}/builds/${HOST_NAME}.${COMPILER}${EXT_DEBUG}
-EIROBJ = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_DEBUG}
+EIROBJ = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_DEBUG}
 
 INCLUDE=
 LOCAL=no
@@ -81,7 +89,6 @@ include ${SRCTRI}/config/config.${HOST_NAME}.${COMPILER}.local
 MAKES+= ${SRCTRI}/config/config.${HOST_NAME}.${COMPILER}.local
 endif
 
-#MODULES := ${patsubst ${SRCDIR}/%.f,%,${shell grep -il '^[ \t]*[ \t]module[ \t]' ${SRCDIR}/modules/*.f}}
 MODULES := ${patsubst ${SRCDIR}/modules/%.f,%,${shell echo ${SRCDIR}/modules/*.f}}
 MODLOCASE:=$(shell echo $(MODULES)| tr A-Z a-z)
 MODMODS := ${MODLOCASE:%=${OBJDIR}/%.${MOD}}
