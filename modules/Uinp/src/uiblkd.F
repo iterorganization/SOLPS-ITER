@@ -657,8 +657,9 @@ c      integer lura,lurm,luri,lurf
 
 c*** 5
 
-      integer lurp,lurc,lup6
-      parameter (lurp=nreac*npls, lurc=nrcdn*npls, lup6=6*npls)
+      integer lurp,lurc,lup5,lup6
+      parameter (lurp=nreac*npls, lurc=nrcdn*npls)
+      parameter (lup5=5*npls, lup6=6*npls)
       data nplsi / 0 /
       data nbgk / 0 /
       data nmassp,ncharp, nprtp,nchrgp, isrfp, isrtp,nmsecp, nrcp  /
@@ -669,16 +670,15 @@ c*** 5
      /  lurp*0,lurp*0,lurp*0,lurp*0,lurp*0,lurp*0,lurp*0 /
       data eelecp, ebulkp, escd1p, escd2p, freacp /
      /    lurp*0.,lurp*0.,lurp*0.,lurp*0.,lurp*0. /
-      data  textp   / npls*' ' /
-#ifndef HPUX
-      data cdnmdlp_sel/'fort.13','saha','boltzmann','corona','colrad'/
-#else
-      data cdnmdlp_sel/'ftn13','saha','boltzmann','corona','colrad'/
-#endif
+      data textp / npls*' ' /
+      data cdnmdlp_sel/
+     /   'FORT.13', 'FORT.10', 'FTN13', 'FTN10',
+     /   'CONSTANT','MULTIPLY','SAHA','BOLTZMANN','CORONA','COLRAD'/
       data cdnmdlp / npls*' ' /
-      data nrep, ispcdn / npls*0, lurc*0 /
-      data bltzcdn,dltecdn,acrncdn/
-     /     npls*0.,npls*0.,npls*0./
+      data nrep, ispcdn, itpcdn, istrcdn /
+     /   npls*0, lurc*0, lurc*4, lurc*0 /
+      data valcdn,bltzcdn,dltecdn,acrncdn/
+     /    lup5*0.,npls*0.,npls*0.,npls*0./
       data fnamcdn, h2cdn  , reaccdn, crcdn   /
      /    lurc*' ',lurc*' ',lurc*' ',lurc*' ' /
       

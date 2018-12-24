@@ -614,23 +614,42 @@ c**  bulk ions species cards
         end do !}
         if (len_trim(cdnmdlp(ipls)).gt.0) then !{
           call upcase(cdnmdlp(ipls),cdnmdlp(ipls),ldnmdlp)
-          if(cdnmdlp(ipls).eq.cdnmdlp_sel(1)) then !{
+          if(streql(cdnmdlp(ipls),cdnmdlp_sel(1)).or.
+     &       streql(cdnmdlp(ipls),cdnmdlp_sel(2))) then !{ 'FORT.13', 'FTN13'
             write(iunoo,707) ispcdn(ipls,1)
-          else if(cdnmdlp(ipls).eq.cdnmdlp_sel(2)) then !}{
+          else if(streql(cdnmdlp(ipls),cdnmdlp_sel(3)).or.
+     &            streql(cdnmdlp(ipls),cdnmdlp_sel(4))) then !}{ 'FORT.10', 'FTN10'
+            write(iunoo,707) ispcdn(ipls,1),
+     ,                       itpcdn(ipls,1),istrcdn(ipls,1)
+          else if(streql(cdnmdlp(ipls),cdnmdlp_sel(5))) then !}{ 'CONSTANT'
+            write(iunoo,703) valcdn(ipls,1),
+     ,                       valcdn(ipls,2),valcdn(ipls,3),
+     ,                       valcdn(ipls,4),valcdn(ipls,5)
+          else if(streql(cdnmdlp(ipls),cdnmdlp_sel(6))) then !}{ 'MULTIPLY'
+            write(iunoo,'(3i6,6x,1p,3e12.4)') ispcdn(ipls,1),
+     ,                        itpcdn(ipls,1),istrcdn(ipls,1),
+     ,                        valcdn(ipls,2),valcdn(ipls,1),
+     ,                        valcdn(ipls,3)
+          else if(streql(cdnmdlp(ipls),cdnmdlp_sel(7))) then !}{ 'SAHA'
 c** To be done (in Eirene first)
-            write(0,*) '### Density model ',cdnmdlp_sel(2),
+            write(0,*) '### Density model ',cdnmdlp_sel(7),
      ,        ' not realised in Eirene. ipls=',ipls
-          else if(cdnmdlp(ipls).eq.cdnmdlp_sel(3)) then !}{
-            write(iunoo,'(i6,6x,1p,2e12.4)') ispcdn(ipls,1),
-     ,                                       bltzcdn(ipls),dltecdn(ipls)
-          else if(cdnmdlp(ipls).eq.cdnmdlp_sel(4)) then !}{
-            write(iunoo,'(i6,1x,a6,1x,a4,a9,a3,1p,e12.4)') 
-     ,                     ispcdn(ipls,1),fnamcdn(ipls,1),h2cdn(ipls,1),
+          else if(streql(cdnmdlp(ipls),cdnmdlp_sel(8))) then !}{ 'BOLTZMANN'
+            write(iunoo,'(3i6,6x,1p,2e12.4)') ispcdn(ipls,1),
+     ,                        itpcdn(ipls,1),istrcdn(ipls,1),
+     ,                        bltzcdn(ipls),dltecdn(ipls)
+          else if(streql(cdnmdlp(ipls),cdnmdlp_sel(9))) then !}{ 'CORONA'
+            write(iunoo,'(3i6,1x,a6,1x,a4,a9,a3,1p,e12.4)') 
+     ,                     ispcdn(ipls,1),
+     ,                     itpcdn(ipls,1),istrcdn(ipls,1),
+     ,                     fnamcdn(ipls,1),h2cdn(ipls,1),
      ,                     reaccdn(ipls,1),crcdn(ipls,1),acrncdn(ipls)
-          else if(cdnmdlp(ipls).eq.cdnmdlp_sel(5)) then !}{
+          else if(streql(cdnmdlp(ipls),cdnmdlp_sel(10))) then !}{ 'COLRAD'
             do i=1,nrep(npls) !{
-              write(iunoo,'(i6,1x,a6,1x,a4,a9,a3)') 
-     ,                     ispcdn(ipls,i),fnamcdn(ipls,i),h2cdn(ipls,i),
+              write(iunoo,'(3i6,1x,a6,1x,a4,a9,a3)') 
+     ,                     ispcdn(ipls,i),
+     ,                     itpcdn(ipls,i),istrcdn(ipls,i),
+     ,                     fnamcdn(ipls,i),h2cdn(ipls,i),
      ,                     reaccdn(ipls,i),crcdn(ipls,i)
             end do !}
           else !}{

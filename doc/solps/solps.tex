@@ -16997,37 +16997,35 @@ or {\tt bash} users would use something like
 ). If choosing to use {\tt SOLPS\_CPP} instead, the procedure is the same as
 in the previous section.
 
-\subsection{Uinp}
-\index{DEFINES, used in compiling Uinp}
+%% \subsection{Uinp}
+%% \index{DEFINES, used in compiling Uinp}
 
 %%grep #if $SOLPSTOP/modules/Uinp/*/*.[Ff]* | grep -v builds | awk '{print $2,$1}' | sort | uniq
 
-We list here the possible compiler options that can be used when compiling {\tt Uinp}.
-The options below must therefore, if desired, be declared as part of the \${\tt SOLPS\_CPP} environment variable, which is defined in the
-\${\tt SOLPSTOP/SETUP/config.}\${\tt {HOST\_NAME}.}\${\tt {COMPILER}(.local)} files.
+%% We list here the possible compiler options that can be used when compiling {\tt Uinp}. The options below must therefore, if desired, be declared as part of the \${\tt SOLPS\_CPP} environment variable, which is defined in the \${\tt SOLPSTOP/SETUP/config.}\${\tt {HOST\_NAME}.}\${\tt {COMPILER}(.local)} files.
 
 %%grep #if $SOLPSTOP/modules/Uinp/src/*.F | awk '{print $2,$1}' | sort | uniq
 
-We list below where the {\tt Uinp} compilation switches are used.
+%% We list below where the {\tt Uinp} compilation switches are used.
 
-\begin{center}
-  \begin{longtable}{|l|l|}
-    \hline
-    \multicolumn{2}{|l|}{\small\sl continued from previous page} \\
-    \hline name & used in \\
-    \hline \endhead
-    \hline name & used in \\
-    \hline \endfirsthead
-    \hline
-    \multicolumn{2}{|l|}{\small\sl continued on next page} \\
-    \hline \endfoot
-    \endlastfoot
-HPUX & uiblkd.F \\
-    \hline
-    \caption{Defines for Uinp and where they are used.}
-    \label{tab:Uinpdefines}
-  \end{longtable}
-\end{center}
+%% \begin{center}
+%%   \begin{longtable}{|l|l|}
+%%     \hline
+%%     \multicolumn{2}{|l|}{\small\sl continued from previous page} \\
+%%     \hline name & used in \\
+%%     \hline \endhead
+%%     \hline name & used in \\
+%%     \hline \endfirsthead
+%%     \hline
+%%     \multicolumn{2}{|l|}{\small\sl continued on next page} \\
+%%     \hline \endfoot
+%%     \endlastfoot
+%% HPUX & uiblkd.F \\
+%%     \hline
+%%     \caption{Defines for Uinp and where they are used.}
+%%     \label{tab:Uinpdefines}
+%%   \end{longtable}
+%% \end{center}
 
 
 \section{NAG calls in SOLPS}

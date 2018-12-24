@@ -148,8 +148,8 @@ c*** 5
      ,  iscd4p(npls,nreac),iscdep(npls,nreac),nrep(npls)
       real eelecp(npls,nreac), ebulkp(npls,nreac), escd1p(npls,nreac),
      ,     escd2p(npls,nreac), freacp(npls,nreac)
-      integer ispcdn(npls,nrcdn)
-      real bltzcdn(npls),dltecdn(npls),acrncdn(npls)
+      integer ispcdn(npls,nrcdn),itpcdn(npls,nrcdn),istrcdn(npls,nrcdn)
+      real valcdn(npls,5),bltzcdn(npls),dltecdn(npls),acrncdn(npls)
       character cdnmdlp(npls)*(ldnmdlp),fnamcdn(npls,nrcdn)*6,
      ,    h2cdn(npls,nrcdn)*4,reaccdn(npls,nrcdn)*9,crcdn(npls,nrcdn)*3
       integer indpro(12)
@@ -416,8 +416,8 @@ c*** b2ah.dat
      ,  ireacf,ibulkf,iscd1f,iscd2f,iscd3f,iscd4f,iscdef,iestmf,ibgkf,
      ,  nplsi,nbgk,nmassp,ncharp,nprtp,nchrgp,isrfp,
      ,  isrtp,nmsecp,nrcp,idnslmp,nfolp,ngenp,nhstp,ireacp,ibulkp,
-     ,  iscd1p,iscd2p,iscd3p,iscd4p,iscdep,nrep,ispcdn,indpro,
-     ,  nnftrm,nchsppri,
+     ,  iscd1p,iscd2p,iscd3p,iscd4p,iscdep,nrep,ispcdn,itpcdn,istrcdn,
+     ,  indpro,nnftrm,nchsppri,
      ,  lchsptrg,lchspgrp,lchspprt,lchspprp,lchsptgt,
      ,  lchsptgp,lchspnwl,lchspaux,nchemvar,indchemvar,nnchemvar,
      ,  nstrai,indsrc,npts,ninitl,nemods,namods,nminpts,nspez,ivlsf,
@@ -478,7 +478,8 @@ c*** b2ah.dat
      ,  eelecm,ebulkm,escd1m,escd2m,freacm,
      ,  eeleci,ebulki,escd1i,escd2i,freaci,
      ,  eelecf,ebulkf,escd1f,escd2f,freacf,edpotf,
-     ,  eelecp,ebulkp,escd1p,escd2p,freacp,bltzcdn,dltecdn,acrncdn,
+     ,  eelecp,ebulkp,escd1p,escd2p,freacp,
+     ,  valcdn,bltzcdn,dltecdn,acrncdn,
      ,  te0,te1,te2,te3,te4,te5,ti0,ti1,ti2,ti3,ti4,ti5,di0,di1,di2,di3,
      ,  di4,di5,vx0,vx1,vx2,vx3,vx4,vx5,vy0,vy1,vy2,vy3,vy4,vy5,vz0,vz1,
      ,  vz2,vz3,vz4,vz5,b0,b1,b2,b3,b4,b5,vl0,vl1,vl2,vl3,vl4,vl5,
