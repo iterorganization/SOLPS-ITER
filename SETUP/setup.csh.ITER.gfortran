@@ -4,7 +4,8 @@ module use /work/imas/etc/modulefiles
 module use /work/imas/etc/modules/all
 # Modules needed by SOLPS-ITER
 set nodename=`hostname`
-module load IMAS/3.20.0-3.8.3
+# module load IMAS/3.20.0-3.8.3
+module load IMAS/3.21.0-3.8.4
 module load GGD/1.8.1-GCC-6.4.0-2.28
 module load Kepler
 module load FC2K

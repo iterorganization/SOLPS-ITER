@@ -10,11 +10,23 @@ ifndef SOLPSTOP
   $(error SOLPSTOP not defined)
 endif
 
+# Extensions for OBJDIR if mpi and/or debug options are used
+ifdef USE_MPI
+EXT_MPI = .mpi
+endif
+ifdef USE_IMPGYRO
+EXT_IMPGYRO = .ig
+endif
+ifdef SOLPS_DEBUG
+EXT_DEBUG = .debug
+endif
+
 SRCTRI   = ${PWD}
 SRCDIR   = ${SRCTRI}/src
 SRCLOCAL = ${SRCTRI}/local
 B2SRC    = ${SOLPSTOP}/modules/B2.5/src
 SRCEIR   = ${SOLPSTOP}/modules/Eirene/src
+EIRDIR   = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
 
 MAKES = ${SRCTRI}/Makefile 
 # Include global SOLPS compiler settings
@@ -78,6 +90,7 @@ else
 VPATH =${SRCDIR}/modules:${SRCDIR}/src
 endif
 endif
+FPATH =${SRCDIR}/modules
 
 ifeq ($(shell [ -e ${OBJDIR}/LISTOBJ ] && echo yes || echo no ),yes)
 include ${OBJDIR}/LISTOBJ
@@ -90,11 +103,12 @@ MAKES+= ${SRCTRI}/config/config.${HOST_NAME}.${COMPILER}.local
 endif
 
 MODULES := ${patsubst ${SRCDIR}/modules/%.f,%,${shell echo ${SRCDIR}/modules/*.f}}
+MODULES += ${patsubst ${SRCDIR}/modules/%.F,%,${shell echo ${SRCDIR}/modules/*.F}}
 MODLOCASE:=$(shell echo $(MODULES)| tr A-Z a-z)
 MODMODS := ${MODLOCASE:%=${OBJDIR}/%.${MOD}}
 MODOBJS = ${MODULES:%=${OBJDIR}/%.o}
-ALLOBJS = ${OBJS:%.o=${OBJDIR}/%.o}
-SRCF = ${OBJS:%.o=%.f}
+ALLOBJS = ${OBJS:%.o=${OBJDIR}/%.o} ${OBJF:%.o=${OBJDIR}/%.o}
+SRCF = ${OBJS:%.o=%.f} ${OBJF:%.o=%.F}
 
 EXCLUDELIS = tria.o triageom.o triainq.o
 
@@ -127,8 +141,8 @@ ${OBJDIR}/triageom: ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${MAKES}
 	${LD} $(LDOPTS) -o ${OBJDIR}/triageom ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${LDLIBS} $(GKS) $(LDEXTRA)
 endif
 
-${OBJDIR}/triainq: ${OBJDIR}/triainq.o ${MAKES}
-	${LD} $(LDOPTS) -o ${OBJDIR}/triainq ${OBJDIR}/triainq.o
+${OBJDIR}/triainq: ${OBJDIR}/triainq.o ${OBJDIR}/libtria.a ${MAKES}
+	${LD} $(LDOPTS) -o ${OBJDIR}/triainq ${OBJDIR}/triainq.o ${OBJDIR}/libtria.a 
 
 ${OBJDIR}/libtria.a: ${ALLOBJS}
 	${BLD} $@ ${ALLOBJS}
@@ -152,27 +166,27 @@ ifneq (${MOD},o)
 	@echo '# 2' >> ${OBJDIR}/dependencies
 endif
 ifeq ($(LOCAL),yes)
-	@egrep -ai '^[ 	]+use ' ${SRCLOCAL}/*.f ${SRCDIR}/*/*.f | grep -v 'IGNORE' | tr , ' ' | \
-          awk '{sub("\\.f:",".o:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' | sort -u >> ${OBJDIR}/dependencies
+	@egrep -ai '^[ 	]+use ' ${SRCLOCAL}/*.[fF] ${SRCDIR}/*/*.[fF] | grep -v 'IGNORE' | tr , ' ' | \
+          awk '{sub("\\.f:",".o:",$$1);sub("\\.F:",".o:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' | sort -u >> ${OBJDIR}/dependencies
 	@echo '# 3b' >> ${OBJDIR}/dependencies
-	@egrep -ai '^[ 	]+use ' ${SRCLOCAL}/*.f ${SRCDIR}/modules/*.f | grep -v 'IGNORE'  | tr , ' ' | awk '{sub("\\.f:",".${MOD}:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' >> ${OBJDIR}/dependencies
+	@egrep -ai '^[ 	]+use ' ${SRCLOCAL}/*.[fF] ${SRCDIR}/modules/*.[fF] | grep -v 'IGNORE' | tr , ' ' | awk '{sub("\\.f:",".${MOD}:",$$1);sub("\\.F:",".${MOD}:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' >> ${OBJDIR}/dependencies
 	@echo '# 4b' >> ${OBJDIR}/dependencies
 ifneq (${MOD},o)
-	@egrep -ai '^[ 	]+use ' ${SRCLOCAL}/*.f ${SRCDIR}/*/*.f | grep -v 'IGNORE' | tr , ' ' | awk '{sub("\\.f:",".o:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".o"}' >> ${OBJDIR}/dependencies
+	@egrep -ai '^[ 	]+use ' ${SRCLOCAL}/*.[fF] ${SRCDIR}/*/*.[fF] | grep -v 'IGNORE' | tr , ' ' | awk '{sub("\\.f:",".o:",$$1);sub("\\.F:",".o:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".o"}' >> ${OBJDIR}/dependencies
 	@echo '# 5b' >> ${OBJDIR}/dependencies
-	@egrep -ai '^[ 	]+use ' ${SRCLOCAL}/*.f ${SRCDIR}/modules/*.f | grep -v 'IGNORE'  | tr , ' ' | awk '{sub("\\.f:",".${MOD}:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".o"}' >> ${OBJDIR}/dependencies
+	@egrep -ai '^[ 	]+use ' ${SRCLOCAL}/*.[fF] ${SRCDIR}/modules/*.[fF] | grep -v 'IGNORE' | tr , ' ' | awk '{sub("\\.f:",".${MOD}:",$$1);sub("\\.F:",".${MOD}:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".o"}' >> ${OBJDIR}/dependencies
 	@echo '# 6b' >> ${OBJDIR}/dependencies
 endif
 else
-	@egrep -ai '^[ 	]+use ' ${SRCDIR}/*/*.f | grep -v 'IGNORE' | tr , ' '  | \
-          awk '{sub("\\.f:",".o:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' | sort -u >> ${OBJDIR}/dependencies
+	@egrep -ai '^[ 	]+use ' ${SRCDIR}/*/*.[fF] | grep -v 'IGNORE' | tr , ' '  | \
+          awk '{sub("\\.f:",".o:",$$1);sub("\\.F:",".o:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' | sort -u >> ${OBJDIR}/dependencies
 	@echo '# 3b' >> ${OBJDIR}/dependencies
-	@egrep -ai '^[ 	]+use ' ${SRCDIR}/modules/*.f | grep -v 'IGNORE' | tr , ' '  | awk '{sub("\\.f:",".${MOD}:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' >> ${OBJDIR}/dependencies
+	@egrep -ai '^[ 	]+use ' ${SRCDIR}/modules/*.[fF] | grep -v 'IGNORE' | tr , ' ' | awk '{sub("\\.f:",".${MOD}:",$$1);sub("\\.F:",".${MOD}:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' >> ${OBJDIR}/dependencies
 	@echo '# 4b' >> ${OBJDIR}/dependencies
 ifneq (${MOD},o)
-	@egrep -ai '^[ 	]+use ' ${SRCDIR}/*/*.f | grep -v 'IGNORE' | tr , ' '  | awk '{sub("\\.f:",".o:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".o"}' >> ${OBJDIR}/dependencies
+	@egrep -ai '^[ 	]+use ' ${SRCDIR}/*/*.[fF] | grep -v 'IGNORE' | tr , ' '  | awk '{sub("\\.f:",".o:",$$1);sub("\\.F:",".o:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".o"}' >> ${OBJDIR}/dependencies
 	@echo '# 5b' >> ${OBJDIR}/dependencies
-	@egrep -ai '^[ 	]+use ' ${SRCDIR}/modules/*.f | grep -v 'IGNORE' | tr , ' '  | awk '{sub("\\.f:",".${MOD}:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".o"}' >> ${OBJDIR}/dependencies
+	@egrep -ai '^[ 	]+use ' ${SRCDIR}/modules/*.[fF] | grep -v 'IGNORE' | tr , ' ' | awk '{sub("\\.f:",".${MOD}:",$$1);sub("\\.F:",".${MOD}:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".o"}' >> ${OBJDIR}/dependencies
 	@echo '# 6b' >> ${OBJDIR}/dependencies
 endif
 endif
@@ -189,12 +203,20 @@ listobj:
 		E="$$E -e 's/ $$f//'"; \
 	done; \
 	echo "$$l" | eval sed "$$E" > ${OBJDIR}/LISTOBJ
+	@lf="OBJF =" ; \
+	for d in `echo "$(FPATH)" | tr : \ `; do \
+		lf="$$lf `(cd $$d > /dev/null; echo *.F)`"; \
+	done; \
+	E="-e 's/\.F/\.o/g'" ; for f in $(MAINLIST); do \
+		E="$$E -e 's/ $$f//'"; \
+	done; \
+	echo "$$lf" | eval sed "$$E" >> ${OBJDIR}/LISTOBJ
 
 tags:
 ifeq ($(LOCAL),yes)
-	rm -f ${SRCTRI}/TAGS ; etags -o ${SRCTRI}/TAGS ${SRCLOCAL}/*.f ${SRCDIR}/*/*.F || touch ${SRCTRI}/TAGS
+	rm -f ${SRCTRI}/TAGS ; etags -o ${SRCTRI}/TAGS ${SRCLOCAL}/*.[fF] ${SRCDIR}/*/*.[fF] || touch ${SRCTRI}/TAGS
 else
-	rm -f ${SRCTRI}/TAGS ; etags -o ${SRCTRI}/TAGS ${SRCDIR}/*/*.f || touch ${SCRTRI}/TAGS
+	rm -f ${SRCTRI}/TAGS ; etags -o ${SRCTRI}/TAGS ${SRCDIR}/*/*.[fF] || touch ${SCRTRI}/TAGS
 endif
 
 ${OBJDIR}/LISTOBJ: listobj
@@ -215,6 +237,7 @@ echo:
 	@echo VPATH=${VPATH}
 	@echo ALLOBJS=${ALLOBJS}
 #	@echo OBJS=${OBJS}
+#	@echo OBJF=${OBJF}
 	@echo DEST=${DEST}
 	@echo MODULES=${MODULES}
 #	@echo MODLOCASE=${MODLOCASE}
@@ -223,5 +246,5 @@ echo:
 #	@echo $(filter-out ${MODOBJS},${ALLOBJS})
 	@echo EXCLUDELIS=${EXCLUDELIS}
 	@echo MAINLIST=${MAINLIST}
-#	@echo ${SRCF}
-#	@echo ${OBJDEST}
+	@echo SRCF=${SRCF}
+#	@echo OBJDEST=${OBJDEST}
