@@ -11,27 +11,25 @@ c* The triangular mesh data are taken from the fort.3[345] files
 c======================================================================
 c*  npoint is the actual number of nodes
 c*  ntria ... of triangles
-c*  ltria : index of triangle containing the point
 c*  px(:),py(:) are the x and y coordinates of nodes
 c*  tri(3,:) : triangle vertices (node indices for each triangle)
 c*  neigh(3,:) : full list of neighbours
 c*  neigr(3,:) : list of open sides
-c*  lneigh(3) : indices of triangles neighbouring the reference one
 c*  lnodes(3) : indices of their opposite nodes
 c*  lcell(2,:) : B2.5 grid indices
 c*  xr,yr : coordinates of the reference point
 
       use eirmod_cinit, only: fort
       implicit none
-      integer npoint,ntria,ltria
+      integer npoint,ntria
       real,allocatable :: px(:),py(:)
       integer,allocatable :: tri(:,:), neigh(:,:),neigr(:,:),lcell(:,:)
-      integer ltri,lneigh(3)
-      integer i,j,k,l,m,n,s(3)
+      integer ltri
+      integer i,j,k,l,s(3)
       integer cell
       data cell /0/
       character line*72
-      realg r,u,xr,yr,xm,xx,ym,yx
+      real u,xr,yr,xm,xx,ym,yx
       logical dbg
 #ifdef DBG
       data dbg /.true./
