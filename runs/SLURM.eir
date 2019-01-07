@@ -1,0 +1,30 @@
+#! /bin/tcsh
+
+#SBATCH  --tasks-per-node=#PROCS#
+#SBATCH  --time=24:00:00
+#SBATCH  --mail-user=#EMAIL#
+#SBATCH  --mail-type=END
+#SBATCH  --job-name=EIRENE
+
+echo Using SOLPSTOP = #SOLPSTOP#
+
+if ($?SOLPS_MPI) then
+  set MPI_EXEC=mpiexec
+  set MPI_OPTS=#MPIOPTS#
+  set TIME="srun --mpi=pmi2"
+  set USE_MPI="-m ${MPI_EXEC} ${MPI_OPTS}"
+  set USE_MPI=`echo $USE_MPI | sed -e 's:-m :-m ''":' -e 's:$:"'':'`
+  set EXT_MPI=".mpi"
+else
+  set MPI_EXEC=time
+  set MPI_OPTS=""
+  set EXT_MPI=""
+endif
+
+if ($COMPILER == "HP") then
+  ln -sf input.dat ftn1
+else
+  ln -sf input.dat fort.1
+endif
+${MPI_EXEC} ${MPI_OPTS} $SOLPSTOP/modules/Eirene/builds/standalone.ITER.ifort64${EXT_MPI}/eirobjx
+
