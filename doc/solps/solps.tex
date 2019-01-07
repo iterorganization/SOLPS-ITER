@@ -1625,6 +1625,8 @@ extracted from the {\tt run.log} file.
   \item[save\_mds]\index{save\_mds} Archive an {\tt MDSplus} case. A "-n" option allows for dry-run tests. A "-d" option allows to run within the chosen debugger. A "-s" option allows to archive a {\tt B2.5} stand-alone case.
   \item[setup\_baserun\_eirene\_links]\index{setup\_baserun\_eirene\_links} Prepares the run directory before a {\tt B2.5-Eirene} run by settings up links to the proper data files.
   \item[sgesubmit]\index{sgesubmit} Command file to launch runs on an SGE system. See Section \ref{b2run} for details.
+  \item[SLURM.postprocess]\index{SLURM.postprocess} Alias to {\tt QSUB.postprocess}
+  \item[SLURM.postprocess\_coupled]\index{SLURM.postprocess\_coupled} Alias to {\tt QSUB.postprocess\_coupled}
   \item[SOLPS4to5]\index{SOLPS4to5} Script to convert a \SOLPSfour run directory into a \SOLPSfive one.
   \item[solps-iter\_update]\index{solps-iter\_update} Script to update to the latest \SOLPSITER master distribution.
   \item[solps-iter\_update\_develop]\index{solps-iter\_update\_develop} Script to switch to the up-to-date \SOLPSITER develop branch.
@@ -1778,7 +1780,7 @@ for itself by climbing up the tree. You can add options to the {\tt b2run} comma
 The use of {\tt b2run} allows for the run to be launched
 in a file space that is outside the \${\tt \{SOLPSTOP\}} tree, provided there is a file named
 {\tt SOLPSTOP} in the run directory or above that contains the path to the \${\tt \{SOLPSTOP\}} tree.
-If the file named {\tt SOLPSTOP} is missing, the script {\tt QSUB.*} will construct \${\tt \{SOLPSTOP\}} by
+If the file named {\tt SOLPSTOP} is missing, the submission script ({\tt QSUB.*} or {\tt SLURM.*}) will construct \${\tt \{SOLPSTOP\}} by
 truncating the path to actual run directory \${\tt \{SOLPSTOP\}/runs/<RUN\_DIRECTORY>} to \${\tt \{SOLPSTOP\}}.
 
 To stop an on-going run in a clean way, before it has reached the initially requested
@@ -1805,12 +1807,13 @@ Users on other systems are encouraged to recopy these command scripts (found in 
 and adapt them to their local environment, along
 with the needed modifications to the \${\tt \{SOLPSTOP\}/runs/QSUB.*} or \${\tt \{SOLPSTOP\}/runs/SLURM.*} actual submission scripts.
 Each submission command file can handle five possible cases:
-\begin{description}\index{QSUB files}
+\index{QSUB files}\index{SLURM files}
+\begin{description}
   \item{QSUB.*, SLURM.*} Runs a stand-alone {\tt B2.5} case.
   \item{QSUB.*-gz, SLURM.*-gz} Runs a stand-alone {\tt B2.5} case where the output log file has been compressed (activated with the "-z" option).
   \item{QSUB.*\_coupled, SLURM.*\_coupled} Runs a coupled \SOLPSITER case.
-  \item{QSUB.*\_coupled-gz, SLURM.*\_coupled-gz} Runs a coupled \SOLPSITER case where the output log file has been compressed (activated with the "-z" option).
-  \item{ } Any otherwise named file specified by the user and given as an argument to the submission command. The specified file must be located in the \${\tt \{SOLPSTOP\}/runs} directory, or in the actual run directory on one above it.
+  \item{QSUB.*\_coupled-gzi, SLURM.*\_coupled-gz} Runs a coupled \SOLPSITER case where the output log file has been compressed (activated with the "-z" option).
+  \item{ } Any otherwise named file specified by the user and given as an argument to the submission command (in which case the "-z" option is ineffective). The specified file must be located in the \${\tt \{SOLPSTOP\}/runs} directory, or in the actual run directory, or one above it.
 \end{description}
 where "*" stands for "iter", "itm", "jet", "lsf", or "sge", referring to the machine system on which the
 submission script is to be used. The "\_coupled" scripts are used when the presence of an {\tt Eirene}
@@ -1833,16 +1836,14 @@ itersubmit <<Submission_file>>
 from your current run directory. This script climbs up the tree looking for {\tt <<Submission\_file>>},
 and submits the job to the cluster by the command
 \begin{verbatim}
-qsub -S /usr/bin/tcsh $NAME
+sbatch <<Job_file>>
 \end{verbatim}
-or
-\begin{verbatim}
-sbatch $NAME
-\end{verbatim}
-depending on which cluster you are on, or stops if the submission file is not found, where \${\tt NAME} stands for the name of the submission file used.
+where {\tt <<Job\_file>>} is a temporary modified copy of {\tt <<Submission\_file>>} with changes corresponding to the particular job submission at hand (built automatically by {\tt itersubmit}),
+%% $
+or stops if the submission file is not found.
 
-If {\tt <<Submission\_file>>} is not specified, {\tt itersubmit} looks for {\tt QSUB.iter\_coupled} (or {\tt SLURM.iter\_coupled}) or
-for {\tt QSUB.iter} (or {\tt SLURM.iter}) depending on whether a coupled or a standalone run is required (and to which cluster you are submitting). To request a stand-alone run explicitly, the user can use the "-s" option. Otherwise, the script will assume a coupled run is requested if an {\tt Eirene} {\tt input.dat} file is present in the run directory, and a stand-alone run otherwise.
+If {\tt <<Submission\_file>>} is not specified, {\tt itersubmit} looks for {\tt SLURM.iter\_coupled} or
+for {\tt SLURM.iter} depending on whether a coupled or a standalone run is required. To request a stand-alone run explicitly, the user can use the "-s" option. Otherwise, the script will assume a coupled run is requested if an {\tt Eirene} {\tt input.dat} file is present in the run directory, and a stand-alone run otherwise.
 
 In the case one wishes to run the code with MPI and needs to pass MPI options to the launching program, this is achieved by means of the "-m" option, followed by the desired options inside double quotes, as follows:
 \begin{verbatim}
@@ -1858,15 +1859,14 @@ itersubmit -j <my_job_name>
 \end{verbatim}
 command.
 
-The {\tt QSUB.iter} and {\tt SLURM.iter} scripts first of all
-change directory to \${\tt \{SOLPSTOP\}}
+The {\tt SLURM.iter} script first of all changes directory to \${\tt \{SOLPSTOP\}}
 with the help of {\tt SOLPSTOP} file
 and execute {\tt setup.csh} there. This is necessary
 to set up environment variables for the cluster node
 which would actually execute the job, since that machine
 does not necessarily coincide with one from which the job was submitted.
-Then the {\tt QSUB.iter} and {\tt SLURM.iter} scripts return back to the
-current run directory and execute the script {\tt b2run}.
+Then the {\tt SLURM.iter} script returns back to the current run directory
+and executes the script {\tt b2run}.
 
 The examples presented below are for a pure D plasma.
 
@@ -4207,7 +4207,9 @@ There are currently four possible choices supported. They are:
   \item[ORIGINAL] The original strategy implemented in versions of {\tt Eirene} prior to \SOLPSITER version 3.0.5. In that strategy, each processor is handed either part of a large stratum or one or several full smaller strata. This strategy works well if the number of processors is larger than the number of strata, but is not recommended if the number of strata is larger than the number of processors.
   \item[AUTOMATIC] tells the code to use the current default, whatever it may be.
 \end{description}
-The format to read the strategy is free-form. The input file is scanned for the words describing the chosen strategy after the title line {\tt *** INFORMATION\_FOR\_MPI} is found. The {\em first} match to an (uppercase) strategy name will be the strategy followed by the code. If the title line is missing or no match is found to any of the strategy names, the default {\bf BALANCED} strategy is used. See the {\tt Eirene\_balanced\_MPI} document on the \SOLPSITER web site {\tt Manuals and Documentation} folder for more details on the performance and algorithm corresponding to each strategy.
+The format to read the strategy is free-form. The input file is scanned for the words describing the chosen strategy after the title line {\tt *** INFORMATION\_FOR\_MPI} is found. The {\em first} match to an (uppercase) strategy name will be the strategy followed by the code. If the title line is missing or no match is found to any of the strategy names, the default strategy is used. See the {\tt Eirene\_balanced\_MPI} document on the \SOLPSITER web site {\tt Manuals and Documentation} folder for more details on the performance and algorithm corresponding to each strategy.
+
+The default strategy depends on the version of the MPI library with which {\tt Eirene} was compiled. If MPI version 3 or greater was used, then the default strategy is the {\bf BALANCED} one. Otherwise, the {\bf ORIGINAL} strategy is chosen.
 
 \chapter{Running the coupled version of B2.5-Eirene}
 \label{cha:coupledb2eirene}
