@@ -1,0 +1,36 @@
+#! /bin/ksh
+
+# Load modules
+# module load lapack
+# module load gnuplot
+# module load blas
+# module load globus
+# module load hdf5
+# module load MUMPS
+module unload ifort          # SOLPS appears not to be compatible with Iris' default ifort compiler (currently 2016)
+module load ifort/2015       # 
+module load netcdf
+# module load scalapack
+
+# Environment variables
+if [ -z "$DEVICE" ]; then
+  export DEVICE=d3d
+fi
+
+# Debugger
+# export DBX=totalview
+
+if [ -z `type paraview-config 2> /dev/null` ]; then
+  echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
+else
+  # See ParaViewCatalystUsersGuide_v2.pdf Sec 3.7.2 Linking with Python ...
+  PARAVIEW_LIB=`paraview-config --libs --python | sed s/-L//`
+  if [ ! -z "$LD_LIBRARY_PATH" ]; then
+    export LD_LIBRARY_PATH="${PARAVIEW_LIB}:${LD_LIBRARY_PATH}"
+  else
+    export LD_LIBRARY_PATH=${PARAVIEW_LIB}
+  fi
+  export PYTHONPATH="${PARAVIEW_LIB}/site-packages/vtk:${PYTHONPATH}"
+  export PYTHONPATH="${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
+  export LD_CATALYST=`paraview-config --libs vtkPVPythonCatalyst`
+fi
