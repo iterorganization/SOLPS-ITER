@@ -51,7 +51,7 @@ Program nc2text_simple
   Enddo
   If (debug) Write(*,*) ' Variable dimensions: ', dimlen
 
-  ! Check type (only double supported), allocate and read
+  ! Check type (only double currently supported), allocate and read
   iret = NF_INQ_VARTYPE(ncid,varid,vartyp)
   If (debug) Write(*,*) ' Variable type: ', vartyp
   Select Case (vartyp)
@@ -59,6 +59,12 @@ Program nc2text_simple
      Select Case (nvdims)
      Case (1)
         Allocate(rdata(dimlen(1),1))
+        itmp = i1
+        i1 = j1
+        j1 = itmp
+        itmp = i2
+        i2 = j2
+        j2 = itmp
      Case (2)
         Allocate(rdata(dimlen(1),dimlen(2)))
      Case Default
