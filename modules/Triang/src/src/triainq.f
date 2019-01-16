@@ -63,8 +63,9 @@ c*** Read the data from the input files
       read(21,*) ntria
       read(23,*) k
       if(k.ne.ntria) then !{
-        stop
+        write (0,*)
      .   'ntria values in '//fort//'34 and '//fort//'35 files differ'
+        stop
       end if !}
       if(cell.gt.ntria) then !{
         write(0,*) 'cell > ntria :',cell,ntria

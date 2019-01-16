@@ -78,7 +78,8 @@ C     READ PHYSICAL COORDINATES FROM FORT.30 FILE TO XCOORD, YCOORD
       else if (exp_location.eq.13) then
         new_format = 2
       else
-        stop "Unrecognized format in "//fort//"30 file"
+        write(0,*) 'Unrecognized format in '//fort//'30 file'
+        stop 
       endif
       backspace(30)
       write(*,'(4a)') 'Detected '//fort//'30 is using ',
