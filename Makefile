@@ -348,13 +348,24 @@ clean_build_mpi: clean_b25eirene_mpi clean_uinp_mpi
 
 clean_all:       clean_carre clean_divgeo clean_b25     clean_eirene     clean_b25eirene     clean_uinp     clean_triang clean_manual
 
+clean_all_nox:   clean_carre_nox clean_divgeo_nox clean_b25_nox clean_eirene_nox clean_b25eirene_nox clean_uinp clean_triang_nox clean_manual
+
 clean_all_mpi:   clean_carre clean_divgeo clean_b25_mpi clean_eirene_mpi clean_b25eirene_mpi clean_uinp_mpi clean_triang clean_manual
+
+clean_all_nox_mpi: clean_carre_nox clean_divgeo_nox clean_b25_nox_mpi clean_eirene_nox_mpi clean_b25eirene_nox_mpi clean_uinp_mpi clean_triang_nox clean_manual
 
 clean_carre:
 	cd modules/Carre; ${MAKE} clean
 
+clean_carre_nox:
+	cd modules/Carre; ${MAKE} clean NCARG_ROOT="" LD_NCARG=""
+
 clean_divgeo:
 	cd modules/DivGeo;         ${MAKE} clean
+	cd modules/DivGeo/equtrn;  ${MAKE} clean
+	cd modules/DivGeo/convert; ${MAKE} clean
+
+clean_divgeo_nox:
 	cd modules/DivGeo/equtrn;  ${MAKE} clean
 	cd modules/DivGeo/convert; ${MAKE} clean
 
@@ -367,6 +378,9 @@ clean_eirene_nox:
 clean_eirene_mpi:
 	cd modules/Eirene; ${MAKE} clean USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 
+clean_eirene_nox_mpi:
+	cd modules/Eirene; ${MAKE} clean USE_MPI=-DUSE_MPI SOLPS_MPI=yes LD_GR="" LD_GKS=""
+
 clean_b25:
 	cd modules/B2.5; ${MAKE} clean
 
@@ -375,6 +389,9 @@ clean_b25_mpi:
 
 clean_b25_nox:
 	cd modules/B2.5; ${MAKE} clean LD_GR="" LD_GKS=""
+
+clean_b25_nox_mpi:
+	cd modules/B2.5; ${MAKE} clean USE_MPI=-DUSE_MPI SOLPS_MPI=yes LD_GR="" LD_GKS=""
 
 clean_b25_ig:
 	cd modules/B2.5; ${MAKE} clean USE_IMPGYRO=-DUSE_IMPGYRO
@@ -390,6 +407,10 @@ clean_b25eirene_mpi:
 clean_b25eirene_nox:
 	cd modules/Eirene; ${MAKE} clean USE_B25=-DB25_EIRENE LD_GR="" LD_GKS=""
 	cd modules/B2.5;   ${MAKE} clean USE_EIRENE=-DB25_EIRENE LD_GR="" LD_GKS=""
+
+clean_b25eirene_nox_mpi:
+	cd modules/Eirene; ${MAKE} clean USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI SOLPS_MPI=yes LD_GR="" LD_GKS=""
+	cd modules/B2.5;   ${MAKE} clean USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI SOLPS_MPI=yes LD_GR="" LD_GKS=""
 
 clean_b25eirene_ig:
 	cd modules/Eirene; ${MAKE} clean USE_B25=-DB25_EIRENE    USE_IMPGYRO=-DUSE_IMPGYRO
