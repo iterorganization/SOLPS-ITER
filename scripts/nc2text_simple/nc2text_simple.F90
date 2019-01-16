@@ -23,14 +23,14 @@ Program nc2text_simple
   !-----------------------------------------------------------------------------
   ! Handle command line args
   iret = handle_cmd_arg()
-  If (iret .ne. 0) Return
+  If (iret .ne. 0) Stop
 
   ! Open
   If (debug) Write(*,*) 'Opening file: ',Trim(filename)
   iret = NF_OPEN(Trim(filename),NCWRITE,ncid)
   If (iret .ne. 0) Then
      Write(*,*) 'Error: Could not open ',Trim(filename)
-     Return
+     Stop
   Endif
 
   ! Inquire varid
@@ -38,7 +38,7 @@ Program nc2text_simple
   iret = NF_INQ_VARID(ncid,varname,varid)
   If (iret .ne. 0) Then
      Write(*,*) 'Error: Did not find variable ''',Trim(varname),''' in ',Trim(filename)
-     Return
+     Stop
   Endif
 
   ! Check dim and read lengths
@@ -69,16 +69,16 @@ Program nc2text_simple
         Allocate(rdata(dimlen(1),dimlen(2)))
      Case Default
         Write(*,*) "Error: Only 1 and 2 dimensional arrays supported"
-        Return
+        Stop
      End Select
-     iret = NF_GET_VAR(ncid,varid,rdata)
+     iret = NF_GET_VAR_DOUBLE(ncid,varid,rdata)
      If (debug) Write(*,*) ' Type is real'
   Case Default
      Write(*,*) 'Error: type does not appear to be double ', vartyp
   End Select
   If (iret .ne. 0) Then
      Write(*,*) 'Error: Could not read variable ''',Trim(varname),''' from ',Trim(filename)
-     Return
+     Stop
   Endif
 
   ! Handle negative indexing
@@ -100,7 +100,7 @@ Program nc2text_simple
      Write(*,*) "Error: index out of bounds"
      Write(*,*) "Size is ",dimlen
      Write(*,'(a,i0,a,i0,a,i0,a,i0,a)') ' Subscripts processed to (',i1,':',i2,',',j1,':',j2,')'
-     Return
+     Stop
   Endif
 
   ! Output
