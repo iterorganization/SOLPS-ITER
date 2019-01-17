@@ -36,12 +36,10 @@ c======================================================================
       integer ndup
       logical h_iso_used(m_hlp_h)
       logical, allocatable :: ldup(:)
-      integer find_matching_reagent, find_matching_species,
-     ,        get_atomic_number, lnblnk
-      logical streql, silent_open, isadigit, isplusorminus
+      integer find_matching_reagent, get_atomic_number, lnblnk
+      logical streql, silent_open
       external xerrab, streql, subini, subend
-      external find_matching_reagent, find_matching_species,
-     ,         get_atomic_number, lnblnk, isadigit, isplusorminus
+      external find_matching_reagent, get_atomic_number, lnblnk
       external silent_open
 c======================================================================
       call subini ('uinprprc')
@@ -510,7 +508,7 @@ c*** Parse the multiple output particles, if any (e.g., 2H)
           end if !}
         else !}{
           if(m.gt.1) then !{
-            write(f_hlp,'(2h(i,i1,1h))') m-1
+            write(f_hlp,'(a2,i1,a1)') '(i',m-1,')'
             read(rctnpto1(irc),f_hlp) k
             rctnnmo1(irc)=max(1,k)
             rctnpto1(irc)=rctnpto1(irc)(m:len(rctnpto1))
@@ -541,7 +539,7 @@ c*** Parse the multiple output particles, if any (e.g., 2H)
           end if !}
         else !}{
           if(m.gt.1) then !{
-            write(f_hlp,'(2h(i,i1,1h))') m-1
+            write(f_hlp,'(a2,i1,a1)') '(i',m-1,')'
             read(rctnpto2(irc),f_hlp) k
             rctnnmo2(irc)=max(1,k)
             rctnpto2(irc)=rctnpto2(irc)(m:len(rctnpto2))
@@ -572,7 +570,7 @@ c*** Parse the multiple output particles, if any (e.g., 2H)
           end if !}
         else !}{
           if(m.gt.1) then !{
-            write(f_hlp,'(2h(i,i1,1h))') m-1
+            write(f_hlp,'(a2,i1,a1)') '(i',m-1,')'
             read(rctnpto3(irc),f_hlp) k
             rctnnmo3(irc)=max(1,k)
             rctnpto3(irc)=rctnpto3(irc)(m:len(rctnpto3))

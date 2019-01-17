@@ -119,12 +119,13 @@ c     ,         l,n,jvrb,jblk,lprdckw(l,n,jvrb,jblk),' : ',c,i,r !###
               s(j+2)='='
               k=j+3
               if(ltrvr(jvrb,jblk)) then !{
-                write(ufc,700) '(',nmdpr(jvrb,jblk)
-  700           format(a1,i3,15h(2h ',a1,2h',)))
+                write(ufc,700) '(',nmdpr(jvrb,jblk),'(2h '',a1,2h'',))'
+  700           format(a1,i3,a15)
                 write(ss(k:mxslen),ufc) (cniprm(i,l,n,jvrb,jblk),i=1,m)
               else if(lt8rvr(jvrb,jblk)) then !}{
-                write(ufc,710) '(',nmdpr(jvrb,jblk)
-  710           format(a1,i3,17h(1x,1h',a8,2h',)))
+                write(ufc,710)
+     .                       '(',nmdpr(jvrb,jblk),'(1x,1h'',a8,2h'',))'
+  710           format(a1,i3,a17)
                 do i=1,m
                   len=lnblnk(c8niprm(i,l,n,jvrb,jblk))
                   if (len.lt.8) then
