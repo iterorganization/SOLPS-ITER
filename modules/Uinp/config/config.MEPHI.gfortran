@@ -11,7 +11,7 @@ else
 FC       = gfortran
 endif
 ifdef SOLPS_DEBUG
-FFLAGS   = -g -ffpe-trap=denormal
+FFLAGS   = -g -ffpe-trap=denormal -ffpe-trap=invalid -ffpe-trap=zero -ftrapv -fsignaling-nans
 endif
 INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}

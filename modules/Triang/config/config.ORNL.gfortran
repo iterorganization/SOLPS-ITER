@@ -16,7 +16,7 @@ LINK_MOD =
 
 FC = gfortran
 ifdef SOLPS_DEBUG
-FCOPTS = -C -g -Wall -ffpe-trap=denormal
+FCOPTS = -C -g -Wall -ffpe-trap=denormal -ffpe-trap=invalid -ffpe-trap=zero -ftrapv -fsignaling-nans
 else
 FCOPTS = -O3
 endif
