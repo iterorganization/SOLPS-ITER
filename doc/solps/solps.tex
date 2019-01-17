@@ -2814,25 +2814,25 @@ The code will fail a transport coefficients test in {\tt b2tral} otherwise.
 See also Appendix \ref{lis:b2cdcn} for a more up-to-date description.
 
 \begin{description}\index{NREG}
-\item[DTCO]\index{DTCO} {\tt real array, length NS * NREG}, the
+\item[DTCO]\index{DTCO} {\tt real array, length NS * (NREG+1)}, the
   timestep multiplier for the continuity equation of species
   {\tt IS} in region {\tt IREG}
-\item[DTMO]\index{DTMO} {\tt real array, length NS * NREG}, the
+\item[DTMO]\index{DTMO} {\tt real array, length NS * (NREG+1)}, the
   timestep multiplier for the parallel momentum equation of species
   {\tt IS} in region {\tt IREG}
-\item[DTEE]\index{DTEE} {\tt real array, length NREG}, the
+\item[DTEE]\index{DTEE} {\tt real array, length (NREG+1)}, the
   timestep multiplier for the electron energy equation in region {\tt IREG}
-\item[DTEI]\index{DTEI} {\tt real array, length NREG}, the
+\item[DTEI]\index{DTEI} {\tt real array, length (NREG+1)}, the
   timestep multiplier for the ion energy equation in region {\tt IREG}
-\item[SOLVECO]\index{SOLVECO} {\tt logical array, length NS * NREG},
+\item[SOLVECO]\index{SOLVECO} {\tt logical array, length NS * (NREG+1)},
   indicates whether the continuity equations are to be solved in each region
-\item[SOLVEMO]\index{SOLVEMO} {\tt logical array, length NS * NREG},
+\item[SOLVEMO]\index{SOLVEMO} {\tt logical array, length NS * (NREG+1)},
   indicates whether the parallel momentum equations are to be solved in each region
-\item[SOLVEPO]\index{SOLVEPO} {\tt logical array, length NREG},
+\item[SOLVEPO]\index{SOLVEPO} {\tt logical array, length (NREG+1)},
   indicates whether the potential equation is to be solved in each region
-\item[SOLVEEE]\index{SOLVEEE} {\tt logical array, length NREG},
+\item[SOLVEEE]\index{SOLVEEE} {\tt logical array, length (NREG+1)},
   indicates whether the electron heat equation is to be solved in each region
-\item[SOLVEEI]\index{SOLVEEI} {\tt logical array, length NREG},
+\item[SOLVEEI]\index{SOLVEEI} {\tt logical array, length (NREG+1)},
   indicates whether the ion heat equation is to be solved in each region
 \item[TIME\_FACTOR\_REQUIRED]\index{TIME\_FACTOR\_REQUIRED}
   {\tt real}, related to local source re-scaling
@@ -2843,7 +2843,11 @@ See also Appendix \ref{lis:b2cdcn} for a more up-to-date description.
   multiplier to the timestep for the innermost core ring of cells
 \item[CORE\_DT\_FACTOR]\index{CORE\_DT\_FACTOR} {\tt real},
   multiplier to the timestep for successive core rings of cells
+\item[ADD\_TE\_CORR\_TO\_PO]\index{ADD\_TE\_CORR\_TO\_PO}{\tt logical array, length (NREG+1)},
+  indicates whether the electron temperature correction is added to the electric potential correction ({\tt .true.} by default)
 \end{description}
+
+When referring to array length {\tt (NREG+1)} above, we mean range {\tt [0:NREG]} in the code.
 
 The region indices are defined as follows for a SN case:
 \begin{itemize}\index{regions}
