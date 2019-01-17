@@ -21,10 +21,10 @@ module load nag/26-nagfor-6.2
 module load motif/2.3.8-intel-2018a
 module load gnuplot/5.2.2-intel-2018a
 module load texlive
-module load MATLAB/2017a
+module load MATLAB/2018a
 
 # mpi-library
-module load OpenMPI/2.1.1-GCC-6.4.0-2.28
+module load impi/2018.1.163-iccifort-2018.1.163-GCC-6.4.0-2.28
 
 # Debugger (set environment variable DBX)
 setenv DBX dbx90

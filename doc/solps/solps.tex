@@ -2828,25 +2828,25 @@ The code will fail a transport coefficients test in {\tt b2tral} otherwise.
 See also Appendix \ref{lis:b2cdcn} for a more up-to-date description.
 
 \begin{description}\index{NREG}
-\item[DTCO]\index{DTCO} {\tt real array, length NS * NREG}, the
+\item[DTCO]\index{DTCO} {\tt real array, length NS * (NREG+1)}, the
   timestep multiplier for the continuity equation of species
   {\tt IS} in region {\tt IREG}
-\item[DTMO]\index{DTMO} {\tt real array, length NS * NREG}, the
+\item[DTMO]\index{DTMO} {\tt real array, length NS * (NREG+1)}, the
   timestep multiplier for the parallel momentum equation of species
   {\tt IS} in region {\tt IREG}
-\item[DTEE]\index{DTEE} {\tt real array, length NREG}, the
+\item[DTEE]\index{DTEE} {\tt real array, length (NREG+1)}, the
   timestep multiplier for the electron energy equation in region {\tt IREG}
-\item[DTEI]\index{DTEI} {\tt real array, length NREG}, the
+\item[DTEI]\index{DTEI} {\tt real array, length (NREG+1)}, the
   timestep multiplier for the ion energy equation in region {\tt IREG}
-\item[SOLVECO]\index{SOLVECO} {\tt logical array, length NS * NREG},
+\item[SOLVECO]\index{SOLVECO} {\tt logical array, length NS * (NREG+1)},
   indicates whether the continuity equations are to be solved in each region
-\item[SOLVEMO]\index{SOLVEMO} {\tt logical array, length NS * NREG},
+\item[SOLVEMO]\index{SOLVEMO} {\tt logical array, length NS * (NREG+1)},
   indicates whether the parallel momentum equations are to be solved in each region
-\item[SOLVEPO]\index{SOLVEPO} {\tt logical array, length NREG},
+\item[SOLVEPO]\index{SOLVEPO} {\tt logical array, length (NREG+1)},
   indicates whether the potential equation is to be solved in each region
-\item[SOLVEEE]\index{SOLVEEE} {\tt logical array, length NREG},
+\item[SOLVEEE]\index{SOLVEEE} {\tt logical array, length (NREG+1)},
   indicates whether the electron heat equation is to be solved in each region
-\item[SOLVEEI]\index{SOLVEEI} {\tt logical array, length NREG},
+\item[SOLVEEI]\index{SOLVEEI} {\tt logical array, length (NREG+1)},
   indicates whether the ion heat equation is to be solved in each region
 \item[TIME\_FACTOR\_REQUIRED]\index{TIME\_FACTOR\_REQUIRED}
   {\tt real}, related to local source re-scaling
@@ -2857,7 +2857,11 @@ See also Appendix \ref{lis:b2cdcn} for a more up-to-date description.
   multiplier to the timestep for the innermost core ring of cells
 \item[CORE\_DT\_FACTOR]\index{CORE\_DT\_FACTOR} {\tt real},
   multiplier to the timestep for successive core rings of cells
+\item[ADD\_TE\_CORR\_TO\_PO]\index{ADD\_TE\_CORR\_TO\_PO}{\tt logical array, length (NREG+1)},
+  indicates whether the electron temperature correction is added to the electric potential correction ({\tt .true.} by default)
 \end{description}
+
+When referring to array length {\tt (NREG+1)} above, we mean range {\tt [0:NREG]} in the code.
 
 The region indices are defined as follows for a SN case:
 \begin{itemize}\index{regions}
@@ -16337,7 +16341,6 @@ which is defined in the
 \begin{description}
 \item[CATALYST] \index{CATALYST} Turns on the Paraview Catalyst utility (see the SOLPS-GUI manual for full details)
 \item[DBG] \index{DBG} Turns on additional debugging output (set internally by the {\tt Makefile} when requesting a {\tt \_debug} compilation)
-\item[FLUSH] \index{FLUSH} Allows for flushing of some output files
 \item[F2003] \index{F2003} To be used if the compiler is compatible with {\tt Fortran 2003}
 \item[F77] \index{F77} Identifies specific code to {\tt Fortran-77} compilers
 \item[GFORTRAN] \index{GFORTRAN} To be used with {\tt gfortran} compilation
@@ -16603,9 +16606,8 @@ B25\_EIRENE & sources/eirene\_f30f31.F \\
 B25\_EIRENE & sources/eirene\_mc.F \\
 B25\_EIRENE & sources/eirene\_mc\_init.F \\
 B25\_EIRENE & transport/b2tinnt.F \\
-B25\_EIRENE & user/b2blnc.F \\
 B25\_EIRENE & user/b2blne.F \\
-B25\_EIRENE & user/b2blnm.F \\
+B25\_EIRENE & user/b2blns.F \\
 B25\_EIRENE & user/b2trace.F \\
 B25\_EIRENE & user/b2usrtrc.F \\
 B25\_EIRENE & user/b2wrint.F \\
@@ -16631,6 +16633,7 @@ DBG & b2plot/plotcontour.F \\
 DBG & b2plot/rlcomp.F \\
 DBG & equations/b2news\_.F \\
 DBG & modules/b2mod\_input\_profile.F \\
+DBG & modules/b2mod\_neutrals\_namelist.F \\
 DBG & user/b2usrtrc.F \\
 DBG & utility/ma28.F \\
 DBG & utility/ma28copy.F \\

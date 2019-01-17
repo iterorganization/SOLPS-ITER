@@ -30,7 +30,7 @@ c<<<
         print '(a,2i3,i6,i4,1p,1e12.4,1x,a)',
      ,   'istr,nstrai,npts,kgpfstr,tgpfstr,cgpfstrs:',
      ,    istr,nstrai,npts(nstrai),kgpfstr(istr),tgpfstr(istr),
-     ,    cgpfstrs(istr)
+     ,    trim(cgpfstrs(istr))
 c>>>
         if(nstrai.ge.nstra) then !{
           write(0,*) 'Too many strata requested (gas puff',istr,') : ',
@@ -58,8 +58,8 @@ c>>>
         end if !}
         nsrfsi(nstrai)=kgpfstr(istr)
 
-        write(txtsou(nstrai),*)  'Gas puffing source ',istr,' : ',
-     ,        cgpfstrs(istr)
+        write(txtsou(nstrai),'(a,i2,a,a)')
+     ,   'Gas puffing source ',istr,' : ',trim(cgpfstrs(istr))
         npts(nstrai)=npgpfstr(istr)
         nminpts(nstrai)=mpgpfstr(istr)
         if(npts(nstrai).lt.0) npts(nstrai)=10000
@@ -79,7 +79,7 @@ c>>>
         call uinspcid(cgpfstrs(istr),l,k)
         if(l.le.0 .or. l.gt.2) then !{
           write(0,*) 'Wrong particle specification for gas puffing ',
-     ,               'source ',istr,' : ',cgpfstrs(istr)
+     ,               'source ',istr,' : ',trim(cgpfstrs(istr))
           write(0,*) '(must be either atom or molecule)'
           call xerrab ('==> Check the DG model')
         end if !}
