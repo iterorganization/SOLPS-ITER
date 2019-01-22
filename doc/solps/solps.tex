@@ -4105,8 +4105,8 @@ We only include here the variables or aspects thereof not already described in t
   \item[NTRFRM] {\tt fort.33} format switch, should be 0
   \item[LKINDP] Index of the {\tt Eirene} atom this species is linked to
   \item[NPTC] In addition to the description in the {\tt Eirene} manual, note that only the value from the first segment of the stratum ({\tt IPRT=1}) is used.
-  \item[NPTCM] This corresponds to the {\tt NMINPTS} flag in input block 7, and is needed only if INDSRC=6, i.e., if the source is specified by data from block 14 alone. As for {\tt NPTC}, only the value from the first stratum segment is used.
-  \item[NEMOD] This corresponds to the {\tt NEMODS} flag in input block 7, and is needed only if INDSRC=6, i.e., if the source is specified by data from block 14 alone. As for {\tt NPTC}, only the value from the first stratum segment is used.
+  \item[NPTCM] This corresponds to the {\tt NMINPTS} flag in input block 7, and is needed only if {\tt INDSRC=6}, i.e., if the source is specified by data from block 14 alone. As for {\tt NPTC}, only the value from the first stratum segment is used.
+  \item[NEMOD] This corresponds to the {\tt NEMODS} flag in input block 7, and is needed only if {\tt INDSRC=6}, i.e., if the source is specified by data from block 14 alone. As for {\tt NPTC}, only the value from the first stratum segment is used.
   \item[NCOPIB] Not in use
   \item[NCOPEB] Maximum number of additional tallies per plasma background species
 \end{description}
@@ -16915,7 +16915,7 @@ routines are affected, recompile them all with
   gmake depend
   gmake
 \end{verbatim}
-).  If {\tt EIRENE\_DEFINES} already had a value, you would want to do
+). If {\tt EIRENE\_DEFINES} already had a value, you would want to do
 \begin{verbatim}
   setenv EIRENE_DEFINES "$EIRENE_DEFINES -DOPTION"
 \end{verbatim}

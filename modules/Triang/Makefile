@@ -10,6 +10,17 @@ ifndef SOLPSTOP
   $(error SOLPSTOP not defined)
 endif
 
+# Extensions for OBJDIR if mpi and/or debug options are used
+ifdef USE_MPI
+EXT_MPI = .mpi
+endif
+ifdef USE_IMPGYRO
+EXT_IMPGYRO = .ig
+endif
+ifdef SOLPS_DEBUG
+EXT_DEBUG = .debug
+endif
+
 SRCTRI   = ${PWD}
 SRCDIR   = ${SRCTRI}/src
 SRCLOCAL = ${SRCTRI}/local
@@ -36,8 +47,13 @@ ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local ] && 
   MAKES += ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
 endif
 
-# Extension for OBJDIR if debug options are used
-# uncomment following lines if debug-code needed
+# Extensions for OBJDIR if MPI and/or debug options are used
+ifdef USE_MPI
+EXT_MPI = .mpi
+endif
+ifdef USE_IMPGYRO
+EXT_IMPGYRO = .ig
+endif
 ifdef SOLPS_DEBUG
 EXT_DEBUG = .debug
 DEFINES  += -DDBG
@@ -70,6 +86,7 @@ else
 VPATH =${SRCDIR}/modules:${SRCDIR}/src
 endif
 endif
+FPATH =${SRCDIR}/modules
 
 ifeq ($(shell [ -e ${OBJDIR}/LISTOBJ ] && echo yes || echo no ),yes)
 include ${OBJDIR}/LISTOBJ
@@ -103,29 +120,32 @@ endif
 mods: $(MODMODS)
 
 ifeq ($(strip ${LD_GR}),)
-${OBJDIR}/tria ${OBJDIR}/.nox: ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${MAKES}
+${OBJDIR}/tria ${OBJDIR}/.nox: ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${OBJDIR}/ioflush.o ${MAKES}
 	rm -f ${OBJDIR}/tria 2> /dev/null; \
 	rm -f ${OBJDIR}/.x 2> /dev/null; \
-	${LD} $(LDOPTS) -o ${OBJDIR}/tria ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${LDLIBS} $(LDEXTRA) && touch ${OBJDIR}/.nox
+	${LD} $(LDOPTS) -o ${OBJDIR}/tria ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${OBJDIR}/ioflush.o ${LDLIBS} $(LDEXTRA) && touch ${OBJDIR}/.nox
 
 ${OBJDIR}/triageom: ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${MAKES}
 	${LD} $(LDOPTS) -o ${OBJDIR}/triageom ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${LDLIBS} $(LDEXTRA)
 else
-${OBJDIR}/tria ${OBJDIR}/.x: ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${MAKES}
+${OBJDIR}/tria ${OBJDIR}/.x: ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${OBJDIR}/ioflush.o ${MAKES}
 	rm -f ${OBJDIR}/tria 2> /dev/null; \
 	rm -f ${OBJDIR}/.nox 2> /dev/null; \
-	${LD} $(LDOPTS) -o ${OBJDIR}/tria ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${LDLIBS} $(GKS) $(LDEXTRA) && touch ${OBJDIR}/.x
+	${LD} $(LDOPTS) -o ${OBJDIR}/tria ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${OBJDIR}/ioflush.o ${LDLIBS} $(GKS) $(LDEXTRA) && touch ${OBJDIR}/.x
 
 ${OBJDIR}/triageom: ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${MAKES}
 	${LD} $(LDOPTS) -o ${OBJDIR}/triageom ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${LDLIBS} $(GKS) $(LDEXTRA)
 endif
 
-${OBJDIR}/triainq: ${OBJDIR}/triainq.o ${MAKES}
-	${LD} $(LDOPTS) -o ${OBJDIR}/triainq ${OBJDIR}/triainq.o
+${OBJDIR}/triainq: ${OBJDIR}/triainq.o ${OBJDIR}/libtria.a ${MAKES}
+	${LD} $(LDOPTS) -o ${OBJDIR}/triainq ${OBJDIR}/triainq.o ${OBJDIR}/libtria.a 
 
 ${OBJDIR}/libtria.a: ${ALLOBJS}
 	${BLD} $@ ${ALLOBJS}
 	ranlib $@
+
+${OBJDIR}/ioflush.o:
+	ln -sf ${EIROBJ}/ioflush.o ${OBJDIR}
 
 clean:
 	rm -rf ${OBJDIR}/*.f ${OBJDIR}/*.o ${OBJDIR}/libtria.a ${OBJDIR}/tria ${OBJDIR}/triageom ${OBJDIR}/triainq ${OBJDIR}/LISTOBJ ${OBJDIR}/dependencies
@@ -208,6 +228,7 @@ echo:
 	@echo VPATH=${VPATH}
 	@echo ALLOBJS=${ALLOBJS}
 #	@echo OBJS=${OBJS}
+#	@echo OBJF=${OBJF}
 	@echo DEST=${DEST}
 	@echo MODULES=${MODULES}
 #	@echo MODLOCASE=${MODLOCASE}
@@ -216,5 +237,5 @@ echo:
 #	@echo $(filter-out ${MODOBJS},${ALLOBJS})
 	@echo EXCLUDELIS=${EXCLUDELIS}
 	@echo MAINLIST=${MAINLIST}
-#	@echo ${SRCF}
-#	@echo ${OBJDEST}
+	@echo SRCF=${SRCF}
+#	@echo OBJDEST=${OBJDEST}

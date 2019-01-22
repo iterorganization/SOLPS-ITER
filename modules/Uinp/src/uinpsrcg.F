@@ -33,32 +33,32 @@ c<<<
      ,    cgpfstrs(istr)
 c>>>
         if(nstrai.ge.nstra) then !{
-          write(0,*) 'Too many strata requested (gas puff',istr,') : ',
+          write(0,*) 'Too many strata requested (gas puff ',istr,') : ',
      ,               nstrai
           write(0,*) 'STOP ==> check the DG model and the value of ',
      ,      'DEF_NSTRA in DIMENSIONS.F'
           call xerrab ('Too many gas puff strata requested')
         end if !}
         if(kgpfstr(istr).gt.nsrfs) then !{
-          write(0,*) 'Too many segments requested (gas puff',istr,
+          write(0,*) 'Too many segments requested (gas puff ',istr,
      ,               ') : ',kgpfstr(istr)
-          write(0,*) 'A gas puffing source cannot span over more then ',
+          write(0,*) 'A gas puffing source cannot span over more than ',
      ,               nsrfs,' wall segments'
           write(0,*) 'STOP ==> check the DG model and the value of ',
      ,         'DEF_NSRFS in DIMENSIONS.F'
           call xerrab ('Too many gas puff segments requested')
         end if !}
         if(kgpfstr(istr).le.0) then !{
-          write(0,*) 'No segments specified (gas puff',istr,
+          write(0,*) 'No segments specified (gas puff ',istr,
      ,               ') : ',kgpfstr(istr)
           write(0,*) 'A gas puffing source must span over at least ',
      ,               'one wall segment'
           call xerrab
-     .     ('==> This should not be allowed in DG - wrong setup?')
+     .     ('==> This should not be allowed in DG - wrong set-up?')
         end if !}
         nsrfsi(nstrai)=kgpfstr(istr)
 
-        write(txtsou(nstrai),*)  'Gas puffing source',istr,' : ',
+        write(txtsou(nstrai),*)  'Gas puffing source ',istr,' : ',
      ,        cgpfstrs(istr)
         npts(nstrai)=npgpfstr(istr)
         nminpts(nstrai)=mpgpfstr(istr)
@@ -79,7 +79,7 @@ c>>>
         call uinspcid(cgpfstrs(istr),l,k)
         if(l.le.0 .or. l.gt.2) then !{
           write(0,*) 'Wrong particle specification for gas puffing ',
-     ,               'source',istr,' : ',cgpfstrs(istr)
+     ,               'source ',istr,' : ',cgpfstrs(istr)
           write(0,*) '(must be either atom or molecule)'
           call xerrab ('==> Check the DG model')
         end if !}
@@ -94,13 +94,13 @@ c>>>
           i=indasrfs(indasrfe(k))
           if(k.le.0) then !{
             write(0,*) 'Wrong segment specification for gas puffing ',
-     ,                 'source',istr,', segment',isf,' : ',k
+     ,                 'source ',istr,', segment',isf,' : ',k
             call xerrab
-     .       ('==> This should not be allowed in DG - wrong setup?')
+     .       ('==> This should not be allowed in DG - wrong set-up?')
           end if !}
           if(indasrfe(k).le.0) then !{
             write(0,*) 'Wrong segment specification for gas puffing ',
-     ,             'source',istr,' : ',isf,k
+     ,             'source ',istr,' : ',isf,k
             write(0,*) 'The segment should not belong to the ',
      ,             '"Elements not for Eirene"'
             call xerrab ('==> Check the DG model')
