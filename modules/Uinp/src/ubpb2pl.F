@@ -39,8 +39,8 @@ c
           c=cublbli(k)//'.chr'
           call lefta(c,ufnlen+4,m)
           open(iunoo,file=c,err=22)
-          write(iunoo,700,err=20) cublbli(k),nubnpni(k)
-  700     format(1h',a,1h',i7)
+          write(iunoo,700,err=20) '''',cublbli(k),'''',nubnpni(k)
+  700     format(a1,a,a1,i7)
 c
 c*** Sort the chords according to their labels
 c
@@ -69,10 +69,10 @@ c
           do i=1,nubchrdp(k)
             j=lubchrdp(i,k)
             l=lublblp(j)
-            write(c,'(a,1h.,i3.3)',err=32) cublblp(k),l
+            write(c,'(a,a1,i3.3)',err=32) cublblp(k),'.',l
             call lefta(c,ufnlen+4,m)
             open(iunoo,file=c,err=32)
-            write(iunoo,700,err=30) c,nubnpnt(k)
+            write(iunoo,700,err=30) '''',c,'''',nubnpnt(k)
 c
             r1=ubchrds(1,j)
             z1=ubchrds(2,j)
