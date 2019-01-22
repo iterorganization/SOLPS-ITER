@@ -5,7 +5,7 @@
 NODENAME  ?= $(shell echo `hostname`)
 $(info $$NODENAME is [${NODENAME}])
 
-ifneq (,$(findstring fusion3,$(NODENAME)))
+ifneq (,$(findstring $(NODENAME), fusion3 ultrabucky))
        NCDIR = /usr/lib/x86_64-linux-gnu/hdf5/openmpi
        NAGDIR = /usr/lib
        BLAS_DIR = /usr/lib

@@ -155,7 +155,7 @@ c*** 1.  General data for the run
      .                 nsmstra,nstoram,ngstal,nrtal1,nreac_add
       write(iunoo,706) nlscl,nltest,nlana,nldrft,nlcrr,
      .                 nlerg,nlident,nlone,nlmovie,nldfst,
-     .                 nloldran,nlcascad,nloctree,nlwrmsh,NEXVS,
+     .                 nloldran,nlcascad,nloctree,nlwrmsh,nexvs,
      .                 nltrimesh
       write(iunoo,720) utxtfl(1) ! AMJUEL needed by default for H-alpha rates
       handle=.false.
@@ -833,7 +833,7 @@ c*** 9.  data for statistics and nonanalog model
         write(iunoo,706) ((nlpbls(i,j),i=1,natmo),j=1,nstrao)
       end if !}
 
-c*** 10. data for additional and surface averaged tallies
+c*** 10. data for additional and surface-averaged tallies
 
       write(iunoo,700) utxthd(11)
       write(iunoo,707) nadvi,nclvi,nalvi,nadsi,nalsi,nadspc

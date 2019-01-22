@@ -50,8 +50,7 @@ SOLPS_CPP      = -DNO_NAG -DGFORTRAN
 else
 SOLPS_CPP      = -DNO_NAG -DPGF90 -DNOQUAD
 endif
-MPI_CPP        = `pkg-config ompi --cflags`
-LD_MPI         = `pkg-config ompi --libs`
+LD_MPI         = -lmpi2
 LD_MSCL        = `pkg-config mscl --libs` -lgfortran
 B25_DEFINES    = -DNO_21
 EIRENE_DEFINES =

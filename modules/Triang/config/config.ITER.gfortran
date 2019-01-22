@@ -21,7 +21,7 @@ LINK_MOD  =
 FC        = gfortran
 
 ifdef SOLPS_DEBUG
-FCOPTS    = -g -fcheck=all -fbacktrace -ffpe-trap=denormal
+FCOPTS    = -g -fcheck=all -fbacktrace -ffpe-trap=denormal -ffpe-trap=invalid -ffpe-trap=zero -ftrapv -fsignaling-nans
 else
 FCOPTS    = -O3
 endif
