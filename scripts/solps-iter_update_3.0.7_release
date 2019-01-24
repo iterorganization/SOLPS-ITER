@@ -46,7 +46,7 @@ DivGeo:
   else
     echo "Old DivGeo develop branch already present"
   endif
-  git checkout develop && echo "Checked out DivGeo develop branch" || goto branch
+  git checkout feature/gfortran_debug_compile && echo "Checked out DivGeo feature/gfortran_debug_compile branch" || goto branch
   git pull && goto ADAS || goto local
 
 ADAS:
