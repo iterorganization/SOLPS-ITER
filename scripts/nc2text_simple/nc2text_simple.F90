@@ -18,6 +18,7 @@ Program nc2text_simple
   Logical :: use_index = .false.
   Integer, Allocatable  :: dimlen(:)
   Real(R8), Allocatable :: rdata(:,:)
+  Character(LEN = 13) :: hlp_frm
   Character(Len = 256) :: filename, varname
   Character(Len = MAXNCNAM) :: dimnam
   !-----------------------------------------------------------------------------
@@ -104,11 +105,9 @@ Program nc2text_simple
   Endif
 
   ! Output
+  Write(hlp_frm,'(a,i4,a)') '(',i2-i1+1,'e18.10/)'
   Do j = j1,j2
-     Do i = i1,i2
-        Write(*,'(e18.10)',advance="no") rdata(i,j)
-     Enddo
-     Write(*,*) ' '
+     Write(*,hlp_frm) (rdata(i,j),i=i1,i2)
   Enddo
   
   Deallocate(rdata)
