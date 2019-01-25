@@ -48,7 +48,9 @@ all : $(ASSETS)
 $(ASSETDIR)/% :
 	if ! test -d $(ASSETDIR); \
            then mkdir -m 3775 -p $(ASSETDIR); \
-	   test -n "$(ASSETDIR_GROUP)" && chgrp $(ASSETDIR_GROUP) $(ASSETDIR);\
+	   if test "x$(ASSETDIR_GROUP)" != "x"; \
+		then chgrp $(ASSETDIR_GROUP) $(ASSETDIR); \
+	   fi; \
         fi
 	curl --fail --output $(ASSETDIR)/$(@F) $(EXTERNALDATA)/$(@F)
 	chmod g+w $(ASSETDIR)/$(@F)
