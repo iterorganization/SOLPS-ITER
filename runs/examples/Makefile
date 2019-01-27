@@ -1,19 +1,18 @@
 # Makefile for fetching large external data
 
-# Shared asset directory is possible on ITER cluster 
+# Shared asset directory is possible on ITER cluster
+ITER_EXTERNALDIR=/work/imas/shared/external/assets/solps-iter/MD5
 ifeq ("$(wildcard /work/imas/shared/boundary/solps-iter)",\
 		"/work/imas/shared/boundary/solps-iter")# On ITER cluster
 	ASSETDIR ?= /work/imas/shared/boundary/solps-iter/assets/MD5
 	ASSETDIR_GROUP ?= fst-cluster-users
-	ITER_EXTERNALDIR=/work/imas/shared/external/assets/solps-iter/MD5
 	EXTERNALDIR ?= ${ITER_EXTERNALDIR}
 else
 	ASSETDIR ?= ${HOME}/assets/MD5
+	ITER_HPC_LOGIN_USERNAME ?= ${USER}
 endif
 EXTERNALDATA ?= https://static.iter.org/imas/assets/solps-iter/MD5
-ITER_HPC_LOGIN_USERNAME ?= ${USER}
 EXTERNALDIR ?= ${ITER_HPC_LOGIN_USERNAME}@hpc-login.iter.org:${ITER_EXTERNALDIR}
-EXTERNALDIR ?= /work/imas/shared/external/assets/solps-iter/MD5
 
 HASHES := $(wildcard *.md5)
 ASSETS = $(HASHES:%.md5=%)
@@ -69,7 +68,7 @@ clean:
 
 # Do not use unless really necessary
 realclean: clean
-	rm -rf $(ASSETDIR) 
+	rm -rf $(ASSETDIR)
 
 publish:
 	if test -d "$(dir)" -a -d $(EXTERNALDIR); then \
