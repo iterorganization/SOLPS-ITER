@@ -10,9 +10,9 @@ ifeq ("$(wildcard /work/imas/shared/boundary/solps-iter)",\
 else
 	ASSETDIR ?= ${HOME}/assets/MD5
 	ITER_HPC_LOGIN_USERNAME ?= ${USER}
+	EXTERNALDIR ?= ${ITER_HPC_LOGIN_USERNAME}@hpc-login.iter.org:${ITER_EXTERNALDIR}
 endif
 EXTERNALDATA ?= https://static.iter.org/imas/assets/solps-iter/MD5
-EXTERNALDIR ?= ${ITER_HPC_LOGIN_USERNAME}@hpc-login.iter.org:${ITER_EXTERNALDIR}
 
 HASHES := $(wildcard *.md5)
 ASSETS = $(HASHES:%.md5=%)
