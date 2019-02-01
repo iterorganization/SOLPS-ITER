@@ -132,7 +132,7 @@ export SonnetTopDirectory=${SOLPSTOP}/modules/Sonnet-light
 export EscapeSonnet=`echo ${SonnetTopDirectory} | sed 's:\/:\\\/:g'`
 
 export DG=${SOLPSTOP}/modules/DivGeo
-export CARRE_STOREDIR=${SOLPSTOP}/modules/Carre/meshes
+# export CARRE_STOREDIR=${SOLPSTOP}/modules/Carre/meshes
 
 alias sb2='cd ${SOLPSTOP}/modules/B2.5'
 alias sbb='cd ${SOLPSTOP}/modules/B2.5'
