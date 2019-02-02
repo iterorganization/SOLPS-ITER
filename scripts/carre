@@ -65,10 +65,17 @@ endings="dgo equ str trg"
 /bin/echo -e "Input directory: $indir\n"
 
 [ "$1" = '-' ] && {
-    /bin/echo -e "Standard linking - the input files are assumed to exist in \"$indir\""
-    q=p
-    qqs=c
-    grid_stem=`ls -ls $indir/dg.str | awk '{print $NF}' | xargs basename | sed 's:\.str$::'`
+    [ -r $indir/dg.str ] && {
+      /bin/echo -e "Standard linking - the input files are assumed to exist in \"$indir\""
+      q=p
+      qqs=c
+      grid_stem=`ls -ls $indir/dg.str | awk '{print $NF}' | xargs basename | sed 's:\.str$::'`
+    } || {
+      /bin/echo -e "Linking error - the input files were not found in \"$indir\""
+      /bin/echo -e "Use (I)nput command to provide correct input directory"
+      q=i
+      qqs=c
+    }
 } || { \
     u="$indir/$1"
     [ -r $u.vrq ] && [ -r $u.str ] && [ -r $u.fld ] & { \
@@ -305,6 +312,13 @@ do {
               }
               [ -n "$indir" ] && {
                 /bin/echo -e "The input directory is now `(cd $indir && pwd)`"; q=n; true
+                [ -r $u/dg.str ] && {
+                  grid_stem=`ls -ls $u/dg.str | awk '{print $NF}' | xargs basename | sed 's:\.str$::'`
+                  q=p
+                } || {
+                  /bin/echo -e "Cannot find dg.str file in $u"
+                  q=i
+                }
               } || {
                 /bin/echo -e "Cannot find directory: $u"; q=i
               }
