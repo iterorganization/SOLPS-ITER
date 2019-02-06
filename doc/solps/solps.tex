@@ -12759,6 +12759,7 @@ when calculating derived data.
     fchyvspe & \index{b2plot, fchyvspe} Radial component of perpendicular viscosity current {\em fchvisper} $(A)$ \\
     fetx     & \index{b2plot, fetx} Total poloidal internal energy flux $(W)$ \\
     fety     & \index{b2plot, fety} Total radial internal energy flux $(W)$ \\
+    ffbz     & \index{b2plot, ffbz} Toroidal magnetic flux function {\em ffbz} $(Wb)$ \\
     fhetx    & \index{b2plot, fhetx} Poloidal total electron energy flux $(W)$ \\
     fhety    & \index{b2plot, fhety} Radial total electron energy flux $(W)$ \\
     fhex     & \index{b2plot, fhex} Poloidal electron energy flux $(W)$ \\
@@ -12809,6 +12810,7 @@ when calculating derived data.
     fnix52   & \index{b2plot, fnix52} Conductive poloidal total ion flux $(s^{-1})$ (Does not include drift contributions) \\
     fniy32   & \index{b2plot, fniy32} Convective radial total ion flux $(s^{-1})$ (Does not include drift contributions) \\
     fniy52   & \index{b2plot, fniy52} Conductive radial total ion flux $(s^{-1})$ (Does not include drift contributions) \\
+    fpsi     & \index{b2plot, fpsi} Normalised poloidal magnetic function $\psi$ \\
     fraa     & \index{b2plot, fraa} Friction heating term {\em b2sihs\_fraa} $(W)$ \\
     gdcl     & \index{b2plot, gdcl} Guard cells \\
     hx       & \index{b2plot, hx} Poloidal cell length $(m)$ \\
@@ -13095,6 +13097,7 @@ are not met, an error is returned and no action is taken.
     mmid \index{b2plot, mmid}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:mmid}  & Map data to midplane \\
     mmin \index{b2plot, mmin}      & 0 & 0 & 0 & 2 & 0 & 0 & 0 & \ref{sec:mmin}  & Minimum of two matrices \\
     mne \index{b2plot, mne}        & 0 & 0 & 0 & 2 & 0 & 0 & 0 & \ref{sec:mne}   & Matrix not equal to \\
+    mpsi \index{b2plot, mpsi}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:mpsi}  & Plot data against psi value \\
     nese \index{b2plot, nese}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:nese}  & Overwrite onto electron density array \\
     nspe, nspec \index{b2plot, nspe}\index{b2plot, nspec} & 3 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:nspe}  & New spectrometer \\
     over \index{b2plot, over}      & 0 & 0 & 0 & 2 & 0 & 0 & 0 & \ref{sec:over}  & Copy over second top element of matrix stack \\
@@ -14123,8 +14126,9 @@ against poloidal or parallel distance along the field line.
 
 \subsubsection{$<$pos,{\bf I}$>$ f.y}\index{b2plot, f.y}\label{sec:f.y}
 Plots the 2-D graph of the matrix data at $ix$ = $\langle$pos$\rangle$ versus $y$.
-Use of the {\bf mmid} (see \ref{sec:mmid}) command allows for plotting versus the
-outer midplane (or another position chosen by the user) radial coordinate.
+Use of the {\bf mmid} (see \ref{sec:mmid}) or {\bf mpsi} (see \ref{sec:mpsi})
+commands allows for plotting versus the outer midplane (or another position
+chosen by the user) radial coordinate, or against the normalized flux, respectively.
 
 \subsubsection{$<$n1,{\bf I}$>$ f.lx}\index{b2plot, f.lx}\label{sec:f.lx}
 Plots the 2-D graph of the matrix data at $iy$ = $\langle$pos$\rangle$ versus $\log(x)$.
@@ -15095,6 +15099,9 @@ is assumed to be located at $ix=jxa$. See commands {\bf omp} (section \ref{sec:o
 Special cases: For double-null cases, HFS data is mapped to the inner midplane
 $ix=jxi$, and for private flux data, it is mapped to the distance below the
 X-point.
+
+\subsubsection{mpsi}\index{b2plot, mpsi}\label{sec:mpsi}
+Toggles plotting 2-D radial plots against the normalised poloidal flux coordinate.
 
 \subsection{Graph appearance commands}\label{sec:graphappearance}
 \index{b2plot, graph appearance commands}
