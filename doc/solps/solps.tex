@@ -12810,7 +12810,6 @@ when calculating derived data.
     fnix52   & \index{b2plot, fnix52} Conductive poloidal total ion flux $(s^{-1})$ (Does not include drift contributions) \\
     fniy32   & \index{b2plot, fniy32} Convective radial total ion flux $(s^{-1})$ (Does not include drift contributions) \\
     fniy52   & \index{b2plot, fniy52} Conductive radial total ion flux $(s^{-1})$ (Does not include drift contributions) \\
-    fpsi     & \index{b2plot, fpsi} Normalised poloidal magnetic function $\psi$ \\
     fraa     & \index{b2plot, fraa} Friction heating term {\em b2sihs\_fraa} $(W)$ \\
     gdcl     & \index{b2plot, gdcl} Guard cells \\
     hx       & \index{b2plot, hx} Poloidal cell length $(m)$ \\
@@ -12889,6 +12888,7 @@ when calculating derived data.
     pot*     & \index{b2plot, pot*} Ionization energy [shifted down one] $(eV)$ \\
     poti     & \index{b2plot, poti} Ionization energy $(eV)$ \\
     pr       & \index{b2plot, pr} Static pressure $(Pa)$ \\
+    psi      & \index{b2plot, psi} Poloidal magnetic flux function $\Psi$ $(Wb)$ \\
     q        & \index{b2plot, q} Safety factor \\
     qc       & \index{b2plot, qc} Cosine of the angle between flux line direction and left cell face \\
     qz0      & \index{b2plot, qz0} Sine of the angle away from orthogonality of the grid \\
@@ -13077,6 +13077,7 @@ are not met, an error is returned and no action is taken.
     f.ly \index{b2plot, f.ly}      & 1 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:f.ly}  & Plot against $\log(y)$ \\
     f.x \index{b2plot, f.x}        & 1 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:f.x}   & Plot against $x$ \\
     f.y \index{b2plot, f.y}        & 1 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:f.y}   & Plot against $y$ \\
+    fpsi \index{b2plot, fpsi}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:fpsi}  & Plot data against poloidal magnetic flux ($\Psi$) value \\
     intx \index{b2plot, intx}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:intx}  & Integrate along $x$ \\
     inty \index{b2plot, inty}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:inty}  & Integrate along $y$ \\
     line \index{b2plot, line}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:line}  & Choose $x$- or $y$-directed graphs \\
@@ -13097,7 +13098,7 @@ are not met, an error is returned and no action is taken.
     mmid \index{b2plot, mmid}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:mmid}  & Map data to midplane \\
     mmin \index{b2plot, mmin}      & 0 & 0 & 0 & 2 & 0 & 0 & 0 & \ref{sec:mmin}  & Minimum of two matrices \\
     mne \index{b2plot, mne}        & 0 & 0 & 0 & 2 & 0 & 0 & 0 & \ref{sec:mne}   & Matrix not equal to \\
-    mpsi \index{b2plot, mpsi}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:mpsi}  & Plot data against psi value \\
+    mpsi \index{b2plot, mpsi}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:mpsi}  & Plot data against normalised poloidal magnetic flux ($\psi$) value \\
     nese \index{b2plot, nese}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:nese}  & Overwrite onto electron density array \\
     nspe, nspec \index{b2plot, nspe}\index{b2plot, nspec} & 3 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:nspe}  & New spectrometer \\
     over \index{b2plot, over}      & 0 & 0 & 0 & 2 & 0 & 0 & 0 & \ref{sec:over}  & Copy over second top element of matrix stack \\
@@ -13115,6 +13116,7 @@ are not met, an error is returned and no action is taken.
     rm/ \index{b2plot, rm/}        & 0 & 1 & 0 & 1 & 0 & 0 & 0 & \ref{sec:rm/}   & Matrix divided by real \\
     rmma, rmmax \index{b2plot, rmma}\index{b2plot, rmmax}        & 0 & 1 & 0 & 1 & 0 & 0 & 0 & \ref{sec:rmma}  & Maximum between real and matrix \\
     rmmi, rmmin \index{b2plot, rmmi}\index{b2plot, rmmin}         & 0 & 1 & 0 & 1 & 0 & 0 & 0 & \ref{sec:rmmi}  & Minimum between real and matrix \\
+    rpsi \index{b2plot, rpsi}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:rpsi}  & Plot data against $\rho_{pol}~\left(~=~\sqrt{\psi}\right)$ value \\
     spec \index{b2plot, spec}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:spec}  & Old spectrometer \\
     sqrt \index{b2plot, sqrt}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:sqrt}  & Square root of matrix \\
     stoe \index{b2plot, stoe}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:stoe}  & Copy top of matrix stack to Eirene stack \\
@@ -14126,9 +14128,11 @@ against poloidal or parallel distance along the field line.
 
 \subsubsection{$<$pos,{\bf I}$>$ f.y}\index{b2plot, f.y}\label{sec:f.y}
 Plots the 2-D graph of the matrix data at $ix$ = $\langle$pos$\rangle$ versus $y$.
-Use of the {\bf mmid} (see \ref{sec:mmid}) or {\bf mpsi} (see \ref{sec:mpsi})
+Use of the {\bf mmid} (see \ref{sec:mmid}), {\bf fpsi} (see \ref{sec:fpsi}),
+{\bf mpsi} (see \ref{sec:mpsi}) or {\bf rpsi} (see \ref{sec:rpsi})
 commands allows for plotting versus the outer midplane (or another position
-chosen by the user) radial coordinate, or against the normalized flux, respectively.
+chosen by the user) radial coordinate, full poloidal magnetic flux,
+normalized flux, or $\rho_{pol}$, respectively.
 
 \subsubsection{$<$n1,{\bf I}$>$ f.lx}\index{b2plot, f.lx}\label{sec:f.lx}
 Plots the 2-D graph of the matrix data at $iy$ = $\langle$pos$\rangle$ versus $\log(x)$.
@@ -15100,8 +15104,17 @@ Special cases: For double-null cases, HFS data is mapped to the inner midplane
 $ix=jxi$, and for private flux data, it is mapped to the distance below the
 X-point.
 
+\subsubsection{fpsi}\index{b2plot, fpsi}\label{sec:fpsi}
+Toggles plotting 2-D radial plots against the full poloidal flux coordinate $\Psi$.
+If turned on, then turns off {\bf mpsi} and {\bf rpsi}.
+
 \subsubsection{mpsi}\index{b2plot, mpsi}\label{sec:mpsi}
-Toggles plotting 2-D radial plots against the normalised poloidal flux coordinate.
+Toggles plotting 2-D radial plots against the normalised poloidal flux coordinate $\psi$.
+If turned on, then turns off {\bf fpsi} and {\bf rpsi}.
+
+\subsubsection{rpsi}\index{b2plot, rpsi}\label{sec:rpsi}
+Toggles plotting 2-D radial plots against the square root of normalised poloidal flux coordinate ($\rho_{pol} = \sqrt{\Psi}$).
+If turned on, then turns off {\bf fpsi} and {\bf mpsi}.
 
 \subsection{Graph appearance commands}\label{sec:graphappearance}
 \index{b2plot, graph appearance commands}
