@@ -1208,6 +1208,9 @@ c Fill out /b2cmpt/ arrays
           else if (nint(zn(is)).eq.2) then
             cfdf0(3,is)= 2.0e-20_R8
             cfdf0(4,is)= 5.0e-20_R8
+          else if (nint(zn(is)).eq.4) then
+            cfdf0(3,is)= 1.0e-20_R8
+            cfdf0(4,is)= 3.0e-20_R8
           else if (nint(zn(is)).eq.6) then
             cfdf0(3,is)= 5.0e-20_R8
             cfdf0(4,is)= 1.5e-18_R8
