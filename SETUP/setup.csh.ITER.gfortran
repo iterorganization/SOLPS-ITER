@@ -6,6 +6,8 @@ module use /work/imas/etc/modules/all
 set nodename=`hostname`
 module load IMAS/3.21.1-4.0.1
 module load GGD/1.8.3-GCC-6.4.0-2.28-DD-3.21.1
+module load PyYAML/3.12-intel-2018a-Python-3.6.4
+module load matplotlib/2.1.2-intel-2018a-Python-3.6.4
 module load Kepler
 module load FC2K
 module load makedepend/1.0.5-GCCcore-6.4.0
@@ -19,6 +21,9 @@ module load TotalView/2017.1.21_linux_x86-64
 module load Ghostscript/9.23-GCCcore-6.4.0
 module unload LibTIFF/4.0.9-GCCcore-6.4.0
 module load ParaView/5.5.2-intel-2018a-Python-3.6.4-mpi
+module load PyQt5/5.9.2-intel-2018a-Python-3.6.4
+setenv QTDIR ${EBROOTQT5}
+setenv PARAVIEW_PREFIX ${EBROOTPARAVIEW}
 module load netCDF-Fortran/4.4.4-intel-2018a
 module load motif/2.3.8-intel-2018a
 module load gnuplot/5.2.2-intel-2018a
@@ -26,9 +31,6 @@ module load MATLAB/2018a
 setenv NCDIR ${EBROOTNETCDFMINFORTRAN}
 setenv MPDIR ${EBROOTIMPI}
 module load texlive
-if (`hostname` == "hpc-app1.iter.org") then
-  module load matlab/2013a
-endif
 
 # Debugger (set environment variable DBX)
 setenv DBX totalview
@@ -54,4 +56,12 @@ endif
 # module load solps-gui
 # setenv LD_PRELOAD /usr/lib64/libfontconfig.so.1 # needed by solps-gui
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/usr/lib64
+setenv PYTHONPATH "/work/imas/opt/SOLPS-GUI/1.5/src/widgets:${PYTHONPATH}"
+setenv PYQTDESIGNERPATH "/work/imas/opt/SOLPS-GUI/1.5/src/plugins/designer"
+setenv SOLPSGUI "/work/imas/opt/SOLPS-GUI/1.5/src/gui"
 setenv SOLPSWORK /work/projects/solps-iter/$USER
+alias solps 'python3 /work/imas/opt/SOLPS-GUI/1.5/src/gui/solps.py'
+alias solps_doc 'xdg-open /work/imas/opt/SOLPS-GUI/1.5/doc/build/html/index.html'
+alias solps_help 'assistant -collectionFile /work/imas/opt/SOLPS-GUI/1.5/doc/build/qthelp/SOLPSGUI.qhc'
+alias eirene 'python3 /work/imas/opt/SOLPS-GUI/1.5/src/widgets/eirene.py'
+alias b2 'python3 /work/imas/opt/SOLPS-GUI/1.5/src/widgets/b2.py'
