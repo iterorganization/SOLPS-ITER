@@ -13,7 +13,7 @@ setenv GLI_HOME ${EBROOTGLI}
 module load flex/2.6.4-GCCcore-6.4.0
 module load netCDF-Fortran/4.4.4-intel-2018a
 setenv NCDIR ${EBROOTNETCDFMINFORTRAN}
-module load NCL/6.4.0-intel-2018a
+module load NCL/6.5.0-intel-2018a
 module load TotalView/2017.1.21_linux_x86-64
 module load Ghostscript/9.23-GCCcore-6.4.0
 module unload LibTIFF/4.0.9-GCCcore-6.4.0
@@ -22,6 +22,8 @@ module load motif/2.3.8-intel-2018a
 module load gnuplot/5.2.2-intel-2018a
 module load texlive
 module load MATLAB/2018a
+module load PyYAML/3.12-intel-2018a-Python-3.6.4
+module load matplotlib/2.1.2-intel-2018a-Python-3.6.4
 
 # mpi-library
 module load impi/2018.1.163-iccifort-2018.1.163-GCC-6.4.0-2.28
@@ -34,7 +36,10 @@ setenv CC gcc
 setenv FC nagfor
 setenv CXX g++
 
-module load ParaView/5.4.1-intel-2018a-mpi
+module load ParaView/5.5.2-intel-2018a-Python-3.6.4-mpi
+module load PyQt5/5.9.2-intel-2018a-Python-3.6.4
+setenv QTDIR ${EBROOTQT5}
+setenv PARAVIEW_PREFIX ${EBROOTPARAVIEW}
 
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
@@ -51,3 +56,11 @@ endif
 # Other environment variables
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/usr/lib64
 setenv SOLPSWORK /work/projects/solps-iter/$USER
+setenv PYTHONPATH "/work/imas/opt/SOLPS-GUI/1.5/src/widgets:${PYTHONPATH}"
+setenv PYQTDESIGNERPATH "/work/imas/opt/SOLPS-GUI/1.5/src/plugins/designer"
+setenv SOLPSGUI "/work/imas/opt/SOLPS-GUI/1.5/src/gui"
+alias solps 'python3 /work/imas/opt/SOLPS-GUI/1.5/src/gui/solps.py'
+alias solps_doc 'xdg-open /work/imas/opt/SOLPS-GUI/1.5/doc/build/html/index.html'
+alias solps_help 'assistant -collectionFile /work/imas/opt/SOLPS-GUI/1.5/doc/build/qthelp/SOLPSGUI.qhc'
+alias eirene 'python3 /work/imas/opt/SOLPS-GUI/1.5/src/widgets/eirene.py'
+alias b2 'python3 /work/imas/opt/SOLPS-GUI/1.5/src/widgets/b2.py'

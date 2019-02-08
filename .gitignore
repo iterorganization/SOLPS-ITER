@@ -2,6 +2,7 @@
 
 # backup files
 *~
+*.bak
 
 # object, archive,... files
 *.[oa]
