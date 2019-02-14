@@ -23,7 +23,7 @@
    MSCL_ROOT = ${IRISLIB}
        H5DIR = ${HDF5_DIR}
      GR_ROOT = ${IRISLIB}
-    GLI_HOME = ${IRISLIB}
+    GLI_HOME = ${IRISLIB}/gli/src
   NCARG_ROOT = ${IRISLIB}/NCARG
       NAGDIR = ${IRISLIB}
  MDSPLUS_DIR = ${IRISLIB}/mdsplus
