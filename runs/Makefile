@@ -277,34 +277,34 @@ endif
 	-cd b2mn.exe.dir ; rm -f $(notdir $^) .quit >& /dev/null
 ifndef STAND_ALONE
 ifneq (${COMPILER},HP)
-	-[ -s b2mn.exe.dir/fort.10 ] && mv b2mn.exe.dir/fort.10 . || echo > /dev/null
-	-[ -s b2mn.exe.dir/fort.11 ] && mv b2mn.exe.dir/fort.11 . || echo > /dev/null
-	-[ -s b2mn.exe.dir/fort.12 ] && mv b2mn.exe.dir/fort.12 . || echo > /dev/null
-	-[ -s b2mn.exe.dir/fort.13 ] && mv b2mn.exe.dir/fort.13 . || echo > /dev/null
-	-[ -s b2mn.exe.dir/fort.14 ] && mv b2mn.exe.dir/fort.14 . || echo > /dev/null
-	-[ -s b2mn.exe.dir/fort.15 ] && mv b2mn.exe.dir/fort.15 . || echo > /dev/null
-	-[ -s b2mn.exe.dir/fort.44 ] && mv b2mn.exe.dir/fort.44 . || echo > /dev/null
-	-[ -s b2mn.exe.dir/fort.46 ] && mv b2mn.exe.dir/fort.46 . || echo > /dev/null
+	-[ -s b2mn.exe.dir/fort.10 ] && mv b2mn.exe.dir/fort.10 . || ( [ -e b2mn.exe.dir/fort.10 ] && rm b2mn.exe.dir/fort.10 || echo > /dev/null )
+	-[ -s b2mn.exe.dir/fort.11 ] && mv b2mn.exe.dir/fort.11 . || ( [ -e b2mn.exe.dir/fort.11 ] && rm b2mn.exe.dir/fort.11 || echo > /dev/null )
+	-[ -s b2mn.exe.dir/fort.12 ] && mv b2mn.exe.dir/fort.12 . || ( [ -e b2mn.exe.dir/fort.12 ] && rm b2mn.exe.dir/fort.12 || echo > /dev/null )
+	-[ -s b2mn.exe.dir/fort.13 ] && mv b2mn.exe.dir/fort.13 . || ( [ -e b2mn.exe.dir/fort.13 ] && rm b2mn.exe.dir/fort.13 || echo > /dev/null )
+	-[ -s b2mn.exe.dir/fort.14 ] && mv b2mn.exe.dir/fort.14 . || ( [ -e b2mn.exe.dir/fort.14 ] && rm b2mn.exe.dir/fort.14 || echo > /dev/null )
+	-[ -s b2mn.exe.dir/fort.15 ] && mv b2mn.exe.dir/fort.15 . || ( [ -e b2mn.exe.dir/fort.15 ] && rm b2mn.exe.dir/fort.15 || echo > /dev/null )
+	-[ -s b2mn.exe.dir/fort.44 ] && mv b2mn.exe.dir/fort.44 . || ( [ -e b2mn.exe.dir/fort.44 ] && rm b2mn.exe.dir/fort.44 || echo > /dev/null )
+	-[ -s b2mn.exe.dir/fort.46 ] && mv b2mn.exe.dir/fort.46 . || ( [ -e b2mn.exe.dir/fort.46 ] && rm b2mn.exe.dir/fort.46 || echo > /dev/null )
 	-cd b2mn.exe.dir ; rm -f HYDHEL METHANE SPUTER H2VIBR AMMONX fort.21 fort.22 graphite_ext.dat mo_ext.dat fort.85 fort.78 fort.1 fort.29 fort.37 fort.55 vtk.out
-	-[ -s b2mn.exe.dir/fort.33 ] && rm b2mn.exe.dir/fort.33 || echo > /dev/null
-	-[ -s b2mn.exe.dir/fort.34 ] && rm b2mn.exe.dir/fort.34 || echo > /dev/null
-	-[ -s b2mn.exe.dir/fort.35 ] && rm b2mn.exe.dir/fort.35 || echo > /dev/null
+	-[ -e b2mn.exe.dir/fort.33 ] && rm b2mn.exe.dir/fort.33 || echo > /dev/null
+	-[ -e b2mn.exe.dir/fort.34 ] && rm b2mn.exe.dir/fort.34 || echo > /dev/null
+	-[ -e b2mn.exe.dir/fort.35 ] && rm b2mn.exe.dir/fort.35 || echo > /dev/null
 else
-	-[ -s b2mn.exe.dir/ftn10 ] && mv b2mn.exe.dir/ftn10 . || echo > /dev/null
-	-[ -s b2mn.exe.dir/ftn11 ] && mv b2mn.exe.dir/ftn11 . || echo > /dev/null
-	-[ -s b2mn.exe.dir/ftn12 ] && mv b2mn.exe.dir/ftn12 . || echo > /dev/null
-	-[ -s b2mn.exe.dir/ftn13 ] && mv b2mn.exe.dir/ftn13 . || echo > /dev/null
-	-[ -s b2mn.exe.dir/ftn14 ] && mv b2mn.exe.dir/ftn14 . || echo > /dev/null
-	-[ -s b2mn.exe.dir/ftn15 ] && mv b2mn.exe.dir/ftn15 . || echo > /dev/null
-	-[ -s b2mn.exe.dir/ftn44 ] && mv b2mn.exe.dir/ftn44 . || echo > /dev/null
-	-[ -s b2mn.exe.dir/ftn46 ] && mv b2mn.exe.dir/ftn46 . || echo > /dev/null
+	-[ -s b2mn.exe.dir/ftn10 ] && mv b2mn.exe.dir/ftn10 . || ( [ -e b2mn.exe.dir/ftn10 ] && rm b2mn.exe.dir/ftn10 || echo > /dev/null )
+	-[ -s b2mn.exe.dir/ftn11 ] && mv b2mn.exe.dir/ftn11 . || ( [ -e b2mn.exe.dir/ftn11 ] && rm b2mn.exe.dir/ftn11 || echo > /dev/null )
+	-[ -s b2mn.exe.dir/ftn12 ] && mv b2mn.exe.dir/ftn12 . || ( [ -e b2mn.exe.dir/ftn12 ] && rm b2mn.exe.dir/ftn12 || echo > /dev/null )
+	-[ -s b2mn.exe.dir/ftn13 ] && mv b2mn.exe.dir/ftn13 . || ( [ -e b2mn.exe.dir/ftn13 ] && rm b2mn.exe.dir/ftn13 || echo > /dev/null )
+	-[ -s b2mn.exe.dir/ftn14 ] && mv b2mn.exe.dir/ftn14 . || ( [ -e b2mn.exe.dir/ftn14 ] && rm b2mn.exe.dir/ftn14 || echo > /dev/null )
+	-[ -s b2mn.exe.dir/ftn15 ] && mv b2mn.exe.dir/ftn15 . || ( [ -e b2mn.exe.dir/ftn15 ] && rm b2mn.exe.dir/ftn15 || echo > /dev/null )
+	-[ -s b2mn.exe.dir/ftn44 ] && mv b2mn.exe.dir/ftn44 . || ( [ -e b2mn.exe.dir/ftn44 ] && rm b2mn.exe.dir/ftn44 || echo > /dev/null )
+	-[ -s b2mn.exe.dir/ftn46 ] && mv b2mn.exe.dir/ftn46 . || ( [ -e b2mn.exe.dir/ftn46 ] && rm b2mn.exe.dir/ftn46 || echo > /dev/null )
 	-cd b2mn.exe.dir ; rm -f HYDHEL METHANE SPUTER H2VIBR AMMONX ftn21 ftn22 graphite_ext.dat mo_ext.dat ftn85 ftn78 ftn1 ftn29 ftn37 ftn55 vtk.out
-	-[ -s b2mn.exe.dir/ftn33 ] && rm b2mn.exe.dir/ftn33 || echo > /dev/null
-	-[ -s b2mn.exe.dir/ftn34 ] && rm b2mn.exe.dir/ftn34 || echo > /dev/null
-	-[ -s b2mn.exe.dir/ftn35 ] && rm b2mn.exe.dir/ftn35 || echo > /dev/null
+	-[ -e b2mn.exe.dir/ftn33 ] && rm b2mn.exe.dir/ftn33 || echo > /dev/null
+	-[ -e b2mn.exe.dir/ftn34 ] && rm b2mn.exe.dir/ftn34 || echo > /dev/null
+	-[ -e b2mn.exe.dir/ftn35 ] && rm b2mn.exe.dir/ftn35 || echo > /dev/null
 endif
 ifdef SOLPS_MPI
-	-[ -s b2mn.exe.dir/output.0001 ] && mv b2mn.exe.dir/output.* . || echo > /dev/null
+	-[ -e b2mn.exe.dir/output.0001 ] && mv b2mn.exe.dir/output.* . || echo > /dev/null
 endif
 endif
 ifneq (${COMPILER},HP)
@@ -393,34 +393,34 @@ endif
 	-cd b2mn.exe.dir ; rm -f $(notdir $^) .quit >& /dev/null
 ifndef STAND_ALONE
 ifneq (${COMPILER},HP)
-	-[ -s b2mn.exe.dir/fort.10 ] && mv b2mn.exe.dir/fort.10 . || echo > /dev/null
-	-[ -s b2mn.exe.dir/fort.11 ] && mv b2mn.exe.dir/fort.11 . || echo > /dev/null
-	-[ -s b2mn.exe.dir/fort.12 ] && mv b2mn.exe.dir/fort.12 . || echo > /dev/null
-	-[ -s b2mn.exe.dir/fort.13 ] && mv b2mn.exe.dir/fort.13 . || echo > /dev/null
-	-[ -s b2mn.exe.dir/fort.14 ] && mv b2mn.exe.dir/fort.14 . || echo > /dev/null
-	-[ -s b2mn.exe.dir/fort.15 ] && mv b2mn.exe.dir/fort.15 . || echo > /dev/null
-	-[ -s b2mn.exe.dir/fort.44 ] && mv b2mn.exe.dir/fort.44 . || echo > /dev/null
-	-[ -s b2mn.exe.dir/fort.46 ] && mv b2mn.exe.dir/fort.46 . || echo > /dev/null
+	-[ -s b2mn.exe.dir/fort.10 ] && mv b2mn.exe.dir/fort.10 . || ( [ -e b2mn.exe.dir/fort.10 ] && rm b2mn.exe.dir/fort.10 || echo > /dev/null )
+	-[ -s b2mn.exe.dir/fort.11 ] && mv b2mn.exe.dir/fort.11 . || ( [ -e b2mn.exe.dir/fort.11 ] && rm b2mn.exe.dir/fort.11 || echo > /dev/null )
+	-[ -s b2mn.exe.dir/fort.12 ] && mv b2mn.exe.dir/fort.12 . || ( [ -e b2mn.exe.dir/fort.12 ] && rm b2mn.exe.dir/fort.12 || echo > /dev/null )
+	-[ -s b2mn.exe.dir/fort.13 ] && mv b2mn.exe.dir/fort.13 . || ( [ -e b2mn.exe.dir/fort.13 ] && rm b2mn.exe.dir/fort.13 || echo > /dev/null )
+	-[ -s b2mn.exe.dir/fort.14 ] && mv b2mn.exe.dir/fort.14 . || ( [ -e b2mn.exe.dir/fort.14 ] && rm b2mn.exe.dir/fort.14 || echo > /dev/null )
+	-[ -s b2mn.exe.dir/fort.15 ] && mv b2mn.exe.dir/fort.15 . || ( [ -e b2mn.exe.dir/fort.15 ] && rm b2mn.exe.dir/fort.15 || echo > /dev/null )
+	-[ -s b2mn.exe.dir/fort.44 ] && mv b2mn.exe.dir/fort.44 . || ( [ -e b2mn.exe.dir/fort.44 ] && rm b2mn.exe.dir/fort.44 || echo > /dev/null )
+	-[ -s b2mn.exe.dir/fort.46 ] && mv b2mn.exe.dir/fort.46 . || ( [ -e b2mn.exe.dir/fort.46 ] && rm b2mn.exe.dir/fort.46 || echo > /dev/null )
 	-cd b2mn.exe.dir ; rm -f HYDHEL METHANE SPUTER H2VIBR AMMONX fort.21 fort.22 graphite_ext.dat mo_ext.dat fort.85 fort.78 fort.1 fort.29 fort.37 fort.55 vtk.out
-	-[ -s b2mn.exe.dir/fort.33 ] && rm b2mn.exe.dir/fort.33 || echo > /dev/null
-	-[ -s b2mn.exe.dir/fort.34 ] && rm b2mn.exe.dir/fort.34 || echo > /dev/null
-	-[ -s b2mn.exe.dir/fort.35 ] && rm b2mn.exe.dir/fort.35 || echo > /dev/null
+	-[ -e b2mn.exe.dir/fort.33 ] && rm b2mn.exe.dir/fort.33 || echo > /dev/null
+	-[ -e b2mn.exe.dir/fort.34 ] && rm b2mn.exe.dir/fort.34 || echo > /dev/null
+	-[ -e b2mn.exe.dir/fort.35 ] && rm b2mn.exe.dir/fort.35 || echo > /dev/null
 else
-	-[ -s b2mn.exe.dir/ftn10 ] && mv b2mn.exe.dir/ftn10 . || echo > /dev/null
-	-[ -s b2mn.exe.dir/ftn11 ] && mv b2mn.exe.dir/ftn11 . || echo > /dev/null
-	-[ -s b2mn.exe.dir/ftn12 ] && mv b2mn.exe.dir/ftn12 . || echo > /dev/null
-	-[ -s b2mn.exe.dir/ftn13 ] && mv b2mn.exe.dir/ftn13 . || echo > /dev/null
-	-[ -s b2mn.exe.dir/ftn14 ] && mv b2mn.exe.dir/ftn14 . || echo > /dev/null
-	-[ -s b2mn.exe.dir/ftn15 ] && mv b2mn.exe.dir/ftn15 . || echo > /dev/null
-	-[ -s b2mn.exe.dir/ftn44 ] && mv b2mn.exe.dir/ftn44 . || echo > /dev/null
-	-[ -s b2mn.exe.dir/ftn46 ] && mv b2mn.exe.dir/ftn46 . || echo > /dev/null
+	-[ -s b2mn.exe.dir/ftn10 ] && mv b2mn.exe.dir/ftn10 . || ( [ -e b2mn.exe.dir/ftn10 ] && rm b2mn.exe.dir/ftn10 || echo > /dev/null )
+	-[ -s b2mn.exe.dir/ftn11 ] && mv b2mn.exe.dir/ftn11 . || ( [ -e b2mn.exe.dir/ftn11 ] && rm b2mn.exe.dir/ftn11 || echo > /dev/null )
+	-[ -s b2mn.exe.dir/ftn12 ] && mv b2mn.exe.dir/ftn12 . || ( [ -e b2mn.exe.dir/ftn12 ] && rm b2mn.exe.dir/ftn12 || echo > /dev/null )
+	-[ -s b2mn.exe.dir/ftn13 ] && mv b2mn.exe.dir/ftn13 . || ( [ -e b2mn.exe.dir/ftn13 ] && rm b2mn.exe.dir/ftn13 || echo > /dev/null )
+	-[ -s b2mn.exe.dir/ftn14 ] && mv b2mn.exe.dir/ftn14 . || ( [ -e b2mn.exe.dir/ftn14 ] && rm b2mn.exe.dir/ftn14 || echo > /dev/null )
+	-[ -s b2mn.exe.dir/ftn15 ] && mv b2mn.exe.dir/ftn15 . || ( [ -e b2mn.exe.dir/ftn15 ] && rm b2mn.exe.dir/ftn15 || echo > /dev/null )
+	-[ -s b2mn.exe.dir/ftn44 ] && mv b2mn.exe.dir/ftn44 . || ( [ -e b2mn.exe.dir/ftn44 ] && rm b2mn.exe.dir/ftn44 || echo > /dev/null )
+	-[ -s b2mn.exe.dir/ftn46 ] && mv b2mn.exe.dir/ftn46 . || ( [ -e b2mn.exe.dir/ftn46 ] && rm b2mn.exe.dir/ftn46 || echo > /dev/null )
 	-cd b2mn.exe.dir ; rm -f HYDHEL METHANE SPUTER H2VIBR AMMONX ftn21 ftn22 graphite_ext.dat mo_ext.dat ftn85 ftn78 ftn1 ftn29 ftn37 ftn55 vtk.out
-	-[ -s b2mn.exe.dir/ftn33 ] && rm b2mn.exe.dir/ftn33 || echo > /dev/null
-	-[ -s b2mn.exe.dir/ftn34 ] && rm b2mn.exe.dir/ftn34 || echo > /dev/null
-	-[ -s b2mn.exe.dir/ftn35 ] && rm b2mn.exe.dir/ftn35 || echo > /dev/null
+	-[ -e b2mn.exe.dir/ftn33 ] && rm b2mn.exe.dir/ftn33 || echo > /dev/null
+	-[ -e b2mn.exe.dir/ftn34 ] && rm b2mn.exe.dir/ftn34 || echo > /dev/null
+	-[ -e b2mn.exe.dir/ftn35 ] && rm b2mn.exe.dir/ftn35 || echo > /dev/null
 endif
 ifdef SOLPS_MPI
-	-[ -s b2mn.exe.dir/output.0001 ] && mv b2mn.exe.dir/output.* . || echo > /dev/null
+	-[ -e b2mn.exe.dir/output.0001 ] && mv b2mn.exe.dir/output.* . || echo > /dev/null
 endif
 endif
 ifneq (${COMPILER},HP)
