@@ -513,7 +513,7 @@ Adding the {\tt \_openmp} suffix at the end of any of build targets will execute
 with OpenMP parallelization options, when relevant, and put the executables in a separate
 {\tt builds/}\${\tt \{TOOL\_CHAIN\}.openmp} directory.
 
-Adding both the {\tt \_openmp} and {\tt \_mpi} suffixes, in that order, i.e. {\tt \_openmp\_mpi}, at the end of any of build targets will execute the command
+Adding both the {\tt \_openmp} and {\tt \_mpi} suffixes, in either order, i.e. {\tt \_openmp\_mpi} or {\tt \_mpi\_openmp}, at the end of any of build targets will execute the command
 with both OpenMP and MPI parallelization options, when relevant, and put the executables in a separate
 {\tt builds/}\${\tt \{TOOL\_CHAIN\}.openmp.mpi} directory.
 
@@ -1852,7 +1852,7 @@ submission script is to be used. The "\_coupled" scripts are used when the prese
 All the submission scripts make use of {\tt b2run} so the same possibility of submitting runs from
 outside the \${\tt SOLPSTOP} file space is available.
 
-If, for instance, one is running on one of the ITER clusters, then, the instructions to follow would be to run the script
+If, for instance, one is running on the ITER cluster, then, the instructions to follow would be to run the script
 \begin{verbatim}
 itersubmit
 \end{verbatim}
@@ -1892,7 +1892,7 @@ command.
 
 The {\tt SLURM.iter} script first of all changes directory to \${\tt \{SOLPSTOP\}}
 with the help of {\tt SOLPSTOP} file
-and execute {\tt setup.csh} there. This is necessary
+and executes {\tt setup.csh} there. This is necessary
 to set up environment variables for the cluster node
 which would actually execute the job, since that machine
 does not necessarily coincide with one from which the job was submitted.
@@ -7117,186 +7117,160 @@ Is it important to know, that, in the equations below, the parallel velocity $V_
 \section{Continuity equations for particle conservation}
 
 \begin{equation}
+\label{eq:cont_appC}
 \frac{\partial n_a}{\partial t} + \frac{1}{\sqrt g}\frac{\partial}{\partial x}\left( \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \right) +   \frac{1}{\sqrt g}\frac{\partial}{\partial y}\left( \frac{\sqrt g}{h_y} \widetilde{\Gamma}_{ay} \right) = S_a^n, a = 0, 1, \ldots, ns-1
 \end{equation}
 
-\begin{equation}
-\begin{matrix}
-\widetilde{ \Gamma}_{ax} =& \left( b_x V_{\parallel a} + V_{ax}^{\left( E \right)} + V_{ax}^{\left( AN \right)} + V_a^{corr\_dpc} \right) n_a + 0 \cdot \frac{\delta_{1,a}}{e} \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} \right) \\
-&- D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x} - \widetilde{D}_{p,ax} \frac{1}{h_x} \frac{\partial p_a}{\partial x} - D_{axy} \frac{1}{h_y} \frac{\partial n_a T_i}{\partial y}
-\end{matrix}
-\end{equation}
+\begin{multline}
+\label{eq:GammaAX_appC}
+\widetilde{ \Gamma}_{ax} = \left( b_x V_{\parallel a} + V_{ax}^{\left( E \right)} + V_{ax}^{\left( AN \right)} + V_a^{corr\_dpc} \right) n_a + 0 \cdot \frac{\delta_{1,a}}{e} \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} \right) \\
+- D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x} - \widetilde{D}_{p,ax} \frac{1}{h_x} \frac{\partial p_a}{\partial x} - D_{axy} \frac{1}{h_y} \frac{\partial n_a T_i}{\partial y}
+\end{multline}
+
+\begin{multline}
+\label{eq:GammaAY_appC}
+\widetilde{ \Gamma}_{ay} = \left( V_{ay}^{\left( E \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \frac{\delta_{1,a}}{e} \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} \right) \\
+ - D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y} - \widetilde{D}_{p,ay} \frac{1}{h_y} \frac{\partial p_a}{\partial y} + D_{ayx} \frac{1}{h_x} \frac{\partial n_a T_i}{\partial x}
+\end{multline}
+
+\begin{multline}
+\label{eq:GammaAXnoTilde_appC}
+\Gamma_{ax} = \left( b_x V_{\parallel a} + V_{ax}^{\left( E \right)} + \widetilde{V}_{ax}^{\left( dia \right)} + V_{ax}^{\left( AN \right)} + V_a^{corr\_dpc} \right) n_a + \\
+ 0 \cdot \frac{\delta_{1,a}}{e} \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x} - \widetilde{D}_{p,ax} \frac{1}{h_x} \frac{\partial p_a}{\partial x}
+\end{multline}
+
+\begin{multline}
+\label{eq:GammaAYnoTilde_appC}
+\Gamma_{ay} = \left( V_{ay}^{\left( E \right)} + \widetilde{V}_{ay}^{\left( dia \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \frac{\delta_{1,a}}{e} \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} \right) \\
+- D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y} - \widetilde{D}_{p,ay} \frac{1}{h_y} \frac{\partial p_a}{\partial y}
+\end{multline}
+
+\begin{multline}
+\label{eq:GammaAXCor_appC}
+\Gamma_{ax}^{Cor} = \left( b_x V_{\parallel a} + V_{ax}^{\left( E \right)} + 2 \widetilde{V}_{ax}^{\left( dia \right)} + V_{ax}^{\left( AN \right)} + V_a^{corr\_dpc} \right) n_a + \\
+ 0 \cdot \frac{\delta_{1,a}}{e} \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x} - \widetilde{D}_{p,ax} \frac{1}{h_x} \frac{\partial p_a}{\partial x}
+\end{multline}
+
+\begin{multline}
+\label{eq:GammaAYCor_appC}
+\Gamma_{ay}^{Cor} = \left( V_{ay}^{\left( E \right)} + 2 \widetilde{V}_{ay}^{\left( dia \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \\
+ \frac{\delta_{1,a}}{e} \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y} - \widetilde{D}_{p,ay} \frac{1}{h_y} \frac{\partial p_a}{\partial y}
+\end{multline}
 
 \begin{equation}
-\begin{matrix}
-\widetilde{ \Gamma}_{ay} =& \left( V_{ay}^{\left( E \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \frac{\delta_{1,a}}{e} \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} \right) \\
-& - D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y} - \widetilde{D}_{p,ay} \frac{1}{h_y} \frac{\partial p_a}{\partial y} + D_{ayx} \frac{1}{h_x} \frac{\partial n_a T_i}{\partial x}
-\end{matrix}
-\end{equation}
-
-\begin{equation}
-\begin{matrix}
-\Gamma_{ax} =& \left( b_x V_{\parallel a} + V_{ax}^{\left( E \right)} + \widetilde{V}_{ax}^{\left( dia \right)} + V_{ax}^{\left( AN \right)} + V_a^{corr\_dpc} \right) n_a + \\
-& 0 \cdot \frac{\delta_{1,a}}{e} \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x} - \widetilde{D}_{p,ax} \frac{1}{h_x} \frac{\partial p_a}{\partial x}
-\end{matrix}
-\end{equation}
-
-\begin{equation}
-\begin{matrix}
-\Gamma_{ay} =& \left( V_{ay}^{\left( E \right)} + \widetilde{V}_{ay}^{\left( dia \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \frac{\delta_{1,a}}{e} \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} \right) \\
-&- D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y} - \widetilde{D}_{p,ay} \frac{1}{h_y} \frac{\partial p_a}{\partial y}
-\end{matrix}
-\end{equation}
-
-\begin{equation}
-\begin{matrix}
-\Gamma_{ax}^{Cor} =& \left( b_x V_{\parallel a} + V_{ax}^{\left( E \right)} + 2 \widetilde{V}_{ax}^{\left( dia \right)} + V_{ax}^{\left( AN \right)} + V_a^{corr\_dpc} \right) n_a + \\
-& 0 \cdot \frac{\delta_{1,a}}{e} \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x} - \widetilde{D}_{p,ax} \frac{1}{h_x} \frac{\partial p_a}{\partial x}
-\end{matrix}
-\end{equation}
-
-\begin{equation}
-\begin{matrix}
-\Gamma_{ay}^{Cor} =& \left( V_{ay}^{\left( E \right)} + 2 \widetilde{V}_{ay}^{\left( dia \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \\
-& \frac{\delta_{1,a}}{e} \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y} - \widetilde{D}_{p,ay} \frac{1}{h_y} \frac{\partial p_a}{\partial y}
-\end{matrix}
-\end{equation}
-
-\begin{equation}
+\label{eq:GammaAxNoDrift_appC}
 \Gamma_{ax}^{ \left( \text{no drift} \right)} = \left( b_x V_{\parallel a} + V_{ax}^{\left( AN \right)} + 0 \cdot V_a^{corr\_dpc} \right) n_a
 \end{equation}
 
 \begin{equation}
+\label{eq:GammaAyNoDrift_appC}
 \Gamma_{ay}^{ \left( \text{no drift} \right)} = \left( V_{ay}^{\left( AN \right)} \right) n_a, \text{really 0 as } V_{ay}^{\left( AN \right)} = 0
 \end{equation}
 
 \noindent where
-\begin{tabular}{cc}
-$\begin{matrix}
-V_{ax}^{(E)} & =
-& \left\{
-\begin{matrix}
+\begin{equation}
+\label{eq:vaExB_appC}
+V_{ax}^{(E)} =
+\left\{
+\begin{aligned}
 -\frac{B_z}{B^2} \frac{1}{h_y} \frac{\partial \Phi}{\partial y} & \ z_a \neq 0 \\
 0, & \ z_a = 0
-\end{matrix} \right.
-\end{matrix}$
-
-,&
-
-$\begin{matrix}
-V_{ay}^{(E)} & =
-& \left\{
-\begin{matrix}
+\end{aligned} \right.
+\qquad\qquad
+V_{ay}^{(E)} =
+\left\{
+\begin{aligned}
 \frac{B_z}{B^2} \frac{1}{h_x} \frac{\partial \Phi}{\partial x} & \ z_a \neq 0 \\
 0, & \ z_a = 0
-\end{matrix} \right.
-\end{matrix}$
-\end{tabular}
+\end{aligned} \right.
+\end{equation}
 
-\begin{tabular}{cc}
-$\begin{matrix}
-\widetilde{V}_{ax}^{(dia)} & =
-& \left\{
-\begin{matrix}
+\begin{equation}
+\label{eq:vadia_tilde_appC}
+\widetilde{V}_{ax}^{(dia)} =
+\left\{
+\begin{aligned}
 \frac{T_i B_z}{z_a e} \frac{\partial}{h_y \partial y} \left( \frac{1}{B^2} \right) & \ z_a \neq 0 \\
 0, & \ z_a = 0
-\end{matrix} \right.
-\end{matrix}$
-
-,&
-
-$\begin{matrix}
-\widetilde{V}_{ay}^{(dia)} & =
-& \left\{
-\begin{matrix}
+\end{aligned} \right.
+\qquad\qquad
+\widetilde{V}_{ay}^{(dia)} =
+\left\{
+\begin{aligned}
 -\frac{T_i B_z}{z_a e} \frac{\partial}{h_x \partial x} \left( \frac{1}{B^2} \right) & \ z_a \neq 0 \\
 0, & \ z_a = 0
-\end{matrix} \right.
-\end{matrix}$
-\end{tabular}
-
-\begin{equation}
-\begin{matrix}
-\Gamma_{ax}^{\left( Eir \right)} =& \left( b_x V_{\parallel a} + V_{ax}^{\left( E \right)} + V_{ax}^{\left( dia \right)} + V_{ax}^{\left( AN \right)} + V_a^{corr\_dpc} \right) n_a + \\
-& 0 \cdot \frac{\delta_{1,a}}{e} \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x}
-\end{matrix}
+\end{aligned} \right.
 \end{equation}
 
-\begin{equation}
-\begin{matrix}
-\Gamma_{ay}^{\left( Eir \right)} =& \left( V_{ay}^{\left( E \right)} + V_{ya}^{\left( dia \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \\
-& \frac{\delta_{1,a}}{e} \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y}
-\end{matrix}
-\end{equation}
+\begin{multline}
+\label{eq:Gamma_ax_Eir}
+\Gamma_{ax}^{\left( Eir \right)} = \left( b_x V_{\parallel a} + V_{ax}^{\left( E \right)} + V_{ax}^{\left( dia \right)} + V_{ax}^{\left( AN \right)} + V_a^{corr\_dpc} \right) n_a + \\
+ 0 \cdot \frac{\delta_{1,a}}{e} \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x}
+\end{multline}
+
+\begin{multline}
+\label{eq:Gamma_ay_Eir}
+\Gamma_{ay}^{\left( Eir \right)} = \left( V_{ay}^{\left( E \right)} + V_{ya}^{\left( dia \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \\
+ \frac{\delta_{1,a}}{e} \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y}
+\end{multline}
 
 \noindent where
-\begin{tabular}{cc}
-$\begin{matrix}
-V_{ax}^{\left( dia \right)} & =
-& \left\{
-\begin{matrix}
+\begin{equation}
+\label{eq:vadia_appC}
+V_{ax}^{\left( dia \right)} =
+\left\{
+\begin{aligned}
 -\frac{B_z}{z_a e B^2 n_a} \frac{1}{h_y} \frac{\partial n_a T_i}{\partial y} & \ z_a \neq 0 \\
 0, & \ z_a = 0
-\end{matrix} \right.
-\end{matrix}$
-
-,&
-
-$\begin{matrix}
-V_{ay}^{\left( dia \right)} & =
-& \left\{
-\begin{matrix}
+\end{aligned} \right.
+\qquad\qquad
+V_{ay}^{\left( dia \right)} =
+\left\{
+\begin{aligned}
 \frac{B_z}{z_a e B^2 n_a} \frac{1}{h_x} \frac{\partial n_a T_i}{\partial x} & \ z_a \neq 0 \\
 0, & \ z_a = 0
-\end{matrix} \right.
-\end{matrix}$
-\end{tabular}
+\end{aligned} \right.
+\end{equation}
 
 \begin{equation}
+\label{eq:Eka}
 E_{k,a}=\frac{m_a}2 V^2_{\parallel a}
 \end{equation}
 
-\begin{tabular}{cc}
-$\begin{matrix}
-W_{a \perp}^{\left( dia \right)} & =
-& \left\{
-\begin{matrix}
+\begin{equation}
+\label{eq:W_xy}
+W_{a \perp}^{\left( dia \right)} =
+\left\{
+\begin{aligned}
 -\frac{1}{z_a e B n_a} \frac{1}{h_y} \frac{\partial n_a T_i}{\partial y}, & \ z_a \neq 0 \\
 0, & \ z_a = 0
-\end{matrix} \right.
-\end{matrix}$
-,&
-$\begin{matrix}
-W_{ay}^{\left( dia \right)} & =
-& \left\{
-\begin{matrix}
+\end{aligned} \right.
+\qquad\qquad
+W_{ay}^{\left( dia \right)} =
+\left\{
+\begin{aligned}
 \frac{B_z}{z_a e B^2 n_a} \frac{1}{h_x} \frac{\partial n_a T_i}{\partial x}, & \ z_a \neq 0 \\
 0, & \ z_a = 0
-\end{matrix} \right.
-\end{matrix}$
-\end{tabular}
-
-\begin{tabular}{cc}
-$\begin{matrix}
-V_{a \perp}^{\left( E \times B \right)} & =
-& \left\{
-\begin{matrix}
--\frac{1}{B} \frac{1}{h_y} \frac{\partial \Phi}{\partial y}, & \ z_a \neq 0 \\
-0, & \ z_a = 0
-\end{matrix} \right.
-\end{matrix}$
-,&
-$\begin{matrix}
-V_{ay}^{\left( E \times B \right)} & =
-& \left\{
-\begin{matrix}
-\frac{B_z}{B^2} \frac{1}{h_x} \frac{\partial \Phi}{\partial x}, & \ z_a \neq 0 \\
-0, & \ z_a = 0
-\end{matrix} \right.
-\end{matrix}$
-\end{tabular}
+\end{aligned} \right.
+\end{equation}
 
 \begin{equation}
+V_{a \perp}^{\left( E \times B \right)} =
+\left\{
+\begin{aligned}
+-\frac{1}{B} \frac{1}{h_y} \frac{\partial \Phi}{\partial y}, & \ z_a \neq 0 \\
+0, & \ z_a = 0
+\end{aligned} \right.
+\qquad\qquad
+V_{ay}^{\left( E \times B \right)} =
+\left\{
+\begin{aligned}
+\frac{B_z}{B^2} \frac{1}{h_x} \frac{\partial \Phi}{\partial x}, & \ z_a \neq 0 \\
+0, & \ z_a = 0
+\end{aligned} \right.
+\end{equation}
+
+\begin{equation}\label{eq:ne}
 n_e = \sum \limits^{ns-1}_{a=0} z_a n_a, \qquad
 n_i = \sum \limits^{ns-1}_{a=0} n_a
 \end{equation}
@@ -7306,7 +7280,7 @@ p_a = n_a \left( z_a T_e + T_i \right), \qquad
 p_e = n_e T_e
 \end{equation}
 
-\begin{equation}
+\begin{equation}\label{eq:VaCor_dpcDef_appC}
 V_a^{corr\_dpc} = \frac{c^{corr\_dpc}}{16} \left| b_x \right| \sqrt{ \frac{p_a}{m_a n_a} } \frac{\partial^2}{\partial x^2} \left( \frac{1}{p_a} \frac{\partial p_a}{\partial x} \right)
 \end{equation}
 
@@ -7314,9 +7288,10 @@ and $\delta_{a,b}$ is the Kronecker delta (1 if $a=b$, 0 otherwise). Here, it is
 
 \subsection{Source terms in density equations}
 
-{\centering}
-$S_a^n=S_{I_a}^n+S_{I_{a+1}}^n+S_{R_a}^n+S_{R_{a-1}}^n+S_{CX_a}^n+S_{CX_{a-1}}^n$,
-{\centering}
+\begin{equation}
+\label{eq:particle_source_appC}
+S_a^n=S_{I_a}^n+S_{I_{a+1}}^n+S_{R_a}^n+S_{R_{a-1}}^n+S_{CX_a}^n+S_{CX_{a-1}}^n+S_a^{\rm Eirene},
+\end{equation}
 
 
 %-------- end of 1st page -------------
@@ -7324,7 +7299,7 @@ $S_a^n=S_{I_a}^n+S_{I_{a+1}}^n+S_{R_a}^n+S_{R_{a-1}}^n+S_{CX_a}^n+S_{CX_{a-1}}^n
 $z_a$ --- the atomic charge of species $a$,
 $z_{n,a}$ --- the nuclear charge of species $a$
 
-\begin{equation}
+\begin{equation}\label{eq:SIa}
 \begin{matrix}
 S_{I_a}^n & =
 & \left\{
@@ -7335,7 +7310,7 @@ S_{I_a}^n & =
 \end{matrix}
 \end{equation}
 
-\begin{equation}
+\begin{equation}\label{eq:SIa1}
 \begin{matrix}
 S_{I_{a+1}}^n & =
 & \left\{
@@ -7350,7 +7325,7 @@ r_{I_a} n_e n_a, & \ a=0,\ldots,ns-2, z_a < z_{a+1} \mbox{ and } z_{n,a}=z_{n,a+
 r_{I_a} = \exp \left( r_{0,I_a}+r_{1,I_a} \ln\left(\frac{T_e}e\right)\right)
 \end{equation}
 
-\begin{equation}
+\begin{equation}\label{eq:SRa}
 \begin{matrix}
 S_{R_a}^n & =
 & \left\{
@@ -7361,7 +7336,7 @@ S_{R_a}^n & =
 \end{matrix}
 \end{equation}
 
-\begin{equation}
+\begin{equation}\label{eq:SRa1}
 \begin{matrix}
 S_{R_{a-1}}^n & =
 & \left\{
@@ -7376,9 +7351,11 @@ r_{R_a} n_e n_a, & \ a=1,\ldots,ns-1, z_{a-1} < z_a \text{ and } z_{n-1,a}=z_{n,
 r_{R_a}=\exp\left(r_{0,R_a}+r_{1,R_a} \ln\left(\frac{T_e}e\right)\right)
 \end{equation}
 %-------------------
-\begin{eqnarray}
+\begin{eqnarray}\label{eq:Scxa}
 S_{CX_a}^n & = - \sum \limits^{ns_{CX}}_{\substack{b=0 \\ b \neq a-1}} r_{CX_{ab}} n_a n_b \\
 S_{CX_{a-1}}^n & = \sum \limits^{ns_{CX}}_{\substack{b=0 \\ b \neq a-1}} r_{CX_{ab}} n_a n_b \\
+\end{eqnarray}
+\begin{eqnarray}\label{eq:Scxb}
 S_{CX_b}^n & = - \sum \limits^{ns-1}_{\substack{a=0 \\ b \neq a-1}} r_{CX_{ab}} n_a n_b \\
 S_{CX_{b+1}}^n & = \sum \limits^{ns-1}_{\substack{a=0 \\ b \neq a-1}} r_{CX_{ab}} n_a n_b
 \end{eqnarray}
@@ -7398,7 +7375,7 @@ V_a^{corr\_dpc} = \frac{c^{corr\_dpc}}{16} |b_x| \sqrt{\frac{p_a}{m_a n_a}} \fra
 ^2}{\partial x^2} \left( \frac 1{p_a} \frac{\partial p_a}{\partial x} \right)
 \end{equation}
 
-\begin{equation}
+\begin{equation}\label{eq:VaxE_appC}
 \begin{matrix}
 V_{ax}^{\left( E\right)} & =
 & \left\{
@@ -7409,7 +7386,7 @@ V_{ax}^{\left( E\right)} & =
 \end{matrix}
 \end{equation}
 
-\begin{equation}
+\begin{equation}\label{eq:VayE_appC}
 \begin{matrix}
 V_{ay}^{\left( E \right)} & =
 & \left\{
@@ -7423,7 +7400,7 @@ c_{E\times B}   \frac{B_z}{B^2}   \frac 1{h_x}   \frac{\partial \Phi }{\partial 
 %-------- end of 2nd page -------------
 
 \begin{equation}
-\begin{matrix}
+\begin{matrix}\label{eq:VaxDia}
 \widetilde{V}_{ax}^{\left( dia \right)} & =
 & \left\{
 \begin{matrix}
@@ -7434,7 +7411,7 @@ c_{dia} \frac{T_i B_z}{z_a e}   \frac{\partial}{h_y\partial y} \left(\frac 1{B^2
 \end{equation}
 
 \begin{equation}
-\begin{matrix}
+\begin{matrix}\label{eq:VayDia}
 \widetilde{V}_{ay}^{\left( dia \right)} & =
 & \left\{
 \begin{matrix}
@@ -7446,9 +7423,9 @@ c_{dia} \frac{T_i B_z}{z_a e}   \frac{\partial}{h_y\partial y} \left(\frac 1{B^2
 
 $V_{ax}^{(AN)}=0$
 
-\begin{equation*}
+\begin{equation}\label{eq:V_ayAN}
 V_{ay}^{(AN)} = c_{V_a^{(AN)},0} + c_{V_a^{(AN)},1} \frac{10^{20}}{n_e} + c_{V_a^{(AN)},2} D_{f,a} + c_{V_a^{(AN)},3} \frac{T_e}{16 e|B|}
-\end{equation*}
+\end{equation}
 
 $a=0, c_{V_a^{(AN)},0}=0, c_{V_a^{(AN)},1}=0, c_{V_a^{(AN)},2}=0, c_{V_a^{(AN)},3}=0$
 
@@ -7468,13 +7445,17 @@ $, where $\left \langle B^2 \right \rangle = \frac{\mathlarger{\iint \limits_{co
 \begin{equation}
 \left\{
 \begin{matrix}
+\label{eq:D_axy}
 D_{ayx} = \left( \frac 1{B^2} - \frac 1{\left\langle B^2\right\rangle} \right)  \frac{B_z}{z_a e}, & z_a \neq 0\\
 D_{ayx} = 0, & z_a=0
 \end{matrix}
 \right.
 \end{equation}
 
-$D_{n,a} = D^{(AN)}_{n,a}$
+\begin{equation}\label{eq:D_na}
+D_{n,a} = D^{(AN)}_{n,a}
+\end{equation}
+
 
 \begin{equation}
 D^{(AN)}_{n,a}=\left( c_{D_{n,a},0}+c_{D_{n,a},1}\frac{10^{20}}{n_e}+c_{D_{n,a},2}D_{f,a}+c_{D_{n,a},3}\frac{T_e}{16 e|B|}\right)f_D(x,y),
@@ -7514,7 +7495,7 @@ $1$ & $0.3$ & $0$ & $0$ & -- & -- & $0$ & $0$ & $0$ \\ \hline
 \end{table}
 %-------- end of 3rd page -------------
 
-\begin{equation}
+\begin{equation}\label{eq:D_pax}
 \begin{matrix}
 \widetilde D_{p,ax} & =
 & \left\{
@@ -7527,20 +7508,22 @@ D_{p,a}, & \ z_a \neq 0 \\
 \end{matrix}
 \end{equation}
 
-\begin{equation}
+\begin{equation}\label{eq:D_pay}
 \begin{matrix}
 \widetilde D_{p,ay} & =
 & \left\{
 \begin{matrix}
 \frac{D_{p,a}}
-{\left(1+\left(\frac{\frac{\sqrt{g}}{h_y} D_{p,a} \left| \frac 1{h_y}\frac{\partial p_a}{\partial y} \right| }{\frac{\sqrt{g}}{h_x} \mathit{\alpha n}_a\frac{V_{T_i}} 4}\right)^{\gamma _1}\right)^{\frac 1{\gamma_1}}},
+{\left(1+\left(\frac{\frac{\sqrt{g}}{h_y} D_{p,a} \left| \frac 1{h_y}\frac{\partial p_a}{\partial y} \right| }{\frac{\sqrt{g}}{h_y} \mathit{\alpha n}_a\frac{V_{T_i}} 4}\right)^{\gamma _1}\right)^{\frac 1{\gamma_1}}},
 & \ V_{T_i}=\sqrt{\frac{8T_i}{\mathit{\pi m}_a}}, & \ z_a = 0 \\
 D_{p,a}, & \ z_a \neq 0 \\
 \end{matrix} \right.
 \end{matrix}
 \end{equation}
 
-$D_{p,a} = D^{(AN)}_{p,a}$
+\begin{equation}\label{eq:D_pa}
+D_{p,a} = D^{(AN)}_{p,a}
+\end{equation}
 
 \begin{equation*}
 D^{(AN)}_{p,a}=\frac 1{z_aT_e+T_i} \left( c_{D_{p,a},0} + c_{D_{p,a},1} \frac{10^{20}}{n_e} + c_{D_{p,a},2} D_{f,a} + c_{D_{p,a},3} \frac{T_e}{16 e|B|}\right),
@@ -7565,7 +7548,7 @@ m_a \frac{\partial n_a V_{\parallel a}}{\partial t} +
 \frac 1{h_z\sqrt g} \frac{\partial}{\partial y} \left( \frac{h_z\sqrt g}{h_y} \Gamma_{ay}^m \right) +
 \frac{b_x}{h_x}\frac{\partial n_a T_i}{\partial x} +
 Z_a e n_a \frac{b_x}{h_x} \frac{\partial \Phi}{\partial x} = \notag \\
-= S_{a \parallel}^m + S_{CF_a}^m + S_{fr_a}^m &+ S_{Therm_a}^{m} + S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m + S_{AN_a}^m
+= S_{a \parallel}^m + S_{CF_a}^m + S_{fr_a}^m &+ S_{Therm_a}^{m} + S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m + S_{AN_a}^m + S_{EIRENE_a}^m
 \end{align}
 
 However, one can also use the formulation given as Eq. (\ref{eq:mom_old}),
@@ -7577,7 +7560,7 @@ m_a \frac{\partial n_a V_{\parallel a}}{\partial t} +
 \frac 1{h_z\sqrt g} \frac{\partial}{\partial y} \left( \frac{h_z \sqrt g}{h_y} \Gamma_{ay}^m \right) +
 \frac{b_x}{h_x} \frac{\partial n_a T_i}{\partial x} +
 \frac{b_x}{h_x} \frac{Z_a n_a \partial n_e T_e}{n_e \partial x} = \notag \\
-= S_{a \parallel}^m + S_{CF_a}^m + S_{fr_a}^m &+ S_{Therm_a}^{m} + S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m + S_{AN_a}^m
+= S_{a \parallel}^m + S_{CF_a}^m + S_{fr_a}^m &+ S_{Therm_a}^{m} + S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m + S_{AN_a}^m + S_{EIRENE_a}^m
 \end{align}
 
 The treatment using Eq. (\ref{eq:mom_new}) is recommended for cases with a
@@ -7592,18 +7575,45 @@ with hydrogenic ion mixtures or non-hydrogenic plasmas, the use of Eq.
 
 \subsection{Sources for parallel momentum equations}
 
-$S_{a \parallel}^m = - \left( \nabla \pi_a^{\parallel} \right)_{\parallel}$
+\begin{align}\label{eq:mom_alls}
+S_{a}^m = S_{a \parallel}^m + S_{CF_a}^m + S_{fr_a}^m &+ S_{Therm_a}^{m} + S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m + S_{AN_a}^m
+\end{align}
 
-\begin{equation}
+\begin{equation}\label{eq:mom_viscos}
 \begin{matrix}
-\left( \nabla \pi_a^{\parallel} \right)_{\parallel} & =
+S_{a \parallel}^m = - \left( \nabla \cdot\overset\leftrightarrow\pi_a^{\parallel} \right)_{\parallel} & =
 & \left\{
 \begin{matrix}
-- \frac{\partial}{h_z\sqrt g\partial x}
+- \left( {\nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{res}_{\parallel} - 
+	\left( \nabla \cdot\overset\leftrightarrow\pi _a^{q_\parallel} \right)_{\parallel}
+& \ z_a = 1~\&~z_{n,a} = 1 \\
+\\
+0, & \mbox{otherwise} \\
+\end{matrix} \right.
+\end{matrix}
+\end{equation}
+
+\begin{equation}\label{eq:mom_visres}
+\begin{matrix}
+\left( {\nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{res}_{\parallel} & =
+& \left\{
+\begin{aligned}
+- \frac{1}{h_z\sqrt g} \frac{\partial}{\partial x}
 \left(\frac{h_z\sqrt g}{h_x} \frac 4 3 \widetilde{\widetilde{\eta}}^{(CL)}_{ax}
 \frac{\partial \ln \left( h_z B^{\frac 1 2} \right) }{B^{\frac 1 2} h_x \partial x}\right)
-B^{\frac 1 2} V_{\parallel a} -
-B^{\frac 3 2} b_x \frac{\partial}{h_x \partial x}
+B^{\frac 1 2} V_{\parallel a},  
+& \qquad  z_a = 1~\&~z_{n,a} = 1 \\
+0, & \qquad \mbox{otherwise} \\
+\end{aligned} \right.
+\end{matrix}
+\end{equation}
+
+\begin{equation}\label{eq:mom_visq}
+\begin{matrix}
+\left( \nabla \cdot\overset\leftrightarrow\pi _a^{q_\parallel} \right)_{\parallel} & =
+& \left\{
+\begin{matrix}
+-B^{\frac 3 2} b_x \frac{\partial}{h_x \partial x}
 \left( \alpha^{NEO} \frac{b_x \tilde {\tau}_a}{B^2} \frac{\partial \left(B^{\frac 1 2} \tilde q_a^{(0)} \right)}{h_x \partial x}\right),
 & \ z_a = 1~\&~z_{n,a} = 1 \\
 0, & \mbox{otherwise} \\
@@ -7611,24 +7621,26 @@ B^{\frac 3 2} b_x \frac{\partial}{h_x \partial x}
 \end{matrix}
 \end{equation}
 
-$S_{CF_a}^m = m_a b_x n_a V_{\parallel a}^2 \frac 1{h_z h_x} \frac{\partial h_z}{\partial x}$
+\begin{equation}\label{eq:mom_sorcf}
+S_{CF_a}^m = m_a b_x n_a V_{\parallel a}^2 \frac 1{h_z h_x} \frac{\partial h_z}{\partial x}
+\end{equation}
 
 $S_{AN_a}^m$ is a correcting source due to the radial anomalous current (here assumed to be carried by hydrogenic ions only):
 
-\begin{equation*}
+\begin{equation}\label{eq:mom_soran}
 S_{AN_a}^m = \left\{
 \begin{matrix}
 0, & z_a \ne 1 \mbox{ or } z_{n,a} \ne 1 \\
 - j_y^{(AN)} \frac{B B_x}{B_z}, & z_a = 1 \mbox{ and } z_{n,a} = 1 \\
 \end{matrix}
 \right.
-\end{equation*}
+\end{equation}
 
 Parallel momentum source due to ionization
 
-\begin{equation*}
+\begin{equation}\label{eq:mom_sorio}
 S_{I_a}^m = S_{I_a}^q + S_{I_{a+1}}^q
-\end{equation*}
+\end{equation}
 
 \begin{equation}
 \begin{matrix}
@@ -7654,9 +7666,9 @@ r_{I_a} n_e n_a \left( \frac{m_a+m_{a+1}}2 \right) V_{\parallel a}, & \ a=0,\ldo
 
 Parallel momentum source due to recombination
 
-\begin{equation*}
+\begin{equation}\label{eq:mom_sorre}
 S_{R_a}^m = S_{R_a}^q + S_{R_{a-1}}^q
-\end{equation*}
+\end{equation}
 
 \begin{equation}
 \begin{matrix}
@@ -7681,11 +7693,11 @@ r_{R_a} n_e n_a \left( \frac{m_a+m_{a+1}}2 \right) V_{\parallel a}, & \ a=0,\ldo
 \end{equation}
 
 
-\begin{equation*}
+\begin{equation}\label{eq:mom_scx}
 S_{CX_a}^m= S_{CX_a}^q + S_{CX_{a-1}}^q + S_{CX_b}^q + S_{CX_{b+1}}^q
-\end{equation*}
+\end{equation}
 
-\begin{eqnarray}
+\begin{eqnarray}\label{eq:mom_sorcex}
 S_{CX_a}^q = - \sum \limits^{ns_{CX}}_{\substack{b=0 \\ b \neq a-1}} r_{CX_{ab}} n_a n_b \left( \frac{m_a+m_{a-1}}{2} \right) V_{a \parallel} \\
 S_{CX_{a-1}}^q = \sum \limits^{ns_{CX}}_{\substack{b=0 \\ b \neq a-1}} r_{CX_{ab}} n_a n_b \left( \frac{m_a+m_{a-1}}{2} \right) V_{a \parallel} \\
 S_{CX_b}^q = - \sum \limits^{ns-1}_{\substack{a=0 \\ b \neq a-1}} r_{CX_{ab}} n_a n_b \left( \frac{m_b+m_{b+1}}{2} \right) V_{b \parallel} \\
@@ -7696,21 +7708,33 @@ S_{CX_{b+1}}^q = \sum \limits^{ns-1}_{\substack{a=0 \\ b \neq a-1}} r_{CX_{ab}} 
 
 If using Eq. (\ref{eq:mom_new}), the thermal and friction forces have two parts:
 
-$S_{Therm,a}^m = S_{Therm,ea}^m + S_{Therm,ia}^m$
+\begin{align}\label{eq:mom_tfric}
+S_{Therm,a}^m = S_{Therm,ea}^m + S_{Therm,ia}^m
+\end{align}
 
-$S_{fr,a}^m = S_{fr,ea}^m + S_{fr,ia}^m$
+\begin{align}\label{eq:mom_fric}
+S_{fr,a}^m = S_{fr,ea}^m + S_{fr,ia}^m
+\end{align}
 
 The electron contributions are:
 
-$S_{Therm,ea}^m = - \alpha_{ex} c_e^{(1)} \frac{n_a z_a^2 m_e}{b_x e \zeta_e} \frac{1}{c_{\sigma^{(CL)}_{\parallel}}^{(Luciani)}} \frac{\partial T_e}{h_x \partial x}, ~ z_a \ne 0$
+\begin{equation}\label{eq:mom_terme}
+S_{Therm,ea}^m = - \alpha_{ex} c_e^{(1)} \frac{n_a z_a^2 m_e}{b_x e \zeta_e} \frac{1}{c_{\sigma^{(CL)}_{\parallel}}^{(Luciani)}} \frac{\partial T_e}{h_x \partial x}, ~ z_a \ne 0
+\end{equation}
 
-$S_{fr,ea}^m = \frac{b_x^2 e^2 z_a^2}{\sigma_\parallel z_{eff}} n_e n_a \left( V_{e \parallel} - V_{a \parallel} \right), ~ z_a \ne 0$
+\begin{equation}\label{eq:mom_sorfre}
+S_{fr,ea}^m = \frac{b_x^2 e^2 z_a^2}{\sigma_\parallel z_{eff}} n_e n_a \left( V_{e \parallel} - V_{a \parallel} \right), ~ z_a \ne 0
+\end{equation}
 
 and the ion contributions are:
 
-$S_{Therm,ia}^m = \sum \limits_{\substack{b=0 \\ b \ne a}}^{ns - 1} c_{\alpha_{ab}}^{(Flim)} z_a^2 z_b^2 \frac{m_p}{\zeta_p e} \frac{n_a n_b}{n_a + n_b} \alpha_{ab} \frac{\partial T_i}{h_x \partial x}, ~z_a \ne 0$
+\begin{equation}\label{eq:mom_termi}
+S_{Therm,ia}^m = \sum \limits_{\substack{b=0 \\ b \ne a}}^{ns - 1} c_{\alpha_{ab}}^{(Flim)} z_a^2 z_b^2 \frac{m_p}{\zeta_p e} \frac{n_a n_b}{n_a + n_b} \alpha_{ab} \frac{\partial T_i}{h_x \partial x}, ~z_a \ne 0
+\end{equation}
 
-$S_{fr,ia}^m = \sum \limits_{\substack{b=0 \\ b \ne a}}^{ns - 1} R_{ab}^{(V_\parallel)} = \sum \limits_{\substack{b=0 \\ b \ne a}}^{ns - 1} \frac{1}{\zeta_p} m_p \sqrt{\frac{\frac{m_a}{m_p} \frac{m_b}{m_p}}{\frac{m_a}{m_p} + \frac{m_b}{m_p}}} z_a^2 z_b^2 n_a n_b K_{ab}^{(V_\parallel)} \left( V_{b \parallel} - V_{a \parallel} \right)$
+\begin{equation}\label{eq:mom_sorfri}
+S_{fr,ia}^m = \sum \limits_{\substack{b=0 \\ b \ne a}}^{ns - 1} R_{ab}^{(V_\parallel)} = \sum \limits_{\substack{b=0 \\ b \ne a}}^{ns - 1} \frac{1}{\zeta_p} m_p \sqrt{\frac{\frac{m_a}{m_p} \frac{m_b}{m_p}}{\frac{m_a}{m_p} + \frac{m_b}{m_p}}} z_a^2 z_b^2 n_a n_b K_{ab}^{(V_\parallel)} \left( V_{b \parallel} - V_{a \parallel} \right)
+\end{equation}
 
 where
 
@@ -7769,7 +7793,7 @@ b_x e
 	\right)
 \right],$
 
-\begin{equation}
+\begin{equation}\label{eq:mom_sorfra}
 S^m_{fr,a} =
 \sum \limits^{ns-1}_{\substack{b = 0 \\ b\neq a, z_a \neq 0, z_b \neq 0}} \frac 1{\tau_p} m_p
 \sqrt{ \frac {\frac{m_a}{m_p} \frac{m_b}{m_p}} {\frac{m_a}{m_p} + \frac{m_b}{m_p}} }
@@ -7856,7 +7880,7 @@ $c_{th_e,a} = 0, a=0,\ldots,ns-1$ and $c_{th_i,a}=2.65, a=0,\ldots, ns-1$ if the
 
 \subsection{Parallel momentum fluxes}
 
-\begin{equation}
+\begin{equation}\label{eq:mom_fluxx}
 \Gamma^m_{ax} = \left\{
 \begin{matrix}
 m_a V_{\parallel a} \Gamma_{ax}^{Cor} +
@@ -7868,7 +7892,7 @@ m_a V_{\parallel a} \Gamma_{ax}^{Cor} -
 \right.
 \end{equation}
 
-\begin{equation}
+\begin{equation}\label{eq:mom_fluxy}
 \Gamma^m_{ay} =
 m_a V_{\parallel a} \Gamma_{ay}^{Cor} -
 \eta_{ay} \frac{\partial V_{\parallel a}}{h_y \partial y}
@@ -7880,9 +7904,9 @@ $\eta_{ax} = \eta^{(AN)}_{a} + \frac{4}{3} \widetilde{\widetilde{\eta}}^{(CL)}_{
 
 %-------- end of 6th page -------------
 
-\begin{equation}
+\begin{equation}\label{eq:mom_etana}
 \begin{matrix}
-\eta^{(AN)}_{a} & =
+\eta^{(AN)}_{a} & = m_an_a\nu_a^{visc} =
 & \left\{
 \begin{matrix}
 \left( c_{\eta_a,0} + c_{\eta_a,1} \frac{10^{20}}{n_e} + c_{\eta_a,2} D_{f,a} +
@@ -7912,9 +7936,11 @@ $ a = 0, \;\;\;  c_{\eta _a,0} = 0, \;\;\;  c_{\eta _a,1} = 0, \;\;\;  c_{\eta _
 
 $ a = 1, \;\;\;  c_{\eta _a,0} = 0, \;\;\;  c_{\eta _a,1} = 0, \;\;\;  c_{\eta _a,2} = 1,  \;\;\;  c_{\eta _a,3} = 0$
 
-$\widetilde{\widetilde{\eta}}^{(CL)}_{ax} = c_{\eta_{ax}^{(CL)}} \widetilde{\eta}^{(CL)}_{ax}$
+\begin{align}\label{eq:mom_dveta}
+\widetilde{\widetilde{\eta}}^{(CL)}_{ax} = c_{\eta_{ax}^{(CL)}} \widetilde{\eta}^{(CL)}_{ax}
+\end{align}
 
-\begin{equation}
+\begin{equation}\label{eq:mom_cetaclx}
 \begin{matrix}
 c_{\eta_{ax}^{(CL)}} & =
 & \left\{
@@ -7933,7 +7959,9 @@ c_{\eta_{ax}^{(CL)}} & =
 
 $V_{m_a}^{(max)} = c_{flim_2} \frac{\sqrt g}{h_x} |b_x| n_a T_i$, ~ $c_{flim_2} = \frac{3}{8}$
 
-$\widetilde{\eta}^{(CL)}_{ax} = c_{\eta_{ax}^{(CL)}}^{Luciani} \eta^{(CL)}_{ax}$
+\begin{align}\label{eq:mom_veta}
+\widetilde{\eta}^{(CL)}_{ax} = c_{\eta_{ax}^{(CL)}}^{Luciani} \eta^{(CL)}_{ax}
+\end{align}
 
 If {\tt 'b2trcl\_lluciani'} is set to {\tt '1'}, the Luciani flux limiter is given by:
 
@@ -7977,22 +8005,27 @@ $c \left( y \right) = \mathlarger{\oint} h_x |b_x|^{-1} dx$, \ \ \ \  $\varepsil
 {\left( \mathlarger{\oint} h_x dx \right)^2}
 {\mathlarger{\oint} \sqrt g / h_y dx}$
 
-$
-\begin{matrix}
-\eta^{(CL)}_{ax} & =
-& \left\{
-\begin{matrix}
+\begin{equation}
+\label{eq:mom_etaCL}
+\eta^{(CL)}_{ax} =
+\left\{
+\begin{aligned}
 0, & \ z_a = 0 ,  \\
 \eta \sqrt{2} T_i n_a \tau_a b_x^2, & \ z_a \neq 0  \\
-\end{matrix} \right.
-\end{matrix}$
+\end{aligned} \right.
+\end{equation}
+
 ,
 
 $\eta = 0.96$,
 
-$\tau _a = \frac 3{4 \sqrt{2\pi}}
+\begin{equation}
+\label{eq:mom_taua}
+\tau _a = \frac 3{4 \sqrt{2\pi}}
 \frac {\sqrt{m_a} T_i^{\frac 3 2}} {z_a^2 z_{eff} n_e \ln \Lambda}
-\left( \frac{4 \pi \varepsilon_0}{e^2} \right)^2$, where the Coulomb logarithm $\ln \Lambda $
+\left( \frac{4 \pi \varepsilon_0}{e^2} \right)^2, 
+\end{equation}
+where the Coulomb logarithm $\ln \Lambda$ 
 can be chosen as
 
 $
@@ -8075,9 +8108,7 @@ $\varepsilon = \frac{\left(\mathlarger{\oint} h_x dx \right)^2}
 
 \section{Electron energy equations}
 
-When Eq. (\ref{eq:mom_new}) is used ({\tt 'b2sigp\_style'} set to {\tt '2'}), we have:
-
-\begin{align}
+\begin{align}\label{eq:ene_new}
 \frac 3 2 \frac{\partial n_e T_e}{\partial t} &+
 \frac 1{\sqrt g} \frac{\partial }{\partial x} \left( \frac{\sqrt g}{h_x} \widetilde{q}_{ex} \right) +
 \frac 1{\sqrt g} \frac{\partial }{\partial y} \left( \frac{\sqrt g}{h_y} \widetilde{q}_{ey} \right) +
@@ -8089,71 +8120,76 @@ When Eq. (\ref{eq:mom_new}) is used ({\tt 'b2sigp\_style'} set to {\tt '2'}), we
 \right)
 -
 \frac{j_y^{(ST)}}{e n_e} \frac{\partial n_e T_e}{h_y \partial y}
-+ Q_{Fei}
-\end{align}
-
-Otherwise, with Eq. (\ref{eq:mom_old}):
-
-\begin{align}
-\frac 3 2 \frac{\partial n_e T_e}{\partial t} &+
-\frac 1{\sqrt g} \frac{\partial }{\partial x} \left( \frac{\sqrt g}{h_x} \widetilde{q}_{ex} \right) +
-\frac 1{\sqrt g} \frac{\partial }{\partial y} \left( \frac{\sqrt g}{h_y} \widetilde{q}_{ey} \right) +
-\frac{n_e T_e}{\sqrt g} \frac{\partial}{\partial x} \left(\frac{\sqrt g}{h_x} b_x V_{e \parallel} \right) = \notag \\
-= Q_e &+ c_{E\times B} n_e T_e B_z \frac 1{h_x h_y}
-\left(
-	\frac{\partial \Phi }{\partial y} \frac{\partial }{\partial x} \left(\frac 1{B^2} \right) -
-	\frac{\partial \Phi }{\partial x} \frac{\partial }{\partial y} \left(\frac 1{B^2} \right)
-\right)
--
-\frac{j_y^{(ST)}}{e n_e} \frac{\partial n_e T_e}{h_y \partial y}
-+ j_x \hat E_x
++ Q_{Fei} + Q_e^{\rm EIRENE}
 \end{align}
 
 \subsection{Electron energy sources}
 
+\begin{multline}\label{eq:ene_seheat}
+ S_e^{heat} = Q_e + c_{E\times B} n_e T_e B_z \frac 1{h_x h_y}
+\left(
+	\frac{\partial \Phi }{\partial y} \frac{\partial }{\partial x} \left(\frac 1{B^2} \right) -
+	\frac{\partial \Phi }{\partial x} \frac{\partial }{\partial y} \left(\frac 1{B^2} \right)
+\right)
+- \frac{j_y^{(ST)}}{e n_e} \frac{\partial n_e T_e}{h_y \partial y}
++ Q_{Fei} -\\
+- \frac{n_e T_e}{\sqrt g} \frac{\partial}{\partial x} \left(\frac{\sqrt g}{h_x} b_x V_{e \parallel} \right) + Q_e^{\rm EIRENE}
+\end{multline}
+
 $Q_e = -Q_{\Delta } - Q_R$
 
-$Q_{\Delta} = c_{eqp} \ln \Lambda e^{\frac 3 2}
+\begin{equation}\label{eq:ene_Qdelta}
+Q_{\Delta} = c_{eqp} \ln \Lambda e^{\frac 3 2}
 \frac{
 	\sum \limits_{a=0}^{ns-1}\frac{z_a^2 m_p}{m_a}n_a
 	}
 	{n_i}
 \frac{n_e n_i}{T_e^{\frac 3 2}}
-(T_e - T_i),\;\;\; c_{eqp}=4.8 \cdot 10^{-15},\;\;$ where $\ln \Lambda $ can be chosen as
+(T_e - T_i),\;\;\; c_{eqp}=4.8 \cdot 10^{-15},\;\;
+\end{equation}
+where $\ln \Lambda $ can be chosen as
 
-$
-\begin{matrix}
-\ln \Lambda & =
-& \left\{
+
+\begin{equation}\label{eq:ene_lnla}
+\ln \Lambda  = \left\{
 \begin{matrix}
 12 \\
 \max \{ 5; 23.4 - 1.15 \cdot \log_{10} \left( \frac{n_e}{10^6} \right) + 3.45 \cdot \log_{10} \left( \frac{T_e}e \right)  \}, & \frac{T_e}{e} \leq 50 & \text{Braginsky formula} \\
 \max \{ 5; 25.3 - 1.15 \cdot \log_{10} \left( \frac{n_e}{10^6} \right) + 2.30 \cdot \log_{10} \left( \frac{T_e}e \right)  \}, & \frac{T_e}{e} > 50  \\
 \max \{ 5; 15.2 - 0.5 \cdot \ln \left( \frac{n_e}{10^{20}} \right) + \ln \left( \frac{T_e}{e \cdot 10^3} \right)  \} && \text{Wesson formula for electron-ion collisions} \\
 \end{matrix} \right.
-\end{matrix}
-$
+\end{equation}
 
-$Q_R = \sum \limits_{a=0}^{ns-1} r_{Q_a} n_e n_a$ from b2stel
+\begin{equation}\label{eq:ene_QR}
+Q_R = \sum \limits_{a=0}^{ns-1} r_{Q_a} n_e n_a
+\end{equation}
+from b2stel
 
-$Q_{Fei} = V_{e \parallel} \sum \limits_{\substack{a=0 \\ z_a \neq 0}}^{ns - 1}
-\left( S^m_{fr,ea} + S^m_{Therm,ea} \right)$
+\begin{equation}\label{eq:ene_Qfei}
+Q_{Fei} = \left\{
+\begin{aligned}
+ V_{e \parallel} \sum \limits_{\substack{a=0 \\ z_a \neq 0}}^{ns - 1}
+\left( S^m_{fr,ea} + S^m_{Therm,ea} \right) 
+& \mbox{, when Eq.(\ref{eq:mom_new}) is activated ({\tt 'b2sigp\_style'} set to {\tt '2'})} \\
+j_x \hat E_x & \mbox{, when Eq.(\ref{eq:mom_old}) is activated}
+\end{aligned}\right.
+\end{equation}
 
  %-------- end of 9th page -------------
 
 \subsection{Poloidal electron energy fluxes}
 
-\begin{equation*}
+\begin{equation}\label{eq:ene_tiqex}
 \widetilde{q}_{ex} = \widetilde{f}_{ex} T_e - \kappa_{ex} \frac 1{h_x} \frac{\partial T_e} {\partial x} - q_{ex}^{P.Sch}
-\end{equation*}
+\end{equation}
 
-\begin{equation*}
+\begin{equation}
 \widetilde{f}_{ex} = \frac 3 2 \Gamma_{ex} + V_{ex}^{(str)} n_e - \widetilde{c_e}^{(2)} \frac{j^{ \left( \parallel \right) }_x}e
-\end{equation*}
+\end{equation}
 
-\begin{equation*}
+\begin{equation}\label{eq:ene_qPSchx}
 q_{ex}^{P.Sch} = -\frac 5 2 D_{exy} \frac 1{h_y} \frac{\partial n_e T_e^2} {\partial y}
-\end{equation*}
+\end{equation}
 
 
 $D_{exy} = \left( \frac 1{B^2} - \frac 1{\left\langle B^2 \right\rangle} \right) \frac{B_z} e$
@@ -8162,7 +8198,7 @@ $D_{eyx} = \left( \frac 1{B^2} - \frac 1{\left\langle B^2 \right\rangle} \right)
 , where $\left\langle B^2 \right\rangle = \frac{\mathlarger{\iint \limits_{core}} B^2 \sqrt g dxdy}
 {\mathlarger{\iint \limits_{core}} \sqrt g dxdy}$
 
-\begin{equation*}
+\begin{equation}\label{eq:ene_qex}
 q_{ex} =
 \left[
 	\frac 3 2 \Gamma_{ex} - \widetilde{c_e}^{(2)} \frac{j^{\left( \parallel \right) }_x} e
@@ -8172,13 +8208,13 @@ q_{ex} =
 \right] T_e
 -
 \kappa_{ex} \frac 1{h_x} \frac{\partial T_e}{\partial x}
-\end{equation*}
+\end{equation}
 
-\begin{equation*}
+\begin{equation}\label{eq:ene_gammax}
 \Gamma_{ex} = \sum \limits_{a=0}^{ns-1} z_a \Gamma_{ax}^{(he)} - \frac{j^{\left( \parallel \right)}_x} e
-\end{equation*}
+\end{equation}
 
-\begin{equation*}
+\begin{equation}\label{eq:ene_gammaxhe}
 \Gamma_{ax}^{(he)} =
 \left(
 	b_x V_{a \parallel} + V_{ax}^{(E)} + \frac 5 3 V_a^{(AN)} + V_a^{corr\_dpc}
@@ -8186,34 +8222,34 @@ q_{ex} =
 \frac 5 3 \left[
 	D_{n,a} \frac 1{h_x} \frac{\partial n_a}{\partial x} + \widetilde{D}_{p,ax} \frac{1}{h_x} \frac{\partial p_a}{\partial x}
 \right]
-\end{equation*}
+\end{equation}
 
-\begin{equation*}
+\begin{equation}\label{eq:ene_qexeir}
 q_{ex}^{(Eir)} =
 \left[
 	\frac 5 2 \Gamma_{ex}^{(Eir)} + V_{ex}^{(str)}n_e
 	- \widetilde{c_e}^{(2)} b_x \frac{\widetilde j_{\parallel}} e
 \right] T_e -
 \kappa_{ex} \frac 1{h_x} \frac{\partial T_e}{\partial x}
-\end{equation*}
+\end{equation}
 
-\begin{equation*}
+\begin{equation}\label{eq:ene_qeyeir}
 q_{ey}^{(Eir)} =
 \left[
 	\frac 5 2 \Gamma_{ex}^{(Eir)} + V_{ey}^{(str)}n_e
 \right] T_e -
 \kappa_{ey} \frac 1{h_y} \frac{\partial T_e}{\partial y}
-\end{equation*}
+\end{equation}
 
 where
 
-\begin{equation*}
+\begin{equation}\label{eq:ene_gamexeir}
 \Gamma_{ex}^{(Eir)} =
 \left(
 	b_x V_{\parallel e} + V_{ex}^{(E)} + V_{ex}^{(dia)} + V_{ex}^{(AN)}
 \right) n_e -
 D_{n,a} \frac 1{h_x} \frac{\partial n_a}{\partial x}
-\end{equation*}
+\end{equation}
 
 \begin{equation*}
 \Gamma_{ey}^{(Eir)} =
@@ -8223,8 +8259,12 @@ D_{n,a} \frac 1{h_x} \frac{\partial n_a}{\partial x}
 D_{n,a} \frac 1{h_y} \frac{\partial n_a}{\partial y}
 \end{equation*}
 
-$V_{ex}^{(dia)} = \frac{B_z}{e B^2 n_e} \frac{\partial n_e T_e}{h_y \partial y}$ \ \ \ \ \ \
-$V_{ey}^{(dia)} = -\frac{B_z}{e B^2 n_e} \frac{\partial n_e T_e}{h_x \partial x}$
+\begin{equation}\label{eq:ene_vexdia}
+V_{ex}^{(dia)} = \frac{B_z}{e B^2 n_e} \frac{\partial n_e T_e}{h_y \partial y}
+\end{equation}
+\begin{equation}\label{eq:ene_veydia}
+V_{ey}^{(dia)} = -\frac{B_z}{e B^2 n_e} \frac{\partial n_e T_e}{h_x \partial x}
+\end{equation}
 
 $V_{ex}^{(str)} = 0$
 
@@ -8235,13 +8275,19 @@ value at $z_{eff} = 1$ of 0.71 otherwise.
 
 \subsection{Electron energy transport}
 
-$\kappa_{ex} = \kappa_e^{(AN)} + \widetilde{\widetilde{\kappa}}_{ex}^{(CL)}$,
+\begin{equation}\label{eq:ene_kapex}
+\kappa_{ex} = \kappa_e^{(AN)} + \widetilde{\widetilde{\kappa}}_{ex}^{(CL)}
+\end{equation}
 
-$\kappa_e^{(AN)} = \chi_e n_e$,
+\begin{equation}\label{eq:ene_kapexan}
+\kappa_e^{(AN)} = \chi_e^{(AN)} n_e
+\end{equation}
 
-$\chi_e = \left(
+\begin{equation}\label{eq:ene_chie}
+\chi_e = \left(
 	c_{h_e,0} + c_{h_e,1} \frac{10^{20}}{n_e} + c_{h_e,3} \frac{T_e}{16 e|B|}
-\right) f_{h_e} (x,y)$,
+\right) f_{h_e} (x,y),
+\end{equation}
 
 %-------- end of 10th page -------------
 
@@ -8259,10 +8305,12 @@ f_{h_e}(x,y) & =
 \end{matrix}
 $
 
-$\widetilde{\widetilde{\kappa}}_{ex}^{(CL)} = c_{\kappa_{ex}}^{(Flim)} \widetilde{\kappa}_{ex}^{(CL)}$
+\begin{equation}\label{eq:ene_dmkapexcl}
+\widetilde{\widetilde{\kappa}}_{ex}^{(CL)} = c_{\kappa_{ex}}^{(Flim)} \widetilde{\kappa}_{ex}^{(CL)}
+\end{equation}
 
 $
-\begin{matrix}
+\begin{matrix}\label{eq:ene_cflim}
 c_{\kappa_{ex}}^{Flim} & =
 & \left\{
 \begin{matrix}
@@ -8280,8 +8328,13 @@ c_{\kappa_{ex}}^{Flim} & =
 \end{matrix}
 $
 
-$V_{h_e}^{(max)} = c_{flim_0} \frac{\sqrt g}{h_x}|b_x| \sqrt{\frac{T_e}{m_e}}$,\\\\
-$\widetilde{\kappa}_{ex}^{(CL)} = c_{\kappa_{ex}^{(CL)}}^{(Luciani)} \kappa_{ex}^{(CL)} b_x^2$
+\begin{equation}\label{eq:ene_vhemax}
+V_{h_e}^{(max)} = c_{flim_0} \frac{\sqrt g}{h_x}|b_x| \sqrt{\frac{T_e}{m_e}}
+\end{equation}
+
+\begin{equation}\label{eq:ene_mkapexcl}
+\widetilde{\kappa}_{ex}^{(CL)} = c_{\kappa_{ex}^{(CL)}}^{(Luciani)} \kappa_{ex}^{(CL)} b_x^2
+\end{equation}
 
 $c_{flim_0} = 0.15$ is the electron heat flux limiter coefficient.
 
@@ -8350,15 +8403,19 @@ K_1 = \frac 1{1 + 2.01 \cdot \nu_{\ast e}^{1/2} + 1.53 \cdot \nu_{\ast e}} +
 \frac{0.52 \cdot \varepsilon^3 \cdot \nu_{\ast e}}{1 + 0.89 \cdot \varepsilon^{3/2} \cdot \nu_{\ast e}}
 \end{equation*}
 
-$\nu_{\ast e} = \frac{c \left( y \right)}{2 \pi \varepsilon^{3/2} \tau_e \sqrt{T_e/m_e}}$,
+\begin{equation}\label{eq:ene_nue} 
+\nu_{\ast e} = \frac{c \left( y \right)}{2 \pi \varepsilon^{3/2} \tau_e \sqrt{T_e/m_e}},
+\end{equation}
 
-$\tau_e = \frac 3{4\sqrt{2\pi}}
+\begin{equation}\label{eq:ene_taue}
+\tau_e = \frac 3{4\sqrt{2\pi}}
 \frac{\sqrt{m_e} T_e^{\frac 3 2}} {\ln \Lambda \sum \limits_{a=0}^{ns-1} z_a^2 n_a}
-\left( \frac{4 \pi \varepsilon_0}{e^2}\right)^2$,
+\left( \frac{4 \pi \varepsilon_0}{e^2}\right)^2,
+\end{equation}
 where the Coulomb logarithm $\ln \Lambda $ can be chosen as
 
 $
-\begin{matrix}
+\begin{matrix}\label{eq:ene_couln}
 \ln \Lambda & =
 & \left\{
 \begin{matrix}
@@ -8386,9 +8443,11 @@ $
 
 \subsubsection{Electron parallel velocity}
 
-$V_{e \parallel} = \frac 1{e n_e} \left[
+\begin{equation}\label{eq:ene_veparal}
+V_{e \parallel} = \frac 1{e n_e} \left[
 \sum \limits_{a=0}^{ns -1} z_a e n_a V_{a\parallel} - \frac{j^{(\parallel)}_x}{b_x}
-\right]$,
+\right]
+\end{equation}
 
 \begin{equation}\label{eq:fch_p}
 j^{(\parallel)}_x = \sigma_{\parallel} \left( \frac{1}{e n_e h_x} \frac{\partial n_e T_e}{\partial x} - \frac{1}{h_x} \frac{\partial \Phi}{\partial x} \right) - \alpha_{ex} \frac{1}{h_x} \frac{\partial T_e}{\partial x} - \frac{e b_x}{z_{eff}} \sum \limits_{a=0}^{ns-1} n_a V_{a \parallel} \left( z_a^2 - z_a z_{eff} \right)
@@ -8396,19 +8455,25 @@ j^{(\parallel)}_x = \sigma_{\parallel} \left( \frac{1}{e n_e h_x} \frac{\partial
 
 The last term in Eq. (\ref{eq:fch_p}) is activated with the switch {\tt b2sigp\_style} set to {\tt '2'}.
 
-$\hat E_x = \frac 1{en_e h_x} \frac{\partial n_e T_e}{\partial x} - \frac 1{h_x} \frac{\partial \Phi}{\partial x}$,
+\begin{equation}\label{eq:ene_Ex}
+\hat E_x = \frac 1{en_e h_x} \frac{\partial n_e T_e}{\partial x} - \frac 1{h_x} \frac{\partial \Phi}{\partial x},
+\end{equation}
 
-$\sigma_{\parallel} = \sigma^{(AN)}_{\parallel} + \widetilde{\sigma}^{(CL)}_{\parallel}$,
+\begin{equation}\label{eq:ene_sigmparal}
+\sigma_{\parallel} = \sigma^{(AN)}_{\parallel} + \widetilde{\sigma}^{(CL)}_{\parallel}
+\end{equation}
 
 $\sigma^{(AN)}_{\parallel} = 0$
 
-\begin{equation*}
+\begin{equation}\label{eq:ene_tisigparcl}
 \widetilde{\sigma}^{(CL)}_{\parallel} = c_{\kappa_{ex}^{(CL)}}^{(Luciani)} \sigma^{(CL)}_{\parallel}
-\end{equation*}
+\end{equation}
 
 The classical parallel conductivity is given as:
 \index{Zhdanov}\index{Balescu}
-$\sigma^{(CL)}_{\parallel} = b_x^2 \frac{e^2}{m_e} f_{\sigma_e} \left( z_{eff} \right) n_e \tau_e$,
+\begin{equation}\label{eq:ene_sigparcl}
+\sigma^{(CL)}_{\parallel} = b_x^2 \frac{e^2}{m_e} f_{\sigma_e} \left( z_{eff} \right) n_e \tau_e
+\end{equation}
 
 where the electron form factor is
 $f_{\sigma_e} \left( z_{eff} \right) = \frac{1}{c_e^{(1)}}$
@@ -8421,13 +8486,16 @@ $c_e^{(1)} = \frac{( 1 + 0.24 z_{eff} ) ( 1 + 0.93 z_{eff} )}
 See also Section \ref{sec:balescubraginskii}.
 
 %-------- end of 12th page -------------
-
-$\alpha_{ex} = \alpha^{(AN)}_{x} + \widetilde{\widetilde{\alpha}}^{(CL)}_{x}$,
+\begin{equation}\label{eq:ene_alphex}
+\alpha_{ex} = \alpha^{(AN)}_{x} + \widetilde{\widetilde{\alpha}}^{(CL)}_{x}
+\end{equation}
 
 $\alpha^{(AN)}_{x}=0$,
 
 The classical thermo-electric coefficient $\alpha^{(CL)}_{x}$ is given as:
-$\alpha^{(CL)}_{x} = - b_x^2 \frac{e}{m_e} \frac{\widetilde{c_e}^{(2)}}{c_e^{(1)}} n_e \tau_e$
+\begin{equation}\label{eq:ene_alphxcl}
+\alpha^{(CL)}_{x} = - b_x^2 \frac{e}{m_e} \frac{\widetilde{c_e}^{(2)}}{c_e^{(1)}} n_e \tau_e
+\end{equation}
 when {\tt 'b2sigp\_style'} is set to {\tt '2'} (Zhdanov formulation, default), and
 $\alpha^{(CL)}_{x} = b_x^2 \frac{e}{m_e} \sqrt{\frac 5 2} f_{\alpha} \left(z_{eff} \right) n_e \tau _e$ otherwise (Balescu formulation), and
 $f_{\alpha} \left( z_{eff} \right) = -\frac{1.25 z_{eff}}{1 + 0.41 z_{eff}}$.
@@ -8435,12 +8503,14 @@ See also Section \ref{sec:balescubraginskii}.
 
 A conductive flux limit is applied to the thermo-electric coefficient, as follows.
 If {\tt 'b2sigp\_style'} is set to {\tt '2'} (default):
-\begin{equation*}
+\begin{equation}\label{eq:ene_2dtialphxcl}
 \widetilde{\widetilde{\alpha}}^{(CL)}_{x} = c_{\alpha_{ex}}^{(F\text{lim})} \widetilde{\alpha}^{(CL)}_{x}
-\end{equation*}
-\begin{equation*}
+\end{equation}
+
+\begin{equation}\label{eq:ene_2tialphxcl}
 \widetilde{\alpha}^{(CL)}_{x} = c_{\kappa_{ex}^{(CL)}}^{(Luciani)} \alpha^{(CL)}_{x}
-\end{equation*}
+\end{equation}
+
 \begin{equation*}
 c_{\alpha_{ex}}^{(F\text{lim})} = \left\{
 \begin{matrix}
@@ -8452,59 +8522,65 @@ c_{\alpha_{ex}}^{(F\text{lim})} = \left\{
 j_{e \max} = \left| b_x \right| e n_e \sqrt{\frac{T_e}{m_e}}, ~ c_{flal} = c_{flim_3} = 0.5
 \end{equation*}
 If {\tt 'b2sigp\_style'} is set to {\tt '1'}:
-\begin{equation*}
+
+\begin{equation}\label{eq:ene_1dtialphxcl}
 \widetilde{\widetilde{\alpha}}^{(CL)}_{x} = c_{\kappa_{ex}}^{(F\text{lim})} \widetilde{\alpha}^{(CL)}_{x}
-\end{equation*}
-\begin{equation*}
+\end{equation}
+
+\begin{equation}\label{eq:ene_1tialphxcl}
 \widetilde{\alpha}^{(CL)}_{x} = c_{\kappa_{ex}^{(CL)}}^{(Luciani)} \alpha^{(CL)}_{x}
-\end{equation*}
+\end{equation}
 
 \subsection{Radial electron energy fluxes}
 
-\begin{equation*}
+\begin{equation}\label{eq:ene_tiqey}
 \widetilde q_{ey} = \widetilde f_{ey} T_e - \kappa_{ey} \frac 1{h_y} \frac{\partial T_e}{\partial y} - q_{ey}^{P.Sch}
-\end{equation*}
+\end{equation}
 
 \begin{equation*}
 \widetilde f_{ey} = \frac 3 2 \left(\Gamma_{ey} - \frac 5 3 \frac{j_y^{\left( ST \right)}} e \right) +
 V_{ey}^{(str)} n_e
 \end{equation*}
 
-\begin{equation*}
+\begin{equation}\label{eq:ene_qPSchy}
 q_{ey}^{P.Sch} = \frac 5 2 D_{eyx} \frac 1{h_x} \frac{\partial n_e T_e^2}{\partial x}
-\end{equation*}
+\end{equation}
 
-\begin{equation*}
+\begin{equation}\label{eq:ene_qey}
 q_{ey} = \left[
 	\frac 3 2 \Gamma_{ey} - \frac 5 2 \frac{j_y^{\left( ST \right)}} e +
 	\frac 5 2 n_e T_e \frac{B_z}e \frac{\partial }{h_x \partial	x}\left( \frac 1{B^2} \right) +
 	V_{ey}^{(str)} n_e
 \right] T_e -
 \kappa_{ey} \frac 1{h_y} \frac{\partial T_e}{\partial y}
-\end{equation*}
+\end{equation}
 
-\begin{equation*}
+\begin{equation}\label{eq:ene_gammay}
 \Gamma_{ey} = \sum \limits_{a=0}^{ns-1} z_a \Gamma_{ay}^{(he)}
-\end{equation*}
+\end{equation}
 
-\begin{equation*}
+\begin{equation}\label{eq:ene_gammayhe}
 \Gamma_{ay}^{(he)} = \left( \frac 5 3 V_a^{(AN)} + V_{ay}^{(E)} \right) n_a - \frac 5 3 \left[
 	D_{n,a} \frac 1{h_y} \frac{\partial n_a}{\partial y} +
 	\widetilde D_{p,ay} \frac 1{h_y} \frac{\partial	p_a}{\partial y}
 \right]
-\end{equation*}
+\end{equation}
 
 %-------- end of 13th page -------------
 
 $V_{ey}^{(str)} = 0$
 
-$\hat E_y = \frac 1{e n_e h_y} \frac{\partial n_e T_e}{\partial y} - \frac 1{h_y}\frac{\partial \Phi }{\partial y}$,
+\begin{equation}\label{eq:ene_Ey}
+\hat E_y = \frac 1{e n_e h_y} \frac{\partial n_e T_e}{\partial y} - \frac 1{h_y}\frac{\partial \Phi }{\partial y},
+\end{equation}
 
-$\kappa_{ey} = \kappa_e^{(AN)} + \kappa_{ey}^{(CL)} + \kappa_e^{(ST)}$,
+\begin{equation}\label{eq:ene_kapey}
+\kappa_{ey} = \kappa_e^{(AN)} + \kappa_{ey}^{(CL)} + \kappa_e^{(ST)}, 
+\end{equation}
 
 $\kappa_{ey}^{(CL)} = 0$
 
-$
+\begin{equation}\label{eq:ene_kapeST}
 \begin{matrix}
 \kappa_{e}^{(ST)} & =
 & \left\{
@@ -8514,16 +8590,16 @@ $
 0, &  y \notin \left[ -\Delta^{(ST)},0 \right]\\
 \end{matrix} \right.
 \end{matrix}
-$
+\end{equation}
 
 $\alpha_{ey} = \alpha^{(AN)}_{y} + \alpha^{(CL)}_{y}$,
 
-\begin{equation*}
+\begin{equation}\label{eq:ene_ayAN}
 \alpha^{(AN)}_{y} = \left(
 	c_{\alpha,0} + c_{\alpha,1} \frac{10^{20}}{n_e} +
 	c_{\alpha,3} \frac{T_e}{16 e |B|}
 \right) n_e \sqrt{\frac e{T_e}}
-\end{equation*}
+\end{equation}
 
 $c_{\alpha,0} = 10^{-3}, \;\;\; c_{\alpha,1} = 0,\;\;\; c_{\alpha,3} = 0$
 
@@ -8531,8 +8607,8 @@ $\alpha^{(CL)}_{y} = 0$
 
 \section{Ion energy equations}
 
-\begin{equation}
-\begin{matrix}
+\begin{multline}
+\label{eq:eni}
 \frac{3}{2} \frac{\partial n_i T_i}{\partial t} + \frac{1}{\sqrt g} \frac{\partial}{\partial x} \left(
 	\frac{\sqrt g}{h_x} \widetilde q_{ix}
 \right)  + \frac{1}{\sqrt g} \frac{\partial}{\partial y} \left(
@@ -8558,36 +8634,63 @@ $\alpha^{(CL)}_{y} = 0$
 	+ \eta^{(AN)}_{a} \left(
 		\frac{\partial V_{a \parallel}}{h_y \partial y}
 	\right)^2
-\right) + Q_I^{(i)} + Q_R^{(i)},
-\end{matrix}
-\end{equation}
+\right) + Q_I^{(i)} + Q_R^{(i)} + Q_i^{\rm EIRENE},
+\end{multline}
 
 The 'sum over fluid species' above means the species index $a$ ranges from $0$ to $ns - 1$ for {\bf B2.5} standalone runs and only over charged species for coupled \SOLPSITER runs.
 
 \subsection{Ion energy sources}
 
+\begin{multline}\label{eq:eni_siheat}
+%\begin{matrix}
+ S_i^{heat} =  Q_{\Delta} + Q_{F_{ab}} +  c_{E \times B} T_i B_z \frac{1}{h_x h_y} \left(
+	\frac{\partial \Phi}{\partial y} \frac{\partial}{\partial x} \left(
+		\frac{1}{B^2}
+	\right) -
+	\frac{\partial \Phi}{\partial x} \frac{\partial}{\partial y} \left(
+		\frac{1}{B^2}
+	\right)
+\right)
+\sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a +
+\\
++ \sum \limits_{fluid~species} \left(
+	  \eta_{ax} \left(
+		\frac{\partial V_{a \parallel}}{h_x \partial x}
+	\right)^2
+	+ \eta^{(AN)}_{a} \left(
+		\frac{\partial V_{a \parallel}}{h_y \partial y}
+	\right)^2
+\right) + Q_I^{(i)} + Q_R^{(i)} - \sum \limits^{ns-1}_{a = 0} \frac{n_a T_i}{\sqrt{g}} \frac{\partial}{\partial x} \left(
+	\frac{\sqrt g}{h_x} V_{a \parallel} b_x
+\right)
+%\end{matrix}
+\end{multline}
+
+
 When Eq.~(\ref{eq:mom_new}) is used ({\tt 'b2sigp\_style'} set to {\tt '2'}), the contribution from friction between charged species is given as:
 
-\begin{equation*}
+\begin{equation}\label{eq:eni_Qfabnew}
 Q_{F_{ab}} = - \sum \limits_{\substack{a=0 \\ z_a \neq 0}}^{ns - 1} V_{a \parallel} \left( S^m_{fr,a} + S^m_{Therm,a} \right)
-\end{equation*}
+\end{equation}
 
 Otherwise, it is:
 
-\begin{equation*}
+\begin{equation}\label{eq:eni_Qfabold}
 Q_{F_{ab}} =
 \sum \limits^{ns-1}_{\substack{b = 0 \\ z_b \neq 0}}
 \sum \limits^{ns-1}_{\substack{a = b + 1 \\ z_a \neq 0}}
 \frac 1{4 \tau_p} m_p
 \sqrt{ \frac {\frac{m_a}{m_p} \frac{m_b}{m_p}} {\frac{m_a}{m_p} + \frac{m_b}{m_p}} }
 z_a^2 z_b^2 n_b n_a \left( V_{a \parallel} - V_{b \parallel} \right)^2
-\end{equation*}
+\end{equation}
 
 Atom heat source due to ionization
 
-$Q_I^{(i)} = \sum \limits_{a=0}^{ns-2} Q_{I_a}^{(i)}$,
+\begin{equation}\label{eq:eni_QIi}
+Q_I^{(i)} = \sum \limits_{a=0}^{ns-2} Q_{I_a}^{(i)}
+\end{equation}
 
-$
+\begin{equation}\label{eq:eni_QIia}
 \begin{matrix}
 Q_{I_a}^{(i)} & =
 & \left\{
@@ -8598,15 +8701,20 @@ r_{I_a} n_e n_a \left( \frac{m_a + m_{a+1}}4 \right)
 0 \\
 \end{matrix} \right.
 \end{matrix}
-$
+\end{equation}
 
 Atom heat source due to recombination
 
 %-------- end of 14th page -------------
 
-$Q_R^{(i)} = \sum \limits_{a=0}^{ns-1} Q_{R_a}^{(i)}$,
 
-$
+\begin{equation}
+\label{eq:eni_QRi}
+Q_R^{(i)} = \sum \limits_{a=0}^{ns-1} Q_{R_a}^{(i)}
+\end{equation}
+
+\begin{equation}
+\label{eq:eni_QRia}
 \begin{matrix}
 Q_{R_a}^{(i)} & =
 & \left\{
@@ -8617,7 +8725,7 @@ r_{R_a} n_e n_a \left( \frac{m_a + m_{a-1}}4 \right)
 0 \\
 \end{matrix} \right.
 \end{matrix}
-$
+\end{equation}
 
 $\tau_p = \frac 3{4\sqrt{2\pi }} \frac{\sqrt{m_p} T_i^{\frac 3 2}}{\ln \Lambda} \left( \frac{4 \pi \varepsilon_0}{e^2}\right)^2$, where the Coulomb logarithm $\ln \Lambda $ can be chosen as
 
@@ -8635,18 +8743,24 @@ $
 $
 
 \subsection{Poloidal ion energy fluxes}
+\begin{multline}\label{eq:eni_tiqix}
+%\begin{matrix}
+\widetilde q_{ix} = \widetilde f_{ix} T_i - \kappa_{ix} \frac 1{h_x} \frac{\partial T_i}{\partial x} - q_{ix}^{P.Sch} = \\ 
+= \frac 3 2 \Gamma_{ix} T_i  + V_{ix}^{(str)} n_i  T_i + 0 \cdot \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)}}{e} \right) T_i - \\ 
+- \kappa_{ix} \frac 1{h_x} \frac{\partial T_i}{\partial x} - q_{ix}^{P.Sch}
+%\end{matrix}
+\end{multline}
 
-$\widetilde q_{ix} = \widetilde f_{ix} T_i - \kappa_{ix} \frac 1{h_x} \frac{\partial T_i}{\partial x} - q_{ix}^{P.Sch}$
 
 \begin{equation*}
 \widetilde f_{ix} = \frac 3 2 \Gamma_{ix} + V_{ix}^{(str)} n_i + 0 \cdot \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)}}{e} \right)
 \end{equation*}
 
-\begin{equation*}
+\begin{equation}\label{eq:eni_qixPSch}
 q_{ix}^{P.Sch} = \frac 5 2 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} D_{axy} \frac 1{h_y} \frac{\partial n_a T_i^2}{\partial y}
-\end{equation*}
+\end{equation}
 
-\begin{equation*}
+\begin{equation}\label{eq:eni_qix}
 q_{ix} = \left[
 	\frac 3 2 \Gamma_{ix} +
 	\frac 5 2 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \widetilde V_{ax}^{(dia)} +
@@ -8654,25 +8768,30 @@ q_{ix} = \left[
         0 \cdot \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)}}{e} \right)
 \right] T_i
 - \kappa_{ix} \frac 1{h_x} \frac{\partial T_i}{\partial x}
-\end{equation*}
+\end{equation}
 
-$\Gamma_{ix} = \sum \limits^{ns-1}_{a = 0} \Gamma_{ax}^{(he)}$
+\begin{equation}\label{eq:eni_gammahix}
+\Gamma_{ix} = \sum \limits^{ns-1}_{a = 0} \Gamma_{ax}^{(he)} 
+\end{equation}
 
-\begin{equation*}
+\begin{equation}\label{eq:eni_qixeir}
 q_{ix}^{(Eir)} =
 \frac 5 2 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} \Gamma_{ax}^{(Eir)} T_i -
 \kappa_{ix} \frac 1{h_x} \frac{\partial T_i}{\partial x}
-\end{equation*}
+\end{equation}
 
 \subsection{Poloidal ion energy transport coefficients}
 
-$\kappa_{ix} = \kappa_{ix}^{(AN)} + \widetilde{\widetilde{\kappa}}_{ix}^{(CL)}$,
+\begin{equation}\label{eq:eni_kapix}
+\kappa_{ix} = \kappa_{ix}^{(AN)} + \widetilde{\widetilde{\kappa}}_{ix}^{(CL)}
+\end{equation}
 
-$\kappa_{ix}^{(AN)} = \sum \limits_{a = 0}^{ns - 1} \widetilde \kappa_{ax}^{(AN)}$,
+\begin{equation}\label{eq:eni_kapixAN}
+\kappa_{ix}^{(AN)} = \sum \limits_{a = 0}^{ns - 1} \widetilde \kappa_{ax}^{(AN)}
+\end{equation}
 
 %-------- end of 15th page -------------
-
-$
+\begin{equation}\label{eq:eni_tikapaxAN}
 \begin{matrix}
 \widetilde{\kappa}_{ax}^{(AN)} & =
 & \left\{
@@ -8688,15 +8807,21 @@ $
 & z_a = 0 \\
 \end{matrix} \right.
 \end{matrix}
-$
+\end{equation}
 
-$V_{h_a} = \sqrt{\frac{2 T_i}{m_a}}$,
+\begin{equation}\label{eq:eni_vha}
+V_{h_a} = \sqrt{\frac{2 T_i}{m_a}}
+\end{equation}
 
-$\kappa_a^{(AN)} = \chi_a^{(AN)} n_a$,
+\begin{equation}\label{eq:eni_kapAN}
+\kappa_a^{(AN)} = \chi_a^{(AN)} n_a
+\end{equation}
 
-$\chi_a^{(AN)} = \left(
+\begin{equation}\label{eq:eni_chiAN}
+\chi_a^{(AN)} = \left(
 c_{h_a,0} + c_{h_a,1} \frac{10^{20}}{n_e} + c_{h_a,2} D_{f,a} + c_{h_a,3}\frac{T_e}{16 e|B|}
-\right) f_{h_a} (x,y)$,
+\right) f_{h_a} (x,y)
+\end{equation}
 
 
 $ a = 0, \;\;\;  c_{h_a,0} = 0, \;\;\;  c_{h_a,1} = 0, \;\;\;  c_{h_a,2} = 1.4,  \;\;\;  c_{h_a,3} = 0$
@@ -8716,9 +8841,11 @@ f_{h_a}(x,y) & =
 \end{matrix}
 $
 
-$\widetilde{\widetilde{\kappa}}_{ix}^{(CL)} = c_{\kappa_{ix}}^{(flim)} \widetilde{\kappa}_{ix}^{(CL)}$
+\begin{equation}\label{eq:eni_dtkapixCL}
+\widetilde{\widetilde{\kappa}}_{ix}^{(CL)} = c_{\kappa_{ix}}^{(flim)} \widetilde{\kappa}_{ix}^{(CL)}
+\end{equation}
 
-$
+\begin{equation}\label{eq:eni_cflim}
 \begin{matrix}
 c_{\kappa_{ix}}^{flim} & =
 & \left\{
@@ -8735,18 +8862,22 @@ c_{\kappa_{ix}}^{flim} & =
 &  \text{for other flux surfaces} \\
 \end{matrix} \right.
 \end{matrix}
-$
+\end{equation}
 
-$V_{h_i}^{(max)} = c_{flim_1} \frac{\sqrt g}{h_x} |b_x| \sqrt{\frac{T_i}{m_p}}
-\frac{\sum \limits_{a=0}^{ns-1}  n_a \sqrt{\frac{m_p}{m_a}}}{n_i}$,
+\begin{equation}\label{eq:eni_vhimax}
+V_{h_i}^{(max)} = c_{flim_1} \frac{\sqrt g}{h_x} |b_x| \sqrt{\frac{T_i}{m_p}}
+\frac{\sum \limits_{a=0}^{ns-1}  n_a \sqrt{\frac{m_p}{m_a}}}{n_i}
+\end{equation}
 
 $c_{flim_1}$ is the ion heat flux limiter coefficient.
 
-$\tilde{\kappa}_{ix}^{(CL)} = c_{\kappa_{ix}^{(CL)}}^{(Luciani)} \kappa_{ix}^{(CL)}$,
+\begin{equation}\label{eq:eni_tikapixCL}
+\tilde{\kappa}_{ix}^{(CL)} = c_{\kappa_{ix}^{(CL)}}^{(Luciani)} \kappa_{ix}^{(CL)}
+\end{equation}
 
 If the plateau and banana transport regimes correction is applied (default, {\tt 'b2trcl\_lluciani'} set to {\tt '3'}), one has:
 
-$
+\begin{equation}\label{eq:eni_3cluciCL}
 \begin{matrix}
 c_{\kappa_{ix}^{(CL)}}^{(Luciani)} & =
 & \left\{
@@ -8755,11 +8886,11 @@ c_{\kappa_{ix}^{(CL)}}^{(Luciani)} & =
 1, &  \text{for other flux surfaces} \\
 \end{matrix} \right.
 \end{matrix}
-$
+\end{equation}
 
 If {\tt 'b2trcl\_luciani'} is set to {\tt '1'}, one gets instead:
 
-$
+\begin{equation}\label{eq:eni_1cluciCL}
 \begin{matrix}
 c_{\kappa_{ix}^{(CL)}}^{(Luciani)} & =
 & \left\{
@@ -8773,11 +8904,11 @@ c_{\kappa_{ix}^{(CL)}}^{(Luciani)} & =
 1, &  \text{for all other cases} \\
 \end{matrix} \right.
 \end{matrix}
-$
+\end{equation}
 
 If {\tt 'b2trcl\_luciani'} is set to {\tt '2'}, the \SOLPSfour formulation is used:
 
-$
+\begin{equation}\label{eq:eni_2cluciCL}
 \begin{matrix}
 c_{\kappa_{ix}^{(CL)}}^{(Luciani)} & =
 & \left\{
@@ -8791,7 +8922,7 @@ c_{\kappa_{ix}^{(CL)}}^{(Luciani)} & =
 1, &  \text{for all other cases} \\
 \end{matrix} \right.
 \end{matrix}
-$
+\end{equation}
 
 %-------- end of 16th page -------------
 
@@ -8811,16 +8942,16 @@ K_2 = \frac{
 }
 \end{equation*}
 
-$
+\begin{equation}\label{eq:eni_kapixCL}
 \kappa_{ix}^{(CL)} =
 \frac 5 2 b_x^2 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} \frac{T_i}{m_a} n_a f_{k_i} \tau_a,
-$
+\end{equation}
 
 $f_{k_i} = 2.253$
 
 For the integral modeling ({\tt 'b2trcl\_integral\_modeling'} set to {\tt '1'}) in the region of the overlap with {\tt ASTRA} in the inner part of the core:
 
-\begin{equation}
+\begin{equation}\label{eq:eni_tkapixCL}
 \widetilde{\kappa}_{ix}^{(CL)} = \frac{25}4 \left(
 	n_1 T_i \frac{B_z}{B_x h_y}
 \right)^2
@@ -8834,17 +8965,28 @@ here $\left\langle B^2 \right\rangle = \frac{\mathlarger{\oint} B^2 \sqrt{g} dx}
 
 from {\tt ASTRA} we get $T_i/e$ and $\oint q_i^{NEO} ds$ as a functions of $R_{\text{(outer midplane)}}$ and calculate
 
-$K_{ASTRA} = \frac{-1}{\oint q_i^{NEO} ds} \frac{d(T_i/e)}{dR_{\text{(outer midplane)}}}$ as a function of the flux surface in {\tt B2.5}
+
+\begin{equation}\label{eq:eni_kastra}
+K_{ASTRA} = \frac{-1}{\oint q_i^{NEO} ds} \frac{d(T_i/e)}{dR_{\text{(outer midplane)}}}
+\end{equation}
+as a function of the flux surface in {\tt B2.5}
 
 $V_{ix}^{(str)}=0$
 
 \subsection{Radial ion energy fluxes}
 
-\begin{equation*}
+\begin{equation}\label{eq:eni_tiqiy}
+\begin{matrix}                 
 \widetilde q_{iy} = \widetilde f_{iy} T_i -
 \kappa_{iy} \frac 1{h_y} \frac{\partial T_i}{\partial y} -
-q_{iy}^{P.Sch}
-\end{equation*}
+q_{iy}^{P.Sch} = \left[\frac 3 2 \Gamma_{iy} + V_{iy}^{(str)} n_i + \frac 3 2 \frac{\left(
+	j_y^{(AN)} + \widetilde j_y^{(vis \parallel)} + \widetilde j_y^{(vis \perp)} + \widetilde j_y^{(visq)} + j_y^{(in)}
+\right)} e \right] T_i - \\
+- \kappa_{iy} \frac 1{h_y} \frac{\partial T_i}{\partial y} -
+q_{iy}^{P.Sch} 
+\end{matrix}
+\end{equation}
+
 
 \begin{equation*}
 \widetilde f_{iy} = \frac 3 2 \Gamma_{iy} + V_{iy}^{(str)} n_i + \frac 3 2 \frac{\left(
@@ -8852,14 +8994,14 @@ q_{iy}^{P.Sch}
 \right)} e
 \end{equation*}
 
-\begin{equation*}
+\begin{equation}\label{eq:eni_qiyPSch}
 q_{iy}^{P.Sch} = -\frac{5}{2} \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} D_{ayx}
 \frac{1}{h_x} \frac{\partial n_a T^2_i}{\partial x}
-\end{equation*}
+\end{equation}
 
 %-------- end of 17th page -------------
 
-\begin{equation*}
+\begin{equation}\label{eq:eni_qiy}
 q_{iy} = \left[
 	\frac{3}{2} \Gamma_{iy} +
 	\frac{5}{2} \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \widetilde V_{ay}^{(dia)} +
@@ -8868,25 +9010,29 @@ q_{iy} = \left[
 		j_y^{(AN)} + \widetilde j_y^{(vis \parallel)} + \widetilde j_y^{(vis \perp)} + \widetilde j_y^{(visq)} + j_y^{(in)}
 	\right)} e
 \right] T_i - \kappa_{iy} \frac{1}{h_y} \frac{\partial T_i}{\partial y}
-\end{equation*}
+\end{equation}
 
 $\Gamma_{iy} = \sum \limits_{a = 0}^{ns -1} \Gamma_{ay}^{(he)}$
 
-\begin{equation*}
+\begin{equation}\label{eq:eni_qiyeir}
 q_{iy}^{(Eir)} =
 \frac{5}{2} \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} \Gamma_{ay}^{(Eir)} T_i -
 \kappa_{iy} \frac{1}{h_y} \frac{\partial T_i}{\partial y}
-\end{equation*}
+\end{equation}
 
 $V_{iy}^{(str)} = 0$
 
 \subsection{Radial ion energy transport coefficients}
 
-$\kappa_{iy} = \kappa_{iy}^{(AN)} + \kappa_{iy}^{(CL)}$,
+\begin{equation}\label{eq:eni_kapiy}
+\kappa_{iy} = \kappa_{iy}^{(AN)} + \kappa_{iy}^{(CL)}
+\end{equation}
 
-$\kappa_{iy}^{(AN)} = \sum \limits_{a=0}^{ns-1} \widetilde \kappa_{ay}^{(AN)}$,
+\begin{equation}\label{eq:eni_kapiyAN}
+\kappa_{iy}^{(AN)} = \sum \limits_{a=0}^{ns-1} \widetilde \kappa_{ay}^{(AN)}
+\end{equation}
 
-\begin{equation*}
+\begin{equation}\label{eq:eni_tikapayAN}
 \begin{matrix}
 \widetilde \kappa_{ay}^{(AN)} = &
 & \left\{
@@ -8902,7 +9048,7 @@ $\kappa_{iy}^{(AN)} = \sum \limits_{a=0}^{ns-1} \widetilde \kappa_{ay}^{(AN)}$,
 , & z_a = 0 \\
 \end{matrix} \right.
 \end{matrix}
-\end{equation*}
+\end{equation}
 
 $\kappa_{iy}^{(CL)} = 0$
 
@@ -8915,12 +9061,17 @@ $\kappa_{iy}^{(CL)} = 0$
 
 \subsection{Poloidal currents}
 
-$j_x = j_x^{(AN)} + \widetilde j_x^{(dia)} + j_x^{(in)} + \widetilde j_x^{(vis \parallel)} + \widetilde j_x^{(vis \perp)}
-+ \widetilde j_x^{(visq)} + \widetilde j_x^{(s)} + j^{(\parallel)}_x$,
+\begin{equation}\label{eq:pot_jx}
+j_x = j_x^{(AN)} + \widetilde j_x^{(dia)} + j_x^{(in)} + \widetilde j_x^{(vis \parallel)} + \widetilde j_x^{(vis \perp)}
++ \widetilde j_x^{(visq)} + \widetilde j_x^{(s)} + j^{(\parallel)}_x
+\end{equation}
 
-$j_x^{(AN)} = - \sigma^{(AN)} \frac{\partial \Phi}{h_x \partial x}$
 
-\begin{equation}
+\begin{equation}\label{eq:pot_jxan}
+j_x^{(AN)} = - \sigma^{(AN)} \frac{\partial \Phi}{h_x \partial x}
+\end{equation}
+
+\begin{equation}\label{eq:pot_tijxdia}
 \widetilde j_x^{(dia)} = B_z \frac{
 	\sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \left(
 		z_aT_e + T_i
@@ -8930,7 +9081,7 @@ $j_x^{(AN)} = - \sigma^{(AN)} \frac{\partial \Phi}{h_x \partial x}$
 \left( \frac{1}{B^2} \right),
 \end{equation}
 
-\begin{equation}
+\begin{equation}\label{eq:pot_tijxin}
 \widetilde j_x^{(in)} = \frac{B_z}2 \frac{\partial}{h_y \partial y}
 \left( \frac{1}{B^2} \right)
 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} m_a n_a V^2_{a \parallel},
@@ -8938,7 +9089,7 @@ $j_x^{(AN)} = - \sigma^{(AN)} \frac{\partial \Phi}{h_x \partial x}$
 
 %-------- end of 18th page -------------
 
-\begin{equation}
+\begin{equation}\label{eq:pot_tijxvispar}
 \widetilde j_x^{(vis \parallel)} =
 - \frac{b_z B_x}{3 B^{\frac{1}{2}}}
 \frac{\partial}{h_y \partial y}
@@ -8964,7 +9115,7 @@ $j_x^{(AN)} = - \sigma^{(AN)} \frac{\partial \Phi}{h_x \partial x}$
 
 For definition of $\widetilde{q}_a^{(0)}$, see Eqs. (\ref{eq:q0-0}) and (\ref{eq:q0-1}).
 
-\begin{equation}
+\begin{equation}\label{eq:pot_tijxs}
 \widetilde j_x^{(s)} =
 \sum \limits^{ns-1}_{\substack{a_0 = 0 \\ z_{a_0} = 0~\&~z_{n,a_0} = 1 }}
 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_{a} = 1~\&~z_{n,a} = 1 }}
@@ -8978,7 +9129,7 @@ For definition of $\widetilde{q}_a^{(0)}$, see Eqs. (\ref{eq:q0-0}) and (\ref{eq
 \begin{equation}
 \sigma_{aa_0} =
 \left\{
-\begin{matrix}
+\begin{matrix}\label{eq:pot_sigaa0}
 \frac{m_a n_a \left\langle V_{aa_0} \sigma_{ex} \right\rangle n_{a_0}}{2 B^2}, &
 z_{a_0} = 0 ~ \& ~ z_{n,a_0} = 1, z_a \ne 0 ~ \& ~z_{n_a} = 1 \\
 0, & \text{otherwise}
@@ -8996,12 +9147,16 @@ $j_x^{(\parallel)}$ - see above
 
 \subsection{Radial currents}
 
-$j_y = j_y^{(AN)} + \widetilde j_y^{(dia)} + j_y^{(in)} + \widetilde j_y^{(vis \parallel)} + \widetilde j_y^{(vis \perp)}
-+ \widetilde j_y^{(visq)} + \widetilde j_y^{(s)} + j_y^{(ST)}$,
+\begin{equation}\label{eq:pot_jy}
+j_y = j_y^{(AN)} + \widetilde j_y^{(dia)} + j_y^{(in)} + \widetilde j_y^{(vis \parallel)} + \widetilde j_y^{(vis \perp)}
++ \widetilde j_y^{(visq)} + \widetilde j_y^{(s)} + j_y^{(ST)}
+\end{equation}
 
-$j_y^{(AN)} = - \sigma^{(AN)} \frac{\partial \Phi}{h_y \partial y} $
+\begin{equation}\label{eq:pot_jyan}
+j_y^{(AN)} = - \sigma^{(AN)} \frac{\partial \Phi}{h_y \partial y}
+\end{equation}
 
-\begin{equation}
+\begin{equation}\label{eq:pot_tijydia}
 \widetilde j_y^{(dia)} = - B_z \frac{
 	\sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \left(
 		z_a T_e + T_i
@@ -9011,13 +9166,13 @@ $j_y^{(AN)} = - \sigma^{(AN)} \frac{\partial \Phi}{h_y \partial y} $
 \left( \frac{1}{B^2} \right),
 \end{equation}
 
-\begin{equation}
+\begin{equation}\label{eq:pot_jyin}
 j_y^{(in)} = - \frac{B_z}2 \frac{\partial}{h_x \partial x}
 \left( \frac{1}{B^2} \right)
 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} m_a n_a V^2_{a \parallel},
 \end{equation}
 
-\begin{equation}
+\begin{equation}\label{eq:pot_tijyvispar}
 \widetilde j_y^{(vis \parallel)} =
 \frac{b_z B_x}{3 B^{\frac{1}{2}}}
 \frac{\partial}{h_x \partial x}
@@ -9029,7 +9184,7 @@ j_y^{(in)} = - \frac{B_z}2 \frac{\partial}{h_x \partial x}
 
 not agreed with parallel momentum balance?
 
-\begin{equation}
+\begin{equation}\label{eq:pot_tijyvisper}
 \widetilde j_y^{(vis \perp)} =
 - \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a = 1~\&~z_{n,a} = 1}}
 \frac{1}{B \sqrt{g}}
@@ -9043,13 +9198,13 @@ not agreed with parallel momentum balance?
 
 %-------- end of 19th page -------------
 
-\begin{equation*}
+\begin{equation}\label{eq:pot_vaperp}
 V_{a \perp} =
 - \frac 1{B h_y}\frac{\partial \Phi}{\partial y}
 - \frac 1{z_a e B h_y n_a} \frac{\partial n_a T_i}{\partial y}
-\end{equation*}
+\end{equation}
 
-\begin{equation}
+\begin{equation}\label{eq:pot_tijyvisq}
 \widetilde j_y^{(visq)} =
 0.24 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a = 1~\&~z_{n,a} = 1}}
 \alpha^{NEO} \widetilde{\tau}_a b_z
@@ -9061,7 +9216,7 @@ V_{a \perp} =
 
 For definition of $\widetilde{q}_a^{(0)}$, see Eqs. (\ref{eq:q0-0}) and (\ref{eq:q0-1}).
 
-\begin{equation}
+\begin{equation}\label{eq:pot_tijys}
 \widetilde j_y^{(s)} =
 \sum \limits^{ns-1}_{\substack{a_0 = 0 \\ z_{a_0} = 0~\&~z_{n,a_0} = 1 }}
 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a = 1~\&~z_{n,a} = 1}}
@@ -9072,7 +9227,7 @@ For definition of $\widetilde{q}_a^{(0)}$, see Eqs. (\ref{eq:q0-0}) and (\ref{eq
 \right)
 \end{equation}
 
-\begin{equation*}
+\begin{equation}\label{eq:pot_jyst}
 \begin{matrix}
 j_y^{(ST)} = &
 & \left\{
@@ -9086,7 +9241,7 @@ j_y^{(ST)} = &
 0, &  y \notin \left[ -\Delta^{(ST)},0 \right] \\
 \end{matrix} \right.
 \end{matrix}
-\end{equation*}
+\end{equation}
 
 $V_{a_{0}x}=\frac{\Gamma_{a_{0}x}}{n_{a_0}}$
 
@@ -9094,7 +9249,7 @@ $\sigma_{aa_0}$ see above
 
 \subsection{Conductivities}
 
-\begin{equation*}
+\begin{equation}\label{eq:pot_sigst}
 \begin{matrix}
 \sigma^{(ST)} = &
 & \left\{
@@ -9104,30 +9259,30 @@ c_{\sigma^{(ST)}} e n_e
 0, &  y \notin \left[ -\Delta^{(ST)},0 \right] \\
 \end{matrix} \right.
 \end{matrix}
-\end{equation*}
+\end{equation}
 
 $\sigma_y=\sigma^{(AN)} + \sigma^{(CL)}_{y}$
 
 $\sigma^{(AN)}$  depends on {\tt 'b2tqna\_model\_sig'}.
 
 If {\tt 'b2tqna\_model\_sig'} is {\tt '0'}, then:
-\begin{equation*}
+\begin{equation}\label{eq:pot_sigan0}
 \sigma^{(AN)} = \left(
 	c_{\sigma_a,0} + c_{\sigma_a,1} \frac{10^{20}}{n_e} +
 	c_{\sigma_a,3} \frac{T_e}{16 e|B|} +
 	c_{\sigma_a,4} e^{-c_{\sigma_a,5}\left(\frac y{L\left(x\right)}\right)^2}
 \right) e n_e,
-\end{equation*}
+\end{equation}
 
 otherwise:
 
-\begin{equation*}
+\begin{equation}\label{eq:pot_sigan}
 \sigma^{(AN)} = \left(
 	c_{\sigma_a,0} + c_{\sigma_a,1} \frac{10^{20}}{n_e} +
 	c_{\sigma_a,3} \frac{T_e}{16 e|B|} +
 	c_{\sigma_a,4} e^{-c_{\sigma_a,5}\left(\frac y{L\left(x\right)}\right)^2}
 \right) e \widetilde n_e
-\end{equation*}
+\end{equation}
 
 where $\widetilde n_e$ is the electron density at the location where the innermost flux surface crosses the outer midplane.
 
@@ -10769,6 +10924,263 @@ $p_{h_i,2} = 0$, without drifts
 $p_{h_i,2} = 10^{-3}$ with drifts, should be $p_{h_i,2} =0$,
 %-------- end of 38th page -------------
 
+\section{Total energy balance}
+
+The aim of this section is to derive an equation which resembles the total energy
+balance equation, i.e. has the form
+
+\begin{multline}
+ \label{eq:total_energy_balance_appC}
+ \frac{\partial\varepsilon}{\partial t} + \left(\nabla \cdot \vec{\bf q}^{\rm ENERGY}\right) = \\
+ \left(\vec{\bf j}\cdot\vec{\bf E}\right) + 
+ V_{e\parallel} R_{e\parallel}^{\rm INELASTIC} + \sum\limits_a V_{a\parallel} R_{a\parallel}^{\rm INELASTIC} + Q_e^{\rm ATOMIC} + Q_i^{\rm ATOMIC} +
+ Q^{\rm res}
+\end{multline}
+
+from the code equations written in the sections above. Then it is explained how
+to compute each term of the equation (\ref{eq:total_energy_balance_appC}), including
+the residual term $Q^{\rm res}$, making use of the quantites available from the code output
+activated by the switch 
+{\tt b2wdat\_iout = 4} (see Appendix~\ref{cha:b2wdat_iout_4}).
+
+The equation~(\ref{eq:total_energy_balance_appC}) may be derived from the code equations,
+following~\cite{Braginskii65}, as
+
+\begin{equation}
+\label{eq:energy_balance_derivation}
+ {\rm Eq.}\mbox{ (\ref{eq:ene_new}) } + {\rm Eq.}\mbox{ (\ref{eq:eni}) } +
+ \sum\limits_a V_{a\parallel} \cdot \left( {\rm Eq.}\mbox{ (\ref{eq:mom_new}) } \right) -
+ \sum\limits_a \frac{m_aV_{a\parallel}^2}{2} \cdot \left( {\rm Eq.}\mbox{ (\ref{eq:cont_appC}) }\right)
+\end{equation} 
+
+The term $\displaystyle \left\{ V_{e\parallel}\cdot\left(\mbox{ electron parallel force balance equation }\right) \right\}$ does not appear in the sum~(\ref{eq:energy_balance_derivation}), because \SOLPSITER neglects electron inertia, so the corresponding equation does not appear explicitly in the B2.5 equation system and there is no term involving the electron kinetic energy $\displaystyle \frac{m_e u_e^2}{2}$. One should make use of equations~(\ref{eq:ene_veparal}) and~(\ref{eq:fch_p}) instead. Similarly, the electron continuity equation (or its equivalent~(\ref{eq:pot_eq})) does not enter the sum~(\ref{eq:energy_balance_derivation}) either.
+
+The kinetic energy of perpendicular motion is neglected as well for the same reason ---
+the inertia terms are neglected in the perpendicular force balance equations (even
+if these equations are implicitly taken into account).
+
+Thus the total energy density is
+
+\begin{equation}
+ \varepsilon = \sum\limits_a\frac{m_aV_{a\parallel}^2}{2}
+ +\frac32\sum\limits_an_aT_i + \frac32 n_eT_e.
+\end{equation}
+
+The energy flux 
+
+\begin{equation}
+\vec{\bf q}^{\rm ENERGY} = \vec{\bf q}_{e}^{\rm ENERGY} + \vec{\bf q}_{i}^{\rm ENERGY}
+\end{equation}
+should be associated with the
+motion of guiding centers in its convective part, BUT
+it should NOT contain $\vec{\tilde{\bf \Gamma}}_a$,
+$\vec{\tilde{\bf q}}_e$ and $\vec{\tilde{\bf q}}_i$, since these are modified fluxes where divergence-free components have been analytically removed for numerical stability reasons.
+
+The explicit expressions may be rewritten in components:
+
+\begin{gather}
+ q_{ex}^{\rm ENERGY} = \frac{5}{2}\left[\sum\limits_a z_a \Gamma^{\rm ENERGY}_{ax} -
+ \frac{j^{(\parallel)}_x}{e} -
+n_e T_e \frac{B_z}{e} \frac{\partial}{h_y \partial y} \left( \frac {1}{B^2} \right)\right] T_e -
+\kappa_{ex} \frac {1}{h_x} \frac{\partial T_e}{\partial x} -
+\tilde{c}_e^{(2)} \frac{j^{\left( \parallel \right) }_x}{e} \\
+q_{ey}^{\rm ENERGY} = \frac{5}{2} \left[\sum\limits_a z_a \Gamma^{\rm ENERGY}_{ay} +
+n_e T_e \frac{B_z}{e} \frac{\partial}{h_x \partial x} \left( \frac {1}{B^2} \right)\right] T_e -
+\kappa_{ey} \frac {1}{h_y} \frac{\partial T_e}{\partial y} 
+\end{gather}
+
+\begin{multline}
+ q_{ix}^{\rm ENERGY} = \sum\limits_a \left( \Gamma^{\rm ENERGY}_{ax} +
+ n_a \tilde{V}_{ax}^{(dia)} + \frac{ j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)}  }{e} \right) \times \\ \left(\frac{m_a n_a V_{a\parallel}^2}{2}
++ \frac{5}{2} n_a T_i \right) -
+\kappa_{ix} \frac {1}{h_x} \frac{\partial T_i}{\partial x}
+\end{multline}
+
+\begin{multline}
+ q_{iy}^{\rm ENERGY} = \sum\limits_a \left( \Gamma^{\rm ENERGY}_{ax} + n_a \tilde{V}_{ax}^{(dia)} + 
+\frac{ j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)}}{e} 
+ \right) \times \\ \left( \frac{m_a n_a V_{a\parallel}^2}{2}
++ \frac{5}{2} n_a T_i \right)-
+ \kappa_{iy} \frac {1}{h_y} \frac{\partial T_i}{\partial y} 
+\end{multline} 
+
+\begin{gather}
+ \Gamma^{\rm ENERGY}_{ax} = \left( b_x V_{\parallel a} + V_{x}^{\left( E \right)} + V_{ax}^{\left( AN \right)} + V_a^{corr\_dpc} \right) n_a  - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x} - \widetilde{D}_{p,ax} \frac{1}{h_x} \frac{\partial p_a}{\partial x}
+\\
+ \Gamma^{\rm ENERGY}_{ay} = \left( V_{y}^{\left( E \right)} + V_{ay}^{\left( AN \right)} \right) n_a  
+ - D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y} - \widetilde{D}_{p,ay} \frac{1}{h_y} \frac{\partial p_a}{\partial y}
+\end{gather}
+
+$R_{e\parallel}$ and $R_{a\parallel}$ are contributions from inelastic
+collisions to the parallel projection of friction forces acting on
+electrons and ions correspondingly. They are
+
+\begin{gather}
+ R_{e\parallel} = 0; \\
+ R_{a\parallel} =  S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m + S_{AN_a}^m + S_{{\rm EIRENE}_a}^m
+\end{gather}
+
+$Q_e^{\rm ATOMIC}$ and $Q_i^{\rm ATOMIC}$ are electron and ion
+energy sources and sinks due to inelastic collisions.
+
+\begin{gather}
+ Q_e^{\rm ATOMIC} = Q_R + Q_e^{\rm EIRENE} \\
+ Q_i^{\rm ATOMIC} = Q_I^{(i)} + Q_R^{(i)} + Q_i^{\rm EIRENE}
+\end{gather}
+
+The residual term $Q^{\rm res}$ consists of residuals coming from the inaccuracies
+of code equations and from numerical approximation. They can be grouped according to
+their origin as follows:
+
+\begin{multline}
+ Q^{\rm res} = Q_{\rm visc} + Q_{\rm inert}^{\rm res} + \left(\left[\vec{\bf j} - \left(\vec{\bf j}\cdot\vec{\bf b}\right) \vec{\bf b} - \vec{\bf j}_{\rm dia}\right]\cdot\vec{\bf E}\right) + 
+  Q_{\rm j_\perp}^{\rm res} + Q_{\rm corr\_dpc}^{\rm res} + {Q^{\rm res}_{i,nTu_\parallel}} + {Q^{\rm res}_{e,dia}} + {Q^{\rm res}_{i,dia}}
+\end{multline} 
+
+The viscosity residual $Q_{\rm visc}$ comes from the fact that the term 
+$\left(\overset\leftrightarrow\pi_a\cdot\vec{\bf V_a}\right)$ does
+not appear in the code equations and cannot be extracted from the code output, therefore it is excluded from the total energy flux $\vec{\bf q}^{\rm ENERGY}$. Instead $Q_{\rm visc}$ appears in the right hand side in the form:
+
+\begin{multline}
+ Q_{\rm visc} = \sum \limits_{a} \left[
+ \frac{4}{3} \widetilde{\widetilde{\eta}}^{(CL)}_{ax} \left(
+		\frac{\partial V_{a \parallel}}{h_x \partial x}
+	\right)^2 +
+	  \eta^{(AN)}_{a} \left[ \left(
+		\frac{\partial V_{a \parallel}}{h_x \partial x}
+	\right)^2 +
+	 \left(
+		\frac{\partial V_{a \parallel}}{h_y \partial y}
+	\right)^2 \right] \right] - \\
+	\sum \limits_{a} \left[ V_{a\parallel} \left(
+	\left( \nabla \cdot\overset\leftrightarrow\pi _a^{V_\parallel} \right)_{\parallel} +
+	\left( \nabla \cdot\overset\leftrightarrow\pi _a^{\perp} \right)_{\parallel} + 
+	\left( \nabla \cdot\overset\leftrightarrow\pi _a^{q} \right)_{\parallel}
+	\right) \right]
+\end{multline}
+which is in fact only the approximation to 
+
+$\sum\limits_a \left(\nabla\cdot\left(\overset\leftrightarrow\pi_a\cdot\vec{\bf V_a}\right)\right) - \sum\limits_a \left(\vec{\bf b} \cdot V_{a\parallel} -
+\left(\nabla \cdot \overset\leftrightarrow\pi_a\right)\right) 
+$
+
+Here
+
+\begin{multline}
+  \left(  \nabla \cdot\overset\leftrightarrow\pi _a^{V_\parallel} \right)_{\parallel} =
+ \frac{4}{3} \frac{1}{h_z \sqrt g}\frac{\partial}{\partial x} \left(\frac{h_z \sqrt g}{h_x}
+\widetilde{\widetilde{\eta}}^{(CL)}_{ax} \frac{\partial \ln h_z}{h_x \partial x} V_{\parallel a} -
+\widetilde{\widetilde{\eta}}^{(CL)}_{ax} \frac{\partial V_{\parallel a}}{h_x \partial x}\right)
+- \\ \frac{4}{3} \frac{1}{h_z \sqrt g}\frac{\partial}{\partial x}
+\left(\frac{h_z \sqrt g}{h_x} \widetilde{\widetilde{\eta}}^{(CL)}_{ax}
+\frac{\partial \ln \left( h_z B^{\frac{1}{2}} \right) }{B^{\frac{1}{2}} h_x \partial x}\right)
+B^{\frac{1}{2}} V_{\parallel a}, \qquad z_a = 1~\&~z_{n,a} = 1
+\end{multline} 
+
+\begin{equation}
+ \left( \nabla \cdot\overset\leftrightarrow\pi _a^{\perp} \right)_{\parallel} = - 
+ \frac{1}{h_z \sqrt g}\frac{\partial}{\partial x} \left(\frac{h_z \sqrt g}{h_x}
+ \eta^{(AN)}_{a} \frac{\partial V_{\parallel a}}{h_x \partial x} \right) -
+ \frac{1}{h_z \sqrt g}\frac{\partial}{\partial y} \left(\frac{h_z \sqrt g}{h_y}
+ \eta^{(AN)}_{a} \frac{\partial V_{\parallel a}}{h_y \partial y} \right)
+\end{equation} 
+
+The inertia residual $Q_{\rm inert}^{\rm res}$ is the difference
+between what we want and what we have regarding the convective
+flux of the ion parallel kinetic energy:
+
+\begin{multline}
+ Q_{\rm inert}^{\rm res} = \\ \frac{1}{\sqrt g} \frac{\partial}{\partial x} \left[ \frac{\sqrt g}{h_x}
+ \sum\limits_a \left( \Gamma^{\rm ENERGY}_{ax}  +
+ n_a \tilde{V}_{ax}^{(dia)} + \frac{ j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} }{e} \right) \frac{m_a V_{a\parallel}^2}{2}
+ \right] +
+\\ \frac{1}{\sqrt g} \frac{\partial}{\partial y} \left[ \frac{\sqrt g}{h_y}
+ \sum\limits_a \left( \Gamma^{\rm ENERGY}_{ay}  +
+ n_a \tilde{V}_{ay}^{(dia)} + \frac{ j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} }{e} \right) \frac{m_a V_{a\parallel}^2}{2}
+ \right] - \\
+ \sum\limits_a V_{a\parallel} \left[
+ \frac{1}{h_z \sqrt g}\frac{\partial}{\partial x} \left(\frac{h_z \sqrt g}{h_x} \Gamma_{ax}^{Cor} \right) + 
+ \frac{1}{h_z \sqrt g}\frac{\partial}{\partial y} \left(\frac{h_z \sqrt g}{h_y} \Gamma_{ay}^{Cor} \right) - S_{CF_a}^m\right] + \\
+\sum\limits_a \frac{m_a V_{a\parallel}^2}{2} \left[
+\frac{1}{\sqrt g}\frac{\partial}{\partial x}\left( \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \right) + \frac{1}{\sqrt g}\frac{\partial}{\partial y}\left( \frac{\sqrt g}{h_y} \widetilde{\Gamma}_{ay} \right) \right]
+\end{multline} 
+
+This residual comes not only from numerical approximations, but
+also from the inaccuracies in the definition of 
+$\left( \vec{\bf b} \cdot \left( \nabla \cdot m_a n_a \vec{V}_a \vec{V}_a \right) \right)$.
+
+The Joule heating term $\left(\vec{\bf j} \cdot \vec{\bf E}\right)$ requires a separate discussion.
+
+It may be noted that, analytically:
+
+\begin{multline}
+\label{eq:j||E||_appC}
+ j_\parallel E_\parallel = \frac{1}{\sqrt g}\frac{\partial}{\partial x}\left( \frac{\sqrt g}{h_x} n_e T_e b_x V_{e\parallel} \right) - 
+ \frac{n_e T_e}{\sqrt g}\frac{\partial}{\partial x}\left(\frac{\sqrt g}{h_x} b_x V_{e\parallel} \right) + V_{e\parallel} \sum\limits_a \left( S_{fr,ea}^m + S_{Therm,ea}^m \right) - \\ 
+ \frac{b_x}{h_x}\frac{\partial \Phi}{\partial x} \sum\limits_a Z_a e n_a V_{a\parallel}
+\end{multline}
+
+and
+
+\begin{equation}
+\label{eq:jdiaE_appC}
+ \left(\vec{\bf j}_{\rm dia} \cdot \vec{\bf E}\right) = 
+ \left(\nabla(n_e T_e + n_i T_i) \cdot \vec{\bf V}^{(E)}\right)
+\end{equation}
+
+No other currents contribute to the total energy balance Eq.~(\ref{eq:total_energy_balance_appC}), which is why the term
+$\left( \left[ \vec{\bf j} - \left( \vec{\bf j} \cdot \vec{\bf b} \right) \vec{\bf b} - \vec{\bf j}_{\rm dia} \right] \cdot \vec{\bf E} \right)$
+appears in the expression for the residual. Practically, it is only
+possible to compute the right hand sides of Eqs.~(\ref{eq:j||E||_appC})
+and~(\ref{eq:jdiaE_appC}), since terms like
+$j_\parallel E_\parallel$, $\left(\vec{\bf j}_{\rm dia} \cdot \vec{\bf E}\right)$ or $\left(\left[\vec{\bf j} - \left(\vec{\bf j}\cdot\vec{\bf b}\right) \vec{\bf b} - \vec{\bf j}_{\rm dia}\right]\cdot\vec{\bf E}\right)$ are not available in the code.
+
+The term
+\begin{multline}
+ Q_{\rm j_\perp}^{\rm res} = 
+ \frac{1}{\sqrt g}\frac{\partial}{\partial x}\left[\frac{\sqrt g}{h_x}
+ \frac{T_i}{e}\left(
+ j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} \right)\right] + \\
+ \frac{1}{\sqrt g}\frac{\partial}{\partial y}\left[
+ \frac{\sqrt g}{h_y}\frac{T_i}{e}\left(
+ j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} \right)
+ \right]
+\end{multline}
+appears due to the approximate treatment of the ion perpendicular force balance equations.
+
+The term 
+\begin{equation}
+ Q_{\rm corr\_dpc}^{\rm res} = 
+ \frac{1}{\sqrt g} \frac{\partial}{\partial x} \left[ \frac{\sqrt g}{h_x} \sum\limits_a \left( n_e T_e + n_a T_i \right) V_a^{corr\_dpc} \right]
+\end{equation} 
+is physically meaningless, but it may give a notable contribution
+to the total energy balance residual in cases, for example, where
+it compensates numerical oscillations in the parallel velocity.
+
+The rest of the residual terms are analytically zero, but may be
+non-zero due to numerical discretization errors:
+
+\begin{equation}
+ {Q^{\rm res}_{i,nTu_\parallel}} = \sum\limits_a \left[
+ \frac{1}{\sqrt g} \frac{\partial}{\partial x} \left( \frac{\sqrt g}{h_x} n_a T_i b_x V_{a\parallel} \right) - 
+ \frac{n_a T_i}{\sqrt g} \frac{\partial}{\partial x} \left( \frac{\sqrt g}{h_x} b_x V_{a\parallel} \right) -
+ \frac{b_x V_{a\parallel}}{h_x} \frac{\partial n_a T_i}{\partial x} \right]
+\end{equation} 
+
+\begin{multline}
+ {Q^{\rm res}_{e,dia}} = \frac{5}{2} \frac{1}{\sqrt g} \frac{\partial}{\partial x} \left[ - \frac{\sqrt g}{h_x} n_e T_e^2 \frac{B_z}{e h_y} \frac{\partial}{\partial y} \left( \frac {1}{B^2} \right) \right] +
+ \frac{1}{\sqrt g} \frac{\partial}{\partial y} \left[ \frac{\sqrt g}{h_y} n_e T_e^2 \frac{B_z}{e h_x} \frac{\partial}{\partial x} \left( \frac {1}{B^2} \right) \right] + \\
+ \frac{1}{\sqrt g}\frac{\partial}{\partial x}\left(\frac{\sqrt g}{h_x} q_{ex}^{P.Sch}\right) + 
+ \frac{1}{\sqrt g}\frac{\partial}{\partial y}\left(\frac{\sqrt g}{h_y} q_{ey}^{P.Sch}\right)
+\end{multline} 
+
+\begin{multline}
+ {Q^{\rm res}_{i,dia}} = \frac{5}{2} \sum\limits_a \left[ \frac{1}{\sqrt g} \frac{\partial}{\partial x} \left( \frac{\sqrt g}{h_x} n_a T_i \tilde{V}_{ax}^{(dia)} \right) +
+ \frac{5}{2} \frac{1}{\sqrt g} \frac{\partial}{\partial y} \left( \frac{\sqrt g}{h_y} n_a T_i \tilde{V}_{ay}^{(dia)} \right) + \right. \\
+ \left. \frac{1}{\sqrt g} \frac{\partial}{\partial x} \left( \frac{\sqrt g}{h_x} q_{ix}^{P.Sch} \right) + 
+ \frac{1}{\sqrt g} \frac{\partial}{\partial y} \left( \frac{\sqrt g}{h_y} q_{iy}^{P.Sch} \right) \right]
+\end{multline}
+
 \section{Parallel viscosity}
 
 Old form of  $\left( \nabla \pi_a^{\parallel}\right)_{\parallel}$ was
@@ -12122,6 +12534,509 @@ volreg \index{volreg}\index{b2tallies.nc, volreg}                               
 \end{center}
 
 \clearpage
+
+\chapter{Quantities printed by {\tt 'b2wdat\_iout' = '4'}}
+\label{cha:b2wdat_iout_4}
+
+The switch setting {\tt 'b2wdat\_iout' = '4'} allows for a number of output files, 
+developed in Saint Petersburg by Elizaveta Kaveeva 
+(with some technical help from Sergey Voskoboynikov and Ilya Senichenkov), in order to obtain explicitly each term from the equations listed in Appendix~\ref{cha:equations} exactly as they are computed in the code.
+
+For this purpose the output of each quantity is produced exactly from the subroutine where this quantity is computed, e.g. 
+the velocity $u_a$ ({\tt ua}) is printed from the subroutine {\tt b2npmo}. Each quantity is printed into a separate 
+ASCII file as a 2D table. All these files are 
+stored in the {\tt output/} folder inside the run directory. The general naming convention is the following
+(except for geometry related quantities and a few others):
+
+ \begin{verbatim}
+  <subroutine_name>_<quantity>[_<XXX>].dat
+ \end{verbatim}
+
+Here, {\tt <subroutine\_name>} is the name of subroutine (or sometimes the name of the Fortran source file containing this subroutine)
+from which the output is produced, while {\tt <quantity>} is the quantity name, which usually coincides with the name of the corresponding
+variable inside the subroutine, if such a variable exists. Otherwise some association is used. The species index is denoted here as {\tt XXX} (three digits), and is used for species-dependent quantities (such as {\tt na} or {\tt ua}), and is
+omitted from common quantities (such as {\tt te}, {\tt ti} or {\tt po}). For example, the file containing the parallel velocity for the species with index {\tt is = 1} would be
+
+\begin{verbatim}
+ b2npmo_ua_001.dat
+\end{verbatim}
+
+The content of the file looks like the following:
+
+\begin{verbatim}
+            -1             0             1             2             3        
+  36   2.525043E+19  2.517455E+19  1.625484E+19  1.444400E+19  1.407206E+19   
+  35   2.681619E+19  2.673561E+19  1.804678E+19  1.575019E+19  1.516221E+19   
+  34   3.360574E+19  3.350655E+19  2.279144E+19  1.984601E+19  1.907786E+19   
+  33   4.343278E+19  4.330891E+19  2.978478E+19  2.597130E+19  2.498425E+19   
+  32   5.664300E+19  5.649203E+19  3.951054E+19  3.444186E+19  3.309993E+19   
+  31   7.393565E+19  7.375144E+19  5.240743E+19  4.567851E+19  4.384763E+19   
+  30   9.590684E+19  9.568531E+19  6.914344E+19  6.032204E+19  5.781704E+19   
+  29   1.230569E+20  1.227959E+20  9.057685E+19  7.919435E+19  7.575477E+19   
+  28   1.556381E+20  1.553424E+20  1.176512E+20  1.032794E+20  9.859909E+19   
+  27   1.932463E+20  1.929148E+20  1.497150E+20  1.323182E+20  1.263528E+20   
+  26   2.335330E+20  2.331599E+20  1.844608E+20  1.643623E+20  1.576109E+20   
+  25   2.721367E+20  2.716981E+20  2.163190E+20  1.948967E+20  1.888368E+20   
+  24   2.992329E+20  2.987071E+20  2.372826E+20  2.165452E+20  2.127225E+20   
+  23   3.069312E+20  3.063232E+20  2.417565E+20  2.224695E+20  2.209700E+20   
+  22   2.972805E+20  2.966824E+20  2.323948E+20  2.140750E+20  2.134266E+20   
+  21   2.785257E+20  2.779398E+20  2.158066E+20  1.981130E+20  1.971063E+20   
+  20   2.592405E+20  2.586764E+20  1.986355E+20  1.815245E+20  1.801132E+20   
+  19   2.447657E+20  2.442036E+20  1.861651E+20  1.694604E+20  1.678487E+20   
+  18   2.378737E+20  2.373074E+20  1.802841E+20  1.638746E+20  1.621619E+20   
+  17   2.345108E+20  2.339292E+20  1.774551E+20  1.611951E+20  1.594105E+20   
+  16   2.302662E+20  2.297536E+20  1.742077E+20  1.580295E+20  1.561263E+20   
+  15   2.263556E+20  2.258411E+20  1.711906E+20  1.550573E+20  1.530871E+20   
+  14   2.219169E+20  2.214601E+20  1.678177E+20  1.517517E+20  1.497154E+20   
+  13   2.171240E+20  2.166303E+20  1.639932E+20  1.481086E+20  1.459853E+20   
+  12   2.121178E+20  2.116556E+20  1.601201E+20  1.444459E+20  1.422191E+20   
+  11   2.064163E+20  2.059699E+20  1.556076E+20  1.401716E+20  1.378837E+20   
+  10   2.005827E+20  2.000971E+20  1.507593E+20  1.356803E+20  1.333992E+20   
+   9   1.944365E+20  1.940038E+20  1.458187E+20  1.311082E+20  1.288094E+20   
+   8   1.872176E+20  1.868137E+20  1.399629E+20  1.256621E+20  1.233961E+20   
+   7   1.797522E+20  1.793348E+20  1.339149E+20  1.200777E+20  1.178179E+20   
+   6   1.717291E+20  1.713409E+20  1.275705E+20  1.142528E+20  1.119222E+20   
+   5   1.627565E+20  1.623631E+20  1.203216E+20  1.076693E+20  1.053815E+20   
+   4   1.534325E+20  1.530565E+20  1.128591E+20  1.008665E+20  9.870904E+19   
+   3   1.433210E+20  1.429840E+20  1.049081E+20  9.352627E+19  9.151503E+19   
+   2   1.324803E+20  1.321455E+20  9.642263E+19  8.568567E+19  8.379455E+19   
+   1   1.208139E+20  1.205130E+20  8.754242E+19  7.755114E+19  7.573841E+19   
+   0   1.083148E+20  1.080124E+20  7.790863E+19  6.878814E+19  6.712576E+19   
+  -1   1.015473E+20  1.012638E+20  7.310223E+19  6.428731E+19  6.265369E+19   
+\end{verbatim}
+
+Here the first row (truncated in the example above) gives the poloidal cell index
+{\tt ix}, the first column (to the right) contains the radial cell index
+{\tt iy}, the rest are the values of the 2D array in each cell.
+
+The price for the possibility to output each quantity exactly from the subroutine where this quantity is calculated 
+is the production of output files each time the corresponding subroutine is called. 
+This gives an additional load to the filesystem due to the increased number of file writing operations and slows the
+computation significantly.
+Therefore it is NOT recommended to perform long-lasting runs with {\tt 'b2wdat\_iout'} set to {\tt '4'}.
+Instead, after a normal run with {\tt 'b2wdat\_iout' = '0'} finishes, it is suggested to set {\tt 'b2wdat\_iout' = '4'} and to continue the run for a small number of time steps, say, between 1 and 10. Then the whole set of output files
+may be read by any suitable tool (e.g. MATLAB) for further analysis, plotting, comparing, etc.
+
+The table below provides a listing of the various files that may be produced, the variables they contain and the equations to which they relate.
+
+\begin{center}
+    \begin{longtable}{|l|l|l|l|}
+    \hline
+    \multicolumn{4}{|l|}{\small\sl continued from previous page} \\
+    \hline quantity & units & file(s) & equation \\
+    \hline \endhead
+    \hline quantity & units & file(s) & equation \\
+    \hline \endfirsthead
+    \hline
+    \multicolumn{4}{|l|}{\small\sl continued on next page} \\
+    \hline \endfoot
+    \endlastfoot
+\multicolumn{4}{|l|}{\small\sl Main quantities} \\
+\hline
+$n_a$ & $m^{-3}$ & \texttt{b2npco\_na[XXX].dat} or & (\ref{eq:cont_appC})  \\ & & \texttt{b2npc9\_na[XXX].dat} or &
+\\ & & \texttt{b2npc11\_na[XXX].dat} & \\
+$u_a$ & $m/s$ & \texttt{b2npmo\_ua[XXX].dat} &  (\ref{eq:mom_new}), (\ref{eq:mom_old})   \\
+$T_e$ & $J$ & \texttt{b2npht\_te.dat} or &  (\ref{eq:ene_new})  \\ & & \texttt{b2nph9\_te.dat} & \\
+$T_i$ & $J$ & \texttt{b2npht\_ti.dat} or &  (\ref{eq:eni})  \\ & & \texttt{b2nph9\_ti.dat} & \\
+$T_e$ & $eV$ & \texttt{te\_eV.dat} &  (\ref{eq:ene_new})  \\ 
+$T_i$ & $eV$ & \texttt{ti\_eV.dat} &  (\ref{eq:eni})  \\ 
+$\varphi$ & $V$ & \texttt{b2nppo\_po.dat} or &  (\ref{eq:pot_eq})  \\ & & \texttt{b2npp7\_po.dat} & \\
+$n_e $ & $ m^{-3} $ & \texttt{ne.dat} & (\ref{eq:ne})\\
+\hline
+\multicolumn{4}{|l|}{\small\sl Geometry and related quantities} \\
+\hline
+
+$\sqrt{g}$ & $m^3$ & \texttt{vol.dat} &  \\
+$h_x$ & $m$ & \texttt{hx.dat} &  \\
+$h_y$ & $m$ & \texttt{hy.dat} &  \\
+$h_{y1}$ & $m$ & \texttt{hy1.dat} &  \\
+$h_z$ & $m$ & \texttt{hz.dat} &  \\
+$B$ & $T$ & \texttt{bb.dat} &  \\
+$B_x$ & $T$ & \texttt{bbx.dat} &  \\
+$B_z$ & $T$ & \texttt{bbz.dat} &  \\
+$R_0$ & $m$ & \texttt{crx0.dat} &  \\
+$Z_0$ & $m$ & \texttt{crz0.dat} &  \\
+$R_1$ & $m$ & \texttt{crx1.dat} &  \\
+$Z_1$ & $m$ & \texttt{crz1.dat} &  \\
+$R_2$ & $m$ & \texttt{crx2.dat} &  \\
+$Z_2$ & $m$ & \texttt{crz2.dat} &  \\
+$R_3$ & $m$ & \texttt{crx3.dat} &  \\
+$Z_3$ & $m$ & \texttt{crz3.dat} &  \\
+
+\hline
+\multicolumn{4}{|l|}{\small\sl Continuity equation and related quantities} \\
+\hline
+$S_a^n\sqrt{g}$ & $s^{-1}$ & \texttt{b2npco\_sna[XXX].dat} or & (\ref{eq:cont_appC})  \\ & & \texttt{b2npc9\_sna[XXX].dat} or &
+\\ & & \texttt{b2npc11\_sna[XXX].dat} & \\
+
+$\left({S_{I_a}^n+S_{I_{a+1}}^n}\right){\sqrt{g}}$ & $s^{-1}$ & \texttt{b2stel\_sna\_ion[XXX].dat} &  (\ref{eq:SIa}), (\ref{eq:SIa1})\\
+
+$\left({S_{R_a}^n+S_{R_{a-1}}^n}\right){\sqrt{g}}$ & $s^{-1}$ & \texttt{b2stel\_sna\_rec[XXX].dat} &   (\ref{eq:SRa}), (\ref{eq:SRa1})\\
+
+$\left({S_{CX_a}^n+S_{CX_{a-1}}^n}\right){\sqrt{g}}$ & $s^{-1}$ & \texttt{b2stcx\_sna\_[XXX].dat} &(\ref{eq:Scxa}) \\
+
+$S_a^{\rm Eirene}{\sqrt{g}}$ & $s^{-1}$ & \texttt{b2stbr\_sna\_eir[XXX].dat} &  \\
+
+${S_a^{BC}}{\sqrt{g}}$ & $s^{-1}$ & \texttt{b2stbc\_phys\_sna[XXX].dat} &  \\
+
+$\displaystyle - \sqrt{g}\frac{\partial n_a}{\partial t} $ & $s^{-1}$ & \texttt{b2srdt\_snadt[XXX].dat} &  (\ref{eq:cont_appC})\\
+
+$\displaystyle\frac{\sqrt{g}}{h_x}\widetilde{ \Gamma}_{ax}$ & $s^{-1}$ & \texttt{b2npc9\_fnax[XXX].dat} or &  (\ref{eq:GammaAX_appC}) 
+\\ & & \texttt{b2npc11\_fnax[XXX].dat} & \\
+
+$\displaystyle \frac{\sqrt{g}}{h_x}\widetilde{ \Gamma}_{ay}$ & $s^{-1}$ & \texttt{b2npc9\_fnay[XXX].dat} or &  (\ref{eq:GammaAY_appC}) 
+\\ & & \texttt{b2npc11\_fnay[XXX].dat} & \\
+
+$\displaystyle \frac{\sqrt{g}}{h_x}b_xV_{||a}n_a $ & $ s^{-1} $ & \texttt{b2tfnb\_bxuanax[XXX].dat} & (\ref{eq:GammaAX_appC}), (\ref{eq:GammaAXnoTilde_appC}) \\
+
+$\displaystyle \frac{\sqrt{g}}{h_x}V_{ax}^{(E)}n_a $ & $ s^{-1} $ & \texttt{b2tfnb\_vaecrbnax[XXX].dat} &  (\ref{eq:vaExB_appC})\\ 
+
+$\displaystyle\frac{\sqrt{g}}{h_x}V_{ay}^{(E)}n_a $ & $ s^{-1} $ & \texttt{b2tfnb\_vaecrbnay[XXX].dat} &  (\ref{eq:vaExB_appC})\\
+
+$\displaystyle\frac{\sqrt{g}}{h_x}V_{a}^{\rm corr\_ dpc}n_a $ & $ s^{-1} $ & \texttt{b2tfnb\_dpccornax[XXX].dat} &  (\ref{eq:VaCor_dpcDef_appC}) \\
+
+$\displaystyle\frac{\sqrt{g}}{h_x}V_{ay}^{(AN)}n_a $ & $ s^{-1} $ & \texttt{b2tfnb\_cvlbnay[XXX].dat} & (\ref{eq:V_ayAN})\\
+
+$\displaystyle -D_{n,a}\frac{\sqrt{g}}{h_x}\frac{1}{h_x}\frac{\partial{n_a}}{\partial{x}} $ & $ s^{-1} $ & \texttt{b2tfnb\_dPat\_mdf\_gradnax[XXX].dat} & (\ref{eq:D_na})\\
+
+$\displaystyle -D_{n,a}\frac{\sqrt{g}}{h_y}\frac{1}{h_y}\frac{\partial{n_a}}{\partial{y}} $ & $ s^{-1} $ & \texttt{b2tfnb\_dPat\_mdf\_gradnay[XXX].dat} &  (\ref{eq:D_na}) \\
+
+$\displaystyle -\tilde{D}_{p,ax}\frac{\sqrt{g}}{h_x}\frac{1}{h_x}\frac{\partial{p_a}}{\partial{x}} $ & $ s^{-1} $ & \texttt{b2tfnb\_dgradpbx[XXX].dat} & (\ref{eq:D_pax})\\
+
+$\displaystyle -\tilde{D}_{p,ay}\frac{\sqrt{g}}{h_y}\frac{1}{h_y}\frac{\partial{p_a}}{\partial{y}} $ & $ s^{-1} $ & \texttt{b2tfnb\_dgradpby[XXX].dat} & (\ref{eq:D_pay})\\
+
+$\displaystyle  D_{ayx}\frac{\sqrt{g}}{h_y} \frac{1}{h_x} \frac{\partial n_a T_i}{\partial x} $ \footnote{Mind the sign! It is opposite in output file and in flux balance.} & $ s^{-1} $ & \texttt{b2tfnb\_fnbPSchx[XXX].dat} &  (\ref{eq:D_axy}) \\
+
+$\displaystyle  -D_{axy} \frac{\sqrt{g}}{h_x} \frac{1}{h_y} \frac{\partial n_a T_i}{\partial y} $ \footnote{Mind the sign! It is opposite in output file and in flux balance.} & $ s^{-1} $ & \texttt{b2tfnb\_fnbPSchy[XXX].dat} & (\ref{eq:D_axy}) \\
+
+$\displaystyle  {D}_{n,a}\frac{\sqrt{g}}{h_x^2} $ & $ m^3/s $ & \texttt{b2trno\_cdnax[XXX].dat} & (\ref{eq:D_na})\\
+
+$\displaystyle {D}_{n,a}\frac{\sqrt{g}}{h_y^2} $ & $ m^3/s $ & \texttt{b2trno\_cdnay[XXX].dat} & (\ref{eq:D_na})\\
+
+$\displaystyle {\tilde{D}_{ax}}^p\frac{\sqrt{g}}{h_x^2} $ & $ m \cdot s / kg $ & \texttt{b2trno\_cdpax.dat} & (\ref{eq:D_pax})\\
+
+$\displaystyle {\tilde{D}_{ay}}^p\frac{\sqrt{g}}{h_y^2} $ & $ m \cdot s / kg $ & \texttt{b2trno\_cdpax.dat} & (\ref{eq:D_pax})\\
+
+$\displaystyle {D}_{n,a}^{AN} $ & $ m^2/s $ & \texttt{b2tqna\_dna0[XXX].dat} & (\ref{eq:D_na})\\
+
+$\displaystyle {{D}_a}^p $ & $ m^2/s $ & \texttt{b2tqna\_dpa0[XXX].dat} & (\ref{eq:D_pa})\\
+
+${V_{ax}}^{(E)} $ & $ {m}/{s} $ & \texttt{b2tfnb\_vbecrbx001.dat} & (\ref{eq:VaxE_appC})\\
+
+${V_{ay}}^{(E)} $ & $ {m}/{s} $ & \texttt{b2tfnb\_vbecrby001.dat} & (\ref{eq:VayE_appC})\\
+
+${W_x}^{(dia)} $ & $ {m}/{s} $ & \texttt{b2tfnb\_wbdiax[XXX].dat} & (\ref{eq:W_xy})\\
+
+${W_y}^{(dia)} $ & $ {m}/{s} $ & \texttt{b2tfnb\_wbdiay[XXX].dat} & (\ref{eq:W_xy})\\
+
+$\tilde{V}_{ax}^{(dia)} $ & $ {m}/{s} $ & \texttt{b2tfnb\_vbdiax[XXX].dat} & (\ref{eq:VaxDia})\\
+
+$\tilde{V}_{ay}^{(dia)} $ & $ {m}/{s} $ & \texttt{b2tfnb\_vbdiay[XXX].dat} & (\ref{eq:VayDia})\\
+
+$\displaystyle \frac{\sqrt{g}}{h_x}\tilde{V}_{ax}^{(dia)}n_a $ & $ s^{-1} $ & \texttt{b2tfnb\_vadianax[XXX].dat} & (\ref{eq:vadia_appC}) \\
+
+$\displaystyle \frac{\sqrt{g}}{h_x}\tilde{V}_{ay}^{(dia)}n_a $ & $ s^{-1} $ & \texttt{b2tfnb\_vadianay[XXX].dat} & (\ref{eq:vadia_appC})\\
+
+$E_{k,a} $ & $ J $ & \texttt{b2tfnb\_kbnrgy[XXX].dat} & (\ref{eq:Eka})\\
+
+${V_{ay}}^{(AN)} $ & $ m/s $ & \texttt{b2tqna\_vla0y[XXX].dat} &(\ref{eq:V_ayAN}) \\
+
+${\Gamma}_{ax}$ & $s^{-1} $ & \texttt{b2tfnb\_fnbx[XXX].dat} &  (\ref{eq:GammaAXnoTilde_appC}) \\
+${\Gamma}_{ay}$ & $s^{-1} $ & \texttt{b2tfnb\_fnby[XXX].dat} &  (\ref{eq:GammaAYnoTilde_appC}) \\
+
+\hline
+\multicolumn{4}{|l|}{\small\sl Momentum balance equation and related quantities} \\
+\hline
+$V_{\parallel a}$ & $ m/s $ & \texttt{b2npmo\_ua[XXX].dat} & (\ref{eq:mom_new}), (\ref{eq:mom_old}) \\
+
+$S_a^m h_z \sqrt{g}$ & $ N\cdot m$ & \texttt{b2npmo\_smb[XXX].dat} & (\ref{eq:mom_alls}) \\
+
+$\displaystyle - m_a \frac{\partial n_a V_{\parallel a}}{\partial t} h_z \sqrt{g} $ & $ N\cdot m $ & \texttt{b2srdt\_smodt[XXX].dat} & (\ref{eq:mom_new}), (\ref{eq:mom_old})  \\
+
+$\displaystyle  \frac{h_z\sqrt g}{h_x} \Gamma_{ax}^m  $ & $N\cdot m$ & \texttt{b2npmo\_fmox[XXX].dat} & (\ref{eq:mom_fluxx}), \\
+
+$\displaystyle \frac{h_z\sqrt g}{h_y} \Gamma_{ay}^m  $ & $N\cdot m$ & \texttt{b2npmo\_fmoy[XXX].dat} & (\ref{eq:mom_fluxy}), \\
+ 
+% $\displaystyle S_{CF_a}^m $ & $ N\cdot m $ & \texttt{b2npmo\_smocf[XXX].dat} & (\ref{eq:mom_alls}), (\ref{eq:mom_sorcf}) \\
+
+$\displaystyle -\frac{b_x}{h_x}\frac{\partial n_a T_i}{\partial x}  h_z \sqrt{g}$ & $ N\cdot m $ & \texttt{b2sigp\_smogpi[XXX].dat} & (\ref{eq:mom_new}), (\ref{eq:mom_old})  \\
+
+$\displaystyle -Z_a e n_a \frac{b_x}{h_x} \frac{\partial \Phi}{\partial x}h_z \sqrt{g} $ & $ N\cdot m $ & \texttt{b2sigp\_smogpo[XXX].dat} & (\ref{eq:mom_new}) \\
+
+$\displaystyle S_{CX_a}^m h_z \sqrt{g} $ & $ N\cdot m $ & \texttt{b2stcx\_smq[XXX].dat} & 
+(\ref{eq:mom_scx})  \\
+
+$\displaystyle S_{CF}^m h_z \sqrt{g} $ & $ N\cdot m  $ & \texttt{b2npmo\_smocf[XXX].dat} & 
+(\ref{eq:mom_sorcf}), (\ref{eq:mom_sorio})  \\
+
+$\displaystyle S_{I_a}^m h_z \sqrt{g} $ & $ N\cdot m $ & \texttt{b2stel\_smq\_ion[XXX].dat} & (\ref{eq:mom_alls}), (\ref{eq:mom_sorio}) \\
+
+$\displaystyle S_{R_a}^m h_z \sqrt{g} $ & $ N\cdot m
+$ & \texttt{b2stel\_smq\_rec[XXX].dat} & (\ref{eq:mom_alls}), (\ref{eq:mom_sorio})  \\
+
+$\displaystyle S_{Therm,ia}^m h_z \sqrt{g} $ & $ N\cdot m$ & \texttt{b2npmo\_smotfia[XXX].dat} & 
+(\ref{eq:mom_termi}) \\
+
+$\displaystyle S_{Therm,ea}^m h_z \sqrt{g} $ & $N\cdot m $ & \texttt{b2npmo\_smotfea[XXX].dat} & (\ref{eq:mom_terme}) \\
+
+$\displaystyle S_{fr,ea}^m h_z \sqrt{g} $ & $ N\cdot m $ & \texttt{b2npmo\_smofrea[XXX].dat} & (\ref{eq:mom_sorfre}) \\
+
+$\displaystyle S_{fr,ia}^m h_z \sqrt{g} $ & $ N\cdot m $ & \texttt{b2npmo\_smofria[XXX].dat} & (\ref{eq:mom_sorfri}) \\
+
+$\displaystyle S_{AN_a}^m h_z \sqrt{g} $ & $ N\cdot m $ & \texttt{b2npmo\_smoan[XXX].dat} & (\ref{eq:mom_soran}) \\
+
+$\displaystyle S_{BC_a}^m h_z \sqrt{g} $ & $ N\cdot m $ & \texttt{b2stbc\_phys\_smo[XXX].dat} &  \\
+
+$\displaystyle \left( {\nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{res}_{\parallel} h_z \sqrt{g}$ & $ N\cdot m $ & \texttt{b2npmo\_smovv001.dat} & (\ref{eq:mom_viscos}), (\ref{eq:mom_visres})  \\
+
+$\displaystyle \left( \nabla \cdot\overset\leftrightarrow\pi _a^{q_\parallel} \right)_{\parallel} h_z \sqrt{g} $ & $ N\cdot m $ & \texttt{b2npmo\_smovh001.dat} & (\ref{eq:mom_viscos}), (\ref{eq:mom_visq}) \\
+
+$\displaystyle \widetilde{\widetilde{\eta}}_{ax}^{(CL)} \frac{h_z \sqrt{g}}{h_x^2} $ & $kg\cdot m / s $ & \texttt{b2trcl\_luciani\_fllim\_cvsahzx[XXX].dat} & (\ref{eq:mom_dveta})  \\
+
+$\displaystyle \widetilde{\eta}^{(CL)}_{ax} \frac{h_z \sqrt{g}}{h_x^2} $ & $kg\cdot m / s $ & \texttt{b2trcl\_luciani\_cvsahzx[XXX].dat} & (\ref{eq:mom_veta}) \\
+
+$\displaystyle \eta_{a}^{(AN)} \frac{h_z\sqrt g}{h_x^2}$ & $kg\cdot m/s$ & \texttt{b2trno\_cvsahzx[XXX].dat} & (\ref{eq:mom_etana})  \\
+
+$\displaystyle \eta_{a}^{(AN)} \frac{h_z\sqrt g}{h_y^2}$ & $kg\cdot m / s $ & \texttt{b2trno\_cvsahzy[XXX].dat} & (\ref{eq:mom_etana})  \\
+
+$\displaystyle \eta_{ax}^{CL} \frac{h_z\sqrt g}{h_x^2}$ & $kg\cdot m / s $ & \texttt{b2trcl\_cvsahzx[XXX].dat} & (\ref{eq:mom_etaCL})  \\
+
+$\displaystyle \tau_a $ &$ s $ & \texttt{b2tqca\_taua[XXX].dat} & (\ref{eq:mom_taua})  \\
+
+$\displaystyle \frac{h_z\sqrt g}{h_x} \Gamma_{ax}^{Corr} $ & $m^2/s$  & \texttt{b2tfnb\_fnb\_fcorx[XXX].dat} & (\ref{eq:GammaAXCor_appC})  \\
+
+$\displaystyle \frac{h_z\sqrt g}{h_x} \Gamma_{ay}^{Corr} $ & $m^2/s$  & \texttt{b2tfnb\_fnb\_fcory[XXX].dat} & (\ref{eq:GammaAYCor_appC})  \\
+
+$\displaystyle -D_a^{n} \frac{1}{h_x} \frac{\partial{n_a}}{\partial x} \frac{h_z\sqrt g}{h_x}$ & $m/s$& \texttt{b2tfnb\_dPat\_2diagradnax[XXX].dat} & (\ref{eq:GammaAXCor_appC})  \\
+
+$\displaystyle \nu_a^{visc} $ & $m^2 / s$  & \texttt{b2tqna\_vsa0[XXX].dat} & (\ref{eq:mom_etana})  \\
+
+$\displaystyle -\frac{h_z\sqrt g}{h_x} \eta_{ax} \frac{\partial V_{\parallel a}}{h_x \partial x}$ & $kg / {s}$ & \texttt{b2urmo\_etaPat\_graduax[XXX].dat} & (\ref{eq:mom_fluxx})  \\
+
+$\displaystyle -\frac{h_z\sqrt g}{h_y} \eta_{ay} \frac{\partial V_{\parallel a}}{h_y \partial y}$ &$ N \cdot m $ & \texttt{b2urmo\_etaPat\_graduay[XXX].dat} & (\ref{eq:mom_fluxy})  \\
+
+$\displaystyle  \frac{h_z\sqrt g}{h_x} \left( \frac 4 3 \widetilde{\widetilde{\eta}}^{(CL)}_{ax} \frac{\partial \ln h_z}{h_x \partial x} \right) $ & $kg \cdot m / s$ & \texttt{b2npmo\_flubvx001.dat} & (\ref{eq:mom_fluxx})  \\
+
+
+\hline
+\multicolumn{4}{|l|}{\small\sl Electron heat balance equation and related quantities} \\
+\hline
+$T_e$ & $J$ & \texttt{b2npht\_te.dat} or &  (\ref{eq:ene_new})  \\ & & \texttt{b2nph9\_te.dat} & \\
+
+$\displaystyle \frac{\sqrt {g}}{h_{x}}\widetilde{q}_{ex} $ & $ W $ & \texttt{b2nph9\_fhex.dat} & (\ref{eq:ene_tiqex})  \\
+
+$\displaystyle \frac{\sqrt {g}}{h_{y}}\widetilde{q}_{ey} $ & $ W $ & \texttt{b2nph9\_fhey.dat} & (\ref{eq:ene_tiqey})  \\
+
+$\displaystyle S_{e}^{heat}  \sqrt{g}$ & $ W $ & \texttt{b2npht\_she.dat} or & (\ref{eq:ene_seheat})  \\
+ & & \texttt{b2nph9\_she.dat} & \\ 
+ 
+$\displaystyle  Q_{R}\sqrt {g} $ & $ W $ & \texttt{b2stel\_she\_rad.dat} & (\ref{eq:ene_QR})  \\
+
+$\displaystyle  Q_{\Delta }\sqrt {g} $ & $ W $ & \texttt{b2npht\_shei.dat} or & (\ref{eq:ene_Qdelta})  \\
+& & \texttt{b2nph9\_shei.dat} & \\ 
+
+$\displaystyle Q_e^{\rm EIRENE}\sqrt {g} $ & $ W $ & \texttt{b2stbr\_she\_eir.dat} & (\ref{eq:ene_seheat})  \\
+ 
+$\displaystyle Q_{Fei} \sqrt {g} $ & $ W $ & \texttt{b2sihs\_\_shefr.dat} & (\ref{eq:ene_Qfei})  \\
+%& & \texttt{b2sihs\_\_shefr.dat} & \\ 
+
+$\displaystyle \frac{n_e T_e}{\sqrt g} \frac{\partial}{\partial x} \left(\frac{\sqrt g}{h_x} b_x V_{e \parallel} \right)\sqrt {g} $ & $ W $ & \texttt{b2sihs\_\_shedu.dat} & (\ref{eq:ene_new})  \\
+%& & \texttt{b2sihs\_\_shedu.dat} & \\ 
+
+$\displaystyle n_e T_e \left ( \nabla \cdot \vec{\bf V}^E \right)\sqrt {g}  $ & $ W $ & \texttt{b2sihs\_\_shedd.dat} & (\ref{eq:ene_new})  \\
+%& & \texttt{b2sihs\_\_shedd.dat} & \\ 
+
+$\displaystyle Q^{BC}_{e}\sqrt {g} $ & $ W $ & \texttt{b2stbc\_phys\_she.dat} &   \\
+
+$\displaystyle -\frac{j_y^{(ST)}}{e n_e} \frac{\partial n_e T_e}{h_y \partial y} \sqrt{g}$ & $ W $ & \texttt{b2sihs\_\_shest.dat} & (\ref{eq:ene_new})  \\
+
+$\displaystyle - \frac{3}{2} \frac{\partial n_e T_e}{\partial t} \sqrt{g} $ & $ W $ & \texttt{b2srdt\_shedt.dat} & (\ref{eq:ene_new})  \\
+
+$\displaystyle \frac32 \frac{\sqrt{g}}{h_{x}} \Gamma_{ex} T_e$ & $ W $ & \texttt{b2tfhe\_\_qe\_32x.dat} & (\ref{eq:ene_gammax})  \\
+
+$\displaystyle \frac32 \frac{\sqrt{g}}{h_{y}} \Gamma_{ey} T_e$ & $ W $ & \texttt{b2tfhe\_\_qe\_32y.dat} & (\ref{eq:ene_gammay})  \\
+
+$\displaystyle \frac{\sqrt{g}}{h_{x}} q_{ex}^{P.Sch}$ & $ W $ & \texttt{b2tfhe\_\_fhePSchx,y.dat} & (\ref{eq:ene_qPSchx})\\
+ 
+$\displaystyle \frac{\sqrt{g}}{h_{y}} q_{ey}^{P.Sch}$ & $ W $ & \texttt{b2tfhe\_\_fhePSchx,y.dat} & (\ref{eq:ene_qPSchy})\\
+ 
+$\displaystyle - \frac{\sqrt{g}}{h_{x}} \kappa_{ex} \frac{1}{h_{x}}\frac{\partial T_e}{\partial x}$ & $ W $ & \texttt{b2tfhe\_\_qe\_ke\_gTx.dat} &  (\ref{eq:ene_qex})\\
+
+$\displaystyle - \frac{\sqrt{g}}{h_{y}} \kappa_{ey} \frac{1}{h_{y}}\frac{\partial T_e}{\partial y}$ & $ W $ & \texttt{b2tfhe\_\_qe\_ke\_gTy.dat} &  (\ref{eq:ene_qey})\\
+
+$\displaystyle \Gamma_{ax}^{(he)} \frac{\sqrt{g}}{h_x}$ & $ s^{-1} $ & \texttt{b2tfnb\_fnb\_hex.dat} & (\ref{eq:ene_gammaxhe})\\
+
+$\displaystyle \Gamma_{ay}^{(he)} \frac{\sqrt{g}}{h_y} $ & $s^{-1}$ & \texttt{b2tfnb\_fnb\_hey.dat} & (\ref{eq:ene_gammayhe})\\
+
+
+$\displaystyle \kappa_{ex} \frac{\sqrt{g}}{h_{x}^2}$ & $ s^{-1} $ & \texttt{b2tfhe\_\_chcex\_Pat.dat} & (\ref{eq:ene_kapex})  \\
+
+$\displaystyle \kappa_{ey} \frac{\sqrt{g}}{h_{y}^2}$ & $ s^{-1} $ & \texttt{b2tfhe\_\_chcey\_Pat.dat} & (\ref{eq:ene_kapey})  \\
+
+$\displaystyle\kappa_{e}^{(AN)} \frac{\sqrt{g}}{h_{x}^2}$ & $ s^{-1}$ & \texttt{b2trno\_chcex.dat} & (\ref{eq:ene_kapexan})  \\
+
+$\displaystyle\kappa_{e}^{(AN)} \frac{\sqrt{g}}{h_{y}^2}$ & $ s^{-1}$ & \texttt{b2trno\_chcey.dat} & (\ref{eq:ene_kapexan})  \\
+
+$ \chi_{e}^{(AN)} $ & $  m^2 / s $ & \texttt{b2tqna\_hce0.dat} & (\ref{eq:ene_kapexan})\\
+
+$\displaystyle \widetilde{\widetilde{\kappa}}_{ex}^{CL} \frac{\sqrt{g}}{h_{x}^2}$ & $  s^{-1}$ & \texttt{b2trcl\_luciani\_fllim\_chcex.dat} & (\ref{eq:mom_new})  \\
+
+$\displaystyle \widetilde{\kappa}_{ex}^{CL} \frac{\sqrt{g}}{h_{x}^2}$ & $  s^{-1}$ & \texttt{b2trcl\_luciani\_chcex.dat} & (\ref{eq:ene_dmkapexcl}) \\
+
+$\displaystyle \kappa_{ex}^{CL} \frac{\sqrt{g}}{h_{x}^2}b_x^2$ & $ s^{-1}$ & \texttt{b2trcl\_chcex.dat} & (\ref{eq:ene_mkapexcl})\\
+
+$\tau_e $ & $s$ & \texttt{b2tqce\_taue.dat} & (\ref{eq:ene_taue})\\
+
+$V_{e\parallel} $ & $m /s$ & \texttt{b2sifrtf\_ue.dat} & (\ref{eq:ene_veparal}) \\
+
+
+$\displaystyle \sigma_{\parallel} \frac{\sqrt{g}}{h_{x}^2} $ & $\displaystyle \frac{1}{m\cdot S}$ & \texttt{b2trcl\_luciani\_csigx.dat} & (\ref{eq:fch_p}), (\ref{eq:ene_sigmparal}) \\
+
+$\displaystyle \sigma_{CL\parallel} \frac{\sqrt{g}}{h_{x}^2} $ & $\displaystyle \frac{1}{m\cdot S}$ & \texttt{b2trcl\_csigx.dat} & (\ref{eq:ene_sigparcl})\\
+
+$\displaystyle \alpha_{ex} \frac{\sqrt{g}}{h_{x}^2} $ & $\displaystyle \frac{m}{ V \cdot s}$ & \texttt{b2trcl\_luciani\_fllim\_calfx.dat} & (\ref{eq:ene_alphex})\\
+
+$\displaystyle \widetilde{\alpha}_{CLx} \frac{\sqrt{g}}{h_{x}^2} $ & $\displaystyle \frac{m}{ V \cdot s}$ & \texttt{b2trcl\_lucian\_calfx.dat} & (\ref{eq:ene_2tialphxcl}), (\ref{eq:ene_1tialphxcl})\\
+$\displaystyle \alpha_{CLx} \frac{\sqrt{g}}{h_{x}^2} $ & $\displaystyle \frac{m}{ V \cdot s}$ & \texttt{b2trcl\_calfx.dat} & (\ref{eq:ene_alphxcl}) \\
+
+$\displaystyle \alpha^{(ST)} $ & $??$ & \texttt{b2trno\_chcey\_stoch.dat} & (\ref{eq:ene_kapeST})\\
+\hline
+\multicolumn{4}{|l|}{\small\sl Ion heat balance equation and related quantities} \\
+\hline
+$T_i$ & $ W $ & \texttt{b2npht\_shi.dat} or & (\ref{eq:eni})\\
+ & & \texttt{b2nph9\_shi.dat} & \\
+ 
+$S_i^{heat}  \sqrt{g}$ & $ W $ & \texttt{b2npht\_shi.dat} or & (\ref{eq:cont_appC})  \\
+ & & \texttt{b2nph9\_shi.dat} & \\
+ 
+$\displaystyle -\frac{3}{2} \sqrt{g} \frac{\partial n_i T_i}{\partial t}$ & $ W $ & \texttt{b2srdt\_shidt.dat} & (\ref{eq:eni})\\
+
+$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{q}_{ix}$ & $ W $ & \texttt{b2nph9\_fhix.dat} &(\ref{eq:eni_tiqix})\\
+
+$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{q}_{iy}$ & $ W $ & \texttt{b2nph9\_fhiy.dat} & (\ref{eq:eni_tiqiy})\\ 
+
+$\displaystyle \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a T_i \left ( \nabla \cdot \vec{\bf V}^E \right)\sqrt {g} $ & $ W $ & \texttt{b2sihs\_\_shidd.dat} & (\ref{eq:eni_siheat})\\
+% & & \texttt{b2sihs\_\_shidd.dat} & \\
+
+$\displaystyle -\sum \limits^{ns-1}_{a = 0} n_a T_i \frac{\partial}{\partial x} \left(
+	\frac{\sqrt g}{h_x} V_{a \parallel} b_x \right) \sqrt {g} $& $ W $ & \texttt{b2sihs\_\_shidu.dat} & (\ref{eq:eni}),  (\ref{eq:eni_siheat})\\
+%& & \texttt{b2sihs\_\_shidu.dat} & \\
+	
+$\displaystyle \sum \limits_{fluid~species}
+\eta_{ax} \left(
+\frac{\partial V_{a \parallel}}{h_x \partial x}
+\right)^2 \sqrt{g} $ & $ W $ & \texttt{b2sihs\_\_shivc.dat} &  (\ref{eq:eni_siheat})\\
+%& & \texttt{b2sihs\_\_shivc.dat} & \\
+	
+$\displaystyle \sum \limits_{fluid~species}
+\eta^{(AN)}_{a} \left(
+\frac{\partial V_{a \parallel}}{h_y \partial y}
+\right)^2  \sqrt{g}$ & $ W $ & \texttt{b2sihs\_\_shiva.dat} & (\ref{eq:eni_siheat})\\
+%& & \texttt{b2sihs\_\_shiva.dat} & \\
+
+$\displaystyle Q_{F_{ab}}\sqrt{g} $ & $ W $ & \texttt{b2sihs\_\_shifr.dat} & (\ref{eq:eni_Qfabnew}), (\ref{eq:eni_Qfabold})\\
+
+$\displaystyle Q_I^{(i)}\sqrt{g}$ & $ W $ & \texttt{b2stel\_shi\_ion.dat} & (\ref{eq:eni_QIi}) \\
+
+$\displaystyle Q_{R}^{(i)}\sqrt{g}$ & $ W $ & \texttt{b2stel\_shi\_rec.dat} &(\ref{eq:eni_siheat}), (\ref{eq:eni_QRi})\\
+
+$\displaystyle Q_i^{\rm EIRENE}\sqrt{g}$ & $ W $ & \texttt{b2stel\_shi\_eir.dat} & (\ref{eq:eni_siheat})\\
+
+$\displaystyle -\frac{3}{2}\frac{\sqrt{g}}{h_x}\Gamma_{ix}T_i$ & $ W $ & \texttt{b2tfhi\_\_qi\_32x.dat} & (\ref{eq:eni_gammahix}) \\
+%& & \texttt{b2tfhi\_\_qi\_32x.dat} & \\
+
+$\displaystyle -\frac{3}{2}\frac{\sqrt{g}}{h_y}\Gamma_{iy}T_i$ & $ W $ & \texttt{b2tfhi\_\_qi\_32y.dat} & (\ref{eq:eni_gammahix}) \\
+%& & \texttt{b2tfhi\_\_qi\_32y.dat} & \\
+
+$\displaystyle \frac{\sqrt{g}}{h_x}q_{ix}^{P.Sch} $ & $ W $ & \texttt{b2tfhi\_\_fhiPSchx.dat} & (\ref{eq:eni_qixPSch})\\
+
+$\displaystyle \frac{\sqrt{g}}{h_y}q_{iy}^{P.Sch} $ & $ W $ & \texttt{b2tfhi\_\_fhiPSchy.dat} & (\ref{eq:eni_qiyPSch})\\
+
+$\displaystyle -\frac{\sqrt{g}}{h_x}\kappa_{ix}\frac{1}{h_x}\frac{\partial{T_i}}{\partial x} $ & $ W $ & \texttt{b2tfhi\_\_qi\_ki\_gTx.dat} & (\ref{eq:eni_tiqix}) \\
+
+$\displaystyle -\frac{\sqrt{g}}{h_y}\kappa_{iy}\frac{1}{h_y}\frac{\partial{T_i}}{\partial y} $ & $ W $ & \texttt{b2tfhi\_\_qi\_ki\_gTy.dat} & (\ref{eq:eni_tiqiy}) \\
+
+$\chi_a^{(AN)} $ & $ m^2 / s $ & \texttt{b2tqna\_hcib[XXX].dat} & (\ref{eq:eni_kapAN}), (\ref{eq:eni_chiAN})\\
+
+$\displaystyle \kappa_{ix}\frac{\sqrt g}{h_x^2} $ & $ s^{-1} $ & \texttt{b2tfhi\_\_chcix\_Pat.dat} &  (\ref{eq:eni_kapixAN})\\
+%& & \texttt{b2tfhi\_\_chcix\_Pat.dat} &  \\
+
+$\displaystyle \kappa_{iy}\frac{\sqrt g}{h_y^2} $ & $ s^{-1} $ & \texttt{b2tfhi\_\_chciy\_Pat.dat} & (\ref{eq:eni_kapiy}),\\
+%& & \texttt{b2tfhi\_\_chciy\_Pat.dat} &  \\
+
+$\displaystyle \kappa_{ix}^{(AN)}\frac{\sqrt g}{h_x^2} $ & $ s^{-1} $ & \texttt{b2trno\_chcix.dat} & (\ref{eq:eni_kapixAN})\\
+
+$\displaystyle \kappa_{iy}^{(AN)}\frac{\sqrt g}{h_y^2} $ & $ s^{-1} $ & \texttt{b2trno\_chciy.dat} & (\ref{eq:eni_kapixAN})\\
+
+$\displaystyle \widetilde{\widetilde {\kappa}}_{ix}^{(CL)}\frac{\sqrt g}{h_x^2} $ & $ s^{-1} $ & \texttt{b2trcl\_luciani\_fllim\_chci.dat} & (\ref{eq:eni_dtkapixCL})\\
+
+$\displaystyle \widetilde {\kappa}_{ix}^{(CL)}\frac{\sqrt g}{h_x^2} $ & $ s^{-1} $ & \texttt{b2trcl\_luciani\_chcix.dat} & (\ref{eq:eni_tikapixCL}), (\ref{eq:eni_tkapixCL})\\
+
+$\displaystyle \kappa_{ix}^{(CL)}\frac{\sqrt g}{h_x^2} $ & $ s^{-1} $ & \texttt{b2trcl\_chcix.dat} & (\ref{eq:eni_kapixCL})\\
+
+\hline
+\multicolumn{4}{|l|}{\small\sl Current continuity equation and related quantities} \\
+\hline
+$\varphi $ & $ V $ & \texttt{b2nppo\_po.dat} or & (\ref{eq:pot_eq}) \\
+& & \texttt{b2npp7\_po.dat} &  \\
+
+$\displaystyle \frac{\sqrt{g}}{h_x}j_x $ & $ A $ & \texttt{b2nppo\_fchx.dat} or & (\ref{eq:pot_eq}), (\ref{eq:pot_jx})\\
+& & \texttt{b2npp7\_fchx.dat} &  \\
+
+$\displaystyle \frac{\sqrt{g}}{h_y}j_y $ & $ A $ & \texttt{b2nppo\_fchy.dat} or & (\ref{eq:pot_eq}), (\ref{eq:pot_jy})\\
+& & \texttt{b2npp7\_fchy.dat} &  \\
+
+$\displaystyle \frac{\sqrt{g}}{h_x}j_x^{(\parallel)} $ & $ A $ & \texttt{b2tfhe\_\_fch\_px.dat} & (\ref{eq:pot_jx})\\
+%& & \texttt{b2tfhe\_\_fch\_px.dat} &  \\
+
+$\displaystyle \frac{\sqrt{g}}{h_x}\widetilde{j}_x^{(dia)} $ & $ A $ & \texttt{b2tfhe\_\_fchdiax.dat} & (\ref{eq:pot_tijxdia})\\
+%& & \texttt{b2tfhe\_\_fchdiax.dat} &  \\
+
+$\displaystyle \frac{\sqrt{g}}{h_y}\widetilde{j}_y^{(dia)} $ & $ A $ & \texttt{b2tfhe\_\_fchdiay.dat} & (\ref{eq:pot_tijydia})\\
+%& & \texttt{b2tfhe\_\_fchdiay.dat} &  \\
+
+$\displaystyle \frac{\sqrt{g}}{h_x}\widetilde{j}_x^{(in)} $ & $ A $ & \texttt{b2tfhe\_\_fchinertx.dat} & (\ref{eq:pot_tijxin})\\
+%& & \texttt{b2tfhe\_\_fchinertx.dat} &  \\
+
+$\displaystyle \frac{\sqrt{g}}{h_y}j_y^{(in)} $ & $ A $ & \texttt{b2tfhe\_\_fchinerty.dat} & (\ref{eq:pot_jyin})\\
+%& & \texttt{b2tfhe\_\_fchinerty.dat} &  \\
+
+$\displaystyle \frac{\sqrt{g}}{h_x}\widetilde{j}_x^{(vis \parallel)} $ & $ A $ & \texttt{b2tfhe\_\_fchvisparx.dat} & (\ref{eq:pot_tijxvispar})\\
+%& & \texttt{b2tfhe\_\_fchvisparx.dat} &  \\
+
+$\displaystyle \frac{\sqrt{g}}{h_y}\widetilde{j}_y^{(vis \parallel)} $ & $ A $ & \texttt{b2tfhe\_\_fchvispary.dat} & (\ref{eq:pot_tijyvispar})\\
+%& & \texttt{b2tfhe\_\_fchvispary.dat} &  \\
+
+$\displaystyle \frac{\sqrt{g}}{h_x}\widetilde{j}_x^{(s)} $ & $ A $ & \texttt{b2tfhe\_\_fchinx.dat} & (\ref{eq:pot_jx}), (\ref{eq:pot_tijxs})\\
+%& & \texttt{b2tfhe\_\_fchinx.dat} &  \\
+
+$\displaystyle \frac{\sqrt{g}}{h_y}\widetilde{j}_y^{(s)} $ & $ A $ & \texttt{b2tfhe\_\_fchiny.dat} & (\ref{eq:pot_jy}), (\ref{eq:pot_tijys})\\
+%& & \texttt{b2tfhe\_\_fchiny.dat} &  \\
+
+$\displaystyle \sigma_{aa0} b^2_z \frac{\sqrt{g}}{h^2_x} $ & $ S $ & \texttt{b2tral\_csiginx01\_00.dat} & (\ref{eq:pot_sigaa0})\\
+
+$\displaystyle \frac{\sqrt{g}}{h_x}\widetilde{j}_x^{(AN)} $ & $ A $ & \texttt{b2tfhe\_\_fchanmlx.dat} & (\ref{eq:pot_jxan})\\
+%& & \texttt{b2tfhe\_\_fchanmlx.dat} &  \\
+
+$\displaystyle \frac{\sqrt{g}}{h_y}\widetilde{j}_y^{(AN)} $ & $ A $ & \texttt{b2tfhe\_\_fchanmly.dat} & (\ref{eq:pot_jyan})\\
+%& & \texttt{b2tfhe\_\_fchanmly.dat} &  \\
+
+$\displaystyle \sigma_{ANy} $ & $ S / m^2 $ & \texttt{b2tqna\_sig0.dat} & (\ref{eq:pot_sigan})\\
+
+$\displaystyle \frac{\sqrt{g}}{h_y}\widetilde{j}_y^{(vis \perp)} $ & $ A $ & \texttt{b2tfhe\_\_fchvispery.dat} & 
+(\ref{eq:pot_tijyvisper})\\
+
+$\displaystyle \frac{\sqrt{g}}{h_y}\widetilde{j}_y^{(vis q)} $ & $ A $ & \texttt{b2tfhe\_\_fchvisqy.dat} & (\ref{eq:pot_tijyvisq})\\
+
+$\displaystyle \frac{\sqrt{g}}{h_y}j_y^{(ST)} $ & $ A $ & \texttt{b2tfhe\_\_fchstochy.dat} & 
+(\ref{eq:pot_jyst})\\
+
+$\displaystyle \frac{\sqrt{g}}{h^2_y}\sigma^{(ST)} $ & $ S $ & \texttt{b2trno\_csigy\_stoch.dat} & (\ref{eq:pot_jyst})\\
+\hline
+\caption{Files produced by means of {\tt 'b2wdat\_iout'}, the variable they contain, and the equation to which they relate}
+\label{tab:b2wdat_files}
+\end{longtable}
+\end{center}
 
 \chapter{Region definitions}
 \label{cha:regions}\index{regions}\index{vreg}\index{xreg}\index{yreg}\index{NREG}
