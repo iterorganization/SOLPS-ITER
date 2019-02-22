@@ -17026,7 +17026,7 @@ poloidal particle flux and chemical sputtering yield. If only the {\bf wzsel} op
 overlay will come from the first species, namely D$^0$ in this case. It is therefore recommended to always make sure
 that the species dimensions of the "matrix" and "wall" data match!
 
-\subsection{Target plot}
+\subsection{Target plots}
 \index{b2plot, plotting target quantities}
 
 In figure \ref{fig:targetplots}, we show examples of target plots.
@@ -17065,7 +17065,7 @@ The wall overlay data is the D$^+$ particle flux to the wall ({\bf wallflux 1 wz
 {\bf 'D+ wall flux' wallblbl}. The colour bars, from left to right, correspond to the "matrix", "wall"
 and "target" data arrays.
 
-\subsection{Radiation plot}
+\subsection{Radiation plots}
 \index{b2plot, radiation plots}
 
 The following was used to produce a plot (figure \ref{fig:b2rad}) of
@@ -17105,19 +17105,34 @@ Please note that {\bf b2ra} only contains the line radiation emanating
 from the fluid species followed by {\tt B2.5}. If you wish to also
 include the radiation emanating from the neutral kinetic species computed
 by {\tt Eirene}, you need to add contributions from {\bf neutrad} as well.
-Please be mindful however that {\bf neutrad} has dimensions $nspecies$ while
-{\bf b2ra} has dimensions $ns$. Moreover, if you are intending to compute the
+Please be mindful however that {\bf neutrad} has dimensions $natmi$ while
+{\bf b2ra} has dimensions $ns$. Currently, however, because of incomplete
+accounting in {\tt Eirene}, only the first element is filled in, and 
+it contains the sum of the radiation due to all neutral atomic species.
+Moreover, if you are intending to compute the
 total radiation rate, you should also include the bremsstrahlung contribution
-from {\bf b2br}. You would then have as your command line:
+from {\bf b2br}. You would then have as your set of commands, now using a
+D+He+C example:
 
 \begin{verbatim}
-! b2plot < b2rad.plot ; ctrans -d ps.land.color gmeta | a4page > ! tmp.ps
-a4l 2 1 page lbof logf phys
-b2ra b2br m+ pvol abs 2  8 sumz neutrad pvol 2 zsel m+
-1.0e4 fmin 1.0e8 fmax 'Total radiation loss due to Carbon' extl surf
-b2ra b2br m+ pvol abs 9 19 sumz neutrad pvol 3 zsel m+
-1.0e4 fmin 1.0e8 fmax 'Total radiation loss due to Neon' extl surf
+a4l 3 1 page lbof logf phys sep vesl outl 1.5 lbsz 5 ndec
+b2ra b2br m+ abs 0  1 sumz neutrad 0 zsel m+ pvol ' ' slbl
+'Total radiation loss (W/m^{3})' glbl 'D and neutrals' extl surf
+b2ra b2br m+ pvol abs 2  4 sumz
+'Total radiation loss (W/m^{3})' glbl 'Helium ions' extl surf
+b2ra b2br m+ pvol abs 5 11 sumz
+'Total radiation loss (W/m^{3})' glbl 'Carbon ions' extl surf
 \end{verbatim}
+
+\begin{figure}[hbtp]
+\ifpdf
+    \centerline{\includegraphics[angle=90,height=10cm]{b2plot_total_rad.pdf}}
+\else
+    \centerline{\includegraphics[angle=90,height=10cm]{b2plot_total_rad.eps}}
+\fi
+    \caption{Total radiation for a D+He+C example case.}
+    \label{fig:b2totalrad}
+\end{figure}
 
 \subsection{Fluxes and values plot}
 
