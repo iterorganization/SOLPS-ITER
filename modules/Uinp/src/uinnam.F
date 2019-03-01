@@ -459,7 +459,7 @@ c=======================================================================
       case (57)
         call resimi(i)
         ngpfstr=ngpfstr+1
-        if(ngpfstr.ge.nstra) then !{
+        if(ngpfstr.gt.nstra) then !{
           write(0,*) 'Too many gas puffing strata specified'
           call xerrab
      .     (' ==> Check the DG model and DEF_NSTRA in DIMENSIONS.F')
@@ -469,7 +469,7 @@ c=======================================================================
           write(0,*) 'uinnam: gas puffing strata index undefined'
           call xerrab (' ==> Corrupted DG output?')
         end if !}
-        if(lugpf.ge.nlim) then !{
+        if(lugpf.gt.nlim) then !{
           write(0,*) 'uinnam: too many slot surfaces for gas puff'
           call xerrab
      .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
@@ -481,7 +481,7 @@ c=======================================================================
           call xerrab
      .     (' ==> Check the "Gas puff" variables in the DG model')
         end if !}
-        if(i.ge.nsrfs) then !{
+        if(i.gt.nsrfs) then !{
           write(0,*) 'uinnam: too many segments for gas puff'
           call xerrab
      .     (' ==> Check the DG model and DEF_NSRFS in DIMENSIONS.F')
