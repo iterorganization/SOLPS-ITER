@@ -40,6 +40,7 @@ else
   setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
   setenv LD_CATALYST `paraview-config --libs vtkPVPythonCatalyst`
 endif
+setenv LD_LIBRARY_PATH "/usr/lib64/:${LD_LIBRARY_PATH}"
 
 # Debugger (set environment variable DBX)
 setenv DBX totalview
