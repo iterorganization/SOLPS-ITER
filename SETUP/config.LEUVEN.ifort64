@@ -72,7 +72,6 @@ ifdef SOLPS_OPENMP
   B25_DEFINES += -D_OPENMP
 endif
 
-
 #
 # Export for use in sub-makefiles
 #

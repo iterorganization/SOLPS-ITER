@@ -104,13 +104,13 @@ nox_openmp_mpi:   carre_nox divgeo_nox b25eirene_nox_openmp_mpi uinp_nox_mpi tri
 
 nox_mpi_openmp: nox_openmp_mpi
 
-all:       carre divgeo b25     eirene     b25eirene     uinp     triang amds sonnet-light manual
+all:         carre divgeo b25     eirene     b25eirene     uinp     triang amds sonnet-light manual
 
 all_nox:     carre_nox divgeo_nox b25_nox eirene_nox b25eirene_nox uinp_nox triang_nox manual
 
-all_openmp:   carre divgeo b25_openmp eirene b25eirene_openmp uinp triang amds sonnet-light manual
+all_openmp:  carre divgeo b25_openmp eirene b25eirene_openmp uinp triang amds sonnet-light manual
 
-all_mpi:   carre divgeo b25_mpi eirene_mpi b25eirene_mpi uinp_mpi triang amds sonnet-light manual
+all_mpi:     carre divgeo b25_mpi eirene_mpi b25eirene_mpi uinp_mpi triang amds_mpi sonnet-light manual
 
 all_nox_openmp: carre_nox divgeo_nox b25_nox_openmp eirene_nox b25eirene_nox_openmp uinp_nox triang_nox manual
 
@@ -536,7 +536,7 @@ clean_b25eirene:
 	cd modules/B2.5;   ${MAKE} clean USE_EIRENE=-DB25_EIRENE
 
 clean_b25eirene_mpi:
-	cd modules/Eirene; ${MAKE} clean USE_B25=-DB25_EIRENE   USE_MPI=-DUSE_MPI SOLPS_MPI=yes
+	cd modules/Eirene; ${MAKE} clean USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 	cd modules/B2.5;   ${MAKE} clean USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 
 clean_b25eirene_openmp:

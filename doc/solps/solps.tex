@@ -102,8 +102,8 @@ All errors, omissions {\it etc.} should be e-mailed to {\tt Xavier.Bonnin@iter.o
 This document describes the \SOLPSITER code package and its components.
 Following this introduction is a chapter (\ref{cha:structure})
 describing the structure of the code.  Then chapter
-\ref{cha:standaloneb2} describes the stand-alone version of {\tt B2.5}.  This
-is followed by a description of the stand-alone version of {\tt Eirene} in
+\ref{cha:standaloneb2} describes the standalone version of {\tt B2.5}.  This
+is followed by a description of the standalone version of {\tt Eirene} in
 chapter \ref{cha:standaloneeirene} and then of the coupled {\tt B2.5-Eirene}
 in chapter \ref{cha:coupledb2eirene}.  Then follow chapters on {\tt DivGeo}
 (\ref{cha:divgeo}), {\tt Carre} (\ref{cha:carre}) and {\tt agg} (\ref{cha:agg}).
@@ -124,7 +124,7 @@ in the {\tt B2.5} part of the \SOLPSITER package.
 Historically, there have been many implementations of the
 {\tt SOLPS} (Scrape-Off Layer Plasma Simulation) code package, according
 to which version of the fluid plasma code ({\tt B2} or {\tt B2.5}) and of
-the {\tt Eirene} Monte-Carlo neutral transport code are used. We distinguish
+the {\tt Eirene} Monte Carlo neutral transport code are used. We distinguish
 between \SOLPSfour which uses {\tt B2} and \SOLPSfive which uses {\tt B2.5}.
 This document is devoted solely to \SOLPSITER although several features are
 common to multiple versions. \SOLPSITER contains the {\tt B2.5} plasma kernel and a recent version of {\tt Eirene}.
@@ -254,7 +254,7 @@ which will fetch and pull the main development branches for the main \SOLPSITER 
 
 \SOLPSITER is a complicated code package and it would be difficult to learn how to install, compile and run it from this document and the internal documentation alone.  In the past we have found that an initial visit of at least two weeks to a research team already proficient with \SOLPSITER use with subsequent visits, or about two months and no further visits, are desirable.
 
-The Git \SOLPSITER repository is structured as a self-contained whole, but some effort was also devoted to be able to check out, as individual stand-alone modules, the main pieces of the SOLPS suite, i.e. {\tt DivGeo}, {\tt Carre}, {\tt Eirene} and {\tt B2.5}, although this is not recommended.
+The Git \SOLPSITER repository is structured as a self-contained whole, but some effort was also devoted to be able to check out, as individual standalone modules, the main pieces of the SOLPS suite, i.e. {\tt DivGeo}, {\tt Carre}, {\tt Eirene} and {\tt B2.5}, although this is not recommended.
 
 \section{Requirements}
 \index{Requirements}
@@ -452,8 +452,8 @@ purpose, a master \SOLPSITER {\tt Makefile} is provided, located at \${\tt \{SOL
     \end{description}
   \item[all] The same as {\bf solps} above, but in addition:
     \begin{description}
-      \item[b25] The {\tt B2.5} stand-alone plasma fluid solver and accompanying programs
-      \item[eirene] The {\tt Eirene} stand-alone Monte-Carlo neutral transport code
+      \item[b25] The {\tt B2.5} standalone plasma fluid solver and accompanying programs
+      \item[eirene] The {\tt Eirene} standalone Monte Carlo neutral transport code
     \end{description}
   \item[nox] The same as {\bf solps} above, but without linking to any graphical libraries:
     \begin{description}
@@ -467,8 +467,8 @@ purpose, a master \SOLPSITER {\tt Makefile} is provided, located at \${\tt \{SOL
     \end{description}
   \item[all\_nox] The same as {\bf nox} above, but in addition:
     \begin{description}
-      \item[b25\_nox] The {\tt B2.5} stand-alone plasma fluid solver and accompanying programs
-      \item[eirene\_nox] The {\tt Eirene} stand-alone Monte-Carlo neutral transport code
+      \item[b25\_nox] The {\tt B2.5} standalone plasma fluid solver and accompanying programs
+      \item[eirene\_nox] The {\tt Eirene} standalone Monte Carlo neutral transport code
     \end{description}
   \item[nox\_build] The same as {\bf nox} above and used for compilation tests on the Continous Integration server:
     \begin{description}
@@ -482,11 +482,11 @@ purpose, a master \SOLPSITER {\tt Makefile} is provided, located at \${\tt \{SOL
   \item[carre] The {\tt Carre} grid generator and associated translators only
   \item[divgeo] The {\tt DivGeo} graphical input file builder and accompanying equilibrium and template converters only
   \item[divgeo\_nox] Equilibrium and template converters for {\tt DivGeo}
-  \item[b25] The {\tt B2.5} stand-alone plasma fluid solver and accompanying programs only
-  \item[b25\_nox] The {\tt B2.5} stand-alone plasma fluid solver and accompanying programs, not using NCAR Graphics
-  \item[b25\_all] The {\tt B2.5} stand-alone plasma fluid solver and accompanying programs only, plus {\tt b2xd} the \SOLPSfive to \SOLPSfour converter
-  \item[eirene] The {\tt Eirene} stand-alone Monte-Carlo neutral transport code only
-  \item[eirene\_nox] The {\tt Eirene} stand-alone Monte-Carlo neutral transport code only, without graphics
+  \item[b25] The {\tt B2.5} standalone plasma fluid solver and accompanying programs only
+  \item[b25\_nox] The {\tt B2.5} standalone plasma fluid solver and accompanying programs, not using NCAR Graphics
+  \item[b25\_all] The {\tt B2.5} standalone plasma fluid solver and accompanying programs only, plus {\tt b2xd} the \SOLPSfive to \SOLPSfour converter
+  \item[eirene] The {\tt Eirene} standalone Monte Carlo neutral transport code only
+  \item[eirene\_nox] The {\tt Eirene} standalone Monte Carlo neutral transport code only, without graphics
   \item[b25eirene] The {\tt B2.5-Eirene} main code and accompanying programs only
   \item[b25eirene\_all] The {\tt B2.5-Eirene} main code and accompanying programs only, plus {\tt b2xd} the \SOLPSfive to \SOLPSfour converter
   \item[uinp] The {\tt Uinp} translator from {\tt DivGeo} output to {\tt B2.5-Eirene} input only (requires {\bf b25eirene} previous compilation)
@@ -568,7 +568,7 @@ to refresh the list of executables to be found with the search path.
 \section{Examples}
 \label{examples}\index{DIMENSIONS.F}
 
-On the \SOLPSITER web site (\href{https://portal.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}{https://portal.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}), in the folder {\em Examples}, one can find a few example cases for \SOLPSITER runs, in both {\tt B2.5} stand-alone or {\tt B2.5-Eirene} coupled modes.
+On the \SOLPSITER web site (\href{https://portal.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}{https://portal.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}), in the folder {\em Examples}, one can find a few example cases for \SOLPSITER runs, in both {\tt B2.5} standalone or {\tt B2.5-Eirene} coupled modes.
 
 There is also a dedicated directory \${\tt SOLPSTOP/runs/examples} which contains links to a series of sample cases. These are actually stored in the {\tt /work/imas/shared/external/assets/solps-iter/MD5} directory hosted at the IO, and the means to retrieve these cases is detailed in the \${\tt SOLPSTOP/runs/examples/README.md} file. Following the instructions therein will extract an archived file in gzipped tar format containing a {\tt baserun} and one or more run directories and associated files. In some cases, a {\tt DIMENSIONS.F} file is also provided, which shows the dimensions necessary to run those cases (see Appendix \ref{sec:DIMENSIONS} for full details about the contents of such files).
 
@@ -589,7 +589,7 @@ The cases stored for retrieval include:
   \item[ITER\_2308\_Honly\_20MW] Same as above, continuing scan, detached conditions
   \item[ITER\_2360\_0.95He+0.05H\_40MW] ITER Helium plasma case at mid-power
   \item[ITER\_2588\_D+He+N] ITER full power case with N injection and gas puff feedback on SOL D particle content
-  \item[ITER\_2588\_drifts] ITER {\tt B2.5} stand-alone D-only demonstration case with and without drifts
+  \item[ITER\_2588\_drifts] ITER {\tt B2.5} standalone D-only demonstration case with and without drifts
   \item[ITER\_535\_D+He+Ar] ITER full power case with Ar injection
   \item[ITER\_Be-W\_D+T+He+Ne] ITER full power case with 98 species
 \end{description}
@@ -740,7 +740,7 @@ will take you to \${\tt \{SOLPSTOP\}}.
 \end{verbatim}
 
 The {\tt modules/B2.5} subtree contains the source directories
-for {\tt B2.5}; {\tt modules/Eirene} for the Monte-Carlo code, {\tt modules/Carre} and
+for {\tt B2.5}; {\tt modules/Eirene} for the Monte Carlo code, {\tt modules/Carre} and
 {\tt modules/fxdr}
 the grid generator and associated converter,
 {\tt modules/DivGeo} for the {\tt DG} graphical interface
@@ -1023,7 +1023,7 @@ The command\index{sei}
 \end{verbatim}
 will take you to \${\tt \{SOLPSTOP\}/modules/Eirene}.
 
-Because {\tt Eirene} is distributed as a stand-alone submodule and is being maintained
+Because {\tt Eirene} is distributed as a standalone submodule and is being maintained
 by FZ-J{\"u}lich, some of the directories found above correspond to {\tt Eirene}
 implementations other than that used in \SOLPSITERns. These are the subdirectories
 within {\tt interfaces} and {\tt user-routines}. \SOLPSITER uses only the code found in
@@ -1576,7 +1576,7 @@ extracted from the {\tt run.log} file.
   \item[b2plot]\index{b2plot} Shortcut to \btwoplotns. A "-n" option allows for dry-run tests.A "-d" option allows to run within the chosen debugger. A "-s" option allows to run \btwoplot with coupling to {\tt Eirene} data. A "-h" option prints a help description.
   \item[b2pp]\index{b2pp} Script to obtain a standard series of \btwoplot graphs.
   \item[b2pt]\index{b2pt} Script to obtain a standard series of \btwoplot graphs.
-  \item[b2run]\index{b2run}\index{b2co}\index{b2fstate} Shortcut to the {\tt Makefile} launching {\tt B2.5}. A "-n" option allows for dry-run tests. A "-d" option allows to run within the chosen debugger. A "-s" option allows to run {\tt B2.5} in stand-alone mode. A "-m" option allows to run with MPI options. A "-o" option adds any other desired run options. The options can be grouped together inside quotes or given individually with multiple "-o" instances. A "-t \#" option allows to request an OpenMP run with \# threads. A "-b" option can be used when invoking the {\tt b2co} program to obtain a provisional {\tt b2fstate} file while the main code is running. A "-h" option prints a help description. (See \ref{b2run} for fuller details)
+  \item[b2run]\index{b2run}\index{b2co}\index{b2fstate} Shortcut to the {\tt Makefile} launching {\tt B2.5}. A "-n" option allows for dry-run tests. A "-d" option allows to run within the chosen debugger. A "-s" option allows to run {\tt B2.5} in standalone mode. A "-m" option allows to run with MPI options. A "-o" option adds any other desired run options. The options can be grouped together inside quotes or given individually with multiple "-o" instances. A "-t \#" option allows to request an OpenMP run with \# threads. A "-b" option can be used when invoking the {\tt b2co} program to obtain a provisional {\tt b2fstate} file while the main code is running. A "-h" option prints a help description. (See \ref{b2run} for fuller details)
   \item[b2run\_hgw\_cluster]\index{b2run\_hgw\_clus} Shortcut to the {\tt Makefile} launching {\tt B2.5} for the IPP--Greifswald cluster. A "-n" option allows for dry-run tests.
   \item[b2sxdr]\index{b2sxdr} Shortcut to the \SOLPSfour to \SOLPSfive
     converter. A "-n" option allows for dry-run tests. A "-d" option allows to run within the chosen debugger. A "-s" option allows to specify the run to convert was not coupled to {\tt Eirene}. A "-o" option adds any other desired run options. The options can be grouped together inside quotes or given individually with multiple "-o" instances. A "-h" option prints a help description.
@@ -1625,18 +1625,18 @@ extracted from the {\tt run.log} file.
   \item[plot\_mesh \#1 \#2]\index{plot\_mesh} Plots the mesh specified as \#1 accompanied by the {\tt mesh.extra} file specified as \#2 as \#1.ps.
   \item[preserve\_scratch\_to\_work]\index{preserve\_scratch\_to\_work} List of instructions to move run results from temporary scratch space to a backed-up filespace
   \item[print\_versions]\index{print\_versions} Prints the GIT repository versions of the various code executables
-  \item[QSUB.postprocess]\index{QSUB.postprocess} List of instructions appended to the {\tt B2.5} stand-alone submission scripts for run post-processing
+  \item[QSUB.postprocess]\index{QSUB.postprocess} List of instructions appended to the {\tt B2.5} standalone submission scripts for run post-processing
   \item[QSUB.postprocess\_coupled]\index{QSUB.postprocess\_coupled} List of instructions appended to the \SOLPSITER submission scripts for run post-processing
   \item[quote\_pwd]\index{quote\_pwd} Returns the current working directory as a string with quotes (c.f.\ {\tt noquote\_pwd}).
   \item[recover\_initial\_files]\index{recover\_initial\_files}\index{b2co}\index{plasmastate} For use to copy back the stored initial case files ({\tt .i} extension) before a run restart, or when use of {\tt b2co} is not possible because the run crash happened too early for {\tt plasmastate} files to be written.
   \item[regression\_test]\index{regression\_test} Utility script to run regression tests.
   \item[res\_av]\index{res\_av} Special script to reduce residuals in the finalization step of the {\tt Eirene} sources averaging scheme (see Section \ref{sec:B2Eirene:averaging} for details).
-  \item[resave\_mds]\index{resave\_mds} Update an archived {\tt MDSplus} case. A "-n" option allows for dry-run tests. A "-d" option allows to run within the chosen debugger. A "-s" option allows to update a {\tt B2.5} stand-alone case.
+  \item[resave\_mds]\index{resave\_mds} Update an archived {\tt MDSplus} case. A "-n" option allows for dry-run tests. A "-d" option allows to run within the chosen debugger. A "-s" option allows to update a {\tt B2.5} standalone case.
   \item[rlndr]\index{rlndr} Replaces a link address by another
   \item[rps]\index{rps} Shifts $\Psi$ values by a given amount within a {\tt DG} equilibrium file (see Sec.~\ref{sec:equtrn}).
   \item[run\_av]\index{run\_av} Special script to prepare the averaging step of the {\tt Eirene} sources averaging scheme (see Section \ref{sec:B2Eirene:averaging} for details).
   \item[save\_initial\_files]\index{save\_initial\_files} Script used by runs Makefile at start of a run to save initial state files for eventual recovery.
-  \item[save\_mds]\index{save\_mds} Archive an {\tt MDSplus} case. A "-n" option allows for dry-run tests. A "-d" option allows to run within the chosen debugger. A "-s" option allows to archive a {\tt B2.5} stand-alone case.
+  \item[save\_mds]\index{save\_mds} Archive an {\tt MDSplus} case. A "-n" option allows for dry-run tests. A "-d" option allows to run within the chosen debugger. A "-s" option allows to archive a {\tt B2.5} standalone case.
   \item[setup\_baserun\_eirene\_links]\index{setup\_baserun\_eirene\_links} Prepares the run directory before a {\tt B2.5-Eirene} run by settings up links to the proper data files.
   \item[sgesubmit]\index{sgesubmit} Command file to launch runs on an SGE system. See Section \ref{b2run} for details.
   \item[SLURM.postprocess]\index{SLURM.postprocess} Alias to {\tt QSUB.postprocess}
@@ -1767,7 +1767,7 @@ by {\tt b2ag.exe}, {\tt b2ah.exe}, {\tt b2ar.exe} and
 usually run in the {\tt baserun} directory, and then {\tt b2mn.exe}
 is run in the actual run directory.
 
-If one is running {\tt B2.5} in stand-alone mode, it is recommended to set the environment variable:
+If one is running {\tt B2.5} in standalone mode, it is recommended to set the environment variable:
 \begin{verbatim}
   setenv STAND_ALONE yes
 \end{verbatim}
@@ -1802,7 +1802,7 @@ for itself by climbing up the tree. You can add options to the {\tt b2run} comma
   \item[-m $\backslash$"MPI-launcher + options$\backslash$"] Allows to launch {\tt b2XX} in MPI
     mode with the provided options (example: [the syntax is important, both
       the slashes and the quotes are needed] \verb!b2run -m \"mpiexec -np 2\" b2mn!)
-  \item[-s] Specifies that one wishes to run {\tt B2.5} in stand-alone mode, i.e. without any coupling to {\tt Eirene}.
+  \item[-s] Specifies that one wishes to run {\tt B2.5} in standalone mode, i.e. without any coupling to {\tt Eirene}.
   \item[-o "run options"] Allows to launch {\tt b2XX} with additional run options. The options can be grouped together inside quotes or given individually with multiple "-o" instances.
   \item[-t \#] Requests an OpenMP run using \# threads.
   \item[-b]\index{b2co}\index{b2fstate} Specifies, when calling the {\tt b2co} program, that only the {\tt b2fstate} file should be produced. To be used when invoking {\tt b2co} while the main code is running.
@@ -1844,8 +1844,8 @@ with the needed modifications to the \${\tt \{SOLPSTOP\}/runs/QSUB.*} or \${\tt 
 Each submission command file can handle five possible cases:
 \index{QSUB files}\index{SLURM files}
 \begin{description}
-  \item{QSUB.*, SLURM.*} Runs a stand-alone {\tt B2.5} case.
-  \item{QSUB.*-gz, SLURM.*-gz} Runs a stand-alone {\tt B2.5} case where the output log file has been compressed (activated with the "-z" option).
+  \item{QSUB.*, SLURM.*} Runs a standalone {\tt B2.5} case.
+  \item{QSUB.*-gz, SLURM.*-gz} Runs a standalone {\tt B2.5} case where the output log file has been compressed (activated with the "-z" option).
   \item{QSUB.*\_coupled, SLURM.*\_coupled} Runs a coupled \SOLPSITER case.
   \item{QSUB.*\_coupled-gz, SLURM.*\_coupled-gz} Runs a coupled \SOLPSITER case where the output log file has been compressed (activated with the "-z" option).
   \item{ } Any otherwise named file specified by the user and given as an argument to the submission command (in which case the "-z" option is ineffective). The specified file must be located in the \${\tt \{SOLPSTOP\}/runs} directory, or in the actual run directory on one above it.
@@ -1878,7 +1878,7 @@ where {\tt <<Job\_file>>} is a temporary modified copy of {\tt <<Submission\_fil
 or stops if the submission file is not found.
 
 If {\tt <<Submission\_file>>} is not specified, {\tt itersubmit} looks for {\tt SLURM.iter\_coupled} or
-for {\tt SLURM.iter} depending on whether a coupled or a standalone run is required. To request a stand-alone run explicitly, the user can use the "-s" option. Otherwise, the script will assume a coupled run is requested if an {\tt Eirene} {\tt input.dat} file is present in the run directory, and a stand-alone run otherwise.
+for {\tt SLURM.iter} depending on whether a coupled or a standalone run is required. To request a standalone run explicitly, the user can use the "-s" option. Otherwise, the script will assume a coupled run is requested if an {\tt Eirene} {\tt input.dat} file is present in the run directory, and a standalone run otherwise.
 
 In the case one wishes to run the code with MPI and needs to pass MPI options to the launching program, this is achieved by means of the "-m" option, followed by the desired options inside double quotes, as follows:
 \begin{verbatim}
@@ -4313,7 +4313,7 @@ web site
 To activate a coupled run, the master switch is {\tt 'b2mndr\_eirene'} which should be set to {\tt '1'}. In addition, the densities of the fluid neutral species need to be scaled down, along with the sources that affect them. This is achieved, respectively, by use of the switches {\tt 'b2mndr\_rescale\_neutrals'} and {\tt 'b2mndr\_rescale\_neutral\_sources'}. Typically, it is recommended to use a value of the order of $10^{-10}$ for scaling down the fluid neutral sources. For the fluid neutral densities, one can scale them down only on the first run, by the same amount as the sources, and then turn off the rescaling, as they are no longer being replenished.
 
 In order to attempt to improve convergence of coupled \SOLPSITER runs, currently three
-averaging schemes are available to reduce the impact of the Monte-Carlo noise intrinsic
+averaging schemes are available to reduce the impact of the Monte Carlo noise intrinsic
 to the {\tt Eirene} sources. The user may want to activate one of these schemes,
 although there is no firm recommendation as to which will perform best. The switches
 for those are:
@@ -4678,7 +4678,7 @@ several values of $\Delta_t$.
 
 When running a coupled \SOLPSITER case to obtain a steady-state solution, it is recommended to use the source
 averaging scheme detailed in \${\tt SOLPSTOP/doc/SOLPS-ITER\_Eirene\_averaging.pdf} and references therein. This averaging scheme is meant to yield significant
-run speed-up and lower the statistical error introduced by the {\tt Eirene} Monte-Carlo noise, as well as provide means to estimate the errors on the solution, following the formalism detailed in \cite{Ghoos_PET2016, Ghoos_JCP2016}. Error estimates are obtained by means of the {\tt b2ye} program (See Section \ref{sec:b2ye} below).  It should be noted that this averaging scheme does NOT affect the physical run behaviour as such and therefore does not have any stabilizing effect on the run.
+run speed-up and lower the statistical error introduced by the {\tt Eirene} Monte Carlo noise, as well as provide means to estimate the errors on the solution, following the formalism detailed in \cite{Ghoos_PET2016, Ghoos_JCP2016}. Error estimates are obtained by means of the {\tt b2ye} program (See Section \ref{sec:b2ye} below).  It should be noted that this averaging scheme does NOT affect the physical run behaviour as such and therefore does not have any stabilizing effect on the run.
 
 The averaging scheme works in three stages:
 \begin{enumerate}\index{res\_av}\index{run\_av}
@@ -6828,8 +6828,8 @@ target profiles to this variation is obvious.
 \subsection{Fluid neutrals}
 \index{neutrals, fluid model}
 
-As an alternative to the complete kinetic Monte-Carlo description offered by {\tt Eirene},
-a simpler and faster neutral fluid model is also available as {\tt B2.5} stand-alone. The surface sources of neutrals are
+As an alternative to the complete kinetic Monte Carlo description offered by {\tt Eirene},
+a simpler and faster neutral fluid model is also available as {\tt B2.5} standalone. The surface sources of neutrals are
 then given by user-defined recycling models, possibly enhanced with local sputtering models
 when impurities are considered (see e.g.~\cite{Warrier04}). The volume sources of neutrals are given by
 plasma recombination rates computed by the {\tt B2.5} atomic physics packages. The neutral species is then
@@ -6896,7 +6896,7 @@ convective heat flux.  In fact, because neutral gradients can be larger
 than $T_i$ gradients, the convective velocity corrections might be the most
 important.
 The impact of the fluid model and associated flux limits, in comparison with
-the {\tt Eirene} Monte-Carlo model, is covered in detail with examples in~\cite{CosterHinM2003}.
+the {\tt Eirene} Monte Carlo model, is covered in detail with examples in~\cite{CosterHinM2003}.
 
 \subsection{First-flight model}
 \index{neutrals, first-flight model}
@@ -6918,14 +6918,14 @@ The effect of such a model is also shown in~\cite{CosterHinM2003}.
 \subsection{Kinetic neutrals: B2.5-Eirene coupling}
 \index{neutral sources, coupling}\label{sec:sourcescoupling}
 
-The coupling procedure between the plasma fluid and Monte-Carlo
+The coupling procedure between the plasma fluid and Monte Carlo
 neutral parts of the SOLPS package is done by means of passing arrays in
 both directions, namely the {\tt braeir} and {\tt eirbra} modules.
 The plasma fluid code delivers a plasma background on which
 the neutral trajectories are computed (also available as files {\tt fort.30} for
 the plasma geometry and {\tt fort.31} for the plasma solution), and the associated particle, parallel momentum
 and energy sources are deduced (returned {\it via} the {\tt fort.44} file). Then, in order to translate the total energy
-sources from the Monte-Carlo code into the internal energy sources needed for
+sources from the Monte Carlo code into the internal energy sources needed for
 the plasma fluid solution, we apply the following conversion rules, where the $E$ superscript
 represents the energy sources in {\tt Eirene} (and old {\tt B2}) and $H$ the heat sources in {\tt B2.5}:
 
@@ -9349,7 +9349,7 @@ $p_{n_a,a,1} = -10^{-2}, \;\; r_{rec,0,0} = 0,\;\; r_{rec,1,0} = 1$
 
 $\widetilde{\Gamma}_{ay}$ was replaced by $\Gamma_{ay}$
 
-$c_{nsr}$ --- neutral sources rescale coefficient, $1$ --- when working with B2.5 stand-alone and $10^{-10}$ when coupling to Eirene
+$c_{nsr}$ --- neutral sources rescale coefficient, $1$ --- when working with B2.5 standalone and $10^{-10}$ when coupling to Eirene
 
 $p_{n_a,a,1}$ is the radial leakage velocity, in units of the local species sound speed. Negative velocities are directed out of the plasma.
 
@@ -9504,7 +9504,7 @@ p_{n_a,a,1} \frac{\sqrt g}{h_y} \sqrt{\frac{z_a T_e + T_i}{m_a}} n_a
 
 $p_{n_a,a,1} = -10^{-2}, \;\; r_{rec,0,0} = 0,\;\; r_{rec,1,0} = 1$
 
-$c_{nsr}$ --- neutral sources rescale coefficient, $1$ --- when working with B2.5 stand-alone and $10^{-10}$ when coupling to Eirene
+$c_{nsr}$ --- neutral sources rescale coefficient, $1$ --- when working with B2.5 standalone and $10^{-10}$ when coupling to Eirene
 
 $p_{n_a,a,1}$ is the radial leakage velocity, in units of the local species sound speed. Negative velocities are directed out of the plasma.
 
@@ -9611,7 +9611,7 @@ $c_{n_a,a,2} = 10^{-3}$ is the radial leakage velocity, in units of the species 
 \right] \right|_N
 \end{equation}
 
-$c_{nsr}$ --- neutral sources rescale coefficient, $1$ --- when working with B2.5 stand-alone and $10^{-10}$ when coupling to Eirene
+$c_{nsr}$ --- neutral sources rescale coefficient, $1$ --- when working with B2.5 standalone and $10^{-10}$ when coupling to Eirene
 
 $r_{rec,0,0} = 0,\;\; r_{rec,1,0} = 1$
 
@@ -9640,7 +9640,7 @@ or
 \right|_N
 \end{equation*}
 
-$c_{nsr}$ --- neutral sources rescale coefficient, $1$ --- when working with B2.5 stand-alone and $10^{-10}$ when coupling to Eirene
+$c_{nsr}$ --- neutral sources rescale coefficient, $1$ --- when working with B2.5 standalone and $10^{-10}$ when coupling to Eirene
 
 $r_{rec,0,0} = 0,\;\; r_{rec,1,0} = 1$
 
@@ -17482,7 +17482,7 @@ which is defined in the
 
 \begin{description}
 \item[ALLOCATE\_AND\_NAMELIST] \index{ALLOCATE\_AND\_NAMELIST} To be used if the compiler allows dynamically allocated namelist arrays
-\item[B25\_EIRENE] \index{B25\_EIRENE} Set internally by the {\tt Makefile} and used to identify differences between source code for stand-alone {\tt B2.5} and coupled {\tt B2.5-Eirene} applications
+\item[B25\_EIRENE] \index{B25\_EIRENE} Set internally by the {\tt Makefile} and used to identify differences between source code for standalone {\tt B2.5} and coupled {\tt B2.5-Eirene} applications
 \item[NO\_B2\_CHEM\_SPUT] \index{NO\_B2\_CHEM\_SPUT} Used to indicate that chemical sputtering is specified through {\tt Eirene} arrays instead of {\tt B2.5}
 \item[NO\_SAVE] \index{NO\_SAVE} Turning off static save of some common blocks
 \item[SOLPS4\_3] \index{SOLPS4\_3} Set internally by the {\tt Makefile} to activates code specific to the {\tt SOLPS4-5 b2sxdr} converter
@@ -18225,7 +18225,7 @@ transfer of the divertor geometry from the CAD system to the
 tool of more general purpose, allowing one, e.g., to specify
 arbitrary shape of the divertor structures, to check visually the
 quality of the computational grids produced by a mesh generator, to
-analyse the error messages from the Monte-Carlo routine, to assess
+analyse the error messages from the Monte Carlo routine, to assess
 easily the compatibility of the plasma equilibrium used in the
 calculations and the wall geometry of the machine, etc. It can also
 be very efficient as a sort of very simple drawing program to design
@@ -18426,7 +18426,7 @@ Target edges
 &
 The elements which should be reconnected to the corresponding corners
 of the calculational mesh in order to avoid mismatches of the mesh
-and the targets in the Monte-Carlo calculations. \\
+and the targets in the Monte Carlo calculations. \\
     \hline
     \caption{DG internal objects}
     \label{tab:dginternalobjects}
@@ -18488,7 +18488,7 @@ a {\it template} to {\it elements} and
 renumbering the elements.
   \item[Variables] You will use this to specify
 additional geometry-related information for the output files (eg.,
-location of targets, boundary conditions for the Monte-Carlo routine,
+location of targets, boundary conditions for the Monte Carlo routine,
 etc.).
   \item[Options] From this menu you can tailor the main window
 and operating mode
