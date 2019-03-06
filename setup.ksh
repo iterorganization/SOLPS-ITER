@@ -69,7 +69,7 @@ export SOLPSLIB=${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}
   echo Loading SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.
   . SETUP/setup.ksh.${HOST_NAME}.${COMPILER}
 } || {
-echo File SETUP/setup.ksh.${HOST_NAME}.${COMPILER} not found!
+  echo File SETUP/setup.ksh.${HOST_NAME}.${COMPILER} not found!
 }
 [ -s SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.local ] && {
   echo Loading SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.local.
@@ -148,16 +148,15 @@ alias sb2='cd ${SOLPSTOP}/modules/B2.5'
 alias sbb='cd ${SOLPSTOP}/modules/B2.5'
 alias sei='cd ${SOLPSTOP}/modules/Eirene'
 alias ssw='cd ${SOLPSTOP}/modules/Sonnet-light'
-alias sst='cd ${SOLPSTOP}/modules/Triang'
 alias ssd='cd ${SOLPSTOP}/modules/DivGeo'
 alias ssc='cd ${SOLPSTOP}/modules/Carre'
+alias sst='cd ${SOLPSTOP}/modules/Triang'
 alias ssu='cd ${SOLPSTOP}/modules/Uinp'
 alias sbin='cd ${SOLPSTOP}/scripts'
 alias slib='cd ${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}'
 alias sbr='cd ${SOLPSTOP}/runs'
 alias scr='cd ${SOLPSTOP}/scripts'
 alias stop='cd ${SOLPSTOP}'
-
 alias sdg='cd ${SOLPSTOP}/modules/DivGeo/device/${DEVICE}'
 alias ssf='cd ${SOLPSTOP}/modules/DivGeo/device/${DEVICE}'
 
