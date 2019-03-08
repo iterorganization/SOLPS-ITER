@@ -64,7 +64,7 @@ endif
 # Setup OpenMP flag
 EXT_OPENMP =
 ifdef SOLPS_OPENMP
-EXT_DBG = .openmp
+EXT_OPENMP = .openmp
 endif
 
 # SOLPS_DEBUG, SOLPS_OPENMP and SOLPS_MPI will not be taken from environment,

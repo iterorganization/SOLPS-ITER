@@ -630,21 +630,21 @@ c**  bulk ions species cards
         end do !}
         if (len_trim(cdnmdlp(ipls)).gt.0) then !{
           call upcase(cdnmdlp(ipls),cdnmdlp(ipls),ldnmdlp)
-          if(streql(cdnmdlp(ipls),cdnmdlp_sel(1))) then !{
+          if(streql(cdnmdlp(ipls),cdnmdlp_sel(1))) then !{ 'FORT.13', 'FTN13'
             write(iunoo,707) ispcdn(ipls,1)
-          else if(streql(cdnmdlp(ipls),cdnmdlp_sel(2))) then !}{
+          else if(streql(cdnmdlp(ipls),cdnmdlp_sel(2))) then !}{ 'SAHA'
 c** To be done (in Eirene first)
             write(0,*) '### Density model ',cdnmdlp_sel(2),
      ,        ' not realised in Eirene. ipls=',ipls
-          else if(streql(cdnmdlp(ipls),cdnmdlp_sel(3))) then !}{
+          else if(streql(cdnmdlp(ipls),cdnmdlp_sel(3))) then !}{ 'BOLTZMANN'
             write(iunoo,'(i6,6x,1p,2e12.4)') ispcdn(ipls,1),
      ,                                       bltzcdn(ipls),dltecdn(ipls)
-          else if(streql(cdnmdlp(ipls),cdnmdlp_sel(4))) then !}{
+          else if(streql(cdnmdlp(ipls),cdnmdlp_sel(4))) then !}{ 'CORONA'
             write(iunoo,'(i6,1x,a6,1x,a4,a9,a3,1p,e12.4)') 
      ,                     ispcdn(ipls,1),
      ,                     fnamcdn(ipls,1),h2cdn(ipls,1),
      ,                     reaccdn(ipls,1),crcdn(ipls,1),acrncdn(ipls)
-          else if(streql(cdnmdlp(ipls),cdnmdlp_sel(5))) then !}{
+          else if(streql(cdnmdlp(ipls),cdnmdlp_sel(5))) then !}{ 'COLRAD'
             do i=1,nrep(npls) !{
               write(iunoo,'(i6,1x,a6,1x,a4,a9,a3)') 
      ,                     ispcdn(ipls,i),
