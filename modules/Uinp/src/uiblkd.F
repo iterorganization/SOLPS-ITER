@@ -672,15 +672,19 @@ c*** 5
      /    lurp*0.,lurp*0.,lurp*0.,lurp*0.,lurp*0. /
       data textp / npls*' ' /
 #ifndef HPUX
-      data cdnmdlp_sel/'fort.13','saha','boltzmann','corona','colrad'/
+      data cdnmdlp_sel/
+     /   'FORT.13',
+     /   'SAHA','BOLTZMANN','CORONA','COLRAD'/
 #else
-      data cdnmdlp_sel/'ftn13','saha','boltzmann','corona','colrad'/
+      data cdnmdlp_sel/
+     /   'FTN13',
+     /   'SAHA','BOLTZMANN','CORONA','COLRAD'/
 #endif
       data cdnmdlp / npls*' ' /
       data nrep, ispcdn /
      /   npls*0, lurc*0 /
       data bltzcdn,dltecdn,acrncdn/
-     /     npls*0.,npls*0.,npls*0./
+     /    npls*0.,npls*0.,npls*0./
       data fnamcdn, h2cdn  , reaccdn, crcdn   /
      /    lurc*' ',lurc*' ',lurc*' ',lurc*' ' /
       
