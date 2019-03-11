@@ -16,6 +16,7 @@ if ($?SOLPS_PATH) then
   if ($?SOLPS_OPENMP) then
     setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|B2.5/builds/standalone.${HOST_NAME}.${COMPILER}.openmp|B2.5/builds/standalone.${HOST_NAME}.${COMPILER}.openmp.mpi|g"`
     setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|B2.5/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}.openmp|B2.5/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}.openmp.mpi|g"`
+    setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|Uinp/builds/${HOST_NAME}.${COMPILER}.openmp|Uinp/builds/${HOST_NAME}.${COMPILER}.openmp.mpi|g"`
     setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|scripts/${HOST_NAME}.${COMPILER}.openmp|scripts/${HOST_NAME}.${COMPILER}.openmp.mpi|g"`
   endif
   if ($?SOLPS_DEBUG) then
