@@ -9,7 +9,8 @@ c*** Temporary - max. number of reactions in cdenmodel section
 
 
 c*** 1
-      integer nmach,nmode,ntcpu,nfile,niter0,niter,ntime0,ntim1,nfullrun 
+      integer nmach,nmode,ntcpu,nfile,niter0,niter,ntime0,ntim1
+      integer nfullrun 
       integer noptim,noptm1,ngeom_usr,ncoup_input,nsmstra,
      ,        nstoram,ngstal,nrtal1,nreac_add,lfrm15
       logical nlscl,nltest,nlana,nldrft,nlcrr,nlerg,nlident,nlone,
