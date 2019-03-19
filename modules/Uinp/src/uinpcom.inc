@@ -459,7 +459,7 @@ c*** Data for pre-defined 'density models' in Eirene:
 c*** number of these models and max. length of their names;
 c*** names of the models
       integer ndnmdlp,ldnmdlp
-      parameter (ndnmdlp=5,ldnmdlp=10)
+      parameter (ndnmdlp=8,ldnmdlp=10)
       character*(ldnmdlp) cdnmdlp_sel(ndnmdlp)
       
 
