@@ -116,7 +116,7 @@ all_nox_openmp: carre_nox divgeo_nox b25_nox_openmp eirene_nox b25eirene_nox_ope
 
 all_nox_mpi: carre_nox divgeo_nox b25_nox_mpi eirene_nox_mpi b25eirene_nox_mpi uinp_nox_mpi triang_nox manual
 
-all_openmp_mpi:   carre divgeo b25_openmp_mpi eirene_mpi b25eirene_openmp_mpi uinp_openmp_mpi triang amds sonnet-light manual
+all_openmp_mpi:   carre divgeo b25_openmp_mpi eirene_mpi b25eirene_openmp_mpi uinp_openmp_mpi triang amds_mpi sonnet-light manual
 
 all_mpi_openmp: all_openmp_mpi
 
@@ -338,7 +338,7 @@ tags:
 	cd modules/DivGeo/convert; ${MAKE} tags
 	cd modules/DivGeo/equtrn;  ${MAKE} tags
 #	cd modules/solps4-5;       ${MAKE} tags
-	rm -f TAGS ; etags -o TAGS modules/Carre/src.local/*.F modules/Carre/src/*/*.F modules/Carre/src/include/*.* modules/Eirene/src.local/*.f modules/Eirene/src/*/*.[fc] modules/Eirene/src/interfaces/couple_SOLPS-ITER/*.f modules/Eirene/src/user-routines/user_iter/*.f modules/Eirene/src/geometry/time-routines/*.F modules/Eirene/src/*/*.[Ff]90 modules/Eirene/src/interfaces/couple_SOLPS-ITER/*.[Ff]90 modules/B2.5/src.local/*.F modules/B2.5/src/*/*.F modules/B2.5/src/*/*.F90 modules/B2.5/src/*/*.[Hh] modules/B2.5/src/common/*.* modules/B2.5/src/common/COUPLE/*.F modules/B2.5/src/documentation/*.xml modules/Uinp/src/*.F modules/Uinp/src/*.inc modules/Uinp/src/*.h modules/Triang/src/*/*.f modules/DivGeo/equtrn/src/*.f modules/DivGeo/equtrn/src/*.inc modules/DivGeo/convert/src/*.f modules/DivGeo/src/*.[ch] modules/DivGeo/dg.dgc scripts/nc2text_simple/*.F90 || touch TAGS
+	rm -f TAGS ; etags -o TAGS modules/Carre/src.local/*.F modules/Carre/src/*/*.F modules/Carre/src/include/*.* modules/Eirene/src.local/*.f modules/Eirene/src/*/*.[Ffc] modules/Eirene/src/interfaces/couple_SOLPS-ITER/*.f modules/Eirene/src/user-routines/user_iter/*.f modules/Eirene/src/geometry/time-routines/*.F modules/Eirene/src/*/*.[Ff]90 modules/Eirene/src/interfaces/couple_SOLPS-ITER/*.[Ff]90 modules/B2.5/src.local/*.F modules/B2.5/src/*/*.F modules/B2.5/src/*/*.F90 modules/B2.5/src/*/*.[Hh] modules/B2.5/src/common/*.* modules/B2.5/src/common/COUPLE/*.F modules/B2.5/src/documentation/*.xml modules/Uinp/src/*.F modules/Uinp/src/*.inc modules/Uinp/src/*.h modules/Triang/src/*/*.f modules/DivGeo/equtrn/src/*.f modules/DivGeo/equtrn/src/*.inc modules/DivGeo/convert/src/*.f modules/DivGeo/src/*.[ch] modules/DivGeo/dg.dgc scripts/nc2text_simple/*.F90 || touch TAGS
 
 listobj:
 	cd modules/Carre;          ${MAKE} listobj
