@@ -459,7 +459,7 @@ c*** Data for pre-defined 'density models' in Eirene:
 c*** number of these models and max. length of their names;
 c*** names of the models
       integer ndnmdlp,ldnmdlp
-      parameter (ndnmdlp=8,ldnmdlp=10)
+      parameter (ndnmdlp=10,ldnmdlp=10)
       character*(ldnmdlp) cdnmdlp_sel(ndnmdlp)
       
 
@@ -490,7 +490,7 @@ c*** Data substitution for the Eirene test run
       logical
      ,  ttchst,ttcref,ttcint,ttcamd,ttcsou,ttcsur,ttcbla,ttcblm,ttcbli,
      ,  ttcblp,ttcble,ttcblph,ttctal,ttcdbg2,ttcdbge,ttcdbgm,ttcdbgf,
-     ,  ttcdbgl,ttcdbgs,ttcdbgg,ttcdbgmpi,ttcdbgc,ttcsrc,
+     ,  ttcdbgl,ttcdbgs,ttcdbgg,ttcdbgmpi,ttcdbgc,ttchktim,ttcsrc,
      ,  ttpl1st,ttpl2nd,ttpladd,ttplhst,ttplcut(3),ttplnums,tttest
       
 c-----------------------------------------------------------------------
@@ -598,7 +598,7 @@ c     ,  spcifup,spcifua,spcifum,spcifui,
      ,  rctndflt,tgdtinpt,srcvdflt,do_hepdt,ttcsrc,ttcint,ttchst,ttcref,
      ,  ttcamd,ttcsou,ttcsur,ttcbla,ttcblm,ttcbli,ttcblp,ttcble,
      ,  ttcblph,ttctal,ttcdbg2,ttcdbge,ttcdbgm,ttcdbgf,ttcdbgl,ttcdbgs,
-     ,  ttcdbgg,ttcdbgmpi,ttcdbgc,
+     ,  ttcdbgg,ttcdbgmpi,ttcdbgc,ttchktim,
      ,  ttpl1st,ttpl2nd,ttpladd,ttplhst,ttplcut,ttplnums,tttest,
      ,  lm_cnfg,no_n2,l_ammon,l_meta,
      ,  no_n2_model,ammonx_used,meta_used,is_meta

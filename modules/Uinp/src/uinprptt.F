@@ -20,6 +20,7 @@ c=======================================================================
      ,  trcbli_b,trcblp_b,trcble_b,trcblph_b,trctal_b,trcdbg2_b,
      ,  trcdbge_b,trcdbgm_b,trcdbgf_b,trcdbgl_b,trcdbgs_b,
      ,  trcdbgg_b,trcdbgmpi_b,trcdbgc_b,trcsrc_b,trcsur_b,
+     ,  trchktim_b,
      ,  pl1st_b,pl2nd_b,pladd_b,plhst_b,plcut_b(3),plnums_b,nltest_b
       save
 c=======================================================================
@@ -61,6 +62,7 @@ c=======================================================================
         trcdbgg_b=trcdbgg
         trcdbgmpi_b=trcdbgmpi
         trcdbgc_b=trcdbgc
+        trchktim_b=trchktim
         trcsrc_b=trcsrc(0)
         pl1st_b=pl1st
         pl2nd_b=pl2nd
@@ -113,6 +115,7 @@ c=======================================================================
         trcdbgg=ttcdbgg
         trcdbgmpi=ttcdbgmpi
         trcdbgc=ttcdbgc
+        trchktim=ttchktim
         trcsrc(0)=ttcsrc
         pl1st=ttpl1st
         pl2nd=ttpl2nd
@@ -171,6 +174,7 @@ c*** Set the VSP data for test.eir
         trcdbgg=trcdbgg_b
         trcdbgmpi=trcdbgmpi_b
         trcdbgc=trcdbgc_b
+        trchktim=trchktim_b
         trcsrc(0)=trcsrc_b
         pl1st=pl1st_b
         pl2nd=pl2nd_b
