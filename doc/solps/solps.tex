@@ -8184,7 +8184,7 @@ j_x \hat E_x & \mbox{, when Eq.(\ref{eq:mom_old}) is activated}
 \widetilde{q}_{ex} = \widetilde{f}_{ex} T_e - \kappa_{ex} \frac 1{h_x} \frac{\partial T_e} {\partial x} - q_{ex}^{P.Sch}
 \end{equation}
 
-\begin{equation}
+\begin{equation}\label{eq:ene_tifex}
 \widetilde{f}_{ex} = \frac 3 2 \Gamma_{ex} + V_{ex}^{(str)} n_e - \widetilde{c_e}^{(2)} \frac{j^{ \left( \parallel \right) }_x}e
 \end{equation}
 
@@ -10984,7 +10984,7 @@ The explicit expressions may be rewritten in components:
  \frac{j^{(\parallel)}_x}{e} -
 n_e T_e \frac{B_z}{e} \frac{\partial}{h_y \partial y} \left( \frac {1}{B^2} \right)\right] T_e -
 \kappa_{ex} \frac {1}{h_x} \frac{\partial T_e}{\partial x} -
-\tilde{c}_e^{(2)} \frac{j^{\left( \parallel \right) }_x}{e} \\
+\tilde{c}_e^{(2)} \frac{j^{\left( \parallel \right) }_x}{e} T_e\\
 q_{ey}^{\rm ENERGY} = \frac{5}{2} \left[\sum\limits_a z_a \Gamma^{\rm ENERGY}_{ay} +
 n_e T_e \frac{B_z}{e} \frac{\partial}{h_x \partial x} \left( \frac {1}{B^2} \right)\right] T_e -
 \kappa_{ey} \frac {1}{h_y} \frac{\partial T_e}{\partial y} 
@@ -11000,8 +11000,8 @@ n_e T_e \frac{B_z}{e} \frac{\partial}{h_x \partial x} \left( \frac {1}{B^2} \rig
 \begin{multline}
  q_{iy}^{\rm ENERGY} = \sum\limits_a \left( \Gamma^{\rm ENERGY}_{ax} + n_a \tilde{V}_{ax}^{(dia)} + 
 \frac{ j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)}}{e} 
- \right) \times \\ \left( \frac{m_a n_a V_{a\parallel}^2}{2}
-+ \frac{5}{2} n_a T_i \right)-
+ \right) \times \\ \left( \frac{m_a V_{a\parallel}^2}{2}
++ \frac{5}{2} T_i \right)-
  \kappa_{iy} \frac {1}{h_y} \frac{\partial T_i}{\partial y} 
 \end{multline} 
 
@@ -12714,9 +12714,9 @@ $\displaystyle  {D}_{n,a}\frac{\sqrt{g}}{h_x^2} $ & $ m^3/s $ & \texttt{b2trno\_
 
 $\displaystyle {D}_{n,a}\frac{\sqrt{g}}{h_y^2} $ & $ m^3/s $ & \texttt{b2trno\_cdnay[XXX].dat} & (\ref{eq:D_na})\\
 
-$\displaystyle {\tilde{D}_{ax}}^p\frac{\sqrt{g}}{h_x^2} $ & $ m \cdot s / kg $ & \texttt{b2trno\_cdpax.dat} & (\ref{eq:D_pax})\\
+$\displaystyle {\tilde{D}_{ax}}^p\frac{\sqrt{g}}{h_x^2} $ & $ m \cdot s / kg $ & \texttt{b2trno\_cdpax[XXX].dat} & (\ref{eq:D_pax})\\
 
-$\displaystyle {\tilde{D}_{ay}}^p\frac{\sqrt{g}}{h_y^2} $ & $ m \cdot s / kg $ & \texttt{b2trno\_cdpax.dat} & (\ref{eq:D_pax})\\
+$\displaystyle {\tilde{D}_{ay}}^p\frac{\sqrt{g}}{h_y^2} $ & $ m \cdot s / kg $ & \texttt{b2trno\_cdpay[XXX].dat} & (\ref{eq:D_pay})\\
 
 $\displaystyle {D}_{n,a}^{AN} $ & $ m^2/s $ & \texttt{b2tqna\_dna0[XXX].dat} & (\ref{eq:D_na})\\
 
@@ -12744,6 +12744,9 @@ ${V_{ay}}^{(AN)} $ & $ m/s $ & \texttt{b2tqna\_vla0y[XXX].dat} &(\ref{eq:V_ayAN}
 
 ${\Gamma}_{ax}$ & $s^{-1} $ & \texttt{b2tfnb\_fnbx[XXX].dat} &  (\ref{eq:GammaAXnoTilde_appC}) \\
 ${\Gamma}_{ay}$ & $s^{-1} $ & \texttt{b2tfnb\_fnby[XXX].dat} &  (\ref{eq:GammaAYnoTilde_appC}) \\
+
+residuals & $s^{-1} $ & \texttt{b2npco\_resco[XXX].dat} or & \\ & & \texttt{b2npc9\_resco[XXX].dat} or &
+\\ & & \texttt{b2npc11\_resco[XXX].dat} & \\
 
 \hline
 \multicolumn{4}{|l|}{\small\sl Momentum balance equation and related quantities} \\
@@ -12818,6 +12821,7 @@ $\displaystyle -\frac{h_z\sqrt g}{h_y} \eta_{ay} \frac{\partial V_{\parallel a}}
 
 $\displaystyle  \frac{h_z\sqrt g}{h_x} \left( \frac 4 3 \widetilde{\widetilde{\eta}}^{(CL)}_{ax} \frac{\partial \ln h_z}{h_x \partial x} \right) $ & $kg \cdot m / s$ & \texttt{b2npmo\_flubvx001.dat} & (\ref{eq:mom_fluxx})  \\
 
+residuals & $ N\cdot m $ & \texttt{b2npmo\_resmo[XXX].dat}  \\
 
 \hline
 \multicolumn{4}{|l|}{\small\sl Electron heat balance equation and related quantities} \\
@@ -12865,6 +12869,17 @@ $\displaystyle - \frac{\sqrt{g}}{h_{x}} \kappa_{ex} \frac{1}{h_{x}}\frac{\partia
 
 $\displaystyle - \frac{\sqrt{g}}{h_{y}} \kappa_{ey} \frac{1}{h_{y}}\frac{\partial T_e}{\partial y}$ & $ W $ & \texttt{b2tfhe\_\_qe\_ke\_gTy.dat} &  (\ref{eq:ene_qey})\\
 
+
+
+$\displaystyle - \widetilde{c_e}^{(2)} \frac{j^{\left( \parallel \right) }_x} e T_e $
+\footnote{If the switch {\tt b2tfhe\_alphaTeh = 1} (and {\tt b2tfhe\_fch\_pTe = 0}),
+then this output item contains $\displaystyle \alpha_{ex} \hat{E}_x T_e $} & $ W $ & \texttt{b2tfhe\_\_qe\_fchpTex.dat} & (\ref{eq:ene_tifex})  \\
+
+%$\displaystyle \alpha_{ex} \hat{E}_x T_e $ & $ W $ & \texttt{b2tfhe\_\_qe\_alphaTehx.dat} & (\ref{eq:ene_Ex})  \\
+$\displaystyle \alpha_{ey} \hat{E}_y T_e $ & $ W $ & \texttt{b2tfhe\_\_qe\_alphaTehy.dat} & (\ref{eq:ene_Ey})  \\
+
+
+
 $\displaystyle \Gamma_{ax}^{(he)} \frac{\sqrt{g}}{h_x}$ & $ s^{-1} $ & \texttt{b2tfnb\_fnb\_hex.dat} & (\ref{eq:ene_gammaxhe})\\
 
 $\displaystyle \Gamma_{ay}^{(he)} \frac{\sqrt{g}}{h_y} $ & $s^{-1}$ & \texttt{b2tfnb\_fnb\_hey.dat} & (\ref{eq:ene_gammayhe})\\
@@ -12901,6 +12916,14 @@ $\displaystyle \widetilde{\alpha}_{CLx} \frac{\sqrt{g}}{h_{x}^2} $ & $\displayst
 $\displaystyle \alpha_{CLx} \frac{\sqrt{g}}{h_{x}^2} $ & $\displaystyle \frac{m}{ V \cdot s}$ & \texttt{b2trcl\_calfx.dat} & (\ref{eq:ene_alphxcl}) \\
 
 $\displaystyle \alpha^{(ST)} $ & $??$ & \texttt{b2trno\_chcey\_stoch.dat} & (\ref{eq:ene_kapeST})\\
+
+$\displaystyle -\frac 5 2 \frac{\sqrt{g}}{h_{x}} n_e T_e^2 \frac{B_z}{eh_y} \frac{\partial}{\partial y} \left( \frac 1{B^2} \right)$ & $W$ & \texttt{b2tfhe\_\_qediax.dat} & (\ref{eq:ene_qex}) \\
+
+$\displaystyle \frac 5 2 \frac{\sqrt{g}}{h_{y}} n_e T_e^2 \frac{B_z}{eh_x} \frac{\partial}{\partial x} \left( \frac 1{B^2} \right) $ & $W$ & \texttt{b2tfhe\_\_qediay.dat} & (\ref{eq:ene_qey}) \\
+
+
+residuals & $ W $ & \texttt{b2npht\_reshe.dat} or & \\ & & \texttt{b2nph9\_reshe.dat} & \\
+
 \hline
 \multicolumn{4}{|l|}{\small\sl Ion heat balance equation and related quantities} \\
 \hline
@@ -12975,6 +12998,14 @@ $\displaystyle \widetilde {\kappa}_{ix}^{(CL)}\frac{\sqrt g}{h_x^2} $ & $ s^{-1}
 
 $\displaystyle \kappa_{ix}^{(CL)}\frac{\sqrt g}{h_x^2} $ & $ s^{-1} $ & \texttt{b2trcl\_chcix.dat} & (\ref{eq:eni_kapixCL})\\
 
+$\displaystyle \frac{5}{2} \frac{\sqrt{g}}{h_x} T_i \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \widetilde V_{ax}^{(dia)} $ & $ W $ & 
+\texttt{b2tfhi\_\_qidiax.dat} & (\ref{eq:eni_qix}) \\
+
+$\displaystyle \frac{5}{2} \frac{\sqrt{g}}{h_y} T_i \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \widetilde V_{ay}^{(dia)} $ & $ W $ & 
+\texttt{b2tfhi\_\_qidiay.dat} & (\ref{eq:eni_qiy}) \\
+
+residuals & $ W $ & \texttt{b2npht\_reshi.dat} or & \\ & & \texttt{b2nph9\_reshi.dat} & \\
+
 \hline
 \multicolumn{4}{|l|}{\small\sl Current continuity equation and related quantities} \\
 \hline
@@ -13033,8 +13064,12 @@ $\displaystyle \frac{\sqrt{g}}{h_y}j_y^{(ST)} $ & $ A $ & \texttt{b2tfhe\_\_fchs
 (\ref{eq:pot_jyst})\\
 
 $\displaystyle \frac{\sqrt{g}}{h^2_y}\sigma^{(ST)} $ & $ S $ & \texttt{b2trno\_csigy\_stoch.dat} & (\ref{eq:pot_jyst})\\
+
+residuals & $ A $ & \texttt{b2nppo\_respo.dat} or & (\ref{eq:pot_eq}) \\
+& & \texttt{b2npp7\_respo.dat} &  \\
+
 \hline
-\caption{Files produced by means of {\tt 'b2wdat\_iout'}, the variable they contain, and the equation to which they relate}
+\caption{Files produced by means of {\tt 'b2wdat\_iout = 4'}, the variable they contain, and the equation to which they are related}
 \label{tab:b2wdat_files}
 \end{longtable}
 \end{center}
