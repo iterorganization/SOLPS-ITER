@@ -362,6 +362,9 @@ ${OBJDIR}/eirmod_precision.o:
 ${OBJDIR}/eirmod_braeir.o: 
 	ln -sf ${EIRDIR}/eirmod_braeir.o ${OBJDIR}
 
+${OBJDIR}/eirmod_cinit.o:
+	ln -sf ${EIRDIR}/eirmod_cinit.o ${OBJDIR}
+
 ${OBJDIR}/eirmod_comxs.o:
 	ln -sf ${EIRDIR}/eirmod_comxs.o ${OBJDIR}
 
@@ -614,6 +617,9 @@ ${OBJDIR}/b2mod_neutrals_namelist.${MOD}: ${OBJDIR}/parmmod.${MOD} ${OBJDIR}/bra
 
 ${OBJDIR}/eirmod_braeir.${MOD}:
 	ln -sf ${EIRDIR}/eirmod_braeir.${MOD} ${OBJDIR}
+
+${OBJDIR}/eirmod_cinit.${MOD}:
+	ln -sf ${EIRDIR}/eirmod_cinit.${MOD} ${OBJDIR}
 
 ${OBJDIR}/eirmod_comxs.${MOD}:
 	ln -sf ${EIRDIR}/eirmod_comxs.${MOD} ${OBJDIR}
