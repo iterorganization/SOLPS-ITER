@@ -4133,7 +4133,7 @@ The format of this input block for coupling to \SOLPSITER is as follows:
 
 {\it ***14. Data for interfacing routine "infusr"}
 \begin{verbatim}
-LSYMET  LBALAN  LCHKQUD
+LSYMET  LBALAN  LCOARSE
 NFLA    NCUTB   NCUTL   IMF   NTRFRM   NFULL   IBRAD   IBPOL   IBTOR
 \end{verbatim}
 {\it read NPLSI species lines}
@@ -4174,7 +4174,7 @@ DO 50, IAOT=1,NAOTB
 We only include here the variables or aspects thereof not already described in the {\tt Eirene} manual, section 2.14.
 
 \begin{description}
-  \item[LCHKQUD] Check quadrangles switch ???
+  \item[LCOARSE] Coarse mesh switch ???
   \item[NCUTB] For \SOLPSITER couplings, should be 0
   \item[NCUTL] For \SOLPSITER couplings, should be 1
   \item[IMF] {\tt fort.30} format switch, should be 0
