@@ -19,6 +19,8 @@ if ($?SOLPS_PATH) then
   setenv   PATH ${SOLPS_PATH}:${OLD_PATH}
   setenv   USE_OPENMP -D_OPENMP
   setenv   SOLPS_OPENMP yes
+  setenv   KMP_STACKSIZE 48M
+  setenv   KMP_AFFINITY norespect,compact
   unsetenv OLD_SOLPS_PATH
   echo "SOLPS-ITER OpenMP mode turned on"
 else

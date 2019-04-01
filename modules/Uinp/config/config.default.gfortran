@@ -13,6 +13,10 @@ endif
 ifdef SOLPS_DEBUG
 FFLAGS   = -g -ffpe-trap=denormal -ffpe-trap=invalid -ffpe-trap=zero -ftrapv -fsignaling-nans
 endif
+ifdef SOLPS_OPENMP
+FFLAGS  += -fopenmp
+endif
+
 INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
 CPP      = /lib/cpp -traditional

@@ -12,6 +12,13 @@ FFLAGS   = -g
 else
 FFLAGS   = -O
 endif
+ifdef SOLPS_OPENMP
+ifdef USE_MPI
+FFLAGS  += -fopenmp
+else
+FFLAGS  += -mp=nonuma
+endif
+endif
 
 INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}

@@ -658,7 +658,8 @@ c      integer lura,lurm,luri,lurf
 c*** 5
 
       integer lurp,lurc,lup6
-      parameter (lurp=nreac*npls, lurc=nrcdn*npls, lup6=6*npls)
+      parameter (lurp=nreac*npls, lurc=nrcdn*npls)
+      parameter (lup6=6*npls)
       data nplsi / 0 /
       data nbgk / 0 /
       data nmassp,ncharp, nprtp,nchrgp, isrfp, isrtp,nmsecp, nrcp  /
@@ -669,14 +670,15 @@ c*** 5
      /  lurp*0,lurp*0,lurp*0,lurp*0,lurp*0,lurp*0,lurp*0 /
       data eelecp, ebulkp, escd1p, escd2p, freacp /
      /    lurp*0.,lurp*0.,lurp*0.,lurp*0.,lurp*0. /
-      data  textp   / npls*' ' /
+      data textp / npls*' ' /
 #ifndef HPUX
       data cdnmdlp_sel/'fort.13','saha','boltzmann','corona','colrad'/
 #else
       data cdnmdlp_sel/'ftn13','saha','boltzmann','corona','colrad'/
 #endif
       data cdnmdlp / npls*' ' /
-      data nrep, ispcdn / npls*0, lurc*0 /
+      data nrep, ispcdn /
+     /   npls*0, lurc*0 /
       data bltzcdn,dltecdn,acrncdn/
      /     npls*0.,npls*0.,npls*0./
       data fnamcdn, h2cdn  , reaccdn, crcdn   /
@@ -698,8 +700,8 @@ c*** 6
       parameter (luchsi=5, luchsr=3)
       parameter (lvchsi=luchsi*nchsppr, lvchsr=luchsr*nchsppr)
       data nltrim / .true. /
-      data path,(filtrm(i),i=1,luftrm)     /
-     /      ' ',         'D_on_C'          /
+      data path / 'modules/Eirene/Database/Surfacedata/TRIM/' /
+      data (filtrm(i),i=1,luftrm) / 'D_on_C' /
       data nnftrm / luftrm /, nchsppri / 0 /
       data lchspgrp, lchsptgt, lchspnwl, lchspaux /
      /    nchsppr*0,nchsppr*1,nchsppr*0, lvchsi*0 /
@@ -840,10 +842,10 @@ c*** 11
      /    .false.,.false.,.false.,.false.,.false.,.false.,.false. /,
      ,     trclst, trcbla, trcblm, trcbli, trcblp, trcble,trcblph /
      /    .false.,.false.,.false.,.false.,.false.,.false.,.false. /,
-     ,     trctal, trcoct, trccen/
-     /    .false.,.false.,.false./,
-     ,    trcdumm,trcdbg2,trcdbge,trcdbgm,trcdbgf,trcdbgl /
-     /    .false.,.false.,.false.,.false.,.false.,.false. /,
+     ,     trctal, trcoct, trccen,trcdumm/
+     /    .false.,.false.,.false.,.false./,
+     ,     trcdbg2,trcdbge,trcdbgm,trcdbgf,trcdbgl /
+     /    .false.,.false.,.false.,.false.,.false. /,
      ,     trcdbgs,trcdbgg,trcdbgmpi,trcdbgc,     trcsrc           /
      /    .false. ,.false.,.false.  ,.false.,.true.,nstra*.false. /,
      ,     pl1st , pl2nd , pl3rd , pladd , plhst /

@@ -11,24 +11,33 @@ endif
 else
 FC        = ifort
 endif
-FC_VERSION = $(shell echo `ifort --version | head -1 | awk '{printf "%s ",$$3,"\n"}'`)
 
+COMPILER_MAJOR_VERSION = $(shell ${FC} -V 2>&1 | grep -o "Version [0-9]*" | cut -d' ' -f 2)
+
+FFLAGS    = -fPIC -assume no2underscore
 ifdef SOLPS_DEBUG
-FFLAGS	  = -g -C -traceback -debug all -check all -fPIC -assume no2underscore
+FFLAGS	 += -g -C -traceback -debug all -check all
 else
-ifeq (${FC_VERSION},12.0.2)
-FFLAGS    = -O2 -vec_report0 -fPIC -fp-model precise -assume no2underscore
+FFLAGS   += -O2 -fp-model precise
+endif
+ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -le 12; echo $$?),0)
+FFLAGS   += -vec_report0
+endif
+ifdef SOLPS_OPENMP
+ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -ge 15; echo $$?),0)
+FFLAGS  += -qopenmp
 else
-FFLAGS    = -O2 -fPIC -fp-model precise -assume no2underscore
+FFLAGS  += -openmp
 endif
 endif
+
 INCLUDE   = -I${SRCDIR} ${EIRINC} ${B2INC}
 COMPILE   = ${FC} -c ${FFLAGS}
 CPP       = /lib/cpp -C -traditional -ffreestanding
 
 MOD       = mod
 LDLIBS	  = ${LD_MSCL}
-ifeq (${FC_VERSION},12.0.2)
+ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -le 12; echo $$?),0)
 LDEXTRA   = -i_dynamic
 endif
 ifdef USE_MPI
