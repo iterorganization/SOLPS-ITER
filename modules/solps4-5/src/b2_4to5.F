@@ -1835,7 +1835,7 @@ c
       write(99,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
      .  (cfalf(i),i=0,7)
       write(99,'(a)') '*cflim'//
-     .  '     cflme     cflmi     cflmv     cflal     cflab     ...'
+     .  '    cflme     cflmi     cflmv     cflal     cflab     ...'
       write(99,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
      .  (cflim(i),i=0,7)
       write(99,'(a)') '*endphy'

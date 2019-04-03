@@ -127,7 +127,7 @@ c*** He pumping data
       data locphep,lpbihep,lpbohep,lptihep,lptohep/
      /        0   ,   0   ,   0   ,   0   ,   0   /,
      ,  j_he_at , j_h_at , j_ne_at, l_h_mol /
-     /     0    ,   3*0   ,    0  ,  luml*0 /,
+     /     0    ,   3*0  ,    0   ,  luml*0 /,
      ,  pwrhepdt,pmphepdt,nstclhep,nhetrgts/
      /    570.  ,   0.8  ,    0   ,   0    /
 
@@ -151,8 +151,8 @@ c*** 1
      /       9  ,   1   ,   0  ,     1    /
       data nlscl , nltest, nlana ,nldrft, nlcrr , nlerg , nlident/
      /    .true. ,.false.,.false.,.true.,.false.,.false.,.false./,
-     ,     nlone , nlmovie,nldfst,nloldran,nlcascad,nloctree/
-     /    .false.,.false.,.false.,.true.,.false.,.false./,
+     ,     nlone ,nlmovie, nldfst,nloldran,nlcascad,nloctree/
+     /    .false.,.false.,.false., .true. , .false., .false./,
      /    nlwrmsh, nexvs ,nltrimesh/
      ,    .true. ,.false.,.false./
       data  txtrun / ' EIRENE input file generated with uinp v. 2.2' /
@@ -546,7 +546,7 @@ c*** 4
       data (rctdmst(i,14),i=1,lurctdxp) / lurctdxp*-1 /
       data (rctddlte(i,1),i=1,lurctdh)  / 4*0.0 /
       data (rctddlte(i,2),i=1,lurctdh2) / 15.4, 10.5, 25.0, 4*0.0 /
-      data (rctddlte(i,3),i=1,lurctdhe) / 24.55 /
+      data (rctddlte(i,3),i=1,lurctdhe) / 24.5874 /
       data (rctddlte(i,4),i=1,lurctdc)  / 4*0.0 /
       data (rctddlte(i,5),i=1,lurctdne) / 21.6 /
       data (rctddlte(i,6),i=1,lurctdhp) / 0.0, 13.6 /
