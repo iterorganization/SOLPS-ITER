@@ -1,21 +1,21 @@
 # General
 # Modules needed by SOLPS-ITER
 set nodename=`hostname`
-module load IMAS/3.21.0-3.8.6
-module load GGD/1.8.3-intel-2018a
+module load IMAS/3.21.1-4.0.1
+module load GGD/1.8.3-intel-2018a-DD-3.21.1
 module load Kepler
 module load FC2K
 module load makedepend/1.0.5-GCCcore-6.4.0
 module load MSCL/1.2.0-GCCcore-6.4.0
 module load GR/0.0.94-GCCcore-6.4.0
 module load GLI/4.5.30-GCCcore-6.4.0
-module load NCL/6.4.0-intel-2018a
+module load NCL/6.5.0-intel-2018a
 module load NAG/26-intel-2018a
 module load TotalView/2017.1.21_linux_x86-64
 module load Ghostscript/9.23-GCCcore-6.4.0
 module unload LibTIFF/4.0.9-GCCcore-6.4.0
 module load Doxygen/1.8.13-GCCcore-6.4.0
-module load ParaView/5.4.1-intel-2018a-mpi
+module load ParaView/5.5.2-intel-2018a-Python-3.6.4-mpi
 module load motif/2.3.8-intel-2018a
 module load gnuplot/5.2.2-intel-2018a
 setenv GLI_HOME ${EBROOTGLI}
