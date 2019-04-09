@@ -39,8 +39,8 @@ Available options are:
   -z                 compress run.log using gzip
   -s                 specify a standalone B2.5 run
   -m <<MPI OPTIONS>> use the MPI options specified (default serial version)
-  -t <<HOURS>>       number of elapsed hours requested (default $hours)
-  -g <<MEM_SIZE>>    memory size (default $mem)
+  -T <<HOURS>>       number of elapsed hours requested (default $hours)
+  -M <<MEM_SIZE>>    memory size (default $mem)
 
 EOF
     exit
@@ -86,24 +86,24 @@ EOF
     set LOOP_OPTS="-m ${HELP_STRING} ${LOOP_OPTS}" 
     goto argloop
   endif
-  if ("X${1}X" == "X-tX") then
+  if ("X${1}X" == "X-TX") then
     shift
     set hours="$1"
     echo Requested time is ${hours} hours
     shift
     set HELP_STRING=\"${hours}\"
 #    echo $HELP_STRING
-    set LOOP_OPTS="-t ${HELP_STRING} ${LOOP_OPTS}" 
+    set LOOP_OPTS="-T ${HELP_STRING} ${LOOP_OPTS}" 
     goto argloop
   endif
-  if ("X${1}X" == "X-gX") then
+  if ("X${1}X" == "X-MX") then
     shift
     set mem="$1"
     echo Requested memory is ${mem}
     shift
     set HELP_STRING=\"${mem}\"
 #    echo $HELP_STRING
-    set LOOP_OPTS="-g ${HELP_STRING} ${LOOP_OPTS}" 
+    set LOOP_OPTS="-M ${HELP_STRING} ${LOOP_OPTS}" 
     goto argloop
   endif
 
