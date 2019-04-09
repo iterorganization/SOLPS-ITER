@@ -73,20 +73,26 @@ endif
 # Build with IMAS if imas module is loaded
 ifdef IMAS_VERSION
   LD_UAL     = `pkg-config imas-ifort ggd --libs` -lxml2
-  UAL_MAJOR_VERSION = $(shell echo ${UAL_VERSION} | cut -c1 )
-  SOLPS_CPP += -DIMAS -DUAL_MAJOR_VERSION=${UAL_MAJOR_VERSION}
+  UAL_MAJOR_VERSION = $(shell echo ${UAL_VERSION} | cut -d '.' -f1 )
+  IMAS_MAJOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f1 )
+  IMAS_MINOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f2 )
+  SOLPS_CPP += -DIMAS -DUAL_MAJOR_VERSION=${UAL_MAJOR_VERSION} -DIMAS_MINOR_VERSION=${IMAS_MINOR_VERSION}
   export LD_UAL
 else
 ifdef ITM_ENVIRONMENT_LOADED
   LD_UAL = -L${UAL}/lib -Wl,-rpath=${ITM_ITMTYPES_DIR}/${ITM_ITMTYPES_VERSION}/lib/amd64_intel_17 -L${ITM_ITMTYPES_DIR}/${ITM_ITMTYPES_VERSION}/lib/amd64_intel_17 -litmtypes
-  UAL_MAJOR_VERSION = $(shell echo ${UAL_VERSION} | cut -c1 )
+  UAL_MAJOR_VERSION = $(shell echo ${UAL_VERSION} | cut -d '.' -f1 )
   SOLPS_CPP += -DUAL_MAJOR_VERSION=${UAL_MAJOR_VERSION}
   export LD_UAL
 else
   UAL_MAJOR_VERSION = 0
 endif
+IMAS_MAJOR_VERSION = 0
+IMAS_MINOR_VERSION = 0
 endif
 export UAL_MAJOR_VERSION
+export IMAS_MAJOR_VERSION
+export IMAS_MINOR_VERSION
 
 # Build with OpenMP if requested
 ifdef SOLPS_OPENMP
