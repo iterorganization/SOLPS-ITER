@@ -17,15 +17,15 @@
 # Add -DNAG22 to SOLPS_CPP
 #
 
-       NCDIR ?= /ptmp1/work/dpc/SOLPS-ITER/NETCDF
-   MSCL_ROOT ?= /ptmp1/work/dpc/SOLPS-ITER/mscl
+       NCDIR ?= /tokp/work/dpc/SOLPS-ITER/NETCDF
+   MSCL_ROOT ?= /tokp/work/dpc/SOLPS-ITER/mscl
        H5DIR ?= ${HDF5_HOME}
-     GR_ROOT ?= /ptmp1/work/dpc/SOLPS-ITER/gr
-    GLI_HOME ?= /ptmp1/work/dpc/SOLPS-ITER/gks
-  NCARG_ROOT ?= /ptmp1/work/dpc/SOLPS-ITER/NCARG
+     GR_ROOT ?= /tokp/work/dpc/SOLPS-ITER/gr
+    GLI_HOME ?= /tokp/work/dpc/SOLPS-ITER/gks
+  NCARG_ROOT ?= /tokp/work/dpc/SOLPS-ITER/NCARG
 #      NAGDIR ?= ${NAGFLIB_HOME}
-      NAGDIR ?= /ptmp1/work/dpc/SOLPS-ITER/nag
- MDSPLUS_DIR ?= /ptmp1/work/dpc/SOLPS-ITER/MDSPLUS
+      NAGDIR ?= /tokp/work/dpc/SOLPS-ITER/nag
+ MDSPLUS_DIR ?= /tokp/work/dpc/SOLPS-ITER/MDSPLUS
 
 #
 # Variables for linking
