@@ -4,6 +4,7 @@ set NAME=/tmp/.run.$$.$USER.`date +%Y%m%d%H%M%S`
 set EMAIL=`get_git_email`
 set JOB_NAME="SOLPS-ITER"
 set PROCS=1
+set THREADS=1
 set hours=24
 set mem=4G
 echo Your email is $EMAIL
@@ -38,6 +39,7 @@ Available options are:
   -z                 compress run.log using gzip
   -s                 specify a standalone B2.5 run
   -m <<MPI OPTIONS>> use the MPI options specified (default serial version)
+  -t <<THREADS>>     use OpenMP parallelization using <<THREADS>> threads (default $THREADS)
   -T <<HOURS>>       number of elapsed hours requested (default $hours)
   -M <<MEM_SIZE>>    memory size (default $mem)
 
@@ -72,6 +74,17 @@ EOF
     endif
     set MPIOPTS="$1"
     echo Using MPI options: $MPIOPTS
+    shift
+    goto argloop
+  endif
+  if ("X${1}X" == "X-tX") then
+    shift
+    if (! $?SOLPS_OPENMP) then
+      source $SOLPSTOP/SETUP/openmp
+      set OPENMP_SET=yes
+    endif
+    set THREADS="$1"
+    echo Asking for OpenMP runs with ${THREADS} threads
     shift
     goto argloop
   endif
@@ -144,6 +157,7 @@ sed \
   -e 's:#EMAIL#:'$EMAIL':g' \
   -e "s:#MPIOPTS#:'$MPIOPTS':g" \
   -e "s:#PROCS#:'$PROCS':g" \
+  -e "s:#THREADS#:'$THREADS':g" \
   -e 's:#MEM#:'$mem':g' \
   -e 's:#HOURS#:'$hours':g' \
   -e "s:#JOBNAME#:'$JOB_NAME':g" \
