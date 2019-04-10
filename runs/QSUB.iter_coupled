@@ -2,9 +2,9 @@
 
 #PBS -q ib_gen8
 #PBS -l nodes=1:ppn=#PROCS#
-#PBS -l walltime=24:00:00
-#PBS -l cput=384:00:00
-#PBS -l mem=4GB
+#PBS -l walltime=#HOURS#:00:00
+#PBS -l cput=#CPU#:00:00
+#PBS -l mem=#MEM#
 #PBS -j oe
 #PBS -M #EMAIL#
 #PBS -m e

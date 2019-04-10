@@ -3,7 +3,9 @@
 set NAME=/tmp/.run.$$.$USER.`date +%Y%m%d%H%M%S`
 set EMAIL=`get_git_email`
 set JOB_NAME="SOLPS-ITER"
-set PROCS=1
+set PROCS=28
+set hours=336
+set mem=4GB
 echo Your email is $EMAIL
 
 set compress=""
@@ -19,6 +21,30 @@ else if ($SOLPSTOP == "") then
 endif
 
 argloop:
+  if ("X${1}X" == "X-hX") then
+    cat <<EOF
+
+Help for $0
+
+This script is used to submit SOLPS-ITER jobs to the SLURM batch system on the SPBSTU cluster.
+
+Usage:
+
+  `basename $0` {options} {<<SCRIPT>>}
+
+where the optional <<SCRIPT>> is the SLURM submission file to be used
+
+Available options are:
+  -j <<JOB NAME>>    set the job name (default $JOB_NAME)
+  -z                 compress run.log using gzip
+  -s                 specify a standalone B2.5 run
+  -m <<MPI OPTIONS>> use the MPI options specified (default serial version)
+  -T <<HOURS>>       number of elapsed hours requested (default $hours)
+  -M <<MEM_SIZE>>    memory size (default $mem)
+
+EOF
+    exit
+  endif
   if ("X${1}X" == "X-jX") then
     shift
     set JOB_NAME="$1"
@@ -58,6 +84,26 @@ argloop:
     set HELP_STRING=`echo \"$MPIOPTS\"`
 #    echo $HELP_STRING
     set LOOP_OPTS="-m ${HELP_STRING} ${LOOP_OPTS}" 
+    goto argloop
+  endif
+  if ("X${1}X" == "X-TX") then
+    shift
+    set hours="$1"
+    echo Requested time is ${hours} hours
+    shift
+    set HELP_STRING=\"${hours}\"
+#    echo $HELP_STRING
+    set LOOP_OPTS="-T ${HELP_STRING} ${LOOP_OPTS}" 
+    goto argloop
+  endif
+  if ("X${1}X" == "X-MX") then
+    shift
+    set mem="$1"
+    echo Requested memory is ${mem}
+    shift
+    set HELP_STRING=\"${mem}\"
+#    echo $HELP_STRING
+    set LOOP_OPTS="-M ${HELP_STRING} ${LOOP_OPTS}" 
     goto argloop
   endif
 
@@ -112,7 +158,18 @@ echo Using submission file template $QSUB
 echo For loop resubmission following options will be used: $LOOP_OPTS
 
 
-sed -e 's:#PWD#:'$PWD':g' -e 's:#SOLPSTOP#:'$SOLPSTOP':g' -e 's:#EMAIL#:'$EMAIL':g' -e "s:#MPIOPTS#:'$MPIOPTS':g" -e 's:#PROCS#:'$PROCS':g' -e 's:#JOBNAME#:'$JOB_NAME':g' -e 's:#USER#:'$USER':g' -e 's:#LOOPOPTS#:'"$LOOP_OPTS"':g'  < $QSUB > $NAME
+sed \
+  -e 's:#PWD#:'$PWD':g' \
+  -e 's:#SOLPSTOP#:'$SOLPSTOP':g' \
+  -e 's:#EMAIL#:'$EMAIL':g' \
+  -e "s:#MPIOPTS#:'$MPIOPTS':g" \
+  -e 's:#PROCS#:'$PROCS':g' \
+  -e 's:#MEM#:'$mem':g' \
+  -e 's:#HOURS#:'$hours':g' \
+  -e 's:#JOBNAME#:'$JOB_NAME':g' \
+  -e 's:#USER#:'$USER':g' \
+  -e 's:#LOOPOPTS#:'"$LOOP_OPTS"':g' \
+  < $QSUB > $NAME
 
 set msg="Submitted at `date`"
 update_solps_run_status -n ${msg}
