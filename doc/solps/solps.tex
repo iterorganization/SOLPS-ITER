@@ -1827,9 +1827,25 @@ produce all the output files in an orderly fashion, which then can be post-proce
 with the usual tools.
 
 When submitting jobs in a cluster environment, one will make use of the job submission commands provided
-in the \${\tt \{SOLPSTOP\}/runs} directory ({\tt QSUB.*} and {\tt SLURM.*} files). Currently, the following commands
+in the \${\tt \{SOLPSTOP\}/runs} directory ({\tt QSUB.*}, {\tt SBATCH.*}
+or {\tt SLURM.*} files). Currently, the following commands
 are provided:
 \begin{description}
+  \item{ippsubmit}\index{ippitmsubmit} for submissions on the IPP
+    cluster
+    \begin{itemize}
+    \item the command supports a ``-h'' option to provide help on
+      using the script
+    \item additional options are:
+      \begin{description}
+      \item[-j <<JOB\_NAME>>] set the job name (default SOLPS-ITER)
+      \item[-z] compress run.log using gzip
+      \item[-s] specify a standalone B2.5 run 
+      \item[-m <<MPI\_OPTIONS>>] use the MPI options specified (default serial version)
+      \item[-T <<hours>>] number of elapsed hours requested (default 24)
+      \item[-M <<MEM\_SIZE>>] memory size (default 4GB)
+      \end{description}
+    \end{itemize}
   \item{ippitmsubmit}\index{ippitmsubmit} for submissions on the IPP ITM cluster
   \item{itersubmit}\index{itersubmit} for submissions on the ITER HPC cluster
   \item{itmsubmit}\index{itmsubmit} for submissions on the Marconi ITM Gateway machine
