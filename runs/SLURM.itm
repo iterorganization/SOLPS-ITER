@@ -2,8 +2,8 @@
 
 #SBATCH --ntasks=#PROCS#
 #SBATCH -p skl_fua_gw
-#SBATCH --time=48:00:00
-#SBATCH --mem=4GB
+#SBATCH --time=#HOURS#:00:00
+#SBATCH --mem=#MEM#
 #SBATCH --job-name=#JOBNAME#
 #SBATCH --mail-type=END
 #SBATCH --mail-user=#EMAIL#
