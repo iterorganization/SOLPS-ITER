@@ -45,7 +45,7 @@ LD_SONNET  = -L${SOLPSLIB} -lsonnet
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNCAR4 -DNO_NAG -DF2003 -DITM
+SOLPS_CPP      = -DNCAR4 -DNO_NAG -DITM
 B25_DEFINES    =
 EIRENE_DEFINES =
 
