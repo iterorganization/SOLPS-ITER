@@ -22,13 +22,9 @@ module load gnuplot/5.2.2-intel-2018a
 setenv GLI_HOME ${EBROOTGLI}
 setenv NCDIR ${EBROOTNETCDFMINFORTRAN}
 setenv MPDIR ${EBROOTIMPI}
-module load MATLAB/2017a
+module load MATLAB/2018a
 module load make/4.1
 module load texlive
-
-if (`hostname` == "hpc-app1.iter.org") then
-  module load matlab/2013a
-endif
 
 # Debugger (set environment variable DBX)
 setenv DBX totalview
