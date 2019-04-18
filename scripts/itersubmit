@@ -103,7 +103,7 @@ EOF
     goto argloop
   endif
 
-set cpu=${hours}*${PROCS}
+@ cpu = ( $hours * $PROCS )
 set nodename=`hostname`
 switch ($nodename)
   case "hpc-login0*.iter.org":
