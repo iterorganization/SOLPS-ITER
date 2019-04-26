@@ -28,7 +28,9 @@ all : $(ASSETS)
 -include depend
 
 % : %.tar.gz
-	tar xmzf $^
+	echo $@ $^
+	mkdir $@.tmp ; tar -xmzf $^ -C $@.tmp
+	[ `echo $@.tmp/* | wc -w` == 1 ] && (mv $@.tmp/$@ . ; rmdir $@.tmp) || ( mv $@.tmp $@)
 
 # If the asset already exist the we don't want to change its timestamp as
 # this may impact other's (re)builds. Therefore MD5 and timestamps needs

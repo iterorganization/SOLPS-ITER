@@ -3,7 +3,7 @@ setenv MODULEPATH /afs/ipp/common/usr/modules.2014/@sys/modulefiles/mpi:$MODULEP
 module load intel/18.0.5
 module load texlive
 # module load subversion  # use built in SVN
-module load totalview
+module load arm_ddt
 module load doxygen
 #module load mdsplus
 #module load netcdf-serial
