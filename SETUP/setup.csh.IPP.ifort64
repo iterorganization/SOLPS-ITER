@@ -14,6 +14,8 @@ module load impi
 module load nag_flib/mk24
 module load gnuplot
 
+setenv DBX ddt
+
 # Environment variables
 if (! $?DEVICE) then
   setenv DEVICE upgrade
