@@ -185,10 +185,12 @@ if ($PROCS == 1) then
   endif
 else
   set part=p.tok.openmp
-  if ($hours > 2) then
-    set qos=p.tok.48h
+  if ($hours > 24) then
+    set qos=p.tok.openmp.48h
+  else if ($hours > 2) then
+    set qos=p.tok.openmp.24h
   else
-    set qos=p.tok.2h
+    set qos=p.tok.openmp.2h
   endif
 endif
 
