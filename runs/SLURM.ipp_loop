@@ -6,7 +6,7 @@
 #SBATCH --partition=#PART#
 #SBATCH --qos=#QOS#
 #SBATCH --time=#HOURS#:00:00
-#SBATCH --mem=#MEM#
+#SBATCH --mem-per-cpu=#MEM#
 #SBATCH --job-name=#JOBNAME#
 #SBATCH --mail-type=END
 #SBATCH --mail-user=#EMAIL#
@@ -39,11 +39,11 @@ popd
 
 set USE_MPI=""
 if ($?SOLPS_MPI) then
-  #module load impi/5.1.3
-  set MPI_EXEC=mpirun
-  set MPI_OPTS=#MPIOPTS#
+  # set MPI_EXEC=mpirun
+  # set MPI_OPTS=#MPIOPTS#
   set MPI_PREFLAGS="--mpi=mpi2"
-  set USE_MPI="-m ${MPI_EXEC} ${MPI_OPTS}"
+  # set USE_MPI="-m ${MPI_EXEC} ${MPI_OPTS}"
+  set USE_MPI="-m srun"
   set USE_MPI=`echo $USE_MPI | sed -e 's:-m :-m ''":' -e 's:$:"'':'`
 else
   set MPI_PREFLAGS=""
