@@ -144,11 +144,11 @@ c*** Data for TRIA mesh
 c*** 1
 
       data nprll, nmode , ntcpu, nfile, niter0, niter, ntime0, ntim1 /
-     /     0    ,   1   ,  50  ,  306 ,   1   ,   1  ,   0   ,   1   /,
+     /       0  ,   1   ,  50  ,  306 ,   1   ,   1  ,   0   ,   1   /,
      ,  nfullrun, noptim,noptm1, ngeom_usr, ncoup_input, nsmstra /
-     /     0    ,   1   ,   1  ,     0    ,     1      ,    1    /,
+     /       0  ,   1   ,   1  ,     0    ,     1      ,    1    /,
      ,   nstoram, ngstal,nrtal1,nreac_add /
-     /      9   ,   1   ,   0  ,     1    /
+     /       9  ,   1   ,   0  ,     1    /
       data nlscl , nltest, nlana ,nldrft, nlcrr , nlerg , nlident/
      /    .true. ,.false.,.false.,.true.,.false.,.false.,.false./,
      ,     nlone , nlmovie,nldfst,nloldran,nlcascad,nloctree/
@@ -665,9 +665,9 @@ c*** 5
       data nmassp,ncharp, nprtp,nchrgp, isrfp, isrtp,nmsecp, nrcp  /
      /     npls*0,npls*0,npls*0,npls*0,npls*0,npls*0,npls*0,npls*0 /,
      ,    idnslmp, nfolp, ngenp,nhstp /
-     /    npls*0,npls*0,npls*0,npls*0 /,
-     ,    ireacp,ibulkp,iscd1p,iscd2p,iscd3p,iscd4p,iscdep /
-     /    lurp*0,lurp*0,lurp*0,lurp*0,lurp*0,lurp*0,lurp*0 /
+     /     npls*0,npls*0,npls*0,npls*0 /,
+     ,     ireacp,ibulkp,iscd1p,iscd2p,iscd3p,iscd4p,iscdep /
+     /     lurp*0,lurp*0,lurp*0,lurp*0,lurp*0,lurp*0,lurp*0 /
       data eelecp, ebulkp, escd1p, escd2p, freacp /
      /    lurp*0.,lurp*0.,lurp*0.,lurp*0.,lurp*0. /
       data textp / npls*' ' /
@@ -676,7 +676,7 @@ c*** 5
      /   'CONSTANT','MULTIPLY','SAHA','BOLTZMANN','CORONA','COLRAD'/
       data cdnmdlp / npls*' ' /
       data nrep, ispcdn, itpcdn, istrcdn /
-     /    npls*0, lurc*0, lurc*4, lurc*0 /
+     /   npls*0, lurc*0, lurc*4, lurc*0 /
       data valcdn,bltzcdn,dltecdn,acrncdn/
      /    lup5*0.,npls*0.,npls*0.,npls*0./
       data fnamcdn, h2cdn  , reaccdn, crcdn   /
@@ -869,11 +869,11 @@ c*** 11
 c*** 12
 
       data numlines, modaddv /
-     /         0   ,    1    /
+     /       0     ,    1    /
       data nchori, ncheni,lntspec,lntsput,nmcsput,npspcen,iatspec /
      /       0   ,   0   ,   0   ,   0   ,   0   ,  29   ,   1    /,
      ,  npspctt,npspcfi,nlstadds,mtreadds,ngwties,ngwtiesi /
-     /     8   ,   4   ,   0    ,   0    ,   0   ,    0    /,
+     /       8   ,   4   ,   0    ,   0    ,   0   ,    0  /,
      ,   nchtal, nspscl, nspnew, nspstr, nspspz, nspini, nspend /
      /  nchor*0,nchor*0,nchor*0,nchor*0,nchor*0,nchor*0,nchor*0 /,
      ,   nspblc, nspadd, masloc, ipivot, ichord, listmtmp , listmtra  /
