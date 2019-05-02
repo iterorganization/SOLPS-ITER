@@ -5,6 +5,7 @@ PATH+=:/usr/bin:/bin
 SVN=svn
 GIT=`which git`
 LATEX := $(shell which_latex)
+PDFTOPS := $(shell which_pdftops)
 PYTHON=python
 INCLUDES=b2cdca.F b2cdci.F b2cdcn.F b2cdcr.F b2cdcv.F DIMENSIONS.F B2_5.Makefile B2_5.config.ITER.ifort64 solps-iter_git.log b2plot.commands SOLPS_versions
 BIBFILES=aps.bib aug.bib divgas.bib extern.bib general.bib main.bib mnw.bib model.bib tok.bib WebofScience.bib xpb.bib
@@ -29,7 +30,7 @@ solps.xdv: solps.tex ${INCLUDES} ${FILES} solps.ind solps.bbl
 	[ -e solps.pdf ] && touch solps.pdf
 
 solps.ps: solps.pdf
-	pdftops solps.pdf solps.ps
+	${PDFTOPS} solps.pdf solps.ps
 
 else
 solps.dvi: solps.tex ${INCLUDES} ${FILES} solps.ind solps.bbl
