@@ -11,6 +11,7 @@
 module load ifort
 module load ncl_ncar
 module load netcdf
+module load git
 
 # Environment variables
 if [ -z "$DEVICE" ]; then
@@ -18,12 +19,12 @@ if [ -z "$DEVICE" ]; then
 fi
 
 export IRISLIB="/fusion/projects/codes/solps/SOLPS-ITER/public_lib/GA.ifort64"
-export GLI_HOME=${IRISLIB}/gli/src
+export GLI_HOME=${IRISLIB}/gli
 
 # Set external library paths
 
 export LD_LIBRARY_PATH="${IRISLIB}:${LD_LIBRARY_PATH}"
-export LD_LIBRARY_PATH="${GLI_HOME}:${LD_LIBRARY_PATH}"
+export LD_LIBRARY_PATH="${GLI_HOME}:${GLI_HOME}/src:${LD_LIBRARY_PATH}"
 
 # Debugger
 # export DBX=totalview
@@ -47,5 +48,5 @@ fi
 
 # Additional setup
 
-pushd ${GLI_HOME} >& /dev/null; source glisetup.ksh; popd >& /dev/null     # Eirene graphics environment
+pushd ${GLI_HOME}/src >& /dev/null; source glisetup.ksh; popd >& /dev/null     # Eirene graphics environment
 

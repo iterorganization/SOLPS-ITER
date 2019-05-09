@@ -10,13 +10,15 @@ module load ifort
 module load ncl_ncar
 module load netcdf
 module load totalview
+module load git
 
 # Environment variables
 if (! $?DEVICE) then
   setenv DEVICE d3d
 endif
 setenv IRISLIB /fusion/projects/codes/solps/SOLPS-ITER/public_lib/GA.ifort64
-setenv GLI_HOME ${IRISLIB}/gli/src
+setenv GLI_HOME ${IRISLIB}/gli
+setenv LD_LIBRARY_PATH "${GLI_HOME}:${GLI_HOME}/src:${LD_LIBRARY_PATH}" 
 
 # Prepend path to python
 set pythondir = `dirname $PYTHON`
@@ -24,6 +26,7 @@ setenv PATH ${pythondir}:$PATH
 
 # Debugger
 setenv DBX totalview
+setenv LATEX pdflatex
 
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
