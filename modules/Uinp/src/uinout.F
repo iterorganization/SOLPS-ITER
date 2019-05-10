@@ -905,7 +905,7 @@ c*** 11.   data for numerical and graphical output
      ,                 trcgrd,trcsur,trcref,trcfle,trcamd,
      ,                 trcint,trclst,trcsou,trcrec,trctim,
      ,                 trcbla,trcblm,trcbli,trcblp,trcble,
-     ,                 trcblph,trctal,trcoct,trccen,trcdumm,
+     ,                 trcblph,trctal,trcoct,trccen,trcrnf,
      ,                 trcdbg2,trcdbge,trcdbgm,trcdbgf,trcdbgl,
      ,                 trcdbgs,trcdbgg,trcdbgmpi,trcdbgc,trchktim
       write(iunoo,706) (trcsrc(j),j=0,nstrao)

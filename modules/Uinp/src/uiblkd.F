@@ -144,7 +144,7 @@ c*** Data for TRIA mesh
 c*** 1
 
       data nprll, nmode , ntcpu, nfile, niter0, niter, ntime0, ntim1 /
-     /       0  ,   1   ,  50  ,  306 ,   1   ,   1  ,   0   ,   1   /,
+     /       0  ,   1   ,  50  , 5306 ,   1   ,   1  ,   0   ,   1   /,
      ,  nfullrun, noptim,noptm1, ngeom_usr, ncoup_input, nsmstra /
      /       0  ,   1   ,   1  ,     0    ,     1      ,    1    /,
      ,   nstoram, ngstal,nrtal1,nreac_add /
@@ -840,8 +840,8 @@ c*** 11
      /    .false.,.false.,.false.,.false.,.false.,.false.,.false. /,
      ,     trclst, trcbla, trcblm, trcbli, trcblp, trcble,trcblph /
      /    .false.,.false.,.false.,.false.,.false.,.false.,.false. /,
-     ,     trctal, trcoct, trccen,trcdumm/
-     /    .false.,.false.,.false.,.false./,
+     ,     trctal, trcoct, trccen, trcrnf /
+     /    .false.,.false.,.false.,.false. /,
      ,     trcdbg2,trcdbge,trcdbgm,trcdbgf,trcdbgl /
      /    .false.,.false.,.false.,.false.,.false. /,
      ,     trcdbgs,trcdbgg,trcdbgmpi,trcdbgc,trchktim /
@@ -935,12 +935,14 @@ c*** Data for Eirene test run
      /    50  , 10100 , nstra*5,   0.  ,.true.,.true.,.true.,.true. /,
      , ttchst,ttcref,ttcamd,ttcsou,ttcbla,ttcblm,ttcbli,ttcblp,ttcble /
      / .true.,.true.,.true.,.true.,.true.,.true.,.true.,.true.,.true. /,
-     , ttcblph,ttctal,ttcdbg2,ttcdbge,ttcdbgm,ttcdbgf,ttcdbgl,ttcdbgs/
-     / .true.,.true. ,.true. ,.true. ,.true. ,.true. ,.true. ,.true. /,
-     , ttcdbgg,ttcdbgmpi,ttcdbgc,ttchktim/
-     / .true. ,.true.   ,.true. , .false./,
-     , ttpl1st,ttpl2nd,ttpladd,ttplhst,        ttplcut       ,ttplnums/
-     / .true. ,.true. ,.true. ,.true. ,.false.,.false.,.true.,.true.  /
+     , ttcblph,ttctal,ttcoct,ttccen,ttcrnf /
+     / .true.,.true. ,.true.,.true.,.true. /,
+     , ttcdbg2,ttcdbge,ttcdbgm,ttcdbgf,ttcdbgl,ttcdbgs /
+     / .true. ,.true. ,.true. ,.true. ,.true. ,.true.  /,
+     , ttcdbgg,ttcdbgmpi,ttcdbgc,ttchktim /
+     / .true. ,.true.   ,.true. , .false. /,
+     , ttpl1st,ttpl2nd,ttpladd,ttplhst,        ttplcut       ,ttplnums /
+     / .true. ,.true. ,.true. ,.true. ,.false.,.false.,.true.,.true.   /
 
 c*** Data for diagnostic run
 
