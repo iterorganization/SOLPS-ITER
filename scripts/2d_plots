@@ -6,7 +6,7 @@ else
     set tmpdir=""
 endif
 setenv GNUPLOT_BATCH yes
-setenv GNUPLOT_POSTSCRIPT_OPTIONS 'color solid'
+setenv GNUPLOT_POSTSCRIPT_OPTIONS 'color solid noenhanced'
 setenv PRINT_PLOT b2time2d.ps
 rm -f ${tmpdir}GNUPLOT_COUNT ${tmpdir}gnuplot.cmd
 echo 0 > ${tmpdir}GNUPLOT_COUNT

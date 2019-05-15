@@ -3,8 +3,7 @@
 #BSUB -e #JOBNAME#.e%J.%I
 #BSUB -o #JOBNAME#.o%J.%I
 #BSUB -J #JOBNAME#
-#BSUB -W 36:00
-
+#BSUB -W #HOURS#:00
 
 setenv PATH ${PATH}:/afs/ipp-garching.mpg.de/@sys/bin
 

@@ -1,6 +1,6 @@
 #! /bin/tcsh -f
 
-setenv GNUPLOT_POSTSCRIPT_OPTIONS 'color solid'
+setenv GNUPLOT_POSTSCRIPT_OPTIONS 'color solid noenhanced'
 setenv PRINT_PLOT resrest.ps ; resrest && rm -f gnuplot.data gnuplot.cmd
 setenv PRINT_PLOT resco.ps ; resco && rm -f gnuplot.data gnuplot.cmd PLOT_FROM_FILE
 setenv PRINT_PLOT resmo.ps ; resmo && rm -f gnuplot.data gnuplot.cmd PLOT_FROM_FILE
