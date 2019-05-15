@@ -2,7 +2,7 @@
 
 setenv DEVICE upgrade
 setenv VERSION `git-describe`
-setenv GNUPLOT_POSTSCRIPT_OPTIONS 'color solid'
+setenv GNUPLOT_POSTSCRIPT_OPTIONS 'color solid noenhanced'
 echo Running regression tests for GIT commit $VERSION
 cd $SOLPSTOP/runs
 [ -d $SOLPSTOP/runs/$VERSION ] || mkdir $SOLPSTOP/runs/$VERSION
