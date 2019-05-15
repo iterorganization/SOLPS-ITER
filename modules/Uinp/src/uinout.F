@@ -906,8 +906,9 @@ c*** 11.   data for numerical and graphical output
      ,                 trcint,trclst,trcsou,trcrec,trctim,
      ,                 trcbla,trcblm,trcbli,trcblp,trcble,
      ,                 trcblph,trctal,trcoct,trccen,trcrnf,
+     ,                 trchktim,
      ,                 trcdbg2,trcdbge,trcdbgm,trcdbgf,trcdbgl,
-     ,                 trcdbgs,trcdbgg,trcdbgmpi,trcdbgc,trchktim
+     ,                 trcdbgs,trcdbgg,trcdbgmpi,trcdbgc
       write(iunoo,706) (trcsrc(j),j=0,nstrao)
       write(iunoo,707) nvolpr
       do j=1,nvolpr !{
@@ -1071,7 +1072,7 @@ c*** 14.  data for interfacing subroutine infcop
 
       write(iunoo,700) utxthd(19)
       if (nmode.ne.0) then !{
-        write(iunoo,706) lsymet,lbalan,lcoarse
+        write(iunoo,706) lsymet,lbalan,lcoarse,nltrimesh
         write(iunoo,707) nfla,ncutb,ncutl,imf,
      .                   ntrfrm,nfull,ibrad,ibpol,ibtor
         do i=1,nplsi+nbgk !{

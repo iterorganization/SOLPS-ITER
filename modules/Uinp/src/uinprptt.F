@@ -56,6 +56,7 @@ c=======================================================================
         trcoct_b=trcoct
         trccen_b=trccen
         trcrnf_b=trcrnf
+        trchktim_b=trchktim
         trcdbg2_b=trcdbg2
         trcdbge_b=trcdbge
         trcdbgm_b=trcdbgm
@@ -65,7 +66,6 @@ c=======================================================================
         trcdbgg_b=trcdbgg
         trcdbgmpi_b=trcdbgmpi
         trcdbgc_b=trcdbgc
-        trchktim_b=trchktim
         trcsrc_b=trcsrc(0)
         pl1st_b=pl1st
         pl2nd_b=pl2nd
@@ -112,6 +112,7 @@ c=======================================================================
         trcoct=ttcoct
         trccen=ttccen
         trcrnf=ttcrnf
+        trchktim=ttchktim
         trcdbg2=ttcdbg2
         trcdbge=ttcdbge
         trcdbgm=ttcdbgm
@@ -121,7 +122,6 @@ c=======================================================================
         trcdbgg=ttcdbgg
         trcdbgmpi=ttcdbgmpi
         trcdbgc=ttcdbgc
-        trchktim=ttchktim
         trcsrc(0)=ttcsrc
         pl1st=ttpl1st
         pl2nd=ttpl2nd
@@ -174,6 +174,7 @@ c*** Set the VSP data for test.eir
         trcoct=trcoct_b
         trccen=trccen_b
         trcrnf=trcrnf_b
+        trchktim=trchktim_b
         trcdbg2=trcdbg2_b
         trcdbge=trcdbge_b
         trcdbgm=trcdbgm_b
@@ -183,7 +184,6 @@ c*** Set the VSP data for test.eir
         trcdbgg=trcdbgg_b
         trcdbgmpi=trcdbgmpi_b
         trcdbgc=trcdbgc_b
-        trchktim=trchktim_b
         trcsrc(0)=trcsrc_b
         pl1st=pl1st_b
         pl2nd=pl2nd_b
