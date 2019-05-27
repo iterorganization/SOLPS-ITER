@@ -3486,7 +3486,8 @@ The data fields that can be requested through {\bf idout} are:
   \item['cpni'] Plot the total ion density
   \item['cpte'] Plot the electron temperature
   \item['cpti'] Plot the ion temperature
-  \item['cppr'] Plot the plasma pressure
+  \item['cppr'] Plot the total pressure (including neutrals)
+  \item['cppz'] Plot the plasma pressure
   \item['cppo'] Plot the electric potential
   \item['cpfn'] Plot the fractional atom density
   \item['cppe'] Plot the electron pressure
@@ -7920,7 +7921,9 @@ m_a V_{\parallel a} \Gamma_{ay}^{Cor} -
 
 \subsection{Parallel momentum transport coefficients}
 
-$\eta_{ax} = \eta^{(AN)}_{a} + \frac{4}{3} \widetilde{\widetilde{\eta}}^{(CL)}_{ax}$
+\begin{equation}\label{eq:eta_ax}
+\eta_{ax} = \eta^{(AN)}_{a} + \frac{4}{3} \widetilde{\widetilde{\eta}}^{(CL)}_{ax}
+\end{equation}
 
 %-------- end of 6th page -------------
 
@@ -7977,7 +7980,9 @@ c_{\eta_{ax}^{(CL)}} & =
 \end{matrix}
 \end{equation}
 
-$V_{m_a}^{(max)} = c_{flim_2} \frac{\sqrt g}{h_x} |b_x| n_a T_i$, ~ $c_{flim_2} = \frac{3}{8}$
+\begin{equation}\label{eq:vma_max}
+V_{m_a}^{(max)} = c_{flim_2} \frac{\sqrt g}{h_x} |b_x| n_a T_i ~ \text{,} ~ c_{flim_2} = \frac{3}{8}
+\end{equation}
 
 \begin{align}\label{eq:mom_veta}
 \widetilde{\eta}^{(CL)}_{ax} = c_{\eta_{ax}^{(CL)}}^{Luciani} \eta^{(CL)}_{ax}
@@ -9696,7 +9701,7 @@ $r_{rec,0,0} = 0,\;\; r_{rec,1,0} = 1,\;\; p_{n_a,a,1} = 0 $
 =
 \left. \left[
 - p_{n,a,1} \frac{\sqrt g}{h_x} |b_x|
-\sqrt{\frac{\sum \limits_{b=0}^{ns-1} p_b}{\sum \limits_{b=0}^{ns-1} m_b n_b}} n_a
+\sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}} n_a
 -
 \frac{\sqrt g}{h_x} D_{axy} \frac 1{h_y} \frac{\partial n_a T_i}{\partial y}
 \right]
@@ -9757,7 +9762,7 @@ $r_{rec,0,0} = 0,\;\; r_{rec,1,0} = 1$
 =
 \left. \left[
 - p_{n,a,1} \frac{\sqrt g}{h_x} |b_x|
-\sqrt{\frac{\sum \limits_{b=0}^{ns-1} p_b}{\sum \limits_{b=0}^{ns-1} m_b n_b}} n_a
+\sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}} n_a
 +
 \frac{\sqrt g}{h_x} D_{axy} \frac 1{h_y} \frac{\partial n_a T_i}{\partial y}
 \right]
@@ -9956,8 +9961,8 @@ $ \left. h_z \frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_W = \left. \left[
 $V_{West} =
 - h_z \frac{\sqrt g}{h_x} \frac{|b_x|}{b_x} V_{ax}^{(E \times B)}
 - h_z \frac{\sqrt g}{h_x} b_x
-\sqrt{\frac{\sum \limits_{a=0}^{ns-1} p_a}
-{\sum \limits_{a=0}^{ns-1} m_a n_a}}$
+\sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}
+{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}$
 
 \underline{If $z_a = 0$}
 
@@ -9989,7 +9994,7 @@ $p_{m,a,1} = 1$, $p_{m,a,2} = 0$, $u_{big} = 10^{18}$, $n_{e00} = 10^{20}$, $\ep
 
 $u_{p_{out}} = \max \left\{ 0, \frac{u_{u_{out}}}{b_x} + \frac{u_a^{(dia)}}{b_x}  \right\}$,
 $u_{u_{out}} = p_{m,a,1} c_s |b_x|$,
-$c_s = \sqrt{\frac{\sum \limits_{a=0}^{ns-1} p_a}{\sum \limits_{a=0}^{ns-1} m_a n_a}}$
+$c_s = \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}$
 
 \subsubsection{East}
 
@@ -10010,8 +10015,8 @@ $\left. -h_z \frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_E = \left. \left[
 $V_{East} =
 - h_z \frac{\sqrt g}{h_x} \frac{|b_x|}{b_x} V_{ax}^{(E \times B)}
 + h_z \frac{\sqrt g}{h_x} b_x
-\sqrt{\frac{\sum \limits_{a=0}^{ns-1} p_a}
-{\sum \limits_{a=0}^{ns-1} m_a n_a}}$
+\sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}
+{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}$
 
 \underline{If $z_a = 0$}
 
@@ -10041,7 +10046,7 @@ $p_{m,a,1} = 1$, $p_{m,a,2} = 0$, $u_{big} = 10^{18}$, $n_{e00} = 10^{20}$, $\ep
 
 $u_{p_{out}} = \max \left\{ 0, \frac{u_{u_{out}}}{b_x} - \frac{u_a^{(dia)}}{b_x}  \right\}$,
 $u_{u_{out}} = p_{m,a,1} c_s |b_x|$,
-$c_s = \sqrt{\frac{\sum \limits_{a=0}^{ns-1} p_a}{\sum \limits_{a=0}^{ns-1} m_a n_a}}$
+$c_s = \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}$
 
 %-------- end of 29th page -------------
 
@@ -10169,8 +10174,8 @@ $\left. \frac{\sqrt{g}}{h_y} j_y \right|_{S_0} = 0$
 \begin{small}
 $\left. \frac{\sqrt g}{h_x} j_x \right|_W =
 \frac{\sqrt g}{h_x} e \left. \left[
-	- \sum \limits_{b=0}^{ns-1} z_a \left(
-		p_{n,a,1} |b_x| \sqrt{\frac{\sum \limits_{a=0}^{ns-1} p_b}{\sum \limits_{b=0}^{ns-1} m_b n_b}} n_a
+	- \sum \limits_{a=0}^{ns-1} z_a \left(
+		p_{n,a,1} |b_x| \sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}} n_a
 	\right) +
 	\left( 1 - \gamma_e \right) |b_x| n_e \frac 1{\sqrt{2\pi}}
 	\sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right)}{T_e} \right)
@@ -10207,8 +10212,8 @@ $\left. \frac{\sqrt g}{h_x} j_x \right|_W =
 \begin{small}
 $\left. -\frac{\sqrt g}{h_x} j_x \right|_E =
 \frac{\sqrt g}{h_x} e \left. \left[
-	- \sum \limits_{b=0}^{ns-1} z_a \left(
-		p_{n,a,1} |b_x| \sqrt{\frac{\sum \limits_{a=0}^{ns-1} p_b}{\sum \limits_{b=0}^{ns-1} m_b n_b}} n_a
+	- \sum \limits_{a=0}^{ns-1} z_a \left(
+		p_{n,a,1} |b_x| \sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}} n_a
 	\right) +
 	\left( 1 - \gamma_e \right) |b_x| n_e \frac 1{\sqrt{2\pi}}
 	\sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right)}{T_e} \right)
@@ -10388,7 +10393,7 @@ $\left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \left. \left[
 	\max \left(
 		0, \frac{\sqrt g}{h_x}
                 \sum \limits_{a=0}^{ns-1} z_a p_{n,a,1} |b_x|
-		\sqrt{\frac{\sum \limits_{b=0}^{ns-1} p_b}{\sum \limits_{b=0}^{ns-1} m_b n_b}} n_a
+		\sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}} n_a
 		+
 		\frac{\sqrt g}{h_x} \frac{j_{\parallel}}e
 	\right)
@@ -10432,9 +10437,7 @@ $\nu_{e_{out}} = \min \left\{
 ,\;\;\;\;\;\;\;\;\;
 u_{u_{out}} = p_{m,a_{main},1} c_s |b_x|
 ,\;\;\;\;\;\;\;\;
-c_s = \sqrt{\frac{\sum \limits_{a=0}^{ns-1} p_a}{\sum \limits_{a=0}^{ns-1} m_a n_a}}$
-
-endif
+c_s = \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}$
 
 \subsubsection{East}
 
@@ -10449,7 +10452,7 @@ $\left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \left. \left[
 	\max \left(
 		0, \frac{\sqrt g}{h_x}
                 \sum \limits_{a=0}^{ns-1} z_a p_{n,a,1} |b_x|
-		\sqrt{\frac{\sum \limits_{b=0}^{ns-1} p_b}{\sum \limits_{b=0}^{ns-1} m_b n_b}} n_a
+		\sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}} n_a
 		-
 		\frac{\sqrt g}{h_x} b_x \frac{j_{\parallel}}e
 	\right)
@@ -10491,9 +10494,7 @@ $\nu_{e_{out}} = max \left\{
 ,\;\;\;\;\;\;\;\;\;
 u_{u_{out}} = p_{m,a_{main},1} c_s |b_x|
 ,\;\;\;\;\;\;\;\;
-c_s = \sqrt{\frac{\sum \limits_{a=0}^{ns-1} p_a}{\sum \limits_{a=0}^{ns-1} m_a n_a}}$
-
-endif
+c_s = \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}$
 
 %-------- end of 34th page -------------
 
@@ -10775,7 +10776,7 @@ $c_{h_i,a,2} = -10^{-2}$
 
 $\left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W = \left.
 - p_{h_i,1} \frac{\sqrt g}{h_x} |b_x|
-\sqrt{\frac{\sum \limits_{b=0}^{ns-1} p_b}{\sum \limits_{b=0}^{ns-1} m_b n_b}} T_i
+\sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}} T_i
 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} p_{n,a,1} n_a
 -
 \frac{\sqrt g}{h_x} q_{ix}^{P.Sch}
@@ -10791,7 +10792,7 @@ $\left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W =
 	\left(
 		c_{h_i,a,7}
 		\frac{\sqrt g}{h_x} |b_x|
-		\sqrt{\frac{\sum \limits_{a=0}^{ns-1} p_a}{\sum \limits_{a=0}^{ns-1} m_a n_a}}
+		\sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}}
 		\frac{n_a}{n_i}
 	\right) n_i T_i
 	-
@@ -10842,7 +10843,7 @@ $u_{p_{out}} = \max \left\{
 	0, \frac{u_{u_{out}}}{b_x} + \frac{u_{1,x}^{(dia)}}{b_x}
 \right\}$
 
-$u_{u_{out}} = p_{m,a_{main},1} c_s |b_x|$, $c_s = \sqrt{\frac{\sum \limits_{a=0}^{ns-1} p_a}{\sum \limits_{a=0}^{ns-1} m_a n_a}}$, \\\\ $p_{m,a_{main},1} = 1.0$
+$u_{u_{out}} = p_{m,a_{main},1} c_s |b_x|$, $c_s = \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}$, \\\\ $p_{m,a_{main},1} = 1.0$
 
 If {\tt neutrals\_namelist.eq.1.or.use\_eirene.ne.0}
 then $e_{rec,0} = 0$, $e_{rec,1} = 0.3$, $r_{rec,0,0} = 0$, $r_{rec,1,0} = 1$
@@ -10863,7 +10864,7 @@ $p_{h_i,2} = 10^{-3}$ with drifts, should be $p_{h_i,2} = 0$
 
 $\left. -\frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_E = \left.
 - p_{h_i,1} \frac{\sqrt g}{h_x} |b_x|
-\sqrt{\frac{\sum \limits_{b=0}^{ns-1} p_b}{\sum \limits_{b=0}^{ns-1} m_b n_b}} T_i
+\sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}} T_i
 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} p_{n,a,1} n_a
 -
 \frac{\sqrt g}{h_x} q_{ix}^{P.Sch}
@@ -10879,7 +10880,7 @@ $\left. -\frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_E =
 	-\left(
 		c_{h_i,a,7}
 		\frac{\sqrt g}{h_x} |b_x|
-		\sqrt{\frac{\sum \limits_{a=0}^{ns-1} p_a}{\sum \limits_{a=0}^{ns-1} m_a n_a}}
+		\sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}}
 		\frac{n_a}{n_i}
 	\right) n_i T_i
 	+
@@ -10930,9 +10931,9 @@ $u_{p_{out}} = \max \left\{
 	0, \frac{u_{u_{out}}}{b_x} - \frac{u_{1,x}^{(dia)}}{b_x}
 \right\}$
 
-$u_{u_{out}} = p_{m,a_{main},1} c_s |b_x|$, $c_s = \sqrt{\frac{\sum \limits_{a=0}^{ns-1} p_a}{\sum \limits_{a=0}^{ns-1} m_a n_a}}$, $p_{m,a_{main},1} = 1.0$
+$u_{u_{out}} = p_{m,a_{main},1} c_s |b_x|$, $c_s = \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}$, $p_{m,a_{main},1} = 1.0$
 
-If neutrals\_namelist.eq.1.or.use\_eirene.ne.0
+If {\tt neutrals\_namelist.eq.1.or.use\_eirene.ne.0}
 then $e_{rec,0} = 0$, $e_{rec,1} = 0.3$, $r_{rec,0,0} = 0$, $r_{rec,1,0} = 1$
 
 else  $r_{rec,0,0} = 0$, $r_{rec,1,0} = 1$, $r_{rec,0,1} = 0$, $r_{rec,1,1} = 0.3$
@@ -11493,16 +11494,12 @@ c_{s\alpha}=\sqrt{\frac{k_{B}\left( Z_{\alpha}T_{e}+T_{i}\right) }
 \end{equation}
 is the isothermal ion sound velocity for the atomic species $\alpha$;
 \begin{equation}
-c_{st}=\sqrt{\frac{\sum_{\alpha}n_{\alpha}k_{B}\left(
-Z_{\alpha}T_{e}+T_{i}\right) }{\sum_{\alpha}n_{\alpha}A_{\alpha}m_{p}}}=
-\sqrt{\frac {\sum_{\alpha}n_{\alpha}k_{B}\left( Z_{\alpha}T_{e}+T_{i}\right)
-}{\sum_{\alpha}n_{\alpha}m_{\alpha}}}   \label{10}
+c_{st}=\sqrt{\frac{\sum_{\substack{\alpha \\ Z_\alpha \neq 0}}n_{\alpha}k_{B}\left(
+Z_{\alpha}T_{e}+T_{i}\right) }{\sum_{\substack{\alpha \\ Z_\alpha \neq 0}} n_{\alpha}A_{\alpha}m_{p}}}=
+\sqrt{\frac {\sum_{\substack{\alpha \\ Z_\alpha \neq 0}}n_{\alpha}k_{B}\left( Z_{\alpha}T_{e}+T_{i}\right)
+}{\sum_{\substack{\alpha \\ Z_\alpha \neq 0}}n_{\alpha}m_{\alpha}}}   \label{10}
 \end{equation}
-is the isothermal ion sound velocity for a multi-species plasma (default model)
-or, if {\tt b2stbc\_sound\_model} is set to 1:
-\begin{equation}
-c_{st}=\sqrt{\sum_{\alpha}\frac{n_\alpha k_{B} \left( Z_\alpha T_e + T_i \right)}{m_\alpha n_i}}~.
-\end{equation}
+is the isothermal ion sound velocity for a multi-species plasma.
 \begin{equation}
 c_{sD\alpha}=\max\left(c_{s\alpha},0.1c_{s\alpha}\pm\left( B_{z}/B_{x}\right)
 u_{Dx}\right)   \label{11}
@@ -12838,7 +12835,7 @@ $\displaystyle -\frac{h_z\sqrt g}{h_x} \eta_{ax} \frac{\partial V_{\parallel a}}
 
 $\displaystyle -\frac{h_z\sqrt g}{h_y} \eta_{ay} \frac{\partial V_{\parallel a}}{h_y \partial y}$ &$ N \cdot m $ & \texttt{b2urmo\_etaPat\_graduay[XXX].dat} & (\ref{eq:mom_fluxy})  \\
 
-$\displaystyle  \frac{h_z\sqrt g}{h_x} \left( \frac 4 3 \widetilde{\widetilde{\eta}}^{(CL)}_{ax} \frac{\partial \ln h_z}{h_x \partial x} \right) $ & $kg \cdot m / s$ & \texttt{b2npmo\_flubvx001.dat} & (\ref{eq:mom_fluxx})  \\
+$\displaystyle \frac{h_z\sqrt g}{h_x} \left( \frac 4 3 \widetilde{\widetilde{\eta}}^{(CL)}_{ax} \frac{\partial \ln h_z}{h_x \partial x} \right) $ & $kg \cdot m / s$ & \texttt{b2npmo\_flubvx001.dat} & (\ref{eq:mom_fluxx})  \\
 
 residuals & $ N\cdot m $ & \texttt{b2npmo\_resmo[XXX].dat}  \\
 
@@ -12854,9 +12851,9 @@ $\displaystyle \frac{\sqrt {g}}{h_{y}}\widetilde{q}_{ey} $ & $ W $ & \texttt{b2n
 $\displaystyle S_{e}^{heat}  \sqrt{g}$ & $ W $ & \texttt{b2npht\_she.dat} or & (\ref{eq:ene_seheat})  \\
  & & \texttt{b2nph9\_she.dat} & \\ 
  
-$\displaystyle  Q_{R}\sqrt {g} $ & $ W $ & \texttt{b2stel\_she\_rad.dat} & (\ref{eq:ene_QR})  \\
+$\displaystyle Q_{R}\sqrt {g} $ & $ W $ & \texttt{b2stel\_she\_rad.dat} & (\ref{eq:ene_QR})  \\
 
-$\displaystyle  Q_{\Delta }\sqrt {g} $ & $ W $ & \texttt{b2npht\_shei.dat} or & (\ref{eq:ene_Qdelta})  \\
+$\displaystyle Q_{\Delta }\sqrt {g} $ & $ W $ & \texttt{b2npht\_shei.dat} or & (\ref{eq:ene_Qdelta})  \\
 & & \texttt{b2nph9\_shei.dat} & \\ 
 
 $\displaystyle Q_e^{\rm EIRENE}\sqrt {g} $ & $ W $ & \texttt{b2stbr\_she\_eir.dat} & (\ref{eq:ene_seheat})  \\
@@ -12874,7 +12871,7 @@ $\displaystyle Q^{BC}_{e}\sqrt {g} $ & $ W $ & \texttt{b2stbc\_phys\_she.dat} & 
 
 $\displaystyle -\frac{j_y^{(ST)}}{e n_e} \frac{\partial n_e T_e}{h_y \partial y} \sqrt{g}$ & $ W $ & \texttt{b2sihs\_\_shest.dat} & (\ref{eq:ene_new})  \\
 
-$\displaystyle - \frac{3}{2} \frac{\partial n_e T_e}{\partial t} \sqrt{g} $ & $ W $ & \texttt{b2srdt\_shedt.dat} & (\ref{eq:ene_new})  \\
+$\displaystyle -\frac{3}{2} \frac{\partial n_e T_e}{\partial t} \sqrt{g} $ & $ W $ & \texttt{b2srdt\_shedt.dat} & (\ref{eq:ene_new})  \\
 
 $\displaystyle \frac32 \frac{\sqrt{g}}{h_{x}} \Gamma_{ex} T_e$ & $ W $ & \texttt{b2tfhe\_\_qe\_32x.dat} & (\ref{eq:ene_gammax})  \\
 
@@ -12888,7 +12885,7 @@ $\displaystyle -\frac{\sqrt{g}}{h_{x}} \kappa_{ex} \frac{1}{h_{x}}\frac{\partial
 
 $\displaystyle -\frac{\sqrt{g}}{h_{y}} \kappa_{ey} \frac{1}{h_{y}}\frac{\partial T_e}{\partial y}$ & $ W $ & \texttt{b2tfhe\_\_qe\_ke\_gTy.dat} &  (\ref{eq:ene_qey})\\
 
-$\displaystyle - \widetilde{c_e}^{(2)} \frac{j^{\left( \parallel \right) }_x} e T_e $
+$\displaystyle -\widetilde{c_e}^{(2)} \frac{j^{\left( \parallel \right) }_x} e T_e $
 \footnote{If the switch {\tt b2tfhe\_alphaTeh = 1} (and {\tt b2tfhe\_fch\_pTe = 0}),
 then this output item contains $\displaystyle \alpha_{ex} \hat{E}_x T_e $} & $ W $ & \texttt{b2tfhe\_\_qe\_fchpTex.dat} & (\ref{eq:ene_tifex})  \\
 
@@ -12942,7 +12939,7 @@ residuals & $ W $ & \texttt{b2npht\_reshe.dat} or & \\ & & \texttt{b2nph9\_reshe
 $T_i$ & $ W $ & \texttt{b2npht\_shi.dat} or & (\ref{eq:eni})\\
  & & \texttt{b2nph9\_shi.dat} & \\
  
-$S_i^{heat}  \sqrt{g}$ & $ W $ & \texttt{b2npht\_shi.dat} or & (\ref{eq:cont_appC})  \\
+$S_i^{heat} \sqrt{g}$ & $ W $ & \texttt{b2npht\_shi.dat} or & (\ref{eq:cont_appC})  \\
  & & \texttt{b2nph9\_shi.dat} & \\
  
 $\displaystyle -\frac{3}{2} \sqrt{g} \frac{\partial n_i T_i}{\partial t}$ & $ W $ & \texttt{b2srdt\_shidt.dat} & (\ref{eq:eni})\\
@@ -13136,7 +13133,7 @@ $Y$-directed regions:
 +--------------1--------------+
 
 region 1 === core boundary
-region 3 === SOL boundary
+region 2 === SOL boundary
 \end{verbatim}
 
 In cases where the problem of interest has only one target and a plasma entry surface, the target should be located to the right of the domain and the plasma should enter from the left.
@@ -13852,6 +13849,7 @@ when calculating derived data.
     poti     & \index{b2plot, poti} Ionization energy $(eV)$ \\
     pr       & \index{b2plot, pr} Static pressure $(Pa)$ \\
     psi      & \index{b2plot, psi} Poloidal magnetic flux function $\Psi$ $(Wb)$ \\
+    pz       & \index{b2plot, pz} Plasma pressure $(Pa)$ \\
     q        & \index{b2plot, q} Safety factor \\
     qc       & \index{b2plot, qc} Cosine of the angle between flux line direction and left cell face \\
     qz0      & \index{b2plot, qz0} Sine of the angle away from orthogonality of the grid \\
