@@ -33,7 +33,7 @@ module load Python/3.6.4-intel-2018a
 # module load motif/2.3.4-intel-2015a-libX11-1.6.3 <<<<<
 # module load libXp/1.0.3-intel-2015a <<<<<<
 # mpi-library from intel/2015a is used
-
+module load Pango/1.41.1-intel-2018a
 # Debugger (set environment variable DBX)
 # module load allinea-forge/6.0 <<<<<<
 setenv DBX ddt
