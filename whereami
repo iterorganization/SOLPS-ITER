@@ -31,6 +31,7 @@ case "*.itm.rzg.mpg.de":
   breaksw
 case "*.efda-itm.eu":
 case "*.marconi.cineca.it"
+case "*.galileo.cineca.it"
   [ -d /afs ] && echo ITM || echo MARCONI
   breaksw
 case "*.ipp-garching.mpg.de":
