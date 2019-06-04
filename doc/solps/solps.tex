@@ -1232,9 +1232,11 @@ The options are applied in that order independently of the order in which they w
   \item[b2stbc\_sna\_reg \#1]\index{b2stbc\_sna\_reg} Boundary particle sources for region \#1 (default 0)
   \item[b2stbr\_sna\_reg \#1]\index{b2stbr\_sna\_reg} Recycling particle sources for region \#1 (default 0)
   \item[b2stbm\_sna\_reg \#1]\index{b2stbm\_sna\_reg} Additional particle sources for region \#1 (default 0)
+  \item[b2sext\_sna\_reg \#1]\index{b2sext\_sna\_reg} External particle sources for region \#1 (default 0)
   \item[b2stbc\_smo\_reg \#1]\index{b2stbc\_smo\_reg} Boundary parallel momentum sources for region \#1 (default 0)
   \item[b2stbr\_smo\_reg \#1]\index{b2stbr\_smo\_reg} Recycling parallel momentum sources for region \#1 (default 0)
   \item[b2stbm\_smo\_reg \#1]\index{b2stbm\_smo\_reg} Additional parallel momentum sources for region \#1 (default 0)
+  \item[b2sext\_smo\_reg \#1]\index{b2sext\_smo\_reg} External parallel momentum sources for region \#1 (default 0)
   \item[rcxhireg \#1]\index{rcxhireg} charge exchange energy for region \#1 (default 0)
   \item[rcxmoreg \#1]\index{rcxmoreg} charge exchange parallel momentum for region \#1 (default 0)
   \item[rcxnareg \#1]\index{rcxnareg} charge exchange rate for region \#1 (default 0)
@@ -1283,6 +1285,18 @@ The options are applied in that order independently of the order in which they w
   \item[b2stbm\_sna\_reg\_region \#1]\index{b2stbm\_sna\_reg\_region} Additional particle sources, by
     region, for species  \#1 (default 0)
   \item[b2stbm\_smo\_reg\_region \#1]\index{b2stbm\_smo\_reg\_region} Additional parallel momentum sources, by
+    region, for species  \#1 (default 0)
+  \item[b2sext\_she\_reg\_region \#1]\index{b2sext\_she\_reg\_region} External electron heat sources, by
+    region, for species  \#1 (default 0)
+  \item[b2sext\_shi\_reg\_region \#1]\index{b2sext\_shi\_reg\_region} External ion heat sources, by
+    region, for species  \#1 (default 0)
+  \item[b2sext\_sne\_reg\_region \#1]\index{b2sext\_sne\_reg\_region} External electron particle sources, by
+    region, for species  \#1 (default 0)
+  \item[b2sext\_sch\_reg\_region \#1]\index{b2sext\_sch\_reg\_region} External charge sources, by
+    region, for species  \#1 (default 0)
+  \item[b2sext\_sna\_reg\_region \#1]\index{b2sext\_sna\_reg\_region} External particle sources, by
+    region, for species  \#1 (default 0)
+  \item[b2sext\_smo\_reg\_region \#1]\index{b2sext\_smo\_reg\_region} External parallel momentum sources, by
     region, for species  \#1 (default 0)
   \item[rcxhireg\_region \#1]\index{rcxhireg\_region} charge exchange
     energy, by region, for species  \#1 (default 0)
@@ -12475,21 +12489,27 @@ b2shi0 \index{b2shi0}\index{b2tallies.nc, b2shi0}                               
 b2stbc\_sch\_reg \index{b2stbc\_sch\_reg}\index{b2tallies.nc, b2stbc\_sch\_reg}  & vreg, time     & $A$           & Boundary charge source \\
 b2stbc\_she\_reg \index{b2stbc\_she\_reg}\index{b2tallies.nc, b2stbc\_she\_reg}  & vreg, time     & $W$           & Boundary electron energy source \\
 b2stbc\_shi\_reg \index{b2stbc\_shi\_reg}\index{b2tallies.nc, b2stbc\_shi\_reg}  & vreg, time     & $W$           & Boundary ion energy source \\
-b2stbc\_smo\_reg \index{b2stbc\_smo\_reg}\index{b2tallies.nc, b2stbc\_smo\_reg}  & vreg, ns, time & $kg.m.s^{-1}$ & Boundary parallel momentum source \\
-b2stbc\_sna\_reg \index{b2stbc\_sna\_reg}\index{b2tallies.nc, b2stbc\_sna\_reg}  & vreg, ns, time & $s^{-1}$      & Boundary particle source \\
-b2stbc\_sne\_reg \index{b2stbc\_sne\_reg}\index{b2tallies.nc, b2stbc\_sne\_reg}  & vreg, time     & $s^{-1}$      & Boundary electron source \\
+b2stbc\_smo\_reg \index{b2stbc\_smo\_reg}\index{b2tallies.nc, b2stbc\_smo\_reg}  & vreg, ns, time & $kg.m.s^{-1}$  & Boundary parallel momentum source \\
+b2stbc\_sna\_reg \index{b2stbc\_sna\_reg}\index{b2tallies.nc, b2stbc\_sna\_reg}  & vreg, ns, time & $s^{-1}$       & Boundary particle source \\
+b2stbc\_sne\_reg \index{b2stbc\_sne\_reg}\index{b2tallies.nc, b2stbc\_sne\_reg}  & vreg, time     & $s^{-1}$       & Boundary electron source \\
 b2stbr\_sch\_reg \index{b2stbr\_sch\_reg}\index{b2tallies.nc, b2stbr\_sch\_reg}  & vreg, time     & $A$           & Recycling charge source \\
 b2stbr\_she\_reg \index{b2stbr\_she\_reg}\index{b2tallies.nc, b2stbr\_she\_reg}  & vreg, time     & $W$           & Recycling electron energy source \\
 b2stbr\_shi\_reg \index{b2stbr\_shi\_reg}\index{b2tallies.nc, b2stbr\_shi\_reg}  & vreg, time     & $W$           & Recycling ion energy source \\
-b2stbr\_smo\_reg \index{b2stbr\_smo\_reg}\index{b2tallies.nc, b2stbr\_smo\_reg}  & vreg, ns, time & $kg.m.s^{-1}$ & Recycling parallel momentum source \\
-b2stbr\_sna\_reg \index{b2stbr\_sna\_reg}\index{b2tallies.nc, b2stbr\_sna\_reg}  & vreg, ns, time & $s^{-1}$      & Recycling particle source \\
-b2stbr\_sne\_reg \index{b2stbr\_sne\_reg}\index{b2tallies.nc, b2stbr\_sne\_reg}  & vreg, time     & $s^{-1}$      & Recycling electron source \\
+b2stbr\_smo\_reg \index{b2stbr\_smo\_reg}\index{b2tallies.nc, b2stbr\_smo\_reg}  & vreg, ns, time & $kg.m.s^{-1}$  & Recycling parallel momentum source \\
+b2stbr\_sna\_reg \index{b2stbr\_sna\_reg}\index{b2tallies.nc, b2stbr\_sna\_reg}  & vreg, ns, time & $s^{-1}$       & Recycling particle source \\
+b2stbr\_sne\_reg \index{b2stbr\_sne\_reg}\index{b2tallies.nc, b2stbr\_sne\_reg}  & vreg, time     & $s^{-1}$       & Recycling electron source \\
 b2stbm\_sch\_reg \index{b2stbm\_sch\_reg}\index{b2tallies.nc, b2stbm\_sch\_reg}  & vreg, time     & $A$           & Additional charge source \\
 b2stbm\_she\_reg \index{b2stbm\_she\_reg}\index{b2tallies.nc, b2stbm\_she\_reg}  & vreg, time     & $W$           & Additional electron energy source \\
 b2stbm\_shi\_reg \index{b2stbm\_shi\_reg}\index{b2tallies.nc, b2stbm\_shi\_reg}  & vreg, time     & $W$           & Additional ion energy source \\
-b2stbm\_smo\_reg \index{b2stbm\_smo\_reg}\index{b2tallies.nc, b2stbm\_smo\_reg}  & vreg, ns, time & $kg.m.s^{-1}$ & Additional parallel momentum source \\
-b2stbm\_sna\_reg \index{b2stbm\_sna\_reg}\index{b2tallies.nc, b2stbm\_sna\_reg}  & vreg, ns, time & $s^{-1}$      & Additional particle source \\
-b2stbm\_sne\_reg \index{b2stbm\_sne\_reg}\index{b2tallies.nc, b2stbm\_sne\_reg}  & vreg, time     & $s^{-1}$      & Additional electron source \\
+b2stbm\_smo\_reg \index{b2stbm\_smo\_reg}\index{b2tallies.nc, b2stbm\_smo\_reg}  & vreg, ns, time & $kg.m.s^{-1}$  & Additional parallel momentum source \\
+b2stbm\_sna\_reg \index{b2stbm\_sna\_reg}\index{b2tallies.nc, b2stbm\_sna\_reg}  & vreg, ns, time & $s^{-1}$       & Additional particle source \\
+b2stbm\_sne\_reg \index{b2stbm\_sne\_reg}\index{b2tallies.nc, b2stbm\_sne\_reg}  & vreg, time     & $s^{-1}$       & Additional electron source \\
+b2sext\_sch\_reg \index{b2sext\_sch\_reg}\index{b2tallies.nc, b2sext\_sch\_reg}  & vreg, time     & $A$           & External charge source \\
+b2sext\_she\_reg \index{b2sext\_she\_reg}\index{b2tallies.nc, b2sext\_she\_reg}  & vreg, time     & $W$           & External electron energy source \\
+b2sext\_shi\_reg \index{b2sext\_shi\_reg}\index{b2tallies.nc, b2sext\_shi\_reg}  & vreg, time     & $W$           & External ion energy source \\
+b2sext\_smo\_reg \index{b2sext\_smo\_reg}\index{b2tallies.nc, b2sext\_smo\_reg}  & vreg, ns, time & $kg.m.s^{-1}$  & External parallel momentum source \\
+b2sext\_sna\_reg \index{b2sext\_sna\_reg}\index{b2tallies.nc, b2sext\_sna\_reg}  & vreg, ns, time & $s^{-1}$       & External particle source \\
+b2sext\_sne\_reg \index{b2sext\_sne\_reg}\index{b2tallies.nc, b2sext\_sne\_reg}  & vreg, time     & $s^{-1}$       & External electron source \\
 b2str \index{b2str}\index{b2tallies.nc, b2str}                                   & vreg, time     & $W$           & Strange term \\
 b2visa \index{b2visa}\index{b2tallies.nc, b2visa}                                & vreg, time     & $W$           & Ion viscous heating \\
 b2wrong1 \index{b2wrong1}\index{b2tallies.nc, b2wrong1}                          & vreg, time     & $W$           & Obsolete \\
@@ -12511,18 +12531,18 @@ fhtxreg \index{fhtxreg}\index{b2tallies.nc, fhtxreg}                            
 fhtyreg \index{fhtyreg}\index{b2tallies.nc, fhtyreg}                             & yreg, time     & $W$           & Radial total energy flux \\
 fnaxreg \index{fnaxreg}\index{b2tallies.nc, fnaxreg}                             & xreg, ns, time & $s{^-1}$      & Poloidal particle flux \\
 fnayreg \index{fnayreg}\index{b2tallies.nc, fnayreg}                             & yreg, ns, time & ${s^-1}$      & Radial particle flux \\
-nareg \index{nareg}\index{b2tallies.nc, nareg}                                   & vreg, ns, time & $m^{-3}$      & Average ion density $\frac{\int n_a dV}{\int dV}$ \\
-ne2reg \index{ne2reg}\index{b2tallies.nc, ne2reg}                                & vreg, time     & $m^{-3}$      & Average weighted density $\frac{\int Z_a^2 n_a dV}{\int dV}$ \\
-nereg \index{nereg}\index{b2tallies.nc, nereg}                                   & vreg, time     & $m^{-3}$      & Average electron density $\frac{\int n_e dV}{\int dV}$ \\
-nireg \index{nireg}\index{b2tallies.nc, nireg}                                   & vreg, time     & $m^{-3}$      & Average total ion density $\frac{\int n_i dV}{\int dV}$  \\
+nareg \index{nareg}\index{b2tallies.nc, nareg}                                   & vreg, ns, time & $m^{-3}$       & Average ion density $\frac{\int n_a dV}{\int dV}$ \\
+ne2reg \index{ne2reg}\index{b2tallies.nc, ne2reg}                                & vreg, time     & $m^{-3}$       & Average weighted density $\frac{\int Z_a^2 n_a dV}{\int dV}$ \\
+nereg \index{nereg}\index{b2tallies.nc, nereg}                                   & vreg, time     & $m^{-3}$       & Average electron density $\frac{\int n_e dV}{\int dV}$ \\
+nireg \index{nireg}\index{b2tallies.nc, nireg}                                   & vreg, time     & $m^{-3}$       & Average total ion density $\frac{\int n_i dV}{\int dV}$  \\
 poreg \index{poreg}\index{b2tallies.nc, poreg}                                   & vreg, time     & $eV$          & Average potential $\frac{\int \Phi dV}{\int dV}$ \\
 qconvexreg \index{qconvexreg}\index{b2tallies.nc, qconvexreg}                    & xreg, time     & $W$           & Poloidally convected electron energy  \\
 qconveyreg \index{qconveyreg}\index{b2tallies.nc, qconveyreg}                    & yreg, time     & $W$           & Radially convected electron energy \\
 qconvixreg \index{qconvixreg}\index{b2tallies.nc, qconvixreg}                    & xreg, ns, time & $W$           & Poloidally convected ion energy \\
 qconviyreg \index{qconviyreg}\index{b2tallies.nc, qconviyreg}                    & yreg, ns, time & $W$           & Radially convected ion energy \\
 rcxhireg \index{rcxhireg}\index{b2tallies.nc, rcxhireg}                          & vreg, ns, time & $W$           & Charge-exchange ion energy source \\
-rcxmoreg \index{rcxmoreg}\index{b2tallies.nc, rcxmoreg}                          & vreg, ns, time & $kg.m.s^{-1}$ & Charge-exchange ion parallel momentum source \\
-rcxnareg \index{rcxnareg}\index{b2tallies.nc, rcxnareg}                          & vreg, ns, time & $s^{-1}$      & Charge-exchange particle source \\
+rcxmoreg \index{rcxmoreg}\index{b2tallies.nc, rcxmoreg}                          & vreg, ns, time & $kg.m.s^{-1}$  & Charge-exchange ion parallel momentum source \\
+rcxnareg \index{rcxnareg}\index{b2tallies.nc, rcxnareg}                          & vreg, ns, time & $s^{-1}$       & Charge-exchange particle source \\
 rdneureg \index{rdenureg}\index{b2tallies.nc, rdneureg}
  & vreg, time     & $W$           & Total radiation from {\tt Eirene} neutrals \\
 resco\_reg \index{resco\_reg}\index{b2tallies.nc, resco\_reg}                    & vreg, ns, time &               & Continuity equation residuals \\
