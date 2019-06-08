@@ -23,7 +23,7 @@
 ### the loop breakes, i.e. the job is not resubmitted again.
 ###
 ### Usage: 
-###   Submit the job:     `ippsubmit -s -j "JobName" SLURM.itm_loop`
+###   Submit the job:     `ippsubmit -s -j "JobName" SLURM.ipp_loop`
 ###   Stop the run:       `touch b2mn.exe.dir/.quit`
 
 pushd #SOLPSTOP#
