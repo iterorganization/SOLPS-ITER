@@ -17,6 +17,6 @@ pipe_run.log | \
   egrep -a '^tereg '\|'^nereg '\|'^volreg ' | \
   awk '/tereg/{for (i=2;i<=NF;i++) {te[i]=$i}}\
        /nereg/{for (i=2;i<=NF;i++) {ne[i]=$i}}\
-       /volreg/{for (i=2;i<=NF;i++) printf "%s ",te[i]/ne[i]/1.6021766028e-19;printf "\n"}' | \
+       /volreg/{for (i=2;i<=NF;i++) printf "%s ",te[i]/ne[i]/1.602176634e-19;printf "\n"}' | \
   nl >! ${tmpdir}PLOT_FROM_FILE
   plot x"$1"yplot$vregP `count 0 $vreg` iter "ave Te" $PWD
