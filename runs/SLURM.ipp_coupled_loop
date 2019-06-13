@@ -23,8 +23,8 @@
 ### the loop breakes, i.e. the job is not resubmitted again.
 ###
 ### Usage: 
-###   Submit the job:     `itmsubmit SLURM.itm_coupled_loop`
-###               or      `itmsubmit -m "-np 36" -j "JobName" SLURM.itm_coupled_loop`
+###   Submit the job:     `ippsubmit SLURM.ipp_coupled_loop`
+###               or      `ippsubmit -m "-np 36" -j "JobName" SLURM.ipp_coupled_loop`
 ###   Stop the run:       `touch b2mn.exe.dir/.quit`
 
 pushd #SOLPSTOP#
