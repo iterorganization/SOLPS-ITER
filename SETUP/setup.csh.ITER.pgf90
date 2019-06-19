@@ -4,10 +4,9 @@ module use /work/imas/etc/modulefiles
 # Modules needed by SOLPS-ITER
 set nodename=`hostname`
 module load PGI/19.4-GCC-6.4.0-2.28
-module load IMAS/3.22.0-4.0.3
+module load IMAS/3.21.1-4.0.1
 module load GGD/1.8.3-PGI-18.4-GCC-6.4.0-2.28-DD-3.21.1
 module load makedepend/1.0.5-GCCcore-6.4.0
-module load MSCL/1.1.1-GCCcore-6.4.0
 module load netCDF-Fortran/4.4.4-intel-2018a
 setenv NCDIR ${EBROOTNETCDFMINFORTRAN}
 module load MSCL/1.2.0-GCCcore-6.4.0
@@ -28,7 +27,6 @@ module load ParaView/5.5.2-intel-2018a-Python-3.6.4-mpi
 module load PyQt5/5.9.2-intel-2018a-Python-3.6.4
 setenv QTDIR ${EBROOTQT5}
 setenv PARAVIEW_PREFIX ${EBROOTPARAVIEW}
-module unload mpich2
 module load motif/2.3.8-intel-2018a
 module load gnuplot/5.2.2-intel-2018a
 module load texlive

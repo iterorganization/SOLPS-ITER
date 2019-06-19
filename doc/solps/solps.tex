@@ -13777,6 +13777,7 @@ when calculating derived data.
     hy1      & \index{b2plot, hy1} Shear-corrected radial cell width $(m)$ \\
     iix      & \index{b2plot, iix} Poloidal cell index {\em ix} \\
     iiy      & \index{b2plot, iiy} Radial cell index {\em iy} \\
+    ionrad   & \index{b2plot, ionrad} Power loss due to molecular ion radiation $(W)$ \\
     iseq     & \index{b2plot, iseq} Species index {\em is} is equal to \\
     isge     & \index{b2plot, isge} Species index {\em is} is greater than or equal to \\
     isgt     & \index{b2plot, isgt} Species index {\em is} is greater than \\
@@ -13813,6 +13814,7 @@ when calculating derived data.
     mhal     & \index{b2plot, mhal} Molecular $H_\alpha$ emissivity $(photons.m^{-3}.s^{-1})$ \\
     mi       & \index{b2plot, mi} Ion mass $(kg)$ \\
     mi\_ext  & \index{b2plot, mi\_ext} External species mass $(kg)$ \\
+    molrad   & \index{b2plot, molrad} Power loss due to molecule radiation $(W)$ \\
     na       & \index{b2plot, na} Ion density $(m^{-3})$ (\SOLPSfive and \SOLPSITER runs) \\
     na0      & \index{b2plot, na0} Ion density {\em na} at previous time step $(m^{-3})$ \\
     na\_ext  & \index{b2plot, na\_ext} External species density $(m^{-3})$ \\
@@ -14510,6 +14512,7 @@ act on the "Eirene" stack or affect graphs of those data.
     esumz \index{b2plot, esumz}    & 2 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:esumz}    & Sum over species \\
     esurf \index{b2plot, esurf}    & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:esurf}    & Plot Eirene data on the triangular grid \\
     eswap \index{b2plot, eswap}    & 0 & 0 & 0 & 0 & 2 & 0 & 0 & \ref{sec:eswap}    & Swap top two elements of Eirene stack \\
+    etal \index{b2plot, etal}      & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:etal}     & Read Eirene tally output file onto the Eirene stack \\
     etos \index{b2plot, etos}      & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:etos}     & Copy Eirene data onto matrix stack \\
     evac \index{b2plot, evac}      & 0 & 1 & 0 & 0 & 1 & 0 & 0 & \ref{sec:evac}     & Fill vacuum region of Eirene stack with a value \\
     wzrng \index{b2plot, ezrng}    & 2 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:ezrng}    & Select species range in Eirene data \\
@@ -16518,6 +16521,9 @@ species (when a match between {\tt B2.5} and {\tt Eirene} species can be found)
 computed from {\tt Eirene} ({\em dab2}) are added to the fluid neutral densities from
 {\tt B2.5} ({\em na}).
 
+\subsubsection{$<$filename,{\bf S}$>$ etal}\index{b2plot, etal}\label{sec:etal}
+Copies data from the Eirene tally output file $\langle$filename$\rangle$ to the Eirene data stack. Such files are written from the volume tally output in block 11 of the {\tt Eirene} input file. This function assumes the tally file contains 2-D data on the Eirene triangular grid.
+
 \subsubsection{$<$value,{\bf R}$>$ evac}\index{b2plot, evac}\label{sec:evac}
 Assigns real value $\langle$value$\rangle$ to all triangles from the top of the Eirene data stack that do not map to a {\tt B2.5} grid cell.
 
@@ -17150,11 +17156,12 @@ labelling the graphs "Carbon" and "Neon" respectively.
 Please note that {\bf b2ra} only contains the line radiation emanating
 from the fluid species followed by {\tt B2.5}. If you wish to also
 include the radiation emanating from the neutral kinetic species computed
-by {\tt Eirene}, you need to add contributions from {\bf neutrad} as well.
-Please be mindful however that {\bf neutrad} has dimensions $natmi$ while
-{\bf b2ra} has dimensions $ns$. Currently, however, because of incomplete
-accounting in {\tt Eirene}, only the first element is filled in, and 
-it contains the sum of the radiation due to all neutral atomic species.
+by {\tt Eirene}, you need to add contributions from {\bf neutrad}, {\bf molrad},
+and {\bf ionrad}, which correspond to the radiation due to atoms, molecules, and
+molecular ions, respectively.
+Please be mindful however that {\bf neutrad} has dimensions $natmi$
+({\bf molrad} $nmoli$ and {\bf ionrad} $nioni$) while
+{\bf b2ra} has dimensions $ns$. 
 Moreover, if you are intending to compute the
 total radiation rate, you should also include the bremsstrahlung contribution
 from {\bf b2br}. You would then have as your set of commands, now using a
@@ -17162,12 +17169,15 @@ D+He+C example:
 
 \begin{verbatim}
 a4l 3 1 page lbof logf phys sep vesl outl 1.5 lbsz 5 ndec
-b2ra b2br m+ abs 0  1 sumz neutrad 0 zsel m+ pvol ' ' slbl
-'Total radiation loss (W/m^{3})' glbl 'D and neutrals' extl surf
-b2ra b2br m+ pvol abs 2  4 sumz
-'Total radiation loss (W/m^{3})' glbl 'Helium ions' extl surf
-b2ra b2br m+ pvol abs 5 11 sumz
-'Total radiation loss (W/m^{3})' glbl 'Carbon ions' extl surf
+b2ra b2br m+ abs 0  1 sumz
+neutrad 0 zsel m+ molrad  0 zsel m+ ionrad  0 zsel m+ pvol 0 ' ' slbl
+'Total radiation loss (W/m^{3})' glbl 'Hydrogenic species' extl surf
+b2ra b2br m+  abs 2  4 sumz
+neutrad 1 zsel m+ pvol 0 ' ' slbl
+'Total radiation loss (W/m^{3})' glbl 'Helium species' extl surf
+b2ra b2br m+  abs 5 11 sumz
+neutrad 2 zsel m+ pvol 0 ' ' slbl
+'Total radiation loss (W/m^{3})' glbl 'Carbon species' extl surf
 \end{verbatim}
 
 \begin{figure}[hbtp]
