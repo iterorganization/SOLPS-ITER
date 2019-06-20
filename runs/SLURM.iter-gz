@@ -2,7 +2,7 @@
 
 #SBATCH  --ntasks=1
 #SBATCH  --ntasks-per-node=#PROCS#
-#SBATCH  --cpus-per-task=#THREADS#
+#SBATCH  --cpus-per-task=1
 #SBATCH  --time=#HOURS#:00:00
 #SBATCH  --mail-user=#EMAIL#
 #SBATCH  --mail-type=END
