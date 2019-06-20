@@ -6,6 +6,9 @@ ifndef LD_MSCL
 endif
 
 FC       = ifort
+
+COMPILER_MAJOR_VERSION = $(shell ${FC} -V 2>&1 | grep -o "Version [0-9]*" | cut -d' ' -f 2)
+
 ifdef SOLPS_DEBUG
 FFLAGS	 = -g -C -traceback -debug all -check all
 endif

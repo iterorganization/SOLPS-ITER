@@ -25,7 +25,7 @@ c      if(mm(1).gt.0) print *,'uichwr: start. n=',n
         udbg = udbg .and. mm(i).gt.0
       end do
 c>>>
-      write(uhd,'(2hCH,i1)') ic
+      write(uhd,'(a2,i1)') 'CH',ic
       uss=' '
 c
       k=0
@@ -42,7 +42,7 @@ c
           if(i.ne.n) go to 100
         end if
  10     if(mb.ne.0) then
-          write(utr,'(i4,1h/,i4)') mb,me
+          write(utr,'(i4,a1,i4)') mb,'/',me
           mb=m
           me=m
           call lefta(utr,16,j)

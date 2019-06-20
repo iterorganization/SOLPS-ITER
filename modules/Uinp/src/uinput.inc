@@ -9,8 +9,7 @@ c*** Temporary - max. number of reactions in cdenmodel section
 
 
 c*** 1
-      integer nmach,nmode,ntcpu,nfile,niter0,niter,ntime0,ntim1
-      integer nfullrun 
+      integer nmach,nmode,ntcpu,nfile,niter0,niter,ntime0,ntim1,nfullrun 
       integer noptim,noptm1,ngeom_usr,ncoup_input,nsmstra,
      ,        nstoram,ngstal,nrtal1,nreac_add,lfrm15
       logical nlscl,nltest,nlana,nldrft,nlcrr,nlerg,nlident,nlone,
@@ -295,8 +294,8 @@ c*** 11
       logical trcplt, trchst, trcnal, trcmod, trcsig, trcgrd, trcsur,
      ,  trcref, trcfle, trcamd, trcint, trctim, trcsou, trcrec,
      ,  trclst, trcbla, trcblm, trcbli, trcblp, trcble, 
-     ,  trcblph,trctal, trcoct, trccen,
-     ,  trcdumm,trcdbg2,trcdbge,trcdbgm,trcdbgf,trcdbgl,
+     ,  trcblph,trctal, trcoct, trccen, trcdumm,
+     ,  trcdbg2,trcdbge,trcdbgm,trcdbgf,trcdbgl,
      ,  trcdbgs,trcdbgg,trcdbgmpi,trcdbgc,
      ,  trcsrc(0:nstra),pl1st,pl2nd,pl3rd,pladd,plhst,plcut(3),plbox,
      ,  plstor,plnumv,plnums,plarr,lrpscut,pltsrc(0:nstra),pl3a(5),
@@ -417,8 +416,8 @@ c*** b2ah.dat
      ,  ireacf,ibulkf,iscd1f,iscd2f,iscd3f,iscd4f,iscdef,iestmf,ibgkf,
      ,  nplsi,nbgk,nmassp,ncharp,nprtp,nchrgp,isrfp,
      ,  isrtp,nmsecp,nrcp,idnslmp,nfolp,ngenp,nhstp,ireacp,ibulkp,
-     ,  iscd1p,iscd2p,iscd3p,iscd4p,iscdep,nrep,ispcdn,indpro,
-     ,  nnftrm,nchsppri,
+     ,  iscd1p,iscd2p,iscd3p,iscd4p,iscdep,nrep,ispcdn,
+     ,  indpro,nnftrm,nchsppri,
      ,  lchsptrg,lchspgrp,lchspprt,lchspprp,lchsptgt,
      ,  lchsptgp,lchspnwl,lchspaux,nchemvar,indchemvar,nnchemvar,
      ,  nstrai,indsrc,npts,ninitl,nemods,namods,nminpts,nspez,ivlsf,
@@ -479,7 +478,8 @@ c*** b2ah.dat
      ,  eelecm,ebulkm,escd1m,escd2m,freacm,
      ,  eeleci,ebulki,escd1i,escd2i,freaci,
      ,  eelecf,ebulkf,escd1f,escd2f,freacf,fldlmf,
-     ,  eelecp,ebulkp,escd1p,escd2p,freacp,bltzcdn,dltecdn,acrncdn,
+     ,  eelecp,ebulkp,escd1p,escd2p,freacp,
+     ,  bltzcdn,dltecdn,acrncdn,
      ,  te0,te1,te2,te3,te4,te5,ti0,ti1,ti2,ti3,ti4,ti5,di0,di1,di2,di3,
      ,  di4,di5,vx0,vx1,vx2,vx3,vx4,vx5,vy0,vy1,vy2,vy3,vy4,vy5,vz0,vz1,
      ,  vz2,vz3,vz4,vz5,b0,b1,b2,b3,b4,b5,vl0,vl1,vl2,vl3,vl4,vl5,
@@ -516,14 +516,15 @@ c*** b2ah.dat
      ,  trcplt,trchst,trcnal,trcmod,
      ,  trcsig,trcgrd,trcsur,trcref,trcfle,trcamd,trcint,trctim,
      ,  trcsou,trcrec,trclst,trcbla,trcblm,trcbli,trcblp,trcble,
-     ,  trcblph,trctal,trcoct,trccen,
-     ,  trcdumm,trcdbg2,trcdbge,trcdbgm,trcdbgf,trcdbgl,
+     ,  trcblph,trctal,trcoct,trccen,trcdumm,
+     ,  trcdbg2,trcdbge,trcdbgm,trcdbgf,trcdbgl,
      ,  trcdbgs,trcdbgg,trcdbgmpi,trcdbgc,
      ,  trcsrc,pl1st,pl2nd,pl3rd,pladd,plhst,plcut,plbox,plstor,plnumv,
      ,  plnums,plarr,lrpscut,pltsrc,pl3a,pl3s,pltl2d,pltl3d,pltllg,
      ,  pltler,lhist2,lsmot2,lhist3,lcntr3,lsmot3,lraps,lvect3,lrpvc3,
      ,  lrps3d,lrpscn,lprad,lppol,lptor,plidl,plvtk,
-     ,  plchor,plspec,lpw_d,lsymet,lbalan,lchkqud,lfchgs,
+     ,  plchor,plspec,lpw_d,
+     ,  lsymet,lbalan,lchkqud,lfchgs,
      ,  is_bundled
 
       common/uinchr/ txtrun,txtsfl,txtsfa,

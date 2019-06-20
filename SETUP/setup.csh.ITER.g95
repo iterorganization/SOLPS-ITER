@@ -1,0 +1,65 @@
+# General
+module use /work/imas/etc/modulefiles
+
+# Modules needed by SOLPS-ITER
+module load IMAS/3.21.0-3.8.6
+module unload Python/2.7.14-intel-2018a
+module unload Anaconda3/5.0.1
+module unload PyYAML/3.12-intel-2018a-Python-2.7.14
+module unload Tkinter/2.7.14-intel-2018a-Python-2.7.14
+module unload matplotlib/2.1.2-intel-2018a-Python-2.7.14
+module unload PostgreSQL/10.3-intel-2018a-Python-2.7.14
+module unload SWIG/3.0.12-intel-2018a-Python-2.7.14
+module unload MDSplus-Python/7.46.1-intel-2018a-Python-2.7.14
+module load PyYAML/3.12-intel-2018a-Python-3.6.4
+module load matplotlib/2.1.2-intel-2018a-Python-3.6.4
+module load GGD/1.8.3-GCC-6.4.0-2.28
+module load Kepler
+module load FC2K
+module load makedepend/1.0.5-GCCcore-6.4.0
+module load MSCL/1.1.1-GCCcore-6.4.0
+module load netCDF-Fortran/4.4.4-intel-2018a
+module load GR/0.0.94-GCCcore-6.4.0
+module load GLI/4.5.30-GCCcore-6.4.0
+setenv GLI_HOME ${EBROOTGLI}
+setenv NCDIR ${EBROOTNETCDFMINFORTRAN}
+module load flex/2.6.4-GCCcore-6.4.0
+module load Doxygen/1.8.13-GCCcore-6.4.0
+module load TotalView/2017.1.21_linux_x86-64
+module load Ghostscript/9.23-GCCcore-6.4.0
+module unload LibTIFF/4.0.9-GCCcore-6.4.0
+module load ParaView/5.5.2-intel-2018a-Python-3.6.4-mpi
+module load PyQt5/5.9.2-intel-2018a-Python-3.6.4
+setenv QTDIR ${EBROOTQT5}
+setenv PARAVIEW_PREFIX ${EBROOTPARAVIEW}
+module load texlive
+module load nag/26-GCC-6.4.0-2.28
+module load HDF5/1.10.1-intel-2018a
+module load make/4.1
+module load motif/2.3.8-intel-2018a
+module load gnuplot/5.2.2-intel-2018a
+module load MATLAB/2018a
+setenv MPDIR ${EBROOTIMPI}
+
+# Debugger (set environment variable DBX)
+setenv DBX totalview
+
+# Compilers
+setenv CC gcc
+setenv FC g95
+setenv CXX g++
+
+if (`where paraview-config` == "") then
+  echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
+else
+  # See ParaViewCatalystUsersGuide_v2.pdf Sec 3.7.2 Linking with Python ...
+  set PARAVIEW_LIB=`paraview-config --libs --python | sed s/-L//`
+  setenv LD_LIBRARY_PATH "${PARAVIEW_LIB}:${LD_LIBRARY_PATH}"
+  setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages/vtk:${PYTHONPATH}"
+  setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
+  setenv LD_CATALYST `paraview-config --libs vtkPVPythonCatalyst`
+endif
+
+# Other environment variables
+# module load solps-gui
+setenv LD_PRELOAD /usr/lib64/libfontconfig.so.1 # needed by solps-gui

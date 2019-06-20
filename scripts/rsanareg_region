@@ -91,6 +91,24 @@ switch ($text)
   case "b2stbm_smo_reg_region":
     set label="momentum loss (-) or source (+) rate from additional sources"
     breaksw
+  case "b2sext_she_reg_region":
+    set label="electron heat loss (-) or source (+) rate from external sources"
+    breaksw
+  case "b2sext_shi_reg_region":
+    set label="ion heat loss (-) or source (+) rate from external sources"
+    breaksw
+  case "b2sext_sne_reg_region":
+    set label="electron particle loss (-) or source (+) rate from external sources"
+    breaksw
+  case "b2sext_shi_reg_region":
+    set label="charge loss (-) or source (+) rate from external sources"
+    breaksw
+  case "b2sext_sna_reg_region":
+    set label="particle loss (-) or source (+) rate from external sources"
+    breaksw
+  case "b2sext_smo_reg_region":
+    set label="momentum loss (-) or source (+) rate from external sources"
+    breaksw
   case "resco_reg_region":
     set label="continuity residual"
     breaksw

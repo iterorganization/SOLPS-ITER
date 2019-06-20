@@ -16,6 +16,7 @@ if ($?SOLPS_MPI) then
   set TIME="srun --mpi=pmi2"
   set USE_MPI="-m ${MPI_EXEC} ${MPI_OPTS}"
   set USE_MPI=`echo $USE_MPI | sed -e 's:-m :-m ''":' -e 's:$:"'':'`
+  setenv I_MPI_PIN_PROCESSOR_LIST 0-27
 endif
 
 update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"

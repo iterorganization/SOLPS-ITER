@@ -1,5 +1,3 @@
-$(error First use of config.GA.ifort64. Provide paths to libraries first.)
-
 #
 # Specify paths to root-directories of following libraries on your system
 #
@@ -19,25 +17,27 @@ $(error First use of config.GA.ifort64. Provide paths to libraries first.)
 # Add -DNAG22 to SOLPS_CPP
 #
 
-       NCDIR ?=
-   MSCL_ROOT ?=
-       H5DIR ?=
-     GR_ROOT ?=
-    GLI_HOME ?=
-  NCARG_ROOT ?=
-      NAGDIR ?=
- MDSPLUS_DIR ?=
+     IRISLIB = /fusion/projects/codes/solps/SOLPS-ITER/public_lib/GA.ifort64
+
+       NCDIR = ${NETCDF_DIR}
+   MSCL_ROOT = ${IRISLIB}
+       H5DIR = ${HDF5_DIR}
+     GR_ROOT = ${IRISLIB}
+    GLI_HOME = ${IRISLIB}/gli
+  NCARG_ROOT = ${IRISLIB}/NCARG
+      NAGDIR = ${IRISLIB}
+ MDSPLUS_DIR = ${IRISLIB}/mdsplus
 
 #
 # Variables for linking
 #
 
 LD_NETCDF  = -L${NCDIR}/lib -lnetcdff
-LD_MSCL    = -L${MSCL_ROOT}/lib -lmscl
-LD_GR      = -L${GR_ROOT}/lib -lgr
-LD_GKS     = -L${GLI_HOME} -lgks -lgfortran
-LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -L/usr/X11R6/lib64 -lX11 -lm
-LD_NAG     = -L${NAGDIR}/lib -lnag
+LD_MSCL    = -L${MSCL_ROOT} -lmscl
+LD_GR      = -L${GR_ROOT} -lgr
+LD_GKS     = -L${GLI_HOME}/src -lgks -lgfortran
+LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -L/usr/lib64 -lX11 -lm
+LD_NAG     = -L${NAGDIR} -lnag
 LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 
@@ -45,7 +45,7 @@ LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNCAR4
+SOLPS_CPP      = -DNCAR4 -DMDSPLUS -DNETCDF4_3
 B25_DEFINES    =
 EIRENE_DEFINES =
 
@@ -69,11 +69,21 @@ ifdef LD_CATALYST
 endif
 
 # Build with IMAS if imas module is loaded
-ifdef IMAS_VERSION
-  SOLPS_CPP += -DIMAS
+ifdef IMAS_PREFIX
   LD_UAL     = `pkg-config imas-lowlevel imas-ifort --libs`
+  UAL_MAJOR_VERSION = $(shell echo ${UAL_VERSION} | cut -d '.' -f1 )
+  IMAS_MAJOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f1 )
+  IMAS_MINOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f2 )
+  SOLPS_CPP += -DIMAS -DUAL_MAJOR_VERSION=${UAL_MAJOR_VERSION} -DIMAS_MINOR_VERSION=${IMAS_MINOR_VERSION}
   export LD_UAL
+else
+  UAL_MAJOR_VERSION = 0
+  IMAS_MAJOR_VERSION = 0
+  IMAS_MINOR_VERSION = 0
 endif
+export UAL_MAJOR_VERSION
+export IMAS_MAJOR_VERSION
+export IMAS_MINOR_VERSION
 
 #
 # Export for use in sub-makefiles

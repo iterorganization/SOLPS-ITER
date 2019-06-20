@@ -80,14 +80,10 @@ c      write(*,'(1p,4e13.4)') (p1(1,i),p1(2,i),p2(1,i),p2(2,i),i=1,np)
 c      write(*,*)
 c!###}
       if(mp.lt.2) then !{
-#ifdef FLUSH
-        call FLUSH(6)
-#endif
+        flush(6)
         write(0,*) 'chkchain: too small first dimension in the ',
      ,                            'segment arrays. Must be > 1, is ',mp
-#ifdef FLUSH
-        call FLUSH(0)
-#endif
+        flush(0)
         irt=-3
         goto 9999
       end if !}
@@ -105,16 +101,12 @@ c!###}
         end if !}
       end do !}
       if(k.gt.0) then !{
-#ifdef FLUSH
-        call FLUSH(6)
-#endif
+        flush(6)
         write(*,*) 'chkchain: requested index outside ',
      ,                                      'the segment list.  np= ',np
         write(*,'(/1x,2a12)') 'index','requested'
         write(*,'(1x,i8,i12)') (ind(i),ls(ind(i)),i=1,k)
-#ifdef FLUSH
-        call FLUSH(0)
-#endif
+        flush(0)
         irt=-2
         goto 9999
       end if !}
@@ -239,9 +231,7 @@ c                    if(bbb) write(*,*) ii,k,inext(k),next(k) !###
                     if(next(k)) go to 40
                     k=inext(k)
                   end do !}
-#ifdef FLUSH
-                  call FLUSH(6)
-#endif
+                  flush(6)
                   call xerrab ('Something wrong with re-ordering')
  40               if(.not.free(i)) go to 100
                   go to 110
@@ -401,13 +391,9 @@ c*** This is an end of a chain
 
           ic=ic+1
           if(ic.gt.nc) then !{
-#ifdef FLUSH
-            call FLUSH(6)
-#endif
+            flush(6)
             write(0,*) 'chkchain: too many chains. nc= ',nc
-#ifdef FLUSH
-            call FLUSH(0)
-#endif
+            flush(0)
             irt=-1
             goto 9999
           end if !}
@@ -472,9 +458,7 @@ c              write(*,*) 'j = ',j,done(j),next(j),inext(j)
         l=l+abs(ind(l))
       end do !}
       if(k.ne.ns) then !{
-#ifdef FLUSH
-        call FLUSH(6)
-#endif
+        flush(6)
         write(0,*) 'chkchain: internal error - k =/= ns ',k,ns
         write(0,*) 'ns,ls: ',ns
         write(0,'(20i5)') ls
@@ -487,9 +471,7 @@ c              write(*,*) 'j = ',j,done(j),next(j),inext(j)
           write(0,'(20i5)') (ind(l+ii),ii=1,k)
           l=l+k
         end do !}
-#ifdef FLUSH
-        call FLUSH(0)
-#endif
+        flush(0)
         irt=-4
         goto 9999
       end if !}

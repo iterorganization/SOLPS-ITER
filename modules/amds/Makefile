@@ -38,6 +38,10 @@ endif
 ifdef USE_MPI
 EXT_MPI = .mpi
 endif
+ifdef USE_IMPGYRO
+EXT_IMPGYRO = .ig
+endif
+
 OBJDIR = ${PWD}/builds/${HOST_NAME}.${COMPILER}${EXT_DEBUG}
 B2OBJ = ${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_DEBUG}
 

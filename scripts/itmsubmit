@@ -79,7 +79,7 @@ EOF
     set MPIOPTS="$1"
     echo Using MPI options: $MPIOPTS
     set PROCS=`echo $MPIOPTS | awk.transpose | grep -A 1 "\-np" | tail -n 1`
-    echo Asking for $PROCS processors
+    echo Asking for MPI run with $PROCS processors
     shift
     set HELP_STRING=`echo \"$MPIOPTS\"`
 #    echo $HELP_STRING
@@ -120,7 +120,7 @@ if ($1 == "") then
       endif
     endif
   else
-    if ($standalone == "no") echo Assuming standalone run
+    if ($standalone == "no") echo No input.dat file found: reverting to a standalone run
     echo No argument is specified. Looking for SLURM.itm$compress
     set QSUB=`climb_and_look_for SLURM.itm$compress`
     if ($QSUB == "//SLURM.itm$compress") then

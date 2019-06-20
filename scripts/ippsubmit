@@ -120,7 +120,7 @@ if ($1 == "") then
       endif
     endif
   else
-    if ($standalone == "no") echo Assuming standalone run
+    if ($standalone == "no") echo No input.dat file found: reverting to a standalone run
     echo No argument is specified. Looking for SLURM.ipp$compress
     set QSUB=`climb_and_look_for SLURM.ipp$compress`
     if ($QSUB == "//SLURM.ipp$compress") then

@@ -59,32 +59,32 @@ update_solps_run_status ${msg}
 #  echo ${USER} ${PWD} ${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
 #endif
 
-#set NORMAL_FINISH=`grep " stopping because " run.log.last10`
+#set NORMAL_FINISH=`grep "stopping because" run.log.last10`
 #echo ${NORMAL_FINISH} >> run.log.last10
-if (`grep " stopping because " run.log.last10` == "") then
+if (`grep "stopping because" run.log.last10` == "") then
   update_solps_run_status "run KAPUTT at `date`"
   echo KAPUTT > run.KAPUTT
 endif
-#set NORMAL_FINISH=`grep " stopping because .quit" run.log.last10`
-if (`grep " stopping because .quit" run.log.last10` != "") then
+#set NORMAL_FINISH=`grep "stopping because .quit" run.log.last10`
+if (`grep "stopping because .quit" run.log.last10` != "") then
   update_solps_run_status "Breaking the loop by .quit at `date`"
 endif
-#set NORMAL_FINISH=`grep " stopping because _quit" run.log.last10`
-if (`grep " stopping because _quit" run.log.last10` != "") then
+#set NORMAL_FINISH=`grep "stopping because _quit" run.log.last10`
+if (`grep "stopping because _quit" run.log.last10` != "") then
   update_solps_run_status "Breaking the loop by _quit at `date`"
 endif
-#set NORMAL_FINISH=`grep " stopping because tim >= etim" run.log.last10`
-if (`grep " stopping because tim >= etim" run.log.last10` != "") then
+#set NORMAL_FINISH=`grep "stopping because tim >= etim" run.log.last10`
+if (`grep "stopping because tim >= etim" run.log.last10` != "") then
   update_solps_run_status "Breaking the loop because the end time is reached at `date`"
 endif
-#set NORMAL_FINISH=`grep " stopping because min_residual" run.log.last10`
-if (`grep " stopping because min_residual" run.log.last10` != "") then
+#set NORMAL_FINISH=`grep "stopping because min_residual" run.log.last10`
+if (`grep "stopping because min_residual" run.log.last10` != "") then
   update_solps_run_status "Breaking the loop because required residual is reached at `date`"
 endif
 
-set End_by_ntim = `grep " stopping because itim" run.log.last10`
-set End_by_cputime = `grep " stopping because cpu" run.log.last10`
-set End_by_walltime = `grep " stopping because elapsed" run.log.last10`
+set End_by_ntim = `grep "stopping because itim" run.log.last10`
+set End_by_cputime = `grep "stopping because cpu" run.log.last10`
+set End_by_walltime = `grep "stopping because elapsed" run.log.last10`
 
 #echo $End_by_ntim
 #echo $End_by_cputime

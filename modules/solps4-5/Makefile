@@ -26,7 +26,13 @@ ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local ] && 
   MAKES += ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
 endif
 
-# Extension for OBJDIR if debug option is used
+# Extensions for object directories when various options are used
+ifdef SOLPS_MPI
+EXT_MPI = .mpi
+endif
+ifdef USE_IMPGYRO
+EXT_IMPGYRO = .ig
+endif
 ifdef SOLPS_DEBUG
 EXT_DEBUG = .debug
 endif
@@ -35,8 +41,8 @@ TOOL_CHAIN = ${HOST_NAME}.${COMPILER}${EXT_DEBUG}
 
 SRCDIR = ${SOLPSTOP}/modules/solps4-5/src
 S45DIR = ${SOLPSTOP}/modules/solps4-5
-EIRDIR = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${TOOL_CHAIN}
-B2BDIR = ${SOLPSTOP}/modules/B2.5/builds/couple_Eirene.${TOOL_CHAIN}
+EIRDIR = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
+B2BDIR = ${SOLPSTOP}/modules/B2.5/builds/couple_Eirene.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
 OBJDIR = ${SOLPSTOP}/modules/solps4-5/builds/${TOOL_CHAIN}
 BASEDIR = ${SOLPSTOP}/modules/solps4-5
 DEFINES += -DSOLPS4_3 -DB25_EIRENE -DUSE_ARRAYS
@@ -950,7 +956,7 @@ ifneq (${MOD},o)
 	sed 's,^$${OBJDIR}/[^ ][^ ]*/,\$${OBJDIR}/,' | \
         sed 's,: ${SOLPSTOP},: $${SOLPSTOP},' >> ${OBJDIR}/dependencies
 endif
-	@egrep -ai '^ {6,}use ' ${FFLIST} | grep -v 'IGNORE' | tr , '  ' | awk '{sub("\\.F:",".o:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' >> ${OBJDIR}/dependencies
+	@egrep -ai '^ {6,}use ' ${FFLIST} | grep -v 'IGNORE' | tr , ' ' | awk '{sub("\\.F:",".o:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' >> ${OBJDIR}/dependencies
 ifneq (${MOD},o)
 	@egrep -ai '^ *use ' ${MODLIST} | grep -v 'IGNORE' | tr , ' ' | awk '{sub("\\.F:",".${MOD}:",$$1);sub("\\.F90:",".${MOD}:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' >> ${OBJDIR}/dependencies
 endif

@@ -9,10 +9,10 @@ FC       = mpif90
 else
 FC       = gfortran
 endif
-ifdef SOLPS_DEBUG
-FFLAGS   = -g -fbounds-check -fno-second-underscore -fbacktrace -fno-unsafe-math-optimizations -frounding-math -fsignaling-nans -ffpe-trap=denormal -ftrapv
-else
+
 FFLAGS   = -fno-second-underscore -fno-unsafe-math-optimizations -frounding-math -fsignaling-nans
+ifdef SOLPS_DEBUG
+FFLAGS  += -g -fbounds-check -fbacktrace -ffpe-trap=denormal -ffpe-trap=invalid -ffpe-trap=zero -ftrapv
 endif
 INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}

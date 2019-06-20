@@ -17,6 +17,7 @@ if ($?SOLPS_PATH) then
   setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}|couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}.mpi|g"`
   setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|Uinp/builds/${HOST_NAME}.${COMPILER}|Uinp/builds/${HOST_NAME}.${COMPILER}.mpi|g"`
   setenv   PATH ${SOLPS_PATH}:${OLD_PATH}
+  setenv   USE_MPI -DUSE_MPI
   setenv   SOLPS_MPI yes
   unsetenv OLD_SOLPS_PATH
   echo "SOLPS-ITER MPI mode turned on"

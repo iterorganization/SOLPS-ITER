@@ -68,12 +68,11 @@ EOF
     shift
     if (! $?SOLPS_MPI) then
       source $SOLPSTOP/SETUP/mpi
-      set MPI_SET=yes
     endif
     set MPIOPTS="$1"
     echo Using MPI options: $MPIOPTS
     set PROCS=`echo $MPIOPTS | awk.transpose | grep -A 1 "\-np" | tail -n 1`
-    echo Asking for $PROCS processors
+    echo Asking for MPI run with $PROCS processors
     shift
     goto argloop
   endif
@@ -115,7 +114,7 @@ if ($1 == "") then
       endif
     endif
   else
-    if ($standalone == "no") echo Assuming standalone run
+    if ($standalone == "no") echo No input.dat file found: reverting to a standalone run
     echo No argument is specified. Looking for $job_prefix.iter$compress
     set QSUB=`climb_and_look_for $job_prefix.iter$compress`
     if ($QSUB == "//$job_prefix.iter$compress") then

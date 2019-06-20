@@ -42,6 +42,7 @@ if ($?SOLPS_MPI) then
   set MPI_PREFLAGS="--mpi=mpi2"
   set USE_MPI="-m ${MPI_EXEC} ${MPI_OPTS}"
   set USE_MPI=`echo $USE_MPI | sed -e 's:-m :-m ''":' -e 's:$:"'':'`
+  setenv I_MPI_PIN_PROCESSOR_LIST 0-47
 else
   set MPI_PREFLAGS=""
 endif
@@ -66,36 +67,36 @@ if ($?SOLPS_GUI_IP) then
   echo ${USER} ${PWD} ${msg} | netcat -u -v -w 1 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
 endif
 
-set Break_loop = ""
-if (`grep " stopping because " run.log.last10` == "") then
+set Break_loop = "no"
+if (`grep "stopping because" run.log.last10` == "") then
   update_solps_run_status "run KAPUTT at `date`"
   echo KAPUTT > run.KAPUTT
 endif
-#set NORMAL_FINISH=`grep " stopping because .quit" run.log.last10`
-if (`grep " stopping because .quit" run.log.last10` != "") then
+#set NORMAL_FINISH=`grep "stopping because .quit" run.log.last10`
+if (`grep "stopping because .quit" run.log.last10` != "") then
   update_solps_run_status "Breaking the loop by .quit at `date`"
   set Break_loop = "yes"
 endif
-#set NORMAL_FINISH=`grep " stopping because _quit" run.log.last10`
-if (`grep " stopping because _quit" run.log.last10` != "") then
+#set NORMAL_FINISH=`grep "stopping because _quit" run.log.last10`
+if (`grep "stopping because _quit" run.log.last10` != "") then
   update_solps_run_status "Breaking the loop by _quit at `date`"
   set Break_loop = "yes"
 endif
-#set NORMAL_FINISH=`grep " stopping because tim >= etim" run.log.last10`
-if (`grep " stopping because tim >= etim" run.log.last10` != "") then
+#set NORMAL_FINISH=`grep "stopping because tim >= etim" run.log.last10`
+if (`grep "stopping because tim >= etim" run.log.last10` != "") then
   update_solps_run_status "Breaking the loop because the end time is reached at `date`"
   set Break_loop = "yes"
 endif
-#set NORMAL_FINISH=`grep " stopping because min_residual" run.log.last10`
-if (`grep " stopping because min_residual" run.log.last10` != "") then
+#set NORMAL_FINISH=`grep "stopping because min_residual" run.log.last10`
+if (`grep "stopping because min_residual" run.log.last10` != "") then
   update_solps_run_status "Breaking the loop because required residual is reached at `date`"
   set Break_loop = "yes"
 endif
 
-if ("$Break_loop" == "") then
-  set End_by_ntim = `grep " stopping because itim" run.log.last10`
-  set End_by_cputime = `grep " stopping because cpu" run.log.last10`
-  set End_by_walltime = `grep " stopping because elapsed" run.log.last10`
+if ("$Break_loop" == "no") then
+  set End_by_ntim = `grep "stopping because itim" run.log.last10`
+  set End_by_cputime = `grep "stopping because cpu" run.log.last10`
+  set End_by_walltime = `grep "stopping because elapsed" run.log.last10`
 
 #  echo $End_by_ntim
 #  echo $End_by_cputime
@@ -113,4 +114,3 @@ if ("$Break_loop" == "") then
     itmsubmit #LOOPOPTS# SLURM.itm_loop
     endif
 endif
-

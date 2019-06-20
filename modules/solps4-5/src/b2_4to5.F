@@ -1208,12 +1208,21 @@ c Fill out /b2cmpt/ arrays
           else if (nint(zn(is)).eq.2) then
             cfdf0(3,is)= 2.0e-20_R8
             cfdf0(4,is)= 5.0e-20_R8
+          else if (nint(zn(is)).eq.4) then
+            cfdf0(3,is)= 1.0e-20_R8
+            cfdf0(4,is)= 3.0e-20_R8
           else if (nint(zn(is)).eq.6) then
             cfdf0(3,is)= 5.0e-20_R8
             cfdf0(4,is)= 1.5e-18_R8
+          else if (nint(zn(is)).eq.7) then
+            cfdf0(3,is)= 1.5e-20_R8
+            cfdf0(4,is)= 5.5e-20_R8
           else if (nint(zn(is)).eq.10) then
             cfdf0(3,is)= 1.0e-20_R8
             cfdf0(4,is)= 7.0e-21_R8
+          else if (nint(zn(is)).eq.18) then
+            cfdf0(3,is)= 2.0e-20_R8
+            cfdf0(4,is)= 5.0e-20_R8
           end if
           if (.not.ni_driven_4) then
             cfdpa(2,is)= 1.0_R8
@@ -1831,7 +1840,7 @@ c
       write(99,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
      .  (cfalf(i),i=0,7)
       write(99,'(a)') '*cflim'//
-     .  '     cflme     cflmi     cflmv     cflal     cflab     ...'
+     .  '    cflme     cflmi     cflmv     cflal     cflab     ...'
       write(99,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
      .  (cflim(i),i=0,7)
       write(99,'(a)') '*endphy'

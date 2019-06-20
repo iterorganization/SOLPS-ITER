@@ -39,15 +39,12 @@ ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local ] && 
 endif
 
 ifdef SOLPS_MPI
-  ifndef USE_MPI
-    USE_MPI = -DUSE_MPI
-  endif
+  USE_MPI ?= -DUSE_MPI
 endif
 
 PROG = uinp.exe
 
 # Extension for OBJDIR if debug or MPI options are used
-# uncomment following lines if debug-code needed
 ifdef SOLPS_DEBUG
 EXT_DEBUG = .debug
 USE_DEBUG = -DDBG
@@ -55,9 +52,13 @@ endif
 ifdef USE_MPI
 EXT_MPI = .mpi
 endif
+ifdef USE_IMPGYRO
+EXT_IMPGYRO = .ig
+endif
+
 OBJDIR  = ${SRCUIN}/builds/${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_DEBUG}
-EIROBJ  = ${EIRDIR}/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_DEBUG}
-B2OBJ   = ${B2DIR}/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_DEBUG}
+EIROBJ  = ${EIRDIR}/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
+B2OBJ   = ${B2DIR}/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
 
 ifeq ($(shell [ -e ${B2DIR}/src/include.local ] && echo yes || echo no ),yes)
 B2INC = -I${B2DIR}/src/include.local -I${B2DIR}/src/include -I${B2DIR}/src/common
@@ -101,7 +102,7 @@ all: VERSION ${OBJDIR}/${PROG} ${OBJDIR}/ub2p
 
 .PHONY: clean depend listobj tags echo VERSION force
 
-${OBJDIR}/${PROG}: ${OBJDIR}/uinput.o ${OBJDIR}/uiblkd.o ${OBJDIR}/uiblb2.o ${OBJDIR}/libui.a ${MNEXTRA} ${OBJDIR}/b2mod_layer.o ${OBJDIR}/b2mod_elements.o ${OBJDIR}/b2mod_constants.o ${OBJDIR}/libeirene.a ${OBJDIR}/ioflush.o ${OBJDIR}/libgr_dummy.a ${MAKES}
+${OBJDIR}/${PROG}: ${OBJDIR}/uinput.o ${OBJDIR}/uiblkd.o ${OBJDIR}/uiblb2.o ${OBJDIR}/libui.a ${MNEXTRA} ${OBJDIR}/b2mod_layer.o ${OBJDIR}/b2mod_elements.o ${OBJDIR}/b2mod_constants.o ${OBJDIR}/b2mod_types.o ${OBJDIR}/libeirene.a ${OBJDIR}/ioflush.o ${OBJDIR}/libgr_dummy.a ${MAKES}
 	${FC} $(FFLAGS) -o ${OBJDIR}/${PROG} ${OBJDIR}/uinput.o ${OBJDIR}/uiblkd.o ${OBJDIR}/uiblb2.o ${OBJDIR}/libui.a ${OBJDIR}/libeirene.a ${OBJDIR}/ioflush.o ${OBJDIR}/libgr_dummy.a ${MNEXTRA} ${LDLIBS} $(LDEXTRA)
 
 ${OBJDIR}/ub2p: ${OBJDIR}/ub2p.o ${OBJDIR}/libui.a ${MAKES} ${MNEXTRA}
