@@ -77,7 +77,7 @@ endif
 # Build with IMAS if imas module is loaded
 ifdef IMAS_VERSION
   ifdef SOLPS_MPI
-    LD_UAL = `pkg-config imas-gfortran --libs` -L/work/imas/opt/EasyBuild/software/GGD/1.8.1-GCC-6.4.0-2.28/lib -lggd
+    LD_UAL = `pkg-config imas-gfortran --libs` -L/work/imas/opt/EasyBuild/software/GGD/1.8.3-GCC-6.4.0-2.28-DD-3.21.1/lib -lggd
   else
     LD_UAL = `pkg-config imas-pgi ggd --libs`
   endif
