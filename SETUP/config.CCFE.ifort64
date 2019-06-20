@@ -96,6 +96,14 @@ export UAL_MAJOR_VERSION
 export IMAS_MAJOR_VERSION
 export IMAS_MINOR_VERSION
 
+# Build with OpenMP if requested
+ifdef SOLPS_OPENMP
+  B25_DEFINES += -D_OPENMP
+endif
+export UAL_MAJOR_VERSION
+export IMAS_MAJOR_VERSION
+export IMAS_MINOR_VERSION
+
 #
 # Export for use in sub-makefiles
 #

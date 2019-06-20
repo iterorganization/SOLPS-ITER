@@ -59,7 +59,7 @@ else
 endif
 switch ($field)
 case t[ei]:
-  paste $tfilenam1 $tfilenam2 | awk '{for (i=1;i<=NF;i++) printf "%s ",$i/1.6021766028e-19; printf "\n"}' >> $tfilename
+  paste $tfilenam1 $tfilenam2 | awk '{for (i=1;i<=NF;i++) printf "%s ",$i/1.602176634e-19; printf "\n"}' >> $tfilename
   breaksw
 default:
   paste $tfilenam1 $tfilenam2 >> $tfilename

@@ -1,8 +1,8 @@
-       block data uiblkd
-       use b2mod_types
-       use b2mod_layer
+      block data uiblkd
+      use b2mod_types
+      use b2mod_layer
      , , only: ntrack, nalloys
-       use eirmod_extrab25
+      use eirmod_extrab25
      , , only: msrfclsx, mgwtiesx
 
 c  version : 01.04.2005 14:35
@@ -676,7 +676,7 @@ c*** 5
      /   'CONSTANT','MULTIPLY','SAHA','BOLTZMANN','CORONA','COLRAD'/
       data cdnmdlp / npls*' ' /
       data nrep, ispcdn, itpcdn, istrcdn /
-     /   npls*0, lurc*0, lurc*4, lurc*0 /
+     /    npls*0, lurc*0, lurc*4, lurc*0 /
       data valcdn,bltzcdn,dltecdn,acrncdn/
      /    lup5*0.,npls*0.,npls*0.,npls*0./
       data fnamcdn, h2cdn  , reaccdn, crcdn   /

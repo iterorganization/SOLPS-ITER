@@ -17,6 +17,6 @@ pipe_run.log | \
   egrep -a '^tireg '\|'^nireg '\|'^volreg ' | \
   awk '/tireg/{for (i=2;i<=NF;i++) {ti[i]=$i}}\
        /nireg/{for (i=2;i<=NF;i++) {ni[i]=$i}}\
-       /volreg/{for (i=2;i<=NF;i++) printf "%s ",ti[i]/ni[i]/1.6021766028e-19;printf "\n"}' | \
+       /volreg/{for (i=2;i<=NF;i++) printf "%s ",ti[i]/ni[i]/1.602176634e-19;printf "\n"}' | \
   nl >! ${tmpdir}PLOT_FROM_FILE
   plot x"$1"yplot$vregP `count 0 $vreg` iter "ave Ti" $PWD

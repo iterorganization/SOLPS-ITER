@@ -46,7 +46,7 @@ set dsfile=b2mn.exe.dir/ds`echo $suffix | tr 'a-z' 'A-Z'`
 if (! -s $dsfile) set dsfile=ds`echo $suffix | tr 'a-z' 'A-Z'`
 if ($no_nc2text == 1) then
   if ($prefix == "t" && $pr2fix != "p") then
-    ncdump $file -f f -v $f2eld | awk 'BEGIN {ORS="";} /data:/{found1=1;next;} /timesa/{if (found1==1) {if (found2==1) print $1; else {print $3;found2=1;}}} END {print "\n";}' | sed 's/,/ /g' | sed 's/;//g' | tr ' ' '\n' | awk 'NF>0{print $1/1.6021766028e-19}' >> $tfilename
+    ncdump $file -f f -v $f2eld | awk 'BEGIN {ORS="";} /data:/{found1=1;next;} /timesa/{if (found1==1) {if (found2==1) print $1; else {print $3;found2=1;}}} END {print "\n";}' | sed 's/,/ /g' | sed 's/;//g' | tr ' ' '\n' | awk 'NF>0{print $1/1.602176634e-19}' >> $tfilename
   else if ($prefix == "f") then
     if ($suf2ix == "r") then
       ( cat $dsfile | tr '\n' ' ' ; echo " " ; ncdump $file -f f -v $f2eld | awk -v string="$field" 'BEGIN {ORS="";} /data:/{found1=1;next;} $0 ~ string {if (found1==1) {if (found2==1) print $field; else {print $3;found2=1;}}}' | awk 'BEGIN {FS=","} {for (i=1;i<=NF;i++) if (i%2==1) {ORS=" ";print $i;}}' | sed 's/;//g' ) | awk 'NR==1{for (i=1;i<=NF;i++) dsR[i]=$i}NR>1{for (i=1;i<=NF;i++) printf "%s ",$i/dsR[i];printf "\n"}' >> $tfilename
@@ -58,7 +58,7 @@ if ($no_nc2text == 1) then
   endif
 else
   if ($prefix == "t" && $pr2fix != "p") then
-    nc2text $file $f2eld | tr ' ' '\n' | awk 'NF>0{print $1/1.6021766028e-19}' >> $tfilename
+    nc2text $file $f2eld | tr ' ' '\n' | awk 'NF>0{print $1/1.602176634e-19}' >> $tfilename
   else if ($prefix == "f") then
     if ($suf2ix == "r") then
       ( cat $dsfile | tr '\n' ' ' ; echo " " ; nc2text -n 999999 $file $f2eld ) | awk 'NR==1{for (i=1;i<=NF;i++) dsR[i]=$i}NR>1{for (i=1;i<=NF;i++) printf "%s ",$i/dsR[i];printf "\n"}' >> $tfilename
