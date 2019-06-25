@@ -27,7 +27,7 @@
 %                                                                              %
 % David Moulton (david.moulton@ccfe.ac.uk) January 2017.                       %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function btn = balpart(balfile,indrad,indpol,isplot,comuse,axbal,reverse,strata_plot,axstrat,makeplot,areaend,area_divide,areatype,polbaldist)
+function btn = balparttest(balfile,indrad,indpol,isplot,comuse,axbal,reverse,strata_plot,axstrat,makeplot,areaend,area_divide,areatype,polbaldist)
 
 % Shorthand for geometry variables:
 nx = comuse.nx;
@@ -38,104 +38,71 @@ topiy = comuse.topiy+1;
 
 %% Obtain required arrays from the simulation...
 % Fluxes:
+tmp = ncread(balfile,'fna_tot');
+fnbx_tot = sum(tmp(:,:,1,isplot),4);
 tmp = ncread(balfile,'fna_pinch');
-fnbx_pinch = sum(tmp(:,:,1,isplot),4);
-fnby_pinch = sum(tmp(:,:,2,isplot),4);
+fnbx_tot_compare = sum(tmp(:,:,1,isplot),4);
 tmp = ncread(balfile,'fna_pll');
-fnbx_pll = sum(tmp(:,:,1,isplot),4);
-fnby_pll = sum(tmp(:,:,2,isplot),4);
+fnbx_tot_compare = fnbx_tot_compare+sum(tmp(:,:,1,isplot),4);
 tmp = ncread(balfile,'fna_drift');
-fnbx_drift = sum(tmp(:,:,1,isplot),4);
-fnby_drift = sum(tmp(:,:,2,isplot),4);
+fnbx_tot_compare = fnbx_tot_compare+sum(tmp(:,:,1,isplot),4);
 tmp = ncread(balfile,'fna_ch');
-fnbx_ch = sum(tmp(:,:,1,isplot),4);
-fnby_ch = sum(tmp(:,:,2,isplot),4);
+fnbx_tot_compare = fnbx_tot_compare+sum(tmp(:,:,1,isplot),4);
 tmp = ncread(balfile,'fna_nanom');
-fnbx_nanom = sum(tmp(:,:,1,isplot),4);
-fnby_nanom = sum(tmp(:,:,2,isplot),4);
+fnbx_tot_compare = fnbx_tot_compare+sum(tmp(:,:,1,isplot),4);
 tmp = ncread(balfile,'fna_panom');
-fnbx_panom = sum(tmp(:,:,1,isplot),4);
-fnby_panom = sum(tmp(:,:,2,isplot),4);
+fnbx_tot_compare = fnbx_tot_compare+sum(tmp(:,:,1,isplot),4);
 tmp = ncread(balfile,'fna_pschused');
-fnbx_pschused = sum(tmp(:,:,1,isplot),4);
-fnby_pschused = sum(tmp(:,:,2,isplot),4);
+fnbx_tot_compare = fnbx_tot_compare+sum(tmp(:,:,1,isplot),4);
+
+figure; hold on;
+plot(fnbx_tot(:,comuse.sep+2));
+plot(fnbx_tot_compare(:,comuse.sep+2));
+plot(fnbx_tot(:,comuse.sep+2)-fnbx_tot_compare(:,comuse.sep+2))
+
 % Sources:
+tmp = ncread(balfile,'tot_sna_bal');
+tot_sna_bal = sum(tmp(:,:,isplot),3);
 tmp = ncread(balfile,'b2stbr_phys_sna_bal');
-b2stbr_phys_sna = sum(tmp(:,:,isplot),3);
+tot_sna_bal_compare = sum(tmp(:,:,isplot),3);
 tmp = ncread(balfile,'b2stbr_bas_sna_bal');
-b2stbr_bas_sna = sum(tmp(:,:,isplot),3);
+tot_sna_bal_compare = tot_sna_bal_compare+sum(tmp(:,:,isplot),3);
 tmp = ncread(balfile,'b2stbr_first_flight_sna_bal');
-b2stbr_first_flight_sna = sum(tmp(:,:,isplot),3);
+tot_sna_bal_compare = tot_sna_bal_compare+sum(tmp(:,:,isplot),3);
 tmp = ncread(balfile,'b2stbc_sna_bal');
-b2stbc_sna = sum(tmp(:,:,isplot),3);
-if (comuse.b2mndr_eirene~=0)
-    tmp = ncread(balfile,'eirene_mc_papl_sna_bal');
-    eirene_mc_papl_sna = sum(tmp(:,:,isplot,:),3);
-    tmp = ncread(balfile,'eirene_mc_pmpl_sna_bal');
-    eirene_mc_pmpl_sna = sum(tmp(:,:,isplot,:),3);
-    tmp = ncread(balfile,'eirene_mc_pipl_sna_bal');
-    eirene_mc_pipl_sna = sum(tmp(:,:,isplot,:),3);
-    tmp = ncread(balfile,'eirene_mc_pppl_sna_bal');
-    eirene_mc_pppl_sna = sum(tmp(:,:,isplot,:),3);
-    tmp = ncread(balfile,'eirene_mc_core_sna_bal');
-    eirene_mc_core_sna = sum(tmp(:,:,isplot),3);
-else
-    eirene_mc_papl_sna = zeros(nx,ny,1,nstra);
-    eirene_mc_pmpl_sna = zeros(nx,ny,1,nstra);
-    eirene_mc_pipl_sna = zeros(nx,ny,1,nstra);
-    eirene_mc_pppl_sna = zeros(nx,ny,1,nstra);
-    eirene_mc_core_sna = zeros(nx,ny,1,nstra);
-end
+tot_sna_bal_compare = tot_sna_bal_compare+sum(tmp(:,:,isplot),3);
+tmp = ncread(balfile,'eirene_mc_papl_sna_bal');
+tot_sna_bal_compare = tot_sna_bal_compare+squeeze(sum(sum(tmp(:,:,isplot,:),3),4));
+tmp = ncread(balfile,'eirene_mc_pmpl_sna_bal');
+tot_sna_bal_compare = tot_sna_bal_compare+squeeze(sum(sum(tmp(:,:,isplot,:),3),4));
+tmp = ncread(balfile,'eirene_mc_pipl_sna_bal');
+tot_sna_bal_compare = tot_sna_bal_compare+squeeze(sum(sum(tmp(:,:,isplot,:),3),4));
+tmp = ncread(balfile,'eirene_mc_pppl_sna_bal');
+tot_sna_bal_compare = tot_sna_bal_compare+squeeze(sum(sum(tmp(:,:,isplot,:),3),4));
+tmp = ncread(balfile,'eirene_mc_core_sna_bal');
+tot_sna_bal_compare = tot_sna_bal_compare+squeeze(sum(sum(tmp(:,:,isplot,:),3),4));
 tmp = ncread(balfile,'b2stbm_sna_bal');
-b2stbm_sna = sum(tmp(:,:,isplot),3);
+tot_sna_bal_compare = tot_sna_bal_compare+sum(tmp(:,:,isplot),3);
 tmp = ncread(balfile,'ext_sna_bal');
-ext_sna = sum(tmp(:,:,isplot),3);
-% Calculate the ionisation sink to the next ionisation state and the ionisation
-% source from the previous ionisation state:
-b2stel_sna_ion_bal = ncread(balfile,'b2stel_sna_ion_bal');
-izhigh = [find(diff(comuse.za)<1)',comuse.ns];
-izlow = [1,izhigh(1:end-1)+1];
-b2stel_sna_ion_prev = zeros(nx,ny,comuse.ns);
-b2stel_sna_ion_next = zeros(nx,ny,comuse.ns);
-for is1=1:length(izhigh);
-    for is2=izhigh(is1):-1:izlow(is1);
-        if is2==izhigh(is1)
-            b2stel_sna_ion_next(:,:,is2) = 0;
-            b2stel_sna_ion_prev(:,:,is2) = b2stel_sna_ion_bal(:,:,is2);
-        else
-            b2stel_sna_ion_next(:,:,is2) = -b2stel_sna_ion_prev(:,:,is2+1);
-            b2stel_sna_ion_prev(:,:,is2) = b2stel_sna_ion_bal(:,:,is2)-b2stel_sna_ion_next(:,:,is2);
-        end
-    end
-end
-b2stel_sna_ion_prev = sum(b2stel_sna_ion_prev(:,:,isplot),3);
-b2stel_sna_ion_next = sum(b2stel_sna_ion_next(:,:,isplot),3);
-% Calculate the recombination sink to the previous ionisation state and the
-% recombination source from the next ionisation state:
-b2stel_sna_rec_bal = ncread(balfile,'b2stel_sna_rec_bal');
-b2stel_sna_rec_prev = zeros(nx,ny,comuse.ns);
-b2stel_sna_rec_next = zeros(nx,ny,comuse.ns);
-for is1=1:length(izhigh);
-    for is2=izhigh(is1):-1:izlow(is1);
-        if is2==izhigh(is1)
-            b2stel_sna_rec_next(:,:,is2) = 0;
-            b2stel_sna_rec_prev(:,:,is2) = b2stel_sna_rec_bal(:,:,is2);
-        else
-            b2stel_sna_rec_next(:,:,is2) = -b2stel_sna_rec_prev(:,:,is2+1);
-            b2stel_sna_rec_prev(:,:,is2) = b2stel_sna_rec_bal(:,:,is2)-b2stel_sna_rec_next(:,:,is2);
-        end
-    end
-end
-b2stel_sna_rec_prev = sum(b2stel_sna_rec_prev(:,:,isplot),3);
-b2stel_sna_rec_next = sum(b2stel_sna_rec_next(:,:,isplot),3);
+tot_sna_bal_compare = tot_sna_bal_compare+sum(tmp(:,:,isplot),3);
+tmp = ncread(balfile,'b2stel_sna_ion_bal');
+tot_sna_bal_compare = tot_sna_bal_compare+sum(tmp(:,:,isplot),3);
+tmp = ncread(balfile,'b2stel_sna_rec_bal');
+tot_sna_bal_compare = tot_sna_bal_compare+sum(tmp(:,:,isplot),3);
 tmp = ncread(balfile,'b2stcx_sna_bal');
-b2stcx_sna = sum(tmp(:,:,isplot),3);
+tot_sna_bal_compare = tot_sna_bal_compare+sum(tmp(:,:,isplot),3);
 tmp = ncread(balfile,'b2srsm_sna_bal');
-b2srsm_sna = sum(tmp(:,:,isplot),3);
+tot_sna_bal_compare = tot_sna_bal_compare+sum(tmp(:,:,isplot),3);
 tmp = ncread(balfile,'b2srdt_sna_bal');
-b2srdt_sna = sum(tmp(:,:,isplot),3);
+tot_sna_bal_compare = tot_sna_bal_compare+sum(tmp(:,:,isplot),3);
 tmp = ncread(balfile,'b2srst_sna_bal');
-b2srst_sna = sum(tmp(:,:,isplot),3);
+tot_sna_bal_compare = tot_sna_bal_compare+sum(tmp(:,:,isplot),3);
+
+figure; hold on;
+plot(tot_sna_bal(2:end-1,comuse.sep+2));
+plot(tot_sna_bal_compare(2:end-1,comuse.sep+2));
+plot(tot_sna_bal(2:end-1,comuse.sep+2)-tot_sna_bal_compare(2:end-1,comuse.sep+2));
+
 % Residual:    
 tmp = ncread(balfile,'resco');
 rescb = sum(tmp(:,:,isplot),3);
@@ -216,9 +183,9 @@ areadividepol = poloidal_balance(...
 
 if strata_plot
     make_strata_plots({squeeze(eirene_mc_papl_sna)},{squeeze(eirene_mc_pmpl_sna)},{squeeze(eirene_mc_pipl_sna)},{squeeze(eirene_mc_pppl_sna)},...
-                      {'Strata decomp. of EIRENE particle source with radial resolution',...
-                       'Strata decomp. of EIRENE particle source with poloidal direction'},...
-                      {''},comuse,indrad,indpol,nstra,axstrat,axbal,btn.area_divide,areadividepol,reverse,false);
+                      {'Strata decomp. of (\int_d^uS_{part}^{EIR}dV)/dA_{||d} in radial direction',...
+                       'Strata decomp. of S_{part}^{EIR}dV/dA_{||d}$ in poloidal direction'},...
+                      {''},comuse,indrad,indpol,nstra,axstrat,axbal,btn.areadown,areadividepol,reverse,false);
 end              
 %%
 end
