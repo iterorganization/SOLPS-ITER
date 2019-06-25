@@ -1564,6 +1564,7 @@ extracted from the {\tt run.log} file.
   \item[fixbb]\index{fixbb} A utility script to properly define the bounding box of PostScript files.
   \item[get\_solps\_fluids]\index{get\_solps\_fluids} A utility script to obtain the list of fluid species labels from the {\tt run.log} file.
   \item[grf]\index{grf} A more effective version of "grep" when searching for use of a variable in source code.
+  \item[inspect\_plasmastate \#1]\index{inspect\_plasmastate} This script will return the plasma time stamp at which the {\tt plasmastate} savefile \#1 was written.
   \item[plot\_cps \#1]\index{plot\_cps} Copies {\tt gnuplot.cmd} to
     {\tt gnuplot\_cps.cmd}, modifying it so that colour plotting occurs to \#1
     or by default {\tt out.ps}; executes {\tt gnuplot} on new file.
@@ -2435,7 +2436,7 @@ which contains
   'ionising\_core' switch is used,
   {\tt CONPAR(,,2)} is the strength of the feedback.
   \item[14] sound speed velocity flux,
-  {\tt CONPAR(,,1)} is a multiplier to the outgoing sound speed $C_{s, \mbox{collective}}$.
+  {\tt CONPAR(,,1)} is a multiplier to the outgoing sound speed $C_{s, \mbox{collective}}$. Recommended sheath boundary condition for use with drifts, in conjunction with {\tt BCENE/I=15}, {\tt BCPOT=11}, and {\tt BCMOM=13}.
   \item[15] prescribe a radial leakage velocity,
   {\tt CONPAR(,,1)} specifies the leakage velocity in units of the local thermal velocity.
   \item[16] particle density to achieve specified total flux, used with {\tt ASTRA} coupling. The total desired flux is summed over all {\tt BCCON=16} core boundaries.
@@ -2495,10 +2496,10 @@ which contains
   {\tt MOMPAR(,,1)} specifies the decay length in $m$
   \item[11] Rozhansky viscosity condition for the parallel momentum,
   {\tt MOMPAR(,,1)} is not used
-  \item[12] Condition from {\tt b2stbc\_spb} for the parallel momentum
-  \item[13] sheath boundary condition from {\tt b2stbc\_spb} for the parallel momentum
-  \item[14] Condition from {\tt b2stbc\_spb} for the parallel momentum
-  \item[15] Prescribe the value of the parallel velocity as a function of poloidal coordinate, scaling with $\frac{\langle B\rangle}{B}$ 
+  \item[12] condition from {\tt b2stbc\_spb} for the parallel momentum
+  \item[13] sheath boundary condition from {\tt b2stbc\_spb} for the parallel momentum. Recommended boundary condition for use with drifts, in conjunction with {\tt BCENE/I=15}, {\tt BCPOT=11}, and {\tt BCCON=14}.
+  \item[14] condition from {\tt b2stbc\_spb} for the parallel momentum
+  \item[15] prescribe the value of the parallel velocity as a function of poloidal coordinate, scaling with $\frac{\langle B\rangle}{B}$
   \item[16] Prescribe the average value of the parallel velocity,
   {\tt MOMPAR(,,1)} specifies the parallel velocity in $m.s^{-1}$
   \item[17] leakage option for parallel momentum, {\tt MOMPAR(,,1)} specifies
@@ -2545,24 +2546,24 @@ which contains
   here in $J$)
   \item[14] leakage option for electron energy, {\tt ENEPAR(,1)} specifies
   the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s, \mbox{collective}} n_e T_e$
-  \item[15] sheath boundary condition, from {\tt b2stbc\_spb}, recommended when using drifts (see Section~\ref{sec:bcene} for details). Linked to using {\tt BCCON=14 }for all ion species.
-  \item[16] Feedback boundary condition with constant temperature,
+  \item[15] sheath boundary condition, from {\tt b2stbc\_spb}, recommended when using drifts (see Section~\ref{sec:bcene} for details). Linked to using {\tt BCCON=14} and {\tt BCMOM=13} for all ion species, {\tt BCENI=15}, and {\tt BCPOT=11}.
+  \item[16] feedback boundary condition with constant temperature,
     {\tt ENEPAR(,1)} specifies the power flux in $W$ across the flux surface
     with index {\tt b2stbc\_type16\_ref} (default=-1), {\tt ENEPAR(,2)}
     should be something like {\tt 0.1} and specifies the strength of the
     feedback. Also see type [17] below. Available if {\tt bcene\_16\_style=0} (default).
     If {\tt bcene\_16\_style=1}, integrated electron heat flux with constant $T_e$,
     summed over all core boundaries with {\tt BCENE=16}.
-  \item[17] Feedback boundary condition with constant shared temperature
+  \item[17] feedback boundary condition with constant shared temperature
     for both electrons and ions, with {\tt ENEPAR(,1) + ENIPAR(,1)} giving
     the total power flux in $W$ across the flux surface
     with index {\tt b2stbc\_type16\_ref} (default=-1), {\tt ENEPAR(,2)}
     should be something like {\tt 0.1} and specifies the strength of the
     feedback. Replaces [16] for high densities and large values of
     {\tt b2stbc\_type16\_ref}.
-  \item[18] Fractional drop condition. Not yet working.
+  \item[18] fractional drop condition. Not yet working.
   \item[19] same as [9] but to be used when simultaneously setting {\tt BCCON=1} on the same boundary.
-  \item[20] Feedback boundary condition with constant temperature,
+  \item[20] feedback boundary condition with constant temperature,
   as per type [16] but with {\tt type20\_} switches and a different
   feedback scheme.
   \item[21] constant temperature feedback scaled by temperature on the ring
@@ -2612,7 +2613,7 @@ which contains
   per temperature in $W.m^{-2}.J^{-1}$ (the temperature here in $J$)
   \item[14] leakage option for ion energy, {\tt ENIPAR(,1)} specifies
   the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s,\mbox{collective}} n_i T_i$
-  \item[15] sheath boundary condition, from {\tt b2stbc\_spb}, recommended when using drifts (see Section~\ref{sec:bceni} for details). Linked to using {\tt BCCON=14} for all ion species.
+  \item[15] sheath boundary condition, from {\tt b2stbc\_spb}, recommended when using drifts (see Section~\ref{sec:bceni} for details). Linked to using {\tt BCCON=14} and {\tt BCMOM=13} for all ion species, {\tt BCENE=15}, and {\tt BCPOT=11}.
   \item[16] Feedback boundary condition with constant temperature,
     {\tt ENIPAR(,1)} specifies the power flux in $W$ across the flux surface
     with index {\tt b2stbc\_type16\_ref} (default=-1), {\tt ENIPAR(,2)}
@@ -2670,11 +2671,10 @@ which contains
   {\tt POTPAR(,1)} specifies the decay length in $m$
   \item[10] feedback option for core [not yet tested!!!!!!!!!] (based
   on using {\tt cbsch(0,coreregno)})
-  \item[11] sheath conditions, electron energy transmission from {\tt b2stbc\_spb}
-  {\tt POTPAR(,2)} specifies the bias potential in $V$
-  \item[12] Imposes the currents due to drifts for the South core boundary. Must be used in conjunction with the switch setting {\tt \allowbreak istyle\_cur\_contr\_on\_S\_and\_N=2}
-  \item[13] Imposes the currents due to drifts for the South private flux and North boundaries. Must be used in conjunction with {\tt \allowbreak istyle\_cur\_contr\_on\_S\_and\_N=2}
-  \item[16] Feedback condition of constant electric potential for a given prescribed current. The prescribed current (in $A$) is given by the sum of the {\tt POTPAR(,1)} of all the boundary conditions with {\tt BCPOT=16}. Still experimental, will not work for drift cases.
+  \item[11] sheath conditions, electron energy transmission from {\tt b2stbc\_spb}, recommended when using drifts. Linked to using {\tt BCCON=14} and {\tt BCMOM=13} for all ion species, and {\tt BCENE/I=15}. {\tt POTPAR(,2)} specifies the bias potential in $V$
+  \item[12] imposes the currents due to drifts for the South core boundary. Must be used in conjunction with the switch setting {\tt \allowbreak istyle\_cur\_contr\_on\_S\_and\_N=2}
+  \item[13] imposes the currents due to drifts for the South private flux and North boundaries. Must be used in conjunction with {\tt \allowbreak istyle\_cur\_contr\_on\_S\_and\_N=2}
+  \item[16] feedback condition of constant electric potential for a given prescribed current. The prescribed current (in $A$) is given by the sum of the {\tt POTPAR(,1)} of all the boundary conditions with {\tt BCPOT=16}. Still experimental, will not work for drift cases.
   \item[21] constant potential feedback scaled by potential on the ring {\tt bc\_type21\_ref} away,
   {\tt POTPAR(,,1)} specifies the desired electric potential in $V$,
   {\tt POTPAR(,,2)} is the strength of the feedback.
@@ -3921,7 +3921,7 @@ are always welcome.
 
 \newpage
 \section{b2co, recovering from a crash}
-\label{sec:b2co}\index{b2co}\index{plasmastate}\index{B2.5, run recovery}\index{b2fstate}\index{recover\_initial\_files}\index{tracing}\index{b2movies.nc}\index{b2tallies.nc}\index{b2wall.nc}\index{b2time.nc}\index{b2run}
+\label{sec:b2co}\index{b2co}\index{plasmastate}\index{B2.5, run recovery}\index{b2fstate}\index{recover\_initial\_files}\index{tracing}\index{b2movies.nc}\index{b2tallies.nc}\index{b2wall.nc}\index{b2time.nc}\index{b2run}\index{inspect\_plasmastate}
 
 In case of a computer crash during a run, it may be possible to recover
 the results and continue the simulation. The code writes, at regular
@@ -3935,6 +3935,7 @@ a crash, the user should then:
 \begin{enumerate}
   \item Check for the presence of {\tt plasmastate.XXXX} files in the {\tt b2mn.exe.dir} run subdirectory
   \item If present, check that the most recent file is of the same size as the others (sometimes the crash happens while writing the {\tt plasmastate} file!)
+  \item You can check the plasma time to which the {\tt plasmastate} file corresponds by means of the {\tt inspect\_plasmastate \#1} script where {\tt \#1} is the name of the plasmastate file you are considering to use
   \item {\tt setenv PLASMASTATE b2mn.exe.dir/plasmastate.XXXX} where {\tt XXXX} is the number of the desired {\tt plasmastate} file
   \item {\tt b2run b2co} or {\tt gmake -f \$SOLPSTOP/runs/Makefile b2co.prt} which will create a {\tt b2fstate} file
   \item {\tt mv b2fstate b2fstati}
@@ -9713,6 +9714,8 @@ $r_{rec,0,0} = 0,\;\; r_{rec,1,0} = 1,\;\; p_{n_a,a,1} = 0 $
 
 {\em Imposing a sound speed outgoing flux:} {\tt BCCON = 14}
 
+To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
+
 \begin{equation*}
 \left. \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \right|_W
 =
@@ -9773,6 +9776,8 @@ $r_{rec,0,0} = 0,\;\; r_{rec,1,0} = 1$
 \end{equation*}
 
 {\em Imposing a sound speed outgoing flux:} {\tt BCCON = 14}
+
+To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
 
 \begin{equation*}
 \left. - \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \right|_E
@@ -9969,6 +9974,8 @@ $c_{m,a,3} = 0$, $c_{m,a,6} = -1$
 
 {\em Imposing the {\tt b2stbc\_spb} style boundary condition on the velocity:} {\tt BCMOM = 13}
 
+To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCCON = 14}, and {\tt BCPOT = 11}.
+
 $ \left. h_z \frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_W = \left. \left[
 	p_{m,a,1} \frac{u_{big}}{\epsilon^2} V_{West} m_a n_a -
 	\frac{u_{big}}{\epsilon^2} h_z \frac{\sqrt g}{h_x} |b_x| m_a n_a V_{\parallel a}
@@ -10020,6 +10027,8 @@ $c_s = \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}{\su
 \underline{If $z_a \neq 0$}
 
 {\em Imposing the {\tt b2stbc\_spb} style boundary condition for parallel velocity:} {\tt BCMOM = 13}
+
+To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCCON = 14}, and {\tt BCPOT = 11}.
 
 $p_{m,a,1} = 1$
 
@@ -10186,7 +10195,9 @@ $\left. \frac{\sqrt{g}}{h_y} j_y \right|_{S_0} = 0$
 
 \subsubsection{West}
 
-{\em Imposing a sound speed velocity flux (to be used in connection with {\tt BCCON = 14}):} {\tt BCPOT = 11}
+{\em Imposing a sound speed velocity flux:} {\tt BCPOT = 11}
+
+To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 13}, and {\tt BCCON = 14}.
 
 \begin{small}
 $\left. \frac{\sqrt g}{h_x} j_x \right|_W =
@@ -10224,7 +10235,9 @@ $\left. \frac{\sqrt g}{h_x} j_x \right|_W =
 
 \subsubsection{East}
 
-{\em Imposing a sound speed velocity flux (to be used in connection with {\tt BCCON = 14}):} {\tt BCPOT = 11}
+{\em Imposing a sound speed velocity flux:} {\tt BCPOT = 11}
+
+To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 13}, and {\tt BCCON = 11}.
 
 \begin{small}
 $\left. -\frac{\sqrt g}{h_x} j_x \right|_E =
@@ -10401,7 +10414,9 @@ $p_{h_e,1} = 10^{-2}$ is the radial electron temperature decay length, in $m$.
 
 {\em Imposing the {\tt b2stbc\_spb} style boundary condition for electron temperature:} {\tt BCENE = 15}
 
-If {\tt 'bcene\_15\_style'} is set to {\tt '0'} (to be used in conjunction with {\tt BCCON = 14}) :
+To be used in conjunction with {\tt BCENI = 15}, {\tt BCCON = 14}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
+
+If {\tt 'bcene\_15\_style'} is set to {\tt '0'}
 
 $\left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \left. \left[
 	-\left(
@@ -10460,7 +10475,9 @@ c_s = \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}{\sum
 
 {\em Imposing the {\tt b2stbc\_spb} style boundary condition for electron temperature:} {\tt BCENE = 15}
 
-If {\tt 'bcene\_15\_style} is set to {\tt '0'} (to be used in conjunction with {\tt BCCON = 14}):
+To be used in conjunction with {\tt BCENI = 15}, {\tt BCCON = 14}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
+
+If {\tt 'bcene\_15\_style} is set to {\tt '0'}:
 
 $\left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \left. \left[
 	-\left(
@@ -10789,7 +10806,9 @@ $c_{h_i,a,2} = -10^{-2}$
 
 \subsubsection{West}
 
-{\em Boundary condition from {\tt b2stbc\_spb}:} {\tt BCENI = 15} (to be used in association with {\tt BCCON = 14})
+{\em Boundary condition from {\tt b2stbc\_spb}:} {\tt BCENI = 15}
+
+To be used in conjunction with {\tt BCENE = 15}, {\tt BCCON = 14}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
 
 $\left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W = \left.
 - p_{h_i,1} \frac{\sqrt g}{h_x} |b_x|
@@ -10877,7 +10896,9 @@ $p_{h_i,2} = 10^{-3}$ with drifts, should be $p_{h_i,2} = 0$
 
 \subsubsection{East}
 
-{\em Imposing a {\tt b2stbc\_spb} style boundary condition:} {\tt BCENI = 15} (to be used in association with {\tt BCCON = 14})
+{\em Imposing a {\tt b2stbc\_spb} style boundary condition:} {\tt BCENI = 15}
+
+To be used in conjunction with {\tt BCENE = 15}, {\tt BCCON = 14}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
 
 $\left. -\frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_E = \left.
 - p_{h_i,1} \frac{\sqrt g}{h_x} |b_x|
