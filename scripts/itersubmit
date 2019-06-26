@@ -181,10 +181,5 @@ update_solps_run_status -n ${msg}
 if ($?SOLPS_GUI_IP) then
   echo ${USER} ${PWD} ${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
 endif
-switch ($nodename)
-  case "hpc-login0*.iter.org":
-    sbatch $NAME
-    breaksw
-  default:
-    qsub -V -S /bin/tcsh $NAME
-endsw
+sbatch $NAME
+
