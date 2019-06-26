@@ -40,7 +40,7 @@ popd
 set USE_MPI=""
 if ($?SOLPS_MPI) then
   # set MPI_EXEC=mpirun
-  # set MPI_OPTS=#MPIOPTS#
+  set MPI_OPTS=#MPIOPTS#
   set MPI_PREFLAGS="--mpi=mpi2"
   # set USE_MPI="-m ${MPI_EXEC} ${MPI_OPTS}"
   set USE_MPI="-m srun"

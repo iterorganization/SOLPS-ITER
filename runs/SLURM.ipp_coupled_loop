@@ -24,7 +24,7 @@
 ###
 ### Usage: 
 ###   Submit the job:     `ippsubmit SLURM.ipp_coupled_loop`
-###               or      `ippsubmit -m "-np 36" -j "JobName" SLURM.ipp_coupled_loop`
+###               or      `ippsubmit -m "-np 32" -j "JobName" SLURM.ipp_coupled_loop`
 ###   Stop the run:       `touch b2mn.exe.dir/.quit`
 
 pushd #SOLPSTOP#
@@ -35,7 +35,7 @@ popd
 set USE_MPI=""
 if ($?SOLPS_MPI) then
   # set MPI_EXEC=mpirun
-  # set MPI_OPTS=#MPIOPTS#
+  set MPI_OPTS=#MPIOPTS#
   set MPI_PREFLAGS="--mpi=mpi2"
   # set USE_MPI="-m ${MPI_EXEC} ${MPI_OPTS}"
   set USE_MPI="-m srun"
