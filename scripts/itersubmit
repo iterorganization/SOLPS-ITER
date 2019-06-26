@@ -12,6 +12,7 @@ echo Your email is $EMAIL
 set compress=""
 set MPIOPTS=""
 set standalone="no"
+set LOOP_OPTS=""
 
 set solpstop=`climb_and_look_for SOLPSTOP`
 if (-s $solpstop) then
@@ -51,12 +52,16 @@ EOF
     set JOB_NAME="$1"
     echo Job name is ${JOB_NAME}
     shift
+    set HELP_STRING=\"${JOB_NAME}\"
+#    echo $HELP_STRING
+    set LOOP_OPTS="-j ${HELP_STRING} ${LOOP_OPTS}" 
     goto argloop
   endif
   if ("X${1}X" == "X-zX") then
     set compress="-gz"
     echo run.log will be compressed
     shift
+    set LOOP_OPTS="-gz ${LOOP_OPTS}" 
     goto argloop
   endif
   if ("X${1}X" == "X-sX") then
@@ -64,6 +69,7 @@ EOF
     if ($JOB_NAME == "SOLPS-ITER") set JOB_NAME="B2.5"
     echo Asking for a B2.5 standalone run
     shift
+    set LOOP_OPTS="-s ${LOOP_OPTS}" 
     goto argloop
   endif
   if ("X${1}X" == "X-mX") then
@@ -76,7 +82,10 @@ EOF
     set PROCS=`echo $MPIOPTS | awk.transpose | grep -A 1 "\-np" | tail -n 1`
     echo Asking for MPI run with $PROCS processors
     shift
-    goto argloop
+    set HELP_STRING=\"${JOB_NAME}\"
+#    echo $HELP_STRING
+    set LOOP_OPTS="-j ${HELP_STRING} ${LOOP_OPTS}" 
+   goto argloop
   endif
   if ("X${1}X" == "X-tX") then
     shift
@@ -86,6 +95,9 @@ EOF
     set THREADS="$1"
     echo Asking for OpenMP run with $THREADS threads
     shift
+    set HELP_STRING=\"${THREADS}\"`
+#    echo $HELP_STRING
+    set LOOP_OPTS="-t ${HELP_STRING} ${LOOP_OPTS}" 
     goto argloop
   endif
   if ("X${1}X" == "X-TX") then
@@ -93,6 +105,9 @@ EOF
     set hours="$1"
     echo Requested time is ${hours} hours
     shift
+    set HELP_STRING=\"${hours}\"
+#    echo $HELP_STRING
+    set LOOP_OPTS="-T ${HELP_STRING} ${LOOP_OPTS}" 
     goto argloop
   endif
   if ("X${1}X" == "X-MX") then
@@ -100,6 +115,9 @@ EOF
     set mem="$1"
     echo Requested memory is ${mem}
     shift
+    set HELP_STRING=\"${mem}\"
+#    echo $HELP_STRING
+    set LOOP_OPTS="-M ${HELP_STRING} ${LOOP_OPTS}" 
     goto argloop
   endif
 
@@ -160,7 +178,10 @@ if($QSUB == "") then
   echo No ITER submission file $1 found. Exiting.
   exit
 endif
+
 echo Using submission file template $QSUB
+echo For loop resubmission following options will be used: $LOOP_OPTS
+
 
 sed \
   -e 's:#PWD#:'$PWD':g' \
@@ -174,6 +195,7 @@ sed \
   -e 's:#CPU#:'$cpu':g' \
   -e "s:#JOBNAME#:'$JOB_NAME':g" \
   -e 's:#USER#:'$USER':g' \
+  -e 's:#LOOPOPTS#:'"$LOOP_OPTS"':g' \
   < $QSUB > $NAME
 
 set msg="Submitted at `date`"
@@ -181,10 +203,15 @@ update_solps_run_status -n ${msg}
 if ($?SOLPS_GUI_IP) then
   echo ${USER} ${PWD} ${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
 endif
+echo nodename is $nodename
+
 switch ($nodename)
   case "hpc-login0*.iter.org":
     sbatch $NAME
     breaksw
+  case "c0*.iter.org":
+    sbatch $NAME
+    breaksw
   default:
     qsub -V -S /bin/tcsh $NAME
-endsw
+#endsw
