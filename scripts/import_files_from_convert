@@ -81,6 +81,11 @@
     [ -s ../convert/mesh.extra ] && cp -uv ../convert/mesh.extra ../baserun
   }
   [ -s ../convert/ratadas.filelist ] && cp -uv ../convert/ratadas.filelist .
+  cd ../baserun
+  b2run b2ah
+  b2run b2ar
+  cd -
+  setup_baserun_eirene_links
   touch b2fstati
 } || {
   echo 'Did not find b2yt.files list. Exiting ...'

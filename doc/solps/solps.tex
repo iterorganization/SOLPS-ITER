@@ -3840,7 +3840,7 @@ after renaming it {\tt b2ah.dat}) and {\tt b2ar} before re-launching the run.
 
 If a new geometry is requested, the {\tt b2yt} program should be run after the
 new geometry file ($nx1 \times ny1$) has
-been produced and is available in the run directory as {\tt b2fgmtry}.
+been produced and is available in the run or {\tt baserun} directories as {\tt b2fgmtry}.
 The old geometry file should also remain available in
 the run directory as {\tt b2fgmtry.old}.
 
@@ -3900,6 +3900,13 @@ to produce a new {\tt input.dat.2} file. In order to
 ensure consistency between the {\tt B2.5} and {\tt Eirene} modified inputs, it is
 important that the order of the neutrals boundary conditions in
 {\tt b2.neutrals.parameters} and the strata in {\tt input.dat} match!
+If the {\tt B2.5} grid has been changed, and a new {\tt Eirene} triangular grid is needed,
+the triangulation will need to be redone. In order to do so, copy the converted
+{\tt input.dat.2} file to {\tt ../baserun/triang.eir}, modify the copied file to set
+{\tt NLTRIMESH} to {\tt .true.}, and then launch the {\tt triang} script (in the
+{\tt baserun} directory, skipping the {\tt (U)inp} and {\tt (b)2ag} steps, i.e.
+starting at the {\tt (E)irene} step.\index{triang}
+
 When species are being re-bundled, possible
 conflicts may occur between their individual settings. In such cases, the code behaviour
 is to use the setting from the highest charge state within the bundle. If species are
@@ -3914,12 +3921,12 @@ place them, after proper renaming, in the current run directory,
 provided the {\tt convert} directory where {\tt b2yt}
 was run is located at the same level.
 
-At this time, not all cases involving reshuffling of bundles have been tested, and the
-user is encouraged to check the {\tt b2yt} output files visually after execution to
-make sure no mistakes remain. No attempt is made to adjust or modify the text labels
-pertaining to the various input files, so the user is encouraged to adapt those to the
-new case being built. Report of conversion errors or omissions to the developer team
-are always welcome.
+Because of the complexity of the conversion process, for which not all possible
+cases have been tested, users are encouraged to inspect the {\tt b2yt} output files
+visually after execution to make sure no mistakes remain. No attempt is made to adjust
+or modify the text labels pertaining to the various input files, so users should
+consider adapting those to the new case being built. Report of conversion errors or
+omissions to the developer team are always welcome.
 
 \newpage
 \section{b2co, recovering from a crash}
