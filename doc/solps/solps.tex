@@ -1859,7 +1859,7 @@ Each submission command file can handle five possible cases:
 \end{description}
 where "*" stands for "iter", "itm", "jet", "lsf", or "sge", referring to the machine system on which the
 submission script is to be used. The "\_coupled" scripts are used when the presence of an {\tt Eirene}
-{\tt input.dat} input file is detected in the run directory.
+{\tt input.dat} input file is detected in the run directory. Looping scripts, with a "\_loop" extension, are also available for some systems. These will automatically relaunch a case at the end of the time allotted to an individual job submission, provided the run appears to have finished cleanly. If the run appears to have failed, the looping script will stop.
 All the submission scripts make use of {\tt b2run} so the same possibility of submitting runs from
 outside the \${\tt SOLPSTOP} file space is available.
 
