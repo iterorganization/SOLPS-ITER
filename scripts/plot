@@ -40,12 +40,13 @@ set n=`wc -l < $dfilename`
 if(! $?GNUPLOT_BATCH) then
   /bin/cp /dev/null $cfilename
 endif
+echo set title noenhanced >>! $cfilename
 if ($?PRINT_PLOT) then
   if(! $?GNUPLOT_POSTSCRIPT_OPTIONS) then
     set GNUPLOT_POSTSCRIPT_OPTIONS=""
   endif
   if(! $?GNUPLOT_BATCH || $GNUPLOT_COUNT == 1) then
-    echo set term postscript $GNUPLOT_POSTSCRIPT_OPTIONS >>! $cfilename
+    echo set term postscript $GNUPLOT_POSTSCRIPT_OPTIONS >> $cfilename
     if("$PRINT_PLOT" == "") then
       echo "set out '| lpr'" >> $cfilename
     else
@@ -55,7 +56,7 @@ if ($?PRINT_PLOT) then
   endif
 else
   if ($?GNUPLOT_TERM) then
-    echo set term "$GNUPLOT_TERM" >>! $cfilename
+    echo set term "$GNUPLOT_TERM" >> $cfilename
   endif
 endif
 if($n < 1) then

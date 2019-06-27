@@ -2,6 +2,7 @@
 
 # backup files
 *~
+*.bak
 
 # object, archive,... files
 *.[oa]
@@ -96,5 +97,4 @@ scripts/*.gfortran*/
 scripts/*.pgf90*/
 scripts/*.nag_f90*/
 scripts/*.g95*/
-
 

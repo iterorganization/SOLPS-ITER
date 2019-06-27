@@ -91,7 +91,6 @@
       logical lvis21_4, ni_driven_4, no_thermal_force_4,
      *  lbndusr_4, lfeedback_4,
      *  lreitr_4, lfirstflight_4,
-     *  lhalpha_4, lvib_4,
      *  autotimestep_4, scale_He_4, print_isat_4,
      *  sepfeedback_4, volrecfeedback_4, sepgasfeedback_4
 
@@ -291,8 +290,6 @@ cxpb
       use braeir
      , , only: chemical_sputter_yield, fchar_chemical,
      ,         itsput_chemical, issput_chemical, igass_chemical
-      use eirdiag
-     , , only: lvib, lhalpha
       use ccoupl
      , , only: nspze_eir => nspze, nspzi_eir => nspzi, ntgprt
       use comsou
@@ -526,8 +523,6 @@ cxpb
       nltrsol_4 = nltrsol
       jxi_4 = jxi-1
       jxa_4 = jxa-1
-      lhalpha_4 = lhalpha
-      lvib_4 = lvib
       debug_flags_4 = debug_flags
       nstepprint_4 = nstepprint
       nstepout_4 = nstepout
@@ -1840,7 +1835,7 @@ c
       write(99,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
      .  (cfalf(i),i=0,7)
       write(99,'(a)') '*cflim'//
-     .  '     cflme     cflmi     cflmv     cflal     cflab     ...'
+     .  '    cflme     cflmi     cflmv     cflal     cflab     ...'
       write(99,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
      .  (cflim(i),i=0,7)
       write(99,'(a)') '*endphy'
@@ -2140,14 +2135,6 @@ c
           write(98,'(a)')
      .     '''ank_tracing'''//tab//tab//tab//'''1'''
         end if
-      end if
-      if (.not.lhalpha_4) then
-        write(99,'(a)') '''eirene_lhalpha'''//tab//tab//'''0'''
-        write(98,'(a)') '''eirene_lhalpha'''//tab//tab//'''0'''
-      end if
-      if (lvib_4) then
-        write(99,'(a)') '''eirene_lvib'''//tab//tab//tab//'''1'''
-        write(98,'(a)') '''eirene_lvib'''//tab//tab//tab//'''1'''
       end if
       if (dflagkxe_4.ne.0 .or. dflagkxi_4.ne.0) then
         write(99,'(a)') '''b2trcl_lluciani'''//tab//tab//'''2'''

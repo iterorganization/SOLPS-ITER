@@ -7,16 +7,13 @@ setenv FC g95
 # Debugger (set environment variable DBX)
 setenv DBX totalview
 
-module load imasenv/3.12.1
+module load itm-g95
+module load mdsplus
 
 # The script above overwrites $PATH, so modules must be loaded afterwards!!!
 # load modules
 # module load solps-gui
 module load texlive
-
-#module load imas
-echo "imasdb solps-iter"
-imasdb solps-iter
 
 if (! $?DEVICE) then
   if ($?TOKAMAKNAME) then

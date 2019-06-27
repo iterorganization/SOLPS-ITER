@@ -7,6 +7,7 @@ C     READ PHYSICAL COORDINATES FROM FORT.30 FILE TO XCOORD, YCOORD
       use cdimen
       use ctria
       use ccuts
+      use eirmod_cinit, only: fort_lc
       IMPLICIT NONE
 
       DOUBLE PRECISION, allocatable :: BR(:,:,:), BZ(:,:,:)
@@ -77,20 +78,12 @@ C     READ PHYSICAL COORDINATES FROM FORT.30 FILE TO XCOORD, YCOORD
       else if (exp_location.eq.13) then
         new_format = 2
       else
-#ifndef HPUX
-        stop "Unrecognized format in fort.30 file"
-#else
-        stop "Unrecognized format in ftn30 file"
-#endif
+        write(0,*) 'Unrecognized format in '//fort_lc//'30 file'
+        stop 
       endif
       backspace(30)
-#ifndef HPUX
-      write(*,*) 'Detected fort.30 is using ',
+      write(*,'(4a)') 'Detected '//fort_lc//'30 is using ',
      . trim(format_string(new_format))
-#else
-      write(*,*) 'Detected ftn30 is using ',
-     . trim(format_string(new_format))
-#endif
       do ix=1,nx
         do iy=1,ny
          read (30,format_string(new_format)) (br(ix,iy,i),i=1,4)

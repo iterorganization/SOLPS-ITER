@@ -15,12 +15,12 @@ if [[ -n "$SOLPS_PATH" ]]; then
   export   SOLPS_PATH=`echo $SOLPS_PATH | sed "s|${HOST_NAME}.${COMPILER}.openmp.mpi:|${HOST_NAME}.${COMPILER}.openmp.mpi.debug:|g"`
   export   SOLPS_PATH=`echo $SOLPS_PATH | sed "s|${HOST_NAME}.${COMPILER}.openmp:|${HOST_NAME}.${COMPILER}.openmp.debug:|g"`
   export   SOLPS_PATH=`echo $SOLPS_PATH | sed "s|${HOST_NAME}.${COMPILER}.mpi:|${HOST_NAME}.${COMPILER}.mpi.debug:|g"`
-  export   SOLPS_PATH=`echo $SOLPS_PATH | sed "s|${HOST_NAME}.${COMPILER}:|${HOST_NAME}.${COMPILER}.debug:|g"`.debug
+  export   SOLPS_PATH=`echo $SOLPS_PATH | sed "s|${HOST_NAME}.${COMPILER}:|${HOST_NAME}.${COMPILER}.debug:|g"`
   export   PATH=${SOLPS_PATH}:${OLD_PATH}
   export   SOLPS_DEBUG=yes
   export   I_MPI_DEBUG=5
   export   PMI_DEBUG=1
-  unset OLD_SOLPS_PATH
+  unset    OLD_SOLPS_PATH
   echo "SOLPS-ITER debug mode turned on"
 else
   echo "SOLPS_PATH not set. Exiting."

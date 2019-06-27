@@ -458,6 +458,7 @@ else
 $(target_co) : b2mn.dat b2fgmtry b2fpardf b2fstati ${PLASMASTATE} ${savefiles}
 endif
 	-rm -rf b2co.exe.dir >& /dev/null ; mkdir b2co.exe.dir ; cp $^ b2co.exe.dir
+	inspect_plasmastate ${PLASMASTATE}
 	-cd b2co.exe.dir ; mkdir tracing
 	obtain_tracing_files
 	rm -f $(target_co)

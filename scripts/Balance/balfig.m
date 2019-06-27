@@ -44,6 +44,8 @@ switch type
         title(axgrid,'ION. INTERNAL ENERGY BALANCE','fontweight','normal');
     case 'totheat'
         title(axgrid,'TOTAL INTERNAL ENERGY BALANCE','fontweight','normal');
+    case 'toten'
+        title(axgrid,'TOTAL ENERGY BALANCE','fontweight','normal');
     otherwise
         error('Figure type unknown.');
 end

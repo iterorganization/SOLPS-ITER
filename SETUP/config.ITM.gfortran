@@ -45,7 +45,7 @@ LD_MPI     = -L${MPDIR}/lib64 -lmpi -lmpigf
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNCAR4 -DGFORTRAN -DNO_F01AAF -DNAG22
+SOLPS_CPP      = -DNCAR4 -DGFORTRAN -DNO_F01AAF -DNAG22 -DITM
 B25_DEFINES    =
 EIRENE_DEFINES =
 MPI_CPP        =
@@ -71,10 +71,20 @@ endif
 
 # Build with IMAS if imas module is loaded
 ifdef IMAS_VERSION
-  SOLPS_CPP += -DIMAS
+  UAL_MAJOR_VERSION = $(shell echo ${UAL_VERSION} | cut -d '.' -f1 )
+  IMAS_MAJOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f1 )
+  IMAS_MINOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f2 )
   LD_UAL     = `pkg-config imas-gfortran ggd --libs` -lstdc++
+  SOLPS_CPP += -DIMAS -DUAL_MAJOR_VERSION=${UAL_MAJOR_VERSION} -DIMAS_MINOR_VERSION=${IMAS_MINOR_VERSION}
   export LD_UAL
+else
+  UAL_MAJOR_VERSION = 0
+  IMAS_MAJOR_VERSION = 0
+  IMAS_MINOR_VERSION = 0
 endif
+export UAL_MAJOR_VERSION
+export IMAS_MAJOR_VERSION
+export IMAS_MINOR_VERSION
 
 #
 # Export for use in sub-makefiles

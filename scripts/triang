@@ -287,10 +287,13 @@ while true; do {
                 $EIRENE > "$eirlog"
                 rm $eirlink
                 [ -s "$eirout" ] && [ -r "$eirout" ] && {
-                  (cat "$eirhed"; tail --lines=+2 "$eirout") > "$triain" && q=t || {
-                    print -u2 -- "Something is wrong with $eirout ==> Check $eirlog"
-                    q=u
+                  [ -s "$eirhed" ] && [ -r "$eirhed" ] && {
+                    (cat "$eirhed"; tail --lines=+2 "$eirout") > "$triain"
+                  } || {
+                    cp "$eirout" "$triain"
+                    print -u2 -- "No $eirhed file found, using default provided by Eirene instead"
                   }
+                  q=t
                   true
                 } || {
                   print -u2 -- "No valid $eirout file created ==> Check $eirlog"

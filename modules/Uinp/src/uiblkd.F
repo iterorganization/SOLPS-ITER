@@ -1,8 +1,8 @@
-       block data uiblkd
-       use b2mod_types
-       use b2mod_layer
+      block data uiblkd
+      use b2mod_types
+      use b2mod_layer
      , , only: ntrack, nalloys
-       use eirmod_extrab25
+      use eirmod_extrab25
      , , only: msrfclsx, mgwtiesx
 
 c  version : 01.04.2005 14:35
@@ -127,7 +127,7 @@ c*** He pumping data
       data locphep,lpbihep,lpbohep,lptihep,lptohep/
      /        0   ,   0   ,   0   ,   0   ,   0   /,
      ,  j_he_at , j_h_at , j_ne_at, l_h_mol /
-     /     0    ,   3*0   ,    0  ,  luml*0 /,
+     /     0    ,   3*0  ,    0   ,  luml*0 /,
      ,  pwrhepdt,pmphepdt,nstclhep,nhetrgts/
      /    570.  ,   0.8  ,    0   ,   0    /
 
@@ -143,16 +143,16 @@ c*** Data for TRIA mesh
  
 c*** 1
 
-      data nmach, nmode , ntcpu, nfile, niter0, niter, ntime0, ntim1 /
-     /       2  ,   1   ,  50  ,  406 ,   1   ,   1  ,   0   ,   1   /,
+      data nprll, nmode , ntcpu, nfile, niter0, niter, ntime0, ntim1 /
+     /       0  ,   1   ,  50  , 5306 ,   1   ,   1  ,   0   ,   1   /,
      ,  nfullrun, noptim,noptm1, ngeom_usr, ncoup_input, nsmstra /
-     /     0    ,   1   ,   1  ,     0    ,     1      ,    1    /,
+     /       0  ,   1   ,   1  ,     0    ,     1      ,    1    /,
      ,   nstoram, ngstal,nrtal1,nreac_add /
-     /      9   ,   1   ,   0  ,     1    /
+     /       9  ,   1   ,   0  ,     1    /
       data nlscl , nltest, nlana ,nldrft, nlcrr , nlerg , nlident/
      /    .true. ,.false.,.false.,.true.,.false.,.false.,.false./,
-     ,     nlone , nlmovie,nldfst,nloldran,nlcascad,nloctree/
-     /    .false.,.false.,.false.,.true.,.false.,.false./,
+     ,     nlone ,nlmovie, nldfst,nloldran,nlcascad,nloctree/
+     /    .false.,.false.,.false., .true. , .false., .false./,
      /    nlwrmsh, nexvs ,nltrimesh/
      ,    .true. ,.false.,.false./
       data  txtrun / ' EIRENE input file generated with uinp v. 2.2' /
@@ -546,7 +546,7 @@ c*** 4
       data (rctdmst(i,14),i=1,lurctdxp) / lurctdxp*-1 /
       data (rctddlte(i,1),i=1,lurctdh)  / 4*0.0 /
       data (rctddlte(i,2),i=1,lurctdh2) / 15.4, 10.5, 25.0, 4*0.0 /
-      data (rctddlte(i,3),i=1,lurctdhe) / 24.55 /
+      data (rctddlte(i,3),i=1,lurctdhe) / 24.5874 /
       data (rctddlte(i,4),i=1,lurctdc)  / 4*0.0 /
       data (rctddlte(i,5),i=1,lurctdne) / 21.6 /
       data (rctddlte(i,6),i=1,lurctdhp) / 0.0, 13.6 /
@@ -628,7 +628,7 @@ c      integer lura,lurm,luri,lurf
      / natm*0,natm*0/,
      ,  ireaca,ibulka,iscd1a,iscd2a,iscd3a,iscd4a,iscdea,iestma,ibgka /
      /  lura*0,lura*0,lura*0,lura*0,lura*0,lura*0,lura*0,lura*0,lura*0/
-      data eeleca, ebulka, escd1a, escd2a, freaca, fldlma /
+      data eeleca, ebulka, escd1a, escd2a, freaca, edpota /
      /    lura*0.,lura*0.,lura*0.,lura*0.,lura*0.,lura*0. /
       data nmassm,ncharm, nprtm, isrfm, isrtm,nmsecm, nrcm , nfolm /
      /     nmol*0,nmol*0,nmol*0,nmol*0,nmol*0,nmol*0,nmol*0,nmol*0 /,
@@ -657,30 +657,28 @@ c      integer lura,lurm,luri,lurf
 
 c*** 5
 
-      integer lurp,lurc,lup6
+      integer lurp,lurc,lup5,lup6
       parameter (lurp=nreac*npls, lurc=nrcdn*npls)
-      parameter (lup6=6*npls)
+      parameter (lup5=5*npls, lup6=6*npls)
       data nplsi / 0 /
       data nbgk / 0 /
       data nmassp,ncharp, nprtp,nchrgp, isrfp, isrtp,nmsecp, nrcp  /
      /     npls*0,npls*0,npls*0,npls*0,npls*0,npls*0,npls*0,npls*0 /,
-     , idnslmp, nfolp, ngenp,nhstp /
-     /  npls*0,npls*0,npls*0,npls*0 /,
-     ,  ireacp,ibulkp,iscd1p,iscd2p,iscd3p,iscd4p,iscdep /
-     /  lurp*0,lurp*0,lurp*0,lurp*0,lurp*0,lurp*0,lurp*0 /
+     ,    idnslmp, nfolp, ngenp,nhstp /
+     /     npls*0,npls*0,npls*0,npls*0 /,
+     ,     ireacp,ibulkp,iscd1p,iscd2p,iscd3p,iscd4p,iscdep /
+     /     lurp*0,lurp*0,lurp*0,lurp*0,lurp*0,lurp*0,lurp*0 /
       data eelecp, ebulkp, escd1p, escd2p, freacp /
      /    lurp*0.,lurp*0.,lurp*0.,lurp*0.,lurp*0. /
       data textp / npls*' ' /
-#ifndef HPUX
-      data cdnmdlp_sel/'fort.13','saha','boltzmann','corona','colrad'/
-#else
-      data cdnmdlp_sel/'ftn13','saha','boltzmann','corona','colrad'/
-#endif
+      data cdnmdlp_sel/
+     /   'FORT.13', 'FTN13', 'FORT.10', 'FTN10',
+     /   'CONSTANT','MULTIPLY','SAHA','BOLTZMANN','CORONA','COLRAD'/
       data cdnmdlp / npls*' ' /
-      data nrep, ispcdn /
-     /   npls*0, lurc*0 /
-      data bltzcdn,dltecdn,acrncdn/
-     /     npls*0.,npls*0.,npls*0./
+      data nrep, ispcdn, itpcdn, istrcdn /
+     /    npls*0, lurc*0, lurc*4, lurc*0 /
+      data valcdn,bltzcdn,dltecdn,acrncdn/
+     /    lup5*0.,npls*0.,npls*0.,npls*0./
       data fnamcdn, h2cdn  , reaccdn, crcdn   /
      /    lurc*' ',lurc*' ',lurc*' ',lurc*' ' /
       
@@ -842,14 +840,16 @@ c*** 11
      /    .false.,.false.,.false.,.false.,.false.,.false.,.false. /,
      ,     trclst, trcbla, trcblm, trcbli, trcblp, trcble,trcblph /
      /    .false.,.false.,.false.,.false.,.false.,.false.,.false. /,
-     ,     trctal, trcoct, trccen,trcdumm/
-     /    .false.,.false.,.false.,.false./,
+     ,     trctal, trcoct, trccen, trcrnf /
+     /    .false.,.false.,.false.,.false. /,
      ,     trcdbg2,trcdbge,trcdbgm,trcdbgf,trcdbgl /
      /    .false.,.false.,.false.,.false.,.false. /,
-     ,     trcdbgs,trcdbgg,trcdbgmpi,trcdbgc,     trcsrc           /
-     /    .false. ,.false.,.false.  ,.false.,.true.,nstra*.false. /,
+     ,     trcdbgs,trcdbgg,trcdbgmpi,trcdbgc,trchktim /
+     /    .false. ,.false.,.false.  ,.false.,.false. /,
+     ,           trcsrc        /
+     /    .true.,nstra*.false. /,
      ,     pl1st , pl2nd , pl3rd , pladd , plhst /
-     ,    .false.,.false.,.false.,.false.,.false./,
+     /    .false.,.false.,.false.,.false.,.false./,
      ,             plcut         , plbox , plstor, plnumv, plnums /
      /    .false.,.false.,.false.,.false.,.false.,.false.,.false. /,
      ,   plarr ,lrpscut,       pltsrc          ,   pl3a   ,  pl3s    /
@@ -868,10 +868,12 @@ c*** 11
 
 c*** 12
 
+      data numlines, modaddv /
+     /       0     ,    1    /
       data nchori, ncheni,lntspec,lntsput,nmcsput,npspcen,iatspec /
      /       0   ,   0   ,   0   ,   0   ,   0   ,  29   ,   1    /,
      ,  npspctt,npspcfi,nlstadds,mtreadds,ngwties,ngwtiesi /
-     /     8   ,   4   ,   0    ,   0    ,   0   ,    0    /,
+     /       8   ,   4   ,   0    ,   0    ,   0   ,    0  /,
      ,   nchtal, nspscl, nspnew, nspstr, nspspz, nspini, nspend /
      /  nchor*0,nchor*0,nchor*0,nchor*0,nchor*0,nchor*0,nchor*0 /,
      ,   nspblc, nspadd, masloc, ipivot, ichord, listmtmp , listmtra  /
@@ -884,8 +886,8 @@ c*** 12
      /    nchor*0.,nchor*0.,nchor*0.,nchor*0.,  0.5 , 5000. /,
      ,     zpivot , xchord , ychord , zchord  /
      /    nchor*0.,nchor*0.,nchor*0.,nchor*0. /
-      data plchor, plspec,    lpw_d     /
-     /    .false.,.false.,npwinx*.false./
+      data plchor, plspec, prspec, plargl, prargl,    lpw_d     /
+     /    .false.,.false.,.false.,.false.,.false.,npwinx*.false./
       data txtsig  ,   txtmtmp  ,   txtmtra   /
      /    nchor*' ',lntsputx*' ',lntsputx*' ' /
 
@@ -914,7 +916,7 @@ c*** 14
      /    lusg*0,lusg*7,   0  ,   0  ,    1   ,    1   ,   0  ,   0   /
       data fcte , bmass ,  chgsp ,  chgsee ,  chgsei , chgsmom /
      /   npls*1.,npls*0.,nstra*60.,nstra*60.,nstra*100.,nstra*50. /
-      data lsymet,lbalan,lchkqud, lfchgs /
+      data lsymet,lbalan,lcoarse, lfchgs /
      /    .false.,.true.,.false.,.false. /
     
 c*** 15
@@ -933,12 +935,14 @@ c*** Data for Eirene test run
      /    50  , 10100 , nstra*5,   0.  ,.true.,.true.,.true.,.true. /,
      , ttchst,ttcref,ttcamd,ttcsou,ttcbla,ttcblm,ttcbli,ttcblp,ttcble /
      / .true.,.true.,.true.,.true.,.true.,.true.,.true.,.true.,.true. /,
-     , ttcblph,ttctal,ttcdbg2,ttcdbge,ttcdbgm,ttcdbgf,ttcdbgl,ttcdbgs/
-     / .true.,.true. ,.true. ,.true. ,.true. ,.true. ,.true. ,.true. /,
-     , ttcdbgg,ttcdbgmpi,ttcdbgc/
-     / .true. ,.true.   ,.true. /,
-     , ttpl1st,ttpl2nd,ttpladd,ttplhst,        ttplcut       ,ttplnums/
-     / .true. ,.true. ,.true. ,.true. ,.false.,.false.,.true.,.true.  /
+     , ttcblph,ttctal,ttcoct,ttccen,ttcrnf /
+     / .true.,.true. ,.true.,.true.,.true. /,
+     , ttcdbg2,ttcdbge,ttcdbgm,ttcdbgf,ttcdbgl,ttcdbgs /
+     / .true. ,.true. ,.true. ,.true. ,.true. ,.true.  /,
+     , ttcdbgg,ttcdbgmpi,ttcdbgc,ttchktim /
+     / .true. ,.true.   ,.true. , .false. /,
+     , ttpl1st,ttpl2nd,ttpladd,ttplhst,        ttplcut       ,ttplnums /
+     / .true. ,.true. ,.true. ,.true. ,.false.,.false.,.true.,.true.   /
 
 c*** Data for diagnostic run
 

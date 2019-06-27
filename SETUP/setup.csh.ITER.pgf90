@@ -4,8 +4,8 @@ module use /work/imas/etc/modulefiles
 # Modules needed by SOLPS-ITER
 set nodename=`hostname`
 module load PGI/19.4-GCC-6.4.0-2.28
-module load IMAS/3.21.0-3.8.6
-module load GGD/1.8.3-PGI-18.4-GCC-6.4.0-2.28
+module load IMAS/3.21.1-4.0.1
+module load GGD/1.8.3-PGI-18.4-GCC-6.4.0-2.28-DD-3.21.1
 module load makedepend/1.0.5-GCCcore-6.4.0
 module load netCDF-Fortran/4.4.4-intel-2018a
 setenv NCDIR ${EBROOTNETCDFMINFORTRAN}
@@ -13,7 +13,9 @@ module load MSCL/1.2.0-GCCcore-6.4.0
 module load GR/0.0.94-GCCcore-6.4.0
 module load GLI/4.5.30-GCCcore-6.4.0
 setenv GLI_HOME ${EBROOTGLI}
-module load NCL/6.4.0-intel-2018a
+module load PyYAML/3.12-intel-2018a-Python-3.6.4
+module load matplotlib/2.1.2-intel-2018a-Python-3.6.4
+module load NCL/6.5.0-intel-2018a
 module load nag/26-GCC-6.4.0-2.28
 module load flex/2.6.4-GCCcore-6.4.0
 module load Doxygen/1.8.13-GCCcore-6.4.0
@@ -21,15 +23,14 @@ module load TotalView/2017.1.21_linux_x86-64
 module load Ghostscript/9.23-GCCcore-6.4.0
 module unload LibTIFF/4.0.9-GCCcore-6.4.0
 module load MATLAB/2018a
-module load ParaView/5.4.1-intel-2018a-mpi
-module unload mpich2
+module load ParaView/5.5.2-intel-2018a-Python-3.6.4-mpi
+module load PyQt5/5.9.2-intel-2018a-Python-3.6.4
+setenv QTDIR ${EBROOTQT5}
+setenv PARAVIEW_PREFIX ${EBROOTPARAVIEW}
 module load motif/2.3.8-intel-2018a
 module load gnuplot/5.2.2-intel-2018a
 module load texlive
 module load make/4.1
-if (`hostname` == "hpc-app1.iter.org") then
-  module load matlab/2013a
-endif
 
 # Debugger (set environment variable DBX)
 setenv DBX totalview
@@ -55,3 +56,11 @@ endif
 # module load solps-gui
 # setenv LD_PRELOAD /usr/lib64/libfontconfig.so.1 # needed by solps-gui
 setenv SOLPSWORK /work/projects/solps-iter/$USER
+setenv PYTHONPATH "/work/imas/opt/SOLPS-GUI/1.5/src/widgets:${PYTHONPATH}"
+setenv PYQTDESIGNERPATH "/work/imas/opt/SOLPS-GUI/1.5/src/plugins/designer"
+setenv SOLPSGUI "/work/imas/opt/SOLPS-GUI/1.5/src/gui"
+alias solps 'python3 /work/imas/opt/SOLPS-GUI/1.5/src/gui/solps.py'
+alias solps_doc 'xdg-open /work/imas/opt/SOLPS-GUI/1.5/doc/build/html/index.html'
+alias solps_help 'assistant -collectionFile /work/imas/opt/SOLPS-GUI/1.5/doc/build/qthelp/SOLPSGUI.qhc'
+alias eirene 'python3 /work/imas/opt/SOLPS-GUI/1.5/src/widgets/eirene.py'
+alias b2 'python3 /work/imas/opt/SOLPS-GUI/1.5/src/widgets/b2.py'
