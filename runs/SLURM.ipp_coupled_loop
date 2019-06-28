@@ -110,6 +110,8 @@ if ("$Break_loop" == "no") then
     set NOW = `date +"%d.%m.%Y_%T"`  
     mv b2fstati b2fstati_$NOW
     if (-e fort.13.i) mv fort.13.i fort.13.i_$NOW
+    if (-e fort.14.i) mv fort.14.i fort.14.i_$NOW
+    if (-e fort.15.i) mv fort.15.i fort.15.i_$NOW
     if (-e fort.44.i) mv fort.44.i fort.44.i_$NOW
     if (-e fort.46.i) mv fort.46.i fort.46.i_$NOW
     mv b2fstate b2fstati

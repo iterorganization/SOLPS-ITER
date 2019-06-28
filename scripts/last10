@@ -9,11 +9,11 @@ else
   endif
   $ZCAT run.log.gz | tail -100000 >! tmp.run.log
 endif
-set steps=`grep -n 'b2-step-cpu' tmp.run.log | wc | awk '{print $1}'`
+set steps=`grep -a -n 'b2-step-cpu' tmp.run.log | wc | awk '{print $1}'`
 if ($steps == 0) then
   set count=0
 else
-  set count=`grep -n 'b2-step-cpu' tmp.run.log | tail -11 | head -1 | awk -F: '{print $1}'`
+  set count=`grep -a -n 'b2-step-cpu' tmp.run.log | tail -11 | head -1 | awk -F: '{print $1}'`
 endif
 tail --lines=+$count tmp.run.log >! run.log.last10
 rm tmp.run.log
