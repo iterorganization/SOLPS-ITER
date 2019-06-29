@@ -82,9 +82,9 @@ EOF
     set PROCS=`echo $MPIOPTS | awk.transpose | grep -A 1 "\-np" | tail -n 1`
     echo Asking for MPI run with $PROCS processors
     shift
-    set HELP_STRING=\"${JOB_NAME}\"
+    set HELP_STRING="${MPIOPTS}"
 #    echo $HELP_STRING
-    set LOOP_OPTS="-j ${HELP_STRING} ${LOOP_OPTS}" 
+    set LOOP_OPTS="-m '${HELP_STRING}' ${LOOP_OPTS}"
    goto argloop
   endif
   if ("X${1}X" == "X-tX") then
@@ -95,7 +95,7 @@ EOF
     set THREADS="$1"
     echo Asking for OpenMP run with $THREADS threads
     shift
-    set HELP_STRING=\"${THREADS}\"`
+    set HELP_STRING="${THREADS}"
 #    echo $HELP_STRING
     set LOOP_OPTS="-t ${HELP_STRING} ${LOOP_OPTS}" 
     goto argloop
@@ -105,7 +105,7 @@ EOF
     set hours="$1"
     echo Requested time is ${hours} hours
     shift
-    set HELP_STRING=\"${hours}\"
+    set HELP_STRING="${hours}"
 #    echo $HELP_STRING
     set LOOP_OPTS="-T ${HELP_STRING} ${LOOP_OPTS}" 
     goto argloop
@@ -115,7 +115,7 @@ EOF
     set mem="$1"
     echo Requested memory is ${mem}
     shift
-    set HELP_STRING=\"${mem}\"
+    set HELP_STRING="${mem}"
 #    echo $HELP_STRING
     set LOOP_OPTS="-M ${HELP_STRING} ${LOOP_OPTS}" 
     goto argloop
