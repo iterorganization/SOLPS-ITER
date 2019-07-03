@@ -1,7 +1,7 @@
 #! /bin/tcsh
 
 #SBATCH --ntasks=#PROCS#
-#SBATCH -p skl_fua_gw
+#SBATCH -p gw
 #SBATCH --time=#HOURS#:00:00
 #SBATCH --mem=#MEM#
 #SBATCH --job-name=#JOBNAME#
