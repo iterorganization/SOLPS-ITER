@@ -73,6 +73,7 @@ set Break_loop = "no"
 if (`grep "stopping because" run.log.last10` == "") then
   update_solps_run_status "run KAPUTT at `date`"
   echo KAPUTT > run.KAPUTT
+  set Break_loop = "yes"
 endif
 #set NORMAL_FINISH=`grep "stopping because .quit" run.log.last10`
 if (`grep "stopping because .quit" run.log.last10` != "") then
@@ -114,5 +115,5 @@ if ("$Break_loop" == "no") then
     if (-s b2faveri) mv b2faveri b2faveri_$NOW
     if (-s b2favere) mv b2favere b2faveri
     ippsubmit #LOOPOPTS# SLURM.ipp_loop
-    endif
+  endif
 endif
