@@ -55,12 +55,18 @@ ifdef SOLPS_DEBUG
 EXT_DBG = .debug
 endif
 
+# Setup MPI flag
+EXT_MPI =
+ifdef SOLPS_MPI
+EXT_MPI = .mpi
+endif
+
 # SOLPS_DEBUG and SOLPS_MPI will not be taken from environment,
 # but will be passed by the corresponding make-targets 
 unexport SOLPS_DEBUG
 unexport SOLPS_MPI
 
-.PHONY: solps solps_mpi nox nox_mpi all all_nox all_mpi all_nox_mpi carre carre_nox divgeo divgeo_nox b25 b25_mpi b25_nox b25_nox_mpi b25_ig b25_all_mpi eirene eirene_mpi eirene_nox eirene_nox_mpi b25eirene b25eirene_mpi b25eirene_nox b25eirene_nox_mpi b25eirene_ig b25eirene_all_mpi b25eirene_mpi_nox uinp uinp_nox uinp_mpi uinp_nox_mpi triang triang_nox amds amds_mpi fxdr sonnet-light b2sxdr manual local depend depend_nox tags listobj listobj_nox clean clean_% debug %_debug VERSION help nox_build nox_build_mpi
+.PHONY: solps solps_mpi nox nox_mpi all all_nox all_mpi all_nox_mpi carre carre_nox divgeo divgeo_nox b25 b25_mpi b25_nox b25_nox_mpi b25_ig b25_all_mpi eirene eirene_mpi eirene_nox eirene_nox_mpi b25eirene b25eirene_mpi b25eirene_nox b25eirene_nox_mpi b25eirene_ig b25eirene_all_mpi uinp uinp_nox uinp_mpi uinp_nox_mpi triang triang_mpi triang_nox triang_nox_mpi amds amds_mpi fxdr sonnet-light b2sxdr manual local depend depend_nox tags listobj listobj_nox clean clean_% debug %_debug VERSION help nox_build nox_build_mpi
 
 DEFAULT: solps
 
@@ -73,19 +79,19 @@ DEFAULT: solps
 
 solps:       carre divgeo b25eirene     uinp     triang amds sonnet-light manual
 
-solps_mpi:   carre divgeo b25eirene_mpi uinp_mpi triang amds_mpi sonnet-light manual
+solps_mpi:   carre divgeo b25eirene_mpi uinp_mpi triang_mpi amds_mpi sonnet-light manual
 
 nox:         carre_nox divgeo_nox b25eirene_nox uinp_nox triang_nox manual
 
-nox_mpi:     carre_nox divgeo_nox b25eirene_nox_mpi uinp_nox_mpi triang_nox manual
+nox_mpi:     carre_nox divgeo_nox b25eirene_nox_mpi uinp_nox_mpi triang_nox_mpi manual
 
 all:         carre divgeo b25     eirene     b25eirene     uinp     triang amds sonnet-light manual
 
 all_nox:     carre_nox divgeo_nox b25_nox eirene_nox b25eirene_nox uinp_nox triang_nox manual
 
-all_mpi:     carre divgeo b25_mpi eirene_mpi b25eirene_mpi uinp_mpi triang amds_mpi sonnet-light manual
+all_mpi:     carre divgeo b25_mpi eirene_mpi b25eirene_mpi uinp_mpi triang_mpi amds_mpi sonnet-light manual
 
-all_nox_mpi: carre_nox divgeo_nox b25_nox_mpi eirene_nox_mpi b25eirene_nox_mpi uinp_nox_mpi triang_nox manual
+all_nox_mpi: carre_nox divgeo_nox b25_nox_mpi eirene_nox_mpi b25eirene_nox_mpi uinp_nox_mpi triang_nox_mpi manual
 
 carre:
 	cd modules/Carre; ${MAKE}
@@ -106,13 +112,13 @@ eirene:
 	cd modules/Eirene; ${MAKE}
 
 eirene_mpi:
-	cd modules/Eirene; ${MAKE} USE_MPI=-DUSE_MPI
+	cd modules/Eirene; ${MAKE} USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 
 eirene_nox:
 	cd modules/Eirene; ${MAKE} LD_GR="" LD_GKS=""
 
 eirene_nox_mpi:
-	cd modules/Eirene; ${MAKE} USE_MPI=-DUSE_MPI LD_GR="" LD_GKS=""
+	cd modules/Eirene; ${MAKE} USE_MPI=-DUSE_MPI LD_GR="" LD_GKS="" SOLPS_MPI=yes
 
 b25:
 	cd modules/B2.5; ${MAKE}
@@ -122,7 +128,7 @@ b25_all:
 	cd modules/B2.5;     ${MAKE} ALL
 
 b25_mpi:
-	cd modules/B2.5; ${MAKE} USE_MPI=-DUSE_MPI
+	cd modules/B2.5; ${MAKE} USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 
 b25_nox:
 	cd modules/B2.5; ${MAKE} NOPLOT
@@ -131,11 +137,11 @@ b25_ig:
 	cd modules/B2.5; ${MAKE} USE_IMPGYRO=-DUSE_IMPGYRO
 
 b25_nox_mpi:
-	cd modules/B2.5; ${MAKE} USE_MPI=-DUSE_MPI NOPLOT
+	cd modules/B2.5; ${MAKE} USE_MPI=-DUSE_MPI SOLPS_MPI=yes NOPLOT
 
 b25_all_mpi:
-	cd modules/solps4-5; ${MAKE} links
-	cd modules/B2.5;     ${MAKE} USE_MPI=-DUSE_MPI ALL
+	cd modules/solps4-5; ${MAKE} SOLPS_MPI=yes links
+	cd modules/B2.5;     ${MAKE} USE_MPI=-DUSE_MPI SOLPS_MPI=yes ALL
 
 b25eirene:
 	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE
@@ -151,21 +157,21 @@ b25eirene_nox:
 	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE NOPLOT
 
 b25eirene_mpi:
-	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI
-	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
+	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI SOLPS_MPI=yes
+	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 
 b25eirene_nox_mpi:
-	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI LD_GR="" LD_GKS=""
-	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI NOPLOT
+	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI SOLPS_MPI=yes  LD_GR="" LD_GKS=""
+	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI SOLPS_MPI=yes NOPLOT
 
 b25eirene_ig:
 	cd modules/Eirene; ${MAKE} USE_B25=-DB25_EIRENE    USE_IMPGYRO=-DUSE_IMPGYRO
 	cd modules/B2.5;   ${MAKE} USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO
 
 b25eirene_all_mpi:
-	cd modules/Eirene;   ${MAKE} USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI
-	cd modules/solps4-5; ${MAKE} links
-	cd modules/B2.5;     ${MAKE} USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI ALL
+	cd modules/Eirene;   ${MAKE} USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI SOLPS_MPI=yes
+	cd modules/solps4-5; ${MAKE} SOLPS_MPI=yes links
+	cd modules/B2.5;     ${MAKE} USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI SOLPS_MPI=yes ALL
 
 uinp:
 	cd modules/Uinp; ${MAKE}
@@ -173,22 +179,29 @@ uinp:
 uinp_nox: uinp
 
 uinp_mpi:
-	cd modules/Uinp; ${MAKE} USE_MPI=-DUSE_MPI
+	cd modules/Uinp; ${MAKE} USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 
 uinp_nox_mpi: uinp_mpi
 
 triang:
 	cd modules/Triang; ${MAKE}
 
+triang_mpi:
+	cd modules/Triang; ${MAKE} USE_MPI=-DUSE_MPI SOLPS_MPI=yes
+
 triang_nox:
 	cd modules/Triang; ${MAKE} LD_GR="" LD_GKS="" mods
 	cd modules/Triang; ${MAKE} LD_GR="" LD_GKS=""
+
+triang_nox_mpi:
+	cd modules/Triang; ${MAKE} USE_MPI=-DUSE_MPI SOLPS_MPI=yes LD_GR="" LD_GKS="" mods
+	cd modules/Triang; ${MAKE} USE_MPI=-DUSE_MPI SOLPS_MPI=yes LD_GR="" LD_GKS=""
 
 amds:
 	cd modules/amds; ${MAKE}
 
 amds_mpi:
-	cd modules/amds; ${MAKE} USE_MPI=-DUSE_MPI
+	cd modules/amds; ${MAKE} USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 
 fxdr:
 	cd modules/fxdr; ${MAKE}
@@ -229,74 +242,78 @@ tags:
 
 listobj:
 	cd modules/Carre;          ${MAKE} listobj
-	cd modules/Eirene;         ${MAKE} listobj USE_MPI=-DUSE_MPI
+	cd modules/Eirene;         ${MAKE} listobj USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 	cd modules/Eirene;         ${MAKE} listobj
-	cd modules/B2.5;           ${MAKE} listobj USE_MPI=-DUSE_MPI
+	cd modules/B2.5;           ${MAKE} listobj USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 	cd modules/B2.5;           ${MAKE} listobj
 	cd modules/Uinp;           ${MAKE} listobj
-	cd modules/Uinp;           ${MAKE} listobj USE_MPI=-DUSE_MPI
+	cd modules/Uinp;           ${MAKE} listobj USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 	cd modules/Triang;         ${MAKE} listobj
+	cd modules/Triang;         ${MAKE} listobj USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 	cd modules/DivGeo;         ${MAKE} listobj
 	cd modules/Eirene;         ${MAKE} listobj USE_B25=-DB25_EIRENE
-	cd modules/Eirene;         ${MAKE} listobj USE_B25=-DB25_EIRENE USE_MPI=-DUSE_MPI
+	cd modules/Eirene;         ${MAKE} listobj USE_B25=-DB25_EIRENE USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 	cd modules/Eirene;         ${MAKE} listobj USE_B25=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO
 	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE
-	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
+	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO
 #	cd modules/solps4-5;       ${MAKE} listobj
 
 listobj_nox:
 	cd modules/Carre;          ${MAKE} listobj NCARG_ROOT="" LD_NCARG=""
-	cd modules/Eirene;         ${MAKE} listobj USE_MPI=-DUSE_MPI LD_GR="" LD_GKS=""
+	cd modules/Eirene;         ${MAKE} listobj USE_MPI=-DUSE_MPI SOLPS_MPI=yes LD_GR="" LD_GKS="" SOLPS_MPI=yes
 	cd modules/Eirene;         ${MAKE} listobj LD_GR="" LD_GKS=""
-	cd modules/B2.5;           ${MAKE} listobj USE_MPI=-DUSE_MPI LD_GR="" LD_GKS=""
+	cd modules/B2.5;           ${MAKE} listobj USE_MPI=-DUSE_MPI SOLPS_MPI=yes LD_GR="" LD_GKS=""
 	cd modules/B2.5;           ${MAKE} listobj LD_GR="" LD_GKS=""
 	cd modules/Uinp;           ${MAKE} listobj
-	cd modules/Uinp;           ${MAKE} listobj USE_MPI=-DUSE_MPI
+	cd modules/Uinp;           ${MAKE} listobj USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 	cd modules/Triang;         ${MAKE} listobj LD_GR="" LD_GKS=""
+	cd modules/Triang;         ${MAKE} listobj USE_MPI=-DUSE_MPI SOLPS_MPI=yes LD_GR="" LD_GKS="" 
 	cd modules/Eirene;         ${MAKE} listobj USE_B25=-DB25_EIRENE LD_GR="" LD_GKS=""
-	cd modules/Eirene;         ${MAKE} listobj USE_B25=-DB25_EIRENE USE_MPI=-DUSE_MPI LD_GR="" LD_GKS=""
+	cd modules/Eirene;         ${MAKE} listobj USE_B25=-DB25_EIRENE USE_MPI=-DUSE_MPI SOLPS_MPI=yes LD_GR="" LD_GKS=""
 	cd modules/Eirene;         ${MAKE} listobj USE_B25=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO LD_GR="" LD_GKS=""
-	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE
-	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
-	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO
+	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE LD_GR="" LD_GKS=""
+	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI SOLPS_MPI=yes LD_GR="" LD_GKS=""
+	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO LD_GR="" LD_GKS=""
 #	cd modules/solps4-5;       ${MAKE} listobj
 
 depend:
 	cd modules/Carre;          ${MAKE} depend
-	cd modules/Eirene;         ${MAKE} depend USE_MPI=-DUSE_MPI
+	cd modules/Eirene;         ${MAKE} depend USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 	cd modules/Eirene;         ${MAKE} depend
-	cd modules/B2.5;           ${MAKE} depend USE_MPI=-DUSE_MPI
+	cd modules/B2.5;           ${MAKE} depend USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 	cd modules/B2.5;           ${MAKE} depend
 	cd modules/Uinp;           ${MAKE} depend
-	cd modules/Uinp;           ${MAKE} depend USE_MPI=-DUSE_MPI
+	cd modules/Uinp;           ${MAKE} depend USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 	cd modules/Triang;         ${MAKE} depend
+	cd modules/Triang;         ${MAKE} depend USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 	cd modules/DivGeo;         ${MAKE} depend
 	cd modules/DivGeo/equtrn;  ${MAKE} depend
 	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE 
-	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI
+	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE    USE_IMPGYRO=-DUSE_IMPGYRO
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE
-	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
+	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO
 	cd modules/amds;           ${MAKE} depend
 #	cd modules/solps4-5;       ${MAKE} depend
 
 depend_nox:
 	cd modules/Carre;          ${MAKE} depend NCARG_ROOT="" LD_NCARG=""
-	cd modules/Eirene;         ${MAKE} depend USE_MPI=-DUSE_MPI LD_GR="" LD_GKS=""
+	cd modules/Eirene;         ${MAKE} depend USE_MPI=-DUSE_MPI SOLPS_MPI=yes LD_GR="" LD_GKS=""
 	cd modules/Eirene;         ${MAKE} depend LD_GR="" LD_GKS=""
-	cd modules/B2.5;           ${MAKE} depend USE_MPI=-DUSE_MPI LD_GR="" LD_GKS=""
+	cd modules/B2.5;           ${MAKE} depend USE_MPI=-DUSE_MPI SOLPS_MPI=yes LD_GR="" LD_GKS=""
 	cd modules/B2.5;           ${MAKE} depend LD_GR="" LD_GKS=""
 	cd modules/Uinp;           ${MAKE} depend
-	cd modules/Uinp;           ${MAKE} depend USE_MPI=-DUSE_MPI
+	cd modules/Uinp;           ${MAKE} depend USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 	cd modules/Triang;         ${MAKE} depend LD_GR="" LD_GKS=""
+	cd modules/Triang;         ${MAKE} depend USE_MPI=-DUSE_MPI SOLPS_MPI=yes LD_GR="" LD_GKS=""
 	cd modules/DivGeo/equtrn;  ${MAKE} depend
 	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE LD_GR="" LD_GKS=""
-	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE USE_MPI=-DUSE_MPI LD_GR="" LD_GKS=""
+	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE USE_MPI=-DUSE_MPI SOLPS_MPI=yes LD_GR="" LD_GKS=""
 	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO LD_GR="" LD_GKS=""
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE LD_GR="" LD_GKS=""
-	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI LD_GR="" LD_GKS=""
+	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI SOLPS_MPI=yes LD_GR="" LD_GKS=""
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO LD_GR="" LD_GKS=""
 
 VERSION:
@@ -323,7 +340,7 @@ debug: solps_debug
 
 nox_build:     clean_build     listobj_nox depend_nox carre_nox divgeo_nox b25eirene_nox     uinp_nox     triang_nox
 
-nox_build_mpi: clean_build_mpi listobj_nox depend_nox           divgeo_nox b25eirene_nox_mpi uinp_nox_mpi
+nox_build_mpi: clean_build_mpi listobj_nox depend_nox           divgeo_nox b25eirene_nox_mpi uinp_nox_mpi triang_nox_mpi
 
 
 # Clean targets
@@ -334,7 +351,7 @@ clean: clean_solps
 
 clean_solps:     clean_carre clean_divgeo clean_b25eirene     clean_uinp     clean_triang clean_sonnet-light clean_manual clean_amds
 
-clean_solps_mpi: clean_carre clean_divgeo clean_b25eirene_mpi clean_uinp_mpi clean_triang clean_sonnet-light clean_manual clean_amds
+clean_solps_mpi: clean_carre clean_divgeo clean_b25eirene_mpi clean_uinp_mpi clean_triang_mpi clean_sonnet-light clean_manual clean_amds
 
 clean_build:     clean_carre clean_b25eirene clean_uinp clean_triang_nox
 
@@ -342,13 +359,24 @@ clean_build_mpi: clean_b25eirene_mpi clean_uinp_mpi
 
 clean_all:       clean_carre clean_divgeo clean_b25     clean_eirene     clean_b25eirene     clean_uinp     clean_triang clean_manual
 
-clean_all_mpi:   clean_carre clean_divgeo clean_b25_mpi clean_eirene_mpi clean_b25eirene_mpi clean_uinp_mpi clean_triang clean_manual
+clean_all_nox:   clean_carre_nox clean_divgeo_nox clean_b25_nox clean_eirene_nox clean_b25eirene_nox clean_uinp clean_triang_nox clean_manual
+
+clean_all_mpi:   clean_carre clean_divgeo clean_b25_mpi clean_eirene_mpi clean_b25eirene_mpi clean_uinp_mpi clean_triang_mpi clean_manual
+
+clean_all_nox_mpi: clean_carre_nox clean_divgeo_nox clean_b25_nox_mpi clean_eirene_nox_mpi clean_b25eirene_nox_mpi clean_uinp_mpi clean_triang_nox_mpi clean_manual
 
 clean_carre:
 	cd modules/Carre; ${MAKE} clean
 
+clean_carre_nox:
+	cd modules/Carre; ${MAKE} clean NCARG_ROOT="" LD_NCARG=""
+
 clean_divgeo:
 	cd modules/DivGeo;         ${MAKE} clean
+	cd modules/DivGeo/equtrn;  ${MAKE} clean
+	cd modules/DivGeo/convert; ${MAKE} clean
+
+clean_divgeo_nox:
 	cd modules/DivGeo/equtrn;  ${MAKE} clean
 	cd modules/DivGeo/convert; ${MAKE} clean
 
@@ -359,16 +387,25 @@ clean_eirene_nox:
 	cd modules/Eirene; ${MAKE} clean LD_GR="" LD_GKS=""
 
 clean_eirene_mpi:
-	cd modules/Eirene; ${MAKE} clean USE_MPI=-DUSE_MPI
+	cd modules/Eirene; ${MAKE} clean USE_MPI=-DUSE_MPI SOLPS_MPI=yes
+
+clean_eirene_nox_mpi:
+	cd modules/Eirene; ${MAKE} clean USE_MPI=-DUSE_MPI SOLPS_MPI=yes LD_GR="" LD_GKS=""
+
+clean_eirene_nox_mpi:
+	cd modules/Eirene; ${MAKE} clean USE_MPI=-DUSE_MPI SOLPS_MPI=yes LD_GR="" LD_GKS=""
 
 clean_b25:
 	cd modules/B2.5; ${MAKE} clean
 
 clean_b25_mpi:
-	cd modules/B2.5; ${MAKE} clean USE_MPI=-DUSE_MPI
+	cd modules/B2.5; ${MAKE} clean USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 
 clean_b25_nox:
 	cd modules/B2.5; ${MAKE} clean LD_GR="" LD_GKS=""
+
+clean_b25_nox_mpi:
+	cd modules/B2.5; ${MAKE} clean USE_MPI=-DUSE_MPI SOLPS_MPI=yes LD_GR="" LD_GKS=""
 
 clean_b25_ig:
 	cd modules/B2.5; ${MAKE} clean USE_IMPGYRO=-DUSE_IMPGYRO
@@ -378,12 +415,16 @@ clean_b25eirene:
 	cd modules/B2.5;   ${MAKE} clean USE_EIRENE=-DB25_EIRENE
 
 clean_b25eirene_mpi:
-	cd modules/Eirene; ${MAKE} clean USE_B25=-DB25_EIRENE   USE_MPI=-DUSE_MPI
-	cd modules/B2.5;   ${MAKE} clean USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI
+	cd modules/Eirene; ${MAKE} clean USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI SOLPS_MPI=yes
+	cd modules/B2.5;   ${MAKE} clean USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 
 clean_b25eirene_nox:
 	cd modules/Eirene; ${MAKE} clean USE_B25=-DB25_EIRENE LD_GR="" LD_GKS=""
 	cd modules/B2.5;   ${MAKE} clean USE_EIRENE=-DB25_EIRENE LD_GR="" LD_GKS=""
+
+clean_b25eirene_nox_mpi:
+	cd modules/Eirene; ${MAKE} clean USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI SOLPS_MPI=yes LD_GR="" LD_GKS=""
+	cd modules/B2.5;   ${MAKE} clean USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI SOLPS_MPI=yes LD_GR="" LD_GKS=""
 
 clean_b25eirene_ig:
 	cd modules/Eirene; ${MAKE} clean USE_B25=-DB25_EIRENE    USE_IMPGYRO=-DUSE_IMPGYRO
@@ -392,13 +433,19 @@ clean_uinp:
 	cd modules/Uinp; ${MAKE} clean
 
 clean_uinp_mpi:
-	cd modules/Uinp; ${MAKE} clean USE_MPI=-DUSE_MPI
+	cd modules/Uinp; ${MAKE} clean USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 
 clean_triang:
 	cd modules/Triang; ${MAKE} clean
 
+clean_triang_mpi:
+	cd modules/Triang; ${MAKE} clean USE_MPI=-DUSE_MPI SOLPS_MPI=yes
+
 clean_triang_nox:
-	cd modules/Triang; ${MAKE} LD_GR="" LD_GKS="" clean
+	cd modules/Triang; ${MAKE} clean LD_GR="" LD_GKS=""
+
+clean_triang_nox_mpi:
+	cd modules/Triang; ${MAKE} clean USE_MPI=-DUSE_MPI SOLPS_MPI=yes LD_GR="" LD_GKS=""
 
 clean_amds:
 	cd modules/amds; ${MAKE} clean
