@@ -392,9 +392,6 @@ clean_eirene_mpi:
 clean_eirene_nox_mpi:
 	cd modules/Eirene; ${MAKE} clean USE_MPI=-DUSE_MPI SOLPS_MPI=yes LD_GR="" LD_GKS=""
 
-clean_eirene_nox_mpi:
-	cd modules/Eirene; ${MAKE} clean USE_MPI=-DUSE_MPI SOLPS_MPI=yes LD_GR="" LD_GKS=""
-
 clean_b25:
 	cd modules/B2.5; ${MAKE} clean
 
