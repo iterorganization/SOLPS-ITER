@@ -5,6 +5,7 @@
 #SBATCH  --mail-user=#EMAIL#
 #SBATCH  --mail-type=END
 #SBATCH  --job-name=#JOBNAME#
+#SBATCH  --partition=#PART#
 
 # source setup.csh
 echo Using SOLPSTOP = #SOLPSTOP#

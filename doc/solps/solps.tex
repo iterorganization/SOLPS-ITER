@@ -1672,6 +1672,7 @@ extracted from the {\tt run.log} file.
   \item[switch\_to\_master]\index{switch\_to\_master} Script to switch to the up-to-date \SOLPSITER master branch.
   \item[triang]\index{triang} Main script used to prepare run input files after the {\tt DivGeo} case has been defined and the {\tt Carre} grid has been built.
   \item[triang.conf]\index{triang.conf} Script containing utility functions used by the {\tt triang} script.
+  \item[transfer\_solps-iter\_runs]\index{transfer\_solps-iter\_runs} Script for transferrring a \SOLPSITER case. If a run directory from machine {\tt X} is to be transferred to machine {\tt Y} then the script is to be run from machine {\tt X} and just one level up from the directory which is to be transferred. The script will trace back and update the soft links in the run directory according to the remote environment. Running the script requires knowing the IP address of the remote machine and have a username and password to log on to it. This script makes use of the {\tt sshpass} utility.
   \item[truncate\_tracing\_files]\index{truncate\_tracing\_files}\index{b2co} Script used by the crash recovery program {\tt b2co} to truncate the optional tracing files so that they stay synchronized with the recovered plasma state.
   \item[v2d]\index{v2d} Converts {\tt Carre} format equilibrium files to {\tt DG} format (see Sec.~\ref{sec:equtrn}).
   \end{description}
@@ -1925,6 +1926,12 @@ command, here to ask for a 24-hour long job. The various submission environments
 itersubmit -M 8GB
 \end{verbatim}
 command, to obtain here a run using 8GB of memory. The "B" (for "bytes") is necessary in this syntax for SLURM submission, but should be omitted when using QSUB submission.
+
+The partition on which the job will be run can be specified by means of the {\tt -Q} option. For example:
+\begin{verbatim}
+itersubmit -Q gen9_ib
+\end{verbatim}
+chooses the {\tt gen9\_ib} partition. By default on the ITER HPC cluster, jobs requiring 24 hours of less are submitted on {\tt gen9}, while longer jobs go to {\tt gen9\_ib}.
 
 A listing of the available options for each submission script can be obtained by the
 \begin{verbatim}

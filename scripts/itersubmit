@@ -7,6 +7,7 @@ set PROCS=1
 set THREADS=1
 set hours=36
 set mem=4GB
+set part="unset"
 echo Your email is $EMAIL
 
 set compress=""
@@ -43,6 +44,7 @@ Available options are:
   -t <<THREADS>>     use OpenMP parallelization with <<THREADS>> threads (default $THREADS)
   -T <<HOURS>>       number of elapsed hours requested (default $hours)
   -M <<MEM_SIZE>>    memory size (default $mem)
+  -Q <<PARTITION>>   partition on which to submit the job (default gen9 for short jobs and gen9_ib for long jobs)
 
 EOF
     exit
@@ -120,8 +122,26 @@ EOF
     set LOOP_OPTS="-M ${HELP_STRING} ${LOOP_OPTS}" 
     goto argloop
   endif
+  if ("X${1}X" == "X-QX") then
+    shift
+    set part="$1"
+    echo Requested partition is ${part}
+    shift
+    set HELP_STRING="${part}"
+#    echo $HELP_STRING
+    set LOOP_OPTS="-Q ${HELP_STRING} ${LOOP_OPTS}"
+    goto argloop
+  endif
 
+# logic to determine the partition on the ITER HPC cluster
 @ cpu = ( $hours * $PROCS )
+if ($part == "unset") then
+  if ($hours > 24 ) then
+    set part=gen9_ib
+  else
+    set part=gen9
+  endif
+endif
 set nodename=`hostname`
 switch ($nodename)
   case "hpc-login0*.iter.org":
@@ -192,6 +212,7 @@ sed \
   -e "s:#THREADS#:'$THREADS':g" \
   -e 's:#MEM#:'$mem':g' \
   -e 's:#HOURS#:'$hours':g' \
+  -e 's:#PART#:'$part':g' \
   -e 's:#CPU#:'$cpu':g' \
   -e "s:#JOBNAME#:'$JOB_NAME':g" \
   -e 's:#USER#:'$USER':g' \

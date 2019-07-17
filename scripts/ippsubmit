@@ -97,7 +97,7 @@ EOF
     set THREADS="$1"
     echo Asking for OpenMP run with $THREADS threads
     shift
-    set HELP_STRING=\"${THREADS}\"`
+    set HELP_STRING=\"${THREADS}\"
 #    echo $HELP_STRING
     set LOOP_OPTS="-t ${HELP_STRING} ${LOOP_OPTS}" 
     goto argloop
