@@ -20,8 +20,8 @@
 ### the loop breakes, i.e. the job is not resubmitted again.
 ###
 ### Usage: 
-###   Submit the job:     `itmsubmit SLURM.itm_coupled_loop`
-###               or      `itmsubmit -m "-np 36" -j "JobName" SLURM.itm_coupled_loop`
+###   Submit the job:     `itmsubmit -T 48 SLURM.itm_coupled_loop`
+###               or      `itmsubmit -m "-np 36" -j "JobName" -T 48 -M 24G SLURM.itm_coupled_loop`
 ###   Stop the run:       `touch b2mn.exe.dir/.quit`
 
 pushd #SOLPSTOP#
