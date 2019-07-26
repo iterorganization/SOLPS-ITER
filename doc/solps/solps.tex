@@ -1674,6 +1674,7 @@ extracted from the {\tt run.log} file.
   \item[triang.conf]\index{triang.conf} Script containing utility functions used by the {\tt triang} script.
   \item[transfer\_solps-iter\_runs]\index{transfer\_solps-iter\_runs} Script for transferrring a \SOLPSITER case. If a run directory from machine {\tt X} is to be transferred to machine {\tt Y} then the script is to be run from machine {\tt X} and just one level up from the directory which is to be transferred. The script will trace back and update the soft links in the run directory according to the remote environment. Running the script requires knowing the IP address of the remote machine and have a username and password to log on to it. This script makes use of the {\tt sshpass} utility.
   \item[truncate\_tracing\_files]\index{truncate\_tracing\_files}\index{b2co} Script used by the crash recovery program {\tt b2co} to truncate the optional tracing files so that they stay synchronized with the recovered plasma state.
+  \item[ustcsubmit]\index{ustcsubmit} Command file to launch runs on the USTC computer cluster. See Section \ref{b2run} for details.
   \item[v2d]\index{v2d} Converts {\tt Carre} format equilibrium files to {\tt DG} format (see Sec.~\ref{sec:equtrn}).
   \end{description}
 \end{itemize}
@@ -1860,6 +1861,7 @@ are provided:
   \item{jetsubmit}\index{jetsubmit} for submissions on the JET Analysis Cluster (JAC)
   \item{localsubmit}\index{localsubmit} for local submission
   \item{sgesubmit}\index{sgesubmit} for submissions on a system running SGE
+  \item{ustcsubmit}\index{ustcsubmit} for submissions on the USTC computer cluster
 \end{description}
 Users on other systems are encouraged to recopy these command scripts (found in \${\tt \{SOLPSTOP\}/scripts})
 and adapt them to their local environment, along
