@@ -13,6 +13,7 @@ set compress=""
 set MPIOPTS=""
 set standalone="no"
 set LOOP_OPTS=""
+set job_prefix="SLURM"
 
 set solpstop=`climb_and_look_for SOLPSTOP`
 if (-s $solpstop) then
@@ -27,7 +28,7 @@ argloop:
 
 Help for $0
 
-This script is used to submit SOLPS-ITER jobs to the SLURM batch system on the ustc HPC cluster.
+This script is used to submit SOLPS-ITER jobs to the SLURM batch system on the USTC computer cluster.
 
 Usage:
 
@@ -42,7 +43,7 @@ Available options are:
   -m <<MPI OPTIONS>> use the MPI options specified (default serial version)
   -T <<HOURS>>       number of elapsed hours requested (default $hours)
   -M <<MEM_SIZE>>    memory size (default $mem)
-  -Q <<PARTITION>>   partition on which to submit the job (default gen9 for short jobs and gen9_ib for long jobs)
+  -Q <<PARTITION>>   partition on which to submit the job (default $part)
 
 EOF
     exit
@@ -125,25 +126,6 @@ EOF
     goto argloop
   endif
 
-# logic to determine the partition on the ITER HPC cluster
-##@ cpu = ( $hours * $PROCS )
-##if ($part == "unset") then
-##  if ($hours > 24 ) then
-##    set part=gen9_ib
-##  else
-##    set part=gen9
-##  endif
-##endif
-
-#set nodename=`hostname`
-#switch ($nodename)
-#  case "hpc-login0*.iter.org":
-    set job_prefix="SLURM"
-#    breaksw
-#  default:
-#    set job_prefix="QSUB"
-#endsw
-
 if ($1 == "") then
   if (-s input.dat && $standalone == "no") then
     echo Assuming run with Eirene
@@ -188,7 +170,7 @@ else
   endif
 endif
 if($QSUB == "") then
-  echo No ustc submission file $1 found. Exiting.
+  echo No USTC submission file $1 found. Exiting.
   exit
 endif
 echo Using submission file template $QSUB
@@ -203,7 +185,6 @@ sed \
   -e 's:#MEM#:'$mem':g' \
   -e 's:#HOURS#:'$hours':g' \
   -e 's:#PART#:'$part':g' \
-#  -e 's:#CPU#:'$cpu':g' \
   -e "s:#JOBNAME#:'$JOB_NAME':g" \
   -e 's:#USER#:'$USER':g' \
   -e 's:#LOOPOPTS#:'"$LOOP_OPTS"':g' \
