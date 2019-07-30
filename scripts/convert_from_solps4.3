@@ -38,6 +38,22 @@ cp input.eir input.dat
 setup_baserun_eirene_links
 rm -f b2sxdr.prt
 $SOLPSTOP/scripts/b2sxdr > b2sx.log
+h_mass="`grep -i MI b2.parameters | grep -v limit | awk '{printf $2; printf '\n'}' | sed 's:,: :' `"
+typeset -i shotnumber
+shotnumber=`echo $1`
+[ "$DEVICE" = 'iter' ] && shotnumber=shotnumber+100000
+[ $h_mass = 2 ] && shotnumber=shotnumber+20000
+[ $h_mass = 3 ] && shotnumber=shotnumber+30000
+[ $h_mass = 4 ] && shotnumber=shotnumber+10000
+echo "IDS shot number will be: " $shotnumber
+echo "'b2mndr_run_number'  '1'" >> b2mn.dat.4
+echo "'b2mndr_user'        '${USER}'" >> b2mn.dat.4
+echo "'b2mndr_device'      '${DEVICE}'" >> b2mn.dat.4
+echo "'b2mndr_shot_number' '${shotnumber}'" >> b2mn.dat.4
+echo "'b2mndr_run_number'  '1'" >> b2mn.dat.5
+echo "'b2mndr_user'        '${USER}'" >> b2mn.dat.5
+echo "'b2mndr_device'      '${DEVICE}'" >> b2mn.dat.5
+echo "'b2mndr_shot_number' '${shotnumber}'" >> b2mn.dat.5
 cp b2.boundary.parameters.5 b2.boundary.parameters
 cp b2.transport.parameters.5 b2.transport.parameters
 cp b2mn.dat.5 b2mn.dat
@@ -77,4 +93,16 @@ correct_baserun_timestamps
 cd run5
 touch b2fstati
 echo 'Case conversion finished!'
+cd ..
+mkdir run_ids
+cd run_ids
+import_files_from_convert
+setup_baserun_eirene_links
+echo "'b2mndr_ntim'     '1'" >> b2mn.dat
+echo "'b2news_no_solve' '1'" >> b2mn.dat
+touch b2fstati
+b2run b2mn > run.log
+b2run b2_ual_write > b2_ual_write.log
+echo 'Case IDS written!'
+cd ..
 
