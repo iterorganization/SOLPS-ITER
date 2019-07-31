@@ -38,7 +38,7 @@ cp input.eir input.dat
 setup_baserun_eirene_links
 rm -f b2sxdr.prt
 $SOLPSTOP/scripts/b2sxdr > b2sx.log
-h_mass="`grep -i MI b2.parameters | grep -v limit | awk '{printf $2; printf '\n'}' | sed 's:,: :' `"
+h_mass="`egrep -i 'MI {0,}=' b2.parameters | tail -1 | awk '{printf $2; printf '\n'}' | sed 's:,: :' `"
 typeset -i shotnumber
 shotnumber=`echo $1`
 [ "$DEVICE" = 'iter' ] && shotnumber=shotnumber+100000
@@ -94,7 +94,7 @@ cd run5
 touch b2fstati
 echo 'Case conversion finished!'
 cd ..
-mkdir run_ids
+mkdir -p run_ids
 cd run_ids
 import_files_from_convert
 setup_baserun_eirene_links
