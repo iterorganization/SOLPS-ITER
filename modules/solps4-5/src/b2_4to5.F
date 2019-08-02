@@ -2102,7 +2102,9 @@ c
      .   '''eirene_fixuub'''//tab//tab//tab//'''2'''
         write(99,'(a,i1,a)')
      .   '''eirene_ank_mods'''//tab//tab//'''',ank_mods,''''
-        write(99,'(a,i3,a)')
+        write(hlp_frm, '(a,i1,a)')
+     .   '(a,i',len_of_digits(ionising_core),',a)'
+        write(99,hlp_frm)
      .   '''eirene_ionising_core'''//tab//tab//'''',ionising_core,''''
         write(98,'(a)')
      .   '''b2mndr_eirene'''//tab//tab//tab//'''1'''
@@ -2329,9 +2331,11 @@ c
         if (ffb_cntr_4(is).ne.0) then
           is0 = isp(is)
           if (is0.ge.0) then
-            write(99,'(a,i2,a)')
+            write(hlp_frm, '(a,i1,a)')
+     .       '(a,i',len_of_digits(is0),',a)'
+            write(99,hlp_frm)
      .       '''b2stbc_isfeedback'''//tab//tab//'''',is0,''''
-            write(98,'(a,i2,a)')
+            write(98,hlp_frm)
      .       '''b2stbc_isfeedback'''//tab//tab//'''',is0,''''
           end if
           if (ffb_strata_4(is).le.0) then
@@ -2342,10 +2346,12 @@ c
             end do
           end if
           if (ffb_strata_4(is).gt.0) then
-            write(99,'(a,i2,a)')
+            write(hlp_frm, '(a,i1,a)')
+     .       '(a,i',len_of_digits(ffb_strata_4(is)),',a)'
+            write(99,hlp_frm)
      .       '''eirene_nesepm_istra'''//tab//'''',
      .       ffb_strata_4(is),''''
-            write(98,'(a,i2,a)')
+            write(98,hlp_frm)
      .       '''eirene_nesepm_istra'''//tab//'''',
      .       ffb_strata_4(is),''''
           end if
@@ -2454,8 +2460,8 @@ cxpb are turned on simultaneously for the same isonuclear sequence
                 else
                   bccon(is0,ib) = 11
                   conpar(is0,ib,2) = 0.0_R8
-                  na_feedback_ib(is-1) = ib
                 end if
+                na_feedback_ib(is-1) = ib
                 conpar(is0,ib,1) = cfb_core_4(is)
                 do iss = isp(is)+1, isp(is)+nfluids_4(is)
                   conpar(is0,ib,1) = conpar(is0,ib,1) +
@@ -2498,9 +2504,13 @@ cxpb are turned on simultaneously for the same isonuclear sequence
             if (ffb_cntr_4(is).ne.0) then
               is0 = isp(is)
               if (is0.ge.0) then
-                bccon(is0,ib) = 11
+                if (cfb_cntr_4(is).ne.0) then
+                  bccon(is0,ib) = 8
+                else
+                  bccon(is0,ib) = 11
+                  na_feedback_ib(is-1) = ib
+                end if
                 conpar(is0,ib,1) = ffb_const_4(is)
-                na_feedback_ib(is-1) = ib
               end if
             end if
           end do
