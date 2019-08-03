@@ -14196,6 +14196,7 @@ are indicated in the table.
     arww \index{b2plot, arww}      & 0 & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:arww}   & Set arrow line width \\
     aspc \index{b2plot, aspc}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:aspc}   & Toggle aspect ratio \\
     bcol \index{b2plot, bcol}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:bcol}   & Colour of label bar title \\
+    bold \index{b2plot, bold}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:bold}   & Toggles bold graph frame \\
     both \index{b2plot, both}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:both}   & Computational and physical domain plots \\
     bw \index{b2plot, bw}          & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:bw}     & Black-and-white plots only \\
     clvd \index{b2plot, clvd}      & 0 & 3 & 0 & 0 & 0 & 0 & 0 & \ref{sec:clvd}   & Customize contour levels (delta) \\
@@ -14213,6 +14214,7 @@ are indicated in the table.
     exps \index{b2plot, exps}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:exps}   & Symbol for experimental scatter plot \\
     ewid \index{b2plot, ewid}      & 0 & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:ewid}   & Experimental data line width \\
     fclv \index{b2plot, fclv}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:fclv}   & Fill contour levels \\
+    fcol \index{b2plot, fcol}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:fcol}   & Color for graph frame, axes, ticks and labels \\
     filo \index{b2plot, filo}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:filo}   & Fill option \\
     font \index{b2plot, font}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:font}   & Set font \\
     gcol \index{b2plot, gcol}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:gcol}   & Colour of graph title \\
@@ -16153,6 +16155,9 @@ Want black and white for some plots.
 \subsubsection{col}\index{b2plot, col}\label{sec:col}
 Want colour for some plots.
 
+\subsubsection{bold}\index{b2plot, bold}\label{sec:bold}
+Toggles having the graph frames, axes, ticks and labels be in bold type.
+
 \subsubsection{$<$number,{\bf I}$>$ font}\index{b2plot, font}\label{sec:font}
 Changes the current font type to $\langle$number$\rangle$
 \begin{itemize}
@@ -16286,6 +16291,10 @@ See {\bf zcol} above for a list of available colours.
 
 \subsubsection{$<$ncol,{\bf I}$>$ bcol}\index{b2plot, bcol}\label{sec:bcol}
 Colour to be used for printing label bar title (default 1).
+See {\bf zcol} above for a list of available colours.
+
+\subsubsection{$<$ncol,{\bf I}$>$ fcol}\index{b2plot, fcol}\label{sec:fcol}
+Colour to be used for printing the graph frame, axes, ticks and labels (default 1).
 See {\bf zcol} above for a list of available colours.
 
 \subsubsection{$<$ncol,{\bf I}$>$ gcol}\index{b2plot, gcol}\label{sec:gcol}
