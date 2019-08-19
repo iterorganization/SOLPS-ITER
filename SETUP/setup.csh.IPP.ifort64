@@ -6,7 +6,7 @@ module load texlive
 module load arm_ddt
 module load doxygen
 #module load mdsplus
-#module load netcdf-serial
+module load netcdf-serial/4.7.0
 module load hdf5-serial
 #module load nag_flib/intel/mk24
 module load git
@@ -24,9 +24,9 @@ setenv GLI_HOME /tokp/work/dpc/SOLPS-ITER/gks
 setenv NCARG_ROOT /tokp/work/dpc/SOLPS-ITER/NCARG
 setenv PATH ${PATH}
 setenv MDSPLUS_DIR /tokp/work/dpc/SOLPS-ITER/MDSPLUS
-setenv PATH ${PATH}:${NCARG_ROOT}/bin:/tokp/work/dpc/SOLPS-ITER/NETCDF/bin:${MDSPLUS_DIR}/bin
+setenv PATH ${PATH}:${NCARG_ROOT}/bin:${MDSPLUS_DIR}/bin
 setenv MDS_PATH ${MDSPLUS_DIR}/tdi
-setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${MDSPLUS_DIR}/lib
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${NETCDF_HOME}/lib:${MDSPLUS_DIR}/lib
 
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
