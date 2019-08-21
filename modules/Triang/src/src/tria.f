@@ -56,10 +56,11 @@ C---- FOUND  : INDICATES IF THE THIRD TRIANGLE POINT WAS FOUND
 cank-20051101{
       integer npn_hlp,ihlp200,jhlp200,khlp200,mhlp200,nhlp200,
      ,  kchn_hlp,mchn_hlp,nchn_hlp
-      logical lhlp200,ex
+      logical lhlp200,ldebug,ex
       integer, allocatable :: ichn_hlp(:),jchn_hlp(:,:)
       logical, allocatable :: lchn_hlp(:)
       character*4 hhlp200
+      character*36 hlp_frm
       double precision dx,dy,d,dxmn,dxmx,dymn,dymx,sx,sy
       character*10 hs(6)
 
@@ -69,6 +70,11 @@ cank-20051101{
       mhlp200=0
       nhlp200=10
       lhlp200=.false.
+#ifdef DBG
+      ldebug=.true.
+#else
+      ldebug=.false.
+#endif
 cank}
 
 C---- INITIALISATION
@@ -499,7 +505,8 @@ c      lhlp200=ihlp200.eq.281 !###
         print *,'*200: npartfr,npoin,ic=',npartfr,npoin,ic
         ia = ifront(1,npartfr)
         ib = ifront(2,npartfr)
-        print '(a,1p,4e12.4)','xa1,ya1,xa2,ya2=',x(ia),y(ia),x(ib),y(ib)
+        print '(1x,a,1p,4e12.4)','xa1,ya1,xa2,ya2=',
+     .                            x(ia),y(ia),x(ib),y(ib)
         call ioflush
         call filepltd(2,inodcon)  !###
         stop ': trap at *200' !###
@@ -548,8 +555,11 @@ C---- TREAT ONE FRONTIER PART
       CALL CANLIST(FRAD,EPSANG) ! CREATES CANDIDATE LIST
 !###{
       if(lhlp200) then !{
-        print *,'after canlist(',frad,',',epsang,
-     ,                                '). ncandi,icandi=',ncandi,icandi
+        write (hlp_frm,'(a,i3,a)')
+     ,   '(1x,a,1p,1e12.4,a,1e12.4,a,',ncandi+1,'i6)'
+        write (*,hlp_frm)
+     ,   'after canlist(',frad,',',epsang,
+     ,   '). ncandi,icandi=',ncandi,icandi(1:ncandi)
         call ioflush
       end if !}
 !###}
@@ -557,7 +567,9 @@ C---- TREAT ONE FRONTIER PART
       CALL ADDCAN ! ADDS POINT C TO CANDIDATE LIST
 !###{
       if(lhlp200) then !{
-        print *,'after addcan. ncandi,icandi=',ncandi,icandi
+        write (hlp_frm,'(a,i3,a)') '(1x,a,',ncandi+1,'i6)'
+        write (*,hlp_frm) 'after addcan. ncandi,icandi=',
+     ,                                   ncandi,icandi(1:ncandi)
         call ioflush
       end if !}
 !###}

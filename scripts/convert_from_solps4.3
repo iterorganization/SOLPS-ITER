@@ -87,18 +87,12 @@ mkdir -p run5
 cd run5
 import_files_from_convert
 cp ../convert/b2fplasma .
-cd ..
-correct_baserun_timestamps
-cd run5
 touch b2fstati
 echo 'Case conversion finished!'
 cd ..
 mkdir -p run_ids
 cd run_ids
 import_files_from_convert
-cd ..
-correct_baserun_timestamps
-cd run_ids
 echo "'b2mndr_ntim'     '1'" >> b2mn.dat
 echo "'b2news_no_solve' '1'" >> b2mn.dat
 touch b2fstati

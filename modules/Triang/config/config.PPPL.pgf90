@@ -20,6 +20,7 @@ LINK_MOD =
 FC = pgf90
 ifdef SOLPS_DEBUG
 FCOPTS = -Mbackslash -C -g -Mchkfpstk -Mchkptr -Mchkstk -Mpgicoff -tp=amd64
+DEFINES += -DDBG
 else
 FCOPTS = -O -Mbackslash -tp=amd64
 endif

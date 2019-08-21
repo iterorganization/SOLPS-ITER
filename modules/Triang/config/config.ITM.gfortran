@@ -25,6 +25,7 @@ FC        = gfortran
 
 ifdef SOLPS_DEBUG
 FCOPTS    = -g -C -fcheck=all -fbacktrace -ffpe-trap=denormal
+DEFINES  += -DDBG
 else
 FCOPTS    = -O3
 endif

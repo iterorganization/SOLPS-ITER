@@ -5,6 +5,7 @@
 } || {
   filestem="fort."
 }
+rundir="`pwd`"
 [ -s ../convert/b2yt.files ] && {
   echo "First copying the files modified by b2yt"
   files="`cat ../convert/b2yt.files | sed -e 's:../::' | awk.transpose`"
@@ -16,8 +17,12 @@
   done
   echo "Now copying unmodified files"
   [ -s ../convert/b2fgmtry.old ] && {
-    [ -s ../convert/b2ag.dat.2 ] || {
-      [ -s ../convert/b2ag.dat ] && cp -uv ../convert/b2ag.dat ../baserun
+    [ -s ../convert/b2ag.dat.2 ] && {
+      [ -s ../convert/b2ag.dat.2 ] && {
+        cp -uv ../convert/b2ag.dat.2 ../baserun
+      } || {
+        [ -s ../convert/b2ag.dat ] && cp -uv ../convert/b2ag.dat ../baserun
+      }
     }
     [ -s ../convert/b2fgmtry ] && cp -uv ../convert/b2fgmtry ../baserun
     [ -s ../convert/"$filestem"30 ] && cp -uv ../convert/"$filestem"30 .
@@ -35,7 +40,10 @@
        [ -s ../convert/"$filestem"35 ] && cp -uv ../convert/"$filestem"35 .
      }
   }
-  [ -s ../convert/input.dat.2 ] || {
+  [ -s ../convert/b2ag.dat.2 ] && rm b2ag.dat
+  [ -s ../convert/input.dat.2 ] && {
+    cp -uv ../convert/input.dat.2 ../baserun/input.dat
+  } || {
     [ -s ../convert/input.dat ] && cp -uv ../convert/input.dat ../baserun
   }
   [ -s ../baserun/"$filestem"30 ] || cp -uv ../convert/"$filestem"30 ../baserun
@@ -45,18 +53,19 @@
   [ -s ../baserun/b2fpardf ] || {
     [ -s ../convert/b2ah.dat.2 ] && {
       cp -uv ../convert/b2ah.dat.2 ../baserun/b2ah.dat
-    } || {
-      [ -s ../convert/b2fpardf ] && cp -uv ../convert/b2fpardf .
     }
+    [ -s ../convert/b2fpardf ] && cp -uv ../convert/b2fpardf .
   }
+  [ -s ../convert/b2ah.dat.2 ] && rm b2ah.dat
   [ -s ../baserun/b2fstati ] || {
     [ -s ../convert/b2ai.dat.2 ] && {
       cp -uv ../convert/b2ai.dat.2 ../baserun/b2ai.dat
     } || {
       [ -s ../convert/b2ai.dat ] && cp -uv ../convert/b2ai.dat ../baserun
-      [ -s ../convert/b2fstati ] && cp -uv ../convert/b2fstati ../baserun
     }
+    [ -s ../convert/b2fstati ] && cp -uv ../convert/b2fstati ../baserun
   }
+  [ -s ../convert/b2ai.dat.2 ] && rm b2ai.dat
   [ -s ../baserun/b2frates ] || {
     [ -s ../convert/b2ar.dat.2 ] && {
       cp -uv ../convert/b2ar.dat.2 ../baserun/b2ar.dat
@@ -65,6 +74,7 @@
     }
     [ -s ../convert/b2frates ] && cp -uv ../convert/b2frates ../baserun
   }
+  [ -s ../convert/b2ar.dat.2 ] && rm b2ar.dat
   [ -s ../convert/b2.*.parameters ] && cp -uv ../convert/b2.*.parameters .
   [ -s ../convert/b2.transport.inputfile ] && cp -uv ../convert/b2.transport.inputfile .
   [ -s ../convert/b2.sources.profile ] && cp -uv ../convert/b2.sources.profile .
@@ -82,11 +92,12 @@
   }
   [ -s ../convert/ratadas.filelist ] && cp -uv ../convert/ratadas.filelist .
   cd ../baserun
-  b2run b2ah
-  b2run b2ar
-  cd -
-  setup_baserun_eirene_links
+  b2run b2ah b2ai b2ar
+  cd ..
+  correct_baserun_timestamps
+  cd $rundir
   touch b2fstati
+  setup_baserun_eirene_links
 } || {
   echo 'Did not find b2yt.files list. Exiting ...'
 }

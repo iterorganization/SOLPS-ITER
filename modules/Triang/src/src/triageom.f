@@ -575,11 +575,11 @@ C     FIND NEIGHBOURS
       INTEGER I, J, K, KK, L, M, IS, INCR, ITRIA, ITRIA1
       DATA INCR /1000/
       LOGICAL PARA
-      LOGICAL DBG, DBG0
+      LOGICAL LDBG, LDBG0
 #ifdef DBG
-      DATA DBG /.false./, DBG0 /.false./
+      DATA LDBG /.false./, LDBG0 /.false./
 #else
-      DATA DBG /.true./, DBG0 /.true./
+      DATA LDBG /.true./, LDBG0 /.true./
 #endif
 
       CALL GRSPTS(25)
@@ -590,8 +590,8 @@ c loop over triangles (a) from tria
 c neighr(i,k).ne.0 -> side k of triangle i is on the tria grid edge
 
       DO ITRIA1=1,NTRIA1 !{
-c        dbg0=itria1.eq.1   !###
-        if(dbg0) then !{
+c        ldbg0=itria1.eq.1   !###
+        if(ldbg0) then !{
           print *,'itria1,ntria1,ntria=',itria1,ntria1,ntria
           print *,'neighr=',(neighr(itria1,k),k=1,3)
           print *,'neighb=',(neighb(itria1,k),k=1,3)
@@ -604,8 +604,8 @@ C         KONTUR
 c loop over triangles (b) inside the b2 grid
 
           DO ITRIA=NTRIA1+1,NTRIA !{
-c            dbg=dbg0.and.itria.eq.1363  !###
-            if(dbg) then !{
+c            ldbg=ldbg0.and.itria.eq.1363  !###
+            if(ldbg) then !{
               print *,'itria=',itria
               print *,'neighr=',(neighr(itria,k),k=1,3)
               print *,'neighb=',(neighb(itria,k),k=1,3)
@@ -624,7 +624,7 @@ c loop over the sides of triangle (b)
                   IF (L .EQ. 4) L = 1
                   M=L+1
                   IF (M .EQ. 4) M = 1
-                  if(dbg) then !{
+                  if(ldbg) then !{
                     print '(a,t12,3i8/t12,3i8)','triangles',
      ,                (tria(itria1,kk),kk=1,3),
      ,                (tria(itria ,kk),kk=1,3)
@@ -638,7 +638,7 @@ c two corners of triangle (b) coincide with two corners of triangle (a)
                     NEIGHB(ITRIA,K) = ITRIA1
                     NEIGHS(ITRIA,K) = I
                     NEIGHR(ITRIA,K) = 0
-                    if(dbg) then !{
+                    if(ldbg) then !{
                       
                     end if !}
                     CALL GRJMP(REAL(XCOORD(TRIA(ITRIA1,I))),
@@ -646,14 +646,14 @@ c two corners of triangle (b) coincide with two corners of triangle (a)
                     CALL GRDRW(REAL(XCOORD(TRIA(ITRIA1,J))),
      .                         REAL(YCOORD(TRIA(ITRIA1,J))))
                   ENDIF !}
-                  if(dbg) then !{
+                  if(ldbg) then !{
                     print *,'neighr1',neighr(itria1,i),neighr(itria,k)
                   end if !}
                   IF ((NEIGHR(ITRIA1,I) .NE. 0) .AND.
      .                (NEIGHR(ITRIA,K) .NE. 0)) then !{
 c edges (i) and (k) of triangles (a) and (b) are of different length 
 c but still have unindentified neighbors
-                  if(dbg) then !{
+                  if(ldbg) then !{
                     print *,'tria j k i l:',TRIA(ITRIA1,J),
      ,                        TRIA(ITRIA,K),TRIA(ITRIA1,I),TRIA(ITRIA,L)
                     print *,'para: ',PARA(XCOORD(TRIA(ITRIA1,J)),
@@ -686,7 +686,7 @@ c but still have unindentified neighbors
      .                (TRIA(ITRIA1,J) .EQ. TRIA(ITRIA,K)) .AND.
      .                (TRIA(ITRIA1,I) .NE. TRIA(ITRIA,L))) THEN !{
                     NTRIA = NTRIA + 1
-                    if(dbg) print *,'ntria,size',ntria,size(tria,1)
+                    if(ldbg) print *,'ntria,size',ntria,size(tria,1)
                     if(size(tria,1).lt.ntria) then !{
                       call realloc_ctria('neigh',incr)
                       call realloc_ctria('tria',incr)
@@ -733,7 +733,7 @@ c but still have unindentified neighbors
                     GOTO 13
                   ENDIF !}
                   end if !}
-                  if(dbg) then !{
+                  if(ldbg) then !{
                     print *,'neighr2',neighr(itria1,i),neighr(itria,k)
                   end if !}
                   IF ((NEIGHR(ITRIA1,I) .NE. 0) .AND.
@@ -749,7 +749,7 @@ c but still have unindentified neighbors
      .                (TRIA(ITRIA1,I) .EQ. TRIA(ITRIA,L)) .AND.
      .                (TRIA(ITRIA1,J) .NE. TRIA(ITRIA,K))) THEN !{
                     NTRIA = NTRIA + 1
-                    if(dbg) print *,'ntria,size',ntria,size(tria,1)
+                    if(ldbg) print *,'ntria,size',ntria,size(tria,1)
                     if(size(tria,1).lt.ntria) then !{
                       call realloc_ctria('neigh',incr)
                       call realloc_ctria('tria',incr)
@@ -800,7 +800,7 @@ c but still have unindentified neighbors
             ENDIF !}
           ENDDO !}
         ENDIF !}
-        dbg=.false.
+        ldbg=.false.
       ENDDO !}
       END
 

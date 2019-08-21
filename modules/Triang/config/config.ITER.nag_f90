@@ -13,6 +13,7 @@ LINK_MOD =
 FC = nagfor
 ifdef SOLPS_DEBUG
 FCOPTS = -C -g
+DEFINES += -DDBG
 else
 FCOPTS = -O2
 endif

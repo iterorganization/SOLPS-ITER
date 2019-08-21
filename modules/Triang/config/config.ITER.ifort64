@@ -23,6 +23,7 @@ FC_VERSION = $(shell echo `ifort --version | head -1 | awk '{printf "%s ",$$3,"\
 
 ifdef SOLPS_DEBUG
 FCOPTS    = -g -C -traceback -debug all -check all
+DEFINES  += -DDBG
 else
 ifeq (${FC_VERSION},12.0.2)
 FCOPTS    = -O3 -vec_report0

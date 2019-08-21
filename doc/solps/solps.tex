@@ -3853,7 +3853,12 @@ If a new geometry is requested, the {\tt b2yt} program should be run after the
 new geometry file ($nx1 \times ny1$) has
 been produced and is available in the run or {\tt baserun} directories as {\tt b2fgmtry}.
 The old geometry file should also remain available in
-the run directory as {\tt b2fgmtry.old}.
+the run directory as {\tt b2fgmtry.old}. If this is a coupled case and the number of
+triangles for the {\tt Eirene} grid remains the same, the new {\tt fort.33}, {\tt fort.34}
+and {\tt fort.35} files corresponding
+to the new geometry should also be provided. If, however, the number of triangles between the
+old and new geometries changes, there is currently no conversion possible of the data in the
+{\tt fort.46} file and it should not be made present in the {\tt convert} directory.
 
 The program also needs the {\tt b2mn.dat} and any other used input files (such
 as {\tt input.dat}, {\tt b2.*.parameters} or {\tt b2.*.inputfile}) from
