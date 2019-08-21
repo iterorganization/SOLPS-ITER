@@ -31,7 +31,7 @@
 # Variables for linking
 #
 
-LD_NETCDF  = `pkg-config netcdf-fortran --libs`
+LD_NETCDF  = `pkg-config netcdf-fortran --libs` -Wl,-rpath,/cineca/prod/opt/libraries/netcdff/4.4.4/intel--pe-xe-2017--binary/lib
 LD_MSCL    = -L${MSCL_ROOT} -lmscl
 LD_GR      = -L${GR_ROOT} -lgr
 LD_GKS     = -L${GLI_HOME} -lgks -lgfortran

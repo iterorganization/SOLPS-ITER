@@ -28,6 +28,7 @@ FC        = ifort
 
 ifdef SOLPS_DEBUG
 FCOPTS    = -g -C -debug all -traceback
+DEFINES  += -DDBG
 else
 FCOPTS    = -O3
 endif

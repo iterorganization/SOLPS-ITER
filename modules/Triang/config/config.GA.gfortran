@@ -28,6 +28,7 @@ FC        = gfortran
 
 ifdef SOLPS_DEBUG
 FCOPTS    = -g -C -fcheck=all -ffpe-trap=denormal -ffpe-trap=invalid -ffpe-trap=zero -ftrapv -fsignaling-nans
+DEFINES  += -DDBG
 else
 FCOPTS    = -O3
 endif
