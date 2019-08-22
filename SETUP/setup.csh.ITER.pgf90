@@ -16,7 +16,7 @@ setenv GLI_HOME ${EBROOTGLI}
 module load PyYAML/3.12-intel-2018a-Python-3.6.4
 module load matplotlib/2.1.2-intel-2018a-Python-3.6.4
 module load NCL/6.5.0-intel-2018a
-module load nag/26-GCC-6.4.0-2.28
+module load NAG/26-GCCcore-6.4.0
 module load flex/2.6.4-GCCcore-6.4.0
 module load Doxygen/1.8.13-GCCcore-6.4.0
 module load TotalView/2017.1.21_linux_x86-64
@@ -31,7 +31,6 @@ module unload mpich2
 module load motif/2.3.8-intel-2018a
 module load gnuplot/5.2.2-intel-2018a
 module load texlive
-module load make/4.1
 
 # Debugger (set environment variable DBX)
 setenv DBX totalview

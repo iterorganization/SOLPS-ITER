@@ -27,7 +27,6 @@ setenv GLI_HOME ${EBROOTGLI}
 setenv NCDIR ${EBROOTNETCDFMINFORTRAN}
 setenv MPDIR ${EBROOTIMPI}
 module load MATLAB/2018a
-module load make/4.1
 module load texlive
 
 # Debugger (set environment variable DBX)
