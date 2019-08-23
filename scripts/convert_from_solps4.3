@@ -97,7 +97,30 @@ echo "'b2mndr_ntim'     '1'" >> b2mn.dat
 echo "'b2news_no_solve' '1'" >> b2mn.dat
 touch b2fstati
 b2run b2mn > run.log
+imasdb ${DEVICE}
 b2run b2_ual_write > b2_ual_write.log
+create_db_entry -u ${USER} -t ${DEVICE} -s ${shotnumber} -r 1
+yaml=ids_${shotnumber}0001.yaml
+typeset -i reference_line
+reference_line=`grep -n "reference_name" ${yaml} | cut -d ':' -f 1`
+head -n ${reference_line} $yaml > $yaml.2
+echo "    "`head -1 /shared/projects/solps/archive/extra/arch_2/B2E/b2arch/$DEVICE/$1/VarID` >> $yaml.2
+typeset -i yaml_lines
+yaml_lines=`cat ${yaml} | wc -l`
+typeset -i tail_lines
+tail_lines=yaml_lines-(reference_line+1)
+tail -n $tail_lines $yaml >> $yaml.2
+typeset -i responsible_line
+responsible_line=`grep -n "responsible_name" ${yaml}.2 | cut -d ':' -f 1`
+head -n ${responsible_line} $yaml.2 > $yaml.3
+echo "    "`get_git_name` >> $yaml.3
+tail_lines=yaml_lines-(responsible_line+1)
+tail -n $tail_lines $yaml.2 >> $yaml.3
+sed -e 's|workflow: tbd|workflow: SOLPS|' < $yaml.3 > $yaml.4
+mv $yaml.4 ${MDSPLUS_TREE_BASE_0}/$yaml
+watcher=ids_${shotnumber}0001.watcher
+mv $watcher ${MDSPLUS_TREE_BASE_0}/
+rm $yaml $yaml.2 $yaml.3
 echo "IDS for case ${shotnumber} written!"
 cd ..
 
