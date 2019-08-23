@@ -1,0 +1,1 @@
+echo `grep name $HOME/.gitconfig | tail -1 | sed -e 's:\"::g' -e 's:name::' -e 's:=::' `
