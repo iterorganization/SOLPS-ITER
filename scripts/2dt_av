@@ -12,8 +12,14 @@ if ("X$1" == "X-ly") then
 else
   set ly=""
 endif
-set source=b2mn.exe.dir/b2time.nc
-if (! -s $source) set source=b2time.nc
+set source=b2mn.exe.dir/b2batch.nc
+if (! -s $source) then
+  set source=b2batch.nc
+  if (! -s $source) then
+    set source=b2mn.exe.dir/b2time.nc
+    if (! -s $source) set source=b2time.nc
+  endif
+endif
 
 set args=""
 set nargs=0

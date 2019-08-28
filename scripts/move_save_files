@@ -4,6 +4,9 @@ if ($?B2FSTATE_ONLY) then
   foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:b2time.nc:'`)
     [ -e $i ] && rm $i || echo > /dev/null
   end
+  foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:b2batch.nc:'`)
+    [ -e $i ] && rm $i || echo > /dev/null
+  end
   foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:b2wall.nc:'`)
     [ -e $i ] && rm $i || echo > /dev/null
   end
@@ -71,6 +74,9 @@ end
 cd ../b2co.exe.dir
 foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:b2time.nc:'`)
   [ -s $i ] && mv -v $i ../b2time.nc || echo > /dev/null
+end
+foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:b2batch.nc:'`)
+  [ -s $i ] && mv -v $i ../b2batch.nc || echo > /dev/null
 end
 foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:b2wall.nc:'`)
   [ -s $i ] && mv -v $i ../b2wall.nc || echo > /dev/null
