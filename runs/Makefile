@@ -312,6 +312,7 @@ else
 	-[ -s b2mn.exe.dir/ftn31 ] && mv b2mn.exe.dir/ftn31 . || echo > /dev/null
 endif
 	-[ -s b2mn.exe.dir/b2time.nc ] && mv b2mn.exe.dir/b2time.nc . || echo > /dev/null
+	-[ -s b2mn.exe.dir/b2batch.nc ] && mv b2mn.exe.dir/b2batch.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2wall.nc ] && mv b2mn.exe.dir/b2wall.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2movies.nc ] && mv b2mn.exe.dir/b2movies.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2tallies.nc ] && mv b2mn.exe.dir/b2tallies.nc . || echo > /dev/null
@@ -428,6 +429,7 @@ else
 	-[ -s b2mn.exe.dir/ftn31 ] && mv b2mn.exe.dir/ftn31 . || echo > /dev/null
 endif
 	-[ -s b2mn.exe.dir/b2time.nc ] && mv b2mn.exe.dir/b2time.nc . || echo > /dev/null
+	-[ -s b2mn.exe.dir/b2batch.nc ] && mv b2mn.exe.dir/b2batch.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2wall.nc ] && mv b2mn.exe.dir/b2wall.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2movies.nc ] && mv b2mn.exe.dir/b2movies.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2tallies.nc ] && mv b2mn.exe.dir/b2tallies.nc . || echo > /dev/null
@@ -475,6 +477,7 @@ endif
 	-[ -e b2co.exe.dir/tracing/user.trc.n.01 ] && rm b2co.exe.dir/tracing/user.trc.n.01 || echo > /dev/null
 	-[ -e b2co.exe.dir/tracing ] && rmdir b2co.exe.dir/tracing || echo > /dev/null
 	-[ -e b2co.exe.dir/b2time.nc ] && rm b2co.exe.dir/b2time.nc || echo > /dev/null
+	-[ -e b2co.exe.dir/b2batch.nc ] && rm b2co.exe.dir/b2batch.nc || echo > /dev/null
 	-[ -e b2co.exe.dir/b2tallies.nc ] && rm b2co.exe.dir/b2tallies.nc || echo > /dev/null
 	-rmdir b2co.exe.dir
 
@@ -517,12 +520,13 @@ $(target_ts) : b2fparam b2fgmtry b2fstate b2fplasma
 	cd b2ts.exe.dir ; ${TIME} ${B2OBJ}/b2ts.exe ${RUN_OPTIONS} ; mv $(target_ts) b2fstate .. ; rm -f $(notdir $^) .quit >& /dev/null
 	-rmdir b2ts.exe.dir
 
-$(target_ye) : b2favere b2time.nc
+$(target_ye) : b2favere
 	rm -rf b2ye.exe.dir >& /dev/null ; mkdir b2ye.exe.dir
 	-[ -e b2favere ] && cp b2favere b2ye.exe.dir || echo > /dev/null
+	-[ -e b2batch.nc ] && cp b2batch.nc b2ye.exe.dir || echo > /dev/null
 	-[ -e b2time.nc ] && cp b2time.nc b2ye.exe.dir || echo > /dev/null
 	echo "B2OBJ=" ${B2OBJ}
-	cd b2ye.exe.dir ; ${TIME} ${B2OBJ}/b2ye.exe ${RUN_OPTIONS} ; mv b2ye.prt .. ; rm b2favere b2time.nc
+	cd b2ye.exe.dir ; ${TIME} ${B2OBJ}/b2ye.exe ${RUN_OPTIONS} ; mv b2ye.prt .. ; rm b2favere b2batch.nc b2time.nc
 	-rmdir b2ye.exe.dir
 
 $(target_yg) : b2yg.dat b2fgmtry
