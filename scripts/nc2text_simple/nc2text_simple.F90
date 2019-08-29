@@ -75,7 +75,7 @@ Program nc2text_simple
      Case (2)
         Allocate(rdata(dimlen(1),dimlen(2)))
      Case Default
-        Write(*,*) "Error: Only 1 and 2 dimensional arrays supported"
+        Write(*,*) "Error: Only scalars, 1 and 2 dimensional arrays supported"
         Stop
      End Select
      iret = NF_GET_VAR_DOUBLE(ncid,varid,rdata)
@@ -256,7 +256,7 @@ Contains
     Write(*,'(a)') '   Ranges start from 1'
     Write(*,'(a)') '   Zero or regative subscripts count from end of array'
     Write(*,'(a)') ' '
-    Write(*,'(a)') 'Current restrictions: only 1D and 2D arrays of type double supported'
+    Write(*,'(a)') 'Current restrictions: only scalars, 1D and 2D arrays of type double supported'
     Write(*,'(a)') ' '
     Write(*,'(a)') 'Examples:'
     Write(*,'(a)') '   nc2text_simple b2time.nc tesepa'
