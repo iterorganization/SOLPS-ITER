@@ -41,6 +41,7 @@ if(! $?GNUPLOT_BATCH) then
   /bin/cp /dev/null $cfilename
 endif
 echo set title noenhanced >>! $cfilename
+echo set key noenhanced >> $cfilename
 if ($?PRINT_PLOT) then
   if(! $?GNUPLOT_POSTSCRIPT_OPTIONS) then
     set GNUPLOT_POSTSCRIPT_OPTIONS=""
