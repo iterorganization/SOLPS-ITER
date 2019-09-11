@@ -29,7 +29,7 @@ MDSPLUS_DIR   ?=
 # Variables of linking, using pkg-config
 #
 
-LD_NETCDF      =
+LD_NETCDF      = `nf-config --flibs`
 LD_GR          = -L${GR_ROOT}/lib -lgr
 LD_GKS         = -L${GLI_HOME} -lgks -lX11 -lXt
 LD_NCARG       = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lm -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lz -lpthread -lXrender -lbz2 -lgfortran # for NCARG v6.x.x
