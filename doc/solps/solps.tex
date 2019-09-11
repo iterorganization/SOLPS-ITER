@@ -1610,7 +1610,7 @@ extracted from the {\tt run.log} file.
   \item[gtdr]\index{gtdr} Script to make a directory tree local.
   \item[gtfl]\index{gtfl} Replaces the specified links by the files they are linked to.
   \item[imasdb\_solps-iter]\index{imasdb\_solps-iter}\index{IMAS} Script to load the IMAS ITER scenario database and the \SOLPSITER IMAS database archives
-  \item[import\_files\_from\_convert]\index{import\_files\_from\_convert}\index{b2yt} Imports and renames the files produced by {\tt b2yt} in a {\tt convert} directory at the same level as the current directory to prepare the new converted case for a run
+  \item[import\_files\_from\_convert]\index{import\_files\_from\_convert}\index{b2yt}\index{correct\_baserun\_timestamps} Imports and renames the files produced by {\tt b2yt} in a {\tt convert} directory at the same level as the current directory to prepare the new converted case for a run. Also updates some of the files in the {\tt baserun} directory, so it is often prudent to use {\tt correct\_baserun\_timestamps}, from the parent directory, afterwards.
   \item[input.dat\_to\_mesh.extra]\index{input.dat\_to\_mesh.extra}\index{input.dat}\index{mesh.extra} Converts standard input (usually directed from a {\tt input.dat} file) into a {\tt mesh.extra} file.
   \item[ITER\_divertor\_HTM]\index{ITER\_divertor\_HTM} Performs the thermal calculation of the divertor target monoblocks and reflector plate hypervapotron channels. It requires {\tt b2ymb.dat} and {\tt b2yrp.dat} to be present in the run directory. It runs \btwoplot to produce the heat load profile data of the targets and reflector plates. Then it runs {\tt b2ymb} to produce the input files (see \ref{sec:b2ymb}) for the {\tt FreeFem++}\cite{MR3043640} heat transfer model of the monoblock {\tt Monoblock\_HTM.edp} for the outer target. Afterwards, {\tt b2ymb} is ran again to produce the input files to run {\tt Monoblock\_HTM.edp} for the inner target. When the inner target is completed, {\tt b2yrp} (see \ref{sec:b2yrp}) is run to produce the input files for the inner reflector plate heat transfer model {\tt ReflectorPlate\_HTM.edp}. Finally, {\tt b2yrp} is executed one last time to produce the input files for the thermal analysis of the outer reflector plate.
   \item[itersubmit]\index{itersubmit} Command file to launch runs on the ITER HPC cluster. See Section \ref{b2run} for details.
@@ -1660,7 +1660,7 @@ extracted from the {\tt run.log} file.
   \item[triang.conf]\index{triang.conf} Script containing utility functions used by the {\tt triang} script.
   \item[transfer\_solps-iter\_runs]\index{transfer\_solps-iter\_runs} Script for transferrring a \SOLPSITER case. If a run directory from machine {\tt X} is to be transferred to machine {\tt Y} then the script is to be run from machine {\tt X} and just one level up from the directory which is to be transferred. The script will trace back and update the soft links in the run directory according to the remote environment. Running the script requires knowing the IP address of the remote machine and have a username and password to log on to it. This script makes use of the {\tt sshpass} utility.
   \item[truncate\_tracing\_files]\index{truncate\_tracing\_files}\index{b2co} Script used by the crash recovery program {\tt b2co} to truncate the optional tracing files so that they stay synchronized with the recovered plasma state.
-  \item[ustcsubmit]\index{ustcsubmit} Command file to launch runs on the USTC computing cluster. See Section \ref{b2run} for details.
+  \item[ustcsubmit]\index{ustcsubmit} Command file to launch runs on the USTC computer cluster. See Section \ref{b2run} for details.
   \item[v2d]\index{v2d} Converts {\tt Carre} format equilibrium files to {\tt DG} format (see Sec.~\ref{sec:equtrn}).
   \end{description}
 \end{itemize}
@@ -2432,7 +2432,7 @@ which contains
   'ionising\_core' switch is used,
   {\tt CONPAR(,,2)} is the strength of the feedback.
   \item[14] sound speed velocity flux,
-  {\tt CONPAR(,,1)} is a multiplier to the outgoing sound speed $C_{s, \mbox{collective}}$.
+  {\tt CONPAR(,,1)} is a multiplier to the outgoing sound speed $C_{s, \mbox{collective}}$. Recommended sheath boundary condition for use with drifts, in conjunction with {\tt BCENE/I=15}, {\tt BCPOT=11}, and {\tt BCMOM=13}.
   \item[15] prescribe a radial leakage velocity,
   {\tt CONPAR(,,1)} specifies the leakage velocity in units of the local thermal velocity.
   \item[16] particle density to achieve specified total flux, used with {\tt ASTRA} coupling. The total desired flux is summed over all {\tt BCCON=16} core boundaries.
@@ -2492,10 +2492,10 @@ which contains
   {\tt MOMPAR(,,1)} specifies the decay length in $m$
   \item[11] Rozhansky viscosity condition for the parallel momentum,
   {\tt MOMPAR(,,1)} is not used
-  \item[12] Condition from {\tt b2stbc\_spb} for the parallel momentum
-  \item[13] sheath boundary condition from {\tt b2stbc\_spb} for the parallel momentum
-  \item[14] Condition from {\tt b2stbc\_spb} for the parallel momentum
-  \item[15] Prescribe the value of the parallel velocity as a function of poloidal coordinate, scaling with $\frac{\langle B\rangle}{B}$ 
+  \item[12] condition from {\tt b2stbc\_spb} for the parallel momentum
+  \item[13] sheath boundary condition from {\tt b2stbc\_spb} for the parallel momentum. Recommended boundary condition for use with drifts, in conjunction with {\tt BCENE/I=15}, {\tt BCPOT=11}, and {\tt BCCON=14}.
+  \item[14] condition from {\tt b2stbc\_spb} for the parallel momentum
+  \item[15] prescribe the value of the parallel velocity as a function of poloidal coordinate, scaling with $\frac{\langle B\rangle}{B}$
   \item[16] Prescribe the average value of the parallel velocity,
   {\tt MOMPAR(,,1)} specifies the parallel velocity in $m.s^{-1}$
   \item[17] leakage option for parallel momentum, {\tt MOMPAR(,,1)} specifies
@@ -2542,24 +2542,24 @@ which contains
   here in $J$)
   \item[14] leakage option for electron energy, {\tt ENEPAR(,1)} specifies
   the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s, \mbox{collective}} n_e T_e$
-  \item[15] sheath boundary condition, from {\tt b2stbc\_spb}, recommended when using drifts (see Section~\ref{sec:bcene} for details). Linked to using {\tt BCCON=14 }for all ion species.
-  \item[16] Feedback boundary condition with constant temperature,
+  \item[15] sheath boundary condition, from {\tt b2stbc\_spb}, recommended when using drifts (see Section~\ref{sec:bcene} for details). Linked to using {\tt BCCON=14} and {\tt BCMOM=13} for all ion species, {\tt BCENI=15}, and {\tt BCPOT=11}.
+  \item[16] feedback boundary condition with constant temperature,
     {\tt ENEPAR(,1)} specifies the power flux in $W$ across the flux surface
     with index {\tt b2stbc\_type16\_ref} (default=-1), {\tt ENEPAR(,2)}
     should be something like {\tt 0.1} and specifies the strength of the
     feedback. Also see type [17] below. Available if {\tt bcene\_16\_style=0} (default).
     If {\tt bcene\_16\_style=1}, integrated electron heat flux with constant $T_e$,
     summed over all core boundaries with {\tt BCENE=16}.
-  \item[17] Feedback boundary condition with constant shared temperature
+  \item[17] feedback boundary condition with constant shared temperature
     for both electrons and ions, with {\tt ENEPAR(,1) + ENIPAR(,1)} giving
     the total power flux in $W$ across the flux surface
     with index {\tt b2stbc\_type16\_ref} (default=-1), {\tt ENEPAR(,2)}
     should be something like {\tt 0.1} and specifies the strength of the
     feedback. Replaces [16] for high densities and large values of
     {\tt b2stbc\_type16\_ref}.
-  \item[18] Fractional drop condition. Not yet working.
+  \item[18] fractional drop condition. Not yet working.
   \item[19] same as [9] but to be used when simultaneously setting {\tt BCCON=1} on the same boundary.
-  \item[20] Feedback boundary condition with constant temperature,
+  \item[20] feedback boundary condition with constant temperature,
   as per type [16] but with {\tt type20\_} switches and a different
   feedback scheme.
   \item[21] constant temperature feedback scaled by temperature on the ring
@@ -2609,7 +2609,7 @@ which contains
   per temperature in $W.m^{-2}.J^{-1}$ (the temperature here in $J$)
   \item[14] leakage option for ion energy, {\tt ENIPAR(,1)} specifies
   the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s,\mbox{collective}} n_i T_i$
-  \item[15] sheath boundary condition, from {\tt b2stbc\_spb}, recommended when using drifts (see Section~\ref{sec:bceni} for details). Linked to using {\tt BCCON=14} for all ion species.
+  \item[15] sheath boundary condition, from {\tt b2stbc\_spb}, recommended when using drifts (see Section~\ref{sec:bceni} for details). Linked to using {\tt BCCON=14} and {\tt BCMOM=13} for all ion species, {\tt BCENE=15}, and {\tt BCPOT=11}.
   \item[16] Feedback boundary condition with constant temperature,
     {\tt ENIPAR(,1)} specifies the power flux in $W$ across the flux surface
     with index {\tt b2stbc\_type16\_ref} (default=-1), {\tt ENIPAR(,2)}
@@ -2667,11 +2667,10 @@ which contains
   {\tt POTPAR(,1)} specifies the decay length in $m$
   \item[10] feedback option for core [not yet tested!!!!!!!!!] (based
   on using {\tt cbsch(0,coreregno)})
-  \item[11] sheath conditions, electron energy transmission from {\tt b2stbc\_spb}
-  {\tt POTPAR(,2)} specifies the bias potential in $V$
-  \item[12] Imposes the currents due to drifts for the South core boundary. Must be used in conjunction with the switch setting {\tt \allowbreak istyle\_cur\_contr\_on\_S\_and\_N=2}
-  \item[13] Imposes the currents due to drifts for the South private flux and North boundaries. Must be used in conjunction with {\tt \allowbreak istyle\_cur\_contr\_on\_S\_and\_N=2}
-  \item[16] Feedback condition of constant electric potential for a given prescribed current. The prescribed current (in $A$) is given by the sum of the {\tt POTPAR(,1)} of all the boundary conditions with {\tt BCPOT=16}. Still experimental, will not work for drift cases.
+  \item[11] sheath conditions, electron energy transmission from {\tt b2stbc\_spb}, recommended when using drifts. Linked to using {\tt BCCON=14} and {\tt BCMOM=13} for all ion species, and {\tt BCENE/I=15}. {\tt POTPAR(,2)} specifies the bias potential in $V$
+  \item[12] imposes the currents due to drifts for the South core boundary. Must be used in conjunction with the switch setting {\tt \allowbreak istyle\_cur\_contr\_on\_S\_and\_N=2}
+  \item[13] imposes the currents due to drifts for the South private flux and North boundaries. Must be used in conjunction with {\tt \allowbreak istyle\_cur\_contr\_on\_S\_and\_N=2}
+  \item[16] feedback condition of constant electric potential for a given prescribed current. The prescribed current (in $A$) is given by the sum of the {\tt POTPAR(,1)} of all the boundary conditions with {\tt BCPOT=16}. Still experimental, will not work for drift cases.
   \item[21] constant potential feedback scaled by potential on the ring {\tt bc\_type21\_ref} away,
   {\tt POTPAR(,,1)} specifies the desired electric potential in $V$,
   {\tt POTPAR(,,2)} is the strength of the feedback.
@@ -3835,7 +3834,7 @@ after renaming it {\tt b2ah.dat}) and {\tt b2ar} before re-launching the run.
 
 If a new geometry is requested, the {\tt b2yt} program should be run after the
 new geometry file ($nx1 \times ny1$) has
-been produced and is available in the run directory as {\tt b2fgmtry}.
+been produced and is available in the run or {\tt baserun} directories as {\tt b2fgmtry}.
 The old geometry file should also remain available in
 the run directory as {\tt b2fgmtry.old}. If this is a coupled case and the number of
 triangles for the {\tt Eirene} grid remains the same, the new {\tt fort.33}, {\tt fort.34}
@@ -3900,6 +3899,13 @@ to produce a new {\tt input.dat.2} file. In order to
 ensure consistency between the {\tt B2.5} and {\tt Eirene} modified inputs, it is
 important that the order of the neutrals boundary conditions in
 {\tt b2.neutrals.parameters} and the strata in {\tt input.dat} match!
+If the {\tt B2.5} grid has been changed, and a new {\tt Eirene} triangular grid is needed,
+the triangulation will need to be redone. In order to do so, copy the converted
+{\tt input.dat.2} file to {\tt ../baserun/triang.eir}, modify the copied file to set
+{\tt NLTRIMESH} to {\tt .true.}, and then launch the {\tt triang} script (in the
+{\tt baserun} directory, skipping the {\tt (U)inp} and {\tt (b)2ag} steps, i.e.
+starting at the {\tt (E)irene} step.\index{triang}
+
 When species are being re-bundled, possible
 conflicts may occur between their individual settings. In such cases, the code behaviour
 is to use the setting from the highest charge state within the bundle. If species are
@@ -3912,14 +3918,18 @@ Once the user has finished converting a case, a script exists, named
 that will take the converted files from {\tt b2yt} and
 place them, after proper renaming, in the current run directory,
 provided the {\tt convert} directory where {\tt b2yt}
-was run is located at the same level.
+was run is located at the same level. Some of the files are put in
+the {\tt baserun} directory if they would belong there, so it is always best, after
+the import, to execute {\tt correct\_baserun\_timestamps}\index{correct\_baserun\_timestamps}
+from the parent directory, followed by a {\tt touch b2fstati} command
+in each of the run subdirectories.
 
-At this time, not all cases involving reshuffling of bundles have been tested, and the
-user is encouraged to check the {\tt b2yt} output files visually after execution to
-make sure no mistakes remain. No attempt is made to adjust or modify the text labels
-pertaining to the various input files, so the user is encouraged to adapt those to the
-new case being built. Report of conversion errors or omissions to the developer team
-are always welcome.
+Because of the complexity of the conversion process, for which not all possible
+cases have been tested, users are encouraged to inspect the {\tt b2yt} output files
+visually after execution to make sure no mistakes remain. No attempt is made to adjust
+or modify the text labels pertaining to the various input files, so users should
+consider adapting those to the new case being built. Report of conversion errors or
+omissions to the developer team are always welcome.
 
 \newpage
 \section{b2co, recovering from a crash}
@@ -4102,7 +4112,7 @@ or
 
 This routine saves the final output state of a run into an IDS (Interface Data Structure).
 
-It reads the {\tt b2mndr\_id*} switch group, defined in {\tt b2mn.dat}:
+The program reads the {\tt b2mndr\_id*} switch group, defined in {\tt b2mn.dat}:
 \begin{itemize}
   \item {\tt b2mndr\_user} defines the user name and it is set by default to be the same as the \${\tt USER} environment variable.
   \item {\tt b2mndr\_device} defines the device name and it is set by default to be the same as the \${\tt DEVICE} environment variable. If {\tt DEVICE} has been left undefined, the device will be noted as {\tt 'solps-iter'}.
@@ -7146,6 +7156,8 @@ Zhdanov fit to Braginskii and the \SOLPSfour values.
 
 The version of the equations shown in this Appendix represents the best available description of the standard recommended settings for the \SOLPSITER physics model, built upon the original work on {\bf SOLPS5.2} from the St. Petersburg group \cite{ROZHANSKY2009}. This Appendix is not meant as an exhaustive registry of the capabilities of the code, for which the reader is encouraged to peruse Chapters \ref{cha:standaloneb2} and \ref{cha:coupledb2eirene} as well as the list of switches in Appendix \ref{lis:b2cdci} and of namelist variables in Appendix \ref{lis:b2cdcn}.
 
+Some equations include terms which are multiplied by zero. This is meant to indicate that such terms are not included in the standard \SOLPSITER physics model, but that switches exist that allow for their inclusion.
+
 \section{Sign conventions}\index{sign conventions}\label{sec:signs}
 
 The radial coordinate $y$ increases as one crosses the separatrix from the core (or private flux) region into the main SOL region (and so is minimum at the magnetic axis). The poloidal coordinate $x$ increases in the {\em clockwise} direction when viewing the poloidal plane with the central axis line on its left. The toroidal magnetic field component $b_z$ is taken as positive if the toroidal magnetic field is directed {\em clockwise} when viewing the tokamak from above. The poloidal magnetic field component $b_x$ follows the same convention as the $x$ component and is positive when directed in the direction of increasing poloidal index, i.e. {\em clockwise}.
@@ -7163,38 +7175,64 @@ Is it important to know, that, in the equations below, the parallel velocity $V_
 
 \begin{multline}
 \label{eq:GammaAX_appC}
-\widetilde{ \Gamma}_{ax} = \left( b_x V_{\parallel a} + V_{ax}^{\left( E \right)} + V_{ax}^{\left( AN \right)} + V_a^{corr\_dpc} \right) n_a + 0 \cdot \frac{\delta_{1,a}}{e} \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} \right) \\
-- D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x} - \widetilde{D}_{p,ax} \frac{1}{h_x} \frac{\partial p_a}{\partial x} - D_{axy} \frac{1}{h_y} \frac{\partial n_a T_i}{\partial y}
+\widetilde{\Gamma}_{ax} = \left( b_x V_{\parallel a} + V_{ax}^{\left( E \right)} + V_{ax}^{\left( AN \right)} + V_a^{corr\_dpc} \right) n_a + 0 \cdot \frac{\delta_{1,a}}{e} \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + j_x^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} \right) \\
+- D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x} - \widetilde{D}_{p,ax} \frac{1}{h_x} \frac{\partial p_a}{\partial x} - \widetilde{\Gamma}_{ax}^{\left( PSch \right)}
 \end{multline}
 
 \begin{multline}
 \label{eq:GammaAY_appC}
-\widetilde{ \Gamma}_{ay} = \left( V_{ay}^{\left( E \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \frac{\delta_{1,a}}{e} \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} \right) \\
- - D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y} - \widetilde{D}_{p,ay} \frac{1}{h_y} \frac{\partial p_a}{\partial y} + D_{ayx} \frac{1}{h_x} \frac{\partial n_a T_i}{\partial x}
+\widetilde{\Gamma}_{ay} = \left( V_{ay}^{\left( E \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \frac{\delta_{1,a}}{e} \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + {j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} \right) \\
+ - D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y} - \widetilde{D}_{p,ay} \frac{1}{h_y} \frac{\partial p_a}{\partial y} - \widetilde{\Gamma}_{ay}^{\left( PSch \right)}
 \end{multline}
+
+\begin{equation}
+\Gamma_{ax}^{\left( PSch \right)} = D_{axy} \frac{1}{h_y} \frac{\partial n_a T_i}{\partial y}
+\qquad\qquad
+\Gamma_{ay}^{\left( PSch \right)} = D_{ayx} \frac{1}{h_x} \frac{\partial n_a T_i}{\partial x}
+\end{equation}
+
+\begin{equation}
+\widetilde{\Gamma}_{ax}^{\left( PSch \right)} =
+\left\{
+\begin{aligned}
+\Gamma_{ax}^{\left( PSch \right)} , & \left( z_{n,a} = 1 ~\text{and}~ z_a \neq 1 \right) ~\text{or}~ z_a = 0 \\
+\frac{\Gamma_{ax}^{\left( PSch \right)}}{1 + \frac{\left| \Gamma_{ax}^{\left( PSch \right)} \right|}{\frac{\sqrt{g}}{h_x} n_a V_{Ta}}} , & \left( z_{n,a} \neq 1 ~\text{or}~ z_a \neq 1 \right) ~\text{and}~ z_a \neq 0  
+\end{aligned} \right.
+\quad
+\widetilde{\Gamma}_{ay}^{\left( PSch \right)} =
+\left\{
+\begin{aligned}
+\Gamma_{ay}^{\left( PSch \right)} , & \left( z_{n,a} = 1 ~\text{and}~ z_a \neq 1 \right) ~\text{or}~ z_a = 0 \\
+\frac{\Gamma_{ay}^{\left( PSch \right)}}{1 + \frac{\left| \Gamma_{ay}^{\left( PSch \right)} \right|}{\frac{\sqrt{g}}{h_y} n_a V_{T_a}}} , & \left( z_{n,a} \neq 1 ~\text{or}~ z_a \neq 1 \right) ~\text{and}~ z_a \neq 0  
+\end{aligned} \right.
+\end{equation}
+
+\begin{equation}
+V_{T_a} = \left| b_x \right| \sqrt{ \frac{8 T_i}{\pi m_a} }
+\end{equation}
 
 \begin{multline}
 \label{eq:GammaAXnoTilde_appC}
-\Gamma_{ax} = \left( b_x V_{\parallel a} + V_{ax}^{\left( E \right)} + \widetilde{V}_{ax}^{\left( dia \right)} + V_{ax}^{\left( AN \right)} + V_a^{corr\_dpc} \right) n_a + \\
- 0 \cdot \frac{\delta_{1,a}}{e} \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x} - \widetilde{D}_{p,ax} \frac{1}{h_x} \frac{\partial p_a}{\partial x}
+\Gamma_{ax} = \left( b_x V_{\parallel a} + \widetilde{U}_{ax}^{\left( dia \right)} + V_{ax}^{\left( AN \right)} + V_a^{corr\_dpc} \right) n_a + \\
+ 0 \cdot \frac{\delta_{1,a}}{e} \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + {j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x} - \widetilde{D}_{p,ax} \frac{1}{h_x} \frac{\partial p_a}{\partial x}
 \end{multline}
 
 \begin{multline}
 \label{eq:GammaAYnoTilde_appC}
-\Gamma_{ay} = \left( V_{ay}^{\left( E \right)} + \widetilde{V}_{ay}^{\left( dia \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \frac{\delta_{1,a}}{e} \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} \right) \\
+\Gamma_{ay} = \left( \widetilde{U}_{ay}^{\left( dia \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \frac{\delta_{1,a}}{e} \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + {j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} \right) \\
 - D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y} - \widetilde{D}_{p,ay} \frac{1}{h_y} \frac{\partial p_a}{\partial y}
 \end{multline}
 
 \begin{multline}
 \label{eq:GammaAXCor_appC}
-\Gamma_{ax}^{Cor} = \left( b_x V_{\parallel a} + V_{ax}^{\left( E \right)} + 2 \widetilde{V}_{ax}^{\left( dia \right)} + V_{ax}^{\left( AN \right)} + V_a^{corr\_dpc} \right) n_a + \\
- 0 \cdot \frac{\delta_{1,a}}{e} \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x} - \widetilde{D}_{p,ax} \frac{1}{h_x} \frac{\partial p_a}{\partial x}
+\Gamma_{ax}^{Cor} = \left( b_x V_{\parallel a} + \widetilde{U}_{ax}^{\left( 2dia \right)} + V_{ax}^{\left( AN \right)} + V_a^{corr\_dpc} \right) n_a + \\
+ 0 \cdot \frac{\delta_{1,a}}{e} \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + {j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x} - \widetilde{D}_{p,ax} \frac{1}{h_x} \frac{\partial p_a}{\partial x}
 \end{multline}
 
 \begin{multline}
 \label{eq:GammaAYCor_appC}
-\Gamma_{ay}^{Cor} = \left( V_{ay}^{\left( E \right)} + 2 \widetilde{V}_{ay}^{\left( dia \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \\
- \frac{\delta_{1,a}}{e} \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y} - \widetilde{D}_{p,ay} \frac{1}{h_y} \frac{\partial p_a}{\partial y}
+\Gamma_{ay}^{Cor} = \left( \widetilde{U}_{ay}^{\left( 2dia \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \\
+ \frac{\delta_{1,a}}{e} \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + {j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y} - \widetilde{D}_{p,ay} \frac{1}{h_y} \frac{\partial p_a}{\partial y}
 \end{multline}
 
 \begin{equation}
@@ -7213,14 +7251,14 @@ Is it important to know, that, in the equations below, the parallel velocity $V_
 V_{ax}^{(E)} =
 \left\{
 \begin{aligned}
--\frac{B_z}{B^2} \frac{1}{h_y} \frac{\partial \Phi}{\partial y} & \ z_a \neq 0 \\
+-\frac{B_z}{B^2} \frac{1}{h_y} \frac{\partial \Phi}{\partial y} , & \ z_a \neq 0 \\
 0, & \ z_a = 0
 \end{aligned} \right.
 \qquad\qquad
 V_{ay}^{(E)} =
 \left\{
 \begin{aligned}
-\frac{B_z}{B^2} \frac{1}{h_x} \frac{\partial \Phi}{\partial x} & \ z_a \neq 0 \\
+\frac{B_z}{B^2} \frac{1}{h_x} \frac{\partial \Phi}{\partial x} , & \ z_a \neq 0 \\
 0, & \ z_a = 0
 \end{aligned} \right.
 \end{equation}
@@ -7230,45 +7268,121 @@ V_{ay}^{(E)} =
 \widetilde{V}_{ax}^{(dia)} =
 \left\{
 \begin{aligned}
-\frac{T_i B_z}{z_a e} \frac{\partial}{h_y \partial y} \left( \frac{1}{B^2} \right) & \ z_a \neq 0 \\
+\frac{T_i B_z}{z_a e} \frac{\partial}{h_y \partial y} \left( \frac{1}{B^2} \right) , & \ z_a \neq 0 \\
 0, & \ z_a = 0
 \end{aligned} \right.
 \qquad\qquad
 \widetilde{V}_{ay}^{(dia)} =
 \left\{
 \begin{aligned}
--\frac{T_i B_z}{z_a e} \frac{\partial}{h_x \partial x} \left( \frac{1}{B^2} \right) & \ z_a \neq 0 \\
+-\frac{T_i B_z}{z_a e} \frac{\partial}{h_x \partial x} \left( \frac{1}{B^2} \right) , & \ z_a \neq 0 \\
 0, & \ z_a = 0
+\end{aligned} \right.
+\end{equation}
+
+\begin{equation}
+\widetilde{\widetilde{V}}_{ax}^{\left( dia \right)} =
+\left\{
+\begin{aligned}
+\widetilde{V}_{ax}^{\left( dia \right)} , & \left( z_{n,a} = 1 ~\text{and}~ z_a \neq 1 \right) ~\text{or}~ z_a = 0 \\
+\frac{\widetilde{V}_{ax}^{\left( dia \right)}}{ 1 + \frac{\left| \widetilde{V}_{ax}^{\left( dia \right)} \right|}{V_{T_a}}} , & \left( z_{n,a} \neq 1 ~\text{or}~ z_a \neq 1 \right) ~\text{and}~ z_a \neq 0
+\end{aligned} \right.
+\qquad
+\widetilde{\widetilde{V}}_{ay}^{\left( dia \right)} =
+\left\{
+\begin{aligned}
+\widetilde{V}_{ay}^{\left( dia \right)} , & \left( z_{n,a} = 1 ~\text{and}~ z_a \neq 1 \right) ~\text{or}~ z_a = 0 \\
+\frac{\widetilde{V}_{ay}^{\left( dia \right)}}{ 1 + \frac{\left| \widetilde{V}_{ay}^{\left( dia \right)} \right|}{V_{T_a}}} , & \left( z_{n,a} \neq 1 ~\text{or}~ z_a \neq 1 \right) ~\text{and}~ z_a \neq 0
 \end{aligned} \right.
 \end{equation}
 
 \begin{multline}
 \label{eq:Gamma_ax_Eir}
-\Gamma_{ax}^{\left( Eir \right)} = \left( b_x V_{\parallel a} + V_{ax}^{\left( E \right)} + V_{ax}^{\left( dia \right)} + V_{ax}^{\left( AN \right)} + V_a^{corr\_dpc} \right) n_a + \\
- 0 \cdot \frac{\delta_{1,a}}{e} \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x}
+\Gamma_{ax}^{\left( Eir \right)} = \left( b_x V_{\parallel a} + V_{ax}^{\left( E \right)} + \widetilde{W}_{ax}^{\left( dia \right)} + V_{ax}^{\left( AN \right)} + V_a^{corr\_dpc} \right) n_a + \\
+ 0 \cdot \frac{\delta_{1,a}}{e} \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + {j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x}
 \end{multline}
 
 \begin{multline}
 \label{eq:Gamma_ay_Eir}
-\Gamma_{ay}^{\left( Eir \right)} = \left( V_{ay}^{\left( E \right)} + V_{ya}^{\left( dia \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \\
- \frac{\delta_{1,a}}{e} \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y}
+\Gamma_{ay}^{\left( Eir \right)} = \left( V_{ay}^{\left( E \right)} + \widetilde{W}_{ya}^{\left( dia \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \\
+ \frac{\delta_{1,a}}{e} \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + {j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y}
 \end{multline}
 
 \noindent where
 \begin{equation}
 \label{eq:vadia_appC}
-V_{ax}^{\left( dia \right)} =
+W_{ax}^{\left( dia \right)} =
 \left\{
 \begin{aligned}
 -\frac{B_z}{z_a e B^2 n_a} \frac{1}{h_y} \frac{\partial n_a T_i}{\partial y} & \ z_a \neq 0 \\
 0, & \ z_a = 0
 \end{aligned} \right.
 \qquad\qquad
-V_{ay}^{\left( dia \right)} =
+W_{ay}^{\left( dia \right)} =
 \left\{
 \begin{aligned}
 \frac{B_z}{z_a e B^2 n_a} \frac{1}{h_x} \frac{\partial n_a T_i}{\partial x} & \ z_a \neq 0 \\
 0, & \ z_a = 0
+\end{aligned} \right.
+\end{equation}
+
+\begin{equation}
+\widetilde{W}_{ax}^{\left( dia \right)} =
+\left\{
+\begin{aligned}
+W_{ax}^{\left( dia \right)} , & \left( z_{n,a} = 1 ~\text{and}~ z_a \neq 1 \right) ~\text{or}~ z_a = 0 \\
+\frac{W_{ax}^{\left( dia \right)}}{ 1 + \frac{\left| W_{ax}^{\left( dia \right)} \right|}{V_{T_a}}} , & \left( z_{n,a} \neq 1 ~\text{or}~ z_a \neq 1 \right) ~\text{and}~ z_a \neq 0
+\end{aligned} \right.
+\qquad
+\widetilde{W}_{ay}^{\left( dia \right)} =
+\left\{
+\begin{aligned}
+W_{ay}^{\left( dia \right)} , & \left( z_{n,a} = 1 ~\text{and}~ z_a \neq 1 \right) ~\text{or}~ z_a = 0 \\
+\frac{W_{ay}^{\left( dia \right)}}{ 1 + \frac{\left| W_{ay}^{\left( dia \right)} \right|}{V_{T_a}}} , & \left( z_{n,a} \neq 1 ~\text{or}~ z_a \neq 1 \right) ~\text{and}~ z_a \neq 0
+\end{aligned} \right.
+\end{equation}
+
+\begin{equation}
+U_{ax}^{\left( dia \right)} = \widetilde{V}_{ax}^{\left( dia \right)} + V_{ax}^{\left( E \right)}
+\qquad\qquad
+U_{ay}^{\left( dia \right)} = \widetilde{V}_{ay}^{\left( dia \right)} + V_{ay}^{\left( E \right)} 
+\end{equation}
+
+\begin{equation}
+U_{ax}^{\left( 2dia \right)} = 2 \widetilde{V}_{ax}^{\left( dia \right)} + V_{ax}^{\left( E \right)}
+\qquad\qquad
+U_{ay}^{\left( 2dia \right)} = 2 \widetilde{V}_{ay}^{\left( dia \right)} + V_{ay}^{\left( E \right)} 
+\end{equation}
+
+\begin{equation}
+\widetilde{U}_{ax}^{\left( dia \right)} =
+\left\{
+\begin{aligned}
+U_{ax}^{\left( dia \right)} , & \left( z_{n,a} = 1 ~\text{and}~ z_a \neq 1 \right) ~\text{or}~ z_a = 0 \\
+\frac{U_{ax}^{\left( dia \right)}}{ 1 + \frac{\left| U_{ax}^{\left( dia \right)} \right|}{V_{T_a}}} , & \left( z_{n,a} \neq 1 ~\text{or}~ z_a \neq 1 \right) ~\text{and}~ z_a \neq 0
+\end{aligned} \right.
+\qquad
+\widetilde{U}_{ay}^{\left( dia \right)} =
+\left\{
+\begin{aligned}
+U_{ay}^{\left( dia \right)} , & \left( z_{n,a} = 1 ~\text{and}~ z_a \neq 1 \right) ~\text{or}~ z_a = 0 \\
+\frac{U_{ay}^{\left( dia \right)}}{ 1 + \frac{\left| U_{ay}^{\left( dia \right)} \right|}{V_{T_a}}} , & \left( z_{n,a} \neq 1 ~\text{or}~ z_a \neq 1 \right) ~\text{and}~ z_a \neq 0
+\end{aligned} \right.
+\end{equation}
+
+\begin{equation}
+\widetilde{U}_{ax}^{\left( 2dia \right)} =
+\left\{
+\begin{aligned}
+U_{ax}^{\left( 2dia \right)} , & \left( z_{n,a} = 1 ~\text{and}~ z_a \neq 1 \right) ~\text{or}~ z_a = 0 \\
+\frac{U_{ax}^{\left( 2dia \right)}}{ 1 + \frac{\left| U_{ax}^{\left( 2dia \right)} \right|}{V_{T_a}}} , & \left( z_{n,a} \neq 1 ~\text{or}~ z_a \neq 1 \right) ~\text{and}~ z_a \neq 0
+\end{aligned} \right.
+\qquad
+\widetilde{U}_{ay}^{\left( 2dia \right)} =
+\left\{
+\begin{aligned}
+U_{ay}^{\left( 2dia \right)} , & \left( z_{n,a} = 1 ~\text{and}~ z_a \neq 1 \right) ~\text{or}~ z_a = 0 \\
+\frac{U_{ay}^{\left( 2dia \right)}}{ 1 + \frac{\left| U_{ay}^{\left( 2dia \right)} \right|}{V_{T_a}}} , & \left( z_{n,a} \neq 1 ~\text{or}~ z_a \neq 1 \right) ~\text{and}~ z_a \neq 0
 \end{aligned} \right.
 \end{equation}
 
@@ -9715,6 +9829,8 @@ $r_{rec,0,0} = 0,\;\; r_{rec,1,0} = 1,\;\; p_{n_a,a,1} = 0 $
 
 {\em Imposing a sound speed outgoing flux:} {\tt BCCON = 14}
 
+To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
+
 \begin{equation*}
 \left. \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \right|_W
 =
@@ -9775,6 +9891,8 @@ $r_{rec,0,0} = 0,\;\; r_{rec,1,0} = 1$
 \end{equation*}
 
 {\em Imposing a sound speed outgoing flux:} {\tt BCCON = 14}
+
+To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
 
 \begin{equation*}
 \left. - \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \right|_E
@@ -9971,6 +10089,8 @@ $c_{m,a,3} = 0$, $c_{m,a,6} = -1$
 
 {\em Imposing the {\tt b2stbc\_spb} style boundary condition on the velocity:} {\tt BCMOM = 13}
 
+To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCCON = 14}, and {\tt BCPOT = 11}.
+
 $ \left. h_z \frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_W = \left. \left[
 	p_{m,a,1} \frac{u_{big}}{\epsilon^2} V_{West} m_a n_a -
 	\frac{u_{big}}{\epsilon^2} h_z \frac{\sqrt g}{h_x} |b_x| m_a n_a V_{\parallel a}
@@ -10022,6 +10142,8 @@ $c_s = \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}{\su
 \underline{If $z_a \neq 0$}
 
 {\em Imposing the {\tt b2stbc\_spb} style boundary condition for parallel velocity:} {\tt BCMOM = 13}
+
+To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCCON = 14}, and {\tt BCPOT = 11}.
 
 $p_{m,a,1} = 1$
 
@@ -10188,7 +10310,9 @@ $\left. \frac{\sqrt{g}}{h_y} j_y \right|_{S_0} = 0$
 
 \subsubsection{West}
 
-{\em Imposing a sound speed velocity flux (to be used in connection with {\tt BCCON = 14}):} {\tt BCPOT = 11}
+{\em Imposing a sound speed velocity flux:} {\tt BCPOT = 11}
+
+To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 13}, and {\tt BCCON = 14}.
 
 \begin{small}
 $\left. \frac{\sqrt g}{h_x} j_x \right|_W =
@@ -10226,7 +10350,9 @@ $\left. \frac{\sqrt g}{h_x} j_x \right|_W =
 
 \subsubsection{East}
 
-{\em Imposing a sound speed velocity flux (to be used in connection with {\tt BCCON = 14}):} {\tt BCPOT = 11}
+{\em Imposing a sound speed velocity flux:} {\tt BCPOT = 11}
+
+To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 13}, and {\tt BCCON = 11}.
 
 \begin{small}
 $\left. -\frac{\sqrt g}{h_x} j_x \right|_E =
@@ -10403,7 +10529,9 @@ $p_{h_e,1} = 10^{-2}$ is the radial electron temperature decay length, in $m$.
 
 {\em Imposing the {\tt b2stbc\_spb} style boundary condition for electron temperature:} {\tt BCENE = 15}
 
-If {\tt 'bcene\_15\_style'} is set to {\tt '0'} (to be used in conjunction with {\tt BCCON = 14}) :
+To be used in conjunction with {\tt BCENI = 15}, {\tt BCCON = 14}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
+
+If {\tt 'bcene\_15\_style'} is set to {\tt '0'}
 
 $\left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \left. \left[
 	-\left(
@@ -10462,7 +10590,9 @@ c_s = \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}{\sum
 
 {\em Imposing the {\tt b2stbc\_spb} style boundary condition for electron temperature:} {\tt BCENE = 15}
 
-If {\tt 'bcene\_15\_style} is set to {\tt '0'} (to be used in conjunction with {\tt BCCON = 14}):
+To be used in conjunction with {\tt BCENI = 15}, {\tt BCCON = 14}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
+
+If {\tt 'bcene\_15\_style} is set to {\tt '0'}:
 
 $\left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \left. \left[
 	-\left(
@@ -10791,7 +10921,9 @@ $c_{h_i,a,2} = -10^{-2}$
 
 \subsubsection{West}
 
-{\em Boundary condition from {\tt b2stbc\_spb}:} {\tt BCENI = 15} (to be used in association with {\tt BCCON = 14})
+{\em Boundary condition from {\tt b2stbc\_spb}:} {\tt BCENI = 15}
+
+To be used in conjunction with {\tt BCENE = 15}, {\tt BCCON = 14}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
 
 $\left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W = \left.
 - p_{h_i,1} \frac{\sqrt g}{h_x} |b_x|
@@ -10879,7 +11011,9 @@ $p_{h_i,2} = 10^{-3}$ with drifts, should be $p_{h_i,2} = 0$
 
 \subsubsection{East}
 
-{\em Imposing a {\tt b2stbc\_spb} style boundary condition:} {\tt BCENI = 15} (to be used in association with {\tt BCCON = 14})
+{\em Imposing a {\tt b2stbc\_spb} style boundary condition:} {\tt BCENI = 15}
+
+To be used in conjunction with {\tt BCENE = 15}, {\tt BCCON = 14}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
 
 $\left. -\frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_E = \left.
 - p_{h_i,1} \frac{\sqrt g}{h_x} |b_x|
@@ -12597,10 +12731,10 @@ stored in the {\tt output/} folder inside the run directory. The general naming 
 Here, {\tt <subroutine\_name>} is the name of subroutine (or sometimes the name of the Fortran source file containing this subroutine)
 from which the output is produced, while {\tt <quantity>} is the quantity name, which usually coincides with the name of the corresponding
 variable inside the subroutine, if such a variable exists. Otherwise some association is used. The species index is denoted here as {\tt XXX} (three digits), and is used for species-dependent quantities (such as {\tt na} or {\tt ua}), and is
-omitted from common quantities (such as {\tt te}, {\tt ti} or {\tt po}). For example, the file containing the parallel velocity for the species with index {\tt is = 1} would be
+omitted from common quantities (such as {\tt te}, {\tt ti} or {\tt po}). For example, the file containing the density of the species with index {\tt is = 1} would be
 
 \begin{verbatim}
- b2npmo_ua_001.dat
+ b2npco_na_001.dat
 \end{verbatim}
 
 The content of the file looks like the following:
@@ -17377,6 +17511,7 @@ which is defined in the
 \item[F2003] \index{F2003} To be used if the compiler is compatible with {\tt Fortran 2003}
 \item[F77] \index{F77} Identifies specific code to {\tt Fortran-77} compilers
 \item[GFORTRAN] \index{GFORTRAN} To be used with {\tt gfortran} compilation
+\item[G95] \index{G95} To be used with {\tt g95} compilation
 \item[HPUX] \index{HPUX} To be used when compiling on HP Unix systems
 \item[IBMaix] \index{IBMaix} To be used when compiling on IBM AIX computers
 \item[IMAS] \index{IMAS} To be used when compiling within the IMAS framework
@@ -17399,7 +17534,7 @@ which is defined in the
 \index{SOLPS\_CPP}
 If you want to activate any of these options, you should add
 {\tt -DOPTION} (where {\tt OPTION} might, for example, be
-{\tt CLASSICAL\_CURRENT}) to the {\tt SOLPS\_CPP} environment variable
+{\tt NO\_NAG}) to the {\tt SOLPS\_CPP} environment variable
 with
 \begin{verbatim}
   setenv SOLPS_CPP '-DOPTION'
@@ -18026,6 +18161,7 @@ MPI\_VERSION & modules/eirmod\_mpi.F90 \\
 NAGFOR & file-handling/get\_solpstop.f \\
 NO\_B2\_CHEM\_SPUT & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.F \\
 NO\_GETENV & file-handling/get\_solpstop.f \\
+PGF90 & assistant/exit\_own.f \\
 TRACE & geometry/time-routines/checks.F \\
 TRACE & geometry/time-routines/timea.F \\
 TRACE & geometry/time-routines/timep.F \\
