@@ -95,6 +95,8 @@ cd run_ids
 import_files_from_convert
 echo "'b2mndr_ntim'     '1'" >> b2mn.dat
 echo "'b2news_no_solve' '1'" >> b2mn.dat
+echo "'ids_from_43'     '1'" >> b2mn.dat
+echo "'balance_netcdf'  '1'" >> b2mn.dat
 touch b2fstati
 b2run b2mn > run.log
 imasdb ${DEVICE}
