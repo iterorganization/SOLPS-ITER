@@ -3559,7 +3559,10 @@ or
 will produce a {\tt b2yr.plt} file containing a series of
 plots detailing the dependencies of the atomic rates on density and temperature for
 each isonuclear sequence, as well as a {\tt b2yr.prt} ASCII file containing
-tables of these rates.
+tables of these rates. If the {\tt fix\_recomb} switch has been activated, then
+the electron cooling rate is plotted with and without the contribution due to the
+ionization potential of the recombining ion, and additional graphs are included for the
+negative of that rate if it becomes a heating (instead of cooling) rate.
 
 The {\tt b2yr.plt} file is an NCAR GKS file. The presence in the run directory of a file called {\tt ncar.cfg}, with the
 first character of the first line non-blank, will cause the program to use
