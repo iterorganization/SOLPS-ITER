@@ -8,9 +8,10 @@
 # module load hdf5
 # module load MUMPS
 # module load scalapack
-module load ifort
+module load ifort/ifort2017
 module load ncl_ncar
 module load netcdf
+module load totalview
 module load git
 
 # Environment variables
@@ -26,8 +27,13 @@ export GLI_HOME=${IRISLIB}/gli
 export LD_LIBRARY_PATH="${IRISLIB}:${LD_LIBRARY_PATH}"
 export LD_LIBRARY_PATH="${GLI_HOME}:${GLI_HOME}/src:${LD_LIBRARY_PATH}"
 
+# Prepend path to python
+
+pythondir=`dirname $PYTHON`
+export PATH=${pythondir}:$PATH
+
 # Debugger
-# export DBX=totalview
+export DBX=totalview
 
 # ParaView compiling options
 
@@ -48,5 +54,5 @@ fi
 
 # Additional setup
 
-pushd ${GLI_HOME}/src >& /dev/null; source glisetup.ksh; popd >& /dev/null     # Eirene graphics environment
+#pushd ${GLI_HOME}/src >& /dev/null; source glisetup.ksh; popd >& /dev/null     # Eirene graphics environment
 
