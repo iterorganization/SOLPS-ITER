@@ -29,7 +29,7 @@ MDSPLUS_DIR   ?=
 # Variables of linking, using pkg-config
 #
 
-LD_NETCDF      =
+LD_NETCDF      = `nf-config --flibs`
 LD_GR          = -L${GR_ROOT}/lib -lgr
 LD_GKS         = -L${GLI_HOME} -lgks -lX11 -lXt
 LD_NCARG       = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lm -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lz -lpthread -lXrender -lbz2 -lgfortran # for NCARG v6.x.x
@@ -82,16 +82,19 @@ ifdef IMAS_VERSION
     LD_UAL = `pkg-config imas-pgi ggd --libs`
   endif
   UAL_MAJOR_VERSION = $(shell echo ${UAL_VERSION} | cut -d '.' -f1 )
+  GGD_MINOR_VERSION = $(shell echo ${EBVERSIONGGD} | cut -d '.' -f2 )
   IMAS_MAJOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f1 )
   IMAS_MINOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f2 )
-  SOLPS_CPP += -DIMAS -DUAL_MAJOR_VERSION=${UAL_MAJOR_VERSION} -DIMAS_MINOR_VERSION=${IMAS_MINOR_VERSION}
+  SOLPS_CPP += -DIMAS -DUAL_MAJOR_VERSION=${UAL_MAJOR_VERSION} -DIMAS_MINOR_VERSION=${IMAS_MINOR_VERSION} -DGGD_MINOR_VERSION=${GGD_MINOR_VERSION}
   export LD_UAL
 else
   UAL_MAJOR_VERSION = 0
+  GGD_MINOR_VERSION = 0
   IMAS_MAJOR_VERSION = 0
   IMAS_MINOR_VERSION = 0
 endif
 export UAL_MAJOR_VERSION
+export GGD_MINOR_VERSION
 export IMAS_MAJOR_VERSION
 export IMAS_MINOR_VERSION
 

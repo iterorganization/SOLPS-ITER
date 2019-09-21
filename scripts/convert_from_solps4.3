@@ -7,14 +7,15 @@
 } || {
   echo "DEVICE = " $DEVICE
 }
-[ "$SOLPS_CENTRAL" = 'yes' ] && DEVICE=$DEVICE/$USER
+export DEVICEDIR=$DEVICE
+[ "$SOLPS_CENTRAL" = 'yes' ] && DEVICEDIR=$DEVICE/$USER
 echo "Converting shot number " $1
-[ -d $SOLPSWORK/$DEVICE ] || mkdir $SOLPSWORK/$DEVICE
-[ -s $SOLPSWORK/$DEVICE/SOLPSTOP ] || {
+[ -d $SOLPSWORK/$DEVICEDIR ] || mkdir $SOLPSWORK/$DEVICEDIR
+[ -s $SOLPSWORK/$DEVICEDIR/SOLPSTOP ] || {
   [ -s $SOLPSWORK/SOLPSTOP ] || echo $SOLPSTOP > $SOLPSWORK/SOLPSTOP 
 }
-[ -d $SOLPSWORK/$DEVICE/$1 ] && {
-  print -u2 -n -- "The directory $SOLPSWORK/$DEVICE/$1 already exists. Proceed anyway? (y/n)"
+[ -d $SOLPSWORK/$DEVICEDIR/$1 ] && {
+  print -u2 -n -- "The directory $SOLPSWORK/$DEVICEDIR/$1 already exists. Proceed anyway? (y/n)"
   while true; do {
     read u
     { case $u in
@@ -24,9 +25,9 @@ echo "Converting shot number " $1
     esac; }
   }; done
 } || {
-  mkdir $SOLPSWORK/$DEVICE/$1
+  mkdir $SOLPSWORK/$DEVICEDIR/$1
 }
-cd $SOLPSWORK/$DEVICE/$1
+cd $SOLPSWORK/$DEVICEDIR/$1
 mkdir -p convert
 mkdir -p baserun
 cd convert
@@ -95,6 +96,8 @@ cd run_ids
 import_files_from_convert
 echo "'b2mndr_ntim'     '1'" >> b2mn.dat
 echo "'b2news_no_solve' '1'" >> b2mn.dat
+echo "'ids_from_43'     '1'" >> b2mn.dat
+echo "'balance_netcdf'  '1'" >> b2mn.dat
 touch b2fstati
 b2run b2mn > run.log
 imasdb ${DEVICE}
