@@ -41,6 +41,7 @@ rundir="`pwd`"
      }
   }
   [ -s ../convert/b2ag.dat.2 ] && rm b2ag.dat
+  [ -s ../convert/b2fgmtry.2 ] && rm b2fgmtry
   [ -s ../convert/input.dat.2 ] && {
     cp -uv ../convert/input.dat.2 ../baserun/input.dat
   } || {
@@ -78,9 +79,13 @@ rundir="`pwd`"
   [ -s ../convert/b2.*.parameters ] && cp -uv ../convert/b2.*.parameters .
   [ -s ../convert/b2.transport.inputfile ] && cp -uv ../convert/b2.transport.inputfile .
   [ -s ../convert/b2.sources.profile ] && cp -uv ../convert/b2.sources.profile .
-  [ -s ../convert/"$filestem"46 ] && cp -uv ../convert/"$filestem"46 .
-  [ -s ../convert/"$filestem"44 ] && cp -uv ../convert/"$filestem"44 .
-  [ -s ../convert/"$filestem"30 ] && cp -uv ../convert/"$filestem"30 .
+  [ -s ../convert/"$filestem"46.2 ] || {
+    [ -s ../convert/"$filestem"46 ] && cp -uv ../convert/"$filestem"46 .
+  }
+  [ -s ../convert/"$filestem"44.2 ] || {
+    [ -s ../convert/"$filestem"44 ] && cp -uv ../convert/"$filestem"44 .
+  }
+  [ -s ../convert/"$filestem"31 ] && cp -uv ../convert/"$filestem"31 .
   [ -s ../convert/"$filestem"15 ] && cp -uv ../convert/"$filestem"15 .
   [ -s ../convert/"$filestem"14 ] && cp -uv ../convert/"$filestem"14 .
   [ -s ../convert/"$filestem"13 ] && cp -uv ../convert/"$filestem"13 .
