@@ -14284,6 +14284,7 @@ are indicated in the table.
     arww \index{b2plot, arww}      & 0 & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:arww}   & Set arrow line width \\
     aspc \index{b2plot, aspc}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:aspc}   & Toggle aspect ratio \\
     bcol \index{b2plot, bcol}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:bcol}   & Colour of label bar title \\
+    bold \index{b2plot, bold}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:bold}   & Toggles bold graph frame \\
     both \index{b2plot, both}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:both}   & Computational and physical domain plots \\
     bw \index{b2plot, bw}          & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:bw}     & Black-and-white plots only \\
     clvd \index{b2plot, clvd}      & 0 & 3 & 0 & 0 & 0 & 0 & 0 & \ref{sec:clvd}   & Customize contour levels (delta) \\
@@ -14301,6 +14302,7 @@ are indicated in the table.
     exps \index{b2plot, exps}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:exps}   & Symbol for experimental scatter plot \\
     ewid \index{b2plot, ewid}      & 0 & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:ewid}   & Experimental data line width \\
     fclv \index{b2plot, fclv}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:fclv}   & Fill contour levels \\
+    fcol \index{b2plot, fcol}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:fcol}   & Color for graph frame, axes, ticks and labels \\
     filo \index{b2plot, filo}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:filo}   & Fill option \\
     font \index{b2plot, font}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:font}   & Set font \\
     gcol \index{b2plot, gcol}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:gcol}   & Colour of graph title \\
@@ -14664,6 +14666,7 @@ act on the "Eirene" stack or affect graphs of those data.
     esumz \index{b2plot, esumz}    & 2 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:esumz}    & Sum over species \\
     esurf \index{b2plot, esurf}    & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:esurf}    & Plot Eirene data on the triangular grid \\
     eswap \index{b2plot, eswap}    & 0 & 0 & 0 & 0 & 2 & 0 & 0 & \ref{sec:eswap}    & Swap top two elements of Eirene stack \\
+    etal \index{b2plot, etal}      & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:etal}     & Read Eirene tally output file onto the Eirene stack \\
     etos \index{b2plot, etos}      & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:etos}     & Copy Eirene data onto matrix stack \\
     evac \index{b2plot, evac}      & 0 & 1 & 0 & 0 & 1 & 0 & 0 & \ref{sec:evac}     & Fill vacuum region of Eirene stack with a value \\
     wzrng \index{b2plot, ezrng}    & 2 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:ezrng}    & Select species range in Eirene data \\
@@ -16225,6 +16228,9 @@ Want black and white for some plots.
 \subsubsection{col}\index{b2plot, col}\label{sec:col}
 Want colour for some plots.
 
+\subsubsection{bold}\index{b2plot, bold}\label{sec:bold}
+Toggles having the graph frames, axes, ticks and labels be in bold type.
+
 \subsubsection{$<$number,{\bf I}$>$ font}\index{b2plot, font}\label{sec:font}
 Changes the current font type to $\langle$number$\rangle$
 \begin{itemize}
@@ -16244,6 +16250,21 @@ the command
 'D-\\Ga\\R (photons m^{-3} s^{-1})' extl
 \end{verbatim}
 would give an extra graph label containing "D-$\alpha$ (photons m$^{-3}$ s$^{-1}$)".
+
+To switch font properties inside the string, use a double backslash followed by one of the letters:
+\begin{description}
+  \item[R] Switch to Roman characters
+  \item[G] Switch to Greek characters
+  \item[d] Switch to default characters
+  \item[g] Switch to Greek font
+  \item[r] Switch to Roman font
+  \item[n] Switch to normal level
+  \item[h] Resize font 130\%
+  \item[t] Resize font 70\%
+  \item[m] Switch to math font
+\end{description}
+
+Exponents can be requested with a string such as '\^~\{{\tt exp}\}', subscripts with '\_\{{\tt sub}\}', environment variables with '\$\{{\tt var}\}', or the result of shell commands with '`{\tt cmd}`'.
 
 \subsubsection{stdl}\index{b2plot, stdl}\label{sec:stdl}
 Sets standard label as {\em extralabel}:
@@ -16358,6 +16379,10 @@ See {\bf zcol} above for a list of available colours.
 
 \subsubsection{$<$ncol,{\bf I}$>$ bcol}\index{b2plot, bcol}\label{sec:bcol}
 Colour to be used for printing label bar title (default 1).
+See {\bf zcol} above for a list of available colours.
+
+\subsubsection{$<$ncol,{\bf I}$>$ fcol}\index{b2plot, fcol}\label{sec:fcol}
+Colour to be used for printing the graph frame, axes, ticks and labels (default 1).
 See {\bf zcol} above for a list of available colours.
 
 \subsubsection{$<$ncol,{\bf I}$>$ gcol}\index{b2plot, gcol}\label{sec:gcol}
@@ -16656,6 +16681,9 @@ Copies {\tt Eirene} data onto {\tt B2.5} data. Specifically, the densities of ne
 species (when a match between {\tt B2.5} and {\tt Eirene} species can be found)
 computed from {\tt Eirene} ({\em dab2}) are added to the fluid neutral densities from
 {\tt B2.5} ({\em na}).
+
+\subsubsection{$<$filename,{\bf S}$>$ etal}\index{b2plot, etal}\label{sec:etal}
+Copies data from the Eirene tally output file $\langle$filename$\rangle$ to the Eirene data stack. Such files are written from the volume tally output in block 11 of the {\tt Eirene} input file. This function assumes the tally file contains 2-D data on the Eirene triangular grid.
 
 \subsubsection{$<$value,{\bf R}$>$ evac}\index{b2plot, evac}\label{sec:evac}
 Assigns real value $\langle$value$\rangle$ to all triangles from the top of the Eirene data stack that do not map to a {\tt B2.5} grid cell.
@@ -18151,7 +18179,8 @@ DBG & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.F \\
 GFORTRAN & modules/eirmod\_mpi.F90 \\
 HPUX & file-handling/wrmesh.f \\
 HPUX & file-handling/wrplam.f \\
-HPUX & file-handling/wrplam\_long.f \\
+HPUX & fisbb
+le-handling/wrplam\_long.f \\
 HPUX & file-handling/wrplam\_shrt.f \\
 HPUX & file-handling/wrplam\_xdr\_shrt.f \\
 HPUX & interfaces/couple\_SOLPS-ITER/eirmod\_extrab25.F90 \\
