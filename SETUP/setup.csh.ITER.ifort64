@@ -2,7 +2,7 @@
 # Modules needed by SOLPS-ITER
 set nodename=`hostname`
 module load IMAS/3.24.0-4.1.5
-module load GGD/1.8.5-intel-2018a-DD-3.23.3
+module load GGD/1.8.5-intel-2018a
 module load PyYAML/3.12-intel-2018a-Python-3.6.4
 module load matplotlib/2.1.2-intel-2018a-Python-3.6.4
 module load Kepler
