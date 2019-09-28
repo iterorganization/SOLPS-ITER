@@ -32,7 +32,7 @@ mkdir -p convert
 mkdir -p baserun
 cd convert
 cp /shared/projects/solps/archive/extra/arch_2/B2E/b2arch/$DEVICE/$1/* .
-cp b2.parameters b2.parameters.src
+cat b2.parameters | grep -vi 'l_targflux=t' > b2.parameters.src
 mv b2.parameters.out b2.parameters.out.4.3
 cp fort.31 fort.31.4.3
 cp input.eir input.dat

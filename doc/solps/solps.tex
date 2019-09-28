@@ -16292,6 +16292,21 @@ the command
 \end{verbatim}
 would give an extra graph label containing "D-$\alpha$ (photons m$^{-3}$ s$^{-1}$)".
 
+To switch font properties inside the string, use a double backslash followed by one of the letters:
+\begin{description}
+  \item[R] Switch to Roman characters
+  \item[G] Switch to Greek characters
+  \item[d] Switch to default characters
+  \item[g] Switch to Greek font
+  \item[r] Switch to Roman font
+  \item[n] Switch to normal level
+  \item[h] Resize font 130\%
+  \item[t] Resize font 70\%
+  \item[m] Switch to math font
+\end{description}
+
+Exponents can be requested with a string such as '\^~\{{\tt exp}\}', subscripts with '\_\{{\tt sub}\}', environment variables with '\$\{{\tt var}\}', or the result of shell commands with '`{\tt cmd}`'.
+
 \subsubsection{stdl}\index{b2plot, stdl}\label{sec:stdl}
 Sets standard label as {\em extralabel}:
 \begin{verbatim}
