@@ -40,12 +40,17 @@ setup_baserun_eirene_links
 rm -f b2sxdr.prt
 $SOLPSTOP/scripts/b2sxdr > b2sx.log
 h_mass="`egrep -i 'MI {0,}=' b2.parameters | tail -1 | awk '{printf $2; printf '\n'}' | sed 's:,: :' `"
+he_shot="`egrep 'F57-[0-9]0MW-He' $SOLPSWORK/$DEVICE/$1/convert/VarID | wc -l`"
 typeset -i shotnumber
 shotnumber=`echo $1`
 [ "$DEVICE" = 'iter' ] && shotnumber=shotnumber+100000
-[ $h_mass = 2 ] && shotnumber=shotnumber+20000
-[ $h_mass = 3 ] && shotnumber=shotnumber+30000
-[ $h_mass = 4 ] && shotnumber=shotnumber+10000
+[ $he_shot = 1 ] && {
+  shotnumber=shotnumber+10000
+} || {
+  [ $h_mass = 2 ] && shotnumber=shotnumber+20000
+  [ $h_mass = 3 ] && shotnumber=shotnumber+30000
+  [ $h_mass = 4 ] && shotnumber=shotnumber+10000
+}
 echo "IDS shot number will be: " $shotnumber
 echo "'b2mndr_run_number'  '1'" >> b2mn.dat.4
 echo "'b2mndr_user'        '${USER}'" >> b2mn.dat.4
@@ -119,11 +124,17 @@ head -n ${responsible_line} $yaml.2 > $yaml.3
 echo "    "`get_git_name` >> $yaml.3
 tail_lines=yaml_lines-(responsible_line+1)
 tail -n $tail_lines $yaml.2 >> $yaml.3
-sed -e 's|workflow: tbd|workflow: SOLPS|' < $yaml.3 > $yaml.4
-mv $yaml.4 ${MDSPLUS_TREE_BASE_0}/$yaml
+sed -e 's|workflow: tbd|workflow: SOLPS|' -e 's|type: tbd|type: predictive|' < $yaml.3 > $yaml.4
+typeset -i status_line
+status_line=`grep -n "status:" ${yaml}.4 | cut -d ':' -f 1`
+head -n ${status_line} $yaml.4 > $yaml.5
+echo "    active" >> $yaml.5
+tail_lines=yaml_lines-(status_line+1)
+tail -n $tail_lines $yaml.4 >> $yaml.5
+mv $yaml.5 ${MDSPLUS_TREE_BASE_0}/$yaml
 watcher=ids_${shotnumber}0001.watcher
 mv $watcher ${MDSPLUS_TREE_BASE_0}/
-rm $yaml $yaml.2 $yaml.3
+rm $yaml $yaml.2 $yaml.3 $yaml.4
 echo "IDS for case ${shotnumber} written!"
 cd ..
 
