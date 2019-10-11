@@ -106,14 +106,21 @@ cp ../convert/b2fplasma .
 touch b2fstati
 echo 'Case conversion finished!'
 cd ..
-mkdir -p run_ids
-cd run_ids
+mkdir -p run_ids_4.3
+cd run_ids_4.3
 import_files_from_convert
+rm b2mn.dat b2.boundary.parameters
+cp ../convert/b2mn.dat.4 b2mn.dat
+cp ../convert/b2.boundary.parameters.4 b2.boundary.parameters
+cp ../convert/b2.transport.parameters.4 b2.transport.parameters
+cat ../baserun/b2ar.dat $SOLPSTOP/runs/examples/b2ar.dat.4.3 > b2ar.dat
+cat $SOLPSTOP/runs/examples/b2mn.dat.4.3 >> b2mn.dat
 echo "'b2mndr_ntim'     '1'" >> b2mn.dat
 echo "'b2news_no_solve' '1'" >> b2mn.dat
 echo "'ids_from_43'     '1'" >> b2mn.dat
 echo "'balance_netcdf'  '1'" >> b2mn.dat
 touch b2fstati
+b2run b2ar
 b2run b2mn > run.log
 b2run b2_ual_write > b2_ual_write.log
 create_db_entry -u ${USER} -t ${DEVICE} -s ${shotnumber} -r 1
