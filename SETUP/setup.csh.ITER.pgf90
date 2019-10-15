@@ -27,7 +27,6 @@ module load ParaView/5.5.2-intel-2018a-Python-3.6.4-mpi
 module load PyQt5/5.9.2-intel-2018a-Python-3.6.4
 setenv QTDIR ${EBROOTQT5}
 setenv PARAVIEW_PREFIX ${EBROOTPARAVIEW}
-module unload mpich2
 module load motif/2.3.8-intel-2018a
 module load gnuplot/5.2.2-intel-2018a
 module load texlive
