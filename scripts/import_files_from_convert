@@ -18,21 +18,21 @@ rundir="`pwd`"
   echo "Now copying unmodified files"
   [ -s ../convert/b2fgmtry.old ] && {
     [ -s ../convert/b2ag.dat.2 ] && {
-        cp -v --no-preserve=timestamps ../convert/b2ag.dat.2 ../baserun/b2ag.dat
+        cp -uv --no-preserve=timestamps ../convert/b2ag.dat.2 ../baserun/b2ag.dat
     } || {
-        [ -s ../convert/b2ag.dat ] && cp -v --no-preserve=timestamps ../convert/b2ag.dat ../baserun
+        [ -s ../convert/b2ag.dat ] && cp -uv --no-preserve=timestamps ../convert/b2ag.dat ../baserun
     }
-    [ -s ../convert/b2fgmtry ] && cp -v --no-preserve=timestamps ../convert/b2fgmtry ../baserun
-    [ -s ../convert/"$filestem"30 ] && cp -v --no-preserve=timestamps ../convert/"$filestem"30 .
+    [ -s ../convert/b2fgmtry ] && cp -uv --no-preserve=timestamps ../convert/b2fgmtry ../baserun
+    [ -s ../convert/"$filestem"30 ] && cp -uv --no-preserve=timestamps ../convert/"$filestem"30 .
     [ -s ../convert/"$filestem"33 ] && cp -uv ../convert/"$filestem"33 .
     [ -s ../convert/"$filestem"34 ] && cp -uv ../convert/"$filestem"34 .
     [ -s ../convert/"$filestem"35 ] && cp -uv ../convert/"$filestem"35 .
   }
   [ -s ../baserun/b2fgmtry ] || {
      [ -s ../convert/b2ag.dat.2 ] || {
-       [ -s ../convert/b2ag.dat ] && cp -v --no-preserve=timestamps ../convert/b2ag.dat ../baserun
-       [ -s ../convert/b2fgmtry ] && cp -v --no-preserve=timestamps ../convert/b2fgmtry ../baserun
-       [ -s ../convert/"$filestem"30 ] && cp -v --no-preserve=timestamps ../convert/"$filestem"30 .
+       [ -s ../convert/b2ag.dat ] && cp -uv --no-preserve=timestamps ../convert/b2ag.dat ../baserun
+       [ -s ../convert/b2fgmtry ] && cp -uv --no-preserve=timestamps ../convert/b2fgmtry ../baserun
+       [ -s ../convert/"$filestem"30 ] && cp -uv --no-preserve=timestamps ../convert/"$filestem"30 .
        [ -s ../convert/"$filestem"33 ] && cp -uv ../convert/"$filestem"33 .
        [ -s ../convert/"$filestem"34 ] && cp -uv ../convert/"$filestem"34 .
        [ -s ../convert/"$filestem"35 ] && cp -uv ../convert/"$filestem"35 .
@@ -41,25 +41,24 @@ rundir="`pwd`"
   [ -s ../convert/b2ag.dat.2 ] && rm b2ag.dat
   [ -s ../convert/b2fgmtry.2 ] && rm b2fgmtry
   [ -s ../convert/input.dat.2 ] && {
-    cp -v ../convert/input.dat.2 ../baserun/input.dat
+    cp -uv ../convert/input.dat.2 ../baserun/input.dat
   } || {
     [ -s ../convert/input.dat ] && cp -uv ../convert/input.dat ../baserun
   }
-  [ -s ../baserun/"$filestem"30 ] || cp -v --no-preserve=timestamps ../convert/"$filestem"30 ../baserun
+  [ -s ../baserun/"$filestem"30 ] || cp -uv --no-preserve=timestamps ../convert/"$filestem"30 ../baserun
   [ -s ../baserun/"$filestem"33 ] || cp -uv ../convert/"$filestem"33 ../baserun
   [ -s ../baserun/"$filestem"34 ] || cp -uv ../convert/"$filestem"34 ../baserun
   [ -s ../baserun/"$filestem"35 ] || cp -uv ../convert/"$filestem"35 ../baserun
-  [ -s ../convert/b2ah.dat.2 ] && cp -v --no-preserve=timestamps ../convert/b2ah.dat.2 ../baserun/b2ah.dat
-  [ -s ../convert/b2fpardf ] && cp -v --no-preserve=timestamps ../convert/b2fpardf .
+  sleep 1
+  [ -s ../convert/b2ah.dat.2 ] && cp -uv --no-preserve=timestamps ../convert/b2ah.dat.2 ../baserun/b2ah.dat
+  [ -s ../convert/b2fpardf ] && cp -uv --no-preserve=timestamps ../convert/b2fpardf ../baserun
   [ -s ../convert/b2ah.dat.2 ] && rm b2ah.dat
-  [ -s ../convert/b2ai.dat.2 ] && cp -v --no-preserve=timestamps ../convert/b2ai.dat.2 ../baserun/b2ai.dat
+  sleep 1
+  [ -s ../convert/b2ai.dat.2 ] && cp -uv --no-preserve=timestamps ../convert/b2ai.dat.2 ../baserun/b2ai.dat
   [ -s ../convert/b2ai.dat.2 ] && rm b2ai.dat
-  [ -s ../convert/b2ar.dat.2 ] && {
-    cp -v --no-preserve=timestamps ../convert/b2ar.dat.2 ../baserun/b2ar.dat
-  } || {
-    [ -s ../convert/b2ar.dat ] && cp -v --no-preserve=timestamps ../convert/b2ar.dat ../baserun
-  }
-  [ -s ../convert/b2frates ] && cp -v --no-preserve=timestamps ../convert/b2frates ../baserun
+  sleep 1
+  [ -s ../convert/b2ar.dat.2 ] && cp -uv --no-preserve=timestamps ../convert/b2ar.dat.2 ../baserun/b2ar.dat
+  [ -s ../convert/b2frates ] && cp -uv --no-preserve=timestamps ../convert/b2frates ../baserun
   [ -s ../convert/b2ar.dat.2 ] && rm b2ar.dat
   [ -s ../convert/b2.*.parameters ] && cp -uv ../convert/b2.*.parameters .
   [ -s ../convert/b2.transport.inputfile ] && cp -uv ../convert/b2.transport.inputfile .

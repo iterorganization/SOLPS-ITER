@@ -79,18 +79,22 @@ correct_b2yt_timestamps
 rm -f b2yt.prt b2yt.files *.2
 b2run b2yt
 cd ..
-cp convert/b2a?.dat baserun
-cp convert/b2y?.dat baserun
-[ -s convert/b2fgmtry.2 ] && cp convert/b2fgmtry.2 baserun/b2fgmtry || cp convert/b2fgmtry baserun
-cp convert/b2ag.prt baserun
-cp convert/b2fpardf convert/b2ah.prt baserun
-cp convert/fort.30 baserun
+cp --no-preserve=timestamps convert/b2a?.dat baserun
+cp --no-preserve=timestamps convert/b2y?.dat baserun
+[ -s convert/b2fgmtry.2 ] && cp --no-preserve=timestamps convert/b2fgmtry.2 baserun/b2fgmtry || cp --no-preserve=timestamps convert/b2fgmtry baserun
+cp --no-preserve=timestamps convert/fort.30 baserun
+cp --no-preserve=timestamps convert/b2ag.prt baserun
+sleep 1
+cp --no-preserve=timestamps convert/b2fpardf convert/b2ah.prt baserun
+sleep 1
 cd baserun
-cp ../convert/b2ai.prt .
-cp ../convert/b2fstatt b2fstati
+cp --no-preserve=timestamps ../convert/b2ai.prt .
+cp --no-preserve=timestamps ../convert/b2fstatt b2fstati
+sleep 1
 ln -sf $SOLPSTOP/modules/B2.5/Database/stra.dat .
 ln -sf $SOLPSTOP/modules/B2.5/Database/weis.dat .
-cp ../convert/b2frates ../convert/b2ar.prt .
+cp --no-preserve=timestamps ../convert/b2frates ../convert/b2ar.prt .
+sleep 1
 cp ../convert/input.dat.2 input.dat
 cp ../convert/fort.3[3-5] .
 cp ../convert/param.dg .

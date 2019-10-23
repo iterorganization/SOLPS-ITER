@@ -2122,7 +2122,7 @@ c
      .   '''eirene_fixmap'''//tab//tab//tab//'''1'''
         write(98,'(a,i1,a)')
      .   '''eirene_ank_mods'''//tab//tab//'''',ank_mods,''''
-        write(98,'(a,i3,a)')
+        write(98,hlp_frm)
      .   '''eirene_ionising_core'''//tab//tab//'''',ionising_core,''''
         if (nstepout_4.ge.1) then
           write(hlp_frm, '(a,i1,a)')
