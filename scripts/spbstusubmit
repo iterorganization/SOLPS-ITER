@@ -7,6 +7,7 @@ set PROCS=28
 set THREADS=1
 set hours=336
 set mem=4GB
+set NODES=2
 echo Your email is $EMAIL
 
 set compress=""
@@ -43,9 +44,20 @@ Available options are:
   -t <<THREADS>>     use OpenMP parallelization with <<THREADS>> threads (default $THREADS)
   -T <<HOURS>>       number of elapsed hours requested (default $hours)
   -M <<MEM_SIZE>>    memory size (default $mem)
+  -N <<NODES>>       request for given number of nodes
 
 EOF
     exit
+  endif
+  if ("X${1}X" == "X-NX") then
+    shift
+    set NODES="$1"
+    echo Request for ${NODES} nodes
+    shift
+#    set HELP_STRING=\"${JOB_NAME}\"
+#    echo $HELP_STRING
+    set LOOP_OPTS="-N ${NODES} ${LOOP_OPTS}" 
+    goto argloop
   endif
   if ("X${1}X" == "X-jX") then
     shift
@@ -183,6 +195,7 @@ sed \
   -e 's:#THREADS#:'$THREADS':g' \
   -e 's:#MEM#:'$mem':g' \
   -e 's:#HOURS#:'$hours':g' \
+  -e 's:#NODES#:'$NODES':g' \
   -e 's:#JOBNAME#:'$JOB_NAME':g' \
   -e 's:#USER#:'$USER':g' \
   -e 's:#LOOPOPTS#:'"$LOOP_OPTS"':g' \
