@@ -48,6 +48,7 @@ LD_MPI     = -L${MPDIR}/lib64 -lmpi -lmpigf
 SOLPS_CPP      = -DNCAR4 -DGFORTRAN -DNO_F01AAF -DNAG22 -DITM
 B25_DEFINES    =
 EIRENE_DEFINES =
+FFLAGSEXTRA    =
 MPI_CPP        =
 
 # Autodetected optional features...

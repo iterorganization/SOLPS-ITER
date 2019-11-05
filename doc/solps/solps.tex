@@ -680,6 +680,7 @@ The {\tt setup.csh} file and its subsidiaries \${\tt \{SOLPSTOP\}/SETUP/setup.cs
 \item {\tt DEVICE}\index{DEVICE} the name of the fusion device most likely to be simulated for this {\tt HOST\_NAME} (see \ref{cha:divgeo} for available choices)
 \item {\tt EIRENE\_DEFINES}\index{EIRENE\_DEFINES}, an environment variable containing the additional
   "defines" to use during compilation of {\tt Eirene}
+\item {\tt FFLAGSEXTRA}\index{FFLAGSEXTRA}, for providing system-wide Fortran compilation flags
 \item {\tt GKS\_ROOT}\index{GKS\_ROOT}, the root of the {\tt GKS} tree, and
   {\tt LD\_GKS}, the appropriate loader instruction to load the {\tt GKS} library
 \item {\tt GLI\_HOME}\index{GLI\_HOME}, the location of the {\tt gksfont.dat} file (this definition must appear in both the {\tt setup.csh.*.*} and {\tt config.*.*} files as it used both during compilation and at runtime
@@ -7177,9 +7178,9 @@ The version of the equations shown in this Appendix represents the best availabl
 
 Some equations include terms which are multiplied by zero. This is meant to indicate that such terms are not included in the standard \SOLPSITER physics model, but that switches exist that allow for their inclusion.
 
-\section{Sign conventions}\index{sign conventions}\label{sec:signs}
+\section{Sign conventions}\index{sign conventions}\label{sec:signs}\index{COCOS}
 
-The radial coordinate $y$ increases as one crosses the separatrix from the core (or private flux) region into the main SOL region (and so is minimum at the magnetic axis). The poloidal coordinate $x$ increases in the {\em clockwise} direction when viewing the poloidal plane with the central axis line on its left. The toroidal magnetic field component $b_z$ is taken as positive if the toroidal magnetic field is directed {\em clockwise} when viewing the tokamak from above. The poloidal magnetic field component $b_x$ follows the same convention as the $x$ component and is positive when directed in the direction of increasing poloidal index, i.e. {\em clockwise}.
+The radial coordinate $y$ increases as one crosses the separatrix from the core (or private flux) region into the main SOL region (and so is minimum at the magnetic axis). The poloidal coordinate $x$ increases in the {\em clockwise} direction when viewing the poloidal plane with the central axis line on its left. The toroidal magnetic field component $b_z$ is taken as positive if the toroidal magnetic field is directed {\em clockwise} when viewing the tokamak from above. The poloidal magnetic field component $b_x$ follows the same convention as the $x$ component and is positive when directed in the direction of increasing poloidal index, i.e. {\em clockwise}. This corresponds, following the conventions laid out in \cite{COCOS}, to a {\em COCOS} index of {\bf 6}.
 
 Is it important to know, that, in the equations below, the parallel velocity $V_\parallel$ is a true parallel velocity, i.e. it changes sign if the poloidal magnetic field component does, namely: $V_\parallel = \vec{V} \cdot \vec{B} / \left| B \right|$. This applies to all species, including electrons, meaning $V_{\parallel a}$ and $V_{\parallel e}$. However, the poloidal projections of the fluxes and currents, such as $\Gamma_{ax}$, are positive when they are colinear with $\vec{e}_x$, i.e. point in the direction of increasing $x$. The exception to this is the parallel current, $j_\parallel$. In the equations below, it has the same sign convention as the parallel velocity. In the actual code, because it is treated as a flux, it follows the sign convention of the fluxes. This therefore means that the code does not follow $j_\parallel$, but rather $j_\parallel \cdot |b_x|/b_x$.
 
@@ -17572,11 +17573,13 @@ they need only contain the modified definitions.
 \subsection{SOLPS-ITER}
 \index{DEFINES, used throughout SOLPS-ITER}
 
-We list here the possible compiler options that can be used when compiling the
-various components of the \SOLPSITER code suite. The options below must therefore,
-if desired, be declared as part of the \${\tt SOLPS\_CPP} environment variable,
-which is defined in the
+We list here the possible optional pre-processor definitions that can be used when
+compiling the various components of the \SOLPSITER code suite.
+The optional variables below must therefore, if desired, be declared as part of the
+\${\tt SOLPS\_CPP} environment variable, which is defined in the
 \${\tt SOLPSTOP/SETUP/config.}\${\tt {HOST\_NAME}.}\${\tt {COMPILER}(.local)} files.
+Additionally, system-wide compiler flags can be provided by means of the
+\${\tt {FFLAGSEXTRA}} environment variable in the same files.
 
 \begin{description}
 \item[CATALYST] \index{CATALYST} Turns on the Paraview Catalyst utility (see the SOLPS-GUI manual for full details)
@@ -17741,7 +17744,7 @@ if desired, be declared as part of either the \${\tt SOLPS\_CPP} or the
 \index{SOLPS\_CPP}\index{B25\_DEFINES}
 If you want to activate any of these options, you should add
 {\tt -DOPTION} (where {\tt OPTION} might, for example, be
-{\tt CLASSICAL\_CURRENT}) to either the {\tt SOLPS\_CPP}
+{\tt PERFMON}) to either the {\tt SOLPS\_CPP}
 or the {\tt B25\_DEFINES} environment variable with
 \begin{verbatim}
   setenv B25_DEFINES '-DOPTION'
@@ -18199,7 +18202,7 @@ if desired, be declared as part of either the \${\tt SOLPS\_CPP} or the
 \index{SOLPS\_CPP}\index{EIRENE\_DEFINES}
 If you want to activate any of these options, you should add
 {\tt -DOPTION} (where {\tt OPTION} might, for example, be
-{\tt CLASSICAL\_CURRENT}) to either the {\tt SOLPS\_CPP}
+{\tt TRACE}) to either the {\tt SOLPS\_CPP}
 or the {\tt EIRENE\_DEFINES} environment variable with
 \begin{verbatim}
   setenv EIRENE_DEFINES '-DOPTION'

@@ -49,6 +49,7 @@ LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lXext `pkg
 SOLPS_CPP      = -DNAGFOR -DNCAR4 -DNAG22 -DNO_F01AAF
 B25_DEFINES    =
 EIRENE_DEFINES =
+FFLAGSEXTRA    =
 
 # Autodetected optional features...
 
