@@ -58,6 +58,8 @@
 \TIMEDEP::TOP.IMP:DS "S-S_sep (inner midplane)"
 \TIMEDEP::TOP.IMP:KE
 \TIMEDEP::TOP.IMP:KI "ion thermal diffusivity, inboard midplane"
+\TIMEDEP::TOP.IMP:LH "Conductive flux limit factor for neutrals, inner midplane"
+\TIMEDEP::TOP.IMP:LN "Convective flux limit factor for neutrals, inner midplane"
 \TIMEDEP::TOP.IMP:MN "molecule density, inboard midplane"
 \TIMEDEP::TOP.IMP:NE "electron density, inboard midplane"
 \TIMEDEP::TOP.IMP:PO "potential, inboard midplane"
@@ -66,6 +68,9 @@
 \TIMEDEP::TOP.IMP:VS "viscosity coefficient, inboard midplane'"
 \TIMEDEP::TOP.IMP:VX "poloidal pinch velocity, inboard midplane'"
 \TIMEDEP::TOP.IMP:VY "radial pinch velocity, inboard midplane"
+
+\TIMEDEP::TOP.INPUT
+\TIMEDEP::TOP.INPUT:DS "S-S_sep (input profile location)"
 
 
 \TIMEDEP::TOP.KE "electron thermal diffusivity"
@@ -97,6 +102,8 @@
 \TIMEDEP::TOP.OMP:DS "S-S_sep (outer midplane)"
 \TIMEDEP::TOP.OMP:KE
 \TIMEDEP::TOP.OMP:KI "ion thermal diffusivity, outboard midplane"
+\TIMEDEP::TOP.OMP:LH "Conductive flux limit factor for neutrals, outer midplane"
+\TIMEDEP::TOP.OMP:LN "Convective flux limit factor for neutrals, outer midplane"
 \TIMEDEP::TOP.OMP:MN "molecule density, outboard midplane"
 \TIMEDEP::TOP.OMP:NE "electron density, outboard midplane"
 \TIMEDEP::TOP.OMP:PO "potential, outboard midplane"
@@ -135,6 +142,7 @@
 \TIMEDEP::TOP.TARGET1:PO "potential, inboard diverto"
 \TIMEDEP::TOP.TARGET1:TE "electron temperature, inboard divertor"
 \TIMEDEP::TOP.TARGET1:TI "ion temperature, inboard divertor"
+\TIMEDEP::TOP.TARGET1:TP "Target surface temperature, inboard divertor"
 
 \TIMEDEP::TOP.TARGET2
 \TIMEDEP::TOP.TARGET2:AN
@@ -152,6 +160,7 @@
 \TIMEDEP::TOP.TARGET2:PO
 \TIMEDEP::TOP.TARGET2:TE
 \TIMEDEP::TOP.TARGET2:TI
+\TIMEDEP::TOP.TARGET2:TP "Target surface temperature"
 
 \TIMEDEP::TOP.TARGET3
 \TIMEDEP::TOP.TARGET3:AN
@@ -169,6 +178,7 @@
 \TIMEDEP::TOP.TARGET3:PO
 \TIMEDEP::TOP.TARGET3:TE
 \TIMEDEP::TOP.TARGET3:TI
+\TIMEDEP::TOP.TARGET3:TP "Target surface temperature"
 
 \TIMEDEP::TOP.TARGET4
 \TIMEDEP::TOP.TARGET4:AN "atom density, outboard divertor"
@@ -186,6 +196,7 @@
 \TIMEDEP::TOP.TARGET4:PO "potential, outboard divertor"
 \TIMEDEP::TOP.TARGET4:TE "electron temperature, outboard divertor"
 \TIMEDEP::TOP.TARGET4:TI "ion temperature, outboard divertor"
+\TIMEDEP::TOP.TARGET4:TP "Target surface temperature, outboard divertor"
 
 \TIMEDEP::TOP.TE
 \TIMEDEP::TOP.TE:IMPSEP
@@ -212,6 +223,16 @@
 \TIMEDEP::TOP.TI:TARG3SEP
 \TIMEDEP::TOP.TI:TARG4MAX "maximum ion temperature, outboard divertor "
 \TIMEDEP::TOP.TI:TARG4SEP "separatrix ion temperature, outboard divertor"
+
+\TIMEDEP::TOP.TP
+\TIMEDEP::TOP.TP:TARG1MAX "Maximum surface temperature along target, inboard divertor"
+\TIMEDEP::TOP.TP:TARG1SEP "Target surface temperature at strike point, inboard divertor"
+\TIMEDEP::TOP.TP:TARG2MAX "Maximum surface temperature along target"
+\TIMEDEP::TOP.TP:TARG2SEP "Target surface temperature at strike point"
+\TIMEDEP::TOP.TP:TARG3MAX "Maximum surface temperature along target"
+\TIMEDEP::TOP.TP:TARG3SEP "Target surface temperature at strike point"
+\TIMEDEP::TOP.TP:TARG4MAX "Maximum surface temperature along target, outboard divertor"
+\TIMEDEP::TOP.TP:TARG4SEP "Target surface temperature at strike point, outboard divertor"
 
 
 \TIMEDEP::TOP.VS "viscosity coefficient"
