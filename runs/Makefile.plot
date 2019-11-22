@@ -137,10 +137,10 @@ endif
 ifneq (${COMPILER},HP)
 ifeq (${NCAR_VERSION},3)
 	rm -f $(target_pl) gmeta
-	cd b2pl.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ${TIME} ${B2OBJ}/b2pl.exe ${RUN_OPTIONS} ; mv -f gmeta .. ; rm -f $(target_pl) $(notdir $^) .quit param.dg >& /dev/null
+	cd b2pl.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ${TIME} ${B2OBJ}/b2pl.exe ${RUN_OPTIONS} ; ( [ -e gmeta ] && mv -f gmeta .. ) ; rm -f $(target_pl) $(notdir $^) .quit param.dg >& /dev/null
 else
 	rm -f $(target_pl) b2plot.ps
-	cd b2pl.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ${TIME} ${B2OBJ}/b2pl.exe ${RUN_OPTIONS} ; mv -f b2plot.ps .. ; rm -f $(target_pl) $(notdir $^) .quit param.dg >& /dev/null
+	cd b2pl.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ${TIME} ${B2OBJ}/b2pl.exe ${RUN_OPTIONS} ; ( [ -e b2plot.ps ] && mv -f b2plot.ps .. ) ; rm -f $(target_pl) $(notdir $^) .quit param.dg >& /dev/null
 endif
 ifndef STAND_ALONE
 	-rm b2pl.exe.dir/fort.44 b2pl.exe.dir/fort.46 b2pl.exe.dir/input.dat b2pl.exe.dir/fort.85
@@ -149,10 +149,10 @@ endif
 else
 ifeq (${NCAR_VERSION},3)
 	rm -f $(target_pl) gmeta
-	cd b2pl.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../ftn21 ../ftn22 ../graphite_ext.dat ../mo_ext.dat . ; ${TIME} ${B2OBJ}/b2pl.exe ${RUN_OPTIONS} ; mv -f gmeta .. ; rm -f $(target_pl) $(notdir $^) .quit param.dg >& /dev/null
+	cd b2pl.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../ftn21 ../ftn22 ../graphite_ext.dat ../mo_ext.dat . ; ${TIME} ${B2OBJ}/b2pl.exe ${RUN_OPTIONS} ; ( [ -e gmeta ] && mv -f gmeta .. ) ; rm -f $(target_pl) $(notdir $^) .quit param.dg >& /dev/null
 else
 	rm -f $(target_pl) b2plot.ps
-	cd b2pl.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../ftn21 ../ftn22 ../graphite_ext.dat ../mo_ext.dat . ; ${TIME} ${B2OBJ}/b2pl.exe ${RUN_OPTIONS} ; mv -f b2plot.ps .. ; rm -f $(target_pl) $(notdir $^) .quit param.dg >& /dev/null
+	cd b2pl.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../ftn21 ../ftn22 ../graphite_ext.dat ../mo_ext.dat . ; ${TIME} ${B2OBJ}/b2pl.exe ${RUN_OPTIONS} ; ( [ -e b2plot.ps ] && mv -f b2plot.ps .. ) ; rm -f $(target_pl) $(notdir $^) .quit param.dg >& /dev/null
 endif
 ifndef STAND_ALONE
 	-rm b2pl.exe.dir/ftn44 b2pl.exe.dir/ftn46 b2pl.exe.dir/input.dat b2pl.exe.dir/ftn85
@@ -183,10 +183,10 @@ endif
 ifneq (${COMPILER},HP)
 ifeq (${NCAR_VERSION},3)
 	rm -f $(target_pl) gmeta
-	cd b2pl.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ${DBX} ${INC} ${DBGOBJ}/b2pl.exe ${RUN_OPTIONS} ; mv -f gmeta .. ; rm -f $(target_pl) $(notdir $^) .quit param.dg >& /dev/null
+	cd b2pl.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ${DBX} ${INC} ${DBGOBJ}/b2pl.exe ${RUN_OPTIONS} ; ( [ -e gmeta ] && mv -f gmeta .. ) ; rm -f $(target_pl) $(notdir $^) .quit param.dg >& /dev/null
 else
 	rm -f $(target_pl) b2plot.ps
-	cd b2pl.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ${DBX} ${INC} ${DBGOBJ}/b2pl.exe ${RUN_OPTIONS} ; mv -f b2plot.ps .. ; rm -f $(target_pl) $(notdir $^) .quit param.dg >& /dev/null
+	cd b2pl.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../fort.21 ../fort.22 ../graphite_ext.dat ../mo_ext.dat . ; ${DBX} ${INC} ${DBGOBJ}/b2pl.exe ${RUN_OPTIONS} ; ( [ -e b2plot.ps ] && mv -f b2plot.ps .. ) ; rm -f $(target_pl) $(notdir $^) .quit param.dg >& /dev/null
 endif
 ifndef STAND_ALONE
 	-rm b2pl.exe.dir/fort.44 b2pl.exe.dir/fort.46 b2pl.exe.dir/input.dat b2pl.exe.dir/fort.85
@@ -195,10 +195,10 @@ endif
 else
 ifeq (${NCAR_VERSION},3)
 	rm -f $(target_pl) gmeta
-	cd b2pl.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../ftn21 ../ftn22 ../graphite_ext.dat ../mo_ext.dat . ; ${DBX} ${INC} ${DBGOBJ}/b2pl.exe ${RUN_OPTIONS} ; mv -f gmeta .. ; rm -f $(target_pl) $(notdir $^) .quit param.dg >& /dev/null
+	cd b2pl.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../ftn21 ../ftn22 ../graphite_ext.dat ../mo_ext.dat . ; ${DBX} ${INC} ${DBGOBJ}/b2pl.exe ${RUN_OPTIONS} ; ( [ -e gmeta ] && mv -f gmeta .. ) ; rm -f $(target_pl) $(notdir $^) .quit param.dg >& /dev/null
 else
 	rm -f $(target_pl) b2plot.ps
-	cd b2pl.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../ftn21 ../ftn22 ../graphite_ext.dat ../mo_ext.dat . ; ${DBX} ${INC} ${DBGOBJ}/b2pl.exe ${RUN_OPTIONS} ; mv -f b2plot.ps .. ; rm -f $(target_pl) $(notdir $^) .quit param.dg >& /dev/null
+	cd b2pl.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../ftn21 ../ftn22 ../graphite_ext.dat ../mo_ext.dat . ; ${DBX} ${INC} ${DBGOBJ}/b2pl.exe ${RUN_OPTIONS} ; ( [ -e b2plot.ps ] && mv -f b2plot.ps .. ) ; rm -f $(target_pl) $(notdir $^) .quit param.dg >& /dev/null
 endif
 ifndef STAND_ALONE
 	-rm b2pl.exe.dir/ftn44 b2pl.exe.dir/ftn46 b2pl.exe.dir/input.dat b2pl.exe.dir/ftn85

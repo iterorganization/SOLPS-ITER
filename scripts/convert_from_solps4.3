@@ -7,6 +7,7 @@
 } || {
   echo "DEVICE = " $DEVICE
 }
+imasdb ${DEVICE}
 export DEVICEDIR=$DEVICE
 [ "$SOLPS_CENTRAL" = 'yes' ] && DEVICEDIR=$DEVICE/$USER
 echo "Converting shot number " $1
@@ -32,7 +33,7 @@ mkdir -p convert
 mkdir -p baserun
 cd convert
 cp /shared/projects/solps/archive/extra/arch_2/B2E/b2arch/$DEVICE/$1/* .
-cp b2.parameters b2.parameters.src
+cat b2.parameters | grep -vi 'l_targflux=t' > b2.parameters.src
 mv b2.parameters.out b2.parameters.out.4.3
 cp fort.31 fort.31.4.3
 cp input.eir input.dat
@@ -40,13 +41,27 @@ setup_baserun_eirene_links
 rm -f b2sxdr.prt
 $SOLPSTOP/scripts/b2sxdr > b2sx.log
 h_mass="`egrep -i 'MI {0,}=' b2.parameters | tail -1 | awk '{printf $2; printf '\n'}' | sed 's:,: :' `"
+he_shot="`egrep 'F57-[0-9]0MW-He' $SOLPSWORK/$DEVICE/$1/convert/VarID | wc -l`"
 typeset -i shotnumber
+typeset -i oldshotnumber
 shotnumber=`echo $1`
 [ "$DEVICE" = 'iter' ] && shotnumber=shotnumber+100000
-[ $h_mass = 2 ] && shotnumber=shotnumber+20000
-[ $h_mass = 3 ] && shotnumber=shotnumber+30000
-[ $h_mass = 4 ] && shotnumber=shotnumber+10000
+[ $he_shot = 1 ] && {
+  shotnumber=shotnumber+10000
+  oldshotnumber=`echo $1`
+  [ "$DEVICE" = 'iter' ] && oldshotnumber=oldshotnumber+100000
+  [ $h_mass = 2 ] && oldshotnumber=oldshotnumber+20000
+  [ $h_mass = 3 ] && oldshotnumber=oldshotnumber+30000
+}
+[ $he_shot = 0 ] && {
+  oldshotnumber=0
+  [ $h_mass = 2 ] && shotnumber=shotnumber+20000
+  [ $h_mass = 3 ] && shotnumber=shotnumber+30000
+  [ $h_mass = 4 ] && shotnumber=shotnumber+10000
+}
 echo "IDS shot number will be: " $shotnumber
+oldyaml=ids_${oldshotnumber}0001.yaml
+[ -e ${MDSPLUS_TREE_BASE_0}/${oldyaml} ] && echo "We are replacing IDS shot " $oldshotnumber
 echo "'b2mndr_run_number'  '1'" >> b2mn.dat.4
 echo "'b2mndr_user'        '${USER}'" >> b2mn.dat.4
 echo "'b2mndr_device'      '${DEVICE}'" >> b2mn.dat.4
@@ -64,18 +79,22 @@ correct_b2yt_timestamps
 rm -f b2yt.prt b2yt.files *.2
 b2run b2yt
 cd ..
-cp convert/b2a?.dat baserun
-cp convert/b2y?.dat baserun
-[ -s convert/b2fgmtry.2 ] && cp convert/b2fgmtry.2 baserun/b2fgmtry || cp convert/b2fgmtry baserun
-cp convert/b2ag.prt baserun
-cp convert/b2fpardf convert/b2ah.prt baserun
-cp convert/fort.30 baserun
+cp --no-preserve=timestamps convert/b2a?.dat baserun
+cp --no-preserve=timestamps convert/b2y?.dat baserun
+[ -s convert/b2fgmtry.2 ] && cp --no-preserve=timestamps convert/b2fgmtry.2 baserun/b2fgmtry || cp --no-preserve=timestamps convert/b2fgmtry baserun
+cp --no-preserve=timestamps convert/fort.30 baserun
+cp --no-preserve=timestamps convert/b2ag.prt baserun
+sleep 1
+cp --no-preserve=timestamps convert/b2fpardf convert/b2ah.prt baserun
+sleep 1
 cd baserun
-cp ../convert/b2ai.prt .
-cp ../convert/b2fstatt b2fstati
+cp --no-preserve=timestamps ../convert/b2ai.prt .
+cp --no-preserve=timestamps ../convert/b2fstatt b2fstati
+sleep 1
 ln -sf $SOLPSTOP/modules/B2.5/Database/stra.dat .
 ln -sf $SOLPSTOP/modules/B2.5/Database/weis.dat .
-cp ../convert/b2frates ../convert/b2ar.prt .
+cp --no-preserve=timestamps ../convert/b2frates ../convert/b2ar.prt .
+sleep 1
 cp ../convert/input.dat.2 input.dat
 cp ../convert/fort.3[3-5] .
 cp ../convert/param.dg .
@@ -91,16 +110,22 @@ cp ../convert/b2fplasma .
 touch b2fstati
 echo 'Case conversion finished!'
 cd ..
-mkdir -p run_ids
-cd run_ids
+mkdir -p run_ids_4.3
+cd run_ids_4.3
 import_files_from_convert
+rm b2mn.dat b2.boundary.parameters
+cp ../convert/b2mn.dat.4 b2mn.dat
+cp ../convert/b2.boundary.parameters.4 b2.boundary.parameters
+cp ../convert/b2.transport.parameters.4 b2.transport.parameters
+cat ../baserun/b2ar.dat $SOLPSTOP/runs/examples/b2ar.dat.4.3 > b2ar.dat
+cat $SOLPSTOP/runs/examples/b2mn.dat.4.3 >> b2mn.dat
 echo "'b2mndr_ntim'     '1'" >> b2mn.dat
 echo "'b2news_no_solve' '1'" >> b2mn.dat
 echo "'ids_from_43'     '1'" >> b2mn.dat
 echo "'balance_netcdf'  '1'" >> b2mn.dat
 touch b2fstati
+b2run b2ar
 b2run b2mn > run.log
-imasdb ${DEVICE}
 b2run b2_ual_write > b2_ual_write.log
 create_db_entry -u ${USER} -t ${DEVICE} -s ${shotnumber} -r 1
 yaml=ids_${shotnumber}0001.yaml
@@ -119,11 +144,21 @@ head -n ${responsible_line} $yaml.2 > $yaml.3
 echo "    "`get_git_name` >> $yaml.3
 tail_lines=yaml_lines-(responsible_line+1)
 tail -n $tail_lines $yaml.2 >> $yaml.3
-sed -e 's|workflow: tbd|workflow: SOLPS|' < $yaml.3 > $yaml.4
-mv $yaml.4 ${MDSPLUS_TREE_BASE_0}/$yaml
+[ -e ${MDSPLUS_TREE_BASE_0}/${oldyaml} ] && {
+  sed -e 's|workflow: tbd|workflow: SOLPS|' -e 's|type: tbd|type: predictive|' -e "s|replaces:|replaces: (${oldshotnumber},1) - Corrected IDS number for He fuelling|" < $yaml.3 > $yaml.4
+} || {
+  sed -e 's|workflow: tbd|workflow: SOLPS|' -e 's|type: tbd|type: predictive|' < $yaml.3 > $yaml.4
+}
+typeset -i status_line
+status_line=`grep -n "status:" ${yaml}.4 | cut -d ':' -f 1`
+head -n ${status_line} $yaml.4 > $yaml.5
+echo "    active" >> $yaml.5
+tail_lines=yaml_lines-(status_line+1)
+tail -n $tail_lines $yaml.4 >> $yaml.5
+mv $yaml.5 ${MDSPLUS_TREE_BASE_0}/$yaml
 watcher=ids_${shotnumber}0001.watcher
 mv $watcher ${MDSPLUS_TREE_BASE_0}/
-rm $yaml $yaml.2 $yaml.3
+rm $yaml $yaml.2 $yaml.3 $yaml.4
 echo "IDS for case ${shotnumber} written!"
 cd ..
 

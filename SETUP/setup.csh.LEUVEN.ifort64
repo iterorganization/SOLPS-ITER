@@ -3,22 +3,22 @@
 # Note: need to do command below, but from bash!
 # source switch_to_2015a
 
-module load git/2.13.4-intel-2015a
+module load git/2.16.1-intel-2018a
 
 # Modules needed by SOLPS-ITER
-module load intel/2015a
-module load makedepend/1.0.5-intel-2015a
+module load intel/2018a
+module load makedepend/1.0.5-GCCcore-6.4.0
 # module load mscl/1.0.0-intel-12.0.2
-module load netCDF/4.3.2-intel-2015a
-module load netCDF-Fortran/4.4.0-intel-2015a
+module load netCDF/4.6.0-intel-2018a
+module load netCDF-Fortran/4.4.4-intel-2018a
 # module load gr/0.0.94
 # module load gks/4.4.74
-module load NCL/6.1.2-intel-2015a
+module load NCL/6.5.0-intel-2018a
 # module load nag/15
 # module load LAPACK/3.5.0-intel-2014a
 # module load HDF5/1.8.12-intel-2014a-serial
 # module load flex
-module load Doxygen/1.8.7-intel-2015a
+module load Doxygen/1.8.14-GCCcore-6.4.0
 # module load texlive
 # module load ghostscript
 # module load libxml2 ! already included in IMAS module
@@ -26,16 +26,17 @@ module load Doxygen/1.8.7-intel-2015a
 # module load cairo
 # module load mdsplus
 # module load make
-module load Python/2.7.9-intel-2015a
+module load Python/3.6.4-intel-2018a
+module load matplotlib/2.1.2-intel-2018a-Python-2.7.14
 # module load totalview
 # module load libX11/1.6.3-intel-2015a-Python-2.7.9
 # module load libXt/1.1.4-intel-2015a-libX11-1.6.3
-module load motif/2.3.4-intel-2015a-libX11-1.6.3
-module load libXp/1.0.3-intel-2015a
+module load motif/2.3.8-intel-2018a
+# module load libXp/1.0.3-intel-2015a
 # mpi-library from intel/2015a is used
-
+module load Pango/1.41.1-intel-2018a
 # Debugger (set environment variable DBX)
-module load allinea-forge/6.0
+module load ArmForge/18.1.2
 setenv DBX ddt
 
 # Other environment variables

@@ -54,6 +54,7 @@ LD_MPI         = -lmpi2
 LD_MSCL        = `pkg-config mscl --libs` -lgfortran
 B25_DEFINES    = -DNO_21
 EIRENE_DEFINES =
+FFLAGSEXTRA    =
 
 # Autodetected optional features...
 

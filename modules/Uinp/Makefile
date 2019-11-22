@@ -99,17 +99,17 @@ DEST = $(OBJS:%.o=$(OBJDIR)/%.o)
 
 $(OBJDIR)/%.o : %.F
 	${CPP} -P $(INCLUDE) ${SOLPS_CPP} ${USE_DEBUG} $< ${OBJDIR}/$*.f
-	$(COMPILE) ${INCLUDE} -o ${OBJDIR}/$*.o ${OBJDIR}/$*.f
+	$(COMPILE) ${INCLUDE} ${FFLAGSEXTRA} -o ${OBJDIR}/$*.o ${OBJDIR}/$*.f
 
 all: VERSION ${OBJDIR}/${PROG} ${OBJDIR}/ub2p
 
 .PHONY: clean depend listobj tags echo VERSION force
 
 ${OBJDIR}/${PROG}: ${OBJDIR}/uinput.o ${OBJDIR}/uiblkd.o ${OBJDIR}/uiblb2.o ${OBJDIR}/libui.a ${MNEXTRA} ${OBJDIR}/b2mod_layer.o ${OBJDIR}/b2mod_openmp.o ${OBJDIR}/b2mod_elements.o ${OBJDIR}/b2mod_constants.o ${OBJDIR}/b2mod_types.o ${OBJDIR}/libeirene.a ${OBJDIR}/ioflush.o ${OBJDIR}/libgr_dummy.a ${MAKES}
-	${FC} $(FFLAGS) -o ${OBJDIR}/${PROG} ${OBJDIR}/uinput.o ${OBJDIR}/uiblkd.o ${OBJDIR}/uiblb2.o ${OBJDIR}/libui.a ${OBJDIR}/libeirene.a ${OBJDIR}/ioflush.o ${OBJDIR}/libgr_dummy.a ${MNEXTRA} ${LDLIBS} $(LDEXTRA)
+	${FC} $(FFLAGS) ${FFLAGSEXTRA} -o ${OBJDIR}/${PROG} ${OBJDIR}/uinput.o ${OBJDIR}/uiblkd.o ${OBJDIR}/uiblb2.o ${OBJDIR}/libui.a ${OBJDIR}/libeirene.a ${OBJDIR}/ioflush.o ${OBJDIR}/libgr_dummy.a ${MNEXTRA} ${LDLIBS} $(LDEXTRA)
 
 ${OBJDIR}/ub2p: ${OBJDIR}/ub2p.o ${OBJDIR}/libui.a ${MAKES} ${MNEXTRA}
-	${FC} $(FFLAGS) -o ${OBJDIR}/ub2p ${OBJDIR}/ub2p.o ${OBJDIR}/libui.a ${MNEXTRA} ${LDLIBS} $(LDEXTRA)
+	${FC} $(FFLAGS) ${FFLAGSEXTRA} -o ${OBJDIR}/ub2p ${OBJDIR}/ub2p.o ${OBJDIR}/libui.a ${MNEXTRA} ${LDLIBS} $(LDEXTRA)
 
 ${OBJDIR}/libui.a: ${DEST} ${SRCDIR}/git_version_Uinp.h
 	@ar rucv $@ ${DEST}

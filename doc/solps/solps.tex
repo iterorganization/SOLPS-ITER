@@ -680,6 +680,7 @@ The {\tt setup.csh} file and its subsidiaries \${\tt \{SOLPSTOP\}/SETUP/setup.cs
 \item {\tt DEVICE}\index{DEVICE} the name of the fusion device most likely to be simulated for this {\tt HOST\_NAME} (see \ref{cha:divgeo} for available choices)
 \item {\tt EIRENE\_DEFINES}\index{EIRENE\_DEFINES}, an environment variable containing the additional
   "defines" to use during compilation of {\tt Eirene}
+\item {\tt FFLAGSEXTRA}\index{FFLAGSEXTRA}, for providing system-wide Fortran compilation flags
 \item {\tt GKS\_ROOT}\index{GKS\_ROOT}, the root of the {\tt GKS} tree, and
   {\tt LD\_GKS}, the appropriate loader instruction to load the {\tt GKS} library
 \item {\tt GLI\_HOME}\index{GLI\_HOME}, the location of the {\tt gksfont.dat} file (this definition must appear in both the {\tt setup.csh.*.*} and {\tt config.*.*} files as it used both during compilation and at runtime
@@ -1673,7 +1674,7 @@ extracted from the {\tt run.log} file.
   \item[switch\_to\_master]\index{switch\_to\_master} Script to switch to the up-to-date \SOLPSITER master branch.
   \item[triang]\index{triang} Main script used to prepare run input files after the {\tt DivGeo} case has been defined and the {\tt Carre} grid has been built.
   \item[triang.conf]\index{triang.conf} Script containing utility functions used by the {\tt triang} script.
-  \item[transfer\_solps-iter\_runs]\index{transfer\_solps-iter\_runs} Script for transferrring a \SOLPSITER case. If a run directory from machine {\tt X} is to be transferred to machine {\tt Y} then the script is to be run from machine {\tt X} and just one level up from the directory which is to be transferred. The script will trace back and update the soft links in the run directory according to the remote environment. Running the script requires knowing the IP address of the remote machine and have a username and password to log on to it. This script makes use of the {\tt sshpass} utility.
+  \item[transfer\_solps-iter\_runs]\index{transfer\_solps-iter\_runs} Script for transferring a \SOLPSITER case. If a run directory from machine {\tt X} is to be transferred to machine {\tt Y} then the script is to be run from machine {\tt X} and just one level up from the directory which is to be transferred. The script will trace back and update the soft links in the run directory according to the remote environment. Running the script requires knowing the IP address of the remote machine and have a username and password to log on to it. This script makes use of the {\tt sshpass} utility.
   \item[truncate\_tracing\_files]\index{truncate\_tracing\_files}\index{b2co} Script used by the crash recovery program {\tt b2co} to truncate the optional tracing files so that they stay synchronized with the recovered plasma state.
   \item[ustcsubmit]\index{ustcsubmit} Command file to launch runs on the USTC computer cluster. See Section \ref{b2run} for details.
   \item[v2d]\index{v2d} Converts {\tt Carre} format equilibrium files to {\tt DG} format (see Sec.~\ref{sec:equtrn}).
@@ -2711,7 +2712,7 @@ which contains
 \item[GAMMAI]\index{GAMMAI} {\tt real}, ratio of specific heats (adiabatic coefficient)
 \item[GAMMAE]\index{GAMMAE} {\tt real}, secondary electron emission coefficient
 \item[LBNDUSR]\index{LBNDUSR} {\tt logical}, if true will also
-  call Bas' boundary condition routine after the end of the physics
+  call Braams boundary condition routine after the end of the physics
   boundary condition routine
 \item[LFEEDBACK]\index{LFEEDBACK} {\tt logical}, if true enables various
   feedback mechanisms (needed for any feedback mechanisms)
@@ -4184,7 +4185,7 @@ The format of this input block for coupling to \SOLPSITER is as follows:
 
 {\it ***14. Data for interfacing routine "infusr"}
 \begin{verbatim}
-LSYMET  LBALAN  LCOARSE
+LSYMET  LBALAN  LCOARSE NLTRIMESH
 NFLA    NCUTB   NCUTL   IMF   NTRFRM   NFULL   IBRAD   IBPOL   IBTOR
 \end{verbatim}
 {\it read NPLSI species lines}
@@ -4226,6 +4227,7 @@ We only include here the variables or aspects thereof not already described in t
 
 \begin{description}
   \item[LCOARSE] Coarse mesh switch ???
+  \item[NLTRIMESH] When {\tt .TRUE.}, {\tt Eirene} is only run to obtain the contours necessary to build the triangular grid, which are then written in {\tt fort.78}. This is used as by the {\tt triang} script toolchain. No particle trajectories are followed.
   \item[NCUTB] For \SOLPSITER couplings, should be 0
   \item[NCUTL] For \SOLPSITER couplings, should be 1
   \item[IMF] {\tt fort.30} format switch, should be 0
@@ -7180,9 +7182,9 @@ The version of the equations shown in this Appendix represents the best availabl
 
 Some equations include terms which are multiplied by zero. This is meant to indicate that such terms are not included in the standard \SOLPSITER physics model, but that switches exist that allow for their inclusion.
 
-\section{Sign conventions}\index{sign conventions}\label{sec:signs}
+\section{Sign conventions}\index{sign conventions}\label{sec:signs}\index{COCOS}
 
-The radial coordinate $y$ increases as one crosses the separatrix from the core (or private flux) region into the main SOL region (and so is minimum at the magnetic axis). The poloidal coordinate $x$ increases in the {\em clockwise} direction when viewing the poloidal plane with the central axis line on its left. The toroidal magnetic field component $b_z$ is taken as positive if the toroidal magnetic field is directed {\em clockwise} when viewing the tokamak from above. The poloidal magnetic field component $b_x$ follows the same convention as the $x$ component and is positive when directed in the direction of increasing poloidal index, i.e. {\em clockwise}.
+The radial coordinate $y$ increases as one crosses the separatrix from the core (or private flux) region into the main SOL region (and so is minimum at the magnetic axis). The poloidal coordinate $x$ increases in the {\em clockwise} direction when viewing the poloidal plane with the central axis line on its left. The toroidal magnetic field component $b_z$ is taken as positive if the toroidal magnetic field is directed {\em clockwise} when viewing the tokamak from above. The poloidal magnetic field component $b_x$ follows the same convention as the $x$ component and is positive when directed in the direction of increasing poloidal index, i.e. {\em clockwise}. This corresponds, following the conventions laid out in \cite{COCOS}, to a {\em COCOS} index of {\bf 6}.
 
 Is it important to know, that, in the equations below, the parallel velocity $V_\parallel$ is a true parallel velocity, i.e. it changes sign if the poloidal magnetic field component does, namely: $V_\parallel = \vec{V} \cdot \vec{B} / \left| B \right|$. This applies to all species, including electrons, meaning $V_{\parallel a}$ and $V_{\parallel e}$. However, the poloidal projections of the fluxes and currents, such as $\Gamma_{ax}$, are positive when they are colinear with $\vec{e}_x$, i.e. point in the direction of increasing $x$. The exception to this is the parallel current, $j_\parallel$. In the equations below, it has the same sign convention as the parallel velocity. In the actual code, because it is treated as a flux, it follows the sign convention of the fluxes. This therefore means that the code does not follow $j_\parallel$, but rather $j_\parallel \cdot |b_x|/b_x$.
 
@@ -14023,9 +14025,9 @@ when calculating derived data.
     pefm     & \index{b2plot, pefm} Poloidal molecular energy flux $(W.m^{-2})$ \\
     pfla     & \index{b2plot, pfla} Poloidal atomic flux $(s^{-1}.m^{-2})$ \\
     pflm     & \index{b2plot, pflm} Poloidal molecular flux $(s^{-1}.m^{-2})$ \\
-    phi      & \index{b2plot, phi} Plasma potential $(V)$ (\SOLPSfour runs) \\
+    phi      & \index{b2plot, phi} Plasma potential $\varphi (V)$ (\SOLPSfour runs) \\
     pit, pitch      & \index{b2plot, pit} Pitch \index{b2plot, pitch} \\
-    po       & \index{b2plot, po} Electric potential $(V)$ \\
+    po       & \index{b2plot, po} Electric potential $\varphi (V)$ \\
     po0      & \index{b2plot, po0} Electric potential {\em po} at previous time step $(V)$ \\
     pot      & \index{b2plot, pot} Potential energy (cumulative) $(eV)$ \\
     pot*     & \index{b2plot, pot*} Ionization energy [shifted down one] $(eV)$ \\
@@ -16295,6 +16297,21 @@ the command
 \end{verbatim}
 would give an extra graph label containing "D-$\alpha$ (photons m$^{-3}$ s$^{-1}$)".
 
+To switch font properties inside the string, use a double backslash followed by one of the letters:
+\begin{description}
+  \item[R] Switch to Roman characters
+  \item[G] Switch to Greek characters
+  \item[d] Switch to default characters
+  \item[g] Switch to Greek font
+  \item[r] Switch to Roman font
+  \item[n] Switch to normal level
+  \item[h] Resize font 130\%
+  \item[t] Resize font 70\%
+  \item[m] Switch to math font
+\end{description}
+
+Exponents can be requested with a string such as '\^~\{{\tt exp}\}', subscripts with '\_\{{\tt sub}\}', environment variables with '\$\{{\tt var}\}', or the result of shell commands with '`{\tt cmd}`'.
+
 \subsubsection{stdl}\index{b2plot, stdl}\label{sec:stdl}
 Sets standard label as {\em extralabel}:
 \begin{verbatim}
@@ -17560,11 +17577,13 @@ they need only contain the modified definitions.
 \subsection{SOLPS-ITER}
 \index{DEFINES, used throughout SOLPS-ITER}
 
-We list here the possible compiler options that can be used when compiling the
-various components of the \SOLPSITER code suite. The options below must therefore,
-if desired, be declared as part of the \${\tt SOLPS\_CPP} environment variable,
-which is defined in the
+We list here the possible optional pre-processor definitions that can be used when
+compiling the various components of the \SOLPSITER code suite.
+The optional variables below must therefore, if desired, be declared as part of the
+\${\tt SOLPS\_CPP} environment variable, which is defined in the
 \${\tt SOLPSTOP/SETUP/config.}\${\tt {HOST\_NAME}.}\${\tt {COMPILER}(.local)} files.
+Additionally, system-wide compiler flags can be provided by means of the
+\${\tt {FFLAGSEXTRA}} environment variable in the same files.
 
 \begin{description}
 \item[CATALYST] \index{CATALYST} Turns on the Paraview Catalyst utility (see the SOLPS-GUI manual for full details)
@@ -17729,7 +17748,7 @@ if desired, be declared as part of either the \${\tt SOLPS\_CPP} or the
 \index{SOLPS\_CPP}\index{B25\_DEFINES}
 If you want to activate any of these options, you should add
 {\tt -DOPTION} (where {\tt OPTION} might, for example, be
-{\tt CLASSICAL\_CURRENT}) to either the {\tt SOLPS\_CPP}
+{\tt PERFMON}) to either the {\tt SOLPS\_CPP}
 or the {\tt B25\_DEFINES} environment variable with
 \begin{verbatim}
   setenv B25_DEFINES '-DOPTION'
@@ -18187,7 +18206,7 @@ if desired, be declared as part of either the \${\tt SOLPS\_CPP} or the
 \index{SOLPS\_CPP}\index{EIRENE\_DEFINES}
 If you want to activate any of these options, you should add
 {\tt -DOPTION} (where {\tt OPTION} might, for example, be
-{\tt CLASSICAL\_CURRENT}) to either the {\tt SOLPS\_CPP}
+{\tt TRACE}) to either the {\tt SOLPS\_CPP}
 or the {\tt EIRENE\_DEFINES} environment variable with
 \begin{verbatim}
   setenv EIRENE_DEFINES '-DOPTION'

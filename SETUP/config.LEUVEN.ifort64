@@ -61,10 +61,11 @@ LD_MPI     =
 # Preprocessor options
 #
 
-SOLPS_CPP      =   -DNO_NAG -DNETCDF4_3 -DNCAR4
-#SOLPS_CPP      =  -DNO_NAG
+SOLPS_CPP      = -DNO_NAG -DNETCDF4_3 -DNCAR4
+#SOLPS_CPP     = -DNO_NAG
 B25_DEFINES    =
 EIRENE_DEFINES =
+FFLAGSEXTRA    =
 MPI_CPP        = 
 
 # Autodetected optional features...

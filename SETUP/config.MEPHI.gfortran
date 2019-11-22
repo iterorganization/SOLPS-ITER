@@ -50,6 +50,7 @@ LD_MPI     = -L${MPDIR} -lmpi
 SOLPS_CPP      = -DNCAR4 -DNO_NAG -DGFORTRAN
 B25_DEFINES    =
 EIRENE_DEFINES =
+FFLAGSEXTRA    =
 MPI_CPP        = -I${MPDIR}/include
 
 # Autodetected optional features...

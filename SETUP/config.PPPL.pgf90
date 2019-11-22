@@ -47,6 +47,7 @@ LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 SOLPS_CPP      = -DNCAR4 -DNO_F01AAF -DPGF90 -DNOQUAD
 B25_DEFINES    =
 EIRENE_DEFINES =
+FFLAGSEXTRA    =
 
 # Autodetected optional features...
 

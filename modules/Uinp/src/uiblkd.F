@@ -840,12 +840,12 @@ c*** 11
      /    .false.,.false.,.false.,.false.,.false.,.false.,.false. /,
      ,     trclst, trcbla, trcblm, trcbli, trcblp, trcble,trcblph /
      /    .false.,.false.,.false.,.false.,.false.,.false.,.false. /,
-     ,     trctal, trcoct, trccen, trcrnf /
-     /    .false.,.false.,.false.,.false. /,
+     ,     trctal, trcoct, trccen, trcrnf,trchktim /
+     /    .false.,.false.,.false.,.false.,.false. /,
      ,     trcdbg2,trcdbge,trcdbgm,trcdbgf,trcdbgl /
      /    .false.,.false.,.false.,.false.,.false. /,
-     ,     trcdbgs,trcdbgg,trcdbgmpi,trcdbgc,trchktim /
-     /    .false. ,.false.,.false.  ,.false.,.false. /,
+     ,     trcdbgs,trcdbgg,trcdbgmpi,trcdbgc /
+     /    .false. ,.false.,.false.  ,.false. /,
      ,           trcsrc        /
      /    .true.,nstra*.false. /,
      ,     pl1st , pl2nd , pl3rd , pladd , plhst /

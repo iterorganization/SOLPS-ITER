@@ -45,12 +45,12 @@ DEST = $(OBJS:%.o=$(OBJDIR)/%.o)
 
 $(OBJDIR)/%.o : %.F
 	${CPP} -P $(INCLUDE) $< ${OBJDIR}/$*.f
-	$(COMPILE) -o ${OBJDIR}/$*.o ${OBJDIR}/$*.f
+	$(COMPILE) ${FFLAGSEXTRA} -o ${OBJDIR}/$*.o ${OBJDIR}/$*.f
 
 all: dirs ${OBJDIR}/fxdr
 
 ${OBJDIR}/fxdr: $(DEST) $(MAKES)
-	${FC} $(FFLAGS) -o ${OBJDIR}/fxdr $(DEST) ${LDLIBS} $(LDEXTRA)
+	${FC} $(FFLAGS) ${FFLAGSEXTRA} -o ${OBJDIR}/fxdr $(DEST) ${LDLIBS} $(LDEXTRA)
 
 clean:
 	rm -rf ${OBJDIR}/*.o ${OBJDIR}/*.f ${OBJDIR}/fxdr
