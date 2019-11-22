@@ -1080,7 +1080,7 @@ c*** appear first
      ,                  'should be grouped for ',
      ,                  rctntyp(irc), ' type'
                       write(0,*)
-     ,                 'Error occured when treating reaction ',irc
+     ,                 'Error occurred when treating reaction ',irc
                       call xerrab ('==> Check the AMDS model')
                     end if !}
                   else if(streql(rctntyp(irc),'EI') .or.
@@ -1129,7 +1129,7 @@ c*** appear first
      ,                  ' H.10 or H.8 for a ',
      ,                  rctntyp(irc), ' reaction'
                       write(0,*)
-     ,                 'Error occured when treating reaction ',irc
+     ,                 'Error occurred when treating reaction ',irc
                       call xerrab ('==> Check the AMDS model')
                     end if !}
                   else !}{
@@ -1140,7 +1140,7 @@ c*** appear first
                     write(0,*) '  H.0 and H.1 with H.3 for ',
      ,                'CX, II, or EL reaction'
                     write(0,*)
-     ,               'Error occured when treating reaction ',irc
+     ,               'Error occurred when treating reaction ',irc
                     call xerrab ('==> Check the AMDS model')
                   end if !} #6
                 end if !} #5 (k1)
@@ -1219,7 +1219,7 @@ c*** appear first
      ,                  'should be grouped for ',
      ,                  rctntyp(irc), ' type'
                       write(0,*)
-     ,                 'Error occured when treating reaction ', irc
+     ,                 'Error occurred when treating reaction ', irc
                       call xerrab ('==> Check the AMDS model')
                     end if !}
                   else if(streql(rctntyp(irc),'EI') .or.
@@ -1256,7 +1256,7 @@ c*** appear first
      ,                  'or H.2 should be grouped with H.10 for a ',
      ,                  rctntyp(irc), ' reaction'
                       write(0,*)
-     ,                 'Error occured when treating reaction ', irc
+     ,                 'Error occurred when treating reaction ', irc
                       call xerrab ('==> Check the AMDS model')
                     end if !}
                   else !}{
@@ -1268,7 +1268,7 @@ c*** appear first
      ,                'CX, II, or EL reaction, or'
                     write(0,*) '  H.1 with H.2 for II reaction'
                     write(0,*)
-     ,               'Error occured when treating reaction ', irc
+     ,               'Error occurred when treating reaction ', irc
                     call xerrab ('==> Check the AMDS model')
                   end if !} #6
                 end if !} #5 (k3)
