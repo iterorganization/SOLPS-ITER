@@ -76,10 +76,7 @@ EOF
     set PROCS=`echo $MPIOPTS | awk.transpose | grep -A 1 "\-np" | tail -n 1`
     echo Asking for MPI run with $PROCS processors
     shift
-    set HELP_STRING=\"${MPIOPTS}\"
-#    echo $HELP_STRING
-    set LOOP_OPTS="-m ${HELP_STRING} ${LOOP_OPTS}" 
-   goto argloop
+    goto argloop
   endif
   if ("X${1}X" == "X-TX") then
     shift
@@ -100,9 +97,6 @@ EOF
     set part="$1"
     echo Requested partition is ${part}
     shift
-    set HELP_STRING="${part}"
-#    echo $HELP_STRING
-    set LOOP_OPTS="-Q ${HELP_STRING} ${LOOP_OPTS}"
     goto argloop
   endif
 
