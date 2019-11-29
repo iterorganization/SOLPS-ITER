@@ -45,14 +45,24 @@ gmtry.isymm = read_ifield(fid,'isymm',1);
 
 gmtry.crx  = read_rfield(fid,'crx' ,[nx+2,ny+2,4]);
 gmtry.cry  = read_rfield(fid,'cry' ,[nx+2,ny+2,4]);
-gmtry.fpsi = read_rfield(fid,'fpsi',[nx+2,ny+2,4]);
+if str2num(strrep(version,'.','')) >= str2num(strrep('03.002.000','.',''))
+    gmtry.fpsi = read_rfield(fid,'fpsi',[nx+2,ny+2,4,3]);
+else
+    gmtry.fpsi = read_rfield(fid,'fpsi',[nx+2,ny+2,4]);
+end
+
 gmtry.ffbz = read_rfield(fid,'ffbz',[nx+2,ny+2,4]);
 gmtry.bb   = read_rfield(fid,'bb'  ,[nx+2,ny+2,4]);
 gmtry.vol  = read_rfield(fid,'vol' ,[nx+2,ny+2]);
 gmtry.hx   = read_rfield(fid,'hx'  ,[nx+2,ny+2]);
 gmtry.hy   = read_rfield(fid,'hy'  ,[nx+2,ny+2]);
 gmtry.qz   = read_rfield(fid,'qz'  ,[nx+2,ny+2,2]);
-gmtry.qc   = read_rfield(fid,'qc'  ,qcdim);
+if str2num(strrep(version,'.','')) >= str2num(strrep('03.001.000','.',''))
+    gmtry.qc   = read_rfield(fid,'qc'  ,[nx+2,ny+2,2]);
+    gmtry.qs   = read_rfield(fid,'qs'  ,[nx+2,ny+2,2]);
+else
+    gmtry.qc   = read_rfield(fid,'qc'  ,[nx+2,ny+2]);
+end
 gmtry.gs   = read_rfield(fid,'gs'  ,[nx+2,ny+2,3]);
 
 
@@ -86,6 +96,23 @@ gmtry.resignore   = read_ifield(fid,'resignore'  ,[nx+2,ny+2,2]);
 gmtry.periodic_bc = read_ifield(fid,'periodic_bc',1);
 
 gmtry.pbs  = read_rfield(fid,'pbs' ,[nx+2,ny+2,2]);
+
+if str2num(strrep(version,'.','')) >= str2num(strrep('03.002.000','.',''))
+    gmtry.cflags = read_ifield(fid,'cflags' ,[nx+2,ny+2,5]);
+    gmtry.hc     = read_rfield(fid,'hc'     ,[nx+2,ny+2,4]);
+    gmtry.ht     = read_rfield(fid,'ht'     ,[nx+2,ny+2,2]);
+    gmtry.qac    = read_rfield(fid,'qac'    ,[nx+2,ny+2,2]);
+    gmtry.qas    = read_rfield(fid,'qas'    ,[nx+2,ny+2,2]);
+    gmtry.ebc    = read_rfield(fid,'ebc'    ,[nx+2,ny+2,3]);
+    
+    % Removing potentially huge values
+    disp('read_b2fgmtry -- extended grid; removing INVALID_DOUBLE values.');
+    huge = 1e99;
+    gmtry.vol(gmtry.vol > huge) = 0;
+    gmtry.hx (gmtry.hx  > huge) = 0;
+    gmtry.hy (gmtry.hy  > huge) = 0;
+    
+end
 
 gmtry.parg = read_rfield(fid,'parg',100);
 
