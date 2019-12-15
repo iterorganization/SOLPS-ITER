@@ -823,7 +823,7 @@ c*** 9.  data for statistics and nonanalog model
       write(iunoo,703) wminv,wmins,wminc
       write(iunoo,703) splpar
       write(iunoo,700) utxthd(23)
-      write(iunoo,707) nsigvi,nsigsi,nsigci,nsigi_bgk,nsigi_cop
+      write(iunoo,707) nsigvi,nsigsi,nsigci,nsigi_bgk,nsigi_spc
       do j=1,nsigvi !{
           write(iunoo,707) igh(j),iih(j)
       end do !}
