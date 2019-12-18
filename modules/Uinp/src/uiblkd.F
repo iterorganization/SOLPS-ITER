@@ -673,7 +673,8 @@ c*** 5
       data textp / npls*' ' /
       data cdnmdlp_sel/
      /   'FORT.13', 'FTN13', 'FORT.10', 'FTN10',
-     /   'CONSTANT','MULTIPLY','SAHA','BOLTZMANN','CORONA','COLRAD'/
+     /   'CONSTANT','PLANCK','MULTIPLY','SAHA','BOLTZMANN','CORONA',
+     /   'COLRAD'/
       data cdnmdlp / npls*' ' /
       data nrep, ispcdn, itpcdn, istrcdn /
      /    npls*0, lurc*0, lurc*4, lurc*0 /

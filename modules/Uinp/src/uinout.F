@@ -625,26 +625,28 @@ c**  bulk ions species cards
             write(iunoo,703) valcdn(ipls,1),
      ,                       valcdn(ipls,2),valcdn(ipls,3),
      ,                       valcdn(ipls,4),valcdn(ipls,5)
-          else if(streql(cdnmdlp(ipls),cdnmdlp_sel(6))) then !}{ 'MULTIPLY'
+          else if(streql(cdnmdlp(ipls),cdnmdlp_sel(6))) then !}{ 'PLANCK'
+            write(iunoo,703) valcdn(ipls,1)
+          else if(streql(cdnmdlp(ipls),cdnmdlp_sel(7))) then !}{ 'MULTIPLY'
             write(iunoo,'(3i6,6x,1p,3e12.4)') ispcdn(ipls,1),
      ,                        itpcdn(ipls,1),istrcdn(ipls,1),
      ,                        valcdn(ipls,2),valcdn(ipls,1),
      ,                        valcdn(ipls,3)
-          else if(streql(cdnmdlp(ipls),cdnmdlp_sel(7))) then !}{ 'SAHA'
+          else if(streql(cdnmdlp(ipls),cdnmdlp_sel(8))) then !}{ 'SAHA'
 c** To be done (in Eirene first)
-            write(0,*) '### Density model ',cdnmdlp_sel(7),
+            write(0,*) '### Density model ',cdnmdlp_sel(8),
      ,        ' not realised in Eirene. ipls=',ipls
-          else if(streql(cdnmdlp(ipls),cdnmdlp_sel(8))) then !}{ 'BOLTZMANN'
+          else if(streql(cdnmdlp(ipls),cdnmdlp_sel(9))) then !}{ 'BOLTZMANN'
             write(iunoo,'(3i6,6x,1p,2e12.4)') ispcdn(ipls,1),
      ,                        itpcdn(ipls,1),istrcdn(ipls,1),
      ,                        bltzcdn(ipls),dltecdn(ipls)
-          else if(streql(cdnmdlp(ipls),cdnmdlp_sel(9))) then !}{ 'CORONA'
+          else if(streql(cdnmdlp(ipls),cdnmdlp_sel(10))) then !}{ 'CORONA'
             write(iunoo,'(3i6,1x,a6,1x,a4,a9,a3,1p,e12.4)') 
      ,                     ispcdn(ipls,1),
      ,                     itpcdn(ipls,1),istrcdn(ipls,1),
      ,                     fnamcdn(ipls,1),h2cdn(ipls,1),
      ,                     reaccdn(ipls,1),crcdn(ipls,1),acrncdn(ipls)
-          else if(streql(cdnmdlp(ipls),cdnmdlp_sel(10))) then !}{ 'COLRAD'
+          else if(streql(cdnmdlp(ipls),cdnmdlp_sel(11))) then !}{ 'COLRAD'
             do i=1,nrep(npls) !{
               write(iunoo,'(3i6,1x,a6,1x,a4,a9,a3)') 
      ,                     ispcdn(ipls,i),
