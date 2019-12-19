@@ -5,7 +5,7 @@ set EMAIL=`get_git_email`
 set JOB_NAME="SOLPS-ITER"
 set PROCS=1
 set hours=48
-set mem=4GB
+set mem=8GB
 echo Your email is $EMAIL
 
 set compress=""
@@ -76,6 +76,7 @@ EOF
       source $SOLPSTOP/SETUP/mpi
       set MPI_SET=yes
     endif
+    set I_MPI_SHM_LMT=shm
     set MPIOPTS="$1"
     echo Using MPI options: $MPIOPTS
     set PROCS=`echo $MPIOPTS | awk.transpose | grep -A 1 "\-np" | tail -n 1`
