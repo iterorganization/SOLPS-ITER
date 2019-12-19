@@ -4,20 +4,10 @@ setenv NCARG_ROOT /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/NCARG
 setenv PATH ${PATH}:${NCARG_ROOT}/bin
 setenv SOLPSWORK /pfs/work/$USER/solps-iter/runs
 
-module load imasenv/3.24.0/ual/4.1.5/1.0
-setenv EBVERSIONGGD 1.8.5
-
-# The script above overwrites $PATH, so modules must be loaded afterwards!!!
-# load modules
-#setenv MODULEPATH /afs/ipp/common/usr/modules.2014/@sys/modulefiles/mpi:$MODULEPATH
-#module unload impi
-#module load impi/5.1.3
-#module load solps-gui
-#module load nag_flib/intel/mk24
-#module load intel
+module load imasenv/3.25.0/ual/4.2.0/1.0
+setenv EBVERSIONGGD 1.9.1
 module load texlive
 
-#module load imas
 echo "imasdb solps-iter"
 imasdb solps-iter
 
