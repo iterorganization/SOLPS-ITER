@@ -5,6 +5,7 @@ setenv SOLPSWORK /pfs/work/$USER/solps-iter/runs
 setenv FC gfortran
 
 # Load modules
+module unload imasenv
 module load imasenv/3.25.0/gcc/7.3.0
 setenv EBVERSIONGGD 1.9.1
 module load itm-nag
