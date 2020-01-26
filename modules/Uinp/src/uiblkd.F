@@ -769,8 +769,8 @@ c*** 9
      /       0   ,nlimps*0,   0  ,   0  ,   0  ,   0  ,   0   /,
      ,     nssplr,nssplp,nssplt,nsspla, nsigvi, nsigsi, nsigci /
      /     n1st*0,n2nd*0,n3rd*0,nlim*0,    0  ,    0  ,   0    /,
-     ,     nsigi_bgk,nsigi_cop, llpbls /
-     /         0    ,    0    ,.false. /,
+     ,     nsigi_spc, llpbls /
+     /         0    ,.false. /,
      ,       igh ,  iih  ,  ighw ,  iihw ,    ighc     ,    iihc     /
      /      nsd*1, nsd*1 , nsdw*1, nsdw*1, ncv*1,ncv*1 , ncv*1,ncv*1 /
       data prmrspl,prmpspl,prmtspl,prmaspl,wminv,wmins,wminc,splpar  /

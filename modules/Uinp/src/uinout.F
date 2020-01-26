@@ -36,7 +36,7 @@ c=======================================================================
      7        '** 6a. General data for reflection model' ,
      8        '** 7. Data for primary sources, nstrai strata' ,
      9        '** 8. Additional data for specific zones' ,
-     o        '** 9. Data for statistic and nonanalog model' ,
+     o        '** 9. Data for statistic and non-analog model' ,
      1        '** 10. Data for additional tallies' ,
      2        '* 10a. Volume tallies - tracklength estimator' ,
      3        '* 10b. Volume tallies - collisional estimator' ,
@@ -795,7 +795,7 @@ c*** "ch3-", "t-", "d-", "v-", "vl-", and "m-cards" here!
 
       end do !}
 
-c*** 9.  data for statistics and nonanalog model
+c*** 9.  data for statistics and non-analog model
 
       write(iunoo,700) utxthd(10)
       write(iunoo,706) (nlprca(j),j=1,natm),(nlprcm(j),j=1,nmol),
@@ -823,7 +823,7 @@ c*** 9.  data for statistics and nonanalog model
       write(iunoo,703) wminv,wmins,wminc
       write(iunoo,703) splpar
       write(iunoo,700) utxthd(23)
-      write(iunoo,707) nsigvi,nsigsi,nsigci,nsigi_bgk,nsigi_cop
+      write(iunoo,707) nsigvi,nsigsi,nsigci,nsigi_spc
       do j=1,nsigvi !{
           write(iunoo,707) igh(j),iih(j)
       end do !}

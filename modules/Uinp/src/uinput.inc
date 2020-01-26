@@ -228,7 +228,7 @@ c*** 9
 
       integer nprcsf,iprcsf(nlimps),maxlev,maxrad,maxpol,maxtor,maxadd,
      ,  nssplr(n1st),nssplp(n2nd),nssplt(n3rd),nsspla(nlim),
-     ,  nsigvi,nsigsi,nsigci,nsigi_bgk,nsigi_cop,
+     ,  nsigvi,nsigsi,nsigci,nsigi_spc,
      ,  igh(nsd),iih(nsd),ighw(nsdw),iihw(nsdw),ighc(2,ncv),iihc(2,ncv)
       real prmrspl(n1st),prmpspl(n2nd),prmtspl(n3rd),prmaspl(nlim),
      ,  wminv,wmins,wminc,splpar
@@ -426,7 +426,7 @@ c*** b2ah.dat
      ,  indim,insor,ingrda,ingrde,nrsor,npsor,ntsor,nbsor,nasor,nisor,
      ,  istor,nzadd,ini,ine,
      ,  nprcsf,iprcsf,maxlev,maxrad,maxpol,maxtor,maxadd,nssplr,nssplp,
-     ,  nssplt,nsspla,nsigvi,nsigsi,nsigci,nsigi_bgk,nsigi_cop,igh,iih,
+     ,  nssplt,nsspla,nsigvi,nsigsi,nsigci,nsigi_spc,igh,iih,
      ,  ighw,iihw,ighc,iihc,nadvi,nclvi,nalvi,nadsi,nalsi,nadspc,
      ,  iadve,iadvs,iadvt,iadrc,iclve,iclvs,iclvt,iclrc,iadse,
      ,  iadss,iadst,iadsc,

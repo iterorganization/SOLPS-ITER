@@ -14,11 +14,15 @@ endif
 ifdef USE_MPI
 EXT_MPI = .mpi
 endif
+ifdef USE_OPENMP
+EXT_OPENMP = .openmp
+endif
 ifdef USE_IMPGYRO
 EXT_IMPGYRO = .ig
 endif
 ifdef SOLPS_DEBUG
 EXT_DEBUG = .debug
+DEFINES  += -DDBG
 endif
 
 SRCTRI   = ${PWD}
@@ -46,21 +50,6 @@ endif
 ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local ] && echo yes || echo no ),yes)
   include ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
   MAKES += ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
-endif
-
-# Extensions for object directories when various options are used
-ifdef USE_MPI
-EXT_MPI = .mpi
-endif
-ifdef USE_OPENMP
-EXT_OPENMP = .openmp
-endif
-ifdef USE_IMPGYRO
-EXT_IMPGYRO = .ig
-endif
-ifdef SOLPS_DEBUG
-EXT_DEBUG = .debug
-DEFINES  += -DDBG
 endif
 
 # Directory where objectcode/binaries will be created
