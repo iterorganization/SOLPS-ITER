@@ -219,13 +219,6 @@ alias unset_ig='. $SOLPSTOP/SETUP/noig'
    source SETUP/setup.ksh.local
 }
 
-# Add links to the IMAS solps-iter database
-
-[ -n "$IMAS_VERSION" ] && {
-  source scripts/imasdb_solps-iter
-  module list
-}
-
 # List loaded modules
 
-[ -e module ] && module list
+module list
