@@ -221,15 +221,6 @@ if (-s SETUP/setup.csh.local) then
   source SETUP/setup.csh.local
 endif
 
-# Add links to the IMAS solps-iter database
-
-if ($?IMAS_VERSION) then
-  source scripts/imasdb_solps-iter
-  module list
-endif
-
 # List loaded modules
 
-if (-e module) then
-  module list
-endif
+module list

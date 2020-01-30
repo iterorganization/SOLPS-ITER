@@ -20,8 +20,6 @@ module load intelmpi/2018--binary
 #module load texlive
 
 #module load imas
-#echo "imasdb solps-iter"
-#imasdb solps-iter
 
 if (! $?DEVICE) then
   if ($?TOKAMAKNAME) then

@@ -16,10 +16,6 @@ module load itm-netcdf
 # load modules
 # module load solps-gui
 module load texlive
-
-echo "imasdb solps-iter"
-imasdb solps-iter
-
 module load paraview
 
 # Set environment variables

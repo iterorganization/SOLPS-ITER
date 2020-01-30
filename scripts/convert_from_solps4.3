@@ -7,7 +7,6 @@
 } || {
   echo "DEVICE = " $DEVICE
 }
-imasdb ${DEVICE}
 export DEVICEDIR=$DEVICE
 [ "$SOLPS_CENTRAL" = 'yes' ] && DEVICEDIR=$DEVICE/$USER
 echo "Converting shot number " $1

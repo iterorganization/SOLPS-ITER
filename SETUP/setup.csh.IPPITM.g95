@@ -16,7 +16,6 @@ module load fftw-mpi
 setenv DBX totalview
 
 #module load imas
-#imasdb solps-iter
 
 module load itm-paraview
 
