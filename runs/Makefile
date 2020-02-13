@@ -683,7 +683,7 @@ else
 	[ -s ../input.dat ] && cp -p ../input.dat . || echo > /dev/null
 endif
 	cd b2us.exe.dir ; ${TIME} ${B2OBJ}/b2us.exe ${RUN_OPTIONS} ; mv $(target_us) .. ; rm -f $(notdir $^) >& /dev/null
-	-rmdir b2us.exe.dir ;
+	-rmdir b2us.exe.dir
 
 stra.dat :
 	ln -s ${SOLPSTOP}/modules/B2.5/Database/stra.dat .

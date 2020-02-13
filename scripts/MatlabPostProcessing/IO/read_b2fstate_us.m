@@ -31,41 +31,20 @@ state.version = version;
 
 %% Read dimensions nx, ny, ns
 
+dim = read_ifield(fid,'nx,ny,ns',3);
+nx  = dim(1);
+ny  = dim(2);
+ns  = dim(3);
 
-if str2num(strrep(version,'.','')) >= str2num(strrep('03.002.000','.',''))
-    
-    dim = read_ifield(fid,'nCv,nFc,ns',3);
-    nCv  = dim(1);
-    nFc  = dim(2);
-    ns   = dim(3);
-    
-    statedim  = [nCv,1];
-    statedims = [nCv,ns];
-    
-    fluxdim   = [nFc,2];
-    fluxdimp  = [nFc,2];
-    fluxdims  = [nFc,2,ns];
-    
-else
-    
-    dim = read_ifield(fid,'nx,ny,ns',3);
-    nx  = dim(1);
-    ny  = dim(2);
-    ns  = dim(3);
-    
-    statedim  = [nx+2,ny+2];
-    statedims = [nx+2,ny+2,ns];
-    
-    fluxdim  = [nx+2,ny+2,2];
-    fluxdimp = [nx+2,ny+2];
-    fluxdims = [nx+2,ny+2,2,ns];
-    if str2num(strrep(version,'.','')) >= str2num(strrep('03.001.000','.',''))
-        fluxdim  = [nx+2,ny+2,2,2];
-        fluxdimp = fluxdim;
-        fluxdims = [nx+2,ny+2,2,2,ns];
-    end
-    
+fluxdim  = [nx+2,ny+2,2];
+fluxdimp = [nx+2,ny+2];
+fluxdims = [nx+2,ny+2,2,ns];
+if version >= '03.001.000'
+    fluxdim  = [nx+2,ny+2,2,2];
+    fluxdimp = fluxdim;
+    fluxdims = [nx+2,ny+2,2,2,ns];
 end
+
 
 %% Read charges etc.
 
@@ -77,13 +56,13 @@ state.am    = read_rfield(fid,'am   ',ns);
 
 %% Read state variables
 
-state.na     = read_rfield(fid,'na'    ,statedims);
-state.ne     = read_rfield(fid,'ne'    ,statedim);
-state.ua     = read_rfield(fid,'ua'    ,statedims);
+state.na     = read_rfield(fid,'na'    ,[nx+2,ny+2,ns]);
+state.ne     = read_rfield(fid,'ne'    ,[nx+2,ny+2]);
+state.ua     = read_rfield(fid,'ua'    ,[nx+2,ny+2,ns]);
 state.uadia  = read_rfield(fid,'uadia' ,fluxdims);
-state.te     = read_rfield(fid,'te'    ,statedim);
-state.ti     = read_rfield(fid,'ti'    ,statedim);
-state.po     = read_rfield(fid,'po'    ,statedim);
+state.te     = read_rfield(fid,'te'    ,[nx+2,ny+2]);
+state.ti     = read_rfield(fid,'ti'    ,[nx+2,ny+2]);
+state.po     = read_rfield(fid,'po'    ,[nx+2,ny+2]);
 
 
 %% Read fluxes
@@ -94,7 +73,7 @@ state.fhi    = read_rfield(fid,'fhi'   ,fluxdim);
 state.fch    = read_rfield(fid,'fch'   ,fluxdim);
 state.fch_32 = read_rfield(fid,'fch_32',fluxdim);
 state.fch_52 = read_rfield(fid,'fch_52',fluxdim);
-state.kinrgy = read_rfield(fid,'kinrgy',statedims);
+state.kinrgy = read_rfield(fid,'kinrgy',[nx+2,ny+2,ns]);
 state.time   = read_rfield(fid,'time'  ,1);
 state.fch_p  = read_rfield(fid,'fch_p' ,fluxdimp);
 

@@ -30,14 +30,14 @@ module load Python/3.6.4-intel-2018a
 # module load totalview
 # module load libX11/1.6.3-intel-2015a-Python-2.7.9
 # module load libXt/1.1.4-intel-2015a-libX11-1.6.3
-# module load motif/2.3.4-intel-2015a-libX11-1.6.3 <<<<<
-# module load libXp/1.0.3-intel-2015a <<<<<<
+module load motif/2.3.8-intel-2018a
+# module load libXp/1.0.3-intel-2015a
 # mpi-library from intel/2015a is used
 module load Pango/1.41.1-intel-2018a
 # Debugger (set environment variable DBX)
-# module load allinea-forge/6.0 <<<<<<
-module load ArmForge/18.1.2
+module load ArmForge/19.0.2
 setenv DBX ddt
 
 # Other environment variables
 setenv STGDIR /staging/leuven/stg_00030/SOLPS/lib/LEUVEN.ifort64
+
