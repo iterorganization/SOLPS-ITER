@@ -665,18 +665,22 @@ ifneq (${COMPILER},HP)
 	[ -s fort.33 ] || ( [ -s $(baserundir)/fort.33 ] && ln -sf $(baserundir)/fort.33 . || ( [ -s $(triangdir)/fort.33 ] && ln -sf $(triangdir)/fort.33 . || echo > /dev/null ) )
 	[ -s fort.34 ] || ( [ -s $(baserundir)/fort.34 ] && ln -sf $(baserundir)/fort.34 . || ( [ -s $(triangdir)/fort.34 ] && ln -sf $(triangdir)/fort.34 . || echo > /dev/null ) )
 	[ -s fort.35 ] || ( [ -s $(baserundir)/fort.35 ] && ln -sf $(baserundir)/fort.35 . || ( [ -s $(triangdir)/fort.35 ] && ln -sf $(triangdir)/fort.35 . || echo > /dev/null ) )
+	[ -s input.dat ] || ( [ -s $(baserundir)/input.dat ] && ln -sf $(baserundir)/input.dat . || echo > /dev/null ) 
 	cd b2us.exe.dir ; \
 	[ -s ../fort.33 ] && cp -p ../fort.33 . || echo > /dev/null ; \
 	[ -s ../fort.34 ] && cp -p ../fort.34 . || echo > /dev/null ; \
-	[ -s ../fort.35 ] && cp -p ../fort.35 . || echo > /dev/null
+	[ -s ../fort.35 ] && cp -p ../fort.35 . || echo > /dev/null ; \
+	[ -s ../input.dat ] && cp -p ../input.dat . || echo > /dev/null
 else
 	[ -s ftn33 ] || ( [ -s $(baserundir)/ftn33 ] && ln -sf $(baserundir)/ftn33 . || ( [ -s $(triangdir)/ftn33 ] && ln -sf $(triangdir)/ftn33 . || echo > /dev/null ) )
 	[ -s ftn34 ] || ( [ -s $(baserundir)/ftn34 ] && ln -sf $(baserundir)/ftn34 . || ( [ -s $(triangdir)/ftn34 ] && ln -sf $(triangdir)/ftn34 . || echo > /dev/null ) )
 	[ -s ftn35 ] || ( [ -s $(baserundir)/ftn35 ] && ln -sf $(baserundir)/ftn35 . || ( [ -s $(triangdir)/ftn35 ] && ln -sf $(triangdir)/ftn35 . || echo > /dev/null ) )
+	[ -s input.dat ] || ( [ -s $(baserundir)/input.dat ] && ln -sf $(baserundir)/input.dat . || echo > /dev/null ) 
 	cd b2us.exe.dir ; \
 	[ -s ../ftn33 ] && cp -p ../ftn33 . || echo > /dev/null ; \
 	[ -s ../ftn34 ] && cp -p ../ftn34 . || echo > /dev/null ; \
-	[ -s ../ftn35 ] && cp -p ../ftn35 . || echo > /dev/null
+	[ -s ../ftn35 ] && cp -p ../ftn35 . || echo > /dev/null ; \
+	[ -s ../input.dat ] && cp -p ../input.dat . || echo > /dev/null
 endif
 	cd b2us.exe.dir ; ${TIME} ${B2OBJ}/b2us.exe ${RUN_OPTIONS} ; mv $(target_us) .. ; rm -f $(notdir $^) >& /dev/null
 	-rmdir b2us.exe.dir ;
