@@ -313,7 +313,7 @@ c*** 12
       integer nchori,ncheni,lntspec,lntsput,nmcsput,nchtal(nchor),
      ,  nspscl(nchor),nspnew(nchor),nspstr(nchor),nspspz(nchor),
      ,  nspini(nchor),nspend(nchor),nspblc(nchor),nspadd(nchor),
-     ,  masloc(nchor),ipivot(nchor),ichord(nchor),npspcen,iatspec,
+     ,  ipivot(nchor),ichord(nchor),npspcen,iatspec,
      ,  npspctt,npspcfi,listmtmp(lntsputx),listmtra(lntsputx),
      ,  nlstadds,mtreadds,listadds(nlimps),listaddg(nlimps),
      ,  ngwties,kgwties(ngwtiesx),mgwties(ngwtiesx),
@@ -321,8 +321,9 @@ c*** 12
      ,  npwin,npwsurf(npwinx),npwtally(npwinx),pwsurf(nlimps,npwinx),
      ,  pwtally(nlimps,npwinx),pwspecy(nlimps,npwinx),
      ,  pwtally_d(nlimps,npwinx),pwspecy_d(nlimps,npwinx)
-      real emin1(nchor), emax1(nchor), xpivot(nchor), ypivot(nchor),
-     ,     zpivot(nchor), xchord(nchor), ychord(nchor), zchord(nchor),
+      real emin1(nchor), emax1(nchor), eshift(nchor),
+     ,     xpivot(nchor), ypivot(nchor), zpivot(nchor),
+     ,     xchord(nchor), ychord(nchor), zchord(nchor),
      ,     emnspc, emxspc
       logical plchor,plspec,lpw_d(npwinx)
       character txtsig(nchor)*71,txtmtmp(lntsputx)*2,txtmtra(lntsputx)*2
@@ -438,7 +439,7 @@ c*** b2ah.dat
      ,  ispzt3,nplin2,nplot2,npldl2,iproj3,npli13,nplo13,npli23,nplo23,
      ,  ipln,nsrfcls,msrfcls,lsrfcls,
      ,  nchori,ncheni,lntspec,lntsput,nmcsput,nchtal,nspscl,
-     ,  nspnew,nspstr,nspspz,nspini,nspend,nspblc,nspadd,masloc,ipivot,
+     ,  nspnew,nspstr,nspspz,nspini,nspend,nspblc,nspadd,ipivot,
      ,  ichord,npspcen,iatspec,npspctt,npspcfi,listmtmp,listmtra,
      ,  nlstadds,mtreadds,listadds,listaddg,ngwties,kgwties,mgwties,
      ,  lgwties,npwin,npwsurf,npwtally,pwsurf,pwtally,pwspecy,
@@ -494,8 +495,8 @@ c*** b2ah.dat
      ,  ch2mx,ch2my,ch2x0,ch2y0,ch2z0,ch3mx,
      ,  ch3my,ch3mz,ch3x0,ch3y0,ch3z0,angle1,angle2,angle3,cutplane,
      ,  talzmi,talzma,talxmi,talxma,talymi,talyma,talw1,talw2,fcabs1,
-     ,  fcabs2,rpsdl,emin1,
-     ,  emax1,xpivot,ypivot,zpivot,xchord,ychord,zchord,emnspc,emxspc,
+     ,  fcabs2,rpsdl,emin1,emax1,eshift,
+     ,  xpivot,ypivot,zpivot,xchord,ychord,zchord,emnspc,emxspc,
      ,  dtimv,time0,fcte,bmass,chgsp,chgsee,chgsei,chgsmom,
      ,  scxmlim,scewall,scewbin,sctransp,screcycf,screcyct,scrcprm,
      ,  scfsheat,scexppl,scexpel,scexpil,screcycs,scychsptg,

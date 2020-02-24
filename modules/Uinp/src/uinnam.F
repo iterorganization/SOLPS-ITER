@@ -21,16 +21,17 @@ c=======================================================================
       parameter (lunm=163)
       character*8 unm(lunm),uun,ubs*1,uam*52
 c...                                                  52=48+4
+      logical, save :: hlp_spc
       integer luwrk(nlim),luind(nlim)
-      logical hlp_spc,streql
+      logical streql
       external streql, xerrab, xertst, subini, subend
-c*** lusgm: segment number for the list of invisibles;
+c*** lusgm : segment number for the list of invisibles;
 c*** luswch: switch for the input of element lists (obsolete)
 c***                1: jedgi1, 2: jedgo1, 3: jedgi2, 4: jedgo2
 c***         or switch for the target data (clockwise from bottom left)
 c*** luskel: counter for the segments to be skipped
-c*** lugpf:  counter for the puffing sources
-c*** lugwt:  counter for the grid-wall ties
+c*** lugpf : counter for the puffing sources
+c*** lugwt : counter for the grid-wall ties
       data lusgm, luswch, luskel, lugpf, lugwt, luvsp, nprnl /7*0/
       data hlp_spc / .true. /
       data lurefls / 0 /  

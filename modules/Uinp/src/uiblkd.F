@@ -876,14 +876,14 @@ c*** 12
      /     8   ,   4   ,   0    ,   0    ,   0   ,    0    /,
      ,   nchtal, nspscl, nspnew, nspstr, nspspz, nspini, nspend /
      /  nchor*0,nchor*0,nchor*0,nchor*0,nchor*0,nchor*0,nchor*0 /,
-     ,   nspblc, nspadd, masloc, ipivot, ichord, listmtmp , listmtra  /
-     /  nchor*0,nchor*0,nchor*0,nchor*0,nchor*0,lntsputx*0,lntsputx*0 /,
+     ,   nspblc, nspadd, ipivot, ichord, listmtmp , listmtra  /
+     /  nchor*0,nchor*0,nchor*0,nchor*0,lntsputx*0,lntsputx*0 /,
      ,  listadds,listaddg, kgwties  , mgwties  ,lgwties ,npwin /
      /  nlimps*0,nlimps*0,ngwtiesx*0,ngwtiesx*0,lugwts*0,  0   /,
      ,  npwsurf,npwtally,pwsurf,pwtally,pwspecy,pwtally_d,pwspecy_d /
      / npwinx*0,npwinx*0,lupw*0, lupw*0, lupw*0,  lupw*0 ,  lupw*0  /
-      data emin1  , emax1  , xpivot , ypivot ,emnspc,emxspc /
-     /    nchor*0.,nchor*0.,nchor*0.,nchor*0.,  0.5 , 5000. /,
+      data emin1  , emax1  , eshift , xpivot , ypivot ,emnspc,emxspc /
+     /    nchor*0.,nchor*0.,nchor*0.,nchor*0.,nchor*0.,  0.5 , 5000. /,
      ,     zpivot , xchord , ychord , zchord  /
      /    nchor*0.,nchor*0.,nchor*0.,nchor*0. /
       data plchor, plspec,    lpw_d     /

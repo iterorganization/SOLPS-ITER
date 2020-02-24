@@ -75,10 +75,6 @@
 \vfill
 
 \newpage
-\tableofcontents
-\listoffigures
-\listoftables
-
 \chapter*{Preface}
 This manual is built from the following code repository versions:
 \begin{alltt}
@@ -95,6 +91,11 @@ includes contributions from
 \item S.~Voskoboynikov, for the \SOLPSITER model equations (Appendix \ref{cha:equations})
 \end{itemize}
 All errors, omissions {\it etc.} should be e-mailed to {\tt Xavier.Bonnin@iter.org}.
+
+\newpage
+\tableofcontents
+\listoffigures
+\listoftables
 
 \chapter{Introduction}
 \label{cha:intro}
@@ -213,7 +214,7 @@ It is best afterwards to position oneself on the master braches, which is achiev
 
 For later updates, it is recommended you use the {\tt solps-iter\_update} script. If you are planning to do code development, your starting point should be the develop branches, which you can upload by using the {\tt solps-iter\_update\_develop} script instead.
 
-Please note that because of the way some of the \SOLPSITER utility scripts function, the path to the \SOLPSITER top directory must not contain any of the strings {\tt .debug}, {\tt .mpi}, {\tt .openmp}, or {\tt .ig}. 
+Please note that because of the way some of the \SOLPSITER utility scripts function, the path to the \SOLPSITER top directory must not contain any of the strings {\tt .debug}, {\tt .mpi}, {\tt .openmp}, or {\tt .ig}.
 
 Since the user-id is immutably encoded into any changes, it is always a good idea to properly configure a local installation of Git on all the systems on which one plans on making code revisions with, e.g.:
 
@@ -493,7 +494,7 @@ purpose, a master \SOLPSITER {\tt Makefile} is provided, located at \${\tt \{SOL
   \item[uinp] The {\tt Uinp} translator from {\tt DivGeo} output to {\tt B2.5-Eirene} input only (requires {\bf b25eirene} previous compilation)
   \item[sonnet-light] The {\tt Sonnet} library only
   \item[triang] The {\tt Tria} and {\tt Triageom} triangulation utilities only
-  \item[nc2text\_simple] The {\tt nc2text\_simple} replacement program for systems where {\tt nc2text} is not available (requires the {\tt NetCDF} library) 
+  \item[nc2text\_simple] The {\tt nc2text\_simple} replacement program for systems where {\tt nc2text} is not available (requires the {\tt NetCDF} library)
   \item[b2sxdr] The {\tt b2sxdr} converter from \SOLPSfour to \SOLPSITER
   \item[amds] The {\tt AMDS} utility for building consistent reaction sets only
   \item[manual] This manual only
@@ -1441,7 +1442,7 @@ logarithmic $y$ scale by use of an additional "l" argument while "L" also plots 
 negative quantities on the same scale and "M" the absolute values of negative quantities in a separate plot)
   \begin{description}
   \item[2d]\index{2d} plots time dependent quantities from
-    {\tt b2time.nc} (Appendix \ref{cha:b2time}), 2$^{nd}$, 3$^{rd}$ {\it etc.\ versus} the 1$^{st}$ argument. 
+    {\tt b2time.nc} (Appendix \ref{cha:b2time}), 2$^{nd}$, 3$^{rd}$ {\it etc.\ versus} the 1$^{st}$ argument.
   \item[2da]\index{2da} prints time dependent quantities from
     {\tt b2time.nc} (Appendix \ref{cha:b2time}), 2$^{nd}$, 3$^{rd}$ {\it etc.\ versus} the 1$^{st}$ argument.
   \item[2dt]\index{2dt} plots time dependent quantities from
@@ -1627,7 +1628,7 @@ extracted from the {\tt run.log} file.
   \item[move\_optional\_files]\index{move\_optional\_files} Script used by the run Makefile to check for the existence of optional output files and, upon succesful termination of a run, move these files to the run directory.
   \item[move\_save\_files]\index{move\_save\_files}\index{b2co} Script used by the crash recovery program {\tt b2co} to replace optional run output files with their recovered versions.
   \item[n2d]\index{n2d} Converts "Naka" format equilibrium files to {\tt DG} format (see Sec.~\ref{sec:equtrn}).
-  \item[nc2text\_simple]\index{nc2text} Replacement program providing the basic capabilities of the {\tt nc2text} utility when not available on the system. A symbolic link to {\tt nc2text} will be created for other scripts to be able to use it. 
+  \item[nc2text\_simple]\index{nc2text} Replacement program providing the basic capabilities of the {\tt nc2text} utility when not available on the system. A symbolic link to {\tt nc2text} will be created for other scripts to be able to use it.
   \item[nn2d]\index{nn2d} Converts new "Naka" format equilibrium files to {\tt DG} format (see Sec.~\ref{sec:equtrn}).
   \item[noquote\_pwd]\index{noquote\_pwd} Returns the current working directory as a string without quotes (c.f.\ {\tt quote\_pwd}).
   \item[obtain\_tracing\_files]\index{obtain\_tracing\_files} Script to grab the last version of the tracing files for run recovery.
@@ -2357,7 +2358,7 @@ If {\tt 'b2stbc\_boundary\_namelist'} is set to 1 in {\tt b2mn.dat}
 then the boundary conditions are read in from
 {\tt b2.boundary.parameters} instead of being taken from the file
 created by {\tt b2ah} and possibly modified in {\tt b2mn.dat}.
-For cases with a double-null topology, use of {\tt b2.boundary.parameters} 
+For cases with a double-null topology, use of {\tt b2.boundary.parameters}
 is required, and will be enforced irrespective of the value of the
 {\tt 'b2stbc\_boundary\_namelist'} switch.
 
@@ -4121,7 +4122,7 @@ The program reads the {\tt b2mndr\_id*} switch group, defined in {\tt b2mn.dat}:
   \item {\tt b2mndr\_run\_number} defines the run number
 \end{itemize}
 These switches are used as identification parameters for the IDS. Afterwards, a
-{\tt b2mn} run is being initialized but {\em not} started, so that the final
+{\tt b2mn} run is initialized but {\em not} started, so that the final
 output state data is read. Then the data is written to an IDS, with the
 {\tt b2mndr\_id*} switchgroup used as identification descriptors.
 
@@ -4733,7 +4734,7 @@ or
 It uses the data in the {\tt b2time.nc} and {\tt b2favere} files and calculates statistical errors based on averaged quantities collected during the averaging phase of a {\tt B2.5-Eirene} calculation.
 For each averaged quantity stored in {\tt b2time.nc} it evaluates:
 \begin{itemize}
-\item The sample mean. 
+\item The sample mean.
 \item The correlation time according to the {\it batching} method.
 \item The correlation time according to the {\it autocorrelation} method.
 \item The statistical error $\sigma_{s}$ according to the maximum of the two correlation times.
@@ -6598,7 +6599,7 @@ We can evaluate the scalar value separately:
 \begin{align*}
 \pi_0 &= \frac{3}{2} \eta_0 W_{\parallel \parallel} = \frac{3}{2} \eta_0 \left( b_\mu b_\nu - \frac{1}{3} \delta_{\mu \nu} \right) W_{\mu \nu} \\
 &= \frac{3}{2} \eta_0 \left(  b_\mu b_\nu - \frac{1}{3} \delta_{\mu \nu} \right) \left( \frac{\partial V_\mu}{\partial x_\nu} + \frac{\partial V_\nu}{\partial x_\mu} - \frac{2}{3} \delta_{\mu \nu} \frac{\partial V_i}{\partial x_i} \right) = 3 \eta_0 \left(  b_\mu b_\nu - \frac{1}{3} \delta_{\mu \nu} \right) \left( \frac{\partial V_\mu}{\partial x_\nu} - \frac{1}{3} \delta_{\mu \nu} \frac{\partial V_i}{\partial x_i} \right) \\
-&= 3 \eta_0 \left( b_\mu b_\nu \frac{\partial V_\mu}{\partial x_\nu} - \frac{1}{3} \frac{\partial V_i}{\partial x_i} \right) = 3 \eta_0 \left( b_\mu b_\nu \frac{\partial V_\parallel b_\mu}{\partial x_\nu} - \frac{1}{3} \frac{\partial V_\parallel b_\nu}{\partial x_\nu} \right) \\ 
+&= 3 \eta_0 \left( b_\mu b_\nu \frac{\partial V_\mu}{\partial x_\nu} - \frac{1}{3} \frac{\partial V_i}{\partial x_i} \right) = 3 \eta_0 \left( b_\mu b_\nu \frac{\partial V_\parallel b_\mu}{\partial x_\nu} - \frac{1}{3} \frac{\partial V_\parallel b_\nu}{\partial x_\nu} \right) \\
 &= 3 \eta_0 \left( \frac{B_\nu}{B} \frac{\partial V_\parallel}{\partial x_\nu} - \frac{1}{3} B_\nu \frac{\partial V_\parallel / B}{\partial x_\nu} \right) = \eta_0 \frac{B_\nu}{B} \left( 2 \frac{\partial V_\parallel}{\partial x_\nu} + \frac{V_\parallel}{B} \frac{\partial B}{\partial x_\nu} \right) \\
 &= 2 \eta_0 \frac{B_\nu}{B} \frac{1}{\sqrt{B}} \frac{\partial V_\parallel \sqrt{B}}{\partial x_\nu} = 2 \eta_0 \frac{1}{\sqrt{B}} \vec{b} \cdot \nabla \left ( V_\parallel \sqrt{B} \right)
 \end{align*}
@@ -6620,7 +6621,7 @@ For \SOLPSITERns, the orthogonal coordinates $(x,r,z)$ are more convenient for f
 
 \begin{equation*}
 \vec{b} \cdot \left( \nabla \cdot \overleftrightarrow{\pi} \right) = \frac{4}{3} b_x B^{\frac{3}{2}} \frac{\partial}{h_x \partial x} \left( \frac{\eta_0 b_x}{B} \frac{\partial \left( B^{\frac{1}{2}} V_\parallel \right)}{h_x \partial x} \right)
-\end{equation*}  
+\end{equation*}
 
 \section{Boundary conditions with drifts and currents}
 \index{drifts and currents, boundary conditions}
@@ -7197,14 +7198,14 @@ Is it important to know, that, in the equations below, the parallel velocity $V_
 \left\{
 \begin{aligned}
 \Gamma_{ax}^{\left( PSch \right)} , & \left( z_{n,a} = 1 ~\text{and}~ z_a \neq 1 \right) ~\text{or}~ z_a = 0 \\
-\frac{\Gamma_{ax}^{\left( PSch \right)}}{1 + \frac{\left| \Gamma_{ax}^{\left( PSch \right)} \right|}{\frac{\sqrt{g}}{h_x} n_a V_{Ta}}} , & \left( z_{n,a} \neq 1 ~\text{or}~ z_a \neq 1 \right) ~\text{and}~ z_a \neq 0  
+\frac{\Gamma_{ax}^{\left( PSch \right)}}{1 + \frac{\left| \Gamma_{ax}^{\left( PSch \right)} \right|}{\frac{\sqrt{g}}{h_x} n_a V_{Ta}}} , & \left( z_{n,a} \neq 1 ~\text{or}~ z_a \neq 1 \right) ~\text{and}~ z_a \neq 0
 \end{aligned} \right.
 \quad
 \widetilde{\Gamma}_{ay}^{\left( PSch \right)} =
 \left\{
 \begin{aligned}
 \Gamma_{ay}^{\left( PSch \right)} , & \left( z_{n,a} = 1 ~\text{and}~ z_a \neq 1 \right) ~\text{or}~ z_a = 0 \\
-\frac{\Gamma_{ay}^{\left( PSch \right)}}{1 + \frac{\left| \Gamma_{ay}^{\left( PSch \right)} \right|}{\frac{\sqrt{g}}{h_y} n_a V_{T_a}}} , & \left( z_{n,a} \neq 1 ~\text{or}~ z_a \neq 1 \right) ~\text{and}~ z_a \neq 0  
+\frac{\Gamma_{ay}^{\left( PSch \right)}}{1 + \frac{\left| \Gamma_{ay}^{\left( PSch \right)} \right|}{\frac{\sqrt{g}}{h_y} n_a V_{T_a}}} , & \left( z_{n,a} \neq 1 ~\text{or}~ z_a \neq 1 \right) ~\text{and}~ z_a \neq 0
 \end{aligned} \right.
 \end{equation}
 
@@ -7346,13 +7347,13 @@ W_{ay}^{\left( dia \right)} , & \left( z_{n,a} = 1 ~\text{and}~ z_a \neq 1 \righ
 \begin{equation}
 U_{ax}^{\left( dia \right)} = \widetilde{V}_{ax}^{\left( dia \right)} + V_{ax}^{\left( E \right)}
 \qquad\qquad
-U_{ay}^{\left( dia \right)} = \widetilde{V}_{ay}^{\left( dia \right)} + V_{ay}^{\left( E \right)} 
+U_{ay}^{\left( dia \right)} = \widetilde{V}_{ay}^{\left( dia \right)} + V_{ay}^{\left( E \right)}
 \end{equation}
 
 \begin{equation}
 U_{ax}^{\left( 2dia \right)} = 2 \widetilde{V}_{ax}^{\left( dia \right)} + V_{ax}^{\left( E \right)}
 \qquad\qquad
-U_{ay}^{\left( 2dia \right)} = 2 \widetilde{V}_{ay}^{\left( dia \right)} + V_{ay}^{\left( E \right)} 
+U_{ay}^{\left( 2dia \right)} = 2 \widetilde{V}_{ay}^{\left( dia \right)} + V_{ay}^{\left( E \right)}
 \end{equation}
 
 \begin{equation}
@@ -7739,7 +7740,7 @@ S_{a}^m = S_{a \parallel}^m + S_{CF_a}^m + S_{fr_a}^m &+ S_{Therm_a}^{m} + S_{I_
 S_{a \parallel}^m = - \left( \nabla \cdot\overset\leftrightarrow\pi_a^{\parallel} \right)_{\parallel} & =
 & \left\{
 \begin{matrix}
-- \left( {\nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{res}_{\parallel} - 
+- \left( {\nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{res}_{\parallel} -
 	\left( \nabla \cdot\overset\leftrightarrow\pi _a^{q_\parallel} \right)_{\parallel}
 & \ z_a = 1~\&~z_{n,a} = 1 \\
 \\
@@ -7756,7 +7757,7 @@ S_{a \parallel}^m = - \left( \nabla \cdot\overset\leftrightarrow\pi_a^{\parallel
 - \frac{1}{h_z\sqrt g} \frac{\partial}{\partial x}
 \left(\frac{h_z\sqrt g}{h_x} \frac 4 3 \widetilde{\widetilde{\eta}}^{(CL)}_{ax}
 \frac{\partial \ln \left( h_z B^{\frac 1 2} \right) }{B^{\frac 1 2} h_x \partial x}\right)
-B^{\frac 1 2} V_{\parallel a},  
+B^{\frac 1 2} V_{\parallel a},
 & \qquad  z_a = 1~\&~z_{n,a} = 1 \\
 0, & \qquad \mbox{otherwise} \\
 \end{aligned} \right.
@@ -8182,9 +8183,9 @@ $\eta = 0.96$,
 \label{eq:mom_taua}
 \tau _a = \frac 3{4 \sqrt{2\pi}}
 \frac {\sqrt{m_a} T_i^{\frac 3 2}} {z_a^2 z_{eff} n_e \ln \Lambda}
-\left( \frac{4 \pi \varepsilon_0}{e^2} \right)^2, 
+\left( \frac{4 \pi \varepsilon_0}{e^2} \right)^2,
 \end{equation}
-where the Coulomb logarithm $\ln \Lambda$ 
+where the Coulomb logarithm $\ln \Lambda$
 can be chosen as
 
 $
@@ -8328,7 +8329,7 @@ from b2stel
 Q_{Fei} = \left\{
 \begin{aligned}
  V_{e \parallel} \sum \limits_{\substack{a=0 \\ z_a \neq 0}}^{ns - 1}
-\left( S^m_{fr,ea} + S^m_{Therm,ea} \right) 
+\left( S^m_{fr,ea} + S^m_{Therm,ea} \right)
 & \mbox{, when Eq.(\ref{eq:mom_new}) is activated ({\tt 'b2sigp\_style'} set to {\tt '2'})} \\
 j_x \hat E_x & \mbox{, when Eq.(\ref{eq:mom_old}) is activated}
 \end{aligned}\right.
@@ -8562,7 +8563,7 @@ K_1 = \frac 1{1 + 2.01 \cdot \nu_{\ast e}^{1/2} + 1.53 \cdot \nu_{\ast e}} +
 \frac{0.52 \cdot \varepsilon^3 \cdot \nu_{\ast e}}{1 + 0.89 \cdot \varepsilon^{3/2} \cdot \nu_{\ast e}}
 \end{equation*}
 
-\begin{equation}\label{eq:ene_nue} 
+\begin{equation}\label{eq:ene_nue}
 \nu_{\ast e} = \frac{c \left( y \right)}{2 \pi \varepsilon^{3/2} \tau_e \sqrt{T_e/m_e}},
 \end{equation}
 
@@ -8734,7 +8735,7 @@ $V_{ey}^{(str)} = 0$
 \end{equation}
 
 \begin{equation}\label{eq:ene_kapey}
-\kappa_{ey} = \kappa_e^{(AN)} + \kappa_{ey}^{(CL)} + \kappa_e^{(ST)}, 
+\kappa_{ey} = \kappa_e^{(AN)} + \kappa_{ey}^{(CL)} + \kappa_e^{(ST)},
 \end{equation}
 
 $\kappa_{ey}^{(CL)} = 0$
@@ -8904,8 +8905,8 @@ $
 \subsection{Poloidal ion energy fluxes}
 \begin{multline}\label{eq:eni_tiqix}
 %\begin{matrix}
-\widetilde q_{ix} = \widetilde f_{ix} T_i - \kappa_{ix} \frac 1{h_x} \frac{\partial T_i}{\partial x} - q_{ix}^{P.Sch} = \\ 
-= \frac 3 2 \Gamma_{ix} T_i  + V_{ix}^{(str)} n_i  T_i + 0 \cdot \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)}}{e} \right) T_i - \\ 
+\widetilde q_{ix} = \widetilde f_{ix} T_i - \kappa_{ix} \frac 1{h_x} \frac{\partial T_i}{\partial x} - q_{ix}^{P.Sch} = \\
+= \frac 3 2 \Gamma_{ix} T_i  + V_{ix}^{(str)} n_i  T_i + 0 \cdot \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)}}{e} \right) T_i - \\
 - \kappa_{ix} \frac 1{h_x} \frac{\partial T_i}{\partial x} - q_{ix}^{P.Sch}
 %\end{matrix}
 \end{multline}
@@ -8930,7 +8931,7 @@ q_{ix} = \left[
 \end{equation}
 
 \begin{equation}\label{eq:eni_gammahix}
-\Gamma_{ix} = \sum \limits^{ns-1}_{a = 0} \Gamma_{ax}^{(he)} 
+\Gamma_{ix} = \sum \limits^{ns-1}_{a = 0} \Gamma_{ax}^{(he)}
 \end{equation}
 
 \begin{equation}\label{eq:eni_qixeir}
@@ -9135,14 +9136,14 @@ $V_{ix}^{(str)}=0$
 \subsection{Radial ion energy fluxes}
 
 \begin{equation}\label{eq:eni_tiqiy}
-\begin{matrix}                 
+\begin{matrix}
 \widetilde q_{iy} = \widetilde f_{iy} T_i -
 \kappa_{iy} \frac 1{h_y} \frac{\partial T_i}{\partial y} -
 q_{iy}^{P.Sch} = \left[\frac 3 2 \Gamma_{iy} + V_{iy}^{(str)} n_i + \frac 3 2 \frac{\left(
 	j_y^{(AN)} + \widetilde j_y^{(vis \parallel)} + \widetilde j_y^{(vis \perp)} + \widetilde j_y^{(visq)} + j_y^{(in)}
 \right)} e \right] T_i - \\
 - \kappa_{iy} \frac 1{h_y} \frac{\partial T_i}{\partial y} -
-q_{iy}^{P.Sch} 
+q_{iy}^{P.Sch}
 \end{matrix}
 \end{equation}
 
@@ -11107,7 +11108,7 @@ balance equation, i.e. has the form
 \begin{multline}
  \label{eq:total_energy_balance_appC}
  \frac{\partial\varepsilon}{\partial t} + \left(\nabla \cdot \vec{\bf q}^{\rm ENERGY}\right) = \\
- \left(\vec{\bf j}\cdot\vec{\bf E}\right) + 
+ \left(\vec{\bf j}\cdot\vec{\bf E}\right) +
  V_{e\parallel} R_{e\parallel}^{\rm INELASTIC} + \sum\limits_a V_{a\parallel} R_{a\parallel}^{\rm INELASTIC} + Q_e^{\rm ATOMIC} + Q_i^{\rm ATOMIC} +
  Q^{\rm res}
 \end{multline}
@@ -11115,7 +11116,7 @@ balance equation, i.e. has the form
 from the code equations written in the sections above. Then it is explained how
 to compute each term of the equation (\ref{eq:total_energy_balance_appC}), including
 the residual term $Q^{\rm res}$, making use of the quantites available from the code output
-activated by the switch 
+activated by the switch
 {\tt b2wdat\_iout = 4} (see Appendix~\ref{cha:b2wdat_iout_4}).
 
 The equation~(\ref{eq:total_energy_balance_appC}) may be derived from the code equations,
@@ -11126,7 +11127,7 @@ following~\cite{Braginskii65}, as
  {\rm Eq.}\mbox{ (\ref{eq:ene_new}) } + {\rm Eq.}\mbox{ (\ref{eq:eni}) } +
  \sum\limits_a V_{a\parallel} \cdot \left( {\rm Eq.}\mbox{ (\ref{eq:mom_new}) } \right) -
  \sum\limits_a \frac{m_aV_{a\parallel}^2}{2} \cdot \left( {\rm Eq.}\mbox{ (\ref{eq:cont_appC}) }\right)
-\end{equation} 
+\end{equation}
 
 The term $\displaystyle \left\{ V_{e\parallel}\cdot\left(\mbox{ electron parallel force balance equation }\right) \right\}$ does not appear in the sum~(\ref{eq:energy_balance_derivation}), because \SOLPSITER neglects electron inertia, so the corresponding equation does not appear explicitly in the B2.5 equation system and there is no term involving the electron kinetic energy $\displaystyle \frac{m_e u_e^2}{2}$. One should make use of equations~(\ref{eq:ene_veparal}) and~(\ref{eq:fch_p}) instead. Similarly, the electron continuity equation (or its equivalent~(\ref{eq:pot_eq})) does not enter the sum~(\ref{eq:energy_balance_derivation}) either.
 
@@ -11141,7 +11142,7 @@ Thus the total energy density is
  +\frac32\sum\limits_an_aT_i + \frac32 n_eT_e.
 \end{equation}
 
-The energy flux 
+The energy flux
 
 \begin{equation}
 \vec{\bf q}^{\rm ENERGY} = \vec{\bf q}_{e}^{\rm ENERGY} + \vec{\bf q}_{i}^{\rm ENERGY}
@@ -11161,7 +11162,7 @@ n_e T_e \frac{B_z}{e} \frac{\partial}{h_y \partial y} \left( \frac {1}{B^2} \rig
 \tilde{c}_e^{(2)} \frac{j^{\left( \parallel \right) }_x}{e} T_e\\
 q_{ey}^{\rm ENERGY} = \frac{5}{2} \left[\sum\limits_a z_a \Gamma^{\rm ENERGY}_{ay} +
 n_e T_e \frac{B_z}{e} \frac{\partial}{h_x \partial x} \left( \frac {1}{B^2} \right)\right] T_e -
-\kappa_{ey} \frac {1}{h_y} \frac{\partial T_e}{\partial y} 
+\kappa_{ey} \frac {1}{h_y} \frac{\partial T_e}{\partial y}
 \end{gather}
 
 \begin{multline}
@@ -11172,17 +11173,17 @@ n_e T_e \frac{B_z}{e} \frac{\partial}{h_x \partial x} \left( \frac {1}{B^2} \rig
 \end{multline}
 
 \begin{multline}
- q_{iy}^{\rm ENERGY} = \sum\limits_a \left( \Gamma^{\rm ENERGY}_{ax} + n_a \tilde{V}_{ax}^{(dia)} + 
-\frac{ j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)}}{e} 
+ q_{iy}^{\rm ENERGY} = \sum\limits_a \left( \Gamma^{\rm ENERGY}_{ax} + n_a \tilde{V}_{ax}^{(dia)} +
+\frac{ j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)}}{e}
  \right) \times \\ \left( \frac{m_a V_{a\parallel}^2}{2}
 + \frac{5}{2} T_i \right)-
- \kappa_{iy} \frac {1}{h_y} \frac{\partial T_i}{\partial y} 
-\end{multline} 
+ \kappa_{iy} \frac {1}{h_y} \frac{\partial T_i}{\partial y}
+\end{multline}
 
 \begin{gather}
  \Gamma^{\rm ENERGY}_{ax} = \left( b_x V_{\parallel a} + V_{x}^{\left( E \right)} + V_{ax}^{\left( AN \right)} + V_a^{corr\_dpc} \right) n_a  - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x} - \widetilde{D}_{p,ax} \frac{1}{h_x} \frac{\partial p_a}{\partial x}
 \\
- \Gamma^{\rm ENERGY}_{ay} = \left( V_{y}^{\left( E \right)} + V_{ay}^{\left( AN \right)} \right) n_a  
+ \Gamma^{\rm ENERGY}_{ay} = \left( V_{y}^{\left( E \right)} + V_{ay}^{\left( AN \right)} \right) n_a
  - D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y} - \widetilde{D}_{p,ay} \frac{1}{h_y} \frac{\partial p_a}{\partial y}
 \end{gather}
 
@@ -11208,11 +11209,11 @@ of code equations and from numerical approximation. They can be grouped accordin
 their origin as follows:
 
 \begin{multline}
- Q^{\rm res} = Q_{\rm visc} + Q_{\rm inert}^{\rm res} + \left(\left[\vec{\bf j} - \left(\vec{\bf j}\cdot\vec{\bf b}\right) \vec{\bf b} - \vec{\bf j}_{\rm dia}\right]\cdot\vec{\bf E}\right) + 
+ Q^{\rm res} = Q_{\rm visc} + Q_{\rm inert}^{\rm res} + \left(\left[\vec{\bf j} - \left(\vec{\bf j}\cdot\vec{\bf b}\right) \vec{\bf b} - \vec{\bf j}_{\rm dia}\right]\cdot\vec{\bf E}\right) +
   Q_{\rm j_\perp}^{\rm res} + Q_{\rm corr\_dpc}^{\rm res} + {Q^{\rm res}_{i,nTu_\parallel}} + {Q^{\rm res}_{e,dia}} + {Q^{\rm res}_{i,dia}}
-\end{multline} 
+\end{multline}
 
-The viscosity residual $Q_{\rm visc}$ comes from the fact that the term 
+The viscosity residual $Q_{\rm visc}$ comes from the fact that the term
 $\left(\overset\leftrightarrow\pi_a\cdot\vec{\bf V_a}\right)$ does
 not appear in the code equations and cannot be extracted from the code output, therefore it is excluded from the total energy flux $\vec{\bf q}^{\rm ENERGY}$. Instead $Q_{\rm visc}$ appears in the right hand side in the form:
 
@@ -11229,14 +11230,14 @@ not appear in the code equations and cannot be extracted from the code output, t
 	\right)^2 \right] \right] - \\
 	\sum \limits_{a} \left[ V_{a\parallel} \left(
 	\left( \nabla \cdot\overset\leftrightarrow\pi _a^{V_\parallel} \right)_{\parallel} +
-	\left( \nabla \cdot\overset\leftrightarrow\pi _a^{\perp} \right)_{\parallel} + 
+	\left( \nabla \cdot\overset\leftrightarrow\pi _a^{\perp} \right)_{\parallel} +
 	\left( \nabla \cdot\overset\leftrightarrow\pi _a^{q} \right)_{\parallel}
 	\right) \right]
 \end{multline}
-which is in fact only the approximation to 
+which is in fact only the approximation to
 
 $\sum\limits_a \left(\nabla\cdot\left(\overset\leftrightarrow\pi_a\cdot\vec{\bf V_a}\right)\right) - \sum\limits_a \left(\vec{\bf b} \cdot V_{a\parallel} -
-\left(\nabla \cdot \overset\leftrightarrow\pi_a\right)\right) 
+\left(\nabla \cdot \overset\leftrightarrow\pi_a\right)\right)
 $
 
 Here
@@ -11250,15 +11251,15 @@ Here
 \left(\frac{h_z \sqrt g}{h_x} \widetilde{\widetilde{\eta}}^{(CL)}_{ax}
 \frac{\partial \ln \left( h_z B^{\frac{1}{2}} \right) }{B^{\frac{1}{2}} h_x \partial x}\right)
 B^{\frac{1}{2}} V_{\parallel a}, \qquad z_a = 1~\&~z_{n,a} = 1
-\end{multline} 
+\end{multline}
 
 \begin{equation}
- \left( \nabla \cdot\overset\leftrightarrow\pi _a^{\perp} \right)_{\parallel} = - 
+ \left( \nabla \cdot\overset\leftrightarrow\pi _a^{\perp} \right)_{\parallel} = -
  \frac{1}{h_z \sqrt g}\frac{\partial}{\partial x} \left(\frac{h_z \sqrt g}{h_x}
  \eta^{(AN)}_{a} \frac{\partial V_{\parallel a}}{h_x \partial x} \right) -
  \frac{1}{h_z \sqrt g}\frac{\partial}{\partial y} \left(\frac{h_z \sqrt g}{h_y}
  \eta^{(AN)}_{a} \frac{\partial V_{\parallel a}}{h_y \partial y} \right)
-\end{equation} 
+\end{equation}
 
 The inertia residual $Q_{\rm inert}^{\rm res}$ is the difference
 between what we want and what we have regarding the convective
@@ -11274,14 +11275,14 @@ flux of the ion parallel kinetic energy:
  n_a \tilde{V}_{ay}^{(dia)} + \frac{ j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} }{e} \right) \frac{m_a V_{a\parallel}^2}{2}
  \right] - \\
  \sum\limits_a V_{a\parallel} \left[
- \frac{1}{h_z \sqrt g}\frac{\partial}{\partial x} \left(\frac{h_z \sqrt g}{h_x} \Gamma_{ax}^{Cor} \right) + 
+ \frac{1}{h_z \sqrt g}\frac{\partial}{\partial x} \left(\frac{h_z \sqrt g}{h_x} \Gamma_{ax}^{Cor} \right) +
  \frac{1}{h_z \sqrt g}\frac{\partial}{\partial y} \left(\frac{h_z \sqrt g}{h_y} \Gamma_{ay}^{Cor} \right) - S_{CF_a}^m\right] + \\
 \sum\limits_a \frac{m_a V_{a\parallel}^2}{2} \left[
 \frac{1}{\sqrt g}\frac{\partial}{\partial x}\left( \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \right) + \frac{1}{\sqrt g}\frac{\partial}{\partial y}\left( \frac{\sqrt g}{h_y} \widetilde{\Gamma}_{ay} \right) \right]
-\end{multline} 
+\end{multline}
 
 This residual comes not only from numerical approximations, but
-also from the inaccuracies in the definition of 
+also from the inaccuracies in the definition of
 $\left( \vec{\bf b} \cdot \left( \nabla \cdot m_a n_a \vec{V}_a \vec{V}_a \right) \right)$.
 
 The Joule heating term $\left(\vec{\bf j} \cdot \vec{\bf E}\right)$ requires a separate discussion.
@@ -11290,8 +11291,8 @@ It may be noted that, analytically:
 
 \begin{multline}
 \label{eq:j||E||_appC}
- j_\parallel E_\parallel = \frac{1}{\sqrt g}\frac{\partial}{\partial x}\left( \frac{\sqrt g}{h_x} n_e T_e b_x V_{e\parallel} \right) - 
- \frac{n_e T_e}{\sqrt g}\frac{\partial}{\partial x}\left(\frac{\sqrt g}{h_x} b_x V_{e\parallel} \right) + V_{e\parallel} \sum\limits_a \left( S_{fr,ea}^m + S_{Therm,ea}^m \right) - \\ 
+ j_\parallel E_\parallel = \frac{1}{\sqrt g}\frac{\partial}{\partial x}\left( \frac{\sqrt g}{h_x} n_e T_e b_x V_{e\parallel} \right) -
+ \frac{n_e T_e}{\sqrt g}\frac{\partial}{\partial x}\left(\frac{\sqrt g}{h_x} b_x V_{e\parallel} \right) + V_{e\parallel} \sum\limits_a \left( S_{fr,ea}^m + S_{Therm,ea}^m \right) - \\
  \frac{b_x}{h_x}\frac{\partial \Phi}{\partial x} \sum\limits_a Z_a e n_a V_{a\parallel}
 \end{multline}
 
@@ -11299,7 +11300,7 @@ and
 
 \begin{equation}
 \label{eq:jdiaE_appC}
- \left(\vec{\bf j}_{\rm dia} \cdot \vec{\bf E}\right) = 
+ \left(\vec{\bf j}_{\rm dia} \cdot \vec{\bf E}\right) =
  \left(\nabla(n_e T_e + n_i T_i) \cdot \vec{\bf V}^{(E)}\right)
 \end{equation}
 
@@ -11312,7 +11313,7 @@ $j_\parallel E_\parallel$, $\left(\vec{\bf j}_{\rm dia} \cdot \vec{\bf E}\right)
 
 The term
 \begin{multline}
- Q_{\rm j_\perp}^{\rm res} = 
+ Q_{\rm j_\perp}^{\rm res} =
  \frac{1}{\sqrt g}\frac{\partial}{\partial x}\left[\frac{\sqrt g}{h_x}
  \frac{T_i}{e}\left(
  j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} \right)\right] + \\
@@ -11323,11 +11324,11 @@ The term
 \end{multline}
 appears due to the approximate treatment of the ion perpendicular force balance equations.
 
-The term 
+The term
 \begin{equation}
- Q_{\rm corr\_dpc}^{\rm res} = 
+ Q_{\rm corr\_dpc}^{\rm res} =
  \frac{1}{\sqrt g} \frac{\partial}{\partial x} \left[ \frac{\sqrt g}{h_x} \sum\limits_a \left( n_e T_e + n_a T_i \right) V_a^{corr\_dpc} \right]
-\end{equation} 
+\end{equation}
 is physically meaningless, but it may give a notable contribution
 to the total energy balance residual in cases, for example, where
 it compensates numerical oscillations in the parallel velocity.
@@ -11337,22 +11338,22 @@ non-zero due to numerical discretization errors:
 
 \begin{equation}
  {Q^{\rm res}_{i,nTu_\parallel}} = \sum\limits_a \left[
- \frac{1}{\sqrt g} \frac{\partial}{\partial x} \left( \frac{\sqrt g}{h_x} n_a T_i b_x V_{a\parallel} \right) - 
+ \frac{1}{\sqrt g} \frac{\partial}{\partial x} \left( \frac{\sqrt g}{h_x} n_a T_i b_x V_{a\parallel} \right) -
  \frac{n_a T_i}{\sqrt g} \frac{\partial}{\partial x} \left( \frac{\sqrt g}{h_x} b_x V_{a\parallel} \right) -
  \frac{b_x V_{a\parallel}}{h_x} \frac{\partial n_a T_i}{\partial x} \right]
-\end{equation} 
+\end{equation}
 
 \begin{multline}
  {Q^{\rm res}_{e,dia}} = \frac{5}{2} \frac{1}{\sqrt g} \frac{\partial}{\partial x} \left[ - \frac{\sqrt g}{h_x} n_e T_e^2 \frac{B_z}{e h_y} \frac{\partial}{\partial y} \left( \frac {1}{B^2} \right) \right] +
  \frac{1}{\sqrt g} \frac{\partial}{\partial y} \left[ \frac{\sqrt g}{h_y} n_e T_e^2 \frac{B_z}{e h_x} \frac{\partial}{\partial x} \left( \frac {1}{B^2} \right) \right] + \\
- \frac{1}{\sqrt g}\frac{\partial}{\partial x}\left(\frac{\sqrt g}{h_x} q_{ex}^{P.Sch}\right) + 
+ \frac{1}{\sqrt g}\frac{\partial}{\partial x}\left(\frac{\sqrt g}{h_x} q_{ex}^{P.Sch}\right) +
  \frac{1}{\sqrt g}\frac{\partial}{\partial y}\left(\frac{\sqrt g}{h_y} q_{ey}^{P.Sch}\right)
-\end{multline} 
+\end{multline}
 
 \begin{multline}
  {Q^{\rm res}_{i,dia}} = \frac{5}{2} \sum\limits_a \left[ \frac{1}{\sqrt g} \frac{\partial}{\partial x} \left( \frac{\sqrt g}{h_x} n_a T_i \tilde{V}_{ax}^{(dia)} \right) +
  \frac{5}{2} \frac{1}{\sqrt g} \frac{\partial}{\partial y} \left( \frac{\sqrt g}{h_y} n_a T_i \tilde{V}_{ay}^{(dia)} \right) + \right. \\
- \left. \frac{1}{\sqrt g} \frac{\partial}{\partial x} \left( \frac{\sqrt g}{h_x} q_{ix}^{P.Sch} \right) + 
+ \left. \frac{1}{\sqrt g} \frac{\partial}{\partial x} \left( \frac{\sqrt g}{h_x} q_{ix}^{P.Sch} \right) +
  \frac{1}{\sqrt g} \frac{\partial}{\partial y} \left( \frac{\sqrt g}{h_y} q_{iy}^{P.Sch} \right) \right]
 \end{multline}
 
@@ -12239,7 +12240,7 @@ In all cases, the point of reference of the midplane quantities can be adjusted 
     \hline quantity & description & units \\
     \hline \endfirsthead
     \hline
-    \multicolumn{3}{|l|}{\small\sl continued on next page} \\
+    \multicolumn{3}{|l|}{\small\sl continued on next page} \\ %
     \hline \endfoot
     \endlastfoot
 ntstep \index{ntstep}\index{b2time.nc, ntstep} & timestep index & $  $ \\
@@ -12715,13 +12716,13 @@ volreg \index{volreg}\index{b2tallies.nc, volreg}                               
 \chapter{Quantities printed by {\tt 'b2wdat\_iout' = '4'}}
 \label{cha:b2wdat_iout_4}
 
-The switch setting {\tt 'b2wdat\_iout' = '4'} allows for a number of output files, 
-developed in Saint Petersburg by Elizaveta Kaveeva 
+The switch setting {\tt 'b2wdat\_iout' = '4'} allows for a number of output files,
+developed in Saint Petersburg by Elizaveta Kaveeva
 (with some technical help from Sergey Voskoboynikov and Ilya Senichenkov), in order to obtain explicitly each term from the equations listed in Appendix~\ref{cha:equations} exactly as they are computed in the code.
 
-For this purpose the output of each quantity is produced exactly from the subroutine where this quantity is computed, e.g. 
-the velocity $u_a$ ({\tt ua}) is printed from the subroutine {\tt b2npmo}. Each quantity is printed into a separate 
-ASCII file as a 2D table. All these files are 
+For this purpose the output of each quantity is produced exactly from the subroutine where this quantity is computed, e.g.
+the velocity $u_a$ ({\tt ua}) is printed from the subroutine {\tt b2npmo}. Each quantity is printed into a separate
+ASCII file as a 2D table. All these files are
 stored in the {\tt output/} folder inside the run directory. The general naming convention is the following
 (except for geometry related quantities and a few others):
 
@@ -12741,53 +12742,53 @@ omitted from common quantities (such as {\tt te}, {\tt ti} or {\tt po}). For exa
 The content of the file looks like the following:
 
 \begin{verbatim}
-            -1             0             1             2             3        
-  36   2.525043E+19  2.517455E+19  1.625484E+19  1.444400E+19  1.407206E+19   
-  35   2.681619E+19  2.673561E+19  1.804678E+19  1.575019E+19  1.516221E+19   
-  34   3.360574E+19  3.350655E+19  2.279144E+19  1.984601E+19  1.907786E+19   
-  33   4.343278E+19  4.330891E+19  2.978478E+19  2.597130E+19  2.498425E+19   
-  32   5.664300E+19  5.649203E+19  3.951054E+19  3.444186E+19  3.309993E+19   
-  31   7.393565E+19  7.375144E+19  5.240743E+19  4.567851E+19  4.384763E+19   
-  30   9.590684E+19  9.568531E+19  6.914344E+19  6.032204E+19  5.781704E+19   
-  29   1.230569E+20  1.227959E+20  9.057685E+19  7.919435E+19  7.575477E+19   
-  28   1.556381E+20  1.553424E+20  1.176512E+20  1.032794E+20  9.859909E+19   
-  27   1.932463E+20  1.929148E+20  1.497150E+20  1.323182E+20  1.263528E+20   
-  26   2.335330E+20  2.331599E+20  1.844608E+20  1.643623E+20  1.576109E+20   
-  25   2.721367E+20  2.716981E+20  2.163190E+20  1.948967E+20  1.888368E+20   
-  24   2.992329E+20  2.987071E+20  2.372826E+20  2.165452E+20  2.127225E+20   
-  23   3.069312E+20  3.063232E+20  2.417565E+20  2.224695E+20  2.209700E+20   
-  22   2.972805E+20  2.966824E+20  2.323948E+20  2.140750E+20  2.134266E+20   
-  21   2.785257E+20  2.779398E+20  2.158066E+20  1.981130E+20  1.971063E+20   
-  20   2.592405E+20  2.586764E+20  1.986355E+20  1.815245E+20  1.801132E+20   
-  19   2.447657E+20  2.442036E+20  1.861651E+20  1.694604E+20  1.678487E+20   
-  18   2.378737E+20  2.373074E+20  1.802841E+20  1.638746E+20  1.621619E+20   
-  17   2.345108E+20  2.339292E+20  1.774551E+20  1.611951E+20  1.594105E+20   
-  16   2.302662E+20  2.297536E+20  1.742077E+20  1.580295E+20  1.561263E+20   
-  15   2.263556E+20  2.258411E+20  1.711906E+20  1.550573E+20  1.530871E+20   
-  14   2.219169E+20  2.214601E+20  1.678177E+20  1.517517E+20  1.497154E+20   
-  13   2.171240E+20  2.166303E+20  1.639932E+20  1.481086E+20  1.459853E+20   
-  12   2.121178E+20  2.116556E+20  1.601201E+20  1.444459E+20  1.422191E+20   
-  11   2.064163E+20  2.059699E+20  1.556076E+20  1.401716E+20  1.378837E+20   
-  10   2.005827E+20  2.000971E+20  1.507593E+20  1.356803E+20  1.333992E+20   
-   9   1.944365E+20  1.940038E+20  1.458187E+20  1.311082E+20  1.288094E+20   
-   8   1.872176E+20  1.868137E+20  1.399629E+20  1.256621E+20  1.233961E+20   
-   7   1.797522E+20  1.793348E+20  1.339149E+20  1.200777E+20  1.178179E+20   
-   6   1.717291E+20  1.713409E+20  1.275705E+20  1.142528E+20  1.119222E+20   
-   5   1.627565E+20  1.623631E+20  1.203216E+20  1.076693E+20  1.053815E+20   
-   4   1.534325E+20  1.530565E+20  1.128591E+20  1.008665E+20  9.870904E+19   
-   3   1.433210E+20  1.429840E+20  1.049081E+20  9.352627E+19  9.151503E+19   
-   2   1.324803E+20  1.321455E+20  9.642263E+19  8.568567E+19  8.379455E+19   
-   1   1.208139E+20  1.205130E+20  8.754242E+19  7.755114E+19  7.573841E+19   
-   0   1.083148E+20  1.080124E+20  7.790863E+19  6.878814E+19  6.712576E+19   
-  -1   1.015473E+20  1.012638E+20  7.310223E+19  6.428731E+19  6.265369E+19   
+            1             0             1             2             3
+  36   2.525043E+19  2.517455E+19  1.625484E+19  1.444400E+19  1.407206E+19
+  35   2.681619E+19  2.673561E+19  1.804678E+19  1.575019E+19  1.516221E+19
+  34   3.360574E+19  3.350655E+19  2.279144E+19  1.984601E+19  1.907786E+19
+  33   4.343278E+19  4.330891E+19  2.978478E+19  2.597130E+19  2.498425E+19
+  32   5.664300E+19  5.649203E+19  3.951054E+19  3.444186E+19  3.309993E+19
+  31   7.393565E+19  7.375144E+19  5.240743E+19  4.567851E+19  4.384763E+19
+  30   9.590684E+19  9.568531E+19  6.914344E+19  6.032204E+19  5.781704E+19
+  29   1.230569E+20  1.227959E+20  9.057685E+19  7.919435E+19  7.575477E+19
+  28   1.556381E+20  1.553424E+20  1.176512E+20  1.032794E+20  9.859909E+19
+  27   1.932463E+20  1.929148E+20  1.497150E+20  1.323182E+20  1.263528E+20
+  26   2.335330E+20  2.331599E+20  1.844608E+20  1.643623E+20  1.576109E+20
+  25   2.721367E+20  2.716981E+20  2.163190E+20  1.948967E+20  1.888368E+20
+  24   2.992329E+20  2.987071E+20  2.372826E+20  2.165452E+20  2.127225E+20
+  23   3.069312E+20  3.063232E+20  2.417565E+20  2.224695E+20  2.209700E+20
+  22   2.972805E+20  2.966824E+20  2.323948E+20  2.140750E+20  2.134266E+20
+  21   2.785257E+20  2.779398E+20  2.158066E+20  1.981130E+20  1.971063E+20
+  20   2.592405E+20  2.586764E+20  1.986355E+20  1.815245E+20  1.801132E+20
+  19   2.447657E+20  2.442036E+20  1.861651E+20  1.694604E+20  1.678487E+20
+  18   2.378737E+20  2.373074E+20  1.802841E+20  1.638746E+20  1.621619E+20
+  17   2.345108E+20  2.339292E+20  1.774551E+20  1.611951E+20  1.594105E+20
+  16   2.302662E+20  2.297536E+20  1.742077E+20  1.580295E+20  1.561263E+20
+  15   2.263556E+20  2.258411E+20  1.711906E+20  1.550573E+20  1.530871E+20
+  14   2.219169E+20  2.214601E+20  1.678177E+20  1.517517E+20  1.497154E+20
+  13   2.171240E+20  2.166303E+20  1.639932E+20  1.481086E+20  1.459853E+20
+  12   2.121178E+20  2.116556E+20  1.601201E+20  1.444459E+20  1.422191E+20
+  11   2.064163E+20  2.059699E+20  1.556076E+20  1.401716E+20  1.378837E+20
+  10   2.005827E+20  2.000971E+20  1.507593E+20  1.356803E+20  1.333992E+20
+   9   1.944365E+20  1.940038E+20  1.458187E+20  1.311082E+20  1.288094E+20
+   8   1.872176E+20  1.868137E+20  1.399629E+20  1.256621E+20  1.233961E+20
+   7   1.797522E+20  1.793348E+20  1.339149E+20  1.200777E+20  1.178179E+20
+   6   1.717291E+20  1.713409E+20  1.275705E+20  1.142528E+20  1.119222E+20
+   5   1.627565E+20  1.623631E+20  1.203216E+20  1.076693E+20  1.053815E+20
+   4   1.534325E+20  1.530565E+20  1.128591E+20  1.008665E+20  9.870904E+19
+   3   1.433210E+20  1.429840E+20  1.049081E+20  9.352627E+19  9.151503E+19
+   2   1.324803E+20  1.321455E+20  9.642263E+19  8.568567E+19  8.379455E+19
+   1   1.208139E+20  1.205130E+20  8.754242E+19  7.755114E+19  7.573841E+19
+   0   1.083148E+20  1.080124E+20  7.790863E+19  6.878814E+19  6.712576E+19
+  -1   1.015473E+20  1.012638E+20  7.310223E+19  6.428731E+19  6.265369E+19
 \end{verbatim}
 
 Here the first row (truncated in the example above) gives the poloidal cell index
 {\tt ix}, the first column (to the right) contains the radial cell index
 {\tt iy}, the rest are the values of the 2D array in each cell.
 
-The price for the possibility to output each quantity exactly from the subroutine where this quantity is calculated 
-is the production of output files each time the corresponding subroutine is called. 
+The price for the possibility to output each quantity exactly from the subroutine where this quantity is calculated
+is the production of output files each time the corresponding subroutine is called.
 This gives an additional load to the filesystem due to the increased number of file writing operations and slows the
 computation significantly.
 Therefore it is NOT recommended to perform long-lasting runs with {\tt 'b2wdat\_iout'} set to {\tt '4'}.
@@ -12815,8 +12816,8 @@ $n_a$ & $m^{-3}$ & \texttt{b2npco\_na[XXX].dat} or & (\ref{eq:cont_appC})  \\ & 
 $u_a$ & $m/s$ & \texttt{b2npmo\_ua[XXX].dat} &  (\ref{eq:mom_new}), (\ref{eq:mom_old})   \\
 $T_e$ & $J$ & \texttt{b2npht\_te.dat} or &  (\ref{eq:ene_new})  \\ & & \texttt{b2nph9\_te.dat} & \\
 $T_i$ & $J$ & \texttt{b2npht\_ti.dat} or &  (\ref{eq:eni})  \\ & & \texttt{b2nph9\_ti.dat} & \\
-$T_e$ & $eV$ & \texttt{te\_eV.dat} &  (\ref{eq:ene_new})  \\ 
-$T_i$ & $eV$ & \texttt{ti\_eV.dat} &  (\ref{eq:eni})  \\ 
+$T_e$ & $eV$ & \texttt{te\_eV.dat} &  (\ref{eq:ene_new})  \\
+$T_i$ & $eV$ & \texttt{ti\_eV.dat} &  (\ref{eq:eni})  \\
 $\varphi$ & $V$ & \texttt{b2nppo\_po.dat} or &  (\ref{eq:pot_eq})  \\ & & \texttt{b2npp7\_po.dat} & \\
 $n_e $ & $ m^{-3} $ & \texttt{ne.dat} & (\ref{eq:ne})\\
 \hline
@@ -12858,15 +12859,15 @@ ${S_a^{BC}}{\sqrt{g}}$ & $s^{-1}$ & \texttt{b2stbc\_phys\_sna[XXX].dat} &  \\
 
 $\displaystyle - \sqrt{g}\frac{\partial n_a}{\partial t} $ & $s^{-1}$ & \texttt{b2srdt\_snadt[XXX].dat} &  (\ref{eq:cont_appC})\\
 
-$\displaystyle\frac{\sqrt{g}}{h_x}\widetilde{ \Gamma}_{ax}$ & $s^{-1}$ & \texttt{b2npc9\_fnax[XXX].dat} or &  (\ref{eq:GammaAX_appC}) 
+$\displaystyle\frac{\sqrt{g}}{h_x}\widetilde{ \Gamma}_{ax}$ & $s^{-1}$ & \texttt{b2npc9\_fnax[XXX].dat} or &  (\ref{eq:GammaAX_appC})
 \\ & & \texttt{b2npc11\_fnax[XXX].dat} & \\
 
-$\displaystyle \frac{\sqrt{g}}{h_x}\widetilde{ \Gamma}_{ay}$ & $s^{-1}$ & \texttt{b2npc9\_fnay[XXX].dat} or &  (\ref{eq:GammaAY_appC}) 
+$\displaystyle \frac{\sqrt{g}}{h_x}\widetilde{ \Gamma}_{ay}$ & $s^{-1}$ & \texttt{b2npc9\_fnay[XXX].dat} or &  (\ref{eq:GammaAY_appC})
 \\ & & \texttt{b2npc11\_fnay[XXX].dat} & \\
 
 $\displaystyle \frac{\sqrt{g}}{h_x}b_xV_{||a}n_a $ & $ s^{-1} $ & \texttt{b2tfnb\_bxuanax[XXX].dat} & (\ref{eq:GammaAX_appC}), (\ref{eq:GammaAXnoTilde_appC}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_x}V_{ax}^{(E)}n_a $ & $ s^{-1} $ & \texttt{b2tfnb\_vaecrbnax[XXX].dat} & (\ref{eq:vaExB_appC})\\ 
+$\displaystyle \frac{\sqrt{g}}{h_x}V_{ax}^{(E)}n_a $ & $ s^{-1} $ & \texttt{b2tfnb\_vaecrbnax[XXX].dat} & (\ref{eq:vaExB_appC})\\
 
 $\displaystyle\frac{\sqrt{g}}{h_x}V_{ay}^{(E)}n_a $ & $ s^{-1} $ & \texttt{b2tfnb\_vaecrbnay[XXX].dat} & (\ref{eq:vaExB_appC})\\
 
@@ -12936,17 +12937,17 @@ $\displaystyle - m_a \frac{\partial n_a V_{\parallel a}}{\partial t} h_z \sqrt{g
 $\displaystyle  \frac{h_z\sqrt g}{h_x} \Gamma_{ax}^m  $ & $N\cdot m$ & \texttt{b2npmo\_fmox[XXX].dat} & (\ref{eq:mom_fluxx}), \\
 
 $\displaystyle \frac{h_z\sqrt g}{h_y} \Gamma_{ay}^m  $ & $N\cdot m$ & \texttt{b2npmo\_fmoy[XXX].dat} & (\ref{eq:mom_fluxy}), \\
- 
+
 % $\displaystyle S_{CF_a}^m $ & $ N\cdot m $ & \texttt{b2npmo\_smocf[XXX].dat} & (\ref{eq:mom_alls}), (\ref{eq:mom_sorcf}) \\
 
 $\displaystyle -\frac{b_x}{h_x}\frac{\partial n_a T_i}{\partial x}  h_z \sqrt{g}$ & $ N\cdot m $ & \texttt{b2sigp\_smogpi[XXX].dat} & (\ref{eq:mom_new}), (\ref{eq:mom_old})  \\
 
 $\displaystyle -Z_a e n_a \frac{b_x}{h_x} \frac{\partial \Phi}{\partial x}h_z \sqrt{g} $ & $ N\cdot m $ & \texttt{b2sigp\_smogpo[XXX].dat} & (\ref{eq:mom_new}) \\
 
-$\displaystyle S_{CX_a}^m h_z \sqrt{g} $ & $ N\cdot m $ & \texttt{b2stcx\_smq[XXX].dat} & 
+$\displaystyle S_{CX_a}^m h_z \sqrt{g} $ & $ N\cdot m $ & \texttt{b2stcx\_smq[XXX].dat} &
 (\ref{eq:mom_scx})  \\
 
-$\displaystyle S_{CF}^m h_z \sqrt{g} $ & $ N\cdot m  $ & \texttt{b2npmo\_smocf[XXX].dat} & 
+$\displaystyle S_{CF}^m h_z \sqrt{g} $ & $ N\cdot m  $ & \texttt{b2npmo\_smocf[XXX].dat} &
 (\ref{eq:mom_sorcf}), (\ref{eq:mom_sorio})  \\
 
 $\displaystyle S_{I_a}^m h_z \sqrt{g} $ & $ N\cdot m $ & \texttt{b2stel\_smq\_ion[XXX].dat} & (\ref{eq:mom_alls}), (\ref{eq:mom_sorio}) \\
@@ -12954,7 +12955,7 @@ $\displaystyle S_{I_a}^m h_z \sqrt{g} $ & $ N\cdot m $ & \texttt{b2stel\_smq\_io
 $\displaystyle S_{R_a}^m h_z \sqrt{g} $ & $ N\cdot m
 $ & \texttt{b2stel\_smq\_rec[XXX].dat} & (\ref{eq:mom_alls}), (\ref{eq:mom_sorio})  \\
 
-$\displaystyle S_{Therm,ia}^m h_z \sqrt{g} $ & $ N\cdot m$ & \texttt{b2npmo\_smotfia[XXX].dat} & 
+$\displaystyle S_{Therm,ia}^m h_z \sqrt{g} $ & $ N\cdot m$ & \texttt{b2npmo\_smotfia[XXX].dat} &
 (\ref{eq:mom_termi}) \\
 
 $\displaystyle S_{Therm,ea}^m h_z \sqrt{g} $ & $N\cdot m $ & \texttt{b2npmo\_smotfea[XXX].dat} & (\ref{eq:mom_terme}) \\
@@ -13009,23 +13010,23 @@ $\displaystyle \frac{\sqrt {g}}{h_{x}}\widetilde{q}_{ex} $ & $ W $ & \texttt{b2n
 $\displaystyle \frac{\sqrt {g}}{h_{y}}\widetilde{q}_{ey} $ & $ W $ & \texttt{b2nph9\_fhey.dat} & (\ref{eq:ene_tiqey})  \\
 
 $\displaystyle S_{e}^{heat}  \sqrt{g}$ & $ W $ & \texttt{b2npht\_she.dat} or & (\ref{eq:ene_seheat})  \\
- & & \texttt{b2nph9\_she.dat} & \\ 
- 
+ & & \texttt{b2nph9\_she.dat} & \\
+
 $\displaystyle Q_{R}\sqrt {g} $ & $ W $ & \texttt{b2stel\_she\_rad.dat} & (\ref{eq:ene_QR})  \\
 
 $\displaystyle Q_{\Delta }\sqrt {g} $ & $ W $ & \texttt{b2npht\_shei.dat} or & (\ref{eq:ene_Qdelta})  \\
-& & \texttt{b2nph9\_shei.dat} & \\ 
+& & \texttt{b2nph9\_shei.dat} & \\
 
 $\displaystyle Q_e^{\rm EIRENE}\sqrt {g} $ & $ W $ & \texttt{b2stbr\_she\_eir.dat} & (\ref{eq:ene_seheat})  \\
- 
+
 $\displaystyle Q_{Fei} \sqrt {g} $ & $ W $ & \texttt{b2sihs\_\_shefr.dat} & (\ref{eq:ene_Qfei})  \\
-%& & \texttt{b2sihs\_\_shefr.dat} & \\ 
+%& & \texttt{b2sihs\_\_shefr.dat} & \\
 
 $\displaystyle \frac{n_e T_e}{\sqrt g} \frac{\partial}{\partial x} \left(\frac{\sqrt g}{h_x} b_x V_{e \parallel} \right)\sqrt {g} $ & $ W $ & \texttt{b2sihs\_\_shedu.dat} & (\ref{eq:ene_new})  \\
-%& & \texttt{b2sihs\_\_shedu.dat} & \\ 
+%& & \texttt{b2sihs\_\_shedu.dat} & \\
 
 $\displaystyle n_e T_e \left ( \nabla \cdot \vec{\bf V}^E \right)\sqrt {g}  $ & $ W $ & \texttt{b2sihs\_\_shedd.dat} & (\ref{eq:ene_new})  \\
-%& & \texttt{b2sihs\_\_shedd.dat} & \\ 
+%& & \texttt{b2sihs\_\_shedd.dat} & \\
 
 $\displaystyle Q^{BC}_{e}\sqrt {g} $ & $ W $ & \texttt{b2stbc\_phys\_she.dat} &   \\
 
@@ -13038,9 +13039,9 @@ $\displaystyle \frac32 \frac{\sqrt{g}}{h_{x}} \Gamma_{ex} T_e$ & $ W $ & \texttt
 $\displaystyle \frac32 \frac{\sqrt{g}}{h_{y}} \Gamma_{ey} T_e$ & $ W $ & \texttt{b2tfhe\_\_qe\_32y.dat} & (\ref{eq:ene_gammay})  \\
 
 $\displaystyle \frac{\sqrt{g}}{h_{x}} q_{ex}^{P.Sch}$ & $ W $ & \texttt{b2tfhe\_\_fhePSchx,y.dat} & (\ref{eq:ene_qPSchx})\\
- 
+
 $\displaystyle \frac{\sqrt{g}}{h_{y}} q_{ey}^{P.Sch}$ & $ W $ & \texttt{b2tfhe\_\_fhePSchx,y.dat} & (\ref{eq:ene_qPSchy})\\
- 
+
 $\displaystyle -\frac{\sqrt{g}}{h_{x}} \kappa_{ex} \frac{1}{h_{x}}\frac{\partial T_e}{\partial x}$ & $ W $ & \texttt{b2tfhe\_\_qe\_ke\_gTx.dat} &  (\ref{eq:ene_qex})\\
 
 $\displaystyle -\frac{\sqrt{g}}{h_{y}} \kappa_{ey} \frac{1}{h_{y}}\frac{\partial T_e}{\partial y}$ & $ W $ & \texttt{b2tfhe\_\_qe\_ke\_gTy.dat} &  (\ref{eq:ene_qey})\\
@@ -13098,15 +13099,15 @@ residuals & $ W $ & \texttt{b2npht\_reshe.dat} or & \\ & & \texttt{b2nph9\_reshe
 \hline
 $T_i$ & $ W $ & \texttt{b2npht\_shi.dat} or & (\ref{eq:eni})\\
  & & \texttt{b2nph9\_shi.dat} & \\
- 
+
 $S_i^{heat} \sqrt{g}$ & $ W $ & \texttt{b2npht\_shi.dat} or & (\ref{eq:cont_appC})  \\
  & & \texttt{b2nph9\_shi.dat} & \\
- 
+
 $\displaystyle -\frac{3}{2} \sqrt{g} \frac{\partial n_i T_i}{\partial t}$ & $ W $ & \texttt{b2srdt\_shidt.dat} & (\ref{eq:eni})\\
 
 $\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{q}_{ix}$ & $ W $ & \texttt{b2nph9\_fhix.dat} &(\ref{eq:eni_tiqix})\\
 
-$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{q}_{iy}$ & $ W $ & \texttt{b2nph9\_fhiy.dat} & (\ref{eq:eni_tiqiy})\\ 
+$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{q}_{iy}$ & $ W $ & \texttt{b2nph9\_fhiy.dat} & (\ref{eq:eni_tiqiy})\\
 
 $\displaystyle \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a T_i \left ( \nabla \cdot \vec{\bf V}^E \right)\sqrt {g} $ & $ W $ & \texttt{b2sihs\_\_shidd.dat} & (\ref{eq:eni_siheat})\\
 % & & \texttt{b2sihs\_\_shidd.dat} & \\
@@ -13167,10 +13168,10 @@ $\displaystyle \widetilde {\kappa}_{ix}^{(CL)}\frac{\sqrt g}{h_x^2} $ & $ s^{-1}
 
 $\displaystyle \kappa_{ix}^{(CL)}\frac{\sqrt g}{h_x^2} $ & $ s^{-1} $ & \texttt{b2trcl\_chcix.dat} & (\ref{eq:eni_kapixCL})\\
 
-$\displaystyle \frac{5}{2} \frac{\sqrt{g}}{h_x} T_i \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \widetilde V_{ax}^{(dia)} $ & $ W $ & 
+$\displaystyle \frac{5}{2} \frac{\sqrt{g}}{h_x} T_i \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \widetilde V_{ax}^{(dia)} $ & $ W $ &
 \texttt{b2tfhi\_\_qidiax.dat} & (\ref{eq:eni_qix}) \\
 
-$\displaystyle \frac{5}{2} \frac{\sqrt{g}}{h_y} T_i \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \widetilde V_{ay}^{(dia)} $ & $ W $ & 
+$\displaystyle \frac{5}{2} \frac{\sqrt{g}}{h_y} T_i \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \widetilde V_{ay}^{(dia)} $ & $ W $ &
 \texttt{b2tfhi\_\_qidiay.dat} & (\ref{eq:eni_qiy}) \\
 
 residuals & $ W $ & \texttt{b2npht\_reshi.dat} or & \\ & & \texttt{b2nph9\_reshi.dat} & \\
@@ -13224,12 +13225,12 @@ $\displaystyle \frac{\sqrt{g}}{h_y}\widetilde{j}_y^{(AN)} $ & $ A $ & \texttt{b2
 
 $\displaystyle \sigma_{ANy} $ & $ S / m^2 $ & \texttt{b2tqna\_sig0.dat} & (\ref{eq:pot_sigan})\\
 
-$\displaystyle \frac{\sqrt{g}}{h_y}\widetilde{j}_y^{(vis \perp)} $ & $ A $ & \texttt{b2tfhe\_\_fchvispery.dat} & 
+$\displaystyle \frac{\sqrt{g}}{h_y}\widetilde{j}_y^{(vis \perp)} $ & $ A $ & \texttt{b2tfhe\_\_fchvispery.dat} &
 (\ref{eq:pot_tijyvisper})\\
 
 $\displaystyle \frac{\sqrt{g}}{h_y}\widetilde{j}_y^{(vis q)} $ & $ A $ & \texttt{b2tfhe\_\_fchvisqy.dat} & (\ref{eq:pot_tijyvisq})\\
 
-$\displaystyle \frac{\sqrt{g}}{h_y}j_y^{(ST)} $ & $ A $ & \texttt{b2tfhe\_\_fchstochy.dat} & 
+$\displaystyle \frac{\sqrt{g}}{h_y}j_y^{(ST)} $ & $ A $ & \texttt{b2tfhe\_\_fchstochy.dat} &
 (\ref{eq:pot_jyst})\\
 
 $\displaystyle \frac{\sqrt{g}}{h^2_y}\sigma^{(ST)} $ & $ S $ & \texttt{b2trno\_csigy\_stoch.dat} & (\ref{eq:pot_jyst})\\
@@ -17321,7 +17322,7 @@ include the radiation emanating from the neutral kinetic species computed
 by {\tt Eirene}, you need to add contributions from {\bf neutrad} as well.
 Please be mindful however that {\bf neutrad} has dimensions $natmi$ while
 {\bf b2ra} has dimensions $ns$. Currently, however, because of incomplete
-accounting in {\tt Eirene}, only the first element is filled in, and 
+accounting in {\tt Eirene}, only the first element is filled in, and
 it contains the sum of the radiation due to all neutral atomic species.
 Moreover, if you are intending to compute the
 total radiation rate, you should also include the bremsstrahlung contribution
@@ -19108,7 +19109,7 @@ invoke it:
 
 This is a script that invokes the {\tt dg2ef} executable to convert a
 {\tt DG} equilibrium file to the {\tt EFIT} format (specifically, the {\tt EFIT}
-"{\tt g}" file). This is invoked with 
+"{\tt g}" file). This is invoked with
 (the file suffixes are recommended for clarity and are not enforced):
 \begin{quote}
 {\tt d2e <filein>.equ <fileout>.efit}
@@ -19156,8 +19157,8 @@ and are not enforced):
 \end{quote}
 
 Another program that produce output in an {\tt EFIT}-like format that is readable
-by {\tt DG} using this script is {\tt FreeGS}\footnote{Documentation available at 
-\href{https://freegs.readthedocs.io/en/latest/index.html}{https://freegs.readthedocs.io/en/latest/index.html}.}. 
+by {\tt DG} using this script is {\tt FreeGS}\footnote{Documentation available at
+\href{https://freegs.readthedocs.io/en/latest/index.html}{https://freegs.readthedocs.io/en/latest/index.html}.}.
 
 \subsubsection{n2d}
 \index{n2d}\index{nn2d}\index{nk2dg}\index{DG, converting from Naka equilibrium}
@@ -19524,7 +19525,7 @@ by setting the {\tt Core width} (in units of $m$).
 grid-limiting parts if needed.
   \item The {\tt Target specification} variables refer to the
 two halves of the limiter on either side of the tangency point. Provide there
-all relevant material and sputtering properties. {\tt Targets \#1} and 
+all relevant material and sputtering properties. {\tt Targets \#1} and
 {\tt \#2} should be positioned so that you travel
 clockwise around the plasma when going from {\tt Target \#1} to
 {\tt Target \#2}. Use the real elements you want to be reconnected to the

@@ -268,7 +268,7 @@ c**  toroidal mesh
 
 c**  mesh multiplication
 
-      if (nlmlt) write(iunoo,700)  utxthd(29)
+      if (nlmlt) write(iunoo,700) utxthd(29)
       write(iunoo,706) nlmlt
       if (nlmlt) then !{
         write(iunoo,707) nbmlt
@@ -992,13 +992,13 @@ c*** 12.  data for diagnostic module
           write(iunoo,700) txtsig(ichori)
           write(iunoo,707) nchtal(ichori),nspscl(ichori),nspnew(ichori)
           write(iunoo,707) nspstr(ichori),nspspz(ichori),
-     ,                      nspini(ichori),nspend(ichori),
-     ,                      nspblc(ichori),nspadd(ichori),masloc(ichori)
-          write(iunoo,703) emin1(ichori),emax1(ichori)
+     ,                     nspini(ichori),nspend(ichori),
+     ,                     nspblc(ichori),nspadd(ichori)
+          write(iunoo,703) emin1(ichori),emax1(ichori),eshift(ichori)
           write(iunoo,704) ipivot(ichori),xpivot(ichori),
-     ,                                    ypivot(ichori),zpivot(ichori)
+     ,                     ypivot(ichori),zpivot(ichori)
           write(iunoo,704) ichord(ichori),xchord(ichori),
-     ,                                    ychord(ichori),zchord(ichori)
+     ,                     ychord(ichori),zchord(ichori)
         end do !}
         write(iunoo,706) plchor,plspec
       end if !}
