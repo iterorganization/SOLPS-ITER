@@ -47,7 +47,7 @@ LD_MSCL    = -L${MSCL_ROOT} -lmscl
 LD_GR      = -L${GR_ROOT} -lgr
 ifeq (,$(findstring cumulus,$(FULLHOST)))
 LD_GKS     = -L${GLI_HOME} -lgks -lgfortran -lX11 -lXt
-LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lm -lX11 -lXext  -lfontconfig -lfreetype -lpthread -lXrender -lbz2 -lgfortran
+LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lm -lX11 -lXext -lfontconfig -lfreetype -lpthread -lXrender -lbz2 -lgfortran
 else
 LD_GKS     = -L${GLI_HOME} -lgks -lgfortran
 LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -L/usr/X11R6/lib64 -lX11 -lm

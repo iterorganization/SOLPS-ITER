@@ -252,7 +252,7 @@ c**  toroidal mesh
 
 c**  mesh multiplication
 
-      if (nlmlt) write(iunoo,700)  utxthd(29)
+      if (nlmlt) write(iunoo,700) utxthd(29)
       write(iunoo,706) nlmlt
       if (nlmlt) then !{
         write(iunoo,707) nbmlt
@@ -865,7 +865,7 @@ c*** 10c.
 
       write(iunoo,700) utxthd(14)
       do j=1,nalvi !{
-        write(iunoo,700) chrtal(j)
+        write(iunoo,700) ' '//chrtal(j)
         write(iunoo,711) txttlr(j)
         write(iunoo,712) txtspr(j),txtunr(j)
       end do !}
@@ -883,7 +883,7 @@ c*** 10e.
 
       write(iunoo,700) utxthd(16)
       do j=1,nalsi !{
-        write(iunoo,700) chrtls(j)
+        write(iunoo,700) ' '//chrtls(j)
         write(iunoo,711) txttls(j)
         write(iunoo,712) txtsps(j),txtuns(j)
       end do !}
@@ -996,17 +996,18 @@ c*** 12.  data for diagnostic module
       write(iunoo,707) nchori,ncheni,lntspec,lntsput,nmcsput,
      ,                                         nlstadds,mtreadds,ngwties
       if (nchori.gt.0) then !{
-        do ichori=1,nchori !{
-          write(iunoo,700) txtsig(ichori)
-          write(iunoo,707) nchtal(ichori),nspscl(ichori),nspnew(ichori)
+        do ichori = 1, nchori ! {
+          write(iunoo,714) chr_lbl(ichori)
+          write(iunoo,707) nchtal(ichori),nspscl(ichori),
+     ,                     nspnew(ichori)
           write(iunoo,707) nspstr(ichori),nspspz(ichori),
-     ,                      nspini(ichori),nspend(ichori),
-     ,                      nspblc(ichori),nspadd(ichori),masloc(ichori)
-          write(iunoo,703) emin1(ichori),emax1(ichori)
+     ,                     nspini(ichori),nspend(ichori),
+     ,                     nspblc(ichori),nspadd(ichori)
+          write(iunoo,703) emin1(ichori),emax1(ichori),eshift(ichori)
           write(iunoo,704) ipivot(ichori),xpivot(ichori),
-     ,                                    ypivot(ichori),zpivot(ichori)
+     ,                     ypivot(ichori),zpivot(ichori)
           write(iunoo,704) ichord(ichori),xchord(ichori),
-     ,                                    ychord(ichori),zchord(ichori)
+     ,                     ychord(ichori),zchord(ichori)
         end do !}
         write(iunoo,706) plchor,plspec,prspec,plargl,prargl
       end if !}
