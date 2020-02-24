@@ -79,7 +79,7 @@ c*** Produce the input file for Eirene for TRIA mesh generation
        call uinout('triang.eir')
        print *,'    ... triang.eir created'
        call triaout('triang.hed')
-       call uinptridg(.FALSE.)
+       call uinptridg(.false.)
       end if !}
 
 c*** Produce the input files for Eirene for averaging scheme runs

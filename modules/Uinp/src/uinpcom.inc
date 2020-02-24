@@ -492,7 +492,8 @@ c*** Data substitution for the Eirene test run
      ,  ttcblp,ttcble,ttcblph,ttctal,ttcoct,ttccen,ttcrnf,
      ,  ttcdbg2,ttcdbge,ttcdbgm,ttcdbgf,
      ,  ttcdbgl,ttcdbgs,ttcdbgg,ttcdbgmpi,ttcdbgc,ttchktim,ttcsrc,
-     ,  ttpl1st,ttpl2nd,ttpladd,ttplhst,ttplcut(3),ttplnums,tttest
+     ,  ttpl1st,ttpl2nd,ttpladd,ttplhst,ttplcut(3),ttplnums,tttest,
+     ,  ttplspec,ttprspec,ttplargl,ttprargl
       
 c-----------------------------------------------------------------------
 c*** Eirene surface data through B2:
@@ -602,6 +603,7 @@ c     ,  spcifup,spcifua,spcifum,spcifui,
      ,  ttcdbg2,ttcdbge,ttcdbgm,ttcdbgf,ttcdbgl,ttcdbgs,
      ,  ttcdbgg,ttcdbgmpi,ttcdbgc,ttchktim,
      ,  ttpl1st,ttpl2nd,ttpladd,ttplhst,ttplcut,ttplnums,tttest,
+     ,  ttplspec,ttprspec,ttplargl,ttprargl,
      ,  lm_cnfg,no_n2,l_ammon,l_meta,
      ,  no_n2_model,ammonx_used,meta_used,is_meta
 

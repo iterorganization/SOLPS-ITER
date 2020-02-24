@@ -19,7 +19,7 @@ c=======================================================================
      ,  lu9=9*nlim,         lustsr=nsrfs*nstra, luatsr=natm*nstra,   
      ,  lunplt=nptal*nplt,  lu21pr=2*nppart,lvrctd=mreac*nsrctd,
      ,  lu3st=3*n1st,       lugwts=mgwtiesx*ngwtiesx, lusts3=3*lustsr,
-     ,  lupw=nlimps*npwinx, lusg=nstep*ngitt,
+     ,  lupw=nlimps*npwinx, lusg=nstep*ngitt, nchor2=nchor*nchor,
      ,  lur9=9*mreac, lur6=6*mreac, luml=3*nmol,
      ,  lcbs=8*nsdb2*cbnrmx, lcbe=8*cbnrmx, lcfs=8*nsdb2
 c=======================================================================
@@ -791,25 +791,25 @@ c*** 10b
       data iclve,  iclvs,  iclvt,  iclrc /
      /    nclv*1, nclv*1, nclv*0, nclv*0 /
 c*** 10c
-      data  txttlc , txtspc , txtunc  /
-     ,     nclv*' ',nclv*' ',nclv*' ' /
-      data  chrtal , txttlr , txtspr , txtunr  /
-     ,     nalv*' ',nalv*' ',nalv*' ',nalv*' ' /
+      data txttlc , txtspc , txtunc  /
+     ,    nclv*' ',nclv*' ',nclv*' ' /
+      data chrtal , txttlr , txtspr , txtunr  /
+     ,    nalv*' ',nalv*' ',nalv*' ',nalv*' ' /
 c*** 10d
       data iadse,  iadss,  iadst,  iadsc /
      /    nads*1, nads*1, nads*0, nads*0 /
-      data  txttld , txtspd , txtund  /
-     ,     nads*' ',nads*' ',nads*' ' /
+      data txttld , txtspd , txtund  /
+     ,    nads*' ',nads*' ',nads*' ' /
 c*** 10e
-      data   chrtls ,  txtsps ,  txttls ,  txtuns  /
-     /      nals*' ', nals*' ', nals*' ', nals*' ' /
+      data chrtls ,  txtsps ,  txttls ,  txtuns  /
+     /    nals*' ', nals*' ', nals*' ', nals*' ' /
 c*** 10f
-      data  ispsrf, iptyp , ipspz , isptyp,  nsps , isrfcl, idirec /
-     /      nasp*0, nasp*0, nasp*0, nasp*0, nasp*0, nasp*0, nasp*0 /
-      data  spcmn , spcmx , spcsh , spcpx , spcpy , spcps /
-     /     nasp*0.,nasp*0.,nasp*0.,nasp*0.,nasp*0.,nasp*0./
-      data  spcvx , spcvy , spcvz /
-     /     nasp*0.,nasp*0.,nasp*0./
+      data ispsrf, iptyp , ipspz , isptyp,  nsps , isrfcl, idirec /
+     /     nasp*0, nasp*0, nasp*0, nasp*0, nasp*0, nasp*0, nasp*0 /
+      data spcmn , spcmx , spcsh , spcpx , spcpy , spcps /
+     /    nasp*0.,nasp*0.,nasp*0.,nasp*0.,nasp*0.,nasp*0./
+      data spcvx , spcvy , spcvz /
+     /    nasp*0.,nasp*0.,nasp*0./
 
 c*** 11
 
@@ -877,20 +877,26 @@ c*** 12
      /       8   ,   4   ,   0    ,   0    ,   0   ,    0  /,
      ,   nchtal, nspscl, nspnew, nspstr, nspspz, nspini, nspend /
      /  nchor*0,nchor*0,nchor*0,nchor*0,nchor*0,nchor*0,nchor*0 /,
-     ,   nspblc, nspadd, masloc, ipivot, ichord, listmtmp , listmtra  /
-     /  nchor*0,nchor*0,nchor*0,nchor*0,nchor*0,lntsputx*0,lntsputx*0 /,
+     ,   nspblc, nspadd, ipivot, ichord, jchlst ,chr_lbl /
+     /  nchor*1,nchor*0,nchor*0,nchor*0,nchor2*0,nchor*0 /,
+     ,   nchrdlint,nchrdlprf, listmtmp , listmtra  /
+     /       0    ,   0     ,lntsputx*0,lntsputx*0 /,
      ,  listadds,listaddg, kgwties  , mgwties  ,lgwties ,npwin /
      /  nlimps*0,nlimps*0,ngwtiesx*0,ngwtiesx*0,lugwts*0,  0   /,
      ,  npwsurf,npwtally,pwsurf,pwtally,pwspecy,pwtally_d,pwspecy_d /
      / npwinx*0,npwinx*0,lupw*0, lupw*0, lupw*0,  lupw*0 ,  lupw*0  /
-      data emin1  , emax1  , xpivot , ypivot ,emnspc,emxspc /
-     /    nchor*0.,nchor*0.,nchor*0.,nchor*0.,  0.5 , 5000. /,
+      data emin1  , emax1  , eshift /
+     /    nchor*0.,nchor*0.,nchor*0./,
+     ,     xpivot , ypivot , emnspc , emxspc /
+     ,    nchor*0.,nchor*0.,  0.5   , 5000.  /,
      ,     zpivot , xchord , ychord , zchord  /
      /    nchor*0.,nchor*0.,nchor*0.,nchor*0. /
       data plchor, plspec, prspec, plargl, prargl,    lpw_d     /
-     /    .false.,.false.,.false.,.false.,.false.,npwinx*.false./
-      data txtsig  ,   txtmtmp  ,   txtmtra   /
-     /    nchor*' ',lntsputx*' ',lntsputx*' ' /
+     /     .true.,.false.,.false.,.false.,.false.,npwinx*.false./
+      data txtmtmp    ,  txtmtra    /
+     /    lntsputx*' ',lntsputx*' ' /,
+     ,     chrdfile /
+     /    nchor*' ' /
 
 c*** 13
 
@@ -942,8 +948,10 @@ c*** Data for Eirene test run
      / .true. ,.true. ,.true. ,.true. ,.true. ,.true.  /,
      , ttcdbgg,ttcdbgmpi,ttcdbgc,ttchktim /
      / .true. ,.true.   ,.true. , .false. /,
-     , ttpl1st,ttpl2nd,ttpladd,ttplhst,        ttplcut       ,ttplnums /
-     / .true. ,.true. ,.true. ,.true. ,.false.,.false.,.true.,.true.   /
+     , ttpl1st,ttpl2nd,ttpladd,ttplhst,        ttplcut       ,ttplnums/
+     / .true. ,.true. ,.true. ,.true. ,.false.,.false.,.true.,.true.  /,
+     , ttplspec,ttprspec,ttplargl,ttprargl /
+     / .true.  ,.true.  ,.true.  ,.true.   /
 
 c*** Data for diagnostic run
 
@@ -952,14 +960,14 @@ c*** Data for diagnostic run
 
 c*** Data for b2ah.dat.stencil file
 
-      data  cbsna , cbsmo , cbshi , cbmsb , cbrec /
-     /     lcbs*0.,lcbs*0.,lcbs*0.,lcbs*0.,lcbs*0./,
-     ,      cbshe , cbsch , cbmsa /
-     /     lcbe*0.,lcbe*0.,lcbe*0./,
-     ,      cfdf0 , cfdna , cfdpa , cfvla , cfvsa , cfhci /
-     /     lcfs*0.,lcfs*0.,lcfs*0.,lcfs*0.,lcfs*0.,lcfs*0./,
-     ,      cfhce , cfsig , cfalf , cflim /
-     /       8*0. ,  8*0. ,  8*0. ,  8*0. /
+      data cbsna , cbsmo , cbshi , cbmsb , cbrec /
+     /    lcbs*0.,lcbs*0.,lcbs*0.,lcbs*0.,lcbs*0./,
+     ,     cbshe , cbsch , cbmsa /
+     /    lcbe*0.,lcbe*0.,lcbe*0./,
+     ,     cfdf0 , cfdna , cfdpa , cfvla , cfvsa , cfhci /
+     /    lcfs*0.,lcfs*0.,lcfs*0.,lcfs*0.,lcfs*0.,lcfs*0./,
+     ,     cfhce , cfsig , cfalf , cflim /
+     /      8*0. ,  8*0. ,  8*0. ,  8*0. /
 
 c======================================================================
       end

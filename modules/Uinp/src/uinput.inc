@@ -251,7 +251,7 @@ c*** 10b
 
 c*** 10c
 
-      character chrtal(nalv)*71
+      character chrtal(nalv)*70
       character txttlr(nalv)*72, txtspr(nalv)*24, txtunr(nalv)*24
 
 c*** 10d
@@ -261,7 +261,7 @@ c*** 10d
 
 c*** 10e
 
-      character chrtls(nals)*71, txtsps(nals)*24, txttls(nals)*72,
+      character chrtls(nals)*70, txtsps(nals)*24, txttls(nals)*72,
      ,    txtuns(nals)*24
 
 c*** 10f
@@ -311,10 +311,12 @@ c*** 12
       integer ngwtiesx
       parameter (ngwtiesx=2*n2nd)
       integer numlines,modaddv
-      integer nchori,ncheni,lntspec,lntsput,nmcsput,nchtal(nchor),
+      integer nchori,ncheni,lntspec,lntsput,nmcsput,
+     ,  nchrdgrp,nchrdlint,nchrdlprf,
+     ,  jchlst(nchor,nchor),nchtal(nchor),chr_lbl(nchor),
      ,  nspscl(nchor),nspnew(nchor),nspstr(nchor),nspspz(nchor),
      ,  nspini(nchor),nspend(nchor),nspblc(nchor),nspadd(nchor),
-     ,  masloc(nchor),ipivot(nchor),ichord(nchor),npspcen,iatspec,
+     ,  ipivot(nchor),ichord(nchor),npspcen,iatspec,
      ,  npspctt,npspcfi,listmtmp(lntsputx),listmtra(lntsputx),
      ,  nlstadds,mtreadds,listadds(nlimps),listaddg(nlimps),
      ,  ngwties,kgwties(ngwtiesx),mgwties(ngwtiesx),
@@ -322,18 +324,20 @@ c*** 12
      ,  npwin,npwsurf(npwinx),npwtally(npwinx),pwsurf(nlimps,npwinx),
      ,  pwtally(nlimps,npwinx),pwspecy(nlimps,npwinx),
      ,  pwtally_d(nlimps,npwinx),pwspecy_d(nlimps,npwinx)
-      real emin1(nchor), emax1(nchor), xpivot(nchor), ypivot(nchor),
-     ,     zpivot(nchor), xchord(nchor), ychord(nchor), zchord(nchor),
-     ,     emnspc, emxspc
+      real emin1(nchor), emax1(nchor), eshift(nchor),
+     ,     xpivot(nchor), ypivot(nchor), zpivot(nchor),
+     ,     xchord(nchor), ychord(nchor), zchord(nchor),
+     ,     emnspc, emxspc, chpts(4,nchor)
       logical plchor,plspec,prspec,plargl,prargl,lpw_d(npwinx)
-      character txtsig(nchor)*71,txtmtmp(lntsputx)*2,txtmtra(lntsputx)*2
+      character chrdfile(nchor)*24,
+     ,     txtmtmp(lntsputx)*2,txtmtra(lntsputx)*2
 
 c*** 13
 
       integer nprnli, ntmstp, nptst, nsnvi, ninitl_read,
      ,  isnve(nsnv), isnvs(nsnv), isnvt(nsnv), isnrc(nsnv)
       real dtimv, time0
-      character txttlv(nsnv)*71, txtspv(nsnv)*24, txtunv(nsnv)*24
+      character txttlv(nsnv)*70, txtspv(nsnv)*24, txtunv(nsnv)*24
 
 c*** 14
 
@@ -438,9 +442,9 @@ c*** b2ah.dat
      ,  iples,i1trc,i2trc,isyplt,ilinie,nvolpl,nptal2,nptal3,nsp,ispzt2,
      ,  ispzt3,nplin2,nplot2,npldl2,iproj3,npli13,nplo13,npli23,nplo23,
      ,  ipln,nsrfcls,msrfcls,lsrfcls,
-     ,  numlines,modaddv,
+     ,  numlines,modaddv,nchrdgrp,nchrdlint,nchrdlprf,jchlst,chr_lbl,
      ,  nchori,ncheni,lntspec,lntsput,nmcsput,nchtal,nspscl,
-     ,  nspnew,nspstr,nspspz,nspini,nspend,nspblc,nspadd,masloc,ipivot,
+     ,  nspnew,nspstr,nspspz,nspini,nspend,nspblc,nspadd,ipivot,
      ,  ichord,npspcen,iatspec,npspctt,npspcfi,listmtmp,listmtra,
      ,  nlstadds,mtreadds,listadds,listaddg,ngwties,kgwties,mgwties,
      ,  lgwties,npwin,npwsurf,npwtally,pwsurf,pwtally,pwspecy,
@@ -496,8 +500,8 @@ c*** b2ah.dat
      ,  ch2mx,ch2my,ch2x0,ch2y0,ch2z0,ch3mx,
      ,  ch3my,ch3mz,ch3x0,ch3y0,ch3z0,angle1,angle2,angle3,cutplane,
      ,  talzmi,talzma,talxmi,talxma,talymi,talyma,talw1,talw2,fcabs1,
-     ,  fcabs2,rpsdl,emin1,
-     ,  emax1,xpivot,ypivot,zpivot,xchord,ychord,zchord,emnspc,emxspc,
+     ,  fcabs2,rpsdl,emin1,emax1,eshift,emnspc,emxspc,
+     ,  chpts,xpivot,ypivot,zpivot,xchord,ychord,zchord,
      ,  dtimv,time0,fcte,bmass,chgsp,chgsee,chgsei,chgsmom,
      ,  scxmlim,scewall,scewbin,sctransp,screcycf,screcyct,scrcprm,
      ,  scfsheat,scexppl,scexpel,scexpil,screcycs,scychsptg,
@@ -535,7 +539,8 @@ c*** b2ah.dat
      ,  cdnmdlp,fnamcdn,h2cdn,reaccdn,crcdn,path,filtrm,
      ,  txtsou,txttla,txtspa,txtuna,txttlc,txtspc,txtunc,
      ,  txttlr,txtspr,txtunr,txttld,txtspd,txtund,chrtal,chrtls,
-     ,  txtsps,txttls,txtuns,textla,textls,txtsig,txtmtmp,txtmtra,
+     ,  txtsps,txttls,txtuns,textla,textls,
+     ,  txtmtmp,txtmtra,chrdfile,
      ,  txtpls,txtpsp,txtpun,txtspv,txttlv,txtunv,scard_name,
      ,  chvarname,chmspname
 

@@ -21,7 +21,8 @@ c=======================================================================
      ,  trcsrc_b,trcsur_b,trcoct_b,trccen_b,trcrnf_b,trchktim_b,
      ,  trcdbg2_b,trcdbge_b,trcdbgm_b,trcdbgf_b,trcdbgl_b,
      ,  trcdbgs_b,trcdbgg_b,trcdbgmpi_b,trcdbgc_b,
-     ,  pl1st_b,pl2nd_b,pladd_b,plhst_b,plcut_b(3),plnums_b,nltest_b
+     ,  pl1st_b,pl2nd_b,pladd_b,plhst_b,plcut_b(3),plnums_b,nltest_b,
+     ,  plspec_b,prspec_b,plargl_b,prargl_b
       save
 c=======================================================================
       if(lc) then !{
@@ -74,6 +75,10 @@ c=======================================================================
         plcut_b(1:3)=plcut(1:3)
         plnums_b=plnums
         nltest_b=nltest
+        plspec_b=plspec
+        prspec_b=prspec
+        plargl_b=plargl
+        prargl_b=prargl
 
         ntcpu=ttntcpu
         nfile=ttnfile
@@ -130,6 +135,10 @@ c=======================================================================
         plcut(1:3)=ttplcut(1:3)
         plnums=ttplnums
         nltest=tttest
+        plspec=ttplspec
+        prspec=ttprspec
+        plargl=ttplargl
+        prargl=ttprargl
 
 c*** Set the VSP data for test.eir
 
@@ -192,6 +201,10 @@ c*** Set the VSP data for test.eir
         plcut(1:3)=plcut_b(1:3)
         plnums=plnums_b
         nltest=nltest_b
+        plspec=plspec_b
+        prspec=prspec_b
+        plargl=plargl_b
+        prargl=prargl_b
       end if !}
 c=======================================================================
       end

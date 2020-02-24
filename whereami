@@ -202,6 +202,7 @@ case "*.kz":
   echo KZ_UNKNOWN
   breaksw
 case "*.ac":
+case "*.ai":
 case "*.fk":
 case "*.gb":
 case "*.gg":
