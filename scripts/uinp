@@ -45,6 +45,7 @@ location="$SOLPSTOP/"
 
 grep '^# topo ' uinput.trg > /dev/null && {
   uinp.exe
+  ub2p
   true
 } || {
 # Old-style DG output: apply the old uinp

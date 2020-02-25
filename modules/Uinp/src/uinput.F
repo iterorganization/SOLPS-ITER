@@ -701,8 +701,9 @@ c*** Modify the input file for B2, if possible
 
 c-----------------------------------------------------------------------
 c*** Create additional files with geometry for b2plot
-      
-      call uib2pl
+
+cxpb Skip this step, use ub2p program instead
+cxpb      call uib2pl
 c=======================================================================
       call prgend ()
 #ifdef USE_MPI
