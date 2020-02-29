@@ -15303,9 +15303,9 @@ Note that the side in contact with the plasma is at the bottom of the target com
 \subsubsection{traj}\index{b2plot, traj}\label{sec:traj}\index{b2plot, uuse}\label{sec:uuse}\index{b2plot, vvse}\label{sec:vvse}\index{b2plot, t\_\#p}\label{sec:t_hashp}\index{b2plot, lint}\label{sec:lint}\index{b2plot, logt}\label{sec:logt}
 \index{b2plot, trajectories plot}
 
-Plots trajectories.  The following commands
+Plots trajectories.  The following command
 \begin{verbatim}
-echo phys a4p vesl sep outl 70 1 70 36 1000 traj | b2plot
+echo phys a4p vesl sep outl 70 1 70 36 1000 0 1 1 traj | b2plot
 \end{verbatim}
 produced the results shown in figure \ref{fig:traj}.
 
@@ -15319,9 +15319,7 @@ produced the results shown in figure \ref{fig:traj}.
     \label{fig:traj}
 \end{figure}
 
-The command seems to have changed since that example. The command
-takes a variable number of integer arguments, the minimum number being
-8.
+The command takes a variable number of integer arguments, the minimum number being 8.
 
 The first 4 numbers specify the bottom left and top right coordinates
 of a rectangle in which the test particles are to be started
@@ -15344,13 +15342,12 @@ stdl glob
 a4p
 phys
 -1.2 zmin 1.2 zmax
-1.0 lbsz 0.005 dots
+1.0 lbsz
 'rgb.pal' cltb
 vesl sep outl
 2000 t_#p
 1e-3 t_pt
-! b2nn b2in m+ 0.0 rmma
-ni vol m*
+na vol m*
 0 0 0 0 -2000 1 2 3 4 5 6 7 6 traj
 drop
 \end{verbatim}
@@ -15358,7 +15355,7 @@ drop
 From the code documentation:
 \begin{verbatim}
 C     This routine is used to plot trajectories of particles using the
-C     velocity fields uutraj and vvtraj from B2SXDR. To call this routine
+C     velocity fields uu and vv. To call this routine
 C     one must specify at least 8 parameters: ixmin, iymin, ixmax, iymax,
 C     # of particles, 1 or 0 for movie or lines, species indices (at least
 C     one), and last but not least the total number of species indices one
@@ -15370,7 +15367,7 @@ C     cell (95,35) (northeast corner) as lines for hydrogen (0=H).
 C     Note that the cell and species indices start at zero!
 C     The number of time steps (plots) is given by the "t_#p" command.
 C     The total flight time of the particles is given by the "t_pt" command.
-C     The velocity fields uutraj and vvtraj can be overwritten using the
+C     The velocity fields uu and vv can be overwritten using the
 C     "uuse" and "vvse" commands. Their defaults values are ua and fna/na/sy
 C     respectively. If the number of particles is positive, then the
 C     particles are born randomly, with the probability of being born in a
@@ -15378,12 +15375,12 @@ C     cell being proportional to the cell volume. This probability weighting
 C     can be changed by calling "traj" with a negative number of particles.
 C     Then the weighting function is whatever field is on top of the matrix
 C     stack. For example, this set of commands does the following:
-C     fnax na m/ psx 0 zsel uuse  ! uutraj set to poloidal neutral flow velocity
-C     fnay na m/ psy 0 zsel vvse  ! vvtraj set to radial neutral flow velocity
-C     1000 t_#p                   ! 1000 time steps
-C     1e-4 t_pt                   ! followed for a total time of 1.e-4 s.
-C     na 0 zsel                   ! weighted with neutral density
-C     0 0 0 0 -1000 0 0 1 traj    ! over the entire physical domain (0 0 0 0)
+C     fnax na m/ psxperp 0 zsel uuse  ! uutraj set to poloidal neutral flow velocity
+C     fnay na m/ psy 0 zsel vvse      ! vvtraj set to radial neutral flow velocity
+C     1000 t_#p                       ! 1000 time steps
+C     1e-4 t_pt                       ! followed for a total time of 1.e-4 s.
+C     na 0 zsel                       ! weighted with neutral density
+C     0 0 0 0 -1000 0 0 1 traj        ! over the entire physical domain (0 0 0 0)
 C               ! 1000 particles using non-default weighting function (-1000)
 C               ! trajectories plotted (0)
 C               ! for species 0 (=H neutrals) (0)
