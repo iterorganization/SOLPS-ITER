@@ -16730,11 +16730,16 @@ Related quantities are:
 \subsubsection{dase}\index{b2plot, dase}\label{sec:dase}
 Overwrites the {\em dab2} array with the top of the matrix stack.
 
-\subsubsection{eirc}\index{b2plot, eirc}\label{sec:eirc}
-Copies {\tt Eirene} data onto {\tt B2.5} data. Specifically, the densities of neutrals
-species (when a match between {\tt B2.5} and {\tt Eirene} species can be found)
-computed from {\tt Eirene} ({\em dab2}) are added to the fluid neutral densities from
-{\tt B2.5} ({\em na}).
+\subsubsection{eirc}\index{b2plot, eirc}\index{b2plot, dab2}\index{b2plot, na}\index{b2plot, ro}\index{b2plot, pfla}\index{b2plot, rfla}\index{b2plot, fnax}\index{b2plot, fnay}\index{b2plot, ua}\index{b2plot, up}\index{b2plot, vv}\index{b2plot, uuse}\index{b2plot, vvse}\index{b2plot, arox}\index{b2plot, aroy}\label{sec:eirc}
+Copies {\tt Eirene} data onto {\tt B2.5} data. Will only be performed once.
+Specifically, the densities of neutrals species (when a match between {\tt B2.5} and
+{\tt Eirene} species can be found) computed from {\tt Eirene} ({\em dab2}) are added
+to the fluid neutral densities from {\tt B2.5} ({\em na}).
+Same for the mass density field {\em ro}.
+If the atomic particle fluxes {\em pfla} and {\em rfla} are available, then the fluxes
+and velocities for the neutral species are also updated, meaning the {\em fnax}, {\em fnay},
+{\em ua}, {\em up}, and {\em vv} fields, along with the default values of the {\em uutraj},
+{\em vvtraj}, {\em arrowx}, and {\em arrowy} arrays.
 
 \subsubsection{$<$filename,{\bf S}$>$ etal}\index{b2plot, etal}\label{sec:etal}
 Copies data from the Eirene tally output file $\langle$filename$\rangle$ to the Eirene data stack. Such files are written from the volume tally output in block 11 of the {\tt Eirene} input file. This function assumes the tally file contains 2-D data on the Eirene triangular grid.
