@@ -7195,9 +7195,9 @@ Some equations include terms which are multiplied by zero. This is meant to indi
 
 \section{Sign conventions}\index{sign conventions}\label{sec:signs}\index{COCOS}
 
-The radial coordinate $y$ increases as one crosses the separatrix from the core (or private flux) region into the main SOL region (and so is minimum at the magnetic axis). The poloidal coordinate $x$ increases in the {\em clockwise} direction when viewing the poloidal plane with the central axis line on its left. The toroidal magnetic field component $b_z$ is taken as positive if the toroidal magnetic field is directed {\em clockwise} when viewing the tokamak from above. The poloidal magnetic field component $b_x$ follows the same convention as the $x$ component and is positive when directed in the direction of increasing poloidal index, i.e. {\em clockwise}. This corresponds, following the conventions laid out in \cite{COCOS}, to a {\em COCOS} index of {\bf 6}.
+The radial coordinate $y$ increases as one crosses the separatrix from the core (or private flux) region into the main SOL region (and so is minimum at the magnetic axis). The poloidal coordinate $x$ increases in the {\em clockwise} direction when viewing the poloidal plane with the central axis line on its left. The toroidal magnetic field component $B_z$ is taken as positive if the toroidal magnetic field is directed {\em clockwise} when viewing the tokamak from above. The poloidal magnetic field component $B_x$ follows the same convention as the $x$ component and is positive when directed in the direction of increasing poloidal index, i.e. {\em clockwise}. This corresponds, following the conventions laid out in \cite{COCOS}, to a {\em COCOS} index of {\bf 6}.
 
-Is it important to know, that, in the equations below, the parallel velocity $V_\parallel$ is a true parallel velocity, i.e. it changes sign if the poloidal magnetic field component does, namely: $V_\parallel = \vec{V} \cdot \vec{B} / \left| B \right|$. This applies to all species, including electrons, meaning $V_{\parallel a}$ and $V_{\parallel e}$. However, the poloidal projections of the fluxes and currents, such as $\Gamma_{ax}$, are positive when they are colinear with $\vec{e}_x$, i.e. point in the direction of increasing $x$. The exception to this is the parallel current, $j_\parallel$. In the equations below, it has the same sign convention as the parallel velocity. In the actual code, because it is treated as a flux, it follows the sign convention of the fluxes. This therefore means that the code does not follow $j_\parallel$, but rather $j_\parallel \cdot |b_x|/b_x$.
+Is it important to know, that, in the equations below, the parallel velocity $V_\parallel$ is a true parallel velocity, i.e. it changes sign if the poloidal magnetic field component does, namely: $V_\parallel = \vec{V} \cdot \vec{B} / \left| B \right|$. This applies to all species, including electrons, meaning $V_{\parallel a}$ and $V_{\parallel e}$. However, the poloidal projections of the fluxes and currents, such as $\Gamma_{ax}$, are positive when they are colinear with $\vec{e}_x$, i.e. point in the direction of increasing $x$. The exception to this is the parallel current, $j_\parallel$. In the equations below, it has the same sign convention as the parallel velocity. In the actual code, because it is treated as a flux, it follows the sign convention of the fluxes. This therefore means that the code does not follow $j_\parallel$, but rather $j_\parallel \cdot |B_x|/B_x$.
 
 %-------- Equations by S.P. Voskoboynikov ---------
 
@@ -7223,7 +7223,7 @@ Is it important to know, that, in the equations below, the parallel velocity $V_
 \begin{equation}
 \Gamma_{ax}^{\left( PSch \right)} = D_{axy} \frac{1}{h_y} \frac{\partial n_a T_i}{\partial y}
 \qquad\qquad
-\Gamma_{ay}^{\left( PSch \right)} = D_{ayx} \frac{1}{h_x} \frac{\partial n_a T_i}{\partial x}
+\Gamma_{ay}^{\left( PSch \right)} = - D_{ayx} \frac{1}{h_x} \frac{\partial n_a T_i}{\partial x}
 \end{equation}
 
 \begin{equation}
@@ -7479,7 +7479,7 @@ and $\delta_{a,b}$ is the Kronecker delta (1 if $a=b$, 0 otherwise). Here, it is
 
 \begin{equation}
 \label{eq:particle_source_appC}
-S_a^n=S_{I_a}^n+S_{I_{a+1}}^n+S_{R_a}^n+S_{R_{a-1}}^n+S_{CX_a}^n+S_{CX_{a-1}}^n+S_a^{\rm Eirene},
+S_a^n=S_{I_a}^n+S_{I_{a+1}}^n+S_{R_a}^n+S_{R_{a-1}}^n+S_{CX_a}^n+S_{CX_{a-1}}^n+S_a^{\rm Eirene}
 \end{equation}
 
 
@@ -7647,7 +7647,7 @@ D_{n,a} = D^{(AN)}_{n,a}
 
 
 \begin{equation}
-D^{(AN)}_{n,a}=\left( c_{D_{n,a},0}+c_{D_{n,a},1}\frac{10^{20}}{n_e}+c_{D_{n,a},2}D_{f,a}+c_{D_{n,a},3}\frac{T_e}{16 e|B|}\right)f_D(x,y),
+D^{(AN)}_{n,a}=\left( c_{D_{n,a},0}+c_{D_{n,a},1}\frac{10^{20}}{n_e}+c_{D_{n,a},2}D_{f,a}+c_{D_{n,a},3}\frac{T_e}{16 e|B|}\right)f_D(x,y)
 \end{equation}
 
 \begin{equation}
@@ -7715,7 +7715,7 @@ D_{p,a} = D^{(AN)}_{p,a}
 \end{equation}
 
 \begin{equation*}
-D^{(AN)}_{p,a}=\frac 1{z_aT_e+T_i} \left( c_{D_{p,a},0} + c_{D_{p,a},1} \frac{10^{20}}{n_e} + c_{D_{p,a},2} D_{f,a} + c_{D_{p,a},3} \frac{T_e}{16 e|B|}\right),
+D^{(AN)}_{p,a}=\frac 1{z_aT_e+T_i} \left( c_{D_{p,a},0} + c_{D_{p,a},1} \frac{10^{20}}{n_e} + c_{D_{p,a},2} D_{f,a} + c_{D_{p,a},3} \frac{T_e}{16 e|B|}\right)
 \end{equation*}
 
 \begin{equation*}
@@ -7836,8 +7836,8 @@ S_{I_a}^m = S_{I_a}^q + S_{I_{a+1}}^q
 S_{I_a}^q & =
 & \left\{
 \begin{matrix}
--r_{I_a} n_e n_a \left( \frac{m_a+m_{a+1}}2 \right) V_{\parallel a}, & \ a=0,\ldots,ns-2, & \ z_a < z_{a+1} \mbox{ and } z_{n,a} = z_{n,a+1}, \\
-0, \\
+-r_{I_a} n_e n_a \left( \frac{m_a+m_{a+1}}2 \right) V_{\parallel a}, & \ a=0,\ldots,ns-2, & \ z_a < z_{a+1} \mbox{ and } z_{n,a} = z_{n,a+1} \\
+0 \\
 \end{matrix} \right.
 \end{matrix}
 \end{equation}
@@ -7847,8 +7847,8 @@ S_{I_a}^q & =
 S_{I_{a+1}}^q & =
 & \left\{
 \begin{matrix}
-r_{I_a} n_e n_a \left( \frac{m_a+m_{a+1}}2 \right) V_{\parallel a}, & \ a=0,\ldots,ns-2, & \ z_a < z_{a+1} \text{ and } z_{n,a} = z_{n,a+1}, \\
-0, \\
+r_{I_a} n_e n_a \left( \frac{m_a+m_{a+1}}2 \right) V_{\parallel a}, & \ a=0,\ldots,ns-2, & \ z_a < z_{a+1} \text{ and } z_{n,a} = z_{n,a+1} \\
+0 \\
 \end{matrix} \right.
 \end{matrix}
 \end{equation}
@@ -7864,8 +7864,8 @@ S_{R_a}^m = S_{R_a}^q + S_{R_{a-1}}^q
 S_{R_a}^q & =
 & \left\{
 \begin{matrix}
--r_{R_a} n_e n_a \left( \frac{m_a+m_{a-1}}2 \right) V_{\parallel a}, & \ a=0,\ldots,ns-1, & \ z_{a-1} < z_a \text{ and } z_{n,a-1}= z_{n,a}, \\
-0, \\
+-r_{R_a} n_e n_a \left( \frac{m_a+m_{a-1}}2 \right) V_{\parallel a}, & \ a=1,\ldots,ns-1, & \ z_{a-1} < z_a \text{ and } z_{n,a-1}= z_{n,a} \\
+0 \\
 \end{matrix} \right.
 \end{matrix}
 \end{equation}
@@ -7875,8 +7875,8 @@ S_{R_a}^q & =
 S_{R_{a-1}}^q & =
 & \left\{
 \begin{matrix}
-r_{R_a} n_e n_a \left( \frac{m_a+m_{a+1}}2 \right) V_{\parallel a}, & \ a=0,\ldots,ns-1, & \ z_{a-1} < z_a \text{ and } z_{n,a-1}= z_{n,a}, \\
-0, \\
+r_{R_a} n_e n_a \left( \frac{m_a+m_{a+1}}2 \right) V_{\parallel a}, & \ a=1,\ldots,ns-1, & \ z_{a-1} < z_a \text{ and } z_{n,a-1}= z_{n,a} \\
+0 \\
 \end{matrix} \right.
 \end{matrix}
 \end{equation}
@@ -7908,7 +7908,7 @@ S_{fr,a}^m = S_{fr,ea}^m + S_{fr,ia}^m
 The electron contributions are:
 
 \begin{equation}\label{eq:mom_terme}
-S_{Therm,ea}^m = - \alpha_{ex} c_e^{(1)} \frac{n_a z_a^2 m_e}{b_x e \zeta_e} \frac{1}{c_{\sigma^{(CL)}_{\parallel}}^{(Luciani)}} \frac{\partial T_e}{h_x \partial x}, ~ z_a \ne 0
+S_{Therm,ea}^m = - \alpha_{ex} c_e^{(1)} \frac{n_a z_a^2 m_e}{b_x e \zeta_e} \frac{1}{c_{\sigma^{(CL)}_{\parallel}}^{(Luciani)}} \frac{1}{h_x} \frac{\partial T_e}{\partial x}, ~ z_a \ne 0
 \end{equation}
 
 \begin{equation}\label{eq:mom_sorfre}
@@ -7918,7 +7918,7 @@ S_{fr,ea}^m = \frac{b_x^2 e^2 z_a^2}{\sigma_\parallel z_{eff}} n_e n_a \left( V_
 and the ion contributions are:
 
 \begin{equation}\label{eq:mom_termi}
-S_{Therm,ia}^m = \sum \limits_{\substack{b=0 \\ b \ne a}}^{ns - 1} c_{\alpha_{ab}}^{(Flim)} z_a^2 z_b^2 \frac{m_p}{\zeta_p e} \frac{n_a n_b}{n_a + n_b} \alpha_{ab} \frac{\partial T_i}{h_x \partial x}, ~z_a \ne 0
+S_{Therm,ia}^m = \sum \limits_{\substack{b=0 \\ b \ne a}}^{ns - 1} c_{\alpha_{ab}}^{(F \lim)} z_a^2 z_b^2 \frac{m_p}{\zeta_p e} \frac{n_a n_b}{n_a + n_b} \alpha_{ab} \frac{1}{h_x} \frac{\partial T_i}{\partial x}, ~z_a \ne 0
 \end{equation}
 
 \begin{equation}\label{eq:mom_sorfri}
@@ -7940,8 +7940,8 @@ $\kappa_a = \sum \limits_{r=0}^{ns - 1} z_a^2 z_r^2 n_r \sqrt{m_p} \sqrt{\frac{\
 
 $K_{rs}^{(Therm)} = \left\{
 \begin{matrix}
-c_{imp}^{(2)}, & s \ne r, & s = s_{main}, & z_r \ne 0, & z_s \ne 0, \\
-0, & r \ne r_{main}, & s \ne s_{main}, & z_r \ne 0, & z_s \ne 0, \\
+c_{imp}^{(2)}, & s \ne r, & s = s_{main}, & z_r \ne 0, & z_s \ne 0 \\
+0, & r \ne r_{main}, & s \ne s_{main}, & z_r \ne 0, & z_s \ne 0 \\
 0, & r = r_{main}, & \forall s & &
 \end{matrix}
 \right.
@@ -7949,10 +7949,10 @@ $
 
 $K_{rs}^{(V_\parallel)} = \left\{
 \begin{matrix}
-c_{imp}^{(1)}, & r = r_{main}, & s \ne r, & z_r \ne 0, & z_s \ne 0, \\
-c_{imp}^{(1)}, & s = s_{main}, & r \ne s, & z_r \ne 0, & z_s \ne 0, \\
-1, & r \ne r_{main}, & s \ne s_{main}, & z_r \ne 0, & z_s \ne 0, \\
-0, & r = s, & or & z_r = 0, & z_s = 0
+c_{imp}^{(1)}, & r = r_{main}, & s \ne r, & z_r \ne 0, & z_s \ne 0 \\
+c_{imp}^{(1)}, & s = s_{main}, & r \ne s, & z_r \ne 0, & z_s \ne 0 \\
+1, & r \ne r_{main}, & s \ne s_{main}, & z_r \ne 0, & z_s \ne 0 \\
+0, & r = s, & \text{or} & z_r = 0, & z_s = 0
 \end{matrix}
 \right.
 $
@@ -7964,7 +7964,7 @@ $z_{eff\_imp} = \frac{\sum \limits_{\substack{a=0 \\ a \ne a_{main}}}^{ns - 1} n
 $c_{\alpha_{ab}}^{(F \lim)} = \left\{
 \begin{matrix}
 1, & \mbox{inside the separatrix} \\
-\frac{1}{1+\frac{\left| \alpha_{ab} \frac{\partial T_i}{h_x \partial x} \right|}{c_{flab} j_{ab, \max}}}, & \mbox{outside the separatrix}
+\frac{1}{1+\frac{\left| \alpha_{ab} \frac{1}{h_x} \frac{\partial T_i}{\partial x} \right|}{c_{flab} j_{ab, \max}}}, & \mbox{outside the separatrix}
 \end{matrix}
 \right.
 $, ~ $j_{ab, \max} = e K_{ab}^{(V_\parallel)} \sqrt{\frac{T_i}{m_p}} \left( n_a + n_b \right)$, ~ $c_{flab} = c_{flim_4} = 0.5$
@@ -8141,7 +8141,7 @@ c_{\eta_{ax}^{(CL)}} & =
 {1 + \frac{
 \frac{\sqrt g}{h_x} \widetilde{\eta}^{(CL)}_{ax}  \left| \frac{\partial V_{\parallel a}}{h_x \partial x} \right|
 }
-{V_{m_a}^{(max)}}
+{V_{m_a}^{(\max)}}
 }, &
 \text{for all other cases} \\
 \end{matrix} \right.
@@ -8149,7 +8149,7 @@ c_{\eta_{ax}^{(CL)}} & =
 \end{equation}
 
 \begin{equation}\label{eq:vma_max}
-V_{m_a}^{(max)} = c_{flim_2} \frac{\sqrt g}{h_x} |b_x| n_a T_i ~ \text{,} ~ c_{flim_2} = \frac{3}{8}
+V_{m_a}^{(\max)} = c_{flim_2} \frac{\sqrt g}{h_x} |b_x| n_a T_i ~ \text{,} ~ c_{flim_2} = \frac{3}{8}
 \end{equation}
 
 \begin{align}\label{eq:mom_veta}
@@ -8167,7 +8167,7 @@ c_{\eta_{ax}^{(CL)}}^{Luciani} & =
 7.5 \cdot 10^{16} \left( \frac{T_i} e \right)^2}
 {c(y) \sum \limits_{a=0}^{ns-1} z_a^2 n_a}
 }
-, & \text{for hydrogenic ions on inner flux surfaces,} \\
+, & \text{for ions on inner flux surfaces} \\
 1, & \text{for all other cases} \\
 \end{matrix} \right.
 \end{matrix}$
@@ -8188,7 +8188,7 @@ c_{\eta_{ax}^{(CL)}}^{Luciani} & =
 \frac 1{1 +
 \frac{15.12 \cdot 10^{16} \cdot \varepsilon^{3/2} \left( \frac{T_i} e \right)^2}
 {c(y)\sum \limits_{a=0}^{ns-1} z_a^2 n_a}}
-, & \text{for hydrogenic ions on inner flux surfaces,} \\
+, & \text{for ions on inner flux surfaces} \\
 1, & \text{for all other cases} \\
 \end{matrix} \right.
 \end{matrix}
@@ -8203,14 +8203,10 @@ $c \left( y \right) = \mathlarger{\oint} h_x |b_x|^{-1} dx$, \ \ \ \  $\varepsil
 \eta^{(CL)}_{ax} =
 \left\{
 \begin{aligned}
-0, & \ z_a = 0 ,  \\
+0, & \ z_a = 0 \\
 \eta \sqrt{2} T_i n_a \tau_a b_x^2, & \ z_a \neq 0  \\
-\end{aligned} \right.
+\end{aligned} \right. ~ \text{,} ~ \eta = 0.96
 \end{equation}
-
-,
-
-$\eta = 0.96$,
 
 \begin{equation}
 \label{eq:mom_taua}
@@ -8234,13 +8230,13 @@ $
 \end{matrix}
 $
 
-$\eta_{ay} = \eta^{(AN)}_a + \eta^{(CL)}_{ay}$
+$\eta_{ay} = \eta^{(AN)}_a + \eta^{(CL)}_{ay}$, $\eta^{(CL)}_{ay} = 0$
 
 $\widetilde{q}_a^{(0)} = q^{(1)} \arctan \left( \frac{q_a^{(0)}}{q^{(1)}} \right), \; q^{(1)} = c_{q1} n_i T_i \sqrt{\frac{T_i + T_e}{m_i}}$
 
 $c_{q1} = 0.5$ or {\tt 'b2siav\_cqip1'} set to {\tt '0.1'} in {\tt b2mn.dat}
 
-The three-point smoothing procedure is imposed twice on $\widetilde{q}^{(0)}$ along x-direction.
+The three-point smoothing procedure is imposed twice on $\widetilde{q}^{(0)}$ along the $x$ direction.
 
 In case {\tt 'b2siav\_style\_qip'} is set to {\tt '0'} in {\tt b2mn.dat}:
 
@@ -8285,7 +8281,7 @@ e\right)^2}{c(y) \sum \limits^{ns-1}_{a=0} z_a^2 n_a}}
 {c(y) \sum \limits^{ns-1}_{a=0} z_a^2 n_a}}
 $
 
-This correction is compatible only with plateau and banana correction 'b2trcl\_lluciani' '3'
+This correction is compatible {\bf only} with plateau and banana correction ('b2trcl\_lluciani' set to '3').
 
 $\alpha^{NEO} = \frac 8{15}
 \left(
@@ -8354,9 +8350,8 @@ where $\ln \Lambda $ can be chosen as
 \end{equation}
 
 \begin{equation}\label{eq:ene_QR}
-Q_R = \sum \limits_{a=0}^{ns-1} r_{Q_a} n_e n_a
+Q_R = \sum \limits_{a=0}^{ns-1} r_{Q_a} n_e n_a ~ \text{from b2stel}
 \end{equation}
-from b2stel
 
 \begin{equation}\label{eq:ene_Qfei}
 Q_{Fei} = \left\{
@@ -8364,7 +8359,7 @@ Q_{Fei} = \left\{
  V_{e \parallel} \sum \limits_{\substack{a=0 \\ z_a \neq 0}}^{ns - 1}
 \left( S^m_{fr,ea} + S^m_{Therm,ea} \right)
 & \mbox{, when Eq.(\ref{eq:mom_new}) is activated ({\tt 'b2sigp\_style'} set to {\tt '2'})} \\
-j_x \hat E_x & \mbox{, when Eq.(\ref{eq:mom_old}) is activated}
+j_x \hat E_x + 0 \cdot j_y \hat{E}_y & \mbox{, when Eq.(\ref{eq:mom_old}) is activated}
 \end{aligned}\right.
 \end{equation}
 
@@ -8373,7 +8368,7 @@ j_x \hat E_x & \mbox{, when Eq.(\ref{eq:mom_old}) is activated}
 \subsection{Poloidal electron energy fluxes}
 
 \begin{equation}\label{eq:ene_tiqex}
-\widetilde{q}_{ex} = \widetilde{f}_{ex} T_e - \kappa_{ex} \frac 1{h_x} \frac{\partial T_e} {\partial x} - q_{ex}^{P.Sch}
+\widetilde{q}_{ex} = \widetilde{f}_{ex} T_e - \kappa_{ex} \frac 1{h_x} \frac{\partial T_e} {\partial x} + 0 \cdot \alpha_{ex} T_e \hat{E}_x - q_{ex}^{P.Sch}
 \end{equation}
 
 \begin{equation}\label{eq:ene_tifex}
@@ -8401,6 +8396,8 @@ q_{ex} =
 \right] T_e
 -
 \kappa_{ex} \frac 1{h_x} \frac{\partial T_e}{\partial x}
++
+0 \cdot \alpha_{ex} T_e \hat{E}_x
 \end{equation}
 
 \begin{equation}\label{eq:ene_gammax}
@@ -8421,7 +8418,7 @@ q_{ex} =
 q_{ex}^{(Eir)} =
 \left[
 	\frac 5 2 \Gamma_{ex}^{(Eir)} + V_{ex}^{(str)}n_e
-	- \widetilde{c_e}^{(2)} b_x \frac{\widetilde j_{\parallel}} e
+	- \widetilde{c_e}^{(2)} \frac{j_{\parallel}} e
 \right] T_e -
 \kappa_{ex} \frac 1{h_x} \frac{\partial T_e}{\partial x}
 \end{equation}
@@ -8441,7 +8438,7 @@ where
 \left(
 	b_x V_{\parallel e} + V_{ex}^{(E)} + V_{ex}^{(dia)} + V_{ex}^{(AN)}
 \right) n_e -
-D_{n,a} \frac 1{h_x} \frac{\partial n_a}{\partial x}
+D_{n,a} \frac 1{h_x} \frac{\partial n_e}{\partial x}
 \end{equation}
 
 \begin{equation*}
@@ -8449,7 +8446,7 @@ D_{n,a} \frac 1{h_x} \frac{\partial n_a}{\partial x}
 \left(
 	V_{ey}^{(E)} + V_{ey}^{(dia)} + V_{ey}^{(AN)}
 \right) n_e -
-D_{n,a} \frac 1{h_y} \frac{\partial n_a}{\partial y}
+D_{n,a} \frac 1{h_y} \frac{\partial n_e}{\partial y}
 \end{equation*}
 
 \begin{equation}\label{eq:ene_vexdia}
@@ -8461,9 +8458,9 @@ V_{ey}^{(dia)} = -\frac{B_z}{e B^2 n_e} \frac{\partial n_e T_e}{h_x \partial x}
 
 $V_{ex}^{(str)} = 0$
 
-The parameter $\widetilde{c_e}^{(2)}$ is given by:
+The parameter $\widetilde{c_e}^{(2)}$ is given by
 $\widetilde{c_e}^{(2)} = \frac{c_e^{(2)}}{\left( z_{eff} + \frac{\sqrt{2}}{2} \right)} = 1.56 \frac{(1 + 1.4 z_{eff})(1 + 0.52 z_{eff})}{(1 + 2.56 z_{eff})( 1 + 0.29 z_{eff})}\frac{1}{\left( z_{eff} + \frac{\sqrt{2}}{2} \right)}$
-when {\tt 'b2sigp\_style'} is set to {\tt '2'} (default) or to its limiting
+when {\tt 'b2sigp\_style'} is set to {\tt '2'} (default) or by its limiting
 value at $z_{eff} = 1$ of 0.71 otherwise.
 
 \subsection{Electron energy transport}
@@ -8477,21 +8474,21 @@ value at $z_{eff} = 1$ of 0.71 otherwise.
 \end{equation}
 
 \begin{equation}\label{eq:ene_chie}
-\chi_e = \left(
+\chi_e^{(AN)} = \left(
 	c_{h_e,0} + c_{h_e,1} \frac{10^{20}}{n_e} + c_{h_e,3} \frac{T_e}{16 e|B|}
-\right) f_{h_e} (x,y),
+\right) f_{h_e} (x,y)
 \end{equation}
 
 %-------- end of 10th page -------------
 
-$c_{h_e,0} = 1.2 , \;\; c_{h_e,1}=0, \;\;\; c_{h_e,3}=0$,
+$c_{h_e,0} = 1.2 , \;\; c_{h_e,1}=0, \;\;\; c_{h_e,3}=0$
 
 $
 \begin{matrix}
 f_{h_e}(x,y) & =
 & \left\{
 \begin{matrix}
-\alpha_{1,h_e}, & \ -\delta _{1,h_e} \le y \le 0, & x \in \text{Core}, \\
+\alpha_{1,h_e}, & \ -\delta _{1,h_e} \le y \le 0, & x \in \text{Core} \\
 \alpha_{2,h_e}, & \ 0 \le y \le \delta _{2,h_e}, & x \in \text{Core} \\
 \alpha_{3,h_e}, & \ x,y\in \text{PFR} \cup \text{SOL}
 \end{matrix} \right.
@@ -8499,22 +8496,22 @@ f_{h_e}(x,y) & =
 $
 
 \begin{equation}\label{eq:ene_dmkapexcl}
-\widetilde{\widetilde{\kappa}}_{ex}^{(CL)} = c_{\kappa_{ex}}^{(Flim)} \widetilde{\kappa}_{ex}^{(CL)}
+\widetilde{\widetilde{\kappa}}_{ex}^{(CL)} = c_{\kappa_{ex}}^{(F \lim)} \widetilde{\kappa}_{ex}^{(CL)}
 \end{equation}
 
 $
 \begin{matrix}\label{eq:ene_cflim}
-c_{\kappa_{ex}}^{Flim} & =
+c_{\kappa_{ex}}^{F \lim} & =
 & \left\{
 \begin{matrix}
-1, & \text{only for inner flux surfaces,} \\
+1, & \text{only for inner flux surfaces} \\
 \frac 1 {
 	1 + \frac{
 	\frac{\sqrt g}{h_x} \widetilde{\kappa}_{ex}^{(CL)}
 	\left|
 		\frac{\partial T_e}{h_x \partial x}
 	\right|}
-	{ V_{h_e}^{(max)} n_e T_e}
+	{ V_{h_e}^{(\max)} n_e T_e}
 }
 &  \text{for other flux surfaces} \\
 \end{matrix} \right.
@@ -8522,7 +8519,7 @@ c_{\kappa_{ex}}^{Flim} & =
 $
 
 \begin{equation}\label{eq:ene_vhemax}
-V_{h_e}^{(max)} = c_{flim_0} \frac{\sqrt g}{h_x}|b_x| \sqrt{\frac{T_e}{m_e}}
+V_{h_e}^{(\max)} = c_{flim_0} \frac{\sqrt g}{h_x}|b_x| \sqrt{\frac{T_e}{m_e}}
 \end{equation}
 
 \begin{equation}\label{eq:ene_mkapexcl}
@@ -8549,7 +8546,7 @@ $
 c_{\kappa_{ex}^{(CL)}}^{(Luciani)} & =
 & \left\{
 \begin{matrix}
-0.58 \varepsilon^{\frac{3}{2}}/K_1, & \text{only for inner flux surfaces,} \\
+0.58 \varepsilon^{\frac{3}{2}}/K_1, & \text{only for inner flux surfaces} \\
 1, &  \text{for other flux surfaces} \\
 \end{matrix} \right.
 \end{matrix}
@@ -8567,7 +8564,7 @@ c_{\kappa_{ex}^{(CL)}}^{(Luciani)} & =
 7.5 \cdot 10^{16} \left( \frac{T_e} e \right)^2}
 {c(y) \sum \limits_{a=0}^{ns-1} z_a^2 n_a}
 }
-, &  \text{only for inner flux surfaces,} \\
+, &  \text{only for inner flux surfaces} \\
 1, &  \text{for all other cases} \\
 \end{matrix} \right.
 \end{matrix}
@@ -8585,7 +8582,7 @@ c_{\kappa_{ex}^{(CL)}}^{(Luciani)} & =
 0.3 \cdot 10^{16} \left( \frac{T_e} e \right)^2}
 {\sum \limits_{a=0}^{ns-1} z_a^2 n_a}
 }
-, &  \text{only for inner flux surfaces,} \\
+, &  \text{only for inner flux surfaces} \\
 1, &  \text{for all other cases} \\
 \end{matrix} \right.
 \end{matrix}
@@ -8597,13 +8594,13 @@ K_1 = \frac 1{1 + 2.01 \cdot \nu_{\ast e}^{1/2} + 1.53 \cdot \nu_{\ast e}} +
 \end{equation*}
 
 \begin{equation}\label{eq:ene_nue}
-\nu_{\ast e} = \frac{c \left( y \right)}{2 \pi \varepsilon^{3/2} \tau_e \sqrt{T_e/m_e}},
+\nu_{\ast e} = \frac{c \left( y \right)}{2 \pi \varepsilon^{3/2} \tau_e \sqrt{T_e/m_e}}
 \end{equation}
 
 \begin{equation}\label{eq:ene_taue}
 \tau_e = \frac 3{4\sqrt{2\pi}}
 \frac{\sqrt{m_e} T_e^{\frac 3 2}} {\ln \Lambda \sum \limits_{a=0}^{ns-1} z_a^2 n_a}
-\left( \frac{4 \pi \varepsilon_0}{e^2}\right)^2,
+\left( \frac{4 \pi \varepsilon_0}{e^2}\right)^2
 \end{equation}
 where the Coulomb logarithm $\ln \Lambda $ can be chosen as
 
@@ -8628,7 +8625,7 @@ c \left( y \right) & =
 & \left\{
 \begin{matrix}
 \mathlarger{\int} \frac{h_x \left( x,y \right)}{|b_x|}dx
-, &  \text{for inner flux surfaces,} \\
+, &  \text{for inner flux surfaces} \\
 0, &  \text{for other} \\
 \end{matrix} \right.
 \end{matrix}
@@ -8649,7 +8646,7 @@ j^{(\parallel)}_x = \sigma_{\parallel} \left( \frac{1}{e n_e h_x} \frac{\partial
 The last term in Eq. (\ref{eq:fch_p}) is activated with the switch {\tt b2sigp\_style} set to {\tt '2'}.
 
 \begin{equation}\label{eq:ene_Ex}
-\hat E_x = \frac 1{en_e h_x} \frac{\partial n_e T_e}{\partial x} - \frac 1{h_x} \frac{\partial \Phi}{\partial x},
+\hat E_x = \frac 1{en_e h_x} \frac{\partial n_e T_e}{\partial x} - \frac 1{h_x} \frac{\partial \Phi}{\partial x}
 \end{equation}
 
 \begin{equation}\label{eq:ene_sigmparal}
@@ -8687,7 +8684,7 @@ $\alpha^{(AN)}_{x}=0$,
 
 The classical thermo-electric coefficient $\alpha^{(CL)}_{x}$ is given as:
 \begin{equation}\label{eq:ene_alphxcl}
-\alpha^{(CL)}_{x} = - b_x^2 \frac{e}{m_e} \frac{\widetilde{c_e}^{(2)}}{c_e^{(1)}} n_e \tau_e
+\alpha^{(CL)}_{x} = - b_x^2 \frac{e}{m_e} \frac{\widetilde{c_e}^{(2)}}{c_e^{(1)}} n_e \tau_e z_{eff}
 \end{equation}
 when {\tt 'b2sigp\_style'} is set to {\tt '2'} (Zhdanov formulation, default), and
 $\alpha^{(CL)}_{x} = b_x^2 \frac{e}{m_e} \sqrt{\frac 5 2} f_{\alpha} \left(z_{eff} \right) n_e \tau _e$ otherwise (Balescu formulation), and
@@ -8697,7 +8694,7 @@ See also Section \ref{sec:balescubraginskii}.
 A conductive flux limit is applied to the thermo-electric coefficient, as follows.
 If {\tt 'b2sigp\_style'} is set to {\tt '2'} (default):
 \begin{equation}\label{eq:ene_2dtialphxcl}
-\widetilde{\widetilde{\alpha}}^{(CL)}_{x} = c_{\alpha_{ex}}^{(F\text{lim})} \widetilde{\alpha}^{(CL)}_{x}
+\widetilde{\widetilde{\alpha}}^{(CL)}_{x} = c_{\alpha_{ex}}^{(F \lim)} \widetilde{\alpha}^{(CL)}_{x}
 \end{equation}
 
 \begin{equation}\label{eq:ene_2tialphxcl}
@@ -8705,7 +8702,7 @@ If {\tt 'b2sigp\_style'} is set to {\tt '2'} (default):
 \end{equation}
 
 \begin{equation*}
-c_{\alpha_{ex}}^{(F\text{lim})} = \left\{
+c_{\alpha_{ex}}^{(F \lim)} = \left\{
 \begin{matrix}
 1, & \text{inside the separatrix} \\
 \frac{1}{1+\left|\frac{\alpha^{(CL)}_{x} \frac{1}{h_x} \frac{\partial T_e}{\partial x}}{c_{flal} j_{e \max}}\right|}, & \text{outside the separatrix} \\
@@ -8727,7 +8724,7 @@ If {\tt 'b2sigp\_style'} is set to {\tt '1'}:
 \subsection{Radial electron energy fluxes}
 
 \begin{equation}\label{eq:ene_tiqey}
-\widetilde q_{ey} = \widetilde f_{ey} T_e - \kappa_{ey} \frac 1{h_y} \frac{\partial T_e}{\partial y} - q_{ey}^{P.Sch}
+\widetilde q_{ey} = \widetilde f_{ey} T_e - \kappa_{ey} \frac 1{h_y} \frac{\partial T_e}{\partial y} + 0 \cdot \alpha_{ey} T_e \hat{E}_y - q_{ey}^{P.Sch}
 \end{equation}
 
 \begin{equation*}
@@ -8746,6 +8743,7 @@ q_{ey} = \left[
 	V_{ey}^{(str)} n_e
 \right] T_e -
 \kappa_{ey} \frac 1{h_y} \frac{\partial T_e}{\partial y}
++ 0 \cdot \alpha_{ey} T_e \hat{E}_y
 \end{equation}
 
 \begin{equation}\label{eq:ene_gammay}
@@ -8764,11 +8762,11 @@ q_{ey} = \left[
 $V_{ey}^{(str)} = 0$
 
 \begin{equation}\label{eq:ene_Ey}
-\hat E_y = \frac 1{e n_e h_y} \frac{\partial n_e T_e}{\partial y} - \frac 1{h_y}\frac{\partial \Phi }{\partial y},
+\hat E_y = \frac 1{e n_e h_y} \frac{\partial n_e T_e}{\partial y} - \frac 1{h_y}\frac{\partial \Phi }{\partial y}
 \end{equation}
 
 \begin{equation}\label{eq:ene_kapey}
-\kappa_{ey} = \kappa_e^{(AN)} + \kappa_{ey}^{(CL)} + \kappa_e^{(ST)},
+\kappa_{ey} = \kappa_e^{(AN)} + \kappa_{ey}^{(CL)} + \kappa_e^{(ST)}
 \end{equation}
 
 $\kappa_{ey}^{(CL)} = 0$
@@ -8785,7 +8783,7 @@ $\kappa_{ey}^{(CL)} = 0$
 \end{matrix}
 \end{equation}
 
-$\alpha_{ey} = \alpha^{(AN)}_{y} + \alpha^{(CL)}_{y}$,
+$\alpha_{ey} = \alpha^{(AN)}_{y} + \alpha^{(CL)}_{y}$
 
 \begin{equation}\label{eq:ene_ayAN}
 \alpha^{(AN)}_{y} = \left(
@@ -8808,7 +8806,7 @@ $\alpha^{(CL)}_{y} = 0$
 	\frac{\sqrt g}{h_y} \widetilde q_{iy}
 \right) + \sum \limits^{ns-1}_{a = 0} \frac{n_a T_i}{\sqrt{g}} \frac{\partial}{\partial x} \left(
 	\frac{\sqrt g}{h_x} V_{a \parallel} b_x
-\right)
+\right) =
 \\
 = Q_{\Delta} + Q_{F_{ab}} +  c_{E \times B} T_i B_z \frac{1}{h_x h_y} \left(
 	\frac{\partial \Phi}{\partial y} \frac{\partial}{\partial x} \left(
@@ -8874,7 +8872,7 @@ Q_{F_{ab}} =
 \sum \limits^{ns-1}_{\substack{a = b + 1 \\ z_a \neq 0}}
 \frac 1{4 \tau_p} m_p
 \sqrt{ \frac {\frac{m_a}{m_p} \frac{m_b}{m_p}} {\frac{m_a}{m_p} + \frac{m_b}{m_p}} }
-z_a^2 z_b^2 n_b n_a \left( V_{a \parallel} - V_{b \parallel} \right)^2
+z_a^2 z_b^2 n_a n_b \left( V_{a \parallel} - V_{b \parallel} \right)^2
 \end{equation}
 
 Atom heat source due to ionization
@@ -8903,7 +8901,7 @@ Atom heat source due to recombination
 
 \begin{equation}
 \label{eq:eni_QRi}
-Q_R^{(i)} = \sum \limits_{a=0}^{ns-1} Q_{R_a}^{(i)}
+Q_R^{(i)} = \sum \limits_{a=1}^{ns-1} Q_{R_a}^{(i)}
 \end{equation}
 
 \begin{equation}
@@ -8937,16 +8935,13 @@ $
 
 \subsection{Poloidal ion energy fluxes}
 \begin{multline}\label{eq:eni_tiqix}
-%\begin{matrix}
 \widetilde q_{ix} = \widetilde f_{ix} T_i - \kappa_{ix} \frac 1{h_x} \frac{\partial T_i}{\partial x} - q_{ix}^{P.Sch} = \\
-= \frac 3 2 \Gamma_{ix} T_i  + V_{ix}^{(str)} n_i  T_i + 0 \cdot \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)}}{e} \right) T_i - \\
+= \frac 3 2 \Gamma_{ix} T_i + V_{ix}^{(str)} n_i T_i + \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + j_x^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)}}{e} \right) T_i - \\
 - \kappa_{ix} \frac 1{h_x} \frac{\partial T_i}{\partial x} - q_{ix}^{P.Sch}
-%\end{matrix}
 \end{multline}
 
-
 \begin{equation*}
-\widetilde f_{ix} = \frac 3 2 \Gamma_{ix} + V_{ix}^{(str)} n_i + 0 \cdot \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)}}{e} \right)
+\widetilde f_{ix} = \frac 3 2 \Gamma_{ix} + V_{ix}^{(str)} n_i + \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + j_x^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)}}{e} \right)
 \end{equation*}
 
 \begin{equation}\label{eq:eni_qixPSch}
@@ -8958,7 +8953,7 @@ q_{ix} = \left[
 	\frac 3 2 \Gamma_{ix} +
 	\frac 5 2 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \widetilde V_{ax}^{(dia)} +
 	V_{ix}^{(str)} n_i +
-        0 \cdot \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)}}{e} \right)
+        \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + j_x^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)}}{e} \right)
 \right] T_i
 - \kappa_{ix} \frac 1{h_x} \frac{\partial T_i}{\partial x}
 \end{equation}
@@ -8996,7 +8991,7 @@ q_{ix}^{(Eir)} =
 			\frac{ \frac{\sqrt{g}}{h_x} \kappa_a^{(AN)} \left| \frac{\partial T_i}{h_x \partial x} \right|}
 			{\frac{\sqrt{g}}{h_x} \alpha V_{h_a} n_a T_i}
 		\right)^{\gamma_2}
-\right)^{\frac 1{\gamma_2}}}
+\right)^{\frac 1{\gamma_2}}},
 & z_a = 0 \\
 \end{matrix} \right.
 \end{matrix}
@@ -9028,19 +9023,19 @@ f_{h_a}(x,y) & =
 \begin{matrix}
 1, & \ z_a = 0 \\
 \alpha_{1,h_a}, & \ -\delta_{1,h_a} \le y \le 0, & x \in \text{Core}, z_a \neq 0 \\
-\alpha_{2,h_a}, & \ 0\le y\le \delta_{2,h_a}, & x \in \text{Core}, \\
+\alpha_{2,h_a}, & \ 0\le y\le \delta_{2,h_a}, & x \in \text{Core} \\
 \alpha_{3,h_a}, & \ x,y\in \text{PFR} \cup \text{SOL}
 \end{matrix} \right.
 \end{matrix}
 $
 
 \begin{equation}\label{eq:eni_dtkapixCL}
-\widetilde{\widetilde{\kappa}}_{ix}^{(CL)} = c_{\kappa_{ix}}^{(flim)} \widetilde{\kappa}_{ix}^{(CL)}
+\widetilde{\widetilde{\kappa}}_{ix}^{(CL)} = c_{\kappa_{ix}}^{(F \lim)} \widetilde{\kappa}_{ix}^{(CL)}
 \end{equation}
 
 \begin{equation}\label{eq:eni_cflim}
 \begin{matrix}
-c_{\kappa_{ix}}^{flim} & =
+c_{\kappa_{ix}}^{F \lim} & =
 & \left\{
 \begin{matrix}
 1, & \text{for inner flux surfaces} \\
@@ -9050,7 +9045,7 @@ c_{\kappa_{ix}}^{flim} & =
 	\left|
 		\frac{\partial T_i}{h_x \partial x}
 	\right|}
-	{ V_{h_i}^{(max)} n_i T_i}
+	{ V_{h_i}^{(\max)} n_i T_i}
 },
 &  \text{for other flux surfaces} \\
 \end{matrix} \right.
@@ -9058,30 +9053,17 @@ c_{\kappa_{ix}}^{flim} & =
 \end{equation}
 
 \begin{equation}\label{eq:eni_vhimax}
-V_{h_i}^{(max)} = c_{flim_1} \frac{\sqrt g}{h_x} |b_x| \sqrt{\frac{T_i}{m_p}}
+V_{h_i}^{(\max)} = c_{flim_1} \frac{\sqrt g}{h_x} |b_x| \sqrt{\frac{T_i}{m_p}}
 \frac{\sum \limits_{a=0}^{ns-1}  n_a \sqrt{\frac{m_p}{m_a}}}{n_i}
 \end{equation}
 
-$c_{flim_1}$ is the ion heat flux limiter coefficient.
+$c_{flim_1} = 0.15$ is the ion heat flux limiter coefficient.
 
 \begin{equation}\label{eq:eni_tikapixCL}
 \tilde{\kappa}_{ix}^{(CL)} = c_{\kappa_{ix}^{(CL)}}^{(Luciani)} \kappa_{ix}^{(CL)}
 \end{equation}
 
-If the plateau and banana transport regimes correction is applied (default, {\tt 'b2trcl\_lluciani'} set to {\tt '3'}), one has:
-
-\begin{equation}\label{eq:eni_3cluciCL}
-\begin{matrix}
-c_{\kappa_{ix}^{(CL)}}^{(Luciani)} & =
-& \left\{
-\begin{matrix}
-1.6 \varepsilon^{\frac{3}{2}}/K_2, & \text{only for inner flux surfaces,} \\
-1, &  \text{for other flux surfaces} \\
-\end{matrix} \right.
-\end{matrix}
-\end{equation}
-
-If {\tt 'b2trcl\_luciani'} is set to {\tt '1'}, one gets instead:
+If {\tt 'b2trcl\_luciani'} is set to {\tt '1'}, one gets:
 
 \begin{equation}\label{eq:eni_1cluciCL}
 \begin{matrix}
@@ -9093,8 +9075,8 @@ c_{\kappa_{ix}^{(CL)}}^{(Luciani)} & =
 7.5 \cdot 10^{16} \left( \frac{T_i} e \right)^2}
 {c(y) \sum \limits_{a=0}^{ns-1} z_a^2 n_a}
 }
-, &  \text{only for inner flux surfaces,} \\
-1, &  \text{for all other cases} \\
+, &  \text{only for inner flux surfaces} \\
+1, &  \text{for other flux surfaces} \\
 \end{matrix} \right.
 \end{matrix}
 \end{equation}
@@ -9111,13 +9093,26 @@ c_{\kappa_{ix}^{(CL)}}^{(Luciani)} & =
 0.3 \cdot 10^{16} \left( \frac{T_i} e \right)^2}
 {\sum \limits_{a=0}^{ns-1} z_a^2 n_a}
 }
-, &  \text{only for inner flux surfaces,} \\
-1, &  \text{for all other cases} \\
+, &  \text{only for inner flux surfaces} \\
+1, &  \text{for other flux surfaces} \\
 \end{matrix} \right.
 \end{matrix}
 \end{equation}
 
 %-------- end of 16th page -------------
+
+If the plateau and banana transport regimes correction is applied (default, {\tt 'b2trcl\_lluciani'} set to {\tt '3'}), one has:
+
+\begin{equation}\label{eq:eni_3cluciCL}
+\begin{matrix}
+c_{\kappa_{ix}^{(CL)}}^{(Luciani)} & =
+& \left\{
+\begin{matrix}
+1.6 \varepsilon^{\frac{3}{2}}/K_2, & \text{only for inner flux surfaces} \\
+1, &  \text{for other flux surfaces} \\
+\end{matrix} \right.
+\end{matrix}
+\end{equation}
 
 \begin{equation*}
 K_2 = \frac{
@@ -9137,12 +9132,10 @@ K_2 = \frac{
 
 \begin{equation}\label{eq:eni_kapixCL}
 \kappa_{ix}^{(CL)} =
-\frac 5 2 b_x^2 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} \frac{T_i}{m_a} n_a f_{k_i} \tau_a,
+\frac 5 2 b_x^2 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} \frac{T_i}{m_a} n_a f_{k_i} \tau_a, ~ f_{k_i} = 2.253
 \end{equation}
 
-$f_{k_i} = 2.253$
-
-For the integral modeling ({\tt 'b2trcl\_integral\_modeling'} set to {\tt '1'}) in the region of the overlap with {\tt ASTRA} in the inner part of the core:
+For integrated modeling workflows ({\tt 'b2trcl\_integral\_modeling'} set to {\tt '1'}), in the region of the overlap with {\tt ASTRA} in the inner part of the core:
 
 \begin{equation}\label{eq:eni_tkapixCL}
 \widetilde{\kappa}_{ix}^{(CL)} = \frac{25}4 \left(
@@ -9151,18 +9144,17 @@ For the integral modeling ({\tt 'b2trcl\_integral\_modeling'} set to {\tt '1'}) 
 \frac{h_{y \text{(outer midplane)}}} e
 \left[
 \oint \frac{\sqrt g}{B^2} \left( 1-\frac{B^2}{\left\langle B^2 \right\rangle} \right)^2 dx
-\right] \times K_{\text{ASTRA}},
+\right] \times K_{\text{ASTRA}}
 \end{equation}
 
-here $\left\langle B^2 \right\rangle = \frac{\mathlarger{\oint} B^2 \sqrt{g} dx}{\mathlarger{\oint} \sqrt g dx}$
+Here $\left\langle B^2 \right\rangle = \frac{\mathlarger{\oint} B^2 \sqrt{g} dx}{\mathlarger{\oint} \sqrt g dx}$
 
-from {\tt ASTRA} we get $T_i/e$ and $\oint q_i^{NEO} ds$ as a functions of $R_{\text{(outer midplane)}}$ and calculate
-
+From {\tt ASTRA} we get $T_i/e$ and $\oint q_i^{NEO} ds$ as a functions of $R_{\text{(outer midplane)}}$ and calculate
 
 \begin{equation}\label{eq:eni_kastra}
 K_{ASTRA} = \frac{-1}{\oint q_i^{NEO} ds} \frac{d(T_i/e)}{dR_{\text{(outer midplane)}}}
 \end{equation}
-as a function of the flux surface in {\tt B2.5}
+as a flux surface function in {\tt B2.5}.
 
 $V_{ix}^{(str)}=0$
 
@@ -9173,7 +9165,7 @@ $V_{ix}^{(str)}=0$
 \widetilde q_{iy} = \widetilde f_{iy} T_i -
 \kappa_{iy} \frac 1{h_y} \frac{\partial T_i}{\partial y} -
 q_{iy}^{P.Sch} = \left[\frac 3 2 \Gamma_{iy} + V_{iy}^{(str)} n_i + \frac 3 2 \frac{\left(
-	j_y^{(AN)} + \widetilde j_y^{(vis \parallel)} + \widetilde j_y^{(vis \perp)} + \widetilde j_y^{(visq)} + j_y^{(in)}
+	j_y^{(AN)} + \widetilde j_y^{(vis \parallel)} + j_y^{(vis \perp)} + \widetilde j_y^{(visq)} + j_y^{(in)}
 \right)} e \right] T_i - \\
 - \kappa_{iy} \frac 1{h_y} \frac{\partial T_i}{\partial y} -
 q_{iy}^{P.Sch}
@@ -9183,7 +9175,7 @@ q_{iy}^{P.Sch}
 
 \begin{equation*}
 \widetilde f_{iy} = \frac 3 2 \Gamma_{iy} + V_{iy}^{(str)} n_i + \frac 3 2 \frac{\left(
-	j_y^{(AN)} + \widetilde j_y^{(vis \parallel)} + \widetilde j_y^{(vis \perp)} + \widetilde j_y^{(visq)} + j_y^{(in)}
+	j_y^{(AN)} + \widetilde j_y^{(vis \parallel)} + j_y^{(vis \perp)} + \widetilde j_y^{(visq)} + j_y^{(in)}
 \right)} e
 \end{equation*}
 
@@ -9200,7 +9192,7 @@ q_{iy} = \left[
 	\frac{5}{2} \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \widetilde V_{ay}^{(dia)} +
 	V_{iy}^{(str)} n_i +
 	\frac 3 2 \frac{\left(
-		j_y^{(AN)} + \widetilde j_y^{(vis \parallel)} + \widetilde j_y^{(vis \perp)} + \widetilde j_y^{(visq)} + j_y^{(in)}
+		j_y^{(AN)} + \widetilde j_y^{(vis \parallel)} + j_y^{(vis \perp)} + \widetilde j_y^{(visq)} + j_y^{(in)}
 	\right)} e
 \right] T_i - \kappa_{iy} \frac{1}{h_y} \frac{\partial T_i}{\partial y}
 \end{equation}
@@ -9255,7 +9247,7 @@ $\kappa_{iy}^{(CL)} = 0$
 \subsection{Poloidal currents}
 
 \begin{equation}\label{eq:pot_jx}
-j_x = j_x^{(AN)} + \widetilde j_x^{(dia)} + j_x^{(in)} + \widetilde j_x^{(vis \parallel)} + \widetilde j_x^{(vis \perp)}
+j_x = j_x^{(AN)} + \widetilde j_x^{(dia)} + j_x^{(in)} + \widetilde j_x^{(vis \parallel)} + j_x^{(vis \perp)}
 + \widetilde j_x^{(visq)} + \widetilde j_x^{(s)} + j^{(\parallel)}_x
 \end{equation}
 
@@ -9271,13 +9263,13 @@ j_x^{(AN)} = - \sigma^{(AN)} \frac{\partial \Phi}{h_x \partial x}
 	\right)
 }{h_y}
 \frac{\partial}{\partial y}
-\left( \frac{1}{B^2} \right),
+\left( \frac{1}{B^2} \right)
 \end{equation}
 
 \begin{equation}\label{eq:pot_tijxin}
 \widetilde j_x^{(in)} = \frac{B_z}2 \frac{\partial}{h_y \partial y}
 \left( \frac{1}{B^2} \right)
-\sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} m_a n_a V^2_{a \parallel},
+\sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} m_a n_a V^2_{a \parallel}
 \end{equation}
 
 %-------- end of 18th page -------------
@@ -9289,11 +9281,11 @@ j_x^{(AN)} = - \sigma^{(AN)} \frac{\partial \Phi}{h_x \partial x}
 \left( \frac{1}{B^2} \right)
 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a = 1~\&~z_{n,a} = 1 }}
 \widetilde{\widetilde{\eta}}^{(CL)}_{ax}
-\frac{\partial \left( \sqrt{B} V_{a \parallel} \right)}{h_x \partial x},
+\frac{\partial \left( \sqrt{B} V_{a \parallel} \right)}{h_x \partial x}
 \end{equation}
 
 \begin{equation*}
-\widetilde j_x^{(vis \perp)} = 0,
+j_x^{(vis \perp)} = 0
 \end{equation*}
 
 \begin{equation}
@@ -9341,7 +9333,7 @@ $j_x^{(\parallel)}$ - see above
 \subsection{Radial currents}
 
 \begin{equation}\label{eq:pot_jy}
-j_y = j_y^{(AN)} + \widetilde j_y^{(dia)} + j_y^{(in)} + \widetilde j_y^{(vis \parallel)} + \widetilde j_y^{(vis \perp)}
+j_y = j_y^{(AN)} + \widetilde j_y^{(dia)} + j_y^{(in)} + \widetilde j_y^{(vis \parallel)} + j_y^{(vis \perp)}
 + \widetilde j_y^{(visq)} + \widetilde j_y^{(s)} + j_y^{(ST)}
 \end{equation}
 
@@ -9356,23 +9348,23 @@ j_y^{(AN)} = - \sigma^{(AN)} \frac{\partial \Phi}{h_y \partial y}
 	\right)
 }{h_x}
 \frac{\partial}{\partial x}
-\left( \frac{1}{B^2} \right),
+\left( \frac{1}{B^2} \right)
 \end{equation}
 
 \begin{equation}\label{eq:pot_jyin}
 j_y^{(in)} = - \frac{B_z}2 \frac{\partial}{h_x \partial x}
 \left( \frac{1}{B^2} \right)
-\sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} m_a n_a V^2_{a \parallel},
+\sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} m_a n_a V^2_{a \parallel}
 \end{equation}
 
 \begin{equation}\label{eq:pot_tijyvispar}
 \widetilde j_y^{(vis \parallel)} =
-\frac{b_z B_x}{3 B^{\frac{1}{2}}}
+b_z \frac{B_x}{3 B^{\frac{1}{2}}}
 \frac{\partial}{h_x \partial x}
 \left( \frac{1}{B^2} \right)
 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a = 1~\&~z_{n,a} = 1}}
 \widetilde{\widetilde{\eta}}^{(CL)}_{ax}
-\frac{\partial \left( \sqrt{B} V_{a \parallel} \right)}{h_x \partial x},
+\frac{\partial \left( \sqrt{B} V_{a \parallel} \right)}{h_x \partial x}
 \end{equation}
 
 not agreed with parallel momentum balance?
@@ -9483,7 +9475,7 @@ where $\widetilde n_e$ is the electron density at the location where the innermo
 L\left( x \right) = \int \limits_0^{y_{out}} h_y \left( x,y \right) ~ dy
 \end{equation*}
 
-$c_{\sigma_a,0} = 10^{-6} \div 10^{-3}$,   $c_{\sigma_a,1}=0$,  $c_{\sigma_a,3}=0$,
+$c_{\sigma_a,0} = 10^{-6} \div 10^{-3}$, $c_{\sigma_a,1}=0$, $c_{\sigma_a,3}=0$
 
 $\sigma^{(CL)}_{y} = 0$
 
@@ -9628,7 +9620,7 @@ $\left. \frac{\sqrt g}{h_y} \Gamma_{ay} \right|_{S_1} = 0$
 	\left. v_{big} n_a \right|_{S_1} - v_{big} n_a
 \right) \right|_{S_1},
 \;\;
-v_{big} = 10^{18},
+v_{big} = 10^8 \sqrt{\frac{100 \text{eV}}{m_p}},
 \;\;
 \left. n_a \right|_{S_1} \text{ is the desired density in } m^{-3}
 \end{equation}
@@ -9757,7 +9749,7 @@ c_{n_a,a,2} \frac{\sqrt g}{h_y} \sqrt{\frac{z_a T_e + T_i}{m_a}} n_a
 \right] \right|_N
 \end{equation}
 
-$c_{n_a,a,2} = 10^{-3}$ is the radial leakage velocity, in units of the species local thermal velocity. Negative velocities are directed out of the plasma.
+$c_{n_a,a,2} = -10^{-3}$ is the radial leakage velocity, in units of the species local thermal velocity. Negative velocities are directed out of the plasma.
 
 % -- end --
 
@@ -9848,7 +9840,7 @@ p_{n,a,1} \frac{\sqrt g}{h_x}
 \right] \right|_W
 \end{equation}
 
-$\widetilde{\Gamma}_{ax}$ was replaced by $\Gamma_{ax}$ (5)
+$\widetilde{\Gamma}_{ax}$ was replaced by $\Gamma_{ax}$
 
 $r_{rec,0,0} = 0,\;\; r_{rec,1,0} = 1,\;\; p_{n_a,a,1} = 0 $
 
@@ -9961,7 +9953,7 @@ p_{m,a,2} h_z \frac{\sqrt g}{h_y} V_{\parallel a}
 
 $p_{m,a,1}=0$ is the imposed velocity, in $m.s^{-1}$, and $p_{m,a,2}=10^5$ is the strength with which this velocity is imposed.
 
-We had these b.c.
+We had this b.c.
 
 $\left. h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_{S_0} =
 \left. \left[
@@ -9987,7 +9979,7 @@ Inserted into {\tt b2stbc\_phys} for {\tt BCMOM=12} as $c_{m,a,3} \rightarrow p_
 \left. \left[
 	p_{m,a,1} p_{m,a,2} h_z \frac{\sqrt g}{h_y} -
 	p_{m,a,2} h_z \frac{\sqrt g}{h_y} V_{\parallel a}
-\right] \right|_{S_0},
+\right] \right|_{S_0}
 \end{equation}
 
 $p_{m,a,1}=0$ is the imposed velocity, in $m.s^{-1}$, and $p_{m,a,2}=10^5$ is the strength with which this velocity is imposed.
@@ -9999,7 +9991,7 @@ $p_{m,a,1}=0$ is the imposed velocity, in $m.s^{-1}$, and $p_{m,a,2}=10^5$ is th
 	c_{m,a,6} \max \left(
 		0, -h_z \frac{\sqrt g}{h_y} \frac{\Gamma_{ay}^{Cor}}{n_a}
 	\right) m_a n_a V_{\parallel a}
-\right] \right|_{S_0},
+\right] \right|_{S_0}
 \end{equation}
 
 delete term with {\tt max}!
@@ -10043,27 +10035,29 @@ $p_{m,a,1}=0$ is the imposed velocity, in $m.s^{-1}$, and $p_{m,a,2}=10^5$ is th
 
 {\em {\tt b2stbc\_spb} style:} {\tt BCMOM = 14}
 
-$\left. h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_{S_1} =
-c_{m,a,3} h_z \left. \frac{\sqrt g}{h_y} m_a n_a V_{\parallel a} \right|_{S_1} + \left. \left[
+\begin{align*}
+\left. h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_{S_1} =
+c_{m,a,3} h_z \left. \frac{\sqrt g}{h_y} m_a n_a V_{\parallel a} \right|_{S_1} +& \left. \left[
 h_z \frac{\sqrt g}{h_y} m_a \left\langle n_a \right\rangle \left( -2 \right)\frac{\left\langle T_i \right\rangle B_z}{ez_a}\frac{\partial }{h_x \partial x} \left( \frac 1{B^2} \right) \left\langle V_{\parallel a} \right\rangle c_{drift} +
 c_{corflux} h_z \frac{\sqrt g}{h_y}
-\right] \right|_{S_1}$
+\right] \right|_{S_1} \\
++& \left. c_{m,a,1} \max \left( 0 , - h_z \frac{\sqrt{g}}{h_y} \frac{\Gamma_{ay}^{Cor}}{n_a} \right) m_a n_a V_{\parallel a} \right|_{S_1}
+\end{align*}
 
-$c_{m,a,3} = -10^{10}$
+$c_{m,a,1} = 0$, $c_{m,a,3} = -10^{10}$
 
-{\em Prescribe the value of the parallel velocity as a function of poloidal coordinate:} {\tt BCMOM = 15}
+{\em Prescribe the value of the parallel velocity as a function of the poloidal coordinate:} {\tt BCMOM = 15}
 
 $
 \left. h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_{S_1} =
 \left. v_{big} n_{e0} m_{a} h_z \frac{\sqrt g}{h_y} \left[
 	\frac{\langle B \rangle}{B} p_{m,a,1} - V_{\parallel a}
-\right] \right|_{S_1}$,
+\right] \right|_{S_1}$
 
 where  $\langle B \rangle =
-\frac{\mathlarger{\oint} B \sqrt{g} \, dx}{\mathlarger{\oint} \sqrt{g} \, dx}
-$, the integration is done over inner magnetic surfaces
-
-$v_{big} \approx 10^{12}$, $n_{e0} = 10^{20}$, $p_{m,a,1}$ is a given value of the average parallel velocity, in $m.s^{-1}$.
+\frac{\mathlarger{\oint}_{S_1} B \sqrt{g} \, dx}{\mathlarger{\oint}_{S_1} \sqrt{g} \, dx}
+$, the integration is done over the innermost magnetic surface,
+$v_{big} = 10^{8} \sqrt{\frac{100 \text{eV}}{m_p}}$, $n_{e0} = 10^{20}$, $p_{m,a,1}$ is the given value of the average parallel velocity, in $m.s^{-1}$.
 
 \subsubsection{North}
 
@@ -10132,6 +10126,8 @@ $ \left. h_z \frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_W = \left. \left[
 \right]
 \right|_W$
 
+with $u_{big} = 10^{10} \sqrt{\frac{100 \text{eV}}{m_p}}$ and $\epsilon = 10^{-10}$.
+
 $V_{West} =
 - h_z \frac{\sqrt g}{h_x} \frac{|b_x|}{b_x} V_{ax}^{(E \times B)}
 - h_z \frac{\sqrt g}{h_x} b_x
@@ -10143,12 +10139,12 @@ $V_{West} =
 {\em Imposing a specified parallel velocity:} {\tt BCMOM = 1}
 
 $\left. \frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_W = \left. \left[
-	u_{big} n_{e00} a_{m, a} \frac{\sqrt{g}}{h_x} p_{m,a,1} -
-	u_{big} n_{e00} a_{m, a} \frac{\sqrt{g}}{h_x} V_{\parallel a}
+	u_{big} n_{e00} \frac{m_a}{m_p} \frac{\sqrt{g}}{h_x} p_{m,a,1} -
+	u_{big} n_{e00} \frac{m_a}{m_p} \frac{\sqrt{g}}{h_x} V_{\parallel a}
 \right]
 \right|_W$
 
-$p_{m,a,1}=0$ is the imposed velocity in $m.s^{-1}$, $u_{big} = 10^{18}$, $n_{e00} = 10^{20}$
+$p_{m,a,1}=0$ is the imposed velocity in $m.s^{-1}$, $n_{e00} = 10^{20}$.
 
 \underline{If $z_a \neq 0$}
 
@@ -10157,14 +10153,14 @@ $p_{m,a,1}=0$ is the imposed velocity in $m.s^{-1}$, $u_{big} = 10^{18}$, $n_{e0
 If $p_{m,a,2} < 0.5$:
 
 $\left. \frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_W = \left. \left[
-	-\frac{u_{big}}{\epsilon^2}  n_a m_a \frac{\sqrt{g}}{h_x} u_{p_{out}}
-	-\frac{u_{big}}{\epsilon^2}  n_a m_a \frac{\sqrt{g}}{h_x} V_{\parallel a}
+	-\frac{u_{big}}{\epsilon^2} n_a m_a \frac{\sqrt{g}}{h_x} u_{p_{out}}
+	-\frac{u_{big}}{\epsilon^2} n_a m_a \frac{\sqrt{g}}{h_x} V_{\parallel a}
 \right]
 \right|_W$
 
 %-------- end of 28th page -------------
 
-$p_{m,a,1} = 1$, $p_{m,a,2} = 0$, $u_{big} = 10^{18}$, $n_{e00} = 10^{20}$, $\epsilon = 10^{-10}$
+$p_{m,a,1} = 1$, $p_{m,a,2} = 0$
 
 $u_{p_{out}} = \max \left\{ 0, \frac{u_{u_{out}}}{b_x} + \frac{u_a^{(dia)}}{b_x}  \right\}$,
 $u_{u_{out}} = p_{m,a,1} c_s |b_x|$,
@@ -10199,12 +10195,12 @@ $V_{East} =
 {\em Imposing a specified parallel velocity:} {\tt BCMOM = 1}
 
 $\left. -\frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_E = \left. \left[
-	u_{big} n_{e00} a_{m, a} \frac{\sqrt{g}}{h_x} p_{m,a,1} -
-	u_{big} n_{e00} a_{m, a} \frac{\sqrt{g}}{h_x} V_{\parallel a}
+	u_{big} n_{e00} \frac{m_a}{m_p} \frac{\sqrt{g}}{h_x} p_{m,a,1} -
+	u_{big} n_{e00} \frac{m_a}{m_p} \frac{\sqrt{g}}{h_x} V_{\parallel a}
 \right]
 \right|_E$
 
-$p_{m,a,1}=0$ is the imposed parallel velocity in $m.s^{-1}$, $u_{big} = 10^{18}$, $n_{e00} = 10^{20}$
+$p_{m,a,1}=0$ is the imposed parallel velocity in $m.s^{-1}$.
 
 \underline{If $z_a \neq 0$}
 
@@ -10213,12 +10209,12 @@ $p_{m,a,1}=0$ is the imposed parallel velocity in $m.s^{-1}$, $u_{big} = 10^{18}
 If $p_{m,a,2} < 0.5$:
 
 $\left. -\frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_E = \left. \left[
-	-\frac{u_{big}}{\epsilon^2}  n_a m_a \frac{\sqrt{g}}{h_x} u_{p_{out}}
-	-\frac{u_{big}}{\epsilon^2}  n_a m_a \frac{\sqrt{g}}{h_x} V_{\parallel a}
+	-\frac{u_{big}}{\epsilon^2} n_a m_a \frac{\sqrt{g}}{h_x} u_{p_{out}}
+	-\frac{u_{big}}{\epsilon^2} n_a m_a \frac{\sqrt{g}}{h_x} V_{\parallel a}
 \right]
 \right|_E$
 
-$p_{m,a,1} = 1$, $p_{m,a,2} = 0$, $u_{big} = 10^{18}$, $n_{e00} = 10^{20}$, $\epsilon = 10^{-10}$
+$p_{m,a,1} = 1$, $p_{m,a,2} = 0$
 
 $u_{p_{out}} = \max \left\{ 0, \frac{u_{u_{out}}}{b_x} - \frac{u_a^{(dia)}}{b_x}  \right\}$,
 $u_{u_{out}} = p_{m,a,1} c_s |b_x|$,
@@ -10302,9 +10298,9 @@ $\left. \frac{\sqrt{g}}{h_y} j_y \right|_{S_0} = 0$
 - \frac{B_z}{2}
 \frac{\partial}{h_x \partial x}
 \left( \frac{1}{B^2} \right)
-\sum \limits^{ns-1}_{\substack{a = 1 \\
+\sum \limits^{ns-1}_{\substack{a = 0 \\
     z_a \neq 0}} m_a n_a \left\langle V^2_{a \parallel}
-\right\rangle,
+\right\rangle
 \end{equation*}
 
 \subsubsection{North}
@@ -10443,7 +10439,7 @@ $\left. \frac{\sqrt g}{h_y} \widetilde q_{ey} \right|_{S_0} = \left. \left[
 	\right) T_e - q_{ex}^{P.Sch}
 \right] \right|_{S_0}$
 
-$c_{h_e,2} = -10^{-4}$,  $c_{h_e,7} = -1$,  $c_{h_e,2} \rightarrow p_{h_e,2} = -10^{-4}$,  $c_{h_e,7} \rightarrow p_{h_e,1} = -1$
+$c_{h_e,2} = -10^{-4}$, $c_{h_e,7} = -1$, $c_{h_e,2} \rightarrow p_{h_e,2} = -10^{-4}$, $c_{h_e,7} \rightarrow p_{h_e,1} = -1$
 
 {\em Imposing a decay length for the electron temperature:} {\tt BCENE = 22}
 
@@ -10501,7 +10497,7 @@ $\left. \frac{\sqrt g}{h_y} q_{ey} \right|_{S_1} = p_{h_e,1} \left. \frac{
 	{\sum \limits_{core} \left( \frac{\sqrt g}{h_y} \right)}
 \right|_{S_1}$
 
-$p_{h_e,1} = 8 \cdot 10^5$ is the imposed total electron energy flux, in $W$.
+$p_{h_e,1}$ is the imposed total electron energy flux, in $W$.
 
 \subsubsection{North}
 
@@ -10509,17 +10505,17 @@ $p_{h_e,1} = 8 \cdot 10^5$ is the imposed total electron energy flux, in $W$.
 
 $\left. -\frac{\sqrt g}{h_y} \widetilde q_{ey} \right|_N = \left. \left[
 	\left(
-		p_{h_e,2} \frac{\sqrt g}{h_y} \sqrt{\frac{T_e}{m_e}}
+		p_{h_e,1} \frac{\sqrt g}{h_y} \sqrt{\frac{T_e}{m_e}}
 	\right) T_e n_e
 	+
-	p_{h_e,1} \max \left(
+	p_{h_e,2} \max \left(
 		0, \frac{\sqrt g}{h_y} \widetilde f_{ey}
 	\right) T_e - q_{ex}^{P.Sch}
 \right] \right|_N$
 
 %-------- end of 32nd page -------------
 
-$p_{h_e,1} = -10^{-4}$,  $p_{h_e,2} = -1$
+$p_{h_e,1} = -10^{-4}$, $p_{h_e,2} = -1$
 
 {\em Imposing a decay length for electron temperature:} {\tt BCENE = 22}
 
@@ -10527,7 +10523,7 @@ $\left. \frac{\sqrt g}{h_y} \kappa_{ey} \frac{\partial T_e}{h_y \partial y} \rig
 
 {\em Imposing a decay length for electron temperature:} {\tt BCENE = 9}
 
-$p_{h_e,1} = 10^{-2}$ is the radial electron temperature decay length, in $m$.
+$p_{h_e,1}$ is the radial electron temperature decay length, in $m$.
 
 \begin{tiny}
 \begin{equation*}
@@ -10609,7 +10605,7 @@ $\left. \frac{\sqrt g}{h_x} q_{ex} \right|_W = \left[ \left(
 \frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
 \right] \right|_W$
 
-$p_{h_e,1} = 0.9$, $p_{\Phi,2} = 0$ is the applied electric potential at the target, in $V$.
+$p_{h_e,1} = 0.9$, $p_{\Phi,2}$ is the applied electric potential at the target, in $V$.
 
 %-------- end of 33rd page -------------
 
@@ -10670,7 +10666,7 @@ $\left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = -\left[ \left(
 \frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
 \right] \right|_E$
 
-$p_{h_e,1} = 0.9$, $p_{\Phi,2} = 0$ is the applied electric potential at the target, in $V$.
+$p_{h_e,1} = 0.9$, $p_{\Phi,2}$ is the applied electric potential at the target, in $V$.
 
 $\nu_{e_{out}} = max \left\{
 	0,u_{u_{out}} n_e - \frac{j_x}e
@@ -10690,7 +10686,7 @@ $S_{h_i} = S_{h_i,0} + S_{h_i,1} T_i + S_{h_i,2} n_i + S_{h_i,3} n_i T_i$
 
 {\em Imposing a decay length for the ion temperature:} {\tt BCENI = 9}
 
-$p_{h_i,1} = 10^{-2}$ is the radial ion temperature decay length, in $m$.
+$p_{h_i,1}$ is the radial ion temperature decay length, in $m$.
 
 $e_{rec,0} = 0$ and $e_{rec,1} = 0.3$ are energy recycling coefficients.
 
@@ -10721,9 +10717,8 @@ $r_{rec,0,0} = 0$ and $r_{rec,1,0} = 1$ are particle recycling coefficients.
 r_{rec,a,0} c_{nsr} \max \left\{
 	0, -\frac{\sqrt g}{h_y} \Gamma_{ay}
 \right\} \right]
-\right|_{S_0},
+\right|_{S_0}, ~ mdf\_fhi = 0
 \end{matrix}
-%& mdf_\fhi = 0
 \\
 \begin{matrix}
 \left[ \frac 5 2 \sum \limits_{a=0}^{ns-1} S_{n_a,0}^{no\_mdf} T_i
@@ -10748,9 +10743,8 @@ q_{iy}^{P.Sch}
 r_{rec,a,0} c_{nsr} \max \left\{
 	0, -\frac{\sqrt g}{h_y} \Gamma_{ay}
 \right\} \right]
-\right|_{S_0},
+\right|_{S_0}, ~ mdf\_fhi = 1
 \end{matrix}
-%& mdf_\fhi = 0
 \end{matrix} \right.
 \end{matrix}
 \end{equation*}
@@ -10763,7 +10757,7 @@ $\left. \frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_{S_0}
 p_{h_i,2} \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} \left(
 	\frac{\sqrt g}{h_y} n_a \sqrt{\frac{z_a T_e + T_i}{m_a}}
 \right) T_i \right|_{S_0} + \left.
-p_{h_i,1} \max \left\{0, -\frac{\sqrt g}{h_y} \widetilde f_{iy}^{(E)} \right\} T_i
+p_{h_i,1} \max \left\{0, -\frac{\sqrt g}{h_y} \widetilde f_{iy} \right\} T_i
 \right|_{S_0}$
 
 $p_{h_i,1} = -1$, $p_{h_i,2} = -10^{-2}$
@@ -10801,10 +10795,10 @@ $\left. \frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_{S_1} = \left. \left[ p_{h
 	\frac{\sqrt g}{h_y}}
 	{\sum \limits_{core} \left( \frac{\sqrt g}{h_y} \right)}
         - q_{iy}^{P.Sch}
-        + \frac{3}{2} \frac{\left( j_y^{(AN)} + j_y^{(in)} + \widetilde{j}_y^{(vis \parallel)} + \widetilde{j}_y^{(visq)} + 0 \cdot j_y^{(vis \perp)} \right)}{e} T_i
+        + \frac{3}{2} \frac{\left( j_y^{(AN)} + j_y^{(in)} + \widetilde{j}_y^{(vis \parallel)} + \widetilde{j}_y^{(visq)} + j_y^{(vis \perp)} \right)}{e} T_i
 \right] \right|_{S_1}$
 
-$p_{h_i,1} = 8 \cdot 10^5$ is the imposed total ion energy flux, in $W$.
+$p_{h_i,1}$ is the imposed total ion energy flux, in $W$.
 
 {\em {\tt b2stbc\_spb} boundary condition:}
 
@@ -10814,17 +10808,17 @@ $\left. \frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_{S_1} =
 	\left(
 		c_{h_i,a,0} \frac{\sqrt g}{h_y} \frac{n_a}{n_i}
 		+
-		c_{h_i,a,1} \frac{\sqrt g}{h_y} \frac{n_a}{n_i} T_e
+		c_{h_i,a,1} \frac{\sqrt g}{h_y} \frac{n_a}{n_i} T_i
 	\right)
 \right] \right|_{S_1}$
 
-$c_{h_i,a,0} = 4 \cdot 10^{13}$, $c_{h_i,a,1} = -10^{30}, a=0.1$.
+$c_{h_i,a,0} = 4 \cdot 10^{13}$, $c_{h_i,a,1} = -10^{30}$, $a=0.1$.
 
 \subsubsection{North}
 
 {\em Imposing an ion temperature decay length:} {\tt BCENE = 9}
 
-$p_{h_i,1} = 10^{-2}$ is the radial ion temperature decay length, in $m$.
+$p_{h_i,1}$ is the radial ion temperature decay length, in $m$.
 
 $e_{rec,0} = 0$ and $e_{rec,1} = 0.3$ are energy recycling coefficients.
 
@@ -10833,7 +10827,7 @@ $r_{rec,0,0} = 0$ and $r_{rec,1,0} = 1$ are particle recycling coefficients.
 \begin{tiny}
 \begin{equation*}
 \begin{matrix}
-\left. \frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_{N} = &
+\left. - \frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_{N} = &
 & \left\{
 \begin{matrix}
 \begin{matrix}
@@ -10855,9 +10849,8 @@ $r_{rec,0,0} = 0$ and $r_{rec,1,0} = 1$ are particle recycling coefficients.
 r_{rec,a,0} c_{nsr} \max \left\{
 	0, -\frac{\sqrt g}{h_y} \Gamma_{ay}
 \right\} \right]
-\right|_{N},
+\right|_{N}, ~ mdf\_fhi = 0
 \end{matrix}
-%& mdf_\fhi = 0
 \\
 \begin{matrix}
 \left[ \frac 5 2 \sum \limits_{a=0}^{ns-1} S_{n_a,0}^{no\_mdf} T_i
@@ -10882,36 +10875,9 @@ q_{iy}^{P.Sch}
 r_{rec,a,0} c_{nsr} \max \left\{
 	0, -\frac{\sqrt g}{h_y} \Gamma_{ay}
 \right\} \right]
-\right|_{N},
+\right|_{N}, ~ mdf\_fhi = 1
 \end{matrix}
-%& mdf_\fhi = 0
 \end{matrix} \right.
-\end{matrix}
-\end{equation*}
-
-\begin{equation*}
-\begin{matrix}
-\left. -\frac{\sqrt g}{h_y} q_{iy} \right|_N = &
-& \left. \left[
-\begin{matrix}
-\frac 5 2 \sum \limits_{a=0}^{ns-1} S_{n_a,0} T_i
--
-\frac{\sqrt g}{h_y} \frac{\kappa_i^{(AN)}}{p_{h_i,1}} T_i
-+
-\frac 5 2 \sum \limits_{a=0}^{ns-1} S_{n_a,1} n_a T_i + \\
-+ \sum \limits_{a=0}^{ns-1} \max \left\{
-	e_{rec,a} \left(
-		\frac{3}{2} + BoRiS
-	\right)\left(
-		T_i + z_a \left( \Phi - p_{\Phi,2} \right)
-	\right),\left(
-		\frac{3}{2} + BoRiS
-	\right) T_{surf} k_B
-\right\}
-r_{rec,a,0} c_{nsr} \max \left\{
-	0, \frac{\sqrt g}{h_y} \Gamma_{ay}
-\right\}
-\end{matrix} \right] \right|_N
 \end{matrix}
 \end{equation*}
 \end{tiny}
@@ -11018,7 +10984,7 @@ If $p_{m,a_{main},2} < 0.5$:
 r_{rec,a,0} c_{nsr} \max \left\{
 	0, -\frac{\sqrt g}{h_x} \Gamma_{ax}
 \right\}
-\end{matrix} \right] \right|_W ,
+\end{matrix} \right] \right|_W
 \end{matrix}
 \end{equation*}
 \end{small}
@@ -11418,7 +11384,7 @@ Old form of  $\left( \nabla \pi_a^{\parallel}\right)_{\parallel}$ was
 -0 \cdot B^{\frac 3 2} b_x \frac{\partial }{h_x \partial x} \left(
 	\frac{b_x}{\nu_{aa} B^2}
 	\frac{\partial \left(
-		B^{\frac 1 2} \left(q_{a \partial}^{(0)} + \frac B{B_x} q_{ax}^{(dia)} \right)
+		B^{\frac 1 2} \left(q_{a \parallel}^{(0)} + \frac B{B_x} q_{ax}^{(dia)} \right)
 	\right)}{h_x\partial x}
 \right)
 \end{matrix} \right.
@@ -11441,8 +11407,8 @@ Because of $\eta^{(AN)}_a \ll \widetilde{\widetilde{\eta}}^{(CL)}_{ax}$, $\eta_{
 		-
 		\frac 4 3 \eta_{ax} \frac{\partial V_{\parallel a}}{h_x \partial x}
 	\right)
-\right)-
--\frac{\partial}{h_z \sqrt g \partial x} \left(
+\right)
+- \frac{\partial}{h_z \sqrt g \partial x} \left(
 	\frac{h_z \sqrt g}{h_x} \frac 4 3 \eta _{ax} \frac{\partial \ln \left( h_z B^{\frac 1 2} \right)}
 	{B^{\frac 1 2} h_x \partial x}
 \right) B^{\frac 1 2} V_{\parallel a}, \;\;\;\;\;\;\; a = 1
@@ -11470,7 +11436,7 @@ New form of $\left( \nabla \pi _a^{\parallel} \right)_{\parallel}$
 \frac{\partial}{h_z \sqrt g \partial x}\left(
 	\frac{h_z \sqrt g}{h_x} \frac 4 3 \eta_{ax}
 	\frac{\partial \ln \left( h_z B^{\frac 1 2} \right)}{B^{\frac 1 2} h_x \partial x}
-\right) B^{\frac 1 2} V_{\parallel a}
+\right) B^{\frac 1 2} V_{\parallel a}, & a = 1
 \end{matrix} \right.
 \end{matrix}
 \end{equation*}
