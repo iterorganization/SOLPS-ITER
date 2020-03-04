@@ -4136,7 +4136,8 @@ This routine saves the final output state of a run into an IDS (Interface Data S
 The program reads the {\tt b2mndr\_id*} switch group, defined in {\tt b2mn.dat}:
 \begin{itemize}
   \item {\tt b2mndr\_user} defines the user name and it is set by default to be the same as the \${\tt USER} environment variable.
-  \item {\tt b2mndr\_device} defines the device name and it is set by default to be the same as the \${\tt DEVICE} environment variable. If {\tt DEVICE} has been left undefined, the device will be noted as {\tt 'solps-iter'}.
+  \item {\tt b2mndr\_database} defines the IMAS IDS database name and it is set by default to be the same as the \${\tt DEVICE} environment variable. If {\tt DEVICE} has been left undefined, the default database name is {\tt 'solps-iter'}.
+  \item {\tt b2mndr\_device} superseded by {\tt b2mndr\_database}
   \item {\tt b2mndr\_shot\_number} defines the shot number
   \item {\tt b2mndr\_run\_number} defines the run number
 \end{itemize}
@@ -4154,7 +4155,7 @@ which will recognize, within the quotes following the {\tt -o} additional option
   \item {\tt -s}, {\tt --shot} The shot number
   \item {\tt -r}, {\tt --run} The run number
   \item {\tt -u}, {\tt --user} The user name (default is \${\tt USER})
-  \item {\tt -d}, {\tt --device} The device name (default is \${\tt DEVICE})
+  \item {\tt -d}, {\tt --database}, {\tt --device} The IMAS database name (default is \${\tt DEVICE}, if set, or "solps-iter" otherwise)
   \item {\tt -v}, {\tt --version} The IMAS version to be used (default is {\tt 3})
 \end{itemize}
 
@@ -18390,12 +18391,12 @@ gmake
 This is the user's manual for the {\tt DG} geometry definition
 code. Its primary objective is to simplify the specification of the
 geometry, and other input data, required for the simulation of the
-boundary of magnetic fusion devices.  The most straightforward application
+boundary of magnetic fusion devices. The most straightforward application
 of the code is to divertor tokamak geometries (having one or two
 X-points), although in principle other magnetic configurations
-are possible.  The flexible design of {\tt DG} allows its
+are possible. The flexible design of {\tt DG} allows its
 output to be used with multiple magnetic fusion simulation codes,
-including {\tt B2-Eirene} and {\tt DEGAS 2}.  In fact, some
+including {\tt B2-Eirene} and {\tt DEGAS 2}. In fact, some
 of the objects defined in {\tt DG} and described in this manual
 may be designed specifically for use by these codes.
 
@@ -18404,12 +18405,12 @@ may be designed specifically for use by these codes.
 This is the user's manual for the {\tt DG} geometry definition
 code. Its primary objective is to simplify the specification of the
 geometry, and other input data, required for the simulation of the
-boundary of magnetic fusion devices.  The most straightforward application
+boundary of magnetic fusion devices. The most straightforward application
 of the code is to divertor tokamak geometries (having one or two
 X-points), although in principle other magnetic configurations
-are possible.  The flexible design of {\tt DG} allows its
+are possible. The flexible design of {\tt DG} allows its
 output to be used with multiple magnetic fusion simulation codes,
-including {\tt B2-Eirene} and {\tt DEGAS 2}.  In fact, some
+including {\tt B2-Eirene} and {\tt DEGAS 2}. In fact, some
 of the objects defined in {\tt DG} and described in this manual
 may be designed specifically for use by these codes.
 
