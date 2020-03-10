@@ -254,14 +254,14 @@ c*** 4
      /    mreac*0.,mreac*0.,mreac*0.,mreac*0.,mreac*0.,lur6*0.,lur6*0./
       data creac / lur9*0. /
       data lconst / mreac*.false. /
-      data filnam ,    h123  ,   reac  ,   crc   , elname   /
-     /    mreac*' ',mreac*' ',mreac*' ',mreac*' ',mreac*' ' /
+      data filnam ,    h123  ,   reac  ,   crc   , elname  , bundling /
+     /    mreac*' ',mreac*' ',mreac*' ',mreac*' ',mreac*' ', mreac*' '/
 
       data rctndflt / .true. /, 
      ,  rctntyp , rctndbs , rctnchp , rctnrct , rctnptpr, rctnptin /
      / mreac*' ',mreac*' ',mreac*' ',mreac*' ',mreac*' ',mreac*' ' /,
-     ,  rctnpto1, rctnpto2, rctnpto3 /
-     / mreac*' ',mreac*' ',mreac*' ' /,
+     ,  rctnpto1, rctnpto2, rctnpto3, rctnbdl /
+     / mreac*' ',mreac*' ',mreac*' ',mreac*' '/,
      ,  rctngrp , rctnmsp , rctnmst , rctnnmo1 /
      /  mreac*0 , mreac*0 , mreac*0 , mreac*0  /,
      ,  rctnnmo2, rctnnmo3 /

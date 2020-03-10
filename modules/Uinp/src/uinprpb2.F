@@ -4,6 +4,7 @@
      , , only: ntrack, nalloys
       use eirmod_extrab25
      , , only: msrfclsx, mgwtiesx
+      use b2mod_elements
 c
 c  version : 15.08.2003 18:26
 c
@@ -20,8 +21,8 @@ c=======================================================================
       integer idez
       logical streql
       external xerrab, subini, subend, idez, streql
-      integer find_matching_species, get_atomic_number
-      external find_matching_species, get_atomic_number
+      integer find_matching_species
+      external find_matching_species
 c=======================================================================
       call subini ('uinprpb2')
 #ifdef DBG

@@ -13,10 +13,10 @@ c*** Prepare the particle lists
 c======================================================================
 #include "uinput.inc"
       integer i,ii,iii,j,jj,jjj,k,l,m,mm,n,na,ni,nm,np,ipt
-      integer find_matching_species, get_atomic_number, lnblnk
+      integer find_matching_species, lnblnk
       logical ex,streql
       external streql, xerrab, subini, subend
-      external find_matching_species, get_atomic_number, lnblnk
+      external find_matching_species, lnblnk
       character*8 c,cc,c0*1
       character*20 hlp_frm
 c======================================================================

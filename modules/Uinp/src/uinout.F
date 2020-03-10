@@ -449,7 +449,12 @@ c**   atomic reaction cards, nreaci data fields
      ,                   massp(j),masst(j),delpot(j),rc1mn(j),rc1mx(j),
      ,                                               rc2mn(j),rc2mx(j)
         if (streql(filnam(j),'ADAS')) then !{
-          write(iunoo,'(4x,a2,1x,i3)') elname(j),iz(j)
+          if (streql(bundling(j),' ')) then !{
+            write(iunoo,'(4x,a2,1x,i3)') elname(j),iz(j)
+          else   !}{
+            write(iunoo,'(4x,a2,1x,i3,2x,a)')
+     ,                                   elname(j),iz(j),bundling(j)
+          end if !}
         end if !}
         if (rc1mn(j).gt.0.) write(iunoo,704) ifex1mn(j),(fp1(j,i),i=1,3)
         if (rc1mx(j).gt.0.) write(iunoo,704) ifex1mx(j),(fp1(j,i),i=4,6)
