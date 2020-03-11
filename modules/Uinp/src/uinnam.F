@@ -1065,7 +1065,6 @@ c***  input elements indices for current rectangle
         else if (streql(chtyp,'lin_prf')) then
           continue
         end if
-        nspnew(minval(ichlst(1:i)))=1
       case (172) ! n_points
         call skipit
       case (173) ! linprfs

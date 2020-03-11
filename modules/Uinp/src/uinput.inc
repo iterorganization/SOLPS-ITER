@@ -85,7 +85,7 @@ c*** 4
      ,  creac(9,mreac)
       logical lconst(mreac)
       character filnam(mreac)*8, h123(mreac)*4, reac(mreac)*9,
-     ,    crc(mreac)*3,elname(mreac)*2
+     ,    crc(mreac)*3,elname(mreac)*2,bundling(mreac)*60
 
 c*** 4a
 
@@ -534,7 +534,7 @@ c*** b2ah.dat
      ,  is_bundled
 
       common/uinchr/ txtrun,txtsfl,txtsfa,
-     ,  filnam,h123,reac,crc,elname,
+     ,  filnam,h123,reac,crc,elname,bundling,
      ,  texta,textm,texti,textf,textp,
      ,  cdnmdlp,fnamcdn,h2cdn,reaccdn,crcdn,path,filtrm,
      ,  txtsou,txttla,txtspa,txtuna,txttlc,txtspc,txtunc,

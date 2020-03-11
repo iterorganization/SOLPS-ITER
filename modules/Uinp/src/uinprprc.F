@@ -20,7 +20,7 @@ c======================================================================
       logical ex,e_hlp
       real hlp_ee,hlp_eb,hlp_e1,hlp_e2,hlp_fr
       character*8 c,cc,ccc,cbgk,c0*1,f_hlp*12
-      logical h_collision, todo
+      logical h_collision, todo, lhelium
       logical hlp_amds(natm+nmol+nion+npls), need_dflt
       integer maxne, quote_count, iquote, iyear, ibundling
       character*256 adasfile
@@ -36,10 +36,10 @@ c======================================================================
       integer ndup
       logical h_iso_used(m_hlp_h)
       logical, allocatable :: ldup(:)
-      integer find_matching_reagent, get_atomic_number, lnblnk
+      integer find_matching_reagent, lnblnk
       logical streql, silent_open
       external xerrab, streql, subini, subend
-      external find_matching_reagent, get_atomic_number, lnblnk
+      external find_matching_reagent, lnblnk
       external silent_open
 c======================================================================
       call subini ('uinprprc')
@@ -47,6 +47,7 @@ c======================================================================
       n_ptc=nspcatm+nspcmol+nspcion+nspcpls
 
       nisotopes=0
+      lhelium=.false.
       h_iso_used=.false.
       do ipt=1,nspcatm !{
         do i=1,m_hlp_h !{
@@ -55,13 +56,17 @@ c======================================================================
             h_iso_used(i) = .true.
           end if !}
         end do !}
+        if(get_atomic_number(spcsatm(ipt)).eq.2) lhelium=.true.
       end do !}
       if (nisotopes.ne.1) then !{
         write(6,'(a,i1,a)')
-     .   'This problem contains ',nisotopes,' hydrogenic isotopes'
+     .   'This problem contains ',nisotopes,' hydrogenic isotopes.'
       else !}{
         write(6,'(a,i1,a)')
-     .   'This problem contains ',nisotopes,' hydrogenic isotope'
+     .   'This problem contains ',nisotopes,' hydrogenic isotope.'
+      end if !}
+      if (lhelium) then !{
+        write(6,'(a)') 'This problem contains Helium.'
       end if !}
 
 c*** Remove reaction duplicates, if any
@@ -113,6 +118,7 @@ c*** Remove reaction duplicates, if any
               rctnenr1(j-1)=rctnenr1(j)
               rctnenr2(j-1)=rctnenr2(j)
               rctneln(j-1) =rctneln(j)
+              rctnbdl(j-1) =rctnbdl(j)
             end do !}
           end if !}
         end do !}
@@ -379,7 +385,7 @@ c     now read the relevant line
                       rctnrct(nnrctn)=trim(rctdrct(j,l))//NEWDIRprb
                     end if !}
                     call strip_spaces(rctnrct(nnrctn))
-                    if (ibundling.gt.0) then
+                    if (ibundling.gt.0) then !{
                       call xertst(.not.streql(NEWDIRzav,'none'),
      .                 'No ADAS bundling data!')
                       if (ipt.le.nspcatm) then
@@ -395,7 +401,10 @@ c     now read the relevant line
                           end if
                         end do
                       end if
-                    end if
+                      rctnbdl(nnrctn)=EB//'_'//trim(Bdescr)
+                    else !}{
+                      rctnbdl(nnrctn)=' '
+                    end if !}
                   else !}{
                     write(*,*) 'Could not find ADAS file list file!'
                     write(*,*) '=> Check the ADAS and AMDS models'
@@ -403,6 +412,7 @@ c     now read the relevant line
                   end if !}
                 else
                   rctnrct(nnrctn)=rctdrct(j,l)
+                  rctnbdl(nnrctn)=' '
                 endif                  
                 rctnptpr(nnrctn)=c
                 rctnptin(nnrctn)=rctdptin(j,l)
@@ -711,6 +721,7 @@ cxpb Now check if we need to rename some isotopes for AMDS reactions
                     rctnmst(jrc)=rctnmst(irc)
                     rctnmsp(jrc)=rctnmsp(irc)
                     rctneln(jrc)=rctneln(irc)
+                    rctnbdl(jrc)=rctnbdl(irc)
                     rctniz(jrc)=rctniz(irc)
                   end if !}
                   do ii = 1, n_hlp_h !{
@@ -812,6 +823,7 @@ cxpb Now check if we need to rename some isotopes for AMDS reactions
                     rctnmst(jrc)=rctnmst(irc)
                     rctnmsp(jrc)=rctnmsp(irc)
                     rctneln(jrc)=rctneln(irc)
+                    rctnbdl(jrc)=rctnbdl(irc)
                     rctniz(jrc)=rctniz(irc)
                   end if !}
                   do ii = 1, n_hlp_h !{
@@ -1302,6 +1314,7 @@ c*** Add the primary reaction to the final list
                 delpot(nrcln)=0.0
                 elname(nrcln)=rctneln(k0)
                 iz(nrcln)=rctniz(k0)
+                bundling(nrcln)=rctnbdl(k0)
 c*** Temporary solution: no rcmn,rcmx
                 rc1mn(nrcln)=0.0
                 rc1mx(nrcln)=0.0
@@ -1338,6 +1351,7 @@ c*** Add the secondary reaction to the final list
                   end if !}
                   elname(nrcln)=rctneln(k1)
                   iz(nrcln)=rctniz(k1)
+                  bundling(nrcln)=rctnbdl(k1)
 
 c*** Temporary solution: no rcmn,rcmx
 
@@ -1382,6 +1396,7 @@ c*** Add the tertiary reaction to the final list
                   end if !}
                   elname(nrcln)=rctneln(k3)
                   iz(nrcln)=rctniz(k3)
+                  bundling(nrcln)=rctnbdl(k3)
 
 c*** Temporary solution: no rcmn,rcmx
 
@@ -1692,7 +1707,11 @@ c*** Check the number of reactions of certain kinds
             end do !}
           end if !}
 c<<<
-          print '(a3,1x,30i3/(4x,30i3))',crc(i),ir(i),(ir(j),j=1,i)
+          if (i.le.29) then
+            print '(a3,1x,30i3)',crc(i),ir(i),(ir(j),j=1,i)
+          else
+            print '(a3,1x,30i3/(4x,30i3))',crc(i),ir(i),(ir(j),j=1,i)
+          endif
 c>>>
           if(e_hlp) then !{
             if(streql(crc(i),'EL')) then !{

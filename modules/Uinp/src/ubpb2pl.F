@@ -39,7 +39,7 @@ c
           c=cublbli(k)//'.chr'
           call lefta(c,ufnlen+4,m)
           open(iunoo,file=c,err=22)
-          write(iunoo,700,err=20) '''',cublbli(k),'''',nubnpni(k)
+          write(iunoo,700,err=20) '''',trim(cublbli(k)),'''',nubnpni(k)
   700     format(a1,a,a1,i7)
 c
 c*** Sort the chords according to their labels

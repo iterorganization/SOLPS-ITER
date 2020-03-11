@@ -21,6 +21,7 @@ c=======================================================================
 #include "git_version_Uinp.h"
 
       integer i,j,k,l,m,n,icont,istep,jsurpr
+      integer llm(nchor),lli(nchor)
       logical handle,ulmlti,ex,carbon,nitrogen,streql
       logical, allocatable :: done(:)
       character utxthd(35)*71, utxtfl(7)*47, ufnm*(*)
@@ -448,7 +449,12 @@ c**   atomic reaction cards, nreaci data fields
      ,                   massp(j),masst(j),delpot(j),rc1mn(j),rc1mx(j),
      ,                                               rc2mn(j),rc2mx(j)
         if (streql(filnam(j),'ADAS')) then !{
-          write(iunoo,'(4x,a2,1x,i3)') elname(j),iz(j)
+          if (streql(bundling(j),' ')) then !{
+            write(iunoo,'(4x,a2,1x,i3)') elname(j),iz(j)
+          else   !}{
+            write(iunoo,'(4x,a2,1x,i3,2x,a)')
+     ,                                   elname(j),iz(j),bundling(j)
+          end if !}
         end if !}
         if (rc1mn(j).gt.0.) write(iunoo,704) ifex1mn(j),(fp1(j,i),i=1,3)
         if (rc1mx(j).gt.0.) write(iunoo,704) ifex1mx(j),(fp1(j,i),i=4,6)
@@ -996,18 +1002,28 @@ c*** 12.  data for diagnostic module
       write(iunoo,707) nchori,ncheni,lntspec,lntsput,nmcsput,
      ,                                         nlstadds,mtreadds,ngwties
       if (nchori.gt.0) then !{
+c***   Sort the chords according to their labels
+        do i = 1, nchori ! {
+          llm(i) = chr_lbl(i)
+        end do !}
+        call sortia(llm,lli,nchori)
+        do i = 1, nchrdlint !{
+          j = minloc(jchlst(:,i),dim=1)
+          if (j.eq.nchor.and.jchlst(j,i).ne.0) j = nchor+1
+          ichmin = minval(chr_lbl(jchlst(1:j-1,i)))
+          nspnew(lli(ichmin))=1
+        end do !}
         do ichori = 1, nchori ! {
-          write(iunoo,714) chr_lbl(ichori)
-          write(iunoo,707) nchtal(ichori),nspscl(ichori),
-     ,                     nspnew(ichori)
-          write(iunoo,707) nspstr(ichori),nspspz(ichori),
-     ,                     nspini(ichori),nspend(ichori),
-     ,                     nspblc(ichori),nspadd(ichori)
-          write(iunoo,703) emin1(ichori),emax1(ichori),eshift(ichori)
-          write(iunoo,704) ipivot(ichori),xpivot(ichori),
-     ,                     ypivot(ichori),zpivot(ichori)
-          write(iunoo,704) ichord(ichori),xchord(ichori),
-     ,                     ychord(ichori),zchord(ichori)
+          i = lli(ichori)
+          write(iunoo,714) chr_lbl(i)
+          write(iunoo,707) nchtal(i),nspscl(i),nspnew(i)
+          write(iunoo,707) nspstr(i),nspspz(i),nspini(i),
+     ,                     nspend(i),nspblc(i),nspadd(i)
+          write(iunoo,703) emin1(i),emax1(i),eshift(i)
+          write(iunoo,704) ipivot(i),xpivot(i),ypivot(i),
+     ,                     zpivot(i)
+          write(iunoo,704) ichord(i),xchord(i),ychord(i),
+     ,                     zchord(i)
         end do !}
         write(iunoo,706) plchor,plspec,prspec,plargl,prargl
       end if !}
