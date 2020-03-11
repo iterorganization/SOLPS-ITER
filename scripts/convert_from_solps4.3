@@ -126,7 +126,7 @@ touch b2fstati
 b2run b2ar
 b2run b2mn > run.log
 b2run b2_ual_write > b2_ual_write.log
-create_db_entry -u ${USER} -t ${DEVICE} -s ${shotnumber} -r 1
+create_db_entry -u ${USER} -d ${DEVICE} -s ${shotnumber} -r 1
 yaml=ids_${shotnumber}0001.yaml
 typeset -i reference_line
 reference_line=`grep -n "reference_name" ${yaml} | cut -d ':' -f 1`

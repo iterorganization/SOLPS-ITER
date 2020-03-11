@@ -22,11 +22,13 @@ c=======================================================================
 
       integer i,j,k,l,m,n,icont,istep,jsurpr
       integer llm(nchor),lli(nchor)
-      logical handle,ulmlti,ex,carbon,nitrogen,streql
+      logical handle,ulmlti,ex,carbon,nitrogen
+      logical streql,silent_open
       logical, allocatable :: done(:)
+      character*256 filename, adasfile, uidin
       character utxthd(35)*71, utxtfl(7)*47, ufnm*(*)
       character utxtgt*71
-      external streql, xerrab, subini, subend
+      external streql, silent_open, xerrab, subini, subend
       data utxthd /
      1        '** 1. Data for operating mode' ,
      2        '** 2. Data for standard mesh' ,
@@ -180,7 +182,23 @@ c*** 1.  General data for the run
       do i=1,nrcln
         handle=handle.or.streql(filnam(i),'ADAS')
       end do
-      if (handle) write(iunoo,720) utxtfl(7)
+      if (handle) then
+        filename='ratadas.filelist'
+        call find_file(filename,ex)
+        if(silent_open(97,filename,
+     .     'data.local|modules/B2.5/Database',adasfile)) then
+          read(97,*) uidin
+          if(uidin(1:9).eq.'SOLPSTOP/') then
+            write(iunoo,721) utxtfl(7)(1:13)//trim(uidin(10:))
+     .                                      //'/adf11'
+          else
+            write(iunoo,721) utxtfl(7)(1:13)//trim(uidin)//'/adf11'
+          endif
+          close(97)
+        else
+          write(iunoo,720) utxtfl(7)
+        endif
+      end if
 
 c*** 2.  data for standard mesh
 

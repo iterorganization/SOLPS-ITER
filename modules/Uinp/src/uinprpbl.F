@@ -116,9 +116,6 @@ c======================================================================
       escd1b = 0.0_R8
       escd2b = 0.0_R8
       freacb = 0.0_R8
-      do l=1,nbgk !{
-        ipls1(nplsi+l)=nplsi+l
-      end do !}
       do l=1,nspigen !{
         if (l.gt.1) then !{
           nc = get_atomic_number(spcigen(l-1))
@@ -157,7 +154,7 @@ c======================================================================
      .             'data.local|modules/B2.5/Database',adasfile)) then !{
           read(99,*) uidin
           if(uidin(1:8).eq.'SOLPSTOP') then !{
-            if (uidin(9:9).ne.'/') then !{
+            if(uidin(9:9).ne.'/') then !{
               uidin=trim(solpstop()) // '/' // trim(uidin(9:))
             else !}{
               uidin=trim(solpstop()) // '/' // trim(uidin(10:))
@@ -370,6 +367,9 @@ cxpb   jend(l) is the number of the last bundled ion of sequence l in the new li
         end if !}
         deallocate(izpmin, izpmax)
         lfirst = .false.
+      end do !}
+      do l=1,nbgk !{
+        ipls1(nplsi+l) = jend(nspigen)+l
       end do !}
 
 cxpb Now we remap the arrays
