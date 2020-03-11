@@ -468,7 +468,7 @@ c     now read the relevant line
 #ifdef DBG
       print *
       print *,'Draft reaction list:'
-      if(nnrctn.gt.0) print '(a9,a7,a5,a9,a3,4a9,3i3,1p,3e9.2)',
+      if(nnrctn.gt.0) print '(a9,a7,a5,a10,a3,4a9,3i3,1p,3e9.2)',
      ,  (rctnptpr(i),rctndbs(i),rctnchp(i),rctnrct(i),rctntyp(i),
      ,   rctnptin(i),rctnpto1(i),rctnpto2(i),rctnpto3(i),
      ,   rctngrp(i),rctnmsp(i),rctnmst(i),
@@ -645,7 +645,7 @@ cxpb Now check if we need to rename some isotopes for AMDS reactions
 #ifdef DBG
       print *
       print *,'Draft reaction list after parsing and renaming:'
-      if(nnrctn.gt.0) print '(a9,a7,a5,a9,a3,4a9,3i3,1p,3e9.2)',
+      if(nnrctn.gt.0) print '(a9,a7,a5,a10,a3,4a9,3i3,1p,3e9.2)',
      ,  (rctnptpr(i),rctndbs(i),rctnchp(i),rctnrct(i),rctntyp(i),
      ,   rctnptin(i),rctnpto1(i),rctnpto2(i),rctnpto3(i),
      ,   rctngrp(i),rctnmsp(i),
@@ -762,7 +762,7 @@ cxpb Now check if we need to rename some isotopes for AMDS reactions
         print *
         print *,
      ,   'Draft reaction list after duplicating H-isotope primaries:'
-        if(nnrctn.gt.0) print '(a9,a7,a5,a9,a3,4a9,3i3,1p,3e9.2)',
+        if(nnrctn.gt.0) print '(a9,a7,a5,a10,a3,4a9,3i3,1p,3e9.2)',
      ,    (rctnptpr(i),rctndbs(i),rctnchp(i),rctnrct(i),rctntyp(i),
      ,     rctnptin(i),rctnpto1(i),rctnpto2(i),rctnpto3(i),
      ,     rctngrp(i),rctnmsp(i),
@@ -897,10 +897,10 @@ cxpb Now check if we need to rename some isotopes for AMDS reactions
       write(*,*) 'Raw reaction list:',nnrctn
       write(*,*)
       if(nnrctn.gt.0) then !{
-        write(*,'(4x,a7,22x,4a9,4x,6a3,a7,2a9)') 'species','bulk',
+        write(*,'(4x,a7,23x,4a9,4x,6a3,a7,2a9)') 'species','bulk',
      ,    'out1','out2','out3','ig','mp','mt',
      ,    'N1','N2','N3','dlte','enr1','enr2'
-        write(*,'(1x,i3,a9,a7,a5,a9,a3,4a9,6i3,1p,3e9.2)')
+        write(*,'(1x,i3,a9,a7,a5,a10,a3,4a9,6i3,1p,3e9.2)')
      -    (i,rctnptpr(i),rctndbs(i),rctnchp(i),rctnrct(i),rctntyp(i),
      ,     rctnptin(i),rctnpto1(i),rctnpto2(i),rctnpto3(i),
      ,     rctngrp(i),rctnmsp(i),
