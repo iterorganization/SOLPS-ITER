@@ -5,7 +5,7 @@
 #SBATCH --ntasks-per-node=28
 #SBATCH -o testjob-%j.out
 #SBATCH -e testjob-%j.err
-#SBATCH -t 336:00:00
+#SBATCH -t #HOURS#:00:00
 scontrol show hostnames
 
 pushd #SOLPSTOP#

@@ -1,9 +1,10 @@
 #! /bin/tcsh
 
-#SBATCH --ntasks=#PROCS#
-#SBATCH -p skl_fua_gw
-#SBATCH --time=48:00:00
-#SBATCH --mem=4GB
+#SBATCH --ntasks-per-node=#PROCS#
+#SBATCH --cpus-per-task=#THREADS#
+#SBATCH -p gw
+#SBATCH --time=#HOURS#:00:00
+#SBATCH --mem=#MEM#
 #SBATCH --job-name=#JOBNAME#
 #SBATCH --mail-type=END
 #SBATCH --mail-user=#EMAIL#
@@ -29,9 +30,11 @@ else
 endif
 set TIME="time srun ${MPI_PREFLAGS}"
 
+set USE_OMP=""
 if ($?SOLPS_OPENMP) then
-  setenv OMP_NUM_THREADS #THREADS#
   setenv KMP_AFFINITY compact,norespect
+  set OMP_OPTS = #THREADS#
+  set USE_OMP = "-t ${OMP_OPTS}"
 endif
 
 update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"
@@ -41,7 +44,7 @@ if ($?SOLPS_GUI_IP) then
   echo ${USER} ${PWD} ${msg} | netcat -u -v -w 1 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
 endif
 
-b2run ${USE_MPI} b2mn >! run.log
+b2run ${USE_MPI} ${USE_OMP} b2mn >! run.log
 
 QSUB.postprocess_coupled
 

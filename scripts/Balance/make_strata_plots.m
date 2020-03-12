@@ -46,7 +46,7 @@ for istra = 1:nstra
         tmp = momfac*sumpol(eirene_tion{ie}(:,:,istra),indrad,comuse)./areadownrad;
         if any(tmp)
             plot(xplot,tmp,'parent',axstrat(3),'color',cmap(istra,:),'linestyle',linestyle{ie},'displayname',['stratum ',num2str(istra),' ',namestr{ie}]);
-            tot_tion{ie} - tot_tion{ie}+tmp;
+            tot_tion{ie} = tot_tion{ie}+tmp;
         end
     end
     linestyle = repmat({'-','--',':','-.'},1,length(eirene_rc));
@@ -64,10 +64,10 @@ for ie = 1:length(eirene_atom)
     plot(xplot,tot_tion{ie},'color','k','linestyle',linestyle{ie},'parent',axstrat(3),'displayname',['stratum total ',namestr{ie}]);
     plot(xplot,tot_rc{ie},'color','k','linestyle',linestyle{ie},'parent',axstrat(4),'displayname',['stratum total ',namestr{ie}]);
 end
-hl = legend(axstrat(1),'show','location','best');
-hl = legend(axstrat(2),'show','location','best');
-hl = legend(axstrat(3),'show','location','best');
-hl = legend(axstrat(4),'show','location','best');
+legend(axstrat(1),'show','location','best');
+legend(axstrat(2),'show','location','best');
+legend(axstrat(3),'show','location','best');
+legend(axstrat(4),'show','location','best');
 ylabel(axstrat(1),get(get(axbal(3),'ylabel'),'string'));
 ylabel(axstrat(2),get(get(axbal(3),'ylabel'),'string'));
 ylabel(axstrat(3),get(get(axbal(3),'ylabel'),'string'));
@@ -143,10 +143,10 @@ for ie = 1:length(eirene_atom)
     plot(xplot,tot_tion{ie},'color','k','linestyle',linestyle{ie},'parent',axstrat(7),'displayname',['stratum total ',namestr{ie}]);
     plot(xplot,tot_rc{ie},'color','k','linestyle',linestyle{ie},'parent',axstrat(8),'displayname',['stratum total ',namestr{ie}]);
 end
-hl = legend(axstrat(5),'show','location','best');
-hl = legend(axstrat(6),'show','location','best');
-hl = legend(axstrat(7),'show','location','best');
-hl = legend(axstrat(8),'show','location','best');
+legend(axstrat(5),'show','location','best');
+legend(axstrat(6),'show','location','best');
+legend(axstrat(7),'show','location','best');
+legend(axstrat(8),'show','location','best');
 ylabel(axstrat(5),get(get(axbal(end),'ylabel'),'string'));
 ylabel(axstrat(6),get(get(axbal(end),'ylabel'),'string'));
 ylabel(axstrat(7),get(get(axbal(end),'ylabel'),'string'));

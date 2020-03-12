@@ -50,6 +50,7 @@ LD_MPI     = -L${MPDIR} -lmpi
 SOLPS_CPP      = -DNCAR4 -DNO_NAG -DGFORTRAN
 B25_DEFINES    =
 EIRENE_DEFINES =
+FFLAGSEXTRA    =
 MPI_CPP        = -I${MPDIR}/include
 
 # Autodetected optional features...
@@ -73,10 +74,23 @@ endif
 
 # Build with IMAS if imas module is loaded
 ifdef IMAS_VERSION
-  SOLPS_CPP += -DIMAS
   LD_UAL     = `pkg-config imas-lowlevel imas-gfortran --libs`
+  UAL_MAJOR_VERSION = $(shell echo ${UAL_VERSION} | cut -d '.' -f1 )
+  GGD_MINOR_VERSION = $(shell echo ${EBVERSIONGGD} | cut -d '.' -f2 )
+  IMAS_MAJOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f1 )
+  IMAS_MINOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f2 )
+  SOLPS_CPP += -DIMAS -DUAL_MAJOR_VERSION=${UAL_MAJOR_VERSION} -DIMAS_MAJOR_VERSION=${IMAS_MAJOR_VERSION} -DGGD_MINOR_VERSION=${GGD_MINOR_VERSION}
   export LD_UAL
+else
+  UAL_MAJOR_VERSION = 0
+  GGD_MINOR_VERSION = 0
+  IMAS_MAJOR_VERSION = 0
+  IMAS_MINOR_VERSION = 0
 endif
+export UAL_MAJOR_VERSION
+export GGD_MINOR_VERSION
+export IMAS_MAJOR_VERSION
+export IMAS_MINOR_VERSION
 
 # Build with OpenMP if requested
 ifdef SOLPS_OPENMP

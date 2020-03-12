@@ -15,6 +15,9 @@ FFLAGS	 = -g -tp=amd64
 else
 FFLAGS	 = -O -tp=amd64
 endif
+ifdef SOLPS_OPENMP
+FFLAGS  += -mp=nonuma
+endif
 
 INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}

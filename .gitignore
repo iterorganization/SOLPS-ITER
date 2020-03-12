@@ -2,6 +2,7 @@
 
 # backup files
 *~
+*.bak
 
 # object, archive,... files
 *.[oa]
@@ -89,4 +90,11 @@ modules/solps4-5/src/solps4_Eirene/*.F
 modules/solps4-5/src/solps4_B2/*.F
 modules/solps4-5/src/B2_include
 modules/solps4-5/src/Eirene_modules
+
+# Links to scripts build directories
+scripts/*.ifort64*/
+scripts/*.gfortran*/
+scripts/*.pgf90*/
+scripts/*.nag_f90*/
+scripts/*.g95*/
 

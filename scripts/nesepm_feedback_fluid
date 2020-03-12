@@ -1,7 +1,7 @@
 #! /bin/csh -f
 set dfilename=feedback.data
 set pfilename=feedback.ps
-setenv GNUPLOT_POSTSCRIPT_OPTIONS 'color solid'
+setenv GNUPLOT_POSTSCRIPT_OPTIONS 'color solid noenhanced'
 setenv GNUPLOT_DATA $dfilename
 setenv PRINT_PLOT $pfilename
 set nreg=`climb_and_look_for NREG`

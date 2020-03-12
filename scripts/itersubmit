@@ -5,11 +5,15 @@ set EMAIL=`get_git_email`
 set JOB_NAME="SOLPS-ITER"
 set PROCS=1
 set THREADS=1
+set hours=36
+set mem=4GB
+set part="unset"
 echo Your email is $EMAIL
 
 set compress=""
 set MPIOPTS=""
 set standalone="no"
+set LOOP_OPTS=""
 
 set solpstop=`climb_and_look_for SOLPSTOP`
 if (-s $solpstop) then
@@ -19,17 +23,47 @@ else if ($SOLPSTOP == "") then
 endif
 
 argloop:
+  if ("X${1}X" == "X-hX") then
+    cat <<EOF
+
+Help for $0
+
+This script is used to submit SOLPS-ITER jobs to the SLURM batch system on the ITER HPC cluster.
+
+Usage:
+
+  `basename $0` {options} {<<SCRIPT>>}
+
+where the optional <<SCRIPT>> is the SLURM submission file to be used
+
+Available options are:
+  -j <<JOB NAME>>    set the job name (default $JOB_NAME)
+  -z                 compress run.log using gzip
+  -s                 specify a standalone B2.5 run
+  -m <<MPI OPTIONS>> use the MPI options specified (default serial version)
+  -t <<THREADS>>     use OpenMP parallelization with <<THREADS>> threads (default $THREADS)
+  -T <<HOURS>>       number of elapsed hours requested (default $hours)
+  -M <<MEM_SIZE>>    memory size (default $mem)
+  -Q <<PARTITION>>   partition on which to submit the job (default gen9 for short jobs and gen9_ib for long jobs)
+
+EOF
+    exit
+  endif
   if ("X${1}X" == "X-jX") then
     shift
     set JOB_NAME="$1"
     echo Job name is ${JOB_NAME}
     shift
+    set HELP_STRING=\"${JOB_NAME}\"
+#    echo $HELP_STRING
+    set LOOP_OPTS="-j ${HELP_STRING} ${LOOP_OPTS}" 
     goto argloop
   endif
   if ("X${1}X" == "X-zX") then
     set compress="-gz"
     echo run.log will be compressed
     shift
+    set LOOP_OPTS="-gz ${LOOP_OPTS}" 
     goto argloop
   endif
   if ("X${1}X" == "X-sX") then
@@ -37,6 +71,7 @@ argloop:
     if ($JOB_NAME == "SOLPS-ITER") set JOB_NAME="B2.5"
     echo Asking for a B2.5 standalone run
     shift
+    set LOOP_OPTS="-s ${LOOP_OPTS}" 
     goto argloop
   endif
   if ("X${1}X" == "X-mX") then
@@ -49,7 +84,10 @@ argloop:
     set PROCS=`echo $MPIOPTS | awk.transpose | grep -A 1 "\-np" | tail -n 1`
     echo Asking for MPI run with $PROCS processors
     shift
-    goto argloop
+    set HELP_STRING="${MPIOPTS}"
+#    echo $HELP_STRING
+    set LOOP_OPTS="-m '${HELP_STRING}' ${LOOP_OPTS}"
+   goto argloop
   endif
   if ("X${1}X" == "X-tX") then
     shift
@@ -59,9 +97,51 @@ argloop:
     set THREADS="$1"
     echo Asking for OpenMP run with $THREADS threads
     shift
+    set HELP_STRING="${THREADS}"
+#    echo $HELP_STRING
+    set LOOP_OPTS="-t ${HELP_STRING} ${LOOP_OPTS}" 
+    goto argloop
+  endif
+  if ("X${1}X" == "X-TX") then
+    shift
+    set hours="$1"
+    echo Requested time is ${hours} hours
+    shift
+    set HELP_STRING="${hours}"
+#    echo $HELP_STRING
+    set LOOP_OPTS="-T ${HELP_STRING} ${LOOP_OPTS}" 
+    goto argloop
+  endif
+  if ("X${1}X" == "X-MX") then
+    shift
+    set mem="$1"
+    echo Requested memory is ${mem}
+    shift
+    set HELP_STRING="${mem}"
+#    echo $HELP_STRING
+    set LOOP_OPTS="-M ${HELP_STRING} ${LOOP_OPTS}" 
+    goto argloop
+  endif
+  if ("X${1}X" == "X-QX") then
+    shift
+    set part="$1"
+    echo Requested partition is ${part}
+    shift
+    set HELP_STRING="${part}"
+#    echo $HELP_STRING
+    set LOOP_OPTS="-Q ${HELP_STRING} ${LOOP_OPTS}"
     goto argloop
   endif
 
+# logic to determine the partition on the ITER HPC cluster
+@ cpu = ( $hours * $PROCS )
+if ($part == "unset") then
+  if ($hours > 24 ) then
+    set part=gen9_ib
+  else
+    set part=gen9
+  endif
+endif
 set nodename=`hostname`
 switch ($nodename)
   case "hpc-login0*.iter.org":
@@ -84,7 +164,7 @@ if ($1 == "") then
       endif
     endif
   else
-    if ($standalone == "no") echo Assuming standalone run
+    if ($standalone == "no") echo No input.dat file found: reverting to a standalone run
     echo No argument is specified. Looking for $job_prefix.iter$compress
     set QSUB=`climb_and_look_for $job_prefix.iter$compress`
     if ($QSUB == "//$job_prefix.iter$compress") then
@@ -118,19 +198,31 @@ if($QSUB == "") then
   echo No ITER submission file $1 found. Exiting.
   exit
 endif
-echo Using submission file template $QSUB
 
-sed -e 's:#PWD#:'$PWD':g' -e 's:#SOLPSTOP#:'$SOLPSTOP':g' -e 's:#EMAIL#:'$EMAIL':g' -e "s:#MPIOPTS#:'$MPIOPTS':g" -e "s:#PROCS#:'$PROCS':g" -e "s:#JOBNAME#:'$JOB_NAME':g" -e 's:#USER#:'$USER':g' -e 's:#THREADS#:'$THREADS':g' < $QSUB > $NAME
+echo Using submission file template $QSUB
+echo For loop resubmission following options will be used: $LOOP_OPTS
+
+
+sed \
+  -e 's:#PWD#:'$PWD':g' \
+  -e 's:#SOLPSTOP#:'$SOLPSTOP':g' \
+  -e 's:#EMAIL#:'$EMAIL':g' \
+  -e "s:#MPIOPTS#:'$MPIOPTS':g" \
+  -e "s:#PROCS#:'$PROCS':g" \
+  -e "s:#THREADS#:'$THREADS':g" \
+  -e 's:#MEM#:'$mem':g' \
+  -e 's:#HOURS#:'$hours':g' \
+  -e 's:#PART#:'$part':g' \
+  -e 's:#CPU#:'$cpu':g' \
+  -e "s:#JOBNAME#:'$JOB_NAME':g" \
+  -e 's:#USER#:'$USER':g' \
+  -e 's:#LOOPOPTS#:'"$LOOP_OPTS"':g' \
+  < $QSUB > $NAME
 
 set msg="Submitted at `date`"
 update_solps_run_status -n ${msg}
 if ($?SOLPS_GUI_IP) then
   echo ${USER} ${PWD} ${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
 endif
-switch ($nodename)
-  case "hpc-login0*.iter.org":
-    sbatch $NAME
-    breaksw
-  default:
-    qsub -V -S /bin/tcsh $NAME
-endsw
+sbatch $NAME
+

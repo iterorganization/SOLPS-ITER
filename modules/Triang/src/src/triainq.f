@@ -19,7 +19,7 @@ c*  lnodes(3) : indices of their opposite nodes
 c*  lcell(2,:) : B2.5 grid indices
 c*  xr,yr : coordinates of the reference point
 
-      use eirmod_cinit, only: fort
+      use eirmod_cinit, only: fort_lc
       implicit none
       integer npoint,ntria
       real,allocatable :: px(:),py(:)
@@ -29,6 +29,7 @@ c*  xr,yr : coordinates of the reference point
       integer cell
       data cell /0/
       character line*72
+      character filename*7
       real u,xr,yr,xm,xx,ym,yx
       logical dbg
 #ifdef DBG
@@ -39,9 +40,12 @@ c*  xr,yr : coordinates of the reference point
 
 c=======================================================================
 c*** Open the data files
-      open(21,file=fort//'34',status='old',action='read')
-      open(22,file=fort//'33',status='old',action='read')
-      open(23,file=fort//'35',status='old',action='read')
+      filename=fort_lc//'34'
+      open(21,file=filename,status='old',action='read')
+      filename=fort_lc//'33'
+      open(22,file=filename,status='old',action='read')
+      filename=fort_lc//'35'
+      open(23,file=filename,status='old',action='read')
 
 c*** Read the data from the input files
 
@@ -64,7 +68,8 @@ c*** Read the data from the input files
       read(23,*) k
       if(k.ne.ntria) then !{
         write (0,*)
-     .   'ntria values in '//fort//'34 and '//fort//'35 files differ'
+     .   'ntria values in '//fort_lc//'34 and '
+     .                     //fort_lc//'35 files differ'
         stop
       end if !}
       if(cell.gt.ntria) then !{
@@ -81,14 +86,14 @@ c*** read nodes
 
       read(22,*) px
       read(22,*) py
-      write(0,*) '    reading '//fort//'33 is finished'
+      write(0,*) '    reading '//fort_lc//'33 is finished'
 
 c*** read elements 
 
       do i=1,ntria   
         read(21,*) j,(tri(l,i),l=1,3)
       end do
-      write(0,*) '    reading '//fort//'34 is finished'
+      write(0,*) '    reading '//fort_lc//'34 is finished'
 c!###{
 c      do i=1,1   
 c      write(0,'(a,t12,4i8,1p/(2e17.8))') 'triangle',i,tri(1:3,i),
@@ -100,7 +105,7 @@ c*** read neighbours
       do i=1,ntria   
         read(23,*) j,(neigh(k,i),j,neigr(k,i),k=1,3),lcell(:,i)
       end do
-      write(0,*) '    reading '//fort//'35 is finished'
+      write(0,*) '    reading '//fort_lc//'35 is finished'
 c!###{
 c      do i=1,1   
 c      write(0,'(a,t12,4i8,1p/(2e17.8))') 'triangle',i,tri(1:3,i),

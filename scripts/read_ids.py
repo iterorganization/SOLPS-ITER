@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-from __future__ import print_function
+
 # Definition of the class structures in file imas.py
 import imas
 import numpy

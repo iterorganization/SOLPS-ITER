@@ -14,6 +14,9 @@ FFLAGS   = -g -ffpe-trap=denormal -ffpe-trap=invalid -ffpe-trap=zero -ftrapv -fs
 else
 FFLAGS   = -O 
 endif
+ifdef SOLPS_OPENMP
+FFLAGS  += -fopenmp
+endif
 
 INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}

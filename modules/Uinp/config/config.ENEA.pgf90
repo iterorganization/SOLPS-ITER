@@ -10,6 +10,9 @@ FFLAGS	 = -g
 else
 FFLAGS	 = -O 
 endif
+ifdef SOLPS_OPENMP
+FFLAGS  += -mp=nonuma
+endif
 
 INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}

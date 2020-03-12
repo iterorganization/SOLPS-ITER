@@ -20,6 +20,7 @@ c=======================================================================
 #endif
       integer ns, i, j, ireg, nreg, len
       real(kind=R8), allocatable :: na0(:)
+      character tab
       character*5, allocatable :: specs(:)
       character*22 hlp_frm
       character*27 lbreg(0:cbnrmx-1)
@@ -43,6 +44,7 @@ c=======================================================================
       call prgini('uinput')
 *   ..mark output unit for error messages
       call xerset (0)
+      tab=char(9)
 c*** Read the input data from various files
       call uininp
 c*** Prepare the constants
@@ -77,7 +79,7 @@ c*** Produce the input file for Eirene for TRIA mesh generation
        call uinout('triang.eir')
        print *,'    ... triang.eir created'
        call triaout('triang.hed')
-       call uinptridg(.FALSE.)
+       call uinptridg(.false.)
       end if !}
 
 c*** Produce the input files for Eirene for averaging scheme runs
@@ -584,6 +586,8 @@ c*** Create the header for the b2yt.dat file
           open(2,file='b2yt.dat')
           write(2,'(a)') '*dimens         (nx1, ny1; free format)'
           write(2,'(2(3x,i4))') nrplg-npplg, ndya
+          write(2,'(a)') '''solps_version'''//tab//'''iter'''
+          write(2,'(a)') '''eirene_format'''//tab//'''iter'''
           close(2)
           print *,'    ... b2yt.dat created'
       endif
@@ -697,8 +701,9 @@ c*** Modify the input file for B2, if possible
 
 c-----------------------------------------------------------------------
 c*** Create additional files with geometry for b2plot
-      
-      call uib2pl
+
+cxpb Skip this step, use ub2p program instead
+cxpb      call uib2pl
 c=======================================================================
       call prgend ()
 #ifdef USE_MPI

@@ -4,6 +4,7 @@
      , , only: ntrack, nalloys
       use eirmod_extrab25
      , , only: msrfclsx, mgwtiesx
+      use b2mod_elements
 c
 c  version : 15.08.2003 18:26
 c
@@ -20,8 +21,8 @@ c=======================================================================
       integer idez
       logical streql
       external xerrab, subini, subend, idez, streql
-      integer find_matching_species, get_atomic_number
-      external find_matching_species, get_atomic_number
+      integer find_matching_species
+      external find_matching_species
 c=======================================================================
       call subini ('uinprpb2')
 #ifdef DBG
@@ -372,13 +373,13 @@ c*** Gas puffing sources
           call xerrab (' == Internal error in UINP')
         end if !}
 
-c***      crcstra, rcpos, rcstart, rcend
+c*** crcstra, rcpos, rcstart, rcend
         cniprm(k,1,1,2,3)='C'
         iniprm(k,1,1,3,3)=0
         iniprm(k,1,1,4,3)=0
         iniprm(k,1,1,5,3)=0
 
-c***        species_start, species_end
+c*** species_start, species_end
         call uinspcid(cgpfstrs(i),l,j)
         if (l.eq.2) then !}{
           iatm = 1
@@ -408,10 +409,10 @@ c***        species_start, species_end
           iniprm(k,1,1,7,3)=ispe+(j-1)
         end if !}
 
-c***              userfluxparm
+c*** userfluxparm
         rniprm(k,1,1,19,3)=fgpfstr(i)
 
-c***      lstrascl,gpfc
+c*** lstrascl,gpfc
         do l=1,nspcncl !{
           iniprm(k,l,1,12,3)=lsgpfstr(l,i)
           rniprm(l,k,1,20,3)=igpfstr(l,i)
@@ -429,13 +430,13 @@ c*** Recombination sources
           call xerrab (' == Internal error in UINP')
         end if !}
 
-c***        crcstra, rcpos, rcstart, rcend
+c*** crcstra, rcpos, rcstart, rcend
         cniprm(k,1,1,2,3)='V'
         iniprm(k,1,1,3,3)=0
         iniprm(k,1,1,4,3)=0
         iniprm(k,1,1,5,3)=0
 
-c***        species_start, species_end
+c*** species_start, species_end
         ispi=nspez(k)
         ispe=nspez(k)
         do ipl = nspez(k)+1, nspcpls !{
@@ -446,10 +447,10 @@ c***        species_start, species_end
         iniprm(k,1,1,6,3)=ispi+(lkindp(nspez(k))-1)-1
         iniprm(k,1,1,7,3)=ispe+(lkindp(nspez(k))-1)
 
-c***        userfluxparm
+c*** userfluxparm
         rniprm(k,1,1,19,3)=0.
 
-c***        lstrascl, gpfc
+c*** lstrascl, gpfc
         do l=1,nspcncl !{
           iniprm(k,l,1,12,3)=lsrcmstr(l,i)
           rniprm(l,k,1,20,3)=0.
@@ -473,23 +474,23 @@ c*** Time-dependent stratum
           call xerrab (' == Internal error in UINP')
         end if !}
 
-c***          crcstra, rcpos, rcstart, rcend
+c*** crcstra, rcpos, rcstart, rcend
         cniprm(k,1,1,2,3)='T'
         iniprm(k,1,1,3,3)=0
         iniprm(k,1,1,4,3)=0
         iniprm(k,1,1,5,3)=0
 
-c***          species_start, species_end
+c*** species_start, species_end
         iniprm(k,1,1,6,3)=0
-        iniprm(k,1,1,7,3)=0
+        iniprm(k,1,1,7,3)=nspcpls+nspcncl-1
 
-c***          lstrascl
+c*** lstrascl
         do l=1,nspcncl !{
           iniprm(k,l,1,12,3)=0
         end do !}
       end if !}
 
-c***        lcns, ltns
+c*** lcns, ltns
       do i=1,nznbndt(1) !{
         iniprm(i,1,1,16,3)=i
       end do !}
@@ -497,7 +498,7 @@ c***        lcns, ltns
         iniprm(i,1,1,17,3)=nznbndt(1)+i
       end do !}
 
-c***        recyc
+c*** recyc
       do j=1,n !{
         do i=1,nspcpls+nspcncl !{
           k=ifl(i)
@@ -1108,14 +1109,15 @@ c*** j_h_at,l_h_mol
 #ifdef DBG
         print *,'uinprpb2: PFR fluxes',npfrgrp
         if(npfrgrp.gt.0) then !{
-          print '(1x,a8,3h : ,10a10)','gpfrgrp',
+          print '(1x,a11,10a10)','gpfrgrp : ',
      ,                                         (gpfrgrp(i),i=1,npfrgrp)
-          print '(1x,a8,3h : ,i6,9i10)','ipfrgrp',
+          print '(1x,a11,i6,9i10)','ipfrgrp : ',
      ,                                         (ipfrgrp(i),i=1,npfrgrp)
-          print '(1x,a8,3h : ,i6,9i10)','jpfrgrp',
+          print '(1x,a11,i6,9i10)','jpfrgrp : ',
      ,                                         (jpfrgrp(i),i=1,npfrgrp)
-          if(jpfrgrp(npfrgrp).gt.0) print '(1x,a8,20i4/(9x,20i4))',
-     ,                      'lpfrgrp',(lpfrgrp(i),i=1,jpfrgrp(npfrgrp))
+          if(jpfrgrp(npfrgrp).gt.0)
+     ,     print '(1x,a11,20i4/(12x,20i4))',
+     ,                   'lpfrgrp : ',(lpfrgrp(i),i=1,jpfrgrp(npfrgrp))
         end if !}
 #endif
         iniprm(1,1,1,13,7)=npfrgrp

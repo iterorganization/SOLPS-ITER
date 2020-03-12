@@ -33,7 +33,7 @@ switch ($NREG)
    pipe_run.log | \
     egrep -a 'r..[hn].reg|fh..reg|^pot|nnreg|End tallies|Total profile-source Power' | \
     awk '/nnreg/{nreg=$2+1;nxreg=$3+1;nyreg=$4+1} \
-       /pot/{for (i=1;i<=NF-1;i++) pot[i]=$(i+1)*1.6021766028e-19;pot[NF]=0} \
+       /pot/{for (i=1;i<=NF-1;i++) pot[i]=$(i+1)*1.602176634e-19;pot[NF]=0} \
        /Total profile-source Power/{ext=$4} \
        /rsahireg/{rsa=0;for (i=2;i<=NF;i+=nreg) rsa+=$i} \
        /rrahireg/{rra=0;for (i=2;i<=NF;i+=nreg) rra+=$i} \
@@ -58,7 +58,7 @@ switch ($NREG)
    pipe_run.log | \
     egrep -a 'r..[hn].reg|fh..reg|^pot|nnreg|End tallies|Total profile-source Power' | \
     awk '/nnreg/{nreg=$2+1;nxreg=$3+1;nyreg=$4+1} \
-       /pot/{for (i=1;i<=NF-1;i++) pot[i]=$(i+1)*1.6021766028e-19;pot[NF]=0} \
+       /pot/{for (i=1;i<=NF-1;i++) pot[i]=$(i+1)*1.602176634e-19;pot[NF]=0} \
        /Total profile-source Power/{ext=$4} \
        /rsahireg/{rsa=0;for (i=2;i<=NF;i+=nreg) rsa+=$i} \
        /rrahireg/{rra=0;for (i=2;i<=NF;i+=nreg) rra+=$i} \
@@ -83,7 +83,7 @@ switch ($NREG)
    pipe_run.log | \
     egrep -a 'r..[hn].reg|fh..reg|^pot|nnreg|End tallies|Total profile-source Power' | \
     awk '/nnreg/{nreg=$2+1;nxreg=$3+1;nyreg=$4+1} \
-       /pot/{for (i=1;i<=NF-1;i++) pot[i]=$(i+1)*1.6021766028e-19;pot[NF]=0} \
+       /pot/{for (i=1;i<=NF-1;i++) pot[i]=$(i+1)*1.602176634e-19;pot[NF]=0} \
        /Total profile-source Power/{ext=$4} \
        /rsahireg/{rsa=0;for (i=2;i<=NF;i+=nreg) rsa+=$i} \
        /rrahireg/{rra=0;for (i=2;i<=NF;i+=nreg) rra+=$i} \
@@ -108,7 +108,7 @@ switch ($NREG)
    pipe_run.log | \
     egrep -a 'r..[hn].reg|fh..reg|^pot|nnreg|End tallies|Total profile-source Power' | \
     awk '/nnreg/{nreg=$2+1;nxreg=$3+1;nyreg=$4+1} \
-       /pot/{for (i=1;i<=NF-1;i++) pot[i]=$(i+1)*1.6021766028e-19;pot[NF]=0} \
+       /pot/{for (i=1;i<=NF-1;i++) pot[i]=$(i+1)*1.602176634e-19;pot[NF]=0} \
        /Total profile-source Power/{ext=$4} \
        /rsahireg/{rsa=0;for (i=2;i<=NF;i+=nreg) rsa+=$i} \
        /rrahireg/{rra=0;for (i=2;i<=NF;i+=nreg) rra+=$i} \
@@ -133,7 +133,7 @@ switch ($NREG)
     pipe_run.log | \
      egrep -a 'r..[hn].reg|fh..reg|^pot|nnreg|End tallies|Total profile-source Power' | \
      awk '/nnreg/{nreg=$2+1;nxreg=$3+1;nyreg=$4+1} \
-       /pot/{for (i=1;i<=NF-1;i++) pot[i]=$(i+1)*1.6021766028e-19;pot[NF]=0} \
+       /pot/{for (i=1;i<=NF-1;i++) pot[i]=$(i+1)*1.602176634e-19;pot[NF]=0} \
        /Total profile-source Power/{ext=$4} \
        /rsahireg/{rsa=0;for (i=2;i<=NF;i+=nreg) rsa+=$i} \
        /rrahireg/{rra=0;for (i=2;i<=NF;i+=nreg) rra+=$i} \

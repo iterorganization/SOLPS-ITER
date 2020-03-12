@@ -16,6 +16,9 @@ FFLAGS   = -g -ffpe-trap=denormal -ffpe-trap=invalid -ffpe-trap=zero -ftrapv -fs
 else
 FFLAGS   =
 endif
+ifdef USE_OPENMP
+FFLAGS += -fopenmp
+endif
 ifeq (${FC_VERSION},6.4.0})
 FFLAGS  += -fuse-ld=bfd
 endif

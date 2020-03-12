@@ -33,7 +33,7 @@ c<<<
      ,    trim(cgpfstrs(istr))
 c>>>
         if(nstrai.ge.nstra) then !{
-          write(0,*) 'Too many strata requested (gas puff',istr,') : ',
+          write(0,*) 'Too many strata requested (gas puff ',istr,') : ',
      ,               nstrai
           write(0,*) 'STOP ==> check the DG model and the value of ',
      ,      'DEF_NSTRA in DIMENSIONS.F'

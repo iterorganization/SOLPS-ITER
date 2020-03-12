@@ -16,17 +16,22 @@ if ($?SOLPS_PATH) then
   if ($?SOLPS_OPENMP) then
     setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|B2.5/builds/standalone.${HOST_NAME}.${COMPILER}.openmp|B2.5/builds/standalone.${HOST_NAME}.${COMPILER}.openmp.mpi|g"`
     setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|B2.5/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}.openmp|B2.5/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}.openmp.mpi|g"`
+    setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|Uinp/builds/${HOST_NAME}.${COMPILER}.openmp|Uinp/builds/${HOST_NAME}.${COMPILER}.openmp.mpi|g"`
+    setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|scripts/${HOST_NAME}.${COMPILER}.openmp|scripts/${HOST_NAME}.${COMPILER}.openmp.mpi|g"`
   endif
   if ($?SOLPS_DEBUG) then
     setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|standalone.${HOST_NAME}.${COMPILER}.debug|standalone.${HOST_NAME}.${COMPILER}.mpi.debug|g"`
     setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|Uinp/builds/${HOST_NAME}.${COMPILER}.debug|Uinp/builds/${HOST_NAME}.${COMPILER}.mpi.debug|g"`
     setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}.debug|couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}.mpi.debug|g"`
+    setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|scripts/${HOST_NAME}.${COMPILER}.debug|scripts/${HOST_NAME}.${COMPILER}.mpi.debug|g"`
   else
     setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|standalone.${HOST_NAME}.${COMPILER}:|standalone.${HOST_NAME}.${COMPILER}.mpi:|g"`
     setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|Uinp/builds/${HOST_NAME}.${COMPILER}:|Uinp/builds/${HOST_NAME}.${COMPILER}.mpi:|g"`
     setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}:|couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}.mpi:|g"`
+    setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|scripts/${HOST_NAME}.${COMPILER}|scripts/${HOST_NAME}.${COMPILER}.mpi|g"`
   endif
   setenv   PATH ${SOLPS_PATH}:${OLD_PATH}
+  setenv   USE_MPI -DUSE_MPI
   setenv   SOLPS_MPI yes
   unsetenv OLD_SOLPS_PATH
   echo "SOLPS-ITER MPI mode turned on"

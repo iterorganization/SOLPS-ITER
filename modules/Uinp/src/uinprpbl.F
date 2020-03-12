@@ -4,6 +4,8 @@
      , , only: ntrack, nalloys
       use eirmod_extrab25
      , , only: msrfclsx, mgwtiesx
+      use b2mod_elements
+      use b2mod_solpstop
       implicit none
 
 c======================================================================
@@ -65,11 +67,10 @@ c     helpers for composing filenames
       character SUBDIRpot*4
       character ES*2, EB*2, YEAR*2, Bdescr*8, filename*256
 c     procedures
-      integer get_atomic_number
       real (kind=R8) :: rratio
       logical silent_open, streql
       external silent_open, streql
-      external get_atomic_number, lower_case, xxdata_11, rratio
+      external lower_case, xxdata_11, rratio
       external subini, subend, xertst, xerrab
 c======================================================================
       call subini ('uinprpbl')
@@ -115,9 +116,6 @@ c======================================================================
       escd1b = 0.0_R8
       escd2b = 0.0_R8
       freacb = 0.0_R8
-      do l=1,nbgk !{
-        ipls1(nplsi+l)=nplsi+l
-      end do !}
       do l=1,nspigen !{
         if (l.gt.1) then !{
           nc = get_atomic_number(spcigen(l-1))
@@ -155,6 +153,14 @@ c======================================================================
         if(silent_open(99,filename,
      .             'data.local|modules/B2.5/Database',adasfile)) then !{
           read(99,*) uidin
+          if(uidin(1:8).eq.'SOLPSTOP') then !{
+            if(uidin(9:9).ne.'/') then !{
+              uidin=trim(solpstop()) // '/' // trim(uidin(9:))
+            else !}{
+              uidin=trim(solpstop()) // '/' // trim(uidin(10:))
+            endif !}
+            write(*,*) 'ADAS UIDIN changed to ',trim(UIDIN)
+          endif !}
           read(99,*) maxne
           if (nc.gt.maxne) then !{
             write(*,*) 'ADAStables: element number',nc,
@@ -254,8 +260,8 @@ c     now read the relevant line
               izpmax(ic-1) = iptnca(1,ic,nptnc(1,ic))
             enddo !}
             write(6,*) spcigen(l)
-            write(6,*) (izpmin(ic-1),ic=1,ncnct)
-            write(6,*) (izpmax(ic-1),ic=1,ncnct)
+            write(6,'(20i5)') (izpmin(ic-1),ic=1,ncnct)
+            write(6,'(20i5)') (izpmax(ic-1),ic=1,ncnct)
             write(6,1028)
           else !}{
             call xerrab ('Could not open ADAS partition file!')
@@ -361,6 +367,9 @@ cxpb   jend(l) is the number of the last bundled ion of sequence l in the new li
         end if !}
         deallocate(izpmin, izpmax)
         lfirst = .false.
+      end do !}
+      do l=1,nbgk !{
+        ipls1(nplsi+l) = jend(nspigen)+l
       end do !}
 
 cxpb Now we remap the arrays

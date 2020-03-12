@@ -18,12 +18,14 @@ c=======================================================================
      ,  nlstadds_b,nlstadu_b,mtreadds_b,
      ,  l_pfr,l_wll
       integer mesh_cell_ind
+      logical plspec_b,prspec_b,plargl_b,prargl_b
       logical ex,streql
       external streql, subini, subend, mesh_cell_ind
       real alloc_b,flux_b(nstra)
       save alloc_b,flux_b,
      ,  ntcpu_b,nfile_b,npts_b,lntspec_b,lntsput_b,nmcsput_b,ngwties_b,
-     ,  nlstadds_b,nlstadu_b,mtreadds_b
+     ,  nlstadds_b,nlstadu_b,mtreadds_b,
+     ,  plspec_b,prspec_b,plargl_b,prargl_b
 c=======================================================================
       call subini ('uinprpdg')
       if(lc) then !{
@@ -232,6 +234,10 @@ c*** Set the VSP data for diag2.eir
             lsrfcls(i,k)=lsrfclu(i,k,3)
           end do !}
         end do !}
+        plspec_b=plspec
+        prspec_b=prspec
+        plargl_b=plargl
+        prargl_b=prargl
 
       else !}{
         nsrfcls=0
@@ -249,6 +255,10 @@ c*** Set the VSP data for diag2.eir
       	  npts(i)=npts_b(i)
       	  flux(i)=flux_b(i)
         end do !}
+        plspec=plspec_b
+        prspec=prspec_b
+        plargl=plargl_b
+        prargl=prargl_b
       end if !}
 c=======================================================================
       call subend ()

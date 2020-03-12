@@ -18,7 +18,7 @@ endif
 DEFINES   =
 EQUIVS    =
 
-#CPP      = -/lib/cpp -C -traditional
+#CPP      = -/lib/cpp -C -traditional -ffreestanding
 CPP       = /lib/cpp -traditional
 CPPOPTS   = -P -I${srcdir} ${EQUIVS}
 SED       =
@@ -28,8 +28,9 @@ FC        = ifort
 
 ifdef SOLPS_DEBUG
 FCOPTS    = -g -C -debug all -traceback
+DEFINES  += -DDBG
 else
-FCOPTS    = -O3 -vec_report0
+FCOPTS    = -O3
 endif
 
 #COMPILE  = ${FC} -c ${FFLAGS}

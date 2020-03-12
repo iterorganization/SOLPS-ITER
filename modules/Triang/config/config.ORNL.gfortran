@@ -34,6 +34,7 @@ BLD = ar rcv
 LD = gfortran
 ifdef SOLPS_DEBUG
 LDOPTS = -g -C -Wall
+DEFINES += -DDBG
 else
 LDOPTS =
 endif

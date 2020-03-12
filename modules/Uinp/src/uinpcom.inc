@@ -333,10 +333,13 @@ c***    flag "Use the default model"
       integer nnrctn,rctngrp(mreac),rctnmsp(mreac),rctnmst(mreac),
      ,  rctnnmo1(mreac),rctnnmo2(mreac),rctnnmo3(mreac),
      ,  rctnimn(mreac),rctnimx(mreac),rctniz(mreac)
-      character*8 rctntyp(mreac)*2,rctndbs(mreac)*6,rctnchp(mreac)*4,
-     ,  rctnrct(mreac)*9,rctnptpr(mreac),rctnptin(mreac),
-     ,  rctnpto1(mreac),rctnpto2(mreac),rctnpto3(mreac),
-     ,  rctneln(mreac)*2
+      character*2 rctntyp(mreac),rctneln(mreac)
+      character*4 rctnchp(mreac)
+      character*6 rctndbs(mreac)
+      character*8 rctnptpr(mreac),rctnptin(mreac),
+     ,            rctnpto1(mreac),rctnpto2(mreac),rctnpto3(mreac)
+      character*9 rctnrct(mreac)
+      character*60 rctnbdl(mreac)
       real(kind=R4)
      ,  rctndlte(mreac),rctntmin(mreac),rctntmax(mreac),
      ,  rctnenr1(mreac),rctnenr2(mreac),rctnexcf(mreac,6)
@@ -350,11 +353,13 @@ c***    primary particle is determined from spcrctd)
       character*8 spcrctd(nsrctd)
       integer nnrctd(nsrctd),rctdgrp(mreac,nsrctd),
      ,  rctdmsp(mreac,nsrctd),rctdmst(mreac,nsrctd)
-      character*6 rctdtyp(mreac,nsrctd)*2,rctddbs(mreac,nsrctd),
-     ,  rctdchp(mreac,nsrctd)*4,rctdrct(mreac,nsrctd)*9,
-     ,  rctdptpr(mreac,nsrctd),rctdptin(mreac,nsrctd),
-     ,  rctdpto1(mreac,nsrctd),rctdpto2(mreac,nsrctd),
-     ,  rctdpto3(mreac,nsrctd),rctdeln(mreac,nsrctd)
+      character*2 rctdtyp(mreac,nsrctd),rctdeln(mreac,nsrctd)
+      character*4 rctdchp(mreac,nsrctd)
+      character*6 rctddbs(mreac,nsrctd)
+      character*8 rctdptpr(mreac,nsrctd),rctdptin(mreac,nsrctd),
+     ,            rctdpto1(mreac,nsrctd),rctdpto2(mreac,nsrctd),
+     ,            rctdpto3(mreac,nsrctd)
+      character*9 rctdrct(mreac,nsrctd)
       real(kind=R4) 
      ,  rctddlte(mreac,nsrctd),rctdtmin(mreac,nsrctd),
      ,  rctdtmax(mreac,nsrctd),
@@ -459,7 +464,7 @@ c*** Data for pre-defined 'density models' in Eirene:
 c*** number of these models and max. length of their names;
 c*** names of the models
       integer ndnmdlp,ldnmdlp
-      parameter (ndnmdlp=10,ldnmdlp=10)
+      parameter (ndnmdlp=11,ldnmdlp=10)
       character*(ldnmdlp) cdnmdlp_sel(ndnmdlp)
       
 
@@ -489,9 +494,11 @@ c*** Data substitution for the Eirene test run
       real(kind=R4) ttalloc
       logical
      ,  ttchst,ttcref,ttcint,ttcamd,ttcsou,ttcsur,ttcbla,ttcblm,ttcbli,
-     ,  ttcblp,ttcble,ttcblph,ttctal,ttcdbg2,ttcdbge,ttcdbgm,ttcdbgf,
-     ,  ttcdbgl,ttcdbgs,ttcdbgg,ttcdbgmpi,ttcdbgc,ttcsrc,
-     ,  ttpl1st,ttpl2nd,ttpladd,ttplhst,ttplcut(3),ttplnums,tttest
+     ,  ttcblp,ttcble,ttcblph,ttctal,ttcoct,ttccen,ttcrnf,
+     ,  ttcdbg2,ttcdbge,ttcdbgm,ttcdbgf,
+     ,  ttcdbgl,ttcdbgs,ttcdbgg,ttcdbgmpi,ttcdbgc,ttchktim,ttcsrc,
+     ,  ttpl1st,ttpl2nd,ttpladd,ttplhst,ttplcut(3),ttplnums,tttest,
+     ,  ttplspec,ttprspec,ttplargl,ttprargl
       
 c-----------------------------------------------------------------------
 c*** Eirene surface data through B2:
@@ -597,9 +604,11 @@ c     ,  spcifup,spcifua,spcifum,spcifui,
      l  nlrbnds,bliin,bbliin,dfrbndx,glb2read,usetmstr,bxsbndt,rxsbndt,
      ,  rctndflt,tgdtinpt,srcvdflt,do_hepdt,ttcsrc,ttcint,ttchst,ttcref,
      ,  ttcamd,ttcsou,ttcsur,ttcbla,ttcblm,ttcbli,ttcblp,ttcble,
-     ,  ttcblph,ttctal,ttcdbg2,ttcdbge,ttcdbgm,ttcdbgf,ttcdbgl,ttcdbgs,
-     ,  ttcdbgg,ttcdbgmpi,ttcdbgc,
+     ,  ttcblph,ttctal,ttcoct,ttccen,ttcrnf,
+     ,  ttcdbg2,ttcdbge,ttcdbgm,ttcdbgf,ttcdbgl,ttcdbgs,
+     ,  ttcdbgg,ttcdbgmpi,ttcdbgc,ttchktim,
      ,  ttpl1st,ttpl2nd,ttpladd,ttplhst,ttplcut,ttplnums,tttest,
+     ,  ttplspec,ttprspec,ttplargl,ttprargl,
      ,  lm_cnfg,no_n2,l_ammon,l_meta,
      ,  no_n2_model,ammonx_used,meta_used,is_meta
 
@@ -613,7 +622,7 @@ c     ,  spcifup,spcifua,spcifum,spcifui,
      ,  crgbndt,cznbndt,ewmbnds,cskbnds,ctxbnds,ewmbndx,escbndx,eswbndx,
      ,  dscbndx,
      ,  rctntyp,rctndbs,rctnchp,rctnrct,rctnptpr,rctnptin,rctnpto1,
-     ,  rctnpto2,rctnpto3,rctneln,
+     ,  rctnpto2,rctnpto3,rctneln,rctnbdl,
      ,  spcrctd,rctdtyp,rctddbs,rctdchp,rctdrct,rctdptpr,
      ,  rctdptin,rctdpto1,rctdpto2,rctdpto3,rctdeln,
      ,  hlp_h,

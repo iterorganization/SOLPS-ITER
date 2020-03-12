@@ -107,7 +107,7 @@ set       B25_PATH =  ${SOLPSTOP}/modules/B2.5/builds/standalone.${TOOLCHAIN}
 set B25EIRENE_PATH =  ${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${TOOLCHAIN}
 set      UINP_PATH =  ${SOLPSTOP}/modules/Uinp/builds/${TOOLCHAIN}
 set    TRIANG_PATH =  ${SOLPSTOP}/modules/Triang/builds/${TOOLCHAIN}
-set   SCRIPTS_PATH =  ${SOLPSTOP}/scripts.local:${SOLPSTOP}/scripts:${SOLPSTOP}/modules/Eirene/scripts:${SOLPSTOP}/modules/B2.5/src/test
+set   SCRIPTS_PATH =  ${SOLPSTOP}/scripts.local:${SOLPSTOP}/scripts:${SOLPSTOP}/scripts/${TOOLCHAIN}:${SOLPSTOP}/modules/Eirene/scripts:${SOLPSTOP}/modules/B2.5/src/test
 set      AMDS_PATH =  ${SOLPSTOP}/modules/amds/builds/${TOOLCHAIN}
 set       S45_PATH =  ${SOLPSTOP}/modules/solps4-5/builds/${TOOLCHAIN}
 
@@ -116,9 +116,12 @@ setenv SOLPS_PATH  ${SCRIPTS_PATH}:${CARRE_PATH}:${DIVGEO_PATH}:${B25EIRENE_PATH
 setenv OLD_PATH    ${PATH}
 setenv PATH        ${SOLPS_PATH}:${PATH}
 if ($?LD_LIBRARY_PATH) then
-  setenv LD_LIBRARY_PATH ${SOLPSLIB}:${LD_LIBRARY_PATH}
+  setenv LD_LIBRARY_PATH ${SOLPSLIB}:${SOLPSTOP}/lib/python:${LD_LIBRARY_PATH}
 else
-  setenv LD_LIBRARY_PATH ${SOLPSLIB}
+  setenv LD_LIBRARY_PATH ${SOLPSLIB}:${SOLPSTOP}/lib/python
+endif
+if ($?PYTHON_PATH) then
+  setenv PYTHONPATH ${PYTHONPATH}:${PYTHON_PATH}
 endif
 
 unset TOOLCHAIN SCRIPTS_PATH CARRE_PATH DIVGEO_PATH EIRENE_PATH B25_PATH B25EIRENE_PATH UINP_PATH TRIANG_PATH AMDS_PATH S45_PATH
@@ -218,15 +221,6 @@ if (-s SETUP/setup.csh.local) then
   source SETUP/setup.csh.local
 endif
 
-# Add links to the IMAS solps-iter database
-
-if ($?IMAS_VERSION) then
-  source scripts/imasdb_solps-iter
-  module list
-endif
-
 # List loaded modules
 
-if (-e module) then
-  module list
-endif
+module list

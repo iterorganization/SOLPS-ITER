@@ -26,7 +26,6 @@ module load impi/2017
 module load git
 
 #module load imas
-#imasdb solps-iter
 
 # module load itm-paraview
 

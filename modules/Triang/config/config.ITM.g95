@@ -26,6 +26,7 @@ FC        = g95
 
 ifdef SOLPS_DEBUG
 FCOPTS    = -g -C -fbounds-check -ftrace=full
+DEFINES  += -DDBG
 else
 FCOPTS    = -O3
 endif

@@ -7,25 +7,42 @@
 # module load globus
 # module load hdf5
 # module load MUMPS
-module unload ifort          # SOLPS appears not to be compatible with Iris' default ifort compiler (currently 2016)
-module load ifort/2015       # 
-module load netcdf
 # module load scalapack
+module load ifort/ifort2017
+module load ncl_ncar
+module load netcdf
+module load totalview
+module load git
 
 # Environment variables
 if [ -z "$DEVICE" ]; then
   export DEVICE=d3d
 fi
 
+export IRISLIB="/fusion/projects/codes/solps/SOLPS-ITER/public_lib/GA.ifort64"
+export GLI_HOME=${IRISLIB}/gli
+
+# Set external library paths
+
+export LD_LIBRARY_PATH="${IRISLIB}:${LD_LIBRARY_PATH}"
+export LD_LIBRARY_PATH="${GLI_HOME}:${GLI_HOME}/src:${LD_LIBRARY_PATH}"
+
+# Prepend path to python
+
+pythondir=`dirname $PYTHON`
+export PATH=${pythondir}:$PATH
+
 # Debugger
-# export DBX=totalview
+export DBX=totalview
+
+# ParaView compiling options
 
 if [ -z `type paraview-config 2> /dev/null` ]; then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
 else
   # See ParaViewCatalystUsersGuide_v2.pdf Sec 3.7.2 Linking with Python ...
   PARAVIEW_LIB=`paraview-config --libs --python | sed s/-L//`
-  if [ ! -z "$LD_LIBRARY_PATH" ]; then
+  if [ -n "$LD_LIBRARY_PATH" ]; then
     export LD_LIBRARY_PATH="${PARAVIEW_LIB}:${LD_LIBRARY_PATH}"
   else
     export LD_LIBRARY_PATH=${PARAVIEW_LIB}
@@ -34,3 +51,8 @@ else
   export PYTHONPATH="${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
   export LD_CATALYST=`paraview-config --libs vtkPVPythonCatalyst`
 fi
+
+# Additional setup
+
+#pushd ${GLI_HOME}/src >& /dev/null; source glisetup.ksh; popd >& /dev/null     # Eirene graphics environment
+

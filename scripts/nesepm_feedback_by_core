@@ -11,7 +11,7 @@ endif
 if (! $?NREG) set NREG = 4
 set target=`grep "'b2stbc_nesepm'" b2mn.dat | tr "'" " " | awk '{print $2}'`
 set overshoot=`grep overshoot b2mn.dat | tr "'" " " | awk '{print $2}'`
-setenv GNUPLOT_POSTSCRIPT_OPTIONS 'color solid'
+setenv GNUPLOT_POSTSCRIPT_OPTIONS 'color solid noenhanced'
 setenv GNUPLOT_DATA feedback.data
 setenv PRINT_PLOT feedback.ps
 switch ($NREG)

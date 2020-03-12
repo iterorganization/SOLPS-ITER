@@ -91,7 +91,6 @@
       logical lvis21_4, ni_driven_4, no_thermal_force_4,
      *  lbndusr_4, lfeedback_4,
      *  lreitr_4, lfirstflight_4,
-     *  lhalpha_4, lvib_4,
      *  autotimestep_4, scale_He_4, print_isat_4,
      *  sepfeedback_4, volrecfeedback_4, sepgasfeedback_4
 
@@ -291,8 +290,6 @@ cxpb
       use braeir
      , , only: chemical_sputter_yield, fchar_chemical,
      ,         itsput_chemical, issput_chemical, igass_chemical
-      use eirdiag
-     , , only: lvib, lhalpha
       use ccoupl
      , , only: nspze_eir => nspze, nspzi_eir => nspzi, ntgprt
       use comsou
@@ -526,8 +523,6 @@ cxpb
       nltrsol_4 = nltrsol
       jxi_4 = jxi-1
       jxa_4 = jxa-1
-      lhalpha_4 = lhalpha
-      lvib_4 = lvib
       debug_flags_4 = debug_flags
       nstepprint_4 = nstepprint
       nstepout_4 = nstepout
@@ -964,7 +959,7 @@ c Fill out b2mod_indirect arrays
 c Compute geometrical quantities
       call b2agmt(nx, ny, 1,
      & crx, cry, vol, hx, hy, qz, qc, qcb, gs,
-     & cell_width, cell_height, leftix, bottomiy)
+     & cell_width, cell_height, leftix, leftiy, bottomiy)
       fpsi = 0.0_R8
       ffbz = 0.0_R8
       periodic_bc = 0
@@ -1208,12 +1203,21 @@ c Fill out /b2cmpt/ arrays
           else if (nint(zn(is)).eq.2) then
             cfdf0(3,is)= 2.0e-20_R8
             cfdf0(4,is)= 5.0e-20_R8
+          else if (nint(zn(is)).eq.4) then
+            cfdf0(3,is)= 1.0e-20_R8
+            cfdf0(4,is)= 3.0e-20_R8
           else if (nint(zn(is)).eq.6) then
             cfdf0(3,is)= 5.0e-20_R8
             cfdf0(4,is)= 1.5e-18_R8
+          else if (nint(zn(is)).eq.7) then
+            cfdf0(3,is)= 1.5e-20_R8
+            cfdf0(4,is)= 5.5e-20_R8
           else if (nint(zn(is)).eq.10) then
             cfdf0(3,is)= 1.0e-20_R8
             cfdf0(4,is)= 7.0e-21_R8
+          else if (nint(zn(is)).eq.18) then
+            cfdf0(3,is)= 2.0e-20_R8
+            cfdf0(4,is)= 5.0e-20_R8
           end if
           if (.not.ni_driven_4) then
             cfdpa(2,is)= 1.0_R8
@@ -1831,7 +1835,7 @@ c
       write(99,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
      .  (cfalf(i),i=0,7)
       write(99,'(a)') '*cflim'//
-     .  '     cflme     cflmi     cflmv     cflal     cflab     ...'
+     .  '    cflme     cflmi     cflmv     cflal     cflab     ...'
       write(99,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
      .  (cflim(i),i=0,7)
       write(99,'(a)') '*endphy'
@@ -2098,7 +2102,9 @@ c
      .   '''eirene_fixuub'''//tab//tab//tab//'''2'''
         write(99,'(a,i1,a)')
      .   '''eirene_ank_mods'''//tab//tab//'''',ank_mods,''''
-        write(99,'(a,i3,a)')
+        write(hlp_frm, '(a,i1,a)')
+     .   '(a,i',len_of_digits(ionising_core),',a)'
+        write(99,hlp_frm)
      .   '''eirene_ionising_core'''//tab//tab//'''',ionising_core,''''
         write(98,'(a)')
      .   '''b2mndr_eirene'''//tab//tab//tab//'''1'''
@@ -2116,7 +2122,7 @@ c
      .   '''eirene_fixmap'''//tab//tab//tab//'''1'''
         write(98,'(a,i1,a)')
      .   '''eirene_ank_mods'''//tab//tab//'''',ank_mods,''''
-        write(98,'(a,i3,a)')
+        write(98,hlp_frm)
      .   '''eirene_ionising_core'''//tab//tab//'''',ionising_core,''''
         if (nstepout_4.ge.1) then
           write(hlp_frm, '(a,i1,a)')
@@ -2131,14 +2137,6 @@ c
           write(98,'(a)')
      .     '''ank_tracing'''//tab//tab//tab//'''1'''
         end if
-      end if
-      if (.not.lhalpha_4) then
-        write(99,'(a)') '''eirene_lhalpha'''//tab//tab//'''0'''
-        write(98,'(a)') '''eirene_lhalpha'''//tab//tab//'''0'''
-      end if
-      if (lvib_4) then
-        write(99,'(a)') '''eirene_lvib'''//tab//tab//tab//'''1'''
-        write(98,'(a)') '''eirene_lvib'''//tab//tab//tab//'''1'''
       end if
       if (dflagkxe_4.ne.0 .or. dflagkxi_4.ne.0) then
         write(99,'(a)') '''b2trcl_lluciani'''//tab//tab//'''2'''
@@ -2333,9 +2331,11 @@ c
         if (ffb_cntr_4(is).ne.0) then
           is0 = isp(is)
           if (is0.ge.0) then
-            write(99,'(a,i2,a)')
+            write(hlp_frm, '(a,i1,a)')
+     .       '(a,i',len_of_digits(is0),',a)'
+            write(99,hlp_frm)
      .       '''b2stbc_isfeedback'''//tab//tab//'''',is0,''''
-            write(98,'(a,i2,a)')
+            write(98,hlp_frm)
      .       '''b2stbc_isfeedback'''//tab//tab//'''',is0,''''
           end if
           if (ffb_strata_4(is).le.0) then
@@ -2346,10 +2346,12 @@ c
             end do
           end if
           if (ffb_strata_4(is).gt.0) then
-            write(99,'(a,i2,a)')
+            write(hlp_frm, '(a,i1,a)')
+     .       '(a,i',len_of_digits(ffb_strata_4(is)),',a)'
+            write(99,hlp_frm)
      .       '''eirene_nesepm_istra'''//tab//'''',
      .       ffb_strata_4(is),''''
-            write(98,'(a,i2,a)')
+            write(98,hlp_frm)
      .       '''eirene_nesepm_istra'''//tab//'''',
      .       ffb_strata_4(is),''''
           end if
@@ -2458,8 +2460,8 @@ cxpb are turned on simultaneously for the same isonuclear sequence
                 else
                   bccon(is0,ib) = 11
                   conpar(is0,ib,2) = 0.0_R8
-                  na_feedback_ib(is-1) = ib
                 end if
+                na_feedback_ib(is-1) = ib
                 conpar(is0,ib,1) = cfb_core_4(is)
                 do iss = isp(is)+1, isp(is)+nfluids_4(is)
                   conpar(is0,ib,1) = conpar(is0,ib,1) +
@@ -2502,9 +2504,13 @@ cxpb are turned on simultaneously for the same isonuclear sequence
             if (ffb_cntr_4(is).ne.0) then
               is0 = isp(is)
               if (is0.ge.0) then
-                bccon(is0,ib) = 11
+                if (cfb_cntr_4(is).ne.0) then
+                  bccon(is0,ib) = 8
+                else
+                  bccon(is0,ib) = 11
+                  na_feedback_ib(is-1) = ib
+                end if
                 conpar(is0,ib,1) = ffb_const_4(is)
-                na_feedback_ib(is-1) = ib
               end if
             end if
           end do

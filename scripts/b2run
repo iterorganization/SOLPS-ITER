@@ -45,6 +45,8 @@ endloop:
   set debug=""
   set TIME=time
   set RUN_OPTIONS=""
+  set KMP_AFFINITY=""
+  set OMP_NUM_THREADS=1
 
 argloop:
   if ("X${1}X" == "X-hX") then
@@ -132,9 +134,10 @@ argloop:
     shift
     if (! $?SOLPS_OPENMP) then
       source $SOLPSTOP/SETUP/openmp
+      set OPENMP_SET=yes
     endif
     set OMP_NUM_THREADS=$1
-    set KMP_AFFINITY=compact
+    set KMP_AFFINITY=compact,verbose,norespect
     shift
     goto argloop
   endif
@@ -184,9 +187,10 @@ argloop:
   endif
   echo "argument = "$b2ex
   set CMD=`echo $b2ex" " | sed -e 's: :.prt :g'`
-  ${MAKE} $debug TIME="$TIME" RUN_OPTIONS="$RUN_OPTIONS" -f $RUNS/Makefile $CMD
+  ${MAKE} $debug TIME="$TIME" RUN_OPTIONS="$RUN_OPTIONS" OMP_NUM_THREADS=$OMP_NUM_THREADS -f $RUNS/Makefile $CMD
   unsetenv STAND_ALONE
   unsetenv B2FSTATE_ONLY
-  if ($?MPI_SET)   source $SOLPSTOP/SETUP/nompi
-  if ($?DEBUG_SET) source $SOLPSTOP/SETUP/nodebug
+  if ($?MPI_SET)    source $SOLPSTOP/SETUP/nompi
+  if ($?DEBUG_SET)  source $SOLPSTOP/SETUP/nodebug
+  if ($?OPENMP_SET) source $SOLPSTOP/SETUP/noopenmp
   

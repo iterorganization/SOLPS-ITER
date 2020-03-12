@@ -1,0 +1,349 @@
+*label          (lblmn: character*60)
+  'shot28903.2400_D+N.upgrade.geometry'
+*b2cmpa  basic parameters
+*b2cmpb  boundary conditions
+*b2cmpt  transport coefficients
+*cfsig     (0)      (1)      (2)      (3)      (4)      (5)      (6)      (7)
+  '-1'   1.0e-05  0.0e+00  0.0e+00  0.0e+00  0.0e+00  0.0e+00  0.0e+00  0.0e+00
+*cfalf     (0)      (1)      (2)      (3)      (4)      (5)      (6)      (7)
+  '-1'   1.0e-05  0.0e+00  0.0e+00  0.0e+00  0.0e+00  0.0e+00  0.0e+00  0.0e+00
+*cflim     (0)      (1)      (2)      (3)      (4)      (5)      (6)      (7)
+  '-1'  3.00E-01 6.00E-01 5.00E-01 5.00E-01 5.00E-01 0.00E+00 0.00E+00 0.00E+00
+*endphy
+
+
+
+############################################################################################################################
+# BASIC RUN PARAMETERS                                                                                                      
+############################################################################################################################
+
+'b2mndr_stim'               '-1.0'       # Start time of the new run is the end time of previous run
+'b2mndr_etim'               '1.0e2'      # End time of the run - infinitely large
+'b2mndr_ntim'               '5000000'    # Number of time steps
+'b2mndr_dtim'               '1.0e-7'     # Time step (in seconds)
+'b2mndt_ntim_step_out'      '10'         # Time period (in timesteps) to write residuals to b2ftrace
+'b2mndt_nstg0'              '1'          # Number of internal iterations of zeroth level
+'b2mndt_nstg1'              '1'          # Number of internal iterations of first level
+'b2mndt_nstg2'              '1'          # Number of internal iterations of second level
+                                         # Most of people (except Sergey Voskoboynikov) recommend to set this parameter to 10 or even 15
+'b2mndr_cpu'                '170000.0'   #
+'b2mndr_elapsed'            '170000.0'   #
+'b2mndr_savecpu'            '7200.0'     # 
+
+'b2stbc_boundary_namelist'  '1'          # To use b2.boundary.parameters         
+'b2stbr_neutrals_namelist'  '1'          # To use b2.neutrals.parameters
+'b2tqna_transport_namelist' '1'          # To use b2.transport.parameters
+'b2srdt_numerics_namelist'  '1'          #
+
+
+
+############################################################################################################################
+# BASIC NUMERICS PARAMETERS                                                                                                 
+############################################################################################################################
+
+'b2mndr_na_min'              '1.0e10'           Numerics
+'b2mndr_na_new'              '1.0e14'           Numerics
+#'b2news_area_fix'            '3'        # by default is '3'
+'b2news_potit'               '100'       # Maximum number of iterations in the potential equation.    
+'b2news_potok'               '1e-2'      # Target residual for the potential equation.
+'b2news_guard_flows'         '2'         # By default is '2'
+
+#'b2srst_rf0'                 '1.0'       # Switch fo numerical stabilization. By default is '1.0'
+#'b2srst_rf1'                 '1.0'       # Switch fo numerical stabilization. By default is '1.0'
+#'b2srst_rf2'                 '1.0'       # Switch fo numerical stabilization. By default is '1.0'
+#'b2srst_rf3'                 '1.0'       # Switch fo numerical stabilization. By default is '1.0'
+
+'b2stbc_bcene_15_style'      '1'         # Express the electron current explicitly through the exponential in the sheath BC on Te. Not described in b2cdci.F. By default is '0'
+'b2stbc_bcene_16_style'      '1'         # Style of feedback BC on Te with prescribed heat flux. '0' - by D.Coster; '1' - by SPb group. Not described in b2cdci.F. By default is '0'
+'b2stbc_bceni_16_style'      '1'         # Style of feedback BC on Ti with prescribed heat flux. '0' - by D.Coster; '1' - by SPb group. Not described in b2cdci.F. By default is '0'
+'b2stbc_bc_ref'              '5.0e-4'    # Relative change in the core na on one time step in feedback BCs BCCON=16,19,22,26,27. Not described in b2cdci.F. By default is '0.01'
+'b2stbc_bc_ref_te'           '1.0e-2'    # Relative change in the core Te on one time step in feedback BC BCENI=16. Not described in b2cdci.F. By default is '0.01'
+'b2stbc_bc_ref_ti'           '1.0e-2'
+'b2stbc_sna0ep'              '1.0e-10'   # Small level sources introduced in all cells. By default is '1.0e-36'
+#'b2stbc_average_pr'         '0'         # Defines the style of average pressure calculation in b2stbc_phys.F. Not described in b2cdci.F. By default is '0'
+'b2stbc_istyle_fchi'         '1'         # If '1', explicitly use the expression (bx*cs*na) of particle flux (fna) from boundary condition instead of fna.
+
+#'b2swtest'                  '0'         # Not described in b2cdci.F. By default is '0'
+
+#'b2tlh0_flux_limit_style'   '2'         # Defines the style of the neutral heat conductivity flux limit. By default is '2'
+#'b2tfnb_xfrhie'             '1.0'       # By default is '1.0'
+#'b2mndt_rxf'                '0.5'       # By default is '0.5'
+
+#'b2ux5p_style'              '2'         # Choose the type of matrix solver. 
+#'b2ux7p_style'              '2'         # Choose the type of matrix solver. 
+#'b2ux9p_style'              '2'         # Choose the type of matrix solver. 
+
+'b2npmo_ion_vlct_restrict'   '2'         # limits the abs(ua) by 3.0*cs and abs(vaecrb) by 2.0*abs(bx * cs) simultaneously
+
+
+############################################################################################################################
+# EQUATION CONTROL                                                                                                 
+############################################################################################################################
+
+'b2mndr_hz'                 '1.0' # If b2mndr_hz = 0.0 then hz = 1        (cylindrical approximation). 
+                                  # If b2mndr_hz = 1.0 then hz = 2*pi*R d (toroidal approximation).
+'b2sigp_style'              '2'   # '2' means the well-known form of momentum equation with explicit appearance of E-field
+                                  # '0' and '1' mean the two different form of expressing the E-force through the electron
+                                  # force balance equation
+
+'b2npmo_b2sifr_'            '2'   # Makes the friction force corresponding to the form of the momentum balance equation 
+                                  # governed by 'b2sigp_style'
+
+# 'b2sihs_istyle_Joule_heating'    '1'   # see the b2cdci.F, by default is '1'
+
+'b2news_poteq'              '1'   # Governs whether to solve the current continuity equation or not
+#'b2tfhe_no_current'        '0'   # Must be set to 1 if b2news_poteq .ne. 1, by default is '0'
+'b2stbc_istyle_cur_contr_on_S_and_N'       '1'     Compatible only with BCPOT=0 on South and North boundaries.
+                                                   For other types of BCPOT on South and North boundaries the value '2' should be used.
+                                                   {BCPOT=0 and '1'} is equivalent {BCPOT=12 and '2'} in the core and {BCPOT=13 and '2'} in the SOL (north) and PFR
+'b2sral_style'              '2'   # by default is 2, and it should be '2' to set up all the boundary conditions correctly
+
+'b2tfhe_vis_par'            '1.0' # Real parameter which multiplies current driven by parallel viscosity.
+'b2tfhe_vis_per'            '1.0' # Turns on the current driven by perpendicular viscosity and switches to 7-point stencils for
+                                  #           electric potential equation.
+'b2tfnb_vis_per'            '1.0' # Turns on the contribution from perpendicular viscosity current into main ion flux and
+                                  # switches to 11-point stencil for main ion particle balance equation. Default is '1.0'
+'b2tfhe_vis_q'              '1.0' # Real parameter which multiplies current driven by heat viscosity effects.
+'b2tfhe_neutral'            '1.0' # Real parameter which multiplies ion-neutral current. By default is '0.0'
+
+'b2trcl_csig_mltpl'         '10.0'# Real factor to increase the parallel electric conductivity in the core guard cells in order to 
+                                  # compensate numerical disbalance in grad B currents by parallel currents more easy
+
+
+############################################################################################################################
+# SWITCHES WHICH TURN ON THE B2 5.2 MODE                                                                                                      
+############################################################################################################################
+
+'b2nxfx_style'                       '1'     NEW
+'b2nxdv_style'                       '1'     NEW
+'b2npht_style'                       '1'     NEW
+'b2nph9_style'                       '1'     NEW
+'b2npp7_style'                       '1'     NEW
+'b2nxfc_style'                       '1'     NEW
+'b2tfnb_drift_style'                 '1'     NEW
+'b2tfnb_fnb_nodrift_style'           '1'     NEW
+
+'b2mndt_style'                       '1'     If 0, b2news is called (SOLPS5.0/1) If 1, b2news_ is called (SOLPS5.2)
+'b2tfnb_mdf'                         '1'                default  0
+'b2tfhi_mdf'                         '1'                default  0
+'b2tfhe_mdf'                         '1'                default  0
+
+
+
+############################################################################################################################
+# DIAMAGNETIC AND ExB DRIFTS                                                                                                 
+############################################################################################################################
+'b2news_facdrift_target'    '1.000'         NEW   1st of 6 keys to turn drifts on/off
+'b2news_facdrift_start'     '1.000'         NEW   2nd of 6 keys to turn drifts on/off
+'b2news_facdrift_inc'       '1.000'         NEW
+'b2news_facdrift_dec'       '1.000'         NEW
+'b2news_facExB_target'      '1.000'         NEW   3rd of 6 keys to turn drifts on/off
+'b2news_facExB_start'       '1.000'         NEW   4th of 6 keys to turn drifts on/off
+'b2news_facExB_inc'         '1.000'         NEW
+'b2news_facExB_dec'         '1.000'         NEW
+'b2news_facvis_target'      '1.000'         NEW   5th of 6 keys to turn drifts on/off
+'b2news_facvis_start'       '1.000'         NEW   6th of 6 keys to turn drifts on/off
+'b2news_facvis_inc'         '1.000'         NEW
+'b2news_facvis_dec'         '1.000'         NEW
+
+
+
+############################################################################################################################
+# ANOMALOUS TRANSPORT                                                                                                 
+############################################################################################################################
+
+'b2tqna_model_sig'       '1'      # If '1', then sig0=dfsig*qe*ne(nmdpl,-1). If '0', use sig0=dfsig*qe*ne(x,y). By default is '0'
+'b2trno_csig_an_style'   '1'      # If '1', then no anomalous contribution to poloidal current driven by both grad(phi) and grad(p_e). By default is '1' 
+
+'b2tqna_itype'           '5'      # This is the main key which turns on the simplified model for anomalous
+                                  # transport coefficient spatial dependency which is widwly used in Saint Petersburg.
+                                  # The choice 'b2tqna_itype'='5' gives the meaning to other keys in this block.
+'b2tqna_user_transport'  '6'      # This key seems to be of the same importance as 'b2tqna_itype' = '5' for the rest of this block
+                                    
+                                  # Each of transport coefficients 
+                                  #    ''   - anomalous particle diffusion 
+                                  #    'vl' - anomalous particle pinch velocity
+                                  #    'te' - anomalous electron heat conductivity 
+                                  #    'ti' - anomalous ion heat conductivity 
+                                  #    'vs' - anomalous perpendicular viscosity 
+                                  # are multiplied by factors alfa[1234] in different zones of computational domain (see also b2tqna.F)
+                                  #    CORE PEDESTAL                            - 1.0
+                                  #    CORE EXTERNAL TRANSPORT BARRIER ZONE     - alfa1
+                                  #    NEAR SOL                                 - alfa2
+                                  #    FAR SOL                                  - alfa3
+                                  #    DIVERTOR REGIONS                         - alfa4, or alfa3 if alfa4 is not set
+
+'b2tqna_delta1'          '0.010'  #    width of the external transport barrier in the core in meters
+'b2tqna_delta2'          '0.005'  #    width of the near SOL in meters
+                                          
+'b2tqna_alfa1'           '0.2'    #    multiplier for anomalous diffusion in the transport barrier zone in the core
+'b2tqna_alfa2'           '1.0'    #    multiplier for anomalous diffusion in the near SOL
+'b2tqna_alfa3'           '3.0'    #    multiplier for anomalous diffusion in the far SOL
+#'b2tqna_alfa4'           '4.0'   #    multiplier for anomalous diffusion in the divertor region
+
+'b2tqna_vs_alfa1'        '0.2'    #    multiplier for anomalous pinch velocity in the transport barrier zone in the core, if not defined explicitly, then is set to 'b2tqna_alfa1'
+'b2tqna_vs_alfa2'        '1.0'    #    multiplier for anomalous pinch velocity in the near SOL, if not defined explicitly, then is set to 'b2tqna_alfa2'
+'b2tqna_vs_alfa3'        '3.0'    #    multiplier for anomalous pinch velocity in the far SOL, if not defined explicitly, then is set to 'b2tqna_alfa3'
+
+'b2tqna_te_alfa1'        '0.5'    #    multiplier for anomalous electron heat conductivity in the transport barrier zone in the core, if not defined explicitly, then is set to 'b2tqna_alfa1'
+'b2tqna_te_alfa2'        '1.0'    #    multiplier for anomalous electron heat conductivity in the near SOL, if not defined explicitly, then is set to 'b2tqna_alfa2'
+'b2tqna_te_alfa3'        '3.0'    #    multiplier for anomalous electron heat conductivity in the far SOL, if not defined explicitly, then is set to 'b2tqna_alfa3'
+#'b2tqna_te_alfa4'        '8.0'    #    multiplier for anomalous electron heat conductivity in the divertor region, if not defined explicitly, then is set to 'b2tqna_te_alfa3' 
+
+'b2tqna_ti_alfa1'        '0.5'    #    multiplier for anomalous ion heat conductivity in the transport barrier zone in the core, if not defined explicitly, then is set to 'b2tqna_alfa1'
+'b2tqna_ti_alfa2'        '1.0'    #    multiplier for anomalous ion heat conductivity in the near SOL, if not defined explicitly, then is set to 'b2tqna_alfa2'
+'b2tqna_ti_alfa3'        '3.0'    #    multiplier for anomalous ion heat conductivity in the far SOL, if not defined explicitly, then is set to 'b2tqna_alfa3'
+#'b2tqna_ti_alfa4'        '4.0'    #    multiplier for anomalous ion heat conductivity in the divertor region, if not defined explicitly, then is set to 'b2tqna_ti_alfa3'
+
+'b2tqna_vl_delta1'       '0.01'  #    is read but is not used
+'b2tqna_vl_delta2'       '0.005'  #    is read but is not used
+
+'b2tqna_vl_alfa1'        '0.0'    #    multiplier for anomalous pinch velocity in the transport barrier zone in the core, if not defined explicitly, then is set to 'b2tqna_alfa1'
+'b2tqna_vl_alfa2'        '0.0'    #    multiplier for anomalous pinch velocity in the near SOL, if not defined explicitly, then is set to 'b2tqna_alfa2'
+'b2tqna_vl_alfa3'        '0.0'    #    multiplier for anomalous pinch velocity in the far SOL, if not defined explicitly, then is set to 'b2tqna_alfa3'
+
+
+
+############################################################################################################################
+# PHYSICS PARAMETERS                                                                                                        
+############################################################################################################################
+
+# 'b2tfhe_fch_pTe'        '1.0'    # Turns on/off the contribution from parallel current to the electron heat flux, by default is '1.0' 
+# 'b2tfhe_alfTeEh'        '0.0'    # Turns on/off the contribution from I do not know what to the electron heat flux, by default is '0.0'
+                                   #    Even more, if 'b2tfhe_fch_pTe' = '1.0', then 'b2tfhe_alfTeEh' ='0.0' automatically
+
+#'b2nph9_pcm0'            '1.0'    # Not described in b2cdci.F, but by default is '1.0'
+#'b2nph9_pcm1'            '1.0'    # Not described in b2cdci.F, but by default is '1.0'
+
+'b2siav_addvis'           '1.0'    # Multiplier to heat flux contribution to divergence of viscosity tensor in the momentum equation. By default is '0.0'
+'b2siav_addvis1'          '1.0'    # When not equal to '0.0', adds contribution to divergence of viscosity tensor coming from x-variations in B. By default is '1.0'
+
+#'b2sicf_phm0'            '1.0'    # Multiplier of the centrifugal force term. By default is '1.0'      
+#'b2sicf_phm1'            '1.0'    # Multiplier of the centrifugal force correction term due to linearization. By default is '1.0'  
+
+#'b2sihs_phm3'            '1.0'    # By default is '1.0'
+#'b2sihs_phm5'            '1.0'    # By default is '1.0'
+#'b2sihs_phm6'            '1.0'    # By default is '1.0'
+#'b2sihs_phm7'            '0.0'    # By default is '0.0'
+
+#'b2sqcx_phm0'            '1.0'    # Multiplier to the charge exchange rate coefficient. By default is '1.0'
+
+#'b2stbc_cbc'             '1.0'    # Multiplier to the ExB velocity for sheath boundary conditions in b2stbc_spb and BCMOM=13 case of b2stbc_phys. By default is '1.0'
+
+#'b2stbr_sput_frc'        '0.0'    # Sput_frc is superseded by the chem_sput array from b2.neutrals.namelist if the latter is used. By default is '0.0'
+#'b2stbr_sput_phys'       '0.0'    # Turns on physical  sputtering when sput_phys.gt.0.0 and contains a (real) multiplier for
+                                   # the physical sputtering rate looked up in the TRIM tables. It is superseded by the phys_sput array in
+                                   # b2.neutrals.parameters if the latter is used. By default is '0.0'
+
+#'b2tfhe_lim_flux'        '0'      #  Define the type of flux limit applied to electron heat flux. By default is '0'
+#'b2tfhi_lim_flux'        '0'      #  Define the type of flux limit applied to ion heat flux. By default is '0'
+
+'b2tlc0_alpha'            '1.0'    # By default is '1.0'                     
+'b2tlc0_gamma'            '1.0'    # By default is '1.0'                    
+'b2tlh0_alpha'            '1.0'    # By default is '1.0'                    
+'b2tlh0_gamma'            '1.0'    # By default is '1.0                     
+
+#'b2tlmv_style'               '1'     # Defines the flux limit to the viscosity. By default is '1'
+#'b2trno_flux_limit_to_dpa'   '1'     # By default is '1' 
+#'b2trcl_conductive_limit'    '1'     # By default is '1'
+#'b2trcl_lluciani'            '3'     # By default is '3'
+#'b2trcl_lambda'              '-5.0'  # If b2trcl_lambda is negative, then abs(b2trcl_lambda) is the lower bound to be used when computing the Coulomb logarithm. By default is '-5.0'
+#'b2tqca_model'               '1'     # By default is '1'
+#'b2tqce_model'               '1'     # By default is '1'
+#'b2tqce_fke_Zhdanov'         '1'     # By default is '1' 
+
+
+############################################################################################################################
+# COUPLING TO EIRENE                                                                                                        
+############################################################################################################################
+
+'b2mndr_eirene'                   '0'    # main switch to turn the coupling to EIRENE mode on
+
+'b2mndr_rescale_neutrals'         '1.0e+00'     set up 1e-10 for first run. set up 1e-00 for continue
+'b2mndr_rescale_neutrals_sources' '1.0e+00'
+
+'b2tfrn_xvecrb'                   '1.0'  # Real parameter which multiplies the contribution from the ExB drift velocity to the flows passed to Eirene
+'b2tfrn_xwdia'                    '1.0'  # Real parameter which multiplies the contribution from the diamagnetic drift velocity to the flows passed to Eirene
+
+'eirene_ank_mods'                 '1'    # See $SOLPSTOP/doc/Source_Scaling_in_B2.pdf for details. By default is '0'
+'eirene_extrap'                   '0'    # If eirene_extrap.eq.1, then guard cell plasma parameter values are calculated from the neighbouring real cell values. 
+                                         #          If eirene_extrap.eq.0, the guard cell values are used unchanged. By default is '0'
+'#eirene_lhalpha'                  '0'    # If 0 then no calculation of halpha in wneutral, otherwise halpha is calculated. By default is '1'
+'#eirene_lvib'                     '0'    # If 0 then the sigadd4 (molecular ions) and sigadd5 (negative ions) contributions to the halpha in
+                                         #          wneutral are not included, otherwis they are.  By default is '0'
+'eirene_ionizing_core'            '0'    # If non-zero, the neutrals coming into the core return as fully striped ions by modification the source in guard cells.
+                                         #          However, this works 'for standard flux boundary conditions applied on that boundary only'. By default is '0'
+'eirene_ion_energy_src_corr_core' '0'    # Not described in b2cdci.F.
+'eirene_dpc_fix'                  '1'    # By default is '1'
+
+'eirene_savef30'                  '0'    # These two switches control the recording of geometry and plasma state used by eirene for standalone runs.
+'eirene_savef31'                  '0'    # For coupled runs these files are produced independently of the values of these two switches.
+
+'eirene_mc_output_style'          '0'    # If zero, then a huge amount of intermal diagnostics from eirene_mc>F is suppressed. By default is '1'
+
+'eirene_te_min'                   '0.5'
+'eirene_ti_min'                   '0.02'
+'eirene_ti_max'                   '20000'
+'eirene_te_max'                   '20000'
+
+'#b2stbr_eir_src_nhist'           '1'   running average on nhist(=100) time steps
+
+
+
+############################################################################################################################
+# Keys not yet introduced into the SOLPS-ITER
+############################################################################################################################
+
+#'b2stbc_bceni_12_style'         '1'        ! modification of BCENI=12 boundary condition
+
+
+############################################################################################################################
+# Obsolete keys
+############################################################################################################################
+#'b2news_minmax'                 '0'    ! seems to be obsolete
+#'b2tfnb_xfrhiehz'               '1.0'  ! seems to be obsolete
+#'b2npmo_modvis'                 '1'    ! seems to be obsolete
+#'b2tfhi_iner_par'               '0.0'  ! seems to be obsolete
+#'b2tfnb_anomalous_core_only'    '1'    ! seems to be obsolete
+#'b2stbr_bas_istyle_rec'         '0'    ! seems to be obsolete
+#'b2stbc_iform_corr_dia'         '1'    ! seems to be obsolete
+#'b2stbr_phys_recycled_neutrals_contr' '1e-20'
+#'b2sqel_with_eirene'            '1'    ! seems to be obsolete
+
+#'eirene_lhalpha'                  '0'    # If 0 then no calculation of halpha in wneutral, otherwise halpha is calculated. By default is '1'
+#'eirene_lvib'                     '0'    # If 0 then the sigadd4 (molecular ions) and sigadd5 (negative ions) contributions to the halpha in
+                                          #          If eirene_extrap.eq.0, the guard cell values are used unchanged. By default is '0'
+
+#'b2mndr_redef_pbs'               '1'        ! re-define pbsx to make the product bb(:,:,0)*hz*hy1 to be poloidally constant
+
+
+############################################################################################################################
+# OUTPUT                                                                                                                    
+############################################################################################################################
+
+#'b2wdat_iout'     '4'
+#'b2npmo_iout'     '1'
+#'b2npc9_iout'     '1'
+#'b2npco_iout'     '1'
+#'b2npp7_iout'     '1'
+#'b2nppo_iout'     '1'
+#'b2nph9_iout'     '1'
+#'b2npht_iout'     '1'
+#'b2tqna_iout'     '1'
+#'eirmod_extrab25_iout'   '1'
+#'b2tfnb_iout'     '1'
+#'b2sral_iout'     '1'
+#'b2sifr_iout'     '1'
+#'b2mndr_ntim'     '10'
+
+'ank_tracing'      '50'
+
+'b2mndr_tally'     '0'
+'b2mndr_mvinc'     '1'
+'b2mndr_mvnum'     '0'
+'b2mndr_b2time'    '100000'        # Specifies the number of timesteps between writes of the time-dependent VERY LARGE NetCDF file.
+
+#'b2ux5p_nltrsol'   '0'            # Output flag for the iluter matrix solver. Larger numbers mean increasing output level. By default is '0'.
+#'b2ux7p_nltrsol'   '0'            # Output flag for the iluter matrix solver. Larger numbers mean increasing output level. By default is '0'.
+#'b2ux9p_nltrsol'   '0'            # Output flag for the iluter matrix solver. Larger numbers mean increasing output level. By default is '0'.
+

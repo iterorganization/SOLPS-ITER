@@ -1,0 +1,5 @@
+#! /bin/tcsh -f
+
+b2plasmastate_inspect.exe $1 > /tmp/b2plasma_inspect.out
+rm /tmp/b2plasma_inspect.out
+

@@ -29,8 +29,6 @@ c      print *,'ubpnam : ',unn !###
       do i=1,lunm
         if(streql(uun,unm(i))) exit
       end do
-      call skipit
-      return
 c======================================================================
       select case (i)
       case (1)
