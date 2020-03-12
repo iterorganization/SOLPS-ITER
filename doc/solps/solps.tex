@@ -1876,7 +1876,7 @@ Each submission command file can handle five possible cases:
   \item{QSUB.*-gz, SLURM.*-gz} Runs a standalone {\tt B2.5} case where the output log file has been compressed (activated with the "-z" option).
   \item{QSUB.*\_coupled, SLURM.*\_coupled} Runs a coupled \SOLPSITER case.
   \item{QSUB.*\_coupled-gz, SLURM.*\_coupled-gz} Runs a coupled \SOLPSITER case where the output log file has been compressed (activated with the "-z" option).
-  \item{ } Any otherwise named file specified by the user and given as an argument to the submission command (in which case the "-z" option is ineffective). The specified file must be located in the \${\tt \{SOLPSTOP\}/runs} directory, or in the actual run directory on one above it.
+  \item{ } Any otherwise named file specified by the user and given as an argument to the submission command (in which case the "-z" option is ineffective). The specified file must be located in the \${\tt \{SOLPSTOP\}/runs} directory, or in the actual run directory, or one above it.
 \end{description}
 where "*" stands for "iter", "itm", "jet", "lsf", or "sge", referring to the machine system on which the
 submission script is to be used. The "\_coupled" scripts are used when the presence of an {\tt Eirene}
