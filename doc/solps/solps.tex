@@ -4335,23 +4335,24 @@ ENDDO
 
 \subsection{Information for MPI}
 
-There is a final optional block in the {\tt Eirene} input file that can be used to choose the MPI parallelization strategy to be applied. Its format is:
+The standard way to choose the MPI parallelization strategy in {\tt Eirene} is {\it via} the {\tt NPRLL} variable in block 1 of the input file. However, one can also use an optional block at the very end of the {\tt Eirene} input file which will overwrite the {\tt NPRLL} setting. Its format is:
 
 {\it *** INFORMATION\_FOR\_MPI}
 \begin{verbatim}
 AUTOMATIC_DISTRIBUTION
 \end{verbatim}
 
-There are currently four possible choices supported. They are:
+There are currently five possible choices supported. They are:
 \begin{description}
-  \item[BALANCED] A balanced strategy in which the workload is attempted to be divided evenly among processors. If the initial setup for the {\bf BALANCED} strategy fails, the code then attempts the {\bf APCAS} strategy.
-  \item[APCAS] meaning {\it All Processors Compute All Strata}, where the work of each stratum is divided among all processors. Usually involves more communication between processors.
-  \item[ORIGINAL] The original strategy implemented in versions of {\tt Eirene} prior to \SOLPSITER version 3.0.5. Also called ``proportional allocation'' in the {\tt Eirene} manual. In that strategy, each processor is handed either part of a large stratum or one or several full smaller strata. This strategy works well if the number of processors is larger than the number of strata, but is not recommended if the number of strata is larger than the number of processors.
+  \item[BALANCED] A balanced strategy in which the workload is attempted to be divided evenly among processors. If the initial setup for the {\bf BALANCED} strategy fails, the code then attempts the {\bf APCAS} strategy. Also obtainable by setting {\tt NPRLL = 3}.
+  \item[APCAS] meaning {\it All Processors Compute All Strata}, where the work of each stratum is divided among all processors. Usually involves more communication between processors. Also obtainable by setting {\tt NPRLL = 2}.
+  \item[ORIGINAL] The original strategy implemented in versions of {\tt Eirene} prior to \SOLPSITER version 3.0.5. Also called ``proportional allocation'' in the {\tt Eirene} manual. In that strategy, each processor is handed either part of a large stratum or one or several full smaller strata. This strategy works well if the number of processors is larger than the number of strata, but is not recommended if the number of strata is larger than the number of processors. Also obtainable by setting {\tt NPRLL = 1}.
+  \item[EMBARRASS] meaning the ``embarassingly parrallel'' scheme by which each processor is assigned the same number of particle trajectories. This is the default in non-\SOLPSITER versions of {\tt EIRENE}. Also obtainable if setting {\tt NPRLL = 0} or {\tt NPRLL > 3}.
   \item[AUTOMATIC] tells the code to use the current default, whatever it may be.
 \end{description}
 The format to read the strategy name is free-form. The input file is scanned for the words describing the chosen strategy after the title line {\tt *** INFORMATION\_FOR\_MPI} is found. The {\em first} match to an (uppercase) strategy name will be the strategy followed by the code. If the title line is missing or no match is found to any of the strategy names, the default strategy is used. See the {\tt Eirene\_balanced\_MPI} document on the \SOLPSITER web site {\tt Manuals and Documentation} folder for more details on the performance and algorithm corresponding to each strategy.
 
-The default strategy depends on the version of the MPI library with which {\tt Eirene} was compiled. If MPI version 3 or greater was used, then the default strategy is the {\bf BALANCED} one. Otherwise, the {\bf ORIGINAL} strategy is chosen.
+The default strategy depends on the version of the MPI library with which {\tt Eirene} was compiled. If MPI version 3 or greater was used, then the default strategy is the {\bf BALANCED} one. Otherwise, the {\bf ORIGINAL} strategy is chosen. If {\tt Eirene} is used outside the \SOLPSITER environment, the default strategy will be the {\bf EMBARASSINGLY PARALLEL} one.
 
 \chapter{Running the coupled version of B2.5-Eirene}
 \label{cha:coupledb2eirene}

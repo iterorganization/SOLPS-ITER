@@ -143,7 +143,7 @@ c*** Data for TRIA mesh
 c*** 1
 
       data nprll, nmode , ntcpu, nfile, niter0, niter, ntime0, ntim1 /
-     /       0  ,   1   ,  50  , 5306 ,   1   ,   1  ,   0   ,   1   /,
+     /      -1  ,   1   ,  50  , 5306 ,   1   ,   1  ,   0   ,   1   /,
      ,  nfullrun, noptim,noptm1, ngeom_usr, ncoup_input, nsmstra /
      /       0  ,   1   ,   1  ,     0    ,     1      ,    1    /,
      ,   nstoram, ngstal,nrtal1,nreac_add /
