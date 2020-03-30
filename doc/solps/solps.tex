@@ -11623,7 +11623,7 @@ magnetic presheath edge should be specified in the discretized equations.
 \section{Analytical Expressions for the Standard ("Old") Boundary Sources
 in the B2.5 Code}
 
-The boundary sources are expressed as linear and/or weakly non-linear
+The boundary sources are expressed as linear and/or weakly nonlinear
 functions of the macroscopic plasma parameters ($n_{\alpha}$, $n_{e}$,
 $u_{\alpha x}$, $T_{i}$, $T_{e}$, $\Phi$), calculated in
 the cells neighbouring the boundary cells. Specific dependencies of the
@@ -11637,8 +11637,8 @@ conditions for the new simulation are not significantly different, it is
 practical to write any minor changes to the boundary conditions in the input
 file {\tt b2mn.dat} (section \ref{sec:b2mn}). (If the existing {\tt b2ah.dat} file is
 corrected, it is not necessary to do that.) When the theoretical model
-predicts more complicated non-linear dependence of the boundary fluxes on
-the plasma parameters, the effects of these non-linearities can be only
+predicts more complicated nonlinear dependence of the boundary fluxes on
+the plasma parameters, the effects of these nonlinearities can be only
 approximately taken into consideration in the calculation, e.g. by some
 appropriate choice of the numerical values of the input parameters. More
 details about the numerical implementation of
@@ -13431,6 +13431,8 @@ region 2 === SOL boundary
 
 In cases where the problem of interest has only one target and a plasma entry surface, the target should be located to the right of the domain and the plasma should enter from the left.
 
+An informative review of how the code geometry and physics model can be adapted to linear devices is given in \cite{Sala2020}.
+
 \clearpage
 \section{Regions for limiter cases}
 \index{regions, limiter cases}
@@ -13546,7 +13548,9 @@ $Y$-directed regions:
 |       |               |       |
 |       |               |       |
 +---1---+-------2-------+---3---+
+\end{verbatim}
 
+\begin{Verbatim}[fontsize=\footnotesize]
 region 1 === Western divertor private flux wall boundary (inboard for LSN, outboard for USN)
 region 2 === core boundary
 region 3 === Eastern divertor private flux wall boundary (outboard for LSN, inboard for USN)
@@ -13554,7 +13558,7 @@ region 4 === separatrix
 region 5 === Western divertor to main chamber wall boundary (inboard for LSN, outboard for USN)
 region 6 === SOL to main chamber wall boundary
 region 7 === Eastern divertor to main chamber wall boundary (outboard for LSN, inboard for USN)
-\end{verbatim}
+\end{Verbatim}
 
 \clearpage
 \section{Regions for CDN}
