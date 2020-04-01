@@ -7,8 +7,8 @@ endif
 
 FC       = ifort
 ifdef SOLPS_DEBUG
-#FFLAGS	 = -g -Am -X9 -O0 -fw
-FFLAGS	 = -g
+#FFLAGS  = -g -Am -X9 -O0 -fw
+FFLAGS   = -g
 endif
 INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}

@@ -4,22 +4,23 @@ LD_MSCL ?= `pkg-config mscl --libs`
 ifdef USE_MPI
 FC       = mpif90
 else
-FC	 = nagfor
+FC       = nagfor
 endif
 
+FFLAGS   = -PIC -compatible
 ifdef SOLPS_DEBUG
-FFLAGS	 = -g -PIC -compatible
+FFLAGS  += -g
 else
-FFLAGS	 = -O -PIC -compatible
+FFLAGS  += -O
 endif
 
 INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
-CPP	 = /lib/cpp -traditional
+CPP      = /lib/cpp -traditional
 MOD      = mod
 
-LDLIBS 	 = ${LD_MSCL}
-LDEXTRA  = 
+LDLIBS   = ${LD_MSCL}
+LDEXTRA  =
 ifdef USE_MPI
 LDLIBS  += ${LD_MPI}
 endif
