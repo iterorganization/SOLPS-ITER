@@ -9,14 +9,14 @@ endif
 
 FC       = f77
 ifdef SOLPS_DEBUG
-FFLAGS	 = -g 
+FFLAGS   = -g
 endif
 INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
 CPP      = /lib/cpp
 
-LDLIBS 	 = -Wl, ${LD_MSCL}
-LDEXTRA  = 
+LDLIBS   = -Wl, ${LD_MSCL}
+LDEXTRA  =
 
 #!!!Local Variables:
 #!!! mode: Makefile

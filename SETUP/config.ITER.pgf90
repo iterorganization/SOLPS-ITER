@@ -45,14 +45,11 @@ LD_SONNET      = -L${SOLPSLIB} -lsonnet -lstdc++
 # Preprocessor options
 #
 
-ifdef SOLPS_MPI
-SOLPS_CPP      = -DNO_NAG -DGFORTRAN
-else
 SOLPS_CPP      = -DNO_NAG -DPGF90 -DNOQUAD
-endif
 LD_MPI         = -lmpi2
 LD_MSCL        = `pkg-config mscl --libs` -lgfortran
 B25_DEFINES    = -DNO_21
+CARRE_DEFINES  =
 EIRENE_DEFINES =
 FFLAGSEXTRA    =
 
@@ -129,7 +126,9 @@ export LD_MPI
 
 export NODENAME
 export SOLPS_CPP
+export FFLAGSEXTRA
 export B25_DEFINES
+export CARRE_DEFINES
 export EIRENE_DEFINES
 export MPI_CPP
 
