@@ -7,14 +7,14 @@ endif
 
 FC       = f95i
 ifndef SOLPS_DEBUG
-FFLAGS	 = -g -Am -X9 -O0 -fw
+FFLAGS   = -g -Am -X9 -O0 -fw
 endif
 INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
 CPP      = /lib/cpp -C -traditional
 MOD      = mod
 
-LDLIBS 	 = ${LD_MSCL}
+LDLIBS   = ${LD_MSCL}
 LDEXTRA  =
 
 #!!!Local Variables:

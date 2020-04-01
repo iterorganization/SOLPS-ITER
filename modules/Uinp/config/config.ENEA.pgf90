@@ -6,9 +6,9 @@ endif
 FC       = pgf90
 
 ifdef SOLPS_DEBUG
-FFLAGS	 = -g 
+FFLAGS   = -g
 else
-FFLAGS	 = -O 
+FFLAGS   = -O
 endif
 ifdef SOLPS_OPENMP
 FFLAGS  += -mp=nonuma
@@ -19,8 +19,8 @@ COMPILE  = ${FC} -c ${FFLAGS}
 CPP      = /lib/cpp -traditional
 MOD      = mod
 
-LDLIBS 	 = ${LD_MSCL}
-LDEXTRA  = 
+LDLIBS   = ${LD_MSCL}
+LDEXTRA  =
 
 #!!!Local Variables:
 #!!! mode: Makefile

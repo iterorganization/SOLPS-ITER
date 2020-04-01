@@ -361,6 +361,7 @@ At the moment the following compiler platforms are supported, assuming a Linux w
   \item[ifort64] Intel 64-bit Fortran compiler, in use at ITER and IPP
   \item[gfortran] The gfortran compiler, in use at FZ-J{\"u}lich, KU-Leuven
   \item[g95] The g95 compiler, in use on the Marconi Gateway
+  \item[nag\_f90] The NAG Fortran compiler
 \end{description}
 
 For each hostname domain, a default compiler can be defined by means of the {\tt default\_compiler}
@@ -17579,15 +17580,20 @@ Additionally, system-wide compiler flags can be provided by means of the
 
 \begin{description}
 \item[CATALYST] \index{CATALYST} Turns on the Paraview Catalyst utility (see the SOLPS-GUI manual for full details)
+\item[COMPILER\_MAJOR\_VERSION] \index{COMPILER\_MAJOR\_VERSION} Major version number of the compiler being used (set internally by the configuration files)
+\item[COMPILER\_MINOR\_VERSION] \index{COMPILER\_MINOR\_VERSION} Minor version number of the compiler being used (set internally by the configuration files)
 \item[DBG] \index{DBG} Turns on additional debugging output (set internally by the {\tt Makefile} when requesting a {\tt \_debug} compilation)
 \item[F2003] \index{F2003} To be used if the compiler is compatible with {\tt Fortran 2003}
 \item[F77] \index{F77} Identifies specific code to {\tt Fortran-77} compilers
 \item[GFORTRAN] \index{GFORTRAN} To be used with {\tt gfortran} compilation
+\item[GGD\_MINOR\_VERSION] \index{GGD\_MINOR\_VERSION} Minor version number of the IMAS GGD library to which the code is linked (set internally by the configuration files)
 \item[G95] \index{G95} To be used with {\tt g95} compilation
 \item[HPUX] \index{HPUX} To be used when compiling on HP Unix systems
 \item[IBMaix] \index{IBMaix} To be used when compiling on IBM AIX computers
 \item[IMAS] \index{IMAS} To be used when compiling within the IMAS framework
+\item[IMAS\_MINOR\_VERSION] \index{IMAS\_MINOR\_VERSION} Minor version number of the IMAS library to which the code is linked (set internally by the configuration files)
 \item[ITM] \index{ITM} To be used when compiling within the ITM framework
+\item[ITM\_ENVIRONMENT\_LOADED] \index{ITM\_ENVIRONMENT\_LOADED} To be used when wishing to compile with ITM CPOs
 \item[MDSPLUS] \index{MDSPLUS} Enables use of {\tt MDSplus} trees
 \item[NAGF95] \index{NAGF95} To be used when compiling with the {\tt NAG} F95 compiler
 \item[NAG22] \index{NAG22} Specific to using the Nag Mark 22 or higher mathematical library
@@ -17598,6 +17604,7 @@ Additionally, system-wide compiler flags can be provided by means of the
 \item[NO\_NAG] \index{NO\_NAG} No {\tt NAG} libraries available
 \item[PGF90] \index{PGF90} To be used when compiling with the Portland Group {\tt Fortran-90} compiler
 \item[PSR] \index{PSR} Specific to the Pacific Sierra VAST compiler
+\item[UAL\_MAJOR\_VERSION] \index{UAL\_MAJOR\_VERSION} Major version number of the UAL (Universal Access Layer) library to which the code is linked (set internally by the configuration files)
 \item[USE\_MPI] \index{USE\_MPI} Set internally by the {\tt Makefile} and used to identify code necessary for MPI applications
 \item[USE\_PXFGETENV] \index{USE\_PXFGETENV} Uses {\tt PXFGETENV} instead of {\tt GETENV}
 \item[WINDOWS] \index{WINDOWS} To be used when compiling on a Windows system
@@ -17682,6 +17689,32 @@ READOPT & carre/rdfrre.F \\
   \end{longtable}
 \end{center}
 
+\subsection{DivGeo}
+\index{DEFINES, used in compiling DivGeo}
+
+%%grep #if $SOLPSTOP/modules/Divgeo/equtrn/src/*.F | awk '{print $2,$1}' | sort | uniq
+
+We list below where the {\tt DivGeo} compilation switches are used.
+
+\begin{center}
+  \begin{longtable}{|l|l|}
+    \hline
+    \multicolumn{2}{|l|}{\small\sl continued from previous page} \\
+    \hline name & used in \\
+    \hline \endhead
+    \hline name & used in \\
+    \hline \endfirsthead
+    \hline
+    \multicolumn{2}{|l|}{\small\sl continued on next page} \\
+    \hline \endfoot
+    \endlastfoot
+IMAS\_MINOR\_VERSION & equtrn/src/rdids.f \\
+    \hline
+    \caption{Defines for DivGeo and where they are used.}
+    \label{tab:Carredefines}
+  \end{longtable}
+\end{center}
+
 \subsection{B2.5-Eirene}
 \index{DEFINES, used in compiling B2.5-Eirene}
 
@@ -17719,8 +17752,6 @@ if desired, be declared as part of either the \${\tt SOLPS\_CPP} or the
 \item[COMPLICATED] \index{COMPLICATED} Uses a more "complicated" model for feedback schemes
 \item[EASY] \index{EASY} Uses the "easy" model for chord integration
 \item[GOT\_AMNSPROTO] \index{GOT\_AMNSPROTO} Links to AMNS database
-\item[IMAS\_MAJOR\_VERSION] \index{IMAS\_MAJOR\_VERSION} Major version number of the IMAS library to which the code is linked (set internally by the configuration files)
-\item[IMAS\_MINOR\_VERSION] \index{IMAS\_MINOR\_VERSION} Minor version number of the IMAS library to which the code is linked (set internally by the configuration files)
 \item[JET] \index{JET} Enables some additional output for coupling to the JET post-processor
 \item[NO\_21] \index{NO\_21} Do not use 21-moment model for thermal and viscous forces
 \item[NO\_IEEE] \index{NO\_IEEE} Provides replacements to IEEE non-standard arithmetic routines
@@ -17731,7 +17762,6 @@ if desired, be declared as part of either the \${\tt SOLPS\_CPP} or the
 \item[PERFMON] \index{PERFMON} Enable performance monitoring
 \item[PLPLOT] \index{PLPLOT} Use {\tt PLPLOT} instead of {\tt NCAR} for plotting
 %\item[SCL\_IMP\_RCI] \index{SCL\_IMP\_RCI} Toggles scaling of impurities tallies
-\item[UAL\_MAJOR\_VERSION] \index{UAL\_MAJOR\_VERSION} Major version number of the UAL (Universal Access Layer) library to which the code is linked (set internally by the configuration files)
 \item[USE\_CDF\_B2STIME] \index{USE\_CDF\_B2STIME} Specific for \SOLPSfour {\tt CDF} tallies
 \item[WANT\_PROCESS] \index{WANT\_PROCESS} Enables the code for the \SOLPSfive to \SOLPSfour converter
 \item[WOS] \index{WOS} Uses the {\tt WOS} libraries for accessing experimental data at IPP
@@ -17897,6 +17927,8 @@ GFORTRAN & utility/ma28.F \\
 GFORTRAN & utility/ma28copy.F \\
 GFORTRAN & utility/ma28copy3.F \\
 GFORTRAN & utility/ma28copy4.F \\
+GGD\_MINOR\_VERSION & ids/b2mod\_ual\_io.F90 \\
+GGD\_MINOR\_VERSION & ids/b2mod\_ual\_io\_grid.F90 \\
 GOT\_AMNSPROTO & utility/ratadas.F \\
 HITS\_PER\_CHORD & b2plot/process\_chords.F \\
 HITS\_PER\_CHORD & b2plot/process\_eirene\_chords.F \\
@@ -17909,14 +17941,19 @@ IMAS & ids/b2mod\_ual\_io\_data.F90 \\
 IMAS & ids/b2mod\_ual\_io\_grid.F90 \\
 IMAS & ids/b2mod\_ual\_io.F90 \\
 IMAS & ids/b2\_ual\_write.F90 \\
-ITM & ids/b2mod\_ual.F90 \\
-ITM & ids/b2mod\_ual\_io\_data.F90 \\
-ITM & ids/b2mod\_ual\_io\_grid.F90 \\
-ITM & ids/b2mod\_ual\_io.F90 \\
-ITM & ids/b2\_ual\_write.F90 \\
+IMAS\_MINOR\_VERSION & ids/b2mod\_ual.F90 \\
+IMAS\_MINOR\_VERSION & ids/b2mod\_ual\_io.F90 \\
+IMAS\_MINOR\_VERSION & ids/b2mod\_ual\_io\_data.F90 \\
+IMAS\_MINOR\_VERSION & ids/b2mod\_ual\_io\_grid.F90 \\
+IMAS\_MINOR\_VERSION & ids/b2\_ual\_write.F90 \\
+IMAS\_MINOR\_VERSION & ids/b2\_ual\_write\_b2mod.F90 \\
 ITM & preprocessing/b2ardr.F \\
 ITM & preprocessing/b2arin.F \\
 ITM & utility/ratadas.F \\
+ITM\_ENVIRONMENT\_LOADED & ids/b2mod\_ual.F90 \\
+ITM\_ENVIRONMENT\_LOADED & ids/b2mod\_ual\_io\_data.F90 \\
+ITM\_ENVIRONMENT\_LOADED & ids/b2mod\_ual\_io\_grid.F90 \\
+ITM\_ENVIRONMENT\_LOADED & ids/b2mod\_ual\_io.F90 \\
 JET & driver/b2mnastra.F \\
 JET & driver/b2mnds.F \\
 JET & driver/b2mn\_opt.F \\
@@ -18097,6 +18134,7 @@ SOLPS4\_3 & modules/b2mod\_diag.F \\
 SOLPS4\_3 & modules/b2mod\_mwti.F90 \\
 SOLPS4\_3 & modules/b2mod\_neutrals\_namelist.F \\
 SOLPS4\_3 & sources/eirene\_f30f31.F \\
+UAL\_MAJOR\_VERSION & ids/b2mod\_ual.F90 \\
 USE\_CDF\_B2STIME & modules/b2mod\_comtimpl.F \\
 USE\_CDF\_B2STIME & common/COUPLE/COMTIMPL.F \\
 USE\_IMPGYRO & driver/b2mod\_driver.F \\
@@ -18246,9 +18284,13 @@ ALLOCATE\_AND\_NAMELIST & startup-routines/find\_param.F \\
 B25\_EIRENE & main-routines/eirene.f \\
 B25\_EIRENE & interfaces/couple\_SOLPS-ITER/eirmod\_extrab25.F90 \\
 B25\_EIRENE & startup-routines/find\_param.f \\
+COMPILER\_MAJOR\_VERSION & assistant/exit\_own.f \\
+COMPILER\_MINOR\_VERSION & assistant/exit\_own.f \\
 DBG & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.F \\
 GFORTRAN & modules/eirmod\_mpi.F90 \\
+GFORTRAN & assistant/exit\_own.f \\
 G95 & assistant/exit\_own.f \\
+F2003 & assistant/subtit.f \\
 HPUX & modules/eirmod\_cinit.F \\
 MPI\_VERSION & modules/eirmod\_mpi.F90 \\
 NAGFOR & file-handling/get\_solpstop.f \\

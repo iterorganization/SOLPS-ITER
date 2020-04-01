@@ -45,6 +45,7 @@ LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 
 SOLPS_CPP      =
 B25_DEFINES    =
+CARRE_DEFINES  =
 EIRENE_DEFINES =
 FFLAGSEXTRA    =
 
@@ -115,7 +116,9 @@ export LD_MDSPLUS
 export LD_SONNET
 
 export SOLPS_CPP
+export FFLAGSEXTRA
 export B25_DEFINES
+export CARRE_DEFINES
 export EIRENE_DEFINES
 
 #!!!Local Variables:

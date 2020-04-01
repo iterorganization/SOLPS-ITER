@@ -49,6 +49,7 @@ LD_MPI     = -L${MPDIR}/lib -lmpi
 
 SOLPS_CPP      = -DNO_NAG # -DNCAR4
 B25_DEFINES    =
+CARRE_DEFINES  =
 EIRENE_DEFINES =
 FFLAGSEXTRA    =
 MPI_CPP        = -I${MPDIR}/include
@@ -121,7 +122,9 @@ export LD_SONNET
 export LD_MPI
 
 export SOLPS_CPP
+export FFLAGSEXTRA
 export B25_DEFINES
+export CARRE_DEFINES
 export EIRENE_DEFINES
 export MPI_CPP
 
