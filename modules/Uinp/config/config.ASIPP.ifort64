@@ -6,7 +6,8 @@ ifndef LD_MSCL
 endif
 
 ifdef USE_MPI
-FC       = mpiifort
+#FC       = mpiifort
+FC       = mpif90
 else
 FC       = ifort
 endif
@@ -17,10 +18,14 @@ ifdef SOLPS_DEBUG
 FFLAGS   = -g -C -traceback -debug all -check all
 endif
 ifdef SOLPS_OPENMP
+ifdef USE_MPI
+FFLAGS  += -fopenmp
+else
 ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -ge 15; echo $$?),0)
 FFLAGS  += -qopenmp
 else
 FFLAGS  += -openmp
+endif
 endif
 endif
 
