@@ -4,7 +4,7 @@ module load intel/18.0.5
 module load texlive
 # module load subversion  # use built in SVN
 module load arm_ddt
-module load doxygen
+module load doxygen/1.8.17
 #module load mdsplus
 #module load netcdf-serial
 module load hdf5-serial
