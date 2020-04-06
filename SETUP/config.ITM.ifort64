@@ -74,7 +74,7 @@ endif
 
 # Build with IMAS if imas module is loaded
 ifdef IMAS_VERSION
-  LD_UAL     = `pkg-config imas-ifort ggd --libs` -lxml2
+  LD_UAL     = `pkg-config imas-ifort ggd --libs` -lxml2 -lstdc++
   UAL_MAJOR_VERSION = $(shell echo ${UAL_VERSION} | cut -d '.' -f1 )
   GGD_MINOR_VERSION = $(shell echo ${EBVERSIONGGD} | cut -d '.' -f2 )
   IMAS_MAJOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f1 )
