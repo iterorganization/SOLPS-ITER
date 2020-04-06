@@ -87,6 +87,9 @@ endif
 ifdef MDSPLUS_DIR
 INCLUDE += -I${MDSPLUS_DIR}/include
 endif
+ifdef NCDIR
+INCLUDE += -I${NCDIR}/include
+endif
 INCLUDE += -I${SRCDIR}/B2.5_include -I${SRCDIR}/B2.5_commons -I${SRCDIR}/B2_include -I${SRCDIR}/Eirene_commons
 TAGSLIST += ${SRCDIR}/*_commons/*.[hH] ${SRCDIR}/*/*.F ${SRCDIR}/*.F
 VPATH += ${SRCDIR}/B2.5_modules:${SRCDIR}:${SRCDIR}/solps4_B2:${SRCDIR}/solps4_Eirene:${SRCDIR}/solps5

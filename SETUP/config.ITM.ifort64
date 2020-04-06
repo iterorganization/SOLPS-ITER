@@ -17,7 +17,7 @@
 # Add -DNAG22 to SOLPS_CPP
 #
 
-       NCDIR ?= /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/NETCDF
+       NCDIR ?= ${NETCDFF_HOME}
    MSCL_ROOT ?= /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/mscl
        H5DIR ?= ${HDF5_HOME}
      GR_ROOT ?= /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/gr
@@ -31,7 +31,7 @@
 # Variables for linking
 #
 
-LD_NETCDF  = -L${NCDIR}/lib -lnetcdf
+LD_NETCDF  = -L${NCDIR}/lib -lnetcdff
 LD_MSCL    = -L${MSCL_ROOT} -lmscl
 LD_GR      = -L${GR_ROOT} -lgr
 LD_GKS     = -L${GLI_HOME} -lgks -lgfortran
