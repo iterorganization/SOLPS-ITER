@@ -7,6 +7,9 @@ setenv SOLPSWORK /pfs/work/$USER/solps-iter/runs
 module load imasenv/3.25.0/ual/4.2.0/1.0
 setenv EBVERSIONGGD 1.9.1
 module load texlive
+module load hdf5/1.8.17--intel--pe-xe-2017--binary
+module load netcdf/4.4.1--intel--pe-xe-2017--binary
+module load netcdff/4.4.4--intel--pe-xe-2017--binary
 
 if (! $?DEVICE) then
   if ($?TOKAMAKNAME) then
