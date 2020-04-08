@@ -12,16 +12,9 @@ if(! $?FLUSH) then
   setenv FLUSH $SIMDIR/flush
 endif
 # load modules
-module unload pgi
-module load imas-modules
-#DPC#module load imas/3.17.1
-module load ifort/2018.2.046
-module load openmpi/3.0.1
-module unload python
-module load python/2.7.5
-module load texlive
-module swap mdsplus/7.7.11
-module load pyual
+module purge
+module load imas-modules/2.0 imasenv/3.25.0/intel/rc
+setenv LATEX pdflatex
 
 setenv _JAVA_OPTIONS "-Xss20m -Xms1g -Xmx4g"
 
