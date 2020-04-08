@@ -64,6 +64,12 @@ else
   exit
 endif
 
+if (! -s shotnumber.history) then
+  echo "No shotnumber.history file present !"
+  echo "Run save_mds instead"
+  exit
+endif
+
 foreach i (`cat shotnumber.history | sort -n | uniq`)
   echo Processing $i
   cat $B2MDDAT | sed '/&end/,$d' >! b2md.dat

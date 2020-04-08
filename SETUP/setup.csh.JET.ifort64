@@ -18,7 +18,6 @@ setenv LATEX pdflatex
 
 #? module load texlive
 
-
 setenv _JAVA_OPTIONS "-Xss20m -Xms1g -Xmx4g"
 
 # work around a problem at JET where the modules are reloaded in a sub-shell
