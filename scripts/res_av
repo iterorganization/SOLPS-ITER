@@ -105,6 +105,7 @@ rm b2ftrace_av
 for i in $RUN_AV_DIR/run_av.*
 do
 
+  echo "Case $i"
   ln -s $i b2faveri
 
 # run 2 timesteps on averaged plasma and source profiles
@@ -114,7 +115,7 @@ do
   FNAME=$i
   NO="${FNAME##*.}"
   CHARS=`printf "%21.13E " $NO`
-  
+
   if [ ! -e b2ftrace_av ]
   then
 # copy header part of b2ftrace into b2ftrace_av
