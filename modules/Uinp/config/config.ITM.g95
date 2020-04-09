@@ -4,17 +4,18 @@
 LD_MSCL ?= -L${SOLPSLIB} -lmscl
 
 FC       = g95
-ifdef SOLPS_DEBUG
-FFLAGS	 = -g -fbounds-check -ftrace=full -fno-second-underscore
-else
 FFLAGS   = -fno-second-underscore
+ifdef SOLPS_DEBUG
+FFLAGS  += -g -fbounds-check -ftrace=full
+else
+FFLAGS  +=
 endif
 INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
-CPP	     = /lib/cpp -C -traditional -ffreestanding
+CPP      = /lib/cpp -C -traditional -ffreestanding
 
 MOD      = mod
-LDLIBS	 = ${LD_MSCL}
+LDLIBS   = ${LD_MSCL}
 LDEXTRA  =
 
 #!!!Local Variables:

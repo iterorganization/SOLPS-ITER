@@ -46,6 +46,7 @@ LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 
 SOLPS_CPP      = -DNCAR4
 B25_DEFINES    =
+CARRE_DEFINES  =
 EIRENE_DEFINES =
 FFLAGSEXTRA    =
 
@@ -70,11 +71,21 @@ endif
 
 # Build with IMAS if imas module is loaded
 ifdef IMAS_VERSION
-  LD_UAL     = `pkg-config imas-lowlevel imas-ifort --libs`
   UAL_MAJOR_VERSION = $(shell echo ${UAL_VERSION} | cut -d '.' -f1 )
-  GGD_MINOR_VERSION = $(shell echo ${EBVERSIONGGD} | cut -d '.' -f2 )
   IMAS_MAJOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f1 )
   IMAS_MINOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f2 )
+  ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 17; echo $$?),0)
+    GGD_MINOR_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f2 )
+    LD_UAL = `pkg-config imas-ifort ggd --libs`
+  else
+    ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 12; echo $$?),0)
+      GGD_MINOR_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f2 )
+      LD_UAL = `pkg-config imas-ifort --libs` -lggd-ifort
+    else
+      GGD_MINOR_VERSION = 0
+      LD_UAL = `pkg-config imas-lowlevel imas-ifort --libs`
+    endif
+  endif
   SOLPS_CPP += -DIMAS -DUAL_MAJOR_VERSION=${UAL_MAJOR_VERSION} -DIMAS_MINOR_VERSION=${IMAS_MINOR_VERSION} -DGGD_MINOR_VERSION=${GGD_MINOR_VERSION}
   export LD_UAL
 else
@@ -116,7 +127,9 @@ export LD_MDSPLUS
 export LD_SONNET
 
 export SOLPS_CPP
+export FFLAGSEXTRA
 export B25_DEFINES
+export CARRE_DEFINES
 export EIRENE_DEFINES
 
 #!!!Local Variables:

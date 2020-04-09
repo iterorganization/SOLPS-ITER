@@ -12,11 +12,11 @@ else
 FC        = ifort
 endif
 
-COMPILER_MAJOR_VERSION = $(shell ${FC} -V 2>&1 | grep -o "Version [0-9]*" | cut -d' ' -f 2)
+COMPILER_MAJOR_VERSION = $(shell ${FC} -V 2>&1 | grep -o "Version [0-9]*" | cut -d ' ' -f 2 )
 
 FFLAGS    = -fPIC -assume no2underscore
 ifdef SOLPS_DEBUG
-FFLAGS	 += -g -C -traceback -debug all -check all
+FFLAGS   += -g -C -traceback -debug all -check all
 else
 FFLAGS   += -O2 -fp-model precise
 endif
@@ -36,7 +36,7 @@ COMPILE   = ${FC} -c ${FFLAGS}
 CPP       = /lib/cpp -C -traditional -ffreestanding
 
 MOD       = mod
-LDLIBS	  = ${LD_MSCL}
+LDLIBS    = ${LD_MSCL}
 ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -le 12; echo $$?),0)
 LDEXTRA   = -i_dynamic
 endif

@@ -272,7 +272,7 @@ To best use the \SOLPSITER code suite, the user will need, locally installed:
 \item[GR] plotting library (optional, developed at FZ-J{\"u}lich, available from the IO Git repository at \href{https://git.iter.org/projects/LIB/repos/gr-software/browse}{https://git.iter.org/projects/LIB/repos/gr-software/browse})
 \item[GKS] graphical kernel library (available from \href{http://ngwww.ucar.edu}{http://ngwww.ucar.edu})
 \item[HDF5] data storage library (available from \href{http://support.hdfgroup.org/HDF5/}{http://support.hdfgroup.org/HDF5/})
-\item[NetCDF]\index{netcdf} storage/archival library (optional) (available from \href{http://www.unidata.ucar.edu/netcdf/}{http://www.unidata.ucar.edu/netcdf/})
+\item[NetCDF]\index{netcdf} storage/archival library (optional) (available from \href{http://www.unidata.ucar.edu/netcdf/}{http://www.unidata.ucar.edu/netcdf/}) (\SOLPSITER needs at least version 4)
 \item[MSCL] utility library (available from the IO Git repository at \href{https://git.iter.org/projects/LIB/repos/mscl/browse}{https://git.iter.org/projects/LIB/repos/mscl/browse})
 \item[makedepend] to build the dependencies needed by the {\tt Makefiles}
 \item[gnuplot] for many analysis scripts
@@ -361,6 +361,7 @@ At the moment the following compiler platforms are supported, assuming a Linux w
   \item[ifort64] Intel 64-bit Fortran compiler, in use at ITER and IPP
   \item[gfortran] The gfortran compiler, in use at FZ-J{\"u}lich, KU-Leuven
   \item[g95] The g95 compiler, in use on the Marconi Gateway
+  \item[nag\_f90] The NAG Fortran compiler
 \end{description}
 
 For each hostname domain, a default compiler can be defined by means of the {\tt default\_compiler}
@@ -1659,12 +1660,12 @@ extracted from the {\tt run.log} file.
   \item[recover\_initial\_files]\index{recover\_initial\_files}\index{b2co}\index{plasmastate} For use to copy back the stored initial case files ({\tt .i} extension) before a run restart, or when use of {\tt b2co} is not possible because the run crash happened too early for {\tt plasmastate} files to be written.
   \item[regression\_test]\index{regression\_test} Utility script to run regression tests.
   \item[res\_av]\index{res\_av} Special script to reduce residuals in the finalization step of the {\tt Eirene} sources averaging scheme (see Section \ref{sec:B2Eirene:averaging} for details).
-  \item[resave\_mds]\index{resave\_mds} Update an archived {\tt MDSplus} case. A "-n" option allows for dry-run tests. A "-d" option allows to run within the chosen debugger. A "-s" option allows to update a {\tt B2.5} standalone case.
+  \item[resave\_mds]\index{resave\_mds} Update an archived {\tt MDSplus} case. A "-n" option allows for dry-run tests. A "-d" option allows to run within the chosen debugger. A "-s" option allows to update a {\tt B2.5} standalone case. A "-r" option allows to pass variable redefinitions to the underlying Makefile.
   \item[rlndr]\index{rlndr} Replaces a link address by another
   \item[rps]\index{rps} Shifts $\Psi$ values by a given amount within a {\tt DG} equilibrium file (see Sec.~\ref{sec:equtrn}).
   \item[run\_av]\index{run\_av} Special script to prepare the averaging step of the {\tt Eirene} sources averaging scheme (see Section \ref{sec:B2Eirene:averaging} for details).
   \item[save\_initial\_files]\index{save\_initial\_files} Script used by runs Makefile at start of a run to save initial state files for eventual recovery.
-  \item[save\_mds]\index{save\_mds} Archive an {\tt MDSplus} case. A "-n" option allows for dry-run tests. A "-d" option allows to run within the chosen debugger. A "-s" option allows to archive a {\tt B2.5} standalone case.
+  \item[save\_mds]\index{save\_mds} Archive an {\tt MDSplus} case. A "-n" option allows for dry-run tests. A "-d" option allows to run within the chosen debugger. A "-s" option allows to archive a {\tt B2.5} standalone case. A "-r" option allows to pass variable redefinitions to the underlying Makefile.
   \item[setup\_baserun\_eirene\_links]\index{setup\_baserun\_eirene\_links} Prepares the run directory before a {\tt B2.5-Eirene} run by settings up links to the proper data files.
   \item[sgesubmit]\index{sgesubmit} Command file to launch runs on an SGE system. See Section \ref{b2run} for details.
   \item[SLURM.postprocess]\index{SLURM.postprocess} Alias to {\tt QSUB.postprocess}
@@ -12233,6 +12234,8 @@ In the case of double-null runs, the divertor and separatrix quantities are give
 the first value is for the outer midplane, and the second value for the inner midplane. Divertor quantities show
 first the bottom then the top divertor.
 
+For double-null (DN) and lower single-null (LSN) topologies, the Western edge refers to the inboard divertor, while it points to the outboard divertor for upper single-null (USN) topologies. Conversely, the Eastern edge is the outboard divertor for DN and LSN cases, but the inboard divertor for USN cases.
+
 In the case of linear runs, the midplane refers, by default, to the midpoint of the domain.
 The divertor throat quantities are not defined.
 
@@ -12251,23 +12254,23 @@ In all cases, the point of reference of the midplane quantities can be adjusted 
     \multicolumn{3}{|l|}{\small\sl continued on next page} \\
     \hline \endfoot
     \endlastfoot
-ntstep \index{ntstep}\index{b2time.nc, ntstep} & timestep index & $  $ \\
-timesa \index{timesa}\index{b2time.nc, timesa} & time stamp & $s $ \\
-fnixip \index{fnixip}\index{b2time.nc, fnixip} & integrated poloidal main ion particle flux, inboard divertor & $s^{-1}$ \\
-feexip \index{feexip}\index{b2time.nc, feexip} & integrated poloidal electron energy flux, inboard divertor & $W $ \\
-feixip \index{feixip}\index{b2time.nc, feixip} & integrated poloidal ion energy flux, inboard divertor & $W $ \\
-fetxip \index{fetxip}\index{b2time.nc, fetxip} & integrated poloidal total energy flux, inboard divertor & $W $ \\
-fchxip \index{fchxip}\index{b2time.nc, fchxip} & integrated poloidal current, inboard divertor & $A $ \\
-fnixap \index{fnixap}\index{b2time.nc, fnixap} & integrated poloidal main ion particle flux, outboard divertor & $s^{-1}$ \\
-feexap \index{feexap}\index{b2time.nc, feexap} & integrated poloidal electron energy flux, outboard divertor & $W $ \\
-feixap \index{feixap}\index{b2time.nc, feixap} & integrated poloidal ion energy flux, outboard divertor & $W $ \\
-fetxap \index{fetxap}\index{b2time.nc, fetxap} & integrated poloidal total energy flux, outboard divertor & $W $ \\
-fchxap \index{fchxap}\index{b2time.nc, fchxap} & integrated poloidal current, outboard divertor & $A $ \\
-nesepi \index{nesepi}\index{b2time.nc, nesepi} & separatrix electron density, inboard divertor & $m^{-3}$ \\
-tesepi \index{tesepi}\index{b2time.nc, tesepi} & separatrix electron temperature, inboard divertor & $eV$ \\
-tisepi \index{tisepi}\index{b2time.nc, tisepi} & separatrix ion temperature, inboard divertor & $eV$ \\
-tpsepi \index{tpsepi}\index{b2time.nc, tpsepi} & separatrix target temperature, inboard divertor & $K $ \\
-posepi \index{posepi}\index{b2time.nc, posepi} & separatrix potential, inboard divertor & $V $ \\
+ntstep \index{ntstep}\index{b2time.nc, ntstep} & timestep index & $ $ \\
+timesa \index{timesa}\index{b2time.nc, timesa} & time stamp & $s$ \\
+fnixip \index{fnixip}\index{b2time.nc, fnixip} & integrated poloidal main ion particle flux, Western edge & $s^{-1}$ \\
+feexip \index{feexip}\index{b2time.nc, feexip} & integrated poloidal electron energy flux, Western edge & $W$ \\
+feixip \index{feixip}\index{b2time.nc, feixip} & integrated poloidal ion energy flux, Western edge & $W$ \\
+fetxip \index{fetxip}\index{b2time.nc, fetxip} & integrated poloidal total energy flux, Western edge & $W$ \\
+fchxip \index{fchxip}\index{b2time.nc, fchxip} & integrated poloidal current, Western edge & $A$ \\
+fnixap \index{fnixap}\index{b2time.nc, fnixap} & integrated poloidal main ion particle flux, Eastern edge & $s^{-1}$ \\
+feexap \index{feexap}\index{b2time.nc, feexap} & integrated poloidal electron energy flux, Eastern edge & $W$ \\
+feixap \index{feixap}\index{b2time.nc, feixap} & integrated poloidal ion energy flux, Eastern edge & $W$ \\
+fetxap \index{fetxap}\index{b2time.nc, fetxap} & integrated poloidal total energy flux, Eastern edge & $W$ \\
+fchxap \index{fchxap}\index{b2time.nc, fchxap} & integrated poloidal current, Eastern edge & $A$ \\
+nesepi \index{nesepi}\index{b2time.nc, nesepi} & separatrix electron density, Western edge & $m^{-3}$ \\
+tesepi \index{tesepi}\index{b2time.nc, tesepi} & separatrix electron temperature, Western edge & $eV$ \\
+tisepi \index{tisepi}\index{b2time.nc, tisepi} & separatrix ion temperature, Western edge & $eV$ \\
+tpsepi \index{tpsepi}\index{b2time.nc, tpsepi} & separatrix target temperature, Western edge & $K$ \\
+posepi \index{posepi}\index{b2time.nc, posepi} & separatrix potential, Western edge & $V $ \\
 nesepm \index{nesepm}\index{b2time.nc, nesepm} & separatrix electron density, outer midplane & $m^{-3}$ \\
 tesepm \index{tesepm}\index{b2time.nc, tesepm} & separatrix electron temperature, outer midplane & $eV$ \\
 tisepm \index{tisepm}\index{b2time.nc, tisepm} & separatrix ion temperature, outer midplane & $eV$ \\
@@ -12279,49 +12282,49 @@ kisepm \index{kisepm}\index{b2time.nc, kisepm} & ion thermal diffusivity, outer 
 vxsepm \index{vxsepm}\index{b2time.nc, vxsepm} & main ion poloidal pinch velocity, outer midplane & $m.s^{-1}$ \\
 vysepm \index{vysepm}\index{b2time.nc, vysepm} & main ion radial pinch velocity, outer midplane & $m.s^{-1}$ \\
 vssepm \index{vssepm}\index{b2time.nc, vssepm} & main ion particle viscosity, outer midplane & $m^2.s^{-1}$ \\
-nesepa \index{nesepa}\index{b2time.nc, nesepa} & separatrix electron density, outboard divertor & $m^{-3}$ \\
-tesepa \index{tesepa}\index{b2time.nc, tesepa} & separatrix electron temperature, outboard divertor & $eV$ \\
-tisepa \index{tisepa}\index{b2time.nc, tisepa} & separatrix ion temperature, outboard divertor & $eV$ \\
-tpsepa \index{tpsepa}\index{b2time.nc, tpsepa} & separatrix target temperature, outboard divertor & $K $ \\
-posepa \index{posepa}\index{b2time.nc, posepa} & separatrix potential, outboard divertor max & $V $ \\
-nemxip \index{nemxip}\index{b2time.nc, nemxip} & maximum electron density, inboard divertor & $m^{-3}$ \\
-temxip \index{temxip}\index{b2time.nc, temxip} & maximum electron temperature, inboard divertor & $eV$ \\
-timxip \index{timxip}\index{b2time.nc, timxip} & maximum ion temperature, inboard divertor & $eV$ \\
-tpmxip \index{tpmxip}\index{b2time.nc, tpmxip} & maximum target temperature, inboard divertor & $K $ \\
-pomxip \index{pomxip}\index{b2time.nc, pomxip} & maximum potential, inboard divertor & $V $ \\
-nemxap \index{nemxap}\index{b2time.nc, nemxap} & maximum electron density, outboard divertor & $m^{-3}$ \\
-temxap \index{temxap}\index{b2time.nc, temxap} & maximum electron temperature, outboard divertor & $eV$ \\
-timxap \index{timxap}\index{b2time.nc, timxap} & maximum ion temperature, outboard divertor  & $eV$ \\
-tpmxap \index{tpmxap}\index{b2time.nc, tpmxap} & maximum target temperature, outboard divertor & $K $ \\
-pomxap \index{pomxap}\index{b2time.nc, pomxap} & maximum potential, outboard divertor & $V $ \\
+nesepa \index{nesepa}\index{b2time.nc, nesepa} & separatrix electron density, Eastern edge & $m^{-3}$ \\
+tesepa \index{tesepa}\index{b2time.nc, tesepa} & separatrix electron temperature, Eastern edge & $eV$ \\
+tisepa \index{tisepa}\index{b2time.nc, tisepa} & separatrix ion temperature, Eastern edge & $eV$ \\
+tpsepa \index{tpsepa}\index{b2time.nc, tpsepa} & separatrix target temperature, Eastern edge & $K$ \\
+posepa \index{posepa}\index{b2time.nc, posepa} & separatrix potential, Eastern edge & $V $ \\
+nemxip \index{nemxip}\index{b2time.nc, nemxip} & maximum electron density, Western edge & $m^{-3}$ \\
+temxip \index{temxip}\index{b2time.nc, temxip} & maximum electron temperature, Western edge & $eV$ \\
+timxip \index{timxip}\index{b2time.nc, timxip} & maximum ion temperature, Western edge & $eV$ \\
+tpmxip \index{tpmxip}\index{b2time.nc, tpmxip} & maximum target temperature, Western edge & $K$ \\
+pomxip \index{pomxip}\index{b2time.nc, pomxip} & maximum potential, Western edge & $V$ \\
+nemxap \index{nemxap}\index{b2time.nc, nemxap} & maximum electron density, Eastern edge & $m^{-3}$ \\
+temxap \index{temxap}\index{b2time.nc, temxap} & maximum electron temperature, Eastern edge & $eV$ \\
+timxap \index{timxap}\index{b2time.nc, timxap} & maximum ion temperature, Eastern edge  & $eV$ \\
+tpmxap \index{tpmxap}\index{b2time.nc, tpmxap} & maximum target temperature, Eastern edge & $K$ \\
+pomxap \index{pomxap}\index{b2time.nc, pomxap} & maximum potential, Eastern edge & $V $ \\
 fniyip \index{fniyip}\index{b2time.nc, fniyip} & integrated radial main ion particle flux, main chamber & $s^{-1}$ \\
 feeyip \index{feeyip}\index{b2time.nc, feeyip} & integrated radial electron energy flux, main chamber & $W$ \\
 feiyip \index{feiyip}\index{b2time.nc, feiyip} & integrated radial ion energy flux, main chamber & $W$ \\
 fetyip \index{fetyip}\index{b2time.nc, fetyip} & integrated radial total energy flux, main chamber & $W$ \\
 fchyip \index{fchyip}\index{b2time.nc, fchyip} & integrated radial current, main chamber & $A$ \\
 fniyap \index{fniyap}\index{b2time.nc, fniyap} & integrated radial main ion particle flux, divertor region & $s^{-1}$ \\
-feeyap \index{feeyap}\index{b2time.nc, feeyap} & integrated radial electron energy flux, divertor region & $W $ \\
-feiyap \index{feiyap}\index{b2time.nc, feiyap} & integrated radial ion energy flux, divertor region & $W $ \\
-fetyap \index{fetyap}\index{b2time.nc, fetyap} & integrated radial total energy flux, divertor region & $W $ \\
-fchyap \index{fchyap}\index{b2time.nc, fchyap} & integrated radial current, divertor region & $A $ \\
-pwmxip \index{pwmxip}\index{b2time.nc, pwmxip} & maximum total power flux, inboard divertor & $W.m^{-2}$ \\
-pwmxap \index{pwmxap}\index{b2time.nc, pwmxap} & maximum total power flux, outboard divertor & $W.m^{-2}$ \\
-tmne \index{tmne}\index{b2time.nc, tmne} & total number of particles & $  $ \\
+feeyap \index{feeyap}\index{b2time.nc, feeyap} & integrated radial electron energy flux, divertor region & $W$ \\
+feiyap \index{feiyap}\index{b2time.nc, feiyap} & integrated radial ion energy flux, divertor region & $W$ \\
+fetyap \index{fetyap}\index{b2time.nc, fetyap} & integrated radial total energy flux, divertor region & $W$ \\
+fchyap \index{fchyap}\index{b2time.nc, fchyap} & integrated radial current, divertor region & $A$ \\
+pwmxip \index{pwmxip}\index{b2time.nc, pwmxip} & maximum total power flux, Western edge & $W.m^{-2}$ \\
+pwmxap \index{pwmxap}\index{b2time.nc, pwmxap} & maximum total power flux, Eastern edge & $W.m^{-2}$ \\
+tmne \index{tmne}\index{b2time.nc, tmne} & total number of particles & $ $ \\
 tmte \index{tmte}\index{b2time.nc, tmte} & total electron energy & $eV$ \\
 tmti \index{tmti}\index{b2time.nc, tmti} & total ion energy & $eV$ \\
 tmhacore \index{tmhacore}\index{b2time.nc, tmhacore} & $H_\alpha$ emissivity, core & $photons.m^{-2}.sr^{-1}?$ \\
 tmhasol \index{tmhasol}\index{b2time.nc, tmhasol} & $H_\alpha$ emissivity, SOL above the X-point & $photons.m^{-2}.sr^{-1}?$ \\
 tmhadiv \index{tmhadiv}\index{b2time.nc, tmhadiv} & $H_\alpha$ emissivity, divertor region & $photons.m^{-2}.sr^{-1}?$ \\
-fnisip \index{fnisip}\index{b2time.nc, fnisip} & poloidal main ion particle flux, into inboard separatrix throat & $s^{-1}$ \\
-feesip \index{feesip}\index{b2time.nc, feesip} & poloidal electron energy flux, into inboard separatrix throat & $W $ \\
-feisip \index{feisip}\index{b2time.nc, feisip} & poloidal ion energy flux, into inboard separatrix throat & $W $ \\
-fetsip \index{fetsip}\index{b2time.nc, fetsip} & poloidal total energy flux, into inboard separatrix throat & $W $ \\
-fchsip \index{fchsip}\index{b2time.nc, fchsip} & poloidal current, into inboard separatrix throat & $A $ \\
-fnisap \index{fnisap}\index{b2time.nc, fnisap} & poloidal main ion particle flux, into outboard separatrix throat & $s^{-1}$ \\
-feesap \index{feesap}\index{b2time.nc, feesap} & poloidal electron energy flux, into outboard separatrix throat & $W $ \\
-feisap \index{feisap}\index{b2time.nc, feisap} & poloidal ion energy flux, into outboard separatrix throat & $W $ \\
-fetsap \index{fetsap}\index{b2time.nc, fetsap} & poloidal total energy flux, into outboard separatrix throat & $W $ \\
-fchsap \index{fchsap}\index{b2time.nc, fchsap} & poloidal current, into outboard separatrix throat & $A $ \\
+fnisip \index{fnisip}\index{b2time.nc, fnisip} & poloidal main ion particle flux, into Western separatrix throat & $s^{-1}$ \\
+feesip \index{feesip}\index{b2time.nc, feesip} & poloidal electron energy flux, into Western separatrix throat & $W$ \\
+feisip \index{feisip}\index{b2time.nc, feisip} & poloidal ion energy flux, into Western separatrix throat & $W$ \\
+fetsip \index{fetsip}\index{b2time.nc, fetsip} & poloidal total energy flux, into Western separatrix throat & $W$ \\
+fchsip \index{fchsip}\index{b2time.nc, fchsip} & poloidal current, into Western separatrix throat & $A$ \\
+fnisap \index{fnisap}\index{b2time.nc, fnisap} & poloidal main ion particle flux, into Eastern separatrix throat & $s^{-1}$ \\
+feesap \index{feesap}\index{b2time.nc, feesap} & poloidal electron energy flux, into Eastern separatrix throat & $W$ \\
+feisap \index{feisap}\index{b2time.nc, feisap} & poloidal ion energy flux, into Eastern separatrix throat & $W$ \\
+fetsap \index{fetsap}\index{b2time.nc, fetsap} & poloidal total energy flux, into Eastern separatrix throat & $W$ \\
+fchsap \index{fchsap}\index{b2time.nc, fchsap} & poloidal current, into Eastern separatrix throat & $A$ \\
 fnisipp \index{fnisipp}\index{b2time.nc, fnisipp} & poloidal main ion particle flux, core x-pt flux region & $s^{-1}$ \\
 feesipp \index{feesipp}\index{b2time.nc, feesipp} & poloidal electron energy flux, core x-pt flux region & $W$ \\
 feisipp \index{feisipp}\index{b2time.nc, feisipp} & poloidal ion energy flux, core x-pt flux region & $W$ \\
@@ -12340,8 +12343,10 @@ fchsapp \index{fchsapp}\index{b2time.nc, fchsapp} & poloidal current, x-pt priva
 
 The following are vector time dependent quantities stored in
 {\tt b2time.nc}.  These are quantities along lines of constant
-{\em ix} at the inner target ({\tt l}), inner midplane ({\tt i}),
-outer midplane ({\tt a}) and outer target ({\tt r}).  The
+{\em ix} at the Western target ({\tt l})
+(inner for LSN, outer for USN, and lower inner for DN configurations),
+inner midplane ({\tt i}), outer midplane ({\tt a}) and Eastern target ({\tt r})
+(outer for LSN, inner for USN, and lower outer for DN configurations).  The
 positions of the inner and outer midplanes can be selected by
 {\tt b2mwti\_jxi} and {\tt b2mwti\_jxa}, respectively, in
 {\tt b2mn.dat}.
@@ -12364,20 +12369,20 @@ perpendicular to the magnetic field direction.
     \multicolumn{3}{|l|}{\small\sl continued on next page} \\
     \hline \endfoot
     \endlastfoot
-fn3dl \index{fn3dl}\index{b2time.nc, fn3dl} & poloidal particle flux of main ion, inboard divertor & $s^{-1}.m^{-2}$ \\
-fl3dl \index{fl3dl}\index{b2time.nc, fl3dl} & poloidal electron flux, inboard divertor & $s^{-1}.m^{-2}$ \\
-fo3dl \index{fo3dl}\index{b2time.nc, fo3dl} & poloidal total ion flux, inboard divertor & $s^{-1}.m^{-2}$ \\
-fe3dl \index{fe3dl}\index{b2time.nc, fe3dl} & poloidal electron energy flux, inboard divertor & $W.m^{-2}$ \\
-fi3dl \index{fi3dl}\index{b2time.nc, fi3dl} & poloidal ion energy flux, inboard divertor & $W.m^{-2}$ \\
-ft3dl \index{ft3dl}\index{b2time.nc, ft3dl} & poloidal total energy flux, inboard divertor & $W.m^{-2}$ \\
-fc3dl \index{fc3dl}\index{b2time.nc, fc3dl} & poloidal current, inboard divertor  & $A.m^{-2}$ \\
-ne3dl \index{ne3dl}\index{b2time.nc, ne3dl} & electron density, inboard divertor & $m^{-3}$ \\
-te3dl \index{te3dl}\index{b2time.nc, te3dl} & electron temperature, inboard divertor & $eV$ \\
-ti3dl \index{ti3dl}\index{b2time.nc, ti3dl} & ion temperature, inboard divertor & $eV$ \\
-tp3dl \index{tp3dl}\index{b2time.nc, tp3dl} & target temperature, inboard divertor & $K $ \\
-po3dl \index{po3dl}\index{b2time.nc, po3dl} & potential, inboard divertor & $V $ \\
-an3dl \index{an3dl}\index{b2time.nc, an3dl} & atom density of main neutral, inboard divertor & $m^{-3}$ \\
-mn3dl \index{mn3dl}\index{b2time.nc, mn3dl} & molecule density of $1^{st}$ molecule, inboard divertor & $m^{-3}$ \\
+fn3dl \index{fn3dl}\index{b2time.nc, fn3dl} & poloidal particle flux of main ion, Western edge & $s^{-1}.m^{-2}$ \\
+fl3dl \index{fl3dl}\index{b2time.nc, fl3dl} & poloidal electron flux, Western edge & $s^{-1}.m^{-2}$ \\
+fo3dl \index{fo3dl}\index{b2time.nc, fo3dl} & poloidal total ion flux, Western edge & $s^{-1}.m^{-2}$ \\
+fe3dl \index{fe3dl}\index{b2time.nc, fe3dl} & poloidal electron energy flux, Western edge & $W.m^{-2}$ \\
+fi3dl \index{fi3dl}\index{b2time.nc, fi3dl} & poloidal ion energy flux, Western edge & $W.m^{-2}$ \\
+ft3dl \index{ft3dl}\index{b2time.nc, ft3dl} & poloidal total energy flux, Western edge & $W.m^{-2}$ \\
+fc3dl \index{fc3dl}\index{b2time.nc, fc3dl} & poloidal current, Western edge & $A.m^{-2}$ \\
+ne3dl \index{ne3dl}\index{b2time.nc, ne3dl} & electron density, Western edge & $m^{-3}$ \\
+te3dl \index{te3dl}\index{b2time.nc, te3dl} & electron temperature, Western edge & $eV$ \\
+ti3dl \index{ti3dl}\index{b2time.nc, ti3dl} & ion temperature, Western edge & $eV$ \\
+tp3dl \index{tp3dl}\index{b2time.nc, tp3dl} & target temperature, Western edge & $K$ \\
+po3dl \index{po3dl}\index{b2time.nc, po3dl} & potential, Western edge & $V$ \\
+an3dl \index{an3dl}\index{b2time.nc, an3dl} & atom density of main neutral, Western edge & $m^{-3}$ \\
+mn3dl \index{mn3dl}\index{b2time.nc, mn3dl} & molecule density of $1^{st}$ molecule, Western edge & $m^{-3}$ \\
 ne3di \index{ne3di}\index{b2time.nc, ne3di} & electron density, inboard midplane & $m^{-3}$ \\
 te3di \index{te3di}\index{b2time.nc, te3di} & electron temperature, inboard midplane & $eV$ \\
 ti3di \index{ti3di}\index{b2time.nc, ti3di} & ion temperature, inboard midplane & $eV$ \\
@@ -12404,20 +12409,20 @@ ki3da \index{ki3da}\index{b2time.nc, ki3da} & ion heat diffusivity, outboard mid
 vs3da \index{vs3da}\index{b2time.nc, vs3da} & main ion viscosity, outboard midplane & $m^2.s^{-1}$ \\
 vx3da \index{vx3da}\index{b2time.nc, vx3da} & main ion poloidal pinch velocity, outboard midplane & $m.s^{-1}$ \\
 vy3da \index{vy3da}\index{b2time.nc, vy3da} & main ion radial pinch velocity, outboard midplane & $m.s^{-1}$ \\
-ne3dr \index{ne3dr}\index{b2time.nc, ne3dr} & electron density, outboard divertor & $m^{-3}$ \\
-te3dr \index{te3dr}\index{b2time.nc, te3dr} & electron temperature, outboard divertor & $eV$ \\
-ti3dr \index{ti3dr}\index{b2time.nc, ti3dr} & ion temperature, outboard divertor & $eV$ \\
-tp3dr \index{tp3dr}\index{b2time.nc, tp3dr} & target temperature, outboard divertor & $K $ \\
-po3dr \index{po3dr}\index{b2time.nc, po3dr} & potential, outboard divertor & $V $ \\
-an3dr \index{an3dr}\index{b2time.nc, an3dr} & atom density of main neutral, outboard divertor & $m^{-3}$ \\
-mn3dr \index{mn3dr}\index{b2time.nc, mn3dr} & molecule density of $1^{st}$ molecule, outboard divertor & $m^{-3}$ \\
-fn3dr \index{fn3dr}\index{b2time.nc, fn3dr} & poloidal particle flux of main ion, outboard divertor & $s^{-1}.m^{-2}$ \\
-fe3dr \index{fe3dr}\index{b2time.nc, fe3dr} & poloidal electron energy flux, outboard divertor & $W.m^{-2}$ \\
-fi3dr \index{fi3dr}\index{b2time.nc, fi3dr} & poloidal ion energy flux, outboard divertor & $W.m^{-2}$ \\
-ft3dr \index{ft3dr}\index{b2time.nc, ft3dr} & poloidal total energy flux, outboard divertor & $W.m^{-2}$ \\
-fc3dr \index{fc3dr}\index{b2time.nc, fc3dr} & poloidal current, outboard divertor & $A.m^{-2}$ \\
-fl3dr \index{fl3dr}\index{b2time.nc, fl3dr} & poloidal electron flux, outboard divertor & $s^{-1}.m^{-2}$ \\
-fo3dr \index{fo3dr}\index{b2time.nc, fo3dr} & poloidal total ion flux, outboard divertor & $s^{-1}.m^{-2}$ \\
+ne3dr \index{ne3dr}\index{b2time.nc, ne3dr} & electron density, Eastern edge & $m^{-3}$ \\
+te3dr \index{te3dr}\index{b2time.nc, te3dr} & electron temperature, Eastern edge & $eV$ \\
+ti3dr \index{ti3dr}\index{b2time.nc, ti3dr} & ion temperature, Eastern edge & $eV$ \\
+tp3dr \index{tp3dr}\index{b2time.nc, tp3dr} & target temperature, Eastern edge & $K$ \\
+po3dr \index{po3dr}\index{b2time.nc, po3dr} & potential, Eastern edge & $V$ \\
+an3dr \index{an3dr}\index{b2time.nc, an3dr} & atom density of main neutral, Eastern edge & $m^{-3}$ \\
+mn3dr \index{mn3dr}\index{b2time.nc, mn3dr} & molecule density of $1^{st}$ molecule, Eastern edge & $m^{-3}$ \\
+fn3dr \index{fn3dr}\index{b2time.nc, fn3dr} & poloidal particle flux of main ion, Eastern edge & $s^{-1}.m^{-2}$ \\
+fe3dr \index{fe3dr}\index{b2time.nc, fe3dr} & poloidal electron energy flux, Eastern edge & $W.m^{-2}$ \\
+fi3dr \index{fi3dr}\index{b2time.nc, fi3dr} & poloidal ion energy flux, Eastern edge & $W.m^{-2}$ \\
+ft3dr \index{ft3dr}\index{b2time.nc, ft3dr} & poloidal total energy flux, Eastern edge & $W.m^{-2}$ \\
+fc3dr \index{fc3dr}\index{b2time.nc, fc3dr} & poloidal current, Eastern edge & $A.m^{-2}$ \\
+fl3dr \index{fl3dr}\index{b2time.nc, fl3dr} & poloidal electron flux, Eastern edge & $s^{-1}.m^{-2}$ \\
+fo3dr \index{fo3dr}\index{b2time.nc, fo3dr} & poloidal total ion flux, Eastern edge & $s^{-1}.m^{-2}$ \\
     \hline
     \caption{Vector time dependent quantities stored in b2time.nc.
        Note that the conversion to "per unit area" for fluxes is done
@@ -12543,48 +12548,48 @@ These quantities can be visualized by means of the {\tt 2dt\_av} script.
     \multicolumn{3}{|l|}{\small\sl continued on next page} \\
     \hline \endfoot
     \endlastfoot
-nastep \index{nastep}\index{b2time.nc, nastep} & timestep index & $  $ \\
-batchsa \index{batchsa}\index{b2time.nc, batchsa} & time stamp for averaged batch & $s $ \\
-nesepi\_av \index{nesepi\_av}\index{b2time.nc, nesepi\_av} & averaged separatrix electron density, inboard divertor & $m^{-3}$ \\
-tesepi\_av \index{tesepi\_av}\index{b2time.nc, tesepi\_av} & averaged separatrix electron temperature, inboard divertor & $eV$ \\
-tisepi\_av \index{tisepi\_av}\index{b2time.nc, tisepi\_av} & averaged separatrix ion temperature, inboard divertor & $eV$ \\
-posepi\_av \index{posepi\_av}\index{b2time.nc, posepi\_av} & averaged separatrix potential, inboard divertor & $V $ \\
+nastep \index{nastep}\index{b2time.nc, nastep} & timestep index & $ $ \\
+batchsa \index{batchsa}\index{b2time.nc, batchsa} & time stamp for averaged batch & $s$ \\
+nesepi\_av \index{nesepi\_av}\index{b2time.nc, nesepi\_av} & averaged separatrix electron density, Western edge & $m^{-3}$ \\
+tesepi\_av \index{tesepi\_av}\index{b2time.nc, tesepi\_av} & averaged separatrix electron temperature, Western edge & $eV$ \\
+tisepi\_av \index{tisepi\_av}\index{b2time.nc, tisepi\_av} & averaged separatrix ion temperature, Western edge & $eV$ \\
+posepi\_av \index{posepi\_av}\index{b2time.nc, posepi\_av} & averaged separatrix potential, Western edge & $V$ \\
 nesepm\_av \index{nesepm\_av}\index{b2time.nc, nesepm\_av} & averaged separatrix electron density, outer midplane & $m^{-3}$ \\
 tesepm\_av \index{tesepm\_av}\index{b2time.nc, tesepm\_av} & averaged separatrix electron temperature, outer midplane & $eV$ \\
 tisepm\_av \index{tisepm\_av}\index{b2time.nc, tisepm\_av} & averaged separatrix ion temperature, outer midplane & $eV$ \\
-posepm\_av \index{posepm\_av}\index{b2time.nc, posepm\_av} & averaged separatrix potential, outer midplane & $V $ \\
-nesepa\_av \index{nesepa\_av}\index{b2time.nc, nesepa\_av} & averaged separatrix electron density, outboard divertor & $m^{-3}$ \\
-tesepa\_av \index{tesepa\_av}\index{b2time.nc, tesepa\_av} & averaged separatrix electron temperature, outboard divertor & $eV$ \\
-tisepa\_av \index{tisepa\_av}\index{b2time.nc, tisepa\_av} & averaged separatrix ion temperature, outboard divertor & $eV$ \\
-posepa\_av \index{posepa\_av}\index{b2time.nc, posepa\_av} & averaged separatrix potential, outboard divertor max & $V $ \\
-nemxip\_av \index{nemxip\_av}\index{b2time.nc, nemxip\_av} & averaged maximum electron density, inboard divertor & $m^{-3}$ \\
-temxip\_av \index{temxip\_av}\index{b2time.nc, temxip\_av} & averaged maximum electron temperature, inboard divertor & $eV$ \\
-timxip\_av \index{timxip\_av}\index{b2time.nc, timxip\_av} & averaged maximum ion temperature, inboard divertor & $eV$ \\
-pomxip\_av \index{pomxip\_av}\index{b2time.nc, pomxip\_av} & averaged maximum potential, inboard divertor & $V $ \\
-nemxap\_av \index{nemxap\_av}\index{b2time.nc, nemxap\_av} & averaged maximum electron density, outboard divertor & $m^{-3}$ \\
-temxap\_av \index{temxap\_av}\index{b2time.nc, temxap\_av} & averaged maximum electron temperature, outboard divertor & $eV$ \\
-timxap\_av \index{timxap\_av}\index{b2time.nc, timxap\_av} & averaged maximum ion temperature, outboard divertor  & $eV$ \\
-pomxap\_av \index{pomxap\_av}\index{b2time.nc, pomxap\_av} & averaged maximum potential, outboard divertor & $V $ \\
-nesepi\_std \index{nesepi\_std}\index{b2time.nc, nesepi\_std} & averaged separatrix electron density, inboard divertor & $m^{-3}$ \\
-tesepi\_std \index{tesepi\_std}\index{b2time.nc, tesepi\_std} & averaged separatrix electron temperature, inboard divertor & $eV$ \\
-tisepi\_std \index{tisepi\_std}\index{b2time.nc, tisepi\_std} & averaged separatrix ion temperature, inboard divertor & $eV$ \\
-posepi\_std \index{posepi\_std}\index{b2time.nc, posepi\_std} & averaged separatrix potential, inboard divertor & $V $ \\
+posepm\_av \index{posepm\_av}\index{b2time.nc, posepm\_av} & averaged separatrix potential, outer midplane & $V$ \\
+nesepa\_av \index{nesepa\_av}\index{b2time.nc, nesepa\_av} & averaged separatrix electron density, Eastern edge & $m^{-3}$ \\
+tesepa\_av \index{tesepa\_av}\index{b2time.nc, tesepa\_av} & averaged separatrix electron temperature, Eastern edge & $eV$ \\
+tisepa\_av \index{tisepa\_av}\index{b2time.nc, tisepa\_av} & averaged separatrix ion temperature, Eastern edge & $eV$ \\
+posepa\_av \index{posepa\_av}\index{b2time.nc, posepa\_av} & averaged separatrix potential, Eastern edge & $V$ \\
+nemxip\_av \index{nemxip\_av}\index{b2time.nc, nemxip\_av} & averaged maximum electron density, Western edge & $m^{-3}$ \\
+temxip\_av \index{temxip\_av}\index{b2time.nc, temxip\_av} & averaged maximum electron temperature, Western edge & $eV$ \\
+timxip\_av \index{timxip\_av}\index{b2time.nc, timxip\_av} & averaged maximum ion temperature, Western edge & $eV$ \\
+pomxip\_av \index{pomxip\_av}\index{b2time.nc, pomxip\_av} & averaged maximum potential, Western edge & $V$ \\
+nemxap\_av \index{nemxap\_av}\index{b2time.nc, nemxap\_av} & averaged maximum electron density, Eastern edge & $m^{-3}$ \\
+temxap\_av \index{temxap\_av}\index{b2time.nc, temxap\_av} & averaged maximum electron temperature, Eastern edge & $eV$ \\
+timxap\_av \index{timxap\_av}\index{b2time.nc, timxap\_av} & averaged maximum ion temperature, Eastern edge & $eV$ \\
+pomxap\_av \index{pomxap\_av}\index{b2time.nc, pomxap\_av} & averaged maximum potential, Eastern edge & $ $ \\
+nesepi\_std \index{nesepi\_std}\index{b2time.nc, nesepi\_std} & averaged separatrix electron density, Western edge & $m^{-3}$ \\
+tesepi\_std \index{tesepi\_std}\index{b2time.nc, tesepi\_std} & averaged separatrix electron temperature, Western edge & $eV$ \\
+tisepi\_std \index{tisepi\_std}\index{b2time.nc, tisepi\_std} & averaged separatrix ion temperature, Western edge & $eV$ \\
+posepi\_std \index{posepi\_std}\index{b2time.nc, posepi\_std} & averaged separatrix potential, Western edge & $V$ \\
 nesepm\_std \index{nesepm\_std}\index{b2time.nc, nesepm\_std} & variance for separatrix electron density, outer midplane & $m^{-3}$ \\
 tesepm\_std \index{tesepm\_std}\index{b2time.nc, tesepm\_std} & variance for separatrix electron temperature, outer midplane & $eV$ \\
 tisepm\_std \index{tisepm\_std}\index{b2time.nc, tisepm\_std} & variance for separatrix ion temperature, outer midplane & $eV$ \\
 posepm\_std \index{posepm\_std}\index{b2time.nc, posepm\_std} & variance for separatrix potential, outer midplane & $V $ \\
-nesepa\_std \index{nesepa\_std}\index{b2time.nc, nesepa\_std} & variance for separatrix electron density, outboard divertor & $m^{-3}$ \\
-tesepa\_std \index{tesepa\_std}\index{b2time.nc, tesepa\_std} & variance for separatrix electron temperature, outboard divertor & $eV$ \\
-tisepa\_std \index{tisepa\_std}\index{b2time.nc, tisepa\_std} & variance for separatrix ion temperature, outboard divertor & $eV$ \\
-posepa\_std \index{posepa\_std}\index{b2time.nc, posepa\_std} & variance for separatrix potential, outboard divertor max & $V $ \\
-nemxip\_std \index{nemxip\_std}\index{b2time.nc, nemxip\_std} & variance for maximum electron density, inboard divertor & $m^{-3}$ \\
-temxip\_std \index{temxip\_std}\index{b2time.nc, temxip\_std} & variance for maximum electron temperature, inboard divertor & $eV$ \\
-timxip\_std \index{timxip\_std}\index{b2time.nc, timxip\_std} & variance for maximum ion temperature, inboard divertor & $eV$ \\
-pomxip\_std \index{pomxip\_std}\index{b2time.nc, pomxip\_std} & variance for maximum potential, inboard divertor & $V $ \\
-nemxap\_std \index{nemxap\_std}\index{b2time.nc, nemxap\_std} & variance for maximum electron density, outboard divertor & $m^{-3}$ \\
-temxap\_std \index{temxap\_std}\index{b2time.nc, temxap\_std} & variance for maximum electron temperature, outboard divertor & $eV$ \\
-timxap\_std \index{timxap\_std}\index{b2time.nc, timxap\_std} & variance for maximum ion temperature, outboard divertor  & $eV$ \\
-pomxap\_std \index{pomxap\_std}\index{b2time.nc, pomxap\_std} & variance for maximum potential, outboard divertor & $V $ \\
+nesepa\_std \index{nesepa\_std}\index{b2time.nc, nesepa\_std} & variance for separatrix electron density, Eastern edge & $m^{-3}$ \\
+tesepa\_std \index{tesepa\_std}\index{b2time.nc, tesepa\_std} & variance for separatrix electron temperature, Eastern edge & $eV$ \\
+tisepa\_std \index{tisepa\_std}\index{b2time.nc, tisepa\_std} & variance for separatrix ion temperature, Eastern edge & $eV$ \\
+posepa\_std \index{posepa\_std}\index{b2time.nc, posepa\_std} & variance for separatrix potential, Eastern edge & $V$ \\
+nemxip\_std \index{nemxip\_std}\index{b2time.nc, nemxip\_std} & variance for maximum electron density, Western edge & $m^{-3}$ \\
+temxip\_std \index{temxip\_std}\index{b2time.nc, temxip\_std} & variance for maximum electron temperature, Western edge & $eV$ \\
+timxip\_std \index{timxip\_std}\index{b2time.nc, timxip\_std} & variance for maximum ion temperature, Western edge & $eV$ \\
+pomxip\_std \index{pomxip\_std}\index{b2time.nc, pomxip\_std} & variance for maximum potential, Western edge & $V$ \\
+nemxap\_std \index{nemxap\_std}\index{b2time.nc, nemxap\_std} & variance for maximum electron density, Eastern edge & $m^{-3}$ \\
+temxap\_std \index{temxap\_std}\index{b2time.nc, temxap\_std} & variance for maximum electron temperature, Eastern edge & $eV$ \\
+timxap\_std \index{timxap\_std}\index{b2time.nc, timxap\_std} & variance for maximum ion temperature, Eastern edge & $eV$ \\
+pomxap\_std \index{pomxap\_std}\index{b2time.nc, pomxap\_std} & variance for maximum potential, Eastern edge & $V $ \\
     \hline
     \caption{Scalar batch-averaged time dependent quantities stored in b2time.nc}
     \label{tab:b2timeav}
@@ -13289,8 +13294,8 @@ $X$-directed regions:
 |                             |
 +-----------------------------+
 
-region 1 === left target
-region 2 === right target
+region 1 === Western edge
+region 2 === Eastern edge
 \end{verbatim}
 
 $Y$-directed regions:
@@ -17575,15 +17580,20 @@ Additionally, system-wide compiler flags can be provided by means of the
 
 \begin{description}
 \item[CATALYST] \index{CATALYST} Turns on the Paraview Catalyst utility (see the SOLPS-GUI manual for full details)
+\item[COMPILER\_MAJOR\_VERSION] \index{COMPILER\_MAJOR\_VERSION} Major version number of the compiler being used (set internally by the configuration files)
+\item[COMPILER\_MINOR\_VERSION] \index{COMPILER\_MINOR\_VERSION} Minor version number of the compiler being used (set internally by the configuration files)
 \item[DBG] \index{DBG} Turns on additional debugging output (set internally by the {\tt Makefile} when requesting a {\tt \_debug} compilation)
 \item[F2003] \index{F2003} To be used if the compiler is compatible with {\tt Fortran 2003}
 \item[F77] \index{F77} Identifies specific code to {\tt Fortran-77} compilers
 \item[GFORTRAN] \index{GFORTRAN} To be used with {\tt gfortran} compilation
+\item[GGD\_MINOR\_VERSION] \index{GGD\_MINOR\_VERSION} Minor version number of the IMAS GGD library to which the code is linked (set internally by the configuration files)
 \item[G95] \index{G95} To be used with {\tt g95} compilation
 \item[HPUX] \index{HPUX} To be used when compiling on HP Unix systems
 \item[IBMaix] \index{IBMaix} To be used when compiling on IBM AIX computers
 \item[IMAS] \index{IMAS} To be used when compiling within the IMAS framework
+\item[IMAS\_MINOR\_VERSION] \index{IMAS\_MINOR\_VERSION} Minor version number of the IMAS library to which the code is linked (set internally by the configuration files)
 \item[ITM] \index{ITM} To be used when compiling within the ITM framework
+\item[ITM\_ENVIRONMENT\_LOADED] \index{ITM\_ENVIRONMENT\_LOADED} To be used when wishing to compile with ITM CPOs
 \item[MDSPLUS] \index{MDSPLUS} Enables use of {\tt MDSplus} trees
 \item[NAGF95] \index{NAGF95} To be used when compiling with the {\tt NAG} F95 compiler
 \item[NAG22] \index{NAG22} Specific to using the Nag Mark 22 or higher mathematical library
@@ -17594,6 +17604,7 @@ Additionally, system-wide compiler flags can be provided by means of the
 \item[NO\_NAG] \index{NO\_NAG} No {\tt NAG} libraries available
 \item[PGF90] \index{PGF90} To be used when compiling with the Portland Group {\tt Fortran-90} compiler
 \item[PSR] \index{PSR} Specific to the Pacific Sierra VAST compiler
+\item[UAL\_MAJOR\_VERSION] \index{UAL\_MAJOR\_VERSION} Major version number of the UAL (Universal Access Layer) library to which the code is linked (set internally by the configuration files)
 \item[USE\_MPI] \index{USE\_MPI} Set internally by the {\tt Makefile} and used to identify code necessary for MPI applications
 \item[USE\_PXFGETENV] \index{USE\_PXFGETENV} Uses {\tt PXFGETENV} instead of {\tt GETENV}
 \item[WINDOWS] \index{WINDOWS} To be used when compiling on a Windows system
@@ -17678,6 +17689,32 @@ READOPT & carre/rdfrre.F \\
   \end{longtable}
 \end{center}
 
+\subsection{DivGeo}
+\index{DEFINES, used in compiling DivGeo}
+
+%%grep #if $SOLPSTOP/modules/Divgeo/equtrn/src/*.F | awk '{print $2,$1}' | sort | uniq
+
+We list below where the {\tt DivGeo} compilation switches are used.
+
+\begin{center}
+  \begin{longtable}{|l|l|}
+    \hline
+    \multicolumn{2}{|l|}{\small\sl continued from previous page} \\
+    \hline name & used in \\
+    \hline \endhead
+    \hline name & used in \\
+    \hline \endfirsthead
+    \hline
+    \multicolumn{2}{|l|}{\small\sl continued on next page} \\
+    \hline \endfoot
+    \endlastfoot
+IMAS\_MINOR\_VERSION & equtrn/src/rdids.f \\
+    \hline
+    \caption{Defines for DivGeo and where they are used.}
+    \label{tab:DivGeodefines}
+  \end{longtable}
+\end{center}
+
 \subsection{B2.5-Eirene}
 \index{DEFINES, used in compiling B2.5-Eirene}
 
@@ -17715,8 +17752,6 @@ if desired, be declared as part of either the \${\tt SOLPS\_CPP} or the
 \item[COMPLICATED] \index{COMPLICATED} Uses a more "complicated" model for feedback schemes
 \item[EASY] \index{EASY} Uses the "easy" model for chord integration
 \item[GOT\_AMNSPROTO] \index{GOT\_AMNSPROTO} Links to AMNS database
-\item[IMAS\_MAJOR\_VERSION] \index{IMAS\_MAJOR\_VERSION} Major version number of the IMAS library to which the code is linked (set internally by the configuration files)
-\item[IMAS\_MINOR\_VERSION] \index{IMAS\_MINOR\_VERSION} Minor version number of the IMAS library to which the code is linked (set internally by the configuration files)
 \item[JET] \index{JET} Enables some additional output for coupling to the JET post-processor
 \item[NO\_21] \index{NO\_21} Do not use 21-moment model for thermal and viscous forces
 \item[NO\_IEEE] \index{NO\_IEEE} Provides replacements to IEEE non-standard arithmetic routines
@@ -17727,7 +17762,6 @@ if desired, be declared as part of either the \${\tt SOLPS\_CPP} or the
 \item[PERFMON] \index{PERFMON} Enable performance monitoring
 \item[PLPLOT] \index{PLPLOT} Use {\tt PLPLOT} instead of {\tt NCAR} for plotting
 %\item[SCL\_IMP\_RCI] \index{SCL\_IMP\_RCI} Toggles scaling of impurities tallies
-\item[UAL\_MAJOR\_VERSION] \index{UAL\_MAJOR\_VERSION} Major version number of the UAL (Universal Access Layer) library to which the code is linked (set internally by the configuration files)
 \item[USE\_CDF\_B2STIME] \index{USE\_CDF\_B2STIME} Specific for \SOLPSfour {\tt CDF} tallies
 \item[WANT\_PROCESS] \index{WANT\_PROCESS} Enables the code for the \SOLPSfive to \SOLPSfour converter
 \item[WOS] \index{WOS} Uses the {\tt WOS} libraries for accessing experimental data at IPP
@@ -17893,6 +17927,8 @@ GFORTRAN & utility/ma28.F \\
 GFORTRAN & utility/ma28copy.F \\
 GFORTRAN & utility/ma28copy3.F \\
 GFORTRAN & utility/ma28copy4.F \\
+GGD\_MINOR\_VERSION & ids/b2mod\_ual\_io.F90 \\
+GGD\_MINOR\_VERSION & ids/b2mod\_ual\_io\_grid.F90 \\
 GOT\_AMNSPROTO & utility/ratadas.F \\
 HITS\_PER\_CHORD & b2plot/process\_chords.F \\
 HITS\_PER\_CHORD & b2plot/process\_eirene\_chords.F \\
@@ -17905,14 +17941,19 @@ IMAS & ids/b2mod\_ual\_io\_data.F90 \\
 IMAS & ids/b2mod\_ual\_io\_grid.F90 \\
 IMAS & ids/b2mod\_ual\_io.F90 \\
 IMAS & ids/b2\_ual\_write.F90 \\
-ITM & ids/b2mod\_ual.F90 \\
-ITM & ids/b2mod\_ual\_io\_data.F90 \\
-ITM & ids/b2mod\_ual\_io\_grid.F90 \\
-ITM & ids/b2mod\_ual\_io.F90 \\
-ITM & ids/b2\_ual\_write.F90 \\
+IMAS\_MINOR\_VERSION & ids/b2mod\_ual.F90 \\
+IMAS\_MINOR\_VERSION & ids/b2mod\_ual\_io.F90 \\
+IMAS\_MINOR\_VERSION & ids/b2mod\_ual\_io\_data.F90 \\
+IMAS\_MINOR\_VERSION & ids/b2mod\_ual\_io\_grid.F90 \\
+IMAS\_MINOR\_VERSION & ids/b2\_ual\_write.F90 \\
+IMAS\_MINOR\_VERSION & ids/b2\_ual\_write\_b2mod.F90 \\
 ITM & preprocessing/b2ardr.F \\
 ITM & preprocessing/b2arin.F \\
 ITM & utility/ratadas.F \\
+ITM\_ENVIRONMENT\_LOADED & ids/b2mod\_ual.F90 \\
+ITM\_ENVIRONMENT\_LOADED & ids/b2mod\_ual\_io\_data.F90 \\
+ITM\_ENVIRONMENT\_LOADED & ids/b2mod\_ual\_io\_grid.F90 \\
+ITM\_ENVIRONMENT\_LOADED & ids/b2mod\_ual\_io.F90 \\
 JET & driver/b2mnastra.F \\
 JET & driver/b2mnds.F \\
 JET & driver/b2mn\_opt.F \\
@@ -18093,6 +18134,7 @@ SOLPS4\_3 & modules/b2mod\_diag.F \\
 SOLPS4\_3 & modules/b2mod\_mwti.F90 \\
 SOLPS4\_3 & modules/b2mod\_neutrals\_namelist.F \\
 SOLPS4\_3 & sources/eirene\_f30f31.F \\
+UAL\_MAJOR\_VERSION & ids/b2mod\_ual.F90 \\
 USE\_CDF\_B2STIME & modules/b2mod\_comtimpl.F \\
 USE\_CDF\_B2STIME & common/COUPLE/COMTIMPL.F \\
 USE\_IMPGYRO & driver/b2mod\_driver.F \\
@@ -18242,9 +18284,13 @@ ALLOCATE\_AND\_NAMELIST & startup-routines/find\_param.F \\
 B25\_EIRENE & main-routines/eirene.f \\
 B25\_EIRENE & interfaces/couple\_SOLPS-ITER/eirmod\_extrab25.F90 \\
 B25\_EIRENE & startup-routines/find\_param.f \\
+COMPILER\_MAJOR\_VERSION & assistant/exit\_own.f \\
+COMPILER\_MINOR\_VERSION & assistant/exit\_own.f \\
 DBG & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.F \\
 GFORTRAN & modules/eirmod\_mpi.F90 \\
+GFORTRAN & assistant/exit\_own.f \\
 G95 & assistant/exit\_own.f \\
+F2003 & assistant/subtit.f \\
 HPUX & modules/eirmod\_cinit.F \\
 MPI\_VERSION & modules/eirmod\_mpi.F90 \\
 NAGFOR & file-handling/get\_solpstop.f \\

@@ -45,14 +45,11 @@ LD_SONNET      = -L${SOLPSLIB} -lsonnet -lstdc++
 # Preprocessor options
 #
 
-ifdef SOLPS_MPI
-SOLPS_CPP      = -DNO_NAG -DGFORTRAN
-else
 SOLPS_CPP      = -DNO_NAG -DPGF90 -DNOQUAD
-endif
 LD_MPI         = -lmpi2
 LD_MSCL        = `pkg-config mscl --libs` -lgfortran
 B25_DEFINES    = -DNO_21
+CARRE_DEFINES  =
 EIRENE_DEFINES =
 FFLAGSEXTRA    =
 
@@ -77,15 +74,33 @@ endif
 
 # Build with IMAS if imas module is loaded
 ifdef IMAS_VERSION
-  ifdef SOLPS_MPI
-    LD_UAL = `pkg-config imas-gfortran --libs` -L/work/imas/opt/EasyBuild/software/GGD/1.9.1-GCC-6.4.0-2.28-DD-3.27.0/lib -lggd
-  else
-    LD_UAL = `pkg-config imas-pgi ggd --libs`
-  endif
   UAL_MAJOR_VERSION = $(shell echo ${UAL_VERSION} | cut -d '.' -f1 )
-  GGD_MINOR_VERSION = $(shell echo ${EBVERSIONGGD} | cut -d '.' -f2 )
   IMAS_MAJOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f1 )
   IMAS_MINOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f2 )
+  ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 17; echo $$?),0)
+    GGD_MINOR_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f2 )
+    ifdef SOLPS_MPI
+      LD_UAL = `pkg-config imas-gfortran --libs` -L/work/imas/opt/EasyBuild/software/GGD/1.8.3-GCC-6.4.0-2.28-DD-3.21.1/lib -lggd
+    else
+      LD_UAL = `pkg-config imas-pgi ggd --libs`
+    endif
+  else
+    ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 12; echo $$?),0)
+      GGD_MINOR_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f2 )
+      ifdef SOLPS_MPI
+        LD_UAL = `pkg-config imas-gfortran --libs` -L/work/imas/opt/EasyBuild/software/GGD/1.8.3-GCC-6.4.0-2.28/lib -lggd
+      else
+        LD_UAL = `pkg-config imas-pgi --libs` -lggd-pgi
+      endif
+    else
+      GGD_MINOR_VERSION = 0
+      ifdef SOLPS_MPI
+        LD_UAL = `pkg-config imas-lowlevel imas-gfortran --libs`
+      else
+        LD_UAL = `pkg-config imas-lowlevel imas-pgi --libs`
+      endif
+    endif
+  endif
   SOLPS_CPP += -DIMAS -DUAL_MAJOR_VERSION=${UAL_MAJOR_VERSION} -DIMAS_MINOR_VERSION=${IMAS_MINOR_VERSION} -DGGD_MINOR_VERSION=${GGD_MINOR_VERSION}
   export LD_UAL
 else
@@ -129,7 +144,9 @@ export LD_MPI
 
 export NODENAME
 export SOLPS_CPP
+export FFLAGSEXTRA
 export B25_DEFINES
+export CARRE_DEFINES
 export EIRENE_DEFINES
 export MPI_CPP
 
