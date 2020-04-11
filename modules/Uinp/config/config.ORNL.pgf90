@@ -11,11 +11,7 @@ endif
 LD_GR   ?= -L${GR_ROOT} -lgr
 LD_GKS  ?= -L${GLI_HOME} -lgks
 
-ifdef USE_MPI
-FC       = mpif90
-else
 FC       = pgf90
-endif
 
 ifdef SOLPS_DEBUG
 FFLAGS   = -g
@@ -23,11 +19,7 @@ else
 FFLAGS   = -O
 endif
 ifdef SOLPS_OPENMP
-ifdef USE_MPI
-FFLAGS  += -fopenmp
-else
 FFLAGS  += -mp=nonuma
-endif
 endif
 
 INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
