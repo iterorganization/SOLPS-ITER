@@ -1,16 +1,18 @@
 # Test whether necessary variables are defined
 LD_MSCL ?= `pkg-config mscl --libs` -lgfortran
 
-ifdef USE_MPI
-FC       = mpif90
-else
 FC       = pgf90
-endif
 
 ifdef SOLPS_DEBUG
 FFLAGS   = -g
 else
 FFLAGS   = -O
+endif
+ifdef SOLPS_OPENMP
+FFLAGS  += -mp=nonuma
+endif
+ifdef SOLPS_MPI
+FFLAGS  += -Mmpi=mpich
 endif
 
 INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
