@@ -1614,7 +1614,7 @@ extracted from the {\tt run.log} file.
   \item[correct\_b2yt\_timestamps]\index{correct\_b2yt\_timestamps}\index{b2yt}
     Makes sure the timestamps for the start-up files in the current
     directory are in the right chronological order for the {\tt b2yt} converter.
-  \item[count]\index{count}
+  \item[count]\index{count} Basic counting with advanced options (``count -h'' for help).
   \item[d2d]\index{d2d} Doubles the resolution of the {\tt DG} equilibrium file (see Sec.~\ref{sec:equtrn}).
   \item[d2e]\index{d2e} Converts {\tt DG} equilibrium files to {\tt EFIT} format (see Sec.~\ref{sec:equtrn}).
   \item[d2v]\index{d2v} Converts {\tt DG} equilibrium files to {\tt Carre} format (see Sec.~\ref{sec:equtrn}).
@@ -1682,10 +1682,11 @@ extracted from the {\tt run.log} file.
   \item[ustcsubmit]\index{ustcsubmit} Command file to launch runs on the USTC computer cluster. See Section \ref{b2run} for details.
   \item[v2d]\index{v2d} Converts {\tt Carre} format equilibrium files to {\tt DG} format (see Sec.~\ref{sec:equtrn}).
   \end{description}
-\end{itemize}
-
-Some new Python \index{Python scripts} based scripts have also been added:
-\begin{description}
+\item Some new Python \index{Python scripts} based scripts have also been added:
+  \begin{description}
+  \item[calculate\_sputter\_inner\_target.py]\index{calculate\_sputter\_inner\_target.py} Calculates the physical sputtering to be expected at the inner target in a simulation saved in MDSplus (chapter \ref{cha:MDSplus}) on the solps-mdsplus.aug.ipp.mpg.de server (``-h'' help is provided).
+  \item[calculate\_sputter\_outer\_target.py]\index{calculate\_sputter\_outer\_target.py} Calculates the physical sputtering to be expected at the outer target in a simulation saved in MDSplus (chapter \ref{cha:MDSplus}) on the solps-mdsplus.aug.ipp.mpg.de server (``-h'' help is provided).
+  \item[compare\_2\_solps.py]\index{compare\_2\_solps.py} Compares two SOLPS shots with same dimensions saved in MDSplus (chapter \ref{cha:MDSplus}) on the solps-mdsplus.aug.ipp.mpg.de server (``-h'' help is provided).
   \item[energy\_analysis.py]\index{energy\_analysis.py} Energy
     passing through various surfaces.
   \item[fluid\_core\_fluxes.py \#1 \#2]\index{fluid\_core\_fluxes.py} Total fluid flux
@@ -1708,7 +1709,8 @@ Some new Python \index{Python scripts} based scripts have also been added:
   \item[tereg.py]\index{tereg.py} Average electron temperatures.
   \item[tireg.py]\index{tireg.py} Average ion temperatures.
   \item[zeffreg.py]\index{zeffreg.py} Average $Z_{eff}$.
-\end{description}
+  \end{description}
+\end{itemize}
 
 \paragraph{Still need to do :}
 
