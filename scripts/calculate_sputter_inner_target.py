@@ -6,8 +6,11 @@ import argparse
 import re
 import sputter
 
-parser=argparse.ArgumentParser(description="Calculate sputtering at the outer target", formatter_class=argparse.RawTextHelpFormatter)
-parser.add_argument("--target", "-t", type=str, help="Target material",default='W')
+parser=argparse.ArgumentParser(description="""
+Calculate sputtering at the inner target based on the SOLPS data 
+stored in the MDSplus server solps-mdsplus.aug.ipp.mpg.de
+""", formatter_class=argparse.RawTextHelpFormatter)
+parser.add_argument("--target", "-t", type=str, help="Target material (default W)",default='W')
 parser.add_argument("Shot", type=int, help="Shot number")
 args=parser.parse_args()
 
