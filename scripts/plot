@@ -11,9 +11,9 @@ column.
 Much of its behaviour is determined by its first argument which is of
 the form
 
-  {l}x{lLM}yplot{ |2|3|4|5|6|7|8|9}
+  {dl}x{lLM}yplot{ |2|3|4|5|6|7|8|9}
 
-where 
+where
 
   the presence of "l" before x indicates a logarithmic axis for x
   the presence of "l" before y indicates a logarithmic axis for y
@@ -21,26 +21,32 @@ where
   the presence of "M" before y indicates a double plot with the
   logarithm of y and -y
   the presence of "d" before x indicates that the x values are datestamps
+  if "b" is present anywhere, plot xy-errorbars
   the number after "plot" indicates the number of columns to be plotted
-  if b is present, plot xy-errorbars
 
-after this should be 
+after this should be, in order
 
   labels for each of the columns
   x-axis label
   y-axis label
   plot title
 
+The data file should contain, in order, one first column for the
+x-abscissae values, followed by one column for each data set
+to be plotted, or, if errorbars are requested, one triplet of
+columns with the horizontal errorbar half-width, then the data
+value, then the vertical errobar half-height
+
 A number of environment variables can be used to change the behaviour
-of "plot".
+of "plot"
 
   GNUPLOT_TMP -- if present, indicates where temporary files such as
   gnuplot.cmd and gnuplot.data should be stored
 
   GNUPLOT_DATA -- if present, overrides the name of the data file
-  (default gnuplot.dat)
+  (default gnuplot.data)
 
-  GNUPLOT_CMD -- if present, overrides the name iof the command file
+  GNUPLOT_CMD -- if present, overrides the name of the command file
   (default gnuplot.cmd)
 
   PLOT_FROM_FILE -- if set, specify the file containing the data
@@ -75,15 +81,15 @@ of "plot".
   GNUPLOT_MAX_POINTS -- if set, determine the maximum number of points
   that will be plotted
 
-  GNUPLOT_MAX_POINTS_FACTOR -- reduction fact to be used in reducing
+  GNUPLOT_MAX_POINTS_FACTOR -- reduction factor to be used in reducing
   the number of points to be plotted
-  
+
 If the following file is present, it will affect the behaviour of
-"plot".
+"plot"
 
   GNUPLOT_COUNT -- if present, indicates that multiple pages should be
   stored and the current page number is given by the contents of the
-  file; probably to be used in conjunction with the GNUPLOT_BATCH
+  file; meant to be used in conjunction with the GNUPLOT_BATCH
   environment variable
 
 EOT
