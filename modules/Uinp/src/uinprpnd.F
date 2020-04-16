@@ -56,7 +56,7 @@ c*** 2*2*2 cuts for a single null
           call xerrab ('Too many "non-default surfaces"')
         end if !}
 
-c***  inner left cut, private flux
+c***  Western left cut, private flux
 
         k=k+1
         inump(k)=izc1-1
@@ -64,7 +64,7 @@ c***  inner left cut, private flux
         ilequi(k)=izc1
         ilcol(k)=3
 
-c***  inner right cut, central flux
+c***  Western right cut, central flux
 
         k=k+1
         inump(k)=izc1
@@ -72,7 +72,7 @@ c***  inner right cut, central flux
         ilequi(k)=izc2
         ilcol(k)=3
 
-c***  11: outer right cut, private flux
+c***  11: Eastern right cut, private flux
 
         k=k+1
         inump(k)=izc2+1
@@ -80,7 +80,7 @@ c***  11: outer right cut, private flux
         ilequi(k)=izc1-1
         ilcol(k)=3
 
-c***  12: outer left cut, central flux
+c***  12: Eastern left cut, central flux
 
         k=k+1
         inump(k)=izc2
@@ -88,7 +88,7 @@ c***  12: outer left cut, central flux
         ilequi(k)=izc2+1
         ilcol(k)=3
 
-c***  13: inner left cut, SOL
+c***  13: Western left cut, SOL
 
         k=k+1
         inump(k)=izc1-1
@@ -97,7 +97,7 @@ c***  13: inner left cut, SOL
         ilequi(k)=izc1
         ilcol(k)=3
 
-c***  14: inner right cut, SOL
+c***  14: Western right cut, SOL
 
         k=k+1
         inump(k)=izc1
@@ -106,7 +106,7 @@ c***  14: inner right cut, SOL
         ilequi(k)=izc2
         ilcol(k)=3
 
-c***  15: outer right cut, SOL
+c***  15: Eastern right cut, SOL
 
         k=k+1
         inump(k)=izc2+1
@@ -115,7 +115,7 @@ c***  15: outer right cut, SOL
         ilequi(k)=izc1-1
         ilcol(k)=3
 
-c***  16: outer left cut, SOL
+c***  16: Eastern left cut, SOL
 
         k=k+1
         inump(k)=izc2

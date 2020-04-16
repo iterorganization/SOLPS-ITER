@@ -25,6 +25,7 @@
   NCARG_ROOT = /usr/lib64/ncarg
       NAGDIR =
  MDSPLUS_DIR =
+       MPDIR ?=
 
 #
 # Variables for linking
@@ -44,7 +45,10 @@ LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++ -lC
 #
 
 SOLPS_CPP      = -DNCAR4 -DNO_NAG -DPGF90 -DNOQUAD
+MPI_CPP        = -I${MPDIR}/include
+LD_MPI         = -Mmpi=mpich
 B25_DEFINES    =
+CARRE_DEFINES  =
 EIRENE_DEFINES =
 FFLAGSEXTRA    =
 
@@ -69,11 +73,21 @@ endif
 
 # Build with IMAS if imas module is loaded
 ifdef IMAS_VERSION
-  LD_UAL     = `pkg-config imas-lowlevel imas-pgi --libs`
   UAL_MAJOR_VERSION = $(shell echo ${UAL_VERSION} | cut -d '.' -f1 )
-  GGD_MINOR_VERSION = $(shell echo ${EBVERSIONGGD} | cut -d '.' -f2 )
   IMAS_MAJOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f1 )
   IMAS_MINOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f2 )
+  ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 17; echo $$?),0)
+    GGD_MINOR_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f2 )
+    LD_UAL = `pkg-config imas-pgi ggd --libs`
+  else
+    ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 12; echo $$?),0)
+      GGD_MINOR_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f2 )
+      LD_UAL = `pkg-config imas-pgi --libs` -lggd-pgi
+    else
+      GGD_MINOR_VERSION = 0
+      LD_UAL = `pkg-config imas-lowlevel imas-pgi --libs`
+    endif
+  endif
   SOLPS_CPP += -DIMAS -DUAL_MAJOR_VERSION=${UAL_MAJOR_VERSION} -DIMAS_MINOR_VERSION=${IMAS_MINOR_VERSION} -DGGD_MINOR_VERSION=${GGD_MINOR_VERSION}
   export LD_UAL
 else
@@ -104,6 +118,7 @@ export GLI_HOME
 export NCARG_ROOT
 export NAGDIR
 export MDSPLUS_DIR
+export MPDIR
 
 export LD_NETCDF
 export LD_MSCL
@@ -113,10 +128,14 @@ export LD_NCARG
 export LD_NAG
 export LD_MDSPLUS
 export LD_SONNET
+export LD_MPI
 
 export SOLPS_CPP
+export FFLAGSEXTRA
 export B25_DEFINES
+export CARRE_DEFINES
 export EIRENE_DEFINES
+export MPI_CPP
 
 #!!!Local Variables:
 #!!! mode: Makefile

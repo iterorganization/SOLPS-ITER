@@ -9,15 +9,9 @@ c  version : 28.01.2003 18:08
 
 c=======================================================================
       implicit none
-#ifdef USE_MPI
-      include 'mpif.h'
-#endif
 #include "uinput.inc"
 #include "impcon.inc"
       integer irt, is, iss, iatm, iloc
-#ifdef USE_MPI
-      integer rank_mpi,size_mpi,ierr_mpi
-#endif
       integer ns, i, j, ireg, nreg, len
       real(kind=R8), allocatable :: na0(:)
       character tab
@@ -31,16 +25,6 @@ c=======================================================================
       external find_matching_species
       external prgini,prgend,xerset
 c=======================================================================
-#ifdef USE_MPI
-      call mpi_init(ierr_mpi)
-      call mpi_comm_rank(MPI_COMM_WORLD,rank_mpi,ierr_mpi)
-      call mpi_comm_size(MPI_COMM_WORLD,size_mpi,ierr_mpi)
-      if(rank_mpi .ne. 0) then
-        call mpi_barrier(MPI_COMM_WORLD,ierr_mpi)
-        call mpi_finalize(ierr_mpi)
-        stop 'uinp_mpi_child'
-      endif
-#endif
       call prgini('uinput')
 *   ..mark output unit for error messages
       call xerset (0)
@@ -706,9 +690,5 @@ cxpb Skip this step, use ub2p program instead
 cxpb      call uib2pl
 c=======================================================================
       call prgend ()
-#ifdef USE_MPI
-      call mpi_barrier(MPI_COMM_WORLD,ierr_mpi)
-      call mpi_finalize(ierr_mpi)
-#endif
       stop 'uinp'
       end

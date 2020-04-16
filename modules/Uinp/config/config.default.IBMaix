@@ -8,10 +8,11 @@ ifndef LD_MSCL
 endif
 
 FC       = xlf
+FFLAGS   = -NA16384 -NQ20000
 ifndef SOLPS_DEBUG
-FFLAGS	 = -O -NA16384 -NQ20000
+FFLAGS  += -O
 else
-FFLAGS	 = -g -C -NA16384 -NQ20000
+FFLAGS  += -g -C
 endif
 INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
@@ -19,7 +20,7 @@ CPP      = /lib/cpp
 MOD      = mod
 
 # LDLIBS = -L${SOLPSLIB}
-LDLIBS 	 = ${LD_MSCL}
+LDLIBS   = ${LD_MSCL}
 # LDEXTRA  = -bmap:$(OBJDIR)/uinp.map -bloadmap:$(OBJDIR)/uinp.lmp -bmaxdata:0x80000000
 LDEXTRA  = -bmap:$(OBJDIR)/uinp.map -bloadmap:$(OBJDIR)/uinp.lmp
 

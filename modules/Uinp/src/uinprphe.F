@@ -121,19 +121,20 @@ c<<<
               luind(1)=nx
             else !}{
               write(0,*) 'Both cell ranges for evaluation of He ',
-     ,          'pumping belong to the outer divertor'
+     ,          'pumping belong to the Eastern divertor'
               write(0,*) 'STOP ==> Check the DG model - make sure ',
      ,          'that continuous cell ranges are marked'
-              call xerrab ('Both He pumping ranges in outer divertor')
+              call xerrab ('Both He pumping ranges in Eastern divertor')
             end if !}
           else !}{
             if(k.eq.2) then !{
               if(luwrk(2).le.nxcut1(1)) then !{
                 write(0,*) 'Both cell ranges for evaluation of He ',
-     ,            'pumping belong to the outer divertor'
+     ,            'pumping belong to the Western divertor'
                 write(0,*) 'STOP ==> Check the DG model - make sure ',
      ,            'that continuous cell ranges are marked'
-                call xerrab ('Both He pumping ranges in outer divertor')
+                call xerrab
+     ,           ('Both He pumping ranges in Western divertor')
               end if !}
             else !}{
               luwrk(2)=1

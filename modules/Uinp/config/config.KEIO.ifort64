@@ -11,25 +11,29 @@ else
 FC       = ifort
 endif
 
-COMPILER_MAJOR_VERSION = $(shell ${FC} -V 2>&1 | grep -o "Version [0-9]*" | cut -d' ' -f 2)
+COMPILER_MAJOR_VERSION = $(shell ${FC} -V 2>&1 | grep -o "Version [0-9]*" | cut -d ' ' -f 2 )
 
 ifdef SOLPS_DEBUG
-FFLAGS	 = -g -C -traceback -debug all -check all
+FFLAGS   = -g -C -traceback -debug all -check all
 endif
 ifdef SOLPS_OPENMP
+ifdef USE_MPI
+FFLAGS  += -fopenmp
+else
 ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -ge 15; echo $$?),0)
 FFLAGS  += -qopenmp
 else
 FFLAGS  += -openmp
 endif
 endif
+endif
 
 INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
-CPP	     = /lib/cpp -traditional
+CPP      = /lib/cpp -traditional
 
 MOD      = mod
-LDLIBS	 = ${LD_MSCL}
+LDLIBS   = ${LD_MSCL}
 LDEXTRA  =
 ifdef USE_MPI
 LDLIBS  += ${LD_MPI}
