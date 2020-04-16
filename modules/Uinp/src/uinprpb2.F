@@ -1109,14 +1109,15 @@ c*** j_h_at,l_h_mol
 #ifdef DBG
         print *,'uinprpb2: PFR fluxes',npfrgrp
         if(npfrgrp.gt.0) then !{
-          print '(1x,a8,3h : ,10a10)','gpfrgrp',
+          print '(1x,a11,10a10)','gpfrgrp : ',
      ,                                         (gpfrgrp(i),i=1,npfrgrp)
-          print '(1x,a8,3h : ,i6,9i10)','ipfrgrp',
+          print '(1x,a11,i6,9i10)','ipfrgrp : ',
      ,                                         (ipfrgrp(i),i=1,npfrgrp)
-          print '(1x,a8,3h : ,i6,9i10)','jpfrgrp',
+          print '(1x,a11,i6,9i10)','jpfrgrp : ',
      ,                                         (jpfrgrp(i),i=1,npfrgrp)
-          if(jpfrgrp(npfrgrp).gt.0) print '(1x,a8,20i4/(9x,20i4))',
-     ,                      'lpfrgrp',(lpfrgrp(i),i=1,jpfrgrp(npfrgrp))
+          if(jpfrgrp(npfrgrp).gt.0)
+     ,     print '(1x,a11,20i4/(12x,20i4))',
+     ,                   'lpfrgrp : ',(lpfrgrp(i),i=1,jpfrgrp(npfrgrp))
         end if !}
 #endif
         iniprm(1,1,1,13,7)=npfrgrp

@@ -18,7 +18,7 @@ Program nc2text_simple
   Logical :: use_index = .false.
   Integer, Allocatable  :: dimlen(:)
   Real(R8), Allocatable :: rdata(:,:)
-  Character(LEN = 13) :: hlp_frm
+  Character(LEN = 16) :: hlp_frm
   Character(Len = 256) :: filename, varname
   Character(Len = MAXNCNAM) :: dimnam
   !-----------------------------------------------------------------------------
@@ -58,6 +58,12 @@ Program nc2text_simple
   Select Case (vartyp)
   Case (NCDOUBLE)
      Select Case (nvdims)
+     Case (0)
+        Allocate(rdata(1,1))
+        i1 = 1
+        i2 = 1
+        j1 = 1
+        j2 = 1
      Case (1)
         Allocate(rdata(dimlen(1),1))
         itmp = i1
@@ -69,7 +75,7 @@ Program nc2text_simple
      Case (2)
         Allocate(rdata(dimlen(1),dimlen(2)))
      Case Default
-        Write(*,*) "Error: Only 1 and 2 dimensional arrays supported"
+        Write(*,*) "Error: Only scalars, 1 and 2 dimensional arrays supported"
         Stop
      End Select
      iret = NF_GET_VAR_DOUBLE(ncid,varid,rdata)
@@ -105,7 +111,7 @@ Program nc2text_simple
   Endif
 
   ! Output
-  Write(hlp_frm,'(a,i4,a)') '(',i2-i1+1,'e18.10/)'
+  Write(hlp_frm,'(a,i4,a)') '(1p,',i2-i1+1,'e18.10)'
   Do j = j1,j2
      Write(*,hlp_frm) (rdata(i,j),i=i1,i2)
   Enddo
@@ -237,26 +243,26 @@ Contains
   !-----------------------------------------------------------------------------
   
   Subroutine Print_help()
-    Write(*,*) ' '
-    Write(*,*) 'usage: nc2text_simple [OPTIONS] filename variable(i1:i2,j1:j2)'
-    Write(*,*) ' '
-    Write(*,*) 'Outputs variable from netcdf file'
-    Write(*,*) ' '
-    Write(*,*) '   OPTION -n #, number of columns to display data in. This arg accepted but ignored for compatibility'
-    Write(*,*) ' '
-    Write(*,*) "   Optional syntax 'variable(i1:i2,j1:j2)' can return a range"
-    Write(*,*) ' '
-    Write(*,*) '   Missing i1..j2 will evaluate as array bounds'
-    Write(*,*) '   Ranges start from 1'
-    Write(*,*) '   Zero or regative subscripts count from end of array'
-    Write(*,*) ' '
-    Write(*,*) 'Current restrictions: only 1D and 2D arrays of type double supported'
-    Write(*,*) ' '
-    Write(*,*) 'Examples:'    
-    Write(*,*) '   nc2text_simple b2time.nc tesepa'
-    Write(*,*) '   nc2text_simple -n 999999 b2time.nc tesepa'
-    Write(*,*) "   nc2text_simple b2time.nc 'tesepa(1)'"
-    Write(*,*) "   nc2text_simple b2time.nc 'fn3dl(-9:-0,:)'"
+    Write(*,'(a)') ' '
+    Write(*,'(a)') 'usage: nc2text_simple [OPTIONS] filename variable(i1:i2,j1:j2)'
+    Write(*,'(a)') ' '
+    Write(*,'(a)') 'Outputs variable from netcdf file'
+    Write(*,'(a)') ' '
+    Write(*,'(a)') '   OPTION -n #, number of columns to display data in. This arg accepted but ignored for compatibility'
+    Write(*,'(a)') ' '
+    Write(*,'(a)') "   Optional syntax 'variable(i1:i2,j1:j2)' can return a range"
+    Write(*,'(a)') ' '
+    Write(*,'(a)') '   Missing i1..j2 will evaluate as array bounds'
+    Write(*,'(a)') '   Ranges start from 1'
+    Write(*,'(a)') '   Zero or regative subscripts count from end of array'
+    Write(*,'(a)') ' '
+    Write(*,'(a)') 'Current restrictions: only scalars, 1D and 2D arrays of type double supported'
+    Write(*,'(a)') ' '
+    Write(*,'(a)') 'Examples:'
+    Write(*,'(a)') '   nc2text_simple b2time.nc tesepa'
+    Write(*,'(a)') '   nc2text_simple -n 999999 b2time.nc tesepa'
+    Write(*,'(a)') "   nc2text_simple b2time.nc 'tesepa(1)'"
+    Write(*,'(a)') "   nc2text_simple b2time.nc 'fn3dl(-9:-0,:)'"
     
     Return
   End Subroutine Print_help
