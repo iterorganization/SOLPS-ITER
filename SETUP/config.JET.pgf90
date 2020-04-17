@@ -19,12 +19,12 @@
 
        NCDIR ?= /usr/local/depot/netcdf-4.4.1-pgi-14.4
    MSCL_ROOT ?= /common/SOLPS-ITER/OBJECTCODE/linux_pgf95/mscl
-       H5DIR ?= 
+       H5DIR ?=
      GR_ROOT ?= /common/SOLPS-ITER/OBJECTCODE/linux_pgf95/gr
     GLI_HOME ?= /common/SOLPS-ITER/OBJECTCODE/linux_pgf95/gks
   NCARG_ROOT ?= /common/SOLPS-ITER/OBJECTCODE/linux_pgf95/NCARG
       NAGDIR ?= /usr/local/depot/NAGMark24/fll6a24dp
- MDSPLUS_DIR ?= 
+ MDSPLUS_DIR ?=
        MPDIR ?=
 
 #

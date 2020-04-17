@@ -1,6 +1,6 @@
 #
 # Specify paths to root-directories of following libraries on your system
-#  
+#
 # Special notes:
 #
 # If you have NCAR version 3 on your system:
@@ -17,14 +17,14 @@
 # Add -DNAG22 to SOLPS_CPP
 #
 
-#       NCDIR ?= 
+#       NCDIR ?=
 #   MSCL_ROOT ?=
-#       H5DIR ?= 
-#     GR_ROOT ?= 
-#    GLI_HOME ?= 
-#  NCARG_ROOT ?= 
-#      NAGDIR ?= 
-# MDSPLUS_DIR ?= 
+#       H5DIR ?=
+#     GR_ROOT ?=
+#    GLI_HOME ?=
+#  NCARG_ROOT ?=
+#      NAGDIR ?=
+# MDSPLUS_DIR ?=
 
        NCDIR ?= /home/sunny2216/solps5.0_old/solps5.0/solps5.0/src/lib/linux.ifort64
    MSCL_ROOT ?= /home/sunny2216/solps5.0_old/solps5.0/solps5.0/src/lib/linux.ifort64
@@ -66,7 +66,7 @@ LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 SOLPS_CPP      = -DNCAR4
 B25_DEFINES    =
 CARRE_DEFINES  =
-EIRENE_DEFINES = 
+EIRENE_DEFINES =
 FFLAGSEXTRA    =
 
 # Autodetected optional features...

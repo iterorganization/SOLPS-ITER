@@ -3788,12 +3788,12 @@ prospective users are urged to read the {\em entire} section below carefully
 before proceeding to use it. As a summary, however, the sequence of steps to
 be followed for a succesful conversion is:
 \begin{enumerate}
-  \item[1] Create a new case directory: {\tt \$SOLPSWORK/<my\_new\_case>}
+  \item[1] Create a new case directory: {\tt \$SOLPSWORK/<my\_new\_case>}.
   \item[2] In the new case directory, create subdirectories {\tt baserun} and {\tt convert} as well as a run subdirectory ({\tt <my\_run>}). {\tt baserun} and {\tt convert} are special names and should not be changed.
   \item[3] Copy from your old case to the new case's {\tt convert} directory all input and output files you wish to have converted. You may copy {\tt baserun} files that you know will not be converted to the new case's {\tt baserun} directory instead.
-  \item[4] Check and correct as necessary the relative ages of the input files.
-  \item[5] Run the {\tt b2yt} converter
-  \item[6] Displace the converted case input files to the converted case {\tt baserun} and run directories
+  \item[4] Check and correct as necessary the relative ages of the input files, for which you can use the {\tt correct\_b2yt\_timestamps} script.
+  \item[5] Run the {\tt b2yt} converter.
+  \item[6] Displace the converted case input files to the converted case {\tt baserun} and run directories, for which you can use the {\tt import\_files\_from\_convert} script.
 \end{enumerate}
 
 The {\tt b2yt} utility program allows a user to take a {\tt b2fstate} solution file
@@ -3809,12 +3809,12 @@ file. The {\tt b2yt.dat} file should contain, for example:
 'solps_version'  'iter'
 'eirene_format'  'iter'
 \end{verbatim}
-with any optional switches mentioned afterwards, to create a solution on an $8 \times 8$ grid.
+with any optional switches mentioned afterwards, here to create a solution on an $8 \times 8$ grid.
 
 A solution for non-commensurate grids is also available, requiring
 instead that the topology of the two solutions be the same, and works by 2-D
 interpolation of the plasma data in the computational domain, by region. This is
-activated with the 'b2ytdr\_non\_commensurate' option set to '1' in {\tt b2yt.dat}. This option should also be used when the overall grid size remains the same but the location and/or depth of the cuts has changed.
+activated with the 'b2ytdr\_non\_commensurate' option set to '1' in {\tt b2yt.dat}. This option should also be used when the overall grid size remains the same but the location and/or depth of the cuts has changed, or when mapping a lower single-null (LSN) case to an upper single-null (USN) case or vice versa (or between USN-like and LSN-like limiter geometries). When switching between USN and LSN, the solution will be mirror-reflected to keep the inboard and outboard divertor solutions in the correct geometrical locations.
 
 The conversion of the {\tt Eirene} input file additionally requires for the converter program to know the original version of {\tt Eirene} with which the input file was used, and this is provided by means of the 'eirene\_format' switch. Its possible values (case-insensitive) are:
 \begin{description}
@@ -3848,7 +3848,7 @@ This is important because the parallel velocity is co-aligned with the magnetic 
 
 {\tt b2yt} may also be used
 to change the order of species (for example changing from $D+C+He$ to $D+He+C$) or for
-bundling, de-bundling or re-bundling species, or even removing species and complete
+bundling, de-bundling, or re-bundling species, or even removing species and complete
 isonuclear sequences. It is however not possible to use this converter to {\em add}
 a new isonuclear sequence. When modifying the species data, the user
 should run {\tt b2ar} with the new species arrangement before running {\tt b2yt}
@@ -3858,9 +3858,9 @@ after renaming it {\tt b2ah.dat}) and {\tt b2ar} before re-launching the run.
 
 If a new geometry is requested, the {\tt b2yt} program should be run after the
 new geometry file ($nx1 \times ny1$) has
-been produced and is available in the run or {\tt baserun} directories as {\tt b2fgmtry}.
+been produced and is available in the {\tt convert} or {\tt baserun} directories as {\tt b2fgmtry}. If converting a linear case, it is possible to move the location of the nominal separatrix on the new grid by means of the {\tt b2ytdr\_jsep1} switch in {\tt b2yt.dat}.
 The old geometry file should also remain available in
-the run directory as {\tt b2fgmtry.old}. If this is a coupled case and the number of
+the {\tt convert} directory as {\tt b2fgmtry.old}. If this is a coupled case and the number of
 triangles for the {\tt Eirene} grid remains the same, the new {\tt fort.33}, {\tt fort.34}
 and {\tt fort.35} files corresponding
 to the new geometry should also be provided. If, however, the number of triangles between the

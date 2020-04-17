@@ -61,7 +61,7 @@ LD_MPI     =
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNO_NAG -DNETCDF4_3 -DNCAR4
+SOLPS_CPP      = -DNO_NAG -DNCAR4
 #SOLPS_CPP     = -DNO_NAG
 B25_DEFINES    =
 CARRE_DEFINES  =
@@ -73,7 +73,7 @@ MPI_CPP        =
 
 # Build with NetCDF tools if available
 ifdef LD_NETCDF
-  SOLPS_CPP   += -DCDF_MOVIE
+  SOLPS_CPP   += -DCDF_MOVIE -DNETCDF4_3
 else
   SOLPS_CPP   += -DNO_CDF
 endif
