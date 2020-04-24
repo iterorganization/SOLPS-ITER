@@ -57,6 +57,7 @@ case "freia*.hpc.l":
   breaksw
 case "*.mech.kuleuven.be":
 case "*.icts.leuven.vsc":
+case "*.hpc.kuleuven.be":
   echo LEUVEN
   breaksw
 case "*.pppl.gov":

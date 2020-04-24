@@ -45,7 +45,7 @@ LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNCAR4 -DMDSPLUS -DNETCDF4_3
+SOLPS_CPP      = -DNCAR4
 B25_DEFINES    =
 CARRE_DEFINES  =
 EIRENE_DEFINES =
@@ -55,7 +55,7 @@ FFLAGSEXTRA    =
 
 # Build with NetCDF tools if available
 ifdef LD_NETCDF
-  SOLPS_CPP   += -DCDF_MOVIE
+  SOLPS_CPP   += -DCDF_MOVIE -DNETCDF4_3
 else
   SOLPS_CPP   += -DNO_CDF
 endif

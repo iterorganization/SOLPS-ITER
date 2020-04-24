@@ -3,6 +3,21 @@ set prefix=""
 set suffix=""
 set digits=1
 restart:
+if ("$1" == "-h") then
+  echo 'The basic version counts from $1 to $2 in increments of $3.'
+  echo 'The defaults are:'
+  echo '  $1: 1'
+  echo '  $2: 10'
+  echo '  $3: 1'
+  echo 'Additional options are:'
+  echo ' -h      this help'
+  echo ' -p STR  prefix the output with STR'
+  echo ' -s STR  suffix the output with STR'
+  echo ' -d INT  use at least INT digits to write the number, zero-filling'
+  echo ' -n INT  same as -d option'
+  echo 'A special case is when 4 arguments are supplied -- then $4 will be written instead of the usual output'
+  exit
+endif
 if ("$1" == "-p") then
   set prefix=$2
   shift ; shift
@@ -18,7 +33,7 @@ if ("$1" == "-d" || "$1" == "-n") then
   shift ; shift
   goto restart
 endif
-if ("$1" == "") then
+if ($1 == "") then
   set start=1
 else
   set start="$1"
@@ -33,7 +48,7 @@ if ($3 == "") then
 else
   set inc=$3
 endif
-set i="$1"
+set i=$start
 if ($inc > 0) then
   while ($i <= $end)
     if ($4 == "") then
