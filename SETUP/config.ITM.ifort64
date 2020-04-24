@@ -79,7 +79,7 @@ ifdef IMAS_VERSION
   IMAS_MINOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f2 )
   ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 15; echo $$?),0)
     GGD_MINOR_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f2 )
-    LD_UAL = `pkg-config imas-ifort ggd --libs` -lxml2 -lstdc++
+    LD_UAL = `pkg-config imas-ifort ggd amns --libs` -lxml2 -lstdc++
   else
     ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 12; echo $$?),0)
       GGD_MINOR_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f2 )
@@ -89,13 +89,13 @@ ifdef IMAS_VERSION
       LD_UAL = `pkg-config imas-lowlevel imas-ifort --libs` -lxml2 -lstdc++
     endif
   endif
-  SOLPS_CPP += -DIMAS -DUAL_MAJOR_VERSION=${UAL_MAJOR_VERSION} -DIMAS_MINOR_VERSION=${IMAS_MINOR_VERSION} -DGGD_MINOR_VERSION=${GGD_MINOR_VERSION}
+  SOLPS_CPP += -DIMAS -DAMNS -DUAL_MAJOR_VERSION=${UAL_MAJOR_VERSION} -DIMAS_MINOR_VERSION=${IMAS_MINOR_VERSION} -DGGD_MINOR_VERSION=${GGD_MINOR_VERSION}
   export LD_UAL
 else
  ifdef ITM_ENVIRONMENT_LOADED
   LD_UAL = -L${UAL}/lib -Wl,-rpath=${ITM_ITMTYPES_DIR}/${ITM_ITMTYPES_VERSION}/lib/amd64_intel_17 -L${ITM_ITMTYPES_DIR}/${ITM_ITMTYPES_VERSION}/lib/amd64_intel_17 -litmtypes
   UAL_MAJOR_VERSION = $(shell echo ${UAL_VERSION} | cut -d '.' -f1 )
-  SOLPS_CPP += -DUAL_MAJOR_VERSION=${UAL_MAJOR_VERSION}
+  SOLPS_CPP += -DUAL_MAJOR_VERSION=${UAL_MAJOR_VERSION} -DGOT_AMNSPROTO
   export LD_UAL
  else
   UAL_MAJOR_VERSION = 0

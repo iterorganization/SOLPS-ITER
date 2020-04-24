@@ -2228,7 +2228,7 @@ The allowable choices for the {\bf flag} switch are:
 \item["adpak"]\index{ADPAK} A complete atomic physics package with scaling law rates applicable to all charge states, but not always of high accuracy \cite{ADPAK}
 \item["strahl"]\index{STRAHL} A collisional-radiative package developed at IPP--Garching \cite{BEHRINGER87A}, stored in the {\tt stra.dat}\index{stra.dat} file
 \item["adas"]\index{ADAS} (Atomic Data and Analysis Structure) A complete collisional-radiative atomic physics database, actively being maintained and upgraded \cite{ADAS,ADAS2006}. Recommended. Available at \href{http://adas.phys.strath.ac.uk/}{http://adas.phys.strath.ac.uk/}
-\item["amns"]\index{AMNS} (Atomic, Molecular, Nuclear, and Surface data) For ITM-environment runs only, uses access to the ITM AMNS tools and database
+\item["amns"]\index{AMNS} (Atomic, Molecular, Nuclear, and Surface data) For IMAS and ITM environment runs only, uses access to the AMNS tools and database
 \end{description}
 
 \index{Weisheit}
@@ -17748,12 +17748,13 @@ if desired, be declared as part of either the \${\tt SOLPS\_CPP} or the
 \${\tt SOLPSTOP/SETUP/config.}\${\tt {HOST\_NAME}.}\${\tt {COMPILER}(.local)} files.
 
 \begin{description}
+\item[AMNS] \index{AMNS} Links to AMNS database in IMAS environment
 \item[ASTRA] \index{ASTRA} To be used if one wishes to run in coupled mode with the core transport code {\tt ASTRA}
 \item[CDF\_MOVIE] \index{CDF\_MOVIE} To be used if {\tt CDF} movie output is desired (turned on by default if the NetCDF library is present)
 \item[CLASSICAL\_CURRENT] \index{CLASSICAL\_CURRENT} Turns on classical current drift term
 \item[COMPLICATED] \index{COMPLICATED} Uses a more "complicated" model for feedback schemes
 \item[EASY] \index{EASY} Uses the "easy" model for chord integration
-\item[GOT\_AMNSPROTO] \index{GOT\_AMNSPROTO} Links to AMNS database
+\item[GOT\_AMNSPROTO] \index{GOT\_AMNSPROTO} Links to AMNS database in ITM environment
 \item[JET] \index{JET} Enables some additional output for coupling to the JET post-processor
 \item[NO\_21] \index{NO\_21} Do not use 21-moment model for thermal and viscous forces
 \item[NO\_IEEE] \index{NO\_IEEE} Provides replacements to IEEE non-standard arithmetic routines
@@ -17831,6 +17832,8 @@ ALLOCATE\_AND\_NAMELIST & modules/b2mod\_user\_namelist.F \\
 ALLOCATE\_AND\_NAMELIST & modules/b2mod\_wall.F \\
 ALLOCATE\_AND\_NAMELIST & postprocessing/b2yt\_wall.F \\
 ALLOCATE\_AND\_NAMELIST & sources/b2stbr.F \\
+AMNS & preprocessing/b2ardr.F \\
+AMNS & utility/ratadas.F \\
 ASTRA & modules/b2mod\_astra\_to\_b2.F \\
 ASTRA & sources/b2stbc\_phys.F \\
 ASTRA & sources/b2stbr.F \\
@@ -17931,6 +17934,7 @@ GFORTRAN & utility/ma28copy3.F \\
 GFORTRAN & utility/ma28copy4.F \\
 GGD\_MINOR\_VERSION & ids/b2mod\_ual\_io.F90 \\
 GGD\_MINOR\_VERSION & ids/b2mod\_ual\_io\_grid.F90 \\
+GOT\_AMNSPROTO & preprocessing/b2ardr.F \\
 GOT\_AMNSPROTO & utility/ratadas.F \\
 HITS\_PER\_CHORD & b2plot/process\_chords.F \\
 HITS\_PER\_CHORD & b2plot/process\_eirene\_chords.F \\
@@ -17943,6 +17947,8 @@ IMAS & ids/b2mod\_ual\_io\_data.F90 \\
 IMAS & ids/b2mod\_ual\_io\_grid.F90 \\
 IMAS & ids/b2mod\_ual\_io.F90 \\
 IMAS & ids/b2\_ual\_write.F90 \\
+IMAS & preprocessing/b2ardr.F \\
+IMAS & utility/ratadas.F \\
 IMAS\_MINOR\_VERSION & ids/b2mod\_ual.F90 \\
 IMAS\_MINOR\_VERSION & ids/b2mod\_ual\_io.F90 \\
 IMAS\_MINOR\_VERSION & ids/b2mod\_ual\_io\_data.F90 \\
@@ -17950,7 +17956,6 @@ IMAS\_MINOR\_VERSION & ids/b2mod\_ual\_io\_grid.F90 \\
 IMAS\_MINOR\_VERSION & ids/b2\_ual\_write.F90 \\
 IMAS\_MINOR\_VERSION & ids/b2\_ual\_write\_b2mod.F90 \\
 ITM & preprocessing/b2ardr.F \\
-ITM & preprocessing/b2arin.F \\
 ITM & utility/ratadas.F \\
 ITM\_ENVIRONMENT\_LOADED & ids/b2mod\_ual.F90 \\
 ITM\_ENVIRONMENT\_LOADED & ids/b2mod\_ual\_io\_data.F90 \\

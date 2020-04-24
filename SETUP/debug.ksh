@@ -17,6 +17,7 @@ if [[ -n "$SOLPS_PATH" ]]; then
   export   SOLPS_PATH=`echo $SOLPS_PATH | sed "s|${HOST_NAME}.${COMPILER}.mpi:|${HOST_NAME}.${COMPILER}.mpi.debug:|g"`
   export   SOLPS_PATH=`echo $SOLPS_PATH | sed "s|${HOST_NAME}.${COMPILER}:|${HOST_NAME}.${COMPILER}.debug:|g"`
   export   PATH=${SOLPS_PATH}:${OLD_PATH}
+  export   IMAS_AMNS_DEBUG=yes
   export   SOLPS_DEBUG=yes
   export   I_MPI_DEBUG=5
   export   PMI_DEBUG=1

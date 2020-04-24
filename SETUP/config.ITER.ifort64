@@ -75,7 +75,7 @@ ifdef IMAS_VERSION
   IMAS_MINOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f2 )
   ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 17; echo $$?),0)
     GGD_MINOR_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f2 )
-    LD_UAL = `pkg-config imas-ifort ggd --libs` -Wl,-rpath,${IMAS_PREFIX}/lib
+    LD_UAL = `pkg-config imas-ifort ggd amns --libs` -Wl,-rpath,${IMAS_PREFIX}/lib
   else
     ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 12; echo $$?),0)
       GGD_MINOR_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f2 )
@@ -85,7 +85,7 @@ ifdef IMAS_VERSION
       LD_UAL = `pkg-config imas-lowlevel imas-ifort --libs` -Wl,-rpath,${IMAS_PREFIX}/lib
     endif
   endif
-  SOLPS_CPP += -DIMAS -DUAL_MAJOR_VERSION=${UAL_MAJOR_VERSION} -DIMAS_MINOR_VERSION=${IMAS_MINOR_VERSION} -DGGD_MINOR_VERSION=${GGD_MINOR_VERSION}
+  SOLPS_CPP += -DIMAS -DAMNS -DUAL_MAJOR_VERSION=${UAL_MAJOR_VERSION} -DIMAS_MINOR_VERSION=${IMAS_MINOR_VERSION} -DGGD_MINOR_VERSION=${GGD_MINOR_VERSION}
   export LD_UAL
 else
   UAL_MAJOR_VERSION = 0
