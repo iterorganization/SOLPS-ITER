@@ -1614,7 +1614,7 @@ extracted from the {\tt run.log} file.
   \item[correct\_b2yt\_timestamps]\index{correct\_b2yt\_timestamps}\index{b2yt}
     Makes sure the timestamps for the start-up files in the current
     directory are in the right chronological order for the {\tt b2yt} converter.
-  \item[count]\index{count}
+  \item[count]\index{count} Basic counting with advanced options (``count -h'' for help).
   \item[d2d]\index{d2d} Doubles the resolution of the {\tt DG} equilibrium file (see Sec.~\ref{sec:equtrn}).
   \item[d2e]\index{d2e} Converts {\tt DG} equilibrium files to {\tt EFIT} format (see Sec.~\ref{sec:equtrn}).
   \item[d2v]\index{d2v} Converts {\tt DG} equilibrium files to {\tt Carre} format (see Sec.~\ref{sec:equtrn}).
@@ -1682,10 +1682,11 @@ extracted from the {\tt run.log} file.
   \item[ustcsubmit]\index{ustcsubmit} Command file to launch runs on the USTC computer cluster. See Section \ref{b2run} for details.
   \item[v2d]\index{v2d} Converts {\tt Carre} format equilibrium files to {\tt DG} format (see Sec.~\ref{sec:equtrn}).
   \end{description}
-\end{itemize}
-
-Some new Python \index{Python scripts} based scripts have also been added:
-\begin{description}
+\item Some new Python \index{Python scripts} based scripts have also been added:
+  \begin{description}
+  \item[calculate\_sputter\_inner\_target.py]\index{calculate\_sputter\_inner\_target.py} Calculates the physical sputtering to be expected at the inner target in a simulation saved in MDSplus (chapter \ref{cha:MDSplus}) on the solps-mdsplus.aug.ipp.mpg.de server (``-h'' help is provided).
+  \item[calculate\_sputter\_outer\_target.py]\index{calculate\_sputter\_outer\_target.py} Calculates the physical sputtering to be expected at the outer target in a simulation saved in MDSplus (chapter \ref{cha:MDSplus}) on the solps-mdsplus.aug.ipp.mpg.de server (``-h'' help is provided).
+  \item[compare\_2\_solps.py]\index{compare\_2\_solps.py} Compares two SOLPS shots with same dimensions saved in MDSplus (chapter \ref{cha:MDSplus}) on the solps-mdsplus.aug.ipp.mpg.de server (``-h'' help is provided).
   \item[energy\_analysis.py]\index{energy\_analysis.py} Energy
     passing through various surfaces.
   \item[fluid\_core\_fluxes.py \#1 \#2]\index{fluid\_core\_fluxes.py} Total fluid flux
@@ -1708,7 +1709,8 @@ Some new Python \index{Python scripts} based scripts have also been added:
   \item[tereg.py]\index{tereg.py} Average electron temperatures.
   \item[tireg.py]\index{tireg.py} Average ion temperatures.
   \item[zeffreg.py]\index{zeffreg.py} Average $Z_{eff}$.
-\end{description}
+  \end{description}
+\end{itemize}
 
 \paragraph{Still need to do :}
 
@@ -2228,7 +2230,7 @@ The allowable choices for the {\bf flag} switch are:
 \item["adpak"]\index{ADPAK} A complete atomic physics package with scaling law rates applicable to all charge states, but not always of high accuracy \cite{ADPAK}
 \item["strahl"]\index{STRAHL} A collisional-radiative package developed at IPP--Garching \cite{BEHRINGER87A}, stored in the {\tt stra.dat}\index{stra.dat} file
 \item["adas"]\index{ADAS} (Atomic Data and Analysis Structure) A complete collisional-radiative atomic physics database, actively being maintained and upgraded \cite{ADAS,ADAS2006}. Recommended. Available at \href{http://adas.phys.strath.ac.uk/}{http://adas.phys.strath.ac.uk/}
-\item["amns"]\index{AMNS} (Atomic, Molecular, Nuclear, and Surface data) For ITM-environment runs only, uses access to the ITM AMNS tools and database
+\item["amns"]\index{AMNS} (Atomic, Molecular, Nuclear, and Surface data) For IMAS and ITM environment runs only, uses access to the AMNS tools and database
 \end{description}
 
 \index{Weisheit}
@@ -3789,12 +3791,12 @@ prospective users are urged to read the {\em entire} section below carefully
 before proceeding to use it. As a summary, however, the sequence of steps to
 be followed for a succesful conversion is:
 \begin{enumerate}
-  \item[1] Create a new case directory: {\tt \$SOLPSWORK/<my\_new\_case>}
+  \item[1] Create a new case directory: {\tt \$SOLPSWORK/<my\_new\_case>}.
   \item[2] In the new case directory, create subdirectories {\tt baserun} and {\tt convert} as well as a run subdirectory ({\tt <my\_run>}). {\tt baserun} and {\tt convert} are special names and should not be changed.
   \item[3] Copy from your old case to the new case's {\tt convert} directory all input and output files you wish to have converted. You may copy {\tt baserun} files that you know will not be converted to the new case's {\tt baserun} directory instead.
-  \item[4] Check and correct as necessary the relative ages of the input files.
-  \item[5] Run the {\tt b2yt} converter
-  \item[6] Displace the converted case input files to the converted case {\tt baserun} and run directories
+  \item[4] Check and correct as necessary the relative ages of the input files, for which you can use the {\tt correct\_b2yt\_timestamps} script.
+  \item[5] Run the {\tt b2yt} converter.
+  \item[6] Displace the converted case input files to the converted case {\tt baserun} and run directories, for which you can use the {\tt import\_files\_from\_convert} script.
 \end{enumerate}
 
 The {\tt b2yt} utility program allows a user to take a {\tt b2fstate} solution file
@@ -3810,12 +3812,12 @@ file. The {\tt b2yt.dat} file should contain, for example:
 'solps_version'  'iter'
 'eirene_format'  'iter'
 \end{verbatim}
-with any optional switches mentioned afterwards, to create a solution on an $8 \times 8$ grid.
+with any optional switches mentioned afterwards, here to create a solution on an $8 \times 8$ grid.
 
 A solution for non-commensurate grids is also available, requiring
 instead that the topology of the two solutions be the same, and works by 2-D
 interpolation of the plasma data in the computational domain, by region. This is
-activated with the 'b2ytdr\_non\_commensurate' option set to '1' in {\tt b2yt.dat}. This option should also be used when the overall grid size remains the same but the location and/or depth of the cuts has changed.
+activated with the 'b2ytdr\_non\_commensurate' option set to '1' in {\tt b2yt.dat}. This option should also be used when the overall grid size remains the same but the location and/or depth of the cuts has changed, or when mapping a lower single-null (LSN) case to an upper single-null (USN) case or vice versa (or between USN-like and LSN-like limiter geometries). When switching between USN and LSN, the solution will be mirror-reflected to keep the inboard and outboard divertor solutions in the correct geometrical locations.
 
 The conversion of the {\tt Eirene} input file additionally requires for the converter program to know the original version of {\tt Eirene} with which the input file was used, and this is provided by means of the 'eirene\_format' switch. Its possible values (case-insensitive) are:
 \begin{description}
@@ -3849,7 +3851,7 @@ This is important because the parallel velocity is co-aligned with the magnetic 
 
 {\tt b2yt} may also be used
 to change the order of species (for example changing from $D+C+He$ to $D+He+C$) or for
-bundling, de-bundling or re-bundling species, or even removing species and complete
+bundling, de-bundling, or re-bundling species, or even removing species and complete
 isonuclear sequences. It is however not possible to use this converter to {\em add}
 a new isonuclear sequence. When modifying the species data, the user
 should run {\tt b2ar} with the new species arrangement before running {\tt b2yt}
@@ -3859,9 +3861,9 @@ after renaming it {\tt b2ah.dat}) and {\tt b2ar} before re-launching the run.
 
 If a new geometry is requested, the {\tt b2yt} program should be run after the
 new geometry file ($nx1 \times ny1$) has
-been produced and is available in the run or {\tt baserun} directories as {\tt b2fgmtry}.
+been produced and is available in the {\tt convert} or {\tt baserun} directories as {\tt b2fgmtry}. If converting a linear case, it is possible to move the location of the nominal separatrix on the new grid by means of the {\tt b2ytdr\_jsep1} switch in {\tt b2yt.dat}.
 The old geometry file should also remain available in
-the run directory as {\tt b2fgmtry.old}. If this is a coupled case and the number of
+the {\tt convert} directory as {\tt b2fgmtry.old}. If this is a coupled case and the number of
 triangles for the {\tt Eirene} grid remains the same, the new {\tt fort.33}, {\tt fort.34}
 and {\tt fort.35} files corresponding
 to the new geometry should also be provided. If, however, the number of triangles between the
@@ -8285,12 +8287,16 @@ q_a^{(0)} = q_{a\parallel}^{(0)} +
 
 $
 \widetilde{\tau}_a =
-\frac{\tau_a}{1+\frac{15.12\cdot 10^{16}\left(\frac{T_i}
+\frac{\tau_a^{(Br)}}{1+\frac{15.12\cdot 10^{16}\left(\frac{T_i}
 e\right)^2}{c(y) \sum \limits^{ns-1}_{a=0} z_a^2 n_a}}
 \cdot
 \frac 1 {1 +
 \frac{15.12 \cdot 10^{16} \cdot \varepsilon^{3/2} \left( \frac{T_i} e \right)^2}
-{c(y) \sum \limits^{ns-1}_{a=0} z_a^2 n_a}}
+{c(y) \sum \limits^{ns-1}_{a=0} z_a^2 n_a}}$, \ \ \ \
+$
+\tau_a^{(Br)} = \frac{3}{4 \sqrt{\pi} }
+\frac{ \sqrt{m_a} T_i^{\frac{3}{2}} }{ z_a^2 z_{eff} n_e \ln \Lambda }
+\left( \frac{ 4 \pi \epsilon_0 }{e²} \right)^2
 $
 
 This correction is compatible {\bf only} with plateau and banana correction ('b2trcl\_lluciani' set to '3').
@@ -17748,12 +17754,13 @@ if desired, be declared as part of either the \${\tt SOLPS\_CPP} or the
 \${\tt SOLPSTOP/SETUP/config.}\${\tt {HOST\_NAME}.}\${\tt {COMPILER}(.local)} files.
 
 \begin{description}
+\item[AMNS] \index{AMNS} Links to AMNS database in IMAS environment
 \item[ASTRA] \index{ASTRA} To be used if one wishes to run in coupled mode with the core transport code {\tt ASTRA}
 \item[CDF\_MOVIE] \index{CDF\_MOVIE} To be used if {\tt CDF} movie output is desired (turned on by default if the NetCDF library is present)
 \item[CLASSICAL\_CURRENT] \index{CLASSICAL\_CURRENT} Turns on classical current drift term
 \item[COMPLICATED] \index{COMPLICATED} Uses a more "complicated" model for feedback schemes
 \item[EASY] \index{EASY} Uses the "easy" model for chord integration
-\item[GOT\_AMNSPROTO] \index{GOT\_AMNSPROTO} Links to AMNS database
+\item[GOT\_AMNSPROTO] \index{GOT\_AMNSPROTO} Links to AMNS database in ITM environment
 \item[JET] \index{JET} Enables some additional output for coupling to the JET post-processor
 \item[NO\_21] \index{NO\_21} Do not use 21-moment model for thermal and viscous forces
 \item[NO\_IEEE] \index{NO\_IEEE} Provides replacements to IEEE non-standard arithmetic routines
@@ -17831,6 +17838,8 @@ ALLOCATE\_AND\_NAMELIST & modules/b2mod\_user\_namelist.F \\
 ALLOCATE\_AND\_NAMELIST & modules/b2mod\_wall.F \\
 ALLOCATE\_AND\_NAMELIST & postprocessing/b2yt\_wall.F \\
 ALLOCATE\_AND\_NAMELIST & sources/b2stbr.F \\
+AMNS & preprocessing/b2ardr.F \\
+AMNS & utility/ratadas.F \\
 ASTRA & modules/b2mod\_astra\_to\_b2.F \\
 ASTRA & sources/b2stbc\_phys.F \\
 ASTRA & sources/b2stbr.F \\
@@ -17840,6 +17849,7 @@ ASTRA & transport/b2trcl.F \\
 B25\_EIRENE & b2plot/b2pinp.F \\
 B25\_EIRENE & b2plot/b2plot.F \\
 B25\_EIRENE & b2plot/b2pnwl.F \\
+B25\_EIRENE & b2plot/b2ptrdl.F \\
 B25\_EIRENE & b2plot/b2ptrgl.F \\
 B25\_EIRENE & b2plot/b2pwinm.F \\
 B25\_EIRENE & b2plot/b2pwldw.F \\
@@ -17931,6 +17941,7 @@ GFORTRAN & utility/ma28copy3.F \\
 GFORTRAN & utility/ma28copy4.F \\
 GGD\_MINOR\_VERSION & ids/b2mod\_ual\_io.F90 \\
 GGD\_MINOR\_VERSION & ids/b2mod\_ual\_io\_grid.F90 \\
+GOT\_AMNSPROTO & preprocessing/b2ardr.F \\
 GOT\_AMNSPROTO & utility/ratadas.F \\
 HITS\_PER\_CHORD & b2plot/process\_chords.F \\
 HITS\_PER\_CHORD & b2plot/process\_eirene\_chords.F \\
@@ -17938,11 +17949,16 @@ HPUX & modules/b2mod\_eirbra.F \\
 IBMaix & b2plot/b2plot.F \\
 IBMaix & postprocessing/b2ytdr.F \\
 IBMaix & user/b2file.F \\
+IMAS & driver/b2mnds.F \\
 IMAS & ids/b2mod\_ual.F90 \\
 IMAS & ids/b2mod\_ual\_io\_data.F90 \\
 IMAS & ids/b2mod\_ual\_io\_grid.F90 \\
 IMAS & ids/b2mod\_ual\_io.F90 \\
 IMAS & ids/b2\_ual\_write.F90 \\
+IMAS & modules/b2mod\_b2cmrc.F \\
+IMAS & modules/b2mod\_ppout.F \\
+IMAS & preprocessing/b2ardr.F \\
+IMAS & utility/ratadas.F \\
 IMAS\_MINOR\_VERSION & ids/b2mod\_ual.F90 \\
 IMAS\_MINOR\_VERSION & ids/b2mod\_ual\_io.F90 \\
 IMAS\_MINOR\_VERSION & ids/b2mod\_ual\_io\_data.F90 \\
@@ -17950,7 +17966,6 @@ IMAS\_MINOR\_VERSION & ids/b2mod\_ual\_io\_grid.F90 \\
 IMAS\_MINOR\_VERSION & ids/b2\_ual\_write.F90 \\
 IMAS\_MINOR\_VERSION & ids/b2\_ual\_write\_b2mod.F90 \\
 ITM & preprocessing/b2ardr.F \\
-ITM & preprocessing/b2arin.F \\
 ITM & utility/ratadas.F \\
 ITM\_ENVIRONMENT\_LOADED & ids/b2mod\_ual.F90 \\
 ITM\_ENVIRONMENT\_LOADED & ids/b2mod\_ual\_io\_data.F90 \\
