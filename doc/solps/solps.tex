@@ -357,6 +357,7 @@ setenv HOST_NAME <your_desired_HOST_NAME_value>
 
 At the moment the following compiler platforms are supported, assuming a Linux work environment:\label{sec:platforms}
 \begin{description}\index{Platforms}
+  \item[cray] The Cray compiler, in use at the JFRS supercomputing center
   \item[pgf90] Portland Group 32-bit Fortran compiler, in use at JET and ORNL
   \item[ifort64] Intel 64-bit Fortran compiler, in use at ITER and IPP
   \item[gfortran] The gfortran compiler, in use at FZ-J{\"u}lich, KU-Leuven
@@ -388,7 +389,7 @@ The compiler switches are given through the configuration file
 \${\tt \{SOLPSTOP\}/SETUP/\allowbreak config.}\${\tt \{HOST\_NAME\}.}\${\tt \{COMPILER\}}. This last file should contain the
 location of all the main libraries with which the \SOLPSITER executables will be linked and their
 linking instructions. It also contains the shared compiler directives for all the \SOLPSITER object files
-and the name of the debugger program to be used, if any.
+(see Section~\ref{sec:defines} for a full listing) and the name of the debugger program to be used, if any.
 Users should make sure the settings within these files fit their run environment and modify them as needed.
 If changes are needed, please forward them to the \SOLPSITER RO so that they may be included in the
 set of distributed files to help other future users.
@@ -436,6 +437,13 @@ so that your local file will be used. The last {\tt gmake} command may of
 course be replaced by {\tt gmake solps(\_debug)},
 {\tt gmake solps\_mpi(\_debug)}, {\tt gmake all(\_debug)} or
 {\tt gmake all\_mpi(\_debug)} as needed.
+
+It is possible to pass down Makefile options with the syntax
+\begin{verbatim}
+  gmake MKAE_OPTIONS=-j8
+\end{verbatim}
+for instance to multi-thread on the compilation. It is not recommended to give compilation options directly in the compilation line (say, with {\tt gmake -j8 solps})
+because the \SOLPSITER compilation includes many parts which must be done in order and sometimes serially.
 
 Once the config files and dimensions have been filled in with the appropriate information for the
 local implementation desired, one proceeds with the compilation of the code. For this
@@ -1636,6 +1644,7 @@ extracted from the {\tt run.log} file.
   \item[ippsubmit]\index{ippsubmit} Command file to launch runs on the new (2019) IPP cluster. See Section \ref{b2run} for details.
   \item[ippitmsubmit]\index{ippitmsubmit} Command file to launch runs on the IPP ITM cluster. See Section \ref{b2run} for details.
   \item[jetsubmit]\index{jetsubmit} Command file to launch runs on the JET Analysis Cluster (JAC). See Section \ref{b2run} for details.
+  \item[jfrssubmit]\index{jfrssubmit} Command file to launch runs on the JFRS IFERC-CSC supercomputer. See Section \ref{b2run} for details.
   \item[last10]\index{last10} Truncates the {\tt run.log} file to contain only the output from the last 10 written code iterations and stores them in {\tt run.log.last10}.
   \item[localsubmit]\index{localsubmit} Command file to launch runs on the local machine. See Section \ref{b2run} for details.
   \item[lln]\index{lln} Lists the chain of symbolic links leading to a file.
@@ -1866,6 +1875,7 @@ are provided:
   \item{itersubmit}\index{itersubmit} for submissions on the ITER HPC cluster
   \item{itmsubmit}\index{itmsubmit} for submissions on the Marconi ITM Gateway machine
   \item{jetsubmit}\index{jetsubmit} for submissions on the JET Analysis Cluster (JAC)
+  \item{jfrssubmit}\index{jfrssubmit} for submissions on the JFRS IFERC-CSC supercomputer
   \item{localsubmit}\index{localsubmit} for local submission
   \item{sgesubmit}\index{sgesubmit} for submissions on a system running SGE
   \item{ustcsubmit}\index{ustcsubmit} for submissions on the USTC computer cluster
@@ -8370,9 +8380,9 @@ Q_R = \sum \limits_{a=0}^{ns-1} r_{Q_a} n_e n_a ~ \text{from b2stel}
 
 \begin{equation}
  \label{eq:ene_QRa}
- r_{Q_a} = r_{Q_a}^{\rm ion} + r_{Q_a}^{\rm rec} + r_{Q_a}^{\rm Brm} + r_{Q_a}^{\rm line}
+ r_{Q_a} = r_{Q_a}^{\rm ion} + r_{Q_a}^{\rm rec} + r_{Q_a}^{\rm brm} + r_{Q_a}^{\rm line}
 \end{equation}
-contains contributions from ionization, recombination, Bremstrahlung and line radiation.
+contains contributions from ionization, recombination, bremsstrahlung and line radiation.
 
 
 
@@ -12824,9 +12834,9 @@ may be read by any suitable tool (e.g. MATLAB) for further analysis, plotting, c
 
 The table below provides a listing of the various files that may be produced, the variables they contain and the equations to which they relate.
 
-Note that some quantities (like density, velocity, temperature, potentials, B-field,
-metric coefficients etc.) are computed at cell centers, while others (like particle,
-energy and momentum fluxes, currents and quantities which contribute to them) are computed at cell faces.
+Note that some quantities (like density, velocity, temperature, potentials, magnetic field,
+metric coefficients, etc.) are computed at cell centers, while others (like particle,
+energy, and momentum fluxes, currents, and quantities which contribute to them) are computed at cell faces.
 
 \begin{center}
     \begin{longtable}{|l|l|l|l|}
@@ -12914,9 +12924,9 @@ $\displaystyle -\tilde{D}_{p,ax}\frac{\sqrt{g}}{h_x}\frac{1}{h_x}\frac{\partial{
 
 $\displaystyle -\tilde{D}_{p,ay}\frac{\sqrt{g}}{h_y}\frac{1}{h_y}\frac{\partial{p_a}}{\partial{y}} $ & $ s^{-1} $ & \texttt{b2tfnb\_dgradpby[XXX].dat} & (\ref{eq:D_pay})\\
 
-$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{\Gamma}_{ax}^{\left( PSch \right)} $ \footnote{Mind the sign! It is opposite in output file and in flux balance.} & $ s^{-1} $ & \texttt{b2tfnb\_fnbPSchx[XXX].dat} &  (\ref{eq:D_axy}) \\
+$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{\Gamma}_{ax}^{\left( PSch \right)} $ \footnote{Mind the sign! It is opposite in the output file and the flux balance.} & $ s^{-1} $ & \texttt{b2tfnb\_fnbPSchx[XXX].dat} &  (\ref{eq:D_axy}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{\Gamma}_{ay}^{\left( PSch \right)} $ \footnote{Mind the sign! It is opposite in output file and in flux balance.} & $ s^{-1} $ & \texttt{b2tfnb\_fnbPSchy[XXX].dat} & (\ref{eq:D_axy}) \\
+$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{\Gamma}_{ay}^{\left( PSch \right)} $ \footnote{Mind the sign! It is opposite in the output file and the flux balance.} & $ s^{-1} $ & \texttt{b2tfnb\_fnbPSchy[XXX].dat} & (\ref{eq:D_axy}) \\
 
 $\displaystyle {D}_{n,a}\frac{\sqrt{g}}{h_x^2} $ & $ m^3/s $ & \texttt{b2trno\_cdnax[XXX].dat} & (\ref{eq:D_na})\\
 
@@ -13069,9 +13079,9 @@ $\displaystyle \frac32 \frac{\sqrt{g}}{h_{x}} \Gamma_{ex} T_e$ & $ W $ & \texttt
 
 $\displaystyle \frac32 \frac{\sqrt{g}}{h_{y}} \Gamma_{ey} T_e$ & $ W $ & \texttt{b2tfhe\_\_qe\_32y.dat} & (\ref{eq:ene_gammay})  \\
 
-$\displaystyle \frac{\sqrt{g}}{h_{x}} q_{ex}^{P.Sch}$ \footnote{Mind the sign! It is opposite in output file and in the heat balance.} & $ W $ & \texttt{b2tfhe\_\_fhePSchx.dat} & (\ref{eq:ene_qPSchx})\\
+$\displaystyle \frac{\sqrt{g}}{h_{x}} q_{ex}^{P.Sch}$ \footnote{Mind the sign! It is opposite in the output file and the heat balance.} & $ W $ & \texttt{b2tfhe\_\_fhePSchx.dat} & (\ref{eq:ene_qPSchx})\\
 
-$\displaystyle \frac{\sqrt{g}}{h_{y}} q_{ey}^{P.Sch}$ \footnote{Mind the sign! It is opposite in output file and in the heat balance.} & $ W $ & \texttt{b2tfhe\_\_fhePSchy.dat} & (\ref{eq:ene_qPSchy})\\
+$\displaystyle \frac{\sqrt{g}}{h_{y}} q_{ey}^{P.Sch}$ \footnote{Mind the sign! It is opposite in the output file and the heat balance.} & $ W $ & \texttt{b2tfhe\_\_fhePSchy.dat} & (\ref{eq:ene_qPSchy})\\
 
 $\displaystyle -\frac{\sqrt{g}}{h_{x}} \kappa_{ex} \frac{1}{h_{x}}\frac{\partial T_e}{\partial x}$ & $ W $ & \texttt{b2tfhe\_\_qe\_ke\_gTx.dat} &  (\ref{eq:ene_qex})\\
 
@@ -13123,10 +13133,9 @@ $\displaystyle -\frac 5 2 \frac{\sqrt{g}}{h_{x}} n_e T_e^2 \frac{B_z}{eh_y} \fra
 
 $\displaystyle \frac 5 2 \frac{\sqrt{g}}{h_{y}} n_e T_e^2 \frac{B_z}{eh_x} \frac{\partial}{\partial x} \left( \frac 1{B^2} \right) $ & $W$ & \texttt{b2tfhe\_\_qediay.dat} & (\ref{eq:ene_qey}) \\
 
-$r_{Q_a}^{\rm Brm}\sqrt{g} $ & $W$ & \texttt{b2stel\_rqbrm[XXX]} & (\ref{eq:ene_QRa}) \\ 
+$r_{Q_a}^{\rm brm}\sqrt{g} $ & $W$ & \texttt{b2stel\_rqbrm[XXX]} & (\ref{eq:ene_QRa}) \\
 
-
-$r_{Q_a}^{\rm line}\sqrt{g} $ & $W$ & \texttt{b2stel\_rqrad[XXX]} & (\ref{eq:ene_QRa}) \\ 
+$r_{Q_a}^{\rm line}\sqrt{g} $ & $W$ & \texttt{b2stel\_rqrad[XXX]} & (\ref{eq:ene_QRa}) \\
 
 residuals & $ W $ & \texttt{b2npht\_reshe.dat} or & \\ & & \texttt{b2nph9\_reshe.dat} & \\
 
@@ -13280,51 +13289,50 @@ residuals & $ A $ & \texttt{b2nppo\_respo.dat} or & (\ref{eq:pot_eq}) \\
 \end{longtable}
 \end{center}
 
-It may be convenient to build a total energy flux $\vec{\bf q}^{\rm ENERGY}$~\ref{eq:energy_flux_vector} and many other quantities
+It may be convenient to build a total energy flux $\vec{\bf q}^{\rm ENERGY}$ (cf. Eq.~\ref{eq:energy_flux_vector}) and many other quantities
 which contribute to it from the quantities listed in the table~\ref{tab:b2wdat_files}. Note that since the energy flux is computed at
-cell faces, it is worth combining it from the quantities also computed at cell
-faces.
+cell faces, it is necessary to compute it from the quantities also computed at cell faces.
 
 \begin{gather}
  q_{x}^{\rm ENERGY} = q_{ex}^{\rm ENERGY} + q_{ix}^{\rm ENERGY} \\
- q_{y}^{\rm ENERGY} = q_{ey}^{\rm ENERGY} + q_{iy}^{\rm ENERGY} 
-\end{gather} 
+ q_{y}^{\rm ENERGY} = q_{ey}^{\rm ENERGY} + q_{iy}^{\rm ENERGY}
+\end{gather}
 
 \begin{gather}
   q_{ex}^{\rm ENERGY} = \widetilde{q}_{ex} + q_{ex}^{P.Sch} + q_{ex}^{dia} +
   \frac23 \left(q_{ex}^{ExB} + q_{ex}^{u_\parallel} + q_{ex}^{uDPC}\right) \\
   q_{ix}^{\rm ENERGY} = \widetilde{q}_{ix} + q_{ix}^{P.Sch} + q_{ix}^{dia} +
-  \frac23 \left(q_{ix}^{ExB} + q_{ix}^{u_\parallel} + q_{ix}^{uDPC}\right) + 
+  \frac23 \left(q_{ix}^{ExB} + q_{ix}^{u_\parallel} + q_{ix}^{uDPC}\right) +
   q_{ix}^{j} + q_{ix}^{conv}\\
   q_{ey}^{\rm ENERGY} = \widetilde{q}_{ey} + q_{ey}^{P.Sch} + q_{ey}^{dia} +
   \frac23 q_{ey}^{ExB} \\
   q_{iy}^{\rm ENERGY} = \widetilde{q}_{iy} + q_{iy}^{P.Sch} + q_{iy}^{dia} +
-  \frac23 q_{iy}^{ExB} + q_{iy}^{conv} + q_{iy}^{j}  
-\end{gather} 
+  \frac23 q_{iy}^{ExB} + q_{iy}^{conv} + q_{iy}^{j}
+\end{gather}
 
 \begin{gather}
- \widetilde{q}_{ex}^{dia} = -\frac52 T_e^{\rm (face)} \sum\limits_a 
+ \widetilde{q}_{ex}^{dia} = -\frac52 T_e^{\rm (face)} \sum\limits_a
  \frac{z_a^2 T_e^{\rm (face)}}{T_i^{\rm (face)}} \tilde{V}_{ax}^{(dia)}n_a \\
- \widetilde{q}_{ey}^{dia} = -\frac52 T_e^{\rm (face)} \sum\limits_a 
- \frac{z_a^2 T_e^{\rm (face)}}{T_i^{\rm (face)}} \tilde{V}_{ay}^{(dia)}n_a \\ 
+ \widetilde{q}_{ey}^{dia} = -\frac52 T_e^{\rm (face)} \sum\limits_a
+ \frac{z_a^2 T_e^{\rm (face)}}{T_i^{\rm (face)}} \tilde{V}_{ay}^{(dia)}n_a \\
  \widetilde{q}_{ix}^{dia} = \frac52 T_i^{\rm (face)} \sum\limits_a \tilde{V}_{ax}^{(dia)}n_a \\
  \widetilde{q}_{iy}^{dia} = \frac52 T_i^{\rm (face)} \sum\limits_a \tilde{V}_{ay}^{(dia)}n_a
-\end{gather} 
+\end{gather}
 Here and below the superscript '(face)' means that the temperature (or other
-quantity) should be computed at the cell face as a half-sum its cell-centered values.
-Since $\displaystyle \frac{\sqrt{g}}{h_x} \tilde{V}_{ax}^{(dia)}n_a$ and 
+quantity) should be computed at the cell face as a half-sum its neighboring cell-centered values.
+Since $\displaystyle \frac{\sqrt{g}}{h_x} \tilde{V}_{ax}^{(dia)}n_a$ and
 $\displaystyle \frac{\sqrt{g}}{h_y} \tilde{V}_{ay}^{(dia)}n_a$ are the particle
-fluxes through cell faces, $\displaystyle \frac{\sqrt{g}}{h_x}$ and
-$\displaystyle \frac{\sqrt{g}}{h_y}$ are cell faces area, and these quantities
+fluxes through the cell faces, $\displaystyle \frac{\sqrt{g}}{h_x}$ and
+$\displaystyle \frac{\sqrt{g}}{h_y}$ are the cell face areas, and these quantities
 are computed at cell faces, we need to compute temperatures at cell faces too
-to get heat flux densities correctly computed at cell faces. Similar approach
+to get heat flux densities correctly computed at cell faces. A similar approach
 is applied below in all equations within this Appendix.
 
 \begin{gather}
  q_{ex}^{ExB} = \frac32 T_e^{\rm (face)} \sum\limits_a z_a n_a V_{ax}^E \\
  q_{ey}^{ExB} = \frac32 T_e^{\rm (face)} \sum\limits_a z_a n_a V_{ay}^E \\
  q_{ix}^{ExB} = \frac32 T_i^{\rm (face)} \sum\limits_a n_a V_{ax}^E \\
- q_{iy}^{ExB} = \frac32 T_i^{\rm (face)} \sum\limits_a n_a V_{ay}^E  
+ q_{iy}^{ExB} = \frac32 T_i^{\rm (face)} \sum\limits_a n_a V_{ay}^E
 \end{gather}
 
 \begin{gather}
@@ -13334,7 +13342,7 @@ is applied below in all equations within this Appendix.
 \end{gather}
 
 \begin{gather}
- q_{ex}^{uDPC} = \frac32 T_e^{\rm (face)} 
+ q_{ex}^{uDPC} = \frac32 T_e^{\rm (face)}
  \sum\limits_a z_a n_a V_a^{\rm corr\_dpc} \\
  q_{ix}^{uDPC} = \frac32 T_i^{\rm (face)} \sum\limits_a n_a V_a^{\rm corr\_dpc}
 \end{gather}
@@ -13348,15 +13356,13 @@ is applied below in all equations within this Appendix.
 
 
 \begin{gather}
- q_{ix}^{j} =  \frac{T_i^{\rm (face)}}{e} \sum\limits_a 
+ q_{ix}^{j} =  \frac{T_i^{\rm (face)}}{e} \sum\limits_a
  \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)}   \right) \\
  q_{iy}^{j} = \frac{T_i^{\rm (face)}}{e} \sum\limits_a \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)}   \right)
 \end{gather}
 
-Additionally one can consider a flux of an energy in a form of potential energy of ionization. This energy is spent by electrons at the place of ionization and releases
-back at the place of recombination (or is transferred to the targets thus contributing to
-the target heat loads). The associated
-energy flux is
+Additionally one can consider a flux of energy in the form of potential energy of ionization. This energy is spent by electrons at the place of ionization and released
+back at the place of recombination (or is transferred to the targets thus contributing to the target heat loads). The associated energy flux is
 
 \begin{gather}
  q_{x}^{ioniz} = \sum\limits_a \left(\widetilde{\Gamma}_{ax} + \widetilde{\Gamma}_{ax}^{\left( PSch \right)}  + \tilde{V}_{ax}^{(dia)} n_a \right) E_a^{pot} \\
@@ -13365,8 +13371,9 @@ energy flux is
 with
 \begin{equation}
    E_a^{pot} = \sum\limits_{i=1}^{z_a} I_a^{ioniz}
-\end{equation} -- the sum of ionization potentials $I_a^{ioniz}$ of all ions with the
-charge state below the considered ion (inclusive) within given isonuclear sequence.
+\end{equation}
+the sum of the ionization potentials $I_a^{ioniz}$ of all ions with
+a charge state below the considered ion (inclusive) within their isonuclear sequence.
 
 \chapter{Region definitions}
 \label{cha:regions}\index{regions}\index{vreg}\index{xreg}\index{yreg}\index{NREG}
@@ -17679,7 +17686,7 @@ they need only contain the modified definitions.
 \section{Defines}
 
 \subsection{SOLPS-ITER}
-\index{DEFINES, used throughout SOLPS-ITER}
+\label{sec:defines}\index{DEFINES, used throughout SOLPS-ITER}
 
 We list here the possible optional pre-processor definitions that can be used when
 compiling the various components of the \SOLPSITER code suite.
@@ -17693,6 +17700,7 @@ Additionally, system-wide compiler flags can be provided by means of the
 \item[CATALYST] \index{CATALYST} Turns on the Paraview Catalyst utility (see the SOLPS-GUI manual for full details)
 \item[COMPILER\_MAJOR\_VERSION] \index{COMPILER\_MAJOR\_VERSION} Major version number of the compiler being used (set internally by the configuration files)
 \item[COMPILER\_MINOR\_VERSION] \index{COMPILER\_MINOR\_VERSION} Minor version number of the compiler being used (set internally by the configuration files)
+\item[CRAY] \index{CRAY} To be used with the Cray Fortran compiler
 \item[DBG] \index{DBG} Turns on additional debugging output (set internally by the {\tt Makefile} when requesting a {\tt \_debug} compilation)
 \item[F2003] \index{F2003} To be used if the compiler is compatible with {\tt Fortran 2003}
 \item[F77] \index{F77} Identifies specific code to {\tt Fortran-77} compilers
@@ -18008,6 +18016,11 @@ CDF\_MOVIE & b2plot/caltraj.F \\
 CDF\_MOVIE & b2plot/process\_chords.F \\
 CLASSICAL\_CURRENT & transport/b2tdia.F \\
 COMPLICATED & sources/b2stbc\_fb.F \\
+CRAY & b2plot/b2plot.F \\
+CRAY & equations/b2news.F \\
+CRAY & equations/b2news\_.F \\
+CRAY & equations/b2npmo.F \\
+CRAY & postprocessing/b2ytdr.F \\
 DBG & b2plot/b2ptrdl.F \\
 DBG & b2plot/b2ptrgl.F \\
 DBG & b2plot/b2pwrdld.F \\
@@ -18193,6 +18206,7 @@ NO\_OPENMP\_B2XPFE & b2aux/b2xpfe.F \\
 NO\_OPENMP\_MYBLAS & utility/myblas.F \\
 NO\_OPENMP\_SFILL & utility/sfill.F \\
 NO\_OPT & b2plot/b2plot.F \\
+NO\_OPT & ids/b2mod\_ual\_io.F90 \\
 NO\_OPT & postprocessing/b2ytdr.F \\
 NO\_SAVE & include/BRAEIR.H \\
 NO\_SAVE & include/EIRBRA.H \\

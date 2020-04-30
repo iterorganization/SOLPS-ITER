@@ -29,7 +29,7 @@ BLD = ar rcv
 GRLIBES = ${LD_NCARG}
 LDLIBES = ${LD_NAG} ${LD_NETCDF} ${LD_MSCL}
 
-LD = f95
+LD = ${FC}
 LDOPTS = -lU77
 LDOPTSend = -lU77
 

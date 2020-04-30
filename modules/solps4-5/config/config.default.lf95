@@ -32,7 +32,7 @@ BLD = ar rcv
 GRLIBES = ${LD_NCARG}
 LDLIBES = ${LD_NAG} ${LD_NETCDF} ${LD_MSCL}
 
-LD = lf95
+LD = ${FC}
 # LDOPTS = -Bstatic
 
 LCPP = ${LD_SONNET}

@@ -48,7 +48,7 @@ OBJDEST   = -o ${OBJDIR}/$*.o
 
 BLD       = ar rcv
 
-LD        = f95f -v 6.2d
+LD        = ${FC}
 
 #!!!Local Variables:
 #!!! mode: Makefile

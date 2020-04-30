@@ -3,8 +3,7 @@
       use b2mod_layer
      , , only: ntrack, nalloys
       use b2mod_constants
-      use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use eirmod_solps
 c
 c  version : 14.04.97 19:05
 c

@@ -1,0 +1,35 @@
+EQUIV4 = 		# name changes for single precision version
+EQUIV5 = 		# name changes for double precision version
+
+CPP = /lib/cpp -traditional
+CPP4OPTS = 		# options for CPP (single precision)
+CPP5OPTS = 		# options for CPP (double precision)
+
+FC      = ftn
+FCOPTS  = -e0 -ez
+ifndef USE_OPENMP
+FCOPTS += -hnoomp
+endif
+ifdef SOLPS_DEBUG
+FCOPTS += -O0 -hfp0 -g -G0 -K trap=divx -K trap=fp -Rb
+else
+FCOPTS += -O3 -hfp3
+endif
+OBJDEST = -ef -em -J${OBJDIR}
+INCMOD  = -p
+MOD     = mod
+
+BLD = 			# program an options for building a library
+
+GRLIBES = 		# libraries for single precision version
+LDLIBES = 		# libraries for double precision version
+
+LD = ${FC}
+LDOPTS = 		# options for loader
+
+LCPP =			# linking to Sonnet library and dependencies
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+
