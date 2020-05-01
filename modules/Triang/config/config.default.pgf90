@@ -33,7 +33,7 @@ OBJDEST = -o ${OBJDIR}/$*.o
 
 BLD = ar rcv
 
-LD = pgf90
+LD = ${FC}
 ifdef SOLPS_DEBUG
 LDOPTS = -g -C -tp px # "-tp px" to fix a compiler bug at JET
 else

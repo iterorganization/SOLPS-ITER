@@ -33,7 +33,7 @@ BLD = ar rcv
 GRLIBES = ${LD_NCARG}
 LDLIBES = ${LD_NAG} ${LD_NETCDF} ${LD_MSCL} -limf -lm
 
-LD = gfortran
+LD = ${FC}
 LDOPTS =
 
 LCPP = ${LD_SONNET}

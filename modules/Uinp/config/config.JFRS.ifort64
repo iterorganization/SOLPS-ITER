@@ -1,0 +1,35 @@
+#  VERSION : 28.07.99 20:34
+
+# Test whether necessary variables are defined
+LD_MSCL ?= -L${SOLPSLIB} -lmscl
+
+FC       = ftn
+
+COMPILER_MAJOR_VERSION = $(shell ${FC} -V 2>&1 | grep -o "Version [0-9]*" | cut -d ' ' -f 2 )
+
+ifdef SOLPS_DEBUG
+FFLAGS  += -O0 -g -C -traceback -debug all -check all -fpe0
+endif
+ifdef SOLPS_OPENMP
+ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -ge 15; echo $$?),0)
+FFLAGS  += -qopenmp -dynamic
+else
+FFLAGS  += -openmp -dynamic
+endif
+endif
+
+INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
+COMPILE  = ${FC} -c ${FFLAGS}
+CPP      = /lib/cpp -traditional -ffreestanding
+
+MOD      = mod
+LDLIBS   = ${LD_MSCL}
+LDEXTRA  =
+ifdef USE_MPI
+LDLIBS  += ${LD_MPI}
+endif
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+

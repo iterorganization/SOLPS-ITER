@@ -73,7 +73,7 @@ compile:
   ${MAKE} listobj listobj_debug
   ${MAKE} depend depend_debug
   ${MAKE} tags
-  ${MAKE} solps
+  ${MAKE} solps MAKE_OPTIONS=-j8
 
 
 

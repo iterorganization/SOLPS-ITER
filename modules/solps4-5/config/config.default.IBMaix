@@ -35,7 +35,7 @@ BLD = ar rcv
 GRLIBES = ${LD_NCARG}
 LDLIBES = ${LD_NAG} ${LD_NETCDF} ${LD_MSCL}
 
-LD = xlf90
+LD = ${FC}
 LDOPTS = -bloadmap:${OBJDIR}/loadmap -bmap:${OBJDIR}/map -pg
 LDOPTS = -bloadmap:${OBJDIR}/loadmap -bmap:${OBJDIR}/map
 
