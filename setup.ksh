@@ -24,8 +24,8 @@ export SOLPSWORK=$SOLPSTOP/runs
 }
 
 [ -s SETUP/setup.ksh.HOST_NAME.local ] && {
-  echo Loading SETUP/setup.ksh.HOST_NAME.local
-  export HOST_NAME=`cat SETUP/setup.csh.HOST_NAME.local`
+  echo Loading SETUP/setup.ksh.HOST_NAME.local.
+  . SETUP/setup.ksh.HOST_NAME.local
 } || {
   case $iamat in
   *UNKNOWN )

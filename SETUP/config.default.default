@@ -1,11 +1,28 @@
 $(error Using default file. Provide paths to libraries first.)
 
 #
-# Specify paths to root-directories of following libraries on your system
+# Specify paths to root directories of following libraries on your system
+# Specify system-specific additional compiler preprocessor definitions
 #
-# Special notes:
+# If using gfortran:
+# Add -DGFORTRAN to SOLPS_CPP
 #
-# If you have NCAR version 3 on your system:
+# If using the Portland Group compiler:
+# Add -DPGF90 -DNO_QUAD to SOLPS_CPP
+#
+# If using the G95 compiler:
+# Add -DG95 to SOLPS_CPP
+#
+# If using the NAG compiler:
+# Add -DNAGF95 to SOLPS_CPP
+#
+# If using the Cray compiler:
+# Add -DCRAY to SOLPS_CPP
+#
+# If your compiler is compatible with Fortran 2003 features, you can:
+# Add -DF2003 to SOLPS_CPP
+#
+# If you have NCAR version 3 (or no NCAR at all) on your system:
 # Remove -DNCAR4 from SOLPS_CPP
 #
 # If you do not have NAG on your system:
@@ -17,6 +34,15 @@ $(error Using default file. Provide paths to libraries first.)
 #
 # If you have NAG Mark 22 or greater on your system:
 # Add -DNAG22 to SOLPS_CPP
+#
+# If compiling on an HP system:
+# Add -DHPUX to SOLPS_CPP
+#
+# If compiling on an IBMaix system:
+# Add -DIBMaix to SOLPS_CPP
+#
+# If compiling in a Windows environment:
+# Add -DWINDOWS to SOLPS_CPP
 #
 
        NCDIR ?=

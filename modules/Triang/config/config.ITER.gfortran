@@ -44,7 +44,7 @@ OBJDEST   = -J${OBJDIR} -o ${OBJDIR}/$*.o
 
 BLD       = ar rcv
 
-LD         = gfortran
+LD        = ${FC}
 
 #!!!Local Variables:
 #!!! mode: Makefile
