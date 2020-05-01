@@ -127,10 +127,10 @@ all_nox_openmp_mpi: carre_nox divgeo_nox b25_nox_openmp_mpi eirene_nox_mpi b25ei
 all_nox_mpi_openmp: all_nox_openmp_mpi
 
 carre:
-	cd modules/Carre; ${MAKEO}
+	cd modules/Carre; ${MAKE}
 
 carre_nox:
-	cd modules/Carre; ${MAKEO} NCARG_ROOT="" LD_NCARG=""
+	cd modules/Carre; ${MAKE} NCARG_ROOT="" LD_NCARG=""
 
 divgeo:
 	cd modules/DivGeo;         ${MAKEO}
@@ -315,18 +315,18 @@ uinp_nox_openmp_mpi: uinp_openmp_mpi
 uinp_nox_mpi_openmp: uinp_openmp_mpi
 
 triang:
-	cd modules/Triang; ${MAKEO}
+	cd modules/Triang; ${MAKE}
 
 triang_mpi:
-	cd modules/Triang; ${MAKEO} USE_MPI=-DUSE_MPI SOLPS_MPI=yes
+	cd modules/Triang; ${MAKE} USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 
 triang_nox:
 	cd modules/Triang; ${MAKE}  LD_GR="" LD_GKS="" mods
-	cd modules/Triang; ${MAKEO} LD_GR="" LD_GKS=""
+	cd modules/Triang; ${MAKE} LD_GR="" LD_GKS=""
 
 triang_nox_mpi:
 	cd modules/Triang; ${MAKE}  USE_MPI=-DUSE_MPI SOLPS_MPI=yes LD_GR="" LD_GKS="" mods
-	cd modules/Triang; ${MAKEO} USE_MPI=-DUSE_MPI SOLPS_MPI=yes LD_GR="" LD_GKS=""
+	cd modules/Triang; ${MAKE} USE_MPI=-DUSE_MPI SOLPS_MPI=yes LD_GR="" LD_GKS=""
 
 amds:
 	cd modules/amds; ${MAKEO}
@@ -356,7 +356,7 @@ b2sxdr:
 	cd modules/solps4-5; ${MAKE} tags
 	cd modules/solps4-5; ${MAKE} listobj
 	cd modules/solps4-5; ${MAKE} depend
-	cd modules/solps4-5; ${MAKEO}
+	cd modules/solps4-5; ${MAKE}
 
 manual:
 ifeq ($(shell [ -e ${SOLPSTOP}/doc/solps/b2cdci.F ] && echo yes || echo no ),no)
