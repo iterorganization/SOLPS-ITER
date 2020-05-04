@@ -24,8 +24,8 @@ else
 endif
 
 if (-s SETUP/setup.csh.HOST_NAME.local) then
-  echo Loading SETUP/setup.csh.HOST_NAME.local
-  setenv HOST_NAME `cat SETUP/setup.csh.HOST_NAME.local`
+  echo Loading SETUP/setup.csh.HOST_NAME.local.
+  source SETUP/setup.csh.HOST_NAME.local
 else
   switch ($iamat)
   case "*UNKNOWN":
@@ -130,7 +130,6 @@ unset TOOLCHAIN SCRIPTS_PATH CARRE_PATH DIVGEO_PATH EIRENE_PATH B25_PATH B25EIRE
 if ($?SOLPS_OPENMP) source $SOLPSTOP/SETUP/openmp
 if ($?SOLPS_DEBUG)  source $SOLPSTOP/SETUP/debug
 if ($?SOLPS_MPI)    source $SOLPSTOP/SETUP/mpi
-
 
 # Set path to manuals
 #--------------------

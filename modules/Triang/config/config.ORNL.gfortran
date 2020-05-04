@@ -31,7 +31,7 @@ OBJDEST = -o ${OBJDIR}/$*.o
 
 BLD = ar rcv
 
-LD = gfortran
+LD = ${FC}
 ifdef SOLPS_DEBUG
 LDOPTS = -g -C -Wall
 DEFINES += -DDBG

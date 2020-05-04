@@ -1,0 +1,35 @@
+# Load modules 
+module switch PrgEnv-cray PrgEnv-gnu
+module load stat
+module load gdb4hpc
+module load cray-netcdf/4.6.1.3
+module load cray-parallel-netcdf/1.8.1.4
+setenv PKG_CONFIG_PATH ${PE_GNU_FIXED_PKGCONFIG_PATH}:${PKG_CONFIG_PATH}
+setenv PKG_CONFIG_PATH /opt/cray/pe/libsci/19.02.1/GNU/8.1/x86_64/lib/pkgconfig:${PKG_CONFIG_PATH}
+
+# Set environment variables
+setenv GLI_HOME ${SOLPSTOP}/lib
+
+if (`where paraview-config` == "") then
+  echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
+else
+  # See ParaViewCatalystUsersGuide_v2.pdf Sec 3.7.2 Linking with Python ...
+  set PARAVIEW_LIB=`paraview-config --libs --python | sed s/-L//`
+  if ($?LD_LIBRARY_PATH) then
+    setenv LD_LIBRARY_PATH "${PARAVIEW_LIB}:${LD_LIBRARY_PATH}"
+  else
+    setenv LD_LIBRARY_PATH ${PARAVIEW_LIB}
+  endif
+  setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages/vtk:${PYTHONPATH}"
+  setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
+  setenv LD_CATALYST `paraview-config --libs vtkPVPythonCatalyst`
+endif
+
+# Debugger (set environment variable DBX)
+setenv DBX gdb
+
+# Compilers
+setenv FC ftn
+setenv CC cc
+setenv CXX cc
+

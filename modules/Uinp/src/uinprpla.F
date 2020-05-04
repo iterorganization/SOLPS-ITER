@@ -2,8 +2,7 @@
       use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
-      use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use eirmod_solps
 c
 c  version : 19.02.2003 18:23
 c

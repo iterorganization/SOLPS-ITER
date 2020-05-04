@@ -28,7 +28,7 @@ BLD = ar rcv
 GRLIBES = ${LD_NCARG}
 LDLIBES = ${LD_NAG} ${LD_NETCDF} ${LD_MSCL}
 
-LD = pgf90
+LD = ${FC}
 ifdef SOLPS_DEBUG
 LDOPTS = -g
 else

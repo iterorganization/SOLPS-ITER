@@ -2,8 +2,7 @@
       use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
-      use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use eirmod_solps
 
 c  version : 28.01.2003 18:08
 
@@ -538,7 +537,7 @@ c*** Create the b2ar.dat file
      >       write(2,'(2x,3i3)') nchara(iatm), 0, nchara(iatm)
           end do
           write(2,'(a)') '*flag           '//
-     .     '(''adpak'', ''strahl'', ''adas'' or ''amds'', free format)'
+     .     '(''adpak'', ''strahl'', ''adas'' or ''amns'', free format)'
           write(2,'(2x,a)') '''adas'''
           write(2,'(a)') '*tailep         (real, free format)'
           write(2,'(2x,f5.2)') 0.08

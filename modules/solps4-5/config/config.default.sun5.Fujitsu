@@ -27,7 +27,7 @@ BLD = ar rcv
 GRLIBES = ${LD_NCARG}
 LDLIBES = ${LD_NAG} ${LD_NETCDF} ${LD_MSCL}
 
-LD = /afs/ipp/@sys/soft/fuji_f90/FSUNf90/bin/f90
+LD = ${FC}
 LDOPTS = -Bstatic
 
 LCPP = ${LD_SONNET}

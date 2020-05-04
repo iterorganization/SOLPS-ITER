@@ -30,13 +30,13 @@ endif
 
 INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
-CPP      = /lib/cpp -C -traditional
+CPP      = /lib/cpp -traditional -ffreestanding
 
 MOD      = mod
 LDLIBS   = ${LD_MSCL}
 LDEXTRA  =
 ifdef USE_MPI
-LDLIBS  += ${LD_LIBS}
+LDLIBS  += ${LD_MPI}
 endif
 
 #!!!Local Variables:

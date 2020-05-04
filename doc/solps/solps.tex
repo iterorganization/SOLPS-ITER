@@ -357,6 +357,7 @@ setenv HOST_NAME <your_desired_HOST_NAME_value>
 
 At the moment the following compiler platforms are supported, assuming a Linux work environment:\label{sec:platforms}
 \begin{description}\index{Platforms}
+  \item[cray] The Cray compiler, in use at the JFRS supercomputing center
   \item[pgf90] Portland Group 32-bit Fortran compiler, in use at JET and ORNL
   \item[ifort64] Intel 64-bit Fortran compiler, in use at ITER and IPP
   \item[gfortran] The gfortran compiler, in use at FZ-J{\"u}lich, KU-Leuven
@@ -388,14 +389,14 @@ The compiler switches are given through the configuration file
 \${\tt \{SOLPSTOP\}/SETUP/\allowbreak config.}\${\tt \{HOST\_NAME\}.}\${\tt \{COMPILER\}}. This last file should contain the
 location of all the main libraries with which the \SOLPSITER executables will be linked and their
 linking instructions. It also contains the shared compiler directives for all the \SOLPSITER object files
-and the name of the debugger program to be used, if any.
+(see Section~\ref{sec:defines} for a full listing) and the name of the debugger program to be used, if any.
 Users should make sure the settings within these files fit their run environment and modify them as needed.
 If changes are needed, please forward them to the \SOLPSITER RO so that they may be included in the
 set of distributed files to help other future users.
 
 For the case where single submodules are cloned from the \SOLPSITER repository, without the full regalia of
 programs, additional sets of config files can be found in the {\tt config} directory in each module. The
-compiler specific to this module are included there. Users are encouraged to modify these as needed. If local
+compiler settings specific to this module are included there. Users are encouraged to modify these as needed. If local
 changes are required that should not be archived in the repository, then users should create a file named
 {\tt config.}\${\tt \{HOST\_NAME\}.}\${\tt \{COMPILER\}\allowbreak.local} which the {\tt Makefile} will load and use to
 overwrite the more general settings from the distributed {\tt config} file.
@@ -436,6 +437,13 @@ so that your local file will be used. The last {\tt gmake} command may of
 course be replaced by {\tt gmake solps(\_debug)},
 {\tt gmake solps\_mpi(\_debug)}, {\tt gmake all(\_debug)} or
 {\tt gmake all\_mpi(\_debug)} as needed.
+
+It is possible to pass down Makefile options with the syntax
+\begin{verbatim}
+  gmake MKAE_OPTIONS=-j8
+\end{verbatim}
+for instance to multi-thread on the compilation. It is not recommended to give compilation options directly in the compilation line (say, with {\tt gmake -j8 solps})
+because the \SOLPSITER compilation includes many parts which must be done in order and sometimes serially.
 
 Once the config files and dimensions have been filled in with the appropriate information for the
 local implementation desired, one proceeds with the compilation of the code. For this
@@ -1614,7 +1622,7 @@ extracted from the {\tt run.log} file.
   \item[correct\_b2yt\_timestamps]\index{correct\_b2yt\_timestamps}\index{b2yt}
     Makes sure the timestamps for the start-up files in the current
     directory are in the right chronological order for the {\tt b2yt} converter.
-  \item[count]\index{count}
+  \item[count]\index{count} Basic counting with advanced options (``count -h'' for help).
   \item[d2d]\index{d2d} Doubles the resolution of the {\tt DG} equilibrium file (see Sec.~\ref{sec:equtrn}).
   \item[d2e]\index{d2e} Converts {\tt DG} equilibrium files to {\tt EFIT} format (see Sec.~\ref{sec:equtrn}).
   \item[d2v]\index{d2v} Converts {\tt DG} equilibrium files to {\tt Carre} format (see Sec.~\ref{sec:equtrn}).
@@ -1636,6 +1644,7 @@ extracted from the {\tt run.log} file.
   \item[ippsubmit]\index{ippsubmit} Command file to launch runs on the new (2019) IPP cluster. See Section \ref{b2run} for details.
   \item[ippitmsubmit]\index{ippitmsubmit} Command file to launch runs on the IPP ITM cluster. See Section \ref{b2run} for details.
   \item[jetsubmit]\index{jetsubmit} Command file to launch runs on the JET Analysis Cluster (JAC). See Section \ref{b2run} for details.
+  \item[jfrssubmit]\index{jfrssubmit} Command file to launch runs on the JFRS IFERC-CSC supercomputer. See Section \ref{b2run} for details.
   \item[last10]\index{last10} Truncates the {\tt run.log} file to contain only the output from the last 10 written code iterations and stores them in {\tt run.log.last10}.
   \item[localsubmit]\index{localsubmit} Command file to launch runs on the local machine. See Section \ref{b2run} for details.
   \item[lln]\index{lln} Lists the chain of symbolic links leading to a file.
@@ -1682,10 +1691,11 @@ extracted from the {\tt run.log} file.
   \item[ustcsubmit]\index{ustcsubmit} Command file to launch runs on the USTC computer cluster. See Section \ref{b2run} for details.
   \item[v2d]\index{v2d} Converts {\tt Carre} format equilibrium files to {\tt DG} format (see Sec.~\ref{sec:equtrn}).
   \end{description}
-\end{itemize}
-
-Some new Python \index{Python scripts} based scripts have also been added:
-\begin{description}
+\item Some new Python \index{Python scripts} based scripts have also been added:
+  \begin{description}
+  \item[calculate\_sputter\_inner\_target.py]\index{calculate\_sputter\_inner\_target.py} Calculates the physical sputtering to be expected at the inner target in a simulation saved in MDSplus (chapter \ref{cha:MDSplus}) on the solps-mdsplus.aug.ipp.mpg.de server (``-h'' help is provided).
+  \item[calculate\_sputter\_outer\_target.py]\index{calculate\_sputter\_outer\_target.py} Calculates the physical sputtering to be expected at the outer target in a simulation saved in MDSplus (chapter \ref{cha:MDSplus}) on the solps-mdsplus.aug.ipp.mpg.de server (``-h'' help is provided).
+  \item[compare\_2\_solps.py]\index{compare\_2\_solps.py} Compares two SOLPS shots with same dimensions saved in MDSplus (chapter \ref{cha:MDSplus}) on the solps-mdsplus.aug.ipp.mpg.de server (``-h'' help is provided).
   \item[energy\_analysis.py]\index{energy\_analysis.py} Energy
     passing through various surfaces.
   \item[fluid\_core\_fluxes.py \#1 \#2]\index{fluid\_core\_fluxes.py} Total fluid flux
@@ -1708,7 +1718,8 @@ Some new Python \index{Python scripts} based scripts have also been added:
   \item[tereg.py]\index{tereg.py} Average electron temperatures.
   \item[tireg.py]\index{tireg.py} Average ion temperatures.
   \item[zeffreg.py]\index{zeffreg.py} Average $Z_{eff}$.
-\end{description}
+  \end{description}
+\end{itemize}
 
 \paragraph{Still need to do :}
 
@@ -1864,6 +1875,7 @@ are provided:
   \item{itersubmit}\index{itersubmit} for submissions on the ITER HPC cluster
   \item{itmsubmit}\index{itmsubmit} for submissions on the Marconi ITM Gateway machine
   \item{jetsubmit}\index{jetsubmit} for submissions on the JET Analysis Cluster (JAC)
+  \item{jfrssubmit}\index{jfrssubmit} for submissions on the JFRS IFERC-CSC supercomputer
   \item{localsubmit}\index{localsubmit} for local submission
   \item{sgesubmit}\index{sgesubmit} for submissions on a system running SGE
   \item{ustcsubmit}\index{ustcsubmit} for submissions on the USTC computer cluster
@@ -2228,7 +2240,7 @@ The allowable choices for the {\bf flag} switch are:
 \item["adpak"]\index{ADPAK} A complete atomic physics package with scaling law rates applicable to all charge states, but not always of high accuracy \cite{ADPAK}
 \item["strahl"]\index{STRAHL} A collisional-radiative package developed at IPP--Garching \cite{BEHRINGER87A}, stored in the {\tt stra.dat}\index{stra.dat} file
 \item["adas"]\index{ADAS} (Atomic Data and Analysis Structure) A complete collisional-radiative atomic physics database, actively being maintained and upgraded \cite{ADAS,ADAS2006}. Recommended. Available at \href{http://adas.phys.strath.ac.uk/}{http://adas.phys.strath.ac.uk/}
-\item["amns"]\index{AMNS} (Atomic, Molecular, Nuclear, and Surface data) For ITM-environment runs only, uses access to the ITM AMNS tools and database
+\item["amns"]\index{AMNS} (Atomic, Molecular, Nuclear, and Surface data) For IMAS and ITM environment runs only, uses access to the AMNS tools and database
 \end{description}
 
 \index{Weisheit}
@@ -3563,7 +3575,10 @@ or
 will produce a {\tt b2yr.plt} file containing a series of
 plots detailing the dependencies of the atomic rates on density and temperature for
 each isonuclear sequence, as well as a {\tt b2yr.prt} ASCII file containing
-tables of these rates.
+tables of these rates. If the {\tt fix\_recomb} switch has been activated, then
+the electron cooling rate is plotted with and without the contribution due to the
+ionization potential of the recombining ion, and additional graphs are included for the
+negative of that rate if it becomes a heating (instead of cooling) rate.
 
 The {\tt b2yr.plt} file is an NCAR GKS file. The presence in the run directory of a file called {\tt ncar.cfg}, with the
 first character of the first line non-blank, will cause the program to use
@@ -3786,12 +3801,12 @@ prospective users are urged to read the {\em entire} section below carefully
 before proceeding to use it. As a summary, however, the sequence of steps to
 be followed for a succesful conversion is:
 \begin{enumerate}
-  \item[1] Create a new case directory: {\tt \$SOLPSWORK/<my\_new\_case>}
+  \item[1] Create a new case directory: {\tt \$SOLPSWORK/<my\_new\_case>}.
   \item[2] In the new case directory, create subdirectories {\tt baserun} and {\tt convert} as well as a run subdirectory ({\tt <my\_run>}). {\tt baserun} and {\tt convert} are special names and should not be changed.
   \item[3] Copy from your old case to the new case's {\tt convert} directory all input and output files you wish to have converted. You may copy {\tt baserun} files that you know will not be converted to the new case's {\tt baserun} directory instead.
-  \item[4] Check and correct as necessary the relative ages of the input files.
-  \item[5] Run the {\tt b2yt} converter
-  \item[6] Displace the converted case input files to the converted case {\tt baserun} and run directories
+  \item[4] Check and correct as necessary the relative ages of the input files, for which you can use the {\tt correct\_b2yt\_timestamps} script.
+  \item[5] Run the {\tt b2yt} converter.
+  \item[6] Displace the converted case input files to the converted case {\tt baserun} and run directories, for which you can use the {\tt import\_files\_from\_convert} script.
 \end{enumerate}
 
 The {\tt b2yt} utility program allows a user to take a {\tt b2fstate} solution file
@@ -3807,12 +3822,12 @@ file. The {\tt b2yt.dat} file should contain, for example:
 'solps_version'  'iter'
 'eirene_format'  'iter'
 \end{verbatim}
-with any optional switches mentioned afterwards, to create a solution on an $8 \times 8$ grid.
+with any optional switches mentioned afterwards, here to create a solution on an $8 \times 8$ grid.
 
 A solution for non-commensurate grids is also available, requiring
 instead that the topology of the two solutions be the same, and works by 2-D
 interpolation of the plasma data in the computational domain, by region. This is
-activated with the 'b2ytdr\_non\_commensurate' option set to '1' in {\tt b2yt.dat}. This option should also be used when the overall grid size remains the same but the location and/or depth of the cuts has changed.
+activated with the 'b2ytdr\_non\_commensurate' option set to '1' in {\tt b2yt.dat}. This option should also be used when the overall grid size remains the same but the location and/or depth of the cuts has changed, or when mapping a lower single-null (LSN) case to an upper single-null (USN) case or vice versa (or between USN-like and LSN-like limiter geometries). When switching between USN and LSN, the solution will be mirror-reflected to keep the inboard and outboard divertor solutions in the correct geometrical locations.
 
 The conversion of the {\tt Eirene} input file additionally requires for the converter program to know the original version of {\tt Eirene} with which the input file was used, and this is provided by means of the 'eirene\_format' switch. Its possible values (case-insensitive) are:
 \begin{description}
@@ -3846,7 +3861,7 @@ This is important because the parallel velocity is co-aligned with the magnetic 
 
 {\tt b2yt} may also be used
 to change the order of species (for example changing from $D+C+He$ to $D+He+C$) or for
-bundling, de-bundling or re-bundling species, or even removing species and complete
+bundling, de-bundling, or re-bundling species, or even removing species and complete
 isonuclear sequences. It is however not possible to use this converter to {\em add}
 a new isonuclear sequence. When modifying the species data, the user
 should run {\tt b2ar} with the new species arrangement before running {\tt b2yt}
@@ -3856,9 +3871,9 @@ after renaming it {\tt b2ah.dat}) and {\tt b2ar} before re-launching the run.
 
 If a new geometry is requested, the {\tt b2yt} program should be run after the
 new geometry file ($nx1 \times ny1$) has
-been produced and is available in the run or {\tt baserun} directories as {\tt b2fgmtry}.
+been produced and is available in the {\tt convert} or {\tt baserun} directories as {\tt b2fgmtry}. If converting a linear case, it is possible to move the location of the nominal separatrix on the new grid by means of the {\tt b2ytdr\_jsep1} switch in {\tt b2yt.dat}.
 The old geometry file should also remain available in
-the run directory as {\tt b2fgmtry.old}. If this is a coupled case and the number of
+the {\tt convert} directory as {\tt b2fgmtry.old}. If this is a coupled case and the number of
 triangles for the {\tt Eirene} grid remains the same, the new {\tt fort.33}, {\tt fort.34}
 and {\tt fort.35} files corresponding
 to the new geometry should also be provided. If, however, the number of triangles between the
@@ -4323,23 +4338,24 @@ ENDDO
 
 \subsection{Information for MPI}
 
-There is a final optional block in the {\tt Eirene} input file that can be used to choose the MPI parallelization strategy to be applied. Its format is:
+The standard way to choose the MPI parallelization strategy in {\tt Eirene} is {\it via} the {\tt NPRLL} variable in block 1 of the input file. However, one can also use an optional block at the very end of the {\tt Eirene} input file which will overwrite the {\tt NPRLL} setting. Its format is:
 
 {\it *** INFORMATION\_FOR\_MPI}
 \begin{verbatim}
 AUTOMATIC_DISTRIBUTION
 \end{verbatim}
 
-There are currently four possible choices supported. They are:
+There are currently five possible choices supported. They are:
 \begin{description}
-  \item[BALANCED] A balanced strategy in which the workload is attempted to be divided evenly among processors. If the initial setup for the {\bf BALANCED} strategy fails, the code then attempts the {\bf APCAS} strategy.
-  \item[APCAS] meaning {\it All Processors Compute All Strata}, where the work of each stratum is divided among all processors. Usually involves more communication between processors.
-  \item[ORIGINAL] The original strategy implemented in versions of {\tt Eirene} prior to \SOLPSITER version 3.0.5. Also called ``proportional allocation'' in the {\tt Eirene} manual. In that strategy, each processor is handed either part of a large stratum or one or several full smaller strata. This strategy works well if the number of processors is larger than the number of strata, but is not recommended if the number of strata is larger than the number of processors.
+  \item[BALANCED] A balanced strategy in which the workload is attempted to be divided evenly among processors. If the initial setup for the {\bf BALANCED} strategy fails, the code then attempts the {\bf APCAS} strategy. Also obtainable by setting {\tt NPRLL = 3}.
+  \item[APCAS] meaning {\it All Processors Compute All Strata}, where the work of each stratum is divided among all processors. Usually involves more communication between processors. Also obtainable by setting {\tt NPRLL = 2}.
+  \item[ORIGINAL] The original strategy implemented in versions of {\tt Eirene} prior to \SOLPSITER version 3.0.5. Also called ``proportional allocation'' in the {\tt Eirene} manual. In that strategy, each processor is handed either part of a large stratum or one or several full smaller strata. This strategy works well if the number of processors is larger than the number of strata, but is not recommended if the number of strata is larger than the number of processors. Also obtainable by setting {\tt NPRLL = 1}.
+  \item[EMBARRASS] meaning the ``embarassingly parrallel'' scheme by which each processor is assigned the same number of particle trajectories. This is the default in non-\SOLPSITER versions of {\tt EIRENE}. Also obtainable if setting {\tt NPRLL = 0} or {\tt NPRLL > 3}.
   \item[AUTOMATIC] tells the code to use the current default, whatever it may be.
 \end{description}
 The format to read the strategy name is free-form. The input file is scanned for the words describing the chosen strategy after the title line {\tt *** INFORMATION\_FOR\_MPI} is found. The {\em first} match to an (uppercase) strategy name will be the strategy followed by the code. If the title line is missing or no match is found to any of the strategy names, the default strategy is used. See the {\tt Eirene\_balanced\_MPI} document on the \SOLPSITER web site {\tt Manuals and Documentation} folder for more details on the performance and algorithm corresponding to each strategy.
 
-The default strategy depends on the version of the MPI library with which {\tt Eirene} was compiled. If MPI version 3 or greater was used, then the default strategy is the {\bf BALANCED} one. Otherwise, the {\bf ORIGINAL} strategy is chosen.
+The default strategy depends on the version of the MPI library with which {\tt Eirene} was compiled. If MPI version 3 or greater was used, then the default strategy is the {\bf BALANCED} one. Otherwise, the {\bf ORIGINAL} strategy is chosen. If {\tt Eirene} is used outside the \SOLPSITER environment, the default strategy will be the {\bf EMBARASSINGLY PARALLEL} one.
 
 \chapter{Running the coupled version of B2.5-Eirene}
 \label{cha:coupledb2eirene}
@@ -8282,12 +8298,16 @@ q_a^{(0)} = q_{a\parallel}^{(0)} +
 
 $
 \widetilde{\tau}_a =
-\frac{\tau_a}{1+\frac{15.12\cdot 10^{16}\left(\frac{T_i}
+\frac{\tau_a^{(Br)}}{1+\frac{15.12\cdot 10^{16}\left(\frac{T_i}
 e\right)^2}{c(y) \sum \limits^{ns-1}_{a=0} z_a^2 n_a}}
 \cdot
 \frac 1 {1 +
 \frac{15.12 \cdot 10^{16} \cdot \varepsilon^{3/2} \left( \frac{T_i} e \right)^2}
-{c(y) \sum \limits^{ns-1}_{a=0} z_a^2 n_a}}
+{c(y) \sum \limits^{ns-1}_{a=0} z_a^2 n_a}}$, \ \ \ \
+$
+\tau_a^{(Br)} = \frac{3}{4 \sqrt{\pi} }
+\frac{ \sqrt{m_a} T_i^{\frac{3}{2}} }{ z_a^2 z_{eff} n_e \ln \Lambda }
+\left( \frac{ 4 \pi \epsilon_0 }{e²} \right)^2
 $
 
 This correction is compatible {\bf only} with plateau and banana correction ('b2trcl\_lluciani' set to '3').
@@ -8361,6 +8381,14 @@ where $\ln \Lambda $ can be chosen as
 \begin{equation}\label{eq:ene_QR}
 Q_R = \sum \limits_{a=0}^{ns-1} r_{Q_a} n_e n_a ~ \text{from b2stel}
 \end{equation}
+
+\begin{equation}
+ \label{eq:ene_QRa}
+ r_{Q_a} = r_{Q_a}^{\rm ion} + r_{Q_a}^{\rm rec} + r_{Q_a}^{\rm brm} + r_{Q_a}^{\rm line}
+\end{equation}
+contains contributions from ionization, recombination, bremsstrahlung and line radiation.
+
+
 
 \begin{equation}\label{eq:ene_Qfei}
 Q_{Fei} = \left\{
@@ -11153,6 +11181,7 @@ Thus the total energy density is
 The energy flux
 
 \begin{equation}
+\label{eq:energy_flux_vector}
 \vec{\bf q}^{\rm ENERGY} = \vec{\bf q}_{e}^{\rm ENERGY} + \vec{\bf q}_{i}^{\rm ENERGY}
 \end{equation}
 should be associated with the
@@ -11597,7 +11626,7 @@ magnetic presheath edge should be specified in the discretized equations.
 \section{Analytical Expressions for the Standard ("Old") Boundary Sources
 in the B2.5 Code}
 
-The boundary sources are expressed as linear and/or weakly non-linear
+The boundary sources are expressed as linear and/or weakly nonlinear
 functions of the macroscopic plasma parameters ($n_{\alpha}$, $n_{e}$,
 $u_{\alpha x}$, $T_{i}$, $T_{e}$, $\Phi$), calculated in
 the cells neighbouring the boundary cells. Specific dependencies of the
@@ -11611,8 +11640,8 @@ conditions for the new simulation are not significantly different, it is
 practical to write any minor changes to the boundary conditions in the input
 file {\tt b2mn.dat} (section \ref{sec:b2mn}). (If the existing {\tt b2ah.dat} file is
 corrected, it is not necessary to do that.) When the theoretical model
-predicts more complicated non-linear dependence of the boundary fluxes on
-the plasma parameters, the effects of these non-linearities can be only
+predicts more complicated nonlinear dependence of the boundary fluxes on
+the plasma parameters, the effects of these nonlinearities can be only
 approximately taken into consideration in the calculation, e.g. by some
 appropriate choice of the numerical values of the input parameters. More
 details about the numerical implementation of
@@ -12809,6 +12838,10 @@ may be read by any suitable tool (e.g. MATLAB) for further analysis, plotting, c
 
 The table below provides a listing of the various files that may be produced, the variables they contain and the equations to which they relate.
 
+Note that some quantities (like density, velocity, temperature, potentials, magnetic field,
+metric coefficients, etc.) are computed at cell centers, while others (like particle,
+energy, and momentum fluxes, currents, and quantities which contribute to them) are computed at cell faces.
+
 \begin{center}
     \begin{longtable}{|l|l|l|l|}
     \hline
@@ -12895,9 +12928,9 @@ $\displaystyle -\tilde{D}_{p,ax}\frac{\sqrt{g}}{h_x}\frac{1}{h_x}\frac{\partial{
 
 $\displaystyle -\tilde{D}_{p,ay}\frac{\sqrt{g}}{h_y}\frac{1}{h_y}\frac{\partial{p_a}}{\partial{y}} $ & $ s^{-1} $ & \texttt{b2tfnb\_dgradpby[XXX].dat} & (\ref{eq:D_pay})\\
 
-$\displaystyle D_{ayx}\frac{\sqrt{g}}{h_y} \frac{1}{h_x} \frac{\partial n_a T_i}{\partial x} $ \footnote{Mind the sign! It is opposite in output file and in flux balance.} & $ s^{-1} $ & \texttt{b2tfnb\_fnbPSchx[XXX].dat} &  (\ref{eq:D_axy}) \\
+$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{\Gamma}_{ax}^{\left( PSch \right)} $ \footnote{Mind the sign! It is opposite in the output file and the flux balance.} & $ s^{-1} $ & \texttt{b2tfnb\_fnbPSchx[XXX].dat} &  (\ref{eq:D_axy}) \\
 
-$\displaystyle -D_{axy} \frac{\sqrt{g}}{h_x} \frac{1}{h_y} \frac{\partial n_a T_i}{\partial y} $ \footnote{Mind the sign! It is opposite in output file and in flux balance.} & $ s^{-1} $ & \texttt{b2tfnb\_fnbPSchy[XXX].dat} & (\ref{eq:D_axy}) \\
+$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{\Gamma}_{ay}^{\left( PSch \right)} $ \footnote{Mind the sign! It is opposite in the output file and the flux balance.} & $ s^{-1} $ & \texttt{b2tfnb\_fnbPSchy[XXX].dat} & (\ref{eq:D_axy}) \\
 
 $\displaystyle {D}_{n,a}\frac{\sqrt{g}}{h_x^2} $ & $ m^3/s $ & \texttt{b2trno\_cdnax[XXX].dat} & (\ref{eq:D_na})\\
 
@@ -13050,9 +13083,9 @@ $\displaystyle \frac32 \frac{\sqrt{g}}{h_{x}} \Gamma_{ex} T_e$ & $ W $ & \texttt
 
 $\displaystyle \frac32 \frac{\sqrt{g}}{h_{y}} \Gamma_{ey} T_e$ & $ W $ & \texttt{b2tfhe\_\_qe\_32y.dat} & (\ref{eq:ene_gammay})  \\
 
-$\displaystyle \frac{\sqrt{g}}{h_{x}} q_{ex}^{P.Sch}$ & $ W $ & \texttt{b2tfhe\_\_fhePSchx,y.dat} & (\ref{eq:ene_qPSchx})\\
+$\displaystyle \frac{\sqrt{g}}{h_{x}} q_{ex}^{P.Sch}$ \footnote{Mind the sign! It is opposite in the output file and the heat balance.} & $ W $ & \texttt{b2tfhe\_\_fhePSchx.dat} & (\ref{eq:ene_qPSchx})\\
 
-$\displaystyle \frac{\sqrt{g}}{h_{y}} q_{ey}^{P.Sch}$ & $ W $ & \texttt{b2tfhe\_\_fhePSchx,y.dat} & (\ref{eq:ene_qPSchy})\\
+$\displaystyle \frac{\sqrt{g}}{h_{y}} q_{ey}^{P.Sch}$ \footnote{Mind the sign! It is opposite in the output file and the heat balance.} & $ W $ & \texttt{b2tfhe\_\_fhePSchy.dat} & (\ref{eq:ene_qPSchy})\\
 
 $\displaystyle -\frac{\sqrt{g}}{h_{x}} \kappa_{ex} \frac{1}{h_{x}}\frac{\partial T_e}{\partial x}$ & $ W $ & \texttt{b2tfhe\_\_qe\_ke\_gTx.dat} &  (\ref{eq:ene_qex})\\
 
@@ -13103,6 +13136,10 @@ $\displaystyle \alpha^{(ST)} $ & $??$ & \texttt{b2trno\_chcey\_stoch.dat} & (\re
 $\displaystyle -\frac 5 2 \frac{\sqrt{g}}{h_{x}} n_e T_e^2 \frac{B_z}{eh_y} \frac{\partial}{\partial y} \left( \frac 1{B^2} \right)$ & $W$ & \texttt{b2tfhe\_\_qediax.dat} & (\ref{eq:ene_qex}) \\
 
 $\displaystyle \frac 5 2 \frac{\sqrt{g}}{h_{y}} n_e T_e^2 \frac{B_z}{eh_x} \frac{\partial}{\partial x} \left( \frac 1{B^2} \right) $ & $W$ & \texttt{b2tfhe\_\_qediay.dat} & (\ref{eq:ene_qey}) \\
+
+$r_{Q_a}^{\rm brm}\sqrt{g} $ & $W$ & \texttt{b2stel\_rqbrm[XXX]} & (\ref{eq:ene_QRa}) \\
+
+$r_{Q_a}^{\rm line}\sqrt{g} $ & $W$ & \texttt{b2stel\_rqrad[XXX]} & (\ref{eq:ene_QRa}) \\
 
 residuals & $ W $ & \texttt{b2npht\_reshe.dat} or & \\ & & \texttt{b2nph9\_reshe.dat} & \\
 
@@ -13200,7 +13237,7 @@ $\displaystyle \frac{\sqrt{g}}{h_x}j_x $ & $ A $ & \texttt{b2nppo\_fchx.dat} or 
 $\displaystyle \frac{\sqrt{g}}{h_y}j_y $ & $ A $ & \texttt{b2nppo\_fchy.dat} or & (\ref{eq:pot_eq}), (\ref{eq:pot_jy})\\
 & & \texttt{b2npp7\_fchy.dat} &  \\
 
-$\displaystyle \frac{\sqrt{g}}{h_x}j_x^{(\parallel)} $ & $ A $ & \texttt{b2tfhe\_\_fch\_px.dat} & (\ref{eq:pot_jx})\\
+$\displaystyle \frac{\sqrt{g}}{h_x}j_x^{(\parallel)} $ & $ A $ & \texttt{b2tfhe\_\_fch\_px.dat} & (\ref{eq:fch_p}), (\ref{eq:pot_jx})\\
 %& & \texttt{b2tfhe\_\_fch\_px.dat} &  \\
 
 $\displaystyle \frac{\sqrt{g}}{h_x}\widetilde{j}_x^{(dia)} $ & $ A $ & \texttt{b2tfhe\_\_fchdiax.dat} & (\ref{eq:pot_tijxdia})\\
@@ -13256,6 +13293,92 @@ residuals & $ A $ & \texttt{b2nppo\_respo.dat} or & (\ref{eq:pot_eq}) \\
 \end{longtable}
 \end{center}
 
+It may be convenient to build a total energy flux $\vec{\bf q}^{\rm ENERGY}$ (cf. Eq.~\ref{eq:energy_flux_vector}) and many other quantities
+which contribute to it from the quantities listed in the table~\ref{tab:b2wdat_files}. Note that since the energy flux is computed at
+cell faces, it is necessary to compute it from the quantities also computed at cell faces.
+
+\begin{gather}
+ q_{x}^{\rm ENERGY} = q_{ex}^{\rm ENERGY} + q_{ix}^{\rm ENERGY} \\
+ q_{y}^{\rm ENERGY} = q_{ey}^{\rm ENERGY} + q_{iy}^{\rm ENERGY}
+\end{gather}
+
+\begin{gather}
+  q_{ex}^{\rm ENERGY} = \widetilde{q}_{ex} + q_{ex}^{P.Sch} + q_{ex}^{dia} +
+  \frac23 \left(q_{ex}^{ExB} + q_{ex}^{u_\parallel} + q_{ex}^{uDPC}\right) \\
+  q_{ix}^{\rm ENERGY} = \widetilde{q}_{ix} + q_{ix}^{P.Sch} + q_{ix}^{dia} +
+  \frac23 \left(q_{ix}^{ExB} + q_{ix}^{u_\parallel} + q_{ix}^{uDPC}\right) +
+  q_{ix}^{j} + q_{ix}^{conv}\\
+  q_{ey}^{\rm ENERGY} = \widetilde{q}_{ey} + q_{ey}^{P.Sch} + q_{ey}^{dia} +
+  \frac23 q_{ey}^{ExB} \\
+  q_{iy}^{\rm ENERGY} = \widetilde{q}_{iy} + q_{iy}^{P.Sch} + q_{iy}^{dia} +
+  \frac23 q_{iy}^{ExB} + q_{iy}^{conv} + q_{iy}^{j}
+\end{gather}
+
+\begin{gather}
+ \widetilde{q}_{ex}^{dia} = -\frac52 T_e^{\rm (face)} \sum\limits_a
+ \frac{z_a^2 T_e^{\rm (face)}}{T_i^{\rm (face)}} \tilde{V}_{ax}^{(dia)}n_a \\
+ \widetilde{q}_{ey}^{dia} = -\frac52 T_e^{\rm (face)} \sum\limits_a
+ \frac{z_a^2 T_e^{\rm (face)}}{T_i^{\rm (face)}} \tilde{V}_{ay}^{(dia)}n_a \\
+ \widetilde{q}_{ix}^{dia} = \frac52 T_i^{\rm (face)} \sum\limits_a \tilde{V}_{ax}^{(dia)}n_a \\
+ \widetilde{q}_{iy}^{dia} = \frac52 T_i^{\rm (face)} \sum\limits_a \tilde{V}_{ay}^{(dia)}n_a
+\end{gather}
+Here and below the superscript '(face)' means that the temperature (or other
+quantity) should be computed at the cell face as a half-sum its neighboring cell-centered values.
+Since $\displaystyle \frac{\sqrt{g}}{h_x} \tilde{V}_{ax}^{(dia)}n_a$ and
+$\displaystyle \frac{\sqrt{g}}{h_y} \tilde{V}_{ay}^{(dia)}n_a$ are the particle
+fluxes through the cell faces, $\displaystyle \frac{\sqrt{g}}{h_x}$ and
+$\displaystyle \frac{\sqrt{g}}{h_y}$ are the cell face areas, and these quantities
+are computed at cell faces, we need to compute temperatures at cell faces too
+to get heat flux densities correctly computed at cell faces. A similar approach
+is applied below in all equations within this Appendix.
+
+\begin{gather}
+ q_{ex}^{ExB} = \frac32 T_e^{\rm (face)} \sum\limits_a z_a n_a V_{ax}^E \\
+ q_{ey}^{ExB} = \frac32 T_e^{\rm (face)} \sum\limits_a z_a n_a V_{ay}^E \\
+ q_{ix}^{ExB} = \frac32 T_i^{\rm (face)} \sum\limits_a n_a V_{ax}^E \\
+ q_{iy}^{ExB} = \frac32 T_i^{\rm (face)} \sum\limits_a n_a V_{ay}^E
+\end{gather}
+
+\begin{gather}
+ q_{ex}^{u_\parallel} = \frac32 T_e^{\rm (face)} \left(
+ \sum\limits_a z_a b_x n_a V_{\parallel a} - \frac{j_x^{(\parallel)}}{e} \right)\\
+ q_{ix}^{u_\parallel} = \frac32 T_i^{\rm (face)} \sum\limits_a b_x n_a V_{\parallel a}
+\end{gather}
+
+\begin{gather}
+ q_{ex}^{uDPC} = \frac32 T_e^{\rm (face)}
+ \sum\limits_a z_a n_a V_a^{\rm corr\_dpc} \\
+ q_{ix}^{uDPC} = \frac32 T_i^{\rm (face)} \sum\limits_a n_a V_a^{\rm corr\_dpc}
+\end{gather}
+
+\begin{gather}
+ q_{ix}^{conv} =  \sum\limits_a \frac{m_a \left(V_{\parallel a}^{\rm (face)}\right)^2}{2}
+ \left(\widetilde{\Gamma}_{ax} + \widetilde{\Gamma}_{ax}^{\left( PSch \right)}  + \tilde{V}_{ax}^{(dia)} n_a \right) \\
+ q_{iy}^{conv} = \sum\limits_a \frac{m_a \left(V_{\parallel a}^{\rm (face)}\right)^2}{2}
+ \left(\widetilde{\Gamma}_{ay} + \widetilde{\Gamma}_{ax}^{\left( PSch \right)} + \tilde{V}_{ax}^{(dia)} n_a \right)
+\end{gather}
+
+
+\begin{gather}
+ q_{ix}^{j} =  \frac{T_i^{\rm (face)}}{e} \sum\limits_a
+ \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)}   \right) \\
+ q_{iy}^{j} = \frac{T_i^{\rm (face)}}{e} \sum\limits_a \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)}   \right)
+\end{gather}
+
+Additionally one can consider a flux of energy in the form of potential energy of ionization. This energy is spent by electrons at the place of ionization and released
+back at the place of recombination (or is transferred to the targets thus contributing to the target heat loads). The associated energy flux is
+
+\begin{gather}
+ q_{x}^{ioniz} = \sum\limits_a \left(\widetilde{\Gamma}_{ax} + \widetilde{\Gamma}_{ax}^{\left( PSch \right)}  + \tilde{V}_{ax}^{(dia)} n_a \right) E_a^{pot} \\
+ q_{y}^{ioniz} = \sum\limits_a \left(\widetilde{\Gamma}_{ax} + \widetilde{\Gamma}_{ax}^{\left( PSch \right)}  + \tilde{V}_{ax}^{(dia)} n_a \right) E_a^{pot}
+\end{gather}
+with
+\begin{equation}
+   E_a^{pot} = \sum\limits_{i=1}^{z_a} I_a^{ioniz}
+\end{equation}
+the sum of the ionization potentials $I_a^{ioniz}$ of all ions with
+a charge state below the considered ion (inclusive) within their isonuclear sequence.
+
 \chapter{Region definitions}
 \label{cha:regions}\index{regions}\index{vreg}\index{xreg}\index{yreg}\index{NREG}
 
@@ -13310,6 +13433,8 @@ region 2 === SOL boundary
 \end{verbatim}
 
 In cases where the problem of interest has only one target and a plasma entry surface, the target should be located to the right of the domain and the plasma should enter from the left.
+
+An informative review of how the code geometry and physics model can be adapted to linear devices is given in \cite{Sala2020}.
 
 \clearpage
 \section{Regions for limiter cases}
@@ -13426,7 +13551,9 @@ $Y$-directed regions:
 |       |               |       |
 |       |               |       |
 +---1---+-------2-------+---3---+
+\end{verbatim}
 
+\begin{Verbatim}[fontsize=\footnotesize]
 region 1 === Western divertor private flux wall boundary (inboard for LSN, outboard for USN)
 region 2 === core boundary
 region 3 === Eastern divertor private flux wall boundary (outboard for LSN, inboard for USN)
@@ -13434,7 +13561,7 @@ region 4 === separatrix
 region 5 === Western divertor to main chamber wall boundary (inboard for LSN, outboard for USN)
 region 6 === SOL to main chamber wall boundary
 region 7 === Eastern divertor to main chamber wall boundary (outboard for LSN, inboard for USN)
-\end{verbatim}
+\end{Verbatim}
 
 \clearpage
 \section{Regions for CDN}
@@ -17567,7 +17694,7 @@ they need only contain the modified definitions.
 \section{Defines}
 
 \subsection{SOLPS-ITER}
-\index{DEFINES, used throughout SOLPS-ITER}
+\label{sec:defines}\index{DEFINES, used throughout SOLPS-ITER}
 
 We list here the possible optional pre-processor definitions that can be used when
 compiling the various components of the \SOLPSITER code suite.
@@ -17581,6 +17708,7 @@ Additionally, system-wide compiler flags can be provided by means of the
 \item[CATALYST] \index{CATALYST} Turns on the Paraview Catalyst utility (see the SOLPS-GUI manual for full details)
 \item[COMPILER\_MAJOR\_VERSION] \index{COMPILER\_MAJOR\_VERSION} Major version number of the compiler being used (set internally by the configuration files)
 \item[COMPILER\_MINOR\_VERSION] \index{COMPILER\_MINOR\_VERSION} Minor version number of the compiler being used (set internally by the configuration files)
+\item[CRAY] \index{CRAY} To be used with the Cray Fortran compiler
 \item[DBG] \index{DBG} Turns on additional debugging output (set internally by the {\tt Makefile} when requesting a {\tt \_debug} compilation)
 \item[F2003] \index{F2003} To be used if the compiler is compatible with {\tt Fortran 2003}
 \item[F77] \index{F77} Identifies specific code to {\tt Fortran-77} compilers
@@ -17745,12 +17873,13 @@ if desired, be declared as part of either the \${\tt SOLPS\_CPP} or the
 \${\tt SOLPSTOP/SETUP/config.}\${\tt {HOST\_NAME}.}\${\tt {COMPILER}(.local)} files.
 
 \begin{description}
+\item[AMNS] \index{AMNS} Links to AMNS database in IMAS environment
 \item[ASTRA] \index{ASTRA} To be used if one wishes to run in coupled mode with the core transport code {\tt ASTRA}
 \item[CDF\_MOVIE] \index{CDF\_MOVIE} To be used if {\tt CDF} movie output is desired (turned on by default if the NetCDF library is present)
 \item[CLASSICAL\_CURRENT] \index{CLASSICAL\_CURRENT} Turns on classical current drift term
 \item[COMPLICATED] \index{COMPLICATED} Uses a more "complicated" model for feedback schemes
 \item[EASY] \index{EASY} Uses the "easy" model for chord integration
-\item[GOT\_AMNSPROTO] \index{GOT\_AMNSPROTO} Links to AMNS database
+\item[GOT\_AMNSPROTO] \index{GOT\_AMNSPROTO} Links to AMNS database in ITM environment
 \item[JET] \index{JET} Enables some additional output for coupling to the JET post-processor
 \item[NO\_21] \index{NO\_21} Do not use 21-moment model for thermal and viscous forces
 \item[NO\_IEEE] \index{NO\_IEEE} Provides replacements to IEEE non-standard arithmetic routines
@@ -17828,6 +17957,8 @@ ALLOCATE\_AND\_NAMELIST & modules/b2mod\_user\_namelist.F \\
 ALLOCATE\_AND\_NAMELIST & modules/b2mod\_wall.F \\
 ALLOCATE\_AND\_NAMELIST & postprocessing/b2yt\_wall.F \\
 ALLOCATE\_AND\_NAMELIST & sources/b2stbr.F \\
+AMNS & preprocessing/b2ardr.F \\
+AMNS & utility/ratadas.F \\
 ASTRA & modules/b2mod\_astra\_to\_b2.F \\
 ASTRA & sources/b2stbc\_phys.F \\
 ASTRA & sources/b2stbr.F \\
@@ -17837,6 +17968,7 @@ ASTRA & transport/b2trcl.F \\
 B25\_EIRENE & b2plot/b2pinp.F \\
 B25\_EIRENE & b2plot/b2plot.F \\
 B25\_EIRENE & b2plot/b2pnwl.F \\
+B25\_EIRENE & b2plot/b2ptrdl.F \\
 B25\_EIRENE & b2plot/b2ptrgl.F \\
 B25\_EIRENE & b2plot/b2pwinm.F \\
 B25\_EIRENE & b2plot/b2pwldw.F \\
@@ -17895,6 +18027,11 @@ CDF\_MOVIE & b2plot/caltraj.F \\
 CDF\_MOVIE & b2plot/process\_chords.F \\
 CLASSICAL\_CURRENT & transport/b2tdia.F \\
 COMPLICATED & sources/b2stbc\_fb.F \\
+CRAY & b2plot/b2plot.F \\
+CRAY & equations/b2news.F \\
+CRAY & equations/b2news\_.F \\
+CRAY & equations/b2npmo.F \\
+CRAY & postprocessing/b2ytdr.F \\
 DBG & b2plot/b2ptrdl.F \\
 DBG & b2plot/b2ptrgl.F \\
 DBG & b2plot/b2pwrdld.F \\
@@ -17928,6 +18065,7 @@ GFORTRAN & utility/ma28copy3.F \\
 GFORTRAN & utility/ma28copy4.F \\
 GGD\_MINOR\_VERSION & ids/b2mod\_ual\_io.F90 \\
 GGD\_MINOR\_VERSION & ids/b2mod\_ual\_io\_grid.F90 \\
+GOT\_AMNSPROTO & preprocessing/b2ardr.F \\
 GOT\_AMNSPROTO & utility/ratadas.F \\
 HITS\_PER\_CHORD & b2plot/process\_chords.F \\
 HITS\_PER\_CHORD & b2plot/process\_eirene\_chords.F \\
@@ -17935,11 +18073,16 @@ HPUX & modules/b2mod\_eirbra.F \\
 IBMaix & b2plot/b2plot.F \\
 IBMaix & postprocessing/b2ytdr.F \\
 IBMaix & user/b2file.F \\
+IMAS & driver/b2mnds.F \\
 IMAS & ids/b2mod\_ual.F90 \\
 IMAS & ids/b2mod\_ual\_io\_data.F90 \\
 IMAS & ids/b2mod\_ual\_io\_grid.F90 \\
 IMAS & ids/b2mod\_ual\_io.F90 \\
 IMAS & ids/b2\_ual\_write.F90 \\
+IMAS & modules/b2mod\_b2cmrc.F \\
+IMAS & modules/b2mod\_ppout.F \\
+IMAS & preprocessing/b2ardr.F \\
+IMAS & utility/ratadas.F \\
 IMAS\_MINOR\_VERSION & ids/b2mod\_ual.F90 \\
 IMAS\_MINOR\_VERSION & ids/b2mod\_ual\_io.F90 \\
 IMAS\_MINOR\_VERSION & ids/b2mod\_ual\_io\_data.F90 \\
@@ -17947,7 +18090,6 @@ IMAS\_MINOR\_VERSION & ids/b2mod\_ual\_io\_grid.F90 \\
 IMAS\_MINOR\_VERSION & ids/b2\_ual\_write.F90 \\
 IMAS\_MINOR\_VERSION & ids/b2\_ual\_write\_b2mod.F90 \\
 ITM & preprocessing/b2ardr.F \\
-ITM & preprocessing/b2arin.F \\
 ITM & utility/ratadas.F \\
 ITM\_ENVIRONMENT\_LOADED & ids/b2mod\_ual.F90 \\
 ITM\_ENVIRONMENT\_LOADED & ids/b2mod\_ual\_io\_data.F90 \\
@@ -18077,6 +18219,7 @@ NO\_OPENMP\_B2XPFE & b2aux/b2xpfe.F \\
 NO\_OPENMP\_MYBLAS & utility/myblas.F \\
 NO\_OPENMP\_SFILL & utility/sfill.F \\
 NO\_OPT & b2plot/b2plot.F \\
+NO\_OPT & ids/b2mod\_ual\_io.F90 \\
 NO\_OPT & postprocessing/b2ytdr.F \\
 NO\_SAVE & include/BRAEIR.H \\
 NO\_SAVE & include/EIRBRA.H \\

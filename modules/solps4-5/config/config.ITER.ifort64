@@ -50,7 +50,7 @@ BLD = ar rcv
 GRLIBES = ${LD_NCARG}
 LDLIBES = ${LD_NETCDF} ${LD_NAG} ${LD_MSCL}
 
-LD = ifort
+LD = ${FC}
 
 LCPP = ${LD_SONNET}
 
