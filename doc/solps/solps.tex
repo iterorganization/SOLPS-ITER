@@ -440,7 +440,7 @@ course be replaced by {\tt gmake solps(\_debug)},
 
 It is possible to pass down Makefile options with the syntax
 \begin{verbatim}
-  gmake MKAE_OPTIONS=-j8
+  gmake MAKE_OPTIONS=-j8
 \end{verbatim}
 for instance to multi-thread on the compilation. It is not recommended to give compilation options directly in the compilation line (say, with {\tt gmake -j8 solps})
 because the \SOLPSITER compilation includes many parts which must be done in order and sometimes serially.
@@ -516,21 +516,25 @@ purpose, a master \SOLPSITER {\tt Makefile} is provided, located at \${\tt \{SOL
   \item[clean] Alias to {\bf clean\_solps}
 \end{description}
 
-Adding the {\tt \_mpi} suffix at the end of any of build targets will execute the command
+Adding the {\tt \_mpi} suffix at the end of any build target will execute the command
 with MPI parallelization options, when relevant, and put the executables in a separate
 {\tt builds/}\${\tt \{TOOL\_CHAIN\}.mpi} directory.
 
-Adding the {\tt \_openmp} suffix at the end of any of build targets will execute the command
+Adding the {\tt \_openmp} suffix at the end of any build target will execute the command
 with OpenMP parallelization options, when relevant, and put the executables in a separate
 {\tt builds/}\${\tt \{TOOL\_CHAIN\}.openmp} directory.
 
-Adding both the {\tt \_openmp} and {\tt \_mpi} suffixes, in either order, i.e. {\tt \_openmp\_mpi} or {\tt \_mpi\_openmp}, at the end of any of build targets will execute the command
+Adding both the {\tt \_openmp} and {\tt \_mpi} suffixes, in either order, i.e. {\tt \_openmp\_mpi} or {\tt \_mpi\_openmp}, at the end of any build target will execute the command
 with both OpenMP and MPI parallelization options, when relevant, and put the executables in a separate
 {\tt builds/}\${\tt \{TOOL\_CHAIN\}.openmp.mpi} directory.
 
-Adding the {\tt \_debug} suffix at the end of any of build targets will execute the command
+Adding the {\tt \_debug} suffix at the end of any build target will execute the command
 in debug mode, and put the executables in a separate
 {\tt builds/}\${\tt \{TOOL\_CHAIN\}.debug} directory.
+
+Adding the {\tt clean\_} prefix at the beginning of any build target will remove that build target
+from its directory, as well as all associated pre-processed source files, object files, module files,
+dependencies and libraries.
 
 For compilation of the {\tt Sonnet} library, the user should first do:
 \begin{verbatim}
