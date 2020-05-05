@@ -13706,7 +13706,13 @@ with {\tt Eirene}) files are read in, and then
 commands are read in from {\tt stdin}.
 
 The basic idea in using \btwoplot is to specify the data quantity, some
-transformations, and then the plot command.  \btwoplot is stack
+transformations, and then the plot command.
+
+{\bf Note that \btwoplot deals with cell-face quantities by
+  interpolating such quantities to cell-centres so that, within
+  \btwoplotns, all quantities are cell-centred quantities.}
+
+\btwoplot is stack
 based: seven different stacks are used\index{b2plot, stacks}.
 The most important stack is
 the "matrix" stack which is used to store quantities on the
