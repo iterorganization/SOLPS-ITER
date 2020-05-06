@@ -34,6 +34,7 @@ if ($?SOLPS_PATH) then
   setenv   USE_MPI -DUSE_MPI
   setenv   SOLPS_MPI yes
   unsetenv OLD_SOLPS_PATH
+  rehash
   echo "SOLPS-ITER MPI mode turned on"
 else
   echo "SOLPS_PATH not set. Exiting."

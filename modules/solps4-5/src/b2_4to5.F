@@ -3143,7 +3143,11 @@ c
         if (cfb_cntr_4(is).eq.1) then
           na_feedback_choice(is-1) = 6
           na_feedback_option(is-1) = 6
-          na_feedback_actuator(is-1) = 3
+          if (ffb_cntr_4(is).ne.0) then
+            na_feedback_actuator(is-1) = 1
+          else
+            na_feedback_actuator(is-1) = 3
+          end if
           na_feedback_ix1(is-1) = leftcut(1)+1
           na_feedback_ix2(is-1) = rightcut(1)
           na_feedback_iy1(is-1) = 0
