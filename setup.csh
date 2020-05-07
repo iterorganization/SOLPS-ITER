@@ -16,17 +16,16 @@ setenv SOLPSWORK ${SOLPSTOP}/runs
 # Set HOST_NAME and COMPILER, which will determine setup-files to be used
 #------------------------------------------------------------------------
 
-if (-s whereami) then
-  set iamat=`./whereami|tail -1`
-  echo Running at $iamat.
-else
-  set iamat="UNKNOWN"
-endif
-
 if (-s SETUP/setup.csh.HOST_NAME.local) then
   echo Loading SETUP/setup.csh.HOST_NAME.local.
   source SETUP/setup.csh.HOST_NAME.local
 else
+  if (-s whereami) then
+    set iamat=`./whereami|tail -1`
+    echo Running at $iamat.
+  else
+    set iamat="UNKNOWN"
+  endif
   switch ($iamat)
   case "*UNKNOWN":
     setenv HOST_NAME UNKNOWN

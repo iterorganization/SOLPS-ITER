@@ -16,17 +16,16 @@ export SOLPSWORK=$SOLPSTOP/runs
 # Set HOST_NAME and COMPILER, which will determine setup-files to be used
 #------------------------------------------------------------------------
 
-[ -s whereami ] && {
-  iamat=`./whereami|tail -1`
-  echo Running at $iamat
-} || {
-  iamat="UNKNOWN"
-}
-
 [ -s SETUP/setup.ksh.HOST_NAME.local ] && {
   echo Loading SETUP/setup.ksh.HOST_NAME.local.
   . SETUP/setup.ksh.HOST_NAME.local
 } || {
+  [ -s whereami ] && {
+    iamat=`./whereami|tail -1`
+    echo Running at $iamat
+  } || {
+    iamat="UNKNOWN"
+  }
   case $iamat in
   *UNKNOWN )
     export HOST_NAME=UNKNOWN
