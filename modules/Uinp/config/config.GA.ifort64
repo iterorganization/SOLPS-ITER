@@ -1,7 +1,8 @@
 #  VERSION : 28.07.99 20:34
 
+IRISLIB   ?= /fusion/projects/codes/solps/SOLPS-ITER/public_lib/GA.ifort64
 MSCL_ROOT ?= ${IRISLIB}
-LD_MSCL ?= -L${MSCL_ROOT} -lmscl
+LD_MSCL   ?= -L${MSCL_ROOT} -lmscl
 
 FC       = ifort
 

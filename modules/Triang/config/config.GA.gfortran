@@ -3,6 +3,7 @@
 # The version relying on Fujitsu Fortran installed on AFS
 
 # Test whether necessary variables are defined
+IRISLIB  ?= /fusion/projects/codes/solps/SOLPS-ITER/public_lib/GA.gfortran
 GR_ROOT  ?= ${IRISLIB}
 GLI_HOME ?= ${IRISLIB}/gli/src
 NAGDIR   ?= ${IRISLIB}
