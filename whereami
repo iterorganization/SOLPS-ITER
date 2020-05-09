@@ -26,9 +26,6 @@ case "*.iaea.org":
 case "*.iferc-csc.org":
   echo IFERC
   breaksw
-case "*.itm.rzg.mpg.de":
-  echo IPPITM
-  breaksw
 case "*.eufus.eu":
 case "*.efda-itm.eu":
 case "*.marconi.cineca.it"
