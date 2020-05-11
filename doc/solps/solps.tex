@@ -688,39 +688,28 @@ chosen Fortran compiler ({\it e.g.} {\tt ifort64}).
 
 The {\tt setup.csh} file and its subsidiaries \${\tt \{SOLPSTOP\}/SETUP/setup.csh.}\${\tt \{HOST\_NAME\}.}\${\tt \{COMPILER\}} and \${\tt \{SOLPSTOP\}/SETUP/config.}\${\tt \{HOST\_NAME\}.}\${\tt \{COMPILER\}} are used to load any modules packages useful for the local \SOLPSITER run environment and the following environment variables:
 \begin{enumerate}
-\item {\tt B25\_DEFINES}\index{B25\_DEFINES}, an environment variable containing the additional
-  "defines" to use during compilation of {\tt B2.5}
+\item {\tt B25\_DEFINES}\index{B25\_DEFINES}, an environment variable containing the additional "defines" to use during compilation of {\tt B2.5}
 \item {\tt DBX}\index{DBX}, the name of the debugger to be used
-\item {\tt DEVICE}\index{DEVICE} the name of the fusion device most likely to be simulated for this {\tt HOST\_NAME} (see \ref{cha:divgeo} for available choices)
-\item {\tt EIRENE\_DEFINES}\index{EIRENE\_DEFINES}, an environment variable containing the additional
-  "defines" to use during compilation of {\tt Eirene}
+\item {\tt DEVICE}\index{DEVICE} the name of the fusion device most likely to be simulated for this {\tt HOST\_NAME} (see Chapter~\ref{cha:divgeo} for available choices)
+\item {\tt EIRENE\_DEFINES}\index{EIRENE\_DEFINES}, an environment variable containing the additional "defines" to use during compilation of {\tt Eirene}
 \item {\tt FFLAGSEXTRA}\index{FFLAGSEXTRA}, for providing system-wide Fortran compilation flags
-\item {\tt GKS\_ROOT}\index{GKS\_ROOT}, the root of the {\tt GKS} tree, and
-  {\tt LD\_GKS}, the appropriate loader instruction to load the {\tt GKS} library
-\item {\tt GLI\_HOME}\index{GLI\_HOME}, the location of the {\tt gksfont.dat} file (this definition must appear in both the {\tt setup.csh.*.*} and {\tt config.*.*} files as it used both during compilation and at runtime
-\item {\tt GR\_ROOT}\index{GR\_ROOT}, the root of the {\tt GR} tree, and
-  {\tt LD\_GR}, the appropriate loader instruction to load the {\tt GR} library (a graphics package produced by FZ-J{\"u}lich and used by {\tt Eirene})
+\item {\tt GKS\_ROOT}\index{GKS\_ROOT}, the root of the {\tt GKS} tree, and {\tt LD\_GKS}, the appropriate loader instruction to load the {\tt GKS} library
+\item {\tt GLI\_HOME}\index{GLI\_HOME}, the location of the {\tt gksfont.dat} file (this definition must appear in both the {\tt setup.csh.*.*} and {\tt config.*.*} files as it is used both during compilation and at runtime)
+\item {\tt GR\_ROOT}\index{GR\_ROOT}, the root of the {\tt GR} tree, and {\tt LD\_GR}, the appropriate loader instruction to load the {\tt GR} library (a graphics package produced by FZ-J{\"u}lich and used by {\tt Eirene})
 \item {\tt H5DIR}\index{H5DIR}, the root directory for the HDF5 utility library
 \item {\tt LD\_CATALYST}, the appropriate loader instruction to load the Paraview Catalyst utility
 \item {\tt LD\_MSCL}, the appropriate loader instruction to load the {\tt MSCL} library
 \item {\tt LD\_NETCDF}, the appropriate loader instruction to load the {\tt NetCDF} library
 \item {\tt LD\_SONNET}, the appropriate loader instruction to load the {\tt Sonnet-light} library
 \item {\tt LD\_UAL}\index{IMAS}\index{UAL}, the appropriate loader instruction to load the Integrated Modelling and Analysis Suite (IMAS) Universal Access Layer (UAL) library
-\item {\tt MDSPLUS\_DIR}\index{MDSPLUS\_DIR}, the root of the {\tt MDSplus} tree, and
-  {\tt LD\_MDSPLUS}, the appropriate loader instruction to load {\tt MDSplus}
-\item {\tt MSCL\_ROOT}\index{MSCL\_ROOT}, the root of the {\tt mscl} tree, and
-  {\tt LD\_MSCL}, the appropriate loader instruction to load the {\tt mscl} library
-\item {\tt NAGDIR}\index{NAGDIR}, the root of the {\tt NAG} tree, and
-  {\tt LD\_NAG}, the appropriate loader instruction to load the {\tt NAG} library
-\item {\tt NCARG\_ROOT}\index{NCARG\_ROOT}, the root of the {\tt NCAR} tree, and
-  {\tt LD\_NCARG}, the appropriate loader instruction to load {\tt NCAR}
-\item {\tt NCDIR}\index{NCDIR}, the root of the {\tt NetCDF} tree, and
-  {\tt LD\_NETCDF}, the appropriate loader instruction to load {\tt NetCDF}
-\item {\tt PERFMON}\index{PERFMON}, an environment variable used by
-  the compiler to know whether to enable the performance monitoring libraries
+\item {\tt MDSPLUS\_DIR}\index{MDSPLUS\_DIR}, the root of the {\tt MDSplus} tree, and {\tt LD\_MDSPLUS}, the appropriate loader instruction to load {\tt MDSplus}
+\item {\tt MSCL\_ROOT}\index{MSCL\_ROOT}, the root of the {\tt mscl} tree, and {\tt LD\_MSCL}, the appropriate loader instruction to load the {\tt mscl} library
+\item {\tt NAGDIR}\index{NAGDIR}, the root of the {\tt NAG} tree, and {\tt LD\_NAG}, the appropriate loader instruction to load the {\tt NAG} library
+\item {\tt NCARG\_ROOT}\index{NCARG\_ROOT}, the root of the {\tt NCAR} tree, and {\tt LD\_NCARG}, the appropriate loader instruction to load {\tt NCAR} (It is best if the definition of {\tt NCARG\_ROOT} appears in both the {\tt setup.csh.*.*} and {\tt config.*.*} files as some implementations of NCAR use it both during compilation and at runtime)
+\item {\tt NCDIR}\index{NCDIR}, the root of the {\tt NetCDF} tree, and {\tt LD\_NETCDF}, the appropriate loader instruction to load {\tt NetCDF}
+\item {\tt PERFMON}\index{PERFMON}, an environment variable used by the compiler to know whether to enable the performance monitoring libraries
 \item {\tt SOLPS\_CPP}\index{SOLPS\_CPP}, an environment variable containing the global "defines" to use during compilation of {\tt SOLPS} code components
-\item some aliases to move around the tree ({\tt sbb}, {\tt sei},
-  {\it etc.})
+\item some aliases to move around the tree ({\tt sbb}, {\tt sei}, {\it etc.})
 \item some aliases for plotting ({\tt xyplot}, etc...)
 \item two aliases to swap between the debug and no\_debug versions of the code ({\tt set\_debug} and {\tt set\_nodebug})
 \item two aliases to swap between the MPI and no\_MPI versions of the code ({\tt set\_mpi} and {\tt set\_nompi})
@@ -5397,28 +5386,34 @@ As of Thu Jun 8 11:22:51 CEST 2017 the SOLPS MDSplus server
 
 You will need to choose your device, {\it e.g.}: \index{DEVICE}
 \begin{verbatim}
-  setenv DEVICE upgrade
+  setenv DEVICE iter
 \end{verbatim}
 Available choices are:
 \begin{description}
+\item[aditya] ADITYA (Gandhinagar, India)
 \item[asdex] ASDEX (Garching, Germany), now HL--2A (Chengdu, China)
 \item[cfns] Compact Fusion Neutron Source (China)
 \item[cmod] Alcator C--Mod (Boston, USA)
+\item[demo] DEMO (many incarnations)
 \item[d3d] DIII--D (San Diego, USA)
 \item[dream] (Japan)
 \item[east] EAST (Hefei, China)
-\item[hl2m] HL-2M (SWIP, Chengdu, China)
+\item[globus] Globus--2M (St. Petersburg, Russia)
+\item[hl2a] HL-2A (Chengdu, China)
+\item[hl2m] HL-2M (Chengdu, China)
 \item[iter] ITER (Cadarache, France) (default)
 \item[iter.dg] link to {\tt iter}
 \item[iterm] ITER (modified)
 \item[jet] JET (Culham, UK)
+\item[jt60sa] JT60--SA (Naka, Japan)
 \item[jt60u] JT60--U (Naka, Japan)
-\item[kstar] KSTAR (Korea)
+\item[kstar] KSTAR (Daejon, Korea)
 \item[mast] MAST (Culham, UK)
 \item[nhtx] NHTX (Hefei, China)
 \item[sst] SST (Gandhinagar, India)
 \item[t15m] T15--M (Moscow, Russia)
 \item[tcv] TCV (Lausanne, Switzerland)
+\item[ts] Tore Supra (Cadarache, France)
 \item[upgrade] ASDEX--Upgrade (Garching, Germany)
 \item[upgrade.dg] link to {\tt upgrade}
 \end{description}

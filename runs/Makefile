@@ -659,7 +659,11 @@ else
 endif
 	-rmdir b2yt.exe.dir
 
+ifndef STAND_ALONE
+$(target_ual) : input.dat AMJUEL
+else
 $(target_ual) :
+endif
 	rm -rf b2_ual_write.exe.dir ; mkdir b2_ual_write.exe.dir
 	cp b2fstate b2_ual_write.exe.dir/b2fstati
 	cp b2fparam b2_ual_write.exe.dir/b2fpardf
