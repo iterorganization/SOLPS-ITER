@@ -107,20 +107,17 @@ MAINLIST = $(EXCLUDELIS:.=\.)
 ifeq ($(strip ${LD_GR}),)
 all: ${OBJDIR}/tria ${OBJDIR}/triageom ${OBJDIR}/triainq ${OBJDIR}/.nox
 else
+ifeq ($(strip ${LD_GKS}),)
+all: ${OBJDIR}/tria ${OBJDIR}/triageom ${OBJDIR}/triainq ${OBJDIR}/.nox
+else
 all: ${OBJDIR}/tria ${OBJDIR}/triageom ${OBJDIR}/triainq ${OBJDIR}/.x
+endif
 endif
 
 mods: $(MODMODS)
 
-ifeq ($(strip ${LD_GR}),)
-${OBJDIR}/tria ${OBJDIR}/.nox: ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${OBJDIR}/ioflush.o ${MAKES}
-	rm -f ${OBJDIR}/tria 2> /dev/null; \
-	rm -f ${OBJDIR}/.x 2> /dev/null; \
-	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/tria ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${OBJDIR}/ioflush.o ${LDLIBS} $(LDEXTRA) && touch ${OBJDIR}/.nox
-
-${OBJDIR}/triageom: ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${MAKES}
-	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/triageom ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${LDLIBS} $(LDEXTRA)
-else
+ifneq ($(strip ${LD_GR}),)
+ifneq ($(strip ${LD_GKS}),)
 ${OBJDIR}/tria ${OBJDIR}/.x: ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${OBJDIR}/ioflush.o ${MAKES}
 	rm -f ${OBJDIR}/tria 2> /dev/null; \
 	rm -f ${OBJDIR}/.nox 2> /dev/null; \
@@ -128,6 +125,23 @@ ${OBJDIR}/tria ${OBJDIR}/.x: ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${OBJDIR}/iofl
 
 ${OBJDIR}/triageom: ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${MAKES}
 	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/triageom ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${LDLIBS} ${GKS} $(LDEXTRA)
+else
+${OBJDIR}/tria ${OBJDIR}/.nox: ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${OBJDIR}/ioflush.o ${MAKES}
+	rm -f ${OBJDIR}/tria 2> /dev/null; \
+	rm -f ${OBJDIR}/.x 2> /dev/null; \
+	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/tria ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${OBJDIR}/ioflush.o ${LDLIBS} $(LDEXTRA) && touch ${OBJDIR}/.nox
+
+${OBJDIR}/triageom: ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${MAKES}
+	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/triageom ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${LDLIBS} $(LDEXTRA)
+endif
+else
+${OBJDIR}/tria ${OBJDIR}/.nox: ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${OBJDIR}/ioflush.o ${MAKES}
+	rm -f ${OBJDIR}/tria 2> /dev/null; \
+	rm -f ${OBJDIR}/.x 2> /dev/null; \
+	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/tria ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${OBJDIR}/ioflush.o ${LDLIBS} $(LDEXTRA) && touch ${OBJDIR}/.nox
+
+${OBJDIR}/triageom: ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${MAKES}
+	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/triageom ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${LDLIBS} $(LDEXTRA)
 endif
 
 ${OBJDIR}/triainq: ${OBJDIR}/triainq.o ${OBJDIR}/libtria.a ${MAKES}
