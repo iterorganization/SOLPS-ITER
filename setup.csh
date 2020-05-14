@@ -219,6 +219,9 @@ if (-s SETUP/setup.csh.local) then
   source SETUP/setup.csh.local
 endif
 
+# Check for Motif library
+if (! -e `locate libXm.a | head -1`) setenv NO_MOTIF 1
+
 # List loaded modules
 
 module list

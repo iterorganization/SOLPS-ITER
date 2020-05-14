@@ -218,6 +218,12 @@ alias unset_ig='. $SOLPSTOP/SETUP/noig'
    source SETUP/setup.ksh.local
 }
 
+# Check if Motif library is present
+
+[ -s `locate libXm.a | head -1` ] || {
+  export NO_MOTIF=1
+}
+
 # List loaded modules
 
 module list

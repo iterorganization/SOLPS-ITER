@@ -133,7 +133,9 @@ carre_nox:
 	cd modules/Carre; ${MAKE} NCARG_ROOT="" LD_NCARG=""
 
 divgeo:
+ifndef NO_MOTIF
 	cd modules/DivGeo;         ${MAKEO}
+endif
 	cd modules/DivGeo/equtrn;  ${MAKEO}
 	cd modules/DivGeo/convert; ${MAKEO}
 
@@ -328,6 +330,7 @@ triang_nox_mpi:
 	cd modules/Triang; ${MAKE}  USE_MPI=-DUSE_MPI SOLPS_MPI=yes LD_GR="" LD_GKS="" mods
 	cd modules/Triang; ${MAKE} USE_MPI=-DUSE_MPI SOLPS_MPI=yes LD_GR="" LD_GKS=""
 
+ifndef NO_MOTIF
 amds:
 	cd modules/amds; ${MAKEO}
 
@@ -339,6 +342,7 @@ amds_openmp:
 
 amds_openmp_mpi:
 	cd modules/amds; ${MAKEO} USE_MPI=-DUSE_MPI USE_OPENMP=-D_OPENMP SOLPS_MPI=yes SOLPS_OPENMP=yes
+endif
 
 fxdr:
 	cd modules/fxdr; ${MAKEO}

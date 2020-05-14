@@ -35,7 +35,9 @@ $(error First use of config.ENEA.pgf90. Provide paths to libraries first.)
 
 LD_NETCDF  = -L${NCDIR}/lib -lnetcdff
 LD_MSCL    = -L${MSCL_ROOT}/lib -lmscl
+ifdef GR_ROOT
 LD_GR      = -L${GR_ROOT}/lib -lgr
+endif
 LD_GKS     = -L${GLI_HOME} -lgks -lgfortran
 ifdef NCARG_ROOT
 LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -L/usr/X11R6/lib64 -lX11 -lm
