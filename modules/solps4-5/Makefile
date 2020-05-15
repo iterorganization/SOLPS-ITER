@@ -137,7 +137,8 @@ FFLIST  += ${shell echo ${SRC5LOCAL}/*.F}
 endif
 MODLIST = ${shell echo ${SRCDIR}/B2.5_modules/*.F ${SRCDIR}/b2_4to5.F ${SRCDIR}/B2.5_modules/*.F90 ${SRCDIR}/solps5/*.F90}
 
-EXCLUDELIST = ${patsubst %.exe, %.o, ${PROG_XR}}
+EXELIST = ${patsubst %.exe, %.o, ${PROG_XR}}
+EXCLUDELIST = ${patsubst %.o, %\\.o, ${EXELIST}}
 XREXE = ${patsubst %.exe, ${OBJDIR}/%.exe, ${PROG_XR}}
 XROBJ = ${patsubst %.exe, ${OBJDIR}/%.o, ${PROG_XR}}
 
@@ -950,7 +951,7 @@ ${OBJDIR}/libb2_solps4.a: ${MD4OBJS} ${SB4OBJS} ${SE4OBJS}
 ${OBJDIR}/libb2_solps5.a: ${MD5OBJS} ${SR5OBJS}
 	${BLD} $@ $?
 
-depend: ${BASEDIR}/LISTOBJ ${OBJS:.o=.F} ${EXCLUDELIST:.o=.F}
+depend: ${BASEDIR}/LISTOBJ ${OBJS:.o=.F} ${EXELIST:.o=.F}
 	@`which makedepend` -p'$${OBJDIR}/' ${DEFINES} -f- ${INCLUDE} $^ | \
 	sed 's,^$${OBJDIR}/[^ ][^ ]*/,\$${OBJDIR}/,' | \
         sed 's,: ${SOLPSTOP},: $${SOLPSTOP},' > ${OBJDIR}/dependencies

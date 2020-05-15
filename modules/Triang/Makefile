@@ -106,10 +106,10 @@ MODOBJS = ${MODULES:%=${OBJDIR}/%.o}
 ALLOBJS = ${OBJS:%.o=${OBJDIR}/%.o}
 SRCF = ${OBJS:%.o=%.f}
 
-EXCLUDELIS = tria.o triageom.o triainq.o
+MAINLIST = tria.o triageom.o triainq.o
 
 DEST = ${filter-out $(MODOBJS),$(OBJS:%.o=$(OBJDIR)/%.o)}
-MAINLIST = $(EXCLUDELIS:.=\.)
+EXCLUDELIST = $(MAINLIST:.o=\\.o)
 
 ifeq ($(strip ${LD_GR}),)
 all: ${OBJDIR}/tria ${OBJDIR}/triageom ${OBJDIR}/triainq ${OBJDIR}/.nox
@@ -153,7 +153,7 @@ ifneq (${MOD},o)
 	rm -rf ${OBJDIR}/*.${MOD}
 endif
 
-depend: ${OBJS:.o=.f} ${EXCLUDELIS:.o=.f}
+depend: ${OBJS:.o=.f} ${MAINLIST:.o=.f}
 	@`which makedepend` -p'$${OBJDIR}/' ${DEFINES} -f- ${INCLUDE} $^ | \
 	sed 's,^$${OBJDIR}/[^ ][^ ]*/,\$${OBJDIR}/,' | \
         sed 's,: ${SOLPSTOP},: $${SOLPSTOP},' > ${OBJDIR}/dependencies
@@ -198,7 +198,7 @@ listobj:
 	for d in `echo "$(VPATH)" | tr : \ `; do \
 		l="$$l `(cd $$d > /dev/null; echo *.f)`"; \
 	done; \
-	E="-e 's/\.f/\.o/g'" ; for f in $(MAINLIST); do \
+	E="-e 's/\.f/\.o/g'" ; for f in $(EXCLUDELIST); do \
 		E="$$E -e 's/ $$f//'"; \
 	done; \
 	echo "$$l" | eval sed "$$E" > ${OBJDIR}/LISTOBJ
@@ -234,7 +234,7 @@ echo:
 	@echo MODMODS=${MODMODS}
 #	@echo MODOBJS=${MODOBJS}
 #	@echo $(filter-out ${MODOBJS},${ALLOBJS})
-	@echo EXCLUDELIS=${EXCLUDELIS}
 	@echo MAINLIST=${MAINLIST}
+	@echo EXCLUDELIST=${EXCLUDELIST}
 	@echo SRCF=${SRCF}
 #	@echo OBJDEST=${OBJDEST}
