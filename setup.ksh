@@ -220,7 +220,7 @@ alias unset_ig='. $SOLPSTOP/SETUP/noig'
 
 # Check if Motif library is present
 
-[ -s `locate libXm.a | head -1` ] || {
+[ -e `which mwm` ] || {
   export NO_MOTIF=1
 }
 

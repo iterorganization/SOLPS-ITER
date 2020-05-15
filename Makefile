@@ -135,6 +135,8 @@ carre_nox:
 divgeo:
 ifndef NO_MOTIF
 	cd modules/DivGeo;         ${MAKEO}
+else
+	$(warning DivGeo will not be compiled because Motif library is not installed.)
 endif
 	cd modules/DivGeo/equtrn;  ${MAKEO}
 	cd modules/DivGeo/convert; ${MAKEO}
@@ -342,6 +344,12 @@ amds_openmp:
 
 amds_openmp_mpi:
 	cd modules/amds; ${MAKEO} USE_MPI=-DUSE_MPI USE_OPENMP=-D_OPENMP SOLPS_MPI=yes SOLPS_OPENMP=yes
+else
+amds:
+amds_mpi:
+amds_openmp:
+amds_openmp_mpi:
+	$(warning AMDS will not be compiled because Motif library file is not installed.)
 endif
 
 fxdr:
