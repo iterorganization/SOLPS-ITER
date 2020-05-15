@@ -112,7 +112,7 @@ ifeq ($(strip ${LD_GKS}),)
 $(warning Triang graphics are turned off because LD_GKS is not defined.)
 all: ${OBJDIR}/tria ${OBJDIR}/triageom ${OBJDIR}/triainq ${OBJDIR}/.nox
 else
-ifndef GLI_HOME
+ifeq ($(strip ${GLI_HOME}),)
 $(warning Triang graphics may not work because GLI_HOME is not defined.)
 endif
 all: ${OBJDIR}/tria ${OBJDIR}/triageom ${OBJDIR}/triainq ${OBJDIR}/.x
