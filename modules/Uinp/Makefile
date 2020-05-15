@@ -182,7 +182,7 @@ depend: ${OBJS:.o=.F} uiblkd.F uinput.F uiblb2.F ub2p.F ${SRCDIR}/git_version_Ui
 listobj:
 	@cd ${SRCDIR} ; rm -f ${OBJDIR}/LISTOBJ; touch ${OBJDIR}/LISTOBJ; \
 	echo "OBJS =" *.F | sed -e 's/ [^ /]*\// /g' -e 's/\.F/.o/g' | \
-	sed -e 's/ub2p.o//' -e 's/uinput.o//' -e 's/uiblkd.o//' -e 's/uiblb2.o//' > ${OBJDIR}/LISTOBJ
+	sed -e 's/ub2p\.o//' -e 's/uinput\.o//' -e 's/uiblkd\.o//' -e 's/uiblb2\.o//' > ${OBJDIR}/LISTOBJ
 
 tags:
 	rm -f ${BASEDIR}/TAGS ; etags -o ${BASEDIR}/TAGS ${SRCDIR}/*.F ${SRCDIR}/*.h ${SRCDIR}/*.inc || touch ${BASEDIR}/TAGS
