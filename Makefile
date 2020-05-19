@@ -1,7 +1,7 @@
 # Test whether required environment variables are set
 # If not, attempt to determine them automatically
 
-# Identify HOST_NAME 
+# Identify HOST_NAME
 ifndef HOST_NAME
   ifeq ($(shell [ -e whereami ] && echo yes || echo no ),yes)
     # Identify host from whereami-script
@@ -11,7 +11,7 @@ ifndef HOST_NAME
       HOST_NAME = default
     endif
   else
-    # If whereami-script not found, use default settings 
+    # If whereami-script not found, use default settings
     HOST_NAME = default
   endif
   export HOST_NAME
@@ -374,7 +374,7 @@ manual:
 ifeq ($(shell [ -e ${SOLPSTOP}/doc/solps/b2cdci.F ] && echo yes || echo no ),no)
 	cd doc/solps; ${MAKE} complete
 else
-	cd doc/solps; ${MAKE} 
+	cd doc/solps; ${MAKE}
 endif
 
 local:
@@ -455,7 +455,7 @@ depend:
 	cd modules/Triang;         ${MAKE} depend
 	cd modules/DivGeo;         ${MAKE} depend
 	cd modules/DivGeo/equtrn;  ${MAKE} depend
-	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE 
+	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE
 	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE    USE_IMPGYRO=-DUSE_IMPGYRO
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE
@@ -700,7 +700,7 @@ clean_triang:
 	cd modules/Triang; ${MAKE} clean
 
 clean_triang_nox:
-	cd modules/Triang; ${MAKE} LD_GR="" LD_GKS="" clean
+	cd modules/Triang; ${MAKE} clean LD_GR="" LD_GKS=""
 
 clean_amds:
 	cd modules/amds; ${MAKE} clean
