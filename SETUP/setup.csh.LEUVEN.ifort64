@@ -37,7 +37,8 @@ module load Pango/1.41.1-intel-2018a
 # Debugger (set environment variable DBX)
 module load ArmForge/19.0.2
 setenv DBX ddt
+module load matlab/R2018a
 
 # Other environment variables
 setenv STGDIR /staging/leuven/stg_00030/SOLPS/lib/LEUVEN.ifort64
-
+setenv TAPENADEDIR  $SOLPSTOP/../tapenade/tapenade_3.15/

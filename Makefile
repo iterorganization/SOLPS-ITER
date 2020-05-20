@@ -60,7 +60,7 @@ endif
 unexport SOLPS_DEBUG
 unexport SOLPS_MPI
 
-.PHONY: solps solps_mpi nox nox_mpi all all_nox all_mpi carre carre_nox divgeo b25 b25_mpi b25_nox b25_ig b25_all_mpi eirene eirene_mpi eirene_nox b25eirene b25eirene_mpi b25eirene_nox b25eirene_ig b25eirene_all_mpi b25eirene_mpi_nox uinp uinp_nox uinp_mpi triang triang_nox amds fxdr sonnet-light b2sxdr manual local depend depend_nox tags listobj listobj_nox clean clean_% debug %_debug VERSION help nox_build nox_build_mpi
+.PHONY: solps solps_mpi nox nox_mpi all all_nox all_mpi carre carre_nox divgeo b25 b25_mpi b25_nox b25_ig b25_all_mpi eirene eirene_mpi eirene_nox b25eirene b25eirene_mpi b25eirene_nox b25eirene_ig b25eirene_all_mpi b25eirene_mpi_nox uinp uinp_nox uinp_mpi triang triang_nox amds fxdr sonnet-light b2sxdr manual local depend depend_nox tags listobj listobj_nox clean clean_% debug %_debug VERSION help nox_build nox_build_mpi b25_diff_d b25_diff_b
 
 DEFAULT: solps
 
@@ -107,6 +107,12 @@ eirene_nox:
 
 b25:
 	cd modules/B2.5; ${MAKE}
+
+b25_diff_d:
+	cd modules/B2.5; ${MAKE} DIFF_D
+
+b25_diff_b:
+	cd modules/B2.5; ${MAKE} DIFF_B
 
 b25_all:
 	cd modules/solps4-5; ${MAKE} links
@@ -396,3 +402,5 @@ help:
 	@echo "    all_nox_debug : compile debug version (serial) (all no X codes)"
 	@echo "    nox_mpi_debug : compile debug version (MPI) (no X main codes)"
 	@echo "all_nox_mpi_debug : compile debug version (MPI) (all no X codes)"
+
+

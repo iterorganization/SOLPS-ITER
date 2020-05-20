@@ -57,6 +57,8 @@ argloop:
     echo ' -m <mpi-launcher + args>: run mpi-version (example: b2run -m \"mpiexec -np 2\" b2mn)'
     echo ' -n: dry run. Will show the sequences of commands requested by b2run.'
     echo ' -s: request a B2.5 stand-alone run. No Eirene input file required then.'
+    echo ' -diff_d: request a B2.5 run with forward differentiated executable'
+    echo ' -diff_b: request a B2.5 run with adjoint differentiated executable'
     echo ' '
     echo 'Executable: One of the following'
     echo ' b2ag: Build the geometry files b2fgmtry and fort.30'
@@ -82,6 +84,8 @@ argloop:
     echo ' b2yq: Plots the time evolution data'
     echo ' b2yr: Plot the atomic physics rates'
     echo ' b2yt: Convert a run to a different grid size or species list'
+    echo ' b2mn_d: Main SOLPS-ITER run program differentiated in forward (tangent) mode'
+    echo ' b2mn_b: Main SOLPS-ITER run program differentiated in reverse (adjoint) mode'
     echo ' '
     exit
   endif
@@ -98,6 +102,18 @@ argloop:
   if ("X${1}X" == "X-sX") then
     shift
     setenv STAND_ALONE yes
+    goto argloop
+  endif
+  if ("X${1}X" == "X-diff_dX") then
+    shift
+    setenv STAND_ALONE yes
+    setenv DIFF_D yes
+    goto argloop
+  endif
+  if ("X${1}X" == "X-diff_bX") then
+    shift
+    setenv STAND_ALONE yes
+    setenv DIFF_B yes
     goto argloop
   endif
   if ("X${1}X" == "X-mX") then
