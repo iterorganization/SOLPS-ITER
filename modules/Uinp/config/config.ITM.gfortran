@@ -14,6 +14,9 @@ FFLAGS   = -fno-second-underscore -fno-unsafe-math-optimizations -frounding-math
 ifdef SOLPS_DEBUG
 FFLAGS  += -g -fbounds-check -fbacktrace -ffpe-trap=denormal -ffpe-trap=invalid -ffpe-trap=zero -ftrapv
 endif
+ifdef USE_OPENMP
+FFLAGS += -fopenmp
+endif
 INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
 CPP      = /lib/cpp -traditional
