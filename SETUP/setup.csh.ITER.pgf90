@@ -30,6 +30,7 @@ setenv PARAVIEW_PREFIX ${EBROOTPARAVIEW}
 module load motif/2.3.8-intel-2018a
 module load gnuplot/5.2.2-intel-2018a
 module load texlive
+module load Viz
 
 # Debugger (set environment variable DBX)
 setenv DBX totalview
