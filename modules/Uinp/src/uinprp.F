@@ -331,14 +331,14 @@ c*** Additional tallies
         iadvs(j)=0
         iadvt(j)=0
         iadrc(j)=1
-        txttla(j)='RADIAL PARTICLE FLUXES, VOLUME AVERAGED'
+        txttla(j)='RADIAL PARTICLE FLUXES, VOLUME-AVERAGED'
         txtspa(j)=trim(spcsatm(j))//' ATOMS'
         txtuna(j)='#/CM**2/S'
         iadve(natmi+nmoli+j)=1
         iadvs(natmi+nmoli+j)=0
         iadvt(natmi+nmoli+j)=0
         iadrc(natmi+nmoli+j)=1
-        txttla(natmi+nmoli+j)='RADIAL ENERGY FLUXES, VOLUME AVERAGED'
+        txttla(natmi+nmoli+j)='RADIAL ENERGY FLUXES, VOLUME-AVERAGED'
         txtspa(natmi+nmoli+j)=trim(spcsatm(j))//' ATOMS'
         txtuna(natmi+nmoli+j)='EV/CM**2/S'
         iadve(2*(natmi+nmoli)+j)=1
@@ -346,7 +346,7 @@ c*** Additional tallies
         iadvt(2*(natmi+nmoli)+j)=0
         iadrc(2*(natmi+nmoli)+j)=1
         txttla(2*(natmi+nmoli)+j)=
-     .   'PARALLEL PARTICLE FLUXES, VOLUME AVERAGED'
+     .   'PARALLEL PARTICLE FLUXES, VOLUME-AVERAGED'
         txtspa(2*(natmi+nmoli)+j)=trim(spcsatm(j))//' ATOMS'
         txtuna(2*(natmi+nmoli)+j)='#/CM**2/S'
         iadve(3*(natmi+nmoli)+j)=1
@@ -354,7 +354,7 @@ c*** Additional tallies
         iadvt(3*(natmi+nmoli)+j)=0
         iadrc(3*(natmi+nmoli)+j)=1
         txttla(3*(natmi+nmoli)+j)=
-     .   'PARALLEL ENERGY FLUXES, VOLUME AVERAGED'
+     .   'PARALLEL ENERGY FLUXES, VOLUME-AVERAGED'
         txtspa(3*(natmi+nmoli)+j)=trim(spcsatm(j))//' ATOMS'
         txtuna(3*(natmi+nmoli)+j)='EV/CM**2/S'
       end do !}
@@ -363,14 +363,14 @@ c*** Additional tallies
         iadvs(natmi+j)=0
         iadvt(natmi+j)=0
         iadrc(natmi+j)=2
-        txttla(natmi+j)='RADIAL PARTICLE FLUXES, VOLUME AVERAGED'
+        txttla(natmi+j)='RADIAL PARTICLE FLUXES, VOLUME-AVERAGED'
         txtspa(natmi+j)=trim(spcsmol(j))//' MOLECULES'
         txtuna(natmi+j)='#/CM**2/S'
         iadve(2*natmi+nmoli+j)=1
         iadvs(2*natmi+nmoli+j)=0
         iadvt(2*natmi+nmoli+j)=0
         iadrc(2*natmi+nmoli+j)=2
-        txttla(2*natmi+nmoli+j)='RADIAL ENERGY FLUXES, VOLUME AVERAGED'
+        txttla(2*natmi+nmoli+j)='RADIAL ENERGY FLUXES, VOLUME-AVERAGED'
         txtspa(2*natmi+nmoli+j)=trim(spcsmol(j))//' MOLECULES'
         txtuna(2*natmi+nmoli+j)='EV/CM**2/S'
         iadve(3*natmi+2*nmoli+j)=1
@@ -378,7 +378,7 @@ c*** Additional tallies
         iadvt(3*natmi+2*nmoli+j)=0
         iadrc(3*natmi+2*nmoli+j)=2
         txttla(3*natmi+2*nmoli+j)=
-     .   'PARALLEL PARTICLE FLUXES, VOLUME AVERAGED'
+     .   'PARALLEL PARTICLE FLUXES, VOLUME-AVERAGED'
         txtspa(3*natmi+2*nmoli+j)=trim(spcsmol(j))//' MOLECULES'
         txtuna(3*natmi+j)='#/CM**2/S'
         iadve(4*natmi+3*nmoli+j)=1
@@ -386,7 +386,7 @@ c*** Additional tallies
         iadvt(4*natmi+3*nmoli+j)=0
         iadrc(4*natmi+3*nmoli+j)=2
         txttla(4*natmi+3*nmoli+j)=
-     .   'PARALLEL ENERGY FLUXES, VOLUME AVERAGED'
+     .   'PARALLEL ENERGY FLUXES, VOLUME-AVERAGED'
         txtspa(4*natmi+3*nmoli+j)=trim(spcsmol(j))//' MOLECULES'
         txtuna(4*natmi+3*nmoli+j)='EV/CM**2/S'
       end do !}

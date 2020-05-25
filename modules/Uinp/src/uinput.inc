@@ -9,12 +9,12 @@ c*** Temporary - max. number of reactions in cdenmodel section
 
 
 c*** 1
-      integer nprll,nmode,ntcpu,nfile,niter0,niter,ntime0,ntim1,nfullrun 
+      integer nprll,nmode,ntcpu,nfile,niter0,niter,ntime0,ntim1,nfullrun
       integer noptim,noptm1,ngeom_usr,ncoup_input,nsmstra,
      ,        nstoram,ngstal,nrtal1,nreac_add,lfrm15
       logical nlscl,nltest,nlana,nldrft,nlcrr,nlerg,nlident,nlone,
      ,        nlmovie,nldfst,nloldran,nlcascad,nloctree,nlwrmsh,
-     ,        nexvs,nltrimesh 
+     ,        nexvs,nltrimesh
       character txtrun*71
 
 c*** 2
@@ -43,7 +43,7 @@ c*** 3a
       real xmlim(nsts), ewall(nsts),  ewbin(nsts),  transp(nsts,2),
      ,    recycc(nsts), recycf(nsts), recyct(nsts), recprm(nsts),
      ,    recycs(nsts), exppl(nsts),  expel(nsts),  expil(nsts),
-     ,    fsheat(nsts), echspts(nsts),fchspts(nsts),sptprm(nsts) 
+     ,    fsheat(nsts), echspts(nsts),fchspts(nsts),sptprm(nsts)
       character txtsfl(nsts)*64
 
 c*** 3b
@@ -188,13 +188,13 @@ c*** Surface Cards
      ,  sctransp(maxsc,2),scfsheat(maxsc),screcycf(maxsc),
      ,  screcyct(maxsc),scrcprm(maxsc),scexppl(maxsc),scexpel(maxsc),
      ,  scexpil(maxsc),screcycs(maxsc),scychsptg(maxsc),
-     ,  scechsptg(maxsc),scfchsptg(maxsc),scstprm(maxsc)  
+     ,  scechsptg(maxsc),scfchsptg(maxsc),scstprm(maxsc)
       integer iscrd(nsts),jscrd(nlim)
       integer maxchmvar,maxchsc,nchemvar
       parameter (maxchmvar=nlim,maxchsc=nlim*(natm+nmol+nion+npht+npls))
       integer nnchemvar(maxsc),indchemvar(maxchsc)
       character*8 chvarname(maxchsc),chmspname(maxchsc)
-      real chmvar(maxchsc) 
+      real chmvar(maxchsc)
 
 c*** 7
 
@@ -203,8 +203,8 @@ c*** 7
      ,  ivlsf(nstra),iscls(nstra),isclt(nstra),iscl1(nstra),
      ,  iscl2(nstra),iscl3(nstra),isclb(nstra),iscla(nstra),
      ,  nsrfsi(nstra),indim(nsrfs,nstra), insor(nsrfs,nstra),
-     ,  ingrda(nsrfs,nstra,3),ingrde(nsrfs,nstra,3),nrsor(nsrfs,nstra), 
-     ,  npsor(nsrfs,nstra),ntsor(nsrfs,nstra),nbsor(nsrfs,nstra), 
+     ,  ingrda(nsrfs,nstra,3),ingrde(nsrfs,nstra,3),nrsor(nsrfs,nstra),
+     ,  npsor(nsrfs,nstra),ntsor(nsrfs,nstra),nbsor(nsrfs,nstra),
      ,  nasor(nsrfs,nstra),nisor(nsrfs,nstra),     istor(nsrfs,nstra)
       real alloc, flux(nstra), scalv(nstra),       sorwgt(nsrfs,nstra),
      ,     sorlim(nsrfs,nstra),sorind(nsrfs,nstra),sorexp(nsrfs,nstra),
@@ -293,7 +293,7 @@ c*** 11
      ,  fcabs2(nptal),rpsdl(nptal)
       logical trcplt, trchst, trcnal, trcmod, trcsig, trcgrd, trcsur,
      ,  trcref, trcfle, trcamd, trcint, trctim, trcsou, trcrec,
-     ,  trclst, trcbla, trcblm, trcbli, trcblp, trcble, 
+     ,  trclst, trcbla, trcblm, trcbli, trcblp, trcble,
      ,  trcblph,trctal, trcoct, trccen, trcrnf, trchktim,
      ,  trcdbg2,trcdbge,trcdbgm,trcdbgf,trcdbgl,
      ,  trcdbgs,trcdbgg,trcdbgmpi,trcdbgc,
@@ -464,7 +464,7 @@ c*** b2ah.dat
      ,  cbnrso,cbnrno,cbnrwe,cbnrea,
      ,  cbirso,cbirno,cbirwe,cbirea,
      ,  izamin,izamax,nbndl
-  
+
       common/uinrl/ ria,ragrid,raa,rarefl,ep1in,ep1ot,ep1ch,exep1,
      ,  ellin,ellot,ellch,exell,triin,triot,trich,extri,
      ,  xpcor,ypcor,zpcor,
@@ -510,10 +510,10 @@ c*** b2ah.dat
      ,  cbrbrk,cbsna,cbsmo,cbshi,cbrec,cbmsb,cbshe,cbsch,cbmsa,
      ,  cfdf0,cfdna,cfdpa,cfvla,cfvsa,cfhci,cfhce,cfsig,cfalf,cflim
 
-      common/uinlog/ 
+      common/uinlog/
      ,  nlscl,nltest,nlana,nldrft,nlcrr,nlerg,nlident,nlone,
      ,  nlmovie,nldfst,nloldran,nlcascad,nloctree,
-     ,  nlwrmsh,nexvs,nltrimesh, 
+     ,  nlwrmsh,nexvs,nltrimesh,
      ,  nlrad,nlslb,nlcrc,nlell,nltri,nlplg,nlfem,nltet,nlgen,
      ,  nlpol,nlply,nlpla,nlplp,nltor,nltrz,nltra,nltrt,
      ,  nlmlt,nladd,lconst,nltrim,nlavrp,nlavrt,nlsymp,nlsymt,

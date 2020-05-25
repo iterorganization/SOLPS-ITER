@@ -4543,6 +4543,8 @@ The data blocks are:
   \item[wlpump(I)] Pumped flux per test ion ($A$), dimension ({\tt NION}, {\tt NLIM}+{\tt NSTS})
   \item[wlpump(P)] Pumped flux per plasma ion ($A$), dimension ({\tt NPLS}, {\tt NLIM}+{\tt NSTS})
   \item[eneutrad] Radiation rate due to atoms ($W$), dimension ({\tt NDX},{\tt NDY},{\tt NATM})
+  \item[emolrad] Radiation rate due to molecules ($W$), dimension ({\tt NDX},{\tt NDY},{\tt NMOL})
+  \item[eionrad] Radiation rate due to test ions ($W$), dimension ({\tt NDX},{\tt NDY},{\tt NION})
   \item[eirdiag\_nds] Indices for segments on resolved non-standard surfaces, dimension ($5 \times$ {\tt NSTS} $+ 1$)
   \item[sarea\_res] Surface area of surface segment ($m^2$), dimension ({\tt NCL})
   \item[wldna\_res] Flux of atoms impinging on surface segment ($A$), dimension ({\tt NATM}, {\tt NCL})
@@ -4614,9 +4616,9 @@ though at the highest time-step there is a time shift.
 
 \begin{figure}[hbtp]
 \ifpdf
-    \centerline{\includegraphics[origin=br,angle=-90,height=8cm]{compare_10814_tesepm_1.pdf}}
+    \centerline{\includegraphics[origin=br,angle=-90,width=8cm]{compare_10814_tesepm_1.pdf}}
 \else
-    \centerline{\includegraphics[origin=br,angle=-90,height=8cm]{compare_10814_tesepm_1.ps}}
+    \centerline{\includegraphics[origin=br,angle=-90,width=8cm]{compare_10814_tesepm_1.ps}}
 \fi
     \caption{Upstream (outer midplane) electron temperature for a
     range of time-steps.}
@@ -4629,9 +4631,9 @@ from {\tt b2.numerics.parameters}.
 
 \begin{figure}[hbtp]
 \ifpdf
-    \centerline{\includegraphics[origin=br,angle=-90,height=8cm]{compare_10814_tesepm_2.pdf}}
+    \centerline{\includegraphics[origin=br,angle=-90,width=8cm]{compare_10814_tesepm_2.pdf}}
 \else
-    \centerline{\includegraphics[origin=br,angle=-90,height=8cm]{compare_10814_tesepm_2.ps}}
+    \centerline{\includegraphics[origin=br,angle=-90,width=8cm]{compare_10814_tesepm_2.ps}}
 \fi
     \caption{Upstream (outer midplane) electron temperature for a
     range of time-steps with a core speed-up factor.}
@@ -4642,9 +4644,9 @@ Figure \ref{fig:tesepm3} combines the data form figures \ref{fig:tesepm1} and \r
 
 \begin{figure}[hbtp]
 \ifpdf
-    \centerline{\includegraphics[origin=br,angle=-90,height=8cm]{compare_10814_tesepm_3.pdf}}
+    \centerline{\includegraphics[origin=br,angle=-90,width=8cm]{compare_10814_tesepm_3.pdf}}
 \else
-    \centerline{\includegraphics[origin=br,angle=-90,height=8cm]{compare_10814_tesepm_3.ps}}
+    \centerline{\includegraphics[origin=br,angle=-90,width=8cm]{compare_10814_tesepm_3.ps}}
 \fi
     \caption{Upstream (outer midplane) electron temperature for a
     range of time-steps with and without a core speed-up factor.}
@@ -4657,9 +4659,9 @@ show the outer target separatrix temperatures corresponding to figures
 
 \begin{figure}[hbtp]
 \ifpdf
-    \centerline{\includegraphics[origin=br,angle=-90,height=8cm]{compare_10814_tesepm_4.pdf}}
+    \centerline{\includegraphics[origin=br,angle=-90,width=8cm]{compare_10814_tesepm_4.pdf}}
 \else
-    \centerline{\includegraphics[origin=br,angle=-90,height=8cm]{compare_10814_tesepm_4.ps}}
+    \centerline{\includegraphics[origin=br,angle=-90,width=8cm]{compare_10814_tesepm_4.ps}}
 \fi
     \caption{Downstream (outer target) electron temperature for a
     range of time-steps.}
@@ -4669,9 +4671,9 @@ show the outer target separatrix temperatures corresponding to figures
 
 \begin{figure}[hbtp]
 \ifpdf
-    \centerline{\includegraphics[origin=br,angle=-90,height=8cm]{compare_10814_tesepm_5.pdf}}
+    \centerline{\includegraphics[origin=br,angle=-90,width=8cm]{compare_10814_tesepm_5.pdf}}
 \else
-    \centerline{\includegraphics[origin=br,angle=-90,height=8cm]{compare_10814_tesepm_5.ps}}
+    \centerline{\includegraphics[origin=br,angle=-90,width=8cm]{compare_10814_tesepm_5.ps}}
 \fi
     \caption{Downstream (outer target) electron temperature for a
     range of time-steps with a core speed-up factor.}
@@ -4681,9 +4683,9 @@ show the outer target separatrix temperatures corresponding to figures
 
 \begin{figure}[hbtp]
 \ifpdf
-    \centerline{\includegraphics[origin=br,angle=-90,height=8cm]{compare_10814_tesepm_6.pdf}}
+    \centerline{\includegraphics[origin=br,angle=-90,width=8cm]{compare_10814_tesepm_6.pdf}}
 \else
-    \centerline{\includegraphics[origin=br,angle=-90,height=8cm]{compare_10814_tesepm_6.ps}}
+    \centerline{\includegraphics[origin=br,angle=-90,width=8cm]{compare_10814_tesepm_6.ps}}
 \fi
     \caption{Downstream (outer target) electron temperature for a
     range of time-steps with and without a core speed-up factor.}
@@ -4695,9 +4697,9 @@ show continuation runs.
 
 \begin{figure}[hbtp]
 \ifpdf
-    \centerline{\includegraphics[origin=br,angle=-90,height=8cm]{compare_10814_tesepm_7.pdf}}
+    \centerline{\includegraphics[origin=br,angle=-90,width=8cm]{compare_10814_tesepm_7.pdf}}
 \else
-    \centerline{\includegraphics[origin=br,angle=-90,height=8cm]{compare_10814_tesepm_7.ps}}
+    \centerline{\includegraphics[origin=br,angle=-90,width=8cm]{compare_10814_tesepm_7.ps}}
 \fi
     \caption{Upstream (outer midplane) electron temperature.}
     \label{fig:tesepm7}
@@ -4706,9 +4708,9 @@ show continuation runs.
 
 \begin{figure}[hbtp]
 \ifpdf
-    \centerline{\includegraphics[origin=br,angle=-90,height=8cm]{compare_10814_tesepm_8.pdf}}
+    \centerline{\includegraphics[origin=br,angle=-90,width=8cm]{compare_10814_tesepm_8.pdf}}
 \else
-    \centerline{\includegraphics[origin=br,angle=-90,height=8cm]{compare_10814_tesepm_8.ps}}
+    \centerline{\includegraphics[origin=br,angle=-90,width=8cm]{compare_10814_tesepm_8.ps}}
 \fi
     \caption{Upstream (outer midplane) electron temperature.}
     \label{fig:tesepm8}
@@ -4717,9 +4719,9 @@ show continuation runs.
 
 \begin{figure}[hbtp]
 \ifpdf
-    \centerline{\includegraphics[origin=br,angle=-90,height=8cm]{compare_10814_tesepm_9.pdf}}
+    \centerline{\includegraphics[origin=br,angle=-90,width=8cm]{compare_10814_tesepm_9.pdf}}
 \else
-    \centerline{\includegraphics[origin=br,angle=-90,height=8cm]{compare_10814_tesepm_9.ps}}
+    \centerline{\includegraphics[origin=br,angle=-90,width=8cm]{compare_10814_tesepm_9.ps}}
 \fi
     \caption{Upstream (outer midplane) electron temperature.}
     \label{fig:tesepm9}
@@ -4968,9 +4970,9 @@ Adding {\tt te:ompsep} and {\tt ti:ompsep}, the graph in figure
 \begin{figure}[htbp]
   \centering
   \ifpdf
-    \centerline{\includegraphics[origin=bl,angle=+90,height=8cm]{MDSPLUS/jetdsp_mdsplus_example.pdf}}
+    \centerline{\includegraphics[origin=bl,angle=+90,width=8cm]{MDSPLUS/jetdsp_mdsplus_example.pdf}}
 \else
-    \centerline{\includegraphics[origin=bl,angle=+90,height=8cm]{MDSPLUS/jetdsp_mdsplus_example.eps}}
+    \centerline{\includegraphics[origin=bl,angle=+90,width=8cm]{MDSPLUS/jetdsp_mdsplus_example.eps}}
 \fi
   \caption{Using JETDSP to access SOLPS MDSplus data.}
   \label{fig:jetdspsolpsmdsplus}
@@ -12723,8 +12725,7 @@ qconviyreg \index{qconviyreg}\index{b2tallies.nc, qconviyreg}                   
 rcxhireg \index{rcxhireg}\index{b2tallies.nc, rcxhireg}                          & vreg, ns, time & $W$           & Charge-exchange ion energy source \\
 rcxmoreg \index{rcxmoreg}\index{b2tallies.nc, rcxmoreg}                          & vreg, ns, time & $kg.m.s^{-1}$  & Charge-exchange ion parallel momentum source \\
 rcxnareg \index{rcxnareg}\index{b2tallies.nc, rcxnareg}                          & vreg, ns, time & $s^{-1}$       & Charge-exchange particle source \\
-rdneureg \index{rdenureg}\index{b2tallies.nc, rdneureg}
- & vreg, time     & $W$           & Total radiation from {\tt Eirene} neutrals \\
+rdneureg \index{rdneureg}\index{b2tallies.nc, rdneureg}                          & vreg, time     & $W$           & Total radiation from {\tt Eirene} neutrals \\
 resco\_reg \index{resco\_reg}\index{b2tallies.nc, resco\_reg}                    & vreg, ns, time &               & Continuity equation residuals \\
 reshe\_reg \index{reshe\_reg}\index{b2tallies.nc, reshe\_reg}                    & vreg, time     & $W$           & Electron heat equation residuals \\
 reshi\_reg \index{reshi\_reg}\index{b2tallies.nc, reshi\_reg}                    & vreg, time     & $W$           & Ion heat equation residuals \\
@@ -12734,7 +12735,6 @@ respo\_reg \index{respo\_reg}\index{b2tallies.nc, respo\_reg}                   
 rqahereg \index{rqahereg}\index{b2tallies.nc, rqahereg}                          & vreg, ns, time & $W$           & Electron cooling rate \\
 rqbrmreg \index{rqbrmreg}\index{b2tallies.nc, rqbrmreg}                          & vreg, ns, time & $W$           & Bremsstrahlung \\
 rqradreg \index{rqradreg}\index{b2tallies.nc, rqradreg}                          & vreg, ns, time & $W$           & Line radiation \\
-rdneureg \index{rdneureg}\index{b2tallies.nc, rdneureg}                          & vreg, time     & $W$           & Radiation rate from {\tt Eirene} neutrals \\
 rrahireg \index{rrahireg}\index{b2tallies.nc, rrahireg}                          & vreg, ns, time & $W$           & Recombination ion heat source \\
 rramoreg \index{rramoreg}\index{b2tallies.nc, rramoreg}                          & vreg, ns, time & $kg.m.s^{-1}$ & Recombination parallel momentum source \\
 rranareg \index{rranareg}\index{b2tallies.nc, rranareg}                          & vreg, ns, time & $s^{-1}$      & Recombination particle source \\
@@ -14193,8 +14193,8 @@ when calculating derived data.
     rvd      & \index{b2plot, rvd} {\em RESVD} (\SOLPSfour runs) \\
     s        & \index{b2plot, s} Magnetic shear \\
     sch      & \index{b2plot, sch} Charge sources $(C)$ \\
-    she      & \index{b2plot, she} Electron energy sources $(W)$ \\
-    shi      & \index{b2plot, shi} Ion energy sources $(W)$ \\
+    she      & \index{b2plot, she} Electron energy sources $(W)$ (excluding equipartition) \\
+    shi      & \index{b2plot, shi} Ion energy sources $(W)$ (excluding equipartition) \\
     sig      & \index{b2plot, sig} Anomalous conductivity $(\Omega^{-1}.m^{-1})$ \\
     smaf     & \index{b2plot, smaf} Parallel momentum source from friction {\em b2npmo\_smaf} $(N)$ \\
     smag     & \index{b2plot, smag} Parallel momentum source from pressure gradient {\em b2npmo\_smag} $(N)$ \\
@@ -16810,7 +16810,7 @@ The choices are:
 \item[4] NEOART: all.
 \end{description}
 
-The available neoclassical quantitities are:
+The available neoclassical quantities are:
 \begin{description}
 \item[dnneo] Neoclassical particle diffusivity $D_n$ $(m^2.s^{-1})$,
 \item[chineo] Neoclassical heat conductivity $\chi$ $(m^2.s^{-1})$,
@@ -17894,6 +17894,7 @@ if desired, be declared as part of either the \${\tt SOLPS\_CPP} or the
 \item[PERFMON] \index{PERFMON} Enable performance monitoring
 \item[PLPLOT] \index{PLPLOT} Use {\tt PLPLOT} instead of {\tt NCAR} for plotting
 %\item[SCL\_IMP\_RCI] \index{SCL\_IMP\_RCI} Toggles scaling of impurities tallies
+\item[UAL\_MAJOR\_VERSION] \index{UAL\_MAJOR\_VERSION} Major version number of the UAL (Universal Access Layer) library to which the code is linked (set internally by the configuration files)
 \item[USE\_CDF\_B2STIME] \index{USE\_CDF\_B2STIME} Specific for \SOLPSfour {\tt CDF} tallies
 \item[WANT\_PROCESS] \index{WANT\_PROCESS} Enables the code for the \SOLPSfive to \SOLPSfour converter
 \item[WOS] \index{WOS} Uses the {\tt WOS} libraries for accessing experimental data at IPP
