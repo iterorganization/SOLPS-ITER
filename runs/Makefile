@@ -281,6 +281,9 @@ else
 	-cd b2mn.exe.dir ; [ -s ../ftn30 ] || ( [ -s ftn30 ] && mv -f ftn30 .. || echo > /dev/null )
 endif
 	-cd b2mn.exe.dir ; [ -s ../b2faveri ] || ( [ -s b2faveri ] && mv -f b2faveri .. || echo > /dev/null )
+ifdef NCDIR
+	-cd b2mn.exe.dir ; rm .netcdf4 >& /dev/null
+endif
 	-cd b2mn.exe.dir ; rm -f $(notdir $^) .quit >& /dev/null
 ifndef STAND_ALONE
 ifneq (${COMPILER},HP)
@@ -403,6 +406,9 @@ else
 endif
 	-cd b2mn.exe.dir ; [ -s ../b2faveri ] || ( [ -s b2faveri ] && mv -f b2faveri .. || echo > /dev/null )
 	-cd b2mn.exe.dir ; rm -f $(notdir $^) .quit >& /dev/null
+ifdef NCDIR
+	-cd b2mn.exe.dir ; rm .netcdf4 >& /dev/null
+endif
 ifndef STAND_ALONE
 ifneq (${COMPILER},HP)
 	-[ -s b2mn.exe.dir/fort.10 ] && mv b2mn.exe.dir/fort.10 . || ( [ -e b2mn.exe.dir/fort.10 ] && rm b2mn.exe.dir/fort.10 || echo > /dev/null )
