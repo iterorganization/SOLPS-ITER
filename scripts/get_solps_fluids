@@ -1,4 +1,4 @@
-#! /usr/bin/csh -f
+#! /bin/tcsh -f
 set solps_fluids=`climb_and_look_for SOLPS_FLUIDS`
 if (-s $solps_fluids) then
   echo `cat $solps_fluids`

@@ -1462,6 +1462,8 @@ negative quantities on the same scale and "M" the absolute values of negative qu
     {\tt b2time.nc} (Appendix \ref{cha:b2time}), 2$^{nd}$, 3$^{rd}$ {\it etc.\ versus} the 1$^{st}$ argument.
   \item[2dt]\index{2dt} plots time dependent quantities from
     {\tt b2time.nc} (Appendix \ref{cha:b2time}) versus time. A python version of this script also exists (Python 2.7 and 3.5 compatible).
+  \item[2dt\_tallies.py]\index{2dt\_tallies.py} plots time dependent quantities from
+    {\tt b2tallies.nc} (Appendix \ref{cha:b2tallies}) versus time (Python 3.5 compatible).    
   \item[2dt\_av]\index{2dt\_av} plots averaged time dependent quantities from
     {\tt b2time.nc} (Appendix \ref{cha:b2time}) versus time.
   \item[2dvi]\index{2dvi} prepares a \btwoplot command file {\tt TDV/contr.b2p} for production of input files to start a {\tt DIVIMP} run.
@@ -1596,6 +1598,8 @@ extracted from the {\tt run.log} file.
     is of correct size and content.
   \item[b2fstate\_OK]\index{b2fstate\_OK} Checks that the {\tt b2fstate} file
     is of correct size and content.
+  \item[b2fstate\_OK\_bool]\index{b2fstate\_OK\_bool} Checks that the {\tt b2fstate} file
+    is of correct size and content and returns 0 or 1 for use in scripting.
   \item[b2p]\index{b2p} Script to obtain a standard series of \btwoplot graphs.
   \item[b2pc]\index{b2pc} Script to obtain a standard series of \btwoplot graphs.
   \item[b2pl]\index{b2pl} Script to obtain a standard series of \btwoplot graphs.
