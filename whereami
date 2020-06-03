@@ -69,6 +69,7 @@ case "*.wm.edu":
   echo WM
   breaksw
 case "*.nersc.gov":
+case "cori*":
   echo NERSC
   breaksw
 case "*.ornl.gov":

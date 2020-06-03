@@ -40,6 +40,7 @@ case "PPPL":
   echo pgf90
   breaksw
 case "MEPHI":
+case "NERSC":
 case "ORNL":
 case "WM":
   echo gfortran
