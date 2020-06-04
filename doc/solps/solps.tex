@@ -4605,7 +4605,7 @@ Similarly, the {\tt fort.46} file contains the following data blocks, this time 
   \item[PVY] $Y$-component of the radial unit vector at the triangle center
 \end{description}
 
-Please note that, for the momentum densities, the coordinate system used by {\tt Eirene} is Cartesian, i.e. independent of the local magnetic field, and that this data is given in CGS units.
+Please note that, for the momentum densities, the coordinate system used by {\tt Eirene} is Cartesian, i.e. independent of the local magnetic field, and that this data is given in CGS units. For cases without a certain species type, for example a pure Helium case with no molecules, the relevant data fields have a species dimension of {\tt 1} as they are mapped internally in {\tt Eirene} to a dummy pointer array.
 
 \section{Changing dt}
 

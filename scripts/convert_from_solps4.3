@@ -126,6 +126,7 @@ touch b2fstati
 b2run b2ar
 b2run b2mn > run.log
 b2run b2_ual_write > b2_ual_write.log
+[ "$DEVICE" = 'iter' ] && idscp -si 10 -ri 2 -so ${shotnumber} -ro 1 -u ${USER} -d ${DEVICE} -ids wall
 create_db_entry -u ${USER} -d ${DEVICE} -s ${shotnumber} -r 1
 yaml=ids_${shotnumber}0001.yaml
 typeset -i reference_line
