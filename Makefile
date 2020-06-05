@@ -463,7 +463,9 @@ depend:
 	cd modules/B2.5;	   ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes
 	cd modules/B2.5;	   ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_OPENMP=-D_OPENMP USE_MPI=-DUSE_MPI SOLPS_MPI=yes SOLPS_OPENMP=yes
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO
+ifndef NO_MOTIF
 	cd modules/amds;           ${MAKE} depend
+endif
 #	cd modules/solps4-5;       ${MAKE} depend
 
 depend_nox:

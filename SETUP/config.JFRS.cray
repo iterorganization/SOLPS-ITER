@@ -50,7 +50,7 @@
     GLI_HOME ?= ${SOLPSTOP}/lib
   NCARG_ROOT ?=
       NAGDIR ?= ${CRAY_LIBSCI_PREFIX_DIR}
- MDSPLUS_DIR ?=
+ MDSPLUS_DIR ?= /opt/mdsplus/7.96.12
        MPDIR ?= ${MPICH_DIR}
 
 #
@@ -65,7 +65,7 @@ LD_GKS     = -L${GLI_HOME} -lgks
 ifdef NCARG_ROOT
 LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -L/usr/X11R6/lib64 -lX11 -lm
 endif
-LD_MDSPLUS =
+LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 LD_MPI     = -L${MPDIR}/lib -lmpich
 ifdef USE_MPI
