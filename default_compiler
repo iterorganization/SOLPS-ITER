@@ -39,14 +39,12 @@ case "ENEA":
 case "PPPL":
   echo pgf90
   breaksw
+case "JFRS":
 case "MEPHI":
 case "NERSC":
 case "ORNL":
 case "WM":
   echo gfortran
-  breaksw
-case "JFRS":
-  echo cray
   breaksw
 default:
   echo ifort64

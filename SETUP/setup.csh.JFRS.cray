@@ -12,6 +12,7 @@ setenv PKG_CONFIG_PATH ${CRAY_LIBSCI_PREFIX_DIR}/lib/pkgconfig:${PKG_CONFIG_PATH
 setenv GLI_HOME ${SOLPSTOP}/lib
 setenv SOLPS_OPENMP yes  # JFRS Cray environment uses OpenMP by default
 setenv MDSPLUS_DIR /opt/mdsplus/7.96.12
+setenv CRAYPE_LINK_TYPE dynamic
 
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
