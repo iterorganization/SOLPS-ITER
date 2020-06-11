@@ -20,7 +20,7 @@
        NCDIR ?= ${NETCDF_DIR}
    MSCL_ROOT ?= ${SOLPSLIB}
        H5DIR ?= ${PE_HDF5_DIR}
-     GR_ROOT ?=
+     GR_ROOT ?= ${SOLPSLIB}
     GLI_HOME ?= ${SOLPSTOP}/lib
   NCARG_ROOT ?= /work/xpb/my_env_dirs/NCL
       NAGDIR ?= ${CRAY_LIBSCI_PREFIX_DIR}
@@ -33,9 +33,9 @@
 
 LD_MSCL    = -L${MSCL_ROOT} -lmscl
 ifdef GR_ROOT
-LD_GR      = -L${GR_ROOT} -lgr
+LD_GR      = -L/opt/intel/lib/intel64 -L${GR_ROOT} -limf -lsvml -lintlc -liomp5 -lgr -lifport
 endif
-LD_GKS     = -L${GLI_HOME} -lgks -lgfortran
+LD_GKS     = -L${GLI_HOME} -lifcore -lgks -lgfortran
 ifdef NCARG_ROOT
 LD_NCARG   = -L$(NCARG_ROOT)/lib -lncarg -lncarg_gks -lncarg_c -lcairo -lXext -lX11 -lm -lfontconfig -lfreetype -lpthread -lXrender -lbz2
 endif

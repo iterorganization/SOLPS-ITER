@@ -3,7 +3,7 @@
 # The version relying on Fujitsu Fortran installed on AFS
 
 # Test whether necessary variables are defined
-LD_GR    ?= -l${SOLPSLIB} -lgr
+LD_GR    ?= -L${SOLPSLIB} -lgr
 LD_NAG   ?= -mkl
 
 #DEFINES  = ${SOLPS_CPP} ${EIRENE_DEFINES} -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
@@ -42,7 +42,7 @@ OBJDEST   = -o ${OBJDIR}/$*.o
 
 BLD       = ar rcv
 
-LD        = ${FC}
+LD        = ${FC} -dynamic
 
 #!!!Local Variables:
 #!!! mode: Makefile
