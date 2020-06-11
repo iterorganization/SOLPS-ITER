@@ -48,7 +48,7 @@
        H5DIR ?= ${PE_HDF5_DIR}
      GR_ROOT ?=
     GLI_HOME ?= ${SOLPSTOP}/lib
-  NCARG_ROOT ?=
+  NCARG_ROOT ?= /work/xpb/my_env_dirs/NCL
       NAGDIR ?= ${CRAY_LIBSCI_PREFIX_DIR}
  MDSPLUS_DIR ?= /opt/mdsplus/7.96.12
        MPDIR ?= ${MPICH_DIR}
@@ -88,7 +88,7 @@ endif
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNO_NAG -DF2003 -DCRAY
+SOLPS_CPP      = -DNO_NAG -DF2003 -DCRAY -DNCAR4
 B25_DEFINES    =
 CARRE_DEFINES  =
 EIRENE_DEFINES =
