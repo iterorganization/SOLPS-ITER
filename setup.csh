@@ -9,19 +9,22 @@ echo "(both require a valid ITER IDM account)"
 echo The full SOLPS-ITER manual can be found in \$SOLPSTOP/doc/solps/solps.pdf
 echo The Eirene manual is located at http://www.eirene.de/
 
-setenv SOLPSTOP $PWD
+# Obtain the directory where setup.csh is located to use as SOLPSTOP
+setenv SETUP_FILE `echo $_ | cut -d " " -f 2`
+setenv REAL_FILE `eval echo ${SETUP_FILE}`
+setenv SETUP_PATH `dirname ${REAL_FILE}`
+setenv SOLPSTOP `cd ${SETUP_PATH}; pwd -L`
 setenv SOLPSWORK ${SOLPSTOP}/runs
 
-
-# Set HOST_NAME and COMPILER, which will determine setup-files to be used
+# Set HOST_NAME and COMPILER, which will determine setup files to be used
 #------------------------------------------------------------------------
 
-if (-s SETUP/setup.csh.HOST_NAME.local) then
+if (-s ${SOLPSTOP}/SETUP/setup.csh.HOST_NAME.local) then
   echo Loading SETUP/setup.csh.HOST_NAME.local.
-  source SETUP/setup.csh.HOST_NAME.local
+  source ${SOLPSTOP}/SETUP/setup.csh.HOST_NAME.local
 else
-  if (-s whereami) then
-    set iamat=`./whereami|tail -1`
+  if (-s ${SOLPSTOP}/whereami) then
+    set iamat=`${SOLPSTOP}/whereami|tail -1`
     echo Running at $iamat.
   else
     set iamat="UNKNOWN"
@@ -37,8 +40,8 @@ endif
 
 # COMPILER can also be the argument to setup.csh call
 if($1 == "") then
-  if (-s default_compiler) then
-    setenv COMPILER `./default_compiler|tail -1`
+  if (-s ${SOLPSTOP}/default_compiler) then
+    setenv COMPILER `${SOLPSTOP}/default_compiler|tail -1`
     echo Using compiler $COMPILER.
   else
     setenv COMPILER ifort64
@@ -65,15 +68,15 @@ endif
 setenv SOLPSLIB ${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}
 
 # setup files for combination of HOST_NAME and COMPILER, + local modifications if present
-if (-s SETUP/setup.csh.${HOST_NAME}.${COMPILER}) then
+if (-s ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}) then
   echo Loading SETUP/setup.csh.${HOST_NAME}.${COMPILER}.
-  source SETUP/setup.csh.${HOST_NAME}.${COMPILER}
+  source ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}
 else
   echo File SETUP/setup.csh.${HOST_NAME}.${COMPILER} not found!
 endif
-if (-s SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local) then
+if (-s ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local) then
   echo Loading SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local.
-  source SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
+  source ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
 endif
 
 limit stacksize unlimited
@@ -86,7 +89,7 @@ setenv SonnetTopDirectory ${SOLPSTOP}/modules/Sonnet-light
 setenv EscapeSonnet `echo ${SonnetTopDirectory} | sed 's:\/:\\\/:g'`
 
 setenv DG ${SOLPSTOP}/modules/DivGeo
-#setenv CARRE_STOREDIR $SOLPSTOP/modules/Carre/meshes
+#setenv CARRE_STOREDIR ${SOLPSTOP}/modules/Carre/meshes
 
 # Set path to scripts and executables
 #------------------------------------
@@ -142,9 +145,9 @@ endif
 unset TOOLCHAIN SCRIPTS_PATH CARRE_PATH DIVGEO_PATH EIRENE_PATH B25_PATH B25EIRENE_PATH UINP_PATH TRIANG_PATH AMDS_PATH S45_PATH
 
 # Check whether SOLPS_DEBUG, SOLPS_OPENMP and SOLPS_MPI have been set already by the user
-if ($?SOLPS_OPENMP) source $SOLPSTOP/SETUP/openmp
-if ($?SOLPS_DEBUG)  source $SOLPSTOP/SETUP/debug
-if ($?SOLPS_MPI)    source $SOLPSTOP/SETUP/mpi
+if ($?SOLPS_OPENMP) source ${SOLPSTOP}/SETUP/openmp
+if ($?SOLPS_DEBUG)  source ${SOLPSTOP}/SETUP/debug
+if ($?SOLPS_MPI)    source ${SOLPSTOP}/SETUP/mpi
 
 # Set path to manuals
 #--------------------
@@ -229,14 +232,14 @@ alias unset_mpi    'source $SOLPSTOP/SETUP/nompi'
 alias   set_ig     'source $SOLPSTOP/SETUP/ig'
 alias unset_ig     'source $SOLPSTOP/SETUP/noig'
 
-# Add any local settings if present
-if (-s SETUP/setup.csh.local) then
-  echo Loading SETUP/setup.csh.local.
-  source SETUP/setup.csh.local
-endif
-
 # Check for Motif library
 if (! -e `which mwm`) setenv NO_MOTIF 1
+
+# Add any local settings if present
+if (-s ${SOLPSTOP}/SETUP/setup.csh.local) then
+  echo Loading SETUP/setup.csh.local.
+  source ${SOLPSTOP}/SETUP/setup.csh.local
+endif
 
 # List loaded modules
 

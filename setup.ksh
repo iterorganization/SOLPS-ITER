@@ -9,19 +9,22 @@ echo "(both require a valid ITER IDM account)"
 echo The full SOLPS-ITER manual can be found in \$SOLPSTOP/doc/solps/solps.pdf
 echo The Eirene manual is located at http://www.eirene.de/
 
-export SOLPSTOP=$PWD
+export SETUP_FILE=`echo $_ | cut -d " " -f 2`
+export REAL_FILE=`eval echo ${SETUP_FILE}`
+export REAL_PATH=`dirname ${REAL_FILE}`
+export SOLPSTOP=`cd ${REAL_PATH}; pwd -L`
 export SOLPSWORK=$SOLPSTOP/runs
 
 
-# Set HOST_NAME and COMPILER, which will determine setup-files to be used
+# Set HOST_NAME and COMPILER, which will determine setup files to be used
 #------------------------------------------------------------------------
 
-[ -s SETUP/setup.ksh.HOST_NAME.local ] && {
+[ -s ${SOLPSTOP}/SETUP/setup.ksh.HOST_NAME.local ] && {
   echo Loading SETUP/setup.ksh.HOST_NAME.local.
-  . SETUP/setup.ksh.HOST_NAME.local
+  . ${SOLPSTOP}/SETUP/setup.ksh.HOST_NAME.local
 } || {
-  [ -s whereami ] && {
-    iamat=`./whereami|tail -1`
+  [ -s ${SOLPSTOP}/whereami ] && {
+    iamat=`${SOLPSTOP}/whereami|tail -1`
     echo Running at $iamat
   } || {
     iamat="UNKNOWN"
@@ -38,8 +41,8 @@ export SOLPSWORK=$SOLPSTOP/runs
 
 # COMPILER can also be the argument to setup.csh call
 [ "$1" = "" ] && {
-  [ -s default_compiler ] && {
-    export COMPILER=`./default_compiler|tail -1`
+  [ -s ${SOLPSTOP}/default_compiler ] && {
+    export COMPILER=`${SOLPSTOP}/default_compiler|tail -1`
     echo Using compiler $COMPILER.
   } || {
     export COMPILER=ifort64
@@ -64,15 +67,15 @@ export SOLPSWORK=$SOLPSTOP/runs
 export SOLPSLIB=${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}
 
 # setup files for combination of HOST_NAME and COMPILER, + local modifications if present
-[ -s SETUP/setup.ksh.${HOST_NAME}.${COMPILER} ] && {
+[ -s ${SOLPSTOP}/SETUP/setup.ksh.${HOST_NAME}.${COMPILER} ] && {
   echo Loading SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.
-  . SETUP/setup.ksh.${HOST_NAME}.${COMPILER}
+  . ${SOLPSTOP}/SETUP/setup.ksh.${HOST_NAME}.${COMPILER}
 } || {
   echo File SETUP/setup.ksh.${HOST_NAME}.${COMPILER} not found!
 }
-[ -s SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.local ] && {
+[ -s ${SOLPSTOP}/SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.local ] && {
   echo Loading SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.local.
-  . SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.local
+  . ${SOLPSTOP}/SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.local
 }
 
 ulimit -s unlimited
@@ -228,16 +231,16 @@ alias unset_mpi='. $SOLPSTOP/SETUP/nompi'
 alias set_ig='. $SOLPSTOP/SETUP/ig'
 alias unset_ig='. $SOLPSTOP/SETUP/noig'
 
-# Add any local settings if present
-[ -s SETUP/setup.ksh.local ] && {
-   echo "Loading SETUP/setup.ksh.local" 
-   source SETUP/setup.ksh.local
-}
-
 # Check if Motif library is present
 
 [ -e `which mwm` ] || {
   export NO_MOTIF=1
+}
+
+# Add any local settings if present
+[ -s ${SOLPSTOP}/SETUP/setup.ksh.local ] && {
+   echo "Loading SETUP/setup.ksh.local"
+   source ${SOLPSTOP}/SETUP/setup.ksh.local
 }
 
 # List loaded modules

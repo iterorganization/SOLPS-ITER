@@ -628,9 +628,13 @@ if (-e $SOLPSWORK/setup.csh.local) then
 endif
 setenv SOLPS_CENTRAL "yes"
 \end{verbatim}
-This will set \${\tt SOLPSWORK}, create the appropriate {\tt SOLPSTOP} file, and load a {\tt setup.csh.local} for each user if it exists. The scripts such as {\tt dg}, {\tt carre}, and {\tt triang} then check if {\tt SOLPS\_CENTRAL} is set and will create the meshes, etc under \${\tt \{DEVICE\}/}\${\tt \{USER\}} instead of just \${\tt \{DEVICE\}}. It is therefore important that the {\tt DivGeo/device}, {\tt Carre/meshes} and {\tt Triang/triangles} and each \${\tt \{DEVICE\}} subdirectory have the permissions set such that each user can write to it. This could be by having a {\tt solps} group, for example, or by providing write access for all users. To avoid issues where the first user to create a \${\tt \{DEVICE\}} directory will do so without the correct permissions, a {\tt add\_central\_device} script has been provided which will create the appropriate directories with write access for all users. The administrator should run this and add each {\tt DEVICE} that will be used by the group.
+This will set \${\tt SOLPSWORK}, create the appropriate {\tt SOLPSTOP} file, and load a {\tt setup.csh.local} for each user if it exists. The scripts such as {\tt dg}, {\tt carre}, and {\tt triang} then check if {\tt SOLPS\_CENTRAL} is set and will create the meshes, etc under \${\tt \{DEVICE\}/}\${\tt \{USER\}} instead of just \${\tt \{DEVICE\}}. It is therefore important that the {\tt DivGeo/device}, {\tt Carre/meshes} and {\tt Triang/triangles} and each \${\tt \{DEVICE\}} subdirectory have the permissions set such that each user can write to it. This can be achieved by having a {\tt solps} group, for example, or by providing write access for all users. Users should also have read and execute access throughout the arboresence emanating from the central installation directory. To avoid issues where the first user to create a \${\tt \{DEVICE\}} directory will do so without the correct permissions, an {\tt add\_central\_device} script has been provided which will create the appropriate directories with write access for all users. The administrator should run this and add each {\tt DEVICE} that will be used by the group.
 
-Each user will then {\tt cd} to the central installation directory, run {\tt tcsh; source setup.csh}, and the rest of the usage would be standard.
+Before each session, each user will then set up the \SOLPSITER environment by running
+\begin{verbatim}
+tcsh; source $(SOLPS_central_dir)/setup.csh
+\end{verbatim}
+from their \${\tt SOLPSWORK} directory, and the rest of the usage would be standard, where \${\tt (SOLPS\_central\_dir)} is the location of the central installation.
 
 \chapter{The structure}
 \label{cha:structure}
