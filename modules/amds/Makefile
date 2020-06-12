@@ -33,7 +33,7 @@ ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local ] && 
 endif
 
 # Extensions for object directories when various options are used
-ifdef SOLPS_OPENMP
+ifdef USE_OPENMP
 EXT_OPENMP = .openmp
 endif
 ifdef SOLPS_DEBUG
