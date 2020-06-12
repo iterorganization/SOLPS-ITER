@@ -13,11 +13,7 @@
 #SBATCH -o SLURM-%j.out
 #SBATCH -e SLURM-%j.err
 
-
-pushd #SOLPSTOP#
-source setup.csh
 echo Using SOLPSTOP = #SOLPSTOP#
-popd
 
 set USE_MPI=""
 if ($?SOLPS_MPI) then

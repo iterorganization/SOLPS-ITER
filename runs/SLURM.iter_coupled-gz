@@ -8,7 +8,6 @@
 #SBATCH  --job-name=#JOBNAME#
 #SBATCH  --partition=#PART#
 
-# source setup.csh
 echo Using SOLPSTOP = #SOLPSTOP#
 
 set USE_MPI=""

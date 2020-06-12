@@ -24,10 +24,7 @@
 ###   Submit the job:     `itmsubmit -s -j "JobName" SLURM.itm_loop`
 ###   Stop the run:       `touch b2mn.exe.dir/.quit`
 
-pushd #SOLPSTOP#
-source setup.csh
 echo Using SOLPSTOP = #SOLPSTOP#
-popd
 
 #echo $MANPATH
 #echo $PATH

@@ -9,7 +9,6 @@
 #SBATCH  --partition=#PART#
 #SBATCH  --account=FUA34_ADC
 
-# source setup.csh
 echo Using SOLPSTOP = #SOLPSTOP#
 
 set USE_MPI=""
