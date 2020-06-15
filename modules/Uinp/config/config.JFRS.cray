@@ -1,7 +1,7 @@
 #  VERSION : 28.07.99 20:34
 
 # Test whether necessary variables are defined
-LD_MSCL ?= -L${SOLPSLIB} -lmscl
+LD_MSCL ?= -L/opt/gcc/8.3.0/snos/lib64 -lgfortran -L${SOLPSLIB} -lmscl
 
 FC       = ftn
 FFLAGS   = -e0 -ez -ef
