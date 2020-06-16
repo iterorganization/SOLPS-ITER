@@ -1,0 +1,5 @@
+#! /bin/tcsh -f
+
+pipe_run.log | \
+  grep "Cost function value:" | \
+  awk '{print NR,$4}' | xyplot

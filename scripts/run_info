@@ -1,0 +1,15 @@
+#! /bin/tcsh -f
+## strip git hashes and cost function information from run.log
+if ( -s run.log ) then
+  grep -i -w 'version' run.log >! run.info
+  grep -e 'ntim' run.log | tail >> run.info
+  grep -i 'stopping' run.log | tail >> run.info
+  grep -i -w 'Defining cost function' run.log | tail -n 1 >> run.info
+  set NNN=`grep -i cost run.info | gawk '{print$4}'`
+  if ( `grep -c diff run.log` > 0) then
+   set NNN=`expr $NNN + $NNN`
+  endif
+  grep -i -w 'cost function' run.log | tail -n $NNN >> run.info
+else
+  echo "No run.log file present"
+endif

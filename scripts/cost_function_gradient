@@ -1,0 +1,5 @@
+#! /bin/tcsh -f
+
+pipe_run.log | \
+  grep "Cost function diff value:" | \
+  awk '{print NR,$5}' | xyplot
