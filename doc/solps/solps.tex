@@ -196,7 +196,7 @@ To do this, one must upload a copy of their public ssh key here: \href{https://g
 > git submodule update
 \end{verbatim}
 
-It is best afterwards to position oneself on the master braches, which is achieved by:
+It is best afterwards to position oneself on the {\tt master} branches, which is achieved by the {\tt switch\_to\_master} script or, alternatively:
 
 \begin{verbatim}
 > git checkout master
@@ -212,7 +212,7 @@ It is best afterwards to position oneself on the master braches, which is achiev
 > git checkout master
 \end{verbatim}
 
-For later updates, it is recommended you use the {\tt solps-iter\_update} script. If you are planning to do code development, your starting point should be the develop branches, which you can upload by using the {\tt solps-iter\_update\_develop} script instead.
+For later updates, it is recommended you use the {\tt solps-iter\_update} script. If you are planning to do code development, your starting point should be the {\tt develop} branches, which you can switch to by using the {\tt solps-iter\_update\_develop} script instead.
 
 Please note that because of the way some of the \SOLPSITER utility scripts function, the path to the \SOLPSITER top directory must not contain any of the strings {\tt .debug}, {\tt .mpi}, {\tt .openmp}, or {\tt .ig}.
 
