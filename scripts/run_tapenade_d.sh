@@ -15,8 +15,17 @@ $SOLPSTOP/modules/B2.5/src/differentiation/move_to_F90.sh
 
 $SOLPSTOP/modules/B2.5/src/differentiation/grab_files_d.sh
 
+sed -i '/EXTERNAL RESTART_MA28_FOR_US/d' b2usht_d.F90 b2npmo_d.F90 b2news__d.F90
+sed -i -e 's/ISIZE1OFgeo%vxonedbsq/nVx/g' b2sihs__d.F90
+sed -i -e 's/ISIZE1OFgeo%cvonedbsq/nCv/g' b2sihs__d.F90
+sed -i '/EXTERNAL DEALLOC_B2MOD_MA28_FOR_US/d' b2mod_driver_diff.F90
+
 sed -i '/DIFFSIZES/d' ./*.F90 
 sed -i -e 's/ISIZE1OFarg1/mpg%nCv/g' b2mod_driver_diff.F90 b2npmo_d.F90 b2stbr_phys_d.F90
+sed -i -e 's/ISIZE1OFcvsahz_eff/nFc/g' b2stbr_phys_d.F90
+sed -i -e 's/ISIZE2OFcvsahz_eff/0:1/g' b2stbr_phys_d.F90
+sed -i -e 's/ISIZE1OFcvsahz/nFc/g' b2stbr_phys_d.F90
+sed -i -e 's/ISIZE2OFcvsahz/0:1/g' b2stbr_phys_d.F90
 sed -i -e 's/ISIZE1OFabs/mpg%nCv/g' b2mod_driver_diff.F90
 sed -i -e 's/ISIZE2OFabs/0:state%pl%ns-1/g' b2mod_driver_diff.F90
 sed -i -e 's/DIMENSION() :: abs6/DIMENSION(mpg%nCv) :: abs6/g' b2mod_driver_diff.F90
@@ -27,25 +36,26 @@ sed -i -e 's/DIMENSION(SIZE(x3, 1))/DIMENSION(mpg%nCv)/g' b2mod_driver_diff.F90
 sed -i -e 's/DIMENSION(SIZE(x4, 1), SIZE(x4, 2))/DIMENSION(mpg%nCv, 0:state%pl%ns-1)/g' b2mod_driver_diff.F90
 sed -i -e 's/ISIZE1OFtemp/nCv/g' b2news__d.F90 b2tfcc_d.F90 b2tfnb_d.F90 b2tqna_d.F90 b2xpic_d.F90
 sed -i -e 's/ISIZE1OFdv%fch_pi_c/nCv/g' b2news__d.F90
-sed -i -e 's/ISIZE1OFcvsa/nFc/g' b2npmo_d.F90 b2stbr_phys_d.F90
+sed -i -e 's/ISIZE1OFcvsa/nFc/g' b2npmo_d.F90
 sed -i -e 's/ISIZE1OFresult1/nCv/g' b2npmo_d.F90
 sed -i -e 's/ISIZE1OFcvhz/nCv/g' b2nxfv_d.F90
 sed -i -e 's/ISIZE1OFfcqalf/nFc/g' b2sian_d.F90 b2stbc_d.F90 b2stbc_phys_d.F90 b2tfhe__d.F90 b2tfhi__d.F90 b2trno_d.F90
 sed -i -e 's/ISIZE1OFcvvol/nCc/g' b2stbc_d.F90 
 sed -i -e 's/ISIZE1OFcvbb/nCv/g' b2stbm_d.F90 b2tvspa_d.F90 b2tfnb_d.F90
-sed -i -e 's/ISIZE2OFcvsa/0:1/g' b2stbr_phys_d.F90
 sed -i -e 's/ISIZE1OFcdpa/nFC/g' b2tfcc_d.F90 b2tfnb_d.F90
 sed -i -e 's/ISIZE1OFne/nCv/g' b2tfhe__d.F90 b2tfrn_d.F90
 sed -i -e 's/ISIZE1OFni/nCv/g' b2tfhi__d.F90 
 sed -i -e 's/ISIZE1OFcdna/nFc/g' b2tfnb_d.F90
 sed -i -e 's/ISIZE1OFpa/nCv/g' b2tfnb_d.F90
 sed -i -e 's/ISIZE1OFfna_52/nFc/g' b2tfnb_d.F90
+sed -i -e 's/ISIZE1OFfchz/nFc/g' b2tfnb_d.F90
 sed -i -e 's/ISIZE1OFfchc/nFc/g' b2tinnt_d.F90
 sed -i -e 's/ISIZE1OFgeo%cvvol/nCv/g' b2stbc_d.F90
 sed -i -e 's/ISIZE1OFdv%fna_52(:, :, isb)/nFc/g' b2tfnb_d.F90 
 sed -i -e 's/ISIZE1OFcvbzb/nCv/g' b2tral_d.F90
 sed -i -e 's/ISIZE1OFgeo%cvbb/nCv/g' b2xpve_d.F90 
 sed -i -e 's/ISIZE1OFfceb/mpg%nFc/g' b2us_geo_diff.F90
+sed -i -e 's/ISIZE1OFvxhz/nVx/g' b2nxfv_d.F90 
 sed -i -e 's/= NULL()/= 0.0_R8/g' b2mod_driver_diff.F90
 sed -i -e 's/=> NULL()/= 0.0_R8/g' ./*.F90
 
@@ -56,6 +66,9 @@ sed -i '/REAL :: user/d' b2mod_user_namelist_diff.F90
 
 sed -i -e 's/alloc_b2mod_balance_d, dealloc_b2mod_balance, dealloc_b2mod_balance_d,/dealloc_b2mod_balance,/g' b2mod_driver_diff.F90
 sed -i -e 's/dealloc_b2mod_eirene_sources, dealloc_b2mod_eirene_sources_d,/dealloc_b2mod_eirene_sources,/g' b2mod_driver_diff.F90
+sed -i -e 's/run_av_get_plasma, run_av_get_plasma_d, run_av_save, run_av_save_d/run_av_get_plasma, run_av_save/g' b2mod_driver_diff.F90
+sed -i -e 's/batch_av_all_init_d, batch_av_all_save, batch_av_all_fin, &/batch_av_all_save, batch_av_all_fin/g' b2mod_driver_diff.F90
+sed -i '/& batch_av_all_fin_d/d' b2mod_driver_diff.F90
 
 sed -i -e 's/CHARACTER(len=\*) :: arg1/CHARACTER(len=20) :: arg1/g' b2usco_d.F90
 sed -i -e 's/CHARACTER(len=\*) :: arg10/CHARACTER(len=20) :: arg10/g' b2usmo_d.F90
@@ -77,6 +90,8 @@ sed -i '/LOGICAL :: ISCLASSICALGRID/d' b2us_prep_diff.F90
 sed -i -e 's/MSTEP_NODIFF/MSTEP/g' heatdiff1D_d.F90
 sed -i -e 's/LINES2C_NODIFF/LINES2C/g' heatdiff1D_d.F90
 
+$SOLPSTOP/modules/B2.5/src/differentiation/remove_allocation.sh
+
 $SOLPSTOP/modules/B2.5/src/differentiation/substitute_allocation.sh
 
 sed -i -e "s/REAL\*8/REAL(kind=r8)/g" *_diff.F90
@@ -86,9 +101,15 @@ sed -i -e "s/REAL\*8/REAL(kind=r8)/g" *_d.F90
 sed -i -e "s/REAL\([^(].*::\)/REAL(kind=r8)\1/g" *_d.F90
 
 sed -i -e "/TYPE(B2RATESWORK_DIFF) :: rtw/i\      TYPE(B2DIAGNOSTIC) :: diag" b2us_plasma_diff.F90
-sed -i -e "/cutlo = 0.0_R8/i\  cutlod = 0.0_R8" expu_d.F90
+sed -i -e 's/DIMENSION(:), DIMENSION(:), ALLOCATABLE :: text/DIMENSION(:), ALLOCATABLE :: text(:)/g' b2us_plasma_diff.F90
+sed -i -e "/END TYPE MAPPING_DIFF/i\      INTEGER :: ncv, nfc, nvx, ncg, nci, ncmxvx, ncmxfc, nvmxcv, nvmxfc&" b2us_map_diff.F90
+sed -i -e "/END TYPE MAPPING_DIFF/i\&     , nfs, nbc, mxnbc, nrc, mxnrc, ncmxnv, ncf, mxncf" b2us_map_diff.F90
+
+sed -i -e "s/B2MNDR_2_D(nout, ns, geo, mpg, state, state_ext)/B2MNDR_2_D(nout, ns, geo, mpg, state, stated, state_ext)/g" b2mod_driver_diff.F90 b2mod_main_diff.F90
+sed -i -e "/'03.002.000') CALL XERRAB(&/i\&       '03.002.000' .or. b2fdiffi_version .LT.&" b2mod_main_diff.F90
 
 cp ../useful_wg/cond_coef.F .
+
 #################### for restart
 
 sed -i '/IF (ALLOCATED(ned)) ned = 0.0/d' b2mod_driver_diff.F90
