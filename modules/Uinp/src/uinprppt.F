@@ -162,11 +162,9 @@ c*** the atoms and nuclei
                     lkindm(nm)=ii
                   end if !}
                 end do !}
-                do ii=1,nspcatm !{
+                do ii=1,na !{
                   do jj=1,m_hlp_h !{
-                    if(streql(spcsatm(ii),hlp_h(1,jj,1))) then !{
-                      if (ipt.eq.0) ipt=jj
-                    end if !}
+                    if(streql(spcsatm(ii),hlp_h(1,jj,1))) ipt=jj
                   end do !}
                 end do !}
                 if (ipt.gt.0) then !{
@@ -229,11 +227,9 @@ c*** the atoms and nuclei
                   if(streql(spcsatm(ii),spcdspc(lspdgen(k))))
      >             lkindi(ni)=ii
                 end do !}
-                do ii=1,nspcatm !{
+                do ii=1,na !{
                   do jj=1,m_hlp_h !{
-                    if(streql(spcsatm(ii),hlp_h(1,jj,1))) then !{
-                      if (ipt.eq.0) ipt=jj
-                    end if !}
+                    if(streql(spcsatm(ii),hlp_h(1,jj,1))) ipt=jj
                   end do !}
                 end do !}
                 if (ipt.gt.0) then !{

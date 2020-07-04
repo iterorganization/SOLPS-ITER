@@ -9,7 +9,7 @@ ifndef LD_GKS
   $(error LD_GKS not defined)
 endif
 
-DEFINES =
+DEFINES += -DPGF90
 EQUIVS =
 
 CPP = /lib/cpp -traditional
@@ -20,7 +20,6 @@ LINK_MOD =
 FC = pgf90
 ifdef SOLPS_DEBUG
 FCOPTS = -Mbackslash -C -g -Mchkfpstk -Mchkptr -Mchkstk -Mpgicoff -tp=amd64
-DEFINES += -DDBG
 else
 FCOPTS = -O -Mbackslash -tp=amd64
 endif

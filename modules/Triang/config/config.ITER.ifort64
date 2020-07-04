@@ -7,9 +7,8 @@ LD_GKS   ?= -L/work/imas/opt/gks/4.4.74/lib -lgks -lgfortran -lX11 -lXt -lXmu
 LD_NAG   ?= `pkg-config nag --libs`
 GLI_HOME ?= /work/imas/opt/gks/4.4.74/lib
 
-#DEFINES  = ${SOLPS_CPP} ${EIRENE_DEFINES} -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
-#DEFINES  = ${SOLPS_CPP} ${EIRENE_DEFINES} -DTRIANG -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
-DEFINES   =
+#DEFINES += ${SOLPS_CPP} ${EIRENE_DEFINES} -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
+#DEFINES += ${SOLPS_CPP} ${EIRENE_DEFINES} -DTRIANG -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
 EQUIVS    =
 
 #CPP      = -/lib/cpp -C -traditional
@@ -23,7 +22,6 @@ FC_VERSION = $(shell echo `ifort --version | head -1 | awk '{printf "%s ",$$3,"\
 
 ifdef SOLPS_DEBUG
 FCOPTS    = -g -C -traceback -debug all -check all
-DEFINES  += -DDBG
 else
 ifeq (${FC_VERSION},12.0.2)
 FCOPTS    = -O3 -vec_report0

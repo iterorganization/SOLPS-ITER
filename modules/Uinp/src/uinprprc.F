@@ -11,7 +11,7 @@ c*** Prepare the reaction data for Eirene
 c======================================================================
       implicit none
 #include "uinput.inc"
-      integer i,j,k,l,m,n,ic,ii,jj,kk,k0,k1,k2,k3,k4,
+      integer i,j,k,l,m,n,ic,ii,jj,kk,k0,k1,k2,k3,k4,ll,
      ,  iib,iie,iir,iik,ii1,ii2,ii3,ibgk,ipls,
      ,  ipt,irc,m_rct,m_rcn,n_ptc,l_hlp(mreac),igd,ngn,nrc,jrc,niso,
      ,  ic0,ic9,ig,jspc,lknd,npass,nnn,nisotopes,gpass,group_found,
@@ -67,6 +67,114 @@ c======================================================================
       if (lhelium) then !{
         write(6,'(a)') 'This problem contains Helium.'
       end if !}
+
+c*** Add some explicit eleastic collisions
+      if (nisotopes.ge.1) then !{
+        if (nnrctn+4.gt.mreac) then !{
+          write(0,*) 'Too many reaction datasets specified:',nnrctn+4
+          call xerrab('==> Check DEF_NREAC in DIMENSIONS.F')
+        end if !}
+        rctntyp(nnrctn+1:nnrctn+4)='EL'
+        rctndbs(nnrctn+1:nnrctn+4)='AMMONX'
+        rctnchp(nnrctn+1:nnrctn+4)='H.2'
+        rctnrct(nnrctn+1)='R-H-H'
+        rctnrct(nnrctn+2)='R-H-H2'
+        rctnrct(nnrctn+3)='R-H2-H'
+        rctnrct(nnrctn+4)='R-H2-H2'
+        rctnptin(nnrctn+1)='H'
+        rctnptin(nnrctn+2)='H2'
+        rctnptin(nnrctn+3)='H'
+        rctnptin(nnrctn+4)='H2'
+        rctnptpr(nnrctn+1)='H'
+        rctnptpr(nnrctn+2)='H'
+        rctnptpr(nnrctn+3)='H2'
+        rctnptpr(nnrctn+4)='H2'
+        rctnpto1(nnrctn+1:nnrctn+4)=rctnptpr(nnrctn+1:nnrctn+4)
+        rctnpto2(nnrctn+1:nnrctn+4)=rctnptin(nnrctn+1:nnrctn+4)
+        rctnpto3(nnrctn+1:nnrctn+4)=' '
+        rctngrp(nnrctn+1:nnrctn+4)=0
+        rctnmsp(nnrctn+1)=1
+        rctnmsp(nnrctn+2)=2
+        rctnmsp(nnrctn+3)=1
+        rctnmsp(nnrctn+4)=2
+        rctnmst(nnrctn+1:nnrctn+2)=1
+        rctnmst(nnrctn+3:nnrctn+4)=2
+        rctndlte(nnrctn+1:nnrctn+4)=0.0
+        rctnenr1(nnrctn+1:nnrctn+4)=0.0
+        rctnenr2(nnrctn+1:nnrctn+4)=0.0
+        rctneln(nnrctn+1:nnrctn+4)='H'
+        rctntmin(nnrctn+1:nnrctn+4)=0.0
+        rctntmax(nnrctn+1:nnrctn+4)=0.0
+        rctnbdl(nnrctn+1:nnrctn+4)=' '
+        nnrctn=nnrctn+4
+      end if !{
+      if (lhelium) then !{
+        if (nnrctn+1.gt.mreac) then !{
+          write(0,*) 'Too many reaction datasets specified:',nnrctn+1
+          call xerrab('==> Check DEF_NREAC in DIMENSIONS.F')
+        end if !}
+        rctntyp(nnrctn+1)='EL'
+        rctndbs(nnrctn+1)='AMMONX'
+        rctnchp(nnrctn+1)='H.2'
+        rctnrct(nnrctn+1)='R-HE-HE'
+        rctnptin(nnrctn+1)='He'
+        rctnptpr(nnrctn+1)='He'
+        rctnpto1(nnrctn+1)=rctnptpr(nnrctn+1)
+        rctnpto2(nnrctn+1)=rctnptin(nnrctn+1)
+        rctnpto3(nnrctn+1)=' '
+        rctngrp(nnrctn+1)=0
+        rctnmst(nnrctn+1)=4
+        rctnmsp(nnrctn+1)=4
+        rctndlte(nnrctn+1)=0.0
+        rctnenr1(nnrctn+1)=0.0
+        rctnenr2(nnrctn+1)=0.0
+        rctneln(nnrctn+1)='He'
+        rctntmin(nnrctn+1)=0.0
+        rctntmax(nnrctn+1)=0.0
+        rctnbdl(nnrctn+1)=' '
+        nnrctn=nnrctn+1
+      end if !{
+      if (nisotopes.ge.1.and.lhelium) then !{
+        if (nnrctn+4.gt.mreac) then !{
+          write(0,*) 'Too many reaction datasets specified:',nnrctn+4
+          call xerrab('==> Check DEF_NREAC in DIMENSIONS.F')
+        end if !}
+        rctntyp(nnrctn+1:nnrctn+4)='EL'
+        rctndbs(nnrctn+1:nnrctn+4)='AMMONX'
+        rctnchp(nnrctn+1:nnrctn+4)='H.2'
+        rctnrct(nnrctn+1)='R-H-HE'
+        rctnrct(nnrctn+2)='R-H2-HE'
+        rctnrct(nnrctn+3)='R-HE-H'
+        rctnrct(nnrctn+4)='R-HE-H2'
+        rctnptin(nnrctn+1)='He'
+        rctnptin(nnrctn+2)='He'
+        rctnptin(nnrctn+3)='H'
+        rctnptin(nnrctn+4)='H2'
+        rctnptpr(nnrctn+1)='H'
+        rctnptpr(nnrctn+2)='H2'
+        rctnptpr(nnrctn+3)='He'
+        rctnptpr(nnrctn+4)='He'
+        rctnpto1(nnrctn+1:nnrctn+4)=rctnptpr(nnrctn+1:nnrctn+4)
+        rctnpto2(nnrctn+1:nnrctn+4)=rctnptin(nnrctn+1:nnrctn+4)
+        rctnpto3(nnrctn+1:nnrctn+4)=' '
+        rctngrp(nnrctn+1:nnrctn+4)=0
+        rctnmsp(nnrctn+1)=4
+        rctnmsp(nnrctn+2)=4
+        rctnmsp(nnrctn+3)=1
+        rctnmsp(nnrctn+4)=2
+        rctnmst(nnrctn+1)=1
+        rctnmst(nnrctn+2)=2
+        rctnmst(nnrctn+3:nnrctn+4)=4
+        rctndlte(nnrctn+1:nnrctn+4)=0.0
+        rctnenr1(nnrctn+1:nnrctn+4)=0.0
+        rctnenr2(nnrctn+1:nnrctn+4)=0.0
+        rctneln(nnrctn+1:nnrctn+2)='H'
+        rctneln(nnrctn+3:nnrctn+4)='He'
+        rctntmin(nnrctn+1:nnrctn+4)=0.0
+        rctntmax(nnrctn+1:nnrctn+4)=0.0
+        rctnbdl(nnrctn+1:nnrctn+4)=' '
+        nnrctn=nnrctn+4
+      end if !{
 
 c*** Remove reaction duplicates, if any
       ndup = 0
@@ -737,6 +845,14 @@ cxpb Now check if we need to rename some isotopes for AMDS reactions
      .                  rctnpto3(jrc)=hlp_h(ii,j,1)
                     end do !}
                   end do !}
+                  if (streql(rctnptin(jrc),' '))
+     >             rctnptin(jrc)=rctnptin(irc)
+                  if (streql(rctnpto1(jrc),' '))
+     >             rctnpto1(jrc)=rctnpto1(irc)
+                  if (streql(rctnpto2(jrc),' '))
+     >             rctnpto2(jrc)=rctnpto2(irc)
+                  if (streql(rctnpto3(jrc),' '))
+     >             rctnpto3(jrc)=rctnpto3(irc)
                   if (rctngrp(jrc).ne.0) then !{
                     ign(jrc,1)=rctngrp(jrc)
                     ign(jrc,1+k)=rctngrp(jrc)
@@ -1466,36 +1582,37 @@ c>>>
      ,               'creating the BGK particle ', cbgk
                     ipls=nplsi+ibgk
                     textp(ipls)=cbgk
-                    if (l.eq.1) then !{
-                      nmassp(ipls)=nmassa(k)
-                      ncharp(ipls)=nchara(k)
+                    call uinspcid(rctnptpr(k0),ll,kk)
+                    if (ll.eq.1) then !{
+                      nmassp(ipls)=nmassa(kk)
+                      ncharp(ipls)=nchara(kk)
                       nprtp(ipls)=1
                       nchrgp(ipls)=0
-                      isrfp(ipls)=isrfa(k)
-                      isrtp(ipls)=isrta(k)
-                      nmsecp(ipls)=nmseca(k)
-                      nhstp(ipls)=nhsta(k)
-                      lkindp(ipls)=k
-                    else if (l.eq.2) then !}{
-                      nmassp(ipls)=nmassm(k)
-                      ncharp(ipls)=ncharm(k)
-                      nprtp(ipls)=nprtm(k)
+                      isrfp(ipls)=isrfa(kk)
+                      isrtp(ipls)=isrta(kk)
+                      nmsecp(ipls)=nmseca(kk)
+                      nhstp(ipls)=nhsta(kk)
+                      lkindp(ipls)=kk
+                    else if (ll.eq.2) then !}{
+                      nmassp(ipls)=nmassm(kk)
+                      ncharp(ipls)=ncharm(kk)
+                      nprtp(ipls)=nprtm(kk)
                       nchrgp(ipls)=0
-                      isrfp(ipls)=isrfm(k)
-                      isrtp(ipls)=isrtm(k)
-                      nmsecp(ipls)=nmsecm(k)
-                      nhstp(ipls)=nhstm(k)
-                      lkindp(ipls)=lkindm(k)
-                    else if (l.eq.3) then !}{
-                      nmassp(ipls)=nmassi(k)
-                      ncharp(ipls)=nchari(k)
-                      nprtp(ipls)=nprti(k)
-                      nchrgp(ipls)=nchrgi(k)
-                      isrfp(ipls)=isrfi(k)
-                      isrtp(ipls)=isrti(k)
-                      nmsecp(ipls)=nmseci(k)
-                      nhstp(ipls)=nhsti(k)
-                      lkindp(ipls)=lkindi(k)
+                      isrfp(ipls)=isrfm(kk)
+                      isrtp(ipls)=isrtm(kk)
+                      nmsecp(ipls)=nmsecm(kk)
+                      nhstp(ipls)=nhstm(kk)
+                      lkindp(ipls)=lkindm(kk)
+                    else if (ll.eq.3) then !}{
+                      nmassp(ipls)=nmassi(kk)
+                      ncharp(ipls)=nchari(kk)
+                      nprtp(ipls)=nprti(kk)
+                      nchrgp(ipls)=nchrgi(kk)
+                      isrfp(ipls)=isrfi(kk)
+                      isrtp(ipls)=isrti(kk)
+                      nmsecp(ipls)=nmseci(kk)
+                      nhstp(ipls)=nhsti(kk)
+                      lkindp(ipls)=lkindi(kk)
                     end if !}
                     nrcp(ipls)=0
                     idnslmp(ipls)=0
@@ -1515,7 +1632,11 @@ c>>>
                 iib=115
               end if !}
 
-              call uinspcid(rctnpto1(k0),l,k)
+              if (iik.eq.0) then !{
+                call uinspcid(rctnpto1(k0),l,k)
+              else !}{
+                call uinspcid(rctnptpr(k0),l,k)
+              end if !}
               if(l.lt.0) then !{
                 write(0,*) 'Output particle 1 not on the list: ',
      ,            l,k0,'  ',rctnpto1(k0)
@@ -1531,6 +1652,8 @@ c>>>
                 write(0,*) 'Output particle 2 not on the list: ',
      ,            l,k0,'  ',rctnpto2(k0)
                 call xerrab ('==> Check the AMDS model')
+              else if(iik.gt.0) then !}{
+                ii2=iib
               else if(l.gt.0) then !}{
                 ii2=100*k+10*rctnnmo2(k0)+l
               else !}{
