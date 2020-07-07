@@ -110,6 +110,7 @@ MODMODS := ${MODLOCASE:%=${OBJDIR}/%.${MOD}}
 MODOBJS = ${MODULES:%=${OBJDIR}/%.o}
 ALLOBJS = ${OBJS:%.o=${OBJDIR}/%.o}
 EIROBJS = ${patsubst %.o,${OBJDIR}/%.o,eirmod_balanced_strategy.o eirmod_cai.o eirmod_calstr_buffered.o eirmod_ccona.o eirmod_cestim.o eirmod_cinit.o eirmod_comprt.o eirmod_comsou.o eirmod_comusr.o eirmod_coutau.o eirmod_cpes.o eirmod_csdvi.o eirmod_cspez.o eirmod_cstep.o eirmod_mpi.o eirmod_parmmod.o exit_own.o leer.o masage.o masj1r.o masj2r.o pedist.o plend.o}
+EGROBJS = ${patsubst %.o,${OBJDIR}/%.o,graxs.o grdrw.o grend.o grjmp.o grnwpn.o grsclc.o grsclv.o grspts.o grstrt.o gr90dg.o}
 
 MAINLIST = tria.o triageom.o triainq.o
 
@@ -158,13 +159,13 @@ ${OBJDIR}/triainq: ${OBJDIR}/triainq.o ${OBJDIR}/libtria.a ${OBJDIR}/libeir.a ${
 	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/triainq ${OBJDIR}/triainq.o ${OBJDIR}/libtria.a ${OBJDIR}/libeir.a
 endif
 else
-${OBJDIR}/tria ${OBJDIR}/.nox: ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${OBJDIR}/ioflush.o ${MAKES}
+${OBJDIR}/tria ${OBJDIR}/.nox: ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${OBJDIR}/ioflush.o ${EGROBJS} ${MAKES}
 	rm -f ${OBJDIR}/tria 2> /dev/null; \
 	rm -f ${OBJDIR}/.x 2> /dev/null; \
-	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/tria ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${OBJDIR}/ioflush.o ${LDLIBS} $(LDEXTRA) && touch ${OBJDIR}/.nox
+	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/tria ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${OBJDIR}/ioflush.o ${EGROBJS} ${LDLIBS} $(LDEXTRA) && touch ${OBJDIR}/.nox
 
-${OBJDIR}/triageom: ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${OBJDIR}/libeir.a ${MAKES}
-	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/triageom ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${OBJDIR}/libeir.a ${LDLIBS} $(LDEXTRA)
+${OBJDIR}/triageom: ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${OBJDIR}/libeir.a ${EGROBJS} ${MAKES}
+	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/triageom ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${OBJDIR}/libeir.a ${EGROBJS} ${LDLIBS} $(LDEXTRA)
 
 ${OBJDIR}/triainq: ${OBJDIR}/triainq.o ${OBJDIR}/libtria.a ${OBJDIR}/libeir.a ${MAKES}
 	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/triainq ${OBJDIR}/triainq.o ${OBJDIR}/libtria.a ${OBJDIR}/libeir.a
@@ -251,6 +252,46 @@ ${OBJDIR}/eirmod_precision.o:
 
 ${OBJDIR}/exit_own.o: ${OBJDIR}/eirmod_mpi.${MOD} ${OBJDIR}/eirmod_cpes.${MOD} ${OBJDIR}/eirmod_comprt.${MOD}
 	ln -sf ${EIROBJ}/exit_own.o ${OBJDIR}
+	@gtfl $@
+
+${OBJDIR}/graxs.o:
+	ln -sf ${EIROBJ}/graxs.o ${OBJDIR}
+	@gtfl $@
+
+${OBJDIR}/grdrw.o:
+	ln -sf ${EIROBJ}/grdrw.o ${OBJDIR}
+	@gtfl $@
+
+${OBJDIR}/grend.o:
+	ln -sf ${EIROBJ}/grend.o ${OBJDIR}
+	@gtfl $@
+
+${OBJDIR}/grjmp.o:
+	ln -sf ${EIROBJ}/grjmp.o ${OBJDIR}
+	@gtfl $@
+
+${OBJDIR}/grnwpn.o:
+	ln -sf ${EIROBJ}/grnwpn.o ${OBJDIR}
+	@gtfl $@
+
+${OBJDIR}/grsclc.o:
+	ln -sf ${EIROBJ}/grsclc.o ${OBJDIR}
+	@gtfl $@
+
+${OBJDIR}/grsclv.o:
+	ln -sf ${EIROBJ}/grsclv.o ${OBJDIR}
+	@gtfl $@
+
+${OBJDIR}/grspts.o:
+	ln -sf ${EIROBJ}/grspts.o ${OBJDIR}
+	@gtfl $@
+
+${OBJDIR}/grstrt.o:
+	ln -sf ${EIROBJ}/grstrt.o ${OBJDIR}
+	@gtfl $@
+
+${OBJDIR}/gr90dg.o:
+	ln -sf ${EIROBJ}/gr90dg.o ${OBJDIR}
 	@gtfl $@
 
 ${OBJDIR}/leer.o: ${OBJDIR}/eirmod_comprt.${MOD}
@@ -434,6 +475,7 @@ echo:
 	@echo VPATH=${VPATH}
 	@echo ALLOBJS=${ALLOBJS}
 	@echo EIROBJS=${EIROBJS}
+	@echo EGROBJS=${EGROBJS}
 #	@echo OBJS=${OBJS}
 #	@echo OBJF=${OBJF}
 	@echo DEST=${DEST}
