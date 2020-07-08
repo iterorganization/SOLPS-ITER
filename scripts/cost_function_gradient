@@ -1,5 +1,15 @@
 #! /bin/tcsh -f
 
+set NN = `pipe_run.log | egrep -i 'Number of cost functions:' | awk '{print $5}'`
+if ($1 > $NN) then
+  echo "Asking cost function $1 but number of cost functions defined is $NN"
+  exit
+endif
+if ($1 == '') then
+  set nn = 1
+else
+  set nn = $1
+endif
 pipe_run.log | \
-  grep "Cost function gradient:" | \
-  awk '{print NR,$4}' | xyplot
+  grep -ai "Cost function gradient $nn" | \
+  awk '{print NR, $5}' | xyplot
