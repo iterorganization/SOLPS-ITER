@@ -122,22 +122,12 @@ sed -i -e "s/INTEGER :: dummyzerodiffd0/INTEGER :: dummyzerodiffd0(nbdirsmax)/g"
 sed -i -e "s/INTEGER :: dummyzerodiffd4/INTEGER :: dummyzerodiffd4(nbdirsmax)/g" b2stbr_phys_dv.F90
 sed -i -e "s/INTEGER :: dummyzerodiffd6/INTEGER :: dummyzerodiffd6(nbdirsmax)/g" b2stbr_phys_dv.F90
 sed -i -e "s/INTEGER :: dummyzerodiffd1/INTEGER :: dummyzerodiffd1(nbdirsmax)/g" b2tanml_dv.F90
-sed -i -e "s/INTEGER :: dummyzerodiffd2/INTEGER :: dummyzerodiffd2(nbdirsmax)/g" b2xpve_dv.F90
-sed -i -e "s/INTEGER :: dummyzerodiffd5/INTEGER :: dummyzerodiffd5(nbdirsmax)/g" b2xpve_dv.F90
-sed -i -e "s/INTEGER :: dummyzerodiffd8/INTEGER :: dummyzerodiffd8(nbdirsmax)/g" b2xpve_dv.F90
+sed -i -e "s/INTEGER :: dummyzerodiffd1/INTEGER :: dummyzerodiffd1(nbdirsmax)/g" b2xpve_dv.F90
+sed -i -e "s/INTEGER :: dummyzerodiffd4/INTEGER :: dummyzerodiffd4(nbdirsmax)/g" b2xpve_dv.F90
+sed -i -e "s/INTEGER :: dummyzerodiffd7/INTEGER :: dummyzerodiffd7(nbdirsmax)/g" b2xpve_dv.F90
 
-sed -i -e "s/cfdnad(:, 0, is), nbdirs)/cfdnad(nbdirs, 0, is), nbdirs)/g" b2tqna_dv.F90
-sed -i -e "s/cfhcid(:, 0, is), nbdirs)/cfhcid(nbdirs, 0, is), nbdirs)/g" b2tqna_dv.F90
-
-
-
-
-
-
-sed -i -e 's/DIMENSION() :: abs6/DIMENSION(mpg%nCv) :: abs6/g' b2mod_driver_diff.F90
-sed -i -e 's/DIMENSION() :: abs11/DIMENSION(mpg%nCv) :: abs11/g' b2mod_driver_diff.F90
-
-sed -i -e 's/= NULL()/= 0.0_R8/g' b2mod_driver_diff.F90
+sed -i -e "s/cfdnad(:, 0, is), nbdirs)/cfdnad(1:nbdirs, 0, is), nbdirs)/g" b2tqna_dv.F90
+sed -i -e "s/cfhcid(:, 0, is), nbdirs)/cfhcid(1:nbdirs, 0, is), nbdirs)/g" b2tqna_dv.F90
 
 
 $SOLPSTOP/modules/B2.5/src/differentiation/remove_allocation.sh

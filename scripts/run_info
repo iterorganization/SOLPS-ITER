@@ -4,11 +4,12 @@ if ( -s run.log ) then
   grep -i -w 'version' run.log >! run.info
   grep -e 'ntim' run.log | tail >> run.info
   grep -i 'stopping' run.log | tail >> run.info
-  grep -i -w 'Defining cost function' run.log | tail -n 1 >> run.info
-  set NNN=`grep -i cost run.info | gawk '{print$4}'`
-  if ( `grep -c diff run.log` > 0) then
-   set NNN=`expr $NNN + $NNN`
+  grep -i 'Number of cost functions' run.log | tail -n 1 >> run.info
+  set NNN=`grep -i 'Number of cost functions' run.info | gawk '{print $5}'`
+  if ( `grep -c gradient run.log` > 0) then
+   @ NNN = $NNN * 2
   endif
+   @ NNN = $NNN * 10
   grep -i -w 'cost function' run.log | tail -n $NNN >> run.info
 else
   echo "No run.log file present"
