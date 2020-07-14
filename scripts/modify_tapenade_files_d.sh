@@ -64,7 +64,7 @@ sed -i '/EXTERNAL DEALLOC_B2MOD_MA28_FOR_US/d' b2mod_driver_diff.F90
 sed -i -e 's/MSTEP_NODIFF/MSTEP/g' heatdiff1D_d.F90
 sed -i -e 's/LINES2C_NODIFF/LINES2C/g' heatdiff1D_d.F90
 
-#remove_initializations_d.sh
+remove_initializations_d.sh
 
 sed -i -e "s/REAL\*8/REAL(kind=r8)/g" *_diff.F90
 sed -i -e "s/REAL\([^(].*::\)/REAL(kind=r8)\1/g" *_diff.F90
