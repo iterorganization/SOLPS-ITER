@@ -45,7 +45,8 @@ c*** the atoms and nuclei
             k=find_matching_species(c)
             if(k.eq.0) then  !{
               write(hlp_frm,'(a,i2,a)') '(a,a8,a,a,',nspdgen,'(a1,a2))'
-              write(*,hlp_frm) 'Generic species "',c,'" undefined. ',
+              write(*,hlp_frm)
+     ,          'Generic species "',trim(c),'" undefined. ',
      ,          'Available non-default species are:',
      ,           (' ',spcdgen(i),i=1,nspdgen-2)
               write(*,*) 'Otherwise should be an element name.'
@@ -361,8 +362,8 @@ c*** the atoms and nuclei
 #endif
             end if  !}
           else  !}{
-            write(*,*) 'A generic species "',c,'" has already been ',
-     ,        'added (skipping it)'
+            write(*,*) 'A generic species "',trim(c),'" ',
+     ,        'has already been added (skipping it)'
           end if  !}
         end if  !}
       end do  !}
