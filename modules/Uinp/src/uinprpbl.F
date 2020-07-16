@@ -76,7 +76,7 @@ c======================================================================
 
       lfirst = .true.
       nplsb = nspcpls
-      allocate(janf(nspigen),jend(nspigen))
+      allocate(janf(nspcncl),jend(nspcncl))
       allocate(spcsrnb(nplsi),spcsrfb(nplsi),spcsrtb(nplsi),
      .         spcsmsb(nplsi),spcsncb(nplsi),spcscgb(nplsi),
      .         spcsfub(nplsi),spcsrsb(nplsi),spcsplb(nplsi))
@@ -293,7 +293,7 @@ cxpb   jend(l) is the number of the last bundled ion of sequence l in the new li
             ja = ianf + izpmin(i)-1
             je = ianf + izpmax(i)-1
             spcsrnb(iplsb) = l
-            ichr = len_trim(spcigen(l))
+            ichr = len_trim(spcsncl(l))
             write(spcsplb(iplsb)(1:ichr+1),'(a,a1)')
      .       trim(spcsncl(l)),'+'
             if (izpmin(i).lt.10) then !{
