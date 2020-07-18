@@ -109,7 +109,7 @@ c        character*(72) cardname
         scewbin(k)=ewbin(ists)
         sctransp(k,1)=transp(ists,1)
         sctransp(k,2)=transp(ists,2)
-        scfsheat(k)=FSHEAT(ists)
+        scfsheat(k)=fsheat(ists)
         screcycf(k)=recycf(ists)
         screcyct(k)=recyct(ists)
         scexppl(k)=exppl(ists)
@@ -140,7 +140,7 @@ c***  check if surface card for NDS k is already present in the list
      .    .OR.scewbin(k).NE.ewbin(ists)
      .    .OR.sctransp(k,1).NE.transp(ists,1)
      .    .OR.sctransp(k,2).NE.transp(ists,2)
-     .    .OR.scfsheat(k).NE.FSHEAT(ists)
+     .    .OR.scfsheat(k).NE.fsheat(ists)
      .    .OR.screcycf(k).NE.recycf(ists)
      .    .OR.screcyct(k).NE.recyct(ists)
      .    .OR.scexppl(k).NE.exppl(ists)
@@ -169,7 +169,7 @@ c        character*(72) cardname
         scewbin(k)=ewbna(i)
         sctransp(k,1)=trnspa(i,1)
         sctransp(k,2)=trnspa(i,2)
-        scfsheat(k)=FSHEATA(i)
+        scfsheat(k)=fsheata(i)
         screcycf(k)=rcycfa(i)
         screcyct(k)=rcycta(i)
         scexppl(k)=exppla(i)
@@ -215,7 +215,7 @@ c***  check if surface card for AS k is already present in the list
 c=======================================================================
 c***  function to generate surface card name for reaction k
 c***  name format:
-C***  SURFMOD_k_<MATERIAL>_<SPUTER>_<PUMP>_<SEMYTRANSP>_<TEMPERATURE K>
+C***  SURFMOD_k_<MATERIAL>_<SPUTER>_<PUMP>_<SEMITRANSP>_<TEMPERATURE K>
        character*(72) function cardname(k) !{
         integer k 
         character*(72) cnam,txtbuf
