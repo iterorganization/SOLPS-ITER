@@ -1,0 +1,162 @@
+#
+# Specify paths to root-directories of following libraries on your system
+#
+# Special notes:
+#
+# If you have NCAR version 3 on your system:
+# Remove -DNCAR4 from SOLPS_CPP
+#
+# If you do not have NAG on your system:
+# Use LD_NAG to link to the BLASLAPACK library instead
+# Add -DNO_NAG to SOLPS_CPP
+#
+# If you have NAG Mark 17 or greater on your system:
+# Add -DNO_F01AAF to SOLPS_CPP
+#
+# If you have NAG Mark 22 or greater on your system:
+# Add -DNAG22 to SOLPS_CPP
+#
+
+#    NODENAME ?= $(shell echo `hostname`)
+#   MSCL_ROOT ?= ${EBROOTMSCL}
+#     GR_ROOT ?= ${EBROOTGR}
+#    GLI_HOME ?= ${EBROOTGLI}
+#       H5DIR ?= ${EBROOTHDF5}
+#  NCARG_ROOT ?=
+#      NAGDIR ?=
+# MDSPLUS_DIR ?=
+
+     NCDIR_C ?= /opt/software/netcdf-c/4.5.0/gcc
+     NCDIR_F ?= /opt/software/netcdf-fortran/4.4.4/gcc
+       NCDIR ?= ${NCDIR_F}
+   MSCL_ROOT ?= ${SOLPSTOP}/../${COMPILER}/mscl
+       H5DIR ?= /opt/software/hdf5/1.10.1/gcc
+     GR_ROOT ?= ${SOLPSTOP}/../${COMPILER}/gr
+    GLI_HOME ?= ${SOLPSTOP}/../${COMPILER}/gks
+  NCARG_ROOT ?= ${SOLPSTOP}/../${COMPILER}/NCARG
+      NAGDIR ?= ${SOLPSTOP}/../${COMPILER}/nag
+ MDSPLUS_DIR ?= ${SOLPSTOP}/../${COMPILER}/MDSPLUS
+       MPDIR ?=
+
+
+#
+# Variables of linking, using pkg-config
+#
+LD_INTEL_LIBS= -lirc -lirc_s -liomp5 -lifcoremt_pic -lsvml -lifport -limf -lm -lifcore_pic -lpthread
+
+LD_NETCDF  = -L${NCDIR_C}/lib -lnetcdf -L${NCDIR_F}/lib -lnetcdff
+LD_GR      = -L${GR_ROOT}/lib -lgr
+LD_GKS     = -L${GLI_HOME}/lib -lgks -lXmu -lX11 -lXt -ldl
+#LD_NAG     = `pkg-config nag --libs`
+LD_NAG     = -L/opt/software/blas/3.8.0 -lblas -L${SOLPSTOP}/../lapack -llapack
+LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
+LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
+LD_MSCL    = `pkg-config mscl --libs` -lgfortran
+NCDIR     ?= ${EBROOTNETCDFMINFORTRAN}
+ifdef NCARG_ROOT
+#LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 # for NCARG v4.x.x
+LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lz -lXrender -lbz2 -ldl # for NCARG v6.x.x
+endif
+LD_MPI     = -lmpi2
+
+#
+# Preprocessor options
+#
+
+SOLPS_CPP      = -DNCAR4 -DGFORTRAN -DNO_NAG
+B25_DEFINES    =
+CARRE_DEFINES  =
+EIRENE_DEFINES =
+FFLAGSEXTRA    =
+
+# Autodetected optional features...
+
+# Build with NetCDF tools if available
+ifdef LD_NETCDF
+  SOLPS_CPP   += -DCDF_MOVIE
+else
+  SOLPS_CPP   += -DNO_CDF
+endif
+
+# Build with MDSplus tools if MDSplus is present
+ifdef LD_MDSPLUS
+  SOLPS_CPP   += -DMDSPLUS
+endif
+
+# Build with Catalyst if ParaView is in PATH
+ifdef LD_CATALYST
+  SOLPS_CPP   += -DCATALYST
+endif
+
+# Build with IMAS if imas module is loaded
+ifdef IMAS_VERSION
+  UAL_MAJOR_VERSION = $(shell echo ${UAL_VERSION} | cut -d '.' -f1 )
+  IMAS_MAJOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f1 )
+  IMAS_MINOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f2 )
+  ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 17; echo $$?),0)
+    GGD_MINOR_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f2 )
+    LD_UAL = `pkg-config imas-gfortran ggd --libs`
+  else
+    ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 12; echo $$?),0)
+      GGD_MINOR_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f2 )
+      LD_UAL = `pkg-config imas-gfortran --libs` -lggd-gfortran
+    else
+      GGD_MINOR_VERSION = 0
+      LD_UAL = `pkg-config imas-lowlevel imas-gfortran --libs`
+    endif
+  endif
+  SOLPS_CPP += -DIMAS -DUAL_MAJOR_VERSION=${UAL_MAJOR_VERSION} -DIMAS_MINOR_VERSION=${IMAS_MINOR_VERSION} -DGGD_MINOR_VERSION=${GGD_MINOR_VERSION}
+  export LD_UAL
+else
+  UAL_MAJOR_VERSION = 0
+  GGD_MINOR_VERSION = 0
+  IMAS_MAJOR_VERSION = 0
+  IMAS_MINOR_VERSION = 0
+endif
+export UAL_MAJOR_VERSION
+export GGD_MINOR_VERSION
+export IMAS_MAJOR_VERSION
+export IMAS_MINOR_VERSION
+
+# Build with OpenMP if requested
+ifdef SOLPS_OPENMP
+  B25_DEFINES += -D_OPENMP
+endif
+
+#
+# Export for use in sub-makefiles
+#
+
+export NCDIR_C
+export NCDIR_F
+export MSCL_ROOT
+export H5DIR
+export GR_ROOT
+export GLI_HOME
+export NCARG_ROOT
+export NAGDIR
+export MDSPLUS_DIR
+
+export LD_NETCDF
+export LD_MSCL
+export LD_GR
+export LD_GKS
+export LD_NCARG
+export LD_NAG
+export LD_MDSPLUS
+export LD_SONNET
+export LD_MPI
+export LD_UAL
+
+export NODENAME
+export SOLPS_CPP
+export FFLAGSEXTRA
+export B25_DEFINES
+export CARRE_DEFINES
+export EIRENE_DEFINES
+export MPI_CPP
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+
