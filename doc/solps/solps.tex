@@ -632,7 +632,7 @@ This will set \${\tt SOLPSWORK}, create the appropriate {\tt SOLPSTOP} file, and
 
 Before each session, each user will then set up the \SOLPSITER environment by running
 \begin{verbatim}
-tcsh; source $(SOLPS_central_dir)/setup.csh
+tcsh; source $(SOLPS_central_dir)/setup.csh [optional_compiler_name]
 \end{verbatim}
 from their \${\tt SOLPSWORK} directory, and the rest of the usage would be standard, where \${\tt (SOLPS\_central\_dir)} is the location of the central installation.
 
@@ -4148,7 +4148,7 @@ or
   b2run b2_ual_write
 \end{verbatim}
 
-This routine saves the final output state of a run into an IDS (Interface Data Structure). Currently, it will populate the {\tt edge\_profiles}, {\tt edge\_transport}, {\tt edge\_sources}, {\tt radiation}, {\tt dataset\_description} and {\tt summary} data structures.
+This routine saves the final output state of a run into an IDS (Interface Data Structure). Currently, it will populate the {\tt edge\_profiles}, {\tt edge\_transport}, {\tt edge\_sources}, {\tt radiation}, {\tt dataset\_description} and {\tt summary} data structures. If the current run being saved is a time continuation of the run already present in that IDS, then a new time slice is appended, otherwise the IDS is overwritten.
 
 The program reads the {\tt b2mndr\_id*} switch group, defined in {\tt b2mn.dat}:
 \begin{itemize}
@@ -18098,6 +18098,7 @@ IMAS & modules/b2mod\_b2cmrc.F \\
 IMAS & modules/b2mod\_ppout.F \\
 IMAS & preprocessing/b2ardr.F \\
 IMAS & utility/ratadas.F \\
+IMAS\_MINOR\_VERSION & driver/b2mod\_driver.F \\
 IMAS\_MINOR\_VERSION & ids/b2mod\_ual.F90 \\
 IMAS\_MINOR\_VERSION & ids/b2mod\_ual\_io.F90 \\
 IMAS\_MINOR\_VERSION & ids/b2mod\_ual\_io\_data.F90 \\
@@ -18153,6 +18154,7 @@ NAGFOR & convert/b2co\_tally\_cdf.F \\
 NAGFOR & convert/b2co\_time\_cdf.F \\
 NAGFOR & convert/b2co\_wall\_cdf.F \\
 NAGFOR & convert/b2mds.F \\
+NAGFOR & driver/b2mod\_driver.F \\
 NAGFOR & ids/b2\_ual\_write.F90 \\
 NAGFOR & modules/b2mod\_openmp.F \\
 NAGFOR & modules/b2mod\_ppout.F \\
@@ -18201,6 +18203,7 @@ NO\_GETENV & convert/b2co\_time\_cdf.F \\
 NO\_GETENV & convert/b2co\_wall\_cdf.F \\
 NO\_GETENV & convert/b2mds.F \\
 NO\_GETENV & driver/b2co.F \\
+NO\_GETENV & driver/b2mod\_driver.F \\
 NO\_GETENV & ids/b2\_ual\_write.F90 \\
 NO\_GETENV & modules/b2mod\_ppout.F \\
 NO\_GETENV & modules/b2mod\_solpstop.F \\
@@ -18327,6 +18330,7 @@ USE\_PXFGETENV & convert/b2co\_tally\_cdf.F \\
 USE\_PXFGETENV & convert/b2co\_time\_cdf.F \\
 USE\_PXFGETENV & convert/b2co\_wall\_cdf.F \\
 USE\_PXFGETENV & driver/b2co.F \\
+USE\_PXFGETENV & driver/b2mod\_driver.F \\
 USE\_PXFGETENV & ids/b2\_ual\_write.F90 \\
 USE\_PXFGETENV & modules/b2mod\_ppout.F \\
 USE\_PXFGETENV & modules/b2mod\_solpstop.F \\

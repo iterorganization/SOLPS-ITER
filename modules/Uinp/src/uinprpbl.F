@@ -76,7 +76,7 @@ c======================================================================
 
       lfirst = .true.
       nplsb = nspcpls
-      allocate(janf(nspigen),jend(nspigen))
+      allocate(janf(nspcncl),jend(nspcncl))
       allocate(spcsrnb(nplsi),spcsrfb(nplsi),spcsrtb(nplsi),
      .         spcsmsb(nplsi),spcsncb(nplsi),spcscgb(nplsi),
      .         spcsfub(nplsi),spcsrsb(nplsi),spcsplb(nplsi))
@@ -115,13 +115,13 @@ c======================================================================
       escd1b = 0.0_R8
       escd2b = 0.0_R8
       freacb = 0.0_R8
-      do l=1,nspigen !{
+      do l=1,nspcncl !{
         if (l.gt.1) then !{
-          nc = get_atomic_number(spcigen(l-1))
+          nc = get_atomic_number(spcsncl(l-1))
           ianf = ianf + nc
           janf(l) = jend(l-1) + 1
         end if !}
-        nc = get_atomic_number(spcigen(l))
+        nc = get_atomic_number(spcsncl(l))
         iend = ianf + (nc-1)
         if (.not.is_bundled(l)) then !{
           nbndl(l) = nc+1
@@ -144,8 +144,8 @@ c======================================================================
           cycle
         end if !}
         if (lfirst) write(6,1028)
-        write(6,*) 'Bundling ',spcigen(l)
-        write(6,*) spcigen(l), ianf, iend
+        write(6,*) 'Bundling ',spcsncl(l)
+        write(6,*) spcsncl(l), ianf, iend
         allocate(izpmin(0:nc), izpmax(0:nc))
         filename='ratadas.filelist'
         call find_file(filename,ex)
@@ -201,7 +201,7 @@ c     now read the relevant line
           if(SUBDIRzav.ne.'none') then !{
             read(SUBDIRzav,*) iyear
           else !}{
-            message = 'Could not find Zav data for '//spcigen(l)
+            message = 'Could not find Zav data for '//spcsncl(l)
             call xerrab (message)
           end if !}
           if (iyear.gt.100) then !{
@@ -258,7 +258,7 @@ c     now read the relevant line
               izpmin(ic-1) = iptnca(1,ic,1)
               izpmax(ic-1) = iptnca(1,ic,nptnc(1,ic))
             enddo !}
-            write(6,*) spcigen(l)
+            write(6,*) spcsncl(l)
             write(6,'(20i5)') (izpmin(ic-1),ic=1,ncnct)
             write(6,'(20i5)') (izpmax(ic-1),ic=1,ncnct)
             write(6,1028)
@@ -293,9 +293,9 @@ cxpb   jend(l) is the number of the last bundled ion of sequence l in the new li
             ja = ianf + izpmin(i)-1
             je = ianf + izpmax(i)-1
             spcsrnb(iplsb) = l
-            ichr = len_trim(spcigen(l))
+            ichr = len_trim(spcsncl(l))
             write(spcsplb(iplsb)(1:ichr+1),'(a,a1)')
-     .       trim(spcigen(l)),'+'
+     .       trim(spcsncl(l)),'+'
             if (izpmin(i).lt.10) then !{
               write(spcsplb(iplsb)(ichr+2:ichr+2),'(i1)') izpmin(i)
               ichr = ichr+2
@@ -368,7 +368,7 @@ cxpb   jend(l) is the number of the last bundled ion of sequence l in the new li
         lfirst = .false.
       end do !}
       do l=1,nbgk !{
-        ipls1(nplsi+l) = jend(nspigen)+l
+        ipls1(nplsi+l) = jend(nspcncl)+l
       end do !}
 
 cxpb Now we remap the arrays
@@ -393,9 +393,9 @@ cxpb   janf(l) is the number of the first bundled ion of sequence l in the new l
 cxpb   jend(l) is the number of the last bundled ion of sequence l in the new list
         allocate(done(nplsi))
         done = .false.
-        do l = 1, nspigen !{
+        do l = 1, nspcncl !{
           ianf = iend + 1
-          nc = get_atomic_number(spcigen(l))
+          nc = get_atomic_number(spcsncl(l))
           iend = iend + nc
           if (.not.is_bundled(l)) then !{
             do j = janf(l), jend(l) !{

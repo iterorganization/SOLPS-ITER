@@ -709,7 +709,7 @@ c*** 6
      /        0.1  ,   0.    ,   0.    ,   0.   , lvchsr*0./
       data scard_name /maxsc*' ' /
       data scilref,scilspt, scisrs, scisrc,sclchspnwl /
-     /     maxsc*1,maxsc*0,maxsc*3,maxsc*3, maxsc*1   /
+     /     maxsc*1,maxsc*0,maxsc*0,maxsc*0, maxsc*1   /
       data scxmlim, scewall, scewbin,    sctransp     ,scfsheat /
      /    maxsc*0.,maxsc*0.,maxsc*0.,maxsc*0.,maxsc*0.,maxsc*-1. /,
      ,    screcycf,screcyct, scrcprm, scexppl, scexpel ,scexpil /
