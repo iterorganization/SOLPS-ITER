@@ -13,9 +13,8 @@ ifndef LD_NAG
   $(error LD_NAG not defined)
 endif
 
-#DEFINES  = ${SOLPS_CPP} ${EIRENE_DEFINES} -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
-#DEFINES  = ${SOLPS_CPP} ${EIRENE_DEFINES} -DTRIANG -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
-DEFINES   =
+#DEFINES += ${SOLPS_CPP} ${EIRENE_DEFINES} -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
+#DEFINES += ${SOLPS_CPP} ${EIRENE_DEFINES} -DTRIANG -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
 EQUIVS    =
 
 #CPP      = -/lib/cpp -traditional
@@ -28,7 +27,6 @@ FC        = gfortran
 
 ifdef SOLPS_DEBUG
 FCOPTS    = -g -C -debug all -ffpe-trap=denormal -ffpe-trap=invalid -ffpe-trap=zero -ftrapv -fsignaling-nans
-DEFINES  += -DDBG
 else
 FCOPTS    = -O3
 endif

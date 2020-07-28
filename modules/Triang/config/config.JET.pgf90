@@ -2,7 +2,7 @@
 LD_GR  ?=
 LD_GKS ?=
 
-DEFINES =
+DEFINES += -DPGF90
 EQUIVS =
 
 CPP = /lib/cpp -traditional
@@ -13,7 +13,6 @@ LINK_MOD =
 FC = pgf90
 ifdef SOLPS_DEBUG
 FCOPTS = -Mbackslash -C -g -Mchkfpstk -Mchkptr -Mchkstk -Mpgicoff
-DEFINES += -DDBG
 else
 FCOPTS = -O2 -Mbackslash
 FCOPTS = -fast -Mbackslash

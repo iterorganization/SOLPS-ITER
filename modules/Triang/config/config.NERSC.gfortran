@@ -4,7 +4,6 @@ GLI_HOME ?= /global/project/projectdirs/atom/atom-install-cori/solps-libs/lib_gf
 LD_GR    ?= -L${GR_ROOT} -lgr
 LD_GKS   ?= -L${GLI_HOME} -lgks
 
-DEFINES =
 EQUIVS =
 
 CPP = cpp -traditional

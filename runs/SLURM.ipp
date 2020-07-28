@@ -1,4 +1,4 @@
-#! /bin/tcsh
+#! /bin/tcsh -f
 
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=#PROCS#

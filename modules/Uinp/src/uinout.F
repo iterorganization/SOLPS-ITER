@@ -21,11 +21,11 @@ c=======================================================================
 
       integer i,j,k,l,m,n,icont,istep,jsurpr
       integer llm(nchor),lli(nchor)
-      logical handle,ulmlti,ex,carbon,nitrogen
+      logical handle,ulmlti,ex,hydrogen,helium,carbon,nitrogen
       logical streql,silent_open
       logical, allocatable :: done(:)
       character*256 filename, adasfile, uidin
-      character utxthd(35)*71, utxtfl(7)*47, ufnm*(*)
+      character utxthd(35)*71, utxtfl(7)*50, ufnm*(*)
       character utxtgt*71
       external streql, silent_open, xerrab, subini, subend
       data utxthd /
@@ -65,13 +65,13 @@ c=======================================================================
      4        '* 5a. Bulk ion species' ,
      5        '* 10f. Data for energy spectra' /
       data utxtfl /
-     1        'CFILE AMJUEL Database/AMdata/amjuel.tex        ',
-     2        'CFILE HYDHEL Database/AMdata/hydhel.tex        ',
-     3        'CFILE SPUTER Database/Surfacedata/SPUTER       ',
-     4        'CFILE TRIM   Database/Surfacedata/TRIM/trim.dat',
-     5        'CFILE METHAN Database/AMdata/methane.tex       ',
-     6        'CFILE AMMONX Database/AMdata/ammoniaex.tex     ',
-     7        'CFILE ADAS   modules/adas/adf11                '/
+     1        'CFILE AMJUEL Database/AMdata/amjuel.tex           ',
+     2        'CFILE HYDHEL Database/AMdata/hydhel.tex           ',
+     3        'CFILE SPUTER Database/Surfacedata/SPUTER          ',
+     4        'CFILE TRIM   Database/Surfacedata/TRIM/trim.dat   ',
+     5        'CFILE METHAN Database/AMdata/methane.tex          ',
+     6        'CFILE AMMONX Database/AMdata/AMMONX_Arrh-elast.tex',
+     7        'CFILE ADAS   modules/adas/adf11                   '/
 c=======================================================================
 
 c*** 0. Prepare some constants
@@ -167,6 +167,16 @@ c*** 1.  General data for the run
       if (handle) write(iunoo,720) utxtfl(2)
       write(iunoo,720) utxtfl(3)
       write(iunoo,720) utxtfl(4)
+      hydrogen = .false.
+      do i=1,nspigen
+        hydrogen=hydrogen.or.streql(spcigen(i),spcdgen(1))
+     .                   .or.streql(spcigen(i),spcdgen(2))
+     .                   .or.streql(spcigen(i),spcdgen(3))
+      enddo
+      helium = .false.
+      do i=1,nspigen
+        helium=helium.or.streql(spcigen(i),spcdgen(4))
+      enddo
       carbon = .false.
       do i=1,nspigen
         carbon=carbon.or.streql(spcigen(i),spcdgen(5))
@@ -176,7 +186,8 @@ c*** 1.  General data for the run
       do i=1,nspigen
         nitrogen=nitrogen.or.streql(spcigen(i),spcdgen(8))
       enddo
-      if (nitrogen) write(iunoo,720) utxtfl(6)
+! AMMONX contains Nitrogen reactions but also H and He elastic collisions
+      if (hydrogen.or.helium.or.nitrogen) write(iunoo,720) utxtfl(6)
       handle=.false.
       do i=1,nrcln
         handle=handle.or.streql(filnam(i),'ADAS')
@@ -1206,7 +1217,7 @@ c=======================================================================
   717 format (a8,1x,a8,i6)
   718 format (1p,2e12.5,8i6)
   719 format (1p,2i6,5e12.5)
-  720 format (a47)
+  720 format (a50)
   721 format (a)
 c=======================================================================
       end

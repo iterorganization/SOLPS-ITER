@@ -6,7 +6,7 @@ ifndef LD_GKS
   $(error LD_GKS not defined)
 endif
 
-DEFINES = ${SOLPS_CPP}
+DEFINES += ${SOLPS_CPP}
 EQUIVS =
 
 CPP = /lib/cpp -traditional
@@ -15,11 +15,11 @@ SED = sed s:\#PREC\#:d:g
 LINK_MOD =
 
 FC = nagfor
+FCOPTS = -compatible
 ifdef SOLPS_DEBUG
-FCOPTS = -Mbackslash -C -g -Mchkfpstk -Mchkptr -Mchkstk -Mpgicoff
-DEFINES += -DDBG
+FCOPTS += -Mbackslash -C -g -Mchkfpstk -Mchkptr -Mchkstk -Mpgicoff
 else
-FCOPTS = -O2 -Mbackslash
+FCOPTS += -O2 -Mbackslash
 FCOPTS = -fast -Mbackslash
 endif
 

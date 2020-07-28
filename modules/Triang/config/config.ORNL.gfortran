@@ -6,7 +6,6 @@ ifndef LD_GKS
   $(error LD_GKS not defined)
 endif
 
-DEFINES =
 EQUIVS =
 
 CPP = /lib/cpp -traditional
