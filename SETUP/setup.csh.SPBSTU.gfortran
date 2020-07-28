@@ -24,11 +24,12 @@ endif
 # module load solps-gui
 # setenv LD_PRELOAD /usr/lib64/libfontconfig.so.1 # needed by solps-gui
 
-setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/usr/lib64:/opt/software/hdf5/1.10.1/gcc/lib:/opt/software/netcdf-fortran/4.4.4/gcc/lib:/opt/software/netcdf-c/4.5.0/gcc/lib
-
 setenv NCARG_ROOT ${SOLPSTOP}/../${COMPILER}/NCARG
 
 module load library/blas/3.8.0
+module load library/netcdf-c/4.5.0/gcc library/netcdf-fortran/4.4.4/gcc library/hdf5/1.10.1/gcc
+
+setenv LD_LIBRARY_PATH ${SOLPSTOP}/../gfortran/MDSPLUS/lib:$LD_LIBRARY_PATH
 
 # setenv PYTHONPATH "/work/imas/opt/SOLPS-GUI/1.5/src/widgets:${PYTHONPATH}"
 # setenv PYQTDESIGNERPATH "/work/imas/opt/SOLPS-GUI/1.5/src/plugins/designer"

@@ -17,7 +17,7 @@
 # Add -DNAG22 to SOLPS_CPP
 #
 
-       NCDIR ?= /opt/software/netcdf-fortran/4.4.4/icc/
+#       NCDIR ?= /opt/software/netcdf-fortran/4.4.4/icc/
    MSCL_ROOT ?= ${SOLPSTOP}/../${COMPILER}/mscl
        H5DIR ?= ${SOLPSLIB}
      GR_ROOT ?= ${SOLPSTOP}/../${COMPILER}/gr
@@ -25,7 +25,7 @@
   NCARG_ROOT ?= ${SOLPSTOP}/../${COMPILER}/NCARG
       NAGDIR ?= ${SOLPSTOP}/../${COMPILER}/nag
  MDSPLUS_DIR ?= ${SOLPSTOP}/../${COMPILER}/MDSPLUS
-       MPDIR ?=
+       MPDIR ?= 
 
 #
 # Variables for linking

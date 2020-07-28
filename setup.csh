@@ -10,10 +10,12 @@ echo The full SOLPS-ITER manual can be found in \$SOLPSTOP/doc/solps/solps.pdf
 echo The Eirene manual is located at http://www.eirene.de/
 
 # Obtain the directory where setup.csh is located to use as SOLPSTOP
-if ($_=="") then
+setenv LAST_COMMAND `echo $_`
+echo ${LAST_COMMAND}
+if (`echo ${LAST_COMMAND}` == "") then
   setenv SETUP_FILE setup.csh
 else
-  setenv SETUP_FILE `echo $_ | cut -d " " -f 2`
+  setenv SETUP_FILE `echo ${LAST_COMMAND} | cut -d " " -f 2`
 endif
 setenv REAL_FILE `eval echo ${SETUP_FILE}`
 setenv SETUP_PATH `dirname ${REAL_FILE}`
