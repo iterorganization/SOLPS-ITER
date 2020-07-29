@@ -618,7 +618,7 @@ After the cases have been downloaded to your system, make sure that the timestam
 \label{Using a central installation}
 \index{add\_central\_device}\index{setup.csh}
 
-For systems with several users it is advisable to set up a central \SOLPSITER installation that can be maintained by an administrator. The scripts have been set up to allow this by specifying a \${\tt SOLPSWORK} directory that is different from the default \${\tt \{SOLPSTOP\}/runs} and setting the environment variable {\tt SOLPS\_CENTRAL} to {\tt 'yes'}.  Each user will then have a directory for their runs, \${\tt SOLPSWORK}, which should contain a file named {\tt SOLPSTOP} which contains the value for \${\tt SOLPSTOP}. Using an example where each user has their runs in \${\tt \{HOME\}/solps-runs} then the central installation could have a {\tt setup.csh.local} with the following lines:
+For systems with several users it is advisable to set up a central \SOLPSITER installation that can be maintained by an administrator. The scripts have been set up to allow this by specifying a \${\tt SOLPSWORK} directory that is different from the default \${\tt \{SOLPSTOP\}/runs} and setting the environment variable {\tt SOLPS\_CENTRAL} to {\tt 'yes'}. Each user will then have a directory for their runs, \${\tt SOLPSWORK}, which should contain a file named {\tt SOLPSTOP} which contains the value for \${\tt SOLPSTOP}. Using an example where each user has their runs in \${\tt \{HOME\}/solps-runs} then the central installation could have a {\tt setup.csh.local} with the following lines:
 \begin{verbatim}
 setenv SOLPSWORK /home/$USER/solps-runs
 alias sbr 'cd ${SOLPSWORK}'
@@ -634,7 +634,7 @@ Before each session, each user will then set up the \SOLPSITER environment by ru
 \begin{verbatim}
 tcsh; source $(SOLPS_central_dir)/setup.csh [optional_compiler_name]
 \end{verbatim}
-from their \${\tt SOLPSWORK} directory, and the rest of the usage would be standard, where \${\tt (SOLPS\_central\_dir)} is the location of the central installation.
+from their \${\tt SOLPSWORK} directory, and the rest of the usage would be standard, where \${\tt (SOLPS\_central\_dir)} is the location of the central installation. Please be aware that the capability to source the {\tt setup.csh} file from elsewhere than the directory where it is located may not be supported by all systems.
 
 \chapter{The structure}
 \label{cha:structure}

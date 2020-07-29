@@ -11,15 +11,14 @@ echo The Eirene manual is located at http://www.eirene.de/
 
 # Obtain the directory where setup.csh is located to use as SOLPSTOP
 setenv LAST_COMMAND `echo $_`
-echo ${LAST_COMMAND}
 if (`echo ${LAST_COMMAND}` == "") then
-  setenv SETUP_FILE setup.csh
+  setenv SOLPSTOP $PWD
 else
   setenv SETUP_FILE `echo ${LAST_COMMAND} | cut -d " " -f 2`
+  setenv REAL_FILE `eval echo ${SETUP_FILE}`
+  setenv SETUP_PATH `dirname ${REAL_FILE}`
+  setenv SOLPSTOP `cd ${SETUP_PATH}; pwd -L`
 endif
-setenv REAL_FILE `eval echo ${SETUP_FILE}`
-setenv SETUP_PATH `dirname ${REAL_FILE}`
-setenv SOLPSTOP `cd ${SETUP_PATH}; pwd -L`
 setenv SOLPSWORK ${SOLPSTOP}/runs
 
 # Set HOST_NAME and COMPILER, which will determine setup files to be used

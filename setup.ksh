@@ -9,10 +9,15 @@ echo "(both require a valid ITER IDM account)"
 echo The full SOLPS-ITER manual can be found in \$SOLPSTOP/doc/solps/solps.pdf
 echo The Eirene manual is located at http://www.eirene.de/
 
-export SETUP_FILE=`echo $_ | cut -d " " -f 2`
-export REAL_FILE=`eval echo ${SETUP_FILE}`
-export REAL_PATH=`dirname ${REAL_FILE}`
-export SOLPSTOP=`cd ${REAL_PATH}; pwd -L`
+export LAST_COMMAND=`echo $_`
+[ $LAST_COMMAND = "" ] && {
+  export SETUP_FILE=`echo ${LAST_COMMAND} | cut -d " " -f 2`
+  export REAL_FILE=`eval echo ${SETUP_FILE}`
+  export REAL_PATH=`dirname ${REAL_FILE}`
+  export SOLPSTOP=`cd ${REAL_PATH}; pwd -L`
+} || {
+  export SOLPSTOP=$PWD
+}
 export SOLPSWORK=$SOLPSTOP/runs
 
 
