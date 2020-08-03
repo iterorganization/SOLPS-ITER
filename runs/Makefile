@@ -21,6 +21,14 @@ endif
 ifdef SOLPS_DEBUG
 EXT_DEBUG = .debug
 endif
+ifdef DIFF_D
+EXT_DIFF = .diff_d
+DIFF=_d
+endif
+ifdef DIFF_B
+EXT_DIFF = .diff_b
+DIFF=_b
+endif
 
 ifndef STAND_ALONE
 B2OBJ = ${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
@@ -31,8 +39,8 @@ ifneq (${DBX},totalview)
 INC = -I ${DBGOBJ} -I ${EDBOBJ}
 endif
 else
-B2OBJ = ${SOLPSTOP}/modules/B2.5/builds/standalone.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
-DBGOBJ = ${SOLPSTOP}/modules/B2.5/builds/standalone.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}.debug
+B2OBJ = ${SOLPSTOP}/modules/B2.5/builds/standalone.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}${EXT_DIFF}${EXT_DEBUG}
+DBGOBJ = ${SOLPSTOP}/modules/B2.5/builds/standalone.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}${EXT_DIFF}.debug
 ifneq (${DBX},totalview)
 INC = -I ${DBGOBJ}
 endif
@@ -51,7 +59,7 @@ endif
 target_ah = b2ah.prt b2fpardf
 target_ai = b2ai.prt b2fstati
 target_ar = b2ar.prt b2frates
-target_mn = b2mn.prt b2fparam b2fstate b2fmovie b2ftrace b2ftrack b2fplasma
+target_mn = b2mn.prt b2fparam b2fstate b2fmovie b2ftrace b2ftrack b2fplasma b2fdiffe b2ftraced
 ifdef USE_IMPGYRO
 target_mn += restart_ext
 endif
@@ -194,8 +202,14 @@ $(target_ar) : b2ar.dat stra.dat weis.dat b2fpardf b2fgmtry
 
 ifneq (${COMPILER},HP)
 $(target_mn) : b2mn.dat b2fgmtry b2fpardf b2fstati b2frates fort.30 AMJUEL
+ifdef DIFF
+$(target_mn) : b2mn.dat b2fgmtry b2fpardf b2fstati b2frates fort.30 AMJUEL b2fdiffi
+endif
 else
 $(target_mn) : b2mn.dat b2fgmtry b2fpardf b2fstati b2frates ftn30 AMJUEL
+ifdef DIFF
+$(target_mn) : b2mn.dat b2fgmtry b2fpardf b2fstati b2frates fort.30 AMJUEL b2fdiffi
+endif
 endif
 	-rm -rf b2mn.exe.dir >& /dev/null ; mkdir b2mn.exe.dir ; cp $^ b2mn.exe.dir
 ifneq (${COMPILER},HP)
@@ -264,7 +278,7 @@ else
 	mv impgyro.* ${WD_EXT}/. ; mv preg ${WD_EXT}/. ; cp restart ${WD_EXT}/. ; mv restart ../.
 endif
 else
-	-cd b2mn.exe.dir ; mkdir tracing ; mkdir output ; copy_tracing_files ; mkdir batch_av ; mkdir run_av ; ${TIME} ${B2OBJ}/b2mn.exe ${RUN_OPTIONS} ; move_optional_files ; mv $(target_mn) .. >& /dev/null
+	-cd b2mn.exe.dir ; mkdir tracing ; mkdir output ; copy_tracing_files ; mkdir batch_av ; mkdir run_av ; ${TIME} ${B2OBJ}/b2mn${DIFF}.exe ${RUN_OPTIONS} ; move_optional_files ; mv $(target_mn) .. >& /dev/null
 endif
 ifneq (${COMPILER},HP)
 	-cd b2mn.exe.dir ; [ -s ../fort.30 ] || ( [ -s fort.30 ] && mv -f fort.30 .. || echo > /dev/null )
@@ -313,6 +327,7 @@ else
 	-[ -s b2mn.exe.dir/ftn31 ] && mv b2mn.exe.dir/ftn31 . || echo > /dev/null
 endif
 	-[ -s b2mn.exe.dir/b2time.nc ] && mv b2mn.exe.dir/b2time.nc . || echo > /dev/null
+	-[ -s b2mn.exe.dir/b2timed.nc ] && mv b2mn.exe.dir/b2timed.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2wall.nc ] && mv b2mn.exe.dir/b2wall.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2movies.nc ] && mv b2mn.exe.dir/b2movies.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2tallies.nc ] && mv b2mn.exe.dir/b2tallies.nc . || echo > /dev/null
@@ -431,6 +446,7 @@ else
 	-[ -s b2mn.exe.dir/ftn31 ] && mv b2mn.exe.dir/ftn31 . || echo > /dev/null
 endif
 	-[ -s b2mn.exe.dir/b2time.nc ] && mv b2mn.exe.dir/b2time.nc . || echo > /dev/null
+	-[ -s b2mn.exe.dir/b2timed.nc ] && mv b2mn.exe.dir/b2timed.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2wall.nc ] && mv b2mn.exe.dir/b2wall.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2movies.nc ] && mv b2mn.exe.dir/b2movies.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2tallies.nc ] && mv b2mn.exe.dir/b2tallies.nc . || echo > /dev/null

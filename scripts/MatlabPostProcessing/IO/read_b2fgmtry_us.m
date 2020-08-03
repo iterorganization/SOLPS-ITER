@@ -61,7 +61,9 @@ dim = read_ifield(fid,'nx,ny,nncut',3);
 nx    = dim(1);
 ny    = dim(2);
 nncut = dim(3);
-                         
+gmtry.nx = nx;
+gmtry.ny=ny;
+gmtry.nncut=nncut;
 
 
 %% Read symmetry information
@@ -96,10 +98,10 @@ if gmtry.isClassicalGrid == 1
   gmtry.imapFcx = read_ifield(fid, 'imapFcx', [nx+2,ny+2]   );
   gmtry.imapFcy = read_ifield(fid, 'imapFcy', [nx+2,ny+2]   );
   gmtry.imapVx  = read_ifield(fid, 'imapVx',  [nx+2,ny+2]   );
+  gmtry.icornVx  = read_ifield(fid, 'icornVx',  nx   );
 end
 gmtry.fcLbl = read_ifield(fid, 'fcLbl', [nFc]);
 
-%% Read geometry variables
 
 % cell volumes 
 gmtry.cvBb   = read_rfield(fid, 'cvBb',  [nCv,4]  );

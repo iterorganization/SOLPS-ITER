@@ -1,0 +1,39 @@
+#! /bin/tcsh -f
+
+set NN = `pipe_run.log | egrep -i 'Number of cost functions:' | awk '{print $5}'`
+set ndir = `pipe_run.log | egrep -i 'nbdirs:' | awk '{print $2}'`
+if ($1 > $NN) then
+  echo "Asking cost function $1 but number of cost functions defined is $NN"
+  exit
+endif
+if ($2 == '') then
+  set idir = 1
+else
+  set idir = $2
+endif
+if ($2 > $ndir) then
+  echo "Asking direction $2 but number of directions defined is $ndir"
+  exit
+endif
+if ($1 == '') then
+  set nn = 1
+else
+  set nn = $1
+endif
+if ($ndir == '') then
+  set ndir = 1
+endif
+
+echo "Plotting gradient of cost function $nn along direction $idir"
+
+set ndata = `pipe_run.log | grep -ai -c "Cost function gradient $nn"`
+
+set lines = "$idir"
+@ idir = $idir + $ndir
+foreach ii ( `seq $idir $ndir $ndata` )
+  set lines = "$lines,$ii"
+end
+
+set str = 'while(<>){if(++$l~~['$lines']){print}}'
+
+pipe_run.log | grep -ai "Cost function gradient $nn" | perl -e "$str" | awk '{print NR, $5}' | xyplot
