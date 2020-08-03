@@ -319,8 +319,10 @@ endif
 	-[ -s b2mn.exe.dir/balance.nc ] && mv b2mn.exe.dir/balance.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2_to_astra.dat ] && mv b2mn.exe.dir/b2_to_astra.dat . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2fstate_add ] && mv b2mn.exe.dir/b2fstate_add . || echo > /dev/null
+	-[ -s b2mn.exe.dir/b2fstate_st ] && mv b2mn.exe.dir/b2fstate_st . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2favere ] && mv b2mn.exe.dir/b2favere . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2fplasmf.0000 ] && mv b2mn.exe.dir/b2fplasmf.* . || echo > /dev/null
+	-[ -s b2mn.exe.dir/b2fplasmf_st ] && mv b2mn.exe.dir/b2fplasmf_st . || echo > /dev/null
 	-[ -s b2mn.exe.dir/tran ] && mv b2mn.exe.dir/tran b2mn.exe.dir/tran?? . || echo > /dev/null
 	-[ -e b2mn.exe.dir/tracing ] && rmdir b2mn.exe.dir/tracing || echo > /dev/null
 	-[ -e output/__1__.dat ] && rm output/__1__.dat || echo > /dev/null
@@ -435,8 +437,10 @@ endif
 	-[ -s b2mn.exe.dir/balance.nc ] && mv b2mn.exe.dir/balance.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2_to_astra.dat ] && mv b2mn.exe.dir/b2_to_astra.dat . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2fstate_add ] && mv b2mn.exe.dir/b2fstate_add . || echo > /dev/null
+	-[ -s b2mn.exe.dir/b2fstate_st ] && mv b2mn.exe.dir/b2fstate_st . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2favere ] && mv b2mn.exe.dir/b2favere . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2fplasmf.0000 ] && mv b2mn.exe.dir/b2fplasmf.* . || echo > /dev/null
+	-[ -s b2mn.exe.dir/b2fplasmf_st ] && mv b2mn.exe.dir/b2fplasmf_st . || echo > /dev/null
 	-[ -s b2mn.exe.dir/tran ] && mv b2mn.exe.dir/tran b2mn.exe.dir/tran?? . || echo > /dev/null
 	-[ -e b2mn.exe.dir/tracing ] && rmdir b2mn.exe.dir/tracing || echo > /dev/null
 	-[ -e output/__1__.dat ] && rm output/__1__.dat || echo > /dev/null
