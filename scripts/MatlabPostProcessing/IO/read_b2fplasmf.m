@@ -44,18 +44,19 @@ end
 
 %% Read gmtry variables
 
-gmtry.bb   = read_rfield(fid,'bb'  ,[nx+2,ny+2,4]);
-gmtry.crx  = read_rfield(fid,'crx' ,[nx+2,ny+2,4]);
-gmtry.cry  = read_rfield(fid,'cry' ,[nx+2,ny+2,4]);
-gmtry.ffbz = read_rfield(fid,'ffbz',[nx+2,ny+2,4]);
-gmtry.fpsi = read_rfield(fid,'fpsi',[nx+2,ny+2,4]);
-gmtry.gs   = read_rfield(fid,'gs'  ,[nx+2,ny+2,3]);
-gmtry.hx   = read_rfield(fid,'hx'  ,[nx+2,ny+2]);
-gmtry.hy   = read_rfield(fid,'hy'  ,[nx+2,ny+2]);
-gmtry.qz   = read_rfield(fid,'qz'  ,[nx+2,ny+2,2]);
-gmtry.qc   = read_rfield(fid,'qc'  ,qcdim);
-gmtry.vol  = read_rfield(fid,'vol' ,[nx+2,ny+2]);
-gmtry.pbs  = read_rfield(fid,'pbs' ,[nx+2,ny+2,2]);
+disp('read_b2fplasmf -- not reading gmtry');
+% gmtry.bb   = read_rfield(fid,'bb'  ,[nx+2,ny+2,4]);
+% gmtry.crx  = read_rfield(fid,'crx' ,[nx+2,ny+2,4]);
+% gmtry.cry  = read_rfield(fid,'cry' ,[nx+2,ny+2,4]);
+% gmtry.ffbz = read_rfield(fid,'ffbz',[nx+2,ny+2,4]);
+% gmtry.fpsi = read_rfield(fid,'fpsi',[nx+2,ny+2,4]);
+% gmtry.gs   = read_rfield(fid,'gs'  ,[nx+2,ny+2,3]);
+% gmtry.hx   = read_rfield(fid,'hx'  ,[nx+2,ny+2]);
+% gmtry.hy   = read_rfield(fid,'hy'  ,[nx+2,ny+2]);
+% gmtry.qz   = read_rfield(fid,'qz'  ,[nx+2,ny+2,2]);
+% gmtry.qc   = read_rfield(fid,'qc'  ,qcdim);
+% gmtry.vol  = read_rfield(fid,'vol' ,[nx+2,ny+2]);
+% gmtry.pbs  = read_rfield(fid,'pbs' ,[nx+2,ny+2,2]);
 
 
 %% Read state variables
@@ -98,7 +99,7 @@ state.tip    = read_rfield(fid,'tip'   ,[nx+2,ny+2]);
 state.ua     = read_rfield(fid,'ua'    ,[nx+2,ny+2,ns]);
 state.ua0    = read_rfield(fid,'ua0'   ,[nx+2,ny+2,ns]);
 state.uap    = read_rfield(fid,'uap'   ,[nx+2,ny+2,ns]);
-state.uadia  = read_rfield(fid,'uadia' ,[nx+2,ny+2,2,ns]);
+state.uadia  = read_rfield(fid,'uadia' ,fluxdims);
 state.fchdia = read_rfield(fid,'fchdia',fluxdim);
 state.fmo    = read_rfield(fid,'fmo'   ,fluxdims);
 state.fna_32 = read_rfield(fid,'fna_32',fluxdims);
@@ -107,8 +108,8 @@ state.fni_32 = read_rfield(fid,'fni_32',fluxdim);
 state.fni_52 = read_rfield(fid,'fni_52',fluxdim);
 state.fne_32 = read_rfield(fid,'fne_32',fluxdim);
 state.fne_52 = read_rfield(fid,'fne_52',fluxdim);
-state.wadia  = read_rfield(fid,'wadia' ,[nx+2,ny+2,2,ns]);
-state.vaecrb = read_rfield(fid,'vaecrb',[nx+2,ny+2,2,ns]);
+state.wadia  = read_rfield(fid,'wadia' ,fluxdims);
+state.vaecrb = read_rfield(fid,'vaecrb',fluxdims);
 state.facdrift     = read_rfield(fid,'facdrift'    ,[nx+2,ny+2]);
 state.fac_ExB      = read_rfield(fid,'fac_ExB'     ,[nx+2,ny+2]);
 state.fchvispar    = read_rfield(fid,'fchvispar'   ,fluxdim);

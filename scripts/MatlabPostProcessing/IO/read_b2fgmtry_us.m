@@ -97,11 +97,13 @@ if gmtry.isClassicalGrid == 1
   gmtry.imapFcy = read_ifield(fid, 'imapFcy', [nx+2,ny+2]   );
   gmtry.imapVx  = read_ifield(fid, 'imapVx',  [nx+2,ny+2]   );
 end
+gmtry.fcLbl = read_ifield(fid, 'fcLbl', [nFc]);
 
 %% Read geometry variables
 
 % cell volumes 
 gmtry.cvBb   = read_rfield(fid, 'cvBb',  [nCv,4]  );
+gmtry.cvEb   = read_rfield(fid, 'cvEb',  [nCv,3]  );
 gmtry.cvX    = read_rfield(fid, 'cvX',   [nCv]    );
 gmtry.cvY    = read_rfield(fid, 'cvY',   [nCv]    );
 gmtry.cvSz   = read_rfield(fid, 'cvSz',  [nCv]    );

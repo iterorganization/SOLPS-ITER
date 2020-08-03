@@ -62,6 +62,7 @@ if str2num(strrep(version,'.','')) >= str2num(strrep('03.001.000','.',''))
     gmtry.qs   = read_rfield(fid,'qs'  ,[nx+2,ny+2,2]);
 else
     gmtry.qc   = read_rfield(fid,'qc'  ,[nx+2,ny+2]);
+    gmtry.qs   = [];
 end
 gmtry.gs   = read_rfield(fid,'gs'  ,[nx+2,ny+2,3]);
 
@@ -111,6 +112,14 @@ if str2num(strrep(version,'.','')) >= str2num(strrep('03.002.000','.',''))
     gmtry.vol(gmtry.vol > huge) = 0;
     gmtry.hx (gmtry.hx  > huge) = 0;
     gmtry.hy (gmtry.hy  > huge) = 0;
+    
+else
+    gmtry.cflags = [];
+    gmtry.hc     = [];
+    gmtry.ht     = [];
+    gmtry.qac    = [];
+    gmtry.qas    = [];
+    gmtry.ebc    = [];
     
 end
 

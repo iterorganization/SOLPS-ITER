@@ -35,10 +35,12 @@ switch meth
             
             for iy = 1:ny+2
                 for ix = 2:nx+2
+                    if lix(ix,iy) >= 1
                     fieldI(ix,iy) = ...
                         (vol(ix,iy)*field(lix(ix,iy),liy(ix,iy)) + ...
                         vol(lix(ix,iy),liy(ix,iy))*field(ix,iy))/...
                         (vol(ix,iy) + vol(lix(ix,iy),liy(ix,iy)));
+                    end
                 end
             end
             
@@ -49,10 +51,12 @@ switch meth
             
             for iy = 2:ny+2
                 for ix = 1:nx+2
+                    if biy(ix,iy) >= 1
                     fieldI(ix,iy) = ...
                         (vol(ix,iy)*field(bix(ix,iy),biy(ix,iy)) + ...
                         vol(bix(ix,iy),biy(ix,iy))*field(ix,iy))/...
                         (vol(ix,iy) + vol(bix(ix,iy),biy(ix,iy)));
+                    end
                 end
             end
         end

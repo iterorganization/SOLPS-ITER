@@ -53,6 +53,13 @@ if isplasmagrid(gmtry)
     X(3:4,:) = X(4:-1:3,:);
     Y(3:4,:) = Y(4:-1:3,:);
     
+    % Eliminate guard cells 
+    if isfield(gmtry,'cflags') & ~isempty(gmtry.cflags)
+        X = X(:,gmtry.cflags(:,:,1)~=9);
+        Y = Y(:,gmtry.cflags(:,:,1)~=9);
+        f = f(gmtry.cflags(:,:,1)~=9);
+    end
+    
     S.XData = X;
     S.YData = Y;
     S.ZData = f;

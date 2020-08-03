@@ -25,6 +25,8 @@ h  = struct('h',[]);
 % Plot all cells as individual polygons
 nx = size(geo.crxs,1);
 ny = size(geo.crxs,2);
+
+% Check 
 for j = 1:ny
     for i = 1:nx
         k = i + (j-1)*nx;

@@ -19,8 +19,8 @@ end
 %% Read dimensions
 
 % ntri, version
-ntri = fscanf(fid,'%d',1);
-ver  = fscanf(fid,'%d',1);
+ntri = fscanf(fid,'%d',1)
+ver  = fscanf(fid,'%d',1)
 
 if ver ~= 20160513 && ver ~= 20160829 && ver ~= 20170930
     error('read_ft46: unknown format of fort.46 file');
@@ -31,9 +31,9 @@ fgetl(fid);
 
 % natm, nmol, nion
 dims = fscanf(fid,'%d',3);
-natm = dims(1);
-nmol = dims(2);
-nion = dims(3);
+natm = dims(1)
+nmol = dims(2)
+nion = dims(3)
 
 % for now, ignore reading species labels
 fgetl(fid);
