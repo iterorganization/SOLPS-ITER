@@ -116,6 +116,8 @@ write_rfield(fid,'vedia'  ,state.vedia);
 write_rfield(fid,'floe_noc' ,state.floe_noc);
 write_rfield(fid,'floi_noc' ,state.floi_noc);
 
+write_rfield(fid,'fhm' ,state.fhm);
+
 
 %% Close file
 
