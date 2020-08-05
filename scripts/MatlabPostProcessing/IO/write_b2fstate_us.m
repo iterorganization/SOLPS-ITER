@@ -64,6 +64,7 @@ write_rfield(fid,'ua'    , state.ua);
 write_rfield(fid,'uadia' , state.uadia);
 write_rfield(fid,'te'    , state.te);
 write_rfield(fid,'ti'    , state.ti);
+write_rfield(fid,'tn'    , state.tn);
 write_rfield(fid,'po'    , state.po);
 
 
@@ -72,10 +73,12 @@ write_rfield(fid,'po'    , state.po);
 write_rfield(fid,'fna'   ,state.fna);
 write_rfield(fid,'fhe'   ,state.fhe);
 write_rfield(fid,'fhi'   ,state.fhi);
+write_rfield(fid,'fhn'   ,state.fhn);
 write_rfield(fid,'fch'   ,state.fch);
 write_rfield(fid,'fch_32',state.fch_32);
 write_rfield(fid,'fch_52',state.fch_52);
 write_rfield(fid,'kinrgy',state.kinrgy);
+write_rfield(fid,'fhm' ,state.fhm);
 write_rfield(fid,'time'  ,state.time);
 write_rfield(fid,'fch_p' ,state.fch_p);
 
@@ -115,8 +118,6 @@ write_rfield(fid,'vedia'  ,state.vedia);
 
 write_rfield(fid,'floe_noc' ,state.floe_noc);
 write_rfield(fid,'floi_noc' ,state.floi_noc);
-
-write_rfield(fid,'fhm' ,state.fhm);
 
 
 %% Close file
