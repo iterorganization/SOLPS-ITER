@@ -41,5 +41,5 @@ module load matlab/R2018a
 
 # Other environment variables
 setenv STGDIR /staging/leuven/stg_00030/SOLPS/lib/LEUVEN.ifort64
-setenv TAPENADEDIR  $SOLPSTOP/../tapenade/tapenade_3.15/
+setenv TAPENADEDIR  /staging/leuven/stg_00030/tapenade
 setenv ALLINEA_NO_MPI_AUTODETECT false

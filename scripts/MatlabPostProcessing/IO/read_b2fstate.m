@@ -83,7 +83,7 @@ state.ua     = read_rfield(fid,'ua'    ,statedims);
 state.uadia  = read_rfield(fid,'uadia' ,fluxdims);
 state.te     = read_rfield(fid,'te'    ,statedim);
 state.ti     = read_rfield(fid,'ti'    ,statedim);
-% state.tn     = read_rfield(fid,'tn'    ,statedim);
+state.tn     = read_rfield(fid,'tn'    ,statedim);
 state.po     = read_rfield(fid,'po'    ,statedim);
 
 
@@ -92,12 +92,12 @@ state.po     = read_rfield(fid,'po'    ,statedim);
 state.fna    = read_rfield(fid,'fna'   ,fluxdims);
 state.fhe    = read_rfield(fid,'fhe'   ,fluxdim);
 state.fhi    = read_rfield(fid,'fhi'   ,fluxdim);
-% state.fhn    = read_rfield(fid,'fhn'   ,fluxdim);
+state.fhn    = read_rfield(fid,'fhn'   ,fluxdim);
 state.fch    = read_rfield(fid,'fch'   ,fluxdim);
 state.fch_32 = read_rfield(fid,'fch_32',fluxdim);
 state.fch_52 = read_rfield(fid,'fch_52',fluxdim);
 state.kinrgy = read_rfield(fid,'kinrgy',statedims);
-% state.fhm    = read_rfield(fid,'fhm'   ,fluxdims);
+state.fhm    = read_rfield(fid,'fhm'   ,fluxdims);
 state.time   = read_rfield(fid,'time'  ,1);
 state.fch_p  = read_rfield(fid,'fch_p' ,fluxdimp);
 
