@@ -69,9 +69,11 @@ INCLUDE += -I${SRC5LOCAL}
 TAGSLIST += ${SRC5LOCAL}/*.F
 VPATH += ${SRC5LOCAL}:
 endif
+ifeq ($(shell [ -d ${SOLPS4}/src/Braams/b2/include.local ] && echo yes || echo no ),yes)
 ifeq ($(shell [ -d ${INC4LOCAL} ] && echo yes || echo no ),yes)
 INCLUDE += -I${INC4LOCAL}
 TAGSLIST += ${INC4LOCAL}/*.h
+endif
 endif
 ifeq ($(shell [ -d ${INC5LOCAL} ] && echo yes || echo no ),yes)
 INCLUDE += -I${INC5LOCAL}
@@ -999,11 +1001,16 @@ listobj:
 
 links:
 	@[ -L ${SRCDIR}/B2_include.local ] && rm -Rf ${SRCDIR}/B2_include.local || echo > /dev/null
+ifeq ($(shell [ -d ${SOLPS4}/src/Braams/b2/include.local ] && echo yes || echo no ),yes)
 	-mkdir -p ${SRCDIR}/B2_include.local
 	@[ -r `which lndir` ] && lndir ${SOLPS4}/src/Braams/b2/include.local ${SRCDIR}/B2_include.local || ln -sf ${SOLPS4}/src/Braams/b2/include.local/* ${SRCDIR}/B2_include.local/
+endif
 	@[ -L ${SRCDIR}/B2_include ] && rm -Rf ${SRCDIR}/B2_include || echo > /dev/null
 	-mkdir -p ${SRCDIR}/B2_include
 	@[ -r `which lndir` ] && lndir ${SOLPS4}/src/Braams/b2/include ${SRCDIR}/B2_include || ln -sf ${SOLPS4}/src/Braams/b2/include/* ${SRCDIR}/B2_include/
+ifdef LD_NETCDF
+	@rm ${SRCDIR}/B2_include/netcdf.inc
+endif
 	@[ -L ${SRCDIR}/Eirene_modules ] && rm -Rf ${SRCDIR}/Eirene_modules || echo > /dev/null
 	-mkdir -p ${SRCDIR}/Eirene_modules
 	@[ -r `which lndir` ] && lndir ${SOLPS4}/src/Eirene/src/modules ${SRCDIR}/Eirene_modules || ln -sf ${SOLPS4}/src/Eirene/src/modules/* ${SRCDIR}/Eirene_modules/
