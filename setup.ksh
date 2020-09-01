@@ -241,11 +241,11 @@ alias unset_ig='. $SOLPSTOP/SETUP/noig'
 [ -e `which mwm` ] || {
   export NO_MOTIF=1
 }
-[ -n "$NO_MOTIF" ] || {
-  [ `whereis libXm | wc -w` == 1 ] && export NO_MOTIF=1
+[ -n "$NO_MOTIF" ] && {
+  [ `whereis libXm | wc -w` != 1 ] && unset NO_MOTIF
 }
-[ -n "$NO_MOTIF" ] || {
-  [ `ldconfig -p | grep 'libXm\.' | wc -l` == 0 ] && export NO_MOTIF=1
+[ -n "$NO_MOTIF" ] && {
+  [ `ldconfig -p | grep 'libXm\.' | wc -l` != 0 ] && unset NO_MOTIF
 }
 
 # Add any local settings if present

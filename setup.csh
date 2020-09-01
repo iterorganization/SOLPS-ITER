@@ -239,11 +239,11 @@ alias unset_ig     'source $SOLPSTOP/SETUP/noig'
 
 # Check for Motif library
 if (! -e `which mwm`) setenv NO_MOTIF 1
-if (! $?NO_MOTIF) then
-  if (`whereis libXm | wc -w` == 1) setenv NO_MOTIF 1
+if ($?NO_MOTIF) then
+  if (`whereis libXm | wc -w` != 1) unsetenv NO_MOTIF
 endif
-if (! $?NO_MOTIF) then
-  if (`ldconfig -p | grep 'libXm\.' | wc -l` == 0) setenv NO_MOTIF 1
+if ($?NO_MOTIF) then
+  if (`ldconfig -p | grep 'libXm\.' | wc -l` != 0) unsetenv NO_MOTIF
 endif
 
 # Add any local settings if present
