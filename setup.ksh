@@ -241,6 +241,12 @@ alias unset_ig='. $SOLPSTOP/SETUP/noig'
 [ -e `which mwm` ] || {
   export NO_MOTIF=1
 }
+[ -n "$NO_MOTIF" ] || {
+  [ `whereis libXm | wc -w` == 1 ] && export NO_MOTIF=1
+}
+[ -n "$NO_MOTIF" ] || {
+  [ `ldconfig -p | grep 'libXm\.' | wc -l` == 0 ] && export NO_MOTIF=1
+}
 
 # Add any local settings if present
 [ -s ${SOLPSTOP}/SETUP/setup.ksh.local ] && {
@@ -248,6 +254,3 @@ alias unset_ig='. $SOLPSTOP/SETUP/noig'
    source ${SOLPSTOP}/SETUP/setup.ksh.local
 }
 
-# List loaded modules
-
-module list
