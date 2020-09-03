@@ -4,7 +4,7 @@
 #-----------------------------------------------------------------------
 # Variables.
 
-SHELL = /bin/sh
+SHELL = /bin/bash
 TIME = time
 RUN_OPTIONS =
 nil =
