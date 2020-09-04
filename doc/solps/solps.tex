@@ -4277,19 +4277,21 @@ We only include here the variables or aspects thereof not already described in t
 
 \subsection{Block 15. Data for interfacing routine GEOUSR}
 
-This input block is used to adjust the edges of the additional walls in the {\tt Eirene} description of the vacuum vessel walls to match exactly the location of the grid corners from the plasma solver in {\tt B2.5}. This block may begin with an optional text line containing either {\tt GENERAL} or {\tt BIASED\_GARCHING}, which changes the format below. The \SOLPSITER default is to not include this text line. By default, the grid corners at the targets will be adjusted to the additional surfaces specified, and there should be one such additional surface per grid corner. Each additional surface can only serve for one grid corner adjustment, no more.
+This input block is used to adjust the edges of the additional walls in the {\tt Eirene} description of the vacuum vessel walls to match exactly the location of the grid corners from the plasma solver in {\tt B2.5}. This block may begin with an optional text line containing either {\tt GENERAL} or {\tt BIASED\_GARCHING}, which changes the format below. The \SOLPSITER default is to not include this text line. With that default, the specified additional surfaces will be adjusted to meet up exactly with the grid corners at the edges of the divertor targets, and there should be one such additional surface specification per grid corner. The corners will be listed in the following order, in reference to the rectangular computational domain: lower left, upper left, lower right, upper right. For double-null configurations, each separate half of the computational domain will be listed in turn, first the four corners of the left half, then the four corners of the right half. An additional surface can only accomodate one such end vertex adjustment, not more. The number of such corner adjustments is provided by {\tt NASMOD}.
+
+It is also possible to move the vertices of other additional surfaces with the {\tt NADMOD} block, and to flip cell face normals with the {\tt NORMOD} block, although this is not recommended in standard \SOLPSITER runs. 
 
 {\it ***15. Data for interfacing routine "geousr"}
 
-If there is no preceding text line, the reading format is:
+If there is no preceding text line (recommended default), the reading format is:
 \begin{verbatim}
 NADMOD   NASMOD
 DO I=1,NADMOD
-   NRS   IPUNKT
-   IF (IPUNKT.LT.0) XPOLPOS   YPOLPOS
+   NRS   IPUNKT   XCOOR   YCOOR   ZCOOR
 ENDDO
 DO I=1,NASMOD
-   NAS   IPUNKT   NSSIR   NSSIP
+   LIMPOS   ONETWO
+   IF (ONETWO.LT.0) XPOLPOS   YPOLPOS
 ENDDO
 \end{verbatim}
 
@@ -4310,30 +4312,32 @@ ENDDO
 If the text line is {\tt BIASED\_GARCHING}, the reading format is:
 \begin{verbatim}
 DO I=1,max(NPPLG/3,1)*4
-   IPUNKT   NRS
-   IF (IPUNKT.LT.0) XPOLPOS   YPOLPOS
+   ONETWO   LIMPOS
+   IF (ONETWO.LT.0) XPOLPOS   YPOLPOS
 ENDDO
 \end{verbatim}
 
 {\bf Meaning of the input variables for interfacing routine GEOUSR}
 
 \begin{description}
-  \item[NADMOD] Number of additional surfaces to be modified (should be 2 per divertor target, and 2 for a limiter geometry case)
-  \item[NASMOD] Number of standard surfaces to be modified. Should be 0 for standard \SOLPSITER couplings.
-  \item[NORMOD] Number of cell faces whose normal is to inverted. Should be 0 for standard \SOLPSITER couplings.
+  \item[NADMOD] Number of additional surfaces to be modified. Should be 0 for standard \SOLPSITER couplings. 
+  \item[NASMOD] Number of additional surfaces to be modified. Should be 2 per divertor target, and 2 for a limiter geometry case.
+  \item[NORMOD] Number of cell faces for which normal is to be inverted. Should be 0 for standard \SOLPSITER couplings.
   \item[NRS] Index of the additional surface being modified
-  \item[IPUNKT] {\tt ABS(IPUNKT)} is the index of the vertex of that additional surface being modified
-  \item[XCOOR] New X-coordinate of the point being modified (in cm). Not necessary in standard \SOLPSITER couplings.
-  \item[YCOOR] New Y-coordinate of the point being modified (in cm). Not necessary in standard \SOLPSITER couplings.
-  \item[ZCOOR] New Z-coordinate of the point being modified (in cm). Not necessary in standard \SOLPSITER couplings.
-  \item[XPOLPOS] X-index (poloidal) of the grid cell to which the additional surface vertex must be matched
-  \item[YPOLPOS] Y-index (radial) of the grid cell to which the additional surface vertex must be matched
-  \item[NAS] Index of the standard surface to be modified
-  \item[NSSIR] Radial position of the standard surface to be modified
-  \item[NSSIP] Poloidal position of the standard surface to be modified
-  \item[IDIR] Direction of the face whose normal is being inverted (1 = radial, 2=poloidal)
-  \item[IR] Radial index of the cell where the normal is being inverted
-  \item[IP] Poloidal index of the cell where the normal is being inverted
+  \item[IPUNKT] Index of the vertex being modified in that additional surface. Values from 1 to 6 are allowed in {\tt NADMOD} block, and 1 or 2 only in {\tt NASMOD} block.
+  \item[XCOOR] New X-coordinate of the vertex being modified (in cm).
+  \item[YCOOR] New Y-coordinate of the vertex being modified (in cm).
+  \item[ZCOOR] New Z-coordinate of the vertex being modified (in cm).
+  \item[LIMPOS] Index of the additional surface to be made to match a grid corner
+  \item[ONETWO] {\tt ABS(ONETWO)} is the index of the vertex being modified in that additional surface, and can only be 1 or 2
+  \item[XPOLPOS] Integer X-index (poloidal) of the {\tt Eirene} grid vertex to which the additional surface vertex must be matched. To be used only if the default setting does not give the desired result.
+  \item[YPOLPOS] Integer Y-index (radial) of the {\tt Eirene} grid vertex to which the additional surface vertex must be matched. To be used only if the default setting does not give the desired result.
+  \item[NAS] Index of the additional surface to be modified
+  \item[NSSIR] Radial index of the {\tt Eirene} grid vertex to which the additional surface vertex is to be matched
+  \item[NSSIP] Poloidal index of the {\tt Eirene} grid vertex to which the additional surface vertex is to be matched
+  \item[IDIR] Direction of the face which normal is being inverted (1 = radial, 2 = poloidal)
+  \item[IR] Radial index of the {\tt Eirene} grid cell which face normal is being inverted
+  \item[IP] Poloidal index of the {\tt Eirene} grid cell which face normal is being inverted
 \end{description}
 
 \subsection{Information for MPI}
@@ -9100,7 +9104,7 @@ c_{\kappa_{ix}}^{F \lim} & =
 \begin{equation}\label{eq:eni_vhimax}
 V_{h_i}^{(\max)} = c_{flim_1} \frac{\sqrt g}{h_x} |b_x| \sqrt{\frac{T_i}{m_p}}
 \frac{\sum \limits_{a=0}^{ns-1}  n_a \sqrt{\frac{m_p}{m_a}}}{n_i}
-\end{equation}
+\end{equation} % nirm
 
 $c_{flim_1} = 0.15$ is the ion heat flux limiter coefficient.
 
