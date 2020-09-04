@@ -4,7 +4,7 @@
 #-----------------------------------------------------------------------
 # Variables.
 
-SHELL = /usr/bin/env sh
+SHELL = /bin/bash
 TIME = time
 RUN_OPTIONS =
 BLANK =
