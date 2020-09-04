@@ -719,6 +719,8 @@ c** To be done (in Eirene first)
      ,                                                        i=1,nplsi)
       end if !}
       if (indpro(5).le.5) write(iunoo,703) b0,b1,b2,b3,b4,b5
+      if (indpro(11).le.5) write(iunoo,703) (zi0(i),zi1(i),zi2(i),
+     ,                                   zi3(i),zi4(i),zi5(i),i=1,nplsi)
       if (indpro(12).le.5) write(iunoo,703) vl0,vl1,vl2,vl3,vl4,vl5
 
 c*** 6a.  data for reflection model

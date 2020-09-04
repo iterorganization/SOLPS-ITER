@@ -160,6 +160,8 @@ c*** 5
      ,     vx3(npls), vx4(npls), vx5(npls), vy0(npls), vy1(npls),
      ,     vy2(npls), vy3(npls), vy4(npls), vy5(npls), vz0(npls),
      ,     vz1(npls), vz2(npls), vz3(npls), vz4(npls), vz5(npls),
+     ,     zi0(npls), zi1(npls), zi2(npls), zi3(npls), zi4(npls),
+     ,     zi5(npls),
      ,     b0, b1, b2, b3, b4, b5, vl0, vl1, vl2, vl3, vl4, vl5
       character textp(npls)*8
 
@@ -488,7 +490,8 @@ c*** b2ah.dat
      ,  valcdn,bltzcdn,dltecdn,acrncdn,
      ,  te0,te1,te2,te3,te4,te5,ti0,ti1,ti2,ti3,ti4,ti5,di0,di1,di2,di3,
      ,  di4,di5,vx0,vx1,vx2,vx3,vx4,vx5,vy0,vy1,vy2,vy3,vy4,vy5,vz0,vz1,
-     ,  vz2,vz3,vz4,vz5,b0,b1,b2,b3,b4,b5,vl0,vl1,vl2,vl3,vl4,vl5,
+     ,  vz2,vz3,vz4,vz5,zi0,zi1,zi2,zi3,zi4,zi5,
+     ,  b0,b1,b2,b3,b4,b5,vl0,vl1,vl2,vl3,vl4,vl5,
      ,  datm,dmol,dion,dpls,ermin,
      ,  ercut,rprob0,rinteg,einteg,ainteg,ychsptg,echsptg,fchsptg,
      ,  achsptg,fsheata,

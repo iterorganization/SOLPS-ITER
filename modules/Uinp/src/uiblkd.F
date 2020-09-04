@@ -682,13 +682,14 @@ c*** 5
       data fnamcdn, h2cdn  , reaccdn, crcdn   /
      /    lurc*' ',lurc*' ',lurc*' ',lurc*' ' /
       
-      data indpro / 6*6, 6*0  /
+      data indpro / 6*6, 4*0, 6, 0 /
       data te0,te1,te2,te3,te4,te5 / 6*0./
       data ti0,ti1,ti2,ti3,ti4,ti5 / lup6*0./
       data di0,di1,di2,di3,di4,di5 / lup6*0./
       data vx0,vx1,vx2,vx3,vx4,vx5 / lup6*0./
       data vy0,vy1,vy2,vy3,vy4,vy5 / lup6*0./
       data vz0,vz1,vz2,vz3,vz4,vz5 / lup6*0./
+      data zi0,zi1,zi2,zi3,zi4,zi5 / lup6*0./
       data b0,b1,b2,b3,b4,b5       / 6*0./
       data vl0,vl1,vl2,vl3,vl4,vl5 / 6*0./
 
