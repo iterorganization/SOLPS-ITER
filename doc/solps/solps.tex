@@ -2884,15 +2884,39 @@ which contains
 \item[PARM\_ALF]\index{PARM\_ALF} {\tt real},
   provides parameters for {\tt FLAG\_ALF}
 \item[CFLME]\index{CFLME} {\tt real},
-  multiplier to the electron flux limit
+  main multiplier to the electron flux limit
 \item[CFLMI]\index{CFLMI} {\tt real},
-  multiplier to the ion flux limit
+  main multiplier to the ion flux limit
 \item[CFLMV]\index{CFLMV} {\tt real},
-  multiplier to the viscosity flux limit
+  main multiplier to the viscosity flux limit
 \item[CFLAL]\index{CFLAL} {\tt real},
   multiplier to the thermo-electric coefficient flux limit
 \item[CFLAB]\index{CFLAB} {\tt real},
   multiplier to the friction force flux limit
+\item[CFLME\_CORE]\index{CFLME\_CORE} {\tt real},
+  limit to multiplier to the electron heat flux limit in the deep core
+\item[CFLME\_SOL]\index{CFLME\_SOL} {\tt real},
+  limit to multiplier to the electron heat flux limit in the far SOL
+\item[CFLME\_TANH\_A]\index{CFLME\_TANH\_A} {\tt real},
+  radial location, measured (in $m$) as a radial distance along the OMP away from the separatrix, for the center of the tanh profile multiplying the electron heat flux limit
+\item[CFLME\_TANH\_B]\index{CFLME\_TANH\_B} {\tt real},
+  radial width, measured (in $m$) as a radial distance along the OMP, for the tanh profile multiplying the electron heat flux limit
+\item[CFLMI\_CORE]\index{CFLMI\_CORE} {\tt real},
+  limit to multiplier to the ion heat flux limit in the deep core
+\item[CFLMI\_SOL]\index{CFLMI\_SOL} {\tt real},
+  limit to multiplier to the ion heat flux limit in the far SOL
+\item[CFLMI\_TANH\_A]\index{CFLMI\_TANH\_A} {\tt real},
+  radial location, measured (in $m$) as a radial distance along the OMP away from the separatrix, for the center of the tanh profile multiplying the ion heat flux limit
+\item[CFLMI\_TANH\_B]\index{CFLMI\_TANH\_B} {\tt real},
+  radial width, measured (in $m$) as a radial distance along the OMP, for the tanh profile multiplying the ion heat flux limit
+\item[CFLMV\_CORE]\index{CFLMV\_CORE} {\tt real},
+  limit to multiplier to the viscosity heat flux limit in the deep core
+\item[CFLMV\_SOL]\index{CFLMV\_SOL} {\tt real},
+  limit to multiplier to the viscosity heat flux limit in the far SOL
+\item[CFLMV\_TANH\_A]\index{CFLMV\_TANH\_A} {\tt real},
+  radial location, measured (in $m$) as a radial distance along the OMP away from the separatrix, for the center of the tanh profile multiplying the viscosity heat flux limit
+\item[CFLMV\_TANH\_B]\index{CFLMV\_TANH\_B} {\tt real},
+  radial width, measured (in $m$) as a radial distance along the OMP, for the tanh profile multiplying the viscosity heat flux limit
 \item[TRANSPORT\_FILENAME]\index{TRANSPORT\_FILENAME} {\tt filename}, the name of a new
   transport input file that will be read based on a condition
   determined by $\mod(${\tt TIM},{\tt TRANSPORT\_TIME\_MOD}$)>${\tt TRANSPORT\_TIME\_SWITCH}
@@ -2908,6 +2932,8 @@ description of the transport coefficients which allows for radial
 variation.
 
 It is important to note that the settings from {\tt b2.transport.parameters} will {\bf NOT} be applied to neutral species!
+
+For the electron, ion, and viscous heat flux limit coefficients, if the main multiplier is not specified but {\tt CFLM*\_CORE} and {\tt CFLM*\_SOL} are set to equal non-zero values, their value will be used. If {\tt CFLM*\_CORE} and {\tt CFLM*\_SOL} are different and non-zero, then a radial tanh profile, centered at radial OMP position {\tt CFLM*\_TANH\_A} (in $m$) and of width {\tt CFLM*\_TANH\_B} is applied. The OMP reference is set to the poloidal index given by {\tt b2news\_fac\_ref}, or, if not specified, by {\tt b2mwti\_jxa}. The flux limit coefficients in the PFR are set to a constant value equal to that at the separatrix. For all flux limit multipliers, setting them to zero turns off the corresponding flux limiter. Otherwise, the multipliers must be positive.
 
 As stated in the {\tt b2cmpt} block description (Section \ref{lab:b2cmpt}),
 for numerical stability reasons, mechanisms must exist to provide some
@@ -4058,7 +4084,7 @@ values will be the ones stored in the appropriate namelists from the {\tt b2.*.p
 This routine first reads the formatted file {\tt b2ymb.dat} and writes the unformatted file {\tt mnb\_in.dat} that is needed by the {\tt FreeFem++}(\href{http://www.freefem.org}{http://www.freefem.org})\cite{MR3043640} heat transfer model of the monoblock, see the details in the manual in {\tt \$SOLPSTOP/doc/SOLPS-ITER\_PFCs\_heat\_transfer\_model.pdf}.
 Then, it reads the files {\tt wlld\_trg[i-o].dat} produced by \btwoplot with the {\tt "1000 wlld"} command and writes the unformatted files {\tt W\_tg[i-o].dat}, {\tt X\_tg[i-o].dat} and {\tt tg[i-o]\_size.dat} that are needed  by the {\tt FreeFem++} heat transfer model of the monoblock.
 In {\tt W\_tg[i-o].dat} is stored the value of the heat flux for each tile of the monoblock in Watts.
-In {\tt X\_tg[i-o].dat} is stored the value of the poloidal coordinate of the center of each tile along the monoblock axis (in meters).
+In {\tt X\_tg[i-o].dat} is stored the value of the poloidal coordinate of the center of each tile along the monoblock axis (in metres).
 In {\tt tg[i-o]\_size.dat} is stored the number of points (i.e. tiles) in which the inner/outer monoblocks have been subdivided according to the assigned tile poloidal length, which is read from the {\tt b2ymb.dat} file.
 To use the routine:
 \begin{enumerate}
@@ -4090,7 +4116,7 @@ Example of the {\tt b2ymb.dat} file:\\
 This routine first reads the formatted file {\tt b2yrp.dat} and writes the unformatted file {\tt rps\_in.dat} that is needed by the {\tt FreeFem++}(\href{http://www.freefem.org}{http://www.freefem.org})\cite{MR3043640} heat transfer model of the reflector plates, see the details in the manual in {\tt \$SOLPSTOP/doc/SOLPS-ITER\_PFCs\_heat\_transfer\_model.pdf}.
 Then, it reads the files {\tt wlld\_[i-o]rp.dat} produced by \btwoplot with the {\tt "1000 wlld"} command and writes the unformatted files {\tt W\_[i-o]rp.dat}, {\tt X\_[i-o]rp.dat} and {\tt [i-o]rp\_size.dat} that are needed by the {\tt FreeFem++} heat transfer model.
 In {\tt W\_[i-o]rp.dat} is stored the value of the heat flux for each tile of the RPs in Watts.
-In {\tt X\_[i-o]rp.dat} is stored the value of the poloidal coordinate of the center of each tile along the RPs axis (in meters).
+In {\tt X\_[i-o]rp.dat} is stored the value of the poloidal coordinate of the center of each tile along the RPs axis (in metres).
 In {\tt [i-o]rp\_size.dat} is stored the number of points (i.e. tiles) in which the inner/outer RPs have been subdivided according to the assigned tile poloidal length, which is read from the {\tt b2yrp.dat} file.
 To use the routine:
 \begin{enumerate}
@@ -6756,11 +6782,11 @@ a specific ordering of lengths is necessary.
 The necessary condition for a fluid model is
 that all characteristic lengths (characteristic length
 of the sheath, which is a microscopic length scale of about 10 Debye lengths;
-electron and ion mean free path ranging from sub-cm to meters; neutral mean
-free path, which is centimeters to meters; heat conduction length which is typically
+electron and ion mean free path ranging from sub-cm to metres; neutral mean
+free path, which is centimetres to metres; heat conduction length which is typically
 five times the mean free path length due to the dominant contribution from tail
 electrons or ions)
-are smaller than the parallel connection length (order of several tens of meters). This
+are smaller than the parallel connection length (order of several tens of metres). This
 is usually fulfilled in edge plasmas with the following possible exceptions:
 \begin{enumerate}
   \item at low temperatures, e.g.
@@ -16575,14 +16601,14 @@ See {\bf zcol} above for a list of available colours.
 
 \subsubsection{$<$length,{\bf R}$>$ arow}\index{b2plot, arow}\label{sec:arow}\index{b2plot, arox}\label{sec:arox}\index{b2plot, aroy}\label{sec:aroy}
 Produces flow chart of arrays {\em up} and {\em vv} using a maximum arrow
-length of $\langle$length$\rangle$ meters.
+length of $\langle$length$\rangle$ metres.
 The use of {\em up} and {\em vv} can be superseded
 by the the commands {\bf arox} and {\bf aroy}, respectively, which will then use
 data from the matrix stack for computing the arrow directions instead.
 
 \subsubsection{$<$length,{\bf R}$>$ earow}\index{b2plot, earow}\label{sec:earow}\index{b2plot, earox}\label{sec:earox}\index{b2plot, earoy}\label{sec:earoy}
 Produces flow chart of Eirene array {\em vxa} and {\em vya} using a
-maximum arrow length of $\langle$length$\rangle$ meters. The use of {\em vxa} and
+maximum arrow length of $\langle$length$\rangle$ metres. The use of {\em vxa} and
 {\em vya} can be superseded by the the commands {\bf earox} and {\bf earoy},
 respectively, which will then use data from the Eirene stack for computing
 the arrow directions instead.
@@ -17267,7 +17293,7 @@ Outputs the geometry in {\tt Sonnet} {\tt ASCII} format.
 
 \subsection{$<$z\textsubscript{shift},{\bf R}$>$ $<$UEDGE grid file$>$ uedgegrd}\index{b2plot, uedgegrd}\label{sec:uedgegrd}
 Outputs the geometry in {\tt UEDGE} ASCII format. The grid can be shifted in the vertical
-direction by an amount of $\langle$z\textsubscript{shift}$\rangle$ meters.
+direction by an amount of $\langle$z\textsubscript{shift}$\rangle$ metres.
 
 \subsection{$<$filename$>$ $<$H123$>$ $<$reac$>$ $<$crc$>$ amju}\index{b2plot, amju}\label{sec:amju}
 Computes a reaction rate as per the {\tt Eirene} specification. Consult the
