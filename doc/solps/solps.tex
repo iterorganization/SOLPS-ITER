@@ -15355,7 +15355,7 @@ If J \textgreater 0, then the codes produces a set of {\tt wlld\_*.dat},
 where the asterisk (*) is the name of each "plot zone" defined in the DG model.
 Each such file contains the power loading onto the set of walls defined in that
 plot zone. If LM = 99 and J \textgreater 0, additional diagnostics are produced that indicate the radiation split by isonuclear sequence. If LM = 98 and J \textgreater 0, additional diagnostics are produced that indicate the radiation coming from the core additional sources. \\
-If the user wants to use the heat transfer model for the monoblock and/or the reflector plates, then he must define in the DG model the inner/outer target, the reflector plates and dome plot zones using the label 'trg[i-o]', '[i-o]rp' and 'dome' respectively. The {\tt wlld\_*.dat} produced should then be postprocessed by b2ymb (see \ref{sec:b2ymb}), b2yrp (\ref{sec:b2yrp}) and b2ydm (\ref{sec:b2ydm}).
+If the user wants to use the heat transfer model for the monoblock and/or the reflector plates, then plot zones for the inner/outer target, the reflector plates, and/or the dome must be defined in the DG model, using the labels 'trg[i-o]', '[i-o]rp', and/or 'dome', respectively. The {\tt wlld\_*.dat} files produced should then be postprocessed by either {\tt b2ymb} (see \ref{sec:b2ymb}), {\tt b2yrp} (\ref{sec:b2yrp}), or {\tt b2ydm} (\ref{sec:b2ydm}).
 
 
 \section{Common errors}
