@@ -23,7 +23,7 @@ fprintf(fid,'%s\n',VERSION);
 
 %% Write dimensions nx, ny, ns
 
-write_ifield(fid,'nCi,nCg,nCv,nFc,nVx,nFs',[gmtry.nCi,gmtry.nCg,gmtry.nCv,gmtry.nFc,gmtry.nVx,gmtry.nFs]);
+write_ifield(fid,'nCi,nCg,nCv,nFc,nVx,nFs,nFt',[gmtry.nCi,gmtry.nCg,gmtry.nCv,gmtry.nFc,gmtry.nVx,gmtry.nFs,gmtry.nFt]);
 
 write_ifield(fid,'nCmxVx,nCmxFc,nVmxCv,nVmxFc,nCmxNv',[gmtry.nCmxVx,gmtry.nCmxFc,gmtry.nVmxCv,gmtry.nVmxFc,gmtry.nCmxNv]);
 
@@ -54,12 +54,16 @@ write_ifield(fid, 'vxFcP',gmtry.vxFcP);
 write_ifield(fid, 'vxFc',gmtry.vxFc);
 write_ifield(fid, 'vxCvP',gmtry.vxCvP);
 write_ifield(fid, 'vxCv',gmtry.vxCv);
-write_ifield(fid, 'fsCvP',gmtry.fsCvP);
-write_ifield(fid, 'fsCv',gmtry.fsCv);
+write_ifield(fid, 'ftCvP',gmtry.ftCvP);
+write_ifield(fid, 'ftCv',gmtry.ftCv);
+write_ifield(fid, 'ftFcP',gmtry.ftFcP);
+write_ifield(fid, 'ftFc',gmtry.ftFc);
+write_ifield(fid, 'cvFt',gmtry.cvFt);
 write_ifield(fid, 'fsFcP',gmtry.fsFcP);
 write_ifield(fid, 'fsFc',gmtry.fsFc);
 write_ifield(fid, 'fcReg',gmtry.fcReg);
 write_ifield(fid, 'cvReg',gmtry.cvReg);
+write_ifield(fid, 'ftReg',gmtry.ftReg);
 write_rfield(fid, 'intcellP',gmtry.intcellP);
 write_rfield(fid, 'intcellR',gmtry.intcellR);
 
@@ -72,6 +76,9 @@ if gmtry.isClassicalGrid == 1
 
 end
 write_ifield(fid, 'fcLbl',   gmtry.fcLbl );
+write_ifield(fid, 'cvLbl',   gmtry.cvLbl );
+write_ifield(fid, 'ftLbl',   gmtry.ftLbl );
+
 %% Write geometry variables
 
 % cell volumes 
@@ -104,8 +111,8 @@ write_rfield(fid,'vxFfbz', gmtry.vxFfbz  );
 write_rfield(fid,'vxFpsi', gmtry.vxFpsi  );
 
 % flux surface quantities
-write_rfield(fid,'fsConn', gmtry.fsConn );
-
+write_rfield(fid,'ftConn', gmtry.ftConn );
+write_rfield(fid,'fsPsi', gmtry.fsPsi );
 
 
 %% Close file

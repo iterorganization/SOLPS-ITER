@@ -85,6 +85,7 @@ state.te     = read_rfield(fid,'te'    ,statedim);
 state.ti     = read_rfield(fid,'ti'    ,statedim);
 state.tn     = read_rfield(fid,'tn'    ,statedim);
 state.po     = read_rfield(fid,'po'    ,statedim);
+state.kt     = read_rfield(fid,'kt'    ,statedim);
 
 
 %% Read fluxes
@@ -98,6 +99,7 @@ state.fch_32 = read_rfield(fid,'fch_32',fluxdim);
 state.fch_52 = read_rfield(fid,'fch_52',fluxdim);
 state.kinrgy = read_rfield(fid,'kinrgy',statedims);
 state.fhm    = read_rfield(fid,'fhm'   ,fluxdims);
+state.fkt    = read_rfield(fid,'fkt'   ,fluxdim);
 state.time   = read_rfield(fid,'time'  ,1);
 state.fch_p  = read_rfield(fid,'fch_p' ,fluxdimp);
 

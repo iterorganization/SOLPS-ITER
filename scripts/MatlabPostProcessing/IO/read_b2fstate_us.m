@@ -63,8 +63,9 @@ state.uadia  = read_rfield(fid,'uadia' ,fluxdims);
 state.te     = read_rfield(fid,'te'    ,[nx+2,ny+2]);
 state.ti     = read_rfield(fid,'ti'    ,[nx+2,ny+2]);
 state.po     = read_rfield(fid,'po'    ,[nx+2,ny+2]);
-
-
+if version >= '03.001.000'
+    state.kt     = read_rfield(fid,'kt'    ,[nx+2,ny+2]);
+end
 %% Read fluxes
 
 state.fna    = read_rfield(fid,'fna'   ,fluxdims);
@@ -114,6 +115,9 @@ if str2num(strrep(version,'.','')) >= str2num(strrep('03.000.005','.',''))
     
     state.floe_noc  = read_rfield(fid,'floe_noc' ,fluxdim);
     state.floi_noc  = read_rfield(fid,'floi_noc' ,fluxdim);
+end
+if version == '03.000.009'
+    state.kt     = read_rfield(fid,'kt'    ,[nx+2,ny+2]);
 end
 
 %% Close file

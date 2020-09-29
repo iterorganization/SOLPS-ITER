@@ -26,13 +26,14 @@ disp(['read_b2fgmtry -- file version ',version]);
 %% Read dimensions nx, ny, and symmetry
 
 
-dim = read_ifield(fid,'nCi,nCg,nCv,nFc,nVx,nFs',6);
+dim = read_ifield(fid,'nCi,nCg,nCv,nFc,nVx,nFs,nFt',7);
 nCi  = dim(1);
 nCg  = dim(2);
 nCv  = dim(3);
 nFc  = dim(4);
 nVx  = dim(5);
 nFs  = dim(6);
+nFt  = dim(7);
 
 dim = read_ifield(fid,'nCmxVx,nCmxFc,nVmxCv,nVmxFc,nCmx',5);
 nCmxVx = dim(1);
@@ -47,6 +48,7 @@ gmtry.nCv = nCv;
 gmtry.nFc = nFc;
 gmtry.nVx = nVx;
 gmtry.nFs = nFs;
+gmtry.nFt = nFt;
 
 gmtry.nCmxVx = nCmxVx;
 gmtry.nCmxFc = nCmxFc;
@@ -85,12 +87,16 @@ gmtry.vxFcP = read_ifield(fid, 'vxFcP', [nVx,2] );
 gmtry.vxFc  = read_ifield(fid, 'vxFc' , [nVmxFc]);
 gmtry.vxCvP = read_ifield(fid, 'vxCvP', [nVx,2] );
 gmtry.vxCv  = read_ifield(fid, 'vxCv' , [nVmxCv]);
-gmtry.fsCvP = read_ifield(fid, 'fsCvP', [nFs,2] );
-gmtry.fsCv  = read_ifield(fid, 'fsCv' , [nCv]   );
+gmtry.ftCvP = read_ifield(fid, 'ftCvP', [nFt,2] );
+gmtry.ftCv  = read_ifield(fid, 'ftCv' , [nCv]   );
+gmtry.ftFcP = read_ifield(fid, 'ftFcP', [nFt,2] );
+gmtry.ftFc  = read_ifield(fid, 'ftFc' , [nFc]   );
+gmtry.cvFt  = read_ifield(fid, 'cvFt' , [nCv]   );
 gmtry.fsFcP = read_ifield(fid, 'fsFcP', [nFs,2] );
 gmtry.fsFc  = read_ifield(fid, 'fsFc' , [nFc]   );
 gmtry.fcReg = read_ifield(fid, 'fcReg', [nFc]   );
 gmtry.cvReg = read_ifield(fid, 'cvReg', [nCv]   );
+gmtry.ftReg = read_ifield(fid, 'ftReg', [nFt]   );
 gmtry.intcellP = read_rfield(fid, 'intcellP', [nCmxFc]);
 gmtry.intcellR = read_rfield(fid, 'intcellR', [nCmxFc]);
 if gmtry.isClassicalGrid == 1
@@ -101,6 +107,8 @@ if gmtry.isClassicalGrid == 1
   gmtry.icornVx  = read_ifield(fid, 'icornVx',  nx   );
 end
 gmtry.fcLbl = read_ifield(fid, 'fcLbl', [nFc]);
+gmtry.cvLbl = read_ifield(fid, 'cvLbl', [nCv]);
+gmtry.ftLbl = read_ifield(fid, 'ftLbl', [nFt]);
 
 
 % cell volumes 
@@ -133,8 +141,8 @@ gmtry.vxFfbz = read_rfield(fid,'vxFfbz',[nVx]    );
 gmtry.vxFpsi = read_rfield(fid,'vxFpsi',[nVx]    );
 
 % flux surface quantities
-gmtry.fsConn = read_rfield(fid,'fsConn',[nFs] );
-
+gmtry.ftConn = read_rfield(fid,'ftConn',[nCv] );
+gmtry.fsPsi  = read_rfield(fid,'fsPsi',[nFs] );
 
 %% Close file
 
