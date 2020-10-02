@@ -1,4 +1,4 @@
-function aver = read_b2favere_us(file,nx,ny,ns)
+function aver = read_b2favere_us(file)
 % state = read_b2favere(file,nx,ny,ns)
 %
 % Read b2faveri/b2favere file created by B2.5.
@@ -40,6 +40,7 @@ aver.te  = read_rfield(fid,'te_mean'    ,statedim);
 aver.ti  = read_rfield(fid,'ti_mean'    ,statedim);
 aver.po  = read_rfield(fid,'po_mean'    ,statedim);
 aver.ua  = read_rfield(fid,'ua_mean'    ,statedims);
+aver.kt  = read_rfield(fid,'kt_mean'    ,statedim);
 
 
 %% Read sources
