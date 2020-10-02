@@ -64,13 +64,6 @@ export SOLPSWORK=$SOLPSTOP/runs
   export MAKE=`which make`
 }
 
-[ -z "$PYTHONPATH" ] && {
-  export PYTHONPATH="$SOLPSTOP/lib/python"
-} || {
-  export PYTHONPATH="${PYTHONPATH}:$SOLPSTOP/lib/python"
-}
-export SOLPSLIB=${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}
-
 # setup files for combination of HOST_NAME and COMPILER, + local modifications if present
 [ -s ${SOLPSTOP}/SETUP/setup.ksh.${HOST_NAME}.${COMPILER} ] && {
   echo Loading SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.
@@ -112,7 +105,7 @@ B25_PATH=${SOLPSTOP}/modules/B2.5/builds/standalone.${TOOLCHAIN}
 B25EIRENE_PATH=${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${TOOLCHAIN}
 UINP_PATH=${SOLPSTOP}/modules/Uinp/builds/${TOOLCHAIN}
 TRIANG_PATH=${SOLPSTOP}/modules/Triang/builds/${TOOLCHAIN}
-SCRIPTS_PATH=${SOLPSTOP}/scripts.local:${SOLPSTOP}/scripts:${SOLPSTOP}/scripts/${TOOLCHAIN}:${SOLPSTOP}/modules/Eirene/scripts:${SOLPSTOP}/modules/B2.5/src/test
+SCRIPTS_PATH=${SOLPSTOP}/scripts.local:${SOLPSTOP}/scripts:${SOLPSTOP}/scripts/${TOOLCHAIN}:${SOLPSTOP}/modules/Eirene/scripts:${SOLPSTOP}/modules/Eirene/scripts/eirenex_v1.0.4:${SOLPSTOP}/modules/B2.5/src/test
 AMDS_PATH=${SOLPSTOP}/modules/amds/builds/${TOOLCHAIN}
 S45_PATH=${SOLPSTOP}/modules/solps4-5/builds/${TOOLCHAIN}
 
@@ -134,12 +127,19 @@ ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.
 
 # Note: in case of name clash between script and executable, script will be found first
 export SOLPS_PATH=${SCRIPTS_PATH}:${CARRE_PATH}:${DIVGEO_PATH}:${B25EIRENE_PATH}:${EIRENE_PATH}:${B25_PATH}:${UINP_PATH}:${TRIANG_PATH}:${AMDS_PATH}:${S45_PATH}
+export SOLPSLIB=${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}
 export OLD_PATH=${PATH}
 export PATH=${SOLPS_PATH}:${PATH}
 [ -n "$LD_LIBRARY_PATH" ] && {
   export LD_LIBRARY_PATH=${SOLPSLIB}:${SOLPSTOP}/lib/python:${LD_LIBRARY_PATH}
 } || {
   export LD_LIBRARY_PATH=${SOLPSLIB}:${SOLPSTOP}/lib/python
+}
+
+[ -z "$PYTHONPATH" ] && {
+  export PYTHONPATH="$SOLPSTOP/lib/python:${SCRIPTS_PATH}"
+} || {
+  export PYTHONPATH="${PYTHONPATH}:$SOLPSTOP/lib/python:${SCRIPTS_PATH}"
 }
 [ -z "$PYTHON_PATH" ] || {
   export PYTHONPATH="${PYTHONPATH}:${PYTHON_PATH}"
