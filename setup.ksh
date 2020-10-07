@@ -2,7 +2,7 @@
 
 echo Welcome to SOLPS-ITER!
 echo Documentation can be found at:
-echo https://portal.iter.org/departments/POP/CM/IMAS/SOLPS-ITER
+echo https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER
 echo and
 echo https://user.iter.org/\?uid=Q92BAQ
 echo "(both require a valid ITER IDM account)"

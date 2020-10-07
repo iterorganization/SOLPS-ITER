@@ -114,6 +114,7 @@ documentation files, \ref{cha:b2physics} describes the physics in {\tt B2.5},
 \ref{cha:Mladen} gives details about some {\tt B2.5} boundary conditions,
 \ref{cha:b2time} information about the quantities stored in {\tt b2time.nc},
 \ref{cha:b2tallies} information about the quantities stored in {\tt b2tallies.nc},
+\ref{cha:b2wdat_iout_4} information about the quantities that can be output using {\tt b2wdat\_iout},
 \ref{cha:regions} gives the region definitions used in the code,
 \ref{cha:b2plotmanual} is an updated
 version of the \btwoplot manual, \ref{cha:Misc}
@@ -181,7 +182,7 @@ The next section discusses obtaining and updating the code.
 To obtain the code a request should be sent to Xavier Bonnin
 ({\tt Xavier.Bonnin@iter.org}) at ITER, the code Responsible Officer (RO).
 
-The first formality will then be for the prospective users to obtain an IDM (ITER Document Management) account, in case they do not have one already. This account request will be done by the RO, and the requesting user will receive an automated electronic message asking for confirmation of the provided e-mail address. With this account, the user will have access to the \SOLPSITER GIT repository (\href{https://git.iter.org/projects/BND/repos/solps-iter/browse}{https://git.iter.org/projects/BND/repos/solps-iter/browse}) maintained at the IO, and the \SOLPSITER SharePoint web site hosted by ITER (\href{https://portal.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}{https://portal.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}, works best with Internet Explorer). The manual to the SOLPS-GUI can be found online at \href{https://static.iter.org/imas/assets/solps-iter/html/}{https://static.iter.org/imas/assets/solps-iter/html/}. Links to the IDM-controlled documents related to \SOLPSITER can be found in a centralized folder (\href{https://user.iter.org/?uid=Q92BAQ}{https://user.iter.org/?uid=Q92BAQ}). The account request will also serve for registration of the user to the \SOLPSITER mailing list ({\tt SOLPS-ITER@iter.org}). Additionally, there is a Confluence Wiki page located at \href{https://confluence.iter.org/display/IMP/SOLPS-ITER}{https://confluence.iter.org/display/IMP/SOLPS-ITER} for the purpose of collecting user contributions to the body of knowledge about the code. Lastly, a Slack discussion forum has been set up, for which the invitation link is: \href{https://join.slack.com/t/solps/shared_invite/zt-ctpoedhs-KZYjYeBDDH7I3pH1M6eGcg}{https://join.slack.com/t/solps/shared\_invite/zt-ctpoedhs-KZYjYeBDDH7I3pH1M6eGcg} .
+The first formality will then be for the prospective users to obtain an IDM (ITER Document Management) account, in case they do not have one already. This account request will be done by the RO, and the requesting user will receive an automated electronic message asking for confirmation of the provided e-mail address. With this account, the user will have access to the \SOLPSITER GIT repository (\href{https://git.iter.org/projects/BND/repos/solps-iter/browse}{https://git.iter.org/projects/BND/repos/solps-iter/browse}) maintained at the IO, and the \SOLPSITER SharePoint web site hosted by ITER (\href{https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}{https://sharepoint.iter.org/departments\allowbreak/POP/CM/IMAS/SOLPS-ITER}, works best with Internet Explorer). The manual to the SOLPS-GUI can be found online at \href{https://static.iter.org/imas/assets/solps-iter/html/}{https://static.iter.org/imas/assets/solps-iter/html/}. Links to the IDM-controlled documents related to \SOLPSITER can be found in a centralized folder (\href{https://user.iter.org/?uid=Q92BAQ}{https://user.iter.org/?uid=Q92BAQ}). The account request will also serve for registration of the user to the \SOLPSITER mailing list ({\tt SOLPS-ITER@iter.org}). Additionally, there is a Confluence Wiki page located at \href{https://confluence.iter.org/display/IMP/SOLPS-ITER}{https://confluence.iter.org/display/IMP/SOLPS-ITER} for the purpose of collecting user contributions to the body of knowledge about the code. Lastly, a Slack discussion forum has been set up, for which the invitation link is: \href{https://join.slack.com/t/solps/shared_invite/zt-ctpoedhs-KZYjYeBDDH7I3pH1M6eGcg}{https://join.slack.com/t/solps/shared\_invite/zt-ctpoedhs-KZYjYeBDDH7I3pH1M6eGcg} .
 
 The \SOLPSITER Git repository also includes the repositories for {\tt B2.5}, {\tt EIRENE}, {\tt Carre} and {\tt DivGeo} individually as submodules. Some service libraries (such as the {\tt GGD}, {\tt MSCL} and {\tt GR} service libraries), can be found in the repository in the {\tt IMAS Extra} and {\tt Libraries} section. Users can also have access to the standalone {\tt SOLPS4.3} repository.
 
@@ -269,7 +270,7 @@ To best use the \SOLPSITER code suite, the user will need, locally installed:
 \item[NAG]\index{NAG} mathematical library (optional) (available from \href{http://www.nag.com/content/nag-library}{http://www.nag.com/content/nag-library})
 \item[BLAS/LAPACK] mathematical libraries (available from \href{http://www.netlib.org/}{http://www.netlib.org/})
 \item[NCAR] plotting library (available from \href{http://library.ucar.edu}{http://library.ucar.edu})
-\item[GR] plotting library (optional, developed at FZ-J{\"u}lich, available from the IO Git repository at \href{https://git.iter.org/projects/LIB/repos/gr-software/browse}{https://git.iter.org/projects/LIB/repos/gr-software/browse})
+\item[GR] plotting library (optional, developed at FZ-J{\"u}lich, available from the IO Git repository at \href{https://git.iter.org/projects/LIB/repos/gr-software/browse}{https://git.iter.org/projects\allowbreak/LIB/repos/gr-software/browse})
 \item[GKS] graphical kernel library (available from \href{http://ngwww.ucar.edu}{http://ngwww.ucar.edu})
 \item[HDF5] data storage library (available from \href{http://support.hdfgroup.org/HDF5/}{http://support.hdfgroup.org/HDF5/})
 \item[NetCDF]\index{netcdf} storage/archival library (optional) (available from \href{http://www.unidata.ucar.edu/netcdf/}{http://www.unidata.ucar.edu/netcdf/}) (\SOLPSITER needs at least version 4)
@@ -582,7 +583,7 @@ to refresh the list of executables to be found with the search path.
 \section{Examples}
 \label{examples}\index{DIMENSIONS.F}
 
-On the \SOLPSITER web site (\href{https://portal.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}{https://portal.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}), in the folder {\em Examples}, one can find a few example cases for \SOLPSITER runs, in both {\tt B2.5} standalone or {\tt B2.5-Eirene} coupled modes.
+On the \SOLPSITER web site (\href{https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}{https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}), in the folder {\em Examples}, one can find a few example cases for \SOLPSITER runs, in both {\tt B2.5} standalone or {\tt B2.5-Eirene} coupled modes.
 
 There is also a dedicated directory \${\tt SOLPSTOP/runs/examples} which contains links to a series of sample cases. These are actually stored in the {\tt /work/imas/shared/external/assets/solps-iter/MD5} directory hosted at the IO, and the means to retrieve these cases is detailed in the \${\tt SOLPSTOP/runs/examples/README.md} file. Following the instructions therein will extract an archived file in gzipped tar format containing a {\tt baserun} and one or more run directories and associated files. In some cases, a {\tt DIMENSIONS.F} file is also provided, which shows the dimensions necessary to run those cases (see Appendix \ref{sec:DIMENSIONS} for full details about the contents of such files).
 
@@ -4407,7 +4408,7 @@ case that can be found on the SVN server. The location of these is
 \href{https://solps-mdsplus.aug.ipp.mpg.de/repos/SOLPS/trunk/solps\_examples/solps5.1/bench\_mark/AUG\_16151\_D+C+He/}{https://solps-mdsplus.aug.ipp.mpg.de/repos/SOLPS/trunk/solps\_examples/solps5.1/bench\_mark/AUG\_16151\_D+C+He/}. Another version of
 these files can be found in the {\em Examples} folder in the \SOLPSITER SharePoint
 web site
-(\href{https://portal.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}{https://portal.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}).
+(\href{https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}{https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}).
 
 \subsection{b2ag.dat}
 \index{b2ag.dat, D+C+He example}
