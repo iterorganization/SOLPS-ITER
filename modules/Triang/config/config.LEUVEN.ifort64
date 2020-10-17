@@ -23,11 +23,15 @@ SED      =
 LINK_MOD = 
 
 FC       = ifort
+COMPILER_MAJOR_VERSION = $(shell ${FC} -V 2>&1 | grep -o "Version [0-9]*" | cut -d ' ' -f 2 )
 
 ifdef SOLPS_DEBUG
 FCOPTS   = -g -C -debug all
 else
-FCOPTS   = -O3 -vec_report0
+FCOPTS   = -O3
+endif
+ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -le 12; echo $$?),0)
+FCOPTS  += -vec_report0
 endif
 
 #COMPILE = ${FC} -c ${FFLAGS}

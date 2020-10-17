@@ -17,17 +17,17 @@ SED =
 LINK_MOD = 
 
 FC = ifort
-FC_VERSION = $(shell echo `ifort --version | head -1 | awk '{printf "%s ",$$3,"\n"}'`)
+COMPILER_MAJOR_VERSION = $(shell ${FC} -V 2>&1 | grep -o "Version [0-9]*" | cut -d ' ' -f 2 )
 
 ifdef SOLPS_DEBUG
 FCOPTS = -g -C -debug all -traceback
-ifeq (${FC_VERSION},12.0.2)
+ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -le 12; echo $$?),0)
 LDOPTS = -i_dynamic
 else
 LDOPTS =
 endif
 else
-ifeq (${FC_VERSION},12.0.2)
+ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -le 12; echo $$?),0)
 FCOPTS = -O3 -vec_report0
 LDOPTS = -i_dynamic
 else
