@@ -80,6 +80,7 @@ target_yt = b2yt.prt b2fstatt b2mn.dat.2 b2ah.dat.2 b2ai.dat.2 b2yt.files
 target_xd = B2SXDR
 target_rd = b2rd.prt
 target_ual = b2_ual_write.prt
+target_rew = b2_ual_rewrite.prt
 
 scandir := $(shell cd .. ; pwd)
 projdir := $(shell cd ../.. ; pwd)
@@ -739,6 +740,61 @@ endif
 endif
 	cd b2_ual_write.exe.dir ; ${TIME} ${B2OBJ}/b2_ual_write.exe ${RUN_OPTIONS}
 	rm -rf b2_ual_write.exe.dir
+
+ifndef STAND_ALONE
+$(target_rew) : input.dat AMJUEL
+else
+$(target_rew) :
+endif
+	rm -rf b2_ual_rewrite.exe.dir ; mkdir b2_ual_rewrite.exe.dir
+	cp b2fstate b2_ual_rewrite.exe.dir/b2fstati
+	cp b2fparam b2_ual_rewrite.exe.dir/b2fpardf
+	cp b2mn.dat b2_ual_rewrite.exe.dir/
+	[ -s b2fgmtry ] && cp b2fgmtry b2_ual_rewrite.exe.dir/ || ( [ -s $(baserundir)/b2fgmtry ] && cp $(baserundir)/b2fgmtry b2_ual_rewrite.exe.dir/ )
+	[ -s b2frates ] && cp b2frates b2_ual_rewrite.exe.dir/ || ( [ -s $(baserundir)/b2frates ] && cp $(baserundir)/b2frates b2_ual_rewrite.exe.dir/ )
+	cp b2fplasma b2_ual_rewrite.exe.dir/
+ifndef STAND_ALONE
+	cp input.dat b2_ual_rewrite.exe.dir/
+	cp AMJUEL b2_ual_rewrite.exe.dir/
+endif
+	-cd b2_ual_rewrite.exe.dir ; [ -e ../b2faveri ] && cp -p ../b2faveri . || echo > /dev/null
+ifndef STAND_ALONE
+ifneq (${COMPILER},HP)
+	[ -s fort.33 ] || ( [ -s $(baserundir)/fort.33 ] && ln -sf $(baserundir)/fort.33 . || ( [ -s $(triangdir)/fort.33 ] && ln -sf $(triangdir)/fort.33 . || echo > /dev/null ) )
+	[ -s fort.34 ] || ( [ -s $(baserundir)/fort.34 ] && ln -sf $(baserundir)/fort.34 . || ( [ -s $(triangdir)/fort.34 ] && ln -sf $(triangdir)/fort.34 . || echo > /dev/null ) )
+	[ -s fort.35 ] || ( [ -s $(baserundir)/fort.35 ] && ln -sf $(baserundir)/fort.35 . || ( [ -s $(triangdir)/fort.35 ] && ln -sf $(triangdir)/fort.35 . || echo > /dev/null ) )
+	-cd b2_ual_rewrite.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../fort.21 ../fort.22 . ; ln -s ../input.dat fort.1 ; \
+	[ -s ../fort.15 ] && cp -p ../fort.15 . || echo > /dev/null ; \
+	[ -s ../fort.14 ] && cp -p ../fort.14 . || echo > /dev/null ; \
+	[ -s ../fort.13 ] && cp -p ../fort.13 . || echo > /dev/null ; \
+	[ -s ../fort.12 ] && cp -p ../fort.12 . || echo > /dev/null ; \
+	[ -s ../fort.11 ] && cp -p ../fort.11 . || echo > /dev/null ; \
+	[ -s ../fort.10 ] && cp -p ../fort.10 . || echo > /dev/null ; \
+	[ -s ../fort.44 ] && cp -p ../fort.44 . || echo > /dev/null ; \
+	[ -s ../fort.46 ] && cp -p ../fort.46 . || echo > /dev/null ; \
+	[ -s ../fort.33 ] && cp -p ../fort.33 . || echo > /dev/null ; \
+	[ -s ../fort.34 ] && cp -p ../fort.34 . || echo > /dev/null ; \
+	[ -s ../fort.35 ] && cp -p ../fort.35 . || echo > /dev/null
+else
+	[ -s ftn33 ] || ( [ -s $(baserundir)/ftn33 ] && ln -sf $(baserundir)/ftn33 . || ( [ -s $(triangdir)/ftn33 ] && ln -sf $(triangdir)/ftn33 . || echo > /dev/null ) )
+	[ -s ftn34 ] || ( [ -s $(baserundir)/ftn34 ] && ln -sf $(baserundir)/ftn34 . || ( [ -s $(triangdir)/ftn34 ] && ln -sf $(triangdir)/ftn34 . || echo > /dev/null ) )
+	[ -s ftn35 ] || ( [ -s $(baserundir)/ftn35 ] && ln -sf $(baserundir)/ftn35 . || ( [ -s $(triangdir)/ftn35 ] && ln -sf $(triangdir)/ftn35 . || echo > /dev/null ) )
+	-cd b2_ual_rewrite.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../ftn21 ../ftn22 . ; ln -s ../input.dat ftn1 ; \
+	[ -s ../ftn15 ] && cp -p ../ftn15 . || echo > /dev/null ; \
+	[ -s ../ftn14 ] && cp -p ../ftn14 . || echo > /dev/null ; \
+	[ -s ../ftn13 ] && cp -p ../ftn13 . || echo > /dev/null ; \
+	[ -s ../ftn12 ] && cp -p ../ftn12 . || echo > /dev/null ; \
+	[ -s ../ftn11 ] && cp -p ../ftn11 . || echo > /dev/null ; \
+	[ -s ../ftn10 ] && cp -p ../ftn10 . || echo > /dev/null ; \
+	[ -s ../ftn44 ] && cp -p ../ftn44 . || echo > /dev/null ; \
+	[ -s ../ftn46 ] && cp -p ../ftn46 . || echo > /dev/null ; \
+	[ -s ../ftn33 ] && cp -p ../ftn33 . || echo > /dev/null ; \
+	[ -s ../ftn34 ] && cp -p ../ftn34 . || echo > /dev/null ; \
+	[ -s ../ftn35 ] && cp -p ../ftn35 . || echo > /dev/null
+endif
+endif
+	cd b2_ual_rewrite.exe.dir ; ${TIME} ${B2OBJ}/b2_ual_rewrite.exe ${RUN_OPTIONS}
+	rm -rf b2_ual_rewrite.exe.dir
 
 stra.dat :
 	ln -sf ${SOLPSTOP}/modules/B2.5/Database/stra.dat .

@@ -4175,7 +4175,7 @@ or
   b2run b2_ual_write
 \end{verbatim}
 
-This routine saves the final output state of a run into an IDS (Interface Data Structure). Currently, it will populate the {\tt edge\_profiles}, {\tt edge\_transport}, {\tt edge\_sources}, {\tt radiation}, {\tt dataset\_description} and {\tt summary} data structures. If the current run being saved is a time continuation of the run already present in that IDS, then a new time slice is appended, otherwise the IDS is overwritten. If the existing IDS was written with an earlier Data Dictionary version, it is recreated with the current one.
+This program saves the final output state of a run into an IDS (Interface Data Structure). Currently, it will populate the {\tt edge\_profiles}, {\tt edge\_transport}, {\tt edge\_sources}, {\tt radiation}, {\tt dataset\_description} and {\tt summary} data structures. If the current run being saved is a time continuation of the run already present in that IDS, then a new time slice is appended, otherwise the IDS is overwritten. If the existing IDS was written with an earlier Data Dictionary version, it is recreated with the current one.
 
 The program reads the {\tt b2mndr\_id*} switch group, defined in {\tt b2mn.dat}:
 \begin{itemize}
@@ -4210,6 +4210,21 @@ After the IDS files are created, one should also run the {\tt create\_db\_entry}
 create_db_entry [-u USER] [-d DATABASE] -s SHOT -r RUN
 \end{verbatim}
 which will create {\tt ids\_*.yaml} and {\tt ids\_*.watcher} files for that shot and run number, to be used in the IMAS scenario database. These files should be edited by hand according to the instructions within them and the IMAS documentation.
+
+\subsection{b2\_ual\_rewrite, rewriting an existing IDS}
+\label{sec:b2_ual_rewrite}\index{b2\_ual\_rewrite}
+
+The program can be run with one of the following
+\begin{verbatim}
+  gmake -f $SOLPSTOP/runs/Makefile b2_ual_rewrite.prt
+\end{verbatim}
+%% $
+or
+\begin{verbatim}
+  b2run b2_ual_rewrite
+\end{verbatim}
+
+This program rewrites an existing IDS in case a correction needs to be made (because of a bug fix, for instance). It will rewrite the {\tt edge\_profiles}, {\tt edge\_transport}, {\tt edge\_sources}, {\tt radiation}, {\tt dataset\_description} and {\tt summary} data structures. It uses the same inputs as {\tt b2\_ual\_write}. Only the last time slice present in the IDS can be rewritten in this way, and data from older time slices will be lost.
 
 \newpage
 \section{b2xx, the others}
