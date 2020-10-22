@@ -6,31 +6,17 @@ ifndef LD_GKS
   $(error LD_GKS not defined)
 endif
 
-EQUIVS =
-
 CPP = /lib/cpp -traditional
-CPPOPTS = -P -I${srcdir} ${EQUIVS}
-SED = 
-LINK_MOD =
 
 FC = gfortran
 ifdef SOLPS_DEBUG
-FCOPTS = -C -g -Wall -ffpe-trap=denormal -ffpe-trap=invalid -ffpe-trap=zero -ftrapv -fsignaling-nans
-else
-FCOPTS = -O3
+FCOPTS = -Wall -ffpe-trap=invalid -ffpe-trap=zero -ftrapv -fsignaling-nans
 endif
 
 DBLFC = ${FC}
 DBLOPTION =
 DBLSED = 
 
-INCMOD = -I
-MOD = mod
-OBJDEST = -o ${OBJDIR}/$*.o
-
-BLD = ar rcv
-
-LD = ${FC}
 ifdef SOLPS_DEBUG
 LDOPTS = -g -C -Wall
 DEFINES += -DDBG
@@ -40,7 +26,6 @@ endif
 
 GKS       = ${LD_GR} ${LD_GKS} -lX11 -lXt
 LDLIBS    = 
-LDEXTRA   =
 
 #!!!Local Variables:
 #!!! mode: Makefile

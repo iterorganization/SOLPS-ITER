@@ -160,7 +160,7 @@ from \SOLPSfour or \SOLPSfive to \SOLPSITERns:
   \item[From 5 to ITER] {\tt b2yt}\index{b2yt}
 \end{description}
 
-Additional documentation on other code versions can be found in the \${\tt \{SOLPSTOP\}/doc} directory.
+Additional documentation on other code versions can be found in the {\tt \$\{SOLPSTOP\}/doc} directory.
 Namely, the original report by Bas Braams is:
 \begin{Verbatim}[fontsize=\footnotesize]
 BRAAMS_-_A_Multi-Fluid_Code_for_the_Simulation_of_the_Edge_Plasma_in_Tokamaks_-_NET_Report_1987.pdf ,
@@ -170,7 +170,7 @@ and an excellent review of \SOLPSfour can be found in:
 Martine_Baelmans_-_Juelich_Report_1994.pdf .
 \end{verbatim}
 
-When referring to \SOLPSITER in scientific papers, please use \cite{WiesenPSI2014,BONNINPET15} and references therein. You will also find these references in the \${\tt \{SOLPSTOP\}/doc} directory.
+When referring to \SOLPSITER in scientific papers, please use \cite{WiesenPSI2014,BONNINPET15} and references therein. You will also find these references in the {\tt \$\{SOLPSTOP\}/doc} directory.
 
 Several of the {\bf SOLPS4.2} features are detailed in {\tt Kotov\_SOLPS42\_Report.pdf}.
 
@@ -295,7 +295,7 @@ centralize their management. Most, but not all, of these libraries are publicly 
 Internet.
 
 If one uses local copies of these libraries, a copy or link to them should be put in the
-\${\tt \{SOLPSTOP\}/lib/\allowbreak}\${\tt \{HOST\_NAME\}.\allowbreak}\${\tt \{COMPILER\}} directory.
+{\tt \$\{SOLPSTOP\}/lib/\allowbreak\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}} directory.
 
 For fuller code capability, it is also recommended to load the IMAS (Integrated Modelling and Analysis Suite)\index{IMAS} environment, provided by the IO, whenever possible.
 
@@ -309,7 +309,7 @@ the location where the various libraries are to be found, as well as the preferr
 used. These are propagated throughout the \SOLPSITER code structure and used by the Makefiles and
 the various scripts. It is therefore important to carefully assign their values.
 
-These environment variables are found in files config.\${\tt \{HOST\_NAME\}}.\${\tt \{COMPILER\}}.
+These environment variables are found in files {\tt config.\$\{HOST\_NAME\}.\$\{COMPILER\}}. Shared settings that are independent of host location are located in files {\tt config.common.\$\{COMPILER\}}.
 
 The current list of recognized hostnames, deduced by means of the {\tt whereami} script, includes:
 \begin{description}\index{Hostnames}
@@ -349,7 +349,7 @@ The current list of recognized hostnames, deduced by means of the {\tt whereami}
   \item[UNKNOWN] everywhere else
 \end{description}
 
-If your specific domain name is not on this list, please add it to {\tt whereami}. In cases where the {\tt hostname} and {\tt nslookup} commands used by {\tt whereami} do not provide the desired \${\tt HOST\_NAME} value, you can specify it explicitly by means of a \${\tt SOLPSTOP/SETUP/setup.csh.HOST\_NAME.local} file, which should contain:
+If your specific domain name is not on this list, please add it to {\tt whereami}. In cases where the {\tt hostname} and {\tt nslookup} commands used by {\tt whereami} do not provide the desired {\tt HOST\_NAME} value, you can specify it explicitly by means of a {\tt \$\{SOLPSTOP\}/SETUP/setup.csh.HOST\_NAME.local} file, which should contain:
 
 \begin{verbatim}
 setenv HOST_NAME <your_desired_HOST_NAME_value>
@@ -380,33 +380,33 @@ Then, if this is the first installation in your file space, please do:
   first_setup
 \end{verbatim}
 
-This will, if they are not already present in the distribution, create the various {\tt config.}\${\tt \{HOST\_NAME\}.}\${\tt \{COMPILER\}} files for each of the \SOLPSITER submodules. Feel free to modify them afterwards according to your local requirements. As with {\tt whereami} and {\tt default\_compiler}, if those modifications are worth sharing with the other users, please commit them back to the repository using a pull request.
+This will, if they are not already present in the distribution, create the various {\tt config.\$\{HOST\_NAME\}.\$\{COMPILER\}} files for each of the \SOLPSITER submodules. Feel free to modify them afterwards according to your local requirements. As with {\tt whereami} and {\tt default\_compiler}, if those modifications are worth sharing with the other users, please commit them back to the repository using a pull request.
 
 For each combination of hostname and compiler, the set of corresponding environment variables are loaded
-from the \${\tt \{SOLPSTOP\}/\allowbreak SETUP/setup.csh.}\${\tt \{HOST\_NAME\}.}\${\tt \{COMPILER\}} file and, subsequently,
-the \${\tt \{SOLPSTOP\}/\allowbreak SETUP/setup.csh.}\${\tt \{HOST\_NAME\}.\allowbreak}\${\tt \{COMPILER\}.local} file.
-The compiler switches are given through the configuration file
-\${\tt \{SOLPSTOP\}/SETUP/\allowbreak config.}\${\tt \{HOST\_NAME\}.}\${\tt \{COMPILER\}}. This last file should contain the
+from the {\tt \$\{SOLPSTOP\}/\allowbreak SETUP/setup.csh.\$\{HOST\_NAME\}.\$\{COMPILER\}} file and, subsequently,
+the {\tt \$\{SOLPSTOP\}/\allowbreak SETUP/setup.csh.\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}.local} file.
+The compiler switches are given through the configuration files
+{\tt \$\{SOLPSTOP\}/SETUP/\allowbreak config.\$\{HOST\_NAME\}.\$\{COMPILER\}} and {\tt \$\{SOLPSTOP\}/SETUP/\allowbreak config.common.\$\{COMPILER\}}. The former file should contain the
 location of all the main libraries with which the \SOLPSITER executables will be linked and their
-linking instructions. It also contains the shared compiler directives for all the \SOLPSITER object files
+linking instructions. The latter file provides shared instructions for that compiler, independent of location. These files also contain the shared compiler directives for all the \SOLPSITER object files
 (see Section~\ref{sec:defines} for a full listing) and the name of the debugger program to be used, if any.
 Users should make sure the settings within these files fit their run environment and modify them as needed.
 If changes are needed, please forward them to the \SOLPSITER RO so that they may be included in the
 set of distributed files to help other future users.
 
 For the case where single submodules are cloned from the \SOLPSITER repository, without the full regalia of
-programs, additional sets of config files can be found in the {\tt config} directory in each module. The
+programs, additional sets of configuration files can be found in the {\tt config} directory in each module. The
 compiler settings specific to this module are included there. Users are encouraged to modify these as needed. If local
 changes are required that should not be archived in the repository, then users should create a file named
-{\tt config.}\${\tt \{HOST\_NAME\}.}\${\tt \{COMPILER\}\allowbreak.local} which the {\tt Makefile} will load and use to
-overwrite the more general settings from the distributed {\tt config} file.
+{\tt config.\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}\allowbreak.local} which the {\tt Makefile} will load and use to
+overwrite the more general settings from the distributed {\tt config} files.
 
 Some Windows\index{Windows} implementations have been attempted, and require an additional {\tt -DWINDOWS} compiler switch, but are not currently being supported.
 
 If you wish your domain name to be included in the list of hostnames above, please contact the
 \SOLPSITER RO and send the
 hostname you would like to have and the Internet address range to which it would apply. Please
-also send the relevant compiler config files so they may be distributed to future users from the
+also send the relevant compiler configuration files so they may be distributed to future users from the
 same domain or serve as examples for other users using the same compiler.
 
 If the NAG library is not available (it requires a pay licence), then the BLAS and
@@ -414,7 +414,7 @@ LAPACK packages should be used instead, and links to them added to the correspon
 
 To compile the coupled version of the code you should begin by checking that the default
 array dimensions provided fit your problem size. These are stored in the file
-\${\tt SOLPSTOP/modules/B2.5/src/include/DIMENSIONS.F}. If the dimensions are not right for you,
+{\tt \$\{SOLPSTOP\}/modules/B2.5/src/include/DIMENSIONS.F}. If the dimensions are not right for you,
 then do the following:
 \index{DIMENSIONS.F}
 \begin{verbatim}
@@ -445,13 +445,13 @@ It is possible to pass down Makefile options with the syntax
 for instance to multi-thread on the compilation. It is not recommended to give compilation options directly in the compilation line (say, with {\tt gmake -j8 solps})
 because the \SOLPSITER compilation includes many parts which must be done in order and sometimes serially.
 
-Once the config files and dimensions have been filled in with the appropriate information for the
+Once the configuration files and dimensions have been filled in with the appropriate information for the
 local implementation desired, one proceeds with the compilation of the code. For this
-purpose, a master \SOLPSITER {\tt Makefile} is provided, located at \${\tt \{SOLPSTOP\}/Makefile}.\index{Makefile} The options supported by this {\tt Makefile} are:
+purpose, a master \SOLPSITER {\tt Makefile} is provided, located at {\tt \$\{SOLPSTOP\}/Makefile}.\index{Makefile} The options supported by this {\tt Makefile} are:
 \begin{description}\index{Compiling the code}\index{B2.5, compiling}\index{SOLPS-ITER, compiling}\index{Eirene, compiling}\index{DivGeo, compiling}\index{Carre, compiling}
   \item[solps] (Default) Compiles the necessary components for a full \SOLPSITER implementation, including:
     \begin{description}
-      \item[libs] Installs the needed libraries according to config file
+      \item[libs] Installs the needed libraries according to configuration files
       \item[carre] The {\tt Carre} grid generator and associated translators
       \item[divgeo] The {\tt DivGeo} graphical input file builder and accompanying equilibrium and template converters
       \item[b25eirene] The {\tt B2.5-Eirene} main code and accompanying programs
@@ -518,19 +518,19 @@ purpose, a master \SOLPSITER {\tt Makefile} is provided, located at \${\tt \{SOL
 
 Adding the {\tt \_mpi} suffix at the end of any build target will execute the command
 with MPI parallelization options, when relevant, and put the executables in a separate
-{\tt builds/}\${\tt \{TOOL\_CHAIN\}.mpi} directory.
+{\tt builds/\$\{TOOL\_CHAIN\}.mpi} directory.
 
 Adding the {\tt \_openmp} suffix at the end of any build target will execute the command
 with OpenMP parallelization options, when relevant, and put the executables in a separate
-{\tt builds/}\${\tt \{TOOL\_CHAIN\}.openmp} directory.
+{\tt builds/\$\{TOOL\_CHAIN\}.openmp} directory.
 
 Adding both the {\tt \_openmp} and {\tt \_mpi} suffixes, in either order, i.e. {\tt \_openmp\_mpi} or {\tt \_mpi\_openmp}, at the end of any build target will execute the command
 with both OpenMP and MPI parallelization options, when relevant, and put the executables in a separate
-{\tt builds/}\${\tt \{TOOL\_CHAIN\}.openmp.mpi} directory.
+{\tt builds/\$\{TOOL\_CHAIN\}.openmp.mpi} directory.
 
 Adding the {\tt \_debug} suffix at the end of any build target will execute the command
 in debug mode, and put the executables in a separate
-{\tt builds/}\${\tt \{TOOL\_CHAIN\}.debug} directory.
+{\tt builds/\$\{TOOL\_CHAIN\}.debug} directory.
 
 Adding the {\tt clean\_} prefix at the beginning of any build target will remove that build target
 from its directory, as well as all associated pre-processed source files, object files, module files,
@@ -540,7 +540,7 @@ For compilation of the {\tt Sonnet} library, the user should first do:
 \begin{verbatim}
 fs sysname
 \end{verbatim}
-and copy the result in \${\tt \{SOLPSTOP\}/modules/Sonnet-light/Makefile}.
+and copy the result in {\tt \$\{SOLPSTOP\}/modules/Sonnet-light/Makefile}.
 
 \section{Before every \SOLPSITER session}
 \index{Run set-up}
@@ -557,17 +557,17 @@ source setup.csh
 
 Among other things, these setup files establish some aliases that are useful for navigating the \SOLPSITER directory structure (see details in Chapter \ref{cha:structure}). Those aliases are:
 \begin{description}
-  \item[stop] Goes to \${\tt \{SOLPSTOP\}}, the \SOLPSITER top directory
-  \item[sb2, sbb] Go to \${\tt \{SOLPSTOP\}/modules/B2.5}, the {\tt B2.5} top directory
-  \item[sei] Goes to \${\tt \{SOLPSTOP\}/modules/Eirene}, the {\tt Eirene} top directory
-  \item[ssc] Goes to \${\tt \{SOLPSTOP\}/modules/Carre}, the {\tt Carre} top directory
-  \item[ssd] Goes to \${\tt \{SOLPSTOP\}/modules/DivGeo}, the {\tt DivGeo} top directory
-  \item[sst] Goes to \${\tt \{SOLPSTOP\}/modules/Triang}, the {\tt Tria} top directory
-  \item[ssu] Goes to \${\tt \{SOLPSTOP\}/modules/Uinp}, the {\tt Uinp} top directory
-  \item[ssw] Goes to \${\tt \{SOLPSTOP\}/modules/Sonnet}, the {\tt Sonnet} top directory
-  \item[slib] Goes to \${\tt \{SOLPSTOP\}/lib/}\${\tt {HOST\_NAME}.}\${\tt {COMPILER}}, the directory where libraries are stored
-  \item[sbr] Go to \${\tt \{SOLPSTOP\}/runs/}, the top run directory
-  \item[scr] Goes to \${\tt \{SOLPSTOP\}/scripts}, the directory where the scripts are stored
+  \item[stop] Goes to {\tt \$\{SOLPSTOP\}}, the \SOLPSITER top directory
+  \item[sb2, sbb] Go to {\tt \$\{SOLPSTOP\}/modules/B2.5}, the {\tt B2.5} top directory
+  \item[sei] Goes to {\tt \$\{SOLPSTOP\}/modules/Eirene}, the {\tt Eirene} top directory
+  \item[ssc] Goes to {\tt \$\{SOLPSTOP\}/modules/Carre}, the {\tt Carre} top directory
+  \item[ssd] Goes to {\tt \$\{SOLPSTOP\}/modules/DivGeo}, the {\tt DivGeo} top directory
+  \item[sst] Goes to {\tt \$\{SOLPSTOP\}/modules/Triang}, the {\tt Tria} top directory
+  \item[ssu] Goes to {\tt \$\{SOLPSTOP\}/modules/Uinp}, the {\tt Uinp} top directory
+  \item[ssw] Goes to {\tt \$\{SOLPSTOP\}/modules/Sonnet}, the {\tt Sonnet} top directory
+  \item[slib] Goes to {\tt \$\{SOLPSTOP\}/lib/\$\{HOST\_NAME\}.\$\{COMPILER\}}, the directory where libraries are stored
+  \item[sbr] Go to {\tt \$\{SOLPSTOP\}/runs/}, the top run directory
+  \item[scr] Goes to {\tt \$\{SOLPSTOP\}/scripts}, the directory where the scripts are stored
   \item[\$DG] The location of the {\tt DivGeo} top directory
 \end{description}
 
@@ -585,7 +585,7 @@ to refresh the list of executables to be found with the search path.
 
 On the \SOLPSITER web site (\href{https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}{https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}), in the folder {\em Examples}, one can find a few example cases for \SOLPSITER runs, in both {\tt B2.5} standalone or {\tt B2.5-Eirene} coupled modes.
 
-There is also a dedicated directory \${\tt SOLPSTOP/runs/examples} which contains links to a series of sample cases. These are actually stored in the {\tt /work/imas/shared/external/assets/solps-iter/MD5} directory hosted at the IO, and the means to retrieve these cases is detailed in the \${\tt SOLPSTOP/runs/examples/README.md} file. Following the instructions therein will extract an archived file in gzipped tar format containing a {\tt baserun} and one or more run directories and associated files. In some cases, a {\tt DIMENSIONS.F} file is also provided, which shows the dimensions necessary to run those cases (see Appendix \ref{sec:DIMENSIONS} for full details about the contents of such files).
+There is also a dedicated directory {\tt \$\{SOLPSTOP\}/runs/examples} which contains links to a series of sample cases. These are actually stored in the {\tt /work/imas/shared/external/assets/solps-iter/MD5} directory hosted at the IO, and the means to retrieve these cases is detailed in the {\tt \$\{SOLPSTOP\}/runs/examples/README.md} file. Following the instructions therein will extract an archived file in gzipped tar format containing a {\tt baserun} and one or more run directories and associated files. In some cases, a {\tt DIMENSIONS.F} file is also provided, which shows the dimensions necessary to run those cases (see Appendix \ref{sec:DIMENSIONS} for full details about the contents of such files).
 
 The cases stored for retrieval include:
 \begin{description}
@@ -619,7 +619,7 @@ After the cases have been downloaded to your system, make sure that the timestam
 \label{Using a central installation}
 \index{add\_central\_device}\index{setup.csh}
 
-For systems with several users it is advisable to set up a central \SOLPSITER installation that can be maintained by an administrator. The scripts have been set up to allow this by specifying a \${\tt SOLPSWORK} directory that is different from the default \${\tt \{SOLPSTOP\}/runs} and setting the environment variable {\tt SOLPS\_CENTRAL} to {\tt 'yes'}. Each user will then have a directory for their runs, \${\tt SOLPSWORK}, which should contain a file named {\tt SOLPSTOP} which contains the value for \${\tt SOLPSTOP}. Using an example where each user has their runs in \${\tt \{HOME\}/solps-runs} then the central installation could have a {\tt setup.csh.local} with the following lines:
+For systems with several users it is advisable to set up a central \SOLPSITER installation that can be maintained by an administrator. The scripts have been set up to allow this by specifying a {\tt \$\{SOLPSWORK\}} directory that is different from the default {\tt \$\{SOLPSTOP\}/runs} and setting the environment variable {\tt SOLPS\_CENTRAL} to {\tt 'yes'}. Each user will then have a directory for their runs, {\tt \$SOLPSWORK}, which should contain a file named {\tt SOLPSTOP} which contains the value for {\tt \$\{SOLPSTOP\}}. Using an example where each user has their runs in {\tt \$\{HOME\}/solps-runs} then the central installation could have a {\tt setup.csh.local} with the following lines:
 \begin{verbatim}
 setenv SOLPSWORK /home/$USER/solps-runs
 alias sbr 'cd ${SOLPSWORK}'
@@ -629,13 +629,13 @@ if (-e $SOLPSWORK/setup.csh.local) then
 endif
 setenv SOLPS_CENTRAL "yes"
 \end{verbatim}
-This will set \${\tt SOLPSWORK}, create the appropriate {\tt SOLPSTOP} file, and load a {\tt setup.csh.local} for each user if it exists. The scripts such as {\tt dg}, {\tt carre}, and {\tt triang} then check if {\tt SOLPS\_CENTRAL} is set and will create the meshes, etc under \${\tt \{DEVICE\}/}\${\tt \{USER\}} instead of just \${\tt \{DEVICE\}}. It is therefore important that the {\tt DivGeo/device}, {\tt Carre/meshes} and {\tt Triang/triangles} and each \${\tt \{DEVICE\}} subdirectory have the permissions set such that each user can write to it. This can be achieved by having a {\tt solps} group, for example, or by providing write access for all users. Users should also have read and execute access throughout the arboresence emanating from the central installation directory. To avoid issues where the first user to create a \${\tt \{DEVICE\}} directory will do so without the correct permissions, an {\tt add\_central\_device} script has been provided which will create the appropriate directories with write access for all users. The administrator should run this and add each {\tt DEVICE} that will be used by the group.
+This will set {\tt SOLPSWORK}, create the appropriate {\tt SOLPSTOP} file, and load a {\tt setup.csh.local} for each user if it exists. The scripts such as {\tt dg}, {\tt carre}, and {\tt triang} then check if {\tt SOLPS\_CENTRAL} is set and will create the meshes, etc under {\tt \$\{DEVICE\}/\$\{USER\}} instead of just {\tt \$\{DEVICE\}}. It is therefore important that the {\tt DivGeo/device}, {\tt Carre/meshes} and {\tt Triang/triangles} and each {\tt \$\{DEVICE\}} subdirectory have the permissions set such that each user can write to it. This can be achieved by having a {\tt solps} group, for example, or by providing write access for all users. Users should also have read and execute access throughout the arboresence emanating from the central installation directory. To avoid issues where the first user to create a {\tt \$\{DEVICE\}} directory will do so without the correct permissions, an {\tt add\_central\_device} script has been provided which will create the appropriate directories with write access for all users. The administrator should run this and add each {\tt DEVICE} that will be used by the group.
 
 Before each session, each user will then set up the \SOLPSITER environment by running
 \begin{verbatim}
 tcsh; source $(SOLPS_central_dir)/setup.csh [optional_compiler_name]
 \end{verbatim}
-from their \${\tt SOLPSWORK} directory, and the rest of the usage would be standard, where \${\tt (SOLPS\_central\_dir)} is the location of the central installation. Please be aware that the capability to source the {\tt setup.csh} file from elsewhere than the directory where it is located may not be supported by all systems.
+from their {\tt \$SOLPSWORK} directory, and the rest of the usage would be standard, where {\tt \$(SOLPS\_central\_dir)} is the location of the central installation. Please be aware that the capability to source the {\tt setup.csh} file from elsewhere than the directory where it is located may not be supported by all systems.
 
 \chapter{The structure}
 \label{cha:structure}
@@ -691,7 +691,7 @@ chosen Fortran compiler ({\it e.g.} {\tt ifort64}).
 \section{Setup and configuration files}
 \index{setup.csh}\label{sec:setup}
 
-The {\tt setup.csh} file and its subsidiaries \${\tt \{SOLPSTOP\}/SETUP/setup.csh.}\${\tt \{HOST\_NAME\}.}\${\tt \{COMPILER\}} and \${\tt \{SOLPSTOP\}/SETUP/config.}\${\tt \{HOST\_NAME\}.}\${\tt \{COMPILER\}} are used to load any modules packages useful for the local \SOLPSITER run environment and the following environment variables:
+The {\tt setup.csh} file and its subsidiaries {\tt \$\{SOLPSTOP\}/SETUP/setup.csh.\$\{HOST\_NAME\}.\$\{COMPILER\}}, {\tt \$\{SOLPSTOP\}/SETUP/config.common.\$\{COMPILER\}}, and {\tt \$\{SOLPSTOP\}/SETUP/config.\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}} are used to load any modules packages useful for the local \SOLPSITER run environment and the following environment variables:
 \begin{enumerate}
 \item {\tt B25\_DEFINES}\index{B25\_DEFINES}, an environment variable containing the additional "defines" to use during compilation of {\tt B2.5}
 \item {\tt DBX}\index{DBX}, the name of the debugger to be used
@@ -720,16 +720,16 @@ The {\tt setup.csh} file and its subsidiaries \${\tt \{SOLPSTOP\}/SETUP/setup.cs
 \item two aliases to swap between the MPI and no\_MPI versions of the code ({\tt set\_mpi} and {\tt set\_nompi})
 \item two aliases to swap between the OpenMP and no\_OpenMP versions of the code ({\tt set\_openmp} and {\tt set\_noopenmp})
 \end{enumerate}
-Of course, any additional desired definitions can be added. The preferred place for those is, for those variables that need not be shared by other users, the \${\tt \{SOLPSTOP\}/SETUP/setup.csh.}\${\tt \{HOST\_NAME\}.}\${\tt \{COMPILER\}.local} and \${\tt \{SOLPSTOP\}/SETUP/config.}\${\tt \{HOST\_NAME\}.}\${\tt \{COMPILER\}.local} files. Variables that are needed at compilation time need to appear in the {\tt config.*.*(.local)} file, while variables needed at runtime must appear in {\tt setup.csh.*.*(.local)} file.
+Of course, any additional desired definitions can be added. The preferred place for those is, for those variables that need not be shared by other users, the {\tt \$\{SOLPSTOP\}/SETUP/setup.csh.\$\{HOST\_NAME\}.\$\{COMPILER\}.local} and {\tt \$\{SOLPSTOP\}/SETUP/config.\$\{HOST\_NAME\}.\$\{COMPILER\}.local} files. Variables that are needed at compilation time need to appear in the {\tt config.*.*(.local)} file, while variables needed at runtime must appear in {\tt setup.csh.*.*(.local)} file.
 
 However, the \SOLPSITER GIT server
-holds several examples in the \${\tt \{SOLPSTOP\}/SETUP/} directory.
+holds several examples in the {\tt \$\{SOLPSTOP\}/SETUP/} directory.
 
 The command\index{stop}
 \begin{verbatim}
     stop
 \end{verbatim}
-will take you to \${\tt \{SOLPSTOP\}}.
+will take you to {\tt \$\{SOLPSTOP\}}.
 
 \newpage
 \section{modules}
@@ -799,7 +799,7 @@ or
 \begin{verbatim}
     sb2
 \end{verbatim}
-will take you to \${\tt \{SOLPSTOP\}/modules/B2.5}.
+will take you to {\tt \$\{SOLPSTOP\}/modules/B2.5}.
 
 \subsubsection{Local modifications to the B2.5 source}
 \label{b2codemodifications}\index{B2.5, modifying the
@@ -846,9 +846,10 @@ directories , the object and module files corresponding to your locally changed 
 and then ask for a normal recompilation with a single {\tt gmake} command.
 
 If the user wishes to modify the compiling options used, the creation
-of a {\tt config.}\${\tt {HOST\_NAME}.}\${\tt {COMPILER}.local} file in the
+of a {\tt config.\$\{HOST\_NAME\}.\$\{COMPILER\}.local} file in the
 {\tt config} subdirectory is recommended. Since the {\tt Makefile}
-reads those after the {\tt config.}\${\tt {HOST\_NAME}.\allowbreak}\${\tt {COMPILER}} file,
+reads those after the {\tt config.\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}}
+and {\tt config.common.\$\{COMPILER\}} files,
 they need only contain the modified definitions.
 
 If you just want to compile {\tt b2mn.exe}, you can do
@@ -1034,7 +1035,7 @@ The command\index{sei}
 \begin{verbatim}
     sei
 \end{verbatim}
-will take you to \${\tt \{SOLPSTOP\}/modules/Eirene}.
+will take you to {\tt \$\{SOLPSTOP\}/modules/Eirene}.
 
 Because {\tt Eirene} is distributed as a standalone submodule and is being maintained
 by FZ-J{\"u}lich, some of the directories found above correspond to {\tt Eirene}
@@ -1073,12 +1074,12 @@ The second {\tt gmake depend} is needed if this is the first compilation or
 if the dependencies have been altered.
 
 If the user wishes to modify the compiling options used, the creation
-of a {\tt config.}\${\tt {HOST\_NAME}.}\${\tt {COMPILER}.local} file in the
+of a {\tt config.\$\{HOST\_NAME\}.\$\{COMPILER\}.local} file in the
 {\tt config} subdirectory is recommended. Since the {\tt Makefile}
-reads those after the {\tt config.}\${\tt {HOST\_NAME}.\allowbreak}\${\tt {COMPILER}} file,
+reads those after the {\tt config.\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}} and {\tt config.common.\$\{COMPILER\}} files,
 they need only contain the modified definitions.
 
-If you are having problems (you've tried to be clever with altering
+If you are having problems (you have tried to be clever with altering
 files, or the {\tt SOLPS} administrator has), you might need to do
 \begin{verbatim}
     gmake clean
@@ -1121,7 +1122,7 @@ This directory is now located in {\tt modules/Eirene/Database/Surfacedata}.
 \index{AMDS}
 
 Allows for the provision of chemistry set files to be used by {\tt Eirene}, through selection in {\tt DG} and
-pre-processing by {\tt Uinp}. See the dedicated manual \${\tt {SOLPSTOP}/modules/amds/doc/manual.pdf} for full
+pre-processing by {\tt Uinp}. See the dedicated manual {\tt \$\{SOLPSTOP\}/modules/amds/doc/manual.pdf} for full
 details.
 
 The {\tt AMDS} program can be called by use of the {\tt amds} script.
@@ -1159,7 +1160,7 @@ The command\index{slib}
 \begin{verbatim}
     slib
 \end{verbatim}
-will take you to \${\tt \{SOLPSTOP\}/lib/}\${\tt {HOST\_NAME}.}\${\tt {COMPILER}}.
+will take you to {\tt \$\{SOLPSTOP\}/lib/\$\{HOST\_NAME\}.\$\{COMPILER\}}.
 
 \section{runs}
 \index{B2.5, runs}\label{sec:b2runs}
@@ -1177,10 +1178,10 @@ The command\index{sbr}
 \begin{verbatim}
     sbr
 \end{verbatim}
-will take you to \${\tt \{SOLPSTOP\}/runs}.
+will take you to {\tt \$\{SOLPSTOP\}/runs}.
 
 Usually a "case series" would be run in a sub-directory of
-\${\tt \{SOLPSTOP\}/runs}.  Sometimes, further subdirectories are created to
+{\tt \$\{SOLPSTOP\}/runs}.  Sometimes, further subdirectories are created to
 separate categories of runs --- the depth of sub-directories is a
 matter of taste!  In each of the directories, a {\tt baserun}
 sub-directory is created, and then, at the same level, run directories.
@@ -1197,9 +1198,9 @@ The command\index{scr}
 \begin{verbatim}
     scr
 \end{verbatim}
-will take you to \${\tt \{SOLPSTOP\}/scripts}.
+will take you to {\tt \$\{SOLPSTOP\}/scripts}.
 
-The number of scripts developed for various {\bf SOLPS} versions is very large. Efforts are currently underway to translate all the relevant ones for use within \SOLPSITERns. Any of these scripts can be copied to the \${\tt \{SOLPSTOP\}/scripts.local} directory for local user modifications as desired. There also are \${\tt \{HOST\_NAME\}.}\${\tt \{COMPILER\}} subdirectories where compiler-dependent script programs will reside. A non-exhaustive listing of these scripts, with some explanation as to their purpose, follows:
+The number of scripts developed for various {\bf SOLPS} versions is very large. Efforts are currently underway to translate all the relevant ones for use within \SOLPSITERns. Any of these scripts can be copied to the {\tt \$\{SOLPSTOP\}/scripts.local} directory for local user modifications as desired. There also are {\tt \$\{HOST\_NAME\}.\$\{COMPILER\}} subdirectories where compiler-dependent script programs will reside. A non-exhaustive listing of these scripts, with some explanation as to their purpose, follows:
 \begin{itemize}
 \item the residuals can be plotted with
   \begin{description}
@@ -1416,7 +1417,7 @@ rm GNUPLOT_COUNT gnuplot.*data
     {\tt GNUPLOT\_COUNT} is set by reading the number from the file;
     incremented; and then saved to the file; instead of using
     {\tt gnuplot.data} for the data, the file
-    {\tt gnuplot.}\${\tt GNUPLOT\_COUNT.data} is used and the commands for
+    {\tt gnuplot.\$\{GNUPLOT\_COUNT\}.data} is used and the commands for
     plotting are concatenated to {\tt gnuplot.cmd} allowing for
     multiple pages of plots.
   \item[plot\_png]\index{plot\_png} produces a PNG output file instead
@@ -1524,7 +1525,7 @@ negative quantities on the same scale and "M" the absolute values of negative qu
   \item[fhtxreg]\index{fhtxreg} Plots the total energy flow across important $x$-directed surfaces in {\tt B2.5}.
   \item[fhtyreg]\index{fhtyreg} Plots the total energy flow across important $y$-directed surfaces in {\tt B2.5}.
   \item[fluid\_fluxes \#1 \#2]\index{fluid\_fluxes} Plots the sum of fluid fluxes for species numbers varying from \#1 to \#2 (respective defaults are 0 and 1). Also exists as a Python script. Fluxes into the domain are shown as negative values, fluxes out of the domain as positive values.
-  \item[fluxt \#1]\index{fluxt}\index{DIMENSIONS.F} Gives the recycling fluxes for the first \#1 {\tt Eirene} strata. The default value is all the strata, as read from the {\tt b2.neutrals.parameters} file, or if not present, the \${\tt SOLPSTOP/modules/B2.5/src\allowbreak/include.local/DIMENSIONS.F} file, or if not present, the \${\tt SOLPSTOP/modules/B2.5/src\allowbreak/include/DIMENSIONS.F} file.
+  \item[fluxt \#1]\index{fluxt}\index{DIMENSIONS.F} Gives the recycling fluxes for the first \#1 {\tt Eirene} strata. The default value is all the strata, as read from the {\tt b2.neutrals.parameters} file, or if not present, the {\tt \$\{SOLPSTOP\}/modules/B2.5/src\allowbreak/include.local/DIMENSIONS.F} file, or if not present, the {\tt \$\{SOLPSTOP\}/modules/B2.5/src\allowbreak/include/DIMENSIONS.F} file.
   \item[internal\_energy\_balance]\index{internal\_energy\_balance} Outputs the energy balance tallies.
   \item[internal\_energy\_balance\_coupled]\index{internal\_energy\_balance\_coupled} Outputs the energy balance tallies for a coupled run.
   \item[joule\_heating]\index{joule\_heating} Plots the amount of Joule heating per region.
@@ -1552,7 +1553,7 @@ negative quantities on the same scale and "M" the absolute values of negative qu
   \item[sputter\_chemical\_energy]\index{sputter\_chemical\_energy} Shows chemical sputtering energy fluxes (for {\tt B2.5} standalone runs).
   \item[sputter\_physical]\index{sputter\_physical} Shows physical sputtering particle fluxes (for {\tt B2.5} standalone runs).
   \item[sputter\_physical\_energy]\index{sputter\_physical\_energy} Shows physical sputtering energy fluxes (for {\tt B2.5} standalone runs).
-  \item[tflux \#1]\index{tflux}\index{DIMENSIONS.F} Gives the recycling fluxes for the first \#1 strata from {\tt b2.neutrals.parameters}. The default value is all the strata, as read from the {\tt b2.neutrals.parameters} file, or if not present, the \${\tt SOLPSTOP\allowbreak/modules/B2.5/src/include.local/DIMENSIONS.F} file, or if not present, the \${\tt SOLPSTOP\allowbreak/modules/B2.5/src/include/DIMENSIONS.F} file.
+  \item[tflux \#1]\index{tflux}\index{DIMENSIONS.F} Gives the recycling fluxes for the first \#1 strata from {\tt b2.neutrals.parameters}. The default value is all the strata, as read from the {\tt b2.neutrals.parameters} file, or if not present, the {\tt \$\{SOLPSTOP\}\allowbreak/modules/B2.5/src/include.local/DIMENSIONS.F} file, or if not present, the {\tt \$\{SOLPSTOP\}\allowbreak/modules/B2.5/src/include/DIMENSIONS.F} file.
   \item[thermal\_evaporation]\index{thermal\_evaporation} Shows thermal evaporation particle fluxes (for {\tt B2.5} standalone runs).
   \item[thermal\_evaporation\_energy]\index{thermal\_evaporation\_energy} Shows thermal evaporation energy fluxes (for {\tt B2.5} standalone runs).
   \item[tereg]\index{tereg} Shows averaged electron temperature per region.
@@ -1577,7 +1578,7 @@ extracted from the {\tt run.log} file.
   \item[awk.plot\_mesh \#1]\index{awk.plot\_mesh} Outputs the mesh specified as \#1 in a form usable for {\tt xyplot}.
   \item[awk.reverse]\index{awk.reverse} Outputs a file in reverse order.
   \item[awk.transpose]\index{awk.transpose} Transposes an array of data.
-  \item[convert\_from\_solps4.3 \#1]\index{convert\_from\_solps4.3} Converts run number \#1 from \${\tt DEVICE} from the SOLPS4.3 ITER archive to a \SOLPSITER run in directory \${\tt SOLPSTOP/runs/}\${\tt DEVICE/}\#1 .
+  \item[convert\_from\_solps4.3 \#1]\index{convert\_from\_solps4.3} Converts run number \#1 from {\tt DEVICE} from the SOLPS4.3 ITER archive to a \SOLPSITER run in directory {\tt \$\{SOLPSTOP\}/runs/\$\{DEVICE\}/\#1} .
   \item[fixbb]\index{fixbb} A utility script to properly define the bounding box of PostScript files.
   \item[get\_solps\_fluids]\index{get\_solps\_fluids} A utility script to obtain the list of fluid species labels from the {\tt run.log} file.
   \item[grf]\index{grf} A more effective version of "grep" when searching for use of a variable in source code.
@@ -1631,7 +1632,7 @@ extracted from the {\tt run.log} file.
   \item[e2d]\index{e2d} Converts {\tt EFIT} equilibrium files to {\tt DG} format (see Sec.~\ref{sec:equtrn}).
   \item[eirobj]\index{eirobj} Alias to run {\tt Eirene} standalone with graphics.
   \item[eirobjx]\index{eirobjx} Alias to run {\tt Eirene} standalone without graphics.
-  \item[first\_setup]\index{first\_setup} Creates the {\tt config.}\${\tt {HOST\_NAME}.}\${\tt {COMPILER}} files in each of the \SOLPSITER submodules.
+  \item[first\_setup]\index{first\_setup} Creates the {\tt config.\$\{HOST\_NAME\}.\$\{COMPILER\}} files, if missing, in each of the \SOLPSITER submodules.
   \item[get\_git\_email]\index{get\_git\_email} Finds the user's email address from the {\tt .gitconfig} file.
   \item[get\_git\_name]\index{get\_git\_name} Finds the user's name from the {\tt .gitconfig} file.
   \item[get\_parm.bpl]\index{get\_parm.bpl} extracts certain useful quantities from a run input and output files for use in later scripts, particularly those building \btwoplot command files.
@@ -1755,7 +1756,7 @@ Contains the palettes that can be used by \btwoplot and {\tt mtv\_3d} scripts.
 \subsection{scripts/Balance}
 \index{balance}
 
-Contains the Matlab routines used for balance diagnostics, provided by David Moulton of CCFE. A detailed description of their use can be found in the document \${\tt \{SOLPSTOP\}/doc/Balance\_routines\_in\_SOLPS-ITER.pdf}.
+Contains the Matlab routines used for balance diagnostics, provided by David Moulton of CCFE. A detailed description of their use can be found in the document {\tt \$\{SOLPSTOP\}/doc/Balance\_routines\_in\_SOLPS-ITER.pdf}.
 
 \subsection{scripts/nc2text\_simple}
 \index{nc2text}
@@ -1775,22 +1776,22 @@ Contains various Matlab routines used for postprocessing run results when activa
 \index{data}
 
 Contrary to previous {\bf SOLPS} versions, there is no more centralized
-version-controlled \${\tt \{SOLPSTOP\}/data} directory. The user may create
+version-controlled {\tt \$\{SOLPSTOP\}/data} directory. The user may create
 one if needed, and use it a similar structure as in the past.
 
 For data files that are still experimental in nature, the option
 to create a parallel {\tt data.local} directory, with
 the same structure (only putting in the needed new files and subdirectories),
-at the level \${\tt \{SOLPSTOP\}/data.local} is also still available.
+at the level {\tt \$\{SOLPSTOP\}/data.local} is also still available.
 The code routinely checks for
 the existence of local data before relying on the presence of Master copies.
 
 Because the \SOLPSITER distribution is split into submodules, the data files
 that are accessed exclusively by either {\tt Eirene} or {\tt B2.5} are now
 placed in directories named {\tt Database} and placed in the corresponding
-\${\tt \{SOLPSTOP\}/modules} directory. Files that were needed by the
+{\tt \$\{SOLPSTOP\}/modules} directory. Files that were needed by the
 post-processing or analysis scripts are now placed within the
-\${\tt \{SOLPSTOP\}/scripts} directory. Please refer to the appropriate sections
+{\tt \$\{SOLPSTOP\}/scripts} directory. Please refer to the appropriate sections
 above for more details.
 
 \chapter{Running the standalone version of B2.5}
@@ -1823,13 +1824,13 @@ or
 \end{verbatim}
 where {\tt b2XX.exe} would be the program run, and {\tt b2fYYYYY}
 would be one of the output files created by the program. The {\tt Makefile}
-is best accessed via \${\tt \{SOLPSTOP\}/runs/Makefile} in the
+is best accessed via {\tt \$\{SOLPSTOP\}/runs/Makefile} in the
 above examples and in the following sections. Alternatively, if you are
-running within the \${tt \{SOLPSTOP\}/runs} tree, the
+running within the {\tt \$\{SOLPSTOP\}/runs} tree, the
 {\tt Makefile} can be found as {\tt ../../Makefile} where the number
 of {\tt ../}s would reflect how many
 levels the actual run directory is below the
-\${\tt \{SOLPSTOP\}/runs} directory.
+{\tt \$\{SOLPSTOP\}/runs} directory.
 
 A useful shortcut is to use\index{b2run}\label{b2run}
 \begin{verbatim}
@@ -1847,15 +1848,15 @@ for itself by climbing up the tree. You can add options to the {\tt b2run} comma
   \item[-o "run options"] Allows to launch {\tt b2XX} with additional run options. The options can be grouped together inside quotes or given individually with multiple "-o" instances.
   \item[-t \#] Requests an OpenMP run using \# threads.
   \item[-b]\index{b2co}\index{b2fstate} Specifies, when calling the {\tt b2co} program, that only the {\tt b2fstate} file should be produced. To be used when invoking {\tt b2co} while the main code is running.
-  \item[-d "debugger\_name"] Allows to run {\tt b2XX} with the named debugger (example: {\tt b2run -d totalview b2mn}). If no debugger name is specified, the debugger defined with the DBX environment variable and specified in the \${\tt \{SOLPSTOP\}/SETUP/setup.csh.}\${\tt \{HOST\_NAME\}.}\${\tt \{COMPILER\}.local} or \${\tt \{SOLPSTOP\}/SETUP\allowbreak/setup.csh.}\${\tt \{HOST\_NAME\}.}\${\tt \{COMPILER\}} files will be used.
+  \item[-d "debugger\_name"] Allows to run {\tt b2XX} with the named debugger (example: {\tt b2run -d totalview b2mn}). If no debugger name is specified, the debugger defined with the {\tt DBX} environment variable and specified in the {\tt \$\{SOLPSTOP\}/SETUP/setup.csh.\$\{HOST\_NAME\}.\$\{COMPILER\}.local} or {\tt \$\{SOLPSTOP\}/SETUP\allowbreak/setup.csh.\$\{HOST\_NAME\}.\$\{COMPILER\}} files will be used.
 \end{description}
 
 \index{SOLPSTOP file}
 The use of {\tt b2run} allows for the run to be launched
-in a file space that is outside the \${\tt \{SOLPSTOP\}} tree, provided there is a file named
-{\tt SOLPSTOP} in the run directory or above that contains the path to the \${\tt \{SOLPSTOP\}} tree.
-If the file named {\tt SOLPSTOP} is missing, the submission script ({\tt QSUB.*} or {\tt SLURM.*}) will construct \${\tt \{SOLPSTOP\}} by
-truncating the path to actual run directory \${\tt \{SOLPSTOP\}/runs/<RUN\_DIRECTORY>} to \${\tt \{SOLPSTOP\}}.
+in a file space that is outside the {\tt \$\{SOLPSTOP\}} tree, provided there is a file named
+{\tt SOLPSTOP} in the run directory or above that contains the path to the {\tt \$\{SOLPSTOP\}} tree.
+If the file named {\tt SOLPSTOP} is missing, the submission script ({\tt QSUB.*} or {\tt SLURM.*}) will construct {\tt \$\{SOLPSTOP\}} by
+truncating the path to actual run directory {\tt \$\{SOLPSTOP\}/runs/<RUN\_DIRECTORY>} to {\tt \$\{SOLPSTOP\}}.
 
 To stop an on-going run in a clean way, before it has reached the initially requested
 number of iterations, one can use, from the run directory:
@@ -1867,7 +1868,7 @@ produce all the output files in an orderly fashion, which then can be post-proce
 with the usual tools.
 
 When submitting jobs in a cluster environment, one will make use of the job submission commands provided
-in the \${\tt \{SOLPSTOP\}/runs} directory ({\tt QSUB.*}, {\tt SBATCH.*}
+in the {\tt \$\{SOLPSTOP\}/runs} directory ({\tt QSUB.*}, {\tt SBATCH.*}
 or {\tt SLURM.*} files). Currently, the following commands
 are provided:
 \begin{description}
@@ -1881,9 +1882,9 @@ are provided:
   \item{sgesubmit}\index{sgesubmit} for submissions on a system running SGE
   \item{ustcsubmit}\index{ustcsubmit} for submissions on the USTC computer cluster
 \end{description}
-Users on other systems are encouraged to recopy these command scripts (found in \${\tt \{SOLPSTOP\}/scripts})
+Users on other systems are encouraged to recopy these command scripts (found in {\tt \$\{SOLPSTOP\}/scripts})
 and adapt them to their local environment, along
-with the needed modifications to the \${\tt \{SOLPSTOP\}/runs/QSUB.*} or \${\tt \{SOLPSTOP\}/runs/SLURM.*} actual submission scripts.
+with the needed modifications to the {\tt \$\{SOLPSTOP\}/runs/QSUB.*} or {\tt \$\{SOLPSTOP\}/runs/SLURM.*} actual submission scripts.
 Each submission command file can handle five possible cases:
 \index{QSUB files}\index{SLURM files}
 \begin{description}
@@ -1891,13 +1892,13 @@ Each submission command file can handle five possible cases:
   \item{QSUB.*-gz, SLURM.*-gz} Runs a standalone {\tt B2.5} case where the output log file has been compressed (activated with the "-z" option).
   \item{QSUB.*\_coupled, SLURM.*\_coupled} Runs a coupled \SOLPSITER case.
   \item{QSUB.*\_coupled-gz, SLURM.*\_coupled-gz} Runs a coupled \SOLPSITER case where the output log file has been compressed (activated with the "-z" option).
-  \item{ } Any otherwise named file specified by the user and given as an argument to the submission command (in which case the "-z" option is ineffective). The specified file must be located in the \${\tt \{SOLPSTOP\}/runs} directory, or in the actual run directory, or one above it.
+  \item{ } Any otherwise named file specified by the user and given as an argument to the submission command (in which case the "-z" option is ineffective). The specified file must be located in the {\tt \$\{SOLPSTOP\}/runs} directory, or in the actual run directory, or one above it.
 \end{description}
 where "*" stands for "iter", "itm", "jet", "lsf", or "sge", referring to the machine system on which the
 submission script is to be used. The "\_coupled" scripts are used when the presence of an {\tt Eirene}
 {\tt input.dat} input file is detected in the run directory. Looping scripts, with a "\_loop" extension, are also available for some systems. These will automatically relaunch a case at the end of the time allotted to an individual job submission, provided the run appears to have finished cleanly. If the run appears to have failed, the looping script will stop.
 All the submission scripts make use of {\tt b2run} so the same possibility of submitting runs from
-outside the \${\tt SOLPSTOP} file space is available.
+outside the {\tt \$\{SOLPSTOP\}} file space is available.
 
 If, for instance, one is running on the ITER cluster, then, the instructions to follow would be to run the script
 \begin{verbatim}
@@ -1927,7 +1928,7 @@ In the case one wishes to run the code with MPI and needs to pass MPI options to
 \begin{verbatim}
 itersubmit -m "<my MPI options>" <my_optional_submission_file_name>
 \end{verbatim}
-The launching program is identified by the variable \${\tt MPI\_EXEC} inside the submission file, and options can be by hand as well using the \${\tt MPI\_OPTS} variable.
+The launching program is identified by the variable {\tt MPI\_EXEC} inside the submission file, and options can be by hand as well using the {\tt MPI\_OPTS} variable.
 
 If the user wishes to submit an OpenMP job, this is done by use of the "-t" option, followed by the number of desired CPU threads.
 
@@ -1959,8 +1960,8 @@ itersubmit -h
 \end{verbatim}
 command. All options (except "-h") can be used simultaneously and in any order, provided the name of the (optional) submission file is given last.
 
-The {\tt SLURM.iter} script first of all changes directory to \${\tt \{SOLPSTOP\}}
-with the help of {\tt SOLPSTOP} file
+The {\tt SLURM.iter} script first of all changes directory to
+{\tt \$\{SOLPSTOP\}} with the help of the {\tt SOLPSTOP} file
 and executes {\tt setup.csh} there. This is necessary
 to set up environment variables for the cluster node
 which would actually execute the job, since that machine
@@ -2028,8 +2029,8 @@ as {\tt jet.50401.58000.geo}, identify it as being of size $96 \times
     \item the {\tt b2ag.exe.dir} sub-directory of the current run
       directory
     \item the current run directory
-    \item \${\tt SOLPSTOP/data.local/meshes}
-    \item \${\tt SOLPSTOP/data/meshes}
+    \item {\tt \$\{SOLPSTOP\}/data.local/meshes}
+    \item {\tt \$\{SOLPSTOP\}/modules/Carre/meshes/\$\{DEVICE\}}
     \end{enumerate}
   \end{itemize}
 \item[...] other options can be used to modify the mesh and magnetic
@@ -2253,8 +2254,7 @@ data are stored in the {\tt weis.dat}\index{weis.dat} file which should be prese
 dedicated {\tt Makefile}, this is automatically done.
 
 Supplemental information on atomic physics rates can be found in the file
-
-\${\tt \{SOLPSTOP\}/doc/SOLPS\_2002\_Course/atomic\_physics.pdf} .
+{\tt \$\{SOLPSTOP\}/doc/SOLPS\_2002\_Course\allowbreak/atomic\_physics.pdf}.
 %% [[[May want to add some stuff from the atomic physics course notes]]]
 
 \newpage
@@ -4082,7 +4082,7 @@ values will be the ones stored in the appropriate namelists from the {\tt b2.*.p
 \section{b2ymb, post processing for monoblock heat transfer model}
 \label{sec:b2ymb}\index{b2ymb}\index{shotnumber.history}\index{B2.5, recover an archived run}\index{b2fstate}\index{b2fgmtrt}\index{b2fgmtry}
 
-This routine first reads the formatted file {\tt b2ymb.dat} and writes the unformatted file {\tt mnb\_in.dat} that is needed by the {\tt FreeFem++}(\href{http://www.freefem.org}{http://www.freefem.org})\cite{MR3043640} heat transfer model of the monoblock, see the details in the manual in {\tt \$SOLPSTOP/doc/SOLPS-ITER\_PFCs\_heat\_transfer\_model.pdf}.
+This routine first reads the formatted file {\tt b2ymb.dat} and writes the unformatted file {\tt mnb\_in.dat} that is needed by the {\tt FreeFem++}(\href{http://www.freefem.org}{http://www.freefem.org})\cite{MR3043640} heat transfer model of the monoblock, see the details in the manual in {\tt \$\{SOLPSTOP\}/doc/SOLPS-ITER\_PFCs\_heat\_transfer\_model.pdf}.
 Then, it reads the files {\tt wlld\_trg[i-o].dat} produced by \btwoplot with the {\tt "1000 wlld"} command and writes the unformatted files {\tt W\_tg[i-o].dat}, {\tt X\_tg[i-o].dat} and {\tt tg[i-o]\_size.dat} that are needed  by the {\tt FreeFem++} heat transfer model of the monoblock.
 In {\tt W\_tg[i-o].dat} is stored the value of the heat flux for each tile of the monoblock in Watts.
 In {\tt X\_tg[i-o].dat} is stored the value of the poloidal coordinate of the center of each tile along the monoblock axis (in metres).
@@ -4114,7 +4114,7 @@ Example of the {\tt b2ymb.dat} file:\\
 \section{b2yrp, post processing for reflector plates heat transfer model}
 \label{sec:b2yrp}\index{b2yrp}\index{shotnumber.history}\index{B2.5, recover an archived run}\index{b2fstate}\index{b2fgmtrt}\index{b2fgmtry}
 
-This routine first reads the formatted file {\tt b2yrp.dat} and writes the unformatted file {\tt rps\_in.dat} that is needed by the {\tt FreeFem++}(\href{http://www.freefem.org}{http://www.freefem.org})\cite{MR3043640} heat transfer model of the reflector plates, see the details in the manual in {\tt \$SOLPSTOP/doc/SOLPS-ITER\_PFCs\_heat\_transfer\_model.pdf}.
+This routine first reads the formatted file {\tt b2yrp.dat} and writes the unformatted file {\tt rps\_in.dat} that is needed by the {\tt FreeFem++}(\href{http://www.freefem.org}{http://www.freefem.org})\cite{MR3043640} heat transfer model of the reflector plates, see the details in the manual in {\tt \$\{SOLPSTOP\}/doc/SOLPS-ITER\_PFCs\_heat\_transfer\_model.pdf}.
 Then, it reads the files {\tt wlld\_[i-o]rp.dat} produced by \btwoplot with the {\tt "1000 wlld"} command and writes the unformatted files {\tt W\_[i-o]rp.dat}, {\tt X\_[i-o]rp.dat} and {\tt [i-o]rp\_size.dat} that are needed by the {\tt FreeFem++} heat transfer model.
 In {\tt W\_[i-o]rp.dat} is stored the value of the heat flux for each tile of the RPs in Watts.
 In {\tt X\_[i-o]rp.dat} is stored the value of the poloidal coordinate of the center of each tile along the RPs axis (in metres).
@@ -4179,8 +4179,8 @@ This program saves the final output state of a run into an IDS (Interface Data S
 
 The program reads the {\tt b2mndr\_id*} switch group, defined in {\tt b2mn.dat}:
 \begin{itemize}
-  \item {\tt b2mndr\_user} defines the user name and it is set by default to be the same as the \${\tt USER} environment variable.
-  \item {\tt b2mndr\_database} defines the IMAS IDS database name and it is set by default to be the same as the \${\tt DEVICE} environment variable. If {\tt DEVICE} has been left undefined, the default database name is {\tt 'solps-iter'}.
+  \item {\tt b2mndr\_user} defines the user name and it is set by default to be the same as the {\tt USER} environment variable.
+  \item {\tt b2mndr\_database} defines the IMAS IDS database name and it is set by default to be the same as the {\tt DEVICE} environment variable. If {\tt DEVICE} has been left undefined, the default database name is {\tt 'solps-iter'}.
   \item {\tt b2mndr\_device} superseded by {\tt b2mndr\_database}
   \item {\tt b2mndr\_shot\_number} defines the shot number
   \item {\tt b2mndr\_run\_number} defines the run number
@@ -4198,8 +4198,8 @@ which will recognize, within the quotes following the {\tt -o} additional option
 \begin{itemize}
   \item {\tt -s}, {\tt --shot} The shot number
   \item {\tt -r}, {\tt --run} The run number
-  \item {\tt -u}, {\tt --user} The user name (default is \${\tt USER})
-  \item {\tt -d}, {\tt --database}, {\tt --device} The IMAS database name (default is \${\tt DEVICE}, if set, or "solps-iter" otherwise)
+  \item {\tt -u}, {\tt --user} The user name (default is {\tt USER})
+  \item {\tt -d}, {\tt --database}, {\tt --device} The IMAS database name (default is {\tt DEVICE}, if set, or "solps-iter" otherwise)
   \item {\tt -v}, {\tt --version} The IMAS version to be used (default is {\tt 3})
 \end{itemize}
 
@@ -4492,7 +4492,7 @@ time-dependent "T" stratum.
 
 Second, the array sizes of {\tt chemical\_sputter\_yield}, is used, now need to match the
 actual number of wall and non-standard surfaces
-{\tt NLIM} and {\tt NSTS} as they are found in the \${\tt Eirene} input file.
+{\tt NLIM} and {\tt NSTS} as they are found in the {\tt Eirene} input file.
 Non-zero values should only be assigned to
 actual walls (so the 200 in the above example corresponds to the real number of walls declared in block 3B of the {\tt Eirene}
 {\tt input.dat} file used for the same case) and to the non-standard surfaces (block 3A) corresponding to the targets. Note that
@@ -4815,7 +4815,7 @@ several values of $\Delta_t$.
 \label{sec:B2Eirene:averaging}\index{Averaging}\index{b2faveri}\index{b2favere}\index{b2fstate}\index{b2fstati}
 
 When running a coupled \SOLPSITER case to obtain a steady-state solution, it is recommended to use the source
-averaging scheme detailed in \${\tt SOLPSTOP/doc/SOLPS-ITER\_Eirene\_averaging.pdf} and references therein. This averaging scheme is meant to yield significant
+averaging scheme detailed in {\tt \$\{SOLPSTOP\}/doc/SOLPS-ITER\_Eirene\_averaging.pdf} and references therein. This averaging scheme is meant to yield significant
 run speed-up and lower the statistical error introduced by the {\tt Eirene} Monte Carlo noise, as well as provide means to estimate the errors on the solution, following the formalism detailed in \cite{Ghoos_PET2016, Ghoos_JCP2016}. Error estimates are obtained by means of the {\tt b2ye} program (See Section \ref{sec:b2ye} below).  It should be noted that this averaging scheme does NOT affect the physical run behaviour as such and therefore does not have any stabilizing effect on the run.
 
 The averaging scheme works in three stages:
@@ -4866,7 +4866,7 @@ In order to compile the code with {\tt MDSplus}, the {\tt MDSPLUS\_DIR} environm
 needs to be set, as well as the compiler linking instruction {\tt LD\_MDSPLUS} ---
 consult your systems people about this, or the
 {\tt MDSplus} documentation. Both of these variables should be set in your
-\${\tt \{SOLPSTOP\}/SETUP/config.}\${\tt \{HOST\_NAME\}.}\${\tt \{COMPILER\}(.local)} file.
+{\tt \$\{SOLPSTOP\}/SETUP/config.\$\{HOST\_NAME\}.\$\{COMPILER\}(.local)} file.
 Then, a full recompilation with
 \begin{verbatim}
 sbb ; gmake clean ; gmake depend ; gmake
@@ -5493,9 +5493,9 @@ If {\tt DivGeo} is not yet compiled, you will need to do \index{DivGeo, compilin
 \end{verbatim}
 %$
 
-The environment variable \${\tt DG} contains the path
-\${\tt \{SOLPSTOP\}/modules/DivGeo}.
-To start {\tt DG}, the command is:
+The environment variable {\tt DG} contains the path
+{\tt \$\{SOLPSTOP\}/modules/DivGeo}.
+To start {\tt DivGeo}, the command is:
 \begin{verbatim}
   ./dg &
 \end{verbatim}
@@ -5966,7 +5966,7 @@ But mesh-generation is valid !
 An extensive review of {\tt B2-Eirene} has been published as \cite{SOLPS2006}\index{SOLPS review}.
 It is asked that authors using {\tt SOLPS} simulation results cite that work when
 referring to the code. This document, only some short sections of which are detailed
-below, can be found as part of the {\tt SOLPS} package at \${\tt \{SOLPSTOP\}/doc/CPP\_2006.pdf}.
+below, can be found as part of the {\tt SOLPS} package at {\tt \$\{SOLPSTOP\}/doc/CPP\_2006.pdf}.
 
 The equations are written on a
 curvilinear orthogonal coordinate system.
@@ -6603,7 +6603,7 @@ T_e - T_i
 
 
 Here $\kappa _{e \parallel}$ is the Balescu (not Braginskii as stated in the CPP review paper \cite{SOLPS_review}
-or in \${\tt \{SOLPSTOP\}/doc/CPP\_2006.pdf}) heat
+or in {\tt \$\{SOLPSTOP\}/doc/CPP\_2006.pdf}) heat
 conductivity with a possible heat
 flux limit \cite{BRAAMS96B}.
 The leading numerical coefficient is then $\frac{5}{2} \frac{2.16 z}{1 + 0.27 z}$ as opposed to 3.16 for the Braginskii
@@ -7186,7 +7186,7 @@ run timestep, as the {\tt B2} internal iterations make the plasma solution evolv
 background originally used for the computation of the {\tt Eirene} sources above, it may become
 necessary to rescale these. A scheme to do so was developed by A. Kukushkin for ITER applications \cite{Kukushkin2002PPCF}
 and can be activated using the 'eirene\_ank\_mods' switch. See the listing in Appendix \ref{lis:b2cdci}
-and the additional description in the \${\tt \{SOLPSTOP\}/doc/Source\_Scaling\_in\_B2.pdf} file.
+and the additional description in the {\tt \$\{SOLPSTOP\}/doc/Source\_Scaling\_in\_B2.pdf} file.
 
 \section{Classical transport: Braginskii, Balescu and Zhdanov formulations}
 \index{Classical transport}\index{Braginskii}\index{Balescu}\index{Zhdanov}\label{sec:balescubraginskii}
@@ -16663,7 +16663,7 @@ Changes the experimental data overlay line width by $\langle$widthfactor$\rangle
 Choose transformation function ($\langle$n$\rangle$.ne.0) for radial
 coordinate to compare with experimental data, according to
 {\tt n.s.r.z.a\_inner} and {\tt n.s.r.z.a\_outer}
-files in the \${\tt \{SOLPSTOP\}/data.local} or \${\tt \{SOLPSTOP\}/data}
+files in the {\tt \$\{SOLPSTOP\}/data.local} or {\tt \$\{SOLPSTOP\}/data}
 directories.
 
 \subsubsection{sep}\index{b2plot, sep}\label{sec:sep}
@@ -16982,14 +16982,15 @@ Resets plotting output.
 
 \subsubsection{spec}\index{b2plot, spec}\label{sec:spec}
 Generates the spectral line emissivities from the Summers' data stored
-in \${\tt SOLPSTOP/modules/B2.5/Database/Summers} (which can be superseded
-by the contents of \${\tt SOLPSTOP/data.local/Summers}). One pre-selected
+in {\tt \$\{SOLPSTOP\}/modules/B2.5/Database\allowbreak/Summers}
+(which can be superseded by the contents of
+{\tt \$\{SOLPSTOP\}/data.local/Summers}). One pre-selected
 diagnostic line per ionization stage is provided. Data is only provided for
 Helium, Boron, Carbon, Oxygen and Neon.
 
 \subsubsection{$<$is,{\bf I}$>$ $<$lambda,{\bf I}$>$ $<$delta,{\bf I}$>$ nspe}\index{b2plot, nspe}\label{sec:nspe}\index{ADAS}
-Generates the spectral line emissivities according to the {\tt ADAS} database \cite{ADAS}, stored in \${\tt SOLPSTOP/modules/adas}
-or \${\tt SOLPSTOP/data.local/adas}, for species index $\langle$is$\rangle$, centered around wavelength $\langle$lambda$\rangle$ (in {\em \AA}),
+Generates the spectral line emissivities according to the {\tt ADAS} database \cite{ADAS}, stored in {\tt \$\{SOLPSTOP\}/modules/adas}
+or {\tt \$\{SOLPSTOP\}/data.local/adas}, for species index $\langle$is$\rangle$, centered around wavelength $\langle$lambda$\rangle$ (in {\em \AA}),
 with width $\langle$delta$\rangle$ (in {\em \AA}).
 {\bf nspec} is an alias for {\bf nspe}.
 
@@ -17126,9 +17127,9 @@ Reads in the specifications for an alternative palette.  The data
 format is RGB triplets for each colour.
 
 If the file does not exist in the current working directory, the
-directories \${\tt SOLPSTOP/data.local/palettes},
-\${\tt SOLPSTOP/scripts.local/palettes} and
-\${\tt SOLPSTOP/scripts/palettes} are searched in order.
+directories {\tt \$\{SOLPSTOP\}/data.local/palettes},
+{\tt \$\{SOLPSTOP\}/scripts.local/palettes} and
+{\tt \$\{SOLPSTOP\}/scripts/palettes} are searched in order.
 
 Many different palettes are available and the user can easily create its own.
 For instance, the 'blue\_to\_red' color maps are useful for data fields that
@@ -17175,8 +17176,8 @@ and a numeric value.  The numeric value is used as the ordinate when
 plotting the chord integrals.
 
 If the file does not exist in the current working directory, the
-directories \${\tt SOLPSTOP/data.local/chords} and
-\${\tt SOLPSTOP/data/chords} are searched in order.
+directories {\tt \$\{SOLPSTOP\}/data.local/chords} and
+{\tt \$\{SOLPSTOP\}/data/chords} are searched in order.
 
 \subsection{$<$chord file$>$ echor}\index{b2plot, echor}\label{sec:echor}\index{b2plot, chord plots}
 Same as {\bf chor} above, but does the line integral over the triangular grid.
@@ -17185,7 +17186,7 @@ Same as {\bf chor} above, but does the line integral over the triangular grid.
 The chords specified by the chord file are plotted in the physical
 plane.  Data format for the file is as for {\bf chor} (see \ref{sec:chor}).
 
-Currently the following chord file examples (from AUG diagnostics) are provided (in the \${\tt SOLPSTOP/doc/solps/chords} directory):
+Currently the following chord file examples (from AUG diagnostics) are provided (in the {\tt \$\{SOLPSTOP\}/doc/solps/chords} directory):
 \begin{itemize}
 \item BLS, figure \ref{fig:BLS}, use:
   \begin{verbatim}
@@ -17247,15 +17248,15 @@ ahal mhal m+ 'HAL.chords' chor
 \subsection{$<$command file$>$ cmd}\index{b2plot, cmd}\label{sec:cmd}
 Further commands are taken from the specified file.  If the file does
 not exist in the current working directory, the directories
-\${\tt SOLPSTOP/scripts.local/commands} and
-\${\tt SOLPSTOP/scripts/commands} are searched in order.
+{\tt \$\{SOLPSTOP\}/scripts.local/commands} and
+{\tt \$\{SOLPSTOP\}/scripts/commands} are searched in order.
 The command file may contain comment lines, starting with '*', '!' or '\#'.
 
 \subsection{$<$CDF command file$>$ cmdcdf}\index{b2plot, cmdcdf}\label{sec:cmdcdf}
 {\tt CDF} commands used repetitively (for movie frames) are taken from the specified file.
 If the file does not exist in the current working directory, the directories
-\${\tt SOLPSTOP/scripts.local/commands} and
-\${\tt SOLPSTOP/scripts/commands} are searched in order.
+{\tt \$\{SOLPSTOP\}/scripts.local/commands} and
+{\tt \$\{SOLPSTOP\}\allowbreak/scripts/commands} are searched in order.
 
 \subsection{$<$chord file$>$ chbx}\index{b2plot, chbx}\label{sec:chbx}
 Chord integral averaged over three chords. Equivalent to using the {\bf 3 ave} command.
@@ -17320,7 +17321,8 @@ Computes a reaction rate as per the {\tt Eirene} specification. Consult the
 \subsection{$<$reac$>$ adas}\index{b2plot, adas}\label{sec:adas}\index{ADAS}
 Computes a reaction rate as per the {\tt ADAS} specification. The $\langle$reac$\rangle$ string should be something of the
 form 'acd89'. The matrix obtained contains then all the rates from these files, for all species in the run, extracted
-from the files stored in \${\tt SOLPSTOP/modules/adas} or \${\tt SOLPSTOP/data.local/adas}.
+from the files stored in {\tt \$\{SOLPSTOP\}/modules/adas} or
+{\tt \$\{SOLPSTOP\}/data.local/adas}.
 
 \section{Environment variables}
 
@@ -17335,7 +17337,7 @@ setenv B2PLOT_DEV 'x11 ps'
 
 Environment variables can also be used in the {\bf extl} command
 (see \ref{sec:extl}). If not explicitly set by the user, they inherit
-their value from the {\tt setup.csh.*} files in the \${\tt SOLPSTOP}
+their value from the {\tt setup.csh.*} files in the {\tt \$\{SOLPSTOP\}}
 directory.
 
 \section{Examples}
@@ -17415,22 +17417,26 @@ In figure \ref{fig:JETchords} we have an example of chord plots as applied to th
 \begin{figure}[hbtp]
   \centering
 \ifpdf
-  \subfigure[a4p vesl outl sep 'JET/KL2.chords' chpl]{\label{fig:chpl}\includegraphics[height=6cm]{chpl.pdf}}
-  \subfigure[a4l phys 3 6581 1 nspec '658 nm CII' extl 'JET/KL2.chords' chor]{\label{fig:chor}\includegraphics[angle=90,height=6cm]{chor.pdf}}
+  \subfigure[a4p vesl outl sep 'KL2.chords' chpl]{\label{fig:chpl}\includegraphics[height=6cm]{chpl.pdf}}
+  \subfigure[a4l phys 3 6581 1 nspec '658 nm CII' extl 'KL2.chords' chor]{\label{fig:chor}\includegraphics[angle=90,height=6cm]{chor.pdf}}
 \else
-  \subfigure[a4p vesl outl sep 'JET/KL2.chords' chpl]{\label{fig:chpl}\includegraphics[height=6cm]{chpl.eps}}
-  \subfigure[a4l phys 3 6581 1 nspec '658 nm CII' extl 'JET/KL2.chords' chor]{\label{fig:chor}\includegraphics[angle=90,height=6cm]{chor.eps}}
+  \subfigure[a4p vesl outl sep 'KL2.chords' chpl]{\label{fig:chpl}\includegraphics[height=6cm]{chpl.eps}}
+  \subfigure[a4l phys 3 6581 1 nspec '658 nm CII' extl 'KL2.chords' chor]{\label{fig:chor}\includegraphics[angle=90,height=6cm]{chor.eps}}
 \fi
   \caption{Chord plots applied to JET.}
   \label{fig:JETchords}
 \end{figure}
 
-The first {\bf chpl} plot (\ref{fig:chpl}) gives the physical position of the chords,
-as obtained from the {\tt JET/KL2.chords} file in the
-\${\tt SOLPSTOP/data/chords} directory. The second {\bf chpl} plot (\ref{fig:chor}),
+The first {\bf chpl} plot (\ref{fig:chpl}) gives the physical
+position of the chords, as obtained from the {\tt KL2.chords} file.
+The second {\bf chpl} plot (\ref{fig:chor}),
 in landscape mode {\bf a4l}, shows the emissivity of a C$^+$ line
 (species 3) at $\lambda = 6581 \pm 1$ {\em \AA} ({\bf 3 6581 1 nspec}).
 The {\bf extl} instruction gives the extra label on the second title line.
+The chords file will be looked for, in succession, in the local directory,
+one level up, in {\tt \$\{SOLPSTOP\}/data.local/chords}, and in
+{\tt \$\{SOLPSTOP\}/data/chords}. The file used for this example can be
+found in {\tt \$\{SOLPSTOP\}/doc/solps/chords}.
 
 \subsection{Wall plots}
 \index{wall segments}\index{b2plot, plotting wall quantities}
@@ -17640,8 +17646,8 @@ scaling is done on all of the data.
 
 \section{DIMENSIONS.F}\index{DIMENSIONS.F}\label{sec:DIMENSIONS}
 
-The file \${\tt SOLPSTOP/modules/B2.5/src/include/DIMENSIONS.F} and its local version
-\${\tt SOLPSTOP/modules\allowbreak/B2.5/src/include.local/DIMENSIONS.F} contain key dimensions
+The file {\tt \$\{SOLPSTOP\}/modules/B2.5/src/include/DIMENSIONS.F} and its local version
+{\tt \$\{SOLPSTOP\}\allowbreak/modules\allowbreak/B2.5/src/include.local/DIMENSIONS.F} contain key dimensions
 that determine
 the sizes of arrays that can be defined by namelists
 in {\tt b2.*.parameters} files (for compatibility with
@@ -17738,16 +17744,20 @@ in the {\tt sbb} directory:
 
 \lstinputlisting[breaklines,basicstyle=\footnotesize]{B2_5.Makefile}
 
-and, as a prototypical example, the {\tt config.ITER.ifort64} in
+and, as a prototypical example, the {\tt config.ITER.ifort64} and
+{\tt config.common.ifort64} files from
 the {\tt config} subdirectory: \index{B2.5, compiling options}
+
+\centerline{\bf config.ITER.ifort64}
 
 \lstinputlisting[breaklines,basicstyle=\footnotesize]{B2_5.config.ITER.ifort64}
 
+\centerline{\bf config.common.ifort64}
+
+\lstinputlisting[breaklines,basicstyle=\footnotesize]{B2_5.config.common.ifort64}
+
 If the user wishes to modify the compiling options used, the creation
-of a {\tt config.}\${\tt {HOST\_NAME}.}\${\tt {COMPILER}.local} file
-is recommended, in which to store the modified settings. Since the {\tt Makefile}
-reads those after the
-{\tt config/compiler.\allowbreak}\${\tt {HOST\_NAME}.}\${\tt {COMPILER}} file,
+of a {\tt config.\$\{HOST\_NAME\}.\$\{COMPILER\}.local} file in the {\tt config} directory is recommended, in which to store the modified settings. Since the {\tt Makefile} reads those after the {\tt config.\allowbreak\$\{HOST\_NAME\}.\$\{COMPILER\}} and {\tt config.common.\$\{COMPILER\}} files,
 they need only contain the modified definitions.
 
 \section{Defines}
@@ -17757,11 +17767,11 @@ they need only contain the modified definitions.
 
 We list here the possible optional pre-processor definitions that can be used when
 compiling the various components of the \SOLPSITER code suite.
-The optional variables below must therefore, if desired, be declared as part of the
-\${\tt SOLPS\_CPP} environment variable, which is defined in the
-\${\tt SOLPSTOP/SETUP/config.}\${\tt {HOST\_NAME}.}\${\tt {COMPILER}(.local)} files.
+The optional variables below must therefore, if desired, be declared as part of the {\tt SOLPS\_CPP} environment variable, which is defined in the
+{\tt \$\{SOLPSTOP\}/SETUP/config.\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}(.local)} and
+{\tt \$\{SOLPSTOP\}/SETUP/config.common.\$\{COMPILER\}} files.
 Additionally, system-wide compiler flags can be provided by means of the
-\${\tt {FFLAGSEXTRA}} environment variable in the same files.
+{\tt FFLAGSEXTRA} environment variable in the same files.
 
 \begin{description}
 \item[CATALYST] \index{CATALYST} Turns on the Paraview Catalyst utility (see the SOLPS-GUI manual for full details)
@@ -17907,9 +17917,9 @@ IMAS\_MINOR\_VERSION & equtrn/src/rdids.f \\
 We list here the possible compiler options that can be used when compiling the
 coupled version of {\tt B2.5-Eirene}. These options are shared across both the
 {\tt B2.5} and {\tt Eirene} source codes. The options below must therefore,
-if desired, be declared as part of the \${\tt SOLPS\_CPP} environment variable,
+if desired, be declared as part of the {\tt SOLPS\_CPP} environment variable,
 which is defined in the
-\${\tt SOLPSTOP/SETUP/config.\allowbreak}\${\tt {HOST\_NAME}.}\${\tt {COMPILER}(.local)} files.
+{\tt \$\{SOLPSTOP\}/SETUP/config.\allowbreak\$\{HOST\_NAME\}.\$\{COMPILER\}(.local)} files.
 
 \begin{description}
 \item[ALLOCATE\_AND\_NAMELIST] \index{ALLOCATE\_AND\_NAMELIST} To be used if the compiler allows dynamically allocated namelist arrays
@@ -17927,9 +17937,9 @@ which is defined in the
 
 We list here the additional compiler options available that only affect compilation of
 {\tt B2.5}. The options below must therefore,
-if desired, be declared as part of either the \${\tt SOLPS\_CPP} or the
-\${\tt B25\_DEFINES} environment variable, which are defined in the
-\${\tt SOLPSTOP/SETUP/config.}\${\tt {HOST\_NAME}.}\${\tt {COMPILER}(.local)} files.
+if desired, be declared as part of either the {\tt SOLPS\_CPP} or the
+{\tt B25\_DEFINES} environment variable, which are defined in the
+{\tt \$\{SOLPSTOP\}/SETUP/config.\$\{HOST\_NAME\}.\$\{COMPILER\}(.local)} files.
 
 \begin{description}
 \item[AMNS] \index{AMNS} Links to AMNS database in IMAS environment
@@ -18411,9 +18421,9 @@ WOS & b2plot/flux.F \\
 
 We list here the possible compiler options that can be used when compiling {\tt Eirene}.
 The options below must therefore,
-if desired, be declared as part of either the \${\tt SOLPS\_CPP} or the
-\${\tt EIRENE\_DEFINES} environment variable, which are defined in the
-\${\tt SOLPSTOP/SETUP/config.}\${\tt {HOST\_NAME}.}\${\tt {COMPILER}(.local)} files.
+if desired, be declared as part of either the {\tt SOLPS\_CPP} or the
+{\tt EIRENE\_DEFINES} environment variable, which are defined in the
+{\tt \$\{SOLPSTOP\}/SETUP/config.\$\{HOST\_NAME\}.\$\{COMPILER\}(.local)} files.
 
 \begin{description}
 \item[MPI\_VERSION] \index{MPI\_VERSION} Index of MPI version (set internally by the {\tt Makefile})
@@ -19379,14 +19389,14 @@ can be used for this purpose in either mode.
 \subsection{Equilibrium conversion and manipulation}
 \label{sec:equtrn}\index{equtrn}
 
-The \${\tt SOLPSTOP/modules/DivGeo/equtrn}
+The {\tt \$\{SOLPSTOP\}/modules/DivGeo/equtrn}
 directory has some utilities for converting between various
 widely used formats for magnetic equilibrium files and for making minor
 modifications to them.
 
 The listings and documentation below may be out of date. An updated
 documentation of the supported scripts can be found in
-\${\tt SOLPSTOP/modules/DivGeo/equtrn/doxygen/refman.pdf}.
+{\tt \$\{SOLPSTOP\}/modules/DivGeo/equtrn/doxygen/refman.pdf}.
 
 \subsubsection{d2d}
 \index{d2d}\index{dg2dg}\index{DG, doubling resolution}
@@ -20474,7 +20484,7 @@ boxes by setting the following environment variables:
 \item[DG\_SAVE\_MASK] Directory mask for {\tt File|Save} (defaults to the current directory)
 \item[DG\_EQUIL\_MASK] Directory mask for {\tt File|Equilibrium} (defaults to the current directory)
 \item[DG\_TEMPLATE\_MASK] Directory mask for {\tt File|Template} (defaults to the {\tt templates/} subdirectory (if present) or to the current directory)
-\item[DGSONNETMASK] Directory mask for {\tt File|Sonnet grid} (defaults to \${\tt \{SOLPSTOP\}/modules/DivGeo/device/\allowbreak}\${\tt \{DEVICE\}})
+\item[DGSONNETMASK] Directory mask for {\tt File|Sonnet grid} (defaults to {\tt \$\{SOLPSTOP\}/modules/DivGeo/device/\allowbreak\$\{DEVICE\}})
 \end{description}
 
 \subsection{The configuration file}

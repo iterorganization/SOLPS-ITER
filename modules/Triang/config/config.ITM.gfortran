@@ -10,42 +10,19 @@ LD_GKS   ?= -L${GLI_HOME} -lgks -lgfortran
 LD_NAG   ?= -L${NAG_LIB} -lnag_nag -lnag_mkl
 LD_GR    ?= -L${GR_ROOT} -lgr
 
-#DEFINES += ${SOLPS_CPP} ${EIRENE_DEFINES} -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
-#DEFINES += ${SOLPS_CPP} ${EIRENE_DEFINES} -DTRIANG -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
-EQUIVS    =
-
 #CPP      = -/lib/cpp -traditional
 CPP       = /lib/cpp -traditional
-CPPOPTS   = -P -I${srcdir} ${EQUIVS}
-SED       =
-LINK_MOD  =
 
 FC        = gfortran
 
 ifdef SOLPS_DEBUG
-FCOPTS    = -g -C -fcheck=all -fbacktrace -ffpe-trap=denormal
-else
-FCOPTS    = -O3
+FCOPTS    = -fcheck=all -fbacktrace
 endif
 
-#COMPILE  = ${FC} -c ${FFLAGS}
-
-NAG       = ${LD_NAG}
 GKS       = ${LD_GR} ${LD_GKS} -lX11 -lXt -lXmu
 
-#LDLIBS   = ${LD_MSCL}-L/usr/local/lib -L/usr/X11R6/lib64
+#LDLIBS   = ${LD_MSCL} -L/usr/local/lib -L/usr/X11R6/lib64
 LDLIBS    =
-LDEXTRA   =
-
-# new
-
-INCMOD    = -I
-MOD       = mod
-OBJDEST   = -o ${OBJDIR}/$*.o
-
-BLD       = ar rcv
-
-LD        = ${FC}
 
 #!!!Local Variables:
 #!!! mode: Makefile

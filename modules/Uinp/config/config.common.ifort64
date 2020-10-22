@@ -1,0 +1,42 @@
+COMPILER_MAJOR_VERSION = $(shell ${FC} -V 2>&1 | grep -o "Version [0-9]*" | cut -d ' ' -f 2 )
+
+ifdef SOLPS_DEBUG
+FFLAGS  += -g -C -traceback -debug all -check all
+endif
+ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -le 12; echo $$?),0)
+FFLAGS   += -vec_report0
+endif
+ifdef SOLPS_OPENMP
+ ifndef SOLPS_MPI
+  ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -ge 15; echo $$?),0)
+   FFLAGS   += -qopenmp
+  else
+   FFLAGS   += -openmp
+  endif
+ else
+  ifeq ($(FC),mpiifort)
+   ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -ge 15; echo $$?),0)
+    FFLAGS   += -qopenmp
+   else
+    FFLAGS   += -openmp
+   endif
+  endif
+ endif
+endif
+
+INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
+COMPILE  = ${FC} -c ${FFLAGS}
+
+MOD      = mod
+LDLIBS   = ${LD_MSCL}
+ifdef USE_MPI
+LDLIBS   += ${LD_MPI}
+endif
+ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -le 12; echo $$?),0)
+LDEXTRA  = -i_dynamic
+endif
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+

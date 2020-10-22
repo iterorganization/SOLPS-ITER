@@ -1,0 +1,19 @@
+FFLAGS  += -fsignaling-nans
+ifdef SOLPS_DEBUG
+FFLAGS  += -g -ffpe-trap=denormal -ffpe-trap=invalid -ffpe-trap=zero -ftrapv
+endif
+ifdef SOLPS_OPENMP
+FFLAGS  += -fopenmp
+endif
+
+INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
+COMPILE  = ${FC} -c ${FFLAGS}
+
+MOD      = mod
+LDLIBS   = ${LD_MSCL}
+LDEXTRA  =
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+

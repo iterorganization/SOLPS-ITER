@@ -2,42 +2,12 @@
 LD_GR  ?=
 LD_GKS ?=
 
-DEFINES += -DPGF90
-EQUIVS =
-
 CPP = /lib/cpp -traditional
-CPPOPTS = -P -I${srcdir} ${EQUIVS}
 SED = sed s:\#PREC\#:d:g
-LINK_MOD =
 
-FC = pgf90
-ifdef SOLPS_DEBUG
-FCOPTS = -Mbackslash -C -g -Mchkfpstk -Mchkptr -Mchkstk -Mpgicoff
-else
-FCOPTS = -O2 -Mbackslash
-FCOPTS = -fast -Mbackslash
-endif
-
-DBLFC = ${FC}
-DBLOPTION =
 DBLSED = sed -e s:\#PREC\#:d:g
 
-INCMOD = -I
-MOD = mod
-OBJDEST = -o ${OBJDIR}/$*.o
-
-BLD = ar rcv
-
-LD = ${FC}
-ifdef SOLPS_DEBUG
-LDOPTS = -g -C -tp px # "-tp px" to fix a compiler bug at JET
-else
 LDOPTS = -tp px # "-tp px" to fix a compiler bug at JET
-endif
-
-GKS       = ${LD_GR} ${LD_GKS} -lX11 -lXt
-LDLIBS    =
-LDEXTRA   =
 
 #!!!Local Variables:
 #!!! mode: Makefile

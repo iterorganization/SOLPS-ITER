@@ -43,6 +43,9 @@ ifeq ($(shell [ -e SETUP/config.${HOST_NAME}.${COMPILER} ] && echo yes || echo n
 else
   $(warning SETUP/config.${HOST_NAME}.${COMPILER} not found.)
 endif
+ifeq ($(shell [ -e SETUP/config.common.${COMPILER} ] && echo yes || echo no ),yes)
+  include SETUP/config.common.${COMPILER}
+endif
 
 # Include local compiler settings, if present
 ifeq ($(shell [ -e SETUP/config.${HOST_NAME}.${COMPILER}.local ] && echo yes || echo no ),yes)

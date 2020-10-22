@@ -1,41 +1,8 @@
-EQUIV4 = ${SOLPS_CPP} -DGRREAL=1
-EQUIV5 = ${SOLPS_CPP} ${USE_EIRENE} -Dsdot=ddot -Dsasum=dasum -Dsaxpy=daxpy -Dsscal=dscal -Dsnrm2=dnrm2 -Dscopy=dcopy -Dsgbtrf=dgbtrf -Dsgbtrs=dgbtrs -DGRREAL=1 -Dsmin=dmin
-DEFINES += -DS2SUM=D2SUM -DS2MIN=D2MIN -DSASUM=DASUM -DSAXPY=DAXPY -DSDOT=DDOT -DSSCAL=DSCAL -DS2ASUM=D2ASUM -DS2SCAL=D2SCAL -DS2DOT=D2DOT -DSCOPY=DCOPY -DS2COPY=D2COPY
-
 CPP = /lib/cpp -C -traditional
-CPP4OPTS = -P -I${SRCDIR} ${EQUIV4}
-CPP5OPTS = -P -I${SRCDIR} ${EQUIV5}
-SED = sed s:\#PREC\#:d:g
-LINK_MOD = 
 
-FC = pgf90
-ifdef SOLPS_DEBUG
-FCOPTS = -g
-else
-FCOPTS = -O2
-FCOPTS = -fast
-endif
-
-DBLFC = ${FC}
 DBLOPTION = -r8
-DBLSED = sed -e s:\#PREC\#:d:g
 
-INCMOD = -I
-MOD = mod
-
-BLD = ar rcv
-
-GRLIBES = ${LD_NCARG}
-LDLIBES = ${LD_NAG} ${LD_NETCDF} ${LD_MSCL}
-
-LD = ${FC}
-ifdef SOLPS_DEBUG
-LDOPTS = -g -tp px # "-tp px" to fix a compiler bug at JET
-else
 LDOPTS = -tp px # "-tp px" to fix a compiler bug at JET
-endif
-
-LCPP = ${LD_SONNET}
 
 #!!!Local Variables:
 #!!! mode: Makefile

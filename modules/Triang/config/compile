@@ -1,6 +1,10 @@
 #  VERSION : 12.09.2004 20:53
 
 include config/config.${HOST_NAME}.${COMPILER}
+ifeq ($(shell [ -e config/config.common.${COMPILER} ] && echo yes || echo no ),yes)
+include config/config.common.${COMPILER}
+MAKES += config/config.common.${COMPILER}
+endif
 
 ${OBJDIR}/%.o : %.f
 	@-# echo ==== object: $*

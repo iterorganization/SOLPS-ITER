@@ -9,22 +9,11 @@ else
 FC       = gfortran
 endif
 
-ifdef SOLPS_DEBUG
-FFLAGS   = -g -ffpe-trap=denormal -ffpe-trap=invalid -ffpe-trap=zero -ftrapv -fsignaling-nans
-else
+ifndef SOLPS_DEBUG
 FFLAGS   = -O 
 endif
-ifdef SOLPS_OPENMP
-FFLAGS  += -fopenmp
-endif
 
-INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
-COMPILE  = ${FC} -c ${FFLAGS}
 CPP      = /lib/cpp -traditional
-MOD      = mod
-
-LDLIBS   = ${LD_MSCL}
-LDEXTRA  = 
 
 #!!!Local Variables:
 #!!! mode: Makefile

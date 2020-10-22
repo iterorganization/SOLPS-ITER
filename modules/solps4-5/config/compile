@@ -1,4 +1,8 @@
 include config/config.${HOST_NAME}.${COMPILER}
+ifeq ($(shell [ -e config/config.common.${COMPILER} ] && echo yes || echo no ),yes)
+  include config/config.common.${COMPILER}
+  MAKES += config/config.common.${COMPILER}
+endif
 
 ${OBJDIR}/%.o : %.F
 	@- /bin/rm -f ${OBJDIR}/$*.f ${OBJDIR}/$*.o ${OBJDIR}/$*.${MOD}

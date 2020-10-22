@@ -7,47 +7,21 @@ LD_GKS   ?= -L/work/imas/opt/gks/4.4.74/lib -lgks -lgfortran -lX11 -lXt -lXmu
 LD_NAG   ?= `pkg-config nag --libs`
 GLI_HOME ?= /work/imas/opt/gks/4.4.74/lib
 
-#DEFINES += ${SOLPS_CPP} ${EIRENE_DEFINES} -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
-#DEFINES += ${SOLPS_CPP} ${EIRENE_DEFINES} -DTRIANG -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
-EQUIVS    =
-
 #CPP      = -/lib/cpp -C -traditional
 CPP       = /lib/cpp -traditional
-CPPOPTS   = -P -I${srcdir} ${EQUIVS} ${DEFINES}
-SED       =
-LINK_MOD  =
 
 FC        = ifort
-COMPILER_MAJOR_VERSION = $(shell ${FC} -V 2>&1 | grep -o "Version [0-9]*" | cut -d ' ' -f 2 )
 
 ifdef SOLPS_DEBUG
-FCOPTS    = -g -C -traceback -debug all -check all
-else
-ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -le 12; echo $$?),0)
-FCOPTS    = -O3 -vec_report0
-else
-FCOPTS    = -O3
-endif
+FCOPTS    = -traceback -check all
 endif
 
-#COMPILE  = ${FC} -c ${FFLAGS}
+OBJDEST   = -module ${OBJDIR}
 
-NAG       = ${LD_NAG}
 GKS       = ${LD_GR} ${LD_GKS}
 
 #LDLIBS   = ${LD_MSCL} -L/usr/local/lib -L/usr/X11R6/lib64
 LDLIBS    =
-LDEXTRA   =
-
-# new
-
-INCMOD    = -I
-MOD       = mod
-OBJDEST   = -module ${OBJDIR} -o ${OBJDIR}/$*.o
-
-BLD       = ar rucv
-
-LD        = ${FC}
 
 #!!!Local Variables:
 #!!! mode: Makefile
