@@ -22,15 +22,10 @@ sed -i -e 's/ISIZE2OFabs/0:state%pl%ns-1/g' b2mod_driver_diffv.F90
 sed -i -e "s/REAL(r8), DIMENSION(:,/REAL(r8), DIMENSION(nbdirsmax,/g" b2news__dv.F90
 sed -i -e 's/ISIZE1OFdv%fch_pi_c/nCv/g' b2news__dv.F90
 sed -i -e "s/INTEGER :: dummyzerodiffd0/INTEGER :: dummyzerodiffd0(nbdirsmax)/g" b2mod_recycle_diffv.F90
-#sed -i -e "s/INTEGER :: dummyzerodiffd27/INTEGER :: dummyzerodiffd27(nbdirsmax)/g" b2news__dv.F90
-#sed -i -e "s/INTEGER :: dummyzerodiffd31/INTEGER :: dummyzerodiffd31(nbdirsmax)/g" b2news__dv.F90
 sed -i -e "s/INTEGER :: dummyzerodiffd29/INTEGER :: dummyzerodiffd29(nbdirsmax)/g" b2news__dv.F90
 sed -i -e "s/INTEGER :: dummyzerodiffd33/INTEGER :: dummyzerodiffd33(nbdirsmax)/g" b2news__dv.F90
 sed -i -e "s/INTEGER :: dummyzerodiffd37/INTEGER :: dummyzerodiffd37(nbdirsmax)/g" b2news__dv.F90
 sed -i -e "s/INTEGER :: dummyzerodiffd54/INTEGER :: dummyzerodiffd54(nbdirsmax)/g" b2news__dv.F90
-#sed -i -e "s/INTEGER :: dummyzerodiffd36/INTEGER :: dummyzerodiffd36(nbdirsmax)/g" b2news__dv.F90
-#sed -i -e "s/INTEGER :: dummyzerodiffd38/INTEGER :: dummyzerodiffd38(nbdirsmax)/g" b2news__dv.F90
-#sed -i -e "s/INTEGER :: dummyzerodiffd57/INTEGER :: dummyzerodiffd57(nbdirsmax)/g" b2news__dv.F90
 sed -i -e 's/ISIZE1OFtemp/nCv/g' b2news__dv.F90 b2tfcc_dv.F90 b2tfnb_dv.F90 b2tqna_dv.F90 b2xpic_dv.F90
 sed -i -e 's/ISIZE1OFcvsa/nFc/g' b2npmo_dv.F90
 sed -i -e 's/ISIZE1OFresult1/nCv/g' b2npmo_dv.F90
