@@ -1,5 +1,8 @@
 # Autodetected optional features...
 
+SOLPS_CPP += -DPGF90 -DNOQUAD
+LD_MPI     = -Mmpi=mpich
+
 # Build with NetCDF tools if available
 ifdef LD_NETCDF
   SOLPS_CPP   += -DCDF_MOVIE

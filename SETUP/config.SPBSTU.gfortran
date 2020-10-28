@@ -60,7 +60,7 @@ endif
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNCAR4 -DGFORTRAN -DNO_NAG
+SOLPS_CPP      = -DNCAR4 -DNO_NAG
 B25_DEFINES    =
 CARRE_DEFINES  =
 EIRENE_DEFINES =

@@ -62,7 +62,7 @@ LD_MPI     = -L${MPDIR}/lib -lmpich
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNO_NAG -DGFORTRAN -DNCAR4
+SOLPS_CPP      = -DNO_NAG -DNCAR4
 B25_DEFINES    =
 CARRE_DEFINES  =
 EIRENE_DEFINES =

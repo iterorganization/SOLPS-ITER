@@ -1,5 +1,7 @@
 # Autodetected optional features...
 
+SOLPS_CPP     += -DGFORTRAN
+
 # Build with NetCDF tools if available
 ifdef LD_NETCDF
   SOLPS_CPP   += -DCDF_MOVIE

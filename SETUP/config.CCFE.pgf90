@@ -50,9 +50,8 @@ LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNCAR4 -DJET -DPGF90 -DNOQUAD
+SOLPS_CPP      = -DNCAR4 -DJET
 MPI_CPP        = -I${MPDIR}/include
-LD_MPI         = -Mmpi=mpich
 B25_DEFINES    =
 CARRE_DEFINES  =
 EIRENE_DEFINES =
