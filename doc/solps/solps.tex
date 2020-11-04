@@ -6686,7 +6686,7 @@ from anomalous radial particle flux to the convective heat flux are left
 in the expressions for $\tilde{q}_{e,i}$. In the term
 $p_i \nabla \cdot \vec{V}_i$ the anomalous particle flux is absent.
 
-\subsection{Derivation of parallel viscosity term in momentum equation}
+\section{Derivation of parallel viscosity term in momentum equation}
 \index{parallel viscosity}\label{sec:viscosity}
 
 To evaluate the parallel viscosity contribution we should start from the general expressions, which can be transformed and simplified in arbitrary Cartesian coordinate system assuming only parallel velocity. The Braginskii description for parallel viscosity in Cartesian coordinates is:
@@ -12321,11 +12321,11 @@ first the bottom then the top divertor.
 
 For double-null (DN) and lower single-null (LSN) topologies, the Western edge refers to the inboard divertor, while it points to the outboard divertor for upper single-null (USN) topologies. Conversely, the Eastern edge is the outboard divertor for DN and LSN cases, but the inboard divertor for USN cases.
 
-In the case of linear runs, the midplane refers, by default, to the midpoint of the domain.
-The divertor throat quantities are not defined.
+In the case of linear runs, the midplane refers, by default, to the midpoint of the domain. The divertor throat quantities are not defined.
 
-In all cases, the point of reference of the midplane quantities can be adjusted by changing the value of $jxa$\index{jxa}
-(and $jxi$\index{jxi} for double-null runs) by assigning it an explicit value in the {\tt b2mn.dat} file.
+In all cases, the point of reference of the midplane quantities can be adjusted by changing the value of $jxa$\index{jxa} (and $jxi$\index{jxi} for double-null runs) by assigning it an explicit value in the {\tt b2mn.dat} file.
+
+The total internal energy flux quantities {\tt fet...} are defined in the same way as the {\tt fetx} \btwoplot quantity (see Section \ref{fetx}).\index{b2plot, fetx}
 
 \begin{center}
     \begin{longtable}{|l|l|l|}
@@ -12344,12 +12344,12 @@ timesa \index{timesa}\index{b2time.nc, timesa} & time stamp & $s$ \\
 fnixip \index{fnixip}\index{b2time.nc, fnixip} & integrated poloidal main ion particle flux, Western edge & $s^{-1}$ \\
 feexip \index{feexip}\index{b2time.nc, feexip} & integrated poloidal electron energy flux, Western edge & $W$ \\
 feixip \index{feixip}\index{b2time.nc, feixip} & integrated poloidal ion energy flux, Western edge & $W$ \\
-fetxip \index{fetxip}\index{b2time.nc, fetxip} & integrated poloidal total energy flux, Western edge & $W$ \\
+fetxip \index{fetxip}\index{b2time.nc, fetxip} & integrated poloidal total internal energy flux, Western edge & $W$ \\
 fchxip \index{fchxip}\index{b2time.nc, fchxip} & integrated poloidal current, Western edge & $A$ \\
 fnixap \index{fnixap}\index{b2time.nc, fnixap} & integrated poloidal main ion particle flux, Eastern edge & $s^{-1}$ \\
 feexap \index{feexap}\index{b2time.nc, feexap} & integrated poloidal electron energy flux, Eastern edge & $W$ \\
 feixap \index{feixap}\index{b2time.nc, feixap} & integrated poloidal ion energy flux, Eastern edge & $W$ \\
-fetxap \index{fetxap}\index{b2time.nc, fetxap} & integrated poloidal total energy flux, Eastern edge & $W$ \\
+fetxap \index{fetxap}\index{b2time.nc, fetxap} & integrated poloidal total internal energy flux, Eastern edge & $W$ \\
 fchxap \index{fchxap}\index{b2time.nc, fchxap} & integrated poloidal current, Eastern edge & $A$ \\
 nesepi \index{nesepi}\index{b2time.nc, nesepi} & separatrix electron density, Western edge & $m^{-3}$ \\
 tesepi \index{tesepi}\index{b2time.nc, tesepi} & separatrix electron temperature, Western edge & $eV$ \\
@@ -12385,12 +12385,12 @@ pomxap \index{pomxap}\index{b2time.nc, pomxap} & maximum potential, Eastern edge
 fniyip \index{fniyip}\index{b2time.nc, fniyip} & integrated radial main ion particle flux, main chamber & $s^{-1}$ \\
 feeyip \index{feeyip}\index{b2time.nc, feeyip} & integrated radial electron energy flux, main chamber & $W$ \\
 feiyip \index{feiyip}\index{b2time.nc, feiyip} & integrated radial ion energy flux, main chamber & $W$ \\
-fetyip \index{fetyip}\index{b2time.nc, fetyip} & integrated radial total energy flux, main chamber & $W$ \\
+fetyip \index{fetyip}\index{b2time.nc, fetyip} & integrated radial total internal energy flux, main chamber & $W$ \\
 fchyip \index{fchyip}\index{b2time.nc, fchyip} & integrated radial current, main chamber & $A$ \\
 fniyap \index{fniyap}\index{b2time.nc, fniyap} & integrated radial main ion particle flux, divertor region & $s^{-1}$ \\
 feeyap \index{feeyap}\index{b2time.nc, feeyap} & integrated radial electron energy flux, divertor region & $W$ \\
 feiyap \index{feiyap}\index{b2time.nc, feiyap} & integrated radial ion energy flux, divertor region & $W$ \\
-fetyap \index{fetyap}\index{b2time.nc, fetyap} & integrated radial total energy flux, divertor region & $W$ \\
+fetyap \index{fetyap}\index{b2time.nc, fetyap} & integrated radial total internal energy flux, divertor region & $W$ \\
 fchyap \index{fchyap}\index{b2time.nc, fchyap} & integrated radial current, divertor region & $A$ \\
 pwmxip \index{pwmxip}\index{b2time.nc, pwmxip} & maximum total power flux, Western edge & $W.m^{-2}$ \\
 pwmxap \index{pwmxap}\index{b2time.nc, pwmxap} & maximum total power flux, Eastern edge & $W.m^{-2}$ \\
@@ -12403,22 +12403,22 @@ tmhadiv \index{tmhadiv}\index{b2time.nc, tmhadiv} & $H_\alpha$ emissivity, diver
 fnisip \index{fnisip}\index{b2time.nc, fnisip} & poloidal main ion particle flux, into Western separatrix throat & $s^{-1}$ \\
 feesip \index{feesip}\index{b2time.nc, feesip} & poloidal electron energy flux, into Western separatrix throat & $W$ \\
 feisip \index{feisip}\index{b2time.nc, feisip} & poloidal ion energy flux, into Western separatrix throat & $W$ \\
-fetsip \index{fetsip}\index{b2time.nc, fetsip} & poloidal total energy flux, into Western separatrix throat & $W$ \\
+fetsip \index{fetsip}\index{b2time.nc, fetsip} & poloidal total internal energy flux, into Western separatrix throat & $W$ \\
 fchsip \index{fchsip}\index{b2time.nc, fchsip} & poloidal current, into Western separatrix throat & $A$ \\
 fnisap \index{fnisap}\index{b2time.nc, fnisap} & poloidal main ion particle flux, into Eastern separatrix throat & $s^{-1}$ \\
 feesap \index{feesap}\index{b2time.nc, feesap} & poloidal electron energy flux, into Eastern separatrix throat & $W$ \\
 feisap \index{feisap}\index{b2time.nc, feisap} & poloidal ion energy flux, into Eastern separatrix throat & $W$ \\
-fetsap \index{fetsap}\index{b2time.nc, fetsap} & poloidal total energy flux, into Eastern separatrix throat & $W$ \\
+fetsap \index{fetsap}\index{b2time.nc, fetsap} & poloidal total internal energy flux, into Eastern separatrix throat & $W$ \\
 fchsap \index{fchsap}\index{b2time.nc, fchsap} & poloidal current, into Eastern separatrix throat & $A$ \\
 fnisipp \index{fnisipp}\index{b2time.nc, fnisipp} & poloidal main ion particle flux, core x-pt flux region & $s^{-1}$ \\
 feesipp \index{feesipp}\index{b2time.nc, feesipp} & poloidal electron energy flux, core x-pt flux region & $W$ \\
 feisipp \index{feisipp}\index{b2time.nc, feisipp} & poloidal ion energy flux, core x-pt flux region & $W$ \\
-fetsipp \index{fetsipp}\index{b2time.nc, fetsipp} & poloidal total energy flux, core x-pt flux region & $W$ \\
+fetsipp \index{fetsipp}\index{b2time.nc, fetsipp} & poloidal total internal energy flux, core x-pt flux region & $W$ \\
 fchsipp \index{fchsipp}\index{b2time.nc, fchsipp} & poloidal current, core x-pt flux region & $A$ \\
 fnisapp \index{fnisapp}\index{b2time.nc, fnisapp} & poloidal main ion particle flux, x-pt private flux region & $s^{-1}$ \\
 feesapp \index{feesapp}\index{b2time.nc, feesapp} & poloidal electron energy flux, x-pt private flux region & $W$ \\
 feisapp \index{feisapp}\index{b2time.nc, feisapp} & poloidal ion energy flux, x-pt private flux region & $W$ \\
-fetsapp \index{fetsapp}\index{b2time.nc, fetsapp} & poloidal total energy flux, x-pt private flux region & $W$ \\
+fetsapp \index{fetsapp}\index{b2time.nc, fetsapp} & poloidal total internal energy flux, x-pt private flux region & $W$ \\
 fchsapp \index{fchsapp}\index{b2time.nc, fchsapp} & poloidal current, x-pt private flux region & $A$ \\
     \hline
     \caption{Scalar time dependent quantities stored in b2time.nc}
@@ -12435,6 +12435,8 @@ inner midplane ({\tt i}), outer midplane ({\tt a}) and Eastern target ({\tt r})
 positions of the inner and outer midplanes can be selected by
 {\tt b2mwti\_jxi} and {\tt b2mwti\_jxa}, respectively, in
 {\tt b2mn.dat}.
+
+Again, the total internal energy flux quantities {\tt ft3d..} are defined in the same way as the {\tt fetx} \btwoplot quantity (see Section \ref{fetx}).\index{b2plot, fetx}
 
 Note that, when processed with {\tt 2d\_profiles}, the fluxes are renormalised by the
 contact area to the neighbouring cells, and therefore their units must all be multiplied
@@ -12459,7 +12461,7 @@ fl3dl \index{fl3dl}\index{b2time.nc, fl3dl} & poloidal electron flux, Western ed
 fo3dl \index{fo3dl}\index{b2time.nc, fo3dl} & poloidal total ion flux, Western edge & $s^{-1}.m^{-2}$ \\
 fe3dl \index{fe3dl}\index{b2time.nc, fe3dl} & poloidal electron energy flux, Western edge & $W.m^{-2}$ \\
 fi3dl \index{fi3dl}\index{b2time.nc, fi3dl} & poloidal ion energy flux, Western edge & $W.m^{-2}$ \\
-ft3dl \index{ft3dl}\index{b2time.nc, ft3dl} & poloidal total energy flux, Western edge & $W.m^{-2}$ \\
+ft3dl \index{ft3dl}\index{b2time.nc, ft3dl} & poloidal total internal energy flux, Western edge & $W.m^{-2}$ \\
 fc3dl \index{fc3dl}\index{b2time.nc, fc3dl} & poloidal current, Western edge & $A.m^{-2}$ \\
 ne3dl \index{ne3dl}\index{b2time.nc, ne3dl} & electron density, Western edge & $m^{-3}$ \\
 te3dl \index{te3dl}\index{b2time.nc, te3dl} & electron temperature, Western edge & $eV$ \\
@@ -12504,7 +12506,7 @@ mn3dr \index{mn3dr}\index{b2time.nc, mn3dr} & molecule density of $1^{st}$ molec
 fn3dr \index{fn3dr}\index{b2time.nc, fn3dr} & poloidal particle flux of main ion, Eastern edge & $s^{-1}.m^{-2}$ \\
 fe3dr \index{fe3dr}\index{b2time.nc, fe3dr} & poloidal electron energy flux, Eastern edge & $W.m^{-2}$ \\
 fi3dr \index{fi3dr}\index{b2time.nc, fi3dr} & poloidal ion energy flux, Eastern edge & $W.m^{-2}$ \\
-ft3dr \index{ft3dr}\index{b2time.nc, ft3dr} & poloidal total energy flux, Eastern edge & $W.m^{-2}$ \\
+ft3dr \index{ft3dr}\index{b2time.nc, ft3dr} & poloidal total internal energy flux, Eastern edge & $W.m^{-2}$ \\
 fc3dr \index{fc3dr}\index{b2time.nc, fc3dr} & poloidal current, Eastern edge & $A.m^{-2}$ \\
 fl3dr \index{fl3dr}\index{b2time.nc, fl3dr} & poloidal electron flux, Eastern edge & $s^{-1}.m^{-2}$ \\
 fo3dr \index{fo3dr}\index{b2time.nc, fo3dr} & poloidal total ion flux, Eastern edge & $s^{-1}.m^{-2}$ \\
@@ -12545,7 +12547,7 @@ mn3dtl \index{mn3dtl}\index{b2time.nc, mn3dtl} & molecule density of $1^{st}$ mo
 fn3dtl \index{fn3dtl}\index{b2time.nc, fn3dtl} & poloidal particle flux of main ion, inboard top divertor & $s^{-1}$ \\
 fe3dtl \index{fe3dtl}\index{b2time.nc, fe3dtl} & poloidal electron energy flux, inboard top divertor & $W$ \\
 fi3dtl \index{fi3dtl}\index{b2time.nc, fi3dtl} & poloidal ion energy flux, inboard top divertor & $W$ \\
-ft3dtl \index{ft3dtl}\index{b2time.nc, ft3dtl} & poloidal total energy flux, inboard top divertor & $W$ \\
+ft3dtl \index{ft3dtl}\index{b2time.nc, ft3dtl} & poloidal total internal energy flux, inboard top divertor & $W$ \\
 fc3dtl \index{fc3dtl}\index{b2time.nc, fc3dtl} & poloidal current, inboard top divertor  & $A$ \\
 fl3dtl \index{fl3dtl}\index{b2time.nc, fl3dtl} & poloidal electron flux, inboard top divertor & $s^{-1}$ \\
 fo3dtl \index{fo3dtl}\index{b2time.nc, fo3dtl} & poloidal total ion flux, inboard top divertor & $s^{-1}$ \\
@@ -12559,7 +12561,7 @@ mn3dtr \index{mn3dtr}\index{b2time.nc, mn3dtr} & molecule density of $1^{st}$ mo
 fn3dtr \index{fn3dtr}\index{b2time.nc, fn3dtr} & poloidal particle flux of main ion, outboard top divertor & $s^{-1}$ \\
 fe3dtr \index{fe3dtr}\index{b2time.nc, fe3dtr} & poloidal electron energy flux, outboard top divertor & $W$ \\
 fi3dtr \index{fi3dtr}\index{b2time.nc, fi3dtr} & poloidal ion energy flux, outboard top divertor & $W$ \\
-ft3dtr \index{ft3dtr}\index{b2time.nc, ft3dtr} & poloidal total energy flux, outboard top divertor & $W$ \\
+ft3dtr \index{ft3dtr}\index{b2time.nc, ft3dtr} & poloidal total internal energy flux, outboard top divertor & $W$ \\
 fc3dtr \index{fc3dtr}\index{b2time.nc, fc3dtr} & poloidal current, outboard top divertor  & $A$ \\
 fl3dtr \index{fl3dtr}\index{b2time.nc, fl3dtr} & poloidal electron flux, outboard top divertor & $s^{-1}$ \\
 fo3dtr \index{fo3dtr}\index{b2time.nc, fo3dtr} & poloidal total ion flux, outboard top divertor & $s^{-1}$ \\
@@ -12569,9 +12571,9 @@ fo3dtr \index{fo3dtr}\index{b2time.nc, fo3dtr} & poloidal total ion flux, outboa
   \end{longtable}
 \end{center}
 
-Additional multi-dimensional writes to {\tt b2time.nc} can be made using the ``b2mwti\_2dwrite'' switch.
-If set to ``1'', then a few 2D arrays ($n_e$, $T_e$, $T_i$) are output with each write to {\tt b2time.nc}. If set
-to ``2'', then additional quantities such as fluxes are added, see below Table
+Additional multi-dimensional writes to {\tt b2time.nc} can be made using the {\tt b2mwti\_2dwrite} switch.
+If set to {\tt 1}, then a few 2D arrays ($n_e$, $T_e$, $T_i$) are output with each write to {\tt b2time.nc}. If set
+to {\tt 2}, then additional quantities such as fluxes are added, see below Table
 \ref{tab:5db2time}.
 
 \begin{center}
@@ -12586,13 +12588,13 @@ to ``2'', then additional quantities such as fluxes are added, see below Table
     \multicolumn{3}{|l|}{\small\sl continued on next page} \\
     \hline \endfoot
     \endlastfoot
-    \multicolumn{3}{|c|}{If b2mwti\_2dwrite $\ge$ 1} \\
+    \multicolumn{3}{|c|}{If {\tt b2mwti\_2dwrite} $\ge$ 1} \\
     \hline
     ne2d \index{ne2d}\index{b2time.nc, ne2d} & electron density & $m^{-3}$ \\
     te2d \index{te2d}\index{b2time.nc, te2d} & electron temperature & $eV$ \\
     ti2d \index{ti2d}\index{b2time.nc, ti2d} & ion temperature & $eV$ \\
     \hline
-    \multicolumn{3}{|c|}{and if b2mwti\_2dwrite = 2} \\
+    \multicolumn{3}{|c|}{and if {\tt b2mwti\_2dwrite} = 2} \\
     \hline
     po2d \index{po2d}\index{b2time.nc, po2d} & electric potential & $V$ \\
     kin2d \index{kin2d}\index{b2time.nc, kin2d} & parallel kinetic energy & $J$ \\
@@ -14362,7 +14364,9 @@ also all require an integer argument $\langle$i$\rangle$,
 with which the logical comparison is done. If the comparison test is true, the arrays
 will contain 1.0, otherwise they will contain zero.
 
-Please note that the sign convention for the parallel ion ({\bf ua}) and electron ({\bf ue}) velocity depends on the sign of the poloidal magnetic field. The poloidal field is positive if it points if the direction of increasing poloidal index $ix$. The parallel velocities are positive if they point in the {\em same direction as the poloidal magnetic field}. Note further that this sign convention {\em does not apply} to the parallel current {\bf fchp}, for which the standard sign convention applies, i.e. it is positive if pointing in the direction of increasing poloidal index $ix$.
+Please note that the sign convention for the parallel ion ({\bf ua}) and electron ({\bf ue}) velocities depends on the sign of the poloidal magnetic field. The poloidal field is positive if it points if the direction of increasing poloidal index $ix$. The parallel velocities are positive if they point in the {\em same direction as the poloidal magnetic field}. Note further that this sign convention {\em does not apply} to the parallel current {\bf fchp}, for which the standard sign convention applies, i.e. it is positive if pointing in the direction of increasing poloidal index $ix$.\index{b2plot, ua}\index{b2plot, ue}
+
+A note about total energy fluxes. These are provided in two slightly different forms, denoted {\bf fet[xy]} and {\bf fht[xy]}. Both formulations contain the {\bf fhe}, {\bf fhi}, {\bf fhm}, and {\bf fhp} terms. If the code was solving internal energy equations (i.e. {\tt b2news\_BoRiS} set to {\tt 0.0} [default]), we add viscous correction terms and an extra factor of particle flux times temperature. For the {\bf fht} formulation, we also add the electrostatic energy flux term {\bf fhj}. This term is not included in {\bf fet}, but, instead, {\bf fet} will include any contributions from species provided by an additional external code (for example, {\tt IMPGYRO}). These external species do not include the ones followed by {\tt Eirene}, however.\index{b2plot, fetx}\index{b2plot, fety}\index{b2plot, fhtx}\index{b2plot, fhty}\label{fetx}
 
 The commands acting on the matrix stack are given in table
 \ref{tab:available-commands}. These involve some manipulation or use of
@@ -14401,7 +14405,8 @@ are not met, an error is returned and no action is taken.
     f.ly \index{b2plot, f.ly}      & 1 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:f.ly}  & Plot against $\log(y)$ \\
     f.x \index{b2plot, f.x}        & 1 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:f.x}   & Plot against $x$ \\
     f.y \index{b2plot, f.y}        & 1 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:f.y}   & Plot against $y$ \\
-    fpsi \index{b2plot, fpsi}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:fpsi}  & Plot data against poloidal magnetic flux ($\Psi$) value \\
+    fpsi \index{b2plot, fpsi}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:fpsi}  & Plot data against \\
+                                   &   &   &   &   &   &   &   &  & \hspace{1cm} poloidal magnetic flux ($\Psi$) value \\
     intx \index{b2plot, intx}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:intx}  & Integrate along $x$ \\
     inty \index{b2plot, inty}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:inty}  & Integrate along $y$ \\
     line \index{b2plot, line}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:line}  & Choose $x$- or $y$-directed graphs \\
@@ -14412,7 +14417,8 @@ are not met, an error is returned and no action is taken.
     m+ \index{b2plot, m+}          & 0 & 0 & 0 & 2 & 0 & 0 & 0 & \ref{sec:m+}    & Matrix addition \\
     m- \index{b2plot, m-}          & 0 & 0 & 0 & 2 & 0 & 0 & 0 & \ref{sec:m-}    & Matrix subtraction \\
     m/ \index{b2plot, m/}          & 0 & 0 & 0 & 2 & 0 & 0 & 0 & \ref{sec:m/}    & Matrix division \\
-    mdims \index{b2plot, mdims}    & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:mdims} & Prints the dimensions and contents of the matrix stack \\
+    mdims \index{b2plot, mdims}    & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:mdims} & Prints the dimensions and \\
+                                   &   &   &   &   &   &   &   &   & \hspace{1cm} contents of the matrix stack \\
     meq \index{b2plot, meq}        & 0 & 0 & 0 & 2 & 0 & 0 & 0 & \ref{sec:meq}   & Matrix equal to \\
     mge \index{b2plot, mge}        & 0 & 0 & 0 & 2 & 0 & 0 & 0 & \ref{sec:mge}   & Matrix greater than or equal to \\
     mgt \index{b2plot, mgt}        & 0 & 0 & 0 & 2 & 0 & 0 & 0 & \ref{sec:mgt}   & Matrix greater than \\
@@ -14422,7 +14428,8 @@ are not met, an error is returned and no action is taken.
     mmid \index{b2plot, mmid}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:mmid}  & Map data to midplane \\
     mmin \index{b2plot, mmin}      & 0 & 0 & 0 & 2 & 0 & 0 & 0 & \ref{sec:mmin}  & Minimum of two matrices \\
     mne \index{b2plot, mne}        & 0 & 0 & 0 & 2 & 0 & 0 & 0 & \ref{sec:mne}   & Matrix not equal to \\
-    mpsi \index{b2plot, mpsi}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:mpsi}  & Plot data against normalised poloidal magnetic flux ($\psi$) value \\
+    mpsi \index{b2plot, mpsi}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:mpsi}  & Plot data against \\
+                                   &   &   &   &   &   &   &   &   & \hspace{1cm} normalised poloidal magnetic flux ($\psi$) value \\
     nese \index{b2plot, nese}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:nese}  & Overwrite onto electron density array \\
     nspe, nspec \index{b2plot, nspe}\index{b2plot, nspec} & 3 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:nspe}  & New spectrometer \\
     over \index{b2plot, over}      & 0 & 0 & 0 & 2 & 0 & 0 & 0 & \ref{sec:over}  & Copy over second top element of matrix stack \\
@@ -14715,8 +14722,10 @@ commands take one value off the "string" stack.
     cmdcdf \index{b2plot, cmdcdf} & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:cmdcdf}   & Loop command file on {\tt CDF} data \\
     ecam \index{b2plot, ecam}    & 0 & 0 & 1 & 0 & 1 & 0 & 0 & \ref{sec:ecam}     & Camera plot for Eirene stack data \\
     echbx \index{b2plot, echbx}  & 0 & 0 & 1 & 0 & 1 & 0 & 0 & \ref{sec:echbx}    & Boxcar average of chords for Eirene stack data \\
-    echmp \index{b2plot, echmp}  & 0 & 0 & 1 & 0 & 1 & 0 & 0 & \ref{sec:echmp}    & Chord contributions to the mesh element from Eirene stack data \\
-    echor \index{b2plot, echor}  & 0 & 0 & 1 & 0 & 1 & 0 & 0 & \ref{sec:echor}    & Filename containing chords (for integration of Eirene stack data) \\
+    echmp \index{b2plot, echmp}  & 0 & 0 & 1 & 0 & 1 & 0 & 0 & \ref{sec:echmp}    & Chord contributions to the mesh element \\
+                                 &   &   &   &   &   &   &   &  & \hspace{1cm} from Eirene stack data \\
+    echor \index{b2plot, echor}  & 0 & 0 & 1 & 0 & 1 & 0 & 0 & \ref{sec:echor}    & Filename containing chords \\
+                                 &   &   &   &   &   &   &   &  & \hspace{1cm} (for integration of Eirene stack data) \\
     echvl \index{b2plot, echvl}  & 0 & 0 & 1 & 0 & 1 & 0 & 0 & \ref{sec:echvl}    & Value at positions of Eirene stack data \\
     expf \index{b2plot, expf}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:expf}     & Experimental data file \\
     extl \index{b2plot, extl}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:extl}     & Extra label \\
@@ -14732,7 +14741,8 @@ commands take one value off the "string" stack.
     pdev \index{b2plot, pdev}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:pdev}     & {\tt PLPLOT} device name \\
     saw \index{b2plot, saw}      & 2 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:saw}      & Read external data onto the matrix stack \\
     saws \index{b2plot, saws}    & 3 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:saws}     & Read external fluid species data onto the matrix stack \\
-    sawx \index{b2plot, sawx}    & 3 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:sawx}     & Read external additional species data onto the matrix stack \\
+    sawx \index{b2plot, sawx}    & 3 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:sawx}     & Read external additional species data \\
+                                 &   &   &   &   &   &   &   &   & \hspace{1cm} onto the matrix stack \\
     scat \index{b2plot, scat}    & 0 & 0 & 2 & 0 & 0 & 0 & 0 & \ref{sec:scat}     & Concatenate two strings \\
     sdrop \index{b2plot, sdrop}  & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:sdrop}    & Drop top of string stack \\
     sdup \index{b2plot, sdup}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:sdup}     & Duplicate top of string stack \\
@@ -15042,7 +15052,7 @@ act on the "wall" stack or affect wall graphs.
     \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
     \hline \endfirsthead
     \hline
-    \multicolumn{9}{|l|}{\small\sl continued on next page} \\
+    \multicolumn{10}{|l|}{\small\sl continued on next page} \\
     \hline \endfoot
     \endlastfoot
     ddw \index{b2plot, ddw}       & 0 & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:ddw}      & Take derivative along wall length \\
