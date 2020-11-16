@@ -147,7 +147,7 @@ endif
 ifeq ($(shell [ -d ${SRC5LOCAL} ] && echo yes || echo no ),yes)
 FFLIST  += ${shell echo ${SRC5LOCAL}/*.F}
 endif
-MODLIST = ${shell echo ${SRCDIR}/B2.5_modules/*.F ${SRCDIR}/b2_4to5.F ${SRCDIR}/B2.5_modules/*.F90 ${SRCDIR}/solps5/*.F90}
+MODLIST = ${shell echo ${SRCDIR}/B2.5_modules/*.F ${SRCDIR}/b2_4to5.F ${SRCDIR}/B2.5_modules/*.F90 ${SRCDIR}/solps5/*.F90 ${SRCDIR}/solps5/b2mod_*.F}
 
 EXELIST = ${patsubst %.exe, %.o, ${PROG_XR}}
 EXCLUDELIST = ${patsubst %.o, %\\.o, ${EXELIST}}
