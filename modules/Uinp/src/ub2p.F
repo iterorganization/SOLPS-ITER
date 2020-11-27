@@ -1,5 +1,6 @@
       program ub2p
       use b2mod_types
+      use b2mod_xerset
       implicit none
 c======================================================================
 c*** Creates the additional input files for b2plot, provided that the
@@ -17,7 +18,7 @@ c  version : 25.08.97 15:04
 c
 #include "ubpcom.h"
 #include "impcon.inc"
-      external prgini,prgend,xerset,ubpnam
+      external prgini,prgend,ubpnam
 c======================================================================
 c*** set up the input routine
       call prgini('ub2p')

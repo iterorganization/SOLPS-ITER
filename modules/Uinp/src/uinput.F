@@ -2,6 +2,7 @@
       use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
+      use b2mod_xerset
       use eirmod_solps
 
 c  version : 28.01.2003 18:08
@@ -22,7 +23,7 @@ c=======================================================================
       logical uex
       integer find_matching_species
       external find_matching_species
-      external prgini,prgend,xerset
+      external prgini,prgend
 c=======================================================================
       call prgini('uinput')
 *   ..mark output unit for error messages
@@ -690,4 +691,4 @@ cxpb      call uib2pl
 c=======================================================================
       call prgend ()
       stop 'uinp'
-      end
+      end program uinput
