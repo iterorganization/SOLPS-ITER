@@ -1410,12 +1410,6 @@ c
       integer nx,ny,ns
       integer is, js, ib, ireg, ireg_4
 
-      real (kind=R8) :: amtol
-      parameter (amtol=1.0e-2_R8)
-      logical lnext
-      lnext(is,js) = zamax(is).lt.zamin(js).and.zn(is).eq.zn(js).and.
-     &  abs(am(is)-am(js)).lt.amtol
-      intrinsic abs
       external subini, subend, xertst
 
       call subini('b2convi2')
