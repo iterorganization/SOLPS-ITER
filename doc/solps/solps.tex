@@ -18144,10 +18144,10 @@ GFORTRAN & equations/b2news.F \\
 GFORTRAN & equations/b2news\_.F \\
 GFORTRAN & equations/b2npmo.F \\
 GFORTRAN & modules/b2mod\_openmp.F \\
-GFORTRAN & utility/ilutern\_solps.F \\
-GFORTRAN & utility/ilutern\_7\_solps.F \\
-GFORTRAN & utility/ilutern\_9\_solps.F \\
-GFORTRAN & utility/ilutern\_11\_solps.F \\
+GFORTRAN & utility/b2mod\_ilutern.F \\
+GFORTRAN & utility/b2mod\_ilutern\_7.F \\
+GFORTRAN & utility/b2mod\_ilutern\_9.F \\
+GFORTRAN & utility/b2mod\_ilutern\_11.F \\
 GFORTRAN & utility/ma28.F \\
 GFORTRAN & utility/ma28copy.F \\
 GFORTRAN & utility/ma28copy3.F \\
@@ -18585,6 +18585,7 @@ The NAG calls from {\tt B2.5} are given in table \ref{tab:nagb2}.
     \hline \endfoot
     \endlastfoot
 b2mndr.f                &  X05BAF & returns the amount of processor time used since an unspecified previous time, via the routine name \\ \hline
+b2mod\_ilutern\_7.f     &  X05BAF & returns the amount of processor time used since an unspecified previous time, via the routine name \\ \hline
 b2mod\_input\_profile.f &  E01BEF & computes a monotonicity-preserving piecewise cubic Hermite interpolant to a set of data points \\ \hline
 b2mod\_input\_profile.f &  E01BFF & evaluates a piecewise cubic Hermite interpolant, as computed by E01BEF \\ \hline
 b2stbr.f                &  X05BAF & returns the amount of processor time used since an unspecified previous time, via the routine name \\ \hline
@@ -18600,7 +18601,6 @@ caltraj.f               &  X05BAF & returns the amount of processor time used si
 daytim.f                &  X05AAF & returns the current date and time \\ \hline
 daytim.f                &  X05ABF & converts from a seven-integer format time and date, as returned by X05AAF, into a character string, returned via the routine name \\ \hline
 heatdiff1D.f            &  D03PCF & integrates a system of linear or nonlinear parabolic partial differential equations (PDEs) in one space variable. \\ \hline
-ilutern\_7\_solps.f     &  X05BAF & returns the amount of processor time used since an unspecified previous time, via the routine name \\ \hline
 macheps.f               &  X02AJF & returns the machine precision \\ \hline
 machsfr.f               &  X02AMF & returns the safe range of floating-point arithmetic \\
   \hline
