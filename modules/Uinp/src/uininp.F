@@ -2,6 +2,7 @@
       use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
+      use b2mod_subsys
       use eirmod_solps
 c
 c  version : 23.04.99 14:36
@@ -14,7 +15,7 @@ c======================================================================
       logical uex,open_file,streql,match_found,skip_wall
       character*2 listmat(nmtr)
       external open_file,uinnam,uintrg,uinaux,uiniamd,streql,
-     .         xertst,xerrab,subini,subend
+     .         xertst,xerrab
 c======================================================================
 c*** set up the input routine
 c
@@ -187,4 +188,4 @@ c*** Add explicitly 3rd product in selected reactions
 c======================================================================
       call subend ()
       return
-      end
+      end subroutine uininp

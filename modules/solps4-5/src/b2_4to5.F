@@ -1,5 +1,6 @@
       module b2_4to5
       use b2mod_types
+      use b2mod_subsys
       implicit none
 #     include "DIMENSIONS.F"
 
@@ -128,7 +129,6 @@
 #     include <CBRAEIR.F>
 
       integer is
-      external subini, subend
 
       call subini('b2convp1')
 
@@ -315,7 +315,6 @@ cxpb
 #     include <CCUT.F>
 
       integer is, it, ib, k
-      external subini, subend
 
       call subini('b2convi1')
 
@@ -689,7 +688,7 @@ cxpb
       integer ixl,ixr,ireg
       integer, allocatable :: zone(:)
 
-      external subini, subend, xertst
+      external xertst
       external b2xpne, b2xpni, b2xppb, b2xpfe, b2xpfi, b2agmt
       external init_region
       real (kind=R8) :: rratio
@@ -1410,7 +1409,7 @@ c
       integer nx,ny,ns
       integer is, js, ib, ireg, ireg_4
 
-      external subini, subend, xertst
+      external xertst
 
       call subini('b2convi2')
 
@@ -3377,7 +3376,7 @@ c
       integer, save :: interptype
 *   ..procedures
       intrinsic sqrt
-      external subini, subend, xerrab
+      external xerrab
 *   ..initialisation
       data interptype /1/
 
@@ -3518,7 +3517,7 @@ c
       integer, save :: interptype
 *   ..procedures
       intrinsic sqrt
-      external subini, subend, xerrab
+      external xerrab
 *   ..initialisation
       data interptype /1/
 

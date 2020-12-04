@@ -2,6 +2,7 @@
       use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
+      use b2mod_subsys
       use eirmod_solps
 c
 c  version : 01.04.2005 14:27
@@ -17,7 +18,7 @@ c=======================================================================
       character hlp_c*2
       integer find_matching_species
       logical streql
-      external streql, xertst, subini, subend, find_matching_species
+      external streql, xertst, find_matching_species
 c=======================================================================
       call subini ('uinbndfl')
 c*** Determine the default source scaling relations
@@ -252,7 +253,7 @@ c*** uex: the highest ionisation state for this species
 c=======================================================================
       call subend ()
       return
-      end
+      end subroutine uinbndfl
 
       integer function find_matching_species(name)
       use b2mod_types

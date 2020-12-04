@@ -2,6 +2,7 @@
       use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
+      use b2mod_subsys
       use eirmod_solps
 c
 c  version : 30.06.2000 21:13
@@ -39,7 +40,7 @@ c
       character hlp_frm*14
       integer len_of_digits
       logical streql
-      external len_of_digits, streql, subini, subend
+      external len_of_digits, streql
 c
 c*** Possible forms of the end-of-block line
       integer nfnl
@@ -319,4 +320,4 @@ c=======================================================================
       iret=2
       return
 c=======================================================================
-      end
+      end subroutine uicrb2

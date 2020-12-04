@@ -4,6 +4,7 @@
      , , only: ntrack, nalloys
       use eirmod_solps
       use b2mod_constants
+      use b2mod_subsys
 
 c  version : 16.03.2005 23:56
 
@@ -18,7 +19,7 @@ c=======================================================================
       real uzdim,rm_hlp,rx_hlp,zm_hlp,zx_hlp
       parameter (uzdim=1.e20)
       character utxsfa*44
-      external xerrab, xertst, subini, subend
+      external xerrab, xertst
       data utxsfa / ' - target edge (to be modified by GEOUSR)' /
       data m_hlp / n_hlp*0 /
 c=======================================================================
@@ -446,4 +447,4 @@ c*** Set the VSP data for input.eir
 c=======================================================================
       call subend ()
       return
-      end
+      end subroutine uinprp

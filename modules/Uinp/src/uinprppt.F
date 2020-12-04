@@ -2,6 +2,7 @@
       use b2mod_elements
       use b2mod_layer
      , , only: ntrack, nalloys
+      use b2mod_subsys
       use eirmod_solps
       implicit none
 
@@ -14,7 +15,7 @@ c======================================================================
       integer i,ii,iii,j,jj,jjj,k,l,m,mm,n,na,ni,nm,np,ipt
       integer find_matching_species, lnblnk
       logical ex,streql
-      external streql, xerrab, subini, subend
+      external streql, xerrab
       external find_matching_species, lnblnk
       character*8 c,cc,c0*1
       character*20 hlp_frm
@@ -844,4 +845,4 @@ cank        isrsp(l)=spcsrsp(l)
 c======================================================================
       call subend ()
       return
-      end
+      end subroutine uinprppt

@@ -2,6 +2,7 @@
       use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
+      use b2mod_subsys
       use eirmod_solps
 
 c  version : 31.03.2005 20:05
@@ -44,7 +45,7 @@ c=======================================================================
      ,  kbnd(nnptseg),lbnd(nnptseg)
       integer ip,iz1,iz2,ik,loff(nbndknd),nz,lz(nnptseg)
       logical er,ex,lw(iztg,2)
-      external subini,subend,xerrab
+      external xerrab
 c*** mtge(i): target edge connected to the target edge i 
       data mtge / 7, 4, 5, 2, 3, 8, 1, 6 /
       data mtgb / 1, 2, 3, 2, 4, 5, 6, 5 /
@@ -402,4 +403,4 @@ c*** Error in the segment chains
  9999 call subend()
       return
 c=======================================================================
-      end
+      end subroutine uichkchn

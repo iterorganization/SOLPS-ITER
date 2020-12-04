@@ -2,6 +2,7 @@
       use b2mod_constants
       use b2mod_layer
      , , only: ntrack, nalloys
+      use b2mod_subsys
       use eirmod_solps
 c
 c  version : 03.01.2005 16:55
@@ -23,7 +24,7 @@ c=======================================================================
       logical ublplt(5)
       equivalence (ublplt,pl1st)
       logical streql
-      external streql, xerrab, subini, subend
+      external streql, xerrab
 c*** List of the valid input keywords
       data unm /
      1    'rmajor  ','npts    ','nprnli  ','ntimv   ','dtimv   ',
@@ -215,4 +216,4 @@ c       call skipit
 c=======================================================================
  9999 call subend ()
       return
-      end
+      end subroutine uinaux

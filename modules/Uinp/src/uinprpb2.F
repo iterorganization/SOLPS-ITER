@@ -4,6 +4,7 @@
      , , only: ntrack, nalloys
       use eirmod_solps
       use b2mod_elements
+      use b2mod_subsys
 c
 c  version : 15.08.2003 18:26
 c
@@ -19,7 +20,7 @@ c=======================================================================
      .        pass, found
       integer idez
       logical streql
-      external xerrab, subini, subend, idez, streql
+      external xerrab, idez, streql
       integer find_matching_species
       external find_matching_species
 c=======================================================================
@@ -1158,4 +1159,4 @@ c*** j_h_at,l_h_mol
 c=======================================================================
       call subend ()
       return
-      end
+      end subroutine uinprpb2

@@ -2,6 +2,7 @@
       use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
+      use b2mod_subsys
       use eirmod_solps
 
 c  version : 05.02.2005 00:46
@@ -27,7 +28,7 @@ c=======================================================================
       character*256 filename, adasfile, uidin
       character utxthd(35)*71, utxtfl(7)*50, ufnm*(*)
       character utxtgt*71
-      external streql, silent_open, xerrab, subini, subend
+      external streql, silent_open, xerrab
       data utxthd /
      1        '** 1. Data for operating mode' ,
      2        '** 2. Data for standard mesh' ,
@@ -1222,4 +1223,4 @@ c=======================================================================
   720 format (a50)
   721 format (a)
 c=======================================================================
-      end
+      end subroutine uinout

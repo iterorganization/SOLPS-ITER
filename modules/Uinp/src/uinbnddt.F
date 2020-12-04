@@ -2,6 +2,7 @@
       use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
+      use b2mod_subsys
       use eirmod_solps
 c
 c  version : 01.04.2005 00:12
@@ -13,7 +14,7 @@ c=======================================================================
       implicit none
 #include "uinput.inc"
       integer ibk,isf,iatm,ispe,ispi
-      external xerrab, subini, subend
+      external xerrab
 c=======================================================================
       call subini ('uinbnddt')
 
@@ -190,4 +191,4 @@ c*** ... and then the recycling source if specified
 c=======================================================================
       call subend ()
       return
-      end
+      end subroutine uinbnddt

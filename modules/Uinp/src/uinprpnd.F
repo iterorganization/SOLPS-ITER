@@ -2,6 +2,7 @@
       use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
+      use b2mod_subsys
       use eirmod_solps
 c
 c  version : 14.03.2001 17:11
@@ -12,7 +13,7 @@ c=======================================================================
       implicit none
 #include "uinput.inc"
       integer i,k
-      external xerrab, subini, subend
+      external xerrab
 c=======================================================================
       RETURN !VK 
 
@@ -282,4 +283,4 @@ c***  26: upper left cut, SOL
 c=======================================================================
       call subend ()
       return
-      end
+      end subroutine uinprpnd

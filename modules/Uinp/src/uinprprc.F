@@ -2,6 +2,7 @@
       use b2mod_elements
       use b2mod_layer
      , , only: ntrack, nalloys
+      use b2mod_subsys
       use eirmod_solps
 c
 c  version : 17.02.2002 21:52
@@ -37,7 +38,7 @@ c======================================================================
       logical, allocatable :: ldup(:)
       integer find_matching_reagent, lnblnk
       logical streql, silent_open
-      external xerrab, streql, subini, subend
+      external xerrab, streql
       external find_matching_reagent, lnblnk
       external silent_open
 c======================================================================
@@ -1911,4 +1912,4 @@ c=======================================================================
       call subend ()
       return
  1028 format()
-      end
+      end subroutine uinprprc

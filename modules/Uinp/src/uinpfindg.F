@@ -2,6 +2,7 @@
       use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
+      use b2mod_subsys
       use eirmod_solps
 
 c  version : 16.03.2005 23:54
@@ -14,7 +15,6 @@ c=======================================================================
 #include "uinput.inc"
       integer, save :: nprnli_save, ntcpu_save, nfile_save
       integer, save :: npts_save(nstra)
-      external subini, subend
 c=======================================================================
       call subini ('uinpfindg')
       if(lc) then !{
@@ -35,4 +35,4 @@ c=======================================================================
       call subend ()
       return
 c=======================================================================
-      end
+      end subroutine uinpfindg

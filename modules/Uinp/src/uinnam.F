@@ -3,6 +3,7 @@
       use b2mod_constants
       use b2mod_layer
      , , only: ntrack, nalloys
+      use b2mod_subsys
       use eirmod_solps
 c
 c  version : 01.04.2005 01:23
@@ -27,7 +28,7 @@ c=======================================================================
 c...                                                  52=48+4
       integer luwrk(nlim),luind(nlim)
       logical streql
-      external streql, xerrab, xertst, subini, subend
+      external streql, xerrab, xertst
 c*** lusgm : segment number for the list of invisibles;
 c*** luswch: switch for the input of element lists (obsolete)
 c***                1: jedgi1, 2: jedgo1, 3: jedgi2, 4: jedgo2
@@ -1083,4 +1084,4 @@ c***  input elements indices for current rectangle
 c=======================================================================
  9999 call subend ()
       return
-      end
+      end subroutine uinnam
