@@ -14763,6 +14763,8 @@ commands take one value off the "string" stack.
     wprt \index{b2plot, wprt}    & 0 & 0 & 1 & 0 & 0 & 1 & 0 & \ref{sec:wprt}     & Output top of wall stack to a file \\
     wslbl \index{b2plot, wslbl}  & 1 & 0 & 1 & 0 & 0 & 1 & 0 & \ref{sec:wslbl}    & Set wall species label \\
     wtab \index{b2plot, wtab}    & 2 & 0 & 1 & 0 & 0 & 1 & 0 & \ref{sec:wtab}     & Output part of the top of the wall stack to a file \\
+    xlab \index{b2plot, xlab}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:extl}     & X-axis label \\
+    ylab \index{b2plot, ylab}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:extl}     & Y-axis label \\
     \hline
     \caption{Commands taking character strings as parameters.  Note
       that the string should be delimited by single quotes.}
@@ -16393,10 +16395,10 @@ Plots on computational mesh only.
 Plots on the physical mesh only.
 
 \subsubsection{aspc}\index{b2plot, aspc}\label{sec:aspc}
-Toggles whether aspect ratio should be preserved for physical
-and computational domain plots (default {\tt .true.}).
-If {\tt .false.}, the plot region limits will be those defined
-from the $xmin~xmax~ymin~ymax$, etc... values.
+Toggles whether aspect ratio should be preserved for physical domain
+plots (default {\tt .true.}).  If {\tt .false.}, the plot region
+limits will be those defined from the $rmin~rmax~zmin~zmax$,
+etc... values (perhaps modified to get ``nice'' axes intervals).
 
 \subsubsection{linf}\index{b2plot, linf}\label{sec:linf}
 Sets linear scaling for the function values (default).
@@ -16544,7 +16546,9 @@ represents 1., 1.5, 2., and 3. times an 8-plotter address unit width. Otherwise,
 width in plotter address units.
 
 \subsubsection{nice}\index{b2plot, nice}\label{sec:nice}
-Toggles whether graphs will use nice axes with rounded values ({\tt .true.} by default).
+Toggles whether graphs will use nice axes with rounded values ({\tt
+  .true.} by default).  Even with this set to {\tt .false.}, some
+massaging of the plot range occurs.
 
 \subsubsection{noax}\index{b2plot, noax}\label{sec:noax}
 Does not plot axes.
@@ -17135,6 +17139,21 @@ entered between \`{}s, e.g.
 
 See section \ref{sec:stdl} for the label set by {\bf stdl} for an example using
 environment variables as well as shell expansions.
+
+\subsection{$<$x-axis label$>$ xlab}\index{b2plot, xlab}\label{sec:xlab}
+Specifies a label for the x-axis.  The same text options as for
+\ref{sec:extl} are available.
+
+A (not to be taken too seriously) example for usage is
+\begin{verbatim}
+  echo 'a4p phys 16 font "R [m]" xlab "Z [m]" ylab mesh' | b2plot -s
+\end{verbatim}
+
+\subsection{$<$y-axis label$>$ ylab}\index{b2plot, ylab}\label{sec:ylab}
+Specifies a label for the y-axis.  The same text options as for
+\ref{sec:extl} are available.
+
+An example is provided in \ref{sec:xlab}.
 
 \subsection{$<$palette file$>$ cltb}\index{b2plot, cltb}\label{sec:cltb}
 Reads in the specifications for an alternative palette.  The data
