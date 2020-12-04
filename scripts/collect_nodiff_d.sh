@@ -61,7 +61,7 @@ cp $SOLPSTOP/modules/B2.5/src/differentiation/b2mxac_diff.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/b2uxus_d.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/read_plasma_state_diff.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/write_plasma_state_diff.F .
-
+cp $SOLPSTOP/modules/B2.5/src/differentiation/b2optim* .
 
 # and now modify the 'use modules' which have been differentiated
 files=`ls *.F*`

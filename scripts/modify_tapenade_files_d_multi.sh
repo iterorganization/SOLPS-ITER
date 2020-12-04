@@ -55,8 +55,8 @@ sed -i -e 's/ISIZE1OFfchz/nFc/g' b2tfnb_dv.F90
 sed -i -e 's/ISIZE1OFpa/nCv/g' b2tfnb_dv.F90
 sed -i -e 's/DIMENSION(:, ISIZE1OFdv%fna_52(:, :, isb), 0:1)/DIMENSION(nbdirsmax, nFc, 0:1)/g' b2tfnb_dv.F90
 sed -i -e 's/ISIZE1OFfchc/nFc/g' b2tinnt_dv.F90
-sed -i -e "s/cfdnad(:, 0, is), nbdirs)/cfdnad(1:nbdirs, 0, is), nbdirs)/g" b2tqna_dv.F90
-sed -i -e "s/cfhcid(:, 0, is), nbdirs)/cfhcid(1:nbdirs, 0, is), nbdirs)/g" b2tqna_dv.F90
+sed -i -e "s/cfdna(0, is), cfdnad(:, 0, is)/cfdna(0, is), cfdnad(1:nbdirs, 0, is)/g" b2tqna_dv.F90
+sed -i -e "s/cfhci(0, is), cfhcid(:, 0, is)/cfhci(0, is), cfhcid(1:nbdirs, 0, is)/g" b2tqna_dv.F90
 sed -i -e 's/ISIZE1OFcvbzb/nCv/g' b2tral_dv.F90
 sed -i -e 's/CHARACTER(len=\*) :: arg1/CHARACTER(len=20) :: arg1/g' b2usco_dv.F90
 sed -i -e 's/CHARACTER(len=\*) :: arg10/CHARACTER(len=20) :: arg10/g' b2usmo_dv.F90

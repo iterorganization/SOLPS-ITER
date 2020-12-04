@@ -41,5 +41,4 @@ module load matlab/R2018a
 module unload GLib/2.54.3-GCCcore-6.4.0
 # Other environment variables
 setenv STGDIR /staging/leuven/stg_00030/SOLPS/lib/LEUVEN.ifort64
-setenv TAPENADEDIR  /staging/leuven/stg_00030/tapenade
 setenv ALLINEA_NO_MPI_AUTODETECT false

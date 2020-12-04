@@ -25,10 +25,24 @@ ifdef DIFF_D
 EXT_DIFF = .diff_d
 DIFF=_d
 endif
+ifdef DIFF_D_MULTI
+EXT_DIFF = .diff_d_multi
+DIFF=_d
+endif
 ifdef DIFF_B
 EXT_DIFF = .diff_b
 DIFF=_b
 endif
+MNEXE=b2mn${DIFF}
+ifdef OPT_D
+EXT_DIFF = .diff_d
+DIFF=_d
+MNEXE=b2optim_${OPT}
+ifdef TAO
+RUN_OPTIONS = -tao_monitor -tao_view_solution
+endif
+endif
+
 
 ifndef STAND_ALONE
 B2OBJ = ${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
@@ -60,6 +74,7 @@ target_ah = b2ah.prt b2fpardf
 target_ai = b2ai.prt b2fstati
 target_ar = b2ar.prt b2frates
 target_mn = b2mn.prt b2fparam b2fstate b2fmovie b2ftrace b2ftrack b2fplasma b2fdiffe b2ftraced
+target_opt = target_mn
 ifdef USE_IMPGYRO
 target_mn += restart_ext
 endif
@@ -278,7 +293,7 @@ else
 	mv impgyro.* ${WD_EXT}/. ; mv preg ${WD_EXT}/. ; cp restart ${WD_EXT}/. ; mv restart ../.
 endif
 else
-	-cd b2mn.exe.dir ; mkdir tracing ; mkdir output ; copy_tracing_files ; mkdir batch_av ; mkdir run_av ; ${TIME} ${B2OBJ}/b2mn${DIFF}.exe ${RUN_OPTIONS} ; move_optional_files ; mv $(target_mn) .. >& /dev/null
+	-cd b2mn.exe.dir ; mkdir tracing ; mkdir output ; copy_tracing_files ; mkdir batch_av ; mkdir run_av ; ${TIME} ${B2OBJ}/${MNEXE}.exe ${RUN_OPTIONS} ; move_optional_files ; mv $(target_mn) .. >& /dev/null
 endif
 ifneq (${COMPILER},HP)
 	-cd b2mn.exe.dir ; [ -s ../fort.30 ] || ( [ -s fort.30 ] && mv -f fort.30 .. || echo > /dev/null )

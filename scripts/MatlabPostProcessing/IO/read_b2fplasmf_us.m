@@ -60,6 +60,7 @@ state.fch    = read_rfield(fid,'fch'   ,fluxdim);
 state.fch_32 = read_rfield(fid,'fch_32',fluxdim);
 state.fch_52 = read_rfield(fid,'fch_52',fluxdim);
 state.kinrgy = read_rfield(fid,'kinrgy',statedims);
+state.fkt = read_rfield(fid,'fkt',fluxdim);
 %state.time   = read_rfield(fid,'time'  ,1);
 state.fch_p  = read_rfield(fid,'fch_p' ,fluxdimp);
 
