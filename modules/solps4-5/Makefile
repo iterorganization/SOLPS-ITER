@@ -37,11 +37,12 @@ endif
 ifdef SOLPS_OPENMP
 EXT_OPENMP = .openmp
 endif
+ifdef USE_IMPGYRO
+EXT_IMPGYRO = .ig
+else
 ifdef SOLPS_MPI
 EXT_MPI = .mpi
 endif
-ifdef USE_IMPGYRO
-EXT_IMPGYRO = .ig
 endif
 ifdef SOLPS_DEBUG
 EXT_DEBUG = .debug

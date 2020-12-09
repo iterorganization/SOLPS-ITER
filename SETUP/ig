@@ -15,9 +15,11 @@ if ($?SOLPS_PATH) then
   setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|standalone.${HOST_NAME}.${COMPILER}|standalone.${HOST_NAME}.${COMPILER}.ig|g"`
   setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}|couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}.ig|g"`
   setenv   PATH `echo $PATH | sed "s|${OLD_SOLPS_PATH}|${SOLPS_PATH}|"`
-  setenv   USE_IMPGYRO yes
+  setenv   USE_IMPGYRO -DUSE_IMPGYRO
+  setenv   USE_MPI -DUSE_MPI
+  setenv   SOLPS_MPI yes
   unsetenv OLD_SOLPS_PATH
-  echo "SOLPS-ITER_IMPGYRO mode turned on"
+  echo "SOLPS-ITER_IMPGYRO mode turned on (implies MPI)"
 else
   echo "SOLPS_PATH not set. Exiting."
 endif
