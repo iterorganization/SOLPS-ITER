@@ -11,14 +11,15 @@ ifndef SOLPSTOP
 endif
 
 # Extensions for OBJDIR if mpi and/or debug options are used
+ifdef USE_IMPGYRO
+EXT_IMPGYRO = .ig
+else
 ifdef USE_MPI
 EXT_MPI = .mpi
 endif
+endif
 ifdef USE_OPENMP
 EXT_OPENMP = .openmp
-endif
-ifdef USE_IMPGYRO
-EXT_IMPGYRO = .ig
 endif
 ifdef SOLPS_DEBUG
 EXT_DEBUG = .debug
@@ -445,7 +446,7 @@ listobj:
 	for d in `echo "$(TPATH)" | tr : \ `; do \
 		l="$$l `(cd $$d > /dev/null; echo *.f)`"; \
 	done; \
-	E="-e 's/\.f/\.o/g'" ; for f in $(EXCLUDELIST); do \
+	E="-e 's/ \*\.f//g' -e 's/\.f/\.o/g'" ; for f in $(EXCLUDELIST); do \
 		E="$$E -e 's/ $$f//'"; \
 	done; \
 	echo "$$l" | eval sed "$$E" > ${OBJDIR}/LISTOBJ

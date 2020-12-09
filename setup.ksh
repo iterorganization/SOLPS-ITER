@@ -2,17 +2,22 @@
 
 echo Welcome to SOLPS-ITER!
 echo Documentation can be found at:
-echo https://portal.iter.org/departments/POP/CM/IMAS/SOLPS-ITER
+echo https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER
 echo and
 echo https://user.iter.org/\?uid=Q92BAQ
 echo "(both require a valid ITER IDM account)"
 echo The full SOLPS-ITER manual can be found in \$SOLPSTOP/doc/solps/solps.pdf
 echo The Eirene manual is located at http://www.eirene.de/
 
-export SETUP_FILE=`echo $_ | cut -d " " -f 2`
-export REAL_FILE=`eval echo ${SETUP_FILE}`
-export REAL_PATH=`dirname ${REAL_FILE}`
-export SOLPSTOP=`cd ${REAL_PATH}; pwd -L`
+export LAST_COMMAND=`echo $_`
+[ $LAST_COMMAND = "" ] && {
+  export SETUP_FILE=`echo ${LAST_COMMAND} | cut -d " " -f 2`
+  export REAL_FILE=`eval echo ${SETUP_FILE}`
+  export REAL_PATH=`dirname ${REAL_FILE}`
+  export SOLPSTOP=`cd ${REAL_PATH}; pwd -L`
+} || {
+  export SOLPSTOP=$PWD
+}
 export SOLPSWORK=$SOLPSTOP/runs
 
 
@@ -58,13 +63,6 @@ export SOLPSWORK=$SOLPSTOP/runs
 } || {
   export MAKE=`which make`
 }
-
-[ -z "$PYTHONPATH" ] && {
-  export PYTHONPATH="$SOLPSTOP/lib/python"
-} || {
-  export PYTHONPATH="${PYTHONPATH}:$SOLPSTOP/lib/python"
-}
-export SOLPSLIB=${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}
 
 # setup files for combination of HOST_NAME and COMPILER, + local modifications if present
 [ -s ${SOLPSTOP}/SETUP/setup.ksh.${HOST_NAME}.${COMPILER} ] && {
@@ -129,12 +127,19 @@ ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.
 
 # Note: in case of name clash between script and executable, script will be found first
 export SOLPS_PATH=${SCRIPTS_PATH}:${CARRE_PATH}:${DIVGEO_PATH}:${B25EIRENE_PATH}:${EIRENE_PATH}:${B25_PATH}:${UINP_PATH}:${TRIANG_PATH}:${AMDS_PATH}:${S45_PATH}
+export SOLPSLIB=${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}
 export OLD_PATH=${PATH}
 export PATH=${SOLPS_PATH}:${PATH}
 [ -n "$LD_LIBRARY_PATH" ] && {
   export LD_LIBRARY_PATH=${SOLPSLIB}:${SOLPSTOP}/lib/python:${LD_LIBRARY_PATH}
 } || {
   export LD_LIBRARY_PATH=${SOLPSLIB}:${SOLPSTOP}/lib/python
+}
+
+[ -z "$PYTHONPATH" ] && {
+  export PYTHONPATH="$SOLPSTOP/lib/python:${SCRIPTS_PATH}"
+} || {
+  export PYTHONPATH="${PYTHONPATH}:$SOLPSTOP/lib/python:${SCRIPTS_PATH}"
 }
 [ -z "$PYTHON_PATH" ] || {
   export PYTHONPATH="${PYTHONPATH}:${PYTHON_PATH}"
@@ -236,6 +241,12 @@ alias unset_ig='. $SOLPSTOP/SETUP/noig'
 [ -e `which mwm` ] || {
   export NO_MOTIF=1
 }
+[ -n "$NO_MOTIF" ] && {
+  [ `whereis libXm | wc -w` != 1 ] && unset NO_MOTIF
+}
+[ -n "$NO_MOTIF" ] && {
+  [ `ldconfig -p | grep 'libXm\.' | wc -l` != 0 ] && unset NO_MOTIF
+}
 
 # Add any local settings if present
 [ -s ${SOLPSTOP}/SETUP/setup.ksh.local ] && {
@@ -243,6 +254,3 @@ alias unset_ig='. $SOLPSTOP/SETUP/noig'
    source ${SOLPSTOP}/SETUP/setup.ksh.local
 }
 
-# List loaded modules
-
-module list

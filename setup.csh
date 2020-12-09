@@ -2,7 +2,7 @@
 
 echo Welcome to SOLPS-ITER!
 echo Documentation can be found at:
-echo https://portal.iter.org/departments/POP/CM/IMAS/SOLPS-ITER
+echo https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER
 echo and
 echo https://user.iter.org/\?uid=Q92BAQ
 echo "(both require a valid ITER IDM account)"
@@ -10,10 +10,15 @@ echo The full SOLPS-ITER manual can be found in \$SOLPSTOP/doc/solps/solps.pdf
 echo The Eirene manual is located at http://www.eirene.de/
 
 # Obtain the directory where setup.csh is located to use as SOLPSTOP
-setenv SETUP_FILE `echo $_ | cut -d " " -f 2`
-setenv REAL_FILE `eval echo ${SETUP_FILE}`
-setenv SETUP_PATH `dirname ${REAL_FILE}`
-setenv SOLPSTOP `cd ${SETUP_PATH}; pwd -L`
+setenv LAST_COMMAND `echo $_`
+if (`echo ${LAST_COMMAND}` == "") then
+  setenv SOLPSTOP $PWD
+else
+  setenv SETUP_FILE `echo ${LAST_COMMAND} | cut -d " " -f 2`
+  setenv REAL_FILE `eval echo ${SETUP_FILE}`
+  setenv SETUP_PATH `dirname ${REAL_FILE}`
+  setenv SOLPSTOP `cd ${SETUP_PATH}; pwd -L`
+endif
 setenv SOLPSWORK ${SOLPSTOP}/runs
 
 # Set HOST_NAME and COMPILER, which will determine setup files to be used
@@ -138,6 +143,7 @@ if ($?LD_LIBRARY_PATH) then
 else
   setenv LD_LIBRARY_PATH ${SOLPSLIB}:${SOLPSTOP}/lib/python
 endif
+setenv PYTHONPATH ${PYTHONPATH}:${SCRIPTS_PATH}
 if ($?PYTHON_PATH) then
   setenv PYTHONPATH ${PYTHONPATH}:${PYTHON_PATH}
 endif
@@ -234,6 +240,12 @@ alias unset_ig     'source $SOLPSTOP/SETUP/noig'
 
 # Check for Motif library
 if (! -e `which mwm`) setenv NO_MOTIF 1
+if ($?NO_MOTIF) then
+  if (`whereis libXm | wc -w` != 1) unsetenv NO_MOTIF
+endif
+if ($?NO_MOTIF) then
+  if (`ldconfig -p | grep 'libXm\.' | wc -l` != 0) unsetenv NO_MOTIF
+endif
 
 # Add any local settings if present
 if (-s ${SOLPSTOP}/SETUP/setup.csh.local) then
