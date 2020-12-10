@@ -46,11 +46,12 @@ endif
 ifdef SOLPS_DEBUG
 EXT_DEBUG = .debug
 endif
+ifdef USE_IMPGYRO
+EXT_IMPGYRO = .ig
+else
 ifdef USE_MPI
 EXT_MPI = .mpi
 endif
-ifdef USE_IMPGYRO
-EXT_IMPGYRO = .ig
 endif
 
 OBJDIR = ${PWD}/builds/${HOST_NAME}.${COMPILER}${EXT_DEBUG}
