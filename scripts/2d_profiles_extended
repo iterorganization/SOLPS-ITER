@@ -40,8 +40,19 @@ if ($no_nc2text == 1) then
 #  echo "ny $ny"
 #  echo "nt $nt"
   @ jstart = $nt + $NUM
+  if ($jstart < 1) then
+    set jstart = 1
+  endif
   @ jend = $nt
-#  echo "$jstart $jend"
+#  echo $jstart $jend
+else
+  set nt = `ncdump $source -f f -v fn3dl | sed -n 'x;$p' | awk -F '[,)]' '{print $2;}'`
+#  echo "nt $nt"
+  @ jstart = $nt + $NUM
+  if ($jstart < 0) then
+    @ NUM = -$nt + 1
+  endif
+#  echo $NUM
 endif
 
 foreach i ($usual $extra)
