@@ -4,7 +4,7 @@ ifdef SOLPS_DEBUG
 FFLAGS  += -g -C -traceback -debug all -check all
 endif
 ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -le 12; echo $$?),0)
-FFLAGS   += -vec_report0
+FFLAGS  += -vec_report0
 endif
 ifdef SOLPS_OPENMP
  ifndef SOLPS_MPI
@@ -16,9 +16,9 @@ ifdef SOLPS_OPENMP
  else
   ifeq ($(FC),mpiifort)
    ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -ge 15; echo $$?),0)
-    FFLAGS   += -qopenmp
+    FFLAGS  += -qopenmp
    else
-    FFLAGS   += -openmp
+    FFLAGS  += -openmp
    endif
   endif
  endif
@@ -30,7 +30,7 @@ COMPILE  = ${FC} -c ${FFLAGS}
 MOD      = mod
 LDLIBS   = ${LD_MSCL}
 ifdef USE_MPI
-LDLIBS   += ${LD_MPI}
+LDLIBS  += ${LD_MPI}
 endif
 ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -le 12; echo $$?),0)
 LDEXTRA  = -i_dynamic
