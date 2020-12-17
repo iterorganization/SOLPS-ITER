@@ -5969,10 +5969,10 @@ But mesh-generation is valid !
 \chapter{The physics of B2.5}
 \label{cha:b2physics}
 
-An extensive review of {\tt B2-Eirene} has been published as \cite{SOLPS2006}\index{SOLPS review}.
+An extensive review of {\tt B2-Eirene} has been published as \cite{SOLPS2006}\index{SOLPS review}. It provides a full description of the {\bf SOLPS5.0} physics model, which can be obtained in the code by setting the {\tt b2mndt\_style} switch to {\tt 0}.
 It is asked that authors using {\tt SOLPS} simulation results cite that work when
-referring to the code. This document, only some short sections of which are detailed
-below, can be found as part of the {\tt SOLPS} package at {\tt \$\{SOLPSTOP\}/doc/CPP\_2006.pdf}.
+referring to the code. This review, only some short sections of which are detailed
+below, can be found as part of the {\tt SOLPS} package at {\tt \$\{SOLPSTOP\}/doc/CPP\_2006.pdf}. Most of the discussion and definitions presented here apply to both the {\bf SOLPS5.0} and {\bf SOLPS5.2} physics models. In cases where the models differ, the use of the {\bf SOLPS5.2} model is recommended, although the {\bf SOLPS5.0} model remains available in the code for backward compatibility.
 
 The equations are written on a
 curvilinear orthogonal coordinate system.
@@ -7275,7 +7275,7 @@ Zhdanov fit to Braginskii and the \SOLPSfour values.
 \chapter{Model equations for B2.5}
 \label{cha:equations}\index{B2.5, model}\index{B2.5, equations}\index{equations}\index{model}
 
-The version of the equations shown in this Appendix represents the best available description of the standard recommended settings for the \SOLPSITER physics model, built upon the original work on {\bf SOLPS5.2} from the St. Petersburg group \cite{ROZHANSKY2009}. This Appendix is not meant as an exhaustive registry of the capabilities of the code, for which the reader is encouraged to peruse Chapters \ref{cha:standaloneb2} and \ref{cha:coupledb2eirene} as well as the list of switches in Appendix \ref{lis:b2cdci} and of namelist variables in Appendix \ref{lis:b2cdcn}.
+The version of the equations shown in this Appendix represents the best available description of the standard recommended settings for the \SOLPSITER physics model, built upon the original work on {\bf SOLPS5.2} from the St. Petersburg group \cite{ROZHANSKY2009}. Use of that physics model is governed by the switch {\tt b2mndt\_style}, with a default value of {\tt 1}. If set to {\tt 0}, then the {\bf SOLPS5.0} physics model, as described in Appendix \ref{cha:b2physics} and in the review paper \cite{SOLPS2006}, will be applied instead. The present Appendix is not meant as an exhaustive registry of the capabilities of the code, for which the reader is encouraged to peruse Chapters \ref{cha:standaloneb2} and \ref{cha:coupledb2eirene} as well as the list of switches in Appendix \ref{lis:b2cdci} and of namelist variables in Appendix \ref{lis:b2cdcn}.
 
 Some equations include terms which are multiplied by zero. This is meant to indicate that such terms are not included in the standard \SOLPSITER physics model, but that switches exist that allow for their inclusion.
 
