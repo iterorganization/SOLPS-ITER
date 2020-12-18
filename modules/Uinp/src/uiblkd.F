@@ -413,11 +413,11 @@ c*** 4
       data (rctddbs(i,12),i=1,lurctdcp) / 2*'ADAS' /
       data (rctddbs(i,13),i=1,lurctdx) / 2*'ADAS' /
       data (rctddbs(i,14),i=1,lurctdxp) / 2*'ADAS' /
-      data (rctdchp(i,1),i=1,lurctdh)  / 'H.4','H.10','H.1','H.3' /
+      data (rctdchp(i,1),i=1,lurctdh)  / 'H.4','H.10', 'H.1', 'H.3' /
       data (rctdchp(i,2),i=1,lurctdh2) 
      .                        / 3*'H.4', 'H.0', 'H.1', 'H.3', 'H.2' /
       data (rctdchp(i,3),i=1,lurctdhe) / 'H.2' /
-      data (rctdchp(i,4),i=1,lurctdc)  / 'H.4','H.10','H.1','H.3' /
+      data (rctdchp(i,4),i=1,lurctdc)  / 'H.4','H.10', 'H.1', 'H.3' /
       data (rctdchp(i,5),i=1,lurctdne) / 'H.2' /
       data (rctdchp(i,6),i=1,lurctdhp) / 'H.4','H.10' /
       data (rctdchp(i,7),i=1,lurctdar) / 'H.2' /
@@ -439,7 +439,7 @@ c*** 4
       data (rctdrct(i,8),i=1,lurctdn)  / 2*'2.7A0' /
       data (rctdrct(i,9),i=1,lurctdbe) / 2*'2.4B0' /
       data (rctdrct(i,10),i=1,lurctdh2p) 
-     .                        / '2.2.12','2.2.11',2*'2.2.14' /
+     .                        / '2.2.12', '2.2.11', 2*'2.2.14' /
       data (rctdrct(i,11),i=1,lurctdnp) / 'acd', 'prb' /
       data (rctdrct(i,12),i=1,lurctdcp) / 'acd', 'prb' /
       data (rctdrct(i,13),i=1,lurctdx) / 'scd', 'plt' /
@@ -458,11 +458,11 @@ c*** 4
       data (rctdptin(i,12),i=1,lurctdcp) / 2*' ' /
       data (rctdptin(i,13),i=1,lurctdx) / 2*' ' /
       data (rctdptin(i,14),i=1,lurctdxp) / 2*' ' /
-      data (rctdpto1(i,1),i=1,lurctdh)  / 2*'H+',2*'H' /
+      data (rctdpto1(i,1),i=1,lurctdh)  / 2*'H+', 2*'H' /
       data (rctdpto1(i,2),i=1,lurctdh2) 
      .                           / 'H2+', '2H', 'H', 3*'H+', 'H' /
       data (rctdpto1(i,3),i=1,lurctdhe) / 'He+' /
-      data (rctdpto1(i,4),i=1,lurctdc)  / 2*'C+',2*'H' /
+      data (rctdpto1(i,4),i=1,lurctdc)  / 2*'C+', 2*'H' /
       data (rctdpto1(i,5),i=1,lurctdne) / 'Ne+' /
       data (rctdpto1(i,6),i=1,lurctdhp) / 2*'H' /
       data (rctdpto1(i,7),i=1,lurctdar) / 'Ar+' /
@@ -682,7 +682,7 @@ c*** 5
       data fnamcdn, h2cdn  , reaccdn, crcdn   /
      /    lurc*' ',lurc*' ',lurc*' ',lurc*' ' /
       
-      data indpro / 6*6, 4*0, 6, 0 /
+      data indpro / 6*6, 4*0, 9, 0 /
       data te0,te1,te2,te3,te4,te5 / 6*0./
       data ti0,ti1,ti2,ti3,ti4,ti5 / lup6*0./
       data di0,di1,di2,di3,di4,di5 / lup6*0./
@@ -970,4 +970,4 @@ c*** Data for b2ah.dat.stencil file
      /      8*0. ,  8*0. ,  8*0. ,  8*0. /
 
 c======================================================================
-      end
+      end block data uiblkd

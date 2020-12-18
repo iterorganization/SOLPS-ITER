@@ -4662,7 +4662,7 @@ Similarly, the {\tt fort.46} file contains the following data blocks, this time 
   \item[PVY] $Y$-component of the radial unit vector at the triangle center
 \end{description}
 
-Please note that, for the momentum densities, the coordinate system used by {\tt Eirene} is Cartesian, i.e. independent of the local magnetic field, and that this data is given in CGS units. For cases without a certain species type, for example a pure Helium case with no molecules, the relevant data fields have a species dimension of {\tt 1} as they are mapped internally in {\tt Eirene} to a dummy pointer array.
+Please note that, for the momentum densities, the coordinate system used by {\tt Eirene} is cartesian, i.e. independent of the local magnetic field, and that this data is given in CGS units. For cases without a certain species type, for example a pure Helium case with no molecules, the relevant data fields have a species dimension of {\tt 1} as they are mapped internally in {\tt Eirene} to a dummy pointer array.
 
 \section{Changing dt}
 
@@ -6695,7 +6695,7 @@ $p_i \nabla \cdot \vec{V}_i$ the anomalous particle flux is absent.
 \section{Derivation of parallel viscosity term in momentum equation}
 \index{parallel viscosity}\label{sec:viscosity}
 
-To evaluate the parallel viscosity contribution we should start from the general expressions, which can be transformed and simplified in arbitrary Cartesian coordinate system assuming only parallel velocity. The Braginskii description for parallel viscosity in Cartesian coordinates is:
+To evaluate the parallel viscosity contribution we should start from the general expressions, which can be transformed and simplified in arbitrary cartesian coordinate system assuming only parallel velocity. The Braginskii description for parallel viscosity in cartesian coordinates is:
 
 \begin{equation*}
 \pi_{\alpha \beta} = \frac{3}{2} \eta_0 \left( b_\alpha b_\beta - \frac{1}{3} \delta_{\alpha \beta} \right) \left( b_\mu b_\nu - \frac{1}{3} \delta_{\mu \nu} \right) W_{\mu \nu}
@@ -17738,12 +17738,14 @@ plasma species to be handled by {\tt Eirene}
 particles that can be saved in the time dependent arrays
 \item[DEF\_NREAC]\index{DEF\_NREAC}\index{NREAC} the maximum number of
 reaction cards that can be created by {\tt Uinp}
-\item[DEF\_NRDS]\index{DEF\_NREAC}\index{NREAC} the maximum number of
-molecular dissociation reaction cards that can be created by {\tt Uinp}
-\item[DEF\_NREC]\index{DEF\_NREAC}\index{NREAC} the maximum number of
+\item[DEF\_NRCX]\index{DEF\_NRCX}\index{NRCX} the maximum number of
+charge exchange reaction cards that can be created by {\tt Uinp}
+\item[DEF\_NREC]\index{DEF\_NREC}\index{NREC} the maximum number of
 recombination reaction cards that can be created by {\tt Uinp}
-\item[DEF\_NREL]\index{DEF\_NREAC}\index{NREAC} the maximum number of
-elastic collisions reaction cards that can be created by {\tt Uinp}
+\item[DEF\_NREI]\index{DEF\_NREI}\index{NREI} the maximum number of
+electron impact reaction cards that can be created by {\tt Uinp}
+\item[DEF\_NREL]\index{DEF\_NREL}\index{NREL} the maximum number of
+elastic collision reaction cards that can be created by {\tt Uinp}
 \item[DEF\_NSD]\index{DEF\_NSD}\index{NSD} the maximum number of plasma
 species handled in {\tt B2.5}
 \item[DEF\_NSPCSRFG]\index{DEF\_NSPCSRFG}\index{NSPCSRFG} the maximum
@@ -19994,12 +19996,12 @@ poloidal plane (i.e., that may be non-axisymmetric).
 For purposes of defining chords in three
 dimensions, two coordinate
 modes have been established.
-In "Cartesian" mode, $Z$ is the
+In "cartesian" mode, $Z$ is the
 vertical axis in the "top-down view" (Sec.~\ref{sec:topdownview});
 the horizontal axis in the poloidal plane is $X$ and the
 vertical axis is $Y$ (note: this is a left-handed coordinate system).
-In "Cylindrical" mode, $Z$ is the vertical coordinate in the poloidal
-plane, identical to $Y$ in "Cartesian" mode.
+In "cylindrical" mode, $Z$ is the vertical coordinate in the poloidal
+plane, identical to $Y$ in "cartesian" mode.
 In the "top-down view",
 the horizontal axis is
 designated as $R$ and the toroidal angle as $\varphi$ (counterclockwise relative
@@ -20013,16 +20015,16 @@ extent, selecting
 {\tt View|Display|Chords} in the
 poloidal plane results in straight
 line segments connecting the
-$X$ and $Y$ "Cartesian" coordinates of the chord end points.
-Equivalently in the "Cylindrical" mode, these are the $R$
+$X$ and $Y$ "cartesian" coordinates of the chord end points.
+Equivalently in the "cylindrical" mode, these are the $R$
 and $Z$ coordinates at the end points.  In contrast,
 {\tt View|Display|3dchords} shows the projection
-of the toroidal path of the chords on the $Z = 0$ ("Cartesian")
-or $\varphi = 0$ ("Cylindrical") plane.  In the "top-down view",
+of the toroidal path of the chords on the $Z = 0$ ("cartesian")
+or $\varphi = 0$ ("cylindrical") plane.  In the "top-down view",
 both {\tt View|Display|Chords} and
 {\tt View|Display|3dchords} show the straight
-line paths of the chords in the $X$-$Z$ ("Cartesian") or
-$R \cos \varphi$-$R \sin \varphi$ ("Cylindrical") plane.
+line paths of the chords in the $X$-$Z$ ("cartesian") or
+$R \cos \varphi$-$R \sin \varphi$ ("cylindrical") plane.
 
 Starting with file format version 115, chords with $X$, $Y$,
 and $Z$

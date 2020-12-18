@@ -26,9 +26,11 @@ c=======================================================================
       logical streql,silent_open
       logical, allocatable :: done(:)
       character*256 filename, adasfile, uidin
+      character*50 hlp_frm
       character utxthd(35)*71, utxtfl(7)*50, ufnm*(*)
       character utxtgt*71
-      external streql, silent_open, xerrab
+      integer len_of_digits
+      external streql, silent_open, len_of_digits, xerrab
       data utxthd /
      1        '** 1. Data for operating mode' ,
      2        '** 2. Data for standard mesh' ,
@@ -472,9 +474,12 @@ c**   atomic reaction cards, nreaci data fields
 
       write(iunoo,700) utxthd(24)
       write(iunoo,707) nreaci
+      write(hlp_frm,'(a,i1,a)')
+     , '(1p,i3,1x,a6,1x,a4,1x,a9,a3,i3,i',
+     ,   1+len_of_digits(maxval(masst(1:nrcln))),',5e12.5)'
       do j=1,nrcln !{
         iid=ir(j)
-        write(iunoo,701) iid,filnam(j),h123(j),reac(j),crc(j),
+        write(iunoo,hlp_frm) iid,filnam(j),h123(j),reac(j),crc(j),
      ,                   massp(j),masst(j),delpot(j),rc1mn(j),rc1mx(j),
      ,                                               rc2mn(j),rc2mx(j)
         if (streql(filnam(j),'ADAS')) then !{
@@ -1200,7 +1205,6 @@ c*** segment numbers for the target edges to be modified by geousr
       return
 c=======================================================================
   700 format ('*',a71)
-  701 format (1p,i3,1x,a6,1x,a4,a9,a3,2i3,5e12.5)
   702 format (l1,1x,a24,1x,i1,1x,4(2i3,1x))
   703 format (1p,6e12.5)
   704 format (1p,i6,6x,5e12.5)

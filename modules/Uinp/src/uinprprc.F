@@ -19,27 +19,30 @@ c======================================================================
      ,  iii,kkk,nc,z
       logical ex,e_hlp
       real hlp_ee,hlp_eb,hlp_e1,hlp_e2,hlp_fr
-      character*8 c,cc,ccc,cbgk,c0*1,f_hlp*12
+      character*8 c,cc,ccc,cbgk
+      character*1 c0
+      character*12 f_hlp
+      character*50 hlp_frm
       logical h_collision, todo, lhelium
       logical hlp_amds(natm+nmol+nion+npls), need_dflt
       integer maxne, quote_count, iquote, iyear, ibundling
       character*256 adasfile
-      character SUBDIRrec*4,SUBDIRion*4,SUBDIRcex*4
-      character SUBDIRprb*4,SUBDIRplt*4,SUBDIRzav*4
-      character SUBDIRpot*4
-      character NEWDIRrec*4,NEWDIRion*4,NEWDIRcex*4
-      character NEWDIRprb*4,NEWDIRplt*4,NEWDIRzav*4
-      character NEWDIRpot*4
+      character*4 SUBDIRrec,SUBDIRion,SUBDIRcex
+      character*4 SUBDIRprb,SUBDIRplt,SUBDIRzav
+      character*4 SUBDIRpot
+      character*4 NEWDIRrec,NEWDIRion,NEWDIRcex
+      character*4 NEWDIRprb,NEWDIRplt,NEWDIRzav
+      character*4 NEWDIRpot
       character ES*2, EB*2, Bdescr*8, filename*256
       character ZEILE*80
       integer ign(mreac,1+m_hlp_h)
       integer ndup
       logical h_iso_used(m_hlp_h)
       logical, allocatable :: ldup(:)
-      integer find_matching_reagent, lnblnk
+      integer find_matching_reagent, lnblnk, len_of_digits
       logical streql, silent_open
       external xerrab, streql
-      external find_matching_reagent, lnblnk
+      external find_matching_reagent, lnblnk, len_of_digits
       external silent_open
 c======================================================================
       call subini ('uinprprc')
@@ -324,7 +327,9 @@ cxpb Find out the number of passes to do
               end if !}
               gpass=0
               do nnn=1,npass !{
-                if (.not.h_iso_used(nnn) .and. h_collision) cycle
+                if (h_collision) then !{
+                  if (.not.h_iso_used(nnn)) cycle
+                end if !}
                 nnrctn=nnrctn+1
                 gpass=gpass+1
                 if(nnrctn.gt.mreac) then !{
@@ -388,13 +393,13 @@ cxpb Find out the number of passes to do
                        write(*,*) 'ADAStables: element number',nc,
      .                            'not supported!'
                        call xerrab ('Unsupported ADAS element')
-                    endif !}
+                    end if !}
 c     jump over the preceding lines
                     do i=1,nc-1 !{
                       read(99,*) SUBDIRrec,SUBDIRion,
      &                           SUBDIRcex,SUBDIRprb,
      &                           SUBDIRplt,SUBDIRzav,SUBDIRpot,ES
-                    enddo !}
+                    end do !}
 c     now read the relevant line
                     read(99,'(a80)') ZEILE
                     quote_count = 0
@@ -405,8 +410,8 @@ c     now read the relevant line
                         iquote = index(ZEILE(iquote+1:80),'''') + iquote
                       else !}{
                         iquote = 0
-                      endif !}
-                    enddo !}
+                      end if !}
+                    end do !}
                     if (quote_count.eq.16) then !{
                       read(ZEILE,*) SUBDIRrec,SUBDIRion,
      &                              SUBDIRcex,SUBDIRprb,
@@ -419,27 +424,28 @@ c     now read the relevant line
                     else !}{
                       call xerrab
      .                 ('Incomplete line found in ratadas.filelist!')
-                    endif !}
+                    end if !}
                     close(99)
-                    if((SUBDIRrec.ne.'none') .and.
-     &   (SUBDIRrec.eq.SUBDIRion .or. SUBDIRion.eq.'none') .and.
-     &   (SUBDIRrec.eq.SUBDIRcex .or. SUBDIRcex.eq.'none') .and.
-     &   (SUBDIRrec.eq.SUBDIRprb .or. SUBDIRprb.eq.'none') .and.
-     &   (SUBDIRrec.eq.SUBDIRplt .or. SUBDIRplt.eq.'none') .and.
-     &   (SUBDIRrec.eq.SUBDIRzav .or. SUBDIRzav.eq.'none') .and.
-     &   (SUBDIRrec.eq.SUBDIRpot .or. SUBDIRpot.eq.'none') ) then !{
+                    if((.not.streql(SUBDIRrec,'none')) .and.
+     &   (streql(SUBDIRrec,SUBDIRion).or.streql(SUBDIRion,'none')) .and.
+     &   (streql(SUBDIRrec,SUBDIRcex).or.streql(SUBDIRcex,'none')) .and.
+     &   (streql(SUBDIRrec,SUBDIRprb).or.streql(SUBDIRprb,'none')) .and.
+     &   (streql(SUBDIRrec,SUBDIRplt).or.streql(SUBDIRplt,'none')) .and.
+     &   (streql(SUBDIRrec,SUBDIRzav).or.streql(SUBDIRzav,'none')) .and.
+     &   (streql(SUBDIRrec,SUBDIRpot).or.streql(SUBDIRpot,'none')) )
+     &               then !{
                       read(SUBDIRrec,*) iyear
-                      if (iyear.gt.100) then !}
+                      if (iyear.gt.100) then !{
                         ibundling = mod(iyear,100)
                         iyear = iyear/100
                         if (ibundling.le.9) then !{
                           write(EB,'(a1,i1)') '0',ibundling
                         else !}{
                           write(EB,'(i2)') ibundling
-                        endif !}
+                        end if !}
                       else !}{
                         ibundling = 0
-                      endif !}
+                      end if !}
                       write(NEWDIRrec,'(i2,2x)') iyear
                       write(NEWDIRion,'(i2,2x)') iyear
                       write(NEWDIRcex,'(i2,2x)') iyear
@@ -504,12 +510,12 @@ c     now read the relevant line
                 else
                   rctnrct(nnrctn)=rctdrct(j,l)
                   rctnbdl(nnrctn)=' '
-                endif                  
+                endif
                 rctnptpr(nnrctn)=c
                 rctnptin(nnrctn)=rctdptin(j,l)
                 rctnpto2(nnrctn)=rctdpto2(j,l)
                 rctnpto3(nnrctn)=rctdpto3(j,l)
-                if (nnn.gt.1) then !{ D or T isotope reaction partners
+                if (nnn.gt.1.and.h_collision) then !{ D or T isotope reaction partners
                   do i=1,n_hlp_h !{
                     if(streql(rctdptin(j,l),hlp_h(i,nnn,2)))
      ,                        rctnptin(nnrctn)=hlp_h(i,nnn,1)
@@ -619,6 +625,7 @@ c*** Remove reaction duplicates, if any
               rctnenr2(j-1)=rctnenr2(j)
               rctneln(j-1) =rctneln(j)
               rctnbdl(j-1) =rctnbdl(j)
+              rctniz(j-1)  =rctniz(j)
             end do !}
           end if !}
         end do !}
@@ -627,12 +634,16 @@ c*** Remove reaction duplicates, if any
       deallocate(ldup)
 
 #ifdef DBG
-      print *
-      print *,'Draft reaction list:'
-      if(nnrctn.gt.0) print '(a9,a7,a5,a10,a3,4a9,3i3,1p,3e9.2)',
+      write(*,*)
+      write(*,*) 'Draft reaction list:'
+      write(hlp_frm,'(a,i1,a,i1,a)')
+     , '(a9,a7,a5,a10,a3,4a9,i3,i',
+     ,   1+len_of_digits(maxval(rctnmsp(1:nnrctn))),',i',
+     ,   1+len_of_digits(maxval(rctnmst(1:nnrctn))),',1p,3e9.2)'
+      if(nnrctn.gt.0) write(*,hlp_frm)
      ,  (rctnptpr(i),rctndbs(i),rctnchp(i),rctnrct(i),rctntyp(i),
      ,   rctnptin(i),rctnpto1(i),rctnpto2(i),rctnpto3(i),
-     ,   rctngrp(i),rctnmsp(i),rctnmst(i),
+     ,   rctngrp(i) ,rctnmsp(i) ,rctnmst(i) ,
      ,   rctndlte(i),rctnenr1(i),rctnenr2(i),i=1,nnrctn)
 #endif
 c*** Check the reaction type - must be assigned to each reaction
@@ -805,13 +816,17 @@ cxpb Now check if we need to rename some isotopes for AMDS reactions
       end do !} (irc)
 
 #ifdef DBG
-      print *
-      print *,'Draft reaction list after parsing and renaming:'
-      if(nnrctn.gt.0) print '(a9,a7,a5,a10,a3,4a9,3i3,1p,3e9.2)',
-     ,  (rctnptpr(i),rctndbs(i),rctnchp(i),rctnrct(i),rctntyp(i),
+      write(*,*)
+      write(*,*) 'Draft reaction list after parsing and renaming:'
+      write(hlp_frm,'(a,i1,a,i1,a)')
+     , '(a9,a7,a5,a10,a3,4a9,i3,i',
+     ,   1+len_of_digits(maxval(rctnmsp(1:nnrctn))),',i',
+     ,   1+len_of_digits(maxval(rctnmst(1:nnrctn))),',1p,3e9.2)'
+      if(nnrctn.gt.0) write(*,hlp_frm)
+     ,  (rctnptpr(i),rctndbs(i) ,rctnchp(i) ,rctnrct(i) ,rctntyp(i),
      ,   rctnptin(i),rctnpto1(i),rctnpto2(i),rctnpto3(i),
-     ,   rctngrp(i),rctnmsp(i),
-     ,   rctnmst(i),rctndlte(i),rctnenr1(i),rctnenr2(i),i=1,nnrctn)
+     ,   rctngrp(i) ,rctnmsp(i) ,
+     ,   rctnmst(i) ,rctndlte(i),rctnenr1(i),rctnenr2(i),i=1,nnrctn)
 #endif
 
       if(.not.rctndflt .and. nisotopes.gt.1) then !{ duplicate reactions
@@ -931,14 +946,18 @@ cxpb Now check if we need to rename some isotopes for AMDS reactions
         nnrctn=nrc
 
 #ifdef DBG
-        print *
-        print *,
+        write(*,*)
+        write(*,*)
      ,   'Draft reaction list after duplicating H-isotope primaries:'
-        if(nnrctn.gt.0) print '(a9,a7,a5,a10,a3,4a9,3i3,1p,3e9.2)',
-     ,    (rctnptpr(i),rctndbs(i),rctnchp(i),rctnrct(i),rctntyp(i),
+        write(hlp_frm,'(a,i1,a,i1,a)')
+     ,  '(a9,a7,a5,a10,a3,4a9,i3,i',
+     ,    1+len_of_digits(maxval(rctnmsp(1:nnrctn))),',i',
+     ,    1+len_of_digits(maxval(rctnmst(1:nnrctn))),',1p,3e9.2)'
+        if(nnrctn.gt.0) write(*,hlp_frm)
+     ,    (rctnptpr(i),rctndbs(i) ,rctnchp(i) ,rctnrct(i) ,rctntyp(i),
      ,     rctnptin(i),rctnpto1(i),rctnpto2(i),rctnpto3(i),
-     ,     rctngrp(i),rctnmsp(i),
-     ,     rctnmst(i),rctndlte(i),rctnenr1(i),rctnenr2(i),i=1,nnrctn)
+     ,     rctngrp(i) ,rctnmsp(i),
+     ,     rctnmst(i) ,rctndlte(i),rctnenr1(i),rctnenr2(i),i=1,nnrctn)
 #endif
 
         do irc=1,nnrctn !{ reactions with second partner an H isotope
@@ -1071,15 +1090,23 @@ cxpb Now check if we need to rename some isotopes for AMDS reactions
       write(*,*) 'Raw reaction list:',nnrctn
       write(*,*)
       if(nnrctn.gt.0) then !{
-        write(*,'(4x,a7,23x,4a9,4x,6a3,a7,2a9)') 'species','bulk',
+        write(hlp_frm,'(a,i1,a,i1,a)')
+     ,   '(4x,a7,23x,4a9,4x,a3,a',
+     ,     1+len_of_digits(maxval(rctnmsp(1:nnrctn))),',a',
+     ,     1+len_of_digits(maxval(rctnmst(1:nnrctn))),',3a3,a7,2a9)'
+        write(*,hlp_frm) 'species','bulk',
      ,    'out1','out2','out3','ig','mp','mt',
      ,    'N1','N2','N3','dlte','enr1','enr2'
-        write(*,'(1x,i3,a9,a7,a5,a10,a3,4a9,6i3,1p,3e9.2)')
-     -    (i,rctnptpr(i),rctndbs(i),rctnchp(i),rctnrct(i),rctntyp(i),
-     ,     rctnptin(i),rctnpto1(i),rctnpto2(i),rctnpto3(i),
-     ,     rctngrp(i),rctnmsp(i),
-     ,     rctnmst(i),rctnnmo1(i),rctnnmo2(i),rctnnmo3(i),
-     ,     rctndlte(i),rctnenr1(i),rctnenr2(i),i=1,nnrctn)
+        write(hlp_frm,'(a,i1,a,i1,a)')
+     ,   '(1x,i3,a9,a7,a5,a10,a3,4a9,i3,i',
+     ,     1+len_of_digits(maxval(rctnmsp(1:nnrctn))),',i',
+     ,     1+len_of_digits(maxval(rctnmst(1:nnrctn))),',3i3,1p,3e9.2)'
+        write(*,hlp_frm)
+     -    (i,rctnptpr(i),rctndbs(i) ,rctnchp(i) ,rctnrct(i) ,rctntyp(i),
+     ,       rctnptin(i),rctnpto1(i),rctnpto2(i),rctnpto3(i),
+     ,       rctngrp(i) ,rctnmsp(i) ,
+     ,       rctnmst(i) ,rctnnmo1(i),rctnnmo2(i),rctnnmo3(i),
+     ,       rctndlte(i),rctnenr1(i),rctnenr2(i),i=1,nnrctn)
         write(*,*)
       end if !}
 
@@ -1147,10 +1174,12 @@ cxpb Here we must keep the first match!
                 if(streql(filnam(ii),rctndbs(irc)) .and.
      ,             streql(  h123(ii),rctnchp(irc)) .and.
      ,             streql(  reac(ii),rctnrct(irc)) .and.
+     ,                        iz(ii).eq.rctniz(irc) .and.
      ,                     massp(ii).eq.rctnmsp(irc) .and.
      ,                     masst(ii).eq.rctnmst(irc) .and.
      ,                     rc1mn(ii).eq.rctntmin(irc) .and.
-     ,                     rc1mx(ii).eq.rctntmax(irc)) kk=ii
+     ,                     rc1mx(ii).eq.rctntmax(irc) .and.
+     ,                    delpot(ii).eq.rctndlte(irc)) kk=ii
                 ii=ii+1
               end do !}
 
@@ -1187,10 +1216,11 @@ cxpb Here we must keep the last match!
                     if(streql(filnam(ii),rctndbs(k1)) .and.
      ,                 streql(  h123(ii),rctnchp(k1)) .and.
      ,                 streql(  reac(ii),rctnrct(k1)) .and.
+     ,                         iz(ii).eq.rctniz(k1)   .and.
      ,                      massp(ii).eq.rctnmsp(irc) .and.
      ,                      masst(ii).eq.rctnmst(irc) .and.
      ,                      rc1mn(ii).eq.rctntmin(k1) .and.
-     ,                      rc1mx(ii).eq.rctntmin(k1) .and.
+     ,                      rc1mx(ii).eq.rctntmax(k1) .and.
      ,                     delpot(ii).eq.rctndlte(k1)) k2=ii
                   end do !}
 
@@ -1326,10 +1356,11 @@ cxpb Here we must keep the last match!
                     if(streql(filnam(ii),rctndbs(k3)) .and.
      ,                 streql(  h123(ii),rctnchp(k3)) .and.
      ,                 streql(  reac(ii),rctnrct(k3)) .and.
+     ,                         iz(ii).eq.rctniz(k3)   .and.
      ,                      massp(ii).eq.rctnmsp(irc) .and.
      ,                      masst(ii).eq.rctnmst(irc) .and.
      ,                      rc1mn(ii).eq.rctntmin(k3) .and.
-     ,                      rc1mx(ii).eq.rctntmin(k3) .and.
+     ,                      rc1mx(ii).eq.rctntmax(k3) .and.
      ,                     delpot(ii).eq.rctndlte(k3)) k4=ii
                   end do !}
 
