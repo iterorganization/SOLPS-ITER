@@ -5098,14 +5098,14 @@ plot(rrsep,osja,'k');
 You will need the MDSplus interface for python.
 
 \begin{verbatim}
-import pmds
-from pylab import *
+import MDSplus
 
-pmds.mdsconnect ('solps-mdsplus.aug.ipp.mpg.de:8001')
-pmds.mdsopen('solps',12380)
-r=pmds.mdsvalue('\\top.snapshot.grid:r')
-z=pmds.mdsvalue('\\top.snapshot.grid:z')
-pmds.mdsdisconnect ()
+conn = MDSplus.Connection('solps-mdsplus.aug.ipp.mpg.de:8001')
+conn.openTree('solps', 12380)
+r=conn.get('\\top.snapshot.grid:r')
+z=conn.get('\\top.snapshot.grid:z')
+conn.closeTree('solps', 12380)
+conn.disconnect()
 
 print(r)
 print(z)
@@ -5130,7 +5130,7 @@ produced figure \ref{fig:python_compare_shots}.
 \ifpdf
     \centerline{\includegraphics[height=8cm]{compare_shots.png}}
 \else
-    \centerline{\includegraphics[height=8cm]{compare_shots.ps}}
+    \centerline{\includegraphics[height=8cm]{compare_shots.eps}}
 \fi
     \caption{Comparison of profiles for a range of shots.}
     \label{fig:python_compare_shots}
@@ -5225,7 +5225,7 @@ plots are given in figures \ref{fig:python_sql_scatter},
 \ifpdf
     \centerline{\includegraphics[height=8cm]{sql_scatter.png}}
 \else
-    \centerline{\includegraphics[height=8cm]{sql_scatter.ps}}
+    \centerline{\includegraphics[height=8cm]{sql_scatter.eps}}
 \fi
     \caption{Comparison of profiles for a range of shots.}
     \label{fig:python_sql_scatter}
@@ -5235,7 +5235,7 @@ plots are given in figures \ref{fig:python_sql_scatter},
 \ifpdf
     \centerline{\includegraphics[height=8cm]{sql_hexbin_lin.png}}
 \else
-    \centerline{\includegraphics[height=8cm]{sql_hexbin_lin.ps}}
+    \centerline{\includegraphics[height=8cm]{sql_hexbin_lin.eps}}
 \fi
     \caption{Comparison of profiles for a range of shots.}
     \label{fig:python_sql_hexbin_lin}
@@ -5245,7 +5245,7 @@ plots are given in figures \ref{fig:python_sql_scatter},
 \ifpdf
     \centerline{\includegraphics[height=8cm]{sql_hexbin_log.png}}
 \else
-    \centerline{\includegraphics[height=8cm]{sql_hexbin_log.ps}}
+    \centerline{\includegraphics[height=8cm]{sql_hexbin_log.eps}}
 \fi
     \caption{Comparison of profiles for a range of shots.}
     \label{fig:python_sql_hexbin_log}
