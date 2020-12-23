@@ -476,7 +476,7 @@ c**   atomic reaction cards, nreaci data fields
       write(iunoo,707) nreaci
       write(hlp_frm,'(a,i1,a)')
      , '(1p,i3,1x,a6,1x,a4,1x,a9,a3,i3,i',
-     ,   1+len_of_digits(maxval(masst(1:nrcln))),',5e12.5)'
+     ,   1+max(2,len_of_digits(maxval(masst(1:nrcln)))),',5e12.5)'
       do j=1,nrcln !{
         iid=ir(j)
         write(iunoo,hlp_frm) iid,filnam(j),h123(j),reac(j),crc(j),
