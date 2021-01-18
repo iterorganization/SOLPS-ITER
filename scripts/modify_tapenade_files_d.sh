@@ -1,7 +1,7 @@
 
 # all files are .f90 files, move them to .F90 extension
 move_to_F90.sh
-
+rm b2uxus_d.F90
 collect_nodiff_d.sh
 
 sed -i '/DIFFSIZES/d' ./*.F90 
@@ -15,17 +15,20 @@ sed -i -e 's/ISIZE1OFabs/mpg%nCv/g' b2mod_driver_diff.F90
 sed -i -e 's/ISIZE2OFabs/0:state%pl%ns-1/g' b2mod_driver_diff.F90
 sed -i -e 's/ISIZE1OFarg1/mpg%nCv/g' b2mod_driver_diff.F90 b2npmo_d.F90 b2stbr_phys_d.F90 b2mod_recycle_diff.F90
 sed -i -e 's/ISIZE1OFdv%fch_pi_c/nCv/g' b2news__d.F90
-sed -i -e 's/ISIZE1OFtemp/nCv/g' b2news__d.F90 b2tfcc_d.F90 b2tfnb_d.F90 b2tqna_d.F90 b2xpic_d.F90
+sed -i -e 's/ISIZE1OFfch_p/nFc/g' b2news__d.F90
+sed -i -e 's/ISIZE1OFtemp/nCv/g' b2news__d.F90 b2tfcc_d.F90 b2tfnb_d.F90 b2tqna_d.F90 b2xpic_d.F90 b2tral_d.F90
+sed -i -e 's/ISIZE1OFfcbb/nFc/g' b2tfch__d.F90 b2tfnb_d.F90 b2tinnt_d.F90
+sed -i -e 's/ISIZE1OFvadia/nFc/g' b2tfnb_d.F90
 sed -i -e 's/ISIZE1OFcvsa/nFc/g' b2npmo_d.F90
 sed -i -e 's/ISIZE1OFresult1/nCv/g' b2npmo_d.F90
 sed -i -e 's/ISIZE1OFcvhz/nCv/g' b2nxfv_d.F90
 sed -i -e 's/ISIZE1OFvxhz/nVx/g' b2nxfv_d.F90 
-sed -i -e 's/ISIZE1OFfcqalf/nFc/g' b2sian_d.F90 b2stbc_d.F90 b2stbc_phys_d.F90 b2tfhe__d.F90 b2tfhi__d.F90 b2trno_d.F90 b2tfch__d.F90 b2tfnb_d.F90
+sed -i -e 's/ISIZE1OFfcqalf/nFc/g' b2sian_d.F90 b2stbc_d.F90 b2stbc_phys_d.F90 b2tfhe__d.F90 b2tfhi__d.F90 b2trno_d.F90 b2tfch__d.F90 b2tfnb_d.F90 b2tinnt_d.F90
 sed -i -e 's/ISIZE1OFgeo%vxonedbsq/nVx/g' b2sihs__d.F90
 sed -i -e 's/ISIZE1OFgeo%cvonedbsq/nCv/g' b2sihs__d.F90
 sed -i -e 's/ISIZE1OFcvvol/nCc/g' b2stbc_d.F90 
 sed -i -e 's/ISIZE1OFgeo%cvvol/nCv/g' b2stbc_d.F90
-sed -i -e 's/ISIZE1OFcvbb/nCv/g' b2stbm_d.F90 b2tfnb_d.F90 b2tvspa_d.F90 b2trno_d.F90
+sed -i -e 's/ISIZE1OFcvbb/nCv/g' b2stbm_d.F90 b2tfnb_d.F90 b2tvspa_d.F90 b2trno_d.F90 b2tfed_d.F90
 sed -i -e 's/ISIZE1OFcvsahz_eff/nFc/g' b2stbr_phys_d.F90 b2mod_recycle_diff.F90
 sed -i -e 's/ISIZE2OFcvsahz_eff/0:1/g' b2stbr_phys_d.F90 b2mod_recycle_diff.F90
 sed -i -e 's/ISIZE1OFcvsahz/nFc/g' b2stbr_phys_d.F90 b2mod_recycle_diff.F90
@@ -76,6 +79,7 @@ sed -i '/EXTERNAL B2CRTIMECDF/d' b2mod_mwti_diff.F90
 sed -i '/EXTERNAL CHECK_CDF_STATUS/d' b2mod_mwti_diff.F90 
 sed -i '/EXTERNAL OR/d' b2mod_mwti_diff.F90 
 sed -i '/INTEGER :: OR/d' b2mod_mwti_diff.F90 
+sed -i -e 's/B2UXUS_NODIFF/B2UXUS/g' b2usco_d.F90 b2usmo_d.F90 b2usht_d.F90 b2uspo_d.F90
 
 remove_initializations_d.sh
 
@@ -92,6 +96,10 @@ sed -i -e "s/B2MNDR_2_D(nout, ns, geo, mpg, state, state_ext)/B2MNDR_2_D(nout, n
 
 cp $TAPENADEDIR/ADFirstAidKit/adContext.c .
 cp $TAPENADEDIR/ADFirstAidKit/adContext.h .
+cp $TAPENADEDIR/ADFirstAidKit/adDebug.c .
+cp $TAPENADEDIR/ADFirstAidKit/adDebug.h .
+cp $TAPENADEDIR/ADFirstAidKit/adStack.c .
+cp $TAPENADEDIR/ADFirstAidKit/adStack.h .
 
 #################### for feedback TBD!!!
 
@@ -105,10 +113,5 @@ cp $TAPENADEDIR/ADFirstAidKit/adContext.h .
 #sed -i '/saved_cbshe_cored = 0.0/d' b2mod_driver_diff.F90
 #sed -i '/saved_na_feedback_actuatord = 0.0/d' b2mod_driver_diff.F90
 
-
-## compile with debug
-#cp $TAPENADEDIR/ADFirstAidKit/adDebug.c .
-#cp $TAPENADEDIR/ADFirstAidKit/adStack.c .
-#cp $TAPENADEDIR/ADFirstAidKit/adStack.h .
 
 

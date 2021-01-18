@@ -60,6 +60,7 @@ cp $SOLPSTOP/modules/B2.5/src/differentiation/b2uxus_dv.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/b2mwqt_diffv.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/b2mxar_diffv.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/b2mxac_diffv.F .
+cp $SOLPSTOP/modules/B2.5/src/differentiation/b2optim* .
 #cp $SOLPSTOP/modules/B2.5/src/differentiation/read_plasma_state_diff.F .
 #cp $SOLPSTOP/modules/B2.5/src/differentiation/write_plasma_state_diff.F .
 

@@ -39,7 +39,7 @@ EXT_DIFF = .diff_d
 DIFF=_d
 MNEXE=b2optim_${OPT}
 ifdef TAO
-RUN_OPTIONS = -tao_monitor -tao_view_solution
+RUN_OPTIONS = -tao_monitor -tao_view_solution ${TAO_OPT}
 endif
 endif
 
