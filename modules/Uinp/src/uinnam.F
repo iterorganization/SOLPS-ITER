@@ -1046,7 +1046,7 @@ c***  input elements indices for current rectangle
         call resima(chtyp)
         if (.not.streql(chtyp,'lin_prf') .and.
      .      .not.streql(chtyp,'lin_int')) then !{
-          write(0,*) 'uinam: unrecognized chord group type ',
+          write(0,*) 'uinnam: unrecognized chord group type ',
      .      chtyp
           write(0,*) '  ==> Check the DG model'
           call xerrab ('Unrecognized chord group type') 

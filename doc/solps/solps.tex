@@ -4429,7 +4429,7 @@ case that can be found on the SVN server. The location of these is
 \href{https://solps-mdsplus.aug.ipp.mpg.de/repos/SOLPS/trunk/solps\_examples/solps5.1/bench\_mark/AUG\_16151\_D+C+He/}{https://solps-mdsplus.aug.ipp.mpg.de/repos/SOLPS/trunk/solps\_examples/solps5.1/bench\_mark/AUG\_16151\_D+C+He/}. Another version of
 these files can be found in the {\em Examples} folder in the \SOLPSITER SharePoint
 web site
-(\href{https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}{https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}).
+(\href{https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}{\allowbreak https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}).
 
 \subsection{b2ag.dat}
 \index{b2ag.dat, D+C+He example}
@@ -6150,7 +6150,7 @@ flux.
 In contrast to
 \cite{ROGNLIEN98A, ROGNLIEN98B, ROGNLIEN99A}
 there is an additional term of the same kind in the r.h.s. of
-Eq. (\ref{eq:mom}):
+Eq.~(\ref{eq:mom}):
 \begin{gather}
 F_k = - m_i \left(\frac{1}{\sqrt{g}} \frac{\partial }{\partial x}
       \left(\frac{\sqrt{g}}{h_x} n V_{\parallel}
@@ -6182,7 +6182,7 @@ the separatrix, the flux-surface-averaged parallel
 viscosity coincides with the well-known
 neoclassical expression for the Pfirsch-Schl{\"u}ter regime
 \cite{HIRSHMAN81A}.
-Thus, parallel viscosity in Eq. (\ref{eq:mom}) provides smooth transition to
+Thus, parallel viscosity in Eq.~(\ref{eq:mom}) provides smooth transition to
 neoclassical theory.
 The classical perpendicular viscosity coefficient
 can
@@ -7674,8 +7674,8 @@ c_{E\times B}   \frac{B_z}{B^2}   \frac 1{h_x}   \frac{\partial \Phi }{\partial 
 
 %-------- end of 2nd page -------------
 
-\begin{equation}
-\begin{matrix}\label{eq:VaxDia}
+\begin{equation}\label{eq:VaxDia}
+\begin{matrix}
 \widetilde{V}_{ax}^{\left( dia \right)} & =
 & \left\{
 \begin{matrix}
@@ -7685,8 +7685,8 @@ c_{dia} \frac{T_i B_z}{z_a e}   \frac{\partial}{h_y\partial y} \left(\frac 1{B^2
 \end{matrix}
 \end{equation}
 
-\begin{equation}
-\begin{matrix}\label{eq:VayDia}
+\begin{equation}\label{eq:VayDia}
+\begin{matrix}
 \widetilde{V}_{ay}^{\left( dia \right)} & =
 & \left\{
 \begin{matrix}
@@ -7814,7 +7814,7 @@ a=1, c_{D_{p,a},0}=0, c_{D_{p,a},1}=0, c_{D_{p,a},2}=0, c_{D_{p,a},3}=0
 \section{Parallel momentum conservation equations}
 
 The standard form of the parallel momentum conservation equation,
-Eq. (\ref{eq:mom_new}), as implemented in the code
+Eq.~(\ref{eq:mom_new}), as implemented in the code
 for the default choice of {\tt b2sigp\_style} set to {\tt '2'}, is:
 
 \begin{align}\label{eq:mom_new}
@@ -7826,7 +7826,7 @@ Z_a e n_a \frac{b_x}{h_x} \frac{\partial \Phi}{\partial x} = \notag \\
 = S_{a \parallel}^m + S_{CF_a}^m + S_{fr_a}^m &+ S_{Therm_a}^{m} + S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m + S_{AN_a}^m + S_{EIRENE_a}^m
 \end{align}
 
-However, one can also use the formulation given as Eq. (\ref{eq:mom_old}),
+However, one can also use the formulation given as Eq.~(\ref{eq:mom_old}),
 by setting {\tt b2sigp\_style} set to {\tt '1'}:
 
 \begin{align}\label{eq:mom_old}
@@ -7838,13 +7838,13 @@ m_a \frac{\partial n_a V_{\parallel a}}{\partial t} +
 = S_{a \parallel}^m + S_{CF_a}^m + S_{fr_a}^m &+ S_{Therm_a}^{m} + S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m + S_{AN_a}^m + S_{EIRENE_a}^m
 \end{align}
 
-The treatment using Eq. (\ref{eq:mom_new}) is recommended for cases with a
+The treatment using Eq.~(\ref{eq:mom_new}) is recommended for cases with a
 single main hydrogenic ion (or at least where the main species is the lightest
 one) and an arbitrary amount of impurities. It also requires the current
 continuity equation (\ref{eq:pot_eq}) to be solved simulatenously for $\Phi$
 (i.e. {\tt 'b2news\_poteq'} set to {\tt '1'}). For cases
-with hydrogenic ion mixtures or non-hydrogenic plasmas, the use of Eq.
-(\ref{eq:mom_old}) is preferred.
+with hydrogenic ion mixtures or non-hydrogenic plasmas, the use of
+Eq.~(\ref{eq:mom_old}) is preferred.
 
 %-------- end of 4th page -------------
 
@@ -7981,7 +7981,7 @@ S_{CX_{b+1}}^q = \sum \limits^{ns-1}_{\substack{a=0 \\ b \neq a-1}} r_{CX_{ab}} 
 
 %-------- end of 5th page -------------
 
-If using Eq. (\ref{eq:mom_new}), the thermal and friction forces have two parts:
+If using Eq.~(\ref{eq:mom_new}), the thermal and friction forces have two parts:
 
 \begin{align}\label{eq:mom_tfric}
 S_{Therm,a}^m = S_{Therm,ea}^m + S_{Therm,ia}^m
@@ -8055,7 +8055,7 @@ $c_{\alpha_{ab}}^{(F \lim)} = \left\{
 \right.
 $, ~ $j_{ab, \max} = e K_{ab}^{(V_\parallel)} \sqrt{\frac{T_i}{m_p}} \left( n_a + n_b \right)$, ~ $c_{flab} = c_{flim_4} = 0.5$
 
-Otherwise, when using Eq. (\ref{eq:mom_old}), the thermal and friction force term expressions are:
+Otherwise, when using Eq.~(\ref{eq:mom_old}), the thermal and friction force term expressions are:
 
 $S_{Therm,a}^m =
 n_a \left(
@@ -8081,7 +8081,7 @@ $\tau_p = \frac 3{4\sqrt{2\pi}}
 \frac{\sqrt{m_p}T_i^{\frac 3 2}}{\ln \Lambda}
 \left(\frac{4 \pi \varepsilon_0}{e^2}\right)^2$, where the Coulomb logarithm $\ln \Lambda $ can be chosen as
 
-\begin{equation}
+\begin{equation}\label{eq:lnlambda_ii}
 \begin{matrix}
 \ln \Lambda & =
 & \left\{
@@ -8456,8 +8456,8 @@ Q_{Fei} = \left\{
 \begin{aligned}
  V_{e \parallel} \sum \limits_{\substack{a=0 \\ z_a \neq 0}}^{ns - 1}
 \left( S^m_{fr,ea} + S^m_{Therm,ea} \right)
-& \mbox{, when Eq.(\ref{eq:mom_new}) is activated ({\tt 'b2sigp\_style'} set to {\tt '2'})} \\
-j_x \hat E_x + 0 \cdot j_y \hat{E}_y & \mbox{, when Eq.(\ref{eq:mom_old}) is activated}
+& \mbox{, when Eq.~(\ref{eq:mom_new}) is activated ({\tt 'b2sigp\_style'} set to {\tt '2'})} \\
+j_x \hat E_x + 0 \cdot j_y \hat{E}_y & \mbox{, when Eq.~(\ref{eq:mom_old}) is activated}
 \end{aligned}\right.
 \end{equation}
 
@@ -8597,8 +8597,8 @@ $
 \widetilde{\widetilde{\kappa}}_{ex}^{(CL)} = c_{\kappa_{ex}}^{(F \lim)} \widetilde{\kappa}_{ex}^{(CL)}
 \end{equation}
 
-$
-\begin{matrix}\label{eq:ene_cflim}
+\begin{equation}\label{eq:ene_cflim}
+\begin{matrix}
 c_{\kappa_{ex}}^{F \lim} & =
 & \left\{
 \begin{matrix}
@@ -8614,7 +8614,7 @@ c_{\kappa_{ex}}^{F \lim} & =
 &  \text{for other flux surfaces} \\
 \end{matrix} \right.
 \end{matrix}
-$
+\end{equation}
 
 \begin{equation}\label{eq:ene_vhemax}
 V_{h_e}^{(\max)} = c_{flim_0} \frac{\sqrt g}{h_x}|b_x| \sqrt{\frac{T_e}{m_e}}
@@ -8702,8 +8702,8 @@ K_1 = \frac 1{1 + 2.01 \cdot \nu_{\ast e}^{1/2} + 1.53 \cdot \nu_{\ast e}} +
 \end{equation}
 where the Coulomb logarithm $\ln \Lambda $ can be chosen as
 
-$
-\begin{matrix}\label{eq:ene_couln}
+\begin{equation}\label{eq:ene_couln}
+\begin{matrix}
 \ln \Lambda & =
 & \left\{
 \begin{matrix}
@@ -8713,7 +8713,7 @@ $
 \max \{ 5; 14.9 - 0.5 \cdot \ln \left( \frac{n_e}{10^{20}} \right) + \ln \left( \frac{T_e}{e \cdot 10^3} \right)  \} && \text{Wesson formula for electron-electron collisions} \\
 \end{matrix} \right.
 \end{matrix}
-$
+\end{equation}
 
 %-------- end of 11th page -------------
 
@@ -8741,7 +8741,7 @@ V_{e \parallel} = \frac 1{e n_e} \left[
 j^{(\parallel)}_x = \sigma_{\parallel} \left( \frac{1}{e n_e h_x} \frac{\partial n_e T_e}{\partial x} - \frac{1}{h_x} \frac{\partial \Phi}{\partial x} \right) - \alpha_{ex} \frac{1}{h_x} \frac{\partial T_e}{\partial x} - \frac{e b_x}{z_{eff}} \sum \limits_{a=0}^{ns-1} n_a V_{a \parallel} \left( z_a^2 - z_a z_{eff} \right)
 \end{equation}
 
-The last term in Eq. (\ref{eq:fch_p}) is activated with the switch {\tt b2sigp\_style} set to {\tt '2'}.
+The last term in Eq.~(\ref{eq:fch_p}) is activated with the switch {\tt b2sigp\_style} set to {\tt '2'}.
 
 \begin{equation}\label{eq:ene_Ex}
 \hat E_x = \frac 1{en_e h_x} \frac{\partial n_e T_e}{\partial x} - \frac 1{h_x} \frac{\partial \Phi}{\partial x}
@@ -9410,10 +9410,10 @@ For definition of $\widetilde{q}_a^{(0)}$, see Eqs. (\ref{eq:q0-0}) and (\ref{eq
 \right)
 \end{equation}
 
-\begin{equation}
+\begin{equation}\label{eq:pot_sigaa0}
 \sigma_{aa_0} =
 \left\{
-\begin{matrix}\label{eq:pot_sigaa0}
+\begin{matrix}
 \frac{m_a n_a \left\langle V_{aa_0} \sigma_{ex} \right\rangle n_{a_0}}{2 B^2}, &
 z_{a_0} = 0 ~ \& ~ z_{n,a_0} = 1, z_a \ne 0 ~ \& ~z_{n_a} = 1 \\
 0, & \text{otherwise}
