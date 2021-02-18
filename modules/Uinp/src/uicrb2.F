@@ -70,8 +70,10 @@ c*** jblk labels the blocks from our list, and jvrb the variables
       call lefta(uff,16,i)
       write(ufs,hlp_frm) '(',mxslen,'a1)'
       call lefta(ufs,16,i)
+#ifdef DBG
       print *,'uff=',uff
       print *,'ufs=',ufs
+#endif
 c
 c*** The main loop starts here: read the next line until end of file
 c*** The following assumptions are made during line parsing:

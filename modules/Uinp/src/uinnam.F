@@ -594,7 +594,7 @@ c=======================================================================
             amd_file(namdf)(i:i)=' '
             call lefta(amd_file(namdf),48,i)
             write(*,*) 'Filename for AMDS reference quoted: ',
-     ,                                                  amd_file(namdf)
+     ,                                           trim(amd_file(namdf))
           end if !}
         else
           i=index(amd_file(namdf),'.')
@@ -603,7 +603,7 @@ c=======================================================================
           call lefta(uam,52,i+4)
           amd_file(namdf)=uam
           write(*,*) 'Filename for AMDS reference quoted: ',
-     ,                                                  amd_file(namdf)
+     ,                                           trim(amd_file(namdf))
         end if !}
       case (87)
         call resimi(namdf)

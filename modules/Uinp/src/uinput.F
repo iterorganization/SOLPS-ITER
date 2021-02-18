@@ -4,6 +4,7 @@
      , , only: ntrack, nalloys
       use b2mod_xerset
       use eirmod_solps
+      use helper
 
 c  version : 28.01.2003 18:08
 
@@ -16,6 +17,7 @@ c=======================================================================
       real(kind=R8), allocatable :: na0(:)
       character tab
       character*5, allocatable :: specs(:)
+      character*8, allocatable :: species_name(:)
       character*22 hlp_frm
       character*27 lbreg(0:cbnrmx-1)
       character*120 lblps
@@ -493,7 +495,11 @@ c*** Create the b2ai.dat file
             write(2,'(1x,a5,5x,a3,6x,a3,4x,i3,a2,4x,i3,a2)')
      .       specs(is),'0.0','0.0',nchara(iatm),'.0',
      .                             nmassa(iatm),'.0'
-            na0(is) = 1.0e12
+            if (nchara(iatm).le.18) then
+              na0(is) = 1.0e12
+            else
+              na0(is) = 1.0e8
+            end if
             is = is + 1
             do iss = 1, nbndl(iatm)-1
               write(2,
@@ -502,8 +508,10 @@ c*** Create the b2ai.dat file
      .                    nchara(iatm),'.0',nmassa(iatm),'.0'
               if (nchara(iatm).eq.1) then
                 na0(is) = 1.0e19
-              else
+              else if (nchara(iatm).le.18) then
                 na0(is) = 1.0e16
+              else
+                na0(is) = 1.0e8
               end if
               is = is + 1
             end do
@@ -682,6 +690,52 @@ c*** Modify the input file for B2, if possible
       end if
    40 close(1,err=42)
    42 continue
+
+      inquire(file='../SOLPS_FLUIDS',exist=uex)
+      if(.not.uex) then
+        write(*,*) 'No SOLPS_FLUIDS file found'
+        write(*,*) 'Writing ../SOLPS_FLUIDS'
+        allocate(species_name(0:ns-1))
+        is = 0
+        do iatm = 1, natmi
+          if (is_meta(iatm)) cycle
+          species_name(is)=trim(spcsncl(iatm))//'0'
+          is = is + 1
+          do iss = 1, nbndl(iatm)-1
+            if (izamin(is).eq.izamax(is)) then
+              species_name(is)=
+     .         trim(spcsncl(iatm))//'+'//int2str(izamin(is))
+            else
+              species_name(is)=
+     .         trim(spcsncl(iatm))//'+'//int2str(izamin(is))
+     .                           //'-+'//int2str(izamax(is))
+            end if
+            is = is + 1
+          end do
+        end do
+        write(hlp_frm,'(a1,i2,a7)') '(',ns,'(a,1x))'
+        open(unit=2,file='../SOLPS_FLUIDS')
+        write(2,hlp_frm) (trim(species_name(is)),is=0,ns-1)
+        close(2)
+        deallocate(species_name)
+      end if
+
+      inquire(file='../NREG',exist=uex)
+      if(.not.uex) then
+        write(*,*) 'No NREG file found'
+        write(*,*) 'Writing ../NREG'
+        open(unit=2,file='../NREG')
+        if (lm_cnfg) then
+          if (nycut2(1).gt.0) then
+            write(2,'(i2)') 2
+          else
+            write(2,'(i2)') 1
+          end if
+        else
+          write(2,'(i2)') 2*nncut
+        end if
+        close(2)
+      end if
 
 c-----------------------------------------------------------------------
 c*** Create additional files with geometry for b2plot
