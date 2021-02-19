@@ -30,7 +30,7 @@ setenv GLI_HOME ${EBROOTGLI}
 setenv NCDIR ${EBROOTNETCDFMINFORTRAN}
 setenv MPDIR ${EBROOTIMPI}
 module load MATLAB/2018a
-module load texlive
+module load texlive/2015
 
 # Debugger (set environment variable DBX)
 setenv DBX totalview

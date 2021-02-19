@@ -33,7 +33,7 @@ module load ParaView/5.5.2-intel-2018a-Python-3.6.4-mpi
 module load PyQt5/5.9.2-intel-2018a-Python-3.6.4
 setenv QTDIR ${EBROOTQT5}
 setenv PARAVIEW_PREFIX ${EBROOTPARAVIEW}
-module load texlive
+module load texlive/2015
 module load nag/26-GCC-6.4.0-2.28
 module load HDF5/1.10.1-intel-2018a
 module load make/4.1

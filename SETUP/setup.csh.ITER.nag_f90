@@ -19,7 +19,7 @@ module unload LibTIFF/4.0.9-GCCcore-6.4.0
 module load NAG/26-GCCcore-6.4.0
 module load motif/2.3.8-intel-2018a
 module load gnuplot/5.2.2-intel-2018a
-module load texlive
+module load texlive/2015
 module load MATLAB/2018a
 module load PyYAML/3.12-intel-2018a-Python-3.6.4
 module load matplotlib/2.1.2-intel-2018a-Python-3.6.4
