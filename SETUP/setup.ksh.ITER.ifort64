@@ -23,7 +23,7 @@ export GLI_HOME=${EBROOTGLI}
 export NCDIR=${EBROOTNETCDFMINFORTRAN}
 export MPDIR=${EBROOTIMPI}
 module load MATLAB/2018a
-module load texlive
+module load texlive/2015
 
 # Debugger (set environment variable DBX)
 export DBX="totalview"
