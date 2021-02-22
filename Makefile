@@ -334,7 +334,7 @@ triang_mpi:
 	cd modules/Triang; ${MAKE} USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 
 triang_nox:
-	cd modules/Triang; ${MAKE}  LD_GR="" LD_GKS="" mods
+	cd modules/Triang; ${MAKE} LD_GR="" LD_GKS="" mods
 	cd modules/Triang; ${MAKE} LD_GR="" LD_GKS=""
 
 triang_nox_mpi:
@@ -462,7 +462,6 @@ depend:
 	cd modules/Uinp;           ${MAKE} depend USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes
 	cd modules/Uinp;           ${MAKE} depend USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 	cd modules/Triang;         ${MAKE} depend
-	cd modules/DivGeo;         ${MAKE} depend
 	cd modules/DivGeo/equtrn;  ${MAKE} depend
 	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE
 	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI SOLPS_MPI=yes
@@ -473,6 +472,7 @@ depend:
 	cd modules/B2.5;	   ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_OPENMP=-D_OPENMP USE_MPI=-DUSE_MPI SOLPS_MPI=yes SOLPS_OPENMP=yes
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO
 ifndef NO_MOTIF
+	cd modules/DivGeo;         ${MAKE} depend
 	cd modules/amds;           ${MAKE} depend
 endif
 #	cd modules/solps4-5;       ${MAKE} depend
@@ -692,6 +692,7 @@ clean_b25eirene_nox_mpi:
 
 clean_b25eirene_ig:
 	cd modules/Eirene; ${MAKE} clean USE_B25=-DB25_EIRENE    USE_IMPGYRO=-DUSE_IMPGYRO
+	cd modules/B2.5;   ${MAKE} clean USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO
 
 clean_uinp:
 	cd modules/Uinp; ${MAKE} clean

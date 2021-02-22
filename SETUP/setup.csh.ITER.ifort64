@@ -11,7 +11,7 @@ module load Kepler
 module load FC2K
 module load Viz
 module load makedepend/1.0.5-GCCcore-6.4.0
-module load MSCL/1.1.1-intel-2018a
+module load MSCL/1.2.2-GCCcore-6.4.0
 module load GR/0.0.94-GCCcore-6.4.0
 module load GLI/4.5.30-GCCcore-6.4.0
 module load NCL/6.5.0-intel-2018a
@@ -30,7 +30,7 @@ setenv GLI_HOME ${EBROOTGLI}
 setenv NCDIR ${EBROOTNETCDFMINFORTRAN}
 setenv MPDIR ${EBROOTIMPI}
 module load MATLAB/2018a
-module load texlive
+module load texlive/2015
 
 # Debugger (set environment variable DBX)
 setenv DBX totalview

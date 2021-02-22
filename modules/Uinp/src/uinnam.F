@@ -594,7 +594,7 @@ c=======================================================================
             amd_file(namdf)(i:i)=' '
             call lefta(amd_file(namdf),48,i)
             write(*,*) 'Filename for AMDS reference quoted: ',
-     ,                                                  amd_file(namdf)
+     ,                                           trim(amd_file(namdf))
           end if !}
         else
           i=index(amd_file(namdf),'.')
@@ -603,7 +603,7 @@ c=======================================================================
           call lefta(uam,52,i+4)
           amd_file(namdf)=uam
           write(*,*) 'Filename for AMDS reference quoted: ',
-     ,                                                  amd_file(namdf)
+     ,                                           trim(amd_file(namdf))
         end if !}
       case (87)
         call resimi(namdf)
@@ -1046,7 +1046,7 @@ c***  input elements indices for current rectangle
         call resima(chtyp)
         if (.not.streql(chtyp,'lin_prf') .and.
      .      .not.streql(chtyp,'lin_int')) then !{
-          write(0,*) 'uinam: unrecognized chord group type ',
+          write(0,*) 'uinnam: unrecognized chord group type ',
      .      chtyp
           write(0,*) '  ==> Check the DG model'
           call xerrab ('Unrecognized chord group type') 

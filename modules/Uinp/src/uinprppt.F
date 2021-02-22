@@ -810,8 +810,8 @@ cank        isrsp(l)=spcsrsp(l)
      ,                                   natmi,nmoli,nioni,nplsi
       write(*,*)
       if(natmi.gt.0) then !{
-        write(*,'(1x,a12,10a8)') 'atoms      ','nmassa','nchara',' ',
-     ,    ' ','isrfa','isrta','nmseca','nfola','ngena','spcsrna'
+        write(*,'(1x,a12,10a8)') 'atoms     ','nmassa','nchara','nprta',
+     ,    'nchrga','isrfa','isrta','nmseca','nfola','ngena','spcsrna'
         do i=1,natmi !{
           write(*,'(a12,i7,9i8)') texta(i),nmassa(i),nchara(i),
      ,      1,0,isrfa(i),isrta(i),nmseca(i),nfola(i),ngena(i),spcsrna(i)

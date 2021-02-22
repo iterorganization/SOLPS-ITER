@@ -242,10 +242,12 @@ c***                                                    2:4-used for passes 1:3
       ign=0
 
 c*** Check whether reactions were specified. If not, take the defaults
+c*** Do not count elastic collisions in this check
 
       hlp_amds = .false.
       is_bundled = .false.
       do i = 1, nrc_amds !{
+        if(streql(rctntyp(i),'EL')) cycle
         c=rctnptpr(i)
         l=get_atomic_number(c)
         if (l.eq.-1.or.streql(c,' ')) then !invert order of reactants
