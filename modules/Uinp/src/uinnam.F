@@ -1083,7 +1083,7 @@ c***  input elements indices for current rectangle
         lena=52
         call resima(uam)
         lena=i
-        ln_cnfg = streql(uam,'-').and.lm_cnfg
+        ln_cnfg = uam(1:1).eq.'-'.and.lm_cnfg
       case default
         call skipit
       end select
