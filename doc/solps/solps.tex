@@ -4230,7 +4230,7 @@ or
   b2run b2_ual_rewrite
 \end{verbatim}
 
-This program rewrites an existing IDS in case a correction needs to be made (because of a bug fix, for instance). It will rewrite the {\tt edge\_profiles}, {\tt edge\_transport}, {\tt edge\_sources}, {\tt radiation}, {\tt dataset\_description} and {\tt summary} data structures. It uses the same inputs as {\tt b2\_ual\_write}. Only the last time slice present in the IDS can be rewritten in this way, and data from older time slices will be lost.
+This program rewrites an existing IDS in case a correction needs to be made (because of a bug fix, for instance). It will rewrite the {\tt edge\_profiles}, {\tt edge\_transport}, {\tt edge\_sources}, {\tt radiation}, {\tt dataset\_description}, and {\tt summary} data structures. It uses the same inputs as {\tt b2\_ual\_write}. Only the last time slice present in the IDS can be rewritten in this way, and data from older time slices will be lost.
 
 \newpage
 \section{b2xx, the others}
@@ -7649,6 +7649,7 @@ r_{CX_{ab}} = \exp \left(
 V_a^{corr\_dpc} = \frac{c^{corr\_dpc}}{16} |b_x| \sqrt{\frac{p_a}{m_a n_a}} \frac{\partial
 ^2}{\partial x^2} \left( \frac 1{p_a} \frac{\partial p_a}{\partial x} \right)
 \end{equation}
+is a (physically meaningless) damping term, often called the "Rhie and Chow" correction, meant to avoid the checkerboard instability when solving the momentum equation. The default value of $c^{corr\_dpc}$ is 1 and provided by the {\tt 'b2tfnb\_xfrhie'} switch.
 
 \begin{equation}\label{eq:VaxE_appC}
 \begin{matrix}
@@ -9545,6 +9546,7 @@ c_{\sigma^{(ST)}} e n_e
 \end{matrix} \right.
 \end{matrix}
 \end{equation}
+is the radial conductivity associated with the presence of a magnetic stochastic layer, of thickness $\Delta^{(ST)}$ (in $m$, given by the {\tt 'b2tstch\_delta'} switch, default value {\tt 0.0}), just inside the nominal separatrix. The multiplier $c_{\sigma^{(ST)}}$ is given by the value of the {\tt 'b2tstch\_sig'} switch (default value {\tt 1.0}). Overall, the presence of the stochastic current term is governed by the {\tt 'b2tfhe\_stochastic'} switch (default value {\tt '0.0'}, i.e. off).
 
 $\sigma_y=\sigma^{(AN)} + \sigma^{(CL)}_{y}$
 
@@ -14363,6 +14365,14 @@ index according to the following\index{cell corner indices}:
 where the topology is that of the computational domain. This means that for a cell with indices $(ix,iy)$,
 the left face is shared with $(ix-1,iy)$, the right face with $(ix+1,iy)$, the top face with $(ix,iy+1)$,
 and the bottom face with $(ix,iy-1)$.
+
+For the Coulomb logarithm {\bf lnlam}, an optional integer argument can be provided to choose which formula is being used. The allowed values are:
+\begin{description}
+  \item[0] Braginskii formula [default if the argument is not provided]
+  \item[1] Wesson formula for ion-ion collisions (Eq.~\ref{eq:lnlambda_ii})
+  \item[2] Wesson formula for electron-electron collisions (Eq.~\ref{eq:ene_lnla})
+  \item[3] Wesson formula for electron-ion collisions (Eq.~\ref{eq:ene_couln})
+\end{description}
 
 The arrays
 {\bf ixlt}, {\bf ixle}, {\bf ixeq}, {\bf ixne}, {\bf ixgt}, {\bf ixge},
