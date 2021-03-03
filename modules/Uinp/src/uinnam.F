@@ -704,7 +704,7 @@ c*** Surface data transfer from B2 to Eirene
         end if !}
         call resima(sps_mtrl(n_spcsrf))
         sps_mtri(n_spcsrf)=-1.0
-        if(.not.streql(sps_mtrl(n_spcsrf),'-')) 
+        if(.not.streql(sps_mtrl(n_spcsrf),'-'))
      >   call uinmtr(sps_mtrl(n_spcsrf),nint(sps_mtri(n_spcsrf)),1)
       case (100)
         if(n_spcsrf.le.0) then !{
@@ -919,7 +919,7 @@ c***  input trimark is the marker for TRIA mesh
 c***  input global mesh size
       case (149)
         call resime(trisize(0))
-c***  input index of rectangle 
+c***  input index of rectangle
       case (150)
         call resimi(ntriref)
 c***  input mesh size for current rectangle
@@ -1049,7 +1049,7 @@ c***  input elements indices for current rectangle
           write(0,*) 'uinnam: unrecognized chord group type ',
      .      chtyp
           write(0,*) '  ==> Check the DG model'
-          call xerrab ('Unrecognized chord group type') 
+          call xerrab ('Unrecognized chord group type')
         end if !}
       case (170) ! data_id
         i=lena

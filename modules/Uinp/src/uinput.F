@@ -727,12 +727,12 @@ c*** Modify the input file for B2, if possible
         open(unit=2,file='../NREG')
         if (lm_cnfg) then
           if (nycut2(1).gt.0) then
-            write(2,'(i2)') 2
+            write(2,'(i1)') 2
           else
-            write(2,'(i2)') 1
+            write(2,'(i1)') 1
           end if
         else
-          write(2,'(i2)') 2*nncut
+          write(2,'(i1)') 2*nncut
         end if
         close(2)
       end if
