@@ -1,8 +1,8 @@
 function compare_sources_us(state1,state2,ns)
 
-vars = {'she';'shi';'sna';'smo';'smq'};
+vars = {'she';'shi';'sna';'smo';'smq';'shn'};
 
-dim =    {'4' ;  '4' ;  'ns*2'  ;  'ns*4';  'ns*4'};
+dim =    {'4' ;  '4' ;  'ns*2'  ;  'ns*4';  'ns*4';  '4'};
 %nx = nx+2;
 %ny=ny+2;
 %boundary2 = [1:ny];

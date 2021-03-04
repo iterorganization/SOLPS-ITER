@@ -1,8 +1,8 @@
 function compare_state_us(state1,state2,ns)
 
-vars = {'na';'ne';'ua';'te';'ti';'po';'fna';'fhe';'fhi'};
+vars = {'na';'ne';'ua';'te';'ti';'po';'fna';'fhe';'fhi';'fhn'};
 
-dim =    [ns  1    ns   1    1    1    ns*2   2     2 ];
+dim =    [ns  1    ns   1    1    1    ns*2   2     2     2 ];
 
 errmax = -1;
 for kk=1:length(vars)

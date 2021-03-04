@@ -28,7 +28,7 @@ sed -i -e "s/INTEGER :: dummyzerodiffd37/INTEGER :: dummyzerodiffd37(nbdirsmax)/
 sed -i -e "s/INTEGER :: dummyzerodiffd54/INTEGER :: dummyzerodiffd54(nbdirsmax)/g" b2news__dv.F90
 sed -i -e 's/ISIZE1OFtemp/nCv/g' b2news__dv.F90 b2tfcc_dv.F90 b2tfnb_dv.F90 b2tqna_dv.F90 b2xpic_dv.F90
 sed -i -e 's/ISIZE1OFcvsa/nFc/g' b2npmo_dv.F90
-sed -i -e 's/ISIZE1OFresult1/nCv/g' b2npmo_dv.F90
+sed -i -e 's/ISIZE1OFresult1/nCv/g' b2npmo_dv.F90 b2tqna_dv.F90
 sed -i -e "s/INTEGER :: dummyzerodiffd10/INTEGER :: dummyzerodiffd10(nbdirsmax)/g" b2npmo_dv.F90 
 sed -i -e "s/INTEGER :: dummyzerodiffd14/INTEGER :: dummyzerodiffd14(nbdirsmax)/g" b2npmo_dv.F90
 sed -i -e 's/ISIZE1OFcvhz/nCv/g' b2nxfv_dv.F90
@@ -66,6 +66,7 @@ sed -i -e "s/INTEGER :: dummyzerodiffd7/INTEGER :: dummyzerodiffd7(nbdirsmax)/g"
 sed -i -e 's/ISIZE1OFarg1/20/g' calc_err_dv.F90
 sed -i -e 's/ISIZE1OFarg2/20/g' calc_err_dv.F90
 sed -i -e 's/REAL :: result1$/integer :: result1/g' b2mod_input_profile_diffv.F90
+sed -i -e 's/#NBDirsMax#/nbdirsmax/g' b2mod_b2cmrc_diffv.F90 intvertex_dv.F90 #why?
 
 sed -i '/EXTERNAL RESTART_MA28_FOR_US/d' b2news__dv.F90 b2npmo_dv.F90 b2usht_dv.F90  
 sed -i '/EXTERNAL DEALLOC_B2MOD_MA28_FOR_US/d' b2mod_driver_diffv.F90
@@ -87,9 +88,21 @@ sed -i '/EXTERNAL CHECK_CDF_STATUS/d' b2mod_mwti_diffv.F90
 sed -i '/EXTERNAL OR/d' b2mod_mwti_diffv.F90 
 sed -i '/INTEGER :: OR/d' b2mod_mwti_diffv.F90 
 sed -i -e 's/B2UXUS_NODIFF/B2UXUS/g' b2usco_dv.F90 b2usmo_dv.F90 b2usht_dv.F90 b2uspo_dv.F90
+sed -i -e 's/B2MOD_GEO_DIFFV/B2MOD_GEO/g' ./*.F90 #why this?
+sed -i -e 's/GET_JSEP_NODIFF/GET_JSEP/g' ./*.F90
+sed -i -e 's/CFWURE_NODIFF/CFWURE/g' ./*.F90
+#sed -i -e 's/CALL READ_B2MOD_USER_NAMELIST_DV(ns, ntns, geo, geod, m, md0, &/CALL READ_B2MOD_USER_NAMELIST(ns, ntns, geo, m)/g' b2mod_user_namelist_diffv.F90 #why this?
+#sed -i '/&                                nbdirs)/d' b2mod_user_namelist_diffv.F90 #why this?
+#sed -i '/READ_B2MOD_USER_NAMELIST_DV/d' b2mod_user_namelist_diffv.F90 #why this?
+#sed -i -e "s/CALL READ_NEUTRALS_NAMELIST_DV(ns, mpg, mpgd, switch, \&/CALL READ_NEUTRALS_NAMELIST(ns, mpg, switch, new_sputter_namelist)/g" b2stbr_dv.F90 #why this?
+#sed -i "/\&                          new_sputter_namelist, nbdirs)/d" b2stbr_dv.F90 #why this?
+#sed -i -e 's/CALL READ_NEUTRALS_NAMELIST_DV(ns, mpg, mpgd, switch, .true., &/CALL READ_NEUTRALS_NAMELIST(ns, mpg, switch, .true.)/g' b2stbr_dv.F90 #why this?
+#sed -i '/&                              nbdirs)/d' b2stbr_dv.F90 #why this? dangerous!
 
 sed -i -e 's/PUBLIC :: to_struct_plasma_dv,/PUBLIC :: /g' b2us_prep_diffv.F90
 sed -i '/PUBLIC :: to_struct_cell_dv, to_struct_face_dv/d' b2us_debug_diffv.F90
+sed -i '/PUBLIC :: alloc_switches_dv/d' b2mod_switches_diffv.F90
+sed -i '/& check_values_switches_dv/d' b2mod_switches_diffv.F90
 sed -i -e 's/alloc_b2mod_balance_dv, dealloc_b2mod_balance/dealloc_b2mod_balance/g' b2mod_driver_diffv.F90
 sed -i -e 's/dealloc_b2mod_balance_dv, dealloc_b2mod_eirene_sources/dealloc_b2mod_eirene_sources/g' b2mod_driver_diffv.F90
 sed -i -e 's/dealloc_b2mod_eirene_sources_dv, balance_average/balance_average/g' b2mod_driver_diffv.F90

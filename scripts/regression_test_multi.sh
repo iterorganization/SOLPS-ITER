@@ -19,7 +19,7 @@ sed -i -e "/B2USR_COST_FUNCTION_DV/a\      DO ICF=1, NCF" b2mod_driver_diffv.F90
 sed -i -e "/B2USR_COST_FUNCTION_DV/a\      if (first_time_step) write(*,*) 'nbdirs: ',nbdirs" b2mod_driver_diffv.F90
 sed -i -e "/B2USR_COST_FUNCTION_DV/a\&                           jd, nbdirs)" b2mod_driver_diffv.F90
 
-sed -i "/ADCONTEXTTGT/d" b2mn_d.F90
+sed -i "/ADCONTEXTTGT/d" b2mn_d.F90 b2stbr_dv.F90 b2mod_user_namelist_diffv.F90
 sed -i "/r8\*nbcd\*2/d" b2mn_d.F90
 sed -i "/\*8\*nsdecl\/8/d" b2mn_d.F90
 sed -i "/r8\/8/d" b2mn_d.F90

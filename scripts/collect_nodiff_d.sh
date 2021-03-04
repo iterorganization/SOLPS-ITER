@@ -36,7 +36,7 @@ rm tmp
 cp $SOLPSTOP/modules/B2.5/src/utility/sfill.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/intface.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/myblas.F .
-#cp $SOLPSTOP/modules/B2.5/src/utility/calc_err.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/trimg.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/intp_2dtable.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/intp_3dtable.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/cpeir_bilinear_int.F .
