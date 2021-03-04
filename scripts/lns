@@ -68,7 +68,11 @@ z=`cat $NAME`
     echo Linking to limiter equilibrium $l
     e=$l
   } || {
-    echo Limiter equilibrium file $l not found!
+    [ "X${l}X" -eq 'X-X' ] && {
+      echo Default limiter equilibrium name provided: assuming a linear device case!
+    } || {
+      echo Limiter equilibrium file $l not found!
+    }
   }
 }
 rm $NAME

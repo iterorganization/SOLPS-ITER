@@ -27,9 +27,13 @@ function [p,seph,strh] = Patchplot(structure,gmtry,field,varargin)
 % E-mail: wouter.dekeyser@kuleuven.be
 % November 2016
 
-figure; hold on;
+hf = figure; hold on;
 p    = patchplot(gmtry,field,varargin{:});
-seph = plotsep(gmtry,'color',[1 1 1]);
+if isplasmagrid(gmtry)
+    seph = plotsep(gmtry,'color',[1 1 1]);
+else
+    seph = [];
+end
 strh = plotstructure(structure,'color',[0 0 0],'LineWidth',2);
 hold off;
 

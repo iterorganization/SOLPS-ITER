@@ -24,7 +24,7 @@ c>>>
       do istr=1,ngpfstr !{
 
         nstrai=nstrai+1
-        indsrc(nstrai)=-1
+        indsrc(nstrai)=1
         ingpfstr(istr)=nstrai
 c<<<
         print '(a,2i3,i6,i4,1p,1e12.4,1x,a)',

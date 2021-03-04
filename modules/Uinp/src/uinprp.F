@@ -65,7 +65,7 @@ c*** Check some dimensions
       call xertst(.not.uex, 'Topological inconsistency found in uinp')
       
 c-----------------------------------------------------------------------
-c*** Modify some defaults for limiter case, if necessary
+c*** Modify some defaults for limiter and linear cases, if necessary
 
       if(lm_cnfg) then !{
         jnpbndx(0,3)=lm_whst
@@ -74,11 +74,21 @@ c*** Modify some defaults for limiter case, if necessary
           nrcmstrs(i)=lm_vhst
         end do !}
         if(zaa.le.0.) then !{
-          write(*,'(2a)') 'The major radius must be specified ',
-     ,                    'for a limiter case'
+          if (ln_cnfg) then !{
+            write(*,'(2a)') 'The major radius variable must be set ',
+     ,        'to a (dummy) nonzero positive value for a linear case'
+          else
+            write(*,'(2a)') 'The major radius must be specified ',
+     ,                      'for a limiter case'
+          end if !}
           call xerrab
      .     ('==> Check the DG variable in "Global Eirene data"')
         end if !}
+        nltrz=.false.
+        nltra=.true.
+        nttra=nttrator
+        roa=roator
+        zaa=zaator
       end if !}
 
 

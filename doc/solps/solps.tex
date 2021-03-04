@@ -13454,12 +13454,12 @@ $x$-directed and $y$-directed.  The number of volume regions should also
 be stored in the {\tt NREG} environment variable (or through the presence
 of an {\tt NREG} ASCII file containing only the number of regions) as it is
 used for a variety of analysis scripts.
-Typical configurations for 1-D, limiter,
+Typical configurations for 1-D, linear, limiter,
 SN, DN (Connected and Disconnected) and periodic stellarator island cases are
 shown below:
 
 \clearpage
-\section{Regions for 1-D cases}
+\section{Regions for 1-D and linear cases}
 \index{regions, 1-D cases}
 
 For this geometry, {\tt NREG} should be set to $1$.
@@ -13499,7 +13499,7 @@ region 1 === core boundary
 region 2 === SOL boundary
 \end{verbatim}
 
-In cases where the problem of interest has only one target and a plasma entry surface, the target should be located to the right of the domain and the plasma should enter from the left.
+In cases where the problem of interest has only one target and a plasma entry surface, it is best if the target is located to the right of the domain and the plasma enters from the left.
 
 An informative review of how the code geometry and physics model can be adapted to linear devices is given in \cite{Sala2020}.
 
@@ -19867,10 +19867,10 @@ intersecting line segments that could even intersect with surfaces!
 With an X-point defined, you can use the {\tt Set X Point} tool to
 redefine it.
 
-\subsection{Limiter configurations}
-\index{DG, limiter configurations}
+\subsection{Limiter and linear configurations}
+\index{DG, limiter configurations}\index{DG, linear configurations}
 
-If you are dealing with a limiter configuration, {\tt DG} needs to be
+If you are dealing with a limiter or linear configuration, {\tt DG} needs to be
 "tricked", because its internal algorithm requires some quantities that
 can only be computed in a divertor topology. The implemented solution
 is to provide two sets of variables, one of which is a dummy only used
@@ -19887,20 +19887,23 @@ diverted equilibrium as usual - preferably at about the same depth that you
 will want for the limiter case grid. Create also two closed polygons
 to act as targets for this SN equilibrium. Declare them as {\tt Inner target}
 and {\tt Outer target}, and include them as part of the {\tt Structure}
-in the usual way, as decribed in Section~\ref{sec:createsurfaces}.. Also include
+in the usual way, as decribed in Section~\ref{sec:createsurfaces}. Also include
 these target polygons in the {\tt Elements not for Eirene} list.
-  \item {\tt Add} a {\tt Limiter configuration} variable, and cut and paste the
-name of the limiter configuration equilibrium file into the
-{\tt Real equilibrium} there. Specify the depth of the grid you wish to obtain
-by setting the {\tt Core width} (in units of $m$).
-  \item Include the limiter walls in the {\tt Structure}, plus some
-grid-limiting parts if needed.
+  \item {\tt Add} the {\tt Limiter and linear configurations} set of variables,
+and cut and paste the name of the limiter configuration equilibrium file into
+the {\tt Real equilibrium} there. If treating a linear case, leave the name of
+{\tt Real equilibrium} to be its default value of {\tt -}.
+Specify the depth of the grid you wish to obtain by setting the {\tt Core width} (in units of $m$).
+  \item Include the limiter or linear device walls in the {\tt Structure}, plus some grid-limiting parts as needed.
   \item The {\tt Target specification} variables refer to the
-two halves of the limiter on either side of the tangency point. Provide there
-all relevant material and sputtering properties. {\tt Targets \#1} and
-{\tt \#2} should be positioned so that you travel
+two halves of the limiter on either side of the tangency point, or the two ends
+of the linear device, as the case may be. Provide there
+all relevant material and sputtering properties. For limiter cases,
+{\tt Targets \#1} and {\tt \#2} should be positioned so that you travel
 clockwise around the plasma when going from {\tt Target \#1} to
-{\tt Target \#2}. Use the real elements you want to be reconnected to the
+{\tt Target \#2}. For linear cases, the poloidal index will increase as you go
+from {\tt Target \#1} to {\tt Target \#2}.
+Use the real elements you want to be reconnected to the
 grid corners as the {\tt SOL edges}. For the {\tt PFR edges}, create two
 fake elements and specify 0 as the {\tt Surface Type} in the
 {\tt General Surface Data} for these two elements. Although these may be
@@ -19908,13 +19911,17 @@ fictitious elemens, they must NOT be included in the
 {\tt Elements not for Eirene} list.
   \item Create the {\tt Surfaces} and {\tt Grid points} as usual.
 Only the {\tt Core} zone for the {\tt Grid points} and the {\tt SOL} and
-{\tt Core} areas for the {\tt Surfaces} are meaningful.
-  \item In {\tt Global Eirene data}, make sure that the {\tt Major radius}
-is set to its real positive value (in units of $cm$).
+{\tt Core} areas for the {\tt Surfaces} are meaningful. The {\tt Grid points}
+in the {\tt Core} will provide the poloidal (or axial) resolution. For linear
+cases, the radial point distribution will be given by the {\tt SOL} number of
+{\tt Surfaces} and the number of {\tt Cells} in the {\tt Core} should be set to {\tt 1}.
+  \item For limiter configurations, make sure that the {\tt Major radius}
+in {\tt Global Eirene data} is set to its real positive value
+(in units of $cm$). For linear devices, set it to any nonzero positive number.
   \item As usual, define all other variables ({\tt Surface data},
 {\tt Gas puff}, {\tt Plasma species}, etc...) as needed. When defining the
 {\tt TRIA-EIRENE parameters}, define the contour indices as they pertain to
-the limiter configuration equilibrium.
+the limiter or linear configuration geometry description.
 \end{enumerate}
 
 \index{lns}
@@ -19924,6 +19931,8 @@ establish the necessary symbolic links (the scripts checks if you are doing
 a limiter case, and, if so, will have {\tt dg.equ} link to the
 file you indicated as the {\tt Real equilibrium}), then use the {\tt carre -}
 script to create the grid, {\tt Import} the {\tt Grid} and inspect it.
+For linear cases, you cannot use {\tt Carre} and must provide the grid
+independently.
 You may have to play with the usual settings for the grid generation,
 such as the {\tt Surfaces} and {\tt Grid points} together with the
 {\tt Carre guard length} in the {\tt Target specifications}, and also with
@@ -19932,8 +19941,8 @@ grid which suits you and is acceptable for the plasma modelling code (no pink
 segments in the grid). If you find it impossible to create the necessary
 distribution of the surfaces or the grid points because of local extrema
 appearing on the visualisation curve, then try to adjust the
-{\tt Radial scale} or {\tt Poloidal scale} in the {\tt Limiter configuration}
-layer.
+{\tt Radial scale} or {\tt Poloidal scale} in the
+{\tt Limiter and linear configurations} layer.
 
 \subsection{Creating and editing grid points}
 \index{DG, grid points}

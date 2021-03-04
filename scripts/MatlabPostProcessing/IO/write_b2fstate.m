@@ -79,7 +79,7 @@ write_rfield(fid,'kinrgy',state.kinrgy);
 write_rfield(fid,'time'  ,state.time);
 write_rfield(fid,'fch_p' ,state.fch_p);
 
-if version >= '03.000.005'
+if str2num(strrep(version,'.','')) >= str2num(strrep('03.000.005','.',''))
     % Starting at version 03.000.005, a large number of additional fields
     % was added to remove restart effect for 5.2 model equations (BCs)
     write_rfield(fid,'fna_mdf'    ,state.fna_mdf);

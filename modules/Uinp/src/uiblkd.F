@@ -26,10 +26,12 @@ c*** General information
 
       data   topo, mnpr,mnptseg,mdvbndx,  ldvbndx  ,ntrgdflt,do_hepdt /
      /        ' ',  0  ,   0   ,   0   ,0,nbnddvd*0,    0   , .false. /,
-     ,  namdf,amd_file ,nnrctn,n_spcsrf,npfrgrp,lm_cnfg,lm_vhst/
-     /    0  ,namdfs*' ',   0  ,   0    ,   0  ,.false., 10000 /,
-     , lm_whst,   niiso   , tiiso, teiso, zaator, roator,nttrator /
-     /  50000 , nsdb2*1.e5,  0.1 ,  0.1 ,  360. ,  1.e-5,   60    /,
+     ,  namdf,amd_file ,nnrctn,n_spcsrf,npfrgrp,lm_cnfg,ln_cnfg/
+     /    0  ,namdfs*' ',   0  ,   0    ,   0  ,.false.,.false. /,
+     , lm_vhst,lm_whst,   niiso   , tiiso, teiso/
+     /  10000 , 50000 , nsdb2*1.e5,  0.1 ,  0.1 /,
+     , zaator, roator,nttrator /
+     /  360. ,  1.e-5,   60    /,
      , nwllmrk, nedgmrk  , ntrgmrk  ,   bliin    ,    bbliin      /
      /    0   ,nwllmrkd*0,nwllmrkd*0,nsts*.false.,luznknd*.false. /,
      , glb2read,usetmstr,pwrcrtte,pwrcrtti,pwrcrfri /

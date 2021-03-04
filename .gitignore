@@ -6,6 +6,7 @@
 
 # object, archive,... files
 *.[oa]
+*_genmod.f90
 *.mod
 a.out
 rwXDR.d
