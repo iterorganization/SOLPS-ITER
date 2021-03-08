@@ -15177,7 +15177,6 @@ temperature (in $K$) upon \btwoplot start-up.
     trgeast \index{b2plot, trgeast}   & Target elements pertaining to the East boundary \\
     trgibnd \index{b2plot, trgibnd}     & Target element index \\
     trgiz \index{b2plot, trgiz}     & Target depth index \\
-    trgl \index{b2plot, trgl}      & ANK target loading (obsolete, use {\em 100 wlld} instead) \\
     trgnorth \index{b2plot, trgnorth}  & Target elements pertaining to the North boundary \\
     trgr1 \index{b2plot, trgr1}     & Radial coordinate of first side of target element $(m)$ \\
     trgr2 \index{b2plot, trgr2}     & Radial coordinate of second side of target element $(m)$ \\
@@ -15387,8 +15386,8 @@ The {\bf wlld} command requires an integer argument $\langle$ig$\rangle$. Let
 $\langle$ig$\rangle$ = JKLM. If M \textgreater 0, then the file {\tt radsrc.b2e} is produced,
 containing the radiation sources (in $MW/m^3$). If L \textgreater 0, then the
 file {\em wlld.dat} is produced, which contains the power loading
-from the plasma onto the Eirene walls (this description does not include
-splitting of the targets by the grid and is obsolete). If K \textgreater 0, then a
+from the plasma onto the Eirene walls (including
+splitting of the targets by the grid). If K \textgreater 0, then a
 set of files is produced containing the power loading on the targets,
 provided the necessary preparatory data exists in the DG model. These files
 are:\index{wall power loading}
@@ -17051,9 +17050,6 @@ computation of its default value.
 Overwrites the radial reference location index {\em iyref} with $\langle$iy$\rangle$.
 See description of 'set\_transport\_iyref' switch (see Appendix \ref{lis:b2cdci})
 for the computation of its default value (usually the separatrix location).
-
-\subsubsection{$<$igm,{\bf I}$>$ $<$iig,{\bf I}$>$ trgl}\index{b2plot, trgl}\label{sec:trgl}
-ANK target loading. Not yet written.
 
 \subsubsection{$<$n,{\bf I}$>$ ave}\index{b2plot, ave}\label{sec:ave}
 Averages over $\langle$n$\rangle$ chords for {\bf chor} and {\bf chvl}.
