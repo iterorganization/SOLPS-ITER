@@ -19,6 +19,13 @@ if ($?SOLPS_MPI) then
   set USE_MPI=`echo $USE_MPI | sed -e 's:-m :-m ''":' -e 's:$:"'':'`
 endif
 
+set USE_OMP=""
+if ($?SOLPS_OPENMP) then
+  setenv KMP_AFFINITY compact,norespect
+  set OMP_OPTS = #THREADS#
+  set USE_OMP = "-t ${OMP_OPTS}"
+endif
+
 update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"
 set msg="Started on `hostname` at `date`"
 update_solps_run_status ${msg}
