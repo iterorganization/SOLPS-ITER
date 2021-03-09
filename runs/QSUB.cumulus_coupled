@@ -1,0 +1,37 @@
+#! /bin/tcsh
+#PBS -l nodes=1:ppn=#PROCS#
+#PBS -l walltime=#HOURS#:00:00
+#PBS -l mem=#MEM#
+#PBS -M #EMAIL#
+#PBS -m ae
+#PBS -N #JOBNAME#
+#PBS -V
+
+echo Using SOLPSTOP = #SOLPSTOP#
+
+cd "$PBS_O_WORKDIR"
+
+set USE_MPI=""
+if ($?SOLPS_MPI) then
+  set MPI_EXEC=mpiexec
+  set MPI_OPTS=#MPIOPTS#
+  set USE_MPI="-m ${MPI_EXEC} ${MPI_OPTS}"
+  set USE_MPI=`echo $USE_MPI | sed -e 's:-m :-m ''":' -e 's:$:"'':'`
+endif
+
+update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"
+set msg="Started on `hostname` at `date`"
+update_solps_run_status ${msg}
+if ($?SOLPS_GUI_IP) then
+  echo ${USER} ${PWD} ${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
+endif
+
+time b2run ${USE_MPI} ${USE_OMP} b2mn >! run.log
+
+QSUB.postprocess_coupled
+
+set msg="Finished on `hostname` at `date`"
+update_solps_run_status ${msg}
+if ($?SOLPS_GUI_IP) then
+  echo ${USER} ${PWD} ${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
+endif
