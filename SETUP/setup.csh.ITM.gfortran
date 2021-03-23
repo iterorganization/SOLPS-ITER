@@ -7,7 +7,7 @@ setenv FC gfortran
 # Load modules
 module unload imasenv
 module load imasenv/3.25.0/gcc/7.3.0/1.0
-setenv GGD_VERSION 1.9.1
+setenv GGD_VERSION `pkg-config ggd --modversion`
 module load itm-nag
 module load itm-matlab
 module load itm-netcdf

@@ -89,7 +89,7 @@ newrun=`echo $3`
   tail -n $tail_lines $newyaml >> $newyaml.2
   reference_line=`grep -n "reference_name:" ${newyaml}.2 | cut -d ':' -f 1`
   head -n ${reference_line} $newyaml.2 > $newyaml.3
-  echo "    "$reference >> $newyaml.3
+  echo "   "$reference >> $newyaml.3
   tail_lines=yaml_lines-(reference_line+1)
   tail -n $tail_lines $newyaml.2 >> $newyaml.3
   responsible_line=`grep -n "responsible_name:" ${newyaml}.3 | cut -d ':' -f 1`
