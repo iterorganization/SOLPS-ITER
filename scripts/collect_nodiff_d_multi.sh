@@ -45,6 +45,7 @@ cp $SOLPSTOP/modules/B2.5/src/utility/cpeir_bilinear_int.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/trilinear_int.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/mstep.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/expu.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/expu2.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/ma28copy.F .
 cp $SOLPSTOP/modules/B2.5/src/transport/b2tlnl.F .
 cp $SOLPSTOP/modules/B2.5/src/b2aux/b2xpne.F .
@@ -56,7 +57,7 @@ cp $SOLPSTOP/modules/B2.5/src/solvers/b2uppo.F .
 cp $SOLPSTOP/modules/B2.5/src/sources/b2sqcx.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/cond_coef.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/erf_dv.F .
-cp $SOLPSTOP/modules/B2.5/src/differentiation/dim_dv.F90 .
+#cp $SOLPSTOP/modules/B2.5/src/differentiation/dim_dv.F90 .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/b2uxus_dv.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/b2mwqt_diffv.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/b2mxar_diffv.F .

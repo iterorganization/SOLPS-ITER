@@ -53,10 +53,6 @@ sed -i -e 's/ISIZE1OFfcqalf/nFc/g' b2stbc_b.F90 b2stbc_phys_b.F90 b2tfch__b.F90 
 sed -i -e "s/CALL B2SAXPY(ncv, switch%sna0ep, 1, srw%sna0(1, 0, is), 1)/CALL B2SAXPY(ncv, switch%sna0ep, geo%cvvol, 1, srw%sna0(1, 0, is), 1)/g" b2stbc_b.F90
 sed -i -e "s/CALL B2SAXPY(ncv, switch%she0ep, 1, srw%she0(1, 0), 1)/CALL B2SAXPY(ncv, switch%she0ep, geo%cvvol, 1, srw%she0(1, 0), 1)/g" b2stbc_b.F90
 sed -i -e "s/CALL B2SAXPY(ncv, switch%shi0ep, 1, srw%shi0(1, 0), 1)/CALL B2SAXPY(ncv, switch%shi0ep, geo%cvvol, 1, srw%shi0(1, 0), 1)/g" b2stbc_b.F90
-#maybe TBC non serve più?
-#sed -i -e "s/CALL PUSHREAL4(result11)/CALL PUSHREAL4ARRAY(result11, r8\/4)/g" b2stbc_phys_b.F90 
-#sed -i -e "s/CALL POPREAL4(result11)/CALL POPREAL4ARRAY(result11, r8\/4)/g" b2stbc_phys_b.F90 
-#maybe TBC
 sed -i -e 's/ISIZE1OFcdpa/nFc/g' b2tfcc_b.F90 b2tfnb_b.F90
 sed -i -e 's/ISIZE1OFne/nCv/g' b2tfhe__b.F90 b2tfrn_b.F90
 #sed -i -e 's/ISIZE1OFfcs/nFc/g' b2tfhe__b.F90
@@ -80,16 +76,17 @@ sed -i -e 's/CHARACTER(len=\*) :: arg1/CHARACTER(len=20) :: arg1/g' b2usco_b.F90
 sed -i '/PUSHCHARACTERARRAY(name/d' b2usco_b.F90 #b2usmo_b.F90 b2uspo_b.F90
 sed -i '/POPCHARACTERARRAY(name/d' b2usco_b.F90 #b2usmo_b.F90 b2uspo_b.F90
 sed -i -e 's/DIMENSION(mpg%cvnvp(icv., 2))/DIMENSION(11)/g' b2usco_b.F90 b2usht_b.F90 b2usmo_b.F90 b2uspo_b.F90
+echo " ******************"
+echo " !!!! WARNING  !!!!"
+echo " This postprocessing script assumes that the maximum number of points in the stencil is 11"
+echo " If this is not true please correct the dimension of the LOGICAL ARRAYS MASK* in b2usco_b b2usht_b b2usmo_b and b2uspo_b"
+echo " !!!! WARNING  !!!!"
+echo " ******************"
 # FIXME
 sed -i -e 's/ISIZE1OFarg1/20/g' calc_err_b.F90
 sed -i -e 's/ISIZE1OFarg2/20/g' calc_err_b.F90
 sed -i -e 's/LOGICAL :: arg1/LOGICAL :: arg1(m%nFc)/g' find_faces_b.F90
-#maybe TBC non serve più
-#sed -i -e "s/CALL PUSHREAL4(result1)/CALL PUSHREAL4ARRAY(result1, r8\/4)/g" b2usht_b.F90 
-#sed -i -e "s/CALL POPREAL4(result1)/CALL POPREAL4ARRAY(result1, r8\/4)/g" b2usht_b.F90
-#maybe TBC
-#sed -i '/CALL PUSHCONTROL2B(2)/d' b2mod_recycle_diff.F90 #no for debug!
-#sed -i '/CALL PUSHCONTROL2B(3)/d' b2mod_recycle_diff.F90 #no for debug!
+
 
 sed -i '/PUBLIC :: to_struct_cell_b, to_struct_face_b/d' b2us_debug_diff.F90
 sed -i -e 's/PUBLIC :: to_struct_plasma_b,/PUBLIC :: /g' b2us_prep_diff.F90
@@ -132,6 +129,9 @@ sed -i -e 's/CFWURE_NODIFF/CFWURE/g' ./*.F90
 #sed -i '/READ_B2MOD_USER_NAMELIST_B/d' b2mod_user_namelist_diff.F90 #why this?
 #sed -i 's/CALL READ_NEUTRALS_NAMELIST_B(ns, mpg, mpgb, switch/CALL READ_NEUTRALS_NAMELIST(ns, mpg, switch/g' b2stbr_b.F90 #why this?
 #sed -i '/CALL ADCONTEXTADJ/d' b2stbr_b.F90 b2mod_user_namelist_diff.F90
+sed -i -e 's/EXTERNAL SUBINI, SUBEND, XERTST, SFILL, DIM/EXTERNAL SUBINI, SUBEND, XERTST, SFILL/g' b2usht_b.F90
+sed -i -e '/EXTERNAL DIM_B/i\  INTRINSIC DIM' b2usht_b.F90 expu2_b.F90 expu_b.F90
+sed -i -e 's/EXTERNAL MACHSFR, DIM/EXTERNAL MACHSFR/g' expu2_b.F90 expu_b.F90
 
 sed -i -e "s/REAL\*8/REAL(kind=r8)/g" *_diff.F90
 sed -i -e "s/REAL\([^(].*::\)/REAL(kind=r8)\1/g" *_diff.F90

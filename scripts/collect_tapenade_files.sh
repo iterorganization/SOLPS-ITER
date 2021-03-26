@@ -36,6 +36,7 @@ done
 echo $string >> testfile)
 
 echo "$SOLPSTOP/modules/B2.5/src/differentiation/b2uxus.f" >> testfile
+echo "$SOLPSTOP/modules/B2.5/src/differentiation/dim.f" >> testfile
 
 cat testfile
 
