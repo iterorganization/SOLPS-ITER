@@ -25,17 +25,32 @@ ifdef IMAS_VERSION
   IMAS_MAJOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f1 )
   IMAS_MINOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f2 )
   ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 17; echo $$?),0)
-    GGD_MINOR_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f2 )
-    ifdef AMNS_PREFIX
-      LD_UAL = `pkg-config imas-gfortran amns ggd --libs`
-      SOLPS_CPP += -DAMNS
+    ifdef GGD_VERSION
+      GGD_MINOR_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f2 )
+      ifdef AMNS_PREFIX
+        LD_UAL = `pkg-config imas-gfortran amns ggd --libs`
+        SOLPS_CPP += -DAMNS
+      else
+        LD_UAL = `pkg-config imas-gfortran ggd --libs`
+      endif
     else
-      LD_UAL = `pkg-config imas-gfortran ggd --libs`
+      GGD_MINOR_VERSION = 0
+      ifdef AMNS_PREFIX
+        LD_UAL = `pkg-config imas-gfortran amns --libs`
+        SOLPS_CPP += -DAMNS
+      else
+        LD_UAL = `pkg-config imas-gfortran --libs`
+      endif
     endif
   else
     ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 12; echo $$?),0)
-      GGD_MINOR_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f2 )
-      LD_UAL = `pkg-config imas-gfortran --libs` -lggd-gfortran
+      ifdef GGD_VERSION
+        GGD_MINOR_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f2 )
+        LD_UAL = `pkg-config imas-gfortran --libs` -lggd-gfortran
+      else
+        GGD_MINOR_VERSION = 0
+        LD_UAL = `pkg-config imas-gfortran --libs`
+      endif
     else
       GGD_MINOR_VERSION = 0
       LD_UAL = `pkg-config imas-lowlevel imas-gfortran --libs`
@@ -58,6 +73,9 @@ export IMAS_MINOR_VERSION
 ifdef SOLPS_OPENMP
   B25_DEFINES += -D_OPENMP
 endif
+
+# Assume MPI is present
+MPI_PRESENT = 1
 
 #
 # Export for use in sub-makefiles

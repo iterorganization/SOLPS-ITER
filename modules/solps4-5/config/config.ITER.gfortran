@@ -7,10 +7,15 @@ CPP = /lib/cpp -traditional
 
 FC = gfortran
 ifndef SOLPS_DEBUG
-FCOPTS = -fdefault-real-8
+FCOPTS  += -fdefault-real-8
 endif
 
-LDLIBES = -limf -lm
+ifeq (,$(findstring sdcc-login,${NODENAME}))
+LDLIBES  = -limf -lm # Intel Math must be before -lm
+else
+INCLUDE += `pkg-config libtirpc --cflags`
+LDLIBES  = `pkg-config libtirpc --libs`
+endif
 
 #!!!Local Variables:
 #!!! mode: Makefile

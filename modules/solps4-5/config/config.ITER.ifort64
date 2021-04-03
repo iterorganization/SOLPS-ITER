@@ -2,6 +2,7 @@ LD_NETCDF ?= `pkg-config netcdf-fortran --libs`
 LD_NAG    ?= `pkg-config nag --libs` 
 LD_SONNET ?= -L${SOLPSLIB} -lsonnet -lstdc++
 LD_MSCL   ?= `pkg-config mscl --libs`
+NODENAME  ?= `hostname`
 
 EQUIV5 =
 
@@ -10,7 +11,12 @@ CPP = /lib/cpp -traditional
 FC = ifort
 
 ifdef SOLPS_DEBUG
-FCOPTS = -traceback
+FCOPTS    += -traceback
+endif
+
+ifneq (,$(findstring sdcc-login,${NODENAME}))
+INCLUDE   += `pkg-config libtirpc --cflags`
+LD_SONNET += `pkg-config libtirpc --libs`
 endif
 
 #!!!Local Variables:

@@ -5,9 +5,14 @@ CPPOPTS = -P -I${srcdir} ${EQUIVS}
 LINK_MOD =
 
 FC = pgf90
+COMPILER_MAJOR_VERSION = $(shell ${FC} -V 2>&1 | grep "pgf90" | grep -o "[0-9][0-9]\.*-*" | head -n 2 | tail -n 1 | cut -d '.' -f 1 )
+
 FCOPTS += -Mbackslash
 ifdef SOLPS_DEBUG
-FCOPTS += -C -g -Mchkfpstk -Mchkptr -Mchkstk -Mpgicoff
+FCOPTS += -C -g -Mchkptr -Mchkstk
+ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -le 19; echo $$?),0)
+FCOPTS += -Mchkfpstk -Mpgicoff
+endif
 else
 # FCOPTS += -O2
 FCOPTS += -fast

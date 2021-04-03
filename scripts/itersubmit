@@ -28,7 +28,7 @@ argloop:
 
 Help for $0
 
-This script is used to submit SOLPS-ITER jobs to the SLURM batch system on the ITER HPC cluster.
+This script is used to submit SOLPS-ITER jobs to the SLURM batch system on the ITER GPC cluster.
 
 Usage:
 
@@ -44,7 +44,7 @@ Available options are:
   -t <<THREADS>>     use OpenMP parallelization with <<THREADS>> threads (default $THREADS)
   -T <<HOURS>>       number of elapsed hours requested (default $hours)
   -M <<MEM_SIZE>>    memory size (default $mem)
-  -Q <<PARTITION>>   partition on which to submit the job (default gen9 for short jobs and gen9_ib for long jobs)
+  -Q <<PARTITION>>   partition on which to submit the job (default gen9 for short jobs and gen9_ib for long jobs on hpc nodes, gen10_ib on sdcc nodes)
 
 EOF
     exit
@@ -135,20 +135,29 @@ EOF
 
 # logic to determine the partition on the ITER HPC cluster
 @ cpu = ( $hours * $PROCS )
-if ($part == "unset") then
-  if ($hours > 24 ) then
-    set part=gen9_ib
-  else
-    set part=gen9
-  endif
-endif
 set nodename=`hostname`
 switch ($nodename)
+  case "sdcc-login*.iter.org":
+    set job_prefix="SLURM"
+    if ($part == "unset") then
+      set part=gen10_ib
+    endif
+    unsetenv LD_PRELOAD
+    unsetenv I_MPI_PMI_LIBRARY
+    breaksw
   case "hpc-login0*.iter.org":
     set job_prefix="SLURM"
+    if ($part == "unset") then
+      if ($hours > 24 ) then
+        set part=gen9_ib
+      else
+        set part=gen9
+      endif
+    endif
     breaksw
   default:
     set job_prefix="QSUB"
+    breaksw
 endsw
 
 if ($1 == "") then
@@ -201,7 +210,6 @@ endif
 
 echo Using submission file template $QSUB
 echo For loop resubmission following options will be used: $LOOP_OPTS
-
 
 sed \
   -e 's:#PWD#:'$PWD':g' \
