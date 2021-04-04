@@ -397,7 +397,7 @@ ${OBJDIR}/eirmod_mpi.o: ${OBJDIR}/comprt.${MOD} ${OBJDIR}/precision.${MOD} ${SRC
 ${OBJDIR}/eirmod_octree.o: ${SRCDIR}/Eirene_modules/eirmod_octree.F ${MAKES}
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/eirmod_octree.o -c ${SRCDIR}/Eirene_modules/eirmod_octree.F
 
-${OBJDIR}/adsp.o: ${OBJDIR}/cpes.${MOD} ${OBJDIR}/eirmod_mpi.${MOD} ${OBJDIR}/precision.${MOD} ${SRCDIR}/Eirene_modules/adsp.F ${MAKES}
+${OBJDIR}/adsp.o: ${OBJDIR}/clogau.${MOD} ${OBJDIR}/comprt.${MOD} ${OBJDIR}/comusr.${MOD} ${OBJDIR}/cpes.${MOD} ${OBJDIR}/ctrcei.${MOD} ${OBJDIR}/eirmod_mpi.${MOD} ${OBJDIR}/precision.${MOD} ${SRCDIR}/Eirene_modules/adsp.F ${MAKES}
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/adsp.o -c ${SRCDIR}/Eirene_modules/adsp.F
 
 ${OBJDIR}/amark_mod.o: ${SRCDIR}/Eirene_modules/amark_mod.F ${MAKES}
@@ -664,7 +664,7 @@ ${OBJDIR}/eirmod_octree.${MOD}: ${SRCDIR}/Eirene_modules/eirmod_octree.F ${MAKES
 	[ -e $@ ] && rm $@ || echo > /dev/null
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/eirmod_octree.o -c ${SRCDIR}/Eirene_modules/eirmod_octree.F
 
-${OBJDIR}/adsp.${MOD}: ${OBJDIR}/cpes.${MOD} ${OBJDIR}/eirmod_mpi.${MOD} ${SRCDIR}/Eirene_modules/adsp.F ${MAKES}
+${OBJDIR}/adsp.${MOD}: ${OBJDIR}/clogau.${MOD} ${OBJDIR}/comprt.${MOD} ${OBJDIR}/comusr.${MOD} ${OBJDIR}/cpes.${MOD} ${OBJDIR}/ctrcei.${MOD} ${OBJDIR}/eirmod_mpi.${MOD} ${SRCDIR}/Eirene_modules/adsp.F ${MAKES}
 	[ -e $@ ] && rm $@ || echo > /dev/null
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/adsp.o -c ${SRCDIR}/Eirene_modules/adsp.F
 
