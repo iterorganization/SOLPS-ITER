@@ -7,7 +7,11 @@ typeset -i nfiles
   ( ls -l b2mn.exe.dir/tracing/*.trc b2mn.exe.dir/tracing/user.trc.n.01 | grep -v 'total ' | grep -v ' 0 ' | wc -l > $NAME ) 2> /dev/null
   nfiles=`cat $NAME`
   ncfiles=`ls -l b2mn.exe.dir/tracing/*.trc b2mn.exe.dir/tracing/user.trc.n.01 | grep -v 'total ' | grep -v ' 0 ' | awk '{printf "%s ",$NF,"\n"}'`
-  echo "tracing : found" $nfiles "non-empty files in b2mn.exe.dir"
+  [ $nfiles -ne 1 ] && {
+    echo "tracing : found" $nfiles "non-empty files in b2mn.exe.dir"
+  } || {
+    echo "tracing : found" $nfiles "non-empty file in b2mn.exe.dir"
+  }
 } || {
   nfiles=0
 }
@@ -28,7 +32,11 @@ typeset -i nfiles
   ( ls -l tracing/*.trc | grep -v 'total ' | grep -v ' 0 ' | wc -l > $NAME ) 2> /dev/null
   n2files=`cat $NAME`
   ncfiles=`ls -l tracing/*.trc | grep -v 'total ' | grep -v ' 0 ' | awk '{printf "%s ",$NF,"\n"}'`
-  echo "tracing : found" $n2files "non-empty files in run directory"
+  [ $n2files -ne 1 ] && {
+    echo "tracing : found" $n2files "non-empty files in run directory"
+  } || {
+    echo "tracing : found" $n2files "non-empty file in run directory"
+  }
   [ $n2files -gt 0 ] && {
     filelist=`ls -1s tracing/*.trc | grep -v ' 0 ' | grep -v '^0 ' | awk '{printf "%s ",$NF,"\n"}'`
     set -A f -- $filelist
@@ -44,7 +52,11 @@ rm $NAME
 ( ls -l b2mn.exe.dir/b2time.nc b2mn.exe.dir/b2batch.nc b2mn.exe.dir/b2wall.nc b2mn.exe.dir/b2tallies.nc b2mn.exe.dir/b2movies.nc | grep -v 'total ' | grep -v ' 0 ' | wc -l > $NAME ) 2> /dev/null
 nfiles=`cat $NAME`
 ncfiles=`ls -l b2mn.exe.dir/b2time.nc b2mn.exe.dir/b2batch.nc b2mn.exe.dir/b2wall.nc b2mn.exe.dir/b2tallies.nc b2mn.exe.dir/b2movies.nc | grep -v 'total ' | grep -v ' 0 ' | awk '{printf "%s ",$NF,"\n"}'`
-echo "Found" $nfiles "non-empty NetCDF tracing files in b2mn.exe.dir"
+[ $nfiles -ne 1 ] && {
+  echo "Found" $nfiles "non-empty NetCDF tracing files in b2mn.exe.dir"
+} || {
+  echo "Found" $nfiles "non-empty NetCDF tracing file in b2mn.exe.dir"
+}
 
 [ $nfiles -gt 0 ] && {
   filelist=`ls -1s b2mn.exe.dir/b2time.nc b2mn.exe.dir/b2batch.nc b2mn.exe.dir/b2wall.nc b2mn.exe.dir/b2tallies.nc b2mn.exe.dir/b2movies.nc | grep -v ' 0 ' | grep -v '^0 ' | awk '{printf "%s ",$NF,"\n"}'`
@@ -58,7 +70,11 @@ echo "Found" $nfiles "non-empty NetCDF tracing files in b2mn.exe.dir"
   ( ls -l b2time.nc b2batch.nc b2wall.nc b2tallies.nc b2movies.nc | grep -v 'total ' | grep -v ' 0 ' | wc -l > $NAME ) 2> /dev/null
   n2files=`cat $NAME`
   ncfiles=`ls -l b2time.nc b2batch.nc b2wall.nc b2tallies.nc b2movies.nc | grep -v 'total ' | grep -v ' 0 ' | awk '{printf "%s ",$NF,"\n"}'`
-  echo "Found" $n2files "non-empty NetCDF tracing files in run directory"
+  [ $n2files -ne 1 ] && {
+    echo "Found" $n2files "non-empty NetCDF tracing files in run directory"
+  } || {
+    echo "Found" $n2files "non-empty NetCDF tracing file in run directory"
+  }
   [ $n2files -gt 0 ] && {
     filelist=`ls -1s b2time.nc b2batch.nc b2wall.nc b2tallies.nc b2movies.nc | grep -v ' 0 ' | grep -v '^0 ' | awk '{printf "%s ",$NF,"\n"}'`
     set -A f -- $filelist
