@@ -43,7 +43,7 @@
 # Add -DWINDOWS to SOLPS_CPP
 #
 
-       NCDIR ?= ${NETCDF_DIR}
+       NCDIR ?= ${CRAY_NETCDF_DIR}/CRAY/9.0
    MSCL_ROOT ?= ${SOLPSLIB}
        H5DIR ?= ${PE_HDF5_DIR}
      GR_ROOT ?= ${SOLPSLIB}
@@ -69,7 +69,7 @@ LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 LD_MPI     = -L${MPDIR}/lib -lmpich
 ifdef USE_MPI
-LD_NETCDF  = `pkg-config netcdf-parallel-fortran --libs`
+LD_NETCDF  = `pkg-config pnetcdf --libs`
 ifdef USE_OPENMP
 LD_NAG     = `pkg-config sci_mpi_mp --libs`
 else
