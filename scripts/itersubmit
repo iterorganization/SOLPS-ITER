@@ -143,6 +143,7 @@ switch ($nodename)
       set part=gen10_ib
     endif
     unsetenv LD_PRELOAD
+    setenv LD_PRELOAD "/usr/lib64/libpmi2.so"
     unsetenv I_MPI_PMI_LIBRARY
     breaksw
   case "hpc-login0*.iter.org":
