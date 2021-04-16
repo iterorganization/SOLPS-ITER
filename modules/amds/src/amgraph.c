@@ -1,6 +1,7 @@
 #include "amds.h"
 #include <signal.h>
 #include <fcntl.h>
+#include <unistd.h>
 #include <sys/wait.h>
 
 /* Data structures and constants */
@@ -231,8 +232,8 @@ static Widget CreateGraphDlg(View w) {
   dlg->calcPid=0;
   dlg->calcFile=NULL;
   dlg->calcReaction=NULL;
-  dlg->calcTimer=NULL;
-  dlg->updateTimer=NULL;
+  dlg->calcTimer=(int) NULL;
+  dlg->updateTimer=(int) NULL;
   *dlg->calcTmpInputFilename=0;
 
   dlg->wDlg=Cw(XmCreateFormDialog,w->wMain,DLG_GRAPH,
@@ -417,15 +418,15 @@ static void CbGraphDlgDestroy(Widget wg,XtPointer xtpDlg,XtPointer pcbs) {
   /* 2000-12-07 Fix for the font problem */
   if (dlg->gv->font!=(Font)NULL) {
     XUnloadFont(XtDisplay(dlg->wDlg),dlg->gv->font);
-    dlg->gv->font=NULL;
+    dlg->gv->font=(int) NULL;
   }
   
   for (gl=Group1st(dlg->lines,&ix);gl!=NULL;gl=Next(&ix))
     DelGraphLine(gl);
 
   if (dlg->calcFile!=NULL) fclose(dlg->calcFile);
-  if (dlg->calcTimer!=NULL) XtRemoveTimeOut(dlg->calcTimer);
-  if (dlg->updateTimer!=NULL) XtRemoveTimeOut(dlg->updateTimer);
+  if (dlg->calcTimer!=(int) NULL) XtRemoveTimeOut(dlg->calcTimer);
+  if (dlg->updateTimer!=(int) NULL) XtRemoveTimeOut(dlg->updateTimer);
 
   XFreeGC(XtDisplay(dlg->wDraw),dlg->gc);
 
@@ -468,7 +469,7 @@ static void ToGraphDlgCalc(XtPointer xtpDlg,XtIntervalId* timer) {
 static void ToRepaintGraphDlg(XtPointer xtpDlg,XtIntervalId* timer) {
   GraphDlg dlg=(GraphDlg)xtpDlg;
 
-  dlg->updateTimer=NULL;
+  dlg->updateTimer=(int) NULL;
   if (!dlg->calcPid) RepaintGraph(dlg->gv); else AddGraphDlgUpdate(dlg);
 }
 
@@ -482,9 +483,9 @@ static void AddGraphDlgUpdate(GraphDlg dlg) {
 }
 
 static void CancelGraphDlgUpdate(GraphDlg dlg) {
-  if (dlg->updateTimer!=NULL) {
+  if (dlg->updateTimer!=(int) NULL) {
     XtRemoveTimeOut(dlg->updateTimer);
-    dlg->updateTimer=NULL;
+    dlg->updateTimer=(int) NULL;
   }
 }
 

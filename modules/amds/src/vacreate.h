@@ -28,7 +28,7 @@ Widget CreateMessageDialog(Widget wParent,String name,...);
 #define CreateOkCancelDialog(wParent,name) \
   CreateDialogEx((wParent),(name),NULL,CDLG_MESSAGE|CDLG_NOLABEL);
 
-int AddCallbackToTree(Widget root,WidgetClass class,String callbackType,
+void AddCallbackToTree(Widget root,WidgetClass class,String callbackType,
     XtCallbackProc callback,XtPointer userData);
 
 /* Resource management functions **************************************/
