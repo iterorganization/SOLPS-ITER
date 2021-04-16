@@ -51,7 +51,7 @@
   NCARG_ROOT ?= /work/xpb/my_env_dirs/NCL
       NAGDIR ?= ${CRAY_LIBSCI_PREFIX_DIR}
  MDSPLUS_DIR ?= /opt/mdsplus/7.96.12
-       MPDIR ?= ${MPICH_DIR}
+       MPDIR ?= ${MPICH_DIR}/../../mpich-cray/9.0
 
 #
 # Variables for linking
