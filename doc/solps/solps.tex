@@ -518,7 +518,8 @@ purpose, a master \SOLPSITER {\tt Makefile} is provided, located at {\tt \$\{SOL
   \item[uinp] The {\tt Uinp} translator from {\tt DivGeo} output to {\tt B2.5-Eirene} input only (requires {\bf b25eirene} previous compilation)
   \item[sonnet-light] The {\tt Sonnet} library only
   \item[triang] The {\tt Tria} and {\tt Triageom} triangulation utilities only
-  \item[nc2text\_simple] The {\tt nc2text\_simple} replacement program for systems where {\tt nc2text} is not available (requires the {\tt NetCDF} library)
+  \item[nc2text\_simple]\index{nc2text} The {\tt nc2text\_simple} replacement program for systems where {\tt nc2text} is not available (requires the {\tt NetCDF} library)
+  \item[nc\_reduce]\index{nc\_reduce} The {\tt nc\_reduce} utility program to make large NetCDF files smaller (requires the {\tt NetCDF} library)
   \item[b2sxdr] The {\tt b2sxdr} converter from \SOLPSfour to \SOLPSITER
   \item[amds] The {\tt AMDS} utility for building consistent reaction sets only
   \item[manual] This manual only
@@ -1687,6 +1688,7 @@ extracted from the {\tt run.log} file.
   \item[move\_optional\_files]\index{move\_optional\_files} Script used by the run Makefile to check for the existence of optional output files and, upon succesful termination of a run, move these files to the run directory.
   \item[move\_save\_files]\index{move\_save\_files}\index{b2co} Script used by the crash recovery program {\tt b2co} to replace optional run output files with their recovered versions.
   \item[n2d]\index{n2d} Converts "Naka" format equilibrium files to {\tt DG} format (see Sec.~\ref{sec:equtrn}).
+  \item[nc\_reduce]\index{nc\_reduce} Utility program to reduce the size of very large NetCDF files by keeping only a fraction of the timeslices. Uses {\tt -m \#} and {\tt -l \#} options to obtain every $m$-th time slice and/or the last $l$ time slices.
   \item[nc2text\_simple]\index{nc2text} Replacement program providing the basic capabilities of the {\tt nc2text} utility when not available on the system. A symbolic link to {\tt nc2text} will be created for other scripts to be able to use it.
   \item[nn2d]\index{nn2d} Converts new "Naka" format equilibrium files to {\tt DG} format (see Sec.~\ref{sec:equtrn}).
   \item[noquote\_pwd]\index{noquote\_pwd} Returns the current working directory as a string without quotes (c.f.\ {\tt quote\_pwd}).
@@ -1794,9 +1796,9 @@ Contains the Matlab routines used for balance diagnostics, provided by David Mou
 \end{sloppypar}
 
 \subsection{scripts/nc2text\_simple}
-\index{nc2text}
+\index{nc2text}\index{nc\_reduce}
 
-Contains the replacement skeleton program for the {\tt nc2text} utility.
+Contains the replacement skeleton program for the {\tt nc2text} and {\tt nc\_reduce} utilities.
 
 \subsection{scripts/MatlabPostProcessing}
 \index{postprocessing}
