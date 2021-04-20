@@ -12,9 +12,9 @@ program nc_reduce
 #endif
 
 #ifndef NO_CDF
-  integer :: ncid, varid, ndims, nvars, natts, unlimid, vartyp
+  integer :: ncid, varid, ndims, nvars, natts, unlimid
   integer :: dimids(NF_MAX_VAR_DIMS), dimsize(NF_MAX_VAR_DIMS)
-  integer :: start(NF_MAX_VAR_DIMS), count(NF_MAX_VAR_DIMS)
+  integer :: start(NF_MAX_VAR_DIMS), count(NF_MAX_VAR_DIMS), varids(NF_MAX_VAR_DIMS)
   integer :: i, j, ivar, idim, iatt, len, xtype
   integer :: status, timedim, timedim2, ncid2
   logical, allocatable :: lsave(:)
@@ -29,8 +29,8 @@ program nc_reduce
   character(len = 256) :: filename, argName, argName2
   integer :: narg, cptArg
   logical :: exists, verbose
-  logical :: streql
-  external streql, xertst
+  logical :: streql, isadigit
+  external streql, isadigit, xertst
 
   call prgini('nc_reduce')
   ! Check for command line arguments
@@ -39,6 +39,7 @@ program nc_reduce
   exists = .false.
   verbose = .false.
   narg = command_argument_count()
+  call xertst( 0.lt.narg, 'No arguments provided, nc_reduce has nothing to do!')
   do cptArg = 1, narg
     call get_command_argument( cptArg, argName )
     select case( adjustl( argName ) )
@@ -54,13 +55,16 @@ program nc_reduce
         call print_help()
       case("-v")
         verbose = .true.
+      case default
+        if (argName(1:1).eq.'-') write(*,*) &
+          &  'Unrecognized argument '//trim(argName)//' : Ignored !'
     end select
-    filename = trim(argName)
+    if(argName(1:1).ne."-".and..not.isadigit(argName(1:1))) filename = trim(argName)
   end do
 
   call xertst( 0.le.last, 'Invalid "-l" parameter!')
   call xertst( 1.le.modulus, 'Invalid "-m" parameter!')
-  if (argName(1:1).ne.'-') then
+  if (.not.streql(filename,' ')) then
     call find_file(filename,exists)
     call xertst( exists, 'File to be reduced not found!')
   end if
@@ -87,6 +91,8 @@ program nc_reduce
     end if
   else if (exists) then
     write(*,*) 'No reduction requested !'
+  else if (verbose) then
+    write(*,*) 'No filename argument: nothing to do!'
   end if
 
   if (exists) then
@@ -117,15 +123,14 @@ program nc_reduce
         call check_cdf_status(status)
         status=nf_inq_att(ncid,ivar,attname,xtype,len)
         call check_cdf_status(status)
-        if(attname.eq.'units') then
+        if(streql(attname,'units')) then
           if(len.le.24) then
             status=nf_get_att_text(ncid,ivar,attname,units)
             call check_cdf_status(status)
           else
             call xerrab ('increase size of units')
           endif
-        endif
-        if(attname.eq.'scale') then
+        elseif(streql(attname,'scale')) then
           if(len.le.1) then
             status=nf_get_att_double(ncid,ivar,attname,scale(1))
             call check_cdf_status(status)
@@ -145,12 +150,19 @@ program nc_reduce
         call check_cdf_status(status)
         dimsize(idim)=len
       enddo
-      if(varname.eq.'times'.or.varname.eq.'timesa'.or.varname.eq.'batchsa') then
+      if(streql(varname,'times').or.streql(varname,'timesa').or. &
+       & streql(varname,'batchsa')) then
         allocate(data1(dimsize(1)))
         status=nf_get_var_double(ncid,ivar,data1)
         timedim=dimsize(1)
         call check_cdf_status(status)
-        if (verbose) write(*,*) 'Found ',timedim,' time slices in original file'
+        if (verbose) then
+          if (timedim.ne.1) then
+            write(*,*) 'Found ',timedim,' time slices in original file'
+          else
+            write(*,*) 'Found ',timedim,' time slice in original file'
+          end if
+        end if
         allocate(lsave(timedim))
         lsave = .false.
         if (last.gt.0) then
@@ -175,20 +187,17 @@ program nc_reduce
 
     ! Read and rewrite header
     ! Obtain dimensions
-    status=nf_inq_unlimdim(ncid,unlimid)
-    call check_cdf_status(status)
-    status=nf_inq_dim(ncid,unlimid,dimname,dimsize(1))
-    call check_cdf_status(status)
-    status=nf_def_dim(ncid2,trim(dimname),dimsize(1),unlimid)
-    call check_cdf_status(status)
-    status=nf_inq_ndims(ncid,ndims)
+    status=nf_inq_dimids(ncid,ndims,dimids)
     call check_cdf_status(status)
     do idim=1,ndims
-      status=nf_inq_dimid(ncid,dimname,dimids(idim))
+      status=nf_inq_dim(ncid,dimids(idim),dimname,len)
       call check_cdf_status(status)
-      status=nf_inq_dim(ncid,dimids(idim),trim(dimname),len)
-      call check_cdf_status(status)
-      status=nf_def_dim(ncid2,trim(dimname),len,dimids(idim))
+      if(verbose) write(*,'(a,a,a,i6)') 'Found dimension ',trim(dimname),' with size ',len
+      if(streql(dimname,'time').or.streql(dimname,'batch')) then
+        status=nf_def_dim(ncid2,trim(dimname),ncunlim,dimids(idim))
+      else
+        status=nf_def_dim(ncid2,trim(dimname),len,dimids(idim))
+      endif
       call check_cdf_status(status)
     enddo
     ! Obtain variable metadata
@@ -204,17 +213,18 @@ program nc_reduce
         &   'variable: ',trim(varname),' has type ',xtype,' and ',ndims,' dimension'
         endif
       endif
+      dimsize=0
+      if(ndims.eq.0) dimsize(1)=1
       do idim=1,ndims
         status=nf_inq_dim(ncid,dimids(idim),dimname,len)
         call check_cdf_status(status)
         dimsize(idim)=len
         if(verbose) write(*,'(a,a,a,i6)') &
           &   '    dimension: ',trim(dimname),' of length ',len
-        status=nf_def_dim(ncid2,trim(dimname),len,dimids(idim))
-        call check_cdf_status(status)
       enddo
-      status=nf_def_var(ncid2,trim(varname),xtype,ndims,dimsize,ivar)
+      status=nf_def_var(ncid2,trim(varname),xtype,ndims,dimids,varid)
       call check_cdf_status(status)
+      varids(ivar)=varid
       units=''
       scale(1)=1.0_R8
       do iatt=1,natts
@@ -224,29 +234,29 @@ program nc_reduce
         call check_cdf_status(status)
         if(verbose) write(*,'(a,a,a,i2,a,i6)') '    attribute: ',trim(attname), &
           &                                    ' of type ',xtype,' and length ',len
-        if(attname.eq.'long_name') then
-          status=nf_put_att_text(ncid2,ivar,attname,len,varname)
+        if(streql(attname,'long_name')) then
+          status=nf_put_att_text(ncid2,varid,attname,len,varname)
           call check_cdf_status(status)
-        endif
-        if(attname.eq.'units') then
+        elseif(streql(attname,'units')) then
           if(len.le.24) then
             status=nf_get_att_text(ncid,ivar,attname,units)
             call check_cdf_status(status)
           else
             call xerrab ('increase size of units')
           endif
-          status=nf_put_att_text(ncid2,ivar,attname,len,units)
+          status=nf_put_att_text(ncid2,varid,attname,len,units)
           call check_cdf_status(status)
-        endif
-        if(attname.eq.'scale') then
+        elseif(streql(attname,'scale')) then
           if(len.le.1) then
             status=nf_get_att_double(ncid,ivar,attname,scale(1))
             call check_cdf_status(status)
           else
             call xerrab ('increase size of scale')
           endif
-          status=nf_put_att_double(ncid2,ivar,attname, NCDOUBLE, 1, scale(1))
+          status=nf_put_att_double(ncid2,varid,attname, NCDOUBLE, 1, scale(1))
           call check_cdf_status(status)
+        else
+          write(*,*) 'Attribute ',trim(attname),' not coded !'
         endif
       enddo
       if(verbose) then
@@ -258,6 +268,10 @@ program nc_reduce
       endif
       if(verbose) write(*,*) '  scale = ',scale(1)
     end do
+    status=nf_enddef(ncid2)
+    call check_cdf_status(status)
+    status=nf_close(ncid2)
+    call check_cdf_status(status)
 
     ! Read and rewrite data
     status=nf_open(trim(fredname),ncwrite,ncid2)
@@ -283,7 +297,8 @@ program nc_reduce
          &     ' with dimensions (',(count(idim),idim=1,ndims),')'
       end if
       if(verbose) write(*,'(a)') trim(message)
-      if(varname.eq.'times'.or.varname.eq.'timesa'.or.varname.eq.'batchsa') then
+      if(streql(varname,'times').or.streql(varname,'timesa').or. &
+       & streql(varname,'batchsa')) then
         allocate(data1(dimsize(1)))
         allocate(rata1(timedim2))
         status=nf_get_vara_double(ncid,ivar,start,count,data1)
@@ -296,7 +311,7 @@ program nc_reduce
             rata1(j) = data1(i)
           end if
         end do
-        status=nf_put_vara_double(ncid2,ivar,start,count,rata1)
+        status=nf_put_vara_double(ncid2,varids(ivar),start,count,rata1)
         deallocate(data1)
         deallocate(rata1)
       else
@@ -314,9 +329,9 @@ program nc_reduce
                 rata4(:,:,:,j) = data4(:,:,:,i)
               end if
             end do
-            status=nf_put_vara_double(ncid2,ivar,start,count,rata4)
+            status=nf_put_vara_double(ncid2,varids(ivar),start,count,rata4)
           else
-            status=nf_put_vara_double(ncid2,ivar,start,count,data4)
+            status=nf_put_vara_double(ncid2,varids(ivar),start,count,data4)
           end if
           call check_cdf_status(status)
           deallocate(data4)
@@ -335,9 +350,9 @@ program nc_reduce
                 rata3(:,:,j) = data3(:,:,i)
               end if
             end do
-            status=nf_put_vara_double(ncid2,ivar,start,count,rata3)
+            status=nf_put_vara_double(ncid2,varids(ivar),start,count,rata3)
           else
-            status=nf_put_vara_double(ncid2,ivar,start,count,data3)
+            status=nf_put_vara_double(ncid2,varids(ivar),start,count,data3)
           end if
           call check_cdf_status(status)
           deallocate(data3)
@@ -356,9 +371,9 @@ program nc_reduce
                 rata2(:,j) = data2(:,i)
               end if
             end do
-            status=nf_put_vara_double(ncid2,ivar,start,count,rata2)
+            status=nf_put_vara_double(ncid2,varids(ivar),start,count,rata2)
           else
-            status=nf_put_vara_double(ncid2,ivar,start,count,data2)
+            status=nf_put_vara_double(ncid2,varids(ivar),start,count,data2)
           end if
           call check_cdf_status(status)
           deallocate(data2)
@@ -377,9 +392,9 @@ program nc_reduce
                 rata1(j) = data1(i)
               end if
             end do
-            status=nf_put_vara_double(ncid2,ivar,start,count,rata1)
+            status=nf_put_vara_double(ncid2,varids(ivar),start,count,rata1)
           else
-            status=nf_put_vara_double(ncid2,ivar,start,count,data1)
+            status=nf_put_vara_double(ncid2,varids(ivar),start,count,data1)
           end if
           call check_cdf_status(status)
           deallocate(data1)
@@ -389,7 +404,7 @@ program nc_reduce
           status=nf_get_var_double(ncid,ivar,data1)
           call check_cdf_status(status)
           if (nint(data1(1)).eq.timedim) data1(1) = real(timedim2)
-          status=nf_put_var_double(ncid2,ivar,data1)
+          status=nf_put_var_double(ncid2,varids(ivar),data1)
           call check_cdf_status(status)
           deallocate(data1)
         else
