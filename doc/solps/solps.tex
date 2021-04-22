@@ -19641,6 +19641,38 @@ specified as a third argument:
 {\tt d2v <filein>.equ <fileout>.v <fieldfile>}
 \end{quote}
 
+\subsubsection{dg\_minuspsi\_dg}
+\index{dg\_minuspsi\_dg}\index{DG, change sign of equilibrium}
+
+This is a program that flips the sign of a {\tt DG} equilibrium file.
+This is invoked with (the file suffixes are recommended for clarity
+and are not enforced):
+\begin{quote}
+{\tt dg\_minuspsi\_dg <filein>.equ <fileout>.equ}
+\end{quote}
+
+\subsubsection{dg\_symm\_dg}
+\index{dg\_symm\_dg}\index{DG, symmetrise equilibrium}\label{sec:dgminuspsidg}
+
+This is a program that symmetrises a {\tt DG} equilibrium file. It is recommended to be used when dealing with a quasi-CDN equilibrium to be modelled as a true CDN.
+This is invoked with (the file suffixes are recommended for clarity
+and are not enforced):
+\begin{quote}
+{\tt dg\_symm\_dg <filein>.equ <fileout>.equ}
+\end{quote}
+
+Some older {\tt DG} files lack the magnetic field data needed for this conversion.
+The default name for the file containing its value is
+{\tt field.snn} (i.e., using the above invocation).
+Alternatively, the name of the file containing the field can be
+specified as a third argument:
+\begin{quote}
+{\tt dg\_symm\_dg <filein>.equ <fileout>.equ <fieldfile>}
+\end{quote}
+
+A fourth optional (real) argument can be added to mix in a fraction of the old equilibrium with
+the symmetrised one, so as to not fully symmetrise it, but rather change the distance between the two X-points.
+
 \subsubsection{e2d}
 \index{e2d}\index{ef2dg}\index{DG, converting from EFIT equilibrium}\index{FreeGS}
 
@@ -20007,14 +20039,17 @@ The procedure to follow is:
 \begin{enumerate}
   \item {\tt Import} a single-null {\tt Equilibrium}. The best would be
 something of a very different size, so that it lies completely outside the
-geometry you really want to model. {\tt Import} the single-null
-{\tt Topology}. {\tt Create} a {\tt Surface} in the core region of the
-diverted equilibrium as usual - preferably at about the same depth that you
-will want for the limiter case grid. Create also two closed polygons
-to act as targets for this SN equilibrium. Declare them as {\tt Inner target}
-and {\tt Outer target}, and include them as part of the {\tt Structure}
-in the usual way, as decribed in Section~\ref{sec:createsurfaces}. Also include
-these target polygons in the {\tt Elements not for Eirene} list.
+geometry you really want to model. Make sure the sign of the single-null
+equilibrium is the same as that of your limiter configuration (use the
+{\tt dg\_minuspsi\_dg} program to change its sign if necessary, see Section~\ref{sec:dgminuspsidg}).
+{\tt Import} the single-null {\tt Topology}. {\tt Create} a {\tt Surface}
+in the core region of the diverted equilibrium as usual - preferably at
+about the same depth that you will want for the limiter case grid.
+Create also two closed polygons to act as targets for this SN equilibrium.
+Declare them as {\tt Inner target} and {\tt Outer target}, and include them
+as part of the {\tt Structure} in the usual way, as decribed in
+Section~\ref{sec:createsurfaces}. Also include these target polygons in the
+{\tt Elements not for Eirene} list.
   \item {\tt Add} the {\tt Limiter and linear configurations} set of variables,
 and cut and paste the name of the limiter configuration equilibrium file into
 the {\tt Real equilibrium} there. If treating a linear case, leave the name of

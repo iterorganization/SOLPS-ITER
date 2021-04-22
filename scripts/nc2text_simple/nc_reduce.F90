@@ -39,7 +39,7 @@ program nc_reduce
   exists = .false.
   verbose = .false.
   narg = command_argument_count()
-  call xertst( 0.lt.narg, 'No arguments provided, nc_reduce has nothing to do!')
+  if(narg.eq.0) call print_help()
   do cptArg = 1, narg
     call get_command_argument( cptArg, argName )
     select case( adjustl( argName ) )
