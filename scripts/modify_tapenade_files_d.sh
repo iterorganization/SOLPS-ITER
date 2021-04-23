@@ -48,6 +48,7 @@ sed -i -e 's/ISIZE1OFarg1/20/g' calc_err_d.F90
 sed -i -e 's/ISIZE1OFarg2/20/g' calc_err_d.F90
 sed -i -e 's/REAL :: result1$/integer :: result1/g' b2mod_input_profile_diff.F90
 sed -i -e 's/CALL DIM_D(1.0_R8, 0.0/CALL DIM_D(1.0_R8, 0.0_R8/g' b2usht_d.F90
+sed -i -e 's/#DIM_D#/DIM_D/g' dim_d.F90
 
 sed -i -e 's/PUBLIC :: to_struct_plasma_d,/PUBLIC :: /g' b2us_prep_diff.F90
 sed -i '/PUBLIC :: to_struct_cell_d, to_struct_face_d/d' b2us_debug_diff.F90

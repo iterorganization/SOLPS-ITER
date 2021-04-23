@@ -4,7 +4,6 @@ move_to_F90.sh
 rm b2uxus_b.F90
 collect_nodiff_b.sh
 
-# add_ncall.sh #NO for DEBUG! e probabile no per tutto
 sed -i -e 's/ipgtmx=40/ipgtmx=4000/g' ipmain.F
 
 #!FIXME SOLVED showing b2usux?
@@ -14,8 +13,6 @@ sed -i -e 's/ipgtmx=40/ipgtmx=4000/g' ipmain.F
 #sed -i '/CALL POPINTEGER4ARRAY(mpg%ictcntrl/d' ./*.F90 
 #!FIXME
 # the above is needed otherwise the program fails with segmentation fault because attempts to fecth from the variables that have been de-allocated(prabably)
-
-# BISOGNA RIMUOVERE le temxip_av etc e trgt%.., art_shi etc in b2mod_main_diff ora
 
 sed -i '/DIFFSIZES/d' ./*.F90 
 sed -i -e 's/REAL :: result1$/integer :: result1/g' b2mod_input_profile_diff.F90
@@ -50,9 +47,10 @@ sed -i -e 's/ISIZE1OFcvhz/nCv/g' b2nxfv_b.F90
 #sed -i -e "s/GRADC_NODIFF(ncv, nfc, nvx, 1, geo, mpg, donedbsqc)/GRADC_NODIFF(ncv, nfc, nvx, 1, geo, mpg, geo%cvonedbsq, geo%\&/g" b2sihs__b.F90 #non piu
 sed -i -e 's/ISIZE1OFgeo%cvvol/nCv/g' b2stbc_b.F90
 sed -i -e 's/ISIZE1OFfcqalf/nFc/g' b2stbc_b.F90 b2stbc_phys_b.F90 b2tfch__b.F90 b2tfhe__b.F90 b2tfhi__b.F90 b2trno_b.F90 #b2sian_b.F90 b2tfnb_b.F90
-sed -i -e "s/CALL B2SAXPY(ncv, switch%sna0ep, 1, srw%sna0(1, 0, is), 1)/CALL B2SAXPY(ncv, switch%sna0ep, geo%cvvol, 1, srw%sna0(1, 0, is), 1)/g" b2stbc_b.F90
-sed -i -e "s/CALL B2SAXPY(ncv, switch%she0ep, 1, srw%she0(1, 0), 1)/CALL B2SAXPY(ncv, switch%she0ep, geo%cvvol, 1, srw%she0(1, 0), 1)/g" b2stbc_b.F90
-sed -i -e "s/CALL B2SAXPY(ncv, switch%shi0ep, 1, srw%shi0(1, 0), 1)/CALL B2SAXPY(ncv, switch%shi0ep, geo%cvvol, 1, srw%shi0(1, 0), 1)/g" b2stbc_b.F90
+sed -i -e "s/CALL B2SAXPY_FWD(ncv, switch%sna0ep, incx=1, sy=srw%sna0(1, 0, is)/CALL B2SAXPY_FWD(ncv, switch%sna0ep, geo%cvvol, 1, srw%sna0(1, 0, is)/g" b2stbc_b.F90
+sed -i -e 's/\&              incy=1)/\&              1)/g' b2stbc_b.F90
+sed -i -e "s/CALL B2SAXPY_FWD(ncv, switch%she0ep, incx=1, sy=srw%she0(1, 0), incy=1/CALL B2SAXPY(ncv, switch%she0ep, geo%cvvol, 1, srw%she0(1, 0), 1/g" b2stbc_b.F90
+sed -i -e "s/CALL B2SAXPY_FWD(ncv, switch%shi0ep, incx=1, sy=srw%shi0(1, 0), incy=1/CALL B2SAXPY(ncv, switch%shi0ep, geo%cvvol, 1, srw%shi0(1, 0), 1/g" b2stbc_b.F90
 sed -i -e 's/ISIZE1OFcdpa/nFc/g' b2tfcc_b.F90 b2tfnb_b.F90
 sed -i -e 's/ISIZE1OFne/nCv/g' b2tfhe__b.F90 b2tfrn_b.F90
 #sed -i -e 's/ISIZE1OFfcs/nFc/g' b2tfhe__b.F90
@@ -65,7 +63,7 @@ sed -i -e 's/ISIZE1OFcdna/nFc/g' b2tfnb_b.F90
 sed -i -e 's/ISIZE1OFtemp/nCv/g' b2tfnb_b.F90 b2sikt_b.F90 b2tqna_b.F90
 sed -i -e 's/ISIZE1OFvadia/nFc/g' b2tfnb_b.F90
 sed -i -e 's/ISIZE1OFdv%fna_52(:, :, isb)/nFc/g' b2tfnb_b.F90 
-sed -i -e "s/\&                :, :, isb))/\&                :, :, isb), dv%fna_52(:, :, isb))/g" b2tfnb_b.F90
+sed -i -e "s/\&             :, isb))/\&             :, isb), dv%fna_52(:, :, isb))/g" b2tfnb_b.F90
 sed -i -e 's/ISIZE1OFpa/nCv/g' b2tfnb_b.F90
 #sed -i -e 's/ISIZE1OFfchz/nFc/g' b2tfnb_b.F90
 sed -i -e 's/ISIZE1OFfchc/nFc/g' b2tinnt_b.F90
@@ -129,9 +127,13 @@ sed -i -e 's/CFWURE_NODIFF/CFWURE/g' ./*.F90
 #sed -i '/READ_B2MOD_USER_NAMELIST_B/d' b2mod_user_namelist_diff.F90 #why this?
 #sed -i 's/CALL READ_NEUTRALS_NAMELIST_B(ns, mpg, mpgb, switch/CALL READ_NEUTRALS_NAMELIST(ns, mpg, switch/g' b2stbr_b.F90 #why this?
 #sed -i '/CALL ADCONTEXTADJ/d' b2stbr_b.F90 b2mod_user_namelist_diff.F90
-sed -i -e 's/EXTERNAL SUBINI, SUBEND, XERTST, SFILL, DIM/EXTERNAL SUBINI, SUBEND, XERTST, SFILL/g' b2usht_b.F90
-sed -i -e '/EXTERNAL DIM_B/i\  INTRINSIC DIM' b2usht_b.F90 expu2_b.F90 expu_b.F90
-sed -i -e 's/EXTERNAL MACHSFR, DIM/EXTERNAL MACHSFR/g' expu2_b.F90 expu_b.F90
+sed -i -e '/EXTERNAL DIM_FWD/a\  real(kind=r8) :: dim_fwd' b2usht_b.F90 expu_b.F90 expu2_b.F90
+sed -i -e '/EXTERNAL EXPU_FWD/a\  real(kind=r8) :: expu_fwd' b2sqcx_b.F90 b2sqel_b.F90 b2mod_recycle_diff.F90
+sed -i -e '/EXTERNAL INTP_2DTABLE_B, INTP_2DTABLE0_B, EXPU_FWD/a\  real(kind=r8) :: expu_fwd' b2mod_recycle_diff.F90
+sed -i -e 's/#DIM_FWD#/DIM_FWD/g' dim_b.F90
+sed -i -e 's/#DIM_BWD#/DIM_BWD/g' dim_b.F90
+sed -i -e 's/SIZE(sy, 1)+1/n/g' myblas_b.F90
+sed -i -e 's/SIZE(sx, 1)+1/n/g' sfill_b.F90
 
 sed -i -e "s/REAL\*8/REAL(kind=r8)/g" *_diff.F90
 sed -i -e "s/REAL\([^(].*::\)/REAL(kind=r8)\1/g" *_diff.F90
@@ -159,8 +161,12 @@ sed -i -e 's/USE ISO_C_BINDING/USE, intrinsic :: ISO_C_BINDING/g' admm_tapenade_
 
 sed -i -e "/CALL B2MNDR_1_B/i\    jb = 0.0_R8" b2mod_main_diff.F90
 sed -i -e "/CALL B2MNDR_1_B/i\    jb(1) = 1.0_R8" b2mod_main_diff.F90
-sed -i -e "/CALL ADCONTEXTADJ_STARTCONCLUDE/i\    write(*,*) 'GRADIENT dna ',parm_dnab" b2mod_main_diff.F90
+sed -i -e "/CALL ADCONTEXTADJ_STARTCONCLUDE/i\    write(*,*) 'GRADIENT enepar ',eneparb(1,1)" b2mod_main_diff.F90
+sed -i -e "/CALL ADCONTEXTADJ_STARTCONCLUDE/i\    write(*,*) 'GRADIENT enipar ',eniparb(1,1)" b2mod_main_diff.F90
+sed -i -e "/CALL ADCONTEXTADJ_STARTCONCLUDE/i\    write(*,*) 'GRADIENT conpar ',conparb(1,1,1)" b2mod_main_diff.F90
 sed -i -e "/CALL ADCONTEXTADJ_STARTCONCLUDE/i\    write(*,*) 'GRADIENT hce ',parm_hceb" b2mod_main_diff.F90
 sed -i -e "/CALL ADCONTEXTADJ_STARTCONCLUDE/i\    write(*,*) 'GRADIENT hci ',parm_hcib" b2mod_main_diff.F90
-
-
+sed -i -e "/CALL ADCONTEXTADJ_STARTCONCLUDE/i\    write(*,*) 'GRADIENT dna ',parm_dnab" b2mod_main_diff.F90
+sed -i '/ADCONTEXTADJ/d' b2mod_main_diff.F90
+sed -i '/r8\*/d' b2mod_main_diff.F90
+sed -i '/r8\/8/d' b2mod_main_diff.F90

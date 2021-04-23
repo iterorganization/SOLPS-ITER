@@ -21,6 +21,7 @@ sed -i -e 's/ISIZE1OFabs/mpg%nCv/g' b2mod_driver_diffv.F90
 sed -i -e 's/ISIZE2OFabs/0:state%pl%ns-1/g' b2mod_driver_diffv.F90
 sed -i -e "s/REAL(r8), DIMENSION(:,/REAL(r8), DIMENSION(nbdirsmax,/g" b2news__dv.F90
 sed -i -e 's/ISIZE1OFdv%fch_pi_c/nCv/g' b2news__dv.F90
+sed -i -e 's/ISIZE1OFfch_p/nFc/g' b2news__dv.F90
 sed -i -e "s/INTEGER :: dummyzerodiffd0/INTEGER :: dummyzerodiffd0(nbdirsmax)/g" b2mod_recycle_diffv.F90
 sed -i -e "s/INTEGER :: dummyzerodiffd29/INTEGER :: dummyzerodiffd29(nbdirsmax)/g" b2news__dv.F90
 sed -i -e "s/INTEGER :: dummyzerodiffd33/INTEGER :: dummyzerodiffd33(nbdirsmax)/g" b2news__dv.F90
@@ -66,7 +67,8 @@ sed -i -e "s/INTEGER :: dummyzerodiffd7/INTEGER :: dummyzerodiffd7(nbdirsmax)/g"
 sed -i -e 's/ISIZE1OFarg1/20/g' calc_err_dv.F90
 sed -i -e 's/ISIZE1OFarg2/20/g' calc_err_dv.F90
 sed -i -e 's/REAL :: result1$/integer :: result1/g' b2mod_input_profile_diffv.F90
-sed -i -e 's/#NBDirsMax#/nbdirsmax/g' b2mod_b2cmrc_diffv.F90 intvertex_dv.F90 #why?
+sed -i -e 's/#NBDirsMax#/nbdirsmax/g' b2mod_b2cmrc_diffv.F90 intvertex_dv.F90 dim_dv.F90 #why?
+sed -i -e 's/#DIM_DV#/DIM_DV/g' dim_dv.F90 #why?
 
 sed -i '/EXTERNAL RESTART_MA28_FOR_US/d' b2news__dv.F90 b2npmo_dv.F90 b2usht_dv.F90  
 sed -i '/EXTERNAL DEALLOC_B2MOD_MA28_FOR_US/d' b2mod_driver_diffv.F90
@@ -126,20 +128,22 @@ sed -i -e "/END TYPE MAPPING_DIFFV/i\&     ncmxnv(nbdirsmax), ncf(nbdirsmax), mx
 sed -i -e "/TYPE(B2RATESWORK_DIFFV) :: rtw/i\      TYPE(B2DIAGNOSTIC) :: diag" b2us_plasma_diffv.F90
 
 sed -i -e "s/b2mod_main_diff/b2mod_main_diffv/g" b2optim_*.F*
+sed -i -e "s/b2mod_ad_diff/b2mod_ad_diffv/g" b2optim_*.F*
+sed -i -e "s/b2mod_par_opt_diff/b2mod_par_opt_diffv/g" b2optim_*.F*
 sed -i -e "s/b2mn_init_d/b2mn_init_dv/g" b2optim_*.F*
 sed -i -e "s/b2mn_fin_d/b2mn_fin_dv/g" b2optim_*.F*
 sed -i -e "s/b2mn_step_d/b2mn_step_dv/g" b2optim_*.F*
 sed -i -e "s/b2mod_user_namelist_diff/b2mod_user_namelist_diffv/g" b2optim_*.F*
 sed -i -e "s/b2mod_plasma_diff/b2mod_plasma_diffv/g" b2optim_*.F*
-sed -i -e "s/call b2mn_init_dv/call b2mn_init_dv(nvar)/g" b2optim_*.F*
-sed -i -e "s/call b2mn_fin_dv/call b2mn_fin_dv(nvar)/g" b2optim_*.F*
-sed -i -e "s/call b2mn_step_dv(j,jd)/call b2mn_step_dv(j,jd,nvar)/g" b2optim_ipopt.F
-sed -i -e "s/call b2mn_step_dv(j,jd)/call b2mn_step_dv(j,jd,nnvar)/g" b2optim_tao.F90
+sed -i -e "s/call b2mn_init_dv/call b2mn_init_dv(npar_opt)/g" b2optim_*.F*
+sed -i -e "s/call b2mn_fin_dv/call b2mn_fin_dv(npar_opt)/g" b2optim_*.F*
+sed -i -e "s/call b2mn_step_dv(j,jd)/call b2mn_step_dv(j,jd,npar_opt)/g" b2optim_ipopt.F
+sed -i -e "s/call b2mn_step_dv(j,jd)/call b2mn_step_dv(j,jd,npar_opt)/g" b2optim_tao.F90
 sed -i -e 's/jd(nncf)/jd(nbdirsmax,nncf)/g' b2optim_*.F*
 sed -i -e "/subroutine EV_GRAD_F(/a\      use diffsizes" b2optim_ipopt.F
 sed -i -e "/subroutine FormFunctionGradient(/a\      use diffsizes" b2optim_tao.F90
-sed -i -e "s/g_v(g_i+iv-1) = jd(1)/g_v(g_i+iv-1) = jd(iv,1)/g" b2optim_tao.F90
-sed -i -e "s/grad(iv) = DBLE(jd(1))/grad(iv) = DBLE(jd(iv,1))/g" b2optim_ipopt.F
+sed -i -e "s/g_v(g_i+ipar-1) = jd(1)/g_v(g_i+ipar-1) = jd(ipar,1)/g" b2optim_tao.F90
+sed -i -e "s/grad(ipar) = DBLE(jd(1))/grad(ipar) = DBLE(jd(ipar,1))/g" b2optim_ipopt.F
 
 cp $TAPENADEDIR/ADFirstAidKit/adContext.c .
 cp $TAPENADEDIR/ADFirstAidKit/adContext.h .

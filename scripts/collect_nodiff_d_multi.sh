@@ -46,6 +46,8 @@ cp $SOLPSTOP/modules/B2.5/src/utility/trilinear_int.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/mstep.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/expu.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/expu2.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/med.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/uxcm.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/ma28copy.F .
 cp $SOLPSTOP/modules/B2.5/src/transport/b2tlnl.F .
 cp $SOLPSTOP/modules/B2.5/src/b2aux/b2xpne.F .
