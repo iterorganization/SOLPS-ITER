@@ -2,7 +2,7 @@
 LD_GR  ?= -L${GR_ROOT}/lib -lgr
 LD_GKS ?= -L${GLI_HOME} -lgks -lXmu -lX11 -lXt
 
-DEFINES = ${SOLPS_CPP}
+DEFINES += ${SOLPS_CPP}
 EQUIVS =
 
 CPP = /lib/cpp -traditional
@@ -11,11 +11,11 @@ SED = sed s:\#PREC\#:d:g
 LINK_MOD =
 
 FC = nagfor
+FCOPTS = -compatible
 ifdef SOLPS_DEBUG
-FCOPTS = -C -g
-DEFINES += -DDBG
+FCOPTS += -C -g
 else
-FCOPTS = -O2
+FCOPTS += -O2
 endif
 
 DBLFC = ${FC}
@@ -28,14 +28,14 @@ OBJDEST = -o ${OBJDIR}/$*.o
 
 BLD = ar rcv
 
-LD = nagfor
+LD = ${FC}
 ifdef SOLPS_DEBUG
 LDOPTS = -g -C
 else
 LDOPTS =
 endif
 
-GKS = ${LD_GR} ${LD_GKS} -lX11 -lXt
+GKS = ${LD_GR} ${LD_GKS}
 LDLIBS =
 LDEXTRA =
 

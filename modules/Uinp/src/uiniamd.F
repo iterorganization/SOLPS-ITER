@@ -2,8 +2,8 @@
       use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
-      use eirmod_extrab25
-     , , only: msrfclsx
+      use b2mod_subsys
+      use eirmod_solps
 c
 c  version : 30.06.2000 19:44
 c
@@ -19,7 +19,7 @@ c=======================================================================
       integer i,j,k,l,m,iv,nn
       save nn
       logical uex, streql
-      external streql, xerrab, subini, subend
+      external streql, xerrab
       character*8 unm(lunm),uun,s*(luns)
       data unm /
      1  '#'       ,'filevers' ,'reactns'  ,'rctype'   ,'group'    ,
@@ -251,4 +251,4 @@ c=======================================================================
 c=======================================================================
       call subend ()
       return
-      end
+      end subroutine uiniamd

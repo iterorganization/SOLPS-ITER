@@ -5,6 +5,7 @@ setenv SOLPSWORK /pfs/work/$USER/solps-iter/runs
 setenv FC g95
 
 # Debugger (set environment variable DBX)
+module load totalview
 setenv DBX totalview
 
 module load itm-g95

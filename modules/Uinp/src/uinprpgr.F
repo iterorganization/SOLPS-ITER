@@ -1,9 +1,9 @@
       subroutine uinprpgr
-       use b2mod_types
-       use b2mod_layer
+      use b2mod_types
+      use b2mod_layer
      , , only: ntrack, nalloys
-       use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use b2mod_subsys
+      use eirmod_solps
 
 c  version : 15.03.2001 17:03
 
@@ -14,7 +14,7 @@ c=======================================================================
       logical ex
       real (kind=R8) :: rratio
       external rratio
-      external xerrab, subini, subend
+      external xerrab
 c=======================================================================
 c*** Now, unlike the previous version, nrsol, nrpfl, nz[io]dv, nzinn,
 c*** together with nrsol1, nz[io]dv2, and nzinn2, are the numbers of
@@ -286,4 +286,4 @@ c!###}
 c=======================================================================
       call subend ()
       return
-      end
+      end subroutine uinprpgr

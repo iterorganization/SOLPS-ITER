@@ -2,22 +2,16 @@
       use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
-      use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use b2mod_xerset
+      use eirmod_solps
 
 c  version : 28.01.2003 18:08
 
 c=======================================================================
       implicit none
-#ifdef USE_MPI
-      include 'mpif.h'
-#endif
 #include "uinput.inc"
 #include "impcon.inc"
       integer irt, is, iss, iatm, iloc
-#ifdef USE_MPI
-      integer rank_mpi,size_mpi,ierr_mpi
-#endif
       integer ns, i, j, ireg, nreg, len
       real(kind=R8), allocatable :: na0(:)
       character tab
@@ -29,18 +23,8 @@ c=======================================================================
       logical uex
       integer find_matching_species
       external find_matching_species
-      external prgini,prgend,xerset
+      external prgini,prgend
 c=======================================================================
-#ifdef USE_MPI
-      call mpi_init(ierr_mpi)
-      call mpi_comm_rank(MPI_COMM_WORLD,rank_mpi,ierr_mpi)
-      call mpi_comm_size(MPI_COMM_WORLD,size_mpi,ierr_mpi)
-      if(rank_mpi .ne. 0) then
-        call mpi_barrier(MPI_COMM_WORLD,ierr_mpi)
-        call mpi_finalize(ierr_mpi)
-        stop 'uinp_mpi_child'
-      endif
-#endif
       call prgini('uinput')
 *   ..mark output unit for error messages
       call xerset (0)
@@ -79,7 +63,7 @@ c*** Produce the input file for Eirene for TRIA mesh generation
        call uinout('triang.eir')
        print *,'    ... triang.eir created'
        call triaout('triang.hed')
-       call uinptridg(.FALSE.)
+       call uinptridg(.false.)
       end if !}
 
 c*** Produce the input files for Eirene for averaging scheme runs
@@ -554,7 +538,7 @@ c*** Create the b2ar.dat file
      >       write(2,'(2x,3i3)') nchara(iatm), 0, nchara(iatm)
           end do
           write(2,'(a)') '*flag           '//
-     .     '(''adpak'', ''strahl'', ''adas'' or ''amds'', free format)'
+     .     '(''adpak'', ''strahl'', ''adas'' or ''amns'', free format)'
           write(2,'(2x,a)') '''adas'''
           write(2,'(a)') '*tailep         (real, free format)'
           write(2,'(2x,f5.2)') 0.08
@@ -701,13 +685,10 @@ c*** Modify the input file for B2, if possible
 
 c-----------------------------------------------------------------------
 c*** Create additional files with geometry for b2plot
-      
-      call uib2pl
+
+cxpb Skip this step, use ub2p program instead
+cxpb      call uib2pl
 c=======================================================================
       call prgend ()
-#ifdef USE_MPI
-      call mpi_barrier(MPI_COMM_WORLD,ierr_mpi)
-      call mpi_finalize(ierr_mpi)
-#endif
       stop 'uinp'
-      end
+      end program uinput

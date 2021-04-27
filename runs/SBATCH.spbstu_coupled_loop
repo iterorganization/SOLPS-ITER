@@ -2,7 +2,7 @@
 
 #SBATCH -N #NODES#
 #SBATCH -J #JOBNAME#
-#SBATCH --ntasks-per-node=28
+#SBATCH --ntasks-per-node=#PROCS#
 #SBATCH -o testjob-%j.out
 #SBATCH -e testjob-%j.err
 #SBATCH -t #HOURS#:00:00

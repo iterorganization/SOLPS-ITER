@@ -12,8 +12,14 @@ if ("X$1" == "X-ly") then
 else
   set ly=""
 endif
-set source=b2mn.exe.dir/b2time.nc
-if (! -s $source) set source=b2time.nc
+set source=b2mn.exe.dir/b2batch.nc
+if (! -s $source) then
+  set source=b2batch.nc
+  if (! -s $source) then
+    set source=b2mn.exe.dir/b2time.nc
+    if (! -s $source) set source=b2time.nc
+  endif
+endif
 
 set args=""
 set nargs=0
@@ -25,6 +31,14 @@ else
 endif
 
 which nc2text > /dev/null && set no_nc2text=0 || set no_nc2text=1
+if (-e b2mn.exe.dir/.netcdf4) then
+  ln -sf $source ${tmpdir}b2batch.nc.tmp
+  set source=${tmpdir}b2batch.nc.tmp
+  gtfl $source
+  set netcdf4=1
+else
+  set netcdf4=0
+endif
 
 /bin/cp /dev/null ${tmpdir}gnuplot.data.tmp
 if ($no_nc2text == 1) then
@@ -74,3 +88,7 @@ start:
 
 awk.transpose < ${tmpdir}gnuplot.data.tmp | awk 'NR==1{saveNF=NF}NF==saveNF{print $0}' | plot ${lx}x${ly}yplot$nargs $args time '' `chop_pwd 60`
 /bin/rm ${tmpdir}gnuplot.data.tmp
+
+if ($netcdf4 == 1) then
+  rm $source
+endif

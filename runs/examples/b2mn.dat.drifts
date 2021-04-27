@@ -28,7 +28,7 @@
 'b2stcx_style'                       '1'
 'b2stel_style'                       '1'
 'b2sral_style'                       '2'
-'b2tfnb_drift_style'                 '1'
+'b2tfnb_drift_style'                 '2'
 'b2news_guard_flows'                 '2'
 'b2mndt_style'                       '1'
 'b2mndr_hz'                          '1.0'

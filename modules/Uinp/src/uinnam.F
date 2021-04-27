@@ -3,8 +3,8 @@
       use b2mod_constants
       use b2mod_layer
      , , only: ntrack, nalloys
-      use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use b2mod_subsys
+      use eirmod_solps
 c
 c  version : 01.04.2005 01:23
 c
@@ -16,24 +16,30 @@ c=======================================================================
 #include "uinput.inc"
 #include "impcon.inc"
       integer lunm,i,j,l,lusgm,lugpf,lugwt,luvsp,nprnl
-      integer, save :: lupfr,luskel,luswch,lurefls
-      real (kind=R4) :: u
-      parameter (lunm=163)
-      character*8 unm(lunm),uun,ubs*1,uam*52
+      integer, save :: lupfr,luskel,luswch,lurefls,
+     .  lchrdgrp,lchrdlint,lchrdlprf
+      integer :: ichlst(nchor)
+      real(kind=R4) :: u
+      parameter(lunm=173)
+      character*8 unm(lunm),uun
+      character*8, save :: chtyp
+      character ubs*1,uam*52
+      logical, save :: hlp_spc,read_chr_angl
 c...                                                  52=48+4
       integer luwrk(nlim),luind(nlim)
-      logical hlp_spc,streql
-      external streql, xerrab, xertst, subini, subend
-c*** lusgm: segment number for the list of invisibles;
+      logical streql
+      external streql, xerrab, xertst
+c*** lusgm : segment number for the list of invisibles;
 c*** luswch: switch for the input of element lists (obsolete)
 c***                1: jedgi1, 2: jedgo1, 3: jedgi2, 4: jedgo2
 c***         or switch for the target data (clockwise from bottom left)
 c*** luskel: counter for the segments to be skipped
-c*** lugpf:  counter for the puffing sources
-c*** lugwt:  counter for the grid-wall ties
+c*** lugpf : counter for the puffing sources
+c*** lugwt : counter for the grid-wall ties
       data lusgm, luswch, luskel, lugpf, lugwt, luvsp, nprnl /7*0/
-      data hlp_spc / .true. /
-      data lurefls / 0 /  
+      data hlp_spc / .true. /, read_chr_angl / .false. /
+      data lurefls / 0 /, chtyp / ' ' /
+      data lchrdgrp / 0 /, lchrdlint / 0 /, lchrdlprf / 0 /
       data unm /
      1    'p1'      ,'p2'      ,'misselem','srfinvsb','jliin'   ,
      2    'jlside'  ,'jadksw'  ,'jadjsw'  ,'jlcol   ','jlacll  ',
@@ -67,7 +73,9 @@ c*** lugwt:  counter for the grid-wall ties
      c    'c_trnspi','c_ewall ','trimark' ,'trisize' ,'trirect' ,
      1    'triref'  ,'trirflis','glb2dat ','glb_pwri','glb_pwre',
      2    'glb_pwrf','glb_tmst','spcs_crk','spcs_crp','spcs_crf',
-     3    'spcs_scn','tgminhst','gpf_mhst'/
+     3    'spcs_scn','tgminhst','gpf_mhst','chords'  ,'linintg' ,
+     4    'set_id'  ,'chr_lbl' ,'chr_angl','chrdsdat','data_id' ,
+     5    'set_list','n_points','linprfs'/
 c=======================================================================
       call subini ('uinnam')
 c*** Backslash:
@@ -979,10 +987,101 @@ c***  input elements indices for current rectangle
         call resimi(tgmhst(luswch))
       case (163)
         call resimi(mpgpfstr(ngpfstr))
+      case (164) ! chords
+        call rearre(chpts,4*nchor,i)
+        call vscale(chpts,0.1,chpts,i)
+        nchori=i/4
+        do i=1,nchori
+          xpivot(i) = chpts(1,i)
+          ypivot(i) = chpts(2,i)
+          zpivot(i) = 0.
+          xchord(i) = chpts(3,i)
+          ychord(i) = chpts(4,i)
+          if (.not.read_chr_angl) zchord(i) = 0.
+        end do
+      case (165) ! linintg
+        chtyp = 'lin_int'
+        call resimi(lchrdlint)
+        nchrdlint=nchrdlint+1
+        if(nchrdlint.gt.nchor) then !{
+          write(0,*)
+     .     'uinnam: too many line integral groups specified ( > ',
+     .                                               nchor,' )'
+          write(0,*) '  ==> Check the DG model'
+          call xerrab ('Too many line integral groups specified')
+        end if !}
+      case (166) ! set_id
+        i=lena
+        lena=24
+        if (streql(chtyp,'lin_prf')) then
+          call skipit
+        else if (streql(chtyp,'lin_int')) then
+          call resima(chrdfile(lchrdlint))
+          call strip_spaces(chrdfile(lchrdlint))
+        end if
+        lena=i
+      case (167) ! chr_lbl
+        call rearri(chr_lbl,nchor,i)
+        do j = 1, i !{
+          if (chr_lbl(j).lt.0 .or. chr_lbl(j).gt.999) then !{
+            write (0,*) 'uinnam: invalid chord label number'
+            write (0,*) '  Must be between 0 and 999'
+            write (0,*) '  ==> Check the DG model'
+            call xerrab ('Invalid chord label number')
+          end if !}
+        end do !}
+      case (168) ! chr_angl
+        call rearre(zchord,nchor,i)
+        read_chr_angl = .true.
+      case (169) ! chrdsdat
+        call resimi(lchrdgrp)
+        nchrdgrp=nchrdgrp+1
+        if(nchrdgrp.gt.nchor) then !{
+          write(0,*)
+     .     'uinnam: too many chord groups specified ( > ',
+     .                                               nchor,' )'
+          write(0,*) '  ==> Check the DG model'
+          call xerrab ('Too many chord groups specified')
+        end if !}
+        call resima(chtyp)
+        if (.not.streql(chtyp,'lin_prf') .and.
+     .      .not.streql(chtyp,'lin_int')) then !{
+          write(0,*) 'uinam: unrecognized chord group type ',
+     .      chtyp
+          write(0,*) '  ==> Check the DG model'
+          call xerrab ('Unrecognized chord group type') 
+        end if !}
+      case (170) ! data_id
+        i=lena
+        lena=24
+        call resima(chrdfile(lchrdgrp))
+        call strip_spaces(chrdfile(lchrdgrp))
+        lena=i
+      case (171) ! set_list
+        ichlst = 0
+        call rearri(ichlst,nchor,i)
+        if (streql(chtyp,'lin_int')) then
+          jchlst(1:i,lchrdlint)=ichlst(1:i)
+        else if (streql(chtyp,'lin_prf')) then
+          continue
+        end if
+      case (172) ! n_points
+        call skipit
+      case (173) ! linprfs
+        chtyp = 'lin_prf'
+        call resimi(lchrdlprf)
+        nchrdlprf=nchrdlprf+1
+        if(nchrdlprf.gt.nchor) then !{
+          write(0,*)
+     .     'uinnam: too many line profiles groups specified ( > ',
+     .                                               nchor,' )'
+          write(0,*) '  ==> Check the DG model'
+          call xerrab ('Too many line profiles groups specified')
+        end if !}
       case default
         call skipit
       end select
 c=======================================================================
  9999 call subend ()
       return
-      end
+      end subroutine uinnam

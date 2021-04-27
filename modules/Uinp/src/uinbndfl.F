@@ -2,8 +2,8 @@
       use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
-      use eirmod_extrab25
-     , , only: msrfclsx
+      use b2mod_subsys
+      use eirmod_solps
 c
 c  version : 01.04.2005 14:27
 c
@@ -18,7 +18,7 @@ c=======================================================================
       character hlp_c*2
       integer find_matching_species
       logical streql
-      external streql, xertst, subini, subend, find_matching_species
+      external streql, xertst, find_matching_species
 c=======================================================================
       call subini ('uinbndfl')
 c*** Determine the default source scaling relations
@@ -253,14 +253,13 @@ c*** uex: the highest ionisation state for this species
 c=======================================================================
       call subend ()
       return
-      end
+      end subroutine uinbndfl
 
       integer function find_matching_species(name)
       use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
-      use eirmod_extrab25
-     , , only: msrfclsx
+      use eirmod_solps
       use b2mod_elements
       implicit none
 #     include "uinpcom.inc"
@@ -297,8 +296,7 @@ c=======================================================================
       use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
-      use eirmod_extrab25
-     , , only: msrfclsx
+      use eirmod_solps
       use b2mod_elements
       implicit none
 #     include "uinpcom.inc"
@@ -343,44 +341,3 @@ c=======================================================================
 
       return
       end function find_matching_reagent
-
-      integer function get_atomic_number(name)
-      use b2mod_elements
-      implicit none
-      character*(*) name
-      character*8 species_name
-      integer i
-      logical skip, openp
-      integer lnblnk
-      logical streql, isadigit, isplusorminus
-      external streql, lnblnk, isadigit, isplusorminus, strip_spaces
-
-      get_atomic_number = 0
-      species_name = repeat(' ',8)
-      openp = .false.
-      do i = 1, lnblnk(name)
-        if (.not.openp) then
-          skip = .false.
-          skip = skip .or. isadigit(name(i:i))
-          skip = skip .or. isplusorminus(name(i:i))
-          skip = skip .or. name(i:i).eq.'*'
-          openp = name(i:i).eq.'('
-        else
-          openp = name(i:i).ne.')'
-          skip = .true.
-        endif
-        skip = skip .or. openp
-        if (.not.skip) species_name(i:i) = name(i:i)
-      end do
-      call strip_spaces(species_name)
-      do i = 1, 92
-        if(streql(species_name(1:2),elements(i))) then
-          get_atomic_number = i
-          return
-        end if
-      end do
-      if (streql(species_name,'D').or.
-     &    streql(species_name,'T')) get_atomic_number=1
-
-      return
-      end function get_atomic_number

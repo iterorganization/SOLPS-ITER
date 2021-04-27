@@ -1,5 +1,3 @@
-#$(error Using default file. Provide paths to libraries first.)
-
 #
 # Specify paths to root-directories of following libraries on your system
 #
@@ -50,62 +48,11 @@ LD_MPI     = -L${MPDIR}/lib -lmpi -lmpich
 
 SOLPS_CPP      = -DNCAR4
 B25_DEFINES    =
+CARRE_DEFINES  =
 EIRENE_DEFINES =
+FFLAGSEXTRA    =
 MPI_CPP        = -I${MPDIR}/include
 
-# Autodetected optional features...
-
-# Build with NetCDF tools if available
-ifdef LD_NETCDF
-  SOLPS_CPP   += -DCDF_MOVIE
-else
-  SOLPS_CPP   += -DNO_CDF
-endif
-
-# Build with MDSplus tools if MDSplus is present
-ifdef LD_MDSPLUS
-  SOLPS_CPP   += -DMDSPLUS
-endif
-
-# Build with Catalyst if ParaView is in PATH
-ifdef LD_CATALYST
-  SOLPS_CPP   += -DCATALYST
-endif
-
-# Build with IMAS if imas module is loaded
-ifdef IMAS_PREFIX
-  SOLPS_CPP += -DIMAS
-  LD_UAL     = `pkg-config imas-lowlevel imas-ifort --libs`
-  export LD_UAL
-endif
-
-#
-# Export for use in sub-makefiles
-#
-
-export NCDIR
-export MSCL_ROOT
-export H5DIR
-export GR_ROOT
-export GLI_HOME
-export NCARG_ROOT
-export NAGDIR
-export MDSPLUS_DIR
-
-export LD_NETCDF
-export LD_MSCL
-export LD_GR
-export LD_GKS
-export LD_NCARG
-export LD_NAG
-export LD_MDSPLUS
-export LD_SONNET
-export LD_MPI
-
-export SOLPS_CPP
-export B25_DEFINES
-export EIRENE_DEFINES
-export MPI_CPP
 
 #!!!Local Variables:
 #!!! mode: Makefile

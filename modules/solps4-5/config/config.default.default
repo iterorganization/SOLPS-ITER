@@ -6,7 +6,7 @@ CPP4OPTS = 		# options for CPP (single precision)
 CPP5OPTS = 		# options for CPP (double precision)
 
 FC = 			# fortran compiler
-FCOPTS = 		# options for fortan compiler for single precision version
+FCOPTS = 		# options for fortran compiler for single precision version
 INCMOD =		# option for including modules
 MOD =			# module suffix
 

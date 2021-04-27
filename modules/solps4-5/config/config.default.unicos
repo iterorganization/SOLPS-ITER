@@ -22,7 +22,7 @@ ifdef PERFMON
 LDLIBES += -L${SOLPSLIB} -lperf
 endif
 
-LD = f90
+LD = ${FC}
 LDOPTS = -Wl"-M,s"
 
 LCPP = ${LD_SONNET}

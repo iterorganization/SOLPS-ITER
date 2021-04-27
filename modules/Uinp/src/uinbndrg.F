@@ -2,8 +2,8 @@
       use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
-      use eirmod_extrab25
-     , , only: msrfclsx
+      use b2mod_subsys
+      use eirmod_solps
 c
 c  version : 15.03.2001 00:57
 c
@@ -212,4 +212,4 @@ c!###}
 c=======================================================================
       call subend ()
       return
-      end
+      end subroutine uinbndrg

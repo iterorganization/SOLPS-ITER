@@ -9,19 +9,19 @@ ifndef SOLPSLIB
   $(error SOLPSLIB not defined)
 endif
 
-FC	 = pgf90
+FC       = pgf90
 
 ifdef SOLPS_DEBUG
-FFLAGS	 = -g -C
+FFLAGS   = -g -C
 else
-FFLAGS	 = -O
+FFLAGS   = -O
 endif
 
 INCLUDE  = -Isrc
 COMPILE  = ${FC} -c ${FFLAGS}
-CPP	 = /lib/cpp -C -traditional
+CPP      = /lib/cpp -C -traditional
 
-LDLIBS	 = -L${SOLPSLIB} -lsonnet ${LD_MSCL} -L/usr/local/lib
+LDLIBS   = -L${SOLPSLIB} -lsonnet ${LD_MSCL} -L/usr/local/lib
 LDEXTRA  = 
 
 #!!!Local Variables:

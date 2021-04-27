@@ -1,4 +1,4 @@
-#! /bin/tcsh
+#! /bin/tcsh -f
 
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=#PROCS#
@@ -27,10 +27,7 @@
 ###               or      `ippsubmit -m "-np 32" -j "JobName" SLURM.ipp_coupled_loop`
 ###   Stop the run:       `touch b2mn.exe.dir/.quit`
 
-pushd #SOLPSTOP#
-source setup.csh
 echo Using SOLPSTOP = #SOLPSTOP#
-popd
 
 set USE_MPI=""
 if ($?SOLPS_MPI) then

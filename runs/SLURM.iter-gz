@@ -9,7 +9,6 @@
 #SBATCH  --job-name=#JOBNAME#
 #SBATCH  --partition=#PART#
 
-# source setup.csh
 echo Using SOLPSTOP = #SOLPSTOP#
 
 set USE_MPI=""
@@ -21,9 +20,11 @@ if ($?SOLPS_MPI) then
   set USE_MPI=`echo $USE_MPI | sed -e 's:-m :-m ''":' -e 's:$:"'':'`
 endif
 
+set USE_OMP=""
 if ($?SOLPS_OPENMP) then
-  setenv OMP_NUM_THREADS #THREADS#
-  setenv KMP_AFFINITY compact
+  setenv KMP_AFFINITY disabled
+  set OMP_OPTS = #THREADS#
+  set USE_OMP = "-t ${OMP_OPTS}"
 endif
 
 update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"
@@ -33,7 +34,7 @@ if ($?SOLPS_GUI_IP) then
   echo ${USER} ${PWD} ${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
 endif
 
-time b2run -s ${USE_MPI} b2mn | gzip -9 >! run.log.gz
+time b2run -s ${USE_MPI} ${USE_OMP} b2mn | gzip -9 >! run.log.gz
 
 QSUB.postprocess
 

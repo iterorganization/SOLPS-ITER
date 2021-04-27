@@ -1,37 +1,9 @@
-EQUIV4 = ${SOLPS_CPP}
-EQUIV5 = ${SOLPS_CPP} ${USE_EIRENE} -Dsdot=ddot -Dsasum=dasum -Dsaxpy=daxpy -Dsscal=dscal -Dsnrm2=dnrm2 -Dscopy=dcopy -Dsgbtrf=dgbtrf -Dsgbtrs=dgbtrs -DGRREAL=4 -DNO_PROCESS -DPSR -Dsmin=dmin
-DEFINES += -DS2SUM=D2SUM -DS2MIN=D2MIN -DSASUM=DASUM -DSAXPY=DAXPY -DSDOT=DDOT -DSSCAL=DSCAL -DS2ASUM=D2ASUM -DS2SCAL=D2SCAL -DS2DOT=D2DOT -DSCOPY=DCOPY -DS2COPY=D2COPY
-
-CPP = /lib/cpp 
-CPP4OPTS = -P -I${SRCDIR} ${EQUIV4} -ffreestanding
-CPP5OPTS = -P -I${SRCDIR} ${EQUIV5} -ffreestanding
-SED = sed s:\#PREC\#:d:g
-LINK_MOD = yes
+CPP = /lib/cpp -ffreestanding
 
 FC = gfortran
-ifdef SOLPS_DEBUG
-FCOPTS = -g -fbounds-check -fbacktrace -fdefault-real-8 -ffpe-trap=denormal -ffpe-trap=invalid -ffpe-trap=zero -ftrapv -fsignaling-nans
-else
-FCOPTS = -O3 -v -ff90
+ifndef SOLPS_DEBUG
+FCOPTS = -v -ff90
 endif
-
-DBLFC = ${FC}
-DBLOPTION =
-DBLSED = sed -e s:\#PREC\#:d:g
-
-INCMOD = -I
-MOD = mod
-OBJDEST = -J${OBJDIR}
-
-BLD = ar rcv
-
-GRLIBES = ${LD_NCARG}
-LDLIBES = ${LD_NAG} ${LD_NETCDF} ${LD_MSCL}
-
-LD = gfortran
-LDOPTS = 
- 
-LCPP = ${LD_SONNET}
 
 #!!!Local Variables:
 #!!! mode: Makefile

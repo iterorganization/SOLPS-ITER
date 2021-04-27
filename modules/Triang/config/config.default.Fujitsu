@@ -10,9 +10,8 @@ ifndef LD_GKS
   $(error LD_GKS not defined)
 endif
 
-#DEFINES  = ${SOLPS_CPP} ${EIRENE_DEFINES} -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
-#DEFINES  = ${SOLPS_CPP} ${EIRENE_DEFINES} -DTRIANG -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
-DEFINES   =
+#DEFINES += ${SOLPS_CPP} ${EIRENE_DEFINES} -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
+#DEFINES += ${SOLPS_CPP} ${EIRENE_DEFINES} -DTRIANG -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
 EQUIVS    =
 
 #CPP      = -/lib/cpp -C -traditional
@@ -26,7 +25,6 @@ FC        = f95f -v 6.2d
 FCOPTS    = -Am -X9 -fw -O -Ad
 ifdef SOLPS_DEBUG
 FCOPTS    = -g -Am -X9 -Hasu --trace
-DEFINES  += -DDBG
 else
 FCOPTS    = -O -fw -Am -X9 -Kfast,eval
 endif
@@ -48,7 +46,7 @@ OBJDEST   = -o ${OBJDIR}/$*.o
 
 BLD       = ar rcv
 
-LD        = f95f -v 6.2d
+LD        = ${FC}
 
 #!!!Local Variables:
 #!!! mode: Makefile

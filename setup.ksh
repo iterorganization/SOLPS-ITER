@@ -2,31 +2,38 @@
 
 echo Welcome to SOLPS-ITER!
 echo Documentation can be found at:
-echo https://portal.iter.org/departments/POP/CM/IMAS/SOLPS-ITER
+echo https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER
 echo and
 echo https://user.iter.org/\?uid=Q92BAQ
 echo "(both require a valid ITER IDM account)"
 echo The full SOLPS-ITER manual can be found in \$SOLPSTOP/doc/solps/solps.pdf
 echo The Eirene manual is located at http://www.eirene.de/
 
-export SOLPSTOP=$PWD
+export LAST_COMMAND=`echo $_`
+[ $LAST_COMMAND = "" ] && {
+  export SETUP_FILE=`echo ${LAST_COMMAND} | cut -d " " -f 2`
+  export REAL_FILE=`eval echo ${SETUP_FILE}`
+  export REAL_PATH=`dirname ${REAL_FILE}`
+  export SOLPSTOP=`cd ${REAL_PATH}; pwd -L`
+} || {
+  export SOLPSTOP=$PWD
+}
 export SOLPSWORK=$SOLPSTOP/runs
 
 
-# Set HOST_NAME and COMPILER, which will determine setup-files to be used
+# Set HOST_NAME and COMPILER, which will determine setup files to be used
 #------------------------------------------------------------------------
 
-[ -s whereami ] && {
-  iamat=`./whereami|tail -1`
-  echo Running at $iamat
+[ -s ${SOLPSTOP}/SETUP/setup.ksh.HOST_NAME.local ] && {
+  echo Loading SETUP/setup.ksh.HOST_NAME.local.
+  . ${SOLPSTOP}/SETUP/setup.ksh.HOST_NAME.local
 } || {
-  iamat="UNKNOWN"
-}
-
-[ -s SETUP/setup.ksh.HOST_NAME.local ] && {
-  echo Loading SETUP/setup.ksh.HOST_NAME.local
-  export HOST_NAME=`cat SETUP/setup.csh.HOST_NAME.local`
-} || {
+  [ -s ${SOLPSTOP}/whereami ] && {
+    iamat=`${SOLPSTOP}/whereami|tail -1`
+    echo Running at $iamat
+  } || {
+    iamat="UNKNOWN"
+  }
   case $iamat in
   *UNKNOWN )
     export HOST_NAME=UNKNOWN
@@ -39,8 +46,8 @@ export SOLPSWORK=$SOLPSTOP/runs
 
 # COMPILER can also be the argument to setup.csh call
 [ "$1" = "" ] && {
-  [ -s default_compiler ] && {
-    export COMPILER=`./default_compiler|tail -1`
+  [ -s ${SOLPSTOP}/default_compiler ] && {
+    export COMPILER=`${SOLPSTOP}/default_compiler|tail -1`
     echo Using compiler $COMPILER.
   } || {
     export COMPILER=ifort64
@@ -57,23 +64,16 @@ export SOLPSWORK=$SOLPSTOP/runs
   export MAKE=`which make`
 }
 
-[ -z "$PYTHONPATH" ] && {
-  export PYTHONPATH="$SOLPSTOP/lib/python"
-} || {
-  export PYTHONPATH="${PYTHONPATH}:$SOLPSTOP/lib/python"
-}
-export SOLPSLIB=${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}
-
 # setup files for combination of HOST_NAME and COMPILER, + local modifications if present
-[ -s SETUP/setup.ksh.${HOST_NAME}.${COMPILER} ] && {
+[ -s ${SOLPSTOP}/SETUP/setup.ksh.${HOST_NAME}.${COMPILER} ] && {
   echo Loading SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.
-  . SETUP/setup.ksh.${HOST_NAME}.${COMPILER}
+  . ${SOLPSTOP}/SETUP/setup.ksh.${HOST_NAME}.${COMPILER}
 } || {
   echo File SETUP/setup.ksh.${HOST_NAME}.${COMPILER} not found!
 }
-[ -s SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.local ] && {
+[ -s ${SOLPSTOP}/SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.local ] && {
   echo Loading SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.local.
-  . SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.local
+  . ${SOLPSTOP}/SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.local
 }
 
 ulimit -s unlimited
@@ -105,18 +105,41 @@ B25_PATH=${SOLPSTOP}/modules/B2.5/builds/standalone.${TOOLCHAIN}
 B25EIRENE_PATH=${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${TOOLCHAIN}
 UINP_PATH=${SOLPSTOP}/modules/Uinp/builds/${TOOLCHAIN}
 TRIANG_PATH=${SOLPSTOP}/modules/Triang/builds/${TOOLCHAIN}
-SCRIPTS_PATH=${SOLPSTOP}/scripts.local:${SOLPSTOP}/scripts:${SOLPSTOP}/scripts/${TOOLCHAIN}:${SOLPSTOP}/modules/Eirene/scripts:${SOLPSTOP}/modules/B2.5/src/test
+SCRIPTS_PATH=${SOLPSTOP}/scripts.local:${SOLPSTOP}/scripts:${SOLPSTOP}/scripts/${TOOLCHAIN}:${SOLPSTOP}/modules/Eirene/scripts:${SOLPSTOP}/modules/Eirene/scripts/eirenex_v1.0.4:${SOLPSTOP}/modules/B2.5/src/test
 AMDS_PATH=${SOLPSTOP}/modules/amds/builds/${TOOLCHAIN}
 S45_PATH=${SOLPSTOP}/modules/solps4-5/builds/${TOOLCHAIN}
 
-# Note: in case of name-clash between script and executable, script will be found first
+# Create mirror scripts directories
+[ -d ${SOLPSTOP}/scripts/${TOOLCHAIN}.mpi ] && rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.mpi
+[ -d ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp ] && rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp
+[ -d ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.mpi ] && rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.mpi
+[ -d ${SOLPSTOP}/scripts/${TOOLCHAIN}.debug ] && rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.debug
+[ -d ${SOLPSTOP}/scripts/${TOOLCHAIN}.mpi.debug ] && rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.mpi.debug
+[ -d ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.debug ] && rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.debug
+[ -d ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.mpi.debug ] && rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.mpi.debug
+ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.mpi
+ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp
+ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.mpi
+ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.debug
+ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.mpi.debug
+ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.debug
+ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.mpi.debug
+
+# Note: in case of name clash between script and executable, script will be found first
 export SOLPS_PATH=${SCRIPTS_PATH}:${CARRE_PATH}:${DIVGEO_PATH}:${B25EIRENE_PATH}:${EIRENE_PATH}:${B25_PATH}:${UINP_PATH}:${TRIANG_PATH}:${AMDS_PATH}:${S45_PATH}
+export SOLPSLIB=${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}
 export OLD_PATH=${PATH}
 export PATH=${SOLPS_PATH}:${PATH}
 [ -n "$LD_LIBRARY_PATH" ] && {
   export LD_LIBRARY_PATH=${SOLPSLIB}:${SOLPSTOP}/lib/python:${LD_LIBRARY_PATH}
 } || {
   export LD_LIBRARY_PATH=${SOLPSLIB}:${SOLPSTOP}/lib/python
+}
+
+[ -z "$PYTHONPATH" ] && {
+  export PYTHONPATH="$SOLPSTOP/lib/python:${SCRIPTS_PATH}"
+} || {
+  export PYTHONPATH="${PYTHONPATH}:$SOLPSTOP/lib/python:${SCRIPTS_PATH}"
 }
 [ -z "$PYTHON_PATH" ] || {
   export PYTHONPATH="${PYTHONPATH}:${PYTHON_PATH}"
@@ -213,19 +236,21 @@ alias unset_mpi='. $SOLPSTOP/SETUP/nompi'
 alias set_ig='. $SOLPSTOP/SETUP/ig'
 alias unset_ig='. $SOLPSTOP/SETUP/noig'
 
+# Check if Motif library is present
+
+[ -e `which mwm` ] || {
+  export NO_MOTIF=1
+}
+[ -n "$NO_MOTIF" ] && {
+  [ `whereis libXm | wc -w` != 1 ] && unset NO_MOTIF
+}
+[ -n "$NO_MOTIF" ] && {
+  [ `ldconfig -p | grep 'libXm\.' | wc -l` != 0 ] && unset NO_MOTIF
+}
+
 # Add any local settings if present
-[ -s SETUP/setup.ksh.local ] && {
-   echo "Loading SETUP/setup.ksh.local" 
-   source SETUP/setup.ksh.local
+[ -s ${SOLPSTOP}/SETUP/setup.ksh.local ] && {
+   echo "Loading SETUP/setup.ksh.local"
+   source ${SOLPSTOP}/SETUP/setup.ksh.local
 }
 
-# Add links to the IMAS solps-iter database
-
-[ -n "$IMAS_VERSION" ] && {
-  source scripts/imasdb_solps-iter
-  module list
-}
-
-# List loaded modules
-
-[ -e module ] && module list

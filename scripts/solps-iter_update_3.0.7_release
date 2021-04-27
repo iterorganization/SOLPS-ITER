@@ -1,7 +1,7 @@
 #! /usr/bin/env tcsh
 
 cd $SOLPSTOP
-echo "Switching to SOLPS-ITER develop branch"
+echo "Switching to SOLPS-ITER release/3.0.7 branch"
 git fetch --prune
 git checkout release/3.0.7 && echo "Checked out SOLPS-ITER 3.0.7 release branch" || goto branch
 git pull && goto b25 || goto local
@@ -73,7 +73,7 @@ compile:
   ${MAKE} listobj listobj_debug
   ${MAKE} depend depend_debug
   ${MAKE} tags
-  ${MAKE} solps
+  ${MAKE} solps MAKE_OPTIONS=-j8
 
 
 

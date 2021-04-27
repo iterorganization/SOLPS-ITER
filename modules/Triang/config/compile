@@ -1,19 +1,23 @@
 #  VERSION : 12.09.2004 20:53
 
 include config/config.${HOST_NAME}.${COMPILER}
+ifeq ($(shell [ -e config/config.common.${COMPILER} ] && echo yes || echo no ),yes)
+include config/config.common.${COMPILER}
+MAKES += config/config.common.${COMPILER}
+endif
 
 ${OBJDIR}/%.o : %.f
 	@-# echo ==== object: $*
 	@- /bin/rm -f ${OBJDIR}/$*.o ${OBJDIR}/$*.${MOD}
 ifeq ($(strip $(CPP)),)
-	${FC} ${FCOPTS} ${DEFINES} ${EQUIVS} ${INCLUDE} ${OBJDEST} -c $<
+	${FC} ${FCOPTS} ${FFLAGSEXTRA} ${DEFINES} ${EQUIVS} ${INCLUDE} ${OBJDEST} -c $<
 else
 ifeq ($(strip $(SED)),)
 	-${CPP} ${DEFINES} ${EQUIVS} -P ${INCLUDE} $< ${OBJDIR}/$*.f
 else
 	-${CPP} ${DEFINES} ${EQUIVS} -P ${INCLUDE} $< | ${SED} > ${OBJDIR}/$*.f
 endif
-	${FC} ${FCOPTS} ${INCLUDE} ${OBJDEST} -c ${OBJDIR}/$*.f
+	${FC} ${FCOPTS} ${FFLAGSEXTRA} ${INCLUDE} ${OBJDEST} -c ${OBJDIR}/$*.f
 endif
 	@if [ -f $*.o ] ; then /bin/mv $*.o ${OBJDIR}/ ; fi
 	@if [ -f $*.${MOD} ] ; then /bin/mv $*.${MOD} ${OBJDIR}/ ; fi
@@ -22,32 +26,62 @@ ${OBJDIR}/%.o : %.F
 	@-# echo ==== object: $*
 	@- /bin/rm -f ${OBJDIR}/$*.o ${OBJDIR}/$*.${MOD}
 ifeq ($(strip $(CPP)),)
-	${FC} ${FCOPTS} ${DEFINES} ${EQUIVS} ${INCLUDE} ${OBJDEST} -c $<
+	${FC} ${FCOPTS} ${FFLAGSEXTRA} ${DEFINES} ${EQUIVS} ${INCLUDE} ${OBJDEST} -c $<
 else
 ifeq ($(strip $(SED)),)
 	-${CPP} ${DEFINES} ${EQUIVS} -P ${INCLUDE} $< ${OBJDIR}/$*.f
 else
 	-${CPP} ${DEFINES} ${EQUIVS} -P ${INCLUDE} $< | ${SED} > ${OBJDIR}/$*.f
 endif
-	${FC} ${FCOPTS} ${INCLUDE} ${OBJDEST} -c ${OBJDIR}/$*.f
+	${FC} ${FCOPTS} ${FFLAGSEXTRA} ${INCLUDE} ${OBJDEST} -c ${OBJDIR}/$*.f
 endif
 	@if [ -f $*.o ] ; then /bin/mv $*.o ${OBJDIR}/ ; fi
 	@if [ -f $*.${MOD} ] ; then /bin/mv $*.${MOD} ${OBJDIR}/ ; fi
 
+${OBJDIR}/%.o : %.F90
+	@-# echo ==== object: $*
+	@- /bin/rm -f ${OBJDIR}/$*.o ${OBJDIR}/$*.${MOD}
+ifeq ($(strip $(CPP)),)
+	${FC} ${FCOPTS} ${FFLAGSEXTRA} ${DEFINES} ${EQUIVS} ${INCLUDE} ${OBJDEST} -c $<
+else
+ifeq ($(strip $(SED)),)
+	-${CPP} ${DEFINES} ${EQUIVS} -P ${INCLUDE} $< ${OBJDIR}/$*.f90
+else
+	-${CPP} ${DEFINES} ${EQUIVS} -P ${INCLUDE} $< | ${SED} > ${OBJDIR}/$*.f90
+endif
+	${FC} ${FCOPTS} ${FFLAGSEXTRA} ${INCLUDE} ${OBJDEST} -c ${OBJDIR}/$*.f90
+endif
+	@if [ -f $*.o ] ; then /bin/mv $*.o ${OBJDIR}/ ; fi
+	@if [ -f $*.${MOD} ] ; then /bin/mv $*.${MOD} ${OBJDIR}/ ; fi
+
+${OBJDIR}/%.o : %.f90
+	@-# echo ==== object: $*
+	@- /bin/rm -f ${OBJDIR}/$*.o ${OBJDIR}/$*.${MOD}
+ifeq ($(strip $(CPP)),)
+	${FC} ${FCOPTS} ${FFLAGSEXTRA} ${DEFINES} ${EQUIVS} ${INCLUDE} ${OBJDEST} -c $<
+else
+ifeq ($(strip $(SED)),)
+	-${CPP} ${DEFINES} ${EQUIVS} -P ${INCLUDE} $< ${OBJDIR}/$*.f90
+else
+	-${CPP} ${DEFINES} ${EQUIVS} -P ${INCLUDE} $< | ${SED} > ${OBJDIR}/$*.f90
+endif
+	${FC} ${FCOPTS} ${FFLAGSEXTRA} ${INCLUDE} ${OBJDEST} -c ${OBJDIR}/$*.f90
+endif
+	@if [ -f $*.o ] ; then /bin/mv $*.o ${OBJDIR}/ ; fi
 
 ifneq (${MOD},o)
 ${OBJDIR}/%.${MOD} : %.f
 	@-# echo ==== object: $*
 	@- /bin/rm -f ${OBJDIR}/$*.o ${OBJDIR}/$*.${MOD}
 ifeq ($(strip $(CPP)),)
-	${FC} ${FCOPTS} ${DEFINES} ${EQUIVS} ${INCLUDE} ${OBJDEST} -c $<
+	${FC} ${FCOPTS} ${FFLAGSEXTRA} ${DEFINES} ${EQUIVS} ${INCLUDE} ${OBJDEST} -c $<
 else
 ifeq ($(strip $(SED)),)
 	-${CPP} ${DEFINES} ${EQUIVS} -P ${INCLUDE} $< ${OBJDIR}/$*.f
 else
 	-${CPP} ${DEFINES} ${EQUIVS} -P ${INCLUDE} $< | ${SED} > ${OBJDIR}/$*.f
 endif
-	${FC} ${FCOPTS} ${INCLUDE} ${OBJDEST} -c ${OBJDIR}/$*.f
+	${FC} ${FCOPTS} ${FFLAGSEXTRA} ${INCLUDE} ${OBJDEST} -c ${OBJDIR}/$*.f
 endif
 	@if [ -f $*.o ] ; then /bin/mv $*.o ${OBJDIR}/ ; fi
 	@if [ -f $*.${MOD} ] ; then /bin/mv $*.${MOD} ${OBJDIR}/ ; fi
@@ -56,14 +90,46 @@ ${OBJDIR}/%.${MOD} : %.F
 	@-# echo ==== object: $*
 	@- /bin/rm -f ${OBJDIR}/$*.o ${OBJDIR}/$*.${MOD}
 ifeq ($(strip $(CPP)),)
-	${FC} ${FCOPTS} ${DEFINES} ${EQUIVS} ${INCLUDE} ${OBJDEST} -c $<
+	${FC} ${FCOPTS} ${FFLAGSEXTRA} ${DEFINES} ${EQUIVS} ${INCLUDE} ${OBJDEST} -c $<
 else
 ifeq ($(strip $(SED)),)
 	-${CPP} ${DEFINES} ${EQUIVS} -P ${INCLUDE} $< ${OBJDIR}/$*.f
 else
 	-${CPP} ${DEFINES} ${EQUIVS} -P ${INCLUDE} $< | ${SED} > ${OBJDIR}/$*.f
 endif
-	${FC} ${FCOPTS} ${INCLUDE} ${OBJDEST} -c ${OBJDIR}/$*.f
+	${FC} ${FCOPTS} ${FFLAGSEXTRA} ${INCLUDE} ${OBJDEST} -c ${OBJDIR}/$*.f
+endif
+	@if [ -f $*.o ] ; then /bin/mv $*.o ${OBJDIR}/ ; fi
+	@if [ -f $*.${MOD} ] ; then /bin/mv $*.${MOD} ${OBJDIR}/ ; fi
+
+${OBJDIR}/%.${MOD} : %.f90
+	@-# echo ==== object: $*
+	@- /bin/rm -f ${OBJDIR}/$*.o ${OBJDIR}/$*.${MOD}
+ifeq ($(strip $(CPP)),)
+	${FC} ${FCOPTS} ${FFLAGSEXTRA} ${DEFINES} ${EQUIVS} ${INCLUDE} ${OBJDEST} -c $<
+else
+ifeq ($(strip $(SED)),)
+	-${CPP} ${DEFINES} ${EQUIVS} -P ${INCLUDE} $< ${OBJDIR}/$*.f90
+else
+	-${CPP} ${DEFINES} ${EQUIVS} -P ${INCLUDE} $< | ${SED} > ${OBJDIR}/$*.f90
+endif
+	${FC} ${FCOPTS} ${FFLAGSEXTRA} ${INCLUDE} ${OBJDEST} -c ${OBJDIR}/$*.f90
+endif
+	@if [ -f $*.o ] ; then /bin/mv $*.o ${OBJDIR}/ ; fi
+	@if [ -f $*.${MOD} ] ; then /bin/mv $*.${MOD} ${OBJDIR}/ ; fi
+
+${OBJDIR}/%.${MOD} : %.F90
+	@-# echo ==== object: $*
+	@- /bin/rm -f ${OBJDIR}/$*.o ${OBJDIR}/$*.${MOD}
+ifeq ($(strip $(CPP)),)
+	${FC} ${FCOPTS} ${FFLAGSEXTRA} ${DEFINES} ${EQUIVS} ${INCLUDE} ${OBJDEST} -c $<
+else
+ifeq ($(strip $(SED)),)
+	-${CPP} ${DEFINES} ${EQUIVS} -P ${INCLUDE} $< ${OBJDIR}/$*.f90
+else
+	-${CPP} ${DEFINES} ${EQUIVS} -P ${INCLUDE} $< | ${SED} > ${OBJDIR}/$*.f90
+endif
+	${FC} ${FCOPTS} ${FFLAGSEXTRA} ${INCLUDE} ${OBJDEST} -c ${OBJDIR}/$*.f90
 endif
 	@if [ -f $*.o ] ; then /bin/mv $*.o ${OBJDIR}/ ; fi
 	@if [ -f $*.${MOD} ] ; then /bin/mv $*.${MOD} ${OBJDIR}/ ; fi

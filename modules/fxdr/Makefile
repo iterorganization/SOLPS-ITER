@@ -19,8 +19,15 @@ ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER} ] && echo y
 else
   $(warning ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER} not found.)
 endif
+ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.common.${COMPILER} ] && echo yes || echo no ),yes)
+  include ${SOLPSTOP}/SETUP/config.common.${COMPILER}
+  MAKES += ${SOLPSTOP}/SETUP/config.common.${COMPILER}
+endif
 else
   MAKES += ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER} ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
+ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.common.${COMPILER} ] && echo yes || echo no ),yes)
+  MAKES += ${SOLPSTOP}/SETUP/config.common.${COMPILER}
+endif
 endif
 ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local ] && echo yes || echo no ),yes)
   MAKES += ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
@@ -45,12 +52,12 @@ DEST = $(OBJS:%.o=$(OBJDIR)/%.o)
 
 $(OBJDIR)/%.o : %.F
 	${CPP} -P $(INCLUDE) $< ${OBJDIR}/$*.f
-	$(COMPILE) -o ${OBJDIR}/$*.o ${OBJDIR}/$*.f
+	$(COMPILE) ${FFLAGSEXTRA} -o ${OBJDIR}/$*.o ${OBJDIR}/$*.f
 
 all: dirs ${OBJDIR}/fxdr
 
 ${OBJDIR}/fxdr: $(DEST) $(MAKES)
-	${FC} $(FFLAGS) -o ${OBJDIR}/fxdr $(DEST) ${LDLIBS} $(LDEXTRA)
+	${FC} $(FFLAGS) ${FFLAGSEXTRA} -o ${OBJDIR}/fxdr $(DEST) ${LDLIBS} $(LDEXTRA)
 
 clean:
 	rm -rf ${OBJDIR}/*.o ${OBJDIR}/*.f ${OBJDIR}/fxdr

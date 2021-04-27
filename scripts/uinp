@@ -6,6 +6,19 @@ solpstop=`climb_and_look_for SOLPSTOP`
 [ -s $solpstop ] && {
   SOLPSTOP="`cat $solpstop`"
 }
+TOOLCHAIN=${HOST_NAME}.${COMPILER}
+[ -z $SOLPS_OPENMP ] || {
+  TOOLCHAIN=${TOOLCHAIN}.openmp
+}
+[ -z $SOLPS_MPI ] || {
+  TOOLCHAIN=${TOOLCHAIN}.mpi
+}
+[ -z $USE_IMPGYRO ] || {
+  TOOLCHAIN=${TOOLCHAIN}.ig
+}
+[ -z $SOLPS_DEBUG ] || {
+  TOOLCHAIN=${TOOLCHAIN}.debug
+}
 
 while true; do {
   [ "$1" = '' ] && break
@@ -44,7 +57,8 @@ location="$SOLPSTOP/"
 }
 
 grep '^# topo ' uinput.trg > /dev/null && {
-  uinp.exe
+  ${SOLPSTOP}/modules/Uinp/builds/${TOOLCHAIN}/uinp.exe
+  ${SOLPSTOP}/modules/Uinp/builds/${TOOLCHAIN}/ub2p
   true
 } || {
 # Old-style DG output: apply the old uinp

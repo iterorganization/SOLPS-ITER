@@ -2,8 +2,7 @@
       use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
-      use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use eirmod_solps
 c
 c  version : 01.04.2005 00:25
 c
@@ -21,7 +20,8 @@ c=======================================================================
      ,  trcsrc_b,trcsur_b,trcoct_b,trccen_b,trcrnf_b,trchktim_b,
      ,  trcdbg2_b,trcdbge_b,trcdbgm_b,trcdbgf_b,trcdbgl_b,
      ,  trcdbgs_b,trcdbgg_b,trcdbgmpi_b,trcdbgc_b,
-     ,  pl1st_b,pl2nd_b,pladd_b,plhst_b,plcut_b(3),plnums_b,nltest_b
+     ,  pl1st_b,pl2nd_b,pladd_b,plhst_b,plcut_b(3),plnums_b,nltest_b,
+     ,  plspec_b,prspec_b,plargl_b,prargl_b
       save
 c=======================================================================
       if(lc) then !{
@@ -56,6 +56,7 @@ c=======================================================================
         trcoct_b=trcoct
         trccen_b=trccen
         trcrnf_b=trcrnf
+        trchktim_b=trchktim
         trcdbg2_b=trcdbg2
         trcdbge_b=trcdbge
         trcdbgm_b=trcdbgm
@@ -65,7 +66,6 @@ c=======================================================================
         trcdbgg_b=trcdbgg
         trcdbgmpi_b=trcdbgmpi
         trcdbgc_b=trcdbgc
-        trchktim_b=trchktim
         trcsrc_b=trcsrc(0)
         pl1st_b=pl1st
         pl2nd_b=pl2nd
@@ -74,6 +74,10 @@ c=======================================================================
         plcut_b(1:3)=plcut(1:3)
         plnums_b=plnums
         nltest_b=nltest
+        plspec_b=plspec
+        prspec_b=prspec
+        plargl_b=plargl
+        prargl_b=prargl
 
         ntcpu=ttntcpu
         nfile=ttnfile
@@ -112,6 +116,7 @@ c=======================================================================
         trcoct=ttcoct
         trccen=ttccen
         trcrnf=ttcrnf
+        trchktim=ttchktim
         trcdbg2=ttcdbg2
         trcdbge=ttcdbge
         trcdbgm=ttcdbgm
@@ -121,7 +126,6 @@ c=======================================================================
         trcdbgg=ttcdbgg
         trcdbgmpi=ttcdbgmpi
         trcdbgc=ttcdbgc
-        trchktim=ttchktim
         trcsrc(0)=ttcsrc
         pl1st=ttpl1st
         pl2nd=ttpl2nd
@@ -130,6 +134,10 @@ c=======================================================================
         plcut(1:3)=ttplcut(1:3)
         plnums=ttplnums
         nltest=tttest
+        plspec=ttplspec
+        prspec=ttprspec
+        plargl=ttplargl
+        prargl=ttprargl
 
 c*** Set the VSP data for test.eir
 
@@ -174,6 +182,7 @@ c*** Set the VSP data for test.eir
         trcoct=trcoct_b
         trccen=trccen_b
         trcrnf=trcrnf_b
+        trchktim=trchktim_b
         trcdbg2=trcdbg2_b
         trcdbge=trcdbge_b
         trcdbgm=trcdbgm_b
@@ -183,7 +192,6 @@ c*** Set the VSP data for test.eir
         trcdbgg=trcdbgg_b
         trcdbgmpi=trcdbgmpi_b
         trcdbgc=trcdbgc_b
-        trchktim=trchktim_b
         trcsrc(0)=trcsrc_b
         pl1st=pl1st_b
         pl2nd=pl2nd_b
@@ -192,6 +200,10 @@ c*** Set the VSP data for test.eir
         plcut(1:3)=plcut_b(1:3)
         plnums=plnums_b
         nltest=nltest_b
+        plspec=plspec_b
+        prspec=prspec_b
+        plargl=plargl_b
+        prargl=prargl_b
       end if !}
 c=======================================================================
       end

@@ -4,9 +4,20 @@ if($?GNUPLOT_TMP) then
 else
     set tmpdir=""
 endif
+set style=`pipe_run.log | grep -a 'i,respo' | wc -l`
 setenv PLOT_FROM_FILE "gnuplot.temp"
+if ($style == 0) then
+# Current default behaviour: Output from YSMP solver
 pipe_run.log | \
-  grep -a i,respo | \
+  grep -a 'respo ' | \
+  awk '{print NR,$4}' | \
+  resopt $argv >! ${tmpdir}PLOT_FROM_FILE
+  plot xlyplot respo iter V $PWD
+else
+# Old behaviour : Output from MA28 solver
+pipe_run.log | \
+  grep -a 'i,respo ' | \
   awk '{print NR,$3}' | \
   resopt $argv >! ${tmpdir}PLOT_FROM_FILE
   plot xlyplot respo iter V $PWD
+endif

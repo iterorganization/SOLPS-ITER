@@ -1,4 +1,4 @@
-#! /usr/bin/csh -f
+#! /bin/csh -f
 if (-s b2mn.exe.dir/b2ftrace) then
   set FILE=b2mn.exe.dir/b2ftrace
 else

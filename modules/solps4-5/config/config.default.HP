@@ -32,7 +32,7 @@
  ifeq ($(realkind),8)
   LDLIBES = $(LIBB2) $(LAPACK) $(LD_NAG) $(LD_MSCL)
  endif
- LD = fort77
+ LD = ${FC}
  LDOPTS = $(nil)
 
  LCPP = ${LD_SONNET}

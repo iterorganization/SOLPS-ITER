@@ -2,7 +2,7 @@
 
 c  version : 10.12.2002 23:30
 
-c*** This function returns a free LUN for i/o in the range from l0 to l1
+c*** This function returns a free LUN for I/O in the range from l0 to l1
 c*** lex contains reserved numbers (nl) to be excluded from search
 
       integer lex(*)
@@ -21,5 +21,6 @@ c*** lex contains reserved numbers (nl) to be excluded from search
         end if !}
       end do !}
       igivelun=-1
+      return
 
-      end
+      end function igivelun

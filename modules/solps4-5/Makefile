@@ -15,8 +15,15 @@ ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER} ] && echo y
 else
   $(warning ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER} not found.)
 endif
+ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.common.${COMPILER} ] && echo yes || echo no ),yes)
+  include ${SOLPSTOP}/SETUP/config.common.${COMPILER}
+  MAKES += ${SOLPSTOP}/SETUP/config.common.${COMPILER}
+endif
 else
   MAKES += ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER} ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
+ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.common.${COMPILER} ] && echo yes || echo no ),yes)
+  MAKES += ${SOLPSTOP}/SETUP/config.common.${COMPILER}
+endif
 endif
 ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local ] && echo yes || echo no ),yes)
   MAKES += ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
@@ -30,11 +37,12 @@ endif
 ifdef SOLPS_OPENMP
 EXT_OPENMP = .openmp
 endif
+ifdef USE_IMPGYRO
+EXT_IMPGYRO = .ig
+else
 ifdef SOLPS_MPI
 EXT_MPI = .mpi
 endif
-ifdef USE_IMPGYRO
-EXT_IMPGYRO = .ig
 endif
 ifdef SOLPS_DEBUG
 EXT_DEBUG = .debug
@@ -69,9 +77,11 @@ INCLUDE += -I${SRC5LOCAL}
 TAGSLIST += ${SRC5LOCAL}/*.F
 VPATH += ${SRC5LOCAL}:
 endif
+ifeq ($(shell [ -d ${SOLPS4}/src/Braams/b2/include.local ] && echo yes || echo no ),yes)
 ifeq ($(shell [ -d ${INC4LOCAL} ] && echo yes || echo no ),yes)
 INCLUDE += -I${INC4LOCAL}
 TAGSLIST += ${INC4LOCAL}/*.h
+endif
 endif
 ifeq ($(shell [ -d ${INC5LOCAL} ] && echo yes || echo no ),yes)
 INCLUDE += -I${INC5LOCAL}
@@ -89,6 +99,9 @@ VPATH += ${EIRMLOCAL}:
 endif
 ifdef MDSPLUS_DIR
 INCLUDE += -I${MDSPLUS_DIR}/include
+endif
+ifdef NCDIR
+INCLUDE += -I${NCDIR}/include
 endif
 INCLUDE += -I${SRCDIR}/B2.5_include -I${SRCDIR}/B2.5_commons -I${SRCDIR}/B2_include -I${SRCDIR}/Eirene_commons
 TAGSLIST += ${SRCDIR}/*_commons/*.[hH] ${SRCDIR}/*/*.F ${SRCDIR}/*.F
@@ -135,9 +148,10 @@ endif
 ifeq ($(shell [ -d ${SRC5LOCAL} ] && echo yes || echo no ),yes)
 FFLIST  += ${shell echo ${SRC5LOCAL}/*.F}
 endif
-MODLIST = ${shell echo ${SRCDIR}/B2.5_modules/*.F ${SRCDIR}/b2_4to5.F ${SRCDIR}/B2.5_modules/*.F90 ${SRCDIR}/solps5/*.F90}
+MODLIST = ${shell echo ${SRCDIR}/B2.5_modules/*.F ${SRCDIR}/b2_4to5.F ${SRCDIR}/B2.5_modules/*.F90 ${SRCDIR}/solps5/*.F90 ${SRCDIR}/solps5/b2mod_*.F}
 
-EXCLUDELIST = ${patsubst %.exe, %.o, ${PROG_XR}}
+EXELIST = ${patsubst %.exe, %.o, ${PROG_XR}}
+EXCLUDELIST = ${patsubst %.o, %\\.o, ${EXELIST}}
 XREXE = ${patsubst %.exe, ${OBJDIR}/%.exe, ${PROG_XR}}
 XROBJ = ${patsubst %.exe, ${OBJDIR}/%.o, ${PROG_XR}}
 
@@ -349,7 +363,7 @@ ${OBJDIR}/zylpln.o: ${OBJDIR}/ccona.${MOD}
 
 ${OBJDIR}/b2_4to5.o: ${OBJDIR}/eirmod_parmmod.${MOD} ${OBJDIR}/braeir.${MOD} ${OBJDIR}/eirdiag.${MOD}
 
-${OBJDIR}/b2mod_b2_to_astra.o: ${OBJDIR}/eirmod_extrab25.${MOD} 
+${OBJDIR}/b2mod_b2_to_astra.o: ${OBJDIR}/eirmod_extrab25.${MOD} ${OBJDIR}/eirmod_wneutrals.${MOD}
 
 ${OBJDIR}/b2mod_neutrals_namelist.o: ${OBJDIR}/eirmod_parmmod.${MOD} ${OBJDIR}/parmmod.${MOD} ${OBJDIR}/braeir.${MOD} ${OBJDIR}/ceirsrt.${MOD} ${OBJDIR}/eirdiag.${MOD} ${OBJDIR}/eirmod_extrab25.${MOD}
 
@@ -371,8 +385,11 @@ ${OBJDIR}/eirmod_comxs.o:
 ${OBJDIR}/eirmod_ctrig.o:
 	ln -sf ${EIRDIR}/eirmod_ctrig.o ${OBJDIR}
 
-${OBJDIR}/eirmod_extrab25.o: ${OBJDIR}/eirmod_comxs.${MOD}
+${OBJDIR}/eirmod_extrab25.o: ${OBJDIR}/eirmod_comxs.${MOD} ${OBJDIR}/eirmod_wneutrals.${MOD}
 	ln -sf ${EIRDIR}/eirmod_extrab25.o ${OBJDIR}
+
+${OBJDIR}/eirmod_wneutrals.o:
+	ln -sf ${EIRDIR}/eirmod_wneutrals.o ${OBJDIR}
 
 ${OBJDIR}/eirmod_mpi.o: ${OBJDIR}/comprt.${MOD} ${OBJDIR}/precision.${MOD} ${SRCDIR}/Eirene_modules/eirmod_mpi.F90 ${MAKES}
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} ${OBJDEST} -o ${OBJDIR}/eirmod_mpi.o -c ${SRCDIR}/Eirene_modules/eirmod_mpi.F90
@@ -627,8 +644,11 @@ ${OBJDIR}/eirmod_comxs.${MOD}:
 ${OBJDIR}/eirmod_ctrig.${MOD}:
 	ln -sf ${EIRDIR}/eirmod_ctrig.${MOD} ${OBJDIR}
 
-${OBJDIR}/eirmod_extrab25.${MOD}: ${OBJDIR}/eirmod_comxs.${MOD}
+${OBJDIR}/eirmod_extrab25.${MOD}: ${OBJDIR}/eirmod_comxs.${MOD} ${OBJDIR}/eirmod_wneutrals.${MOD}
 	ln -sf ${EIRDIR}/eirmod_extrab25.${MOD} ${OBJDIR}
+
+${OBJDIR}/eirmod_wneutrals.${MOD}:
+	ln -sf ${EIRDIR}/eirmod_wneutrals.${MOD} ${OBJDIR}
 
 ${OBJDIR}/eirmod_parmmod.${MOD}: ${OBJDIR}/parmmod.${MOD}
 	ln -sf ${OBJDIR}/parmmod.${MOD} $@
@@ -956,7 +976,7 @@ ${OBJDIR}/libb2_solps4.a: ${MD4OBJS} ${SB4OBJS} ${SE4OBJS}
 ${OBJDIR}/libb2_solps5.a: ${MD5OBJS} ${SR5OBJS}
 	${BLD} $@ $?
 
-depend: ${BASEDIR}/LISTOBJ ${OBJS:.o=.F} ${EXCLUDELIST:.o=.F}
+depend: ${BASEDIR}/LISTOBJ ${OBJS:.o=.F} ${EXELIST:.o=.F}
 	@`which makedepend` -p'$${OBJDIR}/' ${DEFINES} -f- ${INCLUDE} $^ | \
 	sed 's,^$${OBJDIR}/[^ ][^ ]*/,\$${OBJDIR}/,' | \
         sed 's,: ${SOLPSTOP},: $${SOLPSTOP},' > ${OBJDIR}/dependencies
@@ -995,11 +1015,16 @@ listobj:
 
 links:
 	@[ -L ${SRCDIR}/B2_include.local ] && rm -Rf ${SRCDIR}/B2_include.local || echo > /dev/null
+ifeq ($(shell [ -d ${SOLPS4}/src/Braams/b2/include.local ] && echo yes || echo no ),yes)
 	-mkdir -p ${SRCDIR}/B2_include.local
 	@[ -r `which lndir` ] && lndir ${SOLPS4}/src/Braams/b2/include.local ${SRCDIR}/B2_include.local || ln -sf ${SOLPS4}/src/Braams/b2/include.local/* ${SRCDIR}/B2_include.local/
+endif
 	@[ -L ${SRCDIR}/B2_include ] && rm -Rf ${SRCDIR}/B2_include || echo > /dev/null
 	-mkdir -p ${SRCDIR}/B2_include
 	@[ -r `which lndir` ] && lndir ${SOLPS4}/src/Braams/b2/include ${SRCDIR}/B2_include || ln -sf ${SOLPS4}/src/Braams/b2/include/* ${SRCDIR}/B2_include/
+ifdef LD_NETCDF
+	@rm ${SRCDIR}/B2_include/netcdf.inc
+endif
 	@[ -L ${SRCDIR}/Eirene_modules ] && rm -Rf ${SRCDIR}/Eirene_modules || echo > /dev/null
 	-mkdir -p ${SRCDIR}/Eirene_modules
 	@[ -r `which lndir` ] && lndir ${SOLPS4}/src/Eirene/src/modules ${SRCDIR}/Eirene_modules || ln -sf ${SOLPS4}/src/Eirene/src/modules/* ${SRCDIR}/Eirene_modules/

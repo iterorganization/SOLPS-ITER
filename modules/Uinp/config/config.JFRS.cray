@@ -1,0 +1,23 @@
+#  VERSION : 28.07.99 20:34
+
+# Test whether necessary variables are defined
+LD_MSCL ?= -L/opt/gcc/8.3.0/snos/lib64 -lgfortran -L${SOLPSLIB} -lmscl
+
+FC       = ftn
+FFLAGS   = -e0 -ez -ef
+ifdef SOLPS_DEBUG
+FFLAGS  += -g -O0 -G0 -Rb -K trap=fp -K trap=divz
+endif
+
+INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
+COMPILE  = ${FC} -c ${FFLAGS}
+CPP      = /lib/cpp -traditional
+
+MOD      = mod
+LDLIBS   = ${LD_MSCL}
+LDEXTRA  =
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+

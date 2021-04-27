@@ -25,6 +25,14 @@ set pr2fix=`echo $field | cut -c2`
 set suffix=`echo $field | cut -c5-`
 set suf2ix=`echo $field | cut -c5`
 which nc2text > /dev/null && set no_nc2text=0 || set no_nc2text=1
+if (-e b2mn.exe.dir/.netcdf4) then
+  ln -sf $file ${tmpdir}b2time.nc.tmp
+  set file=${tmpdir}b2time.nc.tmp
+  gtfl $file
+  set netcdf4=1
+else
+  set netcdf4=0
+endif
 echo '$' DATA=CONTOUR >! $tfilename
 set dsf2le=b2mn.exe.dir/ds$suf2ix
 if (! -s $dsf2le) set dsf2le=ds$suf2ix
@@ -32,15 +40,15 @@ echo '%' nx = `wc -l < $dsf2le` xgrid=True xlabel=x-xsep>> $tfilename
 cat $dsf2le >> $tfilename
 if ($no_nc2text == 1) then
   echo '%' ny = `ncdump $file -f f -v timesa | awk 'BEGIN {ORS="";} /data:/{found1=1;next;} /timesa/{if (found1==1) {if (found2==1) print $1; else {print $3;found2=1;}}} END {print "\n";}' | sed 's/,/ /g' | sed 's/;//g' | wc -w` ygrid=True ylabel=time >> $tfilename
-  ncdump $file -f f -v timesa | awk 'BEGIN {ORS="";} /data:/{found1=1;next;} /timesa/{if (found1==1) {if (found2==1) print $1; else {print $3;found2=1;}}} END {print "\n";}' | sed 's/,/ /g' | sed 's/;//g' >> $tfilename
+  ncdump $file -f f -v timesa | awk 'BEGIN {ORS="";} /data:/{found1=1;next;} /timesa/{if (found1==1) {if (found2==1) print $1; else {print $3;found2=1;}}} END {print "\n";}' | sed 's/,/ /g' | sed 's/;//g' | awk.transpose >> $tfilename
 else
-  echo '%' ny = `nc2text $file timesa | wc -w`  ygrid=True ylabel=time >> $tfilename
-  nc2text $file timesa >> $tfilename
+  echo '%' ny = `nc2text $file timesa | wc -w` ygrid=True ylabel=time >> $tfilename
+  nc2text $file timesa | awk.transpose >> $tfilename
 endif
 if ($log == "T") then
-  echo '%' contfill = T  equalscale = F logsteps=10 toplabel=$field >> $tfilename
+  echo '%' contfill = T equalscale = F logsteps=10 toplabel=$field >> $tfilename
 else
-  echo '%' contfill = T  equalscale = F nsteps=20 toplabel=$field >> $tfilename
+  echo '%' contfill = T equalscale = F nsteps=20 toplabel=$field >> $tfilename
 endif
 set dsfile=b2mn.exe.dir/ds`echo $suffix | tr 'a-z' 'A-Z'`
 if (! -s $dsfile) set dsfile=ds`echo $suffix | tr 'a-z' 'A-Z'`
@@ -71,3 +79,7 @@ else
 endif
 echo '$' END >> $tfilename
 echo n | plotmtv -colorps -noxplot -o $pfilename $tfilename
+
+if ($netcdf4 == 1) then
+  rm $file
+endif

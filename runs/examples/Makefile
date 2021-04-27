@@ -29,7 +29,7 @@ all : $(ASSETS)
 
 % : %.tar.gz
 	echo $@ $^
-	mkdir $@.tmp ; tar -xmzf $^ -C $@.tmp
+	mkdir $@.tmp ; tar -xhmzf $^ -C $@.tmp
 	[ `echo $@.tmp/* | wc -w` == 1 ] && (mv $@.tmp/$@ . ; rmdir $@.tmp) || ( mv $@.tmp $@)
 
 # If the asset already exist the we don't want to change its timestamp as

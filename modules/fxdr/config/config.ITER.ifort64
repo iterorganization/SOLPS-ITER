@@ -2,22 +2,28 @@
 
 # Test whether necessary variables are defined
 LD_MSCL   ?= `pkg-config mscl --libs`
-LD_SONNET ?= -L../../lib/${HOST_NAME}.${COMPILER} -lsonnet
+LD_SONNET ?= -L${SOLPSLIB} -lsonnet
 
-FC	       = ifort
+FC         = ifort
+
+COMPILER_MAJOR_VERSION = $(shell ${FC} -V 2>&1 | grep -o "Version [0-9]*" | cut -d ' ' -f 2 )
 
 ifdef SOLPS_DEBUG
-FFLAGS	   = -g debug all
+FFLAGS     = -g debug all
 else
-FFLAGS	   = -O -vec_report0
+FFLAGS     = -O
+endif
+
+ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -le 12; echo $$?),0)
+FFLAGS    += -vec_report0
 endif
 
 INCLUDE    = -Isrc
 COMPILE    = ${FC} -c ${FFLAGS}
-CPP	       = /lib/cpp -C -traditional
+CPP        = /lib/cpp -C -traditional
 
-LDLIBS	   = ${LD_SONNET} ${LD_MSCL} -L/usr/local/lib
-LDEXTRA    = 
+LDLIBS     = ${LD_SONNET} ${LD_MSCL} -L/usr/local/lib
+LDEXTRA    =
 
 #!!!Local Variables:
 #!!! mode: Makefile

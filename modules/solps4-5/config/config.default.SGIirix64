@@ -33,7 +33,7 @@
  ifeq ($(realkind),8)
   LDLIBES = $(LIBB2) $(LD_NAG) $(LD_MSCL)
  endif
- LD = f77
+ LD = ${FC}
 # LDOPTS = -64 -r10000 -Wl,-U
  LDOPTS = -64 -r10000
 

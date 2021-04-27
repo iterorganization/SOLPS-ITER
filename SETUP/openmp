@@ -23,6 +23,7 @@ if ($?SOLPS_PATH) then
   setenv   KMP_STACKSIZE 48M
   setenv   KMP_AFFINITY norespect,compact
   unsetenv OLD_SOLPS_PATH
+  rehash
   echo "SOLPS-ITER OpenMP mode turned on"
 else
   echo "SOLPS_PATH not set. Exiting."

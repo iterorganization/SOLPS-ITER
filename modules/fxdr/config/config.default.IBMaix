@@ -10,19 +10,19 @@ ifndef LD_SONNET
   $(error LD_SONNET not defined)
 endif
 
-FC	 = xlf
+FC       = xlf
 
 ifdef SOLPS_DEBUG
-FFLAGS	 = -g
+FFLAGS   = -g
 else
-FFLAGS	 = -O
+FFLAGS   = -O
 endif
 
 INCLUDE  = -Isrc
 COMPILE  = ${FC} -c ${FFLAGS}
-CPP	 = /lib/cpp
+CPP      = /lib/cpp
 
-LDLIBS	 = ${LD_SONNET} ${LD_MSCL} -L/usr/local/lib
+LDLIBS   = ${LD_SONNET} ${LD_MSCL} -L/usr/local/lib
 LDEXTRA  = -bmap:/builds/${HOST_NAME}.${COMPILER}${EXT_DEBUG}/fxdr.map -bloadmap:builds/${HOST_NAME}.${COMPILER}${EXT_DEBUG}/fxdr.lmp
 
 #!!!Local Variables:

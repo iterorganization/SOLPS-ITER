@@ -1,0 +1,9 @@
+#!/usr/bin/env ksh
+run_ok=`b2fstate_OK`
+[ $run_ok == 'yes' ] && {
+return 0
+} ||
+{
+return 1
+}
+

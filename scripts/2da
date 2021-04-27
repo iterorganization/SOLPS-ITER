@@ -17,6 +17,14 @@ else
 endif
 
 which nc2text > /dev/null && set no_nc2text=0 || set no_nc2text=1
+if (-e b2mn.exe.dir/.netcdf4) then
+  ln -sf $source ${tmpdir}b2time.nc.tmp
+  set source=${tmpdir}b2time.nc.tmp
+  gtfl $source
+  set netcdf4=1
+else
+  set netcdf4=0
+endif
 
 /bin/cp /dev/null ${tmpdir}gnuplot.data.tmp
 start:
@@ -25,7 +33,7 @@ start:
     if ($no_nc2text == 1) then
       set check=`ncdump $source -v $1 | sed -n 'x;$p' | sed 's/;//g'`
     else
-      set check=`nc2text -s -n 999999 $source "$1(1)"`
+      set check=`nc2text -n 999999 $source "$1(1)"`
     endif
   else
     set check="1"
@@ -53,3 +61,7 @@ start:
 
 echo "# $args"
 awk.transpose < ${tmpdir}gnuplot.data.tmp
+
+if ($netcdf4 == 1) then
+  rm $source
+endif

@@ -26,12 +26,13 @@ local_5
 LISTOBJ
 TAGS
 linux.*
-g77*/
+g77*
 IBMaix*
 SGIirix*
 sun*
 T3E*
 unicos*
+cray*
 git_version.h
 git_version_*.h
 
@@ -41,6 +42,7 @@ IBMaix*/
 SGIirix*/
 sun*/
 T3E*/
+cray*/
 unicos*/
 !SETUP/linux.*/
 !SETUP/g77/
@@ -48,6 +50,7 @@ unicos*/
 !SETUP/sun*/
 !SETUP/SGIirix*/
 !SETUP/T3E/
+!SETUP/cray/
 !SETUP/unicos/
 
 bin/
@@ -73,6 +76,7 @@ doc/solps/solps-*.svg
 !doc/solps/solps.tex
 doc/solps/b2cdc?.F
 doc/solps/B2_5.config.ITER.ifort64
+doc/solps/B2_5.config.common.ifort64
 doc/solps/B2_5.Makefile
 doc/solps/b2plot.commands
 doc/solps/DIMENSIONS.F
@@ -92,9 +96,10 @@ modules/solps4-5/src/B2_include
 modules/solps4-5/src/Eirene_modules
 
 # Links to scripts build directories
-scripts/*.ifort64*/
-scripts/*.gfortran*/
-scripts/*.pgf90*/
-scripts/*.nag_f90*/
-scripts/*.g95*/
+scripts/*.ifort64*
+scripts/*.gfortran*
+scripts/*.pgf90*
+scripts/*.nag_f90*
+scripts/*.cray*
+scripts/*.g95*
 

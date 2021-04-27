@@ -2,8 +2,8 @@
       use b2mod_elements
       use b2mod_layer
      , , only: ntrack, nalloys
-      use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use b2mod_subsys
+      use eirmod_solps
       implicit none
 
 c  version : 27.12.2004 23:24
@@ -13,10 +13,10 @@ c*** Prepare the particle lists
 c======================================================================
 #include "uinput.inc"
       integer i,ii,iii,j,jj,jjj,k,l,m,mm,n,na,ni,nm,np,ipt
-      integer find_matching_species, get_atomic_number, lnblnk
+      integer find_matching_species, lnblnk
       logical ex,streql
-      external streql, xerrab, subini, subend
-      external find_matching_species, get_atomic_number, lnblnk
+      external streql, xerrab
+      external find_matching_species, lnblnk
       character*8 c,cc,c0*1
       character*20 hlp_frm
 c======================================================================
@@ -46,7 +46,8 @@ c*** the atoms and nuclei
             k=find_matching_species(c)
             if(k.eq.0) then  !{
               write(hlp_frm,'(a,i2,a)') '(a,a8,a,a,',nspdgen,'(a1,a2))'
-              write(*,hlp_frm) 'Generic species "',c,'" undefined. ',
+              write(*,hlp_frm)
+     ,          'Generic species "',trim(c),'" undefined. ',
      ,          'Available non-default species are:',
      ,           (' ',spcdgen(i),i=1,nspdgen-2)
               write(*,*) 'Otherwise should be an element name.'
@@ -163,11 +164,9 @@ c*** the atoms and nuclei
                     lkindm(nm)=ii
                   end if !}
                 end do !}
-                do ii=1,nspcatm !{
+                do ii=1,na !{
                   do jj=1,m_hlp_h !{
-                    if(streql(spcsatm(ii),hlp_h(1,jj,1))) then !{
-                      if (ipt.eq.0) ipt=jj
-                    end if !}
+                    if(streql(spcsatm(ii),hlp_h(1,jj,1))) ipt=jj
                   end do !}
                 end do !}
                 if (ipt.gt.0) then !{
@@ -230,11 +229,9 @@ c*** the atoms and nuclei
                   if(streql(spcsatm(ii),spcdspc(lspdgen(k))))
      >             lkindi(ni)=ii
                 end do !}
-                do ii=1,nspcatm !{
+                do ii=1,na !{
                   do jj=1,m_hlp_h !{
-                    if(streql(spcsatm(ii),hlp_h(1,jj,1))) then !{
-                      if (ipt.eq.0) ipt=jj
-                    end if !}
+                    if(streql(spcsatm(ii),hlp_h(1,jj,1))) ipt=jj
                   end do !}
                 end do !}
                 if (ipt.gt.0) then !{
@@ -366,8 +363,8 @@ c*** the atoms and nuclei
 #endif
             end if  !}
           else  !}{
-            write(*,*) 'A generic species "',c,'" has already been ',
-     ,        'added (skipping it)'
+            write(*,*) 'A generic species "',trim(c),'" ',
+     ,        'has already been added (skipping it)'
           end if  !}
         end if  !}
       end do  !}
@@ -848,4 +845,4 @@ cank        isrsp(l)=spcsrsp(l)
 c======================================================================
       call subend ()
       return
-      end
+      end subroutine uinprppt

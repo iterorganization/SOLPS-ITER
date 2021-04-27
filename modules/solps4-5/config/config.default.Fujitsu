@@ -34,8 +34,7 @@ BLD = ar rcv
 GRLIBES = ${LD_NCARG}
 LDLIBES = ${LD_NETCDF} ${LD_NAG} ${LD_MSCL}
 
-LD = /opt/Fujitsu/bin/f90
-LD = f95f
+LD = ${FC}
 # LDOPTS = -Bstatic
 
 LCPP = ${LD_SONNET}

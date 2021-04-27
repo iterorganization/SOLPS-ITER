@@ -1,5 +1,6 @@
       module b2_4to5
       use b2mod_types
+      use b2mod_subsys
       implicit none
 #     include "DIMENSIONS.F"
 
@@ -128,7 +129,6 @@
 #     include <CBRAEIR.F>
 
       integer is
-      external subini, subend
 
       call subini('b2convp1')
 
@@ -315,7 +315,6 @@ cxpb
 #     include <CCUT.F>
 
       integer is, it, ib, k
-      external subini, subend
 
       call subini('b2convi1')
 
@@ -689,7 +688,7 @@ cxpb
       integer ixl,ixr,ireg
       integer, allocatable :: zone(:)
 
-      external subini, subend, xertst
+      external xertst
       external b2xpne, b2xpni, b2xppb, b2xpfe, b2xpfi, b2agmt
       external init_region
       real (kind=R8) :: rratio
@@ -1410,13 +1409,7 @@ c
       integer nx,ny,ns
       integer is, js, ib, ireg, ireg_4
 
-      real (kind=R8) :: amtol
-      parameter (amtol=1.0e-2_R8)
-      logical lnext
-      lnext(is,js) = zamax(is).lt.zamin(js).and.zn(is).eq.zn(js).and.
-     &  abs(am(is)-am(js)).lt.amtol
-      intrinsic abs
-      external subini, subend, xertst
+      external xertst
 
       call subini('b2convi2')
 
@@ -2122,7 +2115,7 @@ c
      .   '''eirene_fixmap'''//tab//tab//tab//'''1'''
         write(98,'(a,i1,a)')
      .   '''eirene_ank_mods'''//tab//tab//'''',ank_mods,''''
-        write(98,'(a,i3,a)')
+        write(98,hlp_frm)
      .   '''eirene_ionising_core'''//tab//tab//'''',ionising_core,''''
         if (nstepout_4.ge.1) then
           write(hlp_frm, '(a,i1,a)')
@@ -3143,7 +3136,11 @@ c
         if (cfb_cntr_4(is).eq.1) then
           na_feedback_choice(is-1) = 6
           na_feedback_option(is-1) = 6
-          na_feedback_actuator(is-1) = 3
+          if (ffb_cntr_4(is).ne.0) then
+            na_feedback_actuator(is-1) = 1
+          else
+            na_feedback_actuator(is-1) = 3
+          end if
           na_feedback_ix1(is-1) = leftcut(1)+1
           na_feedback_ix2(is-1) = rightcut(1)
           na_feedback_iy1(is-1) = 0
@@ -3379,7 +3376,7 @@ c
       integer, save :: interptype
 *   ..procedures
       intrinsic sqrt
-      external subini, subend, xerrab
+      external xerrab
 *   ..initialisation
       data interptype /1/
 
@@ -3520,7 +3517,7 @@ c
       integer, save :: interptype
 *   ..procedures
       intrinsic sqrt
-      external subini, subend, xerrab
+      external xerrab
 *   ..initialisation
       data interptype /1/
 

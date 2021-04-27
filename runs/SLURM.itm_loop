@@ -1,6 +1,7 @@
 #! /bin/tcsh
 
-#SBATCH --ntasks=#PROCS#
+#SBATCH --ntasks-per-node=#PROCS#
+#SBATCH --cpus-per-task=#THREADS#
 #SBATCH -p gw
 #SBATCH --time=#HOURS#:00:00
 #SBATCH --mem=#MEM#
@@ -23,10 +24,7 @@
 ###   Submit the job:     `itmsubmit -s -j "JobName" SLURM.itm_loop`
 ###   Stop the run:       `touch b2mn.exe.dir/.quit`
 
-pushd #SOLPSTOP#
-source setup.csh
 echo Using SOLPSTOP = #SOLPSTOP#
-popd
 
 #echo $MANPATH
 #echo $PATH
@@ -48,9 +46,11 @@ else
 endif
 set TIME="time srun ${MPI_PREFLAGS}"
 
+set USE_OMP=""
 if ($?SOLPS_OPENMP) then
-  setenv OMP_NUM_THREADS #THREADS#
   setenv KMP_AFFINITY compact,norespect
+  set OMP_OPTS = #THREADS#
+  set USE_OMP = "-t ${OMP_OPTS}"
 endif
 
 update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"
@@ -60,7 +60,7 @@ if ($?SOLPS_GUI_IP) then
   echo ${USER} ${PWD} ${msg} | netcat -u -v -w 1 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
 endif
 
-b2run -s ${USE_MPI} >! run.log
+b2run -s ${USE_MPI} ${USE_OMP} >! run.log
 
 QSUB.postprocess
 

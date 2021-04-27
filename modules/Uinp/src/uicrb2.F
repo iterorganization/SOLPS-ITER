@@ -2,8 +2,8 @@
       use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
-      use eirmod_extrab25
-     , , only: msrfclsx
+      use b2mod_subsys
+      use eirmod_solps
 c
 c  version : 30.06.2000 21:13
 c
@@ -40,7 +40,7 @@ c
       character hlp_frm*14
       integer len_of_digits
       logical streql
-      external len_of_digits, streql, subini, subend
+      external len_of_digits, streql
 c
 c*** Possible forms of the end-of-block line
       integer nfnl
@@ -65,12 +65,13 @@ c*** jblk labels the blocks from our list, and jvrb the variables
       jvrb=0
       lbv=.false.
 
-      write(hlp_frm,'(a,i1,a)') '(2h(a,i',len_of_digits(mxslen),',1h))'
-      write(uff,hlp_frm) mxslen
+      write(hlp_frm,'(a,i1,a)') '(a,i',len_of_digits(mxslen),',a)'
+      write(uff,hlp_frm) '(a',mxslen,')'
       call lefta(uff,16,i)
-      write(hlp_frm,'(a,i1,a)') '(1h(,i',len_of_digits(mxslen),',3ha1))'
-      write(ufs,hlp_frm) mxslen
+      write(ufs,hlp_frm) '(',mxslen,'a1)'
       call lefta(ufs,16,i)
+      print *,'uff=',uff
+      print *,'ufs=',ufs
 c
 c*** The main loop starts here: read the next line until end of file
 c*** The following assumptions are made during line parsing:
@@ -320,4 +321,4 @@ c=======================================================================
       iret=2
       return
 c=======================================================================
-      end
+      end subroutine uicrb2

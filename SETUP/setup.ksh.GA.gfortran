@@ -20,15 +20,19 @@ if [ -z "$DEVICE" ]; then
 fi
 
 export IRISLIB="/fusion/projects/codes/solps/SOLPS-ITER/public_lib/GA.gfortran"
-export GLI_HOME=${IRISLIB}/gli
+export GLI_HOME=${IRISLIB}/gli/src
 
 # Set external library paths
-
 export LD_LIBRARY_PATH="${IRISLIB}:${LD_LIBRARY_PATH}"
-export LD_LIBRARY_PATH="${GLI_HOME}:${GLI_HOME}/src:${LD_LIBRARY_PATH}"
+export LD_LIBRARY_PATH="${GLI_HOME}:${LD_LIBRARY_PATH}"
+
+# Prepend path to python
+
+pythondir=`dirname $PYTHON`
+export PATH=${pythondir}:$PATH
 
 # Debugger
-# export DBX=totalview
+export DBX=totalview
 
 # ParaView compiling options
 
@@ -49,5 +53,5 @@ fi
 
 # Additional setup
 
-pushd ${GLI_HOME} >& /dev/null; source glisetup.ksh; popd >& /dev/null     # Eirene graphics environment
+#pushd ${GLI_HOME} >& /dev/null; source glisetup.ksh; popd >& /dev/null     # Eirene graphics environment
 

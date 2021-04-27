@@ -9,12 +9,12 @@ c*** Temporary - max. number of reactions in cdenmodel section
 
 
 c*** 1
-      integer nprll,nmode,ntcpu,nfile,niter0,niter,ntime0,ntim1,nfullrun 
+      integer nprll,nmode,ntcpu,nfile,niter0,niter,ntime0,ntim1,nfullrun
       integer noptim,noptm1,ngeom_usr,ncoup_input,nsmstra,
      ,        nstoram,ngstal,nrtal1,nreac_add,lfrm15
       logical nlscl,nltest,nlana,nldrft,nlcrr,nlerg,nlident,nlone,
      ,        nlmovie,nldfst,nloldran,nlcascad,nloctree,nlwrmsh,
-     ,        nexvs,nltrimesh 
+     ,        nexvs,nltrimesh
       character txtrun*71
 
 c*** 2
@@ -43,7 +43,7 @@ c*** 3a
       real xmlim(nsts), ewall(nsts),  ewbin(nsts),  transp(nsts,2),
      ,    recycc(nsts), recycf(nsts), recyct(nsts), recprm(nsts),
      ,    recycs(nsts), exppl(nsts),  expel(nsts),  expil(nsts),
-     ,    fsheat(nsts), echspts(nsts),fchspts(nsts),sptprm(nsts) 
+     ,    fsheat(nsts), echspts(nsts),fchspts(nsts),sptprm(nsts)
       character txtsfl(nsts)*64
 
 c*** 3b
@@ -85,7 +85,7 @@ c*** 4
      ,  creac(9,mreac)
       logical lconst(mreac)
       character filnam(mreac)*8, h123(mreac)*4, reac(mreac)*9,
-     ,    crc(mreac)*3,elname(mreac)*2
+     ,    crc(mreac)*3,elname(mreac)*2,bundling(mreac)*60
 
 c*** 4a
 
@@ -160,6 +160,8 @@ c*** 5
      ,     vx3(npls), vx4(npls), vx5(npls), vy0(npls), vy1(npls),
      ,     vy2(npls), vy3(npls), vy4(npls), vy5(npls), vz0(npls),
      ,     vz1(npls), vz2(npls), vz3(npls), vz4(npls), vz5(npls),
+     ,     zi0(npls), zi1(npls), zi2(npls), zi3(npls), zi4(npls),
+     ,     zi5(npls),
      ,     b0, b1, b2, b3, b4, b5, vl0, vl1, vl2, vl3, vl4, vl5
       character textp(npls)*8
 
@@ -188,13 +190,13 @@ c*** Surface Cards
      ,  sctransp(maxsc,2),scfsheat(maxsc),screcycf(maxsc),
      ,  screcyct(maxsc),scrcprm(maxsc),scexppl(maxsc),scexpel(maxsc),
      ,  scexpil(maxsc),screcycs(maxsc),scychsptg(maxsc),
-     ,  scechsptg(maxsc),scfchsptg(maxsc),scstprm(maxsc)  
+     ,  scechsptg(maxsc),scfchsptg(maxsc),scstprm(maxsc)
       integer iscrd(nsts),jscrd(nlim)
       integer maxchmvar,maxchsc,nchemvar
       parameter (maxchmvar=nlim,maxchsc=nlim*(natm+nmol+nion+npht+npls))
       integer nnchemvar(maxsc),indchemvar(maxchsc)
       character*8 chvarname(maxchsc),chmspname(maxchsc)
-      real chmvar(maxchsc) 
+      real chmvar(maxchsc)
 
 c*** 7
 
@@ -203,8 +205,8 @@ c*** 7
      ,  ivlsf(nstra),iscls(nstra),isclt(nstra),iscl1(nstra),
      ,  iscl2(nstra),iscl3(nstra),isclb(nstra),iscla(nstra),
      ,  nsrfsi(nstra),indim(nsrfs,nstra), insor(nsrfs,nstra),
-     ,  ingrda(nsrfs,nstra,3),ingrde(nsrfs,nstra,3),nrsor(nsrfs,nstra), 
-     ,  npsor(nsrfs,nstra),ntsor(nsrfs,nstra),nbsor(nsrfs,nstra), 
+     ,  ingrda(nsrfs,nstra,3),ingrde(nsrfs,nstra,3),nrsor(nsrfs,nstra),
+     ,  npsor(nsrfs,nstra),ntsor(nsrfs,nstra),nbsor(nsrfs,nstra),
      ,  nasor(nsrfs,nstra),nisor(nsrfs,nstra),     istor(nsrfs,nstra)
       real alloc, flux(nstra), scalv(nstra),       sorwgt(nsrfs,nstra),
      ,     sorlim(nsrfs,nstra),sorind(nsrfs,nstra),sorexp(nsrfs,nstra),
@@ -228,7 +230,7 @@ c*** 9
 
       integer nprcsf,iprcsf(nlimps),maxlev,maxrad,maxpol,maxtor,maxadd,
      ,  nssplr(n1st),nssplp(n2nd),nssplt(n3rd),nsspla(nlim),
-     ,  nsigvi,nsigsi,nsigci,nsigi_bgk,nsigi_cop,
+     ,  nsigvi,nsigsi,nsigci,nsigi_spc,
      ,  igh(nsd),iih(nsd),ighw(nsdw),iihw(nsdw),ighc(2,ncv),iihc(2,ncv)
       real prmrspl(n1st),prmpspl(n2nd),prmtspl(n3rd),prmaspl(nlim),
      ,  wminv,wmins,wminc,splpar
@@ -251,7 +253,7 @@ c*** 10b
 
 c*** 10c
 
-      character chrtal(nalv)*71
+      character chrtal(nalv)*70
       character txttlr(nalv)*72, txtspr(nalv)*24, txtunr(nalv)*24
 
 c*** 10d
@@ -261,7 +263,7 @@ c*** 10d
 
 c*** 10e
 
-      character chrtls(nals)*71, txtsps(nals)*24, txttls(nals)*72,
+      character chrtls(nals)*70, txtsps(nals)*24, txttls(nals)*72,
      ,    txtuns(nals)*24
 
 c*** 10f
@@ -293,10 +295,10 @@ c*** 11
      ,  fcabs2(nptal),rpsdl(nptal)
       logical trcplt, trchst, trcnal, trcmod, trcsig, trcgrd, trcsur,
      ,  trcref, trcfle, trcamd, trcint, trctim, trcsou, trcrec,
-     ,  trclst, trcbla, trcblm, trcbli, trcblp, trcble, 
-     ,  trcblph,trctal, trcoct, trccen, trcrnf,
+     ,  trclst, trcbla, trcblm, trcbli, trcblp, trcble,
+     ,  trcblph,trctal, trcoct, trccen, trcrnf, trchktim,
      ,  trcdbg2,trcdbge,trcdbgm,trcdbgf,trcdbgl,
-     ,  trcdbgs,trcdbgg,trcdbgmpi,trcdbgc,trchktim,
+     ,  trcdbgs,trcdbgg,trcdbgmpi,trcdbgc,
      ,  trcsrc(0:nstra),pl1st,pl2nd,pl3rd,pladd,plhst,plcut(3),plbox,
      ,  plstor,plnumv,plnums,plarr,lrpscut,pltsrc(0:nstra),pl3a(5),
      ,  pl3s(3),pltl2d(nptal),pltl3d(nptal),pltllg(nptal),pltler(nptal),
@@ -311,10 +313,12 @@ c*** 12
       integer ngwtiesx
       parameter (ngwtiesx=2*n2nd)
       integer numlines,modaddv
-      integer nchori,ncheni,lntspec,lntsput,nmcsput,nchtal(nchor),
+      integer nchori,ncheni,lntspec,lntsput,nmcsput,
+     ,  nchrdgrp,nchrdlint,nchrdlprf,
+     ,  jchlst(nchor,nchor),nchtal(nchor),chr_lbl(nchor),
      ,  nspscl(nchor),nspnew(nchor),nspstr(nchor),nspspz(nchor),
      ,  nspini(nchor),nspend(nchor),nspblc(nchor),nspadd(nchor),
-     ,  masloc(nchor),ipivot(nchor),ichord(nchor),npspcen,iatspec,
+     ,  ipivot(nchor),ichord(nchor),npspcen,iatspec,
      ,  npspctt,npspcfi,listmtmp(lntsputx),listmtra(lntsputx),
      ,  nlstadds,mtreadds,listadds(nlimps),listaddg(nlimps),
      ,  ngwties,kgwties(ngwtiesx),mgwties(ngwtiesx),
@@ -322,18 +326,20 @@ c*** 12
      ,  npwin,npwsurf(npwinx),npwtally(npwinx),pwsurf(nlimps,npwinx),
      ,  pwtally(nlimps,npwinx),pwspecy(nlimps,npwinx),
      ,  pwtally_d(nlimps,npwinx),pwspecy_d(nlimps,npwinx)
-      real emin1(nchor), emax1(nchor), xpivot(nchor), ypivot(nchor),
-     ,     zpivot(nchor), xchord(nchor), ychord(nchor), zchord(nchor),
-     ,     emnspc, emxspc
+      real emin1(nchor), emax1(nchor), eshift(nchor),
+     ,     xpivot(nchor), ypivot(nchor), zpivot(nchor),
+     ,     xchord(nchor), ychord(nchor), zchord(nchor),
+     ,     emnspc, emxspc, chpts(4,nchor)
       logical plchor,plspec,prspec,plargl,prargl,lpw_d(npwinx)
-      character txtsig(nchor)*71,txtmtmp(lntsputx)*2,txtmtra(lntsputx)*2
+      character chrdfile(nchor)*24,
+     ,     txtmtmp(lntsputx)*2,txtmtra(lntsputx)*2
 
 c*** 13
 
       integer nprnli, ntmstp, nptst, nsnvi, ninitl_read,
      ,  isnve(nsnv), isnvs(nsnv), isnvt(nsnv), isnrc(nsnv)
       real dtimv, time0
-      character txttlv(nsnv)*71, txtspv(nsnv)*24, txtunv(nsnv)*24
+      character txttlv(nsnv)*70, txtspv(nsnv)*24, txtunv(nsnv)*24
 
 c*** 14
 
@@ -426,7 +432,7 @@ c*** b2ah.dat
      ,  indim,insor,ingrda,ingrde,nrsor,npsor,ntsor,nbsor,nasor,nisor,
      ,  istor,nzadd,ini,ine,
      ,  nprcsf,iprcsf,maxlev,maxrad,maxpol,maxtor,maxadd,nssplr,nssplp,
-     ,  nssplt,nsspla,nsigvi,nsigsi,nsigci,nsigi_bgk,nsigi_cop,igh,iih,
+     ,  nssplt,nsspla,nsigvi,nsigsi,nsigci,nsigi_spc,igh,iih,
      ,  ighw,iihw,ighc,iihc,nadvi,nclvi,nalvi,nadsi,nalsi,nadspc,
      ,  iadve,iadvs,iadvt,iadrc,iclve,iclvs,iclvt,iclrc,iadse,
      ,  iadss,iadst,iadsc,
@@ -438,9 +444,9 @@ c*** b2ah.dat
      ,  iples,i1trc,i2trc,isyplt,ilinie,nvolpl,nptal2,nptal3,nsp,ispzt2,
      ,  ispzt3,nplin2,nplot2,npldl2,iproj3,npli13,nplo13,npli23,nplo23,
      ,  ipln,nsrfcls,msrfcls,lsrfcls,
-     ,  numlines,modaddv,
+     ,  numlines,modaddv,nchrdgrp,nchrdlint,nchrdlprf,jchlst,chr_lbl,
      ,  nchori,ncheni,lntspec,lntsput,nmcsput,nchtal,nspscl,
-     ,  nspnew,nspstr,nspspz,nspini,nspend,nspblc,nspadd,masloc,ipivot,
+     ,  nspnew,nspstr,nspspz,nspini,nspend,nspblc,nspadd,ipivot,
      ,  ichord,npspcen,iatspec,npspctt,npspcfi,listmtmp,listmtra,
      ,  nlstadds,mtreadds,listadds,listaddg,ngwties,kgwties,mgwties,
      ,  lgwties,npwin,npwsurf,npwtally,pwsurf,pwtally,pwspecy,
@@ -460,7 +466,7 @@ c*** b2ah.dat
      ,  cbnrso,cbnrno,cbnrwe,cbnrea,
      ,  cbirso,cbirno,cbirwe,cbirea,
      ,  izamin,izamax,nbndl
-  
+
       common/uinrl/ ria,ragrid,raa,rarefl,ep1in,ep1ot,ep1ch,exep1,
      ,  ellin,ellot,ellch,exell,triin,triot,trich,extri,
      ,  xpcor,ypcor,zpcor,
@@ -484,7 +490,8 @@ c*** b2ah.dat
      ,  valcdn,bltzcdn,dltecdn,acrncdn,
      ,  te0,te1,te2,te3,te4,te5,ti0,ti1,ti2,ti3,ti4,ti5,di0,di1,di2,di3,
      ,  di4,di5,vx0,vx1,vx2,vx3,vx4,vx5,vy0,vy1,vy2,vy3,vy4,vy5,vz0,vz1,
-     ,  vz2,vz3,vz4,vz5,b0,b1,b2,b3,b4,b5,vl0,vl1,vl2,vl3,vl4,vl5,
+     ,  vz2,vz3,vz4,vz5,zi0,zi1,zi2,zi3,zi4,zi5,
+     ,  b0,b1,b2,b3,b4,b5,vl0,vl1,vl2,vl3,vl4,vl5,
      ,  datm,dmol,dion,dpls,ermin,
      ,  ercut,rprob0,rinteg,einteg,ainteg,ychsptg,echsptg,fchsptg,
      ,  achsptg,fsheata,
@@ -496,8 +503,8 @@ c*** b2ah.dat
      ,  ch2mx,ch2my,ch2x0,ch2y0,ch2z0,ch3mx,
      ,  ch3my,ch3mz,ch3x0,ch3y0,ch3z0,angle1,angle2,angle3,cutplane,
      ,  talzmi,talzma,talxmi,talxma,talymi,talyma,talw1,talw2,fcabs1,
-     ,  fcabs2,rpsdl,emin1,
-     ,  emax1,xpivot,ypivot,zpivot,xchord,ychord,zchord,emnspc,emxspc,
+     ,  fcabs2,rpsdl,emin1,emax1,eshift,emnspc,emxspc,
+     ,  chpts,xpivot,ypivot,zpivot,xchord,ychord,zchord,
      ,  dtimv,time0,fcte,bmass,chgsp,chgsee,chgsei,chgsmom,
      ,  scxmlim,scewall,scewbin,sctransp,screcycf,screcyct,scrcprm,
      ,  scfsheat,scexppl,scexpel,scexpil,screcycs,scychsptg,
@@ -506,10 +513,10 @@ c*** b2ah.dat
      ,  cbrbrk,cbsna,cbsmo,cbshi,cbrec,cbmsb,cbshe,cbsch,cbmsa,
      ,  cfdf0,cfdna,cfdpa,cfvla,cfvsa,cfhci,cfhce,cfsig,cfalf,cflim
 
-      common/uinlog/ 
+      common/uinlog/
      ,  nlscl,nltest,nlana,nldrft,nlcrr,nlerg,nlident,nlone,
      ,  nlmovie,nldfst,nloldran,nlcascad,nloctree,
-     ,  nlwrmsh,nexvs,nltrimesh, 
+     ,  nlwrmsh,nexvs,nltrimesh,
      ,  nlrad,nlslb,nlcrc,nlell,nltri,nlplg,nlfem,nltet,nlgen,
      ,  nlpol,nlply,nlpla,nlplp,nltor,nltrz,nltra,nltrt,
      ,  nlmlt,nladd,lconst,nltrim,nlavrp,nlavrt,nlsymp,nlsymt,
@@ -518,9 +525,9 @@ c*** b2ah.dat
      ,  trcplt,trchst,trcnal,trcmod,
      ,  trcsig,trcgrd,trcsur,trcref,trcfle,trcamd,trcint,trctim,
      ,  trcsou,trcrec,trclst,trcbla,trcblm,trcbli,trcblp,trcble,
-     ,  trcblph,trctal,trcoct,trccen,trcrnf,
+     ,  trcblph,trctal,trcoct,trccen,trcrnf,trchktim,
      ,  trcdbg2,trcdbge,trcdbgm,trcdbgf,trcdbgl,
-     ,  trcdbgs,trcdbgg,trcdbgmpi,trcdbgc,trchktim,
+     ,  trcdbgs,trcdbgg,trcdbgmpi,trcdbgc,
      ,  trcsrc,pl1st,pl2nd,pl3rd,pladd,plhst,plcut,plbox,plstor,plnumv,
      ,  plnums,plarr,lrpscut,pltsrc,pl3a,pl3s,pltl2d,pltl3d,pltllg,
      ,  pltler,lhist2,lsmot2,lhist3,lcntr3,lsmot3,lraps,lvect3,lrpvc3,
@@ -530,12 +537,13 @@ c*** b2ah.dat
      ,  is_bundled
 
       common/uinchr/ txtrun,txtsfl,txtsfa,
-     ,  filnam,h123,reac,crc,elname,
+     ,  filnam,h123,reac,crc,elname,bundling,
      ,  texta,textm,texti,textf,textp,
      ,  cdnmdlp,fnamcdn,h2cdn,reaccdn,crcdn,path,filtrm,
      ,  txtsou,txttla,txtspa,txtuna,txttlc,txtspc,txtunc,
      ,  txttlr,txtspr,txtunr,txttld,txtspd,txtund,chrtal,chrtls,
-     ,  txtsps,txttls,txtuns,textla,textls,txtsig,txtmtmp,txtmtra,
+     ,  txtsps,txttls,txtuns,textla,textls,
+     ,  txtmtmp,txtmtra,chrdfile,
      ,  txtpls,txtpsp,txtpun,txtspv,txttlv,txtunv,scard_name,
      ,  chvarname,chmspname
 

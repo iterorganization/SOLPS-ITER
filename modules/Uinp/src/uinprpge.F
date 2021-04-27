@@ -2,8 +2,8 @@
       use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
-      use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use b2mod_subsys
+      use eirmod_solps
 c
 c  version : 03.04.2003 17:25
 c
@@ -26,7 +26,7 @@ c=======================================================================
       implicit none
 #include "uinput.inc"
       integer i,j,k,l,m,knd_hlp(nedgmrkd,nwllmrkd)
-      external xerrab, subini, subend
+      external xerrab
 c=======================================================================
       call subini ('uinprpge')
 
@@ -227,4 +227,4 @@ c            print *,'j,k,bbliin(j,k)=',j,k,bbliin(j,k)  !###
 c=======================================================================
       call subend ()
       return
-      end
+      end subroutine uinprpge

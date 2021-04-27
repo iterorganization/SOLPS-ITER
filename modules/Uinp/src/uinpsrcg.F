@@ -2,8 +2,8 @@
       use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
-      use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use b2mod_subsys
+      use eirmod_solps
 c
 c  version : 01.04.2005 00:51
 c
@@ -14,7 +14,7 @@ c=======================================================================
 #include "uinput.inc"
       integer i,j,k,l,isg,istr,isf
       logical ex,uex,streql
-      external streql, xerrab, subini, subend
+      external streql, xerrab
 c=======================================================================
       call subini ('uinpsrcg')
 c<<<
@@ -233,4 +233,4 @@ c*** lstrascl
 c=======================================================================
       call subend ()
       return
-      end
+      end subroutine uinpsrcg

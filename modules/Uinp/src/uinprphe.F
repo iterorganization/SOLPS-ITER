@@ -2,8 +2,8 @@
       use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
-      use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use b2mod_subsys
+      use eirmod_solps
 c
 c  version : 30.06.2000 19:47
 c
@@ -15,7 +15,7 @@ c=======================================================================
 #include "uib2pprm.inc"
       integer i,j,k,l,n,luind(nxd),luwrk(nxd)
       logical streql
-      external xerrab, streql, subini, subend
+      external xerrab, streql
 c=======================================================================
       call subini ('uinprphe')
 
@@ -121,19 +121,20 @@ c<<<
               luind(1)=nx
             else !}{
               write(0,*) 'Both cell ranges for evaluation of He ',
-     ,          'pumping belong to the outer divertor'
+     ,          'pumping belong to the Eastern divertor'
               write(0,*) 'STOP ==> Check the DG model - make sure ',
      ,          'that continuous cell ranges are marked'
-              call xerrab ('Both He pumping ranges in outer divertor')
+              call xerrab ('Both He pumping ranges in Eastern divertor')
             end if !}
           else !}{
             if(k.eq.2) then !{
               if(luwrk(2).le.nxcut1(1)) then !{
                 write(0,*) 'Both cell ranges for evaluation of He ',
-     ,            'pumping belong to the outer divertor'
+     ,            'pumping belong to the Western divertor'
                 write(0,*) 'STOP ==> Check the DG model - make sure ',
      ,            'that continuous cell ranges are marked'
-                call xerrab ('Both He pumping ranges in outer divertor')
+                call xerrab
+     ,           ('Both He pumping ranges in Western divertor')
               end if !}
             else !}{
               luwrk(2)=1
@@ -155,4 +156,4 @@ c>>>
 c=======================================================================
       call subend ()
       return
-      end
+      end subroutine uinprphe

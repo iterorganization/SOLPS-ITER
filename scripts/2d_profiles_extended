@@ -24,6 +24,14 @@ set source=b2mn.exe.dir/b2time.nc
 if (! -s $source) set source=b2time.nc
 
 which nc2text > /dev/null && set no_nc2text=0 || set no_nc2text=1
+if (-e b2mn.exe.dir/.netcdf4) then
+  ln -sf $source ${tmpdir}b2time.nc.tmp
+  set source=${tmpdir}b2time.nc.tmp
+  gtfl $source
+  set netcdf4=1
+else
+  set netcdf4=0
+endif
 
 if ($no_nc2text == 1) then
   # get array size and set indices
@@ -32,8 +40,19 @@ if ($no_nc2text == 1) then
 #  echo "ny $ny"
 #  echo "nt $nt"
   @ jstart = $nt + $NUM
+  if ($jstart < 1) then
+    set jstart = 1
+  endif
   @ jend = $nt
-#  echo "$jstart $jend"
+#  echo $jstart $jend
+else
+  set nt = `ncdump $source -f f -v fn3dl | sed -n 'x;$p' | awk -F '[,)]' '{print $2;}'`
+#  echo "nt $nt"
+  @ jstart = $nt + $NUM
+  if ($jstart < 0) then
+    @ NUM = -$nt + 1
+  endif
+#  echo $NUM
 endif
 
 foreach i ($usual $extra)
@@ -90,3 +109,7 @@ foreach i ($usual $extra)
     endif
   endif
 end
+
+if ($netcdf4 == 1) then
+  rm $source
+endif

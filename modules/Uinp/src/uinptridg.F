@@ -2,8 +2,8 @@
       use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
-      use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use b2mod_subsys
+      use eirmod_solps
 
 c  version : 16.03.2005 23:54
 
@@ -15,8 +15,7 @@ c=======================================================================
 #include "uinput.inc"
       integer, save :: ntcpu_save, nfile_save, nprnli_save
       integer, save :: npts_save(nstra)
-      logical, save :: trcdbgg_save, trcsur_save
-      external subini, subend
+      logical, save :: trcgrd_save, trcsur_save
 c=======================================================================
       call subini ('uinptridg')
       if(lc) then !{
@@ -31,8 +30,8 @@ c=======================================================================
        nprnli=0
        trcsur_save=trcsur
        trcsur=.true.
-       trcdbgg_save=trcdbgg
-       trcdbgg=.true.
+       trcgrd_save=trcgrd
+       trcgrd=.true.
       else !}{
        ntcpu=ntcpu_save
        nfile=nfile_save
@@ -40,9 +39,9 @@ c=======================================================================
        nprnli=nprnli_save
        nltrimesh=.false.
        trcsur=trcsur_save
-       trcdbgg=trcdbgg_save
+       trcgrd=trcgrd_save
       end if !}
  9999 call subend ()
       return
 c=======================================================================
-      end
+      end subroutine uinptridg

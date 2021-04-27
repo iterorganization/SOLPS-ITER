@@ -5,5 +5,5 @@ endif
 set NNA=`cat .na_feedback`
 
 pipe_run.log | \
-  grep -a "na_feedback_rescale   $1" | \
+  grep -a "na_feedback_rescale    $1" | \
   awk '{print NR,$3,$4}' | xyplot2 curr targ
