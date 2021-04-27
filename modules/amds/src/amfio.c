@@ -95,7 +95,7 @@ Widget OpenFileOutputDlg(View w) {
 
   if (!*w->subset->fileName) {
     ErrorBox(w->wMain,"No filename");
-    return;
+    return NULL;
   }
 
   strcpy(fn,w->subset->fileName);

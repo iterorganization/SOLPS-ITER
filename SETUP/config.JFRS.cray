@@ -43,7 +43,7 @@
 # Add -DWINDOWS to SOLPS_CPP
 #
 
-       NCDIR ?= ${NETCDF_DIR}
+       NCDIR ?= ${CRAY_NETCDF_DIR}/CRAY/9.0
    MSCL_ROOT ?= ${SOLPSLIB}
        H5DIR ?= ${PE_HDF5_DIR}
      GR_ROOT ?= ${SOLPSLIB}
@@ -51,7 +51,7 @@
   NCARG_ROOT ?= /work/xpb/my_env_dirs/NCL
       NAGDIR ?= ${CRAY_LIBSCI_PREFIX_DIR}
  MDSPLUS_DIR ?= /opt/mdsplus/7.96.12
-       MPDIR ?= ${MPICH_DIR}
+       MPDIR ?= ${MPICH_DIR}/../../mpich-cray/9.0
 
 #
 # Variables for linking
@@ -69,7 +69,7 @@ LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 LD_MPI     = -L${MPDIR}/lib -lmpich
 ifdef USE_MPI
-LD_NETCDF  = `pkg-config netcdf-parallel-fortran --libs`
+LD_NETCDF  = `pkg-config pnetcdf --libs`
 ifdef USE_OPENMP
 LD_NAG     = `pkg-config sci_mpi_mp --libs`
 else
