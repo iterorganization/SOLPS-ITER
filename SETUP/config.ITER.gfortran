@@ -50,11 +50,18 @@ LD_MPI     = -lmpi2
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNCAR4 -DNO_NAG `pkg-config netcdf-fortran --cflags`
+SOLPS_CPP      = -DNCAR4 -DNO_NAG
 B25_DEFINES    =
 CARRE_DEFINES  =
 EIRENE_DEFINES =
 FFLAGSEXTRA    =
+
+# Autodetected optional features...
+
+# Build with NetCDF tools if available
+ifdef LD_NETCDF
+  SOLPS_CPP   += `pkg-config netcdf-fortran --cflags`
+endif
 
 export NODENAME
 

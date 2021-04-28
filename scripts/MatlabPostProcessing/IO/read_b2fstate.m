@@ -59,7 +59,7 @@ state.am    = read_rfield(fid,'am   ',ns);
 state.na     = read_rfield(fid,'na'    ,[nx+2,ny+2,ns]);
 state.ne     = read_rfield(fid,'ne'    ,[nx+2,ny+2]);
 state.ua     = read_rfield(fid,'ua'    ,[nx+2,ny+2,ns]);
-state.uadia  = read_rfield(fid,'uadia' ,[nx+2,ny+2,2,ns]);
+state.uadia  = read_rfield(fid,'uadia' ,fluxdims);
 state.te     = read_rfield(fid,'te'    ,[nx+2,ny+2]);
 state.ti     = read_rfield(fid,'ti'    ,[nx+2,ny+2]);
 state.po     = read_rfield(fid,'po'    ,[nx+2,ny+2]);
@@ -106,11 +106,11 @@ if str2num(strrep(version,'.','')) >= str2num(strrep('03.000.005','.',''))
     state.fchvisq     = read_rfield(fid,'fchvisq'    ,fluxdim);
     state.fchinert    = read_rfield(fid,'fchinert'   ,fluxdim);
     
-    state.vaecrb = read_rfield(fid,'vaecrb' ,[nx+2,ny+2,2,ns]);
-    state.vadia  = read_rfield(fid,'vadia'  ,[nx+2,ny+2,2,ns]);
-    state.wadia  = read_rfield(fid,'wadia'  ,[nx+2,ny+2,2,ns]);
-    state.veecrb = read_rfield(fid,'veecrb' ,[nx+2,ny+2,2]);
-    state.vedia  = read_rfield(fid,'vedia'  ,[nx+2,ny+2,2]);
+    state.vaecrb = read_rfield(fid,'vaecrb' ,fluxdims);
+    state.vadia  = read_rfield(fid,'vadia'  ,fluxdims);
+    state.wadia  = read_rfield(fid,'wadia'  ,fluxdims);
+    state.veecrb = read_rfield(fid,'veecrb' ,fluxdim);
+    state.vedia  = read_rfield(fid,'vedia'  ,fluxdim);
     
     state.floe_noc  = read_rfield(fid,'floe_noc' ,fluxdim);
     state.floi_noc  = read_rfield(fid,'floi_noc' ,fluxdim);

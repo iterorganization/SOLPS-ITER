@@ -1,6 +1,6 @@
 alias gmake make
 
-setenv NCARG_ROOT ${SOLPSTOP}/../NCARG
+# setenv NCARG_ROOT ${SOLPSTOP}/../NCARG
 
 #module unload compiler/intel/2017.4.239 mpi/impi/2017.4.239
 #module load compiler/intel/2019.4.243 mpi/impi/2019.4.243

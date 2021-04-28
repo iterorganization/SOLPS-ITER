@@ -7,7 +7,7 @@
 %                 balance_netcdf set non-zero in b2mn.dat.                     %
 % BAL_QUANT:      Either 'particles','momentum','totpress','elheat','ionheat', %
 %                 'totheat'.                                                   %
-% SPECIES_INDEX:  An array specifying the species indeces to be summed over.   %
+% SPECIES_INDEX:  An array specifying the species indices to be summed over.   %
 %                 Has length 1 for a single species. Only applicable to        %
 %                 'particles' and 'momentum' balances.                         %
 % DEFAULT_REGION: Either 'lis' (lower inner SOL), 'uis' (upper inner SOL),     %

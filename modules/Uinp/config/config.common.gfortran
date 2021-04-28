@@ -1,9 +1,14 @@
+COMPILER_MAJOR_VERSION = $(shell echo `${FC} --version | head -1 | awk '{printf "%s ",$$4,"\n"}' | cut -d '.' -f 1`)
+
 FFLAGS  += -fsignaling-nans
 ifdef SOLPS_DEBUG
 FFLAGS  += -g -ffpe-trap=denormal -ffpe-trap=invalid -ffpe-trap=zero -ftrapv
 endif
 ifdef SOLPS_OPENMP
 FFLAGS  += -fopenmp
+endif
+ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -ge 6; echo $$?),0)
+FFLAGS  += -fuse-ld=bfd
 endif
 
 INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}

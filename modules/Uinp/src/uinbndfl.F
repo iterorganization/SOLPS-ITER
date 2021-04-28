@@ -113,7 +113,11 @@ c*** Take the neutral data from the "whole target" specification
             else !}{
 c*** Take the data from the boundary default
               ewmbnds(izn,iknd)=ewmbndx(0,iknd)
-              jskbnds(izn,iknd)=jskbndx(0,iknd)
+              if (ln_cnfg.and.iknd.eq.1) then
+                jskbnds(izn,iknd)=3
+              else
+                jskbnds(izn,iknd)=jskbndx(0,iknd)
+              end if
               jrfbnds(izn,iknd)=jrfbndx(0,iknd)
               jcsbnds(izn,iknd)=jcsbndx(0,iknd)
               jcgbnds(izn,iknd)=jcgbndx(0,iknd)

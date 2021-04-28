@@ -275,7 +275,7 @@ while true; do {
             break;;
       ( e|E )                                               # run EIRENE to make input file for TRIA:
             [ -r AMJUEL ] || {
-              setup_baserun_eirene_links
+              setup_baserun_eirene_links ; rm b2.log b2.log.gz ; rmdir tracing batch_av run_av
             } 
             [ -r $b2agout ] && {
               [ -r $eirinp ] && {
@@ -285,7 +285,7 @@ while true; do {
                 [ -r $eirout ] && rm $eirout
                 ln -sf "$eirinp" "$eirlink"
                 $EIRENE > "$eirlog"
-                rm $eirlink
+                rm $eirlink fort.85
                 [ -s "$eirout" ] && [ -r "$eirout" ] && {
                   [ -s "$eirhed" ] && [ -r "$eirhed" ] && {
                     (cat "$eirhed"; tail --lines=+2 "$eirout") > "$triain"

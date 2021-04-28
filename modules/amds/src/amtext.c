@@ -1,4 +1,5 @@
 #include "amds.h"
+#include "ctype.h"
 
 #define DLG_REACTION_TEXT "dlgReactionText_"
 #define WG_TEXT "text"
