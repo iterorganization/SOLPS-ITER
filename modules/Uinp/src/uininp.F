@@ -129,15 +129,25 @@ c
           end if !}
         end if !}
       end do !}
+      match_found=.false.
+      do imat=1,nmat !{
+        match_found=match_found .or. streql(listmat(imat),'C')
+      end do !}
+      if (.not.match_found) nnftrm=0
+      match_found=.false.
+      do isp=1,nspigen !{
+        match_found=match_found .or. streql(spcigen(isp),'D')
+      end do !}
+      if (.not.match_found) nnftrm=0
       ifile = 0
       if (nspigen.gt.1 .or. .not.streql(spcigen(nspigen),'D') .or.
      .     nmat.gt.1   .or. .not.streql(listmat(nmat),'C')) then !{
-         do isp=1,nspigen !{
-           do imat=1,nmat !{
-             if (.not.(streql(spcigen(isp),'D') .and.
-     .                 streql(listmat(imat),'C'))) then !{
-               ifile = ifile + 1
-               filtrm(nnftrm+ifile)=
+        do isp=1,nspigen !{
+          do imat=1,nmat !{
+            if (.not.(streql(spcigen(isp),'D') .and.
+     .                streql(listmat(imat),'C'))) then !{
+              ifile = ifile + 1
+              filtrm(nnftrm+ifile)=
      .          trim(spcigen(isp))
      .          //'_on_'//
      .          listmat(imat)

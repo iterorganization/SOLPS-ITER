@@ -4,6 +4,7 @@
      , , only: ntrack, nalloys
       use b2mod_subsys
       use eirmod_solps
+      implicit none
 
 c  version : 05.02.2005 00:46
 
@@ -20,8 +21,11 @@ c=======================================================================
 #include "impcon.inc"
 #include "git_version_Uinp.h"
 
-      integer i,j,k,l,m,n,icont,istep,jsurpr
+      integer i,ii,ih,j,k,l,m,n,nm,icont,istep,jsurpr,ists
+      integer icopy,jlswch,jlcell,imrlb,iulin,iuscn,ich,ichmin,iid
+      integer iatm,imol,iion,ipht,ipls,ichori,inum
       integer llm(nchor),lli(nchor)
+      real x, y
       logical handle,ulmlti,ex,hydrogen,helium,carbon,nitrogen
       logical streql,silent_open
       logical, allocatable :: done(:)
@@ -29,8 +33,8 @@ c=======================================================================
       character*50 hlp_frm
       character utxthd(35)*71, utxtfl(7)*50, ufnm*(*)
       character utxtgt*71
-      integer len_of_digits
-      external streql, silent_open, len_of_digits, xerrab
+      integer len_of_digits, idez
+      external streql, silent_open, len_of_digits, idez, xerrab
       data utxthd /
      1        '** 1. Data for operating mode' ,
      2        '** 2. Data for standard mesh' ,
@@ -317,9 +321,9 @@ c**  additional cells outside standard mesh
           end if
         end if
       end do
-      nradd = max ( nradd, icont ) 
+      nradd = max(nradd,icont)
 
-      if (nradd .gt. nadd) then !{
+      if (nradd.gt.nadd) then !{
         print *, ' Too many additional zones : NRADD = ', nradd
         print *, ' Recompile Uinp with an incresaed value of NADD'
         call xerrab ('Too many additional zones')
@@ -439,7 +443,7 @@ c**  Boundary data
 
 c**  Local reflection model ?
 
-        if(jscrd(i).GT.0) then !{
+        if(jscrd(i).gt.0) then !{
           write(iunoo,715) scard_name(jscrd(i))
         else if (jliin(i).eq.1) then !}{
           ii=10*jlsptc(i)+jlsptp(i)
@@ -734,12 +738,28 @@ c*** 6a.  data for reflection model
       write(iunoo,700) utxthd(7)
 
       write(iunoo,706) nltrim
-      if(path.ne.' ') write(iunoo,'(a6,a60)') 'cpath ',path
+      if(.not.streql(path,' ')) write(iunoo,'(a6,a60)') 'cpath ',path
       write(iunoo,'(a8)') (filtrm(i),i=1,nnftrm)
-      write(iunoo,703) (datm(iatm),iatm=1,natmi)
-      write(iunoo,703) (dmol(imol),imol=1,nmoli)
-      write(iunoo,703) (dion(iion),iion=1,nioni)
-      write(iunoo,703) (dpls(ipls),ipls=1,nplsi+nbgk)
+      if (natmi.gt.0) then
+        write(iunoo,703) (datm(iatm),iatm=1,natmi)
+      else
+        write(iunoo,703) 0.
+      endif
+      if (nmoli.gt.0) then
+        write(iunoo,703) (dmol(imol),imol=1,nmoli)
+      else
+        write(iunoo,703) 0.
+      end if
+      if (nioni.gt.0) then
+        write(iunoo,703) (dion(iion),iion=1,nioni)
+      else
+        write(iunoo,703) 0.
+      end if
+      if (nplsi+nbgk.gt.0) then
+        write(iunoo,703) (dpls(ipls),ipls=1,nplsi+nbgk)
+      else
+        write(iunoo,703) 0.
+      end if
       write(iunoo,703) ermin,ercut,rprob0,rinteg,einteg,ainteg
 c*** surface cards
       k=0
@@ -1033,8 +1053,10 @@ c**  particle history plots in 2d or 3d geometry plots
 c*** 12.  data for diagnostic module
 
       write(iunoo,700) utxthd(18)
-      write(iunoo,721) "DEFINE_LINES"
-      write(iunoo,707) numlines,modaddv
+      if (hydrogen) then
+        write(iunoo,721) "DEFINE_LINES"
+        write(iunoo,707) numlines,modaddv
+      end if
       write(iunoo,707) nchori,ncheni,lntspec,lntsput,nmcsput,
      ,                                         nlstadds,mtreadds,ngwties
       if (nchori.gt.0) then !{
@@ -1153,8 +1175,8 @@ c*** 14.  data for interfacing subroutine infcop
           end do !}
         end do !}
         if(lfchgs) then !{
-          x=istramin
-          y=istramax
+          x=real(istramin)
+          y=real(istramax)
           write(iunoo,703) 0.,x,y,0.
           do i=istramin,istramax !{
             write(iunoo,'(i3,1p,4e12.5)') i,
