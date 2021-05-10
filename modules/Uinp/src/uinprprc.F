@@ -22,7 +22,7 @@ c======================================================================
       character*8 c,cc,ccc,cbgk
       character*1 c0
       character*12 f_hlp
-      character*50 hlp_frm
+      character*60 hlp_frm, hlp_frf
       logical h_collision, todo, lhelium
       logical hlp_amds(natm+nmol+nion+npls), need_dflt
       integer maxne, quote_count, iquote, iyear, ibundling
@@ -550,7 +550,8 @@ c     now read the relevant line
                     end do !}
                   end do !}
                 end if !}
-                if (l.le.nsrctd-1 .or. j.eq.1) then !{
+                if ((l.le.nsrctd-1 .or. j.eq.1).and.
+     .               index(rctnrct(nnrctn),'plt').eq.0) then !{
                   rctndlte(nnrctn)=rctddlte(j,l)
                 else !}{
                   if(silent_open(99,'ionization_potentials',
@@ -558,8 +559,13 @@ c     now read the relevant line
                     do i = 1, nc-1 !{
                       read(99,1028)
                     end do !}
-                    read(99,*) rctndlte(nnrctn)
+                    read(99,*) hlp_ee
                     close(99)
+                    if(index(rctnrct(nnrctn),'plt').gt.0) then
+                      rctndlte(nnrctn)=-hlp_ee
+                    else
+                      rctndlte(nnrctn)= hlp_ee
+                    end if
                   else !}{
                     call xerrab
      .               ('Could not find ionization_potentials file!')
@@ -638,10 +644,17 @@ c*** Remove reaction duplicates, if any
 #ifdef DBG
       write(*,*)
       write(*,*) 'Draft reaction list:'
-      write(hlp_frm,'(a,i1,a,i1,a)')
+      if(minval(rctndlte(1:nnrctn)).lt.0.) then !{
+        ipls=1
+      else !}{
+        ipls=0
+      end if !}
+      write(hlp_frf,'(a,i1,a)') '(a,i1,a,i1,a,i',1+ipls,',a)'
+      write(hlp_frm,hlp_frf)
      , '(a9,a7,a5,a10,a3,4a9,i3,i',
      ,   1+len_of_digits(maxval(rctnmsp(1:nnrctn))),',i',
-     ,   1+len_of_digits(maxval(rctnmst(1:nnrctn))),',1p,3e9.2)'
+     ,   1+len_of_digits(maxval(rctnmst(1:nnrctn))),',1p,e',
+     ,   9+ipls,'.2,2e9.2)'
       if(nnrctn.gt.0) write(*,hlp_frm)
      ,  (rctnptpr(i),rctndbs(i),rctnchp(i),rctnrct(i),rctntyp(i),
      ,   rctnptin(i),rctnpto1(i),rctnpto2(i),rctnpto3(i),
@@ -820,10 +833,17 @@ cxpb Now check if we need to rename some isotopes for AMDS reactions
 #ifdef DBG
       write(*,*)
       write(*,*) 'Draft reaction list after parsing and renaming:'
-      write(hlp_frm,'(a,i1,a,i1,a)')
+      if(minval(rctndlte(1:nnrctn)).lt.0.) then !{
+        ipls=1
+      else !}{
+        ipls=0
+      end if !}
+      write(hlp_frf,'(a,i1,a)') '(a,i1,a,i1,a,i',1+ipls,',a)'
+      write(hlp_frm,hlp_frf)
      , '(a9,a7,a5,a10,a3,4a9,i3,i',
      ,   1+len_of_digits(maxval(rctnmsp(1:nnrctn))),',i',
-     ,   1+len_of_digits(maxval(rctnmst(1:nnrctn))),',1p,3e9.2)'
+     ,   1+len_of_digits(maxval(rctnmst(1:nnrctn))),',1p,e',
+     ,   9+ipls,'.2,2e9.2)'
       if(nnrctn.gt.0) write(*,hlp_frm)
      ,  (rctnptpr(i),rctndbs(i) ,rctnchp(i) ,rctnrct(i) ,rctntyp(i),
      ,   rctnptin(i),rctnpto1(i),rctnpto2(i),rctnpto3(i),
@@ -951,10 +971,17 @@ cxpb Now check if we need to rename some isotopes for AMDS reactions
         write(*,*)
         write(*,*)
      ,   'Draft reaction list after duplicating H-isotope primaries:'
-        write(hlp_frm,'(a,i1,a,i1,a)')
+        if(minval(rctndlte(1:nnrctn)).lt.0.) then !{
+          ipls=1
+        else !}{
+          ipls=0
+        end if !}
+        write(hlp_frf,'(a,i1,a)') '(a,i1,a,i1,a,i',1+ipls,',a)'
+        write(hlp_frm,hlp_frf)
      ,  '(a9,a7,a5,a10,a3,4a9,i3,i',
      ,    1+len_of_digits(maxval(rctnmsp(1:nnrctn))),',i',
-     ,    1+len_of_digits(maxval(rctnmst(1:nnrctn))),',1p,3e9.2)'
+     ,    1+len_of_digits(maxval(rctnmst(1:nnrctn))),',1p,e',
+     ,    9+ipls,'.2,2e9.2)'
         if(nnrctn.gt.0) write(*,hlp_frm)
      ,    (rctnptpr(i),rctndbs(i) ,rctnchp(i) ,rctnrct(i) ,rctntyp(i),
      ,     rctnptin(i),rctnpto1(i),rctnpto2(i),rctnpto3(i),
@@ -1092,17 +1119,25 @@ cxpb Now check if we need to rename some isotopes for AMDS reactions
       write(*,*) 'Raw reaction list:',nnrctn
       write(*,*)
       if(nnrctn.gt.0) then !{
-        write(hlp_frm,'(a,i1,a,i1,a)')
+        if(minval(rctndlte(1:nnrctn)).lt.0.) then !{
+          ipls=1
+        else !}{
+          ipls=0
+        end if !}
+        write(hlp_frm,'(a,i1,a,i1,a,i1,a)')
      ,   '(4x,a7,23x,4a9,4x,a3,a',
-     ,     1+len_of_digits(maxval(rctnmsp(1:nnrctn))),',a',
-     ,     1+len_of_digits(maxval(rctnmst(1:nnrctn))),',3a3,a7,2a9)'
+     ,     max(3,1+len_of_digits(maxval(rctnmsp(1:nnrctn)))),',a',
+     ,     max(3,1+len_of_digits(maxval(rctnmst(1:nnrctn)))),',3a3,a',
+     ,     7+ipls,',2a9)'
         write(*,hlp_frm) 'species','bulk',
      ,    'out1','out2','out3','ig','mp','mt',
      ,    'N1','N2','N3','dlte','enr1','enr2'
-        write(hlp_frm,'(a,i1,a,i1,a)')
+        write(hlp_frf,'(a,i1,a)') '(a,i1,a,i1,a,i',1+ipls,',a)'
+        write(hlp_frm,hlp_frf)
      ,   '(1x,i3,a9,a7,a5,a10,a3,4a9,i3,i',
-     ,     1+len_of_digits(maxval(rctnmsp(1:nnrctn))),',i',
-     ,     1+len_of_digits(maxval(rctnmst(1:nnrctn))),',3i3,1p,3e9.2)'
+     ,     max(3,1+len_of_digits(maxval(rctnmsp(1:nnrctn)))),',i',
+     ,     max(3,1+len_of_digits(maxval(rctnmst(1:nnrctn)))),
+     ,   ',3i3,1p,e',9+ipls,'.2,2e9.2)'
         write(*,hlp_frm)
      -    (i,rctnptpr(i),rctndbs(i) ,rctnchp(i) ,rctnrct(i) ,rctntyp(i),
      ,       rctnptin(i),rctnpto1(i),rctnpto2(i),rctnpto3(i),
