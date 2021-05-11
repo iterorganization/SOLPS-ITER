@@ -135,6 +135,8 @@ sed -i -e "s/b2mn_fin_d/b2mn_fin_dv/g" b2optim_*.F*
 sed -i -e "s/b2mn_step_d/b2mn_step_dv/g" b2optim_*.F*
 sed -i -e "s/b2mod_user_namelist_diff/b2mod_user_namelist_diffv/g" b2optim_*.F*
 sed -i -e "s/b2mod_plasma_diff/b2mod_plasma_diffv/g" b2optim_*.F*
+sed -i -e "s/b2mod_transport_namelist_diff/b2mod_transport_namelist_diffv/g" b2optim_*.F*
+sed -i -e "s/b2mod_input_profile_diff/b2mod_input_profile_diffv/g" b2optim_*.F*
 sed -i -e "s/call b2mn_init_dv/call b2mn_init_dv(npar_opt)/g" b2optim_*.F*
 sed -i -e "s/call b2mn_fin_dv/call b2mn_fin_dv(npar_opt)/g" b2optim_*.F*
 sed -i -e "s/call b2mn_step_dv(j,jd)/call b2mn_step_dv(j,jd,npar_opt)/g" b2optim_ipopt.F

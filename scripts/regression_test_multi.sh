@@ -5,7 +5,7 @@ modify_tapenade_files_d_multi.sh
 touch diffsizes.F
 echo "      module diffsizes" >> diffsizes.F
 echo "      implicit none" >> diffsizes.F
-echo "      integer ,parameter :: nbdirsmax=6" >> diffsizes.F
+echo "      integer ,parameter :: nbdirsmax=20" >> diffsizes.F
 echo "      end module" >> diffsizes.F
 sed -i -e "/CALL B2MN_INIT_DV/i\  nbdirs=6" b2mn_d.F90
 
@@ -44,6 +44,8 @@ sed -i -e 's/ipgtmx=40/ipgtmx=4000/g' ipmain.F
 sed -i -e '/parm_dnad(nd, 1) = 0.D0/d' b2tqna_dv.F90
 sed -i -e '/parm_hced(nd) = 0.D0/d' b2tqna_dv.F90 
 sed -i -e '/parm_hcid(nd, 1) = 0.D0/d' b2tqna_dv.F90
+sed -i -e '/tdatad(nd, :, :, :, :) = 0.D0/d' b2mod_input_profile_diffv.F90
+sed -i -e '/fd(nd, i) = 0.D0/d' b2mod_input_profile_diffv.F90
 
 setenv DIFF_D yes
 cd $SOLPSTOP
