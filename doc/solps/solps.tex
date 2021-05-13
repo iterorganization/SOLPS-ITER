@@ -12965,7 +12965,9 @@ $S_a^{\rm Eirene}{\sqrt{g}}$ & $s^{-1}$ & \texttt{b2stbr\_sna\_eir[XXX].dat} &  
 
 ${S_a^{BC}}{\sqrt{g}}$ & $s^{-1}$ & \texttt{b2stbc\_phys\_sna[XXX].dat} &  \\
 
-$\displaystyle - \sqrt{g}\frac{\partial n_a}{\partial t} $ & $s^{-1}$ & \texttt{b2srdt\_snadt[XXX].dat} &  (\ref{eq:cont_appC})\\
+$\displaystyle \sqrt{g}\frac{\partial n_a}{\partial t} $ & $s^{-1}$ & \texttt{b2npco\_dnadt[XXX].dat} or &  (\ref{eq:cont_appC})
+\\ & & \texttt{b2npc9\_dnadt[XXX].dat} & \\
+\\ & & \texttt{b2npc11\_dnadt[XXX].dat} & \\
 
 $\displaystyle\frac{\sqrt{g}}{h_x}\widetilde{ \Gamma}_{ax}$ & $s^{-1}$ & \texttt{b2npc9\_fnax[XXX].dat} or &  (\ref{eq:GammaAX_appC})
 \\ & & \texttt{b2npc11\_fnax[XXX].dat} & \\
@@ -13040,7 +13042,11 @@ $V_{\parallel a}$ & $ m/s $ & \texttt{b2npmo\_ua[XXX].dat} & (\ref{eq:mom_new}),
 
 $S_a^m h_z \sqrt{g}$ & $ N\cdot m$ & \texttt{b2npmo\_smb[XXX].dat} & (\ref{eq:mom_alls}) \\
 
-$\displaystyle - m_a \frac{\partial n_a V_{\parallel a}}{\partial t} h_z \sqrt{g} $ & $ N\cdot m $ & \texttt{b2srdt\_smodt[XXX].dat} & (\ref{eq:mom_new}), (\ref{eq:mom_old})  \\
+$\displaystyle m_a \frac{\partial n_a V_{\parallel a}}{\partial t} h_z \sqrt{g} $ & $ N\cdot m $ & \texttt{b2npmo\_madnavadt[XXX].dat} & (\ref{eq:mom_new}), (\ref{eq:mom_old})  \\
+
+$\displaystyle m_a n_a\frac{\partial V_{\parallel a}}{\partial t} h_z \sqrt{g} $ & $ N\cdot m $ & \texttt{b2npmo\_manadvadt[XXX].dat} &    \\
+
+$\displaystyle m_a V_{\parallel a} \frac{\partial n_a }{\partial t} h_z \sqrt{g} $ & $ N\cdot m $ & \texttt{b2npmo\_mavadnadt[XXX].dat} &    \\
 
 $\displaystyle  \frac{h_z\sqrt g}{h_x} \Gamma_{ax}^m  $ & $N\cdot m$ & \texttt{b2npmo\_fmox[XXX].dat} & (\ref{eq:mom_fluxx}), \\
 
@@ -13142,7 +13148,15 @@ $\displaystyle Q^{BC}_{e}\sqrt {g} $ & $ W $ & \texttt{b2stbc\_phys\_she.dat} & 
 
 $\displaystyle -\frac{j_y^{(ST)}}{e n_e} \frac{\partial n_e T_e}{h_y \partial y} \sqrt{g}$ & $ W $ & \texttt{b2sihs\_\_shest.dat} & (\ref{eq:ene_new})  \\
 
-$\displaystyle -\frac{3}{2} \frac{\partial n_e T_e}{\partial t} \sqrt{g} $ & $ W $ & \texttt{b2srdt\_shedt.dat} & (\ref{eq:ene_new})  \\
+$\displaystyle \frac{3}{2} \frac{\partial n_e T_e}{\partial t} \sqrt{g} $ & $ W $ & \texttt{b2npht\_dnetedt.dat} or & (\ref{eq:ene_new})  \\ 
+& & \texttt{b2nph9\_dnetedt.dat} & \\
+
+$\displaystyle \frac{3}{2} n_e \frac{\partial T_e}{\partial t} \sqrt{g} $ & $ W $ & \texttt{b2npht\_nedtedt.dat} or &   \\ 
+& & \texttt{b2nph9\_nedtedt.dat} & \\
+
+$\displaystyle \frac{3}{2} T_e \frac{\partial n_e}{\partial t} \sqrt{g} $ & $ W $ & \texttt{b2npht\_tednedt.dat} or &   \\ 
+& & \texttt{b2nph9\_tednedt.dat} & \\
+
 
 $\displaystyle \frac32 \frac{\sqrt{g}}{h_{x}} \Gamma_{ex} T_e$ & $ W $ & \texttt{b2tfhe\_\_qe\_32x.dat} & (\ref{eq:ene_gammax})  \\
 
@@ -13217,7 +13231,14 @@ $T_i$ & $ W $ & \texttt{b2npht\_shi.dat} or & (\ref{eq:eni})\\
 $S_i^{heat} \sqrt{g}$ & $ W $ & \texttt{b2npht\_shi.dat} or & (\ref{eq:cont_appC})  \\
  & & \texttt{b2nph9\_shi.dat} & \\
 
-$\displaystyle -\frac{3}{2} \sqrt{g} \frac{\partial n_i T_i}{\partial t}$ & $ W $ & \texttt{b2srdt\_shidt.dat} & (\ref{eq:eni})\\
+$\displaystyle \frac{3}{2} \frac{\partial n_i T_i}{\partial t} \sqrt{g} $ & $ W $ & \texttt{b2npht\_dnitidt.dat} or & (\ref{eq:ene_new})  \\ 
+& & \texttt{b2nph9\_dnitidt.dat} & \\
+
+$\displaystyle \frac{3}{2} n_i \frac{\partial T_i}{\partial t} \sqrt{g} $ & $ W $ & \texttt{b2npht\_nidtidt.dat} or &   \\ 
+& & \texttt{b2nph9\_nidtidt.dat} & \\
+
+$\displaystyle \frac{3}{2} T_i \frac{\partial n_i}{\partial t} \sqrt{g} $ & $ W $ & \texttt{b2npht\_tidnidt.dat} or &   \\ 
+& & \texttt{b2nph9\_tidnidt.dat} & \\
 
 $\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{q}_{ix}$ & $ W $ & \texttt{b2nph9\_fhix.dat} &(\ref{eq:eni_tiqix})\\
 
