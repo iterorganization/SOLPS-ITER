@@ -26,7 +26,7 @@ c*** General information
 
       data   topo, mnpr,mnptseg,mdvbndx,  ldvbndx  ,ntrgdflt,do_hepdt /
      /        ' ',  0  ,   0   ,   0   ,0,nbnddvd*0,    0   , .false. /,
-     ,  namdf,amd_file ,nnrctn,n_spcsrf,npfrgrp,lm_cnfg,ln_cnfg/
+     ,  namdf,amd_file ,nnrctn,n_spcsrf,npfrgrp,lm_cnfg,ln_cnfg /
      /    0  ,namdfs*' ',   0  ,   0    ,   0  ,.false.,.false. /,
      , lm_vhst,lm_whst,   niiso   , tiiso, teiso/
      /  10000 , 50000 , nsdb2*1.e5,  0.1 ,  0.1 /,

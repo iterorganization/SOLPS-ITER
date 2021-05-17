@@ -24,6 +24,8 @@ module load gnuplot/5.2.2-intel-2018a
 export GLI_HOME=${EBROOTGLI}
 export NCDIR=${EBROOTNETCDFMINFORTRAN}
 export MPDIR=${EBROOTIMPI}
+export GGD_VERSION=`pkg-config ggd --modversion`
+export EBVERSIONMSCL=`pkg-config mscl --modversion`
 module load MATLAB/2018a
 module load texlive/2015
 
