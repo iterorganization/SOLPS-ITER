@@ -31,7 +31,7 @@ while true; do {
   shift
 }; done
 
-[ -r uinput.dg ] || { print -u2 -- `basename $0`" :  no uinput.dg"; exit 4; }
+[ -r uinput.dg ] || { print -u2 -- `basename $0`" :  no uinput.dg file found. Did you run lns beforehand?"; exit 4; }
 [ -r uinput.trg ] || { print -u2 -- `basename $0`" :  no uinput.trg"; exit 4; }
 [ -r uinput.aux ] && print -- `basename $0`" :  uinput.aux to be used"
 

@@ -80,7 +80,10 @@ EOF
     endif
     set MPIOPTS="$1"
     echo Using MPI options: $MPIOPTS
-    set PROCS=`echo $MPIOPTS | awk.transpose | grep -A 1 "\-np" | tail -n 1`
+    set PROCS_REQ=`echo $MPIOPTS | awk.transpose | grep -A 1 "\-np" | tail -n 1`
+    if ($PROCS_REQ!="") then
+       set PROCS=$PROCS_REQ
+    endif
     echo Asking for MPI run with $PROCS processors
     shift
     set HELP_STRING=`echo \"$MPIOPTS\"`
@@ -187,6 +190,9 @@ sed \
   -e 's:#USER#:'$USER':g' \
   -e 's:#LOOPOPTS#:'"$LOOP_OPTS"':g' \
   < $QSUB > $NAME
+
+echo $PROCS
+echo $PROCS_REQ
 
 set msg="Submitted at `date`"
 update_solps_run_status -n ${msg}

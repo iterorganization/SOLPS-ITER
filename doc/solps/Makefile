@@ -84,19 +84,20 @@ bibtex: solps.bbl
 b2cdca.F:
 	ln -sf ${B25DIR}/src/documentation/b2cdca.F .
 
-b2cdci.F: ${B25DIR}/src/documentation/b2input.xml ${B25DIR}/src/documentation/b2cdci.py
-	-cd ${B25DIR}/src/documentation; ${PYTHON} b2cdci.py || echo "! Error building b2cdci.F from b2input.xml" > ${B25DIR}/src/documentation/b2cdci.F
-	ln -sf ${B25DIR}/src/documentation/b2cdci.F .
+b2cdci.F: b2input.xml ${B25DIR}/src/documentation/b2cdci.py
+	export DO_NOT_RESOLVE_ENTITIES=1; ${PYTHON} ${B25DIR}/src/documentation/b2cdci.py || echo "! Error building b2cdci.F from b2input.xml" > b2cdci.F
 
-b2cdcn.F: ${B25DIR}/src/documentation/b2input.xml ${B25DIR}/src/documentation/b2cdcn.py
-	-cd ${B25DIR}/src/documentation; ${PYTHON} b2cdcn.py || echo "! Error building b2cdcn.F from b2input.xml" > ${B25DIR}/src/documentation/b2cdcn.F
-	ln -sf ${B25DIR}/src/documentation/b2cdcn.F .
+b2cdcn.F: b2input.xml ${B25DIR}/src/documentation/b2cdcn.py
+	export DO_NOT_RESOLVE_ENTITIES=1; ${PYTHON} ${B25DIR}/src/documentation/b2cdcn.py || echo "! Error building b2cdcn.F from b2input.xml" > b2cdcn.F
 
 b2cdcr.F:
 	ln -sf ${B25DIR}/src/documentation/b2cdcr.F .
 
 b2cdcv.F:
 	ln -sf ${B25DIR}/src/documentation/b2cdcv.F .
+
+b2input.xml: ${B25DIR}/src/documentation/b2input.xml
+	ln -sf ${B25DIR}/src/documentation/b2input.xml .
 
 b2plot.commands: ${B25DIR}/src/b2plot/b2plot.F
 	-[ -e b2plot.commands ] && rm b2plot.commands || echo > /dev/null
@@ -136,8 +137,8 @@ complete:
 	${MAKE} solps.ps
 	${MAKE} solps.pdf
 
-clean: 
-	rm -f solps.pdf solps.ps solps.dvi solps.xdv solps.aux solps.ilg solps.ind solps.idx solps.lof solps.log solps.lot solps.out solps.toc b2cdca.F b2cdci.F b2cdcn.F b2cdcr.F b2cdcv.F solps_data_git.log solps-iter_git.log B2_5.config.ITER.ifort64 B2_5.Makefile DIMENSIONS.F SOLPS_versions solps.bbl solps.blg solps.brf solps.tpt
+clean:
+	rm -f solps.pdf solps.ps solps.dvi solps.xdv solps.aux solps.ilg solps.ind solps.idx solps.lof solps.log solps.lot solps.out solps.toc b2input.xml b2cdca.F b2cdci.F b2cdcn.F b2cdcr.F b2cdcv.F solps_data_git.log solps-iter_git.log B2_5.config.ITER.ifort64 B2_5.Makefile DIMENSIONS.F SOLPS_versions solps.bbl solps.blg solps.brf solps.tpt
 
 ### WORK
 COMPARE_10814_TESEPM=/scratch/dpc/solps5.0_HD+C+He/src/Braams/b2/runs/D+C+He/2MW/compare_10814_tesepm.ps

@@ -41,7 +41,7 @@ endif
 NAG       = ${LD_NAG}
 GKS       = ${LD_GR} ${LD_GKS} -lX11 -lXt -lxcb
 
-#LDLIBS   = ${LD_MSCL}-L/usr/local/lib -L/usr/X11R6/lib64
+#LDLIBS   = ${LD_MSCL} -L/usr/local/lib -L/usr/X11R6/lib64
 LDLIBS    =
 LDEXTRA   =
 

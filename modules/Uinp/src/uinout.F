@@ -25,9 +25,12 @@ c=======================================================================
       logical streql,silent_open
       logical, allocatable :: done(:)
       character*256 filename, adasfile, uidin
+      character*50 hlp_frm
       character utxthd(35)*71, utxtfl(7)*50, ufnm*(*)
       character utxtgt*71
-      external streql, silent_open, xerrab, subini, subend
+      integer len_of_digits, idez
+      external streql, silent_open, len_of_digits, idez, xerrab
+     , , subini, subend
       data utxthd /
      1        '** 1. Data for operating mode' ,
      2        '** 2. Data for standard mesh' ,
@@ -471,9 +474,18 @@ c**   atomic reaction cards, nreaci data fields
 
       write(iunoo,700) utxthd(24)
       write(iunoo,707) nreaci
+      if(minval(delpot(1:nrcln)).lt.0.) then !{
+        write(hlp_frm,'(a,i1,a)')
+     ,   '(1p,i3,1x,a6,1x,a4,1x,a9,a3,i3,i',
+     ,     1+max(2,len_of_digits(maxval(masst(1:nrcln)))),',1x,5e12.5)'
+      else !}{
+        write(hlp_frm,'(a,i1,a)')
+     ,   '(1p,i3,1x,a6,1x,a4,1x,a9,a3,i3,i',
+     ,     1+max(2,len_of_digits(maxval(masst(1:nrcln)))),',5e12.5)'
+      end if !}
       do j=1,nrcln !{
         iid=ir(j)
-        write(iunoo,701) iid,filnam(j),h123(j),reac(j),crc(j),
+        write(iunoo,hlp_frm) iid,filnam(j),h123(j),reac(j),crc(j),
      ,                   massp(j),masst(j),delpot(j),rc1mn(j),rc1mx(j),
      ,                                               rc2mn(j),rc2mx(j)
         if (streql(filnam(j),'ADAS')) then !{
@@ -728,10 +740,26 @@ c*** 6a.  data for reflection model
       write(iunoo,706) nltrim
       if(path.ne.' ') write(iunoo,'(a6,a60)') 'cpath ',path
       write(iunoo,'(a8)') (filtrm(i),i=1,nnftrm)
-      write(iunoo,703) (datm(iatm),iatm=1,natmi)
-      write(iunoo,703) (dmol(imol),imol=1,nmoli)
-      write(iunoo,703) (dion(iion),iion=1,nioni)
-      write(iunoo,703) (dpls(ipls),ipls=1,nplsi+nbgk)
+      if (natmi.gt.0) then
+        write(iunoo,703) (datm(iatm),iatm=1,natmi)
+      else
+        write(iunoo,703) 0.
+      endif
+      if (nmoli.gt.0) then
+        write(iunoo,703) (dmol(imol),imol=1,nmoli)
+      else
+        write(iunoo,703) 0.
+      end if
+      if (nioni.gt.0) then
+        write(iunoo,703) (dion(iion),iion=1,nioni)
+      else
+        write(iunoo,703) 0.
+      end if
+      if (nplsi+nbgk.gt.0) then
+        write(iunoo,703) (dpls(ipls),ipls=1,nplsi+nbgk)
+      else
+        write(iunoo,703) 0.
+      end if
       write(iunoo,703) ermin,ercut,rprob0,rinteg,einteg,ainteg
 c*** surface cards
       k=0
@@ -1025,8 +1053,10 @@ c**  particle history plots in 2d or 3d geometry plots
 c*** 12.  data for diagnostic module
 
       write(iunoo,700) utxthd(18)
-      write(iunoo,721) "DEFINE_LINES"
-      write(iunoo,707) numlines,modaddv
+      if (hydrogen) then
+        write(iunoo,721) "DEFINE_LINES"
+        write(iunoo,707) numlines,modaddv
+      end if
       write(iunoo,707) nchori,ncheni,lntspec,lntsput,nmcsput,
      ,                                         nlstadds,mtreadds,ngwties
       if (nchori.gt.0) then !{

@@ -691,7 +691,7 @@ chosen Fortran compiler ({\it e.g.} {\tt ifort64}).
 \section{Setup and configuration files}
 \index{setup.csh}\label{sec:setup}
 
-The {\tt setup.csh} file and its subsidiaries {\tt \$\{SOLPSTOP\}/SETUP/setup.csh.\$\{HOST\_NAME\}.\$\{COMPILER\}} and {\tt \$\{SOLPSTOP\}/SETUP/config.\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}} are used to load any modules packages useful for the local \SOLPSITER run environment and the following environment variables:
+The {\tt setup.csh} file and its subsidiaries {\tt \$\{SOLPSTOP\}/SETUP/setup.csh.\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}} and {\tt \$\{SOLPSTOP\}/SETUP/config.\allowbreak\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}} are used to load any modules packages useful for the local \SOLPSITER run environment and the following environment variables:
 \begin{enumerate}
 \item {\tt B25\_DEFINES}\index{B25\_DEFINES}, an environment variable containing the additional "defines" to use during compilation of {\tt B2.5}
 \item {\tt DBX}\index{DBX}, the name of the debugger to be used
@@ -12900,15 +12900,21 @@ energy, and momentum fluxes, currents, and quantities which contribute to them) 
     \endlastfoot
 \multicolumn{4}{|l|}{\small\sl Main quantities} \\
 \hline
-$n_a$ & $m^{-3}$ & \texttt{b2npco\_na[XXX].dat} or & (\ref{eq:cont_appC})  \\ & & \texttt{b2npc9\_na[XXX].dat} or &
-\\ & & \texttt{b2npc11\_na[XXX].dat} & \\
-$u_a$ & $m/s$ & \texttt{b2npmo\_ua[XXX].dat} &  (\ref{eq:mom_new}), (\ref{eq:mom_old})   \\
-$T_e$ & $J$ & \texttt{b2npht\_te.dat} or &  (\ref{eq:ene_new})  \\ & & \texttt{b2nph9\_te.dat} & \\
-$T_i$ & $J$ & \texttt{b2npht\_ti.dat} or &  (\ref{eq:eni})  \\ & & \texttt{b2nph9\_ti.dat} & \\
-$T_e$ & $eV$ & \texttt{te\_eV.dat} &  (\ref{eq:ene_new})  \\
-$T_i$ & $eV$ & \texttt{ti\_eV.dat} &  (\ref{eq:eni})  \\
-$\varphi$ & $V$ & \texttt{b2nppo\_po.dat} or &  (\ref{eq:pot_eq})  \\ & & \texttt{b2npp7\_po.dat} & \\
-$n_e $ & $ m^{-3} $ & \texttt{ne.dat} & (\ref{eq:ne})\\
+
+$n_a$ & $m^{-3}$ & \texttt{b2npco\_na[XXX].dat} or & (\ref{eq:cont_appC}) \\
+ & & \texttt{b2npc9\_na[XXX].dat} or &  \\
+ & & \texttt{b2npc11\_na[XXX].dat} &  \\
+$u_a$ & $m/s$ & \texttt{b2npmo\_ua[XXX].dat} & (\ref{eq:mom_new}), (\ref{eq:mom_old}) \\
+$T_e$ & $J$ & \texttt{b2npht\_te.dat} or & (\ref{eq:ene_new}) \\
+ & & \texttt{b2nph9\_te.dat} &  \\
+$T_i$ & $J$ & \texttt{b2npht\_ti.dat} or & (\ref{eq:eni}) \\
+ & & \texttt{b2nph9\_ti.dat} &  \\
+$T_e$ & $eV$ & \texttt{te\_eV.dat} & (\ref{eq:ene_new}) \\
+$T_i$ & $eV$ & \texttt{ti\_eV.dat} & (\ref{eq:eni}) \\
+$\varphi$ & $V$ & \texttt{b2nppo\_po.dat} or & (\ref{eq:pot_eq}) \\
+ & & \texttt{b2npp7\_po.dat} &  \\
+$n_e$ & $m^{-3}$ & \texttt{ne.dat} & (\ref{eq:ne}) \\
+
 \hline
 \multicolumn{4}{|l|}{\small\sl Geometry and related quantities} \\
 \hline
@@ -12933,405 +12939,401 @@ $Z_3$ & $m$ & \texttt{crz3.dat} &  \\
 \hline
 \multicolumn{4}{|l|}{\small\sl Continuity equation and related quantities} \\
 \hline
-$S_a^n\sqrt{g}$ & $s^{-1}$ & \texttt{b2npco\_sna[XXX].dat} or & (\ref{eq:cont_appC})  \\ & & \texttt{b2npc9\_sna[XXX].dat} or &
-\\ & & \texttt{b2npc11\_sna[XXX].dat} & \\
 
-$\left({S_{I_a}^n+S_{I_{a+1}}^n}\right){\sqrt{g}}$ & $s^{-1}$ & \texttt{b2stel\_sna\_ion[XXX].dat} &  (\ref{eq:SIa}), (\ref{eq:SIa1})\\
+$S_a^n\sqrt{g}$ & $s^{-1}$ & \texttt{b2npco\_sna[XXX].dat} or & (\ref{eq:cont_appC}) \\
+ & & \texttt{b2npc9\_sna[XXX].dat} or & \\
+ & & \texttt{b2npc11\_sna[XXX].dat} & \\
 
-$\left({S_{R_a}^n+S_{R_{a-1}}^n}\right){\sqrt{g}}$ & $s^{-1}$ & \texttt{b2stel\_sna\_rec[XXX].dat} &   (\ref{eq:SRa}), (\ref{eq:SRa1})\\
+$\left({S_{I_a}^n+S_{I_{a+1}}^n}\right){\sqrt{g}}$ & $s^{-1}$ & \texttt{b2stel\_sna\_ion[XXX].dat} & (\ref{eq:SIa}), (\ref{eq:SIa1}) \\
 
-$\left({S_{CX_a}^n+S_{CX_{a-1}}^n}\right){\sqrt{g}}$ & $s^{-1}$ & \texttt{b2stcx\_sna\_[XXX].dat} &(\ref{eq:Scxa}) \\
+$\left({S_{R_a}^n+S_{R_{a-1}}^n}\right){\sqrt{g}}$ & $s^{-1}$ & \texttt{b2stel\_sna\_rec[XXX].dat} & (\ref{eq:SRa}), (\ref{eq:SRa1}) \\
+
+$\left({S_{CX_a}^n+S_{CX_{a-1}}^n}\right){\sqrt{g}}$ & $s^{-1}$ & \texttt{b2stcx\_sna\_[XXX].dat} & (\ref{eq:Scxa}) \\
 
 $S_a^{\rm Eirene}{\sqrt{g}}$ & $s^{-1}$ & \texttt{b2stbr\_sna\_eir[XXX].dat} &  \\
 
 ${S_a^{BC}}{\sqrt{g}}$ & $s^{-1}$ & \texttt{b2stbc\_phys\_sna[XXX].dat} &  \\
 
-$\displaystyle - \sqrt{g}\frac{\partial n_a}{\partial t} $ & $s^{-1}$ & \texttt{b2srdt\_snadt[XXX].dat} &  (\ref{eq:cont_appC})\\
+$\displaystyle \sqrt{g}\frac{\partial n_a}{\partial t} $ & $s^{-1}$ & \texttt{b2npco\_dnadt[XXX].dat} or & (\ref{eq:cont_appC}) \\
+ & & \texttt{b2npc9\_dnadt[XXX].dat} or & \\
+ & & \texttt{b2npc11\_dnadt[XXX].dat} & \\
 
-$\displaystyle\frac{\sqrt{g}}{h_x}\widetilde{ \Gamma}_{ax}$ & $s^{-1}$ & \texttt{b2npc9\_fnax[XXX].dat} or &  (\ref{eq:GammaAX_appC})
-\\ & & \texttt{b2npc11\_fnax[XXX].dat} & \\
+$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{\Gamma}_{ax}$ & $s^{-1}$ & \texttt{b2npc9\_fnax[XXX].dat} or & (\ref{eq:GammaAX_appC}) \\
+ & & \texttt{b2npc11\_fnax[XXX].dat} & \\
 
-$\displaystyle \frac{\sqrt{g}}{h_x}\widetilde{ \Gamma}_{ay}$ & $s^{-1}$ & \texttt{b2npc9\_fnay[XXX].dat} or &  (\ref{eq:GammaAY_appC})
-\\ & & \texttt{b2npc11\_fnay[XXX].dat} & \\
+$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{\Gamma}_{ay}$ & $s^{-1}$ & \texttt{b2npc9\_fnay[XXX].dat} or & (\ref{eq:GammaAY_appC}) \\
+ & & \texttt{b2npc11\_fnay[XXX].dat} & \\
 
-$\displaystyle \frac{\sqrt{g}}{h_x}b_xV_{||a}n_a $ & $ s^{-1} $ & \texttt{b2tfnb\_bxuanax[XXX].dat} & (\ref{eq:GammaAX_appC}), (\ref{eq:GammaAXnoTilde_appC}) \\
+$\displaystyle \frac{\sqrt{g}}{h_x} b_x V_{||a} n_a$ & $s^{-1}$ & \texttt{b2tfnb\_bxuanax[XXX].dat} & (\ref{eq:GammaAX_appC}), (\ref{eq:GammaAXnoTilde_appC}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_x}V_{ax}^{(E)}n_a $ & $ s^{-1} $ & \texttt{b2tfnb\_vaecrbnax[XXX].dat} & (\ref{eq:vaExB_appC})\\
+$\displaystyle \frac{\sqrt{g}}{h_x} V_{ax}^{(E)} n_a$ & $s^{-1}$ & \texttt{b2tfnb\_vaecrbnax[XXX].dat} & (\ref{eq:vaExB_appC}) \\
 
-$\displaystyle\frac{\sqrt{g}}{h_x}V_{ay}^{(E)}n_a $ & $ s^{-1} $ & \texttt{b2tfnb\_vaecrbnay[XXX].dat} & (\ref{eq:vaExB_appC})\\
+$\displaystyle \frac{\sqrt{g}}{h_x} V_{ay}^{(E)} n_a$ & $s^{-1}$ & \texttt{b2tfnb\_vaecrbnay[XXX].dat} & (\ref{eq:vaExB_appC}) \\
 
-$\displaystyle\frac{\sqrt{g}}{h_x}V_{a}^{\rm corr\_ dpc}n_a $ & $ s^{-1} $ & \texttt{b2tfnb\_dpccornax[XXX].dat} & (\ref{eq:VaCor_dpcDef_appC}) \\
+$\displaystyle \frac{\sqrt{g}}{h_x} V_{a}^{\rm corr\_ dpc} n_a$ & $s^{-1}$ & \texttt{b2tfnb\_dpccornax[XXX].dat} & (\ref{eq:VaCor_dpcDef_appC}) \\
 
-$\displaystyle\frac{\sqrt{g}}{h_x}V_{ay}^{(AN)}n_a $ & $ s^{-1} $ & \texttt{b2tfnb\_cvlbnay[XXX].dat} & (\ref{eq:V_ayAN})\\
+$\displaystyle \frac{\sqrt{g}}{h_x} V_{ay}^{(AN)} n_a$ & $s^{-1}$ & \texttt{b2tfnb\_cvlbnay[XXX].dat} & (\ref{eq:V_ayAN}) \\
 
-$\displaystyle -D_{n,a}\frac{\sqrt{g}}{h_x}\frac{1}{h_x}\frac{\partial{n_a}}{\partial{x}} $ & $ s^{-1} $ & \footnotesize{\texttt{b2tfnb\_dPat\_mdf\_gradnax[XXX].dat}} & (\ref{eq:D_na})\\
+$\displaystyle -D_{n,a} \frac{\sqrt{g}}{h_x} \frac{1}{h_x} \frac{\partial{n_a}}{\partial{x}}$ & $s^{-1}$ & \footnotesize{\texttt{b2tfnb\_dPat\_mdf\_gradnax[XXX].dat}} & (\ref{eq:D_na}) \\
 
-$\displaystyle -D_{n,a}\frac{\sqrt{g}}{h_y}\frac{1}{h_y}\frac{\partial{n_a}}{\partial{y}} $ & $ s^{-1} $ & \footnotesize{\texttt{b2tfnb\_dPat\_mdf\_gradnay[XXX].dat}} &  (\ref{eq:D_na}) \\
+$\displaystyle -D_{n,a} \frac{\sqrt{g}}{h_y} \frac{1}{h_y} \frac{\partial{n_a}}{\partial{y}}$ & $s^{-1}$ & \footnotesize{\texttt{b2tfnb\_dPat\_mdf\_gradnay[XXX].dat}} & (\ref{eq:D_na}) \\
 
-$\displaystyle -\tilde{D}_{p,ax}\frac{\sqrt{g}}{h_x}\frac{1}{h_x}\frac{\partial{p_a}}{\partial{x}} $ & $ s^{-1} $ & \texttt{b2tfnb\_dgradpbx[XXX].dat} & (\ref{eq:D_pax})\\
+$\displaystyle -\tilde{D}_{p,ax} \frac{\sqrt{g}}{h_x} \frac{1}{h_x} \frac{\partial{p_a}}{\partial{x}}$ & $s^{-1}$ & \texttt{b2tfnb\_dgradpbx[XXX].dat} & (\ref{eq:D_pax}) \\
 
-$\displaystyle -\tilde{D}_{p,ay}\frac{\sqrt{g}}{h_y}\frac{1}{h_y}\frac{\partial{p_a}}{\partial{y}} $ & $ s^{-1} $ & \texttt{b2tfnb\_dgradpby[XXX].dat} & (\ref{eq:D_pay})\\
+$\displaystyle -\tilde{D}_{p,ay} \frac{\sqrt{g}}{h_y} \frac{1}{h_y} \frac{\partial{p_a}}{\partial{y}}$ & $s^{-1}$ & \texttt{b2tfnb\_dgradpby[XXX].dat} & (\ref{eq:D_pay}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{\Gamma}_{ax}^{\left( PSch \right)} $ \footnote{Mind the sign! It is opposite in the output file and the flux balance.} & $ s^{-1} $ & \texttt{b2tfnb\_fnbPSchx[XXX].dat} &  (\ref{eq:D_axy}) \\
+$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{\Gamma}_{ax}^{\left( PSch \right)}$ \footnote{Mind the sign! It is opposite in the output file and the flux balance.} & $s^{-1}$ & \texttt{b2tfnb\_fnbPSchx[XXX].dat} & (\ref{eq:D_axy}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{\Gamma}_{ay}^{\left( PSch \right)} $ \footnote{Mind the sign! It is opposite in the output file and the flux balance.} & $ s^{-1} $ & \texttt{b2tfnb\_fnbPSchy[XXX].dat} & (\ref{eq:D_axy}) \\
+$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{\Gamma}_{ay}^{\left( PSch \right)}$ \footnote{Mind the sign! It is opposite in the output file and the flux balance.} & $s^{-1}$ & \texttt{b2tfnb\_fnbPSchy[XXX].dat} & (\ref{eq:D_axy}) \\
 
-$\displaystyle {D}_{n,a}\frac{\sqrt{g}}{h_x^2} $ & $ m^3/s $ & \texttt{b2trno\_cdnax[XXX].dat} & (\ref{eq:D_na})\\
+$\displaystyle {D}_{n,a} \frac{\sqrt{g}}{h_x^2}$ & $m^3/s$ & \texttt{b2trno\_cdnax[XXX].dat} & (\ref{eq:D_na}) \\
 
-$\displaystyle {D}_{n,a}\frac{\sqrt{g}}{h_y^2} $ & $ m^3/s $ & \texttt{b2trno\_cdnay[XXX].dat} & (\ref{eq:D_na})\\
+$\displaystyle {D}_{n,a} \frac{\sqrt{g}}{h_y^2}$ & $m^3/s$ & \texttt{b2trno\_cdnay[XXX].dat} & (\ref{eq:D_na}) \\
 
-$\displaystyle {\tilde{D}_{ax}}^p\frac{\sqrt{g}}{h_x^2} $ & $ m \cdot s / kg $ & \texttt{b2trno\_cdpax[XXX].dat} & (\ref{eq:D_pax})\\
+$\displaystyle {\tilde{D}_{ax}}^p \frac{\sqrt{g}}{h_x^2}$ & $m \cdot s / kg$ & \texttt{b2trno\_cdpax[XXX].dat} & (\ref{eq:D_pax}) \\
 
-$\displaystyle {\tilde{D}_{ay}}^p\frac{\sqrt{g}}{h_y^2} $ & $ m \cdot s / kg $ & \texttt{b2trno\_cdpay[XXX].dat} & (\ref{eq:D_pay})\\
+$\displaystyle {\tilde{D}_{ay}}^p \frac{\sqrt{g}}{h_y^2}$ & $m \cdot s / kg$ & \texttt{b2trno\_cdpay[XXX].dat} & (\ref{eq:D_pay}) \\
 
-$\displaystyle {D}_{n,a}^{AN} $ & $ m^2/s $ & \texttt{b2tqna\_dna0[XXX].dat} & (\ref{eq:D_na})\\
+$\displaystyle {D}_{n,a}^{AN}$ & $m^2/s$ & \texttt{b2tqna\_dna0[XXX].dat} & (\ref{eq:D_na}) \\
 
-$\displaystyle {{D}_a}^p $ & $ m^2/s $ & \texttt{b2tqna\_dpa0[XXX].dat} & (\ref{eq:D_pa})\\
+$\displaystyle {{D}_a}^p $ & $m^2/s$ & \texttt{b2tqna\_dpa0[XXX].dat} & (\ref{eq:D_pa}) \\
 
-${V_{ax}}^{(E)} $ & $ {m}/{s} $ & \texttt{b2tfnb\_vbecrbx001.dat} & (\ref{eq:VaxE_appC})\\
+${V_{ax}}^{(E)}$ & $m/s$ & \texttt{b2tfnb\_vbecrbx001.dat} & (\ref{eq:VaxE_appC}) \\
 
-${V_{ay}}^{(E)} $ & $ {m}/{s} $ & \texttt{b2tfnb\_vbecrby001.dat} & (\ref{eq:VayE_appC})\\
+${V_{ay}}^{(E)}$ & $m/s$ & \texttt{b2tfnb\_vbecrby001.dat} & (\ref{eq:VayE_appC}) \\
 
-${W_x}^{(dia)} $ & $ {m}/{s} $ & \texttt{b2tfnb\_wbdiax[XXX].dat} & (\ref{eq:W_xy})\\
+${W_x}^{(dia)}$ & $m/s$ & \texttt{b2tfnb\_wbdiax[XXX].dat} & (\ref{eq:W_xy}) \\
 
-${W_y}^{(dia)} $ & $ {m}/{s} $ & \texttt{b2tfnb\_wbdiay[XXX].dat} & (\ref{eq:W_xy})\\
+${W_y}^{(dia)}$ & $m/s$ & \texttt{b2tfnb\_wbdiay[XXX].dat} & (\ref{eq:W_xy}) \\
 
-$\tilde{V}_{ax}^{(dia)} $ & $ {m}/{s} $ & \texttt{b2tfnb\_vbdiax[XXX].dat} & (\ref{eq:VaxDia})\\
+$\tilde{V}_{ax}^{(dia)}$ & $m/s$ & \texttt{b2tfnb\_vbdiax[XXX].dat} & (\ref{eq:VaxDia}) \\
 
-$\tilde{V}_{ay}^{(dia)} $ & $ {m}/{s} $ & \texttt{b2tfnb\_vbdiay[XXX].dat} & (\ref{eq:VayDia})\\
+$\tilde{V}_{ay}^{(dia)}$ & $m/s$ & \texttt{b2tfnb\_vbdiay[XXX].dat} & (\ref{eq:VayDia}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_x}\tilde{V}_{ax}^{(dia)}n_a $ & $ s^{-1} $ & \texttt{b2tfnb\_vadianax[XXX].dat} & (\ref{eq:vadia_appC}) \\
+$\displaystyle \frac{\sqrt{g}}{h_x} \tilde{V}_{ax}^{(dia)} n_a$ & $s^{-1}$ & \texttt{b2tfnb\_vadianax[XXX].dat} & (\ref{eq:vadia_appC}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_x}\tilde{V}_{ay}^{(dia)}n_a $ & $ s^{-1} $ & \texttt{b2tfnb\_vadianay[XXX].dat} & (\ref{eq:vadia_appC})\\
+$\displaystyle \frac{\sqrt{g}}{h_x} \tilde{V}_{ay}^{(dia)} n_a$ & $s^{-1}$ & \texttt{b2tfnb\_vadianay[XXX].dat} & (\ref{eq:vadia_appC}) \\
 
-$E_{k,a} $ & $ J $ & \texttt{b2tfnb\_kbnrgy[XXX].dat} & (\ref{eq:Eka})\\
+$E_{k,a}$ & $J$ & \texttt{b2tfnb\_kbnrgy[XXX].dat} & (\ref{eq:Eka}) \\
 
-${V_{ay}}^{(AN)} $ & $ m/s $ & \texttt{b2tqna\_vla0y[XXX].dat} &(\ref{eq:V_ayAN}) \\
+${V_{ay}}^{(AN)}$ & $m/s$ & \texttt{b2tqna\_vla0y[XXX].dat} & (\ref{eq:V_ayAN}) \\
 
-${\Gamma}_{ax}$ & $s^{-1} $ & \texttt{b2tfnb\_fnbx[XXX].dat} &  (\ref{eq:GammaAXnoTilde_appC}) \\
-${\Gamma}_{ay}$ & $s^{-1} $ & \texttt{b2tfnb\_fnby[XXX].dat} &  (\ref{eq:GammaAYnoTilde_appC}) \\
+${\Gamma}_{ax}$ & $s^{-1}$ & \texttt{b2tfnb\_fnbx[XXX].dat} & (\ref{eq:GammaAXnoTilde_appC}) \\
 
-residuals & $s^{-1} $ & \texttt{b2npco\_resco[XXX].dat} or & \\ & & \texttt{b2npc9\_resco[XXX].dat} or &
-\\ & & \texttt{b2npc11\_resco[XXX].dat} & \\
+${\Gamma}_{ay}$ & $s^{-1}$ & \texttt{b2tfnb\_fnby[XXX].dat} & (\ref{eq:GammaAYnoTilde_appC}) \\
+
+residuals & $s^{-1}$ & \texttt{b2npco\_resco[XXX].dat} or &  \\
+ & & \texttt{b2npc9\_resco[XXX].dat} or &  \\
+ & & \texttt{b2npc11\_resco[XXX].dat} &  \\
 
 \hline
 \multicolumn{4}{|l|}{\small\sl Momentum balance equation and related quantities} \\
 \hline
-$V_{\parallel a}$ & $ m/s $ & \texttt{b2npmo\_ua[XXX].dat} & (\ref{eq:mom_new}), (\ref{eq:mom_old}) \\
 
-$S_a^m h_z \sqrt{g}$ & $ N\cdot m$ & \texttt{b2npmo\_smb[XXX].dat} & (\ref{eq:mom_alls}) \\
+$V_{\parallel a}$ & $m/s$ & \texttt{b2npmo\_ua[XXX].dat} & (\ref{eq:mom_new}), (\ref{eq:mom_old}) \\
 
-$\displaystyle - m_a \frac{\partial n_a V_{\parallel a}}{\partial t} h_z \sqrt{g} $ & $ N\cdot m $ & \texttt{b2srdt\_smodt[XXX].dat} & (\ref{eq:mom_new}), (\ref{eq:mom_old})  \\
+$S_a^m h_z \sqrt{g}$ & $N \cdot m$ & \texttt{b2npmo\_smb[XXX].dat} & (\ref{eq:mom_alls}) \\
 
-$\displaystyle  \frac{h_z\sqrt g}{h_x} \Gamma_{ax}^m  $ & $N\cdot m$ & \texttt{b2npmo\_fmox[XXX].dat} & (\ref{eq:mom_fluxx}), \\
+$\displaystyle m_a \frac{\partial n_a V_{\parallel a}}{\partial t} h_z \sqrt{g}$ & $N \cdot m$ & \texttt{b2npmo\_madnavadt[XXX].dat} & (\ref{eq:mom_new}), (\ref{eq:mom_old}) \\
 
-$\displaystyle \frac{h_z\sqrt g}{h_y} \Gamma_{ay}^m  $ & $N\cdot m$ & \texttt{b2npmo\_fmoy[XXX].dat} & (\ref{eq:mom_fluxy}), \\
+$\displaystyle m_a n_a \frac{\partial V_{\parallel a}}{\partial t} h_z \sqrt{g}$ & $N \cdot m$ & \texttt{b2npmo\_manadvadt[XXX].dat} &  \\
 
-% $\displaystyle S_{CF_a}^m $ & $ N\cdot m $ & \texttt{b2npmo\_smocf[XXX].dat} & (\ref{eq:mom_alls}), (\ref{eq:mom_sorcf}) \\
+$\displaystyle m_a V_{\parallel a} \frac{\partial n_a }{\partial t} h_z \sqrt{g}$ & $N \cdot m$ & \texttt{b2npmo\_mavadnadt[XXX].dat} &  \\
 
-$\displaystyle -\frac{b_x}{h_x}\frac{\partial n_a T_i}{\partial x}  h_z \sqrt{g}$ & $ N\cdot m $ & \texttt{b2sigp\_smogpi[XXX].dat} & (\ref{eq:mom_new}), (\ref{eq:mom_old})  \\
+$\displaystyle \frac{h_z\sqrt g}{h_x} \Gamma_{ax}^m$ & $N \cdot m$ & \texttt{b2npmo\_fmox[XXX].dat} & (\ref{eq:mom_fluxx}) \\
 
-$\displaystyle -Z_a e n_a \frac{b_x}{h_x} \frac{\partial \Phi}{\partial x}h_z \sqrt{g} $ & $ N\cdot m $ & \texttt{b2sigp\_smogpo[XXX].dat} & (\ref{eq:mom_new}) \\
+$\displaystyle \frac{h_z\sqrt g}{h_y} \Gamma_{ay}^m$ & $N \cdot m$ & \texttt{b2npmo\_fmoy[XXX].dat} & (\ref{eq:mom_fluxy}) \\
 
-$\displaystyle S_{CX_a}^m h_z \sqrt{g} $ & $ N\cdot m $ & \texttt{b2stcx\_smq[XXX].dat} &
-(\ref{eq:mom_scx})  \\
+% $\displaystyle S_{CF_a}^m $ & $N \cdot m$ & \texttt{b2npmo\_smocf[XXX].dat} & (\ref{eq:mom_alls}), (\ref{eq:mom_sorcf}) \\
 
-$\displaystyle S_{CF}^m h_z \sqrt{g} $ & $ N\cdot m  $ & \texttt{b2npmo\_smocf[XXX].dat} &
-(\ref{eq:mom_sorcf}), (\ref{eq:mom_sorio})  \\
+$\displaystyle -\frac{b_x}{h_x} \frac{\partial n_a T_i}{\partial x}  h_z \sqrt{g}$ & $N \cdot m$ & \texttt{b2sigp\_smogpi[XXX].dat} & (\ref{eq:mom_new}), (\ref{eq:mom_old}) \\
 
-$\displaystyle S_{I_a}^m h_z \sqrt{g} $ & $ N\cdot m $ & \texttt{b2stel\_smq\_ion[XXX].dat} & (\ref{eq:mom_alls}), (\ref{eq:mom_sorio}) \\
+$\displaystyle -Z_a e n_a \frac{b_x}{h_x} \frac{\partial \Phi}{\partial x} h_z \sqrt{g}$ & $N \cdot m$ & \texttt{b2sigp\_smogpo[XXX].dat} & (\ref{eq:mom_new}) \\
 
-$\displaystyle S_{R_a}^m h_z \sqrt{g} $ & $ N\cdot m
-$ & \texttt{b2stel\_smq\_rec[XXX].dat} & (\ref{eq:mom_alls}), (\ref{eq:mom_sorio})  \\
+$\displaystyle S_{CX_a}^m h_z \sqrt{g}$ & $N \cdot m$ & \texttt{b2stcx\_smq[XXX].dat} & (\ref{eq:mom_scx}) \\
 
-$\displaystyle S_{Therm,ia}^m h_z \sqrt{g} $ & $ N\cdot m$ & \texttt{b2npmo\_smotfia[XXX].dat} &
-(\ref{eq:mom_termi}) \\
+$\displaystyle S_{CF}^m h_z \sqrt{g}$ & $N \cdot m$ & \texttt{b2npmo\_smocf[XXX].dat} & (\ref{eq:mom_sorcf}), (\ref{eq:mom_sorio}) \\
 
-$\displaystyle S_{Therm,ea}^m h_z \sqrt{g} $ & $N\cdot m $ & \texttt{b2npmo\_smotfea[XXX].dat} & (\ref{eq:mom_terme}) \\
+$\displaystyle S_{I_a}^m h_z \sqrt{g}$ & $N \cdot m$ & \texttt{b2stel\_smq\_ion[XXX].dat} & (\ref{eq:mom_alls}), (\ref{eq:mom_sorio}) \\
 
-$\displaystyle S_{fr,ea}^m h_z \sqrt{g} $ & $ N\cdot m $ & \texttt{b2npmo\_smofrea[XXX].dat} & (\ref{eq:mom_sorfre}) \\
+$\displaystyle S_{R_a}^m h_z \sqrt{g}$ & $N \cdot m$ & \texttt{b2stel\_smq\_rec[XXX].dat} & (\ref{eq:mom_alls}), (\ref{eq:mom_sorio}) \\
 
-$\displaystyle S_{fr,ia}^m h_z \sqrt{g} $ & $ N\cdot m $ & \texttt{b2npmo\_smofria[XXX].dat} & (\ref{eq:mom_sorfri}) \\
+$\displaystyle S_{Therm,ia}^m h_z \sqrt{g}$ & $N \cdot m$ & \texttt{b2npmo\_smotfia[XXX].dat} & (\ref{eq:mom_termi}) \\
 
-$\displaystyle S_{AN_a}^m h_z \sqrt{g} $ & $ N\cdot m $ & \texttt{b2npmo\_smoan[XXX].dat} & (\ref{eq:mom_soran}) \\
+$\displaystyle S_{Therm,ea}^m h_z \sqrt{g}$ & $N \cdot m$ & \texttt{b2npmo\_smotfea[XXX].dat} & (\ref{eq:mom_terme}) \\
 
-$\displaystyle S_{BC_a}^m h_z \sqrt{g} $ & $ N\cdot m $ & \texttt{b2stbc\_phys\_smo[XXX].dat} &  \\
+$\displaystyle S_{fr,ea}^m h_z \sqrt{g}$ & $N \cdot m$ & \texttt{b2npmo\_smofrea[XXX].dat} & (\ref{eq:mom_sorfre}) \\
 
-$\displaystyle S_{EIRENE_a}^m h_z \sqrt{g} $ & $ N\cdot m $ & \texttt{b2stbr\_smo\_eir[XXX].dat} &  (\ref{eq:mom_new}), (\ref{eq:mom_old}) \\
+$\displaystyle S_{fr,ia}^m h_z \sqrt{g}$ & $N \cdot m$ & \texttt{b2npmo\_smofria[XXX].dat} & (\ref{eq:mom_sorfri}) \\
 
-$\displaystyle \left( {\nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{res}_{\parallel} h_z \sqrt{g}$ & $ N\cdot m $ & \texttt{b2npmo\_smovv001.dat} & (\ref{eq:mom_viscos}), (\ref{eq:mom_visres})  \\
+$\displaystyle S_{AN_a}^m h_z \sqrt{g}$ & $N \cdot m$ & \texttt{b2npmo\_smoan[XXX].dat} & (\ref{eq:mom_soran}) \\
 
-$\displaystyle \left( \nabla \cdot\overset\leftrightarrow\pi _a^{q_\parallel} \right)_{\parallel} h_z \sqrt{g} $ & $ N\cdot m $ & \texttt{b2npmo\_smovh001.dat} & (\ref{eq:mom_viscos}), (\ref{eq:mom_visq}) \\
+$\displaystyle S_{BC_a}^m h_z \sqrt{g}$ & $N \cdot m$ & \texttt{b2stbc\_phys\_smo[XXX].dat} &  \\
 
-$\displaystyle \widetilde{\widetilde{\eta}}_{ax}^{(CL)} \frac{h_z \sqrt{g}}{h_x^2} $ & $kg\cdot m / s $ & \footnotesize{\texttt{b2trcl\_luciani\_fllim\_cvsahzx[XXX].dat}} & (\ref{eq:mom_dveta})  \\
+$\displaystyle S_{EIRENE_a}^m h_z \sqrt{g}$ & $N \cdot m$ & \texttt{b2stbr\_smo\_eir[XXX].dat} &  (\ref{eq:mom_new}), (\ref{eq:mom_old}) \\
 
-$\displaystyle \widetilde{\eta}^{(CL)}_{ax} \frac{h_z \sqrt{g}}{h_x^2} $ & $kg\cdot m / s $ & \footnotesize{\texttt{b2trcl\_luciani\_cvsahzx[XXX].dat}} & (\ref{eq:mom_veta}) \\
+$\displaystyle \left( {\nabla \cdot \overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{res}_{\parallel} h_z \sqrt{g}$ & $N \cdot m$ & \texttt{b2npmo\_smovv001.dat} & (\ref{eq:mom_viscos}), (\ref{eq:mom_visres}) \\
 
-$\displaystyle \eta_{a}^{(AN)} \frac{h_z\sqrt g}{h_x^2}$ & $kg\cdot m/s$ & \texttt{b2trno\_cvsahzx[XXX].dat} & (\ref{eq:mom_etana})  \\
+$\displaystyle \left( \nabla \cdot \overset\leftrightarrow\pi _a^{q_\parallel} \right)_{\parallel} h_z \sqrt{g}$ & $N \cdot m$ & \texttt{b2npmo\_smovh001.dat} & (\ref{eq:mom_viscos}), (\ref{eq:mom_visq}) \\
 
-$\displaystyle \eta_{a}^{(AN)} \frac{h_z\sqrt g}{h_y^2}$ & $kg\cdot m / s $ & \texttt{b2trno\_cvsahzy[XXX].dat} & (\ref{eq:mom_etana})  \\
+$\displaystyle \widetilde{\widetilde{\eta}}_{ax}^{(CL)} \frac{h_z \sqrt{g}}{h_x^2}$ & $kg \cdot m/s$ & \footnotesize{\texttt{b2trcl\_luciani\_fllim\_cvsahzx[XXX].dat}} & (\ref{eq:mom_dveta}) \\
 
-$\displaystyle \eta_{ax}^{CL} \frac{h_z\sqrt g}{h_x^2}$ & $kg\cdot m / s $ & \texttt{b2trcl\_cvsahzx[XXX].dat} & (\ref{eq:mom_etaCL})  \\
+$\displaystyle \widetilde{\eta}^{(CL)}_{ax} \frac{h_z \sqrt{g}}{h_x^2}$ & $kg \cdot m/s$ & \footnotesize{\texttt{b2trcl\_luciani\_cvsahzx[XXX].dat}} & (\ref{eq:mom_veta}) \\
 
-$\displaystyle \tau_a $ &$ s $ & \texttt{b2tqca\_taua[XXX].dat} & (\ref{eq:mom_taua})  \\
+$\displaystyle \eta_{a}^{(AN)} \frac{h_z\sqrt g}{h_x^2}$ & $kg \cdot m/s$ & \texttt{b2trno\_cvsahzx[XXX].dat} & (\ref{eq:mom_etana}) \\
 
-$\displaystyle \frac{h_z\sqrt g}{h_x} \Gamma_{ax}^{Corr} $ & $m^2/s$  & \texttt{b2tfnb\_fnb\_fcorx[XXX].dat} & (\ref{eq:GammaAXCor_appC})  \\
+$\displaystyle \eta_{a}^{(AN)} \frac{h_z\sqrt g}{h_y^2}$ & $kg \cdot m/s$ & \texttt{b2trno\_cvsahzy[XXX].dat} & (\ref{eq:mom_etana})  \\
 
-$\displaystyle \frac{h_z\sqrt g}{h_x} \Gamma_{ay}^{Corr} $ & $m^2/s$  & \texttt{b2tfnb\_fnb\_fcory[XXX].dat} & (\ref{eq:GammaAYCor_appC})  \\
+$\displaystyle \eta_{ax}^{CL} \frac{h_z\sqrt g}{h_x^2}$ & $kg \cdot m/s$ & \texttt{b2trcl\_cvsahzx[XXX].dat} & (\ref{eq:mom_etaCL})  \\
 
-$\displaystyle -D_a^{n} \frac{1}{h_x} \frac{\partial{n_a}}{\partial x} \frac{h_z\sqrt g}{h_x}$ & $m/s$& \footnotesize{\texttt{b2tfnb\_dPat\_2diagradnax[XXX].dat}} & (\ref{eq:GammaAXCor_appC})  \\
+$\displaystyle \tau_a$ & $s$ & \texttt{b2tqca\_taua[XXX].dat} & (\ref{eq:mom_taua}) \\
 
-$\displaystyle \nu_a^{visc} $ & $m^2 / s$  & \texttt{b2tqna\_vsa0[XXX].dat} & (\ref{eq:mom_etana})  \\
+$\displaystyle \frac{h_z \sqrt{g}}{h_x} \Gamma_{ax}^{Corr} $ & $m^2/s$ & \texttt{b2tfnb\_fnb\_fcorx[XXX].dat} & (\ref{eq:GammaAXCor_appC}) \\
 
-$\displaystyle -\frac{h_z\sqrt g}{h_x} \eta_{ax} \frac{\partial V_{\parallel a}}{h_x \partial x}$ & $kg / {s}$ & \texttt{b2urmo\_etaPat\_graduax[XXX].dat} & (\ref{eq:mom_fluxx})  \\
+$\displaystyle \frac{h_z \sqrt{g}}{h_x} \Gamma_{ay}^{Corr} $ & $m^2/s$ & \texttt{b2tfnb\_fnb\_fcory[XXX].dat} & (\ref{eq:GammaAYCor_appC}) \\
 
-$\displaystyle -\frac{h_z\sqrt g}{h_y} \eta_{ay} \frac{\partial V_{\parallel a}}{h_y \partial y}$ &$ N \cdot m $ & \texttt{b2urmo\_etaPat\_graduay[XXX].dat} & (\ref{eq:mom_fluxy})  \\
+$\displaystyle -D_a^{n} \frac{1}{h_x} \frac{\partial{n_a}}{\partial x} \frac{h_z\sqrt g}{h_x}$ & $m/s$ & \footnotesize{\texttt{b2tfnb\_dPat\_2diagradnax[XXX].dat}} & (\ref{eq:GammaAXCor_appC}) \\
 
-$\displaystyle \frac{h_z\sqrt g}{h_x} \left( \frac 4 3 \widetilde{\widetilde{\eta}}^{(CL)}_{ax} \frac{\partial \ln h_z}{h_x \partial x} \right) $ & $kg \cdot m / s$ & \texttt{b2npmo\_flubvx001.dat} & (\ref{eq:mom_fluxx})  \\
+$\displaystyle \nu_a^{visc} $ & $m^2/s$ & \texttt{b2tqna\_vsa0[XXX].dat} & (\ref{eq:mom_etana}) \\
 
-residuals & $ N\cdot m $ & \texttt{b2npmo\_resmo[XXX].dat}  \\
+$\displaystyle -\frac{h_z \sqrt{g}}{h_x} \eta_{ax} \frac{\partial V_{\parallel a}}{h_x \partial x}$ & $kg/s$ & \texttt{b2urmo\_etaPat\_graduax[XXX].dat} & (\ref{eq:mom_fluxx}) \\
+
+$\displaystyle -\frac{h_z \sqrt{g}}{h_y} \eta_{ay} \frac{\partial V_{\parallel a}}{h_y \partial y}$ & $N \cdot m$ & \texttt{b2urmo\_etaPat\_graduay[XXX].dat} & (\ref{eq:mom_fluxy}) \\
+
+$\displaystyle \frac{h_z \sqrt{g}}{h_x} \left( \frac{4}{3} \widetilde{\widetilde{\eta}}^{(CL)}_{ax} \frac{\partial \ln h_z}{h_x \partial x} \right) $ & $kg \cdot m/s$ & \texttt{b2npmo\_flubvx001.dat} & (\ref{eq:mom_fluxx}) \\
+
+residuals & $N \cdot m$ & \texttt{b2npmo\_resmo[XXX].dat} &  \\
 
 \hline
 \multicolumn{4}{|l|}{\small\sl Electron heat balance equation and related quantities} \\
 \hline
-$T_e$ & $J$ & \texttt{b2npht\_te.dat} or &  (\ref{eq:ene_new})  \\ & & \texttt{b2nph9\_te.dat} & \\
 
-$\displaystyle \frac{\sqrt {g}}{h_{x}}\widetilde{q}_{ex} $ & $ W $ & \texttt{b2nph9\_fhex.dat} & (\ref{eq:ene_tiqex})  \\
+$T_e$ & $J$ & \texttt{b2npht\_te.dat} or & (\ref{eq:ene_new}) \\
+ & & \texttt{b2nph9\_te.dat} &  \\
 
-$\displaystyle \frac{\sqrt {g}}{h_{y}}\widetilde{q}_{ey} $ & $ W $ & \texttt{b2nph9\_fhey.dat} & (\ref{eq:ene_tiqey})  \\
+$\displaystyle \frac{\sqrt{g}}{h_{x}} \widetilde{q}_{ex}$ & $W$ & \texttt{b2nph9\_fhex.dat} & (\ref{eq:ene_tiqex}) \\
 
-$\displaystyle S_{e}^{heat}  \sqrt{g}$ & $ W $ & \texttt{b2npht\_she.dat} or & (\ref{eq:ene_seheat})  \\
- & & \texttt{b2nph9\_she.dat} & \\
+$\displaystyle \frac{\sqrt {g}}{h_{y}} \widetilde{q}_{ey}$ & $W$ & \texttt{b2nph9\_fhey.dat} & (\ref{eq:ene_tiqey}) \\
 
-$\displaystyle Q_{R}\sqrt {g} $ & $ W $ & \texttt{b2stel\_she\_rad.dat} & (\ref{eq:ene_QR})  \\
+$\displaystyle S_{e}^{heat} \sqrt{g}$ & $W$ & \texttt{b2npht\_she.dat} or & (\ref{eq:ene_seheat}) \\
+ & & \texttt{b2nph9\_she.dat} &  \\
 
-$\displaystyle Q_{\Delta }\sqrt {g} $ & $ W $ & \texttt{b2npht\_shei.dat} or & (\ref{eq:ene_Qdelta})  \\
-& & \texttt{b2nph9\_shei.dat} & \\
+$\displaystyle Q_{R} \sqrt{g}$ & $W$ & \texttt{b2stel\_she\_rad.dat} & (\ref{eq:ene_QR}) \\
 
-$\displaystyle Q_e^{\rm EIRENE}\sqrt {g} $ & $ W $ & \texttt{b2stbr\_she\_eir.dat} & (\ref{eq:ene_seheat})  \\
+$\displaystyle Q_{\Delta } \sqrt{g}$ & $W$ & \texttt{b2npht\_shei.dat} or & (\ref{eq:ene_Qdelta}) \\
+ & & \texttt{b2nph9\_shei.dat} &  \\
 
-$\displaystyle Q_{Fei} \sqrt {g} $ & $ W $ & \texttt{b2sihs\_\_shefr.dat} & (\ref{eq:ene_Qfei})  \\
-%& & \texttt{b2sihs\_\_shefr.dat} & \\
+$\displaystyle Q_e^{\rm EIRENE} \sqrt{g} $ & $W$ & \texttt{b2stbr\_she\_eir.dat} & (\ref{eq:ene_seheat}) \\
 
-$\displaystyle \frac{n_e T_e}{\sqrt g} \frac{\partial}{\partial x} \left(\frac{\sqrt g}{h_x} b_x V_{e \parallel} \right)\sqrt {g} $ & $ W $ & \texttt{b2sihs\_\_shedu.dat} & (\ref{eq:ene_new})  \\
-%& & \texttt{b2sihs\_\_shedu.dat} & \\
+$\displaystyle Q_{Fei} \sqrt{g}$ & $W$ & \texttt{b2sihs\_\_shefr.dat} & (\ref{eq:ene_Qfei}) \\
 
-$\displaystyle n_e T_e \left ( \nabla \cdot \vec{\bf V}^E \right)\sqrt {g}  $ & $ W $ & \texttt{b2sihs\_\_shedd.dat} & (\ref{eq:ene_new})  \\
-%& & \texttt{b2sihs\_\_shedd.dat} & \\
+$\displaystyle \frac{n_e T_e}{\sqrt{g}} \frac{\partial}{\partial x} \left( \frac{\sqrt{g}}{h_x} b_x V_{e \parallel} \right) \sqrt{g}$ & $W$ & \texttt{b2sihs\_\_shedu.dat} & (\ref{eq:ene_new}) \\
 
-$\displaystyle Q^{BC}_{e}\sqrt {g} $ & $ W $ & \texttt{b2stbc\_phys\_she.dat} &   \\
+$\displaystyle n_e T_e \left( \nabla \cdot \vec{\bf V}^E \right) \sqrt{g}$ & $W$ & \texttt{b2sihs\_\_shedd.dat} & (\ref{eq:ene_new}) \\
 
-$\displaystyle -\frac{j_y^{(ST)}}{e n_e} \frac{\partial n_e T_e}{h_y \partial y} \sqrt{g}$ & $ W $ & \texttt{b2sihs\_\_shest.dat} & (\ref{eq:ene_new})  \\
+$\displaystyle Q^{BC}_{e} \sqrt{g}$ & $W$ & \texttt{b2stbc\_phys\_she.dat} &  \\
 
-$\displaystyle -\frac{3}{2} \frac{\partial n_e T_e}{\partial t} \sqrt{g} $ & $ W $ & \texttt{b2srdt\_shedt.dat} & (\ref{eq:ene_new})  \\
+$\displaystyle -\frac{j_y^{(ST)}}{e n_e} \frac{\partial n_e T_e}{h_y \partial y} \sqrt{g}$ & $W$ & \texttt{b2sihs\_\_shest.dat} & (\ref{eq:ene_new}) \\
 
-$\displaystyle \frac32 \frac{\sqrt{g}}{h_{x}} \Gamma_{ex} T_e$ & $ W $ & \texttt{b2tfhe\_\_qe\_32x.dat} & (\ref{eq:ene_gammax})  \\
+$\displaystyle \frac{3}{2} \frac{\partial n_e T_e}{\partial t} \sqrt{g}$ & $W$ & \texttt{b2npht\_dnetedt.dat} or & (\ref{eq:ene_new}) \\ 
+ & & \texttt{b2nph9\_dnetedt.dat} &  \\
 
-$\displaystyle \frac32 \frac{\sqrt{g}}{h_{y}} \Gamma_{ey} T_e$ & $ W $ & \texttt{b2tfhe\_\_qe\_32y.dat} & (\ref{eq:ene_gammay})  \\
+$\displaystyle \frac{3}{2} n_e \frac{\partial T_e}{\partial t} \sqrt{g}$ & $W$ & \texttt{b2npht\_nedtedt.dat} or &  \\ 
+ & & \texttt{b2nph9\_nedtedt.dat} &  \\
 
-$\displaystyle \frac{\sqrt{g}}{h_{x}} q_{ex}^{P.Sch}$ \footnote{Mind the sign! It is opposite in the output file and the heat balance.} & $ W $ & \texttt{b2tfhe\_\_fhePSchx.dat} & (\ref{eq:ene_qPSchx})\\
+$\displaystyle \frac{3}{2} T_e \frac{\partial n_e}{\partial t} \sqrt{g}$ & $W$ & \texttt{b2npht\_tednedt.dat} or &  \\ 
+ & & \texttt{b2nph9\_tednedt.dat} &  \\
 
-$\displaystyle \frac{\sqrt{g}}{h_{y}} q_{ey}^{P.Sch}$ \footnote{Mind the sign! It is opposite in the output file and the heat balance.} & $ W $ & \texttt{b2tfhe\_\_fhePSchy.dat} & (\ref{eq:ene_qPSchy})\\
+$\displaystyle \frac32 \frac{\sqrt{g}}{h_{x}} \Gamma_{ex} T_e$ & $W$ & \texttt{b2tfhe\_\_qe\_32x.dat} & (\ref{eq:ene_gammax}) \\
 
-$\displaystyle -\frac{\sqrt{g}}{h_{x}} \kappa_{ex} \frac{1}{h_{x}}\frac{\partial T_e}{\partial x}$ & $ W $ & \texttt{b2tfhe\_\_qe\_ke\_gTx.dat} &  (\ref{eq:ene_qex})\\
+$\displaystyle \frac32 \frac{\sqrt{g}}{h_{y}} \Gamma_{ey} T_e$ & $W$ & \texttt{b2tfhe\_\_qe\_32y.dat} & (\ref{eq:ene_gammay}) \\
 
-$\displaystyle -\frac{\sqrt{g}}{h_{y}} \kappa_{ey} \frac{1}{h_{y}}\frac{\partial T_e}{\partial y}$ & $ W $ & \texttt{b2tfhe\_\_qe\_ke\_gTy.dat} &  (\ref{eq:ene_qey})\\
+$\displaystyle \frac{\sqrt{g}}{h_{x}} q_{ex}^{P.Sch}$ \footnote{Mind the sign! It is opposite in the output file and the heat balance.} & $W$ & \texttt{b2tfhe\_\_fhePSchx.dat} & (\ref{eq:ene_qPSchx}) \\
 
-$\displaystyle -\widetilde{c_e}^{(2)} \frac{j^{\left( \parallel \right) }_x} e T_e $
+$\displaystyle \frac{\sqrt{g}}{h_{y}} q_{ey}^{P.Sch}$ \footnote{Mind the sign! It is opposite in the output file and the heat balance.} & $W$ & \texttt{b2tfhe\_\_fhePSchy.dat} & (\ref{eq:ene_qPSchy}) \\
+
+$\displaystyle -\frac{\sqrt{g}}{h_{x}} \kappa_{ex} \frac{1}{h_{x}} \frac{\partial T_e}{\partial x}$ & $W$ & \texttt{b2tfhe\_\_qe\_ke\_gTx.dat} & (\ref{eq:ene_qex}) \\
+
+$\displaystyle -\frac{\sqrt{g}}{h_{y}} \kappa_{ey} \frac{1}{h_{y}} \frac{\partial T_e}{\partial y}$ & $W$ & \texttt{b2tfhe\_\_qe\_ke\_gTy.dat} & (\ref{eq:ene_qey}) \\
+
+$\displaystyle -\widetilde{c_e}^{(2)} \frac{j^{\left( \parallel \right) }_x}{e} T_e$
 \footnote{If the switch {\tt b2tfhe\_alphaTeh = 1} (and {\tt b2tfhe\_fch\_pTe = 0}),
-then this output item contains $\displaystyle \alpha_{ex} \hat{E}_x T_e $} & $ W $ & \texttt{b2tfhe\_\_qe\_fchpTex.dat} & (\ref{eq:ene_tifex})  \\
+then this output item contains $\displaystyle \alpha_{ex} \hat{E}_x T_e$} & $W$ & \texttt{b2tfhe\_\_qe\_fchpTex.dat} & (\ref{eq:ene_tifex}) \\
 
-%$\displaystyle \alpha_{ex} \hat{E}_x T_e $ & $ W $ & \texttt{b2tfhe\_\_qe\_alphaTehx.dat} & (\ref{eq:ene_Ex})  \\
-$\displaystyle \alpha_{ey} \hat{E}_y T_e $ & $ W $ & \texttt{b2tfhe\_\_qe\_alphaTehy.dat} & (\ref{eq:ene_Ey})  \\
+%$\displaystyle \alpha_{ex} \hat{E}_x T_e$ & $W$ & \texttt{b2tfhe\_\_qe\_alphaTehx.dat} & (\ref{eq:ene_Ex}) \\
 
-$\displaystyle \Gamma_{ax}^{(he)} \frac{\sqrt{g}}{h_x}$ & $ s^{-1} $ & \texttt{b2tfnb\_fnb\_hex.dat} & (\ref{eq:ene_gammaxhe})\\
+$\displaystyle \alpha_{ey} \hat{E}_y T_e$ & $W$ & \texttt{b2tfhe\_\_qe\_alphaTehy.dat} & (\ref{eq:ene_Ey}) \\
 
-$\displaystyle \Gamma_{ay}^{(he)} \frac{\sqrt{g}}{h_y} $ & $s^{-1}$ & \texttt{b2tfnb\_fnb\_hey.dat} & (\ref{eq:ene_gammayhe})\\
+$\displaystyle \Gamma_{ax}^{(he)} \frac{\sqrt{g}}{h_x}$ & $s^{-1}$ & \texttt{b2tfnb\_fnb\_hex.dat} & (\ref{eq:ene_gammaxhe}) \\
 
-$\displaystyle \kappa_{ex} \frac{\sqrt{g}}{h_{x}^2}$ & $ s^{-1} $ & \texttt{b2tfhe\_\_chcex\_Pat.dat} & (\ref{eq:ene_kapex})  \\
+$\displaystyle \Gamma_{ay}^{(he)} \frac{\sqrt{g}}{h_y} $ & $s^{-1}$ & \texttt{b2tfnb\_fnb\_hey.dat} & (\ref{eq:ene_gammayhe}) \\
 
-$\displaystyle \kappa_{ey} \frac{\sqrt{g}}{h_{y}^2}$ & $ s^{-1} $ & \texttt{b2tfhe\_\_chcey\_Pat.dat} & (\ref{eq:ene_kapey})  \\
+$\displaystyle \kappa_{ex} \frac{\sqrt{g}}{h_{x}^2}$ & $s^{-1}$ & \texttt{b2tfhe\_\_chcex\_Pat.dat} & (\ref{eq:ene_kapex}) \\
 
-$\displaystyle\kappa_{e}^{(AN)} \frac{\sqrt{g}}{h_{x}^2}$ & $ s^{-1}$ & \texttt{b2trno\_chcex.dat} & (\ref{eq:ene_kapexan})  \\
+$\displaystyle \kappa_{ey} \frac{\sqrt{g}}{h_{y}^2}$ & $s^{-1}$ & \texttt{b2tfhe\_\_chcey\_Pat.dat} & (\ref{eq:ene_kapey}) \\
 
-$\displaystyle\kappa_{e}^{(AN)} \frac{\sqrt{g}}{h_{y}^2}$ & $ s^{-1}$ & \texttt{b2trno\_chcey.dat} & (\ref{eq:ene_kapexan})  \\
+$\displaystyle\kappa_{e}^{(AN)} \frac{\sqrt{g}}{h_{x}^2}$ & $s^{-1}$ & \texttt{b2trno\_chcex.dat} & (\ref{eq:ene_kapexan}) \\
 
-$ \chi_{e}^{(AN)} $ & $  m^2 / s $ & \texttt{b2tqna\_hce0.dat} & (\ref{eq:ene_kapexan})\\
+$\displaystyle\kappa_{e}^{(AN)} \frac{\sqrt{g}}{h_{y}^2}$ & $s^{-1}$ & \texttt{b2trno\_chcey.dat} & (\ref{eq:ene_kapexan}) \\
 
-$\displaystyle \widetilde{\widetilde{\kappa}}_{ex}^{CL} \frac{\sqrt{g}}{h_{x}^2}$ & $  s^{-1}$ & \texttt{b2trcl\_luciani\_fllim\_chcex.dat} & (\ref{eq:mom_new})  \\
+$\chi_{e}^{(AN)}$ & $m^2/s$ & \texttt{b2tqna\_hce0.dat} & (\ref{eq:ene_kapexan}) \\
 
-$\displaystyle \widetilde{\kappa}_{ex}^{CL} \frac{\sqrt{g}}{h_{x}^2}$ & $  s^{-1}$ & \texttt{b2trcl\_luciani\_chcex.dat} & (\ref{eq:ene_dmkapexcl}) \\
+$\displaystyle \widetilde{\widetilde{\kappa}}_{ex}^{CL} \frac{\sqrt{g}}{h_{x}^2}$ & $s^{-1}$ & \texttt{b2trcl\_luciani\_fllim\_chcex.dat} & (\ref{eq:mom_new}) \\
 
-$\displaystyle \kappa_{ex}^{CL} \frac{\sqrt{g}}{h_{x}^2}b_x^2$ & $ s^{-1}$ & \texttt{b2trcl\_chcex.dat} & (\ref{eq:ene_mkapexcl})\\
+$\displaystyle \widetilde{\kappa}_{ex}^{CL} \frac{\sqrt{g}}{h_{x}^2}$ & $s^{-1}$ & \texttt{b2trcl\_luciani\_chcex.dat} & (\ref{eq:ene_dmkapexcl}) \\
 
-$\tau_e $ & $s$ & \texttt{b2tqce\_taue.dat} & (\ref{eq:ene_taue})\\
+$\displaystyle \kappa_{ex}^{CL} \frac{\sqrt{g}}{h_{x}^2} b_x^2$ & $s^{-1}$ & \texttt{b2trcl\_chcex.dat} & (\ref{eq:ene_mkapexcl}) \\
 
-$V_{e\parallel} $ & $m /s$ & \texttt{b2sifrtf\_ue.dat} & (\ref{eq:ene_veparal}) \\
+$\tau_e$ & $s$ & \texttt{b2tqce\_taue.dat} & (\ref{eq:ene_taue}) \\
 
-$\displaystyle \sigma_{\parallel} \frac{\sqrt{g}}{h_{x}^2} $ & $\displaystyle \frac{1}{m\cdot S}$ & \texttt{b2trcl\_luciani\_csigx.dat} & (\ref{eq:fch_p}), (\ref{eq:ene_sigmparal}) \\
+$V_{e\parallel}$ & $m/s$ & \texttt{b2sifrtf\_ue.dat} & (\ref{eq:ene_veparal}) \\
 
-$\displaystyle \sigma_{CL\parallel} \frac{\sqrt{g}}{h_{x}^2} $ & $\displaystyle \frac{1}{m\cdot S}$ & \texttt{b2trcl\_csigx.dat} & (\ref{eq:ene_sigparcl})\\
+$\displaystyle \sigma_{\parallel} \frac{\sqrt{g}}{h_{x}^2}$ & $\displaystyle \frac{1}{m \cdot S}$ & \texttt{b2trcl\_luciani\_csigx.dat} & (\ref{eq:fch_p}), (\ref{eq:ene_sigmparal}) \\
 
-$\displaystyle \alpha_{ex} \frac{\sqrt{g}}{h_{x}^2} $ & $\displaystyle \frac{m}{ V \cdot s}$ & \texttt{b2trcl\_luciani\_fllim\_calfx.dat} & (\ref{eq:ene_alphex})\\
+$\displaystyle \sigma_{CL\parallel} \frac{\sqrt{g}}{h_{x}^2}$ & $\displaystyle \frac{1}{m \cdot S}$ & \texttt{b2trcl\_csigx.dat} & (\ref{eq:ene_sigparcl}) \\
 
-$\displaystyle \widetilde{\alpha}_{CLx} \frac{\sqrt{g}}{h_{x}^2} $ & $\displaystyle \frac{m}{ V \cdot s}$ & \texttt{b2trcl\_lucian\_calfx.dat} & (\ref{eq:ene_2tialphxcl}), (\ref{eq:ene_1tialphxcl})\\
-$\displaystyle \alpha_{CLx} \frac{\sqrt{g}}{h_{x}^2} $ & $\displaystyle \frac{m}{ V \cdot s}$ & \texttt{b2trcl\_calfx.dat} & (\ref{eq:ene_alphxcl}) \\
+$\displaystyle \alpha_{ex} \frac{\sqrt{g}}{h_{x}^2}$ & $\displaystyle \frac{m}{V \cdot s}$ & \texttt{b2trcl\_luciani\_fllim\_calfx.dat} & (\ref{eq:ene_alphex}) \\
 
-$\displaystyle \alpha^{(ST)} $ & $??$ & \texttt{b2trno\_chcey\_stoch.dat} & (\ref{eq:ene_kapeST})\\
+$\displaystyle \widetilde{\alpha}_{CLx} \frac{\sqrt{g}}{h_{x}^2}$ & $\displaystyle \frac{m}{V \cdot s}$ & \texttt{b2trcl\_lucian\_calfx.dat} & (\ref{eq:ene_2tialphxcl}), (\ref{eq:ene_1tialphxcl}) \\
 
-$\displaystyle -\frac 5 2 \frac{\sqrt{g}}{h_{x}} n_e T_e^2 \frac{B_z}{eh_y} \frac{\partial}{\partial y} \left( \frac 1{B^2} \right)$ & $W$ & \texttt{b2tfhe\_\_qediax.dat} & (\ref{eq:ene_qex}) \\
+$\displaystyle \alpha_{CLx} \frac{\sqrt{g}}{h_{x}^2}$ & $\displaystyle \frac{m}{V \cdot s}$ & \texttt{b2trcl\_calfx.dat} & (\ref{eq:ene_alphxcl}) \\
 
-$\displaystyle \frac 5 2 \frac{\sqrt{g}}{h_{y}} n_e T_e^2 \frac{B_z}{eh_x} \frac{\partial}{\partial x} \left( \frac 1{B^2} \right) $ & $W$ & \texttt{b2tfhe\_\_qediay.dat} & (\ref{eq:ene_qey}) \\
+$\displaystyle \alpha^{(ST)}$ & $??$ & \texttt{b2trno\_chcey\_stoch.dat} & (\ref{eq:ene_kapeST}) \\
 
-$r_{Q_a}^{\rm brm}\sqrt{g} $ & $W$ & \texttt{b2stel\_rqbrm[XXX]} & (\ref{eq:ene_QRa}) \\
+$\displaystyle -\frac{5}{2} \frac{\sqrt{g}}{h_{x}} n_e T_e^2 \frac{B_z}{eh_y} \frac{\partial}{\partial y} \left( \frac{1}{B^2} \right)$ & $W$ & \texttt{b2tfhe\_\_qediax.dat} & (\ref{eq:ene_qex}) \\
 
-$r_{Q_a}^{\rm line}\sqrt{g} $ & $W$ & \texttt{b2stel\_rqrad[XXX]} & (\ref{eq:ene_QRa}) \\
+$\displaystyle \frac{5}{2} \frac{\sqrt{g}}{h_{y}} n_e T_e^2 \frac{B_z}{eh_x} \frac{\partial}{\partial x} \left( \frac{1}{B^2} \right)$ & $W$ & \texttt{b2tfhe\_\_qediay.dat} & (\ref{eq:ene_qey}) \\
 
-residuals & $ W $ & \texttt{b2npht\_reshe.dat} or & \\ & & \texttt{b2nph9\_reshe.dat} & \\
+$r_{Q_a}^{\rm brm} \sqrt{g}$ & $W$ & \texttt{b2stel\_rqbrm[XXX]} & (\ref{eq:ene_QRa}) \\
+
+$r_{Q_a}^{\rm line} \sqrt{g}$ & $W$ & \texttt{b2stel\_rqrad[XXX]} & (\ref{eq:ene_QRa}) \\
+
+residuals & $W$ & \texttt{b2npht\_reshe.dat} or &  \\
+ & & \texttt{b2nph9\_reshe.dat} &  \\
 
 \hline
 \multicolumn{4}{|l|}{\small\sl Ion heat balance equation and related quantities} \\
 \hline
-$T_i$ & $ W $ & \texttt{b2npht\_shi.dat} or & (\ref{eq:eni})\\
- & & \texttt{b2nph9\_shi.dat} & \\
 
-$S_i^{heat} \sqrt{g}$ & $ W $ & \texttt{b2npht\_shi.dat} or & (\ref{eq:cont_appC})  \\
- & & \texttt{b2nph9\_shi.dat} & \\
+$T_i$ & $W$ & \texttt{b2npht\_shi.dat} or & (\ref{eq:eni}) \\
+ & & \texttt{b2nph9\_shi.dat} &  \\
 
-$\displaystyle -\frac{3}{2} \sqrt{g} \frac{\partial n_i T_i}{\partial t}$ & $ W $ & \texttt{b2srdt\_shidt.dat} & (\ref{eq:eni})\\
+$S_i^{heat} \sqrt{g}$ & $W$ & \texttt{b2npht\_shi.dat} or & (\ref{eq:cont_appC}) \\
+ & & \texttt{b2nph9\_shi.dat} &  \\
 
-$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{q}_{ix}$ & $ W $ & \texttt{b2nph9\_fhix.dat} &(\ref{eq:eni_tiqix})\\
+$\displaystyle \frac{3}{2} \frac{\partial n_i T_i}{\partial t} \sqrt{g}$ & $W$ & \texttt{b2npht\_dnitidt.dat} or & (\ref{eq:ene_new}) \\ 
+ & & \texttt{b2nph9\_dnitidt.dat} & \\
 
-$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{q}_{iy}$ & $ W $ & \texttt{b2nph9\_fhiy.dat} & (\ref{eq:eni_tiqiy})\\
+$\displaystyle \frac{3}{2} n_i \frac{\partial T_i}{\partial t} \sqrt{g}$ & $W$ & \texttt{b2npht\_nidtidt.dat} or &  \\ 
+ & & \texttt{b2nph9\_nidtidt.dat} & \\
 
-$\displaystyle \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a T_i \left ( \nabla \cdot \vec{\bf V}^E \right)\sqrt {g} $ & $ W $ & \texttt{b2sihs\_\_shidd.dat} & (\ref{eq:eni_siheat})\\
-% & & \texttt{b2sihs\_\_shidd.dat} & \\
+$\displaystyle \frac{3}{2} T_i \frac{\partial n_i}{\partial t} \sqrt{g}$ & $W$ & \texttt{b2npht\_tidnidt.dat} or &  \\ 
+ & & \texttt{b2nph9\_tidnidt.dat} & \\
 
-$\displaystyle -\sum \limits^{ns-1}_{a = 0} n_a T_i \frac{\partial}{\partial x} \left(
-	\frac{\sqrt g}{h_x} V_{a \parallel} b_x \right) \sqrt {g} $& $ W $ & \texttt{b2sihs\_\_shidu.dat} & (\ref{eq:eni}),  (\ref{eq:eni_siheat})\\
-%& & \texttt{b2sihs\_\_shidu.dat} & \\
+$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{q}_{ix}$ & $W$ & \texttt{b2nph9\_fhix.dat} & (\ref{eq:eni_tiqix}) \\
+
+$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{q}_{iy}$ & $W$ & \texttt{b2nph9\_fhiy.dat} & (\ref{eq:eni_tiqiy}) \\
+
+$\displaystyle \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a T_i \left( \nabla \cdot \vec{\bf V}^E \right) \sqrt{g}$ & $W$ & \texttt{b2sihs\_\_shidd.dat} & (\ref{eq:eni_siheat}) \\
+
+$\displaystyle -\sum \limits^{ns-1}_{a = 0} n_a T_i \frac{\partial}{\partial x} \left( \frac{\sqrt{g}}{h_x} V_{a \parallel} b_x \right) \sqrt{g}$& $W$ & \texttt{b2sihs\_\_shidu.dat} & (\ref{eq:eni}), (\ref{eq:eni_siheat}) \\
 	
-$\displaystyle \sum \limits_{fluid~species}
-\eta_{ax} \left(
-\frac{\partial V_{a \parallel}}{h_x \partial x}
-\right)^2 \sqrt{g} $ & $ W $ & \texttt{b2sihs\_\_shivc.dat} &  (\ref{eq:eni_siheat})\\
-%& & \texttt{b2sihs\_\_shivc.dat} & \\
+$\displaystyle \sum \limits_{fluid~species} \eta_{ax} \left( \frac{\partial V_{a \parallel}}{h_x \partial x} \right)^2 \sqrt{g}$ & $W$ & \texttt{b2sihs\_\_shivc.dat} & (\ref{eq:eni_siheat}) \\
 	
-$\displaystyle \sum \limits_{fluid~species}
-\eta^{(AN)}_{a} \left(
-\frac{\partial V_{a \parallel}}{h_y \partial y}
-\right)^2  \sqrt{g}$ & $ W $ & \texttt{b2sihs\_\_shiva.dat} & (\ref{eq:eni_siheat})\\
-%& & \texttt{b2sihs\_\_shiva.dat} & \\
+$\displaystyle \sum \limits_{fluid~species} \eta^{(AN)}_{a} \left( \frac{\partial V_{a \parallel}}{h_y \partial y} \right)^2 \sqrt{g}$ & $W$ & \texttt{b2sihs\_\_shiva.dat} & (\ref{eq:eni_siheat}) \\
 
-$\displaystyle Q_{F_{ab}}\sqrt{g} $ & $ W $ & \texttt{b2sihs\_\_shifr.dat} & (\ref{eq:eni_Qfabnew}), (\ref{eq:eni_Qfabold})\\
+$\displaystyle Q_{F_{ab}} \sqrt{g}$ & $W$ & \texttt{b2sihs\_\_shifr.dat} & (\ref{eq:eni_Qfabnew}), (\ref{eq:eni_Qfabold}) \\
 
-$\displaystyle Q_I^{(i)}\sqrt{g}$ & $ W $ & \texttt{b2stel\_shi\_ion.dat} & (\ref{eq:eni_QIi}) \\
+$\displaystyle Q_I^{(i)} \sqrt{g}$ & $W$ & \texttt{b2stel\_shi\_ion.dat} & (\ref{eq:eni_QIi}) \\
 
-$\displaystyle Q_{R}^{(i)}\sqrt{g}$ & $ W $ & \texttt{b2stel\_shi\_rec.dat} &(\ref{eq:eni_siheat}), (\ref{eq:eni_QRi})\\
+$\displaystyle Q_{R}^{(i)} \sqrt{g}$ & $W$ & \texttt{b2stel\_shi\_rec.dat} &(\ref{eq:eni_siheat}), (\ref{eq:eni_QRi}) \\
 
-$\displaystyle Q_i^{\rm EIRENE}\sqrt{g}$ & $ W $ & \texttt{b2stel\_shi\_eir.dat} & (\ref{eq:eni_siheat})\\
+$\displaystyle Q_i^{\rm EIRENE} \sqrt{g}$ & $W$ & \texttt{b2stel\_shi\_eir.dat} & (\ref{eq:eni_siheat}) \\
 
-$\displaystyle -\frac{3}{2}\frac{\sqrt{g}}{h_x}\Gamma_{ix}T_i$ & $ W $ & \texttt{b2tfhi\_\_qi\_32x.dat} & (\ref{eq:eni_gammahix}) \\
-%& & \texttt{b2tfhi\_\_qi\_32x.dat} & \\
+$\displaystyle -\frac{3}{2} \frac{\sqrt{g}}{h_x} \Gamma_{ix}T_i$ & $W$ & \texttt{b2tfhi\_\_qi\_32x.dat} & (\ref{eq:eni_gammahix}) \\
 
-$\displaystyle -\frac{3}{2}\frac{\sqrt{g}}{h_y}\Gamma_{iy}T_i$ & $ W $ & \texttt{b2tfhi\_\_qi\_32y.dat} & (\ref{eq:eni_gammahix}) \\
-%& & \texttt{b2tfhi\_\_qi\_32y.dat} & \\
+$\displaystyle -\frac{3}{2} \frac{\sqrt{g}}{h_y} \Gamma_{iy}T_i$ & $W$ & \texttt{b2tfhi\_\_qi\_32y.dat} & (\ref{eq:eni_gammahix}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_x}q_{ix}^{P.Sch} $ & $ W $ & \texttt{b2tfhi\_\_fhiPSchx.dat} & (\ref{eq:eni_qixPSch})\\
+$\displaystyle \frac{\sqrt{g}}{h_x} q_{ix}^{P.Sch}$ & $W$ & \texttt{b2tfhi\_\_fhiPSchx.dat} & (\ref{eq:eni_qixPSch}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_y}q_{iy}^{P.Sch} $ & $ W $ & \texttt{b2tfhi\_\_fhiPSchy.dat} & (\ref{eq:eni_qiyPSch})\\
+$\displaystyle \frac{\sqrt{g}}{h_y} q_{iy}^{P.Sch}$ & $W$ & \texttt{b2tfhi\_\_fhiPSchy.dat} & (\ref{eq:eni_qiyPSch}) \\
 
-$\displaystyle -\frac{\sqrt{g}}{h_x}\kappa_{ix}\frac{1}{h_x}\frac{\partial{T_i}}{\partial x} $ & $ W $ & \texttt{b2tfhi\_\_qi\_ki\_gTx.dat} & (\ref{eq:eni_tiqix}) \\
+$\displaystyle -\frac{\sqrt{g}}{h_x} \kappa_{ix} \frac{1}{h_x} \frac{\partial{T_i}}{\partial x}$ & $W$ & \texttt{b2tfhi\_\_qi\_ki\_gTx.dat} & (\ref{eq:eni_tiqix}) \\
 
-$\displaystyle -\frac{\sqrt{g}}{h_y}\kappa_{iy}\frac{1}{h_y}\frac{\partial{T_i}}{\partial y} $ & $ W $ & \texttt{b2tfhi\_\_qi\_ki\_gTy.dat} & (\ref{eq:eni_tiqiy}) \\
+$\displaystyle -\frac{\sqrt{g}}{h_y} \kappa_{iy} \frac{1}{h_y} \frac{\partial{T_i}}{\partial y}$ & $W$ & \texttt{b2tfhi\_\_qi\_ki\_gTy.dat} & (\ref{eq:eni_tiqiy}) \\
 
-$\chi_a^{(AN)} $ & $ m^2 / s $ & \texttt{b2tqna\_hcib[XXX].dat} & (\ref{eq:eni_kapAN}), (\ref{eq:eni_chiAN})\\
+$\chi_a^{(AN)}$ & $m^2/s$ & \texttt{b2tqna\_hcib[XXX].dat} & (\ref{eq:eni_kapAN}), (\ref{eq:eni_chiAN}) \\
 
-$\displaystyle \kappa_{ix}\frac{\sqrt g}{h_x^2} $ & $ s^{-1} $ & \texttt{b2tfhi\_\_chcix\_Pat.dat} &  (\ref{eq:eni_kapixAN})\\
-%& & \texttt{b2tfhi\_\_chcix\_Pat.dat} &  \\
+$\displaystyle \kappa_{ix} \frac{\sqrt{g}}{h_x^2}$ & $s^{-1}$ & \texttt{b2tfhi\_\_chcix\_Pat.dat} & (\ref{eq:eni_kapixAN}) \\
 
-$\displaystyle \kappa_{iy}\frac{\sqrt g}{h_y^2} $ & $ s^{-1} $ & \texttt{b2tfhi\_\_chciy\_Pat.dat} & (\ref{eq:eni_kapiy}),\\
-%& & \texttt{b2tfhi\_\_chciy\_Pat.dat} &  \\
+$\displaystyle \kappa_{iy} \frac{\sqrt{g}}{h_y^2}$ & $s^{-1}$ & \texttt{b2tfhi\_\_chciy\_Pat.dat} & (\ref{eq:eni_kapiy}) \\
 
-$\displaystyle \kappa_{ix}^{(AN)}\frac{\sqrt g}{h_x^2} $ & $ s^{-1} $ & \texttt{b2trno\_chcix.dat} & (\ref{eq:eni_kapixAN})\\
+$\displaystyle \kappa_{ix}^{(AN)} \frac{\sqrt{g}}{h_x^2}$ & $s^{-1}$ & \texttt{b2trno\_chcix.dat} & (\ref{eq:eni_kapixAN}) \\
 
-$\displaystyle \kappa_{iy}^{(AN)}\frac{\sqrt g}{h_y^2} $ & $ s^{-1} $ & \texttt{b2trno\_chciy.dat} & (\ref{eq:eni_kapixAN})\\
+$\displaystyle \kappa_{iy}^{(AN)} \frac{\sqrt{g}}{h_y^2}$ & $s^{-1}$ & \texttt{b2trno\_chciy.dat} & (\ref{eq:eni_kapixAN}) \\
 
-$\displaystyle \widetilde{\widetilde {\kappa}}_{ix}^{(CL)}\frac{\sqrt g}{h_x^2} $ & $ s^{-1} $ & \texttt{b2trcl\_luciani\_fllim\_chci.dat} & (\ref{eq:eni_dtkapixCL})\\
+$\displaystyle \widetilde{\widetilde{\kappa}}_{ix}^{(CL)} \frac{\sqrt{g}}{h_x^2}$ & $s^{-1}$ & \texttt{b2trcl\_luciani\_fllim\_chci.dat} & (\ref{eq:eni_dtkapixCL}) \\
 
-$\displaystyle \widetilde {\kappa}_{ix}^{(CL)}\frac{\sqrt g}{h_x^2} $ & $ s^{-1} $ & \texttt{b2trcl\_luciani\_chcix.dat} & (\ref{eq:eni_tikapixCL}), (\ref{eq:eni_tkapixCL})\\
+$\displaystyle \widetilde{\kappa}_{ix}^{(CL)} \frac{\sqrt{g}}{h_x^2}$ & $ s^{-1} $ & \texttt{b2trcl\_luciani\_chcix.dat} & (\ref{eq:eni_tikapixCL}), (\ref{eq:eni_tkapixCL}) \\
 
-$\displaystyle \kappa_{ix}^{(CL)}\frac{\sqrt g}{h_x^2} $ & $ s^{-1} $ & \texttt{b2trcl\_chcix.dat} & (\ref{eq:eni_kapixCL})\\
+$\displaystyle \kappa_{ix}^{(CL)} \frac{\sqrt g}{h_x^2}$ & $s^{-1}$ & \texttt{b2trcl\_chcix.dat} & (\ref{eq:eni_kapixCL}) \\
 
-$\displaystyle \frac{5}{2} \frac{\sqrt{g}}{h_x} T_i \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \widetilde V_{ax}^{(dia)} $ & $ W $ &
-\texttt{b2tfhi\_\_qidiax.dat} & (\ref{eq:eni_qix}) \\
+$\displaystyle \frac{5}{2} \frac{\sqrt{g}}{h_x} T_i \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \widetilde V_{ax}^{(dia)}$ & $W$ & \texttt{b2tfhi\_\_qidiax.dat} & (\ref{eq:eni_qix}) \\
 
-$\displaystyle \frac{5}{2} \frac{\sqrt{g}}{h_y} T_i \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \widetilde V_{ay}^{(dia)} $ & $ W $ &
-\texttt{b2tfhi\_\_qidiay.dat} & (\ref{eq:eni_qiy}) \\
+$\displaystyle \frac{5}{2} \frac{\sqrt{g}}{h_y} T_i \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \widetilde V_{ay}^{(dia)}$ & $W$ & \texttt{b2tfhi\_\_qidiay.dat} & (\ref{eq:eni_qiy}) \\
 
-residuals & $ W $ & \texttt{b2npht\_reshi.dat} or & \\ & & \texttt{b2nph9\_reshi.dat} & \\
+residuals & $W$ & \texttt{b2npht\_reshi.dat} or &  \\
+ & & \texttt{b2nph9\_reshi.dat} &  \\
 
 \hline
 \multicolumn{4}{|l|}{\small\sl Current continuity equation and related quantities} \\
 \hline
-$\varphi $ & $ V $ & \texttt{b2nppo\_po.dat} or & (\ref{eq:pot_eq}) \\
-& & \texttt{b2npp7\_po.dat} &  \\
 
-$\displaystyle \frac{\sqrt{g}}{h_x}j_x $ & $ A $ & \texttt{b2nppo\_fchx.dat} or & (\ref{eq:pot_eq}), (\ref{eq:pot_jx})\\
-& & \texttt{b2npp7\_fchx.dat} &  \\
+$\varphi$ & $V$ & \texttt{b2nppo\_po.dat} or & (\ref{eq:pot_eq}) \\
+ & & \texttt{b2npp7\_po.dat} &  \\
 
-$\displaystyle \frac{\sqrt{g}}{h_y}j_y $ & $ A $ & \texttt{b2nppo\_fchy.dat} or & (\ref{eq:pot_eq}), (\ref{eq:pot_jy})\\
-& & \texttt{b2npp7\_fchy.dat} &  \\
+$\displaystyle \frac{\sqrt{g}}{h_x} j_x$ & $A$ & \texttt{b2nppo\_fchx.dat} or & (\ref{eq:pot_eq}), (\ref{eq:pot_jx}) \\
+ & & \texttt{b2npp7\_fchx.dat} &  \\
 
-$\displaystyle \frac{\sqrt{g}}{h_x}j_x^{(\parallel)} $ & $ A $ & \texttt{b2tfhe\_\_fch\_px.dat} & (\ref{eq:fch_p}), (\ref{eq:pot_jx})\\
-%& & \texttt{b2tfhe\_\_fch\_px.dat} &  \\
+$\displaystyle \frac{\sqrt{g}}{h_y} j_y$ & $A$ & \texttt{b2nppo\_fchy.dat} or & (\ref{eq:pot_eq}), (\ref{eq:pot_jy}) \\
+ & & \texttt{b2npp7\_fchy.dat} &  \\
 
-$\displaystyle \frac{\sqrt{g}}{h_x}\widetilde{j}_x^{(dia)} $ & $ A $ & \texttt{b2tfhe\_\_fchdiax.dat} & (\ref{eq:pot_tijxdia})\\
-%& & \texttt{b2tfhe\_\_fchdiax.dat} &  \\
+$\displaystyle \frac{\sqrt{g}}{h_x} j_x^{(\parallel)}$ & $A$ & \texttt{b2tfhe\_\_fch\_px.dat} & (\ref{eq:fch_p}), (\ref{eq:pot_jx}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_y}\widetilde{j}_y^{(dia)} $ & $ A $ & \texttt{b2tfhe\_\_fchdiay.dat} & (\ref{eq:pot_tijydia})\\
-%& & \texttt{b2tfhe\_\_fchdiay.dat} &  \\
+$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{j}_x^{(dia)}$ & $A$ & \texttt{b2tfhe\_\_fchdiax.dat} & (\ref{eq:pot_tijxdia}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_x}\widetilde{j}_x^{(in)} $ & $ A $ & \texttt{b2tfhe\_\_fchinertx.dat} & (\ref{eq:pot_tijxin})\\
-%& & \texttt{b2tfhe\_\_fchinertx.dat} &  \\
+$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_y^{(dia)}$ & $A$ & \texttt{b2tfhe\_\_fchdiay.dat} & (\ref{eq:pot_tijydia}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_y}j_y^{(in)} $ & $ A $ & \texttt{b2tfhe\_\_fchinerty.dat} & (\ref{eq:pot_jyin})\\
-%& & \texttt{b2tfhe\_\_fchinerty.dat} &  \\
+$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{j}_x^{(in)}$ & $A$ & \texttt{b2tfhe\_\_fchinertx.dat} & (\ref{eq:pot_tijxin}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_x}\widetilde{j}_x^{(vis \parallel)} $ & $ A $ & \texttt{b2tfhe\_\_fchvisparx.dat} & (\ref{eq:pot_tijxvispar})\\
-%& & \texttt{b2tfhe\_\_fchvisparx.dat} &  \\
+$\displaystyle \frac{\sqrt{g}}{h_y} j_y^{(in)}$ & $A$ & \texttt{b2tfhe\_\_fchinerty.dat} & (\ref{eq:pot_jyin}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_y}\widetilde{j}_y^{(vis \parallel)} $ & $ A $ & \texttt{b2tfhe\_\_fchvispary.dat} & (\ref{eq:pot_tijyvispar})\\
-%& & \texttt{b2tfhe\_\_fchvispary.dat} &  \\
+$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{j}_x^{(vis \parallel)}$ & $A$ & \texttt{b2tfhe\_\_fchvisparx.dat} & (\ref{eq:pot_tijxvispar}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_x}\widetilde{j}_x^{(s)} $ & $ A $ & \texttt{b2tfhe\_\_fchinx.dat} & (\ref{eq:pot_jx}), (\ref{eq:pot_tijxs})\\
-%& & \texttt{b2tfhe\_\_fchinx.dat} &  \\
+$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_y^{(vis \parallel)}$ & $A$ & \texttt{b2tfhe\_\_fchvispary.dat} & (\ref{eq:pot_tijyvispar}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_y}\widetilde{j}_y^{(s)} $ & $ A $ & \texttt{b2tfhe\_\_fchiny.dat} & (\ref{eq:pot_jy}), (\ref{eq:pot_tijys})\\
-%& & \texttt{b2tfhe\_\_fchiny.dat} &  \\
+$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{j}_x^{(s)}$ & $A$ & \texttt{b2tfhe\_\_fchinx.dat} & (\ref{eq:pot_jx}), (\ref{eq:pot_tijxs}) \\
 
-$\displaystyle \sigma_{aa0} b^2_z \frac{\sqrt{g}}{h^2_x} $ & $ S $ & \texttt{b2tral\_csiginx01\_00.dat} & (\ref{eq:pot_sigaa0})\\
+$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_y^{(s)}$ & $A$ & \texttt{b2tfhe\_\_fchiny.dat} & (\ref{eq:pot_jy}), (\ref{eq:pot_tijys}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_x}\widetilde{j}_x^{(AN)} $ & $ A $ & \texttt{b2tfhe\_\_fchanmlx.dat} & (\ref{eq:pot_jxan})\\
-%& & \texttt{b2tfhe\_\_fchanmlx.dat} &  \\
+$\displaystyle \sigma_{aa0} b^2_z \frac{\sqrt{g}}{h^2_x}$ & $S$ & \texttt{b2tral\_csiginx01\_00.dat} & (\ref{eq:pot_sigaa0}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_y}\widetilde{j}_y^{(AN)} $ & $ A $ & \texttt{b2tfhe\_\_fchanmly.dat} & (\ref{eq:pot_jyan})\\
-%& & \texttt{b2tfhe\_\_fchanmly.dat} &  \\
+$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{j}_x^{(AN)}$ & $A$ & \texttt{b2tfhe\_\_fchanmlx.dat} & (\ref{eq:pot_jxan}) \\
 
-$\displaystyle \sigma_{ANy} $ & $ S / m^2 $ & \texttt{b2tqna\_sig0.dat} & (\ref{eq:pot_sigan})\\
+$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_y^{(AN)}$ & $A$ & \texttt{b2tfhe\_\_fchanmly.dat} & (\ref{eq:pot_jyan}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_y}\widetilde{j}_y^{(vis \perp)} $ & $ A $ & \texttt{b2tfhe\_\_fchvispery.dat} &
-(\ref{eq:pot_tijyvisper})\\
+$\displaystyle \sigma_{ANy}$ & $S/m^2$ & \texttt{b2tqna\_sig0.dat} & (\ref{eq:pot_sigan}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_y}\widetilde{j}_y^{(vis q)} $ & $ A $ & \texttt{b2tfhe\_\_fchvisqy.dat} & (\ref{eq:pot_tijyvisq})\\
+$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_y^{(vis \perp)}$ & $A$ & \texttt{b2tfhe\_\_fchvispery.dat} & (\ref{eq:pot_tijyvisper}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_y}j_y^{(ST)} $ & $ A $ & \texttt{b2tfhe\_\_fchstochy.dat} &
-(\ref{eq:pot_jyst})\\
+$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_y^{(vis q)}$ & $A$ & \texttt{b2tfhe\_\_fchvisqy.dat} & (\ref{eq:pot_tijyvisq}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h^2_y}\sigma^{(ST)} $ & $ S $ & \texttt{b2trno\_csigy\_stoch.dat} & (\ref{eq:pot_jyst})\\
+$\displaystyle \frac{\sqrt{g}}{h_y} j_y^{(ST)}$ & $A$ & \texttt{b2tfhe\_\_fchstochy.dat} & (\ref{eq:pot_jyst}) \\
 
-residuals & $ A $ & \texttt{b2nppo\_respo.dat} or & (\ref{eq:pot_eq}) \\
-& & \texttt{b2npp7\_respo.dat} &  \\
+$\displaystyle \frac{\sqrt{g}}{h^2_y} \sigma^{(ST)}$ & $S$ & \texttt{b2trno\_csigy\_stoch.dat} & (\ref{eq:pot_jyst}) \\
+
+residuals & $A$ & \texttt{b2nppo\_respo.dat} or & (\ref{eq:pot_eq}) \\
+ & & \texttt{b2npp7\_respo.dat} &  \\
 
 \hline
 \caption{Files produced by means of {\tt 'b2wdat\_iout = 4'}, the variable they contain, and the equation to which they are related}
@@ -15431,7 +15433,7 @@ where the asterisk (*) stands for {\em i} (inner target), {\em iu} (inner upper 
 If J \textgreater 0, then the codes produces a set of {\tt wlld\_*.dat},
 where the asterisk (*) is the name of each "plot zone" defined in the DG model.
 Each such file contains the power loading onto the set of walls defined in that
-plot zone. If LM = 99 and J \textgreater 0, additional diagnostics are produced that indicate the radiation split by isonuclear sequence. If LM = 98 and J \textgreater 0, additional diagnostics are produced that indicate the radiation coming from the core additional sources. \\
+plot zone. If LM = 99 and J \textgreater 0, additional diagnostics are produced that indicate the radiation split by isonuclear sequence. If LM = 98 and J \textgreater 0, additional diagnostics are produced that indicate the radiation coming from the core additional sources. Note that the radiation loading is computed using a cylindrical approximation, i.e. neglecting the toroidal curvature. \\
 If the user wants to use the heat transfer model for the monoblock and/or the reflector plates, then plot zones for the inner/outer target, the reflector plates, and/or the dome must be defined in the DG model, using the labels 'trg[i-o]', '[i-o]rp', and/or 'dome', respectively. The {\tt wlld\_*.dat} files produced should then be postprocessed by either {\tt b2ymb} (see \ref{sec:b2ymb}), {\tt b2yrp} (\ref{sec:b2yrp}), or {\tt b2ydm} (\ref{sec:b2ydm}).
 
 

@@ -154,7 +154,7 @@ c*** Read the AMDS file if it exists
             open(iunii,file=amd_file(iamd))
           else !}{
             uex=open_file(iunii,amd_file(iamd),
-     .                    'data.local/AMDS|data/AMDS|modules/amds')
+     .               'data.local/AMDS|data.local/amds|modules/amds')
           end if !}
           if(uex) then !{
             uex=immed
@@ -166,10 +166,11 @@ c*** Read the AMDS file if it exists
             write(0,*) 'STOP ==> Check the references to AMDS in the ',
      ,                 'DG model and make sure that the file exists '
             write(0,*) '   in either $SOLPSTOP/modules/amds or ',
-     ,                          '$SOLPSTOP/data(.local)/AMDS ',
+     ,                          '$SOLPSTOP/data.local/(amds|AMDS) or ',
      ,                          'or the current directory'
             call xerrab ('AMDS file not found')
           end if !}
+          close(iunii)
         end if !}
       end do !}
       if (.not.no_n2_model)

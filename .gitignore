@@ -75,6 +75,7 @@ doc/solps/solps.*
 doc/solps/solps-*.svg
 !doc/solps/solps.tex
 doc/solps/b2cdc?.F
+doc/solps/b2input.xml
 doc/solps/B2_5.config.ITER.ifort64
 doc/solps/B2_5.Makefile
 doc/solps/b2plot.commands
