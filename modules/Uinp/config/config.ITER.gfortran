@@ -6,11 +6,6 @@ FC       = mpif90
 else
 FC       = gfortran
 endif
-FC_VERSION = $(shell echo `gfortran --version | head -1 | awk '{printf "%s ",$$3,"\n"}'`)
-
-ifeq (${FC_VERSION},6.4.0})
-FFLAGS  += -fuse-ld=bfd
-endif
 
 CPP      = /lib/cpp -traditional
 

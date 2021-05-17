@@ -1,5 +1,10 @@
 setenv GLI_HOME /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/gks
 setenv PATH ${PATH}:/pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/NETCDF/bin
+if (! $?LD_LIBRARY_PATH) then
+setenv LD_LIBRARY_PATH /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/mscl/lib
+else
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/mscl/lib
+endif
 setenv NCARG_ROOT /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/NCARG
 setenv SOLPSWORK /pfs/work/$USER/solps-iter/runs
 setenv FC g95

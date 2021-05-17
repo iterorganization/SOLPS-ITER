@@ -47,12 +47,10 @@ prints = b2ag.prt b2ah.prt b2ai.prt b2ar.prt b2mn.prt \
  b2yr.prt b2yt.prt b2yi_gnuplot.prt
 
 target_ag = b2ag.prt b2fgmtry
-ifndef STAND_ALONE
 ifneq (${COMPILER},HP)
 target_ag += fort.30
 else
 target_ag += ftn30
-endif
 endif
 target_ah = b2ah.prt b2fpardf
 target_ai = b2ai.prt b2fstati
@@ -501,6 +499,7 @@ endif
 	-[ -e b2co.exe.dir/b2time.nc ] && rm b2co.exe.dir/b2time.nc || echo > /dev/null
 	-[ -e b2co.exe.dir/b2wall.nc ] && rm b2co.exe.dir/b2wall.nc || echo > /dev/null
 	-[ -e b2co.exe.dir/b2batch.nc ] && rm b2co.exe.dir/b2batch.nc || echo > /dev/null
+	-[ -e b2co.exe.dir/b2movies.nc ] && rm b2co.exe.dir/b2movies.nc || echo > /dev/null
 	-[ -e b2co.exe.dir/b2tallies.nc ] && rm b2co.exe.dir/b2tallies.nc || echo > /dev/null
 	-rmdir b2co.exe.dir
 

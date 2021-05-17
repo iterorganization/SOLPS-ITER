@@ -529,8 +529,8 @@ c*** Gas flows in PFR:
       character gpfrgrp(npfrgrpd)*8
       
 c-----------------------------------------------------------------------
-c*** Limiter configuration - cheating:
-      logical lm_cnfg
+c*** Limiter and linear configurations - cheating:
+      logical lm_cnfg, ln_cnfg
       integer lm_vhst, lm_whst
 
 c-----------------------------------------------------------------------
@@ -610,7 +610,7 @@ c     ,  spcifup,spcifua,spcifum,spcifui,
      ,  ttcdbgg,ttcdbgmpi,ttcdbgc,ttchktim,
      ,  ttpl1st,ttpl2nd,ttpladd,ttplhst,ttplcut,ttplnums,tttest,
      ,  ttplspec,ttprspec,ttplargl,ttprargl,
-     ,  lm_cnfg,no_n2,l_ammon,l_meta,
+     ,  lm_cnfg,ln_cnfg,no_n2,l_ammon,l_meta,
      ,  no_n2_model,ammonx_used,meta_used,is_meta
 
       common/uinptxt/topo,amd_file,

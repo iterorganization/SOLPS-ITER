@@ -99,13 +99,13 @@ c*** Grid dimensions and cut locations
       call subini ('uinprpgr')
       ex=.false.
       if(lm_cnfg) then  !{
-c*** Limiter configuration - a temporary, clumsy solution
+c*** Limiter and linear configurations - a temporary, clumsy solution
         if(index(topo,'SN').eq.0) then !{
-          write(*,*) 'A single-null topology should be used for a ',
-     ,      'limiter configuration'
+          write(*,*) 'A single-null topology should be used for ',
+     ,      'limiter and linear configurations'
           write(*,*) '==> Check the DG model'
           call xerrab
-     .     ('Need to use SN topology for limiter configuration')
+     .  ('Need to use SN topology for limiter or linear configurations')
         end if !}
         ex=.true.
         ntrgdflt=2
@@ -134,17 +134,19 @@ c*** Limiter configuration - a temporary, clumsy solution
         nxcut1(1)=nzidv
         nxcut1(2)=nxcut1(1)+nzinn
         nx=nxcut1(2)+nzodv
-        nniso=2
-        ntiso(1)=0
-        ntiso(2)=0
-        nxiso1(1)=0
-        nxiso1(2)=nx+1
-        nxiso2(1)=nxiso1(1)
-        nxiso2(2)=nxiso1(2)
-        nyiso1(1)=0
-        nyiso2(1)=nycut2(1)
-        nyiso1(2)=nyiso1(1)
-        nyiso2(2)=nyiso2(1)
+        if (.not.ln_cnfg) then !{
+          nniso=2
+          ntiso(1)=0
+          ntiso(2)=0
+          nxiso1(1)=0
+          nxiso1(2)=nx+1
+          nxiso2(1)=nxiso1(1)
+          nxiso2(2)=nxiso1(2)
+          nyiso1(1)=0
+          nyiso2(1)=nycut2(1)
+          nyiso1(2)=nyiso1(1)
+          nyiso2(2)=nyiso2(1)
+        end if !}
       else if(index(topo,'DN').gt.0) then  !}{
         ntrgdflt=4
         if(topo.eq.'DNS') then  !{

@@ -8,7 +8,7 @@ setenv FC gfortran
 # Load modules
 #module unload imasenv
 #module load imasenv/3.25.0/gcc/7.3.0/1.0
-#setenv GGD_VERSION 1.9.1
+#setenv GGD_VERSION `pkg-config ggd --modversion`
 module load intel/pe-xe-2018--binary 
 module load intelmpi/2018--binary 
 module load szip/2.1--gnu--6.1.0

@@ -1,13 +1,13 @@
 #! /bin/tcsh
 
-#SBATCH -N 2
+#SBATCH -N #NODES#
 #SBATCH -J #JOBNAME#
 #SBATCH --ntasks-per-node=#PROCS#
 #SBATCH -o testjob-%j.out
 #SBATCH -e testjob-%j.err
 #SBATCH -t #HOURS#:00:00
 
-### This scripts submits the job, which launches SOLPS-ITER code, to HPC cluster,
+### This script submits the job, which launches SOLPS-ITER code, to HPC cluster,
 ### and resubmits the job again after successful finish of SOLPS-ITER in a loop manner.
 ###
 ### Successful finish means that either the prescribed (by 'b2mndr_ntim) number of steps is reached

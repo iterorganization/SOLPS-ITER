@@ -3,6 +3,7 @@
       use b2mod_layer
      , , only: ntrack, nalloys
       use b2mod_subsys
+      use b2mod_solpstop
       use eirmod_solps
 c
 c  version : 23.04.99 14:36
@@ -14,6 +15,7 @@ c======================================================================
       integer i,j,iamd,ifile,imat,nmat,isp
       logical uex,open_file,streql,match_found,skip_wall
       character*2 listmat(nmtr)
+      logical, allocatable :: trim_found(:)
       external open_file,uinnam,uintrg,uinaux,uiniamd,streql,
      .         xertst,xerrab
 c======================================================================
@@ -26,7 +28,9 @@ c
       lena=8
       jmess=2
       lfin=72
-      promp(1:2)=1.d0
+      finish = repeat(' ',8)
+      promp(1) = repeat(' ',8)
+      promp(2) = repeat(' ',8)
       fixkey=.false.
 c
 c*** Read the data from dg output
@@ -125,15 +129,25 @@ c
           end if !}
         end if !}
       end do !}
+      match_found=.false.
+      do imat=1,nmat !{
+        match_found=match_found .or. streql(listmat(imat),'C')
+      end do !}
+      if (.not.match_found) nnftrm=0
+      match_found=.false.
+      do isp=1,nspigen !{
+        match_found=match_found .or. streql(spcigen(isp),'D')
+      end do !}
+      if (.not.match_found) nnftrm=0
       ifile = 0
       if (nspigen.gt.1 .or. .not.streql(spcigen(nspigen),'D') .or.
      .     nmat.gt.1   .or. .not.streql(listmat(nmat),'C')) then !{
-         do isp=1,nspigen !{
-           do imat=1,nmat !{
-             if (.not.(streql(spcigen(isp),'D') .and.
-     .                 streql(listmat(imat),'C'))) then !{
-               ifile = ifile + 1
-               filtrm(nnftrm+ifile)=
+        do isp=1,nspigen !{
+          do imat=1,nmat !{
+            if (.not.(streql(spcigen(isp),'D') .and.
+     .                streql(listmat(imat),'C'))) then !{
+              ifile = ifile + 1
+              filtrm(nnftrm+ifile)=
      .          trim(spcigen(isp))
      .          //'_on_'//
      .          listmat(imat)
@@ -142,6 +156,29 @@ c
         end do !}
       end if !}
       nnftrm = nnftrm+ifile
+      allocate(trim_found(nnftrm))
+      do ifile=1,nnftrm
+        inquire(file=filtrm(ifile),exist=trim_found(ifile))
+        if(.not.trim_found(ifile)) inquire(file=trim(solpstop())
+     .   //'/modules/Eirene/Database/Surfacedata/TRIM/'
+     .   //trim(filtrm(ifile)),exist=trim_found(ifile))
+        if(.not.trim_found(ifile)) inquire(file=trim(solpstop())
+     .   //'/data.local/TRIM/'//trim(filtrm(ifile)),
+     .   exist=trim_found(ifile))
+      end do
+      j=0
+      do ifile=nnftrm,1,-1
+        if (.not.trim_found(ifile)) then
+          write(*,*) 'Did not find TRIM file ',trim(filtrm(ifile)),
+     .               '. Removing from list...'
+          do i = ifile+1, nnftrm-j
+            filtrm(i-1)=filtrm(i)
+          end do
+          j=j+1
+        end if
+      end do
+      nnftrm = nnftrm - j
+      deallocate(trim_found)
 
       ammonx_used=.false.
       meta_used=.false.
@@ -155,7 +192,7 @@ c*** Read the AMDS file if it exists
             open(iunii,file=amd_file(iamd))
           else !}{
             uex=open_file(iunii,amd_file(iamd),
-     .                    'data.local/AMDS|data/AMDS|modules/amds')
+     .               'data.local/AMDS|data.local/amds|modules/amds')
           end if !}
           if(uex) then !{
             uex=immed
@@ -167,10 +204,11 @@ c*** Read the AMDS file if it exists
             write(0,*) 'STOP ==> Check the references to AMDS in the ',
      ,                 'DG model and make sure that the file exists '
             write(0,*) '   in either $SOLPSTOP/modules/amds or ',
-     ,                          '$SOLPSTOP/data(.local)/AMDS ',
+     ,                          '$SOLPSTOP/data.local/(amds|AMDS) or ',
      ,                          'or the current directory'
             call xerrab ('AMDS file not found')
           end if !}
+          close(iunii)
         end if !}
       end do !}
       if (.not.no_n2_model)

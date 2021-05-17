@@ -81,37 +81,38 @@ thumb: solps.pdf
 
 bibtex: solps.bbl
 
-b2cdca.F:
+b2cdca.F: ${B25DIR}/src/documentation/b2cdca.F
 	ln -sf ${B25DIR}/src/documentation/b2cdca.F .
 
-b2cdci.F: ${B25DIR}/src/documentation/b2input.xml ${B25DIR}/src/documentation/b2cdci.py
-	-cd ${B25DIR}/src/documentation; ${PYTHON} b2cdci.py || echo "! Error building b2cdci.F from b2input.xml" > ${B25DIR}/src/documentation/b2cdci.F
-	ln -sf ${B25DIR}/src/documentation/b2cdci.F .
+b2cdci.F: b2input.xml ${B25DIR}/src/documentation/b2cdci.py
+	export DO_NOT_RESOLVE_ENTITIES=1; ${PYTHON} ${B25DIR}/src/documentation/b2cdci.py || echo "! Error building b2cdci.F from b2input.xml" > b2cdci.F
 
-b2cdcn.F: ${B25DIR}/src/documentation/b2input.xml ${B25DIR}/src/documentation/b2cdcn.py
-	-cd ${B25DIR}/src/documentation; ${PYTHON} b2cdcn.py || echo "! Error building b2cdcn.F from b2input.xml" > ${B25DIR}/src/documentation/b2cdcn.F
-	ln -sf ${B25DIR}/src/documentation/b2cdcn.F .
+b2cdcn.F: b2input.xml ${B25DIR}/src/documentation/b2cdcn.py
+	export DO_NOT_RESOLVE_ENTITIES=1; ${PYTHON} ${B25DIR}/src/documentation/b2cdcn.py || echo "! Error building b2cdcn.F from b2input.xml" > b2cdcn.F
 
-b2cdcr.F:
+b2cdcr.F: ${B25DIR}/src/documentation/b2cdcr.F
 	ln -sf ${B25DIR}/src/documentation/b2cdcr.F .
 
-b2cdcv.F:
+b2cdcv.F: ${B25DIR}/src/documentation/b2cdcv.F
 	ln -sf ${B25DIR}/src/documentation/b2cdcv.F .
+
+b2input.xml: ${B25DIR}/src/documentation/b2input.xml
+	ln -sf ${B25DIR}/src/documentation/b2input.xml .
 
 b2plot.commands: ${B25DIR}/src/b2plot/b2plot.F
 	-[ -e b2plot.commands ] && rm b2plot.commands || echo > /dev/null
 	sed 's:^     [^ ]:@@@:' ${B25DIR}/src/b2plot/b2plot.F | awk 'BEGIN{save=""}/^[^@][^@][^@]/&&save!=""{print save}/^[^@][^@][^@]/{save=$$0}/^@@@/{save=save" "$$0}END{print save}' | sed 's; *@@@ *;;g' | grep -v "IGNORE" | egrep "case *\( *'|description *=" | sed -e "s;.*case *('\(.*\)');cmd: \1;" -e "s; *description *= *'\(.*\)';desc: \1;" -e "s;' //';;" | awk -F: 'BEGIN{save=""}/^cmd/&&save!=""{print save}/^cmd:/{save=$$2}/^desc/{save=save"\t "$$2}END{print save}' | sed 's:\! ::' | sed "s:',':,:g" | sed "s:'':':g" | expand > b2plot.commands
 
-DIMENSIONS.F:
+DIMENSIONS.F: ${B25DIR}/src/include/DIMENSIONS.F
 	ln -sf ${B25DIR}/src/include/DIMENSIONS.F .
 
-B2_5.Makefile:
+B2_5.Makefile: ${B25DIR}/Makefile
 	ln -sf ${B25DIR}/Makefile B2_5.Makefile
 
-B2_5.config.ITER.ifort64:
+B2_5.config.ITER.ifort64: ${B25DIR}/config/config.ITER.ifort64
 	ln -sf ${B25DIR}/config/config.ITER.ifort64 B2_5.config.ITER.ifort64
 
-B2_5.config.common.ifort64:
+B2_5.config.common.ifort64: ${B25DIR}/config/config.common.ifort64
 	ln -sf ${B25DIR}/config/config.common.ifort64 B2_5.config.common.ifort64
 
 SOLPS_versions: force
@@ -122,10 +123,10 @@ SOLPS_versions: force
 	@( cd ${SOLPSTOP}/modules/DivGeo ; git describe --always | awk '{print "DivGeo version : ",$$1}' ) >> SOLPS_versions_new
 	@if cmp -s SOLPS_versions_new SOLPS_versions ; then rm SOLPS_versions_new ; else mv SOLPS_versions_new SOLPS_versions ; fi
 
-solps-iter_git.log: 
+solps-iter_git.log:
 	( cd ${SOLPSTOP} ; ${GIT} log --oneline ) > solps-iter_git.log
 
-update_log: 
+update_log:
 	( cd ${SOLPSTOP} ; ${GIT} log --oneline ) > solps-iter_git.log
 
 update: ${INCLUDES}
@@ -139,8 +140,8 @@ complete:
 	${MAKE} solps.ps
 	${MAKE} solps.pdf
 
-clean: 
-	rm -f solps.pdf solps.ps solps.dvi solps.xdv solps.aux solps.ilg solps.ind solps.idx solps.lof solps.log solps.lot solps.out solps.toc b2cdca.F b2cdci.F b2cdcn.F b2cdcr.F b2cdcv.F solps_data_git.log solps-iter_git.log B2_5.config.ITER.ifort64 B2_5.Makefile DIMENSIONS.F SOLPS_versions solps.bbl solps.blg solps.brf solps.tpt
+clean:
+	rm -f solps.pdf solps.ps solps.dvi solps.xdv solps.aux solps.ilg solps.ind solps.idx solps.lof solps.log solps.lot solps.out solps.toc b2input.xml b2cdca.F b2cdci.F b2cdcn.F b2cdcr.F b2cdcv.F solps_data_git.log solps-iter_git.log B2_5.config.ITER.ifort64 B2_5.Makefile DIMENSIONS.F SOLPS_versions solps.bbl solps.blg solps.brf solps.tpt
 
 ### WORK
 COMPARE_10814_TESEPM=/scratch/dpc/solps5.0_HD+C+He/src/Braams/b2/runs/D+C+He/2MW/compare_10814_tesepm.ps

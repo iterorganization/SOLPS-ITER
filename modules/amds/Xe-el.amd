@@ -252,7 +252,9 @@ Reaction AMJUEL_H.0_0.4T 0
 Reaction AMJUEL_H.0_0.5T 0
 Reaction AMJUEL_H.0_0.6T 0
 Reaction AMJUEL_H.0_0.7T 0
-Reaction AMJUEL_H.0_0.8T 0
+Reaction AMJUEL_H.0_0.8T 2
+H+
+Xe
 Reaction AMJUEL_H.1_0.1T 0
 Reaction AMJUEL_H.1_0.1D 0
 Reaction AMJUEL_H.1_0.1V 0
@@ -274,7 +276,9 @@ Reaction AMJUEL_H.1_0.6V 0
 Reaction AMJUEL_H.1_0.7T 0
 Reaction AMJUEL_H.1_0.7D 0
 Reaction AMJUEL_H.1_0.7V 0
-Reaction AMJUEL_H.1_0.8T 0
+Reaction AMJUEL_H.1_0.8T 2
+H+
+Xe
 Reaction AMJUEL_H.1_0.8D 0
 Reaction AMJUEL_H.1_0.8V 0
 Reaction AMJUEL_H.1_2.2.5 0
@@ -320,7 +324,9 @@ Reaction AMJUEL_H.3_0.6T 0
 Reaction AMJUEL_H.3_0.6D 0
 Reaction AMJUEL_H.3_0.7T 0
 Reaction AMJUEL_H.3_0.7D 0
-Reaction AMJUEL_H.3_0.8T 0
+Reaction AMJUEL_H.3_0.8T 2
+H+
+Xe
 Reaction AMJUEL_H.3_0.8D 0
 Reaction AMJUEL_H.3_3.1.8 0
 Reaction AMJUEL_H.3_3.2.3 0
@@ -9247,8 +9253,8 @@ Reaction AMMONX_H.2_23s 2
 
 
 
-Particle e
 Particle N2+
+Particle e
 Reaction AMMONX_H.2_24 2
 
 

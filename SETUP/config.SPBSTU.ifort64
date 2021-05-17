@@ -25,7 +25,7 @@
   NCARG_ROOT ?= ${SOLPSTOP}/../${COMPILER}/NCARG
       NAGDIR ?= ${SOLPSTOP}/../${COMPILER}/nag
  MDSPLUS_DIR ?= ${SOLPSTOP}/../${COMPILER}/MDSPLUS
-       MPDIR ?= 
+       MPDIR ?=
 
 #
 # Variables for linking
