@@ -690,4 +690,4 @@ cxpb      call uib2pl
 c=======================================================================
       call prgend ()
       stop 'uinp'
-      end
+      end program uinput

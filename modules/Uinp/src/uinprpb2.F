@@ -1146,4 +1146,4 @@ c*** j_h_at,l_h_mol
 c=======================================================================
       call subend ()
       return
-      end
+      end subroutine uinprpb2

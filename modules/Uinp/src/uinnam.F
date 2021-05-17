@@ -593,7 +593,7 @@ c=======================================================================
             amd_file(namdf)(i:i)=' '
             call lefta(amd_file(namdf),48,i)
             write(*,*) 'Filename for AMDS reference quoted: ',
-     ,                                                  amd_file(namdf)
+     ,                                           trim(amd_file(namdf))
           end if !}
         else
           i=index(amd_file(namdf),'.')
@@ -602,7 +602,7 @@ c=======================================================================
           call lefta(uam,52,i+4)
           amd_file(namdf)=uam
           write(*,*) 'Filename for AMDS reference quoted: ',
-     ,                                                  amd_file(namdf)
+     ,                                           trim(amd_file(namdf))
         end if !}
       case (87)
         call resimi(namdf)
@@ -703,7 +703,7 @@ c*** Surface data transfer from B2 to Eirene
         end if !}
         call resima(sps_mtrl(n_spcsrf))
         sps_mtri(n_spcsrf)=-1.0
-        if(.not.streql(sps_mtrl(n_spcsrf),'-')) 
+        if(.not.streql(sps_mtrl(n_spcsrf),'-'))
      >   call uinmtr(sps_mtrl(n_spcsrf),nint(sps_mtri(n_spcsrf)),1)
       case (100)
         if(n_spcsrf.le.0) then !{
@@ -918,7 +918,7 @@ c***  input trimark is the marker for TRIA mesh
 c***  input global mesh size
       case (149)
         call resime(trisize(0))
-c***  input index of rectangle 
+c***  input index of rectangle
       case (150)
         call resimi(ntriref)
 c***  input mesh size for current rectangle
@@ -1045,10 +1045,10 @@ c***  input elements indices for current rectangle
         call resima(chtyp)
         if (.not.streql(chtyp,'lin_prf') .and.
      .      .not.streql(chtyp,'lin_int')) then !{
-          write(0,*) 'uinam: unrecognized chord group type ',
+          write(0,*) 'uinnam: unrecognized chord group type ',
      .      chtyp
           write(0,*) '  ==> Check the DG model'
-          call xerrab ('Unrecognized chord group type') 
+          call xerrab ('Unrecognized chord group type')
         end if !}
       case (170) ! data_id
         i=lena
@@ -1083,4 +1083,4 @@ c***  input elements indices for current rectangle
 c=======================================================================
  9999 call subend ()
       return
-      end
+      end subroutine uinnam

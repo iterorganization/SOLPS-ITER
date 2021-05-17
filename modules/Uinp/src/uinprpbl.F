@@ -656,4 +656,4 @@ c======================================================================
       call subend ()
       return
  1028 format()
-      end
+      end subroutine uinprpbl

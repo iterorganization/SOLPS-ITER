@@ -331,7 +331,7 @@ triang_mpi:
 	cd modules/Triang; ${MAKE} USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 
 triang_nox:
-	cd modules/Triang; ${MAKE}  LD_GR="" LD_GKS="" mods
+	cd modules/Triang; ${MAKE} LD_GR="" LD_GKS="" mods
 	cd modules/Triang; ${MAKE} LD_GR="" LD_GKS=""
 
 triang_nox_mpi:

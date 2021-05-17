@@ -79,10 +79,10 @@ endif
 EIRINC += -I${EIROBJ}
 
 include ${SRCUIN}/config/config.${HOST_NAME}.${COMPILER}
-MAKES+= ${SRCUIN}/config/config.${HOST_NAME}.${COMPILER}
+MAKES += ${SRCUIN}/config/config.${HOST_NAME}.${COMPILER}
 ifeq ($(shell [ -e ${SRCUIN}/config/config.${HOST_NAME}.${COMPILER}.local ] && echo yes || echo no ),yes)
 include ${SRCUIN}/config/config.${HOST_NAME}.${COMPILER}.local
-MAKES+= ${SRCUIN}/config/config.${HOST_NAME}.${COMPILER}.local
+MAKES += ${SRCUIN}/config/config.${HOST_NAME}.${COMPILER}.local
 endif
 MNEXTRA = ${OBJDIR}/libb25.a ${OBJDIR}/libeirene.a ${OBJDIR}/libgr_dummy.a
 

@@ -314,9 +314,9 @@ c**  additional cells outside standard mesh
           end if
         end if
       end do
-      nradd = max ( nradd, icont ) 
+      nradd = max(nradd,icont)
 
-      if (nradd .gt. nadd) then !{
+      if (nradd.gt.nadd) then !{
         print *, ' Too many additional zones : NRADD = ', nradd
         print *, ' Recompile Uinp with an incresaed value of NADD'
         call xerrab ('Too many additional zones')
@@ -436,7 +436,7 @@ c**  Boundary data
 
 c**  Local reflection model ?
 
-        if(jscrd(i).GT.0) then !{
+        if(jscrd(i).gt.0) then !{
           write(iunoo,715) scard_name(jscrd(i))
         else if (jliin(i).eq.1) then !}{
           ii=10*jlsptc(i)+jlsptp(i)
@@ -1220,4 +1220,4 @@ c=======================================================================
   720 format (a50)
   721 format (a)
 c=======================================================================
-      end
+      end subroutine uinout

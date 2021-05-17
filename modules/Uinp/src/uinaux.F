@@ -215,4 +215,4 @@ c       call skipit
 c=======================================================================
  9999 call subend ()
       return
-      end
+      end subroutine uinaux

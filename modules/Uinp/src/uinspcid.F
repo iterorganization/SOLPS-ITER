@@ -68,5 +68,5 @@ c*** Plasma ion
       return
 
 c======================================================================
-      end
+      end subroutine uinspcid
 

@@ -73,8 +73,8 @@ c*** Modify some defaults for limiter case, if necessary
           nrcmstrs(i)=lm_vhst
         end do !}
         if(zaa.le.0.) then !{
-          write(*,*) 'The major radius is not specified for a limiter ',
-     ,                                                            'case'
+          write(*,'(2a)') 'The major radius must be specified ',
+     ,                    'for a limiter case'
           call xerrab
      .     ('==> Check the DG variable in "Global Eirene data"')
         end if !}
@@ -446,4 +446,4 @@ c*** Set the VSP data for input.eir
 c=======================================================================
       call subend ()
       return
-      end
+      end subroutine uinprp

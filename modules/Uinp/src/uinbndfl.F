@@ -252,7 +252,7 @@ c*** uex: the highest ionisation state for this species
 c=======================================================================
       call subend ()
       return
-      end
+      end subroutine uinbndfl
 
       integer function find_matching_species(name)
       use b2mod_types

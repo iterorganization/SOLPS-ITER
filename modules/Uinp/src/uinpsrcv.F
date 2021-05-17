@@ -142,4 +142,4 @@ c*** Find the corresponding reaction(s)
 c======================================================================
       call subend ()
       return
-      end
+      end subroutine uinpsrcv

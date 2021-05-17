@@ -481,4 +481,4 @@ c              write(*,*) 'j = ',j,done(j),next(j),inext(j)
 c=======================================================================
  9999 call subend ()
       return
-      end
+      end subroutine chkchain

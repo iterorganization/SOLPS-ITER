@@ -150,7 +150,7 @@ c*** Prepare the data on grid-wall ties, if specified
 #endif 
           do k=1,ngwtiesi !{
             if(mesh_cell_ind(kgwties(k),iy,ix).ne.0) then !{
-              write(0,*) 'uinprpdg: incomprehencible cell index ',
+              write(0,*) 'uinprpdg: incomprehensible cell index ',
      ,                                            kgwties(k),' for k=',k
               write(0,*) ' ==> could be an internal error in uinp - ',
      ,                                        'no ties specification!!!'
@@ -262,4 +262,4 @@ c*** Set the VSP data for diag2.eir
 c=======================================================================
       call subend ()
       return
-      end
+      end subroutine uinprpdg

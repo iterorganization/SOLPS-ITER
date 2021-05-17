@@ -844,4 +844,4 @@ cank        isrsp(l)=spcsrsp(l)
 c======================================================================
       call subend ()
       return
-      end
+      end subroutine uinprppt

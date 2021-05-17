@@ -119,10 +119,10 @@ SOLPS_versions: force
 	@( cd ${SOLPSTOP}/modules/DivGeo ; git describe --always | awk '{print "DivGeo version : ",$$1}' ) >> SOLPS_versions_new
 	@if cmp -s SOLPS_versions_new SOLPS_versions ; then rm SOLPS_versions_new ; else mv SOLPS_versions_new SOLPS_versions ; fi
 
-solps-iter_git.log: 
+solps-iter_git.log:
 	( cd ${SOLPSTOP} ; ${GIT} log --oneline ) > solps-iter_git.log
 
-update_log: 
+update_log:
 	( cd ${SOLPSTOP} ; ${GIT} log --oneline ) > solps-iter_git.log
 
 update: ${INCLUDES}

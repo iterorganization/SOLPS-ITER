@@ -13,16 +13,16 @@ endif
 FC	 = ifort
 
 ifdef SOLPS_DEBUG
-FFLAGS	 = -g debug all
+FFLAGS   = -g debug all
 else
 FFLAGS	 = -O -vec_report0
 endif
 
 INCLUDE  = -Isrc
 COMPILE  = ${FC} -c ${FFLAGS}
-CPP	 = /lib/cpp -C -traditional
+CPP      = /lib/cpp -C -traditional
 
-LDLIBS	 = ${LD_SONNET} ${LD_MSCL} -L/usr/local/lib
+LDLIBS   = ${LD_SONNET} ${LD_MSCL} -L/usr/local/lib
 LDEXTRA  = 
 
 #!!!Local Variables:

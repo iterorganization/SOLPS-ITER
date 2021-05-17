@@ -50,7 +50,7 @@ LD_MPI     = -lmpi2
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNCAR4 -DNO_NAG -DGFORTRAN `pkg-config netcdf-fortran --cflags`
+SOLPS_CPP      = -DNCAR4 -DNO_NAG -DGFORTRAN
 B25_DEFINES    =
 CARRE_DEFINES  =
 EIRENE_DEFINES =
@@ -60,7 +60,7 @@ FFLAGSEXTRA    =
 
 # Build with NetCDF tools if available
 ifdef LD_NETCDF
-  SOLPS_CPP   += -DCDF_MOVIE
+  SOLPS_CPP   += -DCDF_MOVIE `pkg-config netcdf-fortran --cflags`
 else
   SOLPS_CPP   += -DNO_CDF
 endif

@@ -232,4 +232,4 @@ c*** lstrascl
 c=======================================================================
       call subend ()
       return
-      end
+      end subroutine uinpsrcg

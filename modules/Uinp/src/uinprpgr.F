@@ -1,8 +1,8 @@
       subroutine uinprpgr
-       use b2mod_types
-       use b2mod_layer
+      use b2mod_types
+      use b2mod_layer
      , , only: ntrack, nalloys
-       use eirmod_solps
+      use eirmod_solps
 
 c  version : 15.03.2001 17:03
 
@@ -285,4 +285,4 @@ c!###}
 c=======================================================================
       call subend ()
       return
-      end
+      end subroutine uinprpgr

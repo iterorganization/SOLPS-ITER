@@ -282,4 +282,4 @@ c***  26: upper left cut, SOL
 c=======================================================================
       call subend ()
       return
-      end
+      end subroutine uinprpnd
