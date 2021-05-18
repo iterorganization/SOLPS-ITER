@@ -5,19 +5,10 @@ ifndef LD_MSCL
   $(error LD_MSCL not defined)
 endif
 
-ifdef USE_MPI
-FC       = mpif90
-else
 FC       = ifort
-endif
 
 COMPILER_MAJOR_VERSION = $(shell ${FC} -V 2>&1 | grep -o "Version [0-9]*" | cut -d ' ' -f 2 )
 
-ifdef USE_MPI
-ifdef SOLPS_OPENMP
-FFLAGS  += -fopenmp
-endif
-else
 ifdef SOLPS_DEBUG
 FFLAGS  += -g -C -traceback -debug all -check all
 endif
@@ -26,7 +17,6 @@ ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -ge 15; echo $$?),0)
 FFLAGS  += -qopenmp
 else
 FFLAGS  += -openmp
-endif
 endif
 endif
 

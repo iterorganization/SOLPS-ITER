@@ -3,6 +3,7 @@
       use b2mod_layer
      , , only: ntrack, nalloys
       use eirmod_solps
+      implicit none
 
 c  version : 05.02.2005 00:46
 
@@ -19,8 +20,11 @@ c=======================================================================
 #include "impcon.inc"
 #include "git_version_Uinp.h"
 
-      integer i,j,k,l,m,n,icont,istep,jsurpr
+      integer i,ii,ih,j,k,l,m,n,nm,icont,istep,jsurpr,ists
+      integer icopy,jlswch,jlcell,imrlb,iulin,iuscn,ich,ichmin,iid
+      integer iatm,imol,iion,ipht,ipls,ichori,inum
       integer llm(nchor),lli(nchor)
+      real x, y
       logical handle,ulmlti,ex,hydrogen,helium,carbon,nitrogen
       logical streql,silent_open
       logical, allocatable :: done(:)
@@ -738,7 +742,7 @@ c*** 6a.  data for reflection model
       write(iunoo,700) utxthd(7)
 
       write(iunoo,706) nltrim
-      if(path.ne.' ') write(iunoo,'(a6,a60)') 'cpath ',path
+      if(.not.streql(path,' ')) write(iunoo,'(a6,a60)') 'cpath ',path
       write(iunoo,'(a8)') (filtrm(i),i=1,nnftrm)
       if (natmi.gt.0) then
         write(iunoo,703) (datm(iatm),iatm=1,natmi)
@@ -1227,7 +1231,6 @@ c*** segment numbers for the target edges to be modified by geousr
       return
 c=======================================================================
   700 format ('*',a71)
-  701 format (1p,i3,1x,a6,1x,a4,a9,a3,2i3,5e12.5)
   702 format (l1,1x,a24,1x,i1,1x,4(2i3,1x))
   703 format (1p,6e12.5)
   704 format (1p,i6,6x,5e12.5)

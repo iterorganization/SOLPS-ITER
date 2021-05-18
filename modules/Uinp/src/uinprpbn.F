@@ -1,4 +1,5 @@
       subroutine uinprpbn
+      implicit none
 c
 c  version : 22.01.2003 20:03
 c

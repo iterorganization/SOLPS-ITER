@@ -425,13 +425,14 @@ c     now read the relevant line
      .                 ('Incomplete line found in ratadas.filelist!')
                     end if !}
                     close(99)
-                    if((SUBDIRrec.ne.'none') .and.
-     &   (SUBDIRrec.eq.SUBDIRion .or. SUBDIRion.eq.'none') .and.
-     &   (SUBDIRrec.eq.SUBDIRcex .or. SUBDIRcex.eq.'none') .and.
-     &   (SUBDIRrec.eq.SUBDIRprb .or. SUBDIRprb.eq.'none') .and.
-     &   (SUBDIRrec.eq.SUBDIRplt .or. SUBDIRplt.eq.'none') .and.
-     &   (SUBDIRrec.eq.SUBDIRzav .or. SUBDIRzav.eq.'none') .and.
-     &   (SUBDIRrec.eq.SUBDIRpot .or. SUBDIRpot.eq.'none') ) then !{
+                    if((.not.streql(SUBDIRrec,'none')) .and.
+     &   (streql(SUBDIRrec,SUBDIRion).or.streql(SUBDIRion,'none')) .and.
+     &   (streql(SUBDIRrec,SUBDIRcex).or.streql(SUBDIRcex,'none')) .and.
+     &   (streql(SUBDIRrec,SUBDIRprb).or.streql(SUBDIRprb,'none')) .and.
+     &   (streql(SUBDIRrec,SUBDIRplt).or.streql(SUBDIRplt,'none')) .and.
+     &   (streql(SUBDIRrec,SUBDIRzav).or.streql(SUBDIRzav,'none')) .and.
+     &   (streql(SUBDIRrec,SUBDIRpot).or.streql(SUBDIRpot,'none')) )
+     &               then !{
                       read(SUBDIRrec,*) iyear
                       if (iyear.gt.100) then !{
                         ibundling = mod(iyear,100)
@@ -513,7 +514,7 @@ c     now read the relevant line
                 rctnptin(nnrctn)=rctdptin(j,l)
                 rctnpto2(nnrctn)=rctdpto2(j,l)
                 rctnpto3(nnrctn)=rctdpto3(j,l)
-                if (nnn.gt.1) then !{ D or T isotope reaction partners
+                if (nnn.gt.1.and.h_collision) then !{ D or T isotope reaction partners
                   do i=1,n_hlp_h !{
                     if(streql(rctdptin(j,l),hlp_h(i,nnn,2)))
      ,                        rctnptin(nnrctn)=hlp_h(i,nnn,1)
@@ -623,6 +624,7 @@ c*** Remove reaction duplicates, if any
               rctnenr2(j-1)=rctnenr2(j)
               rctneln(j-1) =rctneln(j)
               rctnbdl(j-1) =rctnbdl(j)
+              rctniz(j-1)  =rctniz(j)
             end do !}
           end if !}
         end do !}
@@ -1200,10 +1202,12 @@ cxpb Here we must keep the first match!
                 if(streql(filnam(ii),rctndbs(irc)) .and.
      ,             streql(  h123(ii),rctnchp(irc)) .and.
      ,             streql(  reac(ii),rctnrct(irc)) .and.
+     ,                        iz(ii).eq.rctniz(irc) .and.
      ,                     massp(ii).eq.rctnmsp(irc) .and.
      ,                     masst(ii).eq.rctnmst(irc) .and.
      ,                     rc1mn(ii).eq.rctntmin(irc) .and.
-     ,                     rc1mx(ii).eq.rctntmax(irc)) kk=ii
+     ,                     rc1mx(ii).eq.rctntmax(irc) .and.
+     ,                    delpot(ii).eq.rctndlte(irc)) kk=ii
                 ii=ii+1
               end do !}
 
@@ -1240,10 +1244,11 @@ cxpb Here we must keep the last match!
                     if(streql(filnam(ii),rctndbs(k1)) .and.
      ,                 streql(  h123(ii),rctnchp(k1)) .and.
      ,                 streql(  reac(ii),rctnrct(k1)) .and.
+     ,                         iz(ii).eq.rctniz(k1)   .and.
      ,                      massp(ii).eq.rctnmsp(irc) .and.
      ,                      masst(ii).eq.rctnmst(irc) .and.
      ,                      rc1mn(ii).eq.rctntmin(k1) .and.
-     ,                      rc1mx(ii).eq.rctntmin(k1) .and.
+     ,                      rc1mx(ii).eq.rctntmax(k1) .and.
      ,                     delpot(ii).eq.rctndlte(k1)) k2=ii
                   end do !}
 
@@ -1379,10 +1384,11 @@ cxpb Here we must keep the last match!
                     if(streql(filnam(ii),rctndbs(k3)) .and.
      ,                 streql(  h123(ii),rctnchp(k3)) .and.
      ,                 streql(  reac(ii),rctnrct(k3)) .and.
+     ,                         iz(ii).eq.rctniz(k3)   .and.
      ,                      massp(ii).eq.rctnmsp(irc) .and.
      ,                      masst(ii).eq.rctnmst(irc) .and.
      ,                      rc1mn(ii).eq.rctntmin(k3) .and.
-     ,                      rc1mx(ii).eq.rctntmin(k3) .and.
+     ,                      rc1mx(ii).eq.rctntmax(k3) .and.
      ,                     delpot(ii).eq.rctndlte(k3)) k4=ii
                   end do !}
 

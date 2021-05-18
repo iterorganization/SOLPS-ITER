@@ -32,7 +32,7 @@
 #
 
 LD_NETCDF  = `pkg-config netcdf-fortran --libs` -Wl,-rpath,/cineca/prod/opt/libraries/netcdff/4.4.4/intel--pe-xe-2017--binary/lib
-LD_MSCL    = -L${MSCL_ROOT} -lmscl
+LD_MSCL    = `pkg-config mscl --libs`
 LD_GR      = -L${GR_ROOT} -lgr
 LD_GKS     = -L${GLI_HOME} -lgks -lgfortran
 LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -L/usr/X11R6/lib64 -lX11 -lm

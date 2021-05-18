@@ -1479,9 +1479,15 @@ negative quantities on the same scale and "M" the absolute values of negative qu
     feature of the {\tt plot} command.
   \item[2d\_profiles]\index{2d\_profiles} creates {\tt *.last10} files for plotting.
     When processing fluxes, divides them by the area of contact to the neighbouring cell.
+    By default, the profiles will be averaged over the last 10 snapshots.
+    If the number of available snapshots is less than 10, the default will be to average over all the snapshots available.
+    The averaging limits can be adjusted with the \#1 and \#2 arguments (default values are 10 and 0 respectively).
   \item[2d\_profiles\_extended]\index{2d\_profiles\_extended} creates {\tt *.last10} files for plotting.
     When processing fluxes, divides them by the area of contact to the neighbouring cell.
     The flux files ending in {\tt P.last10} are divided by the perpendicular area of the cell face.
+    By default, the profiles will be averaged over the last 10 snapshots.
+    If the number of available snapshots is less than 10, the default will be to average over all the snapshots available.
+    The averaging number can be adjusted with the \#1 argument (default value is 10).
   \item[2d.summarize]\index{2d.summarize} Outputs the time dependent quantities from the last time point in {\tt b2time.nc}.
   \item[D+\_fluid\_fluxes]\index{D+\_fluid\_fluxes} Plots the fluxes of $D^+$ ions across the grid boundaries for a {\tt B2.5} standalone case
   \item[D0\_fluid\_fluxes]\index{D0\_fluid\_fluxes} Plots the fluxes of $D^0$ neutrals across the grid boundaries for a {\tt B2.5} standalone case
@@ -18275,6 +18281,9 @@ NAGFOR & convert/b2co\_tally\_cdf.F \\
 NAGFOR & convert/b2co\_time\_cdf.F \\
 NAGFOR & convert/b2co\_wall\_cdf.F \\
 NAGFOR & convert/b2mds.F \\
+NAGFOR & driver/b2obeq.F \\
+NAGFOR & driver/b2obfn.F \\
+NAGFOR & driver/b2oblm.F \\
 NAGFOR & ids/b2\_ual\_write.F90 \\
 NAGFOR & modules/b2mod\_openmp.F \\
 NAGFOR & modules/b2mod\_ppout.F \\
