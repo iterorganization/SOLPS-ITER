@@ -13,11 +13,11 @@ if os.access('b2mn.exe.dir/b2tallies.nc', os.R_OK):
   f=netCDF4.Dataset('b2mn.exe.dir/b2tallies.nc','r')
 else:
   f=netCDF4.Dataset('b2tallies.nc','r')
-vreg=f.dimensions['vreg']
-xreg=f.dimensions['xreg']
-yreg=f.dimensions['yreg']
-ns=f.dimensions['ns']
-time=f.dimensions['time']
+vreg=f.dimensions['vreg'].size
+xreg=f.dimensions['xreg'].size
+yreg=f.dimensions['yreg'].size
+ns=f.dimensions['ns'].size
+time=f.dimensions['time'].size
 times=f.variables['times']
 fhexreg=f.variables['fhexreg']
 fheyreg=f.variables['fheyreg']

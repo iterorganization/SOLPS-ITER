@@ -1,6 +1,6 @@
 #include "amds.h"
 
-main(int argc,char** argv) {
+int main(int argc,char** argv) {
   XApp xapp;
   Database db;
   Doc d;

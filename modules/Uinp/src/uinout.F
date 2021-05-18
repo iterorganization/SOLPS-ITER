@@ -1179,8 +1179,8 @@ c*** 14.  data for interfacing subroutine infcop
           end do !}
         end do !}
         if(lfchgs) then !{
-          x=istramin
-          y=istramax
+          x=real(istramin)
+          y=real(istramax)
           write(iunoo,703) 0.,x,y,0.
           do i=istramin,istramax !{
             write(iunoo,'(i3,1p,4e12.5)') i,
