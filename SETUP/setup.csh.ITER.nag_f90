@@ -6,7 +6,7 @@ module use /work/imas/etc/modules/all
 # Modules needed by SOLPS-ITER
 module load NAGfor/6.2.14
 module load makedepend/1.0.5-GCCcore-6.4.0
-module load MSCL/1.2.0-GCCcore-6.4.0
+module load MSCL/1.2.2-GCCcore-6.4.0
 module load GR/0.0.94-GCCcore-6.4.0
 module load GLI/4.5.30-GCCcore-6.4.0
 setenv GLI_HOME ${EBROOTGLI}

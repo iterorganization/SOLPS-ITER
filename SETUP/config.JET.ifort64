@@ -17,7 +17,8 @@
 # Add -DNAG22 to SOLPS_CPP
 #
 
-       NCDIR ?= /common/SOLPS-ITER/OBJECTCODE/ifort64/NETCDF
+#       NCDIR ?= /common/SOLPS-ITER/OBJECTCODE/ifort64/NETCDF
+       NCDIR ?= ${ITM_NETCDF_DIR}/${ITM_NETCDF_VERSION}/amd64_intel_18
    MSCL_ROOT ?= /common/SOLPS-ITER/OBJECTCODE/ifort64/mscl
        H5DIR ?= ${HDF5_HOME}
      GR_ROOT ?= /common/SOLPS-ITER/OBJECTCODE/ifort64/gr
@@ -31,7 +32,7 @@
 # Variables for linking
 #
 
-LD_NETCDF  = -L${NCDIR}/lib -lnetcdf
+LD_NETCDF  = -L${NCDIR}/lib -lnetcdff
 LD_MSCL    = -L${MSCL_ROOT} -lmscl
 LD_GR      = -L${GR_ROOT} -lgr
 LD_GKS     = -L${GLI_HOME} -lgks -lgfortran

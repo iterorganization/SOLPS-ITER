@@ -1,6 +1,6 @@
 #! /bin/tcsh
 
-#SBATCH -N 2
+#SBATCH -N #NODES#
 #SBATCH -J #JOBNAME#
 #SBATCH --ntasks-per-node=#PROCS#
 #SBATCH -o testjob-%j.out

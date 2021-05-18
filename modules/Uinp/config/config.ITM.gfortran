@@ -2,7 +2,7 @@
 
 # Test whether necessary variables are defined
 MSCL_ROOT ?= /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/mscl
-LD_MSCL ?= -L${MSCL_ROOT} -lmscl
+LD_MSCL ?= -L${MSCL_ROOT}/lib -lmscl
 
 ifdef USE_MPI
 FC       = mpif90

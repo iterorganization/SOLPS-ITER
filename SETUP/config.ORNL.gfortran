@@ -2,37 +2,22 @@
 # Specify paths to root-directories of following libraries on your system
 #
 
-NODENAME  ?= $(shell echo `hostname`)
-$(info $$NODENAME is [${NODENAME}])
-
-ifneq (,$(findstring $(NODENAME), fusion3 ultrabucky))
-       NCDIR = /usr/lib/x86_64-linux-gnu/hdf5/openmpi
-       NAGDIR = /usr/lib
-       BLAS_DIR = /usr/lib
-else
-       NCDIR = $(NETCDF)
-       NAGDIR = $(LAPACK_DIR)
-       BLAS_DIR = $(BLASDIR)
-endif
-MSCL_ROOT ?= /usr/local/mscl/linux_gfortran_JDL
-H5DIR =
-GR_ROOT ?= /usr/local/grsource/linux_gfortran_JDL
-GLI_HOME ?= /usr/local/gligks/gks/linux_gfortran_JDL
-NCARG_ROOT = /usr/lib64/ncarg
+NCDIR     = /usr/lib/x86_64-linux-gnu/hdf5/openmpi
+NAGDIR    = /usr/lib/x86_64-linux-gnu/lapack
+BLAS_DIR  = /usr/lib/x86_64-linux-gnu/blas
+NCARG_ROOT= /usr/lib/x86_64-linux-gnu/ncarg
+MSCL_ROOT ?= $(MSCL_ROOT)
+GR_ROOT   ?= $(GR_SOURCE)
+GLI_HOME  ?= $(GLI_HOME)
 MDSPLUS_DIR =
-
-
+H5DIR =
 
 #
 # Variables for linking
 #
-ifneq (,$(findstring fusion3,$(NODENAME)))
-  LD_NETCDF  = -L${NCDIR} -lnetcdf -lnetcdff -lstdc++ -g77libs -lhdf5
-  LD_NAG     = -L${BLAS_DIR} -lblas -L${NAGDIR} -llapack 
-else
-  LD_NETCDF  = -L${NCDIR}/lib -lnetcdf -lnetcdff -lstdc++ -lhdf5
-  LD_NAG     = -L${NAGDIR} -llapack -L${BLAS_DIR} -lblas
-endif
+
+LD_NETCDF  = -L${NCDIR} -lnetcdf -lnetcdff -lstdc++ -lhdf5
+LD_NAG     = -L${BLAS_DIR} -lblas -L${NAGDIR} -llapack
 LD_MSCL    = -L${MSCL_ROOT} -lmscl
 LD_GR      = -L${GR_ROOT} -lgr
 LD_GKS     = -L${GLI_HOME} -lgks

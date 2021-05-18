@@ -21,7 +21,7 @@ Eirene:
   cd $SOLPSTOP/modules/Eirene
   set repo="Eirene"
   git fetch --prune
-  git checkout develop && echo "Checked out Eirene develop branch" || goto branch
+  git checkout safe_develop && echo "Checked out Eirene safe_develop branch" || goto branch
   git pull && goto Carre || goto local
 
 Carre:
@@ -29,13 +29,6 @@ Carre:
   cd $SOLPSTOP/modules/Carre
   set repo="Carre"
   git fetch --prune
-  set old_exists=`git branch | grep svn_develop`
-  if ($old_exists == "") then
-    echo "Moving old Carre develop branch to svn_develop"
-    git branch -m develop svn_develop
-  else
-    echo "Old Carre develop branch already present"
-  endif
   git checkout develop && echo "Checked out Carre develop branch" || goto branch
   git pull && goto DivGeo || goto local
 
@@ -45,12 +38,6 @@ DivGeo:
   set repo="DivGeo"
   git fetch --prune
   set old_exists=`git branch | grep svn_develop`
-  if ($old_exists == "") then
-    echo "Moving old DivGeo develop branch to svn_develop"
-    git branch -m develop svn_develop
-  else
-    echo "Old DivGeo develop branch already present"
-  endif
   git checkout develop && echo "Checked out DivGeo develop branch" || goto branch
   git pull && goto ADAS || goto local
 

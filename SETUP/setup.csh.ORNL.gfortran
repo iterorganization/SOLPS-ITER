@@ -1,22 +1,10 @@
 # Load modules
 module load solps-libs/gcc
 set fullhost=`hostname -f`
-switch ($fullhost)
-  case "megabucky*":
-  case "node*":
-    module load gcc
-    module load openmpi/gcc_6.3.0
-    module load scalapack
-    module load blas
-    module load solps-libs/gcc
-    module load lapack/gcc
-    module load netcdf-with-fortran
-    module load hdf5_18
-endsw
 
-if (-e /cm/shared/apps/texlive/2017/bin/x86_64-linux) then 
-  setenv PATH /cm/shared/apps/texlive/2017/bin/x86_64-linux:${PATH}
-endif
+#if (-e /cm/shared/apps/texlive/2017/bin/x86_64-linux) then
+#  setenv PATH /cm/shared/apps/texlive/2017/bin/x86_64-linux:${PATH}
+#endif
 
 # Environment variables
 if (! $?DEVICE) then

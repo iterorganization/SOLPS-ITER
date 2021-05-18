@@ -14,6 +14,7 @@ endif
 # load modules
 module purge
 module load imas-modules/2.0 imasenv/3.25.0/intel/rc
+module load netcdf
 setenv LATEX pdflatex
 
 #? module load texlive

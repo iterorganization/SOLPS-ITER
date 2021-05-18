@@ -44,6 +44,7 @@ case "MEPHI":
 case "NERSC":
 case "ORNL":
 case "WM":
+case "MARCONI":
   echo gfortran
   breaksw
 default:

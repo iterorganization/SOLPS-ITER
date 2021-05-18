@@ -27,6 +27,12 @@ c
       keylen=8
       mimp=iunii
       lena=ufnlen
+      jmess=2
+      lfin=72
+      finish = repeat(' ',8)
+      promp(1) = repeat(' ',8)
+      promp(2) = repeat(' ',8)
+      fixkey=.false.
 c
 c*** Read the data from DG output
 c
