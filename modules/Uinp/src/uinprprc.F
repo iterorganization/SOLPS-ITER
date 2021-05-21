@@ -549,7 +549,8 @@ c     now read the relevant line
                     end do !}
                   end do !}
                 end if !}
-                if (l.le.nsrctd-1 .or. j.eq.1) then !{
+                if ((l.le.nsrctd-1 .or. j.eq.1).and.
+     .               index(rctnrct(nnrctn),'plt').eq.0) then !{
                   rctndlte(nnrctn)=rctddlte(j,l)
                 else !}{
                   if(silent_open(99,'ionization_potentials',
@@ -557,8 +558,13 @@ c     now read the relevant line
                     do i = 1, nc-1 !{
                       read(99,1028)
                     end do !}
-                    read(99,*) rctndlte(nnrctn)
+                    read(99,*) hlp_ee
                     close(99)
+                    if(index(rctnrct(nnrctn),'plt').gt.0) then
+                      rctndlte(nnrctn)=-hlp_ee
+                    else
+                      rctndlte(nnrctn)= hlp_ee
+                    end if
                   else !}{
                     call xerrab
      .               ('Could not find ionization_potentials file!')
