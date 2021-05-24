@@ -56,7 +56,7 @@ EOF
     shift
 #    set HELP_STRING=\"${JOB_NAME}\"
 #    echo $HELP_STRING
-    set LOOP_OPTS="-N ${NODES} ${LOOP_OPTS}" 
+    set LOOP_OPTS="-N ${NODES} ${LOOP_OPTS}"
     goto argloop
   endif
   if ("X${1}X" == "X-jX") then
@@ -66,14 +66,14 @@ EOF
     shift
     set HELP_STRING=\"${JOB_NAME}\"
 #    echo $HELP_STRING
-    set LOOP_OPTS="-j ${HELP_STRING} ${LOOP_OPTS}" 
+    set LOOP_OPTS="-j ${HELP_STRING} ${LOOP_OPTS}"
     goto argloop
   endif
   if ("X$1X" == "X-zX") then
     set compress="-gz"
     echo run.log will be compressed
     shift
-    set LOOP_OPTS="-gz ${LOOP_OPTS}" 
+    set LOOP_OPTS="-gz ${LOOP_OPTS}"
     goto argloop
   endif
   if ("X${1}X" == "X-sX") then
@@ -81,7 +81,7 @@ EOF
     if ($JOB_NAME == "SOLPS-ITER") set JOB_NAME="B2.5"
     echo Asking for a B2.5 standalone run
     shift
-    set LOOP_OPTS="-s ${LOOP_OPTS}" 
+    set LOOP_OPTS="-s ${LOOP_OPTS}"
     goto argloop
   endif
   if ("X$1X" == "X-mX") then
@@ -100,7 +100,7 @@ EOF
     shift
     set HELP_STRING=`echo \"$MPIOPTS\"`
 #    echo $HELP_STRING
-    set LOOP_OPTS="-m ${HELP_STRING} ${LOOP_OPTS}" 
+    set LOOP_OPTS="-m ${HELP_STRING} ${LOOP_OPTS}"
     goto argloop
   endif
   if ("X$1X" == "X-tX") then
@@ -114,7 +114,7 @@ EOF
     shift
     set HELP_STRING=\"${THREADS}\"`
 #    echo $HELP_STRING
-    set LOOP_OPTS="-t ${HELP_STRING} ${LOOP_OPTS}" 
+    set LOOP_OPTS="-t ${HELP_STRING} ${LOOP_OPTS}"
     goto argloop
   endif
   if ("X${1}X" == "X-TX") then
@@ -124,7 +124,7 @@ EOF
     shift
     set HELP_STRING=\"${hours}\"
 #    echo $HELP_STRING
-    set LOOP_OPTS="-T ${HELP_STRING} ${LOOP_OPTS}" 
+    set LOOP_OPTS="-T ${HELP_STRING} ${LOOP_OPTS}"
     goto argloop
   endif
   if ("X${1}X" == "X-MX") then
@@ -134,7 +134,7 @@ EOF
     shift
     set HELP_STRING=\"${mem}\"
 #    echo $HELP_STRING
-    set LOOP_OPTS="-M ${HELP_STRING} ${LOOP_OPTS}" 
+    set LOOP_OPTS="-M ${HELP_STRING} ${LOOP_OPTS}"
     goto argloop
   endif
 
@@ -168,7 +168,7 @@ else if (-s $1) then
   set QSUB=$1
 else
   echo Submission file $1 is specified as an argument.
-  echo Looking for submission file $1 
+  echo Looking for submission file $1
   set QSUB=`climb_and_look_for $1`
   if ($QSUB == "//"$1) then
     if (-s $SOLPSTOP/runs/$1) then

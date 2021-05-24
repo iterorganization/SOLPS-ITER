@@ -2,7 +2,7 @@
 module load solps-libs/gcc
 set fullhost=`hostname -f`
 
-#if (-e /cm/shared/apps/texlive/2017/bin/x86_64-linux) then 
+#if (-e /cm/shared/apps/texlive/2017/bin/x86_64-linux) then
 #  setenv PATH /cm/shared/apps/texlive/2017/bin/x86_64-linux:${PATH}
 #endif
 
