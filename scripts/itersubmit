@@ -44,7 +44,7 @@ Available options are:
   -t <<THREADS>>     use OpenMP parallelization with <<THREADS>> threads (default $THREADS)
   -T <<HOURS>>       number of elapsed hours requested (default $hours)
   -M <<MEM_SIZE>>    memory size (default $mem)
-  -Q <<PARTITION>>   partition on which to submit the job (default gen9 for short jobs and gen9_ib for long jobs on hpc nodes, gen10_ib on sdcc nodes)
+  -Q <<PARTITION>>   partition on which to submit the job (default gen9_ib on hpc nodes, gen10_ib on sdcc nodes)
 
 EOF
     exit
@@ -149,11 +149,7 @@ switch ($nodename)
   case "hpc-login0*.iter.org":
     set job_prefix="SLURM"
     if ($part == "unset") then
-      if ($hours > 24 ) then
-        set part=gen9_ib
-      else
-        set part=gen9
-      endif
+      set part=gen9_ib
     endif
     breaksw
   default:

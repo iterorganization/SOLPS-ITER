@@ -17,7 +17,7 @@ H5DIR =
 #
 
 LD_NETCDF  = -L${NCDIR} -lnetcdf -lnetcdff -lstdc++ -lhdf5
-LD_NAG     = -L${BLAS_DIR} -lblas -L${NAGDIR} -llapack 
+LD_NAG     = -L${BLAS_DIR} -lblas -L${NAGDIR} -llapack
 LD_MSCL    = -L${MSCL_ROOT} -lmscl
 LD_GR      = -L${GR_ROOT} -lgr
 LD_GKS     = -L${GLI_HOME} -lgks

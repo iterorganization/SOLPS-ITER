@@ -25,4 +25,4 @@ c                           j=4: error ,j gt izif
 1     continue
       idez=iq
       return
-      end
+      end function idez

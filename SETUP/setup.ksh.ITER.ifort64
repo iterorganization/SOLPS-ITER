@@ -42,7 +42,8 @@ switch $nodename
   exit
 endsw
 
-export GGD_VERSION=${EBVERSIONGGD}
+export GGD_VERSION=`pkg-config ggd --modversion`
+export EBVERSIONMSCL=`pkg-config mscl --modversion`
 export QTDIR=${EBROOTQT5}
 export PARAVIEW_PREFIX=${EBROOTPARAVIEW}
 export GLI_HOME=${EBROOTGLI}

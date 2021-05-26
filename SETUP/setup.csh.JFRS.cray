@@ -1,4 +1,4 @@
-# Load modules 
+# Load modules
 module use /project/cscpub/modulefiles
 module load stat
 module load gdb4hpc
@@ -12,7 +12,7 @@ setenv PKG_CONFIG_PATH ${CRAY_LIBSCI_PREFIX_DIR}/lib/pkgconfig:${PKG_CONFIG_PATH
 
 # Set environment variables
 setenv GLI_HOME ${SOLPSTOP}/lib
-#setenv SOLPS_OPENMP yes  # OMP is disabled by default with the new CCE9 compiler 
+# setenv SOLPS_OPENMP yes  # OMP is disabled by default with the new CCE9 compiler
 setenv MDSPLUS_DIR /opt/mdsplus/7.96.12
 setenv CRAYPE_LINK_TYPE dynamic
 

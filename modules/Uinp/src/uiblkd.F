@@ -26,7 +26,7 @@ c*** General information
 
       data   topo, mnpr,mnptseg,mdvbndx,  ldvbndx  ,ntrgdflt,do_hepdt /
      /        ' ',  0  ,   0   ,   0   ,0,nbnddvd*0,    0   , .false. /,
-     ,  namdf,amd_file ,nnrctn,n_spcsrf,npfrgrp,lm_cnfg,ln_cnfg/
+     ,  namdf,amd_file ,nnrctn,n_spcsrf,npfrgrp,lm_cnfg,ln_cnfg /
      /    0  ,namdfs*' ',   0  ,   0    ,   0  ,.false.,.false. /,
      , lm_vhst,lm_whst,   niiso   , tiiso, teiso/
      /  10000 , 50000 , nsdb2*1.e5,  0.1 ,  0.1 /,
@@ -381,8 +381,8 @@ c*** 4
      /      'H','H2','He', 'C','Ne','H+','Ar', 'N','Be','H2+',
      /     'N+','C+', 'X','X+' /
       integer, parameter ::
-     ,  lurctdh=4, lurctdh2=7,lurctdhe=6,lurctdc=4, lurctdne=1,
-     ,  lurctdhp=2,lurctdar=1,lurctdn=2, lurctdbe=2,lurctdh2p=4,
+     ,  lurctdh=4, lurctdh2=7,lurctdhe=6,lurctdc=4, lurctdne=2,
+     ,  lurctdhp=2,lurctdar=2,lurctdn=2, lurctdbe=2,lurctdh2p=4,
      ,  lurctdnp=2,lurctdcp=2,lurctdx=2, lurctdxp=2
       data  nnrctd / lurctdh, lurctdh2,lurctdhe,lurctdc, lurctdne,
      /               lurctdhp,lurctdar,lurctdn, lurctdbe,lurctdh2p,
@@ -391,9 +391,9 @@ c*** 4
       data (rctdtyp(i,2),i=1,lurctdh2) / 'EI', 2*'DS', 3*'EL', 'CX' /
       data (rctdtyp(i,3),i=1,lurctdhe) / 2*'EI', 4*'CX' /
       data (rctdtyp(i,4),i=1,lurctdc)  / 2*'EI', 2*'CX' /
-      data (rctdtyp(i,5),i=1,lurctdne) / 'EI' /
-      data (rctdtyp(i,6),i=1,lurctdhp) /  2*'RC' /
-      data (rctdtyp(i,7),i=1,lurctdar) / 'EI' /
+      data (rctdtyp(i,5),i=1,lurctdne) / 2*'EI' /
+      data (rctdtyp(i,6),i=1,lurctdhp) / 2*'RC' /
+      data (rctdtyp(i,7),i=1,lurctdar) / 2*'EI' /
       data (rctdtyp(i,8),i=1,lurctdn)  / 2*'EI' /
       data (rctdtyp(i,9),i=1,lurctdbe) / 2*'EI' /
       data (rctdtyp(i,10),i=1,lurctdh2p) / 'DS','EI',2*'DS' /
@@ -405,15 +405,15 @@ c*** 4
       data (rctddbs(i,2),i=1,lurctdh2) / 7*'AMJUEL' /
       data (rctddbs(i,3),i=1,lurctdhe) / 2*'ADAS', 4*'HYDHEL' /
       data (rctddbs(i,4),i=1,lurctdc)  / 2*'AMJUEL', 2*'METHAN' /
-      data (rctddbs(i,5),i=1,lurctdne) / 'AMJUEL' /
+      data (rctddbs(i,5),i=1,lurctdne) / 2*'ADAS' /
       data (rctddbs(i,6),i=1,lurctdhp) / 2*'AMJUEL' /
-      data (rctddbs(i,7),i=1,lurctdar) / 'AMJUEL' /
+      data (rctddbs(i,7),i=1,lurctdar) / 2*'ADAS' /
       data (rctddbs(i,8),i=1,lurctdn)  / 2*'AMJUEL' /
       data (rctddbs(i,9),i=1,lurctdbe) / 2*'AMJUEL' /
       data (rctddbs(i,10),i=1,lurctdh2p) / 4*'AMJUEL' /
       data (rctddbs(i,11),i=1,lurctdnp) / 2*'ADAS' /
       data (rctddbs(i,12),i=1,lurctdcp) / 2*'ADAS' /
-      data (rctddbs(i,13),i=1,lurctdx) / 2*'ADAS' /
+      data (rctddbs(i,13),i=1,lurctdx)  / 2*'ADAS' /
       data (rctddbs(i,14),i=1,lurctdxp) / 2*'ADAS' /
       data (rctdchp(i,1),i=1,lurctdh)  / 'H.4','H.10', 'H.1', 'H.3' /
       data (rctdchp(i,2),i=1,lurctdh2)
@@ -421,15 +421,15 @@ c*** 4
       data (rctdchp(i,3),i=1,lurctdhe)
      .                  / 'H.4', 'H.10', 'H.1', 'H.3', 'H.1', 'H.3' /
       data (rctdchp(i,4),i=1,lurctdc)  / 'H.4','H.10', 'H.1', 'H.3' /
-      data (rctdchp(i,5),i=1,lurctdne) / 'H.2' /
+      data (rctdchp(i,5),i=1,lurctdne) / 'H.4','H.10' /
       data (rctdchp(i,6),i=1,lurctdhp) / 'H.4','H.10' /
-      data (rctdchp(i,7),i=1,lurctdar) / 'H.2' /
+      data (rctdchp(i,7),i=1,lurctdar) / 'H.4','H.10' /
       data (rctdchp(i,8),i=1,lurctdn)  / 'H.4','H.10' /
       data (rctdchp(i,9),i=1,lurctdbe) / 'H.2','H.8' /
-      data (rctdchp(i,10),i=1,lurctdh2p)  / 3*'H.4', 'H.8' /
-      data (rctdchp(i,11),i=1,lurctdnp)  / 'H.4','H.10' /
-      data (rctdchp(i,12),i=1,lurctdcp)  / 'H.4','H.10' /
-      data (rctdchp(i,13),i=1,lurctdx) / 'H.4','H.10' /
+      data (rctdchp(i,10),i=1,lurctdh2p) / 3*'H.4', 'H.8' /
+      data (rctdchp(i,11),i=1,lurctdnp) / 'H.4','H.10' /
+      data (rctdchp(i,12),i=1,lurctdcp) / 'H.4','H.10' /
+      data (rctdchp(i,13),i=1,lurctdx)  / 'H.4','H.10' /
       data (rctdchp(i,14),i=1,lurctdxp) / 'H.4','H.10' /
       data (rctdrct(i,1),i=1,lurctdh)  / 2*'2.1.5', 2*'3.1.8' /
       data (rctdrct(i,2),i=1,lurctdh2)
@@ -437,101 +437,101 @@ c*** 4
       data (rctdrct(i,3),i=1,lurctdhe)
      .              / 'scd', 'plt', 2*'5.3.1', 2*'6.3.1' /
       data (rctdrct(i,4),i=1,lurctdc)  / 2*'2.6A0', 2*'3.2' /
-      data (rctdrct(i,5),i=1,lurctdne) / '2.10B0' /
+      data (rctdrct(i,5),i=1,lurctdne) / 'scd', 'plt' /
       data (rctdrct(i,6),i=1,lurctdhp) / 2*'2.1.8' /
-      data (rctdrct(i,7),i=1,lurctdar) / '2.18B0' /
+      data (rctdrct(i,7),i=1,lurctdar) / 'scd', 'plt' /
       data (rctdrct(i,8),i=1,lurctdn)  / 2*'2.7A0' /
       data (rctdrct(i,9),i=1,lurctdbe) / 2*'2.4B0' /
       data (rctdrct(i,10),i=1,lurctdh2p)
      .                        / '2.2.12', '2.2.11', 2*'2.2.14' /
       data (rctdrct(i,11),i=1,lurctdnp) / 'acd', 'prb' /
       data (rctdrct(i,12),i=1,lurctdcp) / 'acd', 'prb' /
-      data (rctdrct(i,13),i=1,lurctdx) / 'scd', 'plt' /
+      data (rctdrct(i,13),i=1,lurctdx)  / 'scd', 'plt' /
       data (rctdrct(i,14),i=1,lurctdxp) / 'acd', 'prb' /
       data (rctdptin(i,1),i=1,lurctdh)  / 2*' ', 2*'H+' /
       data (rctdptin(i,2),i=1,lurctdh2) / 3*' ', 4*'H+' /
       data (rctdptin(i,3),i=1,lurctdhe) / 2*' ', 2*'He+', 2*'He++' /
       data (rctdptin(i,4),i=1,lurctdc)  / 2*' ', 2*'H+' /
-      data (rctdptin(i,5),i=1,lurctdne) / ' ' /
+      data (rctdptin(i,5),i=1,lurctdne) / 2*' ' /
       data (rctdptin(i,6),i=1,lurctdhp) / 2*' ' /
-      data (rctdptin(i,7),i=1,lurctdar) / ' ' /
+      data (rctdptin(i,7),i=1,lurctdar) / 2*' ' /
       data (rctdptin(i,8),i=1,lurctdn)  / 2*' ' /
       data (rctdptin(i,9),i=1,lurctdbe) / 2*' ' /
       data (rctdptin(i,10),i=1,lurctdh2p) / 4*' ' /
       data (rctdptin(i,11),i=1,lurctdnp) / 2*' ' /
       data (rctdptin(i,12),i=1,lurctdcp) / 2*' ' /
-      data (rctdptin(i,13),i=1,lurctdx) / 2*' ' /
+      data (rctdptin(i,13),i=1,lurctdx)  / 2*' ' /
       data (rctdptin(i,14),i=1,lurctdxp) / 2*' ' /
       data (rctdpto1(i,1),i=1,lurctdh)  / 2*'H+', 2*'H' /
       data (rctdpto1(i,2),i=1,lurctdh2)
      .                           / 'H2+', '2H', 'H', 3*'H+', 'H' /
       data (rctdpto1(i,3),i=1,lurctdhe) / 2*'He+', 4*'He' /
       data (rctdpto1(i,4),i=1,lurctdc)  / 2*'C+', 2*'H' /
-      data (rctdpto1(i,5),i=1,lurctdne) / 'Ne+' /
+      data (rctdpto1(i,5),i=1,lurctdne) / 2*'Ne+' /
       data (rctdpto1(i,6),i=1,lurctdhp) / 2*'H' /
-      data (rctdpto1(i,7),i=1,lurctdar) / 'Ar+' /
+      data (rctdpto1(i,7),i=1,lurctdar) / 2*'Ar+' /
       data (rctdpto1(i,8),i=1,lurctdn)  / 2*'N+' /
       data (rctdpto1(i,9),i=1,lurctdbe) / 2*'Be+' /
       data (rctdpto1(i,10),i=1,lurctdh2p) / 'H', '2H+', '2H', '2H' /
       data (rctdpto1(i,11),i=1,lurctdnp) / 2*'N' /
       data (rctdpto1(i,12),i=1,lurctdcp) / 2*'C' /
-      data (rctdpto1(i,13),i=1,lurctdx) / 2*'X+' /
+      data (rctdpto1(i,13),i=1,lurctdx)  / 2*'X+' /
       data (rctdpto1(i,14),i=1,lurctdxp) / 2*'X' /
       data (rctdpto2(i,1),i=1,lurctdh)  / 2*' ', 2*'H+' /
       data (rctdpto2(i,2),i=1,lurctdh2) / 2*' ', 'H+', 3*'H2', 'H2+' /
       data (rctdpto2(i,3),i=1,lurctdhe) / 2*' ', 2*'He+', 2*'He++' /
       data (rctdpto2(i,4),i=1,lurctdc)  / 2*' ', 2*'C+' /
-      data (rctdpto2(i,5),i=1,lurctdne) / ' ' /
+      data (rctdpto2(i,5),i=1,lurctdne) / 2*' ' /
       data (rctdpto2(i,6),i=1,lurctdhp) / 2*' ' /
-      data (rctdpto2(i,7),i=1,lurctdar) / ' ' /
+      data (rctdpto2(i,7),i=1,lurctdar) / 2*' ' /
       data (rctdpto2(i,8),i=1,lurctdn)  / 2*' ' /
       data (rctdpto2(i,9),i=1,lurctdbe) / 2*' ' /
       data (rctdpto2(i,10),i=1,lurctdh2p) / 'H+', 3*' ' /
       data (rctdpto2(i,11),i=1,lurctdnp) / 2*' ' /
       data (rctdpto2(i,12),i=1,lurctdcp) / 2*' ' /
-      data (rctdpto2(i,13),i=1,lurctdx) / 2*' ' /
+      data (rctdpto2(i,13),i=1,lurctdx)  / 2*' ' /
       data (rctdpto2(i,14),i=1,lurctdxp) / 2*' ' /
-      data (rctdpto3(i,1),i=1,lurctdh) / lurctdh*' ' /
+      data (rctdpto3(i,1),i=1,lurctdh)  / lurctdh*' ' /
       data (rctdpto3(i,2),i=1,lurctdh2) / lurctdh2*' ' /
       data (rctdpto3(i,3),i=1,lurctdhe) / lurctdhe*' ' /
-      data (rctdpto3(i,4),i=1,lurctdc) / lurctdc*' ' /
+      data (rctdpto3(i,4),i=1,lurctdc)  / lurctdc*' ' /
       data (rctdpto3(i,5),i=1,lurctdne) / lurctdne*' ' /
       data (rctdpto3(i,6),i=1,lurctdhp) / lurctdhp*' ' /
       data (rctdpto3(i,7),i=1,lurctdar) / lurctdar*' ' /
-      data (rctdpto3(i,8),i=1,lurctdn) / lurctdn*' ' /
+      data (rctdpto3(i,8),i=1,lurctdn)  / lurctdn*' ' /
       data (rctdpto3(i,9),i=1,lurctdbe) / lurctdbe*' ' /
       data (rctdpto3(i,10),i=1,lurctdh2p) / lurctdh2p*' ' /
       data (rctdpto3(i,11),i=1,lurctdnp) / lurctdnp*' ' /
       data (rctdpto3(i,12),i=1,lurctdcp) / lurctdcp*' ' /
-      data (rctdpto3(i,13),i=1,lurctdx) / lurctdx*' ' /
+      data (rctdpto3(i,13),i=1,lurctdx)  / lurctdx*' ' /
       data (rctdpto3(i,14),i=1,lurctdxp) / lurctdxp*' ' /
       data (rctdgrp(i,1),i=1,lurctdh)  / 2*-1, 2*-2 /
       data (rctdgrp(i,2),i=1,lurctdh2) / 3*0, 3*-5, 0 /
       data (rctdgrp(i,3),i=1,lurctdhe) / 2*-9, 2*-6, 2*-8 /
       data (rctdgrp(i,4),i=1,lurctdc)  / 2*-10, 2*-11 /
-      data (rctdgrp(i,5),i=1,lurctdne) / 0 /
+      data (rctdgrp(i,5),i=1,lurctdne) / 2*-17 /
       data (rctdgrp(i,6),i=1,lurctdhp) / 2*-3 /
-      data (rctdgrp(i,7),i=1,lurctdar) / 0 /
+      data (rctdgrp(i,7),i=1,lurctdar) / 2*-18 /
       data (rctdgrp(i,8),i=1,lurctdn)  / 2*-12 /
       data (rctdgrp(i,9),i=1,lurctdbe) / 2*-7 /
       data (rctdgrp(i,10),i=1,lurctdh2p) / 2*0, 2*-4 /
       data (rctdgrp(i,11),i=1,lurctdnp) / 2*-14 /
       data (rctdgrp(i,12),i=1,lurctdcp) / 2*-13 /
-      data (rctdgrp(i,13),i=1,lurctdx) / 2*-15 /
+      data (rctdgrp(i,13),i=1,lurctdx)  / 2*-15 /
       data (rctdgrp(i,14),i=1,lurctdxp) / 2*-16 /
       data (rctdmsp(i,1),i=1,lurctdh)  / 2*0, 2*1 /
       data (rctdmsp(i,2),i=1,lurctdh2) / 3*0, 4*1 /
       data (rctdmsp(i,3),i=1,lurctdhe) / 2*0, 4*4 /
       data (rctdmsp(i,4),i=1,lurctdc)  / 2*0, 2*1 /
-      data (rctdmsp(i,5),i=1,lurctdne) / 0 /
+      data (rctdmsp(i,5),i=1,lurctdne) / 2*0 /
       data (rctdmsp(i,6),i=1,lurctdhp) / 2*0 /
-      data (rctdmsp(i,7),i=1,lurctdar) / 0 /
+      data (rctdmsp(i,7),i=1,lurctdar) / 2*0 /
       data (rctdmsp(i,8),i=1,lurctdn)  / 2*0 /
       data (rctdmsp(i,9),i=1,lurctdbe) / 2*0 /
       data (rctdmsp(i,10),i=1,lurctdh2p) / 4*0 /
       data (rctdmsp(i,11),i=1,lurctdnp) / 2*0 /
       data (rctdmsp(i,12),i=1,lurctdcp) / 2*0 /
-      data (rctdmsp(i,13),i=1,lurctdx) / 2*0 /
+      data (rctdmsp(i,13),i=1,lurctdx)  / 2*0 /
       data (rctdmsp(i,14),i=1,lurctdxp) / 2*0 /
       data (rctdmst(i,1),i=1,lurctdh)  / lurctdh*1 /
       data (rctdmst(i,2),i=1,lurctdh2) / lurctdh2*2 /
@@ -545,15 +545,15 @@ c*** 4
       data (rctdmst(i,10),i=1,lurctdh2p) / lurctdh2p*2 /
       data (rctdmst(i,11),i=1,lurctdnp) / lurctdnp*14 /
       data (rctdmst(i,12),i=1,lurctdcp) / lurctdcp*12 /
-      data (rctdmst(i,13),i=1,lurctdx) / lurctdx*-1 /
+      data (rctdmst(i,13),i=1,lurctdx)  / lurctdx*-1 /
       data (rctdmst(i,14),i=1,lurctdxp) / lurctdxp*-1 /
       data (rctddlte(i,1),i=1,lurctdh)  / 4*0.0 /
       data (rctddlte(i,2),i=1,lurctdh2) / 15.4, 10.5, 25.0, 4*0.0 /
-      data (rctddlte(i,3),i=1,lurctdhe) / 6*0.0 /
+      data (rctddlte(i,3),i=1,lurctdhe) / 0.0,-24.5874, 4*0.0 /
       data (rctddlte(i,4),i=1,lurctdc)  / 4*0.0 /
-      data (rctddlte(i,5),i=1,lurctdne) / 21.6 /
+      data (rctddlte(i,5),i=1,lurctdne) / 0.0,-21.5645 /
       data (rctddlte(i,6),i=1,lurctdhp) / 0.0, 13.6 /
-      data (rctddlte(i,7),i=1,lurctdar) / 15.8 /
+      data (rctddlte(i,7),i=1,lurctdar) / 0.0,-15.7596 /
       data (rctddlte(i,8),i=1,lurctdn)  / 2*0.0 /
       data (rctddlte(i,9),i=1,lurctdbe) / 2*0.0 /
       data (rctddlte(i,10),i=1,lurctdh2p) / 10.4, 15.5, 0.0, 0.0 /
