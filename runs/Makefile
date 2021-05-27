@@ -793,6 +793,8 @@ else
 endif
 endif
 	cd b2_ual_rewrite.exe.dir ; ${TIME} ${B2OBJ}/b2_ual_rewrite.exe ${RUN_OPTIONS}
+	-[ -s b2_ual_rewrite.exe.dir/ids_*.yaml ] && mv b2_ual_rewrite.exe.dir/ids_*.yaml . || ( [ -e b2_ual_rewrite.exe.dir/ids_*.yaml ] && rm b2_ual_rewrite.exe.dir/ids_*.yaml || echo > /dev/null )
+	-[ -s b2_ual_rewrite.exe.dir/ids_*.watcher ] && mv b2_ual_rewrite.exe.dir/ids_*.watcher . || ( [ -e b2_ual_rewrite.exe.dir/ids_*.watcher ] && rm b2_ual_rewrite.exe.dir/ids_*.watcher || echo > /dev/null )
 	rm -rf b2_ual_rewrite.exe.dir
 
 stra.dat :
