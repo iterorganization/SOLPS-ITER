@@ -191,25 +191,29 @@ do {
                 touch CARRE.HISTORY
 		echo $user `date +%Y-%m-%d_%H:%M:%S` >> CARRE.HISTORY
 		ls -ls dg.??? | cut -d ' ' -f 9- >> CARRE.HISTORY
-                mv -f traduit.sno $dgdir/$grid_stem.v$m.sno && \
-                  /bin/echo -e "The grid in DG format is stored as $dgdir/$grid_stem.v$m.sno"
+                cp traduit.sno $dgdir/$grid_stem.v$m.sno && \
+                  /bin/echo -e "The grid in DG format is stored as $dgdir/$grid_stem.v$m.sno" && \
+                  /bin/echo -e "The grid in DG format is stored as $dgdir/$grid_stem.v$m.sno" >> CARRE.HISTORY
+                mv -f traduit.sno $grid_stem.v$m.sno
                 for ext in $endings; do
                   filename=`lln dg.$ext`
                   cp $filename $dgdir/`basename $filename`
-                  /bin/echo -e "dg.$ext copied to $dgdir" && \
-                  /bin/echo -e "dg.$ext copied to $dgdir" >> CARRE.HISTORY
+                  /bin/echo -e "`basename $filename` copied to $dgdir" && \
+                  /bin/echo -e "`basename $filename` copied to $dgdir" >> CARRE.HISTORY
                 done
                 modelname=`echo $filename | sed -e 's\trg\dg\' `
                 cp $modelname $dgdir/`basename $modelname`
                 /bin/echo -e "DG model `basename $modelname` copied to $dgdir" && \
                 /bin/echo -e "DG model `basename $modelname` copied to $dgdir" >> CARRE.HISTORY
-                mv -f traduit.out $griddir/$grid_stem.v$m.geo && \
-                  /bin/echo -e "The grid in B2.5 format is stored as $griddir/$grid_stem.v$m.geo"
+                cp traduit.out $griddir/$grid_stem.v$m.geo && \
+                  /bin/echo -e "The grid in B2.5 format is stored as $griddir/$grid_stem.v$m.geo" && \
+                  /bin/echo -e "The grid in B2.5 format is stored as $griddir/$grid_stem.v$m.geo" >> CARRE.HISTORY
+                mv -f traduit.out $grid_stem.v$m.geo
                 [ -x ctrans ] && {
                   ctrans -d ps.mono gmeta > $griddir/$grid_stem.v$m.ps && \
-                  /bin/echo -e "You can view the grid in PostScript format as $griddir/$grid_stem.v$m.ps"
+                  /bin/echo -e "You can view the grid in PostScript format as $griddir/$grid_stem.v$m.ps" && \
+                  /bin/echo -e "You can view the grid in PostScript format as $griddir/$grid_stem.v$m.ps" >> CARRE.HISTORY
                 }
-		            /bin/echo -e "The grid is stored as $griddir/$grid_stem.v$m".geo >> CARRE.HISTORY
                 [ -n "$stordir" ] && {
                   [ -d "$stordir" ] || {
                     [ -a "$stordir" ] && {
@@ -329,10 +333,10 @@ do {
               }
             }; break;;
     ( o|O )                                               # output directory:
-            /bin/echo -e "Specify the new grid directory: \c"; read u
+            /bin/echo -e "Specify the new grid storage directory: \c"; read u
             [ -n "$u" ] && {
               [ -d $u ] && {
-                griddir="$u"; /bin/echo -e "The grid directory is now $griddir"; q=t
+                griddir="$u"; /bin/echo -e "The grid storage directory is now $griddir"; q=t
               } || {
                 /bin/echo -e "No such directory: $u\nCreate it? (y/n) \c"; read uu
                 case "$uu" in
@@ -352,10 +356,10 @@ do {
                           /bin/echo -e "Creating $ss"
                           mkdir -p $ss && {
                             griddir="$u"; q=t
-                            /bin/echo -e "The grid directory is now $griddir"
+                            /bin/echo -e "The grid storage directory is now $griddir"
                           } || {
                             /bin/echo -e "Unable to create $u"; q=o
-                            /bin/echo -e "The grid directory is still $griddir"
+                            /bin/echo -e "The grid storage directory is still $griddir"
                           };;
                   (  *  ) ;;
                 esac

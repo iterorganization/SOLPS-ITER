@@ -5522,6 +5522,8 @@ where {\tt case} is the name of the just saved case (without the
 {\tt .dg} extension). This links the {\tt DG} output files to
 files named {\tt dg.*} in the {\tt Carre} run directory.
 
+The {\tt lns} script establishes a series of symbolic links from the {\tt DivGeo} output files to some files with standardized names on which other parts of the workflow rely. It also copies the {\tt case.trg} target and {\tt case.str} structure description files to the {\tt \$\{DGSONNETMASK\}} directory (with default value {\tt \$\{DG\}/device/\$\{DEVICE\}} or {\tt \$\{DG\}/device/\allowbreak \$\{DEVICE\}/\$\{USER\}} for central installation).
+
 Then you will probably want to generate the grid --- this is described
 in the next chapter.  After the grid has been created, you can import
 it back into {\tt DG} ({\tt File|Import|Mesh}) to check it.
@@ -5671,6 +5673,8 @@ Lastly, there is a "hidden" language variable {\tt sellan}\index{sellan} (defaul
 to its original 'francais'.
 
 Once all the settings have been chosen, it is often convenient to save them, so as to not have to re-enter them on the next {\tt Carre} meshing attempt. This is achieved by means of the '(S)ave' option within the {\tt carre} script, provided that the user does not start the next meshing attempt with the '(P)repare' option, but rather jumps directly to '(G)rid'.
+
+Upon succesful termination, one needs to '(C)onvert' the grid files to the {\tt .geo} and {\tt .sno} formats understandable by {\tt B2.5} and {\tt DivGeo}. It is also possible to 's(T)ore' the files used to create the grid and the grid output for archival. The input files will be copied to the {\tt \$\{CARRE\_STOREDIR\}} directory (default value is {\tt \$\{SOLPSTOP\}/modules/Carre/\allowbreak meshes/\$\{DEVICE\}}, or {\tt \$\{SOLPSTOP\}/modules/Carre/meshes/\$\{DEVICE\}/\$\{USER\}} for a central installation). The Carre grid output and {\tt .geo} file will be stored in the same location, but that can be changed by means of the '(O)utput' command in the script itsef, or by specifying the {\tt \$\{CARRE\_GRIDDIR\}} environment variable. If {\tt \$\{CARRE\_GRIDDIR\}} is not specified, the {\tt *.sno} converted output file will be copied instead to {\tt \$\{SOLPSTOP\}/\allowbreak modules/DivGeo/device/\allowbreak \$\{DEVICE\}} (or {\tt \$\{SOLPSTOP\}/modules/DivGeo/device/\$\{DEVICE\}/\allowbreak \$\{USER\}} for a central installation).
 
 After running {\tt Carre}, it is recommended to have a look at the mesh and decide if one wants to modify it before
 proceeding much further (see previous section). The default settings may not be appropriate for all cases. It is
