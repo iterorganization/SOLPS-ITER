@@ -15,6 +15,7 @@ module load MSCL/1.2.2-intel-2018a
 module load GR/0.0.94-GCCcore-6.4.0
 module load GLI/4.5.30-GCCcore-6.4.0
 module unload HDF5
+module unload LibTIFF/4.0.9-GCCcore-6.4.0
 module load NCL/6.5.0-intel-2018a
 module load NAG/26-intel-2018a
 module load TotalView/2017.1.21_linux_x86-64
