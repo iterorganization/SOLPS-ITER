@@ -45,7 +45,7 @@ case "*.ipp.kfa-juelich.de":
   echo FZJ
   breaksw
 case "*.ccfe.ac.uk":
-case "cumulus*.hpc.l":
+case "*.cumulus.hpc.l":
   echo CCFE
   breaksw
 case "*.jet.uk":
