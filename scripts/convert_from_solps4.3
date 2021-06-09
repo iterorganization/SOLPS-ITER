@@ -129,7 +129,12 @@ b2run b2ar
 b2run b2mn > run.log
 [ "$DEVICE" = 'iter' ] && {
   idscp --setDatasetVersion -si 10 -ri 2 -so ${shotnumber} -ro 1 -u ${USER} -d ${DEVICE} -ids wall
+# For full-field cases, use:
   idscp --setDatasetVersion -si 131035 -ri 124 -so ${shotnumber} -ro 1 -u ${USER} -d ${DEVICE} -ids equilibrium
+# For half-field cases, use:
+# idscp --setDatasetVersion -si 131035 -ri 125 -so ${shotnumber} -ro 1 -u ${USER} -d ${DEVICE} -ids equilibrium
+# For third-field cases, use:
+# idscp --setDatasetVersion -si 131035 -ri 126 -so ${shotnumber} -ro 1 -u ${USER} -d ${DEVICE} -ids equilibrium
 }
 create_db_entry -u ${USER} -d ${DEVICE} -s ${shotnumber} -r 1
 yaml=ids_${shotnumber}0001.yaml
