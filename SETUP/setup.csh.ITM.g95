@@ -14,6 +14,7 @@ module load totalview
 setenv DBX totalview
 
 module load itm-g95
+module load itm-lapack
 module load mdsplus
 
 # The script above overwrites $PATH, so modules must be loaded afterwards!!!
