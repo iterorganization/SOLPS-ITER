@@ -332,7 +332,7 @@ The current list of recognized hostnames, deduced by means of the {\tt whereami}
   \item[NERSC] DOE supercomputer center: *.nersc.gov
   \item[ORNL] Oak Ridge National Laboratory: *.ornl.gov
   \item[PPPL] PPPL domain: *.pppl.gov
-  \item[SPBSTU] St. Petersburg State PolyTechnical University: *.spbstu.ru
+  \item[SPBSTU] St. Petersburg State Polytechnical University: *.spbstu.ru
   \item[SWIP] SouthWestern Institute of Plasma Physics, Chengdu: *.swip.ac.cn
   \item[WM] College of William and Mary: *.wm.edu
   \item[AU\_UNKNOWN] All other domain names from Australia and associated territories
@@ -1941,6 +1941,12 @@ itersubmit -m "<my MPI options>" <my_optional_submission_file_name>
 The launching program is identified by the variable {\tt MPI\_EXEC} inside the submission file, and options can be by hand as well using the {\tt MPI\_OPTS} variable.
 
 If the user wishes to submit an OpenMP job, this is done by use of the "-t" option, followed by the number of desired CPU threads.
+
+On some environments (ITER and SPBSTU, for instance), it is also possible to specify directly the number of nodes on which the job should run, by means of the
+\begin{verbatim}
+itersubmit -N <number_of_nodes>
+\end{verbatim}
+command. The default value for the number of nodes is 1. If running on multiple nodes, then the number of processors requested among the MPI options must be the {\em total} number of processors required.
 
 The default job name is {\tt SOLPS-ITER} for coupled jobs and {\tt B2.5} for standalone jobs. It can be changed by means of the
 \begin{verbatim}

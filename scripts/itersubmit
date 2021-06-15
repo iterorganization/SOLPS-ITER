@@ -4,6 +4,7 @@ set NAME=/tmp/.run.$$.$USER.`date +%Y%m%d%H%M%S`
 set EMAIL=`get_git_email`
 set JOB_NAME="SOLPS-ITER"
 set PROCS=1
+set NODES=1
 set THREADS=1
 set hours=36
 set mem=4GB
@@ -44,6 +45,7 @@ Available options are:
   -t <<THREADS>>     use OpenMP parallelization with <<THREADS>> threads (default $THREADS)
   -T <<HOURS>>       number of elapsed hours requested (default $hours)
   -M <<MEM_SIZE>>    memory size (default $mem)
+  -N <<NODES>>       number of nodes requested (default $NODES)
   -Q <<PARTITION>>   partition on which to submit the job (default gen9_ib for long jobs)
 
 EOF
@@ -56,14 +58,14 @@ EOF
     shift
     set HELP_STRING=\"${JOB_NAME}\"
 #    echo $HELP_STRING
-    set LOOP_OPTS="-j ${HELP_STRING} ${LOOP_OPTS}" 
+    set LOOP_OPTS="-j ${HELP_STRING} ${LOOP_OPTS}"
     goto argloop
   endif
   if ("X${1}X" == "X-zX") then
     set compress="-gz"
     echo run.log will be compressed
     shift
-    set LOOP_OPTS="-gz ${LOOP_OPTS}" 
+    set LOOP_OPTS="-gz ${LOOP_OPTS}"
     goto argloop
   endif
   if ("X${1}X" == "X-sX") then
@@ -71,7 +73,7 @@ EOF
     if ($JOB_NAME == "SOLPS-ITER") set JOB_NAME="B2.5"
     echo Asking for a B2.5 standalone run
     shift
-    set LOOP_OPTS="-s ${LOOP_OPTS}" 
+    set LOOP_OPTS="-s ${LOOP_OPTS}"
     goto argloop
   endif
   if ("X${1}X" == "X-mX") then
@@ -82,7 +84,7 @@ EOF
     set MPIOPTS="$1"
     echo Using MPI options: $MPIOPTS
     set PROCS=`echo $MPIOPTS | awk.transpose | grep -A 1 "\-np" | tail -n 1`
-    echo Asking for MPI run with $PROCS processors
+    echo Asking for MPI run with a total of $PROCS processors
     shift
     set HELP_STRING="${MPIOPTS}"
 #    echo $HELP_STRING
@@ -99,7 +101,17 @@ EOF
     shift
     set HELP_STRING="${THREADS}"
 #    echo $HELP_STRING
-    set LOOP_OPTS="-t ${HELP_STRING} ${LOOP_OPTS}" 
+    set LOOP_OPTS="-t ${HELP_STRING} ${LOOP_OPTS}"
+    goto argloop
+  endif
+  if ("X${1}X" == "X-NX") then
+    shift
+    set NODES="$1"
+    echo Asking for run over $NODES nodes
+    shift
+    set HELP_STRING="${NODES}"
+#    echo $HELP_STRING
+    set LOOP_OPTS="-N ${HELP_STRING} ${LOOP_OPTS}"
     goto argloop
   endif
   if ("X${1}X" == "X-TX") then
@@ -109,7 +121,7 @@ EOF
     shift
     set HELP_STRING="${hours}"
 #    echo $HELP_STRING
-    set LOOP_OPTS="-T ${HELP_STRING} ${LOOP_OPTS}" 
+    set LOOP_OPTS="-T ${HELP_STRING} ${LOOP_OPTS}"
     goto argloop
   endif
   if ("X${1}X" == "X-MX") then
@@ -119,7 +131,7 @@ EOF
     shift
     set HELP_STRING="${mem}"
 #    echo $HELP_STRING
-    set LOOP_OPTS="-M ${HELP_STRING} ${LOOP_OPTS}" 
+    set LOOP_OPTS="-M ${HELP_STRING} ${LOOP_OPTS}"
     goto argloop
   endif
   if ("X${1}X" == "X-QX") then
@@ -134,7 +146,7 @@ EOF
   endif
 
 # logic to determine the partition on the ITER HPC cluster
-@ cpu = ( $hours * $PROCS )
+@ TASKS = ( $PROCS / $NODES )
 if ($part == "unset") then
   set part=gen9_ib
 endif
@@ -177,7 +189,7 @@ else if (-s $1) then
   set QSUB=$1
 else
   echo Submission file $1 is specified as an argument.
-  echo Looking for submission file $1 
+  echo Looking for submission file $1
   set QSUB=`climb_and_look_for $1`
   if ($QSUB == "//"$1) then
     if (-s $SOLPSTOP/runs/$1) then
@@ -204,12 +216,13 @@ sed \
   -e 's:#SOLPSTOP#:'$SOLPSTOP':g' \
   -e 's:#EMAIL#:'$EMAIL':g' \
   -e "s:#MPIOPTS#:'$MPIOPTS':g" \
+  -e "s:#TASKS#:'$TASKS':g" \
   -e "s:#PROCS#:'$PROCS':g" \
+  -e "s:#NODES#:'$NODES':g" \
   -e "s:#THREADS#:'$THREADS':g" \
   -e 's:#MEM#:'$mem':g' \
   -e 's:#HOURS#:'$hours':g' \
   -e 's:#PART#:'$part':g' \
-  -e 's:#CPU#:'$cpu':g' \
   -e "s:#JOBNAME#:'$JOB_NAME':g" \
   -e 's:#USER#:'$USER':g' \
   -e 's:#LOOPOPTS#:'"$LOOP_OPTS"':g' \

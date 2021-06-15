@@ -1,6 +1,7 @@
 #! /bin/tcsh
 
-#SBATCH  --ntasks-per-node=#PROCS#
+#SBATCH  --nodes=#NODES#
+#SBATCH  --ntasks-per-node=#TASKS#
 #SBATCH  --cpus-per-task=#THREADS#
 #SBATCH  --time=#HOURS#:00:00
 #SBATCH  --mail-user=#EMAIL#
@@ -12,12 +13,10 @@ echo Using SOLPSTOP = #SOLPSTOP#
 
 set USE_MPI=""
 if ($?SOLPS_MPI) then
-  set MPI_EXEC=mpiexec
+  set MPI_EXEC="srun --mpi=pmi2"
   set MPI_OPTS=#MPIOPTS#
   set TIME="srun --mpi=pmi2"
-  set USE_MPI="-m ${MPI_EXEC} ${MPI_OPTS}"
-  set USE_MPI=`echo $USE_MPI | sed -e 's:-m :-m ''":' -e 's:$:"'':'`
-  setenv I_MPI_PIN_PROCESSOR_LIST 0-27
+  set USE_MPI="-m ${MPI_EXEC}"
 endif
 
 set USE_OMP=""
@@ -34,7 +33,7 @@ if ($?SOLPS_GUI_IP) then
   echo ${USER} ${PWD} ${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
 endif
 
-time b2run ${USE_MPI} ${USE_OMP} b2mn >! run.log
+time b2run ${USE_MPI} ${USE_OMP} >! run.log
 
 QSUB.postprocess_coupled
 
