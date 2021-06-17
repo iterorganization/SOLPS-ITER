@@ -97,7 +97,7 @@ target_yt = b2yt.prt b2fstatt b2mn.dat.2 b2ah.dat.2 b2ai.dat.2 b2yt.files
 target_xd = B2SXDR
 target_rd = b2rd.prt
 target_ual = b2_ual_write.prt
-target_us = b2us.prt b2fstati_us b2fgmtry_us b2us.boundary.parameters b2us.neutrals.parameters
+target_us = b2us.prt b2fstati_us b2fgmtry_us b2us.boundary.parameters b2us.neutrals.parameters input.dat.us
 
 scandir := $(shell cd .. ; pwd)
 projdir := $(shell cd ../.. ; pwd)
