@@ -518,7 +518,7 @@ endif
 $(target_uf) : b2fgmtry b2fparam b2fstate b2fplasma
 	rm -rf b2uf.exe.dir >& /dev/null ; mkdir b2uf.exe.dir ; cp $^ b2uf.exe.dir
 	rm -f $(target_uf)
-	cd b2uf.exe.dir ; ${TIME} ${B2OBJ}/b2uf.exe ${RUN_OPTIONS} ; mv $(target_uf) b2fplasmf .. ; rm -f $(notdir $^) .quit >& /dev/null
+	cd b2uf.exe.dir ; ${TIME} ${B2OBJ}/b2uf.exe ${RUN_OPTIONS} ; mv $(target_uf) b2fplasmf b2fplasmf_st b2fstate_st .. ; rm -f $(notdir $^) .quit >& /dev/null
 	-rmdir b2uf.exe.dir
 
 $(target_fu) : b2fgmtry b2fparam b2fstate b2fplasmf
