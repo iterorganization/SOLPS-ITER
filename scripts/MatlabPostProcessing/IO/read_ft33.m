@@ -1,4 +1,4 @@
-function nodes = read_ft33(file)
+function nodes = read_ft33(file,ntrfrm)
 % nodes = read_ft33(file)
 %
 % Read fort.33-files (triangle nodes). Converts to SI units (m).
@@ -14,8 +14,11 @@ if (fid == -1)
    error(msg);
 end
 
-disp('read_ft33: assuming ntrfrm = 0.');
-ntrfrm = 0;
+
+if ~exist('ntrfrm','var') || isempty(ntrfrm)
+    disp('read_ft33: assuming ntrfrm = 0.');
+    ntrfrm = 0;
+end
 
 
 %% Read coordinates
@@ -30,6 +33,16 @@ switch ntrfrm
         
         nodes(:,1) = fscanf(fid,'%f',nnodes);
         nodes(:,2) = fscanf(fid,'%f',nnodes);
+    
+    case 1
+        
+        for i = 1:nnodes
+            
+            data = fscanf(fid,'%f',3);
+            nodes(i,1) = data(2);
+            nodes(i,2) = data(3);
+            
+        end
         
     otherwise
         

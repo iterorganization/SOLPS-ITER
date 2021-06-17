@@ -15,7 +15,7 @@ if (fid == -1)
 end
 
 
-%% Get version of the b2fstate file
+%% Get version of the b2fgmtry file
 
 line    = fgetl(fid);
 version = line(8:17);
@@ -28,12 +28,6 @@ disp(['read_b2fgmtry -- file version ',version]);
 dim = read_ifield(fid,'nx,ny',2);
 nx  = dim(1);
 ny  = dim(2);
-
-% Expected array sizes, gmtry
-qcdim = [nx+2,ny+2];
-if version >= '03.001.000'
-    qcdim  = [nx+2,ny+2,2];
-end
 
 
 %% Read symmetry information

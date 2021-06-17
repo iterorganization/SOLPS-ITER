@@ -86,6 +86,7 @@ state.ti     = read_rfield(fid,'ti'    ,statedim);
 state.tn     = read_rfield(fid,'tn'    ,statedim);
 state.po     = read_rfield(fid,'po'    ,statedim);
 state.kt     = read_rfield(fid,'kt'    ,statedim);
+state.zt     = read_rfield(fid,'zt'    ,statedim);
 
 
 %% Read fluxes
@@ -100,6 +101,7 @@ state.fch_52 = read_rfield(fid,'fch_52',fluxdim);
 state.kinrgy = read_rfield(fid,'kinrgy',statedims);
 state.fhm    = read_rfield(fid,'fhm'   ,fluxdims);
 state.fkt    = read_rfield(fid,'fkt'   ,fluxdim);
+state.fzt    = read_rfield(fid,'fzt'   ,fluxdim);
 state.time   = read_rfield(fid,'time'  ,1);
 state.fch_p  = read_rfield(fid,'fch_p' ,fluxdimp);
 
@@ -130,6 +132,7 @@ if str2num(strrep(version,'.','')) >= str2num(strrep('03.000.005','.',''))
     state.fchvispar   = read_rfield(fid,'fchvispar'  ,fluxdim);
     state.fchvisper   = read_rfield(fid,'fchvisper'  ,fluxdim);
     state.fchvisq     = read_rfield(fid,'fchvisq'    ,fluxdim);
+%     state.fchviskt   = read_rfield(fid,'fchviskt'  ,fluxdim);
     state.fchinert    = read_rfield(fid,'fchinert'   ,fluxdim);
     
     state.vaecrb = read_rfield(fid,'vaecrb' ,fluxdims);

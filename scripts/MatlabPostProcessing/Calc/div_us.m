@@ -1,5 +1,5 @@
 function div = div_us(gmtry,flow)
-% div = div(gmtry,flow)
+% div = div_us(gmtry,flow)
 %
 % Computes the divergence of a B2.5 flow field flow. 
 % It is assumed that flow is defined on cell faces.

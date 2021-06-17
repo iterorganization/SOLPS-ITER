@@ -67,6 +67,7 @@ write_rfield(fid,'ti'    , state.ti);
 write_rfield(fid,'tn'    , state.tn);
 write_rfield(fid,'po'    , state.po);
 write_rfield(fid,'kt'    , state.kt);
+write_rfield(fid,'zt'    , state.zt);
 
 %% Write fluxes
 
@@ -80,6 +81,7 @@ write_rfield(fid,'fch_52',state.fch_52);
 write_rfield(fid,'kinrgy',state.kinrgy);
 write_rfield(fid,'fhm' ,state.fhm);
 write_rfield(fid,'fkt' ,state.fkt);
+write_rfield(fid,'fzt' ,state.fzt);
 write_rfield(fid,'time'  ,state.time);
 write_rfield(fid,'fch_p' ,state.fch_p);
 
@@ -109,6 +111,7 @@ write_rfield(fid,'fchin'      ,state.fchin);
 write_rfield(fid,'fchvispar'  ,state.fchvispar);
 write_rfield(fid,'fchvisper'  ,state.fchvisper);
 write_rfield(fid,'fchvisq'    ,state.fchvisq);
+write_rfield(fid,'fchviskt'  ,state.fchviskt);
 write_rfield(fid,'fchinert'   ,state.fchinert);
 
 write_rfield(fid,'vaecrb' ,state.vaecrb);

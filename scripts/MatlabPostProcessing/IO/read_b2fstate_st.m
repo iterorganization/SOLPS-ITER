@@ -1,5 +1,5 @@
-function state = read_b2fstate(file)
-% state = read_b2fstate(file)
+function state = read_b2fstate_st(file)
+% state = read_b2fstate_st(file)
 %
 % Read b2fstati/b2fstate file created by B2.5.
 %
@@ -39,7 +39,7 @@ ns  = dim(3);
 fluxdim  = [nx+2,ny+2,2];
 fluxdimp = [nx+2,ny+2];
 fluxdims = [nx+2,ny+2,2,ns];
-if version >= '03.001.000'
+if str2num(strrep(version,'.','')) >= str2num(strrep('03.001.000','.',''))
     fluxdim  = [nx+2,ny+2,2,2];
     fluxdimp = fluxdim;
     fluxdims = [nx+2,ny+2,2,2,ns];
@@ -62,19 +62,31 @@ state.ua     = read_rfield(fid,'ua'    ,[nx+2,ny+2,ns]);
 state.uadia  = read_rfield(fid,'uadia' ,fluxdims);
 state.te     = read_rfield(fid,'te'    ,[nx+2,ny+2]);
 state.ti     = read_rfield(fid,'ti'    ,[nx+2,ny+2]);
+if str2num(strrep(version,'.','')) >= str2num(strrep('03.002.000','.',''))
+     state.tn     = read_rfield(fid,'tn'    ,[nx+2,ny+2]);
+end
 state.po     = read_rfield(fid,'po'    ,[nx+2,ny+2]);
-if version >= '03.001.000'
-    state.kt     = read_rfield(fid,'kt'    ,[nx+2,ny+2]);
+if str2num(strrep(version,'.','')) >= str2num(strrep('03.002.000','.',''))
+     state.kt     = read_rfield(fid,'kt'    ,[nx+2,ny+2]);
+     state.zt     = read_rfield(fid,'zt'    ,[nx+2,ny+2]);
 end
 %% Read fluxes
 
 state.fna    = read_rfield(fid,'fna'   ,fluxdims);
 state.fhe    = read_rfield(fid,'fhe'   ,fluxdim);
 state.fhi    = read_rfield(fid,'fhi'   ,fluxdim);
+if str2num(strrep(version,'.','')) >= str2num(strrep('03.002.000','.',''))
+     state.fhn    = read_rfield(fid,'fhn'   ,fluxdim);
+end
 state.fch    = read_rfield(fid,'fch'   ,fluxdim);
 state.fch_32 = read_rfield(fid,'fch_32',fluxdim);
 state.fch_52 = read_rfield(fid,'fch_52',fluxdim);
 state.kinrgy = read_rfield(fid,'kinrgy',[nx+2,ny+2,ns]);
+if str2num(strrep(version,'.','')) >= str2num(strrep('03.002.000','.',''))
+%     state.fhm    = read_rfield(fid,'fhm'   ,fluxdims);
+%     state.fkt    = read_rfield(fid,'fkt'   ,fluxdim);
+%     state.fzt    = read_rfield(fid,'fzt'   ,fluxdim);
+end
 state.time   = read_rfield(fid,'time'  ,1);
 state.fch_p  = read_rfield(fid,'fch_p' ,fluxdimp);
 
@@ -116,7 +128,7 @@ if str2num(strrep(version,'.','')) >= str2num(strrep('03.000.005','.',''))
     state.floe_noc  = read_rfield(fid,'floe_noc' ,fluxdim);
     state.floi_noc  = read_rfield(fid,'floi_noc' ,fluxdim);
 end
-if version == '03.000.009'
+if str2num(strrep(version,'.','')) == str2num(strrep('03.000.009','.',''))
     state.kt     = read_rfield(fid,'kt'    ,[nx+2,ny+2]);
 end
 
