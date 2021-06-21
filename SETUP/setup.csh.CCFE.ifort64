@@ -6,11 +6,9 @@ switch ($fullhost)
   case "*cumulus.hpc.l" 
     echo "Running on the CUMULUS cluster" 
     set cluster="cumulus"
-    module load pgi
-    module load ifort/12.0.1.107
-    module load hdf5
-    module load mscl
-    module load nag
+    module load ifort
+    module load netcdf-fortran/4.5.3 netcdf-fortran-devel/4.5.3
+    module load openmpi
     module load mdsplus
     module load gnuplot
     breaksw
@@ -26,29 +24,30 @@ switch ($fullhost)
     module load texlive
     module swap mdsplus/7.7.11
     module load pyual
+    module load openmpi
 
     setenv _JAVA_OPTIONS "-Xss20m -Xms1g -Xmx4g"
 
     # work around a problem at JET where the modules are reloaded in a sub-shell
     setenv LOADL_ACTIVE 1
-
-    if (`where paraview-config` == "") then
-       echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
-    else
-      # See ParaViewCatalystUsersGuide_v2.pdf Sec 3.7.2 Linking with Python ...
-      set PARAVIEW_LIB=`paraview-config --libs --python | sed s/-L//`
-      if ($?LD_LIBRARY_PATH) then
-         setenv LD_LIBRARY_PATH "${PARAVIEW_LIB}:${LD_LIBRARY_PATH}"
-      else
-       	 setenv LD_LIBRARY_PATH ${PARAVIEW_LIB}
-      endif
-      setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages/vtk:${PYTHONPATH}"
-      setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
-      setenv LD_CATALYST `paraview-config --libs vtkPVPythonCatalyst`
-    endif
 endsw
+
+if (`where paraview-config` == "") then
+  echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
+else
+  # See ParaViewCatalystUsersGuide_v2.pdf Sec 3.7.2 Linking with Python ...
+  set PARAVIEW_LIB=`paraview-config --libs --python | sed s/-L//`
+  if ($?LD_LIBRARY_PATH) then
+    setenv LD_LIBRARY_PATH "${PARAVIEW_LIB}:${LD_LIBRARY_PATH}"
+  else
+    setenv LD_LIBRARY_PATH ${PARAVIEW_LIB}
+  endif
+  setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages/vtk:${PYTHONPATH}"
+  setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
+  setenv LD_CATALYST `paraview-config --libs vtkPVPythonCatalyst`
+endif
+
 
 # Compilers
 setenv CC gcc
 setenv FC ifort
-#setenv CXX g++

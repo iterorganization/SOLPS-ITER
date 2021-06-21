@@ -1,6 +1,6 @@
 #! /bin/tcsh
 
-#SBATCH  --ntasks=#NODES#
+#SBATCH  --nodes=#NODES#
 #SBATCH  --ntasks-per-node=#TASKS#
 #SBATCH  --cpus-per-task=#THREADS#
 #SBATCH  --time=#HOURS#:00:00

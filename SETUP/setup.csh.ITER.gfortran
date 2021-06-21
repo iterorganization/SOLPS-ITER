@@ -64,7 +64,6 @@ endsw
 
 setenv GGD_VERSION `pkg-config ggd --modversion`
 setenv GLI_HOME ${EBROOTGLI}
-# setenv PARAVIEW_PREFIX ${EBROOTPARAVIEW}
 setenv QTDIR ${EBROOTQT5}
 setenv NCDIR ${EBROOTNETCDFMINFORTRAN}
 
