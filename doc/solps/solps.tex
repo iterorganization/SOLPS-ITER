@@ -339,11 +339,12 @@ The current list of recognized hostnames, deduced by means of the {\tt whereami}
   \item[NERSC] DOE supercomputer center: *.nersc.gov
   \item[ORNL] Oak Ridge National Laboratory: *.ornl.gov
   \item[PPPL] PPPL domain: *.pppl.gov
-  \item[SPBSTU] St. Petersburg State PolyTechnical University: *.spbstu.ru
+  \item[SPBSTU] St. Petersburg State Polytechnical University: *.spbstu.ru
   \item[SWIP] SouthWestern Institute of Plasma Physics, Chengdu: *.swip.ac.cn
   \item[WM] College of William and Mary: *.wm.edu
   \item[AU\_UNKNOWN] All other domain names from Australia and associated territories
   \item[CA\_UNKNOWN] All other domain names from Canada
+  \item[CH\_UNKNOWN] All other domain names from Switzerland
   \item[CN\_UNKNOWN] All other domain names from China and associated territories
   \item[EU\_UNKNOWN] All other domain names from EURATOM Member countries and their associated territories
   \item[IN\_UNKNOWN] All other domain names from India
@@ -1679,6 +1680,7 @@ extracted from the {\tt run.log} file.
   \item[marconisubmit]\index{marconisubmit} Command file to launch runs on the Marconi supercomputer. See Section \ref{b2run} for details.
   \item[ippsubmit]\index{ippsubmit} Command file to launch runs on the new (2019) IPP cluster. See Section \ref{b2run} for details.
   \item[jetsubmit]\index{jetsubmit} Command file to launch runs on the JET Analysis Cluster (JAC). See Section \ref{b2run} for details.
+  \item[cumulussubmit]\index{cumulussubmit} Command file to launch runs on the CCFE Cumulus cluster. See section \ref{b2run} for details.
   \item[jfrssubmit]\index{jfrssubmit} Command file to launch runs on the JFRS IFERC-CSC supercomputer. See Section \ref{b2run} for details.
   \item[last10]\index{last10} Truncates the {\tt run.log} file to contain only the output from the last 10 written code iterations and stores them in {\tt run.log.last10}.
   \item[localsubmit]\index{localsubmit} Command file to launch runs on the local machine. See Section \ref{b2run} for details.
@@ -1918,6 +1920,7 @@ are provided:
   \item{itmsubmit}\index{itmsubmit} for submissions on the Marconi ITM Gateway machine
   \item{marconisubmit}\index{marconisubmit} for submissions on the Marconi supercomputer
   \item{jetsubmit}\index{jetsubmit} for submissions on the JET Analysis Cluster (JAC)
+  \item{cumulussubmit}\index{cumulussubmit} for submissions on the CCFE Cumulus cluster
   \item{jfrssubmit}\index{jfrssubmit} for submissions on the JFRS IFERC-CSC supercomputer
   \item{localsubmit}\index{localsubmit} for local submission
   \item{sgesubmit}\index{sgesubmit} for submissions on a system running SGE
@@ -1974,6 +1977,12 @@ itersubmit -m "<my MPI options>" <my_optional_submission_file_name>
 The launching program is identified by the variable {\tt MPI\_EXEC} inside the submission file, and options can be by hand as well using the {\tt MPI\_OPTS} variable.
 
 If the user wishes to submit an OpenMP job, this is done by use of the "-t" option, followed by the number of desired CPU threads.
+
+On some environments (ITER and SPBSTU, for instance), it is also possible to specify directly the number of nodes on which the job should run, by means of the
+\begin{verbatim}
+itersubmit -N <number_of_nodes>
+\end{verbatim}
+command. The default value for the number of nodes is 1. If running on multiple nodes, then the number of processors requested among the MPI options must be the {\em total} number of processors required.
 
 The default job name is {\tt SOLPS-ITER} for coupled jobs and {\tt B2.5} for standalone jobs. It can be changed by means of the
 \begin{verbatim}
@@ -5585,6 +5594,8 @@ where {\tt case} is the name of the just saved case (without the
 {\tt .dg} extension). This links the {\tt DG} output files to
 files named {\tt dg.*} in the {\tt Carre} run directory.
 
+The {\tt lns} script establishes a series of symbolic links from the {\tt DivGeo} output files to some files with standardized names on which other parts of the workflow rely. It also copies the {\tt case.trg} target and {\tt case.str} structure description files to the {\tt \$\{DGSONNETMASK\}} directory (with default value {\tt \$\{DG\}/device/\$\{DEVICE\}} or {\tt \$\{DG\}/device/\allowbreak \$\{DEVICE\}/\$\{USER\}} for central installation).
+
 Then you will probably want to generate the grid --- this is described
 in the next chapter.  After the grid has been created, you can import
 it back into {\tt DG} ({\tt File|Import|Mesh}) to check it.
@@ -5738,6 +5749,10 @@ Lastly, there is a "hidden" language variable {\tt sellan}\index{sellan} (defaul
 to its original 'francais'.
 
 Once all the settings have been chosen, it is often convenient to save them, so as to not have to re-enter them on the next {\tt Carre} meshing attempt. This is achieved by means of the '(S)ave' option within the {\tt carre} script, provided that the user does not start the next meshing attempt with the '(P)repare' option, but rather jumps directly to '(G)rid'.
+
+\begin{sloppypar}
+Upon succesful termination, one needs to '(C)onvert' the grid files to the {\tt .geo} and {\tt .sno} formats understandable by {\tt B2.5} and {\tt DivGeo}. It is also possible to 's(T)ore' the files used to create the grid and the grid output for archival. The input files will be copied to the {\tt \$\{CARRE\_STOREDIR\}} directory (default value is {\tt \$\{SOLPSTOP\}/modules/Carre/\allowbreak meshes/\$\{DEVICE\}}, or {\tt \$\{SOLPSTOP\}/modules/Carre/meshes/\$\{DEVICE\}/\$\{USER\}} for a central installation). The Carre grid output and {\tt .geo} file will be stored in the same location, but that can be changed by means of the '(O)utput' command in the script itsef, or by specifying the {\tt \$\{CARRE\_GRIDDIR\}} environment variable. If {\tt \$\{CARRE\_GRIDDIR\}} is not specified, the {\tt *.sno} converted output file will be copied instead to {\tt \$\{SOLPSTOP\}/\allowbreak modules/DivGeo/device/\allowbreak \$\{DEVICE\}} (or {\tt \$\{SOLPSTOP\}/modules/DivGeo/device/\$\{DEVICE\}/\allowbreak \$\{USER\}} for a central installation).
+\end{sloppypar}
 
 After running {\tt Carre}, it is recommended to have a look at the mesh and decide if one wants to modify it before
 proceeding much further (see previous section). The default settings may not be appropriate for all cases. It is
@@ -17078,7 +17093,7 @@ Writes out the top of the Eirene stack to $\langle$filename$\rangle$ (in the \SO
 or (in the \SOLPSfive environment) \verb:b2pl.exe.dir/:$\langle$filename$\rangle$.
 
 \subsubsection{$<$x1,{\bf R}$>$ $<$y1,{\bf R}$>$ $<$x2,{\bf R}$>$ $<$y2,{\bf R}$>$ $<$x3,{\bf R}$>$ $<$y3,{\bf R}$>$ $<$x4,{\bf R}$>$ $<$y4,{\bf R}$>$ eavg}\index{b2plot, eavg}\label{sec:eavg}
-Writes out the volume average of the data on top of the Eirene stack over the rectangular region delimited by the four doublets of coordinates [($x1$,$y1$);($x2$,$y2$);($x3$,$y3$);($x4$,$y4$)].
+Writes out the volume average of the data on top of the Eirene stack over the quadrangular region delimited by the four doublets of coordinates [($x1$,$y1$);($x2$,$y2$);($x3$,$y3$);($x4$,$y4$)].
 
 \subsubsection{$<$ix1,{\bf I}$>$ $<$ix2,{\bf I}$>$ $<$iy1,{\bf I}$>$ $<$iy2,{\bf I}$>$ $<$filename,{\bf S}$>$ mtab}\index{b2plot, mtab}\label{sec:mtab}
 Writes out a table extracted from the matrix on the top of the stack to $\langle$filename$\rangle$ (in the \SOLPSfour environment)
@@ -17201,7 +17216,7 @@ Currently coded functions are:
   \item[ig = -11] Creates tables with coordinates of the grid cell corners along the separatrices and along the magnetic surfaces, together with the wall geometry in specified zones for separate plotting, in files {\tt gm\_sep.dat}, {\tt gm\_sep\_i.dat}, {\tt gm\_sep\_o.dat}, {\tt gm\_SOL.dat}, {\tt gm\_SOL\_i.dat}, {\tt gm\_SOL\_o.dat}, {\tt gm\_PFR.dat}, {\tt gm\_PFR\_u.dat}, and {\tt gm\_core.dat}, according to magnetic topology
   \item[ig = -10] Creates table of fluxes and temperatures at the grid edges in file {\tt gridedge.dat}
   \item[ig = -9] Prints out the total number of nuclei of each kind in the system in file {\tt nuclei.tot}
-  \item[ig = -8] Creates files {\tt pr.dat} (plasma pressure), {\tt prn.dat} (neutral pressure), {\tt prt.dat} (total pressure) and {\tt sm.dat} (neutral momentum source)
+  \item[ig = -8] Creates files {\tt pr.dat} (plasma pressure), {\tt prn.dat} (pressure due to hydrogen isotope {\em atoms}), {\tt prt.dat} (sum of the previous two) and {\tt sm.dat} (neutral momentum source)
   \item[ig = -7] Prints out the neutral data read from {\tt fort.44} for debugging
   \item[ig = -6] Produces a file {\tt zaveraev.dat} with coordinates of the grid cell centers and the plasma parameters (density, temperatures, neutral density) in these points
   \item[ig = -5] Writes the C{\sc ii} sources in the plasma for DIVIMP in file {\tt CII\_source.dvi}

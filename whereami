@@ -45,7 +45,7 @@ case "*.ipp.kfa-juelich.de":
   echo FZJ
   breaksw
 case "*.ccfe.ac.uk":
-case "cumulus*.hpc.l":
+case "*.cumulus.hpc.l":
   echo CCFE
   breaksw
 case "*.jet.uk":
@@ -120,7 +120,6 @@ case "*.be":
 case "*.bg":
 case "*.bl":
 case "*.bq":
-case "*.ch":
 case "*.cw":
 case "*.cy":
 case "*.cz":
@@ -215,6 +214,9 @@ case "*.sh":
 case "*.uk":
 case "*.vg":
   echo UK_UNKNOWN
+  breaksw
+case "*.ch":
+  echo CH_UNKNOWN
   breaksw
 default:
   echo UNKNOWN
