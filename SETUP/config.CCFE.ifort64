@@ -19,11 +19,11 @@
 
 FULLHOST    ?= $(shell echo `fullhost`)
 ifeq (,$(findstring cumulus,$(FULLHOST)))
-NCDIR       ?= /lustre/home/afil/SOLPS-ITER/OBJECTCODE/NETCDF
+NCDIR       ?= /usr/local/depot/netcdf-fortran-4.5.3-ifort-2018.2.046
 MSCL_ROOT   ?= /lustre/home/afil/SOLPS-ITER/OBJECTCODE/mscl
 GR_ROOT     ?= /lustre/home/afil/SOLPS-ITER/OBJECTCODE/gr
 GLI_HOME    ?= /lustre/home/afil/SOLPS-ITER/OBJECTCODE/gks
-H5DIR       ?= /usr/local/depot/hdf5-1.8.20-pgi
+H5DIR       ?= /usr/local/depot/hdf5-1.8.13-C
 NCARG_ROOT  ?= /lustre/home/afil/SOLPS-ITER/OBJECTCODE/NCARG
 NAGDIR      ?= /lustre/home/afil/SOLPS-ITER/OBJECTCODE/nag
 MDSPLUS_DIR ?= /usr/local/depot/mdsplus-6.1
@@ -42,7 +42,7 @@ endif
 # Variables for linking
 #
 
-LD_NETCDF  = -L${NCDIR}/lib -lnetcdf
+LD_NETCDF  = -L${NCDIR}/lib -lnetcdff
 LD_MSCL    = -L${MSCL_ROOT} -lmscl
 LD_GR      = -L${GR_ROOT} -lgr
 ifeq (,$(findstring cumulus,$(FULLHOST)))
