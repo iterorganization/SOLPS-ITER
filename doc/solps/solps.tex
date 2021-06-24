@@ -4347,7 +4347,7 @@ ENDDO
 
 \subsection{Information for MPI}
 
-The standard way to choose the MPI parallelization strategy in {\tt Eirene} is {\it via} the {\tt NPRLL} variable in block 1 of the input file. However, one can also use an optional block at the very end of the {\tt Eirene} input file which will overwrite the {\tt NPRLL} setting. Its format is:
+The standard way to choose the MPI parallelization strategy in {\tt Eirene} is {\it via} the {\tt NPRLL} variable in block 1 of the input file. In order to obtain the default \SOLPSITER behaviour as quoted below, one should set {\tt NPRLL = -1}. However, one can also use an optional block at the very end of the {\tt Eirene} input file which will overwrite the {\tt NPRLL} setting. Its format is:
 
 {\it *** INFORMATION\_FOR\_MPI}
 \begin{verbatim}
@@ -4359,7 +4359,7 @@ There are currently five possible choices supported. They are:
   \item[BALANCED] A balanced strategy in which the workload is attempted to be divided evenly among processors. If the initial setup for the {\bf BALANCED} strategy fails, the code then attempts the {\bf APCAS} strategy. Also obtainable by setting {\tt NPRLL = 3}.
   \item[APCAS] meaning {\it All Processors Compute All Strata}, where the work of each stratum is divided among all processors. Usually involves more communication between processors. Also obtainable by setting {\tt NPRLL = 2}.
   \item[ORIGINAL] The original strategy implemented in versions of {\tt Eirene} prior to \SOLPSITER version 3.0.5. Also called ``proportional allocation'' in the {\tt Eirene} manual. In that strategy, each processor is handed either part of a large stratum or one or several full smaller strata. This strategy works well if the number of processors is larger than the number of strata, but is not recommended if the number of strata is larger than the number of processors. Also obtainable by setting {\tt NPRLL = 1}.
-  \item[EMBARRASS] meaning the ``embarassingly parrallel'' scheme by which each processor is assigned the same number of particle trajectories. This is the default in non-\SOLPSITER versions of {\tt EIRENE}. Also obtainable if setting {\tt NPRLL = 0} or {\tt NPRLL > 3}.
+  \item[EMBARRASS] meaning the ``embarassingly parrallel'' scheme by which each processor is assigned the same number of particle trajectories, as given in the {\tt Eirene} input file. This is the default in non-\SOLPSITER versions of {\tt EIRENE}. Also obtainable if setting {\tt NPRLL = 0} or {\tt NPRLL > 3}.
   \item[AUTOMATIC] tells the code to use the current default, whatever it may be.
 \end{description}
 The format to read the strategy name is free-form. The input file is scanned for the words describing the chosen strategy after the title line {\tt *** INFORMATION\_FOR\_MPI} is found. The {\em first} match to an (uppercase) strategy name will be the strategy followed by the code. If the title line is missing or no match is found to any of the strategy names, the default strategy is used. See the {\tt Eirene\_balanced\_MPI} document on the \SOLPSITER web site {\tt Manuals and Documentation} folder for more details on the performance and algorithm corresponding to each strategy.
@@ -17993,6 +17993,8 @@ which is defined in the
 \begin{description}
 \item[ALLOCATE\_AND\_NAMELIST] \index{ALLOCATE\_AND\_NAMELIST} To be used if the compiler allows dynamically allocated namelist arrays
 \item[B25\_EIRENE] \index{B25\_EIRENE} Set internally by the {\tt Makefile} and used to identify differences between source code for standalone {\tt B2.5} and coupled {\tt B2.5-Eirene} applications
+\item[MPI\_MOD] \index{MPI\_MOD} Checks whether the MPI internal variables are brought in {\it via} the {\tt mpi.mod} module or the {\tt mpif.h} include file (set internally by the {\tt Makefile})
+\item[MPI\_VERSION] \index{MPI\_VERSION} Index of MPI version (set internally by the {\tt Makefile})
 \item[NO\_B2\_CHEM\_SPUT] \index{NO\_B2\_CHEM\_SPUT} Used to indicate that chemical sputtering is specified through {\tt Eirene} arrays instead of {\tt B2.5}
 \item[NO\_SAVE] \index{NO\_SAVE} Turning off static save of some common blocks
 \item[SOLPS4\_3] \index{SOLPS4\_3} Set internally by the {\tt Makefile} to activates code specific to the {\tt SOLPS4-5 b2sxdr} converter
@@ -18256,6 +18258,11 @@ MDSPLUS & convert/b2mds.F \\
 MDSPLUS & driver/b2rd.F \\
 MDSPLUS & modules/b2mod\_mdsplus.F \\
 MDSPLUS & utility/mds\_routines.F \\
+MPI\_MOD & driver/b2mn\_opt.F \\
+MPI\_MOD & driver/b2mnastra.F \\
+MPI\_MOD & driver/b2mod\_main.F \\
+MPI\_MOD & modules/b2mod\_impgyro.F \\
+MPI\_MOD & utility/xertst.F \\
 NAG22 & b2plot/caltraj.F \\
 NAGF95 & b2plot/b2plot.F \\
 NAGF95 & b2plot/dhdata.F \\
@@ -18493,7 +18500,6 @@ if desired, be declared as part of either the {\tt SOLPS\_CPP} or the
 {\tt \$\{SOLPSTOP\}/SETUP/config.\$\{HOST\_NAME\}.\$\{COMPILER\}(.local)} files.
 
 \begin{description}
-\item[MPI\_VERSION] \index{MPI\_VERSION} Index of MPI version (set internally by the {\tt Makefile})
 \item[TRACE] \index{TRACE} Turns on tracing output in geometry routines (set internally by the {\tt Makefile} when requesting a {\tt \_debug} compilation)
 \end{description}
 
@@ -18556,6 +18562,7 @@ GFORTRAN & assistant/exit\_own.f \\
 G95 & assistant/exit\_own.f \\
 F2003 & assistant/subtit.f \\
 HPUX & modules/eirmod\_cinit.F \\
+MPI\_MOD & modules/eirmod\_mpi.F90 \\
 MPI\_VERSION & modules/eirmod\_mpi.F90 \\
 NAGFOR & file-handling/get\_solpstop.f \\
 NO\_B2\_CHEM\_SPUT & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.F \\
