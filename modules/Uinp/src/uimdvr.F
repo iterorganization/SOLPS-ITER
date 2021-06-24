@@ -50,12 +50,12 @@ c
      .     '(2h(a,i',len_of_digits(mxkwln),',1h))'
           write(ufa,hlp_frm) mxkwln
           call lefta(ufa,16,i)
-cc<<<
-c         print *,'uimdvr: formats'
-c         print *,'  ',ufi
-c         print *,'  ',ufg
-c         print *,'  ',ufa
-cc>>>
+#ifdef DBG
+         print *,'uimdvr: formats'
+         print *,'  ',ufi
+         print *,'  ',ufg
+         print *,'  ',ufa
+#endif
           ufirst=.false.
       end if !}
 
