@@ -118,10 +118,12 @@ cp ../convert/b2.boundary.parameters.4 b2.boundary.parameters
 cp ../convert/b2.transport.parameters.4 b2.transport.parameters
 cat ../baserun/b2ar.dat $SOLPSTOP/runs/examples/b2ar.dat.4.3 > b2ar.dat
 cat $SOLPSTOP/runs/examples/b2mn.dat.4.3 >> b2mn.dat
-echo "'b2mndr_ntim'     '1'" >> b2mn.dat
-echo "'b2news_no_solve' '1'" >> b2mn.dat
-echo "'ids_from_43'     '1'" >> b2mn.dat
-echo "'balance_netcdf'  '1'" >> b2mn.dat
+echo "'b2mndr_ntim'      '1'" >> b2mn.dat
+echo "'b2mndt_style'    '-1'" >> b2mn.dat
+echo "'b2news_no_solve'  '1'" >> b2mn.dat
+echo "'ids_from_43'      '1'" >> b2mn.dat
+echo "'balance_netcdf'   '1'" >> b2mn.dat
+echo "'b2mndr_ids_save' '-1'" >> b2mn.dat
 touch b2fstati
 b2run b2ar
 b2run b2mn > run.log
