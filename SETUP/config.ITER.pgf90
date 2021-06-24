@@ -25,7 +25,9 @@ NCARG_ROOT    ?=
 NAGDIR        ?= ${EBROOTNAG}
 H5DIR         ?= ${EBROOTHDF5}
 MDSPLUS_DIR   ?=
+ifeq (,$(findstring sdcc-login,$(NODENAME)))
 MPDIR         ?= ${EBROOTIMPI}
+endif
 
 # Variables of linking, using pkg-config
 #
@@ -45,13 +47,15 @@ LD_SONNET      = -L${SOLPSLIB} -lsonnet -lstdc++
 #
 
 SOLPS_CPP      = -DNO_NAG -DPGF90 -DNOQUAD
-MPI_CPP        = -I${MPDIR}/include64
-LD_MPI         = -Mmpi=mpich
 LD_MSCL        = `pkg-config mscl --libs` -lgfortran
 B25_DEFINES    = -DNO_21
 CARRE_DEFINES  =
 EIRENE_DEFINES =
 FFLAGSEXTRA    =
+ifneq (,$(findstring hpc-login,$(NODENAME)))
+MPI_CPP        = -I${MPDIR}/include64
+LD_MPI         = -Mmpi=mpich
+endif
 
 # Autodetected optional features...
 

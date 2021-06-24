@@ -23,7 +23,11 @@
      GR_ROOT ?= ${EBROOTGR}
     GLI_HOME ?= ${EBROOTGLI}
   NCARG_ROOT ?=
+ifeq (,$(findstring sdcc-login,${NODENAME}))
       NAGDIR ?= /work/imas/opt/nag/26/fll6i26d9l
+else
+      NAGDIR ?=
+endif
  MDSPLUS_DIR ?=
 
 #
@@ -35,7 +39,11 @@ LD_NETCDF  =
 LD_MSCL    = `pkg-config mscl --libs` -lgfortran
 LD_GR      = -L${GR_ROOT}/lib -lgr
 LD_GKS     = -L${GLI_HOME} -lgks -lgfortran -lXmu -lX11 -lXt
+ifeq (,$(findstring sdcc-login,${NODENAME}))
 LD_NAG     = -L${NAGDIR}/lib -lnag_nag
+else
+LD_NAG     = `pkg-config openblas --libs`
+endif
 LD_MDSPLUS =
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 
@@ -55,6 +63,9 @@ EIRENE_DEFINES =
 FFLAGSEXTRA    =
 
 # Autodetected optional features...
+ifneq (,$(findstring sdcc-login,${NODENAME}))
+SOLPS_CPP     += -DNO_NAG
+endif
 
 # Build with NetCDF tools if available
 ifdef LD_NETCDF

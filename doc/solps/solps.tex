@@ -1669,6 +1669,7 @@ extracted from the {\tt run.log} file.
   \item[get\_parm.bpl]\index{get\_parm.bpl} extracts certain useful quantities from a run input and output files for use in later scripts, particularly those building \btwoplot command files.
   \item[gtdr]\index{gtdr} Script to make a directory tree local.
   \item[gtfl]\index{gtfl} Replaces the specified links by the files to which they are linked.
+  \item[IDS\_yaml\_replace \#shot \#old\_run \#new\_run]\index{IDS\_yaml\_replace}\index{b2\_ual\_rewrite} Script invoked by the {\tt b2\_ual\_rewrite} program (see~\ref{sec:b2_ual_rewrite}) to update the {\tt .yaml} IMAS database files to indicate that the {\tt \#old\_run} run runmber of shot {\tt \#shot} is now replaced by run number {\tt \#new\_run}.
   \item[import\_files\_from\_convert]\index{import\_files\_from\_convert}\index{b2yt}\index{correct\_baserun\_timestamps} Imports and renames the files produced by {\tt b2yt} in a {\tt convert} directory at the same level as the current directory to prepare the new converted case for a run. Also updates some of the files in the {\tt baserun} directory, so it is often prudent to use {\tt correct\_baserun\_timestamps}, from the parent directory, afterwards.
   \item[input.dat\_to\_mesh.extra]\index{input.dat\_to\_mesh.extra}\index{input.dat}\index{mesh.extra} Converts standard input (usually directed from a {\tt input.dat} file) into a {\tt mesh.extra} file.
   \item[ITER\_divertor\_HTM]\index{ITER\_divertor\_HTM} Performs the thermal calculation of the divertor target monoblocks and reflector plate hypervapotron channels. It requires {\tt b2ymb.dat} and {\tt b2yrp.dat} to be present in the run directory. It runs \btwoplot to produce the heat load profile data of the targets and reflector plates. Then it runs {\tt b2ymb} to produce the input files (see \ref{sec:b2ymb}) for the {\tt FreeFem++}\cite{MR3043640} heat transfer model of the monoblock {\tt Monoblock\_HTM.edp} for the outer target. Afterwards, {\tt b2ymb} is ran again to produce the input files to run {\tt Monoblock\_HTM.edp} for the inner target. When the inner target is completed, {\tt b2yrp} (see \ref{sec:b2yrp}) is run to produce the input files for the inner reflector plate heat transfer model {\tt ReflectorPlate\_HTM.edp}. Finally, {\tt b2yrp} is executed one last time to produce the input files for the thermal analysis of the outer reflector plate.
@@ -1974,6 +1975,12 @@ The launching program is identified by the variable {\tt MPI\_EXEC} inside the s
 
 If the user wishes to submit an OpenMP job, this is done by use of the "-t" option, followed by the number of desired CPU threads.
 
+On some environments (ITER and SPBSTU, for instance), it is also possible to specify directly the number of nodes on which the job should run, by means of the
+\begin{verbatim}
+itersubmit -N <number_of_nodes>
+\end{verbatim}
+command. The default value for the number of nodes is 1. If running on multiple nodes, then the number of processors requested among the MPI options must be the {\em total} number of processors required.
+
 The default job name is {\tt SOLPS-ITER} for coupled jobs and {\tt B2.5} for standalone jobs. It can be changed by means of the
 \begin{verbatim}
 itersubmit -j <my_job_name>
@@ -1992,9 +1999,9 @@ command, to obtain here a run using 8GB of memory. The "B" (for "bytes") is nece
 
 The partition on which the job will be run can be specified by means of the {\tt -Q} option. For example:
 \begin{verbatim}
-itersubmit -Q gen9_ib
+itersubmit -Q gen10_ib
 \end{verbatim}
-chooses the {\tt gen9\_ib} partition. This is the current default partition on the ITER GPC cluster.
+chooses the {\tt gen10\_ib} partition, which is the default on the ITER SDCC cluster. On the older ITER HPC cluster, jobs go to {\tt gen9\_ib}.
 
 A listing of the available options for each submission script can be obtained by the
 \begin{verbatim}
@@ -4209,7 +4216,9 @@ or
   b2run b2_ual_write
 \end{verbatim}
 
-This program saves the final output state of a run into an IDS (Interface Data Structure). Currently, it will populate the {\tt edge\_profiles}, {\tt edge\_transport}, {\tt edge\_sources}, {\tt radiation}, {\tt dataset\_description}, and {\tt summary} data structures.
+\begin{sloppypar}
+This program saves the final output state of a run into an IDS (Interface Data Structure). Currently, it will populate the {\tt edge\_profiles}, {\tt edge\_transport}, {\tt edge\_sources}, {\tt radiation}, {\tt divertors}, {\tt dataset\_description}, and {\tt summary} data structures. If the current run being saved is a time continuation of the run already present in that IDS, then a new time slice is appended, otherwise the IDS is overwritten. If the existing IDS was written with an earlier Data Dictionary version, it is recreated with the current one.
+\end{sloppypar}
 
 \begin{sloppypar}
 The program reads the {\tt b2mndr\_id*} switch group, defined in {\tt b2mn.dat}:
@@ -4246,6 +4255,23 @@ After the IDS files are created, one should also run the {\tt create\_db\_entry}
 create_db_entry [-u USER] [-d DATABASE] -s SHOT -r RUN
 \end{verbatim}
 which will create {\tt ids\_*.yaml} and {\tt ids\_*.watcher} files for that shot and run number, to be used in the IMAS scenario database. These files should be edited by hand according to the instructions within them and the IMAS documentation.
+
+\subsection{b2\_ual\_rewrite, rewriting an existing IDS}
+\label{sec:b2_ual_rewrite}\index{b2\_ual\_rewrite}
+
+The program can be run with one of the following
+\begin{verbatim}
+  gmake -f $SOLPSTOP/runs/Makefile b2_ual_rewrite.prt
+\end{verbatim}
+%% $
+or
+\begin{verbatim}
+  b2run b2_ual_rewrite
+\end{verbatim}
+
+\begin{sloppypar}
+This program rewrites an existing IDS in case a correction needs to be made (because of a bug fix, for instance). It will rewrite the {\tt edge\_profiles}, {\tt edge\_transport}, {\tt edge\_sources}, {\tt radiation}, {\tt divertors}, {\tt dataset\_description}, and {\tt summary} data structures. It uses the same inputs as {\tt b2\_ual\_write}. In addition, one can have the IDS rewritten with a new run number, by means of the optional {\tt -n \it new\_run\_number} argument. Only the last time slice present in the IDS can be rewritten in this way, and data from older time slices will be lost. If a new run number is specified, the {\tt .yaml} file of the old run number will be modified to indicate that it is now obsolete and replaced by the new run number, and the {\tt .yaml} file for the new IDS will also indicate which old run it is replacing. The new run number must be larger than the old one.
+\end{sloppypar}
 
 \newpage
 \section{b2xx, the others}
@@ -5114,14 +5140,14 @@ plot(rrsep,osja,'k');
 You will need the MDSplus interface for python.
 
 \begin{verbatim}
-import pmds
-from pylab import *
+import MDSplus
 
-pmds.mdsconnect('solps-mdsplus.aug.ipp.mpg.de:8001')
-pmds.mdsopen('solps',12380)
-r=pmds.mdsvalue('\\top.snapshot.grid:r')
-z=pmds.mdsvalue('\\top.snapshot.grid:z')
-pmds.mdsdisconnect()
+conn = MDSplus.Connection('solps-mdsplus.aug.ipp.mpg.de:8001')
+conn.openTree('solps', 12380)
+r=conn.get('\\top.snapshot.grid:r')
+z=conn.get('\\top.snapshot.grid:z')
+conn.closeTree('solps', 12380)
+conn.disconnect()
 
 print(r)
 print(z)
@@ -5146,7 +5172,7 @@ produced figure \ref{fig:python_compare_shots}.
 \ifpdf
     \centerline{\includegraphics[height=8cm]{compare_shots.png}}
 \else
-    \centerline{\includegraphics[height=8cm]{compare_shots.ps}}
+    \centerline{\includegraphics[height=8cm]{compare_shots.eps}}
 \fi
     \caption{Comparison of profiles for a range of shots.}
     \label{fig:python_compare_shots}
@@ -5241,7 +5267,7 @@ plots are given in figures \ref{fig:python_sql_scatter},
 \ifpdf
     \centerline{\includegraphics[height=8cm]{sql_scatter.png}}
 \else
-    \centerline{\includegraphics[height=8cm]{sql_scatter.ps}}
+    \centerline{\includegraphics[height=8cm]{sql_scatter.eps}}
 \fi
     \caption{Comparison of profiles for a range of shots.}
     \label{fig:python_sql_scatter}
@@ -5251,7 +5277,7 @@ plots are given in figures \ref{fig:python_sql_scatter},
 \ifpdf
     \centerline{\includegraphics[height=8cm]{sql_hexbin_lin.png}}
 \else
-    \centerline{\includegraphics[height=8cm]{sql_hexbin_lin.ps}}
+    \centerline{\includegraphics[height=8cm]{sql_hexbin_lin.eps}}
 \fi
     \caption{Comparison of profiles for a range of shots.}
     \label{fig:python_sql_hexbin_lin}
@@ -5261,7 +5287,7 @@ plots are given in figures \ref{fig:python_sql_scatter},
 \ifpdf
     \centerline{\includegraphics[height=8cm]{sql_hexbin_log.png}}
 \else
-    \centerline{\includegraphics[height=8cm]{sql_hexbin_log.ps}}
+    \centerline{\includegraphics[height=8cm]{sql_hexbin_log.eps}}
 \fi
     \caption{Comparison of profiles for a range of shots.}
     \label{fig:python_sql_hexbin_log}
@@ -18267,6 +18293,7 @@ IMAS & modules/b2mod\_b2cmrc.F \\
 IMAS & modules/b2mod\_ppout.F \\
 IMAS & preprocessing/b2ardr.F \\
 IMAS & utility/ratadas.F \\
+IMAS\_MINOR\_VERSION & driver/b2mod\_driver.F \\
 IMAS\_MINOR\_VERSION & ids/b2mod\_ual.F90 \\
 IMAS\_MINOR\_VERSION & ids/b2mod\_ual\_io.F90 \\
 IMAS\_MINOR\_VERSION & ids/b2mod\_ual\_io\_data.F90 \\
@@ -18327,6 +18354,7 @@ NAGFOR & convert/b2co\_tally\_cdf.F \\
 NAGFOR & convert/b2co\_time\_cdf.F \\
 NAGFOR & convert/b2co\_wall\_cdf.F \\
 NAGFOR & convert/b2mds.F \\
+NAGFOR & driver/b2mod\_driver.F \\
 NAGFOR & driver/b2obeq.F \\
 NAGFOR & driver/b2obfn.F \\
 NAGFOR & driver/b2oblm.F \\
@@ -18378,6 +18406,7 @@ NO\_GETENV & convert/b2co\_time\_cdf.F \\
 NO\_GETENV & convert/b2co\_wall\_cdf.F \\
 NO\_GETENV & convert/b2mds.F \\
 NO\_GETENV & driver/b2co.F \\
+NO\_GETENV & driver/b2mod\_driver.F \\
 NO\_GETENV & ids/b2\_ual\_write.F90 \\
 NO\_GETENV & modules/b2mod\_ppout.F \\
 NO\_GETENV & modules/b2mod\_solpstop.F \\
@@ -18504,6 +18533,7 @@ USE\_PXFGETENV & convert/b2co\_tally\_cdf.F \\
 USE\_PXFGETENV & convert/b2co\_time\_cdf.F \\
 USE\_PXFGETENV & convert/b2co\_wall\_cdf.F \\
 USE\_PXFGETENV & driver/b2co.F \\
+USE\_PXFGETENV & driver/b2mod\_driver.F \\
 USE\_PXFGETENV & ids/b2\_ual\_write.F90 \\
 USE\_PXFGETENV & modules/b2mod\_ppout.F \\
 USE\_PXFGETENV & modules/b2mod\_solpstop.F \\

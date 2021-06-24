@@ -228,7 +228,7 @@ endif
 shift
 echo 'set format y "%g"' >>! $cfilename
 echo set zero 1e-50 >> $cfilename
-if (! $?GNUPLOT_NOTIMESTAMP) echo set time >> $cfilename
+if (! $?GNUPLOT_NOTIMESTAMP) echo set timestamp >> $cfilename
 if("$1" == "-file") then
   if(-e $2) then
     cat $2 >> $cfilename

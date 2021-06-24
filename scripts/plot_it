@@ -39,7 +39,7 @@ function write_control_data {
     }
 #    echo "time,TIME:$time:$TIME:"
     [ "$time" = "$TIME" ] || {
-      [ -z "$time" ] && print -u3 "set notime" || print -u3 "set time"
+      [ -z "$time" ] && print -u3 "set notime" || print -u3 "set timestamp"
     }
   } || b='    '
 #  echo "dstyle,DSTYLE:$dstyle:$DSTYLE:"
@@ -242,7 +242,7 @@ shift
       print -u3 "set style data $dstyle"
       [ -n "$logx" ] && print -u3 "set log x"
       [ -n "$logy" ] && print -u3 "set log y"
-      [ -n "$time" ] && print -u3 "set time"
+      [ -n "$time" ] && print -u3 "set timestamp"
 #      echo $CMDFILE
 #      cat $CMDFILE
       ;;

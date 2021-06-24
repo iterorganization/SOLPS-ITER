@@ -11,6 +11,7 @@
 a.out
 rwXDR.d
 rwXDR.d.*
+*_pycache_*
 
 # any local files, directories,...
 *.local

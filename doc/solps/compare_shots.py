@@ -1,3 +1,4 @@
+#! /usr/bin/env python3
 '''
 Date : 05/12/2008
 Authors : Matthieu Haefele based on IDL scripts provided by David Coster
@@ -13,7 +14,7 @@ filename is omitted, a X window pop up, if filename is specified, no window pop 
 is generated on disk with name filename. 
 '''
 
-import pmds
+import MDSplus
 import numpy
 
 # matplotlib.pyplot is a collection of command style functions that make matplotlib work like matlab
@@ -42,7 +43,7 @@ displays or writes a resulting picture on disk thanks to matplotlib.
 	
 	if filename == None:
 		# No filename supplied, displaying on screen
-		params['backend'] =  'QtAgg'             #'QtAgg', 'ps', 'svg','png'
+		params['backend'] =  'GTK3Agg'             #'QtAgg', 'ps', 'svg','png'
 	else:
 		# Filename provided, then it"s a png
 		params['backend'] =  'png'             #'QtAgg', 'ps', 'svg','png'
@@ -67,20 +68,20 @@ displays or writes a resulting picture on disk thanks to matplotlib.
 	
 	
 	
-	pmds.mdsconnect(server)
+	conn = MDSplus.Connection(server)
 	for i in range(ncase):
-		pmds.mdsopen('solps',shot[i])
-		nx[i]=pmds.mdsvalue('\\top.snapshot.dimensions:nx')
-		ny[i]=pmds.mdsvalue('\\top.snapshot.dimensions:ny')
-		print 'opening shot '+ str(shot[i]) + ' => nx, ny='+str(nx[i]) + ' ' + str(ny[i])
+		conn.openTree('solps',shot[i])
+		nx[i]=conn.get('\\top.snapshot.dimensions:nx')
+		ny[i]=conn.get('\\top.snapshot.dimensions:ny')
+		print('opening shot '+ str(shot[i]) + ' => nx, ny='+str(nx[i]) + ' ' + str(ny[i]))
 		# Someday maybe, all this will work in Python 3. One shall then write 
 		# print(''opening shot '+ str(shot[i]) + ' => nx, ny='+str(nx[i]) + ' ' + str(ny[i]))
 		
-		ns[i]=pmds.mdsvalue('\\top.snapshot.dimensions:ns')
-		imp[i]=pmds.mdsvalue('\\top.snapshot.dimensions:imp')
-		omp[i]=pmds.mdsvalue('\\top.snapshot.dimensions:omp')
-		sep[i]=pmds.mdsvalue('\\top.snapshot.dimensions:sep')
-		pmds.mdsclose('solps',shot[i])
+		ns[i]=conn.get('\\top.snapshot.dimensions:ns')
+		imp[i]=conn.get('\\top.snapshot.dimensions:imp')
+		omp[i]=conn.get('\\top.snapshot.dimensions:omp')
+		sep[i]=conn.get('\\top.snapshot.dimensions:sep')
+		conn.closeTree('solps',shot[i])
 	
         # Another array specification
 	arrayspec=((ncase,ny[0],nx[0]),numpy.float64)
@@ -96,16 +97,16 @@ displays or writes a resulting picture on disk thanks to matplotlib.
 	
 	
 	for i in range(ncase):
-		pmds.mdsopen('solps',shot[i])
-		dsrad[i,:,:]=pmds.mdsvalue('\\top.snapshot.grid:dsrad')
-		dspol[i,:,:]=pmds.mdsvalue('\\top.snapshot.grid:dspol')
-		dspar[i,:,:]=pmds.mdsvalue('\\top.snapshot.grid:dspar')
-		te[i,:,:]=pmds.mdsvalue('\\top.snapshot:te')
-		ti[i,:,:]=pmds.mdsvalue('\\top.snapshot:ti')
-		nel[i,:,:]=pmds.mdsvalue('\\top.snapshot:ne')
-		pmds.mdsclose('solps',shot[i])
+		conn.openTree('solps',shot[i])
+		dsrad[i,:,:]=conn.get('\\top.snapshot.grid:dsrad')
+		dspol[i,:,:]=conn.get('\\top.snapshot.grid:dspol')
+		dspar[i,:,:]=conn.get('\\top.snapshot.grid:dspar')
+		te[i,:,:]=conn.get('\\top.snapshot:te')
+		ti[i,:,:]=conn.get('\\top.snapshot:ti')
+		nel[i,:,:]=conn.get('\\top.snapshot:ne')
+		conn.closeTree('solps',shot[i])
 	
-	pmds.mdsdisconnect()
+	conn.disconnect()
 	
 	
 	#build the figure (Let's go Picasso)
@@ -126,7 +127,7 @@ displays or writes a resulting picture on disk thanks to matplotlib.
 	line_style = ['o-b', '^-g', 's-r', '+-c', 'x-m', 'D-y', '1-k', 'h-']
 	
 	# sub-plot number j[0] in a 3x3 subplot. last number ranges from 1 to 3x3, line-major
-	print 'generating figures'
+	print('generating figures')
 	for j in layout:
 		plotgridshape=(3,3,j[0])
 		cur_fig = plt.subplot(*plotgridshape)

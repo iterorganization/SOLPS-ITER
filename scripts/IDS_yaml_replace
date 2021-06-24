@@ -1,0 +1,117 @@
+#! /usr/bin/env ksh
+
+[ "$DEVICE" = '' ] && {
+  print -u2 -n -- "No DEVICE selected. Please provide a device name\n "
+  read u
+  export DEVICE=$u
+} || {
+  echo "DEVICE = " $DEVICE
+}
+imasdb $DEVICE > /dev/null
+echo "Updating .yaml file for IDS shot number " $1
+echo "New run number "$3" supercedes old run number "$2
+shotnumber=`echo $1`
+typeset -i shot
+shot=`echo $1`
+[ "$DEVICE" = 'iter' ] && {
+  shot=$shot-100000
+}
+[ $shot -ge 30000 ] && {
+  shot=$shot-30000
+} || {
+  [ $shot -ge 20000 ] && {
+    shot=$shot-20000
+  } || {
+    [ $shot -ge 10000 ] && {
+      shot=$shot-10000
+    }
+  }
+}
+typeset -i oldrun
+typeset -i newrun
+oldrun=`echo $2`
+newrun=`echo $3`
+[ $oldrun -ge 1000 ] && {
+  oldyaml=ids_${shotnumber}$2.yaml
+} || {
+  [ $oldrun -ge 100 ] && {
+    oldyaml=ids_${shotnumber}0$2.yaml
+  } || {
+    [ $oldrun -ge 10 ] && {
+      oldyaml=ids_${shotnumber}00$2.yaml
+    } || {
+      oldyaml=ids_${shotnumber}000$2.yaml
+    }
+  }
+}
+[ $newrun -ge 1000 ] && {
+  newyaml=ids_${shotnumber}$3.yaml
+  watcher=ids_${shotnumber}$3.watcher
+} || {
+  [ $newrun -ge 100 ] && {
+    newyaml=ids_${shotnumber}0$3.yaml
+    watcher=ids_${shotnumber}0$3.watcher
+  } || {
+    [ $newrun -ge 10 ] && {
+      newyaml=ids_${shotnumber}00$3.yaml
+      watcher=ids_${shotnumber}00$3.watcher
+    } || {
+      newyaml=ids_${shotnumber}000$3.yaml
+      watcher=ids_${shotnumber}000$3.watcher
+    }
+  }
+}
+[ $3 != $2 ] && {
+  cp ${MDSPLUS_TREE_BASE_0}/$oldyaml .
+  typeset -i yaml_lines
+  typeset -i tail_lines
+  typeset -i status_line
+  typeset -i replace_line
+  typeset -i reference_line
+  typeset -i responsible_line
+  reference=`grep -A1 "reference_name:" ${oldyaml} | tail -n 1 | cut -d ':' -f 2`
+  yaml_lines=`cat ${oldyaml} | wc -l`
+  status_line=`grep -n "status:" ${oldyaml} | cut -d ':' -f 1`
+  head -n ${status_line} $oldyaml > $oldyaml.2
+  echo "    obsolete" >> $oldyaml.2
+  tail_lines=yaml_lines-(status_line+1)
+  tail -n $tail_lines $oldyaml >> $oldyaml.2
+  replace_line=`grep -n "replaces:" ${oldyaml}.2 | cut -d ':' -f 1`
+  head -n ${replace_line} ${oldyaml}.2 > $oldyaml.3
+  echo "    replaced_by: ("$shotnumber","$3")" >> $oldyaml.3
+  tail_lines=yaml_lines-(replace_line+1)
+  tail -n $tail_lines $oldyaml.2 >> $oldyaml.3
+  yaml_lines=`cat ${newyaml} | wc -l`
+  status_line=`grep -n "status:" ${newyaml} | cut -d ':' -f 1`
+  head -n ${status_line} $newyaml > $newyaml.2
+  echo "    active" >> $newyaml.2
+  tail_lines=yaml_lines-(status_line+1)
+  tail -n $tail_lines $newyaml >> $newyaml.2
+  reference_line=`grep -n "reference_name:" ${newyaml}.2 | cut -d ':' -f 1`
+  head -n ${reference_line} $newyaml.2 > $newyaml.3
+  echo "   "$reference >> $newyaml.3
+  tail_lines=yaml_lines-(reference_line+1)
+  tail -n $tail_lines $newyaml.2 >> $newyaml.3
+  responsible_line=`grep -n "responsible_name:" ${newyaml}.3 | cut -d ':' -f 1`
+  head -n ${responsible_line} $newyaml.3 > $newyaml.4
+  echo "    "`get_git_name` >> $newyaml.4
+  tail_lines=yaml_lines-(responsible_line+1)
+  tail -n $tail_lines $newyaml.3 >> $newyaml.4
+  replace_line=`grep -n "database_relations:" ${newyaml}.4 | cut -d ':' -f 1`
+  head -n ${replace_line} $newyaml.4 > $newyaml.5
+  echo "    replaces: ("$shotnumber","$2")" >> $newyaml.5
+  tail_lines=yaml_lines-(replace_line+1)
+  tail -n $tail_lines $newyaml.4 >> $newyaml.5
+  [ $shot -ge 3000 ] && {
+    sed -e 's|workflow: tbd|workflow: SOLPS-ITER|' -e 's|type: tbd|type: predictive|' < $newyaml.5 > $newyaml.6
+  } || {
+    sed -e 's|workflow: tbd|workflow: SOLPS|' -e 's|type: tbd|type: predictive|' < $newyaml.5 > $newyaml.6
+  }
+  mv $oldyaml.3 ${MDSPLUS_TREE_BASE_0}/$oldyaml
+  mv $newyaml.6 ${MDSPLUS_TREE_BASE_0}/$newyaml
+  mv $watcher ${MDSPLUS_TREE_BASE_0}/
+  rm $oldyaml $oldyaml.2
+  rm $newyaml $newyaml.2 $newyaml.3 $newyaml.4 $newyaml.5
+  echo "IDS run number for case ${shotnumber} updated to $3 from $2 !"
+}
+
