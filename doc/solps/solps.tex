@@ -4210,6 +4210,7 @@ or
 
 This program saves the final output state of a run into an IDS (Interface Data Structure). Currently, it will populate the {\tt edge\_profiles}, {\tt edge\_transport}, {\tt edge\_sources}, {\tt radiation}, {\tt dataset\_description}, and {\tt summary} data structures.
 
+\begin{sloppypar}
 The program reads the {\tt b2mndr\_id*} switch group, defined in {\tt b2mn.dat}:
 \begin{itemize}
   \item {\tt b2mndr\_user} defines the user name and it is set by default to be the same as the {\tt USER} environment variable.
@@ -4222,6 +4223,7 @@ These switches are used as identification parameters for the IDS. Afterwards, a
 {\tt b2mn} run is initialized but {\em not} started, so that the final
 output state data is read. Then the data is written to an IDS, with the
 {\tt b2mndr\_id*} switchgroup used as identification descriptors.
+\end{sloppypar}
 
 It is possible to replace (or supplement) the IDS switch settings coming from the {\tt b2mn.dat} file by using the command line {\tt -o} option, with the following syntax:
 \begin{verbatim}
