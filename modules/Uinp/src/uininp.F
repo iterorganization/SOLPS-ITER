@@ -2,6 +2,7 @@
       use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
+      use b2mod_solpstop
       use eirmod_solps
 c
 c  version : 23.04.99 14:36
@@ -13,6 +14,7 @@ c======================================================================
       integer i,j,iamd,ifile,imat,nmat,isp
       logical uex,open_file,streql,match_found,skip_wall
       character*2 listmat(nmtr)
+      logical, allocatable :: trim_found(:)
       external open_file,uinnam,uintrg,uinaux,uiniamd,streql,
      .         xertst,xerrab,subini,subend
 c======================================================================
@@ -126,6 +128,16 @@ c
           end if !}
         end if !}
       end do !}
+      match_found=.false.
+      do imat=1,nmat !{
+        match_found=match_found .or. streql(listmat(imat),'C')
+      end do !}
+      if (.not.match_found) nnftrm=0
+      match_found=.false.
+      do isp=1,nspigen !{
+        match_found=match_found .or. streql(spcigen(isp),'D')
+      end do !}
+      if (.not.match_found) nnftrm=0
       ifile = 0
       if (nspigen.gt.1 .or. .not.streql(spcigen(nspigen),'D') .or.
      .     nmat.gt.1   .or. .not.streql(listmat(nmat),'C')) then !{
@@ -143,6 +155,29 @@ c
         end do !}
       end if !}
       nnftrm = nnftrm+ifile
+      allocate(trim_found(nnftrm))
+      do ifile=1,nnftrm
+        inquire(file=filtrm(ifile),exist=trim_found(ifile))
+        if(.not.trim_found(ifile)) inquire(file=trim(solpstop())
+     .   //'/modules/Eirene/Database/Surfacedata/TRIM/'
+     .   //trim(filtrm(ifile)),exist=trim_found(ifile))
+        if(.not.trim_found(ifile)) inquire(file=trim(solpstop())
+     .   //'/data.local/TRIM/'//trim(filtrm(ifile)),
+     .   exist=trim_found(ifile))
+      end do
+      j=0
+      do ifile=nnftrm,1,-1
+        if (.not.trim_found(ifile)) then
+          write(*,*) 'Did not find TRIM file ',trim(filtrm(ifile)),
+     .               '. Removing from list...'
+          do i = ifile+1, nnftrm-j
+            filtrm(i-1)=filtrm(i)
+          end do
+          j=j+1
+        end if
+      end do
+      nnftrm = nnftrm - j
+      deallocate(trim_found)
 
       ammonx_used=.false.
       meta_used=.false.

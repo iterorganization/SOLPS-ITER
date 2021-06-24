@@ -11,6 +11,7 @@
 \ifpdf
   \usepackage[pdftex]{graphicx}
   \pdfcompresslevel=9
+  \usepackage{microtype}
 \else
   \usepackage{graphicx}
 \fi
@@ -34,11 +35,11 @@
 \ifpdf
 \usepackage{thumbpdf}
 \usepackage[pageanchor,pdftex,backref,hyperindex,colorlinks,bookmarks,bookmarksnumbered]{hyperref} %bookmarksopen,
+\PassOptionsToPackage{unicode}{hyperref}
 \else
 \usepackage{hyperref}
 \fi
 \usepackage{color}
-\usepackage{fixltx2e}
 \usepackage{alltt}
 
 \def\topfraction{.9}
@@ -214,7 +215,9 @@ It is best afterwards to position oneself on the {\tt master} branches, which is
 > git checkout master
 \end{verbatim}
 
+\begin{sloppypar}
 For later updates, it is recommended you use the {\tt solps-iter\_update} script. If you are planning to do code development, your starting point should be the {\tt develop} branches, which you can switch to by using the {\tt solps-iter\_update\_develop} script instead.
+\end{sloppypar}
 
 Please note that because of the way some of the \SOLPSITER utility scripts function, the path to the \SOLPSITER top directory must not contain any of the strings {\tt .debug}, {\tt .mpi}, {\tt .openmp}, or {\tt .ig}.
 
@@ -262,6 +265,7 @@ The Git \SOLPSITER repository is structured as a self-contained whole, but some 
 \section{Requirements}
 \index{Requirements}
 
+\begin{sloppypar}
 To best use the \SOLPSITER code suite, the user will need, locally installed:
 \begin{description}
 \item[Fortran 90/95 Compiler] the main programs are written in {\tt FORTRAN} (see Section \ref{sec:platforms} for a list of supported compilers)
@@ -288,14 +292,17 @@ To best use the \SOLPSITER code suite, the user will need, locally installed:
 \item[/bin/sh] used by some scripts
 \item[/bin/tcsh] used by some scripts
 \end{description}
+\end{sloppypar}
 
 For all the various libraries, it is recommended that they be installed as modules, so that they
 may be shared amongst multiple users on the same machine, so as not to duplicate large files and to
 centralize their management. Most, but not all, of these libraries are publicly available from the
 Internet.
 
+\begin{sloppypar}
 If one uses local copies of these libraries, a copy or link to them should be put in the
 {\tt \$\{SOLPSTOP\}/lib/\allowbreak\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}} directory.
+\end{sloppypar}
 
 For fuller code capability, it is also recommended to load the IMAS (Integrated Modelling and Analysis Suite)\index{IMAS} environment, provided by the IO, whenever possible.
 
@@ -332,7 +339,7 @@ The current list of recognized hostnames, deduced by means of the {\tt whereami}
   \item[NERSC] DOE supercomputer center: *.nersc.gov
   \item[ORNL] Oak Ridge National Laboratory: *.ornl.gov
   \item[PPPL] PPPL domain: *.pppl.gov
-  \item[SPBSTU] St. Petersburg State PolyTechnical University: *.spbstu.ru
+  \item[SPBSTU] St. Petersburg State Polytechnical University: *.spbstu.ru
   \item[SWIP] SouthWestern Institute of Plasma Physics, Chengdu: *.swip.ac.cn
   \item[WM] College of William and Mary: *.wm.edu
   \item[AU\_UNKNOWN] All other domain names from Australia and associated territories
@@ -380,8 +387,11 @@ Then, if this is the first installation in your file space, please do:
   first_setup
 \end{verbatim}
 
+\begin{sloppypar}
 This will, if they are not already present in the distribution, create the various {\tt config.\$\{HOST\_NAME\}.\allowbreak \$\{COMPILER\}} files for each of the \SOLPSITER submodules. Feel free to modify them afterwards according to your local requirements. As with {\tt whereami} and {\tt default\_compiler}, if those modifications are worth sharing with the other users, please commit them back to the repository using a pull request.
+\end{sloppypar}
 
+\begin{sloppypar}
 For each combination of hostname and compiler, the set of corresponding environment variables are loaded
 from the {\tt \$\{SOLPSTOP\}\allowbreak /SETUP/setup.csh.\$\{HOST\_NAME\}.\$\{COMPILER\}} file and, subsequently,
 the {\tt \$\{SOLPSTOP\}/\allowbreak SETUP/setup.csh.\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}.local} file.
@@ -393,13 +403,16 @@ linking instructions. It also contains the shared compiler directives for all th
 Users should make sure the settings within these files fit their run environment and modify them as needed.
 If changes are needed, please forward them to the \SOLPSITER RO so that they may be included in the
 set of distributed files to help other future users.
+\end{sloppypar}
 
+\begin{sloppypar}
 For the case where single submodules are cloned from the \SOLPSITER repository, without the full regalia of
 programs, additional sets of configuration files can be found in the {\tt config} directory in each module. The
 compiler settings specific to this module are included there. Users are encouraged to modify these as needed. If local
 changes are required that should not be archived in the repository, then users should create a file named
 {\tt config.\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}\allowbreak.local} which the {\tt Makefile} will load and use to
 overwrite the more general settings from the distributed {\tt config} file.
+\end{sloppypar}
 
 Some Windows\index{Windows} implementations have been attempted, and require an additional {\tt -DWINDOWS} compiler switch, but are not currently being supported.
 
@@ -412,6 +425,7 @@ same domain or serve as examples for other users using the same compiler.
 If the NAG library is not available (it requires a pay licence), then the BLAS and
 LAPACK packages should be used instead, and links to them added to the corresponding {\tt config} files.
 
+\begin{sloppypar}
 To compile the coupled version of the code you should begin by checking that the default
 array dimensions provided fit your problem size. These are stored in the file
 {\tt \$\{SOLPSTOP\}/modules/B2.5/src/include\allowbreak/DIMENSIONS.F}. If the dimensions are not right for you,
@@ -437,6 +451,7 @@ so that your local file will be used. The last {\tt gmake} command may of
 course be replaced by {\tt gmake solps(\_debug)},
 {\tt gmake solps\_mpi(\_debug)}, {\tt gmake all(\_debug)} or
 {\tt gmake all\_mpi(\_debug)} as needed.
+\end{sloppypar}
 
 It is possible to pass down Makefile options with the syntax
 \begin{verbatim}
@@ -587,6 +602,7 @@ On the \SOLPSITER web site (\href{https://sharepoint.iter.org/departments/POP/CM
 
 There is also a dedicated directory {\tt \$\{SOLPSTOP\}/runs/examples} which contains links to a series of sample cases. These are actually stored in the {\tt /work/imas/shared/external/assets/solps-iter/MD5} directory hosted at the IO, and the means to retrieve these cases is detailed in the {\tt \$\{SOLPSTOP\}/runs/examples\allowbreak/README.md} file. Following the instructions therein will extract an archived file in gzipped tar format containing a {\tt baserun} and one or more run directories and associated files. In some cases, a {\tt DIMENSIONS.F} file is also provided, which shows the dimensions necessary to run those cases (see Appendix \ref{sec:DIMENSIONS} for full details about the contents of such files).
 
+\begin{sloppypar}
 The cases stored for retrieval include:
 \begin{description}
   \item[test\_slab\_ortho\_standalone] An orthogonal slab test case for {\tt B2.5} standalone
@@ -612,6 +628,7 @@ The cases stored for retrieval include:
 \end{description}
 as well as additional partial cases used in tutorials when learning how to build a case using the {\tt DivGeo} and {\tt SOLPS-GUI} utilities.
 Other cases can be added at the suggestion of users, if available.
+\end{sloppypar}
 
 After the cases have been downloaded to your system, make sure that the timestamps of the various input files are in the proper chronological order (using the {\tt correct\_baserun\_timestamps} and {\tt touch bf2tstati} instructions as necessary) before attempting to launch any actual runs. Also, the links to database files are not provided within these examples, and they can be set up using the {\tt setup\_baserun\_eirene\_links} script.
 
@@ -691,7 +708,8 @@ chosen Fortran compiler ({\it e.g.} {\tt ifort64}).
 \section{Setup and configuration files}
 \index{setup.csh}\label{sec:setup}
 
-The {\tt setup.csh} file and its subsidiaries {\tt \$\{SOLPSTOP\}/SETUP/setup.csh.\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}} and {\tt \$\{SOLPSTOP\}/SETUP/config.\allowbreak\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}} are used to load any modules packages useful for the local \SOLPSITER run environment and the following environment variables:
+\begin{sloppypar}
+The {\tt setup.csh} file and its subsidiaries {\tt \$\{SOLPSTOP\}/SETUP/setup.csh.\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}} and {\tt \$\{SOLPSTOP\}/SETUP/config.\allowbreak \$\{HOST\_NAME\}.\allowbreak \$\{COMPILER\}} are used to load any modules packages useful for the local \SOLPSITER run environment and the following environment variables:
 \begin{enumerate}
 \item {\tt B25\_DEFINES}\index{B25\_DEFINES}, an environment variable containing the additional "defines" to use during compilation of {\tt B2.5}
 \item {\tt DBX}\index{DBX}, the name of the debugger to be used
@@ -721,6 +739,7 @@ The {\tt setup.csh} file and its subsidiaries {\tt \$\{SOLPSTOP\}/SETUP/setup.cs
 \item two aliases to swap between the OpenMP and no\_OpenMP versions of the code ({\tt set\_openmp} and {\tt set\_noopenmp})
 \end{enumerate}
 Of course, any additional desired definitions can be added. The preferred place for those is, for those variables that need not be shared by other users, the {\tt \$\{SOLPSTOP\}/SETUP/setup.csh.\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}.local} and {\tt \$\{SOLPSTOP\}/SETUP/config.\$\{HOST\_NAME\}.\$\{COMPILER\}.local} files. Variables that are needed at compilation time need to appear in the {\tt config.*.*(.local)} file, while variables needed at runtime must appear in {\tt setup.csh.*.*(.local)} file.
+\end{sloppypar}
 
 However, the \SOLPSITER GIT server
 holds several examples in the {\tt \$\{SOLPSTOP\}/SETUP/} directory.
@@ -750,6 +769,7 @@ will take you to {\tt \$\{SOLPSTOP\}}.
 |   +---Eirene
 \end{verbatim}
 
+\begin{sloppypar}
 The {\tt modules/B2.5} subtree contains the source directories
 for {\tt B2.5}; {\tt modules/Eirene} for the Monte Carlo code, {\tt modules/Carre} and
 {\tt modules/fxdr}
@@ -761,6 +781,7 @@ to the grid preprocessor, {\tt modules/Triang} for the {\tt Eirene} triangular m
 {\tt modules\allowbreak/amds} for the automated generator of atomic physics blocks for {\tt Eirene},
 {\tt modules/solps4-5} for the {\tt b2sxdr} converter from
 \SOLPSfour to \SOLPSITERns, and {\tt modules/Sonnet-light} for the {\tt Sonnet} library in use for \SOLPSfour grids.
+\end{sloppypar}
 
 \newpage\subsection{modules/B2.5}
 \index{B2.5}\label{sec:b2}
@@ -844,11 +865,13 @@ If you want to avoid a long recompilation, you need to remove from the {\tt buil
 directories , the object and module files corresponding to your locally changed file(s),
 and then ask for a normal recompilation with a single {\tt gmake} command.
 
+\begin{sloppypar}
 If the user wishes to modify the compiling options used, the creation
 of a {\tt config.\$\{HOST\_NAME\}.\allowbreak \$\{COMPILER\}\allowbreak .local} file in the
 {\tt config} subdirectory is recommended. Since the {\tt Makefile}
 reads those after the {\tt config.\allowbreak \$\{HOST\_NAME\}.\allowbreak \$\{COMPILER\}} file,
 they need only contain the modified definitions.
+\end{sloppypar}
 
 If you just want to compile {\tt b2mn.exe}, you can do
 \begin{verbatim}
@@ -1035,6 +1058,7 @@ The command\index{sei}
 \end{verbatim}
 will take you to {\tt \$\{SOLPSTOP\}/modules/Eirene}.
 
+\begin{sloppypar}
 Because {\tt Eirene} is distributed as a standalone submodule and is being maintained
 by FZ-J{\"u}lich, some of the directories found above correspond to {\tt Eirene}
 implementations other than that used in \SOLPSITERns. These are the subdirectories
@@ -1042,6 +1066,7 @@ within {\tt interfaces} and {\tt user-routines}. \SOLPSITER uses only the code f
 the {\tt interfaces/couple\_SOLPS-ITER} and {\tt user-routines/user\_iter} subdirectories.
 The other are included for compatibility with the FZ-J{\"u}lich master {\tt Eirene}
 repository.
+\end{sloppypar}
 
 Additionally, the {\tt Database} directory contain the data files which {\tt Eirene}
 relies on to compute things such as backscattering coefficients, atomic reactions, etc...
@@ -1198,6 +1223,7 @@ The command\index{scr}
 \end{verbatim}
 will take you to {\tt \$\{SOLPSTOP\}/scripts}.
 
+\begin{sloppypar}
 The number of scripts developed for various {\bf SOLPS} versions is very large. Efforts have been made to translate all the relevant ones for use within \SOLPSITERns. Any of these scripts can be copied to the {\tt \$\{SOLPSTOP\}\allowbreak /scripts.local} directory for local user modifications as desired. There also are {\tt \$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}} subdirectories where compiler-dependent script programs will reside. A non-exhaustive listing of these scripts, with some explanation as to their purpose, follows:
 \begin{itemize}
 \item the residuals can be plotted with
@@ -1727,6 +1753,7 @@ extracted from the {\tt run.log} file.
   \item[zeffreg.py]\index{zeffreg.py} Average $Z_{eff}$.
   \end{description}
 \end{itemize}
+\end{sloppypar}
 
 \paragraph{Still need to do :}
 
@@ -1761,7 +1788,9 @@ Contains the palettes that can be used by \btwoplot and {\tt mtv\_3d} scripts.
 \subsection{scripts/Balance}
 \index{balance}
 
+\begin{sloppypar}
 Contains the Matlab routines used for balance diagnostics, provided by David Moulton of CCFE. A detailed description of their use can be found in the document {\tt \$\{SOLPSTOP\}/doc\allowbreak /Balance\_routines\_in\_SOLPS-ITER.pdf}.
+\end{sloppypar}
 
 \subsection{scripts/nc2text\_simple}
 \index{nc2text}
@@ -1808,11 +1837,13 @@ The compilation of {\tt B2.5} is described in section \ref{sec:b2} on page
 The run directory is described in section \ref{sec:b2runs} on page
 \pageref{sec:b2runs}. It is accessible with the {\tt sbr} command.
 
+\begin{sloppypar}
 The main code is {\tt b2mn.exe} but it needs input files written
 by {\tt b2ag.exe}, {\tt b2ah.exe}, {\tt b2ar.exe} and
 {\tt b2ai.exe}.  As described in section \ref{sec:b2runs}, these last four are
 usually run in the {\tt baserun} directory, and then {\tt b2mn.exe}
 is run in the actual run directory.
+\end{sloppypar}
 
 If one is running {\tt B2.5} in standalone mode, it is recommended to set the environment variable:
 \begin{verbatim}
@@ -1837,6 +1868,7 @@ of {\tt ../}s would reflect how many
 levels the actual run directory is below the
 {\tt \$\{SOLPSTOP\}/runs} directory.
 
+\begin{sloppypar}
 A useful shortcut is to use\index{b2run}\label{b2run}
 \begin{verbatim}
     b2run b2XX
@@ -1855,6 +1887,7 @@ for itself by climbing up the tree. You can add options to the {\tt b2run} comma
   \item[-b]\index{b2co}\index{b2fstate} Specifies, when calling the {\tt b2co} program, that only the {\tt b2fstate} file should be produced. To be used when invoking {\tt b2co} while the main code is running.
   \item[-d "debugger\_name"] Allows to run {\tt b2XX} with the named debugger (example: {\tt b2run -d totalview b2mn}). If no debugger name is specified, the debugger defined with the {\tt DBX} environment variable and specified in the {\tt \$\{SOLPSTOP\}/SETUP/setup.csh.\$\{HOST\_NAME\}.\$\{COMPILER\}.local} or {\tt \$\{SOLPSTOP\}\allowbreak/SETUP\allowbreak/setup.csh.\$\{HOST\_NAME\}.\$\{COMPILER\}} files will be used.
 \end{description}
+\end{sloppypar}
 
 \index{SOLPSTOP file}
 The use of {\tt b2run} allows for the run to be launched
@@ -1927,8 +1960,10 @@ where {\tt <<Job\_file>>} is a temporary modified copy of {\tt <<Submission\_fil
 %% $
 or stops if the submission file is not found.
 
+\begin{sloppypar}
 If {\tt <<Submission\_file>>} is not specified, {\tt itersubmit} looks for {\tt SLURM.iter\_coupled} or
 for {\tt SLURM.iter} depending on whether a coupled or a standalone run is required. To request a standalone run explicitly, the user can use the "-s" option. Otherwise, the script will assume a coupled run is requested if an {\tt Eirene} {\tt input.dat} file is present in the run directory, and a standalone run otherwise.
+\end{sloppypar}
 
 In the case one wishes to run the code with MPI and needs to pass MPI options to the launching program, this is achieved by means of the "-m" option, followed by the desired options inside double quotes, as follows:
 \begin{verbatim}
@@ -2259,9 +2294,11 @@ data are stored in the {\tt weis.dat}\index{weis.dat} file which should be prese
 {\tt baserun} directory where {\tt b2ar} is run. When running {\tt b2ar.dat} using the
 dedicated {\tt Makefile}, this is automatically done.
 
+\begin{sloppypar}
 Supplemental information on atomic physics rates can be found in the file
 {\tt \$\{SOLPSTOP\}/doc\allowbreak/SOLPS\_2002\_Course\allowbreak/atomic\_physics.pdf}.
 %% [[[May want to add some stuff from the atomic physics course notes]]]
+\end{sloppypar}
 
 \newpage
 \section{b2ai, the default initial plasma state}
@@ -2376,6 +2413,7 @@ code run are described in section \ref{sec:b2running}.
 
 \VerbatimInput[fontsize=\footnotesize]{D/b2mn.dat}
 
+\begin{sloppypar}
 The basic structure of {\tt b2mn.dat} is
 \begin{description}
   \item[*label] specifies, on the next line, a label for the run
@@ -2387,6 +2425,7 @@ The basic structure of {\tt b2mn.dat} is
   those specified in the block of the same name in {\tt b2ah.dat}
   \item[switches] described in {\tt b2cdci}, (see Appendix \ref{lis:b2cdci})
 \end{description}
+\end{sloppypar}
 
 \subsection{b2.boundary.parameters}
 \index{b2.boundary.parameters}\index{b2stbc}\index{b2stbc\_boundary\_namelist}\index{boundary conditions}\label{lab:b2:boundary:parameters}
@@ -2401,6 +2440,7 @@ For cases with a double-null topology, use of {\tt b2.boundary.parameters}
 is required, and will be enforced irrespective of the value of the
 {\tt 'b2stbc\_boundary\_namelist'} switch.
 
+\begin{sloppypar}
 The boundary conditions are specified by the {\tt boundary} namelist
 which contains
 \begin{description}
@@ -2773,6 +2813,7 @@ drifts\index{boundary conditions, drifts}\index{drifts, boundary
 conditions} are automatically included if drifts are turned on (the
 core current is adjusted to be its neo-classical value, and the Bohm
 criterion at the plates is adjusted to include drift velocities).
+\end{sloppypar}
 
 \subsection{b2.transport.parameters}
 \index{b2.transport.parameters}\index{b2tqna}\index{b2tqna\_transport\_namelist}\index{transport coefficients}\label{lab:b2:transport:parameters}
@@ -3803,6 +3844,7 @@ those regions, excluding the fluxes within boundary regions.
 \index{b2.wall\_save.parameters}\index{b2.wall\_save.parameters.2}\index{b2frates}\index{b2fpardf}
 \index{b2.transport.parameters}\index{b2.transport.parameters.2}\index{SOLPS\_FLUIDS}
 
+\begin{sloppypar}
 The converter program {\tt b2yt} can be used for a variety of purposes, and
 prospective users are urged to read the {\em entire} section below carefully
 before proceeding to use it. As a summary, however, the sequence of steps to
@@ -3815,6 +3857,7 @@ be followed for a succesful conversion is:
   \item[5] Run the {\tt b2yt} converter.
   \item[6] Displace the converted case input files to the converted case {\tt baserun} and run directories, for which you can use the {\tt import\_files\_from\_convert} script.
 \end{enumerate}
+\end{sloppypar}
 
 The {\tt b2yt} utility program allows a user to take a {\tt b2fstate} solution file
 with size $nx \times ny$ and transform it into an $nx1 \times ny1$ {\tt b2fstatt}
@@ -3979,6 +4022,7 @@ omissions to the developer team are always welcome.
 \section{b2co, recovering from a crash}
 \label{sec:b2co}\index{b2co}\index{plasmastate}\index{B2.5, run recovery}\index{b2fstate}\index{recover\_initial\_files}\index{tracing}\index{b2movies.nc}\index{b2tallies.nc}\index{b2wall.nc}\index{b2time.nc}\index{b2run}\index{inspect\_plasmastate}
 
+\begin{sloppypar}
 In case of a computer crash during a run, it may be possible to recover
 the results and continue the simulation. The code writes, at regular
 intervals (default is 3600 CPU seconds, and can be modified with use of the
@@ -3997,16 +4041,19 @@ a crash, the user should then:
   \item {\tt mv b2fstate b2fstati}
   \item Re-launch the run
 \end{enumerate}
+\end{sloppypar}
 
 If the crash happened early on in the simulation and one wishes to return to the initial state of the simulation to re-launch the run cleanly, one may use the {\tt recover\_initial\_files} script instead.
 
 This procedure will produce the files necessary to re-start the run from the point at which the {\tt plasmastate} file was written. In cases with feedback schemes active, the feedback values will be grabbed from the relevant {\tt b2.*\_save.parameters.XXXX} files and a new set of {\tt b2.*\_save.parameters} files will be created. Optional output files (i.e the NetCDF files {\tt b2time.nc}, {\tt b2tallies.nc}, {\tt b2wall.nc}, and {\tt b2movies.nc}, as well as the {\tt *.trc} files in the {\tt tracing} directory), if present, will be truncated to be synchronized with the recovered plasma state file.
 
+\begin{sloppypar}
 It is also possible to use the {\tt b2co} utility {\em while} {\tt SOLPS} is running, in order to obtain a {\tt b2fstate} file in the run directory that one may use to plot certain plasma quantities and monitor the current status of the run. However, to do this and not overwrite the current tracing files, {\tt b2co} {\em must} be invoked as follows:
 \begin{enumerate}
   \item {\tt setenv PLASMASTATE b2mn.exe.dir/plasmastate.XXXX} where {\tt XXXX} is the number of the desired {\tt plasmastate} file
   \item {\tt b2run -b b2co} or {\tt gmake -f \$SOLPSTOP/runs/Makefile b2co.prt B2FSTATE\_ONLY='yes'} which will create the provisional {\tt b2fstate} file
 \end{enumerate}
+\end{sloppypar}
 
 \newpage
 \section{b2uf \& b2fu, converting the plasma output file}
@@ -4040,6 +4087,7 @@ or
 \section{b2rd, fetching an archived MDSPLUS run}
 \label{sec:b2rd}\index{b2rd}\index{shotnumber.history}\index{B2.5, recover an archived run}\index{b2fstate}\index{b2fgmtrt}\index{b2fgmtry}\index{b2run}
 
+\begin{sloppypar}
 If a run has been archived into the {\tt MDSplus} tree structure (see \ref{cha:MDSplus} for details)
 it is possible to extract from the tree the information necessary to obtain {\tt b2fstate} and {\tt b2fgmtry} files
 from which to continue the run. To do so, follow the procedure below:
@@ -4052,6 +4100,7 @@ from which to continue the run. To do so, follow the procedure below:
   \item {\tt mv b2fgmtrt b2fgmtry}
   \item Re-launch the run
 \end{enumerate}
+\end{sloppypar}
 
 This procedure will re-start the run from the point at which the {\tt MDSplus} file was written. However, the input files
 and run settings are not retrieved along with {\tt b2fstate} (these are not stored) so the user must check the input data
@@ -4062,6 +4111,7 @@ values will be the ones stored in the appropriate namelists from the {\tt b2.*.p
 \section{b2ymb, post processing for monoblock heat transfer model}
 \label{sec:b2ymb}\index{b2ymb}\index{shotnumber.history}\index{B2.5, recover an archived run}\index{b2fstate}\index{b2fgmtrt}\index{b2fgmtry}
 
+\begin{sloppypar}
 This routine first reads the formatted file {\tt b2ymb.dat} and writes the unformatted file {\tt mnb\_in.dat} that is needed by the {\tt FreeFem++}(\href{http://www.freefem.org}{http://www.freefem.org})\cite{MR3043640} heat transfer model of the monoblock, see the details in the manual in {\tt \$\{SOLPSTOP\}/doc/SOLPS-ITER\_PFCs\_heat\_transfer\_model.pdf}.
 Then, it reads the files {\tt wlld\_trg[i-o].dat} produced by \btwoplot with the {\tt "1000 wlld"} command and writes the unformatted files {\tt W\_tg[i-o].dat}, {\tt X\_tg[i-o].dat} and {\tt tg[i-o]\_size.dat} that are needed  by the {\tt FreeFem++} heat transfer model of the monoblock.
 In {\tt W\_tg[i-o].dat} is stored the value of the heat flux for each tile of the monoblock in Watts.
@@ -4075,6 +4125,7 @@ To use the routine:
   \item Copy the {\tt wlld\_trg[i-o].dat} files in the run directory
   \item {\tt b2plot b2ymb}
 \end{enumerate}
+\end{sloppypar}
 
 Example of the {\tt b2ymb.dat} file:\\
 \index{b2ymb.dat}
@@ -4094,6 +4145,7 @@ Example of the {\tt b2ymb.dat} file:\\
 \section{b2yrp, post processing for reflector plates heat transfer model}
 \label{sec:b2yrp}\index{b2yrp}\index{shotnumber.history}\index{B2.5, recover an archived run}\index{b2fstate}\index{b2fgmtrt}\index{b2fgmtry}
 
+\begin{sloppypar}
 This routine first reads the formatted file {\tt b2yrp.dat} and writes the unformatted file {\tt rps\_in.dat} that is needed by the {\tt FreeFem++}(\href{http://www.freefem.org}{http://www.freefem.org})\cite{MR3043640} heat transfer model of the reflector plates, see the details in the manual in {\tt \$\{SOLPSTOP\}/doc/SOLPS-ITER\_PFCs\_heat\_transfer\_model.pdf}.
 Then, it reads the files {\tt wlld\_[i-o]rp.dat} produced by \btwoplot with the {\tt "1000 wlld"} command and writes the unformatted files {\tt W\_[i-o]rp.dat}, {\tt X\_[i-o]rp.dat} and {\tt [i-o]rp\_size.dat} that are needed by the {\tt FreeFem++} heat transfer model.
 In {\tt W\_[i-o]rp.dat} is stored the value of the heat flux for each tile of the RPs in Watts.
@@ -4107,6 +4159,7 @@ To use the routine:
   \item Copy the {\tt wlld\_[i-o]rp.dat} files in the run directory
   \item {\tt b2plot b2yrp}
 \end{enumerate}
+\end{sloppypar}
 
 Example of the {\tt b2yrp.dat} file:\\
 \index{b2yrp.dat}
@@ -4493,6 +4546,7 @@ When running the coupled version of \SOLPSITERns, you will obtain additional out
 
 The data blocks are:
 
+\begin{sloppypar}
 \begin{description}
   \item[dab2] Atom density ($m^{-3}$), dimension ({\tt NDX},{\tt NDY},{\tt NATM})
   \item[tab2] Atom temperature ($eV$), dimension ({\tt NDX},{\tt NDY},{\tt NATM})
@@ -4592,6 +4646,7 @@ The data blocks are:
   \item[edenm\_int\_b2] Integral energy carried by molecules over the {\tt B2.5} computational grid ($J$), dimension ({\tt NMOL}, {\tt 0:NSTRA})
   \item[edeni\_int\_b2] Integral energy carried by test ions over the {\tt B2.5} computational grid ($J$), dimension ({\tt NION}, {\tt 0:NSTRA})
 \end{description}
+\end{sloppypar}
 
 Similarly, the {\tt fort.46} file contains the following data blocks, this time all defined on the {\tt Eirene} triangle grid, which are:
 
@@ -4824,6 +4879,7 @@ In order to use this facility, you need to ask David Coster at IPP-Garching
 add you to the list of authorized {\tt MDSplus} writers, supplying the username
 which will be used, as well as the machine/domain.
 
+\begin{sloppypar}
 In order to compile the code with {\tt MDSplus}, the {\tt MDSPLUS\_DIR} environment
 needs to be set, as well as the compiler linking instruction {\tt LD\_MDSPLUS} ---
 consult your systems people about this, or the
@@ -4835,6 +4891,7 @@ sbb ; gmake clean ; gmake depend ; gmake
 is safest.  Before doing this, the {\tt MDSPLUS\_DIR} environment
 needs to be set --- consult your systems people about this, or the
 {\tt MDSplus} documentation.
+\end{sloppypar}
 
 [At IPP on the TOK Linux cluster, add the following to {\tt .login}:
 \begin{verbatim}
@@ -5478,6 +5535,8 @@ where {\tt case} is the name of the just saved case (without the
 {\tt .dg} extension). This links the {\tt DG} output files to
 files named {\tt dg.*} in the {\tt Carre} run directory.
 
+The {\tt lns} script establishes a series of symbolic links from the {\tt DivGeo} output files to some files with standardized names on which other parts of the workflow rely. It also copies the {\tt case.trg} target and {\tt case.str} structure description files to the {\tt \$\{DGSONNETMASK\}} directory (with default value {\tt \$\{DG\}/device/\$\{DEVICE\}} or {\tt \$\{DG\}/device/\allowbreak \$\{DEVICE\}/\$\{USER\}} for central installation).
+
 Then you will probably want to generate the grid --- this is described
 in the next chapter.  After the grid has been created, you can import
 it back into {\tt DG} ({\tt File|Import|Mesh}) to check it.
@@ -5494,6 +5553,7 @@ If {\tt Carre} is not yet compiled, you will need to do \index{Carre, compiling}
   gmake
 \end{verbatim}
 
+\begin{sloppypar}
 With the installation instructions from Section~\ref{solpsdistribution},
 users get a local clone of the {\tt Carre} GIT submodule, and
 {\bf this is the only supported option!}
@@ -5514,6 +5574,7 @@ so that the local file is used. The last {\tt gmake} command may of course be
 replaced by {\tt gmake carre(\_debug)}, {\tt gmake solps(\_debug)},
 {\tt gmake solps\_mpi(\_debug)}, {\tt gmake all(\_debug)} or
 {\tt gmake \allowbreak all\_mpi(\_debug)} as needed.
+\end{sloppypar}
 
 If this local change should no longer
 be needed, then it should be removed from {\tt src.local} and the
@@ -5603,8 +5664,10 @@ For more complicated geometries, see the {\tt Carre} original paper \cite{Marcha
 
 The user is only allowed to change {\tt pntrat}, {\tt npr}, {\tt deltr1} and {\tt deltrn}. Again, the code forces the user to ensure that {\tt width}, {\tt deltr1}, {\tt deltrn}, {\tt drmin} and {\tt drmax} are all of the same sign. It is recommended to keep the sizes of the mesh steps on both sides of the separatrix to be comparable (compare with the {\tt RADIAL DISTRIBUTIONS} table), and to decrease resolution gradually towards the inner core boundary and outer regions. The values of {\tt drmin} and {\tt drmax} can be used to check the monotonicity of the mesh step size. For a {\tt B2} or {\tt B2.5} run, it is necessary that {\tt npr} in the PFR and core regions be the same. This check will be performed by the {\tt b2ag} grid preprocessor and an error message returned if the condition is not satisfied. Similar more complicated checks will be done for double-null geometries.
 
+\begin{sloppypar}
 The fourth table (titled {\tt GUARD LENGTH FOR EACH DIVERTOR PLATE}) gives
 the poloidal length (in $m$) {\tt tgarde} over which the grid is to be adjusted from strictly orthogonal to coincident with the target geometry. This is a highly device-dependent quantity, but a value of the order of the length of the relevant separatrix segment is recommended. In single-null geometries, {\tt tgarde(1)} refers to the inner target, and {\tt tgarde(2)} to the outer target.
+\end{sloppypar}
 
 The last table (titled {\tt RELAXATION PARAMETERS USED TO CONSTRUCT THE MESH})
 gives numerical parameters used to smooth out the mesh.
@@ -5627,6 +5690,10 @@ Lastly, there is a "hidden" language variable {\tt sellan}\index{sellan} (defaul
 to its original 'francais'.
 
 Once all the settings have been chosen, it is often convenient to save them, so as to not have to re-enter them on the next {\tt Carre} meshing attempt. This is achieved by means of the '(S)ave' option within the {\tt carre} script, provided that the user does not start the next meshing attempt with the '(P)repare' option, but rather jumps directly to '(G)rid'.
+
+\begin{sloppypar}
+Upon succesful termination, one needs to '(C)onvert' the grid files to the {\tt .geo} and {\tt .sno} formats understandable by {\tt B2.5} and {\tt DivGeo}. It is also possible to 's(T)ore' the files used to create the grid and the grid output for archival. The input files will be copied to the {\tt \$\{CARRE\_STOREDIR\}} directory (default value is {\tt \$\{SOLPSTOP\}/modules/Carre/\allowbreak meshes/\$\{DEVICE\}}, or {\tt \$\{SOLPSTOP\}/modules/Carre/meshes/\$\{DEVICE\}/\$\{USER\}} for a central installation). The Carre grid output and {\tt .geo} file will be stored in the same location, but that can be changed by means of the '(O)utput' command in the script itsef, or by specifying the {\tt \$\{CARRE\_GRIDDIR\}} environment variable. If {\tt \$\{CARRE\_GRIDDIR\}} is not specified, the {\tt *.sno} converted output file will be copied instead to {\tt \$\{SOLPSTOP\}/\allowbreak modules/DivGeo/device/\allowbreak \$\{DEVICE\}} (or {\tt \$\{SOLPSTOP\}/modules/DivGeo/device/\$\{DEVICE\}/\allowbreak \$\{USER\}} for a central installation).
+\end{sloppypar}
 
 After running {\tt Carre}, it is recommended to have a look at the mesh and decide if one wants to modify it before
 proceeding much further (see previous section). The default settings may not be appropriate for all cases. It is
@@ -6562,7 +6629,7 @@ T_e - T_i
         Q_e = -Q_{\Delta} - Q_u - Q_{AN}~.
 \end{gather}
 
-
+\begin{sloppypar}
 Here $\kappa _{e \parallel}$ is the Balescu (not Braginskii as stated in the CPP review paper \cite{SOLPS_review}
 or in {\tt \$\{SOLPSTOP\}/doc\allowbreak /CPP\_2006.pdf}) heat
 conductivity with a possible heat
@@ -6574,6 +6641,7 @@ either classical or anomalous. In the last term of the energy balance
 equation, it is taken into account that the $\vec{E} \times \vec{B}$
 drift velocity is
 almost divergence-free.
+\end{sloppypar}
 
 The ion energy balance equation is
 \begin{multline}\label{eq:ion_energy} \hfill
@@ -7163,7 +7231,7 @@ See the use of the switches {\tt 'b2tqce\_model'}, {\tt 'b2tqca\_model'} and {\t
 \begin{center}
     \begin{longtable}{|c|c|c|c|c|}
     \hline
-    \multicolumn{5}{|l|}{\small\sl continued from previous page} \\
+    \multicolumn{5}{|l|}{\small\it continued from previous page} \\
     \hline quantity & functional & \multicolumn{3}{|c|}{numerical prefactor} \\
     \cline{3-5}     & dependence & Braginskii & fits to Balescu & fits to Zhdanov \\
     \hline default in &          & \SOLPSfour & \SOLPSfive & \SOLPSITER \\
@@ -7173,7 +7241,7 @@ See the use of the switches {\tt 'b2tqce\_model'}, {\tt 'b2tqca\_model'} and {\t
     \hline default in &          & \SOLPSfour & \SOLPSfive & \SOLPSITER \\
     \hline \endfirsthead
     \hline
-    \multicolumn{5}{|l|}{\small\sl continued on next page} \\
+    \multicolumn{5}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
 $\kappa _{e \parallel}$ & $\frac{T_e^{5/2} n_e}{\ln \Lambda \sum \limits_a Z_a^2 n_a}$ & 3.16 & $\frac{5}{2} \frac{2.16 Z_{eff}}{1 + 0.27 Z_{eff}}$ & $\frac{\left( 3.9 +\frac{2.3}{Z_{eff}} \right)}{0.31+\frac{1.2}{Z_{eff}}+\frac{0.41}{Z_{eff}^2}}$ \\ \hline
@@ -8352,7 +8420,7 @@ $\alpha^{NEO} = \frac 8{15}
 the temperature gradient in the neoclassical electric field in the plateau and banana regime
 
 $\nu_{\ast} = \frac{c \left( y \right)}
-{2 \pi \varepsilon^{3/2} \tau_a \sqrt{T_i/m_a}}$,\ \ \ \
+{2 \pi \varepsilon^{3/2} \tau_a^{(Br)} \sqrt{T_i/m_a}}$,\ \ \ \
 $c \left( y \right) = \mathlarger{\oint} h_x |b_x|^{-1}dx$, \ \ \ \
 $\varepsilon = \frac{\left(\mathlarger{\oint} h_x dx \right)^2}
 {\mathlarger{\oint} \sqrt g /h_y dx}$
@@ -8533,10 +8601,12 @@ V_{ey}^{(dia)} = -\frac{B_z}{e B^2 n_e} \frac{\partial n_e T_e}{h_x \partial x}
 
 $V_{ex}^{(str)} = 0$
 
+\begin{sloppypar}
 The parameter $\widetilde{c_e}^{(2)}$ is given by
 $\widetilde{c_e}^{(2)} = \frac{c_e^{(2)}}{\left( z_{eff} + \frac{\sqrt{2}}{2} \right)} = 1.56 \frac{(1 + 1.4 z_{eff})(1 + 0.52 z_{eff})}{(1 + 2.56 z_{eff})( 1 + 0.29 z_{eff})}\frac{1}{\left( z_{eff} + \frac{\sqrt{2}}{2} \right)}$
 when {\tt 'b2sigp\_style'} is set to {\tt '2'} (default) or by its limiting
 value at $z_{eff} = 1$ of 0.71 otherwise.
+\end{sloppypar}
 
 \subsection{Electron energy transport}
 
@@ -8603,6 +8673,7 @@ V_{h_e}^{(\max)} = c_{flim_0} \frac{\sqrt g}{h_x}|b_x| \sqrt{\frac{T_e}{m_e}}
 
 $c_{flim_0} = 0.15$ is the electron heat flux limiter coefficient.
 
+\begin{sloppypar}
 The classical electron thermal diffusivity is expressed as:
 $\kappa_{ex}^{(CL)} = \frac{T_e}{m_e} f_{k_e} \left( z_{eff} \right) n_e \tau_e$ (Zhdanov formulation, default, {\tt 'b2tqce\_fke\_Zhdanov'} set to {\tt '1'}), with
 $f_{k_e}\left( z_{eff} \right )=
@@ -8613,6 +8684,7 @@ $\kappa_{ex}^{(CL)} = \frac 5 2\frac{T_e}{m_e} f_{k_e}
 $f_{k_e} \left( z_{eff} \right) = \frac{2.16 z_{eff}}{1 + 0.27 z_{eff}}$
 and
 $z_{eff} = \frac{1}{n_e} \sum \limits_{a=0}^{ns-1} z_a^2 n_a$.
+\end{sloppypar}
 
 If the plateau and banana transport regimes correction is applied (default, {\tt 'b2trcl\_lluciani'} set to {\tt '3'}), one has:
 
@@ -9034,14 +9106,15 @@ $
 q_{ix}^{P.Sch} = \frac 5 2 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} D_{axy} \frac 1{h_y} \frac{\partial n_a T_i^2}{\partial y}
 \end{equation}
 
-\begin{equation}\label{eq:eni_qix}
+\begin{equation}\label{eq:eni_qix}\begin{split}
 q_{ix} = \left[
 	\frac 3 2 \Gamma_{ix} +
 	\frac 5 2 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \widetilde V_{ax}^{(dia)} +
-	V_{ix}^{(str)} n_i +
+	V_{ix}^{(str)} n_i \right. \\ \left. +
         \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + j_x^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)}}{e} \right)
 \right] T_i
 - \kappa_{ix} \frac 1{h_x} \frac{\partial T_i}{\partial x}
+\end{split}
 \end{equation}
 
 \begin{equation}\label{eq:eni_gammahix}
@@ -9618,13 +9691,15 @@ $p_{n_a,a,1}$ is the radial leakage velocity, in units of the local species soun
 \right] \right|_{S_0}, & \text{mdf\_fnb} = 0
 \\
 \left. \left[
-	-\frac 1{p_{n_a,a,1}} \frac{\sqrt g}{h_y}  \left(
+\begin{matrix}
+	-\frac 1{p_{n_a,a,1}} \frac{\sqrt g}{h_y} & \left(
 		D^{(AN)}_{n,a} + D^{(AN)}_{p,a} \left(z_a T_e + T_i \right)
 	\right) n_a
-	+
-	\frac{\sqrt g}{h_y} D_{ayx} \frac1{h_x} \frac{\partial n_a T_i}{\partial x}
+	+ \\
+	\frac{\sqrt g}{h_y} & D_{ayx} \frac1{h_x} \frac{\partial n_a T_i}{\partial x}
 	+
 	\frac{\sqrt g}{h_y} V_{ay}^{(E)} n_a
+\end{matrix}
 \right] \right|_{S_0}, & \text{mdf\_fnb} = 1
 \end{matrix} \right.
 \end{matrix}
@@ -9775,13 +9850,15 @@ $\widetilde{\Gamma}_{ay}$ was replaced by $\Gamma_{ay}$
 \right] \right|_{N}, & \text{mdf\_fnb} = 0
 \\
 \left. \left[
-	\frac 1{p_{n_a,a,1}} \frac{\sqrt g}{h_y}  \left(
+\begin{matrix}
+	\frac 1{p_{n_a,a,1}} & \frac{\sqrt g}{h_y}  \left(
 		D^{(AN)}_{n,a} + D^{(AN)}_{p,a} \left(z_a T_e + T_i \right)
-	\right) n_a
+	\right) n_a \\
 	-
-	\frac{\sqrt g}{h_y} D_{ayx} \frac1{h_x} \frac{\partial n_a T_i}{\partial x}
+	\frac{\sqrt g}{h_y} & D_{ayx} \frac1{h_x} \frac{\partial n_a T_i}{\partial x}
 	-
 	\frac{\sqrt g}{h_y} V_{ay}^{(E)} n_a
+\end{matrix}
 \right] \right|_{N}, & \text{mdf\_fnb} = 1
 \end{matrix} \right.
 \end{matrix}
@@ -10026,7 +10103,7 @@ $p_{n,a,1} = +1 $
 
 \subsection{Parallel momentum balance for ions}
 
-$S_{m_a} = S_{m_a,0} + S_{m_a,1} u_{\parallel a} + S_{m_a,2} m_a n_a + S_{m_a,3} m_a n_a u_{\parallel a}$
+$S_{m_a} = S_{m_a,0} + S_{m_a,1} V_{\parallel a} + S_{m_a,2} m_a n_a + S_{m_a,3} m_a n_a V_{\parallel a}$
 
 \subsubsection{South. Private region}
 
@@ -10125,8 +10202,9 @@ $p_{m,a,1}=0$ is the imposed velocity, in $m.s^{-1}$, and $p_{m,a,2}=10^5$ is th
 {\em {\tt b2stbc\_spb} style:} {\tt BCMOM = 14}
 
 \begin{align*}
-\left. h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_{S_1} =
-c_{m,a,3} h_z \left. \frac{\sqrt g}{h_y} m_a n_a V_{\parallel a} \right|_{S_1} +& \left. \left[
+\left. h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_{S_1} = &
+c_{m,a,3} h_z \left. \frac{\sqrt g}{h_y} m_a n_a V_{\parallel a} \right|_{S_1} + \\
+& \left. \left[
 h_z \frac{\sqrt g}{h_y} m_a \left\langle n_a \right\rangle \left( -2 \right)\frac{\left\langle T_i \right\rangle B_z}{ez_a}\frac{\partial }{h_x \partial x} \left( \frac 1{B^2} \right) \left\langle V_{\parallel a} \right\rangle c_{drift} +
 c_{corflux} h_z \frac{\sqrt g}{h_y}
 \right] \right|_{S_1} \\
@@ -10550,15 +10628,17 @@ $\left. -\frac{\sqrt g}{h_y} \kappa_{ey} \frac{\partial T_e}{h_y \partial y} \ri
 \right] \right|_{S_0},
 & \text{mdf\_fhe} = 0 \\
 \left. \left[
-	\frac 5 2 \sum \limits_{a=0}^{ns-1} z_a S_{n_a,0}^{no\_mdf} T_e
+\begin{matrix}
+	& \frac 5 2 \sum \limits_{a=0}^{ns-1} z_a S_{n_a,0}^{no\_mdf} T_e
 	-
-	\frac{\sqrt g}{h_y} \frac{\kappa_e^{(AN)}}{p_{h_e,1}} T_e
-	+
+	\frac{\sqrt g}{h_y} \frac{\kappa_e^{(AN)}}{p_{h_e,1}} T_e \\
+	+ &
 	\frac 5 2 \sum \limits_{a=0}^{ns-1} z_a S_{n_a,1}^{no\_mdf} n_a T_e
 	-
 	q_{ey}^{P.Sch}
 	+
 	\frac{\sqrt g}{h_y} \frac 3 2 V_{ey}^{(E)} n_e T_e
+\end{matrix}
 \right] \right|_{S_0},
 & \text{mdf\_fhe} = 1 \\
 \end{matrix} \right.
@@ -10614,7 +10694,6 @@ $\left. \frac{\sqrt g}{h_y} \kappa_{ey} \frac{\partial T_e}{h_y \partial y} \rig
 
 $p_{h_e,1}$ is the radial electron temperature decay length, in $m$.
 
-\begin{tiny}
 \begin{equation*}
 \begin{matrix}
 \left. -\frac{\sqrt g}{h_y} \widetilde q_{ey} \right|_{N}= &
@@ -10629,21 +10708,22 @@ $p_{h_e,1}$ is the radial electron temperature decay length, in $m$.
 \right] \right|_{N},
 & \text{mdf\_fhe} = 0 \\
 \left. \left[
-	\frac 5 2 \sum \limits_{a=0}^{ns-1} z_a S_{n_a,0}^{no\_mdf} T_e
+\begin{matrix}
+	& \frac 5 2 \sum \limits_{a=0}^{ns-1} z_a S_{n_a,0}^{no\_mdf} T_e
 	-
-	\frac{\sqrt g}{h_y} \frac{\kappa_e^{(AN)}}{p_{h_e,1}} T_e
-	+
+	\frac{\sqrt g}{h_y} \frac{\kappa_e^{(AN)}}{p_{h_e,1}} T_e \\
+	+ &
 	\frac 5 2 \sum \limits_{a=0}^{ns-1} z_a S_{n_a,1}^{no\_mdf} n_a T_e
 	+
 	q_{ey}^{P.Sch}
 	-
 	\frac{\sqrt g}{h_y} \frac 3 2 V_{ey}^{(E)} n_e T_e
+\end{matrix}
 \right] \right|_{N},
 & \text{mdf\_fhe} = 1  \\
 \end{matrix} \right.
 \end{matrix}
 \end{equation*}
-\end{tiny}
 
 \subsubsection{West}
 
@@ -10781,63 +10861,40 @@ $e_{rec,0} = 0$ and $e_{rec,1} = 0.3$ are energy recycling coefficients.
 
 $r_{rec,0,0} = 0$ and $r_{rec,1,0} = 1$ are particle recycling coefficients.
 
-\begin{tiny}
 \begin{equation*}
-\begin{matrix}
-\left. \frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_{S_0} = &
-& \left\{
-\begin{matrix}
-\begin{matrix}
-\left[ \frac 5 2 \sum \limits_{a=0}^{ns-1} S_{n_a,0}^{no\_mdf} T_i
--
-\frac{\sqrt g}{h_y} \frac{\kappa_i^{(AN)}}{p_{h_i,1}} T_i
-+
-\frac 5 2 \sum \limits_{a=0}^{ns-1} S_{n_a,1}^{no\_mdf} n_a T_i+
-\right. \\ \left.
-+ \left. \sum \limits_{a=0}^{ns-1} \max \left\{
-	e_{rec,a} \left(
-		\frac{3}{2} + BoRiS
-	\right)\left(
-		T_i + z_a \left( \Phi - p_{\Phi,2} \right)
-	\right),\left(
-		\frac{3}{2} + BoRiS
-	\right) T_{surf} k_B
-\right\}
-r_{rec,a,0} c_{nsr} \max \left\{
-	0, -\frac{\sqrt g}{h_y} \Gamma_{ay}
-\right\} \right]
-\right|_{S_0}, ~ \text{mdf\_fhi} = 0
-\end{matrix}
+\left. \frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_{S_0} = \left\{
+  \begin{matrix}
+  \left. \left[
+  \begin{matrix}
+    \frac 5 2 \sum \limits_{a=0}^{ns-1} S_{n_a,0}^{no\_mdf} T_i -
+    \frac{\sqrt g}{h_y} \frac{\kappa_i^{(AN)}}{p_{h_i,1}} T_i +
+    \frac 5 2 \sum \limits_{a=0}^{ns-1} S_{n_a,1}^{no\_mdf} n_a T_i + \\
+  + \sum \limits_{a=0}^{ns-1} \max \left\{ e_{rec,a}
+    \left( \frac{3}{2} + BoRiS \right)
+    \left( T_i + z_a \left( \Phi - p_{\Phi,2} \right) \right) \right. , \\
+    \left. \left( \frac{3}{2} + BoRiS \right) T_{surf} k_B \right\}
+    r_{rec,a,0} c_{nsr} \max \left\{ 0, -\frac{\sqrt g}{h_y} \Gamma_{ay} \right\}
+  \end{matrix}
+  \right] \right|_{S_0} & \text{mdf\_fhi} = 0
 \\
-\begin{matrix}
-\left[ \frac 5 2 \sum \limits_{a=0}^{ns-1} S_{n_a,0}^{no\_mdf} T_i
--
-\frac{\sqrt g}{h_y} \frac{\kappa_i^{(AN)}}{p_{h_i,1}} T_i
-+
-\frac 5 2 \sum \limits_{a=0}^{ns-1} S_{n_a,1}^{no\_mdf} n_a T_i
--
-q_{iy}^{P.Sch}
-+
-\frac{\sqrt g}{h_y} \frac 3 2 \sum \limits_{a=0}^{ns-1} V_{ay}^{(E)} n_a T_i
-+ \right. \\ \left.
-+\left. \sum \limits_{a=0}^{ns-1} \max \left\{
-	e_{rec,a} \left(
-		\frac{3}{2} + BoRiS
-	\right)\left(
-		T_i + z_a \left( \Phi - p_{\Phi,2} \right)
-	\right),\left(
-		\frac{3}{2} + BoRiS
-	\right) T_{surf} k_B
-\right\}
-r_{rec,a,0} c_{nsr} \max \left\{
-	0, -\frac{\sqrt g}{h_y} \Gamma_{ay}
-\right\} \right]
-\right|_{S_0}, ~ \text{mdf\_fhi} = 1
-\end{matrix}
+  \begin{matrix}
+  \left. \left[
+    \begin{matrix}
+      \frac 5 2 \sum \limits_{a=0}^{ns-1} S_{n_a,0}^{no\_mdf} T_i -
+      \frac{\sqrt g}{h_y} \frac{\kappa_i^{(AN)}}{p_{h_i,1}} T_i +
+      \frac 5 2 \sum \limits_{a=0}^{ns-1} S_{n_a,1}^{no\_mdf} n_a T_i \\
+      - q_{iy}^{P.Sch} +
+      \frac{\sqrt g}{h_y} \frac 3 2 \sum \limits_{a=0}^{ns-1} V_{ay}^{(E)} n_a T_i + \\
+    + \sum \limits_{a=0}^{ns-1} \max \left\{ e_{rec,a}
+      \left( \frac{3}{2} + BoRiS \right)
+      \left( T_i + z_a \left( \Phi - p_{\Phi,2} \right) \right) \right. , \\
+      \left. \left( \frac{3}{2} + BoRiS	\right) T_{surf} k_B \right\}
+      r_{rec,a,0} c_{nsr} \max \left\{ 0, -\frac{\sqrt g}{h_y} \Gamma_{ay} \right\}
+   \end{matrix}
+   \right] \right|_{S_0} & & \text{mdf\_fhi} = 1
+  \end{matrix}
 \end{matrix} \right.
-\end{matrix}
 \end{equation*}
-\end{tiny}
 
 {\em Imposing a constant ion temperature:} {\tt BCENI = 21}
 
@@ -10913,63 +10970,40 @@ $e_{rec,0} = 0$ and $e_{rec,1} = 0.3$ are energy recycling coefficients.
 
 $r_{rec,0,0} = 0$ and $r_{rec,1,0} = 1$ are particle recycling coefficients.
 
-\begin{tiny}
 \begin{equation*}
-\begin{matrix}
-\left. - \frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_{N} = &
-& \left\{
-\begin{matrix}
-\begin{matrix}
-\left[ \frac 5 2 \sum \limits_{a=0}^{ns-1} S_{n_a,0}^{no\_mdf} T_i
--
-\frac{\sqrt g}{h_y} \frac{\kappa_i^{(AN)}}{p_{h_i,1}} T_i
-+
-\frac 5 2 \sum \limits_{a=0}^{ns-1} S_{n_a,1}^{no\_mdf} n_a T_i+
-\right. \\ \left.
-+\left. \sum \limits_{a=0}^{ns-1} \max \left\{
-	e_{rec,a} \left(
-		\frac{3}{2} + BoRiS
-	\right)\left(
-		T_i + z_a \left( \Phi - p_{\Phi,2} \right)
-	\right),\left(
-		\frac{3}{2} + BoRiS
-	\right) T_{surf} k_B
-\right\}
-r_{rec,a,0} c_{nsr} \max \left\{
-	0, -\frac{\sqrt g}{h_y} \Gamma_{ay}
-\right\} \right]
-\right|_{N}, ~ \text{mdf\_fhi} = 0
-\end{matrix}
-\\
-\begin{matrix}
-\left[ \frac 5 2 \sum \limits_{a=0}^{ns-1} S_{n_a,0}^{no\_mdf} T_i
--
-\frac{\sqrt g}{h_y} \frac{\kappa_i^{(AN)}}{p_{h_i,1}} T_i
-+
-\frac 5 2 \sum \limits_{a=0}^{ns-1} S_{n_a,1}^{no\_mdf} n_a T_i
--
-q_{iy}^{P.Sch}
-+
-\frac{\sqrt g}{h_y} \frac 3 2 \sum \limits_{a=0}^{ns-1} V_{ay}^{(E)} n_a T_i
-+ \right. \\ \left.
-+\left. \sum \limits_{a=0}^{ns-1} \max \left\{
-	e_{rec,a} \left(
-		\frac{3}{2} + BoRiS
-	\right)\left(
-		T_i + z_a \left( \Phi - p_{\Phi,2} \right)
-	\right),\left(
-		\frac{3}{2} + BoRiS
-	\right) T_{surf} k_B
-\right\}
-r_{rec,a,0} c_{nsr} \max \left\{
-	0, -\frac{\sqrt g}{h_y} \Gamma_{ay}
-\right\} \right]
-\right|_{N}, ~ \text{mdf\_fhi} = 1
-\end{matrix}
-\end{matrix} \right.
-\end{matrix}
+- \left. \frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_{N} = \left\{
+  \begin{matrix}
+    \left. \left[
+    \begin{matrix}
+       \frac 5 2 \sum \limits_{a=0}^{ns-1} S_{n_a,0}^{no\_mdf} T_i -
+       \frac{\sqrt g}{h_y} \frac{\kappa_i^{(AN)}}{p_{h_i,1}} T_i +
+       \frac 5 2 \sum \limits_{a=0}^{ns-1} S_{n_a,1}^{no\_mdf} n_a T_i \\
+       + \sum \limits_{a=0}^{ns-1} \max \left\{
+	 e_{rec,a} \left( \frac{3}{2} + BoRiS \right)
+         \left( T_i + z_a \left( \Phi - p_{\Phi,2} \right) \right) , \right. \\
+         \left. \left( \frac{3}{2} + BoRiS \right) T_{surf} k_B \right\}
+       r_{rec,a,0} c_{nsr} \max \left\{ 0, -\frac{\sqrt g}{h_y} \Gamma_{ay} \right\}
+    \end{matrix}
+    \right] \right|_{N} & \text{mdf\_fhi} = 0
+    \\
+    \left. \left[
+    \begin{matrix}
+       \frac 5 2 \sum \limits_{a=0}^{ns-1} S_{n_a,0}^{no\_mdf} T_i -
+       \frac{\sqrt g}{h_y} \frac{\kappa_i^{(AN)}}{p_{h_i,1}} T_i +
+       \frac 5 2 \sum \limits_{a=0}^{ns-1} S_{n_a,1}^{no\_mdf} n_a T_i \\
+       - q_{iy}^{P.Sch} +
+       \frac{\sqrt g}{h_y} \frac 3 2
+       \sum \limits_{a=0}^{ns-1} V_{ay}^{(E)} n_a T_i \\
+       + \sum \limits_{a=0}^{ns-1} \max \left\{
+         e_{rec,a} \left( \frac{3}{2} + BoRiS \right)
+         \left( T_i + z_a \left( \Phi - p_{\Phi,2} \right) \right) , \right. \\
+       \left. \left( \frac{3}{2} + BoRiS \right) T_{surf} k_B \right\}
+       r_{rec,a,0} c_{nsr} \max \left\{ 0, -\frac{\sqrt g}{h_y} \Gamma_{ay} \right\}
+    \end{matrix}
+    \right] \right|_{N} & \text{mdf\_fhi} = 1
+  \end{matrix}
+  \right.
 \end{equation*}
-\end{tiny}
 
 {\em Boundary condition from {\tt b2stbc\_spb}:} {\tt BCENI = 21}
 
@@ -11044,39 +11078,23 @@ $\left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W =
 
 If $p_{m,a_{main},2} < 0.5$:
 
-\begin{small}
 \begin{equation*}
-\begin{matrix}
 \left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W =
-& \left. \left[
+\left. \left[
 \begin{matrix}
-\sum \limits_{z_a \neq 0} \left(
+  \sum \limits_{z_a \neq 0} \left(
 	\frac{\sqrt g}{h_x} \frac{p_{h_i,2}}2 u_{u_{out}} m_a n_a
-	\left(
-		u_{p_{out}}^2 + \left(
-			u_{a,x}^{(dia)}
-		\right)^2
-	\right) T_i
-	-
-	\frac{\sqrt g}{h_x} p_{h_i,1} u_{u_{out}} n_a T_i
-\right) + \\
-
-+ \sum \limits_{a=0}^{ns-1} \max \left\{
-	r_{rec,a,1} \left(
-		\frac{3}{2} + BoRiS
-	\right)\left(
-		T_i + z_a \left( \Phi - p_{\Phi,2} \right)
-	\right),\left(
-		\frac{3}{2} + BoRiS
-	\right) T_{surf} k_B
-\right\}
-r_{rec,a,0} c_{nsr} \max \left\{
-	0, -\frac{\sqrt g}{h_x} \Gamma_{ax}
-\right\}
-\end{matrix} \right] \right|_W
+        \left( u_{p_{out}}^2 + \left( u_{a,x}^{(dia)} \right)^2 \right) T_i -
+	\frac{\sqrt g}{h_x} p_{h_i,1} u_{u_{out}} n_a T_i \right) \\
+ + \sum \limits_{a=0}^{ns-1} \max
+     \left\{ r_{rec,a,1} \left( \frac{3}{2} + BoRiS \right)
+                       \left( T_i + z_a \left( \Phi - p_{\Phi,2} \right) \right)
+     \right., \\
+     \left. \left( \frac{3}{2} + BoRiS \right) T_{surf} k_B \right\}
+     r_{rec,a,0} c_{nsr} \max \left\{ 0, -\frac{\sqrt g}{h_x} \Gamma_{ax} \right\}
 \end{matrix}
+\right] \right|_W
 \end{equation*}
-\end{small}
 
 $u_ {a,x}^{(dia)} = V_{ax}^{(E)} + \widetilde V_{xa}^{(dia)}$
 
@@ -11086,8 +11104,10 @@ $u_{p_{out}} = \max \left\{
 
 $u_{u_{out}} = p_{m,a_{main},1} c_s |b_x|$, $c_s = \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}$, \\\\ $p_{m,a_{main},1} = 1.0$
 
+\begin{sloppypar}
 If {\tt neutrals\_namelist.eq.1.or.use\_eirene.ne.0}
 then $e_{rec,0} = 0$, $e_{rec,1} = 0.3$, $r_{rec,0,0} = 0$, $r_{rec,1,0} = 1$
+\end{sloppypar}
 
 else $r_{rec,0,0} = 0$, $r_{rec,1,0} = 1$, $r_{rec,0,1} = 0$, $r_{rec,1,1} = 0.3$
 
@@ -11134,7 +11154,6 @@ $\left. -\frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_E =
 
 If $p_{m,a_{main},2} < 0.5$:
 
-\begin{small}
 \begin{equation*}
 \begin{matrix}
 \left. -\frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_E =
@@ -11150,13 +11169,12 @@ If $p_{m,a_{main},2} < 0.5$:
 	-
 	\frac{\sqrt g}{h_x} p_{h_i,1} u_{u_{out}} n_a T_i
 \right)+ \\
-
 + \sum \limits_{a=0}^{ns-1} \max \left\{
 	r_{rec,a,1} \left(
 		\frac{3}{2} + BoRiS
 	\right)\left(
 		T_i + z_a \left( \Phi - p_{\Phi,2} \right)
-	\right),\left(
+	\right) \right. , \\ \left. \left(
 		\frac{3}{2} + BoRiS
 	\right) T_{surf} k_B
 \right\}
@@ -11166,7 +11184,6 @@ r_{rec,a,0} c_{nsr} \max \left\{
 \end{matrix} \right] \right|_E ,
 \end{matrix}
 \end{equation*}
-\end{small}
 
 $u_{a,x}^{(dia)} = V_{ax}^{(E)} + \widetilde V_{ax}^{(dia)}$
 
@@ -11217,7 +11234,9 @@ following~\cite{Braginskii65}, as
  \sum\limits_a \frac{m_aV_{a\parallel}^2}{2} \cdot \left( {\rm Eq.}\mbox{ (\ref{eq:cont_appC}) }\right)
 \end{equation}
 
+\begin{sloppypar}
 The term $\displaystyle \left\{ V_{e\parallel}\cdot\left(\mbox{ electron parallel force balance equation }\right) \right\}$ does not appear in the sum~(\ref{eq:energy_balance_derivation}), because \SOLPSITER neglects electron inertia, so the corresponding equation does not appear explicitly in the B2.5 equation system and there is no term involving the electron kinetic energy $\displaystyle \frac{m_e u_e^2}{2}$. One should make use of equations~(\ref{eq:ene_veparal}) and~(\ref{eq:fch_p}) instead. Similarly, the electron continuity equation (or its equivalent~(\ref{eq:pot_eq})) does not enter the sum~(\ref{eq:energy_balance_derivation}) either.
+\end{sloppypar}
 
 The kinetic energy of perpendicular motion is neglected as well for the same reason ---
 the inertia terms are neglected in the perpendicular force balance equations (even
@@ -11393,11 +11412,11 @@ and
  \left(\nabla(n_e T_e + n_i T_i) \cdot \vec{\bf V}^{(E)}\right)
 \end{equation}
 
-No other currents contribute to the total energy balance Eq.~(\ref{eq:total_energy_balance_appC}), which is why the term
+No other currents contribute to the total energy balance Eq.~(\ref{eq:total_energy_balance_appC}), which is why the term \newline
 $\left( \left[ \vec{\bf j} - \left( \vec{\bf j} \cdot \vec{\bf b} \right) \vec{\bf b} - \vec{\bf j}_{\rm dia} \right] \cdot \vec{\bf E} \right)$
 appears in the expression for the residual. Practically, it is only
 possible to compute the right hand sides of Eqs.~(\ref{eq:j||E||_appC})
-and~(\ref{eq:jdiaE_appC}), since terms like
+and~(\ref{eq:jdiaE_appC}), since terms like \newline
 $j_\parallel E_\parallel$, $\left(\vec{\bf j}_{\rm dia} \cdot \vec{\bf E}\right)$ or $\left(\left[\vec{\bf j} - \left(\vec{\bf j}\cdot\vec{\bf b}\right) \vec{\bf b} - \vec{\bf j}_{\rm dia}\right]\cdot\vec{\bf E}\right)$ are not available in the code.
 
 The term
@@ -11485,33 +11504,34 @@ Contribution from anomalous viscosity was contained in l.h.s.
 
 Because of $\eta^{(AN)}_a \ll \widetilde{\widetilde{\eta}}^{(CL)}_{ax}$, $\eta_{ax} \approx \widetilde{\widetilde{\eta}}^{(CL)}_{ax}$ and taking into account $B_x h_x h_y = \text{const}$
 
-\begin{equation}\begin{split}
+\begin{equation}\begin{matrix}
 -\frac 4 3 b_x B^{\frac 3 2} & \frac{\partial}{h_x \partial x} \left(
 	\frac{c_{\eta_{ax}^{(CL)}} c_{\eta_{ax}^{(CL)}}^{(Luciani)} \eta^{(CL)}_{ax} b_x}{B^2}
 	\frac{ \partial \left( B^{\frac 1 2} V_{a \parallel} \right)}{h_x \partial x}
 \right)
-= \\
-& \frac{\partial}{h_z \sqrt g \partial x} \left(
+& = \\
+\frac{\partial}{h_z \sqrt g \partial x} \left(
 	\frac{h_z \sqrt g}{h_x} \left(
 		\frac 4 3 \eta_{ax} \frac{\partial \ln h_z}{h_x \partial x} V_{\parallel a}
 		-
 		\frac 4 3 \eta_{ax} \frac{\partial V_{\parallel a}}{h_x \partial x}
 	\right)
-\right)
+\right) & \\
 - \frac{\partial}{h_z \sqrt g \partial x} \left(
 	\frac{h_z \sqrt g}{h_x} \frac 4 3 \eta _{ax} \frac{\partial \ln \left( h_z B^{\frac 1 2} \right)}
 	{B^{\frac 1 2} h_x \partial x}
-\right) B^{\frac 1 2} V_{\parallel a}, \;\;\;\;\;\;\; a = 1
-\end{split}\end{equation}
+\right) B^{\frac 1 2} V_{\parallel a}, & a = 1
+\end{matrix}\end{equation}
 
 %-------- end of 39th page -------------
 
 New form of $\left( \nabla \pi _a^{\parallel} \right)_{\parallel}$
 
+\begin{tiny}
 \begin{equation*}
 \begin{matrix}
 \left( \nabla \pi_a^{\parallel}\right)_{\parallel} = &
-& \left[
+\left[
 \begin{matrix}
 0, & a \neq 1\\
 
@@ -11530,6 +11550,7 @@ New form of $\left( \nabla \pi _a^{\parallel} \right)_{\parallel}$
 \end{matrix} \right.
 \end{matrix}
 \end{equation*}
+\end{tiny}
 
 \section{Scaling of residuals}
 
@@ -12325,13 +12346,13 @@ The total internal energy flux quantities {\tt fet...} are defined in the same w
 \begin{center}
     \begin{longtable}{|l|l|l|}
     \hline
-    \multicolumn{3}{|l|}{\small\sl continued from previous page} \\
+    \multicolumn{3}{|l|}{\small\it continued from previous page} \\
     \hline quantity & description & units \\
     \hline \endhead
     \hline quantity & description & units \\
     \hline \endfirsthead
     \hline
-    \multicolumn{3}{|l|}{\small\sl continued on next page} \\
+    \multicolumn{3}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
 ntstep \index{ntstep}\index{b2time.nc, ntstep} & timestep index & $ $ \\
@@ -12442,13 +12463,13 @@ perpendicular to the magnetic field direction.
 \begin{center}
     \begin{longtable}{|l|l|l|}
     \hline
-    \multicolumn{3}{|l|}{\small\sl continued from previous page} \\
+    \multicolumn{3}{|l|}{\small\it continued from previous page} \\
     \hline quantity & description & units \\
     \hline \endhead
     \hline quantity & description & units \\
     \hline \endfirsthead
     \hline
-    \multicolumn{3}{|l|}{\small\sl continued on next page} \\
+    \multicolumn{3}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
 fn3dl \index{fn3dl}\index{b2time.nc, fn3dl} & poloidal particle flux of main ion, Western edge & $s^{-1}.m^{-2}$ \\
@@ -12523,13 +12544,13 @@ Table \ref{tab:4db2time}.
 \begin{center}
     \begin{longtable}{|l|l|l|}
     \hline
-    \multicolumn{3}{|l|}{\small\sl continued from previous page} \\
+    \multicolumn{3}{|l|}{\small\it continued from previous page} \\
     \hline quantity & description & units \\
     \hline \endhead
     \hline quantity & description & units \\
     \hline \endfirsthead
     \hline
-    \multicolumn{3}{|l|}{\small\sl continued on next page} \\
+    \multicolumn{3}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
 ne3dtl \index{ne3dtl}\index{b2time.nc, ne3dtl} & electron density, inboard top divertor & $m^{-3}$ \\
@@ -12574,13 +12595,13 @@ to {\tt 2}, then additional quantities such as fluxes are added, see below Table
 \begin{center}
     \begin{longtable}{|l|l|l|}
     \hline
-    \multicolumn{3}{|l|}{\small\sl continued from previous page} \\
+    \multicolumn{3}{|l|}{\small\it continued from previous page} \\
     \hline quantity & description & units \\
     \hline \endhead
     \hline quantity & description & units \\
     \hline \endfirsthead
     \hline
-    \multicolumn{3}{|l|}{\small\sl continued on next page} \\
+    \multicolumn{3}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
     \multicolumn{3}{|c|}{If {\tt b2mwti\_2dwrite} $\ge$ 1} \\
@@ -12611,23 +12632,25 @@ to {\tt 2}, then additional quantities such as fluxes are added, see below Table
   \end{longtable}
 \end{center}
 
+\begin{sloppypar}
 When using the averaging scheme for {\tt Eirene} coupled runs
 (see Section \ref{sec:B2Eirene:averaging}), obtained by
 activating the {\tt 'b2mndt\_av'} switch, the {\tt b2time.nc} file will also
 contain some averaged data, listed below in table \ref{tab:b2timeav}.
 These quantities can be visualized by means of the {\tt 2dt\_av} script.
 \index{2dt\_av}
+\end{sloppypar}
 
 \begin{center}
     \begin{longtable}{|l|l|l|}
     \hline
-    \multicolumn{3}{|l|}{\small\sl continued from previous page} \\
+    \multicolumn{3}{|l|}{\small\it continued from previous page} \\
     \hline quantity & description & units \\
     \hline \endhead
     \hline quantity & description & units \\
     \hline \endfirsthead
     \hline
-    \multicolumn{3}{|l|}{\small\sl continued on next page} \\
+    \multicolumn{3}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
 nastep \index{nastep}\index{b2time.nc, nastep} & timestep index & $ $ \\
@@ -12700,13 +12723,13 @@ The meaning of the dimensions are:
 \begin{center}
     \begin{longtable}{|l|l|l|l|}
     \hline
-    \multicolumn{4}{|l|}{\small\sl continued from previous page} \\
+    \multicolumn{4}{|l|}{\small\it continued from previous page} \\
     \hline quantity & dimensions & units & description \\
     \hline \endhead
     \hline quantity & dimensions & units & description \\
     \hline \endfirsthead
     \hline
-    \multicolumn{4}{|l|}{\small\sl continued on next page} \\
+    \multicolumn{4}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
 b2bremreg \index{b2bremreg}\index{b2tallies.nc, b2bremreg}                       & vreg, time     & $W$           & Bremsstrahlung radiation rate \\
@@ -12897,16 +12920,16 @@ energy, and momentum fluxes, currents, and quantities which contribute to them) 
 \begin{center}
     \begin{longtable}{|l|l|l|l|}
     \hline
-    \multicolumn{4}{|l|}{\small\sl continued from previous page} \\
+    \multicolumn{4}{|l|}{\small\it continued from previous page} \\
     \hline quantity & units & file(s) & equation \\
     \hline \endhead
     \hline quantity & units & file(s) & equation \\
     \hline \endfirsthead
     \hline
-    \multicolumn{4}{|l|}{\small\sl continued on next page} \\
+    \multicolumn{4}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
-\multicolumn{4}{|l|}{\small\sl Main quantities} \\
+\multicolumn{4}{|l|}{\small\it Main quantities} \\
 \hline
 
 $n_a$ & $m^{-3}$ & \texttt{b2npco\_na[XXX].dat} or & (\ref{eq:cont_appC}) \\
@@ -12924,7 +12947,7 @@ $\varphi$ & $V$ & \texttt{b2nppo\_po.dat} or & (\ref{eq:pot_eq}) \\
 $n_e$ & $m^{-3}$ & \texttt{ne.dat} & (\ref{eq:ne}) \\
 
 \hline
-\multicolumn{4}{|l|}{\small\sl Geometry and related quantities} \\
+\multicolumn{4}{|l|}{\small\it Geometry and related quantities} \\
 \hline
 
 $\sqrt{g}$ & $m^3$ & \texttt{vol.dat} &  \\
@@ -12945,7 +12968,7 @@ $R_3$ & $m$ & \texttt{crx3.dat} &  \\
 $Z_3$ & $m$ & \texttt{crz3.dat} &  \\
 
 \hline
-\multicolumn{4}{|l|}{\small\sl Continuity equation and related quantities} \\
+\multicolumn{4}{|l|}{\small\it Continuity equation and related quantities} \\
 \hline
 
 $S_a^n\sqrt{g}$ & $s^{-1}$ & \texttt{b2npco\_sna[XXX].dat} or & (\ref{eq:cont_appC}) \\
@@ -13035,7 +13058,7 @@ residuals & $s^{-1}$ & \texttt{b2npco\_resco[XXX].dat} or &  \\
  & & \texttt{b2npc11\_resco[XXX].dat} &  \\
 
 \hline
-\multicolumn{4}{|l|}{\small\sl Momentum balance equation and related quantities} \\
+\multicolumn{4}{|l|}{\small\it Momentum balance equation and related quantities} \\
 \hline
 
 $V_{\parallel a}$ & $m/s$ & \texttt{b2npmo\_ua[XXX].dat} & (\ref{eq:mom_new}), (\ref{eq:mom_old}) \\
@@ -13113,7 +13136,7 @@ $\displaystyle \frac{h_z \sqrt{g}}{h_x} \left( \frac{4}{3} \widetilde{\widetilde
 residuals & $N \cdot m$ & \texttt{b2npmo\_resmo[XXX].dat} &  \\
 
 \hline
-\multicolumn{4}{|l|}{\small\sl Electron heat balance equation and related quantities} \\
+\multicolumn{4}{|l|}{\small\it Electron heat balance equation and related quantities} \\
 \hline
 
 $T_e$ & $J$ & \texttt{b2npht\_te.dat} or & (\ref{eq:ene_new}) \\
@@ -13143,13 +13166,13 @@ $\displaystyle Q^{BC}_{e} \sqrt{g}$ & $W$ & \texttt{b2stbc\_phys\_she.dat} &  \\
 
 $\displaystyle -\frac{j_y^{(ST)}}{e n_e} \frac{\partial n_e T_e}{h_y \partial y} \sqrt{g}$ & $W$ & \texttt{b2sihs\_\_shest.dat} & (\ref{eq:ene_new}) \\
 
-$\displaystyle \frac{3}{2} \frac{\partial n_e T_e}{\partial t} \sqrt{g}$ & $W$ & \texttt{b2npht\_dnetedt.dat} or & (\ref{eq:ene_new}) \\ 
+$\displaystyle \frac{3}{2} \frac{\partial n_e T_e}{\partial t} \sqrt{g}$ & $W$ & \texttt{b2npht\_dnetedt.dat} or & (\ref{eq:ene_new}) \\
  & & \texttt{b2nph9\_dnetedt.dat} &  \\
 
-$\displaystyle \frac{3}{2} n_e \frac{\partial T_e}{\partial t} \sqrt{g}$ & $W$ & \texttt{b2npht\_nedtedt.dat} or &  \\ 
+$\displaystyle \frac{3}{2} n_e \frac{\partial T_e}{\partial t} \sqrt{g}$ & $W$ & \texttt{b2npht\_nedtedt.dat} or &  \\
  & & \texttt{b2nph9\_nedtedt.dat} &  \\
 
-$\displaystyle \frac{3}{2} T_e \frac{\partial n_e}{\partial t} \sqrt{g}$ & $W$ & \texttt{b2npht\_tednedt.dat} or &  \\ 
+$\displaystyle \frac{3}{2} T_e \frac{\partial n_e}{\partial t} \sqrt{g}$ & $W$ & \texttt{b2npht\_tednedt.dat} or &  \\
  & & \texttt{b2nph9\_tednedt.dat} &  \\
 
 $\displaystyle \frac32 \frac{\sqrt{g}}{h_{x}} \Gamma_{ex} T_e$ & $W$ & \texttt{b2tfhe\_\_qe\_32x.dat} & (\ref{eq:ene_gammax}) \\
@@ -13220,7 +13243,7 @@ residuals & $W$ & \texttt{b2npht\_reshe.dat} or &  \\
  & & \texttt{b2nph9\_reshe.dat} &  \\
 
 \hline
-\multicolumn{4}{|l|}{\small\sl Ion heat balance equation and related quantities} \\
+\multicolumn{4}{|l|}{\small\it Ion heat balance equation and related quantities} \\
 \hline
 
 $T_i$ & $W$ & \texttt{b2npht\_shi.dat} or & (\ref{eq:eni}) \\
@@ -13229,13 +13252,13 @@ $T_i$ & $W$ & \texttt{b2npht\_shi.dat} or & (\ref{eq:eni}) \\
 $S_i^{heat} \sqrt{g}$ & $W$ & \texttt{b2npht\_shi.dat} or & (\ref{eq:cont_appC}) \\
  & & \texttt{b2nph9\_shi.dat} &  \\
 
-$\displaystyle \frac{3}{2} \frac{\partial n_i T_i}{\partial t} \sqrt{g}$ & $W$ & \texttt{b2npht\_dnitidt.dat} or & (\ref{eq:ene_new}) \\ 
+$\displaystyle \frac{3}{2} \frac{\partial n_i T_i}{\partial t} \sqrt{g}$ & $W$ & \texttt{b2npht\_dnitidt.dat} or & (\ref{eq:ene_new}) \\
  & & \texttt{b2nph9\_dnitidt.dat} & \\
 
-$\displaystyle \frac{3}{2} n_i \frac{\partial T_i}{\partial t} \sqrt{g}$ & $W$ & \texttt{b2npht\_nidtidt.dat} or &  \\ 
+$\displaystyle \frac{3}{2} n_i \frac{\partial T_i}{\partial t} \sqrt{g}$ & $W$ & \texttt{b2npht\_nidtidt.dat} or &  \\
  & & \texttt{b2nph9\_nidtidt.dat} & \\
 
-$\displaystyle \frac{3}{2} T_i \frac{\partial n_i}{\partial t} \sqrt{g}$ & $W$ & \texttt{b2npht\_tidnidt.dat} or &  \\ 
+$\displaystyle \frac{3}{2} T_i \frac{\partial n_i}{\partial t} \sqrt{g}$ & $W$ & \texttt{b2npht\_tidnidt.dat} or &  \\
  & & \texttt{b2nph9\_tidnidt.dat} & \\
 
 $\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{q}_{ix}$ & $W$ & \texttt{b2nph9\_fhix.dat} & (\ref{eq:eni_tiqix}) \\
@@ -13294,7 +13317,7 @@ residuals & $W$ & \texttt{b2npht\_reshi.dat} or &  \\
  & & \texttt{b2nph9\_reshi.dat} &  \\
 
 \hline
-\multicolumn{4}{|l|}{\small\sl Current continuity equation and related quantities} \\
+\multicolumn{4}{|l|}{\small\it Current continuity equation and related quantities} \\
 \hline
 
 $\varphi$ & $V$ & \texttt{b2nppo\_po.dat} or & (\ref{eq:pot_eq}) \\
@@ -13968,13 +13991,13 @@ when calculating derived data.
 \begin{center}\index{b2plot, plasma quantities}
   \begin{longtable}{|l|l|}
     \hline
-    \multicolumn{2}{|l|}{\small\sl continued from previous page} \\
+    \multicolumn{2}{|l|}{\small\it continued from previous page} \\
     \hline quantity & description $(units)$ \\
     \hline \endhead
     \hline quantity & description $(units)$ \\
     \hline \endfirsthead
     \hline
-    \multicolumn{2}{|l|}{\small\sl continued on next page} \\
+    \multicolumn{2}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
     ahal     & \index{b2plot, ahal} Atomic $H_\alpha$ emissivity $(photons.m^{-3}.s^{-1})$ \\
@@ -14391,7 +14414,7 @@ are not met, an error is returned and no action is taken.
 \begin{center}\index{b2plot, stack commands}
   \begin{longtable}{|c|c|c|c|c|c|c|c|c|l|}
     \hline
-    \multicolumn{10}{|l|}{\small\sl continued from previous page} \\
+    \multicolumn{10}{|l|}{\small\it continued from previous page} \\
     \hline command & \multicolumn{7}{|c|}{stack requirements} & section & description \\
     \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
     \hline \endhead
@@ -14399,7 +14422,7 @@ are not met, an error is returned and no action is taken.
     \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
     \hline \endfirsthead
     \hline
-    \multicolumn{10}{|l|}{\small\sl continued on next page} \\
+    \multicolumn{10}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
     abs \index{b2plot, abs}        & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:abs}   & Absolute value \\
@@ -14502,7 +14525,7 @@ are indicated in the table.
 \begin{center}\index{b2plot, plot commands}
   \begin{longtable}{|c|c|c|c|c|c|c|c|c|l|}
     \hline
-    \multicolumn{10}{|l|}{\small\sl continued from previous page} \\
+    \multicolumn{10}{|l|}{\small\it continued from previous page} \\
     \hline command & \multicolumn{7}{|c|}{stack requirements} & section & description \\
     \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
     \hline \endhead
@@ -14510,7 +14533,7 @@ are indicated in the table.
     \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
     \hline \endfirsthead
     \hline
-    \multicolumn{10}{|l|}{\small\sl continued on next page} \\
+    \multicolumn{10}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
     a4l \index{b2plot, a4l}        & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:a4l}    & A4 landscape \\
@@ -14665,13 +14688,13 @@ be set by changing the real variables listed in table
 \begin{center}\index{b2plot, real variables}
   \begin{longtable}{|l|l|}
     \hline
-    \multicolumn{2}{|l|}{\small\sl continued from previous page} \\
+    \multicolumn{2}{|l|}{\small\it continued from previous page} \\
     \hline name & use $(units)$ \\
     \hline \endhead
     \hline name & use $(units)$ \\
     \hline \endfirsthead
     \hline
-    \multicolumn{2}{|l|}{\small\sl continued on next page} \\
+    \multicolumn{2}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
     a0 \index{b2plot, a0}      & $R$ radius of the ellipse in {\tt chord.F} $(m)$ \\
@@ -14727,7 +14750,7 @@ commands take one value off the "string" stack.
 \begin{center}\index{b2plot, character commands}
   \begin{longtable}{|c|c|c|c|c|c|c|c|c|l|}
     \hline
-    \multicolumn{10}{|l|}{\small\sl continued from previous page} \\
+    \multicolumn{10}{|l|}{\small\it continued from previous page} \\
     \hline name & \multicolumn{7}{|c|}{stack requirements} & section & use \\
     \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
     \hline \endhead
@@ -14735,7 +14758,7 @@ commands take one value off the "string" stack.
     \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
     \hline \endfirsthead
     \hline
-    \multicolumn{10}{|l|}{\small\sl continued on next page} \\
+    \multicolumn{10}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
     adas \index{b2plot, adas}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:adas}     & Access {\tt ADAS} data \\
@@ -14814,13 +14837,13 @@ quantities are only available for coupled \SOLPSITER runs.
 \begin{center}\index{b2plot, Eirene quantities}
   \begin{longtable}{|l|l|}
     \hline
-    \multicolumn{2}{|l|}{\small\sl continued from previous page} \\
+    \multicolumn{2}{|l|}{\small\it continued from previous page} \\
     \hline name & description $(units)$ \\
     \hline \endhead
     \hline name & description $(units)$ \\
     \hline \endfirsthead
     \hline
-    \multicolumn{2}{|l|}{\small\sl continued on next page} \\
+    \multicolumn{2}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
     edena \index{b2plot, edena} & Atoms energy density $(eV.m^{-3})$ \\
@@ -14873,7 +14896,7 @@ act on the "Eirene" stack or affect graphs of those data.
 \begin{center}\index{b2plot, Eirene stack commands}
   \begin{longtable}{|c|c|c|c|c|c|c|c|c|l|}
     \hline
-    \multicolumn{10}{|l|}{\small\sl continued from previous page} \\
+    \multicolumn{10}{|l|}{\small\it continued from previous page} \\
     \hline name & \multicolumn{7}{|c|}{stack requirements} & section & use \\
     \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
     \hline \endhead
@@ -14881,7 +14904,7 @@ act on the "Eirene" stack or affect graphs of those data.
     \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
     \hline \endfirsthead
     \hline
-    \multicolumn{10}{|l|}{\small\sl continued on next page} \\
+    \multicolumn{10}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
     eabs \index{b2plot, eabs}      & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:eabs}     & Absolute value \\
@@ -14958,13 +14981,13 @@ at the edge of the computational domain.
 \begin{center}\index{b2plot, wall quantities}
   \begin{longtable}{|l|l|}
     \hline
-    \multicolumn{2}{|l|}{\small\sl continued from previous page} \\
+    \multicolumn{2}{|l|}{\small\it continued from previous page} \\
     \hline name & description $(units)$ \\
     \hline \endhead
     \hline name & description $(units)$ \\
     \hline \endfirsthead
     \hline
-    \multicolumn{2}{|l|}{\small\sl continued on next page} \\
+    \multicolumn{2}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
     backscae \index{b2plot, backscae}  & Backscattering energy fraction \\
@@ -15090,7 +15113,7 @@ act on the "wall" stack or affect wall graphs.
 \begin{center}\index{b2plot, wall commands}
   \begin{longtable}{|c|c|c|c|c|c|c|c|c|l|}
     \hline
-    \multicolumn{10}{|l|}{\small\sl continued from previous page} \\
+    \multicolumn{10}{|l|}{\small\it continued from previous page} \\
     \hline name & \multicolumn{7}{|c|}{stack requirements} & section & use \\
     \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
     \hline \endhead
@@ -15098,7 +15121,7 @@ act on the "wall" stack or affect wall graphs.
     \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
     \hline \endfirsthead
     \hline
-    \multicolumn{10}{|l|}{\small\sl continued on next page} \\
+    \multicolumn{10}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
     ddw \index{b2plot, ddw}       & 0 & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:ddw}      & Take derivative along wall length \\
@@ -15180,13 +15203,13 @@ temperature (in $K$) upon \btwoplot start-up.
 \begin{center}\index{b2plot, target quantities}
   \begin{longtable}{|c|l|}
     \hline
-    \multicolumn{2}{|l|}{\small\sl continued from previous page} \\
+    \multicolumn{2}{|l|}{\small\it continued from previous page} \\
     \hline name & description $(units)$ \\
     \hline \endhead
     \hline name & description $(units)$ \\
     \hline \endfirsthead
     \hline
-    \multicolumn{2}{|l|}{\small\sl continued on next page} \\
+    \multicolumn{2}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
     cp \index{b2plot, cp}        & Target specific heat capacity $(J.kg^{-1}.K^{-1})$ \\
@@ -15254,7 +15277,7 @@ stack requirements.
 \begin{center}\index{b2plot, target commands}
   \begin{longtable}{|c|c|c|c|c|c|c|c|c|l|}
     \hline
-    \multicolumn{10}{|l|}{\small\sl continued from previous page} \\
+    \multicolumn{10}{|l|}{\small\it continued from previous page} \\
     \hline name & \multicolumn{7}{|c|}{stack requirements} & section & use \\
     \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
     \hline \endhead
@@ -15262,7 +15285,7 @@ stack requirements.
     \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
     \hline \endfirsthead
     \hline
-    \multicolumn{10}{|l|}{\small\sl continued on next page} \\
+    \multicolumn{10}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
     inttrgw \index{b2plot, inttrgw}  & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:inttrgw}  & Integrate along walls (all segments) \\
@@ -15340,13 +15363,13 @@ in the table \ref{tab:b2plotconstants}.
 \begin{center}\index{b2plot, constants}
   \begin{longtable}{|c|l|}
     \hline
-    \multicolumn{2}{|l|}{\small\sl continued from previous page} \\
+    \multicolumn{2}{|l|}{\small\it continued from previous page} \\
     \hline name & description $(units)$ \\
     \hline \endhead
     \hline name & description $(units)$ \\
     \hline \endfirsthead
     \hline
-    \multicolumn{2}{|l|}{\small\sl continued on next page} \\
+    \multicolumn{2}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
     avogr \index{b2plot, avogr}  & Avogadro's constant $N_A$ $(mol^{-1})$ \\
@@ -15387,13 +15410,13 @@ In table \ref{tab:extracommands} some additional commands are given.
 \begin{center}\index{b2plot, additional commands}
   \begin{longtable}{|c|l|}
     \hline
-    \multicolumn{2}{|l|}{\small\sl continued from previous page} \\
+    \multicolumn{2}{|l|}{\small\it continued from previous page} \\
     \hline name & use \\
     \hline \endhead
     \hline name & use \\
     \hline \endfirsthead
     \hline
-    \multicolumn{2}{|l|}{\small\sl continued on next page} \\
+    \multicolumn{2}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
     coro \index{b2plot, coro}        & Print coronal rates \\
@@ -16735,10 +16758,12 @@ See {\bf zcol} above for a list of available colours.
 Changes the experimental data overlay line width by $\langle$widthfactor$\rangle$ (default 1.0).
 
 \subsubsection{$<$n,{\bf I}$>$ ytra}\index{b2plot, ytra}\label{sec:ytra}
+\begin{sloppypar}
 Choose transformation function ($\langle$n$\rangle$.ne.0) for radial
 coordinate to compare with experimental data, according to
 {\tt n.s.r.z.a\_inner} and {\tt n.s.r.z.a\_outer}
 files in the {\tt \$\{SOLPSTOP\}/data.local} or {\tt \$\{SOLPSTOP\}\allowbreak /data} directories.
+\end{sloppypar}
 
 \subsubsection{sep}\index{b2plot, sep}\label{sec:sep}
 Toggles drawing of the separatrices.
@@ -17000,7 +17025,7 @@ Writes out the top of the Eirene stack to $\langle$filename$\rangle$ (in the \SO
 or (in the \SOLPSfive environment) \verb:b2pl.exe.dir/:$\langle$filename$\rangle$.
 
 \subsubsection{$<$x1,{\bf R}$>$ $<$y1,{\bf R}$>$ $<$x2,{\bf R}$>$ $<$y2,{\bf R}$>$ $<$x3,{\bf R}$>$ $<$y3,{\bf R}$>$ $<$x4,{\bf R}$>$ $<$y4,{\bf R}$>$ eavg}\index{b2plot, eavg}\label{sec:eavg}
-Writes out the volume average of the data on top of the Eirene stack over the rectangular region delimited by the four doublets of coordinates [($x1$,$y1$);($x2$,$y2$);($x3$,$y3$);($x4$,$y4$)].
+Writes out the volume average of the data on top of the Eirene stack over the quadrangular region delimited by the four doublets of coordinates [($x1$,$y1$);($x2$,$y2$);($x3$,$y3$);($x4$,$y4$)].
 
 \subsubsection{$<$ix1,{\bf I}$>$ $<$ix2,{\bf I}$>$ $<$iy1,{\bf I}$>$ $<$iy2,{\bf I}$>$ $<$filename,{\bf S}$>$ mtab}\index{b2plot, mtab}\label{sec:mtab}
 Writes out a table extracted from the matrix on the top of the stack to $\langle$filename$\rangle$ (in the \SOLPSfour environment)
@@ -17055,12 +17080,14 @@ Outputs the transport profile information as a \verb:b2.transport.parameters: fi
 Resets plotting output.
 
 \subsubsection{spec}\index{b2plot, spec}\label{sec:spec}
+\begin{sloppypar}
 Generates the spectral line emissivities from the Summers' data stored
 in {\tt \$\{SOLPSTOP\}/modules/B2.5\allowbreak /Database\allowbreak /Summers}
 (which can be superseded by the contents of
 {\tt \$\{SOLPSTOP\}/data.local/Summers}). One pre-selected
 diagnostic line per ionization stage is provided. Data is only provided for
 Helium, Boron, Carbon, Oxygen and Neon.
+\end{sloppypar}
 
 \subsubsection{$<$is,{\bf I}$>$ $<$lambda,{\bf I}$>$ $<$delta,{\bf I}$>$ nspe}\index{b2plot, nspe}\label{sec:nspe}\index{ADAS}
 Generates the spectral line emissivities according to the {\tt ADAS} database \cite{ADAS}, stored in {\tt \$\{SOLPSTOP\}/modules\allowbreak/adas}
@@ -17108,6 +17135,7 @@ Sets value of {\tt WIN\_ID} environment variable (part of {\tt TCL/TK} interface
 Outputs {\em xmin}, {\em xmax}, {\em ymin}, {\em ymax}, {\em rmin}, {\em rmax}, {\em zmin}, and {\em zmax} to stdout.
 
 \subsubsection{$<$ig,{\bf I}$>$ user}\index{b2plot, user}\label{sec:user}
+\begin{sloppypar}
 Optional user routine. The choice of user routine is governed by $\langle$ig$\rangle$.
 Currently coded functions are:
 \begin{description}
@@ -17123,7 +17151,7 @@ Currently coded functions are:
   \item[ig = -11] Creates tables with coordinates of the grid cell corners along the separatrices and along the magnetic surfaces, together with the wall geometry in specified zones for separate plotting, in files {\tt gm\_sep.dat}, {\tt gm\_sep\_i.dat}, {\tt gm\_sep\_o.dat}, {\tt gm\_SOL.dat}, {\tt gm\_SOL\_i.dat}, {\tt gm\_SOL\_o.dat}, {\tt gm\_PFR.dat}, {\tt gm\_PFR\_u.dat}, and {\tt gm\_core.dat}, according to magnetic topology
   \item[ig = -10] Creates table of fluxes and temperatures at the grid edges in file {\tt gridedge.dat}
   \item[ig = -9] Prints out the total number of nuclei of each kind in the system in file {\tt nuclei.tot}
-  \item[ig = -8] Creates files {\tt pr.dat} (plasma pressure), {\tt prn.dat} (neutral pressure), {\tt prt.dat} (total pressure) and {\tt sm.dat} (neutral momentum source)
+  \item[ig = -8] Creates files {\tt pr.dat} (plasma pressure), {\tt prn.dat} (pressure due to hydrogen isotope {\em atoms}), {\tt prt.dat} (sum of the previous two) and {\tt sm.dat} (neutral momentum source)
   \item[ig = -7] Prints out the neutral data read from {\tt fort.44} for debugging
   \item[ig = -6] Produces a file {\tt zaveraev.dat} with coordinates of the grid cell centers and the plasma parameters (density, temperatures, neutral density) in these points
   \item[ig = -5] Writes the C{\sc ii} sources in the plasma for DIVIMP in file {\tt CII\_source.dvi}
@@ -17135,7 +17163,7 @@ Currently coded functions are:
   \item[ny $<$ ig $<$ 1000] Produces two files with estimated helium concentration ({\tt fraction.he}) and neutral pressure ({\tt pressure.ntr}) in the PFR for summary plots
   \item[ig $\ge$ 1000] Adds a line to the file {\tt ../sum\_tmp/spec\_pwr.dat} with the power entering both divertors, power radiated along the divertor legs, power radiated near the targets, areas of the separatrix branches and mean specific power radiated along the divertor legs per square meter. $\langle$ig$\rangle$ -1000 cells are treated as "close to the targets"
 \end{description}
-
+\end{sloppypar}
 
 \subsection{Still need to do}
 
@@ -17496,10 +17524,10 @@ In figure \ref{fig:JETchords} we have an example of chord plots as applied to th
 \begin{figure}[hbtp]
   \centering
 \ifpdf
-  \subfigure[a4p vesl outl sep 'KL2.chords' chpl]{\label{fig:chpl}\includegraphics[height=6cm]{chpl.pdf}}
+  \subfigure[a4p vesl outl sep \newline 'KL2.chords' chpl]{\label{fig:chpl}\includegraphics[height=6cm]{chpl.pdf}}
   \subfigure[a4l phys 3 6581 1 nspec '658 nm CII' extl 'KL2.chords' chor]{\label{fig:chor}\includegraphics[angle=90,height=6cm]{chor.pdf}}
 \else
-  \subfigure[a4p vesl outl sep 'KL2.chords' chpl]{\label{fig:chpl}\includegraphics[height=6cm]{chpl.eps}}
+  \subfigure[a4p vesl outl sep \newline 'KL2.chords' chpl]{\label{fig:chpl}\includegraphics[height=6cm]{chpl.eps}}
   \subfigure[a4l phys 3 6581 1 nspec '658 nm CII' extl 'KL2.chords' chor]{\label{fig:chor}\includegraphics[angle=90,height=6cm]{chor.eps}}
 \fi
   \caption{Chord plots applied to JET.}
@@ -17525,11 +17553,11 @@ In figure \ref{fig:wallplots}, we show examples of wall plots.
 \begin{figure}[hbtp]
   \centering
 \ifpdf
-  \subfigure[phys 0 nseg 4 1. 2. 3. 4. wclvs 10.0 wwid wall mesh]{\label{fig:nseg}\includegraphics[height=6cm]{nseg.pdf}}
-  \subfigure[vesl sep phys wall 10.0 wwid sputchem 1 wzsel 3 ndec logw fnax 1 zsel 'Ychem D+' wallblbl surf]{\label{fig:Ychem}\includegraphics[height=6cm]{Ychem.pdf}}
+  \subfigure[phys 0 nseg 4 1. 2. 3. 4. wclvs \newline 10.0 wwid wall mesh]{\label{fig:nseg}\includegraphics[height=6cm]{nseg.pdf}}
+  \subfigure[vesl sep phys wall 10.0 wwid sputchem 1 wzsel \newline 3 ndec logw fnax 1 zsel 'Ychem D+' wallblbl surf]{\label{fig:Ychem}\includegraphics[height=6cm]{Ychem.pdf}}
 \else
-  \subfigure[phys 0 nseg 4 1. 2. 3. 4. wclvs 10.0 wwid wall mesh]{\label{fig:nseg}\includegraphics[height=6cm]{nseg.eps}}
-  \subfigure[vesl sep phys wall 10.0 wwid sputchem 1 wzsel 3 ndec logw fnax 1 zsel 'Ychem D+' wallblbl surf]{\label{fig:Ychem}\includegraphics[height=6cm]{Ychem.eps}}
+  \subfigure[phys 0 nseg 4 1. 2. 3. 4. wclvs \newline 10.0 wwid wall mesh]{\label{fig:nseg}\includegraphics[height=6cm]{nseg.eps}}
+  \subfigure[vesl sep phys wall 10.0 wwid sputchem 1 wzsel \newline 3 ndec logw fnax 1 zsel 'Ychem D+' wallblbl surf]{\label{fig:Ychem}\includegraphics[height=6cm]{Ychem.eps}}
 \fi
   \caption{Wall plots.}
   \label{fig:wallplots}
@@ -17725,13 +17753,16 @@ scaling is done on all of the data.
 
 \section{DIMENSIONS.F}\index{DIMENSIONS.F}\label{sec:DIMENSIONS}
 
+\begin{sloppypar}
 The file {\tt \$\{SOLPSTOP\}/modules/B2.5/src/include/DIMENSIONS.F} and its local version
 {\tt \$\{SOLPSTOP\}\allowbreak/modules\allowbreak/B2.5/src/include.local/DIMENSIONS.F} contain key dimensions
 that determine
 the sizes of arrays that can be defined by namelists
 in {\tt b2.*.parameters} files (for compatibility with
 certain compilers).
+\end{sloppypar}
 
+\begin{sloppypar}
 Upon the first creation of the local version of the {\tt DIMENSIONS.F} file,
 one must make the {\tt Makefile} aware of its presence by doing the following:
 \begin{verbatim}
@@ -17744,6 +17775,7 @@ one must make the {\tt Makefile} aware of its presence by doing the following:
 so that the local file is used. The last {\tt gmake} command may of course be
 replaced by {\tt gmake \allowbreak solps(\_debug)}, {\tt gmake solps\_mpi(\_debug)},
 {\tt gmake all(\_debug)} or {\tt gmake all\_mpi(\_debug)} as needed.
+\end{sloppypar}
 
 The quantities defined in {\tt DIMENSIONS.F} are:
 \begin{description}
@@ -17930,13 +17962,13 @@ We list below where the {\tt Carre} compilation switches are used.
 \begin{center}
   \begin{longtable}{|l|l|}
     \hline
-    \multicolumn{2}{|l|}{\small\sl continued from previous page} \\
+    \multicolumn{2}{|l|}{\small\it continued from previous page} \\
     \hline name & used in \\
     \hline \endhead
     \hline name & used in \\
     \hline \endfirsthead
     \hline
-    \multicolumn{2}{|l|}{\small\sl continued on next page} \\
+    \multicolumn{2}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
 DBG & carre/doubld.F \\
@@ -17966,13 +17998,13 @@ We list below where the {\tt DivGeo} compilation switches are used.
 \begin{center}
   \begin{longtable}{|l|l|}
     \hline
-    \multicolumn{2}{|l|}{\small\sl continued from previous page} \\
+    \multicolumn{2}{|l|}{\small\it continued from previous page} \\
     \hline name & used in \\
     \hline \endhead
     \hline name & used in \\
     \hline \endfirsthead
     \hline
-    \multicolumn{2}{|l|}{\small\sl continued on next page} \\
+    \multicolumn{2}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
 IMAS\_MINOR\_VERSION & equtrn/src/rdids.f \\
@@ -18078,13 +18110,13 @@ We list below where the {\tt B2.5} compilation switches are used.
 \begin{center}
   \begin{longtable}{|l|l|}
     \hline
-    \multicolumn{2}{|l|}{\small\sl continued from previous page} \\
+    \multicolumn{2}{|l|}{\small\it continued from previous page} \\
     \hline name & used in \\
     \hline \endhead
     \hline name & used in \\
     \hline \endfirsthead
     \hline
-    \multicolumn{2}{|l|}{\small\sl continued on next page} \\
+    \multicolumn{2}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
 ALLOCATE\_AND\_NAMELIST & b2plot/init\_wall.F \\
@@ -18544,13 +18576,13 @@ We list below where the {\tt Eirene} compilation switches are used.
 \begin{center}
   \begin{longtable}{|l|l|}
     \hline
-    \multicolumn{2}{|l|}{\small\sl continued from previous page} \\
+    \multicolumn{2}{|l|}{\small\it continued from previous page} \\
     \hline name & used in \\
     \hline \endhead
     \hline name & used in \\
     \hline \endfirsthead
     \hline
-    \multicolumn{2}{|l|}{\small\sl continued on next page} \\
+    \multicolumn{2}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
 ALLOCATE\_AND\_NAMELIST & startup-routines/find\_param.F \\
@@ -18571,6 +18603,9 @@ NAGFOR & file-handling/get\_solpstop.f \\
 NO\_B2\_CHEM\_SPUT & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.F \\
 NO\_GETENV & file-handling/get\_solpstop.f \\
 PGF90 & assistant/exit\_own.f \\
+PGF90 & particle-tracing/folion.F \\
+PGF90 & particle-tracing/velocs.F \\
+PGF90 & surface-processes/emaxw.F \\
 TRACE & geometry/time-routines/checks.F \\
 TRACE & geometry/time-routines/timea.F \\
 TRACE & geometry/time-routines/timep.F \\
@@ -18632,13 +18667,13 @@ The NAG calls from {\tt B2.5} are given in table \ref{tab:nagb2}.
 \begin{center}
   \begin{longtable}[hbtp]{|c|c|p{10cm}|}
     \hline
-    \multicolumn{3}{|l|}{\small\sl continued from previous page} \\
+    \multicolumn{3}{|l|}{\small\it continued from previous page} \\
     \hline caller routine & calling & function \\
     \hline \endhead
     \hline caller routine & calling & function \\
     \hline \endfirsthead
     \hline
-    \multicolumn{2}{|l|}{\small\sl continued on next page} \\
+    \multicolumn{2}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
 b2mndr.f                &  X05BAF & returns the amount of processor time used since an unspecified previous time, via the routine name \\ \hline
@@ -18775,13 +18810,13 @@ following table gives a brief description of the files used in {\tt DG}.
 \begin{center}
     \begin{longtable}{|l|p{10cm}|l|}
     \hline
-    \multicolumn{3}{|l|}{\small\sl continued from previous page} \\
+    \multicolumn{3}{|l|}{\small\it continued from previous page} \\
     \hline          & {\large\bf Description} & {\large\bf Extension} \\
     \hline \endhead
     \hline          & {\large\bf Description} & {\large\bf Extension} \\
     \hline \endfirsthead
     \hline
-    \multicolumn{3}{|l|}{\small\sl continued on next page} \\
+    \multicolumn{3}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
 {\bf Input files:}&                                 & \\ \hline
@@ -18822,13 +18857,13 @@ The internal objects are those with which you deal when working with {\tt DG}.
 \begin{center}
     \begin{longtable}{|l|p{12cm}|}
     \hline
-    \multicolumn{2}{|l|}{\small\sl continued from previous page} \\
+    \multicolumn{2}{|l|}{\small\it continued from previous page} \\
     \hline {\large\bf Objects} & {\large\bf Description} \\
     \hline \endhead
     \hline {\large\bf Objects} & {\large\bf Description} \\
     \hline \endfirsthead
     \hline
-    \multicolumn{2}{|l|}{\small\sl continued on next page} \\
+    \multicolumn{2}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
 {\bf Drawing objects}&             \\
@@ -19429,6 +19464,7 @@ the aspect ratio, but does not disable {\tt Stretch} mode.
 \subsection{Top-down view}
 \label{sec:topdownview}\index{DG, top-down view}
 
+\begin{sloppypar}
 To facilitate visualization and specification of chords
 with nonzero toroidal extent (see Sec.~\ref{sec:chords}), a view from above the
 torus is now available via the
@@ -19453,16 +19489,19 @@ disabled in this mode.  Likewise, since top view uses the same
 screen coordinates as the normal view, it may be necessary to re-zoom
 after switching between the two views.
 {\tt View|Picture view} can be used for this purpose in either mode.
+\end{sloppypar}
 
 \section{Working with magnetic surfaces and grid points}
 
 \subsection{Equilibrium conversion and manipulation}
 \label{sec:equtrn}\index{equtrn}
 
+\begin{sloppypar}
 The {\tt \$\{SOLPSTOP\}/modules/DivGeo/equtrn}
 directory has some utilities for converting between various
 widely used formats for magnetic equilibrium files and for making minor
 modifications to them.
+\end{sloppypar}
 
 The listings and documentation below may be out of date. An updated
 documentation of the supported scripts can be found in
@@ -19977,6 +20016,7 @@ appearing on the visualisation curve, then try to adjust the
 \subsection{Creating and editing grid points}
 \index{DG, grid points}\index{DG, adding grid points}
 
+\begin{sloppypar}
 The {\tt Add grid point} tool lets you visually define grid points.
 In addition, the {\tt Edit|Create|Grid point(s)} menu command lets you
 define a grid point by specifying its value or fill a zone on the
@@ -19987,6 +20027,7 @@ is with the {\tt multiple} option of the
 dialog box.  In particular, the {\tt Add grid point} tool
 will not work, nor will the {\tt Move} or
 {\tt Delete} tools have any effect on the grid points.
+\end{sloppypar}
 
 In {\tt Carre} mode, the operation of this dialog box is directly
 analogous to that used to create surfaces (Sec.~\ref{sec:createsurfaces}).

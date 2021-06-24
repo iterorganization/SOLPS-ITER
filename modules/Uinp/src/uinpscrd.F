@@ -28,6 +28,15 @@ c** if we do not need surface card for this surface
           iscrd(i)=0
           goto 10
         end if !}
+        if(isrss(i).gt.natmi) then !{
+          isrss(i)=0
+          write(*,'(a,i3,a)') ' Non-standard surface ',i,
+     ,     ' included physical sputtering of a species'//
+     ,     ' not present in the model!'
+          write(*,*)
+     ,     ' Following of physically sputtered species'//
+     ,     ' turned off for this surface!'
+        end if !}
         do 11 j=1,k !{
          if(checknds(j,i)) then !{
           iscrd(i)=j
@@ -46,6 +55,15 @@ c*** Additional surfaces
 c** if we do not need surface card for this surface
           jscrd(ind)=0
           goto 20
+        end if !}
+        if(jsrss(ind).gt.natmi) then !{
+          jsrss(ind)=0
+          write(*,'(a,i3,a)') ' Additional surface ',ind,
+     ,     ' included physical sputtering of a species'//
+     ,     ' not present in the model!'
+          write(*,*)
+     ,     ' Following of physically sputtered species'//
+     ,     ' turned off for this surface!'
         end if !}
         do 21 j=1,k !{
          if(checkas(j,ind)) then !{

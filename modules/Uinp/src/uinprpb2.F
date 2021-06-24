@@ -905,6 +905,18 @@ cxpb Second pass in case the molecules were not sorted in ascending order
 
 *** Eirene surface data input through B2
 
+*** *** chemical sputtering yield
+      do k = laddsrfs+1, nlimi !{
+        i=indasrfs(k)
+        rniprm(i,1,1,25,3)=rcycca(i)
+      end do !}
+      do k = 1, nstsi !{
+        i=nlim+k
+        rniprm(i,1,1,25,3)=recycc(k)
+      end do !}
+
+*** *** surface groups
+
       if(n_spcsrf.gt.0) then !{
         iniprm(1,1,1,26,3)=n_spcsrf
         k=0
