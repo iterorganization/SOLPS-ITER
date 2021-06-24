@@ -41,14 +41,14 @@ c======================================================================
 c
       if(ufirst) then !{
           write(hlp_frm,'(a,i1,a)')
-     .     '(1h(,i',len_of_digits(nmxprm),',9h(i3,1h,)))'
-          write(ufi,hlp_frm) nmxprm
+     .     '(a,i',len_of_digits(nmxprm),',a)'
+          write(ufi,hlp_frm) '(',nmxprm,'(i3,'',''))'
           write(hlp_frm,'(a,i1,a)')
-     .     '(4h(1p,,i',len_of_digits(nmxprm),',12h(g10.3,1h,)))'
-          write(ufg,hlp_frm) nmxprm
+     .     '(a,i',len_of_digits(nmxprm),',a)'
+          write(ufg,hlp_frm) '(1p,',nmxprm,'(g10.3,'',''))'
           write(hlp_frm,'(a,i1,a)')
-     .     '(2h(a,i',len_of_digits(mxkwln),',1h))'
-          write(ufa,hlp_frm) mxkwln
+     .     '(a,i',len_of_digits(mxkwln),',a)'
+          write(ufa,hlp_frm) '(a',mxkwln,')'
           call lefta(ufa,16,i)
 #ifdef DBG
          print *,'uimdvr: formats'
@@ -118,13 +118,14 @@ c     ,         l,n,jvrb,jblk,lprdckw(l,n,jvrb,jblk),' : ',c,i,r !###
               s(j+2)='='
               k=j+3
               if(ltrvr(jvrb,jblk)) then !{
-                write(ufc,700) '(',nmdpr(jvrb,jblk),'(2h '',a1,2h'',))'
-  700           format(a1,i3,a15)
+                write(ufc,700)
+     .           '(',nmdpr(jvrb,jblk),'('' '''''',a1,'''''',''))'
+  700           format(a1,i3,a)
                 write(ss(k:mxslen),ufc) (cniprm(i,l,n,jvrb,jblk),i=1,m)
               else if(lt8rvr(jvrb,jblk)) then !}{
                 write(ufc,710)
-     .                       '(',nmdpr(jvrb,jblk),'(1x,1h'',a8,2h'',))'
-  710           format(a1,i3,a17)
+     .           '(',nmdpr(jvrb,jblk),'(1x,'''''''',a8,'''''',''))'
+  710           format(a1,i3,a)
                 do i=1,m
                   len=lnblnk(c8niprm(i,l,n,jvrb,jblk))
                   if (len.lt.8) then

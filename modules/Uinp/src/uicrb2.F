@@ -64,12 +64,15 @@ c*** jblk labels the blocks from our list, and jvrb the variables
       jvrb=0
       lbv=.false.
 
-      write(hlp_frm,'(a,i1,a)') '(2h(a,i',len_of_digits(mxslen),',1h))'
-      write(uff,hlp_frm) mxslen
+      write(hlp_frm,'(a,i1,a)') '(a,i',len_of_digits(mxslen),',a)'
+      write(uff,hlp_frm) '(a',mxslen,')'
       call lefta(uff,16,i)
-      write(hlp_frm,'(a,i1,a)') '(1h(,i',len_of_digits(mxslen),',3ha1))'
-      write(ufs,hlp_frm) mxslen
+      write(ufs,hlp_frm) '(',mxslen,'a1)'
       call lefta(ufs,16,i)
+#ifdef DBG
+      print *,'uff=',uff
+      print *,'ufs=',ufs
+#endif
 c
 c*** The main loop starts here: read the next line until end of file
 c*** The following assumptions are made during line parsing:
