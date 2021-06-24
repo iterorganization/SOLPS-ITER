@@ -56,14 +56,14 @@ EOF
     shift
     set HELP_STRING=\"${JOB_NAME}\"
 #    echo $HELP_STRING
-    set LOOP_OPTS="-j ${HELP_STRING} ${LOOP_OPTS}" 
+    set LOOP_OPTS="-j ${HELP_STRING} ${LOOP_OPTS}"
     goto argloop
   endif
   if ("X${1}X" == "X-zX") then
     set compress="-gz"
     echo run.log will be compressed
     shift
-    set LOOP_OPTS="-gz ${LOOP_OPTS}" 
+    set LOOP_OPTS="-gz ${LOOP_OPTS}"
     goto argloop
   endif
   if ("X${1}X" == "X-sX") then
@@ -71,7 +71,7 @@ EOF
     if ($JOB_NAME == "SOLPS-ITER") set JOB_NAME="B2.5"
     echo Asking for a B2.5 standalone run
     shift
-    set LOOP_OPTS="-s ${LOOP_OPTS}" 
+    set LOOP_OPTS="-s ${LOOP_OPTS}"
     goto argloop
   endif
   if ("X${1}X" == "X-mX") then
@@ -109,7 +109,7 @@ EOF
     shift
     set HELP_STRING="${hours}"
 #    echo $HELP_STRING
-    set LOOP_OPTS="-T ${HELP_STRING} ${LOOP_OPTS}" 
+    set LOOP_OPTS="-T ${HELP_STRING} ${LOOP_OPTS}"
     goto argloop
   endif
   if ("X${1}X" == "X-MX") then
@@ -119,7 +119,7 @@ EOF
     shift
     set HELP_STRING="${mem}"
 #    echo $HELP_STRING
-    set LOOP_OPTS="-M ${HELP_STRING} ${LOOP_OPTS}" 
+    set LOOP_OPTS="-M ${HELP_STRING} ${LOOP_OPTS}"
     goto argloop
   endif
   if ("X${1}X" == "X-QX") then
