@@ -18,6 +18,7 @@ if ( -s run.log ) then
   endif
    @ NNN = $NNN * 10
   grep -i -w 'cost function' run.log | tail -n $NNN >> run.info
+  grep -i 'gradient' run.log | tail -n 80 >> run.info
 else
   echo "No run.log file present"
 endif
