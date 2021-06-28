@@ -25,10 +25,6 @@ ifdef DIFF_D
 EXT_DIFF = .diff_d
 DIFF=_d
 endif
-ifdef DIFF_D_MULTI
-EXT_DIFF = .diff_d_multi
-DIFF=_d
-endif
 ifdef DIFF_B
 EXT_DIFF = .diff_b
 DIFF=_b
@@ -38,11 +34,15 @@ ifdef OPT_D
 EXT_DIFF = .diff_d
 DIFF=_d
 MNEXE=b2optim_${OPT}
+endif
+ifdef OPT_B
+EXT_DIFF = .diff_b
+DIFF=_b
+MNEXE=b2optim_${OPT}
+endif
 ifdef TAO
 RUN_OPTIONS = -tao_monitor -tao_view_solution ${TAO_OPT}
 endif
-endif
-
 
 ifndef STAND_ALONE
 B2OBJ = ${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}

@@ -48,6 +48,8 @@ cp $SOLPSTOP/modules/B2.5/src/utility/expu2.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/med.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/uxcm.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/ma28copy.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/interp1d.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/nagsubst.F .
 cp $SOLPSTOP/modules/B2.5/src/transport/b2tlnl.F .
 cp $SOLPSTOP/modules/B2.5/src/b2aux/b2xpne.F .
 cp $SOLPSTOP/modules/B2.5/src/b2aux/b2xpnm.F .
@@ -58,14 +60,10 @@ cp $SOLPSTOP/modules/B2.5/src/solvers/b2uppo.F .
 cp $SOLPSTOP/modules/B2.5/src/sources/b2sqcx.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/cond_coef.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/erf_b.F .
-#cp $SOLPSTOP/modules/B2.5/src/differentiation/dim_b.F90 .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/b2uxus_b.F .
-#cp $SOLPSTOP/modules/B2.5/src/differentiation/b2mwqt_diff.F .
-#cp $SOLPSTOP/modules/B2.5/src/differentiation/b2mxar_diff.F .
-#cp $SOLPSTOP/modules/B2.5/src/differentiation/b2mxac_diff.F .
-#cp $SOLPSTOP/modules/B2.5/src/differentiation/read_plasma_state_diff.F .
-#cp $SOLPSTOP/modules/B2.5/src/differentiation/write_plasma_state_diff.F .
-
+cp $SOLPSTOP/modules/B2.5/src/differentiation/calc_res_fp.F .
+cp $SOLPSTOP/modules/B2.5/src/differentiation/b2optim_ipopt.F .
+cp $SOLPSTOP/modules/B2.5/src/differentiation/b2optim_tao.F90 .
 
 # and now modify the 'use modules' which have been differentiated
 files=`ls *.F*`
