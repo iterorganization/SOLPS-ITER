@@ -366,7 +366,7 @@ fxdr:
 
 sonnet-light:
 	@-mkdir -p ${SOLPSLIB}
-	cd modules/Sonnet-light; ${MAKEO} all INSTALL_USERAREA=${SOLPSLIB}
+	cd modules/Sonnet-light; ${MAKE} all INSTALL_USERAREA=${SOLPSLIB}
 
 nc2text_simple:
 	@-mkdir -p ${SOLPSTOP}/scripts/${TOOLCHAIN}
