@@ -15,8 +15,12 @@ SED =
 LINK_MOD =
 
 FC = pgf90
+COMPILER_MAJOR_VERSION = $(shell ${FC} -V | grep "pgf90" | awk 'match($$0,/[0-9]+\.[0-9]+\-[0-9]+/){print substr($$0, RSTART, RLENGTH)}' | cut -d '.' -f 1 )
 ifdef SOLPS_DEBUG
-FCOPTS = -Mbackslash -C -g -Mchkfpstk -Mchkptr -Mchkstk -Mpgicoff
+FCOPTS = -Mbackslash -C -g -Mchkptr -Mchkstk
+ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -le 19; echo $$?),0)
+FCOPTS += -Mchkfpstk -Mpgicoff
+endif
 else
 FCOPTS = -O2 -Mbackslash
 FCOPTS = -fast -Mbackslash

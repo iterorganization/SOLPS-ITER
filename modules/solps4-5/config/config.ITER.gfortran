@@ -2,6 +2,7 @@ LD_NETCDF ?= `pkg-config netcdf-fortran --libs`
 LD_MSCL   ?= `pkg-config mscl --libs`
 LD_NAG    ?= `pkg-config nag --libs`
 LD_SONNET ?= -L${SOLPSLIB} -lsonnet -lstdc++
+NODENAME  ?= `hostname`
 
 EQUIV4 = ${SOLPS_CPP}
 EQUIV5 = ${SOLPS_CPP} ${USE_EIRENE} -Dsdot=ddot -Dsasum=dasum -Dsaxpy=daxpy -Dsscal=dscal -Dsnrm2=dnrm2 -Dscopy=dcopy -Dsgbtrf=dgbtrf -Dsgbtrs=dgbtrs -DGRREAL=4 -DNO_PROCESS -DPSR -Dsmin=dmin
@@ -31,7 +32,12 @@ OBJDEST = -J${OBJDIR}
 BLD = ar rcv
 
 GRLIBES = ${LD_NCARG}
-LDLIBES = ${LD_NAG} ${LD_NETCDF} ${LD_MSCL} -limf -lm
+LDLIBES = ${LD_NAG} ${LD_NETCDF} ${LD_MSCL} -lm
+
+ifneq (,$(findstring sdcc-login,${NODENAME}))
+INCLUDE   += `pkg-config libtirpc --cflags`
+LD_SONNET += `pkg-config libtirpc --libs`
+endif
 
 LD = ${FC}
 LDOPTS =
