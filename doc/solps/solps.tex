@@ -55,6 +55,8 @@
 \newcommand\SOLPSfivens{{\bf SOLPS 5.x}}
 \newcommand\SOLPSfiveone{{\bf SOLPS 5.1} }
 \newcommand\SOLPSfiveonens{{\bf SOLPS 5.1}}
+\newcommand\SOLPSfivetwo{{\bf SOLPS 5.2} }
+\newcommand\SOLPSfivetwons{{\bf SOLPS 5.2}}
 \newcommand\SOLPSITER{{\bf SOLPS-ITER} }
 \newcommand\SOLPSITERns{{\bf SOLPS-ITER}}
 \newcommand{\btwoplot}{{\bf b2plot} }
@@ -1489,15 +1491,15 @@ rm GNUPLOT_COUNT gnuplot.*data
 logarithmic $y$ scale by use of an additional "l" argument while "L" also plots the absolute values of
 negative quantities on the same scale and "M" the absolute values of negative quantities in a separate plot)
   \begin{description}
-  \item[2d]\index{2d} plots time dependent quantities from
+  \item[2d]\index{2d} plots time-dependent quantities from
     {\tt b2time.nc} (Appendix \ref{cha:b2time}), 2$^{nd}$, 3$^{rd}$ {\it etc.\ versus} the 1$^{st}$ argument.
-  \item[2da]\index{2da} prints time dependent quantities from
+  \item[2da]\index{2da} prints time-dependent quantities from
     {\tt b2time.nc} (Appendix \ref{cha:b2time}), 2$^{nd}$, 3$^{rd}$ {\it etc.\ versus} the 1$^{st}$ argument.
-  \item[2dt]\index{2dt} plots time dependent quantities from
+  \item[2dt]\index{2dt} plots time-dependent quantities from
     {\tt b2time.nc} (Appendix \ref{cha:b2time}) versus time. A python version of this script also exists (Python 2.7 and 3.5 compatible).
-  \item[2dt\_tallies.py]\index{2dt\_tallies.py} plots time dependent quantities from
+  \item[2dt\_tallies.py]\index{2dt\_tallies.py} plots time-dependent quantities from
     {\tt b2tallies.nc} (Appendix \ref{cha:b2tallies}) versus time (Python 3.5 compatible).
-  \item[2dt\_av]\index{2dt\_av} plots averaged time dependent quantities from
+  \item[2dt\_av]\index{2dt\_av} plots averaged time-dependent quantities from
     {\tt b2time.nc} (Appendix \ref{cha:b2time}) versus time.
   \item[2dvi]\index{2dvi} prepares a \btwoplot command file {\tt TDV/contr.b2p} for production of input files to start a {\tt DIVIMP} run.
   \item[2d\_plots]\label{script:2dplots}\index{2d\_plots} prepares {\tt b2time2d.ps} from
@@ -1517,7 +1519,7 @@ negative quantities on the same scale and "M" the absolute values of negative qu
     By default, the profiles will be averaged over the last 10 snapshots.
     If the number of available snapshots is less than 10, the default will be to average over all the snapshots available.
     The averaging number can be adjusted with the \#1 argument (default value is 10).
-  \item[2d.summarize]\index{2d.summarize} Outputs the time dependent quantities from the last time point in {\tt b2time.nc}.
+  \item[2d.summarize]\index{2d.summarize} Outputs the time-dependent quantities from the last time point in {\tt b2time.nc}.
   \item[D+\_fluid\_fluxes]\index{D+\_fluid\_fluxes} Plots the fluxes of $D^+$ ions across the grid boundaries for a {\tt B2.5} standalone case
   \item[D0\_fluid\_fluxes]\index{D0\_fluid\_fluxes} Plots the fluxes of $D^0$ neutrals across the grid boundaries for a {\tt B2.5} standalone case
   \item[D\_coupled\_conservation]\index{D\_coupled\_conservation} Plots the particle balance of D for coupled runs
@@ -2534,7 +2536,7 @@ which contains
   {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
   \item[20] constant density feedback condition,
   {\tt CONPAR(,,1)} specifies the desired density in $m^{-3}$.
-  \item[21] prescribe the value of the density and add a density perturbation to get a solution which is as close as possible to neoclassical theory. It is recommended to use this boundary condition together with corresponding condition on ion temperature ({\tt BCENI=24}). The total desired density is summed over all {\tt BCCON=21} core boundaries.
+  \item[21] prescribe the value of the density and add a poloidal density variation to get a solution which is as close as possible to neoclassical theory. It is recommended to use this boundary condition together with corresponding condition on ion temperature ({\tt BCENI=24}). The total desired density is summed over all {\tt BCCON=21} core boundaries.
   {\tt CONPAR(,,1)} specifies the desired density in $m^{-3}$.
   \item[22] Feedback boundary condition: given total particle flux with constant average density. The poloidal density variation is added to make the solution as close as possible to the neoclassical value derived for pure H/D/T plasma. It is recommended to use this boundary condition with corresponding boundary condition on ion temperature ({\tt BCENI=23,24}). The total desired flux is summed over all {\tt BCCON=22} core boundaries.
   {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
@@ -2543,11 +2545,11 @@ which contains
   \item[24] constant density feedback scaled by density on the ring {\tt bc\_type21\_ref} away
   {\tt CONPAR(,,1)} specifies the desired density in $m^{-3}$.
   {\tt CONPAR(,,2)} is the strength of the feedback
-  \item[25] Feedback boundary condition: prescribe the average value of the density and add a density perturbation from neighbouring radial cell. This boundary condition is suitable for any species of a multi-species plasma (i.e. in the case when the condition used in {\tt BCCON=21} fails). It is recommended to use this boundary condition together with the corresponding condition on ion temperature ({\tt BCENI=26,27}).
+  \item[25] Feedback boundary condition: prescribe the average value of the density and add the poloidal density variation from neighbouring radial ring. This boundary condition is suitable for any species of a multi-species plasma (i.e. in the case when the condition used in {\tt BCCON=21} fails). It is recommended to use this boundary condition together with the corresponding condition on ion temperature ({\tt BCENI=26,27}).
   {\tt CONPAR(,,1)} specifies the desired average density in $m^{-3}$.
-  \item[26] Feedback boundary condition: prescribe the total ion flux and find the average density. A density perturbation is taken from the neighbouring radial cell. This boundary condition is suitable for any species of a multi-species plasma (i.e. in the case when the condition used in {\tt BCCON=22} fails). It is recommended to use this boundary condition together with a corresponding condition on the ion temperature ({\tt BCENI=26,27}). The total desired flux is summed over all {\tt BCCON=26} core boundaries.
+  \item[26] Feedback boundary condition: prescribe the total ion flux and find the average density. The poloidal density variation from the neighbouring radial ring is applied on top of the average density. This boundary condition is suitable for any species of a multi-species plasma (i.e. in the case when the condition used in {\tt BCCON=22} fails). It is recommended to use this boundary condition together with a corresponding condition on the ion temperature ({\tt BCENI=26,27}). The total desired flux is summed over all {\tt BCCON=26} core boundaries.
   {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
-  \item[27] Feedback boundary condition: prescribe the particle flux sum for all neutrals and ions belonging to a given isonuclear sequence and find the average density of the highest ionization stage. A density perturbation is taken from the neighbouring radial cell. It is recommended to use this boundary condition together with corresponding condition on ion temperature ({\tt BCENI=25,26}). The total desired flux is summed over all {\tt BCCON=27} core boundaries.
+  \item[27] Feedback boundary condition: prescribe the particle flux sum for all neutrals and ions belonging to a given isonuclear sequence and find the average density of the highest ionization stage. The poloidal density variation from the neighbouring radial ring is applied on top of the average density. It is recommended to use this boundary condition together with corresponding condition on ion temperature ({\tt BCENI=25,26}). The total desired flux is summed over all {\tt BCCON=27} core boundaries.
   {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
   \end{description}
 \item[BCMOM]\index{BCMOM} {\tt integer array, length NS * NBC}, specifying
@@ -3931,7 +3933,7 @@ The conversion of the {\tt Eirene} output file ({\tt fort.44}) additionally requ
   \item["4.3"] for {\tt fort.44} output files from {\bf SOLPS4.3} runs
   \item["5.0"] for {\tt fort.44} output files from {\bf SOLPS5.0} runs
   \item["5.1"] for {\tt fort.44} output files from \SOLPSfiveone runs
-  \item["5.2"] for {\tt fort.44} output files from {\bf SOLPS5.2} runs
+  \item["5.2"] for {\tt fort.44} output files from \SOLPSfivetwo runs
   \item["iter"] (default) for input files from \SOLPSITER runs (no conversion necessary)
 \end{description}
 The {\tt fort.44.2} file that the converter will create will follow the \SOLPSITER
@@ -6053,7 +6055,7 @@ But mesh-generation is valid !
 An extensive review of {\tt B2-Eirene} has been published as \cite{SOLPS2006}\index{SOLPS review}. It provides a full description of the {\bf SOLPS5.0} physics model, which can be obtained in the code by setting the {\tt b2mndt\_style} switch to {\tt 0}.
 It is asked that authors using {\tt SOLPS} simulation results cite that work when
 referring to the code. This review, only some short sections of which are detailed
-below, can be found as part of the {\tt SOLPS} package at {\tt \$\{SOLPSTOP\}/doc/CPP\_2006.pdf}. Most of the discussion and definitions presented here apply to both the {\bf SOLPS5.0} and {\bf SOLPS5.2} physics models. In cases where the models differ, the use of the {\bf SOLPS5.2} model is recommended, although the {\bf SOLPS5.0} model remains available in the code for backward compatibility.
+below, can be found as part of the {\tt SOLPS} package at {\tt \$\{SOLPSTOP\}/doc/CPP\_2006.pdf}. Most of the discussion and definitions presented here apply to both the {\bf SOLPS5.0} and \SOLPSfivetwo physics models. In cases where the models differ, the use of the \SOLPSfivetwo model is recommended, although the {\bf SOLPS5.0} model remains available in the code for backward compatibility.
 
 The equations are written on a
 curvilinear orthogonal coordinate system.
@@ -7357,7 +7359,7 @@ Zhdanov fit to Braginskii and the \SOLPSfour values.
 \chapter{Model equations for B2.5}
 \label{cha:equations}\index{B2.5, model}\index{B2.5, equations}\index{equations}\index{model}
 
-The version of the equations shown in this Appendix represents the best available description of the standard recommended settings for the \SOLPSITER physics model, built upon the original work on {\bf SOLPS5.2} from the St. Petersburg group \cite{ROZHANSKY2009}. Use of that physics model is governed by the switch {\tt b2mndt\_style}, with a default value of {\tt 1}. If set to {\tt 0}, then the {\bf SOLPS5.0} physics model, as described in Appendix \ref{cha:b2physics} and in the review paper \cite{SOLPS2006}, will be applied instead. The present Appendix is not meant as an exhaustive registry of the capabilities of the code, for which the reader is encouraged to peruse Chapters \ref{cha:standaloneb2} and \ref{cha:coupledb2eirene} as well as the list of switches in Appendix \ref{lis:b2cdci} and of namelist variables in Appendix \ref{lis:b2cdcn}.
+The version of the equations shown in this Appendix represents the best available description of the standard recommended settings for the \SOLPSITER physics model, built upon the original work on \SOLPSfivetwo from the St. Petersburg group \cite{ROZHANSKY2009}. Use of that physics model is governed by the switch {\tt b2mndt\_style}, with a default value of {\tt 1}. If set to {\tt 0}, then the {\bf SOLPS5.0} physics model, as described in Appendix \ref{cha:b2physics} and in the review paper \cite{SOLPS2006}, will be applied instead. The present Appendix is not meant as an exhaustive registry of the capabilities of the code, for which the reader is encouraged to peruse Chapters \ref{cha:standaloneb2} and \ref{cha:coupledb2eirene} as well as the list of switches in Appendix \ref{lis:b2cdci} and of namelist variables in Appendix \ref{lis:b2cdcn}.
 
 Some equations include terms which are multiplied by zero. This is meant to indicate that such terms are not included in the standard \SOLPSITER physics model, but that switches exist that allow for their inclusion.
 
@@ -12376,7 +12378,7 @@ S_{ch3}=C_{ch1}\frac{e^{2}v_{th,e}S_{0}}{T_{e}}+C_{ch3}
 \label{cha:b2time}\index{b2time.nc, quantities stored
   in}\index{time-dependent quantities, b2time.nc}\index{b2time.nc}
 
-The following scalar time dependent quantities are stored in
+The following scalar time-dependent quantities are stored in
 {\tt b2time.nc} and can be plotted by
 \begin{verbatim}
   2dt tesepm
@@ -12496,12 +12498,12 @@ feisapp \index{feisapp}\index{b2time.nc, feisapp} & poloidal ion energy flux, x-
 fetsapp \index{fetsapp}\index{b2time.nc, fetsapp} & poloidal total internal energy flux, x-pt private flux region & $W$ \\
 fchsapp \index{fchsapp}\index{b2time.nc, fchsapp} & poloidal current, x-pt private flux region & $A$ \\
     \hline
-    \caption{Scalar time dependent quantities stored in b2time.nc}
+    \caption{Scalar time-dependent quantities stored in b2time.nc}
     \label{tab:2db2time}
   \end{longtable}
 \end{center}
 
-The following are vector time dependent quantities stored in
+The following are vector time-dependent quantities stored in
 {\tt b2time.nc}.  These are quantities along lines of constant
 {\em ix} at the Western target ({\tt l})
 (inner for LSN, outer for USN, and lower inner for DN configurations),
@@ -12586,7 +12588,7 @@ fc3dr \index{fc3dr}\index{b2time.nc, fc3dr} & poloidal current, Eastern edge & $
 fl3dr \index{fl3dr}\index{b2time.nc, fl3dr} & poloidal electron flux, Eastern edge & $s^{-1}.m^{-2}$ \\
 fo3dr \index{fo3dr}\index{b2time.nc, fo3dr} & poloidal total ion flux, Eastern edge & $s^{-1}.m^{-2}$ \\
     \hline
-    \caption{Vector time dependent quantities stored in b2time.nc.
+    \caption{Vector time-dependent quantities stored in b2time.nc.
        Note that the conversion to "per unit area" for fluxes is done
        in the script "2d\_profiles"; the actual data stored in
        b2time.nc for fluxes are the fluxes per cell. There is a
@@ -12641,7 +12643,7 @@ fc3dtr \index{fc3dtr}\index{b2time.nc, fc3dtr} & poloidal current, outboard top 
 fl3dtr \index{fl3dtr}\index{b2time.nc, fl3dtr} & poloidal electron flux, outboard top divertor & $s^{-1}$ \\
 fo3dtr \index{fo3dtr}\index{b2time.nc, fo3dtr} & poloidal total ion flux, outboard top divertor & $s^{-1}$ \\
     \hline
-    \caption{Double-null vector time dependent quantities stored in b2time.nc}
+    \caption{Double-null vector time-dependent quantities stored in b2time.nc}
     \label{tab:4db2time}
   \end{longtable}
 \end{center}
@@ -12755,7 +12757,7 @@ temxap\_std \index{temxap\_std}\index{b2time.nc, temxap\_std} & variance for max
 timxap\_std \index{timxap\_std}\index{b2time.nc, timxap\_std} & variance for maximum ion temperature, Eastern edge & $eV$ \\
 pomxap\_std \index{pomxap\_std}\index{b2time.nc, pomxap\_std} & variance for maximum potential, Eastern edge & $V $ \\
     \hline
-    \caption{Scalar batch-averaged time dependent quantities stored in b2time.nc}
+    \caption{Scalar batch-averaged time-dependent quantities stored in b2time.nc}
     \label{tab:b2timeav}
   \end{longtable}
 \end{center}
@@ -17894,7 +17896,7 @@ toroidal standard surfaces
 \item[DEF\_NPLS]\index{DEF\_NPLS}\index{NPLS} the maximum number of background
 plasma species to be handled by {\tt Eirene}
 \item[DEF\_NPRNL]\index{DEF\_NPRNL}\index{NPRNL} the maximum number of
-particles that can be saved in the time dependent arrays
+particles that can be saved in the time-dependent arrays
 \item[DEF\_NREAC]\index{DEF\_NREAC}\index{NREAC} the maximum number of
 reaction cards that can be created by {\tt Uinp}
 \item[DEF\_NRCX]\index{DEF\_NRCX}\index{NRCX} the maximum number of
