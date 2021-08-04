@@ -43,7 +43,7 @@ loop:
 endloop:
   set b2ex=""
   set debug=""
-  set TIME=time
+  if(! $?TIME) set TIME=time
   set RUN_OPTIONS=""
   set KMP_AFFINITY=""
   set OMP_NUM_THREADS=1

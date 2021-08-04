@@ -8429,12 +8429,11 @@ In case {\tt 'b2siav\_style\_qip'} is set to {\tt '0'} in {\tt b2mn.dat}:
 
 \begin{equation}\label{eq:q0-0}
 \begin{matrix}
-q_a^{(0)} = q_{a\parallel}^{(0)} +
-\frac B{B_x} q_{ax}^{(dia)} & =
+q_a^{(0)} = \frac{B}{B_x} \widetilde{q}_{ax}^{(dia)} & =
 & \left\{
 \begin{matrix}
 0 & \text{outside the separatrix} \\
--\frac 5 2 \frac{B_z B}{B_x \left\langle B^2 \right\rangle} \frac{n_a T_i}e \frac{\partial T_i}{h_y \partial y}
+-\frac{5}{2} \frac{B_z B}{B_x \left\langle B^2 \right\rangle} \frac{n_a T_i}{e} \frac{\partial T_i}{h_y \partial y}
 & \text{inside the separatrix}
 \end{matrix} \right.
 \end{matrix}
@@ -8446,25 +8445,37 @@ In case {\tt 'b2siav\_style\_qip'} is set to {\tt '1'} in {\tt b2mn.dat}:
 
 \begin{equation}\label{eq:q0-1}
 \begin{matrix}
-q_a^{(0)} = q_{a\parallel}^{(0)} +
-\frac B{B_x} q_{ax}^{(dia)} & =
+q_a^{(0)} = q_{a\parallel}^{(0)} + \frac{B}{B_x} q_{ax}^{(dia)} & =
 & \left\{
 \begin{matrix}
 0 & \text{outside the separatrix} \\
--\widetilde{\widetilde{k}}_{ix}^{(CL)} b_x \frac{ \partial T_i}{h_x \partial x}
--\frac 5 2 \frac{B_z B}{B_x \left\langle B^2 \right\rangle} \frac{n_a T_i}e \frac{\partial T_i}{h_y \partial y}
+-\frac{\widetilde{\widetilde{k}}_{ix}^{(CL)}}{b_x} \frac{\partial T_i}{h_x \partial x}
+-\frac{5}{2} \frac{B_z B}{B_x B^2} \frac{n_a T_i}{e} \frac{\partial T_i}{h_y \partial y}
 & \text{inside the separatrix}
 \end{matrix} \right.
 \end{matrix}
 \end{equation}
 
 $
+q_{a \parallel}^{(0)} = - \frac{\widetilde{\widetilde{k}}_{ix}^{(CL)}}{b_x} \frac{\partial T_i}{h_x \partial x}
+$
+
+Note that $\widetilde{\widetilde{k}}_{ix}^{(CL)}$ already contains a factor of $b_x^2$, see its definition below (Eq.~\ref{eq:eni_kapixCL}).
+
+$
+q_{ax}^{(dia)} = - \frac{5}{2} \frac{B_z}{B^2} \frac{n_a T_i}{e} \frac{\partial T_i}{h_y \partial y}
+$
+
+$
+\widetilde{q}_{ax}^{(dia)} = - \frac{5}{2} \frac{B_z}{\left\langle B^2 \right\rangle} \frac{n_a T_i}{e} \frac{\partial T_i}{h_y \partial y}
+$
+
+$
 \widetilde{\tau}_a =
-\frac{\tau_a^{(Br)}}{1+\frac{15.12\cdot 10^{16}\left(\frac{T_i}
-e\right)^2}{c(y) \sum \limits^{ns-1}_{a=0} z_a^2 n_a}}
+\frac{\tau_a^{(Br)}}{1+\frac{15.12\cdot 10^{16}\left(\frac{T_i}{e}\right)^2}{c(y) \sum \limits^{ns-1}_{a=0} z_a^2 n_a}}
 \cdot
-\frac 1 {1 +
-\frac{15.12 \cdot 10^{16} \cdot \varepsilon^{3/2} \left( \frac{T_i} e \right)^2}
+\frac {1}{1 +
+\frac{15.12 \cdot 10^{16} \cdot \varepsilon^{3/2} \left( \frac{T_i}{e} \right)^2}
 {c(y) \sum \limits^{ns-1}_{a=0} z_a^2 n_a}}$, \ \ \ \
 $
 \tau_a^{(Br)} = \frac{3}{4 \sqrt{\pi} }
@@ -8582,7 +8593,6 @@ j_x \hat E_x + 0 \cdot j_y \hat{E}_y & \mbox{, when Eq.~(\ref{eq:mom_old}) is ac
 \begin{equation}\label{eq:ene_qPSchx}
 q_{ex}^{P.Sch} = -\frac 5 2 D_{exy} \frac 1{h_y} \frac{\partial n_e T_e^2} {\partial y}
 \end{equation}
-
 
 $D_{exy} = \left( \frac 1{B^2} - \frac 1{\left\langle B^2 \right\rangle} \right) \frac{B_z} e$
 
@@ -9280,7 +9290,7 @@ V_{h_i}^{(\max)} = c_{flim_1} \frac{\sqrt g}{h_x} |b_x| \sqrt{\frac{T_i}{m_p}}
 $c_{flim_1} = 0.15$ is the ion heat flux limiter coefficient.
 
 \begin{equation}\label{eq:eni_tikapixCL}
-\tilde{\kappa}_{ix}^{(CL)} = c_{\kappa_{ix}^{(CL)}}^{(Luciani)} \kappa_{ix}^{(CL)}
+\widetilde{\kappa}_{ix}^{(CL)} = c_{\kappa_{ix}^{(CL)}}^{(Luciani)} \kappa_{ix}^{(CL)}
 \end{equation}
 
 If {\tt 'b2trcl\_luciani'} is set to {\tt '1'}, one gets:
@@ -9352,13 +9362,13 @@ K_2 = \frac{
 
 \begin{equation}\label{eq:eni_kapixCL}
 \kappa_{ix}^{(CL)} =
-\frac 5 2 b_x^2 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} \frac{T_i}{m_a} n_a f_{k_i} \tau_a, ~ f_{k_i} = 2.253
+\frac{5}{2} b_x^2 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} \frac{T_i}{m_a} n_a f_{k_i} \tau_a, ~ f_{k_i} = 2.253
 \end{equation}
 
 For integrated modeling workflows ({\tt 'b2trcl\_integral\_modeling'} set to {\tt '1'}), in the region of the overlap with {\tt ASTRA} in the inner part of the core:
 
 \begin{equation}\label{eq:eni_tkapixCL}
-\widetilde{\kappa}_{ix}^{(CL)} = \frac{25}4 \left(
+\widetilde{\kappa}_{ix}^{(CL)} = \frac{25}{4} \left(
 	n_1 T_i \frac{B_z}{B_x h_y}
 \right)^2
 \frac{h_{y \text{(outer midplane)}}} e

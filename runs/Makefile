@@ -5,7 +5,7 @@
 # Variables.
 
 SHELL = /bin/bash
-TIME = time
+TIME ?= time
 RUN_OPTIONS =
 BLANK =
 
