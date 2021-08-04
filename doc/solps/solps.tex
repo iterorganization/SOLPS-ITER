@@ -3048,6 +3048,8 @@ See also Appendix \ref{lis:b2cdcn} for a more up-to-date description.
 
 When referring to array length {\tt (NREG+1)} above, we mean range {\tt [0:NREG]} in the code.
 
+When running in time-dependent mode ({\tt b2mndt\_style.eq.2}), the total momentum and energy equations are not solved, and the timestep multipliers should not be used, unless their product with the under-relaxation parameters is 1 (as the code defaults provide).
+
 The region indices are defined as follows for a SN case:
 \begin{itemize}\index{regions}
   \item[0] Dead regions (unused cells)
@@ -4888,6 +4890,17 @@ several values of $\Delta_t$.
     \caption{Upstream electron temperature for several timesteps after puff b.c. applied.}
     \label{fig:tmne1}
 \end{figure}
+
+\section{Time-dependent mode}
+\label{sec:time-dependent}\index{Time-dependent mode}
+
+It is possible to run {\tt B2.5} in self-consistent time-dependent mode, by setting the switch {\tt b2mndt\_style} to {\tt 2}. Please note that the timestep may need to be decreased compared to a similar steady-state case to achieve convergence.
+
+The time-dependent mode is only available with the \SOLPSfivetwo physics model. It changes the order of solution of the equations to solve first for the density equations, then the parallel momentum equations, followed by the electrical potential, electron and ion temperature equations. The total momentum and energy equations are not solved.
+
+\begin{sloppypar}
+In time-dependent mode, the under-relaxation factor ({\tt b2mndt\_rxf}) and the timestep modifiers from {\tt b2.numerics.parameters} and other under-relaxation switches should be set in such a way that their product is 1 everywhere (as the variable defaults already provide and the code checks for). Thus, it is still possible to use the timestep multipliers (for example setting {\tt DTEE = DTEI = 2}) if the corresponding under-relaxation parameters compensate (in the same example, this would mean {\tt b2npht\_rxg} set to {\tt 0.5}). Choosing these parameters to be different from 1 can influence the total convergence of the code.
+\end{sloppypar}
 
 \section{Averaging scheme}
 \label{sec:B2Eirene:averaging}\index{Averaging}\index{b2faveri}\index{b2favere}\index{b2fstate}\index{b2fstati}
