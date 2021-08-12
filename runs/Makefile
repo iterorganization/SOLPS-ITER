@@ -275,11 +275,11 @@ else
 	-cd b2mn.exe.dir ; mkdir tracing ; mkdir output ; copy_tracing_files ; mkdir batch_av ; mkdir run_av ; ${TIME} ${B2OBJ}/b2mn.exe ${RUN_OPTIONS} ; move_optional_files ; mv $(target_mn) .. >& /dev/null
 endif
 ifneq (${COMPILER},HP)
-	-cd b2mn.exe.dir ; [ -s ../fort.30 ] || ( [ -s fort.30 ] && mv -f fort.30 .. || echo > /dev/null )
+	-[ -s b2mn.exe.dir/fort.30 ] && mv b2mn.exe.dir/fort.30 . || ( [ -e b2mn.exe.dir/fort.30 ] && rm b2mn.exe.dir/fort.30 || echo > /dev/null )
 else
-	-cd b2mn.exe.dir ; [ -s ../ftn30 ] || ( [ -s ftn30 ] && mv -f ftn30 .. || echo > /dev/null )
+	-[ -s b2mn.exe.dir/ftn30 ] && mv b2mn.exe.dir/ftn30 . || ( [ -e b2mn.exe.dir/ftn30 ] && rm b2mn.exe.dir/ftn30 || echo > /dev/null )
 endif
-	-cd b2mn.exe.dir ; [ -s ../b2faveri ] || ( [ -s b2faveri ] && mv -f b2faveri .. || echo > /dev/null )
+	-[ -s b2mn.exe.dir/b2faveri ] && mv b2mn.exe.dir/b2faveri . || ( [ -e b2mn.exe.dir/b2faveri ] && rm b2mn.exe.dir/b2faveri || echo > /dev/null )
 ifdef NCDIR
 	-cd b2mn.exe.dir ; rm .netcdf4 >& /dev/null
 endif
@@ -317,10 +317,8 @@ ifdef SOLPS_MPI
 endif
 endif
 ifneq (${COMPILER},HP)
-	-[ -s fort.30 ] && echo > /dev/null || mv b2mn.exe.dir/fort.30 .
 	-[ -s b2mn.exe.dir/fort.31 ] && mv b2mn.exe.dir/fort.31 . || echo > /dev/null
 else
-	-[ -s ftn30 ] && echo > /dev/null || mv b2mn.exe.dir/ftn30 .
 	-[ -s b2mn.exe.dir/ftn31 ] && mv b2mn.exe.dir/ftn31 . || echo > /dev/null
 endif
 	-[ -s b2mn.exe.dir/b2time.nc ] && mv b2mn.exe.dir/b2time.nc . || echo > /dev/null
@@ -399,11 +397,11 @@ endif
 endif
 	cd b2mn.exe.dir ; mkdir tracing ; mkdir output ; copy_tracing_files ; mkdir batch_av ; mkdir run_av ; ${DBX} ${INC} ${DBGOBJ}/b2mn.exe ${RUN_OPTIONS} ; move_optional_files ; mv $(target_mn) .. >& /dev/null
 ifneq (${COMPILER},HP)
-	-cd b2mn.exe.dir ; [ -s ../fort.30 ] || ( [ -s fort.30 ] && mv -f fort.30 .. || echo > /dev/null )
+	-[ -s b2mn.exe.dir/fort.30 ] && mv b2mn.exe.dir/fort.30 . || ( [ -e b2mn.exe.dir/fort.30 ] && rm b2mn.exe.dir/fort.30 || echo > /dev/null )
 else
-	-cd b2mn.exe.dir ; [ -s ../ftn30 ] || ( [ -s ftn30 ] && mv -f ftn30 .. || echo > /dev/null )
+	-[ -s b2mn.exe.dir/ftn30 ] && mv b2mn.exe.dir/ftn30 . || ( [ -e b2mn.exe.dir/ftn30 ] && rm b2mn.exe.dir/ftn30 || echo > /dev/null )
 endif
-	-cd b2mn.exe.dir ; [ -s ../b2faveri ] || ( [ -s b2faveri ] && mv -f b2faveri .. || echo > /dev/null )
+	-[ -s b2mn.exe.dir/b2faveri ] && mv b2mn.exe.dir/b2faveri . || ( [ -e b2mn.exe.dir/b2faveri ] && rm b2mn.exe.dir/b2faveri || echo > /dev/null )
 	-cd b2mn.exe.dir ; rm -f $(notdir $^) .quit >& /dev/null
 ifdef NCDIR
 	-cd b2mn.exe.dir ; rm .netcdf4 >& /dev/null
@@ -441,10 +439,8 @@ ifdef SOLPS_MPI
 endif
 endif
 ifneq (${COMPILER},HP)
-	-[ -s fort.30 ] && echo > /dev/null || mv b2mn.exe.dir/fort.30 .
 	-[ -s b2mn.exe.dir/fort.31 ] && mv b2mn.exe.dir/fort.31 . || echo > /dev/null
 else
-	-[ -s ftn30 ] && echo > /dev/null || mv b2mn.exe.dir/ftn30 .
 	-[ -s b2mn.exe.dir/ftn31 ] && mv b2mn.exe.dir/ftn31 . || echo > /dev/null
 endif
 	-[ -s b2mn.exe.dir/b2time.nc ] && mv b2mn.exe.dir/b2time.nc . || echo > /dev/null

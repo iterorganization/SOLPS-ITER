@@ -4631,7 +4631,7 @@ The data blocks are:
   \item[srcml] Molecule particle source ($A$), dimension ({\tt NDX},{\tt NDY},{\tt NMOL})
   \item[edissml] Energy spent for dissociating hydrogenic molecules ($W$), dimension ({\tt NDX},{\tt NDY},{\tt NMOL})
   \item[wldnek] Heat transferred by neutrals ($W$), total over strata, dimension ({\tt NLIM}+{\tt NSTS})
-  \item[wldnep] Potential energy released by neutrals ($W$), total over strata, dimension ({\tt NLIM}+{\tt NSTS})
+  \item[wldnep] Energy released by recombination of neutrals and ions into molecules ($W$), total over strata, dimension ({\tt NLIM}+{\tt NSTS})
   \item[wldna] Flux of atoms impinging on surface ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
   \item[ewlda] Average energy of impinging atoms on surface ($eV$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
   \item[wldnm] Flux of molecules impinging on surface ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NMOL})
@@ -4642,7 +4642,7 @@ The data blocks are:
   \item[For each stratum $i=1,nstra$] The above data, resolved per stratum:
   \begin{description}
     \item[wldnek(i)] Heat transferred by neutrals ($W$), dimension ({\tt NLIM}+{\tt NSTS})
-    \item[wldnep(i)] Potential energy released by neutrals ($W$), dimension ({\tt NLIM}+{\tt NSTS})
+    \item[wldnep(i)] Energy released by recombination of neutrals and ions into molecules ($W$), dimension ({\tt NLIM}+{\tt NSTS})
     \item[wldna(i)] Flux of atoms impinging on surface ($A$), dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
     \item[ewlda(i)] Average energy of impinging atoms on surface ($eV$), dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
     \item[wldnm(i)] Flux of molecules impinging on surface ($A$), dimension ({\tt NLIM}+{\tt NSTS},{\tt NMOL})
@@ -4688,8 +4688,8 @@ The data blocks are:
   \item[ewldm\_res] Average energy of impinging molecules on surface segment ($eV$), dimension ({\tt NMOL}, {\tt NCL})
   \item[ewldea\_res] Energy flux carried by emitted atoms from surface segment ($W.m^{-2}$), dimension ({\tt NATM}, {\tt NCL})
   \item[ewldem\_res] Energy flux carried by emitted molecules from surface segment ($W.m^{-2}$), dimension ({\tt NMOL}, {\tt NCL})
-  \item[ewldrp\_res] Total energy flux carried by emitted particles from surface segment ($W.m^{-2}$), dimension ({\tt NCL})
-  \item[ewldmr\_res] Flux of emitted molecules from recycling atoms ($A.m^{-2}$), dimension ({\tt NMOL}, {\tt NCL})
+  \item[ewldrp\_res] Kinetic energy flux carried by recycling atoms and molecules ($W.m^{-2}$), dimension ({\tt NCL})
+  \item[ewldmr\_res] Energy flux due to recombination of atoms and ions into molecules ($W.m^{-2}$), dimension ({\tt NMOL}, {\tt NCL})
   \item[wldspt\_res] Flux of sputtered wall material ($A.m^{-2}$), dimension ({\tt NCL})
   \item[wldspta\_res] Flux of sputtered wall material per atom ($A.m^{-2}$), dimension ({\tt NCL}, {\tt NATM})
   \item[wldsptm\_res] Flux of sputtered wall material per molecule ($A.m^{-2}$), dimension ({\tt NCL}, {\tt NMOL})
