@@ -4893,7 +4893,7 @@ several values of $\Delta_t$.
 \else
     \centerline{\includegraphics[origin=br,height=8cm]{tmne_1.eps}}
 \fi
-    \caption{Upstream electron temperature for several timesteps after puff b.c. applied.}
+    \caption{Total electron content for several timesteps after puff b.c. applied.}
     \label{fig:tmne1}
 \end{figure}
 
@@ -7762,7 +7762,7 @@ r_{CX_{ab}} = \exp \left(
 V_a^{corr\_dpc} = \frac{c^{corr\_dpc}}{16} |b_x| \sqrt{\frac{p_a}{m_a n_a}} \frac{\partial
 ^2}{\partial x^2} \left( \frac 1{p_a} \frac{\partial p_a}{\partial x} \right)
 \end{equation}
-is a (physically meaningless) damping term, often called the "Rhie and Chow" correction, meant to avoid the checkerboard instability when solving the momentum equation. The default value of $c^{corr\_dpc}$ is 1 and provided by the {\tt 'b2tfnb\_xfrhie'} switch.
+is a (physically meaningless) damping term, often called the "Rhie and Chow" correction~\cite{RHIE83A}, meant to avoid the checkerboard instability when solving the momentum equation. The default value of $c^{corr\_dpc}$ is 1 and provided by the {\tt 'b2tfnb\_xfrhie'} switch.
 
 \begin{equation}\label{eq:VaxE_appC}
 \begin{matrix}
@@ -21381,13 +21381,13 @@ The following observations were made (see figure \ref{fig:resDcomp}):
     \ifpdf
     \includegraphics[width=9.0cm]{te3dr_relative_changes.pdf}
     \else
-    \includegraphics[origin=br,angle=-90,width=9.0cm]{te3dr_relative_changes}
+    \includegraphics[origin=br,width=9.0cm]{te3dr_relative_changes}
     \fi
     \hfill
     \ifpdf
     \includegraphics[width=9.0cm]{ne3dr_relative_changes.pdf}
     \else
-    \includegraphics[origin=br,angle=-90,width=9.0cm]{ne3dr_relative_changes}
+    \includegraphics[origin=br,width=9.0cm]{ne3dr_relative_changes}
     \fi
   }
   \caption{Relative changes for the considered options.}
