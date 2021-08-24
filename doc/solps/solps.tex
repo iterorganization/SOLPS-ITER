@@ -4900,6 +4900,8 @@ several values of $\Delta_t$.
 \section{Time-dependent mode}
 \label{sec:time-dependent}\index{Time-dependent mode}
 
+{\em This feature is experimental and should be used with caution!}
+
 It is possible to run {\tt B2.5} in self-consistent time-dependent mode, by setting the switch {\tt b2mndt\_style} to {\tt 2}. Please note that the timestep may need to be decreased compared to a similar steady-state case to achieve convergence.
 
 The time-dependent mode is only available with the \SOLPSfivetwo physics model. It changes the order of solution of the equations to solve first for the density equations, then the parallel momentum equations, followed by the electrical potential, electron and ion temperature equations. The total momentum and energy equations are not solved.
