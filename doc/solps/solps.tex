@@ -8609,8 +8609,10 @@ j_x \hat E_x + 0 \cdot j_y \hat{E}_y & \mbox{, when Eq.~(\ref{eq:mom_old}) is ac
 \end{equation}
 
 \begin{equation}\label{eq:ene_tifex}
-\widetilde{f}_{ex} = \frac 3 2 \Gamma_{ex} + V_{ex}^{(str)} n_e - \widetilde{c_e}^{(2)} \frac{j^{ \left( \parallel \right) }_x}e
+\widetilde{f}_{ex} = \frac 3 2 \Gamma_{ex} + V_{ex}^{(str)} n_e - c_{071} \frac{j^{ \left( \parallel \right) }_x}{e}
 \end{equation}
+
+$c_{071} = z_{eff} \widetilde{c_e}^{(2)}$
 
 \begin{equation}\label{eq:ene_qPSchx}
 q_{ex}^{P.Sch} = -\frac 5 2 D_{exy} \frac 1{h_y} \frac{\partial n_e T_e^2} {\partial y}
@@ -8625,7 +8627,7 @@ $D_{eyx} = \left( \frac 1{B^2} - \frac 1{\left\langle B^2 \right\rangle} \right)
 \begin{equation}\label{eq:ene_qex}
 q_{ex} =
 \left[
-	\frac 3 2 \Gamma_{ex} - \widetilde{c_e}^{(2)} \frac{j^{\left( \parallel \right) }_x} e
+	\frac 3 2 \Gamma_{ex} - c_{071} \frac{j^{\left( \parallel \right) }_x} e
 	-
 	\frac 5 2 n_e T_e \frac{B_z}e \frac{\partial}{h_y\partial y} \left( \frac 1{B^2} \right) +
 	V_{ex}^{(str)} n_e
@@ -8654,7 +8656,7 @@ q_{ex} =
 q_{ex}^{(Eir)} =
 \left[
 	\frac 5 2 \Gamma_{ex}^{(Eir)} + V_{ex}^{(str)}n_e
-	- \widetilde{c_e}^{(2)} \frac{j_{\parallel}} e
+	- c_{071} \frac{j_{\parallel}} e
 \right] T_e -
 \kappa_{ex} \frac 1{h_x} \frac{\partial T_e}{\partial x}
 \end{equation}
