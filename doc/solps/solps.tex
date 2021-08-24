@@ -1155,6 +1155,8 @@ details.
 
 The {\tt AMDS} program can be called by use of the {\tt amds} script.
 
+Several {\tt AMDS} files are provided by default as part of the \SOLPSITER distribution. Users are encouraged to browse through those files to see which ones could fit their needs on a case-by-case basis. Of particular note is the {\tt Uinp\_defaults.amd} file, which provides the same set of reactions as the {\tt Uinp} default recommended set.
+
 \subsection{modules/adas}
 \index{adas}\index{ADAS}
 
@@ -3027,12 +3029,16 @@ See also Appendix \ref{lis:b2cdcn} for a more up-to-date description.
   indicates whether the continuity equations are to be solved in each region
 \item[SOLVEMO]\index{SOLVEMO} {\tt logical array, length NS * (NREG+1)},
   indicates whether the parallel momentum equations are to be solved in each region
+\item[SOLVEMT]\index{SOLVEMT} {\tt logical array, length (NREG+1)},
+  indicates whether the total parallel momentum equation is to be solved in each region
 \item[SOLVEPO]\index{SOLVEPO} {\tt logical array, length (NREG+1)},
   indicates whether the potential equation is to be solved in each region
 \item[SOLVEEE]\index{SOLVEEE} {\tt logical array, length (NREG+1)},
   indicates whether the electron heat equation is to be solved in each region
 \item[SOLVEEI]\index{SOLVEEI} {\tt logical array, length (NREG+1)},
   indicates whether the ion heat equation is to be solved in each region
+\item[SOLVEET]\index{SOLVEET} {\tt logical array, length (NREG+1)},
+  indicates whether the total heat equation is to be solved in each region
 \item[TIME\_FACTOR\_REQUIRED]\index{TIME\_FACTOR\_REQUIRED}
   {\tt real}, related to local source re-scaling
   (see routine {\tt b2srsm.F})
@@ -4630,7 +4636,7 @@ The data blocks are:
   \item[srcml] Molecule particle source ($A$), dimension ({\tt NDX},{\tt NDY},{\tt NMOL})
   \item[edissml] Energy spent for dissociating hydrogenic molecules ($W$), dimension ({\tt NDX},{\tt NDY},{\tt NMOL})
   \item[wldnek] Heat transferred by neutrals ($W$), total over strata, dimension ({\tt NLIM}+{\tt NSTS})
-  \item[wldnep] Potential energy released by neutrals ($W$), total over strata, dimension ({\tt NLIM}+{\tt NSTS})
+  \item[wldnep] Energy released by recombination of neutrals and ions into molecules ($W$), total over strata, dimension ({\tt NLIM}+{\tt NSTS})
   \item[wldna] Flux of atoms impinging on surface ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
   \item[ewlda] Average energy of impinging atoms on surface ($eV$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
   \item[wldnm] Flux of molecules impinging on surface ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NMOL})
@@ -4641,7 +4647,7 @@ The data blocks are:
   \item[For each stratum $i=1,nstra$] The above data, resolved per stratum:
   \begin{description}
     \item[wldnek(i)] Heat transferred by neutrals ($W$), dimension ({\tt NLIM}+{\tt NSTS})
-    \item[wldnep(i)] Potential energy released by neutrals ($W$), dimension ({\tt NLIM}+{\tt NSTS})
+    \item[wldnep(i)] Energy released by recombination of neutrals and ions into molecules ($W$), dimension ({\tt NLIM}+{\tt NSTS})
     \item[wldna(i)] Flux of atoms impinging on surface ($A$), dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
     \item[ewlda(i)] Average energy of impinging atoms on surface ($eV$), dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
     \item[wldnm(i)] Flux of molecules impinging on surface ($A$), dimension ({\tt NLIM}+{\tt NSTS},{\tt NMOL})
@@ -4687,8 +4693,8 @@ The data blocks are:
   \item[ewldm\_res] Average energy of impinging molecules on surface segment ($eV$), dimension ({\tt NMOL}, {\tt NCL})
   \item[ewldea\_res] Energy flux carried by emitted atoms from surface segment ($W.m^{-2}$), dimension ({\tt NATM}, {\tt NCL})
   \item[ewldem\_res] Energy flux carried by emitted molecules from surface segment ($W.m^{-2}$), dimension ({\tt NMOL}, {\tt NCL})
-  \item[ewldrp\_res] Total energy flux carried by emitted particles from surface segment ($W.m^{-2}$), dimension ({\tt NCL})
-  \item[ewldmr\_res] Flux of emitted molecules from recycling atoms ($A.m^{-2}$), dimension ({\tt NMOL}, {\tt NCL})
+  \item[ewldrp\_res] Kinetic energy flux carried by recycling atoms and molecules ($W.m^{-2}$), dimension ({\tt NCL})
+  \item[ewldmr\_res] Energy flux due to recombination of atoms and ions into molecules ($W.m^{-2}$), dimension ({\tt NMOL}, {\tt NCL})
   \item[wldspt\_res] Flux of sputtered wall material ($A.m^{-2}$), dimension ({\tt NCL})
   \item[wldspta\_res] Flux of sputtered wall material per atom ($A.m^{-2}$), dimension ({\tt NCL}, {\tt NATM})
   \item[wldsptm\_res] Flux of sputtered wall material per molecule ($A.m^{-2}$), dimension ({\tt NCL}, {\tt NMOL})
@@ -4888,19 +4894,21 @@ several values of $\Delta_t$.
 \else
     \centerline{\includegraphics[origin=br,height=8cm]{tmne_1.eps}}
 \fi
-    \caption{Upstream electron temperature for several timesteps after puff b.c. applied.}
+    \caption{Total electron content for several timesteps after puff b.c. applied.}
     \label{fig:tmne1}
 \end{figure}
 
 \section{Time-dependent mode}
 \label{sec:time-dependent}\index{Time-dependent mode}
 
+{\em This feature is experimental and should be used with caution!}
+
 It is possible to run {\tt B2.5} in self-consistent time-dependent mode, by setting the switch {\tt b2mndt\_style} to {\tt 2}. Please note that the timestep may need to be decreased compared to a similar steady-state case to achieve convergence.
 
 The time-dependent mode is only available with the \SOLPSfivetwo physics model. It changes the order of solution of the equations to solve first for the density equations, then the parallel momentum equations, followed by the electrical potential, electron and ion temperature equations. The total momentum and energy equations are not solved.
 
 \begin{sloppypar}
-In time-dependent mode, the under-relaxation factor ({\tt b2mndt\_rxf}) and the timestep modifiers from {\tt b2.numerics.parameters} and other under-relaxation switches should be set in such a way that their product is 1 everywhere (as the variable defaults already provide and the code checks for). Thus, it is still possible to use the timestep multipliers (for example setting {\tt DTEE = DTEI = 2}) if the corresponding under-relaxation parameters compensate (in the same example, this would mean {\tt b2npht\_rxg} set to {\tt 0.5}). Choosing these parameters to be different from 1 can influence the total convergence of the code.
+In time-dependent mode, the under-relaxation factor ({\tt b2mndt\_rxf}) and the timestep modifiers from {\tt b2.numerics.parameters} and other under-relaxation switches should be set in such a way that their product is 1 everywhere (as the variable defaults already provide and the code checks for). Thus, it is still possible to use the timestep multipliers (for example setting {\tt DTCO = DTMO = DTEE = DTEI = 2}) if the corresponding under-relaxation parameters compensate (in the same example, this would mean {\tt b2mndt\_rxf} set to {\tt 0.5}). Choosing these parameters to be different from 1 can influence the total convergence of the code.
 \end{sloppypar}
 
 \section{Averaging scheme}
@@ -7757,7 +7765,7 @@ r_{CX_{ab}} = \exp \left(
 V_a^{corr\_dpc} = \frac{c^{corr\_dpc}}{16} |b_x| \sqrt{\frac{p_a}{m_a n_a}} \frac{\partial
 ^2}{\partial x^2} \left( \frac 1{p_a} \frac{\partial p_a}{\partial x} \right)
 \end{equation}
-is a (physically meaningless) damping term, often called the "Rhie and Chow" correction, meant to avoid the checkerboard instability when solving the momentum equation. The default value of $c^{corr\_dpc}$ is 1 and provided by the {\tt 'b2tfnb\_xfrhie'} switch.
+is a (physically meaningless) damping term, often called the "Rhie and Chow" correction~\cite{RHIE83A}, meant to avoid the checkerboard instability when solving the momentum equation. The default value of $c^{corr\_dpc}$ is 1 and provided by the {\tt 'b2tfnb\_xfrhie'} switch.
 
 \begin{equation}\label{eq:VaxE_appC}
 \begin{matrix}
@@ -21376,13 +21384,13 @@ The following observations were made (see figure \ref{fig:resDcomp}):
     \ifpdf
     \includegraphics[width=9.0cm]{te3dr_relative_changes.pdf}
     \else
-    \includegraphics[origin=br,angle=-90,width=9.0cm]{te3dr_relative_changes}
+    \includegraphics[origin=br,width=9.0cm]{te3dr_relative_changes}
     \fi
     \hfill
     \ifpdf
     \includegraphics[width=9.0cm]{ne3dr_relative_changes.pdf}
     \else
-    \includegraphics[origin=br,angle=-90,width=9.0cm]{ne3dr_relative_changes}
+    \includegraphics[origin=br,width=9.0cm]{ne3dr_relative_changes}
     \fi
   }
   \caption{Relative changes for the considered options.}
