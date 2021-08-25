@@ -19760,6 +19760,17 @@ Another program that produce output in an {\tt EFIT}-like format that is readabl
 by {\tt DG} using this script is {\tt FreeGS}\footnote{Documentation available at
 \href{https://freegs.readthedocs.io/en/latest/index.html}{https://freegs.readthedocs.io/en/latest/index.html}.}.
 
+\subsubsection{move\_equ}
+\index{move\_equ}\index{DG, moving an equilibrium}
+
+This script rigidly moves an equilibrium {\tt .equ} file, in the radial and/or vertical directions. The syntax is:
+\begin{quote}
+{\tt move\_equ <filein>.equ <fileout>.equ [<fieldfile>]}
+\end{quote}
+The third argument {\tt <fieldfile>} is optional and has the same meaning as in the {\tt dg\_symm\_dg} script above.
+
+The user is then prompted to provide the radial and vertical shifts (in metres) to apply to the equilibrium.
+
 \subsubsection{n2d}
 \index{n2d}\index{nn2d}\index{nk2dg}\index{DG, converting from Naka equilibrium}
 
