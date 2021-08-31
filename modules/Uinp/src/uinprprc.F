@@ -418,6 +418,7 @@ c     now read the relevant line
                       read(ZEILE,*) SUBDIRrec,SUBDIRion,
      &                              SUBDIRcex,SUBDIRprb,
      &                              SUBDIRplt,SUBDIRzav,SUBDIRpot,ES
+                      Bdescr = ' '
                     else if (quote_count.eq.18) then !}{
                       read(ZEILE,*) SUBDIRrec,SUBDIRion,
      &                              SUBDIRcex,SUBDIRprb,
@@ -500,7 +501,11 @@ c     now read the relevant line
                           end if
                         end do
                       end if
-                      rctnbdl(nnrctn)=EB//'_'//trim(Bdescr)
+                      if(.not.streql(Bdescr,' ')) then !{
+                        rctnbdl(nnrctn)=EB//'_'//trim(Bdescr)
+                      else !}{
+                        rctnbdl(nnrctn)=EB
+                      end if !}
                     else !}{
                       rctnbdl(nnrctn)=' '
                     end if !}
