@@ -205,8 +205,13 @@ c*** 1.  General data for the run
         if(silent_open(97,filename,
      .     'data.local|modules/B2.5/Database',adasfile)) then
           read(97,*) uidin
-          if(uidin(1:9).eq.'SOLPSTOP/') then
+          if(streql(uidin,'adas')) then
+            write(iunoo,720) utxtfl(7)
+          else if(uidin(1:9).eq.'SOLPSTOP/') then
             write(iunoo,721) utxtfl(7)(1:13)//trim(uidin(10:))
+     .                                      //'/adf11'
+          else if(uidin(1:5).eq.'adas/') then
+            write(iunoo,721) utxtfl(7)(1:13)//'modules/'//trim(uidin)
      .                                      //'/adf11'
           else
             write(iunoo,721) utxtfl(7)(1:13)//trim(uidin)//'/adf11'
