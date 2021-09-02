@@ -288,9 +288,13 @@ do {
                 vv=
                 ww=
                 for n in $u; do
-                  uu="$uu $griddir/$grid_stem.v$n.geo"
-                  vv="$vv $griddir/$grid_stem.v$n.ps"
-                  ww="$ww $dgdir/$grid_stem.v$n.sno"
+                  m=$n
+                  [ ${#m} -lt 2 ] && m=00$m || {
+                    [ ${#m} -lt 3 ] && m=0$m
+                  }
+                  uu="$uu $griddir/$grid_stem.v$m.geo"
+                  vv="$vv $griddir/$grid_stem.v$m.ps"
+                  ww="$ww $dgdir/$grid_stem.v$m.sno"
                 done
                 ls -l $uu $vv $ww
                 /bin/echo -e "Do you wish to remove this grid(s)? (y/n): \c"; read u
