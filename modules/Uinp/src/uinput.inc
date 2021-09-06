@@ -355,7 +355,7 @@ c*** 14
      ,  lkindp(npls)
       real fcte(npls),bmass(npls),chgsp(nstra),chgsee(nstra),
      ,  chgsei(nstra),chgsmom(nstra)
-      logical lsymet,lbalan,lcoarse,lfchgs
+      logical lsymet,lbalan,lcoarse,lfchgs,lsprcl
       character txtpls(nain)*72, txtpsp(nain)*24, txtpun(nain)*24
 
 c*** 15
@@ -533,7 +533,7 @@ c*** b2ah.dat
      ,  pltler,lhist2,lsmot2,lhist3,lcntr3,lsmot3,lraps,lvect3,lrpvc3,
      ,  lrps3d,lrpscn,lprad,lppol,lptor,plidl,plvtk,
      ,  plchor,plspec,prspec,plargl,prargl,lpw_d,
-     ,  lsymet,lbalan,lcoarse,lfchgs,
+     ,  lsymet,lbalan,lcoarse,lfchgs,lsprcl,
      ,  is_bundled
 
       common/uinchr/ txtrun,txtsfl,txtsfa,
