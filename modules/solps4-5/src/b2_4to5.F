@@ -3302,7 +3302,7 @@ c
       do is = 0, ns-1
         call species(is,species_name(is),.false.)
       enddo
-      write(hlp_frm,'(a1,i2,a7)') '(',ns,'(a,1x))'
+      write(hlp_frm,'(a1,i3,a7)') '(',ns,'(a,1x))'
       open(unit=99,file='../SOLPS_FLUIDS')
       write(99,hlp_frm) (trim(species_name(is)),is=0,ns-1)
       close(99)

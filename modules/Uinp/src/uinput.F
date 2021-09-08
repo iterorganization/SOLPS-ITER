@@ -713,7 +713,7 @@ c*** Modify the input file for B2, if possible
             is = is + 1
           end do
         end do
-        write(hlp_frm,'(a1,i2,a7)') '(',ns,'(a,1x))'
+        write(hlp_frm,'(a1,i3,a7)') '(',ns,'(a,1x))'
         open(unit=2,file='../SOLPS_FLUIDS')
         write(2,hlp_frm) (trim(species_name(is)),is=0,ns-1)
         close(2)
