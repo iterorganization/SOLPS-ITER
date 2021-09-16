@@ -7402,13 +7402,13 @@ Is it important to know, that, in the equations below, the parallel velocity $V_
 
 \begin{multline}
 \label{eq:GammaAX_appC}
-\widetilde{\Gamma}_{ax} = \left( b_x V_{\parallel a} + V_{ax}^{\left( E \right)} + V_{ax}^{\left( AN \right)} + V_a^{corr\_dpc} \right) n_a + 0 \cdot \frac{\delta_{1,a}}{e} \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + j_x^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} \right) \\
+\widetilde{\Gamma}_{ax} = \left( b_x V_{\parallel a} + V_{ax}^{\left( E \right)} + V_{ax}^{\left( AN \right)} + V_a^{corr\_dpc} \right) n_a + 0 \cdot \frac{1}{z_a e} \left( j_{ax}^{\left( AN \right)} + j_{ax}^{\left( in \right)} + \widetilde{j}_{ax}^{\left( vis \parallel \right)} + j_{ax}^{\left( vis \perp \right)} + \widetilde{j}_{ax}^{\left( visq \right)} \right) \\
 - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x} - \widetilde{D}_{p,ax} \frac{1}{h_x} \frac{\partial p_a}{\partial x} - \widetilde{\Gamma}_{ax}^{\left( PSch \right)}
 \end{multline}
 
 \begin{multline}
 \label{eq:GammaAY_appC}
-\widetilde{\Gamma}_{ay} = \left( V_{ay}^{\left( E \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \frac{\delta_{1,a}}{e} \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + {j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} \right) \\
+\widetilde{\Gamma}_{ay} = \left( V_{ay}^{\left( E \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \frac{1}{z_a e} \left( j_{ay}^{\left( AN \right)} + j_{ay}^{\left( in \right)} + \widetilde{j}_{ay}^{\left( vis \parallel \right)} + j_{ay}^{\left( vis \perp \right)} + \widetilde{j}_{ay}^{\left( visq \right)} \right) \\
  - D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y} - \widetilde{D}_{p,ay} \frac{1}{h_y} \frac{\partial p_a}{\partial y} - \widetilde{\Gamma}_{ay}^{\left( PSch \right)}
 \end{multline}
 
@@ -7443,25 +7443,25 @@ V_{T_a} = \left| b_x \right| \sqrt{ \frac{8 T_i}{\pi m_a} }
 \begin{multline}
 \label{eq:GammaAXnoTilde_appC}
 \Gamma_{ax} = \left( b_x V_{\parallel a} + \widetilde{U}_{ax}^{\left( dia \right)} + V_{ax}^{\left( AN \right)} + V_a^{corr\_dpc} \right) n_a + \\
- 0 \cdot \frac{\delta_{1,a}}{e} \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + {j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x} - \widetilde{D}_{p,ax} \frac{1}{h_x} \frac{\partial p_a}{\partial x}
+ 0 \cdot \frac{1}{z_a e} \left( j_{ax}^{\left( AN \right)} + j_{ax}^{\left( in \right)} + \widetilde{j}_{ax}^{\left( vis \parallel \right)} + {j}_{ax}^{\left( vis \perp \right)} + \widetilde{j}_{ax}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x} - \widetilde{D}_{p,ax} \frac{1}{h_x} \frac{\partial p_a}{\partial x}
 \end{multline}
 
 \begin{multline}
 \label{eq:GammaAYnoTilde_appC}
-\Gamma_{ay} = \left( \widetilde{U}_{ay}^{\left( dia \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \frac{\delta_{1,a}}{e} \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + {j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} \right) \\
+\Gamma_{ay} = \left( \widetilde{U}_{ay}^{\left( dia \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \frac{1}{z_a e} \left( j_{ay}^{\left( AN \right)} + j_{ay}^{\left( in \right)} + \widetilde{j}_{ay}^{\left( vis \parallel \right)} + j_{ay}^{\left( vis \perp \right)} + \widetilde{j}_{ay}^{\left( visq \right)} \right) \\
 - D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y} - \widetilde{D}_{p,ay} \frac{1}{h_y} \frac{\partial p_a}{\partial y}
 \end{multline}
 
 \begin{multline}
 \label{eq:GammaAXCor_appC}
 \Gamma_{ax}^{Cor} = \left( b_x V_{\parallel a} + \widetilde{U}_{ax}^{\left( 2dia \right)} + V_{ax}^{\left( AN \right)} + V_a^{corr\_dpc} \right) n_a + \\
- 0 \cdot \frac{\delta_{1,a}}{e} \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + {j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x} - \widetilde{D}_{p,ax} \frac{1}{h_x} \frac{\partial p_a}{\partial x}
+ 0 \cdot \frac{1}{z_a e} \left( j_{ax}^{\left( AN \right)} + j_{ax}^{\left( in \right)} + \widetilde{j}_{ax}^{\left( vis \parallel \right)} + j_{ax}^{\left( vis \perp \right)} + \widetilde{j}_{ax}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x} - \widetilde{D}_{p,ax} \frac{1}{h_x} \frac{\partial p_a}{\partial x}
 \end{multline}
 
 \begin{multline}
 \label{eq:GammaAYCor_appC}
 \Gamma_{ay}^{Cor} = \left( \widetilde{U}_{ay}^{\left( 2dia \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \\
- \frac{\delta_{1,a}}{e} \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + {j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y} - \widetilde{D}_{p,ay} \frac{1}{h_y} \frac{\partial p_a}{\partial y}
+ \frac{1}{z_a e} \left( j_{ay}^{\left( AN \right)} + j_{ay}^{\left( in \right)} + \widetilde{j}_{ay}^{\left( vis \parallel \right)} + j_{ay}^{\left( vis \perp \right)} + \widetilde{j}_{ay}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y} - \widetilde{D}_{p,ay} \frac{1}{h_y} \frac{\partial p_a}{\partial y}
 \end{multline}
 
 \begin{equation}
@@ -7530,13 +7530,13 @@ V_{ay}^{(E)} =
 \begin{multline}
 \label{eq:Gamma_ax_Eir}
 \Gamma_{ax}^{\left( Eir \right)} = \left( b_x V_{\parallel a} + V_{ax}^{\left( E \right)} + \widetilde{W}_{ax}^{\left( dia \right)} + V_{ax}^{\left( AN \right)} + V_a^{corr\_dpc} \right) n_a + \\
- 0 \cdot \frac{\delta_{1,a}}{e} \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + {j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x}
+ 0 \cdot \frac{1}{z_a e} \left( j_{ax}^{\left( AN \right)} + j_{ax}^{\left( in \right)} + \widetilde{j}_{ax}^{\left( vis \parallel \right)} + j_{ax}^{\left( vis \perp \right)} + \widetilde{j}_{ax}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x}
 \end{multline}
 
 \begin{multline}
 \label{eq:Gamma_ay_Eir}
 \Gamma_{ay}^{\left( Eir \right)} = \left( V_{ay}^{\left( E \right)} + \widetilde{W}_{ya}^{\left( dia \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \\
- \frac{\delta_{1,a}}{e} \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + {j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y}
+ \frac{1}{z_a e} \left( j_{ay}^{\left( AN \right)} + j_{ay}^{\left( in \right)} + \widetilde{j}_{ay}^{\left( vis \parallel \right)} + {j}_{ay}^{\left( vis \perp \right)} + \widetilde{j}_{ay}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y}
 \end{multline}
 
 \noindent where
@@ -7675,7 +7675,7 @@ p_e = n_e T_e
 V_a^{corr\_dpc} = \frac{c^{corr\_dpc}}{16} \left| b_x \right| \sqrt{ \frac{p_a}{m_a n_a} } \frac{\partial^2}{\partial x^2} \left( \frac{1}{p_a} \frac{\partial p_a}{\partial x} \right)
 \end{equation}
 
-and $\delta_{a,b}$ is the Kronecker delta (1 if $a=b$, 0 otherwise). Here, it is used as shortcut to identify the one hydrogenic species with $z_a = 1$ and $z_{n,a} = 1$. If the code contains multiple hydrogenic species, an error will be reported to avoid double-counting of the current contributions. The assignment of these current contributions to the ions instead of the electrons fluxes is governed by the switches {\tt b2tfnb\_xcur} and {\tt b2tfnb\_ycur} for the poloidal and radial directions, respectively.
+The current contributions $j_{a}$ are non-zero only for the one hydrogenic species with $z_a = 1$ and $z_{n,a} = 1$. If the code contains multiple hydrogenic species, an error will be reported to avoid double-counting. The assignment of these current contributions to the ions instead of the electrons fluxes is governed by the switches {\tt b2tfnb\_xcur} and {\tt b2tfnb\_ycur} for the poloidal and radial directions, respectively.
 
 \subsection{Source terms in density equations}
 
@@ -8023,7 +8023,7 @@ $S_{AN_a}^m$ is a correcting source due to the radial anomalous current (here as
 S_{AN_a}^m = \left\{
 \begin{matrix}
 0, & z_a \ne 1 \mbox{ or } z_{n,a} \ne 1 \\
-- j_y^{(AN)} \frac{B B_x}{B_z}, & z_a = 1 \mbox{ and } z_{n,a} = 1 \\
+- j_{ay}^{(AN)} \frac{B B_x}{B_z}, & z_a = 1 \mbox{ and } z_{n,a} = 1 \\
 \end{matrix}
 \right.
 \end{equation}
@@ -9187,6 +9187,7 @@ $
 $
 
 \subsection{Poloidal ion energy fluxes}
+
 \begin{multline}\label{eq:eni_tiqix}
 \widetilde q_{ix} = \widetilde f_{ix} T_i - \kappa_{ix} \frac 1{h_x} \frac{\partial T_i}{\partial x} - q_{ix}^{P.Sch} = \\
 = \frac 3 2 \Gamma_{ix} T_i + V_{ix}^{(str)} n_i T_i + \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + j_x^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)}}{e} \right) T_i - \\
@@ -9426,7 +9427,6 @@ q_{iy}^{P.Sch}
 \end{matrix}
 \end{equation}
 
-
 \begin{equation*}
 \widetilde f_{iy} = \frac 3 2 \Gamma_{iy} + V_{iy}^{(str)} n_i + \frac 3 2 \frac{\left(
 	j_y^{(AN)} + \widetilde j_y^{(vis \parallel)} + j_y^{(vis \perp)} + \widetilde j_y^{(visq)} + j_y^{(in)}
@@ -9494,15 +9494,15 @@ $\kappa_{iy}^{(CL)} = 0$
 \section{Current continuity equation}
 
 \begin{equation}\label{eq:pot_eq}
-\frac 1{\sqrt g} \frac{\partial}{\partial x} \left( \frac{\sqrt g}{h_x} j_x \right) +
-\frac 1{\sqrt g} \frac{\partial}{\partial y} \left( \frac{\sqrt g}{h_y} j_y \right) = 0
+\frac{1}{\sqrt g} \frac{\partial}{\partial x} \left( \frac{\sqrt g}{h_x} j_x \right) +
+\frac{1}{\sqrt g} \frac{\partial}{\partial y} \left( \frac{\sqrt g}{h_y} j_y \right) = 0
 \end{equation}
 
 \subsection{Poloidal currents}
 
 \begin{equation}\label{eq:pot_jx}
-j_x = j_x^{(AN)} + \widetilde j_x^{(dia)} + j_x^{(in)} + \widetilde j_x^{(vis \parallel)} + j_x^{(vis \perp)}
-+ \widetilde j_x^{(visq)} + \widetilde j_x^{(s)} + j^{(\parallel)}_x
+j_x = j_x^{(AN)} + \widetilde{j}_x^{(dia)} + j_x^{(in)} + \widetilde{j}_x^{(vis \parallel)} + j_x^{(vis \perp)}
++ \widetilde{j}_x^{(visq)} + \widetilde{j}_x^{(s)} + j^{(\parallel)}_x
 \end{equation}
 
 
@@ -9510,8 +9510,10 @@ j_x = j_x^{(AN)} + \widetilde j_x^{(dia)} + j_x^{(in)} + \widetilde j_x^{(vis \p
 j_x^{(AN)} = - \sigma^{(AN)} \frac{\partial \Phi}{h_x \partial x}
 \end{equation}
 
+$j_{ax}^{(AN)}$ is the component of the poloidal anomalous current due to species $a$. It is non-zero only for the single hydrogenic species in the problem.
+
 \begin{equation}\label{eq:pot_tijxdia}
-\widetilde j_x^{(dia)} = B_z \frac{
+\widetilde{j}_x^{(dia)} = B_z \frac{
 	\sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \left(
 		z_aT_e + T_i
 	\right)
@@ -9526,10 +9528,12 @@ j_x^{(in)} = \frac{B_z}2 \frac{\partial}{h_y \partial y}
 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} m_a n_a V^2_{a \parallel}
 \end{equation}
 
+$j_{ax}^{(in)}$ is the component of the poloidal inertial current due to species $a$. It is non-zero only for the single hydrogenic species in the problem.
+
 %-------- end of 18th page -------------
 
 \begin{equation}\label{eq:pot_tijxvispar}
-\widetilde j_x^{(vis \parallel)} =
+\widetilde{j}_x^{(vis \parallel)} =
 - \frac{B_z \sqrt{B}}{3 B_x}
 \frac{\partial}{h_y \partial y}
 \left( \frac{1}{B^2} \right)
@@ -9539,12 +9543,16 @@ j_x^{(in)} = \frac{B_z}2 \frac{\partial}{h_y \partial y}
 \left( \widetilde{\widetilde{\eta}}^{(CL)}_{ax} \text{already contains a factor of } b_x^2 \right)
 \end{equation}
 
-\begin{equation*}
-j_x^{(vis \perp)} = 0
-\end{equation*}
+$\widetilde{j}_{ax}^{(in)}$ is the component of the poloidal current due to parallel viscosity from species $a$. It is non-zero only for the single hydrogenic species in the problem.
 
-\begin{equation}
-\widetilde j_x^{(visq)} =
+\begin{equation}\label{eq:pot_tijxvisper}
+j_x^{(vis \perp)} = 0
+\end{equation}
+
+$j_{ax}^{(vis \perp)}$ is the poloidal component of the perpendicular viscosity current due to species $a$.
+
+\begin{equation}\label{eq:pot_tijxvisq}
+\widetilde{j}_x^{(visq)} =
 - 0.24 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a = 1~\&~z_{n,a} = 1 }}
 \alpha^{NEO} \widetilde{\tau}_a b_z
 \frac{B_x}{B^{\frac{1}{2}}}
@@ -9553,10 +9561,12 @@ j_x^{(vis \perp)} = 0
 \frac{\partial \left( \widetilde{q}_a^{(0)} B^{\frac{1}{2}} \right)}{h_x \partial x}
 \end{equation}
 
-For definition of $\widetilde{q}_a^{(0)}$, see Eqs. (\ref{eq:q0-0}) and (\ref{eq:q0-1}).
+$\widetilde{j}_{ax}^{(visq)}$ is the component of the poloidal heat viscosity current due to species $a$. It is non-zero only for the single hydrogenic species in the problem.
+
+For the definition of $\widetilde{q}_a^{(0)}$, see Eqs. (\ref{eq:q0-0}) and (\ref{eq:q0-1}).
 
 \begin{equation}\label{eq:pot_tijxs}
-\widetilde j_x^{(s)} =
+\widetilde{j}_x^{(s)} =
 \sum \limits^{ns-1}_{\substack{a_0 = 0 \\ z_{a_0} = 0~\&~z_{n,a_0} = 1 }}
 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_{a} = 1~\&~z_{n,a} = 1 }}
 \left(
@@ -9588,16 +9598,18 @@ $j_x^{(\parallel)}$ - see above
 \subsection{Radial currents}
 
 \begin{equation}\label{eq:pot_jy}
-j_y = j_y^{(AN)} + \widetilde j_y^{(dia)} + j_y^{(in)} + \widetilde j_y^{(vis \parallel)} + j_y^{(vis \perp)}
-+ \widetilde j_y^{(visq)} + \widetilde j_y^{(s)} + j_y^{(ST)}
+j_y = j_y^{(AN)} + \widetilde{j}_y^{(dia)} + j_y^{(in)} + \widetilde{j}_y^{(vis \parallel)} + j_y^{(vis \perp)}
++ \widetilde{j}_y^{(visq)} + \widetilde{j}_y^{(s)} + j_y^{(ST)}
 \end{equation}
 
 \begin{equation}\label{eq:pot_jyan}
 j_y^{(AN)} = - \sigma^{(AN)} \frac{\partial \Phi}{h_y \partial y}
 \end{equation}
 
+$j_{ay}^{(AN)}$ is the component of the radial anomalous current due to species $a$. It is non-zero only for the single hydrogenic species in the problem.
+
 \begin{equation}\label{eq:pot_tijydia}
-\widetilde j_y^{(dia)} = - B_z \frac{
+\widetilde{j}_y^{(dia)} = - B_z \frac{
 	\sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \left(
 		z_a T_e + T_i
 	\right)
@@ -9612,8 +9624,10 @@ j_y^{(in)} = - \frac{B_z}2 \frac{\partial}{h_x \partial x}
 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} m_a n_a V^2_{a \parallel}
 \end{equation}
 
+$j_{ay}^{(in)}$ is the component of the radial inertial current due to species $a$. It is non-zero only for the single hydrogenic species in the problem.
+
 \begin{equation}\label{eq:pot_tijyvispar}
-\widetilde j_y^{(vis \parallel)} =
+\widetilde{j}_y^{(vis \parallel)} =
 \frac{B_z \sqrt{B}}{3 B_x}
 \frac{\partial}{h_x \partial x}
 \left( \frac{1}{B^2} \right)
@@ -9623,10 +9637,10 @@ j_y^{(in)} = - \frac{B_z}2 \frac{\partial}{h_x \partial x}
 \left( \widetilde{\widetilde{\eta}}^{(CL)}_{ax} \text{already contains a factor of } b_x^2 \right)
 \end{equation}
 
-not agreed with parallel momentum balance?
+$\widetilde{j}_{ay}^{(vis \parallel)}$ is the radial component of the current due to parallel viscosity of species $a$. It is non-zero only for the single hydrogenic species in the problem.
 
 \begin{equation}\label{eq:pot_tijyvisper}
-\widetilde j_y^{(vis \perp)} =
+\widetilde{j}_y^{(vis \perp)} =
 - \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a = 1~\&~z_{n,a} = 1}}
 \frac{1}{B \sqrt{g}}
 \frac{\partial}{\partial y}
@@ -9637,6 +9651,8 @@ not agreed with parallel momentum balance?
 \right)
 \end{equation}
 
+$\widetilde{j}_{ay}^{(vis \perp)}$ is the radial component of the perpendicular viscosity current due to species $a$. It is non-zero only for the single hydrogenic species in the problem.
+
 %-------- end of 19th page -------------
 
 \begin{equation}\label{eq:pot_vaperp}
@@ -9646,7 +9662,7 @@ V_{a \perp} =
 \end{equation}
 
 \begin{equation}\label{eq:pot_tijyvisq}
-\widetilde j_y^{(visq)} =
+\widetilde{j}_y^{(visq)} =
 0.24 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a = 1~\&~z_{n,a} = 1}}
 \alpha^{NEO} \widetilde{\tau}_a b_z
 \frac{B_x}{B^{\frac{1}{2}}}
@@ -9655,10 +9671,12 @@ V_{a \perp} =
 \frac{\partial \left( \widetilde{q}_a^{(0)} B^{\frac{1}{2}} \right)}{h_x \partial x}
 \end{equation}
 
+$\widetilde{j}_{ay}^{(visq)}$ is the radial component of the heat viscosity current due to species $a$. It is non-zero only for the single hydrogenic species in the problem.
+
 For definition of $\widetilde{q}_a^{(0)}$, see Eqs. (\ref{eq:q0-0}) and (\ref{eq:q0-1}).
 
 \begin{equation}\label{eq:pot_tijys}
-\widetilde j_y^{(s)} =
+\widetilde{j}_y^{(s)} =
 \sum \limits^{ns-1}_{\substack{a_0 = 0 \\ z_{a_0} = 0~\&~z_{n,a_0} = 1 }}
 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a = 1~\&~z_{n,a} = 1}}
 \left(
@@ -10500,8 +10518,8 @@ $\left. \frac{\sqrt{g}}{h_y} j_y \right|_{S_0} = 0$
 0, & \text{facdrift} = 0 \\
 \left. \frac{\sqrt{g}}{h_y}
 \left(
-	\widetilde j_y^{(dia)} + j_y^{(in)} + \widetilde j_y^{(vis \parallel)} + j_y^{(vis \perp)}
-	+ \widetilde j_y^{(visq)} + \widetilde j_y^{(s)}
+	\widetilde{j}_y^{(dia)} + j_y^{(in)} + \widetilde{j}_y^{(vis \parallel)} + j_y^{(vis \perp)}
+	+ \widetilde{j}_y^{(visq)} + \widetilde{j}_y^{(s)}
 \right) \right|_{S_0}
 , & \text{facdrift} \neq 0 \\
 \end{matrix} \right.
@@ -10518,7 +10536,7 @@ $\left. \frac{\sqrt{g}}{h_y} j_y \right|_{S_0} = 0$
 0, & \text{facdrift} = 0 \\
 \left. \frac{\sqrt{g}}{h_y}
 \left(
-	\left\langle \widetilde j_y^{(dia)} \right\rangle
+	\left\langle \widetilde{j}_y^{(dia)} \right\rangle
 \right) \right|_{S_1}
 , & \text{facdrift} \neq 0 \\
 \end{matrix} \right.
@@ -10533,7 +10551,7 @@ $\left. \frac{\sqrt{g}}{h_y} j_y \right|_{S_0} = 0$
 0, & \text{facdrift} = 0 \\
 \left. \frac{\sqrt{g}}{h_y}
 \left(
-	\left\langle \widetilde j_y^{(dia)} \right\rangle +
+	\left\langle \widetilde{j}_y^{(dia)} \right\rangle +
 	\left\langle j_y^{(in)} \right\rangle
 \right) \right|_{S_1}
 , & \text{facdrift} \neq 0 \\
@@ -10542,7 +10560,7 @@ $\left. \frac{\sqrt{g}}{h_y} j_y \right|_{S_0} = 0$
 \end{equation*}
 
 \begin{equation*}
-\left\langle \widetilde j_y^{(dia)} \right\rangle =
+\left\langle \widetilde{j}_y^{(dia)} \right\rangle =
 - \frac{
 	B_z \left\langle
 		\sum \limits^{ns-1}_{\substack{a = 0 \\
@@ -10575,7 +10593,7 @@ $\left. \frac{\sqrt{g}}{h_y} j_y \right|_{S_0} = 0$
 0, & \text{facdrift} = 0 \\
 \left. \frac{\sqrt{g}}{h_y}
 \left(
-	\left\langle \widetilde j_y^{(dia)} \right\rangle
+	\left\langle \widetilde{j}_y^{(dia)} \right\rangle
 \right) \right|_N
 , & \text{facdrift} \neq 0 \\
 \end{matrix} \right.
@@ -10592,9 +10610,9 @@ $\left. \frac{\sqrt{g}}{h_y} j_y \right|_{S_0} = 0$
 0, & \text{facdrift} = 0 \\
 \left. - \frac{\sqrt{g}}{h_y}
 \left(
-	\widetilde j_y^{(dia)} + j_y^{(in)} +
-        \widetilde j_y^{(vis \parallel)} + j_y^{(vis \perp)} +
-	\widetilde j_y^{(visq)} + \widetilde j_y^{(s)}
+	\widetilde{j}_y^{(dia)} + j_y^{(in)} +
+        \widetilde{j}_y^{(vis \parallel)} + j_y^{(vis \perp)} +
+	\widetilde{j}_y^{(visq)} + \widetilde{j}_y^{(s)}
 \right) \right|_N
 , & \text{facdrift} \neq 0 \\
 \end{matrix} \right.
@@ -11370,17 +11388,17 @@ n_e T_e \frac{B_z}{e} \frac{\partial}{h_x \partial x} \left( \frac {1}{B^2} \rig
 
 \begin{multline}
  q_{ix}^{\rm ENERGY} = \sum\limits_a \left( \Gamma^{\rm ENERGY}_{ax} +
- n_a \tilde{V}_{ax}^{(dia)} + \frac{ j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)}  }{e} \right) \times \\ \left(\frac{m_a n_a V_{a\parallel}^2}{2}
+ n_a \tilde{V}_{ax}^{(dia)} + \frac{ j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j}_x^{\left( vis \parallel \right)} + \widetilde{j}_x^{\left( vis \perp \right)} + \widetilde{j}_x^{\left( visq \right)} }{e} \right) \times \\ \left(\frac{m_a n_a V_{a\parallel}^2}{2}
 + \frac{5}{2} n_a T_i \right) -
-\kappa_{ix} \frac {1}{h_x} \frac{\partial T_i}{\partial x}
+\kappa_{ix} \frac{1}{h_x} \frac{\partial T_i}{\partial x}
 \end{multline}
 
 \begin{multline}
  q_{iy}^{\rm ENERGY} = \sum\limits_a \left( \Gamma^{\rm ENERGY}_{ax} + n_a \tilde{V}_{ax}^{(dia)} +
-\frac{ j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)}}{e}
+\frac{ j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j}_y^{\left( vis \parallel \right)} + \widetilde{j}_y^{\left( vis \perp \right)} + \widetilde{j}_y^{\left( visq \right)}}{e}
  \right) \times \\ \left( \frac{m_a V_{a\parallel}^2}{2}
 + \frac{5}{2} T_i \right)-
- \kappa_{iy} \frac {1}{h_y} \frac{\partial T_i}{\partial y}
+ \kappa_{iy} \frac{1}{h_y} \frac{\partial T_i}{\partial y}
 \end{multline}
 
 \begin{gather}
@@ -11471,17 +11489,17 @@ flux of the ion parallel kinetic energy:
 \begin{multline}
  Q_{\rm inert}^{\rm res} = \\ \frac{1}{\sqrt g} \frac{\partial}{\partial x} \left[ \frac{\sqrt g}{h_x}
  \sum\limits_a \left( \Gamma^{\rm ENERGY}_{ax}  +
- n_a \tilde{V}_{ax}^{(dia)} + \frac{ j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} }{e} \right) \frac{m_a V_{a\parallel}^2}{2}
+ n_a \tilde{V}_{ax}^{(dia)} + \frac{ j_{ax}^{\left( AN \right)} + j_{ax}^{\left( in \right)} + \widetilde{j}_{ax}^{\left( vis \parallel \right)} + \widetilde{j}_{ax}^{\left( vis \perp \right)} + \widetilde{j}_{ax}^{\left( visq \right)} }{z_a e} \right) \frac{m_a V_{a\parallel}^2}{2}
  \right] +
 \\ \frac{1}{\sqrt g} \frac{\partial}{\partial y} \left[ \frac{\sqrt g}{h_y}
  \sum\limits_a \left( \Gamma^{\rm ENERGY}_{ay}  +
- n_a \tilde{V}_{ay}^{(dia)} + \frac{ j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} }{e} \right) \frac{m_a V_{a\parallel}^2}{2}
+ n_a \tilde{V}_{ay}^{(dia)} + \frac{ j_{ay}^{\left( AN \right)} + j_{ay}^{\left( in \right)} + \widetilde{j}_{ay}^{\left( vis \parallel \right)} + \widetilde{j}_{ay}^{\left( vis \perp \right)} + \widetilde{j}_{ay}^{\left( visq \right)} }{z_a e} \right) \frac{m_a V_{a\parallel}^2}{2}
  \right] - \\
  \sum\limits_a V_{a\parallel} \left[
  \frac{1}{h_z \sqrt g}\frac{\partial}{\partial x} \left(\frac{h_z \sqrt g}{h_x} \Gamma_{ax}^{Cor} \right) +
  \frac{1}{h_z \sqrt g}\frac{\partial}{\partial y} \left(\frac{h_z \sqrt g}{h_y} \Gamma_{ay}^{Cor} \right) - S_{CF_a}^m\right] + \\
 \sum\limits_a \frac{m_a V_{a\parallel}^2}{2} \left[
-\frac{1}{\sqrt g}\frac{\partial}{\partial x}\left( \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \right) + \frac{1}{\sqrt g}\frac{\partial}{\partial y}\left( \frac{\sqrt g}{h_y} \widetilde{\Gamma}_{ay} \right) \right]
+\frac{1}{\sqrt g} \frac{\partial}{\partial x} \left( \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \right) + \frac{1}{\sqrt g} \frac{\partial}{\partial y} \left( \frac{\sqrt g}{h_y} \widetilde{\Gamma}_{ay} \right) \right]
 \end{multline}
 
 This residual comes not only from numerical approximations, but
@@ -11494,9 +11512,9 @@ It may be noted that, analytically:
 
 \begin{multline}
 \label{eq:j||E||_appC}
- j_\parallel E_\parallel = \frac{1}{\sqrt g}\frac{\partial}{\partial x}\left( \frac{\sqrt g}{h_x} n_e T_e b_x V_{e\parallel} \right) -
- \frac{n_e T_e}{\sqrt g}\frac{\partial}{\partial x}\left(\frac{\sqrt g}{h_x} b_x V_{e\parallel} \right) + V_{e\parallel} \sum\limits_a \left( S_{fr,ea}^m + S_{Therm,ea}^m \right) - \\
- \frac{b_x}{h_x}\frac{\partial \Phi}{\partial x} \sum\limits_a Z_a e n_a V_{a\parallel}
+ j_\parallel E_\parallel = \frac{1}{\sqrt g} \frac{\partial}{\partial x} \left( \frac{\sqrt g}{h_x} n_e T_e b_x V_{e\parallel} \right) -
+ \frac{n_e T_e}{\sqrt g} \frac{\partial}{\partial x} \left( \frac{\sqrt g}{h_x} b_x V_{e\parallel} \right) + V_{e\parallel} \sum\limits_a \left( S_{fr,ea}^m + S_{Therm,ea}^m \right) - \\
+ \frac{b_x}{h_x} \frac{\partial \Phi}{\partial x} \sum\limits_a Z_a e n_a V_{a\parallel}
 \end{multline}
 
 and
@@ -11517,12 +11535,12 @@ $j_\parallel E_\parallel$, $\left(\vec{\bf j}_{\rm dia} \cdot \vec{\bf E}\right)
 The term
 \begin{multline}
  Q_{\rm j_\perp}^{\rm res} =
- \frac{1}{\sqrt g}\frac{\partial}{\partial x}\left[\frac{\sqrt g}{h_x}
- \frac{T_i}{e}\left(
- j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} \right)\right] + \\
- \frac{1}{\sqrt g}\frac{\partial}{\partial y}\left[
- \frac{\sqrt g}{h_y}\frac{T_i}{e}\left(
- j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} \right)
+ \frac{1}{\sqrt g} \frac{\partial}{\partial x} \left[ \frac{\sqrt g}{h_x}
+ \frac{T_i}{e} \left(
+ j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j}_x^{\left( vis \parallel \right)} + \widetilde{j}_x^{\left( vis \perp \right)} + \widetilde{j}_x^{\left( visq \right)} \right) \right] + \\
+ \frac{1}{\sqrt g} \frac{\partial}{\partial y} \left[
+ \frac{\sqrt g}{h_y} \frac{T_i}{e} \left(
+ j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j}_y^{\left( vis \parallel \right)} + \widetilde{j}_y^{\left( vis \perp \right)} + \widetilde{j}_y^{\left( visq \right)} \right)
  \right]
 \end{multline}
 appears due to the approximate treatment of the ion perpendicular force balance equations.
@@ -13171,7 +13189,7 @@ $\displaystyle m_a \frac{\partial n_a V_{\parallel a}}{\partial t} h_z \sqrt{g}$
 
 $\displaystyle m_a n_a \frac{\partial V_{\parallel a}}{\partial t} h_z \sqrt{g}$ & $N \cdot m$ & \texttt{b2npmo\_manadvadt[XXX].dat} &  \\
 
-$\displaystyle m_a V_{\parallel a} \frac{\partial n_a }{\partial t} h_z \sqrt{g}$ & $N \cdot m$ & \texttt{b2npmo\_mavadnadt[XXX].dat} &  \\
+$\displaystyle m_a V_{\parallel a} \frac{\partial n_a}{\partial t} h_z \sqrt{g}$ & $N \cdot m$ & \texttt{b2npmo\_mavadnadt[XXX].dat} &  \\
 
 $\displaystyle \frac{h_z\sqrt g}{h_x} \Gamma_{ax}^m$ & $N \cdot m$ & \texttt{b2npmo\_fmox[XXX].dat} & (\ref{eq:mom_fluxx}) \\
 
@@ -13437,13 +13455,21 @@ $\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{j}_x^{(dia)}$ & $A$ & \texttt{b2t
 
 $\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_y^{(dia)}$ & $A$ & \texttt{b2tfhe\_\_fchdiay.dat} & (\ref{eq:pot_tijydia}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{j}_x^{(in)}$ & $A$ & \texttt{b2tfhe\_\_fchinertx.dat} & (\ref{eq:pot_tijxin}) \\
+$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{j}_x^{(in)}$ & $A$ & \texttt{b2tfch\_\_fchinertx.dat} & (\ref{eq:pot_tijxin}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_y} j_y^{(in)}$ & $A$ & \texttt{b2tfhe\_\_fchinerty.dat} & (\ref{eq:pot_jyin}) \\
+$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{j}_{ax}^{(in)}$ & $A$ & \texttt{b2tfch\_\_fchinert\_ax[XXX].dat} & (\ref{eq:pot_tijxin}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{j}_x^{(vis \parallel)}$ & $A$ & \texttt{b2tfhe\_\_fchvisparx.dat} & (\ref{eq:pot_tijxvispar}) \\
+$\displaystyle \frac{\sqrt{g}}{h_y} j_y^{(in)}$ & $A$ & \texttt{b2tfch\_\_fchinerty.dat} & (\ref{eq:pot_jyin}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_y^{(vis \parallel)}$ & $A$ & \texttt{b2tfhe\_\_fchvispary.dat} & (\ref{eq:pot_tijyvispar}) \\
+$\displaystyle \frac{\sqrt{g}}{h_y} j_{ay}^{(in)}$ & $A$ & \texttt{b2tfch\_\_fchinert\_ay[XXX].dat} & (\ref{eq:pot_jyin}) \\
+
+$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{j}_x^{(vis \parallel)}$ & $A$ & \texttt{b2tfch\_\_fchvisparx.dat} & (\ref{eq:pot_tijxvispar}) \\
+
+$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{j}_{ax}^{(vis \parallel)}$ & $A$ & \texttt{b2tfch\_\_fchvispar\_ax[XXX].dat} & (\ref{eq:pot_tijxvispar}) \\
+
+$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_y^{(vis \parallel)}$ & $A$ & \texttt{b2tfch\_\_fchvispary.dat} & (\ref{eq:pot_tijyvispar}) \\
+
+$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_{ay}^{(vis \parallel)}$ & $A$ & \texttt{b2tfch\_\_fchvispar\_ay[XXX].dat} & (\ref{eq:pot_tijyvispar}) \\
 
 $\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{j}_x^{(s)}$ & $A$ & \texttt{b2tfhe\_\_fchinx.dat} & (\ref{eq:pot_jx}), (\ref{eq:pot_tijxs}) \\
 
@@ -13451,15 +13477,27 @@ $\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_y^{(s)}$ & $A$ & \texttt{b2tfh
 
 $\displaystyle \sigma_{aa0} b^2_z \frac{\sqrt{g}}{h^2_x}$ & $S$ & \texttt{b2tral\_csiginx01\_00.dat} & (\ref{eq:pot_sigaa0}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{j}_x^{(AN)}$ & $A$ & \texttt{b2tfhe\_\_fchanmlx.dat} & (\ref{eq:pot_jxan}) \\
+$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{j}_x^{(AN)}$ & $A$ & \texttt{b2tfch\_\_fchanmlx.dat} & (\ref{eq:pot_jxan}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_y^{(AN)}$ & $A$ & \texttt{b2tfhe\_\_fchanmly.dat} & (\ref{eq:pot_jyan}) \\
+$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{j}_{ax}^{(AN)}$ & $A$ & \texttt{b2tfch\_\_fchanml\_ax[XXX].dat} & (\ref{eq:pot_jxan}) \\
+
+$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_y^{(AN)}$ & $A$ & \texttt{b2tfch\_\_fchanmly.dat} & (\ref{eq:pot_jyan}) \\
+
+$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_{ay}^{(AN)}$ & $A$ & \texttt{b2tfch\_\_fchanml\_ay[XXX].dat} & (\ref{eq:pot_jyan}) \\
 
 $\displaystyle \sigma_{ANy}$ & $S/m^2$ & \texttt{b2tqna\_sig0.dat} & (\ref{eq:pot_sigan}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_y^{(vis \perp)}$ & $A$ & \texttt{b2tfhe\_\_fchvispery.dat} & (\ref{eq:pot_tijyvisper}) \\
+$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{j}_{ax}^{(vis \perp)}$ & $A$ & \texttt{b2tfch\_\_fchvisper\_ax[XXX].dat} & (\ref{eq:pot_tijxvisper}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_y^{(vis q)}$ & $A$ & \texttt{b2tfhe\_\_fchvisqy.dat} & (\ref{eq:pot_tijyvisq}) \\
+$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_y^{(vis \perp)}$ & $A$ & \texttt{b2tfch\_\_fchvispery.dat} & (\ref{eq:pot_tijyvisper}) \\
+
+$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_{ay}^{(vis \perp)}$ & $A$ & \texttt{b2tfch\_\_fchvisper\_ay[XXX].dat} & (\ref{eq:pot_tijyvisper}) \\
+
+$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{j}_{ax}^{(vis q)}$ & $A$ & \texttt{b2tfch\_\_fchvisq\_ax[XXX].dat} & (\ref{eq:pot_tijxvisq}) \\
+
+$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_y^{(vis q)}$ & $A$ & \texttt{b2tfch\_\_fchvisqy.dat} & (\ref{eq:pot_tijyvisq}) \\
+
+$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_{ay}^{(vis q)}$ & $A$ & \texttt{b2tfch\_\_fchvisq\_ay[XXX].dat} & (\ref{eq:pot_tijyvisq}) \\
 
 $\displaystyle \frac{\sqrt{g}}{h_y} j_y^{(ST)}$ & $A$ & \texttt{b2tfhe\_\_fchstochy.dat} & (\ref{eq:pot_jyst}) \\
 
@@ -13542,8 +13580,8 @@ is applied below in all equations within this Appendix.
 
 \begin{gather}
  q_{ix}^{j} =  \frac{T_i^{\rm (face)}}{e} \sum\limits_a
- \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)}   \right) \\
- q_{iy}^{j} = \frac{T_i^{\rm (face)}}{e} \sum\limits_a \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)}   \right)
+ \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j}_x^{\left( vis \parallel \right)} + \widetilde{j}_x^{\left( vis \perp \right)} + \widetilde{j}_x^{\left( visq \right)} \right) \\
+ q_{iy}^{j} = \frac{T_i^{\rm (face)}}{e} \sum\limits_a \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j}_y^{\left( vis \parallel \right)} + \widetilde{j}_y^{\left( vis \perp \right)} + \widetilde{j}_y^{\left( visq \right)} \right)
 \end{gather}
 
 Additionally one can consider a flux of energy in the form of potential energy of ionization. This energy is spent by electrons at the place of ionization and released
