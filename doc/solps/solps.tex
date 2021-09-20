@@ -3054,7 +3054,7 @@ See also Appendix \ref{lis:b2cdcn} for a more up-to-date description.
 
 When referring to array length {\tt (NREG+1)} above, we mean range {\tt [0:NREG]} in the code.
 
-When running in time-dependent mode ({\tt b2mndt\_style.eq.2}), the total momentum and energy equations are not solved, and the timestep multipliers should not be used, unless their product with the under-relaxation parameters is 1 (as the code defaults provide).
+When running in the so-called ``time-dependent'' mode ({\tt b2mndt\_style.eq.2}), the total momentum and energy equations are not solved, and the timestep multipliers should not be used, unless their product with the under-relaxation parameters is 1 (as the code defaults provide).
 
 The region indices are defined as follows for a SN case:
 \begin{itemize}\index{regions}
@@ -4898,17 +4898,19 @@ several values of $\Delta_t$.
     \label{fig:tmne1}
 \end{figure}
 
-\section{Time-dependent mode}
+\section{``Time-dependent'' mode}
 \label{sec:time-dependent}\index{Time-dependent mode}
 
 {\em This feature is experimental and should be used with caution!}
 
-It is possible to run {\tt B2.5} in self-consistent time-dependent mode, by setting the switch {\tt b2mndt\_style} to {\tt 2}. Please note that the timestep may need to be decreased compared to a similar steady-state case to achieve convergence.
+There is an alternative solution method available, which does not rely on under-relaxation, and is called, by abuse of language, the ``time-dependent'' mode. This solution mode allows for a more precise estimate of the time derivative terms, particularly for the momentum and energy equations, and can be helpful to damp out numerical oscillations. This is obtained by setting the switch {\tt b2mndt\_style} to {\tt 2}. Please note that the timestep may need to be decreased compared to a similar traditional case, using under-relaxation, to achieve convergence.
 
-The time-dependent mode is only available with the \SOLPSfivetwo physics model. It changes the order of solution of the equations to solve first for the density equations, then the parallel momentum equations, followed by the electrical potential, electron and ion temperature equations. The total momentum and energy equations are not solved.
+The ``time-dependent'' mode triggers the use of the \SOLPSfivetwo physics model. It changes the order of solution of the equations to solve first for the density equations, then the parallel momentum equations, followed by the electrical potential, electron and ion temperature equations. The total momentum and energy equations are not solved.
+
+When using the traditional solution method, relying on under-relaxation of the equations, the evolution in time of the solution is not a true reflection of the physical evolution of the system, but rather only a numerical approximation, and only the final steady-state solution can be fully trusted. If one is interested in the details of the time evolution of the plasma state, then this new solution method should be considered.
 
 \begin{sloppypar}
-In time-dependent mode, the under-relaxation factor ({\tt b2mndt\_rxf}) and the timestep modifiers from {\tt b2.numerics.parameters} and other under-relaxation switches should be set in such a way that their product is 1 everywhere (as the variable defaults already provide and the code checks for). Thus, it is still possible to use the timestep multipliers (for example setting {\tt DTCO = DTMO = DTEE = DTEI = 2}) if the corresponding under-relaxation parameters compensate (in the same example, this would mean {\tt b2mndt\_rxf} set to {\tt 0.5}). Choosing these parameters to be different from 1 can influence the total convergence of the code.
+In ``time-dependent'' mode, the under-relaxation factor ({\tt b2mndt\_rxf}) and the timestep modifiers from {\tt b2.numerics.parameters} and other under-relaxation switches should be set in such a way that their product is 1 everywhere (as the variable defaults already provide and the code checks for). This ensures an accurate estimate of the time derivative terms. It is still possible to use the timestep multipliers (for example setting {\tt DTCO = DTMO = DTEE = DTEI = 2}) if the corresponding under-relaxation parameters compensate (in the same example, this would mean {\tt b2mndt\_rxf} set to {\tt 0.5}). Choosing these parameters to be different from 1 can influence the total convergence of the code and the diagnostic output, e.g. particle balance.
 \end{sloppypar}
 
 \section{Averaging scheme}
