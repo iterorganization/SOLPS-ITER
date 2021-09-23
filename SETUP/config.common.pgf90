@@ -28,7 +28,12 @@ ifdef IMAS_VERSION
   ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 17; echo $$?),0)
     ifdef GGD_VERSION
       GGD_MINOR_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f2 )
-      LD_UAL = `pkg-config imas-pgi ggd --libs`
+      ifdef AMNS_PREFIX
+        LD_UAL = `pkg-config imas-pgi ggd amns --libs`
+        SOLPS_CPP += -DAMNS
+      else
+        LD_UAL = `pkg-config imas-pgi ggd --libs`
+      endif
     else
       GGD_MINOR_VERSION = 0
       LD_UAL = `pkg-config imas-pgi --libs`
