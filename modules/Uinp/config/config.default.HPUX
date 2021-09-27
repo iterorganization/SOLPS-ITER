@@ -15,7 +15,7 @@ INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
 CPP      = /lib/cpp
 
-LDLIBS   = -Wl, ${LD_MSCL}
+LDLIBS   = -Wl, ${LD_MSCL} ${LD_NAG}
 LDEXTRA  =
 
 #!!!Local Variables:

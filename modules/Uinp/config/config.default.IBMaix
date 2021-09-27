@@ -20,7 +20,7 @@ CPP      = /lib/cpp
 MOD      = mod
 
 # LDLIBS = -L${SOLPSLIB}
-LDLIBS   = ${LD_MSCL}
+LDLIBS   = ${LD_MSCL} ${LD_NAG}
 # LDEXTRA  = -bmap:$(OBJDIR)/uinp.map -bloadmap:$(OBJDIR)/uinp.lmp -bmaxdata:0x80000000
 LDEXTRA  = -bmap:$(OBJDIR)/uinp.map -bloadmap:$(OBJDIR)/uinp.lmp
 
