@@ -4263,7 +4263,7 @@ This program saves the final output state of a run into an IDS (Interface Data S
 The program reads the {\tt b2mndr\_id*} switch group, defined in {\tt b2mn.dat}:
 \begin{itemize}
   \item {\tt b2mndr\_user} defines the user name and it is set by default to be the same as the {\tt USER} environment variable.
-  \item {\tt b2mndr\_database} defines the IMAS IDS database name and it is set by default to be the same as the {\tt DEVICE} environment variable. If {\tt DEVICE} has been left undefined, the default database name is {\tt 'solps-iter'}.
+  \item {\tt b2mndr\_database} defines the IMAS IDS database name and it is set by default to be the same as the {\tt DEVICE} environment variable. If {\tt DEVICE} has been left undefined, the default database name is {\tt 'solps-iter'}. If {\tt DEVICE} has been set to {\tt 'iter'}, the code internally modifies it to {\tt 'ITER'}, following the IMAS convention.
   \item {\tt b2mndr\_device} superseded by {\tt b2mndr\_database}
   \item {\tt b2mndr\_shot\_number} defines the shot number
   \item {\tt b2mndr\_run\_number} defines the run number

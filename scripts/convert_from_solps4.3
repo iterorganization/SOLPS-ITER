@@ -63,11 +63,11 @@ oldyaml=ids_${oldshotnumber}0001.yaml
 [ -e ${MDSPLUS_TREE_BASE_0}/${oldyaml} ] && echo "We are replacing IDS shot " $oldshotnumber
 echo "'b2mndr_run_number'  '1'" >> b2mn.dat.4
 echo "'b2mndr_user'        '${USER}'" >> b2mn.dat.4
-echo "'b2mndr_device'      '${DEVICE}'" >> b2mn.dat.4
+echo "'b2mndr_database'    '${DEVICE}'" >> b2mn.dat.4
 echo "'b2mndr_shot_number' '${shotnumber}'" >> b2mn.dat.4
 echo "'b2mndr_run_number'  '1'" >> b2mn.dat.5
 echo "'b2mndr_user'        '${USER}'" >> b2mn.dat.5
-echo "'b2mndr_device'      '${DEVICE}'" >> b2mn.dat.5
+echo "'b2mndr_database'    '${DEVICE}'" >> b2mn.dat.5
 echo "'b2mndr_shot_number' '${shotnumber}'" >> b2mn.dat.5
 cp b2.boundary.parameters.5 b2.boundary.parameters
 cp b2.transport.parameters.5 b2.transport.parameters
