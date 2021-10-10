@@ -8,10 +8,7 @@
 
 GV="gv $GV_OPT"
 
-solpstop=`climb_and_look_for SOLPSTOP`
-[ -s $solpstop ] && {
-  SOLPSTOP="`cat $solpstop`"
-}
+SOLPSTOP=`determine_SOLPSTOP`
 
 [ "$DEVICE" = '' ] && {
   print -u2 -n -- "No DEVICE selected. Please provide a device name\n "

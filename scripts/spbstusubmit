@@ -15,10 +15,8 @@ set MPIOPTS=""
 set standalone="no"
 set LOOP_OPTS=""
 
-set solpstop=`climb_and_look_for SOLPSTOP`
-if (-s $solpstop) then
-  setenv SOLPSTOP "`cat $solpstop`"
-else if ($SOLPSTOP == "") then
+setenv SOLPSTOP "`determine_SOLPSTOP`"
+if ($SOLPSTOP == "") then
   setenv SOLPSTOP "`echo $PWD | sed 's:/runs/.*::'`"
 endif
 

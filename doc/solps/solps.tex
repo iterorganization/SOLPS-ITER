@@ -1234,7 +1234,7 @@ will take you to {\tt \$\{SOLPSTOP\}/scripts}.
 The number of scripts developed for various {\bf SOLPS} versions is very large. Efforts have been made to translate all the relevant ones for use within \SOLPSITERns. Any of these scripts can be copied to the {\tt \$\{SOLPSTOP\}\allowbreak /scripts.local} directory for local user modifications as desired. There also are {\tt \$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}} subdirectories where compiler-dependent script programs will reside. A non-exhaustive listing of these scripts, with some explanation as to their purpose, follows:
 \begin{itemize}
 \item the residuals can be plotted with
-  \begin{description}
+ \begin{description}
   \item[resall\_D]\index{resall\_D} all residuals for a $D$-only case. A python version of this script also exists (Python 2.7 and 3.5 compatible).
   \item[resall\_D+\_only]\index{resall\_D+\_only} all residuals for a $D^+$-only case
   \item[resall\_D+D]\index{resall\_D+D} all residuals for test cases where we treat two separate $D$ sequences
@@ -1260,20 +1260,18 @@ The number of scripts developed for various {\bf SOLPS} versions is very large. 
   \item[resmt\_reg]\index{resmt\_reg} residuals of the total parallel momentum equation
   \item[reshe\_reg]\index{reshe\_reg} residuals of the electron heat equation per region
   \item[reshi\_reg]\index{reshi\_reg} residuals of the ion heat equation per region
-  \item[respo] \index{respo} residuals of the potential equation,
-    including the internal iterations
-  \item[respo\_num] \index{respo\_num} the number of internal
-    potential equation iterations
+  \item[respo] \index{respo} residuals of the potential equation, including the internal iterations
+  \item[respo\_num] \index{respo\_num} the number of internal potential equation iterations
   \item[respo\_reg]\index{respo\_reg} residuals of the potential equation per region
   \item[resopt]\index{resopt} Internal script to apply options to above residuals scripts (see below)
   \item[resmod \#1]\index{resmod} Selects residuals {\it modulo} \#1 (default all)
-  \end{description}
+ \end{description}
 all of the above can take "-m \#" to plot the residuals {\it modulo} "\#" occurrences
 and/or "-l \#" to plot the last "\#" residuals
 and/or "-a \#" to plot the average residual over "\#" occurrences.
 The options are applied in that order independently of the order in which they were typed.
 \item power/particle losses (see section \ref{cha:regions} and Appendix \ref{lab:b2:numerics:parameters} for the region definitions)
-  \begin{description}
+ \begin{description}
   \item[b2stbc\_sna\_reg \#1]\index{b2stbc\_sna\_reg} Boundary particle sources for region \#1 (default 0)
   \item[b2stbr\_sna\_reg \#1]\index{b2stbr\_sna\_reg} Recycling particle sources for region \#1 (default 0)
   \item[b2stbm\_sna\_reg \#1]\index{b2stbm\_sna\_reg} Additional particle sources for region \#1 (default 0)
@@ -1295,100 +1293,49 @@ The options are applied in that order independently of the order in which they w
   \item[rsahireg \#1]\index{rsahireg} ionization energy for region \#1 (default 0)
   \item[rsamoreg \#1]\index{rsamoreg} ionization parallel momentum for region \#1 (default 0)
   \item[rsanareg \#1]\index{rsanareg} ionization rate for region \#1 (default 0)
-  \item[b2stbc\_she\_reg\_region \#1]\index{b2stbc\_she\_reg\_region} Boundary electron heat sources, by
-    region, for species \#1 (default 0)
-  \item[b2stbc\_shi\_reg\_region \#1]\index{b2stbc\_shi\_reg\_region} Boundary ion heat sources, by
-    region, for species \#1 (default 0)
-  \item[b2stbc\_sne\_reg\_region \#1]\index{b2stbc\_sne\_reg\_region} Boundary electron particle sources, by
-    region, for species \#1 (default 0)
-  \item[b2stbc\_sch\_reg\_region \#1]\index{b2stbc\_sch\_reg\_region} Boundary charge sources, by
-    region, for species \#1 (default 0)
-  \item[b2stbc\_sna\_reg\_region \#1]\index{b2stbc\_sna\_reg\_region} Boundary particle sources, by
-    region, for species \#1 (default 0)
-  \item[b2stbc\_smo\_reg\_region \#1]\index{b2stbc\_smo\_reg\_region} Boundary parallel momentum sources, by
-    region, for species \#1 (default 0)
-  \item[b2stbr\_she\_reg\_region \#1]\index{b2stbr\_she\_reg\_region} Recycling electron heat sources, by
-    region, for species \#1 (default 0)
-  \item[b2stbr\_shi\_reg\_region \#1]\index{b2stbr\_shi\_reg\_region} Recycling ion heat sources, by
-    region, for species \#1 (default 0)
-  \item[b2stbr\_sne\_reg\_region \#1]\index{b2stbr\_sne\_reg\_region} Recycling electron particle sources, by
-    region, for species \#1 (default 0)
-  \item[b2stbr\_sch\_reg\_region \#1]\index{b2stbr\_sch\_reg\_region} Recycling charge sources, by
-    region, for species \#1 (default 0)
-  \item[b2stbr\_sna\_reg\_region \#1]\index{b2stbr\_sna\_reg\_region} Recycling particle sources, by
-    region, for species \#1 (default 0)
-  \item[b2stbr\_smo\_reg\_region \#1]\index{b2stbr\_smo\_reg\_region} Recycling parallel momentum sources, by
-    region, for species \#1 (default 0)
-  \item[b2stbm\_she\_reg\_region \#1]\index{b2stbm\_she\_reg\_region} Additional electron heat sources, by
-    region, for species \#1 (default 0)
-  \item[b2stbm\_shi\_reg\_region \#1]\index{b2stbm\_shi\_reg\_region} Additional ion heat sources, by
-    region, for species \#1 (default 0)
-  \item[b2stbm\_sne\_reg\_region \#1]\index{b2stbm\_sne\_reg\_region} Additional electron particle sources, by
-    region, for species \#1 (default 0)
-  \item[b2stbm\_sch\_reg\_region \#1]\index{b2stbm\_sch\_reg\_region} Additional charge sources, by
-    region, for species \#1 (default 0)
-  \item[b2stbm\_sna\_reg\_region \#1]\index{b2stbm\_sna\_reg\_region} Additional particle sources, by
-    region, for species \#1 (default 0)
-  \item[b2stbm\_smo\_reg\_region \#1]\index{b2stbm\_smo\_reg\_region} Additional parallel momentum sources, by
-    region, for species \#1 (default 0)
-  \item[b2sext\_she\_reg\_region \#1]\index{b2sext\_she\_reg\_region} External electron heat sources, by
-    region, for species \#1 (default 0)
-  \item[b2sext\_shi\_reg\_region \#1]\index{b2sext\_shi\_reg\_region} External ion heat sources, by
-    region, for species \#1 (default 0)
-  \item[b2sext\_sne\_reg\_region \#1]\index{b2sext\_sne\_reg\_region} External electron particle sources, by
-    region, for species \#1 (default 0)
-  \item[b2sext\_sch\_reg\_region \#1]\index{b2sext\_sch\_reg\_region} External charge sources, by
-    region, for species \#1 (default 0)
-  \item[b2sext\_sna\_reg\_region \#1]\index{b2sext\_sna\_reg\_region} External particle sources, by
-    region, for species \#1 (default 0)
-  \item[b2sext\_smo\_reg\_region \#1]\index{b2sext\_smo\_reg\_region} External parallel momentum sources, by
-    region, for species \#1 (default 0)
-  \item[rcxhireg\_region \#1]\index{rcxhireg\_region} charge exchange
-    energy, by region, for species \#1 (default 0)
-  \item[rcxmoreg\_region \#1]\index{rcxmoreg\_region} charge exchange
-    parallel momentum, by region, for species \#1 (default 0)
-  \item[rcxnareg\_region \#1]\index{rcxnareg\_region} charge exchange
-    rate, by region, for species \#1 (default 0)
-  \item[rqahereg\_region \#1]\index{rqahereg\_region} electron heat loss,
-    by region, for species \#1 (default 0)
-  \item[rqbrmreg\_region \#1]\index{rqbrmreg\_region} bremsstrahlung radiation loss,
-    by region, for species \#1 (default 0)
-  \item[rqradreg\_region \#1]\index{rqradreg\_region} total radiation rate,
-    by region, for species \#1 (default 0)
-  \item[rrahireg\_region \#1]\index{rrahireg\_region} recombination
-    energy, by region, for species \#1 (default 0)
-  \item[rramoreg\_region \#1]\index{rramoreg\_region} recombination
-    parallel momentum, by region, for species \#1 (default 0)
-  \item[rranareg\_region \#1]\index{rranareg\_region} recombination rate,
-    by region, for species \#1 (default 0)
-  \item[rsahireg\_region \#1]\index{rsahireg\_region} ionization energy,
-    by region, for species \#1 (default 0)
-  \item[rsamoreg\_region \#1]\index{rsamoreg\_region} ionization
-    parallel momentum, by region, for species \#1 (default 0)
-  \item[rsanareg\_region \#1]\index{rsanareg\_region} ionization rate, by
-    region, for species \#1 (default 0)
-  \end{description}
-these require the {\tt SOLPS\_FLUIDS} and {\tt NREG} variables to be set
-correctly (see section \ref{lab:b2:numerics:parameters} and Appendix \ref{cha:regions}
-for the definitions of the regions)\index{SOLPS\_FLUIDS}\index{NREG}. If
-the {\tt SOLPS\_FLUIDS} or {\tt NREG} files are not found, the necessary
-information is extracted from the {\tt run.log} file.
+  \item[b2stbc\_she\_reg\_region \#1]\index{b2stbc\_she\_reg\_region} Boundary electron heat sources, by region, for species \#1 (default 0)
+  \item[b2stbc\_shi\_reg\_region \#1]\index{b2stbc\_shi\_reg\_region} Boundary ion heat sources, by region, for species \#1 (default 0)
+  \item[b2stbc\_sne\_reg\_region \#1]\index{b2stbc\_sne\_reg\_region} Boundary electron particle sources, by region, for species \#1 (default 0)
+  \item[b2stbc\_sch\_reg\_region \#1]\index{b2stbc\_sch\_reg\_region} Boundary charge sources, by region, for species \#1 (default 0)
+  \item[b2stbc\_sna\_reg\_region \#1]\index{b2stbc\_sna\_reg\_region} Boundary particle sources, by region, for species \#1 (default 0)
+  \item[b2stbc\_smo\_reg\_region \#1]\index{b2stbc\_smo\_reg\_region} Boundary parallel momentum sources, by region, for species \#1 (default 0)
+  \item[b2stbr\_she\_reg\_region \#1]\index{b2stbr\_she\_reg\_region} Recycling electron heat sources, by region, for species \#1 (default 0)
+  \item[b2stbr\_shi\_reg\_region \#1]\index{b2stbr\_shi\_reg\_region} Recycling ion heat sources, by region, for species \#1 (default 0)
+  \item[b2stbr\_sne\_reg\_region \#1]\index{b2stbr\_sne\_reg\_region} Recycling electron particle sources, by region, for species \#1 (default 0)
+  \item[b2stbr\_sch\_reg\_region \#1]\index{b2stbr\_sch\_reg\_region} Recycling charge sources, by region, for species \#1 (default 0)
+  \item[b2stbr\_sna\_reg\_region \#1]\index{b2stbr\_sna\_reg\_region} Recycling particle sources, by region, for species \#1 (default 0)
+  \item[b2stbr\_smo\_reg\_region \#1]\index{b2stbr\_smo\_reg\_region} Recycling parallel momentum sources, by region, for species \#1 (default 0)
+  \item[b2stbm\_she\_reg\_region \#1]\index{b2stbm\_she\_reg\_region} Additional electron heat sources, by region, for species \#1 (default 0)
+  \item[b2stbm\_shi\_reg\_region \#1]\index{b2stbm\_shi\_reg\_region} Additional ion heat sources, by region, for species \#1 (default 0)
+  \item[b2stbm\_sne\_reg\_region \#1]\index{b2stbm\_sne\_reg\_region} Additional electron particle sources, by region, for species \#1 (default 0)
+  \item[b2stbm\_sch\_reg\_region \#1]\index{b2stbm\_sch\_reg\_region} Additional charge sources, by region, for species \#1 (default 0)
+  \item[b2stbm\_sna\_reg\_region \#1]\index{b2stbm\_sna\_reg\_region} Additional particle sources, by region, for species \#1 (default 0)
+  \item[b2stbm\_smo\_reg\_region \#1]\index{b2stbm\_smo\_reg\_region} Additional parallel momentum sources, by region, for species \#1 (default 0)
+  \item[b2sext\_she\_reg\_region \#1]\index{b2sext\_she\_reg\_region} External electron heat sources, by region, for species \#1 (default 0)
+  \item[b2sext\_shi\_reg\_region \#1]\index{b2sext\_shi\_reg\_region} External ion heat sources, by region, for species \#1 (default 0)
+  \item[b2sext\_sne\_reg\_region \#1]\index{b2sext\_sne\_reg\_region} External electron particle sources, by region, for species \#1 (default 0)
+  \item[b2sext\_sch\_reg\_region \#1]\index{b2sext\_sch\_reg\_region} External charge sources, by region, for species \#1 (default 0)
+  \item[b2sext\_sna\_reg\_region \#1]\index{b2sext\_sna\_reg\_region} External particle sources, by region, for species \#1 (default 0)
+  \item[b2sext\_smo\_reg\_region \#1]\index{b2sext\_smo\_reg\_region} External parallel momentum sources, by region, for species \#1 (default 0)
+  \item[rcxhireg\_region \#1]\index{rcxhireg\_region} charge exchange energy, by region, for species \#1 (default 0)
+  \item[rcxmoreg\_region \#1]\index{rcxmoreg\_region} charge exchange parallel momentum, by region, for species \#1 (default 0)
+  \item[rcxnareg\_region \#1]\index{rcxnareg\_region} charge exchange rate, by region, for species \#1 (default 0)
+  \item[rqahereg\_region \#1]\index{rqahereg\_region} electron heat loss, by region, for species \#1 (default 0)
+  \item[rqbrmreg\_region \#1]\index{rqbrmreg\_region} bremsstrahlung radiation loss, by region, for species \#1 (default 0)
+  \item[rqradreg\_region \#1]\index{rqradreg\_region} total radiation rate, by region, for species \#1 (default 0)
+  \item[rrahireg\_region \#1]\index{rrahireg\_region} recombination energy, by region, for species \#1 (default 0)
+  \item[rramoreg\_region \#1]\index{rramoreg\_region} recombination parallel momentum, by region, for species \#1 (default 0)
+  \item[rranareg\_region \#1]\index{rranareg\_region} recombination rate, by region, for species \#1 (default 0)
+  \item[rsahireg\_region \#1]\index{rsahireg\_region} ionization energy, by region, for species \#1 (default 0)
+  \item[rsamoreg\_region \#1]\index{rsamoreg\_region} ionization parallel momentum, by region, for species \#1 (default 0)
+  \item[rsanareg\_region \#1]\index{rsanareg\_region} ionization rate, by region, for species \#1 (default 0)
+ \end{description}
+these require the {\tt SOLPS\_FLUIDS} and {\tt NREG} variables to be set correctly (see section \ref{lab:b2:numerics:parameters} and Appendix \ref{cha:regions} for the definitions of the regions)\index{SOLPS\_FLUIDS}\index{NREG}. If the {\tt SOLPS\_FLUIDS} or {\tt NREG} files are not found, the necessary information is extracted from the {\tt run.log} file.
 \item plotting
-  \begin{description}
-  \item[plot]\index{plot} The various {\tt xyplot}\#, {\tt lxyplot}\#, {\tt xlyplot}\# and
-    {\tt lxlyplot}\# call {\tt plot} passing their name as the 1$^{st}$ parameter; {\tt plot}
-    parses the 1$^{st}$ parameter to determine if $\log x$ ({\tt lx}) or $\log y$ ({\tt ly})
-    and the number of curves (\#); args 1..\# specify labels for curves;
-    the next two arguments specify $x$- and $y$-axis labels, the last specifies
-    a header. The system normally uses {\tt gnuplot.cmd} for the
-    {\tt gnuplot} commands, and {\tt gnuplot.data} for the data.  A
-    number of environment variables can be used to modify the
-    behaviour of plot:
-    \begin{description}
-    \item[GNUPLOT\_BATCH] used at the start of the process of
-    specifying a batch of plots that should all be processed together
-    into one PostScript file.  The basic structure for using this
-    feature would be of the following form:
+ \begin{description}
+  \item[plot]\index{plot} The various {\tt xyplot}\#, {\tt lxyplot}\#, {\tt xlyplot}\# and {\tt lxlyplot}\# call {\tt plot} passing their name as the 1$^{st}$ parameter; {\tt plot} parses the 1$^{st}$ parameter to determine if $\log x$ ({\tt lx}) or $\log y$ ({\tt ly}) and the number of curves (\#); args 1..\# specify labels for curves; the next two arguments specify $x$- and $y$-axis labels, the last specifies a header. The system normally uses {\tt gnuplot.cmd} for the {\tt gnuplot} commands, and {\tt gnuplot.data} for the data. A number of environment variables can be used to modify the behaviour of plot:
+   \begin{description}
+    \item[GNUPLOT\_BATCH] used at the start of the process of specifying a batch of plots that should all be processed together into one PostScript file. The basic structure for using this feature would be of the following form:
     \begin{verbatim}
 setenv GNUPLOT_BATCH yes
 setenv GNUPLOT_POSTSCRIPT_OPTIONS 'color solid'
@@ -1406,51 +1353,24 @@ echo 0 > GNUPLOT_COUNT
 gnuplot gnuplot.cmd
 rm GNUPLOT_COUNT gnuplot.*data
     \end{verbatim}
-    where the {\tt 2dt} could be any series of commands that use
-    {\tt plot} for their graphics.  See the script {\tt 2d\_plots}
-    (\ref{script:2dplots} on page \pageref{script:2dplots}) for an
-    example
-    \item[GNUPLOT\_CMD]\index{GNUPLOT\_CMD} changes the command file used from
-    {\tt gnuplot.cmd} to the filename specified by this environment
-    variable
-    \item[GNUPLOT\_COUNT]\index{GNUPLOT\_COUNT} internal environment variable used for
-    batch plots
-    \item[GNUPLOT\_DATA]\index{GNUPLOT\_DATA} changes the data file used from
-    {\tt gnuplot.data} to the filename specified by this environment
-    variable
-    \item[GNUPLOT\_DELAY]\index{GNUPLOT\_DELAY} allows the user to change the delay
-    set at the bottom of {\tt gnuplot.cmd}
-    \item[GNUPLOT\_EXTRA]\index{GNUPLOT\_EXTRA} adds the contents of the file whose name is
-    stored in {\tt GNUPLOT\_EXTRA} to the {\tt gnuplot.cmd} file
+    where the {\tt 2dt} could be any series of commands that use {\tt plot} for their graphics.  See the script {\tt 2d\_plots} (\ref{script:2dplots} on page \pageref{script:2dplots}) for an example
+    \item[GNUPLOT\_CMD]\index{GNUPLOT\_CMD} changes the command file used from {\tt gnuplot.cmd} to the filename specified by this environment variable
+    \item[GNUPLOT\_COUNT]\index{GNUPLOT\_COUNT} internal environment variable used for batch plots
+    \item[GNUPLOT\_DATA]\index{GNUPLOT\_DATA} changes the data file used from {\tt gnuplot.data} to the filename specified by this environment variable
+    \item[GNUPLOT\_DELAY]\index{GNUPLOT\_DELAY} allows the user to change the delay set at the bottom of {\tt gnuplot.cmd}
+    \item[GNUPLOT\_EXTRA]\index{GNUPLOT\_EXTRA} adds the contents of the file whose name is stored in {\tt GNUPLOT\_EXTRA} to the {\tt gnuplot.cmd} file
     \item[GNUPLOT\_LINEWIDTH]\index{GNUPLOT\_LINEWIDTH} changes the line width being used
-    \item[GNUPLOT\_MAX\_POINTS]\index{GNUPLOT\_MAX\_POINTS} sets the maximum number of points
-    that will be plotted; if more points are present, the data will be
-    averaged so that the limit will not be exceeded
-    \item[GNUPLOT\_MAX\_POINTS\_FACTOR]\index{GNUPLOT\_MAX\_POINTS\_FACTOR} integer factor by which
-    the number of points is reduced to be below that set by
-    {\tt GNUPLOT\_MAX\_POINTS} (defaults to 2)
+    \item[GNUPLOT\_MAX\_POINTS]\index{GNUPLOT\_MAX\_POINTS} sets the maximum number of points that will be plotted; if more points are present, the data will be averaged so that the limit will not be exceeded
+    \item[GNUPLOT\_MAX\_POINTS\_FACTOR]\index{GNUPLOT\_MAX\_POINTS\_FACTOR} integer factor by which the number of points is reduced to be below that set by {\tt GNUPLOT\_MAX\_POINTS} (defaults to 2)
     \item[GNUPLOT\_NOTIMESTAMP]\index{GNUPLOT\_NOTIMESTAMP} removes the timestamp from the plots
     \item[GNUPLOT\_POINTSIZE]\index{GNUPLOT\_POINTSIZE} changes the size of points plotted
-    \item[GNUPLOT\_POSTSCRIPT\_OPTIONS]\index{GNUPLOT\_POSTSCRIPT\_OPTIONS} {\tt gnuplot} options for the
-    PostScript driver
+    \item[GNUPLOT\_POSTSCRIPT\_OPTIONS]\index{GNUPLOT\_POSTSCRIPT\_OPTIONS} {\tt gnuplot} options for the PostScript driver
     \item[GNUPLOT\_TERM]\index{GNUPLOT\_TERM} provides the "term" information for {\tt gnuplot}
-    \item[GNUPLOT\_TMP]\index{GNUPLOT\_TMP} causes the {\tt gnuplot.cmd},
-    {\tt gnuplot.data} and other temporary files to be written to the directory
-    specified by this environment variable. Works for most scripts.
-    Also moves the location of the {\tt GNUPLOT\_EXTRA} and
-    {\tt GNUPLOT\_COUNT} files to being located in {\tt GNUPLOT\_TMP}.
+    \item[GNUPLOT\_TMP]\index{GNUPLOT\_TMP} causes the {\tt gnuplot.cmd}, {\tt gnuplot.data} and other temporary files to be written to the directory specified by this environment variable. Works for most scripts. Also moves the location of the {\tt GNUPLOT\_EXTRA} and {\tt GNUPLOT\_COUNT} files to being located in {\tt GNUPLOT\_TMP}.
     \item[PLOTPOINTS]\index{PLOTPOINTS} just plot points
-    \item[PRINT\_PLOT]\index{PRINT\_PLOT} if set to a filename, then PostScript is
-    written to that file; else if set but empty, PostScript is sent to the
-    default printer; otherwise the plot is done to the X terminal
-    \end{description}
-    If the file {\tt GNUPLOT\_COUNT} exists, then an internal counter
-    {\tt GNUPLOT\_COUNT} is set by reading the number from the file;
-    incremented; and then saved to the file; instead of using
-    {\tt gnuplot.data} for the data, the file
-    {\tt gnuplot.\$\{GNUPLOT\_COUNT\}.data} is used and the commands for
-    plotting are concatenated to {\tt gnuplot.cmd} allowing for
-    multiple pages of plots.
+    \item[PRINT\_PLOT]\index{PRINT\_PLOT} if set to a filename, then PostScript is written to that file; else if set but empty, PostScript is sent to the default printer; otherwise the plot is done to the X terminal
+   \end{description}
+  If the file {\tt GNUPLOT\_COUNT} exists, then an internal counter {\tt GNUPLOT\_COUNT} is set by reading the number from the file; incremented; and then saved to the file; instead of using {\tt gnuplot.data} for the data, the file {\tt gnuplot.\$\{GNUPLOT\_COUNT\}.data} is used and the commands for plotting are concatenated to {\tt gnuplot.cmd} allowing for multiple pages of plots.
   \item[plot\_png]\index{plot\_png} produces a PNG output file instead
   \item[xyplot ]\index{xyplot } alias for simple "$x~y$" plot
   \item[xyplot2]\index{xyplot2} alias for simple "$x~y_1~y_2$" plot
@@ -1488,39 +1408,19 @@ rm GNUPLOT_COUNT gnuplot.*data
   \item[lxlyplot7]\index{lxlyplot7} alias for simple "$\log(x)~\log(y_1)~\log(y_2)~\log(y_3)~\log(y_4)~\log(y_5)~\log(y_6)~\log(y_7)$" plot
   \item[lxlyplot8]\index{lxlyplot8} alias for simple "$\log(x)~\log(y_1)~\log(y_2)~\log(y_3)~\log(y_4)~\log(y_5)~\log(y_6)~\log(y_7)~\log(y_8)$" plot
   \item[lxlyplot9]\index{lxlyplot9} alias for simple "$\log(x)~\log(y_1)~\log(y_2)~\log(y_3)~\log(y_4)~\log(y_5)~\log(y_6)~\log(y_7)~\log(y_8)~\log(y_9)$" plot
-  \end{description}
-\item Detailed run diagnostics (Many of these invoke the "plot" command described above and can be toggled to use a
-logarithmic $y$ scale by use of an additional "l" argument while "L" also plots the absolute values of
-negative quantities on the same scale and "M" the absolute values of negative quantities in a separate plot)
-  \begin{description}
-  \item[2d]\index{2d} plots time-dependent quantities from
-    {\tt b2time.nc} (Appendix \ref{cha:b2time}), 2$^{nd}$, 3$^{rd}$ {\it etc.\ versus} the 1$^{st}$ argument.
-  \item[2da]\index{2da} prints time-dependent quantities from
-    {\tt b2time.nc} (Appendix \ref{cha:b2time}), 2$^{nd}$, 3$^{rd}$ {\it etc.\ versus} the 1$^{st}$ argument.
-  \item[2dt]\index{2dt} plots time-dependent quantities from
-    {\tt b2time.nc} (Appendix \ref{cha:b2time}) versus time. A python version of this script also exists (Python 2.7 and 3.5 compatible).
-  \item[2dt\_tallies.py]\index{2dt\_tallies.py} plots time-dependent quantities from
-    {\tt b2tallies.nc} (Appendix \ref{cha:b2tallies}) versus time (Python 3.5 compatible).
-  \item[2dt\_av]\index{2dt\_av} plots averaged time-dependent quantities from
-    {\tt b2time.nc} (Appendix \ref{cha:b2time}) versus time.
+ \end{description}
+\item Detailed run diagnostics (Many of these invoke the "plot" command described above and can be toggled to use a logarithmic $y$ scale by use of an additional "l" argument while "L" also plots the absolute values of negative quantities on the same scale and "M" the absolute values of negative quantities in a separate plot)
+ \begin{description}
+  \item[2d]\index{2d} plots time-dependent quantities from {\tt b2time.nc} (Appendix \ref{cha:b2time}), 2$^{nd}$, 3$^{rd}$ {\it etc.\ versus} the 1$^{st}$ argument.
+  \item[2da]\index{2da} prints time-dependent quantities from {\tt b2time.nc} (Appendix \ref{cha:b2time}), 2$^{nd}$, 3$^{rd}$ {\it etc.\ versus} the 1$^{st}$ argument.
+  \item[2dt]\index{2dt} plots time-dependent quantities from {\tt b2time.nc} (Appendix \ref{cha:b2time}) versus time. A python version of this script also exists (Python 2.7 and 3.5 compatible).
+  \item[2dt\_tallies.py]\index{2dt\_tallies.py} plots time-dependent quantities from {\tt b2tallies.nc} (Appendix \ref{cha:b2tallies}) versus time (Python 3.5 compatible).
+  \item[2dt\_av]\index{2dt\_av} plots averaged time-dependent quantities from {\tt b2time.nc} (Appendix \ref{cha:b2time}) versus time.
   \item[2dvi]\index{2dvi} prepares a \btwoplot command file {\tt TDV/contr.b2p} for production of input files to start a {\tt DIVIMP} run.
-  \item[2d\_plots]\label{script:2dplots}\index{2d\_plots} prepares {\tt b2time2d.ps} from
-    {\tt b2time.nc} (Appendix \ref{cha:b2time}).  This uses the batch
-    feature of the {\tt plot} command.
-  \item[2d\_plots\_av]\index{2d\_plots\_av} prepares {\tt b2time2d\_av.ps} from
-    averaged values in {\tt b2time.nc} (Appendix \ref{cha:b2time}).  This uses the batch
-    feature of the {\tt plot} command.
-  \item[2d\_profiles]\index{2d\_profiles} creates {\tt *.last10} files for plotting.
-    When processing fluxes, divides them by the area of contact to the neighbouring cell.
-    By default, the profiles will be averaged over the last 10 snapshots.
-    If the number of available snapshots is less than 10, the default will be to average over all the snapshots available.
-    The averaging limits can be adjusted with the \#1 and \#2 arguments (default values are 10 and 0 respectively).
-  \item[2d\_profiles\_extended]\index{2d\_profiles\_extended} creates {\tt *.last10} files for plotting.
-    When processing fluxes, divides them by the area of contact to the neighbouring cell.
-    The flux files ending in {\tt P.last10} are divided by the perpendicular area of the cell face.
-    By default, the profiles will be averaged over the last 10 snapshots.
-    If the number of available snapshots is less than 10, the default will be to average over all the snapshots available.
-    The averaging number can be adjusted with the \#1 argument (default value is 10).
+  \item[2d\_plots]\label{script:2dplots}\index{2d\_plots} prepares {\tt b2time2d.ps} from {\tt b2time.nc} (Appendix \ref{cha:b2time}). This uses the batch feature of the {\tt plot} command.
+  \item[2d\_plots\_av]\index{2d\_plots\_av} prepares {\tt b2time2d\_av.ps} from averaged values in {\tt b2time.nc} (Appendix \ref{cha:b2time}). This uses the batch feature of the {\tt plot} command.
+  \item[2d\_profiles]\index{2d\_profiles} creates {\tt *.last10} files for plotting. When processing fluxes, divides them by the area of contact to the neighbouring cell. By default, the profiles will be averaged over the last 10 snapshots. If the number of available snapshots is less than 10, the default will be to average over all the snapshots available. The averaging limits can be adjusted with the \#1 and \#2 arguments (default values are 10 and 0 respectively).
+  \item[2d\_profiles\_extended]\index{2d\_profiles\_extended} creates {\tt *.last10} files for plotting. When processing fluxes, divides them by the area of contact to the neighbouring cell. The flux files ending in {\tt P.last10} are divided by the perpendicular area of the cell face. By default, the profiles will be averaged over the last 10 snapshots. If the number of available snapshots is less than 10, the default will be to average over all the snapshots available. The averaging number can be adjusted with the \#1 argument (default value is 10).
   \item[2d.summarize]\index{2d.summarize} Outputs the time-dependent quantities from the last time point in {\tt b2time.nc}.
   \item[D+\_fluid\_fluxes]\index{D+\_fluid\_fluxes} Plots the fluxes of $D^+$ ions across the grid boundaries for a {\tt B2.5} standalone case
   \item[D0\_fluid\_fluxes]\index{D0\_fluid\_fluxes} Plots the fluxes of $D^0$ neutrals across the grid boundaries for a {\tt B2.5} standalone case
@@ -1598,14 +1498,11 @@ negative quantities on the same scale and "M" the absolute values of negative qu
   \item[tireg]\index{tireg} Shows averaged ion temperature per region.
   \item[viscous\_heating]\index{viscous\_heating} Shows the viscous heating term per region.
   \item[zeffreg]\index{zeffreg} Shows $Z_{eff}$ per region.
-  \end{description}
-many of the above require the {\tt SOLPS\_FLUIDS} and {\tt NREG} variables to be set
-correctly (see section \ref{lab:b2:numerics:parameters} and Appendix \ref{cha:regions}
-for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG}. If
-the {\tt SOLPS\_FLUIDS} or {\tt NREG} files is not found, the necessary information is
-extracted from the {\tt run.log} file.
+ \end{description}
+many of the above require the {\tt SOLPS\_FLUIDS} and {\tt NREG} variables to be set correctly (see section \ref{lab:b2:numerics:parameters} and Appendix \ref{cha:regions}
+for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG}. If the {\tt SOLPS\_FLUIDS} or {\tt NREG} files is not found, the necessary information is extracted from the {\tt run.log} file.
 \item Utility
-  \begin{description}
+ \begin{description}
   \item[add\_central\_device DEVICE]\index{add\_central\_device} Creates writeable directories for a given {\tt DEVICE} for a centralized \SOLPSITER installation.
   \item[ave.awk \#1]\index{ave.awk} Performs an average over the \#1 rows (default all).
   \item[awk.first+even]\index{awk.first+even} Selects the first and every even column from an array of data.
@@ -1620,29 +1517,20 @@ extracted from the {\tt run.log} file.
   \item[get\_solps\_fluids]\index{get\_solps\_fluids} A utility script to obtain the list of fluid species labels from the {\tt run.log} file.
   \item[grf]\index{grf} A more effective version of "grep" when searching for use of a variable in source code.
   \item[inspect\_plasmastate \#1]\index{inspect\_plasmastate} This script will return the plasma time stamp at which the {\tt plasmastate} savefile \#1 was written.
-  \item[plot\_cps \#1]\index{plot\_cps} Copies {\tt gnuplot.cmd} to
-    {\tt gnuplot\_cps.cmd}, modifying it so that colour plotting occurs to \#1
-    or by default {\tt out.ps}; executes {\tt gnuplot} on new file.
-    The location of these files can be modified by use of the {\tt GNUPLOT\_TMP} variable.
+  \item[plot\_cps \#1]\index{plot\_cps} Copies {\tt gnuplot.cmd} to {\tt gnuplot\_cps.cmd}, modifying it so that colour plotting occurs to \#1 or by default {\tt out.ps}; executes {\tt gnuplot} on new file. The location of these files can be modified by use of the {\tt GNUPLOT\_TMP} variable.
   \item[plot\_it]\index{plot\_it} Utility script used to produce complex plots.
-  \item[plot\_ps \#1]\index{plot\_ps} Copies {\tt gnuplot.cmd} to
-    {\tt gnuplot\_ps.cmd}, modifying it so that black-and-white plotting
-    occurs to \#1 or by default {\tt out.ps}; executes {\tt gnuplot} on new file.
-    The location of these files can be modified by use of the {\tt GNUPLOT\_TMP} variable.
+  \item[plot\_ps \#1]\index{plot\_ps} Copies {\tt gnuplot.cmd} to {\tt gnuplot\_ps.cmd}, modifying it so that black-and-white plotting occurs to \#1 or by default {\tt out.ps}; executes {\tt gnuplot} on new file. The location of these files can be modified by use of the {\tt GNUPLOT\_TMP} variable.
   \item[plot\_rzpsi.dat]\index{plot\_rzpsi.dat} Utility script using {\tt plotmtv} to obtain a plot of the equilibrium data from the {\tt rzpsi.dat} file used by {\tt Carre} to build the computational grid.
   \item[plot\_set]\index{plot\_set} Utility script preparing files for complex plots.
   \item[species]\index{species} Obtains the list of species from {\tt SOLPS\_FLUIDS}.
   \item[wavelength\_to\_energy]\index{wavelength\_to\_energy} Converts a wavelength (in $m$) to an energy (in $eV$) (and the reverse).
-  \end{description}
+ \end{description}
 \item Others
-  \begin{description}
+ \begin{description}
   \item[b2]\index{b2} Shortcut to {\tt B2}.
-  \item[b2favere\_OK]\index{b2favere\_OK} Checks that the {\tt b2favere} file
-    is of correct size and content.
-  \item[b2fstate\_OK]\index{b2fstate\_OK} Checks that the {\tt b2fstate} file
-    is of correct size and content.
-  \item[b2fstate\_OK\_bool]\index{b2fstate\_OK\_bool} Checks that the {\tt b2fstate} file
-    is of correct size and content and returns 0 or 1 for use in scripting.
+  \item[b2favere\_OK]\index{b2favere\_OK} Checks that the {\tt b2favere} file is of correct size and content.
+  \item[b2fstate\_OK]\index{b2fstate\_OK} Checks that the {\tt b2fstate} file is of correct size and content.
+  \item[b2fstate\_OK\_bool]\index{b2fstate\_OK\_bool} Checks that the {\tt b2fstate} file is of correct size and content and returns 0 or 1 for use in scripting.
   \item[b2p]\index{b2p} Script to obtain a standard series of \btwoplot graphs.
   \item[b2pc]\index{b2pc} Script to obtain a standard series of \btwoplot graphs.
   \item[b2pl]\index{b2pl} Script to obtain a standard series of \btwoplot graphs.
@@ -1655,17 +1543,14 @@ extracted from the {\tt run.log} file.
   \item[chop\_pwd \#1]\index{chop\_pwd} Truncates the name of the current directory to not exceed \#1 characters (default 60).
   \item[climb\_and\_look\_for]\index{climb\_and\_look\_for} Script used to find a file in a directory above the current one.
   \item[copy\_tracing\_files]\index{copy\_tracing\_files} Script to bring tracing files to temporary run directory, if present.
-  \item[correct\_baserun\_timestamps]\index{correct\_baserun\_timestamps}
-    Makes sure the timestamps for the start-up files in the {\tt baserun}
-    directory are in the right chronological order.
-  \item[correct\_b2yt\_timestamps]\index{correct\_b2yt\_timestamps}\index{b2yt}
-    Makes sure the timestamps for the start-up files in the current
-    directory are in the right chronological order for the {\tt b2yt} converter.
+  \item[correct\_baserun\_timestamps]\index{correct\_baserun\_timestamps} Makes sure the timestamps for the start-up files in the {\tt baserun} directory are in the right chronological order.
+  \item[correct\_b2yt\_timestamps]\index{correct\_b2yt\_timestamps}\index{b2yt} Makes sure the timestamps for the start-up files in the current directory are in the right chronological order for the {\tt b2yt} converter.
   \item[count]\index{count} Basic counting with advanced options (``count -h'' for help).
   \item[d2d]\index{d2d} Doubles the resolution of the {\tt DG} equilibrium file (see Sec.~\ref{sec:equtrn}).
   \item[d2e]\index{d2e} Converts {\tt DG} equilibrium files to {\tt EFIT} format (see Sec.~\ref{sec:equtrn}).
   \item[d2v]\index{d2v} Converts {\tt DG} equilibrium files to {\tt Carre} format (see Sec.~\ref{sec:equtrn}).
   \item[datestamp]\index{datestamp} Gets a date stamp from the machine.
+  \item[determine\_SOLPSTOP]\index{determine\_SOLPSTOP}\index{SOLPSTOP\_FORCE} Assigns the SOLPSTOP variable inside submission scripts according to the environment variable {\tt SOLPSTOP\_FORCE}, if present and pointing to a valid directory, or, next, the content of the local {\tt SOLPSTOP} file or, last, the environment variable {\tt \$SOLPSTOP}.
   \item[e2d]\index{e2d} Converts {\tt EFIT} equilibrium files to {\tt DG} format (see Sec.~\ref{sec:equtrn}).
   \item[eirobj]\index{eirobj} Alias to run {\tt Eirene} standalone with graphics.
   \item[eirobjx]\index{eirobjx} Alias to run {\tt Eirene} standalone without graphics.
@@ -1732,35 +1617,26 @@ extracted from the {\tt run.log} file.
   \item[truncate\_tracing\_files]\index{truncate\_tracing\_files}\index{b2co} Script used by the crash recovery program {\tt b2co} to truncate the optional tracing files so that they stay synchronized with the recovered plasma state.
   \item[ustcsubmit]\index{ustcsubmit} Command file to launch runs on the USTC computer cluster. See Section \ref{b2run} for details.
   \item[v2d]\index{v2d} Converts {\tt Carre} format equilibrium files to {\tt DG} format (see Sec.~\ref{sec:equtrn}).
-  \end{description}
+ \end{description}
 \item Some new Python \index{Python scripts} based scripts have also been added:
-  \begin{description}
+ \begin{description}
   \item[calculate\_sputter\_inner\_target.py]\index{calculate\_sputter\_inner\_target.py} Calculates the physical sputtering to be expected at the inner target in a simulation saved in MDSplus (chapter \ref{cha:MDSplus}) on the solps-mdsplus.aug.ipp.mpg.de server (``-h'' help is provided).
   \item[calculate\_sputter\_outer\_target.py]\index{calculate\_sputter\_outer\_target.py} Calculates the physical sputtering to be expected at the outer target in a simulation saved in MDSplus (chapter \ref{cha:MDSplus}) on the solps-mdsplus.aug.ipp.mpg.de server (``-h'' help is provided).
   \item[compare\_2\_solps.py]\index{compare\_2\_solps.py} Compares two SOLPS shots with same dimensions saved in MDSplus (chapter \ref{cha:MDSplus}) on the solps-mdsplus.aug.ipp.mpg.de server (``-h'' help is provided).
-  \item[energy\_analysis.py]\index{energy\_analysis.py} Energy
-    passing through various surfaces.
-  \item[fluid\_core\_fluxes.py \#1 \#2]\index{fluid\_core\_fluxes.py} Total fluid flux
-    entering the core region summed from species \#1 to \#2.
-  \item[fluid\_fluxes.py \#1 \#2]\index{fluid\_fluxes.py} Fluid fluxes
-    through various surfaces summed from species \#1 to \#2.
+  \item[energy\_analysis.py]\index{energy\_analysis.py} Energy passing through various surfaces.
+  \item[fluid\_core\_fluxes.py \#1 \#2]\index{fluid\_core\_fluxes.py} Total fluid flux entering the core region summed from species \#1 to \#2.
+  \item[fluid\_fluxes.py \#1 \#2]\index{fluid\_fluxes.py} Fluid fluxes through various surfaces summed from species \#1 to \#2.
   \item[nareg.py \#1]\index{nareg.py} Average ion densities for region \#1.
-  \item[nareg\_species.py \#1]\index{nareg\_species.py}  Average ion
-    densities for region \#1 summed over charge states for each species.
+  \item[nareg\_species.py \#1]\index{nareg\_species.py}  Average ion densities for region \#1 summed over charge states for each species.
   \item[nereg.py]\index{nereg.py} Average electron densities.
-  \item[rqradreg.py \#1]\index{rqradreg.py} Line radiation summed over
-    each species' charge states for region \#1.
-  \item[rranareg.py \#1]\index{rranareg.py} Recombination rates for
-    region \#1.
-  \item[rranareg\_per\_rsanareg.py \#1]\index{[rranareg\_per\_rsanareg.py}
-    Recombination rates divided by ionization rates for region \#1
-    (summed over charge states).
-  \item[rsanareg.py \#1]\index{rsanareg.py} Ionization rates for
-    region \#1.
+  \item[rqradreg.py \#1]\index{rqradreg.py} Line radiation summed over each species' charge states for region \#1.
+  \item[rranareg.py \#1]\index{rranareg.py} Recombination rates for region \#1.
+  \item[rranareg\_per\_rsanareg.py \#1]\index{[rranareg\_per\_rsanareg.py} Recombination rates divided by ionization rates for region \#1 (summed over charge states).
+  \item[rsanareg.py \#1]\index{rsanareg.py} Ionization rates for region \#1.
   \item[tereg.py]\index{tereg.py} Average electron temperatures.
   \item[tireg.py]\index{tireg.py} Average ion temperatures.
   \item[zeffreg.py]\index{zeffreg.py} Average $Z_{eff}$.
-  \end{description}
+ \end{description}
 \end{itemize}
 \end{sloppypar}
 
@@ -17574,12 +17450,13 @@ from the files stored in {\tt \$\{SOLPSTOP\}/modules/adas} or
 \section{Environment variables}
 
 \begin{description}
-\item[B2PLOT\_DEV] is used to specify plotting to any combination of
+\item[B2PLOT\_DEV]\index{B2PLOT\_DEV} is used to specify plotting to any combination of
   "x11", "ps" or "cgm" (default is "ps").  Under {\tt tcsh}, use
   \begin{verbatim}
 setenv B2PLOT_DEV 'x11 ps'
   \end{verbatim}
-\item[SOLPSTOP] used to specify the top of the {\tt SOLPS} tree.
+\item[SOLPSTOP]\index{SOLPSTOP} used to specify the top of the {\tt SOLPS} tree
+\item[SOLPSTOP\_FORCE]\index{SOLPSTOP\_FORCE} used to override the value of {\tt \$SOLPSTOP} to force execution of code executables from a different tree (not defined by default)
 \end{description}
 
 Environment variables can also be used in the {\bf extl} command

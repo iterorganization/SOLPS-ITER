@@ -4,10 +4,10 @@
 if($1 == "") then
   if (-s b2.neutrals.parameters) then
     set count = `egrep -i 'NSTRAI *=' b2.neutrals.parameters | tail -1 | sed -e 's/NSTRAI//' | sed -e 's/=//' | sed -e 's/,//'` 
-  else if (-s $SOLPSTOP/src/B2.5/src/include.local/DIMENSIONS.F) then
-    set count = `egrep 'DEF_NSTRA' $SOLPSTOP/src/B2.5/src/include.local/DIMENSIONS.F | tail -1 | sed -e 's/^#define DEF_NSTRA//'`
+  else if (-s $SOLPSTOP/modules/B2.5/src/include.local/DIMENSIONS.F) then
+    set count = `egrep 'DEF_NSTRA' $SOLPSTOP/modules/B2.5/src/include.local/DIMENSIONS.F | tail -1 | sed -e 's/^#define DEF_NSTRA//'`
   else
-    set count = `egrep 'DEF_NSTRA' $SOLPSTOP/src/B2.5/src/include/DIMENSIONS.F | tail -1 | sed -e 's/^#define DEF_NSTRA//'`
+    set count = `egrep 'DEF_NSTRA' $SOLPSTOP/modules/B2.5/src/include/DIMENSIONS.F | tail -1 | sed -e 's/^#define DEF_NSTRA//'`
   endif
   if (-s input.dat) then
     set count = `echo $count 1 | awk '{print $1+$2}'`

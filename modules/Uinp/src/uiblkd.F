@@ -954,8 +954,8 @@ c*** Data for Eirene test run
      / .true. ,.true.   ,.true. , .false. /,
      , ttpl1st,ttpl2nd,ttpladd,ttplhst,        ttplcut       ,ttplnums/
      / .true. ,.true. ,.true. ,.true. ,.false.,.false.,.true.,.true.  /,
-     , ttplspec,ttprspec,ttplargl,ttprargl /
-     / .true.  ,.true.  ,.true.  ,.true.   /
+     , ttplspec,ttprspec,ttplargl,ttprargl,ttlsprcl /
+     / .true.  ,.true.  ,.true.  ,.true.  ,.false.  /
 
 c*** Data for diagnostic run
 
