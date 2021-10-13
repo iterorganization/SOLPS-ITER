@@ -64,11 +64,16 @@ state.te     = read_rfield(fid,'te'    ,[nx+2,ny+2]);
 state.ti     = read_rfield(fid,'ti'    ,[nx+2,ny+2]);
 if str2num(strrep(version,'.','')) >= str2num(strrep('03.002.000','.',''))
      state.tn     = read_rfield(fid,'tn'    ,[nx+2,ny+2]);
+else
+    state.tn = zeros(size(state.ti));
 end
 state.po     = read_rfield(fid,'po'    ,[nx+2,ny+2]);
 if str2num(strrep(version,'.','')) >= str2num(strrep('03.002.000','.',''))
      state.kt     = read_rfield(fid,'kt'    ,[nx+2,ny+2]);
-     state.zt     = read_rfield(fid,'zt'    ,[nx+2,ny+2]);
+%      state.zt     = read_rfield(fid,'zt'    ,[nx+2,ny+2]);
+else
+    state.kt = zeros(size(state.ti));
+%     state.zt = zeros(size(state.ti));
 end
 %% Read fluxes
 
@@ -77,16 +82,22 @@ state.fhe    = read_rfield(fid,'fhe'   ,fluxdim);
 state.fhi    = read_rfield(fid,'fhi'   ,fluxdim);
 if str2num(strrep(version,'.','')) >= str2num(strrep('03.002.000','.',''))
      state.fhn    = read_rfield(fid,'fhn'   ,fluxdim);
+else
+     state.fhn = zeros(size(state.fhi));
 end
 state.fch    = read_rfield(fid,'fch'   ,fluxdim);
 state.fch_32 = read_rfield(fid,'fch_32',fluxdim);
 state.fch_52 = read_rfield(fid,'fch_52',fluxdim);
 state.kinrgy = read_rfield(fid,'kinrgy',[nx+2,ny+2,ns]);
-if str2num(strrep(version,'.','')) >= str2num(strrep('03.002.000','.',''))
+% if str2num(strrep(version,'.','')) >= str2num(strrep('03.002.000','.',''))
 %     state.fhm    = read_rfield(fid,'fhm'   ,fluxdims);
 %     state.fkt    = read_rfield(fid,'fkt'   ,fluxdim);
 %     state.fzt    = read_rfield(fid,'fzt'   ,fluxdim);
-end
+% else
+%     state.fhm    = zeros(size(state.fna));
+%     state.fkt    = zeros(size(state.fhi));
+%     state.fzt    = zeros(size(state.fhi));
+% end
 state.time   = read_rfield(fid,'time'  ,1);
 state.fch_p  = read_rfield(fid,'fch_p' ,fluxdimp);
 

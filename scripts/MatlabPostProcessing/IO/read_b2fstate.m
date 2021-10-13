@@ -132,7 +132,7 @@ if str2num(strrep(version,'.','')) >= str2num(strrep('03.000.005','.',''))
     state.fchvispar   = read_rfield(fid,'fchvispar'  ,fluxdim);
     state.fchvisper   = read_rfield(fid,'fchvisper'  ,fluxdim);
     state.fchvisq     = read_rfield(fid,'fchvisq'    ,fluxdim);
-%     state.fchviskt   = read_rfield(fid,'fchviskt'  ,fluxdim);
+    state.fchviskt   = read_rfield(fid,'fchviskt'  ,fluxdim);
     state.fchinert    = read_rfield(fid,'fchinert'   ,fluxdim);
     
     state.vaecrb = read_rfield(fid,'vaecrb' ,fluxdims);

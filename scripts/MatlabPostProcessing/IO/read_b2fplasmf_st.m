@@ -80,7 +80,13 @@ state.fna0   = read_rfield(fid,'fna0'  ,fluxdims);
 state.fnap   = read_rfield(fid,'fnap'  ,fluxdims);
 state.fne    = read_rfield(fid,'fne'   ,fluxdim);
 state.fni    = read_rfield(fid,'fni'   ,fluxdim);
-state.fkt    = read_rfield(fid,'fkt'   ,fluxdim);
+if str2num(strrep(version,'.','')) >= str2num(strrep('03.002.000','.',''))
+    state.fkt    = read_rfield(fid,'fkt'   ,fluxdim);
+    state.fzt    = read_rfield(fid,'fzt'   ,fluxdim);
+else
+    state.fkt = zeros(size(state.fhi));
+    state.fzt = zeros(size(state.fhi));
+end
 state.na     = read_rfield(fid,'na'    ,[nx+2,ny+2,ns]);
 state.na0    = read_rfield(fid,'na0'   ,[nx+2,ny+2,ns]);
 state.nap    = read_rfield(fid,'nap'   ,[nx+2,ny+2,ns]);
@@ -88,8 +94,8 @@ state.ne     = read_rfield(fid,'ne'    ,[nx+2,ny+2]);
 state.ne0    = read_rfield(fid,'ne0'   ,[nx+2,ny+2]);
 state.ne2    = read_rfield(fid,'ne2'   ,[nx+2,ny+2]);
 state.nep    = read_rfield(fid,'nep'   ,[nx+2,ny+2]);
-state.ni     = read_rfield(fid,'ni'    ,[nx+2,ny+2,ns]);
-state.ni0    = read_rfield(fid,'ni0'   ,[nx+2,ny+2,ns]);
+state.ni     = read_rfield(fid,'ni'    ,[nx+2,ny+2,2]);
+state.ni0    = read_rfield(fid,'ni0'   ,[nx+2,ny+2,2]);
 state.pb     = read_rfield(fid,'pb'    ,[nx+2,ny+2]);
 state.po     = read_rfield(fid,'po'    ,[nx+2,ny+2]);
 state.po0    = read_rfield(fid,'po0'   ,[nx+2,ny+2]);
@@ -100,8 +106,15 @@ state.tep    = read_rfield(fid,'tep'   ,[nx+2,ny+2]);
 state.ti     = read_rfield(fid,'ti'    ,[nx+2,ny+2]);
 state.ti0    = read_rfield(fid,'ti0'   ,[nx+2,ny+2]);
 state.tip    = read_rfield(fid,'tip'   ,[nx+2,ny+2]);
-state.tn     = read_rfield(fid,'tn'    ,[nx+2,ny+2]);
-state.kt     = read_rfield(fid,'kt'    ,[nx+2,ny+2]);
+if str2num(strrep(version,'.','')) >= str2num(strrep('03.002.000','.',''))
+    state.tn     = read_rfield(fid,'tn'    ,[nx+2,ny+2]);
+    state.kt     = read_rfield(fid,'kt'    ,[nx+2,ny+2]);
+    state.zt     = read_rfield(fid,'zt'    ,[nx+2,ny+2]);
+else
+    state.tn = zeros(size(state.ti));
+    state.kt = zeros(size(state.ti));
+    state.zt = zeros(size(state.ti));
+end
 state.ua     = read_rfield(fid,'ua'    ,[nx+2,ny+2,ns]);
 state.ua0    = read_rfield(fid,'ua0'   ,[nx+2,ny+2,ns]);
 state.uap    = read_rfield(fid,'uap'   ,[nx+2,ny+2,ns]);
@@ -133,13 +146,26 @@ state.fna_fcor     = read_rfield(fid,'fna_fcor'    ,fluxdims);
 state.fna_he       = read_rfield(fid,'fna_he'      ,fluxdims);
 state.fchvisq      = read_rfield(fid,'fchvisq'     ,fluxdim);
 state.fchinert     = read_rfield(fid,'fchinert'    ,fluxdim);
+if str2num(strrep(version,'.','')) >= str2num(strrep('03.002.000','.',''))
+    state.fchviskt     = read_rfield(fid,'fchviskt'    ,fluxdim);
+    state.fchanml      = read_rfield(fid,'fchanml'     ,fluxdim);
+else
+    state.fchviskt = zeros(size(state.fch));
+    state.fchanml  = zeros(size(state.fch));
+end
 state.resco        = read_rfield(fid,'resco'       ,[nx+2,ny+2,ns]);
 state.reshe        = read_rfield(fid,'reshe'       ,[nx+2,ny+2]);
 state.reshi        = read_rfield(fid,'reshi'       ,[nx+2,ny+2]);
 state.resmo        = read_rfield(fid,'resmo'       ,[nx+2,ny+2,ns]);
 state.resmt        = read_rfield(fid,'resmt'       ,[nx+2,ny+2]);
 state.respo        = read_rfield(fid,'respo'       ,[nx+2,ny+2]);
-state.reskt        = read_rfield(fid,'reskt'       ,[nx+2,ny+2]);
+if str2num(strrep(version,'.','')) >= str2num(strrep('03.002.000','.',''))
+    state.reskt        = read_rfield(fid,'reskt'       ,[nx+2,ny+2]);
+%     state.reszt        = read_rfield(fid,'reszt'       ,[nx+2,ny+2]);
+else
+   state.reskt = zeros(size(state.reshi));
+%    state.reszt  =zeros(size(state.reszt));
+end
 state.sch          = read_rfield(fid,'sch'         ,[nx+2,ny+2,4]);
 state.she          = read_rfield(fid,'she'         ,[nx+2,ny+2,4]);
 state.shi          = read_rfield(fid,'shi'         ,[nx+2,ny+2,4]);
@@ -198,9 +224,15 @@ state.ext_she      = read_rfield(fid,'ext_she'     ,[nx+2,ny+2]);
 state.ext_shi      = read_rfield(fid,'ext_shi'     ,[nx+2,ny+2]);
 state.ext_sch      = read_rfield(fid,'ext_sch'     ,[nx+2,ny+2]);
 state.ext_sne      = read_rfield(fid,'ext_sne'     ,[nx+2,ny+2]);
-state.skt          = read_rfield(fid,'skt'         ,[nx+2,ny+2,4]);
-state.skt_prod     = read_rfield(fid,'skt_prod'    ,[nx+2,ny+2]);
-state.skt_diss     = read_rfield(fid,'skt_diss'    ,[nx+2,ny+2]);
+if str2num(strrep(version,'.','')) >= str2num(strrep('03.002.000','.',''))
+    state.skt          = read_rfield(fid,'skt'         ,[nx+2,ny+2,4]);
+    state.skt_prod     = read_rfield(fid,'skt_prod'    ,[nx+2,ny+2]);
+    state.skt_diss     = read_rfield(fid,'skt_diss'    ,[nx+2,ny+2]);
+else
+    state.skt      = zeros(size(state.shi));
+    state.skt_prod = zeros(nx+2,ny+2);
+    state.skt_diss = zeros(nx+2,ny+2);
+end
 state.calf         = read_rfield(fid,'calf'        ,fluxdim);
 state.cdna         = read_rfield(fid,'cdna'        ,fluxdims);
 state.cdpa         = read_rfield(fid,'cdpa'        ,fluxdims);
@@ -223,7 +255,13 @@ state.fllimi       = read_rfield(fid,'fllimi'      ,[nx+2,ny+2]);
 state.fllim0fna    = read_rfield(fid,'fllim0fna'   ,fluxdims);
 state.fllim0fhi    = read_rfield(fid,'fllim0fhi'   ,fluxdims);
 state.fllimvisc    = read_rfield(fid,'fllimvisc'   ,[nx+2,ny+2,ns]);
-state.cdkt         = read_rfield(fid,'cdkt'        ,fluxdim);
+if str2num(strrep(version,'.','')) >= str2num(strrep('03.002.000','.',''))
+    state.cdkt         = read_rfield(fid,'cdkt'        ,fluxdim);
+    state.cdzt         = read_rfield(fid,'cdzt'        ,fluxdim);
+else
+    state.cdkt = zeros(size(state.chci));
+    state.cdzt = zeros(size(state.chci));
+end
 state.sig0         = read_rfield(fid,'sig0'        ,[nx+2,ny+2]);
 state.hce0         = read_rfield(fid,'hce0'        ,[nx+2,ny+2]);
 state.alf0         = read_rfield(fid,'alf0'        ,[nx+2,ny+2]);
@@ -235,12 +273,19 @@ state.vsa0         = read_rfield(fid,'vsa0'        ,[nx+2,ny+2,ns]);
 state.vla0         = read_rfield(fid,'vla0'        ,[nx+2,ny+2,2,ns]);
 state.csig_an      = read_rfield(fid,'csig_an'     ,fluxdim);
 state.calf_an      = read_rfield(fid,'calf_an'     ,fluxdim);
-state.dkt0         = read_rfield(fid,'dkt0'        ,[nx+2,ny+2]);
-state.dna_ExB      = read_rfield(fid,'dna_ExB'     ,[nx+2,ny+2]);
-state.hce_ExB      = read_rfield(fid,'hce_ExB'     ,[nx+2,ny+2]);
-state.hci_ExB      = read_rfield(fid,'hci_ExB'     ,[nx+2,ny+2]);
-nstra              = read_ifield(fid,'nstra'       ,[1]);
-state.sclstra      = read_rfield(fid,'sclstra'     ,[ns+1,nstra]);
-state.sclrtio      = read_rfield(fid,'sclrtio'     ,[ns+1,nstra]);
+if str2num(strrep(version,'.','')) >= str2num(strrep('03.002.000','.',''))
+    state.dkt0         = read_rfield(fid,'dkt0'        ,[nx+2,ny+2]);
+    state.dna_ExB      = read_rfield(fid,'dna_ExB'     ,[nx+2,ny+2]);
+    state.hce_ExB      = read_rfield(fid,'hce_ExB'     ,[nx+2,ny+2]);
+    state.hci_ExB      = read_rfield(fid,'hci_ExB'     ,[nx+2,ny+2]);
+else
+    state.dkt0         = zeros(size(state.ti));
+    state.dna_ExB      = zeros(size(state.ti));
+    state.hce_ExB      = zeros(size(state.ti));
+    state.hci_ExB      = zeros(size(state.ti));
+end
+% nstra              = read_ifield(fid,'nstra'       ,[1]);
+% state.sclstra      = read_rfield(fid,'sclstra'     ,[ns+1,nstra]);
+% state.sclrtio      = read_rfield(fid,'sclrtio'     ,[ns+1,nstra]);
 
 fclose(fid);

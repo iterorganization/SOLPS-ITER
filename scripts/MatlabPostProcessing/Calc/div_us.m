@@ -16,9 +16,9 @@ div = zeros(nCv,1);
 % Compute divergence
 for ifc = 1:nFc
     icv1 = gmtry.fcCv(ifc,1);
-    div(icv1) = div(icv1) + flow(ifc,1) + flow(ifc,1);
+    div(icv1) = div(icv1) + flow(ifc,1) + flow(ifc,2);
     icv2 = gmtry.fcCv(ifc,2);
-    div(icv2) = div(icv2) - flow(ifc,1) - flow(ifc,1);
+    div(icv2) = div(icv2) - flow(ifc,1) - flow(ifc,2);
 end
 
 

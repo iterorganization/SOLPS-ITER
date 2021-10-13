@@ -141,7 +141,7 @@ gmtry.vxFfbz = read_rfield(fid,'vxFfbz',[nVx]    );
 gmtry.vxFpsi = read_rfield(fid,'vxFpsi',[nVx]    );
 
 % flux surface quantities
-gmtry.ftConn = read_rfield(fid,'ftConn',[nCv] );
+gmtry.cvConn = read_rfield(fid,'cvConn',[nCv] );
 gmtry.fsPsi  = read_rfield(fid,'fsPsi',[nFs] );
 
 %% Close file
