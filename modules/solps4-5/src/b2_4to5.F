@@ -3292,7 +3292,7 @@ c
       subroutine write_SOLPS_FLUIDS_NREG(nreg,ns)
       integer nreg, ns
       integer is
-      character*10 hlp_frm
+      character*11 hlp_frm
       character*10, allocatable :: species_name(:)
       external species
 
