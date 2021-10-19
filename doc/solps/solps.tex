@@ -4060,7 +4060,7 @@ Example of the {\tt b2ymb.dat} file:\\
 \else
   \centerline{\includegraphics[height=8cm]{monoblock_cross_section.eps}}
 \fi
-\caption{Monoblock tile cross section}
+\caption{Monoblock tile cross-section}
 \label{fig:monoblock_cross_section}
 \end{figure}
 
@@ -4094,7 +4094,7 @@ Example of the {\tt b2yrp.dat} file:\\
 \else
   \centerline{\includegraphics[height=8cm]{ref_plate.eps}}
 \fi
-\caption{Reflector plate tile cross section}
+\caption{Reflector plate tile cross-section}
 \label{fig:refplate_cross_section}
 \end{figure}
 
@@ -4570,7 +4570,7 @@ The data blocks are:
   \item[ewldea\_res] Energy flux carried by emitted atoms from surface segment ($W.m^{-2}$), dimension ({\tt NATM}, {\tt NCL})
   \item[ewldem\_res] Energy flux carried by emitted molecules from surface segment ($W.m^{-2}$), dimension ({\tt NMOL}, {\tt NCL})
   \item[ewldrp\_res] Kinetic energy flux carried by recycling atoms and molecules ($W.m^{-2}$), dimension ({\tt NCL})
-  \item[ewldmr\_res] Energy flux due to recombination of atoms and ions into molecules ($W.m^{-2}$), dimension ({\tt NMOL}, {\tt NCL})
+  \item[ewldmr\_res] Energy flux due to recombination of atoms and atomic ions into molecules ($W.m^{-2}$), dimension ({\tt NMOL}, {\tt NCL})
   \item[wldspt\_res] Flux of sputtered wall material ($A.m^{-2}$), dimension ({\tt NCL})
   \item[wldspta\_res] Flux of sputtered wall material per atom ($A.m^{-2}$), dimension ({\tt NCL}, {\tt NATM})
   \item[wldsptm\_res] Flux of sputtered wall material per molecule ($A.m^{-2}$), dimension ({\tt NCL}, {\tt NMOL})
@@ -15423,15 +15423,15 @@ In table \ref{tab:extracommands} some additional commands are given.
     \multicolumn{2}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
-    coro \index{b2plot, coro}        & Print coronal rates \\
+    coro \index{b2plot, coro}         & Print coronal rates \\
     debu \index{b2plot, debu}, debug \index{b2plot, debug} & Set debugging information level \\
-    eof \index{b2plot, eof}         & Indicate end of file \\
-    f30 \index{b2plot, f30}         & Create a {\tt fort.30} file \\
-    f31 \index{b2plot, f31}         & Create a {\tt fort.31} file \\
-    help \index{b2plot, help}        & Print available commands \\
-    tranprof \index{b2plot, tranprof}    & Create {\tt b2.transport.inputfile} file\index{b2.transport.inputfile} \\
-    user \index{b2plot, user}        & Available for user-defined functions \\
-    wlld \index{b2plot, wlld}        & Produces ANK wall loading files \\
+    eof \index{b2plot, eof}           & Indicate end of file \\
+    f30 \index{b2plot, f30}           & Create a {\tt fort.30} file \\
+    f31 \index{b2plot, f31}           & Create a {\tt fort.31} file \\
+    help \index{b2plot, help}         & Print available commands \\
+    tranprof \index{b2plot, tranprof} & Create {\tt b2.transport.inputfile} file\index{b2.transport.inputfile} \\
+    user \index{b2plot, user}         & Available for user-defined functions \\
+    wlld \index{b2plot, wlld}         & Produces ANK wall loading files \\
     quit \index{b2plot, quit}, exit, end \index{b2plot, exit}\index{b2plot, end} & Terminate program \\
     \hline
     \caption{Additional commands.}
@@ -17078,7 +17078,7 @@ Produces the \verb:fort.31: file containing the plasma state for use within {\tt
 
 \subsubsection{tranprof}\index{b2plot, tranprof}\label{sec:tranprof}
 \index{b2.transport.profile, output by b2plot}
-Outputs the transport profile information as a \verb:b2.transport.parameters: file.
+Outputs the transport profile information as a \verb:b2.transport.inputfile: file.
 
 \subsubsection{reso}\index{b2plot, reso}\label{sec:reso}
 Resets plotting output.
