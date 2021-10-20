@@ -17931,6 +17931,7 @@ Additionally, system-wide compiler flags can be provided by means of the
 \item[PGF90] \index{PGF90} To be used when compiling with the Portland Group {\tt Fortran-90} compiler
 \item[PSR] \index{PSR} Specific to the Pacific Sierra VAST compiler
 \item[UAL\_MAJOR\_VERSION] \index{UAL\_MAJOR\_VERSION} Major version number of the UAL (Universal Access Layer) library to which the code is linked (set internally by the configuration files)
+\item[UAL\_MINOR\_VERSION] \index{UAL\_MINOR\_VERSION} Minor version number of the UAL (Universal Access Layer) library to which the code is linked (set internally by the configuration files)
 \item[USE\_MPI] \index{USE\_MPI} Set internally by the {\tt Makefile} and used to identify code necessary for MPI applications
 \item[USE\_PXFGETENV] \index{USE\_PXFGETENV} Uses {\tt PXFGETENV} instead of {\tt GETENV}
 \item[WINDOWS] \index{WINDOWS} To be used when compiling on a Windows system
@@ -18034,7 +18035,9 @@ We list below where the {\tt DivGeo} compilation switches are used.
     \multicolumn{2}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
-IMAS\_MINOR\_VERSION & equtrn/src/rdids.f \\
+       IMAS\_MINOR\_VERSION & equtrn/src/rdids.f \\
+       UAL\_MAJOR\_VERSION & equtrn/src/rdids.f \\
+       UAL\_MINOR\_VERSION & equtrn/src/rdids.f \\
     \hline
     \caption{Defines for DivGeo and where they are used.}
     \label{tab:DivGeodefines}
