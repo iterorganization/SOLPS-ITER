@@ -614,6 +614,7 @@ The cases stored for retrieval include:
   \item[AUG\_16151\_D+C+He] ASDEX-Upgrade multi-fluid benchmark cases, including {\tt B2.5} standalone, coupled and single {\tt Eirene} call run directories
   \item[AUG\_28903\_D+N\_drifts] ASDEX-Upgrade D+N case including drifts
   \item[AUG\_28903\_D+Ne\_drifts] ASDEX-Upgrade D+Ne case including drifts
+  \item[DIIID\_3106\_DN\_D+C] DIII-D connected double-null case including Carbon chemical sputtering
   \item[ITER\_2171\_D+He+Be+Ne] ITER full performance case with Ne injection
   \item[ITER\_2264\_0.6Ne\_100MW] Another ITER full perfomance case with Ne injection
   \item[ITER\_2275\_Donly\_20MW] ITER low power case at low density (D-fuelled)
@@ -17931,6 +17932,7 @@ Additionally, system-wide compiler flags can be provided by means of the
 \item[PGF90] \index{PGF90} To be used when compiling with the Portland Group {\tt Fortran-90} compiler
 \item[PSR] \index{PSR} Specific to the Pacific Sierra VAST compiler
 \item[UAL\_MAJOR\_VERSION] \index{UAL\_MAJOR\_VERSION} Major version number of the UAL (Universal Access Layer) library to which the code is linked (set internally by the configuration files)
+\item[UAL\_MICRO\_VERSION] \index{UAL\_MICRO\_VERSION} Micro version number of the UAL (Universal Access Layer) library to which the code is linked (set internally by the configuration files)
 \item[UAL\_MINOR\_VERSION] \index{UAL\_MINOR\_VERSION} Minor version number of the UAL (Universal Access Layer) library to which the code is linked (set internally by the configuration files)
 \item[USE\_MPI] \index{USE\_MPI} Set internally by the {\tt Makefile} and used to identify code necessary for MPI applications
 \item[USE\_PXFGETENV] \index{USE\_PXFGETENV} Uses {\tt PXFGETENV} instead of {\tt GETENV}
@@ -18037,6 +18039,7 @@ We list below where the {\tt DivGeo} compilation switches are used.
     \endlastfoot
        IMAS\_MINOR\_VERSION & equtrn/src/rdids.f \\
        UAL\_MAJOR\_VERSION & equtrn/src/rdids.f \\
+       UAL\_MICRO\_VERSION & equtrn/src/rdids.f \\
        UAL\_MINOR\_VERSION & equtrn/src/rdids.f \\
     \hline
     \caption{Defines for DivGeo and where they are used.}
