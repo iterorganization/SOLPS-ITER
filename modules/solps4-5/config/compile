@@ -62,7 +62,7 @@ ifeq ($(strip $(SED)),)
 else
 	-${CPP} ${CPP5OPTS} ${DEFINES} ${INCLUDE} $< | ${SED} > ${OBJDIR}/$*.f
 endif
-	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${FFLAGSEXTRA} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/$*.o -c ${OBJDIR}/$*.f
+	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${FFLAGSEXTRA} ${DEFINES} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/$*.o -c ${OBJDIR}/$*.f
 endif
 	@- if [ -f $*.o ] ; then /bin/mv $*.o ${OBJDIR}/ ; fi
 ifeq ($(strip $(LINK_MOD)),)
@@ -84,7 +84,7 @@ ifeq ($(strip $(SED)),)
 else
 	-${CPP} ${CPP5OPTS} ${DEFINES} ${INCLUDE} $< | ${SED} > ${OBJDIR}/$*.f90
 endif
-	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${FFLAGSEXTRA} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/$*.o -c ${OBJDIR}/$*.f90
+	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${FFLAGSEXTRA} ${DEFINES} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/$*.o -c ${OBJDIR}/$*.f90
 endif
 	@- if [ -f $*.o ] ; then /bin/mv $*.o ${OBJDIR}/ ; fi
 ifeq ($(strip $(LINK_MOD)),)
