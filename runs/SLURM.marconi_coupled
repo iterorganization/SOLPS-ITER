@@ -9,6 +9,7 @@
 #SBATCH  --job-name=#JOBNAME#
 #SBATCH  --partition=#PART#
 #SBATCH  --account=FUA34_ADC
+#SBATCH  --mem=#MEM#
 
 echo Using SOLPSTOP = #SOLPSTOP#
 
