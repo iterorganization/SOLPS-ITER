@@ -1,13 +1,14 @@
 #! /bin/tcsh
 
-#SBATCH  --ntasks-per-node=#PROCS#
+#SBATCH  --nodes=#NODES#
+#SBATCH  --ntasks-per-node=#TASKS#
 #SBATCH  --cpus-per-task=#THREADS#
 #SBATCH  --time=#HOURS#:00:00
-#SBATCH  --mail-user=#EMAIL#
+#SBATCH  --mail-user=rhys.doyle45@mail.dcu.ie
 #SBATCH  --mail-type=END
 #SBATCH  --job-name=#JOBNAME#
 #SBATCH  --partition=#PART#
-#SBATCH  --account=FUA34_ADC
+#SBATCH  --account=FUA35_BOUTFLOW
 
 echo Using SOLPSTOP = #SOLPSTOP#
 

@@ -1,6 +1,7 @@
 #! /bin/tcsh
 
-#SBATCH  --ntasks-per-node=#PROCS#
+#SBATCH  --nodes=#NODES#
+#SBATCH  --ntasks-per-node=#TASKS#
 #SBATCH  --cpus-per-task=#THREADS#
 #SBATCH  --time=#HOURS#:00:00
 #SBATCH  --mail-user=#EMAIL#
