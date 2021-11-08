@@ -4,7 +4,7 @@
 #SBATCH  --ntasks-per-node=#TASKS#
 #SBATCH  --cpus-per-task=#THREADS#
 #SBATCH  --time=#HOURS#:00:00
-#SBATCH  --mail-user=rhys.doyle45@mail.dcu.ie
+#SBATCH  --mail-user=#EMAIL#
 #SBATCH  --mail-type=END
 #SBATCH  --job-name=#JOBNAME#
 #SBATCH  --partition=#PART#
