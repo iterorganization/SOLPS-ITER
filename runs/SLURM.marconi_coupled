@@ -8,7 +8,7 @@
 #SBATCH  --mail-type=END
 #SBATCH  --job-name=#JOBNAME#
 #SBATCH  --partition=#PART#
-#SBATCH  --account=FUA35_BOUTFLOW
+#SBATCH  --account=FUA34_ADC
 
 echo Using SOLPSTOP = #SOLPSTOP#
 
