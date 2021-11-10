@@ -7,7 +7,7 @@ set nodename=`hostname`
 switch ($nodename)
  case "sdcc-login*.iter.org":
   module load NVHPC/21.2
-  module load IMAS/3.34.0-4.9.2-2020b
+  module load IMAS/3.34.0-4.9.3-2020b
   module load MDSplus/7.96.17-GCCcore-10.2.0
   module load GGD/1.10.0-NVHPC-21.2-DD-3.34.0
   module load AMNS/1.3.5-NVHPC-21.2-DD-3.34.0
