@@ -963,7 +963,7 @@ temperatures, etc...
 These data files include:
 \begin{description}
 \item[ionization\_potentials] \index{ionization\_potentials} is a {\tt B2} and {\tt B2.5}
-  input file containing ionization potentials
+  input file containing ionisation potentials
 \item[incatm] \index{incatm} is a {\tt B2.5} input file containing data for
   atomic mass, surface binding energy and density of all elements
 \item[ratadas.filelist] \index{ratadas.filelist}\index{b2ar}\index{ADAS} is a {\tt B2.5} input file
@@ -1291,9 +1291,9 @@ The options are applied in that order independently of the order in which they w
   \item[rrahireg \#1]\index{rrahireg} recombination energy for region \#1 (default 0)
   \item[rramoreg \#1]\index{rramoreg} recombination parallel momentum for region \#1 (default 0)
   \item[rranareg \#1]\index{rranareg} recombination rate for region \#1 (default 0)
-  \item[rsahireg \#1]\index{rsahireg} ionization energy for region \#1 (default 0)
-  \item[rsamoreg \#1]\index{rsamoreg} ionization parallel momentum for region \#1 (default 0)
-  \item[rsanareg \#1]\index{rsanareg} ionization rate for region \#1 (default 0)
+  \item[rsahireg \#1]\index{rsahireg} ionisation energy for region \#1 (default 0)
+  \item[rsamoreg \#1]\index{rsamoreg} ionisation parallel momentum for region \#1 (default 0)
+  \item[rsanareg \#1]\index{rsanareg} ionisation rate for region \#1 (default 0)
   \item[b2stbc\_she\_reg\_region \#1]\index{b2stbc\_she\_reg\_region} Boundary electron heat sources, by region, for species \#1 (default 0)
   \item[b2stbc\_shi\_reg\_region \#1]\index{b2stbc\_shi\_reg\_region} Boundary ion heat sources, by region, for species \#1 (default 0)
   \item[b2stbc\_sne\_reg\_region \#1]\index{b2stbc\_sne\_reg\_region} Boundary electron particle sources, by region, for species \#1 (default 0)
@@ -1327,9 +1327,9 @@ The options are applied in that order independently of the order in which they w
   \item[rrahireg\_region \#1]\index{rrahireg\_region} recombination energy, by region, for species \#1 (default 0)
   \item[rramoreg\_region \#1]\index{rramoreg\_region} recombination parallel momentum, by region, for species \#1 (default 0)
   \item[rranareg\_region \#1]\index{rranareg\_region} recombination rate, by region, for species \#1 (default 0)
-  \item[rsahireg\_region \#1]\index{rsahireg\_region} ionization energy, by region, for species \#1 (default 0)
-  \item[rsamoreg\_region \#1]\index{rsamoreg\_region} ionization parallel momentum, by region, for species \#1 (default 0)
-  \item[rsanareg\_region \#1]\index{rsanareg\_region} ionization rate, by region, for species \#1 (default 0)
+  \item[rsahireg\_region \#1]\index{rsahireg\_region} ionisation energy, by region, for species \#1 (default 0)
+  \item[rsamoreg\_region \#1]\index{rsamoreg\_region} ionisation parallel momentum, by region, for species \#1 (default 0)
+  \item[rsanareg\_region \#1]\index{rsanareg\_region} ionisation rate, by region, for species \#1 (default 0)
  \end{description}
 these require the {\tt SOLPS\_FLUIDS} and {\tt NREG} variables to be set correctly (see section \ref{lab:b2:numerics:parameters} and Appendix \ref{cha:regions} for the definitions of the regions)\index{SOLPS\_FLUIDS}\index{NREG}. If the {\tt SOLPS\_FLUIDS} or {\tt NREG} files are not found, the necessary information is extracted from the {\tt run.log} file.
 \item plotting
@@ -1456,8 +1456,8 @@ rm GNUPLOT_COUNT gnuplot.*data
   \item[fhiyreg]\index{fhiyreg} Plots the ion energy flow across important $y$-directed surfaces in {\tt B2.5}.
   \item[fhmxreg]\index{fhmxreg} Plots the parallel kinetic energy flow across important $x$-directed surfaces in {\tt B2.5}.
   \item[fhmyreg]\index{fhmyreg} Plots the parallel kinetic energy flow across important $y$-directed surfaces in {\tt B2.5}.
-  \item[fhpxreg]\index{fhpxreg} Plots the ionization energy flow across important $x$-directed surfaces in {\tt B2.5}.
-  \item[fhpyreg]\index{fhpyreg} Plots the ionization energy flow across important $y$-directed surfaces in {\tt B2.5}.
+  \item[fhpxreg]\index{fhpxreg} Plots the ionisation energy flow across important $x$-directed surfaces in {\tt B2.5}.
+  \item[fhpyreg]\index{fhpyreg} Plots the ionisation energy flow across important $y$-directed surfaces in {\tt B2.5}.
   \item[fhjxreg]\index{fhjxreg} Plots the electrostatic energy flow across important $x$-directed surfaces in {\tt B2.5}.
   \item[fhjyreg]\index{fhjyreg} Plots the electrostatic energy flow across important $y$-directed surfaces in {\tt B2.5}.
   \item[fhtxreg]\index{fhtxreg} Plots the total energy flow across important $x$-directed surfaces in {\tt B2.5}.
@@ -1632,8 +1632,8 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[nereg.py]\index{nereg.py} Average electron densities.
   \item[rqradreg.py \#1]\index{rqradreg.py} Line radiation summed over each species' charge states for region \#1.
   \item[rranareg.py \#1]\index{rranareg.py} Recombination rates for region \#1.
-  \item[rranareg\_per\_rsanareg.py \#1]\index{[rranareg\_per\_rsanareg.py} Recombination rates divided by ionization rates for region \#1 (summed over charge states).
-  \item[rsanareg.py \#1]\index{rsanareg.py} Ionization rates for region \#1.
+  \item[rranareg\_per\_rsanareg.py \#1]\index{[rranareg\_per\_rsanareg.py} Recombination rates divided by ionisation rates for region \#1 (summed over charge states).
+  \item[rsanareg.py \#1]\index{rsanareg.py} Ionisation rates for region \#1.
   \item[tereg.py]\index{tereg.py} Average electron temperatures.
   \item[tireg.py]\index{tireg.py} Average ion temperatures.
   \item[zeffreg.py]\index{zeffreg.py} Average $Z_{eff}$.
@@ -2031,7 +2031,7 @@ running cases with high-$Z$ species. The relevant description is then
 
 The code can accept indifferently both types of input and makes the
 appropriate self-consistency checks. It is not permitted to bundle
-neutral and ionized species together.
+neutral and ionised species together.
 
 \subsubsection{b2cmpb, boundary conditions}
 \index{b2cmpb}\index{boundary conditions}
@@ -2240,7 +2240,7 @@ running cases with high-$Z$ species. The relevant description is then
 
 The code can accept indifferently both types of input and makes the
 appropriate self-consistency checks. It is not permitted to bundle
-neutral and ionized species together.
+neutral and ionised species together.
 
 The initial state being created by {\tt b2ai.dat} will be a homogeneous
 isothermal static plasma, which is very far from a realistic plasma edge
@@ -2428,7 +2428,7 @@ which contains
   {\tt CONPAR(,,1)} specifies the desired average density in $m^{-3}$.
   \item[26] Feedback boundary condition: prescribe the total ion flux and find the average density. The poloidal density variation from the neighbouring radial ring is applied on top of the average density. This boundary condition is suitable for any species of a multi-species plasma (i.e. in the case when the condition used in {\tt BCCON=22} fails). It is recommended to use this boundary condition together with a corresponding condition on the ion temperature ({\tt BCENI=26,27}). The total desired flux is summed over all {\tt BCCON=26} core boundaries.
   {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
-  \item[27] Feedback boundary condition: prescribe the particle flux sum for all neutrals and ions belonging to a given isonuclear sequence and find the average density of the highest ionization stage. The poloidal density variation from the neighbouring radial ring is applied on top of the average density. It is recommended to use this boundary condition together with corresponding condition on ion temperature ({\tt BCENI=25,26}). The total desired flux is summed over all {\tt BCCON=27} core boundaries.
+  \item[27] Feedback boundary condition: prescribe the particle flux sum for all neutrals and ions belonging to a given isonuclear sequence and find the average density of the ionisation state to which the {\tt BCCON=27} condition is applied. The poloidal density variation from the neighbouring radial ring is applied on top of the average density. It is recommended to use this boundary condition together with corresponding condition on ion temperature ({\tt BCENI=25,26}). The total desired flux is summed over all {\tt BCCON=27} core boundaries. For main ions and low $Z$ impurities, it is recommended to set {\tt BCCON=27} for the highest ionisation state. For high $Z$ impurities, if the ionisation potential of the highest ionisation state of the given isonuclear sequence is much larger than the expected core plasma temperature, the {\tt BCCON=27} condition should be set for the ionisation state for which the density is expected to be maximal. For ionisation states higher than that one, it is recommended to set {\tt BCCON=2} with {\tt CONPAR=0.0}, since their densities are expected to be negligible, and {\tt BCCON=2} with {\tt CONPAR=0.0} seems to be the safest boundary condition for low density species.
   {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
   \end{description}
 \item[BCMOM]\index{BCMOM} {\tt integer array, length NS * NBC}, specifying
@@ -3549,7 +3549,7 @@ plots detailing the dependencies of the atomic rates on density and temperature 
 each isonuclear sequence, as well as a {\tt b2yr.prt} ASCII file containing
 tables of these rates. If the {\tt fix\_recomb} switch has been activated, then
 the electron cooling rate is plotted with and without the contribution due to the
-ionization potential of the recombining ion, and additional graphs are included for the
+ionisation potential of the recombining ion, and additional graphs are included for the
 negative of that rate if it becomes a heating (instead of cooling) rate.
 
 The {\tt b2yr.plt} file is an NCAR GKS file. The presence in the run directory of a file called {\tt ncar.cfg}, with the
@@ -6982,7 +6982,7 @@ The neutral species transport coefficients are usually given by the following eq
  D^{(AN)}_{p,0} = C + \sqrt{\frac{T_i}{m_N}} \frac{1}{( \sigma_{CX} n_i + \sigma_{in} n_e )},
 \end{gather}
 where $m_N$ is the mass of the neutral species, and $C$, $\sigma_{CX}$ and $\sigma_{in}$ are three constants given by
-the user, representing hydrogen gas diffusion, and the charge-exchange and ionization cross-sections, respectively.
+the user, representing hydrogen gas diffusion, and the charge-exchange and ionisation cross-sections, respectively.
 As an option, one may choose to use cross-sections from atomic databases instead of constants, with their appropriate
 parameter dependencies. The diffusion coefficients can also be bounded to avoid unphysically large or small values.
 
@@ -7039,14 +7039,14 @@ the {\tt Eirene} Monte Carlo model, is covered in detail with examples in~\cite{
 As an intermediate approximation between the fluid and kinetic neutral transport models,
 a so-called "first-flight" model has been implemented. In this model, the first trajectory
 flight of neutrals launched from the computational domain boundary (at the plates or the wall
-boundaries) is followed until the neutral undergoes ionization or charge-exchange, and then
+boundaries) is followed until the neutral undergoes ionisation or charge-exchange, and then
 passed on to the neutral fluid model. In practice, as an initial computational step,
 one defines a number of chords (user-specified, usually 9)
 radiating from each edge boundary segment into the plasma, and computes the length travelled by
 each chord within each plasma cell it crosses. Then, at each time step, the locally injected neutral flux
 (from recycling, sputtering, or the like) is launched along each chord (with a normalized intensity
 determined by some pre-determined angular dependence)
-and considered to be attenuated within each intersected cell according to the local CX and ionization mean free paths,
+and considered to be attenuated within each intersected cell according to the local CX and ionisation mean free paths,
 while the balancing plasma sources and sinks in that cell are computed.
 The effect of such a model is also shown in~\cite{CosterHinM2003}.
 
@@ -7899,7 +7899,7 @@ S_{AN_a}^m = \left\{
 \right.
 \end{equation}
 
-Parallel momentum source due to ionization
+Parallel momentum source due to ionisation
 
 \begin{equation}\label{eq:mom_sorio}
 S_{I_a}^m = S_{I_a}^q + S_{I_{a+1}}^q
@@ -8442,7 +8442,7 @@ Q_R = \sum \limits_{a=0}^{ns-1} r_{Q_a} n_e n_a ~ \text{from b2stel}
  \label{eq:ene_QRa}
  r_{Q_a} = r_{Q_a}^{\rm ion} + r_{Q_a}^{\rm rec} + r_{Q_a}^{\rm brm} + r_{Q_a}^{\rm line}
 \end{equation}
-contains contributions from ionization, recombination, bremsstrahlung and line radiation.
+contains contributions from ionisation, recombination, bremsstrahlung and line radiation.
 
 
 
@@ -8977,7 +8977,7 @@ Q_{F_{ab}} =
 z_a^2 z_b^2 n_a n_b \left( V_{a \parallel} - V_{b \parallel} \right)^2
 \end{equation}
 
-Atom heat source due to ionization
+Atom heat source due to ionisation
 
 \begin{equation}\label{eq:eni_QIi}
 Q_I^{(i)} = \sum \limits_{a=0}^{ns-2} Q_{I_a}^{(i)}
@@ -12583,8 +12583,8 @@ to {\tt 2}, then additional quantities such as fluxes are added, see below Table
     \hline
     po2d \index{po2d}\index{b2time.nc, po2d} & electric potential & $V$ \\
     kin2d \index{kin2d}\index{b2time.nc, kin2d} & parallel kinetic energy & $J$ \\
-    rsahi2d \index{rsahi2d}\index{b2time.nc, rsahi2d} & ionization energy source/sink & $W$ \\
-    rsana2d \index{rsana2d}\index{b2time.nc, rsana2d} & ionization rate & $s^{-1}$ \\
+    rsahi2d \index{rsahi2d}\index{b2time.nc, rsahi2d} & ionisation energy source/sink & $W$ \\
+    rsana2d \index{rsana2d}\index{b2time.nc, rsana2d} & ionisation rate & $s^{-1}$ \\
     rrahi2d \index{rrahi2d}\index{b2time.nc, rrahi2d} & recombination energy source/sink & $W$ \\
     rrana2d \index{rrana2d}\index{b2time.nc, rrana2d} & recombination rate & $s^{-1}$ \\
     rcxhi2d \index{rcxhi2d}\index{b2time.nc, rcxhi2d} & charge exchange energy source/sink & $W$ \\
@@ -12751,8 +12751,8 @@ fhixreg \index{fhixreg}\index{b2tallies.nc, fhixreg}                            
 fhiyreg \index{fhiyreg}\index{b2tallies.nc, fhiyreg}                             & yreg, time     & $W$           & Radial ion thermal energy flux \\
 fhmxreg \index{fhmxreg}\index{b2tallies.nc, fhmxreg}                             & xreg, ns, time & $W$           & Poloidal parallel kinetic energy flux \\
 fhmyreg \index{fhmyreg}\index{b2tallies.nc, fhmyreg}                             & yreg, ns, time & $W$           & Radial parallel kinetic energy flux \\
-fhpxreg \index{fhpxreg}\index{b2tallies.nc, fhpxreg}                             & xreg, ns, time & $W$           & Poloidal ionization energy flux \\
-fhpyreg \index{fhpyreg}\index{b2tallies.nc, fhpyreg}                             & yreg, ns, time & $W$           & Radial ionization energy flux \\
+fhpxreg \index{fhpxreg}\index{b2tallies.nc, fhpxreg}                             & xreg, ns, time & $W$           & Poloidal ionisation energy flux \\
+fhpyreg \index{fhpyreg}\index{b2tallies.nc, fhpyreg}                             & yreg, ns, time & $W$           & Radial ionisation energy flux \\
 fhjxreg \index{fhjxreg}\index{b2tallies.nc, fhjxreg}                             & xreg, time     & $W$           & Poloidal electrostatic energy flux \\
 fhjyreg \index{fhjyreg}\index{b2tallies.nc, fhjyreg}                             & yreg, time     & $W$           & Radial electrostatic energy flux \\
 fhtxreg \index{fhtxreg}\index{b2tallies.nc, fhtxreg}                             & xreg, time     & $W$           & Poloidal total energy flux \\
@@ -13440,7 +13440,7 @@ is applied below in all equations within this Appendix.
  q_{iy}^{j} = \frac{T_i^{\rm (face)}}{e} \sum\limits_a \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j}_y^{\left( vis \parallel \right)} + \widetilde{j}_y^{\left( vis \perp \right)} + \widetilde{j}_y^{\left( visq \right)} \right)
 \end{gather}
 
-Additionally one can consider a flux of energy in the form of potential energy of ionization. This energy is spent by electrons at the place of ionization and released
+Additionally one can consider a flux of energy in the form of potential energy of ionisation. This energy is spent by electrons at the place of ionisation and released
 back at the place of recombination (or is transferred to the targets thus contributing to the target heat loads). The associated energy flux is
 
 \begin{gather}
@@ -13451,7 +13451,7 @@ with
 \begin{equation}
    E_a^{pot} = \sum\limits_{i=1}^{z_a} I_a^{ioniz}
 \end{equation}
-the sum of the ionization potentials $I_a^{ioniz}$ of all ions with
+the sum of the ionisation potentials $I_a^{ioniz}$ of all ions with
 a charge state below the considered ion (inclusive) within their isonuclear sequence.
 
 \chapter{Region definitions}
@@ -14003,9 +14003,9 @@ when calculating derived data.
     b2br     & \index{b2plot, b2br} Bremsstrahlung losses $(W)$ \\
     b2eatcr  & \index{b2plot, b2eatcr} {\tt Eirene} atomic species index \\
     b2espcr  & \index{b2plot, b2espcr} Nuclear sequence index \\
-    b2im     & \index{b2plot, b2im} Momentum ionization/recombination losses $(s^{-1})$ (\SOLPSfour runs) \\
-    b2in     & \index{b2plot, b2in} Particle ionization/recombination losses $(s^{-1})$ (\SOLPSfour runs) \\
-    b2io     & \index{b2plot, b2io} Ionization/recombination losses $(W)$ (\SOLPSfour runs) \\
+    b2im     & \index{b2plot, b2im} Momentum ionisation/recombination losses $(s^{-1})$ (\SOLPSfour runs) \\
+    b2in     & \index{b2plot, b2in} Particle ionisation/recombination losses $(s^{-1})$ (\SOLPSfour runs) \\
+    b2io     & \index{b2plot, b2io} Ionisation/recombination losses $(W)$ (\SOLPSfour runs) \\
     b2ne     & \index{b2plot, b2ne} Electron energy neutral losses $(W)$ (\SOLPSfour runs) \\
     b2ni     & \index{b2plot, b2ni} Ion energy neutral losses $(W)$ (\SOLPSfour runs) \\
     b2nm     & \index{b2plot, b2nm} Momentum neutral losses $(s^{-1})$ (\SOLPSfour runs) \\
@@ -14040,7 +14040,7 @@ when calculating derived data.
     chineo   & \index{b2plot, chineo} Neoclassical heat conductivity $\chi$ $(m^2.s^{-1})$ \\
     coni     & \index{b2plot, coni} Coronal equilibrium densities \\
     conn     & \index{b2plot, conn} Connection length $(m)$ \\
-    cora     & \index{b2plot, cora} Coronal equilibrium radiation rate (per homonuclear sequence) $(W)$ \\
+    cora     & \index{b2plot, cora} Coronal equilibrium radiation rate (per isonuclear sequence) $(W)$ \\
     cpa      & \index{b2plot, cpa} Pressure correction $(Pa)$ \\
     cpo      & \index{b2plot, cpo} Electric potential correction $(V)$ \\
     cr       & \index{b2plot, cr} Radial coordinate $(m)$ \\
@@ -14241,8 +14241,8 @@ when calculating derived data.
     po       & \index{b2plot, po} Electric potential $\varphi (V)$ \\
     po0      & \index{b2plot, po0} Electric potential {\em po} at previous time step $(V)$ \\
     pot      & \index{b2plot, pot} Potential energy (cumulative) $(eV)$ \\
-    pot*     & \index{b2plot, pot*} Ionization energy [shifted down one] $(eV)$ \\
-    poti     & \index{b2plot, poti} Ionization energy $(eV)$ \\
+    pot*     & \index{b2plot, pot*} Ionisation energy [shifted down one] $(eV)$ \\
+    poti     & \index{b2plot, poti} Ionisation energy $(eV)$ \\
     pr       & \index{b2plot, pr} Static pressure $(Pa)$ \\
     psi      & \index{b2plot, psi} Poloidal magnetic flux function $\Psi$ $(Wb)$ \\
     pz       & \index{b2plot, pz} Plasma pressure $(Pa)$ \\
@@ -14275,9 +14275,9 @@ when calculating derived data.
     rrai     & \index{b2plot, rrai} Recombination ion energy losses ({\em rrahi}) $(W)$ \\
     rram     & \index{b2plot, rram} Recombination ion momentum losses ({\em rramo}) $(N)$ \\
     rran     & \index{b2plot, rran} Recombination ion particle losses ({\em rrana}) $(s^{-1})$ \\
-    rsai     & \index{b2plot, rsai} Ionization ion energy losses ({\em rsahi}) $(W)$ \\
-    rsam     & \index{b2plot, rsam} Ionization ion momentum losses ({\em rsamo}) $(N)$ \\
-    rsan     & \index{b2plot, rsan} Ionization ion particle losses ({\em rsana}) $(s^{-1})$ \\
+    rsai     & \index{b2plot, rsai} Ionisation ion energy losses ({\em rsahi}) $(W)$ \\
+    rsam     & \index{b2plot, rsam} Ionisation ion momentum losses ({\em rsamo}) $(N)$ \\
+    rsan     & \index{b2plot, rsan} Ionisation ion particle losses ({\em rsana}) $(s^{-1})$ \\
     rud      & \index{b2plot, rud} {\em RESUD} (\SOLPSfour runs) \\
     rudc     & \index{b2plot, rudc} {\em RESUDC} (\SOLPSfour runs) \\
     rvd      & \index{b2plot, rvd} {\em RESVD} (\SOLPSfour runs) \\
@@ -15397,7 +15397,7 @@ in the table \ref{tab:b2plotconstants}.
     nion \index{b2plot, nion}   & Number of molecular ion species followed by {\tt Eirene} \\
     nmol \index{b2plot, nmol}   & Number of molecular species followed by {\tt Eirene} \\
     ns \index{b2plot, ns}     & Number of species \\
-    nspecies \index{b2plot, nspecies}     & Number of homonuclear sequences \\
+    nspecies \index{b2plot, nspecies}     & Number of isonuclear sequences \\
     nx \index{b2plot, nx}     & Mesh size in poloidal direction \\
     nxtl \index{b2plot, nxtl}   & Position index of top inner divertor in DN cases \\
     nxtr \index{b2plot, nxtr}   & Position index of top outer divertor in DN cases \\
@@ -15442,7 +15442,7 @@ In table \ref{tab:extracommands} some additional commands are given.
 
 The {\bf coro} command, with integer argument $\langle$is$\rangle$ and real argument $\langle$T$\rangle$
 prints to {\tt stdout} the coronal radiation
-rates for the homonuclear sequence of species $\langle$is$\rangle$ at temperature $\langle$T$\rangle$ (in $eV$).
+rates for the isonuclear sequence of species $\langle$is$\rangle$ at temperature $\langle$T$\rangle$ (in $eV$).
 
 The {\bf debu} command, with integer argument $\langle$level$\rangle$,
 sets up the level of debugging information to $\langle$level$\rangle$ (default 0).
@@ -17090,7 +17090,7 @@ Generates the spectral line emissivities from the Summers' data stored
 in {\tt \$\{SOLPSTOP\}/modules/B2.5\allowbreak /Database\allowbreak /Summers}
 (which can be superseded by the contents of
 {\tt \$\{SOLPSTOP\}/data.local/Summers}). One pre-selected
-diagnostic line per ionization stage is provided. Data is only provided for
+diagnostic line per ionisation stage is provided. Data is only provided for
 Helium, Boron, Carbon, Oxygen and Neon.
 \end{sloppypar}
 
