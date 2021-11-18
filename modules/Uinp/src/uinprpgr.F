@@ -136,12 +136,12 @@ c*** Limiter and linear configurations - a temporary, clumsy solution
         nx=nxcut1(2)+nzodv
         if (.not.ln_cnfg) then !{
           nniso=2
-          nxiso1(1)=0
-          nxiso1(2)=nx+1
+          nxiso1(1)=-1
+          nxiso1(2)=nx
           nxiso2(1)=nxiso1(1)
           nxiso2(2)=nxiso1(2)
-          nyiso1(1)=0
-          nyiso2(1)=nycut2(1)
+          nyiso1(1)=-1
+          nyiso2(1)=nycut2(1)-1
           nyiso1(2)=nyiso1(1)
           nyiso2(2)=nyiso2(1)
         end if !}
