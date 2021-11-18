@@ -7257,6 +7257,11 @@ Zhdanov fit to Braginskii and the \SOLPSfour values.
 \vspace*{1cm}
 \end{figure}
 
+\section{Classical ion transport: Grad's-Zhdanov module}
+\label{sec:gradszhdanov}
+
+Fully multi-ion collisional closure for the components along the magnetic field of the vector and tensor moments of the distribution function is applied for the all ions (without specifying main ions and impurities) based on the works of Zhdanov \cite{ZHDANOV2002} and Makarov et al \cite{MAKAROV2021}. It is used, if {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'}. THIS PART OF THE CODE IS UNDER TESTING. It is not applied by the default. The Grad's-Zhdanov module operates in two regimes: 1) Improved analytical method (IAM), if {\tt 'b2tral\_zh\_imp\_analyt'} is set to {\tt '1'}; 2) Explicit matrix inversion method (EMIM), if {\tt 'b2tral\_zh\_imp\_analyt'} is set to {\tt '0'}. The Grad's-Zhdanov closure provides transport coefficients for the parallel componetns of the ion heat conductivity, the ion velocity dependent heat flux, the ion thermal force, the ion friction force, the ion flow velocity stress-viscosity and the ion heat stress-viscosity for all ions. It allows to apply the SOLPS-ITER code for arbitrary plasma mixtures such as: D+T+He+impurities, H+D+impurities, He+H+impurities, etc. Detailed description can be found in section \ref{sec:Zhdanov}.
+
 \chapter{Model equations for B2.5}
 \label{cha:equations}\index{B2.5, model}\index{B2.5, equations}\index{equations}\index{model}
 
