@@ -9356,13 +9356,13 @@ j_x = j_x^{(AN)} + \widetilde{j}_x^{(dia)} + j_x^{(in)} + \widetilde{j}_x^{(vis 
 j_x^{(AN)} = \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}}j_{ax}^{(AN)}
 \end{equation}
 
-\begin{equation}
+\begin{equation}\label{eq:pot_jaxan}
 j_{ax}^{(AN)} = - \frac{Z_an_a}{n_e} \sigma^{(AN)} \frac{\partial \Phi}{h_x \partial x}
 \end{equation}
 
 $j_{ax}^{(AN)}$ is the component of the poloidal anomalous current due to species $a$.
 
-\begin{equation}\label{eq:pot_tijxdia}
+\begin{equation}\label{eq:pot_jxdia}
 \widetilde{j}_x^{(dia)} = B_z \frac{
 	\sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \left(
 		z_aT_e + T_i
@@ -9372,12 +9372,12 @@ $j_{ax}^{(AN)}$ is the component of the poloidal anomalous current due to specie
 \left( \frac{1}{B^2} \right)
 \end{equation}
 
-\begin{equation}\label{eq:pot_tijxin}
+\begin{equation}\label{eq:pot_jxin}
 j_x^{(in)} = 
 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} j_{ax}^{(in)} 
 \end{equation}
 
-\begin{equation}
+\begin{equation}\label{eq:pot_jaxin}
 j_{ax}^{(in)}  =
 \left\{
 \begin{aligned}
@@ -9391,12 +9391,12 @@ $j_{ax}^{(in)}$ is the component of the poloidal inertial current due to species
 
 %-------- end of 18th page -------------
 
-\begin{equation}\label{eq:pot_tijxvispar}
+\begin{equation}\label{eq:pot_jxvispar}
 \widetilde j_x^{(vis \parallel)} =
-\sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0 }}\widetilde j_{ax}^{(vis \parallel)}
+\sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0 }} \widetilde j_{ax}^{(vis \parallel)}
 \end{equation}
 
-\begin{equation}
+\begin{equation}\label{eq:pot_jaxvispar}
 \widetilde j_{ax}^{(vis \parallel)} =
 - \delta_{1,a}\frac{B_z \sqrt{B}}{3 B_x}
 \frac{\partial}{h_y \partial y}
@@ -9408,22 +9408,21 @@ $j_{ax}^{(in)}$ is the component of the poloidal inertial current due to species
 
 $\widetilde{j}_{ax}^{(vis \parallel)}$ is the component of the poloidal current due to parallel viscosity from species $a$. It is non-zero only for the main hydrogenic species in the problem.
 
-\begin{equation}\label{eq:pot_tijxvisper}
-j_x^{(vis \perp)} = \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}}j_{ax}^{(vis \perp)}
+\begin{equation}\label{eq:pot_jxvisper}
+j_x^{(vis \perp)} = \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} j_{ax}^{(vis \perp)}
 \end{equation}
 
-\begin{equation}
+\begin{equation}\label{eq:pot_jaxvisper}
 j_{ax}^{(vis \perp)} = 0
 \end{equation}
 
 $j_{ax}^{(vis \perp)}$ is the poloidal component of the perpendicular viscosity current due to species $a$.
 
-\begin{equation}\label{eq:pot_tijxvisq}
-\widetilde j_x^{(visq)} = \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0 }}
-\widetilde j_{ax}^{(visq)}
+\begin{equation}\label{eq:pot_jxvisq}
+\widetilde j_x^{(visq)} = \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0 }} \widetilde j_{ax}^{(visq)}
 \end{equation}
 
-\begin{equation}
+\begin{equation}\label{eq:pot_jaxvisq}
 \widetilde j_{ax}^{(visq)} =
 -\delta_{1,a} 0.24 
 \alpha^{NEO} \widetilde{\tau}_a b_z
@@ -9437,7 +9436,7 @@ $\widetilde{j}_{ax}^{(visq)}$ is the component of the poloidal heat viscosity cu
 
 For the definition of $\widetilde{q}_a^{(0)}$, see Eqs. (\ref{eq:q0-0}) and (\ref{eq:q0-1}).
 
-\begin{equation}\label{eq:pot_tijxs}
+\begin{equation}\label{eq:pot_jxs}
 \widetilde{j}_x^{(s)} =
 \sum \limits^{ns-1}_{\substack{a_0 = 0 \\ z_{a_0} = 0~\&~z_{n,a_0} = 1 }}
 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_{a} = 1~\&~z_{n,a} = 1 }}
@@ -9482,13 +9481,13 @@ j_y = j_y^{(AN)} + \widetilde{j}_y^{(dia)} + j_y^{(in)} + \widetilde{j}_y^{(vis 
 j_y^{(AN)} =\sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}}j_{ay}^{(AN)}
 \end{equation}
 
-\begin{equation}
+\begin{equation}\label{eq:pot_jayan}
 j_{ay}^{(AN)} = - \frac{Z_an_a}{n_e} \sigma^{(AN)} \frac{\partial \Phi}{h_y \partial y}
 \end{equation}
 
 $j_{ay}^{(AN)}$ is the component of the radial anomalous current due to species $a$.
 
-\begin{equation}\label{eq:pot_tijydia}
+\begin{equation}\label{eq:pot_jydia}
 \widetilde{j}_y^{(dia)} = - B_z \frac{
 	\sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \left(
 		z_a T_e + T_i
@@ -9502,7 +9501,7 @@ $j_{ay}^{(AN)}$ is the component of the radial anomalous current due to species 
 j_y^{(in)} = \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}}j_{ay}^{(in)} 
 \end{equation}
 
-\begin{equation}
+\begin{equation}\label{eq:pot_jayin}
 j_{ay}^{(in)} =
 \left\{
 \begin{aligned}
@@ -9514,11 +9513,11 @@ j_{ay}^{(in)} =
 
 $j_{ay}^{(in)}$ is the component of the radial inertial current due to species $a$.
 
-\begin{equation}\label{eq:pot_tijyvispar}
+\begin{equation}\label{eq:pot_jyvispar}
 \widetilde j_y^{(vis \parallel)} = \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} \widetilde j_{ay}^{(vis \parallel)}
 \end{equation}
 
-\begin{equation}
+\begin{equation}\label{eq:pot_jayvispar}
 \widetilde j_{ay}^{(vis \parallel)} =
 \delta_{1,a} \frac{B_z \sqrt{B}}{3 B_x}
 \frac{\partial}{h_x \partial x}
@@ -9530,11 +9529,11 @@ $j_{ay}^{(in)}$ is the component of the radial inertial current due to species $
 
 $\widetilde{j}_{ay}^{(vis \parallel)}$ is the radial component of the current due to parallel viscosity of species $a$. It is non-zero only for the main hydrogenic species in the problem.
 
-\begin{equation}\label{eq:pot_tijyvisper}
+\begin{equation}\label{eq:pot_jyvisper}
 \widetilde j_y^{(vis \perp)} = \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} \widetilde j_{ay}^{(vis \perp)}
 \end{equation}
 
-\begin{equation}
+\begin{equation}\label{eq:pot_jayvisper}
 \widetilde j_{ay}^{(vis \perp)} =
 \left\{
 \begin{aligned}
@@ -9568,12 +9567,12 @@ V_{a \perp} =
 - \frac 1{z_a e B h_y n_a} \frac{\partial n_a T_i}{\partial y}
 \end{equation}
 
-\begin{equation}\label{eq:pot_tijyvisq}
+\begin{equation}\label{eq:pot_jyvisq}
 \widetilde j_y^{(visq)} =
 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}}\widetilde j_{ay}^{(visq)}
 \end{equation}
 
-\begin{equation}\label{eq:pot_tijyvisq}
+\begin{equation}\label{eq:pot_jayvisq}
 \widetilde j_{ay}^{(visq)} =
 \delta_{1,a} 0.24 \alpha^{NEO} \widetilde{\tau}_a b_z
 \frac{B_x}{B^{\frac{1}{2}}}
@@ -9586,7 +9585,7 @@ $\widetilde{j}_{ay}^{(visq)}$ is the radial component of the heat viscosity curr
 
 For definition of $\widetilde{q}_a^{(0)}$, see Eqs. (\ref{eq:q0-0}) and (\ref{eq:q0-1}).
 
-\begin{equation}\label{eq:pot_tijys}
+\begin{equation}\label{eq:pot_jys}
 \widetilde{j}_y^{(s)} =
 \sum \limits^{ns-1}_{\substack{a_0 = 0 \\ z_{a_0} = 0~\&~z_{n,a_0} = 1 }}
 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a = 1~\&~z_{n,a} = 1}}
@@ -13362,57 +13361,57 @@ $\displaystyle \frac{\sqrt{g}}{h_y} j_y$ & $A$ & \texttt{b2nppo\_fchy.dat} or & 
 
 $\displaystyle \frac{\sqrt{g}}{h_x} j_x^{(\parallel)}$ & $A$ & \texttt{b2tfhe\_\_fch\_px.dat} & (\ref{eq:fch_p}), (\ref{eq:pot_jx}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{j}_x^{(dia)}$ & $A$ & \texttt{b2tfhe\_\_fchdiax.dat} & (\ref{eq:pot_tijxdia}) \\
+$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{j}_x^{(dia)}$ & $A$ & \texttt{b2tfhe\_\_fchdiax.dat} & (\ref{eq:pot_jxdia}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_y^{(dia)}$ & $A$ & \texttt{b2tfhe\_\_fchdiay.dat} & (\ref{eq:pot_tijydia}) \\
+$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_y^{(dia)}$ & $A$ & \texttt{b2tfhe\_\_fchdiay.dat} & (\ref{eq:pot_jydia}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{j}_x^{(in)}$ & $A$ & \texttt{b2tfch\_\_fchinertx.dat} & (\ref{eq:pot_tijxin}) \\
+$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{j}_x^{(in)}$ & $A$ & \texttt{b2tfch\_\_fchinertx.dat} & (\ref{eq:pot_jxin}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{j}_{ax}^{(in)}$ & $A$ & \texttt{b2tfch\_\_fchinert\_ax[XXX].dat} & (\ref{eq:pot_tijxin}) \\
+$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{j}_{ax}^{(in)}$ & $A$ & \texttt{b2tfch\_\_fchinert\_ax[XXX].dat} & (\ref{eq:pot_jaxin}) \\
 
 $\displaystyle \frac{\sqrt{g}}{h_y} j_y^{(in)}$ & $A$ & \texttt{b2tfch\_\_fchinerty.dat} & (\ref{eq:pot_jyin}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_y} j_{ay}^{(in)}$ & $A$ & \texttt{b2tfch\_\_fchinert\_ay[XXX].dat} & (\ref{eq:pot_jyin}) \\
+$\displaystyle \frac{\sqrt{g}}{h_y} j_{ay}^{(in)}$ & $A$ & \texttt{b2tfch\_\_fchinert\_ay[XXX].dat} & (\ref{eq:pot_jayin}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{j}_x^{(vis \parallel)}$ & $A$ & \texttt{b2tfch\_\_fchvisparx.dat} & (\ref{eq:pot_tijxvispar}) \\
+$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{j}_x^{(vis \parallel)}$ & $A$ & \texttt{b2tfch\_\_fchvisparx.dat} & (\ref{eq:pot_jxvispar}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{j}_{ax}^{(vis \parallel)}$ & $A$ & \texttt{b2tfch\_\_fchvispar\_ax[XXX].dat} & (\ref{eq:pot_tijxvispar}) \\
+$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{j}_{ax}^{(vis \parallel)}$ & $A$ & \texttt{b2tfch\_\_fchvispar\_ax[XXX].dat} & (\ref{eq:pot_jaxvispar}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_y^{(vis \parallel)}$ & $A$ & \texttt{b2tfch\_\_fchvispary.dat} & (\ref{eq:pot_tijyvispar}) \\
+$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_y^{(vis \parallel)}$ & $A$ & \texttt{b2tfch\_\_fchvispary.dat} & (\ref{eq:pot_jyvispar}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_{ay}^{(vis \parallel)}$ & $A$ & \texttt{b2tfch\_\_fchvispar\_ay[XXX].dat} & (\ref{eq:pot_tijyvispar}) \\
+$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_{ay}^{(vis \parallel)}$ & $A$ & \texttt{b2tfch\_\_fchvispar\_ay[XXX].dat} & (\ref{eq:pot_jayvispar}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{j}_x^{(s)}$ & $A$ & \texttt{b2tfhe\_\_fchinx.dat} & (\ref{eq:pot_jx}), (\ref{eq:pot_tijxs}) \\
+$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{j}_x^{(s)}$ & $A$ & \texttt{b2tfhe\_\_fchinx.dat} & (\ref{eq:pot_jx}), (\ref{eq:pot_jxs}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_y^{(s)}$ & $A$ & \texttt{b2tfhe\_\_fchiny.dat} & (\ref{eq:pot_jy}), (\ref{eq:pot_tijys}) \\
+$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_y^{(s)}$ & $A$ & \texttt{b2tfhe\_\_fchiny.dat} & (\ref{eq:pot_jy}), (\ref{eq:pot_jys}) \\
 
 $\displaystyle \sigma_{aa0} b^2_z \frac{\sqrt{g}}{h^2_x}$ & $S$ & \texttt{b2tral\_csiginx01\_00.dat} & (\ref{eq:pot_sigaa0}) \\
 
 $\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{j}_x^{(AN)}$ & $A$ & \texttt{b2tfch\_\_fchanmlx.dat} & (\ref{eq:pot_jxan}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{j}_{ax}^{(AN)}$ & $A$ & \texttt{b2tfch\_\_fchanml\_ax[XXX].dat} & (\ref{eq:pot_jxan}) \\
+$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{j}_{ax}^{(AN)}$ & $A$ & \texttt{b2tfch\_\_fchanml\_ax[XXX].dat} & (\ref{eq:pot_jaxan}) \\
 
 $\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_y^{(AN)}$ & $A$ & \texttt{b2tfch\_\_fchanmly.dat} & (\ref{eq:pot_jyan}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_{ay}^{(AN)}$ & $A$ & \texttt{b2tfch\_\_fchanml\_ay[XXX].dat} & (\ref{eq:pot_jyan}) \\
+$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_{ay}^{(AN)}$ & $A$ & \texttt{b2tfch\_\_fchanml\_ay[XXX].dat} & (\ref{eq:pot_jayan}) \\
 
 $\displaystyle \sigma_{ANy}$ & $S/m^2$ & \texttt{b2tqna\_sig0.dat} & (\ref{eq:pot_sigan}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{j}_{ax}^{(vis \perp)}$ & $A$ & \texttt{b2tfch\_\_fchvisper\_ax[XXX].dat} & (\ref{eq:pot_tijxvisper}) \\
+$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{j}_{ax}^{(vis \perp)}$ & $A$ & \texttt{b2tfch\_\_fchvisper\_ax[XXX].dat} & (\ref{eq:pot_jaxvisper}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_y^{(vis \perp)}$ & $A$ & \texttt{b2tfch\_\_fchvispery.dat} & (\ref{eq:pot_tijyvisper}) \\
+$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_y^{(vis \perp)}$ & $A$ & \texttt{b2tfch\_\_fchvispery.dat} & (\ref{eq:pot_jyvisper}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_{ay}^{(vis \perp)}$ & $A$ & \texttt{b2tfch\_\_fchvisper\_ay[XXX].dat} & (\ref{eq:pot_tijyvisper}) \\
+$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_{ay}^{(vis \perp)}$ & $A$ & \texttt{b2tfch\_\_fchvisper\_ay[XXX].dat} & (\ref{eq:pot_jayvisper}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{j}_{ax}^{(vis q)}$ & $A$ & \texttt{b2tfch\_\_fchvisq\_ax[XXX].dat} & (\ref{eq:pot_tijxvisq}) \\
+$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{j}_{ax}^{(vis q)}$ & $A$ & \texttt{b2tfch\_\_fchvisq\_ax[XXX].dat} & (\ref{eq:pot_jaxvisq}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_y^{(vis q)}$ & $A$ & \texttt{b2tfch\_\_fchvisqy.dat} & (\ref{eq:pot_tijyvisq}) \\
+$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_y^{(vis q)}$ & $A$ & \texttt{b2tfch\_\_fchvisqy.dat} & (\ref{eq:pot_jyvisq}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_{ay}^{(vis q)}$ & $A$ & \texttt{b2tfch\_\_fchvisq\_ay[XXX].dat} & (\ref{eq:pot_tijyvisq}) \\
+$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_{ay}^{(vis q)}$ & $A$ & \texttt{b2tfch\_\_fchvisq\_ay[XXX].dat} & (\ref{eq:pot_jayvisq}) \\
 
 $\displaystyle \frac{\sqrt{g}}{h_y} j_y^{(ST)}$ & $A$ & \texttt{b2tfhe\_\_fchstochy.dat} & (\ref{eq:pot_jyst}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h^2_y} \sigma^{(ST)}$ & $S$ & \texttt{b2trno\_csigy\_stoch.dat} & (\ref{eq:pot_jyst}) \\
+$\displaystyle \frac{\sqrt{g}}{h^2_y} \sigma^{(ST)}$ & $S$ & \texttt{b2trno\_csigy\_stoch.dat} & (\ref{eq:pot_sigst}) \\
 
 residuals & $A$ & \texttt{b2nppo\_respo.dat} or & (\ref{eq:pot_eq}) \\
  & & \texttt{b2npp7\_respo.dat} &  \\
