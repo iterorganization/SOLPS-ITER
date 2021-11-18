@@ -136,8 +136,6 @@ c*** Limiter and linear configurations - a temporary, clumsy solution
         nx=nxcut1(2)+nzodv
         if (.not.ln_cnfg) then !{
           nniso=2
-          ntiso(1)=0
-          ntiso(2)=0
           nxiso1(1)=0
           nxiso1(2)=nx+1
           nxiso2(1)=nxiso1(1)
@@ -277,13 +275,13 @@ c*** Limiter and linear configurations - a temporary, clumsy solution
 
 c!###{
 c      print *,'uinprpgr: nx,ny,nncut,nxcut{4},nycut{4},nniso,nxiso = ',
-c     , nx,ny,nncut,nxcut1,nycut2,nniso,nxiso1(1)
+c     ,                   nx,ny,nncut,nxcut1,  nycut2,  nniso,nxiso1(1)
 c      print *,'nzidv,nzinn,nzodv,nzidv2,nzinn2,nzodv2 = ',
-c     , nzidv,nzinn,nzodv,nzidv2,nzinn2,nzodv2
+c     ,         nzidv,nzinn,nzodv,nzidv2,nzinn2,nzodv2
 c      print *,'izc1,izc3,izci,izc4,izc2,iztg = ',
-c     , izc1,izc3,izci,izc4,izc2,iztg
+c     ,         izc1,izc3,izci,izc4,izc2,iztg
 c      print *,'nrpfl,nrsol,nrsol1,irwl,irsp,irsp2 = ',
-c     , nrpfl,nrsol,nrsol1,irwl,irsp,irsp2
+c     ,         nrpfl,nrsol,nrsol1,irwl,irsp,irsp2
 c!###}
 c=======================================================================
       call subend ()

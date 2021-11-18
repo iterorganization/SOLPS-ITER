@@ -88,8 +88,11 @@ c*** Boundary
       nmdbr(13,2)=2
       nmdbr(15,2)=2
       nmdpr(16,2)=nznbndt(1)
-      ltrvr(2,2)=.true.
-      lrrvr(9,2)=.true.
+      do i=18,21 !{
+        nmdpr(i,2)=nniso
+      end do !}
+      ltrvr( 2,2)=.true.
+      lrrvr( 9,2)=.true.
       lrrvr(10,2)=.true.
       lrrvr(11,2)=.true.
       lrrvr(13,2)=.true.
@@ -118,16 +121,16 @@ c*** nbc
         do i=1,nznbndt(j) !{
           k=k+1
 c*** bcchar, bcpos, bcstart, bcend, bcene, bceni, bcpot, enepar, enipar, potpar
-          cniprm(k,1,1,2,2)=cznbndt(i,j)
-          iniprm(k,1,1,3,2)=lcpbnds(i,j)-1
-          iniprm(k,1,1,4,2)=lc1bnds(i,j)-1
-          iniprm(k,1,1,5,2)=lc2bnds(i,j)-1
-          iniprm(k,1,1,6,2)=leebnds(i,j)
-          iniprm(k,1,1,7,2)=leibnds(i,j)
-          iniprm(k,1,1,8,2)=lpobnds(i,j)
-          rniprm(k,1,1,9,2)=beebnds(i,1,j)
+          cniprm(k,1,1, 2,2)=cznbndt(i,j)
+          iniprm(k,1,1, 3,2)=lcpbnds(i,j)-1
+          iniprm(k,1,1, 4,2)=lc1bnds(i,j)-1
+          iniprm(k,1,1, 5,2)=lc2bnds(i,j)-1
+          iniprm(k,1,1, 6,2)=leebnds(i,j)
+          iniprm(k,1,1, 7,2)=leibnds(i,j)
+          iniprm(k,1,1, 8,2)=lpobnds(i,j)
+          rniprm(k,1,1, 9,2)=beebnds(i,1,j)
           rniprm(k,1,1,10,2)=beibnds(i,1,j)
-          rniprm(k,2,1,9,2)=beebnds(i,2,j)
+          rniprm(k,2,1, 9,2)=beebnds(i,2,j)
           rniprm(k,2,1,10,2)=beibnds(i,2,j)
           rniprm(k,1,1,11,2)=bpobnds(i,1,j)
           rniprm(k,2,1,11,2)=bpobnds(i,2,j)
@@ -162,7 +165,7 @@ c*** lcbs
       end do !}
 c*** nniso
       iniprm(1,1,1,17,2)=nniso
-c*** ntiso, nxiso1, nxiso2, nyiso1, nyiso2
+c*** nxiso1, nxiso2, nyiso1, nyiso2
       do i=1,nniso !{
         iniprm(i,1,1,18,2)=nxiso1(i)
         iniprm(i,1,1,19,2)=nxiso2(i)
@@ -261,8 +264,8 @@ c*** k, m, n are the numbers of recycling, specified, and all strata
       do i=2,7 !{
         nmdpr(i,3)=n
       end do !}
-      nmdpr(8,3)=nspcncl
-      nmdpr(9,3)=nspcatm
+      nmdpr( 8,3)=nspcncl
+      nmdpr( 9,3)=nspcatm
       nmdpr(10,3)=nspcpls+nspcncl
       nmdpr(11,3)=nspcpls+nspcncl
       nmdpr(12,3)=n
@@ -286,7 +289,7 @@ c*** k, m, n are the numbers of recycling, specified, and all strata
       nmdlr(24,3)=nspcmol
       nmdpr(21,3)=nspcatm
 
-      ltrvr(2,3)=.true.
+      ltrvr( 2,3)=.true.
       lspvr(10,3)=.true.
       lspvr(11,3)=.true.
       lrrvr(18,3)=.true.
@@ -1000,10 +1003,9 @@ c*** nxcut1, nxcut2, nycut1, nycut2
       end do !}
 c*** nniso
       iniprm(1,1,1,7,5)=nniso
-c*** ntiso, nxiso1, nxiso2, nyiso1, nyiso2
+c*** nxiso1, nxiso2, nyiso1, nyiso2
       do i=1,nniso !{
-        iniprm(1,1,1,8,5)=ntiso(i)
-        iniprm(i,1,1,9,5)=nxiso1(i)
+        iniprm(i,1,1, 9,5)=nxiso1(i)
         iniprm(i,1,1,10,5)=nxiso2(i)
         iniprm(i,1,1,11,5)=nyiso1(i)
         iniprm(i,1,1,12,5)=nyiso2(i)
@@ -1074,9 +1076,9 @@ c*** Helium pumping data
 
 c*** location, fusion_power, ratio of pumping speeds, j_he_at, j_ne_at
         iniprm(1,1,1,12,7)=locphep
-        rniprm(1,1,1,1,7)=pwrhepdt
-        rniprm(1,1,1,2,7)=pmphepdt
-        iniprm(1,1,1,9,7)=j_he_at
+        rniprm(1,1,1, 1,7)=pwrhepdt
+        rniprm(1,1,1, 2,7)=pmphepdt
+        iniprm(1,1,1, 9,7)=j_he_at
         iniprm(1,1,1,10,7)=j_ne_at
 c*** lpfrb, lpfrt
         if(locphep.eq.1) then !{
