@@ -55,4 +55,5 @@ C---- ERG3    : CROSS PRODUCT OF SIDEA3 AND SIDEB3
         MEMBER = .TRUE.
       ENDIF
 
+      RETURN
       END

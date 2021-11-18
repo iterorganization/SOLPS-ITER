@@ -157,6 +157,7 @@ C     INITIALIZE THE VARIABLES OF THE COMMON BLOCKS
 
       NNCUT = 0
       NNISO = 0
+      RETURN
       END
 
 *//TRIIN//
@@ -206,6 +207,7 @@ C     READ TRIANGLE MESH
         READ(22,*) (YCOORD(ICOORD),ICOORD=1,NCOORD)
       end if !}
       NTRIA1 = NTRIA
+      RETURN
       END
 
 c*//SONIN//
@@ -370,6 +372,7 @@ c          XCOORD((IY-1)*(NX+1)+IX+NCOORD)=BR(IX,IY,1)*100.
 c          YCOORD((IY-1)*(NX+1)+IX+NCOORD)=BZ(IX,IY,1)*100.
 c        ENDDO
 c      ENDDO
+c      RETURN
 c      END
 
 *//TRIANG//
@@ -489,6 +492,27 @@ c     Shift from B2 grid numbering to Eirene grid numbering
           ENDDO
         ENDDO
       ENDDO
+c     Update neighbours for the case of periodic boundary conditions
+      IX=1
+      IX1=NX
+      DO IY=1,NY
+        IF(ABS(XCOORD((IY-1)*(NX+1)+IX+NCOORD)-
+     &         XCOORD((IY-1)*(NX+1)+IX1+1+NCOORD)).LT.1.E-6 .AND.
+     &     ABS(YCOORD((IY-1)*(NX+1)+IX+NCOORD)-
+     &         YCOORD((IY-1)*(NX+1)+IX1+1+NCOORD)).LT.1.E-6 .AND.
+     &     ABS(XCOORD(IY*(NX+1)+IX+NCOORD)-
+     &         XCOORD(IY*(NX+1)+IX1+1+NCOORD)).LT.1.E-6 .AND.
+     &     ABS(YCOORD(IY*(NX+1)+IX+NCOORD)-
+     &         YCOORD(IY*(NX+1)+IX1+1+NCOORD)).LT.1.E-6) THEN
+          NEIGHB(2*NCELL(IX,IY)-1+NTRIA1,3)=2*NCELL(IX1,IY)+NTRIA1
+          NEIGHS(2*NCELL(IX,IY)-1+NTRIA1,3)=2
+          NEIGHR(2*NCELL(IX,IY)-1+NTRIA1,3)=0
+          NEIGHB(2*NCELL(IX1,IY)+NTRIA1,2)=2*NCELL(IX,IY)-1+NTRIA1
+          NEIGHS(2*NCELL(IX1,IY)+NTRIA1,2)=3
+          NEIGHR(2*NCELL(IX1,IY)+NTRIA1,2)=0
+        ENDIF
+      ENDDO
+c     Enforce isolated regions
       DO IISO=1,NNISO
         IF(NYISO1(IISO).EQ.0 .AND. NYISO2(IISO).EQ.NY) THEN
           DO IX=NXISO2(IISO)+1,NX
@@ -504,6 +528,7 @@ c     Shift from B2 grid numbering to Eirene grid numbering
         ENDIF
       ENDDO
       NTRIA = NTRIA1 + 2*N2EFF
+      RETURN
       END
 
 *//ELIM//
@@ -558,6 +583,7 @@ C         IF (ICO(J) .GT. NCOORD) THEN
         ENDDO
       ENDDO
       NCOORD=ANZCOORD
+      RETURN
       END
 
 *//NEIGHBOUR//
@@ -802,6 +828,7 @@ c but still have unindentified neighbors
         ENDIF !}
         ldbg=.false.
       ENDDO !}
+      RETURN
       END
 
 *//PARA//
@@ -852,6 +879,7 @@ c     otherwise some corners are not detected
       if(para) para=max(xp1,xp2)-tolx.le.max(xq1,xq2)
       if(para) para=max(yp1,yp2)-toly.le.max(yq1,yq2)
 
+      RETURN
       END
 
 *//GRIDOUT//
@@ -881,4 +909,5 @@ C     WRITE NEW GRID
      .       NEIGHB(ITRIA,3),NEIGHS(ITRIA,3),NEIGHR(ITRIA,3),
      .       TRIX(ITRIA),TRIY(ITRIA)
       ENDDO
+      RETURN
       END

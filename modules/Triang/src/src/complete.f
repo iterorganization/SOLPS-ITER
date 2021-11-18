@@ -63,4 +63,5 @@ c     call grjmp(real(x(ielm(1,nelm))),real(y(ielm(1,nelm))))
 c     call grdrw(real(x(ielm(2,nelm))),real(y(ielm(2,nelm))))
 c     call grdrw(real(x(ielm(3,nelm))),real(y(ielm(3,nelm))))
 c     call grdrw(real(x(ielm(1,nelm))),real(y(ielm(1,nelm))))
+      return
       end

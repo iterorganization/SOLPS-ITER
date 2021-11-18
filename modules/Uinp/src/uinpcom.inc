@@ -70,8 +70,8 @@ c***    poloidal positions of the cuts, isolating cuts,
 c***    and the last target, the radial positions of
 c***    the separatrices and the outer wall 
 c***    (see uinprpgr.F for detail)
-      integer nncut,nxcut1(nnptseg),nycut2(nnptseg),nniso,ntiso(nxd),
-     ,  nxiso1(nxd),nxiso2(nxd),nyiso1(nxd),nyiso2(nxd),nx,ny
+      integer nncut,nxcut1(nnptseg),nycut2(nnptseg),nx,ny,
+     ,        nniso,nxiso1(nxd),nxiso2(nxd),nyiso1(nxd),nyiso2(nxd)
       integer izc1,izc2,izc3,izc4,izci,iztg,irsp,irsp2,irwl,
      ,  nrsol,nrsol1,nrpfl,nzidv,nzinn,nzodv,nzidv2,nzinn2,nzodv2
       real(kind=R4) niiso(nsdb2),tiiso,teiso
@@ -556,8 +556,8 @@ c=======================================================================
      i  nstrao,natmo,nmolo,niono,nphto,nplso,
      ,  mnpr,mnptseg,npr,nptseg,laddsrfs,indasrfe,indasrfs,
      ,  nttrator,jxi,jxa,ntcpub2,nnvsle,nmvsle,ttntcpu,ttnfile,ttnpts,
-     ,  ntrgdflt,namdf,nncut,nxcut1,nycut2,nniso,ntiso,nxiso1,nxiso2,
-     ,  nyiso1,nyiso2,nx,ny,
+     ,  ntrgdflt,namdf,nncut,nxcut1,nycut2,
+     ,  nniso,nxiso1,nxiso2,nyiso1,nyiso2,nx,ny,
      ,  izc1,izc2,izc3,izc4,izci,iztg,irsp,irsp2,irwl,hlp_h_m,
      ,  nrsol,nrsol1,nrpfl,nzidv,nzinn,nzodv,nzidv2,nzinn2,nzodv2,
      ,  nspipls,nspiatm,nspimol,nspiion,nspigen,nspignp,spcimsp,spcimsa,
