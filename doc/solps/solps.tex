@@ -19248,6 +19248,7 @@ Additionally, system-wide compiler flags can be provided by means of the
 \item[CATALYST] \index{CATALYST} Turns on the Paraview Catalyst utility (see the SOLPS-GUI manual for full details)
 \item[COMPILER\_MAJOR\_VERSION] \index{COMPILER\_MAJOR\_VERSION} Major version number of the compiler being used (set internally by the configuration files)
 \item[COMPILER\_MINOR\_VERSION] \index{COMPILER\_MINOR\_VERSION} Minor version number of the compiler being used (set internally by the configuration files)
+\item[CONSTANTS\_PROVIDED] \index{CONSTANTS\_PROVIDED} Indicates whether the {\tt Fundamental-Constants} module is being at compilation time (set internally by the configuration files)
 \item[CRAY] \index{CRAY} To be used with the Cray Fortran compiler
 \item[DBG] \index{DBG} Turns on additional debugging output (set internally by the {\tt Makefile} when requesting a {\tt \_debug} compilation)
 \item[F2003] \index{F2003} To be used if the compiler is compatible with {\tt Fortran 2003}
@@ -19377,6 +19378,8 @@ We list below where the {\tt DivGeo} compilation switches are used.
     \multicolumn{2}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
+       CONSTANTS\_PROVIDED & equtrn/src/eqdim.f90 \\
+       IMAS & equtrn/src/eqdim.f90 \\
        IMAS\_MINOR\_VERSION & equtrn/src/rdids.f \\
        UAL\_MAJOR\_VERSION & equtrn/src/rdids.f \\
        UAL\_MICRO\_VERSION & equtrn/src/rdids.f \\
@@ -19587,6 +19590,8 @@ CDF\_MOVIE & b2plot/caltraj.F \\
 CDF\_MOVIE & b2plot/process\_chords.F \\
 CLASSICAL\_CURRENT & transport/b2tdia.F \\
 COMPLICATED & sources/b2stbc\_fb.F \\
+CONSTANTS\_PROVIDED & common/emissivity.constants \\
+CONSTANTS\_PROVIDED & ids/b2mod\_constants.F90 \\
 CRAY & b2plot/b2plot.F \\
 CRAY & equations/b2news.F \\
 CRAY & equations/b2news\_.F \\

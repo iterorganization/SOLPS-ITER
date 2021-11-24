@@ -87,6 +87,15 @@ ifdef SOLPS_OPENMP
   B25_DEFINES += -D_OPENMP
 endif
 
+# Build with Fundamental-Constants module if present
+ifeq ($(shell `pkg-config --exists fundamental-constants`; echo $$?),0)
+  SOLPS_CPP += -DCONSTANTS_PROVIDED
+  INCLUDE += `pkg-config fundamental-constants --cflags`
+  INCMODS += `pkg-config fundamental-constants --cflags`
+  export INCLUDE
+  export INCMODS
+endif
+
 # Assume MPI is possible
 MPI_PRESENT = 1
 
