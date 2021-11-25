@@ -7,6 +7,10 @@ endif
 
 FC       = ifort
 
+ifdef USE_MPI
+FC = mpif90
+endif
+
 COMPILER_MAJOR_VERSION = $(shell ${FC} -V 2>&1 | grep -o "Version [0-9]*" | cut -d ' ' -f 2 )
 
 ifdef SOLPS_DEBUG
