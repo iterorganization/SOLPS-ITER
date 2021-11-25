@@ -1,0 +1,123 @@
+# NCDIR     ?= /usr/local/software/spack/spack-0.11.2/opt/spack/linux-rhel7-x86_64/intel-17.0.4/netcdf-fortran-4.4.4-cesnirf36s5woa3kex3oemvb5hfeutwn
+NCDIR       ?= /usr/local/software/spack/spack-0.11.2/opt/spack/linux-rhel7-x86_64/intel-17.0.4/netcdf-4.4.1.1-zysrbqwgar43zq7pisurzuhnk6iix3bf
+MSCL_ROOT   ?= /home/ir-nunn1/solps-iter-dependencies
+GR_ROOT     ?= /home/ir-nunn1/solps-iter-dependencies/gr
+GLI_HOME    ?= /home/ir-nunn1/solps-iter-dependencies/gks
+H5DIR       ?= /usr/local/software/spack/current/opt/spack/linux-rhel7-x86_64/intel-17.0.4/hdf5-1.10.4-swn7n437jodmcy3p2nqjqk7fda7fjqa6
+NCARG_ROOT  ?= /home/ir-nunn1/solps-iter-dependencies/NCARG
+NAGDIR      ?= /home/ir-nunn1/solps-iter-dependencies/nag
+MDSPLUS_DIR ?=
+MPDIR ?=
+
+LD_NETCDF  = -L${NCDIR}/lib -lnetcdf -L/usr/local/software/spack/spack-0.11.2/opt/spack/linux-rhel7-x86_64/intel-17.0.4/netcdf-fortran-4.4.4-cesnirf36s5woa3kex3oemvb5hfeutwn/lib -lnetcdff
+LD_MSCL    = -L${MSCL_ROOT}/lib -lmscl
+ifdef GR_ROOT
+LD_GR      = -L${GR_ROOT} -lgr
+endif
+LD_GKS     = -L${GLI_HOME} -lgks -lgfortran
+ifdef NCARG_ROOT
+LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -L/usr/X11R6/lib64 -lX11 -lm
+endif
+LD_NAG     = -L${NAGDIR} -lnag
+# LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
+# LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
+# LD_MPI     = -L${MPDIR}/lib -lmpi
+
+#
+# Preprocessor options
+#
+
+SOLPS_CPP      = -DNCAR4 -DNO_F01AAF -ffreestanding
+B25_DEFINES    =
+CARRE_DEFINES  =
+EIRENE_DEFINES =
+FFLAGSEXTRA    =
+MPI_CPP        = -I${MPDIR}/include
+
+# Autodetected optional features...
+
+# Build with NetCDF tools if available
+ifdef LD_NETCDF
+  SOLPS_CPP   += -DCDF_MOVIE
+else
+  SOLPS_CPP   += -DNO_CDF
+endif
+
+# Build with MDSplus tools if MDSplus is present
+ifdef LD_MDSPLUS
+  SOLPS_CPP   += -DMDSPLUS
+endif
+
+# Build with Catalyst if ParaView is in PATH
+ifdef LD_CATALYST
+  SOLPS_CPP   += -DCATALYST
+endif
+
+# Build with IMAS if imas module is loaded
+ifdef IMAS_VERSION
+  UAL_MAJOR_VERSION = $(shell echo ${UAL_VERSION} | cut -d '.' -f1 )
+  IMAS_MAJOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f1 )
+  IMAS_MINOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f1 )
+  ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 17; echo $$?),0)
+    GGD_MINOR_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f2 )
+    LD_UAL = `pkg-config imas-ifort ggd --libs`
+  else
+    ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 12; echo $$?),0)
+      GGD_MINOR_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f2 )
+      LD_UAL = `pkg-config imas-ifort --libs` -lggd-ifort
+    else
+      GGD_MINOR_VERSION = 0
+      LD_UAL = `pkg-config imas-lowlevel imas-ifort --libs`
+    endif
+  endif
+  SOLPS_CPP += -DIMAS -DUAL_MAJOR_VERSION=${UAL_MAJOR_VERSION} -DIMAS_MINOR_VERSION=${IMAS_MINOR_VERSION} -DGGD_MINOR_VERSION=${GGD_MINOR_VERSION}
+  export LD_UAL
+else
+  UAL_MAJOR_VERSION = 0
+  GGD_MINOR_VERSION = 0
+  IMAS_MAJOR_VERSION = 0
+  IMAS_MINOR_VERSION = 0
+endif
+export UAL_MAJOR_VERSION
+export GGD_MINOR_VERSION
+export IMAS_MAJOR_VERSION
+export IMAS_MINOR_VERSION
+
+# Build with OpenMP if requested
+ifdef SOLPS_OPENMP
+  B25_DEFINES += -D_OPENMP
+endif
+
+#
+# Export for use in sub-makefiles
+#
+
+export NCDIR
+export MSCL_ROOT
+export H5DIR
+export GR_ROOT
+export GLI_HOME
+export NCARG_ROOT
+export NAGDIR
+export MDSPLUS_DIR
+
+export LD_NETCDF
+export LD_MSCL
+export LD_GR
+export LD_GKS
+export LD_NCARG
+export LD_NAG
+export LD_MDSPLUS
+export LD_SONNET
+export LD_MPI
+
+export SOLPS_CPP
+export FFLAGSEXTRA
+export B25_DEFINES
+export CARRE_DEFINES
+export EIRENE_DEFINES
+export MPI_CPP
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
