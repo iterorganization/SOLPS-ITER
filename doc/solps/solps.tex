@@ -11684,8 +11684,10 @@ The relevant switches for the Zhdanov closure are:
   \item[b2tral\_Zhdanov\_closure] The main switch that turns on the Zhdanov closure calculation, if set to {\tt '1'}. Default is {\tt '0'}.
   \item[b2sifr\_Zhdanov\_test] If {\tt '1'}, the Zhdanov closure calculation takes place, but the results are not used and the standard calculation is applied. Default is {\tt '0'}. Meant for testing purposes.
   \item[b2sifr\_Zhdanov\_tf\_fr] If {\tt '1'} (default), the Zhdanov thermal and friction forces formulations are applied.
-  \item[b2tral\_zhd\_corr] Multiplier to the corrections due to the difference in definition for heat flux between Zhdanov and Braginskii. Default is {\tt '1'}.
+  \item[b2tral\_zhd\_corr] Multiplier to the corrections due to the difference in definition for temperature and Joule heating between Zhdanov and Braginskii. Default is {\tt '1'}.
+  \item[b2tral\_zhd\_corrT] Multiplier to the corrections due to the difference in definition for temperature between Zhdanov and Braginskii in the thermal force calculation. Default is {\tt '1'}.
   \item[b2tral\_zhcscorr] If {\tt '1'} (default), the corrections for the each ion charge state are applied.
+  \item[b2tral\_zhcscorr\_vq] If {\tt '0'}, the corrections for the each ion charge state is not applied for the heat stress viscosity. Default is {\tt '1'}.
   \item[b2tral\_zh\_imp\_analyt] If {\tt '1'}, the matrix inversion method is not used. Instead, the improved analytical expressions from \cite{MAKAROV2021} are applied. Default is {\tt '0'}.
   \item[b2tral\_zh\_analyt\_mdf] If {\tt '1'}, the MDF friction force calculation is applied (see \cite{MAKAROV2021}). Default is {\tt '0'}.
   \item[b2tral\_zhflcorr] Flux-limiting coefficient multiplier. Default is {\tt '3.0'}.
@@ -11694,6 +11696,7 @@ The relevant switches for the Zhdanov closure are:
   \item[b2tfhi\_Zhdanov\_vel\_heat] If {\tt '1'} (default), the Zhdanov velocity-dependent ion heat flux is added.
   \item[b2tral\_Zhdanov\_visu] If {\tt '1'} (default), the Zhdanov velocity-dependent viscous stress formulation is applied instead of the Braginskii expression.
   \item[b2tral\_Zhdanov\_vish] If {\tt '1'} (default), the Zhdanov heat flux dependent viscous stress formulation is applied instead of the Braginskii expression.
+  \item[b2tral\_zh\_tf\_toff] Integer number with (nspecies*(nspecies+1))/2-nspecies digits. If the digit is 1, turn off the thermal force between corresponding species starting from 1 and 2; 1 and 3;....; nspecies-1 and nspesies. Default is {\tt '0'}.
 \end{description}
 
 \begin{sloppypar}
@@ -11701,6 +11704,7 @@ Legacy switches (using the reduced improved analytical expressions that were inc
 \begin{description}
   \item[b2npmo\_impr\_form\_tf] If {\tt '1'}, the thermal force is calculated using reduced improved analytical expressions (corresponding to {\tt b2sigp\_style.eq.2}). Default is {\tt '0'}.
   \item[b2npmo\_impr\_form\_fr] If {\tt '1'}, the friction force is calculated using reduced improved analytical expressions (corresponding to {\tt b2sigp\_style.eq.2}). Default is {\tt '0'}.
+  \item[b2npmo\_mass\_multiplicator] Using this number the impurity mass can be artificialy increased. Default is {\tt '1.0'}.
 \end{description}
 \end{sloppypar}
 
@@ -11722,7 +11726,7 @@ If {\tt Zhdanov\_cond.eq.1}, then:
 
 \textbf{In the transport part of B2.5:}
 
-\begin{align}
+\begin{align}\label{eq:eni_zh_ddkapixCL}
 \tilde{\tilde{\kappa}}^{CL}_{ix} = c^{(Luciani)}_{\kappa_{ix}} \tilde{\kappa}^{CL}_{ix}
 \end{align}
 
@@ -11730,7 +11734,7 @@ If {\tt Zhdanov\_cond.eq.1}, then:
 \overline{\tilde{\tilde{\kappa}}^{CL}_{\alpha x}} = c^{(Luciani)}_{\kappa_{ix}} \overline{\tilde{\kappa}^{CL}_{\alpha x}},\ \ \ \left(\frac{Z^2}{\overline{Z_\alpha^2}} \text{weighted}\right)
 \end{align}
 
-\begin{align}
+\begin{align}\label{eq:eni_zh_ddkapaxCL}
 \tilde{\tilde{\kappa}}^{CL}_{a x} = c^{(Luciani)}_{\kappa_{ix}} \tilde{\kappa}^{CL}_{a x}
 \end{align}
 
@@ -11759,11 +11763,11 @@ K_2 = \frac{0.66+1.88 \cdot \sqrt{\varepsilon} - 1.54 \cdot \varepsilon}
 \end{align}
 
 Where the Zhdanov ion heat conductivity is:
-\begin{align}
+\begin{align}\label{eq:eni_zh_dkapixCL}
 \tilde{\kappa}^{CL}_{ix} = \sum_\alpha \left( \overline{\tilde{\kappa}^{CL}_{\alpha x}} + zhcscorr \cdot \overline{\tilde{\kappa}^{B}_{\alpha x}} \left( \tilde{I}_\alpha - 1 \right) \right)
 \end{align}
 
-\begin{align}
+\begin{align}\label{eq:eni_zh_kapixCL}
 {\kappa}^{CL}_{ix} = \sum_\alpha \left( \overline{{\kappa}^{CL}_{\alpha x}} + zhcscorr \cdot \overline{{\kappa}^{B}_{\alpha x}} \left( \tilde{I}_\alpha - 1 \right) \right)
 \end{align}
 
@@ -11771,11 +11775,11 @@ Where the Zhdanov ion heat conductivity is:
 \tilde{I}_\alpha = \sum_Z \frac{1}{I_{a(\alpha,Z)}} \left( \frac{n_{a}}{\overline n_{\alpha}} \right)^2
 \end{align}
 
-\begin{align}
+\begin{align}\label{eq:eni_zh_dkapaxCL}
 \tilde{\kappa}^{CL}_{ax} = \frac{n_{a}}{\overline n_{\alpha}} \left( \overline{\tilde{\kappa}^{CL}_{\alpha x}} + zhcscorr \cdot \overline{\tilde{\kappa}^{B}_{\alpha x}} \left( \frac{\overline{Z_\alpha^2}}{Z^2} - 1 \right) \right)
 \end{align}
 
-\begin{align}
+\begin{align}\label{eq:eni_zh_kapaxCL}
 {\kappa}^{CL}_{ax} = \frac{n_{a}}{\overline n_{\alpha}} \left( \overline{{\kappa}^{CL}_{\alpha x}} + zhcscorr \cdot \overline{{\kappa}^{B}_{\alpha x}} \left( \frac{\overline{Z_\alpha^2}}{Z^2} - 1 \right) \right)
 \end{align}
 
@@ -11897,7 +11901,7 @@ c^{(F\ limB\ h)}_{\alpha} & =
 
 If {\tt Zhdanov\_vel\_heat.eq.1}, then:
 
-\begin{align}
+\begin{align}\label{eq:eni_tifix}
 \frac{\sqrt{g}}{h_x} h^V_{ix} = \frac{\sqrt{g}}{h_x} b_x T_i \sum_{\substack{a \\ z_a \neq 0}} n_{a} \sum_{\beta} c^{(h_w)}_{\beta \alpha(a)} \left( V_{a\parallel} - \overline{V}_{\beta\parallel} \right)
 \end{align}
 
@@ -12282,7 +12286,7 @@ does not depend on $V_{\parallel a}$.
 \left( {\nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{full}_{\parallel} = \left( { \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{res}_{\parallel} + \left( { \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{ai}_{\parallel} + \left( { \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{div}_{\parallel}
 \end{align}
 
-\begin{align}
+\begin{align}\label{eq:mom_zh_visres}
 \left( { \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{res}_{\parallel} =
 - \frac{1}{h_z \sqrt g} \frac{\partial}{\partial x}
 \left( \frac{h_z \sqrt g}{h_x} \frac{4}{3} \frac{\widetilde{\widetilde{\eta}}^{(CL)}_{ax}}{\rho^{rel}_a}
@@ -12290,7 +12294,7 @@ does not depend on $V_{\parallel a}$.
 B^{\frac{1}{2}} \rho^{rel}_a V_{\parallel a}
 \end{align}
 
-\begin{align}
+\begin{align}\label{eq:mom_zh_visai}
 \left({ \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{ai}_{\parallel} = -B^{\frac 3 2} b_x \frac{\partial}{h_x \partial x}
 \left( \frac{h_z \sqrt g}{h_x} \frac{4}{3} \frac{\widetilde{\widetilde{\eta}}^{(CL)}_{ax}}{\rho^{rel}_a}
  \frac{1}{b_x B^2}\frac{h_x}{h_z \sqrt g} \frac{\partial \left(B^{\frac{1}{2}} \left( V_{\parallel} - \rho^{rel}_a V_{\parallel a} \right) \right)}{h_x \partial x}\right)
@@ -12307,7 +12311,7 @@ B^{\frac{1}{2}} \rho^{rel}_a V_{\parallel a}
 
 Thus the momentum flux is:
 
-\begin{equation}
+\begin{equation}\label{eq:mom_zh_fluxx}
 \Gamma^m_{ax} = \left\{
 \begin{matrix}
 m_a V_{\parallel a} \Gamma_{ax}^{Cor} + \frac{4}{3} \widetilde{\widetilde{\eta}}^{(CL)}_{ax} \left( \frac{\partial \ln h_z}{h_x \partial x} - \frac{\partial \ln{\rho^{rel}_a}}{h_x \partial x} \right) V_{\parallel a} - \eta_{ax} \frac{\partial V_{\parallel a}}{h_x \partial x}, & z_a \neq 0\\
@@ -12335,11 +12339,11 @@ S_{a \parallel}^m = -\left( \nabla \cdot\overset\leftrightarrow\pi_a^{\parallel}
 
 Where the viscous stress coefficient is:
 
-\begin{align}
+\begin{align}\label{eq:mom_zh_ddveta}
 \widetilde{\widetilde{\eta}}^{(CL)}_{ax} = c_{\eta_{ax}^{(CL)}}^{Luciani} \widetilde{\eta}^{(CL)}_{ax}
 \end{align}
 
-\begin{align}
+\begin{align}\label{eq:mom_zh_dveta}
 \widetilde{\eta}^{(CL)}_{ax} = c_{\eta_{x}^{(CL)}} \eta^{(CL)}_{ax}
 \end{align}
 
@@ -12387,7 +12391,7 @@ c_{\eta_{ax}^{(CL)}} & =
 V_{m_a}^{(\max)} = c_{flim_2} n_a T_i ~ \text{,} ~ c_{flim_2} = \frac{3}{8}
 \end{equation}
 
-\begin{equation}
+\begin{equation}\label{eq:mom_zh_veta}
 \eta^{(CL)}_{ax} =
 \left\{
 \begin{aligned}
@@ -12485,11 +12489,11 @@ In case {\tt 'b2siav\_style\_qip'} is set to {\tt '1'} in {\tt b2mn.dat}:
 
 And the viscosity coefficients are:
 
-\begin{align}
+\begin{align}\label{eq:mom_zh_veta_hA}
 \frac{\widetilde{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha} = \tilde{\alpha}^{neo} c_{\eta_{x}^{(CL)}}^{Luciani} \frac{\eta^{(h_iA)}_{\alpha \beta x}}{p_\alpha};\ \ \ \frac{\eta^{(h_iA)}_{\alpha \beta x}}{p_\alpha} = b_x^2 \frac{\eta^{(h_iA)}_{\alpha \beta }}{p_\alpha};\ \ \ \frac{\eta^{(h_iA)}_{\alpha \beta }}{p_\alpha} = \check{c}^{(\pi_h^A)}_{\alpha \beta} \tau^{(Zh)}_{\alpha \beta}
 \end{align}
 
-\begin{align}
+\begin{align}\label{eq:mom_zh_veta_hB}
 \frac{\widetilde{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} = \tilde{\alpha}^{neo} c_{\eta_{x}^{(CL)}}^{Luciani} \frac{\eta^{(h_iB)}_{\alpha x}}{p_\alpha};\ \ \ \frac{\eta^{(h_iB)}_{\alpha x}}{p_\alpha} = b_x^2\frac{\eta^{(h_iB)}_{\alpha}}{p_\alpha};\ \ \ \frac{\eta^{(h_iB)}_{\alpha}}{p_\alpha} = 2 c^{(\pi_h^B)}_{\alpha} \tau^{(Zh)}_{\alpha \alpha}
 \end{align}
 
@@ -12889,7 +12893,7 @@ K^{(V_\parallel)}_{\beta0} = K^{(V_\parallel)}_{0\beta} =
 %f^\parallel_a(c_\parallel)=n_a\left(\frac{m_a}{2\pi T_i}\right)^{1/2}\exp{\left(-\frac{m_ac_\parallel^2}{2T_i}\right)}\cdot\left[1+\gamma_a w_{\parallel a}c_\parallel+\frac{1}{5}\gamma_a^2\frac{h_{\parallel a}}{p_a}
 %\end{multline}
 
-\begin{multline}
+\begin{multline}\label{eq:zh_ion_dist_fun}
 f_a(\textbf{c}) = n_a \left( \frac{m_a}{2 \pi T_i} \right)^{3/2} \exp{\left( -\frac{m_a c^2}{2 T_i} \right)} \cdot \left[ 1 + \gamma_a w_{\parallel a} c_\parallel + \right. \\
 \left. \frac{1}{5} \gamma_a^2 \left( \frac{h^T_{\parallel a}}{p_a} + \frac{h^w_{\parallel a}}{p_a} \right) c_\parallel \left( c^2 - \frac{5}{\gamma_a} \right) + \frac{1}{70} \gamma_a^3 \left( \frac{ r^T_{\parallel a} \gamma_a}{p_a} + \frac{r^w_{\parallel a} \gamma_a}{p_a} \right) c_\parallel \left( c^4 - \frac{14}{\gamma_a} c^2 + \frac{35}{\gamma_a^2} \right) \right]
 \end{multline}
@@ -14427,11 +14431,37 @@ $\displaystyle \widetilde{\widetilde{\eta}}_{ax}^{(CL)} \frac{h_z \sqrt{g}}{h_x^
 
 $\displaystyle \widetilde{\eta}^{(CL)}_{ax} \frac{h_z \sqrt{g}}{h_x^2}$ & $kg \cdot m/s$ & \footnotesize{\texttt{b2trcl\_luciani\_cvsahzx[XXX].dat}} & (\ref{eq:mom_veta}) \\
 
+$\displaystyle \frac{\widetilde{\widetilde{\eta}}^{(CL)}_{ax}}{\rho^{rel}_a} \frac{h_z \sqrt{g}}{h_x^2}$ (only for \ref{sec:Zhdanov}) & $kg \cdot m/s$ & \footnotesize{\texttt{b2trzh\_luciani\_fllim\_cvsahz\_drhox[XXX].dat}} & (\ref{eq:mom_zh_visres}), (\ref{eq:mom_zh_visai})\\
+
+$\displaystyle \widetilde{\widetilde{\eta}}_{ax}^{(CL)} \frac{h_z \sqrt{g}}{h_x^2}$ (only for \ref{sec:Zhdanov}) & $kg \cdot m/s$ & \footnotesize{\texttt{b2trzh\_applied\_cvsahzx[XXX].dat}} & (applied in \ref{eq:mom_zh_fluxx}) \\
+
+$\displaystyle \widetilde{\widetilde{\eta}}_{ax}^{(CL)} \frac{h_z \sqrt{g}}{h_x^2}$ (only for \ref{sec:Zhdanov}) & $kg \cdot m/s$ & \footnotesize{\texttt{b2trzh\_luciani\_fllim\_cvsahzx[XXX].dat}} & (\ref{eq:mom_zh_ddveta}) \\
+
+$\displaystyle \widetilde{\eta}^{(CL)}_{ax} \frac{h_z \sqrt{g}}{h_x^2}$ (only for \ref{sec:Zhdanov}) & $kg \cdot m/s$ & \footnotesize{\texttt{b2trzh\_fllim\_cvsahzx'[XXX].dat}} & (\ref{eq:mom_zh_dveta}) \\
+
+$\displaystyle {\eta}^{(CL)}_{ax} \frac{h_z \sqrt{g}}{h_x^2}$  (only for \ref{sec:Zhdanov}) & $kg \cdot m/s$ & \footnotesize{\texttt{b2trzh\_cvsahzx'[XXX].dat}} & (\ref{eq:mom_zh_veta}) \\
+
 $\displaystyle \eta_{a}^{(AN)} \frac{h_z\sqrt g}{h_x^2}$ & $kg \cdot m/s$ & \texttt{b2trno\_cvsahzx[XXX].dat} & (\ref{eq:mom_etana}) \\
 
 $\displaystyle \eta_{a}^{(AN)} \frac{h_z\sqrt g}{h_y^2}$ & $kg \cdot m/s$ & \texttt{b2trno\_cvsahzy[XXX].dat} & (\ref{eq:mom_etana})  \\
 
 $\displaystyle \eta_{ax}^{CL} \frac{h_z\sqrt g}{h_x^2}$ & $kg \cdot m/s$ & \texttt{b2trcl\_cvsahzx[XXX].dat} & (\ref{eq:mom_etaCL})  \\
+
+$\displaystyle \frac{\widetilde{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha} \frac{h_z \sqrt{g}}{h_x^2}$ (only for \ref{sec:Zhdanov}) & $kg \cdot m/s$ & \footnotesize{\texttt{b2trzh\_luciani\_cvsahz\_hAdpx[XXX]\_[YYY].dat}} & (\ref{eq:mom_zh_veta_hA}) \\
+
+$\displaystyle \frac{\widetilde{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha} \frac{\sqrt{g}}{h_x^2}$ (only for \ref{sec:Zhdanov}) & $kg \cdot m/s$ & \footnotesize{\texttt{b2trzh\_luciani\_cvsa\_hAdpx[XXX]\_[YYY].dat}} & (\ref{eq:mom_zh_veta_hA}) \\
+
+$\displaystyle \frac{{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha} \frac{h_z \sqrt{g}}{h_x^2}$ (only for \ref{sec:Zhdanov}) & $kg \cdot m/s$ & \footnotesize{\texttt{b2trzh\_cvsahz\_hAdpx[XXX]\_[YYY].dat}} & (\ref{eq:mom_zh_veta_hA}) \\
+
+$\displaystyle \frac{{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha} \frac{\sqrt{g}}{h_x^2}$ (only for \ref{sec:Zhdanov}) & $kg \cdot m/s$ & \footnotesize{\texttt{b2trzh\_cvsa\_hAdpx[XXX]\_[YYY].dat}} & (\ref{eq:mom_zh_veta_hA}) \\
+
+$\displaystyle \frac{\widetilde{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} \frac{h_z \sqrt{g}}{h_x^2}$ (only for \ref{sec:Zhdanov}) & $kg \cdot m/s$ & \footnotesize{\texttt{b2trzh\_luciani\_cvsahz\_hBdpx[XXX].dat}} & (\ref{eq:mom_zh_veta_hB}) \\
+
+$\displaystyle \frac{\widetilde{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} \frac{\sqrt{g}}{h_x^2}$ (only for \ref{sec:Zhdanov}) & $kg \cdot m/s$ & \footnotesize{\texttt{b2trzh\_luciani\_cvsa\_hBdpx[XXX].dat}} & (\ref{eq:mom_zh_veta_hB}) \\
+
+$\displaystyle \frac{{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} \frac{h_z \sqrt{g}}{h_x^2}$ (only for \ref{sec:Zhdanov}) & $kg \cdot m/s$ & \footnotesize{\texttt{b2trzh\_cvsahz\_hBdpx[XXX].dat}} & (\ref{eq:mom_zh_veta_hB}) \\
+
+$\displaystyle \frac{{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} \frac{\sqrt{g}}{h_x^2}$ (only for \ref{sec:Zhdanov}) & $kg \cdot m/s$ & \footnotesize{\texttt{b2trzh\_cvsa\_hBdpx[XXX].dat}} & (\ref{eq:mom_zh_veta_hB}) \\
 
 $\displaystyle \tau_a$ & $s$ & \texttt{b2tqca\_taua[XXX].dat} & (\ref{eq:mom_taua}) \\
 
@@ -14609,6 +14639,8 @@ $\displaystyle -\frac{\sqrt{g}}{h_x} \kappa_{ix} \frac{1}{h_x} \frac{\partial{T_
 
 $\displaystyle -\frac{\sqrt{g}}{h_y} \kappa_{iy} \frac{1}{h_y} \frac{\partial{T_i}}{\partial y}$ & $W$ & \texttt{b2tfhi\_\_qi\_ki\_gTy.dat} & (\ref{eq:eni_tiqiy}) \\
 
+$\displaystyle \frac{\sqrt{g}}{h_x}h^V_{ix}$ (only for \ref{sec:Zhdanov}) & $W$ & \texttt{b2tfhi\_\_hi\_velx.dat} & (\ref{eq:eni_tifix}) \\
+
 $\chi_a^{(AN)}$ & $m^2/s$ & \texttt{b2tqna\_hcib[XXX].dat} & (\ref{eq:eni_kapAN}), (\ref{eq:eni_chiAN}) \\
 
 $\displaystyle \kappa_{ix} \frac{\sqrt{g}}{h_x^2}$ & $s^{-1}$ & \texttt{b2tfhi\_\_chcix\_Pat.dat} & (\ref{eq:eni_kapixAN}) \\
@@ -14624,6 +14656,18 @@ $\displaystyle \widetilde{\widetilde{\kappa}}_{ix}^{(CL)} \frac{\sqrt{g}}{h_x^2}
 $\displaystyle \widetilde{\kappa}_{ix}^{(CL)} \frac{\sqrt{g}}{h_x^2}$ & $ s^{-1} $ & \texttt{b2trcl\_luciani\_chcix.dat} & (\ref{eq:eni_tikapixCL}), (\ref{eq:eni_tkapixCL}) \\
 
 $\displaystyle \kappa_{ix}^{(CL)} \frac{\sqrt g}{h_x^2}$ & $s^{-1}$ & \texttt{b2trcl\_chcix.dat} & (\ref{eq:eni_kapixCL}) \\
+
+$\displaystyle \widetilde{\widetilde{\kappa}}_{ix}^{(CL)} \frac{\sqrt{g}}{h_x^2}$ (only for \ref{sec:Zhdanov}) & $s^{-1}$ & \texttt{b2trzh\_applied\_chcix.dat} & (applied in \ref{eq:eni_kapix}) \\
+
+$\displaystyle \widetilde{\widetilde{\kappa}}_{ix}^{(CL)} \frac{\sqrt{g}}{h_x^2}$ (only for \ref{sec:Zhdanov}) & $s^{-1}$ & \texttt{b2trzh\_luciani\_fllim\_chcix.dat} & (\ref{eq:eni_zh_ddkapixCL}) \\
+
+$\displaystyle \widetilde{\kappa}_{ix}^{(CL)} \frac{\sqrt{g}}{h_x^2}$ (only for \ref{sec:Zhdanov}) & $s^{-1}$ & \texttt{b2trzh\_fllim\_chcix.dat} & (\ref{eq:eni_zh_dkapixCL}) \\
+
+$\displaystyle {\kappa}_{ix}^{(CL)} \frac{\sqrt{g}}{h_x^2}$  (only for \ref{sec:Zhdanov}) & $s^{-1}$ & \texttt{b2trzh\_chcix.dat} & (\ref{eq:eni_zh_kapixCL}) \\
+
+$\displaystyle \widetilde{\widetilde{\kappa}}_{ax}^{(CL)} \frac{\sqrt{g}}{h_x^2}$ (only for \ref{sec:Zhdanov}) & $s^{-1}$ & \texttt{b2trzh\_luciani\_fllim\_chci\_ax.dat} & (\ref{eq:eni_zh_ddkapaxCL}) \\
+
+$\displaystyle \widetilde{\kappa}_{ax}^{(CL)} \frac{\sqrt{g}}{h_x^2}$ (only for \ref{sec:Zhdanov}) & $s^{-1}$ & \texttt{b2trzh\_fllim\_chci\_ax.dat} & (\ref{eq:eni_zh_dkapaxCL}) \\
 
 $\displaystyle \frac{5}{2} \frac{\sqrt{g}}{h_x} T_i \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \widetilde V_{ax}^{(dia)}$ & $W$ & \texttt{b2tfhi\_\_qidiax.dat} & (\ref{eq:eni_qix}) \\
 
@@ -14701,6 +14745,22 @@ $\displaystyle \frac{\sqrt{g}}{h^2_y} \sigma^{(ST)}$ & $S$ & \texttt{b2trno\_csi
 
 residuals & $A$ & \texttt{b2nppo\_respo.dat} or & (\ref{eq:pot_eq}) \\
  & & \texttt{b2npp7\_respo.dat} &  \\
+ 
+\hline
+\multicolumn{4}{|l|}{\small\it Moments of the distribution function} \\
+\hline
+
+$\displaystyle u_{\parallel}$ (only for \ref{sec:Zhdanov}) & $m/s$ & \texttt{b2trzh\_avm\_u.dat} & (\ref{eq:zh_ion_dist_fun}) \\
+
+$\displaystyle w_{\parallel a}$ (only for \ref{sec:Zhdanov}) & $m/s$ & \texttt{b2trzh\_w[XXX].dat} & (\ref{eq:zh_ion_dist_fun}) \\
+
+$\displaystyle \frac{h^T_{\parallel a}}{p_a}$ (only for \ref{sec:Zhdanov}) & $m/s$ & \texttt{b2trzh\_hTdp[XXX].dat} & (\ref{eq:zh_ion_dist_fun}) \\
+
+$\displaystyle \frac{h^w_{\parallel a}}{p_a}$ (only for \ref{sec:Zhdanov}) & $m/s$ & \texttt{b2trzh\_hwdp[XXX].dat} & (\ref{eq:zh_ion_dist_fun}) \\
+
+$\displaystyle \frac{r^T_{\parallel a}\gamma_a}{p_a}$ (only for \ref{sec:Zhdanov}) & $m/s$ & \texttt{b2trzh\_rTdpgamma[XXX].dat} & (\ref{eq:zh_ion_dist_fun}) \\
+
+$\displaystyle \frac{r^w_{\parallel a}\gamma_a}{p_a}$ (only for \ref{sec:Zhdanov}) & $m/s$ & \texttt{b2trzh\_rwdpgamma[XXX].dat} & (\ref{eq:zh_ion_dist_fun}) \\
 
 \hline
 \caption{Files produced by means of {\tt 'b2wdat\_iout = 4'}, the variable they contain, and the equation to which they are related}
