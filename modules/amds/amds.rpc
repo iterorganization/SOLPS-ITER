@@ -1655,16 +1655,16 @@ Particle H+
 Particle H2(v=0)
 Reaction HYDHEL_H.1_3.2.3 2
 
-
-
-
-
-
-
-
-
-
-
+0
+1
+2
+CX
+0
+0
+H2
+H+
+H
+H2+
 
 
 
@@ -4138,17 +4138,17 @@ H+
 Particle H+
 Particle He(1|1s)
 Reaction AMJUEL_H.0_0.3T 2
+16
+0
+1
+4
+EL
 
 
-
-
-
-
-
-
-
-
-
+H2
+H+
+H+
+H2
 
 
 
@@ -4354,17 +4354,17 @@ Reaction AMJUEL_H.1_0.2V 2
 Particle H+
 Particle He(1|1s)
 Reaction AMJUEL_H.1_0.3T 2
+16
+0
+1
+4
+EL
 
 
-
-
-
-
-
-
-
-
-
+H2
+H+
+H+
+H2
 
 
 
@@ -4920,9 +4920,9 @@ EI
 
 
 Be
-
+e
 Be+
-
+2e
 
 
 
@@ -5184,15 +5184,15 @@ Particle H
 Reaction AMJUEL_H.2_3.2.3 2
 
 
+1
+2
+CX
 
 
-
-
-
-
-
-
-
+H2
+H+
+H
+H2+
 
 
 
@@ -5272,17 +5272,17 @@ Reaction AMJUEL_H.3_0.2D 2
 Particle H+
 Particle He(1S)
 Reaction AMJUEL_H.3_0.3T 2
+16
+0
+1
+4
+EL
 
 
-
-
-
-
-
-
-
-
-
+H2
+H+
+H+
+H2
 
 
 
@@ -5586,9 +5586,9 @@ EI
 
 
 H
-
+e
 H+
-
+2e
 
 
 
@@ -5640,7 +5640,7 @@ RC
 
 
 H+
-
+e
 H
 
 
@@ -5759,34 +5759,34 @@ Particle e
 Particle H2
 Reaction AMJUEL_H.4_2.2.5g 2
 
+10.5
+0
+2
+DS
+0
+0
+H2
+e
+2H
 
 
 
-
-
-
-
-
-
-
-
-
-
-
+3.0
+3.0
 Particle e
 Particle H2
 Reaction AMJUEL_H.4_2.2.9 2
 
+15.4
+0
+2
+EI
 
 
-
-
-
-
-
-
-
-
+H2
+e
+H2+
+2e
 
 
 
@@ -5795,88 +5795,88 @@ Particle e
 Particle H2
 Reaction AMJUEL_H.4_2.2.10 2
 
+25.0
+0
+2
+DS
 
 
+H2
+e
+H
+H+
 
 
-
-
-
-
-
-
-
-
-
-
+5.0
+5.0
 Particle e
 Particle H2
 Reaction AMJUEL_H.4_2.2.11 2
 
+15.5
+0
+2
+EI
 
 
+H2+
+e
+2H+
+2e
 
 
-
-
-
-
-
-
-
-
-
-
+0.25
+0.25
 Particle e
 Particle H2+
 Reaction AMJUEL_H.4_2.2.12 2
 
+10.4
+0
+2
+DS
 
 
+H2+
+
+H
+H+
 
 
-
-
-
-
-
-
-
-
-
-
+4.3
+4.3
 Particle e
 Particle H2+
 Reaction AMJUEL_H.4_2.2.14 2
+17
+0
+0
+2
+DS
+
+
+H2+
+e
+2H
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+0.5
+0.5
 Particle e
 Particle H2+
 Reaction AMJUEL_H.4_2.3.9a 2
 
+24.5874
+
+4
+EI
 
 
-
-
-
-
-
-
-
-
+He
+e
+He+
+2e
 
 
 
@@ -6442,21 +6442,21 @@ Reaction AMJUEL_H.4_7.2.3b 2
 Particle H+
 Particle H-
 Reaction AMJUEL_H.8_2.2.14 2
+17
+0
+0
+2
+DS
+
+
+H2+
+e
+2H
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+0.0
+0.0
 Particle e
 Particle H2+(v)
 Reaction AMJUEL_H.8_2.2B0 2
@@ -6857,16 +6857,16 @@ Particle e
 Particle N+
 Reaction AMJUEL_H.10_2.3.9a 2
 
+24.5874
+
+4
+EI
 
 
-
-
-
-
-
-
-
-
+He
+e
+He+
+2e
 
 
 

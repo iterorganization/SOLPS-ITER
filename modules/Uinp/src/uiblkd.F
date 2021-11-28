@@ -562,7 +562,7 @@ c*** 4
       data (rctddlte(i,13),i=1,lurctdx) / 2*0.0 /
       data (rctddlte(i,14),i=1,lurctdxp) / 0.0, -1.0 /
       data (rctdenr1(i,1),i=1,mreac)    / mreac*0 /
-      data (rctdenr1(i,2),i=1,lurctdh2) / 1.0, 3.0, 5.0, 4*0 /
+      data (rctdenr1(i,2),i=1,lurctdh2) / 0.0, 3.0, 5.0, 4*0 /
       data (rctdenr1(i,3),i=1,mreac)    / mreac*0 /
       data (rctdenr1(i,4),i=1,mreac)    / mreac*0 /
       data (rctdenr1(i,5),i=1,mreac)    / mreac*0 /
