@@ -209,6 +209,7 @@ while true; do {
       ( h|H )                                               # help:
             echo "$Help"; break;;
       (  u  )                                               # run uinp to produce the input for Eirene:
+            [ -r $eirinp ] && rm $eirinp
             uinp
             N=
             [ -r $b2agout ] && [ b2ag.dat -nt structure.dat ] && {
@@ -219,10 +220,11 @@ while true; do {
                 /bin/echo -e "The last grid found is : $carrename"
                 echo -e "'b2agfs_geometry'\t'$carrename'" >> b2ag.dat
               }
-              [ -r $eirinp ] && q=b || q=q
+              [ $eirinp -nt dg.dgo ] && q=b || q=q
             }
             break;;  
       (  U  )                                               # run uinp to produce the input for Eirene:
+            [ -r $eirinp ] && rm $eirinp
             uinp -l
             [ -L uinput.dg ] && {
               TRIADIR=$TRIADIR_back
@@ -238,7 +240,7 @@ while true; do {
                 /bin/echo -e "The last grid found is : $carrename"
                 echo -e "'b2agfs_geometry'\t'$carrename'" >> b2ag.dat
               }
-              [ -r $eirinp ] && q=b || q=q
+              [ $eirinp -nt dg.dgo ] && q=b || q=q
             }
             break;;  
       ( b|B )                                               # run b2ag to produce fort.30 file:
@@ -259,7 +261,7 @@ while true; do {
             } || {
               print -u2 -- "Command line: ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2ag.prt > b2ag.log"
               [ -r b2ag.prt ] && rm b2ag.prt
-              [ -r $b2agout ] && rm $b2aagout
+              [ -r $b2agout ] && rm $b2agout
               ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2ag.prt > b2ag.log
               [ -r $b2agout ] && {
                 [ -d b2ag.exe.dir ] && rmdir b2ag.exe.dir
