@@ -7835,7 +7835,7 @@ Eq.~(\ref{eq:mom_old}) is preferred.
 
 %-------- end of 4th page -------------
 
-\subsection{Sources for parallel momentum equations}
+\subsection{Sources for parallel momentum equations}\label{subsec:par_mom}
 
 \begin{align}\label{eq:mom_alls}
 S_{a}^m = S_{a \parallel}^m + S_{CF_a}^m + S_{fr_a}^m &+ S_{Therm_a}^{m} + S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m + S_{AN_a}^m
@@ -11700,7 +11700,7 @@ The relevant switches for the Zhdanov closure are:
 \end{description}
 
 \begin{sloppypar}
-Legacy switches (using the reduced improved analytical expressions that were included in earlier 3.0.7 code versions; they can be applied, if {\tt b2tral\_Zhdanov\_closure.eq.0} or {\tt b2sifr\_Zhdanov\_test.eq.1} or {\tt b2sifr\_Zhdanov\_tf\_fr.eq.}0):
+Legacy switches (using the reduced improved analytical expressions that were included in earlier 3.0.7 code versions; they can be applied, if {\tt b2tral\_Zhdanov\_closure.eq.0} or {\tt b2sifr\_Zhdanov\_test.eq.1} or {\tt b2sifr\_Zhdanov\_tf\_fr.eq.}0; details in subsection \ref{subsec:zh_legacy_tf_fr}):
 \begin{description}
   \item[b2npmo\_impr\_form\_tf] If {\tt '1'}, the thermal force is calculated using reduced improved analytical expressions (corresponding to {\tt b2sigp\_style.eq.2}). Default is {\tt '0'}.
   \item[b2npmo\_impr\_form\_fr] If {\tt '1'}, the friction force is calculated using reduced improved analytical expressions (corresponding to {\tt b2sigp\_style.eq.2}). Default is {\tt '0'}.
@@ -11708,7 +11708,7 @@ Legacy switches (using the reduced improved analytical expressions that were inc
 \end{description}
 \end{sloppypar}
 
-\subsection{Notation}
+\subsection{Notation}\label{subsec:zh_notation}
 
 Latin letters correspond to the indexing of the ion charge states:
 \begin{align*}
@@ -12852,22 +12852,31 @@ If {\tt Zhdanov\_vish.eq.1}, then:
 \left( \frac{\widetilde{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha},\ \frac{\widetilde{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} \text{already contain a factor of } b_x^2 \right)
 \end{multline}
 
-\subsection{The thermal and friction forces (legacy)}
+\subsection{The thermal and friction forces (legacy)}\label{subsec:zh_legacy_tf_fr}
 
 Reduced improved analytical expressions were included into the standard 3.0.7 \SOLPSITER code structure.
-
-Main component index is equal to 0:\\
 
 \textbf{\textit{If {\tt Zhdanov\_closure.eq.0} .or. {\tt Zhdanov\_test.eq.1} .or. {\tt Zhdanov\_tf\_fr.eq.0} then}}\\
 
 \ \ \textbf{\textit{If {\tt impr\_form\_tf.eq.1} then}}
 
+\ \ \ The corresponding term in subsection \ref{subsec:par_mom} is replaced by:
+
 \begin{align}
 K^{(Therm)}_{\beta0} = \frac{1}{\tilde{\Delta}_0} \frac{25}{16} \frac{\mu_{0 \beta}}{m_{0}} \left[ \frac{3}{2} \left( 1 + \frac{433 \sqrt{2}}{360} Z^s_{110} \right) - \frac{1}{2} \frac{\mu_{0 \beta}}{m_0} \left( 1 + \frac{23 \sqrt{2}}{8} Z^s_{90} \right) \right] \left( 1 + \sqrt{2} Z^*_{c\alpha} \right)
 \end{align}
+
+\ \ \ Note, a transition from the Greek to Latin letters should be done $ [ 0 \rightarrow s;\ \beta \rightarrow r] $ (details in subsection \ref{subsec:zh_notation}), where $s=s_{main},\ s\neq r$\\
+
+\ \ \textbf{\textit{else}}
+
+\ \ \ Standard model is used.
+
 \ \ \textbf{\textit{end}}
 
 \ \ \textbf{\textit{If {\tt impr\_form\_fr.eq.1} then}}
+
+\ \ \ The corresponding term in subsection \ref{subsec:par_mom} is replaced by:
 
 \begin{multline}
 K^{(V_\parallel)}_{\beta0} = K^{(V_\parallel)}_{0\beta} =
@@ -12875,6 +12884,13 @@ K^{(V_\parallel)}_{\beta0} = K^{(V_\parallel)}_{0\beta} =
 -
 \frac{5 \sqrt{2}}{16} Z^s_{80} \frac{\mu_{0 \beta}}{m_0} \frac{1}{\tilde{\Delta}_0} \left( \frac{5}{2} \frac{\mu_{0 \beta}}{m_0} - \frac{3}{2} + \frac{65 \sqrt{2}}{16} \frac{\mu_{0 \beta}}{m_0}Z^s_{50} - \frac{69 \sqrt{2}}{16} Z^s_{90} \right)
 \end{multline}
+
+
+\ \ \ Note, a transition from the Greek to Latin letters should be done $ [ 0 \rightarrow s;\ \beta \rightarrow r] $ (details in subsection \ref{subsec:zh_notation}), where $s=s_{main},\ s\neq r$\\
+
+\ \ \textbf{\textit{else}}
+
+\ \ \ Standard model is used.
 
 \ \ \textbf{\textit{end}}
 
