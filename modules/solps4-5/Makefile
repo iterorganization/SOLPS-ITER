@@ -73,7 +73,7 @@ VPATH = ${SRC4LOCAL}:
 else
 INCLUDE ?=
 TAGSLIST =
-VPATH = 
+VPATH =
 endif
 ifeq ($(shell [ -d ${SRC5LOCAL} ] && echo yes || echo no ),yes)
 INCLUDE += -I${SRC5LOCAL}
@@ -336,7 +336,7 @@ ${OBJDIR}/velocs.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/crand.${MOD}
 
 ${OBJDIR}/volume.o: ${OBJDIR}/ccona.${MOD}
 
-${OBJDIR}/wneutral.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/cestim.${MOD} ${OBJDIR}/comusr.${MOD} ${OBJDIR}/comxs.${MOD} ${OBJDIR}/ifwrite.${MOD} 
+${OBJDIR}/wneutral.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/cestim.${MOD} ${OBJDIR}/comusr.${MOD} ${OBJDIR}/comxs.${MOD} ${OBJDIR}/ifwrite.${MOD}
 
 ${OBJDIR}/wneutral_fluxes.o: ${OBJDIR}/amark_mod.${MOD} ${OBJDIR}/braeir.${MOD} ${OBJDIR}/ccona.${MOD} ${OBJDIR}/cestim.${MOD}
 
@@ -370,13 +370,13 @@ ${OBJDIR}/b2mod_b2_to_astra.o: ${OBJDIR}/eirmod_extrab25.${MOD} ${OBJDIR}/eirmod
 
 ${OBJDIR}/b2mod_neutrals_namelist.o: ${OBJDIR}/eirmod_parmmod.${MOD} ${OBJDIR}/parmmod.${MOD} ${OBJDIR}/braeir.${MOD} ${OBJDIR}/ceirsrt.${MOD} ${OBJDIR}/eirdiag.${MOD} ${OBJDIR}/eirmod_extrab25.${MOD}
 
-${OBJDIR}/eirmod_parmmod.o: 
+${OBJDIR}/eirmod_parmmod.o:
 	ln -sf ${OBJDIR}/parmmod.o $@
 
-${OBJDIR}/eirmod_precision.o: 
+${OBJDIR}/eirmod_precision.o:
 	ln -sf ${OBJDIR}/precision.o $@
 
-${OBJDIR}/eirmod_braeir.o: 
+${OBJDIR}/eirmod_braeir.o:
 	ln -sf ${EIRDIR}/eirmod_braeir.o ${OBJDIR}
 
 ${OBJDIR}/eirmod_cinit.o:
@@ -995,7 +995,7 @@ endif
 
 ${BASEDIR}/TAGS: tags
 
-tags: 
+tags:
 	rm -f ${BASEDIR}/TAGS ; etags ${TAGSLIST} || touch ${BASEDIR}/TAGS
 
 clean:
@@ -1006,7 +1006,7 @@ clean:
 	rm -Rf ${SRCDIR}/solps4_B2
 	rm -Rf ${SRCDIR}/solps4_Eirene
 
-listobj: 
+listobj:
 	@rm -f ${BASEDIR}/LISTOBJ; touch ${BASEDIR}/LISTOBJ; l="OBJS ="; \
 	for d in `echo "${VPATH}" | tr : \ `; do \
 		l="$$l `(cd $$d > /dev/null; echo *.[Ff])`"; \
