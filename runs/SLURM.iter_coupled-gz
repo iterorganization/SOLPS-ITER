@@ -4,6 +4,7 @@
 #SBATCH  --ntasks-per-node=#TASKS#
 #SBATCH  --cpus-per-task=#THREADS#
 #SBATCH  --time=#HOURS#:00:00
+#SBATCH  --mem-per-cpu=#MEM#
 #SBATCH  --mail-user=#EMAIL#
 #SBATCH  --mail-type=END
 #SBATCH  --job-name=#JOBNAME#
