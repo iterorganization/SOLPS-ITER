@@ -2,31 +2,38 @@
 
 echo Welcome to SOLPS-ITER!
 echo Documentation can be found at:
-echo https://portal.iter.org/departments/POP/CM/IMAS/SOLPS-ITER
+echo https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER
 echo and
 echo https://user.iter.org/\?uid=Q92BAQ
 echo "(both require a valid ITER IDM account)"
 echo The full SOLPS-ITER manual can be found in \$SOLPSTOP/doc/solps/solps.pdf
 echo The Eirene manual is located at http://www.eirene.de/
 
-setenv SOLPSTOP $PWD
+# Obtain the directory where setup.csh is located to use as SOLPSTOP
+setenv LAST_COMMAND `echo $_`
+if (`echo ${LAST_COMMAND}` == "") then
+  setenv SOLPSTOP $PWD
+else
+  setenv SETUP_FILE `echo ${LAST_COMMAND} | cut -d " " -f 2`
+  setenv REAL_FILE `eval echo ${SETUP_FILE}`
+  setenv SETUP_PATH `dirname ${REAL_FILE}`
+  setenv SOLPSTOP `cd ${SETUP_PATH}; pwd -L`
+endif
 setenv SOLPSWORK ${SOLPSTOP}/runs
 
-
-# Set HOST_NAME and COMPILER, which will determine setup-files to be used
+# Set HOST_NAME and COMPILER, which will determine setup files to be used
 #------------------------------------------------------------------------
 
-if (-e whereami) then
-  set iamat=`./whereami|tail -1`
-  echo Running at $iamat.
+if (-s ${SOLPSTOP}/SETUP/setup.csh.HOST_NAME.local) then
+  echo Loading SETUP/setup.csh.HOST_NAME.local.
+  source ${SOLPSTOP}/SETUP/setup.csh.HOST_NAME.local
 else
-  set iamat="UNKNOWN"
-endif
-
-if (-s SETUP/setup.csh.HOST_NAME.local) then
-  echo Loading SETUP/setup.csh.HOST_NAME.local
-  setenv HOST_NAME `cat SETUP/setup.csh.HOST_NAME.local`
-else
+  if (-s ${SOLPSTOP}/whereami) then
+    set iamat=`${SOLPSTOP}/whereami|tail -1`
+    echo Running at $iamat.
+  else
+    set iamat="UNKNOWN"
+  endif
   switch ($iamat)
   case "*UNKNOWN":
     setenv HOST_NAME UNKNOWN
@@ -38,8 +45,8 @@ endif
 
 # COMPILER can also be the argument to setup.csh call
 if($1 == "") then
-  if (-s default_compiler) then
-    setenv COMPILER `./default_compiler|tail -1`
+  if (-s ${SOLPSTOP}/default_compiler) then
+    setenv COMPILER `${SOLPSTOP}/default_compiler|tail -1`
     echo Using compiler $COMPILER.
   else
     setenv COMPILER ifort64
@@ -47,6 +54,7 @@ if($1 == "") then
   endif
 else
   setenv COMPILER $1
+  echo Using specified compiler $1.
 endif
 if(! $?COMPILER) then
   echo COMPILER not defined!
@@ -62,17 +70,18 @@ if ($?PYTHONPATH) then
 else
   setenv PYTHONPATH ${SOLPSTOP}/lib/python
 endif
+setenv SOLPSLIB ${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}
 
 # setup files for combination of HOST_NAME and COMPILER, + local modifications if present
-if (-s SETUP/setup.csh.${HOST_NAME}.${COMPILER}) then
+if (-s ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}) then
   echo Loading SETUP/setup.csh.${HOST_NAME}.${COMPILER}.
-  source SETUP/setup.csh.${HOST_NAME}.${COMPILER}
+  source ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}
 else
   echo File SETUP/setup.csh.${HOST_NAME}.${COMPILER} not found!
 endif
-if (-s SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local) then
+if (-s ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local) then
   echo Loading SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local.
-  source SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
+  source ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
 endif
 
 limit stacksize unlimited
@@ -85,8 +94,7 @@ setenv SonnetTopDirectory ${SOLPSTOP}/modules/Sonnet-light
 setenv EscapeSonnet `echo ${SonnetTopDirectory} | sed 's:\/:\\\/:g'`
 
 setenv DG ${SOLPSTOP}/modules/DivGeo
-setenv SOLPSLIB ${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}
-#setenv CARRE_STOREDIR $SOLPSTOP/modules/Carre/meshes
+#setenv CARRE_STOREDIR ${SOLPSTOP}/modules/Carre/meshes
 
 # Set path to scripts and executables
 #------------------------------------
@@ -97,7 +105,7 @@ if ($?SOLPS_PATH) then
   setenv PATH `echo $PATH | sed "s|${SOLPS_PATH}:||"`
 endif
 
-# Default PATH: no mpi, no debug
+# Default PATH: no mpi, no openmp, no debug
 set      TOOLCHAIN =  ${HOST_NAME}.${COMPILER}
 set     CARRE_PATH =  ${SOLPSTOP}/modules/Carre/builds/${TOOLCHAIN}
 set    DIVGEO_PATH =  ${SOLPSTOP}/modules/DivGeo/builds/${TOOLCHAIN}:${SOLPSTOP}/modules/DivGeo/equtrn/builds/${TOOLCHAIN}:${SOLPSTOP}/modules/DivGeo/convert/builds/${TOOLCHAIN}
@@ -106,26 +114,46 @@ set       B25_PATH =  ${SOLPSTOP}/modules/B2.5/builds/standalone.${TOOLCHAIN}
 set B25EIRENE_PATH =  ${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${TOOLCHAIN}
 set      UINP_PATH =  ${SOLPSTOP}/modules/Uinp/builds/${TOOLCHAIN}
 set    TRIANG_PATH =  ${SOLPSTOP}/modules/Triang/builds/${TOOLCHAIN}
-set   SCRIPTS_PATH =  ${SOLPSTOP}/scripts.local:${SOLPSTOP}/scripts:${SOLPSTOP}/modules/Eirene/scripts
+set   SCRIPTS_PATH =  ${SOLPSTOP}/scripts.local:${SOLPSTOP}/scripts:${SOLPSTOP}/scripts/${TOOLCHAIN}:${SOLPSTOP}/modules/Eirene/scripts:${SOLPSTOP}/modules/Eirene/scripts/eirenex_v1.0.4:${SOLPSTOP}/modules/B2.5/src/test
 set      AMDS_PATH =  ${SOLPSTOP}/modules/amds/builds/${TOOLCHAIN}
 set       S45_PATH =  ${SOLPSTOP}/modules/solps4-5/builds/${TOOLCHAIN}
 
-# Note: in case of name-clash between script and executable, script will be found first
+# Create mirror scripts directories
+if (-d ${SOLPSTOP}/scripts/${TOOLCHAIN}.mpi) rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.mpi
+if (-d ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp) rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp
+if (-d ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.mpi) rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.mpi
+if (-d ${SOLPSTOP}/scripts/${TOOLCHAIN}.debug) rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.debug
+if (-d ${SOLPSTOP}/scripts/${TOOLCHAIN}.mpi.debug) rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.mpi.debug
+if (-d ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.debug) rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.debug
+if (-d ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.mpi.debug) rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.mpi.debug
+ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.mpi
+ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp
+ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.mpi
+ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.debug
+ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.mpi.debug
+ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.debug
+ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.mpi.debug
+
+# Note: in case of name clash between script and executable, script will be found first
 setenv SOLPS_PATH  ${SCRIPTS_PATH}:${CARRE_PATH}:${DIVGEO_PATH}:${B25EIRENE_PATH}:${EIRENE_PATH}:${B25_PATH}:${UINP_PATH}:${TRIANG_PATH}:${AMDS_PATH}:${S45_PATH}
 setenv OLD_PATH    ${PATH}
 setenv PATH        ${SOLPS_PATH}:${PATH}
 if ($?LD_LIBRARY_PATH) then
-  setenv LD_LIBRARY_PATH ${SOLPSLIB}:${LD_LIBRARY_PATH}
+  setenv LD_LIBRARY_PATH ${SOLPSLIB}:${SOLPSTOP}/lib/python:${LD_LIBRARY_PATH}
 else
-  setenv LD_LIBRARY_PATH ${SOLPSLIB}
+  setenv LD_LIBRARY_PATH ${SOLPSLIB}:${SOLPSTOP}/lib/python
+endif
+setenv PYTHONPATH ${PYTHONPATH}:${SCRIPTS_PATH}
+if ($?PYTHON_PATH) then
+  setenv PYTHONPATH ${PYTHONPATH}:${PYTHON_PATH}
 endif
 
 unset TOOLCHAIN SCRIPTS_PATH CARRE_PATH DIVGEO_PATH EIRENE_PATH B25_PATH B25EIRENE_PATH UINP_PATH TRIANG_PATH AMDS_PATH S45_PATH
 
-# Check whether SOLPS_DEBUG and SOLPS_MPI had been set already by the user
-if ($?SOLPS_DEBUG) source $SOLPSTOP/SETUP/debug
-if ($?SOLPS_MPI)   source $SOLPSTOP/SETUP/mpi
-
+# Check whether SOLPS_DEBUG, SOLPS_OPENMP and SOLPS_MPI have been set already by the user
+if ($?SOLPS_OPENMP) source ${SOLPSTOP}/SETUP/openmp
+if ($?SOLPS_DEBUG)  source ${SOLPSTOP}/SETUP/debug
+if ($?SOLPS_MPI)    source ${SOLPSTOP}/SETUP/mpi
 
 # Set path to manuals
 #--------------------
@@ -136,16 +164,23 @@ else
   setenv MANPATH ${SonnetTopDirectory}/man:${DG}/equtrn/doxygen/man
 endif
 
+# Remove double entries from some environment variables, if there are any
+
+setenv PATH  `echo $PATH | awk -v RS=: -v ORS= '\\!a[$0]++ {if (NR>1) printf(":"); printf("%s",$0) }'`
+setenv LD_LIBRARY_PATH  `echo $LD_LIBRARY_PATH | awk -v RS=: -v ORS= '\\!a[$0]++ {if (NR>1) printf(":"); printf("%s",$0) }'`
+setenv MANPATH  `echo $MANPATH | awk -v RS=: -v ORS= '\\!a[$0]++ {if (NR>1) printf(":"); printf("%s",$0) }'`
+setenv PYTHONPATH  `echo $PYTHONPATH | awk -v RS=: -v ORS= '\\!a[$0]++ {if (NR>1) printf(":"); printf("%s",$0) }'`
+setenv OLD_PATH  `echo $OLD_PATH | awk -v RS=: -v ORS= '\\!a[$0]++ {if (NR>1) printf(":"); printf("%s",$0) }'`
+
 alias sb2  'cd ${SOLPSTOP}/modules/B2.5'
 alias sbb  'cd ${SOLPSTOP}/modules/B2.5'
 alias sei  'cd ${SOLPSTOP}/modules/Eirene'
-alias ssw  'cd ${SOLPSTOP}/modules/Sonnet'
+alias ssw  'cd ${SOLPSTOP}/modules/Sonnet-light'
 alias sst  'cd ${SOLPSTOP}/modules/Triang'
 alias ssd  'cd ${SOLPSTOP}/modules/DivGeo'
 alias ssc  'cd ${SOLPSTOP}/modules/Carre'
 alias ssu  'cd ${SOLPSTOP}/modules/Uinp'
 alias slib 'cd ${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}'
-alias srun 'cd ${SOLPSTOP}/runs'
 alias sbr  'cd ${SOLPSTOP}/runs'
 alias scr  'cd ${SOLPSTOP}/scripts'
 alias stop 'cd ${SOLPSTOP}'
@@ -194,37 +229,30 @@ alias xlylplot8 plot xlylplot8
 alias xlylplot8 plot xlylplot8
 alias xlylplot9 plot xlylplot9
 
-alias   set_debug 'source $SOLPSTOP/SETUP/debug'
-alias unset_debug 'source $SOLPSTOP/SETUP/nodebug'
-alias   set_mpi   'source $SOLPSTOP/SETUP/mpi'
-alias unset_mpi   'source $SOLPSTOP/SETUP/nompi'
-alias   set_ig   'source $SOLPSTOP/SETUP/ig'
-alias unset_ig   'source $SOLPSTOP/SETUP/noig'
+alias   set_debug  'source $SOLPSTOP/SETUP/debug'
+alias unset_debug  'source $SOLPSTOP/SETUP/nodebug'
+alias   set_openmp 'source $SOLPSTOP/SETUP/openmp'
+alias unset_openmp 'source $SOLPSTOP/SETUP/noopenmp'
+alias   set_mpi    'source $SOLPSTOP/SETUP/mpi'
+alias unset_mpi    'source $SOLPSTOP/SETUP/nompi'
+alias   set_ig     'source $SOLPSTOP/SETUP/ig'
+alias unset_ig     'source $SOLPSTOP/SETUP/noig'
 
-#if (! $?IDL_PATH) setenv IDL_PATH
-#setenv IDL_PATH +$SOLPSTOP/data/IDL:${IDL_PATH}
-#
-#
-#
-
-#
-#setenv PLOT_SET_PATH '..:../..:${SOLPSTOP}/data.local/plot_set:${SOLPSTOP}/data/plot_set'
-
-# Add any local settings if present
-if (-s SETUP/setup.csh.local) then
-  echo Loading SETUP/setup.csh.local.
-  source SETUP/setup.csh.local
+# Check for Motif library
+if (! -e `which mwm`) setenv NO_MOTIF 1
+if ($?NO_MOTIF) then
+  if (`whereis libXm | wc -w` != 1) unsetenv NO_MOTIF
+endif
+if ($?NO_MOTIF) then
+  if (`ldconfig -p | grep 'libXm\.' | wc -l` != 0) unsetenv NO_MOTIF
 endif
 
-# Add links to the IMAS solps-iter database
-
-if ($HOST_NAME == "ITER") then
-  source scripts/imasdb_solps-iter
-  module list
+# Add any local settings if present
+if (-s ${SOLPSTOP}/SETUP/setup.csh.local) then
+  echo Loading SETUP/setup.csh.local.
+  source ${SOLPSTOP}/SETUP/setup.csh.local
 endif
 
 # List loaded modules
 
-if (-e module) then
-  module list
-endif
+module list
