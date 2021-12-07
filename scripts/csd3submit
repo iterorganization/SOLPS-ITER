@@ -5,8 +5,8 @@ set EMAIL=`get_git_email`
 set JOB_NAME="SOLPS-ITER"
 set PROCS=1
 set THREADS=1
-set hours=48
-set mem=8GB
+set hours=7
+set mem=100GB
 echo Your email is $EMAIL
 
 set compress=""

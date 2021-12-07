@@ -11,7 +11,7 @@
 #SBATCH -o SLURM-%j.out
 #SBATCH -e SLURM-%j.err
 
-
+echo $LD_LIBRARY_PATH
 echo Using SOLPSTOP = #SOLPSTOP#
 
 set USE_MPI=""
