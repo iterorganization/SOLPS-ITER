@@ -95,6 +95,31 @@ c
             listmat(nmat)=umtrl(i)(1:2)
           end if !}
         end if !}
+        if (trnspa(i,1).gt.0.0_R8 .and. trnspa(i,2).gt.0.0_R8) then !{
+          if (jlside(i).ne.0) then !{
+            write(0,*) '(Semi-)Transparent surfaces must allow '//
+     ,                 'particles arriving from both sides (JLSIDE = 0)'
+            write(0,*) 'STOP ==> Check your DG model for wall index ',i
+            call xerrab ('Inconsistent surface data !')
+          end if !}
+        end if !}
+        if (jlsptp(i).ne.0 .and. jsrss(i).eq.0) then !{
+          match_found = .false.
+          do isp=1,nspigen !{
+            if (match_found) cycle
+            if (streql(umtrl(i),'SS')) then !{
+              match_found = streql('Fe',spcigen(isp))
+            else !}{
+              match_found = streql(umtrl(i),spcigen(isp))
+            end if !}
+          end do !}
+          if (.not.match_found) then !{
+            write(0,*) 'Sputtering of wall material requested, '//
+     ,                 'but no matching species is declared !'
+            write(0,*) 'STOP ==> Check your DG model for wall index ',i
+            call xerrab ('Sputtering of undeclared wall material !')
+          end if !}
+        end if !}
       end do !}
       do i=1,ntrgdflt !{
         match_found=.false.
