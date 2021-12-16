@@ -14,7 +14,7 @@ setenv NCARG_ROOT /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/NCARG
 setenv PATH ${PATH}:${NCARG_ROOT}/bin
 setenv SOLPSWORK /pfs/work/$USER/solps-iter/runs
 
-module load imasenv/3.31.0/intel/17.0/1.1
+module load imasenv/3.33.0/intel/17.0/1.0
 setenv GGD_VERSION `pkg-config ggd --modversion`
 setenv EBVERSIONMSCL `pkg-config mscl --modversion`
 module load texlive
