@@ -1641,6 +1641,11 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
 \end{itemize}
 \end{sloppypar}
 
+Note that the Python scripts above may require Python versions of at least 3.7 and the availability of the {\tt netCDF4} Python package. At ITER, because some of the underlying service modules are built with {\tt iimpi}, it is even necessary to launch them as interactive MPI jobs, such as:
+\begin{verbatim}
+mpirun -np 1 tereg.py
+\end{verbatim}
+
 \paragraph{Still need to do :}
 
 The following have not yet been documented --- user contributions are
