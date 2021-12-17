@@ -546,4 +546,3 @@ c*** b2ah.dat
      ,  txtmtmp,txtmtra,chrdfile,
      ,  txtpls,txtpsp,txtpun,txtspv,txttlv,txtunv,scard_name,
      ,  chvarname,chmspname
-

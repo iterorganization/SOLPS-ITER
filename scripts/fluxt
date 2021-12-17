@@ -3,7 +3,7 @@
 
 if($1 == "") then
   if (-s b2.neutrals.parameters) then
-    set count = `egrep -i 'NSTRAI *=' b2.neutrals.parameters | tail -1 | sed -e 's/NSTRAI//' | sed -e 's/=//' | sed -e 's/,//'` 
+    set count = `egrep -i 'NSTRAI *=' b2.neutrals.parameters | tail -1 | sed -e 's/NSTRAI//' | sed -e 's/nstrai//' | sed -e 's/=//' | sed -e 's/,//'`
   else if (-s $SOLPSTOP/modules/B2.5/src/include.local/DIMENSIONS.F) then
     set count = `egrep 'DEF_NSTRA' $SOLPSTOP/modules/B2.5/src/include.local/DIMENSIONS.F | tail -1 | sed -e 's/^#define DEF_NSTRA//'`
   else
