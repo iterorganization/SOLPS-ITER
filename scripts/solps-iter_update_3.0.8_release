@@ -37,7 +37,7 @@ DivGeo:
   cd $SOLPSTOP/modules/DivGeo
   set repo="DivGeo"
   git fetch --prune
-  git checkout develop && echo "Checked out DivGeo develop branch" || goto branch
+  git checkout release/3.0.8 && echo "Checked out DivGeo 3.0.8 release branch" || goto branch
   git pull && goto ADAS || goto local
 
 ADAS:
