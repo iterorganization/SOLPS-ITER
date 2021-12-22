@@ -1,0 +1,119 @@
+sed -i -e 's/LOGICAL :: arg10/LOGICAL :: arg10(2*m%nfc)/g' b2us_prep_diff.F90
+sed -i '/switchd%b2mndr_na_min = 0.D0/d' b2stbc_d.F90  b2stbc_phys_d.F90 
+sed -i '/switchd%fch_pte = 0.D0/d' b2tqce_d.F90 b2trcl_d.F90
+sed -i '/switchd%b2sqcx_phm0 = 0.D0/d' b2trcl_d.F90
+sed -i -e 's/LOGICAL :: arg1/LOGICAL :: arg1(m%nfc)/g' find_faces_d.F90
+sed -i -e 's/SIZE(sx, 1)+1/n/g' myblas_d.F90 sfill_d.F90
+sed -i -e 's/SIZE(sy, 1)+1/n/g' myblas_d.F90
+sed -i -e 's/(SIZE(\&/\&/g' sfill_d.F90 myblas_d.F90
+sed -i -e 's/\&                                s., 1)+1)\/8)/\&                                n\/8)/g' sfill_d.F90 myblas_d.F90
+sed -i -e 's/(SIZE(sx, &/n\&/g' myblas_d.F90 sfill_d.F90 
+sed -i -e 's/\&                            1)+1)\/8)/\&                            \/8)/g' myblas_d.F90 sfill_d.F90
+sed -i -e 's/(SIZE(sy, \&/n\&/g' myblas_d.F90
+sed -i -e 's/(SIZE(sx\&/\&/g' myblas_d.F90
+sed -i -e 's/\&                              , 1)+1)\/8)/\&                              n\/8)/g' myblas_d.F90
+
+sed -i -e '/CALL DIM_D/i\  cutlod=0.0_R8' expu_d.F90
+
+sed -i -e '/EXTERNAL DIM_D/i\  real(kind=r8) DIM_D' b2usht_d.F90  expu2_d.F90 expu_d.F90
+
+sed -i -e '/REAL(kind=r8) :: temp1/i\     REAL(kind=r8) :: dummy' b2usht_d.F90
+sed -i -e '/result1d = DIM_D(1.0_R8, 0.D0, arg1, arg1d, result1)/i\     dummy = 0.0_R8' b2usht_d.F90
+sed -i -e 's/result1d = DIM_D(1.0_R8, 0.D0, arg1, arg1d, result1)/result1d = DIM_D(1.0_R8, dummy, arg1, arg1d, result1)/g' b2usht_d.F90
+
+sed -i -e 's/pld\%na = 0.D0/\!pld\%na = 0.D0/g' b2tfhe__d.F90 b2mod_recycle_diff.F90 b2stbc_phys_d.F90
+sed -i -e 's/nad = 0.D0/\!nad = 0.D0/g' b2upht_d.F90
+sed -i -e 's/pld\%ua = 0.D0/\!pld\%ua = 0.D0/g' b2stbc_phys_d.F90
+sed -i -e 's/pld\%po = 0.D0/\!pld\%po = 0.D0/g' b2stbc_phys_d.F90
+sed -i -e 's/pld\%te = 0.D0/\!pld\%te = 0.D0/g' b2stbc_phys_d.F90
+sed -i -e 's/pld\%ti = 0.D0/\!pld\%ti = 0.D0/g' b2stbc_phys_d.F90
+sed -i -e 's/pld\%kt = 0.D0/\!pld\%kt = 0.D0/g' b2stbc_phys_d.F90
+sed -i -e 's/rtd\%rza = 0.D0/\!rtd\%rza = 0.D0/g' b2stbc_phys_d.F90
+
+# NOT NEEDED ANYMORE?
+#sed -i '/switchd%b2npco_pcm0 = 0.D0/d' b2npco_d.F90 
+#sed -i '/switchd%b2npco_rxg = 0.D0/d' b2npco_d.F90 
+#sed -i '/switchd%art_rad = 0.D0/d' b2sqel_d.F90 
+#sed -i '/ switchd%b2stcx_rg0 = 0.D0/d' b2stcx_d.F90 
+#sed -i '/switchd%prl_cur = 0.D0/d' b2tcpa_d.F90
+#sed -i '/switchd%b2sifr_phm2 = 0.D0/d' b2tcpa_d.F90
+
+
+#sed -i '/switchd%b2trcl_lambda = 0.D0/d' b2treq_d.F90 b2trcl_d.F90 b2tqce_d.F90 b2tqca_d.F90 b2tlnl_d.F90 b2sihs__d.F90 b2npmo_d.F90 b2npht_d.F90
+#sed -i '/switchd%b2treq_phm0 = 0.D0/d' b2treq_d.F90
+  
+#sed -i '/switchd%cthev = 0.D0/d' b2trcl_d.F90
+#sed -i '/switchd%cthiv = 0.D0/d' b2trcl_d.F90
+#sed -i '/switchd%prl_cur = 0.D0/d' b2trcl_d.F90 b2tqce_d.F90 b2tfch__d.F90
+#sed -i '/switchd%b2tlv0_alpha = 0.D0/d' b2tlv0_d.F90 
+#sed -i '/switchd%b2tlv0_gamma = 0.D0/d' b2tlv0_d.F90
+#sed -i '/switchd%b2tlh0_alpha = 0.D0/d' b2tlh0_d.F90 
+#sed -i '/switchd%b2tlh0_gamma = 0.D0/d' b2tlh0_d.F90
+#sed -i '/switchd%b2tlc0_alpha = 0.D0/d' b2tlc0_d.F90 
+#sed -i '/switchd%b2tlc0_gamma = 0.D0/d' b2tlc0_d.F90
+
+#sed -i '/switchd%vspa_vis_par = 0.D0/d' b2tfch__d.F90
+#sed -i '/switchd%fch_ion_neutral = 0.D0/d' b2tfch__d.F90
+#sed -i '/switchd%dia_cur = 0.D0/d' b2tfch__d.F90
+#sed -i '/switchd%fch_inert = 0.D0/d' b2tfch__d.F90
+#sed -i '/switchd%b2sifr_phm2 = 0.D0/d' b2tfch__d.F90
+#sed -i '/switchd%fch_anomalous = 0.D0/d' b2tfch__d.F90
+
+#sed -i '/switchd%b2tfnb_alpha = 0.D0/d' b2tfnb_d.F90
+#sed -i '/switchd%b2tfnb_gamma = 0.D0/d' b2tfnb_d.F90
+#sed -i '/switchd%b2tfnb_flux_limit_min_ti = 0.D0/d' b2tfnb_d.F90
+
+#sed -i '/switchd%fhepsch = 0.D0/d' b2tfhe__d.F90
+#sed -i '/switchd%alfteeh = 0.D0/d' b2tfhe__d.F90
+#sed -i '/switchd%fhe_vdia_par = 0.D0/d' b2tfhe__d.F90
+    
+#sed -i '/switchd%mfp_b1 = 0.D0/d' b2stbr_phys_d.F90
+#sed -i '/switchd%mfp_b2 = 0.D0/d' b2stbr_phys_d.F90
+sed -i '/switchd%auto_spatial_hyb_mfp_1 = 0.D0/d' b2stbr_phys_d.F90
+sed -i '/switchd%auto_spatial_hyb_mfp_2 = 0.D0/d' b2stbr_phys_d.F90
+
+
+sed -i '/switchd%sna0ep = 0.D0/d' b2stbc_d.F90
+sed -i '/switchd%she0ep = 0.D0/d' b2stbc_d.F90
+sed -i '/switchd%shi0ep = 0.D0/d' b2stbc_d.F90
+sed -i '/switchd%b2stbc_neoclassical = 0.D0/d' b2stbc_d.F90 
+sed -i '/switchd%integral_current = 0.D0/d' b2stbc_d.F90
+sed -i '/switchd%b2stbc_fchy_dia = 0.D0/d' b2stbc_d.F90
+sed -i '/switchd%qalfmin = 0.D0/d' b2stbc_d.F90
+sed -i '/switchd%delpo = 0.D0/d' b2stbc_d.F90
+sed -i '/switchd%b2stbc_phm0 = 0.D0/d' b2stbc_d.F90
+sed -i '/switchd%b2stbc_phm1 = 0.D0/d' b2stbc_d.F90
+
+sed -i '/switchd%fch_stochastic = 0.D0/d' b2sihs__d.F90 b2npht_d.F90
+sed -i '/switchd%b2sihs_phm0 = 0.D0/d' b2sihs__d.F90 b2npht_d.F90
+sed -i '/switchd%b2sihs_phm1 = 0.D0/d' b2sihs__d.F90 b2npht_d.F90
+sed -i '/switchd%b2sihs_phm2 = 0.D0/d' b2sihs__d.F90 b2npht_d.F90
+sed -i '/switchd%b2sihs_phm3 = 0.D0/d' b2sihs__d.F90 b2npht_d.F90
+sed -i '/switchd%b2sihs_phm5 = 0.D0/d' b2sihs__d.F90 b2npht_d.F90
+sed -i '/switchd%b2sihs_phm6 = 0.D0/d' b2sihs__d.F90 b2npht_d.F90
+sed -i '/switchd%b2sihs_phm8 = 0.D0/d' b2sihs__d.F90 b2npht_d.F90
+sed -i '/switchd%b2sihs__rf0 = 0.D0/d' b2sihs__d.F90 b2npht_d.F90
+sed -i '/switchd%b2sihs__rf1 = 0.D0/d' b2sihs__d.F90 b2npht_d.F90
+sed -i '/switchd%b2sihs__rf2 = 0.D0/d' b2sihs__d.F90 b2npht_d.F90
+sed -i '/switchd%b2sihs__rf3 = 0.D0/d' b2sihs__d.F90 b2npht_d.F90
+sed -i '/switchd%cfc0 = 0.D0/d' b2npmo_d.F90
+sed -i '/switchd%b2sian_phm0 = 0.D0/d' b2npmo_d.F90
+sed -i '/switchd%b2sicf_phm0 = 0.D0/d' b2npmo_d.F90
+sed -i '/switchd%b2sicf_phm1 = 0.D0/d' b2npmo_d.F90
+sed -i '/switchd%b2sigp_phm0 = 0.D0/d' b2npmo_d.F90
+sed -i '/switchd%b2nxfv_phm0 = 0.D0/d' b2npmo_d.F90
+sed -i '/switchd%b2nxfv_phm1 = 0.D0/d' b2npmo_d.F90
+sed -i '/switchd%b2npmo_rxg = 0.D0/d' b2npmo_d.F90
+sed -i '/switchd%b2npht_pcm0 = 0.D0/d' b2npht_d.F90
+sed -i '/switchd%b2npht_rxg = 0.D0/d' b2npht_d.F90
+sed -i '/switchd%b2sikt_fac_sheath_core = 0.D0/d' b2npht_d.F90
+sed -i '/switchd%b2sikt_fac_sheath = 0.D0/d' b2npht_d.F90
+sed -i '/switchd%b2sikt_fac_aniso = 0.D0/d' b2npht_d.F90
+
+#sed -i -e 's/EXTERNAL SUBINI, SUBEND, XERTST, SFILL, DIM/EXTERNAL SUBINI, SUBEND, XERTST, SFILL/g' b2usht_d.F90
+#sed -i -e '/EXTERNAL DIM_D/i\  INTRINSIC DIM' b2usht_d.F90 expu2_d.F90 expu_d.F90
+#sed -i -e 's/EXTERNAL MACHSFR, DIM/EXTERNAL MACHSFR/g' expu2_d.F90 expu_d.F90
+
+
+#gedit b2npht_d.F90 b2npmo_d.F90 b2sihs__d.F90 b2stbc_d.F90 b2stbr_phys_d.F90 b2tfch__d.F90 b2tfhe__d.F90 b2tfnb_d.F90 b2tlc0_d.F90 b2tlh0_d.F90 b2tlnl_d.F90 b2tlv0_d.F90 b2tqca_d.F90 b2tqce_d.F90 b2trcl_d.F90 b2treq_d.F90 
+

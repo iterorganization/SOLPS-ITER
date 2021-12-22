@@ -6,6 +6,7 @@ collect_nodiff_d.sh
 
 sed -i '/DIFFSIZES/d' ./*.F90 
 sed -i -e 's/ISIZE1OFfceb/mpg%nFc/g' b2us_geo_diff.F90
+sed -i -e 's/REAL :: result1$/integer :: result1/g' b2mod_input_profile_diff.F90
 sed -i -e 's/DIMENSION(SIZE(x1, 1))/DIMENSION(mpg%nCv)/g' b2mod_driver_diff.F90
 sed -i -e 's/DIMENSION(SIZE(x2, 1))/DIMENSION(mpg%nCv)/g' b2mod_driver_diff.F90
 sed -i -e 's/DIMENSION(SIZE(x3, 1), SIZE(x3, 2))/DIMENSION(mpg%nCv, 0:state%pl%ns-1)/g' b2mod_driver_diff.F90
@@ -24,6 +25,8 @@ sed -i -e 's/ISIZE1OFresult1/nCv/g' b2npmo_d.F90 b2tqna_d.F90
 sed -i -e 's/ISIZE1OFcvhz/nCv/g' b2nxfv_d.F90
 sed -i -e 's/ISIZE1OFvxhz/nVx/g' b2nxfv_d.F90 
 sed -i -e 's/ISIZE1OFfcqalf/nFc/g' b2sian_d.F90 b2stbc_d.F90 b2stbc_phys_d.F90 b2tfhe__d.F90 b2tfhi__d.F90 b2trno_d.F90 b2tfch__d.F90 b2tfnb_d.F90 b2tinnt_d.F90
+sed -i -e 's/ISIZE1OFco%fllim0fhi/nfc/g' b2trno_d.F90
+sed -i -e 's/ISIZE3OFco%fllim0fhi/0:ns-1/g' b2trno_d.F90
 sed -i -e 's/ISIZE1OFgeo%vxonedbsq/nVx/g' b2sihs__d.F90
 sed -i -e 's/ISIZE1OFgeo%cvonedbsq/nCv/g' b2sihs__d.F90
 sed -i -e 's/ISIZE1OFcvvol/nCc/g' b2stbc_d.F90 
@@ -42,18 +45,21 @@ sed -i -e 's/ISIZE1OFdv%fna_52(:, :, isb)/nFc/g' b2tfnb_d.F90
 sed -i -e 's/ISIZE1OFfchz/nFc/g' b2tfnb_d.F90 
 sed -i -e 's/ISIZE1OFfchc/nFc/g' b2tinnt_d.F90
 sed -i -e 's/ISIZE1OFcvbzb/nCv/g' b2tral_d.F90
+sed -i -e 's/ISIZE1OFco%cthi/nFc/g' b2tral_d.F90
+sed -i -e 's/ISIZE2OFco%cthi/0:ns-1/g' b2tral_d.F90
+sed -i -e 's/ISIZE1OFco%cthe/nFc/g' b2tral_d.F90
+sed -i -e 's/ISIZE2OFco%cthe/0:ns-1/g' b2tral_d.F90
 sed -i -e 's/CHARACTER(len=\*) :: arg1/CHARACTER(len=20) :: arg1/g' b2usco_d.F90
 sed -i -e 's/CHARACTER(len=\*) :: arg10/CHARACTER(len=20) :: arg10/g' b2usmo_d.F90
 sed -i -e 's/ISIZE1OFarg1/20/g' calc_err_d.F90
 sed -i -e 's/ISIZE1OFarg2/20/g' calc_err_d.F90
-sed -i -e 's/REAL :: result1$/integer :: result1/g' b2mod_input_profile_diff.F90
 sed -i -e 's/CALL DIM_D(1.0_R8, 0.0/CALL DIM_D(1.0_R8, 0.0_R8/g' b2usht_d.F90
 sed -i -e 's/#DIM_D#/DIM_D/g' dim_d.F90
 
-sed -i -e 's/PUBLIC :: to_struct_plasma_d,/PUBLIC :: /g' b2us_prep_diff.F90
 sed -i '/PUBLIC :: to_struct_cell_d, to_struct_face_d/d' b2us_debug_diff.F90
 sed -i '/PUBLIC :: alloc_switches_d/d' b2mod_switches_diff.F90
 sed -i '/& check_values_switches_d/d' b2mod_switches_diff.F90
+sed -i -e 's/PUBLIC :: to_struct_plasma_d,/PUBLIC :: /g' b2us_prep_diff.F90
 sed -i -e 's/alloc_b2mod_balance_d, dealloc_b2mod_balance, dealloc_b2mod_balance_d,/dealloc_b2mod_balance,/g' b2mod_driver_diff.F90
 sed -i -e 's/dealloc_b2mod_eirene_sources, dealloc_b2mod_eirene_sources_d,/dealloc_b2mod_eirene_sources,/g' b2mod_driver_diff.F90
 sed -i -e 's/run_av_get_plasma, run_av_get_plasma_d, run_av_save, run_av_save_d/run_av_get_plasma, run_av_save/g' b2mod_driver_diff.F90
@@ -61,6 +67,7 @@ sed -i -e 's/batch_av_all_init_d, batch_av_all_save, batch_av_all_fin, &/batch_a
 sed -i '/& batch_av_all_fin_d/d' b2mod_driver_diff.F90
 sed -i -e 's/dealloc_b2mod_wall, dealloc_b2mod_wall_d/dealloc_b2mod_wall/g' b2mod_driver_diff.F90
 sed -i -e 's/ONLY : dealloc_b2mod_ysmp_sdrv, &/ONLY : dealloc_b2mod_ysmp_sdrv/g' b2mod_driver_diff.F90
+sed -i -e 's/\& read_b2mod_par_opt, read_b2mod_par_opt_d, par_opt_phys, x0/\& read_b2mod_par_opt, par_opt_phys, x0/g' b2mod_driver_diff.F90
 sed -i '/& dealloc_b2mod_ysmp_sdrv_d/d' b2mod_driver_diff.F90
 
 sed -i '/EXTERNAL ISGHOSTCELL/d' b2us_prep_diff.F90 
@@ -83,12 +90,12 @@ sed -i '/EXTERNAL CHECK_CDF_STATUS/d' b2mod_mwti_diff.F90
 sed -i '/EXTERNAL OR/d' b2mod_mwti_diff.F90 
 sed -i '/INTEGER :: OR/d' b2mod_mwti_diff.F90 
 sed -i -e 's/B2UXUS_NODIFF/B2UXUS/g' b2usco_d.F90 b2usmo_d.F90 b2usht_d.F90 b2uspo_d.F90
-sed -i -e 's/B2MOD_GEO_DIFF/B2MOD_GEO/g' ./*.F90 #why this?
+sed -i -e 's/B2MOD_GEO_DIFF/B2MOD_GEO/g' ./*.F90
 sed -i -e 's/GET_JSEP_NODIFF/GET_JSEP/g' ./*.F90
 sed -i -e 's/CFWURE_NODIFF/CFWURE/g' ./*.F90
-#sed -i -e 's/CALL READ_B2MOD_USER_NAMELIST_D(ns, ntns, geo, geod, m, md0)/CALL READ_B2MOD_USER_NAMELIST(ns, ntns, geo, m)/g' b2mod_user_namelist_diff.F90 #why this?
-#sed -i '/READ_B2MOD_USER_NAMELIST_D/d' b2mod_user_namelist_diff.F90 #why this?
-#sed -i 's/CALL READ_NEUTRALS_NAMELIST_D(ns, mpg, mpgd, switch/CALL READ_NEUTRALS_NAMELIST(ns, mpg, switch/g' b2stbr_d.F90 #why this?
+##sed -i -e 's/CALL READ_B2MOD_USER_NAMELIST_D(ns, ntns, geo, geod, m, md0)/CALL READ_B2MOD_USER_NAMELIST(ns, ntns, geo, m)/g' b2mod_user_namelist_diff.F90 #why this?
+##sed -i '/READ_B2MOD_USER_NAMELIST_D/d' b2mod_user_namelist_diff.F90 #why this?
+##sed -i 's/CALL READ_NEUTRALS_NAMELIST_D(ns, mpg, mpgd, switch/CALL READ_NEUTRALS_NAMELIST(ns, mpg, switch/g' b2stbr_d.F90 #why this?
 
 remove_initializations_d.sh
 

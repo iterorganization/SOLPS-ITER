@@ -115,8 +115,8 @@ sed -i '/& check_values_switches_dv/d' b2mod_switches_diffv.F90
 sed -i -e 's/alloc_b2mod_balance_dv, dealloc_b2mod_balance/dealloc_b2mod_balance/g' b2mod_driver_diffv.F90
 sed -i -e 's/dealloc_b2mod_balance_dv, dealloc_b2mod_eirene_sources/dealloc_b2mod_eirene_sources/g' b2mod_driver_diffv.F90
 sed -i -e 's/dealloc_b2mod_eirene_sources_dv, balance_average/balance_average/g' b2mod_driver_diffv.F90
-sed -i -e 's/USE B2MOD_RUNNING_AVERAGE_DIFFV, ONLY : run_av_init, run_av_init_dv,/USE B2MOD_RUNNING_AVERAGE_DIFFV, ONLY : run_av_init,/g' b2mod_driver_diffv.F90
-sed -i -e 's/& run_av_fin, run_av_fin_dv/& run_av_fin/g' b2mod_driver_diffv.F90
+#sed -i -e 's/USE B2MOD_RUNNING_AVERAGE_DIFFV, ONLY : run_av_init, run_av_init_dv,/USE B2MOD_RUNNING_AVERAGE_DIFFV, ONLY : run_av_init,/g' b2mod_driver_diffv.F90
+#sed -i -e 's/\& run_av_fin, run_av_fin_dv/\& run_av_fin/g' b2mod_driver_diffv.F90
 sed -i -e 's/run_av_get_plasma, run_av_get_plasma_dv, run_av_save, run_av_save_dv/run_av_get_plasma, run_av_save/g' b2mod_driver_diffv.F90
 sed -i -e 's/batch_av_all_init_dv, batch_av_all_save, batch_av_all_fin, &/batch_av_all_save, batch_av_all_fin/g' b2mod_driver_diffv.F90
 sed -i '/& batch_av_all_fin_dv/d' b2mod_driver_diffv.F90
@@ -135,7 +135,6 @@ sed -i -e "/END TYPE MAPPING_DIFFV/i\&     nfs(nbdirsmax), nbc(nbdirsmax), mxnbc
 sed -i -e "/END TYPE MAPPING_DIFFV/i\&     ncmxnv(nbdirsmax), ncf(nbdirsmax), mxncf(nbdirsmax)" b2us_map_diffv.F90
 
 sed -i -e "/TYPE(B2RATESWORK_DIFFV) :: rtw/i\      TYPE(B2DIAGNOSTIC) :: diag" b2us_plasma_diffv.F90
-sed -i -e "/TYPE(B2PLASMASNAPSHOT_DIFFV) :: psnc/i\      TYPE(B2PLASMASNAPSHOT_DIFFV) :: psnl" b2us_plasma_diffv.F90
 
 sed -i -e "s/b2mod_main_diff/b2mod_main_diffv/g" b2optim_*.F*
 sed -i -e "s/b2mod_ad_diff/b2mod_ad_diffv/g" b2optim_*.F*
@@ -151,7 +150,7 @@ sed -i -e "s/b2mod_boundary_namelist_diff/b2mod_boundary_namelist_diffv/g" b2opt
 sed -i -e "s/b2mod_switches_diff/b2mod_switches_diffv/g" b2optim_*.F*
 sed -i -e "s/call b2mn_init_dv/call b2mn_init_dv(npar_opt)/g" b2optim_*.F*
 sed -i -e "s/call b2mn_fin_dv/call b2mn_fin_dv(npar_opt)/g" b2optim_*.F*
-sed -i -e "s/call b2mn_step_dv(j,jd)/call b2mn_step_dv(j,jd,npar_opt)/g"b2optim_*.F*
+sed -i -e "s/call b2mn_step_dv(j,jd,switchdiff)/call b2mn_step_dv(j,jd,switchdiff,npar_opt)/g" b2optim_*.F*
 sed -i -e 's/jd(nncf)/jd(nbdirsmax,nncf)/g' b2optim_*.F*
 sed -i -e "/subroutine EV_GRAD_F(/a\      use diffsizes" b2optim_ipopt.F
 sed -i -e "/subroutine FormFunctionGradient(/a\      use diffsizes" b2optim_tao.F90

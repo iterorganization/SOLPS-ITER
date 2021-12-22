@@ -70,10 +70,10 @@ sed -i -e 's/CHARACTER(len=\*) :: arg1/CHARACTER(len=20) :: arg1/g' b2usco_b.F90
 # FIXME
 sed -i '/PUSHCHARACTERARRAY(name/d' b2usco_b.F90 
 sed -i '/POPCHARACTERARRAY(name/d' b2usco_b.F90 
-sed -i -e 's/DIMENSION(mpg%cvnvp(icv., 2))/DIMENSION(11)/g' b2usco_b.F90 b2usht_b.F90 b2usmo_b.F90 b2uspo_b.F90
+sed -i -e 's/DIMENSION(mpg%cvnvp(icv., 2))/DIMENSION(13)/g' b2usco_b.F90 b2usht_b.F90 b2usmo_b.F90 b2uspo_b.F90
 echo " ******************"
 echo " !!!! WARNING  !!!!"
-echo " This postprocessing script assumes that the maximum number of points in the stencil is 11"
+echo " This postprocessing script assumes that the maximum number of points in the stencil is 13"
 echo " If this is not true please correct the dimension of the LOGICAL ARRAYS MASK* in b2usco_b b2usht_b b2usmo_b and b2uspo_b"
 echo " !!!! WARNING  !!!!"
 echo " ******************"

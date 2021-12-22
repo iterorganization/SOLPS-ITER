@@ -7,10 +7,10 @@ if ( -s run.log ) then
   grep -i -w 'OPTIM' run.log >> run.info
   grep -i -w 'IPOPT' run.log >> run.info
   grep -i -w 'TAO' run.log >> run.info
-  set nnvar=`grep -i nnvar run.log | awk '{print $3}' | awk -F"," '{print $1}'`
-  echo nnvar = $nnvar >> run.info
-  @ nnvar = $nnvar + 1
-  grep -i -A$nnvar 'vec object' run.log >> run.info
+  set npar_opt=`grep -i npar_opt run.log | awk '{print $3}' | awk -F"," '{print $1}'`
+  echo npar_opt = $npar_opt >> run.info
+  @ npar_opt = $npar_opt + 1
+  grep -i -A$npar_opt 'vec object' run.log >> run.info
   grep -i 'Number of cost functions' run.log | tail -n 1 >> run.info
   set NNN=`grep -i 'Number of cost functions' run.info | gawk '{print $5}'`
   if ( `grep -c gradient run.log` > 0) then

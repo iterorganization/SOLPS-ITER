@@ -50,6 +50,9 @@ cp $SOLPSTOP/modules/B2.5/src/utility/uxcm.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/ma28copy.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/interp1d.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/nagsubst.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/hybr.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/upwind.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/interp1d.F .
 cp $SOLPSTOP/modules/B2.5/src/transport/b2tlnl.F .
 cp $SOLPSTOP/modules/B2.5/src/b2aux/b2xpne.F .
 cp $SOLPSTOP/modules/B2.5/src/b2aux/b2xpnm.F .
@@ -64,6 +67,8 @@ cp $SOLPSTOP/modules/B2.5/src/differentiation/b2uxus_b.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/calc_res_fp.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/b2optim_ipopt.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/b2optim_tao.F90 .
+cp $SOLPSTOP/modules/B2.5/src/differentiation/set_parameters.F .
+cp $SOLPSTOP/modules/B2.5/src/differentiation/set_adj_gradient.F .
 
 # and now modify the 'use modules' which have been differentiated
 files=`ls *.F*`

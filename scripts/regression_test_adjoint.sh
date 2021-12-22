@@ -96,9 +96,9 @@ sed -i '/ADCONTEXTADJ/d' b2mod_main_diff.F90
 sed -i '/r8\*/d' b2mod_main_diff.F90
 sed -i '/r8\/8/d' b2mod_main_diff.F90
 
-setenv DIFF_B yes
-cd $SOLPSTOP
-gmake listobj
-gmake depend
-gmake b25_diff_b
-unsetenv DIFF_B
+#setenv DIFF_B yes
+#cd $SOLPSTOP
+#gmake listobj
+#gmake depend
+#gmake b25_diff_b
+#unsetenv DIFF_B

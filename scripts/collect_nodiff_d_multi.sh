@@ -51,6 +51,8 @@ cp $SOLPSTOP/modules/B2.5/src/utility/uxcm.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/ma28copy.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/nagsubst.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/interp1d.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/hybr.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/upwind.F .
 cp $SOLPSTOP/modules/B2.5/src/transport/b2tlnl.F .
 cp $SOLPSTOP/modules/B2.5/src/b2aux/b2xpne.F .
 cp $SOLPSTOP/modules/B2.5/src/b2aux/b2xpnm.F .
@@ -69,6 +71,8 @@ cp $SOLPSTOP/modules/B2.5/src/differentiation/b2mxac_diffv.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/b2optim* .
 #cp $SOLPSTOP/modules/B2.5/src/differentiation/read_plasma_state_diff.F .
 #cp $SOLPSTOP/modules/B2.5/src/differentiation/write_plasma_state_diff.F .
+cp $SOLPSTOP/modules/B2.5/src/differentiation/set_parameters.F .
+cp $SOLPSTOP/modules/B2.5/src/differentiation/set_tgt_perturbation.F .
 
 # and now modify the 'use modules' which have been differentiated
 files=`ls *.F*`
