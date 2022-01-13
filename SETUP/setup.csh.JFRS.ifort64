@@ -6,7 +6,7 @@ module load stat
 module load gdb4hpc
 module load cray-netcdf/4.6.3.1
 module load cray-parallel-netcdf/1.11.1.0
-module load java/jdk1.8.0_51
+module load cray-python/3.8.5.0
 module load mdsplus/7.96.12
 module load ncarg-intel
 setenv PKG_CONFIG_PATH ${PE_INTEL_FIXED_PKGCONFIG_PATH}:${PKG_CONFIG_PATH}
