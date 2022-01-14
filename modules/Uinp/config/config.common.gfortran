@@ -7,9 +7,6 @@ endif
 ifdef SOLPS_OPENMP
 FFLAGS  += -fopenmp
 endif
-ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -ge 6; echo $$?),0)
-FFLAGS  += -fuse-ld=bfd
-endif
 
 INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
