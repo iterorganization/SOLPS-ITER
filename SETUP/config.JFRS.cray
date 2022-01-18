@@ -57,7 +57,7 @@
 # Variables for linking
 #
 
-LD_MSCL    = -L/opt/gcc/8.3.0/snos/lib64 -lgfortran -L${MSCL_ROOT} -lmscl
+LD_MSCL    = -L${MSCL_ROOT} -lmscl
 ifdef GR_ROOT
 LD_GR      = -L/opt/intel/lib/intel64 -L${GR_ROOT} -lifcore -limf -lsvml -lintlc -lgr -lifport
 endif
