@@ -3,6 +3,7 @@
 #SBATCH --ntasks-per-node=#PROCS#
 #SBATCH --cpus-per-task=#THREADS#
 #SBATCH -p cclake
+#SBATCH -A #ACCOUNT#
 #SBATCH --time=#HOURS#:00:00
 #SBATCH --mem=#MEM#
 #SBATCH --job-name=#JOBNAME#

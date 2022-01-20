@@ -11,6 +11,8 @@ module load netcdf-fortran-4.4.4-intel-17.0.4-cesnirf
 module load gnuplot
 module load hdf5
 
+setenv LD_LIBRARY_PATH "/home/ir-nunn1/solps-iter-dependencies/lib/:${LD_LIBRARY_PATH}"
+
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
 else

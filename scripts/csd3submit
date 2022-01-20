@@ -6,6 +6,7 @@ set JOB_NAME="SOLPS-ITER"
 set PROCS=1
 set THREADS=1
 set hours=7
+set account="UKAEA-AP001-CPU"
 set mem=100GB
 echo Your email is $EMAIL
 
@@ -42,6 +43,7 @@ Available options are:
   -m <<MPI OPTIONS>> use the MPI options specified (default serial version)
   -t <<THREADS>>     use OpenMP parallelization with <<THREADS>> threads (default $THREADS)
   -T <<HOURS>>       number of elapsed hours requested (default $hours)
+  -A <<ACCOUNT>>       the account to be used (default $account)
   -M <<MEM_SIZE>>    memory size (default $mem)
 
 EOF
@@ -109,6 +111,16 @@ EOF
     echo Requested time is ${hours} hours
     shift
     set HELP_STRING=\"${hours}\"
+#    echo $HELP_STRING
+    set LOOP_OPTS="-T ${HELP_STRING} ${LOOP_OPTS}" 
+    goto argloop
+  endif
+  if ("X${1}X" == "X-AX") then
+    shift
+    set account="$1"
+    echo Requested account is ${account}
+    shift
+    set HELP_STRING=\"${account}\"
 #    echo $HELP_STRING
     set LOOP_OPTS="-T ${HELP_STRING} ${LOOP_OPTS}" 
     goto argloop
@@ -183,6 +195,7 @@ sed \
   -e 's:#THREADS#:'$THREADS':g' \
   -e 's:#MEM#:'$mem':g' \
   -e 's:#HOURS#:'$hours':g' \
+  -e 's:#ACCOUNT#:'$account':g' \
   -e 's:#JOBNAME#:'$JOB_NAME':g' \
   -e 's:#USER#:'$USER':g' \
   -e 's:#LOOPOPTS#:'"$LOOP_OPTS"':g' \
@@ -193,4 +206,5 @@ update_solps_run_status -n ${msg}
 if ($?SOLPS_GUI_IP) then
   echo ${USER} ${PWD} ${msg} | netcat -u -v -w 1 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
 endif
+echo $NAME
 sbatch $NAME
