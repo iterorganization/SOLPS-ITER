@@ -258,10 +258,11 @@ void CbPasteAnd(Widget wg,XtPointer xtpV,XtPointer pcbs) {
   Index ix;
 
   for (r=Group1st(w->db->reactions,&ix);r!=NULL;r=Next(&ix)) {
-    if (ReactionActive(w->xapp->clipboard,r))
+    if (ReactionActive(w->xapp->clipboard,r)) {
       if (ReactionActive(w->subset,r))
 	CopyReaction(w->xapp->clipboard,w->subset,r,True);
       else ActivateReaction(w->subset,r,NULL,False);
+    }
   }
   UndoMark(w->subset);
 }
@@ -272,10 +273,11 @@ void CbPasteAndNot(Widget wg,XtPointer xtpV,XtPointer pcbs) {
   Index ix;
 
   for (r=Group1st(w->db->reactions,&ix);r!=NULL;r=Next(&ix)) {
-    if (ReactionActive(w->xapp->clipboard,r))
+    if (ReactionActive(w->xapp->clipboard,r)) {
       if (!ReactionActive(w->subset,r))
 	CopyReaction(w->xapp->clipboard,w->subset,r,True);
       else ActivateReaction(w->subset,r,NULL,False);
+    }
   }
   UndoMark(w->subset);
 }
