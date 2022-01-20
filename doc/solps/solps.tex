@@ -11697,6 +11697,7 @@ The relevant switches for the Zhdanov closure are:
   \item[b2tral\_Zhdanov\_visu] If {\tt '1'} (default), the Zhdanov velocity-dependent viscous stress formulation is applied instead of the Braginskii expression.
   \item[b2tral\_Zhdanov\_vish] If {\tt '1'} (default), the Zhdanov heat flux dependent viscous stress formulation is applied instead of the Braginskii expression.
   \item[b2tral\_zh\_tf\_toff] String of integers with (nspecies*(nspecies+1))/2-nspecies digits. If a digit is {\tt 1}, turn off the thermal force between corresponding species starting from 1 and 2; 1 and 3;....; up to nspecies-1 and nspecies. Default is {\tt '0'}.
+  \item[b2tral\_zh\_vis\_type] If {\tt '0'} (default), the Braginskii-like velocity-dependent stress-viscosity is used.  If {\tt '1'}, the Zhdanov-like velocity-dependent stress-viscosity is used.
   \item[b2npmo\_smbvi\_factor] This switch defines the fraction of the cross-ion part of the stress-viscosity term (Eq.~(\ref{eq:mom_zh_visai})) which is applied. The cross-ion part of the stress-viscosity term can lead to numerical problems. If so, it is recommended to start from {\tt '0.0'} and increase it step by step. Default is {\tt '1.0'}.
 \end{description}
 
@@ -12255,6 +12256,83 @@ $Z$-variables can be found in subsection~\ref{AGZ}.
 
 From Zhdanov for ions:
 
+\ \ \textbf{\textit{If {\tt zh\_vis\_type.eq.0} then}}
+
+\begin{align}
+\left( {\nabla \cdot \overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{full}_{\parallel} = -B^{\frac 3 2} b_x \frac{\partial}{h_x \partial x}
+\left( \frac{4}{3} \frac{\widetilde{\widetilde{\eta}}^{(CL)}_{ax}}{\rho^{rel}_a}
+ \frac{1}{b_x B^2} \frac{\partial \left(B^{\frac{1}{2}} V_{\parallel a} \right)}{h_x \partial x}\right)
+\end{align}
+
+where:
+
+\begin{align}
+\rho^{rel}_a = \frac{\rho_{a}}{\rho},\ \ \
+\rho = \sum_{a} \rho_{a},\ \ \
+\rho_{a} = m_{a} n_{a}
+\end{align}
+
+\begin{align}
+\left( {\nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{full}_{\parallel} = \left( { \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{res}_{\parallel} + \left( { \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{ai}_{\parallel} + \left( { \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{div}_{\parallel}
+\end{align}
+
+\begin{align}\label{eq:mom_zh_visres_0}
+\left( { \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{res}_{\parallel} =
+- \frac{1}{h_z \sqrt g} \frac{\partial}{\partial x}
+\left( \frac{h_z \sqrt g}{h_x} \frac{4}{3} \frac{\widetilde{\widetilde{\eta}}^{(CL)}_{ax}}{\rho^{rel}_a}
+\frac{\partial \ln \left( h_z B^{\frac{1}{2}} \right) }{B^{\frac{1}{2}} h_x \partial x} \right)
+B^{\frac{1}{2}} V_{\parallel a}
+\end{align}
+
+\begin{align}\label{eq:mom_zh_visai_0}
+\left({ \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{ai}_{\parallel} = 0
+\end{align}
+
+\begin{multline}
+\left({ \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{div}_{\parallel} =
+\frac{1}{h_z \sqrt g} \frac{\partial}{\partial x}
+\left( \frac{h_z \sqrt g}{h_x} \frac{4}{3} \frac{\widetilde{\widetilde{\eta}}^{(CL)}_{ax}}{\rho^{rel}_a} \left(\frac{\partial \ln h_z}{h_x \partial x}  V_{\parallel a}
+- \frac{\partial V_{\parallel a}}{h_x \partial x} \right) \right) = \\
+\frac{1}{h_z \sqrt g} \frac{\partial}{\partial x}
+\left( \frac{h_z \sqrt g}{h_x} \left(\frac{4}{3} \frac{\widetilde{\widetilde{\eta}}^{(CL)}_{ax}}{\rho^{rel}_a} \frac{ \partial \ln h_z}{h_x \partial x} V_{\parallel a} - \frac{4}{3} \frac{\widetilde{\widetilde{\eta}}^{(CL)}_{ax}}{\rho^{rel}_a} \frac{\partial V_{\parallel a}}{h_x \partial x} \right) \right)
+\end{multline}
+
+Thus the momentum flux is:
+
+\begin{equation}\label{eq:mom_zh_fluxx_0}
+\Gamma^m_{ax} = \left\{
+\begin{matrix}
+m_a V_{\parallel a} \Gamma_{ax}^{Cor} + \frac{4}{3} \frac{\widetilde{\widetilde{\eta}}^{(CL)}_{ax}}{\rho^{rel}_a} \frac{\partial \ln h_z}{h_x \partial x} V_{\parallel a} - \eta_{ax} \frac{\partial V_{\parallel a}}{h_x \partial x}, & z_a \neq 0\\
+m_a V_{\parallel a} \Gamma_{ax}^{Cor} -
+\eta_{ax} \frac{\partial V_{\parallel a}}{h_x \partial x}, & z_a = 0 \\
+\end{matrix}
+\right.
+\end{equation}
+
+where:
+
+\begin{equation}
+\eta_{ax}=\eta^{(AN)}_{ax}+\frac{4}{3} \frac{\widetilde{\widetilde{\eta}}^{(CL)}_{ax}}{\rho^{rel}_a}
+\end{equation}
+
+and the momentum source is:
+
+\begin{equation}
+\begin{matrix}
+S_{a \parallel}^m = -\left( \nabla \cdot\overset\leftrightarrow\pi_a^{\parallel} \right)_{\parallel} & =
+& \left\{
+\begin{matrix}
+- \left( {\nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{res}_{\parallel} -\left({ \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{ai}_{\parallel}-
+	\left( \nabla \cdot\overset\leftrightarrow\pi_a^{h_i} \right)_{\parallel},
+& \ z_a \neq 0 \\
+\\
+0, & z_a = 0 \\
+\end{matrix} \right.
+\end{matrix}
+\end{equation}
+
+\ \ \textbf{\textit{elseif {\tt zh\_vis\_type.eq.1} then}}
+
 \begin{multline}
 \left( {\nabla \cdot \overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{full}_{\parallel} = -B^{\frac 3 2} b_x \frac{\partial}{h_x \partial x}
 \left( \frac{4}{3} \frac{\widetilde{\widetilde{\eta}}^{(CL)}_{ax}}{\rho^{rel}_a}
@@ -12322,6 +12400,12 @@ m_a V_{\parallel a} \Gamma_{ax}^{Cor} -
 \right.
 \end{equation}
 
+where:
+
+\begin{equation}
+\eta_{ax}=\eta^{(AN)}_{ax}+\frac{4}{3}\widetilde{\widetilde{\eta}}^{(CL)}_{ax}
+\end{equation}
+
 and the momentum source is:
 
 \begin{equation}
@@ -12337,6 +12421,8 @@ S_{a \parallel}^m = -\left( \nabla \cdot\overset\leftrightarrow\pi_a^{\parallel}
 \end{matrix} \right.
 \end{matrix}
 \end{equation}
+
+\textbf{\textit{end}}
 
 Where the viscous stress coefficient is:
 
@@ -12738,6 +12824,21 @@ If {\tt Zhdanov\_visu.eq.1}, then:
 
 \textbf{In the heat source part of B2.5:}
 
+\ \ \textbf{\textit{If {\tt zh\_vis\_type.eq.0} then}}
+
+\begin{equation}
+Q_{vis} = \sum \limits_{fluid~species} \left(
+	  \eta_{ax} \left(
+		\frac{\partial V_{a \parallel}}{h_x \partial x}
+	\right)^2
+	+ \eta^{(AN)}_{a} \left(
+		\frac{\partial V_{a \parallel}}{h_y \partial y}
+	\right)^2
+\right)
+\end{equation}
+
+\ \ \textbf{\textit{elseif {\tt zh\_vis\_type.eq.1} then}}
+
 \begin{multline}
 Q_{vis}=\sum \limits^{ns-1}_{\substack{a = 0 \\ z_a\neq 0}} \left(
 	  \eta^{(AN)}_{a} \left(
@@ -12760,6 +12861,8 @@ Q_{vis}=\sum \limits^{ns-1}_{\substack{a = 0 \\ z_a\neq 0}} \left(
 \right)
 \end{multline}
 
+\textbf{\textit{end}}
+
 \subsection{Currents}
 
 \textbf{In the current part of B2.5:}
@@ -12770,6 +12873,24 @@ If {\tt Zhdanov\_visu.eq.1}, then:
 \widetilde j_x^{(vis \parallel)} = \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0 }}
 \widetilde j_{ax}^{(vis \parallel)}
 \end{equation}
+
+\ \ \textbf{\textit{If {\tt zh\_vis\_type.eq.0} then}}
+
+\begin{multline}
+\widetilde j_{ax}^{(vis \parallel)} =
+\left\{
+\begin{aligned}
+- \frac{B_z \sqrt{B}}{3 B_x}
+\frac{\partial}{h_y \partial y}
+\left( \frac{1}{B^2} \right)
+\frac{\widetilde{\widetilde{\eta}}^{(CL)}_{ax}}{\rho^{rel}_a}
+\frac{\partial \left( \sqrt{B} V_{a \parallel} \right)}{h_x \partial x}, &\ z_a \neq 0 \\
+0, &\ z_a = 0
+\end{aligned} \right.\\
+\left( \widetilde{\widetilde{\eta}}^{(CL)}_{ax} \text{already contains a factor of } \rho^{rel}_a b_x^2 \right)
+\end{multline}
+
+\ \ \textbf{\textit{elseif {\tt zh\_vis\_type.eq.1} then}}
 
 \begin{multline}
 \widetilde j_{ax}^{(vis \parallel)} =
@@ -12785,9 +12906,29 @@ If {\tt Zhdanov\_visu.eq.1}, then:
 \left( \widetilde{\widetilde{\eta}}^{(CL)}_{ax} \text{already contains a factor of } \rho^{rel}_a b_x^2 \right)
 \end{multline}
 
+\textbf{\textit{end}}
+
 \begin{equation}
 \widetilde{j}_y^{(vis \parallel)} = \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} \widetilde{j}_{ay}^{(vis \parallel)}
 \end{equation}
+
+\ \ \textbf{\textit{If {\tt zh\_vis\_type.eq.0} then}}
+
+\begin{multline}
+\widetilde{j}_{ay}^{(vis \parallel)} =
+\left\{
+\begin{aligned}
+\frac{B_z \sqrt{B}}{3 B_x}
+\frac{\partial}{h_x \partial x}
+\left( \frac{1}{B^2} \right)
+\frac{\widetilde{\widetilde{\eta}}^{(CL)}_{ax}}{\rho^{rel}_a}
+\frac{\partial \left( \sqrt{B} V_{a \parallel} \right)}{h_x \partial x}, &\ z_a \neq 0 \\
+0, &\ z_a = 0
+\end{aligned} \right.\\
+\left( \widetilde{\widetilde{\eta}}^{(CL)}_{ax} \text{already contains a factor of } \rho^{rel}_a b_x^2 \right)
+\end{multline}
+
+\ \ \textbf{\textit{elseif {\tt zh\_vis\_type.eq.1} then}}
 
 \begin{multline}
 \widetilde{j}_{ay}^{(vis \parallel)} =
@@ -12802,6 +12943,8 @@ If {\tt Zhdanov\_visu.eq.1}, then:
 \end{aligned} \right.\\
 \left( \widetilde{\widetilde{\eta}}^{(CL)}_{ax} \text{already contains a factor of } \rho^{rel}_a b_x^2 \right)
 \end{multline}
+
+\textbf{\textit{end}}
 
 If {\tt Zhdanov\_vish.eq.1}, then:
 
