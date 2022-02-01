@@ -11,10 +11,14 @@ sed -i -e "/END SUBROUTINE B2MNDR_1_B/i\    j = jsave" b2mod_driver_diff.F90
 
 sed -i -e 's/ipgtmx=40/ipgtmx=4000/g' ipmain.F
 
+sed -i -e "/CALL B2MNDR_1/i\    call set_parameters(switch)" b2mod_main_diff.F90
+
 sed -i -e "/CALL B2MNDT_B/i\      parm_dnab = 0.D0" b2mod_driver_diff.F90
 sed -i -e "/CALL B2MNDT_B/i\      parm_hceb = 0.D0" b2mod_driver_diff.F90
 sed -i -e "/CALL B2MNDT_B/i\      parm_hcib = 0.D0" b2mod_driver_diff.F90
 sed -i -e "/CALL B2MNDT_B/i\      conparb = 0.D0" b2mod_driver_diff.F90
+sed -i -e "/CALL B2MNDT_B/i\      momparb = 0.D0" b2mod_driver_diff.F90
+sed -i -e "/CALL B2MNDT_B/i\      potparb = 0.D0" b2mod_driver_diff.F90
 sed -i -e "/CALL B2MNDT_B/i\      eneparb = 0.D0" b2mod_driver_diff.F90
 sed -i -e "/CALL B2MNDT_B/i\      eniparb = 0.D0" b2mod_driver_diff.F90
 sed -i -e "/CALL B2MNDT_B/i\      enkparb = 0.D0" b2mod_driver_diff.F90
@@ -58,7 +62,16 @@ sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT b2sikt_fac_she
 sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT keps_cd',switchb%keps_cd" b2mod_driver_diff.F90
 sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT keps_heat',switchb%keps_heat" b2mod_driver_diff.F90
 sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT keps_heat_i',switchb%keps_heat_i" b2mod_driver_diff.F90
+sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      do i=1,nisgma" b2mod_driver_diff.F90
+sed -i -e "/CALL ADSTACK_RESETREPEAT/i\        write(*,*) 'GRADIENT sigma',sigmab(i)" b2mod_driver_diff.F90
+sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      end do" b2mod_driver_diff.F90
+sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      if (allocated(par_opt_physb)) then" b2mod_driver_diff.F90
+sed -i -e "/CALL ADSTACK_RESETREPEAT/i\        do i=1,npar_opt" b2mod_driver_diff.F90
+sed -i -e "/CALL ADSTACK_RESETREPEAT/i\          write(*,*) 'GRADIENT par_opt_phys',par_opt_physb(i)" b2mod_driver_diff.F90
+sed -i -e "/CALL ADSTACK_RESETREPEAT/i\        end do" b2mod_driver_diff.F90
+sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      endif" b2mod_driver_diff.F90
 
+sed -i -e "/REAL(kind=r8) :: jb(nncf)/i\    integer :: ii" b2mod_main_diff.F90
 sed -i -e "/CALL ADCONTEXTADJ_STARTCONCLUDE/i\      write(*,*) 'GRADIENT dna ',parm_dnab(1)" b2mod_main_diff.F90
 sed -i -e "/CALL ADCONTEXTADJ_STARTCONCLUDE/i\      write(*,*) 'GRADIENT hce ',parm_hceb" b2mod_main_diff.F90
 sed -i -e "/CALL ADCONTEXTADJ_STARTCONCLUDE/i\      write(*,*) 'GRADIENT hci ',parm_hcib(1)" b2mod_main_diff.F90
@@ -91,6 +104,14 @@ sed -i -e "/CALL ADCONTEXTADJ_STARTCONCLUDE/i\      write(*,*) 'GRADIENT b2sikt_
 sed -i -e "/CALL ADCONTEXTADJ_STARTCONCLUDE/i\      write(*,*) 'GRADIENT keps_cd',switchb%keps_cd" b2mod_main_diff.F90
 sed -i -e "/CALL ADCONTEXTADJ_STARTCONCLUDE/i\      write(*,*) 'GRADIENT keps_heat',switchb%keps_heat" b2mod_main_diff.F90
 sed -i -e "/CALL ADCONTEXTADJ_STARTCONCLUDE/i\      write(*,*) 'GRADIENT keps_heat_i',switchb%keps_heat_i" b2mod_main_diff.F90
+sed -i -e "/CALL ADCONTEXTADJ_STARTCONCLUDE/i\      do ii=1,nisgma" b2mod_main_diff.F90
+sed -i -e "/CALL ADCONTEXTADJ_STARTCONCLUDE/i\        write(*,*) 'GRADIENT sigma',sigmab(ii)" b2mod_main_diff.F90
+sed -i -e "/CALL ADCONTEXTADJ_STARTCONCLUDE/i\      end do" b2mod_main_diff.F90
+sed -i -e "/CALL ADCONTEXTADJ_STARTCONCLUDE/i\      if (allocated(par_opt_physb)) then" b2mod_main_diff.F90
+sed -i -e "/CALL ADCONTEXTADJ_STARTCONCLUDE/i\        do ii=1,npar_opt" b2mod_main_diff.F90
+sed -i -e "/CALL ADCONTEXTADJ_STARTCONCLUDE/i\          write(*,*) 'GRADIENT par_opt_phys',par_opt_physb(ii)" b2mod_main_diff.F90
+sed -i -e "/CALL ADCONTEXTADJ_STARTCONCLUDE/i\        end do" b2mod_main_diff.F90
+sed -i -e "/CALL ADCONTEXTADJ_STARTCONCLUDE/i\      endif" b2mod_main_diff.F90
 
 sed -i '/ADCONTEXTADJ/d' b2mod_main_diff.F90
 sed -i '/r8\*/d' b2mod_main_diff.F90

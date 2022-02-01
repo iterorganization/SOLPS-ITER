@@ -64,7 +64,7 @@ cp $SOLPSTOP/modules/B2.5/src/sources/b2sqcx.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/cond_coef.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/erf_b.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/b2uxus_b.F .
-cp $SOLPSTOP/modules/B2.5/src/differentiation/calc_res_fp.F .
+cp $SOLPSTOP/modules/B2.5/src/differentiation/calc_res_fp_diff.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/b2optim_ipopt.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/b2optim_tao.F90 .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/set_parameters.F .

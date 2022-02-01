@@ -67,17 +67,9 @@ sed -i -e 's/ISIZE1OFco%fllim0fhi/nfc/g' b2trno_b.F90
 sed -i -e 's/ISIZE3OFco%fllim0fhi/0:ns-1/g' b2trno_b.F90
 sed -i -e 's/\&              pl%tn, chcib, co%chcb)/\&              pl%tn, chcib, co%chcb, co%fllim0fhi)/g' b2trno_b.F90
 sed -i -e 's/CHARACTER(len=\*) :: arg1/CHARACTER(len=20) :: arg1/g' b2usco_b.F90 b2usmo_b.F90
-# FIXME
 sed -i '/PUSHCHARACTERARRAY(name/d' b2usco_b.F90 
 sed -i '/POPCHARACTERARRAY(name/d' b2usco_b.F90 
-sed -i -e 's/DIMENSION(mpg%cvnvp(icv., 2))/DIMENSION(13)/g' b2usco_b.F90 b2usht_b.F90 b2usmo_b.F90 b2uspo_b.F90
-echo " ******************"
-echo " !!!! WARNING  !!!!"
-echo " This postprocessing script assumes that the maximum number of points in the stencil is 13"
-echo " If this is not true please correct the dimension of the LOGICAL ARRAYS MASK* in b2usco_b b2usht_b b2usmo_b and b2uspo_b"
-echo " !!!! WARNING  !!!!"
-echo " ******************"
-# FIXME
+sed -i -e 's/DIMENSION(mpg%cvnvp(icv., 2))/DIMENSION(mpg%mxStencil)/g' b2usco_b.F90 b2usht_b.F90 b2usmo_b.F90 b2uspo_b.F90
 sed -i -e 's/ISIZE1OFarg1/20/g' calc_err_b.F90
 sed -i -e 's/ISIZE1OFarg2/20/g' calc_err_b.F90
 sed -i -e 's/LOGICAL :: arg1/LOGICAL :: arg1(m%nFc)/g' find_faces_b.F90
@@ -174,6 +166,25 @@ sed -i -e "s/conparb(0:nsdmax-1, nbcd, 3)/conparb(0:nsdmax-1, nbcd, 3),conparb0(
 sed -i -e "s/eneparb(nbcd, 2)/eneparb(nbcd, 2),eneparb0(nbcd, 2)/g" b2mod_boundary_namelist_diff.F90
 sed -i -e "s/eniparb(nbcd, 2)/eniparb(nbcd, 2),eniparb0(nbcd, 2)/g" b2mod_boundary_namelist_diff.F90
 sed -i -e "s/potparb(nbcd, 2)/potparb(nbcd, 2),potparb0(nbcd, 2)/g" b2mod_boundary_namelist_diff.F90
+sed -i -e "s/enkparb(nbcd, 2)/enkparb(nbcd, 2),enkparb0(nbcd, 2)/g" b2mod_boundary_namelist_diff.F90
+sed -i -e "s/parm_hceb,/parm_hceb,parm_hceb0,/g" b2mod_transport_namelist_diff.F90
+sed -i -e "s/parm_sigb,/parm_sigb,parm_sigb0,/g" b2mod_transport_namelist_diff.F90
+sed -i -e "s/parm_alfb/parm_alfb,parm_alfb0/g" b2mod_transport_namelist_diff.F90
+sed -i -e "s/parm_dnab(0:nsdmax-1)/parm_dnab(0:nsdmax-1),parm_dnab0(0:nsdmax-1)/g" b2mod_transport_namelist_diff.F90
+sed -i -e "s/parm_hcib(0:nsdmax-1)/parm_hcib(0:nsdmax-1),parm_hcib0(0:nsdmax-1)/g" b2mod_transport_namelist_diff.F90
+sed -i -e "s/parm_dpab(0:nsdmax-1)/parm_dpab(0:nsdmax-1),parm_dpab0(0:nsdmax-1)/g" b2mod_transport_namelist_diff.F90
+sed -i -e "s/parm_vsab(0:nsdmax-1)/parm_vsab(0:nsdmax-1),parm_vsab0(0:nsdmax-1)/g" b2mod_transport_namelist_diff.F90
+sed -i -e "s/parm_vlab(0:nsdmax-1)/parm_vlab(0:nsdmax-1),parm_vlab0(0:nsdmax-1)/g" b2mod_transport_namelist_diff.F90
+sed -i -e "s/uoldb=0.D0/uoldb=0.D0,uoldb0=0.D0/g" b2mod_recycle_diff.F90
+sed -i -e "s/toldb=0.D0/toldb=0.D0,toldb0=0.D0/g" b2mod_recycle_diff.F90
+sed -i -e "s/moldb=0.D0/moldb=0.D0,moldb0=0.D0/g" b2mod_recycle_diff.F90
+sed -i -e "s/, uold, mold, told/, uold, mold, told, uoldb, moldb, toldb, uoldb0, moldb0, toldb0/g" b2mod_driver_diff.F90
+sed -i -e "s/b2news_cutlob=0.D0/b2news_cutlob=0.D0,b2news_cutlob0=0.D0/g" b2mod_ad_diff.F90
+sed -i -e "s/b2tlh0_cutlob=0.D0/b2tlh0_cutlob=0.D0,b2tlh0_cutlob0=0.D0/g" b2mod_ad_diff.F90
+sed -i -e "s/b2srst_kt_epsb=0.D0/b2srst_kt_epsb=0.D0,b2srst_kt_epsb0=0.D0/g" b2mod_ad_diff.F90
+sed -i -e "s/b2trcl_cutlob=0.D0/b2trcl_cutlob=0.D0,b2trcl_cutlob0=0.D0/g" b2mod_ad_diff.F90
+sed -i -e "s/b2tlc0_cutlob=0.D0/b2tlc0_cutlob=0.D0,b2tlc0_cutlob0=0.D0/g" b2mod_ad_diff.F90
+sed -i -e "s/b2tlv0_cutlob=0.D0/b2tlv0_cutlob=0.D0,b2tlv0_cutlob0=0.D0/g" b2mod_ad_diff.F90
 sed -i -e "s/znb0(0:nsdecl-1)/znb0(0:nsdecl-1),znb1(0:nsdecl-1)/g" b2mod_b2cmpa_diff.F90
 sed -i -e "s/amb0(0:nsdecl-1)/amb0(0:nsdecl-1),amb1(0:nsdecl-1)/g" b2mod_b2cmpa_diff.F90
 sed -i -e "s/zaminb(0:nsdecl-1)/zaminb(0:nsdecl-1),zaminb0(0:nsdecl-1),zamaxb0(0:nsdecl-1)/g" b2mod_b2cmpa_diff.F90
@@ -185,7 +196,7 @@ sed -i "/stateb3/d" b2mod_driver_diff.F90 ## CAREFUL! might be needed in future
 sed -i "/stateb4/d" b2mod_driver_diff.F90 ## CAREFUL! might be needed in future
 sed -i "/stateb5/d" b2mod_driver_diff.F90 ## CAREFUL! might be needed in future
 sed -i "/cumul = cumul/d" b2mod_driver_diff.F90 ## CAREFUL! might be needed in future
-sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      call calc_res_fp(nCv, ns, stateb1, stateb0, cumul)" b2mod_driver_diff.F90
+sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      call calc_res_fp_diff(nCv, ns, stateb1, stateb0, cumul)" b2mod_driver_diff.F90
 sed -i -e "s/DO WHILE (cumul .GT. 1.0e-6)/DO WHILE (cumul .GT. res_quit)/g" b2mod_driver_diff.F90
 sed -i -e "/REAL(kind=r8) :: cumul/i\    INTEGER :: ITERCOUNT" b2mod_driver_diff.F90
 sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      ITERCOUNT = ITERCOUNT + 1" b2mod_driver_diff.F90
