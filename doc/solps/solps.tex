@@ -4796,7 +4796,7 @@ When using the traditional solution method, relying on under-relaxation of the e
 More specifically, the way the time derivative terms are discretized is changed between the two code operation modes. For the traditional way of running the code, using the under-relaxation scheme, the time derivative term for the parallel momentum equations, (\ref{eq:mom_new}) or (\ref{eq:mom_old}), is discretized as:
 
 \begin{equation}\label{eq:mom_dt_1}
-m_a h_x \sqrt{g} \frac{n_a^{(k)} V_{\parallel a}^{(k+1)} - n_a^{(k)} V_{\parallel a}^{(k)}}{\tau \delta_{ma} \tau_f}
+m_a h_z \sqrt{g} \frac{n_a^{(k)} V_{\parallel a}^{(k+1)} - n_a^{(k)} V_{\parallel a}^{(k)}}{\tau \delta_{ma} \tau_f}
 \end{equation}
 
 and the time derivative terms for the energy equations, (\ref{eq:ene_new}) and (\ref{eq:eni}), are discretized as:
@@ -4821,7 +4821,7 @@ where $r_{xf_{V_{\parallel a}}}$ and $r_{xf_{T_\alpha}}$ are the under-relaxatio
 When applying the ``time-dependent'' mode, the discretization of the time derivative terms becomes, for the parallel momentum equations:
 
 \begin{equation}\label{eq:mom_dt_2}
-m_a h_x \sqrt{g} \frac{ \widetilde{V}_{\parallel a}^{(k+1)} - V_{\parallel a}^{(k)}}{\tau \delta_{ma} \tau_f} n_a^{(k+1)} + m_a h_x \sqrt{g} \frac{n_a^{(k+1)} - n_a^{(k)}}{\tau} V_{\parallel a}^{(k)}
+m_a h_z \sqrt{g} \frac{ \widetilde{V}_{\parallel a}^{(k+1)} - V_{\parallel a}^{(k)}}{\tau \delta_{ma} \tau_f} n_a^{(k+1)} + m_a h_z \sqrt{g} \frac{n_a^{(k+1)} - n_a^{(k)}}{\tau} V_{\parallel a}^{(k)}
 \end{equation}
 
 and, for the energy equations:
