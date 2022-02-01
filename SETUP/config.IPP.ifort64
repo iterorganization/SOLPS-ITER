@@ -17,15 +17,15 @@
 # Add -DNAG22 to SOLPS_CPP
 #
 
-       NCDIR ?= /ptmp1/work/dpc/SOLPS-ITER/NETCDF
-   MSCL_ROOT ?= /ptmp1/work/dpc/SOLPS-ITER/mscl
+       NCDIR ?= /tokp/work/dpc/SOLPS-ITER/NETCDF
+   MSCL_ROOT ?= /tokp/work/dpc/SOLPS-ITER/mscl
        H5DIR ?= ${HDF5_HOME}
-     GR_ROOT ?= /ptmp1/work/dpc/SOLPS-ITER/gr
-    GLI_HOME ?= /ptmp1/work/dpc/SOLPS-ITER/gks
-  NCARG_ROOT ?= /ptmp1/work/dpc/SOLPS-ITER/NCARG
+     GR_ROOT ?= /tokp/work/dpc/SOLPS-ITER/gr
+    GLI_HOME ?= /tokp/work/dpc/SOLPS-ITER/gks
+  NCARG_ROOT ?= /tokp/work/dpc/SOLPS-ITER/NCARG
 #      NAGDIR ?= ${NAGFLIB_HOME}
-      NAGDIR ?= /ptmp1/work/dpc/SOLPS-ITER/nag
- MDSPLUS_DIR ?= /ptmp1/work/dpc/SOLPS-ITER/MDSPLUS
+      NAGDIR ?= /tokp/work/dpc/SOLPS-ITER/nag
+ MDSPLUS_DIR ?= /tokp/work/dpc/SOLPS-ITER/MDSPLUS
 
 #
 # Variables for linking
@@ -46,7 +46,7 @@ LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 #
 
 SOLPS_CPP      = -DNCAR4 -DNO_F01AAF
-B25_DEFINES    =
+B25_DEFINES    = 
 EIRENE_DEFINES =
 
 # Autodetected optional features...
@@ -69,11 +69,24 @@ ifdef LD_CATALYST
 endif
 
 # Build with IMAS if imas module is loaded
-ifdef IMAS_PREFIX
-  SOLPS_CPP += -DIMAS
+ifdef IMAS_VERSION
   LD_UAL     = `pkg-config imas-lowlevel imas-ifort --libs`
+  UAL_MAJOR_VERSION = $(shell echo ${UAL_VERSION} | cut -d '.' -f1 )
+  GGD_MINOR_VERSION = $(shell echo ${EBVERSIONGGD} | cut -d '.' -f2 )
+  IMAS_MAJOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f1 )
+  IMAS_MINOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f2 )
+  SOLPS_CPP += -DIMAS -DUAL_MAJOR_VERSION=${UAL_MAJOR_VERSION} -DIMAS_MINOR_VERSION=${IMAS_MINOR_VERSION} -DGGD_MINOR_VERSION=${GGD_MINOR_VERSION}
   export LD_UAL
+else
+  UAL_MAJOR_VERSION = 0
+  GGD_MINOR_VERSION = 0
+  IMAS_MAJOR_VERSION = 0
+  IMAS_MINOR_VERSION = 0
 endif
+export UAL_MAJOR_VERSION
+export GGD_MINOR_VERSION
+export IMAS_MAJOR_VERSION
+export IMAS_MINOR_VERSION
 
 #
 # Export for use in sub-makefiles

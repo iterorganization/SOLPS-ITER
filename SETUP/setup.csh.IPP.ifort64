@@ -1,28 +1,30 @@
 # Load modules
 setenv MODULEPATH /afs/ipp/common/usr/modules.2014/@sys/modulefiles/mpi:$MODULEPATH
-module load intel/17.0
+module load intel/18.0.5
 module load texlive
-module load subversion
-module load totalview
+# module load subversion  # use built in SVN
+module load arm_ddt
 module load doxygen
 #module load mdsplus
 #module load netcdf-serial
 module load hdf5-serial
 #module load nag_flib/intel/mk24
 module load git
-module unload impi
-module load impi/2017
-module load nag_flib/intel/mk24
+module load impi
+module load nag_flib/mk24
+module load gnuplot
+
+setenv DBX ddt
 
 # Environment variables
 if (! $?DEVICE) then
   setenv DEVICE upgrade
 endif
-setenv GLI_HOME /ptmp1/work/dpc/SOLPS-ITER/gks
-setenv NCARG_ROOT /ptmp1/work/dpc/SOLPS-ITER/NCARG
+setenv GLI_HOME /tokp/work/dpc/SOLPS-ITER/gks
+setenv NCARG_ROOT /tokp/work/dpc/SOLPS-ITER/NCARG
 setenv PATH ${PATH}
-setenv MDSPLUS_DIR /ptmp1/work/dpc/SOLPS-ITER/MDSPLUS
-setenv PATH ${PATH}:${NCARG_ROOT}/bin:/ptmp1/work/dpc/SOLPS-ITER/NETCDF/bin:${MDSPLUS_DIR}/bin
+setenv MDSPLUS_DIR /tokp/work/dpc/SOLPS-ITER/MDSPLUS
+setenv PATH ${PATH}:${NCARG_ROOT}/bin:/tokp/work/dpc/SOLPS-ITER/NETCDF/bin:${MDSPLUS_DIR}/bin
 setenv MDS_PATH ${MDSPLUS_DIR}/tdi
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${MDSPLUS_DIR}/lib
 
