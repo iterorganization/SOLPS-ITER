@@ -172,6 +172,12 @@ setenv MANPATH  `echo $MANPATH | awk -v RS=: -v ORS= '\\!a[$0]++ {if (NR>1) prin
 setenv PYTHONPATH  `echo $PYTHONPATH | awk -v RS=: -v ORS= '\\!a[$0]++ {if (NR>1) printf(":"); printf("%s",$0) }'`
 setenv OLD_PATH  `echo $OLD_PATH | awk -v RS=: -v ORS= '\\!a[$0]++ {if (NR>1) printf(":"); printf("%s",$0) }'`
 
+setenv PATH_FOR_LOOP    ${PATH}
+echo PATH_FOR_LOOP = $PATH_FOR_LOOP
+setenv MANPATH_FOR_LOOP    ${MANPATH}
+echo MANPATH_FOR_LOOP = $MANPATH_FOR_LOOP
+
+
 alias sb2  'cd ${SOLPSTOP}/modules/B2.5'
 alias sbb  'cd ${SOLPSTOP}/modules/B2.5'
 alias sei  'cd ${SOLPSTOP}/modules/Eirene'

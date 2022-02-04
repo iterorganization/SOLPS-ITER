@@ -26,6 +26,9 @@
 
 echo Using SOLPSTOP = #SOLPSTOP#
 
+setenv PATH ${PATH_FOR_LOOP}
+setenv MANPATH ${MANPATH_FOR_LOOP}
+
 #echo $MANPATH
 #echo $PATH
 #echo $OLD_PATH
@@ -59,6 +62,20 @@ update_solps_run_status ${msg}
 if ($?SOLPS_GUI_IP) then
   echo ${USER} ${PWD} ${msg} | netcat -u -v -w 1 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
 endif
+
+rm -f run.KAPUTT
+
+set msg="PATH = `echo $PATH`"
+update_solps_run_status ${msg}
+
+set msg="PYTHONPATH = `echo $PYTHONPATH`"
+update_solps_run_status ${msg}
+
+set msg="LD_LIBRARY_PATH = `echo $LD_LIBRARY_PATH`"
+update_solps_run_status ${msg}
+
+set msg="MANPATH = `echo $MANPATH`"
+update_solps_run_status ${msg}
 
 b2run -s ${USE_MPI} ${USE_OMP} >! run.log
 

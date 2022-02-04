@@ -1,0 +1,11 @@
+#! /usr/bin/env python
+import os
+import sys
+if len(sys.argv) <= 1:
+   VAR="PATH"
+else:
+   VAR=sys.argv[1]
+
+path = os.environ[VAR].split(':')
+print(':'.join(sorted(set(path), key=path.index)))
+

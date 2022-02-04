@@ -1,0 +1,4 @@
+#! /usr/bin/env python
+import os
+for i in os.environ: print(len(os.environ[i]), i)
+

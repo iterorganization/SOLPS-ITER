@@ -25,7 +25,26 @@
 ###               or      `itmsubmit -m "-np 36" -j "JobName" -T 48 -M 24G SLURM.itm_coupled_loop`
 ###   Stop the run:       `touch b2mn.exe.dir/.quit`
 
-echo Using SOLPSTOP = #SOLPSTOP#
+# setenv PATH  `echo $PATH | awk -v RS=: -v ORS= '\\!a[$0]++ {if (NR>1) printf(":"); printf("%s",$0) }'`
+# setenv PATH `python -c "import os; path = os.environ['PATH'].split(':'); print(':'.join(sorted(set(path), key=path.index)))"`
+
+setenv PATH ${PATH_FOR_LOOP}
+setenv MANPATH ${MANPATH_FOR_LOOP}
+
+#setenv counter `@ counter = $counter + 1`
+
+#if ($counter > 9) then
+#  set LOGFILENAME=loop_log`echo $counter`.log
+#else
+#  set LOGFILENAME=loop_log_0`echo $counter`.log
+#endif
+
+#setenv >& $LOGFILENAME
+
+#echo Using SOLPSTOP = #SOLPSTOP# >> itmsubmit.log
+#echo LOOPOPTS = #LOOPOPTS# >> itmsubmit.log
+#echo MPIOPTS = #MPIOPTS# >> itmsubmit.log
+
 
 set USE_MPI=""
 if ($?SOLPS_MPI) then
@@ -51,11 +70,30 @@ endif
 update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"
 set msg="Started on `hostname` at `date`"
 update_solps_run_status ${msg}
+
 if ($?SOLPS_GUI_IP) then
   echo ${USER} ${PWD} ${msg} | netcat -u -v -w 1 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
 endif
 
 rm -f run.KAPUTT
+
+set msg="PATH = `echo $PATH`"
+update_solps_run_status ${msg}
+
+set msg="PYTHONPATH = `echo $PYTHONPATH`"
+update_solps_run_status ${msg}
+
+set msg="LD_LIBRARY_PATH = `echo $LD_LIBRARY_PATH`"
+update_solps_run_status ${msg}
+
+set msg="MANPATH = `echo $MANPATH`"
+update_solps_run_status ${msg}
+
+#echo PATH_FOR_LOOP = $PATH_FOR_LOOP >> itmsubmit.log
+#echo PATH = $PATH >> itmsubmit.log
+#echo LD_LIBRARY_PATH = $LD_LIBRARY_PATH >> itmsubmit.log
+#echo PYTHONPATH = $PYTHONPATH >> itmsubmit.log
+
 
 b2run ${USE_MPI} ${USE_OMP} b2mn >& run.log
 
@@ -119,7 +157,6 @@ if ("$Break_loop" == "no") then
     mv b2fstate b2fstati
     if (-s b2faveri) mv b2faveri b2faveri_$NOW
     if (-s b2favere) mv b2favere b2faveri
-    echo itmsubmit #LOOPOPTS# SLURM.itm_coupled_loop
     itmsubmit #LOOPOPTS# SLURM.itm_coupled_loop
   endif
 endif
