@@ -73,6 +73,7 @@ cp $SOLPSTOP/modules/B2.5/src/differentiation/b2optim* .
 #cp $SOLPSTOP/modules/B2.5/src/differentiation/write_plasma_state_diff.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/set_parameters.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/set_tgt_perturbation.F .
+cp $SOLPSTOP/modules/B2.5/src/b2aux/b2xzmf.F .
 
 # and now modify the 'use modules' which have been differentiated
 files=`ls *.F*`

@@ -9,7 +9,8 @@ echo "      integer ,parameter :: nbdirsmax=20" >> diffsizes.F
 echo "      end module" >> diffsizes.F
 sed -i -e "/CALL B2MN_INIT_DV/i\  nbdirs=6" b2mn_d.F90
 
-sed -i '/&                           , geo, geod, switch%boris, j, jd, nbdirs)/d' b2mod_driver_diffv.F90
+sed -i '/&                           nbdirs)/d' b2mod_driver_diffv.F90
+sed -i '/&                           stated, geo, geod, switch%boris, j, jd, &/d' b2mod_driver_diffv.F90
 sed -i -e "/B2USR_COST_FUNCTION_DV/a\      END DO" b2mod_driver_diffv.F90
 sed -i -e "/B2USR_COST_FUNCTION_DV/a\      END DO" b2mod_driver_diffv.F90
 sed -i -e "/B2USR_COST_FUNCTION_DV/a\        write(*,*) 'Cost function gradient '//ss//': ',Jd(nd,icf)" b2mod_driver_diffv.F90
@@ -17,7 +18,7 @@ sed -i -e "/B2USR_COST_FUNCTION_DV/a\        write (ss,'(I1)') icf" b2mod_driver
 sed -i -e "/B2USR_COST_FUNCTION_DV/a\      DO nd=1,nbdirs" b2mod_driver_diffv.F90
 sed -i -e "/B2USR_COST_FUNCTION_DV/a\      DO ICF=1, NCF" b2mod_driver_diffv.F90
 sed -i -e "/B2USR_COST_FUNCTION_DV/a\      if (first_time_step) write(*,*) 'nbdirs: ',nbdirs" b2mod_driver_diffv.F90
-sed -i -e "/B2USR_COST_FUNCTION_DV/a\&                           , geo, geod, switch%boris, j, jd, nbdirs)" b2mod_driver_diffv.F90
+sed -i -e "/B2USR_COST_FUNCTION_DV/a\&                           stated, geo, geod, switch%boris, j, jd, nbdirs)" b2mod_driver_diffv.F90
 
 sed -i "/ADCONTEXTTGT/d" b2mn_d.F90 b2stbr_dv.F90 b2mod_user_namelist_diffv.F90
 sed -i "/r8\*nbcd\*2/d" b2mn_d.F90

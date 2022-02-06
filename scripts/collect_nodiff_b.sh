@@ -69,6 +69,7 @@ cp $SOLPSTOP/modules/B2.5/src/differentiation/b2optim_ipopt.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/b2optim_tao.F90 .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/set_parameters.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/set_adj_gradient.F .
+cp $SOLPSTOP/modules/B2.5/src/b2aux/b2xzmf.F .
 
 # and now modify the 'use modules' which have been differentiated
 files=`ls *.F*`
