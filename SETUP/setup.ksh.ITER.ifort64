@@ -77,5 +77,6 @@ export CXX="g++"
 # Other environment variables
 # module load solps-gui
 # export LD_PRELOAD="/usr/lib64/libfontconfig.so.1" # needed by solps-gui
+unset MPLBACKEND
 export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/lib64"
 export SOLPSWORK="/work/projects/solps-iter/${USER}"

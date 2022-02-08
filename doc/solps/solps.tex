@@ -221,6 +221,8 @@ It is best afterwards to position oneself on the {\tt master} branches, which is
 For later updates, it is recommended you use the {\tt solps-iter\_update} script. If you are planning to do code development, your starting point should be the {\tt develop} branches, which you can switch to by using the {\tt solps-iter\_update\_develop} script instead.
 \end{sloppypar}
 
+{\em {\bf \underline{IMPORTANT:}} When updating the code, some routines or other configuration files may have been moved, renamed, added, or deleted, and the updating script itself may have changed. In that case, compilation will likely fail on the first update attempt. The user should then start afresh with a new session, and run the update script a second time. If compilation still fails, then the user should remove old compiled files by means of the appropriate {\tt gmake clean} instruction and attempt another compilation, from scratch.}
+
 Please note that because of the way some of the \SOLPSITER utility scripts function, the path to the \SOLPSITER top directory must not contain any of the strings {\tt .debug}, {\tt .mpi}, {\tt .openmp}, or {\tt .ig}.
 
 Since the user-id is immutably encoded into any changes, it is always a good idea to properly configure a local installation of Git on all the systems on which one plans on making code revisions with, e.g.:
@@ -1642,6 +1644,11 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
 \end{itemize}
 \end{sloppypar}
 
+Note that the Python scripts above may require Python versions of at least 3.7 and the availability of the {\tt netCDF4} Python package. At ITER, because some of the underlying service modules are built with {\tt iimpi}, it is even necessary to launch them as interactive MPI jobs, such as:
+\begin{verbatim}
+mpirun -np 1 tereg.py
+\end{verbatim}
+
 \paragraph{Still need to do :}
 
 The following have not yet been documented --- user contributions are
@@ -1767,7 +1774,7 @@ for itself by climbing up the tree. You can add options to the {\tt b2run} comma
   \item[-n] Will run the {\tt Makefile} in dry-run mode. This is useful to check that all the needed files for the runs are in the right order of precedence. If they are not, the {\tt correct\_baserun\_timestamps} script can be used to re-order the pre-requisite files found in the associated {\tt baserun} directory
   \item[-m $\backslash$"MPI-launcher + options$\backslash$"] Allows to launch {\tt b2XX} in MPI
     mode with the provided options (example: [the syntax is important, both
-      the slashes and the quotes are needed] \verb!b2run -m \"mpiexec -np 2\" b2mn!)
+      the slashes and the quotes are needed] {\tt b2run -m \"mpiexec -np 2\" b2mn})
   \item[-s] Specifies that one wishes to run {\tt B2.5} in standalone mode, i.e. without any coupling to {\tt Eirene}.
   \item[-o "run options"] Allows to launch {\tt b2XX} with additional run options. The options can be grouped together inside quotes or given individually with multiple "-o" instances.
   \item[-t \#] Requests an OpenMP run using \# threads.
@@ -4285,7 +4292,7 @@ We only include here the variables or aspects thereof not already described in t
 
 \subsection{Block 15. Data for interfacing routine GEOUSR}
 
-This input block is used to adjust the edges of the additional walls in the {\tt Eirene} description of the vacuum vessel walls to match exactly the location of the grid corners from the plasma solver in {\tt B2.5}. This block may begin with an optional text line containing either {\tt GENERAL} or {\tt BIASED\_GARCHING}, which changes the format below. The \SOLPSITER default is to not include this text line. With that default, the specified additional surfaces will be adjusted to meet up exactly with the grid corners at the edges of the divertor targets, and there should be one such additional surface specification per grid corner. The corners will be listed in the following order, in reference to the rectangular computational domain: lower left, upper left, lower right, upper right. For double-null configurations, each separate half of the computational domain will be listed in turn, first the four corners of the left half, then the four corners of the right half. An additional surface can only accomodate one such end vertex adjustment, not more. The number of such corner adjustments is provided by {\tt NASMOD}.
+This input block is used to adjust the edges of the additional walls in the {\tt Eirene} description of the vacuum vessel walls to match exactly the location of the grid corners from the plasma solver in {\tt B2.5}. This block may begin with an optional text line containing either {\tt GENERAL} or {\tt BIASED\_GARCHING}, which changes the format below. The \SOLPSITER default is to not include this text line. With that default, the specified additional surfaces will be adjusted to meet up exactly with the grid corners at the edges of the divertor targets, and there should be one such additional surface specification per grid corner. The corners will be listed in the following order, in reference to the rectangular computational domain: lower left, upper left, lower right, upper right. For double-null configurations, each separate half of the computational domain will be listed in turn, first the four corners of the left half, then the four corners of the right half. An additional surface can only accommodate one such end vertex adjustment, not more. The number of such corner adjustments is provided by {\tt NASMOD}.
 
 It is also possible to move the vertices of other additional surfaces with the {\tt NADMOD} block, and to flip cell face normals with the {\tt NORMOD} block, although this is not recommended in standard \SOLPSITER runs.
 
@@ -4788,9 +4795,56 @@ The ``time-dependent'' mode triggers the use of the \SOLPSfivetwo physics model.
 
 When using the traditional solution method, relying on under-relaxation of the equations, the evolution in time of the solution is not a true reflection of the physical evolution of the system, but rather only a numerical approximation, and only the final steady-state solution can be fully trusted. If one is interested in the details of the time evolution of the plasma state, then this new solution method should be considered.
 
-\begin{sloppypar}
-In ``time-dependent'' mode, the under-relaxation factor ({\tt b2mndt\_rxf}) and the timestep modifiers from {\tt b2.numerics.parameters} and other under-relaxation switches should be set in such a way that their product is 1 everywhere (as the variable defaults already provide and the code checks for). This ensures an accurate estimate of the time derivative terms. It is still possible to use the timestep multipliers (for example setting {\tt DTCO = DTMO = DTEE = DTEI = 2}) if the corresponding under-relaxation parameters compensate (in the same example, this would mean {\tt b2mndt\_rxf} set to {\tt 0.5}). Choosing these parameters to be different from 1 can influence the total convergence of the code and the diagnostic output, e.g. particle balance.
-\end{sloppypar}
+More specifically, the way the time derivative terms are discretized is changed between the two code operation modes. For the traditional way of running the code, using the under-relaxation scheme, the time derivative term for the parallel momentum equations, (\ref{eq:mom_new}) or (\ref{eq:mom_old}), is discretized as:
+
+\begin{equation}\label{eq:mom_dt_1}
+m_a h_z \sqrt{g} \frac{n_a^{(k)} V_{\parallel a}^{(k+1)} - n_a^{(k)} V_{\parallel a}^{(k)}}{\tau \delta_{ma} \tau_f}
+\end{equation}
+
+and the time derivative terms for the energy equations, (\ref{eq:ene_new}) and (\ref{eq:eni}), are discretized as:
+
+\begin{equation}\label{eq:en_dt_1}
+\sqrt{g} \frac{3}{2} \frac{n_\alpha^{(k+1)} T_\alpha^{(k+1)} - n_\alpha^{(k)} T_\alpha^{(k)}}{\tau \delta_{e \alpha} \tau_f}
+\end{equation}
+
+where $\alpha$ stands for $e$ or $i$, $\tau$ is the time step size, $\delta_x$ is the time step multiplier for the $x$ equation (i.e. the value of the {\tt DTMO}, {\tt DTEE}, or {\tt DTEI} arrays for that region and species), and $\tau_f$ is an additional optional time step multiplier, governed by the {\tt CORE\_DT\_FACTOR} switch from the {\tt NUMERICS} namelist (see Section \ref{lab:b2:numerics:parameters} and Appendix \ref{lis:b2cdcn} for details).
+
+According to the under-relaxation scheme, the updated values of the parallel velocity and temperatures at time step $k+1$ are given by:
+
+\begin{equation*}
+V_{\parallel a}^{(k+1)} = V_{\parallel a}^{(k)} + r_{xf_{V_{\parallel a}}} \left( \widetilde{V}_{\parallel a}^{(k+1)} - V_{\parallel a}^{(k)} \right)
+\end{equation*}
+\begin{equation*}
+T_\alpha^{(k+1)} = T_\alpha^{(k)} + r_{xf_{T_\alpha}} \left( \widetilde{T}_\alpha^{(k+1)} - T_\alpha^{(k)} \right)
+\end{equation*}
+
+where $r_{xf_{V_{\parallel a}}}$ and $r_{xf_{T_\alpha}}$ are the under-relaxation factors, which are equal to {\tt rxf*xfm1} and {\tt rxf*xfm3} respectively, and the tilde quantities are the actual solutions to the equations. The factors {\tt rxf}, {\tt xfm1}, and {\tt xfm3}, are given by the values of the {\tt b2mndr\_rxf}, {\tt b2news\_xfm1}, and {\tt b2news\_xfm3} switches, respectively.
+
+When applying the ``time-dependent'' mode, the discretization of the time derivative terms becomes, for the parallel momentum equations:
+
+\begin{equation}\label{eq:mom_dt_2}
+m_a h_z \sqrt{g} \frac{ \widetilde{V}_{\parallel a}^{(k+1)} - V_{\parallel a}^{(k)}}{\tau \delta_{ma} \tau_f} n_a^{(k+1)} + m_a h_z \sqrt{g} \frac{n_a^{(k+1)} - n_a^{(k)}}{\tau} V_{\parallel a}^{(k)}
+\end{equation}
+
+and, for the energy equations:
+
+\begin{equation}\label{eq:en_dt_2}
+\sqrt{g} \frac{3}{2} \frac{ \widetilde{T}_\alpha^{(k+1)} - T_\alpha^{(k)}}{\tau \delta_{e \alpha} \tau_f} n_\alpha^{(k+1)} + \sqrt{g} \frac{3}{2} \frac{n_\alpha^{(k+1)} - n_\alpha^{(k)}}{\tau} T_\alpha^{(k)}
+\end{equation}
+
+Note that, since the order of solution of the equations has been changed in the ``time-dependent'' mode, the updated density $n_a^{(k+1)}$ is now available for use in Eq.~(\ref{eq:mom_dt_2}), providing a more accurate evaluation of the parallel momentum time derivative term.
+
+The conditions
+\begin{equation}\label{eq:rxf_mo}
+\delta_{m_a} \tau_f r_{xf_{V_{\parallel a}}} = 1
+\end{equation}
+\begin{equation}\label{eq:rxf_en}
+\delta_{e \alpha} \tau_f r_{xf_{T_\alpha}} = 1
+\end{equation}
+\begin{equation}\label{eq:rxf_na}
+\delta_{n_a} \tau_f r_{xf_{f_{n_a}}} = 1
+\end{equation}
+must be fulfilled for the numerical solution to converge to the exact solution as $\tau \rightarrow 0$. Setting all parameters equal to one could be the best option, if it were not for the process of sequential separate solution of the equations, which can lead to a limitation of the time step $\tau$. To expand the region of convergence of this process, one can try to find parameters in Eqs.~(\ref{eq:rxf_mo})-(\ref{eq:rxf_na}) other than unity.
 
 \section{Averaging scheme}
 \label{sec:B2Eirene:averaging}\index{Averaging}\index{b2faveri}\index{b2favere}\index{b2fstate}\index{b2fstati}
@@ -4805,6 +4859,8 @@ The averaging scheme works in three stages:
   \item{An averaging phase}, turned on by means of the {\tt 'b2mndt\_av'} switch in the {\tt b2mn.dat} input file, usually with a smaller number of {\tt Eirene} trajectories, during which batch averaging will be done to obtain an averaged steady-state solution. This stage can be prepared by means of the {\tt run\_av} script and uses the {\tt input\_avg.eir Eirene} input file prepared by {\tt Uinp} if available. When continuing a run in this phase, the user needs to provide both the instantaneous and averaged solutions from the previous run, i.e. do {\tt mv b2favere b2faveri} in addition to {\tt mv b2fstate b2fstati}.
   \item{A finalization phase} where the averaged steady-state solution is used for a small number of timesteps, and a larger number of {\tt Eirene} trajectories, to reduce statistical noise. This is done by running the {\tt res\_av} script and uses the {\tt input\_fin.eir Eirene} input file prepared by {\tt Uinp} if available.
 \end{enumerate}
+
+It is possible to write the averaged state as part of an IMAS data-entry by means of the {\tt b2mndr\_ids\_av} switch. If non-zero, the value of the switch is the frequency, in number of batch averages, at which time-slices are appended to the IMAS data-entry. The averaged solution is saved as the second occurrence of the {\tt edge\_profiles} and {\tt edge\_sources} IDSs.
 
 \section{b2ye, statistical error assessment}
 \label{sec:b2ye}\index{b2ye}\index{error assessment}\index{b2time.nc}\index{b2favere}\index{b2run}
@@ -15930,11 +15986,11 @@ when calculating derived data.
 \end{center}
 
 Note that the {\bf nreg}, {\bf niso}, {\bf xreg}, and {\bf yreg} commands require an integer
-argument $\langle$ireg$\rangle$. If $\langle$ireg$\rangle$=0, the arrays will contain the region
-number of each cell. If $\langle$ireg$\rangle$ is greater than 0, the cells in region with index $\langle$ireg$\rangle$ will contain 1.0, and the rest will contain zero. If $\langle$ireg$\rangle$ is less than 0, the cells in region with index --$\langle$ireg$\rangle$ will contain zero, and the rest will contain 1.0.
+argument $\langle${\tt ireg}$\rangle$. If $\langle${\tt ireg}$\rangle = 0$, the arrays will contain the region
+number of each cell. If $\langle${\tt ireg}$\rangle$ is greater than {\tt 0}, the cells in region with index $\langle${\tt ireg}$\rangle$ will contain {\tt 1.0}, and the rest will contain zero. If $\langle${\tt ireg}$\rangle$ is less than {\tt 0}, the cells in region with index $-\langle${\tt ireg}$\rangle$ will contain zero, and the rest will contain {\tt 1.0}.
 
 The source arrays {\bf sna}, {\bf smo}, {\bf smq}, {\bf she}, {\bf shi}, and
-{\bf sch} can take an optional integer argument $\langle$isel$\rangle$, varying from 0 to 3 (0 to 1 for {\bf sna}). Then the data
+{\bf sch} can take an optional integer argument $\langle${\tt isel}$\rangle$, varying from {\tt 0} to {\tt 3} ({\tt 0} to {\tt 1} for {\bf sna}). Then the data
 stack contains the linearized source data according to the description found in Appendix \ref{lis:b2cdcv}. In the absence of this integer argument, the data stack will contain the total source terms.
 The same treatment applies to {\bf smaf}, {\bf smag}, and {\bf smav}.
 
@@ -15962,7 +16018,7 @@ The arrays
 {\bf ixlt}, {\bf ixle}, {\bf ixeq}, {\bf ixne}, {\bf ixgt}, {\bf ixge},
 {\bf iylt}, {\bf iyle}, {\bf iyeq}, {\bf iyne}, {\bf iygt}, {\bf iyge},
 {\bf islt}, {\bf isle}, {\bf iseq}, {\bf isne}, {\bf isgt}, and {\bf isge}
-also all require an integer argument $\langle$i$\rangle$,
+also all require an integer argument $\langle${\tt i}$\rangle$,
 with which the logical comparison is done. If the comparison test is true, the arrays
 will contain 1.0, otherwise they will contain zero.
 
@@ -16663,17 +16719,17 @@ at the edge of the computational domain.
 \end{center}
 
 Note that the {\bf nseg} command requires an integer
-argument $\langle$iseg$\rangle$. If $\langle$iseg$\rangle$=0, the arrays will contain the wall segment
-number of each element. If $\langle$iseg$\rangle$ is larger than 0, the elements in segment
-with index $\langle$iseg$\rangle$ will contain 1.0, and the rest will contain zero.
-If $\langle$iseg$\rangle$ is less than 0, the elements in segment
-with index --$\langle$iseg$\rangle$ will contain zero, and the rest will contain 1.0.
+argument $\langle${\tt iseg}$\rangle$. If $\langle${\tt iseg}$\rangle = 0$, the arrays will contain the wall segment
+number of each element. If $\langle${\tt iseg}$\rangle$ is larger than {\tt 0}, the elements in segment
+with index $\langle${\tt iseg}$\rangle$ will contain {\tt 1.0}, and the rest will contain zero.
+If $\langle${\tt iseg}$\rangle$ is less than {\tt 0}, the elements in segment
+with index $-\langle${\tt iseg}$\rangle$ will contain zero, and the rest will contain {\tt 1.0}.
 
 The arrays {\bf iwlt}, {\bf iwle}, {\bf iweq}, {\bf iwne}, {\bf iwge}, {\bf iwgt},
 {\bf iswlt}, {\bf iswle}, {\bf isweq}, {\bf iswne}, {\bf iswge}, and {\bf iswgt}
-all require an integer argument $\langle$i$\rangle$,
+all require an integer argument $\langle${\tt i}$\rangle$,
 with which the logical comparison is done. If the comparison test is true, the arrays
-will contain 1.0, otherwise they will contain zero.
+will contain {\tt 1.0}, otherwise they will contain zero.
 
 In table \ref{tab:wallcommands}, we give the list of commands that
 act on the "wall" stack or affect wall graphs.
@@ -16824,18 +16880,18 @@ temperature (in $K$) upon \btwoplot start-up.
 \end{center}
 
 The arrays {\bf itrglt}, {\bf itrgle}, {\bf itrgeq}, {\bf itrgne}, {\bf itrgge}, {\bf itrggt}, {\bf ztrglt}, {\bf ztrgle}, {\bf ztrgeq}, {\bf ztrgne}, {\bf ztrgge}, and {\bf ztrggt}
-all require an integer argument $\langle$i$\rangle$,
+all require an integer argument $\langle${\tt i}$\rangle$,
 with which the logical comparison is done. If the comparison test is true, the arrays
-will contain 1.0, otherwise they will contain zero.
+will contain {\tt 1.0}, otherwise they will contain zero.
 
-The {\bf trgseg} command requires an integer argument $\langle$iseg$\rangle$.
-If $\langle$iseg$\rangle$=0, the arrays will contain the wall segment
-number of each element. If $\langle$iseg$\rangle$ is larger than 0,
-the elements in segment with index $\langle$iseg$\rangle$
-will contain 1.0, and the rest will contain zero.
-If $\langle$iseg$\rangle$ is less than 0,
-the elements in segment with index --$\langle$iseg$\rangle$
-will contain zero, and the others will contain 1.0.
+The {\bf trgseg} command requires an integer argument $\langle${\tt iseg}$\rangle$.
+If $\langle${\tt iseg}$\rangle = 0$, the arrays will contain the wall segment
+number of each element. If $\langle${\tt iseg}$\rangle$ is larger than {\tt 0},
+the elements in segment with index $\langle${\tt iseg}$\rangle$
+will contain {\tt 1.0}, and the rest will contain zero.
+If $\langle${\tt iseg}$\rangle$ is less than {\tt 0},
+the elements in segment with index $-\langle${\tt iseg}$\rangle$
+will contain zero, and the others will contain {\tt 1.0}.
 
 In table \ref{tab:targetcommands}, we give the list of commands that
 act on the "target" stack or affect target graphs, with their respective
@@ -17002,21 +17058,21 @@ In table \ref{tab:extracommands} some additional commands are given.
   \end{longtable}
 \end{center}
 
-The {\bf coro} command, with integer argument $\langle$is$\rangle$ and real argument $\langle$T$\rangle$
+The {\bf coro} command, with integer argument $\langle${\tt is}$\rangle$ and real argument $\langle${\tt T}$\rangle$
 prints to {\tt stdout} the coronal radiation
-rates for the isonuclear sequence of species $\langle$is$\rangle$ at temperature $\langle$T$\rangle$ (in $eV$).
+rates for the isonuclear sequence of species $\langle${\tt is}$\rangle$ at temperature $\langle${\tt T}$\rangle$ (in $eV$).
 
-The {\bf debu} command, with integer argument $\langle$level$\rangle$,
-sets up the level of debugging information to $\langle$level$\rangle$ (default 0).
-The higher the value of $\langle$level$\rangle$, the more output is produced.
+The {\bf debu} command, with integer argument $\langle${\tt level}$\rangle$,
+sets up the level of debugging information to $\langle${\tt level}$\rangle$ (default {\tt 0}).
+The higher the value of $\langle${\tt level}$\rangle$, the more output is produced.
 {\bf debug} is an alias for {\bf debu}.
 
-The {\bf wlld} command requires an integer argument $\langle$ig$\rangle$. Let
-$\langle$ig$\rangle$ = JKLM. If M \textgreater 0, then the file {\tt radsrc.b2e} is produced,
-containing the radiation sources (in $MW/m^3$). If L \textgreater 0, then the
-file {\em wlld.dat} is produced, which contains the power loading
+The {\bf wlld} command requires an integer argument $\langle${\tt ig}$\rangle$. Let
+$\langle${\tt ig}$\rangle${\tt = JKLM}. If {\tt M} \textgreater {\tt 0}, then the file {\tt radsrc.b2e} is produced,
+containing the radiation sources (in $MW/m^3$). If {\tt L} \textgreater {\tt 0}, then the
+file {\tt wlld.dat} is produced, which contains the power loading
 from the plasma onto the Eirene walls (including
-splitting of the targets by the grid). If K \textgreater 0, then a
+splitting of the targets by the grid). If {\tt K} \textgreater {\tt 0}, then a
 set of files is produced containing the power loading on the targets,
 provided the necessary preparatory data exists in the DG model. These files
 are:\index{wall power loading}
@@ -17105,14 +17161,14 @@ number of graphs per page). The use of {\bf surf} (see \ref{sec:surf}) is prefer
 over that of {\bf cont}.
 
 \subsubsection{$<$pos,{\bf I}$>$ f.x}\index{b2plot, f.x}\label{sec:f.x}
-Plots the 2-D graph of the matrix data at $iy$ = $\langle$pos$\rangle$ versus $x$.
+Plots the 2-D graph of the matrix data at $iy = \langle${\tt pos}$\rangle$ versus $x$.
 Vertical lines will be added to the plot to delimit any
 eventual unconnected domain boundaries. Use of {\bf xpol} (default, see \ref{sec:xpol})
 or {\bf xpar} (see \ref{sec:xpar}) commands allows one to toggle between plotting
 against poloidal or parallel distance along the field line.
 
 \subsubsection{$<$pos,{\bf I}$>$ f.y}\index{b2plot, f.y}\label{sec:f.y}
-Plots the 2-D graph of the matrix data at $ix$ = $\langle$pos$\rangle$ versus $y$.
+Plots the 2-D graph of the matrix data at $ix = \langle${\tt pos}$\rangle$ versus $y$.
 Use of the {\bf mmid} (see \ref{sec:mmid}), {\bf fpsi} (see \ref{sec:fpsi}),
 {\bf mpsi} (see \ref{sec:mpsi}) or {\bf rpsi} (see \ref{sec:rpsi})
 commands allows for plotting versus the outer midplane (or another position
@@ -17120,12 +17176,12 @@ chosen by the user) radial coordinate, full poloidal magnetic flux,
 normalized flux, or $\rho_{pol}$, respectively.
 
 \subsubsection{$<$n1,{\bf I}$>$ f.lx}\index{b2plot, f.lx}\label{sec:f.lx}
-Plots the 2-D graph of the matrix data at $iy$ = $\langle$pos$\rangle$ versus $\log(x)$.
+Plots the 2-D graph of the matrix data at $iy = \langle${\tt pos}$\rangle$ versus $\log(x)$.
 Equivalent to a combination of {\bf logx} (see \ref{sec:logx}) and {\bf f.x} above,
 but remembers ths old setting of linear or logarithmic abscissa scale.
 
 \subsubsection{$<$n1,{\bf I}$>$ f.ly}\index{b2plot, f.ly}\label{sec:f.ly}
-Plots the 2-D graph of the matrix data at $ix$ = $\langle$pos$\rangle$ versus $\log(y)$.
+Plots the 2-D graph of the matrix data at $ix = \langle${\tt pos}$\rangle$ versus $\log(y)$.
 Equivalent to a combination of {\bf logx} (see \ref{sec:logx}) and {\bf f.y} above,
 but remembers ths old setting of linear or logarithmic abscissa scale.
 
@@ -17135,16 +17191,16 @@ This creates 2-D plots, with vertical lines separating
 the various wall segments.
 
 \subsubsection{$<$pos,{\bf I}$>$ trg.w}\index{b2plot, trg.w}\label{sec:trg.w}
-Plots the 2-D graph of target data at $iz$ = $\langle$pos$\rangle$ versus wall coordinate.
+Plots the 2-D graph of target data at $iz = \langle${\tt pos}$\rangle$ versus wall coordinate.
 Vertical lines will be added to the plot to delimit
 the various wall segments.
 
 \subsubsection{$<$pos,{\bf I}$>$ trg.z}\index{b2plot, trg.z}\label{sec:trg.z}
-Plots the 2-D graph of target data at element $i$ = $\langle$pos$\rangle$ versus $z$.
+Plots the 2-D graph of target data at element $i = \langle${\tt pos}$\rangle$ versus $z$.
 
 \subsubsection{$<$n1,{\bf I}$>$ line}\index{b2plot, line}\label{sec:line}
-Chooses between plotting against $x$-coordinate (default, $\langle$n1$\rangle$=1)
-or $y$-coordinate ($\langle$n1$\rangle$=2). Not sure this works.
+Chooses between plotting against $x$-coordinate (default, $\langle${\tt n1}$\rangle = 1$)
+or $y$-coordinate ($\langle${\tt n1}$\rangle = 2$). Not sure this works.
 
 \subsubsection{mesh}\index{b2plot, mesh}\label{sec:mesh}
 Plots the mesh. The colour of the mesh can be chosen
@@ -17380,57 +17436,57 @@ Sums the matrix data over the entire $x$-direction, and then copies the sum to a
 Sums the matrix data over the entire $y$-direction, and then copies the sum to all $y$-positions.
 
 \subsubsection{$<$is\textsubscript{start},{\bf I}$>$ $<$is\textsubscript{end},{\bf I}$>$ sumz}\index{b2plot, sumz}\label{sec:sumz}
-Sums the matrix data over the $z$-direction from $\langle$is\textsubscript{start}$\rangle$ to $\langle$is\textsubscript{end}$\rangle$, and then copies the
-sum to the first $z$ position. If $\langle$is\textsubscript{start}$\rangle$=$\langle$is\textsubscript{end}$\rangle$=0, then the sum is done over all species.
+Sums the matrix data over the $z$-direction from $\langle${\tt is\textsubscript{start}}$\rangle$ to $\langle${\tt is\textsubscript{end}}$\rangle$, and then copies the
+sum to the first $z$ position. If $\langle${\tt is\textsubscript{start}}$\rangle = \langle${\tt is\textsubscript{end}}$\rangle = 0$, then the sum is done over all species.
 
 \subsubsection{$<$is\textsubscript{start},{\bf I}$>$ $<$is\textsubscript{end},{\bf I}$>$ esumz}\index{b2plot, esumz}\label{sec:esumz}
-Sums the Eirene data over the $z$-direction from $\langle$is\textsubscript{start}$\rangle$ to $\langle$is\textsubscript{end}$\rangle$, and then copies the
-sum to the first $z$ position. If $\langle$is\textsubscript{start}$\rangle$=$\langle$is\textsubscript{end}$\rangle$=0, then the sum is done over all species.
+Sums the Eirene data over the $z$-direction from $\langle${\tt is\textsubscript{start}}$\rangle$ to $\langle${\tt is\textsubscript{end}}$\rangle$, and then copies the
+sum to the first $z$ position. If $\langle${\tt is\textsubscript{start}}$\rangle = \langle${\tt is\textsubscript{end}}$\rangle = 0$, then the sum is done over all species.
 
 \subsubsection{$<$is\textsubscript{start},{\bf I}$>$ $<$is\textsubscript{end},{\bf I}$>$ wsumz}\index{b2plot, wsumz}\label{sec:wsumz}
-Sums the wall data over the $z$-direction from $\langle$is\textsubscript{start}$\rangle$ to $\langle$is\textsubscript{end}$\rangle$, and then copies the
-sum to the first $z$ position. If $\langle$is\textsubscript{start}$\rangle$=$\langle$is\textsubscript{end}$\rangle$=0, then the sum is done over all species.
+Sums the wall data over the $z$-direction from $\langle${\tt is\textsubscript{start}}$\rangle$ to $\langle${\tt is\textsubscript{end}}$\rangle$, and then copies the
+sum to the first $z$ position. If $\langle${\tt is\textsubscript{start}}$\rangle = \langle${\tt is\textsubscript{end}}$\rangle = 0$, then the sum is done over all species.
 
 \subsubsection{$<$is\textsubscript{start},{\bf I}$>$ $<$is\textsubscript{end},{\bf I}$>$ zrng}\index{b2plot, zrng}\label{sec:zrng}
-Selects the subset over species extended from species index $\langle$is\textsubscript{start}$\rangle$ to
-species index $\langle$is\textsubscript{end}$\rangle$ from the matrix data.
+Selects the subset over species extended from species index $\langle${\tt is\textsubscript{start}}$\rangle$ to
+species index $\langle${\tt is\textsubscript{end}}$\rangle$ from the matrix data.
 
 \subsubsection{$<$is\textsubscript{start},{\bf I}$>$ $<$is\textsubscript{end},{\bf I}$>$ ezrng}\index{b2plot, ezrng}\label{sec:ezrng}
-Selects the subset over species extended from species index $\langle$is\textsubscript{start}$\rangle$ to
-species index $\langle$is\textsubscript{end}$\rangle$ from the Eirene data.
+Selects the subset over species extended from species index $\langle${\tt is\textsubscript{start}}$\rangle$ to
+species index $\langle${\tt is\textsubscript{end}}$\rangle$ from the Eirene data.
 
 \subsubsection{$<$is\textsubscript{start},{\bf I}$>$ $<$is\textsubscript{end},{\bf I}$>$ wzrng}\index{b2plot, wzrng}\label{sec:wzrng}
-Selects the subset over species extended from species index $\langle$is\textsubscript{start}$\rangle$ to
-species index $\langle$is\textsubscript{end}$\rangle$ from the wall data.
+Selects the subset over species extended from species index $\langle${\tt is\textsubscript{start}}$\rangle$ to
+species index $\langle${\tt is\textsubscript{end}}$\rangle$ from the wall data.
 
 \subsubsection{$<$i,{\bf I}$>$ esel}\index{b2plot, esel}\label{sec:esel}
-Propagates the Eirene data value from element $\langle$i$\rangle$ to all other elements.
+Propagates the Eirene data value from element $\langle${\tt i}$\rangle$ to all other elements.
 
 \subsubsection{$<$i,{\bf I}$>$ wsel}\index{b2plot, wsel}\label{sec:wsel}
-Propagates the wall data value from element $\langle$i$\rangle$ to all other elements.
+Propagates the wall data value from element $\langle${\tt i}$\rangle$ to all other elements.
 
 \subsubsection{$<$ix,{\bf I}$>$ xsel}\index{b2plot, xsel}\label{sec:xsel}
-Propagates the matrix data value in the specified position $\langle$ix$\rangle$ to all other $x$ values.
+Propagates the matrix data value in the specified position $\langle${\tt ix}$\rangle$ to all other $x$ values.
 
 \subsubsection{$<$iy,{\bf I}$>$ ysel}\index{b2plot, ysel}\label{sec:ysel}
-Propagates the matrix data value in the specified position $\langle$iy$\rangle$ to all other $y$ values.
+Propagates the matrix data value in the specified position $\langle${\tt iy}$\rangle$ to all other $y$ values.
 
 \subsubsection{$<$is,{\bf I}$>$ zsel}\index{b2plot, zsel}\label{sec:zsel}
-Propagates the matrix data value in the specified position $\langle$is$\rangle$ to all other $z$
+Propagates the matrix data value in the specified position $\langle${\tt is}$\rangle$ to all other $z$
 (species) values.
 
 \subsubsection{$<$i,{\bf I}$>$ trgwsel}\index{b2plot, trgwsel}\label{sec:trgwsel}
-Propagates the target data value from the specified element $\langle$i$\rangle$ to all other elements.
+Propagates the target data value from the specified element $\langle${\tt i}$\rangle$ to all other elements.
 
 \subsubsection{$<$is,{\bf I}$>$ ezsel}\index{b2plot, ezsel}\label{sec:ezsel}
-Propagates the Eirene data value in the specified position $\langle$is$\rangle$ to all other $z$
+Propagates the Eirene data value in the specified position $\langle${\tt is}$\rangle$ to all other $z$
 (species) values.
 
 \subsubsection{$<$iz,{\bf I}$>$ trgzsel}\index{b2plot, trgzsel}\label{sec:trgzsel}
-Propagates the target data value at the specified depth $\langle$iz$\rangle$ to all other $z$ values.
+Propagates the target data value at the specified depth $\langle${\tt iz}$\rangle$ to all other $z$ values.
 
 \subsubsection{$<$is,{\bf I}$>$ wzsel}\index{b2plot, wzsel}\label{sec:wzsel}
-Propagates the wall data value in the specified position $\langle$is$\rangle$ to all other $z$
+Propagates the wall data value in the specified position $\langle${\tt is}$\rangle$ to all other $z$
 (species) values.
 
 \subsubsection{rigz}\index{b2plot, rigz}\label{sec:rigz}
@@ -17530,205 +17586,205 @@ Minimum of two top arrays on the Eirene stack.
 Minimum of two top arrays on the Eirene stack.
 
 \subsubsection{$<$r1,{\bf R}$>$ $<$r2,{\bf R}$>$ r+}\index{b2plot, r+}\label{sec:r+}
-Adds the two real values $\langle$r1$\rangle$ and $\langle$r2$\rangle$ on the top of the real stack.
+Adds the two real values $\langle${\tt r1}$\rangle$ and $\langle${\tt r2}$\rangle$ on the top of the real stack.
 
 \subsubsection{$<$r1,{\bf R}$>$ $<$r2,{\bf R}$>$ r-}\index{b2plot, r-}\label{sec:r-}
-Subtracts the real value on the top of the real stack $\langle$r2$\rangle$ from the real value
-second from the top $\langle$r1$\rangle$.
+Subtracts the real value on the top of the real stack $\langle${\tt r2}$\rangle$ from the real value
+second from the top $\langle${\tt r1}$\rangle$.
 
 \subsubsection{$<$r1,{\bf R}$>$ $<$r2,{\bf R}$>$ r*}\index{b2plot, r*}\label{sec:r*}
-Multiplies the two real values $\langle$r1$\rangle$ and $\langle$r2$\rangle$ on the top of the real stack.
+Multiplies the two real values $\langle${\tt r1}$\rangle$ and $\langle${\tt r2}$\rangle$ on the top of the real stack.
 
 \subsubsection{$<$r1,{\bf R}$>$ $<$r2,{\bf R}$>$ r/}\index{b2plot, r/}\label{sec:r/}
-Divides the real value second from the top of the real stack $\langle$r1$\rangle$ by the real value on the top of the real stack $\langle$r2$\rangle$. Division by 0 will yield an error and do nothing.
+Divides the real value second from the top of the real stack $\langle${\tt r1}$\rangle$ by the real value on the top of the real stack $\langle${\tt r2}$\rangle$. Division by 0 will yield an error and do nothing.
 
 \subsubsection{$<$r1,{\bf R}$>$ $<$r2,{\bf R}$>$ r**}\index{b2plot, r**}\label{sec:r**}
-Raises the real value second from the top of the real stack $\langle$r1$\rangle$ to the power of
-the real value on the top $\langle$r2$\rangle$. $0^0$ will yield an error and do nothing.
+Raises the real value second from the top of the real stack $\langle${\tt r1}$\rangle$ to the power of
+the real value on the top $\langle${\tt r2}$\rangle$. $0^0$ will yield an error and do nothing.
 
 \subsubsection{$<$number,{\bf R}$>$ rm+}\index{b2plot, rm+}\label{sec:rm+}
-Adds $\langle$number$\rangle$ to the array on the top of the matrix stack.
+Adds $\langle${\tt number}$\rangle$ to the array on the top of the matrix stack.
 
 \subsubsection{$<$number,{\bf R}$>$ rm-}\index{b2plot, rm-}\label{sec:rm-}
-Substracts $\langle$number$\rangle$ from the array on the top of the matrix stack.
+Substracts $\langle${\tt number}$\rangle$ from the array on the top of the matrix stack.
 
 \subsubsection{$<$number,{\bf R}$>$ rm*}\index{b2plot, rm*}\label{sec:rm*}
-Multiplies the array on the top of the matrix stack by $\langle$number$\rangle$.
+Multiplies the array on the top of the matrix stack by $\langle${\tt number}$\rangle$.
 
 \subsubsection{$<$number,{\bf R}$>$ rm/}\index{b2plot, rm/}\label{sec:rm/}
-Divides the array on the top of the matrix stack by $\langle$number$\rangle$. Division by
+Divides the array on the top of the matrix stack by $\langle${\tt number}$\rangle$. Division by
 zero will yield an error and do nothing.
 
 \subsubsection{$<$number,{\bf R}$>$ rm**}\index{b2plot, rm**}\label{sec:rm**}
-Raises each element of the array on the top of the matrix stack to the $\langle$number$\rangle$-th power. If $\langle$number$\rangle$=0, the result will be 1.0 for all cells.
+Raises each element of the array on the top of the matrix stack to the $\langle${\tt number}$\rangle$-th power. If $\langle${\tt number}$\rangle = 0$, the result will be {\tt 1.0} for all cells.
 
 \subsubsection{$<$number,{\bf R}$>$ rmmi}\index{b2plot, rmmi}\label{sec:rmmi}
-Minimum of a matrix and $\langle$number$\rangle$.
+Minimum of a matrix and $\langle${\tt number}$\rangle$.
 
 \subsubsection{$<$number,{\bf R}$>$ rmma}\index{b2plot, rmma}\label{sec:rmma}
-Maximum of a matrix and $\langle$number$\rangle$.
+Maximum of a matrix and $\langle${\tt number}$\rangle$.
 
 \subsubsection{$<$number,{\bf R}$>$ rem+}\index{b2plot, rem+}\label{sec:rem+}
-Adds $\langle$number$\rangle$ to the array on the top of the Eirene stack.
+Adds $\langle${\tt number}$\rangle$ to the array on the top of the Eirene stack.
 
 \subsubsection{$<$number,{\bf R}$>$ rem-}\index{b2plot, rem-}\label{sec:rem-}
-Substracts $\langle$number$\rangle$ from the array on the top of the Eirene stack.
+Substracts $\langle${\tt number}$\rangle$ from the array on the top of the Eirene stack.
 
 \subsubsection{$<$number,{\bf R}$>$ rem*}\index{b2plot, rem*}\label{sec:rem*}
-Multiplies the array on the top of the Eirene stack by $\langle$number$\rangle$.
+Multiplies the array on the top of the Eirene stack by $\langle${\tt number}$\rangle$.
 
 \subsubsection{$<$number,{\bf R}$>$ rem/}\index{b2plot, rem/}\label{sec:rem/}
-Divides the array on the top of the Eirene stack by $\langle$number$\rangle$. Division by
+Divides the array on the top of the Eirene stack by $\langle${\tt number}$\rangle$. Division by
 zero will yield an error and do nothing.
 
 \subsubsection{$<$number,{\bf R}$>$ rem**}\index{b2plot, rem**}\label{sec:rem**}
-Raises each element of the array on the top of the Eirene stack to the $\langle$number$\rangle$-th power. If $\langle$number$\rangle$=0, the result will be 1.0 for all cells.
+Raises each element of the array on the top of the Eirene stack to the $\langle${\tt number}$\rangle$-th power. If $\langle${\tt number}$\rangle = 0$, the result will be {\tt 1.0} for all cells.
 
 \subsubsection{$<$number,{\bf R}$>$ remmi}\index{b2plot, remmi}\label{sec:remmi}
-Minimum of an Eirene array and $\langle$number$\rangle$.
+Minimum of an Eirene array and $\langle${\tt number}$\rangle$.
 
 \subsubsection{$<$number,{\bf R}$>$ remma}\index{b2plot, remma}\label{sec:remma}
-Maximum of an Eirene array and $\langle$number$\rangle$.
+Maximum of an Eirene array and $\langle${\tt number}$\rangle$.
 
 \subsubsection{$<$number,{\bf R}$>$ rtrgm+}\index{b2plot, rtrgm+}\label{sec:rtrgm+}
-Adds $\langle$number$\rangle$ to the array on the top of the target stack.
+Adds $\langle${\tt number}$\rangle$ to the array on the top of the target stack.
 
 \subsubsection{$<$number,{\bf R}$>$ rtrgm-}\index{b2plot, rtrgm-}\label{sec:rtrgm-}
-Substracts $\langle$number$\rangle$ from the array on the top of the target stack.
+Substracts $\langle${\tt number}$\rangle$ from the array on the top of the target stack.
 
 \subsubsection{$<$number,{\bf R}$>$ rtrgm*}\index{b2plot, rtrgm*}\label{sec:rtrgm*}
-Multiplies the array on the top of the target stack by $\langle$number$\rangle$.
+Multiplies the array on the top of the target stack by $\langle${\tt number}$\rangle$.
 
 \subsubsection{$<$number,{\bf R}$>$ rtrgm/}\index{b2plot, rtrgm/}\label{sec:rtrgm/}
-Divides the array on the top of the target stack by $\langle$number$\rangle$. Division by
+Divides the array on the top of the target stack by $\langle${\tt number}$\rangle$. Division by
 zero will yield an error and do nothing.
 
 \subsubsection{$<$number,{\bf R}$>$ rtrgm**}\index{b2plot, rtrgm**}\label{sec:rtrgm**}
-Raises each element of the array on the top of the target stack to the $\langle$number$\rangle$-th power. If $\langle$number$\rangle$=0, the result will be 1.0 for all elements.
+Raises each element of the array on the top of the target stack to the $\langle${\tt number}$\rangle$-th power. If $\langle${\tt number}$\rangle = 0$, the result will be {\tt 1.0} for all elements.
 
 \subsubsection{$<$number,{\bf R}$>$ rtrgmmi}\index{b2plot, rtrgmmi}\label{sec:rtrgmmi}
-Minimum of target data and $\langle$number$\rangle$.
+Minimum of target data and $\langle${\tt number}$\rangle$.
 
 \subsubsection{$<$number,{\bf R}$>$ rtrgmma}\index{b2plot, rtrgmma}\label{sec:rtrgmma}
-Maximum of target data and $\langle$number$\rangle$.
+Maximum of target data and $\langle${\tt number}$\rangle$.
 
 \subsubsection{$<$number,{\bf R}$>$ rwm+}\index{b2plot, rwm+}\label{sec:rwm+}
-Adds $\langle$number$\rangle$ to the array on the top of the wall stack.
+Adds $\langle${\tt number}$\rangle$ to the array on the top of the wall stack.
 
 \subsubsection{$<$number,{\bf R}$>$ rwm-}\index{b2plot, rwm-}\label{sec:rwm-}
-Substracts $\langle$number$\rangle$ from the array on the top of the wall stack.
+Substracts $\langle${\tt number}$\rangle$ from the array on the top of the wall stack.
 
 \subsubsection{$<$number,{\bf R}$>$ rwm*}\index{b2plot, rwm*}\label{sec:rwm*}
-Multiplies the array on the top of the wall stack by $\langle$number$\rangle$.
+Multiplies the array on the top of the wall stack by $\langle${\tt number}$\rangle$.
 
 \subsubsection{$<$number,{\bf R}$>$ rwm/}\index{b2plot, rwm/}\label{sec:rwm/}
-Divides the array on the top of the wall stack by $\langle$number$\rangle$. Division by
+Divides the array on the top of the wall stack by $\langle${\tt number}$\rangle$. Division by
 zero will yield an error and do nothing.
 
 \subsubsection{$<$number,{\bf R}$>$ rwm**}\index{b2plot, rwm**}\label{sec:rwm**}
-Raises each element of the array on the top of the wall stack to the $\langle$number$\rangle$-th power. If $\langle$number$\rangle$=0.0, the result will be 1.0 for all elements.
+Raises each element of the array on the top of the wall stack to the $\langle${\tt number}$\rangle$-th power. If $\langle${\tt number}$\rangle = 0.0$, the result will be {\tt 1.0} for all elements.
 
 \subsubsection{$<$number,{\bf R}$>$ rwmmi}\index{b2plot, rwmmi}\label{sec:rwmmi}
-Minimum of wall data and $\langle$number$\rangle$.
+Minimum of wall data and $\langle${\tt number}$\rangle$.
 
 \subsubsection{$<$number,{\bf R}$>$ rwmma}\index{b2plot, rwmma}\label{sec:rwmma}
-Maximum of wall data and $\langle$number$\rangle$.
+Maximum of wall data and $\langle${\tt number}$\rangle$.
 
 \subsubsection{$<$number,{\bf R}$>$ meq}\index{b2plot, meq}\label{sec:meq}
-If a matrix element is equal to $\langle$number$\rangle$, sets this matrix element to 1.0.
+If a matrix element is equal to $\langle${\tt number}$\rangle$, sets this matrix element to {\tt 1.0}.
 Otherwise, sets it to zero.
 
 \subsubsection{$<$number,{\bf R}$>$ mne}\index{b2plot, mne}\label{sec:mne}
-If a matrix element is not equal to $\langle$number$\rangle$, sets this matrix element to 1.0.
+If a matrix element is not equal to $\langle${\tt number}$\rangle$, sets this matrix element to {\tt 1.0}.
 Otherwise, sets it to zero.
 
 \subsubsection{$<$number,{\bf R}$>$ mge}\index{b2plot, mge}\label{sec:mge}
-If a matrix element is greater than or equal to $\langle$number$\rangle$, sets this matrix element to 1.0.
+If a matrix element is greater than or equal to $\langle${\tt number}$\rangle$, sets this matrix element to {\tt 1.0}.
 Otherwise, sets it to zero.
 
 \subsubsection{$<$number,{\bf R}$>$ mgt}\index{b2plot, mgt}\label{sec:mgt}
-If a matrix element is greater than $\langle$number$\rangle$, sets this matrix element to 1.0.
+If a matrix element is greater than $\langle${\tt number}$\rangle$, sets this matrix element to {\tt 1.0}.
 Otherwise, sets it to zero.
 
 \subsubsection{$<$number,{\bf R}$>$ mle}\index{b2plot, mle}\label{sec:mle}
-If a matrix element is less than or equal to $\langle$number$\rangle$, sets this matrix element to 1.0.
+If a matrix element is less than or equal to $\langle${\tt number}$\rangle$, sets this matrix element to {\tt 1.0}.
 Otherwise, sets it to zero.
 
 \subsubsection{$<$number,{\bf R}$>$ mlt}\index{b2plot, mlt}\label{sec:mlt}
-If a matrix element is less than $\langle$number$\rangle$, sets this matrix element to 1.0.
+If a matrix element is less than $\langle${\tt number}$\rangle$, sets this matrix element to {\tt 1.0}.
 Otherwise, sets it to zero.
 
 \subsubsection{pos}\index{b2plot, pos}\label{sec:pos}
-If a matrix element is positive, sets this matrix element to 1.0.
+If a matrix element is positive, sets this matrix element to {\tt 1.0}.
 Otherwise, sets it to zero.
 
 \subsubsection{$<$number,{\bf R}$>$ emeq}\index{b2plot, emeq}\label{sec:emeq}
-If an Eirene array element is equal to $\langle$number$\rangle$, sets this element to 1.0.
+If an Eirene array element is equal to $\langle${\tt number}$\rangle$, sets this element to {\tt 1.0}.
 Otherwise, sets it to zero.
 
 \subsubsection{$<$number,{\bf R}$>$ emne}\index{b2plot, emne}\label{sec:emne}
-If an Eirene array element is not equal to $\langle$number$\rangle$, sets this element to 1.0.
+If an Eirene array element is not equal to $\langle${\tt number}$\rangle$, sets this element to {\tt 1.0}.
 Otherwise, sets it to zero.
 
 \subsubsection{$<$number,{\bf R}$>$ emge}\index{b2plot, emge}\label{sec:emge}
-If an Eirene array element is greater than or equal to $\langle$number$\rangle$, sets this element to 1.0.
+If an Eirene array element is greater than or equal to $\langle${\tt number}$\rangle$, sets this element to {\tt 1.0}.
 Otherwise, sets it to zero.
 
 \subsubsection{$<$number,{\bf R}$>$ emgt}\index{b2plot, emgt}\label{sec:emgt}
-If an Eirene array element is greater than $\langle$number$\rangle$, sets this element to 1.0.
+If an Eirene array element is greater than $\langle${\tt number}$\rangle$, sets this element to {\tt 1.0}.
 Otherwise, sets it to zero.
 
 \subsubsection{$<$number,{\bf R}$>$ emle}\index{b2plot, emle}\label{sec:emle}
-If an Eirene array element is less than or equal to $\langle$number$\rangle$, sets this element to 1.0.
+If an Eirene array element is less than or equal to $\langle${\tt number}$\rangle$, sets this element to {\tt 1.0}.
 Otherwise, sets it to zero.
 
 \subsubsection{$<$number,{\bf R}$>$ emlt}\index{b2plot, emlt}\label{sec:emlt}
-If an Eirene array element is less than $\langle$number$\rangle$, sets this element to 1.0.
+If an Eirene array element is less than $\langle${\tt number}$\rangle$, sets this element to {\tt 1.0}.
 Otherwise, sets it to zero.
 
 \subsubsection{epos}\index{b2plot, epos}\label{sec:epos}
-If an Eirene array element is positive, sets this element to 1.0.
+If an Eirene array element is positive, sets this element to {\tt 1.0}.
 Otherwise, sets it to zero.
 
 \subsubsection{$<$i1,{\bf I}$>$ $<$i2,{\bf I}$>$ i+}\index{b2plot, i+}\label{sec:i+}
-Adds the two integer values $\langle$i1$\rangle$ and $\langle$i2$\rangle$ on the top of the integer stack.
+Adds the two integer values $\langle${\tt i1}$\rangle$ and $\langle${\tt i2}$\rangle$ on the top of the integer stack.
 
 \subsubsection{$<$i1,{\bf I}$>$ $<$i2,{\bf I}$>$ i-}\index{b2plot, i-}\label{sec:i-}
-Subtracts the integer value on the top of the integer stack $\langle$i2$\rangle$ from the integer value
-second from the top $\langle$i1$\rangle$.
+Subtracts the integer value on the top of the integer stack $\langle${\tt i2}$\rangle$ from the integer value
+second from the top $\langle${\tt i1}$\rangle$.
 
 \subsubsection{$<$i1,{\bf I}$>$ $<$i2,{\bf I}$>$ i*}\index{b2plot, i*}\label{sec:i*}
-Multiplies the two integer values $\langle$i1$\rangle$ and $\langle$i2$\rangle$ on the top of the integer stack.
+Multiplies the two integer values $\langle${\tt i1}$\rangle$ and $\langle${\tt i2}$\rangle$ on the top of the integer stack.
 
 \subsubsection{$<$i1,{\bf I}$>$ $<$i2,{\bf I}$>$ i/}\index{b2plot, i/}\label{sec:i/}
-Divides the integer value second from the top of the integer stack $\langle$i1$\rangle$ by the integer value on top of the integer stack $\langle$i2$\rangle$. This is integer division! Division by 0 will yield an error and do nothing.
+Divides the integer value second from the top of the integer stack $\langle${\tt i1}$\rangle$ by the integer value on top of the integer stack $\langle${\tt i2}$\rangle$. This is integer division! Division by {\tt 0} will yield an error and do nothing.
 
 \subsubsection{$<$i1,{\bf I}$>$ $<$i2,{\bf I}$>$ i**}\index{b2plot, i**}\label{sec:i**}
-Raises the integer value second from the top of the integer stack $\langle$i1$\rangle$ to the power of
-the integer value on the top $\langle$i2$\rangle$. $0^0$ will yield an error and do nothing.
+Raises the integer value second from the top of the integer stack $\langle${\tt i1}$\rangle$ to the power of
+the integer value on the top $\langle${\tt i2}$\rangle$. $0^0$ will yield an error and do nothing.
 
 \subsubsection{$<$number,{\bf R}$>$ trgeq}\index{b2plot, trgeq}\label{sec:trgeq}
-If a target element is equal to $\langle$number$\rangle$, sets this target element to 1.0.
+If a target element is equal to $\langle${\tt number}$\rangle$, sets this target element to {\tt 1.0}.
 Otherwise, sets it to zero.
 
 \subsubsection{$<$number,{\bf R}$>$ trgne}\index{b2plot, trgne}\label{sec:trgne}
-If a target element is not equal to $\langle$number$\rangle$, sets this target element to 1.0.
+If a target element is not equal to $\langle${\tt number}$\rangle$, sets this target element to {\tt 1.0}.
 Otherwise, sets it to zero.
 
 \subsubsection{$<$number,{\bf R}$>$ trgge}\index{b2plot, trgge}\label{sec:trgge}
-If a target element is greater than or equal to $\langle$number$\rangle$, sets this target element to 1.0.
+If a target element is greater than or equal to $\langle${\tt number}$\rangle$, sets this target element to {\tt 1.0}.
 Otherwise, sets it to zero.
 
 \subsubsection{$<$number,{\bf R}$>$ trggt}\index{b2plot, trggt}\label{sec:trggt}
-If a target element is greater than $\langle$number$\rangle$, sets this target element to 1.0.
+If a target element is greater than $\langle${\tt number}$\rangle$, sets this target element to {\tt 1.0}.
 Otherwise, sets it to zero.
 
 \subsubsection{$<$number,{\bf R}$>$ trgle}\index{b2plot, trgle}\label{sec:trgle}
-If a target element is less than or equal to $\langle$number$\rangle$, sets this target element to 1.0.
+If a target element is less than or equal to $\langle${\tt number}$\rangle$, sets this target element to {\tt 1.0}.
 Otherwise, sets it to zero.
 
 \subsubsection{$<$number,{\bf R}$>$ trglt}\index{b2plot, trglt}\label{sec:trglt}
-If a target element is less than $\langle$number$\rangle$, sets this target element to 1.0.
+If a target element is less than $\langle${\tt number}$\rangle$, sets this target element to {\tt 1.0}.
 Otherwise, sets it to zero.
 
 \subsubsection{trgmmin}\index{b2plot, trgmmin}\label{sec:trgmmin}
@@ -17776,31 +17832,31 @@ Minimum of two top data sets on the wall stack.
 Minimum of two top data sets on the wall stack.
 
 \subsubsection{$<$number,{\bf R}$>$ wmeq}\index{b2plot, wmeq}\label{sec:wmeq}
-If a wall element is equal to $\langle$number$\rangle$, sets this wall element to 1.0.
+If a wall element is equal to $\langle${\tt number}$\rangle$, sets this wall element to {\tt 1.0}.
 Otherwise, sets it to zero.
 
 \subsubsection{$<$number,{\bf R}$>$ wmne}\index{b2plot, wmne}\label{sec:wmne}
-If a wall element is not equal to $\langle$number$\rangle$, sets this wall element to 1.0.
+If a wall element is not equal to $\langle${\tt number}$\rangle$, sets this wall element to {\tt 1.0}.
 Otherwise, sets it to zero.
 
 \subsubsection{$<$number,{\bf R}$>$ wmge}\index{b2plot, wmge}\label{sec:wmge}
-If a wall element is greater than or equal to $\langle$number$\rangle$, sets this wall element to 1.0.
+If a wall element is greater than or equal to $\langle${\tt number}$\rangle$, sets this wall element to {\tt 1.0}.
 Otherwise, sets it to zero.
 
 \subsubsection{$<$number,{\bf R}$>$ wmgt}\index{b2plot, wmgt}\label{sec:wmgt}
-If a wall element is greater than $\langle$number$\rangle$, sets this wall element to 1.0.
+If a wall element is greater than $\langle${\tt number}$\rangle$, sets this wall element to {\tt 1.0}.
 Otherwise, sets it to zero.
 
 \subsubsection{$<$number,{\bf R}$>$ wmle}\index{b2plot, wmle}\label{sec:wmle}
-If a wall element is less than or equal to $\langle$number$\rangle$, sets this wall element to 1.0.
+If a wall element is less than or equal to $\langle${\tt number}$\rangle$, sets this wall element to {\tt 1.0}.
 Otherwise, sets it to zero.
 
 \subsubsection{$<$number,{\bf R}$>$ wmlt}\index{b2plot, wmlt}\label{sec:wmlt}
-If a wall element is less than $\langle$number$\rangle$, sets this wall element to 1.0.
+If a wall element is less than $\langle${\tt number}$\rangle$, sets this wall element to {\tt 1.0}.
 Otherwise, sets it to zero.
 
 \subsubsection{wpos}\index{b2plot, wpos}\label{sec:wpos}
-If a wall element is positive, sets this wall element to 1.0.
+If a wall element is positive, sets this wall element to {\tt 1.0}.
 Otherwise, sets it to zero.
 
 
@@ -17855,8 +17911,8 @@ Copies the real on top of the real stack to the top of the wall stack.
 Copies the real on top of the real stack to the top of the target stack.
 
 \subsubsection{rprt}\index{b2plot, rprt}\label{sec:rprt}
-Outputs the contents of the real stack to \verb:stdout:, and to \verb:b2plot.write:
-(in the \SOLPSfour environment) or \verb:b2pl.exe.dir/b2plot.write:
+Outputs the contents of the real stack to {\tt stdout}, and to {\tt b2plot.write}
+(in the \SOLPSfour environment) or {\tt b2pl.exe.dir/b2plot.write}
 (in the \SOLPSfive environment) if {\bf writ} is active.
 
 \subsubsection{idrop}\index{b2plot, idrop}\label{sec:idrop}
@@ -17890,8 +17946,8 @@ Copies the integer on top of the integer stack to the top of the wall stack.
 Copies the integer on top of the integer stack to the top of the target stack.
 
 \subsubsection{iprt}\index{b2plot, iprt}\label{sec:iprt}
-Outputs the contents of the integer stack to \verb:stdout:, and to \verb:b2plot.write:
-(in the \SOLPSfour environment) or \verb:b2pl.exe.dir/b2plot.write:
+Outputs the contents of the integer stack to {\tt stdout}, and to {\tt b2plot.write}
+(in the \SOLPSfour environment) or {\tt b2pl.exe.dir/b2plot.write}
 (in the \SOLPSfive environment) if {\bf writ} is active.
 
 \subsubsection{scat}\index{b2plot, scat}\label{sec:scat}
@@ -17910,23 +17966,23 @@ Swaps the top two strings on the string stack.
 Copies the string second from the top to the top of the string stack.
 
 \subsubsection{sprt}\index{b2plot, sprt}\label{sec:sprt}
-Outputs the contents of the string stack to \verb:stdout:, and to \verb:b2plot.write:
-(in the \SOLPSfour environment) or \verb:b2pl.exe.dir/b2plot.write:
+Outputs the contents of the string stack to {\tt stdout}, and to {\tt b2plot.write}
+(in the \SOLPSfour environment) or {\tt b2pl.exe.dir/b2plot.write}
 (in the \SOLPSfive environment) if {\bf writ} is active.
 
 \subsubsection{$<$nx,{\bf I}$>$ $<$ny,{\bf I}$>$ $<$filename,{\bf S}$>$ saw}\index{b2plot, saw}\label{sec:saw}
-Reads the matrix of size ($\langle$nx$\rangle$ +2) $\times$ ($\langle$ny$\rangle$ +2) from file $\langle$filename$\rangle$ into the matrix stack.
+Reads the matrix of size $( \langle${\tt nx}$\rangle + 2 ) \times ( \langle${\tt ny}$\rangle + 2 )$ from file $\langle${\tt filename}$\rangle$ into the matrix stack.
 
 \subsubsection{$<$nx,{\bf I}$>$ $<$ny,{\bf I}$>$ $<$nz,{\bf I}$>$ $<$filename,{\bf S}$>$ saws}\index{b2plot, saws}\label{sec:saws}
-Reads the matrix of size ($\langle$nx$\rangle$ +2) $\times$ ($\langle$ny$\rangle$ +2) $\times$ $\langle$nz$\rangle$ from file $\langle$filename$\rangle$ into the
+Reads the matrix of size $( \langle${\tt nx}$\rangle + 2 ) \times ( \langle${\tt ny}$\rangle + 2 ) \times \langle${\tt nz}$\rangle$ from file $\langle${\tt filename}$\rangle$ into the
 matrix stack. Expects $nz$ to match $ns$ and that the data refers to the fluid plasma species.
 
 \subsubsection{$<$nx,{\bf I}$>$ $<$ny,{\bf I}$>$ $<$nz,{\bf I}$>$ $<$filename,{\bf S}$>$ sawx}\index{b2plot, sawx}\label{sec:sawx}
-Reads the matrix of size ($\langle$nx$\rangle$ +2) $\times$ ($\langle$ny$\rangle$ +2) $\times$ $\langle$nz$\rangle$ from file $\langle$filename$\rangle$ into the
+Reads the matrix of size $( \langle${\tt nx}$\rangle + 2 ) \times ( \langle${\tt ny}$\rangle + 2 ) \times \langle${\tt nz}$\rangle$ from file $\langle${\tt filename}$\rangle$ into the
 matrix stack. Expects $nz$ to match $ns\_ext$ and that the data refers to the additional species followed by the external code to which {\bf SOLPS} is coupled.
 
 \subsubsection{$<$nwall,{\bf I}$>$ $<$filename,{\bf S}$>$ wsaw}\index{b2plot, wsaw}\label{sec:wsaw}
-Reads the array of size $\langle$nwall$\rangle$ from file $\langle$filename$\rangle$ into the wall stack.
+Reads the array of size $\langle${\tt nwall}$\rangle$ from file $\langle${\tt filename}$\rangle$ into the wall stack.
 
 \subsubsection{stoe}\index{b2plot, stoe}\label{sec:stoe}
 Copies the array on top of the matrix stack to the Eirene stack. Only the matrix
@@ -18026,7 +18082,7 @@ lpr".
 Sets the plot area to be square. This ensures that the$x$ and $y$ scaling factors are the same.
 
 \subsubsection{$<$nx,{\bf I}$>$ $<$ny,{\bf I}$>$ page}\index{b2plot, page}\label{sec:page}
-Plots $\langle$nx$\rangle$ graphs in the $x$-direction and $\langle$ny$\rangle$ in the $y$-direction on the same page.
+Plots $\langle${\tt nx}$\rangle$ graphs in the $x$-direction and $\langle${\tt ny}$\rangle$ in the $y$-direction on the same page.
 
 
 \subsection{Graph format commands}\index{b2plot, graphformat}\label{sec:graphformat}
@@ -18078,7 +18134,7 @@ Plots 2-D plots against parallel $x$ distance.
 Plots 2-D plots against poloidal $x$ distance (default).
 
 \subsubsection{$<$n,{\bf I}$>$ ndec}\index{b2plot, ndec}\label{sec:ndec}
-Sets number of decades to $\langle$n$\rangle$ for logarithmic plots (default 10).
+Sets number of decades to $\langle${\tt n}$\rangle$ for logarithmic plots (default 10).
 If $n = 0$, restores the default value.
 
 \subsubsection{mmid}\index{b2plot, mmid}\label{sec:mmid}
@@ -18114,7 +18170,7 @@ Want colour for some plots.
 Toggles having the graph frames, axes, ticks and labels be in bold type.
 
 \subsubsection{$<$number,{\bf I}$>$ font}\index{b2plot, font}\label{sec:font}
-Changes the current font type to $\langle$number$\rangle$
+Changes the current font type to $\langle${\tt number}$\rangle$
 \begin{itemize}
 \item -25 TIMES ROMAN
 \item -26 TIMES BOLD
@@ -18155,53 +18211,50 @@ Sets standard label as {\em extralabel}:
 \end{verbatim}
 
 \subsubsection{$<$label, {\bf S}$>$ glbl}\index{b2plot, glbl}\label{sec:glbl}
-Sets the current graph label to $\langle$label$\rangle$.
+Sets the current graph label to $\langle${\tt label}$\rangle$.
 
 \subsubsection{$<$label, {\bf S}$>$ elbl}\index{b2plot, elbl}\label{sec:elbl}
-Sets the current Eirene data graph label to $\langle$label$\rangle$.
+Sets the current Eirene data graph label to $\langle${\tt label}$\rangle$.
 
 \subsubsection{$<$number,{\bf I}$>$ $<$label, {\bf S}$>$ slbl}\index{b2plot, slbl}\label{sec:slbl}
-Sets the species label of species index $\langle$number$\rangle$ to $\langle$label$\rangle$ for the current graph.
+Sets the species label of species index $\langle${\tt number}$\rangle$ to $\langle${\tt label}$\rangle$ for the current graph.
 
 \subsubsection{$<$label, {\bf S}$>$ tlbl}\index{b2plot, tlbl}\label{sec:tlbl}
-Sets the current target graph label to $\langle$label$\rangle$.
+Sets the current target graph label to $\langle${\tt label}$\rangle$.
 
 \subsubsection{$<$label, {\bf S}$>$ trgblbl}\index{b2plot, trgblbl}\label{sec:trgblbl}
-Sets the current target bar label to $\langle$label$\rangle$.
+Sets the current target bar label to $\langle${\tt label}$\rangle$.
 
 \subsubsection{$<$label, {\bf S}$>$ wlbl}\index{b2plot, wlbl}\label{sec:wlbl}
-Sets the current wall graph label to $\langle$label$\rangle$.
+Sets the current wall graph label to $\langle${\tt label}$\rangle$.
 
 \subsubsection{$<$number,{\bf I}$>$ $<$label, {\bf S}$>$ wslbl}\index{b2plot, wslbl}\label{sec:wslbl}
-Sets the species label of species index $\langle$number$\rangle$ to $\langle$label$\rangle$ for the current wall graph.
+Sets the species label of species index $\langle${\tt number}$\rangle$ to $\langle${\tt label}$\rangle$ for the current wall graph.
 
 \subsubsection{$<$label, {\bf S}$>$ wallblbl}\index{b2plot, wallblbl}\label{sec:wallblbl}
-Sets the current wall bar label to $\langle$label$\rangle$.
+Sets the current wall bar label to $\langle${\tt label}$\rangle$.
 
 \subsubsection{glob}\index{b2plot, glob}\label{sec:glob}
 Copies the contents of {\em extralabel} into the global header for all graphs.
 
 \subsubsection{$<$factor,{\bf R}$>$ glsz}\index{b2plot, glsz}\label{sec:glsz}
-Sets font size for global header to $\langle$factor$\rangle$ times default size (default = 1.0).
+Sets font size for global header to $\langle${\tt factor}$\rangle$ times default size (default is {\tt 1.0}).
 
 \subsubsection{$<$factor,{\bf R}$>$ lbsz}\index{b2plot, lbsz}\label{sec:lbsz}
-Sets label size to $\langle$factor$\rangle$ times default size (default = 1.0). Does not apply to the global header.
+Sets label size to $\langle${\tt factor}$\rangle$ times default size (default is {\tt 1.0}). Does not apply to the global header.
 
 \subsubsection{$<$number,{\bf I}$>$ lfsz}\index{b2plot, lfsz}\label{sec:lfsz}
-Sets line label font size to $\langle$number$\rangle$ (default = 0). If $\langle$number$\rangle$ is between 0 and 3, then the size
-represents 1., 1.5, 2., and 3. times an 8-plotter address unit width. Otherwise, it represents the character
-width in plotter address units.
+Sets line label font size to $\langle${\tt number}$\rangle$ (default is {\tt 0}). If $\langle${\tt number}$\rangle$ is between {\tt 0} and {\tt 3}, then the size
+represents {\tt 1.0}, {\tt 1.5}, {\tt 2.0}, and {\tt 3.0} times an 8-plotter address unit width. Otherwise, it represents the character width in plotter address units.
 
 \subsubsection{nice}\index{b2plot, nice}\label{sec:nice}
-Toggles whether graphs will use nice axes with rounded values ({\tt
-  .true.} by default).  Even with this set to {\tt .false.}, some
-massaging of the plot range occurs.
+Toggles whether graphs will use nice axes with rounded values ({\tt .true.} by default).  Even with this set to {\tt .false.}, some massaging of the plot range occurs.
 
 \subsubsection{noax}\index{b2plot, noax}\label{sec:noax}
 Does not plot axes.
 
 \subsubsection{$<$factor,{\bf R}$>$ lwid}\index{b2plot, lwid}\label{sec:lwid}
-Changes line width to $\langle$factor$\rangle$ times default width.
+Changes line width to $\langle${\tt factor}$\rangle$ times default width.
 
 \subsubsection{same}\index{b2plot, same}\label{sec:same}
 The next graphs occur on the same set of axes. Terminated with {\bf new}.
@@ -18217,10 +18270,10 @@ Starts graphs on a new set of axes.
 Toggles the plotting of dotted axes lines at zero.
 
 \subsubsection{$<$factor,{\bf R}$>$ zwid}\index{b2plot, zwid}\label{sec:zwid}
-Changes width of dotted axes lines at zero to $\langle$factor$\rangle$ times default width.
+Changes width of dotted axes lines at zero to $\langle${\tt factor}$\rangle$ times default width.
 
 \subsubsection{$<$ncol,{\bf I}$>$ zcol}\index{b2plot, zcol}\label{sec:zcol}\index{b2plot, colour table}
-Plots axes line at zero with colour $\langle$ncol$\rangle$ (default 1). The colours available by default are:
+Plots axes line at zero with colour $\langle${\tt ncol}$\rangle$ (default is {\tt 1}). The colours available by default are:
 \begin{enumerate}
   \item[ 0] White (background)
   \item[ 1] Black (default)
@@ -18246,7 +18299,7 @@ These values can be overridden by use of the {\bf cltb} command.
 \subsubsection{$<$ncol,{\bf I}$>$ dcol}\index{b2plot, dcol}\label{sec:dcol}
 Colour to be used for matrix data line plots (default 1).
 If {\bf dcol} is set to a negative value, the data plot lines will use
-a succession of colours starting from $|\langle$dcol$\rangle|$ with increasing index.
+a succession of colours starting from $|\langle${\tt dcol}$\rangle|$ with increasing index.
 See {\bf zcol} above for a list of available colours.
 
 \subsubsection{$<$ncol,{\bf I}$>$ tcol}\index{b2plot, tcol}\label{sec:tcol}
@@ -18283,23 +18336,23 @@ See {\bf zcol} above for a list of available colours.
 
 \subsubsection{$<$length,{\bf R}$>$ arow}\index{b2plot, arow}\label{sec:arow}\index{b2plot, arox}\label{sec:arox}\index{b2plot, aroy}\label{sec:aroy}
 Produces flow chart of arrays {\em up} and {\em vv} using a maximum arrow
-length of $\langle$length$\rangle$ metres.
+length of $\langle${\tt length}$\rangle$ metres.
 The use of {\em up} and {\em vv} can be superseded
 by the the commands {\bf arox} and {\bf aroy}, respectively, which will then use
 data from the matrix stack for computing the arrow directions instead.
 
 \subsubsection{$<$length,{\bf R}$>$ earow}\index{b2plot, earow}\label{sec:earow}\index{b2plot, earox}\label{sec:earox}\index{b2plot, earoy}\label{sec:earoy}
 Produces flow chart of Eirene array {\em vxa} and {\em vya} using a
-maximum arrow length of $\langle$length$\rangle$ metres. The use of {\em vxa} and
+maximum arrow length of $\langle${\tt length}$\rangle$ metres. The use of {\em vxa} and
 {\em vya} can be superseded by the the commands {\bf earox} and {\bf earoy},
 respectively, which will then use data from the Eirene stack for computing
 the arrow directions instead.
 
 \subsubsection{$<$widthfactor,{\bf R}$>$ arww}\index{b2plot, arww}\label{sec:arww}
-Changes default arrow width by $\langle$widthfactor$\rangle$ (default 1.0).
+Changes default arrow width by $\langle${\tt widthfactor}$\rangle$ (default is {\tt 1.0}).
 
 \subsubsection{$<$ncol,{\bf I}$>$ acol}\index{b2plot, acol}\label{sec:acol}
-Plots overlaid arrows with colour $\langle$ncol$\rangle$ (default 1).
+Plots overlaid arrows with colour $\langle${\tt ncol}$\rangle$ (default is {\tt 1}).
 See {\bf zcol} above for a list of available colours.
 
 \subsubsection{$<$data file,{\bf S}$>$ expf}\index{b2plot, expf}\label{sec:expf}
@@ -18316,17 +18369,17 @@ The numbering convention is the same as used in the {\tt libgr} library from {\t
 File from which to take experimental data to be plotted with wall data.
 
 \subsubsection{$<$ncol,{\bf I}$>$ ecol}\index{b2plot, ecol}\label{sec:ecol}
-Plots experimental data overlay with colour $\langle$ncol$\rangle$ (default 1).
+Plots experimental data overlay with colour $\langle${\tt ncol}$\rangle$ (default is {\tt 1}).
 If {\bf ecol} is set to a negative value, the data plot lines will use
-a succession of colours starting from $|ecol|$ with increasing index.
+a succession of colours starting from $|${\tt ecol}$|$ with increasing index.
 See {\bf zcol} above for a list of available colours.
 
 \subsubsection{$<$widthfactor,{\bf R}$>$ ewid}\index{b2plot, ewid}\label{sec:ewid}
-Changes the experimental data overlay line width by $\langle$widthfactor$\rangle$ (default 1.0).
+Changes the experimental data overlay line width by $\langle${\tt widthfactor}$\rangle$ (default is {\tt 1.0}).
 
 \subsubsection{$<$n,{\bf I}$>$ ytra}\index{b2plot, ytra}\label{sec:ytra}
 \begin{sloppypar}
-Choose transformation function ($\langle$n$\rangle$.ne.0) for radial
+Choose transformation function ($\langle${\tt n}$\rangle${\tt .ne.0}) for radial
 coordinate to compare with experimental data, according to
 {\tt n.s.r.z.a\_inner} and {\tt n.s.r.z.a\_outer}
 files in the {\tt \$\{SOLPSTOP\}/data.local} or {\tt \$\{SOLPSTOP\}\allowbreak /data} directories.
@@ -18336,12 +18389,12 @@ files in the {\tt \$\{SOLPSTOP\}/data.local} or {\tt \$\{SOLPSTOP\}\allowbreak /
 Toggles drawing of the separatrices.
 
 \subsubsection{$<$ncol,{\bf I}$>$ scol}\index{b2plot, scol}\label{sec:scol}
-Plots separatrices with colour $\langle$ncol$\rangle$ (default 1).
+Plots separatrices with colour $\langle${\tt ncol}$\rangle$ (default is {\tt 1}).
 Also applies to the vertical separators drawn for 2-D plots.
 See {\bf zcol} above for a list of available colours.
 
 \subsubsection{$<$widthfactor,{\bf R}$>$ sepw}\index{b2plot, sepw}\label{sec:sepw}
-Changes the default width of the separatrices line by $\langle$widthfactor$\rangle$ (default 1.0).
+Changes the default width of the separatrices line by $\langle${\tt widthfactor}$\rangle$ (default is {\tt 1.0}).
 Also applies to the vertical separators drawn for 2-D plots.
 
 \subsubsection{vesl}\index{b2plot, vesl}\label{sec:vesl}
@@ -18350,11 +18403,11 @@ The data for this option is obtained from the file {\tt mesh.extra} if it exists
 If the {\tt mesh.extra} file is not found, does nothing.
 
 \subsubsection{$<$ncol,{\bf I}$>$ vcol}\index{b2plot, vcol}\label{sec:vcol}
-Plots overlaid vacuum vessel outline with colour $\langle$ncol$\rangle$ (default 1).
+Plots overlaid vacuum vessel outline with colour $\langle${\tt ncol}$\rangle$ (default is {\tt 1}).
 See {\bf zcol} above for a list of available colours.
 
 \subsubsection{$<$widthfactor,{\bf R}$>$ vwid}\index{b2plot, vwid}\label{sec:vwid}
-Changes the default width of the vessel outline by $\langle$widthfactor$\rangle$ (default 1.0).
+Changes the default width of the vessel outline by $\langle${\tt widthfactor}$\rangle$ (default is {\tt 1.0}).
 
 \subsubsection{grid}\index{b2plot, grid}\label{sec:grid}
 Toggles drawing of overlaid mesh.
@@ -18363,7 +18416,7 @@ Toggles drawing of overlaid mesh.
 Toggles drawing of overlaid triangular grid.
 
 \subsubsection{$<$ncol,{\bf I}$>$ mcol}\index{b2plot, mcol}\label{sec:mcol}
-Sets colour of overlaid mesh and triangular grid to $\langle$ncol$\rangle$ (default 1).
+Sets colour of overlaid mesh and triangular grid to $\langle${\tt ncol}$\rangle$ (default is {\tt 1}).
 See {\bf zcol} above for a list of available colours.
 
 \subsubsection{outl}\index{b2plot, outl}\label{sec:outl}
@@ -18371,11 +18424,11 @@ Toggles plotting of plasma domain outline.
 When target elements overlays are also plotted, then the target elements outline is activated as well.
 
 \subsubsection{$<$ncol,{\bf I}$>$ ocol}\index{b2plot, ocol}\label{sec:ocol}
-Sets colour of overlaid plasma outline to $\langle$ncol$\rangle$ (default 1).
+Sets colour of overlaid plasma outline to $\langle${\tt ncol}$\rangle$ (default is {\tt 1}).
 See {\bf zcol} above for a list of available colours.
 
 \subsubsection{$<$widthfactor,{\bf R}$>$ owid}\index{b2plot, owid}\label{sec:owid}
-Changes the default width of the overlaid plasma outline by $\langle$widthfactor$\rangle$ (default 1.0).
+Changes the default width of the overlaid plasma outline by $\langle${\tt widthfactor}$\rangle$ (default is {\tt 1.0}).
 
 \subsubsection{wall}\index{b2plot, wall}\label{sec:wall}
 Toggles plotting of additional wall data.
@@ -18384,7 +18437,7 @@ Toggles plotting of additional wall data.
 Turns off plotting of additional wall data (default).
 
 \subsubsection{$<$widthfactor,{\bf R}$>$ wwid}\index{b2plot, wwid}\label{sec:wwid}
-Changes the default width of the wall data overlay line by $\langle$widthfactor$\rangle$ (default 10.0).
+Changes the default width of the wall data overlay line by $\langle${\tt widthfactor}$\rangle$ (default is {\tt 10.0}).
 
 \subsubsection{logw}\index{b2plot, logw}\label{sec:logw}
 Selects logarithmic scale for wall plots.
@@ -18412,14 +18465,14 @@ Turns off plotting of additional target data (default).
 Does not plot contour plot.
 
 \subsubsection{$<$level\textsubscript{min},{\bf R}$>$ $<$level\textsubscript{max},{\bf R}$>$ $<$delta,{\bf R}$>$ clvd}\index{b2plot, clvd}\label{sec:clvd}
-Starts contour levels at $\langle$level\textsubscript{min}$\rangle$ increasing by $\langle$delta$\rangle$ up
-to $\langle$level\textsubscript{max}$\rangle$.
+Starts contour levels at $\langle${\tt level\textsubscript{min}}$\rangle$ increasing by $\langle${\tt delta}$\rangle$ up
+to $\langle${\tt level\textsubscript{max}}$\rangle$.
 
 \subsubsection{$<$level\textsubscript{min},{\bf R}$>$ $<$level\textsubscript{max},{\bf R}$>$ $<$n,{\bf I}$>$ clvn}\index{b2plot, clvn}\label{sec:clvn}
-Produces $\langle$n$\rangle$ contour levels going from $\langle$level\textsubscript{min}$\rangle$ to $\langle$level\textsubscript{max}$\rangle$.
+Produces $\langle${\tt n}$\rangle$ contour levels going from $\langle${\tt level\textsubscript{min}}$\rangle$ to $\langle${\tt level\textsubscript{max}}$\rangle$.
 
 \subsubsection{$<$n,{\bf I}$>$ $<$level$_1$,{\bf R}$>$ ... $<$level$_n$,{\bf R}$>$ clvs}\index{b2plot, clvs}\label{sec:clvs}
-Sets $\langle$n$\rangle$ contour levels to the values specified by $\langle$label$_i$$\rangle$.
+Sets $\langle${\tt n}$\rangle$ contour levels to the values specified by $\langle${\tt label\textsubscript{i}}$\rangle$.
 
 \begin{verbatim}
 0 clvs
@@ -18431,52 +18484,52 @@ of {\bf clvd}, {\bf clvn}, {\bf clvp} or {\bf clvs}.
 Sets up contour levels according to their proportion inside the plasma domain.
 The levels are arranged so that the integral of the absolute value of
 the data over the region between each two neighbouring level lines is the same.
-If $\langle$npplvm$\rangle$.lt.0, then this integral is equal (approximately)
+If $\langle${\tt npplvm}$\rangle${\tt .lt.0}, then this integral is equal (approximately)
 to $\frac{1}{\|\langle\text{npplvp}\rangle\|}$ of the integral over the whole volume.
-If $\langle$npplvm$\rangle$.ge.0, then the regions of positive and negative data
-values are treated separately, with $\|\langle$npplvp$\rangle\|$ data intervals for
-the positive and $\langle$npplvm$\rangle$ for the negative data range. In this case,
-if $\langle$npplvp$\rangle$.ge.0 then 0 is added to the level list, otherwise, the
+If $\langle${\tt npplvm}$\rangle${\tt .ge.0}, then the regions of positive and negative data
+values are treated separately, with $\|\langle${\tt npplvp}$\rangle\|$ data intervals for
+the positive and $\langle${\tt npplvm}$\rangle$ for the negative data range. In this case,
+if $\langle${\tt npplvp}$\rangle${\tt .ge.0} then {\tt 0} is added to the level list, otherwise, the
 negative and positive values closest to zero fall in the same zone.
 
 \subsubsection{$<$level\textsubscript{min},{\bf R}$>$ $<$level\textsubscript{max},{\bf R}$>$ $<$delta,{\bf R}$>$ eclvd}\index{b2plot, eclvd}\label{sec:eclvd}
-Starts contour levels at $\langle$level\textsubscript{min}$\rangle$ increasing by $\langle$delta$\rangle$ up
-to $\langle$level\textsubscript{max}$\rangle$ for Eirene data contour plot.
+Starts contour levels at $\langle${\tt level\textsubscript{min}}$\rangle$ increasing by $\langle${\tt delta}$\rangle$ up
+to $\langle${\tt level\textsubscript{max}}$\rangle$ for Eirene data contour plot.
 
 \subsubsection{$<$level\textsubscript{min},{\bf R}$>$ $<$level\textsubscript{max},{\bf R}$>$ $<$n,{\bf I}$>$ eclvn}\index{b2plot, eclvn}\label{sec:eclvn}
-Produces $\langle$n$\rangle$ contour levels going from $\langle$level\textsubscript{min}$\rangle$ to $\langle$level\textsubscript{max}$\rangle$ for Eirene data contour plot.
+Produces $\langle${\tt n}$\rangle$ contour levels going from $\langle${\tt level\textsubscript{min}}$\rangle$ to $\langle${\tt level\textsubscript{max}}$\rangle$ for Eirene data contour plot.
 
 \subsubsection{$<$n,{\bf I}$>$ $<$level\textsubscript{1},{\bf R}$>$ ... $<$level\textsubscript{n},{\bf R}$>$ eclvs}\index{b2plot, eclvs}\label{sec:eclvs}
-Sets $\langle$n$\rangle$ contour levels to the values specified by $\langle$label\textsubscript{i}$\rangle$ for Eirene data contour plots.
+Sets $\langle${\tt n}$\rangle$ contour levels to the values specified by $\langle${\tt label\textsubscript{i}}$\rangle$ for Eirene data contour plots.
 As above, the command {\tt 0 eclvs} can be used to revert back to default behaviour.
 
 \subsubsection{$<$npplvm,{\bf I}$>$ $<$npplvp,{\bf I}$>$ eclvp}\index{b2plot, eclvp}\label{sec:eclvp}
 Sets up contour levels according to their proportion inside the Eirene domain, as per the {\bf clvp} logic above.
 
 \subsubsection{$<$level\textsubscript{min},{\bf R}$>$ $<$level\textsubscript{max},{\bf R}$>$ $<$delta,{\bf R}$>$ tclvd}\index{b2plot, tclvd}\label{sec:tclvd}
-Starts contour levels at $\langle$level\textsubscript{min}$\rangle$ increasing by $\langle$delta$\rangle$ up
-to $\langle$level\textsubscript{max}$\rangle$ for target data contour plot.
+Starts contour levels at $\langle${\tt level\textsubscript{min}}$\rangle$ increasing by $\langle${\tt delta}$\rangle$ up
+to $\langle${\tt level\textsubscript{max}}$\rangle$ for target data contour plot.
 
 \subsubsection{$<$level\textsubscript{min},{\bf R}$>$ $<$level\textsubscript{max},{\bf R}$>$ $<$n,{\bf I}$>$ tclvn}\index{b2plot, tclvn}\label{sec:tclvn}
-Produces $\langle$n$\rangle$ contour levels going from $\langle$level\textsubscript{min}$\rangle$ to $\langle$level\textsubscript{max}$\rangle$ for target data contour plot.
+Produces $\langle${\tt n}$\rangle$ contour levels going from $\langle${\tt level\textsubscript{min}}$\rangle$ to $\langle${\tt level\textsubscript{max}}$\rangle$ for target data contour plot.
 
 \subsubsection{$<$n,{\bf I}$>$ $<$level\textsubscript{1},{\bf R}$>$ ... $<$level\textsubscript{n},{\bf R}$>$ tclvs}\index{b2plot, tclvs}\label{sec:tclvs}
-Sets $\langle$n$\rangle$ contour levels to the values specified by $\langle$label\textsubscript{i}$\rangle$ for target data contour plots.
+Sets $\langle${\tt n}$\rangle$ contour levels to the values specified by $\langle${\tt label\textsubscript{i}}$\rangle$ for target data contour plots.
 As above, the command {\tt 0 tclvs} can be used to revert back to default behaviour.
 
 \subsubsection{$<$npplvm,{\bf I}$>$ $<$npplvp,{\bf I}$>$ tclvp}\index{b2plot, tclvp}\label{sec:tclvp}
 Sets up contour levels according to their proportion inside the target domain, as per the {\bf clvp} logic above.
 
 \subsubsection{$<$level\textsubscript{min},{\bf R}$>$ $<$level\textsubscript{max},{\bf R}$>$ $<$delta,{\bf R}$>$ wclvd}\index{b2plot, wclvd}\label{sec:wclvd}
-Selects threshold levels at $\langle$level\textsubscript{min}$\rangle$ increasing by $\langle$delta$\rangle$ up
-to $\langle$level\textsubscript{max}$\rangle$, for use in the wall data colour scheme.
+Selects threshold levels at $\langle${\tt level\textsubscript{min}}$\rangle$ increasing by $\langle${\tt delta}$\rangle$ up
+to $\langle${\tt level\textsubscript{max}}$\rangle$, for use in the wall data colour scheme.
 
 \subsubsection{$<$level\textsubscript{min},{\bf R}$>$ $<$level\textsubscript{max},{\bf R}$>$ $<$n,{\bf I}$>$ wclvn}\index{b2plot, wclvn}\label{sec:wclvn}
-Produces $\langle$n$\rangle$ threshold levels starting from $\langle$level\textsubscript{min}$\rangle$ to $\langle$level\textsubscript{max}$\rangle$ for the wall data
+Produces $\langle${\tt n}$\rangle$ threshold levels starting from $\langle${\tt level\textsubscript{min}}$\rangle$ to $\langle${\tt level\textsubscript{max}}$\rangle$ for the wall data
 colour scheme.
 
 \subsubsection{$<$n,{\bf I}$>$ $<$level\textsubscript{1},{\bf R}$>$ ... $<$level\textsubscript{n},{\bf R}$>$ wclvs}\index{b2plot, wclvs}\label{sec:wclvs}
-Sets $\langle$n$\rangle$ threshold levels to the values specified by $\langle$label\textsubscript{i}$\rangle$ for the wall data colour scheme.
+Sets $\langle${\tt n}$\rangle$ threshold levels to the values specified by $\langle${\tt label\textsubscript{i}}$\rangle$ for the wall data colour scheme.
 As above, the command {\tt 0 wclvs} can be used to revert back to default behaviour.
 
 \subsubsection{$<$npplvm,{\bf I}$>$ $<$npplvp,{\bf I}$>$ wclvp}\index{b2plot, wclvp}\label{sec:wclvp}
@@ -18510,8 +18563,8 @@ Toggles labeling of lines for 2-D plots with multiple curves (default {\tt .TRUE
 Uses spline interpolation for plot (very slow !!!).
 
 \subsubsection{$<$fill\_opt,{\bf I}$>$ filo}\index{b2plot, filo}\label{sec:filo}
-Sets the fill option to $\langle$fill\_opt$\rangle$.
-If it equals 0, then colours
+Sets the fill option to $\langle${\tt fill\_opt}$\rangle$.
+If it equals {\tt 0}, then colours
 are selected from the available colour range and adjacent levels might
 have the same value, otherwise modulo selection of colours is enabled
 and colour cycling might occur.
@@ -18573,75 +18626,75 @@ and velocities for the neutral species are also updated, meaning the {\em fnax},
 {\em vvtraj}, {\em arrowx}, and {\em arrowy} arrays.
 
 \subsubsection{$<$filename,{\bf S}$>$ etal}\index{b2plot, etal}\label{sec:etal}
-Copies data from the Eirene tally output file $\langle$filename$\rangle$ to the Eirene data stack. Such files are written from the volume tally output in block 11 of the {\tt Eirene} input file. This function assumes the tally file contains 2-D data on the Eirene triangular grid.
+Copies data from the Eirene tally output file $\langle${\tt filename}$\rangle$ to the Eirene data stack. Such files are written from the volume tally output in block 11 of the Eirene input file. This function assumes the tally file contains 2-D data on the Eirene triangular grid.
 
 \subsubsection{$<$value,{\bf R}$>$ evac}\index{b2plot, evac}\label{sec:evac}
-Assigns real value $\langle$value$\rangle$ to all triangles from the top of the Eirene data stack that do not map to a {\tt B2.5} grid cell.
+Assigns real value $\langle${\tt value}$\rangle$ to all triangles from the top of the Eirene data stack that do not map to a {\tt B2.5} grid cell.
 
 \subsubsection{writ}\index{b2plot, writ}\label{sec:writ}
-Writes out the labels and values for all simple 2-D plots to \verb:b2plot.write: (in the \SOLPSfour environment)
-or \verb:b2pl.exe.dir/b2plot.write: (in the \SOLPSfive environment).
+Writes out the labels and values for all simple 2-D plots to {\tt b2plot.write} (in the \SOLPSfour environment)
+or {\tt b2pl.exe.dir/b2plot.write} (in the \SOLPSfive environment).
 {\bf write} is an alias for {\bf writ}.
 
 \subsubsection{$<$filename,{\bf S}$>$ mprt}\index{b2plot, mprt}\label{sec:mprt}
-Writes out the top of the matrix stack to $\langle$filename$\rangle$ (in the \SOLPSfour environment)
-or (in the \SOLPSfive environment) \verb:b2pl.exe.dir/:$\langle$filename$\rangle$.
+Writes out the top of the matrix stack to $\langle${\tt filename}$\rangle$ (in the \SOLPSfour environment)
+or (in the \SOLPSfive environment) {\tt b2pl.exe.dir/}$\langle${\tt filename}$\rangle$.
 
 \subsubsection{$<$filename,{\bf S}$>$ eprt}\index{b2plot, eprt}\label{sec:eprt}
-Writes out the top of the Eirene stack to $\langle$filename$\rangle$ (in the \SOLPSfour environment)
-or (in the \SOLPSfive environment) \verb:b2pl.exe.dir/:$\langle$filename$\rangle$.
+Writes out the top of the Eirene stack to $\langle${\tt filename}$\rangle$ (in the \SOLPSfour environment)
+or (in the \SOLPSfive environment) {\tt b2pl.exe.dir/}$\langle${\tt filename}$\rangle$.
 
 \subsubsection{$<$x1,{\bf R}$>$ $<$y1,{\bf R}$>$ $<$x2,{\bf R}$>$ $<$y2,{\bf R}$>$ $<$x3,{\bf R}$>$ $<$y3,{\bf R}$>$ $<$x4,{\bf R}$>$ $<$y4,{\bf R}$>$ eavg}\index{b2plot, eavg}\label{sec:eavg}
 Writes out the volume average of the data on top of the Eirene stack over the quadrangular region delimited by the four doublets of coordinates [($x1$,$y1$);($x2$,$y2$);($x3$,$y3$);($x4$,$y4$)].
 
 \subsubsection{$<$ix1,{\bf I}$>$ $<$ix2,{\bf I}$>$ $<$iy1,{\bf I}$>$ $<$iy2,{\bf I}$>$ $<$filename,{\bf S}$>$ mtab}\index{b2plot, mtab}\label{sec:mtab}
-Writes out a table extracted from the matrix on the top of the stack to $\langle$filename$\rangle$ (in the \SOLPSfour environment)
-or (in the \SOLPSfive environment) \verb:b2pl.exe.dir/:$\langle$filename$\rangle$. $0$ $0$ pairs for the $ix$ or $iy$ values will
+Writes out a table extracted from the matrix on the top of the stack to $\langle${\tt filename}$\rangle$ (in the \SOLPSfour environment)
+or (in the \SOLPSfive environment) {\tt b2pl.exe.dir/}$\langle${\tt filename}$\rangle$. $0$ $0$ pairs for the $ix$ or $iy$ values will
 output the entire $ix$ or $iy$ range, respectively.
 
 \subsubsection{$<$filename,{\bf S}$>$ wprt}\index{b2plot, wprt}\label{sec:wprt}
-Writes out the top of the wall stack to $\langle$filename$\rangle$ (in the \SOLPSfour environment)
-or (in the \SOLPSfive environment) \verb:b2pl.exe.dir/:$\langle$filename$\rangle$.
+Writes out the top of the wall stack to $\langle${\tt filename}$\rangle$ (in the \SOLPSfour environment)
+or (in the \SOLPSfive environment) {\tt b2pl.exe.dir/}$\langle${\tt filename}$\rangle$.
 
 \subsubsection{$<$iw1,{\bf I}$>$ $<$iw2,{\bf I}$>$ $<$filename,{\bf S}$>$ wtab}\index{b2plot, wtab}\label{sec:wtab}
-Writes out a table extracted from the array on the top of the wall stack to $\langle$filename$\rangle$ (in the \SOLPSfour environment)
-or (in the \SOLPSfive environment) \verb:b2pl.exe.dir/:$\langle$filename$\rangle$. A $0$ $0$ pair for the $iw$ value will
+Writes out a table extracted from the array on the top of the wall stack to $\langle${\tt filename}$\rangle$ (in the \SOLPSfour environment)
+or (in the \SOLPSfive environment) {\tt b2pl.exe.dir/}$\langle${\tt filename}$\rangle$. A $0$ $0$ pair for the $iw$ value will
 output the entire range.
 
 \subsubsection{$<$filename,{\bf S}$>$ trgprt}\index{b2plot, trgprt}\label{sec:trgprt}
-Writes out the top of the target stack to $\langle$filename$\rangle$ (in the \SOLPSfour environment)
-or (in the \SOLPSfive environment) \verb:b2pl.exe.dir/:$\langle$filename$\rangle$.
+Writes out the top of the target stack to $\langle${\tt filename}$\rangle$ (in the \SOLPSfour environment)
+or (in the \SOLPSfive environment) {\tt b2pl.exe.dir/}$\langle${\tt filename}$\rangle$.
 
 \subsubsection{$<$iw1,{\bf I}$>$ $<$iw2,{\bf I}$>$ $<$depth1,{\bf I}$>$ $<$depth2,{\bf I}$>$ $<$filename,{\bf S}$>$ trgtab}\index{b2plot, trgtab}\label{sec:trgtab}
-Writes out a table extracted from the matrix on the top of the target stack to $\langle$filename$\rangle$ (in the \SOLPSfour environment)
-or (in the \SOLPSfive environment) \verb:b2pl.exe.dir/:$\langle$filename$\rangle$. $0$ $0$ pairs for the $iw$ or $depth$ values will
+Writes out a table extracted from the matrix on the top of the target stack to $\langle${\tt filename}$\rangle$ (in the \SOLPSfour environment)
+or (in the \SOLPSfive environment) {\tt b2pl.exe.dir/}$\langle${\tt filename}$\rangle$. $0$ $0$ pairs for the $iw$ or $depth$ values will
 output the entire wall element or depth ranges, respectively.
 
 \subsubsection{$<$ix,{\bf I}$>$ $<$iy,{\bf I}$>$ $<$filename,{\bf S}$>$ outp}\index{b2plot, outp}\label{sec:outp}
-Writes out data from element ($\langle$ix$\rangle$,$\langle$iy$\rangle$) from the top of the matrix stack to $\langle$filename$\rangle$ (in the \SOLPSfour environment)
-or \verb:b2pl.exe.dir/:$\langle$filename$\rangle$ (in the \SOLPSfive environment).
+Writes out data from element $ ( \langle${\tt ix}$\rangle , \langle${\tt iy}$\rangle )$ from the top of the matrix stack to $\langle${\tt filename}$\rangle$ (in the \SOLPSfour environment)
+or {\tt b2pl.exe.dir/}$\langle${\tt filename}$\rangle$ (in the \SOLPSfive environment).
 
 \subsubsection{$<$i,{\bf I}$>$ $<$filename,{\bf S}$>$ eoutp}\index{b2plot, eoutp}\label{sec:eoutp}
-Writes out data from triangle element $\langle$i$\rangle$ from the top of the matrix stack to $\langle$filename$\rangle$ (in the \SOLPSfour environment)
-or \verb:b2pl.exe.dir/:$\langle$filename$\rangle$ (in the \SOLPSfive environment).
+Writes out data from triangle element $\langle${\tt i}$\rangle$ from the top of the matrix stack to $\langle${\tt filename}$\rangle$ (in the \SOLPSfour environment)
+or {\tt b2pl.exe.dir/}$\langle${\tt filename}$\rangle$ (in the \SOLPSfive environment).
 
 \subsubsection{$<$i,{\bf I}$>$ $<$iz,{\bf I}$>$ $<$filename,{\bf S}$>$ outptrg}\index{b2plot, outptrg}\label{sec:outptrg}
-Writes out data from element ($\langle$i$\rangle$,$\langle$iz$\rangle$) from the top of the target stack to $\langle$filename$\rangle$ (in the \SOLPSfour environment)
-or \verb:b2pl.exe.dir/:$\langle$filename$\rangle$ (in the \SOLPSfive environment).
+Writes out data from element $( \langle${\tt i}$\rangle , \langle${\tt iz}$\rangle )$ from the top of the target stack to $\langle${\tt filename}$\rangle$ (in the \SOLPSfour environment)
+or {\tt b2pl.exe.dir/}$\langle${\tt filename}$\rangle$ (in the \SOLPSfive environment).
 
 \subsubsection{$<$i,{\bf I}$>$ $<$filename,{\bf S}$>$ outpw}\index{b2plot, outpw}\label{sec:outpw}
-Writes out data from element $\langle$i$\rangle$ from the top of the wall stack to $\langle$filename$\rangle$ (in the \SOLPSfour environment)
-or (in the \SOLPSfive environment) to \verb:b2pl.exe.dir/:$\langle$filename$\rangle$.
+Writes out data from element $\langle${\tt i}$\rangle$ from the top of the wall stack to $\langle${\tt filename}$\rangle$ (in the \SOLPSfour environment)
+or (in the \SOLPSfive environment) to {\tt b2pl.exe.dir/}$\langle${\tt filename}$\rangle$.
 
 \subsubsection{f30}\index{b2plot, f30}\label{sec:f30}
-Produces the \verb:fort.30: file containing the geometry for use within {\tt Eirene}.
+Produces the {\tt fort.30} file containing the geometry for use within {\tt Eirene}.
 
 \subsubsection{f31}\index{b2plot, f31}\label{sec:f31}
-Produces the \verb:fort.31: file containing the plasma state for use within {\tt Eirene}.
+Produces the {\tt fort.31} file containing the plasma state for use within {\tt Eirene}.
 
 \subsubsection{tranprof}\index{b2plot, tranprof}\label{sec:tranprof}
 \index{b2.transport.profile, output by b2plot}
-Outputs the transport profile information as a \verb:b2.transport.inputfile: file.
+Outputs the transport profile information as a {\tt b2.transport.inputfile} file.
 
 \subsubsection{reso}\index{b2plot, reso}\label{sec:reso}
 Resets plotting output.
@@ -18658,12 +18711,12 @@ Helium, Boron, Carbon, Oxygen and Neon.
 
 \subsubsection{$<$is,{\bf I}$>$ $<$lambda,{\bf I}$>$ $<$delta,{\bf I}$>$ nspe}\index{b2plot, nspe}\label{sec:nspe}\index{ADAS}
 Generates the spectral line emissivities according to the {\tt ADAS} database \cite{ADAS}, stored in {\tt \$\{SOLPSTOP\}/modules\allowbreak/adas}
-or {\tt \$\{SOLPSTOP\}/data.local/adas}, for species index $\langle$is$\rangle$, centered around wavelength $\langle$lambda$\rangle$ (in {\em \AA}),
-with width $\langle$delta$\rangle$ (in {\em \AA}).
+or {\tt \$\{SOLPSTOP\}/data.local/adas}, for species index $\langle${\tt is}$\rangle$, centered around wavelength $\langle${\tt lambda}$\rangle$ (in {\em \AA}),
+with width $\langle${\tt delta}$\rangle$ (in {\em \AA}).
 {\bf nspec} is an alias for {\bf nspe}.
 
 \subsubsection{$<$n,{\bf I}$>$ mvsk}\index{b2plot, mvsk}\label{sec:mvsk}
-Sets the movie skip factor to $\langle$n$\rangle$ (default 1).
+Sets the movie skip factor to $\langle${\tt n}$\rangle$ (default is {\tt 1}).
 
 \subsubsection{nese}\index{b2plot, nese}\label{sec:nese}
 Overwrites the $n_e$ array with the top of the matrix stack.
@@ -18672,35 +18725,35 @@ Overwrites the $n_e$ array with the top of the matrix stack.
 Overwrites the $T_e$ array with the top of the matrix stack.
 
 \subsubsection{$<$ix,{\bf I}$>$ imp}\index{b2plot, imp}\label{sec:imp}
-Overwrites the inner midplane location index {\em jxi} with $\langle$ix$\rangle$.
-See description of 'b2mwti\_jxi' switch (see Appendix \ref{lis:b2cdci}) for the
+Overwrites the inner midplane location index {\em jxi} with $\langle${\tt ix}$\rangle$.
+See description of {\tt b2mwti\_jxi} switch (see Appendix \ref{lis:b2cdci}) for the
 computation of its default value.
 
 \subsubsection{$<$ix,{\bf I}$>$ omp}\index{b2plot, omp}\label{sec:omp}
-Overwrites the outer midplane location index {\em jxa} with $\langle$ix$\rangle$.
-See description of 'b2mwti\_jxa' switch (see Appendix \ref{lis:b2cdci}) for the
+Overwrites the outer midplane location index {\em jxa} with $\langle${\tt ix}$\rangle$.
+See description of {\tt b2mwti\_jxa} switch (see Appendix \ref{lis:b2cdci}) for the
 computation of its default value.
 
 \subsubsection{$<$iy,{\bf I}$>$ yref}\index{b2plot, yref}\label{sec:yref}
-Overwrites the radial reference location index {\em iyref} with $\langle$iy$\rangle$.
-See description of 'set\_transport\_iyref' switch (see Appendix \ref{lis:b2cdci})
+Overwrites the radial reference location index {\em iyref} with $\langle${\tt iy}$\rangle$.
+See description of {\tt set\_transport\_iyref} switch (see Appendix \ref{lis:b2cdci})
 for the computation of its default value (usually the separatrix location).
 
 \subsubsection{$<$n,{\bf I}$>$ ave}\index{b2plot, ave}\label{sec:ave}
-Averages over $\langle$n$\rangle$ chords for {\bf chor} and {\bf chvl}.
+Averages over $\langle${\tt n}$\rangle$ chords for {\bf chor} and {\bf chvl}.
 
 \subsubsection{$<$device name,{\bf S}$>$ pdev}\index{b2plot, pdev}\label{sec:pdev}
-Sets value of {\tt PLPLOT} device name to $\langle$device name$\rangle$.
+Sets value of {\tt PLPLOT} device name to $\langle${\tt device name}$\rangle$.
 
 \subsubsection{$<$winid,{\bf I}$>$ swid}\index{b2plot, swid}\label{sec:swid}
-Sets value of {\tt WIN\_ID} environment variable (part of {\tt TCL/TK} interface) to $\langle$winid$\rangle$.
+Sets value of {\tt WIN\_ID} environment variable (part of {\tt TCL/TK} interface) to $\langle${\tt winid}$\rangle$.
 
 \subsubsection{xyrz}\index{b2plot, xyrz}\label{sec:xyrz}
 Outputs {\em xmin}, {\em xmax}, {\em ymin}, {\em ymax}, {\em rmin}, {\em rmax}, {\em zmin}, and {\em zmax} to stdout.
 
 \subsubsection{$<$ig,{\bf I}$>$ user}\index{b2plot, user}\label{sec:user}
 \begin{sloppypar}
-Optional user routine. The choice of user routine is governed by $\langle$ig$\rangle$.
+Optional user routine. The choice of user routine is governed by $\langle${\tt ig}$\rangle$.
 Currently coded functions are:
 \begin{description}
   \item[ig = -20] Produces a file {\tt diagno.dat} with coordinates of the grid cell centers and densities, temperatures for all species
@@ -18723,9 +18776,9 @@ Currently coded functions are:
   \item[ig = -3] Prints out the particle flux integrals onto the targets in file {\tt particle.flx}
   \item[ig = -2] Produces a file {\tt horton.dat} with coordinates of the grid cell centers and the plasma parameters (density, temperatures, neutral density, and so on) in these points
   \item[ig = -1] Produces a file {\tt abramov.dat} with coordinates of the grid cell centers and the plasma parameters (density, temperatures, neutral density) in these points
-  \item[0 $\le$ ig $\le$ ny] Produces a file {\tt oleg.dat} with plasma parameters (density, temperature, parallel flow velocity, parallel heat flux) against the distance along the magnetic field along flux surface index $\langle$ig$\rangle$
+  \item[0 $\le$ ig $\le$ ny] Produces a file {\tt oleg.dat} with plasma parameters (density, temperature, parallel flow velocity, parallel heat flux) against the distance along the magnetic field along flux surface index $\langle${\tt ig}$\rangle$
   \item[ny $<$ ig $<$ 1000] Produces two files with estimated helium concentration ({\tt fraction.he}) and neutral pressure ({\tt pressure.ntr}) in the PFR for summary plots
-  \item[ig $\ge$ 1000] Adds a line to the file {\tt ../sum\_tmp/spec\_pwr.dat} with the power entering both divertors, power radiated along the divertor legs, power radiated near the targets, areas of the separatrix branches and mean specific power radiated along the divertor legs per square meter. $\langle$ig$\rangle$ -1000 cells are treated as "close to the targets"
+  \item[ig $\ge$ 1000] Adds a line to the file {\tt ../sum\_tmp/spec\_pwr.dat} with the power entering both divertors, power radiated along the divertor legs, power radiated near the targets, areas of the separatrix branches and mean specific power radiated along the divertor legs per square meter. $\langle${\tt ig}$\rangle$ -1000 cells are treated as "close to the targets"
 \end{description}
 \end{sloppypar}
 
@@ -18980,14 +19033,14 @@ information on the first line.
 Used for specifying the {\tt CDF} file if a movie is to be made.
 
 \subsubsection{$<$istart,{\bf I}$>$ $<$iend,{\bf I}$>$ $<$varname, {\bf S}$>$ movie}\index{b2plot, movie}\label{sec:movie}
-Creates a movie for timeslice $\langle$istart$\rangle$ to time slice $\langle$iend$\rangle$ of variable $\langle$varname$\rangle$. The
+Creates a movie for timeslice $\langle${\tt istart}$\rangle$ to time slice $\langle${\tt iend}$\rangle$ of variable $\langle${\tt varname}$\rangle$. The
 list of available quantities in given in Appendix \ref{cha:b2time}. The time interval between frames can be
 controlled with the {\bf mvsk} command.
 {\bf nmovie} is an alias for {\bf movie}.
 
 \subsubsection{$<$istart,{\bf I}$>$ $<$iend,{\bf I}$>$ $<$filename, {\bf S}$>$ $<$varname, {\bf S}$>$ omovie}\index{b2plot, omovie}\label{sec:omovie}
-Creates a movie for timeslice $\langle$istart$\rangle$ to time slice $\langle$iend$\rangle$ of variable $\langle$varname$\rangle$ read
-from file $\langle$filename$\rangle$.
+Creates a movie for timeslice $\langle${\tt istart}$\rangle$ to time slice $\langle${\tt iend}$\rangle$ of variable $\langle${\tt varname}$\rangle$ read
+from file $\langle${\tt filename}$\rangle$.
 
 \subsubsection{$<$sonnetfile$>$ sonn}\index{b2plot, sonn}\label{sec:sonn}
 Reads in a new {\tt Sonnet} geometry file.
@@ -19005,7 +19058,7 @@ Computes a reaction rate as per the {\tt Eirene} specification. Consult the
 {\bf amjuel} is an alias for {\bf amju}.
 
 \subsubsection{$<$reac$>$ adas}\index{b2plot, adas}\label{sec:adas}\index{ADAS}
-Computes a reaction rate as per the {\tt ADAS} specification. The $\langle$reac$\rangle$ string should be something of the
+Computes a reaction rate as per the {\tt ADAS} specification. The $\langle${\tt reac}$\rangle$ string should be something of the
 form 'acd89'. The matrix obtained contains then all the rates from these files, for all species in the run, extracted
 from the files stored in {\tt \$\{SOLPSTOP\}/modules/adas} or
 {\tt \$\{SOLPSTOP\}/data.local/adas}.

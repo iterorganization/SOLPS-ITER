@@ -100,8 +100,6 @@ check : $(ASSETS)
 query-%:
 	@echo $($(*))
 
-
-
 help :
 	@echo
 	@echo "The following tutorials are available:"

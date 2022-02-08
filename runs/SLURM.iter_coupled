@@ -14,6 +14,7 @@ echo Using SOLPSTOP = #SOLPSTOP#
 
 set USE_MPI=""
 set nodename=`hostname`
+if ($?SOLPS_MPI) then
   set MPI_OPTS=#MPIOPTS#
   switch ($nodename)
     case "sdcc-login*.iter.org":

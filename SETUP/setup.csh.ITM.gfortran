@@ -16,7 +16,7 @@ setenv FC gfortran
 
 # Load modules
 module unload imasenv
-module load imasenv/3.31.0/gcc/7.3.0/1.1
+module load imasenv/3.33.0/gcc/7.3.0/1.0
 setenv GGD_VERSION `pkg-config ggd --modversion`
 setenv EBVERSIONMSCL `pkg-config mscl --modversion`
 module load itm-nag
