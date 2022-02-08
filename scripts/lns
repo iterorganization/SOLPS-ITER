@@ -71,7 +71,11 @@ z=`cat $NAME`
     echo Linking to limiter equilibrium $l
     e=$l
   } || {
-    echo Limiter equilibrium file $l not found!
+    [ "X${l}X" -eq 'X-X' ] && {
+      echo Default limiter equilibrium name provided: assuming a linear device case!
+    } || {
+      echo Limiter equilibrium file $l not found!
+    }
   }
 }
 rm $NAME
@@ -83,9 +87,10 @@ case $e in
                ln -sf `pwd`/default.equ dg.equ
                     echo '-- the default equilibrium file is used';
            } || echo '*** No default equilibrium file found (!!!)';;
-  ( /*   ) ln -sf $e ${DGSONNETMASK}/equilibr.snn
-           cp $e ${DGSONNETMASK}
-           ln -sf $e dg.equ;;
+  ( /*   ) [ -e $e ] && f=$e || f=`basename $e`
+           ln -sf $f ${DGSONNETMASK}/equilibr.snn
+           cp $f ${DGSONNETMASK}
+           ln -sf $f dg.equ;;
   ( ../* ) (d=`dirname $e`; f=`basename $e`; cd $d;
            ln -sf `pwd`/$f ${DGSONNETMASK}/equilibr.snn
            cp $f ${DGSONNETMASK}

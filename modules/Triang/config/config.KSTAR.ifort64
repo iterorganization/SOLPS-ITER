@@ -13,42 +13,15 @@ ifndef LD_NAG
   $(error LD_NAG not defined)
 endif
 
-#DEFINES += ${SOLPS_CPP} ${EIRENE_DEFINES} -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
-#DEFINES += ${SOLPS_CPP} ${EIRENE_DEFINES} -DTRIANG -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
-EQUIVS    =
-
 #CPP      = -/lib/cpp -C -traditional
 CPP       = /lib/cpp -traditional
-CPPOPTS   = -P -I${srcdir} ${EQUIVS}
-SED       =
-LINK_MOD  =
 
 FC        = ifort
 
-ifdef SOLPS_DEBUG
-FCOPTS    = -g -C -debug all
-else
-FCOPTS    = -O3 -vec_report0
-endif
-
-#COMPILE  = ${FC} -c ${FFLAGS}
-
-NAG       = ${LD_NAG}
 GKS       = ${LD_GR} ${LD_GKS} -lX11 -lXt -lXmu
 
 #LDLIBS   = ${LD_MSCL} -L/usr/local/lib -L/usr/X11R6/lib64
 LDLIBS    =
-LDEXTRA   =
-
-# new
-
-INCMOD    = -I
-MOD       = mod
-OBJDEST   = -o ${OBJDIR}/$*.o
-
-BLD       = ar rcv
-
-LD        = ${FC}
 
 #!!!Local Variables:
 #!!! mode: Makefile

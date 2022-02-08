@@ -2,6 +2,7 @@
       use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
+      use b2mod_subsys
       use eirmod_solps
 
 c  version : 01.04.2005 00:51
@@ -16,7 +17,6 @@ c***  returns .TRUE. if successful and .FALSE. otherwise
       integer NSS(nsts),nn,i,j,k,l
       logical ex 
       real txmin,txmax,tymin,tymax
-      external subini, subend
     
       call subini ('uinptriang')
       print *

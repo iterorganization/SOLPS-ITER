@@ -2,6 +2,7 @@
       use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
+      use b2mod_subsys
       use b2mod_solpstop
       use eirmod_solps
 c
@@ -16,7 +17,7 @@ c======================================================================
       character*2 listmat(nmtr)
       logical, allocatable :: trim_found(:)
       external open_file,uinnam,uintrg,uinaux,uiniamd,streql,
-     .         xertst,xerrab,subini,subend
+     .         xertst,xerrab
 c======================================================================
 c*** set up the input routine
 c
@@ -27,7 +28,7 @@ c
       lena=8
       jmess=2
       lfin=72
-      finish = repeat(' ',8)
+      finish = 'finish'
       promp(1) = repeat(' ',8)
       promp(2) = repeat(' ',8)
       fixkey=.false.
@@ -92,6 +93,31 @@ c
             listmat(nmat)='Fe'
           else !}{
             listmat(nmat)=umtrl(i)(1:2)
+          end if !}
+        end if !}
+        if (trnspa(i,1).gt.0.0_R8 .and. trnspa(i,2).gt.0.0_R8) then !{
+          if (jlside(i).ne.0) then !{
+            write(0,*) '(Semi-)Transparent surfaces must allow '//
+     ,                 'particles arriving from both sides (JLSIDE = 0)'
+            write(0,*) 'STOP ==> Check your DG model for wall index ',i
+            call xerrab ('Inconsistent surface data !')
+          end if !}
+        end if !}
+        if (jlsptp(i).ne.0 .and. jsrss(i).eq.0) then !{
+          match_found = .false.
+          do isp=1,nspigen !{
+            if (match_found) cycle
+            if (streql(umtrl(i),'SS')) then !{
+              match_found = streql('Fe',spcigen(isp))
+            else !}{
+              match_found = streql(umtrl(i),spcigen(isp))
+            end if !}
+          end do !}
+          if (.not.match_found) then !{
+            write(0,*) 'Sputtering of wall material requested, '//
+     ,                 'but no matching species is declared !'
+            write(0,*) 'STOP ==> Check your DG model for wall index ',i
+            call xerrab ('Sputtering of undeclared wall material !')
           end if !}
         end if !}
       end do !}

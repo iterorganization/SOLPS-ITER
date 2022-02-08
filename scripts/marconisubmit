@@ -4,6 +4,7 @@ set NAME=/tmp/.run.$$.$USER.`date +%Y%m%d%H%M%S`
 set EMAIL=`get_git_email`
 set JOB_NAME="SOLPS-ITER"
 set PROCS=1
+set NODES=1
 set THREADS=1
 set hours=24
 set mem=4GB
@@ -15,10 +16,8 @@ set MPIOPTS=""
 set standalone="no"
 set LOOP_OPTS=""
 
-set solpstop=`climb_and_look_for SOLPSTOP`
-if (-s $solpstop) then
-  setenv SOLPSTOP "`cat $solpstop`"
-else if ($SOLPSTOP == "") then
+setenv SOLPSTOP "`determine_SOLPSTOP`"
+if ($SOLPSTOP == "") then
   setenv SOLPSTOP "`echo $PWD | sed 's:/runs/.*::'`"
 endif
 
@@ -44,6 +43,7 @@ Available options are:
   -t <<THREADS>>     use OpenMP parallelization with <<THREADS>> threads (default $THREADS)
   -T <<HOURS>>       number of elapsed hours requested (default $hours)
   -M <<MEM_SIZE>>    memory size (default $mem)
+  -N <<NODES>>       number of nodes requested (default $NODES)
   -Q <<PARTITION>>   partition on which to submit the job (default skl_fua_dbg for short jobs and skl_fua_prod for long jobs)
 
 EOF
@@ -102,6 +102,16 @@ EOF
     set LOOP_OPTS="-t ${HELP_STRING} ${LOOP_OPTS}" 
     goto argloop
   endif
+  if ("X${1}X" == "X-NX") then
+    shift
+    set NODES="$1"
+    echo Asking for run over $NODES nodes
+    shift
+    set HELP_STRING="${NODES}"
+#    echo $HELP_STRING
+    set LOOP_OPTS="-N ${HELP_STRING} ${LOOP_OPTS}"
+    goto argloop
+  endif
   if ("X${1}X" == "X-TX") then
     shift
     set hours="$1"
@@ -132,6 +142,9 @@ EOF
     set LOOP_OPTS="-Q ${HELP_STRING} ${LOOP_OPTS}"
     goto argloop
   endif
+
+# Determine Tasks
+@ TASKS = ( $PROCS / $NODES  )
 
 # logic to determine the partition on the Marconi HPC cluster
 @ cpu = ( $hours * $PROCS )
@@ -201,7 +214,9 @@ sed \
   -e 's:#SOLPSTOP#:'$SOLPSTOP':g' \
   -e 's:#EMAIL#:'$EMAIL':g' \
   -e "s:#MPIOPTS#:'$MPIOPTS':g" \
+  -e "s:#TASKS#:'$TASKS':g" \
   -e "s:#PROCS#:'$PROCS':g" \
+  -e "s:#NODES#:'$NODES':g" \
   -e "s:#THREADS#:'$THREADS':g" \
   -e 's:#MEM#:'$mem':g' \
   -e 's:#HOURS#:'$hours':g' \

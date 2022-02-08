@@ -31,8 +31,8 @@ c      integer nniprm(nmxprm,nkwrd,nblck)
       equivalence (ss,s),(s(mxkwln+3),us),(s(2),sss)
       data ss / ' ' /
 #ifdef DBG
-      real r
-      character c*8
+c      real r
+c      character c*8
 #endif
 c*** Flag of the first call
       data ufirst / .true. /

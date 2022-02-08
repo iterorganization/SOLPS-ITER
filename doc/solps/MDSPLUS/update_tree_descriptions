@@ -1,0 +1,30 @@
+#! /bin/tcsh -f
+mdsidl << EOD
+mdsconnect,'solps-mdsplus.aug.ipp.mpg.de:8001'
+mdsclose
+mdsdecomp_tree,'solps',-1
+mdsdecomp_tree,'diag',-1
+mdsdecomp_tree,'ident',-1
+mdsdecomp_tree,'movies',-1
+mdsdecomp_tree,'snapshot',-1
+mdsdecomp_tree,'tallies',-1
+mdsdecomp_tree,'timedep',-1
+mdsclose
+mdsdisconnect
+EOD
+
+foreach i (*_MODEL.TCL)
+
+  echo '<html version="2.0">' >! $i.html
+  echo '<head>' >> $i.html
+  echo "<title>$i</title>" >> $i.html
+  echo '</head>' >> $i.html
+  echo '<body>' >> $i.html
+
+  set j=`echo $i | sed 's:_MODEL.TCL::'`
+  grep '^ADD NODE' $i | sed 's;^ADD NODE.* \\'$j'::;\\'$j'::;' | egrep -v '.*:.*:COMMENT' | sort > ! /tmp/tmp.1
+  awk '/^PUT\/EXTEND\/NOLF.*:COMMENT/{node=$2;active=NR+1}NR==active{print node,$0}' $i | sed 's;:COMMENT ; ;' | sort > ! /tmp/tmp.2
+  cat /tmp/tmp.? | sort | awk '$1!=part1&&NR>1{print line" <p>"}{line=$0;part1=$1}$1!~/.*:.*:.*:.*/{printf "\n"}END{print line" <p>"}' >>  $i.html
+  echo '</body>' >> $i.html
+  echo '</html>' >> $i.html
+end

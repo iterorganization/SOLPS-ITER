@@ -50,98 +50,13 @@ LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNCAR4 -DJET -DPGF90 -DNOQUAD
+SOLPS_CPP      = -DNCAR4 -DJET
 MPI_CPP        = -I${MPDIR}/include
-LD_MPI         = -Mmpi=mpich
 B25_DEFINES    =
 CARRE_DEFINES  =
 EIRENE_DEFINES =
 FFLAGSEXTRA    =
 
-# Autodetected optional features...
-
-# Build with NetCDF tools if available
-ifdef LD_NETCDF
-  SOLPS_CPP   += -DCDF_MOVIE
-else
-  SOLPS_CPP   += -DNO_CDF
-endif
-
-# Build with MDSplus tools if MDSplus is present
-ifdef LD_MDSPLUS
-  SOLPS_CPP   += -DMDSPLUS
-endif
-
-# Build with Catalyst if ParaView is in PATH
-ifdef LD_CATALYST
-  SOLPS_CPP   += -DCATALYST
-endif
-
-# Build with IMAS if imas module is loaded
-ifdef IMAS_VERSION
-  UAL_MAJOR_VERSION = $(shell echo ${UAL_VERSION} | cut -d '.' -f1 )
-  IMAS_MAJOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f1 )
-  IMAS_MINOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f2 )
-  ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 17; echo $$?),0)
-    GGD_MINOR_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f2 )
-    LD_UAL = `pkg-config imas-pgi ggd --libs`
-  else
-    ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 12; echo $$?),0)
-      GGD_MINOR_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f2 )
-      LD_UAL = `pkg-config imas-pgi --libs` -lggd-pgi
-    else
-      GGD_MINOR_VERSION = 0
-      LD_UAL = `pkg-config imas-lowlevel imas-pgi --libs`
-    endif
-  endif
-  SOLPS_CPP += -DIMAS -DUAL_MAJOR_VERSION=${UAL_MAJOR_VERSION} -DIMAS_MINOR_VERSION=${IMAS_MINOR_VERSION} -DGGD_MINOR_VERSION=${GGD_MINOR_VERSION}
-  export LD_UAL
-else
-  UAL_MAJOR_VERSION = 0
-  GGD_MINOR_VERSION = 0
-  IMAS_MAJOR_VERSION = 0
-  IMAS_MINOR_VERSION = 0
-endif
-export UAL_MAJOR_VERSION
-export GGD_MINOR_VERSION
-export IMAS_MAJOR_VERSION
-export IMAS_MINOR_VERSION
-
-# Build with OpenMP if requested
-ifdef SOLPS_OPENMP
-  B25_DEFINES += -D_OPENMP
-endif
-
-#
-# Export for use in sub-makefiles
-#
-
-export NCDIR
-export MSCL_ROOT
-export H5DIR
-export GR_ROOT
-export GLI_HOME
-export NCARG_ROOT
-export NAGDIR
-export MDSPLUS_DIR
-export MPDIR
-
-export LD_NETCDF
-export LD_MSCL
-export LD_GR
-export LD_GKS
-export LD_NCARG
-export LD_NAG
-export LD_MDSPLUS
-export LD_SONNET
-export LD_MPI
-
-export SOLPS_CPP
-export FFLAGSEXTRA
-export B25_DEFINES
-export CARRE_DEFINES
-export EIRENE_DEFINES
-export MPI_CPP
 
 #!!!Local Variables:
 #!!! mode: Makefile

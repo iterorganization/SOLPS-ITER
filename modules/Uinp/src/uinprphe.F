@@ -2,6 +2,7 @@
       use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
+      use b2mod_subsys
       use eirmod_solps
 c
 c  version : 30.06.2000 19:47
@@ -14,7 +15,7 @@ c=======================================================================
 #include "uib2pprm.inc"
       integer i,j,k,l,n,luind(nxd),luwrk(nxd)
       logical streql
-      external xerrab, streql, subini, subend
+      external xerrab, streql
 c=======================================================================
       call subini ('uinprphe')
 

@@ -1,0 +1,43 @@
+DEFINES += -DPGF90
+EQUIVS =
+
+CPPOPTS = -P -I${srcdir} ${EQUIVS}
+LINK_MOD =
+
+FC = pgf90
+COMPILER_MAJOR_VERSION = $(shell ${FC} -V | grep "pgf90" | awk 'match($$0,/[0-9]+\.[0-9]+\-[0-9]+/){print substr($$0, RSTART, RLENGTH)}' | cut -d '.' -f 1 )
+
+FCOPTS += -Mbackslash
+ifdef SOLPS_DEBUG
+FCOPTS += -C -g -Mchkptr -Mchkstk
+ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -le 19; echo $$?),0)
+FCOPTS += -Mchkfpstk -Mpgicoff
+endif
+else
+# FCOPTS += -O2
+FCOPTS += -fast
+endif
+
+DBLFC = ${FC}
+DBLOPTION =
+
+INCMOD = -I
+MOD = mod
+OBJDEST = -o ${OBJDIR}/$*.o
+
+BLD = ar rcv
+
+LD = ${FC}
+
+ifdef SOLPS_DEBUG
+LDOPTS += -g -C
+endif
+
+GKS = ${LD_GR} ${LD_GKS} -lX11 -lXt
+LDLIBS =
+LDEXTRA =
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+

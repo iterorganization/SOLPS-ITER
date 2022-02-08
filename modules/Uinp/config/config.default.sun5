@@ -16,7 +16,7 @@ COMPILE  = ${FC} -c ${FFLAGS}
 CPP      = /usr/ccs/lib/cpp
 MOD      = mod
 
-LDLIBS   = ${LD_MSCL}
+LDLIBS   = ${LD_MSCL} ${LD_NAG}
 LDEXTRA  =
 
 #!!!Local Variables:

@@ -2,6 +2,7 @@
       use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
+      use b2mod_subsys
       use eirmod_solps
 c
 c  version : 01.04.2005 14:27
@@ -17,7 +18,7 @@ c=======================================================================
       character hlp_c*2
       integer find_matching_species
       logical streql
-      external streql, xertst, subini, subend, find_matching_species
+      external streql, xertst, find_matching_species
 c=======================================================================
       call subini ('uinbndfl')
 c*** Determine the default source scaling relations
@@ -112,7 +113,11 @@ c*** Take the neutral data from the "whole target" specification
             else !}{
 c*** Take the data from the boundary default
               ewmbnds(izn,iknd)=ewmbndx(0,iknd)
-              jskbnds(izn,iknd)=jskbndx(0,iknd)
+              if (ln_cnfg.and.iknd.eq.1) then
+                jskbnds(izn,iknd)=3
+              else
+                jskbnds(izn,iknd)=jskbndx(0,iknd)
+              end if
               jrfbnds(izn,iknd)=jrfbndx(0,iknd)
               jcsbnds(izn,iknd)=jcsbndx(0,iknd)
               jcgbnds(izn,iknd)=jcgbndx(0,iknd)

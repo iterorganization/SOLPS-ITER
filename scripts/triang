@@ -8,10 +8,7 @@
 
 GV="gv $GV_OPT"
 
-solpstop=`climb_and_look_for SOLPSTOP`
-[ -s $solpstop ] && {
-  SOLPSTOP="`cat $solpstop`"
-}
+SOLPSTOP=`determine_SOLPSTOP`
 
 [ "$DEVICE" = '' ] && {
   print -u2 -n -- "No DEVICE selected. Please provide a device name\n "
@@ -212,6 +209,7 @@ while true; do {
       ( h|H )                                               # help:
             echo "$Help"; break;;
       (  u  )                                               # run uinp to produce the input for Eirene:
+            [ -r $eirinp ] && rm $eirinp
             uinp
             N=
             [ -r $b2agout ] && [ b2ag.dat -nt structure.dat ] && {
@@ -222,10 +220,11 @@ while true; do {
                 /bin/echo -e "The last grid found is : $carrename"
                 echo -e "'b2agfs_geometry'\t'$carrename'" >> b2ag.dat
               }
-              [ -r $eirinp ] && q=b || q=q
+              [ $eirinp -nt dg.dgo ] && q=b || q=q
             }
             break;;  
       (  U  )                                               # run uinp to produce the input for Eirene:
+            [ -r $eirinp ] && rm $eirinp
             uinp -l
             [ -L uinput.dg ] && {
               TRIADIR=$TRIADIR_back
@@ -241,34 +240,36 @@ while true; do {
                 /bin/echo -e "The last grid found is : $carrename"
                 echo -e "'b2agfs_geometry'\t'$carrename'" >> b2ag.dat
               }
-              [ -r $eirinp ] && q=b || q=q
+              [ $eirinp -nt dg.dgo ] && q=b || q=q
             }
             break;;  
       ( b|B )                                               # run b2ag to produce fort.30 file:
             [ -r b2fplasma ] && {
-              print -u2 -- "Command line: echo f30 | b2plot > b2pl.prt"
+              print -u2 -- "Command line: echo f30 | b2plot > b2pl.log"
               [ -r $b2agout ] && rm $b2agout
-              echo f30 | b2plot > b2pl.prt
+              echo f30 | b2plot > b2pl.log
               [ -r b2pl.exe.dir/$b2agout ] && {
                 mv b2pl.exe.dir/$b2agout .
                 rmdir b2pl.exe.dir
                 print -u2 -- "Produced $b2agout file"
                 q=e
               } || {
-                print -u2 -- "Could not produce the $b2agout file. Please provide separately"
+                print -u2 -- "Could not produce the $b2agout file"
+                print -u2 -- "    ==> Check b2pl.log file or provide separately"
                 q=u
               }
             } || {
               print -u2 -- "Command line: ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2ag.prt > b2ag.log"
               [ -r b2ag.prt ] && rm b2ag.prt
-              [ -r $b2agout ] && rm $b2aagout
+              [ -r $b2agout ] && rm $b2agout
               ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2ag.prt > b2ag.log
               [ -r $b2agout ] && {
                 [ -d b2ag.exe.dir ] && rmdir b2ag.exe.dir
                 print -u2 -- "Produced $b2agout file"
                 q=e
               } || {
-                print -u2 -- "Could not produce the $b2agout file. Please provide separately"
+                print -u2 -- "Could not produce the $b2agout file"
+                print -u2 -- "    ==> Check b2ag.log file or provide separately"
                 q=u
               }
             }

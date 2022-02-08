@@ -2,6 +2,7 @@
       use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
+      use b2mod_subsys
       use eirmod_solps
 c
 c  version : 15.03.2001 00:57
@@ -31,7 +32,43 @@ c*** Check the topology
      ,        'uinbndrg - must be one of: ',(' ',topo_hlp(i),i=1,nt_hlp)
         call xerrab ('==> Check the topology name in the DG model')
       end if !}
-      if(lm_cnfg) then  !{
+      if(ln_cnfg) then  !{
+c*** Core
+        crgbndt(1,1)='S'
+        lrsbndt(1,1)=0
+        lrpbndt(1,1,1)=1
+        lrpbndt(1,1,2)=nx
+        lrrbndt(1,1,1)=0
+        lrrbndt(1,1,2)=nrpfl
+c*** Target 1
+        crgbndt(1,2)='W'
+        lrsbndt(1,2)=0
+        lrpbndt(1,2,1)=0
+        lrpbndt(1,2,2)=nx/2
+        lrrbndt(1,2,1)=0
+        lrrbndt(1,2,2)=irwl
+c*** Target 2
+        crgbndt(2,2)='E'
+        lrsbndt(2,2)=nx+1
+        lrpbndt(2,2,1)=nx/2
+        lrpbndt(2,2,2)=nx+1
+        lrrbndt(2,2,1)=0
+        lrrbndt(2,2,2)=irwl
+c*** Wall
+        crgbndt(1,4)='N'
+        lrsbndt(1,4)=irwl
+        lrpbndt(1,4,1)=1
+        lrpbndt(1,4,2)=nx
+        lrrbndt(1,4,1)=1
+        lrrbndt(1,4,2)=irwl
+
+        ntrgdflt=2
+        nrgbndt(1)=1
+        nrgbndt(2)=2
+        nrgbndt(3)=0
+        nrgbndt(4)=1
+
+      else if(lm_cnfg) then  !{
 c*** Core
         crgbndt(1,1)='S'
         lrsbndt(1,1)=0

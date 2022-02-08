@@ -2,6 +2,7 @@
       use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
+      use b2mod_subsys
       use eirmod_solps
 c
 c  version : 01.06.99 18:08
@@ -16,7 +17,7 @@ c=======================================================================
       integer nlpw_hlp
       parameter (nlpw_hlp=16)
       character hlp_prj*8,hlp_wll*(nlpw_hlp),hlp_prw*(nlpw_hlp+8)
-      external xerrab, subini, subend
+      external xerrab
 c=======================================================================
       call subini ('uinprpsf')
 

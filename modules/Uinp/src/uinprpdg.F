@@ -2,6 +2,7 @@
       use b2mod_constants
       use b2mod_layer
      , , only: ntrack, nalloys
+      use b2mod_subsys
       use eirmod_solps
 c
 c  version : 28.04.2003 23:32
@@ -19,7 +20,7 @@ c=======================================================================
       integer mesh_cell_ind
       logical plspec_b,prspec_b,plargl_b,prargl_b
       logical ex,streql
-      external streql, subini, subend, mesh_cell_ind
+      external streql, mesh_cell_ind
       real alloc_b,flux_b(nstra)
       save alloc_b,flux_b,
      ,  ntcpu_b,nfile_b,npts_b,lntspec_b,lntsput_b,nmcsput_b,ngwties_b,

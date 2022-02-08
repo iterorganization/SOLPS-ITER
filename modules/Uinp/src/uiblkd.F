@@ -26,8 +26,8 @@ c*** General information
 
       data   topo, mnpr,mnptseg,mdvbndx,  ldvbndx  ,ntrgdflt,do_hepdt /
      /        ' ',  0  ,   0   ,   0   ,0,nbnddvd*0,    0   , .false. /,
-     ,  namdf,amd_file ,nnrctn,n_spcsrf,npfrgrp,lm_cnfg /
-     /    0  ,namdfs*' ',   0  ,   0    ,   0  ,.false. /,
+     ,  namdf,amd_file ,nnrctn,n_spcsrf,npfrgrp,lm_cnfg,ln_cnfg /
+     /    0  ,namdfs*' ',   0  ,   0    ,   0  ,.false.,.false. /,
      , lm_vhst,lm_whst,   niiso   , tiiso, teiso/
      /  10000 , 50000 , nsdb2*1.e5,  0.1 ,  0.1 /,
      , zaator, roator,nttrator /
@@ -562,7 +562,7 @@ c*** 4
       data (rctddlte(i,13),i=1,lurctdx) / 2*0.0 /
       data (rctddlte(i,14),i=1,lurctdxp) / 0.0, -1.0 /
       data (rctdenr1(i,1),i=1,mreac)    / mreac*0 /
-      data (rctdenr1(i,2),i=1,lurctdh2) / 1.0, 3.0, 5.0, 4*0 /
+      data (rctdenr1(i,2),i=1,lurctdh2) / 0.0, 3.0, 5.0, 4*0 /
       data (rctdenr1(i,3),i=1,mreac)    / mreac*0 /
       data (rctdenr1(i,4),i=1,mreac)    / mreac*0 /
       data (rctdenr1(i,5),i=1,mreac)    / mreac*0 /
@@ -686,13 +686,14 @@ c*** 5
       data fnamcdn, h2cdn  , reaccdn, crcdn   /
      /    lurc*' ',lurc*' ',lurc*' ',lurc*' ' /
 
-      data indpro / 6*6, 6*0  /
+      data indpro / 6*6, 4*0, 9, 0 /
       data te0,te1,te2,te3,te4,te5 / 6*0./
       data ti0,ti1,ti2,ti3,ti4,ti5 / lup6*0./
       data di0,di1,di2,di3,di4,di5 / lup6*0./
       data vx0,vx1,vx2,vx3,vx4,vx5 / lup6*0./
       data vy0,vy1,vy2,vy3,vy4,vy5 / lup6*0./
       data vz0,vz1,vz2,vz3,vz4,vz5 / lup6*0./
+      data zi0,zi1,zi2,zi3,zi4,zi5 / lup6*0./
       data b0,b1,b2,b3,b4,b5       / 6*0./
       data vl0,vl1,vl2,vl3,vl4,vl5 / 6*0./
 
@@ -926,8 +927,8 @@ c*** 14
      /    lusg*0,lusg*7,   0  ,   0  ,    1   ,    1   ,   0  ,   0   /
       data fcte , bmass ,  chgsp ,  chgsee ,  chgsei , chgsmom /
      /   npls*1.,npls*0.,nstra*60.,nstra*60.,nstra*100.,nstra*50. /
-      data lsymet,lbalan,lcoarse, lfchgs /
-     /    .false.,.true.,.false.,.false. /
+      data lsymet,lbalan,lcoarse, lfchgs,lsprcl /
+     /    .false.,.true.,.false.,.false.,.true. /
 
 c*** 15
 
@@ -953,8 +954,8 @@ c*** Data for Eirene test run
      / .true. ,.true.   ,.true. , .false. /,
      , ttpl1st,ttpl2nd,ttpladd,ttplhst,        ttplcut       ,ttplnums/
      / .true. ,.true. ,.true. ,.true. ,.false.,.false.,.true.,.true.  /,
-     , ttplspec,ttprspec,ttplargl,ttprargl /
-     / .true.  ,.true.  ,.true.  ,.true.   /
+     , ttplspec,ttprspec,ttplargl,ttprargl,ttlsprcl /
+     / .true.  ,.true.  ,.true.  ,.true.  ,.false.  /
 
 c*** Data for diagnostic run
 

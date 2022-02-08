@@ -1,9 +1,9 @@
       subroutine uinprpbn
+      use b2mod_subsys
       implicit none
 c
 c  version : 22.01.2003 20:03
 c
-      external subini, subend
 c=======================================================================
 c*** Prepare the data on the boundary conditions at the grid edges
 c=======================================================================

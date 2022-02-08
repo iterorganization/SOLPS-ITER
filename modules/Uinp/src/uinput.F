@@ -2,6 +2,7 @@
       use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
+      use b2mod_xerset
       use eirmod_solps
       use helper
 
@@ -24,7 +25,7 @@ c=======================================================================
       logical uex
       integer find_matching_species
       external find_matching_species
-      external prgini,prgend,xerset
+      external prgini,prgend
 c=======================================================================
       call prgini('uinput')
 *   ..mark output unit for error messages
@@ -107,7 +108,7 @@ c*** Create the header for the b2ag.dat file
           write(2,'(a)') '*param          (param(0:99); free format)'
           write(2,'(a)') ' -1.0, 99*0.0'
           write(2,'(a)') '''b2agfs_min_pitch''    ''0.01'''
-          if (lm_cnfg) write(2,'(a)')
+          if (lm_cnfg.and..not.ln_cnfg) write(2,'(a)')
      .                   '''b2agfs_periodic_bc''  ''1'''
           close(2)
           print *,'    ... b2ag.dat created'
@@ -712,7 +713,7 @@ c*** Modify the input file for B2, if possible
             is = is + 1
           end do
         end do
-        write(hlp_frm,'(a1,i2,a7)') '(',ns,'(a,1x))'
+        write(hlp_frm,'(a1,i3,a7)') '(',ns,'(a,1x))'
         open(unit=2,file='../SOLPS_FLUIDS')
         write(2,hlp_frm) (trim(species_name(is)),is=0,ns-1)
         close(2)
@@ -724,7 +725,9 @@ c*** Modify the input file for B2, if possible
         write(*,*) 'No NREG file found'
         write(*,*) 'Writing ../NREG'
         open(unit=2,file='../NREG')
-        if (lm_cnfg) then
+        if (ln_cnfg) then
+          write(2,'(i1)') 1
+        else if (lm_cnfg) then
           write(2,'(i1)') 2
         else
           write(2,'(i1)') 2*nncut

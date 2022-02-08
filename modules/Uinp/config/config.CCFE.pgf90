@@ -3,26 +3,7 @@ ifndef LD_MSCL
   $(error LD_MSCL not defined)
 endif
 
-FC       = pgf90
-ifdef SOLPS_DEBUG
-FFLAGS   = -g
-else
-FFLAGS   = -O
-endif
-ifdef SOLPS_OPENMP
-FFLAGS  += -mp=nonuma
-endif
-
-INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
-COMPILE  = ${FC} -c ${FFLAGS}
 CPP      = /lib/cpp -traditional
-MOD      = mod
-
-LDLIBS  += ${LD_MSCL}
-LDEXTRA  =
-ifdef USE_MPI
-LDLIBS  += ${LD_MPI}
-endif
 
 #!!!Local Variables:
 #!!! mode: Makefile

@@ -77,4 +77,5 @@ C---- CALCULATION OF POINT C
       X(IC) = XC(1)
       Y(IC) = XC(2)
 
+      RETURN
       END

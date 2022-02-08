@@ -105,7 +105,7 @@ B25_PATH=${SOLPSTOP}/modules/B2.5/builds/standalone.${TOOLCHAIN}
 B25EIRENE_PATH=${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${TOOLCHAIN}
 UINP_PATH=${SOLPSTOP}/modules/Uinp/builds/${TOOLCHAIN}
 TRIANG_PATH=${SOLPSTOP}/modules/Triang/builds/${TOOLCHAIN}
-SCRIPTS_PATH=${SOLPSTOP}/scripts.local:${SOLPSTOP}/scripts:${SOLPSTOP}/scripts/${TOOLCHAIN}:${SOLPSTOP}/modules/Eirene/scripts:${SOLPSTOP}/modules/B2.5/src/test
+SCRIPTS_PATH=${SOLPSTOP}/scripts.local:${SOLPSTOP}/scripts:${SOLPSTOP}/scripts/${TOOLCHAIN}:${SOLPSTOP}/modules/Eirene/scripts:${SOLPSTOP}/modules/Eirene/scripts/eirenex_v1.0.4:${SOLPSTOP}/modules/B2.5/src/test
 AMDS_PATH=${SOLPSTOP}/modules/amds/builds/${TOOLCHAIN}
 S45_PATH=${SOLPSTOP}/modules/solps4-5/builds/${TOOLCHAIN}
 

@@ -23,3 +23,6 @@ else
   setenv LD_CATALYST `paraview-config --libs vtkPVPythonCatalyst`
 endif
 
+setenv GLI_HOME ${SOLPSTOP}/../${COMPILER}/gks
+setenv NCARG_ROOT ${SOLPSTOP}/../${COMPILER}/NCARG
+

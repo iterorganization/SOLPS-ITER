@@ -21,7 +21,7 @@ c=======================================================================
      ,  trcdbg2_b,trcdbge_b,trcdbgm_b,trcdbgf_b,trcdbgl_b,
      ,  trcdbgs_b,trcdbgg_b,trcdbgmpi_b,trcdbgc_b,
      ,  pl1st_b,pl2nd_b,pladd_b,plhst_b,plcut_b(3),plnums_b,nltest_b,
-     ,  plspec_b,prspec_b,plargl_b,prargl_b
+     ,  plspec_b,prspec_b,plargl_b,prargl_b,lsprcl_b
       save
 c=======================================================================
       if(lc) then !{
@@ -78,6 +78,7 @@ c=======================================================================
         prspec_b=prspec
         plargl_b=plargl
         prargl_b=prargl
+        lsprcl_b=lsprcl
 
         ntcpu=ttntcpu
         nfile=ttnfile
@@ -138,6 +139,7 @@ c=======================================================================
         prspec=ttprspec
         plargl=ttplargl
         prargl=ttprargl
+        lsprcl=ttlsprcl
 
 c*** Set the VSP data for test.eir
 
@@ -204,6 +206,7 @@ c*** Set the VSP data for test.eir
         prspec=prspec_b
         plargl=plargl_b
         prargl=prargl_b
+        lsprcl=lsprcl_b
       end if !}
 c=======================================================================
       end subroutine uinprptt

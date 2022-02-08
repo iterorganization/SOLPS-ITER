@@ -1,5 +1,6 @@
       module b2_4to5
       use b2mod_types
+      use b2mod_subsys
       implicit none
 #     include "DIMENSIONS.F"
 
@@ -128,7 +129,6 @@
 #     include <CBRAEIR.F>
 
       integer is
-      external subini, subend
 
       call subini('b2convp1')
 
@@ -315,7 +315,6 @@ cxpb
 #     include <CCUT.F>
 
       integer is, it, ib, k
-      external subini, subend
 
       call subini('b2convi1')
 
@@ -689,7 +688,7 @@ cxpb
       integer ixl,ixr,ireg
       integer, allocatable :: zone(:)
 
-      external subini, subend, xertst
+      external xertst
       external b2xpne, b2xpni, b2xppb, b2xpfe, b2xpfi, b2agmt
       external init_region
       real (kind=R8) :: rratio
@@ -1410,13 +1409,7 @@ c
       integer nx,ny,ns
       integer is, js, ib, ireg, ireg_4
 
-      real (kind=R8) :: amtol
-      parameter (amtol=1.0e-2_R8)
-      logical lnext
-      lnext(is,js) = zamax(is).lt.zamin(js).and.zn(is).eq.zn(js).and.
-     &  abs(am(is)-am(js)).lt.amtol
-      intrinsic abs
-      external subini, subend, xertst
+      external xertst
 
       call subini('b2convi2')
 
@@ -3299,7 +3292,7 @@ c
       subroutine write_SOLPS_FLUIDS_NREG(nreg,ns)
       integer nreg, ns
       integer is
-      character*10 hlp_frm
+      character*11 hlp_frm
       character*10, allocatable :: species_name(:)
       external species
 
@@ -3309,7 +3302,7 @@ c
       do is = 0, ns-1
         call species(is,species_name(is),.false.)
       enddo
-      write(hlp_frm,'(a1,i2,a7)') '(',ns,'(a,1x))'
+      write(hlp_frm,'(a1,i3,a7)') '(',ns,'(a,1x))'
       open(unit=99,file='../SOLPS_FLUIDS')
       write(99,hlp_frm) (trim(species_name(is)),is=0,ns-1)
       close(99)
@@ -3383,7 +3376,7 @@ c
       integer, save :: interptype
 *   ..procedures
       intrinsic sqrt
-      external subini, subend, xerrab
+      external xerrab
 *   ..initialisation
       data interptype /1/
 
@@ -3524,7 +3517,7 @@ c
       integer, save :: interptype
 *   ..procedures
       intrinsic sqrt
-      external subini, subend, xerrab
+      external xerrab
 *   ..initialisation
       data interptype /1/
 

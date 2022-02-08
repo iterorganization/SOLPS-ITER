@@ -2,6 +2,7 @@
       use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
+      use b2mod_subsys
       use eirmod_solps
 c
 c  version : 13.02.2005 20:02
@@ -16,7 +17,7 @@ c=======================================================================
       integer i,k,l,n,ka,ipl,ipt,irc,krc,nrc,istr,irce(nstra)
       character*12 hlp_frm
       logical ex,l_hlp,hlp_err
-      external xerrab, xertst, subini, subend
+      external xerrab, xertst
       data irce / nstra*0 /
 c=======================================================================
       call subini ('uinpsrcv')

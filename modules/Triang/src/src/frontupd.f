@@ -142,4 +142,5 @@ C---- BUBBLE_SORT:
         BOUND=IND1
       ENDDO
 
+      RETURN
       END

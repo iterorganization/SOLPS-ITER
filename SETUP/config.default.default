@@ -106,8 +106,10 @@ endif
 # Build with IMAS if imas module is loaded
 ifdef IMAS_VERSION
   UAL_MAJOR_VERSION = $(shell echo ${UAL_VERSION} | cut -d '.' -f1 )
+  UAL_MINOR_VERSION = $(shell echo ${UAL_VERSION} | cut -d '.' -f2 )
+  UAL_MICRO_VERSION = $(shell echo ${UAL_VERSION} | cut -d '.' -f3 )
   IMAS_MAJOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f1 )
-  IMAS_MINOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f1 )
+  IMAS_MINOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f2 )
   ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 17; echo $$?),0)
     GGD_MINOR_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f2 )
     LD_UAL = `pkg-config imas-ifort ggd --libs`
@@ -120,15 +122,19 @@ ifdef IMAS_VERSION
       LD_UAL = `pkg-config imas-lowlevel imas-ifort --libs`
     endif
   endif
-  SOLPS_CPP += -DIMAS -DUAL_MAJOR_VERSION=${UAL_MAJOR_VERSION} -DIMAS_MINOR_VERSION=${IMAS_MINOR_VERSION} -DGGD_MINOR_VERSION=${GGD_MINOR_VERSION}
+  SOLPS_CPP += -DIMAS -DUAL_MAJOR_VERSION=${UAL_MAJOR_VERSION} -DUAL_MINOR_VERSION=${UAL_MINOR_VERSION} -DUAL_MICRO_VERSION=${UAL_MICRO_VERSION} -DIMAS_MINOR_VERSION=${IMAS_MINOR_VERSION} -DGGD_MINOR_VERSION=${GGD_MINOR_VERSION}
   export LD_UAL
 else
   UAL_MAJOR_VERSION = 0
+  UAL_MINOR_VERSION = 0
+  UAL_MICRO_VERSION = 0
   GGD_MINOR_VERSION = 0
   IMAS_MAJOR_VERSION = 0
   IMAS_MINOR_VERSION = 0
 endif
 export UAL_MAJOR_VERSION
+export UAL_MINOR_VERSION
+export UAL_MICRO_VERSION
 export GGD_MINOR_VERSION
 export IMAS_MAJOR_VERSION
 export IMAS_MINOR_VERSION
@@ -136,6 +142,15 @@ export IMAS_MINOR_VERSION
 # Build with OpenMP if requested
 ifdef SOLPS_OPENMP
   B25_DEFINES += -D_OPENMP
+endif
+
+# Build with Fundamental-Constants module if present
+ifeq ($(shell `pkg-config --exists fundamental-constants`; echo $$?),0)
+  SOLPS_CPP += -DCONSTANTS_PROVIDED
+  INCLUDE += `pkg-config fundamental-constants --cflags`
+  INCMODS += `pkg-config fundamental-constants --cflags`
+  export INCLUDE
+  export INCMODS
 endif
 
 #

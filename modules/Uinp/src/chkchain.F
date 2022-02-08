@@ -16,6 +16,7 @@ c      end
 
       subroutine chkchain(p1,p2,mp,np,ls,ns,nc,ind,irt,
      . jedgep,jedgec,jedge,nt)
+      use b2mod_subsys
 
 c  version : 31.03.2005 19:39
 
@@ -68,7 +69,7 @@ c*** free:    one of the ends of the segment is not yet linked
       integer i,j,k,l,i1,i2,ib,ic,ii,iii
       real w
       logical match
-      external subini, subend, xerrab
+      external xerrab
 c      logical bbb !###
 c=======================================================================
       call subini ('chkchain')

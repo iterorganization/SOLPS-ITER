@@ -1,27 +1,7 @@
 # Test whether necessary variables are defined
 LD_MSCL ?= `pkg-config mscl --libs` -lgfortran
 
-FC       = pgf90
-
-ifdef SOLPS_DEBUG
-FFLAGS   = -g
-else
-FFLAGS   = -O
-endif
-ifdef SOLPS_OPENMP
-FFLAGS  += -mp=nonuma
-endif
-ifdef SOLPS_MPI
-FFLAGS  += -Mmpi=mpich
-endif
-
-INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
-COMPILE  = ${FC} -c ${FFLAGS}
 CPP      = /lib/cpp -traditional
-MOD      = mod
-
-LDLIBS   = ${LD_MSCL}
-LDEXTRA  = 
 
 #!!!Local Variables:
 #!!! mode: Makefile

@@ -77,6 +77,7 @@ Add new default <COMPILER> for your <HOST_NAME> if necessary.
 
 Check default SOLPS-ITER compiler settings for your <HOST_NAME> and <COMPILER> in SETUP/config.<HOST_NAME>.<COMPILER>.
 Create this config-file if necessary (example config-file: config.default.default).
+Note that shared compilation and option for a given compiler that are not hostname-dependent can be found in SETUP/config.common.<COMPILER>.
 If local modifications to these default compiler options are needed, 
 create a config-file SETUP/config.<HOST_NAME>.<COMPILER>.local file.
 

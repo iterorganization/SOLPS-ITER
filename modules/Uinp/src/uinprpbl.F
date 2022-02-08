@@ -5,6 +5,7 @@
       use eirmod_solps
       use b2mod_elements
       use b2mod_solpstop
+      use b2mod_subsys
       implicit none
 
 c======================================================================
@@ -70,7 +71,7 @@ c     procedures
       logical silent_open, streql
       external silent_open, streql
       external lower_case, xxdata_11, rratio
-      external subini, subend, xertst, xerrab
+      external xertst, xerrab
 c======================================================================
       call subini ('uinprpbl')
 

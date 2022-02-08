@@ -2,6 +2,7 @@
       use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
+      use b2mod_subsys
       use eirmod_solps
       implicit none
 
@@ -34,7 +35,6 @@ c=======================================================================
       character utxtgt*71
       integer len_of_digits, idez
       external streql, silent_open, len_of_digits, idez, xerrab
-     , , subini, subend
       data utxthd /
      1        '** 1. Data for operating mode' ,
      2        '** 2. Data for standard mesh' ,
@@ -205,8 +205,13 @@ c*** 1.  General data for the run
         if(silent_open(97,filename,
      .     'data.local|modules/B2.5/Database',adasfile)) then
           read(97,*) uidin
-          if(uidin(1:9).eq.'SOLPSTOP/') then
+          if(streql(uidin,'adas')) then
+            write(iunoo,720) utxtfl(7)
+          else if(uidin(1:9).eq.'SOLPSTOP/') then
             write(iunoo,721) utxtfl(7)(1:13)//trim(uidin(10:))
+     .                                      //'/adf11'
+          else if(uidin(1:5).eq.'adas/') then
+            write(iunoo,721) utxtfl(7)(1:13)//'modules/'//trim(uidin)
      .                                      //'/adf11'
           else
             write(iunoo,721) utxtfl(7)(1:13)//trim(uidin)//'/adf11'
@@ -735,6 +740,8 @@ c** To be done (in Eirene first)
      ,                                                        i=1,nplsi)
       end if !}
       if (indpro(5).le.5) write(iunoo,703) b0,b1,b2,b3,b4,b5
+      if (indpro(11).le.5) write(iunoo,703) (zi0(i),zi1(i),zi2(i),
+     ,                                   zi3(i),zi4(i),zi5(i),i=1,nplsi)
       if (indpro(12).le.5) write(iunoo,703) vl0,vl1,vl2,vl3,vl4,vl5
 
 c*** 6a.  data for reflection model
@@ -1153,7 +1160,7 @@ c*** 14.  data for interfacing subroutine infcop
 
       write(iunoo,700) utxthd(19)
       if (nmode.ne.0) then !{
-        write(iunoo,706) lsymet,lbalan,lcoarse,nltrimesh
+        write(iunoo,706) lsymet,lbalan,lcoarse,nltrimesh,lsprcl
         write(iunoo,707) nfla,ncutb,ncutl,imf,
      .                   ntrfrm,nfull,ibrad,ibpol,ibtor
         do i=1,nplsi+nbgk !{
@@ -1244,7 +1251,7 @@ c=======================================================================
   711 format (a72)
   712 format (2a24)
   713 format (1p,6i6,3e12.5)
-  714 format ('* ',i3,' : ',i3,' ',a64)
+  714 format ('* ',i4,' : ',i4,' ',a64)
   715 format (a72)
   716 format (a8,1x,a8,1p,e12.5)
   717 format (a8,1x,a8,i6)

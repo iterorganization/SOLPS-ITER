@@ -8,6 +8,13 @@
   echo "DEVICE = " $DEVICE
 }
 export DEVICEDIR=$DEVICE
+[ "$DEVICE" = 'iter' ] && {
+  export DATABASE="ITER"
+} || {
+  export DATABASE=$DEVICE
+}
+export IMAS_MAJOR_VERSION=`echo $IMAS_VERSION | cut -d . -f 1`
+export IMASDIR=${HOME}/public/imasdb/${DATABASE}/${IMAS_MAJOR_VERSION}/0
 [ "$SOLPS_CENTRAL" = 'yes' ] && DEVICEDIR=$DEVICE/$USER
 echo "Converting shot number " $1
 [ -d $SOLPSWORK/$DEVICEDIR ] || mkdir $SOLPSWORK/$DEVICEDIR
@@ -60,14 +67,14 @@ shotnumber=`echo $1`
 }
 echo "IDS shot number will be: " $shotnumber
 oldyaml=ids_${oldshotnumber}0001.yaml
-[ -e ${MDSPLUS_TREE_BASE_0}/${oldyaml} ] && echo "We are replacing IDS shot " $oldshotnumber
+[ -e ${IMASDIR}/${oldyaml} ] && echo "We are replacing IDS shot " $oldshotnumber
 echo "'b2mndr_run_number'  '1'" >> b2mn.dat.4
 echo "'b2mndr_user'        '${USER}'" >> b2mn.dat.4
-echo "'b2mndr_device'      '${DEVICE}'" >> b2mn.dat.4
+echo "'b2mndr_database'    '${DATABASE}'" >> b2mn.dat.4
 echo "'b2mndr_shot_number' '${shotnumber}'" >> b2mn.dat.4
 echo "'b2mndr_run_number'  '1'" >> b2mn.dat.5
 echo "'b2mndr_user'        '${USER}'" >> b2mn.dat.5
-echo "'b2mndr_device'      '${DEVICE}'" >> b2mn.dat.5
+echo "'b2mndr_database'    '${DATABASE}'" >> b2mn.dat.5
 echo "'b2mndr_shot_number' '${shotnumber}'" >> b2mn.dat.5
 cp b2.boundary.parameters.5 b2.boundary.parameters
 cp b2.transport.parameters.5 b2.transport.parameters
@@ -128,15 +135,15 @@ touch b2fstati
 b2run b2ar
 b2run b2mn > run.log
 [ "$DEVICE" = 'iter' ] && {
-  idscp --setDatasetVersion -si 10 -ri 2 -so ${shotnumber} -ro 1 -u ${USER} -d ${DEVICE} wall
+  idscp --setDatasetVersion -si 116000 -ri 1 -so ${shotnumber} -ro 1 -u public -d ITER_MD -do ${DATABASE} wall
 # For full-field cases, use:
-  idscp --setDatasetVersion -si 131035 -ri 124 -so ${shotnumber} -ro 1 -u ${USER} -d ${DEVICE} equilibrium
+  idscp --setDatasetVersion -si 131035 -ri 124 -so ${shotnumber} -ro 1 -u bonninx -d iter -do ${DATABASE} equilibrium
 # For half-field cases, use:
-# idscp --setDatasetVersion -si 131035 -ri 125 -so ${shotnumber} -ro 1 -u ${USER} -d ${DEVICE} equilibrium
+# idscp --setDatasetVersion -si 131035 -ri 125 -so ${shotnumber} -ro 1 -u bonninx -d iter -do ${DATABASE} equilibrium
 # For third-field cases, use:
-# idscp --setDatasetVersion -si 131035 -ri 126 -so ${shotnumber} -ro 1 -u ${USER} -d ${DEVICE} equilibrium
+# idscp --setDatasetVersion -si 131035 -ri 126 -so ${shotnumber} -ro 1 -u bonninx -d iter -do ${DATABASE} equilibrium
 }
-create_db_entry -u ${USER} -d ${DEVICE} -s ${shotnumber} -r 1
+create_db_entry -u ${USER} -d ${DATABASE} -s ${shotnumber} -r 1
 yaml=ids_${shotnumber}0001.yaml
 typeset -i reference_line
 reference_line=`grep -n "reference_name" ${yaml} | cut -d ':' -f 1`
@@ -153,7 +160,7 @@ head -n ${responsible_line} $yaml.2 > $yaml.3
 echo "    "`get_git_name` >> $yaml.3
 tail_lines=yaml_lines-(responsible_line+1)
 tail -n $tail_lines $yaml.2 >> $yaml.3
-[ -e ${MDSPLUS_TREE_BASE_0}/${oldyaml} ] && {
+[ -e ${IMASDIR}/${oldyaml} ] && {
   sed -e 's|workflow: tbd|workflow: SOLPS|' -e 's|type: tbd|type: predictive|' -e "s|replaces:|replaces: (${oldshotnumber},1) - Corrected IDS number for He fuelling|" < $yaml.3 > $yaml.4
 } || {
   sed -e 's|workflow: tbd|workflow: SOLPS|' -e 's|type: tbd|type: predictive|' < $yaml.3 > $yaml.4
@@ -164,9 +171,9 @@ head -n ${status_line} $yaml.4 > $yaml.5
 echo "    active" >> $yaml.5
 tail_lines=yaml_lines-(status_line+1)
 tail -n $tail_lines $yaml.4 >> $yaml.5
-mv $yaml.5 ${MDSPLUS_TREE_BASE_0}/$yaml
+mv $yaml.5 ${IMASDIR}/$yaml
 watcher=ids_${shotnumber}0001.watcher
-mv $watcher ${MDSPLUS_TREE_BASE_0}/
+mv $watcher ${IMASDIR}/
 rm $yaml $yaml.2 $yaml.3 $yaml.4
 echo "IDS for case ${shotnumber} written!"
 cd ..

@@ -2,6 +2,7 @@
       use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
+      use b2mod_subsys
       use eirmod_solps
 
 c  version : 15.03.2001 17:03
@@ -13,7 +14,7 @@ c=======================================================================
       logical ex
       real (kind=R8) :: rratio
       external rratio
-      external xerrab, subini, subend
+      external xerrab
 c=======================================================================
 c*** Now, unlike the previous version, nrsol, nrpfl, nz[io]dv, nzinn,
 c*** together with nrsol1, nz[io]dv2, and nzinn2, are the numbers of
@@ -98,13 +99,13 @@ c*** Grid dimensions and cut locations
       call subini ('uinprpgr')
       ex=.false.
       if(lm_cnfg) then  !{
-c*** Limiter configuration - a temporary, clumsy solution
+c*** Limiter and linear configurations - a temporary, clumsy solution
         if(index(topo,'SN').eq.0) then !{
-          write(*,*) 'A single-null topology should be used for a ',
-     ,      'limiter configuration'
+          write(*,*) 'A single-null topology should be used for ',
+     ,      'limiter and linear configurations'
           write(*,*) '==> Check the DG model'
           call xerrab
-     .     ('Need to use SN topology for limiter configuration')
+     .  ('Need to use SN topology for limiter or linear configurations')
         end if !}
         ex=.true.
         ntrgdflt=2
@@ -133,17 +134,17 @@ c*** Limiter configuration - a temporary, clumsy solution
         nxcut1(1)=nzidv
         nxcut1(2)=nxcut1(1)+nzinn
         nx=nxcut1(2)+nzodv
-        nniso=2
-        ntiso(1)=0
-        ntiso(2)=0
-        nxiso1(1)=0
-        nxiso1(2)=nx+1
-        nxiso2(1)=nxiso1(1)
-        nxiso2(2)=nxiso1(2)
-        nyiso1(1)=0
-        nyiso2(1)=nycut2(1)
-        nyiso1(2)=nyiso1(1)
-        nyiso2(2)=nyiso2(1)
+        if (.not.ln_cnfg) then !{
+          nniso=2
+          nxiso1(1)=-1
+          nxiso1(2)=nx
+          nxiso2(1)=nxiso1(1)
+          nxiso2(2)=nxiso1(2)
+          nyiso1(1)=-1
+          nyiso2(1)=nycut2(1)-1
+          nyiso1(2)=nyiso1(1)
+          nyiso2(2)=nyiso2(1)
+        end if !}
       else if(index(topo,'DN').gt.0) then  !}{
         ntrgdflt=4
         if(topo.eq.'DNS') then  !{
@@ -274,13 +275,13 @@ c*** Limiter configuration - a temporary, clumsy solution
 
 c!###{
 c      print *,'uinprpgr: nx,ny,nncut,nxcut{4},nycut{4},nniso,nxiso = ',
-c     , nx,ny,nncut,nxcut1,nycut2,nniso,nxiso1(1)
+c     ,                   nx,ny,nncut,nxcut1,  nycut2,  nniso,nxiso1(1)
 c      print *,'nzidv,nzinn,nzodv,nzidv2,nzinn2,nzodv2 = ',
-c     , nzidv,nzinn,nzodv,nzidv2,nzinn2,nzodv2
+c     ,         nzidv,nzinn,nzodv,nzidv2,nzinn2,nzodv2
 c      print *,'izc1,izc3,izci,izc4,izc2,iztg = ',
-c     , izc1,izc3,izci,izc4,izc2,iztg
+c     ,         izc1,izc3,izci,izc4,izc2,iztg
 c      print *,'nrpfl,nrsol,nrsol1,irwl,irsp,irsp2 = ',
-c     , nrpfl,nrsol,nrsol1,irwl,irsp,irsp2
+c     ,         nrpfl,nrsol,nrsol1,irwl,irsp,irsp2
 c!###}
 c=======================================================================
       call subend ()

@@ -43,13 +43,13 @@ c** if we do not need surface card for this surface
           goto 10
          end if !}
    11   continue !}
-       k=k+1
-       call getnds(k,i)
-       iscrd(i)=k
+        k=k+1
+        call getnds(k,i)
+        iscrd(i)=k
    10 continue !}
 
 c*** Additional surfaces
-        do 20 i=laddsrfs+1,nlimi !{
+      do 20 i=laddsrfs+1,nlimi !{
         ind=indasrfs(i)
         if (.NOT.jliin(ind).eq.1) then  !{
 c** if we do not need surface card for this surface
@@ -66,14 +66,14 @@ c** if we do not need surface card for this surface
      ,     ' turned off for this surface!'
         end if !}
         do 21 j=1,k !{
-         if(checkas(j,ind)) then !{
-          jscrd(ind)=j
-          goto 20
-         end if !}
+          if(checkas(j,ind)) then !{
+            jscrd(ind)=j
+            goto 20
+          end if !}
    21   continue !}
-       k=k+1
-       call getas(k,ind)
-       jscrd(ind)=k
+        k=k+1
+        call getas(k,ind)
+        jscrd(ind)=k
    20 continue !}
       nscards=k
 
@@ -81,21 +81,21 @@ c*** the table of additional variables for chemical sputtering
       kk=0
       kkk=0
       do 30 i=1,nscards !{
-       nn=0
-       do 31 j=1,nchemvar !{
-        if(checkchm(j,i)) then !{
-         nn=nn+1
-         kk=kk+1
-         indchemvar(kk)=j
-        end if !}
-   31  continue !}
-       kkk=kkk+1
-       nnchemvar(kkk)=nn
+        nn=0
+        do 31 j=1,nchemvar !{
+          if(checkchm(j,i)) then !{
+            nn=nn+1
+            kk=kk+1
+            indchemvar(kk)=j
+          end if !}
+   31   continue !}
+        kkk=kkk+1
+        nnchemvar(kkk)=nn
    30 continue !}
 
 c*** special treatment for C chemical sputtering by H
 c      do 40 i=1,nscards !{
-c       if(scxmlim(i).1206) call checkforcarbon(i)
+c        if(scxmlim(i).1206) call checkforcarbon(i)
 c   40 continue  !}
 
       if (nscards.ne.1) then !{

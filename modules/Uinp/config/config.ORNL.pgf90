@@ -11,27 +11,9 @@ endif
 LD_GR   ?= -L${GR_ROOT} -lgr
 LD_GKS  ?= -L${GLI_HOME} -lgks
 
-FC       = pgf90
-
-ifdef SOLPS_DEBUG
-FFLAGS   = -g
-else
-FFLAGS   = -O
-endif
-ifdef SOLPS_OPENMP
-FFLAGS  += -mp=nonuma
-endif
-
-INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
-COMPILE  = ${FC} -c ${FFLAGS}
 CPP      = /lib/cpp -traditional
-MOD      = mod
 
-LDLIBS   = ${LD_MSCL} ${LD_GR} ${LD_GKS} -lX11 -lXt
-LDEXTRA  =
-ifdef USE_MPI
-LDLIBS  += ${LD_MPI}
-endif
+LDLIBS   = ${LD_GR} ${LD_GKS} -lX11 -lXt
 
 #!!!Local Variables:
 #!!! mode: Makefile

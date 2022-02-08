@@ -32,7 +32,7 @@ c*** The list of keywords to work on:
       data (chrpl(i,4),i=1,nkwrd) / 'jxi','jxa',36*' '/
       data (chrpl(i,5),i=1,nkwrd) /
      /  'nncut','ntcut','nxcut1','nxcut2','nycut1',
-     ,  'nycut2','nniso','ntiso','nxiso1','nxiso2',
+     ,  'nycut2','nniso',' ','nxiso1','nxiso2',
      ,  'nyiso1','nyiso2','niiso','tiiso','teiso',23*' '/
       data (chrpl(i,6),i=1,nkwrd) / 'impflag','nspecies','nfluids',
      ,  35*' '/

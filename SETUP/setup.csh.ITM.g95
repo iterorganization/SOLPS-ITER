@@ -15,6 +15,7 @@ setenv DBX totalview
 
 module load itm-g95
 module load mdsplus
+module load git
 
 # The script above overwrites $PATH, so modules must be loaded afterwards!!!
 # load modules
