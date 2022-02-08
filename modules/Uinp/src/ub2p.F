@@ -30,7 +30,7 @@ c
       lena=ufnlen
       jmess=2
       lfin=72
-      finish = repeat(' ',8)
+      finish = 'finish'
       promp(1) = repeat(' ',8)
       promp(2) = repeat(' ',8)
       fixkey=.false.

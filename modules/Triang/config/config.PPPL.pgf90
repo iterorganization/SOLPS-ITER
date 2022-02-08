@@ -13,9 +13,6 @@ CPP = /lib/cpp -traditional
 SED = sed s:\#PREC\#:d:g
 
 FCOPTS = -tp=amd64
-ifndef SOLPS_DEBUG
-FCOPTS +=
-endif
 
 DBLSED = sed -e s:\#PREC\#:d:g
 

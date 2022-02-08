@@ -4,8 +4,9 @@ c  version : 26.11.95 20:20
 c
 c*** Print out a line
       implicit none
-      integer :: lout,n,k,i
-      character s(n), ss*(*),ff*(*)
+      integer, intent(in) :: lout,n
+      character, intent(in) :: s(n), ss*(*), ff*(*)
+      integer :: k,i
 c=====================================================
 c
       if(ss.eq.' ') then
@@ -20,4 +21,5 @@ c          end do
  560      continue
       end if
 c=====================================================
-      end
+      return
+      end subroutine uisswr
