@@ -49,7 +49,7 @@ case "*.cumulus.hpc.l":
   echo CCFE
   breaksw
 case "*.data.cluster":
-  echo "CCFE.csd3"
+  echo "CCFE-csd3"
   breaksw
 case "*.jet.uk":
 case "freia*.hpc.l":
