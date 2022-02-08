@@ -1,4 +1,9 @@
 #! /usr/bin/env python
+
+# This script (provided by David Coster) tries to prune environment variable X
+# Usage: 
+#  setenv X `env_var_prune X`
+
 import os
 import sys
 if len(sys.argv) <= 1:
