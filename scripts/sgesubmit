@@ -37,7 +37,7 @@ Available options are:
   -z                 compress run.log using gzip
   -s                 specify a standalone B2.5 run
   -m <<MPI OPTIONS>> use the MPI options specified (default serial version)
-  -t <<THREADS>>     use OpenMP parallelization using <<THREADS>> threads (default $THREADS)
+  -t <<THREADS>>     use OpenMP parallelization with <<THREADS>> threads (default $THREADS)
   -T <<HOURS>>       number of elapsed hours requested (default $hours)
   -M <<MEM_SIZE>>    memory size (default $mem)
 
@@ -82,7 +82,7 @@ EOF
       set OPENMP_SET=yes
     endif
     set THREADS="$1"
-    echo Asking for OpenMP runs with ${THREADS} threads
+    echo Asking for OpenMP run with $THREADS threads
     shift
     goto argloop
   endif
@@ -131,11 +131,12 @@ else if (-s $1) then
   set QSUB=$1
 else
   echo Submission file $1 is specified as an argument.
-  echo Looking for submission file $1 
+  echo Looking for submission file $1
   set QSUB=`climb_and_look_for $1`
   if ($QSUB == "//"$1) then
     if (-s $SOLPSTOP/runs/$1) then
       set QSUB="$SOLPSTOP/runs/$1"
+      echo Submission file $QSUB is found
     else
       set QSUB=""
     endif
@@ -145,7 +146,7 @@ else
 endif
 if($QSUB == "") then
   echo No SGE submission file $1 found. Exiting.
-  exit
+  exit 1
 endif
 echo Using submission file template $QSUB
 

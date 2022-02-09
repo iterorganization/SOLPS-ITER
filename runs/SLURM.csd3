@@ -1,6 +1,7 @@
 #! /bin/tcsh
 
-#SBATCH --ntasks-per-node=#PROCS#
+#SBATCH --nodes=#NODES#
+#SBATCH --ntasks-per-node=#TASKS#
 #SBATCH --cpus-per-task=#THREADS#
 #SBATCH -p cclake
 #SBATCH -A #ACCOUNT#
@@ -53,3 +54,4 @@ update_solps_run_status ${msg}
 if ($?SOLPS_GUI_IP) then
   echo ${USER} ${PWD} ${msg} | netcat -u -v -w 1 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
 endif
+b2fstate_OK_bool

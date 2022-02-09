@@ -1896,6 +1896,12 @@ itersubmit -Q gen10_ib
 \end{verbatim}
 chooses the {\tt gen10\_ib} partition, which is the default on the ITER SDCC cluster. On the older ITER HPC cluster, jobs go to {\tt gen9\_ib}.
 
+When using the SLURM job submission engine, it is also possible to submit a chain of jobs, in which jobs only start after a previous one has completed successfully. In this context, a successful job completion means that the {\tt b2fstate\_OK\_bool}\index{b2fstate\_OK\_bool} returns {\tt 0}, i.e. the {\tt b2fstate} end state file and {\tt b2fstati} initial state file are of the same size and format. The relevant option has syntax:
+\begin{verbatim}
+itersubmit -c <<JOB_ID>>
+\end{verbatim}
+where {\tt <<JOB\_ID>>} is the job number of the previous job in the submission chain. Before continuing with the next job submission, the {\tt run.log.gz} and {\tt b2mn.prt} output files will be stored as {\tt run.log.\${JOB\_ID}.gz} and {\tt b2mn.prt.\${JOB\_ID}}, respectively. The job submission script will be stored as {\tt SLURM.\$HOST.after\_\${JOB\_ID}}.
+
 A listing of the available options for each submission script can be obtained by the
 \begin{verbatim}
 itersubmit -h
@@ -2940,7 +2946,7 @@ See also Appendix \ref{lis:b2cdcn} for a more up-to-date description.
 
 When referring to array length {\tt (NREG+1)} above, we mean range {\tt [0:NREG]} in the code.
 
-When running in the so-called ``time-dependent'' mode ({\tt b2mndt\_style.eq.2}), the total momentum and energy equations are not solved, and the timestep multipliers should not be used, unless their product with the under-relaxation parameters is 1 (as the code defaults provide).
+When running in dynamic mode ({\tt b2mndt\_style.eq.2}), the total momentum and energy equations are not solved, and the timestep multipliers should not be used, unless their product with the under-relaxation parameters is 1 (as the code defaults provide).
 
 The region indices are defined as follows for a SN case:
 \begin{itemize}\index{regions}
@@ -4784,14 +4790,14 @@ several values of $\Delta_t$.
     \label{fig:tmne1}
 \end{figure}
 
-\section{``Time-dependent'' mode}
-\label{sec:time-dependent}\index{Time-dependent mode}
+\section{Dynamic (``time-dependent'') mode}
+\label{sec:dynamic}\index{Dynamic mode}
 
 {\em This feature is experimental and should be used with caution!}
 
-There is an alternative solution method available, which does not rely on under-relaxation, and is called, by abuse of language, the ``time-dependent'' mode. This solution mode allows for a more precise estimate of the time derivative terms, particularly for the momentum and energy equations, and can be helpful to damp out numerical oscillations. This is obtained by setting the switch {\tt b2mndt\_style} to {\tt 2}. Please note that the timestep may need to be decreased compared to a similar traditional case, using under-relaxation, to achieve convergence.
+There is an alternative solution method available, which does not rely on under-relaxation, and is called the dynamic mode, or, by abuse of language, the ``time-dependent'' mode. This solution mode allows for a more precise estimate of the time derivative terms, particularly for the momentum and energy equations, and can be helpful to damp out numerical oscillations. This is obtained by setting the switch {\tt b2mndt\_style} to {\tt 2}. Please note that the timestep may need to be decreased compared to a similar traditional case, using under-relaxation, to achieve convergence.
 
-The ``time-dependent'' mode triggers the use of the \SOLPSfivetwo physics model. It changes the order of solution of the equations to solve first for the density equations, then the parallel momentum equations, followed by the electrical potential, electron and ion temperature equations. The total momentum and energy equations are not solved.
+The dynamic mode triggers the use of the \SOLPSfivetwo physics model. It changes the order of solution of the equations to solve first for the density equations, then the parallel momentum equations, followed by the electrical potential, electron and ion temperature equations. The total momentum and energy equations are not solved.
 
 When using the traditional solution method, relying on under-relaxation of the equations, the evolution in time of the solution is not a true reflection of the physical evolution of the system, but rather only a numerical approximation, and only the final steady-state solution can be fully trusted. If one is interested in the details of the time evolution of the plasma state, then this new solution method should be considered.
 
@@ -4820,7 +4826,7 @@ T_\alpha^{(k+1)} = T_\alpha^{(k)} + r_{xf_{T_\alpha}} \left( \widetilde{T}_\alph
 
 where $r_{xf_{V_{\parallel a}}}$ and $r_{xf_{T_\alpha}}$ are the under-relaxation factors, which are equal to {\tt rxf*xfm1} and {\tt rxf*xfm3} respectively, and the tilde quantities are the actual solutions to the equations. The factors {\tt rxf}, {\tt xfm1}, and {\tt xfm3}, are given by the values of the {\tt b2mndr\_rxf}, {\tt b2news\_xfm1}, and {\tt b2news\_xfm3} switches, respectively.
 
-When applying the ``time-dependent'' mode, the discretization of the time derivative terms becomes, for the parallel momentum equations:
+When applying the dynamic mode, the discretization of the time derivative terms becomes, for the parallel momentum equations:
 
 \begin{equation}\label{eq:mom_dt_2}
 m_a h_z \sqrt{g} \frac{ \widetilde{V}_{\parallel a}^{(k+1)} - V_{\parallel a}^{(k)}}{\tau \delta_{ma} \tau_f} n_a^{(k+1)} + m_a h_z \sqrt{g} \frac{n_a^{(k+1)} - n_a^{(k)}}{\tau} V_{\parallel a}^{(k)}
@@ -4832,7 +4838,7 @@ and, for the energy equations:
 \sqrt{g} \frac{3}{2} \frac{ \widetilde{T}_\alpha^{(k+1)} - T_\alpha^{(k)}}{\tau \delta_{e \alpha} \tau_f} n_\alpha^{(k+1)} + \sqrt{g} \frac{3}{2} \frac{n_\alpha^{(k+1)} - n_\alpha^{(k)}}{\tau} T_\alpha^{(k)}
 \end{equation}
 
-Note that, since the order of solution of the equations has been changed in the ``time-dependent'' mode, the updated density $n_a^{(k+1)}$ is now available for use in Eq.~(\ref{eq:mom_dt_2}), providing a more accurate evaluation of the parallel momentum time derivative term.
+Note that, since the order of solution of the equations has been changed in the dynamic mode, the updated density $n_a^{(k+1)}$ is now available for use in Eq.~(\ref{eq:mom_dt_2}), providing a more accurate evaluation of the parallel momentum time derivative term.
 
 The conditions
 \begin{equation}\label{eq:rxf_mo}

@@ -1,6 +1,7 @@
 #! /bin/tcsh
 
-#SBATCH --ntasks-per-node=#PROCS#
+#SBATCH --nodes=#NODES#
+#SBATCH --ntasks-per-node=#TASKS#
 #SBATCH --cpus-per-task=#THREADS#
 #SBATCH -p cclake
 #SBATCH -A #ACCOUNT#
@@ -12,17 +13,17 @@
 #SBATCH -o SLURM-%j.out
 #SBATCH -e SLURM-%j.err
 
-### This scripts submits the job, which launches SOLPS-ITER code, to HPC cluster,
-### and resubmits the job again after successful finish of SOLPS-ITER in a loop manner.
+### This script submits the job, which launches the B2.5 code, to the CSD3 cluster,
+### and resubmits the job again after successful finish of B2.5 in a loop manner.
 ###
-### Successful finish means that either the prescribed (by 'b2mndr_ntim) number of steps is reached
+### Successful finish means that either the prescribed (by 'b2mndr_ntim') number of steps is reached
 ### or the prescribed (by 'b2mndr_cpu' or 'b2mndr_elapsed') time of run is elapsed.
 ###
 ### If the .quit (or _quit) is seen, or end time (specified by 'b2mndr_etim') is reached, then
-### the loop breakes, i.e. the job is not resubmitted again.
+### the loop breaks, i.e. the job is not resubmitted again.
 ###
 ### Usage: 
-###   Submit the job:     `itmsubmit -s -j "JobName" SLURM.itm_loop`
+###   Submit the job:     `csd3submit -s -j "JobName" SLURM.csd3_loop`
 ###   Stop the run:       `touch b2mn.exe.dir/.quit`
 
 echo Using SOLPSTOP = #SOLPSTOP#
@@ -118,6 +119,6 @@ if ("$Break_loop" == "no") then
     mv b2fstate b2fstati
     if (-s b2faveri) mv b2faveri b2faveri_$NOW
     if (-s b2favere) mv b2favere b2faveri
-    itmsubmit #LOOPOPTS# SLURM.itm_loop
+    csd3submit #LOOPOPTS# SLURM.csd3_loop
   endif
 endif
