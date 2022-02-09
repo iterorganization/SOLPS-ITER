@@ -25,7 +25,8 @@
 ###               or      `itmsubmit -m "-np 36" -j "JobName" -T 48 -M 24G SLURM.itm_coupled_loop`
 ###   Stop the run:       `touch b2mn.exe.dir/.quit`
 
-echo Using SOLPSTOP = #SOLPSTOP#
+setenv PATH ${PATH_FOR_LOOP}
+setenv MANPATH ${MANPATH_FOR_LOOP}
 
 set USE_MPI=""
 if ($?SOLPS_MPI) then
@@ -51,6 +52,7 @@ endif
 update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"
 set msg="Started on `hostname` at `date`"
 update_solps_run_status ${msg}
+
 if ($?SOLPS_GUI_IP) then
   echo ${USER} ${PWD} ${msg} | netcat -u -v -w 1 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
 endif
@@ -119,7 +121,6 @@ if ("$Break_loop" == "no") then
     mv b2fstate b2fstati
     if (-s b2faveri) mv b2faveri b2faveri_$NOW
     if (-s b2favere) mv b2favere b2faveri
-    echo itmsubmit #LOOPOPTS# SLURM.itm_coupled_loop
     itmsubmit #LOOPOPTS# SLURM.itm_coupled_loop
   endif
 endif
