@@ -33,6 +33,7 @@ case "LEUVEN":
 case "SPBSTU":
 case "SWIP":
 case "CCFE":
+case "CCFE-csd3":
   echo ifort64
   breaksw
 case "ENEA":
