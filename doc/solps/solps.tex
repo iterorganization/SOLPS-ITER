@@ -970,9 +970,9 @@ These data files include:
   atomic mass, surface binding energy and density of all elements
 \item[ratadas.filelist] \index{ratadas.filelist}\index{b2ar}\index{ADAS} is a {\tt B2.5} input file
   containing information used to index into the ADAS files when the
-  "adas" option is used in {\tt b2ar} (see section \ref{sec:b2ar})
+  {\tt 'adas'} option is used in {\tt b2ar} (see section \ref{sec:b2ar})
 \item[stra.dat] \index{stra.dat}\index{b2ar}\index{baserun}\index{STRAHL} is a file containing {\tt STRAHL}
-  atomic data results for use by {\tt b2ar} when building {\tt b2frates} files where the 'strahl' data
+  atomic data results for use by {\tt b2ar} when building {\tt b2frates} files where the {\tt 'strahl'} data
   option is chosen. Must be copied to the local {\tt baserun} directory.
 \item[weis.dat] \index{weis.dat}\index{b2ar}\index{baserun} is a file containing atomic data
   results for hydrogen by Weisheit {\it et al.} for use by {\tt b2ar} when building {\tt b2frates} files.
@@ -1166,7 +1166,7 @@ Several {\tt AMDS} files are provided by default as part of the \SOLPSITER distr
 The {\tt modules/adas} subdirectory contains files which are used to tell various programs
 which {\tt ADAS} files to use.
 
-{\tt source.location} indicates which class of lines to use ("pjr"
+{\tt source.location} indicates which class of lines to use ({\tt pjr}
 currently) and the name of the other index file ({\tt ratadas.filelist}
 currently).
 
@@ -1236,7 +1236,31 @@ will take you to {\tt \$\{SOLPSTOP\}/scripts}.
 \begin{sloppypar}
 The number of scripts developed for various {\bf SOLPS} versions is very large. Efforts have been made to translate all the relevant ones for use within \SOLPSITERns. Any of these scripts can be copied to the {\tt \$\{SOLPSTOP\}\allowbreak /scripts.local} directory for local user modifications as desired. There also are {\tt \$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}} subdirectories where compiler-dependent script programs will reside. A non-exhaustive listing of these scripts, with some explanation as to their purpose, follows:
 \begin{itemize}
-\item the residuals can be plotted with
+\item Job submission scripts
+ \begin{description}
+  \item[b2plot]\index{b2plot} Shortcut to \btwoplotns. A {\tt -n} option allows for dry-run tests. A {\tt -d} option allows to run within the chosen debugger. A {\tt -s} option allows to run \btwoplot without coupling to {\tt Eirene} data. A {\tt -h} option prints a help description.
+  \item[b2run]\index{b2run}\index{b2co}\index{b2fstate} Shortcut to the {\tt Makefile} launching {\tt B2.5}. A {\tt -n} option allows for dry-run tests. A {\tt -d} option allows to run within the chosen debugger. A {\tt -s} option allows to run {\tt B2.5} in standalone mode. A {\tt -m} option allows to run with MPI options. A {\tt -o} option adds any other desired run options. The options can be grouped together inside quotes or given individually with multiple {\tt -o} instances. A {\tt -t \#} option allows to request an OpenMP run with \# threads. A {\tt -b} option can be used when invoking the {\tt b2co} program to obtain a provisional {\tt b2fstate} file while the main code is running. A {\tt -h} option prints a help description. (See \ref{b2run} for fuller details)
+  \item[b2run\_hgw\_cluster]\index{b2run\_hgw\_clus} Shortcut to the {\tt Makefile} launching {\tt B2.5} for the IPP--Greifswald cluster. A {\tt -n} option allows for dry-run tests.
+  \item[b2sxdr]\index{b2sxdr} Shortcut to the \SOLPSfour to \SOLPSfive converter. A {\tt -n} option allows for dry-run tests. A {\tt -d} option allows to run within the chosen debugger. A {\tt -s} option allows to specify that the run to convert was not coupled to {\tt Eirene}. A {\tt -o} option adds any other desired run options. The options can be grouped together inside quotes or given individually with multiple {\tt -o} instances. A {\tt -h} option prints a help description.
+  \item[convert\_from\_solps4.3 \#1]\index{convert\_from\_solps4.3} Converts run number \#1 from {\tt DEVICE} from the SOLPS4.3 ITER archive to a \SOLPSITER run in directory {\tt \$\{SOLPSTOP\}/runs/\$\{DEVICE\}/\#1} .
+  \item[csd3submit]\index{csd3submit} Command file to launch runs on the CCFE CSD3 cluster. See Section~\ref{b2run} for details.
+  \item[cumulussubmit]\index{cumulussubmit} Command file to launch runs on the CCFE Cumulus cluster. See Section~\ref{b2run} for details.
+  \item[eirobj]\index{eirobj} Alias to run {\tt Eirene} standalone with graphics.
+  \item[eirobjx]\index{eirobjx} Alias to run {\tt Eirene} standalone without graphics.
+  \item[ippsubmit]\index{ippsubmit} Command file to launch runs on the new (2019) IPP cluster. See Section~\ref{b2run} for details.
+  \item[ITER\_divertor\_HTM]\index{ITER\_divertor\_HTM} Performs the thermal calculation of the divertor target monoblocks and reflector plate hypervapotron channels. It requires {\tt b2ymb.dat} and {\tt b2yrp.dat} to be present in the run directory. It runs \btwoplot to produce the heat load profile data of the targets and reflector plates. Then it runs {\tt b2ymb} to produce the input files (see \ref{sec:b2ymb}) for the {\tt FreeFem++}\cite{MR3043640} heat transfer model of the monoblock {\tt Monoblock\_HTM.edp} for the outer target. Afterwards, {\tt b2ymb} is run again to produce the input files to run {\tt Monoblock\_HTM.edp} for the inner target. When the inner target is completed, {\tt b2yrp} (see \ref{sec:b2yrp}) is run to produce the input files for the inner reflector plate heat transfer model {\tt ReflectorPlate\_HTM.edp}. Finally, {\tt b2yrp} is executed one last time to produce the input files for the thermal analysis of the outer reflector plate.
+  \item[itersubmit]\index{itersubmit} Command file to launch runs on the ITER GPC cluster. See Section~\ref{b2run} for details.
+  \item[itmsubmit]\index{itmsubmit} Command file to launch runs on the Marconi ITM Gateway machine. See Section~\ref{b2run} for details.
+  \item[jetsubmit]\index{jetsubmit} Command file to launch runs on the JET Analysis Cluster (JAC). See Section~\ref{b2run} for details.
+  \item[jfrssubmit]\index{jfrssubmit} Command file to launch runs on the JFRS IFERC-CSC supercomputer. See Section~\ref{b2run} for details.
+  \item[localsubmit]\index{localsubmit} Command file to launch runs on the local machine. See Section~\ref{b2run} for details.
+  \item[marconisubmit]\index{marconisubmit} Command file to launch runs on the Marconi supercomputer. See Section~\ref{b2run} for details.
+  \item[resave\_mds]\index{resave\_mds} Update an archived {\tt MDSplus} case. A {\tt -n} option allows for dry-run tests. A {\tt -d} option allows to run within the chosen debugger. A {\tt -s} option allows to update a {\tt B2.5} standalone case. A {\tt -r} option allows to pass variable redefinitions to the underlying Makefile.
+  \item[save\_mds]\index{save\_mds} Archive an {\tt MDSplus} case. A {\tt -n} option allows for dry-run tests. A {\tt -d} option allows to run within the chosen debugger. A {\tt -s} option allows to archive a {\tt B2.5} standalone case. A {\tt -r} option allows to pass variable redefinitions to the underlying Makefile.
+  \item[sgesubmit]\index{sgesubmit} Command file to launch runs on an SGE system. See Section~\ref{b2run} for details.
+  \item[ustcsubmit]\index{ustcsubmit} Command file to launch runs on the USTC computer cluster. See Section~\ref{b2run} for details.
+ \end{description}
+\item The residuals can be plotted with
  \begin{description}
   \item[resall\_D]\index{resall\_D} all residuals for a $D$-only case. A python version of this script also exists (Python 2.7 and 3.5 compatible).
   \item[resall\_D+\_only]\index{resall\_D+\_only} all residuals for a $D^+$-only case
@@ -1269,11 +1293,11 @@ The number of scripts developed for various {\bf SOLPS} versions is very large. 
   \item[resopt]\index{resopt} Internal script to apply options to above residuals scripts (see below)
   \item[resmod \#1]\index{resmod} Selects residuals {\it modulo} \#1 (default all)
  \end{description}
-all of the above can take "-m \#" to plot the residuals {\it modulo} "\#" occurrences
-and/or "-l \#" to plot the last "\#" residuals
-and/or "-a \#" to plot the average residual over "\#" occurrences.
+all of the above can take {\tt -m \#} to plot the residuals {\it modulo} {\tt \#} occurrences
+and/or {\tt -l \#} to plot the last {\tt \#} residuals
+and/or {\tt -a \#} to plot the average residual over {\tt \#} occurrences.
 The options are applied in that order independently of the order in which they were typed.
-\item power/particle losses (see section \ref{cha:regions} and Appendix \ref{lab:b2:numerics:parameters} for the region definitions)
+\item Power/particle losses (see section \ref{cha:regions} and Appendix \ref{lab:b2:numerics:parameters} for the region definitions)
  \begin{description}
   \item[b2stbc\_sna\_reg \#1]\index{b2stbc\_sna\_reg} Boundary particle sources for region \#1 (default 0)
   \item[b2stbr\_sna\_reg \#1]\index{b2stbr\_sna\_reg} Recycling particle sources for region \#1 (default 0)
@@ -1334,7 +1358,7 @@ The options are applied in that order independently of the order in which they w
   \item[rsanareg\_region \#1]\index{rsanareg\_region} ionisation rate, by region, for species \#1 (default 0)
  \end{description}
 these require the {\tt SOLPS\_FLUIDS} and {\tt NREG} variables to be set correctly (see section \ref{lab:b2:numerics:parameters} and Appendix \ref{cha:regions} for the definitions of the regions)\index{SOLPS\_FLUIDS}\index{NREG}. If the {\tt SOLPS\_FLUIDS} or {\tt NREG} files are not found, the necessary information is extracted from the {\tt run.log} file.
-\item plotting
+\item Plotting
  \begin{description}
   \item[plot]\index{plot} The various {\tt xyplot}\#, {\tt lxyplot}\#, {\tt xlyplot}\# and {\tt lxlyplot}\# call {\tt plot} passing their name as the 1$^{st}$ parameter; {\tt plot} parses the 1$^{st}$ parameter to determine if $\log x$ ({\tt lx}) or $\log y$ ({\tt ly}) and the number of curves (\#); args 1..\# specify labels for curves; the next two arguments specify $x$- and $y$-axis labels, the last specifies a header. The system normally uses {\tt gnuplot.cmd} for the {\tt gnuplot} commands, and {\tt gnuplot.data} for the data. A number of environment variables can be used to modify the behaviour of plot:
    \begin{description}
@@ -1374,7 +1398,13 @@ rm GNUPLOT_COUNT gnuplot.*data
     \item[PRINT\_PLOT]\index{PRINT\_PLOT} if set to a filename, then PostScript is written to that file; else if set but empty, PostScript is sent to the default printer; otherwise the plot is done to the X terminal
    \end{description}
   If the file {\tt GNUPLOT\_COUNT} exists, then an internal counter {\tt GNUPLOT\_COUNT} is set by reading the number from the file; incremented; and then saved to the file; instead of using {\tt gnuplot.data} for the data, the file {\tt gnuplot.\$\{GNUPLOT\_COUNT\}.data} is used and the commands for plotting are concatenated to {\tt gnuplot.cmd} allowing for multiple pages of plots.
+  \item[plot\_cps \#1]\index{plot\_cps} Copies {\tt gnuplot.cmd} to {\tt gnuplot\_cps.cmd}, modifying it so that colour plotting occurs to \#1 or by default {\tt out.ps}; executes {\tt gnuplot} on new file. The location of these files can be modified by use of the {\tt GNUPLOT\_TMP} variable.
+  \item[plot\_it]\index{plot\_it} Utility script used to produce complex plots.
+  \item[plot\_mesh \#1 \#2]\index{plot\_mesh} Plots the mesh specified as \#1 accompanied by the {\tt mesh.extra} file specified as \#2 as \#1.ps.
   \item[plot\_png]\index{plot\_png} produces a PNG output file instead
+  \item[plot\_ps \#1]\index{plot\_ps} Copies {\tt gnuplot.cmd} to {\tt gnuplot\_ps.cmd}, modifying it so that black-and-white plotting occurs to \#1 or by default {\tt out.ps}; executes {\tt gnuplot} on new file. The location of these files can be modified by use of the {\tt GNUPLOT\_TMP} variable.
+  \item[plot\_rzpsi.dat]\index{plot\_rzpsi.dat} Utility script using {\tt plotmtv} to obtain a plot of the equilibrium data from the {\tt rzpsi.dat} file used by {\tt Carre} to build the computational grid.
+  \item[plot\_set]\index{plot\_set} Utility script preparing files for complex plots.
   \item[xyplot ]\index{xyplot } alias for simple "$x~y$" plot
   \item[xyplot2]\index{xyplot2} alias for simple "$x~y_1~y_2$" plot
   \item[xyplot3]\index{xyplot3} alias for simple "$x~y_1~y_2~y_3$" plot
@@ -1412,7 +1442,7 @@ rm GNUPLOT_COUNT gnuplot.*data
   \item[lxlyplot8]\index{lxlyplot8} alias for simple "$\log(x)~\log(y_1)~\log(y_2)~\log(y_3)~\log(y_4)~\log(y_5)~\log(y_6)~\log(y_7)~\log(y_8)$" plot
   \item[lxlyplot9]\index{lxlyplot9} alias for simple "$\log(x)~\log(y_1)~\log(y_2)~\log(y_3)~\log(y_4)~\log(y_5)~\log(y_6)~\log(y_7)~\log(y_8)~\log(y_9)$" plot
  \end{description}
-\item Detailed run diagnostics (Many of these invoke the "plot" command described above and can be toggled to use a logarithmic $y$ scale by use of an additional "l" argument while "L" also plots the absolute values of negative quantities on the same scale and "M" the absolute values of negative quantities in a separate plot)
+\item Detailed run diagnostics (Many of these invoke the {\tt plot} command described above and can be toggled to use a logarithmic $y$ scale by use of an additional {\tt l} argument while {\tt L} also plots the absolute values of negative quantities on the same scale and {\tt M} the absolute values of negative quantities in a separate plot)
  \begin{description}
   \item[2d]\index{2d} plots time-dependent quantities from {\tt b2time.nc} (Appendix \ref{cha:b2time}), 2$^{nd}$, 3$^{rd}$ {\it etc.\ versus} the 1$^{st}$ argument.
   \item[2da]\index{2da} prints time-dependent quantities from {\tt b2time.nc} (Appendix \ref{cha:b2time}), 2$^{nd}$, 3$^{rd}$ {\it etc.\ versus} the 1$^{st}$ argument.
@@ -1425,6 +1455,9 @@ rm GNUPLOT_COUNT gnuplot.*data
   \item[2d\_profiles]\index{2d\_profiles} creates {\tt *.last10} files for plotting. When processing fluxes, divides them by the area of contact to the neighbouring cell. By default, the profiles will be averaged over the last 10 snapshots. If the number of available snapshots is less than 10, the default will be to average over all the snapshots available. The averaging limits can be adjusted with the \#1 and \#2 arguments (default values are 10 and 0 respectively).
   \item[2d\_profiles\_extended]\index{2d\_profiles\_extended} creates {\tt *.last10} files for plotting. When processing fluxes, divides them by the area of contact to the neighbouring cell. The flux files ending in {\tt P.last10} are divided by the perpendicular area of the cell face. By default, the profiles will be averaged over the last 10 snapshots. If the number of available snapshots is less than 10, the default will be to average over all the snapshots available. The averaging number can be adjusted with the \#1 argument (default value is 10).
   \item[2d.summarize]\index{2d.summarize} Outputs the time-dependent quantities from the last time point in {\tt b2time.nc}.
+  \item[b2favere\_OK]\index{b2favere\_OK} Checks that the {\tt b2favere} file is of correct size and content.
+  \item[b2fstate\_OK]\index{b2fstate\_OK} Checks that the {\tt b2fstate} file is of correct size and content.
+  \item[b2fstate\_OK\_bool]\index{b2fstate\_OK\_bool} Checks that the {\tt b2fstate} file is of correct size and content and returns 0 or 1 for use in scripting.
   \item[D+\_fluid\_fluxes]\index{D+\_fluid\_fluxes} Plots the fluxes of $D^+$ ions across the grid boundaries for a {\tt B2.5} standalone case
   \item[D0\_fluid\_fluxes]\index{D0\_fluid\_fluxes} Plots the fluxes of $D^0$ neutrals across the grid boundaries for a {\tt B2.5} standalone case
   \item[D\_coupled\_conservation]\index{D\_coupled\_conservation} Plots the particle balance of D for coupled runs
@@ -1441,7 +1474,7 @@ rm GNUPLOT_COUNT gnuplot.*data
   \item[currents.py]\index{currents.py} Plots the electric current across various surfaces. Currents into the domain are shown as negative values, fluxes out of the domain as positive values.
   \item[delta]\index{delta} Plots the maximum fractional change of the primary variables per {\tt B2.5} timestep.
   \item[density]\index{density} Plots the time evolution of the density in a {\tt B2.5} run.
-  \item[display\_tallies]\index{display\_tallies} Displays the {\tt B2.5} tallies in an easy-to-read format (argument "H" gives the first instance, and "L" the last instance)
+  \item[display\_tallies]\index{display\_tallies} Displays the {\tt B2.5} tallies in an easy-to-read format (argument {\tt H} gives the first instance, and {\tt L} the last instance)
   \item[energy\_analysis]\index{energy\_analysis} Plots the energy flows across certain important surfaces in {\tt B2.5}.
   \item[energy\_analysis\_fht]\index{energy\_analysis\_fht} Plots the total energy flows across certain important surfaces in {\tt B2.5}.
   \item[energy\_analysis\_total]\index{energy\_analysis\_total} Plots the total energy flows across certain important surfaces in {\tt B2.5}.
@@ -1466,6 +1499,7 @@ rm GNUPLOT_COUNT gnuplot.*data
   \item[fhtyreg]\index{fhtyreg} Plots the total energy flow across important $y$-directed surfaces in {\tt B2.5}.
   \item[fluid\_fluxes \#1 \#2]\index{fluid\_fluxes} Plots the sum of fluid fluxes for species numbers varying from \#1 to \#2 (respective defaults are 0 and 1). Also exists as a Python script. Fluxes into the domain are shown as negative values, fluxes out of the domain as positive values.
   \item[fluxt \#1]\index{fluxt}\index{DIMENSIONS.F} Gives the flux strength for the first \#1 {\tt Eirene} strata. The default value is all the strata, as read from the {\tt b2.neutrals.parameters} file, or if not present, the {\tt \$\{SOLPSTOP\}/modules/B2.5/src\allowbreak/include.local/DIMENSIONS.F} file, or if not present, the {\tt \$\{SOLPSTOP\}/modules/B2.5\allowbreak /src/include/DIMENSIONS.F} file.
+  \item[get\_solps\_fluids]\index{get\_solps\_fluids} A utility script to obtain the list of fluid species labels from the {\tt run.log} file.
   \item[internal\_energy\_balance]\index{internal\_energy\_balance} Outputs the energy balance tallies.
   \item[internal\_energy\_balance\_coupled]\index{internal\_energy\_balance\_coupled} Outputs the energy balance tallies for a coupled run.
   \item[joule\_heating]\index{joule\_heating} Plots the amount of Joule heating per region.
@@ -1485,6 +1519,7 @@ rm GNUPLOT_COUNT gnuplot.*data
   \item[print\_species]\index{print\_species} Prints the list of species included in the run.
   \item[reflection]\index{reflection} Shows reflected particle fluxes (for {\tt B2.5} standalone runs).
   \item[reflection\_energy]\index{reflection\_energy} Shows reflected energy fluxes (for {\tt B2.5} standalone runs).
+  \item[species]\index{species} Obtains the list of species from {\tt SOLPS\_FLUIDS}.
   \item[sputter]\index{sputter} Shows sputtering particle fluxes (for {\tt B2.5} standalone runs).
   \item[sputter\_energy]\index{sputter\_energy} Shows sputtering energy fluxes (for {\tt B2.5} standalone runs).
   \item[sputter\_RES]\index{sputter\_RES} Shows RES sputtering particle fluxes (for {\tt B2.5} standalone runs).
@@ -1515,72 +1550,48 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[awk.plot\_mesh \#1]\index{awk.plot\_mesh} Outputs the mesh specified as \#1 in a form usable for {\tt xyplot}.
   \item[awk.reverse]\index{awk.reverse} Outputs a file in reverse order.
   \item[awk.transpose]\index{awk.transpose} Transposes an array of data.
-  \item[convert\_from\_solps4.3 \#1]\index{convert\_from\_solps4.3} Converts run number \#1 from {\tt DEVICE} from the SOLPS4.3 ITER archive to a \SOLPSITER run in directory {\tt \$\{SOLPSTOP\}/runs/\$\{DEVICE\}/\#1} .
+  \item[chop\_pwd \#1]\index{chop\_pwd} Truncates the name of the current directory to not exceed \#1 characters (default 60).
+  \item[count]\index{count} Basic counting with advanced options ({\tt count -h} for help).
+  \item[datestamp]\index{datestamp} Gets a date stamp from the machine.
+  \item[env\_var\_length]\index{env\_var\_length} Lists the length of each environment variable in the shell. When executed as in {\tt `env\_var\_length | sort -n | tail`}, prints the 10 longest environment variables.
+  \item[env\_var\_prune]\index{env\_var\_prune} Prunes an environment variable by removing duplicated entries. Usage is {\tt setenv X `env\_var\_prune X`}.
   \item[fixbb]\index{fixbb} A utility script to properly define the bounding box of PostScript files.
-  \item[get\_solps\_fluids]\index{get\_solps\_fluids} A utility script to obtain the list of fluid species labels from the {\tt run.log} file.
-  \item[grf]\index{grf} A more effective version of "grep" when searching for use of a variable in source code.
+  \item[gtdr]\index{gtdr} Script to make a directory tree local.
+  \item[gtfl]\index{gtfl} Replaces the specified links by the files to which they are linked.
+  \item[grf]\index{grf} A more effective version of {\tt grep} when searching for use of a variable in the source code.
   \item[inspect\_plasmastate \#1]\index{inspect\_plasmastate} This script will return the plasma time stamp at which the {\tt plasmastate} savefile \#1 was written.
-  \item[plot\_cps \#1]\index{plot\_cps} Copies {\tt gnuplot.cmd} to {\tt gnuplot\_cps.cmd}, modifying it so that colour plotting occurs to \#1 or by default {\tt out.ps}; executes {\tt gnuplot} on new file. The location of these files can be modified by use of the {\tt GNUPLOT\_TMP} variable.
-  \item[plot\_it]\index{plot\_it} Utility script used to produce complex plots.
-  \item[plot\_ps \#1]\index{plot\_ps} Copies {\tt gnuplot.cmd} to {\tt gnuplot\_ps.cmd}, modifying it so that black-and-white plotting occurs to \#1 or by default {\tt out.ps}; executes {\tt gnuplot} on new file. The location of these files can be modified by use of the {\tt GNUPLOT\_TMP} variable.
-  \item[plot\_rzpsi.dat]\index{plot\_rzpsi.dat} Utility script using {\tt plotmtv} to obtain a plot of the equilibrium data from the {\tt rzpsi.dat} file used by {\tt Carre} to build the computational grid.
-  \item[plot\_set]\index{plot\_set} Utility script preparing files for complex plots.
-  \item[species]\index{species} Obtains the list of species from {\tt SOLPS\_FLUIDS}.
+  \item[lln]\index{lln} Lists the chain of symbolic links leading to a file.
+  \item[lndr]\index{lndr} routine to generate shadow trees.
+  \item[noquote\_pwd]\index{noquote\_pwd} Returns the current working directory as a string without quotes (c.f.\ {\tt quote\_pwd}).
+  \item[quote\_pwd]\index{quote\_pwd} Returns the current working directory as a string with quotes (c.f.\ {\tt noquote\_pwd}).
+  \item[rlndr]\index{rlndr} Replaces a link address by another.
   \item[wavelength\_to\_energy]\index{wavelength\_to\_energy} Converts a wavelength (in $m$) to an energy (in $eV$) (and the reverse).
  \end{description}
 \item Others
  \begin{description}
   \item[b2]\index{b2} Shortcut to {\tt B2}.
-  \item[b2favere\_OK]\index{b2favere\_OK} Checks that the {\tt b2favere} file is of correct size and content.
-  \item[b2fstate\_OK]\index{b2fstate\_OK} Checks that the {\tt b2fstate} file is of correct size and content.
-  \item[b2fstate\_OK\_bool]\index{b2fstate\_OK\_bool} Checks that the {\tt b2fstate} file is of correct size and content and returns 0 or 1 for use in scripting.
   \item[b2p]\index{b2p} Script to obtain a standard series of \btwoplot graphs.
   \item[b2pc]\index{b2pc} Script to obtain a standard series of \btwoplot graphs.
   \item[b2pl]\index{b2pl} Script to obtain a standard series of \btwoplot graphs.
-  \item[b2plot]\index{b2plot} Shortcut to \btwoplotns. A "-n" option allows for dry-run tests. A "-d" option allows to run within the chosen debugger. A "-s" option allows to run \btwoplot without coupling to {\tt Eirene} data. A "-h" option prints a help description.
   \item[b2pp]\index{b2pp} Script to obtain a standard series of \btwoplot graphs.
   \item[b2pt]\index{b2pt} Script to obtain a standard series of \btwoplot graphs.
-  \item[b2run]\index{b2run}\index{b2co}\index{b2fstate} Shortcut to the {\tt Makefile} launching {\tt B2.5}. A "-n" option allows for dry-run tests. A "-d" option allows to run within the chosen debugger. A "-s" option allows to run {\tt B2.5} in standalone mode. A "-m" option allows to run with MPI options. A "-o" option adds any other desired run options. The options can be grouped together inside quotes or given individually with multiple "-o" instances. A "-t \#" option allows to request an OpenMP run with \# threads. A "-b" option can be used when invoking the {\tt b2co} program to obtain a provisional {\tt b2fstate} file while the main code is running. A "-h" option prints a help description. (See \ref{b2run} for fuller details)
-  \item[b2run\_hgw\_cluster]\index{b2run\_hgw\_clus} Shortcut to the {\tt Makefile} launching {\tt B2.5} for the IPP--Greifswald cluster. A "-n" option allows for dry-run tests.
-  \item[b2sxdr]\index{b2sxdr} Shortcut to the \SOLPSfour to \SOLPSfive converter. A "-n" option allows for dry-run tests. A "-d" option allows to run within the chosen debugger. A "-s" option allows to specify that the run to convert was not coupled to {\tt Eirene}. A "-o" option adds any other desired run options. The options can be grouped together inside quotes or given individually with multiple "-o" instances. A "-h" option prints a help description.
-  \item[chop\_pwd \#1]\index{chop\_pwd} Truncates the name of the current directory to not exceed \#1 characters (default 60).
   \item[climb\_and\_look\_for]\index{climb\_and\_look\_for} Script used to find a file in a directory above the current one.
   \item[copy\_tracing\_files]\index{copy\_tracing\_files} Script to bring tracing files to temporary run directory, if present.
   \item[correct\_baserun\_timestamps]\index{correct\_baserun\_timestamps} Makes sure the timestamps for the start-up files in the {\tt baserun} directory are in the right chronological order.
   \item[correct\_b2yt\_timestamps]\index{correct\_b2yt\_timestamps}\index{b2yt} Makes sure the timestamps for the start-up files in the current directory are in the right chronological order for the {\tt b2yt} converter.
-  \item[count]\index{count} Basic counting with advanced options (``count -h'' for help).
   \item[d2d]\index{d2d} Doubles the resolution of the {\tt DG} equilibrium file (see Sec.~\ref{sec:equtrn}).
   \item[d2e]\index{d2e} Converts {\tt DG} equilibrium files to {\tt EFIT} format (see Sec.~\ref{sec:equtrn}).
   \item[d2v]\index{d2v} Converts {\tt DG} equilibrium files to {\tt Carre} format (see Sec.~\ref{sec:equtrn}).
-  \item[datestamp]\index{datestamp} Gets a date stamp from the machine.
   \item[determine\_SOLPSTOP]\index{determine\_SOLPSTOP}\index{SOLPSTOP\_FORCE} Assigns the SOLPSTOP variable inside submission scripts according to the environment variable {\tt SOLPSTOP\_FORCE}, if present and pointing to a valid directory, or, next, the content of the local {\tt SOLPSTOP} file or, last, the environment variable {\tt \$SOLPSTOP}.
   \item[e2d]\index{e2d} Converts {\tt EFIT} equilibrium files to {\tt DG} format (see Sec.~\ref{sec:equtrn}).
-  \item[eirobj]\index{eirobj} Alias to run {\tt Eirene} standalone with graphics.
-  \item[eirobjx]\index{eirobjx} Alias to run {\tt Eirene} standalone without graphics.
-  \item[env\_var\_length]\index{env\_var\_length} Lists the length of each environment variable in the shell. When is executed like `env\_var\_length | sort -n | tail`, prints the 10 longest environment variables. Seems to be not needed for most of users, only for developers and beta-testers.
-  \item[env\_var\_prune]\item{env\_var\_prune} Prunes the environment variable (removing duplicated entries) by `setenv X `env\_var\_prune X` `.  Seems to be not needed for most of users, only for developers and beta-testers.
   \item[first\_setup]\index{first\_setup} Creates the {\tt config.\$\{HOST\_NAME\}.\$\{COMPILER\}} files, if missing, in each of the \SOLPSITER submodules.
   \item[get\_git\_email]\index{get\_git\_email} Finds the user's email address from the {\tt .gitconfig} file.
   \item[get\_git\_name]\index{get\_git\_name} Finds the user's name from the {\tt .gitconfig} file.
   \item[get\_parm.bpl]\index{get\_parm.bpl} extracts certain useful quantities from a run input and output files for use in later scripts, particularly those building \btwoplot command files.
-  \item[gtdr]\index{gtdr} Script to make a directory tree local.
-  \item[gtfl]\index{gtfl} Replaces the specified links by the files to which they are linked.
   \item[IDS\_yaml\_replace \#shot \#old\_run \#new\_run]\index{IDS\_yaml\_replace}\index{b2\_ual\_rewrite} Script invoked by the {\tt b2\_ual\_rewrite} program (see~\ref{sec:b2_ual_rewrite}) to update the {\tt .yaml} IMAS database files to indicate that the {\tt \#old\_run} run runmber of shot {\tt \#shot} is now replaced by run number {\tt \#new\_run}.
   \item[import\_files\_from\_convert]\index{import\_files\_from\_convert}\index{b2yt}\index{correct\_baserun\_timestamps} Imports and renames the files produced by {\tt b2yt} in a {\tt convert} directory at the same level as the current directory to prepare the new converted case for a run. Also updates some of the files in the {\tt baserun} directory, so it is often prudent to use {\tt correct\_baserun\_timestamps}, from the parent directory, afterwards.
   \item[input.dat\_to\_mesh.extra]\index{input.dat\_to\_mesh.extra}\index{input.dat}\index{mesh.extra} Converts standard input (usually directed from a {\tt input.dat} file) into a {\tt mesh.extra} file.
-  \item[ITER\_divertor\_HTM]\index{ITER\_divertor\_HTM} Performs the thermal calculation of the divertor target monoblocks and reflector plate hypervapotron channels. It requires {\tt b2ymb.dat} and {\tt b2yrp.dat} to be present in the run directory. It runs \btwoplot to produce the heat load profile data of the targets and reflector plates. Then it runs {\tt b2ymb} to produce the input files (see \ref{sec:b2ymb}) for the {\tt FreeFem++}\cite{MR3043640} heat transfer model of the monoblock {\tt Monoblock\_HTM.edp} for the outer target. Afterwards, {\tt b2ymb} is ran again to produce the input files to run {\tt Monoblock\_HTM.edp} for the inner target. When the inner target is completed, {\tt b2yrp} (see \ref{sec:b2yrp}) is run to produce the input files for the inner reflector plate heat transfer model {\tt ReflectorPlate\_HTM.edp}. Finally, {\tt b2yrp} is executed one last time to produce the input files for the thermal analysis of the outer reflector plate.
-  \item[itersubmit]\index{itersubmit} Command file to launch runs on the ITER GPC cluster. See Section~\ref{b2run} for details.
-  \item[itmsubmit]\index{itmsubmit} Command file to launch runs on the Marconi ITM Gateway machine. See Section~\ref{b2run} for details.
-  \item[marconisubmit]\index{marconisubmit} Command file to launch runs on the Marconi supercomputer. See Section~\ref{b2run} for details.
-  \item[ippsubmit]\index{ippsubmit} Command file to launch runs on the new (2019) IPP cluster. See Section~\ref{b2run} for details.
-  \item[jetsubmit]\index{jetsubmit} Command file to launch runs on the JET Analysis Cluster (JAC). See Section~\ref{b2run} for details.
-  \item[cumulussubmit]\index{cumulussubmit} Command file to launch runs on the CCFE Cumulus cluster. See Section~\ref{b2run} for details.
-  \item[csd3submit]\index{csd3submit} Command file to launch runs on the CCFE CSD3 cluster. See Section~\ref{b2run} for details.
-  \item[jfrssubmit]\index{jfrssubmit} Command file to launch runs on the JFRS IFERC-CSC supercomputer. See Section~\ref{b2run} for details.
   \item[last10]\index{last10} Truncates the {\tt run.log} file to contain only the output from the last 10 written code iterations and stores them in {\tt run.log.last10}.
-  \item[localsubmit]\index{localsubmit} Command file to launch runs on the local machine. See Section~\ref{b2run} for details.
-  \item[lln]\index{lln} Lists the chain of symbolic links leading to a file.
-  \item[lndr]\index{lndr} routine to generate shadow trees.
   \item[mds\_id]\index{mds\_id} Obtains certain data necessary for run identification when saving to the {\tt MDSplus} database.
   \item[move\_optional\_files]\index{move\_optional\_files} Script used by the run Makefile to check for the existence of optional output files and, upon succesful termination of a run, move these files to the run directory.
   \item[move\_save\_files]\index{move\_save\_files}\index{b2co} Script used by the crash recovery program {\tt b2co} to replace optional run output files with their recovered versions.
@@ -1588,47 +1599,39 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[nc\_reduce]\index{nc\_reduce} Utility program to reduce the size of very large NetCDF files by keeping only a fraction of the timeslices. Uses {\tt -m \#} and {\tt -l \#} options to obtain every $m$-th time slice and/or the last $l$ time slices.
   \item[nc2text\_simple]\index{nc2text} Replacement program providing the basic capabilities of the {\tt nc2text} utility when not available on the system. A symbolic link to {\tt nc2text} will be created for other scripts to be able to use it.
   \item[nn2d]\index{nn2d} Converts new "Naka" format equilibrium files to {\tt DG} format (see Sec.~\ref{sec:equtrn}).
-  \item[noquote\_pwd]\index{noquote\_pwd} Returns the current working directory as a string without quotes (c.f.\ {\tt quote\_pwd}).
   \item[obtain\_tracing\_files]\index{obtain\_tracing\_files} Script to grab the last version of the tracing files for run recovery.
   \item[pipe\_b2.log]\index{pipe\_b2.log} Prepares the {\tt B2} log file for use by other scripts.
   \item[pipe\_run.log]\index{pipe\_run.log} Prepares the {\tt B2.5} log file for use by other scripts.
-  \item[plot\_mesh \#1 \#2]\index{plot\_mesh} Plots the mesh specified as \#1 accompanied by the {\tt mesh.extra} file specified as \#2 as \#1.ps.
   \item[preserve\_scratch\_to\_work]\index{preserve\_scratch\_to\_work} List of instructions to move run results from temporary scratch space to a backed-up filespace
   \item[print\_versions]\index{print\_versions} Prints the GIT repository versions of the various code executables
   \item[QSUB.postprocess]\index{QSUB.postprocess} List of instructions appended to the {\tt B2.5} standalone submission scripts for run post-processing
   \item[QSUB.postprocess\_coupled]\index{QSUB.postprocess\_coupled} List of instructions appended to the \SOLPSITER submission scripts for run post-processing
-  \item[quote\_pwd]\index{quote\_pwd} Returns the current working directory as a string with quotes (c.f.\ {\tt noquote\_pwd}).
   \item[recover\_initial\_files]\index{recover\_initial\_files}\index{b2co}\index{plasmastate} For use to copy back the stored initial case files ({\tt .i} extension) before a run restart, or when use of {\tt b2co} is not possible because the run crash happened too early for {\tt plasmastate} files to be written.
   \item[regression\_test]\index{regression\_test} Utility script to run regression tests.
   \item[res\_av]\index{res\_av} Special script to reduce residuals in the finalization step of the {\tt Eirene} sources averaging scheme (see Section~\ref{sec:B2Eirene:averaging} for details).
-  \item[resave\_mds]\index{resave\_mds} Update an archived {\tt MDSplus} case. A "-n" option allows for dry-run tests. A "-d" option allows to run within the chosen debugger. A "-s" option allows to update a {\tt B2.5} standalone case. A "-r" option allows to pass variable redefinitions to the underlying Makefile.
-  \item[rlndr]\index{rlndr} Replaces a link address by another
   \item[rps]\index{rps} Shifts $\Psi$ values by a given amount within a {\tt DG} equilibrium file (see Sec.~\ref{sec:equtrn}).
   \item[run\_av]\index{run\_av} Special script to prepare the averaging step of the {\tt Eirene} sources averaging scheme (see Section~\ref{sec:B2Eirene:averaging} for details).
   \item[save\_initial\_files]\index{save\_initial\_files} Script used by runs Makefile at start of a run to save initial state files for eventual recovery.
-  \item[save\_mds]\index{save\_mds} Archive an {\tt MDSplus} case. A "-n" option allows for dry-run tests. A "-d" option allows to run within the chosen debugger. A "-s" option allows to archive a {\tt B2.5} standalone case. A "-r" option allows to pass variable redefinitions to the underlying Makefile.
   \item[setup\_baserun\_eirene\_links]\index{setup\_baserun\_eirene\_links} Prepares the run directory before a {\tt B2.5-Eirene} run by settings up links to the proper data files.
-  \item[sgesubmit]\index{sgesubmit} Command file to launch runs on an SGE system. See Section~\ref{b2run} for details.
-  \item[SLURM.postprocess]\index{SLURM.postprocess} Alias to {\tt QSUB.postprocess}
-  \item[SLURM.postprocess\_coupled]\index{SLURM.postprocess\_coupled} Alias to {\tt QSUB.postprocess\_coupled}
+  \item[SLURM.postprocess]\index{SLURM.postprocess} Alias to {\tt QSUB.postprocess}.
+  \item[SLURM.postprocess\_coupled]\index{SLURM.postprocess\_coupled} Alias to {\tt QSUB.postprocess\_coupled}.
   \item[SOLPS4to5]\index{SOLPS4to5} Script to convert a \SOLPSfour run directory into a \SOLPSfive one.
   \item[solps-iter\_update]\index{solps-iter\_update} Script to update to the latest \SOLPSITER master distribution.
   \item[solps-iter\_update\_develop]\index{solps-iter\_update\_develop} Script to switch to the up-to-date \SOLPSITER develop branch.
   \item[str2ogr]\index{str2ogr} Converts a .str structure file into a {\tt DG} .ogr template file.
-  \item[summarize\_run]\index{summarize\_run} List of instructions provided during job submission for obtaining a standard set of run diagnostics
+  \item[summarize\_run]\index{summarize\_run} List of instructions provided during job submission for obtaining a standard set of run diagnostics.
   \item[switch\_to\_master]\index{switch\_to\_master} Script to switch to the up-to-date \SOLPSITER master branch.
   \item[triang]\index{triang} Main script used to prepare run input files after the {\tt DivGeo} case has been defined and the {\tt Carre} grid has been built.
   \item[triang.conf]\index{triang.conf} Script containing utility functions used by the {\tt triang} script.
   \item[transfer\_solps-iter\_runs]\index{transfer\_solps-iter\_runs} Script for transferring a \SOLPSITER case. If a run directory from machine {\tt X} is to be transferred to machine {\tt Y} then the script is to be run from machine {\tt X} and just one level up from the directory which is to be transferred. The script will trace back and update the soft links in the run directory according to the remote environment. Running the script requires knowing the IP address of the remote machine and have a username and password to log on to it. This script makes use of the {\tt sshpass} utility.
   \item[truncate\_tracing\_files]\index{truncate\_tracing\_files}\index{b2co} Script used by the crash recovery program {\tt b2co} to truncate the optional tracing files so that they stay synchronized with the recovered plasma state.
-  \item[ustcsubmit]\index{ustcsubmit} Command file to launch runs on the USTC computer cluster. See Section~\ref{b2run} for details.
   \item[v2d]\index{v2d} Converts {\tt Carre} format equilibrium files to {\tt DG} format (see Sec.~\ref{sec:equtrn}).
  \end{description}
 \item Some new Python \index{Python scripts} based scripts have also been added:
  \begin{description}
-  \item[calculate\_sputter\_inner\_target.py]\index{calculate\_sputter\_inner\_target.py} Calculates the physical sputtering to be expected at the inner target in a simulation saved in MDSplus (chapter \ref{cha:MDSplus}) on the solps-mdsplus.aug.ipp.mpg.de server (``-h'' help is provided).
-  \item[calculate\_sputter\_outer\_target.py]\index{calculate\_sputter\_outer\_target.py} Calculates the physical sputtering to be expected at the outer target in a simulation saved in MDSplus (chapter \ref{cha:MDSplus}) on the solps-mdsplus.aug.ipp.mpg.de server (``-h'' help is provided).
-  \item[compare\_2\_solps.py]\index{compare\_2\_solps.py} Compares two SOLPS shots with same dimensions saved in MDSplus (chapter \ref{cha:MDSplus}) on the solps-mdsplus.aug.ipp.mpg.de server (``-h'' help is provided).
+  \item[calculate\_sputter\_inner\_target.py]\index{calculate\_sputter\_inner\_target.py} Calculates the physical sputtering to be expected at the inner target in a simulation saved in MDSplus (chapter \ref{cha:MDSplus}) on the solps-mdsplus.aug.ipp.mpg.de server ({\tt -h} help is provided).
+  \item[calculate\_sputter\_outer\_target.py]\index{calculate\_sputter\_outer\_target.py} Calculates the physical sputtering to be expected at the outer target in a simulation saved in MDSplus (chapter \ref{cha:MDSplus}) on the solps-mdsplus.aug.ipp.mpg.de server ({\tt -h} help is provided).
+  \item[compare\_2\_solps.py]\index{compare\_2\_solps.py} Compares two SOLPS shots with same dimensions saved in MDSplus (chapter \ref{cha:MDSplus}) on the solps-mdsplus.aug.ipp.mpg.de server ({\tt -h} help is provided).
   \item[energy\_analysis.py]\index{energy\_analysis.py} Energy passing through various surfaces.
   \item[fluid\_core\_fluxes.py \#1 \#2]\index{fluid\_core\_fluxes.py} Total fluid flux entering the core region summed from species \#1 to \#2.
   \item[fluid\_fluxes.py \#1 \#2]\index{fluid\_fluxes.py} Fluid fluxes through various surfaces summed from species \#1 to \#2.
@@ -1778,7 +1781,7 @@ for itself by climbing up the tree. You can add options to the {\tt b2run} comma
     mode with the provided options (example: [the syntax is important, both
       the slashes and the quotes are needed] {\tt b2run -m \"mpiexec -np 2\" b2mn})
   \item[-s] Specifies that one wishes to run {\tt B2.5} in standalone mode, i.e. without any coupling to {\tt Eirene}.
-  \item[-o "run options"] Allows to launch {\tt b2XX} with additional run options. The options can be grouped together inside quotes or given individually with multiple "-o" instances.
+  \item[-o "run options"] Allows to launch {\tt b2XX} with additional run options. The options can be grouped together inside quotes or given individually with multiple {\tt -o} instances.
   \item[-t \#] Requests an OpenMP run using \# threads.
   \item[-b]\index{b2co}\index{b2fstate} Specifies, when calling the {\tt b2co} program, that only the {\tt b2fstate} file should be produced. To be used when invoking {\tt b2co} while the main code is running.
   \item[-d "debugger\_name"] Allows to run {\tt b2XX} with the named debugger (example: {\tt b2run -d totalview b2mn}). If no debugger name is specified, the debugger defined with the {\tt DBX} environment variable and specified in the {\tt \$\{SOLPSTOP\}/SETUP/setup.csh.\$\{HOST\_NAME\}.\$\{COMPILER\}.local} or {\tt \$\{SOLPSTOP\}\allowbreak/SETUP\allowbreak/setup.csh.\$\{HOST\_NAME\}.\$\{COMPILER\}} files will be used.
@@ -1806,15 +1809,15 @@ in the {\tt \$\{SOLPSTOP\}/runs} directory ({\tt QSUB.*}, {\tt SBATCH.*}
 or {\tt SLURM.*} files). Currently, the following commands
 are provided:
 \begin{description}
+  \item{cumulussubmit}\index{cumulussubmit} for submissions on the CCFE Cumulus cluster
+  \item{csd3submit}\index{csd3submit} for submissions on the CCFE CSD3 cluster
   \item{ippsubmit}\index{ippsubmit} for submissions on the new (2019) IPP cluster
   \item{itersubmit}\index{itersubmit} for submissions on the ITER GPC cluster
   \item{itmsubmit}\index{itmsubmit} for submissions on the Marconi ITM Gateway machine
-  \item{marconisubmit}\index{marconisubmit} for submissions on the Marconi supercomputer
   \item{jetsubmit}\index{jetsubmit} for submissions on the JET Analysis Cluster (JAC)
-  \item{cumulussubmit}\index{cumulussubmit} for submissions on the CCFE Cumulus cluster
-  \item{csd3submit}\index{csd3submit} for submissions on the CCFE CSD3 cluster
   \item{jfrssubmit}\index{jfrssubmit} for submissions on the JFRS IFERC-CSC supercomputer
   \item{localsubmit}\index{localsubmit} for local submission
+  \item{marconisubmit}\index{marconisubmit} for submissions on the Marconi supercomputer
   \item{sgesubmit}\index{sgesubmit} for submissions on a system running SGE
   \item{spbstusubmit}\index{spbstusubmit} for submissions on the SPbSPU HPC cluster in Saint Petersburg, Russia
   \item{ustcsubmit}\index{ustcsubmit} for submissions on the USTC computer cluster
@@ -1826,14 +1829,14 @@ Each submission command file can handle several possible cases:
 \index{QSUB files}\index{SLURM files}
 \begin{description}
   \item{QSUB.*, SLURM.*} Runs a standalone {\tt B2.5} case.
-  \item{QSUB.*-gz, SLURM.*-gz} Runs a standalone {\tt B2.5} case where the output log file has been compressed (activated with the "-z" option).
+  \item{QSUB.*-gz, SLURM.*-gz} Runs a standalone {\tt B2.5} case where the output log file has been compressed (activated with the {\tt -z} option).
   \item{QSUB.*\_coupled, SLURM.*\_coupled} Runs a coupled \SOLPSITER case.
-  \item{QSUB.*\_coupled-gz, SLURM.*\_coupled-gz} Runs a coupled \SOLPSITER case where the output log file has been compressed (activated with the "-z" option).
-  \item{ } Any otherwise named file specified by the user and given as an argument to the submission command (in which case the "-z" option is ineffective). The specified file must be located in the {\tt \$\{SOLPSTOP\}/runs} directory, or in the actual run directory, or one above it.
+  \item{QSUB.*\_coupled-gz, SLURM.*\_coupled-gz} Runs a coupled \SOLPSITER case where the output log file has been compressed (activated with the {\tt -z} option).
+  \item{ } Any otherwise named file specified by the user and given as an argument to the submission command (in which case the {\tt -z} option is ineffective). The specified file must be located in the {\tt \$\{SOLPSTOP\}/runs} directory, or in the actual run directory, or one above it.
 \end{description}
-where "*" stands for "iter", "itm", "jet", "lsf", or "sge", referring to the machine system on which the
-submission script is to be used. The "\_coupled" scripts are used when the presence of an {\tt Eirene}
-{\tt input.dat} input file is detected in the run directory. Looping scripts, with a "\_loop" extension, are also available for some systems. These will automatically relaunch a case at the end of the time allotted to an individual job submission, provided the run appears to have finished cleanly. If the run appears to have failed, the looping script will stop. It may happen on some systems that some environment variable is appended or duplicated on job resubmission, which leads to the loop breaking as the maximal allowed length of such environment variable is exceeded --- in this case the possible solution is to save the value of environment variable at its initialization within setup.csh and load on the top of SLURM.*\_loop script. Please refer to the solution suggested on ITM Gateway for environment variable \$PATH and \$MANPATH, see scripts SETUP/SETUP.itm\_* and SLURM.itm*\_loop.
+where {\tt *} stands for {\tt csd3}, {\tt cumulus}, {\tt ipp}, {\tt iter}, {\tt itm}, {\tt jet}, {\tt jfrs}, {\tt lsf}, {\tt marconi}, {\tt sge}, or {\tt spbstu}, referring to the machine system on which the submission script is to be used. The {\tt \_coupled} scripts are used when the presence of an {\tt Eirene} input file {\tt input.dat} is detected in the run directory.
+
+Looping scripts, with a {\tt \_loop} extension, are also available for some systems. These will automatically relaunch a case at the end of the time allotted to an individual job submission, provided the run appears to have finished cleanly. If the run appears to have failed, the looping script will stop. It may happen on some systems that some environment variables are appended to or duplicated on job resubmission, which leads to the loop breaking when the maximum allowed length for the environment variable is exceeded --- in this case the recommended solution is to save the value of the environment variable at its initialization within the {\tt setup.csh} scripts and reload it at the beginning of the {\tt SLURM.*\_loop} script. Please refer to the solution suggested for the ITM Gateway concerning environment variables {\tt \$PATH} and {\tt \$MANPATH}, see scripts {\tt SETUP/SETUP.itm\_*} and {\tt SLURM.itm*\_loop}.
 All the submission scripts make use of {\tt b2run} so the same possibility of submitting runs from
 outside the {\tt \$\{SOLPSTOP\}} file space is available.
 
@@ -1860,16 +1863,16 @@ or stops if the submission file is not found.
 
 \begin{sloppypar}
 If {\tt <<Submission\_file>>} is not specified, {\tt itersubmit} looks for {\tt SLURM.iter\_coupled} or
-for {\tt SLURM.iter} depending on whether a coupled or a standalone run is required. To request a standalone run explicitly, the user can use the "-s" option. Otherwise, the script will assume a coupled run is requested if an {\tt Eirene} {\tt input.dat} file is present in the run directory, and a standalone run otherwise.
+for {\tt SLURM.iter} depending on whether a coupled or a standalone run is required. To request a standalone run explicitly, the user can use the {\tt -s} option. Otherwise, the script will assume a coupled run is requested if an {\tt Eirene} {\tt input.dat} file is present in the run directory, and a standalone run otherwise.
 \end{sloppypar}
 
-In the case one wishes to run the code with MPI and needs to pass MPI options to the launching program, this is achieved by means of the "-m" option, followed by the desired options inside double quotes, as follows:
+In the case one wishes to run the code with MPI and needs to pass MPI options to the launching program, this is achieved by means of the {\tt -m} option, followed by the desired options inside double quotes, as follows:
 \begin{verbatim}
 itersubmit -m "<my MPI options>" <my_optional_submission_file_name>
 \end{verbatim}
 The launching program is identified by the variable {\tt MPI\_EXEC} inside the submission file, and options can be by hand as well using the {\tt MPI\_OPTS} variable.
 
-If the user wishes to submit an OpenMP job, this is done by use of the "-t" option, followed by the number of desired CPU threads.
+If the user wishes to submit an OpenMP job, this is done by use of the {\tt -t} option, followed by the number of desired CPU threads.
 
 On some environments (ITER and SPBSTU, for instance), it is also possible to specify directly the number of nodes on which the job should run, by means of the
 \begin{verbatim}
@@ -1881,7 +1884,7 @@ The default job name is {\tt SOLPS-ITER} for coupled jobs and {\tt B2.5} for sta
 \begin{verbatim}
 itersubmit -j <my_job_name>
 \end{verbatim}
-command. Standalone jobs are requested with the "-s" option.
+command. Standalone jobs are requested with the {\tt -s} option.
 
 The number of CPU hours dedicated to the job (with possible consequences for the queue on which the submission will take place) can be modified by means of the
 \begin{verbatim}
@@ -1891,7 +1894,7 @@ command, here to ask for a 24-hour long job. The various submission environments
 \begin{verbatim}
 itersubmit -M 8GB
 \end{verbatim}
-command, to obtain here a run using 8GB of memory. The "B" (for "bytes") is necessary in this syntax for SLURM submission, but should be omitted when using QSUB submission.
+command, to obtain here a run using 8GB of memory. The {\tt B} (for "bytes") is necessary in this syntax for SLURM submission, but should be omitted when using QSUB submission.
 
 The partition on which the job will be run can be specified by means of the {\tt -Q} option. For example:
 \begin{verbatim}
@@ -1903,7 +1906,7 @@ A listing of the available options for each submission script can be obtained by
 \begin{verbatim}
 itersubmit -h
 \end{verbatim}
-command. All options (except "-h") can be used simultaneously and in any order, provided the name of the (optional) submission file is given last.
+command. All options (except {\tt -h}) can be used simultaneously and in any order, provided the name of the (optional) submission file is given last.
 
 The {\tt SLURM.iter} script first of all changes directory to
 {\tt \$\{SOLPSTOP\}} with the help of the {\tt SOLPSTOP} file
@@ -2053,13 +2056,13 @@ The {\tt b2cmpb} block contains
 \item[*cbregs] specifies the number of regions where boundary
   conditions will be specified
   \begin{itemize}
-  \item the "south" boundary is broken into three pieces with one
+  \item the "South" boundary is broken into three pieces with one
     quarter of the cells in the first region, half of the cells in the
     second, and the remaining quarter in the third region (West
     target private flux, core, East target private flux). This is geometry-dependent
     information the code will check against the mesh connectivity and
     return an error if the two do not match
-  \item the "north", "west" and "east" are not broken up, and
+  \item the "North", "West" and "East" boundaries are not broken up, and
     correspond to the SOL boundary, inner (outer) target and outer (inner) target,
     respectively, for lower (upper) single-null configurations.
     For double-null cases, the north boundary should be split into two sections
@@ -2069,8 +2072,7 @@ The {\tt b2cmpb} block contains
   \begin{description}
     \item[*cbsna] boundary conditions for density (1 line per species)
     \item[*cbsmo] boundary conditions for parallel momentum (1 line per species)
-    \item[*cbshi] ion/neutral (or "atomic") temperature/energy
-    boundary condition (1 line per species)
+    \item[*cbshi] ion/neutral (or "atomic") temperature/energy boundary condition (1 line per species)
     \item[*cbshe] electron temperature/heat flux boundary condition
     \item[*cbsch] boundary condition for the electric potential equation
     \item[*cbrec] recycling coefficients (1 line per species)
@@ -2086,9 +2088,9 @@ or to the write-up in Appendix \ref{cha:Mladen}.
 Users are encouraged to use the "physics" formulation of the
 boundary conditions specified later (see section \ref{lab:b2:boundary:parameters}),
 rather than the "Bas" formulation listed here.
-For double-null cases, the "south" boundary must be split in six pieces,
-and the "north" boundary in two. However, the {\tt b2ah} format does
-not allow for the specification of additional "east" or "west" boundaries,
+For double-null cases, the "South" boundary must be split in six pieces,
+and the "North" boundary in two. However, the {\tt b2ah} format does
+not allow for the specification of additional "East" or "West" boundaries,
 so double-null users {\bf must} use the "physics" formulation in addition.
 The code enforces this requirement.
 
@@ -2184,14 +2186,14 @@ or, best:
 
 The allowable choices for the {\bf flag} switch are:
 \begin{description}
-\item["adpak"]\index{ADPAK} A complete atomic physics package with scaling law rates applicable to all charge states, but not always of high accuracy \cite{ADPAK}
-\item["strahl"]\index{STRAHL} A collisional-radiative package developed at IPP--Garching \cite{BEHRINGER87A}, stored in the {\tt stra.dat}\index{stra.dat} file
-\item["adas"]\index{ADAS} (Atomic Data and Analysis Structure) A complete collisional-radiative atomic physics database, actively being maintained and upgraded \cite{ADAS,ADAS2006}. Recommended. Available at \href{http://adas.phys.strath.ac.uk/}{http://adas.phys.strath.ac.uk/}
-\item["amns"]\index{AMNS} (Atomic, Molecular, Nuclear, and Surface data) For IMAS and ITM environment runs only, uses access to the AMNS tools and database
+\item['adas']\index{ADAS} (Atomic Data and Analysis Structure) A complete collisional-radiative atomic physics database, actively being maintained and upgraded \cite{ADAS,ADAS2006}. Recommended. Available at \href{http://adas.phys.strath.ac.uk/}{http://adas.phys.strath.ac.uk/}
+\item['adpak']\index{ADPAK} A complete atomic physics package with scaling law rates applicable to all charge states, but not always of high accuracy \cite{ADPAK}
+\item['amns']\index{AMNS} (Atomic, Molecular, Nuclear, and Surface data) For IMAS and ITM environment runs only, uses access to the AMNS tools and database
+\item['strahl']\index{STRAHL} A collisional-radiative package developed at IPP--Garching \cite{BEHRINGER87A}, stored in the {\tt stra.dat}\index{stra.dat} file
 \end{description}
 
 \index{Weisheit}
-Unless the user chooses to activate the "b2ardr\_no\_weisheit" switch (see
+Unless the user chooses to activate the {\tt b2ardr\_no\_weisheit} switch (see
 section \ref{lis:b2cdci} for description), the hydrogen rates come from
 \cite{Weisheit} and \cite{Janev1984} and overwrite those provided by the data packages above. Those
 data are stored in the {\tt weis.dat}\index{weis.dat} file which should be present in the
@@ -2336,7 +2338,7 @@ The basic structure of {\tt b2mn.dat} is
 
 See also Appendix \ref{lis:b2cdcn} for a more up-to-date description.
 
-If {\tt 'b2stbc\_boundary\_namelist'} is set to 1 in {\tt b2mn.dat}
+If {\tt 'b2stbc\_boundary\_namelist'} is set to {\tt '1'} in {\tt b2mn.dat}
 then the boundary conditions are read in from
 {\tt b2.boundary.parameters} instead of being taken from the file
 created by {\tt b2ah} and possibly modified in {\tt b2mn.dat}.
@@ -2414,7 +2416,7 @@ which contains
   {\tt b2stbc\_type13\_ref} steps away from the boundary, to which is added
   the returning flux of ionised neutrals that crossed into the plasma core
   ({\it via} {\tt CONPAR(,,3)}) when running with {\tt Eirene} and the
-  'ionising\_core' switch is used,
+  {\tt 'ionising\_core'} switch is used,
   {\tt CONPAR(,,2)} is the strength of the feedback.
   \item[14] sound speed velocity flux,
   {\tt CONPAR(,,1)} is a multiplier to the outgoing sound speed $C_{s, \mbox{collective}}$. Recommended sheath boundary condition for use with drifts, in conjunction with {\tt BCENE/I=15}, {\tt BCPOT=11}, and {\tt BCMOM=13}.
@@ -2724,7 +2726,7 @@ criterion at the plates is adjusted to include drift velocities).
 
 See also Appendix \ref{lis:b2cdcn} for a more up-to-date description.
 
-If {\tt 'b2tqna\_transport\_namelist'} is set to 1 in {\tt b2mn.dat}
+If {\tt 'b2tqna\_transport\_namelist'} is set to {\tt '1'} in {\tt b2mn.dat}
 then the transport coefficients are read in from the namelist found in
 {\tt b2.transport.parameters} instead of being taken from the file
 created by {\tt b2ah} and possibly modified in {\tt b2mn.dat}.
@@ -2943,7 +2945,7 @@ See also Appendix \ref{lis:b2cdcn} for a more up-to-date description.
 
 When referring to array length {\tt (NREG+1)} above, we mean range {\tt [0:NREG]} in the code.
 
-When running in the so-called ``time-dependent'' mode ({\tt b2mndt\_style.eq.2}), the total momentum and energy equations are not solved, and the timestep multipliers should not be used, unless their product with the under-relaxation parameters is 1 (as the code defaults provide).
+When running in the so-called "time-dependent" mode ({\tt b2mndt\_style.eq.2}), the total momentum and energy equations are not solved, and the timestep multipliers should not be used, unless their product with the under-relaxation parameters is 1 (as the code defaults provide).
 
 The region indices are defined as follows for a SN case:
 \begin{itemize}\index{regions}
@@ -2991,7 +2993,7 @@ See also Appendix \ref{lis:b2cdcn} for a more up-to-date description.
 This allows for a radial variation ... for a simpler option see
 section \ref{lab:b2:transport:parameters}.
 
-If {\tt 'b2tqna\_inputfile'} is set to 1 in {\tt b2mn.dat}
+If {\tt 'b2tqna\_inputfile'} is set to {\tt '1'} in {\tt b2mn.dat}
 then the transport coefficients are read in from the namelist in
 {\tt b2.transport.inputfile} instead of being taken from the file
 created by {\tt b2ah} and possibly modified in {\tt b2mn.dat}.
@@ -3115,7 +3117,7 @@ See also Appendix \ref{lis:b2cdcn} for a more up-to-date description.
 
 One can also set radially dependent source profiles, in much the same way as with
 {\tt b2.transport.inputfile}, with the {\tt b2.sources.profile} input file,
-accessed by setting 'b2sral\_inputfile' to '1'. The logic is the same in terms
+accessed by setting {\tt 'b2sral\_inputfile'} to {\tt '1'}. The logic is the same in terms
 of fixing radial positions, applicable species, etc...
 
 The coefficient types go as:
@@ -3813,25 +3815,25 @@ with any optional switches mentioned afterwards, here to create a solution on an
 A solution for non-commensurate grids is also available, requiring
 instead that the topology of the two solutions be the same, and works by 2-D
 interpolation of the plasma data in the computational domain, by region. This is
-activated with the 'b2ytdr\_non\_commensurate' option set to '1' in {\tt b2yt.dat}. This option should also be used when the overall grid size remains the same but the location and/or depth of the cuts has changed, or when mapping a lower single-null (LSN) case to an upper single-null (USN) case or vice versa (or between USN-like and LSN-like limiter geometries). When switching between USN and LSN, the solution will be mirror-reflected to keep the inboard and outboard divertor solutions in the correct geometrical locations.
+activated with the {\tt 'b2ytdr\_non\_commensurate'} option set to {\tt '1'} in {\tt b2yt.dat}. This option should also be used when the overall grid size remains the same but the location and/or depth of the cuts has changed, or when mapping a lower single-null (LSN) case to an upper single-null (USN) case or vice versa (or between USN-like and LSN-like limiter geometries). When switching between USN and LSN, the solution will be mirror-reflected to keep the inboard and outboard divertor solutions in the correct geometrical locations.
 
-The conversion of the {\tt Eirene} input file additionally requires for the converter program to know the original version of {\tt Eirene} with which the input file was used, and this is provided by means of the 'eirene\_format' switch. Its possible values (case-insensitive) are:
+The conversion of the {\tt Eirene} input file additionally requires for the converter program to know the original version of {\tt Eirene} with which the input file was used, and this is provided by means of the {\tt 'eirene\_format'} switch. Its possible values (case-insensitive) are:
 \begin{description}
-  \item["old"] for input files from {\bf SOLPS4.0} and {\bf SOLPS5.0} runs using "old" Eirene\_96
-  \item["new"] for input files from {\bf SOLPS4.0} and {\bf SOLPS5.0} runs using "new" Eirene\_99
-  \item["facelift"] for input files from \SOLPSfiveone runs
-  \item["juelich"] for input files from Juelich {\tt Eirene} versions (2008 and younger)
-  \item["iter"] (default) for input files from {\bf SOLPS4.2/4.3} and \SOLPSITER runs
+  \item['old'] for input files from {\bf SOLPS4.0} and {\bf SOLPS5.0} runs using "old" Eirene\_96
+  \item['new'] for input files from {\bf SOLPS4.0} and {\bf SOLPS5.0} runs using "new" Eirene\_99
+  \item['facelift'] for input files from \SOLPSfiveone runs
+  \item['juelich'] for input files from Juelich {\tt Eirene} versions (2008 and younger)
+  \item['iter'] (default) for input files from {\bf SOLPS4.2/4.3} and \SOLPSITER runs
 \end{description}
 The {\tt input.dat.2} file that the converter will create will follow the \SOLPSITER format.
 
-The conversion of the {\tt Eirene} output file ({\tt fort.44}) additionally requires for the converter program to know the original version of {\tt SOLPS} with which the output file was created, and this is provided by means of the 'solps\_version' switch. Its possible values (case-insensitive) are:
+The conversion of the {\tt Eirene} output file ({\tt fort.44}) additionally requires for the converter program to know the original version of {\tt SOLPS} with which the output file was created, and this is provided by means of the {\tt 'solps\_version'} switch. Its possible values (case-insensitive) are:
 \begin{description}
-  \item["4.3"] for {\tt fort.44} output files from {\bf SOLPS4.3} runs
-  \item["5.0"] for {\tt fort.44} output files from {\bf SOLPS5.0} runs
-  \item["5.1"] for {\tt fort.44} output files from \SOLPSfiveone runs
-  \item["5.2"] for {\tt fort.44} output files from \SOLPSfivetwo runs
-  \item["iter"] (default) for input files from \SOLPSITER runs (no conversion necessary)
+  \item['4.3'] for {\tt fort.44} output files from {\bf SOLPS4.3} runs
+  \item['5.0'] for {\tt fort.44} output files from {\bf SOLPS5.0} runs
+  \item['5.1'] for {\tt fort.44} output files from \SOLPSfiveone runs
+  \item['5.2'] for {\tt fort.44} output files from \SOLPSfivetwo runs
+  \item['iter'] (default) for input files from \SOLPSITER runs (no conversion necessary)
 \end{description}
 The {\tt fort.44.2} file that the converter will create will follow the \SOLPSITER
 format.
@@ -3840,8 +3842,8 @@ One can also use {\tt b2yt} to flip the sign of the poloidal and/or toroidal com
 of the magnetic field, and the code will make the appropriate adjustments in the input
 and data files. The switches to obtain this are:
 \begin{description}
-  \item["invert\_bpol" "1"] Inverts the poloidal field and related quantities
-  \item["invert\_btor" "1"] Inverts the toroidal field and related quantities
+  \item['invert\_bpol' '1'] Inverts the poloidal field and related quantities
+  \item['invert\_btor' '1'] Inverts the toroidal field and related quantities
 \end{description}
 This is important because the parallel velocity is co-aligned with the magnetic field in \SOLPSITERns, which was not the case in earlier code versions (please consult Section~\ref{sec:signs} for a full description of the sign conventions used in \SOLPSITERns). For instance, if you are converting from an older {\bf SOLPS4.3} case (where the magnetic field components were always positive by default), you need to use these switches to adapt the plasma solution and the geometry files. This is done automatically for ITER cases when using the {\tt convert\_from\_solps4.3} script.
 
@@ -3888,7 +3890,7 @@ b2ah.dat < b2fpardf
 
 b2ar.dat < b2frates
 \end{verbatim}
-If this order is not met, use a series of "touch 'filename' " commands
+If this order is not met, use a series of {\tt touch 'filename'} commands
 to give the files new dates. The best to check this is to run the command:
 \begin{verbatim}
 b2run -n b2yt
@@ -3962,7 +3964,7 @@ omissions to the developer team are always welcome.
 In case of a computer crash during a run, it may be possible to recover
 the results and continue the simulation. The code writes, at regular
 intervals (default is 3600 CPU seconds, and can be modified with use of the
-'b2mndr\_cpu' and 'b2mndr\_plasmatim' switches, see Appendix \ref{lis:b2cdci} for details and additional options),
+{\tt b2mndr\_cpu} and {\tt b2mndr\_plasmatim} switches, see Appendix \ref{lis:b2cdci} for details and additional options),
 recovery files entitled {\tt plasmastate.XXXX} and {\tt b2.*\_save.parameters.XXXX} in the {\tt b2mn.exe.dir} run
 subdirectory. The {\tt XXXX} are numbers indicating the order in which the
 files were written. The {\tt plasmastate} files contain the same information as the {\tt b2fstati} or
@@ -4172,7 +4174,7 @@ which will recognize, within the quotes following the {\tt -o} additional option
   \item {\tt -s}, {\tt --shot} The shot number
   \item {\tt -r}, {\tt --run} The run number
   \item {\tt -u}, {\tt --user} The user name (default is {\tt USER})
-  \item {\tt -d}, {\tt --database}, {\tt --device} The IMAS database name (default is {\tt DEVICE}, if set, or "solps-iter" otherwise)
+  \item {\tt -d}, {\tt --database}, {\tt --device} The IMAS database name (default is {\tt DEVICE}, if set, or {\tt 'solps-iter'} otherwise)
   \item {\tt -v}, {\tt --version} The IMAS version to be used (default is {\tt 3})
 \end{itemize}
 
@@ -4371,8 +4373,8 @@ There are currently five possible choices supported. They are:
 \begin{description}
   \item[BALANCED] A balanced strategy in which the workload is attempted to be divided evenly among processors. If the initial setup for the {\bf BALANCED} strategy fails, the code then attempts the {\bf APCAS} strategy. Also obtainable by setting {\tt NPRLL = 3}.
   \item[APCAS] meaning {\it All Processors Compute All Strata}, where the work of each stratum is divided among all processors. Usually involves more communication between processors. Also obtainable by setting {\tt NPRLL = 2}.
-  \item[ORIGINAL] The original strategy implemented in versions of {\tt Eirene} prior to \SOLPSITER version 3.0.5. Also called ``proportional allocation'' in the {\tt Eirene} manual. In that strategy, each processor is handed either part of a large stratum or one or several full smaller strata. This strategy works well if the number of processors is larger than the number of strata, but is not recommended if the number of strata is larger than the number of processors. Also obtainable by setting {\tt NPRLL = 1}.
-  \item[EMBARRASS] meaning the ``embarassingly parrallel'' scheme by which each processor is assigned the same number of particle trajectories, as given in the {\tt Eirene} input file. This is the default in non-\SOLPSITER versions of {\tt EIRENE}. Also obtainable if setting {\tt NPRLL = 0} or {\tt NPRLL > 3}.
+  \item[ORIGINAL] The original strategy implemented in versions of {\tt Eirene} prior to \SOLPSITER version 3.0.5. Also called "proportional allocation" in the {\tt Eirene} manual. In that strategy, each processor is handed either part of a large stratum or one or several full smaller strata. This strategy works well if the number of processors is larger than the number of strata, but is not recommended if the number of strata is larger than the number of processors. Also obtainable by setting {\tt NPRLL = 1}.
+  \item[EMBARRASS] meaning the "embarassingly parrallel" scheme by which each processor is assigned the same number of particle trajectories, as given in the {\tt Eirene} input file. This is the default in non-\SOLPSITER versions of {\tt EIRENE}. Also obtainable if setting {\tt NPRLL = 0} or {\tt NPRLL > 3}.
   \item[AUTOMATIC] tells the code to use the current default, whatever it may be.
 \end{description}
 The format to read the strategy name is free-form. The input file is scanned for the words describing the chosen strategy after the title line {\tt *** INFORMATION\_FOR\_MPI} is found. The {\em first} match to an (uppercase) strategy name will be the strategy followed by the code. If the title line is missing or no match is found to any of the strategy names, the default strategy is used. See the {\tt Eirene\_balanced\_MPI} document on the \SOLPSITER web site {\tt Manuals and Documentation} folder for more details on the performance and algorithm corresponding to each strategy.
@@ -4388,7 +4390,7 @@ In the run directory, you should execute the command
 \end{verbatim}\index{setup\_baserun\_eirene\_links}
 to establish the links {\tt Eirene} needs to the relevant atomic data files,
 as well as some links needed for diagnostic scripts.
-Using the "-r" option with this scripts creates relative links. Default behaviour is to create absolute links.
+Using the {\tt -r} option with this scripts creates relative links. Default behaviour is to create absolute links.
 
 %% Examples files from https://solps-mdsplus.aug.ipp.mpg.de/repos/SOLPS/trunk/solps_examples/solps5.1/bench_mark/AUG_16151_D+C+He/
 
@@ -4462,7 +4464,7 @@ Some differences between the \SOLPSITER and {\bf SOLPS5.0} behaviours
 should be noted here.
 
 First, the number of strata {\tt NSTRAI} need no longer include the
-time-dependent "T" stratum.
+time-dependent {\tt 'T'} stratum.
 
 Second, the array sizes of {\tt chemical\_sputter\_yield}, is used, now need to match the
 actual number of wall and non-standard surfaces
@@ -4496,8 +4498,8 @@ When running the coupled version of \SOLPSITERns, you will obtain additional out
   \item[NION] Number of test ion species declared in the {\tt Eirene} input file
   \item[NPLS] Number of plasma background species declared in the {\tt Eirene} input file
   \item[NSTRA] Number of source strata declared in the {\tt Eirene} input file (Stratum 0 is the sum over strata)
-  \item[NLIM] Number of ``additional surfaces'' (physical walls) declared in block 3B of the {\tt Eirene} input file
-  \item[NSTS] Number of ``non-standard surfaces'' (plasma boundaries) declared in block 3A of the {\tt Eirene} input file
+  \item[NLIM] Number of "additional surfaces" (physical walls) declared in block 3B of the {\tt Eirene} input file
+  \item[NSTS] Number of "non-standard surfaces" (plasma boundaries) declared in block 3A of the {\tt Eirene} input file
   \item[NTRII] Number of triangles forming the {\tt Eirene} computational grid
   \item[NCL] Number of segments for resolved tallies on non-standard surfaces
 \end{description}
@@ -4787,14 +4789,14 @@ several values of $\Delta_t$.
     \label{fig:tmne1}
 \end{figure}
 
-\section{``Time-dependent'' mode}
+\section{"Time-dependent" mode}
 \label{sec:time-dependent}\index{Time-dependent mode}
 
 {\em This feature is experimental and should be used with caution!}
 
-There is an alternative solution method available, which does not rely on under-relaxation, and is called, by abuse of language, the ``time-dependent'' mode. This solution mode allows for a more precise estimate of the time derivative terms, particularly for the momentum and energy equations, and can be helpful to damp out numerical oscillations. This is obtained by setting the switch {\tt b2mndt\_style} to {\tt 2}. Please note that the timestep may need to be decreased compared to a similar traditional case, using under-relaxation, to achieve convergence.
+There is an alternative solution method available, which does not rely on under-relaxation, and is called, by abuse of language, the "time-dependent" mode. This solution mode allows for a more precise estimate of the time derivative terms, particularly for the momentum and energy equations, and can be helpful to damp out numerical oscillations. This is obtained by setting the switch {\tt b2mndt\_style} to {\tt 2}. Please note that the timestep may need to be decreased compared to a similar traditional case, using under-relaxation, to achieve convergence.
 
-The ``time-dependent'' mode triggers the use of the \SOLPSfivetwo physics model. It changes the order of solution of the equations to solve first for the density equations, then the parallel momentum equations, followed by the electrical potential, electron and ion temperature equations. The total momentum and energy equations are not solved.
+The "time-dependent" mode triggers the use of the \SOLPSfivetwo physics model. It changes the order of solution of the equations to solve first for the density equations, then the parallel momentum equations, followed by the electrical potential, electron and ion temperature equations. The total momentum and energy equations are not solved.
 
 When using the traditional solution method, relying on under-relaxation of the equations, the evolution in time of the solution is not a true reflection of the physical evolution of the system, but rather only a numerical approximation, and only the final steady-state solution can be fully trusted. If one is interested in the details of the time evolution of the plasma state, then this new solution method should be considered.
 
@@ -4823,7 +4825,7 @@ T_\alpha^{(k+1)} = T_\alpha^{(k)} + r_{xf_{T_\alpha}} \left( \widetilde{T}_\alph
 
 where $r_{xf_{V_{\parallel a}}}$ and $r_{xf_{T_\alpha}}$ are the under-relaxation factors, which are equal to {\tt rxf*xfm1} and {\tt rxf*xfm3} respectively, and the tilde quantities are the actual solutions to the equations. The factors {\tt rxf}, {\tt xfm1}, and {\tt xfm3}, are given by the values of the {\tt b2mndr\_rxf}, {\tt b2news\_xfm1}, and {\tt b2news\_xfm3} switches, respectively.
 
-When applying the ``time-dependent'' mode, the discretization of the time derivative terms becomes, for the parallel momentum equations:
+When applying the "time-dependent" mode, the discretization of the time derivative terms becomes, for the parallel momentum equations:
 
 \begin{equation}\label{eq:mom_dt_2}
 m_a h_z \sqrt{g} \frac{ \widetilde{V}_{\parallel a}^{(k+1)} - V_{\parallel a}^{(k)}}{\tau \delta_{ma} \tau_f} n_a^{(k+1)} + m_a h_z \sqrt{g} \frac{n_a^{(k+1)} - n_a^{(k)}}{\tau} V_{\parallel a}^{(k)}
@@ -4835,7 +4837,7 @@ and, for the energy equations:
 \sqrt{g} \frac{3}{2} \frac{ \widetilde{T}_\alpha^{(k+1)} - T_\alpha^{(k)}}{\tau \delta_{e \alpha} \tau_f} n_\alpha^{(k+1)} + \sqrt{g} \frac{3}{2} \frac{n_\alpha^{(k+1)} - n_\alpha^{(k)}}{\tau} T_\alpha^{(k)}
 \end{equation}
 
-Note that, since the order of solution of the equations has been changed in the ``time-dependent'' mode, the updated density $n_a^{(k+1)}$ is now available for use in Eq.~(\ref{eq:mom_dt_2}), providing a more accurate evaluation of the parallel momentum time derivative term.
+Note that, since the order of solution of the equations has been changed in the "time-dependent" mode, the updated density $n_a^{(k+1)}$ is now available for use in Eq.~(\ref{eq:mom_dt_2}), providing a more accurate evaluation of the parallel momentum time derivative term.
 
 The conditions
 \begin{equation}\label{eq:rxf_mo}
@@ -5709,13 +5711,13 @@ criteria, an error message will be printed showing the deviation from orthogonal
 options likely to improve it. The user
 may ignore the message and proceed, but the mesh provided may not then be of sufficient quality.
 
-Lastly, there is a "hidden" language variable {\tt sellan}\index{sellan} (default value 'english') that can be changed
-to its original 'francais'.
+Lastly, there is a "hidden" language variable {\tt sellan}\index{sellan} (default value {\tt 'english'}) that can be changed
+to its original {\tt 'francais'}.
 
-Once all the settings have been chosen, it is often convenient to save them, so as to not have to re-enter them on the next {\tt Carre} meshing attempt. This is achieved by means of the '(S)ave' option within the {\tt carre} script, provided that the user does not start the next meshing attempt with the '(P)repare' option, but rather jumps directly to '(G)rid'.
+Once all the settings have been chosen, it is often convenient to save them, so as to not have to re-enter them on the next {\tt Carre} meshing attempt. This is achieved by means of the {\tt (S)ave} option within the {\tt carre} script, provided that the user does not start the next meshing attempt with the {\tt (P)repare} option, but rather jumps directly to {\tt (G)rid}.
 
 \begin{sloppypar}
-Upon succesful termination, one needs to '(C)onvert' the grid files to the {\tt .geo} and {\tt .sno} formats understandable by {\tt B2.5} and {\tt DivGeo}. It is also possible to 's(T)ore' the files used to create the grid and the grid output for archival. The input files will be copied to the {\tt \$\{CARRE\_STOREDIR\}} directory (default value is {\tt \$\{SOLPSTOP\}/modules/Carre/\allowbreak meshes/\$\{DEVICE\}}, or {\tt \$\{SOLPSTOP\}/modules/Carre/meshes/\$\{DEVICE\}/\$\{USER\}} for a central installation). The Carre grid output and {\tt .geo} file will be stored in the same location, but that can be changed by means of the '(O)utput' command in the script itsef, or by specifying the {\tt \$\{CARRE\_GRIDDIR\}} environment variable. If {\tt \$\{CARRE\_GRIDDIR\}} is not specified, the {\tt *.sno} converted output file will be copied instead to {\tt \$\{SOLPSTOP\}/\allowbreak modules/DivGeo/device/\allowbreak \$\{DEVICE\}} (or {\tt \$\{SOLPSTOP\}/modules/DivGeo/device/\$\{DEVICE\}/\allowbreak \$\{USER\}} for a central installation).
+Upon succesful termination, one needs to {\tt (C)onvert} the grid files to the {\tt .geo} and {\tt .sno} formats understandable by {\tt B2.5} and {\tt DivGeo}. It is also possible to {\tt s(T)ore} the files used to create the grid and the grid output for archival. The input files will be copied to the {\tt \$\{CARRE\_STOREDIR\}} directory (default value is {\tt \$\{SOLPSTOP\}/modules/Carre/\allowbreak meshes/\$\{DEVICE\}}, or {\tt \$\{SOLPSTOP\}/modules/Carre/meshes/\$\{DEVICE\}/\$\{USER\}} for a central installation). The Carre grid output and {\tt .geo} file will be stored in the same location, but that can be changed by means of the {\tt (O)utput} command in the script itsef, or by specifying the {\tt \$\{CARRE\_GRIDDIR\}} environment variable. If {\tt \$\{CARRE\_GRIDDIR\}} is not specified, the {\tt *.sno} converted output file will be copied instead to {\tt \$\{SOLPSTOP\}/\allowbreak modules/DivGeo/device/\allowbreak \$\{DEVICE\}} (or {\tt \$\{SOLPSTOP\}/modules/DivGeo/device/\$\{DEVICE\}/\allowbreak \$\{USER\}} for a central installation).
 \end{sloppypar}
 
 After running {\tt Carre}, it is recommended to have a look at the mesh and decide if one wants to modify it before
@@ -6808,7 +6810,7 @@ stellarators, the $V_{\perp}$ term may overpower the sound
 velocity \cite{FENG99A}
 and then the boundary condition would require a plasma flow exiting the plate.
 Therefore, the pitch angle at the plates is limited to be no less than
-1 degree (user parameter, see switch "b2agfs\_min\_pitch" in Appendix \ref{lis:b2cdci}),
+1 degree (user parameter, see switch {\tt b2agfs\_min\_pitch} in Appendix \ref{lis:b2cdci}),
 motivated by the engineering limits met when attempting to align the
 divertor tiles with the magnetic field. The solution procedure of the code
 was also modified so as ensure that no unphysical flows were being created,
@@ -7237,7 +7239,7 @@ In some cases, it may also be essential to ensure excellent particle conservatio
 run timestep, as the {\tt B2} internal iterations make the plasma solution evolve away from the plasma
 background originally used for the computation of the {\tt Eirene} sources above, it may become
 necessary to rescale these. A scheme to do so was developed by A. Kukushkin for ITER applications \cite{Kukushkin2002PPCF}
-and can be activated using the 'eirene\_ank\_mods' switch. See the listing in Appendix \ref{lis:b2cdci}
+and can be activated using the {\tt eirene\_ank\_mods} switch. See the listing in Appendix \ref{lis:b2cdci}
 and the additional description in the {\tt \$\{SOLPSTOP\}/doc/Source\_Scaling\_in\_B2.pdf} file.
 
 \section{Classical transport: Braginskii, Balescu and Zhdanov formulations}
@@ -9005,7 +9007,7 @@ $\alpha^{(CL)}_{y} = 0$
 \right) + Q_I^{(i)} + Q_R^{(i)} + Q_i^{\rm EIRENE},
 \end{multline}
 
-The 'sum over fluid species' above means the species index $a$ ranges from $0$ to $ns - 1$ for {\bf B2.5} standalone runs and only over charged species for coupled \SOLPSITER runs.
+The "sum over fluid species" above means the species index $a$ ranges from $0$ to $ns - 1$ for {\bf B2.5} standalone runs and only over charged species for coupled \SOLPSITER runs.
 
 \subsection{Ion energy sources}
 
@@ -13304,16 +13306,16 @@ c_{sD\alpha}=\max\left(c_{s\alpha},0.1c_{s\alpha}\pm\left( B_{z}/B_{x}\right)
 u_{Dx}\right)   \label{11}
 \end{equation}
 is the conditionally corrected ion drift velocity of the atomic species $\alpha$
-due to the poloidal $\mathbf{E \times B}$ drift, where "$+$" applies to the
-"WEST" and "$-$" to the "EAST" boundaries; the approximate correction is used only if
+due to the poloidal $\mathbf{E \times B}$ drift, where '$+$' applies to the
+"WEST" and '$-$' to the "EAST" boundaries; the approximate correction is used only if
 $0.1c_{s\alpha}\pm\left( B_{z}/B_{x}\right) u_{Dx}>c_{s\alpha}$;
 \begin{equation}
 c_{stD}=\max\left(c_{st},0.1c_{st}\pm\left( B_{z}/B_{x}\right) u_{Dx}\right)
 \label{12}
 \end{equation}
 is the conditionally corrected ion drift velocity of the multi-species plasma due
-to the poloidal $\mathbf{E \times B}$ drift, where "$+$" applies to the "WEST"
-and "$-$" to the "EAST" boundaries; the approximate correction is used only if
+to the poloidal $\mathbf{E \times B}$ drift, where '$+$' applies to the "WEST"
+and '$-$' to the "EAST" boundaries; the approximate correction is used only if
 $0.1c_{st}\pm\left( B_{z}/B_{x}\right) u_{Dx}>c_{st}$;
 \begin{equation}
 \rho_{\alpha}=A_{\alpha}m_{p}n_{\alpha}=m_{\alpha}n_{\alpha}   \label{13}
@@ -13332,7 +13334,7 @@ is the relative concentration (particle density) of the atomic species $\alpha$;
 \label{16}
 \end{equation}
 is the positive ion electric current density in the boundary cells, where
-"$+$" applies to the "NORTH" and "EAST" boundaries and "$-$" to
+'$+$' applies to the "NORTH" and "EAST" boundaries and '$-$' to
 the "SOUTH" and "WEST" boundaries;
 \begin{equation}
 v_{th,e}=\sqrt{\frac{k_{B}T_{e}}{m_{e}}}   \label{17}
@@ -14658,9 +14660,9 @@ $\displaystyle \widetilde{\widetilde{\eta}}_{ax}^{(CL)} \frac{h_z \sqrt{g}}{h_x^
 
 $\displaystyle \widetilde{\widetilde{\eta}}_{ax}^{(CL)} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2trzh\_luciani\_fllim\_cvsahzx[XXX].dat}} & (\ref{eq:mom_zh_ddveta}) \\
 
-$\displaystyle \widetilde{\eta}^{(CL)}_{ax} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2trzh\_fllim\_cvsahzx'[XXX].dat}} & (\ref{eq:mom_zh_dveta}) \\
+$\displaystyle \widetilde{\eta}^{(CL)}_{ax} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2trzh\_fllim\_cvsahzx[XXX].dat}} & (\ref{eq:mom_zh_dveta}) \\
 
-$\displaystyle {\eta}^{(CL)}_{ax} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2trzh\_cvsahzx'[XXX].dat}} & (\ref{eq:mom_zh_veta}) \\
+$\displaystyle {\eta}^{(CL)}_{ax} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2trzh\_cvsahzx[XXX].dat}} & (\ref{eq:mom_zh_veta}) \\
 
 $\displaystyle \eta_{a}^{(AN)} \frac{h_z\sqrt g}{h_x^2}$ & $kg \cdot m/s$ & \texttt{b2trno\_cvsahzx[XXX].dat} & (\ref{eq:mom_etana}) \\
 
@@ -15018,7 +15020,7 @@ cell faces, it is necessary to compute it from the quantities also computed at c
  \widetilde{q}_{ix}^{dia} = \frac52 T_i^{\rm (face)} \sum\limits_a \tilde{V}_{ax}^{(dia)}n_a \\
  \widetilde{q}_{iy}^{dia} = \frac52 T_i^{\rm (face)} \sum\limits_a \tilde{V}_{ay}^{(dia)}n_a
 \end{gather}
-Here and below the superscript '(face)' means that the temperature (or other
+Here and below the superscript "(face)" means that the temperature (or other
 quantity) should be computed at the cell face as a half-sum its neighboring cell-centered values.
 Since $\displaystyle \frac{\sqrt{g}}{h_x} \tilde{V}_{ax}^{(dia)}n_a$ and
 $\displaystyle \frac{\sqrt{g}}{h_y} \tilde{V}_{ay}^{(dia)}n_a$ are the particle
@@ -17091,7 +17093,7 @@ If J \textgreater 0, then the codes produces a set of {\tt wlld\_*.dat},
 where the asterisk (*) is the name of each "plot zone" defined in the DG model.
 Each such file contains the power loading onto the set of walls defined in that
 plot zone. If LM = 99 and J \textgreater 0, additional diagnostics are produced that indicate the radiation split by isonuclear sequence. If LM = 98 and J \textgreater 0, additional diagnostics are produced that indicate the radiation coming from the core additional sources. Note that the radiation loading is computed using a cylindrical approximation, i.e. neglecting the toroidal curvature. \\
-If the user wants to use the heat transfer model for the monoblock and/or the reflector plates, then plot zones for the inner/outer target, the reflector plates, and/or the dome must be defined in the DG model, using the labels 'trg[i-o]', '[i-o]rp', and/or 'dome', respectively. The {\tt wlld\_*.dat} files produced should then be postprocessed by either {\tt b2ymb} (see \ref{sec:b2ymb}), {\tt b2yrp} (\ref{sec:b2yrp}), or {\tt b2ydm} (\ref{sec:b2ydm}).
+If the user wants to use the heat transfer model for the monoblock and/or the reflector plates, then plot zones for the inner/outer target, the reflector plates, and/or the dome must be defined in the DG model, using the labels {\tt trg[i-o]}, {\tt [i-o]rp}, and/or {\tt dome}, respectively. The {\tt wlld\_*.dat} files produced should then be postprocessed by either {\tt b2ymb} (see \ref{sec:b2ymb}), {\tt b2yrp} (\ref{sec:b2yrp}), or {\tt b2ydm} (\ref{sec:b2ydm}).
 
 
 \section{Common errors}
@@ -17250,7 +17252,7 @@ The command takes a variable number of integer arguments, the minimum number bei
 
 The first 4 numbers specify the bottom left and top right coordinates
 of a rectangle in which the test particles are to be started
-($ix_{start}~iy_{start}~ix_{end}~iy_{end}$) (0's will be replaced by the
+($ix_{start}~iy_{start}~ix_{end}~iy_{end}$) ({\tt 0}'s will be replaced by the
 appropriate limit).  The next number specifies the amount
 of test particles to be started (if positive the particles are started
 weighted by volume, if negative then the weighting function is taken
@@ -17292,14 +17294,14 @@ C     This should plot the trajectories of 100 particles which start
 C     in any of the cells between cell (0,0) (southwest corner) and
 C     cell (95,35) (northeast corner) as lines for hydrogen (0=H).
 C     Note that the cell and species indices start at zero!
-C     The number of time steps (plots) is given by the "t_#p" command.
-C     The total flight time of the particles is given by the "t_pt" command.
+C     The number of time steps (plots) is given by the 't_#p' command.
+C     The total flight time of the particles is given by the 't_pt' command.
 C     The velocity fields uu and vv can be overwritten using the
-C     "uuse" and "vvse" commands. Their defaults values are ua and fna/na/sy
+C     'uuse' and 'vvse' commands. Their defaults values are ua and fna/na/sy
 C     respectively. If the number of particles is positive, then the
 C     particles are born randomly, with the probability of being born in a
 C     cell being proportional to the cell volume. This probability weighting
-C     can be changed by calling "traj" with a negative number of particles.
+C     can be changed by calling 'traj' with a negative number of particles.
 C     Then the weighting function is whatever field is on top of the matrix
 C     stack. For example, this set of commands does the following:
 C     fnax na m/ psxperp 0 zsel uuse  ! uutraj set to poloidal
@@ -18074,12 +18076,10 @@ Copies the data from the $iy$-th column of the array on top of the matrix stack 
 \index{b2plot, page format commands}
 
 \subsubsection{a4l}\index{b2plot, a4l}\label{sec:a4l}
-Sets the plot area for A4 landscape. Use "ctrans -d ps.mono.land |
-a4page | lpr".
+Sets the plot area for A4 landscape. Use {\tt ctrans -d ps.mono.land | a4page | lpr}.
 
 \subsubsection{a4p}\index{b2plot, a4p}\label{sec:a4p}
-Sets the plot area for A4 portrait.  Use "ctrans -d ps.mono | a4page |
-lpr".
+Sets the plot area for A4 portrait.  Use {\tt ctrans -d ps.mono | a4page | lpr}.
 
 \subsubsection{sq}\index{b2plot, sq}\label{sec:sq}
 Sets the plot area to be square. This ensures that the$x$ and $y$ scaling factors are the same.
@@ -18104,7 +18104,7 @@ Plots on the physical mesh only.
 Toggles whether aspect ratio should be preserved for physical domain
 plots (default {\tt .true.}).  If {\tt .false.}, the plot region
 limits will be those defined from the $rmin~rmax~zmin~zmax$,
-etc... values (perhaps modified to get ``nice'' axes intervals).
+etc... values (perhaps modified to get "nice" axes intervals).
 
 \subsubsection{linf}\index{b2plot, linf}\label{sec:linf}
 Sets linear scaling for the function values (default).
@@ -18190,7 +18190,7 @@ the command
 \begin{verbatim}
 'D-\\Ga\\R (photons m^{-3} s^{-1})' extl
 \end{verbatim}
-would give an extra graph label containing "D-$\alpha$ (photons m$^{-3}$ s$^{-1}$)".
+would give an extra graph label containing 'D-$\alpha$ (photons m$^{-3}$ s$^{-1}$)'.
 
 To switch font properties inside the string, use a double backslash followed by one of the letters:
 \begin{description}
@@ -18809,7 +18809,7 @@ Specifies an additional label to appear on the graphs.
 
 {\bf Options to the 'extl' string}
 
-In your configuration file you can specify additional 'text' which
+In your configuration file you can specify additional "text" which
 is added to the title of a plot.
 There are several \TeX\--like commands available:
 \begin{itemize}
@@ -18874,11 +18874,11 @@ directories {\tt \$\{SOLPSTOP\}/data.local/palettes},
 {\tt \$\{SOLPSTOP\}/scripts/palettes} are searched in order.
 
 Many different palettes are available and the user can easily create its own.
-For instance, the 'blue\_to\_red' color maps are useful for data fields that
+For instance, the {\tt blue\_to\_red} color maps are useful for data fields that
 have a zero in the middle (such as Mach numbers or velocities). The
 integer number at the end of the filename indicates how many colours the
 palette contains. Figure~\ref{fig:palette} was produced using the commands below,
-and shows examples of the 'jet', 'blue\_to\_red', and 'rainbow' palettes.
+and shows examples of the {\tt jet}, {\tt blue\_to\_red}, and {\tt rainbow} palettes.
 
 \begin{verbatim}
 3 1 page a4l
@@ -18992,7 +18992,7 @@ Further commands are taken from the specified file.  If the file does
 not exist in the current working directory, the directories
 {\tt \$\{SOLPSTOP\}/scripts.local/commands} and
 {\tt \$\{SOLPSTOP\}/scripts/commands} are searched in order.
-The command file may contain comment lines, starting with '*', '!' or '\#'.
+The command file may contain comment lines, starting with {\tt '*'}, {\tt '!'} or {\tt '\#'}.
 
 \subsubsection{$<$CDF command file$>$ cmdcdf}\index{b2plot, cmdcdf}\label{sec:cmdcdf}
 {\tt CDF} commands used repetitively (for movie frames) are taken from the specified file.
@@ -19069,8 +19069,7 @@ from the files stored in {\tt \$\{SOLPSTOP\}/modules/adas} or
 \section{Environment variables}
 
 \begin{description}
-\item[B2PLOT\_DEV]\index{B2PLOT\_DEV} is used to specify plotting to any combination of
-  "x11", "ps" or "cgm" (default is "ps").  Under {\tt tcsh}, use
+\item[B2PLOT\_DEV]\index{B2PLOT\_DEV} is used to specify plotting to any combination of {\tt x11}, {\tt ps} or {\tt cgm} (default is {\tt ps}).  Under {\tt tcsh}, use
   \begin{verbatim}
 setenv B2PLOT_DEV 'x11 ps'
   \end{verbatim}
@@ -19418,60 +19417,33 @@ The quantities defined in {\tt DIMENSIONS.F} are:
 \item[DEF\_ISOEXTRA]\index{DEF\_ISOEXTRA}\index{ISOEXTRA} the maximum
 number of extra isolating cells
 \item[DEF\_MAXCHORDS] \index{DEF\_MAXCHORDS} Maximum number of chords to be considered (optional, internal default value is 10000)
-\item[DEF\_NADD]\index{DEF\_NADD}\index{NADD} the maximum number of
-additional vacuum cells outside the gridded domain in {\tt Eirene}
-\item[DEF\_NATM]\index{DEF\_NATM}\index{NATM} the maximum number of
-neutral atomic species to be handled by {\tt Eirene}
+\item[DEF\_NADD]\index{DEF\_NADD}\index{NADD} the maximum number of additional vacuum cells outside the gridded domain in {\tt Eirene}
+\item[DEF\_NATM]\index{DEF\_NATM}\index{NATM} the maximum number of neutral atomic species to be handled by {\tt Eirene}
 \item[DEF\_NBC]\index{DEF\_NBC}\index{NBC} the maximum number of boundary conditions provided in {\tt b2.boundary.parameters} (optional, internal default value is 20)
-\item[DEF\_NCHEN]\index{DEF\_NCHEN}\index{NCHEN} the maximum number of
-energy bins for the diagnostic chords in {\tt Eirene}
-\item[DEF\_NCUT]\index{DEF\_NCUT}\index{NCUT} the maximum number of
-"cuts" (2 for single null cases, 4 for double nulls)
-\item[DEF\_NFL]\index{DEF\_NFL}\index{NFL} the maximum number of charged fluids
-passed from {\tt B2.5} to {\tt Eirene}
-\item[DEF\_NGSTAL]\index{DEF\_NGSTAL}\index{NGSTAL} the maximum number
-of grids on which spatially resolved surface tallies are computed
-\item[DEF\_NION]\index{DEF\_NION}\index{NION} the maximum number of molecular
-ion species to be handled by {\tt Eirene}
+\item[DEF\_NCHEN]\index{DEF\_NCHEN}\index{NCHEN} the maximum number of energy bins for the diagnostic chords in {\tt Eirene}
+\item[DEF\_NCUT]\index{DEF\_NCUT}\index{NCUT} the maximum number of "cuts" (2 for single null cases, 4 for double nulls)
+\item[DEF\_NFL]\index{DEF\_NFL}\index{NFL} the maximum number of charged fluids passed from {\tt B2.5} to {\tt Eirene}
+\item[DEF\_NGSTAL]\index{DEF\_NGSTAL}\index{NGSTAL} the maximum number of grids on which spatially resolved surface tallies are computed
+\item[DEF\_NION]\index{DEF\_NION}\index{NION} the maximum number of molecular ion species to be handled by {\tt Eirene}
 \item[DEF\_NISO]\index{DEF\_NISO}\index{NISO} the maximum number of isolated regions within the {\tt B2.5} computational domain (optional, internal default value is 10)
-\item[DEF\_NLIM]\index{DEF\_NLIM}\index{NLIM} the maximum number of
-additional surfaces to be handled by {\tt DivGeo}
-\item[DEF\_NMOL]\index{DEF\_NMOL}\index{NMOL} the maximum number of
-neutral molecular species to be handled by {\tt Eirene}
-\item[DEF\_NPHID]\index{DEF\_NPHID}\index{NPHID} the maximum number of
-toroidal standard surfaces
-\item[DEF\_NPLS]\index{DEF\_NPLS}\index{NPLS} the maximum number of background
-plasma species to be handled by {\tt Eirene}
-\item[DEF\_NPRNL]\index{DEF\_NPRNL}\index{NPRNL} the maximum number of
-particles that can be saved in the time-dependent arrays
-\item[DEF\_NREAC]\index{DEF\_NREAC}\index{NREAC} the maximum number of
-reaction cards that can be created by {\tt Uinp}
-\item[DEF\_NRCX]\index{DEF\_NRCX}\index{NRCX} the maximum number of
-charge exchange reaction cards that can be created by {\tt Uinp}
-\item[DEF\_NREC]\index{DEF\_NREC}\index{NREC} the maximum number of
-recombination reaction cards that can be created by {\tt Uinp}
-\item[DEF\_NREI]\index{DEF\_NREI}\index{NREI} the maximum number of
-electron impact reaction cards that can be created by {\tt Uinp}
-\item[DEF\_NREL]\index{DEF\_NREL}\index{NREL} the maximum number of
-elastic collision reaction cards that can be created by {\tt Uinp}
-\item[DEF\_NSD]\index{DEF\_NSD}\index{NSD} the maximum number of plasma
-species handled in {\tt B2.5}
-\item[DEF\_NSPCSRFG]\index{DEF\_NSPCSRFG}\index{NSPCSRFG} the maximum
-number of groups of {\tt Eirene} surfaces for which the data can be
-transferred from {\tt B2.5} ({\tt DG} specification "Surface special")
-\item[DEF\_NSRFS]\index{DEF\_NSRFS}\index{NSRFS} the maximum number of
-surfaces in a stratum
-\item[DEF\_NSTRA]\index{DEF\_NSTRA}\index{NSTRA} the maximum number of
-{\tt Eirene} strata
-\item[DEF\_NSTS]\index{DEF\_NSTS}\index{NSTS} the maximum number of non-default
-standard surfaces to be handled by {\tt Eirene}
-\item[DEF\_NTOR]\index{DEF\_NTOR}\index{NTOR} the maximum number of toroidal
-periodicity boundaries
-\item[DEF\_NXD]\index{DEF\_NXD}\index{NXD} the maximum number of cells
-in the $x$ (parallel or poloidal) direction not including two guard
-cells
-\item[DEF\_NYD]\index{DEF\_NYD}\index{NYD} the maximum number of cells
-in the radial direction not including two guard cells
+\item[DEF\_NLIM]\index{DEF\_NLIM}\index{NLIM} the maximum number of additional surfaces to be handled by {\tt DivGeo}
+\item[DEF\_NMOL]\index{DEF\_NMOL}\index{NMOL} the maximum number of neutral molecular species to be handled by {\tt Eirene}
+\item[DEF\_NPHID]\index{DEF\_NPHID}\index{NPHID} the maximum number of toroidal standard surfaces
+\item[DEF\_NPLS]\index{DEF\_NPLS}\index{NPLS} the maximum number of background plasma species to be handled by {\tt Eirene}
+\item[DEF\_NPRNL]\index{DEF\_NPRNL}\index{NPRNL} the maximum number of particles that can be saved in the time-dependent arrays
+\item[DEF\_NREAC]\index{DEF\_NREAC}\index{NREAC} the maximum number of reaction cards that can be created by {\tt Uinp}
+\item[DEF\_NRCX]\index{DEF\_NRCX}\index{NRCX} the maximum number of charge exchange reaction cards that can be created by {\tt Uinp}
+\item[DEF\_NREC]\index{DEF\_NREC}\index{NREC} the maximum number of recombination reaction cards that can be created by {\tt Uinp}
+\item[DEF\_NREI]\index{DEF\_NREI}\index{NREI} the maximum number of electron impact reaction cards that can be created by {\tt Uinp}
+\item[DEF\_NREL]\index{DEF\_NREL}\index{NREL} the maximum number of elastic collision reaction cards that can be created by {\tt Uinp}
+\item[DEF\_NSD]\index{DEF\_NSD}\index{NSD} the maximum number of plasma species handled in {\tt B2.5}
+\item[DEF\_NSPCSRFG]\index{DEF\_NSPCSRFG}\index{NSPCSRFG} the maximum number of groups of {\tt Eirene} surfaces for which the data can be transferred from {\tt B2.5} ({\tt DG} specification "Surface special")
+\item[DEF\_NSRFS]\index{DEF\_NSRFS}\index{NSRFS} the maximum number of surfaces in a stratum
+\item[DEF\_NSTRA]\index{DEF\_NSTRA}\index{NSTRA} the maximum number of {\tt Eirene} strata
+\item[DEF\_NSTS]\index{DEF\_NSTS}\index{NSTS} the maximum number of non-default standard surfaces to be handled by {\tt Eirene}
+\item[DEF\_NTOR]\index{DEF\_NTOR}\index{NTOR} the maximum number of toroidal periodicity boundaries
+\item[DEF\_NXD]\index{DEF\_NXD}\index{NXD} the maximum number of cells in the $x$ (parallel or poloidal) direction not including two guard cells
+\item[DEF\_NYD]\index{DEF\_NYD}\index{NYD} the maximum number of cells in the radial direction not including two guard cells
 \item[HITS\_PER\_CHORD] \index{HITS\_PER\_CHORD} Maximum number of chord points per cell (optional, internal default value is 50)
 %%\item[] the maximum number of
 %%\item[] the maximum number of
@@ -20799,7 +20771,7 @@ action associated with the drag,
 move the mouse pointer out of the work area and release the
 mouse button.
 
-Some tools require you to 'select' an object. To select an object,
+Some tools require you to "select" an object. To select an object,
 move the mouse pointer to the object and depress the mouse button. The
 object selected will be highlighted in another colour. The {\it green} colour
 means OK, while the {\it red} one indicates that the operation cannot be
@@ -21276,7 +21248,7 @@ the symmetrised one, so as to not fully symmetrise it, but rather change the dis
 \index{e2d}\index{ef2dg}\index{DG, converting from EFIT equilibrium}\index{FreeGS}
 
 This is a script that invokes the {\tt ef2dg}
-executable to convert an {\tt EFIT} format (specifically, the {\tt EFIT} "g" file)
+executable to convert an {\tt EFIT} format (specifically, the {\tt EFIT} "{\tt g}" file)
 equilibrium to the format read by {\tt DG}.
 This is invoked with (the file suffixes are recommended for clarity
 and are not enforced):
@@ -21769,12 +21741,12 @@ Filling a zone with grid points will remove all previous grid points
 from that zone.
 
 \index{DG, moving grid points}
-Use the {\tt Move/Stretch} tool to move a grid point or to 'stretch'
+Use the {\tt Move/Stretch} tool to move a grid point or to "stretch"
 grid points of one zone. To move a single grid point, select it, then
-drag it to the new location and release the mouse button. To 'stretch'
+drag it to the new location and release the mouse button. To "stretch"
 grid points, move the mouse pointer to one of them, press Shift+mouse
 button and drag it to the new location. All other grid points in that
-zone will be 'stretched'.
+zone will be "stretched".
 
 \index{DG, deleting grid points}
 Use the {\tt Delete} tool to remove grid points. Select the grid

@@ -49,11 +49,8 @@ endif
 # Debugger (set environment variable DBX)
 setenv DBX totalview
 
-
-setenv PATH_FOR_LOOP    ${PATH}
-setenv MANPATH_FOR_LOOP    ${MANPATH}
-
-
+setenv PATH_FOR_LOOP ${PATH}
+setenv MANPATH_FOR_LOOP ${MANPATH}
 
 # compilers
 
