@@ -44,6 +44,3 @@ else
   setenv LD_CATALYST "`paraview-config --libs vtkPVPythonCatalyst` -lstdc++"
 endif
 
-setenv PATH_FOR_LOOP ${PATH}
-setenv MANPATH_FOR_LOOP ${MANPATH}
-
