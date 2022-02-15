@@ -1906,7 +1906,7 @@ When using the SLURM job submission engine, it is also possible to submit a chai
 \begin{verbatim}
 itersubmit -c <<JOB_ID>>
 \end{verbatim}
-where {\tt <<JOB\_ID>>} is the job number of the previous job in the submission chain. Before continuing with the next job submission, the {\tt run.log.gz} and {\tt b2mn.prt} output files will be stored as {\tt run.log.\${JOB\_ID}.gz} and {\tt b2mn.prt.\${JOB\_ID}}, respectively. The job submission script will be stored as {\tt SLURM.\$HOST.after\_\${JOB\_ID}}.
+where {\tt <<JOB\_ID>>} is the job number of the previous job in the submission chain. Before continuing with the next job submission, the {\tt run.log.gz} and {\tt b2mn.prt} output files will be stored as {\tt run.log.\${JOB\_ID}.gz} and {\tt b2mn.prt.\${JOB\_ID}}, respectively. The job submission script will be stored as {\tt SLURM.\$HOST.after\_\${JOB\_ID}}. This option is not available when using the loop submission scripts.
 
 A listing of the available options for each submission script can be obtained by the
 \begin{verbatim}

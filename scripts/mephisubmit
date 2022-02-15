@@ -184,7 +184,8 @@ if ($chain != "unset") then
   head -n ${before_line} $NAME > SBATCH.mephi.after_$chain
   echo "mv run.log.gz run.log.$chain.gz" >> SBATCH.mephi.after_$chain
   echo "mv b2mn.prt b2mn.prt.$chain" >> SBATCH.mephi.after_$chain
-  echo "mv b2fstate b2fstati" >> $job_SBATCH.mephi.after_$chain
+  echo "mv b2fstate b2fstati" >> SBATCH.mephi.after_$chain
+  if (-e b2favere) echo "mv b2favere b2faveri" >> SBATCH.mephi.after_$chain
   set all_lines=`cat $NAME | wc -l`
   @ tail_lines = $all_lines - $before_line
   tail -n $tail_lines $NAME >> SBATCH.mephi.after_$chain
