@@ -14,7 +14,7 @@ endif
 ifeq (,$(findstring sdcc-login,${NODENAME}))
 LDLIBES  = -limf -lm # Intel Math must be before -lm
 else
-INCLUDE += `pkg-config libtirpc --cflags`
+SOLPSINCLUDE += `pkg-config libtirpc --cflags`
 LDLIBES  = `pkg-config libtirpc --libs`
 endif
 
