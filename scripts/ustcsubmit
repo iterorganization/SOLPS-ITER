@@ -207,7 +207,7 @@ if ($chain != "unset") then
   echo "mv run.log.gz run.log.$chain.gz" >> $job_prefix.ustc.after_$chain
   echo "mv b2mn.prt b2mn.prt.$chain" >> $job_prefix.ustc.after_$chain
   echo "mv b2fstate b2fstati" >> $job_prefix.ustc.after_$chain
-  if (-e b2favere) echo "mv b2favere b2faveri" >> $job_prefix.ustc.after_$chain
+  echo "if (-e b2favere) mv b2favere b2faveri" >> $job_prefix.ustc.after_$chain
   set all_lines=`cat $NAME | wc -l`
   @ tail_lines = $all_lines - $before_line
   tail -n $tail_lines $NAME >> $job_prefix.ustc.after_$chain
