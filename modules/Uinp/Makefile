@@ -110,7 +110,7 @@ endif
 DEST = $(OBJS:%.o=$(OBJDIR)/%.o)
 
 $(OBJDIR)/%.o : %.F
-	${CPP} -P $(INCLUDE) ${SOLPS_CPP} ${USE_DEBUG} $< ${OBJDIR}/$*.f
+	${CPP} -P ${INCLUDE} ${SOLPS_CPP} ${USE_DEBUG} $< ${OBJDIR}/$*.f
 	$(COMPILE) ${INCLUDE} ${FFLAGSEXTRA} -o ${OBJDIR}/$*.o ${OBJDIR}/$*.f
 
 all: VERSION ${OBJDIR}/${PROG} ${OBJDIR}/ub2p

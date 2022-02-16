@@ -64,13 +64,13 @@ endif
 OBJDIR = ${SRCTRI}/builds/${HOST_NAME}.${COMPILER}${EXT_DEBUG}
 EIROBJ = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_DEBUG}
 
-INCLUDE=
-LOCAL=no
+INCLUDE =
+LOCAL = no
 ifneq ($(strip ${SRCLOCAL}), )
-LOCAL=$(shell [ -d ${SRCLOCAL} ] && echo yes || echo no )
+LOCAL = $(shell [ -d ${SRCLOCAL} ] && echo yes || echo no )
 endif
 ifeq ($(LOCAL),yes)
-INCLUDE = -I${SRCLOCAL}
+INCLUDE += -I${SRCLOCAL}
 endif
 INCLUDE += -I${OBJDIR} -I${B2SRC}/include.local -I${B2SRC}/include
 
@@ -102,13 +102,13 @@ ifeq ($(shell [ -e ${OBJDIR}/LISTOBJ ] && echo yes || echo no ),yes)
 include ${OBJDIR}/LISTOBJ
 endif
 include ${SRCTRI}/config/compile
-MAKES+= ${SRCTRI}/config/compile ${SRCTRI}/config/config.${HOST_NAME}.${COMPILER} ${SOLPSTOP}/modules/Eirene/config/config.${HOST_NAME}.${COMPILER}
+MAKES += ${SRCTRI}/config/compile ${SRCTRI}/config/config.${HOST_NAME}.${COMPILER} ${SOLPSTOP}/modules/Eirene/config/config.${HOST_NAME}.${COMPILER}
 ifeq ($(shell [ -e ${SRCTRI}/config/config.${HOST_NAME}.${COMPILER}.local ] && echo yes || echo no ),yes)
 include ${SRCTRI}/config/config.${HOST_NAME}.${COMPILER}.local
-MAKES+= ${SRCTRI}/config/config.${HOST_NAME}.${COMPILER}.local
+MAKES += ${SRCTRI}/config/config.${HOST_NAME}.${COMPILER}.local
 endif
 ifeq ($(shell [ -e ${SOLPSTOP}/modules/Eirene/config/config.${HOST_NAME}.${COMPILER}.local ] && echo yes || echo no ),yes)
-MAKES+= ${SOLPSTOP}/modules/Eirene/config/config.${HOST_NAME}.${COMPILER}.local
+MAKES += ${SOLPSTOP}/modules/Eirene/config/config.${HOST_NAME}.${COMPILER}.local
 endif
 
 
