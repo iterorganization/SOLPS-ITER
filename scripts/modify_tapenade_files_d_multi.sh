@@ -150,7 +150,7 @@ sed -i -e "/END TYPE MAPPING_DIFFV/i\&     nci(nbdirsmax), ncmxvx(nbdirsmax), nc
 sed -i -e "/END TYPE MAPPING_DIFFV/i\&     nfs(nbdirsmax), nbc(nbdirsmax), mxnbc(nbdirsmax), nrc(nbdirsmax), mxnrc(nbdirsmax),&" b2us_map_diffv.F90
 sed -i -e "/END TYPE MAPPING_DIFFV/i\&     ncmxnv(nbdirsmax), ncf(nbdirsmax), mxncf(nbdirsmax)" b2us_map_diffv.F90
 
-##sed -i -e "/TYPE(B2RATESWORK_DIFFV) :: rtw/i\      TYPE(B2DIAGNOSTIC) :: diag" b2us_plasma_diffv.F90
+sed -i -e '/par_opt_physd(nd, 1:npar_opt) = 0.D0/a\        par_opt_physd(nd, nd) = 1.0_R8' b2mod_driver_diffv.F90
 
 sed -i -e "s/b2mod_main_diff/b2mod_main_diffv/g" b2optim_*.F*
 sed -i -e "s/b2mod_ad_diff/b2mod_ad_diffv/g" b2optim_*.F*

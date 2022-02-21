@@ -1,0 +1,5 @@
+#! /bin/tcsh -f
+
+pipe_run.log | \
+  grep -ai "GRADIENT MAX RES" | \
+  awk '{print NR, $4}' | xlyplot
