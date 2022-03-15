@@ -1,0 +1,39 @@
+#! /bin/ksh
+
+[ ${COMPILER} == "HP" ] && {
+  filestem="ftn"
+} || {
+  filestem="fort."
+}
+
+  echo "First copying the files modified by b2us"
+  [ -s ../convert/b2fgmtry_us ] && cp -uv ../convert/b2fgmtry_us b2fgmtry
+  [ -s ../convert/"$filestem"30 ] && cp -uv ../convert/"$filestem"30 .
+  [ -s ../convert/triangle.coordinates ] && cp -uv ../convert/triangle.coordinates "$filestem"33
+  [ -s ../convert/triangle.elements ] && cp -uv ../convert/triangle.elements "$filestem"34
+  [ -s ../convert/triangle.neighbors ] && cp -uv ../convert/triangle.neighbors "$filestem"35
+
+  if [ -s ../convert/b2fpardf ]
+  then
+      cp -uv ../convert/b2fpardf .
+  else
+      cp -uv ../baserun/b2fpardf .
+  fi
+
+  if [ -s ../convert/b2frates ]
+  then
+      cp -uv ../convert/b2frates .
+  else
+      cp -uv ../baserun/b2frates .
+  fi
+
+  [ -s ../convert/input.dat.us ] && cp -uv ../convert/input.dat.us input.dat
+  [ -s ../convert/b2us.boundary.parameters ] && cp -uv ../convert/b2us.boundary.parameters b2.boundary.parameters
+  [ -s ../convert/b2us.neutrals.parameters ] && cp -uv ../convert/b2us.neutrals.parameters b2.neutrals.parameters
+  [ -s ../convert/b2us.feedback_control.parameters ] && cp -uv ../convert/b2us.feedback_control.parameters b2.feedback_control.parameters
+  [ -s ../convert/b2fstati_us ] && cp -uv ../convert/b2fstati_us b2fstati
+  [ -s ../convert/b2.transport.inputfile ] && cp -uv ../convert/b2.transport.inputfile .
+  [ -s ../convert/b2.numerics.parameters ] && cp -uv ../convert/b2.numerics.parameters .
+  [ -s ../convert/b2.user.parameters ] && cp -uv ../convert/b2.user.parameters .
+  [ -s ../convert/b2.transport.parameters ] && cp -uv ../convert/b2.transport.parameters .
+  touch b2fstati
