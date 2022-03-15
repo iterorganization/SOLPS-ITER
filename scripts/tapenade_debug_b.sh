@@ -25,4 +25,20 @@ sed -i -e 's/rtb\%rza = 0.D0/\!rtb\%rza = 0.D0/g' b2stbc_phys_b.F90
 
 sed -i -e 's/EXTERNAL SUBINI, SUBEND, XERTST, SFILL, DIM/EXTERNAL SUBINI, SUBEND, XERTST, SFILL/g' b2usht_b.F90
 sed -i -e 's/EXTERNAL MACHSFR, DIM/EXTERNAL MACHSFR/g' expu2_b.F90 expu_b.F90
-#sed -i -e '/EXTERNAL DIM_B/i\  real(kind=r8) DIM_B' b2usht_d.F90 expu2_d.F90 expu_d.F90
+
+
+sed -i -e 's/ISIZE1OFfcbb/nFc/g' b2siav_b.F90 b2tvspa_b.F90 b2tvsq_b.F90 b2tvskt_b.F90 b2tfch__b.F90 b2tfnb_b.F90 b2tinnt_b.F90
+sed -i -e 's/ISIZE1OFvxbb/nVx/g' b2siav_b.F90
+sed -i -e 's/ISIZE1OFcvbb/nCv/g' b2siav_b.F90 b2tvsq_b.F90
+sed -i -e 's/ISIZE1OFresult1/nCv/g' b2sikt_b.F90 b2npmo_b.F90 b2tqna_b.F90 b2trcl_b.F90
+sed -i -e 's/ISIZE1OFarg1/nCv/g' b2npmo_b.F90 b2stbr_phys_b.F90 b2mod_recycle_diff.F90 b2tqna_b.F90 b2sikt_b.F90 b2trcl_b.F90 calc_res_fp_b.F90
+
+
+sed -i -e 's/DIMENSION(SIZE(x1, 1))/DIMENSION(mpg%nCv)/g' b2mod_driver_diff.F90
+sed -i -e 's/DIMENSION(SIZE(x2, 1))/DIMENSION(mpg%nCv)/g' b2mod_driver_diff.F90
+sed -i -e 's/DIMENSION(SIZE(x3, 1))/DIMENSION(mpg%nCv)/g' b2mod_driver_diff.F90
+sed -i -e 's/DIMENSION(SIZE(x4, 1), SIZE(x4, 2))/DIMENSION(mpg%nCv, 0:state%pl%ns-1)/g' b2mod_driver_diff.F90
+sed -i -e 's/DIMENSION(SIZE(x5, 1))/DIMENSION(mpg%nCv)/g' b2mod_driver_diff.F90
+sed -i -e 's/DIMENSION(SIZE(x6, 1), SIZE(x6, 2))/DIMENSION(mpg%nCv, 0:state%pl%ns-1)/g' b2mod_driver_diff.F90
+
+

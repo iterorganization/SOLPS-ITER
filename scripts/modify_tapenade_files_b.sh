@@ -86,8 +86,6 @@ sed -i -e 's/dealloc_b2mod_eirene_sources, dealloc_b2mod_eirene_sources_b,/deall
 sed -i -e 's/run_av_get_plasma, run_av_get_plasma_b, run_av_save, run_av_save_b/run_av_get_plasma, run_av_save/g' b2mod_driver_diff.F90
 sed -i -e 's/batch_av_all_init_b, batch_av_all_save, batch_av_all_fin, &/batch_av_all_save, batch_av_all_fin/g' b2mod_driver_diff.F90
 sed -i '/& batch_av_all_fin_b/d' b2mod_driver_diff.F90
-sed -i -e 's/\& run_av_fin, run_av_fin_b/\& run_av_fin/g' b2mod_driver_diff.F90
-sed -i -e 's/run_av_init, run_av_init_b,/run_av_init,/g' b2mod_driver_diff.F90
 sed -i -e 's/dealloc_b2mod_ysmp_sdrv, &/dealloc_b2mod_ysmp_sdrv/g' b2mod_driver_diff.F90
 sed -i '/& dealloc_b2mod_ysmp_sdrv_b/d' b2mod_driver_diff.F90
 sed -i -e 's/\& write_b2us_feedback_b, init_feedback, init_feedback_b, \&/\& init_feedback, \&/g' b2mod_driver_diff.F90
@@ -97,6 +95,7 @@ sed -i -e 's/alloc_geometry_b, dealloc_geometry_b, read_geometry_b, &/alloc_geom
 sed -i '/& check_geometry_b/d' b2us_geo_diff.F90
 sed -i -e 's/read_b2fgmtry_b, read_b2fstate_b, write_b2fstate_b, &/read_b2fgmtry_b, read_b2fstate_b/g' b2us_io_diff.F90
 sed -i '/& write_b2fplasma_b/d' b2us_io_diff.F90
+sed -i 's/read_b2mod_par_opt, read_b2mod_par_opt_b/read_b2mod_par_opt/g' b2mod_driver_diff.F90
 rm b2mod_transport_diff.F90 b2mod_sources_diff.F90 b2mod_anomalous_transport_diff.F90 b2mod_residuals_diff.F90 ## CAREFUL! might be needed in future
 sed -i -e 's/USE B2MOD_RESIDUALS_DIFF/USE B2MOD_RESIDUALS/g' b2mod_diag_diff.F90 b2us_prep_diff.F90 b2mwmv_b.F90
 sed -i -e 's/USE B2MOD_SOURCES_DIFF/USE B2MOD_SOURCES/g' b2mod_batch_average_diff.F90 b2us_prep_diff.F90 b2mod_ual_io_diff.F90 b2mwmv_b.F90 b2sihs_b.F90 profile_average_b.F90
@@ -158,6 +157,10 @@ sed -i -e "/CALL B2UXUS_B/i\  aab = 0.0_R8" b2usco_b.F90 b2usmo_b.F90 b2usht_b.F
 sed -i -e 's/B2UXUS_NODIFF/B2UXUS/g' b2usco_b.F90 b2usmo_b.F90 b2usht_b.F90 b2uspo_b.F90
 
 sed -i -e "/TYPE(B2PLASMASNAPSHOT_DIFF) :: psnc/i\      TYPE(B2PLASMASNAPSHOT_DIFF) :: psnl" b2us_plasma_diff.F90
+sed -i -e 's/CHARACTER(len=13), DIMENSION(:), DIMENSION(:), ALLOCATABLE :: text/CHARACTER(len=13), DIMENSION(:), ALLOCATABLE :: text(:)/g' b2us_plasma_diff.F90
+sed -i -e 's/DO ii2=1,SIZE(state_extb%text(ii1), 1)/DO ii2=1,SIZE(state_extb%text)/g' b2us_plasma_diff.F90
+sed -i -e 's/state_extb%text(ii1)(ii2) = ''/state_extb%text(ii1) = ''/g' b2us_plasma_diff.F90
+
 sed -i -e "s/dtimb, cpustartb/dtimb, cpustartb,dtimb0, cpustartb0, res_quitb0/g" b2mod_driver_diff.F90
 sed -i -e "s/dtcob(0:nsdmax-1, 0:cvregmax)/dtcob(0:nsdmax-1, 0:cvregmax),dtcob0(0:nsdmax-1, 0:cvregmax)/g" b2mod_numerics_namelist_diff.F90
 sed -i -e "s/dtmob(0:nsdmax-1, 0:cvregmax)/dtmob(0:nsdmax-1, 0:cvregmax),dtmob0(0:nsdmax-1, 0:cvregmax)/g" b2mod_numerics_namelist_diff.F90
@@ -228,25 +231,55 @@ sed -i -e "/CALL ADSTACK_STARTREPEAT/i\    ITERCOUNT = 0" b2mod_driver_diff.F90
 sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT ITERATION ',ITERCOUNT" b2mod_driver_diff.F90
 sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT MAX RES ',cumul" b2mod_driver_diff.F90
 
-# modify all the switchbXX geobXX etc to just have one
+sed -i "/POINTER8/d" b2mndt_b.F90 b2news__b.F90 b2sral_b.F90 b2mod_driver_diff.F90 ## CAREFUL! might be needed in future
+sed -i -e '/stateb1 = state0b/d' b2mod_driver_diff.F90 
+sed -i -e '/TYPE(MAPPING_DIFF) :: mpgb1/d' b2mod_driver_diff.F90
+sed -i -e '/TYPE(MAPPING_DIFF) :: mpgb2/d' b2mod_driver_diff.F90
+sed -i -e '/TYPE(MAPPING_DIFF) :: mpgb3/d' b2mod_driver_diff.F90
+
+### modify all the switchbXX geobXX etc to just have one, TOO DIFFICULT TO IMPLEMENT, NEED BY HAND
+
+sed -i -e "/TYPE(B2STATE_DIFF) :: state0b/d" b2mod_driver_diff.F90
+sed -i -e "/cumul = 1.0/a\    stateb = stateb1" b2mod_driver_diff.F90
+sed -i -e "/cumul = 1.0/a\    switchb0 = switchb" b2mod_driver_diff.F90
+sed -i -e "/cumul = 1.0/a\    state_extb0 = state_extb" b2mod_driver_diff.F90
+sed -i -e "/cumul = 1.0/a\    geob0 = geob" b2mod_driver_diff.F90
+sed -i -e "/cumul = 1.0/a\    mpgb0 = mpgb" b2mod_driver_diff.F90
+
+sed -i -e "s/(:, :, :)//" b2mod_driver_diff.F90
+sed -i -e "s/(ii3, ii2, ii1),//" b2mod_driver_diff.F90
+sed -i -e "s/rtltb0(:)/rtltb0/" b2mod_driver_diff.F90
+sed -i -e "s/rtlnb0(:)/rtlnb0/" b2mod_driver_diff.F90
+sed -i -e "s/rtltb(:)/rtltb/" b2mod_driver_diff.F90
+sed -i -e "s/rtlnb(:)/rtlnb/" b2mod_driver_diff.F90
+sed -i -e "s/rtltb0(ii1), 1/rtltb0, 1/" b2mod_driver_diff.F90
+sed -i -e "s/rtltb(ii1), 1/rtltb, 1/" b2mod_driver_diff.F90
+sed -i -e "s/rtlnb0(ii1), 1/rtlnb0, 1/" b2mod_driver_diff.F90
+sed -i -e "s/rtlnb(ii1), 1/rtlnb, 1/" b2mod_driver_diff.F90
+
+
 for d in `seq 1 168`; do
-sed -i -e "s/switchb$d%/switchb0%/g" b2mod_driver_diff.F90
-sed -i -e "/switchb$d/d" b2mod_driver_diff.F90
+sed -i -e "/TYPE(SWITCHES) :: switchb$d/d" b2mod_driver_diff.F90
+#sed -i -e "s/switchb$d%/switchb0%/g" b2mod_driver_diff.F90
+#sed -i -e "/switchb$d/d" b2mod_driver_diff.F90
 done;
 
 for d in `seq 1 3`; do
-sed -i -e "s/mpgb$d%/mpgb0%/g" b2mod_driver_diff.F90
-sed -i "/mpgb$d /d" b2mod_driver_diff.F90
+sed -i -e "/TYPE(MAPPING_DIFF) :: mpgb$d/d" b2mod_driver_diff.F90
+#sed -i -e "s/mpgb$d%/mpgb0%/g" b2mod_driver_diff.F90
+#sed -i "/mpgb$d /d" b2mod_driver_diff.F90
 done;
 
 for d in `seq 1 25`; do
-sed -i -e "s/geob$d%/geob0%/g" b2mod_driver_diff.F90
-sed -i "/geob$d /d" b2mod_driver_diff.F90
+sed -i -e "/TYPE(GEOMETRY) :: geob$d/d" b2mod_driver_diff.F90
+#sed -i -e "s/geob$d%/geob0%/g" b2mod_driver_diff.F90
+#sed -i "/geob$d /d" b2mod_driver_diff.F90
 done;
 
 for d in `seq 1 9`; do
-sed -i -e "s/state_extb$d%/state_extb0%/g" b2mod_driver_diff.F90
-sed -i "/state_extb$d /d" b2mod_driver_diff.F90
+sed -i -e "/TYPE(B2STATEEXT_DIFF) :: state_extb$d/d" b2mod_driver_diff.F90
+#sed -i -e "s/state_extb$d%/state_extb0%/g" b2mod_driver_diff.F90
+#sed -i "/state_extb$d /d" b2mod_driver_diff.F90
 done;
 
 

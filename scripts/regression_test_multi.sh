@@ -9,8 +9,8 @@ echo "      integer ,parameter :: nbdirsmax=20" >> diffsizes.F
 echo "      end module" >> diffsizes.F
 sed -i -e "/CALL B2MN_INIT_DV/i\  nbdirs=6" b2mn_d.F90
 
-sed -i '/&                           nbdirs)/d' b2mod_driver_diffv.F90
-sed -i '/&                           stated, geo, geod, switch%boris, j, jd, &/d' b2mod_driver_diffv.F90
+sed -i '/&                           mpgd, state, stated, state_ext, state_extd, &/d' b2mod_driver_diffv.F90
+sed -i '/&                           switch%boris, j, jd, nbdirs)/d' b2mod_driver_diffv.F90
 sed -i -e "/B2USR_COST_FUNCTION_DV/a\      END DO" b2mod_driver_diffv.F90
 sed -i -e "/B2USR_COST_FUNCTION_DV/a\      END DO" b2mod_driver_diffv.F90
 sed -i -e "/B2USR_COST_FUNCTION_DV/a\        write(*,*) 'Cost function gradient '//ss//': ',Jd(nd,icf)" b2mod_driver_diffv.F90
@@ -18,7 +18,8 @@ sed -i -e "/B2USR_COST_FUNCTION_DV/a\        write (ss,'(I1)') icf" b2mod_driver
 sed -i -e "/B2USR_COST_FUNCTION_DV/a\      DO nd=1,nbdirs" b2mod_driver_diffv.F90
 sed -i -e "/B2USR_COST_FUNCTION_DV/a\      DO ICF=1, NCF" b2mod_driver_diffv.F90
 sed -i -e "/B2USR_COST_FUNCTION_DV/a\      if (first_time_step) write(*,*) 'nbdirs: ',nbdirs" b2mod_driver_diffv.F90
-sed -i -e "/B2USR_COST_FUNCTION_DV/a\&                           stated, geo, geod, switch%boris, j, jd, nbdirs)" b2mod_driver_diffv.F90
+sed -i -e "/B2USR_COST_FUNCTION_DV/a\&                           switch%boris, j, jd, nbdirs)" b2mod_driver_diffv.F90
+sed -i -e "/B2USR_COST_FUNCTION_DV/a\&                           mpgd, state, stated, state_ext, state_extd, &" b2mod_driver_diffv.F90
 
 sed -i "/ADCONTEXTTGT/d" b2mn_d.F90 b2stbr_dv.F90 b2mod_user_namelist_diffv.F90
 sed -i "/r8\*nbcd\*2/d" b2mn_d.F90
@@ -39,19 +40,30 @@ sed -i -e '/fd(nd, i) = 0.D0/d' b2mod_input_profile_diffv.F90
 
 sed -i -e "/CALL B2MNDR_1/i\    call set_parameters(switch)" b2mod_main_diffv.F90
 
-sed -i -e "/CALL B2MN_INIT_DV/i\  parm_dnad = 0.0_R8" b2mn_d.F90
-sed -i -e "/CALL B2MN_INIT_DV/i\  parm_hcid = 0.0_R8" b2mn_d.F90
-sed -i -e "/CALL B2MN_INIT_DV/i\  parm_hced = 0.0_R8" b2mn_d.F90
-sed -i -e "/CALL B2MN_INIT_DV/i\  tdatad = 0.0_R8" b2mn_d.F90
-sed -i -e "/CALL B2MN_INIT_DV/i\  parm_dnad(1,1) = 1.0_R8" b2mn_d.F90
-sed -i -e "/CALL B2MN_INIT_DV/i\  parm_hced(2) = 1.0_R8" b2mn_d.F90
-sed -i -e "/CALL B2MN_INIT_DV/i\  parm_hcid(3,1) = 1.0_R8" b2mn_d.F90
-sed -i -e "/CALL B2MN_INIT_DV/i\  tdatad(4,2,2,1,1) = 1.0_R8 \!D_perp" b2mn_d.F90
-sed -i -e "/CALL B2MN_INIT_DV/i\  tdatad(5,2,4,1,1) = 1.0_R8 \!D_perp" b2mn_d.F90
-sed -i -e "/CALL B2MN_INIT_DV/i\  tdatad(6,2,1,3,1) = 1.0_R8 \!Xi_perp" b2mn_d.F90
-sed -i -e "/CALL B2MN_INIT_DV/i\  tdatad(7,2,6,3,1) = 1.0_R8 \!Xi_perp" b2mn_d.F90
-sed -i -e "/CALL B2MN_INIT_DV/i\  tdatad(8,2,3,4,1) = 1.0_R8 \!Xe_perp" b2mn_d.F90
-sed -i -e "/CALL B2MN_INIT_DV/i\  tdatad(9,2,5,4,1) = 1.0_R8 \!Xe_perp" b2mn_d.F90
+sed -i -e "/CALL B2MN_INIT_DV/a\  parm_dnad = 0.0_R8" b2mn_d.F90
+sed -i -e "/CALL B2MN_INIT_DV/a\  parm_hcid = 0.0_R8" b2mn_d.F90
+sed -i -e "/CALL B2MN_INIT_DV/a\  parm_hced = 0.0_R8" b2mn_d.F90
+sed -i -e "/CALL B2MN_INIT_DV/a\  parm_vsad = 0.0_R8" b2mn_d.F90
+sed -i -e "/CALL B2MN_INIT_DV/a\  parm_sigd = 0.0_R8" b2mn_d.F90
+sed -i -e "/CALL B2MN_INIT_DV/a\  parm_alfd = 0.0_R8" b2mn_d.F90
+sed -i -e "/CALL B2MN_INIT_DV/a\  conpard = 0.0_R8" b2mn_d.F90
+sed -i -e "/CALL B2MN_INIT_DV/a\  mompard = 0.0_R8" b2mn_d.F90
+sed -i -e "/CALL B2MN_INIT_DV/a\  potpard = 0.0_R8" b2mn_d.F90
+sed -i -e "/CALL B2MN_INIT_DV/a\  enepard = 0.0_R8" b2mn_d.F90
+sed -i -e "/CALL B2MN_INIT_DV/a\  enipard = 0.0_R8" b2mn_d.F90
+sed -i -e "/CALL B2MN_INIT_DV/a\  enkpard = 0.0_R8" b2mn_d.F90
+sed -i -e "/CALL B2MN_INIT_DV/a\  enkpard = 0.0_R8" b2mn_d.F90
+sed -i -e "/CALL B2MN_INIT_DV/a\  tdatad = 0.0_R8" b2mn_d.F90
+sed -i -e "/CALL B2MN_INIT_DV/a\  b2recycd = 0.0_R8" b2mn_d.F90
+sed -i -e "/CALL B2MN_INIT_DV/a\  tdatad(9,2,5,4,1) = 1.0_R8 \!Xe_perp" b2mn_d.F90
+sed -i -e "/CALL B2MN_INIT_DV/a\  tdatad(8,2,3,4,1) = 1.0_R8 \!Xe_perp" b2mn_d.F90
+sed -i -e "/CALL B2MN_INIT_DV/a\  tdatad(7,2,6,3,1) = 1.0_R8 \!Xi_perp" b2mn_d.F90
+sed -i -e "/CALL B2MN_INIT_DV/a\  tdatad(6,2,1,3,1) = 1.0_R8 \!Xi_perp" b2mn_d.F90
+sed -i -e "/CALL B2MN_INIT_DV/a\  tdatad(5,2,4,1,1) = 1.0_R8 \!D_perp" b2mn_d.F90
+sed -i -e "/CALL B2MN_INIT_DV/a\  tdatad(4,2,2,1,1) = 1.0_R8 \!D_perp" b2mn_d.F90
+sed -i -e "/CALL B2MN_INIT_DV/a\  parm_hcid(3,1) = 1.0_R8" b2mn_d.F90
+sed -i -e "/CALL B2MN_INIT_DV/a\  parm_hced(2) = 1.0_R8" b2mn_d.F90
+sed -i -e "/CALL B2MN_INIT_DV/a\  parm_dnad(1,1) = 1.0_R8" b2mn_d.F90
 
 setenv DIFF_D yes
 cd $SOLPSTOP

@@ -66,6 +66,8 @@ sed -i -e 's/DIMENSION(:, ISIZE1OFdv%fna_52(:, :, isb), 0:1)/DIMENSION(nbdirsmax
 sed -i -e 's/ISIZE1OFfchc/nFc/g' b2tinnt_dv.F90
 sed -i -e "s/cfdna(0, is), cfdnad(:, 0, is)/cfdna(0, is), cfdnad(1:nbdirs, 0, is)/g" b2tqna_dv.F90
 sed -i -e "s/cfhci(0, is), cfhcid(:, 0, is)/cfhci(0, is), cfhcid(1:nbdirs, 0, is)/g" b2tqna_dv.F90
+sed -i -e "s/cfdpa(0, is), cfdpad(:, 0, is)/cfdpa(0, is), cfdpad(1:nbdirs, 0, is)/g" b2tqna_dv.F90
+sed -i -e "s/cfvsa(0, is), cfvsad(:, 0, is)/cfvsa(0, is), cfvsad(1:nbdirs, 0, is)/g" b2tqna_dv.F90
 sed -i -e 's/ISIZE1OFcvbzb/nCv/g' b2tral_dv.F90
 sed -i -e 's/ISIZE1OFco%cthi/nFc/g' b2tral_dv.F90
 sed -i -e 's/ISIZE2OFco%cthi/0:ns-1/g' b2tral_dv.F90
@@ -134,11 +136,34 @@ sed -i -e 's/USE B2MOD_RESIDUALS_DIFFV/USE B2MOD_RESIDUALS/g' b2mod_diag_diffv.F
 sed -i -e 's/USE B2MOD_SOURCES_DIFFV/USE B2MOD_SOURCES/g' b2mod_batch_average_diffv.F90 b2us_prep_diffv.F90 b2mod_ual_io_diffv.F90 b2mwmv_dv.F90 b2sihs_dv.F90 profile_average_dv.F90
 sed -i -e 's/USE B2MOD_TRANSPORT_DIFFV/USE B2MOD_TRANSPORT/g' b2us_prep_diffv.F90 b2mod_ual_io_diffv.F90 b2mwmv_dv.F90
 sed -i -e 's/USE B2MOD_ANOMALOUS_TRANSPORT_DIFFV/USE B2MOD_ANOMALOUS_TRANSPORT/g' b2us_prep_diffv.F90 b2mod_ual_io_diffv.F90 b2stbc_bas_dv.F90  b2stbc_spb_dv.F90 b2txvspr_dv.F90
+sed -i -e 's/=> NULL()/= 0.0_R8/g' b2mndt_dv.F90
+
+sed -i -e 's/CHARACTER(len=13), DIMENSION(:), DIMENSION(:, :), ALLOCATABLE ::/CHARACTER(len=13), DIMENSION(:, :), ALLOCATABLE ::/g' b2us_plasma_diffv.F90
+sed -i -e 's/\&     text/\&     text(:,:)/g' b2us_plasma_diffv.F90
+sed -i -e 's/DO ii2=1,SIZE(state_extd%text(ii1), 1)/DO ii2=1,SIZE(state_extd%text, 2)-1/g' b2us_plasma_diffv.F90
+sed -i -e 's/state_extd%text(ii1)(nd, ii2) =/state_extd%text(nd, ii2) =/g' b2us_plasma_diffv.F90
 
 sed -i -e 's/MY_OUT_US_NODIFF/MY_OUT_US/g' ./*.F90
 sed -i -e 's/sort_faces/sort_faces_nodiff/g' b2wdat.F
 
-sed -i -e 's/=> NULL()/= 0.0_R8/g' b2mndt_dv.F90
+# for residuals calculation
+sed -i -e 's/B2MXAR_DIFF/B2MXAR_DIFFv/g' b2mndt_dv.F90
+sed -i -e 's/B2MXAC_DIFF/B2MXAC_DIFFv/g' b2mndt_dv.F90
+sed -i -e 's/B2MWQT_DIFF/B2MWQT_DIFFv/g' b2mndt_dv.F90
+sed -i -e "/CALL B2MWQ0_NODIFF(nout(4), ns, switch)/a\  call b2mwq0_nodiff(nout(10), ns, switch)" b2mnds_dv.F90
+sed -i -e "/CALL B2MWQ0_NODIFF(nout(4), ns, switch)/a\  call cfwuch(nout(10), 120, lblmn, 'label')" b2mnds_dv.F90
+sed -i -e "/CALL B2MWQ0_NODIFF(nout(4), ns, switch)/a\  call cfwuin(nout(10), 1, idum, 'ns')" b2mnds_dv.F90
+sed -i -e "/CALL B2MWQ0_NODIFF(nout(4), ns, switch)/a\  idum(0) = ns" b2mnds_dv.F90
+sed -i -e "/CALL ALLOC_MAPPING_DV(mpg, mpgd, nbdirs)/i\    call cfopen (nout(10),'b2ftraced','new','un*formatted')" b2mod_main_diffv.F90
+sed -i -e '0,/CALL B2MXAC_NODIFF(ncv, ns, st%dv, st%diag)/s//CALL B2MXAC_NODIFF(ncv, ns, st%dv, st%diag)\n          CALL B2MXAC_DIFFv(ncv, ns, std%dv, std%diag)/' b2mndt_dv.F90
+sed -i -e '0,/CALL B2MXAC_NODIFF(ncv, ns, st%dv, st%diag)/s//CALL B2MXAC_NODIFF(ncv, ns, st%dv, st%diag)\n\!*      ..compute norms of the differentiated corrections/' b2mndt_dv.F90
+sed -i -e '0,/CALL B2MXAC_NODIFF(ncv, ns, st%dv, st%diag)/s//CALL B2MXAC_NODIFF(ncv, ns, st%dv, st%diag)\n\&                      std%pl, std%dv, std%diag)/' b2mndt_dv.F90
+sed -i -e '0,/CALL B2MXAC_NODIFF(ncv, ns, st%dv, st%diag)/s//CALL B2MXAC_NODIFF(ncv, ns, st%dv, st%diag)\n          CALL B2MXAR_DIFFv(nCv, ns, nnreg(0), switch%BoRiS, switch, geo, mpg, \&/' b2mndt_dv.F90
+sed -i -e '0,/CALL B2MXAC_NODIFF(ncv, ns, st%dv, st%diag)/s//CALL B2MXAC_NODIFF(ncv, ns, st%dv, st%diag)\n\!*      ..compute norms of the differentiated residuals/' b2mndt_dv.F90
+sed -i -e "0,/IF (MOD(ncall_b2mndt, ntim_step_out) .EQ. 0) THEN/s//IF (MOD(ncall_b2mndt, ntim_step_out) .EQ. 0) THEN\n              FLUSH(nout(10))/" b2mndt_dv.F90
+sed -i -e '0,/IF (MOD(ncall_b2mndt, ntim_step_out) .EQ. 0) THEN/s//IF (MOD(ncall_b2mndt, ntim_step_out) .EQ. 0) THEN\n\&               switch%BoRiS, switch, geo, std%pl, std%dv, std%diag)/' b2mndt_dv.F90
+sed -i -e '0,/IF (MOD(ncall_b2mndt, ntim_step_out) .EQ. 0) THEN/s//IF (MOD(ncall_b2mndt, ntim_step_out) .EQ. 0) THEN\n              CALL B2MWQT_DIFFv(nout(10), ncv, ns, itim, b2mndt_itcnt, \&/' b2mndt_dv.F90
+sed -i -e '0,/IF (MOD(ncall_b2mndt, ntim_step_out) .EQ. 0) THEN/s//IF (MOD(ncall_b2mndt, ntim_step_out) .EQ. 0) THEN\n\!*      ..output differentiated residuals/' b2mndt_dv.F90
 
 sed -i -e "s/REAL\*8/REAL(kind=r8)/g" *_diffv.F90
 sed -i -e "s/REAL\([^(].*::\)/REAL(kind=r8)\1/g" *_diffv.F90

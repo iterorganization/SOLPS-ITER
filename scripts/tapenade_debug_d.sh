@@ -29,6 +29,19 @@ sed -i -e 's/pld\%te = 0.D0/\!pld\%te = 0.D0/g' b2stbc_phys_d.F90
 sed -i -e 's/pld\%ti = 0.D0/\!pld\%ti = 0.D0/g' b2stbc_phys_d.F90
 sed -i -e 's/pld\%kt = 0.D0/\!pld\%kt = 0.D0/g' b2stbc_phys_d.F90
 sed -i -e 's/rtd\%rza = 0.D0/\!rtd\%rza = 0.D0/g' b2stbc_phys_d.F90
+sed -i -e 's/geod\%cvbb = 0.D0/\!geod\%cvbb = 0.D0/g' b2mndt_d.F90 b2news__d.F90 b2sral_d.F90 b2stel_d.F90 b2tqca_d.F90 b2tqce_d.F90 b2tqin_d.F90 b2tral_d.F90 b2trcl_d.F90
+
+sed -i '/switchd%fnb_drift_hyb = 0.D0/d' b2tfnb_d.F90 
+  
+sed -i -e '/EXTERNAL SFILL_D/a\  real (kind=r8) :: dummydiff' b2xpni_d.F90 b2xpne_d.F90 b2tqna_d.F90 b2trno_d.F90 b2npmo_d.F90 b2sral_d.F90 b2stbc_d.F90 b2stbr_d.F90 b2stcx_d.F90 b2stel_d.F90 b2tqca_d.F90 b2tqce_d.F90 b2trcl_d.F90 b2xpfe_d.F90 b2xpfi_d.F90 b2xpfn_d.F90 b2xpfz_d.F90 b2xpnm_d.F90
+sed -i -e '/CALL SFILL_D/i\  dummydiff = 0.0_R8' b2xpni_d.F90 b2xpne_d.F90 b2tqna_d.F90 b2trno_d.F90 b2npmo_d.F90 b2sral_d.F90 b2stbc_d.F90 b2stbr_d.F90 b2stcx_d.F90 b2stel_d.F90 b2tqca_d.F90 b2tqce_d.F90 b2trcl_d.F90 b2xpfe_d.F90 b2xpfi_d.F90 b2xpfn_d.F90 b2xpfz_d.F90 b2xpnm_d.F90
+sed -i -e 's/SFILL_D(ncv, 0.0_R8, 0.D0/SFILL_D(ncv, 0.0_R8, dummydiff/g' b2tqna_d.F90 b2xpne_d.F90 b2trno_d.F90 b2xpnm_d.F90 b2trcl_d.F90 b2tqce_d.F90 b2tqca_d.F90 b2npmo_d.F90
+sed -i -e 's/SFILL_D(arg1, 0.0_R8, 0.D0/SFILL_D(arg1, 0.0_R8, dummydiff/g' b2tqna_d.F90 b2xpni_d.F90 b2trno_d.F90 b2xpfe_d.F90 b2xpfi_d.F90 b2xpfn_d.F90 b2xpfz_d.F90 b2trcl_d.F90 b2sral_d.F90 b2stbc_d.F90 b2stbr_d.F90 b2stcx_d.F90 b2stel_d.F90
+sed -i -e 's/CALL SFILL_D(nfc, 0.0e0_R8, 0.D0/CALL SFILL_D(nfc, 0.0e0_R8, dummydiff/g' b2trno_d.F90
+
+sed -i -e 's/CALL SFILL_D(nfc, 1.0_R8, 0.D0/CALL SFILL_D(nfc, 1.0_R8, dummydiff/g' b2trcl_d.F90
+sed -i -e 's/CALL SFILL_D(ncv, 1.0_R8, 0.D0/CALL SFILL_D(ncv, 1.0_R8, dummydiff/g' b2trcl_d.F90
+
 
 # NOT NEEDED ANYMORE?
 #sed -i '/switchd%b2npco_pcm0 = 0.D0/d' b2npco_d.F90 
