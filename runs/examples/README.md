@@ -41,7 +41,7 @@ and then extract `*.tar.gz` linked examples that appear nearby
 
         tar xvzf of_example_available.tar.gz
 
-We commend to use `make help` and prepare the example with command such as:
+We recommend to use `make help` and prepare the example with command such as:
 
         make tutorial-DivGeo_ITER_baseline_scenario
         
@@ -72,7 +72,7 @@ with the MD5 hash.
     md5sum AUG_16151_D+C+He.tar.gz
     Output: cc7d81bb3356467514344c57a7dece0c  AUG_16151_D+C+He.tar.gz
     mv AUG_16151_D+C+He.tar.gz cc7d81bb3356467514344c57a7dece0c \
-       /work/imas/shared/external/assets/solps-iter/assets/MD5/
+       /work/imas/shared/external/assets/solps-iter/MD5/
 
 Above directory is synched to
 http://static.iter.org/imas/assets/solps-iter/%(algo)/%(hash) 

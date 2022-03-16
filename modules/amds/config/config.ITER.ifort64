@@ -1,6 +1,4 @@
-CC = cc
-CFLAGS = -g
-LIBS = -lXm -lz
+LIBS = -lXm -lXt -lX11 -lm -lz
 
 #!!!Local Variables:
 #!!! mode: Makefile

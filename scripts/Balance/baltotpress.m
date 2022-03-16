@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% baltotpress plots the total pressure balance for a given SOLPS simulation.   %
+% balmom plots the momentum balance for a given SOLPS simulation.              %
 % balfile:     Full path to balance.nc file                                    %
 % indbal:      Logical matrix of size nx*ny that is true for cells where       %
 %              balance should be performed                                     %
@@ -12,6 +12,16 @@
 % strata_plot: If true then divide the EIRENE source into components from each %
 %              stratum (in a new figure)                                       %
 % axstrat:     Array of aces into which strata plots will be placed            % 
+% makeplot:    Decides whether to make plots or just pass back the values in   %
+%              the radial balance plots                                        %
+% areaend:     Either 'left', 'right' or 'none'. Defines the poloidal end      %
+%              of the balance region at which areas will be calculated. The    %
+%              poloidal fluxes at both ends will then be divided by these      %
+%              areas to give flux densities.                                   %
+% area_divide: The area that poloidal fluxes and sources are divided by        %
+% polbaldist:  Either 'parallel' or 'poloidal'. Defines the distance used      %
+%              on the x-axis of the poloidal balance plots. Distances are      %
+%              mapped to the first SOL ring.                                   %
 %                                                                              %
 % David Moulton (david.moulton@ccfe.ac.uk) January 2017.                       %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -41,6 +51,9 @@ fmoy_flua = sum(tmp(:,:,2,za>0),4);
 tmp = ncread(balfile,'fmo_cvsa');
 fmox_cvsa = sum(tmp(:,:,1,za>0),4);
 fmoy_cvsa = sum(tmp(:,:,2,za>0),4);
+tmp = ncread(balfile,'fmo_hybr');
+fmox_hybr = sum(tmp(:,:,1,za>0),4);
+fmoy_hybr = sum(tmp(:,:,2,za>0),4);
 tmp = ncread(balfile,'fmo_b2nxfv');
 fmox_b2nxfv = sum(tmp(:,:,1,za>0),4);
 fmoy_b2nxfv = sum(tmp(:,:,2,za>0),4);
@@ -84,6 +97,8 @@ tmp = ncread(balfile,'b2srdt_smo_bal');
 b2srdt_smo = sum(tmp(:,:,za>0),3);
 tmp = ncread(balfile,'b2srst_smo_bal');
 b2srst_smo = sum(tmp(:,:,za>0),3);
+
+% b2sigp_style=='1':
 tmp = ncread(balfile,'b2sifr_smoch_bal');
 b2sifr_smoch = sum(tmp(:,:,za>0),3);
 tmp = ncread(balfile,'b2sifr_smotf_bal');
@@ -101,8 +116,9 @@ tmp = ncread(balfile,'resmo');
 resmo = sum(tmp(:,:,za>0),3);
 %%
 
-%% Parallel area at cell centres...
-apll = dv./hx.*abs(B(:,:,1)./B(:,:,4));
+%% Parallel area at cell centres:
+hz = (1-comuse.b2mndr_hz)+comuse.b2mndr_hz*(dv./gs(:,:,3));
+apll = dv.*hz./hx.*abs(B(:,:,1)./B(:,:,4));
 % Map to left cell face:
 apllx = zeros(nx,ny);
 for iy=1:ny
@@ -115,31 +131,43 @@ for iy=1:ny
                        (dv(ix,iy)+dv(leftix(ix,iy),leftiy(ix,iy)));
     end
 end
+apllc = zeros(nx,ny);
+for iy=1:ny
+    for ix=1:nx
+        if rightix(ix,iy)>nx
+            continue;
+        end
+        apllc(ix,iy) = 0.5*(apllx(ix,iy)+apllx(rightix(ix,iy),rightiy(ix,iy)));
+    end
+end
+%%
 
 %% Calculate the radial divergence...
 raddiv_flua = zeros(nx,ny);
-raddiv_vis = zeros(nx,ny);
+raddiv_visc = zeros(nx,ny);
+raddiv_hybr = zeros(nx,ny);
 for iy=1:ny
     for ix=1:nx
         if topiy(ix,iy)>ny
             continue;
         end
         raddiv_flua(ix,iy) = fmoy_flua(ix,iy)-fmoy_flua(topix(ix,iy),topiy(ix,iy));
-        raddiv_vis(ix,iy) = (fmoy_cvsa(ix,iy)+fmoy_b2nxfv(ix,iy))-...
-                            (fmoy_cvsa(topix(ix,iy),topiy(ix,iy))+fmoy_b2nxfv(topix(ix,iy),topiy(ix,iy)));
+        raddiv_visc(ix,iy) = fmoy_cvsa(ix,iy)-fmoy_cvsa(topix(ix,iy),topiy(ix,iy));
+        raddiv_hybr(ix,iy) = fmoy_hybr(ix,iy)-fmoy_hybr(topix(ix,iy),topiy(ix,iy));
     end
 end
 %%
 
-%% Calculate the poloidal divergence of the viscous part...
+%% Calculate the poloidal divergence of the viscous, hybrid correction and new ion viscosity form parts...
 visc = zeros(nx,ny);
+hybr = zeros(nx,ny);
 for iy=1:ny
     for ix=1:nx
         if rightix(ix,iy)>nx
             continue;
         end
-        visc(ix,iy) = (fmox_cvsa(ix,iy)+fmox_b2nxfv(ix,iy))-...
-                      (fmox_cvsa(rightix(ix,iy),rightiy(ix,iy))+fmox_b2nxfv(rightix(ix,iy),rightiy(ix,iy)));
+        visc(ix,iy) = fmox_cvsa(ix,iy)-fmox_cvsa(rightix(ix,iy),rightiy(ix,iy));
+        hybr(ix,iy) = fmox_hybr(ix,iy)-fmox_hybr(rightix(ix,iy),rightiy(ix,iy));
     end
 end
 %%

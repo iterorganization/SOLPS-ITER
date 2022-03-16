@@ -1,0 +1,59 @@
+#  VERSION : 16.12.2004 23:58
+
+# The version relying on Fujitsu Fortran installed on AFS
+
+# Test whether necessary variables are defined
+LD_GR    ?= -L${SOLPSLIB} -lgr
+ifdef USE_OPENMP
+ifdef USE_MPI
+LD_NAG    = `pkg-config sci_mpi_mp --libs`
+else
+LD_NAG    = `pkg-config sci_mp --libs`
+endif
+else
+ifdef USE_MPI
+LD_NAG    = `pkg-config sci_mpi --libs`
+else
+LD_NAG    = `pkg-config sci --libs`
+endif
+endif
+
+EQUIVS    =
+
+CPP       = /lib/cpp -traditional
+CPPOPTS   = -P -I${srcdir} ${EQUIVS}
+SED       =
+LINK_MOD  =
+
+FC        = ftn
+
+FCOPTS    = -e0 -ez
+ifdef SOLPS_DEBUG
+FCOPTS   += -O0 -hfp0 -G0 -g -K trap=fp -K trap=divz -Rb
+else
+FCOPTS   += -O3 -hfp3
+endif
+
+#COMPILE  = ${FC} -c ${FFLAGS}
+
+NAG       = ${LD_NAG}
+GKS       = ${LD_GR} ${LD_GKS} -lX11 -lXt -lXmu
+
+#LDLIBS   = ${LD_MSCL}-L/usr/local/lib -L/usr/X11R6/lib64
+LDLIBS    =
+LDEXTRA   =
+
+# new
+
+INCMOD    = -p
+MOD       = mod
+OBJDEST   = -ef -em -J${OBJDIR}
+
+BLD       = ar rcv
+
+LD        = ${FC}
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+

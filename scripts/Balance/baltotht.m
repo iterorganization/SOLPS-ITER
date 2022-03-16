@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% baltoten plots the total internal energy balance for a given SOLPS           %
+% baltotht plots the total internal energy balance for a given SOLPS           %
 % simulation.                                                                  %
 % balfile:     Full path to balance.nc file                                    %
 % indbal:      Logical matrix of size nx*ny that is true for cells where       %
@@ -12,11 +12,22 @@
 %              the left-most end, otherwise false                              %
 % strata_plot: If true then divide the EIRENE source into components from each %
 %              stratum (in a new figure)                                       %
-% axstrat:     Array of aces into which strata plots will be placed            % 
+% axstrat:     Array of aces into which strata plots will be placed            %
+% makeplot:    Decides whether to make plots or just pass back the values in   %
+%              the radial balance plots                                        %
+% areaend:     Either 'left', 'right' or 'none'. Defines the poloidal end      %
+%              of the balance region at which areas will be calculated. The    %
+%              poloidal fluxes at both ends will then be divided by these      %
+%              areas to give flux densities.                                   %
+% area_divide: The area that poloidal fluxes and sources are divided by        %
+% areatype:    The type of area that poloidal fluxes are divided by            %
+% polbaldist:  Either 'parallel' or 'poloidal'. Defines the distance used      %
+%              on the x-axis of the poloidal balance plots. Distances are      %
+%              mapped to the first SOL ring.                                   %
 %                                                                              %
 % David Moulton (david.moulton@ccfe.ac.uk) January 2017.                       %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function baltotht(balfile,indrad,indpol,comuse,axbal,reverse,strata_plot,axstrat)
+function bth = baltotht(balfile,indrad,indpol,comuse,axbal,reverse,strata_plot,axstrat,makeplot,areaend,area_divide,areatype,polbaldist)
 
 % Shorthand for geometry variables:
 nx = comuse.nx;
@@ -150,6 +161,19 @@ b2sihs_fraa = ncread(balfile,'b2sihs_fraa_bal');
 reshe = ncread(balfile,'reshe');
 % Residual (ions):
 reshi = ncread(balfile,'reshi');
+
+%% Create the units string
+switch areatype
+    case 'parallel'
+        units = 'Wm^{-2}';
+    case 'contact'
+        units = 'Wm^{-2}';
+    case 'none'
+        units = 'W';
+    otherwise
+        error('Area type ''%s'' not supported.',areatype);
+end
+%%
 
 %% Parallel area at left edges:
 apll = dv./hx.*abs(B(:,:,1)./B(:,:,4));
@@ -297,7 +321,7 @@ if strata_plot
                        ['Strata decomp. of S_{eIE}^{EIR}dV/dA_{||d}$ and ',...
                         'S_{iIE}^{EIR}dV/dA_{||d} in poloidal direction']},...
                       {'el','ion'},comuse,indrad,indpol,nstra,axstrat,axbal,areadownrad,areadownpol,reverse,false);
-end              
+end
 %%
 end
 

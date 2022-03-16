@@ -15,15 +15,30 @@
 %                 replaced by 'd' then the PFR region is also plotted. Any     %
 %                 other string will mean that the region is set by the user in %
 %                 user_set_region.                                             %
+% AREAEND:        Either 'left', 'right' or 'none'. Defines the poloidal end   %
+%                 of the balance region at which areas will be calculated. The %
+%                 poloidal fluxes at both ends will then be divided by these   %
+%                 areas to give flux densities.                                %
+% AREATYPE:       Either 'parallel' or 'contact'. Defines the type of area     %
+%                 that poloidal fluxes are divided by: 'parallel' for the area %
+%                 normal to the B field, 'contact' for the area normal to the  %
+%                 poloidal end of the cell surface (e.g. the target if the     %
+%                 balance region ends at the target)                           %
+% POLBALDIST:     Either 'parallel' or 'poloidal'. Defines the distance used   %
+%                 on the x-axis of the poloidal balance plots. Distances are   %
+%                 mapped to the first SOL ring.                                %
 % STRATA_PLOT:    If true then divide the EIRENE source into components from   %
 %                 each stratum (in a new figure).                              %
 % David Moulton (david.moulton@ccfe.ac.uk) January 2017.                       %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-BALFILE = './balance.nc';
-BAL_QUANT = 'totheat';
-SPECIES_INDEX = 2;
-DEFAULT_REGION = 'lod';
-STRATA_PLOT = true;
+BALFILE = '/tmp/balance2317.nc';
+BAL_QUANT = 'momentum';
+SPECIES_INDEX = 7:16;
+DEFAULT_REGION = 'user';
+AREAEND = 'right';
+AREATYPE = 'none';
+POLBALDIST = 'parallel';
+STRATA_PLOT = false;
 
 % Get commonly used variables for this simulation:
 comuse = get_comuse(BALFILE);
@@ -48,6 +63,9 @@ end
 % Plot the grid showing where balance will be performed:
 balgrid(comuse,indrad,indpol,axgrid,reverse);
 
+% Calculate the area which fluxes and sources will be divided by:
+area_divide = calc_area(comuse,AREATYPE);
+
 % Plot balance of the required quantity
 switch BAL_QUANT
     case 'particles'
@@ -55,6 +73,7 @@ switch BAL_QUANT
     case 'momentum'
         balmom(BALFILE,indrad,indpol,SPECIES_INDEX,comuse,axbal,reverse,STRATA_PLOT,axstrat);
     case 'totpress'
+        warning('Use total pressure balance with caution. Balance not currently perfect.');
         baltotpress(BALFILE,indrad,indpol,comuse,axbal,reverse,STRATA_PLOT,axstrat);
     case 'elheat'
         baleht(BALFILE,indrad,indpol,comuse,axbal,reverse,STRATA_PLOT,axstrat);
@@ -62,6 +81,9 @@ switch BAL_QUANT
         baliht(BALFILE,indrad,indpol,comuse,axbal,reverse,STRATA_PLOT,axstrat);
     case 'totheat'
         baltotht(BALFILE,indrad,indpol,comuse,axbal,reverse,STRATA_PLOT,axstrat);
+    case 'toten'
+        warning('Use total energy balance with caution. Balance not currently perfect.');
+        baltoten(BALFILE,indrad,indpol,comuse,axbal,reverse,STRATA_PLOT,axstrat,true,AREAEND,area_divide,AREATYPE,POLBALDIST);
     otherwise
         error('Balance quantity ''%s'' not supported.',BAL_QUANT);
 end

@@ -1,8 +1,10 @@
       subroutine uinprpb2
-       use b2mod_layer
+      use b2mod_types
+      use b2mod_layer
      , , only: ntrack, nalloys
-       use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use eirmod_solps
+      use b2mod_elements
+      use b2mod_subsys
 c
 c  version : 15.08.2003 18:26
 c
@@ -18,9 +20,9 @@ c=======================================================================
      .        pass, found
       integer idez
       logical streql
-      external xerrab, subini, subend, idez, streql
-      integer find_matching_species, get_atomic_number
-      external find_matching_species, get_atomic_number
+      external xerrab, idez, streql
+      integer find_matching_species
+      external find_matching_species
 c=======================================================================
       call subini ('uinprpb2')
 #ifdef DBG
@@ -86,8 +88,11 @@ c*** Boundary
       nmdbr(13,2)=2
       nmdbr(15,2)=2
       nmdpr(16,2)=nznbndt(1)
-      ltrvr(2,2)=.true.
-      lrrvr(9,2)=.true.
+      do i=18,21 !{
+        nmdpr(i,2)=nniso
+      end do !}
+      ltrvr( 2,2)=.true.
+      lrrvr( 9,2)=.true.
       lrrvr(10,2)=.true.
       lrrvr(11,2)=.true.
       lrrvr(13,2)=.true.
@@ -160,7 +165,7 @@ c*** lcbs
       end do !}
 c*** nniso
       iniprm(1,1,1,17,2)=nniso
-c*** ntiso, nxiso1, nxiso2, nyiso1, nyiso2
+c*** nxiso1, nxiso2, nyiso1, nyiso2
       do i=1,nniso !{
         iniprm(i,1,1,18,2)=nxiso1(i)
         iniprm(i,1,1,19,2)=nxiso2(i)
@@ -480,7 +485,7 @@ c***          crcstra, rcpos, rcstart, rcend
 
 c***          species_start, species_end
         iniprm(k,1,1,6,3)=0
-        iniprm(k,1,1,7,3)=0
+        iniprm(k,1,1,7,3)=nspcpls+nspcncl-1
 
 c***          lstrascl
         do l=1,nspcncl !{
@@ -556,7 +561,7 @@ c*** B2 and Eirene species counters
 
 c*** latmscl, lmolscl, lionscl
       do i = 1, nspcatm !{
-        iniprm(i,1,1,21,3)=iniprm(iniprm(i,1,1,8,3)+1,1,1,10,3)
+        iniprm(i,1,1,21,3)=iniprm(iniprm(i,1,1,9,3)+1,1,1,11,3)
       end do !}
       do i = 1, nspcmol !{
         iniprm(i,1,1,22,3)=lkindm(i)
@@ -572,6 +577,7 @@ cxpb We use one reaction per molecule to avoid double-counting
       hlp_mol(1:nspcmol)=.true.
       hlp_ion(1:nspcion)=.false.
       cmp_bck=0
+      iniprm(:,:,1,24,3)=0
       do j = 1, nspcmol !{
         hlp_el = .false.
         do k = 1, nrcm(j) !{
@@ -895,8 +901,25 @@ cxpb Second pass in case the molecules were not sorted in ascending order
           end do !}
         end do !}
       end do !}
+      do j = 1, nspcmol !{
+        do i = 1, nspcatm !{
+          if(spcsmsa(i).le.3) l_h_mol(j,spcsmsa(i))=iniprm(i,j,1,24,3)
+        end do !}
+      end do !}
 
 *** Eirene surface data input through B2
+
+*** *** chemical sputtering yield
+      do k = laddsrfs+1, nlimi !{
+        i=indasrfs(k)
+        rniprm(i,1,1,25,3)=rcycca(i)
+      end do !}
+      do k = 1, nstsi !{
+        i=nlim+k
+        rniprm(i,1,1,25,3)=recycc(k)
+      end do !}
+
+*** *** surface groups
 
       if(n_spcsrf.gt.0) then !{
         iniprm(1,1,1,26,3)=n_spcsrf
@@ -980,10 +1003,9 @@ c*** nxcut1, nxcut2, nycut1, nycut2
       end do !}
 c*** nniso
       iniprm(1,1,1,7,5)=nniso
-c*** ntiso, nxiso1, nxiso2, nyiso1, nyiso2
+c*** nxiso1, nxiso2, nyiso1, nyiso2
       do i=1,nniso !{
-        iniprm(1,1,1,8,5)=ntiso(i)
-        iniprm(i,1,1,9,5)=nxiso1(i)
+        iniprm(i,1,1, 9,5)=nxiso1(i)
         iniprm(i,1,1,10,5)=nxiso2(i)
         iniprm(i,1,1,11,5)=nyiso1(i)
         iniprm(i,1,1,12,5)=nyiso2(i)
@@ -1101,14 +1123,15 @@ c*** j_h_at,l_h_mol
 #ifdef DBG
         print *,'uinprpb2: PFR fluxes',npfrgrp
         if(npfrgrp.gt.0) then !{
-          print '(1x,a8,3h : ,10a10)','gpfrgrp',
+          print '(1x,a11,10a10)','gpfrgrp : ',
      ,                                         (gpfrgrp(i),i=1,npfrgrp)
-          print '(1x,a8,3h : ,i6,9i10)','ipfrgrp',
+          print '(1x,a11,i6,9i10)','ipfrgrp : ',
      ,                                         (ipfrgrp(i),i=1,npfrgrp)
-          print '(1x,a8,3h : ,i6,9i10)','jpfrgrp',
+          print '(1x,a11,i6,9i10)','jpfrgrp : ',
      ,                                         (jpfrgrp(i),i=1,npfrgrp)
-          if(jpfrgrp(npfrgrp).gt.0) print '(1x,a8,20i4/(9x,20i4))',
-     ,                      'lpfrgrp',(lpfrgrp(i),i=1,jpfrgrp(npfrgrp))
+          if(jpfrgrp(npfrgrp).gt.0)
+     ,     print '(1x,a11,20i4/(12x,20i4))',
+     ,                   'lpfrgrp : ',(lpfrgrp(i),i=1,jpfrgrp(npfrgrp))
         end if !}
 #endif
         iniprm(1,1,1,13,7)=npfrgrp

@@ -2,13 +2,16 @@
 
 # backup files
 *~
+*.bak
 
 # object, archive,... files
 *.[oa]
+*_genmod.f90
 *.mod
 a.out
 rwXDR.d
 rwXDR.d.*
+*_pycache_*
 
 # any local files, directories,...
 *.local
@@ -25,12 +28,13 @@ local_5
 LISTOBJ
 TAGS
 linux.*
-g77*/
+g77*
 IBMaix*
 SGIirix*
 sun*
 T3E*
 unicos*
+cray*
 git_version.h
 git_version_*.h
 
@@ -40,6 +44,7 @@ IBMaix*/
 SGIirix*/
 sun*/
 T3E*/
+cray*/
 unicos*/
 !SETUP/linux.*/
 !SETUP/g77/
@@ -47,6 +52,7 @@ unicos*/
 !SETUP/sun*/
 !SETUP/SGIirix*/
 !SETUP/T3E/
+!SETUP/cray/
 !SETUP/unicos/
 
 bin/
@@ -68,13 +74,17 @@ src/uinp/triang.hed
 doc/solps/solps_data_git.log
 doc/solps/solps-iter_git.log
 doc/solps/solps.*
+doc/solps/solps-*.svg
 !doc/solps/solps.tex
 doc/solps/b2cdc?.F
+doc/solps/b2input.xml
 doc/solps/B2_5.config.ITER.ifort64
+doc/solps/B2_5.config.common.ifort64
 doc/solps/B2_5.Makefile
 doc/solps/b2plot.commands
 doc/solps/DIMENSIONS.F
 doc/solps/SOLPS_versions
+doc/solps/texput.log
 
 # auxiliary files for AMDS
 modules/amds/src/x_~fbr.c
@@ -87,4 +97,12 @@ modules/solps4-5/src/solps4_Eirene/*.F
 modules/solps4-5/src/solps4_B2/*.F
 modules/solps4-5/src/B2_include
 modules/solps4-5/src/Eirene_modules
+
+# Links to scripts build directories
+scripts/*.ifort64*
+scripts/*.gfortran*
+scripts/*.pgf90*
+scripts/*.nag_f90*
+scripts/*.cray*
+scripts/*.g95*
 

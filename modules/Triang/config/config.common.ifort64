@@ -1,0 +1,39 @@
+#DEFINES += ${SOLPS_CPP} ${EIRENE_DEFINES} -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
+#DEFINES += ${SOLPS_CPP} ${EIRENE_DEFINES} -DTRIANG -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
+EQUIVS    =
+
+CPPOPTS   = -P -I${srcdir} ${EQUIVS}
+SED       =
+LINK_MOD  =
+
+COMPILER_MAJOR_VERSION = $(shell ${FC} -V 2>&1 | grep -o "Version [0-9]*" | cut -d ' ' -f 2 )
+
+ifdef SOLPS_DEBUG
+FCOPTS   += -g -C -debug all
+else
+FCOPTS   += -O3
+endif
+ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -le 12; echo $$?),0)
+FCOPTS   += -vec_report0
+endif
+
+#COMPILE  = ${FC} -c ${FFLAGS}
+
+NAG       = ${LD_NAG}
+
+LDEXTRA   =
+
+# new
+
+INCMOD    = -I
+MOD       = mod
+OBJDEST  += -o ${OBJDIR}/$*.o
+
+BLD       = ar rcv
+
+LD        = ${FC}
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+

@@ -10,7 +10,10 @@ module load nag
 #module load scalapack
 module unload python
 module load python/2.7.5
-
+module load imas-modules
+module load imas/3.17.1
+module swap mdsplus/7.7.11
+module load pyual
 
 # Environment variables
 if (! $?DEVICE) then
@@ -24,6 +27,7 @@ if(! $?FLUSH) then
   setenv FLUSH $SIMDIR/flush
 endif
 setenv SOLPSWORK /work/$USER/solps-iter
+setenv _JAVA_OPTIONS "-Xss20m -Xms1g -Xmx4g"
 
 # Debugger
 setenv DBX totalview

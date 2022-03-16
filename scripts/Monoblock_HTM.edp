@@ -33,7 +33,7 @@ else{
   sinout="unknown";}
 }
 
-  
+
 real[int] Lout(npointout);
 for (int kk=1;kk<=npointout;kk+=1){
 inputs>>Lout(kk-1);
@@ -66,14 +66,14 @@ WW(1)=-2.020389882180738e-12;
 WW(2)=-2.780235961230648e-09;
 WW(3)=4.516924060319057e-05;
 WW(4)=-1.054501953718856e-01;
-WW(5)=1.750724560926432e+02;             
+WW(5)=1.750724560926432e+02;
 
 //Load heat flux profile
 ifstream size1("tg"+sinout+"_size.dat");
 ifstream www1("Wtot_tg"+sinout+".dat");
 ifstream www2("Wpls_tg"+sinout+".dat");
 int Ntile;
-size1>>Ntile;     
+size1>>Ntile;
 real[int] qtot(Ntile);
 real[int] qpls(Ntile);
 for(int nn=0;nn<Ntile;nn+=1){
@@ -111,7 +111,7 @@ Vh kCCZ,kCu,kW,K,htc,HF,qq,TMAX;
 problem divert(T,v)=int2d(block)(K*(dx(T)*dx(v)+dy(T)*dy(v)))-int1d(block,C)(qq*v)
 				   -int1d(block,GG)(htc*Tf*v)+int1d(block,GG)(htc*T*v);
 real gamma,npoints=300.0,hfmax,hflux,CHF=40.0e6;
-	   
+
 //Loop on the monoblock length
 //ofstream ff00("Qwater.dat");
 //ofstream ff01("Qplasma.dat");
@@ -119,8 +119,8 @@ ofstream ff02("warning_VT_"+sinout+".log");
 real flag=0.0;
 TTMAX=0.0;
 for(int jj=0;jj<Ntile;jj+=1){
-	qq=(qpls(jj)/cos(beta+alpha))*(x>=Xshadow)+(qtot(jj)-qpls(jj));
-    Qreal(jj)=qpls(jj)/cos(beta+alpha)+qtot(jj)-qpls(jj);
+	qq=(qpls(jj)*sin(theta+alpha+beta)/sin(theta))*(x>=Xshadow)+(qtot(jj)-qpls(jj));
+    Qreal(jj)=qpls(jj)*sin(theta+alpha+beta)/sin(theta)+qtot(jj)-qpls(jj);
 	real err=1.0,tol=1.e-3;
 	Told=Tf;
 	real qwater=0.0,qplasma=0.0;
@@ -142,7 +142,7 @@ for(int jj=0;jj<Ntile;jj+=1){
 	HTC(jj)=int1d(block,GG)(htc)/int1d(block,GG)(1.0);
 	
 	//Evaluate next T bulk
-	qwater=(-int1d(block,GG)(htc*Tf)+int1d(block,GG)(htc*T))*2.0*Ltile;
+	qwater=(-int1d(block,GG)(htc*Tf)+int1d(block,GG)(htc*T))*Ltile;
 	Tf=Tf+qwater/mflow/cpw;
 
 	//Check for CHF (40 MW/m^2)

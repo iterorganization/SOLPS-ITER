@@ -12,11 +12,14 @@ if(! $?FLUSH) then
   setenv FLUSH $SIMDIR/flush
 endif
 # load modules
-module unload pgi
-module load ifort
-module unload python
-module load python/2.7.5
-module load texlive
+module purge
+module load imas-modules/2.0 imasenv/3.25.0/intel/rc
+module load netcdf
+setenv LATEX pdflatex
+
+#? module load texlive
+
+setenv _JAVA_OPTIONS "-Xss20m -Xms1g -Xmx4g"
 
 # work around a problem at JET where the modules are reloaded in a sub-shell
 setenv LOADL_ACTIVE 1

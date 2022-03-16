@@ -1,22 +1,22 @@
       subroutine uinpscrd
-       use b2mod_layer
+      use b2mod_types
+      use b2mod_layer
      , , only: ntrack, nalloys
-       use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use eirmod_solps
 
 c  version : 04.02.2005 18:37
 
 c=======================================================================
-c  Produce surface interaction cards 
+c  Produce surface interaction cards
 c=======================================================================
+      implicit none
 #include "uinput.inc"
-      integer i,j,k,kk,kkk,nn 
-cank      logical checknds,checkas
+      integer i,ii,j,k,kk,kkk,nn,ind
       integer chemindex(maxchmvar)
       logical streql
       external streql
 
-c***  makes table of additional variables for 
+c***  makes table of additional variables for
 c***  chemical sputtering
       call initchemspt
 
@@ -25,49 +25,67 @@ c*** Non-Default Standard surfaces
       do 10 i=1,nstsi !{
         if (.NOT.(iliin(i).eq.1 .or. bliin(i))) then  !{
 c** if we do not need surface card for this surface
-          iscrd(i)=0 
+          iscrd(i)=0
           goto 10
+        end if !}
+        if(isrss(i).gt.natmi) then !{
+          isrss(i)=0
+          write(*,'(a,i3,a)') ' Non-standard surface ',i,
+     ,     ' included physical sputtering of a species'//
+     ,     ' not present in the model!'
+          write(*,*)
+     ,     ' Following of physically sputtered species'//
+     ,     ' turned off for this surface!'
         end if !}
         do 11 j=1,k !{
          if(checknds(j,i)) then !{
-          iscrd(i)=j 
+          iscrd(i)=j
           goto 10
          end if !}
    11   continue !}
-       k=k+1 
+       k=k+1
        call getnds(k,i)
        iscrd(i)=k
    10 continue !}
-  
+
 c*** Additional surfaces
         do 20 i=laddsrfs+1,nlimi !{
         ind=indasrfs(i)
         if (.NOT.jliin(ind).eq.1) then  !{
-c** if we do not need surface card for this surface            
-          jscrd(ind)=0 
+c** if we do not need surface card for this surface
+          jscrd(ind)=0
           goto 20
+        end if !}
+        if(jsrss(ind).gt.natmi) then !{
+          jsrss(ind)=0
+          write(*,'(a,i3,a)') ' Additional surface ',ind,
+     ,     ' included physical sputtering of a species'//
+     ,     ' not present in the model!'
+          write(*,*)
+     ,     ' Following of physically sputtered species'//
+     ,     ' turned off for this surface!'
         end if !}
         do 21 j=1,k !{
          if(checkas(j,ind)) then !{
-          jscrd(ind)=j 
+          jscrd(ind)=j
           goto 20
          end if !}
    21   continue !}
        k=k+1
        call getas(k,ind)
        jscrd(ind)=k
-   20 continue !}   
+   20 continue !}
       nscards=k
 
 c*** the table of additional variables for chemical sputtering
       kk=0
       kkk=0
       do 30 i=1,nscards !{
-       nn=0         
+       nn=0
        do 31 j=1,nchemvar !{
         if(checkchm(j,i)) then !{
          nn=nn+1
-         kk=kk+1 
+         kk=kk+1
          indchemvar(kk)=j
         end if !}
    31  continue !}
@@ -77,8 +95,8 @@ c*** the table of additional variables for chemical sputtering
 
 c*** special treatment for C chemical sputtering by H
 c      do 40 i=1,nscards !{
-c       if(scxmlim(i).1206) call checkforcarbon(i)  
-c   40 continue  !}     
+c       if(scxmlim(i).1206) call checkforcarbon(i)
+c   40 continue  !}
 
       if (nscards.ne.1) then !{
         write(*,*) '  ',nscards,'surface interaction cards are prepared'
@@ -88,13 +106,14 @@ c   40 continue  !}
 
 c=======================================================================
       contains
-c***  internal subroutines      
+c***  internal subroutines
 
 c=======================================================================
-c***  fill surface card number k for NDS number ists 
+c***  fill surface card number k for NDS number ists
        subroutine getnds(k,ists) !{
+      implicit none
 c        character*(72) cardname
-        integer k,ists
+      integer k,ists,ii
 
         scilref(k)=ilref(ists)
         ii=10*ilsptc(ists)+ilsptp(ists)
@@ -118,16 +137,17 @@ c        character*(72) cardname
         scychsptg(k)=recycc(ists)
         scechsptg(k)=1.0
         scfchsptg(k)=0.0
-       
+
         scard_name(k)=cardname(k)
 
         scisrsg(k)=isrsg(ists)
        end subroutine !}
 
 c=======================================================================
-c***  check if surface card for NDS k is already present in the list  
+c***  check if surface card for NDS k is already present in the list
        logical function checknds(k,ists) !{
-        integer k,ists
+      implicit none
+        integer k,ists,ii
 
         checknds=.TRUE.
         ii=10*ilsptc(ists)+ilsptp(ists)
@@ -152,9 +172,10 @@ c***  check if surface card for NDS k is already present in the list
        end function checknds !}
 
 c***  fill surface card number k for AS number i
-       subroutine getas(k,i) !{
+      subroutine getas(k,i) !{
+      implicit none
 c        character*(72) cardname
-        integer k,i
+      integer k,i,ii
 
         scilref(k)=jlref(i)
         ii=10*jlsptc(i)+jlsptp(i)
@@ -185,9 +206,10 @@ c        character*(72) cardname
        end subroutine getas !}
 
 c=======================================================================
-c***  check if surface card for AS k is already present in the list   
+c***  check if surface card for AS k is already present in the list
        logical function checkas(k,i) !{
-        integer k,ists
+      implicit none
+        integer k,i,ii
 
         checkas=.TRUE.
         ii=10*jlsptc(i)+jlsptp(i)
@@ -214,9 +236,10 @@ c***  check if surface card for AS k is already present in the list
 c=======================================================================
 c***  function to generate surface card name for reaction k
 c***  name format:
-C***  SURFMOD_k_<MATERIAL>_<SPUTER>_<PUMP>_<SEMYTRANSP>_<TEMPERATURE K>
+C***  SURFMOD_k_<MATERIAL>_<SPUTER>_<PUMP>_<SEMITRANSP>_<TEMPERATURE K>
        character*(72) function cardname(k) !{
-        integer k 
+       implicit none
+        integer k
         character*(72) cnam,txtbuf
         real znml
         integer twll
@@ -226,7 +249,7 @@ C***  SURFMOD_k_<MATERIAL>_<SPUTER>_<PUMP>_<SEMYTRANSP>_<TEMPERATURE K>
            write(cnam,'(A8,I1)') 'SURFMOD_',k
         else
            write(cnam,'(A8,I2)') 'SURFMOD_',k
-        end if 
+        end if
         znml=scxmlim(k)
         txtbuf='_'
         if(znml.EQ.5626.) then
@@ -242,44 +265,45 @@ C***  SURFMOD_k_<MATERIAL>_<SPUTER>_<PUMP>_<SEMYTRANSP>_<TEMPERATURE K>
         end if
         cnam=cnam(1:len_trim(cnam))//txtbuf(1:len_trim(txtbuf))
         if(scilspt(k).NE.0) cnam=cnam(1:len_trim(cnam))//'_SPT'
-        if(screcycf(k).LT.1.0.OR.screcyct(k).LT.1.0) 
+        if(screcycf(k).LT.1.0.OR.screcyct(k).LT.1.0)
      .                   cnam=cnam(1:len_trim(cnam))//'_PUMP'
-        if(sctransp(k,1).GT.0.OR.sctransp(k,2).GT.0) 
+        if(sctransp(k,1).GT.0.OR.sctransp(k,2).GT.0)
      .                   cnam=cnam(1:len_trim(cnam))//'_SMTRANS'
         if(scewall(k).LT.0) then
-          twll=nint(abs(scewall(k))*11600) !wall temperature in K 
+          twll=nint(abs(scewall(k))*11600) !wall temperature in K
           write(txtbuf,'(i6,a1)') twll,'K'
           txtbuf=adjustl(txtbuf)
           cnam=cnam(1:len_trim(cnam))//'_'//
      .         txtbuf(1:len_of_digits(twll)+1)
         end if
         cardname=cnam
-       end function cardname !} 
+       end function cardname !}
 
 c=======================================================================
-c***   makes table of additional variables for 
+c***   makes table of additional variables for
 c***   chemical sputtering
        subroutine initchemspt !{
-       integer i,k,spz
+      implicit none
+       integer i,k,itp,spz
        character*(8) speciename
-       k=0 
+       k=0
        do 10 i=1,nchsppri !{
-        itp=lchspprt(i) 
-        spz=lchspprp(i)  
+        itp=lchspprt(i)
+        spz=lchspprp(i)
         if(itp.EQ.1) then !{
          speciename=texta(spz)
-        else if(itp.EQ.2) then 
+        else if(itp.EQ.2) then
          speciename=textm(spz)
         else if(itp.LE.3) then
          speciename=texti(spz)
         else if(itp.LE.4) then
          speciename=textp(spz)
         else !}{
-         write(0,*) 
-     ,   'WARNING: indefinite species type in chemical sputtering data'
-         goto 10 
+          write(0,*) 'WARNING: '//
+     ,     'indefinite species type in chemical sputtering data'
+          goto 10
         end if !}
-        k=k+1 
+        k=k+1
         chvarname(k)='ISRC'
         chmspname(k)=speciename
         itp=lchsptgt(i)
@@ -288,8 +312,8 @@ c***   chemical sputtering
         else if(itp.EQ.2) then !}{
          chmvar(k)=lchsptgp(i)+natmi
         else !}{
-          write(0,*) 
-     ,    'WARNING: indefinite species type in chemical sputtering data'      
+          write(0,*)
+     ,    'WARNING: indefinite species type in chemical sputtering data'
         end if !}
         chemindex(k)=i
         k=k+1
@@ -297,7 +321,7 @@ c***   chemical sputtering
         chmspname(k)=speciename
         chmvar(k)=lchspnwl(i)
         chemindex(k)=i
-        k=k+1        
+        k=k+1
         chvarname(k)='RECYCC'
         chmspname(k)=speciename
         chmvar(k)=ychsptg(i)
@@ -309,41 +333,43 @@ c***   chemical sputtering
         chemindex(k)=i
    10  continue !}
        nchemvar=k
-       write(0,*) 
-     .  'The number of additional variables, nchemvar ', nchemvar    
+       write(*,*)
+     .  'The number of additional variables, nchemvar ', nchemvar
        end subroutine initchemspt !}
 
 c=======================================================================
-c***  checks if additional chemical sputtering variable 
+c***  checks if additional chemical sputtering variable
 c***  number ch is suitable for surface card number i
        logical function checkchm(ch,i) !{
+       implicit none
         integer ch,i,j
-        j=chemindex(ch)                    
+        j=chemindex(ch)
         if(scxmlim(i).EQ.lchsptrg(j).AND.
      .     scisrsg(i).EQ.lchspgrp(j)) then !{
-          checkchm=.TRUE.  
+          checkchm=.TRUE.
           if(streql(chvarname(ch),'RECYCC')
      .       .AND.chmvar(ch).EQ.scychsptg(i))
-     .     checkchm=.FALSE.                                 
+     .     checkchm=.FALSE.
         else !}{
           checkchm=.FALSE.
         end if !}
        end function checkchm !}
 
 c=======================================================================
-c*** special treatment for chemical sputtering variables with carbon surface      
-c       subroutine checkforcarbon(i) !{ 
+c*** special treatment for chemical sputtering variables with carbon surface
+c       subroutine checkforcarbon(i) !{
+c      implicit none
 c       if(scxmlim(i).NE.1206) return
-       
+c      k=0
 c       do j=1,nnchemvar(i) !{
-c         k=k+1 
+c         k=k+1
 c         ich=indchemvar(k)
 c         if(streql(chvarname(ich),'ISRC').OR.
 c     .      streql(chvarname(ich),'LCHSPNWL')) then !{
 c            write(iunoo,717) chvarname(ich),chmspname(ich),
 c     ,                       nint(chmvar(ich))
 c         else !}{
-c            write(iunoo,716) chvarname(ich),chmspname(ich),chmvar(ich)   
+c            write(iunoo,716) chvarname(ich),chmspname(ich),chmvar(ich)
 c         end if  !}
 c       end do !}
 

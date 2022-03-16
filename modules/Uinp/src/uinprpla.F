@@ -1,20 +1,22 @@
       subroutine uinprpla
-       use b2mod_layer
+      use b2mod_types
+      use b2mod_layer
      , , only: ntrack, nalloys
-       use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use b2mod_subsys
+      use eirmod_solps
 c
 c  version : 19.02.2003 18:23
 c
 c=======================================================================
 c*** Prepare the additional surface lists for the diagnostic Eirene run
 c=======================================================================
+      implicit none
 #include "uinput.inc"
-      integer i,j,k,nchn,iprv(nlim),inxt(nlim),istrt(nlim),ilen(nlim),
+      integer i,j,k,m,nchn,iprv(nlim),inxt(nlim),istrt(nlim),ilen(nlim),
      ,  iambg(2,nlim),nambg
-      real tol
+      real x1,y1,x2,y2,tol
       logical notyet(nlim),joint
-      external xerrab, subini, subend
+      external xerrab
       data tol / 1.e-2/ ! tolerance for a search for chains
 c=======================================================================
       joint(x1,y1,x2,y2)=abs(x1-x2).le.tol .and. abs(y1-y2).le.tol .and.

@@ -4,7 +4,7 @@
 
 Name=`basename $0`
 Usage="$Name: DG-to-CARRE format conversion
-Usage: $Name DG-file CARRE-file \[Field-file\]
+Usage: $Name DG-file CARRE-file [Field-file]
        where DG-file and Field-file are the input filenames,
        and CARRE-file is the output filename.
        If the Field-file is not specified, the default field.snn is used.
@@ -15,8 +15,8 @@ Usage: $Name DG-file CARRE-file \[Field-file\]
 echo `dirname $0`
 [ $# -lt 2 ] && { echo "$Usage"; exit; }
 F='field.snn'; [ -n "$3" ] && F=$3
-[ -r $1 ] || { echo "File $1 is absent\n"; echo "$Usage"; exit; }
+[ -r $1 ] || { echo "File $1 is absent"; echo "$Usage"; exit; }
 # [ -a fort.2 ] || rm -f fort.2
 # ln -sf $1 fort.1
-[ -r $F ] || { dg2vr $1 $2 } && { dg2vr $1 $2 $F }
-#        && { [ -L fort.2 ] && { rm -f fort.2; true; } || mv fort.2 $2 ; rm -f fort.1; }
+[ -r $F ] || dg2vr $1 $2 && dg2vr $1 $2 $F
+#        && { [ -L fort.2 ] && { rm -f fort.2; true; } || { [ -e fort.2] && mv fort.2 $2 ; rm -f fort.1; } }

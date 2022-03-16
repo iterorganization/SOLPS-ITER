@@ -12,7 +12,18 @@
 %              the left-most end, otherwise false                              %
 % strata_plot: If true then divide the EIRENE source into components from each %
 %              stratum (in a new figure)                                       %
-% axstrat:     Array of aces into which strata plots will be placed            % 
+% axstrat:     Array of aces into which strata plots will be placed            %
+% makeplot:    Decides whether to make plots or just pass back the values in   %
+%              the radial balance plots                                        %
+% areaend:     Either 'left', 'right' or 'none'. Defines the poloidal end      %
+%              of the balance region at which areas will be calculated. The    %
+%              poloidal fluxes at both ends will then be divided by these      %
+%              areas to give flux densities.                                   %
+% area_divide: The area that poloidal fluxes and sources are divided by        %
+% areatype:    The type of area that poloidal fluxes are divided by            %
+% polbaldist:  Either 'parallel' or 'poloidal'. Defines the distance used      %
+%              on the x-axis of the poloidal balance plots. Distances are      %
+%              mapped to the first SOL ring.                                   %
 %                                                                              %
 % David Moulton (david.moulton@ccfe.ac.uk) January 2017.                       %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -85,10 +96,44 @@ tmp = ncread(balfile,'b2stbm_sna_bal');
 b2stbm_sna = sum(tmp(:,:,isplot),3);
 tmp = ncread(balfile,'ext_sna_bal');
 ext_sna = sum(tmp(:,:,isplot),3);
-tmp = ncread(balfile,'b2stel_sna_ion_bal');
-b2stel_sna_ion = sum(tmp(:,:,isplot),3);
-tmp = ncread(balfile,'b2stel_sna_rec_bal');
-b2stel_sna_rec = sum(tmp(:,:,isplot),3);
+% Calculate the ionisation sink to the next ionisation state and the ionisation
+% source from the previous ionisation state:
+b2stel_sna_ion_bal = ncread(balfile,'b2stel_sna_ion_bal');
+izhigh = [find(diff(comuse.za)<1)',comuse.ns];
+izlow = [1,izhigh(1:end-1)+1];
+b2stel_sna_ion_prev = zeros(nx,ny,comuse.ns);
+b2stel_sna_ion_next = zeros(nx,ny,comuse.ns);
+for is1=1:length(izhigh);
+    for is2=izhigh(is1):-1:izlow(is1);
+        if is2==izhigh(is1)
+            b2stel_sna_ion_next(:,:,is2) = 0;
+            b2stel_sna_ion_prev(:,:,is2) = b2stel_sna_ion_bal(:,:,is2);
+        else
+            b2stel_sna_ion_next(:,:,is2) = -b2stel_sna_ion_prev(:,:,is2+1);
+            b2stel_sna_ion_prev(:,:,is2) = b2stel_sna_ion_bal(:,:,is2)-b2stel_sna_ion_next(:,:,is2);
+        end
+    end
+end
+b2stel_sna_ion_prev = sum(b2stel_sna_ion_prev(:,:,isplot),3);
+b2stel_sna_ion_next = sum(b2stel_sna_ion_next(:,:,isplot),3);
+% Calculate the recombination sink to the previous ionisation state and the
+% recombination source from the next ionisation state:
+b2stel_sna_rec_bal = ncread(balfile,'b2stel_sna_rec_bal');
+b2stel_sna_rec_prev = zeros(nx,ny,comuse.ns);
+b2stel_sna_rec_next = zeros(nx,ny,comuse.ns);
+for is1=1:length(izhigh);
+    for is2=izhigh(is1):-1:izlow(is1);
+        if is2==izhigh(is1)
+            b2stel_sna_rec_next(:,:,is2) = 0;
+            b2stel_sna_rec_prev(:,:,is2) = b2stel_sna_rec_bal(:,:,is2);
+        else
+            b2stel_sna_rec_next(:,:,is2) = -b2stel_sna_rec_prev(:,:,is2+1);
+            b2stel_sna_rec_prev(:,:,is2) = b2stel_sna_rec_bal(:,:,is2)-b2stel_sna_rec_next(:,:,is2);
+        end
+    end
+end
+b2stel_sna_rec_prev = sum(b2stel_sna_rec_prev(:,:,isplot),3);
+b2stel_sna_rec_next = sum(b2stel_sna_rec_next(:,:,isplot),3);
 tmp = ncread(balfile,'b2stcx_sna_bal');
 b2stcx_sna = sum(tmp(:,:,isplot),3);
 tmp = ncread(balfile,'b2srsm_sna_bal');
@@ -97,9 +142,22 @@ tmp = ncread(balfile,'b2srdt_sna_bal');
 b2srdt_sna = sum(tmp(:,:,isplot),3);
 tmp = ncread(balfile,'b2srst_sna_bal');
 b2srst_sna = sum(tmp(:,:,isplot),3);
-% Residual:    
+% Residual:
 tmp = ncread(balfile,'resco');
 rescb = sum(tmp(:,:,isplot),3);
+%%
+
+%% Create the units string
+switch areatype
+    case 'parallel'
+        units = 'm^{-2}s^{-1}';
+    case 'contact'
+        units = 'm^{-2}s^{-1}';
+    case 'none'
+        units = 's^{-1}';
+    otherwise
+        error('Area type ''%s'' not supported.',areatype);
+end
 %%
 
 %% Parallel area at cell centres...
@@ -118,7 +176,7 @@ for iy=1:ny
 end
 %%
 
-%% Calculate the radial divergence...
+%% Calculate the radial divergences...
 raddiv_pinch = zeros(nx,ny);
 raddiv_pll = zeros(nx,ny);
 raddiv_drift = zeros(nx,ny);
@@ -137,7 +195,7 @@ for iy=1:ny
         raddiv_nanom(ix,iy) = fnby_nanom(ix,iy)-fnby_nanom(topix(ix,iy),topiy(ix,iy));
         raddiv_panom(ix,iy) = fnby_panom(ix,iy)-fnby_panom(topix(ix,iy),topiy(ix,iy));
         raddiv_ch(ix,iy) = fnby_ch(ix,iy)-fnby_ch(topix(ix,iy),topiy(ix,iy));
-        raddiv_pschused(ix,iy) = fnby_pschused(ix,iy)-fnby_pschused(topix(ix,iy),topiy(ix,iy));                    
+        raddiv_pschused(ix,iy) = fnby_pschused(ix,iy)-fnby_pschused(topix(ix,iy),topiy(ix,iy));
     end
 end
 %%
@@ -179,7 +237,7 @@ if strata_plot
                       {'Strata decomp. of (\int_d^uS_{part}^{EIR}dV)/dA_{||d} in radial direction',...
                        'Strata decomp. of S_{part}^{EIR}dV/dA_{||d}$ in poloidal direction'},...
                       {''},comuse,indrad,indpol,nstra,axstrat,axbal,areadownrad,areadownpol,reverse,false);
-end              
+end
 %%
 end
 

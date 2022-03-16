@@ -2,8 +2,8 @@
       use b2mod_elements
       use b2mod_layer
      , , only: ntrack, nalloys
-      use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use b2mod_subsys
+      use eirmod_solps
       implicit none
 
 c  version : 27.12.2004 23:24
@@ -13,10 +13,10 @@ c*** Prepare the particle lists
 c======================================================================
 #include "uinput.inc"
       integer i,ii,iii,j,jj,jjj,k,l,m,mm,n,na,ni,nm,np,ipt
-      integer find_matching_species, get_atomic_number, lnblnk
+      integer find_matching_species, lnblnk
       logical ex,streql
-      external streql, xerrab, subini, subend
-      external find_matching_species, get_atomic_number, lnblnk
+      external streql, xerrab
+      external find_matching_species, lnblnk
       character*8 c,cc,c0*1
       character*20 hlp_frm
 c======================================================================
@@ -46,7 +46,8 @@ c*** the atoms and nuclei
             k=find_matching_species(c)
             if(k.eq.0) then  !{
               write(hlp_frm,'(a,i2,a)') '(a,a8,a,a,',nspdgen,'(a1,a2))'
-              write(*,hlp_frm) 'Generic species "',c,'" undefined. ',
+              write(*,hlp_frm)
+     ,          'Generic species "',trim(c),'" undefined. ',
      ,          'Available non-default species are:',
      ,           (' ',spcdgen(i),i=1,nspdgen-2)
               write(*,*) 'Otherwise should be an element name.'
@@ -55,7 +56,7 @@ c*** the atoms and nuclei
               j=lspdgen(k)
               na=nspcatm
               do m=0,nspdatm(k)-1 !{
-                if (n2_model.and..not.l_n2(j+m)) cycle
+                if (no_n2_model.and..not.no_n2(j+m)) cycle
                 if (l_ammon(j+m).and..not.ammonx_used) cycle
                 if (l_meta(j+m).and..not.meta_used) cycle
                 if (k.le.nspdgen-2) c=spcdspc(j+m)
@@ -80,6 +81,15 @@ c*** the atoms and nuclei
                 end if !}
                 if(.not.l_meta(j+m)) then
                   nspcncl=nspcncl+1
+                  if(nspcpls+nspcncl.gt.nsdb2) then !{
+                    write(0,*) 'The total number of B2.5 species must ',
+     ,               'not exceed ',nsdb2
+                    write(0,*) 'Current requested number of B2.5 ',
+     ,               'species is ',nspcpls+nspcncl
+                    write(0,*) 'STOP ==> Check the AMDS model - ',
+     ,               'or increase DEF_NSD in DIMENSIONS.F'
+                    call xerrab ('Too many B2.5 species')
+                  end if !}
                   spcsncl(nspcncl)=c
                 end if
                 spcsrna(na)=na
@@ -120,7 +130,7 @@ c*** the atoms and nuclei
 
               nm=nspcmol
               do m=1,nspdmol(k) !{
-                if (n2_model.and..not.l_n2(j+m)) cycle
+                if (no_n2_model.and..not.no_n2(j+m)) cycle
                 if (l_ammon(j+m).and..not.ammonx_used) cycle
                 if (l_meta(j+m).and..not.meta_used) cycle
                 c=spcdspc(j+m)
@@ -152,15 +162,11 @@ c*** the atoms and nuclei
                 do ii=1,na !{
                   if(streql(spcsatm(ii),spcdspc(lspdgen(k)))) then !{
                     lkindm(nm)=ii
-                    if (spcdns(j+m).gt.0)
-     >               l_h_mol(nm,spcsmsa(ii))=spcdns(j+m)
                   end if !}
                 end do !}
-                do ii=1,nspcatm !{
+                do ii=1,na !{
                   do jj=1,m_hlp_h !{
-                    if(streql(spcsatm(ii),hlp_h(1,jj,1))) then !{
-                      if (ipt.eq.0) ipt=jj
-                    end if !}
+                    if(streql(spcsatm(ii),hlp_h(1,jj,1))) ipt=jj
                   end do !}
                 end do !}
                 if (ipt.gt.0) then !{
@@ -190,7 +196,7 @@ c*** the atoms and nuclei
 
               ni=nspcion
               do m=1,nspdion(k) !{
-                if (n2_model.and..not.l_n2(j+m)) cycle
+                if (no_n2_model.and..not.no_n2(j+m)) cycle
                 if (l_ammon(j+m).and..not.ammonx_used) cycle
                 if (l_meta(j+m).and..not.meta_used) cycle
                 c=spcdspc(j+m)
@@ -223,11 +229,9 @@ c*** the atoms and nuclei
                   if(streql(spcsatm(ii),spcdspc(lspdgen(k))))
      >             lkindi(ni)=ii
                 end do !}
-                do ii=1,nspcatm !{
+                do ii=1,na !{
                   do jj=1,m_hlp_h !{
-                    if(streql(spcsatm(ii),hlp_h(1,jj,1))) then !{
-                      if (ipt.eq.0) ipt=jj
-                    end if !}
+                    if(streql(spcsatm(ii),hlp_h(1,jj,1))) ipt=jj
                   end do !}
                 end do !}
                 if (ipt.gt.0) then !{
@@ -359,8 +363,8 @@ c*** the atoms and nuclei
 #endif
             end if  !}
           else  !}{
-            write(*,*) 'A generic species "',c,'" has already been ',
-     ,        'added (skipping it)'
+            write(*,*) 'A generic species "',trim(c),'" ',
+     ,        'has already been added (skipping it)'
           end if  !}
         end if  !}
       end do  !}
@@ -533,6 +537,15 @@ c*** Plasma ions:
      ,	      	'DEF_NPLS in DIMENSIONS.F'
 	      call xerrab ('Too many plasma ion species')
 	    end if !}
+            if(nspcpls+nspcncl.gt.nsdb2) then !{
+              write(0,*) 'The total number of B2.5 species must ',
+     ,          'not exceed ',nsdb2
+              write(0,*) 'Current requested number of B2.5 ',
+     ,          'species is ',nspcpls+nspcncl
+              write(0,*) 'STOP ==> Check the AMDS model - or increase ',
+     ,          'DEF_NSD in DIMENSIONS.F'
+              call xerrab ('Too many B2.5 species')
+            end if !}
 	    cc=spcirnp(l)
 	    j=0
 	    do i=1,nspcncl !{

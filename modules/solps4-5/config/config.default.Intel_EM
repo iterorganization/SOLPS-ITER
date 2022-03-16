@@ -10,8 +10,8 @@ DEFINES  += -DS2SUM=D2SUM -DS2MIN=D2MIN -DSASUM=DASUM -DSAXPY=DAXPY -DSDOT=DDOT 
 #FC        = RZG_WRAPPER=silent f95f -v 1.0
 FC        = ifort
 CPP       = /lib/cpp -C -traditional
-CPP4OPTS  = -C -P -I${srcdir} ${EQUIV4}
-CPP5OPTS  = -C -P -I${srcdir} ${EQUIV5}
+CPP4OPTS  = -P -I${SRCDIR} ${EQUIV4}
+CPP5OPTS  = -P -I${SRCDIR} ${EQUIV5}
 
 #FCOPTS    = -Ad -Am -X9 -fw -Kfast,eval -x- -O -M${OBJDIR}
 #FCOPTS    = -r8 -O0 -check -g -traceback -mp -align dcommons -fpconstant -fpstkchk -ftz 

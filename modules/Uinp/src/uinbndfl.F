@@ -1,22 +1,24 @@
       subroutine uinbndfl
+      use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
-      use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use b2mod_subsys
+      use eirmod_solps
 c
 c  version : 01.04.2005 14:27
 c
 c=======================================================================
 c*** Fill in the default boundary data
 c=======================================================================
+      implicit none
 #include "uinpcom.inc"
-      integer i,j,k,l,m,n,isp,iknd,izn,igs_hlp(nspdgen)
+      integer i,j,k,l,n,isp,iknd,izn,igs_hlp(nspdgen)
       logical ex,uex,hlp_fl1,hlp_fl2
       real hlp_f1
       character hlp_c*2
       integer find_matching_species
       logical streql
-      external streql, xertst, subini, subend, find_matching_species
+      external streql, xertst, find_matching_species
 c=======================================================================
       call subini ('uinbndfl')
 c*** Determine the default source scaling relations
@@ -256,8 +258,7 @@ c=======================================================================
       integer function find_matching_species(name)
       use b2mod_layer
      , , only: ntrack, nalloys
-      use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use eirmod_solps
       use b2mod_elements
       implicit none
 #     include "uinpcom.inc"
@@ -293,17 +294,16 @@ c=======================================================================
       integer function find_matching_reagent(name)
       use b2mod_layer
      , , only: ntrack, nalloys
-      use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use eirmod_solps
       use b2mod_elements
       implicit none
 #     include "uinpcom.inc"
       character*8 name, species_name
-      integer i, j
+      integer i
       integer nplus
       integer lnblnk
-      logical streql, isplusorminus, isadigit
-      external streql, lnblnk, isplusorminus, isadigit, strip_spaces
+      logical streql, isplusorminus
+      external streql, lnblnk, isplusorminus, strip_spaces
 
       find_matching_reagent = 0
       do i = 1, nsrctd
@@ -339,44 +339,3 @@ c=======================================================================
 
       return
       end function find_matching_reagent
-
-      integer function get_atomic_number(name)
-      use b2mod_elements
-      implicit none
-      character*(*) name
-      character*8 species_name
-      integer i
-      logical skip, openp
-      integer lnblnk
-      logical streql, isadigit, isplusorminus
-      external streql, lnblnk, isadigit, isplusorminus, strip_spaces
-
-      get_atomic_number = 0
-      species_name = repeat(' ',8)
-      openp = .false.
-      do i = 1, lnblnk(name)
-        if (.not.openp) then
-          skip = .false.
-          skip = skip .or. isadigit(name(i:i))
-          skip = skip .or. isplusorminus(name(i:i))
-          skip = skip .or. name(i:i).eq.'*'
-          openp = name(i:i).eq.'('
-        else
-          openp = name(i:i).ne.')'
-          skip = .true.
-        endif
-        skip = skip .or. openp
-        if (.not.skip) species_name(i:i) = name(i:i)
-      end do
-      call strip_spaces(species_name)
-      do i = 1, 92
-        if(streql(species_name(1:2),elements(i))) then
-          get_atomic_number = i
-          return
-        end if
-      end do
-      if (streql(species_name,'D').or.
-     &    streql(species_name,'T')) get_atomic_number=1
-
-      return
-      end function get_atomic_number

@@ -23,10 +23,17 @@
 % ismom:       True if we are performing momentum balance                      %
 % axbal:       Array of axes into which balance plots will be placed           %
 % unitstr:     String for units given on y axes                                %
+% areaend:     Either 'left', 'right' or 'none'. Defines the poloidal end      %
+%              of the balance region at which areas will be calculated. The    %
+%              poloidal fluxes at both ends will then be divided by these      %
+%              areas to give flux densities.                                   %
+% polbaldist:  Either 'parallel' or 'poloidal'. Defines the distance used      %
+%              on the x-axis of the poloidal balance plots. Distances are      %
+%              mapped to the first SOL ring.                                   %
 %                                                                              %
 % David Moulton (david.moulton@ccfe.ac.uk) January 2017.                       %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function areadown = poloidal_balance(flux,src,res,totname,fluxname,srcname,comuse,indpol,area,reverse,ismom,axbal,unitstr)
+function area_divide = poloidal_balance(flux,src,res,totname,fluxname,srcname,comuse,indpol,area,reverse,ismom,axbal,unitstr,areaend,polbaldist)
 
 topix = comuse.topix+1;
 topiy = comuse.topiy+1;
@@ -35,16 +42,6 @@ bottomiy = comuse.bottomiy+1;
 leftix = comuse.leftix+1;
 rightix = comuse.rightix+1;
 rightiy = comuse.rightiy+1;
-if ~reverse
-    reversefac = 1;
-    momfac = 1;
-elseif ismom
-    reversefac = -1;
-    momfac = -1;
-else
-    reversefac = -1;
-    momfac = 1;
-end
 
 % Summed fluxes through the cell edges:
 fluxedge = [];
@@ -61,6 +58,19 @@ end
 % Integrated residual:
 resint = sumrad(res,indpol,comuse);
 
+% Account for reversal (normally inner-to-outer fluxes are positive but if
+% reverse==true then outer-to-inner fluxes become positive):
+if ~reverse
+    reversefac = 1;
+    momfac = 1;
+elseif ismom
+    reversefac = -1;
+    momfac = -1;
+else
+    reversefac = -1;
+    momfac = 1;
+end
+
 % Find the poloidal distance along the first SOL ring (for single- or double-
 % null cases), or along the first ring in indpol (for slab case)
 % Find the left end of the balance region:
@@ -68,7 +78,7 @@ resint = sumrad(res,indpol,comuse);
 ixsep = ix0;
 iysep = iy0;
 % Step to the first SOL ring (if not a 1d case):
-if ~isempty(find(diff(comuse.leftix(:,1))<1))
+if ~isempty(find(diff(comuse.leftix(:,1))<1,1))
     if iysep<comuse.sep+2 % Step up
         while iysep~=comuse.sep+2
             ixsep = topix(ixsep,iysep);
@@ -118,10 +128,10 @@ postres = momfac*(sum(srcint,2)-diff(sum(fluxedge,2)))/areadown;
 plot(dspol,postres,'-g','parent',axbal(1),'displayname',[totname{3},' (post-cal.)']);
 fprintf('Poloidal balance: the maximum difference between code- and post-calculated residuals is %e%%\n',max(abs((coderes-postres)./coderes)*100));
 
-hl = legend(axbal(1),'show','location','best');
+legend(axbal(1),'show','location','best');
 title(axbal(1),'Total poloidal balance','fontweight','normal');
 axis(axbal(1),'tight');
-xlabel(axbal(1),'Poloidal dist. from downstream face + 0.001m. (m)');
+xlabel(axbal(1),[polbaldist,' dist. from inn. tar. along 1st SOL ring (m)']);
 ylabel(axbal(1),['(',unitstr,')']);
     
 % Decompose fluxes:
@@ -129,12 +139,12 @@ cmap = comuse.cmap;
 for i=1:size(fluxedge,2)
     % Only make the plot if the flux is non-zero somewhere
     if any(fluxedge(:,i))
-        plot(dspolface,momfac*reversefac*fluxedge(:,i)./areadown','marker','.','parent',axbal(2),'displayname',fluxname{i},'color',cmap(1,:)); cmap=circshift(cmap,-1);
+        plot(xdatax,momfac*reversefac*fluxedge(:,i)./area_divide','marker','.','parent',axbal(2),'displayname',fluxname{i},'color',cmap(1,:)); cmap=circshift(cmap,-1);
     end
 end
-hl = legend(axbal(2),'show','location','best');
+legend(axbal(2),'show','location','best');
 ylabel(axbal(2),['(',unitstr,')']);
-xlabel(axbal(2),'Poloidal dist. from downstream face + 0.001m. (m)');
+xlabel(axbal(2),[polbaldist,' dist. from inn. tar. along 1st SOL ring (m)']);
 title(axbal(2),['Decomp. of ',totname{1}],'fontweight','normal');
 set(axbal(2),'xlim',get(axbal(1),'xlim'));
 
@@ -143,13 +153,13 @@ cmap = comuse.cmap;
 for i=1:size(srcint,2)
     % Only make the plot if the source is non-zero somewhere
     if any(srcint(:,i))
-        plot(dspol,momfac*srcint(:,i)./areadown','marker','.','parent',axbal(3),'displayname',srcname{i},'color',cmap(1,:)); cmap=circshift(cmap,-1);
+        plot(xdata,momfac*srcint(:,i)./area_divide','marker','.','parent',axbal(3),'displayname',srcname{i},'color',cmap(1,:)); cmap=circshift(cmap,-1);
     end
 end
-hl = legend(axbal(3),'show','location','best');
+legend(axbal(3),'show','location','best');
 set(axbal(3),'xlim',get(axbal(1),'xlim'));
 ylabel(axbal(3),['(',unitstr,')']);
-xlabel(axbal(3),'Poloidal dist. from downstream face + 0.001m. (m)');
+xlabel(axbal(3),[polbaldist,' dist. from inn. tar. along 1st SOL ring (m)']);
 title(axbal(3),['Decomp. of ',totname{2}],'fontweight','normal');
 set(axbal(3),'xlim',get(axbal(1),'xlim'));
 

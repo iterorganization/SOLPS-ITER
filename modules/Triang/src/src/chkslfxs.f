@@ -14,9 +14,9 @@ c=======================================================================
       use cslfxs
 
       implicit none
-      logical ex,found,lfxsgm1
-      integer i,j,k,l
-      real*8 x0(2),y0(2),x1(2),y1(2),xs,ys
+      logical found,lfxsgm1
+      integer i,j
+      double precision x0(2),y0(2),x1(2),y1(2),xs,ys
 c=======================================================================
 
       nsx=0

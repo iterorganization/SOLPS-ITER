@@ -1,7 +1,4 @@
-#  VERSION : 28.07.99 20:34
-
-# File compiler.macro for Fujitsu frt
-
+# Test whether necessary variables are defined
 LD_MSCL ?= `pkg-config mscl --libs`
 
 ifdef USE_MPI
@@ -9,16 +6,8 @@ FC       = mpif90
 else
 FC       = gfortran
 endif
-ifdef SOLPS_DEBUG
-FFLAGS	 = -g -ffpe-trap=denormal
-endif
-INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
-COMPILE  = ${FC} -c ${FFLAGS}
-CPP	     = /lib/cpp -traditional
 
-MOD      = mod
-LDLIBS	 = ${LD_MSCL}
-LDEXTRA  =
+CPP      = /lib/cpp -traditional
 
 #!!!Local Variables:
 #!!! mode: Makefile

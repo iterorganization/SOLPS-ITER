@@ -1,41 +1,27 @@
 #
 # Specify paths to root-directories of following libraries on your system
 #
-# Special notes:
-#
-# If you have NCAR version 3 on your system:
-# Remove -DNCAR4 from SOLPS_CPP
-#
-# If you do not have NAG on your system:
-# Use LD_NAG to link to the BLASLAPACK library instead
-# Add -DNO_NAG to SOLPS_CPP
-#
-# If you have NAG Mark 17 or greater on your system:
-# Add -DNO_F01AAF to SOLPS_CPP
-#
-# If you have NAG Mark 22 or greater on your system:
-# Add -DNAG22 to SOLPS_CPP
-#
 
-       NCDIR = /usr/lib64/openmpi/lib
-   MSCL_ROOT ?= /usr/local/mscl/linux_gfortran_JDL
-       H5DIR =
-     GR_ROOT ?= /usr/local/grsource/linux_gfortran_JDL
-    GLI_HOME ?= /usr/local/gligks/gks/linux_gfortran_JDL
-  NCARG_ROOT = /usr/lib64/ncarg
-      NAGDIR =
- MDSPLUS_DIR =
+NCDIR     = /usr/lib/x86_64-linux-gnu/hdf5/openmpi
+NAGDIR    = /usr/lib/x86_64-linux-gnu/lapack
+BLAS_DIR  = /usr/lib/x86_64-linux-gnu/blas
+NCARG_ROOT= /usr/lib/x86_64-linux-gnu/ncarg
+MSCL_ROOT ?= $(MSCL_ROOT)
+GR_ROOT   ?= $(GR_SOURCE)
+GLI_HOME  ?= $(GLI_HOME)
+MDSPLUS_DIR =
+H5DIR =
 
 #
 # Variables for linking
 #
 
-LD_NETCDF  = -L${NCDIR} -lnetcdf -lnetcdff -lstdc++ -g77libs -lhdf5
+LD_NETCDF  = -L${NCDIR} -lnetcdf -lnetcdff -lstdc++ -lhdf5
+LD_NAG     = -L${BLAS_DIR} -lblas -L${NAGDIR} -llapack
 LD_MSCL    = -L${MSCL_ROOT} -lmscl
 LD_GR      = -L${GR_ROOT} -lgr
 LD_GKS     = -L${GLI_HOME} -lgks
 LD_NCARG   = -L${NCARG_ROOT} -lncarg -lncarg_gks -lncarg_c -lX11 -lm -lgfortran -lcairo -lgcc_s -lfreetype
-LD_NAG     = -L${NAGDIR} -lblas -llapack
 LD_MDSPLUS =
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++ -lC
 
@@ -45,59 +31,10 @@ LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++ -lC
 
 SOLPS_CPP      = -DNCAR4 -DNO_NAG
 B25_DEFINES    =
+CARRE_DEFINES  =
 EIRENE_DEFINES =
+FFLAGSEXTRA    =
 
-# Autodetected optional features...
-
-# Build with NetCDF tools if available
-ifdef LD_NETCDF
-  SOLPS_CPP   += -DCDF_MOVIE
-else
-  SOLPS_CPP   += -DNO_CDF
-endif
-
-# Build with MDSplus tools if MDSplus is present
-ifdef LD_MDSPLUS
-  SOLPS_CPP   += -DMDSPLUS
-endif
-
-# Build with Catalyst if ParaView is in PATH
-ifdef LD_CATALYST
-  SOLPS_CPP   += -DCATALYST
-endif
-
-# Build with IMAS if imas module is loaded
-ifdef IMAS_PREFIX
-  SOLPS_CPP += -DIMAS
-  LD_UAL     = `pkg-config imas-lowlevel imas-gfortran --libs`
-  export LD_UAL
-endif
-
-#
-# Export for use in sub-makefiles
-#
-
-export NCDIR
-export MSCL_ROOT
-export H5DIR
-export GR_ROOT
-export GLI_HOME
-export NCARG_ROOT
-export NAGDIR
-export MDSPLUS_DIR
-
-export LD_NETCDF
-export LD_MSCL
-export LD_GR
-export LD_GKS
-export LD_NCARG
-export LD_NAG
-export LD_MDSPLUS
-export LD_SONNET
-
-export SOLPS_CPP
-export B25_DEFINES
-export EIRENE_DEFINES
 
 #!!!Local Variables:
 #!!! mode: Makefile

@@ -1,8 +1,8 @@
       subroutine triaout(filename)
-       use b2mod_layer
+      use b2mod_types
+      use b2mod_layer
      , , only: ntrack, nalloys
-       use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use eirmod_solps
 
 c  version : 17.03.2005 00:03
 

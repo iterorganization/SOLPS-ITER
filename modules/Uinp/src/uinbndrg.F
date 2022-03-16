@@ -1,14 +1,16 @@
       subroutine uinbndrg
-       use b2mod_layer
+      use b2mod_types
+      use b2mod_layer
      , , only: ntrack, nalloys
-       use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use b2mod_subsys
+      use eirmod_solps
 c
 c  version : 15.03.2001 00:57
 c
 c=======================================================================
 c*** Determine the gross boundary regions
 c=======================================================================
+      implicit none
 #include "uinpcom.inc"
       integer i,j,k,l,nt_hlp
       logical ex
@@ -197,6 +199,7 @@ c!###{
       print *
       print *,'knd reg    pos loc_pol loc_rad cmb'
       do k=1,nbndknd !{
+        if (nrgbndt(k).eq.0) cycle
       	print *
 	do j=1,nrgbndt(k) !{
 	  print '(2i4,1x,a1,1x,6i4)',k,j,crgbndt(j,k),lrsbndt(j,k),

@@ -1,83 +1,99 @@
 include config/config.${HOST_NAME}.${COMPILER}
+ifeq ($(shell [ -e config/config.common.${COMPILER} ] && echo yes || echo no ),yes)
+  include config/config.common.${COMPILER}
+  MAKES += config/config.common.${COMPILER}
+endif
 
 ${OBJDIR}/%.o : %.F
 	@- /bin/rm -f ${OBJDIR}/$*.f ${OBJDIR}/$*.o ${OBJDIR}/$*.${MOD}
 ifeq ($(strip $(CPP)),)
 	case $< in \
-		${S45DIR}/src/solps4_*/* ) ${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} -c $< ;; \
-		${S45DIR}/local_4/* ) ${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${INCLUDE} -c $< ;; \
-                * ) ${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV5} ${INCLUDE} -c $< ;; \
+		${S45DIR}/src/solps4_*/* ) ${DBLFC} ${DDBLOPTION} ${FCOPTS} ${FFLAGSEXTRA} ${DEFINES} ${EQUIV4} ${SOLPSINCLUDE} ${OBJDEST} -c $< ;; \
+		${S45DIR}/local_4/* ) ${DBLFC} ${DDBLOPTION} ${FCOPTS} ${FFLAGSEXTRA} ${DEFINES} ${EQUIV4} ${SOLPSINCLUDE} ${OBJDEST} -c $< ;; \
+                * ) ${DBLFC} ${DDBLOPTION} ${FCOPTS} ${FFLAGSEXTRA} ${DEFINES} ${EQUIV5} ${SOLPSINCLUDE} ${OBJDEST} -c $< ;; \
         esac
 else
 ifeq ($(strip $(SED)),)
 	case $< in \
-		${S45DIR}/src/solps4_*/* ) ${CPP} ${CPP4OPTS} ${DEFINES} ${INCLUDE} $< ${OBJDIR}/$*.f ;; \
-		${S45DIR}/local_4/* ) ${CPP} ${CPP4OPTS} ${DEFINES} ${INCLUDE} $< ${OBJDIR}/$*.f ;; \
-                * ) ${CPP} ${CPP5OPTS} ${DEFINES} ${INCLUDE} $< ${OBJDIR}/$*.f ;; \
+		${S45DIR}/src/solps4_*/* ) ${CPP} ${CPP4OPTS} ${DEFINES} ${SOLPSINCLUDE} $< ${OBJDIR}/$*.f ;; \
+		${S45DIR}/local_4/* ) ${CPP} ${CPP4OPTS} ${DEFINES} ${SOLPSINCLUDE} $< ${OBJDIR}/$*.f ;; \
+                * ) ${CPP} ${CPP5OPTS} ${DEFINES} ${SOLPSINCLUDE} $< ${OBJDIR}/$*.f ;; \
         esac
 else
 	case $< in \
-		${S45DIR}/src/solps4_*/* ) ${CPP} ${CPP4OPTS} ${DEFINES} ${INCLUDE} $< | ${SED} > ${OBJDIR}/$*.f ;; \
-		${S45DIR}/local_4/* ) ${CPP} ${CPP4OPTS} ${DEFINES} ${INCLUDE} $< | ${SED} > ${OBJDIR}/$*.f ;; \
-                * ) ${CPP} ${CPP5OPTS} ${DEFINES} ${INCLUDE} $< | ${SED} > ${OBJDIR}/$*.f ;; \
+		${S45DIR}/src/solps4_*/* ) ${CPP} ${CPP4OPTS} ${DEFINES} ${SOLPSINCLUDE} $< | ${SED} > ${OBJDIR}/$*.f ;; \
+		${S45DIR}/local_4/* ) ${CPP} ${CPP4OPTS} ${DEFINES} ${SOLPSINCLUDE} $< | ${SED} > ${OBJDIR}/$*.f ;; \
+                * ) ${CPP} ${CPP5OPTS} ${DEFINES} ${SOLPSINCLUDE} $< | ${SED} > ${OBJDIR}/$*.f ;; \
         esac
 endif
-	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/$*.o -c ${OBJDIR}/$*.f
+	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${FFLAGSEXTRA} ${DEFINES} ${SOLPSINCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/$*.o -c ${OBJDIR}/$*.f
 endif
 	@- if [ -f $*.o ] ; then /bin/mv $*.o ${OBJDIR}/ ; fi
 	@- if [ -f $*.${MOD} ] ; then /bin/mv $*.${MOD} ${OBJDIR}/ ; fi
+ifneq ($(COMPILER),nag_f90)
+	@if [ -f ${OBJDIR}/$*.${MOD} ] ; then touch ${OBJDIR}/$*.${MOD} ; fi
+endif
 
 ${OBJDIR}/%.o : %.F90
 	@- /bin/rm -f ${OBJDIR}/$*.f90 ${OBJDIR}/$*.o ${OBJDIR}/$*.${MOD}
 ifeq ($(strip $(CPP)),)
-	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV5} ${INCLUDE} -c $<
+	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${FFLAGSEXTRA} ${DEFINES} ${EQUIV5} ${SOLPSINCLUDE} ${OBJDEST} -c $<
 else
 ifeq ($(strip $(SED)),)
-	${CPP} ${CPP5OPTS} ${DEFINES} ${INCLUDE} $< ${OBJDIR}/$*.f90
+	${CPP} ${CPP5OPTS} ${DEFINES} ${SOLPSINCLUDE} $< ${OBJDIR}/$*.f90
 else
-	${CPP} ${CPP5OPTS} ${DEFINES} ${INCLUDE} $< | ${SED} > ${OBJDIR}/$*.f90
+	${CPP} ${CPP5OPTS} ${DEFINES} ${SOLPSINCLUDE} $< | ${SED} > ${OBJDIR}/$*.f90
 endif
-	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${INCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/$*.o -c ${OBJDIR}/$*.f90
+	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${FFLAGSEXTRA} ${DEFINES} ${SOLPSINCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/$*.o -c ${OBJDIR}/$*.f90
 endif
 	@- if [ -f $*.o ] ; then /bin/mv $*.o ${OBJDIR}/ ; fi
 	@- if [ -f $*.${MOD} ] ; then /bin/mv $*.${MOD} ${OBJDIR}/ ; fi
+ifneq ($(COMPILER),nag_f90)
+	@if [ -f ${OBJDIR}/$*.${MOD} ] ; then touch ${OBJDIR}/$*.${MOD} ; fi
+endif
 
 ${OBJDIR}/%.${MOD} : %.F        # src/B2.5_modules/
 	@- /bin/rm -f ${OBJDIR}/$*.f ${OBJDIR}/$*.o ${OBJDIR}/$*.${MOD}
 ifeq ($(strip $(CPP)),)
-	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV5} ${INCLUDE} -c $<
+	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${FFLAGSEXTRA} ${DEFINES} ${EQUIV5} ${SOLPSINCLUDE} ${OBJDEST} -c $<
 else
 ifeq ($(strip $(SED)),)
-	-${CPP} ${CPP5OPTS} ${DEFINES} ${INCLUDE} $< ${OBJDIR}/$*.f
+	-${CPP} ${CPP5OPTS} ${DEFINES} ${SOLPSINCLUDE} $< ${OBJDIR}/$*.f
 else
-	-${CPP} ${CPP5OPTS} ${DEFINES} ${INCLUDE} $< | ${SED} > ${OBJDIR}/$*.f
+	-${CPP} ${CPP5OPTS} ${DEFINES} ${SOLPSINCLUDE} $< | ${SED} > ${OBJDIR}/$*.f
 endif
-	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/$*.o -c ${OBJDIR}/$*.f
+	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${FFLAGSEXTRA} ${DEFINES} ${SOLPSINCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/$*.o -c ${OBJDIR}/$*.f
 endif
 	@- if [ -f $*.o ] ; then /bin/mv $*.o ${OBJDIR}/ ; fi
 ifeq ($(strip $(LINK_MOD)),)
 	@- if [ -f $*.${MOD} ] ; then /bin/mv $*.${MOD} ${OBJDIR}/ ; fi
 else
 	@- [ -f $*.${MOD} ] && [ ! -L $*.${MOD} ] && /bin/mv $*.${MOD} ${OBJDIR}/ && /bin/ln -s ${OBJDIR}/$*.${MOD} . || echo > /dev/null
+endif
+ifneq ($(COMPILER),nag_f90)
+	@if [ -f ${OBJDIR}/$*.${MOD} ] ; then touch ${OBJDIR}/$*.${MOD} ; fi
 endif
 
 ${OBJDIR}/%.${MOD} : %.F90        # src/solps5/b2mod_*.F90
 	@- /bin/rm -f ${OBJDIR}/$*.f90 ${OBJDIR}/$*.o ${OBJDIR}/$*.${MOD}
 ifeq ($(strip $(CPP)),)
-	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV5} ${INCLUDE} -c $<
+	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${FFLAGSEXTRA} ${DEFINES} ${EQUIV5} ${SOLPSINCLUDE} ${OBJDEST} -c $<
 else
 ifeq ($(strip $(SED)),)
-	-${CPP} ${CPP5OPTS} ${DEFINES} ${INCLUDE} $< ${OBJDIR}/$*.f90
+	-${CPP} ${CPP5OPTS} ${DEFINES} ${SOLPSINCLUDE} $< ${OBJDIR}/$*.f90
 else
-	-${CPP} ${CPP5OPTS} ${DEFINES} ${INCLUDE} $< | ${SED} > ${OBJDIR}/$*.f90
+	-${CPP} ${CPP5OPTS} ${DEFINES} ${SOLPSINCLUDE} $< | ${SED} > ${OBJDIR}/$*.f90
 endif
-	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/$*.o -c ${OBJDIR}/$*.f90
+	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${FFLAGSEXTRA} ${DEFINES} ${SOLPSINCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/$*.o -c ${OBJDIR}/$*.f90
 endif
 	@- if [ -f $*.o ] ; then /bin/mv $*.o ${OBJDIR}/ ; fi
 ifeq ($(strip $(LINK_MOD)),)
 	@- if [ -f $*.${MOD} ] ; then /bin/mv $*.${MOD} ${OBJDIR}/ ; fi
 else
 	@- [ -f $*.${MOD} ] && [ ! -L $*.${MOD} ] && /bin/mv $*.${MOD} ${OBJDIR}/ && /bin/ln -s ${OBJDIR}/$*.${MOD} . || echo > /dev/null
+endif
+ifneq ($(COMPILER),nag_f90)
+	@if [ -f ${OBJDIR}/$*.${MOD} ] ; then touch ${OBJDIR}/$*.${MOD} ; fi
 endif
 
 #!!!Local Variables:

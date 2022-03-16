@@ -7,15 +7,15 @@ endif
 
 FC      = f95f
 
-FFLAGS 	= -O --tpp
+FFLAGS  = -O --tpp
 
-INCLUDE	= -I${SRCDIR} ${EIRINC} ${B2INC}
+INCLUDE = -I${SRCDIR} ${EIRINC} ${B2INC}
 COMPILE = ${FC} -c ${FFLAGS}
-CPP	    = /lib/cpp -C -traditional
+CPP     = /lib/cpp -C -traditional
 MOD     = mod
 
-LDLIBS	= ${LD_MSCL}
-LDEXTRA	= -Wl,-Map,$(OBJDIR)/map
+LDLIBS  = ${LD_MSCL} ${LD_NAG}
+LDEXTRA = -Wl,-Map,$(OBJDIR)/map
 
 #!!!Local Variables:
 #!!! mode: Makefile

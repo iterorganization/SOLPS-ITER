@@ -1,22 +1,25 @@
       subroutine uinprp
-       use b2mod_layer
+      use b2mod_types
+      use b2mod_layer
      , , only: ntrack, nalloys
-       use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use eirmod_solps
+      use b2mod_constants
+      use b2mod_subsys
 
 c  version : 16.03.2005 23:56
 
 c=======================================================================
 c*** Prepare the data for the B2-Eirene input files
 c=======================================================================
+      implicit none
 #include "uinput.inc"
-      integer i,j,k,l,lunplt,m_hlp(nlim,nlim),n_hlp
+      integer i,j,k,l,m,lunplt,m_hlp(nlim,nlim),n_hlp
       parameter (n_hlp=nlim*nlim)
       logical uex,hlp_l
-      real u,uzdim,rm_hlp,rx_hlp,zm_hlp,zx_hlp
+      real uzdim,rm_hlp,rx_hlp,zm_hlp,zx_hlp
       parameter (uzdim=1.e20)
       character utxsfa*44
-      external xerrab, xertst, subini, subend
+      external xerrab, xertst
       data utxsfa / ' - target edge (to be modified by GEOUSR)' /
       data m_hlp / n_hlp*0 /
 c=======================================================================
@@ -76,6 +79,11 @@ c*** Modify some defaults for limiter case, if necessary
           call xerrab
      .     ('==> Check the DG variable in "Global Eirene data"')
         end if !}
+        nltrz=.false.
+        nltra=.true.
+        nttra=nttrator
+        roa=roator
+        zaa=zaator
       end if !}
 
 
@@ -87,8 +95,8 @@ c*** Modify the toroidal dimension in p1, p2 arrays
       end do !}
 
       if(zaa.eq.0.) then !{
-      	zaa=0.2*3.1415926535898*xlpcntr(1)
-	write(*,'(1x,a,f11.4,a)')
+        zaa=0.2*pi*xlpcntr(1)
+        write(*,'(1x,a,f11.4,a)')
      ,   'The O-point was taken for the major radius : ',
      ,	       	      	        	    0.1*xlpcntr(1),' cm.'
       else if(zaa.lt.0.) then !}{
@@ -326,21 +334,21 @@ c*** Additional tallies
       nadvi = 4*(natmi+nmoli)
       do j=1,natmi !{
         iadve(j)=1
-        iadvs(j)=0
+        iadvs(j)=j
         iadvt(j)=0
         iadrc(j)=1
         txttla(j)='RADIAL PARTICLE FLUXES, VOLUME AVERAGED'
         txtspa(j)=trim(spcsatm(j))//' ATOMS'
         txtuna(j)='#/CM**2/S'
         iadve(natmi+nmoli+j)=1
-        iadvs(natmi+nmoli+j)=0
+        iadvs(natmi+nmoli+j)=j
         iadvt(natmi+nmoli+j)=0
         iadrc(natmi+nmoli+j)=1
         txttla(natmi+nmoli+j)='RADIAL ENERGY FLUXES, VOLUME AVERAGED'
         txtspa(natmi+nmoli+j)=trim(spcsatm(j))//' ATOMS'
         txtuna(natmi+nmoli+j)='EV/CM**2/S'
         iadve(2*(natmi+nmoli)+j)=1
-        iadvs(2*(natmi+nmoli)+j)=0
+        iadvs(2*(natmi+nmoli)+j)=j
         iadvt(2*(natmi+nmoli)+j)=0
         iadrc(2*(natmi+nmoli)+j)=1
         txttla(2*(natmi+nmoli)+j)=
@@ -348,7 +356,7 @@ c*** Additional tallies
         txtspa(2*(natmi+nmoli)+j)=trim(spcsatm(j))//' ATOMS'
         txtuna(2*(natmi+nmoli)+j)='#/CM**2/S'
         iadve(3*(natmi+nmoli)+j)=1
-        iadvs(3*(natmi+nmoli)+j)=0
+        iadvs(3*(natmi+nmoli)+j)=j
         iadvt(3*(natmi+nmoli)+j)=0
         iadrc(3*(natmi+nmoli)+j)=1
         txttla(3*(natmi+nmoli)+j)=
@@ -358,21 +366,21 @@ c*** Additional tallies
       end do !}
       do j=1,nmoli !{
         iadve(natmi+j)=1
-        iadvs(natmi+j)=0
+        iadvs(natmi+j)=j
         iadvt(natmi+j)=0
         iadrc(natmi+j)=2
         txttla(natmi+j)='RADIAL PARTICLE FLUXES, VOLUME AVERAGED'
         txtspa(natmi+j)=trim(spcsmol(j))//' MOLECULES'
         txtuna(natmi+j)='#/CM**2/S'
         iadve(2*natmi+nmoli+j)=1
-        iadvs(2*natmi+nmoli+j)=0
+        iadvs(2*natmi+nmoli+j)=j
         iadvt(2*natmi+nmoli+j)=0
         iadrc(2*natmi+nmoli+j)=2
         txttla(2*natmi+nmoli+j)='RADIAL ENERGY FLUXES, VOLUME AVERAGED'
         txtspa(2*natmi+nmoli+j)=trim(spcsmol(j))//' MOLECULES'
         txtuna(2*natmi+nmoli+j)='EV/CM**2/S'
         iadve(3*natmi+2*nmoli+j)=1
-        iadvs(3*natmi+2*nmoli+j)=0
+        iadvs(3*natmi+2*nmoli+j)=j
         iadvt(3*natmi+2*nmoli+j)=0
         iadrc(3*natmi+2*nmoli+j)=2
         txttla(3*natmi+2*nmoli+j)=
@@ -380,7 +388,7 @@ c*** Additional tallies
         txtspa(3*natmi+2*nmoli+j)=trim(spcsmol(j))//' MOLECULES'
         txtuna(3*natmi+j)='#/CM**2/S'
         iadve(4*natmi+3*nmoli+j)=1
-        iadvs(4*natmi+3*nmoli+j)=0
+        iadvs(4*natmi+3*nmoli+j)=j
         iadvt(4*natmi+3*nmoli+j)=0
         iadrc(4*natmi+3*nmoli+j)=2
         txttla(4*natmi+3*nmoli+j)=

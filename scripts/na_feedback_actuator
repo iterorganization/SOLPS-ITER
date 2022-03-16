@@ -1,4 +1,4 @@
 #! /bin/tcsh -f
 pipe_run.log | \
-  grep "na_feedback_actuator   $1" | \
+  grep -a "na_feedback_actuator   $1" | \
   awk '{print NR,$3}' | xyplot

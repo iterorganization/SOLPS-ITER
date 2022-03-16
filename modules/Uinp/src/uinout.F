@@ -1,13 +1,15 @@
       subroutine uinout(ufnm)
-       use b2mod_layer
+      use b2mod_types
+      use b2mod_layer
      , , only: ntrack, nalloys
-       use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use b2mod_subsys
+      use eirmod_solps
+      implicit none
 
 c  version : 05.02.2005 00:46
 
 cvk input for block 1,3,4,9,13,14 is changed
-cvk block 6 has to be changed (with reaction cards), 
+cvk block 6 has to be changed (with reaction cards),
 cvk blocks 9,10,11,12 probably should be changed as well
 
 c=======================================================================
@@ -19,12 +21,20 @@ c=======================================================================
 #include "impcon.inc"
 #include "git_version_Uinp.h"
 
-      integer i,j,k,l,m,n,icont,istep
-      logical handle,ulmlti,ex,carbon,nitrogen,moly,streql
+      integer i,ii,ih,j,k,l,m,n,nm,icont,istep,jsurpr,ists
+      integer icopy,jlswch,jlcell,imrlb,iulin,iuscn,ich,ichmin,iid
+      integer iatm,imol,iion,ipht,ipls,ichori,inum
+      integer llm(nchor),lli(nchor)
+      real x, y
+      logical handle,ulmlti,ex,hydrogen,helium,carbon,nitrogen
+      logical streql,silent_open
       logical, allocatable :: done(:)
-      character utxthd(35)*71, utxtfl(9)*47, ufnm*(*), ucdnmdl*10
+      character*256 filename, adasfile, uidin
+      character*50 hlp_frm
+      character utxthd(35)*71, utxtfl(7)*50, ufnm*(*)
       character utxtgt*71
-      external streql, xerrab, subini, subend
+      integer len_of_digits, idez
+      external streql, silent_open, len_of_digits, idez, xerrab
       data utxthd /
      1        '** 1. Data for operating mode' ,
      2        '** 2. Data for standard mesh' ,
@@ -62,15 +72,13 @@ c=======================================================================
      4        '* 5a. Bulk ion species' ,
      5        '* 10f. Data for energy spectra' /
       data utxtfl /
-     1        'CFILE AMJUEL Database/AMdata/amjuel.tex        ',
-     2        'CFILE HYDHEL Database/AMdata/hydhel.tex        ',
-     3        'CFILE SPUTER Database/Surfacedata/SPUTER       ',
-     4        'CFILE TRIM   Database/Surfacedata/TRIM/trim.dat',
-     5        'CFILE METHAN Database/AMdata/methane.tex       ',
-     6        'CFILE AMMONX Database/AMdata/ammoniaex.tex     ',
-     7        'CFILE ADAS   modules/adas/adf11                ',
-     8        'CFILE gr_ext Database/graphite_ext.dat         ',
-     9        'CFILE mo_ext Database/mo_ext.dat               '/
+     1        'CFILE AMJUEL Database/AMdata/amjuel.tex           ',
+     2        'CFILE HYDHEL Database/AMdata/hydhel.tex           ',
+     3        'CFILE SPUTER Database/Surfacedata/SPUTER          ',
+     4        'CFILE TRIM   Database/Surfacedata/TRIM/trim.dat   ',
+     5        'CFILE METHAN Database/AMdata/methane.tex          ',
+     6        'CFILE AMMONX Database/AMdata/AMMONX_Arrh-elast.tex',
+     7        'CFILE ADAS   modules/adas/adf11                   '/
 c=======================================================================
 
 c*** 0. Prepare some constants
@@ -142,19 +150,21 @@ c*** 1.  General data for the run
         n=mod(nfile,10)
         if (l.le.2) then
           l=4
-        else if (l.eq.6.or.l.eq.7) then
-          l=9
+        else if (l.eq.6.or.l.eq.7.or.l.eq.9) then
+          l=4
+        else if (l.eq.8) then
+          l=3
         endif
         if (n.ne.1) n=6
         nfile=j*10000+k*1000+l*100+m*10+n
       end if
-      write(iunoo,707) nmach,nmode,ntcpu,nfile,niter0,niter,
+      write(iunoo,707) nprll,nmode,ntcpu,nfile,niter0,niter,
      .                 ntime0,ntim1,nfullrun
       write(iunoo,707) noptim,noptm1,ngeom_usr,ncoup_input,
      .                 nsmstra,nstoram,ngstal,nrtal1,nreac_add
       write(iunoo,706) nlscl,nltest,nlana,nldrft,nlcrr,
      .                 nlerg,nlident,nlone,nlmovie,nldfst,
-     .                 nloldran,nlcascad,nloctree,nlwrmsh,NEXVS,
+     .                 nloldran,nlcascad,nloctree,nlwrmsh,nexvs,
      .                 nltrimesh
       write(iunoo,720) utxtfl(1) ! AMJUEL needed by default for H-alpha rates
       handle=.false.
@@ -164,6 +174,16 @@ c*** 1.  General data for the run
       if (handle) write(iunoo,720) utxtfl(2)
       write(iunoo,720) utxtfl(3)
       write(iunoo,720) utxtfl(4)
+      hydrogen = .false.
+      do i=1,nspigen
+        hydrogen=hydrogen.or.streql(spcigen(i),spcdgen(1))
+     .                   .or.streql(spcigen(i),spcdgen(2))
+     .                   .or.streql(spcigen(i),spcdgen(3))
+      enddo
+      helium = .false.
+      do i=1,nspigen
+        helium=helium.or.streql(spcigen(i),spcdgen(4))
+      enddo
       carbon = .false.
       do i=1,nspigen
         carbon=carbon.or.streql(spcigen(i),spcdgen(5))
@@ -173,28 +193,34 @@ c*** 1.  General data for the run
       do i=1,nspigen
         nitrogen=nitrogen.or.streql(spcigen(i),spcdgen(8))
       enddo
-      if (nitrogen) write(iunoo,720) utxtfl(6)
+! AMMONX contains Nitrogen reactions but also H and He elastic collisions
+      if (hydrogen.or.helium.or.nitrogen) write(iunoo,720) utxtfl(6)
       handle=.false.
       do i=1,nrcln
         handle=handle.or.streql(filnam(i),'ADAS')
       end do
-      if (handle) write(iunoo,720) utxtfl(7)
-      carbon = .false.
-      do i=1,ntrgdflt
-        carbon=carbon.or.streql(made_of(i),'C')
-      end do
-      do i=1,n_spcsrf
-        carbon=carbon.or.streql(sps_mtrl(i),'C')
-      end do
-      if (carbon.or..true.) write(iunoo,720) utxtfl(8)
-      moly=.false.
-      do i=1,ntrgdflt
-        moly=moly.or.streql(made_of(i),'Mo')
-      end do
-      do i=1,n_spcsrf
-        moly=moly.or.streql(sps_mtrl(i),'Mo')
-      end do
-      if (moly.or..true.) write(iunoo,720) utxtfl(9)
+      if (handle) then
+        filename='ratadas.filelist'
+        call find_file(filename,ex)
+        if(silent_open(97,filename,
+     .     'data.local|modules/B2.5/Database',adasfile)) then
+          read(97,*) uidin
+          if(streql(uidin,'adas')) then
+            write(iunoo,720) utxtfl(7)
+          else if(uidin(1:9).eq.'SOLPSTOP/') then
+            write(iunoo,721) utxtfl(7)(1:13)//trim(uidin(10:))
+     .                                      //'/adf11'
+          else if(uidin(1:5).eq.'adas/') then
+            write(iunoo,721) utxtfl(7)(1:13)//'modules/'//trim(uidin)
+     .                                      //'/adf11'
+          else
+            write(iunoo,721) utxtfl(7)(1:13)//trim(uidin)//'/adf11'
+          endif
+          close(97)
+        else
+          write(iunoo,720) utxtfl(7)
+        endif
+      end if
 
 c*** 2.  data for standard mesh
 
@@ -300,7 +326,7 @@ c**  additional cells outside standard mesh
           end if
         end if
       end do
-      nradd = max ( nradd, icont ) 
+      nradd = max ( nradd, icont )
 
       if (nradd .gt. nadd) then !{
         print *, ' Too many additional zones : NRADD = ', nradd
@@ -347,6 +373,7 @@ c*** 3b.  data for additional surfaces
 c***  "ch0-cards"
       call uichwr(iunoo,0,jadch0,nlimi)
       icopy=0
+      jsurpr=nsurpr
       do 360 k=laddsrfs+1,nlimi !{
         i=indasrfs(k)
 	if(i.eq.0) go to 360
@@ -358,7 +385,7 @@ c***  "ch0-cards"
 c   general surface data
 
 c*** "ch1-cards"
-c% This should be changed 
+c% This should be changed
 c        call uichwr(iunoo,1,jadch1(1,i),nlimi)
 c*** "ch2-cards" here !
 
@@ -368,6 +395,10 @@ c*** "ch2-cards" here !
         jlcell=jlacll(i)+1000*jlblck(i)
         write(iunoo,707) jliin(i),jlside(i),jlswch,jlequi(i),
      ,    jltor(i),jlcol(i),jlfit(i),jlcell,jlbox(i),jlplg(i)
+        if(jliin(i).lt.0) then
+          jsurpr=jsurpr+1
+          nsrf(jsurpr)=k
+        end if
 
 c**  Surface coefficients
 
@@ -452,13 +483,27 @@ c**   atomic reaction cards, nreaci data fields
 
       write(iunoo,700) utxthd(24)
       write(iunoo,707) nreaci
+      if(minval(delpot(1:nrcln)).lt.0.) then !{
+        write(hlp_frm,'(a,i1,a)')
+     ,   '(1p,i3,1x,a6,1x,a4,1x,a9,a3,i3,i',
+     ,     1+max(2,len_of_digits(maxval(masst(1:nrcln)))),',1x,5e12.5)'
+      else !}{
+        write(hlp_frm,'(a,i1,a)')
+     ,   '(1p,i3,1x,a6,1x,a4,1x,a9,a3,i3,i',
+     ,     1+max(2,len_of_digits(maxval(masst(1:nrcln)))),',5e12.5)'
+      end if !}
       do j=1,nrcln !{
         iid=ir(j)
-        write(iunoo,701) iid,filnam(j),h123(j),reac(j),crc(j),
-     ,        	      	 massp(j),masst(j),delpot(j),rc1mn(j),rc1mx(j),
+        write(iunoo,hlp_frm) iid,filnam(j),h123(j),reac(j),crc(j),
+     ,                   massp(j),masst(j),delpot(j),rc1mn(j),rc1mx(j),
      ,                                               rc2mn(j),rc2mx(j)
         if (streql(filnam(j),'ADAS')) then !{
-          write(iunoo,'(4x,a2,1x,i3)') elname(j),iz(j)
+          if (streql(bundling(j),' ')) then !{
+            write(iunoo,'(4x,a2,1x,i3)') elname(j),iz(j)
+          else   !}{
+            write(iunoo,'(4x,a2,1x,i3,2x,a)')
+     ,                                   elname(j),iz(j),bundling(j)
+          end if !}
         end if !}
         if (rc1mn(j).gt.0.) write(iunoo,704) ifex1mn(j),(fp1(j,i),i=1,3)
         if (rc1mx(j).gt.0.) write(iunoo,704) ifex1mx(j),(fp1(j,i),i=4,6)
@@ -491,7 +536,7 @@ c**  atomic species cards
      ,                     iscdea(iatm,k),iestma(iatm,k),ibgka(iatm,k)
           end if !}
           write(iunoo,703) eeleca(iatm,k),ebulka(iatm,k),escd1a(iatm,k),
-     ,                     escd2a(iatm,k),freaca(iatm,k),fldlma(iatm,k)
+     ,                     escd2a(iatm,k),freaca(iatm,k),edpota(iatm,k)
         end do !}
       end do !}
 
@@ -577,7 +622,7 @@ c**  photon species cards
      ,  	       iscdef(ipht,k),iestmf(ipht,k),ibgkf(ipht,k)
             end if !}
             write(iunoo,703) eelecf(ipht,k),ebulkf(ipht,k),
-     ,       escd1f(ipht,k),escd2f(ipht,k),freacf(ipht,k),fldlmf(ipht,k)
+     ,       escd1f(ipht,k),escd2f(ipht,k),freacf(ipht,k),edpotf(ipht,k)
           end do !}
         end do !}
       end if !}
@@ -595,10 +640,17 @@ c**  bulk ions species cards
 
       write(iunoo,707) nplsi+nbgk
       do ipls=1,nplsi+nbgk !{
-        write(iunoo,708) ipls,textp(ipls),nmassp(ipls),
+        if (ipls.lt.100) then !{
+         write(iunoo,708) ipls,textp(ipls),nmassp(ipls),
      ,    ncharp(ipls),nprtp(ipls),nchrgp(ipls),isrfp(ipls),
      ,    isrtp(ipls),nmsecp(ipls),nrcp(ipls),idnslmp(ipls),
      ,    0,nhstp(ipls),0,cdnmdlp(ipls),nrep(ipls)
+        else !}{
+         write(iunoo,7080) mod(ipls,100),textp(ipls),nmassp(ipls),
+     ,    ncharp(ipls),nprtp(ipls),nchrgp(ipls),isrfp(ipls),
+     ,    isrtp(ipls),nmsecp(ipls),nrcp(ipls),idnslmp(ipls),
+     ,    0,nhstp(ipls),0,cdnmdlp(ipls),nrep(ipls)
+        end if !}
         do k=1,nrcp(ipls) !{
           if(nmsecp(ipls).le.2) then !{
             write(iunoo,707) ireacp(ipls,k),ibulkp(ipls,k),
@@ -617,23 +669,44 @@ c**  bulk ions species cards
         end do !}
         if (len_trim(cdnmdlp(ipls)).gt.0) then !{
           call upcase(cdnmdlp(ipls),cdnmdlp(ipls),ldnmdlp)
-          if(cdnmdlp(ipls).eq.cdnmdlp_sel(1)) then !{
+          if(streql(cdnmdlp(ipls),cdnmdlp_sel(1)).or.
+     &       streql(cdnmdlp(ipls),cdnmdlp_sel(2))) then !{ 'FORT.13', 'FTN13'
             write(iunoo,707) ispcdn(ipls,1)
-          else if(cdnmdlp(ipls).eq.cdnmdlp_sel(2)) then !}{
+          else if(streql(cdnmdlp(ipls),cdnmdlp_sel(3)).or.
+     &            streql(cdnmdlp(ipls),cdnmdlp_sel(4))) then !}{ 'FORT.10', 'FTN10'
+            write(iunoo,707) ispcdn(ipls,1),
+     ,                       itpcdn(ipls,1),istrcdn(ipls,1)
+          else if(streql(cdnmdlp(ipls),cdnmdlp_sel(5))) then !}{ 'CONSTANT'
+            write(iunoo,703) valcdn(ipls,1),
+     ,                       valcdn(ipls,2),valcdn(ipls,3),
+     ,                       valcdn(ipls,4),valcdn(ipls,5)
+          else if(streql(cdnmdlp(ipls),cdnmdlp_sel(6))) then !}{ 'PLANCK'
+            write(iunoo,703) valcdn(ipls,1)
+          else if(streql(cdnmdlp(ipls),cdnmdlp_sel(7))) then !}{ 'MULTIPLY'
+            write(iunoo,'(3i6,6x,1p,3e12.4)') ispcdn(ipls,1),
+     ,                        itpcdn(ipls,1),istrcdn(ipls,1),
+     ,                        valcdn(ipls,2),valcdn(ipls,1),
+     ,                        valcdn(ipls,3)
+          else if(streql(cdnmdlp(ipls),cdnmdlp_sel(8))) then !}{ 'SAHA'
 c** To be done (in Eirene first)
-            write(0,*) '### Density model ',cdnmdlp_sel(2),
+            write(0,*) '### Density model ',cdnmdlp_sel(8),
      ,        ' not realised in Eirene. ipls=',ipls
-          else if(cdnmdlp(ipls).eq.cdnmdlp_sel(3)) then !}{
-            write(iunoo,'(i6,6x,1p,2e12.4)') ispcdn(ipls,1),
-     ,                                       bltzcdn(ipls),dltecdn(ipls)
-          else if(cdnmdlp(ipls).eq.cdnmdlp_sel(4)) then !}{
-            write(iunoo,'(i6,1x,a6,1x,a4,a9,a3,1p,e12.4)') 
-     ,                     ispcdn(ipls,1),fnamcdn(ipls,1),h2cdn(ipls,1),
+          else if(streql(cdnmdlp(ipls),cdnmdlp_sel(9))) then !}{ 'BOLTZMANN'
+            write(iunoo,'(3i6,6x,1p,2e12.4)') ispcdn(ipls,1),
+     ,                        itpcdn(ipls,1),istrcdn(ipls,1),
+     ,                        bltzcdn(ipls),dltecdn(ipls)
+          else if(streql(cdnmdlp(ipls),cdnmdlp_sel(10))) then !}{ 'CORONA'
+            write(iunoo,'(3i6,1x,a6,1x,a4,a9,a3,1p,e12.4)')
+     ,                     ispcdn(ipls,1),
+     ,                     itpcdn(ipls,1),istrcdn(ipls,1),
+     ,                     fnamcdn(ipls,1),h2cdn(ipls,1),
      ,                     reaccdn(ipls,1),crcdn(ipls,1),acrncdn(ipls)
-          else if(cdnmdlp(ipls).eq.cdnmdlp_sel(5)) then !}{
+          else if(streql(cdnmdlp(ipls),cdnmdlp_sel(11))) then !}{ 'COLRAD'
             do i=1,nrep(npls) !{
-              write(iunoo,'(i6,1x,a6,1x,a4,a9,a3)') 
-     ,                     ispcdn(ipls,i),fnamcdn(ipls,i),h2cdn(ipls,i),
+              write(iunoo,'(3i6,1x,a6,1x,a4,a9,a3)')
+     ,                     ispcdn(ipls,i),
+     ,                     itpcdn(ipls,i),istrcdn(ipls,i),
+     ,                     fnamcdn(ipls,i),h2cdn(ipls,i),
      ,                     reaccdn(ipls,i),crcdn(ipls,i)
             end do !}
           else !}{
@@ -667,6 +740,8 @@ c** To be done (in Eirene first)
      ,                                        	      	      i=1,nplsi)
       end if !}
       if (indpro(5).le.5) write(iunoo,703) b0,b1,b2,b3,b4,b5
+      if (indpro(11).le.5) write(iunoo,703) (zi0(i),zi1(i),zi2(i),
+     ,                                   zi3(i),zi4(i),zi5(i),i=1,nplsi)
       if (indpro(12).le.5) write(iunoo,703) vl0,vl1,vl2,vl3,vl4,vl5
 
 c*** 6a.  data for reflection model
@@ -674,12 +749,28 @@ c*** 6a.  data for reflection model
       write(iunoo,700) utxthd(7)
 
       write(iunoo,706) nltrim
-      if(path.ne.' ') write(iunoo,'(a6,a60)') 'cpath ',path
+      if(.not.streql(path,' ')) write(iunoo,'(a6,a60)') 'cpath ',path
       write(iunoo,'(a8)') (filtrm(i),i=1,nnftrm)
-      write(iunoo,703) (datm(iatm),iatm=1,natmi)
-      write(iunoo,703) (dmol(imol),imol=1,nmoli)
-      write(iunoo,703) (dion(iion),iion=1,nioni)
-      write(iunoo,703) (dpls(ipls),ipls=1,nplsi+nbgk)
+      if (natmi.gt.0) then
+        write(iunoo,703) (datm(iatm),iatm=1,natmi)
+      else
+        write(iunoo,703) 0.
+      endif
+      if (nmoli.gt.0) then
+        write(iunoo,703) (dmol(imol),imol=1,nmoli)
+      else
+        write(iunoo,703) 0.
+      end if
+      if (nioni.gt.0) then
+        write(iunoo,703) (dion(iion),iion=1,nioni)
+      else
+        write(iunoo,703) 0.
+      end if
+      if (nplsi+nbgk.gt.0) then
+        write(iunoo,703) (dpls(ipls),ipls=1,nplsi+nbgk)
+      else
+        write(iunoo,703) 0.
+      end if
       write(iunoo,703) ermin,ercut,rprob0,rinteg,einteg,ainteg
 c*** surface cards
       k=0
@@ -694,7 +785,7 @@ c*** surface cards
         write(iunoo,703) screcycs(i),scychsptg(i),scstprm(i),0.0,
      ,                              scechsptg(i)
         do j=1,nnchemvar(i) !{
-          k=k+1 
+          k=k+1
           ich=indchemvar(k)
           if(streql(chvarname(ich),'ISRC').OR.
      .                      streql(chvarname(ich),'LCHSPNWL')) then !{
@@ -702,7 +793,7 @@ c*** surface cards
      ,                                                nint(chmvar(ich))
           else !}{
             write(iunoo,716) chvarname(ich),chmspname(ich),chmvar(ich)
-          end if !} 
+          end if !}
         end do !}
       end do !}
 
@@ -805,7 +896,7 @@ c*** 9.  data for statistics and nonanalog model
       write(iunoo,703) wminv,wmins,wminc
       write(iunoo,703) splpar
       write(iunoo,700) utxthd(23)
-      write(iunoo,707) nsigvi,nsigsi,nsigci,nsigi_bgk,nsigi_cop
+      write(iunoo,707) nsigvi,nsigsi,nsigci,nsigi_spc
       do j=1,nsigvi !{
           write(iunoo,707) igh(j),iih(j)
       end do !}
@@ -847,7 +938,7 @@ c*** 10c.
 
       write(iunoo,700) utxthd(14)
       do j=1,nalvi !{
-        write(iunoo,700) chrtal(j)
+        write(iunoo,700) ' '//chrtal(j)
         write(iunoo,711) txttlr(j)
         write(iunoo,712) txtspr(j),txtunr(j)
       end do !}
@@ -865,7 +956,7 @@ c*** 10e.
 
       write(iunoo,700) utxthd(16)
       do j=1,nalsi !{
-        write(iunoo,700) chrtls(j)
+        write(iunoo,700) ' '//chrtls(j)
         write(iunoo,711) txttls(j)
         write(iunoo,712) txtsps(j),txtuns(j)
       end do !}
@@ -889,7 +980,8 @@ c*** 11.   data for numerical and graphical output
      ,                 trcgrd,trcsur,trcref,trcfle,trcamd,
      ,                 trcint,trclst,trcsou,trcrec,trctim,
      ,                 trcbla,trcblm,trcbli,trcblp,trcble,
-     ,                 trcblph,trctal,trcoct,trccen,trcdumm,
+     ,                 trcblph,trctal,trcoct,trccen,trcrnf,
+     ,                 trchktim,
      ,                 trcdbg2,trcdbge,trcdbgm,trcdbgf,trcdbgl,
      ,                 trcdbgs,trcdbgg,trcdbgmpi,trcdbgc
       write(iunoo,706) (trcsrc(j),j=0,nstrao)
@@ -897,8 +989,8 @@ c*** 11.   data for numerical and graphical output
       do j=1,nvolpr !{
         write(iunoo,707) ntlv(j),nflgv(j),nspzv1(j),nspzv2(j),ntlvf(j)
       end do !}
-      write(iunoo,707) nsurpr
-      do j=1,nsurpr !{
+      write(iunoo,707) jsurpr
+      do j=1,jsurpr !{
         write(iunoo,707) nsrf(j),ntls(j),nflgs(j),nspzs1(j),nspzs2(j)
       end do !}
 
@@ -972,22 +1064,37 @@ c**  particle history plots in 2d or 3d geometry plots
 c*** 12.  data for diagnostic module
 
       write(iunoo,700) utxthd(18)
+      if (hydrogen) then
+        write(iunoo,721) "DEFINE_LINES"
+        write(iunoo,707) numlines,modaddv
+      end if
       write(iunoo,707) nchori,ncheni,lntspec,lntsput,nmcsput,
      ,                                         nlstadds,mtreadds,ngwties
       if (nchori.gt.0) then !{
-        do ichori=1,nchori !{
-          write(iunoo,700) txtsig(ichori)
-          write(iunoo,707) nchtal(ichori),nspscl(ichori),nspnew(ichori)
-          write(iunoo,707) nspstr(ichori),nspspz(ichori),
-     ,  		    nspini(ichori),nspend(ichori),
-     ,  		    nspblc(ichori),nspadd(ichori),masloc(ichori)
-          write(iunoo,703) emin1(ichori),emax1(ichori)
-          write(iunoo,704) ipivot(ichori),xpivot(ichori),
-     ,  		      	      	  ypivot(ichori),zpivot(ichori)
-          write(iunoo,704) ichord(ichori),xchord(ichori),
-     ,  		      	      	  ychord(ichori),zchord(ichori)
-      	end do !}
-        write(iunoo,706) plchor,plspec
+c***   Sort the chords according to their labels
+        do i = 1, nchori ! {
+          llm(i) = chr_lbl(i)
+        end do !}
+        call sortia(llm,lli,nchori)
+        do i = 1, nchrdlint !{
+          j = minloc(jchlst(:,i),dim=1)
+          if (j.eq.nchor.and.jchlst(j,i).ne.0) j = nchor+1
+          ichmin = minval(chr_lbl(jchlst(1:j-1,i)))
+          nspnew(lli(ichmin))=1
+        end do !}
+        do ichori = 1, nchori ! {
+          i = lli(ichori)
+          write(iunoo,714) chr_lbl(i)
+          write(iunoo,707) nchtal(i),nspscl(i),nspnew(i)
+          write(iunoo,707) nspstr(i),nspspz(i),nspini(i),
+     ,                     nspend(i),nspblc(i),nspadd(i)
+          write(iunoo,703) emin1(i),emax1(i),eshift(i)
+          write(iunoo,704) ipivot(i),xpivot(i),ypivot(i),
+     ,                     zpivot(i)
+          write(iunoo,704) ichord(i),xchord(i),ychord(i),
+     ,                     zchord(i)
+        end do !}
+        write(iunoo,706) plchor,plspec,prspec,plargl,prargl
       end if !}
       if(lntspec.gt.0) write(iunoo,'(1p,2e12.5,4i6)') emnspc,emxspc,
      ,                                   npspcen,iatspec,npspctt,npspcfi
@@ -999,7 +1106,7 @@ c*** 12.  data for diagnostic module
         write(iunoo,707) (listadds(i),i=1,nlstadds)
         write(iunoo,707) (listaddg(i),i=1,nlstadds)
       end if !}
-      
+
       do j=1,ngwties !{
         write(iunoo,707) kgwties(j),mgwties(j)
         if(mgwties(j).gt.0)
@@ -1019,7 +1126,7 @@ c*** Postprocessing windows
           write(iunoo,707) (100*pwtally(j,i)+pwspecy(j,i),
      ,                                                  j=1,npwtally(i))
           if(lpw_d(i)) then !{
-            write(iunoo,'(3h///)')
+            write(iunoo,'(a3)') '///'
             write(iunoo,707) (100*pwtally_d(j,i)+pwspecy_d(j,i),
      ,                                                  j=1,npwtally(i))
           end if !}
@@ -1053,7 +1160,7 @@ c*** 14.  data for interfacing subroutine infcop
 
       write(iunoo,700) utxthd(19)
       if (nmode.ne.0) then !{
-        write(iunoo,706) lsymet,lbalan,lchkqud
+        write(iunoo,706) lsymet,lbalan,lcoarse,nltrimesh,lsprcl
         write(iunoo,707) nfla,ncutb,ncutl,imf,
      .                   ntrfrm,nfull,ibrad,ibpol,ibtor
         do i=1,nplsi+nbgk !{
@@ -1079,8 +1186,8 @@ c*** 14.  data for interfacing subroutine infcop
           end do !}
         end do !}
         if(lfchgs) then !{
-          x=istramin
-          y=istramax
+          x=real(istramin)
+          y=real(istramax)
           write(iunoo,703) 0.,x,y,0.
           do i=istramin,istramax !{
             write(iunoo,'(i3,1p,4e12.5)') i,
@@ -1110,14 +1217,19 @@ c*** 15. additional information for geousr
 c*** segment numbers for the target edges to be modified by geousr
 
       write(iunoo,700) utxthd(27)
-      write(iunoo,707) nadmod,ntrgte
+      if(lm_cnfg) then
+        write(iunoo,707) nadmod,ntrgte/2
+      else
+        write(iunoo,707) nadmod,ntrgte
+      endif
       do i=1,nadmod !{
         write (iunoo,'(2i6,1p,3e12.5)') nrs(i),ipunkt(i),
      ,                                        xcoor(i),ycoor(i),zcoor(i)
       end do !}
       if(ntrgte.gt.0) then !{
         do i=1,ntrgte !{
-      	  write(iunoo,'(2i6,1p,2e12.5)') jedge(2,i),jedge(1,i),
+          if (lm_cnfg.and.mod(i,2).eq.1) cycle
+          write(iunoo,'(2i6,1p,2e12.5)') jedge(2,i),jedge(1,i),
      ,                                             xpolpos(i),ypolpos(i)
         end do !}
       end if !}
@@ -1126,7 +1238,6 @@ c*** segment numbers for the target edges to be modified by geousr
       return
 c=======================================================================
   700 format ('*',a71)
-  701 format (1p,i3,1x,a6,1x,a4,a9,a3,2i3,5e12.5)
   702 format (l1,1x,a24,1x,i1,1x,4(2i3,1x))
   703 format (1p,6e12.5)
   704 format (1p,i6,6x,5e12.5)
@@ -1134,17 +1245,19 @@ c=======================================================================
   706 format (12(5l1,1x))
   707 format (12i6)
   708 format (i2,1x,a8,12i3,1x,a10,1x,i2)
+ 7080 format (i2.2,1x,a8,12i3,1x,a10,1x,i2)
   709 format ('* ',i3,' : ',a64)
   710 format (1p,2i6,2e12.5,i6)
   711 format (a72)
   712 format (2a24)
   713 format (1p,6i6,3e12.5)
-  714 format ('* ',i3,' : ',i3,' ',a64)
+  714 format ('* ',i4,' : ',i4,' ',a64)
   715 format (a72)
   716 format (a8,1x,a8,1p,e12.5)
   717 format (a8,1x,a8,i6)
   718 format (1p,2e12.5,8i6)
   719 format (1p,2i6,5e12.5)
-  720 format (a47)
+  720 format (a50)
+  721 format (a)
 c=======================================================================
       end

@@ -4,6 +4,9 @@ if ($?B2FSTATE_ONLY) then
   foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:b2time.nc:'`)
     [ -e $i ] && rm $i || echo > /dev/null
   end
+  foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:b2batch.nc:'`)
+    [ -e $i ] && rm $i || echo > /dev/null
+  end
   foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:b2wall.nc:'`)
     [ -e $i ] && rm $i || echo > /dev/null
   end
@@ -24,45 +27,56 @@ end
 if (${COMPILER} == "HP") then
   foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:ftn13:'`)
     set recoverfile=`echo $i:t:r`
-    [ -s $recoverfile ] && mv -v `basename $i` ../$recoverfile || echo > /dev/null
+    [ -s $i ] && mv -v `basename $i` ../$recoverfile || echo > /dev/null
+  end
+  foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:ftn14:'`)
+    set recoverfile=`echo $i:t:r`
+    [ -s $i ] && mv -v `basename $i` ../$recoverfile || echo > /dev/null
   end
   foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:ftn15:'`)
     set recoverfile=`echo $i:t:r`
-    [ -s $recoverfile ] && mv -v `basename $i` ../$recoverfile || echo > /dev/null
+    [ -s $i ] && mv -v `basename $i` ../$recoverfile || echo > /dev/null
   end
   foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:ftn44:'`)
     set recoverfile=`echo $i:t:r`
-    [ -s $recoverfile ] && mv -v `basename $i` ../$recoverfile || echo > /dev/null
+    [ -s $i ] && mv -v `basename $i` ../$recoverfile || echo > /dev/null
   end
   foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:ftn46:'`)
     set recoverfile=`echo $i:t:r`
-    [ -s $recoverfile ] && mv -v `basename $i` ../$recoverfile || echo > /dev/null
+    [ -s $i ] && mv -v `basename $i` ../$recoverfile || echo > /dev/null
   end
 else
   foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:fort.13:'`)
   set recoverfile=`echo $i:t:r`
-  [ -s $recoverfile ] && mv -v `basename $i` ../$recoverfile || echo > /dev/null
+  [ -s $i ] && mv -v `basename $i` ../$recoverfile || echo > /dev/null
+  end
+  foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:fort.14:'`)
+  set recoverfile=`echo $i:t:r`
+  [ -s $i ] && mv -v `basename $i` ../$recoverfile || echo > /dev/null
   end
   foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:fort.15:'`)
   set recoverfile=`echo $i:t:r`
-  [ -s $recoverfile ] && mv -v `basename $i` ../$recoverfile || echo > /dev/null
+  [ -s $i ] && mv -v `basename $i` ../$recoverfile || echo > /dev/null
   end
   foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:fort.44:'`)
   set recoverfile=`echo $i:t:r`
-  [ -s $recoverfile ] && mv -v `basename $i` ../$recoverfile || echo > /dev/null
+  [ -s $i ] && mv -v `basename $i` ../$recoverfile || echo > /dev/null
   end
   foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:fort.46:'`)
   set recoverfile=`echo $i:t:r`
-  [ -s $recoverfile ] && mv -v `basename $i` ../$recoverfile || echo > /dev/null
+  [ -s $i ] && mv -v `basename $i` ../$recoverfile || echo > /dev/null
   end
 endif
 foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:run_av/run_av:'`)
   set recoverfile=`echo $i:t:r`
-  [ -s $recoverfile ] && mv -v `basename $i` ../b2favere || echo > /dev/null
+  [ -s $i ] && mv -v `basename $i` ../b2favere || echo > /dev/null
 end
 cd ../b2co.exe.dir
 foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:b2time.nc:'`)
   [ -s $i ] && mv -v $i ../b2time.nc || echo > /dev/null
+end
+foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:b2batch.nc:'`)
+  [ -s $i ] && mv -v $i ../b2batch.nc || echo > /dev/null
 end
 foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:b2wall.nc:'`)
   [ -s $i ] && mv -v $i ../b2wall.nc || echo > /dev/null

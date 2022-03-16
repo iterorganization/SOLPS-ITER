@@ -1,8 +1,8 @@
       subroutine uimdvr(lout,jblk,jvrb,ufs)
-       use b2mod_layer
+      use b2mod_types
+      use b2mod_layer
      , , only: ntrack, nalloys
-       use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use eirmod_solps
 c
 c  version : 18.08.2003 17:31
 c
@@ -22,17 +22,17 @@ c======================================================================
 #include "uib2pprm.inc"
       logical ufirst
 c      integer nniprm(nmxprm,nkwrd,nblck)
-      integer i,j,k,l,m,n,ll,nn
+      integer i,j,k,l,m,n,ll,nn,len
       character ss*(mxslen),s(mxslen),us*(mxslen-mxkwln-1),
      ,  sss*(mxslen-1),ufi*24,ufc*24,ufa*20,ufg*24,s0
       character hlp_frm*30
-      integer len_of_digits
-      external len_of_digits
+      integer len_of_digits, lnblnk
+      external len_of_digits, lnblnk
       equivalence (ss,s),(s(mxkwln+3),us),(s(2),sss)
       data ss / ' ' /
 #ifdef DBG
-      real r
-      character c*8
+c      real r
+c      character c*8
 #endif
 c*** Flag of the first call
       data ufirst / .true. /
@@ -41,27 +41,27 @@ c======================================================================
 c
       if(ufirst) then !{
           write(hlp_frm,'(a,i1,a)')
-     .     '(1h(,i',len_of_digits(nmxprm),',9h(i3,1h,)))'
-          write(ufi,hlp_frm) nmxprm
+     .     '(a,i',len_of_digits(nmxprm),',a)'
+          write(ufi,hlp_frm) '(',nmxprm,'(i3,'',''))'
           write(hlp_frm,'(a,i1,a)')
-     .     '(4h(1p,,i',len_of_digits(nmxprm),',12h(g10.3,1h,)))'
-          write(ufg,hlp_frm) nmxprm
+     .     '(a,i',len_of_digits(nmxprm),',a)'
+          write(ufg,hlp_frm) '(1p,',nmxprm,'(g10.3,'',''))'
           write(hlp_frm,'(a,i1,a)')
-     .     '(2h(a,i',len_of_digits(mxkwln),',1h))'
-          write(ufa,hlp_frm) mxkwln
+     .     '(a,i',len_of_digits(mxkwln),',a)'
+          write(ufa,hlp_frm) '(a',mxkwln,')'
           call lefta(ufa,16,i)
-cc<<<
-c         print *,'uimdvr: formats'
-c         print *,'  ',ufi
-c         print *,'  ',ufg
-c         print *,'  ',ufa
-cc>>>
+#ifdef DBG
+         print *,'uimdvr: formats'
+         print *,'  ',ufi
+         print *,'  ',ufg
+         print *,'  ',ufa
+#endif
           ufirst=.false.
       end if !}
 
       if(lbmdf(jvrb,jblk)) then !{
 c*** Not the first appearance of the same keyword. Skip it.
-      	lbv=.false.
+        lbv=.false.
 cc<<<
 c	print *,'uimdvr: skipping ',chrpl(jvrb,jblk)
 cc>>>
@@ -118,12 +118,20 @@ c     ,         l,n,jvrb,jblk,lprdckw(l,n,jvrb,jblk),' : ',c,i,r !###
 	      s(j+2)='='
 	      k=j+3
               if(ltrvr(jvrb,jblk)) then !{
-                write(ufc,700) nmdpr(jvrb,jblk)
-  700           format(1h(,i3,15h(2h ',a1,2h',)))
+                write(ufc,700)
+     .           '(',nmdpr(jvrb,jblk),'('' '''''',a1,'''''',''))'
+  700           format(a1,i3,a)
                 write(ss(k:mxslen),ufc) (cniprm(i,l,n,jvrb,jblk),i=1,m)
               else if(lt8rvr(jvrb,jblk)) then !}{
-                write(ufc,710) nmdpr(jvrb,jblk)
-  710           format(1h(,i3,17h(1x,1h',a8,2h',)))
+                write(ufc,710)
+     .           '(',nmdpr(jvrb,jblk),'(1x,'''''''',a8,'''''',''))'
+  710           format(a1,i3,a)
+                do i=1,m
+                  len=lnblnk(c8niprm(i,l,n,jvrb,jblk))
+                  if (len.lt.8) then
+                    c8niprm(i,l,n,jvrb,jblk)(len+1:8)=repeat(' ',8-len)
+                  endif
+                enddo
                 write(ss(k:mxslen),ufc) (c8niprm(i,l,n,jvrb,jblk),i=1,m)
               else if(lrrvr(jvrb,jblk)) then !}{
                 write(ss(k:mxslen),ufg) (rniprm(i,l,n,jvrb,jblk),i=1,m)

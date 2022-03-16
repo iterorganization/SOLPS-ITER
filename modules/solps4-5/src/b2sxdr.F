@@ -55,9 +55,6 @@
      , ,only: alloc_eirdiag
       implicit none
 #     include "DIMENSIONS.F"
-#ifdef USE_MPI
-      include 'mpif.h'
-#endif
 *   ..common blocks
 
 *-----------------------------------------------------------------------
@@ -141,9 +138,6 @@
 
 *   ..local variables
       integer nout(0:4), idum(0:9), nx, ny, ns
-#ifdef USE_MPI
-      integer rank_mpi,size_mpi,ierr_mpi
-#endif
       integer is, it, ix, iy, n2
       real (kind=R8) :: xcnt, ycnt, scale
       real (kind=R8) :: parg(0:99)
@@ -165,19 +159,8 @@
 *-----------------------------------------------------------------------
 *.computation
 *   ..program start-up calls
-#ifdef USE_MPI
-      call mpi_init(ierr_mpi)
-      call mpi_comm_rank(MPI_COMM_WORLD,rank_mpi,ierr_mpi)
-      call mpi_comm_size(MPI_COMM_WORLD,size_mpi,ierr_mpi)
-      if(rank_mpi .ne. 0) then
-        call mpi_barrier(MPI_COMM_WORLD,ierr_mpi)
-        call mpi_finalize(ierr_mpi)
-        stop 'b2sxdr_mpi_child'
-      endif
-#else
       nprs = 1
       my_pe = 0
-#endif
       call prgini ('b2sxdr')
 c=================================================================
 c*** Read the old data from the input file (b2.parameters.src) and
@@ -241,8 +224,6 @@ c
         CALL ALLOC_COMNNL
         CALL ALLOC_CCOUPL(1)
         CALL SETCON
-        CALL INPUT
-        close(45)
       endif
       if (.not.ex) then
         natm = DEF_NATM
@@ -264,12 +245,12 @@ c
 cxpb Next line not needed if inherited from UPC instead!
       call map4_5x(nx,ny,ns,crx,cry,vol,bb,ua)
       allocate(wrk(-1:nx,-1:ny,0:ns-1))
-      wrk = uadia(-1:nx,-1:ny,0,0:ns-1)
+      wrk = uadia(-1:nx,-1:ny,0,0,0:ns-1)
       call map4_5x(nx,ny,ns,crx,cry,vol,bb,wrk)
-      uadia(-1:nx,-1:ny,0,0:ns-1) = wrk
-      wrk = uadia(-1:nx,-1:ny,1,0:ns-1)
+      uadia(-1:nx,-1:ny,0,0,0:ns-1) = wrk
+      wrk = uadia(-1:nx,-1:ny,1,1,0:ns-1)
       call map4_5y(nx,ny,ns,crx,cry,vol,bb,wrk)
-      uadia(-1:nx,-1:ny,1,0:ns-1) = wrk
+      uadia(-1:nx,-1:ny,1,1,0:ns-1) = wrk
       deallocate(wrk)
       ua0 = ua
       uap = ua
@@ -279,15 +260,15 @@ cxpb Next line not needed if inherited from UPC instead!
       do is = 0, ns-1
         kinrgy(-1:nx,-1:ny,is) =
      .   0.5_R8 * am(is) * mp * ua(-1:nx,-1:ny,is)**2
-        fmo(-1:nx,-1:ny,0,is) =
-     .   am(is) * mp * ua(-1:nx,-1:ny,is) * fna(-1:nx,-1:ny,0,is)
-        fmo(-1:nx,-1:ny,1,is) =
-     .   am(is) * mp * ua(-1:nx,-1:ny,is) * fna(-1:nx,-1:ny,1,is)
-        vedia(-1:nx,-1:ny,0) = vedia(-1:nx,-1:ny,0) +
-     .   uadia(-1:nx,-1:ny,0,is) *
+        fmo(-1:nx,-1:ny,0,0,is) =
+     .   am(is) * mp * ua(-1:nx,-1:ny,is) * fna(-1:nx,-1:ny,0,0,is)
+        fmo(-1:nx,-1:ny,1,1,is) =
+     .   am(is) * mp * ua(-1:nx,-1:ny,is) * fna(-1:nx,-1:ny,1,1,is)
+        vedia(-1:nx,-1:ny,0,0) = vedia(-1:nx,-1:ny,0,0) +
+     .   uadia(-1:nx,-1:ny,0,0,is) *
      .   rza(-1:nx,-1:ny,is) * na(-1:nx,-1:ny,is) / ne(-1:nx,-1:ny)
-        vedia(-1:nx,-1:ny,1) = vedia(-1:nx,-1:ny,1) +
-     .   uadia(-1:nx,-1:ny,1,is) *
+        vedia(-1:nx,-1:ny,1,1) = vedia(-1:nx,-1:ny,1,1) +
+     .   uadia(-1:nx,-1:ny,1,1,is) *
      .   rza(-1:nx,-1:ny,is) * na(-1:nx,-1:ny,is) / ne(-1:nx,-1:ny)
       enddo
 *  ..output
@@ -332,7 +313,7 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
 *   ..save geometry
       call write_b2ag(nx,ny)
       call b2wugm (nout(1), nx, ny, crx, cry, fpsi, ffbz, bb,
-     &  vol, hx, hy, qz, qc, qcb, gs, pbs, wbbc,
+     &  vol, hx, hy, qz, qc, qs, gs, pbs, wbbc,
      &  cell_width, cell_height)
 *   ..save parameters
       parg(0) = -1.0_R8
@@ -340,6 +321,10 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
       call cfwure (nout(1), 100, parg, 'parg')
 *   ..in 5.1 and SOLPS-ITER, we need a fort.30 file early to build triangular grids
       call write_f30 (nx, ny)
+      if (ex) then
+        CALL INPUT
+        close(45)
+      endif
 *   ..write dummy b2ag.prt
       write(*,*) 'Writing b2ag.prt'
       open(unit=70,file='b2ag.prt')
@@ -355,7 +340,7 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
 *   ..write b2yt.dat
       write(*,*) 'Writing b2yt.dat'
       open(unit=70,file='b2yt.dat')
-      write(70,'(a)') '*dimens (nx, ny: free format)'
+      write(70,'(a)') '*dimens (nx1, ny1: free format)'
       write(70,'(2(2x,i4))') nx, ny
       if (EIRENE96) then
         write(70,'(a)') '''eirene_format''     ''old'''
@@ -525,10 +510,6 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
 
 * ..end of computation
       call prgend ()
-#ifdef USE_MPI
-      call mpi_barrier(MPI_COMM_WORLD,ierr_mpi)
-      call mpi_finalize(ierr_mpi)
-#endif
       stop 'b2sxdr'
 
 *-----------------------------------------------------------------------

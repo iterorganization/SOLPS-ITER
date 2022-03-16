@@ -1,8 +1,9 @@
       subroutine uinbnddt
-       use b2mod_layer
+      use b2mod_types
+      use b2mod_layer
      , , only: ntrack, nalloys
-       use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use b2mod_subsys
+      use eirmod_solps
 c
 c  version : 01.04.2005 00:12
 c
@@ -10,9 +11,10 @@ c=======================================================================
 c*** Prepare the boundary data ("non-default surfaces" and recycling
 c*** sources) for the Eirene input file
 c=======================================================================
+      implicit none
 #include "uinput.inc"
-      integer i,j,k,l,m,n,ibk,isf,iatm,ispe,ispi
-      external xerrab, subini, subend
+      integer ibk,isf,iatm,ispe,ispi
+      external xerrab
 c=======================================================================
       call subini ('uinbnddt')
 
@@ -150,6 +152,7 @@ c*** ... and then the recycling source if specified
 	    if(cskbnds(isf,ibk).eq.'W' .or. 
      .        	      	      	      	cskbnds(isf,ibk).eq.'E') then !{
 	      nixy2(ntargi,1)=1
+              nemod(ntargi,1)=7
 	      indim(1,nstrai)=2
 	      sorlim(1,nstrai)=104
 	      ingrda(1,nstrai,1)=ntin2(ntargi,1)
@@ -164,6 +167,7 @@ c*** ... and then the recycling source if specified
 	    else if(cskbnds(isf,ibk).eq.'S' .or. 
      .	      	      	      	       cskbnds(isf,ibk).eq.'N') then !}{
 	      nixy2(ntargi,1)=2
+              nemod(ntargi,1)=6
 	      indim(1,nstrai)=1
 	      sorlim(1,nstrai)=140
 	      ingrda(1,nstrai,1)=insor(1,nstrai)

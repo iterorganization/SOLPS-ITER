@@ -1,8 +1,9 @@
       subroutine uinbndzn
-       use b2mod_layer
+      use b2mod_types
+      use b2mod_layer
      , , only: ntrack, nalloys
-       use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use b2mod_subsys
+      use eirmod_solps
 c
 c  version : 15.03.2001 17:12
 c
@@ -16,7 +17,7 @@ c=======================================================================
       integer i_sw(0:nxd+1,nbndrgn,n_hlp),i_tg(0:nyd+1,ntrgts),
      ,  l_hlp(n_hlp),i_cr(0:nxd+1)
       character*10 hlp_txt(n_hlp)
-      external xerrab, subini, subend
+      external xerrab
       data l_hlp /1,3,4/
       data hlp_txt / 'Core','PFR','Outer side' /
 c=======================================================================
@@ -515,6 +516,7 @@ c!###{
       print *,'knd  zone  ref pos  range  jdr jcp jc1 jc2 lcp lc1 lc2',
      ,  ' ls1 ls2'
       do k=1,nbndknd !{
+        if (nznbndt(k).eq.0) cycle
         print *
         do j=1,nznbndt(k) !{
           print '(2i4,1x,a1,1x,13i4)',k,j,cznbndt(j,k),lrfbndt(j,k),

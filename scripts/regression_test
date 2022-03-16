@@ -1,0 +1,112 @@
+#! /usr/bin/env tcsh
+
+setenv DEVICE upgrade
+setenv VERSION `git-describe`
+setenv GNUPLOT_POSTSCRIPT_OPTIONS 'color solid noenhanced'
+echo Running regression tests for GIT commit $VERSION
+cd $SOLPSTOP/runs
+[ -d $SOLPSTOP/runs/$VERSION ] || mkdir $SOLPSTOP/runs/$VERSION
+[ -d $SOLPSTOP/runs/$VERSION/AUG_16151_D ] || mkdir $SOLPSTOP/runs/$VERSION/AUG_16151_D
+[ -d $SOLPSTOP/runs/$VERSION/AUG_16151_D/baserun ] || mkdir $SOLPSTOP/runs/$VERSION/AUG_16151_D/baserun
+cp /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D/mesh.extra $SOLPSTOP/runs/$VERSION/AUG_16151_D/mesh.extra
+cp /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D/SOLPS_FLUIDS $SOLPSTOP/runs/$VERSION/AUG_16151_D/SOLPS_FLUIDS
+cp /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D/baserun/b2a?.dat $SOLPSTOP/runs/$VERSION/AUG_16151_D/baserun/
+cp /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D/baserun/16151.4000.AUGD.EQI.00._96x36.geo $SOLPSTOP/runs/$VERSION/AUG_16151_D/baserun/
+cd $SOLPSTOP/runs/$VERSION/AUG_16151_D/baserun/
+b2run b2ag
+b2run b2ah
+b2run b2ai
+b2run b2ar
+cp /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D/baserun/fort.3[3-5] .
+cd ..
+[ -d standalone ] || mkdir standalone
+cd standalone
+cp /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D/16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2.*.parameters .
+cp /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D/16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2fstati .
+cp /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D/16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2mn.dat .
+setup_baserun_eirene_links
+b2run -s b2mn > run.log
+check_b2_output /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D/16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2fstate b2fstate
+setenv PRINT_PLOT resall_D.ps ; resall_D
+set maxres=`tail -1 gnuplot.data | awk.transpose | tail -8 | min_ave_max.awk | awk '{if ($3 > 1.0e-6) {print 1} }'`
+if ( $maxres == 1 ) then
+ exit 1
+endif
+cd ..
+[ -d coupled ] || mkdir coupled
+cd coupled
+cp /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D/16151_1.6MW_2.0e19_D=0.4_chi=1.6_pump=0.90/b2.*.parameters .
+cp /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D/16151_1.6MW_2.0e19_D=0.4_chi=1.6_pump=0.90/b2fstati .
+cp /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D/16151_1.6MW_2.0e19_D=0.4_chi=1.6_pump=0.90/b2mn.dat .
+cp /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D/16151_1.6MW_2.0e19_D=0.4_chi=1.6_pump=0.90/input.dat .
+setup_baserun_eirene_links
+b2run b2mn > run.log
+check_b2_output /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D/16151_1.6MW_2.0e19_D=0.4_chi=1.6_pump=0.90/b2fstate b2fstate
+setenv PRINT_PLOT resall_D.ps ; resall_D
+set maxres=`tail -1 gnuplot.data | awk.transpose | tail -8 | min_ave_max.awk | awk '{if ($3 > 1.0e6) {print 1} }'`
+if ( $maxres == 1 ) then
+ exit 1
+endif
+cd ../..
+[ -d $SOLPSTOP/runs/bench_mark/AUG_16151_D+C+He ] || mkdir $SOLPSTOP/runs/$VERSION/AUG_16151_D+C+He
+[ -d $SOLPSTOP/runs/bench_mark/AUG_16151_D+C+He/baserun ] || mkdir $SOLPSTOP/runs/$VERSION/AUG_16151_D+C+He/baserun
+cp /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D+C+He/mesh.extra $SOLPSTOP/runs/$VERSION/AUG_16151_D+C+He/mesh.extra
+cp /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D+C+He/SOLPS_FLUIDS $SOLPSTOP/runs/$VERSION/AUG_16151_D+C+He/SOLPS_FLUIDS
+cp /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D+C+He/baserun/b2a?.dat $SOLPSTOP/runs/$VERSION/AUG_16151_D+C+He/baserun/
+cp /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D+C+He/baserun/16151.4000.AUGD.EQI.00._96x36.geo $SOLPSTOP/runs/$VERSION/AUG_16151_D+C+He/baserun/
+cd $SOLPSTOP/runs/$VERSION/AUG_16151_D+C+He/baserun/
+b2run b2ag
+b2run b2ah
+b2run b2ai
+b2run b2ar
+cp /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D+C+He/baserun/fort.3[3-5] .
+cd ..
+[ -d standalone ] || mkdir standalone
+cd standalone
+cp /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D+C+He/16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2.*.parameters .
+cp /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D+C+He/16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2fstati .
+cp /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D+C+He/16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2mn.dat .
+setup_baserun_eirene_links
+b2run -s b2mn > run.log
+check_b2_output /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D+C+He/16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2fstate b2fstate
+setenv PRINT_PLOT resco.ps ; resco
+set maxres=`tail -1 gnuplot.data | awk.transpose | tail -12 | min_ave_max.awk | awk '{if ($3 > 1.0e-6) {print 1} }'`
+if ( $maxres == 1 ) then
+ exit 1
+endif
+setenv PRINT_PLOT resmo.ps ; resmo
+set maxres=`tail -1 gnuplot.data | awk.transpose | tail -12 | min_ave_max.awk | awk '{if ($3 > 1.0e-6) {print 1} }'`
+if ( $maxres == 1 ) then
+ exit 1
+endif
+setenv PRINT_PLOT resrest.ps ; resrest
+set maxres=`tail -1 gnuplot.data | awk.transpose | tail -4 | min_ave_max.awk | awk '{if ($3 > 1.0e-6) {print 1} }'`
+if ( $maxres == 1 ) then
+ exit 1
+endif
+cd ..
+[ -d coupled ] || mkdir coupled
+cd coupled
+cp /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D+C+He/16151_1.6MW_2.0e19_D=0.4_chi=1.6_pump=0.90/b2.*.parameters .
+cp /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D+C+He/16151_1.6MW_2.0e19_D=0.4_chi=1.6_pump=0.90/b2fstati .
+cp /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D+C+He/16151_1.6MW_2.0e19_D=0.4_chi=1.6_pump=0.90/b2mn.dat .
+cp /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D+C+He/16151_1.6MW_2.0e19_D=0.4_chi=1.6_pump=0.90/input.dat .
+setup_baserun_eirene_links
+b2run b2mn > run.log
+check_b2_output /work/projects/solps-iter/bonninx/bench_mark/AUG_16151_D+C+He/16151_1.6MW_2.0e19_D=0.4_chi=1.6_pump=0.90/b2fstate b2fstate
+setenv PRINT_PLOT resco.ps ; resco
+set maxres=`tail -1 gnuplot.data | awk.transpose | tail -12 | min_ave_max.awk | awk '{if ($3 > 1.0e6) {print 1} }'`
+if ( $maxres == 1 ) then
+ exit 1
+endif
+setenv PRINT_PLOT resmo.ps ; resmo
+set maxres=`tail -1 gnuplot.data | awk.transpose | tail -12 | min_ave_max.awk | awk '{if ($3 > 1.0e7) {print 1} }'`
+if ( $maxres == 1 ) then
+ exit 1
+endif
+setenv PRINT_PLOT resrest.ps ; resrest
+set maxres=`tail -1 gnuplot.data | awk.transpose | tail -4 | min_ave_max.awk | awk '{if ($3 > 1.0e4) {print 1} }'`
+if ( $maxres == 1 ) then
+ exit 1
+endif
+

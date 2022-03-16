@@ -1,8 +1,7 @@
       program ub2p
+      use b2mod_types
+      use b2mod_xerset
       implicit none
-#ifdef USE_MPI
-      include 'mpif.h'
-#endif
 c======================================================================
 c*** Creates the additional input files for b2plot, provided that the
 c*** corresponding data is present in the dg output files.
@@ -19,23 +18,9 @@ c  version : 25.08.97 15:04
 c
 #include "ubpcom.h"
 #include "impcon.inc"
-      logical uex
-      external prgini,prgend,xerset,ubpnam
-#ifdef USE_MPI
-      integer rank_mpi,size_mpi,ierr_mpi
-#endif
+      external prgini,prgend,ubpnam
 c======================================================================
 c*** set up the input routine
-#ifdef USE_MPI
-      call mpi_init(ierr_mpi)
-      call mpi_comm_rank(MPI_COMM_WORLD,rank_mpi,ierr_mpi)
-      call mpi_comm_size(MPI_COMM_WORLD,size_mpi,ierr_mpi)
-      if(rank_mpi .ne. 0) then
-        call mpi_barrier(MPI_COMM_WORLD,ierr_mpi)
-        call mpi_finalize(ierr_mpi)
-        stop 'ub2p_mpi_child'
-      endif
-#endif
       call prgini('ub2p')
       call xerset(0)
 c
@@ -43,6 +28,12 @@ c
       keylen=8
       mimp=iunii
       lena=ufnlen
+      jmess=2
+      lfin=72
+      finish = 'finish'
+      promp(1) = repeat(' ',8)
+      promp(2) = repeat(' ',8)
+      fixkey=.false.
 c
 c*** Read the data from DG output
 c
@@ -54,9 +45,5 @@ c
       call ubpb2pl
 c======================================================================
       call prgend ()
-#ifdef USE_MPI
-      call mpi_barrier(MPI_COMM_WORLD,ierr_mpi)
-      call mpi_finalize(ierr_mpi)
-#endif
       stop 'ub2p'
       end program ub2p

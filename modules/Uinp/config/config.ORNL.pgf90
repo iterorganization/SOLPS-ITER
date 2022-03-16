@@ -8,28 +8,12 @@ endif
 ifndef LD_MSCL
   $(error LD_MSCL not defined)
 endif
-LD_GR   ?= -L${GR_ROOT} -lgr 
-LD_GKS  ?= -L${GLI_HOME} -lgks 
+LD_GR   ?= -L${GR_ROOT} -lgr
+LD_GKS  ?= -L${GLI_HOME} -lgks
 
-ifdef USE_MPI
-FC	     = mpif90
-else
-FC	     = pgf90
-endif
+CPP      = /lib/cpp -traditional
 
-ifdef SOLPS_DEBUG
-FFLAGS	 = -g 
-else
-FFLAGS	 = -O 
-endif
-
-INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
-COMPILE  = ${FC} -c ${FFLAGS}
-CPP	     = /lib/cpp -traditional
-MOD      = mod
-
-LDLIBS 	 = ${LD_MSCL} ${LD_GR} ${LD_GKS} -lX11 -lXt
-LDEXTRA  = 
+LDLIBS   = ${LD_GR} ${LD_GKS} -lX11 -lXt
 
 #!!!Local Variables:
 #!!! mode: Makefile

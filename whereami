@@ -1,15 +1,20 @@
 #! /bin/csh -f
 set machine_location=`hostname`
+set fullhost=`nslookup $machine_location | grep -m 1 Name | awk '/Name:/{print $2}' | tr 'A-Z' 'a-z'`
+if ("$fullhost" == "") then
+  set fullhost=`hostname -f`
+endif
+# special handling of hostnames head*, node* that keeps mephi_check working
 set mephi_check=`echo $machine_location | cut -c1-4` 
 if ("$mephi_check" == "head" || "$mephi_check" == "node") then 
-  echo "mephi_check = $mephi_check - special mephi cluster treatment applies"
-  set machine_location="cluster21.mephi.ru"
-  set fullhost=$machine_location
-else
-  set fullhost=`nslookup $machine_location | grep -m 1 Name | awk '/Name:/{print $2}' | tr 'A-Z' 'a-z'`
-  if ("$fullhost" == "") then
-    set fullhost=`hostname -f`
-  endif
+  switch ($fullhost)
+  case "*.cm.cluster":
+    breaksw
+  default:
+    echo "mephi_check = $mephi_check - special mephi cluster treatment applies"
+    set machine_location="cluster21.mephi.ru"
+    set fullhost=$machine_location
+  endsw
 endif
 switch ($fullhost)
 case "*.iter.org":
@@ -21,12 +26,11 @@ case "*.iaea.org":
 case "*.iferc-csc.org":
   echo IFERC
   breaksw
-case "*.itm.rzg.mpg.de":
-  echo IPPITM
-  breaksw
+case "*.eufus.eu":
 case "*.efda-itm.eu":
 case "*.marconi.cineca.it"
-  echo ITM
+case "*.galileo.cineca.it"
+  [ -d /afs ] && echo ITM || echo MARCONI
   breaksw
 case "*.ipp-garching.mpg.de":
 case "*.ipp.mpg.de":
@@ -41,29 +45,39 @@ case "*.ipp.kfa-juelich.de":
   echo FZJ
   breaksw
 case "*.ccfe.ac.uk":
+case "*.cumulus.hpc.l":
   echo CCFE
   breaksw
+case "*.data.cluster":
+  echo "CCFE-csd3"
+  breaksw
 case "*.jet.uk":
-case "*.hpc.l":
+case "freia*.hpc.l":
   echo JET
   breaksw
 case "*.mech.kuleuven.be":
 case "*.icts.leuven.vsc":
+case "*.hpc.kuleuven.be":
   echo LEUVEN
   breaksw
 case "*.pppl.gov":
   echo PPPL
   breaksw
-case "*.fusion.gat.com":
+case "*.gat.com":
+case "iris*.cluster":
+case "saturn*.cluster":
   echo GA
   breaksw
 case "*.wm.edu":
   echo WM
   breaksw
 case "*.nersc.gov":
+case "cori*":
   echo NERSC
   breaksw
 case "*.ornl.gov":
+case "megabucky*":
+case "*.cm.cluster":
   echo ORNL
   breaksw
 case "*.ipp.cas.cn":
@@ -86,7 +100,7 @@ case "*.keio.ac.jp":
 case "kraken01":
   echo KSTAR
   breaksw
-case "*.spbau.ru":
+case "*.spbstu.ru":
 case "login1.cluster":
 case "n01p*.cluster":
 case "PLASMATHEORY08":
@@ -101,7 +115,6 @@ case "*.mo":
   echo CN_UNKNOWN
   breaksw
 case "*.eu":
-case "*.ac":
 case "*.an":
 case "*.at":
 case "*.aw":
@@ -110,8 +123,6 @@ case "*.be":
 case "*.bg":
 case "*.bl":
 case "*.bq":
-case "*.bv":
-case "*.ch":
 case "*.cw":
 case "*.cy":
 case "*.cz":
@@ -120,24 +131,15 @@ case "*.dk":
 case "*.ee":
 case "*.es":
 case "*.fi":
-case "*.fk":
 case "*.fo":
 case "*.fr":
-case "*.gb":
 case "*.gf":
-case "*.gg":
-case "*.gi":
-case "*.gl":
 case "*.gp":
 case "*.gr":
-case "*.gs":
 case "*.hr":
 case "*.hu":
 case "*.ie":
-case "*.im":
-case "*.io":
 case "*.it":
-case "*.je":
 case "*.lt":
 case "*.lu":
 case "*.lv":
@@ -150,19 +152,15 @@ case "*.nl":
 case "*.pf":
 case "*.pl":
 case "*.pm":
-case "*.pn":
 case "*.pt":
 case "*.re":
 case "*.ro":
 case "*.se":
-case "*.sh":
 case "*.si":
 case "*.sk":
 case "*.sx":
 case "*.tf":
 case "*.ua":
-case "*.uk":
-case "*.vg":
 case "*.wf":
 case "*.yt":
   echo EU_UNKNOWN
@@ -178,7 +176,7 @@ case "*.kr":
   breaksw
 case "*.ru":
 case "*.su:"
-  echo RU_UNKNOWN
+  echo RF_UNKNOWN
   breaksw
 case "*.gov":
 case "*.edu":
@@ -198,8 +196,30 @@ case "*.hm":
 case "*.nf":
   echo AU_UNKNOWN
   breaksw
+case "*.ca":
+  echo CA_UNKNOWN
+  breaksw
 case "*.kz":
   echo KZ_UNKNOWN
+  breaksw
+case "*.ac":
+case "*.ai":
+case "*.fk":
+case "*.gb":
+case "*.gg":
+case "*.gi":
+case "*.gs":
+case "*.im":
+case "*.io":
+case "*.je":
+case "*.pn":
+case "*.sh":
+case "*.uk":
+case "*.vg":
+  echo UK_UNKNOWN
+  breaksw
+case "*.ch":
+  echo CH_UNKNOWN
   breaksw
 default:
   echo UNKNOWN

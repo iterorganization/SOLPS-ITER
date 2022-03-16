@@ -1,0 +1,31 @@
+# Test whether necessary variables are defined
+LD_MSCL ?= `pkg-config mscl --libs`
+
+ifdef USE_MPI
+FC       = mpif90
+else
+FC       = nagfor
+endif
+
+FFLAGS   = -PIC -compatible
+ifdef SOLPS_DEBUG
+FFLAGS  += -g
+else
+FFLAGS  += -O
+endif
+
+INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
+COMPILE  = ${FC} -c ${FFLAGS}
+CPP      = /lib/cpp -traditional
+MOD      = mod
+
+LDLIBS   = ${LD_MSCL} ${LD_NAG}
+LDEXTRA  =
+ifdef USE_MPI
+LDLIBS  += ${LD_MPI}
+endif
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+

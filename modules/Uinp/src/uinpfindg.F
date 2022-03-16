@@ -1,19 +1,20 @@
       subroutine uinpfindg(lc)
-       use b2mod_layer
+      use b2mod_types
+      use b2mod_layer
      , , only: ntrack, nalloys
-       use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use b2mod_subsys
+      use eirmod_solps
 
 c  version : 16.03.2005 23:54
 
 c=======================================================================
 c*** Prepare the data for the final stage of Eirene averaging
 c=======================================================================
+      implicit none
       logical lc
 #include "uinput.inc"
       integer, save :: nprnli_save, ntcpu_save, nfile_save
       integer, save :: npts_save(nstra)
-      external subini, subend
 c=======================================================================
       call subini ('uinpfindg')
       if(lc) then !{

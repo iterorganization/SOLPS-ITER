@@ -24,23 +24,17 @@
 % ismom:       True if we are performing momentum balance                      %
 % axbal:       Array of axes into which balance plots will be placed           %
 % unitstr:     String for units given on y axes                                %
+% areaend:     Either 'left', 'right' or 'none'. Defines the poloidal end      %
+%              of the balance region at which areas will be calculated. The    %
+%              poloidal fluxes at both ends will then be divided by these      %
+%              areas to give flux densities.                                   %
 %                                                                              %
 % David Moulton (david.moulton@ccfe.ac.uk) January 2017.                       %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function areadown = radial_balance(flux,src,res,totname,fluxname,srcname,comuse,indrad,area,reverse,ismom,axbal,unitstr)
+function rb = radial_balance(flux,src,res,totname,fluxname,srcname,comuse,indrad,area,reverse,ismom,axbal,unitstr,makeplot,areaend)
 
 rightix = comuse.rightix+1; % Convert to one-based
 rightiy = comuse.rightiy+1;
-if ~reverse
-    reversefac = 1;
-    momfac = 1;
-elseif ismom
-    reversefac = -1;
-    momfac = -1;
-else
-    reversefac = -1;
-    momfac = 1;
-end
 
 % Fluxes through the ends:
 fluxleft = [];
@@ -59,6 +53,18 @@ end
 % Integrated residual:
 resint = sumpol(res,indrad,comuse);
 
+% Account for reversal (normally inner-to-outer fluxes are positive but if
+% reverse==true then outer-to-inner fluxes become positive):
+if ~reverse
+    reversefac = 1;
+    momfac = 1;
+elseif ismom
+    reversefac = -1;
+    momfac = -1;
+else
+    reversefac = -1;
+    momfac = 1;
+end
 % Areas at the ends:
 arealeft = findlr(area,indrad,'left');
 arearight = findlr(area,indrad,'right',rightix,rightiy);
@@ -89,80 +95,103 @@ end
 
 % Total balance with residuals:
 cmap = comuse.cmap;
-plot(xmxsep,momfac*reversefac*sum(fluxup,2)./areadown','marker','.','parent',axbal(1),'displayname',totname{1},'color',cmap(1,:)); cmap=circshift(cmap,-1);
-plot(xmxsep,momfac*reversefac*sum(fluxdown,2)./areadown','marker','.','parent',axbal(1),'displayname',totname{2},'color',cmap(1,:)); cmap=circshift(cmap,-1);
-plot(xmxsep,momfac*sum(srcint,2)./areadown','marker','.','parent',axbal(1),'displayname',totname{3},'color',cmap(1,:)); cmap=circshift(cmap,-1);
+plot(ymysep,momfac*reversefac*sum(fluxup,2)./areadown','marker','.','parent',axbal(1),'displayname',totname{1},'color',cmap(1,:)); cmap=circshift(cmap,-1);
+plot(ymysep,momfac*reversefac*sum(fluxdown,2)./areadown','marker','.','parent',axbal(1),'displayname',totname{2},'color',cmap(1,:)); cmap=circshift(cmap,-1);
+plot(ymysep,momfac*sum(srcint,2)./areadown','marker','.','parent',axbal(1),'displayname',totname{3},'color',cmap(1,:)); cmap=circshift(cmap,-1);
 coderes = momfac*(resint./areadown)';
-plot(xmxsep,coderes,'-m','parent',axbal(1),'displayname',[totname{4},' (code)']);
+plot(ymysep,coderes,'-m','parent',axbal(1),'displayname',[totname{4},' (code)']);
 
 % Check the level of agreement between post-calculated and code-calculated residuals agree:
-postres = momfac*(reversefac*(sum(fluxup,2)-sum(fluxdown,2))+sum(srcint,2))./areadown';
-plot(xmxsep,postres,'-g','parent',axbal(1),'displayname',[totname{4},' (post-cal.)']);
+postres = momfac*(reversefac*(sum(fluxup,2)-sum(fluxdown,2))+sum(srcint,2))./rb.area_divide';
+rb.postres = postres;
+if makeplot
+    plot(ymysep,postres,'-g','parent',axbal(1),'displayname',[totname{4},' (post-cal.)']);
+    plot(ymysep,postres-coderes,'-c','parent',axbal(1),'displayname',[totname{4},' (post-cal.-code)']);
+end
 fprintf('Radial balance: the maximum difference between code- and post-calculated residuals is %e%%\n',max(abs((coderes-postres)./coderes)*100));
 
-hl = legend(axbal(1),'show','location','best');
-title(axbal(1),'Total radial balance','fontweight','normal');
-axis(axbal(1),'tight');
-xlabel(axbal(1),'x-x_{sep} (cm)');
-ylabel(axbal(1),['(',unitstr,')']);
+if makeplot
+    legend(axbal(1),'show','location','best');
+    title(axbal(1),'Total radial balance','fontweight','normal');
+    axis(axbal(1),'tight');
+    xlabel(axbal(1),'y-y_{sep} (cm)');
+    ylabel(axbal(1),['(',unitstr,')']);
+end
 
 % Decompose upstream fluxes:
 cmap = comuse.cmap;
 for i=1:size(fluxup,2)
     % Only make the plot if the flux is non-zero somewhere
     if any(fluxup(:,i))
-        plot(xmxsep,momfac*reversefac*fluxup(:,i)./areadown','marker','.','parent',axbal(2),'displayname',fluxname{i},'color',cmap(1,:)); cmap=circshift(cmap,-1);
+        if makeplot
+            plot(ymysep,momfac*reversefac*fluxup(:,i)./rb.area_divide','marker','.','parent',axbal(2),'displayname',fluxname{i},'color',cmap(1,:)); cmap=circshift(cmap,-1);
+        end
     end
+    rb.flxu_dcmp{i} = momfac*reversefac*fluxup(:,i)./rb.area_divide';
 end
-hl = legend(axbal(2),'show','location','best');
-title(axbal(2),['Decomp. of ',totname{1}],'fontweight','normal');
-axis(axbal(2),'tight');
-xlabel(axbal(2),'x-x_{sep} (cm)');
-ylabel(axbal(2),['(',unitstr,')']);
+if makeplot
+    legend(axbal(2),'show','location','best');
+    title(axbal(2),['Decomp. of ',totname{1}],'fontweight','normal');
+    axis(axbal(2),'tight');
+    xlabel(axbal(2),'y-y_{sep} (cm)');
+    ylabel(axbal(2),['(',unitstr,')']);
+end
 
 % Decompose downstream fluxes:
 cmap = comuse.cmap;
 for i=1:size(fluxdown,2)
     % Only make the plot if the flux is non-zero somewhere
     if any(fluxdown(:,i))
-        plot(xmxsep,momfac*reversefac*fluxdown(:,i)./areadown','marker','.','parent',axbal(3),'displayname',fluxname{i},'color',cmap(1,:)); cmap=circshift(cmap,-1);
+        if makeplot
+            plot(ymysep,momfac*reversefac*fluxdown(:,i)./rb.area_divide','marker','.','parent',axbal(3),'displayname',fluxname{i},'color',cmap(1,:)); cmap=circshift(cmap,-1);
+        end
     end
+    rb.flxd_dcmp{i} = momfac*reversefac*fluxdown(:,i)./rb.area_divide';
 end
-hl = legend(axbal(3),'show','location','best');
-title(axbal(3),['Decomp. of ',totname{2}],'fontweight','normal');
-axis(axbal(3),'tight');
-xlabel(axbal(3),'x-x_{sep} (cm)');
-ylabel(axbal(3),['(',unitstr,')']);
+if makeplot
+    legend(axbal(3),'show','location','best');
+    title(axbal(3),['Decomp. of ',totname{2}],'fontweight','normal');
+    axis(axbal(3),'tight');
+    xlabel(axbal(3),'y-y_{sep} (cm)');
+    ylabel(axbal(3),['(',unitstr,')']);
+end
 
 % Decompose sources:
 cmap = comuse.cmap;
 for i=1:size(srcint,2)
     % Only make the plot if the integrated source is non-zero somewhere
     if any(srcint(:,i))
-        plot(xmxsep,momfac*srcint(:,i)./areadown','marker','.','parent',axbal(4),'displayname',srcname{i},'color',cmap(1,:)); cmap=circshift(cmap,-1);
+        if makeplot
+            plot(ymysep,momfac*srcint(:,i)./rb.area_divide','marker','.','parent',axbal(4),'displayname',srcname{i},'color',cmap(1,:)); cmap=circshift(cmap,-1);
+        end
     end
+    rb.src_dcmp{i} = momfac*srcint(:,i)./rb.area_divide';
 end
-hl = legend(axbal(4),'show','location','best');
-title(axbal(4),['Decomp. of ',totname{3}],'fontweight','normal');
-axis(axbal(4),'tight');
-xlabel(axbal(4),'x-x_{sep} (cm)');
-ylabel(axbal(4),['(',unitstr,')']);
+if makeplot
+    legend(axbal(4),'show','location','best');
+    title(axbal(4),['Decomp. of ',totname{3}],'fontweight','normal');
+    axis(axbal(4),'tight');
+    xlabel(axbal(4),'y-y_{sep} (cm)');
+    ylabel(axbal(4),['(',unitstr,')']);
+end
 
 % Set the same axes limits for all radial balance plots:
-ymin = 1E40;
-ymax = -1E40;
-for iax=1:length(axbal)
-    a = findobj(get(axbal(iax),'children'),'type','line');
-    for il=1:length(a)
-        if min(get(a(il),'ydata'))<ymin
-            ymin = min(min(get(a(il),'ydata')));
-        end
-        if max(get(a(il),'ydata'))>ymax
-            ymax = max(get(a(il),'ydata'));
+if makeplot
+    ymin = 1E40;
+    ymax = -1E40;
+    for iax=1:length(axbal)
+        a = findobj(get(axbal(iax),'children'),'type','line');
+        for il=1:length(a)
+            if min(get(a(il),'ydata'))<ymin
+                ymin = min(min(get(a(il),'ydata')));
+            end
+            if max(get(a(il),'ydata'))>ymax
+                ymax = max(get(a(il),'ydata'));
+            end
         end
     end
-end
-if (ymin~=ymax)
-    set(axbal,'ylim',[ymin ymax]);
+    if (ymin~=ymax)
+        set(axbal,'ylim',[ymin ymax]);
+    end
 end
 

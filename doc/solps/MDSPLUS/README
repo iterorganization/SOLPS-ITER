@@ -1,0 +1,21 @@
+The TCL files here describe the model tree for the SOLPS tree on
+solps-mdsplus.
+
+To actually update the model tree:
+
+on lnxb201.aug.ipp.mpg.de (restricted login)
+
+cd /afs/ipp-garching.mpg.de/home/d/dpc/MDS/models
+svn up ../TCL/
+mdstcl < ../TCL/DIAG_MODEL.TCL
+mdstcl < ../TCL/IDENT_MODEL.TCL
+mdstcl < ../TCL/MOVIES_MODEL.TCL
+mdstcl < ../TCL/SNAPSHOT_MODEL.TCL
+mdstcl < ../TCL/SOLPS_MODEL.TCL
+mdstcl < ../TCL/TALLIES_MODEL.TCL
+mdstcl < ../TCL/TIMEDEP_MODEL.TCL
+
+see also README in /afs/ipp-garching.mpg.de/home/d/dpc/MDS/
+
+
+

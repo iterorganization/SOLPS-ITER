@@ -1,8 +1,6 @@
 # Load modules 
 
 
-
-
 # Set environment variables
 
 if (`where paraview-config` == "") then
@@ -20,5 +18,9 @@ else
   setenv LD_CATALYST `paraview-config --libs vtkPVPythonCatalyst`
 endif
 
-
 # Debugger (set environment variable DBX)
+
+
+# Compilers
+
+

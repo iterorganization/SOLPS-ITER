@@ -1,4 +1,3 @@
-### eval '(exit $?0)' && eval 'exec tcsh $0 ${1+"$@"}' && eval 'exec tcsh $0 $argv:q'
 #! /bin/tcsh -f
 
 if($?GNUPLOT_TMP) then
@@ -7,13 +6,13 @@ else
     set tmpdir=""
 endif
 setenv GNUPLOT_BATCH yes
-setenv GNUPLOT_POSTSCRIPT_OPTIONS 'color solid'
+setenv GNUPLOT_POSTSCRIPT_OPTIONS 'color solid noenhanced'
 setenv PRINT_PLOT b2time2d.ps
 rm -f ${tmpdir}GNUPLOT_COUNT ${tmpdir}gnuplot.cmd
 echo 0 > ${tmpdir}GNUPLOT_COUNT
 
 set nreg=`climb_and_look_for NREG`
-set nnreg=`pipe_run.log | grep ^nnreg | head -1`
+set nnreg=`pipe_run.log | grep -a ^nnreg | head -1`
 if (-s $nreg) then
   setenv NREG `cat $nreg`
   echo Set NREG to $NREG "(based on $nreg)"

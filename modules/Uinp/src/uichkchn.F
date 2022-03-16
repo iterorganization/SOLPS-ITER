@@ -1,8 +1,9 @@
       subroutine uichkchn(indelm,nni,nnx,indnss,nno,label)
-       use b2mod_layer
+      use b2mod_types
+      use b2mod_layer
      , , only: ntrack, nalloys
-       use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use b2mod_subsys
+      use eirmod_solps
 
 c  version : 31.03.2005 20:05
 
@@ -44,7 +45,7 @@ c=======================================================================
      ,  kbnd(nnptseg),lbnd(nnptseg)
       integer ip,iz1,iz2,ik,loff(nbndknd),nz,lz(nnptseg)
       logical er,ex,lw(iztg,2)
-      external subini,subend,xerrab
+      external xerrab
 c*** mtge(i): target edge connected to the target edge i 
       data mtge / 7, 4, 5, 2, 3, 8, 1, 6 /
       data mtgb / 1, 2, 3, 2, 4, 5, 6, 5 /
@@ -66,13 +67,9 @@ c*** Check some dimensions
       nno=-100
       if(nni.le.0) then !{
         nno=-1
-#ifdef FLUSH
-        call FLUSH(6)
-#endif
+        flush(6)
         write(0,*) 'uichkchn: no chain specified. nni= ',nni
-#ifdef FLUSH
-        call FLUSH(0)
-#endif
+        flush(0)
         goto 9999
       end if !}
       
@@ -82,25 +79,17 @@ c*** Check whether the specified chain consists of valid elements
       do i=1,nni !{
         j=indelm(i)
         if(j.le.0 .or. j.gt.nlim) then !{
-#ifdef FLUSH
-          call FLUSH(6)
-#endif
+          flush(6)
           write(0,*) 'uichkchn: invalid index in the chain list ',i,j
-#ifdef FLUSH
-          call FLUSH(0)
-#endif
+          flush(0)
           nno=-2
           goto 9999
         end if !}
         if(indasrfe(j).le.0 .or. indasrfe(j).gt.nlimi) then !{
-#ifdef FLUSH
-          call FLUSH(6)
-#endif
+          flush(6)
           write(0,*) 'uichkchn: excluded segment in the chain ',
      ,                                                   i,j,indasrfe(j)
-#ifdef FLUSH
-          call FLUSH(0)
-#endif
+          flush(0)
           nno=-2
           goto 9999
         end if !}
@@ -111,14 +100,10 @@ c*** Order the chain and check it for continuity
       call chkchain(p1,p2,3,nlim,indelm,nni,ntrgte,ind,irt,
      .              jedgep,jedgec,jedge,ntrgte/2)
       if(irt.le.0) then !{
-#ifdef FLUSH
-        call FLUSH(6)
-#endif
+        flush(6)
         write(0,*) 'uichkchn: unexpected error ',
      ,                                       'in a call to chkchain',irt
-#ifdef FLUSH
-        call FLUSH(0)
-#endif
+        flush(0)
         nno=-100
         goto 9999
       end if !}
@@ -136,9 +121,7 @@ c*** Check whether the chain is closed - no multiple chains then!!!
         j=ind(l)
         if(i.gt.1 .and. (k.lt.0 .or. j.lt.0)) then !{
 c*** Closed polygon in a multiple chain - error!
-#ifdef FLUSH
-          call FLUSH(6)
-#endif
+          flush(6)
           write(0,*) 'uichkchn: a closed polygon in a multiple chain'
           write(0,*) 'The same label cannot appear in multiple chains ',
      ,      'if one of the chains is closed.'
@@ -154,14 +137,10 @@ c*** The chain is closed
         nno=0
         goto 9999
       else if(k.eq.0) then !}{
-#ifdef FLUSH
-        call FLUSH(6)
-#endif
+        flush(6)
         write(0,*) 'uichkchn: unexpected error in parsing the chains ',
      ,    ' - k=0'
-#ifdef FLUSH
-        call FLUSH(0)
-#endif
+        flush(0)
         nno=-100
         goto 9999
       end if !}
@@ -179,15 +158,11 @@ c*** and prepare the "connection table"
         k1=ind(l+1)
         k2=ind(l+n)
         if(k1.le.0 .or. k1.gt.nlim .or. k2.le.0 .or. k2.gt.nlim) then !{
-#ifdef FLUSH
-          call FLUSH(6)
-#endif
+          flush(6)
           write(0,*) 'uichkchn: unexpected error - end index ',
      ,             'outside the DG range after chkchain.'
           write(0,'(a,5i5)') 'label,j,nlim,k1,k2= ',label,j,nlim,k1,k2
-#ifdef FLUSH
-          call FLUSH(0)
-#endif
+          flush(0)
           er=.true.
           cycle
         end if !}
@@ -195,15 +170,11 @@ c*** and prepare the "connection table"
         i2=indasrfe(k2)
         if(i1.le.0 .or. i1.gt.nlimi .or.
      .                      i2.le.0 .or. i2.gt.nlimi) then !{
-#ifdef FLUSH
-          call FLUSH(6)
-#endif
+          flush(6)
           write(0,*) 'uichkchn: unexpected error - end index ',
      ,                   'outside the Eirene range after chkchain.'
           write(0,'(a,5i5)') 'label,j,nlim,i1,i2= ',label,j,nlim,i1,i2
-#ifdef FLUSH
-          call FLUSH(0)
-#endif
+          flush(0)
           er=.true.
           cycle
         end if !}
@@ -214,15 +185,11 @@ c*** and prepare the "connection table"
           if(i2.eq.jedge(2,i)) j2=i
         end do !}
         if(j1.eq.0 .or. j2.eq.0) then !{
-#ifdef FLUSH
-          call FLUSH(6)
-#endif
+          flush(6)
           write(0,*) 
      .     'uichkchn: the chain does not end at the target edges.'
           write(0,'(a,4i5)') 'label,j,j1,j2= ',label,j,j1,j2
-#ifdef FLUSH
-          call FLUSH(0)
-#endif
+          flush(0)
           nno=-4
           er=.true.
           cycle
@@ -280,17 +247,13 @@ c***                                      1   7
         if(ltge(k).eq.1) then !{
           m=mtge(k)
           if(ltge(m).eq.0) then !{
-#ifdef FLUSH
-            call FLUSH(6)
-#endif
+            flush(6)
             write(0,*) 'uichkchn: inconsistent grid edge specification.'
             write(0,*) 'Both ends of a segment of the grid edge must ',
      ,        'have the same label.'
             write(0,*) 'label,k,m,ltge( 1 :',ntg,')= ',
      ,                                      label,k,m,(ltge(i),i=1,ntg)
-#ifdef FLUSH
-            call FLUSH(0)
-#endif
+            flush(0)
             nno=-5
             er=.true.
             cycle
@@ -350,9 +313,7 @@ c*** Finally, produce the NSS list
             iz1=1
             iz2=izc1-1
           else !}{
-#ifdef FLUSH
-            call FLUSH(6)
-#endif
+            flush(6)
             write(0,*) 'uichkchn: unexpected error with edge zones.'
             write(0,*) 'label,k,l,nz,lz(1:',nz,')= ',label,k,l,
      ,                                                nz,(lz(i),i=1,nz)
@@ -393,25 +354,19 @@ c!###}
       end do !}
 
       if(nno.gt.nnx) then !{
-#ifdef FLUSH
-        call FLUSH(6)
-#endif
+        flush(6)
         write(0,*) 'uichkchn: too many non-default standard surfaces ',
      ,                           'required to close the chain  '
         write(0,*) 'label,nno,nnx= ',label,nno,nnx
         write(0,*) ' ==> Check the DG model or increase the DEF_NSTS ',
      ,                 'parameter in $SOLPSTOP/src/include/DIMENSIONS.F'
-#ifdef FLUSH
-        call FLUSH(0)
-#endif
+        flush(0)
         nno=-100-nno
         goto 9999
       end if !}
 
       if(.not.ex) then !{
-#ifdef FLUSH
-        call FLUSH(6)
-#endif
+        flush(6)
         write(0,*) 'uichkchn: non-default standard surfaces do not ',
      ,                                                 'close the chain'
         write(0,*) 'label,nno=',label,nno
@@ -421,9 +376,7 @@ c!###}
         write(0,'((12(1x,5l1)))') (lw(i,1),i=1,iztg)
         write(0,*)
         write(0,'((12(1x,5l1)))') (lw(i,2),i=1,iztg)
-#ifdef FLUSH
-        call FLUSH(0)
-#endif
+        flush(0)
         nno=-6
         goto 9999
       end if !}
@@ -431,9 +384,7 @@ c!###}
 c=======================================================================
 c*** Error in the segment chains
  900  continue
-#ifdef FLUSH
-      call FLUSH(6)
-#endif
+      flush(6)
       write(0,*) 'label,irt= ',label,irt
       l=0
       do m=1,irt !{
@@ -448,9 +399,7 @@ c*** Error in the segment chains
      . 'The targets must be numbered according to the B2 convention:'
       write(0,*) 
      . 'going clockwise and starting from the bottom left corner.'
-#ifdef FLUSH
-      call FLUSH(0)
-#endif
+      flush(0)
  9999 call subend()
       return
 c=======================================================================

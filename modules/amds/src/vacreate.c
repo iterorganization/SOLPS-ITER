@@ -52,6 +52,7 @@
 #include <Xm/Form.h>
 #include <Xm/Frame.h>
 #include <Xm/Protocols.h>
+#include <Xm/List.h>
 
 #include <X11/IntrinsicP.h>
 #include <X11/Core.h>
@@ -549,7 +550,7 @@ Widget CreateDialogEx(Widget wParent,String name,va_list* pargs,int flags) {
   return wDlg;
 }
 
-int AddCallbackToTree(Widget root,WidgetClass class,String callbackType,
+void AddCallbackToTree(Widget root,WidgetClass class,String callbackType,
     XtCallbackProc callback,XtPointer userData) {
   WidgetList wl;
   Cardinal wlCount,i;
@@ -658,9 +659,9 @@ void CbFreeGC(Widget wg,XtPointer xtpGC,XtPointer pcbs) {
 void CbRemovePTimeOut(Widget wg,XtPointer xtppTO,XtPointer pcbs) {
   XtIntervalId* pxtiid=(XtIntervalId*)xtppTO;
 
-  if (*pxtiid!=NULL) {
+  if (*pxtiid!=(int) NULL) {
     XtRemoveTimeOut(*pxtiid);
-    *pxtiid=NULL;
+    *pxtiid=(int) NULL;
   }
 }
 

@@ -1,0 +1,19 @@
+# Test whether necessary variables are defined
+LD_MSCL ?= -L${SOLPSLIB} -lmscl
+
+FC       = ftn
+FFLAGS   = -fno-align-commons
+ifdef SOLPS_DEBUG
+FFLAGS  += -fbounds-check
+endif
+
+CPP      = /lib/cpp -traditional
+
+ifdef USE_MPI
+LDEXTRA  = ${LD_MPI}
+endif
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+

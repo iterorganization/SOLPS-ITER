@@ -32,16 +32,20 @@ case "KSTAR":
 case "LEUVEN":
 case "SPBSTU":
 case "SWIP":
+case "CCFE":
+case "CCFE-csd3":
   echo ifort64
   breaksw
-case "CCFE":
 case "ENEA":
-case "ORNL":
 case "PPPL":
   echo pgf90
   breaksw
+case "JFRS":
 case "MEPHI":
+case "NERSC":
+case "ORNL":
 case "WM":
+case "MARCONI":
   echo gfortran
   breaksw
 default:

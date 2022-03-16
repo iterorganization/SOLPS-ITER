@@ -1,8 +1,9 @@
       subroutine uinpsrcg
-       use b2mod_layer
+      use b2mod_types
+      use b2mod_layer
      , , only: ntrack, nalloys
-       use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use b2mod_subsys
+      use eirmod_solps
 c
 c  version : 01.04.2005 00:51
 c
@@ -12,10 +13,8 @@ c=======================================================================
       implicit none
 #include "uinput.inc"
       integer i,j,k,l,isg,istr,isf
-      real*4 hlp,hlp1,hlp2,hlpeps,hlpeps2
       logical ex,uex,streql
-      external streql, xerrab, subini, subend
-      parameter (hlpeps=1.e-6, hlpeps2=1.e-5)
+      external streql, xerrab
 c=======================================================================
       call subini ('uinpsrcg')
 c<<<
@@ -25,13 +24,13 @@ c>>>
       do istr=1,ngpfstr !{
 
         nstrai=nstrai+1
-        indsrc(nstrai)=-1
+        indsrc(nstrai)=1
         ingpfstr(istr)=nstrai
 c<<<
         print '(a,2i3,i6,i4,1p,1e12.4,1x,a)',
-     ,   'istr,nstrai,npts,kgpfstr,tgpfstr,cgpfstrs:',
-     ,    istr,nstrai,npts(nstrai),kgpfstr(istr),tgpfstr(istr),
-     ,    cgpfstrs(istr)
+     ,   'istr,nstrai,npts,kgpfstr,fgpfstr,cgpfstrs:',
+     ,    istr,nstrai,npts(nstrai),kgpfstr(istr),fgpfstr(istr),
+     ,    trim(cgpfstrs(istr))
 c>>>
         if(nstrai.ge.nstra) then !{
           write(0,*) 'Too many strata requested (gas puff',istr,') : ',
@@ -43,7 +42,7 @@ c>>>
         if(kgpfstr(istr).gt.nsrfs) then !{
           write(0,*) 'Too many segments requested (gas puff',istr,
      ,               ') : ',kgpfstr(istr)
-          write(0,*) 'A gas puffing source cannot span over more then ',
+          write(0,*) 'A gas puffing source cannot span over more than ',
      ,               nsrfs,' wall segments'
           write(0,*) 'STOP ==> check the DG model and the value of ',
      ,         'DEF_NSRFS in DIMENSIONS.F'
@@ -59,8 +58,8 @@ c>>>
         end if !}
         nsrfsi(nstrai)=kgpfstr(istr)
 
-        write(txtsou(nstrai),*)  'Gas puffing source',istr,' : ',
-     ,        cgpfstrs(istr)
+        write(txtsou(nstrai),'(a,i2,a,a)')
+     ,   'Gas puffing source ',istr,' : ',trim(cgpfstrs(istr))
         npts(nstrai)=npgpfstr(istr)
         nminpts(nstrai)=mpgpfstr(istr)
         if(npts(nstrai).lt.0) npts(nstrai)=10000
@@ -80,7 +79,7 @@ c>>>
         call uinspcid(cgpfstrs(istr),l,k)
         if(l.le.0 .or. l.gt.2) then !{
           write(0,*) 'Wrong particle specification for gas puffing ',
-     ,               'source',istr,' : ',cgpfstrs(istr)
+     ,               'source ',istr,' : ',trim(cgpfstrs(istr))
           write(0,*) '(must be either atom or molecule)'
           call xerrab ('==> Check the DG model')
         end if !}
