@@ -1590,6 +1590,7 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[get\_parm.bpl]\index{get\_parm.bpl} extracts certain useful quantities from a run input and output files for use in later scripts, particularly those building \btwoplot command files.
   \item[IDS\_yaml\_replace \#shot \#old\_run \#new\_run]\index{IDS\_yaml\_replace}\index{b2\_ual\_rewrite} Script invoked by the {\tt b2\_ual\_rewrite} program (see~\ref{sec:b2_ual_rewrite}) to update the {\tt .yaml} IMAS database files to indicate that the {\tt \#old\_run} run runmber of shot {\tt \#shot} is now replaced by run number {\tt \#new\_run}.
   \item[import\_files\_from\_convert]\index{import\_files\_from\_convert}\index{b2yt}\index{correct\_baserun\_timestamps} Imports and renames the files produced by {\tt b2yt} in a {\tt convert} directory at the same level as the current directory to prepare the new converted case for a run. Also updates some of the files in the {\tt baserun} directory, so it is often prudent to use {\tt correct\_baserun\_timestamps}, from the parent directory, afterwards.
+  \item[import\_files\_from\_convert\_wg]\index{import\_files\_from\_convert\_wg}\index{b2us} Imports and renames the files produced by {\tt b2us} in a {\tt convert} directory at the same level as the current directory to prepare the new converted wide-grid case for a run.
   \item[input.dat\_to\_mesh.extra]\index{input.dat\_to\_mesh.extra}\index{input.dat}\index{mesh.extra} Converts standard input (usually directed from a {\tt input.dat} file) into a {\tt mesh.extra} file.
   \item[last10]\index{last10} Truncates the {\tt run.log} file to contain only the output from the last 10 written code iterations and stores them in {\tt run.log.last10}.
   \item[mds\_id]\index{mds\_id} Obtains certain data necessary for run identification when saving to the {\tt MDSplus} database.
@@ -1618,6 +1619,7 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[SOLPS4to5]\index{SOLPS4to5} Script to convert a \SOLPSfour run directory into a \SOLPSfive one.
   \item[solps-iter\_update]\index{solps-iter\_update} Script to update to the latest \SOLPSITER master distribution.
   \item[solps-iter\_update\_develop]\index{solps-iter\_update\_develop} Script to switch to the up-to-date \SOLPSITER develop branch.
+  \item[solps-iter\_update\_wg]\index{solps-iter\_update\_wg} Script to switch to the up-to-date \SOLPSITER wide grid wg-release branch.
   \item[str2ogr]\index{str2ogr} Converts a .str structure file into a {\tt DG} .ogr template file.
   \item[summarize\_run]\index{summarize\_run} List of instructions provided during job submission for obtaining a standard set of run diagnostics.
   \item[switch\_to\_master]\index{switch\_to\_master} Script to switch to the up-to-date \SOLPSITER master branch.
