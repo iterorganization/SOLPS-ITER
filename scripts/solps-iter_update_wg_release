@@ -56,7 +56,7 @@ ADAS:
   cd $SOLPSTOP/modules/adas
   set repo="ADAS"
   git fetch --prune
-  git checkout wiesens/feature/fzj_misc && echo "Checked out ADAS fsj_misc branch" || goto branch
+  git checkout develop && echo "Checked out ADAS develop branch" || goto branch
   git pull && goto compile || goto local
 
 branch:
