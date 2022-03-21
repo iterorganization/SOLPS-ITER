@@ -21,7 +21,8 @@ switch ($nodename)
   module load flex/2.6.4-GCCcore-10.2.0
   module load Doxygen/1.8.20-GCCcore-10.2.0
   module load Ghostscript/9.53.3-GCCcore-10.2.0
-#  module load ParaView/5.8.1-foss-2020b-mpi
+  module load CMake/3.18.4-GCCcore-10.2.0
+  module load ParaView/5.10.0-intel-2020b-mpi
   module load PyQt5/5.15.1-GCCcore-10.2.0
   module load OpenBLAS/0.3.12-GCC-10.2.0
   module load netCDF-Fortran/4.5.3-iimpi-2020b
@@ -84,11 +85,18 @@ if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
 else
   # See ParaViewCatalystUsersGuide_v2.pdf Sec 3.7.2 Linking with Python ...
-  set PARAVIEW_LIB=`paraview-config --libs --python | sed s/-L//`
-  setenv LD_LIBRARY_PATH "${PARAVIEW_LIB}:${LD_LIBRARY_PATH}"
-  setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages/vtk:${PYTHONPATH}"
-  setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
-  setenv LD_CATALYST `paraview-config --libs vtkPVPythonCatalyst`
+  setenv PARAVIEW_MAJOR_VERSION `paraview --version | cut -d '.' -f 1 | cut -d ' ' -f 3`
+  if (${PARAVIEW_MAJOR_VERSION} > 4) then
+    setenv LD_CATALYST `paraview-config --ldflags -c PythonCatalyst -v CommonDataModel`
+    setenv PARAVIEW_INCLUDE `paraview-config --cppflags`
+  else
+#   setenv PARAVIEW_LIB `paraview-config --libs --python | sed s/-L//`
+#   setenv LD_LIBRARY_PATH "${PARAVIEW_LIB}:${LD_LIBRARY_PATH}"
+#   setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages/vtk:${PYTHONPATH}"
+#   setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
+    setenv LD_CATALYST `paraview-config --libs vtkPVPythonCatalyst`
+    setenv PARAVIEW_INCLUDE `paraview-config --include`
+  endif
   setenv LD_CATALYST "${LD_CATALYST} -lstdc++"
 endif
 
