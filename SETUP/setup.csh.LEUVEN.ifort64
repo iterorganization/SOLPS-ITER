@@ -45,3 +45,8 @@ module load worker/1.6.12-intel-2018a
 # Other environment variables
 setenv STGDIR /staging/leuven/stg_00030/SOLPS/lib/LEUVEN.ifort64
 setenv ALLINEA_NO_MPI_AUTODETECT false
+setenv TAPENADEDIR  /staging/leuven/stg_00030/tapenade
+alias   set_ipopt 'source $SOLPSTOP/scripts/ipopt'
+alias unset_ipopt 'source $SOLPSTOP/scripts/noipopt'
+alias   set_tao 'source $SOLPSTOP/scripts/tao'
+alias unset_tao 'source $SOLPSTOP/scripts/notao'

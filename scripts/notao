@@ -1,0 +1,7 @@
+if ($?SOLPS_PATH) then
+  unsetenv OPT TAO TAO_OPT
+  echo "PETSC-TAO compilation and optimization turned off"
+else
+  echo "SOLPS_PATH not set. Exiting."
+endif
+
