@@ -65,6 +65,7 @@ sed -i -e 's/ISIZE1OFfnapsch/nFc/g' b2tfnb_dv.F90
 sed -i -e 's/DIMENSION(:, ISIZE1OFdv%fna_52(:, :, isb), 0:1)/DIMENSION(nbdirsmax, nFc, 0:1)/g' b2tfnb_dv.F90
 sed -i -e 's/ISIZE1OFfchc/nFc/g' b2tinnt_dv.F90
 sed -i -e "s/cfdna(0, is), cfdnad(:, 0, is)/cfdna(0, is), cfdnad(1:nbdirs, 0, is)/g" b2tqna_dv.F90
+sed -i -e "s/cfvla(0, is), cfvlad(:, 0, is)/cfvla(0, is), cfvlad(1:nbdirs, 0, is)/g" b2tqna_dv.F90
 sed -i -e "s/cfhci(0, is), cfhcid(:, 0, is)/cfhci(0, is), cfhcid(1:nbdirs, 0, is)/g" b2tqna_dv.F90
 sed -i -e "s/cfdpa(0, is), cfdpad(:, 0, is)/cfdpa(0, is), cfdpad(1:nbdirs, 0, is)/g" b2tqna_dv.F90
 sed -i -e "s/cfvsa(0, is), cfvsad(:, 0, is)/cfvsa(0, is), cfvsad(1:nbdirs, 0, is)/g" b2tqna_dv.F90
