@@ -3303,7 +3303,7 @@ quantities that can be plotted in this way.
 \section{b2pl, the plotting program}
 \index{b2pl}\index{b2plot}\label{sec:b2pl}
 
-%%sed 's:^     [^ ]:@@@:' $SOLPSTOP/modules/B2.5/src/b2plot/b2plot.F | awk 'BEGIN{save=""}/^[^@][^@][^@]/&&save!=""{print save}/^[^@][^@][^@]/{save=$0}/^@@@/{save=save" "$0}END{print save}' | sed 's; *@@@ *;;g' | grep -v "IGNORE" | egrep "case *\( *'|description *=" | sed -e "s;.*case *('\(.*\)');cmd: \1;" -e "s; *description *= *'\(.*\)';desc: \1;" -e "s;' //';;" | awk -F: 'BEGIN{save=""}/^cmd/&&save!=""{print save}/^cmd:/{save=$2}/^desc/{save=save"\t "$2}END{print save}' | sed 's:\! ::' | sed "s:',':,:g" | sed "s:'':':g" | expand >! b2plot.commands
+%%sed 's:^     [^ ]:@@@:' $SOLPSTOP/modules/B2.5/src/b2plot/b2plot.F | awk 'BEGIN{save=""}/^[^@][^@][^@]/&&save!=""{print save}/^[^@][^@][^@]/{save=$0}/^@@@/{save=save" "$0}END{print save}' | sed 's; *@@@ *;;g' | grep -v "IGNORE" | egrep "case *\( *'|description *=" | sed -e "s;.*case *('\(.*\)');cmd: \1;" -e "s; *description *= *'\(.*\)';desc: \1;" -e "s;' //';;" -e "s;'//';;" | awk -F: 'BEGIN{save=""}/^cmd/&&save!=""{print save}/^cmd:/{save=$2}/^desc/{save=save"\t "$2}END{print save}' | sed 's:\! ::' | sed "s:',':,:g" | sed "s:'':':g" | expand >! b2plot.commands
 
 The following commands apply:
 
@@ -4532,7 +4532,7 @@ The data blocks are:
   \item[emissmol] $H_\alpha$ emissivity due to molecules and molecular ions ($photons.m^{-3}.s^{-1}$), dimension ({\tt NDX},{\tt NDY})
   \item[srcml] Molecule particle source ($A$), dimension ({\tt NDX},{\tt NDY},{\tt NMOL})
   \item[edissml] Energy spent for dissociating hydrogenic molecules ($W$), dimension ({\tt NDX},{\tt NDY},{\tt NMOL})
-  \item[wldnek] Heat transferred by neutrals ($W$), total over strata, dimension ({\tt NLIM}+{\tt NSTS})
+  \item[wldnek] Net kinetic energy deposited by neutrals ($W$), total over strata, dimension ({\tt NLIM}+{\tt NSTS})
   \item[wldnep] Energy released by recombination of neutrals and ions into molecules ($W$), total over strata, dimension ({\tt NLIM}+{\tt NSTS})
   \item[wldna] Flux of atoms impinging on surface ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
   \item[ewlda] Average energy of impinging atoms on surface ($eV$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
@@ -4543,7 +4543,7 @@ The data blocks are:
   \item[wldrm] Flux of reflected molecules from surface ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NMOL})
   \item[For each stratum $i=1,nstra$] The above data, resolved per stratum:
   \begin{description}
-    \item[wldnek(i)] Heat transferred by neutrals ($W$), dimension ({\tt NLIM}+{\tt NSTS})
+    \item[wldnek(i)] Net kinetic energy deposited by neutrals ($W$), dimension ({\tt NLIM}+{\tt NSTS})
     \item[wldnep(i)] Energy released by recombination of neutrals and ions into molecules ($W$), dimension ({\tt NLIM}+{\tt NSTS})
     \item[wldna(i)] Flux of atoms impinging on surface ($A$), dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
     \item[ewlda(i)] Average energy of impinging atoms on surface ($eV$), dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
@@ -16499,24 +16499,24 @@ quantities are only available for coupled \SOLPSITER runs.
     triarea \index{b2plot, triarea} & Triangle area $(m^{2})$ \\
     triavol \index{b2plot, triavol} & Triangle volume $(m^{3})$ \\
     tz \index{b2plot,tz} & Triangle centroid $z$ coordinate $(m)$ \\
-    vxa \index{b2plot, vxa} & Atoms $x$-directed velocity $(m.s^{-1})$ \\
-    vxdena \index{b2plot, vxdena} & Atoms $x$-directed momentum density $(kg.m^{-2}.s^{-1})$ \\
-    vxdeni \index{b2plot, vxdeni} & Test ions $x$-directed momentum density $(kg.m^{-2}.s^{-1})$ \\
-    vxdenm \index{b2plot, vxdenm} & Molecules $x$-directed momentum density $(kg.m^{-2}.s^{-1})$ \\
-    vxi \index{b2plot, vxi} & Test ions $x$-directed velocity $(m.s^{-1})$ \\
-    vxm \index{b2plot, vxm} & Molecules $x$-directed velocity $(m.s^{-1})$ \\
-    vya \index{b2plot, vya} & Atoms $y$-directed velocity $(m.s^{-1})$ \\
-    vydena \index{b2plot, vydena} & Atoms $y$-directed momentum density $(kg.m^{-2}.s^{-1})$ \\
-    vydeni \index{b2plot, vydeni} & Test ions $y$-directed momentum density $(kg.m^{-2}.s^{-1})$ \\
-    vydenm \index{b2plot, vydenm} & Molecules $y$-directed momentum density $(kg.m^{-2}.s^{-1})$ \\
-    vyi \index{b2plot, vyi} & Test ions $y$-directed velocity $(m.s^{-1})$ \\
-    vym \index{b2plot, vym} & Molecules $y$-directed velocity $(m.s^{-1})$ \\
-    vza \index{b2plot, vza} & Atoms $z$-directed velocity $(m.s^{-1})$ \\
-    vzdena \index{b2plot, vzdena} & Atoms $z$-directed momentum density $(kg.m^{-2}.s^{-1})$ \\
-    vzdeni \index{b2plot, vzdeni} & Test ions $z$-directed momentum density $(kg.m^{-2}.s^{-1})$ \\
-    vzdenm \index{b2plot, vzdenm} & Molecules $z$-directed momentum density $(kg.m^{-2}.s^{-1})$ \\
-    vzi \index{b2plot, vzi} & Test ions $z$-directed velocity $(m.s^{-1})$ \\
-    vzm \index{b2plot, vzm} & Molecules $z$-directed velocity $(m.s^{-1})$ \\
+    vxa \index{b2plot, vxa} & Atoms $x$-directed (Cartesian) velocity $(m.s^{-1})$ \\
+    vxdena \index{b2plot, vxdena} & Atoms $x$-directed (Cartesian) momentum density $(kg.m^{-2}.s^{-1})$ \\
+    vxdeni \index{b2plot, vxdeni} & Test ions $x$-directed (Cartesian) momentum density $(kg.m^{-2}.s^{-1})$ \\
+    vxdenm \index{b2plot, vxdenm} & Molecules $x$-directed (Cartesian) momentum density $(kg.m^{-2}.s^{-1})$ \\
+    vxi \index{b2plot, vxi} & Test ions $x$-directed (Cartesian) velocity $(m.s^{-1})$ \\
+    vxm \index{b2plot, vxm} & Molecules $x$-directed (Cartesian) velocity $(m.s^{-1})$ \\
+    vya \index{b2plot, vya} & Atoms $y$-directed (Cartesian) velocity $(m.s^{-1})$ \\
+    vydena \index{b2plot, vydena} & Atoms $y$-directed (Cartesian) momentum density $(kg.m^{-2}.s^{-1})$ \\
+    vydeni \index{b2plot, vydeni} & Test ions $y$-directed (Cartesian) momentum density $(kg.m^{-2}.s^{-1})$ \\
+    vydenm \index{b2plot, vydenm} & Molecules $y$-directed (Cartesian) momentum density $(kg.m^{-2}.s^{-1})$ \\
+    vyi \index{b2plot, vyi} & Test ions $y$-directed (Cartesian) velocity $(m.s^{-1})$ \\
+    vym \index{b2plot, vym} & Molecules $y$-directed (Cartesian) velocity $(m.s^{-1})$ \\
+    vza \index{b2plot, vza} & Atoms $z$-directed (Cartesian) velocity $(m.s^{-1})$ \\
+    vzdena \index{b2plot, vzdena} & Atoms $z$-directed (Cartesian) momentum density $(kg.m^{-2}.s^{-1})$ \\
+    vzdeni \index{b2plot, vzdeni} & Test ions $z$-directed (Cartesian) momentum density $(kg.m^{-2}.s^{-1})$ \\
+    vzdenm \index{b2plot, vzdenm} & Molecules $z$-directed (Cartesian) momentum density $(kg.m^{-2}.s^{-1})$ \\
+    vzi \index{b2plot, vzi} & Test ions $z$-directed (Cartesian) velocity $(m.s^{-1})$ \\
+    vzm \index{b2plot, vzm} & Molecules $z$-directed (Cartesian) velocity $(m.s^{-1})$ \\
     \hline
     \caption{Quantities that can be stored in the "Eirene" stack.}
     \label{tab:eirenequantities}

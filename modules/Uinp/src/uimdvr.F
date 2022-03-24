@@ -141,7 +141,7 @@ c     ,         l,n,jvrb,jblk,lprdckw(l,n,jvrb,jblk),' : ',c,i,r !###
               call uisswr(lout,s,ss,mxslen,ufs)
             end if !}
           end do !}
-        end do            !}
+        end do !}
       end if !}
       lbmdf(jvrb,jblk)=.true.
 c

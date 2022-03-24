@@ -16,7 +16,7 @@
 ### If the .quit (or _quit) is seen, or end time (specified by 'b2mndr_etim') is reached, then
 ### the loop breaks, i.e. the job is not resubmitted again.
 ###
-### Usage: 
+### Usage:
 ###   Submit the job:     `spbstusubmit SBATCH.spbstu_coupled_loop`
 ###   Stop the run:       `touch b2mn.exe.dir/.quit`
 
@@ -99,7 +99,7 @@ if ("$Break_loop" == "no") then
     set msg="Resubmitting inside the loop at `date`"
     update_solps_run_status ${msg}
     rm -f run.log* b2mn.prt b2.log*;
-    set NOW = `date +"%d.%m.%Y_%T"`  
+    set NOW = `date +"%d.%m.%Y_%T"`
     mv b2fstati b2fstati_$NOW
     if (-e fort.13.i) mv fort.13.i fort.13.i_$NOW
     if (-e fort.44.i) mv fort.44.i fort.44.i_$NOW

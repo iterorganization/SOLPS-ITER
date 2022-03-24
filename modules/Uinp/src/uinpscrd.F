@@ -283,6 +283,7 @@ C***  SURFMOD_k_<MATERIAL>_<SPUTER>_<PUMP>_<SEMITRANSP>_<TEMPERATURE K>
      .       txtbuf(1:len_of_digits(twll)+1)
       end if
       cardname=cnam
+      return
       end function cardname !}
 
 c=======================================================================
