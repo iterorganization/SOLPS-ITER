@@ -95,7 +95,7 @@ reshe = ncread(balfile,'reshe');
 
 %% Create the units string
 switch areatype
-    case 'parallel'        
+    case 'parallel'
         units = 'Wm^{-2}';
     case 'contact'
         units = 'Wm^{-2}';
@@ -179,7 +179,7 @@ if strata_plot
                       {'Strata decomp. of (\int_d^u S_{eIE}^{EIR}dV)/dA_{||d} in radial direction',...
                        'Strata decomp. of S_{eIE}^{EIR}dV/dA_{||d} in poloidal direction'},...
                       {''},comuse,indrad,indpol,nstra,axstrat,axbal,btp.areadown,areadownpol,reverse,false);
-end              
+end
 %%
 end
 

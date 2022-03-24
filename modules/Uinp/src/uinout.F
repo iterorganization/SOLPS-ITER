@@ -9,7 +9,7 @@
 c  version : 05.02.2005 00:46
 
 cvk input for block 1,3,4,9,13,14 is changed
-cvk block 6 has to be changed (with reaction cards), 
+cvk block 6 has to be changed (with reaction cards),
 cvk blocks 9,10,11,12 probably should be changed as well
 
 c=======================================================================
@@ -385,7 +385,7 @@ c***  "ch0-cards"
 c   general surface data
 
 c*** "ch1-cards"
-c% This should be changed 
+c% This should be changed
 c        call uichwr(iunoo,1,jadch1(1,i),nlimi)
 c*** "ch2-cards" here !
 
@@ -696,14 +696,14 @@ c** To be done (in Eirene first)
      ,                        itpcdn(ipls,1),istrcdn(ipls,1),
      ,                        bltzcdn(ipls),dltecdn(ipls)
           else if(streql(cdnmdlp(ipls),cdnmdlp_sel(10))) then !}{ 'CORONA'
-            write(iunoo,'(3i6,1x,a6,1x,a4,a9,a3,1p,e12.4)') 
+            write(iunoo,'(3i6,1x,a6,1x,a4,a9,a3,1p,e12.4)')
      ,                     ispcdn(ipls,1),
      ,                     itpcdn(ipls,1),istrcdn(ipls,1),
      ,                     fnamcdn(ipls,1),h2cdn(ipls,1),
      ,                     reaccdn(ipls,1),crcdn(ipls,1),acrncdn(ipls)
           else if(streql(cdnmdlp(ipls),cdnmdlp_sel(11))) then !}{ 'COLRAD'
             do i=1,nrep(npls) !{
-              write(iunoo,'(3i6,1x,a6,1x,a4,a9,a3)') 
+              write(iunoo,'(3i6,1x,a6,1x,a4,a9,a3)')
      ,                     ispcdn(ipls,i),
      ,                     itpcdn(ipls,i),istrcdn(ipls,i),
      ,                     fnamcdn(ipls,i),h2cdn(ipls,i),
@@ -785,7 +785,7 @@ c*** surface cards
         write(iunoo,703) screcycs(i),scychsptg(i),scstprm(i),0.0,
      ,                              scechsptg(i)
         do j=1,nnchemvar(i) !{
-          k=k+1 
+          k=k+1
           ich=indchemvar(k)
           if(streql(chvarname(ich),'ISRC').OR.
      .                      streql(chvarname(ich),'LCHSPNWL')) then !{
@@ -793,7 +793,7 @@ c*** surface cards
      ,                                                nint(chmvar(ich))
           else !}{
             write(iunoo,716) chvarname(ich),chmspname(ich),chmvar(ich)
-          end if !} 
+          end if !}
         end do !}
       end do !}
 
@@ -852,7 +852,7 @@ c**  velocity space distribution
         write(iunoo,703) soreni(i),sorene(i),sorvdx(i),sorvdy(i),
      ,                                                 sorvdz(i)
         write(iunoo,703) sorcos(i),sormax(i),sorctx(i),sorcty(i),
-     ,                                                sorctz(i)
+     ,                                                 sorctz(i)
 
       end do !}
 
@@ -1106,7 +1106,7 @@ c***   Sort the chords according to their labels
         write(iunoo,707) (listadds(i),i=1,nlstadds)
         write(iunoo,707) (listaddg(i),i=1,nlstadds)
       end if !}
-      
+
       do j=1,ngwties !{
         write(iunoo,707) kgwties(j),mgwties(j)
         if(mgwties(j).gt.0)

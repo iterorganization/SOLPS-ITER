@@ -19,14 +19,14 @@ C     READ PHYSICAL COORDINATES FROM FORT.30 FILE TO XCOORD, YCOORD
       integer, save :: new_format, exp_location
 
       data new_format/1/
-      data format_string/ 
+      data format_string/
      . '(T2,1E15.7,T17,1E15.7,T32,1E15.7,T47,1E15.7)',
      . '(T2,1E16.8,T18,1E16.8,T34,1E16.8,T50,1E16.8)' /
 
 *  READ PHYSICAL COORDINATES FROM FORT.30 FILE
 *  ---------------------------------------------------------------------
 *  INFORMATION FOR EACH CELL
-*                             y ^ 
+*                             y ^
 *     NO. OF CELL    (IX,IY)    |  (BR(3),BZ(3))       (BR(2),BZ(2))
 *                               |
 *            PITCH              |               (CR,CZ)
@@ -34,7 +34,7 @@ C     READ PHYSICAL COORDINATES FROM FORT.30 FILE TO XCOORD, YCOORD
 *                               |  (BR(4),BZ(4))       (BR(1),BZ(1))
 *                                 -----------------------------------> x
 *
-      
+
       REWIND 30
       READ (30,*)
       READ (30,*)
@@ -64,14 +64,14 @@ C     READ PHYSICAL COORDINATES FROM FORT.30 FILE TO XCOORD, YCOORD
       read (30,'(A80)') line
       exp_location = 81
       write(*,'(A80)') line
-      if (index(line,'E').ne.0) 
+      if (index(line,'E').ne.0)
      . exp_location = min(exp_location,index(line,'E'))
       write(*,*) 'Exp_location = ', exp_location
-      if (index(line,'e').ne.0) 
+      if (index(line,'e').ne.0)
      . exp_location = min(exp_location,index(line,'e'))
-      if (index(line,'d').ne.0) 
+      if (index(line,'d').ne.0)
      . exp_location = min(exp_location,index(line,'d'))
-      if (index(line,'D').ne.0) 
+      if (index(line,'D').ne.0)
      . exp_location = min(exp_location,index(line,'D'))
       if (exp_location.eq.12) then
         new_format = 1
@@ -79,7 +79,7 @@ C     READ PHYSICAL COORDINATES FROM FORT.30 FILE TO XCOORD, YCOORD
         new_format = 2
       else
         write(0,*) 'Unrecognized format in '//fort_lc//'30 file'
-        stop 
+        stop
       endif
       backspace(30)
       write(*,'(4a)') 'Detected '//fort_lc//'30 is using ',
@@ -108,9 +108,9 @@ C     READ PHYSICAL COORDINATES FROM FORT.30 FILE TO XCOORD, YCOORD
         ENDDO
       ENDDO
       N2EFF=ICELL
-            
+
       call realloc_ctria('xycoord',(nx+1)*(ny+1))
-      DO IY=1,NY  
+      DO IY=1,NY
         DO IX=1,NX
           XCOORD((IY-1)*(NX+1)+IX+NCOORD)=BR(IX,IY,4)*100.
           YCOORD((IY-1)*(NX+1)+IX+NCOORD)=BZ(IX,IY,4)*100.

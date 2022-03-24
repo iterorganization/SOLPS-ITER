@@ -10,7 +10,7 @@ FC       = gfortran
 endif
 
 ifndef SOLPS_DEBUG
-FFLAGS   = -O 
+FFLAGS   = -O
 endif
 
 CPP      = /lib/cpp -traditional

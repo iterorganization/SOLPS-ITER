@@ -28,7 +28,7 @@ The script prints the output filename after successful grid conversion to B2 for
 The directories for the input files and for the grids can be specified in the
 environmental variables CARRE_INPUTDIR and CARRE_GRIDDIR (default is the current directory).
 If the variable CARRE_STOREDIR is set, then all the input data (i.e., the control file, the
-equilibrium file, and the structures file) are saved in a directory 
+equilibrium file, and the structures file) are saved in a directory
 \$CARRE_STOREDIR/\$DEVICE/<grid number>. If this directory does not exist, it is created.
 
 Error messages and tracing data from carre (\"Grid\") and traduit (\"Convert\") can be found in
@@ -118,7 +118,7 @@ do {
                 The stored input data (if any) for the specified grids are also removed.
   Input   (i)   specify a new directory for the input files (input directory).
                 If the specified directory does not exist and the CARRE_STOREDIR is set,
-                then the input directory is looked for in \$CARRE_STOREDIR/\$DEVICE 
+                then the input directory is looked for in \$CARRE_STOREDIR/\$DEVICE
                 and \$CARRE_STOREDIR
   Output  (o)   specify a new storage directory for the grids
   Quit    (q)   quit $script
@@ -153,7 +153,7 @@ do {
             q=c; break;;
     ( c|C )                                               # convert:
             /bin/echo -e "carre.out\n4" | $CARRE_PATH/traduit.exe 2>traduit.log; mv traduit.out traduit.sno ;
-            /bin/echo -e "carre.out\n2" | $CARRE_PATH/traduit.exe 2>traduit.log; 
+            /bin/echo -e "carre.out\n2" | $CARRE_PATH/traduit.exe 2>traduit.log;
             q=t; break;;
     ( t|T )                                               # store the grid:
             [ -r traduit.out ] && {
@@ -249,7 +249,7 @@ do {
             break;;
     ( n|N )                                               # next job:
             /bin/echo -e "Input the new stem: \c"; read u
-            [ -n "$u" ] && { 
+            [ -n "$u" ] && {
               [ "$u" = '-' ] && {
                 [ -r $indir/rzpsi.dat ] && [ -r $indir/structure.dat ] && [ -r $indir/btor.dat ] && {
                   ln -sf $indir/rzpsi.dat $indir/structure.dat $indir/btor.dat . && q=g
@@ -313,7 +313,7 @@ do {
                 indir="$u"
               } || {
                 [ -n "$stordir" ] && {
-                  indir="$stordir/$u" 
+                  indir="$stordir/$u"
                   [ -d "$indir" ] || {
                     indir="$CARRE_STOREDIR/$u"
                     [ -d "$indir" ] || indir=

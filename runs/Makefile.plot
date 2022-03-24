@@ -19,7 +19,7 @@ endif
 ifdef SOLPS_MPI
 EXT_MPI = .mpi
 endif
-ifdef USE_IMPGYRO 
+ifdef USE_IMPGYRO
 EXT_IMPGYRO = .ig
 endif
 ifdef SOLPS_DEBUG
@@ -54,7 +54,7 @@ target_yn = b2yn.prt b2yn.plt
 target_md = b2md.prt
 target_md.dbx = b2md.dbx
 target_rd = b2rd.prt
-target_ymb = b2ymb.prt 
+target_ymb = b2ymb.prt
 target_yrp = b2yrp.prt
 target_ydm = b2ydm.prt
 
@@ -240,7 +240,7 @@ ifndef STAND_ALONE
 endif
 	-cd b2md.exe.dir ; rm -f HYDHEL METHANE SPUTER H2VIBR AMMONX ftn21 ftn22
 endif
-	-[ -s b2md.exe.dir/shotnumber.history ] && mv b2md.exe.dir/shotnumber.history . || echo > /dev/null 
+	-[ -s b2md.exe.dir/shotnumber.history ] && mv b2md.exe.dir/shotnumber.history . || echo > /dev/null
 	-rmdir b2md.exe.dir
 
 ifndef STAND_ALONE

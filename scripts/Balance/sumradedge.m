@@ -7,7 +7,7 @@ function yout = sumradedge(yin,indpol,comuse)
     rightiy = comuse.rightiy+1;
     topix = comuse.topix+1;
     topiy = comuse.topiy+1;
-    
+
     % Add an extra true cell to the rightmost edge of indpol to get indpoledge:
     for iy = 1:comuse.ny
         ixlast = find(indpol(:,iy),1,'last');
@@ -15,7 +15,7 @@ function yout = sumradedge(yin,indpol,comuse)
             indpoledge(rightix(ixlast,iy),rightiy(ixlast,iy)) = true;
         end
     end
-    
+
     % Go to the bottom left of indpol:
     [ix,iy]=ind2sub(size(indpol),find(indpol,1));
     % For poloidally consecutive points in indpol, sum radially:

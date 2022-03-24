@@ -80,7 +80,7 @@ ifstream size1(sinout+"rp_size.dat");
 ifstream www1("Wtot_"+sinout+"rp.dat");
 ifstream www2("Wpls_"+sinout+"rp.dat");
 int Ntile;
-size1>>Ntile;     
+size1>>Ntile;
 real[int] qtot(Ntile);
 real[int] qpls(Ntile);
 for(int nn=0;nn<Ntile;nn+=1){
@@ -98,7 +98,7 @@ real[int] HTC(Ntile);
 real[int,int] Tout(Ntile,npointout);
 real TTMAX=0.0;
 int IMAX=0;
-real htc; 
+real htc;
 
 //DOMAIN GENERATION
 //DOMAIN SS

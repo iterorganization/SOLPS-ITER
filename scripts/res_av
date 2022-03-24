@@ -3,11 +3,11 @@
 ACTDIR=`pwd`
 
 # find directory containing running averages
-if [ -d b2mn.exe.dir/run_av ] 
+if [ -d b2mn.exe.dir/run_av ]
 then
   RUN_AV_DIR=${ACTDIR}/b2mn.exe.dir/run_av
   CP_DIR=${ACTDIR}/b2mn.exe.dir
-elif [ -d run_av ] 
+elif [ -d run_av ]
 then
   RUN_AV_DIR=${ACTDIR}/run_av
   CP_DIR=${ACTDIR}
@@ -33,7 +33,7 @@ fi
       found=0
     }
   }
-}  
+}
 [ $found -eq 1 ] && {
   [ -s ${ACTDIR}/input_avg.eir ] || mv ${ACTDIR}/input.dat ${ACTDIR}/input_avg.eir
 }
@@ -42,7 +42,7 @@ echo "run_av_dir = " $RUN_AV_DIR
 echo "cp_dir = " $CP_DIR
 echo "input = " $input
 
-if [ ! "$(ls -A $RUN_AV_DIR/run_av.*)" ] 
+if [ ! "$(ls -A $RUN_AV_DIR/run_av.*)" ]
 then
   echo "no files with averages found"
   exit
@@ -55,7 +55,7 @@ mkdir res.exe.dir
 cd res.exe.dir
 cp ${CP_DIR}/b2mn.dat .
 
-# prepare B2.5 input file 
+# prepare B2.5 input file
 cat << EOF >> b2mn.dat
 'b2mndr_ntim'                        '2'             # number of time steps
 'b2mndt_rxf'                         '0.0'           # under-relaxation factor
@@ -75,19 +75,19 @@ ln -s ${CP_DIR}/AMJUEL ${CP_DIR}/HYDHEL ${CP_DIR}/METHANE ${CP_DIR}/SPUTER ${CP_
 ln -s ${CP_DIR}/fort.* .
 fi
 ln -s ${input} input.dat
-if [ -s ${CP_DIR}/b2fgmtry ] 
+if [ -s ${CP_DIR}/b2fgmtry ]
 then
   ln -s ${CP_DIR}/b2fgmtry .
 else
 ln -s ${CP_DIR}/../baserun/b2fgmtry .
 fi
-if [ -s ${CP_DIR}/b2fpardf ] 
+if [ -s ${CP_DIR}/b2fpardf ]
 then
   ln -s ${CP_DIR}/b2fpardf .
 else
 ln -s ${CP_DIR}/../baserun/b2fpardf .
 fi
-if [ -s ${CP_DIR}/b2frates ] 
+if [ -s ${CP_DIR}/b2frates ]
 then
   ln -s ${CP_DIR}/b2frates .
 else
@@ -130,14 +130,14 @@ do
   cat ecartf2b | awk "flag != 1; /real/ { flag = 1 }; " > last
 # write the line containing "real" into b2ftrace_av
   tail -1 last >> b2ftrace_av
-# write the second to last line into b2ftrace_av and 
+# write the second to last line into b2ftrace_av and
 # replace the iteration number with the running average index
   tail -2 last | head -1 | awk '{$2 = "'"$CHARS"'"; print $0 }' >> b2ftrace_av
-# reverse last 
+# reverse last
   tac last > tsal
 # write reversed last starting at line 3
   tail -n +3 tsal >> b2ftrace_av
-  
+
   rm b2faveri b2mn.prt ecartf2b last tsal
 done
 

@@ -136,14 +136,14 @@ tmp = ncread(balfile,'b2srdt_sna_bal');
 b2srdt_sna = sum(tmp(:,:,isplot),3);
 tmp = ncread(balfile,'b2srst_sna_bal');
 b2srst_sna = sum(tmp(:,:,isplot),3);
-% Residual:    
+% Residual:
 tmp = ncread(balfile,'resco');
 rescb = sum(tmp(:,:,isplot),3);
 %%
 
 %% Create the units string
 switch areatype
-    case 'parallel'        
+    case 'parallel'
         units = 'm^{-2}s^{-1}';
     case 'contact'
         units = 'm^{-2}s^{-1}';
@@ -219,7 +219,7 @@ if strata_plot
                       {'Strata decomp. of EIRENE particle source with radial resolution',...
                        'Strata decomp. of EIRENE particle source with poloidal direction'},...
                       {''},comuse,indrad,indpol,nstra,axstrat,axbal,btn.area_divide,areadividepol,reverse,false);
-end              
+end
 %%
 end
 
