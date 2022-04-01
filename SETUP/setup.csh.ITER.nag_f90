@@ -23,8 +23,8 @@ switch ($nodename)
   module load PyYAML/5.3.1-GCCcore-10.2.0
   module load matplotlib/3.3.3-foss-2020b
   module load xarray/0.16.2-foss-2020b
-  module load AMNS/1.3.5-foss-2020b-DD-3.35.0
-  module load CMake/3.18.4-GCCcore-10.2.0
+  module load AMNS/1.4.0-foss-2020b-DD-3.35.0
+  module load CMake/3.20.1-GCCcore-10.2.0
 #  module load ParaView/5.10.0-foss-2020b-mpi
   module load PyQt5/5.15.1-GCCcore-10.2.0
   module load Doxygen/1.8.20-GCCcore-10.2.0
