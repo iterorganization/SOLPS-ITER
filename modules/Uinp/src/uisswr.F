@@ -21,4 +21,5 @@ c          end do
  560      continue
       end if
 c=====================================================
-      end
+      return
+      end subroutine uisswr

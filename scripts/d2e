@@ -8,7 +8,6 @@ Usage: $Name DG-file EFIT-file [Field-file]
        where DG-file and Field-file are the input filenames,
        and EFIT-file is the output filename.
        If the Field-file is not specified, the default field.snn is used.
-
        The Field-file is only needed, when the DG-file is in old format!
 "
 

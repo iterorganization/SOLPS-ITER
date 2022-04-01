@@ -113,7 +113,11 @@ c*** Take the neutral data from the "whole target" specification
             else !}{
 c*** Take the data from the boundary default
               ewmbnds(izn,iknd)=ewmbndx(0,iknd)
-              jskbnds(izn,iknd)=jskbndx(0,iknd)
+              if (ln_cnfg.and.iknd.eq.1) then
+                jskbnds(izn,iknd)=3
+              else
+                jskbnds(izn,iknd)=jskbndx(0,iknd)
+              end if
               jrfbnds(izn,iknd)=jrfbndx(0,iknd)
               jcsbnds(izn,iknd)=jcsbndx(0,iknd)
               jcgbnds(izn,iknd)=jcgbndx(0,iknd)
@@ -253,9 +257,10 @@ c*** uex: the highest ionisation state for this species
 c=======================================================================
       call subend ()
       return
-      end
+      end subroutine uinbndfl
 
       integer function find_matching_species(name)
+      use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
       use eirmod_solps
@@ -292,6 +297,7 @@ c=======================================================================
       end function find_matching_species
 
       integer function find_matching_reagent(name)
+      use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
       use eirmod_solps

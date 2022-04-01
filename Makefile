@@ -1,7 +1,7 @@
 # Test whether required environment variables are set
 # If not, attempt to determine them automatically
 
-# Identify HOST_NAME 
+# Identify HOST_NAME
 ifndef HOST_NAME
   ifeq ($(shell [ -e whereami ] && echo yes || echo no ),yes)
     # Identify host from whereami-script
@@ -11,7 +11,7 @@ ifndef HOST_NAME
       HOST_NAME = default
     endif
   else
-    # If whereami-script not found, use default settings 
+    # If whereami-script not found, use default settings
     HOST_NAME = default
   endif
   export HOST_NAME
@@ -55,7 +55,7 @@ endif
 # Setup debug flag
 EXT_DBG =
 ifdef SOLPS_DEBUG
-EXT_DBG=.debug
+EXT_DBG = .debug
 endif
 
 # Setup MPI flag
@@ -95,33 +95,33 @@ DEFAULT: solps
 #----------------------
 
 
-solps:     carre divgeo b25eirene     uinp     triang amds sonnet-light manual
+solps:       carre divgeo b25eirene     uinp     triang amds sonnet-light manual
 
 solps_openmp: carre divgeo b25eirene_openmp uinp_openmp triang amds_openmp sonnet-light manual
 
-solps_mpi: carre divgeo b25eirene_mpi uinp_mpi triang_mpi amds_mpi sonnet-light manual
+solps_mpi:   carre divgeo b25eirene_mpi uinp_mpi triang_mpi amds_mpi sonnet-light manual
 
 solps_openmp_mpi: carre divgeo b25eirene_openmp_mpi uinp_openmp_mpi triang_mpi amds_openmp_mpi sonnet-light manual
 
 solps_mpi_openmp: solps_openmp_mpi
 
-nox:       carre_nox divgeo_nox b25eirene_nox uinp_nox triang_nox manual
+nox:         carre_nox divgeo_nox b25eirene_nox uinp_nox triang_nox manual
 
 nox_openmp:  carre_nox divgeo_nox b25eirene_nox_openmp uinp_nox_openmp triang_nox manual
 
-nox_mpi:   carre_nox divgeo_nox b25eirene_nox_mpi uinp_nox_mpi triang_nox_mpi manual
+nox_mpi:     carre_nox divgeo_nox b25eirene_nox_mpi uinp_nox_mpi triang_nox_mpi manual
 
 nox_openmp_mpi: carre_nox divgeo_nox b25eirene_nox_openmp_mpi uinp_nox_openmp_mpi triang_nox_mpi manual
 
 nox_mpi_openmp: nox_openmp_mpi
 
-all:       carre divgeo b25     eirene     b25eirene     uinp     triang amds sonnet-light manual
+all:         carre divgeo b25     eirene     b25eirene     uinp     triang amds sonnet-light manual
 
-all_nox:   carre_nox divgeo_nox b25_nox eirene_nox b25eirene_nox uinp_nox triang_nox manual
+all_nox:     carre_nox divgeo_nox b25_nox eirene_nox b25eirene_nox uinp_nox triang_nox manual
 
 all_openmp:  carre divgeo b25_openmp eirene b25eirene_openmp uinp_openmp triang amds_openmp sonnet-light manual
 
-all_mpi:   carre divgeo b25_mpi eirene_mpi b25eirene_mpi uinp_mpi triang_mpi amds_mpi sonnet-light manual
+all_mpi:     carre divgeo b25_mpi eirene_mpi b25eirene_mpi uinp_mpi triang_mpi amds_mpi sonnet-light manual
 
 all_nox_openmp: carre_nox divgeo_nox b25_nox_openmp eirene_nox b25eirene_nox_openmp uinp_nox_openmp triang_nox manual
 
@@ -746,7 +746,6 @@ clean_b2sxdr:
 
 clean_manual:
 	cd doc/solps; ${MAKE} clean
-
 
 # help
 help:

@@ -43,7 +43,7 @@ hx = comuse.hx; % hx
 B = comuse.bb; % Mag. field
 
 %% Obtain required arrays from the simulation...
-% Fluxes (electrons)
+% Fluxes (electrons):
 tmp = ncread(balfile,'fhe_32');
 fhex_32 = tmp(:,:,1);
 fhey_32 = tmp(:,:,2);

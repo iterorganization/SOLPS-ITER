@@ -31,14 +31,13 @@ function baltotpress(balfile,indrad,indpol,comuse,axbal,reverse,strata_plot,axst
 nx = comuse.nx;
 ny = comuse.ny;
 nstra = comuse.nstra;
-za = comuse.za;
-leftix = comuse.leftix+1;  % Convert to one-based
+topix = comuse.topix+1;
+topiy = comuse.topiy+1;
+leftix = comuse.leftix+1;
 leftiy = comuse.leftiy+1;
 rightix = comuse.rightix+1;
 rightiy = comuse.rightiy+1;
-topix = comuse.topix+1;
-topiy = comuse.topiy+1;
-
+za = comuse.za;
 dv = comuse.dv; % Cell vol.
 hx = comuse.hx; % hx
 B = comuse.bb; % Mag. field

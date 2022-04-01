@@ -63,9 +63,9 @@ c
 c*** Not the first appearance of the same keyword. Skip it.
         lbv=.false.
 cc<<<
-c	print *,'uimdvr: skipping ',chrpl(jvrb,jblk)
+c       print *,'uimdvr: skipping ',chrpl(jvrb,jblk)
 cc>>>
-	return
+        return
       end if !}
 
       ss=' '
@@ -75,14 +75,14 @@ c      print *,'=> uimdvr: ',chrpl(jvrb,jblk),m
 cc>>>
       if(m.gt.0) then !{
 c        write(sss,ufa) chrpl(jvrb,jblk)
-	ll=max(1,nmdlr(jvrb,jblk))
-	nn=max(1,nmdbr(jvrb,jblk))
+        ll=max(1,nmdlr(jvrb,jblk))
+        nn=max(1,nmdbr(jvrb,jblk))
 cc<<<
-c      	print *,' ll,nn = ',ll,nn
+c       print *,' ll,nn = ',ll,nn
 cc>>>
-	do n=1,nn !{
-	  do l=1,ll !{
-	    if(lprdckw(l,n,jvrb,jblk)) then !{
+        do n=1,nn !{
+          do l=1,ll !{
+            if(lprdckw(l,n,jvrb,jblk)) then !{
 #ifdef DBG
 c            r=0
 c            i=0
@@ -101,7 +101,7 @@ c     ,        'l,n,jvrb,jblk,lprdckw:parm(1) = ',
 c     ,         l,n,jvrb,jblk,lprdckw(l,n,jvrb,jblk),' : ',c,i,r !###
 #endif
               sss=chrpl(jvrb,jblk)
-	      if(nmdlr(jvrb,jblk).gt.0) then !{
+              if(nmdlr(jvrb,jblk).gt.0) then !{
                 if(lspvr(jvrb,jblk)) then !{
                   s0='0'
                 else !}{
@@ -114,9 +114,9 @@ c     ,         l,n,jvrb,jblk,lprdckw(l,n,jvrb,jblk),' : ',c,i,r !###
                   write(us,'(a1,a1,a1,i3,a1)') '(',s0,',',l,')'
                 end if !}
               end if !}
-	      call lefta(sss,mxslen,j)
-	      s(j+2)='='
-	      k=j+3
+              call lefta(sss,mxslen,j)
+              s(j+2)='='
+              k=j+3
               if(ltrvr(jvrb,jblk)) then !{
                 write(ufc,700)
      .           '(',nmdpr(jvrb,jblk),'('' '''''',a1,'''''',''))'
@@ -140,8 +140,8 @@ c     ,         l,n,jvrb,jblk,lprdckw(l,n,jvrb,jblk),' : ',c,i,r !###
               end if !}
               call uisswr(lout,s,ss,mxslen,ufs)
             end if !}
-	  end do !}
-	end do !}
+          end do !}
+        end do !}
       end if !}
       lbmdf(jvrb,jblk)=.true.
 c
@@ -154,4 +154,5 @@ c
 c
       lbv=.false.
 c======================================================================
-      end
+      return
+      end subroutine uimdvr

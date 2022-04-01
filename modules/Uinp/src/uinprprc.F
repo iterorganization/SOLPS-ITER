@@ -65,10 +65,10 @@ c======================================================================
       end do !}
       if (nisotopes.ne.1) then !{
         write(6,'(a,i1,a)')
-     .   'This problem contains ',nisotopes,' hydrogenic isotopes'
+     .   'This problem contains ',nisotopes,' hydrogenic isotopes.'
       else !}{
         write(6,'(a,i1,a)')
-     .   'This problem contains ',nisotopes,' hydrogenic isotope'
+     .   'This problem contains ',nisotopes,' hydrogenic isotope.'
       end if !}
       if (lhelium) then !{
         write(6,'(a)') 'This problem contains Helium.'
@@ -397,13 +397,13 @@ cxpb Find out the number of passes to do
                        write(*,*) 'ADAStables: element number',nc,
      .                            'not supported!'
                        call xerrab ('Unsupported ADAS element')
-                    endif !}
+                    end if !}
 c     jump over the preceding lines
                     do i=1,nc-1 !{
                       read(99,*) SUBDIRrec,SUBDIRion,
      &                           SUBDIRcex,SUBDIRprb,
      &                           SUBDIRplt,SUBDIRzav,SUBDIRpot,ES
-                    enddo !}
+                    end do !}
 c     now read the relevant line
                     read(99,'(a80)') ZEILE
                     quote_count = 0
@@ -414,8 +414,8 @@ c     now read the relevant line
                         iquote = index(ZEILE(iquote+1:80),'''') + iquote
                       else !}{
                         iquote = 0
-                      endif !}
-                    enddo !}
+                      end if !}
+                    end do !}
                     if (quote_count.eq.16) then !{
                       read(ZEILE,*) SUBDIRrec,SUBDIRion,
      &                              SUBDIRcex,SUBDIRprb,
@@ -429,7 +429,7 @@ c     now read the relevant line
                     else !}{
                       call xerrab
      .                 ('Incomplete line found in ratadas.filelist!')
-                    endif !}
+                    end if !}
                     close(99)
                     if((.not.streql(SUBDIRrec,'none')) .and.
      &   (streql(SUBDIRrec,SUBDIRion).or.streql(SUBDIRion,'none')) .and.
@@ -447,10 +447,10 @@ c     now read the relevant line
                           write(EB,'(a1,i1)') '0',ibundling
                         else !}{
                           write(EB,'(i2)') ibundling
-                        endif !}
+                        end if !}
                       else !}{
                         ibundling = 0
-                      endif !}
+                      end if !}
                       write(NEWDIRrec,'(i2,2x)') iyear
                       write(NEWDIRion,'(i2,2x)') iyear
                       write(NEWDIRcex,'(i2,2x)') iyear
@@ -665,7 +665,7 @@ c*** Remove reaction duplicates, if any
       if(nnrctn.gt.0) write(*,hlp_frm)
      ,  (rctnptpr(i),rctndbs(i),rctnchp(i),rctnrct(i),rctntyp(i),
      ,   rctnptin(i),rctnpto1(i),rctnpto2(i),rctnpto3(i),
-     ,   rctngrp(i),rctnmsp(i),rctnmst(i),
+     ,   rctngrp(i) ,rctnmsp(i) ,rctnmst(i) ,
      ,   rctndlte(i),rctnenr1(i),rctnenr2(i),i=1,nnrctn)
 #endif
 c*** Check the reaction type - must be assigned to each reaction
@@ -854,8 +854,8 @@ cxpb Now check if we need to rename some isotopes for AMDS reactions
       if(nnrctn.gt.0) write(*,hlp_frm)
      ,  (rctnptpr(i),rctndbs(i) ,rctnchp(i) ,rctnrct(i) ,rctntyp(i),
      ,   rctnptin(i),rctnpto1(i),rctnpto2(i),rctnpto3(i),
-     ,   rctngrp(i),rctnmsp(i),
-     ,   rctnmst(i),rctndlte(i),rctnenr1(i),rctnenr2(i),i=1,nnrctn)
+     ,   rctngrp(i) ,rctnmsp(i) ,
+     ,   rctnmst(i) ,rctndlte(i),rctnenr1(i),rctnenr2(i),i=1,nnrctn)
 #endif
 
       if(.not.rctndflt .and. nisotopes.gt.1) then !{ duplicate reactions
@@ -975,8 +975,8 @@ cxpb Now check if we need to rename some isotopes for AMDS reactions
         nnrctn=nrc
 
 #ifdef DBG
-        print *
-        print *,
+        write(*,*)
+        write(*,*)
      ,   'Draft reaction list after duplicating H-isotope primaries:'
         if(minval(rctndlte(1:nnrctn)).lt.0.) then !{
           ipls=1
@@ -992,8 +992,8 @@ cxpb Now check if we need to rename some isotopes for AMDS reactions
         if(nnrctn.gt.0) write(*,hlp_frm)
      ,    (rctnptpr(i),rctndbs(i) ,rctnchp(i) ,rctnrct(i) ,rctntyp(i),
      ,     rctnptin(i),rctnpto1(i),rctnpto2(i),rctnpto3(i),
-     ,     rctngrp(i),rctnmsp(i),
-     ,     rctnmst(i),rctndlte(i),rctnenr1(i),rctnenr2(i),i=1,nnrctn)
+     ,     rctngrp(i) ,rctnmsp(i),
+     ,     rctnmst(i) ,rctndlte(i),rctnenr1(i),rctnenr2(i),i=1,nnrctn)
 #endif
 
         do irc=1,nnrctn !{ reactions with second partner an H isotope
@@ -1987,4 +1987,4 @@ c=======================================================================
       call subend ()
       return
  1028 format()
-      end
+      end subroutine uinprprc

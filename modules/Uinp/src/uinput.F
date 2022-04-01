@@ -65,7 +65,7 @@ c*** Produce the input file for Eirene for TRIA mesh generation
        call uinout('triang.eir')
        print *,'    ... triang.eir created'
        call triaout('triang.hed')
-       call uinptridg(.FALSE.)
+       call uinptridg(.false.)
       end if !}
 
 c*** Produce the input files for Eirene for averaging scheme runs
@@ -108,7 +108,7 @@ c*** Create the header for the b2ag.dat file
           write(2,'(a)') '*param          (param(0:99); free format)'
           write(2,'(a)') ' -1.0, 99*0.0'
           write(2,'(a)') '''b2agfs_min_pitch''    ''0.01'''
-          if (lm_cnfg) write(2,'(a)')
+          if (lm_cnfg.and..not.ln_cnfg) write(2,'(a)')
      .                   '''b2agfs_periodic_bc''  ''1'''
           close(2)
           print *,'    ... b2ag.dat created'
@@ -725,7 +725,9 @@ c*** Modify the input file for B2, if possible
         write(*,*) 'No NREG file found'
         write(*,*) 'Writing ../NREG'
         open(unit=2,file='../NREG')
-        if (lm_cnfg) then
+        if (ln_cnfg) then
+          write(2,'(i1)') 1
+        else if (lm_cnfg) then
           write(2,'(i1)') 2
         else
           write(2,'(i1)') 2*nncut
@@ -741,4 +743,4 @@ cxpb      call uib2pl
 c=======================================================================
       call prgend ()
       stop 'uinp'
-      end
+      end program uinput

@@ -34,6 +34,7 @@
 'b2tlh0_flux_limit_style'             '0'
 'b2trno_flux_limit_to_dpa'            '0'
 'b2tqce_fke_Zhdanov'                  '0'
+'b2tqin_csigin_style'                 '0'
 'b2trno_csig_an_style'                '0'
 'b2tfnb_drift_style'                  '0'
 'b2news_no_b2sral_call'               '1'

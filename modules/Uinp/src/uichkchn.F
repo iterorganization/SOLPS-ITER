@@ -403,4 +403,4 @@ c*** Error in the segment chains
  9999 call subend()
       return
 c=======================================================================
-      end
+      end subroutine uichkchn

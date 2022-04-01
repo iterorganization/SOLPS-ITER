@@ -21,7 +21,7 @@ Eirene:
   cd $SOLPSTOP/modules/Eirene
   set repo="Eirene"
   git fetch --prune
-  git checkout ITER-develop && echo "Checked out Eirene ITER-develop branch" || goto branch
+  git checkout develop && echo "Checked out Eirene develop branch" || goto branch
   git pull && goto Carre || goto local
 
 Carre:
@@ -29,7 +29,7 @@ Carre:
   cd $SOLPSTOP/modules/Carre
   set repo="Carre"
   git fetch --prune
-  git checkout ITER-develop && echo "Checked out Carre ITER-develop branch" || goto branch
+  git checkout develop && echo "Checked out Carre develop branch" || goto branch
   git pull && goto DivGeo || goto local
 
 DivGeo:
@@ -37,7 +37,7 @@ DivGeo:
   cd $SOLPSTOP/modules/DivGeo
   set repo="DivGeo"
   git fetch --prune
-  git checkout ITER-develop && echo "Checked out DivGeo ITER-develop branch" || goto branch
+  git checkout develop && echo "Checked out DivGeo develop branch" || goto branch
   git pull && goto ADAS || goto local
 
 ADAS:
@@ -45,7 +45,7 @@ ADAS:
   cd $SOLPSTOP/modules/adas
   set repo="ADAS"
   git fetch --prune
-  git checkout ITER-develop && echo "Checked out ADAS ITER-develop branch" || goto branch
+  git checkout develop && echo "Checked out ADAS develop branch" || goto branch
   git pull && goto compile || goto local
 
 branch:

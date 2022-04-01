@@ -32,14 +32,14 @@ c=======================================================================
 c*** Return the result in parameter n
 
         call locase(cmt(1)(1:2),ucr,imtrl)
-	ex=.true.
+        ex=.true.
         do j=1,nmtr !{
           if(ex) then !{
-	    if(streql(ucr,ucm(j))) then !{
-	      ex=.false.
-	      n=uz(j)
-	    end if !}
-	  end if !}
+            if(streql(ucr,ucm(j))) then !{
+              ex=.false.
+              n=uz(j)
+            end if !}
+          end if !}
         end do !}
 
       else if(n.eq.0) then !}{
@@ -64,7 +64,7 @@ c*** Non-default surface (target)
         end do !}
         j=0
  20     xmlim(n)=uz(j)
-      	
+
       end if !}
 c=======================================================================
-      end
+      end subroutine uinmtr

@@ -36,4 +36,4 @@ c*** Prepare the data for B2-Eirene input files
 c=======================================================================
       call subend ()
       return
-      end
+      end subroutine uinprpbn

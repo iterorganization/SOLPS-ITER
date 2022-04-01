@@ -8,7 +8,6 @@ c=======================================================================
 c*** Temporary assignment - the max. number of photon species
       integer, parameter :: npht=1
 
-c
 c*** Unit numbers for output and input of the files
       integer, parameter :: iunoo=2, iunii=1
 
@@ -325,7 +324,7 @@ c-----------------------------------------------------------------------
       integer mreac
       parameter (mreac=2*nreac)
 
-c*** Reaction lists: number of data sets, groups, massp, masst,
+c*** Reaction lists: number of datasets, groups, massp, masst,
 c***    number of the output particles, extrapolation modes;
 c***    reaction type, database, chapter and reaction;
 c***    input and output particles (AMDS notation);
@@ -530,8 +529,8 @@ c*** Gas flows in PFR:
       character gpfrgrp(npfrgrpd)*8
 
 c-----------------------------------------------------------------------
-c*** Limiter configuration - cheating:
-      logical lm_cnfg
+c*** Limiter and linear configurations - cheating:
+      logical lm_cnfg, ln_cnfg
       integer lm_vhst, lm_whst
 
 c-----------------------------------------------------------------------
@@ -545,20 +544,20 @@ c=======================================================================
      ,  esibnds,esebnds,beebnds,bcobnds,beibnds,bmobnds,bpobnds,
      ,  etfbndx,etbbndx,easbndx,eewbndx,efpbndx,efcbndx,esibndx,esebndx,
      ,  wlmbnds,beebndx,bcobndx,beibndx,bmobndx,bpobndx,
-     ,  dcobndx, dmobndx,
+     ,  dcobndx,dmobndx,
      ,  pwrcrtte,pwrcrtti,pwrcrfri,
      ,  rctndlte,rctntmin,rctntmax,rctnenr1,rctnenr2,rctnexcf,
      ,  rctddlte,rctdtmin,rctdtmax,rctdenr1,rctdenr2,
      ,  tgpfstr,tgpfstd,fgpfstr,pgpfstr,dgalloc,
      ,  tgsppff,tgspcff,tgewall,tgabsrp,tgtrnsf,tgtrnsb,ttalloc,
      ,  xlpcntr,zaator,roator,
-     ,  trisize, trixmin, trixmax, triymin, triymax,pwrhepdt,pmphepdt,
+     ,  trisize,trixmin,trixmax,triymin,triymax,pwrhepdt,pmphepdt,
      ,  sps_absr,sps_trno,sps_trni,sps_mtri,sps_tmpr,sps_spph,sps_spch,
      i  nstrao,natmo,nmolo,niono,nphto,nplso,
      ,  mnpr,mnptseg,npr,nptseg,laddsrfs,indasrfe,indasrfs,
      ,  nttrator,jxi,jxa,ntcpub2,nnvsle,nmvsle,ttntcpu,ttnfile,ttnpts,
-     ,  ntrgdflt,namdf,nncut,nxcut1,nycut2,nniso,nxiso1,nxiso2,
-     ,  nyiso1,nyiso2,nx,ny,
+     ,  ntrgdflt,namdf,nncut,nxcut1,nycut2,
+     ,  nniso,nxiso1,nxiso2,nyiso1,nyiso2,nx,ny,
      ,  izc1,izc2,izc3,izc4,izci,iztg,irsp,irsp2,irwl,hlp_h_m,
      ,  nrsol,nrsol1,nrpfl,nzidv,nzinn,nzodv,nzidv2,nzinn2,nzodv2,
      ,  nspipls,nspiatm,nspimol,nspiion,nspigen,nspignp,spcimsp,spcimsa,
@@ -611,7 +610,7 @@ c     ,  spcifup,spcifua,spcifum,spcifui,
      ,  ttcdbgg,ttcdbgmpi,ttcdbgc,ttchktim,
      ,  ttpl1st,ttpl2nd,ttpladd,ttplhst,ttplcut,ttplnums,tttest,
      ,  ttplspec,ttprspec,ttplargl,ttprargl,ttlsprcl,
-     ,  lm_cnfg,no_n2,l_ammon,l_meta,
+     ,  lm_cnfg,ln_cnfg,no_n2,l_ammon,l_meta,
      ,  no_n2_model,ammonx_used,meta_used,is_meta
 
       common/uinptxt/topo,amd_file,

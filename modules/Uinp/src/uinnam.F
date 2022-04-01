@@ -29,13 +29,13 @@ c...                                                  52=48+4
       integer luwrk(nlim),luind(nlim)
       logical streql
       external streql, xerrab, xertst
-c*** lusgm: segment number for the list of invisibles;
+c*** lusgm : segment number for the list of invisibles;
 c*** luswch: switch for the input of element lists (obsolete)
 c***                1: jedgi1, 2: jedgo1, 3: jedgi2, 4: jedgo2
 c***         or switch for the target data (clockwise from bottom left)
 c*** luskel: counter for the segments to be skipped
-c*** lugpf:  counter for the puffing sources
-c*** lugwt:  counter for the grid-wall ties
+c*** lugpf : counter for the puffing sources
+c*** lugwt : counter for the grid-wall ties
       data lusgm, luswch, luskel, lugpf, lugwt, luvsp, nprnl /7*0/
       data hlp_spc / .true. /, read_chr_angl / .false. /
       data lurefls / 0 /, chtyp / ' ' /
@@ -1083,10 +1083,11 @@ c***  input elements indices for current rectangle
         lena=52
         call resima(uam)
         lena=i
+        ln_cnfg = uam(1:1).eq.'-'.and.lm_cnfg
       case default
         call skipit
       end select
 c=======================================================================
  9999 call subend ()
       return
-      end
+      end subroutine uinnam

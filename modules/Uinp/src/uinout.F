@@ -45,7 +45,7 @@ c=======================================================================
      7        '** 6a. General data for reflection model' ,
      8        '** 7. Data for primary sources, nstrai strata' ,
      9        '** 8. Additional data for specific zones' ,
-     o        '** 9. Data for statistic and nonanalog model' ,
+     o        '** 9. Data for statistic and non-analog model' ,
      1        '** 10. Data for additional tallies' ,
      2        '* 10a. Volume tallies - tracklength estimator' ,
      3        '* 10b. Volume tallies - collisional estimator' ,
@@ -250,7 +250,7 @@ c**  radial mesh
             write(iunoo,707) (npoin1(1,j),npoin1(2,j),j=1,npplg)
             do i=1,nr1st !{
               write(iunoo,703) (xpol(i,j),ypol(i,j),j=1,nrplg)
-      	    end do !}
+            end do !}
           end if !}
           if (nlfem) then !{
             write(iunoo,703) xpcor,ypcor,zpcor
@@ -293,7 +293,7 @@ c**  toroidal mesh
 
 c**  mesh multiplication
 
-      if (nlmlt) write(iunoo,700)  utxthd(29)
+      if (nlmlt) write(iunoo,700) utxthd(29)
       write(iunoo,706) nlmlt
       if (nlmlt) then !{
         write(iunoo,707) nbmlt
@@ -326,9 +326,9 @@ c**  additional cells outside standard mesh
           end if
         end if
       end do
-      nradd = max ( nradd, icont )
+      nradd = max(nradd,icont)
 
-      if (nradd .gt. nadd) then !{
+      if (nradd.gt.nadd) then !{
         print *, ' Too many additional zones : NRADD = ', nradd
         print *, ' Recompile Uinp with an incresaed value of NADD'
         call xerrab ('Too many additional zones')
@@ -376,8 +376,8 @@ c***  "ch0-cards"
       jsurpr=nsurpr
       do 360 k=laddsrfs+1,nlimi !{
         i=indasrfs(k)
-	if(i.eq.0) go to 360
-	write(iunoo,714) k,i,txtsfa(k)
+        if(i.eq.0) go to 360
+        write(iunoo,714) k,i,txtsfa(k)
 
         icopy=icopy-1
         if (icopy.ge.1) goto 360
@@ -391,7 +391,7 @@ c*** "ch2-cards" here !
 
         write(iunoo,703) rlb(i),sarea(i),rlwmn(i),rlwmx(i)
         jlswch=jadnsw(i)+10*jadmsw(i)+100*jadlsw(i)+1000*jadksw(i)+
-     +  			     10000*jadjsw(i)+100000*jadisw(i)
+     +                               10000*jadjsw(i)+100000*jadisw(i)
         jlcell=jlacll(i)+1000*jlblck(i)
         write(iunoo,707) jliin(i),jlside(i),jlswch,jlequi(i),
      ,    jltor(i),jlcol(i),jlfit(i),jlcell,jlbox(i),jlplg(i)
@@ -404,30 +404,30 @@ c**  Surface coefficients
 
         if (rlb(i).lt.2.) then !{
           write(iunoo,703) a0lm(i),a1lm(i),a2lm(i),
-     ,          			    a3lm(i),a4lm(i),a5lm(i)
+     ,                                      a3lm(i),a4lm(i),a5lm(i)
           write(iunoo,703) a6lm(i),a7lm(i),a8lm(i),a9lm(i)
         else if (rlb(i).lt.3.) then !}{
           write(iunoo,703) p1(1,i),p1(2,i),p1(3,i),
-     ,          			    p2(1,i),p2(2,i),p2(3,i)
+     ,                                      p2(1,i),p2(2,i),p2(3,i)
         else if (rlb(i).lt.5.) then !}{
           write(iunoo,703) p1(1,i),p1(2,i),p1(3,i),
-     ,          			    p2(1,i),p2(2,i),p2(3,i)
+     ,                                      p2(1,i),p2(2,i),p2(3,i)
           write(iunoo,703) p3(1,i),p3(2,i),p3(3,i),
-     ,          			    p4(1,i),p4(2,i),p4(3,i)
+     ,                                      p4(1,i),p4(2,i),p4(3,i)
         else if (rlb(i).lt.7.) then !}{
           write(iunoo,703) p1(1,i),p1(2,i),p1(3,i),
-     ,          			    p2(1,i),p2(2,i),p2(3,i)
+     ,                                      p2(1,i),p2(2,i),p2(3,i)
           write(iunoo,703) p3(1,i),p3(2,i),p3(3,i),
-     ,          			    p4(1,i),p4(2,i),p4(3,i)
+     ,                                      p4(1,i),p4(2,i),p4(3,i)
           write(iunoo,703) p5(1,i),p5(2,i),p5(3,i),
-     ,          			    p6(1,i),p6(2,i),p6(3,i)
+     ,                                      p6(1,i),p6(2,i),p6(3,i)
         end if !}
 
 c**  Boundary data
 
         if (rlb(i).gt.0..and.rlb(i).lt.2.) then !{
           write(iunoo,703) xlims1(i,1),ylims1(i,1),
-     ,  	      zlims1(i,1),xlims2(i,1),ylims2(i,1),zlims2(i,1)
+     ,                zlims1(i,1),xlims2(i,1),ylims2(i,1),zlims2(i,1)
         else if (rlb(i).le.0.) then !}{
           imrlb=-rlb(i)
           ih=mod(imrlb,100)
@@ -436,42 +436,42 @@ c**  Boundary data
           iuscn=idez(ih,2,2)
           do j=1,iulin !{
             write(iunoo,703) alims(i,j),xlims(i,j),
-     ,  					  ylims(i,j),zlims(i,j)
+     ,                                            ylims(i,j),zlims(i,j)
           end do !}
           do j=1,iuscn !{
             write(iunoo,703) alims0(i,j),xlims1(i,j),
-     ,  	      ylims1(i,j),zlims1(i,j),xlims2(i,j),ylims2(i,j)
+     ,                ylims1(i,j),zlims1(i,j),xlims2(i,j),ylims2(i,j)
             write(iunoo,703) zlims2(i,j),xlims3(i,j),
-     ,  				      ylims3(i,j),zlims3(i,j)
+     ,                                        ylims3(i,j),zlims3(i,j)
           end do !}
         end if !}
 
 c**  Local reflection model ?
 
-      if(jscrd(i).GT.0) then !{
-        write(iunoo,715) scard_name(jscrd(i))
-      else if (jliin(i).eq.1) then !}{
-        ii=10*jlsptc(i)+jlsptp(i)
-        write(iunoo,707) jlref(i),ii,jsrss(i),jsrc(i),lchspnwa(i)
-        write(iunoo,703) xmlma(i),ewala(i),ewbna(i),
+        if(jscrd(i).gt.0) then !{
+          write(iunoo,715) scard_name(jscrd(i))
+        else if (jliin(i).eq.1) then !}{
+          ii=10*jlsptc(i)+jlsptp(i)
+          write(iunoo,707) jlref(i),ii,jsrss(i),jsrc(i),lchspnwa(i)
+          write(iunoo,703) xmlma(i),ewala(i),ewbna(i),
      ,                trnspa(i,1),trnspa(i,2),fsheata(i)
-        write(iunoo,703) rcycfa(i),rcycta(i),rcprma(i),
-     ,  		exppla(i),expela(i),expila(i)
-        write(iunoo,703) rcycsa(i),rcycca(i),
-     ,  		echspta(i),fchspta(i),sptpra(i)
-      end if !}
+          write(iunoo,703) rcycfa(i),rcycta(i),rcprma(i),
+     ,                exppla(i),expela(i),expila(i)
+          write(iunoo,703) rcycsa(i),rcycca(i),
+     ,                echspta(i),fchspta(i),sptpra(i)
+        end if !}
 
 c* Transform from convenient coordinate system to Eirene coordinate
 c* system. This is possible for all surfaces written by now, i.e.
 c* from itini=1 to itend=i
 
-      if(itini(i).ge.0) then !{
-        write(iunoo,'(a)') 'TRANSFORM'
-        write(iunoo,707) itini(i),itend(i)
-        write(iunoo,703) xlcor(i),ylcor(i),zlcor(i)
-        write(iunoo,703) xlref(i),ylref(i),zlref(i)
-        write(iunoo,703) xlrot(i),ylrot(i),zlrot(i),alrot(i)
-      end if !}
+        if(itini(i).ge.0) then !{
+          write(iunoo,'(a)') 'TRANSFORM'
+          write(iunoo,707) itini(i),itend(i)
+          write(iunoo,703) xlcor(i),ylcor(i),zlcor(i)
+          write(iunoo,703) xlref(i),ylref(i),zlref(i)
+          write(iunoo,703) xlrot(i),ylrot(i),zlrot(i),alrot(i)
+        end if !}
 
   360 continue !}
 
@@ -520,7 +520,7 @@ c**  atomic species cards
         write(iunoo,708) iatm,texta(iatm),nmassa(iatm),nchara(iatm),
      ,    1,0,isrfa(iatm),isrta(iatm),nmseca(iatm),nrca(iatm),
      ,    nfola(iatm),ngena(iatm),nhsta(iatm)
-      	do k=1,nrca(iatm) !{
+        do k=1,nrca(iatm) !{
           if(nmseca(iatm).le.2) then !{
             write(iunoo,707) ireaca(iatm,k),ibulka(iatm,k),
      ,                 iscd1a(iatm,k),iscd2a(iatm,k),
@@ -580,20 +580,20 @@ c**  test particle ions species cards
         do k=1,nrci(iion) !{
           if(nmseci(iion).le.2) then !{
             write(iunoo,707) ireaci(iion,k),ibulki(iion,k),
-     ,  	       iscd1i(iion,k),iscd2i(iion,k),
-     ,  	       iscdei(iion,k),iestmi(iion,k),ibgki(iion,k)
+     ,                 iscd1i(iion,k),iscd2i(iion,k),
+     ,                 iscdei(iion,k),iestmi(iion,k),ibgki(iion,k)
           else if(nmseci(iion).eq.3) then !}{
             write(iunoo,707) ireaci(iion,k),ibulki(iion,k),
-     ,  	       iscd1i(iion,k),iscd2i(iion,k),iscd3i(iion,k),
-     ,  	       iscdei(iion,k),iestmi(iion,k),ibgki(iion,k)
+     ,                 iscd1i(iion,k),iscd2i(iion,k),iscd3i(iion,k),
+     ,                 iscdei(iion,k),iestmi(iion,k),ibgki(iion,k)
           else if(nmseci(iion).eq.4) then !}{
             write(iunoo,707) ireaci(iion,k),ibulki(iion,k),
-     ,  	       iscd1i(iion,k),iscd2i(iion,k),
+     ,                 iscd1i(iion,k),iscd2i(iion,k),
      ,                 iscd3i(iion,k),iscd4i(iion,k),
-     ,  	       iscdei(iion,k),iestmi(iion,k),ibgki(iion,k)
+     ,                 iscdei(iion,k),iestmi(iion,k),ibgki(iion,k)
           end if !}
           write(iunoo,703) eeleci(iion,k),ebulki(iion,k),
-     ,  		    escd1i(iion,k),escd2i(iion,k),freaci(iion,k)
+     ,                      escd1i(iion,k),escd2i(iion,k),freaci(iion,k)
         end do !}
       end do !}
 
@@ -609,17 +609,17 @@ c**  photon species cards
           do k=1,nrcf(ipht) !{
             if(nmsecf(ipht).le.2) then !{
               write(iunoo,707) ireacf(ipht,k),ibulkf(ipht,k),
-     ,  	       iscd1f(ipht,k),iscd2f(ipht,k),
-     ,  	       iscdef(ipht,k),iestmf(ipht,k),ibgkf(ipht,k)
+     ,                 iscd1f(ipht,k),iscd2f(ipht,k),
+     ,                 iscdef(ipht,k),iestmf(ipht,k),ibgkf(ipht,k)
             else if(nmsecf(ipht).eq.3) then !}{
               write(iunoo,707) ireacf(ipht,k),ibulkf(ipht,k),
-     ,  	       iscd1f(ipht,k),iscd2f(ipht,k),iscd3f(ipht,k),
-     ,  	       iscdef(ipht,k),iestmf(ipht,k),ibgkf(ipht,k)
+     ,                 iscd1f(ipht,k),iscd2f(ipht,k),iscd3f(ipht,k),
+     ,                 iscdef(ipht,k),iestmf(ipht,k),ibgkf(ipht,k)
             else if(nmsecf(ipht).eq.4) then !}{
               write(iunoo,707) ireacf(ipht,k),ibulkf(ipht,k),
-     ,  	       iscd1f(ipht,k),iscd2f(ipht,k),
+     ,                 iscd1f(ipht,k),iscd2f(ipht,k),
      ,                 iscd3f(ipht,k),iscd4f(ipht,k),
-     ,  	       iscdef(ipht,k),iestmf(ipht,k),ibgkf(ipht,k)
+     ,                 iscdef(ipht,k),iestmf(ipht,k),ibgkf(ipht,k)
             end if !}
             write(iunoo,703) eelecf(ipht,k),ebulkf(ipht,k),
      ,       escd1f(ipht,k),escd2f(ipht,k),freacf(ipht,k),edpotf(ipht,k)
@@ -665,7 +665,7 @@ c**  bulk ions species cards
      ,        iscd4p(ipls,k),iscdep(ipls,k)
           end if !}
           write(iunoo,703) eelecp(ipls,k),ebulkp(ipls,k),
-     .          	   escd1p(ipls,k),escd2p(ipls,k),freacp(ipls,k)
+     .                     escd1p(ipls,k),escd2p(ipls,k),freacp(ipls,k)
         end do !}
         if (len_trim(cdnmdlp(ipls)).gt.0) then !{
           call upcase(cdnmdlp(ipls),cdnmdlp(ipls),ldnmdlp)
@@ -724,7 +724,7 @@ c** To be done (in Eirene first)
       if (iabs(indpro(2)).le.5 .and. nplsi.gt.0) then !{
         if (ulmlti) then !{
           write(iunoo,703) (ti0(i),ti1(i),ti2(i),ti3(i),ti4(i),ti5(i),
-     ,                                        	      	      i=1,nplsi)
+     ,                                                        i=1,nplsi)
         else !}{
           write(iunoo,703) ti0(1),ti1(1),ti2(1),ti3(1),ti4(1),ti5(1)
         end if !}
@@ -733,11 +733,11 @@ c** To be done (in Eirene first)
      ,                                   di3(i),di4(i),di5(i),i=1,nplsi)
       if (abs(indpro(4)).le.5) then !{
         write(iunoo,703) (vx0(i),vx1(i),vx2(i),vx3(i),vx4(i),vx5(i),
-     ,                                        	      	      i=1,nplsi)
+     ,                                                        i=1,nplsi)
         write(iunoo,703) (vy0(i),vy1(i),vy2(i),vy3(i),vy4(i),vy5(i),
-     ,                                        	      	      i=1,nplsi)
+     ,                                                        i=1,nplsi)
         write(iunoo,703) (vz0(i),vz1(i),vz2(i),vz3(i),vz4(i),vz5(i),
-     ,                                        	      	      i=1,nplsi)
+     ,                                                        i=1,nplsi)
       end if !}
       if (indpro(5).le.5) write(iunoo,703) b0,b1,b2,b3,b4,b5
       if (indpro(11).le.5) write(iunoo,703) (zi0(i),zi1(i),zi2(i),
@@ -852,7 +852,7 @@ c**  velocity space distribution
         write(iunoo,703) soreni(i),sorene(i),sorvdx(i),sorvdy(i),
      ,                                                 sorvdz(i)
         write(iunoo,703) sorcos(i),sormax(i),sorctx(i),sorcty(i),
-     ,          	    	      	      	       sorctz(i)
+     ,                                                 sorctz(i)
 
       end do !}
 
@@ -868,7 +868,7 @@ c*** "ch3-", "t-", "d-", "v-", "vl-", and "m-cards" here!
 
       end do !}
 
-c*** 9.  data for statistics and nonanalog model
+c*** 9.  data for statistics and non-analog model
 
       write(iunoo,700) utxthd(10)
       write(iunoo,706) (nlprca(j),j=1,natm),(nlprcm(j),j=1,nmol),
@@ -911,7 +911,7 @@ c*** 9.  data for statistics and nonanalog model
         write(iunoo,706) ((nlpbls(i,j),i=1,natmo),j=1,nstrao)
       end if !}
 
-c*** 10. data for additional and surface averaged tallies
+c*** 10. data for additional and surface-averaged tallies
 
       write(iunoo,700) utxthd(11)
       write(iunoo,707) nadvi,nclvi,nalvi,nadsi,nalsi,nadspc
@@ -1030,7 +1030,7 @@ c**  particle history plots in 2d or 3d geometry plots
       write(iunoo,707) nvolpl
       if(nvolpl.gt.0) then !{
 
-      	write(iunoo,706) (pltsrc(j),j=0,nstrao)
+        write(iunoo,706) (pltsrc(j),j=0,nstrao)
         if (lrpscut) then !{
           write(iunoo,703) cutplane
         end if !}
@@ -1043,20 +1043,20 @@ c**  particle history plots in 2d or 3d geometry plots
             write(iunoo,706) lhist2(j),lsmot2(j)
             do i=1,nsptal(j) !{
               write(iunoo,707) ispzt2(j,i),nptal2(j,i),
-     ,      			nplin2(j,i),nplot2(j,i),npldl2(j,i)
+     ,                         nplin2(j,i),nplot2(j,i),npldl2(j,i)
             end do !}
           end if !}
           if (pltl3d(j)) then !{
             write(iunoo,706) lhist3(j),lcntr3(j),lsmot3(j),lraps(j),
-     ,      		      lvect3(j),lrpvc3(j),lrps3d(j),lrpscn(j)
+     ,                       lvect3(j),lrpvc3(j),lrps3d(j),lrpscn(j)
             write(iunoo,706) lprad(j),lppol(j),lptor(j)
             do i=1,nsp(j) !{
               write(iunoo,707) ispzt3(j,i),nptal3(j,i),iproj3(j,i),
-     ,      	npli13(j,i),nplo13(j,i),npli23(j,i),nplo23(j,i),
-     ,      	ipln(j,i)
+     ,         npli13(j,i),nplo13(j,i),npli23(j,i),nplo23(j,i),
+     ,         ipln(j,i)
             end do !}
             write(iunoo,703) talw1(j),talw2(j),
-     ,      	                            fcabs1(j),fcabs2(j),rpsdl(j)
+     ,                                     fcabs1(j),fcabs2(j),rpsdl(j)
           end if !}
         end do !}
       end if !}
@@ -1260,4 +1260,4 @@ c=======================================================================
   720 format (a50)
   721 format (a)
 c=======================================================================
-      end
+      end subroutine uinout

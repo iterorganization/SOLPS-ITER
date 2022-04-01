@@ -380,11 +380,11 @@ cxpb Now we remap the arrays
         do i=1,nplsb !{
           if (spcsrnb(i).eq.0) cycle
           if (is_bundled(spcsrnb(i))) then !{
-	    write(*,'(4x,a8,i7,8i8)') textb(i),
+            write(*,'(4x,a8,i7,8i8)') textb(i),
      ,       nmassb(i),ncharb(i),nprtb(i),
-     ,	     nchrgb(i),isrfb(i),isrtb(i),nmsecb(i),spcsrnb(i)
+     ,       nchrgb(i),isrfb(i),isrtb(i),nmsecb(i),spcsrnb(i)
           end if !}
-	end do !}
+        end do !}
         write(6,1028)
         ianf = 0
         iend = 0
@@ -498,12 +498,12 @@ cxpb   jend(l) is the number of the last bundled ion of sequence l in the new li
         end do !}
         deallocate(done)
         write(6,*) 'New ion list after mapping: '
-      	write(*,'(1x,a12,9a8)') 'plasma ions','nmassp','ncharp','nprtp',
-     ,	  'nchrgp','isrfp','isrtp','nmsecp','spcsrnp'
+        write(*,'(1x,a12,9a8)') 'plasma ions','nmassp','ncharp','nprtp',
+     ,    'nchrgp','isrfp','isrtp','nmsecp','spcsrnp'
         do i=1,nplsi+nbgk !{
-	  write(*,'(a12,i7,8i8)') textp(i),nmassp(i),ncharp(i),nprtp(i),
-     ,	    nchrgp(i),isrfp(i),isrtp(i),nmsecp(i),spcsrnp(i)
-	end do !}
+          write(*,'(a12,i7,8i8)') textp(i),nmassp(i),ncharp(i),nprtp(i),
+     ,      nchrgp(i),isrfp(i),isrtp(i),nmsecp(i),spcsrnp(i)
+        end do !}
         nspcpls=nplsi
         write(*,1028)
       end if !}
@@ -657,4 +657,4 @@ c======================================================================
       call subend ()
       return
  1028 format()
-      end
+      end subroutine uinprpbl

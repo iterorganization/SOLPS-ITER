@@ -13,6 +13,7 @@ C----         DEPENDS ON INDEX OF BOUNDARY
       INTEGER, public, save :: NELM
 
       contains
+
       subroutine realloc_celm(kennung,incr)
       character*(*) kennung
       integer incr
@@ -36,5 +37,7 @@ c     .              ',',dim2,') auf (',dim1,',',dim2+incr,')'
          write(6,*) 'unknown flag in realloc_celm ', kennung
          stop 'error'
       endif
+      return
       end subroutine realloc_celm
+
       end module celm

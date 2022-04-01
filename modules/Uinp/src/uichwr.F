@@ -20,7 +20,7 @@ c<<<
       if(mm(1).gt.0) print *,'uichwr: start. n=',n
       udbg=.true.
 #else
-       udbg=.false.
+      udbg=.false.
 #endif
       do i=1,n
         if(udbg) print *,mm(i)
@@ -64,4 +64,5 @@ c
         if(m.eq.0) return
  100  continue
 c======================================================================
-      end
+      return
+      end subroutine uichwr

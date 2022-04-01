@@ -263,4 +263,4 @@ c*** Set the VSP data for diag2.eir
 c=======================================================================
       call subend ()
       return
-      end
+      end subroutine uinprpdg

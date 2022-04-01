@@ -5,7 +5,6 @@ Usage: $Name DG-old-file DG-new-file [Field-file]
        where DG-old-file and Field-file the input filenames,
        and DG-new-file is the output filename.
        If the Field-file is not specified, the default field.snn is used.
-
        The Field-file is only needed, when the DG-file is in old format!
 "
 

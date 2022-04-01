@@ -366,17 +366,17 @@ ${OBJDIR}/zylpln.o: ${OBJDIR}/ccona.${MOD}
 
 ${OBJDIR}/b2_4to5.o: ${OBJDIR}/eirmod_parmmod.${MOD} ${OBJDIR}/braeir.${MOD} ${OBJDIR}/eirdiag.${MOD}
 
-${OBJDIR}/b2mod_b2_to_astra.o: ${OBJDIR}/eirmod_extrab25.${MOD} 
+${OBJDIR}/b2mod_b2_to_astra.o: ${OBJDIR}/eirmod_extrab25.${MOD} ${OBJDIR}/eirmod_wneutrals.${MOD}
 
 ${OBJDIR}/b2mod_neutrals_namelist.o: ${OBJDIR}/eirmod_parmmod.${MOD} ${OBJDIR}/parmmod.${MOD} ${OBJDIR}/braeir.${MOD} ${OBJDIR}/ceirsrt.${MOD} ${OBJDIR}/eirdiag.${MOD} ${OBJDIR}/eirmod_extrab25.${MOD}
 
-${OBJDIR}/eirmod_parmmod.o: 
+${OBJDIR}/eirmod_parmmod.o:
 	ln -sf ${OBJDIR}/parmmod.o $@
 
-${OBJDIR}/eirmod_precision.o: 
+${OBJDIR}/eirmod_precision.o:
 	ln -sf ${OBJDIR}/precision.o $@
 
-${OBJDIR}/eirmod_braeir.o: 
+${OBJDIR}/eirmod_braeir.o:
 	ln -sf ${EIRDIR}/eirmod_braeir.o ${OBJDIR}
 
 ${OBJDIR}/eirmod_cinit.o:
@@ -1006,7 +1006,7 @@ clean:
 	rm -Rf ${SRCDIR}/solps4_B2
 	rm -Rf ${SRCDIR}/solps4_Eirene
 
-listobj: 
+listobj:
 	@rm -f ${BASEDIR}/LISTOBJ; touch ${BASEDIR}/LISTOBJ; l="OBJS ="; \
 	for d in `echo "${VPATH}" | tr : \ `; do \
 		l="$$l `(cd $$d > /dev/null; echo *.[Ff])`"; \

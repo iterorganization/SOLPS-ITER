@@ -159,6 +159,7 @@ if($QSUB == "") then
   echo No MEPHI submission file $1 found. Exiting.
   exit 1
 endif
+
 echo Using submission file template $QSUB
 if ($chain == "unset") then
   echo For loop resubmission following options will be used: $LOOP_OPTS

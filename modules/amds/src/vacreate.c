@@ -973,7 +973,7 @@ void SetXmListItems(Widget wList,XmString* items,int count) {
   XmListDeleteAllItems(wList);
   XmListAddItems(wList,items,count,0);
 
-  for (i=0;i<selCount;i++)  {
+  for (i=0;i<selCount;i++) {
     XmListSelectItem(wList,xmst[i],False);
     XmStringFree(xmst[i]);
   }

@@ -91,7 +91,7 @@ C---- NODES (NODCON-A OR B-NODCON) THESE FRONTIER PART MUST BE DELETED.
         ENDIF
 C---- IF THERE IS NO FRONTIER PARTS WITH REVERSED NODES IS FOUND THE
 C---- FRONTIER PART A-NODCON OR NODCON-B MUST BE ADDED.
-        IF (.NOT. LNODA)THEN
+        IF (.NOT. LNODA) THEN
           NPARTFR = NPARTFR+1
           IF (NPARTFR .GT. size(delfro)) THEN
              call realloc_cfront('delfro',10)
@@ -142,4 +142,5 @@ C---- BUBBLE_SORT:
         BOUND=IND1
       ENDDO
 
+      RETURN
       END

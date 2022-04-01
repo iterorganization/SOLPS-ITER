@@ -381,18 +381,18 @@ c*** Atoms:
           end do      !}
           if(ex) then  !{
             nspcatm=nspcatm+1
-	    if(nspcatm.gt.natm) then !{
-	      write(0,*) 'The number of atomic species must not ',
-     ,	      	'exceed ',natm
+            if(nspcatm.gt.natm) then !{
+              write(0,*) 'The number of atomic species must not ',
+     ,          'exceed ',natm
               write(0,*) 'Current requested number of atomic ',
      ,          'species is ',nspcatm
-	      write(0,*) 'STOP ==> Check the AMDS model - or increase ',
-     ,	      	'DEF_NATM in DIMENSIONS.F'
-	      call xerrab ('Too many atomic species')
-	    end if !}
-	    nspcncl=nspcatm
-	    spcsncl(nspcatm)=c
-	    spcsrna(nspcatm)=nspcncl
+              write(0,*) 'STOP ==> Check the AMDS model - or increase ',
+     ,          'DEF_NATM in DIMENSIONS.F'
+              call xerrab ('Too many atomic species')
+            end if !}
+            nspcncl=nspcatm
+            spcsncl(nspcatm)=c
+            spcsrna(nspcatm)=nspcncl
             spcsatm(nspcatm)=c
             spcsrfa(nspcatm)=spcirfa(l)
             spcsrta(nspcatm)=spcirta(l)
@@ -421,32 +421,32 @@ c*** Molecules:
           end do      !}
           if(ex) then  !{
             nspcmol=nspcmol+1
-	    if(nspcmol.gt.nmol) then !{
-	      write(0,*) 'The number of molecular species must ',
-     ,	      	'not exceed ',nmol
+            if(nspcmol.gt.nmol) then !{
+              write(0,*) 'The number of molecular species must ',
+     ,          'not exceed ',nmol
               write(0,*) 'Current requested number of molecular ',
      ,          'species is ',nspcmol
-	      write(0,*) 'STOP ==> Check the AMDS model - or increase ',
-     ,	      	'DEF_NMOL in DIMENSIONS.F'
-	      call xerrab ('Too many molecular species')
-	    end if !}
-	    n=0
-	    do k=1,spcinnm(l) !{
-	      cc=spcirnm(k,l)
-	      j=0
-	      do i=1,nspcncl !{
-	        if(j.eq.0) then !{
-	          if(streql(cc,spcsncl(i))) j=i
-	        end if !}
-	      end do !}
-	      if(j.eq.0) then !{
-	        write(0,*) 'Nucleus ',cc,' specified for molecule ',c,
-     ,	          ' - not found'
-	      else !}{
-	      	spcscmm(j,l)=spcicmm(k,l)
-		n=n+spcicmm(k,l)
-	      end if !}
-	    end do !}
+              write(0,*) 'STOP ==> Check the AMDS model - or increase ',
+     ,          'DEF_NMOL in DIMENSIONS.F'
+              call xerrab ('Too many molecular species')
+            end if !}
+            n=0
+            do k=1,spcinnm(l) !{
+              cc=spcirnm(k,l)
+              j=0
+              do i=1,nspcncl !{
+                if(j.eq.0) then !{
+                  if(streql(cc,spcsncl(i))) j=i
+                end if !}
+              end do !}
+              if(j.eq.0) then !{
+                write(0,*) 'Nucleus ',cc,' specified for molecule ',c,
+     ,            ' - not found'
+              else !}{
+                spcscmm(j,l)=spcicmm(k,l)
+                n=n+spcicmm(k,l)
+              end if !}
+            end do !}
             spcsmol(nspcmol)=c
             spcsrfm(nspcmol)=spcirfm(l)
             spcsrtm(nspcmol)=spcirtm(l)
@@ -475,32 +475,32 @@ c*** Test ions:
           end do      !}
           if(ex) then  !{
             nspcion=nspcion+1
-	    if(nspcion.gt.nion) then !{
-	      write(0,*) 'The number of test ion species must ',
-     ,	      	'not exceed ',nion
+            if(nspcion.gt.nion) then !{
+              write(0,*) 'The number of test ion species must ',
+     ,          'not exceed ',nion
               write(0,*) 'Current requested number of test ion ',
      ,          'species is ',nspcion
-	      write(0,*) 'STOP ==> Check the AMDS model - or increase ',
-     ,	      	'DEF_NION in DIMENSIONS.F'
-	      call xerrab ('Too many test ion species')
-	    end if !}
-	    n=0
-	    do k=1,spcinni(l) !{
-	      cc=spcirni(k,l)
-	      j=0
-	      do i=1,nspcncl !{
-	        if(j.eq.0) then !{
-	          if(streql(cc,spcsncl(i))) j=i
-	        end if !}
-	      end do !}
-	      if(j.eq.0) then !{
-	        write(0,*) 'Nucleus ',cc,' specified for test ion ',c,
-     ,	          ' - not found'
-	      else !}{
-	      	spcscmi(j,l)=spcicmi(k,l)
-		n=n+spcicmi(k,l)
-	      end if !}
-	    end do !}
+              write(0,*) 'STOP ==> Check the AMDS model - or increase ',
+     ,          'DEF_NION in DIMENSIONS.F'
+              call xerrab ('Too many test ion species')
+            end if !}
+            n=0
+            do k=1,spcinni(l) !{
+              cc=spcirni(k,l)
+              j=0
+              do i=1,nspcncl !{
+                if(j.eq.0) then !{
+                  if(streql(cc,spcsncl(i))) j=i
+                end if !}
+              end do !}
+              if(j.eq.0) then !{
+                write(0,*) 'Nucleus ',cc,' specified for test ion ',c,
+     ,            ' - not found'
+              else !}{
+                spcscmi(j,l)=spcicmi(k,l)
+                n=n+spcicmi(k,l)
+              end if !}
+            end do !}
             spcsion(nspcion)=c
             spcsrfi(nspcion)=spcirfi(l)
             spcsrti(nspcion)=spcirti(l)
@@ -528,15 +528,15 @@ c*** Plasma ions:
           end do      !}
           if(ex) then  !{
             nspcpls=nspcpls+1
-	    if(nspcpls.gt.npls) then !{
-	      write(0,*) 'The number of plasma ion species must ',
-     ,	      	'not exceed ',npls
+            if(nspcpls.gt.npls) then !{
+              write(0,*) 'The number of plasma ion species must ',
+     ,          'not exceed ',npls
               write(0,*) 'Current requested number of atomic ',
      ,          'species is ',nspcpls
-	      write(0,*) 'STOP ==> Check the AMDS model - or increase ',
-     ,	      	'DEF_NPLS in DIMENSIONS.F'
-	      call xerrab ('Too many plasma ion species')
-	    end if !}
+              write(0,*) 'STOP ==> Check the AMDS model - or increase ',
+     ,          'DEF_NPLS in DIMENSIONS.F'
+              call xerrab ('Too many plasma ion species')
+            end if !}
             if(nspcpls+nspcncl.gt.nsdb2) then !{
               write(0,*) 'The total number of B2.5 species must ',
      ,          'not exceed ',nsdb2
@@ -546,18 +546,18 @@ c*** Plasma ions:
      ,          'DEF_NSD in DIMENSIONS.F'
               call xerrab ('Too many B2.5 species')
             end if !}
-	    cc=spcirnp(l)
-	    j=0
-	    do i=1,nspcncl !{
-	      if(j.eq.0) then !{
-	      	if(streql(cc,spcsncl(i))) j=i
-	      end if !}
-	    end do !}
-	    if(j.eq.0) then !{
-	      write(0,*) 'Nucleus ',cc,' specified for plasma ion ',c,
-     ,	      	' - not found'
-	    end if !}
-	    spcsrnp(nspcpls)=j
+            cc=spcirnp(l)
+            j=0
+            do i=1,nspcncl !{
+              if(j.eq.0) then !{
+                if(streql(cc,spcsncl(i))) j=i
+              end if !}
+            end do !}
+            if(j.eq.0) then !{
+              write(0,*) 'Nucleus ',cc,' specified for plasma ion ',c,
+     ,          ' - not found'
+            end if !}
+            spcsrnp(nspcpls)=j
             spcspls(nspcpls)=c
             spcsrfp(nspcpls)=spcirfp(l)
             spcsrtp(nspcpls)=spcirtp(l)
@@ -620,15 +620,15 @@ c*** Produce the Eirene-style data for the species (except reactions)
 
       natmi=nspcatm
       do l=1,nspcatm !{
-      	texta(l)=spcsatm(l)
-      	nmassa(l)=spcsmsa(l)
-	nchara(l)=spcsnca(l)
+        texta(l)=spcsatm(l)
+        nmassa(l)=spcsmsa(l)
+        nchara(l)=spcsnca(l)
 cank        nprta(l)=spcsfua(l)
 cank        isrsa(l)=spcsrsa(l)
 
-	k=0
-	c=spcsrfa(l)
-	if(.not.streql(c,' ')) then !{
+        k=0
+        c=spcsrfa(l)
+        if(.not.streql(c,' ')) then !{
           do i=1,nspcatm !{
             if(streql(c,spcsatm(i))) k=i
           end do !}
@@ -637,18 +637,18 @@ cank        isrsa(l)=spcsrsa(l)
               if(streql(c,spcsion(i))) k=-i
             end do !}
           end if !}
-	  if(k.eq.0) then !{
-	    write(0,*) 'Reflected fast particle not found: ',c,
-     ,	      ' for ',spcsatm(l)
-	  end if !}
-	  isrfa(l)=k
-	else !}{
-	  isrfa(l)=0
-	end if !}
-	
-	k=0
-	c=spcsrta(l)
-	if(.not.streql(c,' ')) then !{
+          if(k.eq.0) then !{
+            write(0,*) 'Reflected fast particle not found: ',c,
+     ,        ' for ',spcsatm(l)
+          end if !}
+          isrfa(l)=k
+        else !}{
+          isrfa(l)=0
+        end if !}
+
+        k=0
+        c=spcsrta(l)
+        if(.not.streql(c,' ')) then !{
           do i=1,nspcatm !{
             if(streql(c,spcsatm(i))) k=i
           end do !}
@@ -657,53 +657,53 @@ cank        isrsa(l)=spcsrsa(l)
               if(streql(c,spcsmol(i))) k=-i
             end do !}
           end if !}
-	  if(k.eq.0) then !{
-	    write(0,*) 'Re-emitted thermal particle not found: ',c,
-     ,	      ' for ',spcsatm(l)
-	  end if !}
-	  isrta(l)=k
-	else !}{
-	  isrta(l)=0
-	end if !}
+          if(k.eq.0) then !{
+            write(0,*) 'Re-emitted thermal particle not found: ',c,
+     ,        ' for ',spcsatm(l)
+          end if !}
+          isrta(l)=k
+        else !}{
+          isrta(l)=0
+        end if !}
       end do !}
 
       nmoli=nspcmol
       do l=1,nspcmol !{
-      	textm(l)=spcsmol(l)
-      	nmassm(l)=spcsmsm(l)
-	ncharm(l)=spcsncm(l)
-	nprtm(l)=spcsfum(l)
+        textm(l)=spcsmol(l)
+        nmassm(l)=spcsmsm(l)
+        ncharm(l)=spcsncm(l)
+        nprtm(l)=spcsfum(l)
 
-	k=0
-	c=spcsrtm(l)
-	if(.not.streql(c,' ')) then !{
+        k=0
+        c=spcsrtm(l)
+        if(.not.streql(c,' ')) then !{
           do i=1,nspcmol !{
             if(streql(c,spcsmol(i))) k=i
           end do !}
           write(6,*) 'Molecule ',l,textm(l),spcsrtm(l),k
-	  if(k.eq.0) then !{
-	    write(0,*) 'Re-emitted thermal particle not found: ',c,
-     ,	      ' for ',spcsmol(l)
-	  end if !}
-	  isrtm(l)=k
-	else !}{
-	  isrtm(l)=0
-	end if !}
+          if(k.eq.0) then !{
+            write(0,*) 'Re-emitted thermal particle not found: ',c,
+     ,        ' for ',spcsmol(l)
+          end if !}
+          isrtm(l)=k
+        else !}{
+          isrtm(l)=0
+        end if !}
       end do !}
 
       nioni=nspcion
       do l=1,nspcion !{
-      	texti(l)=spcsion(l)
-      	nmassi(l)=spcsmsi(l)
-	nchari(l)=spcsnci(l)
-	nprti(l)=spcsfui(l)
-	nchrgi(l)=spcscgi(l)
+        texti(l)=spcsion(l)
+        nmassi(l)=spcsmsi(l)
+        nchari(l)=spcsnci(l)
+        nprti(l)=spcsfui(l)
+        nchrgi(l)=spcscgi(l)
 cank        isrsi(l)=spcsrsi(l)
-	nfoli(l)=-1
+        nfoli(l)=-1
 
-	k=0
-	c=spcsrfi(l)
-	if(.not.streql(c,' ')) then !{
+        k=0
+        c=spcsrfi(l)
+        if(.not.streql(c,' ')) then !{
           do i=1,nspcatm !{
             if(streql(c,spcsatm(i))) k=i
           end do !}
@@ -712,18 +712,18 @@ cank        isrsi(l)=spcsrsi(l)
               if(streql(c,spcsion(i))) k=-i
             end do !}
           end if !}
-	  if(k.eq.0) then !{
-	    write(0,*) 'Reflected fast particle not found: ',c,
-     ,	      ' for ',spcsion(l)
-	  end if !}
-	  isrfi(l)=k
-	else !}{
-	  isrfi(l)=0
-	end if !}
-	
-	k=0
-	c=spcsrti(l)
-	if(.not.streql(c,' ')) then !{
+          if(k.eq.0) then !{
+            write(0,*) 'Reflected fast particle not found: ',c,
+     ,        ' for ',spcsion(l)
+          end if !}
+          isrfi(l)=k
+        else !}{
+          isrfi(l)=0
+        end if !}
+
+        k=0
+        c=spcsrti(l)
+        if(.not.streql(c,' ')) then !{
           do i=1,nspcatm !{
             if(streql(c,spcsatm(i))) then !{
               k=i
@@ -734,26 +734,26 @@ cank        isrsi(l)=spcsrsi(l)
               if(streql(c,spcsmol(i))) k=-i
             end do !}
           end if !}
-	  if(k.eq.0) then !{
-	    write(0,*) 'Re-emitted thermal particle not found: ',c,
-     ,	      ' for ',spcsion(l)
-	  end if !}
-	  isrti(l)=k
-	else !}{
-	  isrti(l)=0
-	end if !}
+          if(k.eq.0) then !{
+            write(0,*) 'Re-emitted thermal particle not found: ',c,
+     ,        ' for ',spcsion(l)
+          end if !}
+          isrti(l)=k
+        else !}{
+          isrti(l)=0
+        end if !}
       end do !}
 
       nplsi=nspcpls
       nfla=nplsi
       do l=1,nspcpls !{
-      	textp(l)=spcspls(l)
-      	nmassp(l)=spcsmsp(l)
-	ncharp(l)=spcsncp(l)
-	nprtp(l)=spcsfup(l)
-	nchrgp(l)=spcscgp(l)
+        textp(l)=spcspls(l)
+        nmassp(l)=spcsmsp(l)
+        ncharp(l)=spcsncp(l)
+        nprtp(l)=spcsfup(l)
+        nchrgp(l)=spcscgp(l)
 cank        isrsp(l)=spcsrsp(l)
-	bmass(l)=nmassp(l)
+        bmass(l)=nmassp(l)
         if (l.eq.1) then !{
           lkindp(l)=1
         else if (bmass(l).eq.bmass(l-1) .and. 
@@ -762,11 +762,11 @@ cank        isrsp(l)=spcsrsp(l)
         else
           lkindp(l)=lkindp(l-1)+1
         endif !}
-	iflb(l)=l
+        iflb(l)=l
 
-	k=0
-	c=spcsrfp(l)
-	if(.not.streql(c,' ')) then !{
+        k=0
+        c=spcsrfp(l)
+        if(.not.streql(c,' ')) then !{
           do i=1,nspcatm !{
             if(streql(c,spcsatm(i))) k=i
           end do !}
@@ -775,18 +775,18 @@ cank        isrsp(l)=spcsrsp(l)
               if(streql(c,spcsion(i))) k=-i
             end do !}
           end if !}
-	  if(k.eq.0) then !{
-	    write(0,*) 'Reflected fast particle not found: ',c,
-     ,	      ' for ',spcspls(l)
-	  end if !}
-	  isrfp(l)=k
-	else !}{
-	  isrfp(l)=0
-	end if !}
-	
-	k=0
-	c=spcsrtp(l)
-	if(.not.streql(c,' ')) then !{
+          if(k.eq.0) then !{
+            write(0,*) 'Reflected fast particle not found: ',c,
+     ,        ' for ',spcspls(l)
+          end if !}
+          isrfp(l)=k
+        else !}{
+          isrfp(l)=0
+        end if !}
+
+        k=0
+        c=spcsrtp(l)
+        if(.not.streql(c,' ')) then !{
           do i=1,nspcatm !{
             if(streql(c,spcsatm(i))) k=i
           end do !}
@@ -795,54 +795,54 @@ cank        isrsp(l)=spcsrsp(l)
               if(streql(c,spcsmol(i))) k=-i
             end do !}
           end if !}
-	  if(k.eq.0) then !{
-	    write(0,*) 'Re-emitted thermal particle not found: ',c,
-     ,	      ' for ',spcspls(l)
-	  end if !}
-	  isrtp(l)=k
-	else !}{
-	  isrtp(l)=0
-	end if !}
+          if(k.eq.0) then !{
+            write(0,*) 'Re-emitted thermal particle not found: ',c,
+     ,        ' for ',spcspls(l)
+          end if !}
+          isrtp(l)=k
+        else !}{
+          isrtp(l)=0
+        end if !}
       end do !}
 
       write(*,*)
       write(*,'(a,4i5)') 'Particle list: natmi,nmoli,nioni,nplsi =',
-     ,	      	      	      	         natmi,nmoli,nioni,nplsi
+     ,                                   natmi,nmoli,nioni,nplsi
       write(*,*)
       if(natmi.gt.0) then !{
-      	write(*,'(1x,a12,10a8)') 'atoms      ','nmassa','nchara',' ',
-     ,	  ' ','isrfa','isrta','nmseca','nfola','ngena','spcsrna'
-      	do i=1,natmi !{
-	  write(*,'(a12,i7,9i8)') texta(i),nmassa(i),nchara(i),
-     ,	    1,0,isrfa(i),isrta(i),nmseca(i),nfola(i),ngena(i),spcsrna(i)
-	end do !}
+        write(*,'(1x,a12,10a8)') 'atoms     ','nmassa','nchara','nprta',
+     ,    'nchrga','isrfa','isrta','nmseca','nfola','ngena','spcsrna'
+        do i=1,natmi !{
+          write(*,'(a12,i7,9i8)') texta(i),nmassa(i),nchara(i),
+     ,      1,0,isrfa(i),isrta(i),nmseca(i),nfola(i),ngena(i),spcsrna(i)
+        end do !}
       end if !}
       if(nmoli.gt.0) then !{
         write(*,'(1x,a12,9a8)') 'molecules  ','nmassm','ncharm','nprtm',
-     ,	  'nchrgm','isrfm','isrtm','nmsecm','lkindm'
-      	do i=1,nmoli !{
-	  write(*,'(a12,i7,7i8)') textm(i),nmassm(i),ncharm(i),nprtm(i),
-     ,	    0,0,isrtm(i),nmsecm(i),lkindm(i)
-	end do !}
+     ,    'nchrgm','isrfm','isrtm','nmsecm','lkindm'
+        do i=1,nmoli !{
+          write(*,'(a12,i7,7i8)') textm(i),nmassm(i),ncharm(i),nprtm(i),
+     ,      0,0,isrtm(i),nmsecm(i),lkindm(i)
+        end do !}
       end if !}
       if(nioni.gt.0) then !{
         write(*,'(1x,a12,9a8)') 'test ions  ','nmassi','nchari','nprti',
-     ,	  'nchrgi','isrfi','isrti','nmseci','nfoli','lkindi'
-      	do i=1,nioni !{
-	  write(*,'(a12,i7,8i8)') texti(i),nmassi(i),nchari(i),nprti(i),
-     ,	    nchrgi(i),isrfi(i),isrti(i),nmseci(i),nfoli(i),lkindi(i)
-	end do !}
+     ,    'nchrgi','isrfi','isrti','nmseci','nfoli','lkindi'
+        do i=1,nioni !{
+          write(*,'(a12,i7,8i8)') texti(i),nmassi(i),nchari(i),nprti(i),
+     ,      nchrgi(i),isrfi(i),isrti(i),nmseci(i),nfoli(i),lkindi(i)
+        end do !}
       end if !}
       if(nplsi.gt.0) then !{
-      	write(*,'(1x,a12,9a8)') 'plasma ions','nmassp','ncharp','nprtp',
-     ,	  'nchrgp','isrfp','isrtp','nmsecp','spcsrnp'
-      	do i=1,nplsi !{
-	  write(*,'(a12,i7,8i8)') textp(i),nmassp(i),ncharp(i),nprtp(i),
-     ,	    nchrgp(i),isrfp(i),isrtp(i),nmsecp(i),spcsrnp(i)
-	end do !}
+        write(*,'(1x,a12,9a8)') 'plasma ions','nmassp','ncharp','nprtp',
+     ,    'nchrgp','isrfp','isrtp','nmsecp','spcsrnp'
+        do i=1,nplsi !{
+          write(*,'(a12,i7,8i8)') textp(i),nmassp(i),ncharp(i),nprtp(i),
+     ,      nchrgp(i),isrfp(i),isrtp(i),nmsecp(i),spcsrnp(i)
+        end do !}
       end if !}
       write(*,*)
 c======================================================================
       call subend ()
       return
-      end
+      end subroutine uinprppt

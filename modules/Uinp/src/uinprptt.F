@@ -31,8 +31,8 @@ c=======================================================================
         i1trc_b=i1trc
         i2trc_b=i2trc
         do i=1,nstrai !{
-      	  npts_b(i)=npts(i)
-      	  mpts_b(i)=nminpts(i)
+          npts_b(i)=npts(i)
+          mpts_b(i)=nminpts(i)
         end do !}
         do i=1,ntargi !{
           nptc_b(i)=nptc(i,1)
@@ -86,9 +86,9 @@ c=======================================================================
         i1trc=1
         i2trc=0
         do i=1,nstrai !{
-      	  npts(i)=ttnpts(i)
+          npts(i)=ttnpts(i)
           nminpts(i)=0
-	  i2trc=i2trc+npts(i)
+          i2trc=i2trc+npts(i)
         end do !}
         do i=1,ntargi !{
           nptc(i,1)=ttnpts(i)
@@ -159,8 +159,8 @@ c*** Set the VSP data for test.eir
         i1trc=i1trc_b
         i2trc=i2trc_b
         do i=1,nstrai !{
-      	  npts(i)=npts_b(i)
-      	  nminpts(i)=mpts_b(i)
+          npts(i)=npts_b(i)
+          nminpts(i)=mpts_b(i)
         end do !}
         do i=1,ntargi !{
           nptc(i,1)=nptc_b(i)
@@ -209,4 +209,4 @@ c*** Set the VSP data for test.eir
         lsprcl=lsprcl_b
       end if !}
 c=======================================================================
-      end
+      end subroutine uinprptt

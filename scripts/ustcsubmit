@@ -54,14 +54,14 @@ EOF
     echo Job name is ${JOB_NAME}
     shift
     set HELP_STRING=\"${JOB_NAME}\"
-    set LOOP_OPTS="-j ${HELP_STRING} ${LOOP_OPTS}" 
+    set LOOP_OPTS="-j ${HELP_STRING} ${LOOP_OPTS}"
     goto argloop
   endif
   if ("X${1}X" == "X-zX") then
     set compress="-gz"
     echo run.log will be compressed
     shift
-    set LOOP_OPTS="-gz ${LOOP_OPTS}" 
+    set LOOP_OPTS="-gz ${LOOP_OPTS}"
     goto argloop
   endif
   if ("X${1}X" == "X-sX") then
@@ -69,7 +69,7 @@ EOF
     if ($JOB_NAME == "SOLPS-ITER") set JOB_NAME="B2.5"
     echo Asking for a B2.5 standalone run
     shift
-    set LOOP_OPTS="-s ${LOOP_OPTS}" 
+    set LOOP_OPTS="-s ${LOOP_OPTS}"
     goto argloop
   endif
   if ("X${1}X" == "X-mX") then
@@ -83,8 +83,8 @@ EOF
     echo Asking for MPI run with a total of $PROCS processors
     shift
     set HELP_STRING=`echo \"$MPIOPTS\"`
-    set LOOP_OPTS="-m ${HELP_STRING} ${LOOP_OPTS}" 
-   goto argloop
+    set LOOP_OPTS="-m ${HELP_STRING} ${LOOP_OPTS}"
+    goto argloop
   endif
   if ("X${1}X" == "X-tX") then
     shift
@@ -105,7 +105,7 @@ EOF
     echo Requested time is ${hours} hours
     shift
     set HELP_STRING=\"${hours}\"
-    set LOOP_OPTS="-T ${HELP_STRING} ${LOOP_OPTS}" 
+    set LOOP_OPTS="-T ${HELP_STRING} ${LOOP_OPTS}"
     goto argloop
   endif
   if ("X${1}X" == "X-MX") then
@@ -164,7 +164,7 @@ else if (-s $1) then
   set QSUB=$1
 else
   echo Submission file $1 is specified as an argument.
-  echo Looking for submission file $1 
+  echo Looking for submission file $1
   set QSUB=`climb_and_look_for $1`
   if ($QSUB == "//"$1) then
     if (-s $SOLPSTOP/runs/$1) then

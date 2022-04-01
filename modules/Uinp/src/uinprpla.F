@@ -188,4 +188,4 @@ c*** Create the list in Eirene numbering
 c=======================================================================
       call subend ()
       return
-      end
+      end subroutine uinprpla

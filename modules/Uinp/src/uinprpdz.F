@@ -99,4 +99,5 @@ c     ,                                     l,lmrk(l),ir,iz,m,it,k  !###
       end do !}
       nmrk=k
 c=======================================================================
-      end
+      return
+      end subroutine uinprpdz

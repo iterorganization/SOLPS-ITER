@@ -227,4 +227,4 @@ c            print *,'j,k,bbliin(j,k)=',j,k,bbliin(j,k)  !###
 c=======================================================================
       call subend ()
       return
-      end
+      end subroutine uinprpge

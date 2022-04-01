@@ -109,7 +109,6 @@ if makeplot
     plot(ymysep,postres-coderes,'-c','parent',axbal(1),'displayname',[totname{4},' (post-cal.-code)']);
 end
 fprintf('Radial balance: the maximum difference between code- and post-calculated residuals is %e%%\n',max(abs((coderes-postres)./coderes)*100));
-
 if makeplot
     legend(axbal(1),'show','location','best');
     title(axbal(1),'Total radial balance','fontweight','normal');

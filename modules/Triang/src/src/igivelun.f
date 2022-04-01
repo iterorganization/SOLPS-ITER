@@ -21,5 +21,6 @@ c*** lex contains reserved numbers (nl) to be excluded from search
         end if !}
       end do !}
       igivelun=-1
+      return
 
-      end
+      end function igivelun

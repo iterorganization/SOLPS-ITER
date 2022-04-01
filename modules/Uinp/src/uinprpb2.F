@@ -121,16 +121,16 @@ c*** nbc
         do i=1,nznbndt(j) !{
           k=k+1
 c*** bcchar, bcpos, bcstart, bcend, bcene, bceni, bcpot, enepar, enipar, potpar
-          cniprm(k,1,1,2,2)=cznbndt(i,j)
-          iniprm(k,1,1,3,2)=lcpbnds(i,j)-1
-          iniprm(k,1,1,4,2)=lc1bnds(i,j)-1
-          iniprm(k,1,1,5,2)=lc2bnds(i,j)-1
-          iniprm(k,1,1,6,2)=leebnds(i,j)
-          iniprm(k,1,1,7,2)=leibnds(i,j)
-          iniprm(k,1,1,8,2)=lpobnds(i,j)
-          rniprm(k,1,1,9,2)=beebnds(i,1,j)
+          cniprm(k,1,1, 2,2)=cznbndt(i,j)
+          iniprm(k,1,1, 3,2)=lcpbnds(i,j)-1
+          iniprm(k,1,1, 4,2)=lc1bnds(i,j)-1
+          iniprm(k,1,1, 5,2)=lc2bnds(i,j)-1
+          iniprm(k,1,1, 6,2)=leebnds(i,j)
+          iniprm(k,1,1, 7,2)=leibnds(i,j)
+          iniprm(k,1,1, 8,2)=lpobnds(i,j)
+          rniprm(k,1,1, 9,2)=beebnds(i,1,j)
           rniprm(k,1,1,10,2)=beibnds(i,1,j)
-          rniprm(k,2,1,9,2)=beebnds(i,2,j)
+          rniprm(k,2,1, 9,2)=beebnds(i,2,j)
           rniprm(k,2,1,10,2)=beibnds(i,2,j)
           rniprm(k,1,1,11,2)=bpobnds(i,1,j)
           rniprm(k,2,1,11,2)=bpobnds(i,2,j)
@@ -264,8 +264,8 @@ c*** k, m, n are the numbers of recycling, specified, and all strata
       do i=2,7 !{
         nmdpr(i,3)=n
       end do !}
-      nmdpr(8,3)=nspcncl
-      nmdpr(9,3)=nspcatm
+      nmdpr( 8,3)=nspcncl
+      nmdpr( 9,3)=nspcatm
       nmdpr(10,3)=nspcpls+nspcncl
       nmdpr(11,3)=nspcpls+nspcncl
       nmdpr(12,3)=n
@@ -289,7 +289,7 @@ c*** k, m, n are the numbers of recycling, specified, and all strata
       nmdlr(24,3)=nspcmol
       nmdpr(21,3)=nspcatm
 
-      ltrvr(2,3)=.true.
+      ltrvr( 2,3)=.true.
       lspvr(10,3)=.true.
       lspvr(11,3)=.true.
       lrrvr(18,3)=.true.
@@ -376,13 +376,13 @@ c*** Gas puffing sources
           call xerrab (' == Internal error in UINP')
         end if !}
 
-c***      crcstra, rcpos, rcstart, rcend
+c*** crcstra, rcpos, rcstart, rcend
         cniprm(k,1,1,2,3)='C'
         iniprm(k,1,1,3,3)=0
         iniprm(k,1,1,4,3)=0
         iniprm(k,1,1,5,3)=0
 
-c***        species_start, species_end
+c*** species_start, species_end
         call uinspcid(cgpfstrs(i),l,j)
         if (l.eq.2) then !}{
           iatm = 1
@@ -412,10 +412,10 @@ c***        species_start, species_end
           iniprm(k,1,1,7,3)=ispe+(j-1)
         end if !}
 
-c***              userfluxparm
+c*** userfluxparm
         rniprm(k,1,1,19,3)=fgpfstr(i)
 
-c***      lstrascl,gpfc
+c*** lstrascl,gpfc
         do l=1,nspcncl !{
           iniprm(k,l,1,12,3)=lsgpfstr(l,i)
           rniprm(l,k,1,20,3)=igpfstr(l,i)
@@ -433,13 +433,13 @@ c*** Recombination sources
           call xerrab (' == Internal error in UINP')
         end if !}
 
-c***        crcstra, rcpos, rcstart, rcend
+c*** crcstra, rcpos, rcstart, rcend
         cniprm(k,1,1,2,3)='V'
         iniprm(k,1,1,3,3)=0
         iniprm(k,1,1,4,3)=0
         iniprm(k,1,1,5,3)=0
 
-c***        species_start, species_end
+c*** species_start, species_end
         ispi=nspez(k)
         ispe=nspez(k)
         do ipl = nspez(k)+1, nspcpls !{
@@ -450,10 +450,10 @@ c***        species_start, species_end
         iniprm(k,1,1,6,3)=ispi+(lkindp(nspez(k))-1)-1
         iniprm(k,1,1,7,3)=ispe+(lkindp(nspez(k))-1)
 
-c***        userfluxparm
+c*** userfluxparm
         rniprm(k,1,1,19,3)=0.
 
-c***        lstrascl, gpfc
+c*** lstrascl, gpfc
         do l=1,nspcncl !{
           iniprm(k,l,1,12,3)=lsrcmstr(l,i)
           rniprm(l,k,1,20,3)=0.
@@ -477,23 +477,23 @@ c*** Time-dependent stratum
           call xerrab (' == Internal error in UINP')
         end if !}
 
-c***          crcstra, rcpos, rcstart, rcend
+c*** crcstra, rcpos, rcstart, rcend
         cniprm(k,1,1,2,3)='T'
         iniprm(k,1,1,3,3)=0
         iniprm(k,1,1,4,3)=0
         iniprm(k,1,1,5,3)=0
 
-c***          species_start, species_end
+c*** species_start, species_end
         iniprm(k,1,1,6,3)=0
         iniprm(k,1,1,7,3)=nspcpls+nspcncl-1
 
-c***          lstrascl
+c*** lstrascl
         do l=1,nspcncl !{
           iniprm(k,l,1,12,3)=0
         end do !}
       end if !}
 
-c***        lcns, ltns
+c*** lcns, ltns
       do i=1,nznbndt(1) !{
         iniprm(i,1,1,16,3)=i
       end do !}
@@ -501,7 +501,7 @@ c***        lcns, ltns
         iniprm(i,1,1,17,3)=nznbndt(1)+i
       end do !}
 
-c***        recyc
+c*** recyc
       do j=1,n !{
         do i=1,nspcpls+nspcncl !{
           k=ifl(i)
@@ -1076,9 +1076,9 @@ c*** Helium pumping data
 
 c*** location, fusion_power, ratio of pumping speeds, j_he_at, j_ne_at
         iniprm(1,1,1,12,7)=locphep
-        rniprm(1,1,1,1,7)=pwrhepdt
-        rniprm(1,1,1,2,7)=pmphepdt
-        iniprm(1,1,1,9,7)=j_he_at
+        rniprm(1,1,1, 1,7)=pwrhepdt
+        rniprm(1,1,1, 2,7)=pmphepdt
+        iniprm(1,1,1, 9,7)=j_he_at
         iniprm(1,1,1,10,7)=j_ne_at
 c*** lpfrb, lpfrt
         if(locphep.eq.1) then !{
@@ -1161,4 +1161,4 @@ c*** j_h_at,l_h_mol
 c=======================================================================
       call subend ()
       return
-      end
+      end subroutine uinprpb2

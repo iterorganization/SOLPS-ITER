@@ -25,7 +25,7 @@ div = zeros(nx+2,ny+2,ns);
 for is = 1:ns
     % Contributions from left and bottom neighbors
     div(:,:,is) = -flow(:,:,1,1,is) - flow(:,:,1,2,is) - ...
-         flow(:,:,2,1,is) - flow(:,:,2,2,is);
+                   flow(:,:,2,1,is) - flow(:,:,2,2,is);
     
     for iy = 1:ny+2
         for ix = 1:nx+2

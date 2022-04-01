@@ -207,6 +207,7 @@ C     READ TRIANGLE MESH
         READ(22,*) (YCOORD(ICOORD),ICOORD=1,NCOORD)
       end if !}
       NTRIA1 = NTRIA
+      RETURN
       END
 
 c*//SONIN//
@@ -371,6 +372,7 @@ c          XCOORD((IY-1)*(NX+1)+IX+NCOORD)=BR(IX,IY,1)*100.
 c          YCOORD((IY-1)*(NX+1)+IX+NCOORD)=BZ(IX,IY,1)*100.
 c        ENDDO
 c      ENDDO
+c      RETURN
 c      END
 
 *//TRIANG//
@@ -526,6 +528,7 @@ c     Enforce isolated regions
         ENDIF
       ENDDO
       NTRIA = NTRIA1 + 2*N2EFF
+      RETURN
       END
 
 *//ELIM//
@@ -580,6 +583,7 @@ C         IF (ICO(J) .GT. NCOORD) THEN
         ENDDO
       ENDDO
       NCOORD=ANZCOORD
+      RETURN
       END
 
 *//NEIGHBOUR//
@@ -824,6 +828,7 @@ c but still have unindentified neighbors
         ENDIF !}
         ldbg=.false.
       ENDDO !}
+      RETURN
       END
 
 *//PARA//
@@ -874,6 +879,7 @@ c     otherwise some corners are not detected
       if(para) para=max(xp1,xp2)-tolx.le.max(xq1,xq2)
       if(para) para=max(yp1,yp2)-toly.le.max(yq1,yq2)
 
+      RETURN
       END
 
 *//GRIDOUT//
@@ -903,4 +909,5 @@ C     WRITE NEW GRID
      .       NEIGHB(ITRIA,3),NEIGHS(ITRIA,3),NEIGHR(ITRIA,3),
      .       TRIX(ITRIA),TRIY(ITRIA)
       ENDDO
+      RETURN
       END

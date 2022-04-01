@@ -160,7 +160,7 @@ else if (-s $1) then
   set QSUB=$1
 else
   echo Submission file $1 is specified as an argument.
-  echo Looking for submission file $1 
+  echo Looking for submission file $1
   set QSUB=`climb_and_look_for $1`
   if ($QSUB == "//"$1) then
     if (-s $SOLPSTOP/runs/$1) then

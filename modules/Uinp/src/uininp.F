@@ -167,12 +167,12 @@ c
       ifile = 0
       if (nspigen.gt.1 .or. .not.streql(spcigen(nspigen),'D') .or.
      .     nmat.gt.1   .or. .not.streql(listmat(nmat),'C')) then !{
-         do isp=1,nspigen !{
-           do imat=1,nmat !{
-             if (.not.(streql(spcigen(isp),'D') .and.
-     .                 streql(listmat(imat),'C'))) then !{
-               ifile = ifile + 1
-               filtrm(nnftrm+ifile)=
+        do isp=1,nspigen !{
+          do imat=1,nmat !{
+            if (.not.(streql(spcigen(isp),'D') .and.
+     .                streql(listmat(imat),'C'))) then !{
+              ifile = ifile + 1
+              filtrm(nnftrm+ifile)=
      .          trim(spcigen(isp))
      .          //'_on_'//
      .          listmat(imat)
@@ -251,4 +251,4 @@ c*** Add explicitly 3rd product in selected reactions
 c======================================================================
       call subend ()
       return
-      end
+      end subroutine uininp
