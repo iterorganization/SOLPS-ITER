@@ -11,7 +11,7 @@ c  Produce surface interaction cards
 c=======================================================================
       implicit none
 #include "uinput.inc"
-      integer i,ii,j,k,kk,kkk,nn,ind
+      integer i,j,k,kk,kkk,nn,ind
       integer chemindex(maxchmvar)
       logical streql
       external streql
