@@ -243,6 +243,7 @@ c***  function to generate surface card name for reaction k
 c***  name format:
 C***  SURFMOD_k_<MATERIAL>_<SPUTER>_<PUMP>_<SEMITRANSP>_<TEMPERATURE K>
       character*(72) function cardname(k) !{
+      use b2mod_constants
       implicit none
       integer k
       character*(72) cnam,txtbuf
@@ -258,15 +259,15 @@ C***  SURFMOD_k_<MATERIAL>_<SPUTER>_<PUMP>_<SEMITRANSP>_<TEMPERATURE K>
       end if
       znml=scxmlim(k)
       txtbuf='_'
-      if(znml.EQ.5626.) then
+      if(nint(znml).EQ.5626) then
         txtbuf='_IRON'
-      else if(znml.EQ.18474.) then
+      else if(nint(znml).EQ.18474) then
         txtbuf='_TUNGSTEN'
-      else if(znml.EQ.904.) then
+      else if(nint(znml).EQ.904) then
         txtbuf='_BERYLLIUM'
-      else if(znml.EQ.1206.) then
+      else if(nint(znml).EQ.1206) then
         txtbuf='_CARBON'
-      else if(znml.EQ.9642.) then
+      else if(nint(znml).EQ.9642) then
         txtbuf='_MOLYBDENUM'
       end if
       cnam=cnam(1:len_trim(cnam))//txtbuf(1:len_trim(txtbuf))
@@ -276,7 +277,7 @@ C***  SURFMOD_k_<MATERIAL>_<SPUTER>_<PUMP>_<SEMITRANSP>_<TEMPERATURE K>
       if(sctransp(k,1).GT.0.OR.sctransp(k,2).GT.0)
      .                 cnam=cnam(1:len_trim(cnam))//'_SMTRANS'
       if(scewall(k).LT.0) then
-        twll=nint(abs(scewall(k))*11600) !wall temperature in K
+        twll=nint(abs(scewall(k))*ev/KBolt) !wall temperature in K
         write(txtbuf,'(i6,a1)') twll,'K'
         txtbuf=adjustl(txtbuf)
         cnam=cnam(1:len_trim(cnam))//'_'//
