@@ -12,6 +12,7 @@ setenv FC g95
 # Debugger (set environment variable DBX)
 module load totalview
 setenv DBX totalview
+setenv SYSNAME `fs sysname | cut -d "'" -f 2`
 
 module load itm-g95
 module load mdsplus

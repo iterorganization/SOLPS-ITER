@@ -21,6 +21,7 @@ setenv GGD_VERSION `pkg-config ggd --modversion`
 setenv EBVERSIONMSCL `pkg-config mscl --modversion`
 module load itm-nag
 module load itm-netcdf
+setenv SYSNAME `fs sysname | cut -d "'" -f 2`
 
 # The script above overwrites $PATH, so modules must be loaded afterwards!!!
 # load modules
