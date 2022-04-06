@@ -1,23 +1,24 @@
 # Load modules
 setenv MODULEPATH /afs/ipp/common/usr/modules.2014/@sys/modulefiles/mpi:$MODULEPATH
-module load intel/18.0.5
-module load texlive/2019
+module load intel/21.5.0
+module load texlive/2021
 # module load subversion  # use built in SVN
-module load arm_ddt
-module load doxygen/1.8.17
+module load arm_ddt/22.0
+module load doxygen/1.8
 #module load mdsplus
 module load netcdf-serial/4.7.0
-module load hdf5-serial
+module load hdf5-serial/1.8.22
 #module load nag_flib/intel/mk24
-module load git
-module load impi
-module load nag_flib/mk24
-module load gnuplot
+module load git/2.31
+module load impi/2021.5
+module load nag_flib/mk26
+module load gnuplot/5.4
+module load paraview/5.9
 
-module load imas-modules/1.0
-module load IMAS/3.25.0-4.4.0
-module load ggd/1.9.1-INTEL-18.0.5
-module load amns/1.3.3-INTEL-18.0.5
+#module load imas-modules/1.0
+#module load IMAS/3.25.0-4.4.0
+#module load ggd/1.9.1-INTEL-18.0.5
+#module load amns/1.3.3-INTEL-18.0.5
 
 setenv DBX ddt
 setenv SYSNAME `fs sysname | cut -d "'" -f 2`
@@ -29,19 +30,20 @@ endif
 
 # find libraries
 if (-d /tokp/work/dpc/SOLPS-ITER) then
-  setenv SOLPSLIBS /tokp/work/dpc/SOLPS-ITER
+  setenv IPPSOLPSLIBS /tokp/work/dpc/SOLPS-ITER
 else if (-d /u/dpc/SOLPS-ITER) then
-  setenv SOLPSLIBS /u/dpc/SOLPS-ITER
+  setenv IPPSOLPSLIBS /u/dpc/SOLPS-ITER
 else
-  echo "Could not find SOLPSLIBS -- contact dpc@ipp.mpg.de"
+  echo "Could not find IPPSOLPSLIBS -- contact dpc@ipp.mpg.de"
 endif
 
-setenv GLI_HOME $SOLPSLIBS/gks
-setenv NCARG_ROOT $SOLPSLIBS/NCARG
+setenv GLI_HOME $IPPSOLPSLIBS/gks
+setenv NCARG_ROOT $IPPSOLPSLIBS/NCARG
 setenv PATH ${PATH}
-setenv MDSPLUS_DIR $SOLPSLIBS/MDSPLUS
+setenv MDSPLUS_DIR $IPPSOLPSLIBS/MDSPLUS
 setenv PATH ${PATH}:${NCARG_ROOT}/bin:${MDSPLUS_DIR}/bin
 setenv MDS_PATH ${MDSPLUS_DIR}/tdi
+[ $?LD_LIBRARY_PATH == 0 ] && setenv LD_LIBRARY_PATH
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${NETCDF_HOME}/lib:${MDSPLUS_DIR}/lib
 
 if (`where paraview-config` == "") then

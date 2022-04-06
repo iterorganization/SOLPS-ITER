@@ -2,6 +2,9 @@
 set machine_location=`hostname`
 set fullhost=`nslookup $machine_location | grep -m 1 Name | awk '/Name:/{print $2}' | tr 'A-Z' 'a-z'`
 if ("$fullhost" == "") then
+  set fullhost=`nslookup ${machine_location}i | grep -m 1 Name | awk '/Name:/{print $2}' | tr 'A-Z' 'a-z'`
+endif
+if ("$fullhost" == "") then
   set fullhost=`hostname -f`
 endif
 # special handling of hostnames head*, node* that keeps mephi_check working
@@ -36,6 +39,9 @@ case "*.ipp-garching.mpg.de":
 case "*.ipp.mpg.de":
 case "*.rzg.mpg.de":
   echo IPP
+  breaksw
+case "*.mpcdf.mpg.de":
+  echo MPCDF
   breaksw
 case "*.ipp-hgw.mpg.de":
   echo IPP-HGW
