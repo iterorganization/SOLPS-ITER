@@ -173,7 +173,7 @@ for iy=1:ny
         raddiv_nanom(ix,iy) = fnby_nanom(ix,iy)-fnby_nanom(topix(ix,iy),topiy(ix,iy));
         raddiv_panom(ix,iy) = fnby_panom(ix,iy)-fnby_panom(topix(ix,iy),topiy(ix,iy));
         raddiv_ch(ix,iy) = fnby_ch(ix,iy)-fnby_ch(topix(ix,iy),topiy(ix,iy));
-        raddiv_pschused(ix,iy) = fnby_pschused(ix,iy)-fnby_pschused(topix(ix,iy),topiy(ix,iy));                    
+        raddiv_pschused(ix,iy) = fnby_pschused(ix,iy)-fnby_pschused(topix(ix,iy),topiy(ix,iy));
     end
 end
 %%

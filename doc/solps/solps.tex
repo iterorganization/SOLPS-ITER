@@ -2680,6 +2680,7 @@ which contains
   \item[11] sheath conditions, electron energy transmission from {\tt b2stbc\_spb}, recommended when using drifts. Linked to using {\tt BCCON=14} and {\tt BCMOM=13} for all ion species, and {\tt BCENE/I=15}. {\tt POTPAR(,2)} specifies the bias potential in $V$
   \item[12] imposes the currents due to drifts for the South core boundary. Must be used in conjunction with the switch setting {\tt \allowbreak istyle\_cur\_contr\_on\_S\_and\_N=2}
   \item[13] imposes the currents due to drifts for the South private flux and North boundaries. Must be used in conjunction with {\tt \allowbreak istyle\_cur\_contr\_on\_S\_and\_N=2}
+  \item[14] prescribe the value of the radial sheath potential, {\tt POTPAR(,1)}, in $V$
   \item[16] feedback condition of constant electric potential for a given prescribed current. The prescribed current (in $A$) is given by the sum of the {\tt POTPAR(,1)} of all the boundary conditions with {\tt BCPOT=16}. Still experimental, will not work for drift cases.
   \item[21] constant potential feedback scaled by potential on the ring {\tt bc\_type21\_ref} away,
   {\tt POTPAR(,,1)} specifies the desired electric potential in $V$,
@@ -8249,7 +8250,6 @@ m_a V_{\parallel a} \Gamma_{ax}^{Cor} -
 
 If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $\Gamma^m_{ax} $ is applied according to section \ref{sec:Zhdanov}.
 
-
 \begin{equation}\label{eq:mom_fluxy}
 \Gamma^m_{ay} =
 m_a V_{\parallel a} \Gamma_{ay}^{Cor} -
@@ -8541,8 +8541,6 @@ Q_R = \sum \limits_{a=0}^{ns-1} r_{Q_a} n_e n_a ~ \text{from b2stel}
  r_{Q_a} = r_{Q_a}^{\rm ion} + r_{Q_a}^{\rm rec} + r_{Q_a}^{\rm brm} + r_{Q_a}^{\rm line}
 \end{equation}
 contains contributions from ionisation, recombination, bremsstrahlung and line radiation.
-
-
 
 \begin{equation}\label{eq:ene_Qfei}
 Q_{Fei} = \left\{
