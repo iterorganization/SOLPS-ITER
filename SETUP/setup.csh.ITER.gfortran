@@ -7,9 +7,9 @@ module use /work/imas/etc/modules/all
 set nodename=`hostname`
 switch ($nodename)
  case "sdcc-login*.iter.org":
-  module load IMAS/3.35.0-4.10.0-foss-2020b
-  module load GGD/1.10.0-GCC-10.2.0-DD-3.35.0
-  module load AMNS/1.4.0-foss-2020b-DD-3.35.0
+  module load IMAS/3.36.0-4.10.1-foss-2020b
+  module load GGD/1.10.1-GCC-10.2.0-DD-3.36.0
+  module load AMNS/1.4.0-foss-2020b-DD-3.36.0
   module load xarray/0.16.2-foss-2020b
   module load Viz/2.4.7-foss-2020b
   module load ToFu/1.5.0-foss-2020b-Python-3.8.6
