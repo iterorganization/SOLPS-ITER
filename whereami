@@ -120,6 +120,9 @@ case "*.hk":
 case "*.mo":
   echo CN_UNKNOWN
   breaksw
+case "*.uni-lj.si":
+  echo UL
+  breaksw
 case "*.eu":
 case "*.an":
 case "*.at":
