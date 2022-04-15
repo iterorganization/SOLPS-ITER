@@ -39,7 +39,6 @@ topix = comuse.topix+1;
 topiy = comuse.topiy+1;
 bottomix = comuse.bottomix+1;
 bottomiy = comuse.bottomiy+1;
-leftix = comuse.leftix+1;
 rightix = comuse.rightix+1;
 rightiy = comuse.rightiy+1;
 
@@ -70,6 +69,19 @@ else
     reversefac = -1;
     momfac = 1;
 end
+if ismom
+    momfac = momfac*-sign(mean(mean(comuse.bb(:,:,3))));
+end
+
+% Areas at the ends:
+switch areaend
+    case 'left'
+        area_divide = sum(findlr(area,indpol,'left',rightix,rightiy));
+    case 'right'
+        area_divide = sum(findlr(area,indpol,'right',rightix,rightiy));
+    case 'none'
+        area_divide = 1;
+end
 
 % Find the poloidal distance along the first SOL ring (for single- or double-
 % null cases), or along the first ring in indpol (for slab case)
@@ -91,42 +103,40 @@ if ~isempty(find(diff(comuse.leftix(:,1))<1,1))
         end
     end
 end
-ixleftsep = ixsep;
-iyleftsep = iysep; 
-dspol = comuse.dspol(ixsep,iysep);
-dspolface = 0.5*(comuse.dspol(leftix(ixsep,iysep),iysep)+comuse.dspol(ixsep,iysep));
+switch polbaldist
+    case 'parallel'
+        dist2D = comuse.dspar;
+        dist2Dx = comuse.dsparx;
+    case 'poloidal'
+        dist2D = comuse.dspol;
+        dist2Dx = comuse.dspolx;
+    otherwise
+        error('Poloidal balance distance ''%s'' not supported.',polbaldist);
+end
+xdata = dist2D(ixsep,iysep);
+xdatax = dist2Dx(ixsep,iysep);
 while indpol(rightix(ix0,iy0),rightiy(ix0,iy0))
     ixsep = rightix(ixsep,iysep);
     iysep = rightiy(ixsep,iysep);
     ix0 = rightix(ix0,iy0);
     iy0 = rightiy(ix0,iy0);
-    dspol = [dspol,comuse.dspol(ixsep,iysep)];
-    dspolface = [dspolface,0.5*(comuse.dspol(leftix(ixsep,iysep),iysep)+comuse.dspol(ixsep,iysep))];
+    xdata = [xdata,dist2D(ixsep,iysep)];
+    xdatax = [xdatax,dist2Dx(ixsep,iysep)];
 end
-ixrightsep = ixsep;
-iyrightsep = iysep;
-dspolface = [dspolface,0.5*(comuse.dspol(ixsep,iysep)+comuse.dspol(rightix(ixsep,iysep),iysep))];
-if ~reverse
-    dspol = dspolface(end)-dspol+0.001;
-    dspolface = dspolface(end)-dspolface+0.001;
-    areadown = area(rightix(ixrightsep,iyrightsep),rightiy(ixrightsep,iyrightsep));
-else
-    dspol = dspol-dspolface(1)+0.001;
-    dspolface = dspolface-dspolface(1)+0.001;
-    areadown = area(ixleftsep,iyleftsep);
-end
+xdatax = [xdatax,dist2Dx(rightix(ixsep,iysep),iysep)];
 
 % Total balance with residuals:
 cmap = comuse.cmap;
-plot(dspolface,momfac*reversefac*sum(fluxedge,2)/areadown,'marker','.','parent',axbal(1),'displayname',totname{1},'color',cmap(1,:)); cmap=circshift(cmap,-1);
-plot(dspol,momfac*sum(srcint,2)/areadown,'marker','.','parent',axbal(1),'displayname',totname{2},'color',cmap(1,:)); cmap=circshift(cmap,-1);
-coderes = momfac*(resint/areadown)';
-plot(dspol,coderes,'-m','parent',axbal(1),'displayname',[totname{3},' (code)']);
+plot(xdatax,momfac*reversefac*sum(fluxedge,2)/area_divide,'marker','.','parent',axbal(1),'displayname',totname{1},'color',cmap(1,:)); cmap=circshift(cmap,-1);
+plot(xdata,momfac*sum(srcint,2)/area_divide,'marker','.','parent',axbal(1),'displayname',totname{2},'color',cmap(1,:));
+coderes = momfac*(resint/area_divide)';
+plot(xdata,coderes,'-m','parent',axbal(1),'displayname',[totname{3},' (code)']);
 
 % Check the level of agreement between post-calculated and code-calculated residuals agree:
-postres = momfac*(sum(srcint,2)-diff(sum(fluxedge,2)))/areadown;
-plot(dspol,postres,'-g','parent',axbal(1),'displayname',[totname{3},' (post-cal.)']);
-fprintf('Poloidal balance: the maximum difference between code- and post-calculated residuals is %e%%\n',max(abs((coderes-postres)./coderes)*100));
+postres = momfac*(sum(srcint,2)-diff(sum(fluxedge,2)))/area_divide;
+plot(xdata,postres,'-g','parent',axbal(1),'displayname',[totname{3},' (post-cal.)']);
+plot(xdata,postres-coderes,'-c','parent',axbal(1),'displayname',[totname{3},' (post-cal.-code)']);
+% fprintf('Poloidal balance: the maximum difference between code- and post-calculated residuals is %e%%\n',max(abs((coderes-postres)./coderes)*100));
 
 legend(axbal(1),'show','location','best');
 title(axbal(1),'Total poloidal balance','fontweight','normal');

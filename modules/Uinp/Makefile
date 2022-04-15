@@ -155,8 +155,14 @@ ${OBJDIR}/b2mod_lwimai.${MOD}:
 ${OBJDIR}/b2mod_lwmain.${MOD}:
 	ln -sf ${B2OBJ}/b2mod_lwmain.${MOD} ${OBJDIR}
 
+${OBJDIR}/b2mod_math.${MOD}:
+	ln -sf ${B2OBJ}/b2mod_math.${MOD} ${OBJDIR}
+
 ${OBJDIR}/b2mod_openmp.${MOD}:
 	ln -sf ${B2OBJ}/b2mod_openmp.${MOD} ${OBJDIR}
+
+${OBJDIR}/b2mod_solpstop.${MOD}:
+	ln -sf ${B2OBJ}/b2mod_solpstop.${MOD} ${OBJDIR}
 
 ${OBJDIR}/b2mod_subsys.${MOD}:
 	ln -sf ${B2OBJ}/b2mod_subsys.${MOD} ${OBJDIR}
@@ -164,6 +170,8 @@ ${OBJDIR}/b2mod_subsys.${MOD}:
 ${OBJDIR}/b2mod_xerset.${MOD}:
 	ln -sf ${B2OBJ}/b2mod_xerset.${MOD} ${OBJDIR}
 
+${OBJDIR}/helper.${MOD}:
+	ln -sf ${B2OBJ}/helper.${MOD} ${OBJDIR}
 endif
 
 ${OBJDIR}/libeirene.a:
@@ -196,8 +204,14 @@ ${OBJDIR}/b2mod_lwmain.o:
 ${OBJDIR}/b2mod_ipmain.o:
 	ln -sf ${B2OBJ}/b2mod_ipmain.o ${OBJDIR}
 
+${OBJDIR}/b2mod_math.o:
+	ln -sf ${B2OBJ}/b2mod_math.o ${OBJDIR}
+
 ${OBJDIR}/b2mod_openmp.o:
 	ln -sf ${B2OBJ}/b2mod_openmp.o ${OBJDIR}
+
+${OBJDIR}/b2mod_solpstop.o:
+	ln -sf ${B2OBJ}/b2mod_solpstop.o ${OBJDIR}
 
 ${OBJDIR}/b2mod_subsys.o:
 	ln -sf ${B2OBJ}/b2mod_subsys.o ${OBJDIR}
@@ -205,6 +219,8 @@ ${OBJDIR}/b2mod_subsys.o:
 ${OBJDIR}/b2mod_xerset.o:
 	ln -sf ${B2OBJ}/b2mod_xerset.o ${OBJDIR}
 
+${OBJDIR}/helper.o:
+	ln -sf ${B2OBJ}/helper.o ${OBJDIR}
 
 clean:
 	rm -rf ${OBJDIR}/*.o ${OBJDIR}/*.f ${OBJDIR}/${PROG} ${OBJDIR}/libui.a ${OBJDIR}/libb25.a ${OBJDIR}/ub2p ${OBJDIR}/LISTOBJ ${SRCDIR}/git_version_Uinp.h ${OBJDIR}/dependencies*

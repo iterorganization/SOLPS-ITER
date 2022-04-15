@@ -69,18 +69,18 @@ area_divide = calc_area(comuse,AREATYPE);
 % Plot balance of the required quantity
 switch BAL_QUANT
     case 'particles'
-        balpart(BALFILE,indrad,indpol,SPECIES_INDEX,comuse,axbal,reverse,STRATA_PLOT,axstrat);
+        balpart(BALFILE,indrad,indpol,SPECIES_INDEX,comuse,axbal,reverse,STRATA_PLOT,axstrat,true,AREAEND,area_divide,AREATYPE,POLBALDIST);
     case 'momentum'
-        balmom(BALFILE,indrad,indpol,SPECIES_INDEX,comuse,axbal,reverse,STRATA_PLOT,axstrat);
+        balmom(BALFILE,indrad,indpol,SPECIES_INDEX,comuse,axbal,reverse,STRATA_PLOT,axstrat,true,AREAEND,area_divide,AREATYPE,POLBALDIST);
     case 'totpress'
         warning('Use total pressure balance with caution. Balance not currently perfect.');
-        baltotpress(BALFILE,indrad,indpol,comuse,axbal,reverse,STRATA_PLOT,axstrat);
+        baltotpress(BALFILE,indrad,indpol,comuse,axbal,reverse,STRATA_PLOT,axstrat,true,POLBALDIST);
     case 'elheat'
-        baleht(BALFILE,indrad,indpol,comuse,axbal,reverse,STRATA_PLOT,axstrat);
+        baleht(BALFILE,indrad,indpol,comuse,axbal,reverse,STRATA_PLOT,axstrat,AREAEND,area_divide,AREATYPE,POLBALDIST);
     case 'ionheat'
-        baliht(BALFILE,indrad,indpol,comuse,axbal,reverse,STRATA_PLOT,axstrat);
+        baliht(BALFILE,indrad,indpol,comuse,axbal,reverse,STRATA_PLOT,axstrat,AREAEND,area_divide,AREATYPE,POLBALDIST);
     case 'totheat'
-        baltotht(BALFILE,indrad,indpol,comuse,axbal,reverse,STRATA_PLOT,axstrat);
+        baltotht(BALFILE,indrad,indpol,comuse,axbal,reverse,STRATA_PLOT,axstrat,true,AREAEND,area_divide,AREATYPE,POLBALDIST);
     case 'toten'
         warning('Use total energy balance with caution. Balance not currently perfect.');
         baltoten(BALFILE,indrad,indpol,comuse,axbal,reverse,STRATA_PLOT,axstrat,true,AREAEND,area_divide,AREATYPE,POLBALDIST);

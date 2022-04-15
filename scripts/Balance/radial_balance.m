@@ -65,41 +65,64 @@ else
     reversefac = -1;
     momfac = 1;
 end
-% Areas at the ends:
-arealeft = findlr(area,indrad,'left');
-arearight = findlr(area,indrad,'right',rightix,rightiy);
-
-% x - x_sep at outer mid-plane (cm):
-xmxsep = [];
-in = 1;
-x = [zeros(comuse.nx,1),cumsum(sqrt(diff(comuse.cr,1,2).^2+diff(comuse.cz,1,2).^2),2)];
-xompsep = 0.5*(x(comuse.omp,comuse.sep+1)+x(comuse.omp,comuse.sep+2));
-for iy=1:comuse.ny
-    inds = find(indrad(:,iy));
-    if ~isempty(inds)
-        xmxsep(in) = 100*(x(comuse.omp,iy)-xompsep);
-        in = in+1;
-    end
+if ismom
+    momfac = momfac*-sign(mean(mean(comuse.bb(:,:,3))));
 end
-
-% Account for balance in -x direction:
 if ~reverse
     fluxup = fluxleft;
     fluxdown = fluxright;
-    areadown = arearight;
 else
     fluxup = fluxright;
     fluxdown = fluxleft;
-    areadown = arealeft;
 end
+
+% Areas at the ends:
+switch areaend
+    case 'left'
+        rb.area_divide = findlr(area,indrad,'left');
+    case 'right'
+        rb.area_divide = findlr(area,indrad,'right',rightix,rightiy);
+    case 'none'
+        rb.area_divide = ones(1,size(fluxleft,1));
+end
+
+% y - y_sep at outer mid-plane (cm):
+yomp = [0,cumsum(sqrt(diff(comuse.cr(comuse.omp,:)).^2+diff(comuse.cz(comuse.omp,:)).^2))];
+dys1 = sqrt(diff(comuse.cr_y(comuse.omp,comuse.sep+1:comuse.sep+2))^2+diff(comuse.cz_y(comuse.omp,comuse.sep+1:comuse.sep+2))^2);
+yomp = yomp-yomp(comuse.sep+2)+dys1/2;
+% psi:
+tmp = abs(comuse.dv./comuse.hx.*comuse.bb(:,:,1));
+psi = cumsum(tmp,2);
+for ix=1:comuse.nx
+    psi(ix,:)=psi(ix,:)-0.5*(psi(ix,comuse.sep+1)+psi(ix,comuse.sep+2))+1;
+end
+% Ensure all SOL psis take outer target value:
+psi(:,comuse.sep+2:end)=repmat(psi(end,comuse.sep+2:end),comuse.nx,1);
+% psi at outer mid-plane:
+psiomp = psi(comuse.omp,:);
+% psi downstream:
+if ~reverse
+    psidown = findlr(psi,indrad,'right',rightix,rightiy);
+else
+    psidown = findlr(psi,indrad,'left');
+end
+% Target distances mapped to OMP
+ymysep = 100*interp1(psiomp,yomp,psidown,'linear','extrap');
 
 % Total balance with residuals:
 cmap = comuse.cmap;
-plot(ymysep,momfac*reversefac*sum(fluxup,2)./areadown','marker','.','parent',axbal(1),'displayname',totname{1},'color',cmap(1,:)); cmap=circshift(cmap,-1);
-plot(ymysep,momfac*reversefac*sum(fluxdown,2)./areadown','marker','.','parent',axbal(1),'displayname',totname{2},'color',cmap(1,:)); cmap=circshift(cmap,-1);
-plot(ymysep,momfac*sum(srcint,2)./areadown','marker','.','parent',axbal(1),'displayname',totname{3},'color',cmap(1,:)); cmap=circshift(cmap,-1);
-coderes = momfac*(resint./areadown)';
-plot(ymysep,coderes,'-m','parent',axbal(1),'displayname',[totname{4},' (code)']);
+coderes = momfac*(resint./rb.area_divide)';
+if makeplot
+    plot(ymysep,momfac*reversefac*sum(fluxup,2)./rb.area_divide','marker','.','parent',axbal(1),'displayname',totname{1},'color',cmap(1,:)); cmap=circshift(cmap,-1);
+    plot(ymysep,momfac*reversefac*sum(fluxdown,2)./rb.area_divide','marker','.','parent',axbal(1),'displayname',totname{2},'color',cmap(1,:)); cmap=circshift(cmap,-1);
+    plot(ymysep,momfac*sum(srcint,2)./rb.area_divide','marker','.','parent',axbal(1),'displayname',totname{3},'color',cmap(1,:));
+    plot(ymysep,coderes,'-m','parent',axbal(1),'displayname',[totname{4},' (code)']);
+end
+rb.ymysep = ymysep;
+rb.totflxu = momfac*reversefac*sum(fluxup,2)./rb.area_divide';
+rb.totflxd = momfac*reversefac*sum(fluxdown,2)./rb.area_divide';
+rb.totsrc = momfac*sum(srcint,2)./rb.area_divide';
+rb.coderes = coderes;
 
 % Check the level of agreement between post-calculated and code-calculated residuals agree:
 postres = momfac*(reversefac*(sum(fluxup,2)-sum(fluxdown,2))+sum(srcint,2))./rb.area_divide';
@@ -108,7 +131,7 @@ if makeplot
     plot(ymysep,postres,'-g','parent',axbal(1),'displayname',[totname{4},' (post-cal.)']);
     plot(ymysep,postres-coderes,'-c','parent',axbal(1),'displayname',[totname{4},' (post-cal.-code)']);
 end
-fprintf('Radial balance: the maximum difference between code- and post-calculated residuals is %e%%\n',max(abs((coderes-postres)./coderes)*100));
+% fprintf('Radial balance: the maximum difference between code- and post-calculated residuals is %e%%\n',max(abs((coderes-postres)./coderes)*100));
 if makeplot
     legend(axbal(1),'show','location','best');
     title(axbal(1),'Total radial balance','fontweight','normal');
@@ -194,3 +217,4 @@ if makeplot
     end
 end
 
+rb.src_name = srcname;

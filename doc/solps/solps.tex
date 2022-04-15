@@ -2397,8 +2397,7 @@ which contains
   \item[6] prescribe the total particle flux for a constant density,
   {\tt CONPAR(,,1)} specifies the particle flux in
   $s^{-1}$
-  \item[7] prescribe the density as a function of other plasma
-  parameters [not yet available]
+  \item[7] prescribe the given profile of density from the {\tt bv\_na.dat} file (requires {\tt b2mndr\_boundary\_sources} to be {\tt 1})
   \item[8] prescribe the total particle flux with constant flux
   density, {\tt CONPAR(,,1)} specifies the particle flux in
   $s^{-1}$
@@ -2470,8 +2469,7 @@ which contains
   {\tt MOMPAR(,,1)} specifies the parallel momentum flux density in $N.m^{-2}$
   \item[6] prescribe the total parallel momentum flux for a constant
   parallel velocity [not yet available]
-  \item[7] prescribe the parallel momentum as a function of other plasma
-  parameters [not yet available]
+  \item[7] prescribe the given profile of parallel velocity from the {\tt bv\_ua.dat} file (requires {\tt b2mndr\_boundary\_sources} to be {\tt 1})
   \item[8] special : limited shear, imposes zero gradient for the Mach number.
   [[[Eventually intended to have {\tt MOMPAR(,,1)} specify the
   gradient of the Mach number in $m^{-1}$]]]
@@ -2489,6 +2487,7 @@ which contains
   {\tt MOMPAR(,,1)} specifies the parallel velocity in $m.s^{-1}$
   \item[17] leakage option for parallel momentum, {\tt MOMPAR(,,1)} specifies
   the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s, a} m_a n_a u_a$
+  \item[18] parallel momentum radial sheath loss
   \end{description}
 \item[BCENE]\index{BCENE} {\tt integer array, length NBC}, specifying
   the type of electron energy or temperature boundary condition for
@@ -2513,8 +2512,7 @@ which contains
   \item[6] prescribe the total electron energy flux for a constant
   electron temperature, {\tt ENEPAR(,1)} specifies the energy flux
   in $W$ (no longer supported, use types [16] or [17] instead)
-  \item[7] prescribe the electron temperature as a function of
-  other plasma parameters [not yet available]
+  \item[7] prescribe the electron temperature profile from the {\tt bv\_te.dat} file (requires {\tt b2mndr\_boundary\_sources} to be {\tt 1})
   \item[8] prescribe the total electron heat flux with constant flux
   density, {\tt ENEPAR(,1)} specifies the energy flux in $W$
   \item[9] prescribe the decay length for the electron temperature,
@@ -2579,8 +2577,7 @@ which contains
   \item[6] prescribe the total ion energy flux for a constant ion
   temperature, {\tt ENIPAR(,1)} specifies the energy flux in $W$
   (no longer supported, use types [16] or [17] instead)
-  \item[7] prescribe the ion temperature as a function of other plasma
-  parameters [not yet available]
+  \item[7] prescribe the ion temperature profile from the {\tt bv\_ti.dat} file (requires {\tt b2mndr\_boundary\_sources} to be {\tt 1})
   \item[8] prescribe the total ion heat flux with constant flux
   density, {\tt ENIPAR(,1)} specifies the energy flux in $W$
   \item[9] prescribe the decay length for the ion temperature,
@@ -2648,8 +2645,7 @@ which contains
     $A.m^{-2}$
   \item[6] prescribe the total current flux density for a
   constant potential [not yet available]
-  \item[7] prescribe the potential as a function of other
-  plasma parameters [not yet available]
+  \item[7] prescribe the given profile of potential from the {\tt bv\_po.dat} file (requires {\tt b2mndr\_boundary\_sources} to be {\tt 1})
   \item[8] prescribe the total electric current with constant flux
   density, {\tt POTPAR(,1)} specifies the electric current in $A$
   \item[9] prescribe the decay length for the potential,
@@ -2659,6 +2655,7 @@ which contains
   \item[11] sheath conditions, electron energy transmission from {\tt b2stbc\_spb}, recommended when using drifts. Linked to using {\tt BCCON=14} and {\tt BCMOM=13} for all ion species, and {\tt BCENE/I=15}. {\tt POTPAR(,2)} specifies the bias potential in $V$
   \item[12] imposes the currents due to drifts for the South core boundary. Must be used in conjunction with the switch setting {\tt \allowbreak istyle\_cur\_contr\_on\_S\_and\_N=2}
   \item[13] imposes the currents due to drifts for the South private flux and North boundaries. Must be used in conjunction with {\tt \allowbreak istyle\_cur\_contr\_on\_S\_and\_N=2}
+  \item[14] prescribe the value of the radial sheath potential, {\tt POTPAR(,1)}, in $V$
   \item[16] feedback condition of constant electric potential for a given prescribed current. The prescribed current (in $A$) is given by the sum of the {\tt POTPAR(,1)} of all the boundary conditions with {\tt BCPOT=16}. Still experimental, will not work for drift cases.
   \item[21] constant potential feedback scaled by potential on the ring {\tt bc\_type21\_ref} away,
   {\tt POTPAR(,,1)} specifies the desired electric potential in $V$,
@@ -4627,9 +4624,9 @@ from {\tt b2.numerics.parameters}.
 
 \begin{figure}[hbtp]
 \ifpdf
-    \centerline{\includegraphics[origin=br,angle=-90,height=8cm]{compare_10814_tesepm_2.pdf}}
+    \centerline{\includegraphics[origin=br,angle=-90,width=8cm]{compare_10814_tesepm_2.pdf}}
 \else
-    \centerline{\includegraphics[origin=br,angle=-90,height=8cm]{compare_10814_tesepm_2.ps}}
+    \centerline{\includegraphics[origin=br,angle=-90,width=8cm]{compare_10814_tesepm_2.ps}}
 \fi
     \caption{Upstream (outer midplane) electron temperature for a
     range of time-steps with a core speed-up factor.}
@@ -6115,7 +6112,7 @@ as the inertia terms.
 Parallel viscosity is represented
 by the fourth and fifth terms in the r.h.s.
 The former is the Balescu
-parallel viscosity with coefficient $\eta_0 = \dfrac{4}{3} 0.96 \sqrt{2} n T_i / \nu_{ii}$.
+parallel viscosity with coefficient $\eta_0 = \dfrac{4}{3} 0.96 \sqrt{2} n T_i / \nu_{ii}$. A detailed derivation is given at the end of this section, see~\ref{sec:viscosity}.
 The latter corresponds to the parallel viscosity driven
 by parallel ion heat flux
 $q_{i\parallel}^{\left( 0 \right)} =
@@ -7336,58 +7333,127 @@ V_{ay}^{(E)} =
 \widetilde{V}_{ax}^{(dia)} =
 \left\{
 \begin{aligned}
-\frac{T_i B_z}{z_a e} \frac{\partial}{h_y \partial y} \left( \frac{1}{B^2} \right) , \ z_a \neq 0 \\
+\frac{T_i B_z}{z_a e} \frac{\partial}{h_y \partial y} \left( \frac{1}{B^2} \right) , & \ z_a \neq 0 \\
 0, & \ z_a = 0
 \end{aligned} \right.
 \qquad\qquad
 \widetilde{V}_{ay}^{(dia)} =
 \left\{
 \begin{aligned}
--\frac{T_i B_z}{z_a e} \frac{\partial}{h_x \partial x} \left( \frac{1}{B^2} \right) & \ z_a \neq 0 \\
+-\frac{T_i B_z}{z_a e} \frac{\partial}{h_x \partial x} \left( \frac{1}{B^2} \right) , & \ z_a \neq 0 \\
 0, & \ z_a = 0
 \end{aligned} \right.
 \end{equation}
 
 \begin{equation}
-\begin{matrix}
-\Gamma_{ax}^{\left( Eir \right)} =& \left( b_x V_{\parallel a} + V_{ax}^{\left( E \right)} + V_{ax}^{\left( dia \right)} + V_{ax}^{\left( AN \right)} + V_a^{corr\_dpc} \right) n_a + \\
-0 \cdot \frac{\delta_{1,a}}{e} & \left( j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + \widetilde{j_x}^{\left( vis \perp \right)} + 0 \cdot \widetilde{j_x}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x}
-\end{matrix}
+\widetilde{\widetilde{V}}_{ax}^{\left( dia \right)} =
+\left\{
+\begin{aligned}
+\widetilde{V}_{ax}^{\left( dia \right)} , &  \ z_a = 0 \\
+\frac{\widetilde{V}_{ax}^{\left( dia \right)}}{ 1 + \frac{\left| \widetilde{V}_{ax}^{\left( dia \right)} \right|}{V_{T_a}}} , &  \  z_a \neq 0
+\end{aligned} \right.
+\qquad
+\widetilde{\widetilde{V}}_{ay}^{\left( dia \right)} =
+\left\{
+\begin{aligned}
+\widetilde{V}_{ay}^{\left( dia \right)} , &  \  z_a = 0 \\
+\frac{\widetilde{V}_{ay}^{\left( dia \right)}}{ 1 + \frac{\left| \widetilde{V}_{ay}^{\left( dia \right)} \right|}{V_{T_a}}} , &  \  z_a \neq 0
+\end{aligned} \right.
+\end{equation}
+
+\begin{multline}
+\label{eq:Gamma_ax_Eir}
+\Gamma_{ax}^{\left( Eir \right)} = \left( b_x V_{\parallel a} + V_{ax}^{\left( E \right)} + \widetilde{W}_{ax}^{\left( dia \right)} + V_{ax}^{\left( AN \right)} + V_a^{corr\_dpc} \right) n_a + \\
+ 0 \cdot \frac{1}{z_a e} \left( j_{ax}^{\left( AN \right)} + j_{ax}^{\left( in \right)} + \widetilde{j}_{ax}^{\left( vis \parallel \right)} + j_{ax}^{\left( vis \perp \right)} + \widetilde{j}_{ax}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x}
+\end{multline}
+
+\begin{multline}
+\label{eq:Gamma_ay_Eir}
+\Gamma_{ay}^{\left( Eir \right)} = \left( V_{ay}^{\left( E \right)} + \widetilde{W}_{ya}^{\left( dia \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \\
+ \frac{1}{z_a e} \left( j_{ay}^{\left( AN \right)} + j_{ay}^{\left( in \right)} + \widetilde{j}_{ay}^{\left( vis \parallel \right)} + {j}_{ay}^{\left( vis \perp \right)} + \widetilde{j}_{ay}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y}
+\end{multline}
+
+\noindent where
+\begin{equation}
+\label{eq:vadia_appC}
+W_{ax}^{\left( dia \right)} =
+\left\{
+\begin{aligned}
+-\frac{B_z}{z_a e B^2 n_a} \frac{1}{h_y} \frac{\partial n_a T_i}{\partial y} & \ z_a \neq 0 \\
+0, & \ z_a = 0
+\end{aligned} \right.
+\qquad\qquad
+W_{ay}^{\left( dia \right)} =
+\left\{
+\begin{aligned}
+\frac{B_z}{z_a e B^2 n_a} \frac{1}{h_x} \frac{\partial n_a T_i}{\partial x} & \ z_a \neq 0 \\
+0, & \ z_a = 0
+\end{aligned} \right.
 \end{equation}
 
 \begin{equation}
-\begin{matrix}
-\Gamma_{ay}^{\left( Eir \right)} =& \left( V_{ay}^{\left( E \right)} + V_{ya}^{\left( dia \right)} + V_{ay}^{\left( AN \right)} \right) n_a \\
-+ \frac{\delta_{1,a}}{e} & \left( j_y^{\left( AN \right)} + j_y^{\left( in \right)} + \widetilde{j_y}^{\left( vis \parallel \right)} + 0 \cdot \widetilde{j_y}^{\left( vis \perp \right)} + \widetilde{j_y}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y}
-\end{matrix}
+\widetilde{W}_{ax}^{\left( dia \right)} =
+\left\{
+\begin{aligned}
+W_{ax}^{\left( dia \right)} , & \  z_a = 0 \\
+\frac{W_{ax}^{\left( dia \right)}}{ 1 + \frac{\left| W_{ax}^{\left( dia \right)} \right|}{V_{T_a}}} , & \ z_a \neq 0
+\end{aligned} \right.
+\qquad
+\widetilde{W}_{ay}^{\left( dia \right)} =
+\left\{
+\begin{aligned}
+W_{ay}^{\left( dia \right)} , & \ z_a = 0 \\
+\frac{W_{ay}^{\left( dia \right)}}{ 1 + \frac{\left| W_{ay}^{\left( dia \right)} \right|}{V_{T_a}}} , & \ z_a \neq 0
+\end{aligned} \right.
 \end{equation}
 
-\noindent where
-\begin{tabular}{cc}
-$\begin{matrix}
-V_{ax}^{\left( dia \right)} & =
-& \left\{
-\begin{matrix}
--\frac{B_z}{z_a e B^2 n_a} \frac{1}{h_y} \frac{\partial n_a T_i}{\partial y} & \ z_a \neq 0 \\
-0, & \ z_a = 0
-\end{matrix} \right.
-\end{matrix}$
+\begin{equation}
+U_{ax}^{\left( dia \right)} = \widetilde{V}_{ax}^{\left( dia \right)} + V_{ax}^{\left( E \right)}
+\qquad\qquad
+U_{ay}^{\left( dia \right)} = \widetilde{V}_{ay}^{\left( dia \right)} + V_{ay}^{\left( E \right)}
+\end{equation}
 
-,&
+\begin{equation}
+U_{ax}^{\left( 2dia \right)} = 2 \widetilde{V}_{ax}^{\left( dia \right)} + V_{ax}^{\left( E \right)}
+\qquad\qquad
+U_{ay}^{\left( 2dia \right)} = 2 \widetilde{V}_{ay}^{\left( dia \right)} + V_{ay}^{\left( E \right)}
+\end{equation}
 
-$\begin{matrix}
-V_{ay}^{\left( dia \right)} & =
-& \left\{
-\begin{matrix}
-\frac{B_z}{z_a e B^2 n_a} \frac{1}{h_x} \frac{\partial n_a T_i}{\partial x} & \ z_a \neq 0 \\
-0, & \ z_a = 0
-\end{matrix} \right.
-\end{matrix}$
-\end{tabular}
+\begin{equation}
+\widetilde{U}_{ax}^{\left( dia \right)} =
+\left\{
+\begin{aligned}
+U_{ax}^{\left( dia \right)} , & \ z_a = 0 \\
+\frac{U_{ax}^{\left( dia \right)}}{ 1 + \frac{\left| U_{ax}^{\left( dia \right)} \right|}{V_{T_a}}} , & \ z_a \neq 0
+\end{aligned} \right.
+\qquad
+\widetilde{U}_{ay}^{\left( dia \right)} =
+\left\{
+\begin{aligned}
+U_{ay}^{\left( dia \right)} , & \ z_a = 0 \\
+\frac{U_{ay}^{\left( dia \right)}}{ 1 + \frac{\left| U_{ay}^{\left( dia \right)} \right|}{V_{T_a}}} , & \ z_a \neq 0
+\end{aligned} \right.
+\end{equation}
+
+\begin{equation}
+\widetilde{U}_{ax}^{\left( 2dia \right)} =
+\left\{
+\begin{aligned}
+U_{ax}^{\left( 2dia \right)} , & \ z_a = 0 \\
+\frac{U_{ax}^{\left( 2dia \right)}}{ 1 + \frac{\left| U_{ax}^{\left( 2dia \right)} \right|}{V_{T_a}}} , & \ z_a \neq 0
+\end{aligned} \right.
+\qquad
+\widetilde{U}_{ay}^{\left( 2dia \right)} =
+\left\{
+\begin{aligned}
+U_{ay}^{\left( 2dia \right)} , & \ z_a = 0 \\
+\frac{U_{ay}^{\left( 2dia \right)}}{ 1 + \frac{\left| U_{ay}^{\left( 2dia \right)} \right|}{V_{T_a}}} , & \ z_a \neq 0
+\end{aligned} \right.
+\end{equation}
 
 \begin{equation}
 \label{eq:Eka}
-E_{k,a}=\frac{m_a}2 \left[   V^2_{\parallel a}+\left( W_{a\perp}^{\left( dia \right)}+V_{a\perp}^{\left( E \times B \right)}  \right)^2    +   \left(  W_{ay}^{\left( dia \right)} + V_{ay}^{\left( E \times B \right)} \right)^2    \right]
+E_{k,a}=\frac{m_a}2 V^2_{\parallel a}
 \end{equation}
 
 \begin{equation}
@@ -8089,7 +8155,7 @@ c_{\eta_{ax}^{(CL)}}^{Luciani} & =
 \frac{1}{1 + \frac{7.5 \cdot 10^{16} \left( \frac{T_i}{e} \right)^2}
 {c(y) \sum \limits_{a=0}^{ns-1} z_a^2 n_a}
 }
-, & \text{for hydrogenic ions on inner flux surfaces,} \\
+, & \text{for ions on inner flux surfaces} \\
 1, & \text{for all other cases} \\
 \end{matrix} \right.
 \end{matrix}$
@@ -8110,7 +8176,7 @@ c_{\eta_{ax}^{(CL)}}^{Luciani} & =
 \frac{1}{1 +
 \frac{15.12 \cdot 10^{16} \cdot \varepsilon^{3/2} \left( \frac{T_i}{e} \right)^2}
 {c(y)\sum \limits_{a=0}^{ns-1} z_a^2 n_a}}
-, & \text{for hydrogenic ions on inner flux surfaces,} \\
+, & \text{for ions on inner flux surfaces} \\
 1, & \text{for all other cases} \\
 \end{matrix} \right.
 \end{matrix}
@@ -8303,8 +8369,13 @@ Q_R = \sum \limits_{a=0}^{ns-1} r_{Q_a} n_e n_a ~ \text{from b2stel}
 contains contributions from ionisation, recombination, bremsstrahlung and line radiation.
 
 \begin{equation}\label{eq:ene_Qfei}
-Q_{Fei} = V_{e \parallel} \sum \limits_{\substack{a=0 \\ z_a \neq 0}}^{ns - 1}
+Q_{Fei} = \left\{
+\begin{aligned}
+ V_{e \parallel} \sum \limits_{\substack{a=0 \\ z_a \neq 0}}^{ns - 1}
 \left( S^m_{fr,ea} + S^m_{Therm,ea} \right)
+& \mbox{, when Eq.~(\ref{eq:mom_new}) is activated ({\tt 'b2sigp\_style'} set to {\tt '2'})} \\
+j_x \hat E_x + 0 \cdot j_y \hat{E}_y & \mbox{, when Eq.~(\ref{eq:mom_old}) is activated}
+\end{aligned}\right.
 \end{equation}
 
  %-------- end of 9th page -------------
@@ -8324,7 +8395,6 @@ $c_{071} = z_{eff} \widetilde{c_e}^{(2)}$
 \begin{equation}\label{eq:ene_qPSchx}
 q_{ex}^{P.Sch} = -\frac{5}{2} D_{exy} \frac{1}{h_y} \frac{\partial n_e T_e^2} {\partial y}
 \end{equation}
-
 
 $D_{exy} = \left( \frac{1}{B^2} - \frac{1}{\left\langle B^2 \right\rangle} \right) \frac{B_z} e$
 
@@ -8814,6 +8884,7 @@ Q_{vis} = \sum \limits_{fluid~species} \left(
 	\right)^2
 \right)
 \end{equation}
+
 When Eq.~(\ref{eq:mom_new}) is used ({\tt 'b2sigp\_style'} set to {\tt '2'}), the contribution from friction between charged species is given as:
 
 \begin{equation}\label{eq:eni_Qfabnew}
@@ -8836,7 +8907,6 @@ Atom heat source due to ionisation
 \begin{equation}\label{eq:eni_QIi}
 Q_I^{(i)} = \sum \limits_{a=0}^{ns-2} Q_{I_a}^{(i)}
 \end{equation}
-
 
 \begin{equation}\label{eq:eni_QIia}
 \begin{matrix}
@@ -12936,6 +13006,10 @@ $\tilde{V}_{ax}^{(dia)}$ & $m/s$ & \texttt{b2tfnb\_vbdiax[XXX].dat} & (\ref{eq:V
 
 $\tilde{V}_{ay}^{(dia)}$ & $m/s$ & \texttt{b2tfnb\_vbdiay[XXX].dat} & (\ref{eq:VayDia}) \\
 
+$\displaystyle \frac{\sqrt{g}}{h_x} \tilde{V}_{ax}^{(dia)} n_a$ & $s^{-1}$ & \texttt{b2tfnb\_vadianax[XXX].dat} & (\ref{eq:vadia_appC}) \\
+
+$\displaystyle \frac{\sqrt{g}}{h_x} \tilde{V}_{ay}^{(dia)} n_a$ & $s^{-1}$ & \texttt{b2tfnb\_vadianay[XXX].dat} & (\ref{eq:vadia_appC}) \\
+
 $E_{k,a}$ & $J$ & \texttt{b2tfnb\_kbnrgy[XXX].dat} & (\ref{eq:Eka}) \\
 
 ${V_{ay}}^{(AN)}$ & $m/s$ & \texttt{b2tqna\_vla0y[XXX].dat} & (\ref{eq:V_ayAN}) \\
@@ -14480,6 +14554,7 @@ are indicated in the table.
     font \index{b2plot, font}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:font}   & Set font \\
     gcol \index{b2plot, gcol}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:gcol}   & Colour of graph title \\
     glob \index{b2plot, glob}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:glob}   & Copy {\em extralabel} to the global label field \\
+    glsz \index{b2plot, glsz}      & 0 & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:glsz}   & Global header font size \\
     grid \index{b2plot, grid}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:grid}   & Add grid to plot \\
     hcol \index{b2plot, hcol}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:hcol}   & Colour of global header \\
     i* \index{b2plot, i*}          & 2 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:i*}     & Integer multiplication \\
@@ -16519,6 +16594,9 @@ Sets the current wall bar label to $\langle${\tt label}$\rangle$.
 \subsubsection{glob}\index{b2plot, glob}\label{sec:glob}
 Copies the contents of {\em extralabel} into the global header for all graphs.
 
+\subsubsection{$<$factor,{\bf R}$>$ glsz}\index{b2plot, glsz}\label{sec:glsz}
+Sets font size for global header to $\langle${\tt factor}$\rangle$ times default size (default is {\tt 1.0}).
+
 \subsubsection{$<$factor,{\bf R}$>$ lbsz}\index{b2plot, lbsz}\label{sec:lbsz}
 Sets label size to $\langle${\tt factor}$\rangle$ times default size (default is {\tt 1.0}). Does not apply to the global header.
 
@@ -18075,14 +18153,16 @@ B25\_EIRENE & sources/b2stbr.F \\
 B25\_EIRENE & sources/eirene\_f30f31.F \\
 B25\_EIRENE & sources/eirene\_mc\_init.F \\
 B25\_EIRENE & transport/b2tinnt.F \\
-B25\_EIRENE & user/b2blnc.F \\
-B25\_EIRENE & user/b2blne.F \\
-B25\_EIRENE & user/b2blnm.F \\
-B25\_EIRENE & user/b2trace.F \\
-B25\_EIRENE & user/b2usrtrc.F \\
-B25\_EIRENE & user/b2wrint.F \\
-B25\_EIRENE & user/b2wrsep.F \\
-B25\_EIRENE & user/b2wrsrt.F \\
+B25\_EIRENE & user/b2mod\_average.F \\
+B25\_EIRENE & user/b2mod\_batch.F \\
+B25\_EIRENE & user/b2mod\_blnc.F \\
+B25\_EIRENE & user/b2mod\_blne.F \\
+B25\_EIRENE & user/b2mod\_blns.F \\
+B25\_EIRENE & user/b2mod\_trace.F \\
+B25\_EIRENE & user/b2mod\_usrtrc.F \\
+B25\_EIRENE & user/b2mod\_wrint.F \\
+B25\_EIRENE & user/b2mod\_wrsep.F \\
+B25\_EIRENE & user/b2mod\_wrsrt.F \\
 B25\_EIRENE & user/cdfmovie.F \\
 B25\_EIRENE & user/eirflux\_map.F \\
 B25\_EIRENE & user/test\_couple.F90 \\
@@ -18117,7 +18197,9 @@ DBG & modules/b2mod\_mwti.F \\
 DBG & modules/b2mod\_neutrals\_namelist.F \\
 DBG & sources/b2stbr\_bas.F \\
 DBG & sources/b2stbr\_phys.F \\
-DBG & user/b2usrtrc.F \\
+DBG & user/b2mod\_file.F \\
+DBG & user/b2mod\_usrtrc.F \\
+DBG & user/b2mod\_wrsrt.F \\
 DBG & utility/ma28.F \\
 DBG & utility/ma28copy.F \\
 DBG & utility/ma28copy3.F \\

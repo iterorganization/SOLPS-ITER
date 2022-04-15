@@ -39,12 +39,10 @@ c======================================================================
       integer ndup
       logical h_iso_used(m_hlp_h)
       logical, allocatable :: ldup(:)
-      integer find_matching_reagent, find_matching_species,
-     ,        lnblnk, len_of_digits
-      logical streql, silent_open, isadigit, isplusorminus
-      external xerrab, streql, len_of_digits
-      external find_matching_reagent, find_matching_species,
-     ,         lnblnk, isadigit, isplusorminus
+      integer find_matching_reagent, lnblnk, len_of_digits
+      logical streql, silent_open
+      external xerrab, streql
+      external find_matching_reagent, lnblnk, len_of_digits
       external silent_open
 c======================================================================
       call subini ('uinprprc')
