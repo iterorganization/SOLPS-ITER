@@ -18,26 +18,19 @@ argloop:
 
 # Please note that some atd do not support SHELL environment
 # and always use /bin/sh.
-cat << __EOF__ | batch
+
+<< __EOF__  batch |& sed '/warning: commands will be executed using \/bin\/sh/d'
 #!/bin/sh
 LD_LIBRARY_PATH="${LD_LIBRARY_PATH}"
 export LD_LIBRARY_PATH
 
-msg="Started on `hostname` at `date`"
-update_solps_run_status \${msg}
-if test -n "\${SOLPS_GUI_IP}"; then
-  if hash netcat 2> /dev/null; then
-    echo ${USER} ${PWD} \${msg} | netcat -u -v -w 1 \${SOLPS_GUI_IP} \${SOLPS_GUI_PORT}
-  else
-    echo ${USER} ${PWD} \${msg} | nc -u -v -w 0 \${SOLPS_GUI_IP} \${SOLPS_GUI_PORT}
-  fi
-fi
+update_solps_run_status "Started on `hostname` at `date`"
 
 if [ -s input.dat -a ${standalone} = "no" ]; then
   if [ ${compress} = "-gz" ]; then
     time b2run ${argv} b2mn < input.dat | gzip -9 > run.log.gz
   else
-    time b2run ${argv} b2mn < input.dat > run.log
+    time b2run ${argv} b2mn < input.dat > run.log:
   fi
 else
   if [ ${compress} = "-gz" ]; then
@@ -46,13 +39,6 @@ else
     time b2run ${argv} -s b2mn > run.log
   fi
 fi
-msg="Finished on `hostname` at `date`"
-update_solps_run_status \${msg}
-if test -n "\${SOLPS_GUI_IP}"; then
-  if hash netcat 2> /dev/null; then
-    echo ${USER} ${PWD} \${msg} | netcat -u -v -w 1 \${SOLPS_GUI_IP} \${SOLPS_GUI_PORT}
-  else
-    echo ${USER} ${PWD} \${msg} | nc -u -v -w 0 \${SOLPS_GUI_IP} \${SOLPS_GUI_PORT}
-  fi
-fi
+
+update_solps_run_status "Finished on `hostname` at `date`"
 __EOF__
