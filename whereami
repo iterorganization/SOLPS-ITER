@@ -115,13 +115,13 @@ case "PLASMATHEORY08":
 case "*.mephi.ru":
   echo MEPHI
   breaksw
+case "*.uni-lj.si":
+  echo UL
+  breaksw
 case "*.cn":
 case "*.hk":
 case "*.mo":
   echo CN_UNKNOWN
-  breaksw
-case "*.uni-lj.si":
-  echo UL
   breaksw
 case "*.eu":
 case "*.an":
