@@ -27,7 +27,7 @@ if (! $?DEVICE) then
 endif
 #setenv LD_LIBRARY_PATH ${WORK}/solps-gui/staging/paraview/5.1.2/lib/paraview-5.1:${WORK}/solps-gui/staging/qt/4.8.7/lib:${LD_LIBRARY_PATH}
 
-module load paraview
+#module load paraview
 
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
