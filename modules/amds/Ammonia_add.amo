@@ -1,7 +1,8 @@
 # Output file produced by amds version 1.04
+# within SOLPS-ITER GIT version 3.0.8-53-g0737c8a6-dirty
+
 filevers 1
-reactns 48
-HYDHEL H.1 4.3.3
+reactns 47
 AMMONX H.2 02
 AMMONX H.2 03
 AMMONX H.2 07
@@ -50,7 +51,6 @@ AMMONX H.2 34
 AMMONX H.2 09
 AMMONX H.2 17
 group
-59
 
 
 
@@ -65,17 +65,17 @@ group
 
 
 
- 
-  
-  
-  
-  
-50 
+
+
+
+
+
+50
 50
 51
 51
-  
-  
+
+
 52
 52
 53
@@ -86,18 +86,18 @@ group
 55
 56
 56
-  
+
 57
 57
 58
 58
 
-  
-  
-  
+
+
+
 59
-  
-  
+
+
 deltae
 
 
@@ -146,9 +146,7 @@ deltae
 
 
 
-
 massp
-2
 0
 0
 0
@@ -156,13 +154,13 @@ massp
 0
 0
 0
-28
-15
-16
-17
-17
-18
-29
+0
+0
+0
+0
+0
+0
+0
 14
 17
 16
@@ -189,7 +187,7 @@ massp
 15
 16
 16
-2
+0
 0
 0
 1
@@ -197,7 +195,6 @@ massp
 0
 0
 masst
-2
 28
 28
 15
@@ -205,13 +202,13 @@ masst
 17
 17
 17
-0
-0
-0
-0
-0
-0
-0
+28
+15
+16
+17
+17
+18
+29
 2
 1
 1
@@ -238,7 +235,7 @@ masst
 2
 2
 2
-0
+2
 3
 3
 2
@@ -246,7 +243,6 @@ masst
 16
 16
 rctype
-II
 DS
 EI
 EI
@@ -342,7 +338,6 @@ tmin
 
 
 
-
 tmax
 
 
@@ -391,9 +386,7 @@ tmax
 
 
 
-
 primpart
-H2
 
 
 
@@ -442,7 +435,6 @@ H2
 
 
 intrpart
-H2+
 N2
 N2
 NH
@@ -491,7 +483,6 @@ H2+
 NH2
 NH2
 product1
-H3+
 N+
 N2+
 NH+
@@ -540,7 +531,6 @@ H3+
 NH2+
 NH
 product2
-H
 N
 
 
@@ -596,7 +586,6 @@ nprdct1
 
 
 
-
 2
 
 
@@ -638,7 +627,6 @@ nprdct1
 
 
 nprdct2
-
 
 
 
@@ -734,9 +722,7 @@ eprdct1
 
 
 
-
 eprdct2
-
 
 
 
