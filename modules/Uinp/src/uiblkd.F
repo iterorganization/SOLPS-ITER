@@ -904,8 +904,8 @@ c*** 12
 
 c*** 13
 
-      data nprnli, ntmstp , nptst  , ninitl_read /
-     /        0  ,    1   ,   0    ,   -1        /,
+      data nprnli, ntmstp , nptst  , ninitl_read, nprmul /
+     /        0  ,    1   ,   0    ,   -1       ,    0   /,
      ,      nsnvi,  isnve ,  isnvs ,  isnvt ,  isnrc /
      ,        0  , nsnv*0 , nsnv*0 , nsnv*0 , nsnv*0 /
       data dtimv , time0 /

@@ -36,7 +36,8 @@ c***         or switch for the target data (clockwise from bottom left)
 c*** luskel: counter for the segments to be skipped
 c*** lugpf : counter for the puffing sources
 c*** lugwt : counter for the grid-wall ties
-      data lusgm, luswch, luskel, lugpf, lugwt, luvsp, nprnl /7*0/
+      data lusgm, luswch, luskel, lugpf, lugwt, luvsp /6*0/
+      data nprnl /999999/
       data hlp_spc / .true. /, read_chr_angl / .false. /
       data lurefls / 0 /, chtyp / ' ' /
       data lchrdgrp / 0 /, lchrdlint / 0 /, lchrdlprf / 0 /
@@ -542,7 +543,10 @@ c=======================================================================
         call resimi(lfrm15)
       case (75)
         call resimi(nprnli)
-        nprnli=min(nprnli,nprnl)
+        if (nprnli.gt.nprnl) then
+          nprmul=(nprnli/nprnl)+1
+          nprnli=nprnli/nprmul
+        end if
       case (76)
         call resime(dtimv)
       case (77)

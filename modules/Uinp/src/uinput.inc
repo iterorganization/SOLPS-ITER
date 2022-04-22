@@ -336,7 +336,7 @@ c*** 12
 
 c*** 13
 
-      integer nprnli, ntmstp, nptst, nsnvi, ninitl_read,
+      integer nprnli, ntmstp, nptst, nsnvi, ninitl_read, nprmul,
      ,  isnve(nsnv), isnvs(nsnv), isnvt(nsnv), isnrc(nsnv)
       real dtimv, time0
       character txttlv(nsnv)*70, txtspv(nsnv)*24, txtunv(nsnv)*24
@@ -451,7 +451,7 @@ c*** b2ah.dat
      ,  nlstadds,mtreadds,listadds,listaddg,ngwties,kgwties,mgwties,
      ,  lgwties,npwin,npwsurf,npwtally,pwsurf,pwtally,pwspecy,
      ,  pwtally_d,pwspecy_d,
-     ,  nprnli,ntmstp,nptst,ninitl_read,
+     ,  nprnli,ntmstp,nptst,ninitl_read,nprmul,
      ,  nsnvi,isnve,isnvs,isnvt,isnrc,
      ,  jadch0,jadch1,jadnsw,jadmsw,jadlsw,jadksw,jadjsw,jadisw,
      ,  jlblck,jlacll,nclmi,nblcki,nprnvi,nprtvi,nprdvi,nfla,
