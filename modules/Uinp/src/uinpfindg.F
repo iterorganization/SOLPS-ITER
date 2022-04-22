@@ -13,7 +13,7 @@ c=======================================================================
       implicit none
       logical lc
 #include "uinput.inc"
-      integer, save :: nprnli_save, ntcpu_save, nfile_save
+      integer, save :: ntcpu_save, nfile_save, nprmul_save
       integer, save :: npts_save(nstra)
 c=======================================================================
       call subini ('uinpfindg')
@@ -21,15 +21,15 @@ c=======================================================================
        ntcpu_save=ntcpu
        ntcpu=ntcpu*10
        npts_save=npts
-       npts=npts*10
-       nprnli_save=nprnli
-       nprnli=nprnli*10
+       npts(:)=min(npts(:)*10,999999)
+       nprmul_save=nprmul
+       nprmul=max(1,nprmul)*10
        nfile_save=nfile
        nfile=30000+mod(nfile_save,10000)
       else !}{
        ntcpu=ntcpu_save
        npts=npts_save
-       nprnli=nprnli_save
+       nprmul=nprmul_save
        nfile=nfile_save
       end if !}
       call subend ()

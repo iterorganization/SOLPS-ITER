@@ -1139,7 +1139,7 @@ c*** 13.  data for nonlinear and time dep. option
 
 c*** the number of histories to be saved
 
-      write(iunoo,707) nprnli, ninitl_read
+      write(iunoo,707) nprnli, ninitl_read, nprmul
       if(nprnli.gt.0) then !{
 
 c*** the number of timesteps in Eirene, the timestep, and starting time

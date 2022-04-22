@@ -11,6 +11,7 @@ module load ncarg-gnu
 setenv PKG_CONFIG_PATH ${NETCDF_DIR}/lib/pkgconfig:${PKG_CONFIG_PATH}
 setenv PKG_CONFIG_PATH ${PARALLEL_NETCDF_DIR}/lib/pkgconfig:${PKG_CONFIG_PATH}
 setenv PKG_CONFIG_PATH /opt/cray/pe/libsci/19.06.1/GNU/8.1/x86_64/lib/pkgconfig:${PKG_CONFIG_PATH}
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/opt/intel/lib/intel64
 
 # Set environment variables
 setenv GLI_HOME ${SOLPSTOP}/lib
