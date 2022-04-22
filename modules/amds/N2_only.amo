@@ -1,26 +1,20 @@
 # Output file produced by amds version 1.04
-# within SOLPS-ITER GIT version 3.0.8-53-g0737c8a6-dirty
+# within SOLPS-ITER GIT version 3.0.7-506-g0255764d
 
 filevers 1
-reactns 7
+reactns 5
 AMMONX H.2 02
 AMMONX H.2 03
 AMMONX H.2 23s
 AMMONX H.2 ZN
-AMMONX H.2 41
-AMMONX H.1 41
 AMMONX H.2 ZZ
 group
 
 
 
  
-56
-56
   
 deltae
-
-
 
 
 
@@ -31,8 +25,6 @@ massp
 0
 0
 14
-2
-2
 1
 masst
 28
@@ -40,19 +32,13 @@ masst
 28
 2
 14
-14
-14
 rctype
 DS
 EI
 DS
 CX
-II
-II
 CX
 tmin
-
-
 
 
 
@@ -64,15 +50,11 @@ tmax
 
 
 
-
-
 primpart
 
 
 N2+
 N
-H2
-H2
 H
 intrpart
 N2
@@ -80,23 +62,17 @@ N2
 
 H2+
 N+
-N+
-N+
 product1
 N+
 N2+
 N
 H2
-NH+
-NH+
 N
 product2
 N
 
 
 N+
-H
-H
 H+
 nprdct1
 
@@ -104,11 +80,7 @@ nprdct1
 2
 
 
-
-
 nprdct2
-
-
 
 
 
@@ -120,11 +92,7 @@ eprdct1
 
 
 
-
-
 eprdct2
-
-
 
 
 

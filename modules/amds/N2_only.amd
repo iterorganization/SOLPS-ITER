@@ -564,12 +564,8 @@ Reaction AMMONX_H.2_ZV 0
 Reaction AMMONX_H.1_ZV 0
 Reaction AMMONX_H.2_40 0
 Reaction AMMONX_H.1_40 0
-Reaction AMMONX_H.2_41 2
-H2
-N+
-Reaction AMMONX_H.1_41 2
-H2
-N+
+Reaction AMMONX_H.2_41 0
+Reaction AMMONX_H.1_41 0
 Reaction AMMONX_H.2_ZZ 2
 H
 N+
