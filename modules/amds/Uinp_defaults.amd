@@ -5928,7 +5928,7 @@ e
 Particle e
 Particle H2+
 Reaction AMJUEL_H.4_2.3.9a 2
-
+18
 24.5874
 
 4
@@ -6918,7 +6918,7 @@ N
 Particle e
 Particle N+
 Reaction AMJUEL_H.10_2.3.9a 2
-
+18
 24.5874
 
 4
@@ -7818,7 +7818,7 @@ Reaction AMJUEL_H.12_2.3.6A0 2
 Particle e
 Particle C+
 Reaction AMJUEL_H.12_2.3.9a 2
-
+18
 24.5874
 
 4
