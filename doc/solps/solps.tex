@@ -2098,6 +2098,7 @@ For double-null cases, the "South" boundary must be split in six pieces,
 and the "North" boundary in two. However, the {\tt b2ah} format does
 not allow for the specification of additional "East" or "West" boundaries,
 so double-null users {\bf must} use the "physics" formulation in addition.
+The code enforces this requirement.
 
 The boundary condition implemented arises from numerical combinations
 of the eight parameters with various quantities from the code.
@@ -2347,6 +2348,9 @@ If {\tt 'b2stbc\_boundary\_namelist'} is set to {\tt '1'} in {\tt b2mn.dat}
 then the boundary conditions are read in from
 {\tt b2.boundary.parameters} instead of being taken from the file
 created by {\tt b2ah} and possibly modified in {\tt b2mn.dat}.
+For cases with a double-null topology, use of {\tt b2.boundary.parameters}
+is required, and will be enforced irrespective of the value of the
+{\tt 'b2stbc\_boundary\_namelist'} switch.
 
 \begin{sloppypar}
 The boundary conditions are specified by the {\tt boundary} namelist
@@ -2902,10 +2906,14 @@ See also Appendix \ref{lis:b2cdcn} for a more up-to-date description.
 \item[TIME\_FACTOR\_REQUIRED]\index{TIME\_FACTOR\_REQUIRED}
   {\tt real}, related to local source re-scaling
   (see routine {\tt b2srsm.F})
+\item[CORR\_CORE\_DN]\index{CORR\_CORE\_DN} {\tt real array, length NS}, damping parameter for speed-up of the density equations in the core when drifts are activated (does not apply to neutral species)
+\item[CORR\_CORE\_DT]\index{CORR\_CORE\_DT} {\tt real}, damping parameter for speed-up of the temperature equations in the core when drifts are activated
 \item[CORE\_DT\_SUPPRESSION]\index{CORE\_DT\_SUPPRESSION} {\tt real},
   multiplier to the timestep for the innermost core ring of cells
 \item[CORE\_DT\_FACTOR]\index{CORE\_DT\_FACTOR} {\tt real},
   multiplier to the timestep for successive core rings of cells
+\item[ADD\_TE\_CORR\_TO\_PO]\index{ADD\_TE\_CORR\_TO\_PO}{\tt logical array, length (NREG+1)},
+  indicates whether the electron temperature correction is added to the electric potential correction ({\tt .true.} by default)
 \end{description}
 
 When referring to array length {\tt (NREG+1)} above, we mean range {\tt [0:NREG]} in the code.
