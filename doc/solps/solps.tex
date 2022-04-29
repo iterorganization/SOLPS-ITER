@@ -2841,11 +2841,39 @@ which contains
 \item[PARM\_ALF]\index{PARM\_ALF} {\tt real},
   provides parameters for {\tt FLAG\_ALF}
 \item[CFLME]\index{CFLME} {\tt real},
-  multiplier to the electron flux limit
+  main multiplier to the electron flux limit
 \item[CFLMI]\index{CFLMI} {\tt real},
-  multiplier to the ion flux limit
+  main multiplier to the ion flux limit
 \item[CFLMV]\index{CFLMV} {\tt real},
-  multiplier to the viscosity flux limit
+  main multiplier to the viscosity flux limit
+\item[CFLAL]\index{CFLAL} {\tt real},
+  multiplier to the thermo-electric coefficient flux limit
+\item[CFLAB]\index{CFLAB} {\tt real},
+  multiplier to the friction force flux limit
+\item[CFLME\_CORE]\index{CFLME\_CORE} {\tt real},
+  limit to multiplier to the electron heat flux limit in the deep core
+\item[CFLME\_SOL]\index{CFLME\_SOL} {\tt real},
+  limit to multiplier to the electron heat flux limit in the far SOL
+\item[CFLME\_TANH\_A]\index{CFLME\_TANH\_A} {\tt real},
+  radial location, measured (in $m$) as a radial distance along the OMP away from the separatrix, for the center of the tanh profile multiplying the electron heat flux limit
+\item[CFLME\_TANH\_B]\index{CFLME\_TANH\_B} {\tt real},
+  radial width, measured (in $m$) as a radial distance along the OMP, for the tanh profile multiplying the electron heat flux limit
+\item[CFLMI\_CORE]\index{CFLMI\_CORE} {\tt real},
+  limit to multiplier to the ion heat flux limit in the deep core
+\item[CFLMI\_SOL]\index{CFLMI\_SOL} {\tt real},
+  limit to multiplier to the ion heat flux limit in the far SOL
+\item[CFLMI\_TANH\_A]\index{CFLMI\_TANH\_A} {\tt real},
+  radial location, measured (in $m$) as a radial distance along the OMP away from the separatrix, for the center of the tanh profile multiplying the ion heat flux limit
+\item[CFLMI\_TANH\_B]\index{CFLMI\_TANH\_B} {\tt real},
+  radial width, measured (in $m$) as a radial distance along the OMP, for the tanh profile multiplying the ion heat flux limit
+\item[CFLMV\_CORE]\index{CFLMV\_CORE} {\tt real},
+  limit to multiplier to the viscosity heat flux limit in the deep core
+\item[CFLMV\_SOL]\index{CFLMV\_SOL} {\tt real},
+  limit to multiplier to the viscosity heat flux limit in the far SOL
+\item[CFLMV\_TANH\_A]\index{CFLMV\_TANH\_A} {\tt real},
+  radial location, measured (in $m$) as a radial distance along the OMP away from the separatrix, for the center of the tanh profile multiplying the viscosity heat flux limit
+\item[CFLMV\_TANH\_B]\index{CFLMV\_TANH\_B} {\tt real},
+  radial width, measured (in $m$) as a radial distance along the OMP, for the tanh profile multiplying the viscosity heat flux limit
 \item[TRANSPORT\_FILENAME]\index{TRANSPORT\_FILENAME} {\tt filename}, the name of a new
   transport input file that will be read based on a condition
   determined by $\mod(${\tt TIM},{\tt TRANSPORT\_TIME\_MOD}$)>${\tt TRANSPORT\_TIME\_SWITCH}
@@ -2861,6 +2889,8 @@ description of the transport coefficients which allows for radial
 variation.
 
 It is important to note that the settings from {\tt b2.transport.parameters} will {\bf NOT} be applied to neutral species!
+
+For the electron, ion, and viscous heat flux limit coefficients, if the main multiplier is not specified but {\tt CFLM*\_CORE} and {\tt CFLM*\_SOL} are set to equal non-zero values, their value will be used. If {\tt CFLM*\_CORE} and {\tt CFLM*\_SOL} are different and non-zero, then a radial tanh profile, centered at radial OMP position {\tt CFLM*\_TANH\_A} (in $m$) and of width {\tt CFLM*\_TANH\_B} is applied. The OMP reference is set to the poloidal index given by {\tt b2news\_fac\_ref}, or, if not specified, by {\tt b2mwti\_jxa}. The flux limit coefficients in the PFR are set to a constant value equal to that at the separatrix. For all flux limit multipliers, setting them to zero turns off the corresponding flux limiter. Otherwise, the multipliers must be positive.
 
 As stated in the {\tt b2cmpt} block description (Section~\ref{lab:b2cmpt}),
 for numerical stability reasons, mechanisms must exist to provide some
@@ -4770,6 +4800,8 @@ The averaging scheme works in three stages:
   \item{An averaging phase}, turned on by means of the {\tt 'b2mndt\_av'} switch in the {\tt b2mn.dat} input file, usually with a smaller number of {\tt Eirene} trajectories, during which batch averaging will be done to obtain an averaged steady-state solution. This stage can be prepared by means of the {\tt run\_av} script and uses the {\tt input\_avg.eir Eirene} input file prepared by {\tt Uinp} if available. When continuing a run in this phase, the user needs to provide both the instantaneous and averaged solutions from the previous run, i.e. do {\tt mv b2favere b2faveri} in addition to {\tt mv b2fstate b2fstati}.
   \item{A finalization phase} where the averaged steady-state solution is used for a small number of timesteps, and a larger number of {\tt Eirene} trajectories, to reduce statistical noise. This is done by running the {\tt res\_av} script and uses the {\tt input\_fin.eir Eirene} input file prepared by {\tt Uinp} if available.
 \end{enumerate}
+
+It is possible to write the averaged state as part of an IMAS data-entry by means of the {\tt b2mndr\_ids\_av} switch. If non-zero, the value of the switch is the frequency, in number of batch averages, at which time-slices are appended to the IMAS data-entry. The averaged solution is saved as the second occurrence of the {\tt edge\_profiles} and {\tt edge\_sources} IDSs.
 
 \section{b2ye, statistical error assessment}
 \label{sec:b2ye}\index{b2ye}\index{error assessment}\index{b2time.nc}\index{b2favere}\index{b2run}
@@ -14540,6 +14572,7 @@ are indicated in the table.
     arww \index{b2plot, arww}      & 0 & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:arww}   & Set arrow line width \\
     aspc \index{b2plot, aspc}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:aspc}   & Toggle aspect ratio \\
     bcol \index{b2plot, bcol}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:bcol}   & Colour of label bar title \\
+    bold \index{b2plot, bold}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:bold}   & Toggles bold graph frame \\
     both \index{b2plot, both}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:both}   & Computational and physical domain plots \\
     bw \index{b2plot, bw}          & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:bw}     & Black-and-white plots only \\
     clvd \index{b2plot, clvd}      & 0 & 3 & 0 & 0 & 0 & 0 & 0 & \ref{sec:clvd}   & Customize contour levels (delta) \\
@@ -14558,6 +14591,8 @@ are indicated in the table.
     exps \index{b2plot, exps}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:exps}   & Symbol for experimental scatter plot \\
     ewid \index{b2plot, ewid}      & 0 & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:ewid}   & Experimental data line width \\
     fclv \index{b2plot, fclv}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:fclv}   & Fill contour levels \\
+    fcol \index{b2plot, fcol}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:fcol}   & Color for graph frame, axes, \\
+     &  &  &  &  &  &  &  &  & \hspace{1cm} ticks and labels \\
     filo \index{b2plot, filo}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:filo}   & Fill option \\
     font \index{b2plot, font}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:font}   & Set font \\
     gcol \index{b2plot, gcol}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:gcol}   & Colour of graph title \\
@@ -14605,6 +14640,7 @@ are indicated in the table.
     ndec \index{b2plot, ndec}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:ndec}   & Number of logarithmic decades \\
     new \index{b2plot, new}        & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:new}    & New page \\
     neo\_ic \index{b2plot, neo\_ic} & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:neoic}   & Option for neoclassical calculation \\
+    nice \index{b2plot, nice}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:nice}   & Toggle whether nice axes will be used \\
     noax \index{b2plot, noax}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:noax}   & No axes \\
     nocp \index{b2plot, nocp}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:nocp}   & No contour plot \\
     ocol \index{b2plot, ocol}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:ocol}   & Outline colour \\
@@ -14815,6 +14851,8 @@ commands take one value off the "string" stack.
     wslbl \index{b2plot, wslbl}  & 1 & 0 & 1 & 0 & 0 & 1 & 0 & \ref{sec:wslbl}    & Set wall species label \\
     wtab \index{b2plot, wtab}    & 2 & 0 & 1 & 0 & 0 & 1 & 0 & \ref{sec:wtab}     & Output part of the top of the \\
      &  &  &  &  &  &  &  &  & \hspace{1cm} wall stack to a file \\
+    xlab \index{b2plot, xlab}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:xlab}     & Set $x$-axis label \\
+    ylab \index{b2plot, ylab}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:ylab}     & Set $y$-axis label \\
     \hline
     \caption{Commands taking character strings as parameters.  Note
       that the string should be delimited by single quotes.}
@@ -15223,7 +15261,6 @@ temperature (in $K$) upon \btwoplot start-up.
     trgeast \index{b2plot, trgeast}   & Target elements pertaining to the East boundary \\
     trgibnd \index{b2plot, trgibnd}     & Target element index \\
     trgiz \index{b2plot, trgiz}     & Target depth index \\
-    trgl \index{b2plot, trgl}      & ANK target loading (obsolete, use {\em 100 wlld} instead) \\
     trgnorth \index{b2plot, trgnorth}  & Target elements pertaining to the North boundary \\
     trgr1 \index{b2plot, trgr1}     & Radial coordinate of first side of target element $(m)$ \\
     trgr2 \index{b2plot, trgr2}     & Radial coordinate of second side of target element $(m)$ \\
@@ -16534,6 +16571,9 @@ Want black and white for some plots.
 \subsubsection{col}\index{b2plot, col}\label{sec:col}
 Want colour for some plots.
 
+\subsubsection{bold}\index{b2plot, bold}\label{sec:bold}
+Toggles having the graph frames, axes, ticks and labels be in bold type.
+
 \subsubsection{$<$number,{\bf I}$>$ font}\index{b2plot, font}\label{sec:font}
 Changes the current font type to $\langle${\tt number}$\rangle$
 \begin{itemize}
@@ -16612,6 +16652,9 @@ Sets label size to $\langle${\tt factor}$\rangle$ times default size (default is
 Sets line label font size to $\langle${\tt number}$\rangle$ (default is {\tt 0}). If $\langle${\tt number}$\rangle$ is between {\tt 0} and {\tt 3}, then the size
 represents {\tt 1.0}, {\tt 1.5}, {\tt 2.0}, and {\tt 3.0} times an 8-plotter address unit width. Otherwise, it represents the character width in plotter address units.
 
+\subsubsection{nice}\index{b2plot, nice}\label{sec:nice}
+Toggles whether graphs will use nice axes with rounded values ({\tt .true.} by default).  Even with this set to {\tt .false.}, some massaging of the plot range occurs.
+
 \subsubsection{noax}\index{b2plot, noax}\label{sec:noax}
 Does not plot axes.
 
@@ -16678,6 +16721,10 @@ See {\bf zcol} above for a list of available colours.
 
 \subsubsection{$<$ncol,{\bf I}$>$ bcol}\index{b2plot, bcol}\label{sec:bcol}
 Colour to be used for printing label bar title (default 1).
+See {\bf zcol} above for a list of available colours.
+
+\subsubsection{$<$ncol,{\bf I}$>$ fcol}\index{b2plot, fcol}\label{sec:fcol}
+Colour to be used for printing the graph frame, axes, ticks and labels (default 1).
 See {\bf zcol} above for a list of available colours.
 
 \subsubsection{$<$ncol,{\bf I}$>$ gcol}\index{b2plot, gcol}\label{sec:gcol}
@@ -17097,9 +17144,6 @@ Overwrites the radial reference location index {\em iyref} with $\langle${\tt iy
 See description of {\tt set\_transport\_iyref} switch (see Appendix \ref{lis:b2cdci})
 for the computation of its default value (usually the separatrix location).
 
-\subsubsection{$<$igm,{\bf I}$>$ $<$iig,{\bf I}$>$ trgl}\index{b2plot, trgl}\label{sec:trgl}
-ANK target loading. Not yet written.
-
 \subsubsection{$<$n,{\bf I}$>$ ave}\index{b2plot, ave}\label{sec:ave}
 Averages over $\langle${\tt n}$\rangle$ chords for {\bf chor} and {\bf chvl}.
 
@@ -17204,6 +17248,21 @@ entered between \`{}s, e.g.
 
 See section \ref{sec:stdl} for the label set by {\bf stdl} for an example using
 environment variables as well as shell expansions.
+
+\subsubsection{$<${\it x}-axis label$>$ xlab}\index{b2plot, xlab}\label{sec:xlab}
+Specifies a label for the $x$-axis.  The same text options as for
+\ref{sec:extl} are available.
+
+A (not to be taken too seriously) example for usage is
+\begin{verbatim}
+  echo 'a4p phys 16 font "R [m]" xlab "Z [m]" ylab mesh' | b2plot -s
+\end{verbatim}
+
+\subsubsection{$<${\it y}-axis label$>$ ylab}\index{b2plot, ylab}\label{sec:ylab}
+Specifies a label for the $y$-axis.  The same text options as for
+\ref{sec:extl} are available.
+
+An example is provided in \ref{sec:xlab}.
 
 \subsection{Commands using external files}
 
