@@ -29,19 +29,20 @@ endif
 
 # find libraries
 if (-d /tokp/work/dpc/SOLPS-ITER) then
-  setenv SOLPSLIBS /tokp/work/dpc/SOLPS-ITER
+  setenv IPPSOLPSLIBS /tokp/work/dpc/SOLPS-ITER
 else if (-d /u/dpc/SOLPS-ITER) then
-  setenv SOLPSLIBS /u/dpc/SOLPS-ITER
+  setenv IPPSOLPSLIBS /u/dpc/SOLPS-ITER
 else
-  echo "Could not find SOLPSLIBS -- contact dpc@ipp.mpg.de"
+  echo "Could not find IPPSOLPSLIBS -- contact dpc@ipp.mpg.de"
 endif
 
-setenv GLI_HOME $SOLPSLIBS/gks
-setenv NCARG_ROOT $SOLPSLIBS/NCARG
+setenv GLI_HOME $IPPSOLPSLIBS/gks
+setenv NCARG_ROOT $IPPSOLPSLIBS/NCARG
 setenv PATH ${PATH}
-setenv MDSPLUS_DIR $SOLPSLIBS/MDSPLUS
+setenv MDSPLUS_DIR $IPPSOLPSLIBS/MDSPLUS
 setenv PATH ${PATH}:${NCARG_ROOT}/bin:${MDSPLUS_DIR}/bin
 setenv MDS_PATH ${MDSPLUS_DIR}/tdi
+[ $?LD_LIBRARY_PATH == 0 ] && setenv LD_LIBRARY_PATH
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${NETCDF_HOME}/lib:${MDSPLUS_DIR}/lib
 
 if (`where paraview-config` == "") then
