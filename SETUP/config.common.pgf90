@@ -1,7 +1,8 @@
 # Autodetected optional features...
 
-SOLPS_CPP += -DPGF90 -DNOQUAD
-LD_MPI     = -Mmpi=mpich
+SOLPS_CPP  += -DPGF90 -DNOQUAD
+LD_MPI      = -Mmpi=mpich
+FFLAGSEXTRA = -Mnorpath
 
 # Build with NetCDF tools if available
 ifdef LD_NETCDF
@@ -30,7 +31,7 @@ ifdef IMAS_VERSION
   ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 17; echo $$?),0)
     ifdef GGD_VERSION
       GGD_MINOR_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f2 )
-      GGD_MICRO_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f3 )
+      GGD_MICRO_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f3 | cut -d '-' -f1 )
       ifdef AMNS_PREFIX
         LD_UAL = `pkg-config imas-pgi ggd amns --libs`
         SOLPS_CPP += -DAMNS
@@ -46,7 +47,7 @@ ifdef IMAS_VERSION
     ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 12; echo $$?),0)
       ifdef GGD_VERSION
         GGD_MINOR_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f2 )
-        GGD_MICRO_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f3 )
+        GGD_MICRO_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f3 | cut -d '-' -f1 )
         LD_UAL = `pkg-config imas-pgi --libs` -lggd-pgi
       else
         GGD_MINOR_VERSION = 0
