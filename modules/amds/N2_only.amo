@@ -1,4 +1,6 @@
 # Output file produced by amds version 1.04
+# within SOLPS-ITER GIT version 3.0.7-506-g0255764d
+
 filevers 1
 reactns 5
 AMMONX H.2 02
@@ -21,13 +23,13 @@ deltae
 massp
 0
 0
-28
+0
 14
 1
 masst
 28
 28
-0
+28
 2
 14
 rctype

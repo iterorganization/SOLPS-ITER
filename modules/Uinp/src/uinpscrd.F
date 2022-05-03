@@ -11,7 +11,7 @@ c  Produce surface interaction cards
 c=======================================================================
       implicit none
 #include "uinput.inc"
-      integer i,ii,j,k,kk,kkk,nn,ind
+      integer i,j,k,kk,kkk,nn,ind
       integer chemindex(maxchmvar)
       logical streql
       external streql
@@ -243,6 +243,7 @@ c***  function to generate surface card name for reaction k
 c***  name format:
 C***  SURFMOD_k_<MATERIAL>_<SPUTER>_<PUMP>_<SEMITRANSP>_<TEMPERATURE K>
       character*(72) function cardname(k) !{
+      use b2mod_constants
       implicit none
       integer k
       character*(72) cnam,txtbuf
@@ -276,7 +277,7 @@ C***  SURFMOD_k_<MATERIAL>_<SPUTER>_<PUMP>_<SEMITRANSP>_<TEMPERATURE K>
       if(sctransp(k,1).GT.0.OR.sctransp(k,2).GT.0)
      .                 cnam=cnam(1:len_trim(cnam))//'_SMTRANS'
       if(scewall(k).LT.0) then
-        twll=nint(abs(scewall(k))*11600) !wall temperature in K
+        twll=nint(abs(scewall(k))*ev/KBolt) !wall temperature in K
         write(txtbuf,'(i6,a1)') twll,'K'
         txtbuf=adjustl(txtbuf)
         cnam=cnam(1:len_trim(cnam))//'_'//

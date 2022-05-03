@@ -12,7 +12,7 @@ endif
 endif
 
 #SYSNAME should be the output of the 'fs sysname' command
-SYSNAME = amd64_sles11
+SYSNAME ?= amd64_sles11
 
 .PHONY: all clean install
 

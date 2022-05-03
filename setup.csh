@@ -88,7 +88,7 @@ limit stacksize unlimited
 
 if (! $?GRAPHCAP) setenv GRAPHCAP X11
 
-if (! $?B2PLOT_DEV) setenv B2PLOT_DEV "x11 ps" 
+if (! $?B2PLOT_DEV) setenv B2PLOT_DEV "x11 ps"
 if (! $?GRSOFT_DEVICE) setenv GRSOFT_DEVICE "211 62"
 setenv SonnetTopDirectory ${SOLPSTOP}/modules/Sonnet-light
 setenv EscapeSonnet `echo ${SonnetTopDirectory} | sed 's:\/:\\\/:g'`
@@ -257,5 +257,4 @@ if (-s ${SOLPSTOP}/SETUP/setup.csh.local) then
 endif
 
 # List loaded modules
-
 module list

@@ -3095,7 +3095,7 @@ Particle e
 Particle He*(1s2s|3P)
 Reaction HYDHEL_H.2_2.3.9 2
 0
-24.55
+24.5874
 0
 4
 EI
@@ -5866,7 +5866,7 @@ e
 Particle e
 Particle H2+
 Reaction AMJUEL_H.4_2.3.9a 2
-
+18
 24.5874
 
 4
@@ -6856,7 +6856,7 @@ N
 Particle e
 Particle N+
 Reaction AMJUEL_H.10_2.3.9a 2
-
+18
 24.5874
 
 4

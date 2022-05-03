@@ -77,10 +77,10 @@ publish:
 		echo Publishing $(dir); \
 		tar czf $(dir).tar.gz $(dir); \
 		md5=$$(md5sum $(dir).tar.gz | cut -c 1-32);\
-		echo "$${md5} > $(dir).tar.gz.md5" ;\
+		echo $${md5} > $(dir).tar.gz.md5 ;\
 		scp $(dir).tar.gz $(EXTERNALDIR)/$${md5} ;\
 		rm -f $(dir).tar.gz ;\
-		git add $(dir).tar.gz ;\
+		git add $(dir).tar.gz.md5 ;\
 		echo "Do not forget to commit and push $(dir).tar.gz.md5" ;\
 	else \
 		echo "Missing argument dir=yourdir or not ITER cluster";\

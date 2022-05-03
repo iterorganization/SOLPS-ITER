@@ -368,9 +368,11 @@ sonnet-light:
 	@-mkdir -p ${SOLPSLIB}
 	cd modules/Sonnet-light; ${MAKE} all INSTALL_USERAREA=${SOLPSLIB}
 
+nc2text: nc2text_simple
+
 nc2text_simple:
 	@-mkdir -p ${SOLPSTOP}/scripts/${TOOLCHAIN}
-	cd modules/B2.5; ${MAKE} nc2text_simple
+	cd modules/B2.5; ${MAKE} nc2text
 
 nc_reduce:
 	@-mkdir -p ${SOLPSTOP}/scripts/${TOOLCHAIN}

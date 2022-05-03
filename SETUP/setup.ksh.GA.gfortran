@@ -40,15 +40,22 @@ if [ -z `type paraview-config 2> /dev/null` ]; then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
 else
   # See ParaViewCatalystUsersGuide_v2.pdf Sec 3.7.2 Linking with Python ...
-  PARAVIEW_LIB=`paraview-config --libs --python | sed s/-L//`
-  if [ -n "$LD_LIBRARY_PATH" ]; then
-    export LD_LIBRARY_PATH="${PARAVIEW_LIB}:${LD_LIBRARY_PATH}"
+  export PARAVIEW_MAJOR_VERSION=`paraview --version | cut -d '.' -f 1 | cut -d ' ' -f 3`
+  if [ $PARAVIEW_MAJOR_VERSION -gt 4 ]; then
+    export LD_CATALYST=`paraview-config --ldflags -c PythonCatalyst -v CommonDataModel`
+    export PARAVIEW_INCLUDE=`paraview-config --cppflags`
   else
-    export LD_LIBRARY_PATH=${PARAVIEW_LIB}
+    PARAVIEW_LIB=`paraview-config --libs --python | sed s/-L//`
+    export PARAVIEW_INCLUDE=`paraview-config --include`
+    if [ -n "$LD_LIBRARY_PATH" ]; then
+      export LD_LIBRARY_PATH="${PARAVIEW_LIB}:${LD_LIBRARY_PATH}"
+    else
+      export LD_LIBRARY_PATH=${PARAVIEW_LIB}
+    fi
+    export PYTHONPATH="${PARAVIEW_LIB}/site-packages/vtk:${PYTHONPATH}"
+    export PYTHONPATH="${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
+    export LD_CATALYST=`paraview-config --libs vtkPVPythonCatalyst`
   fi
-  export PYTHONPATH="${PARAVIEW_LIB}/site-packages/vtk:${PYTHONPATH}"
-  export PYTHONPATH="${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
-  export LD_CATALYST=`paraview-config --libs vtkPVPythonCatalyst`
 fi
 
 # Additional setup
