@@ -17,6 +17,8 @@ endif
 # List of default compilers per HOST_NAME
 switch ($HOST_NAME)
 case "ASIPP":
+case "CCFE":
+case "CCFE-csd3":
 case "FZJ":
 case "GA":
 case "IFERC":
@@ -32,8 +34,6 @@ case "KSTAR":
 case "LEUVEN":
 case "SPBSTU":
 case "SWIP":
-case "CCFE":
-case "CCFE-csd3":
   echo ifort64
   breaksw
 case "ENEA":
@@ -41,11 +41,11 @@ case "PPPL":
   echo pgf90
   breaksw
 case "JFRS":
+case "MARCONI":
 case "MEPHI":
 case "NERSC":
 case "ORNL":
 case "WM":
-case "MARCONI":
   echo gfortran
   breaksw
 default:
