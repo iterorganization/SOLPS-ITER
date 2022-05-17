@@ -40,6 +40,9 @@ case "*.ipp.mpg.de":
 case "*.rzg.mpg.de":
   echo IPP
   breaksw
+case "*.mpcdf.mpg.de":
+  echo MPCDF
+  breaksw
 case "*.ipp-hgw.mpg.de":
   echo IPP-HGW
   breaksw
