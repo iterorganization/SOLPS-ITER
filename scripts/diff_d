@@ -1,0 +1,21 @@
+if ($?SOLPS_PATH) then
+  # Check whether HOST_NAME and COMPILER are defined
+  if (! $?HOST_NAME) then
+    echo "HOST_NAME not defined. Exiting."
+    exit 1
+  endif
+  if (! $?COMPILER) then
+    echo "COMPILER not defined. Exiting."
+    exit 1
+  endif
+
+  unsetenv DIFF_D DIFF_D1 DIFF_D2 DIFF_D3 DIFF_D4 DIFF_D5
+  unsetenv DIFF_B DIFF_B1 DIFF_B2 DIFF_B3 DIFF_B4
+  setenv DIFF_D yes
+  unsetenv TGT ADJ
+  setenv TGT yes
+  echo "DIFF_D compilation turned on"
+else
+  echo "SOLPS_PATH not set. Exiting."
+endif
+

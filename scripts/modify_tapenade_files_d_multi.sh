@@ -181,23 +181,30 @@ sed -i -e '/par_opt_physd(nd, 1:npar_opt) = 0.D0/a\        par_opt_physd(nd, nd)
 sed -i -e "s/b2mod_main_diff/b2mod_main_diffv/g" b2optim_*.F*
 sed -i -e "s/b2mod_ad_diff/b2mod_ad_diffv/g" b2optim_*.F*
 sed -i -e "s/b2mod_par_opt_diff/b2mod_par_opt_diffv/g" b2optim_*.F* set_parameters.F
-sed -i -e "s/b2mn_init_d/b2mn_init_dv/g" b2optim_*.F*
-sed -i -e "s/b2mn_fin_d/b2mn_fin_dv/g" b2optim_*.F*
-sed -i -e "s/b2mn_step_d/b2mn_step_dv/g" b2optim_*.F*
+sed -i -e "s/b2mn_init_diff/b2mn_init_dv/g" b2optim_*.F*
+sed -i -e "s/b2mn_fin_diff/b2mn_fin_dv/g" b2optim_*.F*
+sed -i -e "s/b2mn_step_diff/b2mn_step_dv/g" b2optim_*.F*
 sed -i -e "s/b2mod_user_namelist_diff/b2mod_user_namelist_diffv/g" b2optim_*.F*
-sed -i -e "s/b2mod_plasma_diff/b2mod_plasma_diffv/g" b2optim_*.F*
+sed -i -e "s/b2us_data_diff/b2us_data_diffv/g" b2optim_*.F*
+sed -i -e "s/b2us_io_diff/b2us_io_diffv/g" b2optim_*.F*
 sed -i -e "s/b2mod_transport_namelist_diff/b2mod_transport_namelist_diffv/g" b2optim_*.F* set_parameters.F
 sed -i -e "s/b2mod_input_profile_diff/b2mod_input_profile_diffv/g" b2optim_*.F* set_parameters.F
 sed -i -e "s/b2mod_boundary_namelist_diff/b2mod_boundary_namelist_diffv/g" b2optim_*.F* set_parameters.F
-sed -i -e "s/b2mod_switches_diff/b2mod_switches_diffv/g" b2optim_*.F* set_parameters.F
-sed -i -e "s/call b2mn_init_dv/call b2mn_init_dv(npar_opt)/g" b2optim_*.F*
-sed -i -e "s/call b2mn_fin_dv/call b2mn_fin_dv(npar_opt)/g" b2optim_*.F*
-sed -i -e "s/call b2mn_step_dv(j,jd,switchdiff)/call b2mn_step_dv(j,jd,switchdiff,npar_opt)/g" b2optim_*.F*
-sed -i -e 's/jd(nncf)/jd(nbdirsmax,nncf)/g' b2optim_*.F*
+sed -i -e "s/b2mod_switches_diff/b2mod_switches_diffv/g" set_parameters.F
+sed -i -e "s/b2mod_neutrals_namelist_diff/b2mod_neutrals_namelist_diffv/g" set_parameters.F
+sed -i -e "s/geodiff/geod/g" b2optim_*.F*
+sed -i -e "s/mpgdiff/mpgd/g" b2optim_*.F*
+sed -i -e "s/statediff/stated/g" b2optim_*.F*
+sed -i -e "s/state_extdiff/state_extd/g" b2optim_*.F*
+sed -i -e "s/switchdiff/switchd/g" b2optim_*.F*
+sed -i -e "s/par_opt_physdiff/par_opt_physd/g" b2optim_*.F*
+sed -i -e "s/state_ext, state_extd)/state_ext, state_extd, npar_opt)/g" b2optim_*.F*
+sed -i -e "s/state_ext, state_extd, j, jdiff)/state_ext, state_extd, j, jdiff, npar_opt)/g" b2optim_*.F*
+sed -i -e 's/jdiff(nncf)/jdiff(nbdirsmax,nncf)/g' b2optim_*.F*
 sed -i -e "/subroutine EV_GRAD_F(/a\      use diffsizes" b2optim_ipopt.F
 sed -i -e "/subroutine FormFunctionGradient(/a\      use diffsizes" b2optim_tao.F90
-sed -i -e "s/g_v(g_i+ipar-1) = jd(1)/g_v(g_i+ipar-1) = jd(ipar,1)/g" b2optim_tao.F90
-sed -i -e "s/grad(ipar) = DBLE(jd(1))/grad(ipar) = DBLE(jd(ipar,1))/g" b2optim_ipopt.F
+sed -i -e "s/g_v(g_i+ipar-1) = jdiff(1)/g_v(g_i+ipar-1) = jdiff(ipar,1)/g" b2optim_tao.F90
+sed -i -e "s/grad(ipar) = DBLE(jdiff(1))/grad(ipar) = DBLE(jdiff(ipar,1))/g" b2optim_ipopt.F
 
 cp $TAPENADEDIR/ADFirstAidKit/adContext.c .
 cp $TAPENADEDIR/ADFirstAidKit/adContext.h .

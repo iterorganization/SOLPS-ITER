@@ -172,6 +172,8 @@ sed -i -e "s/core_dt_suppressionb/core_dt_suppressionb,core_dt_suppressionb0/g" 
 sed -i -e "s/core_dt_factorb/core_dt_factorb,core_dt_factorb0/g" b2mod_numerics_namelist_diff.F90
 sed -i -e "s/numerics_time_modb/numerics_time_modb,numerics_time_modb0/g" b2mod_numerics_namelist_diff.F90
 sed -i -e "s/numerics_time_switchb/numerics_time_switchb,numerics_time_switchb0/g" b2mod_numerics_namelist_diff.F90
+sed -i -e "s/corr_core_dnb(0:nsdmax-1)/corr_core_dnb(0:nsdmax-1),corr_core_dnb0(0:nsdmax-1)/g" b2mod_numerics_namelist_diff.F90
+sed -i -e "s/SAVE :: corr_core_dtb/SAVE :: corr_core_dtb, corr_core_dtb0/g" b2mod_numerics_namelist_diff.F90
 sed -i -e "s/transport_time_modb/transport_time_modb,transport_time_modb0/g" b2mod_transport_namelist_diff.F90
 sed -i -e "s/transport_time_switchb/transport_time_switchb,transport_time_switchb0/g" b2mod_transport_namelist_diff.F90
 sed -i -e "s/transport_ip_time_modb/transport_ip_time_modb,transport_ip_time_modb0/g" b2mod_input_profile_diff.F90
@@ -257,43 +259,16 @@ sed -i -e "s/rtltb(ii1), 1/rtltb, 1/" b2mod_driver_diff.F90
 sed -i -e "s/rtlnb0(ii1), 1/rtlnb0, 1/" b2mod_driver_diff.F90
 sed -i -e "s/rtlnb(ii1), 1/rtlnb, 1/" b2mod_driver_diff.F90
 
-
-for d in `seq 1 168`; do
-sed -i -e "/TYPE(SWITCHES) :: switchb$d/d" b2mod_driver_diff.F90
-#sed -i -e "s/switchb$d%/switchb0%/g" b2mod_driver_diff.F90
-#sed -i -e "/switchb$d/d" b2mod_driver_diff.F90
-done;
-
-for d in `seq 1 3`; do
-sed -i -e "/TYPE(MAPPING_DIFF) :: mpgb$d/d" b2mod_driver_diff.F90
-#sed -i -e "s/mpgb$d%/mpgb0%/g" b2mod_driver_diff.F90
-#sed -i "/mpgb$d /d" b2mod_driver_diff.F90
-done;
-
-for d in `seq 1 25`; do
-sed -i -e "/TYPE(GEOMETRY) :: geob$d/d" b2mod_driver_diff.F90
-#sed -i -e "s/geob$d%/geob0%/g" b2mod_driver_diff.F90
-#sed -i "/geob$d /d" b2mod_driver_diff.F90
-done;
-
-for d in `seq 1 9`; do
-sed -i -e "/TYPE(B2STATEEXT_DIFF) :: state_extb$d/d" b2mod_driver_diff.F90
-#sed -i -e "s/state_extb$d%/state_extb0%/g" b2mod_driver_diff.F90
-#sed -i "/state_extb$d /d" b2mod_driver_diff.F90
-done;
-
-
-
-sed -i -e "s/b2mn_init_d/b2mn_init_b/g" b2optim_*.F*
-sed -i -e "s/b2mn_fin_d/b2mn_fin_b/g" b2optim_*.F*
-sed -i -e "s/b2mn_step_d/b2mn_step_b/g" b2optim_*.F*
-sed -i -e "s/call b2mn_step_b(j,jd,switchdiff)/call b2mn_step_b(j,switchdiff)/g" b2optim_*.F*
-sed -i -e "s/type(switches_diffv)/type(switches)/g" b2optim_*.F*
-sed -i -e "/REAL(kind=r8) :: j(nncf)/i\  TYPE(SWITCHES), SAVE :: switchb" b2mn_b.F90
-sed -i -e "s/CALL B2MN_STEP_B(j)/CALL B2MN_STEP_B(j,switchb)/g" b2mn_b.F90
-sed -i "/TYPE(SWITCHES_DIFF), SAVE :: switchb/d" b2mod_main_diff.F90
-sed -i -e "s/SUBROUTINE B2MN_STEP_B(j)/SUBROUTINE B2MN_STEP_B(j,switchb)/g" b2mod_main_diff.F90
-sed -i -e "/REAL(kind=r8) :: jb(nncf)/i\    TYPE(SWITCHES), intent(inout) :: switchb" b2mod_main_diff.F90
+sed -i -e "s/b2mn_init_diff/b2mn_init_b/g" b2optim_*.F*
+sed -i -e "s/b2mn_fin_diff/b2mn_fin_b/g" b2optim_*.F*
+sed -i -e "s/b2mn_step_diff/b2mn_step_b/g" b2optim_*.F*
+sed -i -e "s/geodiff/geob/g" b2optim_*.F*
+sed -i -e "s/mpgdiff/mpgb/g" b2optim_*.F*
+sed -i -e "s/statediff/stateb/g" b2optim_*.F*
+sed -i -e "s/state_extdiff/state_extb/g" b2optim_*.F*
+sed -i -e "s/switchdiff/switchb/g" b2optim_*.F*
+sed -i -e "s/par_opt_physdiff/par_opt_physb/g" b2optim_*.F*
+sed -i -e "s/stateb, state_ext, state_extb, j, jdiff)/stateb, state_ext, state_extb, j)/g" b2optim_*.F*
 
 cp $TAPENADEDIR/ADFirstAidKit/adContext.c .
 cp $TAPENADEDIR/ADFirstAidKit/adContext.h .
