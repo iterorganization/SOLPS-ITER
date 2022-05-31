@@ -96,6 +96,8 @@ c*** ... set up the material properties
               recyct(nstsi)= 1-easbnds(isf,ibk)
               transp(nstsi,1)= etfbnds(isf,ibk)
               transp(nstsi,2)= etbbnds(isf,ibk)
+              arefcell(nstsi) = rfcbnds(isf,ibk)
+              arfpress(nstsi) = rfpbnds(isf,ibk)
             end if !}
           end if !}
 c*** ... and then the recycling source if specified

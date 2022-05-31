@@ -106,10 +106,16 @@ c*** Create the header for the b2ag.dat file
      .     '*dimens         (nx, ny, nx1, ny1; free format)'
           write(2,'(4(3x,i4))') nrplg-npplg, ndya, nrplg-npplg, ndya
           write(2,'(a)') '*param          (param(0:99); free format)'
-          write(2,'(a)') ' -1.0, 99*0.0'
+          if (ln_cnfg) then
+            write(2,'(a)') ' -3.0, 99*0.0'
+          else
+            write(2,'(a)') ' -1.0, 99*0.0'
+          endif
           write(2,'(a)') '''b2agfs_min_pitch''    ''0.01'''
           if (lm_cnfg.and..not.ln_cnfg) write(2,'(a)')
      .                   '''b2agfs_periodic_bc''  ''1'''
+          if (ln_cnfg) write(2,'(a)')
+     .                   '''b2agfs_lineardevice'' ''linear.geometry'''
           close(2)
           print *,'    ... b2ag.dat created'
       endif !}
