@@ -458,8 +458,8 @@ c*** temporary arrays for ILPLG parameter;
 c*** mesh size and coordinates of refinment zone (rectangle);
 c*** refinment zone markers from DG, and actual number of zones
        integer ntrimax
-       parameter (ntrimax=100) 
-       integer ilplgu(nsts),jlplgu(nlim),ilplgdg(nlim) 
+       parameter (ntrimax=100)
+       integer ilplgu(nsts),jlplgu(nlim),ilplgdg(nlim)
        real(kind=R4)
      ,      trisize(0:ntrimax), trixmin(ntrimax), trixmax(ntrimax),
      ,      triymin(ntrimax), triymax(ntrimax)

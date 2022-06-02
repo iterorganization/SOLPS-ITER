@@ -32,7 +32,6 @@ case "JET":
 case "KEIO":
 case "KSTAR":
 case "LEUVEN":
-case "MARCONI":
 case "SPBSTU":
 case "SURFSARA":
 case "SWIP":
@@ -43,6 +42,7 @@ case "PPPL":
   echo pgf90
   breaksw
 case "JFRS":
+case "MARCONI":
 case "MEPHI":
 case "NERSC":
 case "ORNL":

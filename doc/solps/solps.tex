@@ -2584,8 +2584,8 @@ which contains
   {\tt MOMPAR(,,1)} specifies the parallel velocity in $m.s^{-1}$
   \item[17] leakage option for parallel momentum, {\tt MOMPAR(,,1)} specifies
   the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s, a} m_a n_a u_a$
-  \item[18] prescribe the parallel velocity profile in units of $m s^{-1}$, read from file specified in {\tt MOM\_FN}. If {\tt MOMPAR(IS,IB,2) > 0.0}, the profile is scaled such that the maximum parallel velocity is given by {\tt MOMPAR(IS,IB,1)} in $m s^{-1}$. Only available for E and W boundaries.
-  \item[19] prescribe the momentum flux profile in units of $m^{-2} s^{-1}$, read from {\tt MOM\_FN}. This has to be used in combination with {\tt BCCON = 1}, {\tt 28} , or {\tt 30} and {\tt BCENI = 15}. Only available for E and W boundaries.
+  \item[18] prescribe the parallel velocity profile in units of $m.s^{-1}$, read from file specified in {\tt MOM\_FN}. If {\tt MOMPAR(IS,IB,2) > 0.0}, the profile is scaled such that the maximum parallel velocity is given by {\tt MOMPAR(IS,IB,1)} in $m.s^{-1}$. Only available for E and W boundaries.
+  \item[19] prescribe the momentum flux profile in units of $m^{-2}.s^{-1}$, read from {\tt MOM\_FN}. This has to be used in combination with {\tt BCCON = 1}, {\tt 28} , or {\tt 30} and {\tt BCENI = 15}. Only available for E and W boundaries.
   \item[20] the parallel velocity is based on the temperature and the Mach number read from the {\tt MOM\_FN} file. It is assumed that $\gamma_i = 1$. Only available for E and W boundaries.
   \item[21] prescribe the radial parallel velocity gradient profile in units of $s^{-1}$, read from file specified in {\tt MOM\_FN}. If {\tt MOMPAR(IS,IB,2) > 0.0}, the profile is scaled such that the maximum parallel velocity gradient is given by {\tt MOMPAR(IS,IB,1)} in $s^{-1}$. Only available for E and W boundaries.
   \end{description}

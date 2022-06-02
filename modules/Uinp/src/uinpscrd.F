@@ -144,7 +144,6 @@ c        character*(72) cardname
       scard_name(k)=cardname(k)
 
       scisrsg(k)=isrsg(ists)
-
       return
       end subroutine getnds !}
 
@@ -267,7 +266,7 @@ C***  SURFMOD_k_<MATERIAL>_<SPT>_<PUMP>_<PRESS>_<SEMITRANSP>_<TEMPERATURE K>
         write(cnam,'(A8,I2)') 'SURFMOD_',k
       end if
       znml=scxmlim(k)
-      txtbuf='_'
+      txtbuf=''
       if(nint(znml).EQ.5626) then
         txtbuf='_IRON'
       else if(nint(znml).EQ.18474) then
