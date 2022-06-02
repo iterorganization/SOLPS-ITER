@@ -150,12 +150,25 @@ ifdef SOLPS_OPENMP
 endif
 
 # Build with Fundamental-Constants module if present
+# Only needed explicitly if AMNS version is less than 1.4.0
+ifdef AMNS_PREFIX
+  AMNS_VERSION = `pkg-config amns --modversion`
+  AMNS_MAJOR_VERSION = $(shell echo ${AMNS_VERSION} | cut -d '.' -f1 )
+  AMNS_MINOR_VERSION = $(shell echo ${AMNS_VERSION} | cut -d '.' -f2 )
+else
+  AMNS_MAJOR_VERSION = 0
+  AMNS_MINOR_VERSION = 0
+endif
 ifeq ($(shell `pkg-config --exists fundamental-constants`; echo $$?),0)
   SOLPS_CPP += -DCONSTANTS_PROVIDED
-  SOLPSINCLUDE = `pkg-config fundamental-constants --cflags`
-  INCMODS = `pkg-config fundamental-constants --cflags`
-  export SOLPSINCLUDE
-  export INCMODS
+  ifeq ($(shell test ${AMNS_MAJOR_VERSION} -le 1; echo $$?),0)
+    ifeq ($(shell test ${AMNS_MINOR_VERSION} -le 3; echo $$?),0)
+      SOLPSINCLUDE = `pkg-config fundamental-constants --cflags`
+      INCMODS = `pkg-config fundamental-constants --cflags`
+      export SOLPSINCLUDE
+      export INCMODS
+    endif
+  endif
 endif
 
 #
