@@ -180,6 +180,7 @@ case "*.jp":
 case "*.kr":
   echo KR_UNKNOWN
   breaksw
+case "*.rf":
 case "*.ru":
 case "*.su:"
   echo RF_UNKNOWN

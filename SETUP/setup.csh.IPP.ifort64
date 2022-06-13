@@ -29,7 +29,7 @@ endif
 
 # find libraries
 if (-d /tokp/work/dpc/SOLPS-ITER) then
-  setenv IPPSOLPSLIBS /tokp/work/dpc/SOLPS-ITER
+  setenv IPPSOLPSLIBS /tokp/work/dpc/SOLPS-ITER/${COMPILER}
 else if (-d /u/dpc/SOLPS-ITER) then
   setenv IPPSOLPSLIBS /u/dpc/SOLPS-ITER
 else
@@ -38,12 +38,14 @@ endif
 
 setenv GLI_HOME $IPPSOLPSLIBS/gks
 setenv NCARG_ROOT $IPPSOLPSLIBS/NCARG
+setenv NCARG_ROOT /afs/.ipp/tok/soft/ncarg/6.6.2
 setenv PATH ${PATH}
 setenv MDSPLUS_DIR $IPPSOLPSLIBS/MDSPLUS
 setenv PATH ${PATH}:${NCARG_ROOT}/bin:${MDSPLUS_DIR}/bin
 setenv MDS_PATH ${MDSPLUS_DIR}/tdi
 [ $?LD_LIBRARY_PATH == 0 ] && setenv LD_LIBRARY_PATH
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${NETCDF_HOME}/lib:${MDSPLUS_DIR}/lib
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${IPPSOLPSLIBS}/mscl/lib
 
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
