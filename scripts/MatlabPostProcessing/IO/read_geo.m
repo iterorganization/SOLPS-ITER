@@ -26,7 +26,11 @@ end
 disp(['read_geo -- file version ',version]);
 
 % Read nx, ny
-dims = fscanf(fid,'%d',4);
+if str2num(strrep(version,'.','')) >= str2num(strrep('01.001.028','.',''))
+    dims = fscanf(fid,'%d',4);
+else
+    dims = fscanf(fid,'%d',2);
+end
 nx   = dims(1);
 ny   = dims(2);
 
@@ -63,10 +67,12 @@ else
             crxs(i,j,4) = line(9);  crys(i,j,4) = line(10);
             crxs(i,j,5) = line(11); crys(i,j,5) = line(12);
             bp(i,j)     = line(13); bt(i,j)     = line(14);
-            
-            
         end
     end
+    % Set cflags for default structured grid assumptions
+    cflags(:,:,1) = 9;
+    cflags(2:end-1,2:end-1,1) = 3;
+    cflags(3:end-2,3:end-2,1) = 1;
 end
 
 % Store in struct
