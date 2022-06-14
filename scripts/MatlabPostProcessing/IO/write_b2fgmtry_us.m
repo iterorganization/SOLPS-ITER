@@ -111,7 +111,7 @@ write_rfield(fid,'vxFfbz', gmtry.vxFfbz  );
 write_rfield(fid,'vxFpsi', gmtry.vxFpsi  );
 
 % flux surface quantities
-write_rfield(fid,'ftConn', gmtry.ftConn );
+write_rfield(fid,'cvConn', gmtry.cvConn );
 write_rfield(fid,'fsPsi', gmtry.fsPsi );
 
 
