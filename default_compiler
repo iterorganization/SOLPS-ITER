@@ -33,6 +33,7 @@ case "KEIO":
 case "KSTAR":
 case "LEUVEN":
 case "SPBSTU":
+case "SURFSARA":
 case "SWIP":
   echo ifort64
   breaksw

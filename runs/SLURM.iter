@@ -1,0 +1,62 @@
+#! /bin/tcsh
+
+#SBATCH  --nodes=#NODES#
+#SBATCH  --ntasks-per-node=#TASKS#
+#SBATCH  --cpus-per-task=#THREADS#
+#SBATCH  --time=#HOURS#:00:00
+#SBATCH  --mem-per-cpu=#MEM#
+#SBATCH  --mail-user=#EMAIL#
+#SBATCH  --mail-type=END
+#SBATCH  --job-name=#JOBNAME#
+#SBATCH  --partition=#PART#
+
+echo Using SOLPSTOP = #SOLPSTOP#
+
+set USE_MPI=""
+set nodename=`hostname`
+if ($?SOLPS_MPI) then
+  set MPI_OPTS=#MPIOPTS#
+  switch ($nodename)
+    case "sdcc-login*.iter.org":
+      set MPI_EXEC=mpiexec
+      set USE_MPI="-m ${MPI_EXEC} ${MPI_OPTS}"
+      breaksw
+    case "hpc-login0*.iter.org":
+      set MPI_EXEC="srun --mpi=pmi2"
+      set USE_MPI="-m ${MPI_EXEC}"
+      breaksw
+    default:
+      set MPI_EXEC=mpiexec
+      set USE_MPI="-m ${MPI_EXEC} ${MPI_OPTS}"
+      breaksw
+  endsw
+  set TIME="srun --mpi=pmi2"
+  set USE_MPI=`echo $USE_MPI | sed -e 's:-m :-m ''":' -e 's:$:"'':'`
+endif
+
+set USE_OMP=""
+if ($?SOLPS_OPENMP) then
+  setenv KMP_AFFINITY disabled
+  set OMP_OPTS = #THREADS#
+  set USE_OMP = "-t ${OMP_OPTS}"
+endif
+
+update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"
+set msg="Started on `hostname` at `date`"
+update_solps_run_status ${msg}
+if ($?SOLPS_GUI_IP) then
+  echo ${USER} ${PWD} ${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
+endif
+
+time b2run -s ${USE_MPI} ${USE_OMP} >! run.log
+
+QSUB.postprocess
+
+preserve_scratch_to_work
+
+set msg="Finished on `hostname` at `date`"
+update_solps_run_status ${msg}
+if ($?SOLPS_GUI_IP) then
+  echo ${USER} ${PWD} ${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
+endif
+b2fstate_OK_bool

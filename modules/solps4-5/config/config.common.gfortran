@@ -28,7 +28,7 @@ LDLIBES += ${LD_NAG} ${LD_NETCDF} ${LD_MSCL}
 
 LD = ${FC}
 LDOPTS = 
- 
+
 LCPP = ${LD_SONNET}
 
 #!!!Local Variables:

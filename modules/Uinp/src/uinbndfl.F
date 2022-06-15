@@ -110,6 +110,8 @@ c*** Take the neutral data from the "whole target" specification
               eewbnds(izn,iknd)=tgewall(k)
               efpbnds(izn,iknd)=tgsppff(k)
               efcbnds(izn,iknd)=tgspcff(k)
+              rfcbnds(izn,iknd)=trefcell(k)
+              rfpbnds(izn,iknd)=trfpress(k)
             else !}{
 c*** Take the data from the boundary default
               ewmbnds(izn,iknd)=ewmbndx(0,iknd)
@@ -131,6 +133,8 @@ c*** Take the data from the boundary default
               eewbnds(izn,iknd)=eewbndx(0,iknd)
               efpbnds(izn,iknd)=efpbndx(0,iknd)
               efcbnds(izn,iknd)=efcbndx(0,iknd)
+              rfcbnds(izn,iknd)=rfcbndx(0,iknd)
+              rfpbnds(izn,iknd)=rfpbndx(0,iknd)
             end if !}
             jclbnds(izn,iknd)=jclbndx(0,iknd)
             jnebnds(izn,iknd)=jnebndx(0,iknd)

@@ -1,0 +1,110 @@
+#! /bin/tcsh
+
+#SBATCH  --nodes=#NODES#
+#SBATCH  --ntasks-per-node=#TASKS#
+#SBATCH  --cpus-per-task=#THREADS#
+#SBATCH  --time=#HOURS#:00:00
+#SBATCH  --mem-per-cpu=#MEM#
+#SBATCH  --mail-user=#EMAIL#
+#SBATCH  --mail-type=END
+#SBATCH  --job-name=#JOBNAME#
+#SBATCH  --partition=#PART#
+
+echo Using SOLPSTOP = #SOLPSTOP#
+
+set USE_MPI=""
+set nodename=`hostname`
+if ($?SOLPS_MPI) then
+  set MPI_OPTS=#MPIOPTS#
+  switch ($nodename)
+    case "sdcc-login*.iter.org":
+      set MPI_EXEC=mpiexec
+      set USE_MPI="-m ${MPI_EXEC} ${MPI_OPTS}"
+      breaksw
+    case "hpc-login0*.iter.org":
+      set MPI_EXEC="srun --mpi=pmi2"
+      set USE_MPI="-m ${MPI_EXEC}"
+      breaksw
+    default:
+      set MPI_EXEC=mpiexec
+      set USE_MPI="-m ${MPI_EXEC} ${MPI_OPTS}"
+      breaksw
+  endsw
+  set TIME="srun --mpi=pmi2"
+  set USE_MPI=`echo $USE_MPI | sed -e 's:-m :-m ''":' -e 's:$:"'':'`
+endif
+
+set USE_OMP=""
+if ($?SOLPS_OPENMP) then
+  setenv KMP_AFFINITY disabled
+  set OMP_OPTS = #THREADS#
+  set USE_OMP = "-t ${OMP_OPTS}"
+endif
+
+update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"
+set msg="Started on `hostname` at `date`"
+update_solps_run_status ${msg}
+if ($?SOLPS_GUI_IP) then
+  echo ${USER} ${PWD} ${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
+endif
+
+time b2run -s ${USE_MPI} ${USE_OMP} >! run.log
+
+QSUB.postprocess
+
+preserve_scratch_to_work
+
+set msg="Finished on `hostname` at `date`"
+update_solps_run_status ${msg}
+if ($?SOLPS_GUI_IP) then
+  echo ${USER} ${PWD} ${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
+endif
+
+set Break_loop = "no"
+if (`grep "stopping because" run.log.last10` == "") then
+  update_solps_run_status "run KAPUTT at `date`"
+  echo KAPUTT > run.KAPUTT
+  set Break_loop = "yes"
+endif
+#set NORMAL_FINISH=`grep "stopping because .quit" run.log.last10`
+if (`grep "stopping because .quit" run.log.last10` != "") then
+  update_solps_run_status "Breaking the loop by .quit at `date`"
+  set Break_loop = "yes"
+endif
+#set NORMAL_FINISH=`grep "stopping because _quit" run.log.last10`
+if (`grep "stopping because _quit" run.log.last10` != "") then
+  update_solps_run_status "Breaking the loop by _quit at `date`"
+  set Break_loop = "yes"
+endif
+#set NORMAL_FINISH=`grep "stopping because tim >= etim" run.log.last10`
+if (`grep "stopping because tim >= etim" run.log.last10` != "") then
+  update_solps_run_status "Breaking the loop because the end time is reached at `date`"
+  set Break_loop = "yes"
+endif
+#set NORMAL_FINISH=`grep "stopping because min_residual" run.log.last10`
+if (`grep "stopping because min_residual" run.log.last10` != "") then
+  update_solps_run_status "Breaking the loop because required residual is reached at `date`"
+  set Break_loop = "yes"
+endif
+
+if ("$Break_loop" == "no") then
+  set End_by_ntim = `grep "stopping because itim" run.log.last10`
+  set End_by_cputime = `grep "stopping because cpu" run.log.last10`
+  set End_by_walltime = `grep "stopping because elapsed" run.log.last10`
+
+#  echo $End_by_ntim
+#  echo $End_by_cputime
+#  echo $End_by_walltime
+
+  if ("$End_by_ntim" != "" || "$End_by_cputime" != "" || "$End_by_walltime" != "") then
+    set msg="Resubmitting inside the loop at `date`"
+    update_solps_run_status ${msg}
+    rm -f run.log* b2mn.prt b2.log*;
+    set NOW = `date +"%d.%m.%Y_%T"`  
+    mv b2fstati b2fstati_$NOW
+    mv b2fstate b2fstati
+    if (-s b2faveri) mv b2faveri b2faveri_$NOW
+    if (-s b2favere) mv b2favere b2faveri
+    itersubmit #LOOPOPTS# SLURM.iter_loop
+  endif
+endif
