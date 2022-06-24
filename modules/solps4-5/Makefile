@@ -169,8 +169,8 @@ DEFAULT: ${XREXE}
 
 b2sxdr: ${XREXE}
 
-${XREXE}: ${XROBJ} ${XREXTRA} ${OBJDIR}/libb2_solps5.a ${OBJDIR}/libb2_solps4.a ${MNEXTRA} ${MAKES}
-	${LD} ${LDOPTS} ${XROBJ} ${XREXTRA} ${OBJDIR}/libb2_solps5.a ${OBJDIR}/libb2_solps4.a ${MNEXTRA} -o $@ ${LDLIBES} ${LCPP} ${LDOPTSend}
+${XREXE}: ${XROBJ} ${XREXTRA} ${OBJDIR}/libb2_solps5.a ${OBJDIR}/libb2_solps4.a ${OBJDIR}/eirmod_solps.o ${MNEXTRA} ${MAKES}
+	${LD} ${LDOPTS} ${XROBJ} ${XREXTRA} ${OBJDIR}/libb2_solps5.a ${OBJDIR}/libb2_solps4.a ${OBJDIR}/eirmod_solps.o ${MNEXTRA} -o $@ ${LDLIBES} ${LCPP} ${LDOPTSend}
 
 ${OBJDIR}/allocate_modules.o: ${OBJDIR}/braeir.${MOD} ${OBJDIR}/cadgeo.${MOD} ${OBJDIR}/cai.${MOD} ${OBJDIR}/ccflux.${MOD} ${OBJDIR}/ccona.${MOD} ${OBJDIR}/cestim.${MOD} ${OBJDIR}/cgeom.${MOD} ${OBJDIR}/clast.${MOD} ${OBJDIR}/clena.${MOD} ${OBJDIR}/clogau.${MOD} ${OBJDIR}/comnnl.${MOD} ${OBJDIR}/comspl.${MOD} ${OBJDIR}/comusr.${MOD} ${OBJDIR}/comxs.${MOD} ${OBJDIR}/coutau.${MOD} ${OBJDIR}/cpes.${MOD} ${OBJDIR}/cplot.${MOD} ${OBJDIR}/cpolyg.${MOD} ${OBJDIR}/cref.${MOD} ${OBJDIR}/crefmod.${MOD} ${OBJDIR}/csdvi.${MOD} ${OBJDIR}/csdvi_bgk.${MOD} ${OBJDIR}/csdvi_cop.${MOD} ${OBJDIR}/cspei.${MOD} ${OBJDIR}/cspez.${MOD} ${OBJDIR}/cstep.${MOD} ${OBJDIR}/ctetra.${MOD} ${OBJDIR}/ctext.${MOD} ${OBJDIR}/cupd.${MOD} ${OBJDIR}/czt1.${MOD} ${OBJDIR}/eirbra.${MOD} ${OBJDIR}/photon.${MOD}
 
@@ -368,7 +368,7 @@ ${OBJDIR}/b2_4to5.o: ${OBJDIR}/eirmod_parmmod.${MOD} ${OBJDIR}/braeir.${MOD} ${O
 
 ${OBJDIR}/b2mod_b2_to_astra.o: ${OBJDIR}/eirmod_extrab25.${MOD} ${OBJDIR}/eirmod_wneutrals.${MOD}
 
-${OBJDIR}/b2mod_neutrals_namelist.o: ${OBJDIR}/eirmod_parmmod.${MOD} ${OBJDIR}/parmmod.${MOD} ${OBJDIR}/braeir.${MOD} ${OBJDIR}/ceirsrt.${MOD} ${OBJDIR}/eirdiag.${MOD} ${OBJDIR}/eirmod_extrab25.${MOD}
+${OBJDIR}/b2mod_neutrals_namelist.o: ${OBJDIR}/eirmod_parmmod.${MOD} ${OBJDIR}/parmmod.${MOD} ${OBJDIR}/braeir.${MOD} ${OBJDIR}/ceirsrt.${MOD} ${OBJDIR}/eirdiag.${MOD} ${OBJDIR}/eirmod_extrab25.${MOD} ${OBJDIR}/eirmod_solps.${MOD}
 
 ${OBJDIR}/eirmod_parmmod.o:
 	ln -sf ${OBJDIR}/parmmod.o $@
@@ -388,8 +388,11 @@ ${OBJDIR}/eirmod_comxs.o:
 ${OBJDIR}/eirmod_ctrig.o:
 	ln -sf ${EIRDIR}/eirmod_ctrig.o ${OBJDIR}
 
-${OBJDIR}/eirmod_extrab25.o: ${OBJDIR}/eirmod_comxs.${MOD} ${OBJDIR}/eirmod_wneutrals.${MOD}
+${OBJDIR}/eirmod_extrab25.o: ${OBJDIR}/eirmod_comxs.${MOD} ${OBJDIR}/eirmod_wneutrals.${MOD} ${OBJDIR}/eirmod_solps.${MOD}
 	ln -sf ${EIRDIR}/eirmod_extrab25.o ${OBJDIR}
+
+${OBJDIR}/eirmod_solps.o:
+	ln -sf ${EIRDIR}/eirmod_solps.o ${OBJDIR}
 
 ${OBJDIR}/eirmod_wneutrals.o:
 	ln -sf ${EIRDIR}/eirmod_wneutrals.o ${OBJDIR}
@@ -633,7 +636,7 @@ ${OBJDIR}/b2_4to5.${MOD}: ${OBJDIR}/eirmod_parmmod.${MOD} ${OBJDIR}/braeir.${MOD
 
 ${OBJDIR}/b2mod_b2_to_astra.${MOD}: ${OBJDIR}/eirdiag.${MOD}
 
-${OBJDIR}/b2mod_neutrals_namelist.${MOD}: ${OBJDIR}/parmmod.${MOD} ${OBJDIR}/braeir.${MOD} ${OBJDIR}/ceirsrt.${MOD} ${OBJDIR}/eirdiag.${MOD}
+${OBJDIR}/b2mod_neutrals_namelist.${MOD}: ${OBJDIR}/parmmod.${MOD} ${OBJDIR}/braeir.${MOD} ${OBJDIR}/ceirsrt.${MOD} ${OBJDIR}/eirdiag.${MOD} ${OBJDIR}/eirmod_solps.${MOD}
 
 ${OBJDIR}/eirmod_braeir.${MOD}:
 	ln -sf ${EIRDIR}/eirmod_braeir.${MOD} ${OBJDIR}
@@ -647,8 +650,11 @@ ${OBJDIR}/eirmod_comxs.${MOD}:
 ${OBJDIR}/eirmod_ctrig.${MOD}:
 	ln -sf ${EIRDIR}/eirmod_ctrig.${MOD} ${OBJDIR}
 
-${OBJDIR}/eirmod_extrab25.${MOD}: ${OBJDIR}/eirmod_comxs.${MOD} ${OBJDIR}/eirmod_wneutrals.${MOD}
+${OBJDIR}/eirmod_extrab25.${MOD}: ${OBJDIR}/eirmod_comxs.${MOD} ${OBJDIR}/eirmod_wneutrals.${MOD} ${OBJDIR}/eirmod_solps.${MOD}
 	ln -sf ${EIRDIR}/eirmod_extrab25.${MOD} ${OBJDIR}
+
+${OBJDIR}/eirmod_solps.${MOD}:
+	ln -sf ${EIRDIR}/eirmod_solps.${MOD} ${OBJDIR}
 
 ${OBJDIR}/eirmod_wneutrals.${MOD}:
 	ln -sf ${EIRDIR}/eirmod_wneutrals.${MOD} ${OBJDIR}
