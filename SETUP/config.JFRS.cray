@@ -132,16 +132,18 @@ ifdef IMAS_VERSION
       LD_UAL = `pkg-config imas-ifort --libs` -lggd-ifort
     else
       GGD_MINOR_VERSION = 0
+      GGD_MICRO_VERSION = 0
       LD_UAL = `pkg-config imas-lowlevel imas-ifort --libs`
     endif
   endif
-  SOLPS_CPP += -DIMAS -DUAL_MAJOR_VERSION=${UAL_MAJOR_VERSION} -DUAL_MINOR_VERSION=${UAL_MINOR_VERSION} -DUAL_MICRO_VERSION=${UAL_MICRO_VERSION} -DIMAS_MINOR_VERSION=${IMAS_MINOR_VERSION} -DGGD_MINOR_VERSION=${GGD_MINOR_VERSION}
+  SOLPS_CPP += -DIMAS -DUAL_MAJOR_VERSION=${UAL_MAJOR_VERSION} -DUAL_MINOR_VERSION=${UAL_MINOR_VERSION} -DUAL_MICRO_VERSION=${UAL_MICRO_VERSION} -DIMAS_MAJOR_VERSION=${IMAS_MAJOR_VERSION} -DIMAS_MINOR_VERSION=${IMAS_MINOR_VERSION} -DGGD_MINOR_VERSION=${GGD_MINOR_VERSION} -DGGD_MICRO_VERSION=${GGD_MICRO_VERSION}
   export LD_UAL
 else
   UAL_MAJOR_VERSION = 0
   UAL_MINOR_VERSION = 0
   UAL_MICRO_VERSION = 0
   GGD_MINOR_VERSION = 0
+  GGD_MICRO_VERSION = 0
   IMAS_MAJOR_VERSION = 0
   IMAS_MINOR_VERSION = 0
 endif
@@ -149,16 +151,30 @@ export UAL_MAJOR_VERSION
 export UAL_MINOR_VERSION
 export UAL_MICRO_VERSION
 export GGD_MINOR_VERSION
+export GGD_MICRO_VERSION
 export IMAS_MAJOR_VERSION
 export IMAS_MINOR_VERSION
 
 # Build with Fundamental-Constants module if present
+# Only needed explicitly if AMNS version is less than 1.4.0
+ifdef AMNS_PREFIX
+  AMNS_VERSION = `pkg-config amns --modversion`
+  AMNS_MAJOR_VERSION = $(shell echo ${AMNS_VERSION} | cut -d '.' -f1 )
+  AMNS_MINOR_VERSION = $(shell echo ${AMNS_VERSION} | cut -d '.' -f2 )
+else
+  AMNS_MAJOR_VERSION = 0
+  AMNS_MINOR_VERSION = 0
+endif
 ifeq ($(shell `pkg-config --exists fundamental-constants`; echo $$?),0)
   SOLPS_CPP += -DCONSTANTS_PROVIDED
-  SOLPSINCLUDE = `pkg-config fundamental-constants --cflags`
-  INCMODS = `pkg-config fundamental-constants --cflags`
-  export SOLPSINCLUDE
-  export INCMODS
+  ifeq ($(shell test ${AMNS_MAJOR_VERSION} -le 1; echo $$?),0)
+    ifeq ($(shell test ${AMNS_MINOR_VERSION} -le 3; echo $$?),0)
+      SOLPSINCLUDE = `pkg-config fundamental-constants --cflags`
+      INCMODS = `pkg-config fundamental-constants --cflags`
+      export SOLPSINCLUDE
+      export INCMODS
+    endif
+  endif
 endif
 
 #

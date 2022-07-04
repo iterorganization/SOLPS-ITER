@@ -783,7 +783,7 @@ c*** surface cards
         write(iunoo,703) screcycf(i),screcyct(i),scrcprm(i),
      ,                   scexppl(i),scexpel(i),scexpil(i)
         write(iunoo,703) screcycs(i),scychsptg(i),scstprm(i),0.0,
-     ,                              scechsptg(i)
+     ,                               scechsptg(i)
         do j=1,nnchemvar(i) !{
           k=k+1
           ich=indchemvar(k)

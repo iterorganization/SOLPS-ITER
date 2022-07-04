@@ -50,11 +50,11 @@ c*** First, non-default surface...
 c          print *,'uinbnddt: isf,ibk,nstsi,cskbnds,iliin,ilside =',!###
 c     ,      isf,ibk,nstsi,' ',cskbnds(isf,ibk),' ',                !###
 c     ,      iliin(nstsi),ilside(nstsi)                             !###
-          if(cskbnds(isf,ibk).eq.'W' .or. 
+          if(cskbnds(isf,ibk).eq.'W' .or.
      ,                                  cskbnds(isf,ibk).eq.'E') then !{
             idimp(nstsi)=2
             ilswch(nstsi)=0
-          else if(cskbnds(isf,ibk).eq.'S' .or. 
+          else if(cskbnds(isf,ibk).eq.'S' .or.
      ,                                 cskbnds(isf,ibk).eq.'N') then !}{
             idimp(nstsi)=1
             if(cskbnds(isf,ibk).eq.'S') then !{
@@ -124,7 +124,7 @@ c*** ... and then the recycling source if specified
             if(ntargi.gt.nstep) then !{
               write(0,*) 'Too many recycling strata requested: ',ntargi
               write(0,*) 'STOP  ==> check the DG model and the value ',
-     ,                               'of NSTEP in KOPPLDIM.F:' 
+     ,                               'of NSTEP in KOPPLDIM.F:'
               write(0,*) '          NSTEP must not be less than ',
      ,                                'the number of recycling sources'
               call xerrab ('Too many recycling strata requested')
@@ -149,7 +149,7 @@ c*** ... and then the recycling source if specified
             soreni(nstrai)=esibnds(isf,ibk)
             sorene(nstrai)=esebnds(isf,ibk)
             nrsor(1,nstrai)=-1
-            if(cskbnds(isf,ibk).eq.'W' .or. 
+            if(cskbnds(isf,ibk).eq.'W' .or.
      .                                  cskbnds(isf,ibk).eq.'E') then !{
               nixy2(ntargi,1)=1
               nemod(ntargi,1)=7
@@ -164,7 +164,7 @@ c*** ... and then the recycling source if specified
               else !}{
                 sorifl(1,nstrai)=1000
               end if !}
-            else if(cskbnds(isf,ibk).eq.'S' .or. 
+            else if(cskbnds(isf,ibk).eq.'S' .or.
      .                                 cskbnds(isf,ibk).eq.'N') then !}{
               nixy2(ntargi,1)=2
               nemod(ntargi,1)=6

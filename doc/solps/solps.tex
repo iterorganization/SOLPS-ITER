@@ -407,7 +407,7 @@ location of all the main libraries with which the \SOLPSITER executables will be
 linking instructions. The latter file provides shared instructions for that compiler, independent of location. These files also contain the shared compiler directives for all the \SOLPSITER object files
 (see Section~\ref{sec:defines} for a full listing) and the name of the debugger program to be used, if any.
 Users should make sure the settings within these files fit their run environment and modify them as needed.
-In particular, if the default {\tt python} command on the system points to version 2.7 or similar, and a newer version 3 executable is available, it is recommended to define the {\tt PYTHON} environment variable to point to that executable in the appropriate {\tt \$\{SOLPSTOP\}/SETUP/setup.csh.\*} file.
+In particular, if the default {\tt python} command on the system points to version 2.7 or similar, and a newer version 3 executable is available, it is recommended to define the {\tt PYTHON} environment variable to point to that executable in the appropriate local {\tt \$\{SOLPSTOP\}/SETUP/setup.csh} file.
 If changes are needed, please forward them to the \SOLPSITER RO so that they may be included in the
 set of distributed files to help other future users.
 \end{sloppypar}
@@ -2505,7 +2505,7 @@ which contains
   \item[13] sheath boundary condition from {\tt b2stbc\_spb} for the parallel momentum. Recommended boundary condition for use with drifts, in conjunction with {\tt BCENE/I=15}, {\tt BCPOT=11}, and {\tt BCCON=14}.
   \item[14] condition from {\tt b2stbc\_spb} for the parallel momentum
   \item[15] prescribe the value of the parallel velocity as a function of poloidal coordinate, scaling with $\frac{\langle B\rangle}{B}$
-  \item[16] Prescribe the average value of the parallel velocity,
+  \item[16] prescribe the average value of the parallel velocity,
   {\tt MOMPAR(,,1)} specifies the parallel velocity in $m.s^{-1}$
   \item[17] leakage option for parallel momentum, {\tt MOMPAR(,,1)} specifies
   the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s, a} m_a n_a u_a$
@@ -4396,7 +4396,7 @@ There are currently five possible choices supported. They are:
   \item[BALANCED] A balanced strategy in which the workload is attempted to be divided evenly among processors. If the initial setup for the {\bf BALANCED} strategy fails, the code then attempts the {\bf APCAS} strategy. Also obtainable by setting {\tt NPRLL = 3}.
   \item[APCAS] meaning {\it All Processors Compute All Strata}, where the work of each stratum is divided among all processors. Usually involves more communication between processors. Also obtainable by setting {\tt NPRLL = 2}.
   \item[ORIGINAL] The original strategy implemented in versions of {\tt Eirene} prior to \SOLPSITER version 3.0.5. Also called "proportional allocation" in the {\tt Eirene} manual. In that strategy, each processor is handed either part of a large stratum or one or several full smaller strata. This strategy works well if the number of processors is larger than the number of strata, but is not recommended if the number of strata is larger than the number of processors. Also obtainable by setting {\tt NPRLL = 1}.
-  \item[EMBARRASS] meaning the "embarassingly parrallel" scheme by which each processor is assigned the same number of particle trajectories, as given in the {\tt Eirene} input file. This is the default in non-\SOLPSITER versions of {\tt EIRENE}. Also obtainable if setting {\tt NPRLL = 0} or {\tt NPRLL > 3}.
+  \item[EMBARRASS] meaning the "embarassingly parallel" scheme by which each processor is assigned the same number of particle trajectories, as given in the {\tt Eirene} input file. This is the default in non-\SOLPSITER versions of {\tt EIRENE}. Also obtainable if setting {\tt NPRLL = 0} or {\tt NPRLL > 3}.
   \item[AUTOMATIC] tells the code to use the current default, whatever it may be.
 \end{description}
 The format to read the strategy name is free-form. The input file is scanned for the words describing the chosen strategy after the title line {\tt *** INFORMATION\_FOR\_MPI} is found. The {\em first} match to an (uppercase) strategy name will be the strategy followed by the code. If the title line is missing or no match is found to any of the strategy names, the default strategy is used. See the {\tt Eirene\_balanced\_MPI} document on the \SOLPSITER web site {\tt Manuals and Documentation} folder for more details on the performance and algorithm corresponding to each strategy.
@@ -8250,7 +8250,6 @@ m_a V_{\parallel a} \Gamma_{ax}^{Cor} -
 
 If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $\Gamma^m_{ax} $ is applied according to section \ref{sec:Zhdanov}.
 
-
 \begin{equation}\label{eq:mom_fluxy}
 \Gamma^m_{ay} =
 m_a V_{\parallel a} \Gamma_{ay}^{Cor} -
@@ -8542,8 +8541,6 @@ Q_R = \sum \limits_{a=0}^{ns-1} r_{Q_a} n_e n_a ~ \text{from b2stel}
  r_{Q_a} = r_{Q_a}^{\rm ion} + r_{Q_a}^{\rm rec} + r_{Q_a}^{\rm brm} + r_{Q_a}^{\rm line}
 \end{equation}
 contains contributions from ionisation, recombination, bremsstrahlung and line radiation.
-
-
 
 \begin{equation}\label{eq:ene_Qfei}
 Q_{Fei} = \left\{
@@ -14992,7 +14989,7 @@ $\displaystyle \frac{\sqrt{g}}{h^2_y} \sigma^{(ST)}$ & $S$ & \texttt{b2trno\_csi
 
 residuals & $A$ & \texttt{b2nppo\_respo.dat} or & (\ref{eq:pot_eq}) \\
  & & \texttt{b2npp7\_respo.dat} &  \\
- 
+
 \hline
 \multicolumn{4}{|l|}{\small\it Moments of the distribution function} \\
 \hline
@@ -17430,7 +17427,7 @@ Divides the matrix data by $s_x$ --- the contact cell area between cells in the
 $x$-direction.
 
 \subsubsection{psxperp}\index{b2plot, psxperp}\label{sec:psxperp}
-Divides the matrix data by $s_x$ --- the cell area perpendicular to the
+Divides the matrix data by $s_x \times qc$ --- the cell area perpendicular to the
 $x$-direction.
 
 \subsubsection{psy}\index{b2plot, psy}\label{sec:psy}

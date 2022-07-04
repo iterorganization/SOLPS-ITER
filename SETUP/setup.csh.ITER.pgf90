@@ -9,10 +9,10 @@ set nodename=`hostname`
 switch ($nodename)
  case "sdcc-login*.iter.org":
   module load NVHPC/21.2
-  module load IMAS/3.35.0-4.10.0-2020b
+  module load IMAS/3.36.0-4.10.2-2020b
   module load MDSplus/7.96.17-GCCcore-10.2.0
-  module load GGD/1.10.0-NVHPC-21.2-DD-3.35.0
-  module load AMNS/1.4.0-NVHPC-21.2-DD-3.35.0
+  module load GGD/1.10.1-NVHPC-21.2-DD-3.36.0
+  module load AMNS/1.4.0-NVHPC-21.2-DD-3.36.0
   module load xarray/0.16.2-intel-2020b
   module load Viz/2.4.7-intel-2020b
   module load ToFu/1.5.0-intel-2020b-Python-3.8.6
@@ -33,8 +33,8 @@ switch ($nodename)
 #  module load MATLAB/2020b-GCCcore-10.2.0-Java-11
   module load texlive/20210216-GCCcore-10.2.0
   module load libtirpc/1.3.1-GCCcore-10.2.0
-  module load SimDB/0.6.0-intel-2020b
-  module load Fundamental-Constants/0.1.0
+  module load SimDB/0.7.0-intel-2020b
+  module load Fundamental-Constants/0.1.1
   breaksw
  case "hpc-login*.iter.org":
   module load PGI/19.4-GCC-6.4.0-2.28

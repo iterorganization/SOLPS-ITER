@@ -258,7 +258,7 @@ C***  SURFMOD_k_<MATERIAL>_<SPUTER>_<PUMP>_<SEMITRANSP>_<TEMPERATURE K>
         write(cnam,'(A8,I2)') 'SURFMOD_',k
       end if
       znml=scxmlim(k)
-      txtbuf='_'
+      txtbuf=''
       if(nint(znml).EQ.5626) then
         txtbuf='_IRON'
       else if(nint(znml).EQ.18474) then
@@ -270,7 +270,8 @@ C***  SURFMOD_k_<MATERIAL>_<SPUTER>_<PUMP>_<SEMITRANSP>_<TEMPERATURE K>
       else if(nint(znml).EQ.9642) then
         txtbuf='_MOLYBDENUM'
       end if
-      cnam=cnam(1:len_trim(cnam))//txtbuf(1:len_trim(txtbuf))
+      if (.not.streql(txtbuf,''))
+     .  cnam=cnam(1:len_trim(cnam))//txtbuf(1:len_trim(txtbuf))
       if(scilspt(k).NE.0) cnam=cnam(1:len_trim(cnam))//'_SPT'
       if(screcycf(k).LT.1.0.OR.screcyct(k).LT.1.0)
      .                 cnam=cnam(1:len_trim(cnam))//'_PUMP'

@@ -456,7 +456,8 @@ c*** refinment zone markers from DG, and actual number of zones
        integer ntrimax
        parameter (ntrimax=100)
        integer ilplgu(nsts),jlplgu(nlim),ilplgdg(nlim)
-       real trisize(0:ntrimax), trixmin(ntrimax), trixmax(ntrimax),
+       real(kind=R4)
+     ,      trisize(0:ntrimax), trixmin(ntrimax), trixmax(ntrimax),
      ,      triymin(ntrimax), triymax(ntrimax)
        integer trirefel(2*nlim),trirefcn(ntrimax),ntriref
 

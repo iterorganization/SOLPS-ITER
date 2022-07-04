@@ -8,8 +8,8 @@ if ("$fullhost" == "") then
   set fullhost=`hostname -f`
 endif
 # special handling of hostnames head*, node* that keeps mephi_check working
-set mephi_check=`echo $machine_location | cut -c1-4` 
-if ("$mephi_check" == "head" || "$mephi_check" == "node") then 
+set mephi_check=`echo $machine_location | cut -c1-4`
+if ("$mephi_check" == "head" || "$mephi_check" == "node") then
   switch ($fullhost)
   case "*.cm.cluster":
     breaksw
@@ -180,6 +180,7 @@ case "*.jp":
 case "*.kr":
   echo KR_UNKNOWN
   breaksw
+case "*.rf":
 case "*.ru":
 case "*.su:"
   echo RF_UNKNOWN
