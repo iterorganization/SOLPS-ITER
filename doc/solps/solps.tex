@@ -407,7 +407,7 @@ location of all the main libraries with which the \SOLPSITER executables will be
 linking instructions. The latter file provides shared instructions for that compiler, independent of location. These files also contain the shared compiler directives for all the \SOLPSITER object files
 (see Section~\ref{sec:defines} for a full listing) and the name of the debugger program to be used, if any.
 Users should make sure the settings within these files fit their run environment and modify them as needed.
-In particular, if the default {\tt python} command on the system points to version 2.7 or similar, and a newer version 3 executable is available, it is recommended to define the {\tt PYTHON} environment variable to point to that executable in the appropriate {\tt \$\{SOLPSTOP\}/SETUP/setup.csh.\*} file.
+In particular, if the default {\tt python} command on the system points to version 2.7 or similar, and a newer version 3 executable is available, it is recommended to define the {\tt PYTHON} environment variable to point to that executable in the appropriate local {\tt \$\{SOLPSTOP\}/SETUP/setup.csh} file.
 If changes are needed, please forward them to the \SOLPSITER RO so that they may be included in the
 set of distributed files to help other future users.
 \end{sloppypar}
