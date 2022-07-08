@@ -92,6 +92,11 @@ endif
 # Assume MPI is present
 MPI_PRESENT = 1
 
+
+# Temporary flags for extended grids compilation
+B25_DEFINES += -DWG_DEBUG
+
+
 #
 # Export for use in sub-makefiles
 #
