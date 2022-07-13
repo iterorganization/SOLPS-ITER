@@ -613,8 +613,8 @@ There is also a dedicated directory {\tt \$\{SOLPSTOP\}/runs/examples} which con
 The cases stored for retrieval include:
 \begin{description}
   \item[test\_slab\_ortho\_standalone] An orthogonal slab test case for {\tt B2.5} standalone
-  \item[AUG\_16151\_D] ASDEX-Upgrade D-only benchmark cases, including {\tt B2.5} standalone, coupled and single {\tt Eirene} call run directories
-  \item[AUG\_16151\_D+C+He] ASDEX-Upgrade multi-fluid benchmark cases, including {\tt B2.5} standalone, coupled and single {\tt Eirene} call run directories
+  \item[AUG\_16151\_D] ASDEX-Upgrade D-only benchmark cases, including {\tt B2.5} standalone, coupled and single {\tt Eirene} call run directories (uses the SOLPS5.0 physics model)
+  \item[AUG\_16151\_D+C+He] ASDEX-Upgrade multi-fluid benchmark cases, including {\tt B2.5} standalone, coupled and single {\tt Eirene} call run directories (uses the SOLPS5.0 physics model)
   \item[AUG\_28903\_D+N\_drifts] ASDEX-Upgrade D+N case including drifts
   \item[AUG\_28903\_D+Ne\_drifts] ASDEX-Upgrade D+Ne case including drifts
   \item[DIIID\_3106\_DN\_D+C] DIII-D disconnected double-null case including Carbon chemical sputtering
@@ -5102,6 +5102,8 @@ The signals in, for example, {\tt TIMEDEP} can be accessed as
 \subsection{SNAPSHOT}
 
 \VerbatimInput[fontsize=\footnotesize]{MDSPLUS/SNAPSHOT_MODEL.TCL.index}
+
+Note that the {\tt SNAPSHOT::TOP.GRID:DSPAR} and {\tt SNAPSHOT::TOP.GRID:DSPOL} quantities are respectively the parallel and poloidal distances along the magnetic field to the Western edge of the computational domain, and not, strictly speaking, connection lengths.
 
 \subsection{TALLIES}
 
