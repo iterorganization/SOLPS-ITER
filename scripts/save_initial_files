@@ -20,6 +20,8 @@
     [ -s fort.15 ] && cp fort.15 fort.15.i || echo > /dev/null
     [ -s fort.44 ] && cp fort.44 fort.44.i || echo > /dev/null
     [ -s fort.46 ] && cp fort.46 fort.46.i || echo > /dev/null
+    [ -s fort.44_aver ] && cp fort.44_aver fort.44_aver.i || echo > /dev/null
+    [ -s fort.46_aver ] && cp fort.46_aver fort.46_aver.i || echo > /dev/null
   } || {
     [ -s ftn10 ] && cp ftn10 ftn10.i || echo > /dev/null
     [ -s ftn11 ] && cp ftn11 ftn11.i || echo > /dev/null
@@ -29,7 +31,10 @@
     [ -s ftn15 ] && cp ftn15 ftn15.i || echo > /dev/null
     [ -s ftn44 ] && cp ftn44 ftn44.i || echo > /dev/null
     [ -s ftn46 ] && cp ftn46 ftn46.i || echo > /dev/null
+    [ -s ftn44_aver ] && cp ftn44_aver ftn44_aver.i || echo > /dev/null
+    [ -s ftn46_aver ] && cp ftn46_aver ftn46_aver.i || echo > /dev/null
   }
+  [ -s conbe.dat ] && cp conbe.dat conbe.dat.i || echo > /dev/null
 }
 
 NAME=/tmp/.files.$$.$USER.`date +%Y%m%d%H%M%S`

@@ -2046,7 +2046,7 @@ i.e. a {\tt fort.30} file.
     \item[endCellZ] array of size {\tt nExternalRegions}. Axial index of the last node in the region. Default value is $-1$.
     \item[write\_nml\_ld] logical. If {\tt .true.}, writes the contents of the namelist after it has been read. Defaults to {\tt .false.}.
   \end{description}
-  
+
   Once parameters are read, the magnetic field lines starting from {\tt r\_start}, {\tt r\_end}, {\tt z\_start}, {\tt z\_end} and propagating towards the E and W boundaries are calculated.
   The files {\tt fn\_r} and {\tt fn\_z} distribute the cells in the numerical space in the radial and axial directions, respectively.
   For typical cases in Magnum-PSI, see Fig.~\ref{fig:geometryLinearDevice}, these field lines start from the target, which has a known geometry and propagate towards the source.
@@ -4512,6 +4512,58 @@ in which {\tt REFPRESS} is the reference pressure in $Pa$.
 This loop will not provide values of {\tt RECYCT} larger than $1$ or below $0$.
 The coefficients of the proportional-integral loop are hard-coded.
 
+\section{Modelling for Beryllium migration}
+\label{conbe.dat}\label{input_for_refusr.dat}
+
+A model for the self-consistent modelling of Beryllium (Be) erosion and migration is provided through the {\tt SPTUSR} routines within {\tt Eirene}. This model tracks the erosion and re-deposition of Be for selected wall elements. It computes the fractional surface coverage of deposited Be originating from wall erosion (from any location) on the designated wall elements as a function of time and allows for the further sputtering and transport of that deposited Be.
+
+For this model to be activated, the file {\tt input\_for\_refusr.dat} should be present in the run directory. This file has the format
+
+\VerbatimInput[fontsize=\footnotesize]{input_for_refusr_minimal.dat}
+
+and contains the variables:
+
+\begin{description}
+  \item[BEGIN] Starting {\tt Eirene} wall element number over which the Be deposition will be computed (should be in the range {\tt [1:NLIMI+NSTSI]}). If given a negative value, its absolute value will be understood as the index of an {\tt Eirene} non-standard surface and mapped to its proper location in the array.
+  \item[END] Ending {\tt Eirene} wall element number over which the Be deposition will be computed (should be in the range {\tt [1:NLIMI+NSTSI]} and larger than or equal to {\tt BEGIN} once mapped). If given a negative value, its absolute value will be understood as the index of an {\tt Eirene} non-standard surface and mapped to its proper location in the array.
+  \item[DELAY] Frequency of {\tt Eirene} calls at which the {\tt conbe.dat} output file is written (should be at least {\tt 1})
+  \item[SBE] Characteristic area occupied by one Be atom on the surface (in $m^2$)
+  \item[TSTEP] Time-step used in the dynamic re-sputtering model (in $s$)
+  \item[TSTEP\_FLAG] Flag to indicate that all surfaces use the same time-step (default), or if a separate array of different time-steps for each wall element is to be provided (if {\tt TSTEP\_FLAG = 1}, see below)
+  \item[AVCOF] Averaging coefficient in the Robbins-Monro method for smoothing the time-evolution of the beryllium surface concentration (should be between {\tt 0} and {\tt 1})
+  \item[NOACUM\_FLAG] If set to {\tt 1}, limits the maximum Be concentration to one complete monolayer (recommended)
+\end{description}
+
+An example of an input file where different time-steps are provided for each wall element looks like:
+
+\VerbatimInput[fontsize=\footnotesize]{input_for_refusr_advanced.dat}
+
+where the array of timesteps is provided after the initial set of variables.
+
+For wall elements between {\tt BEGIN} and {\tt END}, to activate the Be dynamic sputtering model, one must in addition select the user-supplied sputtering model as part of their surface properties, namely {\tt ILSPT = 9}. The surface block first two lines will then look like:
+
+\begin{verbatim}
+SURFMOD_3_TUNGSTEN_BESPUT_1160K
+     1     9     4     0     1
+\end{verbatim}
+
+where {\tt 4} refers to the species index of Be in the list of atomic species followed by {\tt Eirene} in block 4a of its input file. With these settings, only Be will be sputtered from that surface, not its original material.
+
+For wall elements within the {\tt [BEGIN:END]} range that do not have {\tt ILSPT = 9}, the Be surface concentration will remain constant. To speed up the convergence of the model, it is recommended to use a {\tt TSTEP} value that is 4-5 orders of magnitude larger than the {\tt B2.5} timestep, since the deposition and sputtering processes occur on much longer timescales than the plasma transport itself.
+
+If this model is active, the {\tt conbe.dat} file will be written at least on the first and last iterations of the run, and every {\tt DELAY} iterations in between. If the file is already present at the beginning of the run, its contents will be read and used for the starting values of the Be data evolution. If the file is not found, it will be created and assume zero Be concentration on the wall elements and {\tt 1\%} Be concentration on the {\tt Eirene} non-standard surfaces at the start. The file will contain blocks of six lines (one per writing call) which correspond to:
+
+\begin{enumerate}
+  \item {\tt SPUMPADD} Instantaneous values of the Be deposition fluxes (in $A.m^{-2}$)
+  \item {\tt SPTTOTADD} Instantaneous values of the Be sputtering fluxes (in $A.m^{-2}$)
+  \item {\tt SPUMPSAVE} Time-averaged values of the Be deposition fluxes (in $A.m^{-2}$)
+  \item {\tt SPTTOTSAVE} Time-averaged values of the Be sputtering fluxes (in $A.m^{-2}$)
+  \item {\tt CONBE} Proportion of wall element surface coated with Be
+  \item {\tt DENSBE} Surface concentration of Be on the wall element (in $m^{-2}$)
+\end{enumerate}
+
+Only the last block of 6 lines of the {\tt conbe.dat} file needs to be kept from one run to the next. However, the number of wall elements to which the model is applied should remain the same, or the {\tt conbe.dat} file should be modified by hand to reflect the new number of wall elements, or removed, in which case the model restarts from scratch.
+
 \chapter{Running the coupled version of B2.5-Eirene}
 \label{cha:coupledb2eirene}
 
@@ -4617,7 +4669,7 @@ no longer recycling/sputtering surfaces but rather only switching surfaces to th
 triangular grid regions.
 
 \section{Output files}
-\index{fort.44}\index{fort.46}
+\index{fort.44}\index{fort.46}\index{fort.44\_aver}\index{fort.46\_aver}
 
 When running the coupled version of \SOLPSITERns, you will obtain additional output files, named {\tt fort.44} and {\tt fort.46}, which contain data computed from {\tt Eirene}. The contents of the {\tt fort.44} file is a series of data blocks, each starting with a title line, after a header providing the grid size and species list, as well as a format identifier. The relevant dimensions are (please also refer to the {\tt Eirene} manual for further details and to the code for the actual way the arrays are written out):
 
@@ -4627,7 +4679,8 @@ When running the coupled version of \SOLPSITERns, you will obtain additional out
   \item[NATM] Number of atom species declared in the {\tt Eirene} input file
   \item[NMOL] Number of molecule species declared in the {\tt Eirene} input file
   \item[NION] Number of test ion species declared in the {\tt Eirene} input file
-  \item[NPLS] Number of plasma background species declared in the {\tt Eirene} input file
+  \item[NFLA] Number of plasma species followed by the plasma solver, as declared in the {\tt Eirene} input file
+  \item[NPLS] Number of plasma background species declared in the {\tt Eirene} input file (including BGK species)
   \item[NSTRA] Number of source strata declared in the {\tt Eirene} input file (Stratum 0 is the sum over strata)
   \item[NLIM] Number of "additional surfaces" (physical walls) declared in block 3B of the {\tt Eirene} input file
   \item[NSTS] Number of "non-standard surfaces" (plasma boundaries) declared in block 3A of the {\tt Eirene} input file
@@ -4766,6 +4819,51 @@ Similarly, the {\tt fort.46} file contains the following data blocks, this time 
 \end{description}
 
 Please note that, for the momentum densities, the coordinate system used by {\tt Eirene} is cartesian, i.e. independent of the local magnetic field, and that this data is given in CGS units. For cases without a certain species type, for example a pure Helium case with no molecules, the relevant data fields have a species dimension of {\tt 1} as they are mapped internally in {\tt Eirene} to a dummy pointer array.
+
+It is also possible to save long-term averages of some of the {\tt fort.44} and {\tt fort.46} quantities, using the Robbins-Monro averaging method. These will be found in the {\tt fort.44\_aver} and {\tt fort.46\_aver} files respectively. To activate the calculation and saving of these averages, create the two files, in the current run directory, with the first line empty, and the second line containing the real number which will be used to weigh the averages. If that number is zero, the corresponding averages will not be computed. If that number is negative or larger than {\tt 1}, then the default value of {\tt 0.99} will be used and any existing further data in the file will be ignored and the averages restarted from scratch. The averaging scheme applied is of the form:
+
+\begin{equation}
+X_{aver}^{t} = ( 1 - F ) X^{t} + F X_{aver}^{t-1}
+\end{equation}
+
+where $F$ is the number read from the {\tt fort.4[4-6]\_aver} files.
+
+The list of averaged quantities stored in {\tt fort.44\_aver} is:
+\begin{description}
+  \item[wldnek\_aver] Time-averaged net kinetic energy deposited by neutrals ($W$), total over strata, dimension ({\tt NLIM}+{\tt NSTS})
+  \item[wldnep\_aver] Time-averaged energy released by recombination of neutrals and ions into molecules ($W$), total over strata, dimension ({\tt NLIM}+{\tt NSTS})
+  \item[wldna\_aver] Time-averaged flux of atoms impinging on surface ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
+  \item[ewlda\_aver] Time-averaged average energy of impinging atoms on surface ($eV$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
+  \item[wldnm\_aver] Time-averaged flux of molecules impinging on surface ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NMOL})
+  \item[ewldm\_aver] Time-averaged average energy of impinging molecules on surface ($eV$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NMOL})
+  \item[wldra\_aver] Time-averaged flux of reflected atoms from surface ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
+  \item[wldrm\_aver] Time-averaged flux of reflected molecules from surface ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NMOL})
+  \item[wldpp\_aver] Time-averaged flux of plasma ions impinging on surface ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NFLA})
+  \item[wldpa\_aver] Time-averaged net flux of atoms emitted from surface ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
+  \item[wldpm\_aver] Time-averaged net flux of molecules emitted from surface ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NMOL})
+  \item[wldpeb\_aver] Time-averaged power carried by particles emitted from surface ($W$), total over strata, dimension ({\tt NLIM}+{\tt NSTS})
+  \item[wldspt\_aver] Time-averaged flux of sputtered wall material ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS})
+  \item[wldspta\_aver] Time-averaged flux of sputtered wall material per atom ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
+  \item[wldsptm\_aver] Time-averaged flux of sputtered wall material per molecule ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NMOL})
+  \item[wlpump\_aver(A)] Time-averaged pumped flux per atom ($A$), dimension ({\tt NATM}, {\tt NLIM}+{\tt NSTS})
+  \item[wlpump\_aver(M)] Time-averaged pumped flux per molecule ($A$), dimension ({\tt NMOL}, {\tt NLIM}+{\tt NSTS})
+  \item[wlpump\_aver(I)] Time-averaged pumped flux per test ion ($A$), dimension ({\tt NION}, {\tt NLIM}+{\tt NSTS})
+  \item[wlpump\_aver(P)] Time-averaged pumped flux per plasma ion ($A$), dimension ({\tt NFLA}, {\tt NLIM}+{\tt NSTS})
+\end{description}
+
+The list of averaged quantities stored in {\tt fort.46\_aver} is:
+\begin{description}
+  \item[PDENA\_AVER] Time-averaged atom particle density (in $cm^{-3}$), dimension ({\tt NTRII},{\tt NATM})
+  \item[PDENM\_AVER] Time-averaged molecule particle density (in $cm^{-3}$), dimension ({\tt NTRII},{\tt NMOL})
+  \item[EDENA\_AVER] Time-averaged energy density carried by atoms (in $eV.cm^{-3}$), dimension ({\tt NTRII},{\tt NATM})
+  \item[EDENM\_AVER] Time-averaged energy density carried by molecules (in $eV.cm^{-3}$), dimension ({\tt NTRII},{\tt NMOL})
+  \item[VXDENA\_AVER] Time-averaged $X$-directed momentum density carried by atoms (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NATM})
+  \item[VXDENM\_AVER] Time-averaged $X$-directed momentum density carried by molecules (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NMOL})
+  \item[VYDENA\_AVER] Time-averaged $Y$-directed momentum density carried by atoms (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NATM})
+  \item[VYDENM\_AVER] Time-averaged $Y$-directed momentum density carried by molecules (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NMOL})
+  \item[VZDENA\_AVER] Time-averaged $Z$-directed momentum density carried by atoms (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NATM})
+  \item[VZDENM\_AVER] Time-averaged $Z$-directed momentum density carried by molecules (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NMOL})
+\end{description}
 
 \section{Changing dt}
 
@@ -19933,10 +20031,10 @@ B25\_EIRENE & b2plot/psta.F \\
 B25\_EIRENE & b2plot/pstv.F \\
 B25\_EIRENE & b2plot/triangle\_surf.F \\
 B25\_EIRENE & b2plot/trigmesh.F \\
-B25\_EIRENE & convert/b2co.F \\
 B25\_EIRENE & convert/b2mds.F \\
 B25\_EIRENE & convert/b2yt\_ngread.F \\
 B25\_EIRENE & convert/b2yt\_ntread.F \\
+B25\_EIRENE & driver/b2co.F \\
 B25\_EIRENE & driver/b2mod\_driver.F \\
 B25\_EIRENE & driver/b2mod\_main.F \\
 B25\_EIRENE & ids/b2mod\_ual\_io.F90 \\
@@ -20108,12 +20206,12 @@ NAGFOR & b2plot/dhdata.F \\
 NAGFOR & b2plot/initialize\_plotting.F \\
 NAGFOR & b2plot/set\_extralabel.F \\
 NAGFOR & b2plot/spect.F \\
-NAGFOR & convert/b2co.F \\
 NAGFOR & convert/b2co\_movies\_cdf.F \\
 NAGFOR & convert/b2co\_tally\_cdf.F \\
 NAGFOR & convert/b2co\_time\_cdf.F \\
 NAGFOR & convert/b2co\_wall\_cdf.F \\
 NAGFOR & convert/b2mds.F \\
+NAGFOR & driver/b2co.F \\
 NAGFOR & driver/b2mod\_driver.F \\
 NAGFOR & driver/b2obeq.F \\
 NAGFOR & driver/b2obfn.F \\

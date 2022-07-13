@@ -103,7 +103,32 @@ c
             call xerrab ('Inconsistent surface data !')
           end if !}
         end if !}
-        if (jlsptp(i).ne.0 .and. jsrss(i).eq.0) then !{
+        if (jlsptp(i).eq.9) then !{ Special Be re-sputtering model
+          match_found = .false.
+          do isp=1,nspigen !{
+            if (match_found) cycle
+            match_found = streql('Be',spcigen(isp))
+            if (match_found) then !{ Only Be physical sputtering
+              jsrss(i)=isp
+              jsrc(i)=0
+              jlsptc(i)=0
+            end if !}
+          end do !}
+          if (.not.match_found) then !{
+            write(0,*) 'Beryllium re-sputtering model requested, '//
+     ,                 'but no Be species is declared !'
+            write(0,*) 'STOP ==> Check your DG model for wall index ',i
+            call xerrab ('Missing Be species declaration !')
+          end if !}
+          match_found=.false.
+          do imat=1,nmat !{
+            match_found=match_found.or.streql(listmat(imat),'Be')
+          end do !}
+          if (.not.match_found) then !{
+            nmat=nmat+1
+            listmat(nmat)='Be'
+          end if !}
+        else if (jlsptp(i).ne.0 .and. jsrss(i).eq.0) then !}{
           match_found = .false.
           do isp=1,nspigen !{
             if (match_found) cycle
@@ -134,6 +159,35 @@ c
             listmat(nmat)='Fe'
           else !}{
             listmat(nmat)=made_of(i)(1:2)
+          end if !}
+        end if !}
+      end do !}
+      do i=1,ntrgte !{
+        if (tgsppsw(i).eq.9) then !{ Special Be re-sputtering model
+          match_found = .false.
+          do isp=1,nspigen !{
+            if (match_found) cycle
+            match_found = streql('Be',spcigen(isp))
+            if (match_found) then !{ Only Be physical sputtering
+              tgsppsp(i)=isp
+              tgspcsw(i)=0
+              tgspcgr(i)=0
+            end if !}
+          end do !}
+          if (.not.match_found) then !{
+            write(0,*) 'Beryllium re-sputtering model requested, '//
+     ,                 'but no Be species is declared !'
+            write(0,*) 'STOP ==> Check your DG model for target index ',
+     ,                  i
+            call xerrab ('Missing Be species declaration !')
+          end if !}
+          match_found=.false.
+          do imat=1,nmat !{
+            match_found=match_found.or.streql(listmat(imat),'Be')
+          end do !}
+          if (.not.match_found) then !{
+            nmat=nmat+1
+            listmat(nmat)='Be'
           end if !}
         end if !}
       end do !}
