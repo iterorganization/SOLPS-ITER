@@ -17,6 +17,7 @@ endif
 
 DBLFC = ${FC}
 DBLSED = sed -e s:\#PREC\#:d:g
+OBJDEST = -module ${OBJDIR} -o ${OBJDIR}/$*.o
 
 INCMOD = -I
 MOD = mod

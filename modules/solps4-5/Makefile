@@ -66,12 +66,16 @@ INC4LOCAL = ${SOLPSTOP}/modules/solps4-5/src/B2_include.local
 INC5LOCAL = ${SOLPSTOP}/modules/solps4-5/src/B2.5_include.local
 B2M5LOCAL = ${SOLPSTOP}/modules/solps4-5/src/B2.5_modules.local
 EIRMLOCAL = ${SOLPSTOP}/modules/solps4-5/src/Eirene_modules.local
+ifeq ($(shell `pkg-config --exists fundamental-constants`; echo $$?),0)
+SOLPSINCLUDE += `pkg-config fundamental-constants --cflags`
+else
+SOLPSINCLUDE ?=
+endif
 ifeq ($(shell [ -d ${SRC4LOCAL} ] && echo yes || echo no ),yes)
 SOLPSINCLUDE += -I${SRC4LOCAL}
 TAGSLIST = ${SRC4LOCAL}/*.F
 VPATH = ${SRC4LOCAL}:
 else
-SOLPSINCLUDE ?=
 TAGSLIST =
 VPATH =
 endif
@@ -1072,4 +1076,5 @@ echo:
 #	@echo SR5OBJS=${SR5OBJS}
 	@echo FFLIST=${FFLIST}
 	@echo MODLIST=${MODLIST}
+	@echo SOLPSINCLUDE=${SOLPSINCLUDE}
 
