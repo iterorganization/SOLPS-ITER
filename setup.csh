@@ -279,8 +279,9 @@ env | sed -ne "/^[ }]\|=()/b; s/\([^=]*\)=\(.*\)/setenv \1 '\2'/p" \
 grep -F -v -f $setup_pre $setup_post >! $setup.env.local
 sed -i -e "s/setenv/unsetenv/; s/ '.*'//" $setup_pre $setup_post
 grep -F -v -f $setup_post $setup_pre >> $setup.env.local
-alias | grep -F -v -f $alias_pre | sed -e "s/[^\t ]*[ \t]*/alias & '/" \
-    -e "s/"'$'"/'/"  >> $setup.env.local
+alias | grep -F -v -f $alias_pre | sed -e 's/^/alias /' \
+    -e "/\t(.*[;|&].*)/{s/\t(/\t'(/;s/)"'$'"/)'/;b}" \
+    -e "s/\t\([^(].*\)/\t'\1'/" -e 's/\t(/\t/;s/)$//' >> $setup.env.local
 rm -f $setup_pre $setup_post $alias_pre
 
 # List loaded modules
