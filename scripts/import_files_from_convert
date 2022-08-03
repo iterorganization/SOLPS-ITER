@@ -66,8 +66,14 @@ rundir="`pwd`"
   [ -s ../convert/"$filestem"46.2 ] || {
     [ -s ../convert/"$filestem"46 ] && cp -uv ../convert/"$filestem"46 .
   }
+  [ -s ../convert/"$filestem"46_aver.2 ] || {
+    [ -s ../convert/"$filestem"46_aver ] && cp -uv ../convert/"$filestem"46_aver .
+  }
   [ -s ../convert/"$filestem"44.2 ] || {
     [ -s ../convert/"$filestem"44 ] && cp -uv ../convert/"$filestem"44 .
+  }
+  [ -s ../convert/"$filestem"44_aver.2 ] || {
+    [ -s ../convert/"$filestem"44_aver ] && cp -uv ../convert/"$filestem"44_aver .
   }
   [ -s ../convert/"$filestem"31 ] && cp -uv ../convert/"$filestem"31 .
   [ -s ../convert/"$filestem"15 ] && cp -uv ../convert/"$filestem"15 .

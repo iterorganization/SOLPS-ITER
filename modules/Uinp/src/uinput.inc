@@ -39,11 +39,12 @@ c*** 3a
      ,    ilequi(nsts), iltor(nsts),  ilcol(nsts),  ilfit(nsts),
      ,    ilcell(nsts), ilbox(nsts),  ilplg(nsts),  ilref(nsts),
      ,    ilsptp(nsts), ilsptc(nsts), isrss(nsts),  isrc(nsts),
-     ,    lchspnws(nsts),isrsg(nsts)
+     ,    lchspnws(nsts),isrsg(nsts), arefcell(nsts)
       real xmlim(nsts), ewall(nsts),  ewbin(nsts),  transp(nsts,2),
      ,    recycc(nsts), recycf(nsts), recyct(nsts), recprm(nsts),
      ,    recycs(nsts), exppl(nsts),  expel(nsts),  expil(nsts),
-     ,    fsheat(nsts), echspts(nsts),fchspts(nsts),sptprm(nsts)
+     ,    fsheat(nsts), echspts(nsts),fchspts(nsts),sptprm(nsts),
+     ,    arfpress(nsts)
       character txtsfl(nsts)*64
 
 c*** 3b
@@ -55,7 +56,7 @@ c*** 3b
      ,    jsrsg(nlim),  jlplg(nlim)
       integer jadch0(nlim), jadch1(nlim,nlim), jadnsw(nlim),
      ,    jadmsw(nlim), jadlsw(nlim), jadksw(nlim), jadjsw(nlim),
-     ,    jadisw(nlim), jlblck(nlim), jlacll(nlim)
+     ,    jadisw(nlim), jlblck(nlim), jlacll(nlim), refcell(nlim)
       real rlb(nlim),  sarea(nlim),rlwmn(nlim),rlwmx(nlim),
      ,     a0lm(nlim), a1lm(nlim), a2lm(nlim), a3lm(nlim), a4lm(nlim),
      ,     a5lm(nlim), a6lm(nlim), a7lm(nlim), a8lm(nlim), a9lm(nlim),
@@ -70,7 +71,8 @@ c*** 3b
      ,     rcprma(nlim), sptpra(nlim), echspta(nlim),fchspta(nlim),
      ,     xlcor(nlim), ylcor(nlim), zlcor(nlim),
      ,     xlref(nlim), ylref(nlim), zlref(nlim), xlrot(nlim),
-     ,     ylrot(nlim), zlrot(nlim), alrot(nlim), fsheata(nlim)
+     ,     ylrot(nlim), zlrot(nlim), alrot(nlim), fsheata(nlim),
+     ,     refpress(nlim)
       character txtsfa(nlim)*64
 
 c*** 4
@@ -185,12 +187,14 @@ c*** Surface Cards
       parameter (maxsc=100)
       character*(72) scard_name(maxsc)
       integer scilref(maxsc),scilspt(maxsc),scisrs(maxsc),
-     ,       scisrc(maxsc),sclchspnwl(maxsc),scisrsg(maxsc)
+     ,       scisrc(maxsc),sclchspnwl(maxsc),scisrsg(maxsc),
+     ,       screfcell(maxsc)
       real scxmlim(maxsc),scewall(maxsc),scewbin(maxsc),
      ,  sctransp(maxsc,2),scfsheat(maxsc),screcycf(maxsc),
      ,  screcyct(maxsc),scrcprm(maxsc),scexppl(maxsc),scexpel(maxsc),
      ,  scexpil(maxsc),screcycs(maxsc),scychsptg(maxsc),
-     ,  scechsptg(maxsc),scfchsptg(maxsc),scstprm(maxsc)
+     ,  scechsptg(maxsc),scfchsptg(maxsc),scstprm(maxsc),
+     ,  screfpress(maxsc)
       integer iscrd(nsts),jscrd(nlim)
       integer maxchmvar,maxchsc,nchemvar
       parameter (maxchmvar=nlim,maxchsc=nlim*(natm+nmol+nion+npht+npls))
@@ -336,7 +340,7 @@ c*** 12
 
 c*** 13
 
-      integer nprnli, ntmstp, nptst, nsnvi, ninitl_read,
+      integer nprnli, ntmstp, nptst, nsnvi, ninitl_read, nprmul,
      ,  isnve(nsnv), isnvs(nsnv), isnvt(nsnv), isnrc(nsnv)
       real dtimv, time0
       character txttlv(nsnv)*70, txtspv(nsnv)*24, txtunv(nsnv)*24
@@ -404,9 +408,9 @@ c*** b2ah.dat
      ,  nradd,nstsi,idimp,inump,irpta1,irpte1,irpta2,irpte2,irpta3,
      ,  irpte3,iliin,ilside,ilswch,ilequi,iltor,ilcol,ilfit,ilcell,
      ,  ilbox,ilplg,ilref,ilsptp,ilsptc,isrss,isrc,lchspnws,isrsg,
-     ,  nlimi,itend,
+     ,  arefcell,nlimi,itend,
      ,  itini,jliin,jlside,jlequi,jltor,jlcol,jlfit,jlbox,jlplg,jlref,
-     ,  jsrss,jsrc,lchspnwa,jsrsg,
+     ,  jsrss,jsrc,lchspnwa,jsrsg,refcell,
      ,  jlsptp,jlsptc,nreaci,ir,massp,masst,
      ,  ifex1mn,ifex1mx,ifex2mn,ifex2mx,iz,nrcln,
      ,  natmi,nmeta,
@@ -451,7 +455,7 @@ c*** b2ah.dat
      ,  nlstadds,mtreadds,listadds,listaddg,ngwties,kgwties,mgwties,
      ,  lgwties,npwin,npwsurf,npwtally,pwsurf,pwtally,pwspecy,
      ,  pwtally_d,pwspecy_d,
-     ,  nprnli,ntmstp,nptst,ninitl_read,
+     ,  nprnli,ntmstp,nptst,ninitl_read,nprmul,
      ,  nsnvi,isnve,isnvs,isnvt,isnrc,
      ,  jadch0,jadch1,jadnsw,jadmsw,jadlsw,jadksw,jadjsw,jadisw,
      ,  jlblck,jlacll,nclmi,nblcki,nprnvi,nprtvi,nprdvi,nfla,
@@ -461,7 +465,7 @@ c*** b2ah.dat
      ,  istramax,nainb,ncopib,ncopeb,nains,naint,naotb,naots,naott,
      ,  lkindm,lkindi,lkindp,
      ,  nadmod,nasmod,nrs,ipunkt,jedge,
-     ,  scilref,scilspt,scisrs,scisrc,sclchspnwl,scisrsg,
+     ,  scilref,scilspt,scisrs,scisrc,sclchspnwl,scisrsg,screfcell,
      ,  iscrd,jscrd,
      ,  cbnrso,cbnrno,cbnrwe,cbnrea,
      ,  cbirso,cbirno,cbirwe,cbirea,
@@ -471,9 +475,9 @@ c*** b2ah.dat
      ,  ellin,ellot,ellch,exell,triin,triot,trich,extri,
      ,  xpcor,ypcor,zpcor,
      ,  plrefl,xpol,ypol,xtrian,ytrian,yia,yagrid,yaa,yya,zia,zagrid,
-     ,  zaa,zza,roa,volcor,voladd,
+     ,  zaa,zza,roa,volcor,voladd,arfpress,
      ,  xmlim,ewall,ewbin,transp,recycc,recycf,recyct,recprm,recycs,
-     ,  exppl,expel,expil,fsheat,echspts,fchspts,sptprm,
+     ,  exppl,expel,expil,fsheat,echspts,fchspts,sptprm,refpress,
      ,  rlb,sarea,rlwmn,rlwmx,
      ,  a0lm,a1lm,a2lm,a3lm,a4lm,a5lm,a6lm,a7lm,a8lm,a9lm,p1,p2,p3,
      ,  p4,p5,p6,xlims1,ylims1,zlims1,xlims2,ylims2,zlims2,
@@ -508,7 +512,7 @@ c*** b2ah.dat
      ,  dtimv,time0,fcte,bmass,chgsp,chgsee,chgsei,chgsmom,
      ,  scxmlim,scewall,scewbin,sctransp,screcycf,screcyct,scrcprm,
      ,  scfsheat,scexppl,scexpel,scexpil,screcycs,scychsptg,
-     ,  scechsptg,scfchsptg,scstprm,chmvar,
+     ,  scechsptg,scfchsptg,scstprm,chmvar,screfpress,
      ,  xcoor,ycoor,zcoor,xpolpos,ypolpos,
      ,  cbrbrk,cbsna,cbsmo,cbshi,cbrec,cbmsb,cbshe,cbsch,cbmsa,
      ,  cfdf0,cfdna,cfdpa,cfvla,cfvsa,cfhci,cfhce,cfsig,cfalf,cflim

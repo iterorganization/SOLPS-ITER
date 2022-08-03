@@ -18,7 +18,8 @@ c=======================================================================
       parameter (nnms=38)
       character*8 name, unm(nnms)
       integer i,j,l,itrsrc(0:nstra),iitalv(ntalv),iiiplt(5),idum(11)
-      integer nfiles,ntimv
+      integer nfiles,ntimv,nprnl
+      data nprnl /999999/
       real u
       real rdum(6)
       logical ublplt(5)
@@ -52,6 +53,10 @@ c
         print *,'npts read. n,npts=',i,npts
       case (3)
         call resimi(nprnli)
+        if (nprnli.gt.nprnl) then
+          nprmul=(nprnli/nprnl)+1
+          nprnli=nprnli/nprmul
+        end if
       case (4)
         call resimi(ntimv)
       case (5)

@@ -1,5 +1,8 @@
 # General
-module use /work/imas/etc/modulefiles
+if ( -d $HOME/privatemodules ) then
+  module use $HOME/privatemodules
+endif
+module use /work/imas/etc/modules/all
 
 # Modules needed by SOLPS-ITER
 module load IMAS/3.21.0-3.8.6
@@ -55,7 +58,8 @@ if (`where paraview-config` == "") then
 else
   # See ParaViewCatalystUsersGuide_v2.pdf Sec 3.7.2 Linking with Python ...
   setenv PARAVIEW_MAJOR_VERSION `paraview --version | cut -d '.' -f 1 | cut -d ' ' -f 3`
-  if (${PARAVIEW_MAJOR_VERSION} > 4) then
+  setenv CMAKE_MAJOR_VERSION `cmake --version | head -1 | cut -d ' ' -f 3 | cut -d '.' -f 1`
+  if (${CMAKE_MAJOR_VERSION} > 2) then
     setenv LD_CATALYST `paraview-config --ldflags -c PythonCatalyst -v CommonDataModel`
     setenv PARAVIEW_INCLUDE `paraview-config --cppflags`
   else

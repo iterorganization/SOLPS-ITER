@@ -65,7 +65,7 @@ EOF
     set compress="-gz"
     echo run.log will be compressed
     shift
-    set LOOP_OPTS="-gz ${LOOP_OPTS}"
+    set LOOP_OPTS="-z ${LOOP_OPTS}"
     goto argloop
   endif
   if ("X${1}X" == "X-sX") then
@@ -119,7 +119,11 @@ EOF
   if ("X${1}X" == "X-TX") then
     shift
     set hours="$1"
-    echo Requested time is ${hours} hours
+    if ( $hours == 1) then
+      echo Requested time is ${hours} hour
+    else
+      echo Requested time is ${hours} hours
+    endif
     shift
     set HELP_STRING=\"${hours}\"
 #    echo $HELP_STRING

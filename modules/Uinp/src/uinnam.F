@@ -20,7 +20,7 @@ c=======================================================================
      .  lchrdgrp,lchrdlint,lchrdlprf
       integer :: ichlst(nchor)
       real(kind=R4) :: u
-      parameter(lunm=174)
+      parameter(lunm=178)
       character*8 unm(lunm),uun
       character*8, save :: chtyp
       character ubs*1,uam*52
@@ -36,7 +36,8 @@ c***         or switch for the target data (clockwise from bottom left)
 c*** luskel: counter for the segments to be skipped
 c*** lugpf : counter for the puffing sources
 c*** lugwt : counter for the grid-wall ties
-      data lusgm, luswch, luskel, lugpf, lugwt, luvsp, nprnl /7*0/
+      data lusgm, luswch, luskel, lugpf, lugwt, luvsp /6*0/
+      data nprnl /999999/
       data hlp_spc / .true. /, read_chr_angl / .false. /
       data lurefls / 0 /, chtyp / ' ' /
       data lchrdgrp / 0 /, lchrdlint / 0 /, lchrdlprf / 0 /
@@ -75,7 +76,8 @@ c*** lugwt : counter for the grid-wall ties
      2    'glb_pwrf','glb_tmst','spcs_crk','spcs_crp','spcs_crf',
      3    'spcs_scn','tgminhst','gpf_mhst','chords'  ,'linintg' ,
      4    'set_id'  ,'chr_lbl' ,'chr_angl','chrdsdat','data_id' ,
-     5    'set_list','n_points','linprfs' ,'lm_equ'/
+     5    'set_list','n_points','linprfs' ,'lm_equ'  ,'refcell' ,
+     6    'refpress','trefcell','trfpress'/
 c=======================================================================
       call subini ('uinnam')
 c*** Backslash:
@@ -542,7 +544,10 @@ c=======================================================================
         call resimi(lfrm15)
       case (75)
         call resimi(nprnli)
-        nprnli=min(nprnli,nprnl)
+        if (nprnli.gt.nprnl) then
+          nprmul=(nprnli/nprnl)+1
+          nprnli=nprnli/nprmul
+        end if
       case (76)
         call resime(dtimv)
       case (77)
@@ -1084,6 +1089,26 @@ c***  input elements indices for current rectangle
         call resima(uam)
         lena=i
         ln_cnfg = uam(1:1).eq.'-'.and.lm_cnfg
+      case (175) ! refcell
+        call rearri(refcell,nlim,i)
+        if(i.gt.nlim) then !{
+          write(0,*) 'Too many wall elements: maximum ',nlim
+          write(0,*) 'Current number of requested elements: ',i
+          call xerrab
+     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+        end if !}
+      case (176) ! refpress
+        call rearre(refpress,nlim,i)
+        if(i.gt.nlim) then !{
+          write(0,*) 'Too many wall elements: maximum ',nlim
+          write(0,*) 'Current number of requested elements: ',i
+          call xerrab
+     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+        end if !}
+      case (177) ! trefcell
+        call resimi(trefcell(luswch))
+      case (178) ! trfpress
+        call resime(trfpress(luswch))
       case default
         call skipit
       end select

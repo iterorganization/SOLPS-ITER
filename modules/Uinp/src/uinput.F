@@ -12,7 +12,7 @@ c=======================================================================
       implicit none
 #include "uinput.inc"
 #include "impcon.inc"
-      integer irt, is, iss, iatm, iloc
+      integer irt, is, iss, iatm, iloc, imin, imax
       integer ns, i, j, ireg, nreg, len
       real(kind=R8), allocatable :: na0(:)
       character tab
@@ -22,7 +22,7 @@ c=======================================================================
       character*27 lbreg(0:cbnrmx-1)
       character*120 lblps
       character*80 column_header
-      logical uex
+      logical uex, todo
       integer find_matching_species
       external find_matching_species
       external prgini,prgend
@@ -106,10 +106,16 @@ c*** Create the header for the b2ag.dat file
      .     '*dimens         (nx, ny, nx1, ny1; free format)'
           write(2,'(4(3x,i4))') nrplg-npplg, ndya, nrplg-npplg, ndya
           write(2,'(a)') '*param          (param(0:99); free format)'
-          write(2,'(a)') ' -1.0, 99*0.0'
+          if (ln_cnfg) then
+            write(2,'(a)') ' -3.0, 99*0.0'
+          else
+            write(2,'(a)') ' -1.0, 99*0.0'
+          endif
           write(2,'(a)') '''b2agfs_min_pitch''    ''0.01'''
           if (lm_cnfg.and..not.ln_cnfg) write(2,'(a)')
      .                   '''b2agfs_periodic_bc''  ''1'''
+          if (ln_cnfg) write(2,'(a)')
+     .                   '''b2agfs_lineardevice'' ''linear.geometry'''
           close(2)
           print *,'    ... b2ag.dat created'
       endif !}
@@ -735,6 +741,37 @@ c*** Modify the input file for B2, if possible
         close(2)
       end if
 
+      todo = .false.
+      imin = nlimi+nstsi+1
+      imax = 0
+      do i = 1, nstsi
+        todo = todo .or. ilsptp(i).eq.9
+        if (ilsptp(i).eq.9) then
+          imin = min(nlimi+i,imin)
+          imax = max(nlimi+i,imax)
+        end if
+      end do
+      do i = 1, nlimi
+        todo = todo .or. jlsptp(i).eq.9
+        if (jlsptp(i).eq.9) then
+          imin = min(i,imin)
+          imax = max(i,imax)
+        end if
+      end do
+      if (todo) then
+        open(unit=2,file='input_for_refusr.dat')
+        write(*,*) 'Writing input_for_refusr.dat'
+        rewind(2)
+        write(2,'(a)') 'BEGIN'//tab//'END'//tab//
+     .                 'DELAY'//tab//'SBE'//tab//
+     .                 'TSTEP'//tab//'AVCOF'//tab//
+     .                 'TSTEP_FLAG'//tab//'NOACUM_FLAG'
+        write(2,'(i4,a,i4,a,i4,a,1pe11.4,a,e11.4,
+     .               a,e9.2,a,i1,a,i1)')
+     .   imin, tab, imax, tab, 10, tab, 3.24e-20, tab,
+     .   0.01, tab, 0.99, tab,  0, tab, 1
+        close(2)
+      end if
 c-----------------------------------------------------------------------
 c*** Create additional files with geometry for b2plot
 

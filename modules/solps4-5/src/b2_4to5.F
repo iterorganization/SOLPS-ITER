@@ -905,7 +905,8 @@ c Fill out b2mod_indirect arrays
           fhi(ix,iy,1) = fhi_4(bottomix(ix,iy),bottomiy(ix,iy),1)
           fch(ix,iy,1) = fch_4(bottomix(ix,iy),bottomiy(ix,iy),1)
           fch_p(ix,iy,1) = fch_p_4(bottomix(ix,iy),bottomiy(ix,iy),1)
-          fchdia(ix,iy,1) = fchdia_4(bottomix(ix,iy),bottomiy(ix,iy),1)
+          fchdia(ix,iy,1) =
+     .                    fchdia_4(bottomix(ix,iy),bottomiy(ix,iy),1)
           do i=0,ns-1
             if(ifl(i).ne.0) then
               fna(ix,iy,1,i) =

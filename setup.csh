@@ -73,8 +73,8 @@ if ((-f $setup.env.local) && ( -M $setup.env.local ) >= ( -M $setup ) && \
     source $setup.env.local
     exit 0
 else
-    set setup_pre = `mktemp` alias_pre = `mktemp` && alias > $alias_pre
-    env|sed -ne "/^[ }]\|=(/b; s/\([^=]*\)=\(.*\)/setenv \1 '\2'/p" > $setup_pre
+    set setup_pre = `mktemp` alias_pre = `mktemp` && alias >! $alias_pre
+    env|sed -ne "/^[ }]\|=(/b; s/\([^=]*\)=\(.*\)/setenv \1 '\2'/p" >! $setup_pre
 endif
 
 if (-x `which gmake`) then
@@ -275,12 +275,13 @@ endif
 # Create environment cache for faster loading (setenv, unsetenv, and aliases)
 set setup_post = `mktemp`
 env | sed -ne "/^[ }]\|=()/b; s/\([^=]*\)=\(.*\)/setenv \1 '\2'/p" \
-   -e '1i# Generated environment cache. Do not edit!' > $setup_post
+   -e '1i# Generated environment cache. Do not edit!' >! $setup_post
 grep -F -v -f $setup_pre $setup_post >! $setup.env.local
 sed -i -e "s/setenv/unsetenv/; s/ '.*'//" $setup_pre $setup_post
 grep -F -v -f $setup_post $setup_pre >> $setup.env.local
-alias | grep -F -v -f $alias_pre | sed -e "s/[^\t ]*[ \t]*/alias & '/" \
-    -e "s/"'$'"/'/"  >> $setup.env.local
+alias | grep -F -v -f $alias_pre | sed -e 's/^/alias /' \
+    -e "/\t(.*[;|&].*)/{s/\t(/\t'(/;s/)"'$'"/)'/;b}" \
+    -e "s/\t\([^(].*\)/\t'\1'/" -e 's/\t(/\t/;s/)$//' >> $setup.env.local
 rm -f $setup_pre $setup_post $alias_pre
 
 # List loaded modules

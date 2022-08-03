@@ -289,7 +289,7 @@ To best use the \SOLPSITER code suite, the user will need, locally installed:
 \item[plotmtv] for obtaining graphs of the time evolution of various profiles (optional)
 \item[LaTeX interpreter] to produce this manual
 \item[GIT] version control software
-\item[python] scripting language (\SOLPSITER needs at least version 2.7)
+\item[python] scripting language (\SOLPSITER needs at least version 2.7, but version at least 3.5 is required for many additional features)
 \item[/bin/bash] used by some scripts
 \item[/bin/csh] used by some scripts
 \item[/bin/ksh] used by some scripts
@@ -407,6 +407,7 @@ location of all the main libraries with which the \SOLPSITER executables will be
 linking instructions. The latter file provides shared instructions for that compiler, independent of location. These files also contain the shared compiler directives for all the \SOLPSITER object files
 (see Section~\ref{sec:defines} for a full listing) and the name of the debugger program to be used, if any.
 Users should make sure the settings within these files fit their run environment and modify them as needed.
+In particular, if the default {\tt python} command on the system points to version 2.7 or similar, and a newer version 3 executable is available, it is recommended to define the {\tt PYTHON} environment variable to point to that executable in the appropriate local {\tt \$\{SOLPSTOP\}/SETUP/setup.csh} file.
 If changes are needed, please forward them to the \SOLPSITER RO so that they may be included in the
 set of distributed files to help other future users.
 \end{sloppypar}
@@ -628,7 +629,7 @@ The cases stored for retrieval include:
   \item[ITER\_2298\_Honly\_20MW] Same as above, continuing scan
   \item[ITER\_2299\_Honly\_20MW] Same as above, continuing scan, reaching detachment
   \item[ITER\_2308\_Honly\_20MW] Same as above, continuing scan, detached conditions
-  \item[ITER\_2360\_0.95He+0.05H\_40MW] ITER Helium plasma case at mid-power
+  \item[ITER\_2360\_0.95He+0.05H\_40MW] ITER Helium plasma case at mid-power (also contains an example with metastable-resolved Helium neutrals)
   \item[ITER\_2588\_D+He+N] ITER full power case with N injection and gas puff feedback on SOL D particle content
   \item[ITER\_2588\_drifts] ITER {\tt B2.5} standalone D-only demonstration case with and without drifts
   \item[ITER\_535\_D+He+Ar] ITER full power case with Ar injection
@@ -1970,8 +1971,22 @@ as {\tt jet.50401.58000.geo}, identify it as being of size $96 \times
   \begin{description}
   \item[-1.0] read the mesh data using the "simplified" {\tt Carre} format
   \item[-2.0] read the mesh data using the {\tt Sonnet} format
+  \item[-3.0] read the geometry information for a plasma linear device
   \end{description}
 \item[b2agfs\_geometry] specifies the mesh file to be read
+  \begin{itemize}
+  \item searched for in (in order)
+    \begin{enumerate}
+    \item the {\tt b2ag.exe.dir} sub-directory of the current run
+      directory
+    \item the current run directory
+    \item {\tt \$\{SOLPSTOP\}/data.local/meshes}
+    \item {\tt \$\{SOLPSTOP\}/modules/Carre/meshes/\$\{DEVICE\}}
+    \end{enumerate}
+  \end{itemize}
+\item[b2agfs\_lineardevice] specifies the geometry file for a linear device.
+  The default value is {\tt linear.geometry}.
+  An example can be found in Section~\ref{subsec:b2ld}.
   \begin{itemize}
   \item searched for in (in order)
     \begin{enumerate}
@@ -1988,6 +2003,63 @@ as {\tt jet.50401.58000.geo}, identify it as being of size $96 \times
 
 {\tt b2ag} will also prepare the grid information in the format usable by {\tt Eirene},
 i.e. a {\tt fort.30} file.
+
+\subsection{Geometry for linear device}
+\index{Geometry for linear device}\label{subsec:b2ld}
+  The following example contains the required parameters to generate a geometry for a linear device in {\tt B2.5}. These variables must be contained in the filename defined in {\tt b2agfs\_lineardevice}.
+  \begin{description}
+    \item[NCOIL] number of magnetic coils in the device
+    \item[R1] array of size {\tt NCOIL} with the inner radius in units of $m$ of the coils. Default value is $0$.
+    \item[Z1] array of size {\tt NCOIL} with the axial start position in units of $m$ of the coils. Default value is $0$.
+    \item[R2] array of size {\tt NCOIL} with the outer radius in units of $m$ of the coils. Default value is $0$.
+    \item[Z2] array of size {\tt NCOIL} with the axial end position in units of $m$ of the coils. Default value is $0$.
+    \item[CURRENT] array of size {\tt NCOIL} with the current per coil in units of $A$. Default value is $0$.
+    \item[windings] array of size {\tt NCOIL} with the number of windings per coil. Default value is $0$.
+    \item[nlayers] array of size {\tt NCOIL} with the number of layers to divide each coil in the radial direction. Default value is $5$.
+    \item[stepsize] Initial spatial step size used in calculating the field lines in units of $m$. Default value is $10^{-4}$.
+    \item[bTor] Toroidal magnetic field in units of $T$. Default value is $0$.
+    \item[fn\_z] name of two column file with the profile of axial cell size in the numerical space. First line in the file determines the number of rows to read.
+    \item[fn\_r] name of two column file with the profile of radial cell size in the numerical space. First line in the file determines the number of rows to read.
+    \item[r\_ne] radial position in $m$ of the northeastmost point of the plasma region. Default value is $0$.
+    \item[z\_ne] axial position in $m$ of the northeastmost point of the plasma region. Default value is $0$.
+    \item[r\_se] radial position in $m$ of the southeastmost point of the plasma region. Default value is $0$.
+    \item[z\_se] axial position in $m$ of the southeastmost point of the plasma region. Default value is $0$.
+    \item[r\_sw] radial position in $m$ of the southwestmost point of the plasma region. Default value is $0$.
+    \item[z\_sw] axial position in $m$ of the southwestmost point of the plasma region. Default value is $0$.
+    \item[r\_nw] radial position in $m$ of the northwestmost point of the plasma region. Default value is $0$.
+    \item[z\_nw] axial position in $m$ of the northwestmost point of the plasma region. Default value is $0$
+    \item[r\_start] Starting radial point in $m$ for the distribution of cells provided by {\tt fn\_r}. This is used as the starting point to propagate the field lines. Default value is $0$.
+    \item[r\_end] End radial point in $m$ for the distribution of cells provided by {\tt fn\_r}. This is used as the end point to propagate the field lines. Default value is $0$.
+    \item[z\_start] Starting axial point in $m$ for the distribution of cells provided by {\tt fn\_z}. This is used as the starting point to propagate the field lines. Default value is $0$.
+    \item[z\_end] End axial point in $m$ for the distribution of cells provided by {\tt fn\_z}. This is used as the end point to propagate the field lines. Default value is $0$.
+    \item[gc\_n] Guard cell size for the North boundary in $m$. Default value is $10^{-4}$.
+    \item[gc\_s] Guard cell size for the South boundary in $m$. Default value is $10^{-4}$.
+    \item[gc\_w] Guard cell size for the West boundary in $m$. Default value is $10^{-4}$.
+    \item[gc\_e] Guard cell size for the East boundary in $m$. Default value is $10^{-4}$.
+    \item[nExternalRegions] Number of external regions to be used in the grid. Default value is $10$.
+    \item[nNodesInRegion] Number of nodes per region. Minimum of 3 is required. Default value is $0$.
+    \item[regionR] array of size {\tt (nNodesInRegion,nExternalRegions)}. Radial position in $m$ of the nodes defining the external region. Default value is $0$.
+    \item[regionZ] array of size {\tt (nNodesInRegion,nExternalRegions)}. Axial position in $m$ of the nodes defining the external region. Default value is $0$.
+    \item[startCellR] array of size {\tt nExternalRegions}. Radial index of the first node in the region. Default value is $-1$.
+    \item[startCellZ] array of size {\tt nExternalRegions}. Axial index of the first node in the region. Default value is $-1$.
+    \item[endCellR] array of size {\tt nExternalRegions}. Radial index of the last node in the region. Default value is $-1$.
+    \item[endCellZ] array of size {\tt nExternalRegions}. Axial index of the last node in the region. Default value is $-1$.
+    \item[write\_nml\_ld] logical. If {\tt .true.}, writes the contents of the namelist after it has been read. Defaults to {\tt .false.}.
+  \end{description}
+
+  Once parameters are read, the magnetic field lines starting from {\tt r\_start}, {\tt r\_end}, {\tt z\_start}, {\tt z\_end} and propagating towards the E and W boundaries are calculated.
+  The files {\tt fn\_r} and {\tt fn\_z} distribute the cells in the numerical space in the radial and axial directions, respectively.
+  For typical cases in Magnum-PSI, see Fig.~\ref{fig:geometryLinearDevice}, these field lines start from the target, which has a known geometry and propagate towards the source.
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.4\textwidth]{geometryLinearDevice}
+    \caption{\label{fig:geometryLinearDevice}
+             Typical geometry in B2.5 for a linear device.
+             This case is taken from a SOLPS-ITER case for the linear device Magnum-PSI.
+             The starting point of the magnetic field lines is represented as a dashed green line.
+            }
+  \end{figure}
+  The coordinates of each node are calculated to match the field lines computed, thus the final corner coordinates provided in the input file might vary as they are moved to match positions along field lines.
 
 \newpage\section{b2ah, setting up the default physics parameters}
 \index{b2fpardf}\label{sec:b2ah}\index{b2ah}\index{b2run}
@@ -2467,6 +2539,9 @@ which contains
   {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
   \item[27] Feedback boundary condition: prescribe the particle flux sum for all neutrals and ions belonging to a given isonuclear sequence and find the average density of the ionisation state to which the {\tt BCCON=27} condition is applied. The poloidal density variation from the neighbouring radial ring is applied on top of the average density. It is recommended to use this boundary condition together with corresponding condition on ion temperature ({\tt BCENI=25,26}). The total desired flux is summed over all {\tt BCCON=27} core boundaries. For main ions and low $Z$ impurities, it is recommended to set {\tt BCCON=27} for the highest ionisation state. For high $Z$ impurities, if the ionisation potential of the highest ionisation state of the given isonuclear sequence is much larger than the expected core plasma temperature, the {\tt BCCON=27} condition should be set for the ionisation state for which the density is expected to be maximal. For ionisation states higher than that one, it is recommended to set {\tt BCCON=2} with {\tt CONPAR=0.0}, since their densities are expected to be negligible, and {\tt BCCON=2} with {\tt CONPAR=0.0} seems to be the safest boundary condition for low density species.
   {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
+  \item[28] Density profile is read from file specified in {\tt CON\_FN}. If {\tt CONPAR(IS,IB,2)} is positive, the profile is scaled such that {\tt CONPAR(IS,IB,1)} gives the maximum density of the profile.
+  \item[29] Constant pressure prescribed by {\tt CONPAR(,,1)} in units of $Pa$. Density is calculated by dividing the pressure by the temperature.
+  \item[30] The particle flux per unit area profile is read from the file {\tt CON\_FN}. If {\tt CONPAR(IS,IB,2)} is positive, the profile is scaled such that {\tt CONPAR(IS,IB,1)} gives the maximum value of the profile. Only applicable to E and W boundaries.
   \end{description}
 \item[BCMOM]\index{BCMOM} {\tt integer array, length NS * NBC}, specifying
   the type of parallel momentum or velocity boundary condition for each segment
@@ -2506,10 +2581,14 @@ which contains
   \item[13] sheath boundary condition from {\tt b2stbc\_spb} for the parallel momentum. Recommended boundary condition for use with drifts, in conjunction with {\tt BCENE/I=15}, {\tt BCPOT=11}, and {\tt BCCON=14}.
   \item[14] condition from {\tt b2stbc\_spb} for the parallel momentum
   \item[15] prescribe the value of the parallel velocity as a function of poloidal coordinate, scaling with $\frac{\langle B\rangle}{B}$
-  \item[16] Prescribe the average value of the parallel velocity,
+  \item[16] prescribe the average value of the parallel velocity,
   {\tt MOMPAR(,,1)} specifies the parallel velocity in $m.s^{-1}$
   \item[17] leakage option for parallel momentum, {\tt MOMPAR(,,1)} specifies
   the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s, a} m_a n_a u_a$
+  \item[18] prescribe the parallel velocity profile in units of $m.s^{-1}$, read from file specified in {\tt MOM\_FN}. If {\tt MOMPAR(IS,IB,2) > 0.0}, the profile is scaled such that the maximum parallel velocity is given by {\tt MOMPAR(IS,IB,1)} in $m.s^{-1}$. Only available for E and W boundaries.
+  \item[19] prescribe the momentum flux profile in units of $m^{-2}.s^{-1}$, read from {\tt MOM\_FN}. This has to be used in combination with {\tt BCCON = 1}, {\tt 28} , or {\tt 30} and {\tt BCENI = 15}. Only available for E and W boundaries.
+  \item[20] the parallel velocity is based on the temperature and the Mach number read from the {\tt MOM\_FN} file. It is assumed that $\gamma_i = 1$. Only available for E and W boundaries.
+  \item[21] prescribe the radial parallel velocity gradient profile in units of $s^{-1}$, read from file specified in {\tt MOM\_FN}. If {\tt MOMPAR(IS,IB,2) > 0.0}, the profile is scaled such that the maximum parallel velocity gradient is given by {\tt MOMPAR(IS,IB,1)} in $s^{-1}$. Only available for E and W boundaries.
   \end{description}
 \item[BCENE]\index{BCENE} {\tt integer array, length NBC}, specifying
   the type of electron energy or temperature boundary condition for
@@ -2576,6 +2655,7 @@ which contains
    {\tt bc\_type21\_ref} away. {\tt ENEPAR(,1)} specifies the desired electron temperature in $eV$. {\tt ENEPAR(,2)} is the strength of the feedback.
   \item[22] radial leakage condition for the electron temperature.
   {\tt ENEPAR(,1)} specifies the leakage velocity in units of the electron thermal velocity. A temperature gradient such that the diffusive flux is set to match this leakage is imposed.
+  \item[23] prescribe electron temperature profile in $eV$, read from file {\tt ENE\_FN}. If {\tt ENEPAR(IB,2)} is positive, the profile is scaled such that {\tt ENEPAR(IB,1)} is the maximum electron temperature of the profile in $eV$. Only available for E and W boundaries.
   \end{description}
 \item[BCENI]\index{BCENI} {\tt integer array, length NBC}, specifying the
   type of ion energy or temperature boundary condition for each
@@ -2647,6 +2727,7 @@ which contains
   {\tt ENIPAR(,1)} specifies the temperature in $eV$
   \item[27] Feedback boundary condition with prescribed total ion heat flux, constant poloidally averaged ion temperature and a poloidal variation in a simplified manner. This boundary condition is suitable for any plasma composition (i.e. when {\tt BCENI=24} fails). It is recommended to use this boundary condition together with corresponding condition on ion density ({\tt BCCON = 25,26,27}). The flux is summed over all core boundaries with {\tt BCENI=27}.
   {\tt ENIPAR(,1)} specifies the energy flux in $W$
+  \item[28] prescribe ion temperature profile in $eV$, read from file {\tt ENI\_FN}. If {\tt ENIPAR(IB,2)} is positive, the profile is scaled such that {\tt ENIPAR(IB,1)} is the maximum ion temperature of the profile in $eV$. Only available for E and W boundaries.
   \end{description}
 \item[BCPOT]\index{BCPOT} {\tt integer array, length NBC}, specifying the
   type of electric potential or current boundary condition for each
@@ -2681,7 +2762,9 @@ which contains
   \item[12] imposes the currents due to drifts for the South core boundary. Must be used in conjunction with the switch setting {\tt \allowbreak istyle\_cur\_contr\_on\_S\_and\_N=2}
   \item[13] imposes the currents due to drifts for the South private flux and North boundaries. Must be used in conjunction with {\tt \allowbreak istyle\_cur\_contr\_on\_S\_and\_N=2}
   \item[14] prescribe the value of the radial sheath potential, {\tt POTPAR(,1)}, in $V$
+  \item[15] prescribe potential profile in $V$, read from file defined in {\tt POT\_FN}. Only available in E and W boundaries.
   \item[16] feedback condition of constant electric potential for a given prescribed current. The prescribed current (in $A$) is given by the sum of the {\tt POTPAR(,1)} of all the boundary conditions with {\tt BCPOT=16}. Still experimental, will not work for drift cases.
+  \item[17] Sheath condition for floating target. This BC provides a zero net current through the target. First, the total current through the surface is computed. Then, the potential is corrected by a factor of {\tt POTPAR(,1) * current} to reduce the current. {\tt POTPAR(,2)} used for storing the potential value, in $V$, during the iterative process and to provide an initial guess.
   \item[21] constant potential feedback scaled by potential on the ring {\tt bc\_type21\_ref} away,
   {\tt POTPAR(,,1)} specifies the desired electric potential in $V$,
   {\tt POTPAR(,,2)} is the strength of the feedback.
@@ -2737,6 +2820,11 @@ which contains
   boundary input file, in $s$
 \item[LCBS]\index{LCBS} {\tt integer array, length NBC}, indices of the core boundary
   segments in {\tt B2} and {\tt B2.5} for passing to {\tt Eirene}
+\item[CON\_FN]\index{CON\_FN} {\tt character*256 array of length NS * NBC}, list of files for specifying the profile for {\tt BCCON = 28} and {\tt 30} or {\tt BCMOM = 19}. The format is a plain text file in which the first line is the number of data points and then two columns with information about the coordinate (in $m$) and the profile value. The number of data values is unrelated with the number of grid elements as the profile is interpolated to the boundary.
+\item[MOM\_FN]\index{MOM\_FN} {\tt character*256 array of length NS * NBC}, list of files for specifying the profile for {\tt BCMOM = 18}, {\tt 19}, or {\tt 21}. Same format as {\tt CON\_FN}.
+\item[ENE\_FN]\index{ENE\_FN} {\tt character*256 array of length NBC}, list of files for specifying the profile for {\tt BCENE = 23}. Same format as {\tt CON\_FN}.
+\item[ENI\_FN]\index{ENI\_FN} {\tt character*256 array of length NBC}, list of files for specifying the profile for {\tt BCENI = 28}. Same format as {\tt CON\_FN}.
+\item[POT\_FN]\index{POT\_FN} {\tt character*256 array of length NBC}, list of files for specifying the profile for {\tt BCPOT = 15}. Same format as {\tt CON\_FN}.
 \end{description}
 Additional boundary conditions modifications due to
 drifts\index{boundary conditions, drifts}\index{drifts, boundary
@@ -4398,12 +4486,83 @@ There are currently five possible choices supported. They are:
   \item[BALANCED] A balanced strategy in which the workload is attempted to be divided evenly among processors. If the initial setup for the {\bf BALANCED} strategy fails, the code then attempts the {\bf APCAS} strategy. Also obtainable by setting {\tt NPRLL = 3}.
   \item[APCAS] meaning {\it All Processors Compute All Strata}, where the work of each stratum is divided among all processors. Usually involves more communication between processors. Also obtainable by setting {\tt NPRLL = 2}.
   \item[ORIGINAL] The original strategy implemented in versions of {\tt Eirene} prior to \SOLPSITER version 3.0.5. Also called "proportional allocation" in the {\tt Eirene} manual. In that strategy, each processor is handed either part of a large stratum or one or several full smaller strata. This strategy works well if the number of processors is larger than the number of strata, but is not recommended if the number of strata is larger than the number of processors. Also obtainable by setting {\tt NPRLL = 1}.
-  \item[EMBARRASS] meaning the "embarassingly parrallel" scheme by which each processor is assigned the same number of particle trajectories, as given in the {\tt Eirene} input file. This is the default in non-\SOLPSITER versions of {\tt EIRENE}. Also obtainable if setting {\tt NPRLL = 0} or {\tt NPRLL > 3}.
+  \item[EMBARRASS] meaning the "embarassingly parallel" scheme by which each processor is assigned the same number of particle trajectories, as given in the {\tt Eirene} input file. This is the default in non-\SOLPSITER versions of {\tt EIRENE}. Also obtainable if setting {\tt NPRLL = 0} or {\tt NPRLL > 3}.
   \item[AUTOMATIC] tells the code to use the current default, whatever it may be.
 \end{description}
 The format to read the strategy name is free-form. The input file is scanned for the words describing the chosen strategy after the title line {\tt *** INFORMATION\_FOR\_MPI} is found. The {\em first} match to an (uppercase) strategy name will be the strategy followed by the code. If the title line is missing or no match is found to any of the strategy names, the default strategy is used. See the {\tt Eirene\_balanced\_MPI} document on the \SOLPSITER web site {\tt Manuals and Documentation} folder for more details on the performance and algorithm corresponding to each strategy.
 
 The default strategy depends on the version of the MPI library with which {\tt Eirene} was compiled. If MPI version 3 or greater was used, then the default strategy is the {\bf BALANCED} one. Otherwise, the {\bf ORIGINAL} strategy is chosen. If {\tt Eirene} is used outside the \SOLPSITER environment, the default strategy will be the {\bf EMBARASSINGLY PARALLEL} one.
+
+\section{Pressure Feedback Loop}
+
+This type of boundary condition modifies the recycling probability {\tt RECYCT} by means of a proportional-integral loop so that the pressure in a given cell matches a given reference value. It is activated by setting {\tt ILREF = 4} in the desired reflection model in block 6a of the Eirene input file. Two new values, related with the reference cell and pressure, have to be provided. The first one in the line:
+
+\begin{verbatim}
+ILREF ILSPT ISRS ISRC REFCELL
+\end{verbatim}
+
+in which {\tt REFCELL} is an integer referencing the cell in the Eirene mesh in which the pressure will be computed. This value can be easily obtained with {\tt triang} by means of the {\tt (I)nquire} function. The second value is provided in the line:
+
+\begin{verbatim}
+RECYCS RECYCC SPTPRM ESPUTS ESPUTC REFPRESS
+\end{verbatim}
+
+in which {\tt REFPRESS} is the reference pressure in $Pa$.
+
+This loop will not provide values of {\tt RECYCT} larger than $1$ or below $0$.
+The coefficients of the proportional-integral loop are hard-coded.
+
+\section{Modelling for Beryllium migration}
+\label{conbe.dat}\label{input_for_refusr.dat}
+
+A model for the self-consistent modelling of Beryllium (Be) erosion and migration is provided through the {\tt SPTUSR} routines within {\tt Eirene}. This model tracks the erosion and re-deposition of Be for selected wall elements. It computes the fractional surface coverage of deposited Be originating from wall erosion (from any location) on the designated wall elements as a function of time and allows for the further sputtering and transport of that deposited Be.
+
+For this model to be activated, the file {\tt input\_for\_refusr.dat} should be present in the run directory. This file has the format
+
+\VerbatimInput[fontsize=\footnotesize]{input_for_refusr_minimal.dat}
+
+and contains the variables:
+
+\begin{description}
+  \item[BEGIN] Starting {\tt Eirene} wall element number over which the Be deposition will be computed (should be in the range {\tt [1:NLIMI+NSTSI]}). If given a negative value, its absolute value will be understood as the index of an {\tt Eirene} non-standard surface and mapped to its proper location in the array.
+  \item[END] Ending {\tt Eirene} wall element number over which the Be deposition will be computed (should be in the range {\tt [1:NLIMI+NSTSI]} and larger than or equal to {\tt BEGIN} once mapped). If given a negative value, its absolute value will be understood as the index of an {\tt Eirene} non-standard surface and mapped to its proper location in the array.
+  \item[DELAY] Frequency of {\tt Eirene} calls at which the {\tt conbe.dat} output file is written (should be at least {\tt 1})
+  \item[SBE] Characteristic area occupied by one Be atom on the surface (in $m^2$)
+  \item[TSTEP] Time-step used in the dynamic re-sputtering model (in $s$)
+  \item[TSTEP\_FLAG] Flag to indicate that all surfaces use the same time-step (default), or if a separate array of different time-steps for each wall element is to be provided (if {\tt TSTEP\_FLAG = 1}, see below)
+  \item[AVCOF] Averaging coefficient in the Robbins-Monro method for smoothing the time-evolution of the beryllium surface concentration (should be between {\tt 0} and {\tt 1})
+  \item[NOACUM\_FLAG] If set to {\tt 1}, limits the maximum Be concentration to one complete monolayer (recommended)
+\end{description}
+
+An example of an input file where different time-steps are provided for each wall element looks like:
+
+\VerbatimInput[fontsize=\footnotesize]{input_for_refusr_advanced.dat}
+
+where the array of timesteps is provided after the initial set of variables.
+
+For wall elements between {\tt BEGIN} and {\tt END}, to activate the Be dynamic sputtering model, one must in addition select the user-supplied sputtering model as part of their surface properties, namely {\tt ILSPT = 9}. The surface block first two lines will then look like:
+
+\begin{verbatim}
+SURFMOD_3_TUNGSTEN_BESPUT_1160K
+     1     9     4     0     1
+\end{verbatim}
+
+where {\tt 4} refers to the species index of Be in the list of atomic species followed by {\tt Eirene} in block 4a of its input file. With these settings, only Be will be sputtered from that surface, not its original material.
+
+For wall elements within the {\tt [BEGIN:END]} range that do not have {\tt ILSPT = 9}, the Be surface concentration will remain constant. To speed up the convergence of the model, it is recommended to use a {\tt TSTEP} value that is 4-5 orders of magnitude larger than the {\tt B2.5} timestep, since the deposition and sputtering processes occur on much longer timescales than the plasma transport itself.
+
+If this model is active, the {\tt conbe.dat} file will be written at least on the first and last iterations of the run, and every {\tt DELAY} iterations in between. If the file is already present at the beginning of the run, its contents will be read and used for the starting values of the Be data evolution. If the file is not found, it will be created and assume zero Be concentration on the wall elements and {\tt 1\%} Be concentration on the {\tt Eirene} non-standard surfaces at the start. The file will contain blocks of six lines (one per writing call) which correspond to:
+
+\begin{enumerate}
+  \item {\tt SPUMPADD} Instantaneous values of the Be deposition fluxes (in $A.m^{-2}$)
+  \item {\tt SPTTOTADD} Instantaneous values of the Be sputtering fluxes (in $A.m^{-2}$)
+  \item {\tt SPUMPSAVE} Time-averaged values of the Be deposition fluxes (in $A.m^{-2}$)
+  \item {\tt SPTTOTSAVE} Time-averaged values of the Be sputtering fluxes (in $A.m^{-2}$)
+  \item {\tt CONBE} Proportion of wall element surface coated with Be
+  \item {\tt DENSBE} Surface concentration of Be on the wall element (in $m^{-2}$)
+\end{enumerate}
+
+Only the last block of 6 lines of the {\tt conbe.dat} file needs to be kept from one run to the next. However, the number of wall elements to which the model is applied should remain the same, or the {\tt conbe.dat} file should be modified by hand to reflect the new number of wall elements, or removed, in which case the model restarts from scratch.
 
 \chapter{Running the coupled version of B2.5-Eirene}
 \label{cha:coupledb2eirene}
@@ -4510,7 +4669,7 @@ no longer recycling/sputtering surfaces but rather only switching surfaces to th
 triangular grid regions.
 
 \section{Output files}
-\index{fort.44}\index{fort.46}
+\index{fort.44}\index{fort.46}\index{fort.44\_aver}\index{fort.46\_aver}
 
 When running the coupled version of \SOLPSITERns, you will obtain additional output files, named {\tt fort.44} and {\tt fort.46}, which contain data computed from {\tt Eirene}. The contents of the {\tt fort.44} file is a series of data blocks, each starting with a title line, after a header providing the grid size and species list, as well as a format identifier. The relevant dimensions are (please also refer to the {\tt Eirene} manual for further details and to the code for the actual way the arrays are written out):
 
@@ -4520,7 +4679,8 @@ When running the coupled version of \SOLPSITERns, you will obtain additional out
   \item[NATM] Number of atom species declared in the {\tt Eirene} input file
   \item[NMOL] Number of molecule species declared in the {\tt Eirene} input file
   \item[NION] Number of test ion species declared in the {\tt Eirene} input file
-  \item[NPLS] Number of plasma background species declared in the {\tt Eirene} input file
+  \item[NFLA] Number of plasma species followed by the plasma solver, as declared in the {\tt Eirene} input file
+  \item[NPLS] Number of plasma background species declared in the {\tt Eirene} input file (including BGK species)
   \item[NSTRA] Number of source strata declared in the {\tt Eirene} input file (Stratum 0 is the sum over strata)
   \item[NLIM] Number of "additional surfaces" (physical walls) declared in block 3B of the {\tt Eirene} input file
   \item[NSTS] Number of "non-standard surfaces" (plasma boundaries) declared in block 3A of the {\tt Eirene} input file
@@ -4659,6 +4819,51 @@ Similarly, the {\tt fort.46} file contains the following data blocks, this time 
 \end{description}
 
 Please note that, for the momentum densities, the coordinate system used by {\tt Eirene} is cartesian, i.e. independent of the local magnetic field, and that this data is given in CGS units. For cases without a certain species type, for example a pure Helium case with no molecules, the relevant data fields have a species dimension of {\tt 1} as they are mapped internally in {\tt Eirene} to a dummy pointer array.
+
+It is also possible to save long-term averages of some of the {\tt fort.44} and {\tt fort.46} quantities, using the Robbins-Monro averaging method. These will be found in the {\tt fort.44\_aver} and {\tt fort.46\_aver} files respectively. To activate the calculation and saving of these averages, create the two files, in the current run directory, with the first line empty, and the second line containing the real number which will be used to weigh the averages. If that number is zero, the corresponding averages will not be computed. If that number is negative or larger than {\tt 1}, then the default value of {\tt 0.99} will be used and any existing further data in the file will be ignored and the averages restarted from scratch. The averaging scheme applied is of the form:
+
+\begin{equation}
+X_{aver}^{t} = ( 1 - F ) X^{t} + F X_{aver}^{t-1}
+\end{equation}
+
+where $F$ is the number read from the {\tt fort.4[4-6]\_aver} files.
+
+The list of averaged quantities stored in {\tt fort.44\_aver} is:
+\begin{description}
+  \item[wldnek\_aver] Time-averaged net kinetic energy deposited by neutrals ($W$), total over strata, dimension ({\tt NLIM}+{\tt NSTS})
+  \item[wldnep\_aver] Time-averaged energy released by recombination of neutrals and ions into molecules ($W$), total over strata, dimension ({\tt NLIM}+{\tt NSTS})
+  \item[wldna\_aver] Time-averaged flux of atoms impinging on surface ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
+  \item[ewlda\_aver] Time-averaged average energy of impinging atoms on surface ($eV$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
+  \item[wldnm\_aver] Time-averaged flux of molecules impinging on surface ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NMOL})
+  \item[ewldm\_aver] Time-averaged average energy of impinging molecules on surface ($eV$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NMOL})
+  \item[wldra\_aver] Time-averaged flux of reflected atoms from surface ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
+  \item[wldrm\_aver] Time-averaged flux of reflected molecules from surface ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NMOL})
+  \item[wldpp\_aver] Time-averaged flux of plasma ions impinging on surface ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NFLA})
+  \item[wldpa\_aver] Time-averaged net flux of atoms emitted from surface ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
+  \item[wldpm\_aver] Time-averaged net flux of molecules emitted from surface ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NMOL})
+  \item[wldpeb\_aver] Time-averaged power carried by particles emitted from surface ($W$), total over strata, dimension ({\tt NLIM}+{\tt NSTS})
+  \item[wldspt\_aver] Time-averaged flux of sputtered wall material ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS})
+  \item[wldspta\_aver] Time-averaged flux of sputtered wall material per atom ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
+  \item[wldsptm\_aver] Time-averaged flux of sputtered wall material per molecule ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NMOL})
+  \item[wlpump\_aver(A)] Time-averaged pumped flux per atom ($A$), dimension ({\tt NATM}, {\tt NLIM}+{\tt NSTS})
+  \item[wlpump\_aver(M)] Time-averaged pumped flux per molecule ($A$), dimension ({\tt NMOL}, {\tt NLIM}+{\tt NSTS})
+  \item[wlpump\_aver(I)] Time-averaged pumped flux per test ion ($A$), dimension ({\tt NION}, {\tt NLIM}+{\tt NSTS})
+  \item[wlpump\_aver(P)] Time-averaged pumped flux per plasma ion ($A$), dimension ({\tt NFLA}, {\tt NLIM}+{\tt NSTS})
+\end{description}
+
+The list of averaged quantities stored in {\tt fort.46\_aver} is:
+\begin{description}
+  \item[PDENA\_AVER] Time-averaged atom particle density (in $cm^{-3}$), dimension ({\tt NTRII},{\tt NATM})
+  \item[PDENM\_AVER] Time-averaged molecule particle density (in $cm^{-3}$), dimension ({\tt NTRII},{\tt NMOL})
+  \item[EDENA\_AVER] Time-averaged energy density carried by atoms (in $eV.cm^{-3}$), dimension ({\tt NTRII},{\tt NATM})
+  \item[EDENM\_AVER] Time-averaged energy density carried by molecules (in $eV.cm^{-3}$), dimension ({\tt NTRII},{\tt NMOL})
+  \item[VXDENA\_AVER] Time-averaged $X$-directed momentum density carried by atoms (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NATM})
+  \item[VXDENM\_AVER] Time-averaged $X$-directed momentum density carried by molecules (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NMOL})
+  \item[VYDENA\_AVER] Time-averaged $Y$-directed momentum density carried by atoms (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NATM})
+  \item[VYDENM\_AVER] Time-averaged $Y$-directed momentum density carried by molecules (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NMOL})
+  \item[VZDENA\_AVER] Time-averaged $Z$-directed momentum density carried by atoms (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NATM})
+  \item[VZDENM\_AVER] Time-averaged $Z$-directed momentum density carried by molecules (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NMOL})
+\end{description}
 
 \section{Changing dt}
 
@@ -5000,6 +5205,8 @@ The signals in, for example, {\tt TIMEDEP} can be accessed as
 \subsection{SNAPSHOT}
 
 \VerbatimInput[fontsize=\footnotesize]{MDSPLUS/SNAPSHOT_MODEL.TCL.index}
+
+Note that the {\tt SNAPSHOT::TOP.GRID:DSPAR} and {\tt SNAPSHOT::TOP.GRID:DSPOL} quantities are respectively the parallel and poloidal distances along the magnetic field to the Western edge of the computational domain, and not, strictly speaking, connection lengths.
 
 \subsection{TALLIES}
 
@@ -14989,7 +15196,7 @@ $\displaystyle \frac{\sqrt{g}}{h^2_y} \sigma^{(ST)}$ & $S$ & \texttt{b2trno\_csi
 
 residuals & $A$ & \texttt{b2nppo\_respo.dat} or & (\ref{eq:pot_eq}) \\
  & & \texttt{b2npp7\_respo.dat} &  \\
- 
+
 \hline
 \multicolumn{4}{|l|}{\small\it Moments of the distribution function} \\
 \hline
@@ -17427,7 +17634,7 @@ Divides the matrix data by $s_x$ --- the contact cell area between cells in the
 $x$-direction.
 
 \subsubsection{psxperp}\index{b2plot, psxperp}\label{sec:psxperp}
-Divides the matrix data by $s_x$ --- the cell area perpendicular to the
+Divides the matrix data by $s_x \times qc$ --- the cell area perpendicular to the
 $x$-direction.
 
 \subsubsection{psy}\index{b2plot, psy}\label{sec:psy}
@@ -19525,11 +19732,13 @@ Additionally, system-wide compiler flags can be provided by means of the
 \item[F2003] \index{F2003} To be used if the compiler is compatible with {\tt Fortran 2003}
 \item[F77] \index{F77} Identifies specific code to {\tt Fortran-77} compilers
 \item[GFORTRAN] \index{GFORTRAN} To be used with {\tt gfortran} compilation
+\item[GGD\_MICRO\_VERSION] \index{GGD\_MICRO\_VERSION} Micro version number of the IMAS GGD library to which the code is linked (set internally by the configuration files)
 \item[GGD\_MINOR\_VERSION] \index{GGD\_MINOR\_VERSION} Minor version number of the IMAS GGD library to which the code is linked (set internally by the configuration files)
 \item[G95] \index{G95} To be used with {\tt g95} compilation
 \item[HPUX] \index{HPUX} To be used when compiling on HP Unix systems
 \item[IBMaix] \index{IBMaix} To be used when compiling on IBM AIX computers
 \item[IMAS] \index{IMAS} To be used when compiling within the IMAS framework
+\item[IMAS\_MAJOR\_VERSION] \index{IMAS\_MAJOR\_VERSION} Major version number of the IMAS library to which the code is linked (set internally by the configuration files)
 \item[IMAS\_MINOR\_VERSION] \index{IMAS\_MINOR\_VERSION} Minor version number of the IMAS library to which the code is linked (set internally by the configuration files)
 \item[ITM] \index{ITM} To be used when compiling within the ITM framework
 \item[ITM\_ENVIRONMENT\_LOADED] \index{ITM\_ENVIRONMENT\_LOADED} To be used when wishing to compile with ITM CPOs
@@ -19651,7 +19860,9 @@ We list below where the {\tt DivGeo} compilation switches are used.
     \endlastfoot
        CONSTANTS\_PROVIDED & equtrn/src/eqdim.f90 \\
        IMAS & equtrn/src/eqdim.f90 \\
+       IMAS\_MINOR\_VERSION & equtrn/src/eqdim.f90 \\
        IMAS\_MINOR\_VERSION & equtrn/src/rdids.f \\
+       IMAS\_MINOR\_VERSION & equtrn/src/wrids.f \\
        UAL\_MAJOR\_VERSION & equtrn/src/rdids.f \\
        UAL\_MICRO\_VERSION & equtrn/src/rdids.f \\
        UAL\_MINOR\_VERSION & equtrn/src/rdids.f \\
@@ -19770,6 +19981,7 @@ ALLOCATE\_AND\_NAMELIST & b2plot/init\_wall.F \\
 ALLOCATE\_AND\_NAMELIST & modules/b2mod\_boundary\_namelist.F \\
 ALLOCATE\_AND\_NAMELIST & modules/b2mod\_input\_profile.F \\
 ALLOCATE\_AND\_NAMELIST & modules/b2mod\_layer.F \\
+ALLOCATE\_AND\_NAMELIST & modules/b2mod\_ld\_namelist.F \\
 ALLOCATE\_AND\_NAMELIST & modules/b2mod\_neutrals\_namelist.F \\
 ALLOCATE\_AND\_NAMELIST & modules/b2mod\_numerics\_namelist.F \\
 ALLOCATE\_AND\_NAMELIST & modules/b2mod\_sputter.F \\
@@ -19819,10 +20031,10 @@ B25\_EIRENE & b2plot/psta.F \\
 B25\_EIRENE & b2plot/pstv.F \\
 B25\_EIRENE & b2plot/triangle\_surf.F \\
 B25\_EIRENE & b2plot/trigmesh.F \\
-B25\_EIRENE & convert/b2co.F \\
 B25\_EIRENE & convert/b2mds.F \\
 B25\_EIRENE & convert/b2yt\_ngread.F \\
 B25\_EIRENE & convert/b2yt\_ntread.F \\
+B25\_EIRENE & driver/b2co.F \\
 B25\_EIRENE & driver/b2mod\_driver.F \\
 B25\_EIRENE & driver/b2mod\_main.F \\
 B25\_EIRENE & ids/b2mod\_ual\_io.F90 \\
@@ -19911,6 +20123,8 @@ GFORTRAN & utility/ma28copy.F \\
 GFORTRAN & utility/ma28copy3.F \\
 GFORTRAN & utility/ma28copy4.F \\
 G95 & utility/mds\_routines.F \\
+GGD\_MICRO\_VERSION & ids/b2mod\_ual\_io.F90 \\
+GGD\_MICRO\_VERSION & ids/b2mod\_ual\_io\_grid.F90 \\
 GGD\_MINOR\_VERSION & ids/b2mod\_ual\_io.F90 \\
 GGD\_MINOR\_VERSION & ids/b2mod\_ual\_io\_grid.F90 \\
 GOT\_AMNSPROTO & preprocessing/b2ardr.F \\
@@ -19932,12 +20146,16 @@ IMAS & modules/b2mod\_b2cmrc.F \\
 IMAS & modules/b2mod\_ppout.F \\
 IMAS & preprocessing/b2ardr.F \\
 IMAS & utility/ratadas.F \\
+IMAS\_MAJOR\_VERSION & driver/b2mod\_driver.F \\
+IMAS\_MAJOR\_VERSION & ids/b2\_ual\_rewrite.F90 \\
+IMAS\_MAJOR\_VERSION & ids/b2\_ual\_write.F90 \\
 IMAS\_MINOR\_VERSION & driver/b2mod\_driver.F \\
 IMAS\_MINOR\_VERSION & ids/b2mod\_interp.F90 \\
 IMAS\_MINOR\_VERSION & ids/b2mod\_ual.F90 \\
 IMAS\_MINOR\_VERSION & ids/b2mod\_ual\_io.F90 \\
 IMAS\_MINOR\_VERSION & ids/b2mod\_ual\_io\_data.F90 \\
 IMAS\_MINOR\_VERSION & ids/b2mod\_ual\_io\_grid.F90 \\
+IMAS\_MINOR\_VERSION & ids/b2\_ual\_rewrite.F90 \\
 IMAS\_MINOR\_VERSION & ids/b2\_ual\_write.F90 \\
 IMAS\_MINOR\_VERSION & ids/b2\_ual\_write\_b2mod.F90 \\
 ITM & driver/b2mod\_driver.F \\
@@ -19988,12 +20206,12 @@ NAGFOR & b2plot/dhdata.F \\
 NAGFOR & b2plot/initialize\_plotting.F \\
 NAGFOR & b2plot/set\_extralabel.F \\
 NAGFOR & b2plot/spect.F \\
-NAGFOR & convert/b2co.F \\
 NAGFOR & convert/b2co\_movies\_cdf.F \\
 NAGFOR & convert/b2co\_tally\_cdf.F \\
 NAGFOR & convert/b2co\_time\_cdf.F \\
 NAGFOR & convert/b2co\_wall\_cdf.F \\
 NAGFOR & convert/b2mds.F \\
+NAGFOR & driver/b2co.F \\
 NAGFOR & driver/b2mod\_driver.F \\
 NAGFOR & driver/b2obeq.F \\
 NAGFOR & driver/b2obfn.F \\
@@ -20262,8 +20480,10 @@ We list below where the {\tt Eirene} compilation switches are used.
     \hline \endfoot
     \endlastfoot
 ALLOCATE\_AND\_NAMELIST & startup-routines/find\_param.F \\
+B25\_EIRENE & file-handling/wrmesh.F \\
 B25\_EIRENE & main-routines/eirene.f \\
 B25\_EIRENE & interfaces/couple\_SOLPS-ITER/eirmod\_extrab25.F90 \\
+B25\_EIRENE & plotting/plmesh.F \\
 B25\_EIRENE & startup-routines/find\_param.f \\
 COMPILER\_MAJOR\_VERSION & assistant/exit\_own.f \\
 COMPILER\_MINOR\_VERSION & assistant/exit\_own.f \\
@@ -20276,6 +20496,8 @@ HPUX & modules/eirmod\_cinit.F \\
 MPI\_MOD & modules/eirmod\_mpi.F90 \\
 MPI\_VERSION & modules/eirmod\_mpi.F90 \\
 NAGFOR & file-handling/get\_solpstop.f \\
+NAGFOR & main-routines/eirene.f \\
+NAGFOR & startup-routines/find\_param.f \\
 NO\_B2\_CHEM\_SPUT & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.F \\
 NO\_GETENV & file-handling/get\_solpstop.f \\
 PGF90 & assistant/exit\_own.f \\
@@ -21674,7 +21896,7 @@ fake elements and specify 0 as the {\tt Surface Type} in the
 fictitious elemens, they must NOT be included in the
 {\tt Elements not for Eirene} list.
   \item Create the {\tt Surfaces} and {\tt Grid points} as usual.
-Only the {\tt Core} zone for the {\tt Grid points} and the {\tt SOL} and
+Only the {\tt SOL} zone for the {\tt Grid points} and the {\tt SOL} and
 {\tt Core} areas for the {\tt Surfaces} are meaningful. The {\tt Grid points}
 in the {\tt Core} will provide the poloidal (or axial) resolution. For linear
 cases, the radial point distribution will be given by the {\tt SOL} number of

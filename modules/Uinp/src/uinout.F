@@ -356,13 +356,13 @@ c*** 3a.  data for non-default surface models on standard surfaces
         else if (iliin(ists).eq.1 .or. bliin(ists)) then !}{
           ii=10*ilsptc(ists)+ilsptp(ists)
           write(iunoo,707) ilref(ists),ii,isrss(ists),isrc(ists),
-     ,                                                    lchspnws(ists)
+     ,                                    lchspnws(ists),arefcell(ists)
           write(iunoo,703) xmlim(ists),ewall(ists),ewbin(ists),
      ,                       transp(ists,1),transp(ists,2),fsheat(ists)
           write(iunoo,703) recycf(ists),recyct(ists),recprm(ists),
      ,                              exppl(ists),expel(ists),expil(ists)
           write(iunoo,703) recycs(ists),recycc(ists),echspts(ists),
-     ,                                        fchspts(ists),sptprm(ists)
+     ,                        fchspts(ists),sptprm(ists),arfpress(ists)
         end if !}
       end do !}
 
@@ -452,13 +452,14 @@ c**  Local reflection model ?
           write(iunoo,715) scard_name(jscrd(i))
         else if (jliin(i).eq.1) then !}{
           ii=10*jlsptc(i)+jlsptp(i)
-          write(iunoo,707) jlref(i),ii,jsrss(i),jsrc(i),lchspnwa(i)
+          write(iunoo,707) jlref(i),ii,jsrss(i),jsrc(i),lchspnwa(i),
+     ,                refcell(i)
           write(iunoo,703) xmlma(i),ewala(i),ewbna(i),
      ,                trnspa(i,1),trnspa(i,2),fsheata(i)
           write(iunoo,703) rcycfa(i),rcycta(i),rcprma(i),
      ,                exppla(i),expela(i),expila(i)
           write(iunoo,703) rcycsa(i),rcycca(i),
-     ,                echspta(i),fchspta(i),sptpra(i)
+     ,                echspta(i),fchspta(i),sptpra(i),refpress(i)
         end if !}
 
 c* Transform from convenient coordinate system to Eirene coordinate
@@ -777,13 +778,13 @@ c*** surface cards
       do i=1,nscards
         write(iunoo,715) scard_name(i)
         write(iunoo,707) scilref(i),scilspt(i),scisrs(i),
-     ,                   scisrc(i),sclchspnwl(i)
+     ,                   scisrc(i),sclchspnwl(i),screfcell(i)
         write(iunoo,703) scxmlim(i),scewall(i),scewbin(i),
      ,                   sctransp(i,1),sctransp(i,2),scfsheat(i)
         write(iunoo,703) screcycf(i),screcyct(i),scrcprm(i),
      ,                   scexppl(i),scexpel(i),scexpil(i)
         write(iunoo,703) screcycs(i),scychsptg(i),scstprm(i),0.0,
-     ,                              scechsptg(i)
+     ,                               scechsptg(i),screfpress(i)
         do j=1,nnchemvar(i) !{
           k=k+1
           ich=indchemvar(k)
@@ -1139,7 +1140,7 @@ c*** 13.  data for nonlinear and time dep. option
 
 c*** the number of histories to be saved
 
-      write(iunoo,707) nprnli, ninitl_read
+      write(iunoo,707) nprnli, ninitl_read, nprmul
       if(nprnli.gt.0) then !{
 
 c*** the number of timesteps in Eirene, the timestep, and starting time

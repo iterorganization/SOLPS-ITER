@@ -48,19 +48,21 @@ c*** Default boundary conditions
       data lcmbndt, lrfbndt,   bxsbndt    ,   rxsbndt    ,    dfrbndx /
      /  lurgkn*0,luznkn*0,luznkn*.false.,luznkn*.false.,nbndknd*.true./,
      ,  (jskbndx(0,i),i=1,nbndknd), (jclbndx(0,i),i=1,nbndknd) /
-     /    2, 1, -3, -3    ,     nbndknd*6        /,
+     /    2, 1, -3, -3    ,     nbndknd*6    /,
      ,  (jrfbndx(0,i),i=1,nbndknd), (jcsbndx(0,i),i=1,nbndknd) /
      /     0,  3*1    ,    0, 1, 0, 0        /,
      ,  (jcgbndx(0,i),i=1,nbndknd), (jpsbndx(0,i),i=1,nbndknd) /
      /    nbndknd*0   ,    0, 2, 0, 0        /,
      ,  (jppbndx(0,i),i=1,nbndknd), (etfbndx(0,i),i=1,nbndknd) /
-     /    nbndknd*0   ,     nbndknd*0.         /,
+     /    nbndknd*0   ,     nbndknd*0.       /,
      ,  (etbbndx(0,i),i=1,nbndknd), (easbndx(0,i),i=1,nbndknd) /
-     /    nbndknd*0.    ,     nbndknd*0.         /,
+     /    nbndknd*0.    ,     nbndknd*0.     /,
      ,  (eewbndx(0,i),i=1,nbndknd), (efpbndx(0,i),i=1,nbndknd) /
-     /        nbndknd*-0.1    ,     nbndknd*1.         /,
+     /    nbndknd*-0.1    ,   nbndknd*1.     /,
      ,  (efcbndx(0,i),i=1,nbndknd), (ewmbndx(0,i),i=1,nbndknd) /
-     /    nbndknd*1.    ,    nbndknd*'C'         /,
+     /    nbndknd*1.    ,    nbndknd*'C'     /,
+     ,  (rfcbndx(0,i),i=1,nbndknd), (rfpbndx(0,i),i=1,nbndknd) /
+     /    nbndknd*0     ,    nbndknd*0.      /,
      ,  (nlrbndx(0,i),i=1,nbndknd),  (jnpbndx(0,i),i=1,nbndknd)/
      /      0, 3*1    ,       2000,25000,2*2000    /,
      ,  (jmpbndx(0,i),i=1,nbndknd)/
@@ -194,15 +196,17 @@ c*** 3a
      ,      ilswch, ilequi, ilcol , irpta2, irpte2, irpta3, irpte3 /
      /      nsts*0, nsts*0, nsts*6, nsts*0, nsts*0, nsts*0, nsts*0 /,
      ,     iltor  , ilfit , ilplg , ilbox , ilcell/
-     ,     nsts*0 , nsts*0, nsts*0, nsts*0, nsts*0/,
+     /     nsts*0 , nsts*0, nsts*0, nsts*0, nsts*0/,
      ,     ilref  , ilsptp, ilsptc, isrss ,  isrc ,lchspnws, isrsg  /
-     /     nsts*1 , nsts*0, nsts*0, nsts*0, nsts*0, nsts*0 , nsts*0 /
+     /     nsts*1 , nsts*0, nsts*0, nsts*0, nsts*0, nsts*0 , nsts*0 /,
+     ,    arefcell/
+     /     nsts*0 /
       data  xmlim   ,   ewall   ,  ewbin ,    transp     , fsheat /
      /    nsts*1206., nsts*0.087, nsts*0.,nsts*0.,nsts*0.,nsts*-1./,
-     ,     recycf , recyct , recprm , recycs ,  exppl ,  expel  /
-     /     nsts*1., nsts*1., nsts*0., nsts*0., nsts*1., nsts*0.5/,
-     /      expil , recycc , echspts, fchspts, sptprm  /
-     /     nsts*1.,nsts*0.01,nsts*0., nsts*0., nsts*0. /
+     ,     recycf , recyct , recprm , recycs ,  exppl ,  expel    /
+     /     nsts*1., nsts*1., nsts*0., nsts*0., nsts*1., nsts*0.5  /,
+     ,      expil , recycc , echspts, fchspts, sptprm , arfpress  /
+     /     nsts*1.,nsts*0.01,nsts*0., nsts*0., nsts*0.,  nsts*0.  /
       data  ctxbnds / 'Core side','Target','PFR side','Outer side'/
       data tgdtinpt / .false. /
 
@@ -217,8 +221,8 @@ c*** 3b
      ,    nlim*0, nlim*0, nlim*0, nlim*0, nlim*0, nlim*0 /,
      ,     jlref, jlsptp, jlsptc,  jsrss,  jsrc, lchspnwa, jsrsg /
      /    nlim*1, nlim*0, nlim*0, nlim*0, nlim*0, nlim*0, nlim*0 /,
-     ,     itini,  itend /
-     /    nlim*-1, nlim*0 /
+     ,     itini,  itend,refcell /
+     /   nlim*-1, nlim*0, nlim*0 /
       data  rlb  , sarea , rlwmn ,   rlwmx  , a0lm  , a1lm  , a2lm  /
      /    nlim*2.,nlim*1.,nlim*1.,nlim*1.e-5,nlim*0.,nlim*0.,nlim*0./,
      ,     a3lm  , a4lm  , a5lm  , a6lm  , a7lm  , a8lm  , a9lm  /
@@ -242,7 +246,9 @@ c*** 3b
      ,      xlcor ,  ylcor ,  zlcor  /
      /    nlim*0., nlim*0., nlim*0. /,
      ,     xlref , ylref , zlref , xlrot , ylrot , zlrot , alrot /
-     /    nlim*0.,nlim*0.,nlim*0.,nlim*0.,nlim*0.,nlim*0.,nlim*0./
+     /    nlim*0.,nlim*0.,nlim*0.,nlim*0.,nlim*0.,nlim*0.,nlim*0./,
+     ,   refpress /
+     /    nlim*0. /
       data txtsfa / nlim*' ' /
 
 c*** 4
@@ -713,8 +719,10 @@ c*** 6
      ,      rprob0 , rinteg  , einteg  , ainteg , achsptg  /
      /        0.1  ,   0.    ,   0.    ,   0.   , lvchsr*0./
       data scard_name /maxsc*' ' /
-      data scilref,scilspt, scisrs, scisrc,sclchspnwl /
-     /     maxsc*1,maxsc*0,maxsc*0,maxsc*0, maxsc*1   /
+      data scilref,scilspt, scisrs, scisrc,sclchspnwl,screfcell /
+     /     maxsc*1,maxsc*0,maxsc*0,maxsc*0, maxsc*1  ,maxsc*0   /,
+     ,     screfpress /
+     ,     maxsc*0.   /
       data scxmlim, scewall, scewbin,    sctransp     ,scfsheat /
      /    maxsc*0.,maxsc*0.,maxsc*0.,maxsc*0.,maxsc*0.,maxsc*-1. /,
      ,    screcycf,screcyct, scrcprm, scexppl, scexpel ,scexpil /
@@ -904,8 +912,8 @@ c*** 12
 
 c*** 13
 
-      data nprnli, ntmstp , nptst  , ninitl_read /
-     /        0  ,    1   ,   0    ,   -1        /,
+      data nprnli, ntmstp , nptst  , ninitl_read, nprmul /
+     /        0  ,    1   ,   0    ,   -1       ,    0   /,
      ,      nsnvi,  isnve ,  isnvs ,  isnvt ,  isnrc /
      ,        0  , nsnv*0 , nsnv*0 , nsnv*0 , nsnv*0 /
       data dtimv , time0 /

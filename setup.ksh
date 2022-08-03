@@ -20,7 +20,6 @@ export LAST_COMMAND=`echo $_`
 }
 export SOLPSWORK=$SOLPSTOP/runs
 
-
 # Set HOST_NAME and COMPILER, which will determine setup files to be used
 #------------------------------------------------------------------------
 
@@ -148,10 +147,10 @@ export PATH=${SOLPS_PATH}:${PATH}
 unset TOOLCHAIN SCRIPTS_PATH CARRE_PATH DIVGEO_PATH EIRENE_PATH B25_PATH B25EIRENE_PATH UINP_PATH TRIANG_PATH AMDS_PATH S45_PATH
 
 # Check whether SOLPS_DEBUG, SOLPS_OPENMP and SOLPS_MPI have been set already by the user
-[ -n "$SOLPS_OPENMP" ] && source $SOLPSTOP/SETUP/openmp
-[ -n "$SOLPS_DEBUG" ] && source $SOLPSTOP/SETUP/debug
-[ -n "$SOLPS_MPI" ] && source $SOLPSTOP/SETUP/mpi
 
+[ -n "$SOLPS_OPENMP" ] && . $SOLPSTOP/SETUP/openmp.ksh
+[ -n "$SOLPS_DEBUG" ] && . $SOLPSTOP/SETUP/debug.ksh
+[ -n "$SOLPS_MPI" ] && . $SOLPSTOP/SETUP/mpi.ksh
 
 # Set path to manuals
 #--------------------
@@ -251,6 +250,5 @@ alias unset_ig='. $SOLPSTOP/SETUP/noig'
 # Add any local settings if present
 [ -s ${SOLPSTOP}/SETUP/setup.ksh.local ] && {
    echo "Loading SETUP/setup.ksh.local"
-   source ${SOLPSTOP}/SETUP/setup.ksh.local
+   . ${SOLPSTOP}/SETUP/setup.ksh.local
 }
-

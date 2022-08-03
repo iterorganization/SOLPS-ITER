@@ -105,9 +105,19 @@ else
 fort44file := $(shell echo ${PLASMASTATE} | sed -e 's:plasmastate:ftn44:')
 endif
 ifneq (${COMPILER},HP)
+fort44avfile := $(shell echo ${PLASMASTATE} | sed -e 's:plasmastate:fort.44_aver:')
+else
+fort44avfile := $(shell echo ${PLASMASTATE} | sed -e 's:plasmastate:ftn44_aver:')
+endif
+ifneq (${COMPILER},HP)
 fort46file := $(shell echo ${PLASMASTATE} | sed -e 's:plasmastate:fort.46:')
 else
 fort46file := $(shell echo ${PLASMASTATE} | sed -e 's:plasmastate:ftn46:')
+endif
+ifneq (${COMPILER},HP)
+fort46avfile := $(shell echo ${PLASMASTATE} | sed -e 's:plasmastate:fort.46_aver:')
+else
+fort46avfile := $(shell echo ${PLASMASTATE} | sed -e 's:plasmastate:ftn46_aver:')
 endif
 ifeq ($(shell [ -e $(fort13file) ] && echo yes || echo no ),yes)
 savefiles += $(fort13file)
@@ -118,8 +128,18 @@ endif
 ifeq ($(shell [ -e $(fort44file) ] && echo yes || echo no ),yes)
 savefiles += $(fort44file)
 endif
+ifeq ($(shell [ -e $(fort44avfile) ] && echo yes || echo no ),yes)
+savefiles += $(fort44avfile)
+endif
 ifeq ($(shell [ -e $(fort46file) ] && echo yes || echo no ),yes)
 savefiles += $(fort46file)
+endif
+ifeq ($(shell [ -e $(fort46avfile) ] && echo yes || echo no ),yes)
+savefiles += $(fort46avfile)
+endif
+conbefile := $(shell echo ${PLASMASTATE} | sed -e 's:plasmastate:conbe.dat:')
+ifeq ($(shell [ -e $(conbefile) ] && echo yes || echo no ),yes)
+savefiles += $(conbefile)
 endif
 
 echo:
@@ -230,6 +250,8 @@ ifneq (${COMPILER},HP)
 	[ -s ../fort.10 ] && cp -p ../fort.10 . || echo > /dev/null ; \
 	[ -s ../fort.44 ] && cp -p ../fort.44 . || echo > /dev/null ; \
 	[ -s ../fort.46 ] && cp -p ../fort.46 . || echo > /dev/null ; \
+	[ -s ../fort.44_aver ] && cp -p ../fort.44_aver . || echo > /dev/null ; \
+	[ -s ../fort.46_aver ] && cp -p ../fort.46_aver . || echo > /dev/null ; \
 	[ -s ../fort.33 ] && cp -p ../fort.33 . || echo > /dev/null ; \
 	[ -s ../fort.34 ] && cp -p ../fort.34 . || echo > /dev/null ; \
 	[ -s ../fort.35 ] && cp -p ../fort.35 . || echo > /dev/null
@@ -246,10 +268,13 @@ else
 	[ -s ../ftn10 ] && cp -p ../ftn10 . || echo > /dev/null ; \
 	[ -s ../ftn44 ] && cp -p ../ftn44 . || echo > /dev/null ; \
 	[ -s ../ftn46 ] && cp -p ../ftn46 . || echo > /dev/null ; \
+	[ -s ../ftn44_aver ] && cp -p ../ftn44_aver . || echo > /dev/null ; \
+	[ -s ../ftn46_aver ] && cp -p ../ftn46_aver . || echo > /dev/null ; \
 	[ -s ../ftn33 ] && cp -p ../ftn33 . || echo > /dev/null ; \
 	[ -s ../ftn34 ] && cp -p ../ftn34 . || echo > /dev/null ; \
 	[ -s ../ftn35 ] && cp -p ../ftn35 . || echo > /dev/null
 endif
+	[ -s ../conbe.dat ] && cp -p ../conbe.dat . || echo > /dev/null
 endif
 ifdef USE_IMPGYRO
 ifneq (${COMPILER},HP)
@@ -294,6 +319,8 @@ ifneq (${COMPILER},HP)
 	-[ -s b2mn.exe.dir/fort.15 ] && mv b2mn.exe.dir/fort.15 . || ( [ -e b2mn.exe.dir/fort.15 ] && rm b2mn.exe.dir/fort.15 || echo > /dev/null )
 	-[ -s b2mn.exe.dir/fort.44 ] && mv b2mn.exe.dir/fort.44 . || ( [ -e b2mn.exe.dir/fort.44 ] && rm b2mn.exe.dir/fort.44 || echo > /dev/null )
 	-[ -s b2mn.exe.dir/fort.46 ] && mv b2mn.exe.dir/fort.46 . || ( [ -e b2mn.exe.dir/fort.46 ] && rm b2mn.exe.dir/fort.46 || echo > /dev/null )
+	-[ -s b2mn.exe.dir/fort.44_aver ] && mv b2mn.exe.dir/fort.44_aver . || ( [ -e b2mn.exe.dir/fort.44_aver ] && rm b2mn.exe.dir/fort.44_aver || echo > /dev/null )
+	-[ -s b2mn.exe.dir/fort.46_aver ] && mv b2mn.exe.dir/fort.46_aver . || ( [ -e b2mn.exe.dir/fort.46_aver ] && rm b2mn.exe.dir/fort.46_aver || echo > /dev/null )
 	-cd b2mn.exe.dir ; rm -f HYDHEL METHANE SPUTER H2VIBR AMMONX fort.21 fort.22 graphite_ext.dat mo_ext.dat fort.85 fort.78 fort.1 fort.29 fort.37 fort.55 vtk.out
 	-[ -e b2mn.exe.dir/fort.33 ] && rm b2mn.exe.dir/fort.33 || echo > /dev/null
 	-[ -e b2mn.exe.dir/fort.34 ] && rm b2mn.exe.dir/fort.34 || echo > /dev/null
@@ -307,6 +334,8 @@ else
 	-[ -s b2mn.exe.dir/ftn15 ] && mv b2mn.exe.dir/ftn15 . || ( [ -e b2mn.exe.dir/ftn15 ] && rm b2mn.exe.dir/ftn15 || echo > /dev/null )
 	-[ -s b2mn.exe.dir/ftn44 ] && mv b2mn.exe.dir/ftn44 . || ( [ -e b2mn.exe.dir/ftn44 ] && rm b2mn.exe.dir/ftn44 || echo > /dev/null )
 	-[ -s b2mn.exe.dir/ftn46 ] && mv b2mn.exe.dir/ftn46 . || ( [ -e b2mn.exe.dir/ftn46 ] && rm b2mn.exe.dir/ftn46 || echo > /dev/null )
+	-[ -s b2mn.exe.dir/ftn44_aver ] && mv b2mn.exe.dir/ftn44_aver . || ( [ -e b2mn.exe.dir/ftn44_aver ] && rm b2mn.exe.dir/ftn44_aver || echo > /dev/null )
+	-[ -s b2mn.exe.dir/ftn46_aver ] && mv b2mn.exe.dir/ftn46_aver . || ( [ -e b2mn.exe.dir/ftn46_aver ] && rm b2mn.exe.dir/ftn46_aver || echo > /dev/null )
 	-cd b2mn.exe.dir ; rm -f HYDHEL METHANE SPUTER H2VIBR AMMONX ftn21 ftn22 graphite_ext.dat mo_ext.dat ftn85 ftn78 ftn1 ftn29 ftn37 ftn55 vtk.out
 	-[ -e b2mn.exe.dir/ftn33 ] && rm b2mn.exe.dir/ftn33 || echo > /dev/null
 	-[ -e b2mn.exe.dir/ftn34 ] && rm b2mn.exe.dir/ftn34 || echo > /dev/null
@@ -315,6 +344,7 @@ endif
 ifdef SOLPS_MPI
 	-[ -e b2mn.exe.dir/output.0001 ] && mv b2mn.exe.dir/output.* . || echo > /dev/null
 endif
+	-[ -e b2mn.exe.dir/conbe.dat ] && mv b2mn.exe.dir/conbe.dat . || echo > /dev/null
 endif
 ifneq (${COMPILER},HP)
 	-[ -s b2mn.exe.dir/fort.31 ] && mv b2mn.exe.dir/fort.31 . || echo > /dev/null
@@ -374,6 +404,8 @@ ifneq (${COMPILER},HP)
 	[ -s ../fort.10 ] && cp -p ../fort.10 . || echo > /dev/null ; \
 	[ -s ../fort.44 ] && cp -p ../fort.44 . || echo > /dev/null ; \
 	[ -s ../fort.46 ] && cp -p ../fort.46 . || echo > /dev/null ; \
+	[ -s ../fort.44_aver ] && cp -p ../fort.44_aver . || echo > /dev/null ; \
+	[ -s ../fort.46_aver ] && cp -p ../fort.46_aver . || echo > /dev/null ; \
 	[ -s ../fort.33 ] && cp -p ../fort.33 . || echo > /dev/null ; \
 	[ -s ../fort.34 ] && cp -p ../fort.34 . || echo > /dev/null ; \
 	[ -s ../fort.35 ] && cp -p ../fort.35 . || echo > /dev/null
@@ -390,10 +422,13 @@ else
 	[ -s ../ftn10 ] && cp -p ../ftn10 . || echo > /dev/null ; \
 	[ -s ../ftn44 ] && cp -p ../ftn44 . || echo > /dev/null ; \
 	[ -s ../ftn46 ] && cp -p ../ftn46 . || echo > /dev/null ; \
+	[ -s ../ftn44_aver ] && cp -p ../ftn44_aver . || echo > /dev/null ; \
+	[ -s ../ftn46_aver ] && cp -p ../ftn46_aver . || echo > /dev/null ; \
 	[ -s ../ftn33 ] && cp -p ../ftn33 . || echo > /dev/null ; \
 	[ -s ../ftn34 ] && cp -p ../ftn34 . || echo > /dev/null ; \
 	[ -s ../ftn35 ] && cp -p ../ftn35 . || echo > /dev/null
 endif
+	[ -s ../conbe.dat ] && cp -p ../conbe.dat . || echo > /dev/null
 endif
 	cd b2mn.exe.dir ; mkdir tracing ; mkdir output ; copy_tracing_files ; mkdir batch_av ; mkdir run_av ; ${DBX} ${INC} ${DBGOBJ}/b2mn.exe ${RUN_OPTIONS} ; move_optional_files ; mv $(target_mn) .. >& /dev/null
 ifneq (${COMPILER},HP)
@@ -416,6 +451,8 @@ ifneq (${COMPILER},HP)
 	-[ -s b2mn.exe.dir/fort.15 ] && mv b2mn.exe.dir/fort.15 . || ( [ -e b2mn.exe.dir/fort.15 ] && rm b2mn.exe.dir/fort.15 || echo > /dev/null )
 	-[ -s b2mn.exe.dir/fort.44 ] && mv b2mn.exe.dir/fort.44 . || ( [ -e b2mn.exe.dir/fort.44 ] && rm b2mn.exe.dir/fort.44 || echo > /dev/null )
 	-[ -s b2mn.exe.dir/fort.46 ] && mv b2mn.exe.dir/fort.46 . || ( [ -e b2mn.exe.dir/fort.46 ] && rm b2mn.exe.dir/fort.46 || echo > /dev/null )
+	-[ -s b2mn.exe.dir/fort.44_aver ] && mv b2mn.exe.dir/fort.44_aver . || ( [ -e b2mn.exe.dir/fort.44_aver ] && rm b2mn.exe.dir/fort.44_aver || echo > /dev/null )
+	-[ -s b2mn.exe.dir/fort.46_aver ] && mv b2mn.exe.dir/fort.46_aver . || ( [ -e b2mn.exe.dir/fort.46_aver ] && rm b2mn.exe.dir/fort.46_aver || echo > /dev/null )
 	-cd b2mn.exe.dir ; rm -f HYDHEL METHANE SPUTER H2VIBR AMMONX fort.21 fort.22 graphite_ext.dat mo_ext.dat fort.85 fort.78 fort.1 fort.29 fort.37 fort.55 vtk.out
 	-[ -e b2mn.exe.dir/fort.33 ] && rm b2mn.exe.dir/fort.33 || echo > /dev/null
 	-[ -e b2mn.exe.dir/fort.34 ] && rm b2mn.exe.dir/fort.34 || echo > /dev/null
@@ -429,6 +466,8 @@ else
 	-[ -s b2mn.exe.dir/ftn15 ] && mv b2mn.exe.dir/ftn15 . || ( [ -e b2mn.exe.dir/ftn15 ] && rm b2mn.exe.dir/ftn15 || echo > /dev/null )
 	-[ -s b2mn.exe.dir/ftn44 ] && mv b2mn.exe.dir/ftn44 . || ( [ -e b2mn.exe.dir/ftn44 ] && rm b2mn.exe.dir/ftn44 || echo > /dev/null )
 	-[ -s b2mn.exe.dir/ftn46 ] && mv b2mn.exe.dir/ftn46 . || ( [ -e b2mn.exe.dir/ftn46 ] && rm b2mn.exe.dir/ftn46 || echo > /dev/null )
+	-[ -s b2mn.exe.dir/ftn44_aver ] && mv b2mn.exe.dir/ftn44_aver . || ( [ -e b2mn.exe.dir/ftn44_aver ] && rm b2mn.exe.dir/ftn44_aver || echo > /dev/null )
+	-[ -s b2mn.exe.dir/ftn46_aver ] && mv b2mn.exe.dir/ftn46_aver . || ( [ -e b2mn.exe.dir/ftn46_aver ] && rm b2mn.exe.dir/ftn46_aver || echo > /dev/null )
 	-cd b2mn.exe.dir ; rm -f HYDHEL METHANE SPUTER H2VIBR AMMONX ftn21 ftn22 graphite_ext.dat mo_ext.dat ftn85 ftn78 ftn1 ftn29 ftn37 ftn55 vtk.out
 	-[ -e b2mn.exe.dir/ftn33 ] && rm b2mn.exe.dir/ftn33 || echo > /dev/null
 	-[ -e b2mn.exe.dir/ftn34 ] && rm b2mn.exe.dir/ftn34 || echo > /dev/null
@@ -437,6 +476,7 @@ endif
 ifdef SOLPS_MPI
 	-[ -e b2mn.exe.dir/output.0001 ] && mv b2mn.exe.dir/output.* . || echo > /dev/null
 endif
+	-[ -e b2mn.exe.dir/conbe.dat ] && mv b2mn.exe.dir/conbe.dat . || echo > /dev/null
 endif
 ifneq (${COMPILER},HP)
 	-[ -s b2mn.exe.dir/fort.31 ] && mv b2mn.exe.dir/fort.31 . || echo > /dev/null
@@ -628,11 +668,11 @@ endif
 	rm -f $(target_yt)
 ifndef STAND_ALONE
 ifneq (${COMPILER},HP)
-	-cd b2yt.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../fort.21 ../fort.22 . ; [ -e ../input.dat ] && ln -s ../input.dat . || echo > /dev/null ; [ -e ../fort.44 ] && ln -s ../fort.44 . || echo > /dev/null ; [ -e ../fort.46 ] && ln -s ../fort.46 . || echo > /dev/null ; [ -e ../fort.33 ] && ln -s ../fort.33 . || echo > /dev/null ; [ -e ../fort.34 ] && ln -s ../fort.34 . || echo > /dev/null ; [ -e ../fort.35 ] && ln -s ../fort.35 . || echo > /dev/null
-	cd b2yt.exe.dir ; ${TIME} ${B2OBJ}/b2yt.exe ${RUN_OPTIONS} ; mv $(target_yt) .. ; rm -f $(notdir $^) input.dat fort.44 fort.46 fort.85 >& /dev/null ; mv *.2 ..
+	-cd b2yt.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../fort.21 ../fort.22 . ; [ -e ../input.dat ] && ln -s ../input.dat . || echo > /dev/null ; [ -e ../fort.44 ] && ln -s ../fort.44 . || echo > /dev/null ; [ -e ../fort.46 ] && ln -s ../fort.46 . || echo > /dev/null ; [ -e ../fort.44_aver ] && ln -s ../fort.44_aver . || echo > /dev/null ; [ -e ../fort.46_aver ] && ln -s ../fort.46_aver . || echo > /dev/null ; [ -e ../fort.33 ] && ln -s ../fort.33 . || echo > /dev/null ; [ -e ../fort.34 ] && ln -s ../fort.34 . || echo > /dev/null ; [ -e ../fort.35 ] && ln -s ../fort.35 . || echo > /dev/null
+	cd b2yt.exe.dir ; ${TIME} ${B2OBJ}/b2yt.exe ${RUN_OPTIONS} ; mv $(target_yt) .. ; rm -f $(notdir $^) input.dat fort.44 fort.46 fort.44_aver fort.46_aver fort.85 >& /dev/null ; mv *.2 ..
 else
-	-cd b2yt.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../ftn21 ../ftn22 . ; [ -e ../input.dat ] && ln -s ../input.dat . || echo > /dev/null ; [ -e ../ftn44 ] && ln -s ../ftn44 . || echo > /dev/null ; [ -e ../ftn46 ] && ln -s ../ftn46 . || echo > /dev/null ; [ -e ../ftn33 ] && ln -s ../ftn33 . || echo > /dev/null ; [ -e ../ftn34 ] && ln -s ../ftn34 . || echo > /dev/null ; [ -e ../ftn35 ] && ln -s ../ftn35 . || echo > /dev/null
-	cd b2yt.exe.dir ; ${TIME} ${B2OBJ}/b2yt.exe ${RUN_OPTIONS} ; mv $(target_yt) .. ; rm -f $(notdir $^) input.dat ftn44 ftn46 ftn85 >& /dev/null ; mv *.2 ..
+	-cd b2yt.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../ftn21 ../ftn22 . ; [ -e ../input.dat ] && ln -s ../input.dat . || echo > /dev/null ; [ -e ../ftn44 ] && ln -s ../ftn44 . || echo > /dev/null ; [ -e ../ftn46 ] && ln -s ../ftn46 . || echo > /dev/null ; [ -e ../ftn44_aver ] && ln -s ../ftn44_aver . || echo > /dev/null ; [ -e ../ftn46_aver ] && ln -s ../ftn46_aver . || echo > /dev/null ; [ -e ../ftn33 ] && ln -s ../ftn33 . || echo > /dev/null ; [ -e ../ftn34 ] && ln -s ../ftn34 . || echo > /dev/null ; [ -e ../ftn35 ] && ln -s ../ftn35 . || echo > /dev/null
+	cd b2yt.exe.dir ; ${TIME} ${B2OBJ}/b2yt.exe ${RUN_OPTIONS} ; mv $(target_yt) .. ; rm -f $(notdir $^) input.dat ftn44 ftn46 ftn44_aver ftn46_aver ftn85 >& /dev/null ; mv *.2 ..
 endif
 else
 	cd b2yt.exe.dir ; ${TIME} ${B2OBJ}/b2yt.exe ${RUN_OPTIONS} ; mv $(target_yt) .. ; rm -f $(notdir $^) >& /dev/null ; mv *.2 ..
@@ -659,11 +699,11 @@ endif
 	rm -f $(target_yt)
 ifndef STAND_ALONE
 ifneq (${COMPILER},HP)
-	-cd b2yt.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../fort.21 ../fort.22 . ; [ -e ../input.dat ] && ln -s ../input.dat . || echo > /dev/null ; [ -e ../fort.44 ] && ln -s ../fort.44 . || echo > /dev/null ; [ -e ../fort.46 ] && ln -s ../fort.46 . || echo > /dev/null ; [ -e ../fort.33 ] && ln -s ../fort.33 . || echo > /dev/null ; [ -e ../fort.34 ] && ln -s ../fort.34 . || echo > /dev/null ; [ -e ../fort.35 ] && ln -s ../fort.35 . || echo > /dev/null
-	cd b2yt.exe.dir ; ${DBX} ${INC} ${DBGOBJ}/b2yt.exe ${RUN_OPTIONS} ; mv $(target_yt) .. ; rm -f $(notdir $^) input.dat fort.44 fort.46 fort.85 >& /dev/null ; mv *.2 ..
+	-cd b2yt.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../fort.21 ../fort.22 . ; [ -e ../input.dat ] && ln -s ../input.dat . || echo > /dev/null ; [ -e ../fort.44 ] && ln -s ../fort.44 . || echo > /dev/null ; [ -e ../fort.46 ] && ln -s ../fort.46 . || echo > /dev/null ; [ -e ../fort.44_aver ] && ln -s ../fort.44_aver . || echo > /dev/null ; [ -e ../fort.46_aver ] && ln -s ../fort.46_aver . || echo > /dev/null ; [ -e ../fort.33 ] && ln -s ../fort.33 . || echo > /dev/null ; [ -e ../fort.34 ] && ln -s ../fort.34 . || echo > /dev/null ; [ -e ../fort.35 ] && ln -s ../fort.35 . || echo > /dev/null
+	cd b2yt.exe.dir ; ${DBX} ${INC} ${DBGOBJ}/b2yt.exe ${RUN_OPTIONS} ; mv $(target_yt) .. ; rm -f $(notdir $^) input.dat fort.44 fort.46 fort.44_aver fort.46_aver fort.85 >& /dev/null ; mv *.2 ..
 else
-	-cd b2yt.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../ftn21 ../ftn22 . ; [ -e ../input.dat ] && ln -s ../input.dat . || echo > /dev/null ; [ -e ../ftn44 ] && ln -s ../ftn44 . || echo > /dev/null ; [ -e ../ftn46 ] && ln -s ../ftn46 . || echo > /dev/null ; [ -e ../ftn33 ] && ln -s ../ftn33 . || echo > /dev/null ; [ -e ../ftn34 ] && ln -s ../ftn34 . || echo > /dev/null ; [ -e ../ftn35 ] && ln -s ../ftn35 . || echo > /dev/null
-	cd b2yt.exe.dir ; ${DBX} ${INC} ${DBGOBJ}/b2yt.exe ${RUN_OPTIONS} ; mv $(target_yt) .. ; rm -f $(notdir $^) input.dat ftn44 ftn46 ftn85 >& /dev/null ; mv *.2 ..
+	-cd b2yt.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../ftn21 ../ftn22 . ; [ -e ../input.dat ] && ln -s ../input.dat . || echo > /dev/null ; [ -e ../ftn44 ] && ln -s ../ftn44 . || echo > /dev/null ; [ -e ../ftn46 ] && ln -s ../ftn46 . || echo > /dev/null ; [ -e ../ftn44_aver ] && ln -s ../ftn44_aver . || echo > /dev/null ; [ -e ../ftn46_aver ] && ln -s ../ftn46_aver . || echo > /dev/null ; [ -e ../ftn33 ] && ln -s ../ftn33 . || echo > /dev/null ; [ -e ../ftn34 ] && ln -s ../ftn34 . || echo > /dev/null ; [ -e ../ftn35 ] && ln -s ../ftn35 . || echo > /dev/null
+	cd b2yt.exe.dir ; ${DBX} ${INC} ${DBGOBJ}/b2yt.exe ${RUN_OPTIONS} ; mv $(target_yt) .. ; rm -f $(notdir $^) input.dat ftn44 ftn46 ftn44_aver ftn46_aver ftn85 >& /dev/null ; mv *.2 ..
 endif
 else
 	cd b2yt.exe.dir ; ${DBX} ${INC} ${DBGOBJ}/b2yt.exe ${RUN_OPTIONS} ; mv $(target_yt) .. ; rm -f $(notdir $^) >& /dev/null ; mv *.2 ..
@@ -712,6 +752,8 @@ ifneq (${COMPILER},HP)
 	[ -s ../fort.10 ] && cp -p ../fort.10 . || echo > /dev/null ; \
 	[ -s ../fort.44 ] && cp -p ../fort.44 . || echo > /dev/null ; \
 	[ -s ../fort.46 ] && cp -p ../fort.46 . || echo > /dev/null ; \
+	[ -s ../fort.44_aver ] && cp -p ../fort.44_aver . || echo > /dev/null ; \
+	[ -s ../fort.46_aver ] && cp -p ../fort.46_aver . || echo > /dev/null ; \
 	[ -s ../fort.33 ] && cp -p ../fort.33 . || echo > /dev/null ; \
 	[ -s ../fort.34 ] && cp -p ../fort.34 . || echo > /dev/null ; \
 	[ -s ../fort.35 ] && cp -p ../fort.35 . || echo > /dev/null
@@ -728,6 +770,8 @@ else
 	[ -s ../ftn10 ] && cp -p ../ftn10 . || echo > /dev/null ; \
 	[ -s ../ftn44 ] && cp -p ../ftn44 . || echo > /dev/null ; \
 	[ -s ../ftn46 ] && cp -p ../ftn46 . || echo > /dev/null ; \
+	[ -s ../ftn44_aver ] && cp -p ../ftn44_aver . || echo > /dev/null ; \
+	[ -s ../ftn46_aver ] && cp -p ../ftn46_aver . || echo > /dev/null ; \
 	[ -s ../ftn33 ] && cp -p ../ftn33 . || echo > /dev/null ; \
 	[ -s ../ftn34 ] && cp -p ../ftn34 . || echo > /dev/null ; \
 	[ -s ../ftn35 ] && cp -p ../ftn35 . || echo > /dev/null
@@ -767,6 +811,8 @@ ifneq (${COMPILER},HP)
 	[ -s ../fort.10 ] && cp -p ../fort.10 . || echo > /dev/null ; \
 	[ -s ../fort.44 ] && cp -p ../fort.44 . || echo > /dev/null ; \
 	[ -s ../fort.46 ] && cp -p ../fort.46 . || echo > /dev/null ; \
+	[ -s ../fort.44_aver ] && cp -p ../fort.44_aver . || echo > /dev/null ; \
+	[ -s ../fort.46_aver ] && cp -p ../fort.46_aver . || echo > /dev/null ; \
 	[ -s ../fort.33 ] && cp -p ../fort.33 . || echo > /dev/null ; \
 	[ -s ../fort.34 ] && cp -p ../fort.34 . || echo > /dev/null ; \
 	[ -s ../fort.35 ] && cp -p ../fort.35 . || echo > /dev/null
@@ -783,6 +829,8 @@ else
 	[ -s ../ftn10 ] && cp -p ../ftn10 . || echo > /dev/null ; \
 	[ -s ../ftn44 ] && cp -p ../ftn44 . || echo > /dev/null ; \
 	[ -s ../ftn46 ] && cp -p ../ftn46 . || echo > /dev/null ; \
+	[ -s ../ftn44_aver ] && cp -p ../ftn44_aver . || echo > /dev/null ; \
+	[ -s ../ftn46_aver ] && cp -p ../ftn46_aver . || echo > /dev/null ; \
 	[ -s ../ftn33 ] && cp -p ../ftn33 . || echo > /dev/null ; \
 	[ -s ../ftn34 ] && cp -p ../ftn34 . || echo > /dev/null ; \
 	[ -s ../ftn35 ] && cp -p ../ftn35 . || echo > /dev/null
