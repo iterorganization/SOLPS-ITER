@@ -33,6 +33,9 @@ setenv HOST_NAME ITER
   module load Fundamental-Constants/0.1.0
   module load PySide6/6.2.3-GCCcore-10.2.0
 
+module unload matplotlib/3.3.3-foss-2020b
+module load matplotlib/3.5.1-foss-2020b
+
 setenv GGD_VERSION `pkg-config ggd --modversion`
 setenv GLI_HOME ${EBROOTGLI}
 setenv QTDIR ${EBROOTQT5}
