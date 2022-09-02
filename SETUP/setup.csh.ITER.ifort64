@@ -33,6 +33,9 @@ switch ($nodename)
   module load SimDB/0.7.1-intel-2020b
   module load Fundamental-Constants/0.1.1
   module load PySide6/6.2.3-GCCcore-10.2.0
+  # TODO Upgrade Viz for 3.5.1
+  module unload --force matplotlib/3.3.3-intel-2020b
+  module load matplotlib/3.5.1-intel-2020b
   breaksw
  case "hpc-login*.iter.org":
   module load IMAS/3.32.1-4.9.1
@@ -114,14 +117,13 @@ endif
 alias solps5 'env PYTHONPATH=${HOME}/solps-gui/src/widgets:${PYTHONPATH} python3 ${HOME}/solps-gui/src/gui/solps5.py'
 alias solps 'env PYTHONPATH=${HOME}/solps-gui/src/actors:${PYTHONPATH} python3 ${HOME}/solps-gui/src/gui/solps.py'
 
-setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/usr/lib64
-setenv SOLPSWORK /work/projects/solps-iter/$USER
-setenv PYTHONPATH "/work/imas/opt/SOLPS-GUI/1.5/src/widgets:${PYTHONPATH}"
-setenv PYQTDESIGNERPATH "/work/imas/opt/SOLPS-GUI/1.5/src/plugins/designer"
+setenv PYTHONPATH "${HOME}/solps-gui/src/gui:${PYTHONPATH}"
+setenv PYQTDESIGNERPATH "${HOME}/solps-gui/src/plugins/designer"
 setenv PYSIDE_DESIGNER_PLUGINS "${HOME}/solps-gui/src/plugins/pyside6-designer"
-setenv SOLPSGUI "/work/imas/opt/SOLPS-GUI/1.5/src/gui"
-#alias solps 'python3 /work/imas/opt/SOLPS-GUI/1.5/src/gui/solps.py'
-alias solps_doc 'xdg-open /work/imas/opt/SOLPS-GUI/1.5/doc/build/html/index.html'
-alias solps_help 'assistant -collectionFile /work/imas/opt/SOLPS-GUI/1.5/doc/build/qthelp/SOLPSGUI.qhc'
-alias eirene 'python3 /work/imas/opt/SOLPS-GUI/1.5/src/widgets/eirene.py'
-alias b2 'python3 /work/imas/opt/SOLPS-GUI/1.5/src/widgets/b2.py'
+setenv SOLPSGUI "${HOME}/solps-gui/src/gui"
+setenv SOLPSWORK /work/projects/solps-iter/$USER
+alias designer "env PYTHONPATH=${HOME}/solps-gui/src/widgets:${PYTHONPATH} ${EBROOTQT5}/bin/designer"
+alias solps_doc 'firefox ${HOME}/solps-gui/doc/build/html/index.html'
+alias solps_help 'assistant -collectionFile ${HOME}/solps-gui/doc/build/qthelp/SOLPSGUI.qhc'
+alias eirene 'python3 ${HOME}/solps-gui/src/widgets/eirene.py'
+alias b2 'python3 ${HOME}/solps-gui/src/widgets/b2.py'
