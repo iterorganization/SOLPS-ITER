@@ -2,9 +2,9 @@
 
 # Shared asset directory is possible on ITER cluster
 ITER_EXTERNALDIR=/work/imas/shared/external/assets/solps-iter/MD5
-ifeq ("$(wildcard /work/imas/shared/boundary/solps-iter)",\
-		"/work/imas/shared/boundary/solps-iter")# On ITER cluster
-	ASSETDIR ?= /work/imas/shared/boundary/solps-iter/assets/MD5
+ifeq ("$(wildcard /work/imas/shared/external/assets/solps-iter)",\
+		"/work/imas/shared/external/assets/solps-iter")# On ITER cluster
+	ASSETDIR ?= /work/imas/shared/external/assets/solps-iter/MD5
 	ASSETDIR_GROUP ?= fst-cluster-users
 	EXTERNALDIR ?= ${ITER_EXTERNALDIR}
 else
