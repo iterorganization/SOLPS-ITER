@@ -186,9 +186,26 @@ The next section discusses obtaining and updating the code.
 To obtain the code a request should be sent to Xavier Bonnin
 ({\tt Xavier.Bonnin@iter.org}) at ITER, the code Responsible Officer (RO).
 
-The first formality will then be for the prospective users to obtain an IDM (ITER Document Management) account, in case they do not have one already. This account request will be done by the RO, and the requesting user will receive an automated electronic message asking for confirmation of the provided e-mail address. With this account, the user will have access to the \SOLPSITER GIT repository (\href{https://git.iter.org/projects/BND/repos/solps-iter/browse}{https://git.iter.org/projects/BND/repos/solps-iter/browse}) maintained at the IO, and the \SOLPSITER SharePoint web site hosted by ITER (\href{https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}{https://sharepoint.iter.org/departments\allowbreak/POP/CM/IMAS/SOLPS-ITER}, works best with Internet Explorer). The manual to the SOLPS-GUI can be found online at \href{https://static.iter.org/imas/assets/solps-iter/html/}{https://static.iter.org/imas/assets/solps-iter/html/}. Links to the IDM-controlled documents related to \SOLPSITER can be found in a centralized folder (\href{https://user.iter.org/?uid=Q92BAQ}{https://user.iter.org/?uid=Q92BAQ}). The account request will also serve for registration of the user to the \SOLPSITER mailing list ({\tt SOLPS-ITER@iter.org}). Additionally, there is a Confluence Wiki page located at \href{https://confluence.iter.org/display/IMP/SOLPS-ITER}{https://confluence.iter.org/display/IMP/SOLPS-ITER} for the purpose of collecting user contributions to the body of knowledge about the code. Lastly, a Slack discussion forum has been set up. To join, please send a request to the SOLPS-ITER RO at ITER: {\tt xavier.bonnin@iter.org}.
+The first formality will then be for prospective users to obtain an IDM (ITER Document Management) account, in case they do not have one already. This account request will be done by the RO, and the requesting user will receive an automated electronic message asking for confirmation of the provided e-mail address.
 
-The \SOLPSITER Git repository also includes the repositories for {\tt B2.5}, {\tt EIRENE}, {\tt Carre} and {\tt DivGeo} individually as submodules. Some service libraries (such as the {\tt GGD}, {\tt MSCL} and {\tt GR} service libraries), can be found in the repository in the {\tt IMAS Extra} and {\tt Libraries} section. Users can also have access to the standalone {\tt SOLPS4.3} repository.
+The next step, after the IDM account has been obtained, is to agree to the ITER Integrated Modelling and Analysis Suite (IMAS) terms of use and request access to the needed repositories. The form to fill out for this is to be found at: \href{https://jira.iter.org/servicedesk/customer/portal/1/create/257}{https://jira.iter.org/servicedesk/customer/portal/1/create/257}. For a full \SOLPSITER installation, you should request access to the following repositories:
+\begin{description}
+  \item[SOLPS-ITER] The overarching \SOLPSITER repository
+  \item[B2.5] For the {\tt B2.5} source code
+  \item[EIRENE] For the {\tt Eirene} source code
+  \item[CARRE] For the {\tt Carre} source code
+  \item[DIVGEO] For the {\tt DG} source code and the equilibrium conversion programs
+  \item[TIARA] For the {\tt TIARA} grid generator
+  \item[SOLPS-GUI] For the graphical environment in which \SOLPSITER can be run
+  \item[GR Software] The graphics library needed by {\tt Eirene} and the triangulation program
+  \item[MSCL] A utility library to parse the {\tt DG} output files
+  \item[AMNS ADAS] A repository of atomic data used by the codes
+\end{description}
+Users may request access to other repositories as well according to their needs or interest. If not intending to participate in code development, one may ask for {\tt REPO\_READ} permissions only, instead of {\tt REPO\_WRITE}.
+
+After access is granted, the user will be able to consult the \SOLPSITER GIT repository (\href{https://git.iter.org/projects/BND/repos/solps-iter/browse}{https://git.iter.org/projects\allowbreak/BND/repos/solps-iter/browse}) maintained at the IO, and the \SOLPSITER SharePoint web site hosted by ITER (\href{https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}{https://sharepoint.iter.org\allowbreak/departments/POP/CM/IMAS/SOLPS-ITER}). The manual to the SOLPS-GUI can be found online at \href{https://static.iter.org/imas/assets/solps-iter/html/}{https://static.iter.org/imas/assets/solps-iter/html/}. Links to the IDM-controlled documents related to \SOLPSITER can be found in a centralized folder (\href{https://user.iter.org/?uid=Q92BAQ}{https://user.iter.org/?uid=Q92BAQ}). The account request will also serve for registration of the user to the \SOLPSITER mailing list ({\tt SOLPS-ITER@iter.org}). Additionally, there is a Confluence Wiki page located at \href{https://confluence.iter.org/display/IMP/SOLPS-ITER}{https://confluence.iter.org/display/IMP/SOLPS-ITER} for the purpose of collecting user contributions to the body of knowledge about the code and which contains minutes of the \SOLPSITER User Forums and Release Notes for the various code versions. Lastly, a Slack discussion forum has been set up. To join, please send a request to the \SOLPSITER RO at ITER: {\tt xavier.bonnin@iter.org}.
+
+The \SOLPSITER Git repository includes the repositories for {\tt B2.5}, {\tt EIRENE}, {\tt Carre} and {\tt DivGeo} individually as submodules. Some service libraries (such as the {\tt GGD}, {\tt MSCL} and {\tt GR} service libraries), can be found in the repository in the {\tt IMAS Extra} and {\tt Libraries} section. Users can also have access to the standalone {\tt SOLPS4.3} repository.
 
 One can generally browse the ITER Git repositories here: \href{https://git.iter.org}{https://git.iter.org} and \SOLPSITER specifically here: \href{https://git.iter.org/projects/BND/repos/solps-iter/browse}{https://git.iter.org/projects/BND/repos/solps-iter/browse}, but since these repositories are restricted users will first need to authenticate with their ITER (IDM) username and password - possibly twice, once for the intranet, and once for the Git web front end in the top right hand corner in the web browser window.
 
@@ -232,7 +249,7 @@ Since the user-id is immutably encoded into any changes, it is always a good ide
 > git config --global user.email your.name@anywhere.you.are
 \end{verbatim}
 
-Users all have write access to these repositories although not to the {\tt develop}, {\tt master} or {\tt svn/*} branches.  This basically means one should create {\tt feature/[topic]}, {\tt bugfix/[topic]}, or {\tt hotfix/[topic]} branches and raise a "Pull Request" (\href{https://git.iter.org/projects/BND/repos/solps-iter/pull-requests}{https://git.iter.org/projects/BND/repos/solps-iter/pull-requests}) to have them merged into the {\tt develop} branch after pushing them back to the ITER repository.
+Users who have obtained {\tt REPO\_WRITE} permissions can, for their own development, create {\tt feature/[topic]}, {\tt bugfix/[topic]}, or {\tt hotfix/[topic]} branches and raise a "Pull Request" (\href{https://git.iter.org/projects/BND/repos/solps-iter/pull-requests}{https://git.iter.org/projects/BND\allowbreak/repos/solps-iter/pull-requests}) to have them merged into the {\tt develop} branch after pushing them back to the ITER repository. The {\tt develop}, {\tt master} and {\tt svn/*} branches are protected and can only be manipulated by the owners of the repository.
 
 Issues are handled using JIRA (\href{https://jira.iter.org/browse/IMAS}{https://jira.iter.org/browse/IMAS}) and users should feel encouraged to create new issues associated with \SOLPSITER (selected from the drop-down list of components) if they have any problems or suggestions. (Please ignore the options associated with resource estimates and sprints.)
 
@@ -7835,7 +7852,8 @@ V_{ay}^{\left( E \times B \right)} =
 
 \begin{equation}\label{eq:ne}
 n_e = \sum \limits^{ns-1}_{a=0} z_a n_a, \qquad
-n_i = \sum \limits^{ns-1}_{a=0} n_a
+n_i = \sum \limits^{ns-1}_{a=0} n_a, \qquad
+\widetilde{n}_i = \sum \limits^{ns-1}_{\substack{a=0 \\ z_a \neq 0}} n_a
 \end{equation}
 
 \begin{equation}
@@ -7847,13 +7865,15 @@ p_e = n_e T_e
 V_a^{corr\_dpc} = \frac{c^{corr\_dpc}}{16} \left| b_x \right| \sqrt{ \frac{p_a}{m_a n_a} } \frac{\partial^2}{\partial x^2} \left( \frac{1}{p_a} \frac{\partial p_a}{\partial x} \right)
 \end{equation}
 
-The current contributions $j_{a}$ are non-zero only for the one hydrogenic species with $z_a = 1$ and $z_{n,a} = 1$. If the code contains multiple hydrogenic species, an error will be reported to avoid double-counting. The assignment of these current contributions to the ions instead of the electrons fluxes is governed by the switches {\tt b2tfnb\_xcur} and {\tt b2tfnb\_ycur} for the poloidal and radial directions, respectively.
+The ion densities $n_i$ and $\widetilde{n}_i$ are stored in the {\tt ni(:,:,0)} and {\tt ni(:,:,1)} array components respectively.
+
+Which speciated $j_{a}$ current contributions are non-zero depends on the physics model switches {\tt b2tanml\_anml\_all\_ions} for $j_a^{(AN)}$, {\tt b2tiner\_inert\_all\_ions} for $j_a^{(in)}$, and {\tt b2tvspr\_visper\_all\_ions} for $j_a^{(vis \perp)}$, respectively. If the Grad-Zhdanov closure is applied, then all ion species contribute to the $\widetilde{j}_a^{(vis \parallel)}$ and $\widetilde{j}_a^{(visq)}$ currents. Otherwise, only the one hydrogenic species with $z_a = 1$ and $z_{n,a} = 1$ will. If the code contains multiple hydrogenic species and the Zhdanov closure scheme is not activated, an error will be reported to avoid double-counting. Overall, the assignment of these current contributions to the ion instead of to the electron fluxes is governed by the switches {\tt b2tfnb\_xcur} and {\tt b2tfnb\_ycur} for the poloidal and radial directions, respectively.
 
 \subsection{Source terms in density equations}
 
 \begin{equation}
 \label{eq:particle_source_appC}
-S_a^n=S_{I_a}^n+S_{I_{a+1}}^n+S_{R_a}^n+S_{R_{a-1}}^n+S_{CX_a}^n+S_{CX_{a-1}}^n+S_a^{\rm Eirene}
+S_a^n = S_{I_a}^n+S_{I_{a+1}}^n+S_{R_a}^n+S_{R_{a-1}}^n+S_{CX_a}^n+S_{CX_{a-1}}^n+S_a^{\rm Eirene}
 \end{equation}
 
 
@@ -8602,7 +8622,7 @@ $
 
 $\eta_{ay} = \eta^{(AN)}_a + \eta^{(CL)}_{ay}$, $\eta^{(CL)}_{ay} = 0$
 
-$\widetilde{q}_a^{(0)} = q^{(1)} \arctan \left( \frac{q_a^{(0)}}{q^{(1)}} \right), \; q^{(1)} = c_{q1} n_i T_i \sqrt{\frac{T_i + T_e}{m_i}}$
+$\widetilde{q}_a^{(0)} = q^{(1)} \arctan \left( \frac{q_a^{(0)}}{q^{(1)}} \right), \; q^{(1)} = c_{q1} \widetilde{n}_i T_i \sqrt{\frac{T_i + T_e}{m_i}}$
 
 $c_{q1} = 0.5$ or {\tt 'b2siav\_cqip1'} set to {\tt '0.1'} in {\tt b2mn.dat}
 
@@ -8611,15 +8631,11 @@ The three-point smoothing procedure is imposed twice on $\widetilde{q}^{(0)}$ al
 In case {\tt 'b2siav\_style\_qip'} is set to {\tt '0'} in {\tt b2mn.dat}:
 
 \begin{equation}\label{eq:q0-0}
-\begin{matrix}
-q_a^{(0)} = \frac{B}{B_x} \widetilde{q}_{ax}^{(dia)} & =
-& \left\{
+q_a^{(0)} = \left\{
 \begin{matrix}
 0 & \text{outside the separatrix} \\
--\frac{5}{2} \frac{B_z B}{B_x \left\langle B^2 \right\rangle} \frac{n_a T_i}{e} \frac{\partial T_i}{h_y \partial y}
-& \text{inside the separatrix}
+\frac{B}{B_x} \widetilde{q}_{ax}^{(dia)} & \text{inside the separatrix}
 \end{matrix} \right.
-\end{matrix}
 \end{equation}
 
 %-------- end of 8th page -------------
@@ -8627,16 +8643,11 @@ q_a^{(0)} = \frac{B}{B_x} \widetilde{q}_{ax}^{(dia)} & =
 In case {\tt 'b2siav\_style\_qip'} is set to {\tt '1'} in {\tt b2mn.dat}:
 
 \begin{equation}\label{eq:q0-1}
-\begin{matrix}
-q_a^{(0)} = q_{a\parallel}^{(0)} + \frac{B}{B_x} q_{ax}^{(dia)} & =
-& \left\{
+q_a^{(0)} = \left\{
 \begin{matrix}
 0 & \text{outside the separatrix} \\
--\frac{\widetilde{\widetilde{k}}_{ix}^{(CL)}}{b_x} \frac{\partial T_i}{h_x \partial x}
--\frac{5}{2} \frac{B_z B}{B_x B^2} \frac{n_a T_i}{e} \frac{\partial T_i}{h_y \partial y}
-& \text{inside the separatrix}
+q_{a\parallel}^{(0)} + \frac{B}{B_x} q_{ax}^{(dia)} & \text{inside the separatrix}
 \end{matrix} \right.
-\end{matrix}
 \end{equation}
 
 $
@@ -8646,11 +8657,11 @@ $
 Note that $\widetilde{\widetilde{k}}_{ix}^{(CL)}$ already contains a factor of $b_x^2$, see its definition below Eq.~(\ref{eq:eni_kapixCL}).
 
 $
-q_{ax}^{(dia)} = - \frac{5}{2} \frac{B_z}{B^2} \frac{n_a T_i}{e} \frac{\partial T_i}{h_y \partial y}
+q_{ax}^{(dia)} = - \frac{5}{2} \frac{B_z}{B^2} \frac{\widetilde{n}_i T_i}{e} \frac{\partial T_i}{h_y \partial y}
 $
 
 $
-\widetilde{q}_{ax}^{(dia)} = - \frac{5}{2} \frac{B_z}{\left\langle B^2 \right\rangle} \frac{n_a T_i}{e} \frac{\partial T_i}{h_y \partial y}
+\widetilde{q}_{ax}^{(dia)} = - \frac{5}{2} \frac{B_z}{\left\langle B^2 \right\rangle} \frac{\widetilde{n}_i T_i}{e} \frac{\partial T_i}{h_y \partial y}
 $
 
 $
@@ -9570,7 +9581,7 @@ For integrated modeling workflows ({\tt 'b2trcl\_integral\_modeling'} set to {\t
 
 \begin{equation}\label{eq:eni_tkapixCL}
 \widetilde{\kappa}_{ix}^{(CL)} = \frac{25}{4} \left(
-	n_1 T_i \frac{B_z}{B_x h_y}
+	n_{ismain} T_i \frac{B_z}{B_x h_y}
 \right)^2
 \frac{h_{y \text{(outer midplane)}}} e
 \left[
@@ -9578,7 +9589,7 @@ For integrated modeling workflows ({\tt 'b2trcl\_integral\_modeling'} set to {\t
 \right] \times K_{\text{ASTRA}}
 \end{equation}
 
-Here $\left\langle B^2 \right\rangle = \frac{\mathlarger{\oint} B^2 \sqrt{g} dx}{\mathlarger{\oint} \sqrt g dx}$
+Here $\left\langle B^2 \right\rangle = \frac{\mathlarger{\oint} B^2 \sqrt{g} dx}{\mathlarger{\oint} \sqrt g dx}$ and {\tt ismain} is the index of the main plasma ion species.
 
 From {\tt ASTRA} we get $T_i/e$ and $\oint q_i^{NEO} ds$ as a functions of $R_{\text{(outer midplane)}}$ and calculate
 
@@ -9921,7 +9932,7 @@ $\widetilde{j}_{ay}^{(visq)}$ is the radial component of the heat viscosity curr
 
 If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $\widetilde j_{ay}^{(visq)} $ is applied according to section \ref{sec:Zhdanov}.
 
-For definition of $\widetilde{q}_a^{(0)}$, see Eqs. (\ref{eq:q0-0}) and (\ref{eq:q0-1}).
+For definition of $\widetilde{q}_a^{(0)}$, see Eqs.~(\ref{eq:q0-0}) and (\ref{eq:q0-1}).
 
 \begin{equation}\label{eq:pot_jys}
 \widetilde{j}_y^{(s)} =
@@ -9930,7 +9941,7 @@ For definition of $\widetilde{q}_a^{(0)}$, see Eqs. (\ref{eq:q0-0}) and (\ref{eq
 \left(
 - \sigma_{aa_0} \frac{\partial \Phi}{h_y \partial y}
 - \sigma_{aa_0} \frac{1}{z_a e n_a} \frac{\partial n_a T_i}{h_y \partial y}
-- \sigma_{aa_0} B_z V_{a_{0}x}
+- \sigma_{aa_0} B V_{a_{0}x}
 \right)
 \end{equation}
 
@@ -9952,7 +9963,7 @@ j_y^{(ST)} = &
 
 $V_{a_{0}x}=\frac{\Gamma_{a_{0}x}}{n_{a_0}}$
 
-$\sigma_{aa_0}$ see above
+$\sigma_{aa_0}$ see Eq.~(\ref{eq:pot_sigaa0}) above.
 
 \subsection{Conductivities}
 
