@@ -118,6 +118,9 @@ if ("$Break_loop" == "no") then
     if (-e fort.15.i) mv fort.15.i fort.15.i_$NOW
     if (-e fort.44.i) mv fort.44.i fort.44.i_$NOW
     if (-e fort.46.i) mv fort.46.i fort.46.i_$NOW
+    if (-e fort.44_aver.i) mv fort.44_aver.i fort.44_aver.i_$NOW
+    if (-e fort.46_aver.i) mv fort.46_aver.i fort.46_aver.i_$NOW
+    if (-e conbe.dat.i) mv conbe.dat.i conbe.dat.i_$NOW
     mv b2fstate b2fstati
     if (-s b2faveri) mv b2faveri b2faveri_$NOW
     if (-s b2favere) mv b2favere b2faveri

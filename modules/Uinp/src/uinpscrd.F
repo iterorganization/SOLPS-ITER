@@ -280,7 +280,11 @@ C***  SURFMOD_k_<MATERIAL>_<SPT>_<PUMP>_<PRESS>_<SEMITRANSP>_<TEMPERATURE K>
       end if
       if (.not.streql(txtbuf,''))
      .  cnam=cnam(1:len_trim(cnam))//txtbuf(1:len_trim(txtbuf))
-      if(scilspt(k).NE.0) cnam=cnam(1:len_trim(cnam))//'_SPT'
+      if(scilspt(k).EQ.9) then
+        cnam=cnam(1:len_trim(cnam))//'_BESPUT'
+      elseif(scilspt(k).NE.0) then
+        cnam=cnam(1:len_trim(cnam))//'_SPT'
+      end if
       if(screcycf(k).LT.1.0.OR.screcyct(k).LT.1.0)
      .                 cnam=cnam(1:len_trim(cnam))//'_PUMP'
       if(scilref(k).EQ.4)

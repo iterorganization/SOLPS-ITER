@@ -1,0 +1,2 @@
+BEGIN     END   DELAY     SBE        TSTEP      AVCOF   TSTEP_FLAG  NOACUM_FLAG
+  182     253      10   3.240E-20  1.000E-02    0.990            0           1
