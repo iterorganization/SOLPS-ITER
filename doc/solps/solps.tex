@@ -15749,6 +15749,94 @@ region 8 === island boundary
 \end{Verbatim}
 
 \clearpage
+\section{Regions for Low-field Side Snowflakes}
+\index{regions, SF cases}
+
+The case presented below corresponds to one where the secondary X-point is 
+located in the SOL the primary (ie, a Snowflake-minus). For the
+SF-plus configuration, the only change is if the boundary between the 
+outer divertor entrance and outer leg 3 occurs in the PFR and SOL,
+or just the PFR of the outboard entrance. These region definitions also apply to
+X-point target geometries.
+
+For both cases, {\tt NREG} should be set to $7$.
+
+Volume regions:
+
+\begin{verbatim}
++-------+-----------------------+-------+-------++-------+-------+  
+|       :                       :       :       ||       :       |
+|       :           2           :       :       ||       :       |
+|       :                       :       +...5...||...6...+...7...|
+|       :                       :       |       ||       |       |
+|...3...+-----------------------+...4...+       ||       |       |
+|       |           1           |       |       ||       |       |
+|       |                       |       |       ||       |       |
++-------+-----------------------+-------+-------++-------+-------+
+ 
+region 1 === core
+region 2 === SOL
+region 3 === inboard divertor
+region 4 === outboard divertor entrance
+region 5 === outboard divertor leg 1
+region 6 === outboard divertor leg 2
+region 7 === outboard divertor leg 3
+\end{verbatim}
+
+\clearpage
+$X$-directed regions:
+\begin{verbatim}
++-------+-----------------------+-------+-------++-------+-------+  
+|       :                       :       :       ||       :       |
+|       2                       3       6       ||       7       |
+|       :                       :       +.......45.......+.......8
+|       :                       :       |       ||       |12     |
+1.......+-----------------------+.......+11     ||       |       |
+|       |9                      |10     |       ||       |       |
+|       |                       |       |       ||       |       |
++-------+-----------------------+-------+-------++-------+-------+
+
+region 1 === inboard divertor target
+region 2 === entrance to inboard divertor
+region 3 === entrance to outboard divertor
+region 4 === first outboard divertor target 
+region 5 === second outboard divertor target 
+region 6 === entrance to first outer divertor leg
+region 7 === connection of SOLs for 3rd and 4th region in the outboard divertor
+region 8 === third outboard divertor target 
+region 9 ===connection between left and right core
+region 10 ===connection between left and right private flux region
+region 11 ===connection between outboard divertor entrance and third outer leg 
+region 12 ===connection between PFR of first and second outer leg
+\end{verbatim}
+
+$Y$-directed regions:
+\begin{verbatim}
++---5---+-----------6-----------+---7---+--11---++--12---+---13--+  
+|       :                       :       :       ||       :       |
+|       :                       :       :       ||       :       |
+|       :                       :       +.......||.......+.......|
+|       :                       :       |       ||       |       |
+|.......+-----------4-----------+.......+       ||       |       |
+|       |                       |       |       ||       |       |
+|       |                       |       |       ||       |       |
++---1---+-----------2-----------+---3---+---8---++---9---+---10--+
+
+region 1 === inboard divertor private flux wall boundary
+region 2 === core boundary
+region 3 === outboard divertor entrance private flux wall boundary 
+region 4 === separatrix
+region 5 === inboard divertor main chamber wall boundary 
+region 6 === SOL main chamber wall boundary 
+region 7 === outboard divertor enterance main chamber wall boundary
+region 8 === first outboard divertor leg private flux wall boundary 
+region 9 === second ooutboard divertor leg private flux wall boundary 
+region 10 === third outboard divertor leg private flux wall boundary 
+region 11 === first outboard divertor leg main chamber wall boundary
+region 12 === second outboard divertor leg main chamber wall boundary 
+region 13 === third outboard divertor leg main chamber wall boundary
+  
+\end{verbatim}
 
 \chapter{b2plot manual}
 \label{cha:b2plotmanual}
@@ -21930,6 +22018,38 @@ appearing on the visualisation curve, then try to adjust the
 {\tt Radial scale} or {\tt Poloidal scale} in the
 {\tt Limiter and linear configurations} layer.
 
+\subsection{Snowflake configurations}
+\index{DG, Snowflake configurations}\index{DG, linear configurations}
+
+Similar to limiter or linear configurations, {\tt DG} needs to be
+"tricked", because it is not yet a valid topology in DG.  
+
+The procedure to follow is:
+\begin{enumerate}
+  \item {\tt Import} a valid (preferably double-null) {\tt Equilibrium} and {\tt Template} for the same machine 
+  as the desired snowflake. Declare the structure, 
+  {\tt Inner target} and {\tt Outer target}, as if preparing the double-null stand-in.
+  \item Add four targets to the {\tt Target specification} variables, the edges of which
+  should correspond to the snowflake grid, not the double-null stand in. Provide there
+all relevant material and sputtering properties.
+\item Identify the four contours for the {\tt TRIA-EIRENE parameters} variable that apply to the snowflake
+grid, not the double-null stand-in.
+Export these four surfaces as templates, which must be used to manually generate a tria.in file later
+(there are also python routines to do this in the snowflake example run). 
+  \item Create the {\tt Surfaces} and {\tt Grid points} for the double-null stand in.
+  This step is done because DG needs surfaces and grid points before outputting.
+  \item As usual, define all other variables ({\tt Surface data},
+{\tt Gas puff}, {\tt Plasma species}, etc...) as needed.
+\end{enumerate}
+
+\index{lns}
+Once you are finished setting up all the case variables, follow the
+usual procedure: {\tt Output} the case files, use the {\tt lns} script to
+establish the necessary symbolic links. Rather than running CARRE, simply run Unip with
+the externally generated snowflake grid file. This should generate an {\tt input.eir} file, which
+will house the desired material and strata data, but plasma data relevant to the double null grid.
+As such, it should be edited later to contain correct plasma information. Instructions to do this
+are located in the snowflake example run directory.
 \subsection{Creating and editing grid points}
 \index{DG, grid points}\index{DG, adding grid points}
 
