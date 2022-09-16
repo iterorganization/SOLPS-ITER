@@ -634,6 +634,7 @@ The cases stored for retrieval include:
   \item[ITER\_2588\_drifts] ITER {\tt B2.5} standalone D-only demonstration case with and without drifts
   \item[ITER\_535\_D+He+Ar] ITER full power case with Ar injection
   \item[ITER\_Be-W\_D+T+He+Ne] ITER full power case with 98 species
+  \item[MAST\_U\_SFminus\_Donly] Lower snowflake-minus case at low power with D-only
 \end{description}
 as well as additional partial cases used in tutorials when learning how to build a case using the {\tt DivGeo} and {\tt SOLPS-GUI} utilities.
 Other cases can be added at the suggestion of users, if available.
@@ -15790,8 +15791,8 @@ $X$-directed regions:
 |       :                       :       :       ||       :       |
 |       2                       3       6       ||       7       |
 |       :                       :       +.......45.......+.......8
-|       :                       :       |       ||       |12     |
-1.......+-----------------------+.......+11     ||       |       |
+|       :                       :       |       ||       |       |
+1.......+-----------------------+.......+11     ||       |12     |
 |       |9                      |10     |       ||       |       |
 |       |                       |       |       ||       |       |
 +-------+-----------------------+-------+-------++-------+-------+
@@ -22019,7 +22020,7 @@ appearing on the visualisation curve, then try to adjust the
 {\tt Limiter and linear configurations} layer.
 
 \subsection{Snowflake configurations}
-\index{DG, Snowflake configurations}\index{DG, linear configurations}
+\index{DG, Snowflake configurations}
 
 Similar to limiter or linear configurations, {\tt DG} needs to be
 "tricked", because it is not yet a valid topology in DG.  
@@ -22045,11 +22046,11 @@ Export these four surfaces as templates, which must be used to manually generate
 \index{lns}
 Once you are finished setting up all the case variables, follow the
 usual procedure: {\tt Output} the case files, use the {\tt lns} script to
-establish the necessary symbolic links. Rather than running CARRE, simply run Unip with
+establish the necessary symbolic links. Rather than running CARRE, simply run Uinp with
 the externally generated snowflake grid file. This should generate an {\tt input.eir} file, which
-will house the desired material and strata data, but plasma data relevant to the double null grid.
-As such, it should be edited later to contain correct plasma information. Instructions to do this
-are located in the snowflake example run directory.
+will house the desired material and strata data. However, the plasma data will be relevant to the 
+double null grid, not the desired snowflake. As such, it should be edited later to contain correct
+ plasma information. Instructions to do this are located in the snowflake example run directory.
 \subsection{Creating and editing grid points}
 \index{DG, grid points}\index{DG, adding grid points}
 
