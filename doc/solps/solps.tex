@@ -3045,6 +3045,20 @@ See also Appendix \ref{lis:b2cdcn} for a more up-to-date description.
   timestep multiplier for the electron energy equation in region {\tt IREG}
 \item[DTEI]\index{DTEI} {\tt real array, length (NREG+1)}, the
   timestep multiplier for the ion energy equation in region {\tt IREG}
+\item[DTCO\_SOL]\index{DTCO\_SOL} {\tt real array, length NS}, additional
+  timestep multiplier for the continuity equation of species
+  {\tt IS} in the far SOL ($iy \ge iy\_SOL\_dtXX$)
+\item[DTMO\_SOL]\index{DTMO\_SOL} {\tt real array, length NS}, additional
+  timestep multiplier for the parallel momentum equation of species
+  {\tt IS} in the far SOL ($iy \ge iy\_SOL\_dtXX$)
+\item[DTEE\_SOL]\index{DTEE\_SOL} {\tt real}, additional
+  timestep multiplier for the electron energy equation in the far SOL
+  ($iy \ge iy\_SOL\_dtXX$)
+\item[DTEI\_SOL]\index{DTEI\_SOL} {\tt real}, additional
+  timestep multiplier for the ion energy equation in the far SOL
+  ($iy \ge iy\_SOL\_dtXX$)
+\item[IY\_SOL\_DTXX]\index{IY\_SOL\_DTXX} {\tt integer}, index of the
+  first radial ring where the far SOL starts
 \item[SOLVECO]\index{SOLVECO} {\tt logical array, length NS * (NREG+1)},
   indicates whether the continuity equations are to be solved in each region
 \item[SOLVEMO]\index{SOLVEMO} {\tt logical array, length NS * (NREG+1)},
@@ -3072,7 +3086,7 @@ See also Appendix \ref{lis:b2cdcn} for a more up-to-date description.
   indicates whether the electron temperature correction is added to the electric potential correction ({\tt .true.} by default)
 \end{description}
 
-When referring to array length {\tt (NREG+1)} above, we mean range {\tt [0:NREG]} in the code.
+When referring to array length {\tt (NREG+1)} above, we mean range {\tt [0:NREG]} in the code, while {\tt NS} refers to {\tt [0:NS-1]}.
 
 When running in dynamic mode ({\tt b2mndt\_style.eq.2}), the total momentum and energy equations are not solved, and the timestep multipliers should not be used, unless their product with the under-relaxation parameters is 1 (as the code defaults provide).
 
