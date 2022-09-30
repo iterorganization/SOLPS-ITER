@@ -2,7 +2,7 @@
 
 # Shared asset directory is possible on ITER cluster
 ITER_EXTERNALDIR=/work/imas/shared/external/assets/solps-iter/MD5
-ifeq (${HOST_NAME},"ITER") # On ITER cluster
+ifeq (${HOST_NAME},ITER) # On ITER cluster
 	ASSETDIR ?= ${ITER_EXTERNALDIR}
 	ASSETDIR_GROUP ?= fst-cluster-users
 	EXTERNALDIR ?= ${ITER_EXTERNALDIR}
