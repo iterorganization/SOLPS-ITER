@@ -18,6 +18,7 @@ switch ($nodename)
   module load MSCL/1.2.3-GCCcore-10.2.0
   module load GR/0.0.94-GCCcore-10.2.0
   module load GLI/4.5.30-GCCcore-10.2.0
+  # module load NCL/6.6.2-foss-2020b # TODO install module
   module load flex/2.6.4-GCCcore-10.2.0
   module load Doxygen/1.8.20-GCCcore-10.2.0
   module load Ghostscript/9.53.3-GCCcore-10.2.0
