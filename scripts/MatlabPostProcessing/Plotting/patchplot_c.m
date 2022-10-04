@@ -1,4 +1,4 @@
-function [p,seph,strh] = Patchplot(structure,gmtry,field,varargin)
+function [p,seph,strh,hf] = Patchplot(structure,gmtry,field,varargin)
 % [p,seph,strh]= Patchplot(structure,gmtry,field,scale,fmin,fmax)
 %
 % Routine to make patchplot of cell centered quantity.

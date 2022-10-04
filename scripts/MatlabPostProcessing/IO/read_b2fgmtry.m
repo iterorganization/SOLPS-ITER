@@ -53,6 +53,9 @@ gmtry.hx   = read_rfield(fid,'hx'  ,[nx+2,ny+2]);
 gmtry.hy   = read_rfield(fid,'hy'  ,[nx+2,ny+2]);
 gmtry.qz   = read_rfield(fid,'qz'  ,[nx+2,ny+2,2]);
 gmtry.qc   = read_rfield(fid,'qc'  ,qcdim);
+if version >= '03.001.000'
+    gmtry.qs   = read_rfield(fid,'qs'  ,[nx+2,ny+2,2]);
+end
 gmtry.gs   = read_rfield(fid,'gs'  ,[nx+2,ny+2,3]);
 
 

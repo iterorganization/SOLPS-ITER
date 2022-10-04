@@ -879,49 +879,49 @@ c Fill out b2mod_indirect arrays
       do ix = -1, nx
        do iy = -1, ny
         if (leftix(ix,iy).ne.-2) then
-          fhe(ix,iy,0) = fhe_4(leftix(ix,iy),leftiy(ix,iy),0)
-          fhi(ix,iy,0) = fhi_4(leftix(ix,iy),leftiy(ix,iy),0)
-          fch(ix,iy,0) = fch_4(leftix(ix,iy),leftiy(ix,iy),0)
-          fch_p(ix,iy,0) = fch_p_4(leftix(ix,iy),leftiy(ix,iy),0)
-          fchdia(ix,iy,0) = fchdia_4(leftix(ix,iy),leftiy(ix,iy),0)
+          fhe(ix,iy,0,0) = fhe_4(leftix(ix,iy),leftiy(ix,iy),0)
+          fhi(ix,iy,0,0) = fhi_4(leftix(ix,iy),leftiy(ix,iy),0)
+          fch(ix,iy,0,0) = fch_4(leftix(ix,iy),leftiy(ix,iy),0)
+          fch_p(ix,iy,0,0) = fch_p_4(leftix(ix,iy),leftiy(ix,iy),0)
+          fchdia(ix,iy,0,0) = fchdia_4(leftix(ix,iy),leftiy(ix,iy),0)
           do i=0,ns-1
             if(ifl(i).ne.0) then
-              fna(ix,iy,0,i) =
+              fna(ix,iy,0,0,i) =
      .         fna_4(leftix(ix,iy),leftiy(ix,iy),0,ifl(i))
             else
-              fna(ix,iy,0,i) = 0.0_R8
+              fna(ix,iy,0,0,i) = 0.0_R8
             endif
           enddo
         else
-          fhe(ix,iy,0) = 0.0_R8
-          fhi(ix,iy,0) = 0.0_R8
-          fch(ix,iy,0) = 0.0_R8
-          fch_p(ix,iy,0) = 0.0_R8
-          fchdia(ix,iy,0) = 0.0_R8
-          fna(ix,iy,0,0:ns-1) = 0.0_R8
+          fhe(ix,iy,0,0) = 0.0_R8
+          fhi(ix,iy,0,0) = 0.0_R8
+          fch(ix,iy,0,0) = 0.0_R8
+          fch_p(ix,iy,0,0) = 0.0_R8
+          fchdia(ix,iy,0,0) = 0.0_R8
+          fna(ix,iy,0,0,0:ns-1) = 0.0_R8
         endif
     7   if (bottomiy(ix,iy).ne.-2) then
-          fhe(ix,iy,1) = fhe_4(bottomix(ix,iy),bottomiy(ix,iy),1)
-          fhi(ix,iy,1) = fhi_4(bottomix(ix,iy),bottomiy(ix,iy),1)
-          fch(ix,iy,1) = fch_4(bottomix(ix,iy),bottomiy(ix,iy),1)
-          fch_p(ix,iy,1) = fch_p_4(bottomix(ix,iy),bottomiy(ix,iy),1)
-          fchdia(ix,iy,1) =
-     .                    fchdia_4(bottomix(ix,iy),bottomiy(ix,iy),1)
+          fhe(ix,iy,1,1) = fhe_4(bottomix(ix,iy),bottomiy(ix,iy),1)
+          fhi(ix,iy,1,1) = fhi_4(bottomix(ix,iy),bottomiy(ix,iy),1)
+          fch(ix,iy,1,1) = fch_4(bottomix(ix,iy),bottomiy(ix,iy),1)
+          fch_p(ix,iy,1,1) = fch_p_4(bottomix(ix,iy),bottomiy(ix,iy),1)
+          fchdia(ix,iy,1,1) =
+     .                      fchdia_4(bottomix(ix,iy),bottomiy(ix,iy),1)
           do i=0,ns-1
             if(ifl(i).ne.0) then
-              fna(ix,iy,1,i) =
+              fna(ix,iy,1,1,i) =
      .         fna_4(bottomix(ix,iy),bottomiy(ix,iy),1,ifl(i))
             else
-              fna(ix,iy,1,i) = 0.0_R8
+              fna(ix,iy,1,1,i) = 0.0_R8
             endif
           enddo
         else
-          fhe(ix,iy,1) = 0.0_R8
-          fhi(ix,iy,1) = 0.0_R8
-          fch(ix,iy,1) = 0.0_R8
-          fch_p(ix,iy,1) = 0.0_R8
-          fchdia(ix,iy,1) = 0.0_R8
-          fna(ix,iy,1,0:ns-1) = 0.0_R8
+          fhe(ix,iy,1,1) = 0.0_R8
+          fhi(ix,iy,1,1) = 0.0_R8
+          fch(ix,iy,1,1) = 0.0_R8
+          fch_p(ix,iy,1,1) = 0.0_R8
+          fchdia(ix,iy,1,1) = 0.0_R8
+          fna(ix,iy,1,1,0:ns-1) = 0.0_R8
         endif
        enddo
       enddo
@@ -936,7 +936,8 @@ c Fill out b2mod_indirect arrays
         if(ifl(i).ne.0) then
           na(-1:nx,-1:ny,i) = na_4(-1:nx,-1:ny,ifl(i))
           ua(-1:nx,-1:ny,i) = ua_4(-1:nx,-1:ny,ifl(i))
-          uadia(-1:nx,-1:ny,0:1,i) = uadia_4(-1:nx,-1:ny,0:1,ifl(i))
+          uadia(-1:nx,-1:ny,0,0,i) = uadia_4(-1:nx,-1:ny,0,ifl(i))
+          uadia(-1:nx,-1:ny,1,1,i) = uadia_4(-1:nx,-1:ny,1,ifl(i))
           am(i) = nint(mi_4(ifl(i))/mp)
           zamin(i) = zi_4(ifl(i))
           zamax(i) = zi_4(ifl(i))
@@ -944,7 +945,7 @@ c Fill out b2mod_indirect arrays
         else
           na(-1:nx,-1:ny,i) = 1.0e8_R8
           ua(-1:nx,-1:ny,i) = 0.0_R8
-          uadia(-1:nx,-1:ny,0:1,i) = 0.0_R8
+          uadia(-1:nx,-1:ny,0:1,0:1,i) = 0.0_R8
           am(i) = nint(mi_4(ifl(i+1))/mp)
           zamin(i) = 0.0_R8
           zamax(i) = 0.0_R8
@@ -958,8 +959,8 @@ c Fill out b2mod_indirect arrays
 
 c Compute geometrical quantities
       call b2agmt(nx, ny, 1,
-     & crx, cry, vol, hx, hy, qz, qc, qcb, gs,
-     & cell_width, cell_height, leftix, leftiy, bottomiy)
+     & crx, cry, vol, hx, hy, qz, qc, qs, gs,
+     & leftix, leftiy, bottomix, bottomiy)
       fpsi = 0.0_R8
       ffbz = 0.0_R8
       periodic_bc = 0
@@ -997,14 +998,14 @@ c Fill out b2mod_plasma data
       fna_eir = fna
       fhe_eir = fhe
       fhi_eir = fhi
-      fna_32(:,:,0,:) = fna(:,:,0,:)
-      fna_32(:,:,1,:) = 0.0_R8
-      fna_52(:,:,0,:) = 0.0_R8
-      fna_52(:,:,1,:) = fna(:,:,1,:)
-      fch_32(:,:,0) = fch(:,:,0)
-      fch_32(:,:,1) = 0.0_R8
-      fch_52(:,:,0) = 0.0_R8
-      fch_52(:,:,1) = fch(:,:,1)
+      fna_32(:,:,0,0,:) = fna(:,:,0,0,:)
+      fna_32(:,:,1,1,:) = 0.0_R8
+      fna_52(:,:,0,0,:) = 0.0_R8
+      fna_52(:,:,1,1,:) = fna(:,:,1,1,:)
+      fch_32(:,:,0,0) = fch(:,:,0,0)
+      fch_32(:,:,1,1) = 0.0_R8
+      fch_52(:,:,0,0) = 0.0_R8
+      fch_52(:,:,1,1) = fch(:,:,1,1)
       call b2xpfi(nx, ny, ns, fna, fni)
       call b2xpfi(nx, ny, ns, fna_32, fni_32)
       call b2xpfi(nx, ny, ns, fna_52, fni_52)
