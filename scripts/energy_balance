@@ -79,6 +79,31 @@ switch ($NREG)
        /End tallies/{cnt++;print cnt,rsa,rra,rqa,rcx,rsap,rrap,LI,NI,UI,pfrU,UO,NO,LO,pfrL,LI+NI+UI+pfrU+UO+NO+LO+pfrL+rsa+rra+rqa+rcx-rsap+rrap,ext+0}' | \
     plot ${lx}x${ly}yplot16 rsa rra rqa rcx rsap rrap LI NI UI pfrU UO NO LO pfrL LI+NI+UI+pfrU+UO+NO+LO+pfrL+rsa+rra+rqa+rcx-rsap+rrap EXT iteration 'Power (W)' "`basename $0` `chop_pwd 40`"
     breaksw
+  case "7":
+   pipe_run.log | \
+    egrep -a 'r..[hn].reg|fh..reg|^pot|nnreg|End tallies|Total profile-source Power' | \
+    awk '/nnreg/{nreg=$2+1;nxreg=$3+1;nyreg=$4+1} \
+       /pot/{for (i=1;i<=NF-1;i++) pot[i]=$(i+1)*1.602176634e-19;pot[NF]=0} \
+       /Total profile-source Power/{ext=$4} \
+       /rsahireg/{rsa=0;for (i=2;i<=NF;i+=nreg) rsa+=$i} \
+       /rrahireg/{rra=0;for (i=2;i<=NF;i+=nreg) rra+=$i} \
+       /rqahereg/{rqa=0;for (i=2;i<=NF;i+=nreg) rqa+=$i} \
+       /rcxhireg/{rcx=0;for (i=2;i<=NF;i+=nreg) rcx+=$i} \
+       /rsanareg/{rsap=0;for (i=2;i<=NF;i+=nreg) rsap+=$i*pot[int(i/nreg)+2]} \
+       /rranareg/{rrap=0;for (i=2;i<=NF;i+=nreg) rrap+=$i*pot[int(i/nreg)+1]} \
+       /fhixreg/{W=-$3;E1=$6;E2=-$7;E3=$10} \
+       /fhiyreg/{core=-$4;N=$7+$8+$9+$13+$14+$15;pfr=-$3-$5-$10-$11-$12} \
+       /fhexreg/{W+=-$3;E1+=$6;E2+=-$7;E3+=$10} \
+       /fheyreg/{core+=-$4;N+=$7+$8+$9+$13+$14+$15;pfr+=-$3-$5-$10-$11-$12} \
+       /fhpxreg/{for (i=2;i<=NF;i+=nxreg) {W+=-$(i+1);E1+=$(i+4);E2+=-$(i+5);E3+=-$(i+8)}} \
+       /fhpyreg/{for (i=2;i<=NF;i+=nyreg) {core+=-$(i+2);N+=$(i+5)+$(i+6)+$(i+7)+$(i+11)+$(i+12)+$(i+13);pfr+=-$(i+1)-$(i+3)-$(i+8)-$(i+9)-$(i+10)}} \
+       /fhmxreg/{for (i=2;i<=NF;i+=nxreg) {W+=-$(i+1);E1+=$(i+4);E2+=-$(i+5);E3+=-$(i+8)}} \
+       /fhmyreg/{for (i=2;i<=NF;i+=nyreg) {core+=-$(i+2);N+=$(i+5)+$(i+6)+$(i+7)+$(i+11)+$(i+12)+$(i+13);pfr+=-$(i+1)-$(i+3)-$(i+8)-$(i+9)-$(i+10)}} \
+       BEGIN{print "#cnt rsa rra rqa rcx rsap rrap W N E1 E2 E3 pfr W+N+E1+E2+E3+pfr+rsa+rra+rqa+rcx-rsap+rrap EXT"} \
+       END{print "#cnt rsa rra rqa rcx rsap rrap W N E1 E2 E3 pfr W+N+E1+E2+E3+pfr+rsa+rra+rqa+rcx-rsap+rrap EXT"} \
+       /End tallies/{cnt++;print cnt,rsa,rra,rqa,rcx,rsap,rrap,W,N,E1,E2,E3,pfr,W+N+E1+E2+E3+pfr+rsa+rra+rqa+rcx-rsap+rrap,ext+0}' | \
+    plot ${lx}x${ly}yplot16 rsa rra rqa rcx rsap rrap W N E1 E2 E3 pfr W+N+E1+E2+E3+pfr+rsa+rra+rqa+rcx-rsap+rrap EXT iteration 'Power (W)' "`basename $0` `chop_pwd 40`"
+    breaksw
   case "5":
    pipe_run.log | \
     egrep -a 'r..[hn].reg|fh..reg|^pot|nnreg|End tallies|Total profile-source Power' | \

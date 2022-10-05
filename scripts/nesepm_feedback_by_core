@@ -43,6 +43,13 @@ switch ($NREG)
       pipe_run.log | grep -a nesepm_curr | awk '{print NR,$2,'$target','$target'*'$overshoot',$7}' | sed '$d' | x{$1}yplot4 current target overshoot control Iteration_no density `noquote_pwd 3`
     endif
     breaksw
+  case "7":
+    if ($overshoot == "") then
+      pipe_run.log | grep -a nesepm_curr | awk '{print NR,$2,'$target',$7}' | sed '$d' | x{$1}yplot3 current target control Iteration_no density `noquote_pwd 3`
+    else
+      pipe_run.log | grep -a nesepm_curr | awk '{print NR,$2,'$target','$target'*'$overshoot',$7}' | sed '$d' | x{$1}yplot4 current target overshoot control Iteration_no density `noquote_pwd 3`
+    endif
+    breaksw
   case "8":
     if ($overshoot == "") then
       pipe_run.log | grep -a nesepm_curr | awk '{print NR,$2,'$target',($7+$8)}' | sed '$d' | x{$1}yplot3 current target control Iteration_no density `noquote_pwd 3`
