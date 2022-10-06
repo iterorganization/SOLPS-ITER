@@ -9,6 +9,8 @@ echo "(both require a valid ITER IDM account)"
 echo The full SOLPS-ITER manual can be found in \$SOLPSTOP/doc/solps/solps.pdf
 echo The Eirene manual is located at http://www.eirene.de/
 
+test $0 == tcsh || echo -e "\e[31mUse tcsh to source setup.csh!\e[m" && return 1
+
 # Obtain the directory where setup.csh is located to use as SOLPSTOP
 setenv LAST_COMMAND `echo $_`
 if (`echo ${LAST_COMMAND}` == "") then
@@ -92,7 +94,7 @@ setenv SOLPSLIB ${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}
 
 # setup files for combination of HOST_NAME and COMPILER, + local modifications if present
 if (-s ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}) then
-  echo Loading SETUP/setup.csh.${HOST_NAME}.${COMPILER}.
+  echo Loading SETUP/setup.csh.${HOST_NAME}.${COMPILER}...
   source ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}
 else
   echo File SETUP/setup.csh.${HOST_NAME}.${COMPILER} not found!
