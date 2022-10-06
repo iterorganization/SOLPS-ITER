@@ -12,7 +12,7 @@ switch ($nodename)
   module load GGD/1.10.2-GCC-10.2.0-DD-3.37.0
   module load AMNS/1.4.0-foss-2020b-DD-3.37.0
   module load xarray/0.16.2-foss-2020b
-  module load Viz/2.4.7-foss-2020b
+  module load Viz/2.5.0-foss-2020b
   module load ToFu/1.5.0-foss-2020b-Python-3.8.6
   module load makedepend/1.0.6-GCCcore-10.2.0
   module load MSCL/1.2.3-GCCcore-10.2.0
@@ -35,9 +35,6 @@ switch ($nodename)
   module load SimDB/0.7.1-foss-2020b
   module load Fundamental-Constants/0.1.1
   module load PySide6/6.2.3-GCCcore-10.2.0
-    # TODO Upgrade Viz for 3.5.1
-  module unload --force matplotlib/3.3.3-intel-2020b
-  module load matplotlib/3.5.1-intel-2020b
   breaksw
  case "hpc-login*.iter.org":
   module load IMAS/3.32.1-4.9.1
@@ -106,25 +103,33 @@ else
   setenv LD_CATALYST "${LD_CATALYST} -lstdc++"
 endif
 
-# Other environment variables
-# module load solps-gui
-unsetenv MPLBACKEND
-setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/usr/lib64
-
-setenv QT_API PySide6 
-if ("$QT_API" == "PySide6") then
-  setenv PYTHONPATH "${HOME}/solps-gui/src/actors:${PYTHONPATH}"
-else
-  setenv PYTHONPATH "${HOME}/solps-gui/src/widgets:${PYTHONPATH}"
+# Try to load SOLPS GUI locally (for developers)
+if (! $?SOLPS_GUI_PREFIX) then
+  foreach dir (${HOME}/solps-gui ${HOME}/SOLPS-GUI ${SOLPSTOP}/modules/solps-gui)
+    if ( -d ${dir} ) setenv SOLPS_GUI_PREFIX ${dir}
+  end
 endif
-alias solps5 'env PYTHONPATH=${HOME}/solps-gui/src/widgets:${PYTHONPATH} python3 ${HOME}/solps-gui/src/gui/solps5.py'
-alias solps 'env PYTHONPATH=${HOME}/solps-gui/src/actors:${PYTHONPATH} python3 ${HOME}/solps-gui/src/gui/solps.py'
-setenv PYTHONPATH "${HOME}/solps-gui/src/gui:${PYTHONPATH}"
-setenv PYQTDESIGNERPATH "${HOME}/solps-gui/src/plugins/designer"
-setenv SOLPSGUI "${HOME}/solps-gui/src/gui"
-setenv SOLPSWORK /work/projects/solps-iter/$USER
-alias designer "env PYTHONPATH=${HOME}/solps-gui/src/widgets:${PYTHONPATH} ${EBROOTQT5}/bin/designer"
-alias solps_doc 'firefox ${HOME}/solps-gui/doc/build/html/index.html'
-alias solps_help 'assistant -collectionFile ${HOME}/solps-gui/doc/build/qthelp/SOLPSGUI.qhc'
-alias eirene 'python3 ${HOME}/solps-gui/src/widgets/eirene.py'
-alias b2 'python3 ${HOME}/solps-gui/src/widgets/b2.py'
+if ($?SOLPS_GUI_PREFIX) then
+  module load PySide6/6.2.3-GCCcore-10.2.0
+  module unload --force matplotlib
+  module load matplotlib/3.5.1-foss-2020b
+  setenv QT_API PySide6 
+  setenv PYTHONPATH "${SOLPS_GUI_PREFIX}/src/actors:${PYTHONPATH}"
+  setenv PYTHONPATH "${SOLPS_GUI_PREFIX}/src/gui:${PYTHONPATH}"
+  setenv PYQTDESIGNERPATH "${SOLPS_GUI_PREFIX}/src/plugins/designer"
+  setenv PYSIDE_DESIGNER_PLUGINS "${SOLPS_GUI_PREFIX}/src/plugins/pyside6-designer"
+  setenv SOLPSGUI "${SOLPS_GUI_PREFIX}/src/gui"
+  alias solps 'python3 ${SOLPS_GUI_PREFIX}/src/gui/solps.py'
+  alias solps5 'env PYTHONPATH=${SOLPS_GUI_PREFIX}/src/widgets:${PYTHONPATH} python3 ${SOLPS_GUI_PREFIX}/src/gui/solps5.py'
+  alias designer "env PYTHONPATH=${SOLPS_GUI_PREFIX}/src/widgets:${PYTHONPATH} ${EBROOTQT5}/bin/designer"
+  alias solps_doc 'env --unset LD_LIBRARY_PATH firefox ${SOLPS_GUI_PREFIX}/doc/build/html/index.html'
+  alias eirene 'python3 ${SOLPS_GUI_PREFIX}/src/widgets/eirene.py'
+  alias b2 'python3 ${SOLPS_GUI_PREFIX}/src/widgets/b2.py'
+else
+  if `module is-avail SOLPS-GUI` then
+    module load SOLPS-GUI
+  endif
+endif
+
+# Other environment variables
+
