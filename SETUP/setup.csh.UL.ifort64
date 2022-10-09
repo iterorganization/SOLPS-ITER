@@ -84,8 +84,8 @@ if ($?SOLPS_GUI_PREFIX) then
   alias solps5 'env PYTHONPATH=${SOLPS_GUI_PREFIX}/src/widgets:${PYTHONPATH} python3 ${SOLPS_GUI_PREFIX}/src/gui/solps5.py'
   alias designer "env PYTHONPATH=${SOLPS_GUI_PREFIX}/src/widgets:${PYTHONPATH} ${EBROOTQT5}/bin/designer"
   alias solps_doc 'env --unset LD_LIBRARY_PATH firefox ${SOLPS_GUI_PREFIX}/doc/build/html/index.html'
-  alias eirene 'python3 ${SOLPS_GUI_PREFIX}/src/widgets/eirene.py'
-  alias b2 'python3 ${SOLPS_GUI_PREFIX}/src/widgets/b2.py'
+  alias eirene 'python3 ${SOLPS_GUI_PREFIX}/src/actors/eirene.py'
+  alias b2 'python3 ${SOLPS_GUI_PREFIX}/src/actors/b2.py'
 else
   if `module is-avail SOLPS-GUI` then
     module load SOLPS-GUI
