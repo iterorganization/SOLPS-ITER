@@ -129,7 +129,7 @@ switch ($NREG)
        BEGIN{print "#cnt rsa rra rqa rcx rsap rrap W N E1 E2 E3 pfr srcr srcm srce W+N+E1+E2+E3+pfr+rsa+rra+rqa+rcx-rsap+rrap+srcr+srcm+srce EXT"} \
        END{print "#cnt rsa rra rqa rcx rsap rrap W N E1 E2 E3 pfr srcr srcm srce W+N+E1+E2+E3+pfr+rsa+rra+rqa+rcx-rsap+rrap+srcr+srcm+srce EXT"} \
        /End tallies/{cnt++;print cnt,rsa,rra,rqa,rcx,rsap,rrap,W,N,E1,E2,E3,pfr,srcr,srcm,srce,W+N+E1+E2+E3+pfr+rsa+rra+rqa+rcx-rsap+rrap+srcr+srcm+srce,ext+0}' | \
-    plot ${lx}x${ly}yplot19 rsa rra rqa rcx rsap rrap W N E1 E2 E3 pfr srcr srcm srce W+N+E1+E2+E3+pfr+rsa+rra+rqa+rcx-rsap+rrap+srcr+srcm+srce EXT iteration 'Power (W)' "`basename $0` `chop_pwd 40`"
+    plot ${lx}x${ly}yplot17 rsa rra rqa rcx rsap rrap W N E1 E2 E3 pfr srcr srcm srce W+N+E1+E2+E3+pfr+rsa+rra+rqa+rcx-rsap+rrap+srcr+srcm+srce EXT iteration 'Power (W)' "`basename $0` `chop_pwd 40`"
     breaksw
   case "5":
    pipe_run.log | \

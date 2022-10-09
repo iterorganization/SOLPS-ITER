@@ -270,6 +270,11 @@ switch ($NREG)
       awk 'BEGIN{ns='$E'-'$S'+1}NR>1{t=$1; i=2; LW=0; for (j=1;j<=ns;j++) {LW+=$i;i++}; UE=0; for (j=1;j<=ns;j++) {UE+=$i;i++}; UW=0; for (j=1;j<=ns;j++) {UW+=$i;i++}; LE=0; for (j=1;j<=ns;j++) {LE+=$i;i++}; pflxlw=0; for (j=1;j<=ns;j++) {pflxlw+=$i;i++}; coreI=0; for (j=1;j<=ns;j++) {coreI+=$i;i++}; pflxue=0; for (j=1;j<=ns;j++) {pflxue+=$i;i++}; NI=0; for (j=1;j<=3*ns;j++) {NI+=$i;i++}; pflxuw=0; for (j=1;j<=ns;j++) {pflxuw+=$i;i++}; coreO=0; for (j=1;j<=ns;j++) {coreO+=$i;i++}; pflxle=0; for (j=1;j<=ns;j++) {pflxle+=$i;i++}; NO=0; for (j=1;j<=3*ns;j++) {NO+=$i;i++}; print t,-LW, UE, -UW, LE, -coreI, -coreO, -pflxlw, -pflxue, -pflxuw, -pflxle, NI, NO}' | \
       plot x$3yplot12 -LW UE -UW LE -coreI -coreO -pflxlw -pflxue -pflxuw -pflxle NI NO time $label `noquote_pwd 3`
     breaksw
+  case "7":
+    eval 2da -s $FILE times $line | \
+      awk 'BEGIN{ns='$E'-'$S'+1}NR>1{t=$1; i=2; W=0; for (j=1;j<=ns;j++) {W+=$i;i++}; E1=0; for (j=1;j<=ns;j++) {E1+=$i;i++}; E2=0; for (j=1;j<=ns;j++) {E2+=$i;i++}; E3=0; for (j=1;j<=ns;j++) {E3+=$i;i++}; pflxw=0; for (j=1;j<=ns;j++) {pflxw+=$i;i++}; core=0; for (j=1;j<=ns;j++) {core+=$i;i++}; pflxe=0; for (j=1;j<=ns;j++) {pflxe+=$i;i++}; N=0; for (j=1;j<=3*ns;j++) {N+=$i;i++}; pflxe3=0; for (j=1;j<=ns;j++) {pflxe3+=$i;i++}; pflxe2=0; for (j=1;j<=ns;j++) {pflxe2+=$i;i++}; pflxe1=0; for (j=1;j<=ns;j++) {pflxe1+=$i;i++}; for (j=1;j<=3*ns;j++) {N+=$i;i++}; print t,-W, E1, -E2, E3, -core, -pflxw, -pflxe, -pflxe1, -pflxe2, -pflxe3, N}' | \
+      plot x$3yplot11 -W E1 -E2 E3 -core -pflxw -pflxe -pflxe1 -pflxe2 -pflxe3 N time $label `noquote_pwd 3`
+    breaksw
   case "2":
     eval 2da -s $FILE times $line | \
       awk 'BEGIN{ns='$E'-'$S'+1}NR>1{t=$1; i=2; W=0; for (j=1;j<=ns;j++) {W+=$i;i++}; E=0; for (j=1;j<=ns;j++) {E+=$i;i++}; core=0; for (j=1;j<=ns;j++) {core+=$i;i++}; N=0; for (j=1;j<=ns;j++) {N+=$i;i++}; print t,-W, E, -core, N}' | \

@@ -15788,7 +15788,7 @@ For both cases, {\tt NREG} should be set to $7$.
 
 Volume regions:
 
-\begin{verbatim}
+\begin{Verbatim}
 +-------+-----------------------+-------+-------++-------+-------+
 |       :                       :       :       ||       :       |
 |       :           2           :       :       ||       :       |
@@ -15806,18 +15806,18 @@ region 4 === outboard divertor entrance
 region 5 === outboard divertor leg 1
 region 6 === outboard divertor leg 2
 region 7 === outboard divertor leg 3
-\end{verbatim}
+\end{Verbatim}
 
 \clearpage
 $X$-directed regions:
-\begin{verbatim}
+\begin{Verbatim}
 +-------+-----------------------+-------+-------++-------+-------+
 |       :                       :       :       ||       :       |
 |       2                       3       6       ||       7       |
-|       :                       :       +.......45.......+.......8
-|       :                       :       |       ||       |       |
-1.......+-----------------------+.......+11     ||       |12     |
-|       |9                      |10     |       ||       |       |
+|       :                       :       +.......45.......+.......|
+|       :                       :       |       ||       |13     |
+1.......+-----------------------+.......+11     ||       +.......8
+|       |9                      |10     |       ||       |12     |
 |       |                       |       |       ||       |       |
 +-------+-----------------------+-------+-------++-------+-------+
 
@@ -15827,16 +15827,17 @@ region 3 === entrance to outboard divertor
 region 4 === first outboard divertor target
 region 5 === second outboard divertor target
 region 6 === entrance to first outer divertor leg
-region 7 === connection of SOLs for 3rd and 4th region in the outboard divertor
+region 7 === connection between 2nd and 3rd outer divertor legs
 region 8 === third outboard divertor target
 region 9 === connection between left and right core
 region 10 === connection between left and right primary private flux region
-region 11 === connection between outboard divertor entrance and third outer leg
-region 12 === connection between PFR of first and second outer leg
-\end{verbatim}
+region 11 === connection between 1st and 2nd outer divertor legs
+region 12 === connection between primary PFR and third outer divertor leg
+region 13 === connection between primary CFR and third outer divertor leg
+\end{Verbatim}
 
 $Y$-directed regions:
-\begin{verbatim}
+\begin{Verbatim}
 +---5---+-----------6-----------+---7---+--11---++--12---+---13--+
 |       :                       :       :       ||       :       |
 |       :                       :       :       ||       :       |
@@ -15860,8 +15861,7 @@ region 10 === third outboard divertor leg private flux wall boundary
 region 11 === first outboard divertor leg main chamber wall boundary
 region 12 === second outboard divertor leg main chamber wall boundary
 region 13 === third outboard divertor leg main chamber wall boundary
-
-\end{verbatim}
+\end{Verbatim}
 
 \chapter{b2plot manual}
 \label{cha:b2plotmanual}
