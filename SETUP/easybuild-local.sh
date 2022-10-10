@@ -542,7 +542,7 @@ fi
 
 
 # Listed in SETUP/setup.csh.ITER.gfortran
-SOLPS_ITER_GFORTRAN_MODULES="
+SOLPS_ITER_FOSS_2020b_MODULES="
 	CMake/3.20.1-GCCcore-10.2.0
 	xarray/0.16.2-foss-2020b
 	makedepend/1.0.6-GCCcore-10.2.0
@@ -698,7 +698,7 @@ function build_modules () {
 
 case "${1##--}" in
     "") # No argument given. Build all gfortran
-        build_modules ${SOLPS_ITER_GFORTRAN_MODULES} ${IMAS_FOSS_MODULES}
+        build_modules ${SOLPS_ITER_FOSS_2020b_MODULES} ${IMAS_FOSS_MODULES}
         ;;
     intel)
         shift
