@@ -562,7 +562,7 @@ SOLPS_ITER_FOSS_2020b_MODULES="
 	"
 
 # Listed in SETUP/setup.csh.ITER.ifort64
-SOLPS_ITER_IFORT64_MODULES="
+SOLPS_ITER_INTEL_2020b_MODULES="
         xarray/0.16.2-intel-2020b
         makedepend/1.0.6-GCCcore-10.2.0
         MSCL/1.2.2-intel-2020b
@@ -587,7 +587,7 @@ SOLPS_ITER_IFORT64_MODULES="
   
 # Listed in imas-installer/site-config/Makefile.ITER.HPC.foss-2020b
 # with addition to Saxon, NVHPC modules required to build IMAS
-IMAS_FOSS_MODULES="
+IMAS_FOSS_2020b_MODULES="
         Doxygen/1.8.20-GCCcore-10.2.0
         texlive/20210216-GCCcore-10.2.0
         Java/11.0.2
@@ -615,7 +615,7 @@ IMAS_FOSS_MODULES="
 
 # Listed in  imas-installer/site-config/Makefile.ITER.HPC.intel-2020b
 # MDSplus must be with Java
-IMAS_INTEL_MODULES="
+IMAS_INTEL_2020b_MODULES="
      Doxygen/1.8.20-GCCcore-10.2.0
      texlive/20210216-GCCcore-10.2.0
      Java/11.0.2
@@ -641,7 +641,7 @@ IMAS_INTEL_MODULES="
      "
 
 # IMAS modules are built separately and listed here for check only
-IMAS_APPLICATIONS="
+IMAS_2020b_APPLICATIONS="
     IMAS/${TAG_DD}-${TAG_AL}-2020b
     AMNS/1.4.0-foss-2020b-DD-${TAG_DD}
     GGD/1.10.2-GCC-10.2.0-DD-${TAG_DD}
@@ -698,32 +698,32 @@ function build_modules () {
 
 case "${1##--}" in
     "") # No argument given. Build all gfortran
-        build_modules ${SOLPS_ITER_FOSS_2020b_MODULES} ${IMAS_FOSS_MODULES}
+        build_modules ${SOLPS_ITER_FOSS_2020b_MODULES} ${IMAS_FOSS_2020b_MODULES}
         ;;
     intel)
         shift
-        build_modules ${SOLPS_ITER_IFORT64_MODULES} ${IMAS_INTEL_MODULES}
+        build_modules ${SOLPS_ITER_INTEL_2020b_MODULES} ${IMAS_INTEL_2020b_MODULES}
         ;;
     imas-foss)
         shift
-        module load ${IMAS_FOSS_MODULES}
+        module load ${IMAS_FOSS_2020b_MODULES}
         export IMAS_CONFIG_FILE=site-config/Makefile.ITER.HPC.foss-2020b
         build_imas IMAS_IFORT=no TAG_DD=${TAG_DD} TAG_AL=${TAG_AL} $*
         ;;
     imas-intel)
         shift
-        module load ${IMAS_INTEL_MODULES}
+        module load ${IMAS_INTEL_2020b_MODULES}
         export IMAS_CONFIG_FILE=site-config/Makefile.ITER.HPC.intel-2020b
         build_imas TAG_DD=${TAG_DD} TAG_AL=${TAG_AL} $*
         ;;
     imas)
         shift
-        module load ${IMAS_INTEL_MODULES}
+        module load ${IMAS_INTEL_2020b_MODULES}
         export IMAS_CONFIG_FILE=site-config/Makefile.ITER.HPC.CentOS-8
         build_imas TAG_DD=${TAG_DD} TAG_AL=${TAG_AL} $*
         ;;    
     imas-apps)
-        build_modules ${IMAS_APPLICATIONS}
+        build_modules ${IMAS_2020b_APPLICATIONS}
         ;;
     help)
         help | grip --title="EasyBuild for SOLPS-ITER modules" \
