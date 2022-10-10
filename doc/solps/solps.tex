@@ -363,6 +363,7 @@ The current list of recognized hostnames, deduced by means of the {\tt whereami}
   \item[PPPL] PPPL domain: *.pppl.gov
   \item[SPBSTU] St. Petersburg State Polytechnical University: *.spbstu.ru
   \item[SWIP] SouthWestern Institute of Plasma Physics, Chengdu: *.swip.ac.cn
+  \item[UL] University of Ljubljana, *.uni-lj.si
   \item[WM] College of William and Mary: *.wm.edu
   \item[AU\_UNKNOWN] All other domain names from Australia and associated territories
   \item[CA\_UNKNOWN] All other domain names from Canada
@@ -438,7 +439,22 @@ changes are required that should not be archived in the repository, then users s
 overwrite the more general settings from the distributed {\tt config} files.
 \end{sloppypar}
 
-Some Windows\index{Windows} implementations have been attempted, and require an additional {\tt -DWINDOWS} compiler switch, but are not currently being supported.
+\begin{sloppypar}
+For easier building of \verb`gfortran` and  \verb`ifort64` toolchains, including IMAS\index{IMAS} modules and tools for \SOLPSITER, a \verb`SETUP/easybuild-local.sh` script is provided. The script includes a complete list of modules as they appear on ITER SDCC cluster and convenient for standalone/local "builders" and for site administrators that want to build ITER-equivalent installation on their machine. Example \verb`setup.csh.UL.gfortran` and  \verb`setup.csh.UL.ifort64` are thus very similar to \verb`setup.csh. ITER.gfortran` and  \verb`setup.csh.ITER.ifort64`, respectively. Configs \verb`config.UL.gfortran` and \verb`config.UL.ifort64` can actually be symlinked to config.ITER versions.
+
+Essentially, this script extends functionality of \href{http://easybuild.readthedocs.org/}{EasyBuild} tool by adding search paths to ITER-specific easyconfigs (\verb`.eb`) for sources from ITER Git repositories. The only requirement for this script is recent version of Python 3 and modulesfiles or Lmod support. The rest is being downloaded from internet and ITER Git website. Quick astart for building may be by creating Personal Access Token from \href{https://git.iter.org/plugins/servlet/access-tokens/manage}{ITER Git website} and entering
+\end{sloppypar}
+\begin{verbatim}
+export EASYBUILD_MODULES_TOOL=Lmod # EnvironmentModules are default
+export HTTP_AUTH_BEARER="ReplaceWithPersonalAccessToken"
+SETUP/easybuild-local.sh --help | more
+SETUP/easybuild-local.sh
+SETUP/easybuild-local.sh --imas-foss install
+SETUP/easybuild-local.sh --imas-apps
+\end{verbatim}
+Note that above minimal example requires Python 3.8+, Lmod and Korn shell to be installed on the system and functional. The rest is installed by the script under the  \verb`easybuild.local` directory or elsewhere if desired.
+
+Some Windows\index{Windows} implementations have been attempted, and require an additional {\tt -DWINDOWS} compiler switch, but are not curently being supported. Windows subsystem for Linux (WSL2) on Windows 10 and 11 can be convenient replacement for standalone builds using \verb`SETUP/easybuild-local.sh` script.
 
 If you wish your domain name to be included in the list of hostnames above, please contact the
 \SOLPSITER RO and send the
@@ -23320,3 +23336,12 @@ introduced a very small effect, seen only as a jump in the residuals.
 \else
 \fi
 
+%%% Local Variables:
+%%% coding: utf-8
+%%% mode: visual-line
+%%% mode: flyspell;
+%%% TeX-parse-self: t
+%%% TeX-auto-save: t
+%%% TeX-master: t
+%%% ispell-local-dictionary: "english"
+%%% End:
