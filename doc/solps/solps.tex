@@ -438,7 +438,22 @@ changes are required that should not be archived in the repository, then users s
 overwrite the more general settings from the distributed {\tt config} files.
 \end{sloppypar}
 
-Some Windows\index{Windows} implementations have been attempted, and require an additional {\tt -DWINDOWS} compiler switch, but are not currently being supported.
+\begin{sloppypar}\index{easybuild}\label{sec:easybuild}
+For easier building of the {\tt gfortran} and {\tt ifort64} toolchains, including the IMAS\index{IMAS} modules and tools for \SOLPSITERns, a {\tt SETUP/easybuild-local.sh} script is provided. The script includes a complete list of modules as they appear on the ITER SDCC cluster and is convenient for standalone/local "builders" and for site administrators that want to build an ITER-equivalent installation on their machine. Example {\tt setup.csh.UL.gfortran} and {\tt setup.csh.UL.ifort64} are thus very similar to {\tt setup.csh.ITER.gfortran} and {\tt setup.csh.ITER.ifort64}, respectively. The configuration files {\tt config.UL.gfortran} and {\tt config.UL.ifort64} can then simply be symlinked to the corresponding {\tt config.ITER} versions.
+
+Essentially, this script exploits the functionality of the \href{http://easybuild.readthedocs.org/}{EasyBuild} tool by adding search paths to ITER-specific easyconfigs {\tt .eb} sources from the ITER Git repository. The only requirement for this script is a recent version of Python 3 and modulesfiles or Lmod support. The rest is being downloaded from the internet and the ITER Git website. A quick start for building may be by creating a Personal Access Token from the \href{https://git.iter.org/plugins/servlet/access-tokens/manage}{ITER Git website} and entering
+\end{sloppypar}
+\begin{verbatim}
+export EASYBUILD_MODULES_TOOL=Lmod # EnvironmentModules are default
+export HTTP_AUTH_BEARER="ReplaceWithPersonalAccessToken"
+SETUP/easybuild-local.sh --help | more
+SETUP/easybuild-local.sh
+SETUP/easybuild-local.sh --imas-foss install
+SETUP/easybuild-local.sh --imas-apps
+\end{verbatim}
+Note that the above minimal example requires Python 3.8+, Lmod and Korn shell to be installed on the system and functional. The rest is installed by the script in the {\tt easybuild.local} directory or elsewhere if desired.
+
+Some Windows\index{Windows} implementations have been attempted, and require an additional {\tt -DWINDOWS} compiler switch, but are not curently being supported. Windows subsystem for Linux (WSL2) on Windows 10 and 11 can be a convenient replacement for standalone builds using the {\tt SETUP/easybuild-local.sh} script.
 
 If you wish your domain name to be included in the list of hostnames above, please contact the
 \SOLPSITER RO and send the
@@ -21950,6 +21965,39 @@ distribution of the surfaces or the grid points because of local extrema
 appearing on the visualisation curve, then try to adjust the
 {\tt Radial scale} or {\tt Poloidal scale} in the
 {\tt Limiter and linear configurations} layer.
+
+\subsection{Snowflake configurations}
+\index{DG, Snowflake configurations}
+
+Similar to limiter or linear configurations, {\tt DG} needs to be
+"tricked", because it is not yet a valid topology in {\tt DG}.
+
+The procedure to follow is:
+\begin{enumerate}
+  \item {\tt Import} a valid (preferably double-null) {\tt Equilibrium} and {\tt Template} for the same machine
+    as the desired snowflake. Declare the structure,
+    {\tt Inner target} and {\tt Outer target}, as if preparing the double-null stand-in.
+  \item Add four targets to the {\tt Target specification} variables, the edges of which
+    should correspond to the snowflake grid, not the double-null stand in. Provide there
+    all relevant material and sputtering properties.
+  \item Identify the four contours for the {\tt TRIA-EIRENE parameters} variable that apply to the snowflake
+    grid, not the double-null stand-in.
+    Export these four surfaces as templates, which must be used to manually generate a {\tt tria.in} file later
+    (there are also Python routines to do this in the snowflake example run).
+  \item Create the {\tt Surfaces} and {\tt Grid points} for the double-null stand in.
+    This step is done because {\tt DG} needs surfaces and grid points before outputting.
+  \item As usual, define all other variables ({\tt Surface data},
+    {\tt Gas puff}, {\tt Plasma species}, etc...) as needed.
+\end{enumerate}
+
+\index{lns}
+Once you are finished setting up all the case variables, follow the
+usual procedure: {\tt Output} the case files, use the {\tt lns} script to
+establish the necessary symbolic links. Rather than running {\tt carre}, simply run {\tt uinp} with
+the externally generated snowflake grid file. This should generate an {\tt input.eir} file, which
+will house the desired material and strata data. However, the plasma data will be relevant to the
+double-null grid, not the desired snowflake. As such, it should be edited later to contain correct
+ plasma information. Instructions to do this are located in the snowflake example run directory.
 
 \subsection{Creating and editing grid points}
 \index{DG, grid points}\index{DG, adding grid points}
