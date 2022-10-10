@@ -68,7 +68,7 @@ c*** Wall
         nrgbndt(3)=0
         nrgbndt(4)=1
 
-      else if(lm_cnfg) then  !{
+      else if(lm_cnfg) then  !}{
 c*** Core
         crgbndt(1,1)='S'
         lrsbndt(1,1)=0

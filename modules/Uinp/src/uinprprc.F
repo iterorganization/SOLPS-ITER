@@ -990,7 +990,7 @@ cxpb Now check if we need to rename some isotopes for AMDS reactions
         if(nnrctn.gt.0) write(*,hlp_frm)
      ,    (rctnptpr(i),rctndbs(i) ,rctnchp(i) ,rctnrct(i) ,rctntyp(i),
      ,     rctnptin(i),rctnpto1(i),rctnpto2(i),rctnpto3(i),
-     ,     rctngrp(i) ,rctnmsp(i),
+     ,     rctngrp(i) ,rctnmsp(i) ,
      ,     rctnmst(i) ,rctndlte(i),rctnenr1(i),rctnenr2(i),i=1,nnrctn)
 #endif
 
