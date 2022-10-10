@@ -651,8 +651,8 @@ The cases stored for retrieval include:
   \item[AUG\_28903\_D+N\_drifts] ASDEX-Upgrade D+N case including drifts
   \item[AUG\_28903\_D+Ne\_drifts] ASDEX-Upgrade D+Ne case including drifts
   \item[DIIID\_3106\_DN\_D+C] DIII-D disconnected double-null case including Carbon chemical sputtering
-  \item[ITER\_2171\_D+He+Be+Ne] ITER full performance case with Ne injection
-  \item[ITER\_2264\_0.6Ne\_100MW] Another ITER full perfomance case with Ne injection and Be sputtering
+  \item[ITER\_2171\_D+He+Be+Ne] ITER full performance case with Ne injection and Be sputtering
+  \item[ITER\_2264\_0.6Ne\_100MW] Another ITER full perfomance case with Ne injection
   \item[ITER\_2275\_Donly\_20MW] ITER low power case at low density (D-fuelled)
   \item[ITER\_2292\_Honly\_20MW] ITER low power case at low density (H-fuelled)
   \item[ITER\_2294\_Honly\_20MW] Same as above, but increasing density
@@ -666,6 +666,7 @@ The cases stored for retrieval include:
   \item[ITER\_2588\_drifts] ITER {\tt B2.5} standalone D-only demonstration case with and without drifts
   \item[ITER\_535\_D+He+Ar] ITER full power case with Ar injection
   \item[ITER\_Be-W\_D+T+He+Ne] ITER full power case with 98 species
+  \item[MAST\_U\_SFminus\_Donly] Lower snowflake-minus case at low power with D-only
 \end{description}
 as well as additional partial cases used in tutorials when learning how to build a case using the {\tt DivGeo} and {\tt SOLPS-GUI} utilities.
 Other cases can be added at the suggestion of users, if available.
@@ -15785,6 +15786,93 @@ region 8 === island boundary
 \end{Verbatim}
 
 \clearpage
+\section{Regions for low field side snowflakes}
+\index{regions, SF cases}
+
+The case presented below corresponds to one where the secondary X-point is
+located in the primary SOL (ie, a Snowflake-minus). For the
+SF-plus configuration, the only change is that the secondary X-point is
+located in the primary PFR. These region definitions also apply to
+X-point target geometries.
+
+For both cases, {\tt NREG} should be set to $7$.
+
+Volume regions:
+
+\begin{Verbatim}
++-------+-----------------------+-------+-------++-------+-------+
+|       :                       :       :       ||       :       |
+|       :           2           :       :       ||       :       |
+|       :                       :       +...5...||...6...+...7...|
+|       :                       :       |       ||       |       |
+|...3...+-----------------------+...4...+       ||       |       |
+|       |           1           |       |       ||       |       |
+|       |                       |       |       ||       |       |
++-------+-----------------------+-------+-------++-------+-------+
+
+region 1 === core
+region 2 === SOL
+region 3 === inboard divertor
+region 4 === outboard divertor entrance
+region 5 === outboard divertor leg 1
+region 6 === outboard divertor leg 2
+region 7 === outboard divertor leg 3
+\end{Verbatim}
+
+\clearpage
+$X$-directed regions:
+\begin{Verbatim}
++-------+-----------------------+-------+-------++-------+-------+
+|       :                       :       :       ||       :       |
+|       2                       3       6       ||       7       |
+|       :                       :       +.......45.......+.......|
+|       :                       :       |       ||       |13     |
+1.......+-----------------------+.......+11     ||       +.......8
+|       |9                      |10     |       ||       |12     |
+|       |                       |       |       ||       |       |
++-------+-----------------------+-------+-------++-------+-------+
+
+region 1 === inboard divertor target
+region 2 === entrance to inboard divertor
+region 3 === entrance to outboard divertor
+region 4 === first outboard divertor target
+region 5 === second outboard divertor target
+region 6 === entrance to first outer divertor leg
+region 7 === connection between 2nd and 3rd outer divertor legs
+region 8 === third outboard divertor target
+region 9 === connection between left and right core
+region 10 === connection between left and right primary private flux region
+region 11 === connection between 1st and 2nd outer divertor legs
+region 12 === connection between primary PFR and third outer divertor leg
+region 13 === connection between primary CFR and third outer divertor leg
+\end{Verbatim}
+
+$Y$-directed regions:
+\begin{Verbatim}
++---5---+-----------6-----------+---7---+--11---++--12---+---13--+
+|       :                       :       :       ||       :       |
+|       :                       :       :       ||       :       |
+|       :                       :       +.......||.......+.......|
+|       :                       :       |       ||       |       |
+|.......+-----------4-----------+.......+       ||       |       |
+|       |                       |       |       ||       |       |
+|       |                       |       |       ||       |       |
++---1---+-----------2-----------+---3---+---8---++---9---+---10--+
+
+region 1 === inboard divertor private flux wall boundary
+region 2 === core boundary
+region 3 === outboard divertor entrance private flux wall boundary
+region 4 === primary separatrix
+region 5 === inboard divertor main chamber wall boundary
+region 6 === SOL main chamber wall boundary
+region 7 === outboard divertor entrance main chamber wall boundary
+region 8 === first outboard divertor leg private flux wall boundary
+region 9 === second outboard divertor leg private flux wall boundary
+region 10 === third outboard divertor leg private flux wall boundary
+region 11 === first outboard divertor leg main chamber wall boundary
+region 12 === second outboard divertor leg main chamber wall boundary
+region 13 === third outboard divertor leg main chamber wall boundary
+\end{Verbatim}
 
 \chapter{b2plot manual}
 \label{cha:b2plotmanual}

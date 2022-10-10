@@ -134,6 +134,72 @@ switch ($NREG)
       set line = "$line 'fnayreg(15,$i,:)'"
     end
     breaksw
+  case "7":
+# West target fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnaxreg(2,$i,:)'"
+    end
+# First East target fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnaxreg(5,$i,:)'"
+    end
+# Second East target fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnaxreg(6,$i,:)'"
+    end
+# Third East target fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnaxreg(9,$i,:)'"
+    end
+# PFR West side fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnayreg(2,$i,:)'"
+    end
+# Core fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnayreg(3,$i,:)'"
+    end
+# Main East PFR fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnayreg(4,$i,:)'"
+    end
+# North West divertor fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnayreg(6,$i,:)'"
+    end
+# North Inner MCW fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnayreg(7,$i,:)'"
+    end
+# North Main East fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnayreg(8,$i,:)'"
+    end
+# First PFR East side fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnayreg(9,$i,:)'"
+    end
+# Second PFR East side fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnayreg(10,$i,:)'"
+    end
+# Third PFR East side fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnayreg(11,$i,:)'"
+    end
+# First East divertor fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnayreg(12,$i,:)'"
+    end
+# Second East divertor fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnayreg(13,$i,:)'"
+    end
+# Third East divertor fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnayreg(14,$i,:)'"
+    end
+    breaksw
   case "2":
 # West target fluxes
     foreach i (`count $S $E`)
@@ -203,6 +269,11 @@ switch ($NREG)
     eval 2da -s $FILE times $line | \
       awk 'BEGIN{ns='$E'-'$S'+1}NR>1{t=$1; i=2; LW=0; for (j=1;j<=ns;j++) {LW+=$i;i++}; UE=0; for (j=1;j<=ns;j++) {UE+=$i;i++}; UW=0; for (j=1;j<=ns;j++) {UW+=$i;i++}; LE=0; for (j=1;j<=ns;j++) {LE+=$i;i++}; pflxlw=0; for (j=1;j<=ns;j++) {pflxlw+=$i;i++}; coreI=0; for (j=1;j<=ns;j++) {coreI+=$i;i++}; pflxue=0; for (j=1;j<=ns;j++) {pflxue+=$i;i++}; NI=0; for (j=1;j<=3*ns;j++) {NI+=$i;i++}; pflxuw=0; for (j=1;j<=ns;j++) {pflxuw+=$i;i++}; coreO=0; for (j=1;j<=ns;j++) {coreO+=$i;i++}; pflxle=0; for (j=1;j<=ns;j++) {pflxle+=$i;i++}; NO=0; for (j=1;j<=3*ns;j++) {NO+=$i;i++}; print t,-LW, UE, -UW, LE, -coreI, -coreO, -pflxlw, -pflxue, -pflxuw, -pflxle, NI, NO}' | \
       plot x$3yplot12 -LW UE -UW LE -coreI -coreO -pflxlw -pflxue -pflxuw -pflxle NI NO time $label `noquote_pwd 3`
+    breaksw
+  case "7":
+    eval 2da -s $FILE times $line | \
+      awk 'BEGIN{ns='$E'-'$S'+1}NR>1{t=$1; i=2; W=0; for (j=1;j<=ns;j++) {W+=$i;i++}; E1=0; for (j=1;j<=ns;j++) {E1+=$i;i++}; E2=0; for (j=1;j<=ns;j++) {E2+=$i;i++}; E3=0; for (j=1;j<=ns;j++) {E3+=$i;i++}; pflxw=0; for (j=1;j<=ns;j++) {pflxw+=$i;i++}; core=0; for (j=1;j<=ns;j++) {core+=$i;i++}; pflxe=0; for (j=1;j<=ns;j++) {pflxe+=$i;i++}; N=0; for (j=1;j<=3*ns;j++) {N+=$i;i++}; pflxe3=0; for (j=1;j<=ns;j++) {pflxe3+=$i;i++}; pflxe2=0; for (j=1;j<=ns;j++) {pflxe2+=$i;i++}; pflxe1=0; for (j=1;j<=ns;j++) {pflxe1+=$i;i++}; for (j=1;j<=3*ns;j++) {N+=$i;i++}; print t,-W, E1, -E2, E3, -core, -pflxw, -pflxe, -pflxe1, -pflxe2, -pflxe3, N}' | \
+      plot x$3yplot11 -W E1 -E2 E3 -core -pflxw -pflxe -pflxe1 -pflxe2 -pflxe3 N time $label `noquote_pwd 3`
     breaksw
   case "2":
     eval 2da -s $FILE times $line | \
