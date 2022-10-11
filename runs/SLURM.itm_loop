@@ -51,25 +51,17 @@ if ($?SOLPS_OPENMP) then
 endif
 
 update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"
-set msg="Started on `hostname` at `date`"
-update_solps_run_status ${msg}
-if ($?SOLPS_GUI_IP) then
-  echo ${USER} ${PWD} ${msg} | netcat -u -v -w 1 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
-endif
+update_solps_run_status "Started on `hostname` at `date`"
 
 rm -f run.KAPUTT
 
-set msg="PATH = `echo $PATH`"
-update_solps_run_status ${msg}
+update_solps_run_status "PATH = `echo $PATH`"
 
-set msg="PYTHONPATH = `echo $PYTHONPATH`"
-update_solps_run_status ${msg}
+update_solps_run_status "PYTHONPATH = `echo $PYTHONPATH`"
 
-set msg="LD_LIBRARY_PATH = `echo $LD_LIBRARY_PATH`"
-update_solps_run_status ${msg}
+update_solps_run_status "LD_LIBRARY_PATH = `echo $LD_LIBRARY_PATH`"
 
-set msg="MANPATH = `echo $MANPATH`"
-update_solps_run_status ${msg}
+update_solps_run_status "MANPATH = `echo $MANPATH`"
 
 b2run -s ${USE_MPI} ${USE_OMP} >! run.log
 
@@ -77,11 +69,7 @@ QSUB.postprocess
 
 preserve_scratch_to_work
 
-set msg="Finished on `hostname` at `date`"
-update_solps_run_status ${msg}
-if ($?SOLPS_GUI_IP) then
-  echo ${USER} ${PWD} ${msg} | netcat -u -v -w 1 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
-endif
+update_solps_run_status "Finished on `hostname` at `date`"
 
 set Break_loop = "no"
 if (`grep "stopping because" run.log.last10` == "") then
@@ -117,8 +105,7 @@ if ("$Break_loop" == "no") then
 
 
   if ("$End_by_ntim" != "" || "$End_by_cputime" != "" || "$End_by_walltime" != "") then
-    set msg="Resubmitting inside the loop at `date`"
-    update_solps_run_status ${msg}
+    update_solps_run_status     "Resubmitting inside the loop at `date`"
     rm -f run.log* b2mn.prt b2.log*;
     set NOW = `date +"%d.%m.%Y_%T"`  
     mv b2fstati b2fstati_$NOW

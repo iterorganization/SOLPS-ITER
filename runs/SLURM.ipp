@@ -29,11 +29,7 @@ endif
 set TIME="time srun ${MPI_PREFLAGS}"
 
 update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"
-set msg="Started on `hostname` at `date`"
-update_solps_run_status ${msg}
-if ($?SOLPS_GUI_IP) then
-  echo ${USER} ${PWD} ${msg} | netcat -u -v -w 1 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
-endif
+update_solps_run_status "Started on `hostname` at `date`"
 
 b2run -s ${USE_MPI} >! run.log
 
@@ -41,9 +37,5 @@ QSUB.postprocess
 
 preserve_scratch_to_work
 
-set msg="Finished on `hostname` at `date`"
-update_solps_run_status ${msg}
-if ($?SOLPS_GUI_IP) then
-  echo ${USER} ${PWD} ${msg} | netcat -u -v -w 1 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
-endif
+update_solps_run_status "Finished on `hostname` at `date`"
 b2fstate_OK_bool

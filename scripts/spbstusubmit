@@ -232,11 +232,8 @@ if ($chain != "unset") then
   set NAME=SBATCH.spbstu.after_$chain
 endif
 
-set msg="Submitted at `date`"
-update_solps_run_status -n ${msg}
-if ($?SOLPS_GUI_IP) then
-  echo ${USER} ${PWD} ${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
-endif
+update_solps_run_status -n "Submitted at `date`"
+
 echo sbatch $NAME
 echo $NAME
 if ($chain == "unset") then
