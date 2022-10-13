@@ -363,6 +363,7 @@ The current list of recognized hostnames, deduced by means of the {\tt whereami}
   \item[PPPL] PPPL domain: *.pppl.gov
   \item[SPBSTU] St. Petersburg State Polytechnical University: *.spbstu.ru
   \item[SWIP] SouthWestern Institute of Plasma Physics, Chengdu: *.swip.ac.cn
+  \item[UL] University of Ljubljana, *.uni-lj.si
   \item[WM] College of William and Mary: *.wm.edu
   \item[AU\_UNKNOWN] All other domain names from Australia and associated territories
   \item[CA\_UNKNOWN] All other domain names from Canada
@@ -441,7 +442,7 @@ overwrite the more general settings from the distributed {\tt config} files.
 \begin{sloppypar}\index{easybuild}\label{sec:easybuild}
 For easier building of the {\tt gfortran} and {\tt ifort64} toolchains, including the IMAS\index{IMAS} modules and tools for \SOLPSITERns, a {\tt SETUP/easybuild-local.sh} script is provided. The script includes a complete list of modules as they appear on the ITER SDCC cluster and is convenient for standalone/local "builders" and for site administrators that want to build an ITER-equivalent installation on their machine. Example {\tt setup.csh.UL.gfortran} and {\tt setup.csh.UL.ifort64} are thus very similar to {\tt setup.csh.ITER.gfortran} and {\tt setup.csh.ITER.ifort64}, respectively. The configuration files {\tt config.UL.gfortran} and {\tt config.UL.ifort64} can then simply be symlinked to the corresponding {\tt config.ITER} versions.
 
-Essentially, this script exploits the functionality of the \href{http://easybuild.readthedocs.org/}{EasyBuild} tool by adding search paths to ITER-specific easyconfigs {\tt .eb} sources from the ITER Git repository. The only requirement for this script is a recent version of Python 3 and modulesfiles or Lmod support. The rest is being downloaded from the internet and the ITER Git website. A quick start for building may be by creating a Personal Access Token from the \href{https://git.iter.org/plugins/servlet/access-tokens/manage}{ITER Git website} and entering
+Essentially, this script exploits the functionality of the \href{http://easybuild.readthedocs.org/}{EasyBuild} tool by adding search paths to ITER-specific easyconfig {\tt .eb} sources from the ITER Git repository. The only requirement for this script is a recent version of Python 3 and {\tt modulesfiles} or {\tt Lmod} support. The rest is being downloaded from the internet and the ITER Git website. A quick start for building may be by creating a Personal Access Token from the \href{https://git.iter.org/plugins/servlet/access-tokens/manage}{ITER Git website} and entering:
 \end{sloppypar}
 \begin{verbatim}
 export EASYBUILD_MODULES_TOOL=Lmod # EnvironmentModules are default
@@ -451,7 +452,7 @@ SETUP/easybuild-local.sh
 SETUP/easybuild-local.sh --imas-foss install
 SETUP/easybuild-local.sh --imas-apps
 \end{verbatim}
-Note that the above minimal example requires Python 3.8+, Lmod and Korn shell to be installed on the system and functional. The rest is installed by the script in the {\tt easybuild.local} directory or elsewhere if desired.
+Note that the above minimal example requires Python 3.8+, {\tt Lmod} and Korn shell to be installed on the system and functional. The rest is installed by the script in the {\tt easybuild.local} directory or elsewhere if desired.
 
 Some Windows\index{Windows} implementations have been attempted, and require an additional {\tt -DWINDOWS} compiler switch, but are not curently being supported. Windows subsystem for Linux (WSL2) on Windows 10 and 11 can be a convenient replacement for standalone builds using the {\tt SETUP/easybuild-local.sh} script.
 
