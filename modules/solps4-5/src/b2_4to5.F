@@ -3609,4 +3609,20 @@ cxpb We use these results for the core and the leftmost guard cells.
       return
       end subroutine map4_5y
 c
+      integer function newunit ()
+      implicit none
+      logical used
+      external xertst
+
+      newunit = 99
+      used = .true.
+      do while (newunit.gt.0 .and. used)
+        inquire(unit=newunit,opened=used)
+        if (used) newunit = newunit - 1
+      end do
+      call xertst(.not.used,
+     . 'No available free unit numbers for output!')
+      return
+      end function newunit
+c
       end module b2_4to5

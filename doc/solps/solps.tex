@@ -2195,10 +2195,11 @@ or to the write-up in Appendix \ref{cha:Mladen}.
 Users are encouraged to use the "physics" formulation of the
 boundary conditions specified later (see section \ref{lab:b2:boundary:parameters}),
 rather than the "Bas" formulation listed here.
-For double-null cases, the "South" boundary must be split in six pieces,
-and the "North" boundary in two. However, the {\tt b2ah} format does
-not allow for the specification of additional "East" or "West" boundaries,
-so double-null users {\bf must} use the "physics" formulation in addition.
+For double-null and snowflake cases, the "South" boundary must be split
+in at least six pieces, and the "North" boundary in at least two.
+However, the {\tt b2ah} format does not allow for the specification of
+additional "East" or "West" boundaries, so double-null and snowflake cases
+{\bf must} use the "physics" formulation in addition.
 The code enforces this requirement.
 
 The boundary condition implemented arises from numerical combinations
@@ -20239,10 +20240,10 @@ GFORTRAN & equations/b2news.F \\
 GFORTRAN & equations/b2news\_.F \\
 GFORTRAN & equations/b2npmo.F \\
 GFORTRAN & modules/b2mod\_openmp.F \\
-GFORTRAN & utility/b2mod\_ilutern.F \\
 GFORTRAN & utility/b2mod\_ilutern\_7.F \\
 GFORTRAN & utility/b2mod\_ilutern\_9.F \\
 GFORTRAN & utility/b2mod\_ilutern\_11.F \\
+GFORTRAN & utility/ilutern\_solps.F \\
 GFORTRAN & utility/ma28.F \\
 GFORTRAN & utility/ma28copy.F \\
 GFORTRAN & utility/ma28copy3.F \\
