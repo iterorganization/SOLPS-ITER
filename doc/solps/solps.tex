@@ -218,7 +218,7 @@ To do this, one must upload a copy of their public ssh key here: \href{https://g
 > git submodule update
 \end{verbatim}
 
-It is best afterwards to position oneself on the {\tt master} branches, which is achieved by the {\tt switch\_to\_master} script or, alternatively:
+It is best afterwards to position oneself on the {\tt master} branches, which is achieved by the {\tt switch\_to\_master} script (which can be used after the SOLPS-ITER session environment is established, see Section~\ref{sec:session}) or, alternatively, by hand, with the commands:
 
 \begin{verbatim}
 > git checkout master
@@ -599,7 +599,7 @@ fs sysname
 and copy the result in {\tt \$\{SOLPSTOP\}/modules/Sonnet-light/Makefile}.
 
 \section{Before every \SOLPSITER session}
-\index{Run set-up}
+\index{Run set-up}\label{sec:session}
 
 At the beginning of every \SOLPSITER session, the user must load up the \SOLPSITER
 environment, which will contain the aliases and environment variables needed for
