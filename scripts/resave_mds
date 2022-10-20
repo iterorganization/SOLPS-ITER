@@ -1,9 +1,10 @@
 #! /bin/tcsh -f
 
 set debug=""
+set REDEFINES=""
 argloop:
   if ("X${1}X" == "X-nX") then
-    set debug="-n"
+    set debug="$debug -n"
     shift
     goto argloop
   endif
@@ -12,14 +13,30 @@ argloop:
     setenv STAND_ALONE yes
     goto argloop
   endif
+  if ("X${1}X" == "X-rX") then
+    shift
+    set REDEFINES="$REDEFINES $1"
+    shift
+    goto argloop
+  endif
   if ("X${1}X" == "X-dX") then
     shift
+    if (! $?SOLPS_DEBUG) then
+      source $SOLPSTOP/SETUP/debug
+      set DEBUG_SET=yes
+    endif
     if ($1 == "") then
       set debug="$debug TIME=$DBX"
     else
-      set debug="$debug TIME=$1"
+      set next=$1
+      set begin_next=`printf '%s' $next | cut -c1`
+      if ("X${begin_next}X" == "X-X") then
+        set debug="$debug TIME=$DBX"
+      else
+        set debug="$debug TIME=$1"
+        shift
+      endif
     endif
-    shift
     goto argloop
   endif
 
@@ -40,10 +57,16 @@ if (-s b2md.dat) then
   mv b2md.dat $B2MDDAT
 else if (-s ../baserun/b2md.dat) then
   set B2MDDAT=../baserun/b2md.dat
-else if (-s $SOLPSTOP/data/mdsplus/b2md.dat) then
-  set B2MDDAT=$SOLPSTOP/data/mdsplus/b2md.dat
+else if (-s $SOLPSTOP/data.local/mdsplus/b2md.dat) then
+  set B2MDDAT=$SOLPSTOP/data.local/mdsplus/b2md.dat
 else
   echo 'No b2md.dat found'
+  exit
+endif
+
+if (! -s shotnumber.history) then
+  echo "No shotnumber.history file present !"
+  echo "Run save_mds instead"
   exit
 endif
 
@@ -67,7 +90,7 @@ foreach i (`cat shotnumber.history | sort -n | uniq`)
    (cd .. ; ln -s ../mesh.extra .)
   endif
   if (! -s AMJUEL) ln -s $SOLPSTOP/modules/Eirene/Database/AMJUEL .
-  ${MAKE} $debug -f $SOLPSTOP/runs/Makefile.plot b2md.prt > b2md.log
+  ${MAKE} $debug $REDEFINES -f $SOLPSTOP/runs/Makefile.plot b2md.prt > b2md.log
 end
 
 if ($B2MDDAT == b2md.dat.sav) then

@@ -1,6 +1,101 @@
 ### eval '(exit $?0)' && eval 'exec tcsh -f $0 ${1+"$@"}' && eval 'exec tcsh -f $0 $argv:q'
 #! /usr/bin/env tcsh
 
+if($1 == "-h") then
+cat << EOT
+
+"plot" is a script that is used by many of the SOLPS plotting scripts
+and is designed to plot one or more columns of data against the first
+column.
+
+Much of its behaviour is determined by its first argument which is of
+the form
+
+  {dl}x{lLM}yplot{ |2|3|4|5|6|7|8|9}
+
+where
+
+  the presence of "l" before x indicates a logarithmic axis for x
+  the presence of "l" before y indicates a logarithmic axis for y
+  the presence of "L" before y indicates a logarithmic axis for y and -y
+  the presence of "M" before y indicates a double plot with the
+  logarithm of y and -y
+  the presence of "d" before x indicates that the x values are datestamps
+  if "b" is present anywhere, plot xy-errorbars
+  the number after "plot" indicates the number of columns to be plotted
+
+after this should be, in order
+
+  labels for each of the columns
+  x-axis label
+  y-axis label
+  plot title
+
+The data file should contain, in order, one first column for the
+x-abscissae values, followed by one column for each data set
+to be plotted, or, if errorbars are requested, one triplet of
+columns with the horizontal errorbar half-width, then the data
+value, then the vertical errobar half-height
+
+A number of environment variables can be used to change the behaviour
+of "plot"
+
+  GNUPLOT_TMP -- if present, indicates where temporary files such as
+  gnuplot.cmd and gnuplot.data should be stored
+
+  GNUPLOT_DATA -- if present, overrides the name of the data file
+  (default gnuplot.data)
+
+  GNUPLOT_CMD -- if present, overrides the name of the command file
+  (default gnuplot.cmd)
+
+  PLOT_FROM_FILE -- if set, specify the file containing the data
+  source (file is removed)
+
+  GNUPLOT_BATCH -- used when plotting multiple pages
+
+  PRINT_PLOT -- if present and set, the name of the file to which the
+  postscript will be saved; if present and not set, the postscript
+  will be sent to the default printer
+
+  GNUPLOT_POSTSCRIPT_OPTIONS -- options to be used for postscript
+  plotting
+
+  GNUPLOT_TERM -- if set, options to be used for setting the gnuplot
+  terminal
+
+  PLOTPOINTS -- if set no lines are plotted
+
+  GNUPLOT_LINEWIDTH -- if set, the line width
+
+  GNUPLOT_POINTSIZE -- if set, the point size
+
+  GNUPLOT_NOTIMESTAMP -- if set, suppress timestamp
+
+  GNUPLOT_EXTRA -- if present, add the contents to the gnuplot command
+  file just before the plotting starts
+
+  GNUPLOT_DELAY -- if set, the number of seconds to pause after the
+  end of the plot
+
+  GNUPLOT_MAX_POINTS -- if set, determine the maximum number of points
+  that will be plotted
+
+  GNUPLOT_MAX_POINTS_FACTOR -- reduction factor to be used in reducing
+  the number of points to be plotted
+
+If the following file is present, it will affect the behaviour of
+"plot"
+
+  GNUPLOT_COUNT -- if present, indicates that multiple pages should be
+  stored and the current page number is given by the contents of the
+  file; meant to be used in conjunction with the GNUPLOT_BATCH
+  environment variable
+
+EOT
+  exit
+endif
+
 if($?GNUPLOT_TMP) then
   set tmpdir="$GNUPLOT_TMP/"
 else
@@ -40,12 +135,14 @@ set n=`wc -l < $dfilename`
 if(! $?GNUPLOT_BATCH) then
   /bin/cp /dev/null $cfilename
 endif
+echo set title noenhanced >>! $cfilename
+echo set key noenhanced >> $cfilename
 if ($?PRINT_PLOT) then
   if(! $?GNUPLOT_POSTSCRIPT_OPTIONS) then
     set GNUPLOT_POSTSCRIPT_OPTIONS=""
   endif
   if(! $?GNUPLOT_BATCH || $GNUPLOT_COUNT == 1) then
-    echo set term postscript $GNUPLOT_POSTSCRIPT_OPTIONS >>! $cfilename
+    echo set term postscript $GNUPLOT_POSTSCRIPT_OPTIONS >> $cfilename
     if("$PRINT_PLOT" == "") then
       echo "set out '| lpr'" >> $cfilename
     else
@@ -55,7 +152,7 @@ if ($?PRINT_PLOT) then
   endif
 else
   if ($?GNUPLOT_TERM) then
-    echo set term "$GNUPLOT_TERM" >>! $cfilename
+    echo set term "$GNUPLOT_TERM" >> $cfilename
   endif
 endif
 if($n < 1) then
@@ -131,7 +228,7 @@ endif
 shift
 echo 'set format y "%g"' >>! $cfilename
 echo set zero 1e-50 >> $cfilename
-if (! $?GNUPLOT_NOTIMESTAMP) echo set time >> $cfilename
+if (! $?GNUPLOT_NOTIMESTAMP) echo set timestamp >> $cfilename
 if("$1" == "-file") then
   if(-e $2) then
     cat $2 >> $cfilename

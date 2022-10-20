@@ -14,9 +14,9 @@ Getting the latest code updates
     If you want to see the details of what is modified in each submodule, do:
     git submodule foreach 'git status'
 
-1.3 Before proceeding, if you have uncommitted work in the main SOLPS-ITER repository and/or 
-    any of its submodules, go into each of the submodules, commit the changes, and then do the 
-    same in the main SOLPS-ITER repository. 
+1.3 Before proceeding, if you have uncommitted work in the main SOLPS-ITER repository and/or
+    any of its submodules, go into each of the submodules, commit the changes, and then do the
+    same in the main SOLPS-ITER repository.
     If necessary, create local private development branches to commit your work to, for example
     git checkout -b <username>/develop                          (creates and checks out a new branch in SOLPS-ITER)
     git submodule foreach 'git checkout -b <username>/develop'  (creates and checks out a new branch in each submodule)
@@ -56,11 +56,13 @@ We recommend using the tcsh shell, as other shell commands may not be supported.
 To load up the tcsh shell, simply type:
 tcsh
 
-To define the environment variables of SOLPS-ITER, a setup-script has to be sourced:
-source setup.csh
+To define the environment variables of SOLPS-ITER, a setup script has to be sourced:
+source setup.csh [<COMPILER>]
 
-If you want to define any additional variables, create a script setup.csh.local. 
-The general setup-script will automatically look for this script and source it if present.
+The optional parameter <COMPILER> above can be used to force SOLPS-ITER to use a different compiler than the default one already specified for your <HOST_NAME> environment (see below).
+
+If you want to define any additional variables, create a script setup.csh.local.
+The general setup script will automatically look for this script and source it if present.
 
 
 
@@ -68,21 +70,22 @@ At first compilation
 ====================
 
 Check whether your <HOST_NAME> is included in whereami.
-Add new <HOST_NAME> if necessary.
+Add new <HOST_NAME> if necessary or specify it using a SETUP/setup.csh.HOST_NAME.local file.
 
-Check whether default compiler for your <HOST_NAME> is set in default_compiler.
+Check whether a default compiler for your <HOST_NAME> is set in default_compiler.
 Add new default <COMPILER> for your <HOST_NAME> if necessary.
 
 Check default SOLPS-ITER compiler settings for your <HOST_NAME> and <COMPILER> in SETUP/config.<HOST_NAME>.<COMPILER>.
 Create this config-file if necessary (example config-file: config.default.default).
-If local modifications to these default compiler options are needed, 
-create a config-file SETUP/config.<HOST_NAME>.<COMPILER>.local.
+Note that shared compilation and option for a given compiler that are not hostname-dependent can be found in SETUP/config.common.<COMPILER>.
+If local modifications to these default compiler options are needed,
+create a config-file SETUP/config.<HOST_NAME>.<COMPILER>.local file.
 
 Run the following script:
 first_setup
 which will create the other config.<HOST_NAME>.<COMPILER> files needed by each of the individual SOLPS-ITER
 submodules. Modify as needed.
-If local modifications to these default compiler options are needed, 
+If local modifications to these default compiler options are needed,
 create config-files <SOLPSTOP>/modules/*/config.<HOST_NAME>.<COMPILER>.local.
 
 
@@ -96,7 +99,7 @@ Compile instructions
 Basic make-targets
 ------------------
 
-In order to compile SOLPS-ITER, type either 
+In order to compile SOLPS-ITER, type either
 make
 make solps
 This will compile the modules:
@@ -106,7 +109,7 @@ and build the SOLPS-ITER manual.
 In order to compile SOLPS-ITER using MPI, type
 make solps_mpi
 This will compile the modules:
-carre, divgeo, b25eirene_mpi, uinp_mpi, triang, amds, sonnet-light
+carre, divgeo, b25eirene_mpi, uinp, triang, amds, sonnet-light
 and build the SOLPS-ITER manual.
 
 In order to compile only a particular module, type
@@ -119,8 +122,16 @@ make sonnet-light
 
 In order to compile a particular module using MPI, type
 make <module_mpi>
-where <module_mpi> can be 
-b25_mpi, eirene_mpi, b25eirene_mpi, uinp_mpi 
+where <module_mpi> can be
+b25_mpi, eirene_mpi, b25eirene_mpi
+
+To compile using OPENMP, use the '_openmp' extension and
+proceed as with MPI. Only the b25 and b25eirene modules
+use OpenMP parallelization.
+
+You can compile with both MPI and OpenMP parallelization by
+using the "_mpi" and "_openmp" extensions together
+make solps_openmp_mpi
 
 To create the manual, type
 make manual
@@ -131,13 +142,17 @@ No-graphics make-targets
 
 In order to compile SOLPS-ITER without (external) graphics libraries, type
 make nox
-or, for the MPI-parallelized version,
+or, for the parallelized versions,
 make nox_mpi
+make nox_openmp
+make nox_openmp_mpi
 
 Note: as divgeo is essentially a graphics tool, it will not be built using nox-targets
 Note: any individual module can be built without graphics using
       make <module>_nox
       make <module_mpi>_nox
+      make <module_openmp>_nox
+      make <module_openmp_mpi>_nox
 
 
 Debug make-targets
@@ -149,17 +164,21 @@ defined above.
 For example, to create debug versions of SOLPS-ITER, following targets are defined:
 make debug
 make solps_debug
-or, for the mpi-version of SOLPS-ITER:
+or, for the parallelized versions of SOLPS-ITER:
 make solps_mpi_debug
+make solps_openmp_debug
+make solps_openmp_mpi_debug
 
 Similarly, debug versions of individual modules can be created using
 make <module>_debug
 make <module_mpi>_debug
-with <module> and <module_mpi> as above.
+make <module_openmp>_debug
+make <module_openmp_mpi>_debug
+with <module> and <module_XXX> as above.
 
-Note: The debug-targets do not require the variable SOLPS_DEBUG to be set in the environment.
-      Similarly, even if SOLPS_DEBUG is defined in the environment, the debug-targets have to 
-      be used to compile debug versions of SOLPS-ITER and/or its submodules (and the "basic 
+Note: The debug targets do not require the variable SOLPS_DEBUG to be set in the environment.
+      Similarly, even if SOLPS_DEBUG is defined in the environment, the debug targets have to
+      be used to compile debug versions of SOLPS-ITER and/or its submodules (and the "basic
       make-targets" defined above will still compile non-debug versions).
 
 
@@ -167,22 +186,26 @@ Clean make-targets
 ------------------
 
 To clean SOLPS-ITER, type either
-make clean 
+make clean
 make clean_solps
-or, for the mpi-version of SOLPS-ITER,
+or, for the parallelized versions of SOLPS-ITER,
 make clean_solps_mpi
+make clean_solps_openmp
+make clean_solps_openmp_mpi
 
 To clean a particular module, type
 make clean_<module>
-make clean_<module_mpi>
-with <module> and <module_mpi> as above.
+make clean_<module_XXX>
+with <module> and <module_XXX> as above.
 
-To clean debug versions of solps or a module, add _debug to the clean-targets defined above, i.e.
+To clean debug versions of solps or a module, add _debug to the clean targets defined above, i.e.
 make clean_debug
 make clean_solps_debug
 make clean_solps_mpi_debug
+make clean_solps_openmp_debug
+make clean_solps_openmp_mpi_debug
 for the various versions of SOLPS-ITER, and
 make clean_<module>_debug
-make clean_<module_mpi>_debug
+make clean_<module_XXX>_debug
 for a particular module.
 

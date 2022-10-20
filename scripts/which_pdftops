@@ -1,0 +1,9 @@
+#! /bin/tcsh -f
+
+if (-X pdftops) then
+  echo 'pdftops'
+else if (-X pdf2ps) then
+  echo 'pdf2ps'
+else
+  echo 'convert'
+endif

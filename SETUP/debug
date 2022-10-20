@@ -11,12 +11,18 @@ if ($?SOLPS_PATH) then
 
   setenv   OLD_SOLPS_PATH $SOLPS_PATH
   setenv   PATH `echo $PATH | sed "s|${SOLPS_PATH}:||"`
-  setenv   SOLPS_PATH `echo $SOLPS_PATH | sed 's|.debug||g'`
-  setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|${HOST_NAME}.${COMPILER}.mpi|${HOST_NAME}.${COMPILER}.mpi.debug|g"`
-  setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|${HOST_NAME}.${COMPILER}:|${HOST_NAME}.${COMPILER}.debug:|g"`.debug
+  setenv   SOLPS_PATH `echo $SOLPS_PATH | sed 's|\.debug:|:|g'`
+  setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|${HOST_NAME}.${COMPILER}.openmp.mpi:|${HOST_NAME}.${COMPILER}.openmp.mpi.debug:|g"`
+  setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|${HOST_NAME}.${COMPILER}.openmp:|${HOST_NAME}.${COMPILER}.openmp.debug:|g"`
+  setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|${HOST_NAME}.${COMPILER}.mpi:|${HOST_NAME}.${COMPILER}.mpi.debug:|g"`
+  setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|${HOST_NAME}.${COMPILER}:|${HOST_NAME}.${COMPILER}.debug:|g"`
   setenv   PATH ${SOLPS_PATH}:${OLD_PATH}
+  setenv   IMAS_AMNS_DEBUG yes
   setenv   SOLPS_DEBUG yes
+  setenv   I_MPI_DEBUG 5
+  setenv   PMI_DEBUG 1
   unsetenv OLD_SOLPS_PATH
+  rehash
   echo "SOLPS-ITER debug mode turned on"
 else
   echo "SOLPS_PATH not set. Exiting."

@@ -1,0 +1,11 @@
+#! /bin/tcsh -f
+
+if (-X xelatex) then
+  echo 'xelatex'
+else
+  if (-X pdflatex) then
+    echo 'pdflatex'
+  else
+    echo 'latex'
+  endif
+endif

@@ -4,7 +4,7 @@
 
 [ "$1" = '' ] && { \
     echo "Usage: lns <Varid>"
-    echo "        This will link the files to the Sonnet directory:"
+    echo "        This will link the files to the DGSONNETMASK directory:"
     echo "                <Varid>.str --> struct.snn"
     echo "                <Varid>.trg --> targets.snn"
     echo "           equilibrium file --> equilibr.snn"
@@ -29,14 +29,16 @@
 }
 [ "$SOLPS_CENTRAL" = 'yes' ] && DEVICE=$DEVICE/$USER
 
-CLASSDIR=${DG}/device/$DEVICE
-[ -d "$CLASSDIR" ] || {
-  print -u2 -n -- "The directory $CLASSDIR does not exist. Create it? (y/n) "
+# the directory where the DivGeo files will be stored
+[ -z "$DGSONNETMASK" ] && DGSONNETMASK=${DG}/device/$DEVICE
+
+[ -d "$DGSONNETMASK" ] || {
+  print -u2 -n -- "The directory $DGSONNETMASK does not exist. Create it? (y/n) "
   while true; do {
     read u
     { case $u in
-       (y|Y) mkdir -p "$CLASSDIR" || {
-             print -u2 -- "Unable to create the directory. Check the permissions in ${CLASSDIR}%/*"
+       (y|Y) mkdir -p "$DGSONNETMASK" || {
+             print -u2 -- "Unable to create the directory. Check the permissions in ${DGSONNETMASK}%/*"
              break 2
              }; break;;
        (n|N) break 2;;
@@ -45,8 +47,9 @@ CLASSDIR=${DG}/device/$DEVICE
     }; done
   }
 
-ln -sf `pwd`/"$1".str ${DG}/device/$DEVICE/struct.snn
-ln -sf `pwd`/"$1".trg ${DG}/device/$DEVICE/targets.snn
+cp "$1".dgo "$1".str "$1".trg ${DGSONNETMASK}
+ln -sf `pwd`/"$1".str ${DGSONNETMASK}/struct.snn
+ln -sf `pwd`/"$1".trg ${DGSONNETMASK}/targets.snn
 ln -sf `pwd`/"$1".dgo uinput.dg
 ln -sf `pwd`/"$1".trg uinput.trg
 ln -sf `pwd`/"$1".str dg.str
@@ -55,21 +58,48 @@ ln -sf `pwd`/"$1".dgo dg.dgo
 ln -sf `pwd`/"$1".dgo param.dg
 
 e=`cat $1.trg | grep '# equil' | cut -f3 -d' '`
+
+# check in case we are doing a limiter configuration
+# and must fetch the real equilibrium from the .dgo file
+typeset -i z
+NAME=/tmp/lns.$USER.`date +%Y%m%d%H%M%S`
+cat $1.dgo | grep 'lm_equ' | wc -l > $NAME
+z=`cat $NAME`
+[ $z -gt 0 ] && {
+  l=`cat $1.dgo | grep 'lm_equ' | cut -f4 -d' '`
+  [ -s $l ] && {
+    echo Linking to limiter equilibrium $l
+    e=$l
+  } || {
+    [ "X${l}X" -eq 'X-X' ] && {
+      echo Default limiter equilibrium name provided: assuming a linear device case!
+    } || {
+      echo Limiter equilibrium file $l not found!
+    }
+  }
+}
+rm $NAME
+
 case $e in
   ( ''   ) echo "$1.trg is in old format - no information on the equilibrium there"
            [ -r default.equ ] && { \
-               ln -sf `pwd`/default.equ ${DG}/device/$DEVICE/equilibr.snn
+               ln -sf `pwd`/default.equ ${DGSONNETMASK}/equilibr.snn
                ln -sf `pwd`/default.equ dg.equ
                     echo '-- the default equilibrium file is used';
            } || echo '*** No default equilibrium file found (!!!)';;
-  ( /*   ) ln -sf $e ${DG}/device/$DEVICE/equilibr.snn
-           ln -sf $e dg.equ;;
+  ( /*   ) [ -e $e ] && f=$e || f=`basename $e`
+           ln -sf $f ${DGSONNETMASK}/equilibr.snn
+           cp $f ${DGSONNETMASK}
+           ln -sf $f dg.equ;;
   ( ../* ) (d=`dirname $e`; f=`basename $e`; cd $d;
-           ln -sf `pwd`/$f ${DG}/device/$DEVICE/equilibr.snn
+           ln -sf `pwd`/$f ${DGSONNETMASK}/equilibr.snn
+           cp $f ${DGSONNETMASK}
            ln -sf `pwd`/$f dg.equ);;
   ( ./*  ) (d=`dirname $e`; f=`basename $e`; cd $d;
-           ln -sf `pwd`/$f ${DG}/device/$DEVICE/equilibr.snn
+           ln -sf `pwd`/$f ${DGSONNETMASK}/equilibr.snn
+           cp $f ${DGSONNETMASK}
            ln -sf `pwd`/$f dg.equ);;
-  (   *  ) ln -sf `pwd`/$e ${DG}/device/$DEVICE/equilibr.snn
+  (   *  ) ln -sf `pwd`/$e ${DGSONNETMASK}/equilibr.snn
+           cp $e ${DGSONNETMASK}
            ln -sf `pwd`/$e dg.equ;;
 esac

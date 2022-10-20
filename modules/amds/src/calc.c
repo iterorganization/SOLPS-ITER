@@ -1,4 +1,5 @@
 #include "amds.h"
+#include "ctype.h"
 
 #define xstrwordBUFFERS 10
 char* StrWord(char* s,int n) {

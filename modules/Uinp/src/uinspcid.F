@@ -1,8 +1,8 @@
       subroutine uinspcid(s,l,k)
-       use b2mod_layer
+      use b2mod_types
+      use b2mod_layer
      , , only: ntrack, nalloys
-       use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use eirmod_solps
 c
 c  version : 26.05.99 20:38
 c
@@ -10,8 +10,9 @@ c======================================================================
 c*** Prepare the reaction data.
 c***  Input:  s is the particle identifier
 c***  Output: l the particle kind (0-e, 1-a, 2-m, 3-i, 4-p; <0 - err)
-c***  	      k the species index
+c***          k the species index
 c======================================================================
+      implicit none
       integer l,k
       character*(*) s
 #include "uinpcom.inc"
@@ -22,25 +23,25 @@ c======================================================================
 
       if(s.eq.' ' .or. s.eq.'e') then
 c*** Electron
-      	l=0
-	k=0
-	return
+        l=0
+        k=0
+        return
       end if
 
       do i=1,nspcatm
-      	if(streql(s,spcsatm(i))) go to 10
+        if(streql(s,spcsatm(i))) go to 10
       end do
 
       do i=1,nspcmol
-      	if(streql(s,spcsmol(i))) go to 20
+        if(streql(s,spcsmol(i))) go to 20
       end do
 
       do i=1,nspcion
-      	if(streql(s,spcsion(i))) go to 30
+        if(streql(s,spcsion(i))) go to 30
       end do
 
       do i=1,nspcpls
-      	if(streql(s,spcspls(i))) go to 40
+        if(streql(s,spcspls(i))) go to 40
       end do
       l=-1
       k=0
@@ -67,5 +68,5 @@ c*** Plasma ion
       return
 
 c======================================================================
-      end
+      end subroutine uinspcid
 

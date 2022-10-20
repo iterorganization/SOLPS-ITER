@@ -11,8 +11,8 @@
     . /tmp/b2co.$extension
     rm /tmp/b2co.$extension
   } || {
-    echo 'Did not find non-empty b2co.files list. Nothing to do ...'
+    echo 'Did not find non-empty b2co.files list. Nothing else to do ...'
   }
 } || {
-  echo 'B2FSTATE_ONLY set. Skipping...'
+  echo 'B2FSTATE_ONLY set. Skipping tracing files...'
 }

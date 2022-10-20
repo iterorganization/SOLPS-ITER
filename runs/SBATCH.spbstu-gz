@@ -2,10 +2,10 @@
 
 #SBATCH -N 8
 #SBATCH -J #JOBNAME#
-#SBATCH --ntasks-per-node=28
+#SBATCH --ntasks-per-node=#PROCS#
 #SBATCH -o testjob-%j.out
 #SBATCH -e testjob-%j.err
-#SBATCH -t 336:00:00
+#SBATCH -t #HOURS#:00:00
 scontrol show hostnames
 
 echo Using SOLPSTOP = $SOLPSTOP
@@ -42,3 +42,4 @@ update_solps_run_status ${msg}
 if ($?SOLPS_GUI_IP) then
   echo ${USER} ${PWD} ${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
 endif
+b2fstate_OK_bool

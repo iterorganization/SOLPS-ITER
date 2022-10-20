@@ -33,11 +33,15 @@ $(error First use of config.WM.gfortran. Provide paths to libraries first.)
 #
 
 LD_NETCDF  = `pkg-config netcdf-fortran --libs`
-LD_MSCL    = `pkg-config mscl --libs`
+LD_MSCL    = -L${MSCL_ROOT} -lmscl
+ifdef GR_ROOT
 LD_GR      = -L${GR_ROOT}/lib -lgr
+endif
 LD_GKS     = -L${GLI_HOME} -lgks -lgfortran
+ifdef NCARG_ROOT
 #LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lm  -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lz -lpthread -lXrender -lbz2 -lgfortran # for NCARG v6.x.x
 LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lm                                                                                                          # for NCARG v4.x.x
+endif
 LD_NAG     = `pkg-config nag --libs`
 LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
@@ -48,59 +52,10 @@ LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 
 SOLPS_CPP      = -DNCAR4 -DNO_F01AAF
 B25_DEFINES    =
+CARRE_DEFINES  =
 EIRENE_DEFINES =
+FFLAGSEXTRA    =
 
-# Autodetected optional features...
-
-# Build with NetCDF tools if available
-ifdef LD_NETCDF
-  SOLPS_CPP   += -DCDF_MOVIE
-else
-  SOLPS_CPP   += -DNO_CDF
-endif
-
-# Build with MDSplus tools if MDSplus is present
-ifdef LD_MDSPLUS
-  SOLPS_CPP   += -DMDSPLUS
-endif
-
-# Build with Catalyst if ParaView is in PATH
-ifdef LD_CATALYST
-  SOLPS_CPP   += -DCATALYST
-endif
-
-# Build with IMAS if imas module is loaded
-ifdef IMAS_PREFIX
-  SOLPS_CPP += -DIMAS
-  LD_UAL     = `pkg-config imas-lowlevel imas-gfortran --libs`
-  export LD_UAL
-endif
-
-#
-# Export for use in sub-makefiles
-#
-
-export NCDIR
-export MSCL_ROOT
-export H5DIR
-export GR_ROOT
-export GLI_HOME
-export NCARG_ROOT
-export NAGDIR
-export MDSPLUS_DIR
-
-export LD_NETCDF
-export LD_MSCL
-export LD_GR
-export LD_GKS
-export LD_NCARG
-export LD_NAG
-export LD_MDSPLUS
-export LD_SONNET
-
-export SOLPS_CPP
-export B25_DEFINES
-export EIRENE_DEFINES
 
 #!!!Local Variables:
 #!!! mode: Makefile

@@ -2,8 +2,10 @@
       use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
-      use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use eirmod_solps
+      use b2mod_elements
+      use b2mod_solpstop
+      use b2mod_subsys
       implicit none
 
 c======================================================================
@@ -50,35 +52,33 @@ c     helpers for reading in data
       integer iblmx,ismax
       integer isppr(isdimd),ispbr(isdimd),isstgr(isdimd)
       integer IDMAXDzav,ITMAXDzav
-      logical lres,lstan,lptn
+      logical lres,lstan,lptn,ex
       real (kind=R8) :: dnr_ams
       integer, allocatable :: izpmin(:), izpmax(:)
 c     log10 of densities (in 1/cm3), temperatures (in eV)
       real (kind=R8) ::
      *   DDENSDzav(iddimd),DTEVDzav(itdimd)
 c     log10 of rate coefficients (in cm3/s)
-      real (kind=R8) :: DTMP1(itdimd,iddimd)
-c     effective coefficients
 c     effective coefficients
       real (kind=R8) :: DZAV(isdimd,itdimd,iddimd)
 c     helpers for composing filenames
       character SUBDIRrec*4,SUBDIRion*4,SUBDIRcex*4
       character SUBDIRprb*4,SUBDIRplt*4,SUBDIRzav*4
       character SUBDIRpot*4
-      character ES*2, EB*2, YEAR*2, Bdescr*8
+      character ES*2, EB*2, YEAR*2, Bdescr*8, filename*256
 c     procedures
       integer get_atomic_number
       real (kind=R8) :: rratio
       logical silent_open, streql
       external silent_open, streql
       external get_atomic_number, lower_case, xxdata_11, rratio
-      external subini, subend, xertst, xerrab
+      external xertst, xerrab
 c======================================================================
       call subini ('uinprpbl')
 
       lfirst = .true.
       nplsb = nspcpls
-      allocate(janf(nspigen),jend(nspigen))
+      allocate(janf(nspcncl),jend(nspcncl))
       allocate(spcsrnb(nplsi),spcsrfb(nplsi),spcsrtb(nplsi),
      .         spcsmsb(nplsi),spcsncb(nplsi),spcscgb(nplsi),
      .         spcsfub(nplsi),spcsrsb(nplsi),spcsplb(nplsi))
@@ -117,16 +117,13 @@ c======================================================================
       escd1b = 0.0_R8
       escd2b = 0.0_R8
       freacb = 0.0_R8
-      do l=1,nbgk !{
-        ipls1(nplsi+l)=nplsi+l
-      end do !}
-      do l=1,nspigen !{
+      do l=1,nspcncl !{
         if (l.gt.1) then !{
-          nc = get_atomic_number(spcigen(l-1))
+          nc = get_atomic_number(spcsncl(l-1))
           ianf = ianf + nc
           janf(l) = jend(l-1) + 1
         end if !}
-        nc = get_atomic_number(spcigen(l))
+        nc = get_atomic_number(spcsncl(l))
         iend = ianf + (nc-1)
         if (.not.is_bundled(l)) then !{
           nbndl(l) = nc+1
@@ -149,12 +146,22 @@ c======================================================================
           cycle
         end if !}
         if (lfirst) write(6,1028)
-        write(6,*) 'Bundling ',spcigen(l)
-        write(6,*) spcigen(l), ianf, iend
+        write(6,*) 'Bundling ',spcsncl(l)
+        write(6,*) spcsncl(l), ianf, iend
         allocate(izpmin(0:nc), izpmax(0:nc))
-        if(silent_open(99,'ratadas.filelist',
+        filename='ratadas.filelist'
+        call find_file(filename,ex)
+        if(silent_open(99,filename,
      .             'data.local|modules/B2.5/Database',adasfile)) then !{
           read(99,*) uidin
+          if(uidin(1:8).eq.'SOLPSTOP') then !{
+            if(uidin(9:9).ne.'/') then !{
+              uidin=trim(solpstop()) // '/' // trim(uidin(9:))
+            else !}{
+              uidin=trim(solpstop()) // '/' // trim(uidin(10:))
+            endif !}
+            write(*,*) 'ADAS UIDIN changed to ',trim(UIDIN)
+          endif !}
           read(99,*) maxne
           if (nc.gt.maxne) then !{
             write(*,*) 'ADAStables: element number',nc,
@@ -196,7 +203,7 @@ c     now read the relevant line
           if(SUBDIRzav.ne.'none') then !{
             read(SUBDIRzav,*) iyear
           else !}{
-            message = 'Could not find Zav data for '//spcigen(l)
+            message = 'Could not find Zav data for '//spcsncl(l)
             call xerrab (message)
           end if !}
           if (iyear.gt.100) then !{
@@ -253,9 +260,9 @@ c     now read the relevant line
               izpmin(ic-1) = iptnca(1,ic,1)
               izpmax(ic-1) = iptnca(1,ic,nptnc(1,ic))
             enddo !}
-            write(6,*) spcigen(l)
-            write(6,*) (izpmin(ic-1),ic=1,ncnct)
-            write(6,*) (izpmax(ic-1),ic=1,ncnct)
+            write(6,*) spcsncl(l)
+            write(6,'(20i5)') (izpmin(ic-1),ic=1,ncnct)
+            write(6,'(20i5)') (izpmax(ic-1),ic=1,ncnct)
             write(6,1028)
           else !}{
             call xerrab ('Could not open ADAS partition file!')
@@ -288,9 +295,9 @@ cxpb   jend(l) is the number of the last bundled ion of sequence l in the new li
             ja = ianf + izpmin(i)-1
             je = ianf + izpmax(i)-1
             spcsrnb(iplsb) = l
-            ichr = len_trim(spcigen(l))
+            ichr = len_trim(spcsncl(l))
             write(spcsplb(iplsb)(1:ichr+1),'(a,a1)')
-     .       trim(spcigen(l)),'+'
+     .       trim(spcsncl(l)),'+'
             if (izpmin(i).lt.10) then !{
               write(spcsplb(iplsb)(ichr+2:ichr+2),'(i1)') izpmin(i)
               ichr = ichr+2
@@ -362,20 +369,23 @@ cxpb   jend(l) is the number of the last bundled ion of sequence l in the new li
         deallocate(izpmin, izpmax)
         lfirst = .false.
       end do !}
+      do l=1,nbgk !{
+        ipls1(nplsi+l) = jend(nspcncl)+l
+      end do !}
 
 cxpb Now we remap the arrays
       if (nplsb.ne.nspcpls.and.nplsb.gt.0) then !{
         write(6,*) 'New ion list after bundling to be mapped: '
-      	write(*,'(1x,a12,9a8)') 'plasma ions','nmassb','ncharb','nprtb',
-     ,	  'nchrgb','isrfb','isrtb','nmsecb','spcsrnb'
-      	do i=1,nplsb !{
+        write(*,'(1x,a12,9a8)') 'plasma ions','nmassb','ncharb','nprtb',
+     ,    'nchrgb','isrfb','isrtb','nmsecb','spcsrnb'
+        do i=1,nplsb !{
           if (spcsrnb(i).eq.0) cycle
           if (is_bundled(spcsrnb(i))) then !{
-	    write(*,'(4x,a8,i7,8i8)') textb(i),
+            write(*,'(4x,a8,i7,8i8)') textb(i),
      ,       nmassb(i),ncharb(i),nprtb(i),
-     ,	     nchrgb(i),isrfb(i),isrtb(i),nmsecb(i),spcsrnb(i)
+     ,       nchrgb(i),isrfb(i),isrtb(i),nmsecb(i),spcsrnb(i)
           end if !}
-	end do !}
+        end do !}
         write(6,1028)
         ianf = 0
         iend = 0
@@ -385,9 +395,9 @@ cxpb   janf(l) is the number of the first bundled ion of sequence l in the new l
 cxpb   jend(l) is the number of the last bundled ion of sequence l in the new list
         allocate(done(nplsi))
         done = .false.
-        do l = 1, nspigen !{
+        do l = 1, nspcncl !{
           ianf = iend + 1
-          nc = get_atomic_number(spcigen(l))
+          nc = get_atomic_number(spcsncl(l))
           iend = iend + nc
           if (.not.is_bundled(l)) then !{
             do j = janf(l), jend(l) !{
@@ -489,12 +499,12 @@ cxpb   jend(l) is the number of the last bundled ion of sequence l in the new li
         end do !}
         deallocate(done)
         write(6,*) 'New ion list after mapping: '
-      	write(*,'(1x,a12,9a8)') 'plasma ions','nmassp','ncharp','nprtp',
-     ,	  'nchrgp','isrfp','isrtp','nmsecp','spcsrnp'
+        write(*,'(1x,a12,9a8)') 'plasma ions','nmassp','ncharp','nprtp',
+     ,    'nchrgp','isrfp','isrtp','nmsecp','spcsrnp'
         do i=1,nplsi+nbgk !{
-	  write(*,'(a12,i7,8i8)') textp(i),nmassp(i),ncharp(i),nprtp(i),
-     ,	    nchrgp(i),isrfp(i),isrtp(i),nmsecp(i),spcsrnp(i)
-	end do !}
+          write(*,'(a12,i7,8i8)') textp(i),nmassp(i),ncharp(i),nprtp(i),
+     ,      nchrgp(i),isrfp(i),isrtp(i),nmsecp(i),spcsrnp(i)
+        end do !}
         nspcpls=nplsi
         write(*,1028)
       end if !}
@@ -648,4 +658,4 @@ c======================================================================
       call subend ()
       return
  1028 format()
-      end
+      end subroutine uinprpbl

@@ -32,7 +32,7 @@ MDSPLUS_DIR ?=
 LD_NETCDF  = `nf-config --flibs`
 LD_GR      = -L${GR_ROOT}/lib -lgr
 LD_GKS     = -L${GLI_HOME} -lgks -lgfortran -lX11 -lXt
-#LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
+LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 LD_MSCL    = `pkg-config mscl --libs`
 LD_NAG     = -L${NAGDIR}/lib -lnag_nag
@@ -44,7 +44,7 @@ NCDIR     ?= ${EBROOTNETCDFMINFORTRAN}
 #
 
 SOLPS_CPP      = -DNCAR4 -DNO_F01AAF -DNAG22
-B25_DEFINES    = 
+B25_DEFINES    =
 CARRE_DEFINES  =
 EIRENE_DEFINES =
 FFLAGSEXTRA    =

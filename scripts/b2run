@@ -19,11 +19,8 @@
 # endif
 # end
 
-set solpstop=`climb_and_look_for SOLPSTOP`
-if (-s $solpstop) then
-  setenv SOLPSTOP "`cat $solpstop`"
-  set RUNS=$SOLPSTOP/runs
-else if ($SOLPSTOP != "") then
+setenv SOLPSTOP "`determine_SOLPSTOP`"
+if ($SOLPSTOP != "") then
   set RUNS=$SOLPSTOP/runs
 else
   setenv SOLPSTOP "`echo $PWD | sed 's:/runs/.*::'`"
@@ -41,8 +38,12 @@ loop:
   goto loop
 
 endloop:
+  set b2ex=""
   set debug=""
-  set TIME=time
+  if(! $?TIME) set TIME=time
+  set RUN_OPTIONS=""
+  set KMP_AFFINITY=""
+  set OMP_NUM_THREADS=1
 
 argloop:
   if ("X${1}X" == "X-hX") then
@@ -52,11 +53,13 @@ argloop:
     echo ' '
     echo 'Optional arguments:'
     echo ' -b: for use with b2co to produce a provisional b2fstate file while the main code is running'
-    echo ' -d <debugger>: launch run with debugger <debugger>.'
-    echo ' -h: Prints this message.'
+    echo ' -d <debugger>: launch run with debugger <debugger> (or with $DBX if <debugger> not specified)'
+    echo ' -h: Prints this message'
     echo ' -m <mpi-launcher + args>: run mpi-version (example: b2run -m \"mpiexec -np 2\" b2mn)'
     echo ' -n: dry run. Will show the sequences of commands requested by b2run.'
+    echo ' -o <options>: any additional run options'
     echo ' -s: request a B2.5 stand-alone run. No Eirene input file required then.'
+    echo ' -t <number-of-threads> : request an OpenMP run with <number-of-threads> threads'
     echo ' -diff_d: request a B2.5 run with forward differentiated executable'
     echo ' -diff_b: request a B2.5 run with adjoint differentiated executable'
     echo ' '
@@ -134,8 +137,13 @@ argloop:
       source $SOLPSTOP/SETUP/mpi
       set MPI_SET=yes
     endif
-    set TIME=`echo $argv | sed -e 's:^"::' -e 's:" .*::'`
-    set nargs=`echo $TIME | awk '{print split($0,args," ")}'`
+    set TMPI=`echo $argv | sed -e 's:^"::' -e 's:" .*::' -e 's:"$::' `
+    set nargs=`echo $TMPI | awk '{print split($0,args," ")}'`
+    if ("X${TIME}X" == "XtimeX") then
+      set TIME="$TMPI"
+    else
+      set TIME="$TIME $TMPI"
+    endif
     mpiloop:
       if ($nargs > 0) then
         shift
@@ -147,27 +155,67 @@ argloop:
     mpiloopend:
     goto argloop
   endif
+  if ("X${1}X" == "X-tX") then
+    shift
+    if (! $?SOLPS_OPENMP) then
+      source $SOLPSTOP/SETUP/openmp
+      set OPENMP_SET=yes
+    endif
+    set OMP_NUM_THREADS=$1
+    set KMP_AFFINITY=compact,verbose,norespect
+    shift
+    goto argloop
+  endif
   if ("X${1}X" == "X-dX") then
     shift
     if (! $?SOLPS_DEBUG) then
       source $SOLPSTOP/SETUP/debug
       set DEBUG_SET=yes
     endif
-    if ($1 == "") then 
-      set TIME="$DBX"
-    else  
-      set TIME="$1"
-      shift
+    if ("X${1}X" == "XX") then
+      if ("X${TIME}X" == "XtimeX") then
+        set TIME="$DBX"
+      else
+        set TIME="$DBX $TIME"
+      endif
+    else
+      set next=$1
+      set begin_next=`printf '%s' $next | cut -c1`
+      set b2gin_next=`printf '%s' $next | cut -c-2`
+      if ("X${begin_next}X" == "X-X") then
+        set TIME="$DBX"
+      else
+        if ("X${b2gin_next}X" == "Xb2X") then
+          set b2ex="${argv}"
+          set TIME="$DBX"
+          shift
+        else
+          set TIME="$1"
+          shift
+        endif
+      endif
     endif
     goto argloop 
   endif
-  if ("X${argv}X" == "XX") set argv="b2mn"
-  echo "argument= " $argv
-  set CMD=`echo $argv" " | sed -e 's: :.prt :g'`
-  echo $CMD
-  make $debug TIME="$TIME" -f $RUNS/Makefile $CMD
+  if ("X${1}X" == "X-oX") then
+    shift
+    set RUN_OPTIONS="$RUN_OPTIONS $1"
+    shift
+    goto argloop
+  endif
+  if ("X${b2ex}X" == "XX") then
+    if ("X${argv}X" == "XX") then
+      set b2ex="b2mn"
+    else
+      set b2ex="${argv}"
+    endif
+  endif
+  echo "argument = "$b2ex
+  set CMD=`echo $b2ex" " | sed -e 's: :.prt :g'`
+  ${MAKE} $debug TIME="$TIME" RUN_OPTIONS="$RUN_OPTIONS" OMP_NUM_THREADS=$OMP_NUM_THREADS -f $RUNS/Makefile $CMD
   unsetenv STAND_ALONE
   unsetenv B2FSTATE_ONLY
-  if ($?MPI_SET)   source $SOLPSTOP/SETUP/nompi
-  if ($?DEBUG_SET) source $SOLPSTOP/SETUP/nodebug
+  if ($?MPI_SET)    source $SOLPSTOP/SETUP/nompi
+  if ($?DEBUG_SET)  source $SOLPSTOP/SETUP/nodebug
+  if ($?OPENMP_SET) source $SOLPSTOP/SETUP/noopenmp
   

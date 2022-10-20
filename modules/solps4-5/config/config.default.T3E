@@ -5,7 +5,7 @@ EQUIV5 = ${EQUIVS} -Dsmin=dmin
 
 CPP = /opt/ctl/cf90/cf90/lib/ftpp -F
 CPP = /usr/lib/make/cpp
-CPPOPTS = -C -P -N -I$(srcdir) $(EQUIVS)
+CPPOPTS = -C -P -N -I$(SRCDIR) $(EQUIVS)
 CPP4OPTS = ${CPPOPTS}
 CPP5OPTS = ${CPPOPTS}
 SED = sed s:\#PREC\#:d:g
@@ -25,10 +25,9 @@ BLD = ar rcv
 GRLIBES = $(LD_NCARG)
 LDLIBES = $(LD_NAG) $(LD_MSCL)
 
-LD = f90 -lapp
-LD = f90
+LD = ${FC}
 
-LDOPTS = -l /usr/local/pat/libpat.a /usr/local/pat/pat.cld
+LDOPTS = -lapp -l /usr/local/pat/libpat.a /usr/local/pat/pat.cld
 LDOPTS = 
 
 LCPP = ${LD_SONNET}

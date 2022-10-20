@@ -1,11 +1,11 @@
       module cfront      
       implicit none
       public :: realloc_cfront
-C---- DELFRO : LENTGH OF FRONTIER-PARTS
-C---- IFRONT : LIST OF FRONTIER-PARTS
+C---- DELFRO : LENTGH OF FRONTIER PARTS
+C---- IFRONT : LIST OF FRONTIER PARTS
 C----          IFRONT(1,*) : START POINT OF FRONTIER PART
 C----          IFRONT(2,*) : END POINT OF FRONTIER PART
-C---- NPARTFR : TOTAL NUMBER OF FRONTIER-PARTS
+C---- NPARTFR : TOTAL NUMBER OF FRONTIER PARTS
       double precision, allocatable, public, save :: delfro(:)
       integer, allocatable, public, save :: ifront(:,:)
 

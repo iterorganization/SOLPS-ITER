@@ -59,6 +59,24 @@ endif
 if(! $?COMPILER) then
   echo COMPILER not defined!
 endif
+
+limit stacksize unlimited
+
+# Load environment cache if it exists and the setup files have not changed
+set setup=${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}
+if ((-f $setup.env.local) && ( -M $setup.env.local ) >= ( -M $setup ) && \
+    ( -M $setup.env.local ) >= ( -M ${SOLPSTOP}/setup.csh ) && \
+    (!(-f ${SOLPSTOP}/SETUP/setup.csh.local) || \
+      ( -M $setup.env.local ) >= ( -M ${SOLPSTOP}/SETUP/setup.csh.local )) && \
+    (!(-f $setup.local) || ( -M $setup.env.local ) >= ( -M $setup.local ))) then
+    echo "Loading cached SETUP/setup.csh.${HOST_NAME}.${COMPILER}.env.local."
+    source $setup.env.local
+    exit 0
+else
+    set setup_pre = `mktemp` alias_pre = `mktemp` && alias >! $alias_pre
+    env|sed -ne "/^[ }]\|=(/b; s/\([^=]*\)=\(.*\)/setenv \1 '\2'/p" >! $setup_pre
+endif
+
 if (-x `which gmake`) then
   setenv MAKE `which gmake`
 else
@@ -84,11 +102,9 @@ if (-s ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local) then
   source ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
 endif
 
-limit stacksize unlimited
-
 if (! $?GRAPHCAP) setenv GRAPHCAP X11
 
-if (! $?B2PLOT_DEV) setenv B2PLOT_DEV "x11 ps" 
+if (! $?B2PLOT_DEV) setenv B2PLOT_DEV "x11 ps"
 if (! $?GRSOFT_DEVICE) setenv GRSOFT_DEVICE "211 62"
 setenv SonnetTopDirectory ${SOLPSTOP}/modules/Sonnet-light
 setenv EscapeSonnet `echo ${SonnetTopDirectory} | sed 's:\/:\\\/:g'`
@@ -172,6 +188,9 @@ setenv MANPATH  `echo $MANPATH | awk -v RS=: -v ORS= '\\!a[$0]++ {if (NR>1) prin
 setenv PYTHONPATH  `echo $PYTHONPATH | awk -v RS=: -v ORS= '\\!a[$0]++ {if (NR>1) printf(":"); printf("%s",$0) }'`
 setenv OLD_PATH  `echo $OLD_PATH | awk -v RS=: -v ORS= '\\!a[$0]++ {if (NR>1) printf(":"); printf("%s",$0) }'`
 
+setenv PATH_FOR_LOOP ${PATH}
+setenv MANPATH_FOR_LOOP ${MANPATH}
+
 alias sb2  'cd ${SOLPSTOP}/modules/B2.5'
 alias sbb  'cd ${SOLPSTOP}/modules/B2.5'
 alias sei  'cd ${SOLPSTOP}/modules/Eirene'
@@ -179,6 +198,7 @@ alias ssw  'cd ${SOLPSTOP}/modules/Sonnet-light'
 alias sst  'cd ${SOLPSTOP}/modules/Triang'
 alias ssd  'cd ${SOLPSTOP}/modules/DivGeo'
 alias ssc  'cd ${SOLPSTOP}/modules/Carre'
+alias ssc2 'cd ${SOLPSTOP}/modules/Carre2'
 alias ssu  'cd ${SOLPSTOP}/modules/Uinp'
 alias slib 'cd ${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}'
 alias sbr  'cd ${SOLPSTOP}/runs'
@@ -253,6 +273,17 @@ if (-s ${SOLPSTOP}/SETUP/setup.csh.local) then
   source ${SOLPSTOP}/SETUP/setup.csh.local
 endif
 
-# List loaded modules
+# Create environment cache for faster loading (setenv, unsetenv, and aliases)
+set setup_post = `mktemp`
+env | sed -ne "/^[ }]\|=()/b; s/\([^=]*\)=\(.*\)/setenv \1 '\2'/p" \
+   -e '1i# Generated environment cache. Do not edit!' >! $setup_post
+grep -F -v -f $setup_pre $setup_post >! $setup.env.local
+sed -i -e "s/setenv/unsetenv/; s/ '.*'//" $setup_pre $setup_post
+grep -F -v -f $setup_post $setup_pre >> $setup.env.local
+alias | grep -F -v -f $alias_pre | sed -e 's/^/alias /' \
+    -e "/\t(.*[;|&].*)/{s/\t(/\t'(/;s/)"'$'"/)'/;b}" \
+    -e "s/\t\([^(].*\)/\t'\1'/" -e 's/\t(/\t/;s/)$//' >> $setup.env.local
+rm -f $setup_pre $setup_post $alias_pre
 
+# List loaded modules
 module list

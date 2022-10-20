@@ -11,9 +11,9 @@ FC       = f77
 FFLAGS   = -static -O2 -nocpp
 INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
-CPP	     = /lib/cpp
+CPP      = /lib/cpp
 MOD      = mod
-LDLIBS 	 = ${LD_MSCL}
+LDLIBS   = ${LD_MSCL} ${LD_NAG}
 LDEXTRA  =
 
 #!!!Local Variables:

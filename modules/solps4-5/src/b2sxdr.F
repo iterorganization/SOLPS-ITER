@@ -55,9 +55,6 @@
      , ,only: alloc_eirdiag
       implicit none
 #     include "DIMENSIONS.F"
-#ifdef USE_MPI
-      include 'mpif.h'
-#endif
 *   ..common blocks
 
 *-----------------------------------------------------------------------
@@ -141,9 +138,6 @@
 
 *   ..local variables
       integer nout(0:4), idum(0:9), nx, ny, ns
-#ifdef USE_MPI
-      integer rank_mpi,size_mpi,ierr_mpi
-#endif
       integer is, it, ix, iy, n2
       real (kind=R8) :: xcnt, ycnt, scale
       real (kind=R8) :: parg(0:99)
@@ -165,19 +159,8 @@
 *-----------------------------------------------------------------------
 *.computation
 *   ..program start-up calls
-#ifdef USE_MPI
-      call mpi_init(ierr_mpi)
-      call mpi_comm_rank(MPI_COMM_WORLD,rank_mpi,ierr_mpi)
-      call mpi_comm_size(MPI_COMM_WORLD,size_mpi,ierr_mpi)
-      if(rank_mpi .ne. 0) then
-        call mpi_barrier(MPI_COMM_WORLD,ierr_mpi)
-        call mpi_finalize(ierr_mpi)
-        stop 'b2sxdr_mpi_child'
-      endif
-#else
       nprs = 1
       my_pe = 0
-#endif
       call prgini ('b2sxdr')
 c=================================================================
 c*** Read the old data from the input file (b2.parameters.src) and
@@ -241,8 +224,6 @@ c
         CALL ALLOC_COMNNL
         CALL ALLOC_CCOUPL(1)
         CALL SETCON
-        CALL INPUT
-        close(45)
       endif
       if (.not.ex) then
         natm = DEF_NATM
@@ -340,6 +321,10 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
       call cfwure (nout(1), 100, parg, 'parg')
 *   ..in 5.1 and SOLPS-ITER, we need a fort.30 file early to build triangular grids
       call write_f30 (nx, ny)
+      if (ex) then
+        CALL INPUT
+        close(45)
+      endif
 *   ..write dummy b2ag.prt
       write(*,*) 'Writing b2ag.prt'
       open(unit=70,file='b2ag.prt')
@@ -355,7 +340,7 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
 *   ..write b2yt.dat
       write(*,*) 'Writing b2yt.dat'
       open(unit=70,file='b2yt.dat')
-      write(70,'(a)') '*dimens (nx, ny: free format)'
+      write(70,'(a)') '*dimens (nx1, ny1: free format)'
       write(70,'(2(2x,i4))') nx, ny
       if (EIRENE96) then
         write(70,'(a)') '''eirene_format''     ''old'''
@@ -525,10 +510,6 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
 
 * ..end of computation
       call prgend ()
-#ifdef USE_MPI
-      call mpi_barrier(MPI_COMM_WORLD,ierr_mpi)
-      call mpi_finalize(ierr_mpi)
-#endif
       stop 'b2sxdr'
 
 *-----------------------------------------------------------------------

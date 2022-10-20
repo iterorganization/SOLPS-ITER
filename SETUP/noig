@@ -1,9 +1,10 @@
 if ($?SOLPS_PATH) then
   setenv   OLD_SOLPS_PATH $SOLPS_PATH
-  setenv   SOLPS_PATH `echo $SOLPS_PATH | sed 's|.ig||g'`
+  setenv   SOLPS_PATH `echo $SOLPS_PATH | sed 's|\.ig||g'`
   setenv   PATH `echo $PATH | sed "s|${OLD_SOLPS_PATH}|${SOLPS_PATH}|"`
-  unsetenv OLD_SOLPS_PATH USE_IMPGYRO
-  echo "SOLPS-ITER_IMPGYRO mode turned off"
+  unsetenv OLD_SOLPS_PATH USE_IMPGYRO SOLPS_MPI USE_MPI
+  rehash
+  echo "SOLPS-ITER_IMPGYRO (and MPI) mode turned off"
 else
   echo "SOLPS_PATH not set. Exiting."
 endif

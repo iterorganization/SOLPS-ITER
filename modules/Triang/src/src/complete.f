@@ -11,7 +11,7 @@ c  version : 19.09.2005 18:04
       use celm
       implicit none
 
-      integer u,i
+      integer i
 
 c---- the new element is the triangle limited by the points ia, ib and
 c---- inodcon
@@ -63,4 +63,5 @@ c     call grjmp(real(x(ielm(1,nelm))),real(y(ielm(1,nelm))))
 c     call grdrw(real(x(ielm(2,nelm))),real(y(ielm(2,nelm))))
 c     call grdrw(real(x(ielm(3,nelm))),real(y(ielm(3,nelm))))
 c     call grdrw(real(x(ielm(1,nelm))),real(y(ielm(1,nelm))))
+      return
       end

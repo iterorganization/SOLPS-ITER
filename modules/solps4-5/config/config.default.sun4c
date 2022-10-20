@@ -27,8 +27,8 @@
  FC = f77
  FCOPTS = -i4 -r$(realkind) -Nl39 -fast -xO4 -xdepend
  CPP = /usr/ccs/lib/cpp
- CPP4OPTS = -C -P -I$(srcdir) $(EQUIV5)
- CPP5OPTS = -C -P -I$(srcdir) $(EQUIV4)
+ CPP4OPTS = -C -P -I$(SRCDIR) $(EQUIV5)
+ CPP5OPTS = -C -P -I$(SRCDIR) $(EQUIV4)
  BLD = /usr/xpg4/bin/ar rcv
  ifeq ($(locale),cims.nyu.edu)
   LD_NAG = -L/${HOME}/lib -lnag -lblas
@@ -50,7 +50,7 @@
  ifeq ($(realkind),8)
   LDLIBES = $(LIBB2) $(LD_NAG) $(LD_MSCL)
  endif
- LD = f77
+ LD = ${FC}
  LDOPTS = -fast
 
  LCPP = ${LD_SONNET}

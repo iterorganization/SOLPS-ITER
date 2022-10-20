@@ -6,8 +6,7 @@
      .                                      neighs(:,:), neighr(:,:),
      .                                      trix(:), triy(:)
 
-      INTEGER, public, save :: NCOORD, NTRIA, NTRIA1, ICOORD, 
-     .                         ITRIA, ITRIA1
+      INTEGER, public, save :: NCOORD, NTRIA, NTRIA1
 
       contains
       subroutine realloc_ctria(kennung,incr)
@@ -15,7 +14,6 @@
       integer incr
 
       double precision, allocatable :: help(:,:), help1(:)
-      integer, allocatable :: ihelp(:,:)
       integer dim1, dim2
 
       if (kennung .eq. 'xycoord') then

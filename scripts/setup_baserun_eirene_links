@@ -21,8 +21,6 @@ if ("X$1X" == "X-rX") then
   ln -sf `climb_and_look_for -r modules/Eirene/Database/Surfacedata/SPUTER`        
   ln -sf `climb_and_look_for -r modules/Eirene/Database/Surfacedata/TRIM/trim.dat` "$filestem"21
   ln -sf `climb_and_look_for -r modules/Eirene/Database/Surfacedata/TRIM/marlow.dat` "$filestem"22
-  ln -sf `climb_and_look_for -r modules/Eirene/Database/graphite_ext.dat` graphite_ext.dat
-  ln -sf `climb_and_look_for -r modules/Eirene/Database/mo_ext.dat` mo_ext.dat
 else
   ln -sf ${datapath}/AMdata/amjuel.tex AMJUEL
   ln -sf ${datapath}/AMdata/h2vibr.tex H2VIBR
@@ -33,8 +31,6 @@ else
   ln -sf ${datapath}/Surfacedata/SPUTER
   ln -sf ${datapath}/Surfacedata/TRIM/trim.dat "$filestem"21
   ln -sf ${datapath}/Surfacedata/TRIM/marlow.dat "$filestem"22
-  ln -sf ${datapath}/graphite_ext.dat .
-  ln -sf ${datapath}/mo_ext.dat .
 endif
 
 if (! -s input.dat) then
@@ -61,7 +57,7 @@ if (! -s input.dat) then
     endif
   endif
 endif
-ln -sf input.dat "$filestem"1
+if (-s input.dat) ln -sf input.dat "$filestem"1
 if (! -s "$filestem"33) then
   if (-s ../TRIANG/"$filestem"33) then
     ln -s ../TRIANG/"$filestem"33 .

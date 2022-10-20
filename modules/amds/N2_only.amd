@@ -564,12 +564,8 @@ Reaction AMMONX_H.2_ZV 0
 Reaction AMMONX_H.1_ZV 0
 Reaction AMMONX_H.2_40 0
 Reaction AMMONX_H.1_40 0
-Reaction AMMONX_H.2_41 2
-H2
-N+
-Reaction AMMONX_H.1_41 2
-H2
-N+
+Reaction AMMONX_H.2_41 0
+Reaction AMMONX_H.1_41 0
 Reaction AMMONX_H.2_ZZ 2
 H
 N+
@@ -3109,7 +3105,7 @@ Particle e
 Particle He*(1s2s|3P)
 Reaction HYDHEL_H.2_2.3.9 2
 0
-24.55
+24.5874
 0
 4
 EI
@@ -9230,8 +9226,8 @@ Particle NH3
 Reaction AMMONX_H.2_23 2
 
 
-28
 0
+28
 DS
 
 
@@ -9248,8 +9244,8 @@ Particle e
 Reaction AMMONX_H.2_23s 2
 
 
-28
 0
+28
 DS
 
 
@@ -9266,8 +9262,8 @@ Particle e
 Reaction AMMONX_H.2_24 2
 
 
-15
 0
+15
 DS
 
 
@@ -9284,8 +9280,8 @@ Particle e
 Reaction AMMONX_H.2_25 2
 
 
-16
 0
+16
 DS
 
 
@@ -9302,8 +9298,8 @@ Particle e
 Reaction AMMONX_H.2_27 2
 
 
-17
 0
+17
 DS
 
 
@@ -9320,8 +9316,8 @@ Particle e
 Reaction AMMONX_H.2_28 2
 
 
-17
 0
+17
 DS
 
 
@@ -9338,8 +9334,8 @@ Particle e
 Reaction AMMONX_H.2_29 2
 
 
-18
 0
+18
 DS
 
 
@@ -9356,8 +9352,8 @@ Particle e
 Reaction AMMONX_H.2_31 2
 
 
-29
 0
+29
 DS
 
 
@@ -10094,8 +10090,8 @@ Particle N*(2D)
 Reaction AMMONX_H.2_20 2
 
 
-2
 0
+2
 DS
 
 
@@ -10112,8 +10108,8 @@ Particle e
 Reaction AMMONX_H.2_13 2
   
 
-2
 0
+2
 DS
 
 

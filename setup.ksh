@@ -2,26 +2,37 @@
 
 echo Welcome to SOLPS-ITER!
 echo Documentation can be found at:
-echo https://portal.iter.org/departments/POP/CM/IMAS/SOLPS-ITER
+echo https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER
 echo and
 echo https://user.iter.org/\?uid=Q92BAQ
 echo "(both require a valid ITER IDM account)"
 echo The full SOLPS-ITER manual can be found in \$SOLPSTOP/doc/solps/solps.pdf
 echo The Eirene manual is located at http://www.eirene.de/
 
-export SOLPSTOP=$PWD
+export LAST_COMMAND=`echo $_`
+[ $LAST_COMMAND = "" ] && {
+  export SETUP_FILE=`echo ${LAST_COMMAND} | cut -d " " -f 2`
+  export REAL_FILE=`eval echo ${SETUP_FILE}`
+  export REAL_PATH=`dirname ${REAL_FILE}`
+  export SOLPSTOP=`cd ${REAL_PATH}; pwd -L`
+} || {
+  export SOLPSTOP=$PWD
+}
 export SOLPSWORK=$SOLPSTOP/runs
 
-[ -s whereami ] && {
-  iamat=`./whereami|tail -1`
-  echo Running at $iamat
-} || {
-  iamat="UNKNOWN"
-}
+# Set HOST_NAME and COMPILER, which will determine setup files to be used
+#------------------------------------------------------------------------
 
-[ -s SETUP/setup.csh.HOST_NAME.local ] && {
-  echo Loading SETUP/setup.csh.HOST_NAME.local
+[ -s ${SOLPSTOP}/SETUP/setup.ksh.HOST_NAME.local ] && {
+  echo Loading SETUP/setup.ksh.HOST_NAME.local.
+  . ${SOLPSTOP}/SETUP/setup.ksh.HOST_NAME.local
 } || {
+  [ -s ${SOLPSTOP}/whereami ] && {
+    iamat=`${SOLPSTOP}/whereami|tail -1`
+    echo Running at $iamat
+  } || {
+    iamat="UNKNOWN"
+  }
   case $iamat in
   *UNKNOWN )
     export HOST_NAME=UNKNOWN
@@ -32,31 +43,10 @@ export SOLPSWORK=$SOLPSTOP/runs
   esac
 }
 
-[ -s setup.ksh.SOLPSMASTER ] && . setup.ksh.SOLPSMASTER
-[ -s setup.ksh.SOLPSMASTER.local ] && . setup.ksh.SOLPSMASTER.local
-
-[ -z "$SOLPSMASTER" ] && {
-  case $iamat in
-  "IPP" )
-    export SOLPSMASTER=/afs/ipp-garching.mpg.de/u/dpc
-    [ -z "$DEVICE" ] && export DEVICE upgrade
-    ;;
-  "ITM" | "EU_UNKNOWN" )
-    export SOLPSMASTER=/afs/ipp-garching.mpg.de/u/dpc
-    ;;
-  "PPPL" | "USA_UNKNOWN" )
-    export SOLPSMASTER=/afs/pppl.gov/u/dcoster
-    ;;
-  * )
-    export SOLPSMASTER=/afs/ipp-garching.mpg.de/u/dpc
-    ;;
-  esac
-}
-
 # COMPILER can also be the argument to setup.csh call
 [ "$1" = "" ] && {
-  [ -s default_compiler ] && {
-    export COMPILER=`./default_compiler|tail -1`
+  [ -s ${SOLPSTOP}/default_compiler ] && {
+    export COMPILER=`${SOLPSTOP}/default_compiler|tail -1`
     echo Using compiler $COMPILER.
   } || {
     export COMPILER=ifort64
@@ -64,6 +54,7 @@ export SOLPSWORK=$SOLPSTOP/runs
   }
 } || {
   export COMPILER=$1
+  echo Using specified compiler $1.
 }
 [ -z "$COMPILER" ] && echo 'COMPILER not defined!'
 [ -x `which gmake` ] && {
@@ -72,78 +63,123 @@ export SOLPSWORK=$SOLPSTOP/runs
   export MAKE=`which make`
 }
 
-[ -z "$PYTHONPATH" ] && {
-  export PYTHONPATH="$SOLPSTOP/lib/python"
-} || {
-  export PYTHONPATH="${PYTHONPATH}:$SOLPSTOP/lib/python"
-}
-
 # setup files for combination of HOST_NAME and COMPILER, + local modifications if present
-[ -s SETUP/setup.ksh.${HOST_NAME}.${COMPILER} ] && {
+[ -s ${SOLPSTOP}/SETUP/setup.ksh.${HOST_NAME}.${COMPILER} ] && {
   echo Loading SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.
-  . SETUP/setup.ksh.${HOST_NAME}.${COMPILER}
+  . ${SOLPSTOP}/SETUP/setup.ksh.${HOST_NAME}.${COMPILER}
 } || {
   echo File SETUP/setup.ksh.${HOST_NAME}.${COMPILER} not found!
 }
-[ -s SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.local ] && {
+[ -s ${SOLPSTOP}/SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.local ] && {
   echo Loading SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.local.
-  . SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.local
+  . ${SOLPSTOP}/SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.local
 }
+
+ulimit -s unlimited
 
 [ -z "$GRAPHCAP" ] && export GRAPHCAP=X11
 
-case $OBJECTCODE in
-"IBMaix" )
-  export nOBJECTCODE=Aix
-  ;;
-"DECalpha" )
-  export nOBJECTCODE=Alpha
-  ;;
-"SGIirix" )
-  export nOBJECTCODE=Iris
-  ;;
-"sun4c" )
-  export nOBJECTCODE=SunOS
-  ;;
-"sun5" )
-  export nOBJECTCODE=Solaris
-  ;;
-"unicos" )
-  export nOBJECTCODE=Unicos
-  ;;
-"linux.ifort64" )
-  export nOBJECTCODE= Intel
-  ;;
-* )
-  export nOBJECTCODE=Unknown
-  ;;
-esac
-
-[ -z "$DEVICE" ] && export DEVICE=iter
-
 [ -z "$B2PLOT_DEV" ] && export B2PLOT_DEV="x11 ps"
-[ -z "$GLI_HOME"] && export GLI_HOME=$SOLPSTOP/lib
-export WSTYPE=$OBJECTCODE
-# export GLI_WSTYPE=210
-[ -z "$GRSOFT_DEVICE"] && export GRSOFT_DEVICE="211 62"
-export SonnetTopDirectory=${SOLPSTOP}/src/Sonnet
+[ -z "$GRSOFT_DEVICE" ] && export GRSOFT_DEVICE="211 62"
+export SonnetTopDirectory=${SOLPSTOP}/modules/Sonnet-light
 export EscapeSonnet=`echo ${SonnetTopDirectory} | sed 's:\/:\\\/:g'`
 
 export DG=${SOLPSTOP}/modules/DivGeo
-export SOLPSLIB=${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}
 export CARRE_STOREDIR=${SOLPSTOP}/modules/Carre/meshes
 
-alias sb2='cd ${SOLPSTOP}/src/b2'
-alias sbb='cd ${SOLPSTOP}/src/b2'
-alias sei='cd ${SOLPSTOP}/src/Eirene'
-alias ssw='cd ${SOLPSTOP}/src/Sonnet'
-alias ssd='cd ${SOLPSTOP}/src/DivGeo'
-alias ssc='cd ${SOLPSTOP}/src/Carre'
-alias sst='cd ${SOLPSTOP}/src/Triang'
-alias ssu='cd ${SOLPSTOP}/src/uinp'
-alias sbin='cd ${SOLPSTOP}/bin/${OBJECTCODE}'sbb
-alias slib='cd ${SOLPSTOP}/lib/${OBJECTCODE}'
-alias srun='cd ${SOLPSTOP}/runs'
+# Set path to scripts and executables
+#------------------------------------
+
+# First, remove the old path to SOLPS if already set
+# (avoid too long paths)
+
+[ -n "$SOLPS_PATH" ] && export PATH=`echo $PATH | sed "s|${SOLPS_PATH}:||"`
+
+# Default PATH: no mpi, no openmp, no debug
+TOOLCHAIN=${HOST_NAME}.${COMPILER}
+CARRE_PATH=${SOLPSTOP}/modules/Carre/builds/${TOOLCHAIN}
+DIVGEO_PATH=${SOLPSTOP}/modules/DivGeo/builds/${TOOLCHAIN}:${SOLPSTOP}/modules/DivGeo/equtrn/builds/${TOOLCHAIN}:${SOLPSTOP}/modules/DivGeo/convert/builds/${TOOLCHAIN}
+EIRENE_PATH=${SOLPSTOP}/modules/Eirene/builds/standalone.${TOOLCHAIN}
+B25_PATH=${SOLPSTOP}/modules/B2.5/builds/standalone.${TOOLCHAIN}
+B25EIRENE_PATH=${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${TOOLCHAIN}
+UINP_PATH=${SOLPSTOP}/modules/Uinp/builds/${TOOLCHAIN}
+TRIANG_PATH=${SOLPSTOP}/modules/Triang/builds/${TOOLCHAIN}
+SCRIPTS_PATH=${SOLPSTOP}/scripts.local:${SOLPSTOP}/scripts:${SOLPSTOP}/scripts/${TOOLCHAIN}:${SOLPSTOP}/modules/Eirene/scripts:${SOLPSTOP}/modules/Eirene/scripts/eirenex_v1.0.4:${SOLPSTOP}/modules/B2.5/src/test
+AMDS_PATH=${SOLPSTOP}/modules/amds/builds/${TOOLCHAIN}
+S45_PATH=${SOLPSTOP}/modules/solps4-5/builds/${TOOLCHAIN}
+
+# Create mirror scripts directories
+[ -d ${SOLPSTOP}/scripts/${TOOLCHAIN}.mpi ] && rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.mpi
+[ -d ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp ] && rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp
+[ -d ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.mpi ] && rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.mpi
+[ -d ${SOLPSTOP}/scripts/${TOOLCHAIN}.debug ] && rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.debug
+[ -d ${SOLPSTOP}/scripts/${TOOLCHAIN}.mpi.debug ] && rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.mpi.debug
+[ -d ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.debug ] && rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.debug
+[ -d ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.mpi.debug ] && rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.mpi.debug
+ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.mpi
+ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp
+ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.mpi
+ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.debug
+ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.mpi.debug
+ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.debug
+ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.mpi.debug
+
+# Note: in case of name clash between script and executable, script will be found first
+export SOLPS_PATH=${SCRIPTS_PATH}:${CARRE_PATH}:${DIVGEO_PATH}:${B25EIRENE_PATH}:${EIRENE_PATH}:${B25_PATH}:${UINP_PATH}:${TRIANG_PATH}:${AMDS_PATH}:${S45_PATH}
+export SOLPSLIB=${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}
+export OLD_PATH=${PATH}
+export PATH=${SOLPS_PATH}:${PATH}
+[ -n "$LD_LIBRARY_PATH" ] && {
+  export LD_LIBRARY_PATH=${SOLPSLIB}:${SOLPSTOP}/lib/python:${LD_LIBRARY_PATH}
+} || {
+  export LD_LIBRARY_PATH=${SOLPSLIB}:${SOLPSTOP}/lib/python
+}
+
+[ -z "$PYTHONPATH" ] && {
+  export PYTHONPATH="$SOLPSTOP/lib/python:${SCRIPTS_PATH}"
+} || {
+  export PYTHONPATH="${PYTHONPATH}:$SOLPSTOP/lib/python:${SCRIPTS_PATH}"
+}
+[ -z "$PYTHON_PATH" ] || {
+  export PYTHONPATH="${PYTHONPATH}:${PYTHON_PATH}"
+}
+
+unset TOOLCHAIN SCRIPTS_PATH CARRE_PATH DIVGEO_PATH EIRENE_PATH B25_PATH B25EIRENE_PATH UINP_PATH TRIANG_PATH AMDS_PATH S45_PATH
+
+# Check whether SOLPS_DEBUG, SOLPS_OPENMP and SOLPS_MPI have been set already by the user
+
+[ -n "$SOLPS_OPENMP" ] && . $SOLPSTOP/SETUP/openmp.ksh
+[ -n "$SOLPS_DEBUG" ] && . $SOLPSTOP/SETUP/debug.ksh
+[ -n "$SOLPS_MPI" ] && . $SOLPSTOP/SETUP/mpi.ksh
+
+# Set path to manuals
+#--------------------
+
+[ -n "$MANPATH" ] && {
+  export MANPATH=${MANPATH}:${SonnetTopDirectory}/man:${DG}/equtrn/doxygen/man
+} || {
+  export MANPATH=${SonnetTopDirectory}/man:${DG}/equtrn/doxygen/man
+}
+
+# Remove double entries from some environment variables, if there are any
+
+# export PATH=`echo $PATH | awk -v RS=: -v ORS= '\\!a[$0]++ {if (NR>1) printf(":"); printf("%s",$0) }'`
+# export LD_LIBRARY_PATH=`echo $LD_LIBRARY_PATH | awk -v RS=: -v ORS= '\\!a[$0]++ {if (NR>1) printf(":"); printf("%s",$0) }'`
+# export MANPATH=`echo $MANPATH | awk -v RS=: -v ORS= '\\!a[$0]++ {if (NR>1) printf(":"); printf("%s",$0) }'`
+# export PYTHONPATH=`echo $PYTHONPATH | awk -v RS=: -v ORS= '\\!a[$0]++ {if (NR>1) printf(":"); printf("%s",$0) }'`
+# export OLD_PATH=`echo $OLD_PATH | awk -v RS=: -v ORS= '\\!a[$0]++ {if (NR>1) printf(":"); printf("%s",$0) }'`
+
+alias sb2='cd ${SOLPSTOP}/modules/B2.5'
+alias sbb='cd ${SOLPSTOP}/modules/B2.5'
+alias sei='cd ${SOLPSTOP}/modules/Eirene'
+alias ssw='cd ${SOLPSTOP}/modules/Sonnet-light'
+alias ssd='cd ${SOLPSTOP}/modules/DivGeo'
+alias ssc='cd ${SOLPSTOP}/modules/Carre'
+alias ssc2='cd ${SOLPSTOP}/modules/Carre2'
+alias sst='cd ${SOLPSTOP}/modules/Triang'
+alias ssu='cd ${SOLPSTOP}/modules/Uinp'
+alias sbin='cd ${SOLPSTOP}/scripts'
+alias slib='cd ${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}'
 alias sbr='cd ${SOLPSTOP}/runs'
 alias scr='cd ${SOLPSTOP}/scripts'
 alias stop='cd ${SOLPSTOP}'
@@ -191,62 +227,29 @@ alias xlylplot8='plot xlylplot8'
 alias xlylplot8='plot xlylplot8'
 alias xlylplot9='plot xlylplot9'
 
-alias set_debug='. $SOLPSTOP/debug.ksh'
-alias unset_debug='. $SOLPSTOP/nodebug.ksh'
+alias set_debug='. $SOLPSTOP/SETUP/debug.ksh'
+alias unset_debug='. $SOLPSTOP/SETUP/nodebug.ksh'
+alias set_openmp='. $SOLPSTOP/SETUP/openmp'
+alias unset_openmp='. $SOLPSTOP/SETUP/noopenmp'
 alias set_mpi='. $SOLPSTOP/SETUP/mpi'
 alias unset_mpi='. $SOLPSTOP/SETUP/nompi'
 alias set_ig='. $SOLPSTOP/SETUP/ig'
 alias unset_ig='. $SOLPSTOP/SETUP/noig'
 
-[ -s setup.ksh.$OBJECTCODE ] && . setup.ksh.$OBJECTCODE
-[ -s setup.ksh.local ] && . setup.ksh.local
-[ -s setup.ksh.local.$OBJECTCODE ] && . setup.ksh.local.$OBJECTCODE
-[ -s setup.ksh.mdsplus ] && . setup.ksh.mdsplus
-[ -s setup.ksh.mdsplus.$OBJECTCODE ] && . setup.ksh.mdsplus.$OBJECTCODE
-[ -s setup.ksh.$USER ] && . setup.ksh.$USER
-[ -s setup.ksh.$USER.$OBJECTCODE ] && . setup.ksh.$USER.$OBJECTCODE
+# Check if Motif library is present
 
-export      TOOLCHAIN=${HOST_NAME}.${COMPILER}
-export     CARRE_PATH=${SOLPSTOP}/modules/Carre/builds/${TOOLCHAIN}
-export    DIVGEO_PATH=${SOLPSTOP}/modules/DivGeo/builds/${TOOLCHAIN}:${SOLPSTOP}/modules/DivGeo/equtrn/builds/${TOOLCHAIN}:${SOLPSTOP}/modules/DivGeo/convert/builds/${TOOLCHAIN}
-export    EIRENE_PATH=${SOLPSTOP}/modules/Eirene/builds/standalone.${TOOLCHAIN}
-export       B25_PATH=${SOLPSTOP}/modules/B2.5/builds/standalone.${TOOLCHAIN}
-export B25EIRENE_PATH=${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${TOOLCHAIN}
-export      UINP_PATH=${SOLPSTOP}/modules/Uinp/builds/${TOOLCHAIN}
-export    TRIANG_PATH=${SOLPSTOP}/modules/Triang/builds/${TOOLCHAIN}
-export   SCRIPTS_PATH=${SOLPSTOP}/scripts.local:${SOLPSTOP}/scripts:${SOLPSTOP}/modules/Eirene/scripts
-export      AMDS_PATH=${SOLPSTOP}/modules/amds/builds/${TOOLCHAIN}
-export       S45_PATH=${SOLPSTOP}/modules/solps4-5/builds/${TOOLCHAIN}
-
-export SOLPS_PATH=${SCRIPTS_PATH}:${CARRE_PATH}:${DIVGEO_PATH}:${B25EIRENE_PATH}:${EIRENE_PATH}:${B25_PATH}:${UINP_PATH}:${TRIANG_PATH}:${AMDS_PATH}:${S45_PATH}
-export OLD_PATH=${PATH}
-export PATH=${SOLPS_PATH}:${PATH}
-
-export PATH=$NCARG_ROOT/bin:$PATH
-export MANPATH=$NCARG_ROOT/man:${DG}/equtrn/doxygen/man:$MANPATH
-
-[ -z "$IDL_PATH" ] && {
-  export IDL_PATH="+$SOLPSTOP/data/IDL"
-} || {
-  export IDL_PATH="+$SOLPSTOP/data/IDL:${IDL_PATH}"
+[ -e `which mwm` ] || {
+  export NO_MOTIF=1
+}
+[ -n "$NO_MOTIF" ] && {
+  [ `whereis libXm | wc -w` != 1 ] && unset NO_MOTIF
+}
+[ -n "$NO_MOTIF" ] && {
+  [ `ldconfig -p | grep 'libXm\.' | wc -l` != 0 ] && unset NO_MOTIF
 }
 
-[ -s $SOLPSLIB/libnetcdf.a ] && export NETCDF=-lnetcdf
-
-[ -z "$LD_LIBRARY_PATH" ] && {
-    export LD_LIBRARY_PATH=${SOLPSLIB}
-} || {
-    export LD_LIBRARY_PATH=${SOLPSLIB}:${LD_LIBRARY_PATH}
+# Add any local settings if present
+[ -s ${SOLPSTOP}/SETUP/setup.ksh.local ] && {
+   echo "Loading SETUP/setup.ksh.local"
+   . ${SOLPSTOP}/SETUP/setup.ksh.local
 }
-
-[ -z "$error" ] && {
-  [ -n "$dbg" ] && {
-    . debug.ksh
-  }
-  export WSTYPE=${COMPILER}
-  [ -n $XLFRTEOPTS ] && export XLFRTEOPTS
-}
-
-export PLOT_SET_PATH=":..:../..:$SOLPSTOP/data.local/plot_set:$SOLPSTOP/data/plot_set"
-
-[ -x module ] && module list

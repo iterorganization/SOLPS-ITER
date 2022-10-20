@@ -1,0 +1,16 @@
+# Test whether necessary variables are defined
+LD_MSCL ?= -L${SOLPSLIB} -lmscl
+
+FC       = ftn
+
+ifdef SOLPS_DEBUG
+FFLAGS  += -O0 -fpe0
+endif
+FFLAGS  += -dynamic
+
+CPP      = /lib/cpp -traditional -ffreestanding
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+

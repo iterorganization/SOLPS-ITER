@@ -1,20 +1,36 @@
 alias gmake make
-setenv PATH ${PATH}:/opt/intel/bin/
-#setenv LD_LIBRARY_PATH /opt/intel/composer_xe_2013_sp1.2.144/compiler/lib/intel64/
-unsetenv NCARG_ROOT 
+
+# setenv NCARG_ROOT ${SOLPSTOP}/../NCARG
+
+#module unload compiler/intel/2017.4.239 mpi/impi/2017.4.239
+#module load compiler/intel/2019.4.243 mpi/impi/2019.4.243
+#module load compiler/intel/2020.1.217 mpi/impi/2020.1.217
+
+module load library/netcdf-c/4.5.0/icc library/netcdf-fortran/4.4.4/icc library/hdf5/1.10.1/icc
 
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
 else
   # See ParaViewCatalystUsersGuide_v2.pdf Sec 3.7.2 Linking with Python ...
-  set PARAVIEW_LIB=`paraview-config --libs --python | sed s/-L//`
-  if ($?LD_LIBRARY_PATH) then
-    setenv LD_LIBRARY_PATH "${PARAVIEW_LIB}:${LD_LIBRARY_PATH}"
+  setenv PARAVIEW_MAJOR_VERSION `paraview --version | cut -d '.' -f 1 | cut -d ' ' -f 3`
+  setenv CMAKE_MAJOR_VERSION `cmake --version | head -1 | cut -d ' ' -f 3 | cut -d '.' -f 1`
+  if (${CMAKE_MAJOR_VERSION} > 2) then
+    setenv LD_CATALYST `paraview-config --ldflags -c PythonCatalyst -v CommonDataModel`
+    setenv PARAVIEW_INCLUDE `paraview-config --cppflags`
   else
-    setenv LD_LIBRARY_PATH ${PARAVIEW_LIB}
+    setenv PARAVIEW_LIB `paraview-config --libs --python | sed s/-L//`
+    setenv LD_CATALYST `paraview-config --libs vtkPVPythonCatalyst`
+    setenv PARAVIEW_INCLUDE `paraview-config --include`
+    if ($?LD_LIBRARY_PATH) then
+      setenv LD_LIBRARY_PATH "${PARAVIEW_LIB}:${LD_LIBRARY_PATH}"
+    else
+      setenv LD_LIBRARY_PATH ${PARAVIEW_LIB}
+    endif
+    setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages/vtk:${PYTHONPATH}"
+    setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
   endif
-  setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages/vtk:${PYTHONPATH}"
-  setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
-  setenv LD_CATALYST `paraview-config --libs vtkPVPythonCatalyst`
 endif
+
+setenv GLI_HOME ${SOLPSTOP}/../${COMPILER}/gks
+setenv NCARG_ROOT ${SOLPSTOP}/../${COMPILER}/NCARG
 

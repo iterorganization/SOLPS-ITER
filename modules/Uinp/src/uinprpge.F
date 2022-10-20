@@ -1,8 +1,9 @@
       subroutine uinprpge
-       use b2mod_layer
+      use b2mod_types
+      use b2mod_layer
      , , only: ntrack, nalloys
-       use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use b2mod_subsys
+      use eirmod_solps
 c
 c  version : 03.04.2003 17:25
 c
@@ -24,9 +25,8 @@ c***    eewbnds, etfbnds, etbbnds, efcbnds, easbnds, efpbnds
 c=======================================================================
       implicit none
 #include "uinput.inc"
-      integer i,j,k,l,m,im,knd_hlp(nedgmrkd,nwllmrkd)
-      logical ex
-      external xerrab, subini, subend
+      integer i,j,k,l,m,knd_hlp(nedgmrkd,nwllmrkd)
+      external xerrab
 c=======================================================================
       call subini ('uinprpge')
 
@@ -57,7 +57,6 @@ c*** Check the default specification
       end do !}
 c      print *,'ledgdfl=',ledgdfl  !###
 
-      ex=.false.
       do l=1,nwllmrk !{
 c        print *,'l,nedgmrk(l)=',l,nedgmrk(l)  !###
         if(nedgmrk(l).le.0 .and. ntrgmrk(l).le.0) then !{
@@ -228,4 +227,4 @@ c            print *,'j,k,bbliin(j,k)=',j,k,bbliin(j,k)  !###
 c=======================================================================
       call subend ()
       return
-      end
+      end subroutine uinprpge

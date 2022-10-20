@@ -8,6 +8,8 @@
 
 GV="gv $GV_OPT"
 
+SOLPSTOP=`determine_SOLPSTOP`
+
 [ "$DEVICE" = '' ] && {
   print -u2 -n -- "No DEVICE selected. Please provide a device name\n "
   read u
@@ -107,19 +109,24 @@ $Help"
 #  location="${SOLPSTOP%/*}/$u/scripts"
 #}
 
-[ "$SOLPS_MPI" = ' ' ] && {
-  toolchain=${HOST_NAME}.${COMPILER}.mpi
+toolchain=${HOST_NAME}.${COMPILER}
+[ "${SOLPS_MPI}" = '' ] && {
+  eirchain=${HOST_NAME}.${COMPILER}
 } || {
-  toolchain=${HOST_NAME}.${COMPILER}
+  eirchain=${HOST_NAME}.${COMPILER}.mpi
 }  
-[ "$SOLPS_DEBUG" = '' ] || {
+[ "${USE_IMPGYRO}" = '' ] || {
+  eirchain=$eirchain.ig
+}
+[ "${SOLPS_DEBUG}" = '' ] || {
+  eirchain=$eirchain.debug
   toolchain=$toolchain.debug
 }
 
 TRIA="${SOLPSTOP}/modules/Triang/builds/$toolchain/tria"
 TRIAGEOM="${SOLPSTOP}/modules/Triang/builds/$toolchain/triageom"
 TRIAINQ="${SOLPSTOP}/modules/Triang/builds/$toolchain/triainq"
-EIRENE="${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.$toolchain/eirobjx"
+EIRENE="${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.$eirchain/eirobjx"
 
 griddir=${CARRE_GRIDDIR-$SOLPSTOP/modules/Carre/meshes/${DEVICE-iter}}
 [ -s dg.dgo ] && {
@@ -202,18 +209,22 @@ while true; do {
       ( h|H )                                               # help:
             echo "$Help"; break;;
       (  u  )                                               # run uinp to produce the input for Eirene:
+            [ -r $eirinp ] && rm $eirinp
             uinp
             N=
-            [ -r $b2agout ] && q=e || {
+            [ -r $b2agout ] && [ b2ag.dat -nt structure.dat ] && {
+              [ -r $eirinp ] && q=e || q=q
+            } || {
               [ -r b2ag.dat ] && {
                 ln -sf $griddir/$carre_stem.v$n.geo .
                 /bin/echo -e "The last grid found is : $carrename"
                 echo -e "'b2agfs_geometry'\t'$carrename'" >> b2ag.dat
               }
-              q=b
+              [ $eirinp -nt dg.dgo ] && q=b || q=q
             }
             break;;  
       (  U  )                                               # run uinp to produce the input for Eirene:
+            [ -r $eirinp ] && rm $eirinp
             uinp -l
             [ -L uinput.dg ] && {
               TRIADIR=$TRIADIR_back
@@ -221,47 +232,51 @@ while true; do {
               . triang.conf
             }
             N=
-            [ -r $b2agout ] && q=e || {
+            [ -r $b2agout ] && [ b2ag.dat -nt structure.dat ] && {
+              [ -r $eirinp ] && q=e || q=q
+            } || {
               [ -r b2ag.dat ] && {
                 ln -sf $griddir/$carre_stem.v$n.geo .
                 /bin/echo -e "The last grid found is : $carrename"
                 echo -e "'b2agfs_geometry'\t'$carrename'" >> b2ag.dat
               }
-              q=b
+              [ $eirinp -nt dg.dgo ] && q=b || q=q
             }
             break;;  
       ( b|B )                                               # run b2ag to produce fort.30 file:
             [ -r b2fplasma ] && {
-              print -u2 -- "Command line: echo f30 | b2plot > b2pl.prt"
+              print -u2 -- "Command line: echo f30 | b2plot > b2pl.log"
               [ -r $b2agout ] && rm $b2agout
-              echo f30 | b2plot > b2pl.prt
+              echo f30 | b2plot > b2pl.log
               [ -r b2pl.exe.dir/$b2agout ] && {
                 mv b2pl.exe.dir/$b2agout .
                 rmdir b2pl.exe.dir
                 print -u2 -- "Produced $b2agout file"
                 q=e
               } || {
-                print -u2 -- "Could not produce the $b2agout file. Please provide separately"
+                print -u2 -- "Could not produce the $b2agout file"
+                print -u2 -- "    ==> Check b2pl.log file or provide separately"
                 q=u
               }
             } || {
               print -u2 -- "Command line: ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2ag.prt > b2ag.log"
               [ -r b2ag.prt ] && rm b2ag.prt
-              [ -r $b2agout ] && rm $b2aagout
+              [ -r $b2agout ] && rm $b2agout
               ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2ag.prt > b2ag.log
               [ -r $b2agout ] && {
                 [ -d b2ag.exe.dir ] && rmdir b2ag.exe.dir
                 print -u2 -- "Produced $b2agout file"
                 q=e
               } || {
-                print -u2 -- "Could not produce the $b2agout file. Please provide separately"
+                print -u2 -- "Could not produce the $b2agout file"
+                print -u2 -- "    ==> Check b2ag.log file or provide separately"
                 q=u
               }
             }
             break;;
       ( e|E )                                               # run EIRENE to make input file for TRIA:
             [ -r AMJUEL ] || {
-              setup_baserun_eirene_links
+              setup_baserun_eirene_links ; rm b2.log b2.log.gz ; rmdir tracing batch_av run_av
             } 
             [ -r $b2agout ] && {
               [ -r $eirinp ] && {
@@ -271,12 +286,15 @@ while true; do {
                 [ -r $eirout ] && rm $eirout
                 ln -sf "$eirinp" "$eirlink"
                 $EIRENE > "$eirlog"
-                rm $eirlink
+                rm $eirlink fort.85
                 [ -s "$eirout" ] && [ -r "$eirout" ] && {
-                  (cat "$eirhed"; tail --lines=+2 "$eirout") > "$triain" && q=t || {
-                    print -u2 -- "Something is wrong with $eirout ==> Check $eirlog"
-                    q=u
+                  [ -s "$eirhed" ] && [ -r "$eirhed" ] && {
+                    (cat "$eirhed"; tail --lines=+2 "$eirout") > "$triain"
+                  } || {
+                    cp "$eirout" "$triain"
+                    print -u2 -- "No $eirhed file found, using default provided by Eirene instead"
                   }
+                  q=t
                   true
                 } || {
                   print -u2 -- "No valid $eirout file created ==> Check $eirlog"
@@ -584,7 +602,7 @@ while true; do {
               q=t
             }; unset e; break;;
       (  v  )                                               # view graphical output of TRIA:
-            [ -r  "$triaeps" ] && {
+            [ -r "$triaeps" ] && {
               $GV $triaeps &
               q=q
               true
@@ -593,7 +611,7 @@ while true; do {
               q=t
             }; break;;
       (  V  )                                               # view graphical output of TRIA:
-            [ -r  "$trigeps" ] && {
+            [ -r "$trigeps" ] && {
               $GV $trigeps &
               true
               q=q
@@ -691,3 +709,5 @@ while true; do {
      esac; }
   }; done
 }; done
+stty sane
+

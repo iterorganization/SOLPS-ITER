@@ -1,26 +1,28 @@
       subroutine uinprptt(lc)
-       use b2mod_layer
+      use b2mod_types
+      use b2mod_layer
      , , only: ntrack, nalloys
-       use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use eirmod_solps
 c
 c  version : 01.04.2005 00:25
 c
 c=======================================================================
 c*** Prepare the data for the test Eirene run
 c=======================================================================
-       Implicit None
-       Save
-       logical lc
+      implicit none
+      logical lc
 #include "uinput.inc"
       integer :: i,k,ntcpu_b,nfile_b,i1trc_b,i2trc_b,npts_b(nstra),
      ,  mpts_b(nstra),isyplt_b(8),nptc_b(nstep),nptcm_b(nstep)
       real alloc_b
       logical trchst_b,trcint_b,trcamd_b,trcsou_b,trcbla_b,trcblm_b,
-     ,  trcbli_b,trcblp_b,trcble_b,trcblph_b,trctal_b,trcdbg2_b,
-     ,  trcdbge_b,trcdbgm_b,trcdbgf_b,trcdbgl_b,trcdbgs_b,
-     ,  trcdbgg_b,trcdbgmpi_b,trcdbgc_b,trcsrc_b,
-     ,  pl1st_b,pl2nd_b,pladd_b,plhst_b,plcut_b(3),plnums_b,nltest_b
+     ,  trcbli_b,trcblp_b,trcble_b,trcblph_b,trctal_b,
+     ,  trcsrc_b,trcsur_b,trcoct_b,trccen_b,trcrnf_b,trchktim_b,
+     ,  trcdbg2_b,trcdbge_b,trcdbgm_b,trcdbgf_b,trcdbgl_b,
+     ,  trcdbgs_b,trcdbgg_b,trcdbgmpi_b,trcdbgc_b,
+     ,  pl1st_b,pl2nd_b,pladd_b,plhst_b,plcut_b(3),plnums_b,nltest_b,
+     ,  plspec_b,prspec_b,plargl_b,prargl_b,lsprcl_b
+      save
 c=======================================================================
       if(lc) then !{
         ntcpu_b=ntcpu
@@ -29,8 +31,8 @@ c=======================================================================
         i1trc_b=i1trc
         i2trc_b=i2trc
         do i=1,nstrai !{
-      	  npts_b(i)=npts(i)
-      	  mpts_b(i)=nminpts(i)
+          npts_b(i)=npts(i)
+          mpts_b(i)=nminpts(i)
         end do !}
         do i=1,ntargi !{
           nptc_b(i)=nptc(i,1)
@@ -43,6 +45,7 @@ c=======================================================================
         trcint_b=trcint
         trcamd_b=trcamd
         trcsou_b=trcsou
+        trcsur_b=trcsur
         trcbla_b=trcbla
         trcblm_b=trcblm
         trcbli_b=trcbli
@@ -50,6 +53,10 @@ c=======================================================================
         trcble_b=trcble
         trcblph_b=trcblph
         trctal_b=trctal
+        trcoct_b=trcoct
+        trccen_b=trccen
+        trcrnf_b=trcrnf
+        trchktim_b=trchktim
         trcdbg2_b=trcdbg2
         trcdbge_b=trcdbge
         trcdbgm_b=trcdbgm
@@ -67,6 +74,11 @@ c=======================================================================
         plcut_b(1:3)=plcut(1:3)
         plnums_b=plnums
         nltest_b=nltest
+        plspec_b=plspec
+        prspec_b=prspec
+        plargl_b=plargl
+        prargl_b=prargl
+        lsprcl_b=lsprcl
 
         ntcpu=ttntcpu
         nfile=ttnfile
@@ -74,9 +86,9 @@ c=======================================================================
         i1trc=1
         i2trc=0
         do i=1,nstrai !{
-      	  npts(i)=ttnpts(i)
+          npts(i)=ttnpts(i)
           nminpts(i)=0
-	  i2trc=i2trc+npts(i)
+          i2trc=i2trc+npts(i)
         end do !}
         do i=1,ntargi !{
           nptc(i,1)=ttnpts(i)
@@ -94,6 +106,7 @@ c=======================================================================
         trcint=ttcint
         trcamd=ttcint
         trcsou=ttcsou
+        trcsur=ttcsur
         trcbla=ttcbla
         trcblm=ttcblm
         trcbli=ttcbli
@@ -101,6 +114,10 @@ c=======================================================================
         trcble=ttcble
         trcblph=ttcblph
         trctal=ttctal
+        trcoct=ttcoct
+        trccen=ttccen
+        trcrnf=ttcrnf
+        trchktim=ttchktim
         trcdbg2=ttcdbg2
         trcdbge=ttcdbge
         trcdbgm=ttcdbgm
@@ -118,6 +135,11 @@ c=======================================================================
         plcut(1:3)=ttplcut(1:3)
         plnums=ttplnums
         nltest=tttest
+        plspec=ttplspec
+        prspec=ttprspec
+        plargl=ttplargl
+        prargl=ttprargl
+        lsprcl=ttlsprcl
 
 c*** Set the VSP data for test.eir
 
@@ -137,8 +159,8 @@ c*** Set the VSP data for test.eir
         i1trc=i1trc_b
         i2trc=i2trc_b
         do i=1,nstrai !{
-      	  npts(i)=npts_b(i)
-      	  nminpts(i)=mpts_b(i)
+          npts(i)=npts_b(i)
+          nminpts(i)=mpts_b(i)
         end do !}
         do i=1,ntargi !{
           nptc(i,1)=nptc_b(i)
@@ -151,6 +173,7 @@ c*** Set the VSP data for test.eir
         trcint=trcint_b
         trcamd=trcamd_b
         trcsou=trcsou_b
+        trcsur=trcsur_b
         trcbla=trcbla_b
         trcblm=trcblm_b
         trcbli=trcbli_b
@@ -158,6 +181,10 @@ c*** Set the VSP data for test.eir
         trcble=trcble_b
         trcblph=trcblph_b
         trctal=trctal_b
+        trcoct=trcoct_b
+        trccen=trccen_b
+        trcrnf=trcrnf_b
+        trchktim=trchktim_b
         trcdbg2=trcdbg2_b
         trcdbge=trcdbge_b
         trcdbgm=trcdbgm_b
@@ -175,6 +202,11 @@ c*** Set the VSP data for test.eir
         plcut(1:3)=plcut_b(1:3)
         plnums=plnums_b
         nltest=nltest_b
+        plspec=plspec_b
+        prspec=prspec_b
+        plargl=plargl_b
+        prargl=prargl_b
+        lsprcl=lsprcl_b
       end if !}
 c=======================================================================
-      end
+      end subroutine uinprptt

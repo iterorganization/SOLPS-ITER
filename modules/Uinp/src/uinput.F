@@ -1,47 +1,36 @@
       program uinput
-       use b2mod_layer
+      use b2mod_types
+      use b2mod_layer
      , , only: ntrack, nalloys
-       use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use b2mod_xerset
+      use eirmod_solps
+      use helper
 
 c  version : 28.01.2003 18:08
 
 c=======================================================================
       implicit none
-#ifdef USE_MPI
-      include 'mpif.h'
-#endif
 #include "uinput.inc"
 #include "impcon.inc"
       integer irt, is, iss, iatm, iloc
-#ifdef USE_MPI
-      integer rank_mpi,size_mpi,ierr_mpi
-#endif
       integer ns, i, j, ireg, nreg, len
-      real*8, allocatable :: na0(:)
-      character*4, allocatable :: specs(:)
+      real(kind=R8), allocatable :: na0(:)
+      character tab
+      character*5, allocatable :: specs(:)
+      character*8, allocatable :: species_name(:)
       character*22 hlp_frm
       character*27 lbreg(0:cbnrmx-1)
       character*120 lblps
       character*80 column_header
-      logical uex
+      logical uex, todo
       integer find_matching_species
       external find_matching_species
-      external prgini,prgend,xerset
+      external prgini,prgend
 c=======================================================================
-#ifdef USE_MPI
-      call mpi_init(ierr_mpi)
-      call mpi_comm_rank(MPI_COMM_WORLD,rank_mpi,ierr_mpi)
-      call mpi_comm_size(MPI_COMM_WORLD,size_mpi,ierr_mpi)
-      if(rank_mpi .ne. 0) then
-        call mpi_barrier(MPI_COMM_WORLD,ierr_mpi)
-        call mpi_finalize(ierr_mpi)
-        stop 'uinp_mpi_child'
-      endif
-#endif
       call prgini('uinput')
 *   ..mark output unit for error messages
       call xerset (0)
+      tab=char(9)
 c*** Read the input data from various files
       call uininp
 c*** Prepare the constants
@@ -76,7 +65,7 @@ c*** Produce the input file for Eirene for TRIA mesh generation
        call uinout('triang.eir')
        print *,'    ... triang.eir created'
        call triaout('triang.hed')
-       call uinptridg(.FALSE.)
+       call uinptridg(.false.)
       end if !}
 
 c*** Produce the input files for Eirene for averaging scheme runs
@@ -95,6 +84,18 @@ c*** Produce the input files for Eirene for averaging scheme runs
         call uinpfindg(.false.)
       end if !}
 
+      ns = natmi-nmeta+nplsi
+      allocate(specs(-1:ns-1))
+      write(specs(-1),'(a)') ' ''-1'''
+      do is = 0, ns-1
+        if (is.lt.10) then
+          write(specs(is),'(a,i1,a)') '  ''',is,''''
+        else if (is.lt.100) then
+          write(specs(is),'(a,i2,a)')  ' ''',is,''''
+        else
+          write(specs(is),'(a,i3,a)')   '''',is,''''
+        end if
+      end do
 c*** Create the header for the b2ag.dat file
       inquire(file='b2ag.dat', exist=uex)
       if(uex) then !{
@@ -105,8 +106,16 @@ c*** Create the header for the b2ag.dat file
      .     '*dimens         (nx, ny, nx1, ny1; free format)'
           write(2,'(4(3x,i4))') nrplg-npplg, ndya, nrplg-npplg, ndya
           write(2,'(a)') '*param          (param(0:99); free format)'
-          write(2,'(a)') ' -1.0, 99*0.0'
+          if (ln_cnfg) then
+            write(2,'(a)') ' -3.0, 99*0.0'
+          else
+            write(2,'(a)') ' -1.0, 99*0.0'
+          endif
           write(2,'(a)') '''b2agfs_min_pitch''    ''0.01'''
+          if (lm_cnfg.and..not.ln_cnfg) write(2,'(a)')
+     .                   '''b2agfs_periodic_bc''  ''1'''
+          if (ln_cnfg) write(2,'(a)')
+     .                   '''b2agfs_lineardevice'' ''linear.geometry'''
           close(2)
           print *,'    ... b2ag.dat created'
       endif !}
@@ -154,23 +163,13 @@ c*** Create a b2ah.dat.stencil file
           write(2,'(2x,a)') lblps(1:iloc+20)
           write(2,'(a)') '*b2cmpa         basic parameters'
           write(2,'(a)') '*specs    zamin    zamax       zn      am'
-          ns = natmi-nmeta+nplsi
-          allocate(specs(-1:ns-1))
-          write(specs(-1),'(a)') '''-1'''
-          do is = 0, ns-1
-            if (is.lt.10) then
-              write(specs(is),'(a,i1,a)') ' ''',is,''''
-            else
-              write(specs(is),'(a,i2,a)')  '''',is,''''
-            end if
-          end do
           is=0
           do iatm = 1, natmi
             if (is_meta(iatm)) cycle
             j=find_matching_species(spcsncl(iatm))
-            write(2,'(2x,a1,i3,a1,5x,a3,6x,a3,4x,i3,a2,4x,i3,a2)')
-     .       '''',is,'''','0.0','0.0',nchara(iatm),'.0',
-     .                                nmassa(iatm),'.0'
+            write(2,'(1x,a5,5x,a3,6x,a3,4x,i3,a2,4x,i3,a2)')
+     .       specs(is),'0.0','0.0',nchara(iatm),'.0',
+     .                             nmassa(iatm),'.0'
 cxpb Default data for neutrals
             do ireg = cbirso, cbirso+cbnrso-1
               if (mod(ireg-cbirso+1,3).eq.2) then ! core boundary
@@ -235,8 +234,8 @@ cxpb Default data for neutrals
             is = is + 1
             do iss = 1, nbndl(iatm)-1
               write(2,
-     .         '(2x,a1,i3,a1,4x,i2,a2,5x,i2,a2,4x,i3,a2,4x,i3,a2)')
-     .         '''',is,'''',izamin(is),'.0',izamax(is),'.0',
+     .         '(1x,a5,4x,i2,a2,5x,i2,a2,4x,i3,a2,4x,i3,a2)')
+     .            specs(is),izamin(is),'.0',izamax(is),'.0',
      .                    nchara(iatm),'.0',nmassa(iatm),'.0'
 cxpb Default data for ions
               do ireg = cbirso, cbirso+cbnrso-1
@@ -383,86 +382,85 @@ cxpb Default data for ions
             write(2,'(i2,2x,a)') ireg,lbreg(ireg)
             write(2,'(a)') '*cbsna'//column_header
             do is = 0, ns-1
-              write(2,'(2x,a4,1p,8(1x,e9.2))') specs(is),
+              write(2,'(1x,a5,1p,8(1x,e9.2))') specs(is),
      .         (cbsna(i,is,ireg),i=0,7)
             end do
             write(2,'(a)') '*cbsmo'//column_header
             do is = 0, ns-1
-              write(2,'(2x,a4,1p,8(1x,e9.2))') specs(is),
+              write(2,'(1x,a5,1p,8(1x,e9.2))') specs(is),
      .         (cbsmo(i,is,ireg),i=0,7)
             end do
             write(2,'(a)') '*cbshi'//column_header
             do is = 0, ns-1
-              write(2,'(2x,a4,1p,8(1x,e9.2))') specs(is),
+              write(2,'(1x,a5,1p,8(1x,e9.2))') specs(is),
      .         (cbshi(i,is,ireg),i=0,7)
             end do
             write(2,'(a)') '*cbshe'//column_header
-            write(2,'(2x,a4,1p,8(1x,e9.2))') specs(-1),
+            write(2,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
      .       (cbshe(i,ireg),i=0,7)
             write(2,'(a)') '*cbsch'//column_header
-            write(2,'(2x,a4,1p,8(1x,e9.2))') specs(-1),
+            write(2,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
      .       (cbsch(i,ireg),i=0,7)
             write(2,'(a)') '*cbrec'//column_header
             do is = 0, ns-1
-              write(2,'(2x,a4,1p,8(1x,e9.2))') specs(is),
+              write(2,'(1x,a5,1p,8(1x,e9.2))') specs(is),
      .         (cbrec(i,is,ireg),i=0,7)
             end do
             write(2,'(a)') '*cbmsa'//column_header
-            write(2,'(2x,a4,1p,8(1x,e9.2))') specs(-1),
+            write(2,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
      .       (cbmsa(i,ireg),i=0,7)
             write(2,'(a)') '*cbmsb'//column_header
             do is = 0, ns-1
-              write(2,'(2x,a4,1p,8(1x,e9.2))') specs(is),
+              write(2,'(1x,a5,1p,8(1x,e9.2))') specs(is),
      .         (cbmsb(i,is,ireg),i=0,7)
             end do
           end do
           write(2,'(a)') '*b2cmpt  transport coefficients'
           write(2,'(a)') '*cfdf0'//column_header
           do is = 0, ns-1
-            write(2,'(2x,a4,1p,8(1x,e9.2))') specs(is),
+            write(2,'(1x,a5,1p,8(1x,e9.2))') specs(is),
      .       (cfdf0(i,is),i=0,7)
           end do
           write(2,'(a)') '*cfdna'//column_header
           do is = 0, ns-1
-            write(2,'(2x,a4,1p,8(1x,e9.2))') specs(is),
+            write(2,'(1x,a5,1p,8(1x,e9.2))') specs(is),
      .       (cfdna(i,is),i=0,7)
           end do
           write(2,'(a)') '*cfdpa'//column_header
           do is = 0, ns-1
-            write(2,'(2x,a4,1p,8(1x,e9.2))') specs(is),
+            write(2,'(1x,a5,1p,8(1x,e9.2))') specs(is),
      .       (cfdpa(i,is),i=0,7)
           end do
           write(2,'(a)') '*cfvla'//column_header
           do is = 0, ns-1
-            write(2,'(2x,a4,1p,8(1x,e9.2))') specs(is),
+            write(2,'(1x,a5,1p,8(1x,e9.2))') specs(is),
      .       (cfvla(i,is),i=0,7)
           end do
           write(2,'(a)') '*cfvsa'//column_header
           do is = 0, ns-1
-            write(2,'(2x,a4,1p,8(1x,e9.2))') specs(is),
+            write(2,'(1x,a5,1p,8(1x,e9.2))') specs(is),
      .       (cfvsa(i,is),i=0,7)
           end do
           write(2,'(a)') '*cfhci'//column_header
           do is = 0, ns-1
-            write(2,'(2x,a4,1p,8(1x,e9.2))') specs(is),
+            write(2,'(1x,a5,1p,8(1x,e9.2))') specs(is),
      .       (cfhci(i,is),i=0,7)
           end do
           write(2,'(a)') '*cfhce'//column_header
-          write(2,'(2x,a4,1p,8(1x,e9.2))') specs(-1),
+          write(2,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
      .     (cfhce(i),i=0,7)
           write(2,'(a)') '*cfsig'//column_header
-          write(2,'(2x,a4,1p,8(1x,e9.2))') specs(-1),
+          write(2,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
      .     (cfsig(i),i=0,7)
           write(2,'(a)') '*cfalf'//column_header
-          write(2,'(2x,a4,1p,8(1x,e9.2))') specs(-1),
+          write(2,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
      .     (cfalf(i),i=0,7)
           write(2,'(a)') '*cflim'//
      .     '    cflme     cflmi     cflmv     cflal     cflab     ...'
-          write(2,'(2x,a4,1p,8(1x,e9.2))') specs(-1),
+          write(2,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
      .     (cflim(i),i=0,7)
           write(2,'(a)') '*endphy'
           close(2)
-          deallocate(specs)
           print *,'    ... b2ah.dat.stencil created'
       endif
 
@@ -500,20 +498,26 @@ c*** Create the b2ai.dat file
           is=0
           do iatm = 1, natmi
             if (is_meta(iatm)) cycle
-            write(2,'(2x,a1,i3,a1,5x,a3,6x,a3,4x,i3,a2,4x,i3,a2)')
-     .       '''',is,'''','0.0','0.0',nchara(iatm),'.0',
-     .                                nmassa(iatm),'.0'
-            na0(is) = 1.0e12
+            write(2,'(1x,a5,5x,a3,6x,a3,4x,i3,a2,4x,i3,a2)')
+     .       specs(is),'0.0','0.0',nchara(iatm),'.0',
+     .                             nmassa(iatm),'.0'
+            if (nchara(iatm).le.18) then
+              na0(is) = 1.0e12
+            else
+              na0(is) = 1.0e8
+            end if
             is = is + 1
             do iss = 1, nbndl(iatm)-1
               write(2,
-     .         '(2x,a1,i3,a1,4x,i2,a2,5x,i2,a2,4x,i3,a2,4x,i3,a2)')
-     .         '''',is,'''',izamin(is),'.0',izamax(is),'.0',
+     .         '(1x,a5,4x,i2,a2,5x,i2,a2,4x,i3,a2,4x,i3,a2)')
+     .            specs(is),izamin(is),'.0',izamax(is),'.0',
      .                    nchara(iatm),'.0',nmassa(iatm),'.0'
               if (nchara(iatm).eq.1) then
                 na0(is) = 1.0e19
-              else
+              else if (nchara(iatm).le.18) then
                 na0(is) = 1.0e16
+              else
+                na0(is) = 1.0e8
               end if
               is = is + 1
             end do
@@ -538,7 +542,7 @@ c*** Create the b2ar.dat file
           write(2,'(a)') '*tlohi          (tlo, thi; real, free format)'
           write(2,'(1p,2(2x,e8.1))') 0.1, 1.0e4
           write(2,'(a)') '*nlohi          (nlo, nhi; real, free format)'
-          write(2,'(1p,2(2x,e8.1))') 1.0e17, 1.0e22
+          write(2,'(1p,2(2x,e8.1))') 1.0e14, 1.0e22
           write(2,'(a)') '*numnuc         (nnuc; integer, free format)'
           write(2,'(2x,i2)') natmi-nmeta
           write(2,'(a)') '*nucspec        '//
@@ -548,7 +552,7 @@ c*** Create the b2ar.dat file
      >       write(2,'(2x,3i3)') nchara(iatm), 0, nchara(iatm)
           end do
           write(2,'(a)') '*flag           '//
-     .     '(''adpak'', ''strahl'', ''adas'' or ''amds'', free format)'
+     .     '(''adpak'', ''strahl'', ''adas'' or ''amns'', free format)'
           write(2,'(2x,a)') '''adas'''
           write(2,'(a)') '*tailep         (real, free format)'
           write(2,'(2x,f5.2)') 0.08
@@ -567,7 +571,7 @@ c*** Create the header for the b2yr.dat file
           write(2,'(a)') '*idis          (nidis*integer, free format)'
           write(2,'(4i4)') 8, 16, 24, 32
           write(2,'(a)') '*jdis          (njdis*integer, free format)'
-          write(2,'(4i4)') 2, 6, 10, 14
+          write(2,'(4i4)') 4, 12, 20, 28
           close(2)
           print *,'    ... b2yr.dat created'
       endif
@@ -580,10 +584,13 @@ c*** Create the header for the b2yt.dat file
           open(2,file='b2yt.dat')
           write(2,'(a)') '*dimens         (nx1, ny1; free format)'
           write(2,'(2(3x,i4))') nrplg-npplg, ndya
+          write(2,'(a)') '''solps_version'''//tab//'''iter'''
+          write(2,'(a)') '''eirene_format'''//tab//'''iter'''
           close(2)
           print *,'    ... b2yt.dat created'
       endif
 
+      deallocate(specs)
 
 c-----------------------------------------------------------------------
 c*** Modify the input file for B2, if possible
@@ -690,15 +697,56 @@ c*** Modify the input file for B2, if possible
    40 close(1,err=42)
    42 continue
 
+      inquire(file='../SOLPS_FLUIDS',exist=uex)
+      if(.not.uex) then
+        write(*,*) 'No SOLPS_FLUIDS file found'
+        write(*,*) 'Writing ../SOLPS_FLUIDS'
+        allocate(species_name(0:ns-1))
+        is = 0
+        do iatm = 1, natmi
+          if (is_meta(iatm)) cycle
+          species_name(is)=trim(spcsncl(iatm))//'0'
+          is = is + 1
+          do iss = 1, nbndl(iatm)-1
+            if (izamin(is).eq.izamax(is)) then
+              species_name(is)=
+     .         trim(spcsncl(iatm))//'+'//int2str(izamin(is))
+            else
+              species_name(is)=
+     .         trim(spcsncl(iatm))//'+'//int2str(izamin(is))
+     .                           //'-+'//int2str(izamax(is))
+            end if
+            is = is + 1
+          end do
+        end do
+        write(hlp_frm,'(a1,i3,a7)') '(',ns,'(a,1x))'
+        open(unit=2,file='../SOLPS_FLUIDS')
+        write(2,hlp_frm) (trim(species_name(is)),is=0,ns-1)
+        close(2)
+        deallocate(species_name)
+      end if
+
+      inquire(file='../NREG',exist=uex)
+      if(.not.uex) then
+        write(*,*) 'No NREG file found'
+        write(*,*) 'Writing ../NREG'
+        open(unit=2,file='../NREG')
+        if (ln_cnfg) then
+          write(2,'(i1)') 1
+        else if (lm_cnfg) then
+          write(2,'(i1)') 2
+        else
+          write(2,'(i1)') 2*nncut
+        end if
+        close(2)
+      end if
+
 c-----------------------------------------------------------------------
 c*** Create additional files with geometry for b2plot
-      
-      call uib2pl
+
+cxpb Skip this step, use ub2p program instead
+cxpb      call uib2pl
 c=======================================================================
       call prgend ()
-#ifdef USE_MPI
-      call mpi_barrier(MPI_COMM_WORLD,ierr_mpi)
-      call mpi_finalize(ierr_mpi)
-#endif
       stop 'uinp'
-      end
+      end program uinput
