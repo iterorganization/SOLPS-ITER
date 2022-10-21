@@ -1,5 +1,6 @@
       module b2_4to5
       use b2mod_types
+      use b2mod_subsys
       implicit none
 #     include "DIMENSIONS.F"
 
@@ -128,7 +129,6 @@
 #     include <CBRAEIR.F>
 
       integer is
-      external subini, subend
 
       call subini('b2convp1')
 
@@ -315,7 +315,6 @@ cxpb
 #     include <CCUT.F>
 
       integer is, it, ib, k
-      external subini, subend
 
       call subini('b2convi1')
 
@@ -689,9 +688,8 @@ cxpb
       integer ixl,ixr,ireg
       integer, allocatable :: zone(:)
 
-      external subini, subend, xertst
+      external xertst
       external b2xpne, b2xpni, b2xppb, b2xpfe, b2xpfi, b2agmt
-      external init_region
       real (kind=R8) :: rratio
       external rratio
 
@@ -880,49 +878,49 @@ c Fill out b2mod_indirect arrays
       do ix = -1, nx
        do iy = -1, ny
         if (leftix(ix,iy).ne.-2) then
-          fhe(ix,iy,0) = fhe_4(leftix(ix,iy),leftiy(ix,iy),0)
-          fhi(ix,iy,0) = fhi_4(leftix(ix,iy),leftiy(ix,iy),0)
-          fch(ix,iy,0) = fch_4(leftix(ix,iy),leftiy(ix,iy),0)
-          fch_p(ix,iy,0) = fch_p_4(leftix(ix,iy),leftiy(ix,iy),0)
-          fchdia(ix,iy,0) = fchdia_4(leftix(ix,iy),leftiy(ix,iy),0)
+          fhe(ix,iy,0,0) = fhe_4(leftix(ix,iy),leftiy(ix,iy),0)
+          fhi(ix,iy,0,0) = fhi_4(leftix(ix,iy),leftiy(ix,iy),0)
+          fch(ix,iy,0,0) = fch_4(leftix(ix,iy),leftiy(ix,iy),0)
+          fch_p(ix,iy,0,0) = fch_p_4(leftix(ix,iy),leftiy(ix,iy),0)
+          fchdia(ix,iy,0,0) = fchdia_4(leftix(ix,iy),leftiy(ix,iy),0)
           do i=0,ns-1
             if(ifl(i).ne.0) then
-              fna(ix,iy,0,i) =
+              fna(ix,iy,0,0,i) =
      .         fna_4(leftix(ix,iy),leftiy(ix,iy),0,ifl(i))
             else
-              fna(ix,iy,0,i) = 0.0_R8
+              fna(ix,iy,0,0,i) = 0.0_R8
             endif
           enddo
         else
-          fhe(ix,iy,0) = 0.0_R8
-          fhi(ix,iy,0) = 0.0_R8
-          fch(ix,iy,0) = 0.0_R8
-          fch_p(ix,iy,0) = 0.0_R8
-          fchdia(ix,iy,0) = 0.0_R8
-          fna(ix,iy,0,0:ns-1) = 0.0_R8
+          fhe(ix,iy,0,0) = 0.0_R8
+          fhi(ix,iy,0,0) = 0.0_R8
+          fch(ix,iy,0,0) = 0.0_R8
+          fch_p(ix,iy,0,0) = 0.0_R8
+          fchdia(ix,iy,0,0) = 0.0_R8
+          fna(ix,iy,0,0,0:ns-1) = 0.0_R8
         endif
     7   if (bottomiy(ix,iy).ne.-2) then
-          fhe(ix,iy,1) = fhe_4(bottomix(ix,iy),bottomiy(ix,iy),1)
-          fhi(ix,iy,1) = fhi_4(bottomix(ix,iy),bottomiy(ix,iy),1)
-          fch(ix,iy,1) = fch_4(bottomix(ix,iy),bottomiy(ix,iy),1)
-          fch_p(ix,iy,1) = fch_p_4(bottomix(ix,iy),bottomiy(ix,iy),1)
-          fchdia(ix,iy,1) =
-     .                    fchdia_4(bottomix(ix,iy),bottomiy(ix,iy),1)
+          fhe(ix,iy,1,1) = fhe_4(bottomix(ix,iy),bottomiy(ix,iy),1)
+          fhi(ix,iy,1,1) = fhi_4(bottomix(ix,iy),bottomiy(ix,iy),1)
+          fch(ix,iy,1,1) = fch_4(bottomix(ix,iy),bottomiy(ix,iy),1)
+          fch_p(ix,iy,1,1) = fch_p_4(bottomix(ix,iy),bottomiy(ix,iy),1)
+          fchdia(ix,iy,1,1) =
+     .                      fchdia_4(bottomix(ix,iy),bottomiy(ix,iy),1)
           do i=0,ns-1
             if(ifl(i).ne.0) then
-              fna(ix,iy,1,i) =
+              fna(ix,iy,1,1,i) =
      .         fna_4(bottomix(ix,iy),bottomiy(ix,iy),1,ifl(i))
             else
-              fna(ix,iy,1,i) = 0.0_R8
+              fna(ix,iy,1,1,i) = 0.0_R8
             endif
           enddo
         else
-          fhe(ix,iy,1) = 0.0_R8
-          fhi(ix,iy,1) = 0.0_R8
-          fch(ix,iy,1) = 0.0_R8
-          fch_p(ix,iy,1) = 0.0_R8
-          fchdia(ix,iy,1) = 0.0_R8
-          fna(ix,iy,1,0:ns-1) = 0.0_R8
+          fhe(ix,iy,1,1) = 0.0_R8
+          fhi(ix,iy,1,1) = 0.0_R8
+          fch(ix,iy,1,1) = 0.0_R8
+          fch_p(ix,iy,1,1) = 0.0_R8
+          fchdia(ix,iy,1,1) = 0.0_R8
+          fna(ix,iy,1,1,0:ns-1) = 0.0_R8
         endif
        enddo
       enddo
@@ -937,7 +935,8 @@ c Fill out b2mod_indirect arrays
         if(ifl(i).ne.0) then
           na(-1:nx,-1:ny,i) = na_4(-1:nx,-1:ny,ifl(i))
           ua(-1:nx,-1:ny,i) = ua_4(-1:nx,-1:ny,ifl(i))
-          uadia(-1:nx,-1:ny,0:1,i) = uadia_4(-1:nx,-1:ny,0:1,ifl(i))
+          uadia(-1:nx,-1:ny,0,0,i) = uadia_4(-1:nx,-1:ny,0,ifl(i))
+          uadia(-1:nx,-1:ny,1,1,i) = uadia_4(-1:nx,-1:ny,1,ifl(i))
           am(i) = nint(mi_4(ifl(i))/mp)
           zamin(i) = zi_4(ifl(i))
           zamax(i) = zi_4(ifl(i))
@@ -945,7 +944,7 @@ c Fill out b2mod_indirect arrays
         else
           na(-1:nx,-1:ny,i) = 1.0e8_R8
           ua(-1:nx,-1:ny,i) = 0.0_R8
-          uadia(-1:nx,-1:ny,0:1,i) = 0.0_R8
+          uadia(-1:nx,-1:ny,0:1,0:1,i) = 0.0_R8
           am(i) = nint(mi_4(ifl(i+1))/mp)
           zamin(i) = 0.0_R8
           zamax(i) = 0.0_R8
@@ -958,17 +957,18 @@ c Fill out b2mod_indirect arrays
       call alloc_b2mod_elements(ns, zn, am)
 
 c Compute geometrical quantities
-      call b2agmt(nx, ny, 1,
-     & crx, cry, vol, hx, hy, qz, qc, qcb, gs,
-     & cell_width, cell_height, leftix, bottomiy)
+      call b2agmt(nx, ny, 1, crx, cry,
+     & fpsi, bb, vol, hx, hy, hz, hc, ht, qz, qc, qs, qac, qas, ebc,
+     & gs, cell_width, cell_height, leftix, leftiy, bottomix, bottomiy,
+     & rightix, rightiy, topix, topiy, cflags)
       fpsi = 0.0_R8
       ffbz = 0.0_R8
       periodic_bc = 0
       call init_region(nx,ny,nncut,nncutmax,
      1 leftcut,rightcut,topcut,bottomcut,
-     1 leftix,rightix,rightiy,topix,topiy,bottomiy,
+     1 leftix,leftiy,rightix,rightiy,topix,topiy,bottomix,bottomiy,
      2 region,nnreg,resignore,
-     3 crx,cry,periodic_bc)
+     3 crx,cry,periodic_bc,cflags)
       call get_jsep(nx, ny, jxi, jxa, jsep)
 
 c Fill out b2mod_plasma data
@@ -998,14 +998,14 @@ c Fill out b2mod_plasma data
       fna_eir = fna
       fhe_eir = fhe
       fhi_eir = fhi
-      fna_32(:,:,0,:) = fna(:,:,0,:)
-      fna_32(:,:,1,:) = 0.0_R8
-      fna_52(:,:,0,:) = 0.0_R8
-      fna_52(:,:,1,:) = fna(:,:,1,:)
-      fch_32(:,:,0) = fch(:,:,0)
-      fch_32(:,:,1) = 0.0_R8
-      fch_52(:,:,0) = 0.0_R8
-      fch_52(:,:,1) = fch(:,:,1)
+      fna_32(:,:,0,0,:) = fna(:,:,0,0,:)
+      fna_32(:,:,1,1,:) = 0.0_R8
+      fna_52(:,:,0,0,:) = 0.0_R8
+      fna_52(:,:,1,1,:) = fna(:,:,1,1,:)
+      fch_32(:,:,0,0) = fch(:,:,0,0)
+      fch_32(:,:,1,1) = 0.0_R8
+      fch_52(:,:,0,0) = 0.0_R8
+      fch_52(:,:,1,1) = fch(:,:,1,1)
       call b2xpfi(nx, ny, ns, fna, fni)
       call b2xpfi(nx, ny, ns, fna_32, fni_32)
       call b2xpfi(nx, ny, ns, fna_52, fni_52)
@@ -1404,23 +1404,20 @@ c
       use b2mod_b2cmpa
       use b2mod_b2cmpb
       use b2mod_b2cmpt
+      use b2mod_switches
       use comsou
      , , only: nlpls, nspez
       implicit none
 
       integer nx,ny,ns
-      integer is, js, ib, ireg, ireg_4
+      integer is, js, ib, ireg, ireg_4, n2
+      type (switches) :: switch
 
-      real (kind=R8) :: amtol
-      parameter (amtol=1.0e-2_R8)
-      logical lnext
-      lnext(is,js) = zamax(is).lt.zamin(js).and.zn(is).eq.zn(js).and.
-     &  abs(am(is)-am(js)).lt.amtol
-      intrinsic abs
-      external subini, subend, xertst
+      external xertst
 
       call subini('b2convi2')
 
+      n2 = (nx+2)*(ny+2)
 c Fill out some b2mod_boundary_namelist data
       call alloc_b2mod_boundary(nx, ny, ns, nbc_4, nniso)
       nbc = nbc_4
@@ -1562,7 +1559,7 @@ c Fill out some b2mod_ma28 data
       nltrsol = nltrsol_4
 
 c Fill out b2mod_numerics_namelist data
-      call alloc_b2mod_numerics(nx,ny,ns)
+      call alloc_b2mod_numerics(n2,ns,nnreg,switch)
       do ireg = 1, nnreg(0)
         ireg_4 = mod(ireg,4)
         if (ireg_4.eq.0) ireg_4 = 4
@@ -3384,7 +3381,7 @@ c
       integer, save :: interptype
 *   ..procedures
       intrinsic sqrt
-      external subini, subend, xerrab
+      external xerrab
 *   ..initialisation
       data interptype /1/
 
@@ -3525,7 +3522,7 @@ c
       integer, save :: interptype
 *   ..procedures
       intrinsic sqrt
-      external subini, subend, xerrab
+      external xerrab
 *   ..initialisation
       data interptype /1/
 
@@ -3615,4 +3612,21 @@ cxpb We use these results for the core and the leftmost guard cells.
       return
       end subroutine map4_5y
 c
+      integer function newunit ()
+      implicit none
+      logical used
+
+      newunit = 99
+      used = .true.
+      do while (newunit.gt.0 .and. used)
+        inquire(unit=newunit,opened=used)
+        if (used) newunit = newunit - 1
+      end do
+      if (used) then
+        call masage ('No available free unit numbers for output!     ')
+        call exit_own(1)
+      end if
+      return
+      end function newunit
+
       end module b2_4to5

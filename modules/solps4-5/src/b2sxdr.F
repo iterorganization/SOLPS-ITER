@@ -245,12 +245,12 @@ c
 cxpb Next line not needed if inherited from UPC instead!
       call map4_5x(nx,ny,ns,crx,cry,vol,bb,ua)
       allocate(wrk(-1:nx,-1:ny,0:ns-1))
-      wrk = uadia(-1:nx,-1:ny,0,0:ns-1)
+      wrk = uadia(-1:nx,-1:ny,0,0,0:ns-1)
       call map4_5x(nx,ny,ns,crx,cry,vol,bb,wrk)
-      uadia(-1:nx,-1:ny,0,0:ns-1) = wrk
-      wrk = uadia(-1:nx,-1:ny,1,0:ns-1)
+      uadia(-1:nx,-1:ny,0,0,0:ns-1) = wrk
+      wrk = uadia(-1:nx,-1:ny,1,1,0:ns-1)
       call map4_5y(nx,ny,ns,crx,cry,vol,bb,wrk)
-      uadia(-1:nx,-1:ny,1,0:ns-1) = wrk
+      uadia(-1:nx,-1:ny,1,1,0:ns-1) = wrk
       deallocate(wrk)
       ua0 = ua
       uap = ua
@@ -260,15 +260,15 @@ cxpb Next line not needed if inherited from UPC instead!
       do is = 0, ns-1
         kinrgy(-1:nx,-1:ny,is) =
      .   0.5_R8 * am(is) * mp * ua(-1:nx,-1:ny,is)**2
-        fmo(-1:nx,-1:ny,0,is) =
-     .   am(is) * mp * ua(-1:nx,-1:ny,is) * fna(-1:nx,-1:ny,0,is)
-        fmo(-1:nx,-1:ny,1,is) =
-     .   am(is) * mp * ua(-1:nx,-1:ny,is) * fna(-1:nx,-1:ny,1,is)
-        vedia(-1:nx,-1:ny,0) = vedia(-1:nx,-1:ny,0) +
-     .   uadia(-1:nx,-1:ny,0,is) *
+        fmo(-1:nx,-1:ny,0,0,is) =
+     .   am(is) * mp * ua(-1:nx,-1:ny,is) * fna(-1:nx,-1:ny,0,0,is)
+        fmo(-1:nx,-1:ny,1,1,is) =
+     .   am(is) * mp * ua(-1:nx,-1:ny,is) * fna(-1:nx,-1:ny,1,1,is)
+        vedia(-1:nx,-1:ny,0,0) = vedia(-1:nx,-1:ny,0,0) +
+     .   uadia(-1:nx,-1:ny,0,0,is) *
      .   rza(-1:nx,-1:ny,is) * na(-1:nx,-1:ny,is) / ne(-1:nx,-1:ny)
-        vedia(-1:nx,-1:ny,1) = vedia(-1:nx,-1:ny,1) +
-     .   uadia(-1:nx,-1:ny,1,is) *
+        vedia(-1:nx,-1:ny,1,1) = vedia(-1:nx,-1:ny,1,1) +
+     .   uadia(-1:nx,-1:ny,1,1,is) *
      .   rza(-1:nx,-1:ny,is) * na(-1:nx,-1:ny,is) / ne(-1:nx,-1:ny)
       enddo
 *  ..output
@@ -313,8 +313,8 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
 *   ..save geometry
       call write_b2ag(nx,ny)
       call b2wugm (nout(1), nx, ny, crx, cry, fpsi, ffbz, bb,
-     &  vol, hx, hy, qz, qc, qcb, gs, pbs, wbbc,
-     &  cell_width, cell_height)
+     &  vol, hx, hy, hc, ht, qz, qc, qs, qac, qas, ebc, gs, pbs, wbbl,
+     &  wbbc, cell_width, cell_height)
 *   ..save parameters
       parg(0) = -1.0_R8
       parg(1:99) = 0.0_R8
