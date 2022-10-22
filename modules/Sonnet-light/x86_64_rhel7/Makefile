@@ -7,7 +7,7 @@ INSTALL_DIR = ../
 LIBS = -L${INSTALL_DIR} -lsonnet -lstdc++
 
 INSTALL_USERAREA = ${SOLPSLIB}
-LIBS_USERAREA = -L${INSTALL_DIR_USERAREA} -lsonnet -lstdc++
+LIBS_USERAREA = -L${INSTALL_USERAREA} -lsonnet -lstdc++
 
 include ../sonnet.src
 
@@ -27,7 +27,7 @@ all: libsonnet.a
 	sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
 	rm -f $@.$$$$
 
-libsonnet.a: $(sources:.cpp=.o)
+libsonnet.a: $(sources:.cpp=.o) Makefile
 	ar clq libsonnet.a $(sources:.cpp=.o)
 	${INSTALL} libsonnet.a ${INSTALL_DIR}
 	${INSTALL} libsonnet.a ${INSTALL_USERAREA}
