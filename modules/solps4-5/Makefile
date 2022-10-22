@@ -370,6 +370,8 @@ ${OBJDIR}/zylpln.o: ${OBJDIR}/ccona.${MOD}
 
 ${OBJDIR}/b2_4to5.o: ${OBJDIR}/eirmod_parmmod.${MOD} ${OBJDIR}/braeir.${MOD} ${OBJDIR}/eirdiag.${MOD}
 
+${OBJDIR}/b2ag_parameters.o: ${OBJDIR}/b2mod_ipmain.${MOD}
+
 ${OBJDIR}/b2mod_b2_to_astra.o: ${OBJDIR}/eirmod_extrab25.${MOD} 
 
 ${OBJDIR}/b2mod_neutrals_namelist.o: ${OBJDIR}/eirmod_parmmod.${MOD} ${OBJDIR}/parmmod.${MOD} ${OBJDIR}/braeir.${MOD} ${OBJDIR}/ceirsrt.${MOD} ${OBJDIR}/eirdiag.${MOD} ${OBJDIR}/eirmod_extrab25.${MOD} ${OBJDIR}/eirmod_solps.${MOD}
@@ -634,6 +636,8 @@ ${OBJDIR}/rcm.o: ${SRCDIR}/Eirene_modules/rcm.F ${MAKES}
 
 ifneq (${MOD},o)
 ${OBJDIR}/b2_4to5.${MOD}: ${OBJDIR}/eirmod_parmmod.${MOD} ${OBJDIR}/braeir.${MOD} ${OBJDIR}/eirdiag.${MOD}
+
+${OBJDIR}/b2ag.parameters.${MOD}: ${OBJDIR}/b2mod_ipmain.${MOD}
 
 ${OBJDIR}/b2mod_b2_to_astra.${MOD}: ${OBJDIR}/eirdiag.${MOD}
 
