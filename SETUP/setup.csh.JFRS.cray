@@ -15,6 +15,7 @@ setenv GLI_HOME ${SOLPSTOP}/lib
 # setenv SOLPS_OPENMP yes  # OMP is disabled by default with the new CCE9 compiler
 setenv MDSPLUS_DIR /opt/mdsplus/7.96.12
 setenv CRAYPE_LINK_TYPE dynamic
+setenv SYSNAME amd64_sles15
 
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
