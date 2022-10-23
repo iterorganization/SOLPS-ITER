@@ -1,4 +1,4 @@
-# Load modules 
+# Load modules
 module use /project/cscpub/modulefiles
 module switch PrgEnv-cray PrgEnv-intel
 module unload cray-libsci

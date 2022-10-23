@@ -16,6 +16,9 @@
 # If you have NAG Mark 22 or greater on your system:
 # Add -DNAG22 to SOLPS_CPP
 #
+# If your compiler is compatible with Fortran 2003 features, you can:
+# Add -DF2003 to SOLPS_CPP
+#
 
 #       NCDIR ?=
 #   MSCL_ROOT ?=

@@ -8,7 +8,7 @@ if [[ -n "$SOLPS_PATH" ]]; then
     echo "COMPILER not defined. Exiting."
     exit 1
   fi
-  
+
   # Pragmatic approach: assume only Eirene, B2.5 and B25Eirene will require mpi-versions
   export   OLD_SOLPS_PATH=$SOLPS_PATH
   export   SOLPS_PATH=`echo $SOLPS_PATH | sed 's|\.ig||g'` # remove .mpi if already present

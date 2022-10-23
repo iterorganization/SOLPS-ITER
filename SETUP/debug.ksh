@@ -26,4 +26,3 @@ if [[ -n "$SOLPS_PATH" ]]; then
 else
   echo "SOLPS_PATH not set. Exiting."
 fi
-

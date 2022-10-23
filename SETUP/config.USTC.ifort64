@@ -16,10 +16,13 @@
 # If you have NAG Mark 22 or greater on your system:
 # Add -DNAG22 to SOLPS_CPP
 #
+# If your compiler is compatible with Fortran 2003 features, you can:
+# Add -DF2003 to SOLPS_CPP
+#
 
        NCDIR ?= ${SOLPSLIB}
    MSCL_ROOT ?= ${SOLPSLIB}
-       H5DIR ?= /opt/hdf5/1.10.0-patch1-linux-centos6-x86_64-gcc447-shared 
+       H5DIR ?= /opt/hdf5/1.10.0-patch1-linux-centos6-x86_64-gcc447-shared
      GR_ROOT ?= ${SOLPSLIB}
     GLI_HOME ?= ${SOLPSLIB}
   NCARG_ROOT ?= ${SOLPSLIB}

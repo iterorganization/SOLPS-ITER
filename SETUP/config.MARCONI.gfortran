@@ -16,6 +16,9 @@
 # If you have NAG Mark 22 or greater on your system:
 # Add -DNAG22 to SOLPS_CPP
 #
+# If your compiler is compatible with Fortran 2003 features, you can:
+# Add -DF2003 to SOLPS_CPP
+#
 
        NCDIR ?= ${NETCDFF_HOME}
    MSCL_ROOT ?= /marconi_work/FUSIO_ALL/SOLPS-ITER/${COMPILER}/mscl
@@ -45,7 +48,7 @@ LD_MPI     = -L${MPDIR}/lib64 -lmpi -lmpigf
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNCAR4 -DNO_F01AAF -DITM
+SOLPS_CPP      = -DNCAR4 -DNO_F01AAF -DF2003
 B25_DEFINES    =
 CARRE_DEFINES  =
 EIRENE_DEFINES =
