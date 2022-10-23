@@ -53,7 +53,7 @@ endif
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNCAR4 -DNO_NAG
+SOLPS_CPP      = -DNCAR4 -DNO_NAG -DF2003
 B25_DEFINES    =
 CARRE_DEFINES  =
 EIRENE_DEFINES =
