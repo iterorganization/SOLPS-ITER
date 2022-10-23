@@ -8,7 +8,7 @@ if ($?SOLPS_PATH) then
     echo "COMPILER not defined. Exiting."
     exit 1
   endif
-  
+
   # Pragmatic approach: assume only B2.5 and B2.5-Eirene will require OpenMP versions
   setenv   OLD_SOLPS_PATH   $SOLPS_PATH
   setenv   PATH `echo $PATH | sed "s|${SOLPS_PATH}:||"`

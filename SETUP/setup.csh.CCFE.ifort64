@@ -3,8 +3,8 @@ set machine_location=`hostname`
 set fullhost=`nslookup $machine_location | grep -m 1 Name | awk '/Name:/{print $2}' | tr 'A-Z' 'a-z'`
 
 switch ($fullhost)
-  case "*cumulus.hpc.l" 
-    echo "Running on the CUMULUS cluster" 
+  case "*cumulus.hpc.l"
+    echo "Running on the CUMULUS cluster"
     set cluster="cumulus"
     module load ifort
     module load netcdf-fortran/4.5.3 netcdf-fortran-devel/4.5.3
@@ -12,9 +12,9 @@ switch ($fullhost)
     module load mdsplus
     module load gnuplot
     breaksw
-  default: 
-    echo "Running on the Freia cluster" 
-    set cluster="Freia" 
+  default:
+    echo "Running on the Freia cluster"
+    set cluster="Freia"
     module unload pgi
     module load imas-modules
     module load imas/3.17.1
