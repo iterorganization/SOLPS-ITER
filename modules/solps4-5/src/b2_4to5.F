@@ -3612,21 +3612,4 @@ cxpb We use these results for the core and the leftmost guard cells.
       return
       end subroutine map4_5y
 c
-      integer function newunit ()
-      implicit none
-      logical used
-
-      newunit = 99
-      used = .true.
-      do while (newunit.gt.0 .and. used)
-        inquire(unit=newunit,opened=used)
-        if (used) newunit = newunit - 1
-      end do
-      if (used) then
-        call masage ('No available free unit numbers for output!     ')
-        call exit_own(1)
-      end if
-      return
-      end function newunit
-
       end module b2_4to5

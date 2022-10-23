@@ -18012,7 +18012,7 @@ which is defined in the
 \item[MPI\_VERSION] \index{MPI\_VERSION} Index of MPI version (set internally by the {\tt Makefile})
 \item[NO\_B2\_CHEM\_SPUT] \index{NO\_B2\_CHEM\_SPUT} Used to indicate that chemical sputtering is specified through {\tt Eirene} arrays instead of {\tt B2.5}
 \item[NO\_SAVE] \index{NO\_SAVE} Turning off static save of some common blocks
-\item[SOLPS4\_3] \index{SOLPS4\_3} Set internally by the {\tt Makefile} to activates code specific to the {\tt SOLPS4-5 b2sxdr} converter
+\item[SOLPS4\_3] \index{SOLPS4\_3} Set internally by the {\tt Makefile} to activate code specific to the {\tt SOLPS4-5 b2sxdr} converter
 \item[USE\_IMPGYRO] \index{USE\_IMPGYRO} Used when coupling to IMPGYRO
 \end{description}
 
@@ -18164,6 +18164,7 @@ B25\_EIRENE & modules/b2mod\_b2\_to\_astra.F \\
 B25\_EIRENE & modules/b2mod\_mwti.F90 \\
 B25\_EIRENE & modules/b2mod\_neutrals\_namelist.F \\
 B25\_EIRENE & modules/b2mod\_user\_namelist.F \\
+B25\_EIRENE & modules/b2us\_feedback.F \\
 B25\_EIRENE & output/b2wdat.F \\
 B25\_EIRENE & postprocessing/b2ytdr.F \\
 B25\_EIRENE & sources/b2mod\_eirene.F \\
@@ -18221,6 +18222,25 @@ DEF\_MAXCHORDS & b2plot/process\_eirene\_chords.F \\
 EASY & b2plot/chord.F \\
 EASY & b2plot/chord\_triangle.F \\
 F2003 & convert/b2cdftallies2mds.F \\
+F2003 & convert/conv\_surface\_models.F \\
+F2003 & convert/conv\_triangles.F \\
+F2003 & convert/write\_triangles.F \\
+F2003 & modules/b2mod\_boundary\_namelist.F \\
+F2003 & modules/b2mod\_mdsplus.F \\
+F2003 & modules/b2mod\_neutrals\_namelist.F \\
+F2003 & modules/b2mod\_running\_average.F \\
+F2003 & modules/b2mod\_user\_namelist.F \\
+F2003 & modules/b2us\_feedback.F \\
+F2003 & modules/b2us\_plasma.F \\
+F2003 & modules/b2us\_prep.F \\
+F2003 & postprocessing/b2ye.F \\
+F2003 & preprocessing/b2agdr.F \\
+F2003 & preprocessing/b2aidr.F \\
+F2003 & test/check\_b2\_output.F90 \\
+F2003 & user/out\_for\_plot.F \\
+F2003 & utility/calc\_err.F \\
+F2003 & utility/cfopen.F \\
+F2003 & utility/mds\_routines.F \\
 F77 & user/b2file.F \\
 G95 & utility/mds\_routines.F \\
 GGD\_MICRO\_VERSION & ids/b2mod\_ual\_io.F90 \\
@@ -18409,8 +18429,8 @@ PLPLOT & utility/pagini.F \\
 PSR & modules/b2mod\_b2plot.F \\
 PSR & modules/b2mod\_elements.F \\
 PSR & modules/b2mod\_sputter.F \\
-%SCL\_IMP\_RCI & user/b2wrint.F \\
 SOLPS4\_3 & modules/b2mod\_b2\_to\_astra.F \\
+SOLPS4\_3 & modules/b2mod\_balance.F \\
 SOLPS4\_3 & modules/b2mod\_diag.F \\
 SOLPS4\_3 & modules/b2mod\_mwti.F90 \\
 SOLPS4\_3 & modules/b2mod\_neutrals\_namelist.F \\
@@ -18543,6 +18563,9 @@ B25\_EIRENE & startup-routines/find\_param.f \\
 COMPILER\_MAJOR\_VERSION & assistant/exit\_own.f \\
 COMPILER\_MINOR\_VERSION & assistant/exit\_own.f \\
 DBG & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.F \\
+F2003 & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.F \\
+F2003 & interfaces/couple\_SOLPS-ITER/wneutral\_fluxes.F \\
+F2003 & output/outidlgeo.F \\
 GFORTRAN & modules/eirmod\_mpi.F90 \\
 GFORTRAN & assistant/exit\_own.f \\
 G95 & assistant/exit\_own.f \\
