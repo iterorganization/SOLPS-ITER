@@ -16,6 +16,7 @@ setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/opt/intel/lib/intel64
 # Set environment variables
 setenv GLI_HOME ${SOLPSTOP}/lib
 setenv MDSPLUS_DIR /opt/mdsplus/7.96.12
+setenv SYSNAME amd64_sles15
 
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
