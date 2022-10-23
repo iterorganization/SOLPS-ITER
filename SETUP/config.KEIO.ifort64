@@ -19,7 +19,6 @@
 # If your compiler is compatible with Fortran 2003 features, you can:
 # Add -DF2003 to SOLPS_CPP
 #
-#
 
        NCDIR ?= /opt/NetCDF4
    MSCL_ROOT ?= /usr/share/lib/solpslib

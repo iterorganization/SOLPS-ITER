@@ -19,7 +19,6 @@
 # If your compiler is compatible with Fortran 2003 features, you can:
 # Add -DF2003 to SOLPS_CPP
 #
-#
 
        NCDIR = /usr/lib64/openmpi/lib
    MSCL_ROOT ?= /usr/local/mscl/linux_pgf90_JDL

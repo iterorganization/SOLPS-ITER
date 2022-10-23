@@ -25,7 +25,7 @@
      GR_ROOT ?= ${EBROOTGR}
     GLI_HOME ?= ${EBROOTGLI}
        H5DIR ?= ${EBROOTHDF5}
-  NCARG_ROOT ?=
+  NCARG_ROOT ?= ${EBROOTNCL}
       NAGDIR ?=
  MDSPLUS_DIR ?=
 

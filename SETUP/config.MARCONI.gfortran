@@ -48,7 +48,7 @@ LD_MPI     = -L${MPDIR}/lib64 -lmpi -lmpigf
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNCAR4 -DNO_F01AAF -D2003
+SOLPS_CPP      = -DNCAR4 -DNO_F01AAF -DF2003
 B25_DEFINES    =
 CARRE_DEFINES  =
 EIRENE_DEFINES =
