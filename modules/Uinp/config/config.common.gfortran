@@ -1,0 +1,21 @@
+COMPILER_MAJOR_VERSION = $(shell echo `${FC} --version | head -1 | awk '{printf "%s ",$$4,"\n"}' | cut -d '.' -f 1`)
+
+FFLAGS  += -fsignaling-nans
+ifdef SOLPS_DEBUG
+FFLAGS  += -g -ffpe-trap=denormal -ffpe-trap=invalid -ffpe-trap=zero -ftrapv
+endif
+ifdef SOLPS_OPENMP
+FFLAGS  += -fopenmp
+endif
+
+INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
+COMPILE  = ${FC} -c ${FFLAGS}
+
+MOD      = mod
+LDLIBS   = ${LD_MSCL} ${LD_NAG}
+LDEXTRA  =
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+

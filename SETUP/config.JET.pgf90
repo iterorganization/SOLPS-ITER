@@ -16,15 +16,19 @@
 # If you have NAG Mark 22 or greater on your system:
 # Add -DNAG22 to SOLPS_CPP
 #
+# If your compiler is compatible with Fortran 2003 features, you can:
+# Add -DF2003 to SOLPS_CPP
+#
 
        NCDIR ?= /usr/local/depot/netcdf-4.4.1-pgi-14.4
    MSCL_ROOT ?= /common/SOLPS-ITER/OBJECTCODE/linux_pgf95/mscl
-       H5DIR ?= 
+       H5DIR ?=
      GR_ROOT ?= /common/SOLPS-ITER/OBJECTCODE/linux_pgf95/gr
     GLI_HOME ?= /common/SOLPS-ITER/OBJECTCODE/linux_pgf95/gks
   NCARG_ROOT ?= /common/SOLPS-ITER/OBJECTCODE/linux_pgf95/NCARG
       NAGDIR ?= /usr/local/depot/NAGMark24/fll6a24dp
- MDSPLUS_DIR ?= 
+ MDSPLUS_DIR ?=
+       MPDIR ?=
 
 #
 # Variables for linking
@@ -45,60 +49,12 @@ LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 #
 
 SOLPS_CPP      = -DNCAR4 -DJET -DNO_F01AAF -DNAG22
+MPI_CPP        = -I${MPDIR}/include
 B25_DEFINES    =
+CARRE_DEFINES  =
 EIRENE_DEFINES =
+FFLAGSEXTRA    =
 
-# Autodetected optional features...
-
-# Build with NetCDF tools if available
-ifdef LD_NETCDF
-  SOLPS_CPP   += -DCDF_MOVIE
-else
-  SOLPS_CPP   += -DNO_CDF
-endif
-
-# Build with MDSplus tools if MDSplus is present
-ifdef LD_MDSPLUS
-  SOLPS_CPP   += -DMDSPLUS
-endif
-
-# Build with Catalyst if ParaView is in PATH
-ifdef LD_CATALYST
-  SOLPS_CPP   += -DCATALYST
-endif
-
-# Build with IMAS if imas module is loaded
-ifdef IMAS_PREFIX
-  SOLPS_CPP += -DIMAS
-  LD_UAL     = `pkg-config imas-lowlevel imas-pgi --libs`
-  export LD_UAL
-endif
-
-#
-# Export for use in sub-makefiles
-#
-
-export NCDIR
-export MSCL_ROOT
-export H5DIR
-export GR_ROOT
-export GLI_HOME
-export NCARG_ROOT
-export NAGDIR
-export MDSPLUS_DIR
-
-export LD_NETCDF
-export LD_MSCL
-export LD_GR
-export LD_GKS
-export LD_NCARG
-export LD_NAG
-export LD_MDSPLUS
-export LD_SONNET
-
-export SOLPS_CPP
-export B25_DEFINES
-export EIRENE_DEFINES
 
 #!!!Local Variables:
 #!!! mode: Makefile

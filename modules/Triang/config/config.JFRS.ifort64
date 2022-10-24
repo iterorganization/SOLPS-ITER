@@ -1,0 +1,27 @@
+#  VERSION : 16.12.2004 23:58
+
+# The version relying on Fujitsu Fortran installed on AFS
+
+# Test whether necessary variables are defined
+LD_GR    ?= -L${SOLPSLIB} -lgr
+LD_NAG   ?= -mkl
+
+CPP       = /lib/cpp -traditional
+
+FC        = ftn
+
+ifdef SOLPS_DEBUG
+FCOPTS    = -O0 -traceback -fpe0
+endif
+
+GKS       = ${LD_GR} ${LD_GKS} -lX11 -lXt -lXmu
+
+#LDLIBS   = ${LD_MSCL} -L/usr/local/lib -L/usr/X11R6/lib64
+LDLIBS    =
+
+LDOPTS    = -dynamic
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+

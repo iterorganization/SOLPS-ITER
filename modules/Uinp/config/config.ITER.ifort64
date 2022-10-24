@@ -1,25 +1,21 @@
 #  VERSION : 28.07.99 20:34
-
-LD_MSCL ?= `pkg-config mscl --libs`
+NODENAME ?= $(shell echo `hostname`)
+LD_MSCL  ?= `pkg-config mscl --libs` -lgfortran
+LD_MPI   ?= -Wl,-rpath,${MPDIR}/lib64
 
 ifdef USE_MPI
-FC       = mpif90
-MPI_CPP ?= `pkg-config mpich2-ch3 --cflags`
-LD_MPI  ?= `pkg-config mpich2-ch3 --libs`
+FC        = mpiifort
+MPDIR    ?= ${EBROOTMPI}
 else
-FC       = ifort
+FC        = ifort
 endif
 
-ifdef SOLPS_DEBUG
-FFLAGS	 = -g -C -traceback -debug all -check all
+FFLAGS    = -fPIC -assume no2underscore
+ifndef SOLPS_DEBUG
+FFLAGS   += -O2 -fp-model precise
 endif
-INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
-COMPILE  = ${FC} -c ${FFLAGS}
-CPP      = /lib/cpp -traditional
 
-MOD      = mod
-LDLIBS	 = ${LD_MSCL}
-LDEXTRA  = -i_dynamic
+CPP       = /lib/cpp -C -traditional -ffreestanding
 
 #!!!Local Variables:
 #!!! mode: Makefile

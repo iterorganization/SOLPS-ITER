@@ -2,8 +2,8 @@
       use b2mod_constants
       use b2mod_layer
      , , only: ntrack, nalloys
-      use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use b2mod_subsys
+      use eirmod_solps
 c
 c  version : 28.04.2003 23:32
 c
@@ -14,16 +14,18 @@ c=======================================================================
       logical lc
 #include "uinput.inc"
       integer i,j,k,l,m,iy,ix,ntcpu_b,nfile_b,npts_b(nstra),lntspec_b,
-     ,  lntsput_b,nmcsput_b,ngwties_b,lgwt_h(ngwtiesx),kgwt_h(ngwtiesx),
+     ,  lntsput_b,nmcsput_b,ngwties_b,
      ,  nlstadds_b,nlstadu_b,mtreadds_b,
      ,  l_pfr,l_wll
       integer mesh_cell_ind
+      logical plspec_b,prspec_b,plargl_b,prargl_b
       logical ex,streql
-      external streql, subini, subend, mesh_cell_ind
-      real w,alloc_b,flux_b(nstra)
+      external streql, mesh_cell_ind
+      real alloc_b,flux_b(nstra)
       save alloc_b,flux_b,
      ,  ntcpu_b,nfile_b,npts_b,lntspec_b,lntsput_b,nmcsput_b,ngwties_b,
-     ,  nlstadds_b,nlstadu_b,mtreadds_b
+     ,  nlstadds_b,nlstadu_b,mtreadds_b,
+     ,  plspec_b,prspec_b,plargl_b,prargl_b
 c=======================================================================
       call subini ('uinprpdg')
       if(lc) then !{
@@ -149,7 +151,7 @@ c*** Prepare the data on grid-wall ties, if specified
 #endif 
           do k=1,ngwtiesi !{
             if(mesh_cell_ind(kgwties(k),iy,ix).ne.0) then !{
-              write(0,*) 'uinprpdg: incomprehencible cell index ',
+              write(0,*) 'uinprpdg: incomprehensible cell index ',
      ,                                            kgwties(k),' for k=',k
               write(0,*) ' ==> could be an internal error in uinp - ',
      ,                                        'no ties specification!!!'
@@ -232,6 +234,10 @@ c*** Set the VSP data for diag2.eir
             lsrfcls(i,k)=lsrfclu(i,k,3)
           end do !}
         end do !}
+        plspec_b=plspec
+        prspec_b=prspec
+        plargl_b=plargl
+        prargl_b=prargl
 
       else !}{
         nsrfcls=0
@@ -249,8 +255,12 @@ c*** Set the VSP data for diag2.eir
       	  npts(i)=npts_b(i)
       	  flux(i)=flux_b(i)
         end do !}
+        plspec=plspec_b
+        prspec=prspec_b
+        plargl=plargl_b
+        prargl=prargl_b
       end if !}
 c=======================================================================
       call subend ()
       return
-      end
+      end subroutine uinprpdg

@@ -1,5 +1,3 @@
-$(error First use of config.GA.ifort64. Provide paths to libraries first.)
-
 #
 # Specify paths to root-directories of following libraries on your system
 #
@@ -18,26 +16,31 @@ $(error First use of config.GA.ifort64. Provide paths to libraries first.)
 # If you have NAG Mark 22 or greater on your system:
 # Add -DNAG22 to SOLPS_CPP
 #
+# If your compiler is compatible with Fortran 2003 features, you can:
+# Add -DF2003 to SOLPS_CPP
+#
 
-       NCDIR ?=
-   MSCL_ROOT ?=
-       H5DIR ?=
-     GR_ROOT ?=
-    GLI_HOME ?=
-  NCARG_ROOT ?=
-      NAGDIR ?=
- MDSPLUS_DIR ?=
+     IRISLIB = /fusion/projects/codes/solps/SOLPS-ITER/public_lib/GA.ifort64
+
+       NCDIR = ${NETCDF_DIR}
+   MSCL_ROOT = ${IRISLIB}
+       H5DIR = ${HDF5_DIR}
+     GR_ROOT = ${IRISLIB}
+    GLI_HOME = ${IRISLIB}/gli/src
+  NCARG_ROOT = ${IRISLIB}/NCARG
+      NAGDIR = ${IRISLIB}
+ MDSPLUS_DIR = ${IRISLIB}/mdsplus
 
 #
 # Variables for linking
 #
 
 LD_NETCDF  = -L${NCDIR}/lib -lnetcdff
-LD_MSCL    = -L${MSCL_ROOT}/lib -lmscl
-LD_GR      = -L${GR_ROOT}/lib -lgr
+LD_MSCL    = -L${MSCL_ROOT} -lmscl
+LD_GR      = -L${GR_ROOT} -lgr
 LD_GKS     = -L${GLI_HOME} -lgks -lgfortran
-LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -L/usr/X11R6/lib64 -lX11 -lm
-LD_NAG     = -L${NAGDIR}/lib -lnag
+LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -L/usr/lib64 -lX11 -lm
+LD_NAG     = -L${NAGDIR} -lnag
 LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 
@@ -47,59 +50,10 @@ LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 
 SOLPS_CPP      = -DNCAR4
 B25_DEFINES    =
+CARRE_DEFINES  =
 EIRENE_DEFINES =
+FFLAGSEXTRA    =
 
-# Autodetected optional features...
-
-# Build with NetCDF tools if available
-ifdef LD_NETCDF
-  SOLPS_CPP   += -DCDF_MOVIE
-else
-  SOLPS_CPP   += -DNO_CDF
-endif
-
-# Build with MDSplus tools if MDSplus is present
-ifdef LD_MDSPLUS
-  SOLPS_CPP   += -DMDSPLUS
-endif
-
-# Build with Catalyst if ParaView is in PATH
-ifdef LD_CATALYST
-  SOLPS_CPP   += -DCATALYST
-endif
-
-# Build with IMAS if imas module is loaded
-ifdef IMAS_PREFIX
-  SOLPS_CPP += -DIMAS
-  LD_UAL     = `pkg-config imas-lowlevel imas-ifort --libs`
-  export LD_UAL
-endif
-
-#
-# Export for use in sub-makefiles
-#
-
-export NCDIR
-export MSCL_ROOT
-export H5DIR
-export GR_ROOT
-export GLI_HOME
-export NCARG_ROOT
-export NAGDIR
-export MDSPLUS_DIR
-
-export LD_NETCDF
-export LD_MSCL
-export LD_GR
-export LD_GKS
-export LD_NCARG
-export LD_NAG
-export LD_MDSPLUS
-export LD_SONNET
-
-export SOLPS_CPP
-export B25_DEFINES
-export EIRENE_DEFINES
 
 #!!!Local Variables:
 #!!! mode: Makefile

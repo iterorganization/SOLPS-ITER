@@ -24,4 +24,5 @@ echo "input = " $input
 # prepare B2.5 input file 
 cat << EOF >> b2mn.dat
 'b2mndt_av'                          '1'             # perform running averages
+'b2mndt_av_continue'                 '1'             # continue from averaged solution
 EOF

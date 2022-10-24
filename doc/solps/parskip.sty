@@ -1,0 +1,34 @@
+% This is PARSKIP.STY by H.Partl, TU Wien, as of 19 Jan 1989.
+% Document Style Option to be used with any style and with any size.
+% It produces the following Paragraph Layout: 
+%     Zero Parindent and non-zero Parskip. The stretchable glue in \parskip
+%     helps LaTeX in finding the best place for page breaks.
+  
+\parskip=0.5\baselineskip \advance\parskip by 0pt plus 2pt
+\parindent=\z@
+  
+% To accompany this, the vertical spacing in the list environments is changed
+% to use the same as \parskip in all relevant places (for normalsize only): 
+%   \parsep = \parskip
+%   \itemsep = \z@ % add nothing to \parskip between items
+%   \topsep = \z@ % add nothing to \parskip before first item
+  
+\def\@listI{\leftmargin\leftmargini
+   \partopsep\z@ % added by G. Partosch
+   \topsep\z@ \parsep\parskip \itemsep\z@}
+\let\@listi\@listI
+\@listi
+  
+\def\@listii{\leftmargin\leftmarginii
+   \labelwidth\leftmarginii\advance\labelwidth-\labelsep
+   \partopsep\z@ % added by G. Partosch
+   \topsep\z@ \parsep\parskip \itemsep\z@}
+  
+\def\@listiii{\leftmargin\leftmarginiii
+    \labelwidth\leftmarginiii\advance\labelwidth-\labelsep
+    \partopsep\z@ % added by G. Partosch
+    \topsep\z@ \parsep\parskip \itemsep\z@}
+  
+% Note that listiv, listv and listvi don't change vertical parameters.
+  
+\endinput

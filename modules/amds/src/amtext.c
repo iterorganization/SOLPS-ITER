@@ -1,4 +1,5 @@
 #include "amds.h"
+#include "ctype.h"
 
 #define DLG_REACTION_TEXT "dlgReactionText_"
 #define WG_TEXT "text"
@@ -62,7 +63,7 @@ int DisplayReactionText(View w,Reaction r) {
   while(1) {
     str3=strstr(str2+1,s0);
     str2=strstr(str2,s);
-    if (str2==NULL || str3!=NULL && str2>str3) return -1;
+    if (str2==NULL || ( str3!=NULL && str2>str3 )) return -1;
     if (isspace(str2[strlen(s)])) break;
   }
 

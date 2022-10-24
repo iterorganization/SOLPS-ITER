@@ -8,7 +8,7 @@ else
   set NREG=$nnreg[2]
   echo Set NREG to $NREG "(based on log file)"
 endif
-set ns=$1
+set ns=`get_solps_fluids | wc -w`
 echo Set number of species to $ns
 if (! $?NREG) set NREG = 4
 if ("X$nnreg" != "X") then

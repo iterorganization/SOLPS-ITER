@@ -54,7 +54,7 @@ echo "ds?? : found" $nfiles "files"
 [ $nfiles -gt 0 ] && mv ds?? ../ 2> /dev/null || echo > /dev/null
 rm $NAME
 
-( ls -l ds??? | grep -v 'total ' | grep -v ' 0 ' | grep -vwc -l > $NAME ) 2> /dev/null
+( ls -l ds??? | grep -v 'total ' | grep -v ' 0 ' | wc -l > $NAME ) 2> /dev/null
 nfiles=`cat $NAME`
 echo "ds??? : found" $nfiles "files"
 [ $nfiles -gt 0 ] && mv ds??? ../ 2> /dev/null || echo > /dev/null

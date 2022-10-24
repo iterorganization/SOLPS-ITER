@@ -2,9 +2,8 @@
 
 # Shared asset directory is possible on ITER cluster
 ITER_EXTERNALDIR=/work/imas/shared/external/assets/solps-iter/MD5
-ifeq ("$(wildcard /work/imas/shared/boundary/solps-iter)",\
-		"/work/imas/shared/boundary/solps-iter")# On ITER cluster
-	ASSETDIR ?= /work/imas/shared/boundary/solps-iter/assets/MD5
+ifeq (${HOST_NAME},ITER) # On ITER cluster
+	ASSETDIR ?= ${ITER_EXTERNALDIR}
 	ASSETDIR_GROUP ?= fst-cluster-users
 	EXTERNALDIR ?= ${ITER_EXTERNALDIR}
 else
@@ -32,8 +31,8 @@ all : $(ASSETS)
 	mkdir $@.tmp ; tar -xhmzf $^ -C $@.tmp
 	[ `echo $@.tmp/* | wc -w` == 1 ] && (mv $@.tmp/$@ . ; rm -Rf $@.tmp) || ( mv $@.tmp $@)
 
-# If the asset already exist the we don't want to change its timestamp as
-# this may impact other's (re)builds. Therefore MD5 and timestamps needs
+# If the asset already exists then we do not want to change its timestamp as
+# this may impact other (re)builds. Therefore MD5 and timestamps need
 # to be backdated in this case.
 % : %.md5-stamp
 	if test -f $(ASSETDIR)/$(shell cat $^); \
@@ -77,10 +76,17 @@ publish:
 		echo Publishing $(dir); \
 		tar czf $(dir).tar.gz $(dir); \
 		md5=$$(md5sum $(dir).tar.gz | cut -c 1-32);\
+<<<<<<< HEAD
 		echo "$${md5} > $(dir).tar.gz.md5" ;\
 		scp $(dir).tar.gz $(EXTERNALDIR)/$${md5} ;\
 		rm -f $(dir).tar.gz ;\
 		git add $(dir).tar.gz ;\
+=======
+		echo $${md5} > $(dir).tar.gz.md5 ;\
+		scp $(dir).tar.gz $(EXTERNALDIR)/$${md5} ;\
+		rm -f $(dir).tar.gz ;\
+		git add $(dir).tar.gz.md5 ;\
+>>>>>>> feature/3.0.8-catchup
 		echo "Do not forget to commit and push $(dir).tar.gz.md5" ;\
 	else \
 		echo "Missing argument dir=yourdir or not ITER cluster";\

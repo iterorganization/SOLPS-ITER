@@ -1,6 +1,8 @@
       module b2_4to5
       use b2mod_types
+      use b2mod_subsys
       implicit none
+#     include "DIMENSIONS.F"
 
       real (kind=R8), allocatable ::
      *  fch_4(:,:,:),  fch_32_4(:,:,:), fch_52_4(:,:,:), fch_p_4(:,:,:),
@@ -90,7 +92,6 @@
       logical lvis21_4, ni_driven_4, no_thermal_force_4,
      *  lbndusr_4, lfeedback_4,
      *  lreitr_4, lfirstflight_4,
-     *  lhalpha_4, lvib_4,
      *  autotimestep_4, scale_He_4, print_isat_4,
      *  sepfeedback_4, volrecfeedback_4, sepgasfeedback_4
 
@@ -112,7 +113,6 @@
       use braeir
       use ceirsrt
       implicit none
-#     include <DIMENSIONS.F>
 #     include <KOPPLDIM.F>
 #     include <COMDIM.F>
 #     include <COMNUM.F>
@@ -129,7 +129,6 @@
 #     include <CBRAEIR.F>
 
       integer is
-      external subini, subend
 
       call subini('b2convp1')
 
@@ -291,8 +290,6 @@ cxpb
       use braeir
      , , only: chemical_sputter_yield, fchar_chemical,
      ,         itsput_chemical, issput_chemical, igass_chemical
-      use eirdiag
-     , , only: lvib, lhalpha
       use ccoupl
      , , only: nspze_eir => nspze, nspzi_eir => nspzi, ntgprt
       use comsou
@@ -301,7 +298,6 @@ cxpb
      , , only: indsrc
       use ceirsrt
       implicit none
-#     include <DIMENSIONS.F>
 #     include <KOPPLDIM.F>
 #     include <COMDIM.F>
 #     include <COMFEEDBACK.F>
@@ -319,7 +315,6 @@ cxpb
 #     include <CCUT.F>
 
       integer is, it, ib, k
-      external subini, subend
 
       call subini('b2convi1')
 
@@ -527,8 +522,6 @@ cxpb
       nltrsol_4 = nltrsol
       jxi_4 = jxi-1
       jxa_4 = jxa-1
-      lhalpha_4 = lhalpha
-      lvib_4 = lvib
       debug_flags_4 = debug_flags
       nstepprint_4 = nstepprint
       nstepout_4 = nstepout
@@ -575,10 +568,26 @@ cxpb
       jntrgrp_4 = jntrgrp
       gntrgrp_4 = gntrgrp
       lhetrgts_4 = lhetrgts
-      lpfrb_i_4 = lpfrb_i
-      lpfrb_o_4 = lpfrb_o
-      lpfrt_i_4 = lpfrt_i
-      lpfrt_o_4 = lpfrt_o
+      if (lpfrb_i.gt.0) then
+        lpfrb_i_4 = lpfrb_i-1
+      else
+        lpfrb_i_4 = lpfrb_i
+      end if
+      if (lpfrb_o.gt.0) then
+        lpfrb_o_4 = lpfrb_o-1
+      else
+        lpfrb_o_4 = lpfrb_o
+      end if
+      if (lpfrt_i.gt.0) then
+        lpfrt_i_4 = lpfrt_i-1
+      else
+        lpfrt_i_4 = lpfrt_i
+      end if
+      if (lpfrt_o.gt.0) then
+        lpfrt_o_4 = lpfrt_o-1
+      else
+        lpfrt_o_4 = lpfrt_o
+      end if
       lpfrs_pmp_4 =  lpfrs_pmp
       j_he_at_4 = j_he_at
       j_h_at_4 = j_h_at
@@ -671,6 +680,7 @@ cxpb
       use b2mod_b2cmpt
       use b2mod_external
       implicit none
+#     include "DIMENSIONS.F"
 
       integer nx, ny, ns
       character*120 lblgm
@@ -678,9 +688,8 @@ cxpb
       integer ixl,ixr,ireg
       integer, allocatable :: zone(:)
 
-      external subini, subend, xertst
+      external xertst
       external b2xpne, b2xpni, b2xppb, b2xpfe, b2xpfi, b2agmt
-      external init_region
       real (kind=R8) :: rratio
       external rratio
 
@@ -869,48 +878,49 @@ c Fill out b2mod_indirect arrays
       do ix = -1, nx
        do iy = -1, ny
         if (leftix(ix,iy).ne.-2) then
-          fhe(ix,iy,0) = fhe_4(leftix(ix,iy),leftiy(ix,iy),0)
-          fhi(ix,iy,0) = fhi_4(leftix(ix,iy),leftiy(ix,iy),0)
-          fch(ix,iy,0) = fch_4(leftix(ix,iy),leftiy(ix,iy),0)
-          fch_p(ix,iy,0) = fch_p_4(leftix(ix,iy),leftiy(ix,iy),0)
-          fchdia(ix,iy,0) = fchdia_4(leftix(ix,iy),leftiy(ix,iy),0)
+          fhe(ix,iy,0,0) = fhe_4(leftix(ix,iy),leftiy(ix,iy),0)
+          fhi(ix,iy,0,0) = fhi_4(leftix(ix,iy),leftiy(ix,iy),0)
+          fch(ix,iy,0,0) = fch_4(leftix(ix,iy),leftiy(ix,iy),0)
+          fch_p(ix,iy,0,0) = fch_p_4(leftix(ix,iy),leftiy(ix,iy),0)
+          fchdia(ix,iy,0,0) = fchdia_4(leftix(ix,iy),leftiy(ix,iy),0)
           do i=0,ns-1
             if(ifl(i).ne.0) then
-              fna(ix,iy,0,i) =
+              fna(ix,iy,0,0,i) =
      .         fna_4(leftix(ix,iy),leftiy(ix,iy),0,ifl(i))
             else
-              fna(ix,iy,0,i) = 0.0_R8
+              fna(ix,iy,0,0,i) = 0.0_R8
             endif
           enddo
         else
-          fhe(ix,iy,0) = 0.0_R8
-          fhi(ix,iy,0) = 0.0_R8
-          fch(ix,iy,0) = 0.0_R8
-          fch_p(ix,iy,0) = 0.0_R8
-          fchdia(ix,iy,0) = 0.0_R8
-          fna(ix,iy,0,0:ns-1) = 0.0_R8
+          fhe(ix,iy,0,0) = 0.0_R8
+          fhi(ix,iy,0,0) = 0.0_R8
+          fch(ix,iy,0,0) = 0.0_R8
+          fch_p(ix,iy,0,0) = 0.0_R8
+          fchdia(ix,iy,0,0) = 0.0_R8
+          fna(ix,iy,0,0,0:ns-1) = 0.0_R8
         endif
- 7      if (bottomiy(ix,iy).ne.-2) then
-          fhe(ix,iy,1) = fhe_4(bottomix(ix,iy),bottomiy(ix,iy),1)
-          fhi(ix,iy,1) = fhi_4(bottomix(ix,iy),bottomiy(ix,iy),1)
-          fch(ix,iy,1) = fch_4(bottomix(ix,iy),bottomiy(ix,iy),1)
-          fch_p(ix,iy,1) = fch_p_4(bottomix(ix,iy),bottomiy(ix,iy),1)
-          fchdia(ix,iy,1) = fchdia_4(bottomix(ix,iy),bottomiy(ix,iy),1)
+    7   if (bottomiy(ix,iy).ne.-2) then
+          fhe(ix,iy,1,1) = fhe_4(bottomix(ix,iy),bottomiy(ix,iy),1)
+          fhi(ix,iy,1,1) = fhi_4(bottomix(ix,iy),bottomiy(ix,iy),1)
+          fch(ix,iy,1,1) = fch_4(bottomix(ix,iy),bottomiy(ix,iy),1)
+          fch_p(ix,iy,1,1) = fch_p_4(bottomix(ix,iy),bottomiy(ix,iy),1)
+          fchdia(ix,iy,1,1) =
+     .                      fchdia_4(bottomix(ix,iy),bottomiy(ix,iy),1)
           do i=0,ns-1
             if(ifl(i).ne.0) then
-              fna(ix,iy,1,i) =
+              fna(ix,iy,1,1,i) =
      .         fna_4(bottomix(ix,iy),bottomiy(ix,iy),1,ifl(i))
             else
-              fna(ix,iy,1,i) = 0.0_R8
+              fna(ix,iy,1,1,i) = 0.0_R8
             endif
           enddo
         else
-          fhe(ix,iy,1) = 0.0_R8
-          fhi(ix,iy,1) = 0.0_R8
-          fch(ix,iy,1) = 0.0_R8
-          fch_p(ix,iy,1) = 0.0_R8
-          fchdia(ix,iy,1) = 0.0_R8
-          fna(ix,iy,1,0:ns-1) = 0.0_R8
+          fhe(ix,iy,1,1) = 0.0_R8
+          fhi(ix,iy,1,1) = 0.0_R8
+          fch(ix,iy,1,1) = 0.0_R8
+          fch_p(ix,iy,1,1) = 0.0_R8
+          fchdia(ix,iy,1,1) = 0.0_R8
+          fna(ix,iy,1,1,0:ns-1) = 0.0_R8
         endif
        enddo
       enddo
@@ -925,7 +935,8 @@ c Fill out b2mod_indirect arrays
         if(ifl(i).ne.0) then
           na(-1:nx,-1:ny,i) = na_4(-1:nx,-1:ny,ifl(i))
           ua(-1:nx,-1:ny,i) = ua_4(-1:nx,-1:ny,ifl(i))
-          uadia(-1:nx,-1:ny,0:1,i) = uadia_4(-1:nx,-1:ny,0:1,ifl(i))
+          uadia(-1:nx,-1:ny,0,0,i) = uadia_4(-1:nx,-1:ny,0,ifl(i))
+          uadia(-1:nx,-1:ny,1,1,i) = uadia_4(-1:nx,-1:ny,1,ifl(i))
           am(i) = nint(mi_4(ifl(i))/mp)
           zamin(i) = zi_4(ifl(i))
           zamax(i) = zi_4(ifl(i))
@@ -933,7 +944,7 @@ c Fill out b2mod_indirect arrays
         else
           na(-1:nx,-1:ny,i) = 1.0e8_R8
           ua(-1:nx,-1:ny,i) = 0.0_R8
-          uadia(-1:nx,-1:ny,0:1,i) = 0.0_R8
+          uadia(-1:nx,-1:ny,0:1,0:1,i) = 0.0_R8
           am(i) = nint(mi_4(ifl(i+1))/mp)
           zamin(i) = 0.0_R8
           zamax(i) = 0.0_R8
@@ -946,17 +957,18 @@ c Fill out b2mod_indirect arrays
       call alloc_b2mod_elements(ns, zn, am)
 
 c Compute geometrical quantities
-      call b2agmt(nx, ny, 1,
-     & crx, cry, vol, hx, hy, qz, qc, qcb, gs,
-     & cell_width, cell_height, leftix, bottomiy)
+      call b2agmt(nx, ny, 1, crx, cry,
+     & fpsi, bb, vol, hx, hy, hz, hc, ht, qz, qc, qs, qac, qas, ebc,
+     & gs, cell_width, cell_height, leftix, leftiy, bottomix, bottomiy,
+     & rightix, rightiy, topix, topiy, cflags)
       fpsi = 0.0_R8
       ffbz = 0.0_R8
       periodic_bc = 0
       call init_region(nx,ny,nncut,nncutmax,
      1 leftcut,rightcut,topcut,bottomcut,
-     1 leftix,rightix,rightiy,topix,topiy,bottomiy,
+     1 leftix,leftiy,rightix,rightiy,topix,topiy,bottomix,bottomiy,
      2 region,nnreg,resignore,
-     3 crx,cry,periodic_bc)
+     3 crx,cry,periodic_bc,cflags)
       call get_jsep(nx, ny, jxi, jxa, jsep)
 
 c Fill out b2mod_plasma data
@@ -986,14 +998,14 @@ c Fill out b2mod_plasma data
       fna_eir = fna
       fhe_eir = fhe
       fhi_eir = fhi
-      fna_32(:,:,0,:) = fna(:,:,0,:)
-      fna_32(:,:,1,:) = 0.0_R8
-      fna_52(:,:,0,:) = 0.0_R8
-      fna_52(:,:,1,:) = fna(:,:,1,:)
-      fch_32(:,:,0) = fch(:,:,0)
-      fch_32(:,:,1) = 0.0_R8
-      fch_52(:,:,0) = 0.0_R8
-      fch_52(:,:,1) = fch(:,:,1)
+      fna_32(:,:,0,0,:) = fna(:,:,0,0,:)
+      fna_32(:,:,1,1,:) = 0.0_R8
+      fna_52(:,:,0,0,:) = 0.0_R8
+      fna_52(:,:,1,1,:) = fna(:,:,1,1,:)
+      fch_32(:,:,0,0) = fch(:,:,0,0)
+      fch_32(:,:,1,1) = 0.0_R8
+      fch_52(:,:,0,0) = 0.0_R8
+      fch_52(:,:,1,1) = fch(:,:,1,1)
       call b2xpfi(nx, ny, ns, fna, fni)
       call b2xpfi(nx, ny, ns, fna_32, fni_32)
       call b2xpfi(nx, ny, ns, fna_52, fni_52)
@@ -1192,12 +1204,21 @@ c Fill out /b2cmpt/ arrays
           else if (nint(zn(is)).eq.2) then
             cfdf0(3,is)= 2.0e-20_R8
             cfdf0(4,is)= 5.0e-20_R8
+          else if (nint(zn(is)).eq.4) then
+            cfdf0(3,is)= 1.0e-20_R8
+            cfdf0(4,is)= 3.0e-20_R8
           else if (nint(zn(is)).eq.6) then
             cfdf0(3,is)= 5.0e-20_R8
             cfdf0(4,is)= 1.5e-18_R8
+          else if (nint(zn(is)).eq.7) then
+            cfdf0(3,is)= 1.5e-20_R8
+            cfdf0(4,is)= 5.5e-20_R8
           else if (nint(zn(is)).eq.10) then
             cfdf0(3,is)= 1.0e-20_R8
             cfdf0(4,is)= 7.0e-21_R8
+          else if (nint(zn(is)).eq.18) then
+            cfdf0(3,is)= 2.0e-20_R8
+            cfdf0(4,is)= 5.0e-20_R8
           end if
           if (.not.ni_driven_4) then
             cfdpa(2,is)= 1.0_R8
@@ -1383,23 +1404,20 @@ c
       use b2mod_b2cmpa
       use b2mod_b2cmpb
       use b2mod_b2cmpt
+      use b2mod_switches
       use comsou
      , , only: nlpls, nspez
       implicit none
 
       integer nx,ny,ns
-      integer is, js, ib, it, ireg, ireg_4
+      integer is, js, ib, ireg, ireg_4, n2
+      type (switches) :: switch
 
-      real (kind=R8) :: amtol
-      parameter (amtol=1.0e-2_R8)
-      logical lnext
-      lnext(is,js) = zamax(is).lt.zamin(js).and.zn(is).eq.zn(js).and.
-     &  abs(am(is)-am(js)).lt.amtol
-      intrinsic abs, min, max
-      external subini, subend, xertst
+      external xertst
 
       call subini('b2convi2')
 
+      n2 = (nx+2)*(ny+2)
 c Fill out some b2mod_boundary_namelist data
       call alloc_b2mod_boundary(nx, ny, ns, nbc_4, nniso)
       nbc = nbc_4
@@ -1541,7 +1559,7 @@ c Fill out some b2mod_ma28 data
       nltrsol = nltrsol_4
 
 c Fill out b2mod_numerics_namelist data
-      call alloc_b2mod_numerics(nx,ny,ns)
+      call alloc_b2mod_numerics(n2,ns,nnreg,switch)
       do ireg = 1, nnreg(0)
         ireg_4 = mod(ireg,4)
         if (ireg_4.eq.0) ireg_4 = 4
@@ -1815,7 +1833,7 @@ c
       write(99,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
      .  (cfalf(i),i=0,7)
       write(99,'(a)') '*cflim'//
-     .  '     cflme     cflmi     cflmv     cflal     cflab     ...'
+     .  '    cflme     cflmi     cflmv     cflal     cflab     ...'
       write(99,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
      .  (cflim(i),i=0,7)
       write(99,'(a)') '*endphy'
@@ -1886,7 +1904,7 @@ c
       integer nx, ny, ns
       character tab
       character*10 hlp_frm
-      integer i, is, is0, ncall
+      integer i, is, is0
       integer len_of_digits
       external len_of_digits
 
@@ -2082,7 +2100,9 @@ c
      .   '''eirene_fixuub'''//tab//tab//tab//'''2'''
         write(99,'(a,i1,a)')
      .   '''eirene_ank_mods'''//tab//tab//'''',ank_mods,''''
-        write(99,'(a,i3,a)')
+        write(hlp_frm, '(a,i1,a)')
+     .   '(a,i',len_of_digits(ionising_core),',a)'
+        write(99,hlp_frm)
      .   '''eirene_ionising_core'''//tab//tab//'''',ionising_core,''''
         write(98,'(a)')
      .   '''b2mndr_eirene'''//tab//tab//tab//'''1'''
@@ -2100,7 +2120,7 @@ c
      .   '''eirene_fixmap'''//tab//tab//tab//'''1'''
         write(98,'(a,i1,a)')
      .   '''eirene_ank_mods'''//tab//tab//'''',ank_mods,''''
-        write(98,'(a,i3,a)')
+        write(98,hlp_frm)
      .   '''eirene_ionising_core'''//tab//tab//'''',ionising_core,''''
         if (nstepout_4.ge.1) then
           write(hlp_frm, '(a,i1,a)')
@@ -2115,14 +2135,6 @@ c
           write(98,'(a)')
      .     '''ank_tracing'''//tab//tab//tab//'''1'''
         end if
-      end if
-      if (.not.lhalpha_4) then
-        write(99,'(a)') '''eirene_lhalpha'''//tab//tab//'''0'''
-        write(98,'(a)') '''eirene_lhalpha'''//tab//tab//'''0'''
-      end if
-      if (lvib_4) then
-        write(99,'(a)') '''eirene_lvib'''//tab//tab//tab//'''1'''
-        write(98,'(a)') '''eirene_lvib'''//tab//tab//tab//'''1'''
       end if
       if (dflagkxe_4.ne.0 .or. dflagkxi_4.ne.0) then
         write(99,'(a)') '''b2trcl_lluciani'''//tab//tab//'''2'''
@@ -2317,9 +2329,11 @@ c
         if (ffb_cntr_4(is).ne.0) then
           is0 = isp(is)
           if (is0.ge.0) then
-            write(99,'(a,i2,a)')
+            write(hlp_frm, '(a,i1,a)')
+     .       '(a,i',len_of_digits(is0),',a)'
+            write(99,hlp_frm)
      .       '''b2stbc_isfeedback'''//tab//tab//'''',is0,''''
-            write(98,'(a,i2,a)')
+            write(98,hlp_frm)
      .       '''b2stbc_isfeedback'''//tab//tab//'''',is0,''''
           end if
           if (ffb_strata_4(is).le.0) then
@@ -2330,10 +2344,12 @@ c
             end do
           end if
           if (ffb_strata_4(is).gt.0) then
-            write(99,'(a,i2,a)')
+            write(hlp_frm, '(a,i1,a)')
+     .       '(a,i',len_of_digits(ffb_strata_4(is)),',a)'
+            write(99,hlp_frm)
      .       '''eirene_nesepm_istra'''//tab//'''',
      .       ffb_strata_4(is),''''
-            write(98,'(a,i2,a)')
+            write(98,hlp_frm)
      .       '''eirene_nesepm_istra'''//tab//'''',
      .       ffb_strata_4(is),''''
           end if
@@ -2442,8 +2458,8 @@ cxpb are turned on simultaneously for the same isonuclear sequence
                 else
                   bccon(is0,ib) = 11
                   conpar(is0,ib,2) = 0.0_R8
-                  na_feedback_ib(is-1) = ib
                 end if
+                na_feedback_ib(is-1) = ib
                 conpar(is0,ib,1) = cfb_core_4(is)
                 do iss = isp(is)+1, isp(is)+nfluids_4(is)
                   conpar(is0,ib,1) = conpar(is0,ib,1) +
@@ -2486,9 +2502,13 @@ cxpb are turned on simultaneously for the same isonuclear sequence
             if (ffb_cntr_4(is).ne.0) then
               is0 = isp(is)
               if (is0.ge.0) then
-                bccon(is0,ib) = 11
+                if (cfb_cntr_4(is).ne.0) then
+                  bccon(is0,ib) = 8
+                else
+                  bccon(is0,ib) = 11
+                  na_feedback_ib(is-1) = ib
+                end if
                 conpar(is0,ib,1) = ffb_const_4(is)
-                na_feedback_ib(is-1) = ib
               end if
             end if
           end do
@@ -3121,7 +3141,11 @@ c
         if (cfb_cntr_4(is).eq.1) then
           na_feedback_choice(is-1) = 6
           na_feedback_option(is-1) = 6
-          na_feedback_actuator(is-1) = 3
+          if (ffb_cntr_4(is).ne.0) then
+            na_feedback_actuator(is-1) = 1
+          else
+            na_feedback_actuator(is-1) = 3
+          end if
           na_feedback_ix1(is-1) = leftcut(1)+1
           na_feedback_ix2(is-1) = rightcut(1)
           na_feedback_iy1(is-1) = 0
@@ -3273,7 +3297,7 @@ c
       subroutine write_SOLPS_FLUIDS_NREG(nreg,ns)
       integer nreg, ns
       integer is
-      character*10 hlp_frm
+      character*11 hlp_frm
       character*10, allocatable :: species_name(:)
       external species
 
@@ -3283,7 +3307,7 @@ c
       do is = 0, ns-1
         call species(is,species_name(is),.false.)
       enddo
-      write(hlp_frm,'(a1,i2,a7)') '(',ns,'(a,1x))'
+      write(hlp_frm,'(a1,i3,a7)') '(',ns,'(a,1x))'
       open(unit=99,file='../SOLPS_FLUIDS')
       write(99,hlp_frm) (trim(species_name(is)),is=0,ns-1)
       close(99)
@@ -3357,7 +3381,7 @@ c
       integer, save :: interptype
 *   ..procedures
       intrinsic sqrt
-      external subini, subend, xerrab
+      external xerrab
 *   ..initialisation
       data interptype /1/
 
@@ -3498,7 +3522,7 @@ c
       integer, save :: interptype
 *   ..procedures
       intrinsic sqrt
-      external subini, subend, xerrab
+      external xerrab
 *   ..initialisation
       data interptype /1/
 

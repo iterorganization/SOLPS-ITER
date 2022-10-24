@@ -1,23 +1,14 @@
-#  VERSION : 28.07.99 20:34
-
+# Test whether necessary variables are defined
 MSCL_ROOT ?= /pfs/work/g2dpc/SOLPS-ITER/mscl
-LD_MSCL ?= -L${MSCL_ROOT} -lmscl
+LD_MSCL ?= -L${MSCL_ROOT}/lib -lmscl
 
 ifdef USE_MPI
 FC       = mpiifort
 else
 FC       = ifort
 endif
-ifdef SOLPS_DEBUG
-FFLAGS	 = -g -C -traceback -debug all -check all
-endif
-INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
-COMPILE  = ${FC} -c ${FFLAGS}
-CPP      = /lib/cpp -C -traditional -ffreestanding
 
-MOD      = mod
-LDLIBS	 = ${LD_MSCL}
-LDEXTRA  =
+CPP      = /lib/cpp -C -traditional -ffreestanding
 
 #!!!Local Variables:
 #!!! mode: Makefile

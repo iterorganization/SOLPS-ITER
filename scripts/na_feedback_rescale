@@ -1,9 +1,9 @@
 #! /bin/tcsh -f
 if (! -e .na_feedback) then
-  pipe_run.log | grep na_feedback_rescale | awk '{print $2}' | sort | uniq | wc -l > .na_feedback
+  pipe_run.log | grep -a na_feedback_rescale | awk '{print $2}' | sort | uniq | wc -l > .na_feedback
 endif
 set NNA=`cat .na_feedback`
 
 pipe_run.log | \
-  grep "na_feedback_rescale   $1" | \
+  grep -a "na_feedback_rescale    $1" | \
   awk '{print NR,$3,$4}' | xyplot2 curr targ

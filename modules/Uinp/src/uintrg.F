@@ -1,15 +1,15 @@
       subroutine uintrg(nam)
-       use b2mod_layer
+      use b2mod_types
+      use b2mod_layer
      , , only: ntrack, nalloys
-       use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use eirmod_solps
 c
 c  version : 25.03.99 21:27
 c
 c======================================================================
 c*** Data input from the target file
 c======================================================================
-c      implicit none
+      implicit none
       character*8 nam
       integer lun
       
@@ -28,17 +28,18 @@ c======================================================================
 
       call locase(nam,name,8)
       do i=1,nnms
-        if(streql(name,unm(i))) go to (10,20),i
+        if(streql(name,unm(i))) exit
       end do
-      call skipit
-      return
 
- 10   call rearri(npr,nnpr,mnpr)
+      select case (i)
+      case (1)
+        call rearri(npr,nnpr,mnpr)
+      case (2)
+        call rearri(nptseg,nnptseg,mnptseg)
+      case default
+        call skipit
+      end select
       return
-
- 20   call rearri(nptseg,nnptseg,mnptseg)
-      return
-
 c======================================================================
       entry uintopo(lun)
 c*** Read the topology keyword from the file header
@@ -56,4 +57,4 @@ c======================================================================
       return
       
 c======================================================================
-      end
+      end subroutine uintrg

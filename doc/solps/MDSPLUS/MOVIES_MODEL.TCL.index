@@ -5,6 +5,7 @@
 \MOVIES::TOP:NA "Ion density"
 \MOVIES::TOP:NE "Electron density"
 \MOVIES::TOP:RQAHESUM "Electron cooling rate (summed over all species)"
+\MOVIES::TOP:RQRADSUM "Radiation rate"
 \MOVIES::TOP:TE "Electron temperature"
 \MOVIES::TOP:TI "Ion temperature"
 \MOVIES::TOP:TIME "Time base"

@@ -4,20 +4,46 @@ set NAME=/tmp/.run.$$.$USER.`date +%Y%m%d%H%M%S`
 set EMAIL=`get_git_email`
 set JOB_NAME="SOLPS-ITER"
 set PROCS=1
+set THREADS=1
+set hours=24
+set mem=4G
 echo Your email is $EMAIL
 
 set compress=""
 set MPIOPTS=""
 set standalone="no"
 
-set solpstop=`climb_and_look_for SOLPSTOP`
-if (-s $solpstop) then
- setenv SOLPSTOP "`cat $solpstop`"
-else if ($SOLPSTOP == "") then
+setenv SOLPSTOP "`determine_SOLPSTOP`"
+if ($SOLPSTOP == "") then
  setenv SOLPSTOP "`echo $PWD | sed 's:/runs/.*::'`"
 endif
 
 argloop:
+  if ("X${1}X" == "X-hX") then
+    cat <<EOF
+
+Help for $0
+
+This script is used to submit SOLPS-ITER jobs to the QSUB batch system on an SGE cluster.
+
+Usage:
+
+  `basename $0` {options} {<<SCRIPT>>}
+
+where the optional <<SCRIPT>> is the QSUB submission file to be used
+
+Available options are:
+  -j <<JOB NAME>>    set the job name (default $JOB_NAME)
+  -z                 compress run.log using gzip
+  -s                 specify a standalone B2.5 run
+  -m <<MPI OPTIONS>> use the MPI options specified (default serial version)
+  -t <<THREADS>>     use OpenMP parallelization with <<THREADS>> threads (default $THREADS)
+  -T <<HOURS>>       number of elapsed hours requested (default $hours)
+  -M <<MEM_SIZE>>    memory size (default $mem)
+
+EOF
+    exit
+  endif
   if ("X${1}X" == "X-jX") then
     shift
     set JOB_NAME="$1"
@@ -49,6 +75,35 @@ argloop:
     shift
     goto argloop
   endif
+  if ("X${1}X" == "X-tX") then
+    shift
+    if (! $?SOLPS_OPENMP) then
+      source $SOLPSTOP/SETUP/openmp
+      set OPENMP_SET=yes
+    endif
+    set THREADS="$1"
+    echo Asking for OpenMP run with $THREADS threads
+    shift
+    goto argloop
+  endif
+  if ("X${1}X" == "X-TX") then
+    shift
+    set hours="$1"
+    if ( $hours == 1) then
+      echo Requested time is ${hours} hour
+    else
+      echo Requested time is ${hours} hours
+    endif
+    shift
+    goto argloop
+  endif
+  if ("X${1}X" == "X-MX") then
+    shift
+    set mem="$1"
+    echo Requested memory is ${mem}
+    shift
+    goto argloop
+  endif
 
 if ($1 == "") then
   if (-s input.dat && $standalone == "no") then
@@ -63,7 +118,7 @@ if ($1 == "") then
       endif
     endif
   else
-    if ($standalone == "no") echo Assuming standalone run
+    if ($standalone == "no") echo No input.dat file found: reverting to a standalone run
     echo No argument is specified. Looking for QSUB.sge$compress
     set QSUB=`climb_and_look_for QSUB.sge$compress`
     if ($QSUB == "//QSUB.sge$compress") then
@@ -80,11 +135,12 @@ else if (-s $1) then
   set QSUB=$1
 else
   echo Submission file $1 is specified as an argument.
-  echo Looking for submission file $1 
+  echo Looking for submission file $1
   set QSUB=`climb_and_look_for $1`
   if ($QSUB == "//"$1) then
     if (-s $SOLPSTOP/runs/$1) then
       set QSUB="$SOLPSTOP/runs/$1"
+      echo Submission file $QSUB is found
     else
       set QSUB=""
     endif
@@ -94,11 +150,22 @@ else
 endif
 if($QSUB == "") then
   echo No SGE submission file $1 found. Exiting.
-  exit
+  exit 1
 endif
 echo Using submission file template $QSUB
 
-sed -e 's:#PWD#:'$PWD':g' -e 's:#SOLPSTOP#:'$SOLPSTOP':g' -e 's:#EMAIL#:'$EMAIL':g' -e "s:#MPIOPTS#:'$MPIOPTS':g" -e "s:#PROCS#:'$PROCS':g" -e "s:#JOBNAME#:'$JOB_NAME':g" < $QSUB > $NAME
+sed \
+  -e 's:#PWD#:'$PWD':g' \
+  -e 's:#SOLPSTOP#:'$SOLPSTOP':g' \
+  -e 's:#EMAIL#:'$EMAIL':g' \
+  -e "s:#MPIOPTS#:'$MPIOPTS':g" \
+  -e "s:#PROCS#:'$PROCS':g" \
+  -e "s:#THREADS#:'$THREADS':g" \
+  -e 's:#MEM#:'$mem':g' \
+  -e 's:#HOURS#:'$hours':g' \
+  -e "s:#JOBNAME#:'$JOB_NAME':g" \
+  -e 's:#USER#:'$USER':g' \
+  < $QSUB > $NAME
 
 set msg="Submitted at `date`"
 update_solps_run_status -n ${msg}

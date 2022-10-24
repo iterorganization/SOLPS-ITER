@@ -1,4 +1,7 @@
       PROGRAM TRIANGLE
+#ifdef NAGFOR
+      use f90_unix_io ! IGNORE
+#endif
 
 c  version : 01.10.2016 21:09
 
@@ -25,10 +28,10 @@ cank}
 
 C---- DECLARATIONS
 C---- VARIABLES FOR SORTING
-C---- BOUND,IND1,IND2 : LOOP VARIABLES
+C---- BOUND,IND1,IND2,IREG : LOOP VARIABLES
 C---- IHELP : VARIABLE FOR EXCHANGE
 C---- HELP  : VARIABLE FOR EXCHANGE
-      INTEGER BOUND,IND1,IND2,IHELP
+      INTEGER BOUND,IND1,IND2,IREG,IHELP
       DOUBLE PRECISION HELP
 
 C---- VARIABLES FOR GRAPHICS
@@ -53,11 +56,12 @@ C---- FOUND  : INDICATES IF THE THIRD TRIANGLE POINT WAS FOUND
 cank-20051101{
       integer npn_hlp,ihlp200,jhlp200,khlp200,mhlp200,nhlp200,
      ,  kchn_hlp,mchn_hlp,nchn_hlp
-      logical lhlp200,bhlp200,ex
+      logical lhlp200,ldebug,ex
       integer, allocatable :: ichn_hlp(:),jchn_hlp(:,:)
       logical, allocatable :: lchn_hlp(:)
       character*4 hhlp200
-      real*8 dx,dy,d,dxmn,dxmx,dymn,dymx,sx,sy
+      character*36 hlp_frm
+      double precision dx,dy,d,dxmn,dxmx,dymn,dymx,sx,sy
       character*10 hs(6)
 
       ihlp200=0
@@ -66,7 +70,11 @@ cank-20051101{
       mhlp200=0
       nhlp200=10
       lhlp200=.false.
-      bhlp200=.false.
+#ifdef DBG
+      ldebug=.true.
+#else
+      ldebug=.false.
+#endif
 cank}
 
 C---- INITIALISATION
@@ -476,13 +484,12 @@ C---- SORTS THE FRONTIER PARTS FROM LONGEST TO SHORTEST
       ihlp200=ihlp200+1
       khlp200=max(khlp200,jhlp200)
       jhlp200=0
-      bhlp200=lhlp200
       lhlp200=ihlp200.eq.mhlp200
 c      lhlp200=ihlp200.eq.281 !###
       print *
       print '(a,2i6,a,3i6)',' before *200: ',ihlp200,khlp200,
      ,                  '. npoin,npartfr,nfront=',npoin,npartfr,nfront
-      call flush(6)
+      call ioflush
       if(lhlp200) then !{
         print *
         print *,'    i   ik'
@@ -498,8 +505,9 @@ c      lhlp200=ihlp200.eq.281 !###
         print *,'*200: npartfr,npoin,ic=',npartfr,npoin,ic
         ia = ifront(1,npartfr)
         ib = ifront(2,npartfr)
-        print '(a,1p,4e12.4)','xa1,ya1,xa2,ya2=',x(ia),y(ia),x(ib),y(ib)
-        call flush(6)
+        print '(1x,a,1p,4e12.4)','xa1,ya1,xa2,ya2=',
+     .                            x(ia),y(ia),x(ib),y(ib)
+        call ioflush
         call filepltd(2,inodcon)  !###
         stop ': trap at *200' !###
       end if !}
@@ -512,7 +520,7 @@ c      lhlp200=ihlp200.eq.281 !###
       if(lhlp200) then !{
         print *,'*200: ',jhlp200,'. npartfr,frad,epsang=',
      ,                                              npartfr,frad,epsang
-        call flush(6)
+        call ioflush
         if(jhlp200.gt.nhlp200) stop 'stopped at *200'
       end if !}
 !###}
@@ -540,24 +548,29 @@ C---- TREAT ONE FRONTIER PART
 !###{
       if(lhlp200) then !{
         print *,'after optc. ic,xc=',ic,xc
-        call flush(6)
+        call ioflush
       end if !}
 !###}
 
       CALL CANLIST(FRAD,EPSANG) ! CREATES CANDIDATE LIST
 !###{
       if(lhlp200) then !{
-        print *,'after canlist(',frad,',',epsang,
-     ,                                '). ncandi,icandi=',ncandi,icandi
-        call flush(6)
+        write (hlp_frm,'(a,i3,a)')
+     ,   '(1x,a,1p,1e12.4,a,1e12.4,a,',ncandi+1,'i6)'
+        write (*,hlp_frm)
+     ,   'after canlist(',frad,',',epsang,
+     ,   '). ncandi,icandi=',ncandi,icandi(1:ncandi)
+        call ioflush
       end if !}
 !###}
 
       CALL ADDCAN ! ADDS POINT C TO CANDIDATE LIST
 !###{
       if(lhlp200) then !{
-        print *,'after addcan. ncandi,icandi=',ncandi,icandi
-        call flush(6)
+        write (hlp_frm,'(a,i3,a)') '(1x,a,',ncandi+1,'i6)'
+        write (*,hlp_frm) 'after addcan. ncandi,icandi=',
+     ,                                   ncandi,icandi(1:ncandi)
+        call ioflush
       end if !}
 !###}
 
@@ -567,7 +580,7 @@ C----                      GRID POINTS
 !###{
       if(lhlp200) then !{
         print *,'after choice. found,inodcon=',found,inodcon
-        call flush(6)
+        call ioflush
       end if !}
 !###}
 

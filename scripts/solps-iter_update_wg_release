@@ -1,7 +1,8 @@
 #! /usr/bin/env tcsh
 
 cd $SOLPSTOP
-echo "Switching to SOLPS-ITER WG-relese branch"
+echo "Switching to SOLPS-ITER WG-release branch"
+set repo="SOLPS-ITER"
 git fetch --prune
 git checkout feature/wg-release && echo "Checked out SOLPS-ITER WG-release branch" || goto branch
 git pull && goto b25 || goto local
@@ -10,6 +11,7 @@ b25:
   git submodule update
   echo "Updating B2.5"
   cd $SOLPSTOP/modules/B2.5
+  set repo="B2.5"
   git fetch --prune
   git checkout feature/wg-release && echo "Checked out B2.5 WG-release branch" || goto branch
   git pull && goto Eirene || goto local
@@ -17,18 +19,56 @@ b25:
 Eirene:
   echo "Updating Eirene"
   cd $SOLPSTOP/modules/Eirene
+  set repo="Eirene"
   git fetch --prune
   git checkout feature/wg-release && echo "Checked out Eirene WG-release branch" || goto branch
+  git pull && goto Carre || goto local
+
+Carre:
+  echo "Updating Carre"
+  cd $SOLPSTOP/modules/Carre
+  set repo="Carre"
+  git fetch --prune
+  git checkout develop && echo "Checked out Carre develop branch" || goto branch
+  git pull && goto Carre2 || goto local
+
+Carre2:
+  echo "Updating Carre2"
+  if (! -d $SOLPSTOP/modules/Carre2) then
+    git clone ssh://git@git.iter.org/bnd/carre.git $SOLPSTOP/modules/Carre2
+  endif
+  cd $SOLPSTOP/modules/Carre2
+  set repo="Carre2"
+  git fetch --prune
+  git checkout feature/Carre2 && echo "Checked out Carre2 branch" || goto branch
+  git pull && goto DivGeo || goto local
+
+DivGeo:
+  echo "Updating DivGeo"
+  cd $SOLPSTOP/modules/DivGeo
+  set repo="DivGeo"
+  git fetch --prune
+  git checkout develop && echo "Checked out DivGeo develop branch" || goto branch
+  git pull && goto ADAS || goto local
+
+ADAS:
+  echo "Updating ADAS"
+  cd $SOLPSTOP/modules/adas
+  set repo="ADAS"
+  git fetch --prune
+  git checkout develop && echo "Checked out ADAS develop branch" || goto branch
   git pull && goto compile || goto local
 
 branch:
   echo "You are not on the WG-release branch."
 
 local:
+  echo "In your "$repo" copy:"
   echo "You have local files under version control which"
   echo "would cause a conflict during the update."
   echo "Please modify, delete, rename, stash these files or"
   echo "commit them to a local branch before proceeding with the update."
+  git status
   exit
 
 compile:

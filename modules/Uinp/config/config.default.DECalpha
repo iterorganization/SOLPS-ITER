@@ -5,14 +5,14 @@ ifndef LD_MSCL
   $(error LD_MSCL not defined)
 endif
 
-FC	     = f90
-CPP	     = /usr/ucb/cpp -C
-MOD	     = mod
-FFLAGS	 = -i4 -fast
+FC       = f90
+CPP      = /usr/ucb/cpp -C
+MOD      = mod
+FFLAGS   = -i4 -fast
 INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
 
-LDLIBS 	 = ${LD_MSCL}
+LDLIBS   = ${LD_MSCL} ${LD_NAG}
 LDEXTRA  = 
 
 #!!!Local Variables:

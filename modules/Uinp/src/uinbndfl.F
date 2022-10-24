@@ -1,22 +1,24 @@
       subroutine uinbndfl
+      use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
-      use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use b2mod_subsys
+      use eirmod_solps
 c
 c  version : 01.04.2005 14:27
 c
 c=======================================================================
 c*** Fill in the default boundary data
 c=======================================================================
+      implicit none
 #include "uinpcom.inc"
-      integer i,j,k,l,m,n,isp,iknd,izn,igs_hlp(nspdgen)
+      integer i,j,k,l,n,isp,iknd,izn,igs_hlp(nspdgen)
       logical ex,uex,hlp_fl1,hlp_fl2
       real hlp_f1
       character hlp_c*2
       integer find_matching_species
       logical streql
-      external streql, xertst, subini, subend, find_matching_species
+      external streql, xertst, find_matching_species
 c=======================================================================
       call subini ('uinbndfl')
 c*** Determine the default source scaling relations
@@ -111,7 +113,11 @@ c*** Take the neutral data from the "whole target" specification
             else !}{
 c*** Take the data from the boundary default
               ewmbnds(izn,iknd)=ewmbndx(0,iknd)
-              jskbnds(izn,iknd)=jskbndx(0,iknd)
+              if (ln_cnfg.and.iknd.eq.1) then
+                jskbnds(izn,iknd)=3
+              else
+                jskbnds(izn,iknd)=jskbndx(0,iknd)
+              end if
               jrfbnds(izn,iknd)=jrfbndx(0,iknd)
               jcsbnds(izn,iknd)=jcsbndx(0,iknd)
               jcgbnds(izn,iknd)=jcgbndx(0,iknd)
@@ -251,13 +257,13 @@ c*** uex: the highest ionisation state for this species
 c=======================================================================
       call subend ()
       return
-      end
+      end subroutine uinbndfl
 
       integer function find_matching_species(name)
+      use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
-      use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use eirmod_solps
       use b2mod_elements
       implicit none
 #     include "uinpcom.inc"
@@ -291,19 +297,19 @@ c=======================================================================
       end function find_matching_species
 
       integer function find_matching_reagent(name)
+      use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
-      use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use eirmod_solps
       use b2mod_elements
       implicit none
 #     include "uinpcom.inc"
       character*8 name, species_name
-      integer i, j
+      integer i
       integer nplus
       integer lnblnk
-      logical streql, isplusorminus, isadigit
-      external streql, lnblnk, isplusorminus, isadigit, strip_spaces
+      logical streql, isplusorminus
+      external streql, lnblnk, isplusorminus, strip_spaces
 
       find_matching_reagent = 0
       do i = 1, nsrctd

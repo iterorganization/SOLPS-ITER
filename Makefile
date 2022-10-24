@@ -137,9 +137,11 @@ all_nox_mpi_openmp: all_nox_openmp_mpi
 
 carre:
 	cd modules/Carre; ${MAKE}
+	cd modules/Carre2; ${MAKE}
 
 carre_nox:
 	cd modules/Carre; ${MAKE} NCARG_ROOT="" LD_NCARG=""
+	cd modules/Carre2; ${MAKE} NCARG_ROOT="" LD_NCARG=""
 
 divgeo:
 ifndef NO_MOTIF
@@ -374,9 +376,11 @@ sonnet-light:
 	@-mkdir -p ${SOLPSLIB}
 	cd modules/Sonnet-light; ${MAKE} all INSTALL_USERAREA=${SOLPSLIB}
 
+nc2text: nc2text_simple
+
 nc2text_simple:
 	@-mkdir -p ${SOLPSTOP}/scripts/${TOOLCHAIN}
-	cd modules/B2.5; ${MAKE} nc2text_simple
+	cd modules/B2.5; ${MAKE} nc2text
 
 nc_reduce:
 	@-mkdir -p ${SOLPSTOP}/scripts/${TOOLCHAIN}
@@ -402,6 +406,7 @@ local:
 
 tags:
 	cd modules/Carre;          ${MAKE} tags
+	cd modules/Carre2;         ${MAKE} tags
 	cd modules/Eirene;         ${MAKE} tags
 	cd modules/B2.5;           ${MAKE} tags
 	cd modules/Uinp;           ${MAKE} tags
@@ -410,10 +415,11 @@ tags:
 	cd modules/DivGeo/convert; ${MAKE} tags
 	cd modules/DivGeo/equtrn;  ${MAKE} tags
 #	cd modules/solps4-5;       ${MAKE} tags
-	rm -f TAGS ; etags -o TAGS modules/Carre/src.local/*.F modules/Carre/src/*/*.F modules/Carre/src/include/*.* modules/Eirene/src.local/*.f modules/Eirene/src/*/*.[Ffc] modules/Eirene/src/interfaces/couple_SOLPS-ITER/*.f modules/Eirene/src/user-routines/user_iter/*.f modules/Eirene/src/geometry/time-routines/*.F modules/Eirene/src/*/*.[Ff]90 modules/Eirene/src/interfaces/couple_SOLPS-ITER/*.[Ff]90 modules/B2.5/src.local/*.F modules/B2.5/src/*/*.F modules/B2.5/src/*/*.F90 modules/B2.5/src/*/*.[Hh] modules/B2.5/src/common/*.* modules/B2.5/src/common/COUPLE/*.F modules/B2.5/src/documentation/*.xml modules/B2.5/src/documentation/*.py modules/Uinp/src/*.F modules/Uinp/src/*.inc modules/Uinp/src/*.h modules/Triang/src/*/*.f modules/DivGeo/equtrn/src/*.f modules/DivGeo/equtrn/src/*.f90 modules/DivGeo/equtrn/src/*.inc modules/DivGeo/convert/src/*.f modules/DivGeo/src/*.[ch] modules/DivGeo/dg.dgc modules/solps4-5/src/*.F scripts/nc2text_simple/*.F90 doc/solps/solps.tex || touch TAGS
+	rm -f TAGS ; etags -o TAGS modules/Carre/src.local/*.F modules/Carre/src/*/*.F modules/Carre/src/include/*.* modules/Carre2/src90/*/*.[Ff]90 modules/Carre2/src90/include/*.* modules/Eirene/src.local/*.f modules/Eirene/src/*/*.[Ffc] modules/Eirene/src/interfaces/couple_SOLPS-ITER/*.f modules/Eirene/src/user-routines/user_iter/*.f modules/Eirene/src/geometry/time-routines/*.F modules/Eirene/src/*/*.[Ff]90 modules/Eirene/src/interfaces/couple_SOLPS-ITER/*.[Ff]90 modules/B2.5/src.local/*.F modules/B2.5/src/*/*.F modules/B2.5/src/*/*.F90 modules/B2.5/src/*/*.[Hh] modules/B2.5/src/common/*.* modules/B2.5/src/common/COUPLE/*.F modules/B2.5/src/documentation/*.xml modules/B2.5/src/documentation/*.py modules/Uinp/src/*.F modules/Uinp/src/*.inc modules/Uinp/src/*.h modules/Triang/src/*/*.f modules/DivGeo/equtrn/src/*.f modules/DivGeo/equtrn/src/*.f90 modules/DivGeo/equtrn/src/*.inc modules/DivGeo/convert/src/*.f modules/DivGeo/src/*.[ch] modules/DivGeo/dg.dgc modules/solps4-5/src/*.F scripts/nc2text_simple/*.F90 doc/solps/solps.tex || touch TAGS
 
 listobj:
 	cd modules/Carre;          ${MAKE} listobj
+	cd modules/Carre2;         ${MAKE} listobj
 	cd modules/Eirene;         ${MAKE} listobj
 	cd modules/B2.5;           ${MAKE} listobj USE_OPENMP=-DUSE_OPENMP SOLPS_OPENMP=yes
 	cd modules/B2.5;           ${MAKE} listobj
@@ -440,6 +446,7 @@ endif
 
 listobj_nox:
 	cd modules/Carre;          ${MAKE} listobj NCARG_ROOT="" LD_NCARG=""
+	cd modules/Carre2;         ${MAKE} listobj NCARG_ROOT="" LD_NCARG=""
 	cd modules/Eirene;         ${MAKE} listobj LD_GR="" LD_GKS=""
 	cd modules/B2.5;           ${MAKE} listobj USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes LD_GR="" LD_GKS=""
 	cd modules/B2.5;           ${MAKE} listobj LD_GR="" LD_GKS=""
@@ -465,6 +472,7 @@ endif
 
 depend:
 	cd modules/Carre;          ${MAKE} depend
+	cd modules/Carre2;         ${MAKE} depend
 	cd modules/Eirene;         ${MAKE} depend
 	cd modules/B2.5;           ${MAKE} depend USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes
 	cd modules/B2.5;           ${MAKE} depend
@@ -495,6 +503,7 @@ endif
 
 depend_nox:
 	cd modules/Carre;          ${MAKE} depend NCARG_ROOT="" LD_NCARG=""
+	cd modules/Carre2;         ${MAKE} depend NCARG_ROOT="" LD_NCARG=""
 	cd modules/Eirene;         ${MAKE} depend LD_GR="" LD_GKS=""
 	cd modules/B2.5;           ${MAKE} depend USE_OPENMP=-D_OPENMP LD_GR="" LD_GKS="" SOLPS_OPENMP=yes
 	cd modules/B2.5;           ${MAKE} depend LD_GR="" LD_GKS=""
@@ -522,6 +531,7 @@ VERSION:
 	cd modules/B2.5;   ${MAKE} VERSION
 	cd modules/Eirene; ${MAKE} VERSION
 	cd modules/Carre;  ${MAKE} VERSION
+	cd modules/Carre2; ${MAKE} VERSION
 	cd modules/DivGeo; ${MAKE} VERSION
 	cd modules/Uinp;   ${MAKE} VERSION
 
@@ -616,9 +626,11 @@ clean_all_nox_mpi_openmp: clean_all_nox_openmp_mpi
 
 clean_carre:
 	cd modules/Carre; ${MAKE} clean
+	cd modules/Carre2; ${MAKE} clean
 
 clean_carre_nox:
 	cd modules/Carre; ${MAKE} clean NCARG_ROOT="" LD_NCARG=""
+	cd modules/Carre2; ${MAKE} clean NCARG_ROOT="" LD_NCARG=""
 
 clean_divgeo:
 	cd modules/DivGeo;         ${MAKE} clean

@@ -45,7 +45,7 @@ int SaveDoc(Doc ss,char* fileName) {
   fprintf(f,STR_DATA);
   fprintf(f,"FileVersion %d\n",FILE_VERSION);
 
-  fprintf(f,"VarDefs1 %d\n",GroupCount(ss->varDefs));
+  fprintf(f,"VarDefs1 %u\n",(unsigned)GroupCount(ss->varDefs));
   for (vd=Group1st(ss->varDefs,&ix);vd!=NULL;vd=Next(&ix)) {
     fprintf(f,"%s %s\n",Flags2Str(vd->flags,vdFlags),
       Int2Name(vd->type,vdTypes));
@@ -54,16 +54,16 @@ int SaveDoc(Doc ss,char* fileName) {
 
   fprintf(f,"EnabledParticles1 %d\n",ss->reactionCount);
   for (i=0;i<ss->reactionCount;i++) {
-    fprintf(f,"Reaction %s %d\n",ss->data[i].r->name,
-      GroupCount(ss->data[i].enabled));
+    fprintf(f,"Reaction %s %u\n",ss->data[i].r->name,
+      (unsigned)GroupCount(ss->data[i].enabled));
     for (p=Group1st(ss->data[i].enabled,&ix);p!=NULL;p=Next(&ix))
       fprintf(f,"%s\n",p->name);
   }
 
   fprintf(f,"Vars1 %d\n",ss->reactionCount);
   for (i=0;i<ss->reactionCount;i++) {
-    fprintf(f,"Reaction %s %d\n",ss->data[i].r->name,
-      GroupCount(ss->data[i].r->inputSet));
+    fprintf(f,"Reaction %s %u\n",ss->data[i].r->name,
+      (unsigned)GroupCount(ss->data[i].r->inputSet));
     for (vd=Group1st(ss->varDefs,&ix);vd!=NULL;vd=Next(&ix)) {
       if (~vd->flags & VDF_REACTIONS) continue;
       fprintf(f,"%s\n",GetReactionVar(ss,ss->data[i].r,vd));
@@ -77,7 +77,7 @@ int SaveDoc(Doc ss,char* fileName) {
     }
   }
 
-  fprintf(f,"StartupParticles2 %d\n",GroupCount(ss->startupParticles));
+  fprintf(f,"StartupParticles2 %u\n",(unsigned)GroupCount(ss->startupParticles));
   for (p=Group1st(ss->startupParticles,&ix);p!=NULL;p=Next(&ix))
     fprintf(f,"%s\n",p->name);
 
@@ -256,15 +256,15 @@ int OutputDoc(Doc d,char* fileName) {
   if (f==NULL) return -1;
 
   fprintf(f,"# Output file produced by amds version %g\n",
-            "# within SOLPS-ITER GIT version %s\n\n",
-	  (double)GetVersion()/100,
+	  (double)GetVersion()/100);
+  fprintf(f,"# within SOLPS-ITER GIT version %s\n\n",
           GIT_VERSION);
 
   fprintf(f,"filevers %d\n",OUTPUT_VERSION);
 
   g=GetActiveReactions(d);
 
-  fprintf(f,"reactns %d\n",GroupCount(g));
+  fprintf(f,"reactns %u\n",(unsigned)GroupCount(g));
   for (r=Group1st(g,&ix);r!=NULL;r=Next(&ix))
     fprintf(f,"%s %s %s\n",GetReactionDatabase(r),
 	GetReactionSection(r),GetReactionNumber(r));

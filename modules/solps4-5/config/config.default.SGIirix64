@@ -20,8 +20,8 @@
  endif
  FC = f77
  CPP = /usr/lib/cpp
- CPP4OPTS = -C -P -I$(srcdir) $(EQUIV4)
- CPP5OPTS = -C -P -I$(srcdir) $(EQUIV5)
+ CPP4OPTS = -C -P -I$(SRCDIR) $(EQUIV4)
+ CPP5OPTS = -C -P -I$(SRCDIR) $(EQUIV5)
  BLD = ar rcv
  ifeq ($(locale),acf.nyu.edu)
   LD_NAG = -L${HOME}/lib -lcomplib.sgimath -lblas -lnagsubst
@@ -33,7 +33,7 @@
  ifeq ($(realkind),8)
   LDLIBES = $(LIBB2) $(LD_NAG) $(LD_MSCL)
  endif
- LD = f77
+ LD = ${FC}
 # LDOPTS = -64 -r10000 -Wl,-U
  LDOPTS = -64 -r10000
 

@@ -1,8 +1,9 @@
       subroutine uinptriang(TriMesh)
-       use b2mod_layer
+      use b2mod_types
+      use b2mod_layer
      , , only: ntrack, nalloys
-       use eirmod_extrab25
-     , , only: msrfclsx, mgwtiesx
+      use b2mod_subsys
+      use eirmod_solps
 
 c  version : 01.04.2005 00:51
 
@@ -16,7 +17,6 @@ c***  returns .TRUE. if successful and .FALSE. otherwise
       integer NSS(nsts),nn,i,j,k,l
       logical ex 
       real txmin,txmax,tymin,tymax
-      external subini, subend
     
       call subini ('uinptriang')
       print *
@@ -38,7 +38,7 @@ c*** makes list of polygon indices present in the input data
       nattr=k
 c***  makes sets of elements with certain attribute
 c***  and check if they are closed
-      write(*,*) 'nattr',nattr
+      write(*,*) 'nattr ',nattr
       IF(nattr.GT.0) write(*,*) 'attrib', (attrib(l),l=1,nattr)
       if(nattr.EQ.1.AND.attrib(1).EQ.0) then
        TriMesh=.FALSE.
@@ -63,12 +63,12 @@ c***  and check if they are closed
        ENDIF
 c***   makes checking and outputs NSS indices if necessary
        call uichkchn(chain,nchain,nsts,NSS,nn,attrib(i))
-       write(*,*) 'nn',nn
+       write(*,*) 'nn ',nn
        IF(nn.GT.0)  write(*,*) 'NSS', (NSS(l),l=1,nn)
        if(nn.LT.0) then 
         write(0,*) 'ERROR in uichkchn, nn', nn
         TriMesh=.FALSE.
-        goto 9999
+        call xerrab('Contours did not close. Stopping.')
        end if
 c***   write intermediate arrays for output
        do 26 j=1,nchain

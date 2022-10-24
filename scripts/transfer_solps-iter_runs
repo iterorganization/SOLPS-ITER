@@ -1,0 +1,146 @@
+#!/bin/bash
+###################
+# This script is created by Anil Tyagi (aktyagi@iter-india.org)
+# This script is to transfer a solps-iter run to other machines however should work for other solps versions as well
+#
+echo "Run this script from just one level up of the directory to be transferred"
+echo "##############"
+echo "Enter the name of the directory to be synced:"
+read sync_dir
+echo "Enter client directory where to transfer:"
+read client_dir
+echo "Enter client username:"
+read u_name
+read -s -p "Enter client password:" u_pass
+echo ""
+echo "Enter client IP address:"
+read ip_add
+# create remote directory
+mails5=$(echo $client_dir | tr "/" "\n")
+str5=
+odr5=
+for odr5 in $mails5
+do
+str5="$str5/$odr5"
+#echo $str5
+sshpass -p $u_pass ssh $u_name@$ip_add "(mkdir -p $str5)"
+done
+sshpass -p $u_pass rsync -atv $sync_dir $u_name@$ip_add:$client_dir/.
+sshpass -p $u_pass ssh $u_name@$ip_add mkdir $client_dir/$sync_dir/linked_files
+# get the old username for source file
+ostop=$SOLPSTOP
+ouser=$USER
+echo 'old user name is' $ouser
+# copy the linking files to local directory
+echo "making local directory for copying linking files"
+# copy linked files to linked_files directory
+ls -al $sync_dir | grep '>' | awk '{print($11)}' > source.txt
+file2="source.txt"
+echo "making remote directories"
+while IFS= read -r line;do
+idfr=`echo $line | cut -c1-1`
+if [ "$idfr" = "/" ];then
+sshpass -p $u_pass scp $line $u_name@$ip_add:$client_dir/$sync_dir/linked_files/.
+fi
+done <"$file2"
+echo "All linked files transferred"
+echo $'#!/bin/ksh' >> create.ksh
+echo $'###################' >> create.ksh
+echo $'# This script is created by Anil Tyagi (aktyagi@iter-india.org) on 16-Jan-2019' >> create.ksh
+echo $'# This script fixes the links in the SOLPS run directory' >> create.ksh
+echo $'#' >> create.ksh
+echo $'# get the total line ' >> create.ksh
+echo $'i=`ls -Ral | grep \'>\' | awk \'{print($9)}\' | wc -l`' >> create.ksh
+echo $'echo "total files having soft links in this directory are: $i"' >> create.ksh
+echo $'# get the old username for source file' >> create.ksh
+echo $'ouser='${ouser} >> create.ksh
+echo $'echo "old user name is" $ouser' >> create.ksh
+echo $'# find the current user' >> create.ksh
+echo $'nuser=$USER' >> create.ksh
+echo $'echo "Current user name is" $nuser' >> create.ksh
+echo $'#### section-2 to create local directories if these do not exist' >> create.ksh
+echo $'# find old top directory' >> create.ksh
+echo $'odr=`ls -Ral | grep \'>\' | awk \'{print($11)}\' | grep \'runs\' | tail -1`' >> create.ksh
+echo $'mails=$(echo $odr | tr "/" "\\n")' >> create.ksh
+echo $'ostop='${ostop} >> create.ksh
+echo $'for odr1 in $mails' >> create.ksh
+echo $'do' >> create.ksh
+echo $'if [ "$odr1" != "runs" ]' >> create.ksh
+echo $'then' >> create.ksh
+echo $' str1="$str1/$odr1"' >> create.ksh
+echo $'# echo $str1' >> create.ksh
+echo $' ostop=$str1' >> create.ksh
+echo $'else' >> create.ksh
+echo $' break' >> create.ksh
+echo $'fi' >> create.ksh
+echo $'done' >> create.ksh
+echo $'echo "old top directory is "$ostop' >> create.ksh
+echo $'# find new top directory' >> create.ksh
+echo $'str=`echo $PWD`' >> create.ksh
+echo $'# echo $str' >> create.ksh
+echo $'mails1=$(echo $str | tr "/" "\\n")' >> create.ksh
+echo $'for addr in $mails1' >> create.ksh
+echo $'do' >> create.ksh
+echo $'if [ "$addr" != "runs" ]' >> create.ksh
+echo $'then' >> create.ksh
+echo $' str2="$str2/$addr"' >> create.ksh
+echo $'# echo $str2' >> create.ksh
+echo $' stop=$str2' >> create.ksh
+echo $'else' >> create.ksh
+echo $' echo "Found new top directory"' >> create.ksh
+echo $' echo $stop' >> create.ksh
+echo $'break' >> create.ksh
+echo $'fi' >> create.ksh
+echo $'done' >> create.ksh
+echo $'# create destination file' >> create.ksh
+echo $'ls -Ral | grep \'>\' | awk \'{print($11)}\' | sed "s#$ostop#$stop#" > destination.txt' >> create.ksh
+echo $'# creating directories to copy files for linking' >> create.ksh
+echo $'file1="destination.txt"' >> create.ksh
+echo $'while IFS= read -r line' >> create.ksh
+echo $'do' >> create.ksh
+echo $'idfr=`echo $line | cut -c1-1`' >> create.ksh
+echo $'if [ "$idfr" = "/" ]' >> create.ksh
+echo $'then' >> create.ksh
+echo $' mails2=' >> create.ksh
+echo $' mails2=$(echo $line | sed -e \'s/\\/[^\\/]*$//\'| tr "/" "\\n")' >> create.ksh
+echo $' str3=' >> create.ksh
+echo $' odr2=' >> create.ksh
+echo $' for odr2 in $mails2' >> create.ksh
+echo $' do' >> create.ksh
+echo $' str3="$str3/$odr2"' >> create.ksh
+echo $' mkdir -p $str3' >> create.ksh
+echo $' done' >> create.ksh
+echo $'fnm=${line#"${line%/*}/"}' >> create.ksh
+echo $'# cp linked_files/$fnm $line' >> create.ksh
+echo $'fi' >> create.ksh
+echo $'done <"$file1"' >> create.ksh
+echo $'#### end of section-2' >> create.ksh
+echo $'' >> create.ksh
+echo $'####  section-3 to create linking of sources to local files' >> create.ksh
+echo $'# store the links in the file' >> create.ksh
+echo $'ls -ld * */* */*/* | grep \'>\' | awk \'{print($9)}\' > local.txt' >> create.ksh
+echo $'# store links of the source file' >> create.ksh
+echo $'paste destination.txt local.txt > merged.txt' >> create.ksh
+echo $'file="merged.txt"' >> create.ksh
+echo $'# echo $file' >> create.ksh
+echo $'# add ln -sf in front of each line for execution of linking' >> create.ksh
+echo $'while IFS= read -r line' >> create.ksh
+echo $'do' >> create.ksh
+echo $' echo "ln -sf $line" >> final.txt' >> create.ksh
+echo $'done <"$file"' >> create.ksh
+echo $'# remove local links' >> create.ksh
+echo $'while read -r filename' >> create.ksh
+echo $' do' >> create.ksh
+echo $' echo removing local file $filename' >> create.ksh
+echo $' rm "$filename"' >> create.ksh
+echo $'done <local.txt' >> create.ksh
+echo $'chmod u+x final.txt' >> create.ksh
+echo $'./final.txt' >> create.ksh
+echo $'rm local.txt merged.txt final.txt destination.txt' >> create.ksh
+echo $'echo "############ Links to local files have been set based on original #############"' >> create.ksh
+chmod u+x create.ksh
+sshpass -p $u_pass scp create.ksh $u_name@$ip_add:$client_dir/$sync_dir/.
+rm create.ksh
+sshpass -p $u_pass ssh $u_name@$ip_add "(cd $client_dir/$sync_dir; $client_dir/$sync_dir/create.ksh)"
+sshpass -p $u_pass ssh $u_name@$ip_add "(rm -r $client_dir/$sync_dir/linked_files; rm $client_dir/$sync_dir/create.ksh)"
+rm source.txt

@@ -1,7 +1,7 @@
 import numpy
 
 import matplotlib.pyplot as plt
-import matplotlib.mpl as mpl
+import matplotlib as mpl
 
 def patch(arr, r, z, title=None, rmin=None, rmax=None, zmin=None, zmax=None, fmin=None, fmax=None, vessel=None, flog=None, file=None):
    """ Plots a 2d data field 'arr' on the unstructured mesh specified by
@@ -56,13 +56,13 @@ def patch(arr, r, z, title=None, rmin=None, rmax=None, zmin=None, zmax=None, fmi
    ax1.set_aspect(aspect=1, adjustable='box')
    ax1.set_title(title)
 #   cm = mpl.cm.OrRd
-   cm = mpl.cm.spectral
+   cm = mpl.cm.Spectral
    if (flog is not None):   
       norm = mpl.colors.LogNorm(vmin=fmin, vmax=fmax)
    else:   
       norm = mpl.colors.Normalize(vmin=fmin,vmax=fmax)
    cb = mpl.colorbar.ColorbarBase(ax2, cmap=cm, norm=norm, orientation='vertical')
-   t_arr = cb.to_rgba(arr)[:,:,0:3]
+   t_arr = cb.cmap(norm(arr))[:,:,0:3]
    if (vessel is not None):   
       for i in numpy.arange(0, vessel.shape[0]):
          junk = ax1.plot([vessel[i,0], vessel[i,2]], [vessel[i,1], vessel[i,3]], 'k-')

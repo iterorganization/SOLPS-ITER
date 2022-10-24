@@ -3,21 +3,21 @@ ifndef LD_MSCL
   $(error LD_MSCL not defined)
 endif
 
-FC	     = f90
+FC       = f90
 
 ifdef SOLPS_DEBUG
-FFLAGS	 = -g 
+FFLAGS   = -g
 else
-FFLAGS	 = -O 
+FFLAGS   = -O
 endif
 
 INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
 COMPILE  = ${FC} -c ${FFLAGS}
-CPP	     = /usr/ccs/lib/cpp
+CPP      = /usr/ccs/lib/cpp
 MOD      = mod
 
-LDLIBS 	 = ${LD_MSCL}
-LDEXTRA  = 
+LDLIBS   = ${LD_MSCL} ${LD_NAG}
+LDEXTRA  =
 
 #!!!Local Variables:
 #!!! mode: Makefile

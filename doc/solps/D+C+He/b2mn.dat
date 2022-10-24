@@ -3,8 +3,8 @@
 *b2cmpa  basic parameters
 *b2cmpb  boundary conditions
 *b2cmpt  transport coefficients
-*cflim    cflme    cflmi    cflmv     ...
-  '-1'      0.3     10.0      0.5       0        0        0        0        0
+*cflim     cflme    cflmi    cflmv    cflal    cflab     ...
+  '-1'      0.3     10.0      0.5      0.5      0.5       0        0        0
 *endphy
 'b2mndr_ntim'     '100'
 'b2mndr_dtim'     '1.0e-4'

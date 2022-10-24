@@ -4,24 +4,16 @@ ifndef LD_MSCL
 endif
 
 ifdef USE_MPI
-FC	     = mpif90
+FC       = mpif90
 else
-FC	     = gfortran
+FC       = gfortran
 endif
 
-ifdef SOLPS_DEBUG
-FFLAGS	 = -g -ffpe-trap=denormal
-else
-FFLAGS	 = -O 
+ifndef SOLPS_DEBUG
+FFLAGS   = -O
 endif
 
-INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
-COMPILE  = ${FC} -c ${FFLAGS}
-CPP	     = /lib/cpp -traditional
-MOD      = mod
-
-LDLIBS 	 = ${LD_MSCL}
-LDEXTRA  = 
+CPP      = /lib/cpp -traditional
 
 #!!!Local Variables:
 #!!! mode: Makefile

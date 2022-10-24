@@ -7,7 +7,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function balgrid(comuse,indrad,indpol,axgrid,reverse)
 
-axis(axgrid,'equal');
+axis(axgrid,'image');
 xlabel(axgrid,'R (m)');
 ylabel(axgrid,'Z (m)');
 

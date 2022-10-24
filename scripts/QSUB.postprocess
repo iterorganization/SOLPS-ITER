@@ -5,3 +5,9 @@ echo "This file can be used for post-processing commands after a standalone batc
 echo ""
 echo "Copy this file ( $0 ) to $SOLPSTOP/scripts.local/ and make any modifications you want."
 echo ""
+
+tar_important_files
+
+summarize_run
+
+[ -e run.log ] && gzip -9 -f run.log

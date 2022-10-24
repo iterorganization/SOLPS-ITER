@@ -16,89 +16,50 @@
 # If you have NAG Mark 22 or greater on your system:
 # Add -DNAG22 to SOLPS_CPP
 #
+# If your compiler is compatible with Fortran 2003 features, you can:
+# Add -DF2003 to SOLPS_CPP
+#
 
-MSCL_ROOT   ?=
-H5DIR       ?=
-GR_ROOT     ?= /work/imas/opt/gr/0.0.94
-GLI_HOME    ?=
-NCARG_ROOT  ?=
-NAGDIR      ?= /work/imas/opt/nag/15
-MDSPLUS_DIR ?=
+NODENAME      ?= $(shell echo `hostname`)
+MSCL_ROOT     ?= ${EBROOTMSCL}
+GR_ROOT       ?= ${EBROOTGR}
+GLI_HOME      ?= ${EBROOTGLI}
+NCARG_ROOT    ?=
+NAGDIR        ?= ${EBROOTNAG}
+H5DIR         ?= ${EBROOTHDF5}
+MDSPLUS_DIR   ?=
+ifeq (,$(findstring sdcc-login,$(NODENAME)))
+MPDIR         ?= ${EBROOTIMPI}
+endif
 
 # Variables of linking, using pkg-config
 #
 
-LD_NETCDF  =
-LD_MSCL    = `pkg-config mscl --libs`
-LD_GR      = -L${GR_ROOT}/lib -lgr
-LD_GKS     = -L${GLI_HOME} -lgks -lX11 -lXt
-LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lm -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lz -lpthread -lXrender -lbz2 -lgfortran # for NCARG v6.x.x
-#LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lm                                                                                                          # for NCARG v4.x.x
-LD_NAG     = -L${SOLPSLIB} -lblaslapack
-LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
-LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
-LD_MPI     = -L/work/imas/opt/libibverbs/1.1.4/lib `pkg-config mpich2-ch3 --libs`
+LD_NETCDF      = `nf-config --flibs`
+LD_GR          = -L${GR_ROOT}/lib -lgr
+LD_GKS         = -L${GLI_HOME} -lgks -lgfortran -lX11 -lXt
+ifdef NCARG_ROOT
+LD_NCARG       = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lm -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lz -lpthread -lXrender -lbz2 -lgfortran # for NCARG v6.x.x
+#LD_NCARG      = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lm                                                                                                          # for NCARG v4.x.x
+endif
+LD_NAG         = `pkg-config openblas --libs`
+LD_MSCL        = `pkg-config mscl --libs` -lgfortran
+LD_MDSPLUS     = -L${MDSPLUS_DIR}/lib -lMdsLib_client
+LD_SONNET      = -L${SOLPSLIB} -lsonnet -lstdc++
 
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNO_NAG
+SOLPS_CPP      = -DNO_NAG -DF2003
 B25_DEFINES    = -DNO_21
+CARRE_DEFINES  =
 EIRENE_DEFINES =
-MPI_CPP        = `pkg-config mpich2-ch3 --cflags`
-
-# Autodetected optional features...
-
-# Build with NetCDF tools if available
-ifdef LD_NETCDF
-  SOLPS_CPP   += -DCDF_MOVIE
-else
-  SOLPS_CPP   += -DNO_CDF
+FFLAGSEXTRA    =
+ifneq (,$(findstring hpc-login,$(NODENAME)))
+MPI_CPP        = -I${MPDIR}/include64
 endif
 
-# Build with MDSplus tools if MDSplus is present
-ifdef LD_MDSPLUS
-  SOLPS_CPP   += -DMDSPLUS
-endif
-
-# Build with Catalyst if ParaView is in PATH
-ifdef LD_CATALYST
-  SOLPS_CPP   += -DCATALYST
-endif
-
-# Build with IMAS if imas module is loaded
-ifdef IMAS_PREFIX
-  SOLPS_CPP += -DIMAS
-  LD_UAL     = `pkg-config imas-lowlevel imas-pgi --libs`
-  export LD_UAL
-endif
-
-#
-# Export for use in sub-makefiles
-#
-
-export NCDIR
-export MSCL_ROOT
-export H5DIR
-export GR_ROOT
-export GLI_HOME
-export NCARG_ROOT
-export NAGDIR
-export MDSPLUS_DIR
-
-export LD_NETCDF
-export LD_MSCL
-export LD_GR
-export LD_GKS
-export LD_NCARG
-export LD_NAG
-export LD_MDSPLUS
-export LD_SONNET
-export LD_MPI
-
-export B25_DEFINES
-export EIRENE_DEFINES
-export MPI_CPP
+export NODENAME
 
 #!!!Local Variables:
 #!!! mode: Makefile

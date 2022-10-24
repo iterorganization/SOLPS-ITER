@@ -9,23 +9,25 @@ c***  mm  is the array containing the corresponding element numbers.
 c***      the valid elements of mm must be sorted in ascending order
 c***      and followed by 0 if there are less than n of them.
 c======================================================================
-      integer mm(*)
+      implicit none
+      integer, intent(in) :: lun,ic,mm(*),n
+      integer i,j,k,kk,m,mb,me
       character uss*68,uhd*4,utr*16
       logical udbg
 c======================================================================
 c<<<
-c      if(mm(1).gt.0) print *,'uichwr: start. n=',n
 #ifdef DBG
-       udbg=.true.
+      if(mm(1).gt.0) print *,'uichwr: start. n=',n
+      udbg=.true.
 #else
-       udbg=.false.
+      udbg=.false.
 #endif
       do i=1,n
         if(udbg) print *,mm(i)
         udbg = udbg .and. mm(i).gt.0
       end do
 c>>>
-      write(uhd,'(2hCH,i1)') ic
+      write(uhd,'(a2,i1)') 'CH',ic
       uss=' '
 c
       k=0
@@ -42,7 +44,7 @@ c
           if(i.ne.n) go to 100
         end if
  10     if(mb.ne.0) then
-          write(utr,'(i4,1h/,i4)') mb,me
+          write(utr,'(i4,a1,i4)') mb,'/',me
           mb=m
           me=m
           call lefta(utr,16,j)
@@ -62,4 +64,5 @@ c
         if(m.eq.0) return
  100  continue
 c======================================================================
-      end
+      return
+      end subroutine uichwr

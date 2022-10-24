@@ -11,21 +11,27 @@ else if (-s $1 || -s $1.gz) then
   set FILE=$1
 else if (-s $SOLPSTOP/data.local/meshes/$1 || -s $SOLPSTOP/data.local/meshes/$1.gz) then
   set FILE=$SOLPSTOP/data.local/meshes/$1
-else if (-s $SOLPSTOP/data/meshes/$1 || -s $SOLPSTOP/data/meshes/$1.gz) then
-  set FILE=$SOLPSTOP/data/meshes/$1
+else if (-s $SOLPSTOP/data.local/meshes/$DEVICE/$1 || -s $SOLPSTOP/data.local/meshes/$DEVICE/$1.gz) then
+  set FILE=$SOLPSTOP/data.local/meshes/$DEVICE/$1
+else if (-s $SOLPSTOP/modules/Carre/meshes/$DEVICE/$1 || -s $SOLPSTOP/modules/Carre/meshes/$DEVICE/$1.gz) then
+  set FILE=$SOLPSTOP/modules/Carre/meshes/$DEVICE/$1
 else
   echo Cannot find $1
   exit
 endif
 
 if ( "$2" == "") then
-  set MESH="/dev/null"
+  set MESH="mesh.extra"
 else if (-s $2 ) then
   set MESH=$2
 else if (-s $SOLPSTOP/data.local/mesh.extra/$2 ) then
   set MESH=$SOLPSTOP/data.local/mesh.extra/$2
-else if (-s $SOLPSTOP/data/mesh.extra/$2 ) then
-  set MESH=$SOLPSTOP/data/mesh.extra/$2
+else if (-s $SOLPSTOP/data.local/mesh.extra/$DEVICE/$2 ) then
+  set MESH=$SOLPSTOP/data.local/mesh.extra/$DEVICE/$2
+else
+  set MESH="/dev/null"
+endif
+if (-s $MESH) then
 else
   set MESH="/dev/null"
 endif
@@ -34,6 +40,9 @@ awk.mesh $MESH >! /tmp/tmp.$USER.$$.mesh.extra
 
 setenv GNUPLOT_POSTSCRIPT_OPTIONS "portrait 20 ; set size ratio -1"
 setenv PRINT_PLOT $1.ps
+setenv GNUPLOT_EXTRA /tmp/tmp.$USER.$$.gnuplot.extra
+echo 'set xlabel "R (m)"' >! $GNUPLOT_EXTRA
+echo 'set ylabel "Z (m)"' >> $GNUPLOT_EXTRA
 
 if (-X zcat) then
   set ZCAT="zcat --force"
@@ -43,4 +52,4 @@ endif
 
 $ZCAT $FILE | \
   awk 'NR>1{printf "%s %s\n%s %s\n%s %s\n%s %s\n%s %s\n\n",$5,$6,$7,$8,$11,$12,$9,$10,$5,$6}' | cat - /tmp/tmp.$USER.$$.mesh.extra | xyplot
-/bin/rm /tmp/tmp.$USER.$$.mesh.extra
+/bin/rm /tmp/tmp.$USER.$$.mesh.extra $GNUPLOT_EXTRA

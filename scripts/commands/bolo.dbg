@@ -1,48 +1,20 @@
 ! Calculate the bolometer radiation (per cell)
-rqae                        ! electron cooling rate
+
+b2ra                        ! radiation rate from B2.5 species
 rlcl m* 0 0 sumz
-dup pvol 'electron cooling rate [+]' extl surf drop
-dup sumx sumy 0 0 'INTEGRAL BOLOMETER POWER: rqae' outp drop
-rsan pot* m* qe rm*         ! less increase of potential energy
+dup 'line radiation from B2.5 [+]' extl surf drop
+dup sumx sumy 0 0 'INTEGRAL BOLOMETER POWER: b2ra' outp drop
+
+b2br                        ! bremsstrahlung
 rlcl m* 0 0 sumz
-dup pvol 'increase of potential energy due to ionization [-]' extl surf drop
-dup sumx sumy 0 0 'INTEGRAL BOLOMETER POWER: rsan' outp drop
-m-
-dup sumx sumy 0 0 'INTEGRAL BOLOMETER POWER: cumulative' outp drop
-rran poti m* qe rm*         ! plus decrease of potential energy
-rlcl m* 0 0 sumz
-dup pvol 'decrease of potential energy due to recombination [+]' extl surf drop
-dup sumx sumy 0 0 'INTEGRAL BOLOMETER POWER: rran' outp drop
+dup 'bremsstrahlung [+]' extl surf drop
+dup sumx sumy 0 0 'INTEGRAL BOLOMETER POWER: b2br' outp drop
 m+
-dup sumx sumy 0 0 'INTEGRAL BOLOMETER POWER: cumulative' outp drop
-rsai                        ! less energy into ions from ionization
+
+neutrad                     ! radiation from Eirene atoms
 rlcl m* 0 0 sumz
-dup pvol 'energy into ions from ionization [-]' extl surf drop
-dup sumx sumy 0 0 'INTEGRAL BOLOMETER POWER: rsai' outp drop
-m-
-dup sumx sumy 0 0 'INTEGRAL BOLOMETER POWER: cumulative' outp drop
-rrai                        ! less energy into ions from recombination
-rlcl m* 0 0 sumz
-dup pvol 'energy into ions from recombination [-]' extl surf drop
-dup sumx sumy 0 0 'INTEGRAL BOLOMETER POWER: rrai' outp drop
-m-
-dup sumx sumy 0 0 'INTEGRAL BOLOMETER POWER: cumulative' outp drop
-brhe                        ! add the loss from Eirene
-rlcl m* 0 0 sumz
-dup pvol 'electron energy loss due to interaction with recycling neutrals [-]' extl surf drop
-dup sumx sumy 0 0 'INTEGRAL BOLOMETER POWER: brhe' outp drop
-m-
-dup sumx sumy 0 0 'INTEGRAL BOLOMETER POWER: cumulative' outp drop
-brna poti m* qe rm*         ! less increase of potential energy
-rlcl m* 0 0 sumz
-dup pvol 'increase of potential energy arising from ionization of recycling neutrals [-]' extl surf drop
-dup sumx sumy 0 0 'INTEGRAL BOLOMETER POWER: brna' outp drop
-m-
-dup sumx sumy 0 0 'INTEGRAL BOLOMETER POWER: cumulative' outp drop
-brhi                        ! less the loss to the ions
-rlcl m* 0 0 sumz
-dup pvol 'ion energy loss due to interaction with recycling neutrals [-]' extl surf drop
-dup sumx sumy 0 0 'INTEGRAL BOLOMETER POWER: brhi' outp drop
-m-
-dup sumx sumy 0 0 'INTEGRAL BOLOMETER POWER: total' outp drop
+dup 'radiation from atoms [+]' extl surf drop
+dup sumx sumy 0 0 'INTEGRAL BOLOMETER POWER: neutrad' outp drop
+m+
+
 'Bolometer radiation loss (W)' extl

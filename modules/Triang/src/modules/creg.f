@@ -8,13 +8,12 @@ C---- DELPOIN : MAXIMAL LENGTH BETWEEN OF A FRONTIER PART (CAN BE
 C----           CHANGED BY REGION)
 C---- DELX : WIDTH OF A REGION
 C---- DELY : HEIGHT OF A REGION
-C---- IREG : LOOP OVER REGIONS
 C---- NREG : TOTAL NUMBER OF REGIONS
       double precision, allocatable, public, save :: region(:,:)
 
       DOUBLE PRECISION, public, save :: XADEL,XEDEL,YADEL,YEDEL,
      >                 DELPOIN,DELX,DELY
-      INTEGER, public, save :: IREG,NREG
+      INTEGER, public, save :: NREG
 
       contains
       subroutine realloc_creg(kennung,incr)

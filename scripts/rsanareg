@@ -46,6 +46,9 @@ switch ($text)
   case "b2stbm_sna_reg":
     set label="particle loss (-) or source (+) rate from additional sources"
     breaksw
+  case "b2sext_sna_reg":
+    set label="particle loss (-) or source (+) rate from external sources"
+    breaksw
   case "b2stbr_smo_reg":
     set label="momentum loss (-) or source (+) rate from recycling"
     breaksw
@@ -54,6 +57,9 @@ switch ($text)
     breaksw
   case "b2stbm_smo_reg":
     set label="momentum loss (-) or source (+) rate from additional sources"
+    breaksw
+  case "b2sext_smo_reg":
+    set label="momentum loss (-) or source (+) rate from external sources"
     breaksw
   case "resco_reg":
     set label="continuity residual"
@@ -65,7 +71,7 @@ switch ($text)
     echo invalid quantity $text
     exit
 endsw
-set nnreg=`pipe_run.log | grep ^nnreg | head -1`
+set nnreg=`pipe_run.log | grep -a ^nnreg | head -1`
 set vreg=$nnreg[2]
 set xreg=$nnreg[3]
 set yreg=$nnreg[4]

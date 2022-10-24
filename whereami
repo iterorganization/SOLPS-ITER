@@ -2,11 +2,14 @@
 set machine_location=`hostname`
 set fullhost=`nslookup $machine_location | grep -m 1 Name | awk '/Name:/{print $2}' | tr 'A-Z' 'a-z'`
 if ("$fullhost" == "") then
+  set fullhost=`nslookup ${machine_location}i | grep -m 1 Name | awk '/Name:/{print $2}' | tr 'A-Z' 'a-z'`
+endif
+if ("$fullhost" == "") then
   set fullhost=`hostname -f`
 endif
 # special handling of hostnames head*, node* that keeps mephi_check working
-set mephi_check=`echo $machine_location | cut -c1-4` 
-if ("$mephi_check" == "head" || "$mephi_check" == "node") then 
+set mephi_check=`echo $machine_location | cut -c1-4`
+if ("$mephi_check" == "head" || "$mephi_check" == "node") then
   switch ($fullhost)
   case "*.cm.cluster":
     breaksw
@@ -37,6 +40,9 @@ case "*.ipp.mpg.de":
 case "*.rzg.mpg.de":
   echo IPP
   breaksw
+case "*.mpcdf.mpg.de":
+  echo MPCDF
+  breaksw
 case "*.ipp-hgw.mpg.de":
   echo IPP-HGW
   breaksw
@@ -48,6 +54,9 @@ case "*.ccfe.ac.uk":
 case "*.cumulus.hpc.l":
   echo CCFE
   breaksw
+case "*.data.cluster":
+  echo "CCFE-csd3"
+  breaksw
 case "*.jet.uk":
 case "freia*.hpc.l":
   echo JET
@@ -56,6 +65,10 @@ case "*.mech.kuleuven.be":
 case "*.icts.leuven.vsc":
 case "*.hpc.kuleuven.be":
   echo LEUVEN
+  breaksw
+case "*.snellius.surf.nl":
+case "*.bullx":
+  echo SURFSARA
   breaksw
 case "*.pppl.gov":
   echo PPPL
@@ -105,6 +118,9 @@ case "PLASMATHEORY08":
   breaksw
 case "*.mephi.ru":
   echo MEPHI
+  breaksw
+case "*.uni-lj.si":
+  echo UL
   breaksw
 case "*.cn":
 case "*.hk":
@@ -171,6 +187,7 @@ case "*.jp":
 case "*.kr":
   echo KR_UNKNOWN
   breaksw
+case "*.rf":
 case "*.ru":
 case "*.su:"
   echo RF_UNKNOWN

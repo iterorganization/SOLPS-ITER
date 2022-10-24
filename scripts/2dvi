@@ -21,7 +21,7 @@ mkdir -p $LK || {
 
 B="'$LL' extl"
 BBB="comp"
-ST="lbof sep clvl vesl phys 1.2 lbsz"
+ST="lbof sep clvl vesl 1.2 lbsz"
 
 rm -f gmeta $LK/contr.b2p ${LK}/${L}.ps.legend ${LK}/b2p.log b2plot.ps 2>/dev/null
 ic=0
@@ -36,38 +36,31 @@ unset ss sf kw
 echo "phys $B" >> $LK/contr.b2p
 
 let "im=im+1"
-echo "$B
-      te -18 '$LK/te$L.txt' user drop" >> $LK/contr.b2p
+echo "te -18 '$LK/te$L.txt' user drop" >> $LK/contr.b2p
 echo -e "te\t$im" >> ${LK}/${L}.ps.legend
 
 let "im=im+1"
-echo "$B
-      ne -18 '$LK/ne$L.txt' user drop" >> $LK/contr.b2p
+echo "ne -18 '$LK/ne$L.txt' user drop" >> $LK/contr.b2p
 echo -e "ne\t$im" >> ${LK}/${L}.ps.legend
 
 let "im=im+1"
-echo "$B
-      ti -18 '$LK/ti$L.txt' user drop" >> $LK/contr.b2p
+echo "ti -18 '$LK/ti$L.txt' user drop" >> $LK/contr.b2p
 echo -e "ti\t$im" >> ${LK}/${L}.ps.legend
 
 let "im=im+1"
-echo "$B
-      ni -18 '$LK/ni$L.txt' user drop" >> $LK/contr.b2p
+echo "ni -18 '$LK/ni$L.txt' user drop" >> $LK/contr.b2p
 echo -e "ni\t$im" >> ${LK}/${L}.ps.legend
 
 let "im=im+1"
-echo "$B
-      up -18 '$LK/up$L.txt' user drop" >> $LK/contr.b2p
+echo "up -18 '$LK/up$L.txt' user drop" >> $LK/contr.b2p
 echo -e "up\t$im" >> ${LK}/${L}.ps.legend
 
 let "im=im+1"
-echo "$B
-      dab2 -18 '$LK/na$L.txt' user drop" >> $LK/contr.b2p
+echo "dab2 -18 '$LK/na$L.txt' user drop" >> $LK/contr.b2p
 echo -e "na\t$im" >> ${LK}/${L}.ps.legend
 
 let "im=im+1"
-echo "$B
-      dmb2 -18 '$LK/nm$L.txt' user drop" >> $LK/contr.b2p
+echo "dmb2 -18 '$LK/nm$L.txt' user drop" >> $LK/contr.b2p
 echo -e "nm\t$im" >> ${LK}/${L}.ps.legend
 
 # Produce the plots from the prepared control files

@@ -1,9 +1,10 @@
 #! /bin/tcsh -f
 
 set debug=""
+set REDEFINES=""
 argloop:
   if ("X${1}X" == "X-nX") then
-    set debug="-n"
+    set debug="$debug -n"
     shift
     goto argloop
   endif
@@ -12,14 +13,30 @@ argloop:
     setenv STAND_ALONE yes
     goto argloop
   endif
+  if ("X${1}X" == "X-rX") then
+    shift
+    set REDEFINES="$REDEFINES $1"
+    shift
+    goto argloop
+  endif
   if ("X${1}X" == "X-dX") then
     shift
+    if (! $?SOLPS_DEBUG) then
+      source $SOLPSTOP/SETUP/debug
+      set DEBUG_SET=yes
+    endif
     if ($1 == "") then
       set debug="$debug TIME=$DBX"
     else
-      set debug="$debug TIME=$1"
+      set next=$1
+      set begin_next=`printf '%s' $next | cut -c1`
+      if ("X${begin_next}X" == "X-X") then
+        set debug="$debug TIME=$DBX"
+      else
+        set debug="$debug TIME=$1"
+        shift
+      endif
     endif
-    shift
     goto argloop
   endif
 
@@ -35,7 +52,7 @@ if (! -s mesh.extra) then
  (cd .. ; ln -s ../mesh.extra .)
 endif
 if (! -s AMJUEL) ln -s $SOLPSTOP/modules/Eirene/Database/AMJUEL .
-${MAKE} $debug -f $SOLPSTOP/runs/Makefile.plot b2md.prt > b2md.log
+${MAKE} $debug $REDEFINES -f $SOLPSTOP/runs/Makefile.plot b2md.prt > b2md.log
 if (-s shotnumber.history) then
   cat shotnumber.history
   rm -f .save_mds .resave_mds

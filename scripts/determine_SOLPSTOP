@@ -1,11 +1,32 @@
 #! /bin/tcsh -f
 # author: David Coster (2015-06-25)
+# modified by Xavier Bonnin (2021-10-07)
 #
 # return a value of SOLPSTOP by taking the first of
-#  climbing the tree looking for SOLPSTOP and returning the contents
-#  returning the value of the environment variable $SOLPSTOP
-#  attempting to strip off the elements from $PWD
+#  1. returning the value of the environment variable $SOLPSTOP_FORCE (if it points to a valid directory)
+#  2. climbing the tree looking for SOLPSTOP and returning the contents
+#  3. returning the value of the environment variable $SOLPSTOP
+#  4. attempting to strip off the elements from $PWD
 #
 
-set S=`climb_and_look_for SOLPSTOP`
-echo `[ -e $S ] && cat $S || [ ${?SOLPSTOP} == 1 ] && echo $SOLPSTOP || echo $PWD | sed 's:/src/.*::'`
+setenv S ""
+set solpstop=`climb_and_look_for SOLPSTOP`
+
+if ($?SOLPSTOP_FORCE) then
+  [ -d $SOLPSTOP_FORCE ] && setenv S $SOLPSTOP_FORCE
+endif
+if ("X${S}X" == "XX") then
+  [ -s $solpstop ] && setenv S `cat $solpstop`
+endif
+if ("X${S}X" == "XX") then
+   if ($?SOLPSTOP) then
+     [ -d $SOLPSTOP ] && setenv S $SOLPSTOP
+   endif
+endif
+if ("X${S}X" == "XX") then
+   setenv S `echo $PWD | sed 's:/runs/.*::'`
+endif
+
+echo $S
+
+unsetenv S
