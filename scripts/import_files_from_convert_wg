@@ -36,4 +36,5 @@
   [ -s ../convert/b2.numerics.parameters ] && cp -uv ../convert/b2.numerics.parameters .
   [ -s ../convert/b2.user.parameters ] && cp -uv ../convert/b2.user.parameters .
   [ -s ../convert/b2.transport.parameters ] && cp -uv ../convert/b2.transport.parameters .
+  [ -s ../convert/b2mn.dat ] && cp -uv ../convert/b2mn.dat .
   touch b2fstati
