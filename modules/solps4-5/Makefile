@@ -372,7 +372,7 @@ ${OBJDIR}/b2_4to5.o: ${OBJDIR}/eirmod_parmmod.${MOD} ${OBJDIR}/braeir.${MOD} ${O
 
 ${OBJDIR}/b2ag_parameters.o: ${OBJDIR}/b2mod_ipmain.${MOD}
 
-${OBJDIR}/b2mod_b2_to_astra.o: ${OBJDIR}/eirmod_extrab25.${MOD} 
+${OBJDIR}/b2mod_b2_to_astra.o: ${OBJDIR}/eirdiag.${MOD}
 
 ${OBJDIR}/b2mod_boundary_namelist.o: ${OBJDIR}/b2mod_eirbra.${MOD}
 
