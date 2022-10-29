@@ -214,7 +214,7 @@ $(target_ai) : b2ag.dat b2ai.dat b2fgmtry
 	cd b2ai.exe.dir ; ${TIME} ${B2OBJ}/b2ai.exe ${RUN_OPTIONS} ; mv $(target_ai) .. ; rm -f $(notdir $^) >& /dev/null
 	-rmdir b2ai.exe.dir
 
-$(target_ar) : b2ar.dat stra.dat weis.dat b2fpardf b2fgmtry
+$(target_ar) : b2ar.dat stra.dat weis.dat b2fpardf b2fgmtry AMJUEL HYDHEL
 	rm -rf b2ar.exe.dir >& /dev/null ; mkdir b2ar.exe.dir ; cp $^ b2ar.exe.dir
 	rm -f $(target_ar)
 	cd b2ar.exe.dir ; ${TIME} ${B2OBJ}/b2ar.exe ${RUN_OPTIONS} ; mv $(target_ar) .. ; rm -f $(notdir $^) >& /dev/null
@@ -866,6 +866,9 @@ weis.dat :
 
 AMJUEL:
 	ln -sf ${SOLPSTOP}/modules/Eirene/Database/AMJUEL .
+
+HYDHEL:
+	ln -sf ${SOLPSTOP}/modules/Eirene/Database/HYDHEL .
 
 $(savefiles):
 	touch $(shell echo ${PLASMASTATE} | sed -e 's:plasmastate:b2.dummy_save.parameters:')

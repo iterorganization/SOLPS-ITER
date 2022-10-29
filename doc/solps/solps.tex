@@ -2225,6 +2225,12 @@ data are stored in the {\tt weis.dat}\index{weis.dat} file which should be prese
 {\tt baserun} directory where {\tt b2ar} is run. When running {\tt b2ar.dat} using the
 dedicated {\tt Makefile}, this is automatically done.
 
+Another option allows for the user to request specific rates using reaction cards from the {\tt AMJUEL} and {\tt HYDHEL} database files. To be used, one must set {\tt b2ardr\_no\_weisheit} to {\tt 1} and {\tt b2ardr\_amjhydhel} to {\tt 1}. An example of such a file is provided below:
+
+\VerbatimInput[fontsize=\footnotesize]{D/b2ar_AFN.dat}
+
+Note that the headers must contain the exact text shown, including the capitalization. The reaction list order must be the same as in the example and both the ionization and recombination rates must include two reaction cards, one for the particle reaction rate, followed by a second one for the associated electron heat loss rate.
+
 \begin{sloppypar}
 Supplemental information on atomic physics rates can be found in the file
 {\tt \$\{SOLPSTOP\}/doc\allowbreak/SOLPS\_2002\_Course\allowbreak/atomic\_physics.pdf}.
@@ -18436,6 +18442,7 @@ PSR & modules/b2mod\_elements.F \\
 PSR & modules/b2mod\_sputter.F \\
 SOLPS4\_3 & modules/b2mod\_b2\_to\_astra.F \\
 SOLPS4\_3 & modules/b2mod\_balance.F \\
+SOLPS4\_3 & modules/b2mod\_cdf.F90 \\
 SOLPS4\_3 & modules/b2mod\_diag.F \\
 SOLPS4\_3 & modules/b2mod\_mwti.F90 \\
 SOLPS4\_3 & modules/b2mod\_neutrals\_namelist.F \\
