@@ -12,47 +12,48 @@
       use b2mod_residuals
       use b2mod_transport
       use b2mod_constants
+     , , only : mp
       use b2mod_sources
       use b2mod_anomalous_transport
       use b2mod_neutrals_namelist
+     , , only : nstraid
       use b2mod_neutr_src_scaling
       use b2mod_version
       use b2_4to5
       use b2mod_b2cmpa
+     , , only : am, zamin, zamax, zn
       use b2mod_b2cmpb
       use b2mod_b2cmpt
       use b2mod_b2cmfs
       use parmmod
-      use ccoupl
-      use ctrcei
-      use cgeom
-      use csdvi
-      use clogau
-      use cpolyg
-      use cadgeo
-      use comusr
-     , , only: alloc_comusr, eirene96
-      use cplot
-      use cai
-      use cestim
-      use comprt
-      use cinit
-      use cupd
-      use cgrid
-      use cspez
-      use czt1
-      use ctext
-      use ctetra
-      use cpes
-      use comsou
-      use comspl
-      use clgin
-      use comxs
-      use comnnl
-      use ctrig
-      use braeir
-      use eirdiag
-     , ,only: alloc_eirdiag
+      use ccoupl, only : alloc_ccoupl
+      use ctrcei, only : alloc_ctrcei
+      use cgeom, only : alloc_cgeom
+      use csdvi, only : alloc_csdvi
+      use clogau, only : alloc_clogau
+      use cpolyg, only : alloc_cpolyg
+      use cadgeo, only : alloc_cadgeo
+      use comusr, only : alloc_comusr, eirene96
+      use cplot, only : alloc_cplot
+      use cai, only : alloc_cai
+      use cestim, only : alloc_cestim
+      use comprt, only : alloc_comprt
+      use cinit, only : alloc_cinit
+      use cupd, only : alloc_cupd
+      use cgrid, only : alloc_cgrid
+      use cspez, only : alloc_cspez
+      use czt1, only : alloc_czt1
+      use ctext, only : alloc_ctext
+      use ctetra, only : alloc_ctetra
+      use cpes, only : alloc_cpes, nprs, my_pe
+      use comsou, only : alloc_comsou
+      use comspl, only : alloc_comspl
+      use clgin, only : alloc_clgin
+      use comxs, only : alloc_comxs
+      use comnnl, only : alloc_comnnl
+      use ctrig, only : alloc_ctrig
+      use braeir, only : alloc_braeir
+      use eirdiag, only : alloc_eirdiag
       implicit none
 #     include "DIMENSIONS.F"
 *   ..common blocks
@@ -199,7 +200,7 @@ c
         CALL ALLOC_CLOGAU
         CALL ALLOC_COMPRT
         CALL ALLOC_CESTIM(1)  !VKMPI
-        CALL ALLOC_COMUSR(1) 
+        CALL ALLOC_COMUSR(1)
         CALL ALLOC_CADGEO
         CALL ALLOC_CAI
 !pb      CALL ALLOC_CGRPTL
@@ -450,7 +451,8 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
       call cfwuch (nout(2), 120, lblmn, 'label')
       call b2wuzd (nout(2), newversion, ns, zamin, zamax, zn, am)
 *   ..write converted initial state file
-      call b2wups (nout(2), nx, ny, ns, ne, na, ua, uadia, te, ti, po,
+      call b2wups (nout(2), nx, ny, ns,
+     &  ne, na, ua, uadia, te, ti, po,
      &  fna, fhe, fhi, fch, fch_32, fch_52, fch_p, kinrgy,
      &  fna_mdf, fhe_mdf, fhi_mdf, fna_fcor, fna_nodrift, fna_he,
      &  fnaPSch, fhePSch, fhiPSch, fna_eir, fne_eir, fhe_eir, fhi_eir,
