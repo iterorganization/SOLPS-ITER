@@ -684,12 +684,12 @@ cxpb
 
       integer nx, ny, ns
       character*120 lblgm
-      integer i,j,k,m,n,is,ic,ix,iy
+      integer i,j,k,m,n,is,ic,ix,iy,n2
       integer ixl,ixr,ireg
       integer, allocatable :: zone(:)
 
       external xertst
-      external b2xpne, b2xpni, b2xppb, b2xpfe, b2xpfi, b2agmt
+      external b2xpne_st, b2xpni, b2xppb, b2xpfe_st, b2xpfi_st, b2agmt
       real (kind=R8) :: rratio
       external rratio
 
@@ -697,6 +697,7 @@ cxpb
 
       nx = nx_4
       ny = ny_4
+      n2 = (nx+2)*(ny+2)
       ns = ns_4 + nspecies_4
       nspecies = nspecies_4
 
@@ -972,10 +973,10 @@ c Compute geometrical quantities
       call get_jsep(nx, ny, jxi, jxa, jsep)
 
 c Fill out b2mod_plasma data
-      call b2xpne(nx, ny, ns, rza, na, ne_ext, ne)
-      call b2xpne(nx, ny, ns, rz2, na, ne_ext, ne2)
-      call b2xpni(nx, ny, ns, na, ni)
-      call b2xppb(nx, ny, rza(-1,-1,1), na(-1,-1,1), te, ti, pb)
+      call b2xpne_st(nx, ny, ns, rza, na, ne_ext, ne)
+      call b2xpne_st(nx, ny, ns, rz2, na, ne_ext, ne2)
+      call b2xpni(n2, ns, na, ni)
+      call b2xppb(n2, rza(-1,-1,1), na(-1,-1,1), te, ti, ti, 1, pb)
       fhe0 = fhe
       fhep = fhe
       fhet = fhe
@@ -1006,16 +1007,16 @@ c Fill out b2mod_plasma data
       fch_32(:,:,1,1) = 0.0_R8
       fch_52(:,:,0,0) = 0.0_R8
       fch_52(:,:,1,1) = fch(:,:,1,1)
-      call b2xpfi(nx, ny, ns, fna, fni)
-      call b2xpfi(nx, ny, ns, fna_32, fni_32)
-      call b2xpfi(nx, ny, ns, fna_52, fni_52)
-      call b2xpfe(nx, ny, ns, ns_ext, qe, rza, za_ext,
+      call b2xpfi_st(nx, ny, ns, fna, fni)
+      call b2xpfi_st(nx, ny, ns, fna_32, fni_32)
+      call b2xpfi_st(nx, ny, ns, fna_52, fni_52)
+      call b2xpfe_st(nx, ny, ns, ns_ext, qe, rza, za_ext,
      $     fna, fa_ext, fch, fne)
-      call b2xpfe(nx, ny, ns, ns_ext, qe, rza, za_ext,
+      call b2xpfe_st(nx, ny, ns, ns_ext, qe, rza, za_ext,
      $     fna_32, fa_ext, fch_32, fne_32)
-      call b2xpfe(nx, ny, ns, ns_ext, qe, rza, za_ext,
+      call b2xpfe_st(nx, ny, ns, ns_ext, qe, rza, za_ext,
      $     fna_52, fa_ext, fch_52, fne_52)
-      call b2xpfe(nx, ny, ns, ns_ext, qe, rza, za_ext,
+      call b2xpfe_st(nx, ny, ns, ns_ext, qe, rza, za_ext,
      $     fna_eir, fa_ext, fch, fne_eir)
       vaecrb = 0.0_R8
       veecrb = 0.0_R8
