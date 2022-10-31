@@ -20,7 +20,7 @@ LDLIBES = ${LD_NAG} ${LD_MSCL}
 
 DBLFC = ${FC}
 LD = ${FC}
-LDOPTS = 
+LDOPTS =
 
 # LDEXTRA  = env.o
 

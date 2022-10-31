@@ -147,15 +147,15 @@ MODOBJS = ${MODULES:%.o=${OBJDIR}/%.o}
 SB4OBJS = ${SOURCB4:%.o=${OBJDIR}/%.o}
 SE4OBJS = ${SOURCE4:%.o=${OBJDIR}/%.o}
 SR5OBJS = ${SOURCE5:%.o=${OBJDIR}/%.o}
-ALLOBJS = ${OBJS:%.o=${OBJDIR}/%.o}
-FFLIST  = ${shell echo ${SRCDIR}/*/*.H ${SRCDIR}/*.F ${SRCDIR}/solps5/*.F ${SRCDIR}/solps5/*.F90 ${SRCDIR}/B2.5_modules/*.F ${SRCDIR}/solps4_B2/*.F}
+ALLOBJS = ${FOBJS:%.o=${OBJDIR}/%.o} ${F90OBJS:%.o=${OBJDIR}/%.o}
+FFLIST  = ${shell echo ${SRCDIR}/*/*.H ${SRCDIR}/*.F ${SRCDIR}/solps5/*.F ${SRCDIR}/solps5/*.F90 ${SRCDIR}/B2.5_modules/*.F ${SRCDIR}/B2.5_modules/*.F90 ${SRCDIR}/solps4_B2/*.F}
 ifeq ($(shell [ -d ${SRC4LOCAL} ] && echo yes || echo no ),yes)
 FFLIST  += ${shell echo ${SRC4LOCAL}/*.F}
 endif
 ifeq ($(shell [ -d ${SRC5LOCAL} ] && echo yes || echo no ),yes)
 FFLIST  += ${shell echo ${SRC5LOCAL}/*.F}
 endif
-MODLIST = ${shell echo ${SRCDIR}/B2.5_modules/*.F ${SRCDIR}/b2_4to5.F ${SRCDIR}/B2.5_modules/*.F90 ${SRCDIR}/solps5/*.F90 ${SRCDIR}/solps5/b2mod_*.F}
+MODLIST = ${shell echo ${SRCDIR}/B2.5_modules/*.F ${SRCDIR}/b2_4to5.F ${SRCDIR}/B2.5_modules/*.F90 ${SRCDIR}/solps5/*.F90 ${SRCDIR}/solps5/b2mod_*.F ${SRCDIR}/solps5/eirmod_*.F}
 
 EXELIST = ${patsubst %.exe, %.o, ${PROG_XR}}
 EXCLUDELIST = ${patsubst %.o, %\\.o, ${EXELIST}}
@@ -173,8 +173,8 @@ DEFAULT: ${XREXE}
 
 b2sxdr: ${XREXE}
 
-${XREXE}: ${XROBJ} ${XREXTRA} ${OBJDIR}/libb2_solps5.a ${OBJDIR}/libb2_solps4.a ${OBJDIR}/eirmod_solps.o ${MNEXTRA} ${MAKES}
-	${LD} ${LDOPTS} ${XROBJ} ${XREXTRA} ${OBJDIR}/libb2_solps5.a ${OBJDIR}/libb2_solps4.a ${OBJDIR}/eirmod_solps.o ${MNEXTRA} -o $@ ${LDLIBES} ${LCPP} ${LDOPTSend}
+${XREXE}: ${XROBJ} ${XREXTRA} ${OBJDIR}/libb2_solps5.a ${OBJDIR}/libb2_solps4.a ${MNEXTRA} ${MAKES}
+	${LD} ${LDOPTS} ${XROBJ} ${XREXTRA} ${OBJDIR}/libb2_solps5.a ${OBJDIR}/libb2_solps4.a ${MNEXTRA} -o $@ ${LDLIBES} ${LCPP} ${LDOPTSend}
 
 ${OBJDIR}/allocate_modules.o: ${OBJDIR}/braeir.${MOD} ${OBJDIR}/cadgeo.${MOD} ${OBJDIR}/cai.${MOD} ${OBJDIR}/ccflux.${MOD} ${OBJDIR}/ccona.${MOD} ${OBJDIR}/cestim.${MOD} ${OBJDIR}/cgeom.${MOD} ${OBJDIR}/clast.${MOD} ${OBJDIR}/clena.${MOD} ${OBJDIR}/clogau.${MOD} ${OBJDIR}/comnnl.${MOD} ${OBJDIR}/comspl.${MOD} ${OBJDIR}/comusr.${MOD} ${OBJDIR}/comxs.${MOD} ${OBJDIR}/coutau.${MOD} ${OBJDIR}/cpes.${MOD} ${OBJDIR}/cplot.${MOD} ${OBJDIR}/cpolyg.${MOD} ${OBJDIR}/cref.${MOD} ${OBJDIR}/crefmod.${MOD} ${OBJDIR}/csdvi.${MOD} ${OBJDIR}/csdvi_bgk.${MOD} ${OBJDIR}/csdvi_cop.${MOD} ${OBJDIR}/cspei.${MOD} ${OBJDIR}/cspez.${MOD} ${OBJDIR}/cstep.${MOD} ${OBJDIR}/ctetra.${MOD} ${OBJDIR}/ctext.${MOD} ${OBJDIR}/cupd.${MOD} ${OBJDIR}/czt1.${MOD} ${OBJDIR}/eirbra.${MOD} ${OBJDIR}/photon.${MOD}
 
@@ -370,9 +370,9 @@ ${OBJDIR}/zylpln.o: ${OBJDIR}/ccona.${MOD}
 
 ${OBJDIR}/b2_4to5.o: ${OBJDIR}/eirmod_parmmod.${MOD} ${OBJDIR}/braeir.${MOD} ${OBJDIR}/eirdiag.${MOD}
 
-${OBJDIR}/b2mod_b2_to_astra.o: ${OBJDIR}/eirmod_extrab25.${MOD} ${OBJDIR}/eirmod_wneutrals.${MOD}
+${OBJDIR}/b2mod_b2_to_astra.o: ${OBJDIR}/eirdiag.${MOD}
 
-${OBJDIR}/b2mod_neutrals_namelist.o: ${OBJDIR}/eirmod_parmmod.${MOD} ${OBJDIR}/parmmod.${MOD} ${OBJDIR}/braeir.${MOD} ${OBJDIR}/ceirsrt.${MOD} ${OBJDIR}/eirdiag.${MOD} ${OBJDIR}/eirmod_extrab25.${MOD} ${OBJDIR}/eirmod_solps.${MOD}
+${OBJDIR}/b2mod_neutrals_namelist.o: ${OBJDIR}/eirmod_parmmod.${MOD} ${OBJDIR}/parmmod.${MOD} ${OBJDIR}/braeir.${MOD} ${OBJDIR}/ceirsrt.${MOD} ${OBJDIR}/eirdiag.${MOD}
 
 ${OBJDIR}/eirmod_parmmod.o:
 	ln -sf ${OBJDIR}/parmmod.o $@
@@ -392,14 +392,8 @@ ${OBJDIR}/eirmod_comxs.o:
 ${OBJDIR}/eirmod_ctrig.o:
 	ln -sf ${EIRDIR}/eirmod_ctrig.o ${OBJDIR}
 
-${OBJDIR}/eirmod_extrab25.o: ${OBJDIR}/eirmod_comxs.${MOD} ${OBJDIR}/eirmod_wneutrals.${MOD} ${OBJDIR}/eirmod_solps.${MOD}
+${OBJDIR}/eirmod_extrab25.o: ${OBJDIR}/eirmod_comxs.${MOD}
 	ln -sf ${EIRDIR}/eirmod_extrab25.o ${OBJDIR}
-
-${OBJDIR}/eirmod_solps.o:
-	ln -sf ${EIRDIR}/eirmod_solps.o ${OBJDIR}
-
-${OBJDIR}/eirmod_wneutrals.o:
-	ln -sf ${EIRDIR}/eirmod_wneutrals.o ${OBJDIR}
 
 ${OBJDIR}/eirmod_mpi.o: ${OBJDIR}/comprt.${MOD} ${OBJDIR}/precision.${MOD} ${SRCDIR}/Eirene_modules/eirmod_mpi.F90 ${MAKES}
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${SOLPSINCLUDE} ${OBJDEST} -o ${OBJDIR}/eirmod_mpi.o -c ${SRCDIR}/Eirene_modules/eirmod_mpi.F90
@@ -640,7 +634,7 @@ ${OBJDIR}/b2_4to5.${MOD}: ${OBJDIR}/eirmod_parmmod.${MOD} ${OBJDIR}/braeir.${MOD
 
 ${OBJDIR}/b2mod_b2_to_astra.${MOD}: ${OBJDIR}/eirdiag.${MOD}
 
-${OBJDIR}/b2mod_neutrals_namelist.${MOD}: ${OBJDIR}/parmmod.${MOD} ${OBJDIR}/braeir.${MOD} ${OBJDIR}/ceirsrt.${MOD} ${OBJDIR}/eirdiag.${MOD} ${OBJDIR}/eirmod_solps.${MOD}
+${OBJDIR}/b2mod_neutrals_namelist.${MOD}: ${OBJDIR}/parmmod.${MOD} ${OBJDIR}/braeir.${MOD} ${OBJDIR}/ceirsrt.${MOD} ${OBJDIR}/eirdiag.${MOD}
 
 ${OBJDIR}/eirmod_braeir.${MOD}:
 	ln -sf ${EIRDIR}/eirmod_braeir.${MOD} ${OBJDIR}
@@ -654,14 +648,8 @@ ${OBJDIR}/eirmod_comxs.${MOD}:
 ${OBJDIR}/eirmod_ctrig.${MOD}:
 	ln -sf ${EIRDIR}/eirmod_ctrig.${MOD} ${OBJDIR}
 
-${OBJDIR}/eirmod_extrab25.${MOD}: ${OBJDIR}/eirmod_comxs.${MOD} ${OBJDIR}/eirmod_wneutrals.${MOD} ${OBJDIR}/eirmod_solps.${MOD}
+${OBJDIR}/eirmod_extrab25.${MOD}: ${OBJDIR}/eirmod_comxs.${MOD}
 	ln -sf ${EIRDIR}/eirmod_extrab25.${MOD} ${OBJDIR}
-
-${OBJDIR}/eirmod_solps.${MOD}:
-	ln -sf ${EIRDIR}/eirmod_solps.${MOD} ${OBJDIR}
-
-${OBJDIR}/eirmod_wneutrals.${MOD}:
-	ln -sf ${EIRDIR}/eirmod_wneutrals.${MOD} ${OBJDIR}
 
 ${OBJDIR}/eirmod_parmmod.${MOD}: ${OBJDIR}/parmmod.${MOD}
 	ln -sf ${OBJDIR}/parmmod.${MOD} $@
@@ -989,7 +977,7 @@ ${OBJDIR}/libb2_solps4.a: ${MD4OBJS} ${SB4OBJS} ${SE4OBJS}
 ${OBJDIR}/libb2_solps5.a: ${MD5OBJS} ${SR5OBJS}
 	${BLD} $@ $?
 
-depend: ${BASEDIR}/LISTOBJ ${OBJS:.o=.F} ${EXELIST:.o=.F}
+depend: ${BASEDIR}/LISTOBJ ${FOBJS:.o=.F} ${F90OBJS:.o=.F90} ${EXELIST:.o=.F}
 	@`which makedepend` -p'$${OBJDIR}/' ${DEFINES} -f- ${SOLPSINCLUDE} $^ | \
 	sed 's,^$${OBJDIR}/[^ ][^ ]*/,\$${OBJDIR}/,' | \
         sed 's,: ${SOLPSTOP},: $${SOLPSTOP},' > ${OBJDIR}/dependencies
@@ -998,9 +986,9 @@ ifneq (${MOD},o)
 	sed 's,^$${OBJDIR}/[^ ][^ ]*/,\$${OBJDIR}/,' | \
         sed 's,: ${SOLPSTOP},: $${SOLPSTOP},' >> ${OBJDIR}/dependencies
 endif
-	@egrep -ai '^ {6,}use ' ${FFLIST} | grep -v 'IGNORE' | tr , ' ' | awk '{sub("\\.F:",".o:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' >> ${OBJDIR}/dependencies
+	@egrep -ai '^ *use ' ${FFLIST} | grep -v 'IGNORE' | tr , ' ' | awk '{sub("\\.F90:",".o:",$$1);sub("\\.F:",".o:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' >> ${OBJDIR}/dependencies
 ifneq (${MOD},o)
-	@egrep -ai '^ *use ' ${MODLIST} | grep -v 'IGNORE' | tr , ' ' | awk '{sub("\\.F:",".${MOD}:",$$1);sub("\\.F90:",".${MOD}:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' >> ${OBJDIR}/dependencies
+	@egrep -ai '^ *use ' ${MODLIST} | grep -v 'IGNORE' | tr , ' ' | awk '{sub("\\.F90:",".${MOD}:",$$1);sub("\\.F:",".${MOD}:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' >> ${OBJDIR}/dependencies
 endif
 
 ${BASEDIR}/TAGS: tags
@@ -1017,14 +1005,22 @@ clean:
 	rm -Rf ${SRCDIR}/solps4_Eirene
 
 listobj:
-	@rm -f ${BASEDIR}/LISTOBJ; touch ${BASEDIR}/LISTOBJ; l="OBJS ="; \
+	@rm -f ${BASEDIR}/LISTOBJ; touch ${BASEDIR}/LISTOBJ; l="FOBJS ="; \
 	for d in `echo "${VPATH}" | tr : \ `; do \
 		l="$$l `(cd $$d > /dev/null; echo *.[Ff])`"; \
 	done; \
-	E="-e 's/\.[Ff]/\.o/g'" ; for f in ${EXCLUDELIST}; do \
+	E="-e 's/ \*.\[Ff\]90//g' -e 's/\.[Ff]90/\.o/g' -e 's/\.[Ff]/\.o/g'" ; for f in ${EXCLUDELIST}; do \
 		E="$$E -e 's/ $$f//'"; \
 	done; \
 	echo "$$l" | eval sed "$$E" > ${BASEDIR}/LISTOBJ
+	@ll="F90OBJS ="; \
+	for d in `echo "${VPATH}" | tr : \ `; do \
+		ll="$$ll `(cd $$d > /dev/null; echo *.[Ff]90)`"; \
+	done; \
+	E="-e 's/ \*.\[Ff\]90//g' -e 's/\.[Ff]90/\.o/g'" ; for f in ${EXCLUDELIST}; do \
+		E="$$E -e 's/ $$f//'"; \
+	done; \
+	echo "$$ll" | eval sed "$$E" >> ${BASEDIR}/LISTOBJ
 
 links:
 	@[ -L ${SRCDIR}/B2_include.local ] && rm -Rf ${SRCDIR}/B2_include.local || echo > /dev/null
