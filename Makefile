@@ -95,43 +95,43 @@ DEFAULT: solps
 #----------------------
 
 
-solps:       carre divgeo b25eirene     uinp     triang amds sonnet-light manual
+solps: divgeo b25eirene carre uinp triang amds sonnet-light manual
 
-solps_openmp: carre divgeo b25eirene_openmp uinp_openmp triang amds_openmp sonnet-light manual
+solps_openmp: divgeo b25eirene_openmp carre uinp_openmp triang amds_openmp sonnet-light manual
 
-solps_mpi:   carre divgeo b25eirene_mpi uinp_mpi triang_mpi amds_mpi sonnet-light manual
+solps_mpi: divgeo b25eirene_mpi carre uinp_mpi triang_mpi amds_mpi sonnet-light manual
 
-solps_openmp_mpi: carre divgeo b25eirene_openmp_mpi uinp_openmp_mpi triang_mpi amds_openmp_mpi sonnet-light manual
+solps_openmp_mpi: divgeo b25eirene_openmp_mpi carre uinp_openmp_mpi triang_mpi amds_openmp_mpi sonnet-light manual
 
 solps_mpi_openmp: solps_openmp_mpi
 
-nox:         carre_nox divgeo_nox b25eirene_nox uinp_nox triang_nox manual
+nox: divgeo_nox b25eirene_nox carre_nox uinp_nox triang_nox manual
 
-nox_openmp:  carre_nox divgeo_nox b25eirene_nox_openmp uinp_nox_openmp triang_nox manual
+nox_openmp: divgeo_nox b25eirene_nox_openmp carre_nox uinp_nox_openmp triang_nox manual
 
-nox_mpi:     carre_nox divgeo_nox b25eirene_nox_mpi uinp_nox_mpi triang_nox_mpi manual
+nox_mpi: divgeo_nox b25eirene_nox_mpi carre_nox uinp_nox_mpi triang_nox_mpi manual
 
-nox_openmp_mpi: carre_nox divgeo_nox b25eirene_nox_openmp_mpi uinp_nox_openmp_mpi triang_nox_mpi manual
+nox_openmp_mpi: divgeo_nox b25eirene_nox_openmp_mpi carre_nox uinp_nox_openmp_mpi triang_nox_mpi manual
 
 nox_mpi_openmp: nox_openmp_mpi
 
-all:         carre divgeo b25     eirene     b25eirene     uinp     triang amds sonnet-light manual
+all: divgeo b25 eirene b25eirene carre uinp triang amds sonnet-light manual
 
-all_nox:     carre_nox divgeo_nox b25_nox eirene_nox b25eirene_nox uinp_nox triang_nox manual
+all_nox: divgeo_nox b25_nox eirene_nox b25eirene_nox carre_nox uinp_nox triang_nox manual
 
-all_openmp:  carre divgeo b25_openmp eirene b25eirene_openmp uinp_openmp triang amds_openmp sonnet-light manual
+all_openmp: divgeo b25_openmp eirene b25eirene_openmp carre uinp_openmp triang amds_openmp sonnet-light manual
 
-all_mpi:     carre divgeo b25_mpi eirene_mpi b25eirene_mpi uinp_mpi triang_mpi amds_mpi sonnet-light manual
+all_mpi: divgeo b25_mpi eirene_mpi b25eirene_mpi carre uinp_mpi triang_mpi amds_mpi sonnet-light manual
 
-all_nox_openmp: carre_nox divgeo_nox b25_nox_openmp eirene_nox b25eirene_nox_openmp uinp_nox_openmp triang_nox manual
+all_nox_openmp: divgeo_nox b25_nox_openmp eirene_nox b25eirene_nox_openmp carre_nox uinp_nox_openmp triang_nox manual
 
-all_nox_mpi: carre_nox divgeo_nox b25_nox_mpi eirene_nox_mpi b25eirene_nox_mpi uinp_nox_mpi triang_nox_mpi manual
+all_nox_mpi: divgeo_nox b25_nox_mpi eirene_nox_mpi b25eirene_nox_mpi carre_nox uinp_nox_mpi triang_nox_mpi manual
 
-all_openmp_mpi: carre divgeo b25_openmp_mpi eirene_mpi b25eirene_openmp_mpi uinp_openmp_mpi triang_mpi amds_openmp_mpi sonnet-light manual
+all_openmp_mpi: divgeo b25_openmp_mpi eirene_mpi b25eirene_openmp_mpi carre uinp_openmp_mpi triang_mpi amds_openmp_mpi sonnet-light manual
 
 all_mpi_openmp: all_openmp_mpi
 
-all_nox_openmp_mpi: carre_nox divgeo_nox b25_nox_openmp_mpi eirene_nox_mpi b25eirene_nox_openmp_mpi uinp_nox_openmp_mpi triang_nox_mpi manual
+all_nox_openmp_mpi: divgeo_nox b25_nox_openmp_mpi eirene_nox_mpi b25eirene_nox_openmp_mpi carre_nox uinp_nox_openmp_mpi triang_nox_mpi manual
 
 all_nox_mpi_openmp: all_nox_openmp_mpi
 

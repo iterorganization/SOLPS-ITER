@@ -214,11 +214,8 @@ if ($chain != "unset") then
   set NAME=SLURM.itm.after_$chain
 endif
 
-set msg="Submitted at `date`"
-update_solps_run_status -n ${msg}
-if ($?SOLPS_GUI_IP) then
-  echo ${USER} ${PWD} ${msg} | netcat -u -v -w 1 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
-endif
+update_solps_run_status -n "Submitted at `date`"
+
 if ($chain == "unset") then
   sbatch $NAME
 else

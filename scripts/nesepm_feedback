@@ -32,6 +32,9 @@ switch ($NREG)
   case "5":
     pipe_run.log | grep -a nesepm_curr | awk '{print NR,$2,$5,($10/'${R}'/1e3)}' | sed '$d' | x{$1}yplot3 current target control/1000 Iteration_no density_or_flux `noquote_pwd 3`
     breaksw
+  case "7":
+    pipe_run.log | grep -a nesepm_curr | awk '{print NR,$2,$5,($10/'${R}'/1e3)}' | sed '$d' | x{$1}yplot3 current target control/1000 Iteration_no density_or_flux `noquote_pwd 3`
+    breaksw
   case "8":
     pipe_run.log | grep -a nesepm_curr | awk '{print NR,$2,$5,(($10+$11)/'${R}'/1e3)}' | sed '$d' | x{$1}yplot3 current target control/1000 Iteration_no density_or_flux `noquote_pwd 3`
     breaksw

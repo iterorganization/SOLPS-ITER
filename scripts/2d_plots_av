@@ -43,6 +43,11 @@ switch ($NREG)
     2dt_av feeyip feeyap
     2dt_av feiyip feiyap
   breaksw
+  case "7":
+    2dt_av fniyip fniyap
+    2dt_av feeyip feeyap
+    2dt_av feiyip feiyap
+  breaksw
   case "5":
     2dt_av fniyip fniyap
     2dt_av feeyip feeyap

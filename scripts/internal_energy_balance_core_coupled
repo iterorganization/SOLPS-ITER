@@ -50,6 +50,8 @@ pipe_run.log | \
        /b2stbr_shi_reg/{b2brhi=$3} \
        /fhiyreg/&&nrv==4{S=-$4;N=$6} \
        /fheyreg/&&nrv==4{S+=-$4;N+=$6} \
+       /fhiyreg/&&nrv==7{S=-$4;N=$6} \
+       /fheyreg/&&nrv==7{S+=-$4;N+=$6} \
        /fhiyreg/&&nrv==8{S=-$4-$11;N=$6+$13} \
        /fheyreg/&&nrv==8{S+=-$4-$11;N+=$6+$13} \
        /rsanareg/{rsap=0;for (i=3;i<=NF;i+=nrv+1) rsap+=$i*pot[int(i/(nrv+1))+2]} \

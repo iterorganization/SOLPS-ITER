@@ -169,9 +169,6 @@ sed \
   -e 's:#USER#:'$USER':g' \
   < $QSUB > $NAME
 
-set msg="Submitted at `date`"
-update_solps_run_status -n ${msg}
-if ($?SOLPS_GUI_IP) then
-  echo ${USER} ${PWD} ${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
-endif
+update_solps_run_status -n "Submitted at `date`"
+
 qsub -V -S /bin/tcsh $NAME

@@ -7,7 +7,11 @@ run_ok=`b2fstate_OK`
 
 ( ls -l tracing/* | grep -v 'total ' | grep -v ' 0 ' | wc -l > $NAME ) 2> /dev/null
 nfiles=`cat $NAME`
-echo "tracing : found" $nfiles "files"
+[ $nfiles -ne 1 ] && {
+  echo "tracing : found" $nfiles "files"
+} || {
+  echo "tracing : found" $nfiles "file"
+}
 [ $nfiles -gt 0 ] && {
   [ -d ../tracing ] || mkdir ../tracing
   mv tracing/* ../tracing 2> /dev/null || echo > /dev/null
@@ -17,7 +21,11 @@ rm $NAME
 
 ( ls -l batch_av/* | grep -v 'total ' | grep -v ' 0 ' | wc -l > $NAME ) 2> /dev/null
 nfiles=`cat $NAME`
-echo "batch_av : found" $nfiles "files"
+[ $nfiles -ne 1 ] && {
+  echo "batch_av : found" $nfiles "files"
+} || {
+  echo "batch_av : found" $nfiles "file"
+}
 [ $nfiles -gt 0 ] && {
   [ -d ../batch_av ] || mkdir ../batch_av
   mv batch_av/* ../batch_av 2> /dev/null || echo > /dev/null
@@ -26,7 +34,11 @@ rm $NAME
 
 ( ls -l run_av/* | grep -v 'total ' | grep -v ' 0 ' | wc -l > $NAME ) 2> /dev/null
 nfiles=`cat $NAME`
-echo "run_av : found" $nfiles "files"
+[ $nfiles -ne 1 ] && {
+  echo "run_av : found" $nfiles "files"
+} || {
+  echo "run_av : found" $nfiles "file"
+}
 [ $nfiles -gt 0 ] && {
   [ -d ../run_av ] || mkdir ../run_av
   mv run_av/* ../run_av 2> /dev/null || echo > /dev/null
@@ -35,7 +47,11 @@ rm $NAME
 
 ( ls -l output/* | grep -v 'total ' | grep -v ' 0 ' | wc -l > $NAME ) 2> /dev/null
 nfiles=`cat $NAME`
-echo "output : found" $nfiles "files"
+[ $nfiles -ne 1 ] && {
+  echo "output : found" $nfiles "files"
+} || {
+  echo "output : found" $nfiles "file"
+}
 [ $nfiles -gt 0 ] && {
   [ -d ../output ] || mkdir ../output
   mv output/* ../output 2> /dev/null || echo > /dev/null
@@ -44,25 +60,41 @@ rm $NAME
 
 ( ls -l d?? | grep -v 'total ' | grep -v ' 0 ' | wc -l > $NAME ) 2> /dev/null
 nfiles=`cat $NAME`
-echo "d?? : found" $nfiles "files"
+[ $nfiles -ne 1 ] && {
+  echo "d?? : found" $nfiles "files"
+} || {
+  echo "d?? : found" $nfiles "file"
+}
 [ $nfiles -gt 0 ] && mv d?? ../ 2> /dev/null || echo > /dev/null
 rm $NAME
 
 ( ls -l ds?? | grep -v 'total ' | grep -v ' 0 ' | wc -l > $NAME ) 2> /dev/null
 nfiles=`cat $NAME`
-echo "ds?? : found" $nfiles "files"
+[ $nfiles -ne 1 ] && {
+  echo "ds?? : found" $nfiles "files"
+} || {
+  echo "ds?? : found" $nfiles "file"
+}
 [ $nfiles -gt 0 ] && mv ds?? ../ 2> /dev/null || echo > /dev/null
 rm $NAME
 
 ( ls -l ds??? | grep -v 'total ' | grep -v ' 0 ' | wc -l > $NAME ) 2> /dev/null
 nfiles=`cat $NAME`
-echo "ds??? : found" $nfiles "files"
+[ $nfiles -ne 1 ] && {
+  echo "ds??? : found" $nfiles "files"
+} || {
+  echo "ds??? : found" $nfiles "file"
+}
 [ $nfiles -gt 0 ] && mv ds??? ../ 2> /dev/null || echo > /dev/null
 rm $NAME
 
 ( ls -l b2.*.parameters | grep -v 'total ' | grep -v ' 0 ' | wc -l > $NAME ) 2> /dev/null
 nfiles=`cat $NAME`
-echo "b2.*.parameters : found" $nfiles "files"
+[ $nfiles -ne 1 ] && {
+  echo "b2.*.parameters : found" $nfiles "files"
+} || {
+  echo "b2.*.parameters : found" $nfiles "file"
+}
 [ $nfiles -gt 0 ] && mv b2.*.parameters ../ 2> /dev/null || echo > /dev/null
 rm $NAME
 

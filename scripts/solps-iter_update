@@ -30,7 +30,7 @@ Carre:
   set repo="Carre"
   git fetch --prune
   git checkout master && echo "Checked out Carre master branch" || goto branch
-  git pull && goto Carre2 || goto local
+  git pull && goto DivGeo || goto local
 
 DivGeo:
   echo "Updating DivGeo"
