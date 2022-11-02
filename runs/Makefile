@@ -173,6 +173,8 @@ vpath ftn35    .:$(baserundir):$(triangdir)
 endif
 vpath stra.dat .:$(baserundir)
 vpath weis.dat .:$(baserundir)
+vpath AMJUEL   .:$(baserundir)
+vpath HYDHEL   .:$(baserundir)
 vpath b2frates .:$(baserundir)
 
 #-----------------------------------------------------------------------

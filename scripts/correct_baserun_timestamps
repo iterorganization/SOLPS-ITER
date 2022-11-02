@@ -16,5 +16,7 @@ touch b2ai.prt
 sleep 1
 ln -sf $SOLPSTOP/modules/B2.5/Database/stra.dat .
 ln -sf $SOLPSTOP/modules/B2.5/Database/weis.dat .
+ln -sf $SOLPSTOP/modules/Eirene/Database/AMJUEL .
+ln -sf $SOLPSTOP/modules/Eirene/Database/HYDHEL .
 touch b2ar.prt
 [ -s b2frates ] && touch b2frates || echo 'No valid b2frates file found'
