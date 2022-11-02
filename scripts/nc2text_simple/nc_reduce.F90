@@ -432,7 +432,7 @@ program nc_reduce
   contains
 
   !-----------------------------------------------------------------------------
-  
+
   subroutine print_help()
     write(0,'(a)') ' '
     write(0,'(a)') 'Usage: nc_reduce [OPTIONS] filename'
@@ -452,5 +452,5 @@ program nc_reduce
     write(0,'(a)') ' '
     return
   end subroutine print_help
-  
+
 end program nc_reduce

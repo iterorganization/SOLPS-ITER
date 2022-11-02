@@ -35,7 +35,7 @@ print(species[S],species[E])
 if vreg == 5:
 
   plt.plot(times[:],numpy.sum(fnayreg[:,S:E+1,2],axis=1), label='core')
-  
+
 else:
 
   plt.plot(times[:],numpy.sum(fnayreg[:,S:E+1,2],axis=1), label='core1')
@@ -75,7 +75,7 @@ for i in cwd.split('/'):
     ncwd = ncwd + '/\n' + i
     l = len(i)
 plt.suptitle(ncwd[1:], fontsize=10)
-  
+
 if os.getenv('SOLPS_PYTHON_PLOT') is None:
   plt.show()
 else:

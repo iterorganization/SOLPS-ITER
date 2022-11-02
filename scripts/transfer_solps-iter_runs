@@ -15,7 +15,7 @@ read -s -p "Enter client password:" u_pass
 echo ""
 echo "Enter client IP address:"
 read ip_add
-# create remote directory 
+# create remote directory
 mails5=$(echo $client_dir | tr "/" "\n")
 str5=
 odr5=
