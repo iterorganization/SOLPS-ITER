@@ -11,8 +11,8 @@ import matplotlib.pyplot as plt
 import itertools
 
 def main(args):
- 
-    file_in = "b2mn.exe.dir/b2ftrace" 
+
+    file_in = "b2mn.exe.dir/b2ftrace"
     if os.path.isfile(file_in):
         print("Reading "+file_in)
     else:
@@ -38,7 +38,7 @@ def main(args):
             line = line.split()
             part_list = [float(i) for i in line]
             mydatalist.extend(part_list)
-        
+
     mydata = np.array(mydatalist)
     mydata = mydata.reshape(counter,int(len(mydatalist)/counter))
 
@@ -65,11 +65,11 @@ def main(args):
     plt.legend(loc="best")
     plt.title(os.getcwd())
     plt.show()
-    
+
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument("-l","--last",type = int,help = 'display last n entries',default=0)
     args = parser.parse_args()
-      
+
     main(args)

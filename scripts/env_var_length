@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 
-# This script (provided by David Coster) prints the length of strings 
+# This script (provided by David Coster) prints the length of strings
 # corresponding to each environment variable
 
 # Example of usage: `env_var_length | sort -n | tail` will sort environment

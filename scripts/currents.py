@@ -40,7 +40,7 @@ elif vreg == 5:
   plt.plot(times[:],-numpy.sum(fchyreg[:,5:8],axis=1), label='-N')
   plt.plot(times[:],extschreg[:,0], label='EXT')
   plt.plot(times[:],fchxreg[:,1]-fchxreg[:,4]+fchyreg[:,2]+fchyreg[:,1]+fchyreg[:,3]-numpy.sum(fchyreg[:,5:8],axis=1)+extschreg[:,0], label='Sum')
-  
+
 else:
 
   plt.plot(times[:],fchxreg[:,1], label='W1')
@@ -166,7 +166,7 @@ for i in cwd.split('/'):
     ncwd = ncwd + '/\n' + i
     l = len(i)
 plt.suptitle(ncwd[1:], fontsize=10)
-  
+
 if os.getenv('SOLPS_PYTHON_PLOT') is None:
   plt.show()
 else:

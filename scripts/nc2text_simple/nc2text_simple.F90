@@ -12,7 +12,7 @@ Program nc2text_simple
 
   Integer, Parameter :: R8 = Selected_real_kind(15,307)
   Integer, Parameter :: I8 = Selected_int_kind(8)
-  
+
   Integer :: ncid, iret, varid, nvdims, vartyp, dimids(MAXVDIMS), numcmdarg
   Integer(I8) :: i, j, i1=1, i2=0, j1=1, j2=0, itmp
   Logical :: use_index = .false.
@@ -103,7 +103,7 @@ Program nc2text_simple
 
   ! Check dimensions
   If( (i2 .gt. Size(rdata,1)) .OR. (j2 .gt. Size(rdata,2)) .OR. &
-       (i1 .le. 0) .OR. (j1 .le. 0) ) Then     
+       (i1 .le. 0) .OR. (j1 .le. 0) ) Then
      Write(0,*) "Error: index out of bounds"
      Write(0,*) "Size is ",dimlen
      Write(0,'(a,i0,a,i0,a,i0,a,i0,a)') ' Subscripts processed to (',i1,':',i2,',',j1,':',j2,')'
@@ -115,11 +115,11 @@ Program nc2text_simple
   Do j = j1,j2
      Write(*,hlp_frm) (rdata(i,j),i=i1,i2)
   Enddo
-  
+
   Deallocate(rdata)
   Deallocate(dimlen)
   !-----------------------------------------------------------------------------
-  
+
 Contains
 
   Function handle_cmd_arg() Result(ierr)
@@ -127,7 +127,7 @@ Contains
     Character(Len = 32)  :: arg
     Character(Len = 256) :: temp, temp2
     Integer :: numcols = -1 ! This can be set but is ignored
-    ierr = -1 
+    ierr = -1
     numcmdarg = Command_argument_count()
     Select Case (numcmdarg)
     Case (1)
@@ -140,7 +140,7 @@ Contains
        Case Default
           Write(0,*) 'Error: Must provide filename and variable'
           ierr = 1
-          Return 
+          Return
        End Select
     Case (2)
        Call Get_command_argument(1,filename)
@@ -155,7 +155,7 @@ Contains
           Write(0,*) 'Error: Invalid syntax'
           Call Print_help()
           ierr = 1
-          Return 
+          Return
        End Select
        Call Get_command_argument(3,filename)
        Call Get_command_argument(4,varname)
@@ -163,7 +163,7 @@ Contains
        Write(0,*) 'Error: Invalid syntax'
        Call Print_help()
        ierr = 1
-       Return 
+       Return
     End Select
 
     ! Check for subscripts in argument
@@ -187,7 +187,7 @@ Contains
              j2 = j1
              If (debug) Write(0,*) "--Single subscript found:",j1
           Else
-             ! Range found, get two values. 
+             ! Range found, get two values.
              If (debug) Write(0,*) "--Range identified"
              temp = varname(Index(varname,'(')+1:Index(varname,':')-1)
              If (Len(Trim(temp)) .ne. 0) Read(temp,'(I10)',iostat=ioerr) j1
@@ -197,8 +197,8 @@ Contains
           Endif
           i1 = 1
           i2 = 0
-       Else 
-          
+       Else
+
           ! There is a comma, look for two dimensions
           If (debug) Write(0,*) "--Found a ',', attempting to get two dimensions"
 
@@ -238,10 +238,10 @@ Contains
        varname = varname(1:Index(varname,'(')-1)
     Endif
     ierr = 0
-    Return 
+    Return
   End Function handle_cmd_arg
   !-----------------------------------------------------------------------------
-  
+
   Subroutine Print_help()
     Write(0,'(a)') ' '
     Write(0,'(a)') 'usage: nc2text_simple [OPTIONS] filename variable(i1:i2,j1:j2)'
@@ -263,11 +263,11 @@ Contains
     Write(0,'(a)') '   nc2text_simple -n 999999 b2time.nc tesepa'
     Write(0,'(a)') "   nc2text_simple b2time.nc 'tesepa(1)'"
     Write(0,'(a)') "   nc2text_simple b2time.nc 'fn3dl(-9:-0,:)'"
-    
+
     Return
   End Subroutine Print_help
-  
+
 #endif
 
-  
+
 End Program nc2text_simple

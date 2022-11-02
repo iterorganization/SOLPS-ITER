@@ -19,7 +19,7 @@ def main(plotvars):
     except:
         print("Error: Could not open "+file_in)
         exit(0)
-        
+
     times = ncIn.variables['times'][:]
 
     myvar = {}
@@ -34,11 +34,11 @@ def main(plotvars):
     plt.figure()
     for i,item in enumerate(plotvars):
         plt.plot(times,np.squeeze(myvar[plotvars[i]]),label=item,marker='x')
-        
+
     plt.xlabel("time (s)")
     plt.legend(loc="best")
     plt.show()
-    
+
 if __name__ == '__main__':
     import argparse
     import textwrap
