@@ -17,11 +17,7 @@ setenv FC gfortran
 # Load modules
 module unload imasenv
 module load imasenv/3.33.0/gcc/7.3.0/1.0
-if `module is-loaded ggd` then
-  setenv GGD_VERSION `pkg-config ggd --modversion`
-else
-  setenv GGD_VERSION '0.0.0'
-endif
+pkg-config ggd --exists && setenv GGD_VERSION `pkg-config ggd --modversion` || setenv GGD_VERSION '0.0.0'
 setenv EBVERSIONMSCL `pkg-config mscl --modversion`
 module load itm-nag
 module load itm-netcdf
