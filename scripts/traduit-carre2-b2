@@ -1,0 +1,32 @@
+#!/bin/sh
+
+SOLPSTOP=`determine_SOLPSTOP`
+if [ ! $SOLPS_DEBUG = "" ]; then
+    export EXT_DEBUG=".debug"
+fi
+TRADUIT_PATH=${SOLPSTOP}/modules/Carre2/builds/$HOST_NAME.$COMPILER${EXT_DEBUG}
+/bin/echo -e "TRADUIT_PATH : $TRADUIT_PATH"
+
+
+#check whether traduit is available
+if [ ! -e ${TRADUIT_PATH}/traduit.exe ]; then
+    echo "No traduit program available"
+    exit
+fi
+
+cat << EOF | ${TRADUIT_PATH}/traduit.exe
+carre.out
+2
+EOF
+
+mv traduit.out traduit.out.b2
+
+cat << EOF | ${TRADUIT_PATH}/traduit.exe
+carre.out
+4
+EOF
+
+mv traduit.out traduit.out.sonnet
+
+
+
