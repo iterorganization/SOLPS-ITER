@@ -69,11 +69,6 @@ prints = b2ag.prt b2ah.prt b2ai.prt b2ar.prt b2mn.prt \
  b2yr.prt b2yt.prt b2yi_gnuplot.prt
 
 target_ag = b2ag.prt b2fgmtry
-ifneq (${COMPILER},HP)
-target_ag += fort.30
-else
-target_ag += ftn30
-endif
 target_ah = b2ah.prt b2fpardf
 target_ai = b2ai.prt b2fstati
 target_ar = b2ar.prt b2frates
@@ -161,12 +156,10 @@ vpath b2fgmtry .:$(baserundir)
 vpath b2fpardf .:$(baserundir)
 vpath b2fstati .:$(baserundir)
 ifneq (${COMPILER},HP)
-vpath fort.30  .:$(baserundir)
 vpath fort.33  .:$(baserundir):$(triangdir)
 vpath fort.34  .:$(baserundir):$(triangdir)
 vpath fort.35  .:$(baserundir):$(triangdir)
 else
-vpath ftn30    .:$(baserundir)
 vpath ftn33    .:$(baserundir):$(triangdir)
 vpath ftn34    .:$(baserundir):$(triangdir)
 vpath ftn35    .:$(baserundir):$(triangdir)
@@ -224,9 +217,9 @@ $(target_ar) : b2ar.dat stra.dat weis.dat b2fpardf b2fgmtry AMJUEL HYDHEL
 
 ifndef STAND_ALONE
 ifneq (${COMPILER},HP)
-$(target_mn) : b2mn.dat b2fgmtry b2fpardf b2fstati b2frates fort.30 AMJUEL
+$(target_mn) : b2mn.dat b2fgmtry b2fpardf b2fstati b2frates AMJUEL
 else
-$(target_mn) : b2mn.dat b2fgmtry b2fpardf b2fstati b2frates ftn30 AMJUEL
+$(target_mn) : b2mn.dat b2fgmtry b2fpardf b2fstati b2frates AMJUEL
 endif
 else
 $(target_mn) : b2mn.dat b2fgmtry b2fpardf b2fstati b2frates
@@ -300,11 +293,6 @@ endif
 else
 	-cd b2mn.exe.dir ; mkdir tracing ; mkdir output ; copy_tracing_files ; mkdir batch_av ; mkdir run_av ; ${TIME} ${B2OBJ}/${MNEXE}.exe ${RUN_OPTIONS} ; move_optional_files ; mv $(target_mn) .. >& /dev/null
 endif
-ifneq (${COMPILER},HP)
-	-[ -s fort.30 ] || ( [ -s ../baserun/fort.30 ] || ( [ -s b2mn.exe.dir/fort.30 ] && mv b2mn.exe.dir/fort.30 . || ( [ -e b2mn.exe.dir/fort.30 ] && rm b2mn.exe.dir/fort.30 || echo > /dev/null ) ) )
-else
-	-[ -s ftn30 ] || ( [ -s ../baserun/ftn30 ] || ( [ -s b2mn.exe.dir/ftn30 ] && mv b2mn.exe.dir/ftn30 . || ( [ -e b2mn.exe.dir/ftn30 ] && rm b2mn.exe.dir/ftn30 || echo > /dev/null ) ) )
-endif
 	-[ -s b2mn.exe.dir/b2faveri ] && mv b2mn.exe.dir/b2faveri . || ( [ -e b2mn.exe.dir/b2faveri ] && rm b2mn.exe.dir/b2faveri || echo > /dev/null )
 ifdef NCDIR
 	-cd b2mn.exe.dir ; rm .netcdf4 >& /dev/null
@@ -371,9 +359,9 @@ endif
 
 ifndef STAND_ALONE
 ifneq (${COMPILER},HP)
-dbx.b2mn : b2mn.dat b2fgmtry b2fpardf b2fstati b2frates fort.30 AMJUEL
+dbx.b2mn : b2mn.dat b2fgmtry b2fpardf b2fstati b2frates AMJUEL
 else
-dbx.b2mn : b2mn.dat b2fgmtry b2fpardf b2fstati b2frates ftn30 AMJUEL
+dbx.b2mn : b2mn.dat b2fgmtry b2fpardf b2fstati b2frates AMJUEL
 endif
 else
 dbx.b2mn : b2mn.dat b2fgmtry b2fpardf b2fstati b2frates
@@ -425,11 +413,6 @@ else
 endif
 endif
 	cd b2mn.exe.dir ; mkdir tracing ; mkdir output ; copy_tracing_files ; mkdir batch_av ; mkdir run_av ; ${DBX} ${INC} ${DBGOBJ}/b2mn.exe ${RUN_OPTIONS} ; move_optional_files ; mv $(target_mn) .. >& /dev/null
-ifneq (${COMPILER},HP)
-	-[ -s fort.30 ] || ( [ -s ../baserun/fort.30 ] || ( [ -s b2mn.exe.dir/fort.30 ] && mv b2mn.exe.dir/fort.30 . || ( [ -e b2mn.exe.dir/fort.30 ] && rm b2mn.exe.dir/fort.30 || echo > /dev/null ) ) )
-else
-	-[ -s ftn30 ] || ( [ -s ../baserun/ftn30 ] || ( [ -s b2mn.exe.dir/ftn30 ] && mv b2mn.exe.dir/ftn30 . || ( [ -e b2mn.exe.dir/ftn30 ] && rm b2mn.exe.dir/ftn30 || echo > /dev/null ) ) )
-endif
 	-[ -s b2mn.exe.dir/b2faveri ] && mv b2mn.exe.dir/b2faveri . || ( [ -e b2mn.exe.dir/b2faveri ] && rm b2mn.exe.dir/b2faveri || echo > /dev/null )
 	-cd b2mn.exe.dir ; rm -f $(notdir $^) .quit >& /dev/null
 ifdef NCDIR

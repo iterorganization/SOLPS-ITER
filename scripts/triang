@@ -26,14 +26,13 @@ gkseps=gli.eps
 eirinp=triang.eir
 eirhed=triang.hed
 [ "$COMPILER" = 'HP' ] && {
-  b2agout=ftn30
   eirout=ftn78
   eirlink=ftn1
 } || {
-  b2agout=fort.30
   eirout=fort.78
   eirlink=fort.1
 }
+b2agout=b2fgmtry
 eirlog=eirtria.log
 triain=tria.in
 trialog=tria.log
@@ -244,34 +243,18 @@ while true; do {
             }
             break;;  
       ( b|B )                                               # run b2ag to produce fort.30 file:
-            [ -r b2fplasma ] && {
-              print -u2 -- "Command line: echo f30 | b2plot > b2pl.log"
-              [ -r $b2agout ] && rm $b2agout
-              echo f30 | b2plot > b2pl.log
-              [ -r b2pl.exe.dir/$b2agout ] && {
-                mv b2pl.exe.dir/$b2agout .
-                rmdir b2pl.exe.dir
-                print -u2 -- "Produced $b2agout file"
-                q=e
-              } || {
-                print -u2 -- "Could not produce the $b2agout file"
-                print -u2 -- "    ==> Check b2pl.log file or provide separately"
-                q=u
-              }
+            print -u2 -- "Command line: ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2ag.prt > b2ag.log"
+            [ -r b2ag.prt ] && rm b2ag.prt
+            [ -r $b2agout ] && rm $b2agout
+            ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2ag.prt > b2ag.log
+            [ -r $b2agout ] && {
+              [ -d b2ag.exe.dir ] && rmdir b2ag.exe.dir
+              print -u2 -- "Produced $b2agout file"
+              q=e
             } || {
-              print -u2 -- "Command line: ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2ag.prt > b2ag.log"
-              [ -r b2ag.prt ] && rm b2ag.prt
-              [ -r $b2agout ] && rm $b2agout
-              ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2ag.prt > b2ag.log
-              [ -r $b2agout ] && {
-                [ -d b2ag.exe.dir ] && rmdir b2ag.exe.dir
-                print -u2 -- "Produced $b2agout file"
-                q=e
-              } || {
-                print -u2 -- "Could not produce the $b2agout file"
-                print -u2 -- "    ==> Check b2ag.log file or provide separately"
-                q=u
-              }
+              print -u2 -- "Could not produce the $b2agout file"
+              print -u2 -- "    ==> Check b2ag.log file or provide separately"
+              q=u
             }
             break;;
       ( e|E )                                               # run EIRENE to make input file for TRIA:

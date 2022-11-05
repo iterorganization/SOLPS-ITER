@@ -1950,7 +1950,7 @@ and executes the script {\tt b2run}.
 The examples presented below are for a pure D plasma.
 
 \newpage\section{b2ag, setting up the geometry}
-\index{b2fgmtry}\label{sec:b2ag}\index{b2ag}\index{fort.30}\index{b2run}
+\index{b2fgmtry}\label{sec:b2ag}\index{b2ag}\index{b2run}
 
 {\tt b2ag} prepares the geometry file, {\tt b2fgmtry}, reading the
 input file {\tt b2ag.dat}
@@ -1962,10 +1962,6 @@ It is run by doing
 or
 \begin{verbatim}
     gmake -f $SOLPSTOP/runs/Makefile b2fgmtry
-\end{verbatim}
-or
-\begin{verbatim}
-    gmake -f $SOLPSTOP/runs/Makefile fort.30
 \end{verbatim}
 %% $
 or, best:
@@ -2014,9 +2010,6 @@ as {\tt jet.50401.58000.geo}, identify it as being of size $96 \times
 \item[...] other options can be used to modify the mesh and magnetic
   field information that are read in from the mesh file (see Appendix \ref{lis:b2cdci})
 \end{description}
-
-{\tt b2ag} will also prepare the grid information in the format usable by {\tt Eirene},
-i.e. a {\tt fort.30} file.
 
 \newpage\section{b2ah, setting up the default physics parameters}
 \index{b2fpardf}\label{sec:b2ah}\index{b2ah}\index{b2run}

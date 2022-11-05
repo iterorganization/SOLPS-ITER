@@ -69,11 +69,6 @@ if (! -s "$filestem"33) then
     ln -s ../baserun/"$filestem"35 .
   endif
 endif
-if (! -s "$filestem"30) then
-  if (-s ../baserun/"$filestem"30) then
-    ln -s ../baserun/"$filestem"30 .
-  endif
-endif
 if (! -s mesh.extra) then
   if (-s ../baserun/mesh.extra) then
     ln -s ../baserun/mesh.extra .

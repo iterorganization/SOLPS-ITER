@@ -2,11 +2,6 @@
 cd baserun
 touch b2ag.prt
 [ -s b2fgmtry ] && touch b2fgmtry || echo 'No valid b2fgmtry file found'
-if (${COMPILER} == "HP" ) then
-  [ -s ftn30 ] && touch ftn30 || echo 'No valid ftn30 file found'
-else
-  [ -s fort.30 ] && touch fort.30 || echo 'No valid fort.30 file found'
-endif
 sleep 1
 touch b2ah.prt
 [ -s b2fpardf ] && touch b2fpardf || echo 'No valid b2fpardf file found'
