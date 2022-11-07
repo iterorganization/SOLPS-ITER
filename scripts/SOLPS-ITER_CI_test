@@ -1,5 +1,5 @@
 # Set up SOLPS-ITER environment
-./scripts/SOLPS-ITER_CI_env
+. scripts/SOLPS-ITER_CI_env
 
 # Compile the code
 echo "LDOPTS += -mcmodel large -shared-intel" >! ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local

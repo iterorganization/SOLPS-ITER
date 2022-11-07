@@ -6,6 +6,5 @@ set -v
 
 export MAKE=/usr/bin/gmake
 echo "export HOST_NAME=ITER" > ./SETUP/setup.ksh.HOST_NAME.local
-./setup.ksh ifort64
-./scripts/determine_SOLPSTOP
+. setup.ksh ifort64
 make local
