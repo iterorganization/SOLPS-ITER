@@ -5,6 +5,6 @@ set -v
 . /usr/share/Modules/init/sh
 
 export MAKE=/usr/bin/gmake
-echo "export HOST_NAME=ITER" > ./SETUP/setup.ksh.HOST_NAME.local
-. setup.ksh ifort64
+echo "export HOST_NAME=ITER" > $(dirname $0)/../SETUP/setup.ksh.HOST_NAME.local
+. $(dirname $0)/../setup.ksh ifort64
 make local
