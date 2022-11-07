@@ -1,6 +1,5 @@
 # Set up SOLPS-ITER environment
 . $(dirname $0)/SOLPS-ITER_CI_env
-set_debug
 
 # Compile the code with debug options activated
 echo "LDOPTS += -mcmodel large -shared-intel" > ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
@@ -9,6 +8,7 @@ make listobj_nox_debug depend_nox_debug
 make MAKE_OPTIONS=-j8 nox_build_debug
 
 # Run test case
+set_debug
 cd ${SOLPSTOP}/runs/examples
 make AUG_16151_D+C+He
 cd AUG_16151_D+C+He
