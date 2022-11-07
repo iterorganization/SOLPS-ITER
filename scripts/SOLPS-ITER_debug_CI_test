@@ -9,7 +9,7 @@ make nc2text_simple
 make MAKE_OPTIONS=-j8 nox_build_debug
 
 # Run test case
-set_debug
+. ${SOLPSTOP}/SETUP/debug.ksh
 cd ${SOLPSTOP}/runs/examples
 make AUG_16151_D+C+He
 cd AUG_16151_D+C+He

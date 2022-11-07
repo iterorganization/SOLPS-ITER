@@ -6,7 +6,7 @@ make listobj_nox depend_nox
 make MAKE_OPTIONS=-j8 nox_build_mpi
 
 # Run test case
-set_mpi
+. ${SOLPSTOP}/SETUP/mpi.ksh
 cd ${SOLPSTOP}/runs/examples
 make ITER_2360_0.95He+0.05H_40MW
 cd ITER_2360_0.95He+0.05H_40MW
