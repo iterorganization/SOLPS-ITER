@@ -1,0 +1,64 @@
+cd ${SOLPSTOP}/runs/examples
+make test_slab_ortho_standalone
+cd test_slab_ortho_standalone
+correct_baserun_timestamps
+mkdir run_new
+cd run_new
+cp ../test/b2.*.parameters .
+cp ../test/b2mn.dat .
+cp ../test/b2fstati .
+cp ../test/b2time.nc .
+touch b2fstati
+b2run -s b2mn
+${SOLPSTOP}/modules/B2.5/src/test/run_checks.sh ../test ./ || exit 1
+
+cd ../..
+make AUG_16151_D
+cd AUG_16151_D
+cd baserun
+rm *.prt b2fgmtry b2fpardf b2fstati b2frates
+b2run b2ag b2ah b2ai b2ar
+cd ..
+mkdir run_standalone_new
+cd run_standalone_new
+cp ../16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2.*.parameters .
+cp ../16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2mn.dat .
+cp ../16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2fstati .
+cp ../16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2time.nc .
+cp ../16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2tallies.nc .
+touch b2fstati
+setup_baserun_eirene_links
+b2run b2mn
+${SOLPSTOP}/modules/B2.5/src/test/run_checks.sh ../16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/ ./ || exit 2
+
+cd ../..
+make ITER_2360_0.95He+0.05H_40MW
+cd ITER_2360_0.95He+0.05H_40MW
+correct_baserun_timestamps
+mkdir run_CI_test
+cd run_CI_test
+cp ../run_restart/b2.*.parameters .
+cp ../run_restart/b2mn.dat .
+cp ../run_restart/b2fstati .
+cp ../run_restart/b2time.nc .
+touch b2fstati
+setup_baserun_eirene_links
+echo "'b2mndr_ntim' '10'" >> b2mn.dat
+b2run b2mn
+${SOLPSTOP}/modules/B2.5/src/test/run_checks_CI_coupled.sh ../run_restart/ ./ || exit 3
+
+cd ../..
+make DIIID_3106_DN_D+C
+cd DIIID_3106_DN_D+C
+correct_baserun_timestamps
+mkdir run_CI_test
+cd run_CI_test
+cp ../P5MW_n3e19_Yc1pc/b2.*.parameters .
+cp ../P5MW_n3e19_Yc1pc/b2mn.dat .
+cp ../P5MW_n3e19_Yc1pc/b2fstati .
+cp ../P5MW_n3e19_Yc1pc/b2time.nc .
+touch b2fstati
+setup_baserun_eirene_links
+echo "'b2mndr_ntim' '10'" >> b2mn.dat
+b2run b2mn
+${SOLPSTOP}/modules/B2.5/src/test/run_checks_CI_coupled.sh ../P5MW_n3e19_Yc1pc/ ./ || exit 4
