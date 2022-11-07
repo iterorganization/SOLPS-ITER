@@ -1,0 +1,39 @@
+# Set up SOLPS-ITER environment
+. $(dirname $0)/SOLPS-ITER_CI_env
+set_mpi
+
+# Compile the code with MPI options activated
+make listobj_nox depend_nox
+make MAKE_OPTIONS=-j8 nox_build_mpi
+
+# Run test case
+cd ${SOLPSTOP}/runs/examples
+make ITER_2360_0.95He+0.05H_40MW
+cd ITER_2360_0.95He+0.05H_40MW
+export DEVICE=iter
+correct_baserun_timestamps
+mkdir run_CI_MPI_test
+cd run_CI_MPI_test
+cp ../run_restart/b2.*.parameters .
+cp ../run_restart/b2mn.dat .
+cp ../run_restart/b2fstati .
+cp ../run_restart/b2time.nc .
+touch b2fstati
+setup_baserun_eirene_links
+echo "'b2mndr_ntim' '10'" >> b2mn.dat
+b2run -m \"mpiexec -np 4\" b2mn
+${SOLPSTOP}/modules/B2.5/src/test/run_checks_CI_coupled.sh ../run_restart/ ./ || exit 1
+
+cd ..
+mkdir run_CI_MPI_test_9-pt
+cd run_CI_MPI_test_9-pt
+cp ../run_restart_9-pt/b2.*.parameters .
+cp ../run_restart_9-pt/b2mn.dat .
+cp ../run_restart_9-pt/b2fstati .
+cp ../run_restart_9-pt/b2time.nc .
+touch b2fstati
+setup_baserun_eirene_links
+echo "'b2mndr_ntim' '10'" >> b2mn.dat
+b2run -m \"mpiexec -np 4\" b2mn
+${SOLPSTOP}/modules/B2.5/src/test/run_checks_CI_coupled.sh ../run_restart_9-pt/ ./ || exit 2
+

@@ -1,0 +1,30 @@
+# Set up SOLPS-ITER environment
+. $(dirname $0)/SOLPS-ITER_CI_env
+set_debug
+
+# Compile the code with debug options activated
+echo "LDOPTS += -mcmodel large -shared-intel" > ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
+echo "FCOPTS += -mcmodel large -shared-intel -diag-enable=error" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
+make listobj_nox_debug depend_nox_debug
+make MAKE_OPTIONS=-j8 nox_build_debug
+
+# Run test case
+cd ${SOLPSTOP}/runs/examples
+make AUG_16151_D+C+He
+cd AUG_16151_D+C+He
+export DEVICE=upgrade
+cd baserun
+rm *.prt
+b2run b2ag b2ah b2ai b2ar
+cd ..
+mkdir run_standalone_debug_new
+cd run_standalone_debug_new
+cp ../16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2.*.parameters .
+cp ../16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2mn.dat .
+cp ../16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2fstati .
+cp ../16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2*.nc .
+touch b2fstati
+setup_baserun_eirene_links
+echo "'b2mndr_ntim' '10'" >> b2mn.dat
+b2run b2mn
+${SOLPSTOP}/modules/B2.5/src/test/run_checks.sh ../16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone ./
