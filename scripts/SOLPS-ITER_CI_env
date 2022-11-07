@@ -1,0 +1,47 @@
+# Set up environment for compilation
+
+set -v
+
+. /usr/share/Modules/init/sh
+
+module load IMAS/3.37.0-4.11.0-2020b
+module load GGD/1.10.2-intel-2020b-DD-3.37.0
+module load AMNS/1.4.0-intel-2020b-DD-3.37.0
+module load xarray/0.16.2-intel-2020b
+module load Viz/2.4.7-intel-2020b
+module load makedepend/1.0.6-GCCcore-10.2.0
+module load MSCL/1.2.2-intel-2020b
+module load GR/0.0.94-GCCcore-10.2.0
+module load GLI/4.5.30-GCCcore-10.2.0
+module load NCL/6.6.2-intel-2020b
+module load NAG/26-intel-2020b
+module load Ghostscript/9.53.3-GCCcore-10.2.0
+module load Doxygen/1.8.20-GCCcore-10.2.0
+module load netCDF-Fortran/4.5.3-iimpi-2020b
+module load CMake/3.20.1-GCCcore-10.2.0
+module load ParaView/5.10.0-intel-2020b-mpi
+module load PyQt5/5.15.1-GCCcore-10.2.0
+module load motif/2.3.8-intel-2020b
+module load gnuplot/5.4.1-GCCcore-10.2.0
+#  module load MATLAB/2020b-GCCcore-10.2.0-Java-11
+module load texlive/20210216-GCCcore-10.2.0
+module load libtirpc/1.3.1-GCCcore-10.2.0
+module load Fundamental-Constants/0.1.1
+
+export GGD_VERSION=`pkg-config ggd --modversion`
+export GLI_HOME=${EBROOTGLI}
+export QTDIR=${EBROOTQT5}
+export NCDIR=${EBROOTNETCDFMINFORTRAN}
+export MPDIR=${EBROOTIMPI}
+
+module load TotalView/2017.1.21_linux_x86-64
+
+# Build SOLPS-ITER
+export SOLPSTOP=${PWD}
+export COMPILER=ifort64
+export HOST_NAME=ITER
+export MAKE=/usr/bin/gmake
+export PATH=${PWD}/scripts:${PATH}
+ulimit -s unlimited
+
+make local

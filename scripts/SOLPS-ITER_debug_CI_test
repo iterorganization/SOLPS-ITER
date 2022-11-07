@@ -1,6 +1,22 @@
+# Set up SOLPS-ITER environment
+./scripts/SOLPS-ITER_CI_env
+
+# Compile the code with debug options activated
+echo "LDOPTS += -mcmodel large -shared-intel" >! ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
+echo "FCOPTS += -mcmodel large -shared-intel -diag-enable=error" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
+make listobj_nox_debug depend_nox_debug
+make MAKE_OPTIONS=-j8 nox_build_debug
+
+# Run test case
+echo "export HOST_NAME=ITER" > ./SETUP/setup.ksh.HOST_NAME.local
+./setup.ksh ifort64
+export PATH=${PWD}/modules/B2.5/builds/couple_SOLPS-ITER.ITER.ifort64.debug:${PATH}
+export SOLPS_DEBUG="yes"
+
 cd ${SOLPSTOP}/runs/examples
 make AUG_16151_D+C+He
 cd AUG_16151_D+C+He
+export DEVICE=upgrade
 cd baserun
 rm *.prt
 b2run b2ag b2ah b2ai b2ar
