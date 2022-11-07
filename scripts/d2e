@@ -17,3 +17,4 @@ F='field.snn'; [ -n "$3" ] && F=$3
 [ -r $1 ] || { echo "File $1 is absent"; echo "$Usage"; exit; }
 
 [ -r $F ] && dg2ef $1 $2 $F || dg2ef $1 $2
+

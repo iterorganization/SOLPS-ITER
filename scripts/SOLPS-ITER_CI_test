@@ -1,0 +1,51 @@
+# Set up SOLPS-ITER environment
+. $(dirname $0)/SOLPS-ITER_CI_env
+
+# Compile the code
+echo "LDOPTS += -mcmodel large -shared-intel" > ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
+echo "FCOPTS += -mcmodel large -shared-intel" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
+make listobj_nox depend_nox
+make MAKE_OPTIONS=-j8 nox_build b25_nox
+
+# Run test cases
+
+cd ${SOLPSTOP}/runs/examples
+make COMPASS_16515_1150ms_D_drift_AFN
+cd COMPASS_16515_1150ms_D_drift_AFN
+export DEVICE=compass
+# cd baserun
+# rm *.prt b2fgmtry b2fpardf b2fstati b2frates
+# b2run b2ag b2ah b2ai b2ar
+# cd ..
+mkdir run_AFN_drift_new
+cd run_AFN_drift_new
+cp ../run_AFN_drift/b2.*.parameters .
+cp ../run_AFN_drift/b2mn.dat .
+cp ../run_AFN_drift/b2fstati .
+cp ../run_AFN_drift/b2*.nc .
+touch b2fstati
+setup_baserun_eirene_links
+b2run -s b2mn
+${SOLPSTOP}/modules/B2.5/src/test/run_checks.sh ../run_AFN_drift/ ./ || exit 1
+
+cd ..
+mkdir run_kin_test
+cd run_kin_test
+cp ../run_kin/b2.*.parameters .
+cp ../run_kin/b2mn.dat .
+cp ../run_kin/b2fstate b2fstati
+cp ../run_kin/b2time.nc .
+cp ../run_kin/input.dat .
+cp ../run_kin/fort.11 .
+cp ../run_kin/fort.13 .
+cp ../run_kin/fort.15 .
+cp ../run_kin/fort.33 .
+cp ../run_kin/fort.34 .
+cp ../run_kin/fort.35 .
+cp ../run_kin/fort.44 .
+cp ../run_kin/fort.46 .
+touch b2fstati
+setup_baserun_eirene_links
+echo "'b2mndr_ntim' '10'" >> b2mn.dat
+b2run b2mn
+${SOLPSTOP}/modules/B2.5/src/test/run_checks_CI_coupled.sh ../run_kin/ ./ || exit 2

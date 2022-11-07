@@ -1,0 +1,10 @@
+# Set up environment for SOLPS-ITER compilation and test runs
+
+set -v
+
+. /usr/share/Modules/init/sh
+
+export MAKE=/usr/bin/gmake
+echo "export HOST_NAME=ITER" > $(dirname $0)/../SETUP/setup.ksh.HOST_NAME.local
+. $(dirname $0)/../setup.ksh ifort64
+make local
