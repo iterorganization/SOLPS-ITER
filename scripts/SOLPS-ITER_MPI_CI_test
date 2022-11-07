@@ -1,15 +1,12 @@
 # Set up SOLPS-ITER environment
 ./scripts/SOLPS-ITER_CI_env
+set_mpi
 
 # Compile the code with MPI options activated
 make listobj_nox depend_nox
 make MAKE_OPTIONS=-j8 nox_build_mpi
 
 # Run test case
-echo "export HOST_NAME=ITER" > ./SETUP/setup.ksh.HOST_NAME.local
-./setup.ksh ifort64
-export PATH=${PWD}/modules/B2.5/builds/couple_SOLPS-ITER.ITER.ifort64.mpi:${PATH}
-
 cd ${SOLPSTOP}/runs/examples
 make ITER_2360_0.95He+0.05H_40MW
 cd ITER_2360_0.95He+0.05H_40MW

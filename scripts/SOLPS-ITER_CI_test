@@ -4,13 +4,10 @@
 # Compile the code
 echo "LDOPTS += -mcmodel large -shared-intel" >! ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
 echo "FCOPTS += -mcmodel large -shared-intel" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
-make local listobj_nox depend_nox
+make listobj_nox depend_nox
 make MAKE_OPTIONS=-j8 nox_build b25_nox
 
 # Run test cases
-echo "export HOST_NAME=ITER" > ./SETUP/setup.ksh.HOST_NAME.local
-./setup.ksh ifort64
-export PATH=${PWD}/modules/B2.5/builds/couple_SOLPS-ITER.ITER.ifort64:${PATH}
 
 cd ${SOLPSTOP}/runs/examples
 make test_slab_ortho_standalone
