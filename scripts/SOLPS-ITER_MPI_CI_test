@@ -1,12 +1,12 @@
 # Set up SOLPS-ITER environment
 . $(dirname $0)/SOLPS-ITER_CI_env
-set_mpi
 
 # Compile the code with MPI options activated
 make listobj_nox depend_nox
 make MAKE_OPTIONS=-j8 nox_build_mpi
 
 # Run test case
+. ${SOLPSTOP}/SETUP/mpi.ksh
 cd ${SOLPSTOP}/runs/examples
 make COMPASS_16515_1150ms_D_drift_AFN
 cd COMPASS_16515_1150ms_D_drift_AFN
