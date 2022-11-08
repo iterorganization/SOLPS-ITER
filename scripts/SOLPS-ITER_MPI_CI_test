@@ -11,6 +11,7 @@ cd ${SOLPSTOP}/runs/examples
 make COMPASS_16515_1150ms_D_drift_AFN
 cd COMPASS_16515_1150ms_D_drift_AFN
 export DEVICE=compass
+correct_baserun_timestamps
 # cd baserun
 # rm *.prt b2fgmtry b2fpardf b2fstati b2frates
 # b2run b2ag b2ah b2ai b2ar
