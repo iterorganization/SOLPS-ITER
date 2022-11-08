@@ -195,6 +195,8 @@ $(target_ag) : b2ag.dat
 	rm -rf b2ag.exe.dir >& /dev/null ; mkdir b2ag.exe.dir ; cp $^ b2ag.exe.dir
 	rm -f $(target_ag)
 	cd b2ag.exe.dir ; ${TIME} ${B2OBJ}/b2ag.exe ${RUN_OPTIONS} ; mv $(target_ag) .. ; rm -f $(notdir $^) >& /dev/null
+	-[ -s b2ag.exe.dir/b2fgmtry_us ] && mv b2ag.exe.dir/b2fgmtry_us . || echo > /dev/null
+	-[ -s b2ag.exe.dir/b2us.regions.parameters ] && mv b2ag.exe.dir/b2us.regions.parameters . || echo > /dev/null
 	-rmdir b2ag.exe.dir
 
 $(target_ah) : b2ah.dat b2fgmtry
@@ -205,8 +207,11 @@ $(target_ah) : b2ah.dat b2fgmtry
 
 $(target_ai) : b2ag.dat b2ai.dat b2fgmtry
 	rm -rf b2ai.exe.dir >& /dev/null ; mkdir b2ai.exe.dir ; cp $^ b2ai.exe.dir
+	-[ -s b2fgmtry_us ] && cp b2fgmtry_us b2ai.exe.dir || echo > /dev/null
 	rm -f $(target_ai)
 	cd b2ai.exe.dir ; ${TIME} ${B2OBJ}/b2ai.exe ${RUN_OPTIONS} ; mv $(target_ai) .. ; rm -f $(notdir $^) >& /dev/null
+	-[ -s b2ai.exe.dir/b2fstati_us ] && mv b2ai.exe.dir/b2fstati_us . || echo > /dev/null
+	-[ -s b2ai.exe.dir/b2fgmtry_us ] && rm b2ai.exe.dir/b2fgmtry_us   || echo > /dev/null
 	-rmdir b2ai.exe.dir
 
 $(target_ar) : b2ar.dat stra.dat weis.dat b2fpardf b2fgmtry AMJUEL HYDHEL
