@@ -21103,9 +21103,10 @@ b2yt.prt \index{b2yt.prt} & formatted & b2yt \\
   \begin{center}
 \begin{tabular}{l|l|l|l|l}
 filename & formatted? & written by & read by & contents \\ \hline
-b2fgmtry \index{b2fgmtry} & un*formatted & b2ag & b2ah b2ai b2co b2fu b2md & geometry \\
+b2fgmtry \index{b2fgmtry} & un*formatted & b2ag & b2ah b2ai b2co b2fu b2md & structured geometry file \\
  &  &  & b2mn b2pl b2ts b2uf b2xd & \\
  &  &  & b2yg b2yh b2yp b2yt & \\
+b2fgmtry\_us \index{b2fgmtry\_us} & un*formatted & b2ag b2us & b2ai & unstructured geometry file \\
 b2fmovie \index{b2fmovie} & un*formatted & b2mn & b2ym & movie of plasma evolution \\
 b2fparam \index{b2fparam} & un*formatted & b2mn & b2md b2fu b2pl b2ts & run parameters used \\
  &  &  & b2uf b2xd b2yh b2yp & \hspace{1cm} for plotting \\
@@ -21118,8 +21119,9 @@ b2frates \index{b2frates} & un*formatted & b2ar & b2md b2mn b2pl b2yn & atomic p
 b2fstate \index{b2fstate} & un*formatted & b2co b2mn & b2fu b2md b2pl b2ts b2uf & final plasma state \\
  &  & b2rd & b2xd b2yi b2yi\_gnuplot & \\
  &  &  & b2yp b2yr b2yt & \\
-b2fstati \index{b2fstati} & un*formatted & b2ai & b2co b2mn b2yi & initial plasma state \\
+b2fstati \index{b2fstati} & un*formatted & b2ai & b2co b2mn b2yi & initial (structured) plasma state \\
  &  &  & b2yi\_gnuplot & \\
+b2fstati\_us \index{b2fstati\_us} & un*formatted & b2ai b2us & & initial (unstructured) plasma state \\
 b2fstatt \index{b2fstatt} & un*formatted & b2yt & & plasma state on a new grid \\
 b2fgmtrt \index{b2fgmtrt} & un*formatted & b2rd & & recovered geometry file \\
 b2ftrace \index{b2ftrace} & un*formatted & b2mn & b2yq & residuals \\
