@@ -21,15 +21,15 @@ cp ../test/b2fstati .
 cp ../test/b2time.nc .
 touch b2fstati
 b2run -s b2mn
-${SOLPSTOP}/modules/B2.5/src/test/run_checks.sh ../test ./ || exit 1
+${SOLPSTOP}/modules/B2.5/src/test/run_checks.sh ../test/ ./ || exit 1
 
 cd ..
-mkdir run_9-pt_new
-cd run_9-pt_new
-cp ../test_9-pt/b2.*.parameters .
-cp ../test_9-pt/b2mn.dat .
-cp ../test_9-pt/b2fstati .
-cp ../test_9-pt/b2time.nc .
+mkdir run_9pt_new
+cd run_9pt_new
+cp ../test_9pt/b2.*.parameters .
+cp ../test_9pt/b2mn.dat .
+cp ../test_9pt/b2fstati .
+cp ../test_9pt/b2time.nc .
 touch b2fstati
 b2run -s b2mn
 ${SOLPSTOP}/modules/B2.5/src/test/run_checks.sh ../test_9pt/ ./ || exit 2
