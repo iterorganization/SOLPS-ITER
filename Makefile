@@ -393,8 +393,9 @@ else
 endif
 
 local:
-	cd modules/Eirene; ${MAKE} local
-	cd modules/B2.5;   ${MAKE} local
+	cd modules/Eirene;   ${MAKE} local
+	cd modules/B2.5;     ${MAKE} local
+	cd modules/solps4-5; ${MAKE} local
 
 tags:
 	cd modules/Carre;          ${MAKE} tags

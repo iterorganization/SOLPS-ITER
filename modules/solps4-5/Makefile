@@ -165,7 +165,7 @@ XROBJ = ${patsubst %.exe, ${OBJDIR}/%.o, ${PROG_XR}}
 XREXTRA=${OBJDIR}/b2_4to5.o ${OBJDIR}/xerset_5.o
 MNEXTRA=
 
-.PHONY: DEFAULT ALL clean depend listobj tags links
+.PHONY: DEFAULT ALL clean depend listobj tags local links
 
 ALL: links ${XREXE}
 
@@ -1022,7 +1022,7 @@ listobj:
 	done; \
 	echo "$$ll" | eval sed "$$E" >> ${BASEDIR}/LISTOBJ
 
-links:
+links: local
 	@[ -L ${SRCDIR}/B2_include.local ] && rm -Rf ${SRCDIR}/B2_include.local || echo > /dev/null
 ifeq ($(shell [ -d ${SOLPS4}/src/Braams/b2/include.local ] && echo yes || echo no ),yes)
 	-mkdir -p ${SRCDIR}/B2_include.local
@@ -1045,6 +1045,11 @@ endif
 	@cat Eirene_4.3.source_files | sed -e 's:[^ ]*/: ${SRCDIR}/solps4_Eirene/:' | paste Eirene_4.3.source_files - | sed -e "s:^:ln -sf ${SOLPS4}/src/Eirene/src/:" > Eirene_links
 	. ./Eirene_links
 	@rm Eirene_links
+
+local:
+	@[ -L ${SRC5LOCAL} ] || ln -sf ${SOLPSTOP}/modules/B2.5/src.local ${SRC5LOCAL}
+	@[ -L ${INC5LOCAL} ] || ln -sf ${SOLPSTOP}/modules/B2.5/src/include.local ${INC5LOCAL}
+	@[ -L ${B2M5LOCAL} ] || ln -sf ${SOLPSTOP}/modules/B2.5/src/modules.local ${B2M5LOCAL}
 
 ${BASEDIR}/LISTOBJ: listobj
 
