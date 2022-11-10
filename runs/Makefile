@@ -855,7 +855,7 @@ else
 	[ -s b2us.exe.dir/ftn33 ] && rm b2us.exe.dir/ftn33 || echo > /dev/null ; \
 	[ -s b2us.exe.dir/ftn34 ] && rm b2us.exe.dir/ftn34 || echo > /dev/null ; \
 	[ -s b2us.exe.dir/ftn35 ] && rm b2us.exe.dir/ftn35 || echo > /dev/null ; \
-	[ -s b2us.exe.dir/input.dat ] && rm b2us.exe.dirinput.dat || echo > /dev/null
+	[ -s b2us.exe.dir/input.dat ] && rm b2us.exe.dir/input.dat || echo > /dev/null
 endif
 	[ -s b2us.exe.dir/eirene_block3.dat  ] && mv b2us.exe.dir/eirene_block3.dat  . || echo > /dev/null ; \
 	[ -s b2us.exe.dir/eirene_block14.dat ] && mv b2us.exe.dir/eirene_block14.dat . || echo > /dev/null ; \
