@@ -5,8 +5,14 @@
 } || {
   filestem="fort."
 }
+  echo "Saving converted geometry and state files in structured format for post processing"
+  [ -s ./b2fgmtry ] && cp ./b2fgmtry ./b2fgmtry_st
+  [ -s ../convert/b2fgmtry ] && cp ../convert/b2fgmtry ./b2fgmtry_st
+  [ -s ./b2fstati ] && cp ./b2fstati ./b2fstati_st
+  [ -s ../convert/b2fstati ] && cp ../convert/b2fstati ./b2fstati_st
 
-  echo "First copying the files modified by b2us"
+
+  echo "Copying the files modified by b2us"
   [ -s ../convert/b2fgmtry_us ] && cp -uv ../convert/b2fgmtry_us b2fgmtry
   [ -s ../convert/"$filestem"30 ] && cp -uv ../convert/"$filestem"30 .
   [ -s ../convert/triangle.coordinates ] && cp -uv ../convert/triangle.coordinates "$filestem"33
