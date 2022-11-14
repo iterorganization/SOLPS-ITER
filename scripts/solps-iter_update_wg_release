@@ -36,6 +36,8 @@ Carre2:
   echo "Updating Carre2"
   if (! -d $SOLPSTOP/modules/Carre2) then
     git clone ssh://git@git.iter.org/bnd/carre.git $SOLPSTOP/modules/Carre2
+    git submodule init
+    git submodule update
   endif
   cd $SOLPSTOP/modules/Carre2
   set repo="Carre2"
