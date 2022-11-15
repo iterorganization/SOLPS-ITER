@@ -121,11 +121,11 @@ B2_5.config.common.ifort64: ${B25DIR}/config/config.common.ifort64
 	ln -sf ${B25DIR}/config/config.common.ifort64 B2_5.config.common.ifort64
 
 SOLPS_versions: force
-	@( cd ${SOLPSTOP} ; git describe --always | awk '{print "SOLPS-ITER version : ",$$1}' ) > SOLPS_versions_new
-	@( cd ${SOLPSTOP}/modules/B2.5 ; git describe --always | awk '{print "B2.5 version : ",$$1}') >> SOLPS_versions_new
-	@( cd ${SOLPSTOP}/modules/Eirene ; git describe --always | awk '{print "Eirene version : ",$$1}' ) >> SOLPS_versions_new
-	@( cd ${SOLPSTOP}/modules/Carre ; git describe --always | awk '{print "Carre version : ",$$1}' ) >> SOLPS_versions_new
-	@( cd ${SOLPSTOP}/modules/DivGeo ; git describe --always | awk '{print "DivGeo version : ",$$1}' ) >> SOLPS_versions_new
+	@( cd ${SOLPSTOP} ; git describe --tags --always | awk '{print "SOLPS-ITER version : ",$$1}' ) > SOLPS_versions_new
+	@( cd ${SOLPSTOP}/modules/B2.5 ; git describe --tags --always | awk '{print "B2.5 version : ",$$1}') >> SOLPS_versions_new
+	@( cd ${SOLPSTOP}/modules/Eirene ; git describe --tags --always | awk '{print "Eirene version : ",$$1}' ) >> SOLPS_versions_new
+	@( cd ${SOLPSTOP}/modules/Carre ; git describe --tags --always | awk '{print "Carre version : ",$$1}' ) >> SOLPS_versions_new
+	@( cd ${SOLPSTOP}/modules/DivGeo ; git describe --tags --always | awk '{print "DivGeo version : ",$$1}' ) >> SOLPS_versions_new
 	@if cmp -s SOLPS_versions_new SOLPS_versions ; then rm SOLPS_versions_new ; else mv SOLPS_versions_new SOLPS_versions ; fi
 
 solps-iter_git.log:
