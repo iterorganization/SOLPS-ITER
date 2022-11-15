@@ -247,7 +247,7 @@ VERSION: ${SRCDIR}/git_version_Uinp.h
 
 ${SRCDIR}/git_version_Uinp.h: force
 	@echo "      character*32 :: git_version_Uinp =" > ${SRCDIR}/git_version_new.h
-	@echo "     . '`git describe --dirty --always | cut -c 1-32`'" >> ${SRCDIR}/git_version_new.h
+	@echo "     . '`git describe --tags --dirty --always | cut -c 1-32`'" >> ${SRCDIR}/git_version_new.h
 	@if cmp -s ${SRCDIR}/git_version_new.h ${SRCDIR}/git_version_Uinp.h; then rm ${SRCDIR}/git_version_new.h; else mv ${SRCDIR}/git_version_new.h ${SRCDIR}/git_version_Uinp.h; fi
 
 ${OBJDIR}/dependencies.${COMPILER}:

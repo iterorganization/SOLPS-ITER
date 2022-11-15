@@ -140,7 +140,7 @@ ${OBJDIR}/LISTOBJ: listobj
 VERSION: src/git_version.h
 
 src/git_version.h: force
-	@echo "#define GIT_VERSION \"`git describe --dirty --always`\"" > src/git_version_new.h
+	@echo "#define GIT_VERSION \"`git describe --tags --dirty --always`\"" > src/git_version_new.h
 	@if cmp -s src/git_version_new.h src/git_version.h; then rm src/git_version_new.h; else mv src/git_version_new.h src/git_version.h; fi
 
 ${OBJDIR}/dependencies.${COMPILER}:
