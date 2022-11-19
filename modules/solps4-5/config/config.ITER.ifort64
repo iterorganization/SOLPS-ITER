@@ -14,10 +14,8 @@ ifdef SOLPS_DEBUG
 FCOPTS    += -traceback
 endif
 
-ifneq (,$(findstring sdcc-login,${NODENAME}))
 SOLPSINCLUDE   += `pkg-config libtirpc --cflags`
 LD_SONNET += `pkg-config libtirpc --libs`
-endif
 
 #!!!Local Variables:
 #!!! mode: Makefile

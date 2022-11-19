@@ -11,12 +11,8 @@ ifndef SOLPS_DEBUG
 FCOPTS  += -fdefault-real-8
 endif
 
-ifeq (,$(findstring sdcc-login,${NODENAME}))
-LDLIBES  = -limf -lm # Intel Math must be before -lm
-else
 SOLPSINCLUDE += `pkg-config libtirpc --cflags`
 LDLIBES  = `pkg-config libtirpc --libs`
-endif
 
 #!!!Local Variables:
 #!!! mode: Makefile
