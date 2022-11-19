@@ -46,7 +46,7 @@ Available options are:
   -T <<HOURS>>       number of elapsed hours requested (default $hours)
   -M <<MEM_SIZE>>    memory size (default $mem)
   -N <<NODES>>       number of nodes requested (default $NODES)
-  -Q <<PARTITION>>   partition on which to submit the job (default gen9_ib on HPC nodes, gen10_ib on SDCC nodes)
+  -Q <<PARTITION>>   partition on which to submit the job (default gen10_ib)
 
 EOF
     exit
@@ -156,29 +156,16 @@ EOF
     goto argloop
   endif
 
-# logic to determine the partition on the ITER HPC cluster
+# logic to determine the partition on the ITER SDCC cluster
 @ TASKS = ( $PROCS / $NODES )
 set nodename=`hostname`
-switch ($nodename)
-  case "sdcc-login*.iter.org":
-    set job_prefix="SLURM"
-    if ($part == "unset") then
-      set part=gen10_ib
-    endif
-    unsetenv LD_PRELOAD
-    setenv LD_PRELOAD "/usr/lib64/libpmi2.so"
-    unsetenv I_MPI_PMI_LIBRARY
-    breaksw
-  case "hpc-login0*.iter.org":
-    set job_prefix="SLURM"
-    if ($part == "unset") then
-      set part=gen9_ib
-    endif
-    breaksw
-  default:
-    set job_prefix="SLURM"
-    breaksw
-endsw
+set job_prefix="SLURM"
+if ($part == "unset") then
+  set part=gen10_ib
+endif
+unsetenv LD_PRELOAD
+setenv LD_PRELOAD "/usr/lib64/libpmi2.so"
+unsetenv I_MPI_PMI_LIBRARY
 
 if ($1 == "") then
   if (-s input.dat && $standalone == "no") then
