@@ -16,20 +16,8 @@ set USE_MPI=""
 set nodename=`hostname`
 if ($?SOLPS_MPI) then
   set MPI_OPTS=#MPIOPTS#
-  switch ($nodename)
-    case "sdcc-login*.iter.org":
-      set MPI_EXEC=mpiexec
-      set USE_MPI="-m ${MPI_EXEC} ${MPI_OPTS}"
-      breaksw
-    case "hpc-login0*.iter.org":
-      set MPI_EXEC="srun --mpi=pmi2"
-      set USE_MPI="-m ${MPI_EXEC}"
-      breaksw
-    default:
-      set MPI_EXEC=mpiexec
-      set USE_MPI="-m ${MPI_EXEC} ${MPI_OPTS}"
-      breaksw
-  endsw
+  set MPI_EXEC=mpiexec
+  set USE_MPI="-m ${MPI_EXEC} ${MPI_OPTS}"
   set TIME="srun --mpi=pmi2"
   set USE_MPI=`echo $USE_MPI | sed -e 's:-m :-m ''":' -e 's:$:"'':'`
 endif
