@@ -146,8 +146,11 @@
       logical ex
       character filename*80, lblgm*120, lblmn*120, idout*80
       character*8 device
-#ifdef USE_PXFGETENV
+#ifndef NO_GETENV
       integer lenval, ierror
+#ifndef USE_PXFGETENV
+      intrinsic get_environment_variable
+#endif
 #endif
 *   ..procedures
       logical streql
@@ -347,17 +350,19 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
         write(70,'(a)') '''eirene_format''     ''facelift'''
       endif
       write(70,'(a)') '''solps_version''     ''4.3'''
-#ifdef NO_GETENV
 #ifdef JET
       device='jet'
 #else
       device='iter'
 #endif
-#else
+#ifndef NO_GETENV
 #ifdef USE_PXFGETENV
       CALL PXFGETENV ('DEVICE', 0, device, lenval, ierror)
 #else
-      call getenv ('DEVICE', device)
+      call get_environment_variable
+     . ('DEVICE', status=ierror, length=lenval)
+      if (ierror.eq.0) call get_environment_variable
+     . ('DEVICE', value=device)
 #endif
 #endif
       if (streql(device,'iter'))
