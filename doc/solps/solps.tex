@@ -17988,13 +17988,28 @@ We list below where the {\tt DivGeo} compilation switches are used.
     \hline \endfoot
     \endlastfoot
        CONSTANTS\_PROVIDED & equtrn/src/eqdim.f90 \\
+       GGD\_MAJOR\_VERSION & equtrn/src/wrids.f \\
+       GGD\_MICRO\_VERSION & equtrn/src/wrids.f \\
+       GGD\_MINOR\_VERSION & equtrn/src/wrids.f \\
        IMAS & equtrn/src/eqdim.f90 \\
+       IMAS\_MAJOR\_VERSION & equtrn/src/dg2ids.f \\
+       IMAS\_MAJOR\_VERSION & equtrn/src/ids2dg.f \\
+       IMAS\_MAJOR\_VERSION & equtrn/src/wrids.f \\
        IMAS\_MINOR\_VERSION & equtrn/src/eqdim.f90 \\
        IMAS\_MINOR\_VERSION & equtrn/src/rdids.f \\
        IMAS\_MINOR\_VERSION & equtrn/src/wrids.f \\
+       NO\_GETENV & equtrn/src/dg2ids.f \\
+       NO\_GETENV & equtrn/src/ids2dg.f \\
+       NO\_GETENV & equtrn/src/wrids.f \\
        UAL\_MAJOR\_VERSION & equtrn/src/rdids.f \\
+       UAL\_MAJOR\_VERSION & equtrn/src/wrids.f \\
        UAL\_MICRO\_VERSION & equtrn/src/rdids.f \\
+       UAL\_MICRO\_VERSION & equtrn/src/wrids.f \\
        UAL\_MINOR\_VERSION & equtrn/src/rdids.f \\
+       UAL\_MINOR\_VERSION & equtrn/src/wrids.f \\
+       USE\_PXFGETENV & equtrn/src/dg2ids.f \\
+       USE\_PXFGETENV & equtrn/src/ids2dg.f \\
+       USE\_PXFGETENV & equtrn/src/wrids.f \\
     \hline
     \caption{Defines for DivGeo and where they are used.}
     \label{tab:DivGeodefines}
@@ -18288,6 +18303,8 @@ IMAS & preprocessing/b2ardr.F \\
 IMAS & utility/ratadas.F \\
 IMAS\_MAJOR\_VERSION & ids/b2\_ual\_rewrite.F90 \\
 IMAS\_MAJOR\_VERSION & ids/b2\_ual\_write.F90 \\
+IMAS\_MAJOR\_VERSION & ids/b2\_ual\_write\_b2mod.F90 \\
+IMAS\_MINOR\_VERSION & ids/b2mod\_interp.F90 \\
 IMAS\_MINOR\_VERSION & ids/b2mod\_ual.F90 \\
 IMAS\_MINOR\_VERSION & ids/b2mod\_ual\_io.F90 \\
 IMAS\_MINOR\_VERSION & ids/b2mod\_ual\_io\_data.F90 \\
@@ -18332,6 +18349,7 @@ NAGF95 & b2plot/initialize\_plotting.F \\
 NAGF95 & b2plot/set\_extralabel.F \\
 NAGF95 & b2plot/spect.F \\
 NAGF95 & convert/b2mds.F \\
+NAGF95 & convert/b2plasmastate\_inspect.F \\
 NAGF95 & driver/b2co.F \\
 NAGF95 & modules/b2mod\_ppout.F \\
 NAGF95 & modules/b2mod\_solpstop.F \\
@@ -18339,6 +18357,19 @@ NAGF95 & output/b2wgpj\_gnuplot.F \\
 NAGF95 & preprocessing/b2agfs.F \\
 NAGF95 & utility/open\_file.F \\
 NAGF95 & utility/usrnam.F \\
+NAGFOR & b2plot/dhdata.F \\
+NAGFOR & b2plot/set\_extralabel.F \\
+NAGFOR & convert/b2plasmastate\_inspect.F \\
+NAGFOR & driver/b2mod\_driver.F \\
+NAGFOR & driver/b2obeq.F \\
+NAGFOR & driver/b2obfn.F \\
+NAGFOR & driver/b2oblm.F \\
+NAGFOR & modules/b2mod\_openmp.F \\
+NAGFOR & modules/b2mod\_types.F \\
+NAGFOR & output/b2wgpj\_gnuplot.F \\
+NAGFOR & transport/b2trca.F \\
+NAGFOR & transport/b2trcv.F \\
+NAGFOR & utility/calc\_atomic\_data.F \\
 NCAR4 & b2plot/end\_page.F \\
 NCAR4 & b2plot/initialize\_plotting.F \\
 NCAR4 & b2plot/terminate\_plotting.F \\
@@ -18370,7 +18401,6 @@ NO\_CDF & user/cdfmovie.F \\
 NO\_CDF & utility/cdf\_routines.F \\
 NO\_F01AAF & transport/b2tr21.F \\
 NO\_GETENV & b2plot/b2plot.F \\
-NO\_GETENV & b2plot/dhdata.F \\
 NO\_GETENV & b2plot/spect.F \\
 NO\_GETENV & convert/b2co\_movies\_cdf.F \\
 NO\_GETENV & convert/b2co\_tally\_cdf.F \\
@@ -18379,11 +18409,15 @@ NO\_GETENV & convert/b2co\_wall\_cdf.F \\
 NO\_GETENV & convert/b2mds.F \\
 NO\_GETENV & driver/b2co.F \\
 NO\_GETENV & driver/b2mod\_driver.F \\
+NO\_GETENV & ids/b2\_ual\_rewrite.F90 \\
 NO\_GETENV & ids/b2\_ual\_write.F90 \\
+NO\_GETENV & ids/b2\_ual\_write\_b2mod.F90 \\
+NO\_GETENV & ids/b2mod\_ual\_io.F90 \\
 NO\_GETENV & modules/b2mod\_ppout.F \\
 NO\_GETENV & modules/b2mod\_solpstop.F \\
 NO\_GETENV & preprocessing/b2agfs.F \\
 NO\_GETENV & utility/open\_file.F \\
+NO\_GETENV & utility/usrnam.F \\
 NO\_IEEE & utility/nancheck.F \\
 NO\_LONG\_LINES & output/tallies.F \\
 NO\_NAG & b2plot/caltraj.F \\
@@ -18447,6 +18481,9 @@ SOLPS4\_3 & modules/b2mod\_mwti.F90 \\
 SOLPS4\_3 & modules/b2mod\_neutrals\_namelist.F \\
 SOLPS4\_3 & sources/eirene\_f30f31.F \\
 UAL\_MAJOR\_VERSION & ids/b2mod\_ual.F90 \\
+UAL\_MAJOR\_VERSION & ids/b2mod\_ual\_io.F90 \\
+UAL\_MICRO\_VERSION & ids/b2mod\_ual\_io.F90 \\
+UAL\_MINOR\_VERSION & ids/b2mod\_ual\_io.F90 \\
 USE\_CDF\_B2STIME & modules/b2mod\_comtimpl.F \\
 USE\_CDF\_B2STIME & common/COUPLE/COMTIMPL.F \\
 USE\_IMPGYRO & driver/b2mod\_driver.F \\
@@ -18470,17 +18507,19 @@ USE\_MPI & modules/b2mod\_user\_namelist.F \\
 USE\_MPI & modules/b2mod\_wall.F \\
 USE\_MPI & utility/xertst.F \\
 USE\_PXFGETENV & b2plot/b2plot.F \\
-USE\_PXFGETENV & b2plot/dhdata.F \\
 USE\_PXFGETENV & b2plot/initialize\_plotting.F \\
 USE\_PXFGETENV & b2plot/set\_extralabel.F \\
 USE\_PXFGETENV & b2plot/spect.F \\
-USE\_PXFGETENV & convert/b2mds.F \\
 USE\_PXFGETENV & convert/b2co\_movies\_cdf.F \\
 USE\_PXFGETENV & convert/b2co\_tally\_cdf.F \\
 USE\_PXFGETENV & convert/b2co\_time\_cdf.F \\
 USE\_PXFGETENV & convert/b2co\_wall\_cdf.F \\
+USE\_PXFGETENV & convert/b2mds.F \\
+USE\_PXFGETENV & convert/b2plasmastate\_inspect.F \\
 USE\_PXFGETENV & driver/b2co.F \\
+USE\_PXFGETENV & ids/b2\_ual\_rewrite.F90 \\
 USE\_PXFGETENV & ids/b2\_ual\_write.F90 \\
+USE\_PXFGETENV & ids/b2mod\_ual\_io.F90 \\
 USE\_PXFGETENV & modules/b2mod\_ppout.F \\
 USE\_PXFGETENV & modules/b2mod\_solpstop.F \\
 USE\_PXFGETENV & preprocessing/b2agfs.F \\
@@ -18583,6 +18622,8 @@ G95 & assistant/exit\_own.f \\
 HPUX & modules/eirmod\_cinit.F \\
 MPI\_MOD & modules/eirmod\_mpi.F90 \\
 MPI\_VERSION & modules/eirmod\_mpi.F90 \\
+NAGFOR & main-routines/eirene.f \\
+NAGFOR & startup-routines/find\_param.f \\
 NO\_B2\_CHEM\_SPUT & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.F \\
 NO\_GETENV & file-handling/get\_solpstop.f \\
 PGF90 & assistant/exit\_own.f \\

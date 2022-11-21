@@ -1610,8 +1610,11 @@ c
       integer nx, ny
       character tab
       character*8 device
-#ifdef USE_PXFGETENV
+#ifndef NO_GETENV
       integer lenval, ierror
+#ifndef USE_PXFGETENV
+      intrinsic get_environment_variable
+#endif
 #endif
       logical streql
       external streql
@@ -1625,17 +1628,19 @@ c
       write(99,'(a)') '  -2.0, 99*0.0'
       write(99,'(3a)')
      . '''b2agfs_geometry'''//tab//'''',trim(sonnetfile_4),''''
-#ifdef NO_GETENV
 #ifdef JET
       device='jet'
 #else
       device='iter'
 #endif
-#else
+#ifndef NO_GETENV
 #ifdef USE_PXFGETENV
       CALL PXFGETENV ('DEVICE', 0, device, lenval, ierror)
 #else
-      call getenv ('DEVICE', device)
+      call get_environment_variable
+     . ('DEVICE', status=ierror, length=lenval)
+      if (ierror.eq.0) call get_environment_variable
+     . ('DEVICE', value=device)
 #endif
 #endif
       if (streql(device,'iter'))

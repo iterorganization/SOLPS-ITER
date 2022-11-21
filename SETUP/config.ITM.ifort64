@@ -20,7 +20,7 @@
 # Add -DF2003 to SOLPS_CPP
 #
 
-       NCDIR ?= ${NETCDFF_HOME}
+       NCDIR ?= ${ITM_NETCDF_DIR}
    MSCL_ROOT ?= /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/mscl
        H5DIR ?= ${HDF5_HOME}
      GR_ROOT ?= /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/gr
@@ -34,7 +34,7 @@
 # Variables for linking
 #
 
-LD_NETCDF  = -L${NCDIR}/lib -lnetcdff
+LD_NETCDF  = `pkg-config --libs netcdf-fortran`
 LD_MSCL    = `pkg-config mscl --libs`
 LD_GR      = -L${GR_ROOT} -lgr
 LD_GKS     = -L${GLI_HOME} -lgks -lgfortran

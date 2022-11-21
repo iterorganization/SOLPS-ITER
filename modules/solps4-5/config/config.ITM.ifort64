@@ -4,6 +4,8 @@ CPP = /lib/cpp -C -traditional -ffreestanding
 
 FC = ifort
 
+SOLPSINCLUDE += `pkg-config netcdf-fortran --cflags`
+
 #!!!Local Variables:
 #!!! mode: Makefile
 #!!! End:
