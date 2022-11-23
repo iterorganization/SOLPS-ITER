@@ -28,7 +28,7 @@
   NCARG_ROOT ?= /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/NCARG
       NAGDIR ?= ${NAG_HOME}
  MDSPLUS_DIR ?= /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/MDSPLUS
-       MPDIR ?= ${INTELMPI_HOME}
+       MPDIR ?= ${OPENMPI_HOME}
 
 #
 # Variables for linking
