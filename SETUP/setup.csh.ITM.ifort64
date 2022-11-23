@@ -19,6 +19,7 @@ pkg-config ggd --exists && setenv GGD_VERSION `pkg-config ggd --modversion` || s
 setenv EBVERSIONMSCL `pkg-config mscl --modversion`
 module load texlive
 module load itm-hdf5/1.12.2/intel/2020 # was hdf5/1.8.17--intel--pe-xe-2017--binary
+module unload itm-netcdf/4.4
 module load itm-netcdf/4.9.0/intel/2020 # was netcdf/4.4.1--intel--pe-xe-2017--binary
 module load itm-netcdff/4.6.0/intel/2020 # was netcdff/4.4.4--intel--pe-xe-2017--binary
 setenv SYSNAME `fs sysname | cut -d "'" -f 2`
@@ -29,7 +30,7 @@ if (! $?DEVICE) then
   endif
 endif
 
-module load paraview
+module load paraview/5.10.0
 if ($?LD_LIBRARY_PATH) then
   setenv LD_LIBRARY_PATH "/usr/lib64:${LD_LIBRARY_PATH}"
 else
