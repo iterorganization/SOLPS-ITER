@@ -27,7 +27,7 @@ setenv SYSNAME `fs sysname | cut -d "'" -f 2`
 # load modules
 # module load solps-gui
 module load texlive
-module load paraview/5.10.0
+module load paraview/5.2.0
 
 # Set environment variables
 if (! $?DEVICE) then
