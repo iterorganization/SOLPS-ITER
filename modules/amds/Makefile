@@ -124,7 +124,7 @@ clean:
 TAGS:	tags
 
 tags:
-	rm -f TAGS ; etags src/*.c src/*.h
+	rm -f TAGS ; ctags -e -f TAGS src/*.c src/*.h || touch TAGS
 
 depend: ${OBJS:.o=.c}
 	@$(CC) -M $^ | sed '/^[^ ]*.o: / s|^|${OBJDIR}/|' | \

@@ -71,7 +71,7 @@ listobj:
 	cd src ; echo " " *.F | sed -e 's/ [^ /]*\// /g' -e 's/\.F/.o/g'
 
 tags:
-	rm -f TAGS ; etags src/*.F
+	rm -f TAGS ; ctags -e -f TAGS src/*.F || touch TAGS
 
 dirs: ${OBJDIR}
 
