@@ -994,7 +994,7 @@ endif
 ${BASEDIR}/TAGS: tags
 
 tags:
-	rm -f ${BASEDIR}/TAGS ; etags ${TAGSLIST} || touch ${BASEDIR}/TAGS
+	rm -f ${BASEDIR}/TAGS ; ctags -e -f ${BASEDIR}/TAGS ${TAGSLIST} || touch ${BASEDIR}/TAGS
 
 clean:
 	rm -f ${OBJDIR}/*.f ${OBJDIR}/*.f90 ${OBJDIR}/*.o ${OBJDIR}/*.${MOD} ${OBJDIR}/*.a ${OBJDIR}/*.exe
