@@ -1,0 +1,50 @@
+#! /bin/tcsh -f
+
+if($# < 3) then
+  echo "Need to supply"
+  echo "  arg 1 == path to mesh.extra"
+  echo "  arg 2 == path to GEO file"
+  echo "  arg 3 == path to run.log"
+  echo "  arg 4 == xrange (e.g. '[5:6]')"
+  echo "  arg 5 == yrange (e.g. '[-4.5:-2.5]')"
+  exit
+endif
+
+set MESH = $1
+set GEO = $2
+set RUN = $3
+
+if( "$4" == "") then
+  set XR=""
+else
+  set XR="set xrange $4"
+endif
+
+if("$5" == "") then
+  set YR=""
+else
+  set YR="set yrange $5"
+endif
+
+awk.mesh $MESH >! /tmp/$USER.$$.mesh
+
+awk.plot_mesh $GEO >! /tmp/$USER.$$.geo
+
+grep -A16 'ERROR IN FOLNEUT, ZDT1 OR NCELL OUT OF RANGE' $RUN | awk '/X0,Y0,Z0,ZT/{x0=$2; y0=$3; z0=$4}/X0ERR,Y0ERR,Z0ERR/{print x0/100,y0/100,z0/100; print $2/100,$3/100,$4/100; printf "\n"}' >! /tmp/$USER.$$.eirene
+
+cat <<EOF >! gnuplot.cmd
+set title noenhanced
+set key noenhanced
+set nolog x
+set nolog y
+set format y "%g"
+set zero 1e-50
+set timestamp
+#set size ratio -1
+$XR
+$YR
+plot "/tmp/$USER.$$.mesh" with lines title "mesh.extra", "/tmp/$USER.$$.geo" with lines title "Carre GEO output", "/tmp/$USER.$$.eirene" with lines lw 3 title "FOLNEUT errors from EIRENE"
+pause mouse
+EOF
+
+gnuplot gnuplot.cmd
