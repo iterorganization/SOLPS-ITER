@@ -1,7 +1,7 @@
 #! /usr/bin/env tcsh
 
 cd $SOLPSTOP
-echo "Switching to SOLPS-ITER release/3.0.8 branch"
+echo "Switching to SOLPS-ITER release/3.1.0 branch"
 set repo="SOLPS-ITER"
 git fetch --prune
 git checkout release/3.1.0 && echo "Checked out SOLPS-ITER 3.1.0 release branch" || goto branch
