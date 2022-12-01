@@ -51,5 +51,5 @@ else
 endif
 
 $ZCAT $FILE | \
-  awk 'NR>1{printf "%s %s\n%s %s\n%s %s\n%s %s\n%s %s\n\n",$5,$6,$7,$8,$11,$12,$9,$10,$5,$6}' | cat - /tmp/tmp.$USER.$$.mesh.extra | xyplot
+  awk 'NF==14{printf "%s %s\n%s %s\n%s %s\n%s %s\n%s %s\n\n",$5,$6,$7,$8,$11,$12,$9,$10,$5,$6}' | cat - /tmp/tmp.$USER.$$.mesh.extra | xyplot
 /bin/rm /tmp/tmp.$USER.$$.mesh.extra $GNUPLOT_EXTRA
