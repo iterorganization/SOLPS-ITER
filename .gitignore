@@ -85,6 +85,8 @@ doc/solps/b2plot.commands
 doc/solps/DIMENSIONS.F
 doc/solps/SOLPS_versions
 doc/solps/texput.log
+doc/solps/LICENSE.tex
+doc/solps/CONTRIBUTING.tex
 
 # auxiliary files for AMDS
 modules/amds/src/x_~fbr.c
