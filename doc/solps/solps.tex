@@ -64,6 +64,9 @@
 \newcommand{\grad}{\nabla}
 \definecolor{Red}{rgb}{1.0,0.0,0.0}
 
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
 \makeindex
 
 \begin{document}
@@ -2118,10 +2121,11 @@ or to the write-up in Appendix \ref{cha:Mladen}.
 Users are encouraged to use the "physics" formulation of the
 boundary conditions specified later (see section \ref{lab:b2:boundary:parameters}),
 rather than the "Bas" formulation listed here.
-For double-null cases, the "South" boundary must be split in six pieces,
-and the "North" boundary in two. However, the {\tt b2ah} format does
-not allow for the specification of additional "East" or "West" boundaries,
-so double-null users {\bf must} use the "physics" formulation in addition.
+For double-null and snowflake cases, the "South" boundary must be split
+in at least six pieces, and the "North" boundary in at least two.
+However, the {\tt b2ah} format does not allow for the specification of
+additional "East" or "West" boundaries, so double-null and snowflake cases
+{\bf must} use the "physics" formulation in addition.
 The code enforces this requirement.
 
 The boundary condition implemented arises from numerical combinations
@@ -21318,6 +21322,14 @@ The conclusion: the largest effect seems to have come from the
 correction in the cell volumes (causing a change in {\tt b2fgmtry}),
 but this caused a small final change.  The change of physics constants
 introduced a very small effect, seen only as a jump in the residuals.
+
+\chapter{License}
+
+\input{LICENSE.tex}
+
+\chapter{Contributing}
+
+\input{CONTRIBUTING.tex}
 
 \bibliographystyle{iaea}
 \bibliography{tok,aug,general,extern,main,model,divgas,mnw,xpb}
