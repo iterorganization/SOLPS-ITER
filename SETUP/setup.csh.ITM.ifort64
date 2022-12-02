@@ -26,13 +26,7 @@ if (! $?DEVICE) then
   endif
 endif
 
-module load paraview/5.2.0
-if ($?LD_LIBRARY_PATH) then
-  setenv LD_LIBRARY_PATH "/usr/lib64:${LD_LIBRARY_PATH}"
-else
-  setenv LD_LIBRARY_PATH "/usr/lib64"
-endif
-
+module load paraview/5.10.0
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
 else
@@ -44,12 +38,17 @@ else
     setenv PARAVIEW_INCLUDE `paraview-config --cppflags`
   else
     setenv PARAVIEW_LIB `paraview-config --libs --python | sed s/-L//`
-    setenv LD_LIBRARY_PATH "/usr/lib64:${PARAVIEW_LIB}:${LD_LIBRARY_PATH}"
+    setenv LD_LIBRARY_PATH "${PARAVIEW_LIB}:${LD_LIBRARY_PATH}"
     setenv PARAVIEW_INCLUDE `paraview-config --include`
     setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages/vtk:${PYTHONPATH}"
     setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
     setenv LD_CATALYST "`paraview-config --libs vtkPVPythonCatalyst` -lstdc++"
   endif
+endif
+if ($?LD_LIBRARY_PATH) then
+  setenv LD_LIBRARY_PATH "/usr/lib64:${LD_LIBRARY_PATH}"
+else
+  setenv LD_LIBRARY_PATH "/usr/lib64"
 endif
 
 # Debugger (set environment variable DBX)

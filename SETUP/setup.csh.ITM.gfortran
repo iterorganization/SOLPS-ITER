@@ -27,7 +27,7 @@ setenv SYSNAME `fs sysname | cut -d "'" -f 2`
 # load modules
 # module load solps-gui
 module load texlive
-module load paraview/5.2.0
+module load paraview/5.10.0
 
 # Set environment variables
 if (! $?DEVICE) then
@@ -58,7 +58,11 @@ else
     setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
   endif
 endif
-setenv LD_LIBRARY_PATH "/usr/lib64/:${LD_LIBRARY_PATH}"
+if ($?LD_LIBRARY_PATH) then
+  setenv LD_LIBRARY_PATH "/usr/lib64:${LD_LIBRARY_PATH}"
+else
+  setenv LD_LIBRARY_PATH "/usr/lib64"
+endif
 
 # Debugger (set environment variable DBX)
 setenv DBX totalview
