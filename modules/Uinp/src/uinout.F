@@ -142,22 +142,18 @@ c*** 1.  General data for the run
      . " Created with SOLPS-ITER Uinp version "//git_version_Uinp
       write(iunoo,700) utxtgt
       write(iunoo,700) utxthd(1)
-      if (nbgk.gt.0) then
-        j=nfile/10000
-        k=(nfile-j*10000)/1000
-        l=(nfile-j*10000-k*1000)/100
-        m=(nfile-j*10000-k*1000-l*100)/10
-        n=mod(nfile,10)
-        if (l.le.2) then
-          l=4
-        else if (l.eq.6.or.l.eq.7.or.l.eq.9) then
-          l=4
-        else if (l.eq.8) then
-          l=3
-        endif
-        if (n.ne.1) n=6
-        nfile=j*10000+k*1000+l*100+m*10+n
+      j=nfile/10000
+      k=(nfile-j*10000)/1000
+      l=(nfile-j*10000-k*1000)/100
+      m=(nfile-j*10000-k*1000-l*100)/10
+      n=mod(nfile,10)
+      if (nprnli.gt.0) then
+        if (j.eq.0) j=3
       end if
+      if (nbgk.gt.0) then
+        if (l.eq.0) l=8
+      end if
+      nfile=j*10000+k*1000+l*100+m*10+n
       write(iunoo,707) nprll,nmode,ntcpu,nfile,niter0,niter,
      .                 ntime0,ntim1,nfullrun
       write(iunoo,707) noptim,noptm1,ngeom_usr,ncoup_input,
