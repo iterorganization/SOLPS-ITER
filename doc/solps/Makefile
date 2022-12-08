@@ -121,10 +121,10 @@ B2_5.config.common.ifort64: ${B25DIR}/config/config.common.ifort64
 	ln -sf ${B25DIR}/config/config.common.ifort64 B2_5.config.common.ifort64
 
 LICENSE.tex: ${SOLPSTOP}/LICENSE.md
-	pandoc ${SOLPSTOP}/LICENSE.md -o LICENSE.tex
+	pandoc ${SOLPSTOP}/LICENSE.md -o LICENSE.tex || cat ${SOLPSTOP}/LICENSE.md | sed -e "s:#::g" > LICENSE.tex
 
 CONTRIBUTING.tex: ${SOLPSTOP}/CONTRIBUTING.md
-	pandoc ${SOLPSTOP}/CONTRIBUTING.md -o CONTRIBUTING.tex
+	pandoc ${SOLPSTOP}/CONTRIBUTING.md -o CONTRIBUTING.tex || cat ${SOLPSTOP}/CONTRIBUTING.md | sed -e "s:#::g" -e "s:_:\\\_:g" -e "s:$$:\\\$$:g" > CONTRIBUTING.tex
 
 SOLPS_versions: force
 	@( cd ${SOLPSTOP} ; git describe --tags --always | awk '{print "SOLPS-ITER version : ",$$1}' ) > SOLPS_versions_new
