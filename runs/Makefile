@@ -97,7 +97,7 @@ target_xd = B2SXDR
 target_rd = b2rd.prt
 target_ual = b2_ual_write.prt
 target_rew = b2_ual_rewrite.prt
-target_us = b2us.prt b2fstati_us b2fgmtry_us b2us.boundary.parameters b2us.neutrals.parameters b2us.feedback_control.parameters b2us.regions.parameters input.dat.us triangle.coordinates triangle.elements triangle.neighbors
+target_us = b2us.prt b2fstati_us b2fgmtry_us b2us.boundary.parameters b2us.neutrals.parameters b2us.feedback_control.parameters b2us.regions.parameters b2us.user.parameters input.dat.us triangle.coordinates triangle.elements triangle.neighbors
 
 scandir := $(shell cd .. ; pwd)
 projdir := $(shell cd ../.. ; pwd)
