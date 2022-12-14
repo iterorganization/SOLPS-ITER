@@ -5138,6 +5138,50 @@ The conditions
 \end{equation}
 must be fulfilled for the numerical solution to converge to the exact solution as $\tau \rightarrow 0$. Setting all parameters equal to one could be the best option, if it were not for the process of sequential separate solution of the equations, which can lead to a limitation of the time step $\tau$. To expand the region of convergence of this process, one can try to find parameters in Eqs.~(\ref{eq:rxf_mo})-(\ref{eq:rxf_na}) other than unity.
 
+\section{Time-dependent puff functions}
+\label{sec:time-dep-puff}
+Several functional forms for setting time-dependent gas puff inputs can be set using {\tt b2.neutrals.parameters}. To use these optoins, the switches {\tt TIME\_DEP\_PUFF} and {\tt TIME\_DEP\_PUFF\_FUNC} should be set to {\tt true} for the intended stratum. Six functional forms can be selected, corresponding to the value of {\tt TIME\_DEP\_PUFF\_CASE}, with parameters controlled by {\tt TIME\_DEP\_PUFF\_PARAM}. These are described in Table \ref{tab:time-dep-puff} with examples shown in Fig.~\ref{fig:time-dep-puff}.
+
+\begin{table}[hbtp]
+  \centering
+  \begin{tabular}{|c|c|c|c|c|} \hline
+    Function & Case & Param & Meaning & Fig. Example\\ \hline
+    Sine & 0 & 1 & offset (/s) & 1 \\ \hline
+    & & 2 & amplitude (/s) & 1 \\ \hline
+    & & 3 & frequency (Hz) & 2 \\ \hline
+    & & 4 & phase (rad) & 0\\ \hline
+    Stair+Ramp & 1 & 1 & offset (/s) & 2 \\ \hline
+    & & 2 & step size (/s) & 1 \\ \hline
+    & & 3 & step duration (s) & 0.33 \\ \hline
+    Linear & 2 & 1 & offset (/s) & 3 \\ \hline
+    & & 2 & slope ($/s^2$) & 2 \\ \hline
+    Lin+Sine & 3 & 1 & offset (/s) & 3 \\ \hline
+    & & 2 & amplitude (/s) & 1 \\ \hline
+    & & 3 & frequency (Hz) & 4 \\ \hline
+    & & 4 & phase (rad) & 0 \\ \hline
+    & & 5 & slope ($/s^2$) & 2\\ \hline
+    Stair & 4 & 1 & offset (/s) & 5 \\ \hline
+    & & 2 & step size (/s) & 2 \\ \hline
+    & & 3 & step duration (s) & 0.5 \\ \hline    
+    Triangle & 5 & 1 & offset (/s) & 6 \\ \hline
+    & & 2 & slope ($/s^2$) & 2 \\ \hline
+    & & 3 & period (s) & 0.25 \\ \hline
+    & & 4 & phase (rad) & 0 \\ \hline    
+  \end{tabular}
+  \caption{Input switch settings for time-dependent puff functions.}
+  \label{tab:time-dep-puff}
+\end{table}
+
+\begin{figure}[hbtp]
+\ifpdf
+    \centerline{\includegraphics[height=8cm]{time_dep_puff.pdf}}
+\else
+    \centerline{\includegraphics[height=8cm]{time_dep_puff.eps}}
+\fi
+    \caption{Examples of the time-dependent puff functions.}
+    \label{fig:time-dep-puff}
+\end{figure}
+
 \section{Averaging scheme}
 \label{sec:B2Eirene:averaging}\index{Averaging}\index{b2faveri}\index{b2favere}\index{b2fstate}\index{b2fstati}
 
