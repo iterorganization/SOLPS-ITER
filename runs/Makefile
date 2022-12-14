@@ -197,6 +197,8 @@ $(target_ag) : b2ag.dat
 	cd b2ag.exe.dir ; ${TIME} ${B2OBJ}/b2ag.exe ${RUN_OPTIONS} ; mv $(target_ag) .. ; rm -f $(notdir $^) >& /dev/null
 	-[ -s b2ag.exe.dir/b2fgmtry_us ] && mv b2ag.exe.dir/b2fgmtry_us . || echo > /dev/null
 	-[ -s b2ag.exe.dir/b2us.regions.parameters ] && mv b2ag.exe.dir/b2us.regions.parameters . || echo > /dev/null
+	-[ -s b2ag.exe.dir/b2us.user.parameters ] && mv b2ag.exe.dir/b2us.user.parameters . || echo > /dev/null
+	-[ -s b2ag.exe.dir/info.dat ] && mv b2ag.exe.dir/info.dat . || echo > /dev/null
 	-rmdir b2ag.exe.dir
 
 $(target_ah) : b2ah.dat b2fgmtry
