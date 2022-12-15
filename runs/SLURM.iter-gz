@@ -9,6 +9,7 @@
 #SBATCH  --mail-type=END
 #SBATCH  --job-name=#JOBNAME#
 #SBATCH  --partition=#PART#
+#SBATCH  --no-requeue
 
 echo Using SOLPSTOP = #SOLPSTOP#
 
