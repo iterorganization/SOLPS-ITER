@@ -64,13 +64,14 @@ limit stacksize unlimited
 
 # Load environment cache if it exists and the setup files have not changed
 set setup=${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}
-if ((-f $setup.env.local) && ( -M $setup.env.local ) >= ( -M $setup ) && \
-    ( -M $setup.env.local ) >= ( -M ${SOLPSTOP}/setup.csh ) && \
+if ((-f $setup.env.local.${USER}) && \
+    ( -M $setup.env.local.${USER} ) >= ( -M $setup ) && \
+    ( -M $setup.env.local.${USER} ) >= ( -M ${SOLPSTOP}/setup.csh ) && \
     (!(-f ${SOLPSTOP}/SETUP/setup.csh.local) || \
-      ( -M $setup.env.local ) >= ( -M ${SOLPSTOP}/SETUP/setup.csh.local )) && \
-    (!(-f $setup.local) || ( -M $setup.env.local ) >= ( -M $setup.local ))) then
-    echo "Loading cached SETUP/setup.csh.${HOST_NAME}.${COMPILER}.env.local."
-    source $setup.env.local
+      ( -M $setup.env.local.${USER} ) >= ( -M ${SOLPSTOP}/SETUP/setup.csh.local )) && \
+    (!(-f $setup.local) || ( -M $setup.env.local.${USER} ) >= ( -M $setup.local ))) then
+    echo "Loading cached SETUP/setup.csh.${HOST_NAME}.${COMPILER}.env.local.${USER}."
+    source $setup.env.local.${USER}
     exit 0
 else
     set setup_pre = `mktemp` alias_pre = `mktemp` && alias >! $alias_pre
@@ -277,12 +278,12 @@ endif
 set setup_post = `mktemp`
 env | sed -ne "/^[ }]\|=()/b; s/\([^=]*\)=\(.*\)/setenv \1 '\2'/p" \
    -e '1i# Generated environment cache. Do not edit!' >! $setup_post
-grep -F -v -f $setup_pre $setup_post >! $setup.env.local
+grep -F -v -f $setup_pre $setup_post >! $setup.env.local.${USER}
 sed -i -e "s/setenv/unsetenv/; s/ '.*'//" $setup_pre $setup_post
-grep -F -v -f $setup_post $setup_pre >> $setup.env.local
+grep -F -v -f $setup_post $setup_pre >> $setup.env.local.${USER}
 alias | grep -F -v -f $alias_pre | sed -e 's/^/alias /' \
     -e "/\t(.*[;|&].*)/{s/\t(/\t'(/;s/)"'$'"/)'/;b}" \
-    -e "s/\t\([^(].*\)/\t'\1'/" -e 's/\t(/\t/;s/)$//' >> $setup.env.local
+    -e "s/\t\([^(].*\)/\t'\1'/" -e 's/\t(/\t/;s/)$//' >> $setup.env.local.${USER}
 rm -f $setup_pre $setup_post $alias_pre
 
 # List loaded modules
