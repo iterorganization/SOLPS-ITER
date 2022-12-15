@@ -5140,33 +5140,33 @@ must be fulfilled for the numerical solution to converge to the exact solution a
 
 \section{Time-dependent puff functions}
 \label{sec:time-dep-puff}
-Several functional forms for setting time-dependent gas puff inputs can be set using {\tt b2.neutrals.parameters}. To use these optoins, the switches {\tt TIME\_DEP\_PUFF} and {\tt TIME\_DEP\_PUFF\_FUNC} should be set to {\tt true} for the intended stratum. Six functional forms can be selected, corresponding to the value of {\tt TIME\_DEP\_PUFF\_CASE}, with parameters controlled by {\tt TIME\_DEP\_PUFF\_PARAM}. These are described in Table \ref{tab:time-dep-puff} with examples shown in Fig.~\ref{fig:time-dep-puff}.
+Several functional forms for setting time-dependent gas puff inputs can be set using {\tt b2.neutrals.parameters}. To use these options, the switches {\tt TIME\_DEP\_PUFF} and {\tt TIME\_DEP\_PUFF\_FUNC} should be set to {\tt true} for the intended stratum. Six functional forms can be selected, corresponding to the value of {\tt TIME\_DEP\_PUFF\_CASE}, with parameters controlled by {\tt TIME\_DEP\_PUFF\_PARAM}. These are described in Table \ref{tab:time-dep-puff} with examples shown in Fig.~\ref{fig:time-dep-puff}.
 
 \begin{table}[hbtp]
   \centering
   \begin{tabular}{|c|c|c|c|c|} \hline
-    Function & Case & Param & Meaning & Fig. Example\\ \hline
-    Sine & 0 & 1 & offset (/s) & 1 \\ \hline
-    & & 2 & amplitude (/s) & 1 \\ \hline
-    & & 3 & frequency (Hz) & 2 \\ \hline
-    & & 4 & phase (rad) & 0\\ \hline
-    Stair+Ramp & 1 & 1 & offset (/s) & 2 \\ \hline
-    & & 2 & step size (/s) & 1 \\ \hline
-    & & 3 & step duration (s) & 0.33 \\ \hline
-    Linear & 2 & 1 & offset (/s) & 3 \\ \hline
-    & & 2 & slope ($/s^2$) & 2 \\ \hline
-    Lin+Sine & 3 & 1 & offset (/s) & 3 \\ \hline
-    & & 2 & amplitude (/s) & 1 \\ \hline
-    & & 3 & frequency (Hz) & 4 \\ \hline
-    & & 4 & phase (rad) & 0 \\ \hline
-    & & 5 & slope ($/s^2$) & 2\\ \hline
-    Stair & 4 & 1 & offset (/s) & 5 \\ \hline
-    & & 2 & step size (/s) & 2 \\ \hline
-    & & 3 & step duration (s) & 0.5 \\ \hline    
-    Triangle & 5 & 1 & offset (/s) & 6 \\ \hline
-    & & 2 & slope ($/s^2$) & 2 \\ \hline
-    & & 3 & period (s) & 0.25 \\ \hline
-    & & 4 & phase (rad) & 0 \\ \hline    
+    Function & Case & Param & Meaning & Fig. Example \\ \hline
+    Sine     & 0 & 1 & offset ($\#/s$) & 1 \\ \hline
+             &   & 2 & amplitude ($\#/s$) & 1 \\ \hline
+             &   & 3 & frequency ($Hz$) & 2 \\ \hline
+             &   & 4 & phase ($rad$) & 0 \\ \hline
+    Stair+Ramp & 1 & 1 & offset ($\#/s$) & 2 \\ \hline
+             &   & 2 & step size ($\#/s$) & 1 \\ \hline
+             &   & 3 & step duration ($s$) & 0.33 \\ \hline
+    Linear   & 2 & 1 & offset ($\#/s$) & 3 \\ \hline
+             &   & 2 & slope ($\#/s^2$) & 2 \\ \hline
+    Lin+Sine & 3 & 1 & offset ($\#/s$) & 3 \\ \hline
+             &   & 2 & amplitude ($\#/s$) & 1 \\ \hline
+             &   & 3 & frequency ($Hz$) & 4 \\ \hline
+             &   & 4 & phase ($rad$) & 0 \\ \hline
+             &   & 5 & slope ($\#/s^2$) & 2 \\ \hline
+    Stair    & 4 & 1 & offset ($\#/s$) & 5 \\ \hline
+             &   & 2 & step size ($\#/s$) & 2 \\ \hline
+             &   & 3 & step duration ($s$) & 0.5 \\ \hline
+    Triangle & 5 & 1 & offset ($\#/s$) & 6 \\ \hline
+             &   & 2 & slope ($/s^2$) & 2 \\ \hline
+             &   & 3 & period ($s$) & 0.25 \\ \hline
+             &   & 4 & phase ($rad$) & 0 \\ \hline
   \end{tabular}
   \caption{Input switch settings for time-dependent puff functions.}
   \label{tab:time-dep-puff}
