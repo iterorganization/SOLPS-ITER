@@ -317,9 +317,7 @@ c!!!This interpolation scheme does not guarantee that bb(3)=sqrt(bb(0:2)**2)!!!
      &  leftix, leftiy, bottomix, bottomiy, cflags)
 *   ..save geometry
       call write_b2ag(nx,ny)
-      call b2wugm (nout(1), nx, ny, crx, cry, fpsi, ffbz, bb,
-     &  vol, hx, hy, hc, ht, qz, qc, qs, qac, qas, ebc, gs, pbs, wbbl,
-     &  wbbc, cell_width, cell_height)
+      call b2wugm (nout(1), nx, ny)
 *   ..save parameters
       parg(0) = -1.0_R8
       parg(1:99) = 0.0_R8
