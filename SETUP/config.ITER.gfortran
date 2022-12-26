@@ -26,7 +26,7 @@
     GLI_HOME ?= ${EBROOTGLI}
        H5DIR ?= ${EBROOTHDF5}
   NCARG_ROOT ?= ${EBROOTNCL}
-      NAGDIR ?=
+#     NAGDIR ?=
  MDSPLUS_DIR ?=
 
 #
@@ -38,7 +38,11 @@ LD_NETCDF  = `nf-config --flibs`
 LD_GR      = -L${GR_ROOT}/lib -lgr
 LD_GKS     = -L${GLI_HOME} -lgks -lXmu -lX11 -lXt -ldl
 #LD_NAG     = `pkg-config nag --libs`
+ifdef NAGDIR
+LD_NAG     = -L${NAGDIR}/lib -lnag_nag
+else
 LD_NAG     = `pkg-config openblas --libs`
+endif
 LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 LD_MSCL    = `pkg-config mscl --libs`
@@ -53,7 +57,7 @@ endif
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNCAR4 -DNO_NAG -DF2003
+SOLPS_CPP      = -DNCAR4 -DF2003
 B25_DEFINES    =
 CARRE_DEFINES  =
 EIRENE_DEFINES =
@@ -64,6 +68,13 @@ FFLAGSEXTRA    =
 # Build with NetCDF tools if available
 ifdef LD_NETCDF
   SOLPS_CPP   += `pkg-config netcdf-fortran --cflags`
+endif
+
+# Build with NAG library if available
+ifdef NAGDIR
+  SOLPS_CPP   += -DNO_F01AAF -DNAG22
+else
+  SOLPS_CPP   += -DNO_NAG
 endif
 
 export NODENAME
