@@ -113,10 +113,10 @@ by putting them into easyconfigs.local
     SETUP/easybuild-local.sh # defaults to foss modules
     SETUP/easybuild-local.sh --imas-foss 
     SETUP/easybuild-local.sh --imas-foss install
-    SETUP/easybuild-local.sh GGD-1.10.2-GCC-10.2.0-DD-3.37.0.eb
+    SETUP/easybuild-local.sh GGD-1.10.2-GCC-10.2.0-DD-3.38.0.eb
     sed -i -e /CPATH/d easybuild.local/modules/*/GGD/*
-    SETUP/easybuild-local.sh Viz-2.4.7-foss-2020b.eb --robot
-    SETUP/easybuild-local.sh SimDB-0.6.0-foss-2020b.eb --robot
+    SETUP/easybuild-local.sh Viz-2.6.1-foss-2020b.eb --robot
+    SETUP/easybuild-local.sh SimDB-0.7.1-foss-2020b.eb --robot
 
 ### SOLPS-ITER ifort64 modules
 
@@ -509,8 +509,8 @@ trap 'ec=$?; ((ec != 0)) && echo -e "\e[31mExited with failure: $ec\e[m"' EXIT
 solps_top=$(git rev-parse --show-toplevel)
 EASYBUILD_LOCAL=${solps_top}/easybuild.local
 
-TAG_DD=${TAG_DD:-3.37.0}
-TAG_AL=${TAG_AL:-4.11.0}
+TAG_DD=${TAG_DD:-3.38.0}
+TAG_AL=${TAG_AL:-4.11.1}
 
 setup=${solps_top}/SETUP/setup-easybuild.local && test -f ${setup} && . ${setup}
     
@@ -546,23 +546,29 @@ SOLPS_ITER_FOSS_2020b_MODULES="
 	CMake/3.20.1-GCCcore-10.2.0
 	xarray/0.16.2-foss-2020b
 	makedepend/1.0.6-GCCcore-10.2.0
-	flex/2.6.4-GCCcore-10.2.0
-	PyQt5/5.15.2-GCCcore-10.2.0
-	OpenBLAS/0.3.12-GCC-10.2.0
-	gnuplot/5.4.1-GCCcore-10.2.0
-	motif/2.3.8-GCCcore-10.2.0
-	Ghostscript/9.53.3-GCCcore-10.2.0
-	netCDF-Fortran/4.5.3-gompi-2020b
-	ParaView/5.10.0-foss-2020b-mpi
+	MSCL/1.2.3-GCCcore-10.2.0
 	GR/0.0.94-GCCcore-10.2.0
 	GLI/4.5.30-GCCcore-10.2.0
-    NCL/6.6.2-foss-2020b
+	NCL/6.6.2-foss-2020b
+	NAG/26-GCC-10.2.0
+	Ghostscript/9.53.3-GCCcore-10.2.0
+	Doxygen/1.8.20-GCCcore-10.2.0
+	ParaView/5.10.0-foss-2020b-mpi
+	PyQt5/5.15.1-GCCcore-10.2.0
+	motif/2.3.8-GCCcore-10.2.0
+	gnuplot/5.4.1-GCCcore-10.2.0
+	texlive/20210216-GCCcore-10.2.0
+	libtirpc/1.3.1-GCCcore-10.2.0
+	SimDB/0.7.1-foss-2020b
+	Fundamental-Constants/0.1.1
 	ToFu/1.5.0-foss-2020b-Python-3.8.6
-	MSCL/1.2.3-GCCcore-10.2.0
+	netCDF-Fortran/4.5.3-gompi-2020b
+	flex/2.6.4-GCCcore-10.2.0
 	"
 
 # Listed in SETUP/setup.csh.ITER.ifort64
 SOLPS_ITER_INTEL_2020b_MODULES="
+        CMake/3.20.1-GCCcore-10.2.0
         xarray/0.16.2-intel-2020b
         makedepend/1.0.6-GCCcore-10.2.0
         MSCL/1.2.2-intel-2020b
@@ -572,12 +578,10 @@ SOLPS_ITER_INTEL_2020b_MODULES="
         NAG/26-intel-2020b
         Ghostscript/9.53.3-GCCcore-10.2.0
         Doxygen/1.8.20-GCCcore-10.2.0
-        CMake/3.20.1-GCCcore-10.2.0
         ParaView/5.10.0-intel-2020b-mpi
         PyQt5/5.15.2-GCCcore-10.2.0
         motif/2.3.8-intel-2020b
         gnuplot/5.4.1-GCCcore-10.2.0
-        Doxygen/1.8.20-GCCcore-10.2.0
         texlive/20210216-GCCcore-10.2.0
         libtirpc/1.3.1-GCCcore-10.2.0
         SimDB/0.7.1-intel-2020b
@@ -645,12 +649,13 @@ IMAS_2020b_APPLICATIONS="
     IMAS/${TAG_DD}-${TAG_AL}-2020b
     AMNS/1.4.0-foss-2020b-DD-${TAG_DD}
     GGD/1.10.2-GCC-10.2.0-DD-${TAG_DD}
-    Viz/2.5.0-foss-2020b
+    Viz/2.6.1-foss-2020b
     SimDB/0.7.1-foss-2020b
     IMAS/${TAG_DD}-${TAG_AL}-2020b
     GGD/1.10.2-intel-2020b-DD-${TAG_DD}
     AMNS/1.4.0-intel-2020b-DD-${TAG_DD}
-    Viz/2.5.0-intel-2020b
+    Viz/2.6.1-intel-2020b
+    SimDB/0.7.1-intel-2020b
     "
 
 
