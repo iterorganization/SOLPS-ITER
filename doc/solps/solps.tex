@@ -17917,6 +17917,7 @@ Additionally, system-wide compiler flags can be provided by means of the
 \item[IBMaix] \index{IBMaix} To be used when compiling on IBM AIX computers
 \item[IMAS] \index{IMAS} To be used when compiling within the IMAS framework
 \item[IMAS\_MAJOR\_VERSION] \index{IMAS\_MAJOR\_VERSION} Major version number of the IMAS library to which the code is linked (set internally by the configuration files)
+\item[IMAS\_MICRO\_VERSION] \index{IMAS\_MICRO\_VERSION} Micro version number of the IMAS library to which the code is linked (set internally by the configuration files)
 \item[IMAS\_MINOR\_VERSION] \index{IMAS\_MINOR\_VERSION} Minor version number of the IMAS library to which the code is linked (set internally by the configuration files)
 \item[ITM] \index{ITM} To be used when compiling within the ITM framework
 \item[ITM\_ENVIRONMENT\_LOADED] \index{ITM\_ENVIRONMENT\_LOADED} To be used when wishing to compile with ITM CPOs
@@ -18044,6 +18045,7 @@ We list below where the {\tt DivGeo} compilation switches are used.
        IMAS\_MAJOR\_VERSION & equtrn/src/dg2ids.f \\
        IMAS\_MAJOR\_VERSION & equtrn/src/ids2dg.f \\
        IMAS\_MAJOR\_VERSION & equtrn/src/wrids.f \\
+       IMAS\_MICRO\_VERSION & equtrn/src/wrids.f \\
        IMAS\_MINOR\_VERSION & equtrn/src/eqdim.f90 \\
        IMAS\_MINOR\_VERSION & equtrn/src/rdids.f \\
        IMAS\_MINOR\_VERSION & equtrn/src/wrids.f \\
@@ -18353,6 +18355,12 @@ IMAS & utility/ratadas.F \\
 IMAS\_MAJOR\_VERSION & ids/b2\_ual\_rewrite.F90 \\
 IMAS\_MAJOR\_VERSION & ids/b2\_ual\_write.F90 \\
 IMAS\_MAJOR\_VERSION & ids/b2\_ual\_write\_b2mod.F90 \\
+IMAS\_MICRO\_VERSION & driver/b2mod\_driver.F \\
+IMAS\_MICRO\_VERSION & ids/b2mod\_ual\_io.F90 \\
+IMAS\_MICRO\_VERSION & ids/b2\_ual\_rewrite.F90 \\
+IMAS\_MICRO\_VERSION & ids/b2\_ual\_write.F90 \\
+IMAS\_MICRO\_VERSION & ids/b2\_ual\_write\_b2mod.F90 \\
+IMAS\_MINOR\_VERSION & driver/b2mod\_driver.F \\
 IMAS\_MINOR\_VERSION & ids/b2mod\_interp.F90 \\
 IMAS\_MINOR\_VERSION & ids/b2mod\_ual.F90 \\
 IMAS\_MINOR\_VERSION & ids/b2mod\_ual\_io.F90 \\
