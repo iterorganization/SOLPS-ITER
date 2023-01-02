@@ -706,7 +706,7 @@ function build_imas() {
     export IMAS_HOME=${EASYBUILD_PREFIX}/imas
     export INSTALL_MOD_DIR=${EASYBUILD_PREFIX}/modules/all
     test -d ${IMAS_HOME}/core/IMAS/${TAG_DD}-${TAG_AL}* && \
-        chmod -R +w ${IMAS_HOME}/core/IMAS/${TAG_DD}-${TAG_AL}*/model
+        chmod -R +w ${IMAS_HOME}/core/IMAS/${TAG_DD}-${TAG_AL}*/models
     make IMAS_NAGFOR=no IMAS_HDC=no IMAS_MEX=no IMAS_PGI=no IMAS_JAVA=no $*
 }
 
