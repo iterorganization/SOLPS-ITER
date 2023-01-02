@@ -163,8 +163,25 @@ the token and then export it with setenv or export (bash)
 Instead of using automatic download from ITER site one can use manual
 download and save it under `easybuild.local/sources/<letter>/<package>/`.
 
-## Package notes
+## Updating local build repositories for new environment build
 
+When this script is updated with new IMAS tools, several repositories
+need to be updated too. The easiest way to update for new environment
+build is to issue
+
+    SETUP/easybuild-local.sh --pull
+
+and then usual rebuild of new packages with
+
+    SETUP/easybuild-local.sh
+    SETUP/easybuild-local.sh --intel
+    SETUP/easybuild-local.sh --imas-foss install
+    SETUP/easybuild-local.sh --imas-intel install
+    SETUP/easybuild-local.sh --imas install
+    SETUP/easybuild-local.sh --imas-apps
+    SETUP/easybuild-local.sh --patch-imas-modules
+
+## Package notes
 
 
 ### OpenSSL
@@ -184,7 +201,7 @@ and for that use lower threads or even `--parallel 1` for serial build.
 IMAS installer is needed to build IMAS modules. There is no EasyBuild
 for IMAS! After IMAS is built AMNS, GGD, and Viz can be built. Note
 that by default IMAS module name assumes "some" compilers without
-having toolchain in its name. For example `IMAS/3.36.0-4.10.1-2020b`
+having toolchain in its name. For example `IMAS/3.38.0-4.11.1-2020b`
 module may or may not contain `ifort` modules. This means that
 `--imas-foss` will build only *foss* FORTRAN modules, while
 `--imas-intel` will build only *intel* FORTRAN modules.
@@ -199,7 +216,7 @@ AMNS requires system to having latexmk package installed on the system.
 
 Dependency to IMAS for AMNS, GGD and VIZ needs to be updated with
 
-    ('IMAS/3.36.0-4.10.1-2020b', EXTERNAL_MODULE),
+    ('IMAS/3.38.0-4.11.1-2020b', EXTERNAL_MODULE),
 
 GGD and AMNS modules must not have CPATH otherwise `pkg-config ggd
 amns --cflags` will not have GGD include path
@@ -491,6 +508,8 @@ SETUP/easybuild-local.sh [OPTION... | easybuild_command...]
   --imas                builds default CentOS-8 IMAS built with GCC and INTEL
   --imas install        installs IMAS CentOS-8 module built with GCC and INTEL
   --imas-apps           builds all IMAS applications
+  --pull                pulls latest sources for environment update
+  --patch-imas-modules  fixes AMNS and GGD module by removing CPATH
 
 ENVIRONMENT variables:
 
@@ -686,8 +705,18 @@ function build_imas() {
     cd ${EASYBUILD_LOCAL}/imas-installer
     export IMAS_HOME=${EASYBUILD_PREFIX}/imas
     export INSTALL_MOD_DIR=${EASYBUILD_PREFIX}/modules/all
-    chmod -R +w ${IMAS_HOME}/core/IMAS/${TAG_DD}-${TAG_AL}*/models
+    test -d ${IMAS_HOME}/core/IMAS/${TAG_DD}-${TAG_AL}* && \
+        chmod -R +w ${IMAS_HOME}/core/IMAS/${TAG_DD}-${TAG_AL}*/model
     make IMAS_NAGFOR=no IMAS_HDC=no IMAS_MEX=no IMAS_PGI=no IMAS_JAVA=no $*
+}
+
+function add_imas_lite() { # IMAS without matplotlib as a dependency
+    v=${TAG_DD}-${TAG_AL}-${1}
+    mf=${MODULEPATH}/IMAS/${v}
+    if test -f ${mf}; then
+        sed -e /matplotlib/d ${mf} > ${mf}-lite
+        ln -sf ${v} ${EASYBUILD_PREFIX}/imas/core/IMAS/${v}-lite
+    fi
 }
 
 function build_modules () {
@@ -714,21 +743,35 @@ case "${1##--}" in
         module load ${IMAS_FOSS_2020b_MODULES}
         export IMAS_CONFIG_FILE=site-config/Makefile.ITER.HPC.foss-2020b
         build_imas IMAS_IFORT=no TAG_DD=${TAG_DD} TAG_AL=${TAG_AL} $*
+        add_imas_lite foss-2020b
         ;;
     imas-intel)
         shift
         module load ${IMAS_INTEL_2020b_MODULES}
         export IMAS_CONFIG_FILE=site-config/Makefile.ITER.HPC.intel-2020b
         build_imas TAG_DD=${TAG_DD} TAG_AL=${TAG_AL} $*
+        add_imas_lite intel-2020b
         ;;
     imas)
         shift
         module load ${IMAS_INTEL_2020b_MODULES}
         export IMAS_CONFIG_FILE=site-config/Makefile.ITER.HPC.CentOS-8
         build_imas TAG_DD=${TAG_DD} TAG_AL=${TAG_AL} $*
+        add_imas_lite 2020b
         ;;    
     imas-apps)
         build_modules ${IMAS_2020b_APPLICATIONS}
+        ;;
+    pull)
+        set -x
+        ${EASYBUILD_LOCAL}/bin/python -m pip install --upgrade pip easybuild
+        cd ${solps_top}/easyconfigs.local && git pull --autostash
+        cd ${EASYBUILD_LOCAL}/imas-easybuild-easyconfigs && git pull
+        cd ${EASYBUILD_LOCAL}/imas-installer && git pull && make cache
+        ;;
+    patch-imas-modules)
+        sed -i -e /CPATH/d ${MODULEPATH}/GGD/*
+        sed -i -e /CPATH/d ${MODULEPATH}/AMNS/*
         ;;
     help)
         help | grip --title="EasyBuild for SOLPS-ITER modules" \
