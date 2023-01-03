@@ -9,6 +9,7 @@
 #SBATCH  --job-name=#JOBNAME#
 #SBATCH  --partition=#PART#
 #SBATCH  --account=MISONIC
+#SBATCH  --no-requeue
 
 echo Using SOLPSTOP = #SOLPSTOP#
 
