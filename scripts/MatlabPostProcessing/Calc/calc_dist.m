@@ -1,4 +1,4 @@
-function [ds] = output_ds_us(geo,clist,nc,iref)
+function [ds] = calc_dist(geo,clist,nc,iref)
     % Description
     %============
     % Subroutine to compute relative distance between a set of cell 
