@@ -44,9 +44,6 @@ cp $SOLPSTOP/modules/B2.5/src/utility/intp_3dtable.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/cpeir_bilinear_int.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/trilinear_int.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/mstep.F .
-cp $SOLPSTOP/modules/B2.5/src/utility/expu.F .
-cp $SOLPSTOP/modules/B2.5/src/utility/expu2.F .
-cp $SOLPSTOP/modules/B2.5/src/utility/med.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/uxcm.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/ma28copy.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/nagsubst.F .
@@ -74,6 +71,19 @@ cp $SOLPSTOP/modules/B2.5/src/differentiation/b2optim* .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/set_parameters.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/set_tgt_perturbation.F .
 cp $SOLPSTOP/modules/B2.5/src/b2aux/b2xzmf.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/smin.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/smax.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/samax.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/get_jsep.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/prvrt.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/prvrti.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/prgini.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/ifill.F .
+cp $SOLPSTOP/modules/B2.5/src/user/fix_user.F .
+cp $SOLPSTOP/modules/B2.5/src/user/b2usr_loads.F .
+cp $SOLPSTOP/modules/B2.5/src/b2aux/b2xppz_st.F .
+cp $SOLPSTOP/modules/B2.5/src/b2aux/b2xzef_st.F .
+cp $SOLPSTOP/modules/B2.5/src/b2plot/chord.F .
 
 # and now modify the 'use modules' which have been differentiated
 files=`ls *.F*`

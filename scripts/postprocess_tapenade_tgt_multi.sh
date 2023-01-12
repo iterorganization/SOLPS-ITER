@@ -19,7 +19,7 @@ sed -i -e "/B2USR_COST_FUNCTION_DV/a\        write (ss,'(I1)') icf" b2mod_driver
 sed -i -e "/B2USR_COST_FUNCTION_DV/a\      DO nd=1,nbdirs" b2mod_driver_diffv.F90
 sed -i -e "/B2USR_COST_FUNCTION_DV/a\      DO ICF=1, NCF" b2mod_driver_diffv.F90
 sed -i -e "/B2USR_COST_FUNCTION_DV/a\      if (first_time_step) write(*,*) 'nbdirs: ',nbdirs" b2mod_driver_diffv.F90
-sed -i -e "/B2USR_COST_FUNCTION_DV/a\&                           switch%boris, j, jd, nbdirs)" b2mod_driver_diffv.F90
+sed -i -e "/B2USR_COST_FUNCTION_DV/a\&                           switch%boris, j, jd, nbdirs+nsigma_opt)" b2mod_driver_diffv.F90
 sed -i -e "/B2USR_COST_FUNCTION_DV/a\&                           mpgd, state, stated, state_ext, state_extd, &" b2mod_driver_diffv.F90
 
 sed -i "/ADCONTEXTTGT/d" b2mn_d.F90 b2stbr_dv.F90 b2mod_user_namelist_diffv.F90
@@ -30,7 +30,7 @@ sed -i "/r8\*nsdmax/d" b2mn_d.F90
 sed -i "/nsigmx/d" b2mn_d.F90
 sed -i "/\*nkind_coeff/d" b2mn_d.F90
 
-sed -i -e 's/ipgtmx=40/ipgtmx=4000/g' ipmain.F
+#sed -i -e 's/ipgtmx=400/ipgtmx=4000/g' b2mod_ipmain.F
 
 sed -i -e '/enkpard(nd, :, :) = 0.D0/d' b2mod_driver_diffv.F90
 sed -i -e '/parm_dnad(nd, 1) = 0.D0/d' b2tqna_dv.F90
