@@ -43,9 +43,6 @@ EXT_DIFF = .diff_b
 DIFF=_b
 MNEXE=b2optim_${OPT}
 endif
-ifdef TAO
-RUN_OPTIONS = -tao_monitor -tao_view_solution ${TAO_OPT}
-endif
 
 ifndef STAND_ALONE
 B2OBJ = ${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_OPENMP}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}

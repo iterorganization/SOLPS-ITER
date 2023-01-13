@@ -37,42 +37,10 @@ sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT dna ',parm_dna
 sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT hce ',parm_hceb" b2mod_driver_diff.F90
 sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT hci ',parm_hcib(1)" b2mod_driver_diff.F90
 sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT conpar 1',conparb(1,1,1)" b2mod_driver_diff.F90
-sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT conpar 2',conparb(1,2,1)" b2mod_driver_diff.F90
-sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT conpar 3',conparb(1,3,1)" b2mod_driver_diff.F90
-sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT conpar 4',conparb(1,4,1)" b2mod_driver_diff.F90
-sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT conpar 5',conparb(1,5,1)" b2mod_driver_diff.F90
-sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT conpar 6',conparb(1,6,1)" b2mod_driver_diff.F90
 sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT enepar 1',eneparb(1,1)" b2mod_driver_diff.F90
-sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT enepar 2',eneparb(2,1)" b2mod_driver_diff.F90
-sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT enepar 3',eneparb(3,1)" b2mod_driver_diff.F90
-sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT enepar 4',eneparb(4,1)" b2mod_driver_diff.F90
-sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT enepar 5',eneparb(5,1)" b2mod_driver_diff.F90
-sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT enepar 6',eneparb(6,1)" b2mod_driver_diff.F90
 sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT enipar 1',eniparb(1,1)" b2mod_driver_diff.F90
-sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT enipar 2',eniparb(2,1)" b2mod_driver_diff.F90
-sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT enipar 3',eniparb(3,1)" b2mod_driver_diff.F90
-sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT enipar 4',eniparb(4,1)" b2mod_driver_diff.F90
-sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT enipar 5',eniparb(5,1)" b2mod_driver_diff.F90
-sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT enipar 6',eniparb(6,1)" b2mod_driver_diff.F90
-sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT enkpar 1',enkparb(1,1)" b2mod_driver_diff.F90
-sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT enkpar 2',enkparb(2,1)" b2mod_driver_diff.F90
-sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT enkpar 3',enkparb(3,1)" b2mod_driver_diff.F90
-sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT enkpar 4',enkparb(4,1)" b2mod_driver_diff.F90
-sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT enkpar 5',enkparb(5,1)" b2mod_driver_diff.F90
-sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT enkpar 6',enkparb(6,1)" b2mod_driver_diff.F90
-sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT b2sikt_fac_sheath',switchb%b2sikt_fac_sheath" b2mod_driver_diff.F90
-sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT b2sikt_fac_sheath_core',switchb%b2sikt_fac_sheath_core" b2mod_driver_diff.F90
-sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT keps_cd',switchb%keps_cd" b2mod_driver_diff.F90
-sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT keps_heat',switchb%keps_heat" b2mod_driver_diff.F90
-sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT keps_heat_i',switchb%keps_heat_i" b2mod_driver_diff.F90
-sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      do i=1,nsigma" b2mod_driver_diff.F90
-sed -i -e "/CALL ADSTACK_RESETREPEAT/i\        write(*,*) 'GRADIENT sigma',sigmab(i)" b2mod_driver_diff.F90
-sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      end do" b2mod_driver_diff.F90
-sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      if (allocated(par_opt_physb)) then" b2mod_driver_diff.F90
-sed -i -e "/CALL ADSTACK_RESETREPEAT/i\        do i=1,npar_opt" b2mod_driver_diff.F90
-sed -i -e "/CALL ADSTACK_RESETREPEAT/i\          write(*,*) 'GRADIENT par_opt_phys',par_opt_physb(i)" b2mod_driver_diff.F90
-sed -i -e "/CALL ADSTACK_RESETREPEAT/i\        end do" b2mod_driver_diff.F90
-sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      endif" b2mod_driver_diff.F90
+sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT recyc 2',b2recycb(1,2)" b2mod_driver_diff.F90
+
 
 sed -i -e "/REAL(kind=r8) :: jb(nncf)/i\    integer :: ii" b2mod_main_diff.F90
 sed -i -e "/CALL ADCONTEXTADJ_STARTCONCLUDE/i\      write(*,*) 'GRADIENT dna ',parm_dnab(1)" b2mod_main_diff.F90
