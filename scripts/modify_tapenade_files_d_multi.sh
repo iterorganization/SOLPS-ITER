@@ -3,12 +3,12 @@
 move_to_F90.sh
 rm b2uxus_dv.F90
 collect_nodiff_d_multi.sh
-rm b2_ual_write_deprecated.F90 b2_ual_write_gsl.F90 samax_dv.F90 smin_dv.F90 smax_dv.F90 get_jsep_dv.F90
+rm samax_dv.F90 smin_dv.F90 smax_dv.F90 get_jsep_dv.F90
 mv b2mn_dv.F90 b2mn_d.F90
 
 sed -i "/INCLUDE 'DIFFSIZES.inc'/d" ./*.F90
 sed -i "/USE DIFFSIZES/d" ./*.F90
-sed -i -e "/IMPLICIT NONE/i\  USE DIFFSIZES" ./*.F90
+sed -i -e "/IMPLICIT NONE/i\  USE B2MOD_DIFFSIZES" ./*.F90
 
 sed -i -e 's/ISIZE1OFfceb/mpg%nFc/g' b2us_geo_diffv.F90
 
@@ -94,7 +94,6 @@ sed -i -e 's/SMIN_NODIFF/smin/g' ./*.F90
 sed -i -e 's/SMAX_NODIFF/smax/g' ./*.F90
 sed -i -e 's/calc_dist(/calc_dist_nodiff(/g' b2wdat.F
 sed -i -e 's/calc_dist_f/calc_dist_f_nodiff/g' b2wdat.F
-sed -i -e 's/calc_dist_f/calc_dist_f_nodiff/g' b2wdat.F
 sed -i -e 's/result10 = ISGHOSTCELL(cflag(:, :, cellflag_type))/result10 = count(ISGHOSTCELL(cflag(:, :, cellflag_type)))/g' b2mod_geo2_diffv.F90
 sed -i -e 's/IF (COUNT(result10) .EQ. 0) THEN/IF (result10 .EQ. 0) THEN/g' b2mod_geo2_diffv.F90
 sed -i -e 's/result10 = ISUNUSEDCELL(cflag(0:nx-1, 0:ny-1, cellflag_type))/result10 = count(ISUNUSEDCELL(cflag(0:nx-1, 0:ny-1, cellflag_type)))/g' b2mod_geo2_diffv.F90
@@ -141,6 +140,11 @@ sed -i '/EXTERNAL B2TRACE/d' b2mod_driver_diffv.F90
 sed -i '/EXTERNAL B2MWTI/d' b2mod_driver_diffv.F90
 sed -i '/EXTERNAL OUTPUT_DS/d' b2mod_input_profile_diffv.F90
 sed -i '/TRIM_DV/d' b2mod_main_diffv.F90
+sed -i 's/FIX_USER_NODIFF/FIX_USER/g' fix_user_dv.F90
+sed -i 's/b2usr_loads/b2usr_loads_nodiff/g' b2mod_usrtrc.F
+sed -i 's/b2xppz_st/b2xppz_st_nodiff/g' b2mod_usrtrc.F
+sed -i 's/b2xzef_st/b2xzef_st_nodiff/g' b2mod_wrsep.F
+sed -i 's/fill/fill_nodiff/g' prvrt*.F
 
 sed -i -e 's/PUBLIC :: to_struct_plasma_dv,/PUBLIC :: /g' b2us_prep_diffv.F90
 #sed -i '/PUBLIC :: to_struct_cell_dv, to_struct_face_dv/d' b2us_debug_diffv.F90
@@ -223,6 +227,7 @@ sed -i -e "s/b2mn_step_diff/b2mn_step_dv/g" b2optim_*.F*
 sed -i -e "s/b2mod_user_namelist_diff/b2mod_user_namelist_diffv/g" b2optim_*.F*
 sed -i -e "s/b2us_data_diff/b2us_data_diffv/g" b2optim_*.F*
 sed -i -e "s/b2us_io_diff/b2us_io_diffv/g" b2optim_*.F*
+sed -i -e "s/b2mod_b2cmpa_diff/b2mod_b2cmpa_diffv/g" b2optim_*.F*
 sed -i -e "s/b2mod_transport_namelist_diff/b2mod_transport_namelist_diffv/g" b2optim_*.F* set_parameters.F
 sed -i -e "s/b2mod_input_profile_diff/b2mod_input_profile_diffv/g" b2optim_*.F* set_parameters.F
 sed -i -e "s/b2mod_boundary_namelist_diff/b2mod_boundary_namelist_diffv/g" b2optim_*.F* set_parameters.F
@@ -237,8 +242,8 @@ sed -i -e "s/par_opt_physdiff/par_opt_physd/g" b2optim_*.F*
 sed -i -e "s/state_ext, state_extd)/state_ext, state_extd, npar_opt)/g" b2optim_*.F*
 sed -i -e "s/state_ext, state_extd, j, jdiff)/state_ext, state_extd, j, jdiff, npar_opt-nsigma_opt)/g" b2optim_*.F*
 sed -i -e 's/jdiff(nncf)/jdiff(nbdirsmax,nncf)/g' b2optim_*.F*
-sed -i -e "/subroutine EV_GRAD_F(/a\      use diffsizes" b2optim_ipopt.F
-sed -i -e "/subroutine FormFunctionGradient(/a\      use diffsizes" b2optim_tao.F90
+sed -i -e "/subroutine EV_GRAD_F(/a\      use b2mod_diffsizes" b2optim_ipopt.F
+sed -i -e "/subroutine FormFunctionGradient(/a\      use b2mod_diffsizes" b2optim_tao.F90
 sed -i -e "s/g_v(g_i+ipar-1) = jdiff(1)/g_v(g_i+ipar-1) = jdiff(ipar,1)/g" b2optim_tao.F90
 sed -i -e "s/grad(ipar) = DBLE(jdiff(1))/grad(ipar) = DBLE(jdiff(ipar,1))/g" b2optim_ipopt.F
 

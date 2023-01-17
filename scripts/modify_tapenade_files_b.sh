@@ -3,7 +3,7 @@
 move_to_F90.sh
 rm b2uxus_b.F90
 collect_nodiff_b.sh
-rm b2_ual_write_deprecated.F90 b2_ual_write_gsl.F90 smax_b.F90 samax_b.F90 smin_b.F90 get_jsep_b.F90
+rm smax_b.F90 samax_b.F90 smin_b.F90 get_jsep_b.F90
 
 sed -i '/DIFFSIZES/d' ./*.F90 
 sed -i -e 's/REAL :: result1$/integer :: result1/g' b2mod_input_profile_diff.F90
@@ -78,7 +78,6 @@ sed -i -e 's/ISIZE1OFarg2/20/g' calc_err_b.F90
 sed -i -e 's/LOGICAL :: arg1/LOGICAL :: arg1(m%nFc)/g' find_faces_b.F90
 
 
-sed -i '/PUBLIC :: to_struct_cell_b, to_struct_face_b/d' b2us_debug_diff.F90
 sed -i -e 's/PUBLIC :: to_struct_plasma_b,/PUBLIC :: /g' b2us_prep_diff.F90
 sed -i '/PUBLIC :: alloc_switches_b/d' b2mod_switches_diff.F90
 sed -i '/& check_values_switches_b/d' b2mod_switches_diff.F90
@@ -124,11 +123,6 @@ sed -i '/LOGICAL :: ISCLASSICALGRID/d' b2mod_geo_diff.F90
 sed -i '/EXTERNAL DEALLOC_B2MOD_MA28_FOR_US/d' b2mod_driver_diff.F90
 sed -i -e 's/MSTEP_NODIFF/MSTEP/g' heatdiff1D_b.F90
 sed -i -e 's/LINES2C_NODIFF/LINES2C/g' heatdiff1D_b.F90
-sed -i '/EXTERNAL RWCDF/d' b2mod_mwti_diff.F90 
-sed -i '/EXTERNAL B2CRTIMECDF/d' b2mod_mwti_diff.F90 
-sed -i '/EXTERNAL CHECK_CDF_STATUS/d' b2mod_mwti_diff.F90 
-sed -i '/EXTERNAL OR/d' b2mod_mwti_diff.F90 
-sed -i '/INTEGER :: OR/d' b2mod_mwti_diff.F90 
 sed -i -e 's/GET_JSEP_NODIFF/GET_JSEP/g' ./*.F90
 sed -i -e 's/CFWURE_NODIFF/CFWURE/g' ./*.F90
 sed -i -e '/EXTERNAL DIM_FWD/a\  real(kind=r8) :: dim_fwd' b2usht_b.F90 b2mod_math_diff.F90
@@ -159,13 +153,17 @@ sed -i '/EXTERNAL B2TRCS/d' b2mod_driver_diff.F90
 sed -i '/EXTERNAL B2TRCF/d' b2mod_driver_diff.F90
 sed -i '/EXTERNAL B2TRACE/d' b2mod_driver_diff.F90
 sed -i '/EXTERNAL B2MWTI/d' b2mod_driver_diff.F90
+sed -i 's/FIX_USER_NODIFF/FIX_USER/g' fix_user_b.F90
+sed -i 's/b2usr_loads/b2usr_loads_nodiff/g' b2mod_usrtrc.F
+sed -i 's/b2xppz_st/b2xppz_st_nodiff/g' b2mod_usrtrc.F
+sed -i 's/b2xzef_st/b2xzef_st_nodiff/g' b2mod_wrsep.F
+sed -i 's/fill/fill_nodiff/g' prvrt*.F
 
 sed -i -e 's/DAMAX_NODIFF/samax/g' b2mndt_b.F90 b2mxac_b.F90 b2stcx_b.F90 b2stel_b.F90
 sed -i -e 's/damax/samax/g' b2stcx_b.F90
 sed -i -e 's/SMIN_NODIFF/smin/g' ./*.F90
 sed -i -e 's/SMAX_NODIFF/smax/g' ./*.F90
 sed -i -e 's/calc_dist(/calc_dist_nodiff(/g' b2wdat.F
-sed -i -e 's/calc_dist_f/calc_dist_f_nodiff/g' b2wdat.F
 sed -i -e 's/calc_dist_f/calc_dist_f_nodiff/g' b2wdat.F
 sed -i '/EXTERNAL OR/d' b2stbr_b.F90
 sed -i '/INTEGER :: OR/d' b2stbr_b.F90

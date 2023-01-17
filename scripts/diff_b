@@ -12,7 +12,6 @@ if ($?SOLPS_PATH) then
   unsetenv DIFF_B DIFF_B1 DIFF_B2 DIFF_B3 DIFF_B4
   setenv DIFF_B yes
   unsetenv TGT ADJ
-  setenv ADJ yes
   echo "DIFF_B compilation turned on"
 else
   echo "SOLPS_PATH not set. Exiting."

@@ -65,8 +65,10 @@ argloop:
     echo ' -o <options>: any additional run options'
     echo ' -s: request a B2.5 stand-alone run. No Eirene input file required then.'
     echo ' -t <number-of-threads> : request an OpenMP run with <number-of-threads> threads'
-    echo ' -diff_d: request a B2.5 run with forward differentiated executable'
-    echo ' -diff_b: request a B2.5 run with adjoint differentiated executable'
+    echo ' -tgt: request a B2.5 run with tangent differentiated executable'
+    echo ' -adj: request a B2.5 run with adjoint differentiated executable'
+    echo ' -opt_tgt: request a B2.5 parameter optimization with tangent differentiated executable'
+    echo ' -opt_adj: request a B2.5 parameter optimization with adjoint differentiated executable'
     echo ' '
     echo 'Executable: One of the following'
     echo ' b2ag: Build the geometry files b2fgmtry and fort.30'
@@ -92,8 +94,10 @@ argloop:
     echo ' b2yq: Plots the time evolution data'
     echo ' b2yr: Plot the atomic physics rates'
     echo ' b2yt: Convert a run to a different grid size or species list'
-    echo ' b2mn_d: Main SOLPS-ITER run program differentiated in forward (tangent) mode'
-    echo ' b2mn_b: Main SOLPS-ITER run program differentiated in reverse (adjoint) mode'
+    echo ' b2mn_d: Main SOLPS-ITER run program differentiated in tangent mode'
+    echo ' b2mn_b: Main SOLPS-ITER run program differentiated in adjoint mode'
+    echo ' b2optim_tao: Parameter optimization with PETSc/TAO solver'
+    echo ' b2optim_ipopt: Parameter optimization with Ipopt solver'
     echo ' '
     exit
   endif
@@ -134,6 +138,30 @@ argloop:
     shift
     setenv STAND_ALONE yes
     setenv OPT_B yes
+    goto argloop
+  endif
+  if ("X${1}X" == "X-tgtX") then
+    shift
+    setenv STAND_ALONE yes
+    setenv TGT yes
+    goto argloop
+  endif
+  if ("X${1}X" == "X-opt_tgtX") then
+    shift
+    setenv STAND_ALONE yes
+    setenv OPT_TGT yes
+    goto argloop
+  endif
+  if ("X${1}X" == "X-adjX") then
+    shift
+    setenv STAND_ALONE yes
+    setenv ADJ yes
+    goto argloop
+  endif
+  if ("X${1}X" == "X-opt_adjX") then
+    shift
+    setenv STAND_ALONE yes
+    setenv OPT_ADJ yes
     goto argloop
   endif
   if ("X${1}X" == "X-mX") then

@@ -2,11 +2,11 @@
 
 modify_tapenade_files_d_multi.sh
 
-touch diffsizes.F
-echo "      module diffsizes" >> diffsizes.F
-echo "      implicit none" >> diffsizes.F
-echo "      integer ,parameter :: nbdirsmax=20" >> diffsizes.F
-echo "      end module" >> diffsizes.F
+touch b2mod_diffsizes.F
+echo "      module b2mod_diffsizes" >> b2mod_diffsizes.F
+echo "      implicit none" >> b2mod_diffsizes.F
+echo "      integer ,parameter :: nbdirsmax=20" >> b2mod_diffsizes.F
+echo "      end module b2mod_diffsizes" >> b2mod_diffsizes.F
 sed -i -e "/CALL B2MN_INIT_DV/i\  nbdirs=6" b2mn_d.F90
 
 sed -i '/&                           mpgd, state, stated, state_ext, state_extd, &/d' b2mod_driver_diffv.F90

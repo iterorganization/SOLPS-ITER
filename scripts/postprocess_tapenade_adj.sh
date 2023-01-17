@@ -9,7 +9,7 @@ sed -i -e "/REAL(kind=r8) :: jb(nncf)/i\    REAL(kind=r8) :: jsave(nncf)" b2mod_
 sed -i -e "/B2USR_COST_FUNCTION_B/i\    jsave = j" b2mod_driver_diff.F90
 sed -i -e "/END SUBROUTINE B2MNDR_1_B/i\    j = jsave" b2mod_driver_diff.F90
 
-sed -i -e 's/ipgtmx=40/ipgtmx=4000/g' ipmain.F
+sed -i -e 's/ipgtmx=40/ipgtmx=4000/g' b2mod_ipmain.F
 
 sed -i -e "/CALL B2MNDR_1/i\    call set_parameters(switch)" b2mod_main_diff.F90
 
