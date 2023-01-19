@@ -2467,12 +2467,8 @@ which contains
   \item[10] leakage option for density, recommended for cases with drifts,
   {\tt CONPAR(,,1)} specifies the leakage factor,
   $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s,a} n_a$
-  \item[11] particle flux feedback boundary condition,
-  {\tt CONPAR(,,1)} not used, derived from {\tt CBSNA(0,IS,IREG)}.
-  The species used must be declared using the {\tt b2stbc\_isfeedback} switch.
-  \item[12] particle density feedback boundary condition, as above,
-  {\tt CONPAR(,,1)} not used, derived from {\tt CBSNA(0,IS,IREG)}.
-  The species used must be declared using the {\tt b2stbc\_isfeedback} switch.
+  \item[11] should not be used for feedbacks anymore, not converted to WG code.
+  \item[12] should not be used for feedbacks anymore, not converted to WG code.
   \item[13] particle density to achieve specified total flux,
   {\tt CONPAR(,,1)} is the specified radial flux crossing the surface
   {\tt b2stbc\_type13\_ref} steps away from the boundary, to which is added
@@ -2579,8 +2575,7 @@ which contains
   density, {\tt ENEPAR(,1)} specifies the energy flux in $W$
   \item[9] prescribe the decay length for the electron temperature,
   {\tt ENEPAR(,1)} specifies the decay length in $m$ (can also use type [19] instead)
-  \item[10] feedback option for core, {\tt ENEPAR(,1)} not used,
-  derived from {\tt cbshe(0,coreregno)}
+  \item[10] should not be used for feedbacks anymore, not converted to WG code.
   \item[11] not used
   \item[12] sheath conditions, electron energy transmission coefficient,
   {\tt ENEPAR(,1)} specifies an energy transmission factor,
@@ -2645,8 +2640,7 @@ which contains
   density, {\tt ENIPAR(,1)} specifies the energy flux in $W$
   \item[9] prescribe the decay length for the ion temperature,
   {\tt ENIPAR(,1)} specifies the decay length in $m$ (can also use type [19] instead)
-  \item[10] feedback option for core, {\tt ENIPAR(,1)} not used,
-  derived from {\tt cbshi(0,ISMAIN,coreregno)}
+  \item[10] should not be used for feedbacks anymore, not converted to WG code.
   \item[11] sheath conditions, ion energy transmission coefficient,
   {\tt ENIPAR(,1)} specifies an energy transmission factor,
   $\delta_i$ in $Q_i = \delta_i T_i \sum_a n_a C_{s,a}$
@@ -2714,8 +2708,7 @@ which contains
   density, {\tt POTPAR(,1)} specifies the electric current in $A$
   \item[9] prescribe the decay length for the potential,
   {\tt POTPAR(,1)} specifies the decay length in $m$
-  \item[10] feedback option for core [not yet tested!!!!!!!!!] (based
-  on using {\tt cbsch(0,coreregno)})
+  \item[10] should not be used for feedbacks anymore, not converted to WG code.
   \item[11] sheath conditions, electron energy transmission from {\tt b2stbc\_spb}, recommended when using drifts. Linked to using {\tt BCCON=14} and {\tt BCMOM=13} for all ion species, and {\tt BCENE/I=15}. {\tt POTPAR(,2)} specifies the bias potential in $V$
   \item[12] imposes the currents due to drifts for the South core boundary. Must be used in conjunction with the switch setting {\tt \allowbreak istyle\_cur\_contr\_on\_S\_and\_N=2}
   \item[13] imposes the currents due to drifts for the South private flux and North boundaries. Must be used in conjunction with {\tt \allowbreak istyle\_cur\_contr\_on\_S\_and\_N=2}
@@ -18121,6 +18114,7 @@ if desired, be declared as part of either the {\tt SOLPS\_CPP} or the
 \item[USE\_CDF\_B2STIME] \index{USE\_CDF\_B2STIME} Specific for \SOLPSfour {\tt CDF} tallies
 \item[WANT\_PROCESS] \index{WANT\_PROCESS} Enables the code for the \SOLPSfive to \SOLPSfour converter
 \item[WOS] \index{WOS} Uses the {\tt WOS} libraries for accessing experimental data at IPP
+\item[FIXED\_POINT] \index{FIXED\_POINT} Compiles the B2.5 code such that the time-stepping loop is turned into a fixedpoint form for an efficient checkpointing strategy of Tapenade Adjoint AD
 \end{description}
 
 \index{SOLPS\_CPP}\index{B25\_DEFINES}
@@ -18593,6 +18587,7 @@ WINDOWS & modules/b2mod\_sputter.F \\
 WINDOWS & postprocessing/b2yv.F \\
 WOS & b2plot/additional\_elements.F \\
 WOS & b2plot/flux.F \\
+FIXED\_POINT & driver/b2mod\_driver.F \\
     \hline
     \caption{Defines for B2.5 and where they are used.}
     \label{tab:B2defines}
