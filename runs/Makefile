@@ -27,23 +27,20 @@ endif
 ifdef DIFF_D
 EXT_DIFF = .diff_d
 DIFF=_d
-MNEXE=b2mn${DIFF}
 endif
 ifdef DIFF_B
 EXT_DIFF = .diff_b
 DIFF=_b
-MNEXE=b2mn${DIFF}
 endif
 ifdef TGT
 EXT_DIFF = .tgt
 DIFF=_d
-MNEXE=b2mn${DIFF}
 endif
 ifdef ADJ
 EXT_DIFF = .adj
 DIFF=_b
-MNEXE=b2mn${DIFF}
 endif
+MNEXE=b2mn${DIFF}
 ifdef OPT_D
 EXT_DIFF = .diff_d
 DIFF=_d

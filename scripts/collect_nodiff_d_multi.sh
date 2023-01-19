@@ -38,6 +38,8 @@ cp $SOLPSTOP/modules/B2.5/src/b2aux/b2xxid.F .
 cp $SOLPSTOP/modules/B2.5/src/b2aux/b2xzmf.F .
 cp $SOLPSTOP/modules/B2.5/src/b2plot/chord.F .
 cp $SOLPSTOP/modules/B2.5/src/b2plot/lower_case.F .
+cp $SOLPSTOP/modules/B2.5/src/catalyst/fortranAdaptor.F90 .
+cp $SOLPSTOP/modules/B2.5/src/catalyst/cxxAdaptor.cxx .
 cp $SOLPSTOP/modules/B2.5/src/equations/b2nxcm.F .
 cp $SOLPSTOP/modules/B2.5/src/equations/b2nxst.F .
 cp $SOLPSTOP/modules/B2.5/src/ids/b2mod_constants.F90 .
@@ -97,6 +99,7 @@ cp $SOLPSTOP/modules/B2.5/src/utility/smin.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/smax.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/samax.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/open_file.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/lnblnk.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/ipget* .
 cp $SOLPSTOP/modules/B2.5/src/utility/mstep.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/hybr.F .
@@ -138,6 +141,9 @@ cp $SOLPSTOP/modules/B2.5/src/utility/cfvers.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/daytim.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/usrnam.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/strcopy.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/dfmin.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/dseval.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/dspline.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/cond_coef.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/erf_dv.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/b2uxus_dv.F .

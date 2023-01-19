@@ -98,6 +98,20 @@ sed -i -e 's/result10 = ISGHOSTCELL(cflag(:, :, cellflag_type))/result10 = count
 sed -i -e 's/IF (COUNT(result10) .EQ. 0) THEN/IF (result10 .EQ. 0) THEN/g' b2mod_geo2_diffv.F90
 sed -i -e 's/result10 = ISUNUSEDCELL(cflag(0:nx-1, 0:ny-1, cellflag_type))/result10 = count(ISUNUSEDCELL(cflag(0:nx-1, 0:ny-1, cellflag_type)))/g' b2mod_geo2_diffv.F90
 sed -i -e 's/fullgrid = COUNT(result10) .EQ. 0/fullgrid = result10 .EQ. 0/g' b2mod_geo2_diffv.F90
+sed -i '/REAL(kind=r8) :: const_h/d' heatdiff1D_dv.F90 ratstr_dv.F90
+sed -i '/PARAMETER (const_h/d' heatdiff1D_dv.F90 ratstr_dv.F90
+sed -i -e 's/md0%cfoncv(nd, 1:m%ncf) = 0.D0/md0%cfoncv(nd, 1:m%ncf) = .true./g' b2us_map_diffv.F90
+sed -i -e 's/d0%cvonclosedsurface(nd, 1:m%ncv) = 0.D0/d0%cvonclosedsurface(nd, 1:m%ncv) = .true./g' b2us_map_diffv.F90
+sed -i -e 's/state_extd%is_neutral(nd, 0:ns_ext-1) = 0.D0/state_extd%is_neutral(nd, 0:ns_ext-1) = .true./g' b2us_plasma_diffv.F90
+sed -i -e 's/INTEGER, SAVE :: ank_tracing=0/INTEGER :: ank_tracing=0/g' b2mod_diag_diffv.F90
+sed -i '/INTRINSIC HUGE/d' b2mod_neutrals_namelist_diffv.F90 b2mod_geo2_diffv.F90
+sed -i -e 's/LOGICAL :: result10/INTEGER :: result10/g' b2mod_geo2_diffv.F90
+sed -i '/INTRINSIC MAX/d' b2stbc_fb_dv.F90 b2stbc_phys_dv.F90 b2usr_cost_function_dv.F90 fix_user_dv.F90
+sed -i '/TYPE(B2PLASMASNAPSHOT_DIFFV) :: dummyzerodiffd0/d' b2sral_dv.F90
+sed -i 's/dummyzerodiffd0/std%psnl/g' b2sral_dv.F90
+sed -i '/CALL INTCELL_FWD/i\  gfunrf = 1.0_R8 \!csc added this here for safety in gfortran' gradc_r_b.F90
+sed -i '/CALL INTFACE_FWD/i\        wrk = 1.0_R8 \!csc added this here for safety in gfortran' b2tiner_b.F90
+sed -i '/CALL INTCELL_FWD/i\    wrkf = 1.0_R8 \!csc added this here for safety in gfortran' b2sian_b.F90
 
 sed -i '/EXTERNAL SUBINI/d' *.F90
 sed -i '/EXTERNAL SUBEND/d' *.F90
@@ -119,13 +133,9 @@ sed -i '/EXTERNAL ISCLASSICALGRID/d' b2us_prep_diffv.F90
 sed -i '/LOGICAL :: ISCLASSICALGRID/d' b2us_prep_diffv.F90 
 sed -i -e 's/MSTEP_NODIFF/MSTEP/g' heatdiff1D_dv.F90
 sed -i -e 's/LINES2C_NODIFF/LINES2C/g' heatdiff1D_dv.F90
-#sed -i '/EXTERNAL RWCDF/d' b2mod_mwti_diffv.F90 
-#sed -i '/EXTERNAL B2CRTIMECDF/d' b2mod_mwti_diffv.F90 
-#sed -i '/EXTERNAL CHECK_CDF_STATUS/d' b2mod_mwti_diffv.F90 
 sed -i '/EXTERNAL OR/d' b2stbr_dv.F90
 sed -i '/INTEGER :: OR/d' b2stbr_dv.F90
 sed -i -e 's/B2UXUS_NODIFF/B2UXUS/g' b2usco_dv.F90 b2usmo_dv.F90 b2usht_dv.F90 b2uspo_dv.F90
-#sed -i -e 's/B2MOD_GEO_DIFFV/B2MOD_GEO/g' ./*.F90 #why this?
 sed -i -e 's/GET_JSEP_NODIFF/GET_JSEP/g' ./*.F90
 sed -i -e 's/CFWURE_NODIFF/CFWURE/g' ./*.F90
 sed -i '/EXTERNAL IPSETC/d' b2mnds_dv.F90 
@@ -147,7 +157,6 @@ sed -i 's/b2xzef_st/b2xzef_st_nodiff/g' b2mod_wrsep.F
 sed -i 's/fill/fill_nodiff/g' prvrt*.F
 
 sed -i -e 's/PUBLIC :: to_struct_plasma_dv,/PUBLIC :: /g' b2us_prep_diffv.F90
-#sed -i '/PUBLIC :: to_struct_cell_dv, to_struct_face_dv/d' b2us_debug_diffv.F90
 sed -i '/PUBLIC :: alloc_switches_dv/d' b2mod_switches_diffv.F90
 sed -i '/& check_values_switches_dv/d' b2mod_switches_diffv.F90
 sed -i -e 's/alloc_b2mod_balance_dv, dealloc_b2mod_balance/dealloc_b2mod_balance/g' b2mod_driver_diffv.F90
@@ -169,9 +178,6 @@ sed -i '/& check_geometry_dv/d' b2us_geo_diffv.F90
 sed -i -e 's/read_b2fgmtry_dv, read_b2fstate_dv, write_b2fstate_dv, &/read_b2fgmtry_dv, read_b2fstate_dv/g' b2us_io_diffv.F90
 sed -i '/& write_b2fplasma_dv/d' b2us_io_diffv.F90
 sed -i -e 's/USE B2MOD_RESIDUALS_DIFFV/USE B2MOD_RESIDUALS/g' b2mod_diag_diffv.F90 b2us_prep_diffv.F90 b2mwmv_dv.F90
-#sed -i -e 's/USE B2MOD_SOURCES_DIFFV/USE B2MOD_SOURCES/g' b2mod_batch_average_diffv.F90 b2us_prep_diffv.F90 b2mod_ual_io_diffv.F90 b2mwmv_dv.F90 b2sihs_dv.F90 profile_average_dv.F90
-#sed -i -e 's/USE B2MOD_TRANSPORT_DIFFV/USE B2MOD_TRANSPORT/g' b2us_prep_diffv.F90 b2mod_ual_io_diffv.F90 b2mwmv_dv.F90
-#sed -i -e 's/USE B2MOD_ANOMALOUS_TRANSPORT_DIFFV/USE B2MOD_ANOMALOUS_TRANSPORT/g' b2us_prep_diffv.F90 b2mod_ual_io_diffv.F90 b2stbc_bas_dv.F90  b2stbc_spb_dv.F90 b2txvspr_dv.F90
 sed -i -e 's/=> NULL()/= 0.0_R8/g' b2mndt_dv.F90 b2sral_dv.F90
 
 sed -i -e 's/CHARACTER(len=13), DIMENSION(:), DIMENSION(:, :), ALLOCATABLE ::/CHARACTER(len=13), DIMENSION(:, :), ALLOCATABLE ::/g' b2us_plasma_diffv.F90
@@ -246,7 +252,4 @@ sed -i -e "/subroutine EV_GRAD_F(/a\      use b2mod_diffsizes" b2optim_ipopt.F
 sed -i -e "/subroutine FormFunctionGradient(/a\      use b2mod_diffsizes" b2optim_tao.F90
 sed -i -e "s/g_v(g_i+ipar-1) = jdiff(1)/g_v(g_i+ipar-1) = jdiff(ipar,1)/g" b2optim_tao.F90
 sed -i -e "s/grad(ipar) = DBLE(jdiff(1))/grad(ipar) = DBLE(jdiff(ipar,1))/g" b2optim_ipopt.F
-
-cp $TAPENADEDIR/ADFirstAidKit/adContext.c .
-cp $TAPENADEDIR/ADFirstAidKit/adContext.h .
 

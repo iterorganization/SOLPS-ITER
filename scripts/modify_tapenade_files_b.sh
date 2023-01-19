@@ -76,7 +76,17 @@ sed -i -e 's/DIMENSION(mpg%cvnvp(icv., 2))/DIMENSION(mpg%mxStencil)/g' b2usco_b.
 sed -i -e 's/ISIZE1OFarg1/20/g' calc_err_b.F90
 sed -i -e 's/ISIZE1OFarg2/20/g' calc_err_b.F90
 sed -i -e 's/LOGICAL :: arg1/LOGICAL :: arg1(m%nFc)/g' find_faces_b.F90
-
+sed -i '/REAL(kind=r8) :: const_h/d' heatdiff1D_b.F90 ratstr_b.F90
+sed -i '/PARAMETER (const_h/d' heatdiff1D_b.F90 ratstr_b.F90
+sed -i -e 's/mb%cfoncv = 0.D0/mb%cfoncv = .true./g' b2us_map_diff.F90
+sed -i -e 's/mb%cvonclosedsurface = 0.D0/mb%cvonclosedsurface = .true./g' b2us_map_diff.F90
+sed -i -e 's/state_extb%is_neutral = 0.D0/state_extb%is_neutral = .true./g' b2us_plasma_diff.F90
+sed -i '/INTRINSIC HUGE/d' b2mod_neutrals_namelist_diff.F90 b2mod_geo2_diff.F90
+sed -i -e 's/LOGICAL :: result10/INTEGER :: result10/g' b2mod_geo2_diff.F90
+sed -i -e 's/REAL8ARRAY(small_r4_constant, r4\/8)/REAL4(small_r4_constant, r4\/8)/g' *.F90
+sed -i -e 's/CALL POPREAL8ARRAY(switch/CALL POPREAL8(switch/g' *.F90
+sed -i -e 's/REAL8ARRAY\(.*, r8\/8\)/REAL8\1/g' *.F90 ## match any [PUSH/POP]REAL8ARRAY, and substitute with REAL8, only when this addresses a scalar, for which only ", r8/8" is present
+sed -i '/INTRINSIC MAX/d' b2stbc_fb_b.F90 b2stbc_phys_b.F90 b2usr_cost_function_b.F90 fix_user_b.F90
 
 sed -i -e 's/PUBLIC :: to_struct_plasma_b,/PUBLIC :: /g' b2us_prep_diff.F90
 sed -i '/PUBLIC :: alloc_switches_b/d' b2mod_switches_diff.F90
@@ -216,10 +226,10 @@ sed -i -e "s/recycmb(0:nsdmax-1, nstraid)/recycmb(0:nsdmax-1, nstraid),recycmb0(
 sed -i -e "s/b2recycb(0:nsdmax-1, nstraid)/b2recycb(0:nsdmax-1, nstraid),b2recycb0(0:nsdmax-1, nstraid)/g" b2mod_neutrals_namelist_diff.F90
 sed -i -e "s/mrecycb(0:nsdmax-1, nstraid)/mrecycb(0:nsdmax-1, nstraid),mrecycb0(0:nsdmax-1, nstraid)/g" b2mod_neutrals_namelist_diff.F90
 sed -i -e "s/erecycb(0:nsdmax-1, nstraid)/erecycb(0:nsdmax-1, nstraid),erecycb0(0:nsdmax-1, nstraid)/g" b2mod_neutrals_namelist_diff.F90
-sed -i -e "s/monolayer_depositionb(nwall, ntrack)/monolayer_depositionb(nwall, ntrack),monolayer_depositionb0(nwall, ntrack)/g" b2mod_wall_diff.F90
-sed -i -e "s/monolayer_erosionb(nwall, ntrack)/monolayer_erosionb(nwall, ntrack),monolayer_erosionb0(nwall, ntrack),erosionb0(nwall, ntrack)/g" b2mod_wall_diff.F90
-sed -i -e "s/plate_timeb(nwall)/plate_timeb(nwall),plate_timeb0(nwall)/g" b2mod_wall_diff.F90
-sed -i -e "s/ depositionb(nwall, ntrack)/ depositionb(nwall, ntrack),depositionb0(nwall, ntrack),plate_areab0(nwall)/g" b2mod_wall_diff.F90
+sed -i -e "/REAL(kind=r8), SAVE :: depositionb(/i\  REAL(kind=r8), SAVE :: depositionb0(nwall, ntrack), \&" b2mod_wall_diff.F90
+sed -i -e "/REAL(kind=r8), SAVE :: depositionb(/i\  monolayer_depositionb0(nwall, ntrack), erosionb0(nwall, ntrack), \&" b2mod_wall_diff.F90
+sed -i -e "/REAL(kind=r8), SAVE :: depositionb(/i\  & monolayer_erosionb0(nwall, ntrack), plate_timeb0(nwall), plate_areab0(nwall)" b2mod_wall_diff.F90
+
 sed -i -e "s/momparb(0:nsdmax-1, nbcd, 2)/momparb(0:nsdmax-1, nbcd, 2),momparb0(0:nsdmax-1, nbcd, 2)/g" b2mod_boundary_namelist_diff.F90
 sed -i -e "s/gammaeb/gammaeb,gammaeb0/g" b2mod_boundary_namelist_diff.F90
 sed -i -e "s/conparb(0:nsdmax-1, nbcd, 3)/conparb(0:nsdmax-1, nbcd, 3),conparb0(0:nsdmax-1, nbcd, 3)/g" b2mod_boundary_namelist_diff.F90
@@ -301,14 +311,6 @@ sed -i -e "s/switchdiff/switchb/g" b2optim_*.F*
 sed -i -e "s/par_opt_physdiff/par_opt_physb/g" b2optim_*.F*
 sed -i -e "s/stateb, state_ext, state_extb, j, jdiff)/stateb, state_ext, state_extb, j)/g" b2optim_*.F*
 
-cp $TAPENADEDIR/ADFirstAidKit/adContext.c .
-cp $TAPENADEDIR/ADFirstAidKit/adContext.h .
 cp $TAPENADEDIR/ADFirstAidKit/adStack.c .
 cp $TAPENADEDIR/ADFirstAidKit/adStack.h .
-cp $TAPENADEDIR/ADFirstAidKit/adDebug.c .
-cp $TAPENADEDIR/ADFirstAidKit/adDebug.h .
-cp $TAPENADEDIR/ADFirstAidKit/adBuffer.f adBuffer.F
-cp $TAPENADEDIR/ADFirstAidKit/admm_tapenade_interface.f90 admm_tapenade_interface.F90
-sed -i -e 's/USE ISO_C_BINDING/USE, intrinsic :: ISO_C_BINDING/g' admm_tapenade_interface.F90
-
-
+cp $TAPENADEDIR/ADFirstAidKit/adComplex.h .
