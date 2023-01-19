@@ -98,8 +98,8 @@ sed -i -e 's/result10 = ISGHOSTCELL(cflag(:, :, cellflag_type))/result10 = count
 sed -i -e 's/IF (COUNT(result10) .EQ. 0) THEN/IF (result10 .EQ. 0) THEN/g' b2mod_geo2_diffv.F90
 sed -i -e 's/result10 = ISUNUSEDCELL(cflag(0:nx-1, 0:ny-1, cellflag_type))/result10 = count(ISUNUSEDCELL(cflag(0:nx-1, 0:ny-1, cellflag_type)))/g' b2mod_geo2_diffv.F90
 sed -i -e 's/fullgrid = COUNT(result10) .EQ. 0/fullgrid = result10 .EQ. 0/g' b2mod_geo2_diffv.F90
-sed -i '/REAL(kind=r8) :: const_h/d' heatdiff1D_dv.F90 ratstr_dv.F90
-sed -i '/PARAMETER (const_h/d' heatdiff1D_dv.F90 ratstr_dv.F90
+sed -i '/REAL(kind=r8) :: const_h/i\# ifndef CONSTANTS_PROVIDED' heatdiff1D_dv.F90 ratstr_dv.F90
+sed -i '/PARAMETER (const_h/a\# endif' heatdiff1D_dv.F90 ratstr_dv.F90
 sed -i -e 's/md0%cfoncv(nd, 1:m%ncf) = 0.D0/md0%cfoncv(nd, 1:m%ncf) = .true./g' b2us_map_diffv.F90
 sed -i -e 's/d0%cvonclosedsurface(nd, 1:m%ncv) = 0.D0/d0%cvonclosedsurface(nd, 1:m%ncv) = .true./g' b2us_map_diffv.F90
 sed -i -e 's/state_extd%is_neutral(nd, 0:ns_ext-1) = 0.D0/state_extd%is_neutral(nd, 0:ns_ext-1) = .true./g' b2us_plasma_diffv.F90
@@ -109,9 +109,6 @@ sed -i -e 's/LOGICAL :: result10/INTEGER :: result10/g' b2mod_geo2_diffv.F90
 sed -i '/INTRINSIC MAX/d' b2stbc_fb_dv.F90 b2stbc_phys_dv.F90 b2usr_cost_function_dv.F90 fix_user_dv.F90
 sed -i '/TYPE(B2PLASMASNAPSHOT_DIFFV) :: dummyzerodiffd0/d' b2sral_dv.F90
 sed -i 's/dummyzerodiffd0/std%psnl/g' b2sral_dv.F90
-sed -i '/CALL INTCELL_FWD/i\  gfunrf = 1.0_R8 \!csc added this here for safety in gfortran' gradc_r_b.F90
-sed -i '/CALL INTFACE_FWD/i\        wrk = 1.0_R8 \!csc added this here for safety in gfortran' b2tiner_b.F90
-sed -i '/CALL INTCELL_FWD/i\    wrkf = 1.0_R8 \!csc added this here for safety in gfortran' b2sian_b.F90
 
 sed -i '/EXTERNAL SUBINI/d' *.F90
 sed -i '/EXTERNAL SUBEND/d' *.F90

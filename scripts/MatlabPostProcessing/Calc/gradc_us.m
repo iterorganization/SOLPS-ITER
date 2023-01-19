@@ -1,4 +1,4 @@
-function [gfun] = gradc_us(gmtry,mode,fun)
+function [gfun] = gradc_us(gmtry,mode,fun,volstyle)
 % compute gradient of cell-centered quantity on cell-celnters
 
 nCv = gmtry.nCv;
@@ -13,7 +13,7 @@ end
 
 %   ..interpolate fun to cell vertices, using volume weighted averaging
 if (mode==0)
-    vxVol = calc_vxVol(nVx,gmtry,1);
+    vxVol = calc_vxVol(nVx,gmtry,volstyle);
     [funv] = intvertex_us(nVx,gmtry,vxVol,fun);
 end
 
