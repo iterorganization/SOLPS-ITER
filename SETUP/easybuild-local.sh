@@ -210,7 +210,7 @@ module may or may not contain `ifort` modules. This means that
 all 3 IMAS variants needs to be built. For 'foss-only' IMAS apps some
 prerequisites will need to be adapted to exclude INTEL dependencies.
 
-### AMNS, GDD, Viz
+### AMNS, GGD, Viz
 
 AMNS requires system to having latexmk package installed on the system.
 
