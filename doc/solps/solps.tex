@@ -1592,6 +1592,23 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[rlndr]\index{rlndr} Replaces a link address by another.
   \item[wavelength\_to\_energy]\index{wavelength\_to\_energy} Converts a wavelength (in $m$) to an energy (in $eV$) (and the reverse).
  \end{description}
+\item AD-related (see ``Expert mode for AD'' in \ref{script_ad} for more details)
+ \begin{description}
+  \item[collect\_tapenade\_files.sh]\index{collect\_tapenade\_files.sh} provides Tapenade with the name and path of the source files to be differentiated. 
+  \item[exclude\_tapenade\_files.sh] \index{exclude\_tapenade\_files.sh} produces a file that lists all the files that have been excluded from the differentiation.
+  \item[postprocess\_tapenade\_tgt.sh]\index{postprocess\_tapenade\_tgt.sh} applies corrections to the diff'ed files obtained from Tapenade in tangent mode.
+  \item[postprocess\_tapenade\_tgt\_multi.sh]\index{postprocess\_tapenade\_tgt\_multi.sh} applies corrections to the diff'ed files obtained from Tapenade in tangent vector mode.
+  \item[postprocess\_tapenade\_adj.sh]\index{postprocess\_tapenade\_adj.sh} applies corrections to the diff'ed files obtained from Tapenade in adjoint mode.
+  \item[modify\_tapenade\_files\_d.sh]\index{modify\_tapenade\_files\_d.sh} modifies the diff'ed source files produced by Tapenade in tangent AD mode so that the diff'ed code can properly compile and run.
+  \item[move\_to\_F90.sh]\index{move\_to\_F90.sh} Changes the diff'ed files extensions from {\tt .f90} to {\tt .F90}.
+  \item[collect\_nodiff\_d.sh]\index{collect\_nodiff\_d.sh} Collect source files that have not been diff'ed in tangent mode.
+  \item[remove\_initializations\_d.sh]\index{remove\_initializations\_d.sh} In {\tt b2mod\_driver\_diff.F90} looks for which plasma state variables are read in {\tt read\_plasma\_state\_diff.F} and makes sure their initialization in {\tt b2mod\_driver\_diff.F90} is removed.
+  \item[modify\_tapenade\_files\_d\_multi.sh]\index{modify\_tapenade\_files\_d\_multi.sh} modifies the diff'ed source files produced by Tapenade in tangent vector mode so that the diff'ed code can properly compile and run.
+  \item[collect\_nodiff\_d\_multi.sh]\index{collect\_nodiff\_d\_multi.sh} executes similar commands as {\tt collect\_nodiff\_d.sh}, but for tangent vector mode.
+  \item[modify\_tapenade\_files\_b.sh]\index{modify\_tapenade\_files\_b.sh} modifies the diff'ed source files produced by Tapenade in adjoint mode so that the diff'ed code can properly compile and run.
+  \item[collect\_nodiff\_b.sh]\index{collect\_nodiff\_b.sh} executes similar commands as {\tt collect\_nodiff\_d.sh}, but for adjoint AD code.
+  \item[collect\_nodiff\_p.sh]\index{collect\_nodiff\_p.sh} executes similar commands as {\tt collect\_nodiff\_d.sh}, but for AD pre-processing mode.
+ \end{description}
 \item Others
  \begin{description}
   \item[b2]\index{b2} Shortcut to {\tt B2}.
