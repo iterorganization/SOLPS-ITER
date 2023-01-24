@@ -1,7 +1,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Introduction}\label{sec:introduction}
+\section{Introduction}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 This manual is intended as a practical guide on how to obtain input parameters sensitivities and apply optimization strategies in B2.5 thanks to Algorithmic Differentiation (AD), therefore only \textit{using} the already available AD code. If one is interested in \textit{producing} new AD code, please see the ``Expert'' section \ref{cha:ad_expert}.
@@ -161,7 +161,7 @@ Before calculating derivatives, the user first has to think which kind of cost f
 
 	Finally, the user can specify additional ad-hoc cost functions for own purposes, modifying the source file: \\ {\tt B2.5/src/user/b2usr\_cost\_function.F},\\
 	after which re-differentiation is needed (see Expert mode \ref{cha:ad_expert})
-	
+
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	\subsection{Example of cost function file}\label{sec:cfexample}
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

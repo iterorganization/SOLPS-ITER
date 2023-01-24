@@ -9,7 +9,7 @@ The website of Tapenade provides a manual for this tool as well as an extensive 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Running Tapenade in tangent mode}{\label{sec:runningTapeTgt}
+\section{Running Tapenade in tangent mode}\label{sec:runningTapeTgt}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 To start, the user needs to make sure all code changes they need have been correctly implemented and the code has been re-compiled in standalone B2.5 mode, as Tapenade needs the pre-processed source files compiled in:\\
@@ -61,7 +61,7 @@ Note that also after a successful differentiation Tapenade still issues several 
 	The next step, before the diff'ed code is compiled, is to modify some of the diff'ed source files to get rid of the small inconsistencies that Tapenade leaves behind and to setup the code such that the derivatives of the input parameter(s) are properly initialized. This procedure has been automatized as much as possible but still some user manual changes are required.\\
 
 	The automatized part is carried out by executing the script {\tt postprocess\_tapenade\_tgt.sh} in the folder \\
-	{\tt differentiated\_files.diff\_d}, where the diff'ed files should be moved after differentiation (keep the original diff'ed files for backup). This scripts performs different actions on specific source files (more details can be found in \ref{script_d}). It is likely that with new code developments or new Tapenade versions, some of such modifications are not necessary anymore and new ones can arise. Therefore the user is invited to look at the script file description and at the script itself in case new modifications should be necessary.\\
+	{\tt differentiated\_files.diff\_d}, where the diff'ed files should be moved after differentiation (keep the original diff'ed files for backup). This scripts performs different actions on specific source files (more details can be found in \ref{script_ad}). It is likely that with new code developments or new Tapenade versions, some of such modifications are not necessary anymore and new ones can arise. Therefore the user is invited to look at the script file description and at the script itself in case new modifications should be necessary.\\
 
 	The automatized part will perform the following actions, which the user can take inspiration from for personal needs:
 	\begin{itemize}
@@ -183,7 +183,7 @@ Note that also after a successful differentiation Tapenade still issues several 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Running Tapenade in adjoint mode}{\label{sec:runningTapeAdj}
+\section{Running Tapenade in adjoint mode}\label{sec:runningTapeAdj}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Again, the user needs to make sure all code changes they need have been correctly implemented. Specifically for adjoint AD, the time-iterating scheme of B2.5 (essentially a for-loop on the number of iterations) needs to be converted into a fixed-point iterator form. This is essential to apply the \textit{two-phases} scheme, which allows significantly lower memory requirements, see \cite{carlijcp,griewank}. To convert into a fixed point form, users need to set a specific environment variable and recompile {\tt b2mod\_driver}:
@@ -271,7 +271,7 @@ As with tangent mode, new source files are produced by Tapenade, this time with 
 \section{Pre-processing mode}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Tapenade allows a pre-processing mode in which basically it parses through the source files but do not attempt to write any derivative information. The output is just the original code but written out by Tapenade in F90 style. This Tapenade mode is quite useful and quick to test if a certain cost function depends on certain parameters, to check for potential errors in the code (see common pitfalls \ref{sec:errors}), and to test compilation of the diff'ed files and verify that the outcome is the same of the original code.
+Tapenade allows a pre-processing mode in which basically it parses through the source files but do not attempt to write any derivative information. The output is just the original code but written out by Tapenade in F90 style. This Tapenade mode is quite useful and quick to test if a certain cost function depends on certain parameters, to check for potential errors in the code (see common pitfalls \ref{sec:errors_ad}), and to test compilation of the diff'ed files and verify that the outcome is the same of the original code.
 
 The command line to perform the pre-processing mode is the following:\\
 {\tt \$TAPENADEDIR/bin/tapenade -p -O . -head "b2mn\_step(J)/(parm\_dna parm\_hce}\\
@@ -282,7 +282,7 @@ The command line to perform the pre-processing mode is the following:\\
 The only difference wrt to tangent and adjoint mode is in the flag ``{\tt -p}'' in place of ``{\tt -d}'' or ``{\tt -b}''.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Common pitfalls}\label{sec:errors}
+\section{Common pitfalls}\label{sec:errors_ad}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -316,12 +316,12 @@ Other errors encountered:
 
 	\item SIDE EFFECT: this issue happens again only in adjoint, when Tapenade needs to restore some SAVE'd variables within a certain routine. Such SAVE'd variables must therefore be visible in the calling routine, in order for Tapenade to checkpoint them before the call'ed routine and restore them after. Side effect variables are mentioned in the log file. An example is the case in which \textit{routine A} calls \textit{routine B}, and \textit{routine B} saves the variable \textit{ncall\_B} because it performs different actions depending on its value. As a result, Tapenade will ask that variable \textit{ncall\_B} is visible within \textit{routine A}. This can be solved for example using a module, as the dedicated {\tt b2mod\_ad} already available for this purposes, which defines and stores \textit{ncall\_B}, and is USE'd by both routines.
 
-	\item ARRAY DIMENSIONS: in some cases Tapenade is not able to reconstruct the sizes of certain extra variables it has created during the differentiation. Often this happens when slicing of array is done in the primal code. In these cases it employs for the variable definition the size ``{\tt ISIZE1OFXXX}'', where {\tt XXX} is the variable name. In the automated script files some of these instances are already corrected using typical sizes like {\tt nCv, nFc}, etc. When differentiating the code, some of these may re-appear somewhere else. The user can look at the script files below in \ref{script_d} to find inspiration to correct these.
+	\item ARRAY DIMENSIONS: in some cases Tapenade is not able to reconstruct the sizes of certain extra variables it has created during the differentiation. Often this happens when slicing of array is done in the primal code. In these cases it employs for the variable definition the size ``{\tt ISIZE1OFXXX}'', where {\tt XXX} is the variable name. In the automated script files some of these instances are already corrected using typical sizes like {\tt nCv, nFc}, etc. When differentiating the code, some of these may re-appear somewhere else. The user can look at the script files below in \ref{script_ad} to find inspiration to correct these.
 \end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Detailed files description }\label{sec:description}
+\section{Detailed files description }\label{sec:description_files_ad}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -352,8 +352,8 @@ Other errors encountered:
 
 		\item{\tt b2uxus\_b.F} similar to the previous, but for adjoint AD. The routine solves te following equations:
 		\begin{align}
-			&A^T \overline{b} =  \overline{x}, \label{linb1}\\
-			&\overline{A}_{i,j} = -x_j\overline{b}_i \label{linb2}.
+			&A^T \overline{b} =  \overline{x},\\
+			&\overline{A}_{i,j} = -x_j\overline{b}_i.
 		\end{align}
 		In this case, the first linear system is solved for $\overline{b}$ and simply transposing the matrix $A$. Afterwards, the primal linear system is solved and $x$ fed to the second equation.
 
@@ -379,7 +379,7 @@ Other errors encountered:
 
 	\end{description}
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	\subsection{Description of script files}\label{script_d}
+	\subsection{Description of script files}\label{script_ad}
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	In this section additional information is given on the script files used for or after the differentiation (available in {\tt \$SOLPSTOP/scripts}). Be aware that after modification of the source code some of the command lines in these scripts might not work anymore and thus the user has to modify them according to his needs.
 	\begin{description}
