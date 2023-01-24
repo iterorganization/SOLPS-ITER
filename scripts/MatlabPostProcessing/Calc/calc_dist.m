@@ -22,10 +22,14 @@ function [ds] = calc_dist(geo,clist,nc,iref)
     end
 
     % Compute reference point
-    if (iref<=2 || iref>nc)
+    if iref==1
+        dsref = ds(1);
+    elseif iref>nc
         error('iref out of bounds')
+    else
+        dsref = (ds(iref) + ds(iref-1))/2.0;
     end
-    dsref = (ds(iref) + ds(iref-1))/2.0;
+    
     % Subtract reference length
     ds = ds - dsref;
    

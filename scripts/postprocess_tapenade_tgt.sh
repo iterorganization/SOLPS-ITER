@@ -18,11 +18,4 @@ sed -i -e '/parm_dnad(1) = 0.D0/d' b2tqna_d.F90
 
 sed -i -e 's/ipgtmx=40/ipgtmx=4000/g' ipmain.F
 
-setenv DIFF_D yes
-cd $SOLPSTOP
-gmake listobj
-gmake depend
-gmake b25_diff_d
-unsetenv DIFF_D
-
 

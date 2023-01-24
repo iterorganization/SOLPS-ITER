@@ -19,8 +19,14 @@ sed -i -e "/B2USR_COST_FUNCTION_DV/a\        write (ss,'(I1)') icf" b2mod_driver
 sed -i -e "/B2USR_COST_FUNCTION_DV/a\      DO nd=1,nbdirs" b2mod_driver_diffv.F90
 sed -i -e "/B2USR_COST_FUNCTION_DV/a\      DO ICF=1, NCF" b2mod_driver_diffv.F90
 sed -i -e "/B2USR_COST_FUNCTION_DV/a\      if (first_time_step) write(*,*) 'nbdirs: ',nbdirs" b2mod_driver_diffv.F90
-sed -i -e "/B2USR_COST_FUNCTION_DV/a\&                           switch%boris, j, jd, nbdirs+nsigma_opt)" b2mod_driver_diffv.F90
+sed -i -e "/B2USR_COST_FUNCTION_DV/a\&                           switch%boris, j, jd, nndirs)" b2mod_driver_diffv.F90
 sed -i -e "/B2USR_COST_FUNCTION_DV/a\&                           mpgd, state, stated, state_ext, state_extd, &" b2mod_driver_diffv.F90
+sed -i -e "/B2USR_COST_FUNCTION_DV/i\      if (flag_optim) then" b2mod_driver_diffv.F90
+sed -i -e "/B2USR_COST_FUNCTION_DV/i\        nndirs = nbdirs+nsigma_opt" b2mod_driver_diffv.F90
+sed -i -e "/B2USR_COST_FUNCTION_DV/i\      else" b2mod_driver_diffv.F90
+sed -i -e "/B2USR_COST_FUNCTION_DV/i\        nndirs = nbdirs" b2mod_driver_diffv.F90
+sed -i -e "/B2USR_COST_FUNCTION_DV/i\      endif" b2mod_driver_diffv.F90
+sed -i -e "/TYPE(SWITCHES_DIFFV), INTENT(INOUT) :: switchd/a\    INTEGER :: nndirs" b2mod_driver_diffv.F90
 
 sed -i "/ADCONTEXTTGT/d" b2mn_d.F90 b2stbr_dv.F90 b2mod_user_namelist_diffv.F90
 sed -i "/r8\*nbcd\*2/d" b2mn_d.F90
@@ -65,10 +71,3 @@ sed -i -e "/CALL B2MN_STEP_DV/i\  tdatad(4,2,2,1,1) = 1.0_R8 \!D_perp" b2mn_d.F9
 sed -i -e "/CALL B2MN_STEP_DV/i\  parm_hcid(3,1) = 1.0_R8" b2mn_d.F90
 sed -i -e "/CALL B2MN_STEP_DV/i\  parm_hced(2) = 1.0_R8" b2mn_d.F90
 sed -i -e "/CALL B2MN_STEP_DV/i\  parm_dnad(1,1) = 1.0_R8" b2mn_d.F90
-
-setenv DIFF_D yes
-cd $SOLPSTOP
-gmake listobj
-gmake depend
-gmake b25_diff_d
-unsetenv DIFF_D
