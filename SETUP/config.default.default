@@ -116,7 +116,7 @@ endif
 ifdef IMAS_VERSION
   UAL_MAJOR_VERSION = $(shell echo ${UAL_VERSION} | cut -d '.' -f1 )
   UAL_MINOR_VERSION = $(shell echo ${UAL_VERSION} | cut -d '.' -f2 )
-  UAL_MICRO_VERSION = $(shell echo ${UAL_VERSION} | cut -d '.' -f3 )
+  UAL_MICRO_VERSION = $(shell echo ${UAL_VERSION} | cut -d '.' -f3 | cut -d '-' -f1 )
   IMAS_MAJOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f1 )
   IMAS_MINOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f2 )
   IMAS_MICRO_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f3 )
