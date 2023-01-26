@@ -257,15 +257,17 @@ In tangent AD mode, the user can thus specify as many cost functions as desired,
 	\begin{description}
 		\item[cost\_function \$i] This script allows the user to plot the value of the cost function {\tt \$i} as a function of the iterations
 
-		\item[cost\_function\_gradient \$i] This script allows the user to plot the value of the gradient of cost function {\tt \$i} as a function of the iterations
+		\item[cost\_function\_gradient \$i] This script allows the user to plot the value of the gradient of cost function {\tt \$i} as a function of the iterations (in tangent mode only).
 
-		\item[resall\_D\_diff] This script plots the evolution of the residuals of all the differentiated equations for D only cases
+		\item[resall\_D\_diff] This script plots the evolution of the residuals of all the differentiated equations for D only cases (in tangent mode only).
 
-		\item[resco\_diff] This script plots the evolution of the residuals of the differentiated continuity equation
+		\item[resco\_diff] This script plots the evolution of the residuals of the differentiated continuity equation (in tangent mode only).
 
-		\item[resmo\_diff] This script plots the evolution of the residuals of the diff'ed momentum equation
+		\item[resmo\_diff] This script plots the evolution of the residuals of the diff'ed momentum equation (in tangent mode only).
 
-		\item[resrest\_diff] This script plots the evolution of the residuals of the diff'ed total momentum, ion energy, electron energy and potential equations
+		\item[reskt\_diff] This script plots the evolution of the residuals of the diff'ed k equation (in tangent mode only).
+
+		\item[resrest\_diff] This script plots the evolution of the residuals of the diff'ed total momentum, ion energy, electron energy and potential equations (in tangent mode only).
 
 		\item[2dt\_diff] To be done if needed
 	\end{description}
@@ -388,7 +390,7 @@ The optimization framework will try to minimize the cost function $\hat{\mathcal
 \end{equation}
 where $\theta_{L}$ and $\theta_{U}$ are the lower and upper bounds for $\theta$ respectively. Currently, no other nonlinear constraint is implemented.
 
-The minimization is carried out by coupling the tangent or adjoint AD code to some optimization libraries, such as PETCs/TAO \cite{petsc1} or Ipopt \cite{ipopt}. What these optimizers do is to calculate the cost function and its gradient starting from an initial guess supplied by the user. Once the gradient is known, a suitable direction is computed along which the cost function decreases. This descent direction depends on the algorithm chosen (BFGS is the default, other possibilities include other quasi-Newton methods, steepest-descent, conjugate gradient, etc.). Subsequently, a so-called line-search is typically applied to find a step-length in the descent direction that guarantees convergence of the algorithm. Also here different choices are possible, the most common ones require the Armijo or the strong Wolfe condition. With PETCs/TAO it is possible to flexibly choose the descent direction type, the line search options, or even switch to trust region in place of line search methods. Users who like to know more regarding optimization methods are encouraged to read \cite{nocedal}.
+The minimization is carried out by coupling the tangent or adjoint AD code to some optimization libraries, such as PETSc/TAO \cite{petsc1} or Ipopt \cite{ipopt}. What these optimizers do is to calculate the cost function and its gradient starting from an initial guess supplied by the user. Once the gradient is known, a suitable direction is computed along which the cost function decreases. This descent direction depends on the algorithm chosen (BFGS is the default, other possibilities include other quasi-Newton methods, steepest-descent, conjugate gradient, etc.). Subsequently, a so-called line-search is typically applied to find a step-length in the descent direction that guarantees convergence of the algorithm. Also here different choices are possible, the most common ones require the Armijo or the strong Wolfe condition. With PETSc/TAO it is possible to flexibly choose the descent direction type, the line search options, or even switch to trust region in place of line search methods. Users who like to know more regarding optimization methods are encouraged to read \cite{nocedal}.
 
 A schematic view of the optimization process is available in Figure \ref{fig_optim} when tangent AD is employed for gradient computation. The initial guess $X0$ is fed to the tangent AD version of the main driver routine {\tt b2mndr\_1\_d}, which will compute the value of cost function and its gradient. If certain criteria regarding tolerances, computational time or iterations are met (see below), the optimization is stopped, otherwise the line search procedure is started and a new value for the parameters $\theta$ is computed and fed again to the main driver. Note that the line search will actually require one or more additional calls to the driver routines to evaluate the cost function and/or the gradient.
 
@@ -410,21 +412,21 @@ Stopping criteria for the optimization:
 	\item tolerance met
 \end{itemize}
 
-For PETCs/TAO the tolerance is easily linked with optimization quantities like gradient and cost function, so that the optimization is stopped when the norm of the gradient is small enough $\left|\left |\nabla \hat{\mathcal{J}}\right|\right| \le \epsilon_a $, when the relative norm of the gradient is small enough $ \frac{\left|\left |\nabla \hat{\mathcal{J}}\right|\right|}{\left|\hat{\mathcal{J}}\right|} \le \epsilon_r $, or when the gradient has been sufficiently reduced wrt its value at the zeroth iteration $\frac{\left|\left |\nabla \hat{\mathcal{J}}\right|\right|} {\left|\left |\nabla \hat{\mathcal{J}}_0\right|\right|} \le \epsilon_t $. The various tolerances $\epsilon$ are set to the same default {\tt TOL\_OPT} (see b2.optimization.parameters in \ref{run_opt}), but with command line options they can be controlled separately.
+For PETSc/TAO the tolerance is easily linked with optimization quantities like gradient and cost function, so that the optimization is stopped when the norm of the gradient is small enough $\left|\left |\nabla \hat{\mathcal{J}}\right|\right| \le \epsilon_a $, when the relative norm of the gradient is small enough $ \frac{\left|\left |\nabla \hat{\mathcal{J}}\right|\right|}{\left|\hat{\mathcal{J}}\right|} \le \epsilon_r $, or when the gradient has been sufficiently reduced wrt its value at the zeroth iteration $\frac{\left|\left |\nabla \hat{\mathcal{J}}\right|\right|} {\left|\left |\nabla \hat{\mathcal{J}}_0\right|\right|} \le \epsilon_t $. The various tolerances $\epsilon$ are set to the same default {\tt TOL\_OPT} (see b2.optimization.parameters in \ref{run_opt}), but with command line options they can be controlled separately.
 
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	\subsection{Compile optimization code}
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	In order to compile the optimization code, one must make sure that one of the optimization library currently tested with B2.5 is available, such as PETCs/TAO and Ipopt, either as a module to be loaded or as locally installed library from the user. Both PETCs/TAO and Ipopt are open source so the latter should always be feasible.
+	In order to compile the optimization code, one must make sure that one of the optimization library currently tested with B2.5 is available, such as PETSc/TAO and Ipopt, either as a module to be loaded or as locally installed library from the user. Both PETSc/TAO and Ipopt are open source so the latter should always be feasible.
 
-	For the local installation on the KU Leuven VSC cluster, for PETC/TAO to the following command line options to configure the installation were used:\\
+	For the local installation on the KU Leuven VSC cluster, for PETSc/TAO to the following command line options to configure the installation were used:\\
 
 	{\tt \$ ./configure {\tt-{}-with-mpi=0}} {\tt-{}-with-fc=ifort} {\tt-{}–with-cpp:/lib/cpp} {\tt-traditional} \\{\tt-{}-download-cmake=yes} {\tt-{}-download-superlu=yes} \\
 
-	On other clusters a similar configuration could be used. It was in particular necessary to make sure that when loading the PETCs/TAO module or library the default compiler and compiler options of SOLPS were retained and not overwritten by those of the library.
+	On other clusters a similar configuration could be used. It was in particular necessary to make sure that when loading the PETSc/TAO module or library the default compiler and compiler options of SOLPS were retained and not overwritten by those of the library.
 
 
-	To compile the optimization version, for example with PETCs/TAO optimization library:\\
+	To compile the optimization version, for example with PETSc/TAO optimization library:\\
 	{\tt \$ game listobj depend}\\
 	{\tt \$ set\_tao}\\
 	{\tt \$ gmake b25\_tgt b25\_adj}\\
@@ -492,7 +494,7 @@ For PETCs/TAO the tolerance is easily linked with optimization quantities like g
 
 		\item[SPATIAL\_POINTS] \index{SPATIAL\_POINTS} {\tt integer array, length NNVAR}, number of spatial points optimized for parameter {\tt ipar} (should be the same as ndata in b2.transport.inputfile). The actual number of optimized variables (NPAR\_OPT) is then equal to the total number of spatial points + any other additional parameter. ({\tt DEFAULT = 0}).
 
-		\item[PARIS] \index{PARIS} {\tt integer array, length NNVAR}, specifies the species of the optimization parameter {\tt ipar}. Only meaningful for {\tt partype} = [1-3,5,7,12,13,16]. ({\tt DEFAULT = 0}).
+		\item[PARIS] \index{PARIS} {\tt integer array, length NNVAR}, specifies the species of the optimization parameter {\tt ipar}. Only meaningful for {\tt partype} = [1-5,7,12,13,16]. ({\tt DEFAULT = 0}).
 
 		\item[PARIB] \index{PARIB} {\tt integer array, length NNVAR}, specifies the boundary/strata of the optimization parameter {\tt ipar}. Only meaningful for {\tt partype} = [10-16]. ({\tt DEFAULT = 0}).
 
@@ -506,13 +508,13 @@ For PETCs/TAO the tolerance is easily linked with optimization quantities like g
 
 		\item[CPU\_OPT] \index{CPU\_OPT} {\tt real*8}, maximum amount of CPU time in seconds after which the optimization is stopped. ({\tt DEFAULT = 0.0}).
 
-		\item[MAXITER] \index{MAXITER} {\tt integer}, maximum number of optimization iterations. The maximum number of cost function evaluations is set to {\tt 2*MAXITER} to allow for line searches. Can be overridden with PETCs/Tao by using command line options for the optimization. ({\tt DEFAULT = 100}).
+		\item[MAXITER] \index{MAXITER} {\tt integer}, maximum number of optimization iterations. The maximum number of cost function evaluations is set to {\tt 2*MAXITER} to allow for line searches. Can be overridden with PETSc/Tao by using command line options for the optimization. ({\tt DEFAULT = 100}).
 
-		\item[TOL\_OPT] \index{TOL\_OPT} {\tt real*8}, tolerance below which optimization is stopped. For PETCs/Tao it is used for the absolute gradient norm, the relative gradient norm, and the gradient reduction stopping criteria. Can be overridden with PETCs/Tao by using command line options for the optimization. ({\tt DEFAULT = 1.0e-7}).
+		\item[TOL\_OPT] \index{TOL\_OPT} {\tt real*8}, tolerance below which optimization is stopped. For PETSc/Tao it is used for the absolute gradient norm, the relative gradient norm, and the gradient reduction stopping criteria. Can be overridden with PETSc/Tao by using command line options for the optimization. ({\tt DEFAULT = 1.0e-7}).
 
 		\item[HESSIAN\_APPROXIMATION] \index{HESSIAN\_APPROXIMATION} {\tt character*256}, type of Hessian approximation employed. Depends on optimization library. Possible values are currently: 'limited-memory' and 'exact'. When using the 'exact' option the steepest descent algorithm is used. ({\tt DEFAULT = 'limited-memory'}).
 
-		\item[LIMITED\_MEMORY\_UPDATE\_TYPE] \index{LIMITED\_MEMORY\_UPDATE\_TYPE} {\tt character*256}, specifies which kind of Hessian approximation is employed if HESSIAN\_APPROXIMATION is set to 'limited-memory'. Can overridden with PETCs/Tao by using command line options for the optimization ({\tt DEFAULT = 'bfgs'}).
+		\item[LIMITED\_MEMORY\_UPDATE\_TYPE] \index{LIMITED\_MEMORY\_UPDATE\_TYPE} {\tt character*256}, specifies which kind of Hessian approximation is employed if HESSIAN\_APPROXIMATION is set to 'limited-memory'. Can overridden with PETSc/Tao by using command line options for the optimization ({\tt DEFAULT = 'bfgs'}).
 
 		\item[HESSIAN\_APPROXIMATION] \index{HESSIAN\_APPROXIMATION} {\tt character*256}, type of Hessian approximation employed. Depends on optimization library. Possible values are currently: 'limited-memory' and 'exact'. When using the 'exact' option the steepest descent algorithm is used. ({\tt DEFAULT = 'limited-memory'}).
 
@@ -541,17 +543,38 @@ For PETCs/TAO the tolerance is easily linked with optimization quantities like g
 
 	Note additionally that {\tt b2mn\_d.F90} need not be modified to run the tangent optimization with a smaller/larger set of parameters (see \ref{sec:tanget_more})! One need only to specify them with b2.optimization.parameters.
 
-	Finally, when optimization libraries like PETCs/TAO enable to modify options using command line arguments, the user can also do so by setting the environment variable:\\
+	Finally, when optimization libraries like PETSc/TAO enable to modify options using command line arguments, the user can also do so by setting the environment variable:\\
 	{\tt \$ setenv TAO\_OPT = "list-of-valid-options"}\\
 
 
 	\textbf{Some suggestions:}
 	\begin{itemize}
 		\item scaling of the problem is quite important! therefore, aim at parameters which are in a similar range of order of magnitude, using {\tt par\_rescale};
-		\item PETCs/TAO requires by default the strong Wolfe conditions for the line search, which may be too strict or be affected by gradient discontinuities. It may be better to require Armijo condition only with setting the option {\tt setenv TAO\_OPT = "-tao\_ls\_type armijo"};
-		\item the BFGS method with PETCs/TAO seemed so far the most performing option, with Iptop and other PETCs/TAO methods more demanding.
+		\item PETSc/TAO requires by default the strong Wolfe conditions for the line search, which may be too strict or be affected by gradient discontinuities. It may be better to require Armijo condition only with setting the option {\tt setenv TAO\_OPT = "-tao\_ls\_type armijo"};
+		\item the BFGS method with PETSc/TAO seemed so far the most performing option, with Iptop and other PETSc/TAO methods more demanding.
 	\end{itemize}
 
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \subsection{Check optimization results}\label{sec:optim_results}
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    When the optimization is running, the user can check its status by doing:\\
+    {\tt \$ grep -i tao run.log} \\
+    or\\
+    {\tt \$grep -i ipopt run.log}\\
+    This will printout information on the iterations performed, cost function value and gradient, and value of the parameters.
+    
+    Once the optimization is completed, results can be analyzed. It is suggested to first check if the optimization crashed, in which case there will not be any b2fstate and error messages in the log file. After that, a script can be run to extract information from run.log concerning the optimization. The script to use is either {\tt result\_tao.sh} or  {\tt result\_ipopt.sh}, depending on the optimization library adopted. These scripts will create the following files:
+    \begin{description}
+    	\item[run\_info]\index{run.info} which stores information about git version, number of iterations performed, number and last 10 values of cost functions, number of parameters, cost function gradient (last 200 values), info from optimization libraries
+    	\item[objval.dat]\index{objval.dat}, that stores the cost function value for each optimization iteration
+    	\item[grad.dat]\index{grad.dat} that stores the cost function gradient norm for each optimization iteration
+    	\item[parm\_histX.dat]\index{parm\_histX.dat} that stores the value of optimization parameter X for each optimization iteration
+    	\item[fgeval.dat]\index{fgeval.dat} that stores the number of optimization iterations (for PETSc/TAO only)
+    	\item[feval.dat]\index{fgeval.dat} that stores the number of function evaluations (for Ipopt only)
+    	\item[geval.dat]\index{fgeval.dat} that stores the number of optimization iterations (for Ipopt only)
+    \end{description}
+	Additionally, the files {\tt PETSC-TAO.OUT} and{\tt IPOPT.OUT} will be copied from b2mn.exe.dir into the run directory, and will contain further details on the optimization (e.g. stopping criteria).
+	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	\subsection{Example of optimization setup}
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -580,10 +603,10 @@ For PETCs/TAO the tolerance is easily linked with optimization quantities like g
 
 	The eplanation is as follows: we optimize four parameters, thus {\tt nnvar=4}; these four parameters are, in order:
 	\begin{description}
-		\item $D_{\perp}$ for D+ ions ({\tt parm\_dna(1)}). Thus {\tt par\_type(1)=1}, for species 1, thus {\tt par\_is(1)=1}. {\tt par\_ib(1)} does not matter and is set to zero
-		\item $\chi_{\perp,i}$ for D+ ions ({\tt parm\_hci(1)}). Thus {\tt par\_type(2)=3}, for species 1, thus {\tt par\_is(2)=1}. {\tt par\_ib(2)} does not matter and is set to zero
-		\item $\chi_{\perp,e}$ ({\tt parm\_hce}). Thus {\tt par\_type(3)=4}. {\tt par\_ib(3)} and {\tt par\_is(3)} do not matter
-		\item continuity BC at the core for D+ ({\tt bccon(1,1,1)}). Thus {\tt par\_type(4) = 12}), for species 1, thus {\tt par\_is(4)=1}, and for core boundary (in this case 1), thus {\tt par\_ib(4)=1}
+		\item $D_{\perp}$ for D+ ions ({\tt parm\_dna(1)}). Thus {\tt par\_type(1)=1}, for species 1, thus {\tt paris(1)=1}. {\tt parib(1)} does not matter and is set to zero
+		\item $\chi_{\perp,i}$ for D+ ions ({\tt parm\_hci(1)}). Thus {\tt par\_type(2)=3}, for species 1, thus {\tt paris(2)=1}. {\tt parib(2)} does not matter and is set to zero
+		\item $\chi_{\perp,e}$ ({\tt parm\_hce}). Thus {\tt par\_type(3)=4} .{\tt paris(3)} does not matter in this case because {\tt parm\_hce} is being optimized, which is not species dependent, while if radially varying coefficients would be optimized (with {\tt tdata(:,:,4,:)}), then {\tt paris(3)} should be set to 1. {\tt parib(3)} does not matter.
+		\item continuity BC at the core for D+ ({\tt bccon(1,1,1)}). Thus {\tt par\_type(4) = 12}), for species 1, thus {\tt paris(4)=1}, and for core boundary (in this case 1), thus {\tt parib(4)=1} 
 	\end{description}
 	Moreover, the starting guess for each of the transport coefficients is 1.0, while for the density BC this is $10^{19} m^{-3}$. As such, {\tt x0 = 1.0, 1.0, 1.0, 1.0e19} (and {\tt xl, xu} are defined in a similar way).
 
@@ -593,10 +616,11 @@ For PETCs/TAO the tolerance is easily linked with optimization quantities like g
 
 	Next, we set as stopping criteria a maximum number of 20 optimization iterations with {\tt maxiter=20}, a minimum tolerance of $10^{-4}$ with {\tt tol\_opt = 1e-4}, and maximum of about 71 hours of cpu time for the optimization with {\tt cpu\_opt = 255000.0}.
 
-	The last parameters could be omitted in a standard optimization with PETCs/TAO BFGS and without nonlinear constraints, while they should be specified for Ipopt, as in there a 'hard-coded' trivial constraint needs to be specified (automatically done).\\
+	The last parameters could be omitted in a standard optimization with PETSc/TAO BFGS and without nonlinear constraints, while they should be specified for Ipopt, as in there a 'hard-coded' trivial constraint needs to be specified (automatically done).\\
 
 	\textbf{Radially dependent coefficients}\\
 	If one wants to optimize radially dependent transport coefficients the setup above can be modified according to:\\
+	{\tt paris  =             1,         1,       1,                  1,}\\
 	{\tt par\_rescale =    6*1.0,    6*1.0.   6*1.0,          1.0e19,}\\
 	{\tt x0 =              6*1.0,    6*1.0,   6*1.0,  1.00e19,}\\
 	{\tt xl =              6*0.1,    6*0.1,   6*0.1,  0.5e19, }\\
@@ -604,7 +628,7 @@ For PETCs/TAO the tolerance is easily linked with optimization quantities like g
 	{\tt spatial\_dep =  T,T,T,}\\
 	{\tt spatial\_points = 6,6,6,}\\
 
-	The major difference wrt the previous example is that for each of the transport coefficients we now specify that there are 6 spatial points to be optimized ({\tt spatial\_dep=T,T,T} and {\tt spatial\_points=6,6,6}). Accordingly, we need to specify {\tt per\_rescale, x0, xl, xu} for each of these spatial points, therefore the additional {\tt 6*} if front of the values for {\tt part\_type(1:3)}.
+	The major difference wrt the previous example is that for each of the transport coefficients we now specify that there are 6 spatial points to be optimized ({\tt spatial\_dep=T,T,T} and {\tt spatial\_points=6,6,6}). Accordingly, we need to specify {\tt per\_rescale, x0, xl, xu} for each of these spatial points, therefore the additional {\tt 6*} if front of the values for {\tt part\_type(1:3)}. Furthermore, we set {\tt paris(3)} to 1, as now {\tt tdata(:,:,3,:)} is optimized, which requires it.
 
 	Note that the other optimization parameters don't need to change!
 

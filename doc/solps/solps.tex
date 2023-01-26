@@ -1595,12 +1595,15 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
 \item AD-related (see also ``Expert mode for AD'' in \ref{script_ad} for more details)
  \begin{description}
   \item[cost\_function \$i]\index{cost\_function} This script allows the user to plot the value of the cost function {\tt \$i} as a function of the iterations
-	\item[cost\_function\_gradient \$i]\index{cost\_function\_gradient} This script allows the user to plot the value of the gradient of cost function {\tt \$i} as a function of the iterations (in tangent mode only).
-	\item[resall\_D\_diff]\index{resall\_D\_diff} This script plots the evolution of the residuals of all the diff'ed equations for D only cases (in tangent mode only).
-	\item[resco\_diff]\index{resco\_diff} This script plots the evolution of the residuals of the diff'ed continuity equation (in tangent mode only).
-	\item[resmo\_diff]\index{resmo\_diff} This script plots the evolution of the residuals of the diff'ed momentum equation (in tangent mode only).
+  \item[cost\_function\_gradient \$i]\index{cost\_function\_gradient} This script allows the user to plot the value of the gradient of cost function {\tt \$i} as a function of the iterations (in tangent mode only).
+  \item[resall\_D\_diff]\index{resall\_D\_diff} This script plots the evolution of the residuals of all the diff'ed equations for D only cases (in tangent mode only).
+  \item[resco\_diff]\index{resco\_diff} This script plots the evolution of the residuals of the diff'ed continuity equation (in tangent mode only).
+  \item[resmo\_diff]\index{resmo\_diff} This script plots the evolution of the residuals of the diff'ed momentum equation (in tangent mode only).
   \item[reskt\_diff]\index{reskt\_diff} This script plots the evolution of the residuals of the diff'ed k equation (in tangent mode only).
-	\item[resrest\_diff]\index{resrest\_diff} This script plots the evolution of the residuals of the diff'ed total momentum, ion energy, electron energy and potential equations (in tangent mode only).
+  \item[resrest\_diff]\index{resrest\_diff} This script plots the evolution of the residuals of the diff'ed total momentum, ion energy, electron energy and potential equations (in tangent mode only).
+  \item[run\_info]\index{run\_info} this script prints the file {\tt run.info} that stores information about cost function, gradient, optimization. See \ref{sec:optim_results} for details
+  \item[result\_tao.sh]\index{result\_tao.sh} this script produces files that summarize an optimization run performed with PETSc/TAO. See \ref{sec:optim_results} for details
+  \item[result\_ipopt.sh]\index{result\_ipopt.sh} same as the one before, but for optimization with Ipopt.
   \item[collect\_tapenade\_files.sh]\index{collect\_tapenade\_files.sh} provides Tapenade with the name and path of the source files to be differentiated.
   \item[exclude\_tapenade\_files.sh]\index{exclude\_tapenade\_files.sh} produces a file that lists all the files that have been excluded from the differentiation.
   \item[postprocess\_tapenade\_tgt.sh]\index{postprocess\_tapenade\_tgt.sh} applies corrections to the diff'ed files obtained from Tapenade in tangent mode.
