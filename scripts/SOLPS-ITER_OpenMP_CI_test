@@ -12,5 +12,5 @@ export DEVICE=upgrade
 ${SOLPSTOP}/modules/B2.5/src/test/run_omp_test.sh AUG_16151_D+C+He 16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone 10 12 || exit 1
 
 export DEVICE=iter
-${SOLPSTOP}/modules/B2.5/src/test/run_omp_test.sh ITER_535_D+He+Ar standalone 10 24 || exit 2
-${SOLPSTOP}/modules/B2.5/src/test/run_omp_test.sh ITER_2171_D+He+Be+Ne standalone 10 21 || exit 3
+${SOLPSTOP}/modules/B2.5/src/test/run_omp_test.sh ITER_535_D+He+Ar standalone 100 24 || exit 2
+${SOLPSTOP}/modules/B2.5/src/test/run_omp_test.sh ITER_2171_D+He+Be+Ne standalone 100 21 || exit 3
