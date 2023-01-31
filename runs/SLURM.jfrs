@@ -9,6 +9,7 @@
 #SBATCH  --job-name=#JOBNAME#
 #SBATCH  --partition=#PART#
 #SBATCH  --account=MISONIC
+#SBATCH  --no-requeue
 
 echo Using SOLPSTOP = #SOLPSTOP#
 
@@ -51,11 +52,7 @@ if ($?SOLPS_DEBUG) then
 endif
 
 update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"
-set msg="Started on `hostname` at `date`"
-update_solps_run_status ${msg}
-if ($?SOLPS_GUI_IP) then
-  echo ${USER} ${PWD} ${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
-endif
+update_solps_run_status "Started on `hostname` at `date`"
 
 time b2run -s ${USE_MPI} ${USE_OMP} b2mn >! run.log
 
@@ -63,9 +60,5 @@ QSUB.postprocess
 
 preserve_scratch_to_work
 
-set msg="Finished on `hostname` at `date`"
-update_solps_run_status ${msg}
-if ($?SOLPS_GUI_IP) then
-  echo ${USER} ${PWD} ${msg} | nc -u -v -w 0 ${SOLPS_GUI_IP} ${SOLPS_GUI_PORT}
-endif
+update_solps_run_status "Finished on `hostname` at `date`"
 b2fstate_OK_bool
