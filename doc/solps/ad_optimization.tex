@@ -21,6 +21,14 @@ An additional caveat must be known by the user: this manual version and the proc
 	\item{Tapenade} \href{https://gitlab.inria.fr/tapenade/tapenade/-/commit/686e29d1a492ce72f4f7f61d94a47066695c9da8}{3.16-v2-120-g686e29d1a}
 \end{description}
 
+\textbf{Acknowledgments}\\
+For issues, suggestions, and comments about sensitivity calculation and optimization in B2.5 please contact Stefano Carli (stefano.carli@kuleuven.be) or the KU Leuven team (wouter.dekeyser@kuleuven.be).
+
+To cite this part of the code please use:
+\begin{itemize}
+	\item For sensitivity calculation and optimization: Carli S., Hascoet L., Dekeyser W., Blommaert M., Algorithmic differentiation for adjoint sensitivity calculation in plasma edge codes, submitted to Journal of Computational Physics, 2022
+	\item For optimization, also: Carli, S., Dekeyser, W., Blommaert, M., Coosemans, R., Van Uytven, W., Baelmans, M., Contributions to Plasma Physics 2022, 62 (5-6), e202100184. https://doi.org/10.1002/ctpp.202100184
+\end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -417,7 +425,7 @@ For PETSc/TAO the tolerance is easily linked with optimization quantities like g
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	\subsection{Compile optimization code}
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	In order to compile the optimization code, one must make sure that one of the optimization library currently tested with B2.5 is available, such as PETSc/TAO and Ipopt, either as a module to be loaded or as locally installed library from the user. Both PETSc/TAO and Ipopt are open source so the latter should always be feasible.
+	In order to compile the optimization code, one must make sure that one of the optimization library currently tested with B2.5 is available, such as PETSc/TAO (version 3.10 or younger) and Ipopt, either as a module to be loaded or as locally installed library from the user. Both PETSc/TAO and Ipopt are open source so the latter should always be feasible.
 
 	For the local installation on the KU Leuven VSC cluster, for PETSc/TAO to the following command line options to configure the installation were used:\\
 
@@ -433,6 +441,8 @@ For PETSc/TAO the tolerance is easily linked with optimization quantities like g
 
 	where {\tt SET\_TAO} allows to include extra compilation flags in the user's config files of B2.5. Alternatively, one can do the same with command {\tt SET\_IPOPT}. In both cases an additional executable named {\tt b2optim\_tao} or {\tt b2optim\_ipopt} is compiled in: \\
 	{\tt B2.5/builds/standalone.}{\tt\${HOST\_NAME}}.{\tt\${COMPILER}}.{\tt[tgt-adj]}.\\
+
+	\textbf{Important:} on the ITER cluster it is currently possible to compile only the PETSc/TAO version.
 
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	\subsection{Run an optimization}\label{run_opt}
@@ -562,7 +572,7 @@ For PETSc/TAO the tolerance is easily linked with optimization quantities like g
     or\\
     {\tt \$grep -i ipopt run.log}\\
     This will printout information on the iterations performed, cost function value and gradient, and value of the parameters.
-    
+
     Once the optimization is completed, results can be analyzed. It is suggested to first check if the optimization crashed, in which case there will not be any b2fstate and error messages in the log file. After that, a script can be run to extract information from run.log concerning the optimization. The script to use is either {\tt result\_tao.sh} or  {\tt result\_ipopt.sh}, depending on the optimization library adopted. These scripts will create the following files:
     \begin{description}
     	\item[run\_info]\index{run.info} which stores information about git version, number of iterations performed, number and last 10 values of cost functions, number of parameters, cost function gradient (last 200 values), info from optimization libraries
@@ -574,7 +584,9 @@ For PETSc/TAO the tolerance is easily linked with optimization quantities like g
     	\item[geval.dat]\index{fgeval.dat} that stores the number of optimization iterations (for Ipopt only)
     \end{description}
 	Additionally, the files {\tt PETSC-TAO.OUT} and{\tt IPOPT.OUT} will be copied from b2mn.exe.dir into the run directory, and will contain further details on the optimization (e.g. stopping criteria).
-	
+
+  Finally, the optimization will also write some intermediate state files in {\tt b2mn.exe.dir}, with names {\tt b2fstate\_optim.XXXX}, where {\tt XXXX} is the optimization iteration. These can be used for checking intermediate optimization states or reconstruct the optimization history if needed.
+
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	\subsection{Example of optimization setup}
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -593,8 +605,8 @@ For PETSc/TAO the tolerance is easily linked with optimization quantities like g
 	{\tt maxiter = 20,}\\
 	{\tt tol\_opt = 1.0e-4,}\\
 	{\tt cpu\_opt = 255000.0,}\\
-	{\tt hessian\_approximation = limited-memory,}\\
-	{\tt limited\_memory\_update\_type = bfgs,}\\
+	{\tt hessian\_approximation = 'limited-memory',}\\
+	{\tt limited\_memory\_update\_type = 'bfgs',}\\
 	{\tt nncon = 1,}\\
 	{\tt nnjac = 1,}\\
 	{\tt jcol = 1,}\\
@@ -606,7 +618,7 @@ For PETSc/TAO the tolerance is easily linked with optimization quantities like g
 		\item $D_{\perp}$ for D+ ions ({\tt parm\_dna(1)}). Thus {\tt par\_type(1)=1}, for species 1, thus {\tt paris(1)=1}. {\tt parib(1)} does not matter and is set to zero
 		\item $\chi_{\perp,i}$ for D+ ions ({\tt parm\_hci(1)}). Thus {\tt par\_type(2)=3}, for species 1, thus {\tt paris(2)=1}. {\tt parib(2)} does not matter and is set to zero
 		\item $\chi_{\perp,e}$ ({\tt parm\_hce}). Thus {\tt par\_type(3)=4} .{\tt paris(3)} does not matter in this case because {\tt parm\_hce} is being optimized, which is not species dependent, while if radially varying coefficients would be optimized (with {\tt tdata(:,:,4,:)}), then {\tt paris(3)} should be set to 1. {\tt parib(3)} does not matter.
-		\item continuity BC at the core for D+ ({\tt bccon(1,1,1)}). Thus {\tt par\_type(4) = 12}), for species 1, thus {\tt paris(4)=1}, and for core boundary (in this case 1), thus {\tt parib(4)=1} 
+		\item continuity BC at the core for D+ ({\tt bccon(1,1,1)}). Thus {\tt par\_type(4) = 12}), for species 1, thus {\tt paris(4)=1}, and for core boundary (in this case 1), thus {\tt parib(4)=1}
 	\end{description}
 	Moreover, the starting guess for each of the transport coefficients is 1.0, while for the density BC this is $10^{19} m^{-3}$. As such, {\tt x0 = 1.0, 1.0, 1.0, 1.0e19} (and {\tt xl, xu} are defined in a similar way).
 
@@ -653,8 +665,8 @@ For PETSc/TAO the tolerance is easily linked with optimization quantities like g
 	{\tt maxiter = 20,}\\
 	{\tt tol\_opt = 1.0e-4,}\\
 	{\tt cpu\_opt = 255000.0,}\\
-	{\tt hessian\_approximation = limited-memory,}\\
-	{\tt limited\_memory\_update\_type = bfgs,}\\
+	{\tt hessian\_approximation = 'limited-memory',}\\
+	{\tt limited\_memory\_update\_type = 'bfgs',}\\
 	{\tt nncon = 1,}\\
 	{\tt nnjac = 1,}\\
 	{\tt jcol = 1,}\\

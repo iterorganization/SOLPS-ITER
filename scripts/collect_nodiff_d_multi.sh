@@ -146,6 +146,7 @@ cp $SOLPSTOP/modules/B2.5/src/utility/dseval.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/dspline.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/cond_coef.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/erf_dv.F .
+cp $SOLPSTOP/modules/B2.5/src/differentiation/dim_dv.F90 .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/b2uxus_dv.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/b2mwqt_diffv.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/b2mxar_diffv.F .

@@ -60,7 +60,7 @@ cp $SOLPSTOP/modules/B2.5/src/solvers/b2uppo.F .
 cp $SOLPSTOP/modules/B2.5/src/sources/b2sqcx.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/cond_coef.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/erf_d.F .
-#cp $SOLPSTOP/modules/B2.5/src/differentiation/dim_d.F90 .
+cp $SOLPSTOP/modules/B2.5/src/differentiation/dim_d.F90 .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/b2mwqt_diff.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/b2mxar_diff.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/b2mxac_diff.F .
