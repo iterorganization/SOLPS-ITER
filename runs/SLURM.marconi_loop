@@ -5,10 +5,11 @@
 #SBATCH  --cpus-per-task=#THREADS#
 #SBATCH  --time=#HOURS#:00:00
 #SBATCH  --mail-user=#EMAIL#
-#SBATCH  --mail-type=END
+#SBATCH  --mail-type=END,FAIL
 #SBATCH  --job-name=#JOBNAME#
 #SBATCH  --partition=#PART#
 #SBATCH  --account=FUA34_ADC
+#SBATCH  --no-requeue
 
 echo Using SOLPSTOP = #SOLPSTOP#
 

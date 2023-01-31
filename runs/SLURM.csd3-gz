@@ -8,10 +8,11 @@
 #SBATCH --time=#HOURS#:00:00
 #SBATCH --mem=#MEM#
 #SBATCH --job-name=#JOBNAME#
-#SBATCH --mail-type=END
+#SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=#EMAIL#
 #SBATCH -o SLURM-%j.out
 #SBATCH -e SLURM-%j.err
+#SBATCH  --no-requeue
 
 echo Using SOLPSTOP = #SOLPSTOP#
 

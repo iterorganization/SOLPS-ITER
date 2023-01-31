@@ -4,7 +4,7 @@
 #SBATCH  --tasks-per-node=#TASKS#
 #SBATCH  --time=#HOURS#:00:00
 #SBATCH  --mail-user=#EMAIL#
-#SBATCH  --mail-type=END
+#SBATCH  --mail-type=END,FAIL
 #SBATCH  --job-name=EIRENE
 
 echo Using SOLPSTOP = #SOLPSTOP#
