@@ -12,7 +12,7 @@
 %              the left-most end, otherwise false                              %
 % strata_plot: If true then divide the EIRENE source into components from each %
 %              stratum (in a new figure)                                       %
-% axstrat:     Array of aces into which strata plots will be placed            % 
+% axstrat:     Array of aces into which strata plots will be placed            %
 % makeplot:    Decides whether to make plots or just pass back the values in   %
 %              the radial balance plots                                        %
 % areaend:     Either 'left', 'right' or 'none'. Defines the poloidal end      %
@@ -131,7 +131,7 @@ resmo = sum(tmp(:,:,isplot),3);
 
 %% Create the units string
 switch areatype
-    case 'parallel'        
+    case 'parallel'
         units = 'Nm^{-2}';
     case 'contact'
         units = 'Nm^{-2}';
@@ -197,7 +197,7 @@ bm = radial_balance(...
   'eirene\_mc atm.-plasma','eirene\_mc mol.-plasma','eirene\_mc t.ion-plasma','eirene\_mc recomb.','b2stbm','source\_input','b2stel\_ion',...
   'b2stel\_rec','b2stcx','b2srsm','b2srdt','b2srst','friction force','b2sifr\_smotf\_ehxb','b2sifr\_smotf\_cthe','b2sifr\_smotf_cthi','b2siav\_smovh','b2siav\_smovv','b2sicf','b2sian','b2nxdv\_smo','ion stat. press. gradient','el. stat. press. gradient','pressure gradient restriction','b2stbr\_phys','b2stbr\_bas'},...
  comuse,indrad,area_divide,reverse,true,axbal(1:4),units,true,areaend);
-% 
+%
 % areadownpol = poloidal_balance(...
 %  fmox_flua,...
 %  cat(3,visc,hybr,b2nxfv,raddiv_flua,raddiv_visc,raddiv_hybr,b2stbc_smo,sum(eirene_mc_mapl_smo,4),...
@@ -243,7 +243,7 @@ if strata_plot
                       {'Strata decomp. of \int_d^uS_{mom}^{EIR}ds_{||} in radial direction',...
                        'Strata decomp. of S_{mom}^{EIR}ds_{||} in poloidal direction'},...
                       {''},comuse,indrad,indpol,nstra,axstrat,axbal,bm.areadownrad,areadownpol,reverse,true);
-end    
+end
 %%
 end
 
