@@ -51,7 +51,7 @@ end
 fluxedge = [];
 for i=1:size(flux,3)
     fluxedge(:,i) = sumradedge(flux(:,:,i),indpol,comuse);
-    
+
 end
 areaedge = sumradedge(area,indpol,comuse)';
 areadown = areaedge;
@@ -116,7 +116,7 @@ title(axbal(1),'Total poloidal balance','fontweight','normal');
 axis(axbal(1),'tight');
 xlabel(axbal(1),'Poloidal dist. from downstream face + 0.001m. (m)');
 ylabel(axbal(1),['(',unitstr,')']);
-    
+
 % Decompose fluxes:
 cmap = comuse.cmap;
 for i=1:size(fluxedge,2)

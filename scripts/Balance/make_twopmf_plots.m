@@ -89,7 +89,7 @@ plot(ymysep,(gamma_sheath.^2./mtar/32).*(ptotu.^3./qu.^2).*(4./pKRtar.^2).*(8*M.
     'displayname','$\left[\frac{\gamma^2}{32m}\right]\left[\frac{p_{tot,u}^3}{\tilde q_{\parallel u}^2}\right]\left[\frac{4}{(1+\tau_t/z_t)^2}\right]\left[\frac{8M_t^2}{(1+M_t^2)^3}\right]$');
 plot(ymysep,(gamma_sheath.^2./mtar/32).*(ptotu.^3./qu.^2).*(4./pKRtar.^2).*(8*M.^2./(1+M.^2).^3).*((1+fmom).^3./(1+fpwr).^2),...
     'displayname',['$\left[\frac{\gamma^2}{32m}\right]\left[\frac{p_{tot,u}^3}{\tilde q_{\parallel u}^2}\right]\left[\frac{4}{(1+\tau_t/z_t)^2}\right]\left[\frac{8M_t^2}{(1+M_t^2)^3}\right]',...
-                   '\left[\frac{(1+fmom)^3}{(1+fpwr)^2}\right]$']);            
+                   '\left[\frac{(1+fmom)^3}{(1+fpwr)^2}\right]$']);
 plot(ymysep,(gamma_sheath.^2./mtar/32).*(ptotu.^3./qu.^2).*(4./pKRtar.^2).*(8*M.^2./(1+M.^2).^3).*((1+sum(fmomcomps,1)).^3./(1+sum(fpwrcomps,1)).^2).*(areadownrad./areauprad).^2,...
     'displayname',['$\left[\frac{\gamma^2}{32m}\right]\left[\frac{p_{tot,u}^3}{\tilde q_{\parallel u}^2}\right]\left[\frac{4}{(1+\tau_t/z_t)^2}\right]\left[\frac{8M_t^2}{(1+M_t^2)^3}\right]',...
                    '\left[\frac{(1+fmom)^3}{(1+fpwr)^2}\right]\left[\left(\frac{B_u}{B_t}\right)^2\right]$']);
@@ -110,7 +110,7 @@ plot(ymysep,(gamma_sheath./mtar/8).*(ptotu.^2./qu).*(2./pKRtar).*(4*M.^2./(1+M.^
     'displayname',['$\left[\frac{\gamma}{8m}\right]\left[\frac{p_{tot,u}^2}{q_{\parallel u}}\right]\left[\frac{2}{1+\tau_t/z_t}\right]\left[\frac{4M_t^2}{(1+M_t^2)^2}\right]',...
                    '\left[\frac{(1+fmom)^2}{1+fpwr}\right]\left[\frac{B_u}{B_t}\right]$']);
 hl = legend(gca,'show','location','best');
-set(hl,'interpreter','latex');               
+set(hl,'interpreter','latex');
 subplot(2,3,4); hold on;
 dispnames = get(flipud(findobj(get(axbal_2pmfpr(4),'children'),'type','line')),'displayname');
 for i=1:size(fmomcomps,1)
