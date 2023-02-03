@@ -42,7 +42,7 @@ if ($?SOLPS_ADJ) then
   set STANDALONE=-${SOLPS_OPT}adj
 endif
 
-time b2run ${STANDALONE} ${USE_MPI} ${USE_OMP} | gzip -9 >! run.log.gz
+time b2run ${STANDALONE} ${USE_MPI} ${USE_OMP} b2mn | gzip -9 >! run.log.gz
 
 QSUB.postprocess
 

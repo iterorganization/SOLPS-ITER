@@ -243,7 +243,7 @@ For later updates, it is recommended you use the {\tt solps-iter\_update} script
 
 {\em {\bf \underline{IMPORTANT:}} When updating the code, some routines or other configuration files may have been moved, renamed, added, or deleted, and the updating script itself may have changed. In that case, compilation will likely fail on the first update attempt. The user should then start afresh with a new session, and run the update script a second time. If compilation still fails, then the user should remove old compiled files by means of the appropriate {\tt gmake clean} instruction and attempt another compilation, from scratch.}
 
-Please note that because of the way some of the \SOLPSITER utility scripts function, the path to the \SOLPSITER top directory must not contain any of the strings {\tt .debug}, {\tt .mpi}, {\tt .openmp}, or {\tt .ig}.
+Please note that because of the way some of the \SOLPSITER utility scripts function, the path to the \SOLPSITER top directory must not contain any of the strings {\tt .debug}, {\tt .mpi}, {\tt .openmp}, {\tt .ig}, {\tt .tgt}, or {\tt .adj}.
 
 Since the user-id is immutably encoded into any changes, it is always a good idea to properly configure a local installation of Git on all the systems on which one plans on making code revisions with, e.g.:
 
@@ -773,9 +773,13 @@ The {\tt setup.csh} file and its subsidiaries {\tt \$\{SOLPSTOP\}/SETUP/setup.cs
 \item {\tt SOLPS\_CPP}\index{SOLPS\_CPP}, an environment variable containing the global "defines" to use during compilation of {\tt SOLPS} code components
 \item some aliases to move around the tree ({\tt sbb}, {\tt sei}, {\it etc.})
 \item some aliases for plotting ({\tt xyplot}, etc...)
-\item two aliases to swap between the debug and no\_debug versions of the code ({\tt set\_debug} and {\tt set\_nodebug})
-\item two aliases to swap between the MPI and no\_MPI versions of the code ({\tt set\_mpi} and {\tt set\_nompi})
-\item two aliases to swap between the OpenMP and no\_OpenMP versions of the code ({\tt set\_openmp} and {\tt set\_noopenmp})
+\item two aliases to swap between the debug and no\_debug versions of the code ({\tt set\_debug} and {\tt unset\_debug})
+\item two aliases to swap between the MPI and no\_MPI versions of the code ({\tt set\_mpi} and {\tt unset\_mpi})
+\item two aliases to swap between the OpenMP and no\_OpenMP versions of the code ({\tt set\_openmp} and {\tt unset\_openmp})
+\item two aliases to swap between the tgt and no\_tgt versions of the code ({\tt set\_tgt} and {\tt unset\_tgt})
+\item two aliases to swap between the adj and no\_adj versions of the code ({\tt set\_adj} and {\tt unset\_adj})
+\item two aliases to swap between the tao and no\_tao versions of the code ({\tt set\_tao} and {\tt unset\_tao})
+\item two aliases to swap between the ipopt and no\_ipopt versions of the code ({\tt set\_ipopt} and {\tt unset\_ipopt})
 \end{enumerate}
 Of course, any additional desired definitions can be added. The preferred place for those is, for those variables that need not be shared by other users, the {\tt \$\{SOLPSTOP\}/SETUP/setup.csh.\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}.local} and {\tt \$\{SOLPSTOP\}/SETUP/config.\$\{HOST\_NAME\}.\$\{COMPILER\}.local} files. Variables that are needed at compilation time need to appear in the {\tt config.*.*(.local)} file, while variables needed at runtime must appear in {\tt setup.csh.*.*(.local)} file.
 \end{sloppypar}
@@ -1266,7 +1270,7 @@ The number of scripts developed for various {\bf SOLPS} versions is very large. 
 \item Job submission scripts
  \begin{description}
   \item[b2plot]\index{b2plot} Shortcut to \btwoplotns. A {\tt -n} option allows for dry-run tests. A {\tt -d} option allows to run within the chosen debugger. A {\tt -s} option allows to run \btwoplot without coupling to {\tt Eirene} data. A {\tt -h} option prints a help description.
-  \item[b2run]\index{b2run}\index{b2co}\index{b2fstate} Shortcut to the {\tt Makefile} launching {\tt B2.5}. A {\tt -n} option allows for dry-run tests. A {\tt -d} option allows to run within the chosen debugger. A {\tt -s} option allows to run {\tt B2.5} in standalone mode. A {\tt -m} option allows to run with MPI options. A {\tt -o} option adds any other desired run options. The options can be grouped together inside quotes or given individually with multiple {\tt -o} instances. A {\tt -t \#} option allows to request an OpenMP run with \# threads. A {\tt -b} option can be used when invoking the {\tt b2co} program to obtain a provisional {\tt b2fstate} file while the main code is running. A {\tt -h} option prints a help description. (See \ref{b2run} for fuller details)
+  \item[b2run]\index{b2run}\index{b2co}\index{b2fstate} Shortcut to the {\tt Makefile} launching {\tt B2.5}. A {\tt -n} option allows for dry-run tests. A {\tt -d} option allows to run within the chosen debugger. A {\tt -s} option allows to run {\tt B2.5} in standalone mode. A {\tt -m} option allows to run with MPI options. A {\tt -o} option adds any other desired run options. The options can be grouped together inside quotes or given individually with multiple {\tt -o} instances. A {\tt -t \#} option allows to request an OpenMP run with \# threads. A {\tt -b} option can be used when invoking the {\tt b2co} program to obtain a provisional {\tt b2fstate} file while the main code is running. A {\tt -tgt} or {\tt -adj} option allows to request a standalone run with tangentor or adjoint AD derivatives, respectively. A {\tt -opt\_tgt} or {\tt -opt\_adj} allows to request a standalone optimization with tangent or adjoint AD derivatives, respectively. A {\tt -h} option prints a help description. (See \ref{b2run} for fuller details)
   \item[b2run\_hgw\_cluster]\index{b2run\_hgw\_clus} Shortcut to the {\tt Makefile} launching {\tt B2.5} for the IPP--Greifswald cluster. A {\tt -n} option allows for dry-run tests.
   \item[b2sxdr]\index{b2sxdr} Shortcut to the \SOLPSfour to \SOLPSfive converter. A {\tt -n} option allows for dry-run tests. A {\tt -d} option allows to run within the chosen debugger. A {\tt -s} option allows to specify that the run to convert was not coupled to {\tt Eirene}. A {\tt -o} option adds any other desired run options. The options can be grouped together inside quotes or given individually with multiple {\tt -o} instances. A {\tt -h} option prints a help description.
   \item[convert\_from\_solps4.3 \#1]\index{convert\_from\_solps4.3} Converts run number \#1 from {\tt DEVICE} from the SOLPS4.3 ITER archive to a \SOLPSITER run in directory {\tt \$\{SOLPSTOP\}/runs/\$\{DEVICE\}/\#1} .
@@ -1850,6 +1854,10 @@ for itself by climbing up the tree. You can add options to the {\tt b2run} comma
   \item[-t \#] Requests an OpenMP run using \# threads.
   \item[-b]\index{b2co}\index{b2fstate} Specifies, when calling the {\tt b2co} program, that only the {\tt b2fstate} file should be produced. To be used when invoking {\tt b2co} while the main code is running.
   \item[-d "debugger\_name"] Allows to run {\tt b2XX} with the named debugger (example: {\tt b2run -d totalview b2mn}). If no debugger name is specified, the debugger defined with the {\tt DBX} environment variable and specified in the {\tt \$\{SOLPSTOP\}/SETUP/setup.csh.\$\{HOST\_NAME\}.\$\{COMPILER\}.local} or {\tt \$\{SOLPSTOP\}\allowbreak/SETUP\allowbreak/setup.csh.\$\{HOST\_NAME\}.\$\{COMPILER\}} files will be used.
+  \item[-tgt]\index{tgt} Allows to run a standalone case with tangent AD derivatives.
+  \item[-adj]\index{adj} Allows to run a standalone case with adjoint AD derivatives.
+  \item[-opt\_tgt]\index{opt\_tgt} Allows to run a standalone optimization with tangent AD derivatives.
+  \item[-opt\_adj]\index{opt\_adj} Allows to run a standalone optimization with adjoint AD derivatives.
 \end{description}
 \end{sloppypar}
 
@@ -1987,7 +1995,7 @@ again for tangent and adjoint AD respectively. The user can select the optimizat
 \begin{verbatim}
 set_tao; itersubmit -opt_tgt '-tao_ls_type armijo'
 \end{verbatim}
-where the PETSc/TAO Armijo line search option is asked for. For both sensitivity and optimization runs only the {\tt SLURM.iter} script should be employed. Note additionally that MPI and OpenMP are currently not tested for AD executables. 
+where the PETSc/TAO Armijo line search option is asked for. For both sensitivity and optimization runs only the {\tt SLURM.iter} script should be employed. Note additionally that MPI and OpenMP are currently not tested for AD executables.
 
 A listing of the available options for each submission script can be obtained by the
 \begin{verbatim}

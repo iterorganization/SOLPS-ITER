@@ -16,6 +16,8 @@ set compress=""
 set MPIOPTS=""
 set standalone="no"
 set LOOP_OPTS=""
+set OPTOPTS=""
+setenv SOLPS_OPT ""
 
 setenv SOLPSTOP "`determine_SOLPSTOP`"
 if ($SOLPSTOP == "") then
@@ -37,15 +39,19 @@ Usage:
 where the optional <<SCRIPT>> is the SLURM submission file to be used
 
 Available options are:
-  -j <<JOB NAME>>    set the job name (default $JOB_NAME)
-  -z                 compress run.log using gzip
-  -s                 specify a standalone B2.5 run
-  -c <<JOB_ID>>      job ID of the previous job in a chain submission
-  -m <<MPI OPTIONS>> use the MPI options specified (default serial version)
-  -t <<THREADS>>     use OpenMP parallelization with <<THREADS>> threads (default $THREADS)
-  -T <<HOURS>>       number of elapsed hours requested (default $hours)
+  -j <<JOB NAME>>          set the job name (default $JOB_NAME)
+  -z                       compress run.log using gzip
+  -s                       specify a standalone B2.5 run
+  -tgt                     specify a standalone B2.5 run with tangent AD derivatives
+  -adj                     specify a standalone B2.5 run with adjoint AD derivatives
+  -opt_tgt <<OPT_OPTIONS>> specify a standalone B2.5 optimization run with tangent AD derivatives
+  -opt_adj <<OPT_OPTIONS>> specify a standalone B2.5 optimization run with adjoint AD derivatives
+  -c <<JOB_ID>>            job ID of the previous job in a chain submission
+  -m <<MPI OPTIONS>>       use the MPI options specified (default serial version)
+  -t <<THREADS>>           use OpenMP parallelization with <<THREADS>> threads (default $THREADS)
+  -T <<HOURS>>             number of elapsed hours requested (default $hours)
   -A <<ACCOUNT>>     the account to be used (default $account)
-  -M <<MEM_SIZE>>    memory size (default $mem)
+  -M <<MEM_SIZE>>          memory size (default $mem)
   -N <<NODES>>       number of nodes requested (default $NODES)
 
 EOF
@@ -74,6 +80,66 @@ EOF
     echo Asking for a B2.5 standalone run
     shift
     set LOOP_OPTS="-s ${LOOP_OPTS}"
+    goto argloop
+  endif
+  if ("X${1}X" == "X-opt_tgtX") then
+    shift
+    set standalone="yes"
+    setenv SOLPS_OPT "opt_"
+    if (! $?SOLPS_TGT) then
+      source $SOLPSTOP/SETUP/tgt
+    endif
+    set OPTOPTS="$1"
+    if (! $?OPT) then
+      echo No optimization library specified, reverting to PETSc/TAO
+      source $SOLPSTOP/scripts/tao "${OPTOPTS}"
+    endif
+    if ($JOB_NAME == "SOLPS-ITER") set JOB_NAME="B2.5_OPT_TGT"
+    echo Asking for a B2.5 standalone optimization with tangent AD
+    shift
+    set HELP_STRING="${OPTOPTS}"
+    set LOOP_OPTS="-opt_tgt '${OPTOPTS}' ${LOOP_OPTS}"
+    goto argloop
+  endif
+  if ("X${1}X" == "X-opt_adjX") then
+    shift
+    set standalone="yes"
+    setenv SOLPS_OPT "opt_"
+    if (! $?SOLPS_TGT) then
+      source $SOLPSTOP/SETUP/adj
+    endif
+    set OPTOPTS="$1"
+    if (! $?OPT) then
+      echo No optimization library specified, reverting to PETSc/TAO
+      source $SOLPSTOP/scripts/tao "${OPTOPTS}"
+    endif
+    if ($JOB_NAME == "SOLPS-ITER") set JOB_NAME="B2.5_OPT_ADJ"
+    echo Asking for a B2.5 standalone optimization with adjoint AD
+    shift
+    set HELP_STRING="${OPTOPTS}"
+    set LOOP_OPTS="-opt_adj '${OPTOPTS}' ${LOOP_OPTS}"
+    goto argloop
+  endif
+  if ("X${1}X" == "X-tgtX") then
+    set standalone="yes"
+    if (! $?SOLPS_TGT) then
+      source $SOLPSTOP/SETUP/tgt
+    endif
+    if ($JOB_NAME == "SOLPS-ITER") set JOB_NAME="B2.5_TGT"
+    echo Asking for a B2.5 standalone run with tangent AD
+    shift
+    set LOOP_OPTS="-tgt ${LOOP_OPTS}"
+    goto argloop
+  endif
+  if ("X${1}X" == "X-adjX") then
+    set standalone="yes"
+    if (! $?SOLPS_ADJ) then
+      source $SOLPSTOP/SETUP/adj
+    endif
+    if ($JOB_NAME == "SOLPS-ITER") set JOB_NAME="B2.5_ADJ"
+    echo Asking for a B2.5 standalone run with adjoint AD
+    shift
+    set LOOP_OPTS="-adj ${LOOP_OPTS}"
     goto argloop
   endif
   if ("X${1}X" == "X-mX") then

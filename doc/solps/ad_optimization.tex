@@ -223,7 +223,7 @@ Before calculating derivatives, the user first has to think which kind of cost f
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Tangent AD mode}\label{sec:forwardAD}
+\section{Tangent AD mode}\label{sec:forwardAD}\index{tgt}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 The tangent (or forward) AD mode is the simplest one and allows the user to obtain simultaneously the gradient of all cost functions (outputs) with respect to a single input parameter. For details on the tangent mode the user is referred to \cite{griewank}. The tangent AD is also the first type of AD that has been applied successfully on B2.5 \cite{carlipsi}.\\
@@ -302,7 +302,7 @@ In tangent AD mode, the user can thus specify as many cost functions as desired,
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Adjoint AD mode}\label{sec:adjointAd}
+\section{Adjoint AD mode}\label{sec:adjointAd}\index{adj}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -386,7 +386,7 @@ While in principle adjoint vector mode exists and allows to retrieve the full Ja
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Optimization}\label{sec:optimization}
+\section{Optimization}\label{sec:optimization}\index{opt\_tgt}\index{opt\_adj}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 The optimization framework will try to minimize the cost function $\hat{\mathcal{J}}(\theta)$ by adjusting some parameters $\theta$, subject to bound constraints on the $\theta$ variables themselves:
@@ -436,7 +436,7 @@ For PETSc/TAO the tolerance is easily linked with optimization quantities like g
 
 	To compile the optimization version, for example with PETSc/TAO optimization library:\\
 	{\tt \$ game listobj depend}\\
-	{\tt \$ set\_tao}\\
+	{\tt \$ set\_tao}\index{set\_tao}\\
 	{\tt \$ gmake b25\_tgt b25\_adj}\\
 
 	where {\tt SET\_TAO} allows to include extra compilation flags in the user's config files of B2.5. Alternatively, one can do the same with command {\tt SET\_IPOPT}. In both cases an additional executable named {\tt b2optim\_tao} or {\tt b2optim\_ipopt} is compiled in: \\
@@ -546,7 +546,7 @@ For PETSc/TAO the tolerance is easily linked with optimization quantities like g
 
 
 	Once the optimization case is ready, it can be started with the command:\\
-	{\tt \$ set\_tao}\\
+	{\tt \$ set\_tao}\index{set\_tao}\\
 	{\tt \$ b2run -opt\_tgt > run.log}  OR {\tt \$ b2run -opt\_adj > run.log}\\
 
 	Note that switches like {\tt b2mndr\_ntim} and {\tt b2mndr\_elapsed} will set the number of iterations or cpu time\textit{ for each single call} to {\tt b2mndr\_1\_[db]}. More tricky is the case of {\tt b2mndr\_etim}, which for now is suggested to be set to 0.0.

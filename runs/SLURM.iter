@@ -42,7 +42,7 @@ if ($?SOLPS_ADJ) then
   set STANDALONE=-${SOLPS_OPT}adj
 endif
 
-time b2run ${STANDALONE} ${USE_MPI} ${USE_OMP} >! run.log
+time b2run ${STANDALONE} ${USE_MPI} ${USE_OMP} b2mn >! run.log
 
 QSUB.postprocess
 
