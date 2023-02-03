@@ -73,16 +73,17 @@ realclean: clean
 
 publish:
 	if test -d "$(dir)" -a -d $(EXTERNALDIR); then \
-		echo Publishing $(dir); \
-		tar czf $(dir).tar.gz $(dir); \
-		md5=$$(md5sum $(dir).tar.gz | cut -c 1-32);\
+		echo Publishing $(dir) ; \
+		rm -f $(dir).tar.gz ; \
+		tar czf $(dir).tar.gz $(dir) ; \
+		md5=$$(md5sum $(dir).tar.gz | cut -c 1-32) ;\
 		echo $${md5} > $(dir).tar.gz.md5 ;\
 		scp $(dir).tar.gz $(EXTERNALDIR)/$${md5} ;\
 		rm -f $(dir).tar.gz ;\
 		git add $(dir).tar.gz.md5 ;\
 		echo "Do not forget to commit and push $(dir).tar.gz.md5" ;\
 	else \
-		echo "Missing argument dir=yourdir or not ITER cluster";\
+		echo "Missing argument dir=yourdir or not ITER cluster" ;\
 	fi
 
 check : $(ASSETS)
