@@ -8,10 +8,11 @@
 #SBATCH --time=#HOURS#:00:00
 #SBATCH --mem=#MEM#
 #SBATCH --job-name=#JOBNAME#
-#SBATCH --mail-type=END
+#SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=#EMAIL#
 #SBATCH -o SLURM-%j.out
 #SBATCH -e SLURM-%j.err
+#SBATCH  --no-requeue
 
 ### This script submits the job, which launches the B2.5 code, to the CSD3 cluster,
 ### and resubmits the job again after successful finish of B2.5 in a loop manner.
@@ -103,7 +104,7 @@ if ("$Break_loop" == "no") then
 #  echo $End_by_walltime
 
   if ("$End_by_ntim" != "" || "$End_by_cputime" != "" || "$End_by_walltime" != "") then
-    update_solps_run_status     "Resubmitting inside the loop at `date`"
+    update_solps_run_status "Resubmitting inside the loop at `date`"
     rm -f run.log* b2mn.prt b2.log*;
     set NOW = `date +"%d.%m.%Y_%T"`  
     mv b2fstati b2fstati_$NOW

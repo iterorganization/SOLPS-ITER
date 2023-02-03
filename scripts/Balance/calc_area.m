@@ -9,9 +9,9 @@ function area_divide = calc_area(comuse,areatype)
     dv = comuse.dv; % Cell vol.
     hx = comuse.hx; % hx
     B = comuse.bb; % Mag. field
-    
+
     switch areatype
-        case 'parallel'        
+        case 'parallel'
             % Parallel area at cell centres:
             apll = dv./hx.*abs(B(:,:,1)./B(:,:,4));
             % Map to left cell face:

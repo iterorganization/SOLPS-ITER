@@ -103,14 +103,14 @@ plot(tot_sna_bal(2:end-1,comuse.sep+2));
 plot(tot_sna_bal_compare(2:end-1,comuse.sep+2));
 plot(tot_sna_bal(2:end-1,comuse.sep+2)-tot_sna_bal_compare(2:end-1,comuse.sep+2));
 
-% Residual:    
+% Residual:
 tmp = ncread(balfile,'resco');
 rescb = sum(tmp(:,:,isplot),3);
 %%
 
 %% Create the units string
 switch areatype
-    case 'parallel'        
+    case 'parallel'
         units = 'm^{-2}s^{-1}';
     case 'contact'
         units = 'm^{-2}s^{-1}';
@@ -140,7 +140,7 @@ for iy=1:ny
         raddiv_nanom(ix,iy) = fnby_nanom(ix,iy)-fnby_nanom(topix(ix,iy),topiy(ix,iy));
         raddiv_panom(ix,iy) = fnby_panom(ix,iy)-fnby_panom(topix(ix,iy),topiy(ix,iy));
         raddiv_ch(ix,iy) = fnby_ch(ix,iy)-fnby_ch(topix(ix,iy),topiy(ix,iy));
-        raddiv_pschused(ix,iy) = fnby_pschused(ix,iy)-fnby_pschused(topix(ix,iy),topiy(ix,iy));                    
+        raddiv_pschused(ix,iy) = fnby_pschused(ix,iy)-fnby_pschused(topix(ix,iy),topiy(ix,iy));
     end
 end
 %%
@@ -186,7 +186,7 @@ if strata_plot
                       {'Strata decomp. of (\int_d^uS_{part}^{EIR}dV)/dA_{||d} in radial direction',...
                        'Strata decomp. of S_{part}^{EIR}dV/dA_{||d}$ in poloidal direction'},...
                       {''},comuse,indrad,indpol,nstra,axstrat,axbal,btn.areadown,areadividepol,reverse,false);
-end              
+end
 %%
 end
 

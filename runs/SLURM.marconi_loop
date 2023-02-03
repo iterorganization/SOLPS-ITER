@@ -5,10 +5,11 @@
 #SBATCH  --cpus-per-task=#THREADS#
 #SBATCH  --time=#HOURS#:00:00
 #SBATCH  --mail-user=#EMAIL#
-#SBATCH  --mail-type=END
+#SBATCH  --mail-type=END,FAIL
 #SBATCH  --job-name=#JOBNAME#
 #SBATCH  --partition=#PART#
 #SBATCH  --account=FUA34_ADC
+#SBATCH  --no-requeue
 
 echo Using SOLPSTOP = #SOLPSTOP#
 
@@ -76,7 +77,7 @@ if ("$Break_loop" == "no") then
 #  echo $End_by_walltime
 
   if ("$End_by_ntim" != "" || "$End_by_cputime" != "" || "$End_by_walltime" != "") then
-    update_solps_run_status     "Resubmitting inside the loop at `date`"
+    update_solps_run_status "Resubmitting inside the loop at `date`"
     rm -f run.log* b2mn.prt b2.log*;
     set NOW = `date +"%d.%m.%Y_%T"`  
     mv b2fstati b2fstati_$NOW
