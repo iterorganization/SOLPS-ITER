@@ -98,6 +98,3 @@ endif
 
 # Other environment variables
 setenv SOLPSWORK /work/projects/solps-iter/$USER
-
-alias   set_tao 'source $SOLPSTOP/scripts/tao'
-alias unset_tao 'source $SOLPSTOP/scripts/notao'
