@@ -1973,6 +1973,22 @@ itersubmit -c <<JOB_ID>>
 \end{verbatim}
 where {\tt <<JOB\_ID>>} is the job number of the previous job in the submission chain. Before continuing with the next job submission, the {\tt run.log.gz} and {\tt b2mn.prt} output files will be stored as {\tt run.log.\${JOB\_ID}.gz} and {\tt b2mn.prt.\${JOB\_ID}}, respectively. The job submission script will be stored as {\tt SLURM.\$HOST.after\_\${JOB\_ID}}. This option is not available when using the loop submission scripts.
 
+To run a standalone case with AD sensitivities one case use the command
+\begin{verbatim}
+itersubmit -tgt
+itersubmit -adj
+\end{verbatim}
+for tangent and adjoint AD resepctively. This can be complemented with the other options listed before. Furthermore, if one is interested in a standalone optimization the command to use is:
+\begin{verbatim}
+itersubmit -opt_tgt <<OPT_OPTIONS>>
+itersubmit -opt_adj <<OPT_OPTIONS>>
+\end{verbatim}
+again for tangent and adjoint AD respectively. The user can select the optimization library beforehand, e.g. using {\tt set\_tao} or another available one, otherwise the script will default to PETSc/TAO. A concrete example is:
+\begin{verbatim}
+set_tao; itersubmit -opt_tgt '-tao_ls_type armijo'
+\end{verbatim}
+where the PETSc/TAO Armijo line search option is asked for. For both sensitivity and optimization runs only the {\tt SLURM.iter} script should be employed. Note additionally that MPI and OpenMP are currently not tested for AD executables. 
+
 A listing of the available options for each submission script can be obtained by the
 \begin{verbatim}
 itersubmit -h
