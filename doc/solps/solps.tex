@@ -5140,6 +5140,8 @@ The conditions
 \end{equation}
 must be fulfilled for the numerical solution to converge to the exact solution as $\tau \rightarrow 0$. Setting all parameters equal to one could be the best option, if it were not for the process of sequential separate solution of the equations, which can lead to a limitation of the time step $\tau$. To expand the region of convergence of this process, one can try to find parameters in Eqs.~(\ref{eq:rxf_mo})-(\ref{eq:rxf_na}) other than unity.
 
+When computing the residuals in dynamic mode, the contribution from the time derivative terms is not included. If using internal iterations ({\tt b2mndt\_nstg0}, {\tt b2mndt\_nstg1}, or {\tt b2mndt\_nstg2} larger than 1), the time derivative is computed from one internal iteration to the next.
+
 \section{Time-dependent puff functions}
 \label{sec:time-dep-puff}
 Several functional forms for setting time-dependent gas puff inputs can be set using {\tt b2.neutrals.parameters}. To use these options, the switches {\tt TIME\_DEP\_PUFF} and {\tt TIME\_DEP\_PUFF\_FUNC} should be set to {\tt true} for the intended stratum. Six functional forms can be selected, corresponding to the value of {\tt TIME\_DEP\_PUFF\_CASE}, with parameters controlled by {\tt TIME\_DEP\_PUFF\_PARAM}. These are described in Table \ref{tab:time-dep-puff} with examples shown in Fig.~\ref{fig:time-dep-puff}.
