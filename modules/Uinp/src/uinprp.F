@@ -252,7 +252,6 @@ c*** Re-arrange specification of the time allocation: through B2
 
       ntcpub2=ntcpu
       NTIM1=1
-      NTCPU=ttntcpu
 
       NOPTIM=-1
     
