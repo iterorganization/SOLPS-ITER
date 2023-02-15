@@ -674,7 +674,7 @@ c*** Check the reaction type - must be assigned to each reaction
           write(0,*) 'Undefined reaction type found.'
           write(0,*) 'Error occurred treating reaction ',i
           write(0,*) 'STOP ==> check the AMDS model. If OK, then the ',
-     ,      'AMDS file is corrupted - or an internal error in UINP'
+     ,      'AMDS file is corrupted - or an internal error in Uinp'
           call xerrab ('Undefined reaction type')
         end if !}
       end do !}
@@ -1821,7 +1821,7 @@ c>>>
                   endif
                   if(k2.le.0 .or. k2.gt.nrcln) then !{
                     write(0,*) 'k2 outside the range - internal error ',
-     ,                'in uinp.'
+     ,                'in Uinp.'
                     write(0,'(a,6i4)') 'ipt,irc,k0,kk,k1,k2 = ',
      ,                ipt,irc,k0,kk,k1,k2
                     call xerrab ('==> Check the AMDS model')
@@ -1835,7 +1835,7 @@ c>>>
                   endif
                   if(k4.le.0 .or. k4.gt.nrcln) then !{
                     write(0,*) 'k4 outside the range - internal error ',
-     ,                'in uinp.'
+     ,                'in Uinp.'
                     write(0,'(a,6i4)') 'ipt,irc,k0,kk,k3,k4 = ',
      ,                ipt,irc,k0,kk,k3,k4
                     call xerrab ('==> Check the AMDS model')
@@ -1912,7 +1912,7 @@ c>>>
                 freacp(jspc,m_rcn)=hlp_fr
               else  !}{
                 write(0,*) 'Wrong value of lknd : ',lknd,
-     ,                     '  -- internal error in uinp!'
+     ,                     '  -- internal error in Uinp !!'
                 call xerrab ('Wrong lknd value')
               end if !}
 
@@ -1930,7 +1930,7 @@ c>>>
           nrcp(jspc)=m_rcn
         else  !}{
           write(0,*) 'Wrong value of lknd : ',lknd,
-     ,                                    '  -- internal error in uinp!'
+     ,               ' -- internal error in Uinp !!'
           call xerrab ('Wrong lknd value')
         end if !}
       end do !} #0  (ipt: particles)

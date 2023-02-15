@@ -81,7 +81,7 @@ c               print *,'k,l,m= ',k,l,m
                   uex=.false.
                 else !}{
                   write(0,*) 'uiniamd: error parsing the reaction list'
-                  call xerrab ('-- internal error in UINP')
+                  call xerrab ('-- internal error in Uinp !!')
                 end if !}
                 l=l+m+1
               end if !}
