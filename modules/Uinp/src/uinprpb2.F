@@ -367,8 +367,12 @@ c***          gpfc
               end do !}
 
 c***          targsp
-              if (j.eq.2) then !{
-                ists = nznbndt(1)+i
+              if (j.gt.1) then !{
+                ists = 0
+                do jj = 2, j !{
+                  ists = ists+nznbndt(j-1)
+                end do !}
+                ists = ists + i
                 isp = 0
                 if (ilsptp(ists).gt.0) then !{
                   if (isrss(ists).gt.0) then !{
