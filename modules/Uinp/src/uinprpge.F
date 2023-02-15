@@ -65,7 +65,7 @@ c        print *,'l,nedgmrk(l)=',l,nedgmrk(l)  !###
             write(0,*) 'uinprpge: inconsistent default ',
      ,         'specification. nwllmrk,l,ledgdfl,nedgmrk(l) =',
      ,                                     nwllmrk,l,ledgdfl,nedgmrk(l)
-            call xerrab ('==> Internal error in uinp?')
+            call xerrab ('==> Internal error in Uinp ?')
           end if !}
         end if !}
 
