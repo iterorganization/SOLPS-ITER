@@ -708,7 +708,7 @@ c** To be done (in Eirene first)
             end do !}
           else !}{
             write(0,*) '### Density model ',cdnmdlp(ipls),
-     ,        ' not realised in uinp. ipls=',ipls
+     ,        ' not realised in Uinp. ipls=',ipls
           end if !}
         end if !}
       end do !}

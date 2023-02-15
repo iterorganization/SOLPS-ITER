@@ -65,7 +65,7 @@ c     ,      iliin(nstsi),ilside(nstsi)                             !###
           else !}{
             write(0,*) 'Wrong boundary letter ',cskbnds(isf,ibk),'.  ',
      ,                                        ctxbnds(ibk),',  zone',isf
-            call xerrab ('*** Internal error in uinp !!!')
+            call xerrab ('*** Internal error in Uinp !!!')
           end if !}
           if((iliin(nstsi).gt.0 .and. iliin(nstsi).lt.10) .or.
      .                                             bliin(nstsi)) then !{
