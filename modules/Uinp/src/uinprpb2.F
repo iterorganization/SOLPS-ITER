@@ -14,7 +14,7 @@ c=======================================================================
       implicit none
 #include "uinput.inc"
 #include "uib2pprm.inc"
-      integer i,j,k,kk,l,m,n,ii,jj,nbc,iatm,ipl,isp,ispi,ispe,ists
+      integer i,j,k,kk,l,m,n,ii,jj,ll,nbc,iatm,ipl,isp,ispi,ispe,ists
       integer ifl(DEF_NFL),cmp_bck(nmol,nmol+nion)
       logical ex,hlp_el,hlp_mol(nmol),hlp_ion(nion),
      .        pass, found
@@ -388,8 +388,8 @@ c***          targsp
                 if (isp.gt.0.and.isp.le.nspcatm) then !{
                   iniprm(k,1,1,39,3) = 0
                   do ii = 1, isp-1 !{
-                    do kk = 1, nspcpls !{
-                      if (lkindp(kk).eq.ii)
+                    do ll = 1, nspcpls !{
+                      if (lkindp(ll).eq.ii)
      >                 iniprm(k,1,1,39,3) = iniprm(k,1,1,39,3)+1
                     end do !}
                     iniprm(k,1,1,39,3) = iniprm(k,1,1,39,3)+1
