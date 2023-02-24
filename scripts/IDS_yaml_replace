@@ -7,7 +7,18 @@
 } || {
   echo "DEVICE = " $DEVICE
 }
-imasdb $DEVICE > /dev/null
+[ "$DEVICE" = 'iter' ] && {
+  imasdb ITER > /dev/null
+} || {
+  imasdb $DEVICE > /dev/null
+}
+[ "$IMASDIR" = '' ] && {
+  print -u2 -n -- "No IMASDIR defined. Please provide a directory name\n "
+  read u
+  export IMASDIR=$u
+} || {
+  echo "IMASDIR = " $IMASDIR
+}
 echo "Updating .yaml file for IDS shot number " $1
 echo "New run number "$3" supercedes old run number "$2
 shotnumber=`echo $1`
@@ -33,14 +44,18 @@ oldrun=`echo $2`
 newrun=`echo $3`
 [ $oldrun -ge 1000 ] && {
   oldyaml=ids_${shotnumber}$2.yaml
+  oldwatcher=ids_${shotnumber}$2.watcher
 } || {
   [ $oldrun -ge 100 ] && {
     oldyaml=ids_${shotnumber}0$2.yaml
+    oldwatcher=ids_${shotnumber}0$2.watcher
   } || {
     [ $oldrun -ge 10 ] && {
       oldyaml=ids_${shotnumber}00$2.yaml
+      oldwatcher=oldyaml=ids_${shotnumber}00$2.watcher
     } || {
       oldyaml=ids_${shotnumber}000$2.yaml
+      oldwatcher=ids_${shotnumber}000$2.watcher
     }
   }
 }
@@ -62,7 +77,26 @@ newrun=`echo $3`
   }
 }
 [ $3 != $2 ] && {
-  cp ${MDSPLUS_TREE_BASE_0}/$oldyaml .
+  [ -r ${IMASDIR}/$oldyaml ] && {
+    [ $PWD != $IMASDIR ] && cp ${IMASDIR}/$oldyaml .
+  } || {
+    [ -r /work/imas/shared/imasdb/ITER/3/0/$oldyaml ] && {
+      cp /work/imas/shared/imasdb/ITER/3/0/$oldyaml .
+    } || {
+      echo $oldyaml "file not found. Exit"
+      exit 1
+    }
+  }
+  [ -r ${IMASDIR}/$oldwatcher ] && {
+    [ $PWD != $IMASDIR ] && cp ${IMASDIR}/$oldwatcher .
+  } || {
+    [ -r /work/imas/shared/imasdb/ITER/3/0/$oldwatcher ] && {
+      cp /work/imas/shared/imasdb/ITER/3/0/$oldwatcher .
+    } || {
+      echo $oldwatcher "file not found. Exit"
+      exit 2
+    }
+  }
   typeset -i yaml_lines
   typeset -i tail_lines
   typeset -i status_line
@@ -107,11 +141,18 @@ newrun=`echo $3`
   } || {
     sed -e 's|workflow: tbd|workflow: SOLPS|' -e 's|type: tbd|type: predictive|' < $newyaml.5 > $newyaml.6
   }
-  mv $oldyaml.3 ${MDSPLUS_TREE_BASE_0}/$oldyaml
-  mv $newyaml.6 ${MDSPLUS_TREE_BASE_0}/$newyaml
-  mv $watcher ${MDSPLUS_TREE_BASE_0}/
-  rm $oldyaml $oldyaml.2
-  rm $newyaml $newyaml.2 $newyaml.3 $newyaml.4 $newyaml.5
+  mv $oldyaml.3 ${IMASDIR}/$oldyaml
+  mv $newyaml.6 ${IMASDIR}/$newyaml
+  [ $PWD != $IMASDIR ] && {
+    [ -r $watcher ] && {
+      mv $watcher ${IMASDIR}/
+    } || {
+      cp $oldwatcher ${IMASDIR}/$watcher
+    }
+    rm $oldyaml $newyaml
+  }
+  rm $oldyaml.2
+  rm $newyaml.2 $newyaml.3 $newyaml.4 $newyaml.5
   echo "IDS run number for case ${shotnumber} updated to $3 from $2 !"
 }
 
