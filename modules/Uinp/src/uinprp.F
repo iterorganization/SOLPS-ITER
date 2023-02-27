@@ -62,7 +62,7 @@ c*** Check some dimensions
         write(0,*) '  ==> check the topology name in DG'
         call xerrab ('Unknown topology')
       end if !}
-      call xertst(.not.uex, 'Topological inconsistency found in uinp')
+      call xertst(.not.uex, 'Topological inconsistency found in Uinp')
       
 c-----------------------------------------------------------------------
 c*** Modify some defaults for limiter and linear cases, if necessary
@@ -252,7 +252,6 @@ c*** Re-arrange specification of the time allocation: through B2
 
       ntcpub2=ntcpu
       NTIM1=1
-      NTCPU=ttntcpu
 
       NOPTIM=-1
     

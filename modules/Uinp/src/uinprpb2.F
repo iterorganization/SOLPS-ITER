@@ -14,7 +14,7 @@ c=======================================================================
       implicit none
 #include "uinput.inc"
 #include "uib2pprm.inc"
-      integer i,j,k,kk,l,m,n,ii,jj,nbc,iatm,ipl,ispi,ispe
+      integer i,j,k,kk,l,m,n,ii,jj,ll,nbc,iatm,ipl,isp,ispi,ispe,ists
       integer ifl(DEF_NFL),cmp_bck(nmol,nmol+nion)
       logical ex,hlp_el,hlp_mol(nmol),hlp_ion(nion),
      .        pass, found
@@ -109,7 +109,7 @@ c*** simple SN case
           beebnds(2,1,1)=1.e6*pwrcrtte*(1-pwrcrfri)
           beibnds(2,1,1)=1.e6*pwrcrtti*(1-pwrcrfri)
         else !}{
-          write(*,*) 'CEI partitioning in uinp is not yet foreseen !!!'
+          write(*,*) 'CEI partitioning in Uinp is not yet foreseen !!!'
         end if !}
       end if !}
 
@@ -254,7 +254,7 @@ c*** k, m, n are the numbers of recycling, specified, and all strata
      ,          '(1x,a2,1x,50l2/(4x,50l2))') jj,
      ,            (nlrbnds(ii,jj),ii=1,nznbndt(j))
         end do !}
-        call xerrab (' == Internal error in UINP')
+        call xerrab (' == Internal error in Uinp !!')
       end if !}
 
 #ifdef DBG
@@ -288,6 +288,8 @@ c*** k, m, n are the numbers of recycling, specified, and all strata
       nmdpr(24,3)=nspcatm
       nmdlr(24,3)=nspcmol
       nmdpr(21,3)=nspcatm
+      nmdpr(39,3)=n
+      nmdlr(39,3)=ntrack
 
       ltrvr( 2,3)=.true.
       lspvr(10,3)=.true.
@@ -297,6 +299,8 @@ c*** k, m, n are the numbers of recycling, specified, and all strata
       lrrvr(19,3)=.true.
       lrrvr(20,3)=.true.
       lrrvr(25,3)=.true.
+
+      iniprm(:,:,1,39,3)=-1
 
 c*** nstrai
 
@@ -332,7 +336,7 @@ c*** Recycling sources
      ,                          '(1x,a2,1x,50l2/(4x,50l2))') jj,
      ,                            (nlrbnds(ii,jj),ii=1,nznbndt(j))
                 end do !}
-                call xerrab (' == Internal error in UINP')
+                call xerrab (' == Internal error in Uinp !!')
               end if !}
 
 c***          crcstra, rcpos, rcstart, rcend
@@ -361,6 +365,38 @@ c***          gpfc
               do l=1,nspcncl !{
                 rniprm(l,k,1,20,3)=0.
               end do !}
+
+c***          targsp
+              if (j.gt.1) then !{
+                ists = 0
+                do jj = 2, j !{
+                  ists = ists+nznbndt(j-1)
+                end do !}
+                ists = ists + i
+                isp = 0
+                if (ilsptp(ists).gt.0) then !{
+                  if (isrss(ists).gt.0) then !{
+                    isp = isrss(ists)
+                  else if (isrss(ists).lt.0) then !}{
+                    ii = mod(nint(xmlim(ists)),100)
+                    do jj = 1, nspcatm !{
+                      if (isp.ne.0) cycle
+                      if (ii.eq.get_atomic_number(spcsatm(jj))) isp = jj
+                    end do !}
+                  end if !}
+                end if !}
+                if (isp.gt.0.and.isp.le.nspcatm) then !{
+                  iniprm(k,1,1,39,3) = 0
+                  do ii = 1, isp-1 !{
+                    do ll = 1, nspcpls !{
+                      if (lkindp(ll).eq.ii)
+     >                 iniprm(k,1,1,39,3) = iniprm(k,1,1,39,3)+1
+                    end do !}
+                    iniprm(k,1,1,39,3) = iniprm(k,1,1,39,3)+1
+                  end do !}
+                end if !}
+              end if !}
+
             end do !}
           end if !}
         end do !}
@@ -373,7 +409,7 @@ c*** Gas puffing sources
         if(k.ge.nmxprm) then !{
           write(0,*) 'Too many strata found in uinprpb2: ',k
           write(0,*) 'Gas puffing loop, i = ',i
-          call xerrab (' == Internal error in UINP')
+          call xerrab (' == Internal error in Uinp !!')
         end if !}
 
 c*** crcstra, rcpos, rcstart, rcend
@@ -430,7 +466,7 @@ c*** Recombination sources
         if(k.ge.nmxprm) then !{
           write(0,*) 'Too many strata found in uinprpb2: ',k
           write(0,*) 'Recombination loop, i = ',i
-          call xerrab (' == Internal error in UINP')
+          call xerrab (' == Internal error in Uinp !!')
         end if !}
 
 c*** crcstra, rcpos, rcstart, rcend
@@ -468,13 +504,13 @@ c*** Time-dependent stratum
 
         if(k.ne.n) then !{
           write(0,*) 'Wrong strata counting in uinprpb2: k,n =',k,n
-          call xerrab (' == Internal error in UINP !!')
+          call xerrab (' == Internal error in Uinp !!')
         end if !}
 
         if(k.ge.nmxprm) then !{
           write(0,*) 'Too many strata found in uinprpb2: ',k
           write(0,*) 'The last stratum'
-          call xerrab (' == Internal error in UINP')
+          call xerrab (' == Internal error in Uinp !!')
         end if !}
 
 c*** crcstra, rcpos, rcstart, rcend
@@ -1059,7 +1095,7 @@ c*** impflag, nspecies, nfluids
           write(0,*) 'Ill-sorted plasma species in uinprpb2. nspcncl, ',
      ,      'nspcpls, spcsrnp: ',nspcncl,nspcpls
           write(0,*) (spcsrnp(i),i=1,nspcpls)
-          call xerrab ('== Internal error in UINP !!')
+          call xerrab ('== Internal error in Uinp !!')
         end if !}
        end if !}
 

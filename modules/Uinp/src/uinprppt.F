@@ -66,7 +66,7 @@ c*** the atoms and nuclei
                 end do !}
                 if(ex) then !{
                   write(0,*) 'Ambiguous atom name "',c,
-     ,              '" - internal error in UINP!!!'
+     ,              '" - internal error in Uinp !!'
                   call xerrab ('Ambiguous atom name')
                 end if  !}
                 na=na+1
@@ -140,7 +140,7 @@ c*** the atoms and nuclei
                 end do !}
                 if(ex) then !{
                   write(0,*) 'Ambiguous molecule name "',c,
-     ,              '" - internal error in UINP!!!'
+     ,              '" - internal error in Uinp !!'
                   call xerrab ('Ambiguous molecule name')
                 end if  !}
                 nm=nm+1
@@ -206,7 +206,7 @@ c*** the atoms and nuclei
                 end do  !}
                 if(ex) then !{
                   write(0,*) 'Ambiguous test ion name "',c,
-     ,              '" - internal error in UINP!!!'
+     ,              '" - internal error in Uinp !!'
                   call xerrab ('Ambiguous test ion name')
                 end if  !}
                 ni=ni+1
@@ -300,7 +300,7 @@ c*** the atoms and nuclei
                 end do  !}
                 if(ex) then !{
                   write(0,*) 'Ambiguous plasma ion name "',c,
-     ,              '" - internal error in UINP !!!'
+     ,              '" - internal error in Uinp !!'
                   call xerrab ('Ambiguous plasma ion name')
                 end if  !}
                 np=np+1

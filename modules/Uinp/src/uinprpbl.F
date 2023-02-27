@@ -409,7 +409,7 @@ cxpb   jend(l) is the number of the last bundled ion of sequence l in the new li
             i = ipls1(j)
             if (done(i)) cycle
             spcsrnp(i) = spcsrnb(i)
-            spcspls(nspcatm+nspcmol+nspcion+i) = spcsplb(i)
+            spcspls(i) = spcsplb(i)
             spcsrfp(i) = spcsrfb(i)
             spcsrtp(i) = spcsrtb(i)
             spcsmsp(i) = spcsmsb(i)
@@ -453,8 +453,7 @@ cxpb   jend(l) is the number of the last bundled ion of sequence l in the new li
           do i = iend+1, nplsi+nbgk !{ Shift up whatever follows
             j = jend(l) + i - iend
             spcsrnp(j) = spcsrnp(i)
-            spcspls(nspcatm+nspcmol+nspcion+j) =
-     .       spcspls(nspcatm+nspcmol+nspcion+i)
+            spcspls(j) = spcspls(i)
             spcsrfp(j) = spcsrfp(i)
             spcsrtp(j) = spcsrtp(i)
             spcsmsp(j) = spcsmsp(i)

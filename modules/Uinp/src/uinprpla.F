@@ -151,7 +151,7 @@ c*** Error check
             write(*,'(1x,a/(2i5))') 'iambg:',
      ,                                 (iambg(1,i),iambg(2,i),i=1,nambg)
           end if !}
-          call xerrab ('== INTERNAL ERROR IN UINP !!!')
+          call xerrab ('== Internal error in Uinp !!')
         end if !}
       end do !}
 

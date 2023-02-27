@@ -1649,6 +1649,7 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[get\_git\_email]\index{get\_git\_email} Finds the user's email address from the {\tt .gitconfig} file.
   \item[get\_git\_name]\index{get\_git\_name} Finds the user's name from the {\tt .gitconfig} file.
   \item[get\_parm.bpl]\index{get\_parm.bpl} extracts certain useful quantities from a run input and output files for use in later scripts, particularly those building \btwoplot command files.
+  \item[IDS\_yaml\_replace \#shot \#old\_run \#new\_run]\index{IDS\_yaml\_replace} Script to update the {\tt .yaml} IMAS database files to indicate that the {\tt \#old\_run} run runmber of shot {\tt \#shot} is now replaced by run number {\tt \#new\_run}.
   \item[import\_files\_from\_convert]\index{import\_files\_from\_convert}\index{b2yt}\index{correct\_baserun\_timestamps} Imports and renames the files produced by {\tt b2yt} in a {\tt convert} directory at the same level as the current directory to prepare the new converted case for a run. Also updates some of the files in the {\tt baserun} directory, so it is often prudent to use {\tt correct\_baserun\_timestamps}, from the parent directory, afterwards.
   \item[import\_files\_from\_convert\_wg]\index{import\_files\_from\_convert\_wg}\index{b2us} Imports and renames the files produced by {\tt b2us} in a {\tt convert} directory at the same level as the current directory to prepare the new converted wide-grid case for a run.
   \item[input.dat\_to\_mesh.extra]\index{input.dat\_to\_mesh.extra}\index{input.dat}\index{mesh.extra} Converts standard input (usually directed from a {\tt input.dat} file) into a {\tt mesh.extra} file.
@@ -13967,6 +13968,7 @@ located in the primary SOL (ie, a Snowflake-minus). For the
 SF-plus configuration, the only change is that the secondary X-point is
 located in the primary PFR. These region definitions also apply to
 X-point target geometries.
+For a fuller description, please refer to \cite{Cowley2023}.
 
 For both cases, {\tt NREG} should be set to $7$.
 
@@ -18323,7 +18325,25 @@ COMPLICATED & sources/b2stbc\_fb.F \\
 CONSTANTS\_PROVIDED & common/emissivity.constants \\
 CONSTANTS\_PROVIDED & ids/b2mod\_constants.F90 \\
 CRAY & b2plot/b2plot.F \\
+CRAY & driver/b2mnastra.F \\
+CRAY & driver/b2mod\_driver.F \\
+CRAY & driver/b2obeq.F \\
+CRAY & driver/b2obfn.F \\
+CRAY & driver/b2oblm.F \\
+CRAY & equations/b2news.F \\
+CRAY & equations/b2news\_.F \\
+CRAY & equations/b2npmo.F \\
+CRAY & modules/b2mod\_openmp.F \\
 CRAY & postprocessing/b2ytdr.F \\
+CRAY & solvers/b2ux11p.F \\
+CRAY & solvers/b2ux5p.F \\
+CRAY & solvers/b2ux7p.F \\
+CRAY & solvers/b2ux9p.F \\
+CRAY & sources/b2stbr.F \\
+CRAY & utility/illtern\_7\_solps.F \\
+CRAY & utility/ilutern\_7\_solps.F \\
+CRAY & utility/ilutern\_9\_solps.F \\
+CRAY & utility/ilutern\_us\_solps.F \\
 DBG & b2plot/b2ptrdl.F \\
 DBG & b2plot/b2ptrgl.F \\
 DBG & b2plot/b2pwrdld.F \\
