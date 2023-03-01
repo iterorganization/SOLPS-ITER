@@ -88,14 +88,14 @@ This manual is built from the following code repository versions:
 \input{SOLPS_versions}
 \end{alltt}
 
-This is the combined work of many authors.  Started by D.P.~Coster, it
-includes contributions from
+This is the combined work of many authors. Started by D.P.~Coster, it includes contributions from
 \begin{itemize}
-\item D.P~Coster and O.~Wenisch, the original \btwoplot manual (Appendix \ref{cha:b2plotmanual})
-\item K.~and A.S.~Kukushkin, the {\tt DG} manual (Appendix \ref{cha:dgmanual}), with revisions by A.~Chin and D.~Stotler
-\item M.~Stanojevic, Appendix \ref{cha:Mladen} on boundary conditions
+\item D.P~Coster and O.~Wenisch, the original \btwoplot manual (Appendix~\ref{cha:b2plotmanual})
+\item K.~and A.S.~Kukushkin, the {\tt DG} manual (Appendix~\ref{cha:dgmanual}), with revisions by A.~Chin and D.~Stotler
+\item M.~Stanojevic, Appendix~\ref{cha:Mladen} on boundary conditions
 \item X.~Bonnin, for many contributions and the \SOLPSITER updates
-\item S.~Voskoboynikov, E.~Kaveeva, and I.~Senichenkov, for the \SOLPSITER model equations (Appendix \ref{cha:equations})
+\item S.~Voskoboynikov, E.~Kaveeva, and I.~Senichenkov, for the \SOLPSITER model equations (Appendix~\ref{cha:equations}) and output quantities information (Appendix~\ref{cha:b2wdat_iout_4})
+\item S.~Makarov, for the Grad-Zhdanov closure description
 \end{itemize}
 All errors, omissions {\it etc.} should be e-mailed to {\tt Xavier.Bonnin@iter.org}.
 
@@ -123,12 +123,11 @@ documentation files, \ref{cha:b2physics} describes the physics in {\tt B2.5},
 \ref{cha:b2tallies} information about the quantities stored in {\tt b2tallies.nc},
 \ref{cha:b2wdat_iout_4} information about the quantities that can be output using {\tt b2wdat\_iout},
 \ref{cha:regions} gives the region definitions used in the code,
-\ref{cha:b2plotmanual} is an updated
-version of the \btwoplot manual, \ref{cha:Misc}
-contains information about array dimensions and compilation options,
-\ref{cha:dgmanual} is the {\tt DG} manual, and lastly
+\ref{cha:b2plotmanual} is an updated version of the \btwoplot manual,
+\ref{cha:Misc} contains information about array dimensions and compilation options,
+\ref{cha:dgmanual} is the {\tt DG} manual,
 \ref{cha:coursenotes} includes a listing of the programs and files included
-in the {\tt B2.5} part of the \SOLPSITER package.
+in the {\tt B2.5} part of the \SOLPSITER package, followed by the repository logs, license document, and contribution rules.
 
 Historically, there have been many implementations of the
 {\tt SOLPS} (Scrape-Off Layer Plasma Simulation) code package, according
@@ -5495,7 +5494,7 @@ Typing
 \end{verbatim}
 with the following as {\tt compare\_shots.py}:
 \lstinputlisting[breaklines,basicstyle=\footnotesize]{compare_shots.py}
-produced figure \ref{fig:python_compare_shots}.
+produced Figure~\ref{fig:python_compare_shots}.
 
 \begin{figure}[hbtp]
 \ifpdf
@@ -20565,7 +20564,7 @@ PLPLOT & b2plot/terminate\_plotting.F \\
 PLPLOT & b2plot/trgw.F \\
 PLPLOT & b2plot/trgz.F \\
 PLPLOT & b2plot/trigmesh.F \\
-PLPLOT & utility/lbfill.F \\
+PLPLOT & utility/b2mod\_lbfill.F \\
 PLPLOT & utility/ncardummy.F \\
 PLPLOT & utility/pagdef.F \\
 PLPLOT & utility/pagend.F \\
@@ -20573,7 +20572,6 @@ PLPLOT & utility/pagini.F \\
 PSR & modules/b2mod\_b2plot.F \\
 PSR & modules/b2mod\_elements.F \\
 PSR & modules/b2mod\_sputter.F \\
-%SCL\_IMP\_RCI & user/b2wrint.F \\
 SOLPS4\_3 & modules/b2mod\_b2\_to\_astra.F \\
 SOLPS4\_3 & modules/b2mod\_diag.F \\
 SOLPS4\_3 & modules/b2mod\_mwti.F90 \\
@@ -20713,12 +20711,12 @@ B25\_EIRENE & startup-routines/find\_param.f \\
 COMPILER\_MAJOR\_VERSION & assistant/exit\_own.f \\
 COMPILER\_MINOR\_VERSION & assistant/exit\_own.f \\
 DBG & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.F \\
-GFORTRAN & modules/eirmod\_mpi.F90 \\
-GFORTRAN & assistant/exit\_own.f \\
-G95 & assistant/exit\_own.f \\
 F2003 & assistant/subtit.f \\
 F2003 & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.F \\
 F2003 & output/outidlsrf.f \\
+GFORTRAN & modules/eirmod\_mpi.F90 \\
+GFORTRAN & assistant/exit\_own.f \\
+G95 & assistant/exit\_own.f \\
 HPUX & modules/eirmod\_cinit.F \\
 MPI\_MOD & modules/eirmod\_mpi.F90 \\
 MPI\_VERSION & modules/eirmod\_mpi.F90 \\
@@ -23414,13 +23412,13 @@ The following observations were made (see figure \ref{fig:resDcomp}):
 
 Comparing (figure \ref{fig:relchangetene}) the converged values of $T_e$
 at the outer target, {\bf 000}, {\bf 001} and {\bf 002b} gave the same
-answer as {\bf REF}.  {\bf 001} and {\bf 002b} gave the same answer,
+answer as {\bf REF}. {\bf 001} and {\bf 002b} gave the same answer,
 and the maximum relative change was 0.997408. (For $n_e$ at the outer
 target, the maximum relative error was 1.00227.)
 
 The conclusion: the largest effect seems to have come from the
 correction in the cell volumes (causing a change in {\tt b2fgmtry}),
-but this caused a small final change.  The change of physics constants
+but this caused a small final change. The change of physics constants
 introduced a very small effect, seen only as a jump in the residuals.
 
 \chapter{License}
