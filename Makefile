@@ -412,8 +412,8 @@ tags:
 listobj:
 	cd modules/Carre;          ${MAKE} listobj
 	cd modules/Eirene;         ${MAKE} listobj
-	cd modules/B2.5;           ${MAKE} listobj USE_OPENMP=-DUSE_OPENMP SOLPS_OPENMP=yes
 	cd modules/B2.5;           ${MAKE} listobj
+	cd modules/B2.5;           ${MAKE} listobj USE_OPENMP=-DUSE_OPENMP SOLPS_OPENMP=yes
 	cd modules/Uinp;           ${MAKE} listobj
 	cd modules/Uinp;           ${MAKE} listobj USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes
 	cd modules/Triang;         ${MAKE} listobj
@@ -463,8 +463,8 @@ endif
 depend:
 	cd modules/Carre;          ${MAKE} depend
 	cd modules/Eirene;         ${MAKE} depend
-	cd modules/B2.5;           ${MAKE} depend USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes
 	cd modules/B2.5;           ${MAKE} depend
+	cd modules/B2.5;           ${MAKE} depend USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes
 	cd modules/Uinp;           ${MAKE} depend
 	cd modules/Uinp;           ${MAKE} depend USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes
 	cd modules/Triang;         ${MAKE} depend
