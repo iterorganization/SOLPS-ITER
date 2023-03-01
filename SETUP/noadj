@@ -5,7 +5,7 @@ if ($?SOLPS_PATH) then
   setenv   PATH ${SOLPS_PATH}:${OLD_PATH}
   unsetenv OLD_SOLPS_PATH SOLPS_ADJ
   rehash
-  echo "SOLPS-ITER adj mode turned off"
+  echo "SOLPS-ITER ADJ mode turned off"
 else
   echo "SOLPS_PATH not set. Exiting."
 endif

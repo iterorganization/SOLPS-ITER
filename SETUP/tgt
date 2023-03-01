@@ -18,7 +18,7 @@ if ($?SOLPS_PATH) then
   setenv   SOLPS_TGT yes
   unsetenv OLD_SOLPS_PATH SOLPS_ADJ
   rehash
-  echo "SOLPS-ITER tgt mode turned on"
+  echo "SOLPS-ITER TGT mode turned on"
 else
   echo "SOLPS_PATH not set. Exiting."
 endif

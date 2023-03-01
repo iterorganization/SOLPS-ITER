@@ -109,7 +109,14 @@ ifeq ($(shell `pkg-config --exists fundamental-constants`; echo $$?),0)
   SOLPSINCLUDE = `pkg-config fundamental-constants --cflags`
   IMAS_PKG_LIST = fundamental-constants
   export SOLPSINCLUDE
-  export INCMODS
+endif
+
+# Build with PETSc if available
+ifeq ($(shell `pkg-config --exists petsc`; echo $$?),0)
+  TAO_PRESENT = 1
+  ifdef TAO
+    IMAS_PKG_LIST += petsc
+  endif
 endif
 
 # Build with IMAS if imas module is loaded
@@ -151,7 +158,6 @@ ifdef IMAS_VERSION
     LD_UAL += ${LD_GGD}
   endif
   SOLPS_CPP += -DIMAS -DUAL_MAJOR_VERSION=${UAL_MAJOR_VERSION} -DUAL_MINOR_VERSION=${UAL_MINOR_VERSION} -DUAL_MICRO_VERSION=${UAL_MICRO_VERSION} -DIMAS_MAJOR_VERSION=${IMAS_MAJOR_VERSION} -DIMAS_MINOR_VERSION=${IMAS_MINOR_VERSION} -DIMAS_MICRO_VERSION=${IMAS_MICRO_VERSION} -DGGD_MAJOR_VERSION=${GGD_MAJOR_VERSION} -DGGD_MINOR_VERSION=${GGD_MINOR_VERSION} -DGGD_MICRO_VERSION=${GGD_MICRO_VERSION}
-  export IMAS_PKG_LIST
   export LD_UAL
 else
   UAL_MAJOR_VERSION = 0
@@ -173,6 +179,7 @@ export GGD_MICRO_VERSION
 export IMAS_MAJOR_VERSION
 export IMAS_MINOR_VERSION
 export IMAS_MICRO_VERSION
+export IMAS_PKG_LIST
 
 # Build with OpenMP if requested
 ifdef SOLPS_OPENMP

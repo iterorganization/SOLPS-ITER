@@ -422,14 +422,14 @@ tags:
 	cd modules/DivGeo/convert; ${MAKE} tags
 	cd modules/DivGeo/equtrn;  ${MAKE} tags
 #	cd modules/solps4-5;       ${MAKE} tags
-	rm -f TAGS ; ctags -e -f TAGS modules/Carre/src.local/*.F modules/Carre/src/*/*.F modules/Carre/src/include/*.* modules/Carre2/src90/*/*.[Ff]90 modules/Carre2/src90/include/*.* modules/Eirene/src.local/*.f modules/Eirene/src/*/*.[Ffc] modules/Eirene/src/interfaces/couple_SOLPS-ITER/*.f modules/Eirene/src/user-routines/user_iter/*.f modules/Eirene/src/geometry/time-routines/*.F modules/Eirene/src/*/*.[Ff]90 modules/Eirene/src/interfaces/couple_SOLPS-ITER/*.[Ff]90 modules/B2.5/src.local/*.F modules/B2.5/src/*/*.F modules/B2.5/src/*/*.F90 modules/B2.5/src/*/*.[Hh] modules/B2.5/src/common/*.* modules/B2.5/src/common/COUPLE/*.F modules/B2.5/src/documentation/*.xml modules/B2.5/src/documentation/*.py modules/Uinp/src/*.F modules/Uinp/src/*.inc modules/Uinp/src/*.h modules/Triang/src/*/*.f modules/DivGeo/equtrn/src/*.f modules/DivGeo/equtrn/src/*.f90 modules/DivGeo/equtrn/src/*.inc modules/DivGeo/convert/src/*.f modules/DivGeo/src/*.[ch] modules/DivGeo/dg.dgc modules/solps4-5/src/*.F scripts/nc2text_simple/*.F90 doc/solps/solps.tex || touch TAGS
+	rm -f TAGS ; ctags -e -f TAGS modules/Carre/src.local/*.F modules/Carre/src/*/*.F modules/Carre/src/include/*.* modules/Carre2/src90/*/*.[Ff]90 modules/Carre2/src90/include/*.* modules/Eirene/src.local/*.f modules/Eirene/src/*/*.[Ffc] modules/Eirene/src/interfaces/couple_SOLPS-ITER/*.f modules/Eirene/src/user-routines/user_iter/*.f modules/Eirene/src/geometry/time-routines/*.F modules/Eirene/src/*/*.[Ff]90 modules/Eirene/src/interfaces/couple_SOLPS-ITER/*.[Ff]90 modules/B2.5/src.local/*.F modules/B2.5/src/*/*.F modules/B2.5/src/*/*.F90 modules/B2.5/src/*/*.[Hh] modules/B2.5/src/common/*.* modules/B2.5/src/common/COUPLE/*.F modules/B2.5/src/documentation/*.xml modules/B2.5/src/documentation/*.py modules/Uinp/src/*.F modules/Uinp/src/*.inc modules/Uinp/src/*.h modules/Triang/src/*/*.f modules/DivGeo/equtrn/src/*.f modules/DivGeo/equtrn/src/*.f90 modules/DivGeo/equtrn/src/*.inc modules/DivGeo/convert/src/*.f modules/DivGeo/src/*.[ch] modules/DivGeo/dg.dgc modules/solps4-5/src/*.F scripts/nc2text_simple/*.F90 doc/solps/*.tex || touch TAGS
 
 listobj:
 	cd modules/Carre;          ${MAKE} listobj
 	cd modules/Carre2;         ${MAKE} listobj
 	cd modules/Eirene;         ${MAKE} listobj
-	cd modules/B2.5;           ${MAKE} listobj USE_OPENMP=-DUSE_OPENMP SOLPS_OPENMP=yes
 	cd modules/B2.5;           ${MAKE} listobj
+	cd modules/B2.5;           ${MAKE} listobj USE_OPENMP=-DUSE_OPENMP SOLPS_OPENMP=yes
 	cd modules/B2.5;           ${MAKE} listobj TGT=yes
 	cd modules/B2.5;           ${MAKE} listobj ADJ=yes
 	cd modules/Uinp;           ${MAKE} listobj
@@ -483,10 +483,8 @@ depend:
 	cd modules/Carre;          ${MAKE} depend
 	cd modules/Carre2;         ${MAKE} depend
 	cd modules/Eirene;         ${MAKE} depend
-	cd modules/B2.5;           ${MAKE} depend USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes
 	cd modules/B2.5;           ${MAKE} depend
-	cd modules/B2.5;           ${MAKE} depend TGT=yes
-	cd modules/B2.5;           ${MAKE} depend ADJ=yes
+	cd modules/B2.5;           ${MAKE} depend USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes
 	cd modules/Uinp;           ${MAKE} depend
 	cd modules/Uinp;           ${MAKE} depend USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes
 	cd modules/Triang;         ${MAKE} depend
@@ -511,6 +509,14 @@ ifeq (${MPI_PRESENT},1)
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO
 endif
 #	cd modules/solps4-5;       ${MAKE} depend
+ifeq (${TAO_PRESENT},1)
+# The following dependency builds must be done last as they change the filelist
+	cd modules/B2.5;           ${MAKE} depend TGT=yes TAO=yes
+	cd modules/B2.5;           ${MAKE} depend ADJ=yes TAO=yes
+else
+	cd modules/B2.5;           ${MAKE} depend TGT=yes
+	cd modules/B2.5;           ${MAKE} depend ADJ=yes
+endif
 
 depend_nox:
 	cd modules/Carre;          ${MAKE} depend NCARG_ROOT="" LD_NCARG=""
@@ -665,6 +671,12 @@ clean_eirene_nox_mpi:
 
 clean_b25:
 	cd modules/B2.5; ${MAKE} clean
+
+clean_b25_adj:
+	cd modules/B2.5; ${MAKE} clean ADJ=yes
+
+clean_b25_tgt:
+	cd modules/B2.5; ${MAKE} clean TGT=yes
 
 clean_b25_openmp:
 	cd modules/B2.5; ${MAKE} clean USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes
