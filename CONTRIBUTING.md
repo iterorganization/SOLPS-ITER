@@ -32,4 +32,5 @@ Contributors to the SOLPS-ITER code base are expected to follow **ALL** the rule
 26.	The use of `ENTRY` statements must be avoided. Instead, it is recommended to create a module that contains the entries as separate subroutines.
 27.	The use of `GOTO` statements should be avoided and substituted by `SELECT CASE` or `IF` statements whenever possible.
 28.	Statement functions should be avoided and substituted by external or contained functions.
-29.	Avoid special characters (accents, Greek letters, etc...) in the GIT commit messages as the GIT log is appended to the manual and the LaTeX builders may not be able to digest such entries.
+29.	The use of `stop` statements within **B2.5** or **Eirene** is not MPI-compliant and therefore not allowed. Within **B2.5**, use the `xerrab` or `xertst` functions to cause the code to stop upon some error. In **Eirene**, the relevant routine to call is `EIRENE_EXIT_OWN`.
+30.	Avoid special characters (accents, Greek letters, etc...) in the GIT commit messages as the GIT log is appended to the manual and the LaTeX builders may not be able to digest such entries.
