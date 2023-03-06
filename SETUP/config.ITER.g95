@@ -84,7 +84,9 @@ endif
 ifeq ($(shell `pkg-config --exists petsc`; echo $$?),0)
   TAO_PRESENT = 1
   ifdef TAO
+    SOLPSINCLUDE += `pkg-config petsc --cflags`
     IMAS_PKG_LIST += petsc
+    export SOLPSINCLUDE
   endif
 endif
 
