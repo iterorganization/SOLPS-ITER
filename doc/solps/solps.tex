@@ -88,14 +88,13 @@ This manual is built from the following code repository versions:
 \input{SOLPS_versions}
 \end{alltt}
 
-This is the combined work of many authors.  Started by D.P.~Coster, it
-includes contributions from
+This is the combined work of many authors. Started by D.P.~Coster, it includes contributions from
 \begin{itemize}
-\item D.P~Coster and O.~Wenisch, the original \btwoplot manual (Appendix \ref{cha:b2plotmanual})
-\item K.~and A.S.~Kukushkin, the {\tt DG} manual (Appendix \ref{cha:dgmanual}), with revisions by A.~Chin and D.~Stotler
-\item M.~Stanojevic, Appendix \ref{cha:Mladen} on boundary conditions
+\item D.P~Coster and O.~Wenisch, the original \btwoplot manual (Appendix~\ref{cha:b2plotmanual})
+\item K.~and A.S.~Kukushkin, the {\tt DG} manual (Appendix~\ref{cha:dgmanual}), with revisions by A.~Chin and D.~Stotler
+\item M.~Stanojevic, Appendix~\ref{cha:Mladen} on boundary conditions
 \item X.~Bonnin, for many contributions and the \SOLPSITER updates
-\item S.~Voskoboynikov, E.~Kaveeva, and I.~Senichenkov, for the \SOLPSITER model equations (Appendix \ref{cha:equations})
+\item S.~Voskoboynikov, E.~Kaveeva, and I.~Senichenkov, for the \SOLPSITER model equations (Appendix~\ref{cha:equations}) and output quantities information (Appendix~\ref{cha:b2wdat_iout_4})
 \end{itemize}
 All errors, omissions {\it etc.} should be e-mailed to {\tt Xavier.Bonnin@iter.org}.
 
@@ -123,12 +122,11 @@ documentation files, \ref{cha:b2physics} describes the physics in {\tt B2.5},
 \ref{cha:b2tallies} information about the quantities stored in {\tt b2tallies.nc},
 \ref{cha:b2wdat_iout_4} information about the quantities that can be output using {\tt b2wdat\_iout},
 \ref{cha:regions} gives the region definitions used in the code,
-\ref{cha:b2plotmanual} is an updated
-version of the \btwoplot manual, \ref{cha:Misc}
-contains information about array dimensions and compilation options,
-\ref{cha:dgmanual} is the {\tt DG} manual, and lastly
+\ref{cha:b2plotmanual} is an updated version of the \btwoplot manual,
+\ref{cha:Misc} contains information about array dimensions and compilation options,
+\ref{cha:dgmanual} is the {\tt DG} manual,
 \ref{cha:coursenotes} includes a listing of the programs and files included
-in the {\tt B2.5} part of the \SOLPSITER package.
+in the {\tt B2.5} part of the \SOLPSITER package, followed by the repository logs, license document, and contribution rules.
 
 Historically, there have been many implementations of the
 {\tt SOLPS} (Scrape-Off Layer Plasma Simulation) code package, according
@@ -5093,7 +5091,7 @@ Typing
 \end{verbatim}
 with the following as {\tt compare\_shots.py}:
 \lstinputlisting[breaklines,basicstyle=\footnotesize]{compare_shots.py}
-produced figure \ref{fig:python_compare_shots}.
+produced Figure~\ref{fig:python_compare_shots}.
 
 \begin{figure}[hbtp]
 \ifpdf
@@ -18255,12 +18253,13 @@ B25\_EIRENE & user/b2mod\_blnc.F \\
 B25\_EIRENE & user/b2mod\_blne.F \\
 B25\_EIRENE & user/b2mod\_blnm.F \\
 B25\_EIRENE & user/b2mod\_trace.F \\
-B25\_EIRENE & user/b2usrtrc.F \\
+B25\_EIRENE & user/b2mod\_usrtrc.F \\
 B25\_EIRENE & user/b2mod\_wrint.F \\
 B25\_EIRENE & user/b2mod\_wrsep.F \\
 B25\_EIRENE & user/b2mod\_wrsrt.F \\
 B25\_EIRENE & user/cdfmovie.F \\
 B25\_EIRENE & user/eirflux\_map.F \\
+B25\_EIRENE & user/test\_couple.F90 \\
 B25\_EIRENE & utility/gfsub2.F \\
 B25\_EIRENE & utility/rdneutrs.F \\
 B25\_EIRENE & utility/xertst.F \\
@@ -18302,9 +18301,9 @@ DBG & b2plot/plotcontour.F \\
 DBG & b2plot/rlcomp.F \\
 DBG & equations/b2news\_.F \\
 DBG & modules/b2mod\_input\_profile.F \\
-DBG & user/b2usrtrc.F \\
 DBG & sources/b2stbr\_bas.F \\
 DBG & sources/b2stbr\_phys.F \\
+DBG & user/b2mod\_usrtrc.F \\
 DBG & utility/ma28.F \\
 DBG & utility/ma28copy.F \\
 DBG & utility/ma28copy3.F \\
@@ -18364,6 +18363,7 @@ IBMaix & b2plot/b2plot.F \\
 IBMaix & postprocessing/b2ytdr.F \\
 IBMaix & user/b2file.F \\
 IMAS & driver/b2mnds.F \\
+IMAS & ids/b2mod\_interp.F90 \\
 IMAS & ids/b2mod\_ual.F90 \\
 IMAS & ids/b2mod\_ual\_io\_data.F90 \\
 IMAS & ids/b2mod\_ual\_io\_grid.F90 \\
@@ -21387,13 +21387,13 @@ The following observations were made (see figure \ref{fig:resDcomp}):
 
 Comparing (figure \ref{fig:relchangetene}) the converged values of $T_e$
 at the outer target, {\bf 000}, {\bf 001} and {\bf 002b} gave the same
-answer as {\bf REF}.  {\bf 001} and {\bf 002b} gave the same answer,
+answer as {\bf REF}. {\bf 001} and {\bf 002b} gave the same answer,
 and the maximum relative change was 0.997408. (For $n_e$ at the outer
 target, the maximum relative error was 1.00227.)
 
 The conclusion: the largest effect seems to have come from the
 correction in the cell volumes (causing a change in {\tt b2fgmtry}),
-but this caused a small final change.  The change of physics constants
+but this caused a small final change. The change of physics constants
 introduced a very small effect, seen only as a jump in the residuals.
 
 \chapter{License}
