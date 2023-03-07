@@ -13,7 +13,7 @@ endif
 
 DBLFC = ${FC}
 DBLOPTION =
-DBLSED = 
+DBLSED =
 
 ifdef SOLPS_DEBUG
 LDOPTS = -g -C -Wall
@@ -23,7 +23,7 @@ LDOPTS =
 endif
 
 GKS       = ${LD_GR} ${LD_GKS} -lX11 -lXt
-LDLIBS    = 
+LDLIBS    =
 
 #!!!Local Variables:
 #!!! mode: Makefile
