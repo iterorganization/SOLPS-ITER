@@ -220,6 +220,8 @@ To do this, one must upload a copy of their public ssh key here: \href{https://g
 > git submodule update
 \end{verbatim}
 
+If using the SSH method, make sure that there is no {\tt PreferredAuthentications} setting in your ssh configuration file, as it can conflict with the IO GIT repository access protocol.
+
 It is best afterwards to position oneself on the {\tt master} branches, which is achieved by the {\tt switch\_to\_master} script (which can be used after the SOLPS-ITER session environment is established, see Section~\ref{sec:session}) or, alternatively, by hand, with the commands:
 
 \begin{verbatim}
