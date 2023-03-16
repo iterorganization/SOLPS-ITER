@@ -9,7 +9,7 @@
     exit
   endif
 
-  run_info; rm run.log
+  run_info
   cp b2mn.exe.dir/*.OUT .
   grep -i objval run.info | awk '{print $3}' > objval.dat
   set nnvar=`grep -i nnvar run.info | awk '{print $3}'`

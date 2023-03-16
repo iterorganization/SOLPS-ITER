@@ -8,7 +8,8 @@
     echo "No run.log or run.log.gz file present, stopping"
     exit
   endif
-  run_info; rm run.log
+
+  run_info
   cp b2mn.exe.dir/*.OUT .
   grep -i 'TAO,  Function value' run.info | awk '{print $5}' | awk -F"," '{print $1}' > objval.dat
   grep -i 'TAO GRADIENT NORM' run.info | awk '{print $4}' > grad.dat
