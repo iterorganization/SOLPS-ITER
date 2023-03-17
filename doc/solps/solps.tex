@@ -13468,14 +13468,7 @@ a charge state below the considered ion (inclusive) within their isonuclear sequ
 \chapter{Region definitions}
 \label{cha:regions}\index{regions}\index{vreg}\index{xreg}\index{yreg}\index{NREG}
 
-Three types of regions are defined in {\tt b2agfs.F}: volume,
-$x$-directed and $y$-directed.  The number of volume regions should also
-be stored in the {\tt NREG} environment variable (or through the presence
-of an {\tt NREG} ASCII file containing only the number of regions) as it is
-used for a variety of analysis scripts.
-Typical configurations for 1-D, linear, limiter,
-SN, DN (Connected and Disconnected) and periodic stellarator island cases are
-shown below:
+Two types of regions are defined in {\tt b2agfs.F}: volume-based and face-based. Face-based regions may include either only flux-aligned faces, only non-aligned faces, or a mixture of both, as indicated. The number of volume regions should also be stored in the {\tt NREG} environment variable (or through the presence of an {\tt NREG} ASCII file containing only the number of regions) as it is used for a variety of analysis scripts. Typical configurations for 1-D, linear, limiter, SN, DN (Connected and Disconnected), periodic stellarator island, and LFS snowflake cases are shown below:
 
 \clearpage
 \section{Regions for 1-D and linear cases}
@@ -13483,7 +13476,7 @@ shown below:
 
 For this geometry, {\tt NREG} should be set to $1$.
 
-Volume regions:
+Volume-based regions:
 \begin{verbatim}
 +-----------------------------+
 |                             |
@@ -13494,29 +13487,21 @@ Volume regions:
 region 1 === plasma
 \end{verbatim}
 
-$X$-directed regions:
+Face-based regions:
 \begin{verbatim}
-+-----------------------------+
++--------------4--------------+
 |                             |
 1                             2
 |                             |
-+-----------------------------+
++--------------3--------------+
 
 region 1 === Western edge
 region 2 === Eastern edge
+region 3 === core boundary
+region 4 === SOL boundary
 \end{verbatim}
 
-$Y$-directed regions:
-\begin{verbatim}
-+--------------2--------------+
-|                             |
-|                             |
-|                             |
-+--------------1--------------+
-
-region 1 === core boundary
-region 2 === SOL boundary
-\end{verbatim}
+In 1-d or linear topologies, none of the face-based regions is required to be exclusively formed of (non-)flux-aligned faces.
 
 In cases where the problem of interest has only one target and a plasma entry surface, it is best if the target is located to the right of the domain and the plasma enters from the left.
 
@@ -13528,7 +13513,7 @@ An informative review of how the code geometry and physics model can be adapted 
 
 For this geometry, {\tt NREG} should be set to $2$.
 
-Volume regions:
+Volume-based regions:
 \begin{verbatim}
 +-------------------------------+
 |                               |
@@ -13544,39 +13529,27 @@ region 1 === core
 region 2 === SOL
 \end{verbatim}
 
-$X$-directed regions:
+Face-based regions:
 \begin{verbatim}
-+-------------------------------+
++---------------6---------------+
 |                               |
 1                               2
 |                               |
-+/-----------------------------\+
++/--------------5--------------\+
 ||                             ||
 ||3                            ||
 ||                             ||
-++-----------------------------++
+++--------------4--------------++
 
 region 1 === left target
 region 2 === right target
 region 3 === connection between both sides of core
+region 4 === core boundary
+region 5 === separatrix
+region 6 === SOL boundary
 \end{verbatim}
 
-$Y$-directed regions:
-\begin{verbatim}
-+---------------3---------------+
-|                               |
-|                               |
-|                               |
-+/--------------2--------------\+
-||                             ||
-||                             ||
-||                             ||
-++--------------1--------------++
-
-region 1 === core boundary
-region 2 === separatrix
-region 3 === SOL boundary
-\end{verbatim}
+In limiter topologies, face-based regions 4 and 5 (core boundary and separatrix) must be exclusively formed of flux-aligned faces, while face-based region 3, the core connection periodicity surface, must consist exclusively of non-flux-aligned faces.
 
 \clearpage
 \section{Regions for SN}
@@ -13584,7 +13557,7 @@ region 3 === SOL boundary
 
 For this geometry, {\tt NREG} should be set to $4$ (default).
 
-Volume regions:
+Volume-based regions:
 
 See also section \ref{lab:b2:numerics:parameters} for a specific example.
 
@@ -13605,17 +13578,17 @@ region 3 === Western divertor (inboard for LSN, outboard for USN)
 region 4 === Eastern divertor (outboard for LSN, inboard for USN)
 \end{verbatim}
 
-$X$-directed regions:
+Face-based regions:
 \begin{verbatim}
-+-------+---------------+-------+
++--11---+------12-------+--13---+
 |       :               :       |
 |       2               3       |
 |       :               :       |
-1       +---------------+       4
+1       +------10-------+       4
 |       |               |       |
 |       |5              |6      |
 |       |               |       |
-+-------+---------------+-------+
++---7---+-------8-------+---9---+
 
 region 1 === Western target (inboard for LSN, outboard for USN)
 region 2 === entrance to Western divertor
@@ -13623,35 +13596,20 @@ region 3 === entrance to Eastern divertor
 region 4 === Eastern target (outboard for LSN, inboard for USN)
 region 5 === connection between both sides of core
 region 6 === connection between both sides of divertor
+region 7 === Western divertor private flux wall boundary
+                (inboard for LSN, outboard for USN)
+region 8 === core boundary
+region 9 === Eastern divertor private flux wall boundary
+                (outboard for LSN, inboard for USN)
+region 10 === separatrix
+region 11 === Western divertor to main chamber wall boundary
+                (inboard for LSN, outboard for USN)
+region 12 === SOL to main chamber wall boundary
+region 13 === Eastern divertor to main chamber wall boundary
+                (outboard for LSN, inboard for USN)
 \end{verbatim}
 
-\clearpage
-$Y$-directed regions:
-\begin{verbatim}
-+---5---+-------6-------+---7---+
-|       :               :       |
-|       :               :       |
-|       :               :       |
-|       +-------4-------+       |
-|       |               |       |
-|       |               |       |
-|       |               |       |
-+---1---+-------2-------+---3---+
-\end{verbatim}
-
-\begin{Verbatim}[fontsize=\footnotesize]
-region 1 === Western divertor private flux wall boundary
-                (inboard for LSN, outboard for USN)
-region 2 === core boundary
-region 3 === Eastern divertor private flux wall boundary
-                (outboard for LSN, inboard for USN)
-region 4 === separatrix
-region 5 === Western divertor to main chamber wall boundary
-                (inboard for LSN, outboard for USN)
-region 6 === SOL to main chamber wall boundary
-region 7 === Eastern divertor to main chamber wall boundary
-                (outboard for LSN, inboard for USN)
-\end{Verbatim}
+For SN topologies, face-based regions 8 and 10, the core boundary and the separatrix, must consist exclusively of flux-aligned faces, while face-based regions 2, 3, 5, and 6, the divertor entrances and the connection across the cuts, must contain only non-flux-aligned faces.
 
 \clearpage
 \section{Regions for CDN}
@@ -13659,7 +13617,7 @@ region 7 === Eastern divertor to main chamber wall boundary
 
 For this geometry, {\tt NREG} should be set to $8$.
 
-Volume regions:
+Volume-based regions:
 \begin{verbatim}
 +-------+---------------+-------++-------+---------------+-------+
 |       :               :       ||       :               :       |
@@ -13681,17 +13639,17 @@ region 7 === right inboard divertor
 region 8 === right outboard divertor
 \end{verbatim}
 
-$X$-directed regions:
+Face-based regions:
 \begin{verbatim}
-+-------+---------------+-------++-------+---------------+-------+
-|       :               :       ||       :               :       |
-|       2               3       ||       6               7       |
-|       :               :       ||       :               :       |
-1       +---------------+       45       +---------------+       8
-|       |               |       ||       |               |       |
-|       |9              |10     ||       |11             |12     |
-|       |               |       ||       |               |       |
-+-------+---------------+-------++-------+---------------+-------+
++---17---+------18------+---19---++---24---+------25------+---26---+
+|        :              :        ||        :              :        |
+|        2              3        ||        6              7        |
+|        :              :        ||        :              :        |
+1        +------16------+        45        +------23------+        8
+|        |              |        ||        |              |        |
+|        |9             |10      ||        |11            |12      |
+|        |              |        ||        |              |        |
++---13---+------14------+---15---++---20---+------21------+---22---+
 
 region 1 === left inboard divertor target
 region 2 === entrance to left inboard divertor
@@ -13707,36 +13665,23 @@ region 10 === connection between left outboard and
 region 11 === connection between right inboard and left outboard core
 region 12 === connection between right outboard and
                                  left inboard private flux region
+region 13 === left inboard divertor private flux wall boundary
+region 14 === left core boundary
+region 15 === left outboard divertor private flux wall boundary
+region 16 === left separatrix
+region 17 === left inboard divertor main chamber wall boundary
+region 18 === left SOL main chamber wall boundary
+region 19 === left outboard divertor main chamber wall boundary
+region 20 === right inboard divertor private flux wall boundary
+region 21 === right core boundary
+region 22 === right outboard divertor private flux wall boundary
+region 23 === right separatrix
+region 24 === right inboard divertor main chamber wall boundary
+region 25 === right SOL main chamber wall boundary
+region 26 === right outboard divertor main chamber wall boundary
 \end{verbatim}
 
-\clearpage
-$Y$-directed regions:
-\begin{verbatim}
-+---5---+-------6-------+---7---++--12---+------13-------+--14---+
-|       :               :       ||       :               :       |
-|       :               :       ||       :               :       |
-|       :               :       ||       :               :       |
-|       +-------4-------+       ||       +------11-------+       |
-|       |               |       ||       |               |       |
-|       |               |       ||       |               |       |
-|       |               |       ||       |               |       |
-+---1---+-------2-------+---3---++---8---+-------9-------+--10---+
-
-region 1 === left inboard divertor private flux wall boundary
-region 2 === left core boundary
-region 3 === left outboard divertor private flux wall boundary
-region 4 === left separatrix
-region 5 === left inboard divertor main chamber wall boundary
-region 6 === left SOL main chamber wall boundary
-region 7 === left outboard divertor main chamber wall boundary
-region 8 === right inboard divertor private flux wall boundary
-region 9 === right core boundary
-region 10 === right outboard divertor private flux wall boundary
-region 11 === right separatrix
-region 12 === right inboard divertor main chamber wall boundary
-region 13 === right SOL main chamber wall boundary
-region 14 === right outboard divertor main chamber wall boundary
-\end{verbatim}
+For CDN topologies, face-based regions 14, 16, 21, and 23, the core boundaries and the separatrices, must consist exclusively of flux-aligned faces, while face-based regions 2, 3, 6, 7, 9, 10, 11, and 12, the divertor entrances and the connection across the cuts, must contain only non-flux-aligned faces.
 
 \clearpage
 \section{Regions for DDN}
@@ -13746,12 +13691,12 @@ The case presented below corresponds to one where the active (or innermost)
 X-point is located at the bottom of the plasma (i.e. a DND case). For the
 opposite DNU configuration, the only change is the relative radial positions
 of the inner divertor boundaries between SOL-connected and PFR-connected
-halves and the position of the $x$-directed region 13 moves to being between
-$x$-directed regions 9 and 2 instead of being between $x$-directed regions 11 and 6.
+halves and the position of the face-based region 13 moves to being between
+face-based regions 9 and 2 instead of being between face-based regions 11 and 6.
 
 For both cases, {\tt NREG} should be set to $8$.
 
-Volume regions:
+Volume-based regions:
 
 See also section \ref{lab:b2:numerics:parameters} for a specific example.
 
@@ -13777,17 +13722,17 @@ region 8 === right outboard divertor
 \end{verbatim}
 
 \clearpage
-$X$-directed regions:
+Face-based regions:
 \begin{verbatim}
-+-------+---------------+-------++-------+---------------+-------+
-|       :               :       ||       :               :       |
-|       2               3       ||       6               7       |
-|       :               +.......45.......+               :       |
-|       :               |       ||       |13             :       |
-1.......+---------------+10     ||       +---------------+.......8
-|       |9              |       ||       |11             |12     |
-|       |               |       ||       |               |       |
-+-------+---------------+-------++-------+---------------+-------+
++---18---+------19------+---20---++---25---+------26------+---27---+
+|        :              :        ||        :              :        |
+|        2              3        ||        6              7        |
+|        :              +........45........+              :        |
+|        :              |        ||        |13            :        |
+1........+------17------+10      ||        +------24------+........8
+|        |9             |        ||        |11            |12      |
+|        |              |        ||        |              |        |
++---14---+------15------+---16---++---21---+------22------+---23---+
 
 region 1 === left inboard divertor target
 region 2 === entrance to left inboard divertor
@@ -13804,35 +13749,23 @@ region 11 === connection between right inboard and left outboard core
 region 12 === connection between right outboard and
                                  left inboard private flux region
 region 13 === connection between right and left SOL
+region 14 === left inboard divertor private flux wall boundary
+region 15 === left core boundary
+region 16 === left outboard divertor private flux wall boundary
+region 17 === left separatrix
+region 18 === left inboard divertor main chamber wall boundary
+region 19 === left SOL main chamber wall boundary
+region 20 === left outboard divertor main chamber wall boundary
+region 21 === right inboard divertor private flux wall boundary
+region 22 === right core boundary
+region 13 === right outboard divertor private flux wall boundary
+region 24 === right separatrix
+region 25 === right inboard divertor main chamber wall boundary
+region 26 === right SOL main chamber wall boundary
+region 27 === right outboard divertor main chamber wall boundary
 \end{verbatim}
 
-$Y$-directed regions:
-\begin{verbatim}
-+---5---+-------6-------+---7---++--12---+------13-------+--14---+
-|       :               :       ||       :               :       |
-|       :               :       ||       :               :       |
-|       :               +.......||.......+               :       |
-|       :               |       ||       |               :       |
-|.......+-------4-------+       ||       +------11-------+.......|
-|       |               |       ||       |               |       |
-|       |               |       ||       |               |       |
-+---1---+-------2-------+---3---++---8---+-------9-------+--10---+
-
-region 1 === left inboard divertor private flux wall boundary
-region 2 === left core boundary
-region 3 === left outboard divertor private flux wall boundary
-region 4 === left separatrix
-region 5 === left inboard divertor main chamber wall boundary
-region 6 === left SOL main chamber wall boundary
-region 7 === left outboard divertor main chamber wall boundary
-region 8 === right inboard divertor private flux wall boundary
-region 9 === right core boundary
-region 10 === right outboard divertor private flux wall boundary
-region 11 === right separatrix
-region 12 === right inboard divertor main chamber wall boundary
-region 13 === right SOL main chamber wall boundary
-region 14 === right outboard divertor main chamber wall boundary
-\end{verbatim}
+For DDN topologies, face-based regions 15, 17, 22, and 24, the core boundaries and the separatrices, must consist exclusively of flux-aligned faces, while face-based regions 2, 3, 6, 7, 9, 10, 11, 12, and 13, the divertor entrances and the connection across the cuts, must contain only non-flux-aligned faces.
 
 \clearpage
 \section{Regions for periodic BC stellarator island case}
@@ -13845,7 +13778,7 @@ boundaries.
 
 For this geometry, {\tt NREG} should be set to $5$.
 
-Volume regions:
+Volume-based regions:
 \begin{verbatim}
 ++-----------------------------++
 ||              5              ||
@@ -13864,17 +13797,17 @@ region 4 === outboard divertor
 region 5 === island
 \end{verbatim}
 
-$X$-directed regions:
+Face-based regions:
 \begin{verbatim}
-++-----------------------------++
+++-------------13--------------++
 ||7                            ||
-+\-----------------------------/+
++\-------------15--------------/+
 |       2               3       |
-1-------+---------------+-------4
+1--12---+------11-------+--14---4
 |       |               |       |
 |       |5              |6      |
 |       |               |       |
-+-------+---------------+-------+
++---8---+-------9-------+--10---+
 
 region 1 === inboard target
 region 2 === entrance to inboard divertor
@@ -13883,30 +13816,17 @@ region 4 === outboard target
 region 5 === connection between both sides of core
 region 6 === connection between both sides of private flux region
 region 7 === connection between both sides of island
+region 8 === inboard divertor private flux wall boundary
+region 9 === core boundary
+region 10 === outboard divertor private flux wall boundary
+region 11 === separatrix
+region 12 === entrance to inboard private flux region
+region 13 === island center
+region 14 === entrance to outboard private flux region
+region 15 === island boundary
 \end{verbatim}
 
-\clearpage
-$Y$-directed regions:
-\begin{Verbatim}
-++--------------6--------------++
-||                             ||
-+\--------------8--------------/+
-|                               |
-+---5---+-------4-------+---7---+
-|       |               |       |
-|       |               |       |
-|       |               |       |
-+---1---+-------2-------+---3---+
-
-region 1 === inboard divertor private flux wall boundary
-region 2 === core boundary
-region 3 === outboard divertor private flux wall boundary
-region 4 === separatrix
-region 5 === entrance to inboard private flux region
-region 6 === island center
-region 7 === entrance to outboard private flux region
-region 8 === island boundary
-\end{Verbatim}
+For stellarator island topologies, face-based regions 9, 11, 12, 13, 14, and 15, the core and island boundaries and the separatrices, must consist exclusively of flux-aligned faces, while face-based regions 2, 3, 5, 6, and 7, the divertor entrances, connection across the cuts, and periodicity boundaries, must contain only non-flux-aligned faces.
 
 \clearpage
 \section{Regions for low field side snowflakes}
@@ -13921,7 +13841,7 @@ For a fuller description, please refer to \cite{Cowley2023}.
 
 For both cases, {\tt NREG} should be set to $7$.
 
-Volume regions:
+Volume-based regions:
 
 \begin{Verbatim}
 +-------+-----------------------+-------+-------++-------+-------+
@@ -13944,17 +13864,17 @@ region 7 === outboard divertor leg 3
 \end{Verbatim}
 
 \clearpage
-$X$-directed regions:
+Face-based regions:
 \begin{Verbatim}
-+-------+-----------------------+-------+-------++-------+-------+
-|       :                       :       :       ||       :       |
-|       2                       3       6       ||       7       |
-|       :                       :       +.......45.......+.......|
-|       :                       :       |       ||       |13     |
-1.......+-----------------------+.......+11     ||       +.......8
-|       |9                      |10     |       ||       |12     |
-|       |                       |       |       ||       |       |
-+-------+-----------------------+-------+-------++-------+-------+
++---18---+---------19-----------+---20---+---24---++---25---+---26---+
+|        :                      :        :        ||        :        |
+|        2                      3        6        ||        7        |
+|        :                      :        +........45........+........|
+|        :                      :        |        ||        |13      |
+1........+---------17-----------+........+11      ||        +........8
+|        |9                     |10      |        ||        |12      |
+|        |                      |        |        ||        |        |
++---14---+---------15-----------+---16---+---21---++---22---+---23---+
 
 region 1 === inboard divertor target
 region 2 === entrance to inboard divertor
@@ -13969,34 +13889,22 @@ region 10 === connection between left and right primary private flux region
 region 11 === connection between 1st and 2nd outer divertor legs
 region 12 === connection between primary PFR and third outer divertor leg
 region 13 === connection between primary CFR and third outer divertor leg
+region 14 === inboard divertor private flux wall boundary
+region 15 === core boundary
+region 16 === outboard divertor entrance private flux wall boundary
+region 17 === primary separatrix
+region 18 === inboard divertor main chamber wall boundary
+region 19 === SOL main chamber wall boundary
+region 20 === outboard divertor entrance main chamber wall boundary
+region 21 === first outboard divertor leg private flux wall boundary
+region 22 === second outboard divertor leg private flux wall boundary
+region 23 === third outboard divertor leg private flux wall boundary
+region 24 === first outboard divertor leg main chamber wall boundary
+region 25 === second outboard divertor leg main chamber wall boundary
+region 26 === third outboard divertor leg main chamber wall boundary
 \end{Verbatim}
 
-$Y$-directed regions:
-\begin{Verbatim}
-+---5---+-----------6-----------+---7---+--11---++--12---+---13--+
-|       :                       :       :       ||       :       |
-|       :                       :       :       ||       :       |
-|       :                       :       +.......||.......+.......|
-|       :                       :       |       ||       |       |
-|.......+-----------4-----------+.......+       ||       |       |
-|       |                       |       |       ||       |       |
-|       |                       |       |       ||       |       |
-+---1---+-----------2-----------+---3---+---8---++---9---+---10--+
-
-region 1 === inboard divertor private flux wall boundary
-region 2 === core boundary
-region 3 === outboard divertor entrance private flux wall boundary
-region 4 === primary separatrix
-region 5 === inboard divertor main chamber wall boundary
-region 6 === SOL main chamber wall boundary
-region 7 === outboard divertor entrance main chamber wall boundary
-region 8 === first outboard divertor leg private flux wall boundary
-region 9 === second outboard divertor leg private flux wall boundary
-region 10 === third outboard divertor leg private flux wall boundary
-region 11 === first outboard divertor leg main chamber wall boundary
-region 12 === second outboard divertor leg main chamber wall boundary
-region 13 === third outboard divertor leg main chamber wall boundary
-\end{Verbatim}
+For LFS snowflake topologies, face-based regions 15 and 17, the core boundary and the separatrix, must consist exclusively of flux-aligned faces, while face-based regions 2, 3, 6, 7, 9, 10, 11, 12, and 13, the divertor entrances and connection across the cuts, must contain only non-flux-aligned faces.
 
 \chapter{b2plot manual}
 \label{cha:b2plotmanual}
