@@ -780,8 +780,7 @@ The {\tt setup.csh} file and its subsidiaries {\tt \$\{SOLPSTOP\}/SETUP/setup.cs
 Of course, any additional desired definitions can be added. The preferred place for those is, for those variables that need not be shared by other users, the {\tt \$\{SOLPSTOP\}/SETUP/setup.csh.\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}.local} and {\tt \$\{SOLPSTOP\}/SETUP/config.\$\{HOST\_NAME\}.\$\{COMPILER\}.local} files. Variables that are needed at compilation time need to appear in the {\tt config.*.*(.local)} file, while variables needed at runtime must appear in {\tt setup.csh.*.*(.local)} file.
 \end{sloppypar}
 
-However, the \SOLPSITER GIT server
-holds several examples in the {\tt \$\{SOLPSTOP\}/SETUP/} directory.
+Moreover, the \SOLPSITER GIT server holds several examples in the {\tt \$\{SOLPSTOP\}/SETUP/} directory.
 
 The command\index{stop}
 \begin{verbatim}
@@ -842,10 +841,8 @@ SOLPSTOP
 
 \begin{description}
 \item[config] \index{config} contains compiler option files
-\item[src.local] \index{src.local}\index{B2.5,
-    local}\label{src.local} is an optional location which can contain locally modified source files (not version-controlled)
-\item[src] \index{src}\index{B2.5, src}\label{b2.5_src}
-  contains the {\tt B2.5} source code files
+\item[src.local] \index{src.local}\index{B2.5,local}\label{src.local} is an optional location which can contain locally modified source files (not version-controlled)
+\item[src] \index{src}\index{B2.5, src}\label{b2.5_src} contains the {\tt B2.5} source code files
 \item[builds]\index{builds}\index{B2.5, builds} contains the compiled object files for building the {\tt B2.5} executables.
 \end{description}
 
@@ -872,7 +869,7 @@ The files in {\tt src} will be version-controlled and updated whenever the
 user will pull in new code version.
 If, however, one wishes to make local changes to a file and protect those from
 GIT updates, the procedure for that purpose is to copy the file you want to change to
-{\tt src.local} and then edit that file.  You will then need to do
+{\tt src.local} and then edit that file. You will then need to do
 \begin{verbatim}
   sbb
   gmake local
@@ -902,7 +899,7 @@ following performed:
   gmake
 \end{verbatim}
 If you want to avoid a long recompilation, you need to remove from the {\tt builds/*/}
-directories , the object and module files corresponding to your locally changed file(s),
+directories, the object and module files corresponding to your locally changed file(s),
 and then ask for a normal recompilation with a single {\tt gmake} command.
 
 \begin{sloppypar}
@@ -913,6 +910,12 @@ reads those after the {\tt config.\allowbreak \$\{HOST\_NAME\}.\allowbreak \$\{C
 and {\tt config.common.\$\{COMPILER\}} files,
 they need only contain the modified definitions.
 \end{sloppypar}
+
+It is also possible to add additional dependencies by means of a {\tt config/dependencies.local} file, which should then contain lines with the format:
+\begin{verbatim}
+${OBJDIR}/<calling_program>.o: ${OBJDIR}/<called_program>.o
+\end{verbatim}
+This can be particularly useful when compiling with options such as {\tt warn interfaces} to make sure that the files containing the called routines are compiled before the files containing the calling routines.
 
 If you just want to compile {\tt b2mn.exe}, you can do
 \begin{verbatim}
