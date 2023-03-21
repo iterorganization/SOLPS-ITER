@@ -90,7 +90,7 @@ EOF
     set OPTOPTS="$1"
     if (! $?OPT) then
       echo No optimization library specified, reverting to PETSc/TAO
-      source $SOLPSTOP/scripts/tao "${OPTOPTS}"
+      source $SOLPSTOP/SETUP/tao "${OPTOPTS}"
     endif
     if ($JOB_NAME == "SOLPS-ITER") set JOB_NAME="B2.5_OPT_TGT"
     echo Asking for a B2.5 standalone optimization with tangent AD
@@ -109,7 +109,7 @@ EOF
     set OPTOPTS="$1"
     if (! $?OPT) then
       echo No optimization library specified, reverting to PETSc/TAO
-      source $SOLPSTOP/scripts/tao "${OPTOPTS}"
+      source $SOLPSTOP/SETUP/tao "${OPTOPTS}"
     endif
     if ($JOB_NAME == "SOLPS-ITER") set JOB_NAME="B2.5_OPT_ADJ"
     echo Asking for a B2.5 standalone optimization with adjoint AD
