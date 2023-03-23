@@ -24,7 +24,7 @@ if ($ndir == '') then
   set ndir = 1
 endif
 
-echo "Plotting gradient of cost function $nn along direction $idir"
+echo "Plotting gradient of cost function $nn for parameter $idir"
 
 set ndata = `pipe_run.log | grep -ai -c "Cost function gradient $nn"`
 
