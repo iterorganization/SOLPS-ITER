@@ -1618,7 +1618,7 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[get\_git\_email]\index{get\_git\_email} Finds the user's email address from the {\tt .gitconfig} file.
   \item[get\_git\_name]\index{get\_git\_name} Finds the user's name from the {\tt .gitconfig} file.
   \item[get\_parm.bpl]\index{get\_parm.bpl} extracts certain useful quantities from a run input and output files for use in later scripts, particularly those building \btwoplot command files.
-  \item[IDS\_yaml\_replace \#shot \#old\_run \#new\_run]\index{IDS\_yaml\_replace} Script to update the {\tt .yaml} IMAS database files to indicate that the {\tt \#old\_run} run runmber of shot {\tt \#shot} is now replaced by run number {\tt \#new\_run}.
+  \item[IDS\_yaml\_replace \#shot \#old\_run \#new\_run]\index{IDS\_yaml\_replace}\index{b2\_ual\_rewrite} Script invoked by the {\tt b2\_ual\_rewrite} program (see~\ref{sec:b2_ual_rewrite}) to update the {\tt .yaml} IMAS database files to indicate that the {\tt \#old\_run} run runmber of shot {\tt \#shot} is now replaced by run number {\tt \#new\_run}.
   \item[import\_files\_from\_convert]\index{import\_files\_from\_convert}\index{b2yt}\index{correct\_baserun\_timestamps} Imports and renames the files produced by {\tt b2yt} in a {\tt convert} directory at the same level as the current directory to prepare the new converted case for a run. Also updates some of the files in the {\tt baserun} directory, so it is often prudent to use {\tt correct\_baserun\_timestamps}, from the parent directory, afterwards.
   \item[import\_files\_from\_convert\_wg]\index{import\_files\_from\_convert\_wg}\index{b2us} Imports and renames the files produced by {\tt b2us} in a {\tt convert} directory at the same level as the current directory to prepare the new converted wide-grid case for a run.
   \item[input.dat\_to\_mesh.extra]\index{input.dat\_to\_mesh.extra}\index{input.dat}\index{mesh.extra} Converts standard input (usually directed from a {\tt input.dat} file) into a {\tt mesh.extra} file.
@@ -4159,6 +4159,76 @@ Example of the {\tt b2ydm.dat} file:\\
 \index{b2ydm.dat}
 \VerbatimInput[fontsize=\footnotesize]{b2ydm.dat}
 
+\newpage
+\section{b2\_ual\_write, writing last state to IDS}
+\label{sec:b2_ual_write}\index{b2\_ual\_write}\index{IDS, Interface Data Structues}
+
+The program can be run with one of the following
+\begin{verbatim}
+  gmake -f $SOLPSTOP/runs/Makefile b2_ual_write.prt
+\end{verbatim}
+%% $
+or
+\begin{verbatim}
+  b2run b2_ual_write
+\end{verbatim}
+
+\begin{sloppypar}
+This program saves the final output state of a run into an IDS (Interface Data Structure). Currently, it will populate the {\tt edge\_profiles}, {\tt edge\_transport}, {\tt edge\_sources}, {\tt radiation}, {\tt divertors}, {\tt dataset\_description}, and {\tt summary} data structures. If the current run being saved is a time continuation of the run already present in that IDS, then a new time slice is appended, otherwise the IDS is overwritten. If the existing IDS was written with an earlier Data Dictionary version, it is recreated with the current one.
+\end{sloppypar}
+
+\begin{sloppypar}
+The program reads the {\tt b2mndr\_id*} switch group, defined in {\tt b2mn.dat}:
+\begin{itemize}
+  \item {\tt b2mndr\_user} defines the user name and it is set by default to be the same as the {\tt USER} environment variable.
+  \item {\tt b2mndr\_database} defines the IMAS IDS database name and it is set by default to be the same as the {\tt DEVICE} environment variable. If {\tt DEVICE} has been left undefined, the default database name is {\tt 'solps-iter'}. If {\tt DEVICE} has been set to {\tt 'iter'}, the code internally modifies it to {\tt 'ITER'}, following the IMAS convention.
+  \item {\tt b2mndr\_device} superseded by {\tt b2mndr\_database}
+  \item {\tt b2mndr\_shot\_number} defines the shot number
+  \item {\tt b2mndr\_run\_number} defines the run number
+\end{itemize}
+These switches are used as identification parameters for the IDS. Afterwards, a
+{\tt b2mn} run is initialized but {\em not} started, so that the final
+output state data is read. Then the data is written to an IDS, with the
+{\tt b2mndr\_id*} switchgroup used as identification descriptors.
+\end{sloppypar}
+
+It is possible to replace (or supplement) the IDS switch settings coming from the {\tt b2mn.dat} file by using the command line {\tt -o} option, with the following syntax:
+\begin{verbatim}
+  b2run -o "-s 123456 -r 1" b2_ual_write
+\end{verbatim}
+which will recognize, within the quotes following the {\tt -o} additional options opener, the switches:
+\begin{itemize}
+  \item {\tt -s}, {\tt --shot} The shot number
+  \item {\tt -r}, {\tt --run} The run number
+  \item {\tt -u}, {\tt --user} The user name (default is {\tt USER})
+  \item {\tt -d}, {\tt --database}, {\tt --device} The IMAS database name (default is {\tt DEVICE}, if set, or {\tt 'solps-iter'} otherwise)
+  \item {\tt -v}, {\tt --version} The IMAS version to be used (default is {\tt 3})
+\end{itemize}
+
+Concerning the assignment of shot and run numbers, the following rules are in effect. The shot number is a six digit number between 1 and 214748. ITER shot numbers shall start with a 1, the second digit represents the majority fuelling species (0:H, 1:He, 2:D, 3:D-T, 4:T, 5:others, the sequence reflecting the order in which fuel gases are expected to be used in the ITER Research Plan), and the last four digits identify the simulation. Because multiple codes are all writing to the same database and we want to avoid clashes, different "slices" of numbers have been assigned for various codes. We will use numbers {\tt 1x2000} to {\tt 1x2999} for transferring existing simulations from the {\bf SOLPS 4.3} database to IMAS, and {\tt 1x3000} to {\tt 1x3499} for new \SOLPSITER cases. Run numbers should start at 1, and be incremented every time a new version of the same simulation (say after a re-run because a bug in the code was fixed) is being stored in the archive. When changing important run parameters such as gas puffing rates, turning on drifts, etc..., a new shot number should be used. Until a more automatic way of assigning numbers (and a better overall scheme) can be implemented, please send an email to the IO code responsible officer ({\tt Xavier.Bonnin@iter.org}), when you wish to obtain a new shot number, as the IO will keep track of those already assigned. IMPORTANT: {\em When publishing SOLPS-ITER results with IO co-authors involved, archiving into the public IMAS database of the simulations on which the published work is based is mandatory.}
+
+After the IDS files are created, one should also run the {\tt create\_db\_entry} script, with the syntax:
+\begin{verbatim}
+create_db_entry [-u USER] [-d DATABASE] -s SHOT -r RUN
+\end{verbatim}
+which will create {\tt ids\_*.yaml} and {\tt ids\_*.watcher} files for that shot and run number, to be used in the IMAS scenario database. These files should be edited by hand according to the instructions within them and the IMAS documentation.
+
+\subsection{b2\_ual\_rewrite, rewriting an existing IDS}
+\label{sec:b2_ual_rewrite}\index{b2\_ual\_rewrite}
+
+The program can be run with one of the following
+\begin{verbatim}
+  gmake -f $SOLPSTOP/runs/Makefile b2_ual_rewrite.prt
+\end{verbatim}
+%% $
+or
+\begin{verbatim}
+  b2run b2_ual_rewrite
+\end{verbatim}
+
+\begin{sloppypar}
+This program rewrites an existing IDS in case a correction needs to be made (because of a bug fix, for instance). It will rewrite the {\tt edge\_profiles}, {\tt edge\_transport}, {\tt edge\_sources}, {\tt radiation}, {\tt divertors}, {\tt dataset\_description}, and {\tt summary} data structures. It uses the same inputs as {\tt b2\_ual\_write}. In addition, one can have the IDS rewritten with a new run number, by means of the optional {\tt -n \it new\_run\_number} argument. Only the last time slice present in the IDS can be rewritten in this way, and data from older time slices will be lost. If a new run number is specified, the {\tt .yaml} file of the old run number will be modified to indicate that it is now obsolete and replaced by the new run number, and the {\tt .yaml} file for the new IDS will also indicate which old run it is replacing. The new run number must be larger than the old one.
+\end{sloppypar}
 
 \newpage
 \section{b2xx, the others}
@@ -18286,6 +18356,7 @@ IMAS & modules/b2mod\_b2cmrc.F \\
 IMAS & modules/b2mod\_ppout.F \\
 IMAS & preprocessing/b2ardr.F \\
 IMAS & utility/ratadas.F \\
+IMAS\_MAJOR\_VERSION & driver/b2mod\_driver.F \\
 IMAS\_MAJOR\_VERSION & ids/b2\_ual\_rewrite.F90 \\
 IMAS\_MAJOR\_VERSION & ids/b2\_ual\_write.F90 \\
 IMAS\_MAJOR\_VERSION & ids/b2\_ual\_write\_b2mod.F90 \\
@@ -21076,7 +21147,7 @@ b2ah.dat \index{b2ah.dat} & formatted &  b2ah \\
 b2ai.dat \index{b2ai.dat} & formatted &  b2ai \\
 b2ar.dat \index{b2ar.dat} & formatted &  b2ar \\
 b2md.dat \index{b2md.dat} & formatted &  b2md \\
-b2mn.dat \index{b2mn.dat} & formatted &  b2md b2mn b2pl b2yi b2yi\_gnuplot b2yn b2yp b2yt \\
+b2mn.dat \index{b2mn.dat} & formatted &  b2md b2mn b2pl b2yi b2yi\_gnuplot b2yn b2yp b2yt b2\_ual\_write \\
 b2ydm.dat \index{b2ydm.dat} & formatted &  b2ydm \\
 b2yg.dat \index{b2yg.dat} & formatted &  b2yg \\
 b2yh.dat \index{b2yh.dat} & formatted &  b2yh \\
@@ -21139,19 +21210,23 @@ filename & formatted? & written by & read by & contents \\ \hline
 b2fgmtry \index{b2fgmtry} & un*formatted & b2ag & b2ah b2ai b2co b2fu b2md & structured geometry file \\
  &  &  & b2mn b2pl b2ts b2uf b2xd & \\
  &  &  & b2yg b2yh b2yp b2yt & \\
+ &  &  & b2\_ual\_write & \\
 b2fgmtry\_us \index{b2fgmtry\_us} & un*formatted & b2ag b2us & b2ai & unstructured geometry file \\
 b2fmovie \index{b2fmovie} & un*formatted & b2mn & b2ym & movie of plasma evolution \\
 b2fparam \index{b2fparam} & un*formatted & b2mn & b2md b2fu b2pl b2ts & run parameters used \\
  &  &  & b2uf b2xd b2yh b2yp & \hspace{1cm} for plotting \\
+ &  &  & b2\_ual\_write & \\
 b2fpardf \index{b2fpardf} & un*formatted & b2ah & b2co b2mn b2yh b2yt & transport parameters \\
 b2fplasma \index{b2fplasma} & unformatted & b2fu b2mn & b2md b2pl b2ts b2uf b2xd & plasma state used \\
- &  &  &  & \hspace{1cm} for plotting \\
+ &  &  & b2\_ual\_write & \hspace{1cm} for plotting \\
 b2fplasmf \index{b2fplasmf} & formatted & b2uf & b2fu & plasma state used for plotting \\
 b2frates \index{b2frates} & un*formatted & b2ar & b2md b2mn b2pl b2yn & atomic physics rates \\
  &  &  & b2yp b2yr b2yt & \\
+ &  &  & b2\_ual\_write & \\
 b2fstate \index{b2fstate} & un*formatted & b2co b2mn & b2fu b2md b2pl b2ts b2uf & final plasma state \\
  &  & b2rd & b2xd b2yi b2yi\_gnuplot & \\
  &  &  & b2yp b2yr b2yt & \\
+ &  &  & b2\_ual\_write & \\
 b2fstati \index{b2fstati} & un*formatted & b2ai & b2co b2mn b2yi & initial (structured) plasma state \\
  &  &  & b2yi\_gnuplot & \\
 b2fstati\_us \index{b2fstati\_us} & un*formatted & b2ai b2us & & initial (unstructured) plasma state \\
