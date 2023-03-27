@@ -17,7 +17,8 @@ sed -i -e 's/DIMENSION(SIZE(x2, 1))/DIMENSION(mpg%nCv)/g' b2mod_driver_diffv.F90
 sed -i -e 's/DIMENSION(SIZE(x3, 1))/DIMENSION(mpg%nCv)/g' b2mod_driver_diffv.F90
 sed -i -e 's/DIMENSION(SIZE(x4, 1), SIZE(x4, 2))/DIMENSION(mpg%nCv, 0:state%pl%ns-1)/g' b2mod_driver_diffv.F90
 sed -i -e 's/DIMENSION(SIZE(x5, 1))/DIMENSION(mpg%nCv)/g' b2mod_driver_diffv.F90
-sed -i -e 's/DIMENSION(SIZE(x6, 1), SIZE(x6, 2))/DIMENSION(mpg%nCv, 0:state%pl%ns-1)/g' b2mod_driver_diffv.F90
+sed -i -e 's/DIMENSION(SIZE(x6, 1))/DIMENSION(mpg%nCv)/g' b2mod_driver_diffv.F90
+sed -i -e 's/DIMENSION(SIZE(x7, 1), SIZE(x7, 2))/DIMENSION(mpg%nCv, 0:state%pl%ns-1)/g' b2mod_driver_diffv.F90
 sed -i -e 's/ISIZE1OFarg1/mpg%nCv/g' b2mod_driver_diffv.F90
 sed -i -e 's/ISIZE1OFarg1/nCv/g' b2npmo_dv.F90 b2stbr_phys_dv.F90 b2tqna_dv.F90 eirene_f30f31_dv.F90 b2mod_recycle_diffv.F90 b2sikt_dv.F90 b2trcl_dv.F90 calc_res_fp_dv.F90
 sed -i -e 's/ISIZE1OFabs/mpg%nCv/g' b2mod_driver_diffv.F90
@@ -144,6 +145,7 @@ sed -i '/EXTERNAL IPGETC/d' b2mod_driver_diffv.F90
 sed -i '/EXTERNAL B2TRCS/d' b2mod_driver_diffv.F90
 sed -i '/EXTERNAL B2TRCF/d' b2mod_driver_diffv.F90
 sed -i '/EXTERNAL B2TRACE/d' b2mod_driver_diffv.F90
+sed -i '/EXTERNAL B2TRCI/d' b2mod_driver_diffv.F90
 sed -i '/EXTERNAL B2MWTI/d' b2mod_driver_diffv.F90
 sed -i '/EXTERNAL OUTPUT_DS/d' b2mod_input_profile_diffv.F90
 sed -i '/TRIM_DV/d' b2mod_main_diffv.F90
@@ -227,7 +229,6 @@ sed -i -e "s/b2mod_par_opt_diff/b2mod_par_opt_diffv/g" b2optim_*.F* set_paramete
 sed -i -e "s/b2mn_init_diff/b2mn_init_dv/g" b2optim_*.F*
 sed -i -e "s/b2mn_fin_diff/b2mn_fin_dv/g" b2optim_*.F*
 sed -i -e "s/b2mn_step_diff/b2mn_step_dv/g" b2optim_*.F*
-sed -i -e "s/b2mod_user_namelist_diff/b2mod_user_namelist_diffv/g" b2optim_*.F*
 sed -i -e "s/b2us_data_diff/b2us_data_diffv/g" b2optim_*.F*
 sed -i -e "s/b2us_io_diff/b2us_io_diffv/g" b2optim_*.F*
 sed -i -e "s/b2mod_b2cmpa_diff/b2mod_b2cmpa_diffv/g" b2optim_*.F*
@@ -247,6 +248,6 @@ sed -i -e "s/state_ext, state_extd, j, jdiff)/state_ext, state_extd, j, jdiff, n
 sed -i -e 's/jdiff(nncf)/jdiff(nbdirsmax,nncf)/g' b2optim_*.F*
 sed -i -e "/subroutine EV_GRAD_F(/a\      use b2mod_diffsizes" b2optim_ipopt.F
 sed -i -e "/subroutine FormFunctionGradient(/a\      use b2mod_diffsizes" b2optim_tao.F90
-sed -i -e "s/g_v(g_i+ipar-1) = jdiff(1)/g_v(g_i+ipar-1) = jdiff(ipar,1)/g" b2optim_tao.F90
+sed -i -e "s/g_v(ipar) = jdiff(1)/g_v(ipar) = jdiff(ipar,1)/g" b2optim_tao.F90
 sed -i -e "s/grad(ipar) = DBLE(jdiff(1))/grad(ipar) = DBLE(jdiff(ipar,1))/g" b2optim_ipopt.F
 

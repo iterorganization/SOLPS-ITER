@@ -7,7 +7,8 @@ done;
 ls *_dv.F90 | sed -e 's/_dv.F90//g' >> tmp
 
 SRCPATH="equations"
-# grab the files that have been excluded from differentiation but not the MAIN programs
+# grab the files that have been excluded from differentiation but not the MAIN programs 
+# To facilitate things SRCPATH can be extended to other folders to automatically grab files in new differentiation, but will also get files not stritly needed for TGT compilation
 rm -r temp
 mkdir temp
 cd temp
@@ -53,6 +54,7 @@ cp $SOLPSTOP/modules/B2.5/src/ids/b2mod_connectivity.F90 .
 cp $SOLPSTOP/modules/B2.5/src/ids/b2mod_interp.F90 .
 cp $SOLPSTOP/modules/B2.5/src/input/b2rflb.F .
 cp $SOLPSTOP/modules/B2.5/src/input/b2rusr.F .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_openmp.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_rates.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_geo_corner.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_b2cmfs.F .
@@ -144,7 +146,8 @@ cp $SOLPSTOP/modules/B2.5/src/utility/strcopy.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/dfmin.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/dseval.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/dspline.F .
-cp $SOLPSTOP/modules/B2.5/src/differentiation/cond_coef.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/cond_coef.F .
+#cp $SOLPSTOP/modules/B2.5/src/utility/mass_density.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/erf_dv.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/dim_dv.F90 .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/b2uxus_dv.F .
@@ -154,6 +157,7 @@ cp $SOLPSTOP/modules/B2.5/src/differentiation/b2mxac_diffv.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/b2optim* .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/set_parameters.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/set_tgt_perturbation.F .
+cp $SOLPSTOP/modules/B2.5/src/differentiation/print_tgt_gradient.F .
 
 # and now modify the 'use modules' which have been differentiated
 files=`ls *.F*`

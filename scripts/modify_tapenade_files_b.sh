@@ -206,7 +206,9 @@ sed -i -e 's/CHARACTER(len=13), DIMENSION(:), DIMENSION(:), ALLOCATABLE :: text/
 sed -i -e 's/DO ii2=1,SIZE(state_extb%text(ii1), 1)/DO ii2=1,SIZE(state_extb%text)/g' b2us_plasma_diff.F90
 sed -i -e 's/state_extb%text(ii1)(ii2) = ''/state_extb%text(ii1) = ''/g' b2us_plasma_diff.F90
 
-sed -i -e "s/dtimb, cpustartb/dtimb, cpustartb,dtimb0, cpustartb0, res_quitb0/g" b2mod_driver_diff.F90
+sed -i -e "s/REAL(kind=r4) :: cpustartb/REAL(kind=r4) :: cpustartb, cpustartb0/g" b2mod_driver_diff.F90
+sed -i -e "s/  REAL(kind=r8) :: res_quitb/  REAL(kind=r8) :: res_quitb, res_quitb0/g" b2mod_driver_diff.F90
+sed -i -e "s/  REAL(kind=r8) :: na_minb, na_newb, dtimb/  REAL(kind=r8) :: na_minb, na_newb, dtimb, dtimb0/g" b2mod_driver_diff.F90
 sed -i -e "s/dtcob(0:nsdmax-1, 0:cvregmax)/dtcob(0:nsdmax-1, 0:cvregmax),dtcob0(0:nsdmax-1, 0:cvregmax)/g" b2mod_numerics_namelist_diff.F90
 sed -i -e "s/dtmob(0:nsdmax-1, 0:cvregmax)/dtmob(0:nsdmax-1, 0:cvregmax),dtmob0(0:nsdmax-1, 0:cvregmax)/g" b2mod_numerics_namelist_diff.F90
 sed -i -e "s/dteeb(0:cvregmax)/dteeb(0:cvregmax),dteeb0(0:cvregmax)/g" b2mod_numerics_namelist_diff.F90
@@ -278,11 +280,71 @@ sed -i -e "/CALL ADSTACK_STARTREPEAT/i\    ITERCOUNT = 0" b2mod_driver_diff.F90
 sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT ITERATION ',ITERCOUNT" b2mod_driver_diff.F90
 sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT MAX RES ',cumul" b2mod_driver_diff.F90
 
+sed -i -e "/INTEGER, ALLOCATABLE, SAVE :: rtyr(:)/i\  REAL(kind=r8), ALLOCATABLE, SAVE :: rtlrab0(:, :, :), rtlsab0(:, :, :),&" b2mod_b2cmrc_diff.F90
+sed -i -e "/INTEGER, ALLOCATABLE, SAVE :: rtyr(:)/i\& rtlqab0(:, :, :), rtlcxb0(:, :, :)" b2mod_b2cmrc_diff.F90
+sed -i -e "/rtlsab = 0.D0/a\    rtlsab0 = 0.D0" b2mod_b2cmrc_diff.F90
+sed -i -e "/rtlsab = 0.D0/a\    ALLOCATE(rtlsab0(0:rtnt, 0:rtnn, 0:rtns-1))" b2mod_b2cmrc_diff.F90
+sed -i -e "/rtlrab = 0.D0/a\    rtlrab0 = 0.D0" b2mod_b2cmrc_diff.F90
+sed -i -e "/rtlrab = 0.D0/a\    ALLOCATE(rtlrab0(0:rtnt, 0:rtnn, 0:rtns-1))" b2mod_b2cmrc_diff.F90
+sed -i -e "/rtlqab = 0.D0/a\    rtlqab0 = 0.D0" b2mod_b2cmrc_diff.F90
+sed -i -e "/rtlqab = 0.D0/a\    ALLOCATE(rtlqab0(0:rtnt, 0:rtnn, 0:rtns-1))" b2mod_b2cmrc_diff.F90
+sed -i -e "/rtlcxb = 0.D0/a\    rtlcxb0 = 0.D0" b2mod_b2cmrc_diff.F90
+sed -i -e "/rtlcxb = 0.D0/a\    ALLOCATE(rtlcxb0(0:rtnt, 0:rtnn, 0:rtns-1))" b2mod_b2cmrc_diff.F90
+sed -i -e "/DEALLOCATE(rtlsab)/a\      DEALLOCATE(rtlsab0)" b2mod_b2cmrc_diff.F90
+sed -i -e "/DEALLOCATE(rtlrab)/a\      DEALLOCATE(rtlrab0)" b2mod_b2cmrc_diff.F90
+sed -i -e "/DEALLOCATE(rtlqab)/a\      DEALLOCATE(rtlqab0)" b2mod_b2cmrc_diff.F90
+sed -i -e "/DEALLOCATE(rtlcxb)/a\      DEALLOCATE(rtlcxb0)" b2mod_b2cmrc_diff.F90
+
 sed -i "/POINTER8/d" b2mndt_b.F90 b2news__b.F90 b2sral_b.F90 b2mod_driver_diff.F90 ## CAREFUL! might be needed in future
 sed -i -e '/stateb1 = state0b/d' b2mod_driver_diff.F90 
 sed -i -e '/TYPE(MAPPING_DIFF) :: mpgb1/d' b2mod_driver_diff.F90
 sed -i -e '/TYPE(MAPPING_DIFF) :: mpgb2/d' b2mod_driver_diff.F90
 sed -i -e '/TYPE(MAPPING_DIFF) :: mpgb3/d' b2mod_driver_diff.F90
+
+# add variables for output of 2D maps of transport coeff
+sed -i -e "/REAL(r8), DIMENSION(:), ALLOCATABLE :: cssb/a\      REAL(r8), DIMENSION(:, :), ALLOCATABLE :: dna0save" b2us_plasma_diff.F90
+sed -i -e "/REAL(r8), DIMENSION(:), ALLOCATABLE :: cssb/a\      REAL(r8), DIMENSION(:), ALLOCATABLE :: hci0save" b2us_plasma_diff.F90
+sed -i -e "/REAL(r8), DIMENSION(:), ALLOCATABLE :: cssb/a\      REAL(r8), DIMENSION(:), ALLOCATABLE :: hce0save" b2us_plasma_diff.F90
+sed -i -e "/REAL(r8), DIMENSION(:), ALLOCATABLE :: cssb/a\! the sensitivity of transport coefficients for each cell" b2us_plasma_diff.F90
+sed -i -e "/REAL(r8), DIMENSION(:), ALLOCATABLE :: cssb/a\! csc the following three have been manually added to enable saving" b2us_plasma_diff.F90
+sed -i -e "/coeffb%cssb = 0.D0/a\!" b2us_plasma_diff.F90
+sed -i -e "/coeffb%cssb = 0.D0/a\      coeffb%dna0save = 0.D0" b2us_plasma_diff.F90
+sed -i -e "/coeffb%cssb = 0.D0/a\      ALLOCATE(coeffb%dna0save(ncv, 0:ns-1), source=0._R8)" b2us_plasma_diff.F90
+sed -i -e "/coeffb%cssb = 0.D0/a\      coeffb%hce0save = 0.D0" b2us_plasma_diff.F90
+sed -i -e "/coeffb%cssb = 0.D0/a\      ALLOCATE(coeffb%hci0save(ncv), source=0._R8)" b2us_plasma_diff.F90
+sed -i -e "/coeffb%cssb = 0.D0/a\      coeffb%hce0save = 0.D0" b2us_plasma_diff.F90
+sed -i -e "/coeffb%cssb = 0.D0/a\      ALLOCATE(coeffb%hce0save(ncv), source=0._R8)" b2us_plasma_diff.F90
+sed -i -e "/coeffb%cssb = 0.D0/a\! the sensitivity of transport coefficients for each cell" b2us_plasma_diff.F90
+sed -i -e "/coeffb%cssb = 0.D0/a\! csc the following three have been manually added to enable saving" b2us_plasma_diff.F90
+sed -i -e "/IF (ALLOCATED(coeffb%cssb)) THEN/i\! csc the following three have been manually added to enable saving" b2us_plasma_diff.F90
+sed -i -e "/IF (ALLOCATED(coeffb%cssb)) THEN/i\! the sensitivity of transport coefficients for each cell" b2us_plasma_diff.F90
+sed -i -e "/IF (ALLOCATED(coeffb%cssb)) THEN/i\    IF (ALLOCATED(coeffb%dna0save)) THEN" b2us_plasma_diff.F90
+sed -i -e "/IF (ALLOCATED(coeffb%cssb)) THEN/i\      DEALLOCATE(coeffb%dna0save)" b2us_plasma_diff.F90
+sed -i -e "/IF (ALLOCATED(coeffb%cssb)) THEN/i\    END IF" b2us_plasma_diff.F90
+sed -i -e "/IF (ALLOCATED(coeffb%cssb)) THEN/i\    IF (ALLOCATED(coeffb%hce0save)) THEN" b2us_plasma_diff.F90
+sed -i -e "/IF (ALLOCATED(coeffb%cssb)) THEN/i\      DEALLOCATE(coeffb%hce0save)" b2us_plasma_diff.F90
+sed -i -e "/IF (ALLOCATED(coeffb%cssb)) THEN/i\    END IF" b2us_plasma_diff.F90
+sed -i -e "/IF (ALLOCATED(coeffb%cssb)) THEN/i\    IF (ALLOCATED(coeffb%hci0save)) THEN" b2us_plasma_diff.F90
+sed -i -e "/IF (ALLOCATED(coeffb%cssb)) THEN/i\      DEALLOCATE(coeffb%hci0save)" b2us_plasma_diff.F90
+sed -i -e "/IF (ALLOCATED(coeffb%cssb)) THEN/i\    END IF" b2us_plasma_diff.F90
+sed -i -e "s/dzt0b, dna_exb, dna_exbb, hce_exb, hce_exbb, hci_exb, hci_exbb)/dzt0b, dna_exb, dna_exbb, hce_exb, hce_exbb, hci_exb, hci_exbb, dna0bsave, hce0bsave, hci0bsave)/g" b2tqna_b.F90
+sed -i -e '0,/\& ncall_transp_keps/{s/\& ncall_transp_keps/\& ncall_transp_keps, last_call_transp/}' b2tqna_b.F90
+sed -i -e "/\& , hci_exbb(ncv)/a\  REAL(kind=r8) :: dna0bsave(ncv, 0:ns-1), hci0bsave(ncv), hce0bsave(ncv)" b2tqna_b.F90
+sed -i -e "/\& , hci_exbb(ncv)/a\! the sensitivity of the transport coefficient for each cell" b2tqna_b.F90
+sed -i -e "/\& , hci_exbb(ncv)/a\! csc these additional variables are added manually and are used to save" b2tqna_b.F90
+sed -i -e '0,/\& ncall_transp_keps/{s/ / /}' b2tqna_b.F90
+sed -i -e '/hcn0b = 0.D0/{p;s/.*/1/;H;g;/^\(\n1\)\{2\}$/s//    last_call_transp = .false./p;d}' b2tqna_b.F90 # might be risky to search for this key but worst case it won spit out anything
+sed -i -e '/hcn0b = 0.D0/{p;s/.*/1/;H;g;/^\(\n1\)\{2\}$/s//    hci0bsave = pl%na(:, 1)*(hcibb(:,1) + hci0b)/p;d}' b2tqna_b.F90
+sed -i -e '/hcn0b = 0.D0/{p;s/.*/1/;H;g;/^\(\n1\)\{2\}$/s//    hce0bsave = dv%ne*hce0b/p;d}' b2tqna_b.F90
+sed -i -e '/hcn0b = 0.D0/{p;s/.*/1/;H;g;/^\(\n1\)\{2\}$/s//    dna0bsave = dna0b/p;d}' b2tqna_b.F90
+sed -i -e '/hcn0b = 0.D0/{p;s/.*/1/;H;g;/^\(\n1\)\{2\}$/s//  if (last_call_transp) then/p;d}' b2tqna_b.F90
+sed -i -e '/hcn0b = 0.D0/{p;s/.*/1/;H;g;/^\(\n1\)\{2\}$/s//! for each point of the domain, before they are reset to zero/p;d}' b2tqna_b.F90
+sed -i -e '/hcn0b = 0.D0/{p;s/.*/1/;H;g;/^\(\n1\)\{2\}$/s//! csc added manually to save sensitivities of transport coefficients/p;d}' b2tqna_b.F90
+sed -i -e '/hcn0b = 0.D0/{p;s/.*/1/;H;g;/^\(\n1\)\{2\}$/s//  END IF/p;d}' b2tqna_b.F90
+sed -i -e "/ CALL B2TQNA_B/i\! csc the last three arguments of the b2tqna_b call have been added " b2trno_b.F90
+sed -i -e "/ CALL B2TQNA_B/i\! manually to save the sensitivity of transport coefficients in each" b2trno_b.F90
+sed -i -e "/ CALL B2TQNA_B/i\! cell of the domain" b2trno_b.F90
+sed -i -e 's/\&         %hci_exb)/\&         %hci_exb, cob%dna0save, cob%hce0save, cob%hci0save)/g' b2trno_b.F90
 
 ### modify all the switchbXX geobXX etc to just have one, TOO DIFFICULT TO IMPLEMENT, NEED BY HAND
 
