@@ -222,6 +222,8 @@ To do this, one must upload a copy of their public ssh key here: \href{https://g
 > git submodule update
 \end{verbatim}
 
+If using the SSH method, make sure that there is no {\tt PreferredAuthentications} setting in your ssh configuration file, as it can conflict with the IO GIT repository access protocol.
+
 It is best afterwards to position oneself on the {\tt master} branches, which is achieved by the {\tt switch\_to\_master} script (which can be used after the SOLPS-ITER session environment is established, see Section~\ref{sec:session}) or, alternatively, by hand, with the commands:
 
 \begin{verbatim}
@@ -18308,12 +18310,13 @@ B25\_EIRENE & user/b2mod\_blnc.F \\
 B25\_EIRENE & user/b2mod\_blne.F \\
 B25\_EIRENE & user/b2mod\_blnm.F \\
 B25\_EIRENE & user/b2mod\_trace.F \\
-B25\_EIRENE & user/b2usrtrc.F \\
+B25\_EIRENE & user/b2mod\_usrtrc.F \\
 B25\_EIRENE & user/b2mod\_wrint.F \\
 B25\_EIRENE & user/b2mod\_wrsep.F \\
 B25\_EIRENE & user/b2mod\_wrsrt.F \\
 B25\_EIRENE & user/cdfmovie.F \\
 B25\_EIRENE & user/eirflux\_map.F \\
+B25\_EIRENE & user/test\_couple.F90 \\
 B25\_EIRENE & utility/gfsub2.F \\
 B25\_EIRENE & utility/rdneutrs.F \\
 B25\_EIRENE & utility/xertst.F \\
@@ -18355,9 +18358,9 @@ DBG & b2plot/plotcontour.F \\
 DBG & b2plot/rlcomp.F \\
 DBG & equations/b2news\_.F \\
 DBG & modules/b2mod\_input\_profile.F \\
-DBG & user/b2usrtrc.F \\
 DBG & sources/b2stbr\_bas.F \\
 DBG & sources/b2stbr\_phys.F \\
+DBG & user/b2mod\_usrtrc.F \\
 DBG & utility/ma28.F \\
 DBG & utility/ma28copy.F \\
 DBG & utility/ma28copy3.F \\
@@ -18417,6 +18420,7 @@ IBMaix & b2plot/b2plot.F \\
 IBMaix & postprocessing/b2ytdr.F \\
 IBMaix & user/b2file.F \\
 IMAS & driver/b2mnds.F \\
+IMAS & ids/b2mod\_interp.F90 \\
 IMAS & ids/b2mod\_ual.F90 \\
 IMAS & ids/b2mod\_ual\_io\_data.F90 \\
 IMAS & ids/b2mod\_ual\_io\_grid.F90 \\
@@ -21472,3 +21476,4 @@ introduced a very small effect, seen only as a jump in the residuals.
 \ifpdf
 \else
 \fi
+
