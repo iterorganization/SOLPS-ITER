@@ -76,7 +76,7 @@ Whenever data is available at multiple locations (OMP, targets,...) and for mult
 \subsection{How to specify the cost function in B2.5}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The user can select one of these cost functions through the input file {\tt b2.user.parameters}. To do so, it is needed to specify the following parameters, contained in the {\tt USER} namelist, which are similar to the boundary condition specification. An up-to-date list is also available in Appendix~\ref{lis:b2cdcn}.
+The user can select one of these cost functions through the input file {\tt b2.optimization.parameters}. To do so, it is needed to specify the following parameters, contained in the {\tt OPTIMIZATION} namelist, which are similar to the boundary condition specification. An up-to-date list is also available in Appendix~\ref{lis:b2cdcn}. Note that to read the {\tt b2.optimization.parameters} file users needs to set in {\tt b2mn.dat} the switch {\tt 'b2optim\_namelist'} to {\tt '1'}. 
 \begin{description}
   \item[NCF]\index{NCF} {\tt integer}, number of cost functions ({\tt icf = 1, NCF}). Defaults to {\tt 0}.
   \item[CFTYPE]\index{CFTYPE} {\tt integer array, dimension (NCF)}, specifies the type of cost function for index {\tt icf}. Defaults to {\tt -1}. Available options are:
@@ -101,7 +101,7 @@ The user can select one of these cost functions through the input file {\tt b2.u
     \end{description}
   \item[CFSTART, CFEND]\index{CFSTART}\index{CFEND} {\tt integer arrays, dimension (NCF)}, specify the starting/ending, face (FC) label {\tt fcLbl} or control volume (CV) label {\tt cvLbl} where the cost function {\tt icf} will be evaluated. For {\tt CFTYPE = 0} and {\tt CFTYPE = 6}, they instead identify which cost functions will be summed together. Default to {\tt 0}.
   \item[CF\_REGP]\index{CF\_REGP} {\tt integer array, dimension (NCF, 2)}, points for each cost function to the first index in the {\tt CF\_REG} list, and its number of items. Defaults to {\tt 0}.
-  \item[CF\_REG]\index{CF\_REG} {\tt integer array, dimension (MXNCF)}\footnote{The parameter {\tt MXNCF} is hard-coded with value {\tt 1000} in {\tt b2mod\_user\_namelist.F}.}, lists for each cost function the corresponding domain CVs or FCs. WARNING! No attempt is made to check if these CVs or FCs are connected, sorted or even available in the current geometry: it is up to the user to make sure the list is correct. Defaults to {\tt 0}.
+  \item[CF\_REG]\index{CF\_REG} {\tt integer array, dimension (MXNCF)}\footnote{The parameter {\tt MXNCF} is hard-coded with value {\tt 1000} in {\tt b2mod\_par\_opt.F}.}, lists for each cost function the corresponding domain CVs or FCs. WARNING! No attempt is made to check if these CVs or FCs are connected, sorted or even available in the current geometry: it is up to the user to make sure the list is correct. Defaults to {\tt 0}.
   \item[CFWEIGHT]\index{CFWEIGHT} {\tt real array, dimension (NCF)}. Multipliers to rescale each cost function separately, $w_{l,q}$ in Eq.~(\ref{eq:regression}). Defaults to {\tt 1.0}.
   \item[MapToOMP]\index{MapToOMP} {\tt logical array, dimension (NCF)}, indicates if cost function {\tt icf} is to be re-mapped to the OMP, according to {\tt CFTYPE}. \textbf{Warning:} the mapping is a rigid translation of the data to the OMP and is safe to work only for non-extended grids and for cost functions defined on the same number of elements as the OMP list. Defaults to {\tt .false.}.
   \item[READ\_SIGMA]\index{READ\_SIGMA} {\tt logical array, dimension (NCF)}, indicates if file {\tt cf[i].dat} containing the experimental data uncertainty is to be read. Defaults to {\tt .false.}.
@@ -144,7 +144,7 @@ Finally, users can specify additional {\it ad hoc} cost functions for their own 
 
 \subsubsection{Regression cost function}
 
-Let's take as an example the case of a cost function including electron density, electron temperature, and ion temperature, at the OMP, and electron density and temperature at the outer target. These have to be summed together in a weighted least-squares approach. Therefore, in {\tt b2.user.parameters}, one needs to specify:
+Let's take as an example the case of a cost function including electron density, electron temperature, and ion temperature, at the OMP, and electron density and temperature at the outer target. These have to be summed together in a weighted least-squares approach. Therefore, in {\tt b2.optimization.parameters}, one needs to specify:
 \begin{verbatim}
 NCF = 6,
 CFTYPE = 0, 1, 2, 3, 1, 2,
@@ -217,7 +217,7 @@ Bear in mind that the tangent and adjoint AD code was built with {\tt Tapenade} 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Specify the independent variables for sensitivity calculation}\label{sec:sensitivity_parameters}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-After successful compilation, the user needs to specify with respect to which input parameters, alias independent variables, the sensitivities are computed. This requires a new file, {\tt b2.optimization.parameters}, which allows choosing such parameters for sensitivity calculation, and will be employed for specifying optimization-related variables as well. This file is read by setting in {\tt b2mn.dat} the switch {\tt 'b2optim\_namelist'} to {\tt '1'}.
+After successful compilation, the user needs to specify with respect to which input parameters, alias independent variables, the sensitivities are computed. This requires a new file, {\tt b2.optimization.parameters}, which allows choosing such parameters for sensitivity calculation, and will be employed for specifying optimization-related variables as well.
 
 Below is a description of the variables needed in {\tt b2.optimization.parameters} within the {\tt OPTIMIZATION} namelist. Additional variables for optimization are listed in Section~\ref{sec:run_opt}, and an up-to-date list is also available in Appendix~\ref{lis:b2cdcn}.
 
@@ -278,6 +278,7 @@ Below is a description of the variables needed in {\tt b2.optimization.parameter
 If one is interested in sensitivity of regression-type cost function(s) wrt particle and heat transport coefficients ($D_{\perp}$, $\chi_{\perp,i}$, and $\chi_{\perp,e}$), as well as the density BC for $\mathrm{D}^{+}$ ions at the core, then the {\tt b2.optimization.parameters} file could look like this:
 \begin{verbatim}
 	&OPTIMIZATION
+	[..cost function definition...]
 	NNVAR = 4,
 	PARTYPE =        1,  3,  4,                 12,
 	PARIS  =         1,  1,  0,                  1,
@@ -304,7 +305,7 @@ Once the code has been successfully compiled, it can be run with the following c
 $ b2run -tgt b2mn > run.log
 \end{verbatim}
 
-This code will converge the original {\tt B2.5} equations (also called the primal) and at the same time also the tangent equations (derivative of the original equations in tangent mode). By default, running this version of the code will calculate the derivative of ALL cost functions specified in {\tt b2.user.parameters} wrt the parameters specified in {\tt b2.optimization.parameters}.
+This code will converge the original {\tt B2.5} equations (also called the primal) and at the same time also the tangent equations (derivative of the original equations in tangent mode). By default, running this version of the code will calculate the derivative of ALL cost functions specified in {\tt b2.optimization.parameters} wrt the parameters specified in {\tt b2.optimization.parameters}.
 
 The code will automatically print in {\tt run.log} the value of the cost function(s) and their derivatives. To check it, simply do:
 \begin{verbatim}
@@ -490,7 +491,7 @@ $ game listobj depend
 $ set_tao
 $ gmake b25_tgt b25_adj
 \end{verbatim}
-where {\tt set\_tao} allows to include extra compilation flags in the user's configuration files for {\tt B2.5}. Alternatively, one can do the same with command {\tt set\_ipopt}. In both cases an additional executable named {\tt b2optim\_tao.exe} or {\tt b2optim\_ipopt.exe} is compiled in {\tt B2.5/builds/standalone.\$HOST\_NAME.\$COMPILER.[tgt|adj]}.
+where {\tt set\_tao} allows to include extra compilation flags in the user's configuration files for {\tt B2.5}. Alternatively, one can do the same with command {\tt set\_ipopt}. In both cases an additional executable named {\tt b2optim\_tao.exe} or {\tt b2optim\_ipopt.exe} is compiled in {\tt B2.5/builds/standalone.\allowbreak\$HOST\_NAME.\allowbreak\$COMPILER.[tgt|adj]}.
 
 \textbf{Important:} On the ITER cluster it is currently possible to compile only the {\tt PETSc/TAO} version.
 
@@ -498,13 +499,13 @@ where {\tt set\_tao} allows to include extra compilation flags in the user's con
 \subsection{Run an optimization}\label{sec:run_opt}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-After successful compilation, the optimization case can be setup. This requires additional variables in {\tt b2.optimization.parameters} other than the ones listed in Section~\ref{sec:sensitivity_parameters}, which allows choosing the starting guess for the optimization parameters, lower/upper bounds, as well as other optimization parameters. Additionally, one may need to adjust also {\tt b2.user.parameters} in case a MAP estimation takes place (see example below).
+After successful compilation, the optimization case can be setup. This requires additional variables in {\tt b2\allowbreak.optimization\allowbreak.parameters} other than the ones listed in Section~\ref{sec:sensitivity_parameters}, which allows choosing the starting guess for the optimization parameters, lower/upper bounds, as well as other optimization parameters.
 
 Below is a description of the additional variables set in {\tt b2.optimization.parameters} within the {\tt OPTIMIZATION} namelist. An up-to-date list is also available in Appendix~\ref{lis:b2cdcn}.
 
 \begin{description}
   \item[PAR\_RESCALE]\index{PAR\_RESCALE} {\tt real*8 array, dimension (NPAR\_OPT)}, coefficient to rescale optimization parameters (and their gradient). Note that the dimension is {\tt NPAR\_OPT}, so it needs to be specified also for each spatial point in case of radially varying coefficients. Defaults to {\tt 1.0}.
-  \item[X0]\index{X0} {\tt real*8 array, dimension (NPAR\_OPT)}, initial guess for each optimization parameter. Defaults to $10*p_\infty$, where $p_\infty$ is a parameter currently set to $10^{30}$.
+  \item[X0]\index{X0} {\tt real*8 array, dimension (NPAR\_OPT)}, initial guess for each optimization parameter. Must be set for MAP cost function as its value is employed for calculating priors. Defaults to $10*p_\infty$, where $p_\infty$ is a parameter currently set to $10^{30}$.
   \item[XL]\index{XL} {\tt real*8 array, dimension (NPAR\_OPT)}, lower bound for each optimization parameter. Defaults to $-10*p_\infty$.
   \item[XU]\index{XU} {\tt real*8 array, dimension (NPAR\_OPT)}, upper bound for each optimization parameter. Defaults to $10*p_\infty$.
   \item[CPU\_OPT]\index{CPU\_OPT} {\tt real*8}, maximum amount of CPU time in seconds after which the optimization is stopped. Defaults to {\tt 0.0}.
@@ -579,6 +580,7 @@ Finally, the optimization will also write some intermediate state files in {\tt 
 For an estimation using a regression cost function as in the example in Section~\ref{sec:cfexample}, one could think of optimizing particle and heat transport coefficients ($D_{\perp}$, $\chi_{\perp,i}$, and $\chi_{\perp,e}$), as well as the density BC for $\mathrm{D}^{+}$ ions at the core. In this case the {\tt b2.optimization.parameters} file builds upon the example shown in Section~\ref{sec:sensitivity_parameters} and could look like this:
 \begin{verbatim}
 &OPTIMIZATION
+[...cost function definition...]
 NNVAR = 4,
 PARTYPE =        1,  3,  4,                 12,
 PARIS  =         1,  1,  0,                  1,
@@ -642,7 +644,7 @@ Finally, one must be careful to have {\tt 'b2tqna\_inputfile'} set to {\tt '1'} 
 
 \subsubsection{MAP cost function}
 
-If the user is instead interested in a Bayesian MAP estimation, with a cost function again similar to the example above (Section~\ref{sec:cfexample}), the optimization setup needs to change, as well as the {\tt b2.user.parameters} file. Starting from the former, the {\tt b2.optimization.parameters} file will read:
+If the user is instead interested in a Bayesian MAP estimation, with a cost function again similar to the example above (Section~\ref{sec:cfexample}), the optimization setup needs to change, as well as the {\tt b2.optimization.parameters} file. Starting from the former, the {\tt b2.optimization.parameters} file will read:
 \begin{verbatim}
 &OPTIMIZATION
 NNVAR = 9,
@@ -673,7 +675,7 @@ While for optimization parameters {\tt 1} to {\tt 4} the same comments as in the
 
 If one already knows {\it a priori} the value of one of those sigmas, e.g. that of the ion temperature at the OMP ({\tt icf = 4}), then the {\em third} value of {\tt SIMGA\_OPT} should be `F'.
 
-When looking at the {\tt b2.user.parameters} file, this is adjusted as:
+When looking at the cost function definition, this is adjusted as:
 \begin{verbatim}
 NCF = 6,
 CFTYPE =  6, 1, 2, 3,   1,   2,
@@ -689,7 +691,7 @@ PRIOR_PAR(1,2) = 4*0.0, 10.0, 10.0, 10.0,
 PRIOR_RANGE(1,1) = 4*1.0e-5, 1.0e-5, 1.0e-5, 1.0e-5, 1.0e-5, 1.0e-5,
 \end{verbatim}
 
-where we have added 4 extra entries at the beginning of the arrays {\tt PRIOR\_TYPE}, {\tt PRIOR\_PAR}, and {\tt PRIOR\_RANGE}. The reasoning is that now the prior must include {\em all} the optimization parameters, not only the sigmas, in the order they are specified in {\tt b2.optimization.parameters}. As such, {\tt PRIOR\_TYPE(1:4)} refer in this case to the prior for {\tt PARTYPE(1:4) = 1,3,4,12}, while {\tt PRIOR\_TYPE(5:9)} refer to {\tt PARTYPE(5:9) = 5*0}, i.e. the sigmas.
+where we have added 4 extra entries at the beginning of the arrays {\tt PRIOR\_TYPE}, {\tt PRIOR\_PAR}, and {\tt PRIOR\_RANGE}. The reasoning is that now the prior must include {\em all} the optimization parameters, not only the sigmas, in the order they are specified for {\tt PARTYPE}. As such, {\tt PRIOR\_TYPE(1:4)} refer in this case to the prior for {\tt PARTYPE(1:4) = 1,3,4,12}, while {\tt PRIOR\_TYPE(5:9)} refer to {\tt PARTYPE(5:9) = 5*0}, i.e. the sigmas.
 
 In this specific case we used a uniform prior for the first four optimization parameters, while for the sigmas the same as in the example cost function is retained.
 
