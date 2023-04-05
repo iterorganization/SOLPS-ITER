@@ -24,7 +24,7 @@ switch ($NREG)
            /fnareg/{E=0;W=0;S=0;N=0; \
                  for (i=iss;i<=ise;i++) \
                    {E+=-$(2+nfreg*i+1);W+=$(3+nfreg*i+1); \
-                    S+=-($(4+nfreg*i+1));N+=($(5+nfreg*i+1)}; \
+                    S+=-($(4+nfreg*i+1));N+=$(5+nfreg*i+1)}; \
                  cnt++;print cnt,E,W,S,N}' | \
       plot x$1yplot4 -E W -S N iteration D0+D1+ `noquote_pwd 3`
     breaksw
@@ -36,7 +36,7 @@ switch ($NREG)
            /fnareg/{E=0;W=0;S=0;N=0; \
                  for (i=iss;i<=ise;i++) \
                    {E+=-$(2+nfreg*i+1);W+=$(3+nfreg*i+1); \
-                    S+=-($(5+nfreg*i+1));N+=($(7+nfreg*i+1)}; \
+                    S+=-($(5+nfreg*i+1));N+=$(7+nfreg*i+1)}; \
                  cnt++;print cnt,E,W,S,N}' | \
       plot x$1yplot4 -E W -S N iteration D0+D1+ `noquote_pwd 3`
     breaksw
@@ -56,7 +56,7 @@ switch ($NREG)
   case "5":
     pipe_run.log | \
       egrep -a 'fnareg|nnreg' | \
-      awk 'BEGIN{iss=0;ise=1;nfreg=13+1} \
+      awk 'BEGIN{iss=0;ise=1;nfreg=15+1} \
            /nnreg/{nfreg=$3+1} \
            /fnareg/{E=0;W=0;core=0;pflxl=0;pflxr=0;N=0; \
                  for (i=iss;i<=ise;i++) \

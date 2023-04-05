@@ -123,7 +123,7 @@ elif vreg == 3:
   WEST=fchreg[-1,1]
   EAST=-fchreg[-1,2]
   CORE=fchreg[-1,4]
-  NORTH=-fchreg[-1,5]
+  NORTH=-fchreg[-1,6]
   EXT=extschreg[-1,0]
   SUM=WEST+EAST+SOUTH+NORTH+EXT
 

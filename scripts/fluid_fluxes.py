@@ -75,7 +75,7 @@ elif vreg == 8:
   plt.plot(times[:],numpy.sum(fnareg[:,S:E+1,1],axis=1), label='W')
   plt.plot(times[:],-numpy.sum(fnareg[:,S:E+1,4],axis=1), label='-E1')
   plt.plot(times[:],numpy.sum(fnareg[:,S:E+1,5],axis=1), label='E2')
-  plt.plot(times[:],-numpy.sum(fnareg[:,S:E+1,6],axis=1), label='-E3')
+  plt.plot(times[:],-numpy.sum(fnareg[:,S:E+1,8],axis=1), label='-E3')
   plt.plot(times[:],numpy.sum(fnareg[:,S:E+1,15],axis=1), label='core')
   plt.plot(times[:],numpy.sum(fnareg[:,S:E+1,14],axis=1), label='pflxl')
   plt.plot(times[:],numpy.sum(fnareg[:,S:E+1,16],axis=1)+numpy.sum(fnareg[:,S:E+1,23],axis=1), label='pflxr1')
@@ -83,7 +83,7 @@ elif vreg == 8:
   plt.plot(times[:],-numpy.sum(numpy.sum(fnareg[:,S:E+1,18:20],axis=1),axis=1)-numpy.sum(fnareg[:,S:E+1,26],axis=1), label='-N1')
   plt.plot(times[:],-numpy.sum(numpy.sum(fnareg[:,S:E+1,24:25],axis=1),axis=1), label='-N2')
   plt.plot(times[:],numpy.sum(extsnareg[:,S:E+1,0],axis=1), label='EXT')
-  plt.plot(times[:],numpy.sum(fnareg[:,S:E+1,1],axis=1)-numpy.sum(fnareg[:,S:E+1,4],axis=1)+numpy.sum(fnareg[:,S:E+1,5],axis=1)-numpy.sum(fnareg[:,S:E+1,6],axis=1)+numpy.sum(fnareg[:,S:E+1,15],axis=1)+numpy.sum(fnareg[:,S:E+1,14],axis=1)+numpy.sum(fnareg[:,S:E+1,16],axis=1)+numpy.sum(fnareg[:,S:E+1,23],axis=1)+numpy.sum(fnareg[:,S:E+1,21],axis=1)+numpy.sum(fnareg[:,S:E+1,22],axis=1)-numpy.sum(numpy.sum(fnareg[:,S:E+1,18:20],axis=1),axis=1)-numpy.sum(fnareg[:,S:E+1,26],axis=1)-numpy.sum(numpy.sum(fnareg[:,S:E+1,24:25],axis=1),axis=1)+numpy.sum(extsnareg[:,S:E+1,0],axis=1), label='Sum')
+  plt.plot(times[:],numpy.sum(fnareg[:,S:E+1,1],axis=1)-numpy.sum(fnareg[:,S:E+1,4],axis=1)+numpy.sum(fnareg[:,S:E+1,5],axis=1)-numpy.sum(fnareg[:,S:E+1,8],axis=1)+numpy.sum(fnareg[:,S:E+1,15],axis=1)+numpy.sum(fnareg[:,S:E+1,14],axis=1)+numpy.sum(fnareg[:,S:E+1,16],axis=1)+numpy.sum(fnareg[:,S:E+1,23],axis=1)+numpy.sum(fnareg[:,S:E+1,21],axis=1)+numpy.sum(fnareg[:,S:E+1,22],axis=1)-numpy.sum(numpy.sum(fnareg[:,S:E+1,18:20],axis=1),axis=1)-numpy.sum(fnareg[:,S:E+1,26],axis=1)-numpy.sum(numpy.sum(fnareg[:,S:E+1,24:25],axis=1),axis=1)+numpy.sum(extsnareg[:,S:E+1,0],axis=1), label='Sum')
 
 elif freg == 27:
 
@@ -168,7 +168,7 @@ elif vreg == 5:
   SEP=numpy.sum(fnareg[-1,S:E+1,10],axis=0)
   PFLXL=numpy.sum(fnareg[-1,S:E+1,7],axis=0)
   PFLXR=numpy.sum(fnareg[-1,S:E+1,9],axis=0)
-  NORTH=-numpy.sum(numpy.sum(fnareg[-1,S:E+1,10:12],axis=0),axis=0)
+  NORTH=-numpy.sum(numpy.sum(fnareg[-1,S:E+1,11:13],axis=0),axis=0)
   EXT=numpy.sum(extsnareg[-1,S:E+1,0],axis=0)
   EXTCORE=numpy.sum(extsnareg[-1,S:E+1,1],axis=0)
   SUM=WEST+EAST+CORE+PFLXL+PFLXR+NORTH+EXT
@@ -237,6 +237,24 @@ elif vreg == 8:
   EXT=numpy.sum(extsnareg[-1,S:E+1,0],axis=0)
   EXTCORE=numpy.sum(extsnareg[-1,S:E+1,1],axis=0)
   SUM=WEST+EAST1+EAST2+EAST3+CORE+PFLXL+PFLXR1+PFLXR2+NORTH1+NORTH2+EXT
+
+  print('Core(%s--%s) = %s' % (species[S],species[E],CORE))
+  print('Sep(%s--%s) = %s' % (species[S],species[E],SEP))
+  print('North1(%s--%s) = %s' % (species[S],species[E],NORTH1))
+  print('East1(%s--%s) = %s' % (species[S],species[E],EAST1))
+  print('east1(%s--%s) = %s' % (species[S],species[E],east1))
+  print('west1(%s--%s) = %s' % (species[S],species[E],west1))
+  print('West1(%s--%s) = %s' % (species[S],species[E],WEST1))
+  print('North2(%s--%s) = %s' % (species[S],species[E],NORTH2))
+  print('East2(%s--%s) = %s' % (species[S],species[E],EAST2))
+  print('east3(%s--%s) = %s' % (species[S],species[E],east3))
+  print('East3(%s--%s) = %s' % (species[S],species[E],EAST3))
+  print('Pflxl(%s--%s) = %s' % (species[S],species[E],PFLXL))
+  print('Pflxr1(%s--%s) = %s' % (species[S],species[E],PFLXR1))
+  print('Pflxr2(%s--%s) = %s' % (species[S],species[E],PFLXR2))
+  print('Ext(%s--%s) = %s' % (species[S],species[E],EXT))
+  print('Sum(%s--%s) = %s' % (species[S],species[E],SUM))
+  print('ExtCore(%s--%s) = %s' % (species[S],species[E],EXTCORE))
 
 elif freg == 27:
 

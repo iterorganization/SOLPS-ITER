@@ -36,11 +36,11 @@ b2stbr_sna_reg = f.variables['b2stbr_sna_reg']
 
 if vreg == 5: # SN topology
     FULL_XY = numpy.array([0,0,0,0,0,0,0,0,1,0,-1,0,0,0])
-elif vreg == 3:  # Limiter topology
+elif vreg == 3: # Limiter topology
     FULL_XY = numpy.array([0,0,0,0,1,-1,0])
-elif vreg == 6:  # Stellarator island topology
+elif vreg == 6: # Stellarator island topology
     FULL_XY = numpy.array([0,0,0,0,0,0,0,0,0,1,0,-1,0,0,0,0])
-elif vreg == 8:  # LFS Snowflake topology
+elif vreg == 8: # LFS Snowflake topology
     FULL_XY = numpy.array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,-1,0,0,0,0,0,0,0,0,0])
 elif freg == 27: # CDN topology
     FULL_XY = numpy.array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,-1,0,0,0,0,1,0,-1,0,0,0])
