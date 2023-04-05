@@ -52,7 +52,7 @@ switch ($NREG)
     pipe_run.log | \
       egrep -a '^fh[eipm][xy]reg |tallies|nnreg'| \
       regxy_sum_over_species | \
-      awk '/Start tallies by region/{W=0;w=0;e=0;E=0;core=0;sep=0;mcw=0;pfw=0}/fh[eipm]xreg/{W+=-$3;E+=$4}/fh[eipm]yreg/{core+=$3;sep+=$4;mcw+=$5}/End tallies by region/{print W,E,core,sep,mcw}' | \
+      awk '/Start tallies by region/{W=0;E=0;core=0;sep=0;mcw=0}/fh[eipm]xreg/{W+=-$3;E+=$4}/fh[eipm]yreg/{core+=$3;sep+=$4;mcw+=$5}/End tallies by region/{print W,E,core,sep,mcw}' | \
       nl | \
       plot x"$1"yplot5 -W E core sep mcw iterations W $PWD
     breaksw
@@ -60,9 +60,7 @@ switch ($NREG)
     pipe_run.log | \
       egrep -a '^fh[eipm][xy]reg |nnreg'| \
       regxy_sum_over_species | \
-      paste - - | \
-      ave.awk 4 | \
-      awk "$2"'{print NR,4*$3,4*$4,4*$7,4*$8}' | \
+      awk '/Start tallies by region/{W=0;E=0;S=0;N=0}/fh[eipm]xreg/{W+=-$3;E+=$4}/fh[eipm]yreg/{S+=$3;N+=$4}/End tallies by region/{print W,E,S,N}' | \
       plot x"$1"yplot4 W E S N iterations W $PWD
     breaksw
   default:

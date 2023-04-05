@@ -64,7 +64,7 @@ switch ($NREG)
   case "5":
     pipe_run.log | \
       egrep -a '^fh[ei][xy]reg |tallies'| \
-      awk '/Start tallies by region/{W=0;w=0;e=0;E=0;core=0;sep=0;island=0;centre=0;pfw=0}/fh[ei]xreg/{W+=-$3;w+=-$4;e+=$5;E+=$6}/fh[ei]yreg/{core+=$4;sep+=$6;island+=$10;centre+=$8;pfw+=-$3-$5+$7+$9}/End tallies by region/{print W,w,e,E,core,sep,island,centre,pfw}' | \
+      awk '/Start tallies by region/{W=0;w=0;e=0;E=0;core=0;sep=0;island=0;centre=0;pfw=0}/fh[ei]xreg/{W+=-$3;w+=-$4;e+=$5;E+=$6}/fh[ei]yreg/{core+=$4;sep+=$6;island+=$10;centre+=$8;pfw+=-$3-$5}/End tallies by region/{print W,w,e,E,core,sep,island,centre,pfw}' | \
       nl | \
       plot x"$1"yplot9 -W -w e E core sep island center pfw iterations W $PWD
     breaksw
@@ -79,16 +79,15 @@ switch ($NREG)
   case "2":
     pipe_run.log | \
       egrep -a '^fh[ei][xy]reg |tallies'| \
-      awk '/Start tallies by region/{W=0;w=0;e=0;E=0;core=0;sep=0;mcw=0;pfw=0}/fh[ei]xreg/{W+=-$3;E+=$4}/fh[ei]yreg/{core+=$3;sep+=$4;mcw+=$5}/End tallies by region/{print W,E,core,sep,mcw}' | \
+      awk '/Start tallies by region/{W=0;E=0;core=0;sep=0;mcw=0}/fh[ei]xreg/{W+=-$3;E+=$4}/fh[ei]yreg/{core+=$3;sep+=$4;mcw+=$5}/End tallies by region/{print W,E,core,sep,mcw}' | \
       nl | \
       plot x"$1"yplot5 -W E core sep mcw iterations W $PWD
     breaksw
   case "1":
     pipe_run.log | \
       egrep -a '^fh[ei][xy]reg '| \
-      paste - - | \
-      ave.awk 2 | \
-      awk "$2"'{print NR,2*$3,2*$4,2*$7,2*$8}' | \
+      awk '/Start tallies by region/{W=0;E=0;S=0;N=0}/fh[ei]xreg/{W+=-$3;E+=$4}/fh[ei]yreg/{S+=$3;N+=$4}/End tallies by region/{print W,E,S,N}' | \
+      nl | \
       plot x"$1"yplot4 W E S N iterations W $PWD
     breaksw
   default:

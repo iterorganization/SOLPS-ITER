@@ -37,12 +37,27 @@ fnayreg = f.variables['fnayreg']
 b2stbr_sna_reg = f.variables['b2stbr_sna_reg']
 b2sext_sna_reg = f.variables['b2sext_sna_reg']
 
-if vreg == 5:
+if vreg == 5: # SN topology
     FULL_X = numpy.array([0,1,0,0,-1,0,0])
     FULL_Y = numpy.array([0,1,1,1,0,-1,-1,-1])
-elif vreg ==2:
+elif vreg == 3: # Limiter topology
+    FULL_X = numpy.array([0,1,-1])
+    FULL_Y = numpy.array([0,1,0,-1])
+elif vreg == 2: # Linear topology
     FULL_X = numpy.array([0,1,-1])
     FULL_Y = numpy.array([0,1,-1])
+elif vreg == 6: # Stellarator island topology
+    FULL_X = numpy.array([0,1,0,0,-1,0,0,0])
+    FULL_Y = numpy.array([0,1,1,1,0,0,-1,0,0])
+elif vreg == 8: # LFS Snowflake topology
+    FULL_X = numpy.array([0,1,0,0,-1,1,0,0,-1,0,0,0,0,0])
+    FULL_Y = numpy.array([0,1,1,1,0,-1,-1,-1,1,1,1,-1,-1,-1])
+elif xreg == 13: # CDN topology
+    FULL_X = numpy.array([0,1,0,0,-1,1,0,0,-1,0,0,0,0])
+    FULL_Y = numpy.array([0,1,1,1,0,-1,-1,-1,1,1,1,0,-1,-1,-1])
+elif xreg == 14: # DDN topology
+    FULL_X = numpy.array([0,1,0,0,-1,1,0,0,-1,0,0,0,0,0])
+    FULL_Y = numpy.array([0,1,1,1,0,-1,-1,-1,1,1,1,0,-1,-1,-1])
 else:
     raise ValueError('Value of vreg=%s not currently coded' % vreg)
 

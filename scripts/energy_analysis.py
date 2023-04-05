@@ -30,7 +30,7 @@ plt.plot(times[:],fhexreg[:,3]+fhixreg[:,3], label='e')
 plt.plot(times[:],fhexreg[:,4]+fhixreg[:,4], label='E')
 plt.plot(times[:],fheyreg[:,2]+fhiyreg[:,2], label='core')
 plt.plot(times[:],fheyreg[:,4]+fhiyreg[:,4], label='sep')
-plt.plot(times[:],numpy.sum(fheyreg[:,5:8],axis=1)+numpy.sum(fhiyreg[:,5:8],axis=1), label='mcw')
+plt.plot(times[:],numpy.sum(fheyreg[:,5:7],axis=1)+numpy.sum(fhiyreg[:,5:7],axis=1), label='mcw')
 plt.plot(times[:],-fheyreg[:,1]-fhiyreg[:,1]-fheyreg[:,3]-fhiyreg[:,3], label='-pfw')
 if  matplotlib.__version__ <=  '0.98.1':
   plt.legend(loc=0)

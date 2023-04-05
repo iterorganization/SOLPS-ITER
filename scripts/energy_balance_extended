@@ -22,5 +22,5 @@ pipe_run.log | \
        BEGIN{print "#cnt rsa rra rqa rcx rsap rrap E N W S E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap b2divue b2divua b2exbe b2exba b2visa b2joule b2fraa b2str b2divue+b2divua+b2exbe+b2exba+b2visa+b2joule+b2fraa+b2str EXT"} \
        END{print "#cnt rsa rra rqa rcx rsap rrap E N W S E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap b2divue b2divua b2exbe b2exba b2visa b2joule b2fraa b2str b2divue+b2divua+b2exbe+b2exba+b2visa+b2joule+b2fraa+b2str EXT"} \
        /End tallies/{cnt++;print cnt,rsa,rra,rqa,rcx,rsap,rrap,E,N,W,S,E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap,b2divue,b2divua,b2exbe,b2exba,b2visa,b2joule,b2fraa,b2str,b2divue+b2divua+b2exbe+b2exba+b2visa+b2joule+b2fraa+b2str,ext+0}' | \
-  plot xyplot21 rsa rra rqa rcx  rsap rrap E N W S E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap b2divue b2divua b2exbe b2exba b2visa b2joule b2fraa b2str b2divue+b2divua+b2exbe+b2exba+b2visa+b2joule+b2fraa+b2str EXT iteration 'Power (W)' "`basename $0` `chop_pwd 40`"
+  plot xyplot21 rsa rra rqa rcx rsap rrap E N W S E+N+W+S+rsa+rra+rqa+rcx-rsap+rrap b2divue b2divua b2exbe b2exba b2visa b2joule b2fraa b2str b2divue+b2divua+b2exbe+b2exba+b2visa+b2joule+b2fraa+b2str EXT iteration 'Power (W)' "`basename $0` `chop_pwd 40`"
 
