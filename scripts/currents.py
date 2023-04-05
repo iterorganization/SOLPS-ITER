@@ -30,6 +30,15 @@ if vreg == 2:
   plt.plot(times[:],extschreg[:,0], label='EXT')
   plt.plot(times[:],fchxreg[:,1]-fchxreg[:,2]+fchyreg[:,1]-fchyreg[:,2]+extschreg[:,0], label='Sum')
 
+elif vreg == 3:
+
+  plt.plot(times[:],fchxreg[:,1], label='W')
+  plt.plot(times[:],-fchxreg[:,2], label='-E')
+  plt.plot(times[:],fchyreg[:,1], label='core')
+  plt.plot(times[:],-fchyreg[:,3], label='-N')
+  plt.plot(times[:],extschreg[:,0], label='EXT')
+  plt.plot(times[:],fchxreg[:,1]-fchxreg[:,2]+fchyreg[:,1]-fchyreg[:,3]+extschreg[:,0], label='Sum')
+
 elif vreg == 5:
 
   plt.plot(times[:],fchxreg[:,1], label='W')
@@ -37,9 +46,22 @@ elif vreg == 5:
   plt.plot(times[:],fchyreg[:,2], label='core')
   plt.plot(times[:],fchyreg[:,1], label='pflxl')
   plt.plot(times[:],fchyreg[:,3], label='pflxr')
-  plt.plot(times[:],-numpy.sum(fchyreg[:,5:8],axis=1), label='-N')
+  plt.plot(times[:],-numpy.sum(fchyreg[:,5:7],axis=1), label='-N')
   plt.plot(times[:],extschreg[:,0], label='EXT')
-  plt.plot(times[:],fchxreg[:,1]-fchxreg[:,4]+fchyreg[:,2]+fchyreg[:,1]+fchyreg[:,3]-numpy.sum(fchyreg[:,5:8],axis=1)+extschreg[:,0], label='Sum')
+  plt.plot(times[:],fchxreg[:,1]-fchxreg[:,4]+fchyreg[:,2]+fchyreg[:,1]+fchyreg[:,3]-numpy.sum(fchyreg[:,5:7],axis=1)+extschreg[:,0], label='Sum')
+
+elif vreg == 8:
+
+  plt.plot(times[:],fchxreg[:,1], label='W')
+  plt.plot(times[:],-fchxreg[:,4], label='-E')
+  plt.plot(times[:],fchxreg[:,5], label='E2')
+  plt.plot(times[:],-fchxreg[:,8], label='-E3')
+  plt.plot(times[:],fchyreg[:,2], label='core')
+  plt.plot(times[:],fchyreg[:,1], label='pflxl')
+  plt.plot(times[:],fchyreg[:,3]+numpy.sum(fchyreg[:,8:10],axis=1), label='pflxr')
+  plt.plot(times[:],-numpy.sum(fchyreg[:,5:7],axis=1)-numpy.sum(fchyreg[11:13],axis=1), label='-N')
+  plt.plot(times[:],extschreg[:,0], label='EXT')
+  plt.plot(times[:],fchxreg[:,1]-fchxreg[:,4]+fchxreg[:5]-fchxreg[:8]+fchyreg[:,2]+fchyreg[:,1]+fchyreg[:,3]+numpy.sum(fchyreg[:,8:10],axis=1)-numpy.sum(fchyreg[:,5:7],axis=1)-numpy.sum(fchyreg[11:13],axis=1)+extschreg[:,0], label='Sum')
 
 else:
 
@@ -50,13 +72,13 @@ else:
   plt.plot(times[:],fchyreg[:,2], label='core1')
   plt.plot(times[:],fchyreg[:,1], label='pflxl1')
   plt.plot(times[:],fchyreg[:,3], label='pflxr1')
-  plt.plot(times[:],-numpy.sum(fchyreg[:,5:8],axis=1), label='-N1')
+  plt.plot(times[:],-numpy.sum(fchyreg[:,5:7],axis=1), label='-N1')
   plt.plot(times[:],fchyreg[:,9], label='core2')
   plt.plot(times[:],fchyreg[:,8], label='pflxl2')
   plt.plot(times[:],fchyreg[:,10], label='pflxr2')
-  plt.plot(times[:],-fchyreg[:,12:15], label='-N2')
+  plt.plot(times[:],-fchyreg[:,12:14], label='-N2')
   plt.plot(times[:],extschreg[:,0], label='EXT')
-  plt.plot(times[:],fchxreg[:,1]-fchxreg[:,4]+fchyreg[:,2]+fchyreg[:,1]+fchyreg[:,3]-numpy.sum(fchyreg[:,5:8],axis=1)+extschreg[:,0]+fchxreg[:,5]-fchxreg[:,8]+fchyreg[:,9]+fchyreg[:,8]+fchyreg[:,10]-fchyreg[:,12:15]+extschreg[:,0], label='Sum')
+  plt.plot(times[:],fchxreg[:,1]-fchxreg[:,4]+fchyreg[:,2]+fchyreg[:,1]+fchyreg[:,3]-numpy.sum(fchyreg[:,5:7],axis=1)+fchxreg[:,5]-fchxreg[:,8]+fchyreg[:,9]+fchyreg[:,8]+fchyreg[:,10]-fchyreg[:,12:14]+extschreg[:,0], label='Sum')
 
 if  matplotlib.__version__ <=  '0.98.1':
   plt.legend(loc=0)
@@ -81,6 +103,22 @@ if vreg == 2:
   print('Ext = %s' % (EXT))
   print('Sum = %s' % (SUM))
 
+elif vreg == 3:
+
+  WEST=fchxreg[-1,1]
+  EAST=-fchxreg[-1,2]
+  CORE=fchyreg[-1,1]
+  NORTH=-fchyreg[-1,3]
+  EXT=extschreg[-1,0]
+  SUM=WEST+EAST+SOUTH+NORTH+EXT
+
+  print('Core = %s' % (CORE))
+  print('North = %s' % (NORTH))
+  print('East = %s' % (EAST))
+  print('West = %s' % (WEST))
+  print('Ext = %s' % (EXT))
+  print('Sum = %s' % (SUM))
+
 elif vreg == 5:
 
   WEST=fchxreg[-1,1]
@@ -91,7 +129,7 @@ elif vreg == 5:
   SEP=fchyreg[-1,4]
   PFLXL=fchyreg[-1,1]
   PFLXR=fchyreg[-1,3]
-  NORTH=-numpy.sum(fchyreg[-1,5:8],axis=0)
+  NORTH=-numpy.sum(fchyreg[-1,5:7],axis=0)
   EXT=extschreg[-1,0]
   EXTCORE=extschreg[-1,1]
   SUM=WEST+EAST+CORE+PFLXL+PFLXR+NORTH+EXT
@@ -101,6 +139,72 @@ elif vreg == 5:
   print('North = %s' % (NORTH))
   print('East = %s' % (EAST))
   print('east = %s' % (east))
+  print('west = %s' % (west))
+  print('West = %s' % (WEST))
+  print('Pflxl = %s' % (PFLXL))
+  print('Pflxr = %s' % (PFLXR))
+  print('Ext = %s' % (EXT))
+  print('Sum = %s' % (SUM))
+  print('ExtCore = %s' % (EXTCORE))
+  print('SumCore = %s' % (CORE-SEP+EXTCORE))
+
+elif vreg == 6:
+
+  WEST=fchxreg[-1,1]
+  west=fchxreg[-1,2]
+  east=-fchxreg[-1,3]
+  EAST=-fchxreg[-1,4]
+  CORE=fchyreg[-1,2]
+  SEP=fchyreg[-1,4]
+  PFLXL=fchyreg[-1,1]
+  PFLXR=fchyreg[-1,3]
+  ISLAND=fchyreg[-1,8]
+  NORTH=-fchyreg[-1,6]
+  EXT=extschreg[-1,0]
+  EXTCORE=extschreg[-1,1]
+  SUM=WEST+EAST+CORE+PFLXL+PFLXR+NORTH+EXT
+
+  print('Core = %s' % (CORE))
+  print('Sep = %s' % (SEP))
+  print('North = %s' % (NORTH))
+  print('East = %s' % (EAST))
+  print('east = %s' % (east))
+  print('west = %s' % (west))
+  print('West = %s' % (WEST))
+  print('Pflxl = %s' % (PFLXL))
+  print('Pflxr = %s' % (PFLXR))
+  print('Island = %s' % (ISLAND))
+  print('Ext = %s' % (EXT))
+  print('Sum = %s' % (SUM))
+  print('ExtCore = %s' % (EXTCORE))
+  print('SumCore = %s' % (CORE-SEP+EXTCORE))
+
+elif vreg == 8:
+
+  WEST=fchxreg[-1,1]
+  west=fchxreg[-1,2]
+  east1=-fchxreg[-1,3]
+  EAST1=-fchxreg[-1,4]
+  EAST2=fchxreg[-1,5]
+  east3=fchxreg[-1,7]
+  EAST3=fchxreg[-1,8]
+  CORE=fchyreg[-1,2]
+  SEP=fchyreg[-1,4]
+  PFLXL=fchyreg[-1,1]
+  PFLXR=fchyreg[-1,3]+numpy.sum(fchyreg[-1,8:10],axis=0)
+  NORTH=-numpy.sum(fchyreg[-1,5:7],axis=0)-numpy.sum(fchyreg[-1,11:13],axis=0)
+  EXT=extschreg[-1,0]
+  EXTCORE=extschreg[-1,1]
+  SUM=WEST+EAST+CORE+PFLXL+PFLXR+NORTH+EXT
+
+  print('Core = %s' % (CORE))
+  print('Sep = %s' % (SEP))
+  print('North = %s' % (NORTH))
+  print('East1 = %s' % (EAST1))
+  print('east1 = %s' % (east1))
+  print('East2 = %s' % (EAST2))
+  print('east3 = %s' % (east3))
+  print('East3 = %s' % (EAST3))
   print('west = %s' % (west))
   print('West = %s' % (WEST))
   print('Pflxl = %s' % (PFLXL))
@@ -124,12 +228,12 @@ else:
   SEP1=fchyreg[-1,4]
   PFLXL1=fchyreg[-1,1]
   PFLXR1=fchyreg[-1,3]
-  NORTH1=-numpy.sum(fchyreg[-1,5:8],axis=0)
+  NORTH1=-numpy.sum(fchyreg[-1,5:7],axis=0)
   CORE2=fchyreg[-1,8]
   SEP2=fchyreg[-1,11]
-  PFLXL2=fchyreg[-1,8]
+  PFLXL2=fchyreg[-1,9]
   PFLXR2=fchyreg[-1,10]
-  NORTH2=-fchyreg[-1,12:15]
+  NORTH2=-numpy.sum(fchyreg[-1,12:14],axis=0)
   EXT=extschreg[-1,0]
   EXTCORE=extschreg[-1,1]
   SUM=WEST1+EAST1+CORE1+PFLXL1+PFLXR1+NORTH1+WEST2+EAST2+CORE2+PFLXL2+PFLXR2+NORTH2+EXT

@@ -68,6 +68,32 @@ switch ($NREG)
       set line = "$line 'fnayreg(8,$i,:)'"
     end
     breaksw
+  case "5":
+# West target fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnaxreg(2,$i,:)'"
+    end
+# East target fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnaxreg(5,$i,:)'"
+    end
+# PFR West side fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnayreg(2,$i,:)'"
+    end
+# core fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnayreg(3,$i,:)'"
+    end
+# PFR East fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnayreg(4,$i,:)'"
+    end
+# North island fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnayreg(7,$i,:)'"
+    end
+    breaksw
   case "8":
 # Lower West target fluxes
     foreach i (`count $S $E`)
@@ -261,6 +287,11 @@ endif
 
 switch ($NREG)
   case "4":
+    eval 2da -s $FILE times $line | \
+      awk 'BEGIN{ns='$E'-'$S'+1}NR>1{t=$1; i=2; W=0; for (j=1;j<=ns;j++) {W+=$i;i++}; E=0; for (j=1;j<=ns;j++) {E+=$i;i++}; pflxl=0; for (j=1;j<=ns;j++) {pflxl+=$i;i++}; core=0; for (j=1;j<=ns;j++) {core+=$i;i++}; pflxr=0; for (j=1;j<=ns;j++) {pflxr+=$i;i++}; N=0; for (j=1;j<=3*ns;j++) {N+=$i;i++}; print t,-W, E, -core, -pflxl, -pflxr, N}' | \
+      plot x$3yplot6 -W E -core -pflxl -pflxr N time $label `noquote_pwd 3`
+    breaksw
+  case "5":
     eval 2da -s $FILE times $line | \
       awk 'BEGIN{ns='$E'-'$S'+1}NR>1{t=$1; i=2; W=0; for (j=1;j<=ns;j++) {W+=$i;i++}; E=0; for (j=1;j<=ns;j++) {E+=$i;i++}; pflxl=0; for (j=1;j<=ns;j++) {pflxl+=$i;i++}; core=0; for (j=1;j<=ns;j++) {core+=$i;i++}; pflxr=0; for (j=1;j<=ns;j++) {pflxr+=$i;i++}; N=0; for (j=1;j<=3*ns;j++) {N+=$i;i++}; print t,-W, E, -core, -pflxl, -pflxr, N}' | \
       plot x$3yplot6 -W E -core -pflxl -pflxr N time $label `noquote_pwd 3`

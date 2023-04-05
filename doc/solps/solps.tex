@@ -1587,6 +1587,8 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[awk.plot\_mesh \#1]\index{awk.plot\_mesh} Outputs the mesh specified as \#1 in a form usable for {\tt xyplot}.
   \item[awk.reverse]\index{awk.reverse} Outputs a file in reverse order.
   \item[awk.transpose]\index{awk.transpose} Transposes an array of data.
+  \item[blank]\index{blank} Dummy script that does nothing.
+  \item[canonical \#1]\index{canonical} Provides the full absolute path to the filename given as argument.
   \item[chop\_pwd \#1]\index{chop\_pwd} Truncates the name of the current directory to not exceed \#1 characters (default 60).
   \item[count]\index{count} Basic counting with advanced options ({\tt count -h} for help).
   \item[datestamp]\index{datestamp} Gets a date stamp from the machine.
@@ -1647,6 +1649,7 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[QSUB.postprocess\_coupled]\index{QSUB.postprocess\_coupled} List of instructions appended to the \SOLPSITER submission scripts for run post-processing
   \item[recover\_initial\_files]\index{recover\_initial\_files}\index{b2co}\index{plasmastate} For use to copy back the stored initial case files ({\tt .i} extension) before a run restart, or when use of {\tt b2co} is not possible because the run crash happened too early for {\tt plasmastate} files to be written.
   \item[regression\_test]\index{regression\_test} Utility script to run regression tests.
+  \item[regxy\_sum\_over\_species]\index{regxy\_sum\_over\_species} Intermediate utility script to extract a face-directed region quantity and sum it over species.
   \item[res\_av]\index{res\_av} Special script to reduce residuals in the finalization step of the {\tt Eirene} sources averaging scheme (see Section~\ref{sec:B2Eirene:averaging} for details).
   \item[rps]\index{rps} Shifts $\Psi$ values by a given amount within a {\tt DG} equilibrium file (see Sec.~\ref{sec:equtrn}).
   \item[run\_av]\index{run\_av} Special script to prepare the averaging step of the {\tt Eirene} sources averaging scheme (see Section~\ref{sec:B2Eirene:averaging} for details).
@@ -1706,13 +1709,10 @@ The following have not yet been documented --- user contributions are
 welcome!
 \begin{description}
   \item[awk.derivative]\index{awk.derivative}
-  \item[blank]\index{blank}
-  \item[canonical]\index{canonical}
   \item[cnvtria]\index{cnvtria}
   \item[min\_ave\_max.awk]\index{min\_ave\_max.awk}
   \item[plot\_bc\_conpar13]\index{plot\_bc\_conpar13}
   \item[plotdg]\index{plotdg}
-  \item[regxy\_sum\_over\_species]\index{regxy\_sum\_over\_species}
 \end{description}
 
 \subsection{scripts/commands}
