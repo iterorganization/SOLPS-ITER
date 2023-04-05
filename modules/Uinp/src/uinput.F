@@ -24,7 +24,8 @@ c=======================================================================
       character*80 column_header
       logical uex, todo
       integer find_matching_species
-      external find_matching_species
+      logical streql
+      external find_matching_species, streql
       external prgini,prgend
 c=======================================================================
       call prgini('uinput')
@@ -732,11 +733,15 @@ c*** Modify the input file for B2, if possible
         write(*,*) 'Writing ../NREG'
         open(unit=2,file='../NREG')
         if (ln_cnfg) then
-          write(2,'(i1)') 1
+          write(2,'(i1,1x,i1)') 1,4
         else if (lm_cnfg) then
-          write(2,'(i1)') 2
-        else
-          write(2,'(i1)') 2*nncut
+          write(2,'(i1,1x,i1)') 2,6
+        else if (nncut.eq.1) then
+          write(2,'(i1,1x,i2)') 4,13
+        else if (nncut.eq.2.and.streql(topo,'DNS')) then
+          write(2,'(i1,1x,i2)') 8,26
+        else if (nncut.eq.2) then
+          write(2,'(i1,1x,i2)') 8,27
         end if
         close(2)
       end if

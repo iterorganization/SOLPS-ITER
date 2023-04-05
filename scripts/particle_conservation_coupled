@@ -2,60 +2,109 @@
 set nreg=`climb_and_look_for NREG`
 set nnreg=`pipe_run.log | grep ^nnreg | head -1`
 if (-s $nreg) then
-  setenv NREG `cat $nreg`
+  setenv NREG `cat $nreg | cut -d ' ' -f 1`
+  setenv FREG `cat $nreg | cut -d ' ' -f 2`
   echo Set NREG to $NREG "(based on $nreg)"
+  echo Set FREG to $FREG "(based on $nreg)"
 else
   set NREG=$nnreg[2]
+  set FREG=$nnreg[3]
   echo Set NREG to $NREG "(based on log file)"
+  echo Set FREG to $FREG "(based on log file)"
 endif
 set ns=`get_solps_fluids | wc -w`
 echo Set number of species to $ns
 if (! $?NREG) set NREG = 4
+if (! $?FREG) set FREG = 13
 if ("X$nnreg" != "X") then
   if ($NREG != $nnreg[2]) then
     echo "NREG in file ($nnreg[2]) does not match $NREG"
     exit
   endif
+  if ($FREG != $nnreg[3]) then
+    echo "FREG in file ($nnreg[3]) does not match $FREG"
+    exit
+  endif
 endif
 switch ($NREG)
-  case "4":
+  case "1":
     pipe_run.log | \
-      egrep -a 'fna.reg|b2stbr_sna_reg|nnreg|Total profile-source na|tallies' | \
+      egrep -a 'fnareg|b2stbr_sna_reg|nnreg|Total profile-source na|tallies' | \
       awk 'BEGIN{ext=0} \
-           /nnreg/{nvreg=$2;nxreg=$3;nyreg=$4} \
+           /nnreg/{nvreg=$2;nfreg=$3} \
            /Total profile-source na: *0 /{ext=$5} \
            /Total profile-source na: *1 /{ext+=$5} \
-           /fnaxreg/{dev=0;for (i=0;i<'$ns';i++) dev+=-$(3+(nxreg+1)*i)+$(6+(nxreg+1)*i)}\
-		   /fnayreg/{for (i=0;i<'$ns';i++) dev+=-$(3+(nyreg+1)*i)-$(4+(nyreg+1)*i)-$(5+(nyreg+1)*i)+$(7+(nyreg+1)*i)+$(8+(nyreg+1)*i)+$(9+(nyreg+1)*i)}\
-		   /b2stbr_sna_reg/{recyc=0;for (i=0;i<'$ns';i++) recyc+=$(2+(nvreg+1)*i)}\
-		   /End tallies by region/{cnt++;print cnt,dev,ext,recyc,dev-ext-recyc;dev=0}' | \
+           /fnareg/{dev=0;for (i=0;i<'$ns';i++) dev+=-$(3+(nfreg+1)*i)+$(4+(nfreg+1)*i)-$(5+(nfreg+1)*i)+$(6+(nfreg+1)*i)}\
+           /b2stbr_sna_reg/{recyc=0;for (i=0;i<'$ns';i++) recyc+=$(2+(nvreg+1)*i)}\
+           /End tallies by region/{cnt++;print cnt,dev,ext,recyc,dev-ext-recyc;dev=0}' | \
+      plot x$1yplot4 N-S+E-W EXT RECYC ERR "`basename $0` `chop_pwd 40`"
+    breaksw
+  case "2":
+    pipe_run.log | \
+      egrep -a 'fnareg|b2stbr_sna_reg|nnreg|Total profile-source na|tallies' | \
+      awk 'BEGIN{ext=0} \
+           /nnreg/{nvreg=$2;nfreg=$3} \
+           /Total profile-source na: *0 /{ext=$5} \
+           /Total profile-source na: *1 /{ext+=$5} \
+           /fnareg/{dev=0;for (i=0;i<'$ns';i++) dev+=-$(3+(nfreg+1)*i)+$(4+(nfreg+1)*i)-$(6+(nfreg+1)*i)+$(8+(nfreg+1)*i)}\
+           /b2stbr_sna_reg/{recyc=0;for (i=0;i<'$ns';i++) recyc+=$(2+(nvreg+1)*i)}\
+           /End tallies by region/{cnt++;print cnt,dev,ext,recyc,dev-ext-recyc;dev=0}' | \
+      plot x$1yplot4 N-S+E-W EXT RECYC ERR "`basename $0` `chop_pwd 40`"
+    breaksw
+  case "4":
+    pipe_run.log | \
+      egrep -a 'fnareg|b2stbr_sna_reg|nnreg|Total profile-source na|tallies' | \
+      awk 'BEGIN{ext=0} \
+           /nnreg/{nvreg=$2;nfreg=$3} \
+           /Total profile-source na: *0 /{ext=$5} \
+           /Total profile-source na: *1 /{ext+=$5} \
+           /fnareg/{dev=0;for (i=0;i<'$ns';i++) dev+=-$(3+(nfreg+1)*i)+$(6+(nfreg+1)*i)-$(9+(nfreg+1)*i)-$(10+(nfreg+1)*i)-$(11+(nfreg+1)*i)+$(13+(nfreg+1)*i)+$(14+(nfreg+1)*i)+$(15+(nfreg+1)*i)}\
+           /b2stbr_sna_reg/{recyc=0;for (i=0;i<'$ns';i++) recyc+=$(2+(nvreg+1)*i)}\
+           /End tallies by region/{cnt++;print cnt,dev,ext,recyc,dev-ext-recyc;dev=0}' | \
       plot x$1yplot4 N-S+E-W EXT RECYC ERR "`basename $0` `chop_pwd 40`"
     breaksw
   case "7":
     pipe_run.log | \
-      egrep -a 'fna.reg|b2stbr_sna_reg|nnreg|Total profile-source na|tallies' | \
+      egrep -a 'fnareg|b2stbr_sna_reg|nnreg|Total profile-source na|tallies' | \
       awk 'BEGIN{ext=0} \
-           /nnreg/{nvreg=$2;nxreg=$3;nyreg=$4} \
+           /nnreg/{nvreg=$2;nfreg=$3} \
            /Total profile-source na: *0 /{ext=$5} \
            /Total profile-source na: *1 /{ext+=$5} \
-           /fnaxreg/{dev=0;for (i=0;i<'$ns';i++) dev+=-$(3+(nxreg+1)*i)+$(6+(nxreg+1)*i)-$(7+(nxreg+1)*i)+$(10+(nxreg+1)*i)}\
-		   /fnayreg/{for (i=0;i<'$ns';i++) dev+=-$(3+(nyreg+1)*i)-$(4+(nyreg+1)*i)-$(5+(nyreg+1)*i)+$(7+(nyreg+1)*i)+$(8+(nyreg+1)*i)+$(9+(nyreg+1)*i)-$(10+(nyreg+1)*i)-$(11+(nyreg+1)*i)-$(12+(nyreg+1)*i)+$(13+(nyreg+1)*i)+$(14+(nyreg+1)*i)+$(15+(nyreg+1)*i)}\
-		   /b2stbr_sna_reg/{recyc=0;for (i=0;i<'$ns';i++) recyc+=$(2+(nvreg+1)*i)}\
+           /fnareg/{dev=0;for (i=0;i<'$ns';i++) dev+=-$(3+(nfreg+1)*i)+$(6+(nfreg+1)*i)-$(7+(nfreg+1)*i)+$(10+(nfreg+1)*i)-$(16+(nfreg+1)*i)-$(17+(nfreg+1)*i)-$(18+(nfreg+1)*i)+$(20+(nfreg+1)*i)+$(21+(nfreg+1)*i)+$(22+(nfreg+1)*i)-$(23+(nfreg+1)*i)-$(24+(nfreg+1)*i)-$(25+(nfreg+1)*i)+$(26+(nfreg+1)*i)+$(27+(nfreg+1)*i)+$(28+(nfreg+1)*i)}\
+           /b2stbr_sna_reg/{recyc=0;for (i=0;i<'$ns';i++) recyc+=$(2+(nvreg+1)*i)}\
            /End tallies by region/{cnt++;print cnt,dev,ext,recyc,dev-ext-recyc;dev=0}' | \
       plot x$1yplot4 N-S+E-W EXT RECYC ERR
     breaksw
   case "8":
-    pipe_run.log | \
-      egrep -a 'fna.reg|b2stbr_sna_reg|nnreg|Total profile-source na|tallies' | \
-      awk 'BEGIN{ext=0} \
-           /nnreg/{nvreg=$2;nxreg=$3;nyreg=$4} \
+    switch ($FREG)
+      case "26":
+        pipe_run.log | \
+          egrep -a 'fnareg|b2stbr_sna_reg|nnreg|Total profile-source na|tallies' | \
+          awk 'BEGIN{ext=0} \
+           /nnreg/{nvreg=$2;nfreg=$3} \
            /Total profile-source na: *0 /{ext=$5} \
            /Total profile-source na: *1 /{ext+=$5} \
-           /fnaxreg/{dev=0;for (i=0;i<'$ns';i++) dev+=-$(3+(nxreg+1)*i)+$(6+(nxreg+1)*i)-$(7+(nxreg+1)*i)+$(10+(nxreg+1)*i)}\
-		   /fnayreg/{for (i=0;i<'$ns';i++) dev+=-$(3+(nyreg+1)*i)-$(4+(nyreg+1)*i)-$(5+(nyreg+1)*i)+$(7+(nyreg+1)*i)+$(8+(nyreg+1)*i)+$(9+(nyreg+1)*i)-$(10+(nyreg+1)*i)-$(11+(nyreg+1)*i)-$(12+(nyreg+1)*i)+$(14+(nyreg+1)*i)+$(15+(nyreg+1)*i)+$(16+(nyreg+1)*i)}\
-		   /b2stbr_sna_reg/{recyc=0;for (i=0;i<'$ns';i++) recyc+=$(2+(nvreg+1)*i)}\
+           /fnareg/{dev=0;for (i=0;i<'$ns';i++) dev+=-$(3+(nfreg+1)*i)+$(6+(nfreg+1)*i)-$(7+(nfreg+1)*i)+$(10+(nfreg+1)*i)-$(15+(nfreg+1)*i)-$(16+(nfreg+1)*i)-$(17+(nfreg+1)*i)+$(19+(nfreg+1)*i)+$(20+(nfreg+1)*i)+$(21+(nfreg+1)*i)-$(22+(nfreg+1)*i)-$(23+(nfreg+1)*i)-$(24+(nfreg+1)*i)+$(26+(nfreg+1)*i)+$(27+(nfreg+1)*i)+$(28+(nfreg+1)*i)}\
+           /b2stbr_sna_reg/{recyc=0;for (i=0;i<'$ns';i++) recyc+=$(2+(nvreg+1)*i)}\
            /End tallies by region/{cnt++;print cnt,dev,ext,recyc,dev-ext-recyc;dev=0}' | \
-      plot x$1yplot4 N-S+E-W EXT RECYC ERR
+        plot x$1yplot4 N-S+E-W EXT RECYC ERR
+        breaksw
+      case "27":
+        pipe_run.log | \
+          egrep -a 'fnareg|b2stbr_sna_reg|nnreg|Total profile-source na|tallies' | \
+          awk 'BEGIN{ext=0} \
+           /nnreg/{nvreg=$2;nfreg=$3} \
+           /Total profile-source na: *0 /{ext=$5} \
+           /Total profile-source na: *1 /{ext+=$5} \
+           /fnareg/{dev=0;for (i=0;i<'$ns';i++) dev+=-$(3+(nfreg+1)*i)+$(6+(nfreg+1)*i)-$(7+(nfreg+1)*i)+$(10+(nfreg+1)*i)-$(16+(nfreg+1)*i)-$(17+(nfreg+1)*i)-$(18+(nfreg+1)*i)+$(20+(nfreg+1)*i)+$(21+(nfreg+1)*i)+$(22+(nfreg+1)*i)-$(23+(nfreg+1)*i)-$(24+(nfreg+1)*i)-$(25+(nfreg+1)*i)+$(27+(nfreg+1)*i)+$(28+(nfreg+1)*i)+$(29+(nfreg+1)*i)}\
+           /b2stbr_sna_reg/{recyc=0;for (i=0;i<'$ns';i++) recyc+=$(2+(nvreg+1)*i)}\
+           /End tallies by region/{cnt++;print cnt,dev,ext,recyc,dev-ext-recyc;dev=0}' | \
+        plot x$1yplot4 N-S+E-W EXT RECYC ERR
+        breaksw
+      default:
+        echo "Unusual number of regions: Not sure what to do!"
+        echo "FREG = " $FREG
+      endsw
     breaksw
   default:
     echo "Unusual number of regions: Not sure what to do!"

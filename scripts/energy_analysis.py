@@ -14,24 +14,21 @@ if os.access('b2mn.exe.dir/b2tallies.nc', os.R_OK):
 else:
   f=netCDF4.Dataset('b2tallies.nc','r')
 vreg=f.dimensions['vreg'].size
-xreg=f.dimensions['xreg'].size
-yreg=f.dimensions['yreg'].size
+freg=f.dimensions['freg'].size
 ns=f.dimensions['ns'].size
 time=f.dimensions['time'].size
 times=f.variables['times']
-fhexreg=f.variables['fhexreg']
-fheyreg=f.variables['fheyreg']
-fhixreg=f.variables['fhixreg']
-fhiyreg=f.variables['fhiyreg']
+fhereg=f.variables['fhereg']
+fhireg=f.variables['fhireg']
 
-plt.plot(times[:],-fhexreg[:,1]-fhixreg[:,1], label='-W')
-plt.plot(times[:],-fhexreg[:,2]-fhixreg[:,2], label='-w')
-plt.plot(times[:],fhexreg[:,3]+fhixreg[:,3], label='e')
-plt.plot(times[:],fhexreg[:,4]+fhixreg[:,4], label='E')
-plt.plot(times[:],fheyreg[:,2]+fhiyreg[:,2], label='core')
-plt.plot(times[:],fheyreg[:,4]+fhiyreg[:,4], label='sep')
-plt.plot(times[:],numpy.sum(fheyreg[:,5:8],axis=1)+numpy.sum(fhiyreg[:,5:8],axis=1), label='mcw')
-plt.plot(times[:],-fheyreg[:,1]-fhiyreg[:,1]-fheyreg[:,3]-fhiyreg[:,3], label='-pfw')
+plt.plot(times[:],-fhereg[:,1]-fhireg[:,1], label='-W')
+plt.plot(times[:],-fhereg[:,2]-fhireg[:,2], label='-w')
+plt.plot(times[:],fhereg[:,3]+fhireg[:,3], label='e')
+plt.plot(times[:],fhereg[:,4]+fhireg[:,4], label='E')
+plt.plot(times[:],fhereg[:,8]+fhireg[:,8], label='core')
+plt.plot(times[:],fhereg[:,10]+fhireg[:,10], label='sep')
+plt.plot(times[:],numpy.sum(fhereg[:,11:13],axis=1)+numpy.sum(fhireg[:,11:13],axis=1), label='mcw')
+plt.plot(times[:],-fhereg[:,7]-fhireg[:,7]-fhereg[:,9]-fhireg[:,9], label='-pfw')
 if  matplotlib.__version__ <=  '0.98.1':
   plt.legend(loc=0)
 else:

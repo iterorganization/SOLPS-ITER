@@ -3,12 +3,10 @@ set lines=1000
 if ("X$2" != "X") set lines=$2
 ( [ X$1 = XH ] && head -$lines run.log || [ X$1 = XL ] && tail -$lines run.log || pipe_run.log) | \
   awk '/ITER.*TIME.*NTIM/{for (i=1;i<=120;i++) printf "=";printf "\n";print $0} \
-       /^nnreg/{v=$2;x=$3;y=$4} \
+       /^nnreg/{v=$2;f=$3} \
        /^species/{nspec=$2;species=$0;split(species,speciesarr)} \
        /^r[srqc][ax][nhm][aioe]reg/||(/^..reg/&&NF==nspec*(v+1)+1)||/b2stb[rmc]_sna_reg/||/b2sext_sna_reg/{printf "%16s",$1; for (j=0;j<=v;j++) printf " %15s",j;printf "\n"; for (i=2;i<=NF;i+=v+1) {printf "%19s ",speciesarr[int((i-2)/(v+1)+3)]; for (j=0;j<=v;j++) printf " %15s",$(i+j); printf "\n"}; printf "\n"} \
        /^..reg/&&NF==v+2||/b2stb[rmc]_s[hc][eih]_reg/||/b2sext_s[hc][eih]_reg/||/^volreg/||/^ne2reg/||/^b2brem/||/^b2rad/||/^b2qie/||/^b2vdp/||/^b2divu/||/^b2exb/||/^b2visa/||/^b2joule/||/^b2fraa/||/^b2sh[ei]/||/^rdneureg/{printf "%16s",$1; for (j=0;j<=v;j++) printf " %15s",j;printf "\n"; for (i=2;i<=NF;i+=v+1) {printf "%19s ",""; for (j=0;j<=v;j++) printf " %15s",$(i+j); printf "\n"}; printf "\n"} \
-       /^f..xreg/&&NF==nspec*(x+1)+1{printf "%16s",$1; for (j=0;j<=x;j++) printf " %15s",j;printf "\n"; for (i=2;i<=NF;i+=x+1) {printf "%19s ",speciesarr[int((i-2)/(x+1)+3)]; for (j=0;j<=x;j++) printf " %15s",$(i+j); printf "\n"}; printf "\n"} \
-       /^f..xreg/&&NF==x+2{printf "%16s",$1; for (j=0;j<=x;j++) printf " %15s",j;printf "\n"; for (i=2;i<=NF;i+=x+1) {printf "%19s ",""; for (j=0;j<=x;j++) printf " %15s",$(i+j); printf "\n"}; printf "\n"} \
-       /^f..yreg/&&NF==nspec*(y+1)+1{printf "%16s",$1; for (j=0;j<=y;j++) printf " %15s",j;printf "\n"; for (i=2;i<=NF;i+=y+1) {printf "%19s ",speciesarr[int((i-2)/(y+1)+3)]; for (j=0;j<=y;j++) printf " %15s",$(i+j); printf "\n"}; printf "\n"} \
-       /^f..yreg/&&NF==y+2{printf "%16s",$1; for (j=0;j<=y;j++) printf " %15s",j;printf "\n"; for (i=2;i<=NF;i+=y+1) {printf "%19s ",""; for (j=0;j<=y;j++) printf " %15s",$(i+j); printf "\n"}; printf "\n"} \
+       /^f..reg/&&NF==nspec*(f+1)+1{printf "%16s",$1; for (j=0;j<=f;j++) printf " %15s",j;printf "\n"; for (i=2;i<=NF;i+=f+1) {printf "%19s ",speciesarr[int((i-2)/(f+1)+3)]; for (j=0;j<=f;j++) printf " %15s",$(i+j); printf "\n"}; printf "\n"} \
+       /^f..reg/&&NF==f+2{printf "%16s",$1; for (j=0;j<=f;j++) printf " %15s",j;printf "\n"; for (i=2;i<=NF;i+=f+1) {printf "%19s ",""; for (j=0;j<=f;j++) printf " %15s",$(i+j); printf "\n"}; printf "\n"} \
        /End tallies/{printf "\n\n"}'

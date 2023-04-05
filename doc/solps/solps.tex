@@ -1511,20 +1511,13 @@ rm GNUPLOT_COUNT gnuplot.*data
   \item[energy\_balance\_core\_extended]\index{energy\_balance\_core\_extended} Plots an extended version including volumetric sources of the energy balance for the core plasma.
   \item[energy\_balance\_coupled]\index{energy\_balance\_coupled} Plots the energy balance, including sources from {\tt Eirene}.
   \item[energy\_balance\_extended]\index{energy\_balance\_extended} Plots an extended version including volumetric sources of the energy balance.
-  \item[fchxreg]\index{fchxreg} Plots the electric current flow across important $x$-directed surfaces in {\tt B2.5}.
-  \item[fchyreg]\index{fchyreg} Plots the electric current flow across important $y$-directed surfaces in {\tt B2.5}.
-  \item[fhexreg]\index{fhexreg} Plots the electron energy flow across important $x$-directed surfaces in {\tt B2.5}.
-  \item[fheyreg]\index{fheyreg} Plots the electron energy flow across important $y$-directed surfaces in {\tt B2.5}.
-  \item[fhixreg]\index{fhixreg} Plots the ion energy flow across important $x$-directed surfaces in {\tt B2.5}.
-  \item[fhiyreg]\index{fhiyreg} Plots the ion energy flow across important $y$-directed surfaces in {\tt B2.5}.
-  \item[fhmxreg]\index{fhmxreg} Plots the parallel kinetic energy flow across important $x$-directed surfaces in {\tt B2.5}.
-  \item[fhmyreg]\index{fhmyreg} Plots the parallel kinetic energy flow across important $y$-directed surfaces in {\tt B2.5}.
-  \item[fhpxreg]\index{fhpxreg} Plots the ionisation energy flow across important $x$-directed surfaces in {\tt B2.5}.
-  \item[fhpyreg]\index{fhpyreg} Plots the ionisation energy flow across important $y$-directed surfaces in {\tt B2.5}.
-  \item[fhjxreg]\index{fhjxreg} Plots the electrostatic energy flow across important $x$-directed surfaces in {\tt B2.5}.
-  \item[fhjyreg]\index{fhjyreg} Plots the electrostatic energy flow across important $y$-directed surfaces in {\tt B2.5}.
-  \item[fhtxreg]\index{fhtxreg} Plots the total energy flow across important $x$-directed surfaces in {\tt B2.5}.
-  \item[fhtyreg]\index{fhtyreg} Plots the total energy flow across important $y$-directed surfaces in {\tt B2.5}.
+  \item[fchreg]\index{fchreg} Plots the electric current flow across important face-directed surfaces in {\tt B2.5}.
+  \item[fhereg]\index{fhereg} Plots the electron energy flow across important face-directed surfaces in {\tt B2.5}.
+  \item[fhireg]\index{fhireg} Plots the ion energy flow across important face-directed surfaces in {\tt B2.5}.
+  \item[fhmreg]\index{fhmreg} Plots the parallel kinetic energy flow across important face-directed surfaces in {\tt B2.5}.
+  \item[fhpreg]\index{fhpreg} Plots the ionisation energy flow across important face-directed surfaces in {\tt B2.5}.
+  \item[fhjreg]\index{fhjreg} Plots the electrostatic energy flow across important face-directed surfaces in {\tt B2.5}.
+  \item[fhtreg]\index{fhtreg} Plots the total energy flow across important face-directed surfaces in {\tt B2.5}.
   \item[fluid\_fluxes \#1 \#2]\index{fluid\_fluxes} Plots the sum of fluid fluxes for species numbers varying from \#1 to \#2 (respective defaults are 0 and 1). Also exists as a Python script. Fluxes into the domain are shown as negative values, fluxes out of the domain as positive values.
   \item[fluxt \#1]\index{fluxt}\index{DIMENSIONS.F} Gives the flux strength for the first \#1 {\tt Eirene} strata. The default value is all the strata, as read from the {\tt b2.neutrals.parameters} file, or if not present, the {\tt \$\{SOLPSTOP\}/modules/B2.5/src\allowbreak/include.local/DIMENSIONS.F} file, or if not present, the {\tt \$\{SOLPSTOP\}/modules/B2.5\allowbreak /src/include/DIMENSIONS.F} file.
   \item[get\_solps\_fluids]\index{get\_solps\_fluids} A utility script to obtain the list of fluid species labels from the {\tt run.log} file.
@@ -1578,6 +1571,8 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[awk.plot\_mesh \#1]\index{awk.plot\_mesh} Outputs the mesh specified as \#1 in a form usable for {\tt xyplot}.
   \item[awk.reverse]\index{awk.reverse} Outputs a file in reverse order.
   \item[awk.transpose]\index{awk.transpose} Transposes an array of data.
+  \item[blank]\index{blank} Dummy script that does nothing.
+  \item[canonical \#1]\index{canonical} Provides the full absolute path to the filename given as argument.
   \item[chop\_pwd \#1]\index{chop\_pwd} Truncates the name of the current directory to not exceed \#1 characters (default 60).
   \item[count]\index{count} Basic counting with advanced options ({\tt count -h} for help).
   \item[datestamp]\index{datestamp} Gets a date stamp from the machine.
@@ -1639,6 +1634,7 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[QSUB.postprocess\_coupled]\index{QSUB.postprocess\_coupled} List of instructions appended to the \SOLPSITER submission scripts for run post-processing
   \item[recover\_initial\_files]\index{recover\_initial\_files}\index{b2co}\index{plasmastate} For use to copy back the stored initial case files ({\tt .i} extension) before a run restart, or when use of {\tt b2co} is not possible because the run crash happened too early for {\tt plasmastate} files to be written.
   \item[regression\_test]\index{regression\_test} Utility script to run regression tests.
+  \item[regxy\_sum\_over\_species]\index{regxy\_sum\_over\_species} Intermediate utility script to extract a face-directed region quantity and sum it over species.
   \item[res\_av]\index{res\_av} Special script to reduce residuals in the finalization step of the {\tt Eirene} sources averaging scheme (see Section~\ref{sec:B2Eirene:averaging} for details).
   \item[rps]\index{rps} Shifts $\Psi$ values by a given amount within a {\tt DG} equilibrium file (see Sec.~\ref{sec:equtrn}).
   \item[run\_av]\index{run\_av} Special script to prepare the averaging step of the {\tt Eirene} sources averaging scheme (see Section~\ref{sec:B2Eirene:averaging} for details).
@@ -1699,13 +1695,10 @@ The following have not yet been documented --- user contributions are
 welcome!
 \begin{description}
   \item[awk.derivative]\index{awk.derivative}
-  \item[blank]\index{blank}
-  \item[canonical]\index{canonical}
   \item[cnvtria]\index{cnvtria}
   \item[min\_ave\_max.awk]\index{min\_ave\_max.awk}
   \item[plot\_bc\_conpar13]\index{plot\_bc\_conpar13}
   \item[plotdg]\index{plotdg}
-  \item[regxy\_sum\_over\_species]\index{regxy\_sum\_over\_species}
 \end{description}
 
 \subsection{scripts/commands}
@@ -12777,8 +12770,7 @@ If {\tt 'b2mndr\_stim'} is set to a negative value, data from the current \SOLPS
 The meaning of the dimensions are:
 \begin{description}
 \item[vreg] volume region tally (see Appendix \ref{cha:regions} and section \ref{lab:b2:numerics:parameters}). Here, however, region 0 stands for the whole plasma.
-\item[xreg] $x$-directed region tally (see Appendix \ref{cha:regions})
-\item[yreg] $y$-directed region tally (see Appendix \ref{cha:regions})
+\item[freg] face-directed region tally (see Appendix \ref{cha:regions})
 \item[ns] species index
 \item[time] time index
 \end{description}
@@ -12837,31 +12829,21 @@ b2visa \index{b2visa}\index{b2tallies.nc, b2visa}                               
 b2wrong1 \index{b2wrong1}\index{b2tallies.nc, b2wrong1}                          & vreg, time     & $W$           & Obsolete \\
 b2wrong2 \index{b2wrong2}\index{b2tallies.nc, b2wrong2}                          & vreg, time     & $W$           & Obsolete \\
 b2wrong3 \index{b2wrong3}\index{b2tallies.nc, b2wrong3}                          & vreg, time     & $W$           & Obsolete \\
-fchxreg \index{fchxreg}\index{b2tallies.nc, fchxreg}                             & xreg, time     & $A$           & Poloidal current \\
-fchyreg \index{fchyreg}\index{b2tallies.nc, fchyreg}                             & yreg, time     & $A$           & Radial current \\
-fhexreg \index{fhexreg}\index{b2tallies.nc, fhexreg}                             & xreg, time     & $W$           & Poloidal electron thermal energy flux \\
-fheyreg \index{fheyreg}\index{b2tallies.nc, fheyreg}                             & yreg, time     & $W$           & Radial electron thermal energy flux \\
-fhixreg \index{fhixreg}\index{b2tallies.nc, fhixreg}                             & xreg, time     & $W$           & Poloidal ion thermal energy flux \\
-fhiyreg \index{fhiyreg}\index{b2tallies.nc, fhiyreg}                             & yreg, time     & $W$           & Radial ion thermal energy flux \\
-fhmxreg \index{fhmxreg}\index{b2tallies.nc, fhmxreg}                             & xreg, ns, time & $W$           & Poloidal parallel kinetic energy flux \\
-fhmyreg \index{fhmyreg}\index{b2tallies.nc, fhmyreg}                             & yreg, ns, time & $W$           & Radial parallel kinetic energy flux \\
-fhpxreg \index{fhpxreg}\index{b2tallies.nc, fhpxreg}                             & xreg, ns, time & $W$           & Poloidal ionisation energy flux \\
-fhpyreg \index{fhpyreg}\index{b2tallies.nc, fhpyreg}                             & yreg, ns, time & $W$           & Radial ionisation energy flux \\
-fhjxreg \index{fhjxreg}\index{b2tallies.nc, fhjxreg}                             & xreg, time     & $W$           & Poloidal electrostatic energy flux \\
-fhjyreg \index{fhjyreg}\index{b2tallies.nc, fhjyreg}                             & yreg, time     & $W$           & Radial electrostatic energy flux \\
-fhtxreg \index{fhtxreg}\index{b2tallies.nc, fhtxreg}                             & xreg, time     & $W$           & Poloidal total energy flux \\
-fhtyreg \index{fhtyreg}\index{b2tallies.nc, fhtyreg}                             & yreg, time     & $W$           & Radial total energy flux \\
-fnaxreg \index{fnaxreg}\index{b2tallies.nc, fnaxreg}                             & xreg, ns, time & $s{^-1}$      & Poloidal particle flux \\
-fnayreg \index{fnayreg}\index{b2tallies.nc, fnayreg}                             & yreg, ns, time & ${s^-1}$      & Radial particle flux \\
+fchreg \index{fchreg}\index{b2tallies.nc, fchreg}                                & freg, time     & $A$           & Current \\
+fhereg \index{fhereg}\index{b2tallies.nc, fhereg}                                & freg, time     & $W$           & Electron thermal energy flux \\
+fhireg \index{fhireg}\index{b2tallies.nc, fhireg}                                & freg, time     & $W$           & Ion thermal energy flux \\
+fhmreg \index{fhmreg}\index{b2tallies.nc, fhmreg}                                & freg, ns, time & $W$           & Flux of parallel kinetic energy \\
+fhpreg \index{fhpreg}\index{b2tallies.nc, fhpreg}                                & freg, ns, time & $W$           & Ionisation energy flux \\
+fhjreg \index{fhjreg}\index{b2tallies.nc, fhjreg}                                & freg, time     & $W$           & Electrostatic energy flux \\
+fhtreg \index{fhtreg}\index{b2tallies.nc, fhtreg}                                & freg, time     & $W$           & Total energy flux \\
+fnareg \index{fnareg}\index{b2tallies.nc, fnareg}                                & freg, ns, time & $s{^-1}$      & Particle flux \\
 nareg \index{nareg}\index{b2tallies.nc, nareg}                                   & vreg, ns, time & $m^{-3}$       & Average ion density $\frac{\int n_a dV}{\int dV}$ \\
 ne2reg \index{ne2reg}\index{b2tallies.nc, ne2reg}                                & vreg, time     & $m^{-3}$       & Average weighted density $\frac{\int Z_a^2 n_a dV}{\int dV}$ \\
 nereg \index{nereg}\index{b2tallies.nc, nereg}                                   & vreg, time     & $m^{-3}$       & Average electron density $\frac{\int n_e dV}{\int dV}$ \\
 nireg \index{nireg}\index{b2tallies.nc, nireg}                                   & vreg, time     & $m^{-3}$       & Average total ion density $\frac{\int n_i dV}{\int dV}$  \\
 poreg \index{poreg}\index{b2tallies.nc, poreg}                                   & vreg, time     & $eV$          & Average potential $\frac{\int \Phi dV}{\int dV}$ \\
-qconvexreg \index{qconvexreg}\index{b2tallies.nc, qconvexreg}                    & xreg, time     & $W$           & Poloidally convected electron energy  \\
-qconveyreg \index{qconveyreg}\index{b2tallies.nc, qconveyreg}                    & yreg, time     & $W$           & Radially convected electron energy \\
-qconvixreg \index{qconvixreg}\index{b2tallies.nc, qconvixreg}                    & xreg, ns, time & $W$           & Poloidally convected ion energy \\
-qconviyreg \index{qconviyreg}\index{b2tallies.nc, qconviyreg}                    & yreg, ns, time & $W$           & Radially convected ion energy \\
+qconvereg \index{qconvereg}\index{b2tallies.nc, qconvereg}                       & freg, time     & $W$           & Convected electron energy  \\
+qconvireg \index{qconvireg}\index{b2tallies.nc, qconvireg}                       & freg, ns, time & $W$           & Convected ion energy \\
 rcxhireg \index{rcxhireg}\index{b2tallies.nc, rcxhireg}                          & vreg, ns, time & $W$           & Charge-exchange ion energy source \\
 rcxmoreg \index{rcxmoreg}\index{b2tallies.nc, rcxmoreg}                          & vreg, ns, time & $kg.m.s^{-1}$  & Charge-exchange ion parallel momentum source \\
 rcxnareg \index{rcxnareg}\index{b2tallies.nc, rcxnareg}                          & vreg, ns, time & $s^{-1}$       & Charge-exchange particle source \\
@@ -13539,15 +13521,18 @@ the sum of the ionisation potentials $I_a^{ioniz}$ of all ions with
 a charge state below the considered ion (inclusive) within their isonuclear sequence.
 
 \chapter{Region definitions}
-\label{cha:regions}\index{regions}\index{vreg}\index{xreg}\index{yreg}\index{NREG}
+\label{cha:regions}\index{regions}\index{vreg}\index{freg}\index{NREG}
 
-Two types of regions are defined in {\tt b2agfs.F}: volume-based and face-based. Face-based regions may include either only flux-aligned faces, only non-aligned faces, or a mixture of both, as indicated. The number of volume regions should also be stored in the {\tt NREG} environment variable (or through the presence of an {\tt NREG} ASCII file containing only the number of regions) as it is used for a variety of analysis scripts. Typical configurations for 1-D, linear, limiter, SN, DN (Connected and Disconnected), periodic stellarator island, and LFS snowflake cases are shown below:
+Two types of regions are defined in {\tt b2agfs.F}: volume-based and face-based. Face-based regions may include either only flux-aligned faces, only non-aligned faces, or a mixture of both, as indicated. The numbers of volume-based and face-based regions should also be stored in the {\tt NREG} and {\tt FREG} environment variables respectively (or through the presence of an {\tt NREG} ASCII file containing only two numbers of regions, volume- then face-based, separated by a single space and on the same line) as they are used for a variety of analysis scripts. Typical configurations for 1-D, linear, limiter, SN, DN (Connected and Disconnected), periodic stellarator island, and LFS snowflake cases are shown below:
 
 \clearpage
 \section{Regions for 1-D and linear cases}
 \index{regions, 1-D cases}
 
-For this geometry, {\tt NREG} should be set to $1$.
+For this geometry, {\tt NREG} should be set to $1$ and {\tt FREG} to $4$, or the {\tt NREG} file contain:
+\begin{verbatim}
+1 4
+\end{verbatim}
 
 Volume-based regions:
 \begin{verbatim}
@@ -13584,7 +13569,10 @@ An informative review of how the code geometry and physics model can be adapted 
 \section{Regions for limiter cases}
 \index{regions, limiter cases}
 
-For this geometry, {\tt NREG} should be set to $2$.
+For this geometry, {\tt NREG} should be set to $2$ and {\tt FREG} to $6$, or the {\tt NREG} file contain:
+\begin{verbatim}
+2 6
+\end{verbatim}
 
 Volume-based regions:
 \begin{verbatim}
@@ -13628,7 +13616,10 @@ In limiter topologies, face-based regions 4 and 5 (core boundary and separatrix)
 \section{Regions for SN}
 \index{regions, SN cases}
 
-For this geometry, {\tt NREG} should be set to $4$ (default).
+For this geometry, {\tt NREG} should be set to $4$ and {\tt FREG} to $13$ (defaults), or the {\tt NREG} file contain:
+\begin{verbatim}
+4 13
+\end{verbatim}
 
 Volume-based regions:
 
@@ -13688,7 +13679,10 @@ For SN topologies, face-based regions 8 and 10, the core boundary and the separa
 \section{Regions for CDN}
 \index{regions, CDN cases}
 
-For this geometry, {\tt NREG} should be set to $8$.
+For this geometry, {\tt NREG} should be set to $8$ and {\tt FREG} to $26$, or the {\tt NREG} file contain:
+\begin{verbatim}
+8 26
+\end{verbatim}
 
 Volume-based regions:
 \begin{verbatim}
@@ -13767,7 +13761,10 @@ of the inner divertor boundaries between SOL-connected and PFR-connected
 halves and the position of the face-based region 13 moves to being between
 face-based regions 9 and 2 instead of being between face-based regions 11 and 6.
 
-For both cases, {\tt NREG} should be set to $8$.
+For both cases, {\tt NREG} should be set to $8$ and {\tt FREG} to $27$, or the {\tt NREG} file contain:
+\begin{verbatim}
+8 27
+\end{verbatim}
 
 Volume-based regions:
 
@@ -13849,7 +13846,10 @@ geometry.
 Note that the side edges of the core (volume region 1) are periodicity
 boundaries.
 
-For this geometry, {\tt NREG} should be set to $5$.
+For this geometry, {\tt NREG} should be set to $5$ and {\tt FREG} to $15$, or the {\tt NREG} file contain:
+\begin{verbatim}
+5 15
+\end{verbatim}
 
 Volume-based regions:
 \begin{verbatim}
@@ -13912,7 +13912,10 @@ located in the primary PFR. These region definitions also apply to
 X-point target geometries.
 For a fuller description, please refer to \cite{Cowley2023}.
 
-For both cases, {\tt NREG} should be set to $7$.
+For both cases, {\tt NREG} should be set to $7$ and {\tt FREG} to $26$, or the {\tt NREG} file contain:
+\begin{verbatim}
+7 26
+\end{verbatim}
 
 Volume-based regions:
 
