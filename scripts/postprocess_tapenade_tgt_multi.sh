@@ -12,14 +12,14 @@ sed -i -e "/CALL B2MN_STEP_DV/i\  call xertst(npar_opt.le.nbdirsmax, 'Increase s
 sed -i -e "/CALL B2MN_STEP_DV/i\  call xertst(switch%b2optim_namelist.eq.1, 'Sensitivity calculation needs b2optim_namelist=1!')" b2mn_d.F90
 sed -i -e "/CALL B2MN_STEP_DV/i\  call set_tgt_perturbation(switchd)" b2mn_d.F90
 sed -i -e 's/state_extd, nbdirs/state_extd, npar_opt/g' b2mn_d.F90
-sed -i -e 's/j, jd, nbdirs/j, jd, npar_opt-nsigma_opt/g' b2mn_d.F90
+sed -i -e 's/j, jd, nbdirs/j, jd, npar_opt-nsigma_opt-nmean_opt/g' b2mn_d.F90
 
 
 sed -i '/&                           mpgd, state, stated, state_ext, state_extd, &/d' b2mod_driver_diffv.F90
 sed -i '/&                           switch%boris, j, jd, nbdirs)/d' b2mod_driver_diffv.F90
 sed -i -e "/B2USR_COST_FUNCTION_DV/a\      call print_tgt_gradient(jd,ncf)" b2mod_driver_diffv.F90
 sed -i -e "/B2USR_COST_FUNCTION_DV/a\      if (first_time_step) write(*,*) 'nbdirs: ',nbdirs" b2mod_driver_diffv.F90
-sed -i -e "/B2USR_COST_FUNCTION_DV/a\&                           switch%boris, j, jd, nbdirs+nsigma_opt)" b2mod_driver_diffv.F90
+sed -i -e "/B2USR_COST_FUNCTION_DV/a\&                           switch%boris, j, jd, nbdirs+nsigma_opt+nmean_opt)" b2mod_driver_diffv.F90
 sed -i -e "/B2USR_COST_FUNCTION_DV/a\&                           mpgd, state, stated, state_ext, state_extd, &" b2mod_driver_diffv.F90
 sed -i -e "/TYPE(SWITCHES_DIFFV), INTENT(INOUT) :: switchd/a\    INTEGER :: nndirs" b2mod_driver_diffv.F90
 

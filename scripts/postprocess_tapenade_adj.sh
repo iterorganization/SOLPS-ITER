@@ -17,7 +17,7 @@ sed -i -e "/END SUBROUTINE B2MNDR_1_B/i\    j = jsave" b2mod_driver_diff.F90
 
 sed -i -e "/  LOGICAL, SAVE :: b2news_solving(4)=.true./a\  LOGICAL, SAVE :: last_call_transp=.false." b2mod_ad_diff.F90
 
-sed -i -e 's/ipgtmx=40/ipgtmx=400/g' b2mod_ipmain.F
+sed -i -e 's/ipgtmx=4/ipgtmx=40/g' b2mod_ipmain.F
 
 sed -i -e "/CALL B2MNDR_1/i\    call set_parameters(switch)" b2mod_main_diff.F90
 
