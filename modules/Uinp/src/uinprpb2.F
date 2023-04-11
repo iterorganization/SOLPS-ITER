@@ -74,7 +74,11 @@ c*** mi, zi
 c-----------------------------------------------------------------------
 c*** Boundary
       ncore=nznbndt(1)   ! number of core regions
-      nvess=maxval(fclbl) ! vessel elements for vessel mode
+      if (grid_mode.eq.2) then 
+        nvess=maxval(fclbl)   ! vessel elements for vessel mode
+      else 
+        nvess=0
+      end if
       if (grid_mode.ne.2) then 
         nbc=0
         do i=1,nbndknd !{
@@ -200,8 +204,8 @@ c*** bcchar, bcstart, bcend, bcene, bceni, bcpot, enepar, enipar, potpar
         rniprm(1:ncore,2,1,11,2)=bpobnds(1:ncore,2,1)
 !     set the other components of the vessel
         do i=ncore+1,nbc
-          iniprm(i,1,1, 4,2)=i
-          iniprm(i,1,1, 5,2)=i
+          iniprm(i,1,1, 4,2)=i-ncore
+          iniprm(i,1,1, 5,2)=i-ncore
           iniprm(i,1,1, 6,2)=15
           iniprm(i,1,1, 7,2)=15
           iniprm(i,1,1, 8,2)=11
@@ -249,7 +253,7 @@ c*** bccon, conpar, bcmom, mompar
       end if
 c*** lcbs
       do i=1,nznbndt(1) !{
-        iniprm(i,1,1,16,2)=i
+        iniprm(i,1,1,16,2)=nbc-ncore+i
       end do !}
 c*** nniso
       iniprm(1,1,1,17,2)=nniso

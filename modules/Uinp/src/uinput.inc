@@ -52,7 +52,7 @@ c*** 3b
      ,    jlside(nlim), jlequi(nlim), jltor(nlim), jlcol(nlim),
      ,    jlfit(nlim),  jlbox(nlim),  jlref(nlim), jlsptp(nlim),
      ,    jlsptc(nlim), jsrss(nlim),  jsrc(nlim),  lchspnwa(nlim),
-     ,    jsrsg(nlim),  jlplg(nlim)
+     ,    jsrsg(nlim),  jlplg(nlim),  fclbl(nlim)
       integer jadch0(nlim), jadch1(nlim,nlim), jadnsw(nlim),
      ,    jadmsw(nlim), jadlsw(nlim), jadksw(nlim), jadjsw(nlim),
      ,    jadisw(nlim), jlblck(nlim), jlacll(nlim)
@@ -70,8 +70,7 @@ c*** 3b
      ,     rcprma(nlim), sptpra(nlim), echspta(nlim),fchspta(nlim),
      ,     xlcor(nlim), ylcor(nlim), zlcor(nlim),
      ,     xlref(nlim), ylref(nlim), zlref(nlim), xlrot(nlim),
-     ,     ylrot(nlim), zlrot(nlim), alrot(nlim), fsheata(nlim),
-     ,     fclbl(nlim)
+     ,     ylrot(nlim), zlrot(nlim), alrot(nlim), fsheata(nlim)
       character txtsfa(nlim)*64
 
 c*** 4
