@@ -14,26 +14,41 @@ export DEVICE=iter
 correct_baserun_timestamps
 mkdir run_CI_MPI_test
 cd run_CI_MPI_test
-cp ../run_restart/b2.*.parameters .
-cp ../run_restart/b2mn.dat .
-cp ../run_restart/b2fstati .
-cp ../run_restart/b2time.nc .
+cp ../ref_run_for_MPI_CI/b2.*.parameters .
+cp ../ref_run_for_MPI_CI/b2.feedback_save.parameters.i b2.feedback_save.parameters
+cp ../ref_run_for_MPI_CI/b2mn.dat .
+cp ../ref_run_for_MPI_CI/b2fstati .
+cp ../ref_run_for_MPI_CI/input.dat .
+cp ../ref_run_for_MPI_CI/fort.10.i fort.10
+cp ../ref_run_for_MPI_CI/fort.11.i fort.11
+cp ../ref_run_for_MPI_CI/fort.13.i fort.13
+cp ../ref_run_for_MPI_CI/fort.14.i fort.14
+cp ../ref_run_for_MPI_CI/fort.15.i fort.15
+cp ../ref_run_for_MPI_CI/fort.44.i fort.44
+cp ../ref_run_for_MPI_CI/fort.46.i fort.46
+cp ../ref_run_for_MPI_CI/b2time.nc.i b2time.nc
 touch b2fstati
 setup_baserun_eirene_links
-echo "'b2mndr_ntim' '10'" >> b2mn.dat
 b2run -m \"mpiexec -np 4\" b2mn
-${SOLPSTOP}/modules/B2.5/src/test/run_checks_CI_coupled.sh ../run_restart/ ./ || exit 1
+${SOLPSTOP}/modules/B2.5/src/test/run_checks_MPI_CI_coupled.sh ../ref_run_for_MPI_CI/ ./ || exit 1
 
 cd ..
 mkdir run_CI_MPI_test_9-pt
 cd run_CI_MPI_test_9-pt
-cp ../run_restart_9-pt/b2.*.parameters .
-cp ../run_restart_9-pt/b2mn.dat .
-cp ../run_restart_9-pt/b2fstati .
-cp ../run_restart_9-pt/b2time.nc .
+cp ../ref_run_for_MPI_CI_9-pt/b2.*.parameters .
+cp ../ref_run_for_MPI_CI_9-pt/b2.feedback_save.parameters.i b2.feedback_save.parameters
+cp ../ref_run_for_MPI_CI_9-pt/b2mn.dat .
+cp ../ref_run_for_MPI_CI_9-pt/b2fstati .
+cp ../ref_run_for_MPI_CI_9-pt/input.dat .
+cp ../ref_run_for_MPI_CI_9-pt/fort.10.i fort.10
+cp ../ref_run_for_MPI_CI_9-pt/fort.11.i fort.11
+cp ../ref_run_for_MPI_CI_9-pt/fort.13.i fort.13
+cp ../ref_run_for_MPI_CI_9-pt/fort.14.i fort.14
+cp ../ref_run_for_MPI_CI_9-pt/fort.15.i fort.15
+cp ../ref_run_for_MPI_CI_9-pt/fort.44.i fort.44
+cp ../ref_run_for_MPI_CI_9-pt/fort.46.i fort.46
+cp ../ref_run_for_MPI_CI_9-pt/b2time.nc.i b2time.nc
 touch b2fstati
 setup_baserun_eirene_links
-echo "'b2mndr_ntim' '10'" >> b2mn.dat
 b2run -m \"mpiexec -np 4\" b2mn
-${SOLPSTOP}/modules/B2.5/src/test/run_checks_CI_coupled.sh ../run_restart_9-pt/ ./ || exit 2
-
+${SOLPSTOP}/modules/B2.5/src/test/run_checks_MPI_CI_coupled.sh ../ref_run_for_MPI_CI_9-pt/ ./ || exit 2
