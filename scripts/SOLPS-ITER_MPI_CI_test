@@ -17,7 +17,7 @@ correct_baserun_timestamps
 # b2run b2ag b2ah b2ai b2ar
 # cd ..
 
-# Important note! We assume the case run_kin_mpi has been run with 4 processes, if this is not the case, the test will likely fail
+# Important note! We assume the case run_kin_mpi has been run with 4 processes. If this is not the case, the test will likely fail.
 mkdir run_kin_test
 cd run_kin_test
 cp ../run_kin_mpi/b2.*.parameters .
@@ -28,8 +28,8 @@ cp ../run_kin_mpi/b2time.nc .
 cp ../run_kin_mpi/fort.11.i fort.11
 cp ../run_kin_mpi/fort.13.i fort.13
 cp ../run_kin_mpi/fort.15.i fort.15
-cp ../run_kin_mpi/fort.44 .
-cp ../run_kin_mpi/fort.46 .
+cp ../run_kin_mpi/fort.44.i fort.44
+cp ../run_kin_mpi/fort.46.i fort.44
 touch b2fstati
 setup_baserun_eirene_links
 echo "'b2mndr_ntim' '10'" >> b2mn.dat

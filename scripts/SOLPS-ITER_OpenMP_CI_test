@@ -8,7 +8,7 @@ make MAKE_OPTIONS=-j8 b25_nox_openmp
 # Run test case
 . ${SOLPSTOP}/SETUP/openmp.ksh
 
-# For now comment-out until OMP is included again
+# For now, comment out until OpenMP is included again
 #export DEVICE=upgrade
 #${SOLPSTOP}/modules/B2.5/src/test/run_omp_test.sh AUG_16151_D+C+He 16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone 10 12 || exit 1
 
