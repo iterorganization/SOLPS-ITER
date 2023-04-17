@@ -7,6 +7,9 @@ make MAKE_OPTIONS=-j8 nox_build_mpi
 
 # Run test case
 . ${SOLPSTOP}/SETUP/mpi.ksh
+ldd `which b2mn.exe`
+exit
+
 cd ${SOLPSTOP}/runs/examples
 make ITER_2360_0.95He+0.05H_40MW
 cd ITER_2360_0.95He+0.05H_40MW
