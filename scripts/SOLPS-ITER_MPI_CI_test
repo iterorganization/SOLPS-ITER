@@ -7,9 +7,6 @@ make MAKE_OPTIONS=-j8 nox_build_mpi
 
 # Run test case
 . ${SOLPSTOP}/SETUP/mpi.ksh
-ldd `which b2mn.exe`
-exit
-
 cd ${SOLPSTOP}/runs/examples
 make ITER_2360_0.95He+0.05H_40MW
 cd ITER_2360_0.95He+0.05H_40MW
@@ -30,4 +27,4 @@ cp ../ref_run_for_MPI_CI/b2time.nc.i b2time.nc
 touch b2fstati
 setup_baserun_eirene_links
 b2run -m \"mpiexec -np 4\" b2mn
-${SOLPSTOP}/modules/B2.5/src/test/run_checks_MPI_CI_coupled.sh ../ref_run_for_MPI_CI/ ./
+${SOLPSTOP}/modules/B2.5/src/test/run_checks_MPI_CI_coupled.sh ../ref_run_for_MPI_CI/ ./ || exit 1
