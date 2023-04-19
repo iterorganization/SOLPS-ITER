@@ -7,7 +7,7 @@ module use /work/imas/etc/modules/all
 # Modules needed by SOLPS-ITER
 set nodename=`hostname`
 module load NVHPC/21.2
-module load IMAS/3.38.1-4.11.1-2020b
+module load IMAS/3.38.1-4.11.3-2020b
 module load MDSplus/7.96.17-GCCcore-10.2.0
 module load GGD/1.10.3-NVHPC-21.2-DD-3.38.1
 module load AMNS/1.4.0-NVHPC-21.2-DD-3.38.1
