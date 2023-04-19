@@ -16001,6 +16001,22 @@ is dropped, and the command can proceed. Stack overflows can be avoided by using
 the appropriate {\bf drop} (see \ref{sec:drop}) commands once a stack quantity is
 no longer needed.
 
+\section{Environment variables}
+
+\begin{description}
+\item[B2PLOT\_DEV]\index{B2PLOT\_DEV} is used to specify plotting to any combination of {\tt x11}, {\tt ps} or {\tt cgm} (default is {\tt ps}).  Under {\tt tcsh}, use
+  \begin{verbatim}
+setenv B2PLOT_DEV 'x11 ps'
+  \end{verbatim}
+\item[SOLPSTOP]\index{SOLPSTOP} used to specify the top of the {\tt SOLPS} tree
+\item[SOLPSTOP\_FORCE]\index{SOLPSTOP\_FORCE} used to override the value of {\tt \$SOLPSTOP} to force execution of code executables from a different tree (not defined by default)
+\end{description}
+
+Environment variables can also be used in the {\bf extl} command
+(see \ref{sec:extl}). If not explicitly set by the user, they inherit
+their value from the {\tt setup.csh.*} files in the {\tt \$\{SOLPSTOP\}}
+directory.
+
 \section{Commands}
 
 Commands are
@@ -19475,22 +19491,6 @@ Computes a reaction rate as per the {\tt ADAS} specification. The $\langle${\tt 
 form 'acd89'. The matrix obtained contains then all the rates from these files, for all species in the run, extracted
 from the files stored in {\tt \$\{SOLPSTOP\}/modules/adas} or
 {\tt \$\{SOLPSTOP\}/data.local/adas}.
-
-\section{Environment variables}
-
-\begin{description}
-\item[B2PLOT\_DEV]\index{B2PLOT\_DEV} is used to specify plotting to any combination of {\tt x11}, {\tt ps} or {\tt cgm} (default is {\tt ps}).  Under {\tt tcsh}, use
-  \begin{verbatim}
-setenv B2PLOT_DEV 'x11 ps'
-  \end{verbatim}
-\item[SOLPSTOP]\index{SOLPSTOP} used to specify the top of the {\tt SOLPS} tree
-\item[SOLPSTOP\_FORCE]\index{SOLPSTOP\_FORCE} used to override the value of {\tt \$SOLPSTOP} to force execution of code executables from a different tree (not defined by default)
-\end{description}
-
-Environment variables can also be used in the {\bf extl} command
-(see \ref{sec:extl}). If not explicitly set by the user, they inherit
-their value from the {\tt setup.csh.*} files in the {\tt \$\{SOLPSTOP\}}
-directory.
 
 \section{Examples}
 
