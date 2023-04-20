@@ -86,6 +86,7 @@ EOF
     endif
     if ($JOB_NAME == "SOLPS-ITER") set JOB_NAME="B2.5_OPT_TGT"
     echo Asking for a B2.5 standalone optimization with tangent AD
+    shift
     goto argloop
   endif
   if ("X${1}X" == "X-opt_adjX") then
@@ -102,6 +103,7 @@ EOF
     endif
     if ($JOB_NAME == "SOLPS-ITER") set JOB_NAME="B2.5_OPT_ADJ"
     echo Asking for a B2.5 standalone optimization with adjoint AD
+    shift
     goto argloop
   endif
   if ("X${1}X" == "X-tgtX") then
