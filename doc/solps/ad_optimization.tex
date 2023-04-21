@@ -1,0 +1,698 @@
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+This chapter is intended as a practical guide on how to obtain input parameter sensitivities and apply optimization strategies in B2.5 thanks to Algorithmic Differentiation (AD), therefore only {\em using} the already available AD code. If one is interested in {\em producing} new AD code, please see the ``Expert'' section (Appendix~\ref{cha:ad_expert}).
+
+The user is invited to read the literature concerning AD for a more detailed theoretical background about this method, for example \cite{griewank}. The reference paper for AD in \SOLPSITER is \cite{carlijcp}. This particular application of AD makes use of the tool {\tt Tapenade} \cite{tapenade}, which is available at \cite{tapesite}. {\tt Tapenade} is a so-called source transformation AD tool, which means it will analyze the {\tt B2.5} source files and produce a new set of source files containing the derivative information. However, other AD tools are available, see for example the list in \cite{autodiff}, but they have not been tested on {\tt B2.5} so far and this manual might not be applicable to them.\\
+
+The user must be aware that the AD differentiated code, available in {\tt B2.5/src/differentiation/tangent} and {\tt B2.5/src/differentiation/adjoint}, is not 100\% consistent with the current {\tt B2.5} code. The AD code will only be made consistent with the {\it feature/ad-wg} branch/tag, when {\tt B2.5} will be re-differentiated and the AD files updated accordingly. Because this procedure cannot be automated and can be time-consuming, it will only be done occasionally when significant code updates to the main {\tt B2.5} distribution warrant it or if some specific user needs arise for it.
+
+An additional caveat must be known by the user: this manual version and the procedure described here are valid and have been proven to work with specific {\tt Tapenade} and \SOLPSITER versions. New {\tt Tapenade} releases and \SOLPSITER development can make some of the procedure below obsolete or require modifications. Therefore, here are listed the git hash of both \SOLPSITER and {\tt B2.5}, and the {\tt Tapenade} version that have been verified to work with this manual version:
+\begin{description}
+  \item{\SOLPSITER} \href{https://git.iter.org/projects/BND/repos/solps-iter/commits/6d4ad74aa97fdd71df4b1bc008623603e0af3d78}{6d4ad74aa97}
+  \item{B2.5} \href{https://git.iter.org/projects/BND/repos/b2.5/commits/3eabeb0698f9894e72e8ee832b09f8dbd07a1083}{3eabeb0698f}
+  \item{Tapenade} \href{https://gitlab.inria.fr/tapenade/tapenade/-/commit/686e29d1a492ce72f4f7f61d94a47066695c9da8}{3.16-v2-120-g686e29d1a}
+\end{description}
+
+\subsubsection{Acknowledgments}
+
+For issues, suggestions, and comments about sensitivity calculation and optimization in {\tt B2.5}, please contact Stefano Carli (stefano.carli@kuleuven.be) or the KU Leuven team (wouter.dekeyser@kuleuven.be).
+
+To cite this part of the code please use:
+\begin{itemize}
+  \item For sensitivity calculation and optimization: Carli S., Hascoet L., Dekeyser W., Blommaert M., Algorithmic differentiation for adjoint sensitivity calculation in plasma edge codes, submitted to Journal of Computational Physics, 2022 (Reference~\cite{carlijcp} in this manual)
+  \item For optimization, also: Carli, S., Dekeyser, W., Blommaert, M., Coosemans, R., Van Uytven, W., Baelmans, M., Contributions to Plasma Physics 2022, 62 (5-6), e202100184. https://doi.org/10.1002/ctpp.202100184 (Reference~\cite{carlpet21} in this manual)
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Definition of the cost function}\label{sec:cost_fun}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Before calculating derivatives, the user first has to think which kind of cost function is of interest. There are pre-defined cost functions already available within {\tt B2.5}, found in the subroutine {\tt user/b2usr\_cost\_function.F} and based on the weighted least-squares and Bayesian Maximum {\it A Posteriori} (MAP) framework described in \cite{carlpet21}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Regression cost function}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The nonlinear regression, weighted least-squares, cost function reads:
+
+\begin{equation}\label{eq:regression0}
+\hat{\mathcal{J}}(\theta)=\sum_{l} \sum_{q} \frac{1}{\Omega_l} \int_{\Omega_l} \left(\frac{w_{l,q}}{\bar{q_l}^2} \frac{\left(q(\theta) - q^{\mathrm{EXP}}  \right)^2}{2} \right) \mathrm{d}\Omega.
+\end{equation}
+
+In Eq.~(\ref{eq:regression0}), $q$ indicates a general plasma quantity like density, temperature, etc..., while $\theta$ indicates the set of input parameters (transport coefficients, boundary conditions, etc...), which one will eventually want to optimize. Furthermore, summation over $l$ indicates different spatial locations, for example OMP or target, while summation over $q$ indicates different state variables, for example plasma density $n_e$ or electron temperature $T_e$. The superscript $\mathrm{EXP}$ indicates the experimental measurement one is trying to match. $\Omega_l$ is the domain over which the integration is performed and $w_{l,q}$ are weighting factors. Finally, $\bar{q_l}=1/\Omega_l\int_{\Omega_l} q^{\mathrm{EXP}}\mathrm{d}\Omega$ is the average experimental value of $q$ over the $\Omega_l$ domain used to normalize the terms in the cost function. The integral in Eq.~(\ref{eq:regression0}) is actually approximated as a discrete sum:
+\begin{equation}\label{eq:regression}
+\hat{\mathcal{J}}(\theta)=\sum_{l} \sum_{q} \frac{1}{\Omega_l} \frac{w_{l,q}}{\bar{q_l}^2} \sum_{\Omega_{l,i}} \left( \frac{\left(q_i(\theta) - q_i^{\mathrm{EXP}}  \right)^2}{2} \right) \Omega_{l,i},
+\end{equation}
+where now the index $i$ refers to the discrete points in the sum. Such discrete points are the radial points specified by the experimental data, onto which the \SOLPSITER quantities are interpolated.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{MAP cost function}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+For a MAP estimation, the following cost function is employed:
+\begin{equation}\label{eq:mapcost}
+\hat{\mathcal{J}}(\theta)=-\log\left[\mathcal{L}(\mathcal{D}\vert\theta)\pi(\theta)\right],
+\end{equation}
+where $\mathcal{D}$ is the experimental dataset available for the analysis, of which $q^{\mathrm{EXP}}$ is a specific measurement. In Eq.~(\ref{eq:mapcost}), $\mathcal{L}(\mathcal{D}\vert\theta)$ is the likelihood function and $\pi(\theta)$ the prior distribution.
+
+The prior distribution $\pi(\theta)$ can be chosen by the user, and currently available options are uniform distributions (i.e. $\pi(\theta_i)=1.0$), or Gaussian priors $\pi(\theta_i)=\frac{2}{\sigma_{\theta,i}\sqrt{(2\pi)}} \exp{\left[-\frac{1}{2} \frac{\left( \theta_i -\mu_{\theta_i}\right)^2}{\sigma_{\theta,i}^2} \right]}$, where $i$ indicates the specific element in the vector of control variables $\theta$, and $\mu_{\theta_i}$ and $\sigma_{\theta,i}$ are respectively the mean and standard deviation associated with the Gaussian for variable $\theta_i$.
+
+The likelihood function $\mathcal{L}(\mathcal{D}\vert \theta)$ is currently available as a Gaussian distribution, while other types may be implemented in the future if needed. The Gaussian likelihood for a quantity $q$ at a specific spatial location $\Omega_l$ takes the form
+\begin{equation}\label{eq:likelihood}
+\mathcal{L}(\mathcal{D}\vert\theta)=\frac{1}{\sqrt{(2\pi)^{N_\mathcal{D}}\det\Sigma}} \exp{\left(-\frac{1}{2}z^T\Sigma^{-1}z \right)},
+\end{equation}
+where $z=q^{\mathrm{EXP}}-q(\theta)-\mu$, $\Sigma$ is the covariance matrix and $N_\mathcal{D}$ is the number of data points in $q^{\mathrm{EXP}}$ for this specific quantity at this specific location $\Omega_l$. $\mu$ is the mean of the Gaussian distribution (not a tunable parameter at the moment). The covariance matrix is a diagonal matrix with $\Sigma_{ii}=\sigma_{q,l}^2$, if an absolute error is assumed in the likelihood. If instead the likelihood models a relative, instead of an absolute, error, the diagonal elements of $\Sigma$ take the form $\Sigma_{ii}=\sigma_i^2=(\sigma_{q,l} q_i^{\mathrm{EXP}})^2$, with $\sigma_{q,l}$ a constant standard deviation. Note that in both cases $\sigma_{q,l}$ is the standard deviation associated with this specific quantity $q$ at this location $\Omega_l$.
+
+Whenever data is available at multiple locations (OMP, targets,...) and for multiple quantities (density, temperature,...), the total likelihood simply becomes the multiplication of the likelihoods for each quantity at each spatial location, each of them with their specific standard deviation.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{How to specify the cost function in B2.5}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The user can select one of these cost functions through the input file {\tt b2.optimization.parameters}. To do so, it is needed to specify the following parameters, contained in the {\tt OPTIMIZATION} namelist, which are similar to the boundary condition specification. An up-to-date list is also available in Appendix~\ref{lis:b2cdcn}. Note that to read the {\tt b2.optimization.parameters} file users needs to set in {\tt b2mn.dat} the switch {\tt 'b2optim\_namelist'} to {\tt '1'}.
+\begin{description}
+  \item[NCF]\index{NCF} {\tt integer}, number of cost functions ({\tt icf = 1, NCF}). Defaults to {\tt 0}.
+  \item[CFTYPE]\index{CFTYPE} {\tt integer array, dimension (NCF)}, specifies the type of cost function for index {\tt icf}. Defaults to {\tt -1}. Available options are:
+    \begin{description}
+      \item[0] Sum of weighted least squares cost functions. {\tt CFSTART}, {\tt CFEND} indicate over which {\tt icf} indices the cost functions are to be summed (valid cost function to be summed are types 1-3 and 7-9).
+      \item[1]  Weighted least squares, on the desired CVs, of calculated electron density and experimental values read from file, normalized with average experimental value  (units must be $10^{19}~m^{-3}$).
+      \item[2] Weighted least squares, on the desired CVs, of calculated electron temperature and values read from file, normalized with average experimental value (units must be $eV$).
+      \item[3] Weighted least squares, on the desired CVs, of calculated ion temperature and values read from file, normalized with average experimental value (units must be $eV$).
+      \item[4] Maximum electron temperature on the desired CVs (output in $eV$).
+      \item[5] Maximum heat flux on the desired FCs (output in $W$).
+      \item[6] Bayesian MAP cost function (see \cite{carlpet21}). {\tt CFSTART}, {\tt CFEND} indicate over which {\tt icf} indices the cost functions are to be summed (valid cost function to be summed are types are 1-3 and 7-9).
+      \item[7] Weighted least squares, on the desired CVs, of calculated electron density radial gradient and experimental values read from file, normalized with average experimental value (units must be $10^{19}~m^{-4}$).
+      \item[8] Weighted least squares, on the desired CVs, of calculated electron temperature radial gradient and values read from file, normalized with average experimental value (units must be $eV/m$).
+      \item[9] Weighted least squares, on the desired CVs, of calculated ion temperature radial gradient and values read from file, normalized with average experimental value (units must be $eV/m$).
+    \end{description}
+  \item[CFDEF]\index{CFDEF} {\tt integer array, dimension (NCF)}, indicates how the domain of cost function {\tt icf} is specified. Defaults to {\tt 0}. Valid options are:
+    \begin{description}
+      \item[1] The cost function is defined on the OMP, using the {\tt RZOMP} array. In this case {\tt CFSTART}, {\tt CFEND} are not necessary and ignored.
+      \item[2] The cost function is defined using the FC labels specified in {\tt CFSTART}, {\tt CFEND}. Cost functions requiring CVs or FCs can both be defined in this way.
+      \item[3] The cost function is defined using the CV labels specified in {\tt CFSTART}, {\tt CFEND}. Only cost functions requiring CVs can be defined in this way.
+      \item[4] The cost function is defined using the {\tt CF\_REG} and {\tt CF\_REGP} arrays. Cost functions requiring CVs or FCs can both be defined in this way.
+    \end{description}
+  \item[CFSTART, CFEND]\index{CFSTART}\index{CFEND} {\tt integer arrays, dimension (NCF)}, specify the starting/ending, face (FC) label {\tt fcLbl} or control volume (CV) label {\tt cvLbl} where the cost function {\tt icf} will be evaluated. For {\tt CFTYPE = 0} and {\tt CFTYPE = 6}, they instead identify which cost functions will be summed together. Default to {\tt 0}.
+  \item[CF\_REGP]\index{CF\_REGP} {\tt integer array, dimension (NCF, 2)}, points for each cost function to the first index in the {\tt CF\_REG} list, and its number of items. Defaults to {\tt 0}.
+  \item[CF\_REG]\index{CF\_REG} {\tt integer array, dimension (MXNCF)}\footnote{The parameter {\tt MXNCF} is hard-coded with value {\tt 1000} in {\tt b2mod\_par\_opt.F}.}, lists for each cost function the corresponding domain CVs or FCs. WARNING! No attempt is made to check if these CVs or FCs are connected, sorted or even available in the current geometry: it is up to the user to make sure the list is correct. Defaults to {\tt 0}.
+  \item[CFWEIGHT]\index{CFWEIGHT} {\tt real array, dimension (NCF)}. Multipliers to rescale each cost function separately, $w_{l,q}$ in Eq.~(\ref{eq:regression}). Defaults to {\tt 1.0}.
+  \item[MapToOMP]\index{MapToOMP} {\tt logical array, dimension (NCF)}, indicates if cost function {\tt icf} is to be re-mapped to the OMP, according to {\tt CFTYPE}. \textbf{Warning:} the mapping is a rigid translation of the data to the OMP and is safe to work only for non-extended grids and for cost functions defined on the same number of elements as the OMP list. Defaults to {\tt .false.}.
+  \item[READ\_SIGMA]\index{READ\_SIGMA} {\tt logical array, dimension (NCF)}, indicates if file {\tt cf[i].dat} containing the experimental data uncertainty is to be read. Defaults to {\tt .false.}.
+  \item[NSIGMA]\index{NSIGMA} {\tt integer}, number of standard deviation variables used for Bayesian MAP cost function (normally this should be equal to the number of cost functions summed for {\tt CFTYPE = 6}, i.e. one for each variable on each domain) ({\tt isigma = 1, NSIGMA}). Defaults to {\tt 0}.
+  \item[SIGMA]\index{SIGMA} {\tt real array, dimension (NSIGMA)}. Value of the standard deviation $\sigma$ in the likelihood function. For absolute STD, the units are the same as the experimental data used for the cost function it refers to. Defaults to {\tt 0.0}.
+  \item[SCALE\_SIGMA]\index{SCALE\_SIGMA} {\tt logical array, dimension (NSIGMA)}, indicates if {\tt SIGMA(isigma)} is intended as relative standard deviation ({\tt SCALE\_SIGMA(isigma)=.true.}) or absolute ({\tt SCALE\_SIGMA(isigma)=\allowbreak .false.}). Defaults to {\tt .true.}.
+  \item[PRIOR\_TYPE]\index{PRIOR\_TYPE} {\tt integer array, dimension (NNVAR)}. Defines the type of prior distribution for each parameter for the MAP cost function. Defaults to {\tt -1}. Possible values are:
+    \begin{description}
+      \item[0] Uniform distribution.
+      \item[1] Uninformative, proper, Gaussian prior.
+    \end{description}
+  \item[PRIOR\_PAR]\index{PRIOR\_PAR} {\tt real array, dimension (NNVAR,2)}. Indicates parameters for the prior distributions. Defaults to {\tt -1.0}. For {\tt PRIOR\_TYPE}:
+    \begin{description}
+      \item[0] Not used
+      \item[1] {\tt PRIOR\_PAR(ii,1)} indicates the mean $\mu_{\theta_i}$ and {\tt PRIOR\_PAR(ii,2)} indicates the standard deviation $\sigma_{\theta,i}$ of the Gaussian distribution.
+    \end{description}
+  \item[PRIOR\_RANGE]\index{PRIOR\_RANGE} {\tt real array, dimension (NNVAR,2)}. Indicates the valid range for the prior distributions, outside of which the program will return an infinite cost function value. {\tt PRIOR\_RANGE(:,1)} sets the lower bound and {\tt PRIOR\_RANGE(:,2)} sets the upper bound. Defaults to {\tt $\pm 10p_{\infty}$}, where $p_{\infty}$ is a parameter currently set to $10^{30}$.
+\end{description}
+
+
+If experimental data needs to be read (e.g. for cost functions 1-3, 7-9), these must be available in a file named {\tt cfi.dat}, with {\tt i} corresponding to the cost function index  {\tt icf} (not the type!). Within the file, the user has to specify two columns of the same length, the first containing the radial distance from the separatrix (in units of $m$), and the second containing the data value (units described above). The calculated {\tt B2.5} quantities are then interpolated onto the specified radial domain, with no extrapolation allowed.
+
+Labels for FCs ({\tt fcLbl}) and CVs ({\tt cvLbl}) can be specified within {\tt b2fgmtry}. Boundary FCs already have a label assigned to impose boundary conditions, therefore for cost functions defined at the targets, these labels can readily be used.
+
+Dedicated internal mapping arrays have been additionally defined in {\tt b2us\_map} to collect the FCs and CVs on which cost functions are defined:
+\begin{description}
+  \item[cfRegP] \index{cfRegP} {\tt integer array, dimension (NCF, 2)}, pointing for each cost function to the first index in the {\tt cfReg} list, and its number of elements.
+  \item[cfReg] \index{cfReg} {\tt integer array, dimension (MXNCF)}, listing for each cost function the corresponding domain cells or faces.
+  \item[cfOnCv] \index{cfOnCv} {\tt logical array, dimension (NCF)}. Logical to indicate whether a CF domain is on CVs ({\tt .true.}) or FCs ({\tt .false.}).
+  \item[cfFcOr] \index{cfFcOr} {\tt real array, dimension (NCF)}. Multiplier to indicate whether outward normal coincides with the face normal ({\tt 1.0}) or not ({\tt -1.0}).
+\end{description}
+
+Cost functions requiring cell-centered quantities like density or temperature can be correctly defined also using FC labels, since the lowest numbered internal CV belonging to each face will be mapped.
+
+Finally, users can specify additional {\it ad hoc} cost functions for their own purposes, modifying the source file: {\tt B2.5/src\allowbreak/user/b2usr\_cost\_function.F}, after which re-differentiation is needed (see Expert mode, Appendix~\ref{cha:ad_expert}).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Example of cost function file}\label{sec:cfexample}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Regression cost function}
+
+Let's take as an example the case of a cost function including electron density, electron temperature, and ion temperature, at the OMP, and electron density and temperature at the outer target. These have to be summed together in a weighted least-squares approach. Therefore, in {\tt b2.optimization.parameters}, one needs to specify:
+\begin{verbatim}
+NCF = 6,
+CFTYPE = 0, 1, 2, 3, 1, 2,
+\end{verbatim}
+where the {\tt 0} indicates the sum of the cost functions, {\tt 1} indicates electron density, {\tt 2} electron temperature, and {\tt 3} ion temperature. Suppose the face label of the outer target is {\tt -34}, then to define the cost function there and at the OMP one needs:
+\begin{verbatim}
+CFSTART = 2, 0, 0, 0, -34, -34,
+CFEND   = 6, 0, 0, 0, -34, -34,
+CFDEF   = 0, 1, 1, 1,   2,   2,
+\end{verbatim}
+where {\tt CFSTART(1)=2} and {\tt CFEND(1)=6} indicate the indices of cost functions to be summed together (from {\tt 2} to {\tt 6}). {\tt CFSTART(2:4)=CFEND(2:4)=0} because these cost functions are defined on the OMP ({\tt CFDEF(2:4)=1}). Finally, the ones defined on the outer target use the FC label ({\tt CFDEF(2:4)=2}) number {\tt -34} and have thus {\tt CFSTART(5:6)=\allowbreak CFEND(5:6)=-34}.
+
+Finally, the user still needs to provide experimental data for each of these cost functions, which should be saved in files named: {\tt cf2.dat}, for electron density at OMP; {\tt cf3.dat}, for electron temperature at OMP; {\tt cf4.dat}, for ion temperature at OMP; {\tt cf5.dat}, for electron density at target; {\tt cf6.dat}, for electron temperature at target. Note the name numbering starts at {\tt 2} as this is the index of the first cost function actually needing to read data!
+
+\subsubsection{MAP cost function}
+
+If the user is instead interested in using a Bayesian MAP cost function defined on the same domains and using the same quantities as above, then it is necessary to modify the first cost function type to have:
+\begin{verbatim}
+CFTYPE = 6, 1, 2, 3, 1, 2,
+\end{verbatim}
+
+Furthermore, standard deviations needs to be specified for each of the five summed cost functions. Supposing for all OMP quantities a relative standard deviation of 10\%, and for target quantities an absolute standard deviation of $2 \times 10^{18}~m^{-3}$ for electron density and $5~eV$ for electron temperature:
+\begin{verbatim}
+NSIGMA = 5,
+SIGMA =  0.1, 0.1, 0.1, 0.2, 5,
+SCALE_SIGMA = T, T, T, F, F,
+\end{verbatim}
+where {\tt SIGMA(1:3) = 0.1} refer to the 10\% relative standard deviation for the OMP cost functions for which {\tt SCALE\_SIGMA(1:3) = T}; {\tt SIGMA(4) = 0.2} refers to the $2 \times 10^{18}~m^{-3}$ standard deviation for electron density (in units of $10^{19}~m^{-3}$) in absolute form {\tt SCALE\_SIGMA(4) = F}; {\tt SIGMA(5) = 5.0} refers to the $5~eV$ standard deviation for electron temperature in absolute form {\tt SCALE\_SIGMA(5) = F}.
+
+Suppose finally that a Gaussian prior distribution describes well the standard deviation for the OMP quantities, with zero mean and 10.0 standard deviation, while for the target quantities a uniform prior can be used. Then one must set:
+\begin{verbatim}
+PRIOR_TYPE = 1, 1, 1, 0, 0,
+PRIOR_PAR(1,1) =  0.0,  0.0,  0.0,
+PRIOR_PAR(1,2) = 10.0, 10.0, 10.0,
+\end{verbatim}
+
+Finally, all these priors refer to a quantity (the standard deviation of the plasma density/temperature), which by definition must be a positive, nonzero number. Therefore the lower range of the priors must be adjusted to e.g.:
+\begin{verbatim}
+PRIOR_RANGE(1,1) = 1.0e-5, 1.0e-5, 1.0e-5, 1.0e-5, 1.0e-5,
+\end{verbatim}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Tangent AD mode}\label{sec:forwardAD}\index{tgt}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The tangent (or forward) AD mode is the simplest one and allows the user to obtain simultaneously the gradient of all cost functions (outputs) with respect to a single input parameter. For details on the tangent mode the user is referred to \cite{griewank}. The tangent AD is also the first type of AD that has been applied successfully in {\tt B2.5} \cite{carlipsi}.
+
+In tangent AD mode, the user can thus specify as many cost functions as desired, but the differentiation can be done only with respect to a single input parameter. There is, however, the possibility to exploit the so-called vector AD mode, which allows to obtain the full Jacobian, i.e. the derivatives of all cost functions wrt multiple input parameters. The computational cost of this method will however increase proportionally to the number of input parameters, therefore one must think whether the adjoint AD mode can be more efficient, see Section~\ref{sec:adjointAd}. The tangent AD code currently available in {\tt B2.5} has been produced using this tangent vector mode.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Code compilation}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+To compile the tangent code make the objects and dependencies list in the standard way from {\tt \$SOLPSTOP}:
+\begin{verbatim}
+$ gmake listobj depend
+\end{verbatim}
+Then compile with:
+\begin{verbatim}
+$ gmake b25_tgt
+\end{verbatim}
+This way a new executable called {\tt b2mn\_d.exe} will be created in {\tt B2.5/builds/standalone.\${HOST\_NAME}.\allowbreak\${COMPILER}.tgt}.
+
+In case the {\tt debug} version is needed, it follows the standard \SOLPSITER rules which simply require to append {\tt \_debug} to the make targets.
+
+Bear in mind that the tangent and adjoint AD code was built with {\tt Tapenade} using a Fortran 2003 standard (and includes NetCDF support), so it must be compiled with the same constraints: a compiler compatible with the Fortran 2003 standard and with NetCDF installed on your system.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Specify the independent variables for sensitivity calculation}\label{sec:sensitivity_parameters}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+After successful compilation, the user needs to specify with respect to which input parameters, alias independent variables, the sensitivities are computed. This requires a new file, {\tt b2.optimization.parameters}, which allows choosing such parameters for sensitivity calculation, and will be employed for specifying optimization-related variables as well.
+
+Below is a description of the variables needed in {\tt b2.optimization.parameters} within the {\tt OPTIMIZATION} namelist. Additional variables for optimization are listed in Section~\ref{sec:run_opt}, and an up-to-date list is also available in Appendix~\ref{lis:b2cdcn}.
+
+\begin{description}
+	\item[NNVAR]\index{NNVAR} {\tt integer}, number of sensitivity/optimization parameters $\theta$ (radially varying transport coefficients count as 1 as a whole) ({\tt ipar = 1, NNVAR}). Defaults to {\tt 0}.
+	\item[PARTYPE]\index{PARTYPE} {\tt integer array, dimension (NNVAR)}, indicates the type of sensitivity/optimization parameter $\theta$ for index {\tt ipar}. Defaults to {\tt -1}. Available options are:
+	\begin{description}
+		\item[0] {\tt SIGMA}, standard deviation $\sigma_{q,l}$ in likelihood function for Bayesian inference (one for each plasma quantity and location used). These must {\em always} be the last parameters in the {\tt PARTYPE} vector!
+		\item[1] {\tt PARM\_DNA} or {\tt TDATA(:,:,1,:)}
+		\item[2] {\tt PARM\_DPA} or {\tt TDATA(:,:,2,:)}
+		\item[3] {\tt PARM\_HCI} or {\tt TDATA(:,:,3,:)}
+		\item[4] {\tt PARM\_HCE} or {\tt TDATA(:,:,4,:)}
+		\item[5] {\tt PARM\_VLA} or {\tt TDATA(:,:,5,:)} (not yet tested!)
+		\item[6] nothing yet (presumably $y$-component of {\tt vla}?)
+		\item[7] {\tt PARM\_VSA} or {\tt TDATA(:,:,7,:)}
+		\item[8] {\tt PARM\_SIG} or {\tt TDATA(:,:,8,:)}
+		\item[9] {\tt PARM\_ALF} or {\tt TDATA(:,:,9,:)}
+		\item[10] {\tt ENEPAR}
+		\item[11] {\tt ENIPAR}
+		\item[12] {\tt CONPAR}
+		\item[13] {\tt MOMPAR}
+		\item[14] {\tt POTPAR}
+		\item[15] {\tt ENKPAR}
+		\item[16] {\tt B2RECYC}
+		\item[17] {\tt b2tqna\_ballooning}
+		\item[18] {\tt b2tqna\_ballooning\_rescale}
+		\item[19] {\tt keps\_cd}
+		\item[20] {\tt keps\_heat}
+		\item[21] {\tt keps\_heat\_i}
+		\item[22] {\tt keps\_sig}
+		\item[23] {\tt keps\_alf}
+		\item[24] {\tt keps\_visc}
+		\item[25] {\tt keps\_dkt}
+		\item[26] {\tt keps\_dzt}
+		\item[27] {\tt b2sikt\_fac\_diss}
+		\item[28] {\tt b2sikt\_fac\_diss\_core}
+		\item[29] {\tt b2sikt\_fac\_sheath}
+		\item[30] {\tt b2sikt\_fac\_sheath\_core}
+		\item[31] {\tt keps\_shear}
+		\item[32] {\tt b2tfhi\_fsigkt}
+		\item[33] {\tt b2sikt\_fac\_vis\_RS}
+		\item[34] {\tt b2tfhi\_fflokt}
+		\item[35] {\tt b2tfhi\_fconkt}
+		\item[36] {\tt b2tfhi\_fflozt}
+		\item[37] {\tt b2tfhi\_fconzt}
+		\item[38] {\tt b2tfhi\_fkt\_hie}
+		\item[39] {\tt b2tfhe\_vis\_kt}
+	\end{description}
+	\item[SIGMA\_OPT]\index{SIGMA\_OPT} {\tt logical array, dimension (NSIGMA)}, for each {\tt SIGMA}, specifies whether its sensitivity is computed or not, and whether is optimized or fixed. Defaults to {\tt .true.}.
+	\item[SPATIAL\_DEP]\index{SPATIAL\_DEP} {\tt logical array, dimension (NNVAR)}, for each sensitivity/optimization variable {\tt ipar}, specifies if radially varying coefficients are optimized.	Meaningful only for {\tt PARTYPE = 1} to {\tt 9}. Defaults to {\tt .false.}.
+	\item[SPATIAL\_POINTS]\index{SPATIAL\_POINTS} {\tt integer array, dimension (NNVAR)}, number of spatial points for sensitivity/optimization parameter {\tt ipar} (should be the same as {\tt NDATA} in {\tt b2.transport.inputfile}). The actual number of optimized variables ({\tt NPAR\_OPT}) is then equal to the total number of spatial points + any other additional parameters. Defaults to {\tt 0}.
+	\item[PARIS]\index{PARIS} {\tt integer array, dimension (NNVAR)}, specifies the species of the sensitivity/optimization parameter {\tt ipar}. Only meaningful for {\tt PARTYPE = [1-5,7,12,13,16]}. Defaults to {\tt 0}.
+	\item[PARIB]\index{PARIB} {\tt integer array, dimension (NNVAR)}, specifies the boundary/strata of the sensitivity/optimization parameter {\tt ipar}. Only meaningful for {\tt PARTYPE = [10-16]}. Defaults to {\tt 0}.
+\end{description}
+
+\subsubsection{Example of b2.optimization.parameters}
+
+If one is interested in sensitivity of regression-type cost function(s) wrt particle and heat transport coefficients ($D_{\perp}$, $\chi_{\perp,i}$, and $\chi_{\perp,e}$), as well as the density BC for $\mathrm{D}^{+}$ ions at the core, then the {\tt b2.optimization.parameters} file could look like this:
+\begin{verbatim}
+	&OPTIMIZATION
+	[..cost function definition...]
+	NNVAR = 4,
+	PARTYPE =        1,  3,  4,                 12,
+	PARIS  =         1,  1,  0,                  1,
+	PARIB  =         3*0,                        1,
+	/
+\end{verbatim}
+
+The explanation is as follows: we require sensitivity wrt four parameters, thus {\tt NNVAR=4}; these four parameters are, in order:
+\begin{description}
+	\item $D_{\perp}$ for $\mathrm{D}^{+}$ ions ({\tt PARM\_DNA(1)}). Thus {\tt PARTYPE(1)=1}, for species {\tt 1}, thus {\tt PARIS(1)=1}. {\tt PARIB(1)} does not matter and is set to zero.
+	\item $\chi_{\perp,i}$ for $\mathrm{D}^{+}$ ions ({\tt PARM\_HCI(1)}). Thus {\tt PARTYPE(2)=3}, for species {\tt 1}, thus {\tt PARIS(2)=1}. {\tt PARIB(2)} does not matter and is set to zero.
+	\item $\chi_{\perp,e}$ ({\tt PARM\_HCE}). Thus {\tt PARTYPE(3)=4}. {\tt PARIS(3)} does not matter in this case because {\tt PARM\_HCE} is looked at, which is not species-dependent, while if radially varying coefficients would be optimized (with {\tt TDATA(:,:,4,:)}), then {\tt PARIS(3)} should be set to {\tt 1}. {\tt PARIB(3)} does not matter.
+	\item Continuity BC at the core for $\mathrm{D}^{+}$ ({\tt BCCON(1,1,1)}). Thus {\tt PARTYPE(4) = 12}, for species {\tt 1}, thus {\tt PARIS(4)=1}, and for the core boundary (in this case {\tt 1}), thus {\tt PARIB(4)=1}.
+\end{description}
+
+If one is interested in MAP cost function sensitivities or of spatially dependent transport coefficients please see the example setups in Section~\ref{sec:example_optimization}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Code run}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Once the code has been successfully compiled, it can be run with the following command:
+\begin{verbatim}
+$ b2run -tgt b2mn > run.log
+\end{verbatim}
+
+This code will converge the original {\tt B2.5} equations (also called the primal) and at the same time also the tangent equations (derivative of the original equations in tangent mode). By default, running this version of the code will calculate the derivative of ALL cost functions specified in {\tt b2.optimization.parameters} wrt the parameters specified in {\tt b2.optimization.parameters}.
+
+The code will automatically print in {\tt run.log} the value of the cost function(s) and their derivatives. To check it, simply do:
+\begin{verbatim}
+$ grep -i cost run.log
+$ grep -i gradient run.log
+\end{verbatim}
+
+Users have other options to monitor the progress of the derived quantities:
+\begin{description}
+  \item[cost\_function \$i] This script allows the user to plot the value of the cost function {\tt \$i} as a function of the iterations.
+  \item[cost\_function\_gradient \$i] This script allows the user to plot the value of the gradient of cost function {\tt \$i} as a function of the iterations (in tangent mode only).
+  \item[resall\_D\_diff] This script plots the evolution of the residuals of all the differentiated equations for D-only cases (in tangent mode only).
+  \item[resco\_diff] This script plots the evolution of the residuals of the differentiated continuity equation (in tangent mode only).
+  \item[resmo\_diff] This script plots the evolution of the residuals of the diff'ed momentum equation (in tangent mode only).
+  \item[reskt\_diff] This script plots the evolution of the residuals of the diff'ed $k$ equation (in tangent mode only).
+  \item[resrest\_diff] This script plots the evolution of the residuals of the diff'ed total momentum, ion energy, electron energy and potential equations (in tangent mode only).
+  \item[2dt\_diff] To be done if needed
+\end{description}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Derivatives of more parameters}\label{sec:tanget_more}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+{\tt b2mod\_diffsizes.F} acts similarly to {\tt DIMENSIONS.F} and stores the maximum number of directions {\tt nbdirsmax} allowed, i.e. the maximum number of independent variables with respect to which one can calculate the derivative of the cost function. Increase {\tt nbdirsmax} and recompile if needed.
+
+Current parameters for which derivative calculation is possible (default parameters):
+\begin{itemize}
+  \item Transport coefficients: {\tt PARM\_DNA}, {\tt PARM\_HCE}, {\tt PARM\_HCI}, {\tt PARM\_VSA}, {\tt PARM\_SIG}, {\tt PARM\_ALF}
+  \item Radially-varying and ballooned transport coefficients: {\tt TDATA}, {\tt b2tqna\_ballooning}, {\tt b2tqna\_ballooning\_rescale}
+  \item Boundary conditions: {\tt ENEPAR}, {\tt ENIPAR}, {\tt CONPAR}, {\tt MOMPAR}, {\tt POTPAR}, {\tt ENKPAR}
+  \item Recycling coefficients: {\tt B2RECYC}
+  \item $\kappa$-model switches: {\tt keps\_cd}, {\tt b2sikt\_fac\_sheath}, {\tt b2sikt\_fac\_sheath\_core}, {\tt b2sikt\_fac\_diss}, {\tt b2sikt\_fac\_diss\_core}, {\tt b2tfhi\_fsigkt}, {\tt keps\_heat}, {\tt keps\_heat\_i}, {\tt keps\_sig}, {\tt keps\_alf}, {\tt keps\_visc}, {\tt keps\_dkt}, {\tt keps\_dzt}, {\tt keps\_shear}, {\tt b2sikt\_fac\_vis\_RS}, {\tt b2tfhi\_fflokt}, {\tt b2tfhi\_fconkt}, {\tt b2tfhi\_fflozt}, {\tt b2tfhi\_fconzt}, {\tt b2tfhi\_fkt\_hie}, {\tt b2tfhe\_vis\_kt}
+  \item Reaction rates: {\tt rtlsa}, {\tt rtlra}, {\tt rtlcx}, {\tt rtlqa} (Note: these cannot be specified in {\tt b2.optimization.parameters} and require manual changes to the source file of {\tt b2mn\_d.F90})
+  \item Optimization parameters: {\tt sigma}, {\tt par\_opt\_phys}
+\end{itemize}
+
+If users require sensitivities/optimization of parameters other than the default ones, then {\tt B2.5} needs to be differentiated anew, see Appendix~\ref{cha:ad_expert}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Adjoint AD mode}\label{sec:adjointAd}\index{adj}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The adjoint (or backward) AD mode allows the user to obtain the gradient of a single cost function with respect to all input parameters, at a cost which is around 5 times that of a standard {\tt B2.5} simulation. For details on the adjoint mode the user is referred to \cite{griewank}. The reference work for adjoint AD on {\tt B2.5} is \cite{carlijcp}.
+
+While in principle adjoint vector mode exists and allows to retrieve the full Jacobian, this has not yet been deployed in \SOLPSITER.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Code compilation}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+To compile the adjoint code make the objects and dependencies list in the standard way from {\tt \$SOLPSTOP}:
+\begin{verbatim}
+$ gmake listobj depend
+\end{verbatim}
+Then compile with:
+\begin{verbatim}
+$ gmake b25_adj
+\end{verbatim}
+
+Similarly as for tangent AD, a new executable called {\tt b2mn\_b.exe} will be created in {\tt B2.5/builds/standalone.\allowbreak\${HOST\_NAME}.\allowbreak\${COMPILER}.adj}.
+
+In case the {\tt debug} version is needed, it follows the standard \SOLPSITER rules which simply require to append {\tt \_debug} to the make targets.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Code run}\label{sec:run_adj}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Once the code has been successfully compiled, it can be run with the following command:
+\begin{verbatim}
+$ b2run -adj b2mn > run.log
+\end{verbatim}
+
+The adjoint code features a small difference wrt to the tangent one in that it first converges the primal, and then converges the adjoint equations, keeping the converged primal state fixed, see \cite{carlijcp} and Figure~\ref{fig:adjoint}. In this framework, there are two stopping criteria for both the primal and the adjoint iterations: either the maximum number of iterations set by {\tt b2mndr\_ntim} or a threshold for the maximum residual set by {\tt b2mndr\_res\_quit} (default {\tt 1e-7}). When either of the two is reached, the primal or adjoint iterations are stopped. The maximum residual is calculated for the primal as the maximum among the L1-norms of the residuals of the solved equations (variables {\tt aresco}, {\tt aresmo}, etc... already available in the code). For the adjoint, this residual is calculated as the maximum of the quantities:
+\begin{equation}\label{eq:res}
+R_q = \frac{\sqrt{\sum_{i} (\bar{q}(i) -\bar{q}_0(i))^2}}{\sqrt{\sum_{i} \bar{q}(i)^2}}
+\end{equation}
+where $\bar{q}$ indicates an adjoint state variable (density, velocity, electron temperature, etc...), $\bar{q}_0$ indicates the same adjoint state variable at the previous iteration, and the sum is done over each cell $i$ of the domain.
+
+\begin{figure}[h]
+\begin{center}
+\ifpdf
+  \includegraphics[width=120mm]{FiguresAD/adjoint_driver.png}
+\else
+  \includegraphics[width=120mm]{FiguresAD/adjoint_driver.eps}
+\fi
+\caption{Scheme of the adjoint AD main driver routine.}\label{fig:adjoint}
+\end{center}
+\end{figure}
+
+By default, running this version of the code will calculate the derivative of the {\em first} cost function wrt all the default parameters indicated above. At each adjoint iteration it will print out in {\tt run.log} the following information:
+\begin{itemize}
+  \item {\tt GRADIENT ITERATION}: current adjoint iteration
+  \item {\tt GRADIENT MAX RES}: current value of the maximum residual
+  \item the derivative of the parameters specified in {\tt b2.optimization.parameters}
+\end{itemize}
+
+To obtain such information simply do:
+\begin{verbatim}
+$ grep -i gradient run.log
+\end{verbatim}
+
+If printout of reaction rate sensitivities is needed, then {\tt b2mod\_driver\_diff.F90} need to be modified accordingly.
+
+For the moment, one can only monitor the progress of the derived quantities by inspecting the output produced by the code. In addition one can use the following script:
+\begin{description}
+  \item[res\_adj] This script allows the user to plot the value of the calculated adjoint residual as per Eq.~(\ref{eq:res}), as a function of the iterations
+\end{description}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Comparing tangent and adjoint }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Tangent and adjoint derivatives should always be the same up to machine precision, i.e. $10^{-14}$ or near that, while comparisons with finite differences result in discrepancies of $\sim 10^{-6}$ (depending on the perturbation size). This has been verified in the paper \cite{carlijcp}. There was however one case in which discrepancy between tangent, adjoint, and finite differences was quite larger, of order $10^{-3}$ or even higher. This was encountered when the total momentum equation was switched on. The reason is that when this equation is used, then an extra velocity correction is applied through a function like
+\begin{equation*}
+min(max(x,y),max(x,x+y),max(y,x+y)),
+\end{equation*}
+which at convergence (i.e. when the corrections are nearly zero), has a large gradient discontinuity. Is is therefore suggested to not use the total momentum equation for tangent/adjoint, or modify it to make it a smooth function.
+
+Additional non-smoothnesses are likely present in the code, which could potentially hamper the gradient's accuracy. Whenever these are found, they should be added to this section.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Optimization}\label{sec:optimization}\index{opt\_tgt}\index{opt\_adj}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The optimization framework will try to minimize the cost function $\hat{\mathcal{J}}(\theta)$ by adjusting some parameter set $\theta$, subject to bound constraints on the $\theta$ variables themselves:
+\begin{equation*}\label{eq:optim}
+\begin{array}{ll}
+\min\limits_{\theta} \hat{\mathcal{J}}(\theta) \\
+\mathrm{s.t.}~\theta_{L}\le\theta\le\theta_{U},
+\end{array}
+\end{equation*}
+where $\theta_{L}$ and $\theta_{U}$ are the lower and upper bounds for $\theta$ respectively. Currently, no other nonlinear constraint is implemented.
+
+The minimization is carried out by coupling the tangent or adjoint AD code to some optimization library, such as {\tt PETSc/TAO} \cite{petsc1} or {\tt IPOPT} \cite{ipopt}. What these optimizers do is to calculate the cost function and its gradient starting from an initial guess supplied by the user. Once the gradient is known, a suitable direction is computed along which the cost function decreases. This descent direction depends on the algorithm chosen (BFGS is the default, other possibilities include other quasi-Newton methods, steepest-descent, conjugate gradient, etc...). Subsequently, a so-called line search is typically applied to find a step-length in the descent direction that guarantees convergence of the algorithm. Also here different choices are possible, the most common ones require the Armijo or the strong Wolfe condition. With {\tt PETSc/TAO}, it is possible to flexibly choose the descent direction type, the line search options, or even switch to trust region in place of line search methods. Users who would like to know more regarding optimization methods are encouraged to read \cite{nocedal}.
+
+A schematic view of the optimization process is available in Figure~\ref{fig:optim} when tangent AD is employed for gradient computation. The initial guess {\tt X0} is fed to the tangent AD version of the main driver routine {\tt b2mndr\_1\_d}, which will compute the value of the cost function and its gradient. If certain criteria regarding tolerances, computational time, or iterations, are met (see below), the optimization is stopped, otherwise the line search procedure is started and a new value for the parameter set $\theta$ is computed and fed again to the main driver. Note that the line search will actually require one or more additional calls to the driver routines to evaluate the cost function and/or the gradient.
+
+If adjoint AD is used for gradient calculation, then the driver routine {\tt b2mndr\_1\_d} in Figure~\ref{fig:optim} is replaced by {\tt b2mndr\_1\_b} shown previously in Figure~\ref{fig:adjoint}.
+
+\begin{figure}[h]
+\begin{center}
+\ifpdf
+  \includegraphics[width=120mm]{FiguresAD/optimization_scheme.png}
+\else
+  \includegraphics[width=120mm]{FiguresAD/optimization_scheme.eps}
+\fi
+\caption{Scheme of the tangent AD optimization.}\label{fig:optim}
+\end{center}
+\end{figure}
+
+
+Stopping criteria for the optimization:
+\begin{itemize}
+  \item zero-gradient (it means a stationary point / local minimum has been reached)
+  \item maximum number of iterations reached
+  \item maximum amount of CPU time spent
+  \item tolerance met
+\end{itemize}
+
+For {\tt PETSc/TAO} the tolerance is easily linked with optimization quantities like gradient and cost function, so that the optimization is stopped when the norm of the gradient is small enough $\left|\left |\nabla \hat{\mathcal{J}}\right|\right| \le \epsilon_a$, when the relative norm of the gradient is small enough $\frac{\left|\left |\nabla \hat{\mathcal{J}}\right|\right|}{\left|\hat{\mathcal{J}}\right|} \le \epsilon_r$, or when the gradient has been sufficiently reduced wrt its value at the zeroth iteration $\frac{\left|\left |\nabla \hat{\mathcal{J}}\right|\right|} {\left|\left |\nabla \hat{\mathcal{J}}_0\right|\right|} \le \epsilon_t$. The various tolerances $\epsilon$ are set to the same default {\tt TOL\_OPT} (see {\tt b2.optimization.parameters} in Section~\ref{sec:run_opt}), but with command line options they can be controlled separately.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Compile optimization code}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+In order to compile the optimization code, one must make sure that one of the optimization libraries currently tested with {\tt B2.5} is available, such as {\tt PETSc/TAO} (version 3.10 or younger) or {\tt IPOPT}, either as a module to be loaded or as a locally installed library from the user. Both {\tt PETSc/TAO} and {\tt IPOPT} are open source so the latter should always be feasible.
+
+For the local installation on the KU-Leuven VSC cluster, for {\tt PETSc/TAO} to the following command line options to configure the installation were used:
+\begin{verbatim}
+$ ./configure --with-mpi=0 --with-fc=ifort -–with-cpp:/lib/cpp -traditional \
+  --download-cmake=yes --download-superlu=yes
+\end{verbatim}
+
+On other clusters a similar configuration could be used. It was in particular necessary to make sure that when loading the {\tt PETSc/TAO} module or library the default compiler and compiler options of \SOLPSITER were retained and not overwritten by those of the library.
+
+To compile the optimization version, for example with the {\tt PETSc/TAO} optimization library:\index{set\_tao}
+\begin{verbatim}
+$ game listobj depend
+$ set_tao
+$ gmake b25_tgt b25_adj
+\end{verbatim}
+where {\tt set\_tao} allows to include extra compilation flags in the user's configuration files for {\tt B2.5}. Alternatively, one can do the same with command {\tt set\_ipopt}. In both cases an additional executable named {\tt b2optim\_tao.exe} or {\tt b2optim\_ipopt.exe} is compiled in {\tt B2.5/builds/standalone.\allowbreak\$HOST\_NAME.\allowbreak\$COMPILER.[tgt|adj]}.
+
+\textbf{Important:} On the ITER cluster it is currently possible to compile only the {\tt PETSc/TAO} version.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run an optimization}\label{sec:run_opt}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+After successful compilation, the optimization case can be setup. This requires additional variables in {\tt b2\allowbreak.optimization\allowbreak.parameters} other than the ones listed in Section~\ref{sec:sensitivity_parameters}, which allows choosing the starting guess for the optimization parameters, lower/upper bounds, as well as other optimization parameters.
+
+Below is a description of the additional variables set in {\tt b2.optimization.parameters} within the {\tt OPTIMIZATION} namelist. An up-to-date list is also available in Appendix~\ref{lis:b2cdcn}.
+
+\begin{description}
+  \item[PAR\_RESCALE]\index{PAR\_RESCALE} {\tt real*8 array, dimension (NPAR\_OPT)}, coefficient to rescale optimization parameters (and their gradient). Note that the dimension is {\tt NPAR\_OPT}, so it needs to be specified also for each spatial point in case of radially varying coefficients. Defaults to {\tt 1.0}.
+  \item[X0]\index{X0} {\tt real*8 array, dimension (NPAR\_OPT)}, initial guess for each optimization parameter. Must be set for MAP cost function as its value is employed for calculating priors. Defaults to $10*p_\infty$, where $p_\infty$ is a parameter currently set to $10^{30}$.
+  \item[XL]\index{XL} {\tt real*8 array, dimension (NPAR\_OPT)}, lower bound for each optimization parameter. Defaults to $-10*p_\infty$.
+  \item[XU]\index{XU} {\tt real*8 array, dimension (NPAR\_OPT)}, upper bound for each optimization parameter. Defaults to $10*p_\infty$.
+  \item[CPU\_OPT]\index{CPU\_OPT} {\tt real*8}, maximum amount of CPU time in seconds after which the optimization is stopped. Defaults to {\tt 0.0}.
+  \item[MAXITER]\index{MAXITER} {\tt integer}, maximum number of optimization iterations. The maximum number of cost function evaluations is set to {\tt 2*MAXITER} to allow for line searches. Can be overridden with {\tt PETSc/TAO} by using command line options for the optimization. Defaults to {\tt 100}.
+  \item[TOL\_OPT]\index{TOL\_OPT} {\tt real*8}, tolerance below which optimization is stopped. For {\tt PETSc/TAO} it is used for the absolute gradient norm, the relative gradient norm, and the gradient reduction stopping criteria. Can be overridden with {\tt PETSc/TAO} by using command line options for the optimization. Defaults to $10^{-7}$.
+  \item[HESSIAN\_APPROXIMATION]\index{HESSIAN\_APPROXIMATION} {\tt character*256}, type of Hessian approximation employed. Depends on optimization library. Possible values are currently: {\tt 'limited-memory'} and {\tt 'exact'}. When using the {\tt 'exact'} option the steepest descent algorithm is used. Defaults to {\tt 'limited-memory'}.
+  \item[LIMITED\_MEMORY\_UPDATE\_TYPE]\index{LIMITED\_MEMORY\_UPDATE\_TYPE} {\tt character*256}, specifies which kind of Hessian approximation is employed if {\tt HESSIAN\_APPROXIMATION} is set to {\tt 'limited-memory'}. Can overridden with {\tt PETSc/TAO} by using command line options for the optimization. Defaults to {\tt 'bfgs'}.
+  \item[NNCON]\index{NNCON} {\tt integer}, number of nonlinear constraints to impose (not used for the moment). Defaults to {\tt 0}.
+  \item[GL]\index{GL} {\tt real*8 array, dimension (NNCON)}, lower bound for each nonlinear constraint (not used for the moment). Defaults to $-10*p_\infty$.
+  \item[GU]\index{GU} {\tt real*8 array, dimension (NNCON)}, upper bound for each nonlinear constraint (not used for the moment). Defaults to $10*p_\infty$.
+  \item[NNJAC]\index{NNJAC} {\tt integer}, number of non-zeros in Jacobian for the nonlinear constraints (not used for the moment). Defaults to {\tt 0}.
+  \item[JCOL]\index{JCOL} {\tt integer array, dimension (NNJAC)}, contains the column index of the non-zero element of the Jacobian for the nonlinear constraints (not used for the moment). Defaults to {\tt 0}.
+  \item[JROW]\index{JROW} {\tt integer array, dimension (NNJAC)}, contains the row index of the non-zero element of the Jacobian for the nonlinear constraints. (not used for the moment). Defaults to {\tt 0}.
+  \item[JJ]\index{JJ} {\tt real*8 array, dimension (NNJAC)}, contains the value of the non-zero element of the Jacobian for the nonlinear constraints (not used for the moment). Defaults to {\tt 0.0}.
+\end{description}
+
+Once the optimization case is ready, it can be started with the commands:\index{set\_tao}
+\begin{verbatim}
+$ set_tao
+\end{verbatim}
+\verb|$ b2run -opt_tgt > run.log| or \verb|$ b2run -opt_adj > run.log|
+
+Note that switches like {\tt b2mndr\_ntim} and {\tt b2mndr\_elapsed} will set the number of iterations or CPU time {\em for each single call} to {\tt b2mndr\_1\_[d|b]}. More tricky is the case of {\tt b2mndr\_etim}, which for now is suggested to be set to {\tt 0.0}.
+
+Finally, when optimization libraries like {\tt PETSc/TAO} enable modifying options using command line arguments, the user can also do so by setting the environment variable:\index{TAO\_OPT}
+\begin{verbatim}
+$ setenv TAO_OPT "list-of-valid-options"
+\end{verbatim}
+
+\textbf{Some suggestions:}
+\begin{itemize}
+  \item Scaling of the problem is quite important! Therefore, aim at parameters which are in a similar range of order of magnitude, using {\tt PAR\_RESCALE};
+  \item {\tt PETSc/TAO} requires by default the strong Wolfe conditions for the line search, which may be too strict or be affected by gradient discontinuities. It may be better to require the Armijo condition only with setting the option {\tt setenv TAO\_OPT "-tao\_ls\_type armijo"};
+  \item the BFGS method with {\tt PETSc/TAO} seems so far the most performing option, with {\tt IPOPT} and other {\tt PETSc/TAO} methods more demanding.
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Check optimization results}\label{sec:optim_results}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+When the optimization is running, the user can check its status by doing:
+\begin{verbatim}
+$ grep -i tao run.log
+\end{verbatim}
+or
+\begin{verbatim}
+$ grep -i ipopt run.log
+\end{verbatim}
+
+This will print out information on the iterations performed, cost function value and gradient, and value of the parameters.
+
+Once the optimization is completed, results can be analyzed. It is suggested to first check if the optimization crashed, in which case there will not be any {\tt b2fstate} and error messages in the log file. After that, a script can be run to extract information from {\tt run.log} concerning the optimization. The script to use is either {\tt result\_tao.sh} or {\tt result\_ipopt.sh}, depending on the optimization library adopted. These scripts will create the following files:
+\begin{description}
+  \item[run\_info]\index{run.info} which stores information about GIT version, number of iterations performed, number and last 10 values of cost functions, number of parameters, cost function gradient (last 200 values), and other info from the optimization libraries.
+  \item[objval.dat]\index{objval.dat} which stores the cost function value for each optimization iteration.
+  \item[grad.dat]\index{grad.dat} which stores the cost function gradient norm for each optimization iteration.
+  \item[parm\_histX.dat]\index{parm\_histX.dat} which stores the value of optimization parameter {\tt X} for each optimization iteration.
+  \item[fgeval.dat]\index{fgeval.dat} which stores the number of optimization iterations (for {\tt PETSc/TAO} only).
+  \item[feval.dat]\index{fgeval.dat} which stores the number of function evaluations (for {\tt IPOPT} only).
+  \item[geval.dat]\index{fgeval.dat} which stores the number of optimization iterations (for {\tt IPOPT} only).
+\end{description}
+Additionally, the files {\tt PETSC-TAO.OUT} and {\tt IPOPT.OUT} will be copied from {\tt b2mn.exe.dir} into the run directory, and will contain further details on the optimization (e.g. stopping criteria).
+
+Finally, the optimization will also write some intermediate state files in {\tt b2mn.exe.dir}, with names {\tt b2fstate\_optim.XXXX}, where {\tt XXXX} is the optimization iteration. These can be used for checking intermediate optimization states or reconstruct the optimization history if needed.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Example of optimization setup}\label{sec:example_optimization}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Regression cost function}
+
+For an estimation using a regression cost function as in the example in Section~\ref{sec:cfexample}, one could think of optimizing particle and heat transport coefficients ($D_{\perp}$, $\chi_{\perp,i}$, and $\chi_{\perp,e}$), as well as the density BC for $\mathrm{D}^{+}$ ions at the core. In this case the {\tt b2.optimization.parameters} file builds upon the example shown in Section~\ref{sec:sensitivity_parameters} and could look like this:
+\begin{verbatim}
+&OPTIMIZATION
+[...cost function definition...]
+NNVAR = 4,
+PARTYPE =        1,  3,  4,                 12,
+PARIS  =         1,  1,  0,                  1,
+PARIB  =         3*0,                        1,
+PAR_RESCALE =    3*1.0,                   1.0e19,
+X0 =             1.0,      1.0,     1.0,  1.0e19,
+XL =             0.1,      0.1,     0.1,  0.5e19,
+XU =             10.0,     15.0,    25.0, 1.5e19,
+SPATIAL_DEP =  F,F,F,
+SPATIAL_POINTS = 0,0,0,
+MAXITER = 20,
+TOL_OPT = 1.0e-4,
+CPU_OPT = 255000.0,
+HESSIAN_APPROXIMATION = 'limited-memory',
+LIMITED_MEMORY_UPDATE_TYPE = 'bfgs',
+NNCON = 1,
+NNJAC = 1,
+JCOL = 1,
+JROW = 1,
+JJ = 0.0,
+/
+\end{verbatim}
+
+The explanation is as follows: we optimize four parameters, thus {\tt NNVAR=4}; these four parameters are, in order:
+\begin{description}
+  \item $D_{\perp}$ for $\mathrm{D}^{+}$ ions ({\tt PARM\_DNA(1)}). Thus {\tt PARTYPE(1)=1}, for species {\tt 1}, thus {\tt PARIS(1)=1}. {\tt PARIB(1)} does not matter and is set to zero.
+  \item $\chi_{\perp,i}$ for $\mathrm{D}^{+}$ ions ({\tt PARM\_HCI(1)}). Thus {\tt PARTYPE(2)=3}, for species {\tt 1}, thus {\tt PARIS(2)=1}. {\tt PARIB(2)} does not matter and is set to zero.
+  \item $\chi_{\perp,e}$ ({\tt PARM\_HCE}). Thus {\tt PARTYPE(3)=4}. {\tt PARIS(3)} does not matter in this case because {\tt PARM\_HCE} is being optimized, which is not species-dependent, while if radially varying coefficients would be optimized (with {\tt TDATA(:,:,4,:)}), then {\tt PARIS(3)} should be set to {\tt 1}. {\tt PARIB(3)} does not matter.
+  \item Continuity BC at the core for $\mathrm{D}^{+}$ ({\tt BCCON(1,1,1)}). Thus {\tt PARTYPE(4) = 12}, for species {\tt 1}, thus {\tt PARIS(4)=1}, and for the core boundary (in this case {\tt 1}), thus {\tt PARIB(4)=1}.
+\end{description}
+Moreover, the starting guess for each of the transport coefficients is {\tt 1.0}, while for the density BC it is $10^{19}~m^{-3}$. As such, {\tt X0 = 1.0, 1.0, 1.0, 1.0e19} (and {\tt XL}, {\tt XU} are defined in a similar way).
+
+Since the density BC has a quite different order of magnitude, which will considerably hamper the optimization process, it is better to rescale this parameter and the related gradient component such that it falls in the vicinity of the order of magnitude of the other parameters. Therefore, {\tt PAR\_RESCALE(4) = 1.0e19}.
+
+There is no radially dependent transport coefficient in this case, so we set {\tt SPATIAL\_DEP = F,F,F} and {\tt SPATIAL\_POINTS = 0,0,0}.
+
+Next, we set as stopping criteria a maximum number of 20 optimization iterations with {\tt MAXITER=20}, a minimum tolerance of $10^{-4}$ with {\tt TOL\_OPT = 1e-4}, and maximum of about 71 hours of cpu time for the optimization with {\tt CPU\_OPT = 255000.0}.
+
+The last parameters could be omitted in a standard optimization with {\tt PETSc/TAO} BFGS and without nonlinear constraints, while they should be specified for {\tt IPOPT}, as in there a 'hard-coded' trivial constraint needs to be specified (automatically done).
+
+\subsubsection{Radially dependent coefficients}
+
+If one wants to optimize radially dependent transport coefficients the setup above can be modified according to:
+\begin{verbatim}
+PARIS  =             1,        1,       1,       1,
+PAR_RESCALE =    6*1.0,    6*1.0,   6*1.0,  1.0e19,
+X0 =             6*1.0,    6*1.0,   6*1.0,  1.0e19,
+XL =             6*0.1,    6*0.1,   6*0.1,  0.5e19,
+XU =            6*10.0,   6*15.0,  6*25.0,  1.5e19,
+SPATIAL_DEP = T,T,T,
+SPATIAL_POINTS = 6,6,6,
+\end{verbatim}
+
+The major difference wrt the previous example is that for each of the transport coefficients we now specify that there are 6 spatial points to be optimized ({\tt SPATIAL\_DEP=T,T,T} and {\tt SPATIAL\_POINTS=6,6,6}). Accordingly, we need to specify {\tt PER\_RESCALE}, {\tt X0}, {\tt XL}, and {\tt XU} for each of these spatial points, therefore the additional {\tt 6*} in front of the values for {\tt PARTYPE(1:3)}. Furthermore, we set {\tt PARIS(3)} to {\tt 1}, as now {\tt TDATA(:,:,3,:)} is optimized, which requires it.
+
+Note that the other optimization parameters do not need to change!
+
+Finally, one must be careful to have {\tt 'b2tqna\_inputfile'} set to {\tt '1'} and that in {\tt b2.transport.inputfile} the coefficients for {\tt kind\_coeff=1,3,4} are specified on 6 radial points.
+
+\textbf{NOTE:} the optimization will adapt the value of the transport coefficients at these radial locations, but will not `move' such locations!
+
+\subsubsection{MAP cost function}
+
+If the user is instead interested in a Bayesian MAP estimation, with a cost function again similar to the example above (Section~\ref{sec:cfexample}), the optimization setup needs to change, as well as the {\tt b2.optimization.parameters} file. Starting from the former, the {\tt b2.optimization.parameters} file will read:
+\begin{verbatim}
+&OPTIMIZATION
+NNVAR = 9,
+PARTYPE =        1,  3,  4,                     12, 5*0,
+PARIS  =         1,  1,  0,                      1, 5*0,
+PARIB  =         3*0,                            1, 5*0,
+PAR_RESCALE =    3*1.0,                     1.0e19, 5*1.0,
+X0 =               1.0,      1.0,     1.0,  1.0e19, 5*1.0,
+XL =               0.1,      0.1,     0.1,  0.5e19, 5*1.0e-2,
+XU =              10.0,     15.0,    25.0,  1.5e19, 5*10.0,
+SIGMA_OPT = T,T,T,T,T,
+SPATIAL_DEP =  F,F,F,
+SPATIAL_POINTS = 0,0,0,
+MAXITER = 20,
+TOL_OPT = 1.0e-4,
+CPU_OPT = 255000.0,
+HESSIAN_APPROXIMATION = 'limited-memory',
+LIMITED_MEMORY_UPDATE_TYPE = 'bfgs',
+NNCON = 1,
+NNJAC = 1,
+JCOL = 1,
+JROW = 1,
+JJ = 0.0,
+/
+\end{verbatim}
+
+While for optimization parameters {\tt 1} to {\tt 4} the same comments as in the first example optimization setup hold, we also added 5 extra variables, which refer to the {\tt SIGMA}'s in the likelihood function we also want to estimate. They are defined with {\tt PARTYPE(5:9) = 0}, no species or boundary needs to be specified for them ({\tt PARIS(5:9) = PARIB(5:9) = 0}), and their initial value is set to {\tt 1.0}. The rescaling and lower/upper bounds are also specified. Finally, one additional variable is employed now, {\tt SIGMA\_OPT = T,T,T,T,T,} which essentially makes that all 5 sigma values are optimized.
+
+If one already knows {\it a priori} the value of one of those sigmas, e.g. that of the ion temperature at the OMP ({\tt icf = 4}), then the {\em third} value of {\tt SIMGA\_OPT} should be `F'.
+
+When looking at the cost function definition, this is adjusted as:
+\begin{verbatim}
+NCF = 6,
+CFTYPE =  6, 1, 2, 3,   1,   2,
+CFSTART = 2, 0, 0, 0, -34, -34,
+CFEND =   6, 0, 0, 0, -34, -34,
+CFDEF =   0, 1, 1, 1,   2,   2,
+NSIGMA = 5,
+SIGMA =  0.1, 0.1, 0.1, 0.2, 5,
+SCALE_SIGMA = T, T, T, F, F,
+PRIOR_TYPE = 4*0, 1, 1, 1, 0, 0,
+PRIOR_PAR(1,1) = 4*0.0,  0.0,  0.0,  0.0,
+PRIOR_PAR(1,2) = 4*0.0, 10.0, 10.0, 10.0,
+PRIOR_RANGE(1,1) = 4*1.0e-5, 1.0e-5, 1.0e-5, 1.0e-5, 1.0e-5, 1.0e-5,
+\end{verbatim}
+
+where we have added 4 extra entries at the beginning of the arrays {\tt PRIOR\_TYPE}, {\tt PRIOR\_PAR}, and {\tt PRIOR\_RANGE}. The reasoning is that now the prior must include {\em all} the optimization parameters, not only the sigmas, in the order they are specified for {\tt PARTYPE}. As such, {\tt PRIOR\_TYPE(1:4)} refer in this case to the prior for {\tt PARTYPE(1:4) = 1,3,4,12}, while {\tt PRIOR\_TYPE(5:9)} refer to {\tt PARTYPE(5:9) = 5*0}, i.e. the sigmas.
+
+In this specific case we used a uniform prior for the first four optimization parameters, while for the sigmas the same as in the example cost function is retained.
+
+Note that the prior range may be superfluous if a lower/upper bound for the optimization parameters and sigmas is used, and {\it vice versa}.

@@ -6,7 +6,7 @@ echo "LDOPTS += -mcmodel large -shared-intel" > ${SOLPSTOP}/modules/B2.5/config/
 echo "FCOPTS += -mcmodel large -shared-intel -diag-enable=error" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
 make listobj_nox_debug depend_nox_debug
 make nc2text_simple
-make MAKE_OPTIONS=-j8 nox_build_debug
+make MAKE_OPTIONS=-j8 nox_build_debug b25_nox_debug
 
 # Run test case
 . ${SOLPSTOP}/SETUP/debug.ksh
@@ -15,18 +15,38 @@ make COMPASS_16515_1150ms_D_drift_AFN
 cd COMPASS_16515_1150ms_D_drift_AFN
 export DEVICE=compass
 correct_baserun_timestamps
-# cd baserun
+mkdir convert
+cd convert
+cp ../convert_orig/b2mn.dat .
+cp ../convert_orig/b2.neutrals.parameters .
+cp ../convert_orig/b2.boundary.parameters .
+cp ../convert_orig/b2.numerics.parameters .
+cp ../convert_orig/b2.transport.parameters .
+cp ../convert_orig/input.dat .
+cp ../convert_orig/b2fgmtry .
+cp ../convert_orig/b2fpardf .
+cp ../convert_orig/b2fstati .
+cp ../convert_orig/fort.* .
+b2run b2us
+${SOLPSTOP}/modules/B2.5/src/test/convert_checks.sh ../convert_orig/ ./ || exit 1
+cd ..
+
+cd baserun
 # rm *.prt b2fgmtry b2fpardf b2fstati b2frates
 # b2run b2ag b2ah b2ai b2ar
-# cd ..
+rm b2ar.prt b2frates
+b2run b2ar
+cd ..
+
 mkdir run_AFN_drift_new
 cd run_AFN_drift_new
-cp ../run_AFN_drift/b2.*.parameters .
-cp ../run_AFN_drift/b2mn.dat .
+import_files_from_convert_wg
 cp ../run_AFN_drift/b2fstati .
+cp ../run_AFN_drift/b2mn.dat .
 cp ../run_AFN_drift/b2*.nc .
 touch b2fstati
 setup_baserun_eirene_links
 echo "'b2mndr_ntim' '10'" >> b2mn.dat
-b2run b2mn
-${SOLPSTOP}/modules/B2.5/src/test/run_checks.sh ../run_AFN_drift/ ./
+b2run -s b2mn
+${SOLPSTOP}/modules/B2.5/src/test/run_checks.sh ../run_AFN_drift/ ./ || exit 2
+cd ..

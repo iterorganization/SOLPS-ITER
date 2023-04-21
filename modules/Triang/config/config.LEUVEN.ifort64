@@ -13,14 +13,17 @@ ifndef LD_NAG
   $(error LD_NAG not defined)
 endif
 
-CPP      = -/lib/cpp -traditional
+DEFINES =
 
-FC       = ifort
+CPP     = -/lib/cpp -traditional
 
-GKS      = ${LD_GR} ${LD_GKS} -lX11 -lXt -lXmu
+FC      = ifort
 
-#LDLIBS  = ${LD_MSCL} -L/usr/local/lib -L/usr/X11R6/lib64
-LDLIBS   = -L/usr/local/lib -L/usr/X11R6/lib64
+GKS     = ${LD_GR} ${LD_GKS} -lX11 -lXt -lXmu
+
+#LDLIBS = ${LD_MSCL} -L/usr/local/lib -L/usr/X11R6/lib64
+LDLIBS  = -L/usr/local/lib -L/usr/X11R6/lib64
+
 
 #!!!Local Variables:
 #!!! mode: Makefile

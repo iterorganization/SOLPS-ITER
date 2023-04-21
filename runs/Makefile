@@ -32,6 +32,14 @@ ifdef DIFF_B
 EXT_DIFF = .diff_b
 DIFF=_b
 endif
+ifdef TGT
+EXT_DIFF = .tgt
+DIFF=_d
+endif
+ifdef ADJ
+EXT_DIFF = .adj
+DIFF=_b
+endif
 MNEXE=b2mn${DIFF}
 ifdef OPT_D
 EXT_DIFF = .diff_d
@@ -43,8 +51,13 @@ EXT_DIFF = .diff_b
 DIFF=_b
 MNEXE=b2optim_${OPT}
 endif
-ifdef TAO
-RUN_OPTIONS = -tao_monitor -tao_view_solution ${TAO_OPT}
+ifdef OPT_TGT
+EXT_DIFF = .tgt
+MNEXE=b2optim_${OPT}
+endif
+ifdef OPT_ADJ
+EXT_DIFF = .adj
+MNEXE=b2optim_${OPT}
 endif
 
 ifndef STAND_ALONE
@@ -92,7 +105,7 @@ target_yn = b2yn.prt b2yn.plt
 target_yp = b2yp.prt b2yp.plt b2specp
 target_yq = b2yq.prt b2yq.plt
 target_yr = b2yr.prt b2yr.plt
-target_yt = b2yt.prt b2fstatt b2mn.dat.2 b2ah.dat.2 b2ai.dat.2 b2yt.files
+target_yt = b2yt.prt b2fstatt b2yt.files
 target_xd = B2SXDR
 target_rd = b2rd.prt
 target_ual = b2_ual_write.prt

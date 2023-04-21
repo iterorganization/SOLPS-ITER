@@ -33,7 +33,16 @@ endif
 update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"
 update_solps_run_status "Started on `hostname` at `date`"
 
-time b2run -s ${USE_MPI} ${USE_OMP} >! run.log
+set STANDALONE=-s
+if ($?SOLPS_TGT) then
+  set STANDALONE=-${SOLPS_OPT}tgt
+endif
+
+if ($?SOLPS_ADJ) then
+  set STANDALONE=-${SOLPS_OPT}adj
+endif
+
+time b2run ${STANDALONE} ${USE_MPI} ${USE_OMP} >! run.log
 
 QSUB.postprocess
 

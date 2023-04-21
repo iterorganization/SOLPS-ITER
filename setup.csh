@@ -258,7 +258,14 @@ alias   set_mpi    'source $SOLPSTOP/SETUP/mpi'
 alias unset_mpi    'source $SOLPSTOP/SETUP/nompi'
 alias   set_ig     'source $SOLPSTOP/SETUP/ig'
 alias unset_ig     'source $SOLPSTOP/SETUP/noig'
-
+alias   set_tgt    'source $SOLPSTOP/SETUP/tgt'
+alias unset_tgt    'source $SOLPSTOP/SETUP/notgt'
+alias   set_adj    'source $SOLPSTOP/SETUP/adj'
+alias unset_adj    'source $SOLPSTOP/SETUP/noadj'
+alias   set_ipopt  'source $SOLPSTOP/SETUP/ipopt'
+alias unset_ipopt  'source $SOLPSTOP/SETUP/noipopt'
+alias   set_tao    'source $SOLPSTOP/SETUP/tao'
+alias unset_tao    'source $SOLPSTOP/SETUP/notao'
 # Check for Motif library
 if (! -e `which mwm`) setenv NO_MOTIF 1
 if ($?NO_MOTIF) then

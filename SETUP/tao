@@ -1,0 +1,21 @@
+if ($?SOLPS_PATH) then
+  # Check whether HOST_NAME and COMPILER are defined
+  if (! $?HOST_NAME) then
+    echo "HOST_NAME not defined. Exiting."
+    exit 1
+  endif
+  if (! $?COMPILER) then
+    echo "COMPILER not defined. Exiting."
+    exit 1
+  endif
+
+  unsetenv IPOPT
+  setenv OPT tao
+  setenv TAO yes
+  setenv TAO_OPT "$1"
+  echo "PETSC-TAO compilation and optimization turned on"
+  echo "with TAO options $TAO_OPT"
+else
+  echo "SOLPS_PATH not set. Exiting."
+endif
+
