@@ -547,7 +547,7 @@ solps_top=$(git rev-parse --show-toplevel)
 EASYBUILD_LOCAL=${solps_top}/easybuild.local
 
 TAG_DD=${TAG_DD:-3.38.1}
-TAG_AL=${TAG_AL:-4.11.1}
+TAG_AL=${TAG_AL:-4.11.3}
 
 setup=${solps_top}/SETUP/setup-easybuild.local && test -f ${setup} && . ${setup}
     

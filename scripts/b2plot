@@ -34,6 +34,11 @@ argloop:
     echo ' -n: dry run. Will show the sequence of commands requested by b2plot.'
     echo ' -s: request a stand-alone run (without Eirene).'
     echo ' '
+    echo 'You can choose the type of output produced with the B2PLOT_DEV environment variable:'
+    echo ' x11: Interactive window'
+    echo ' ps : PostScript file b2plot.ps'
+    echo ' cgm: NCAR gmeta file'
+    echo 'or any combination of the above.'
     exit
   endif
   if ("X${1}X" == "X-nX") then
