@@ -567,7 +567,7 @@ SOLPS_ITER_FOSS_2020b_MODULES="
 	makedepend/1.0.6-GCCcore-10.2.0
 	MSCL/1.2.3-GCCcore-10.2.0
 	GR/0.0.94-GCCcore-10.2.0
-	GLI/4.5.30-GCCcore-10.2.0
+	GLI/4.5.31-GCCcore-10.2.0
 	NCL/6.6.2-foss-2020b
 	NAG/26-GCC-10.2.0
 	Ghostscript/9.53.3-GCCcore-10.2.0
@@ -592,7 +592,7 @@ SOLPS_ITER_INTEL_2020b_MODULES="
         makedepend/1.0.6-GCCcore-10.2.0
         MSCL/1.2.2-intel-2020b
         GR/0.0.94-GCCcore-10.2.0
-        GLI/4.5.30-GCCcore-10.2.0
+        GLI/4.5.31-GCCcore-10.2.0
         NCL/6.6.2-intel-2020b
         NAG/26-intel-2020b
         Ghostscript/9.53.3-GCCcore-10.2.0
