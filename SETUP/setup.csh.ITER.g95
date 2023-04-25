@@ -24,7 +24,7 @@ module load makedepend/1.0.5-GCCcore-6.4.0
 module load MSCL/1.2.2-GCCcore-6.4.0
 module load netCDF-Fortran/4.4.4-intel-2018a
 module load GR/0.0.94-GCCcore-6.4.0
-module load GLI/4.5.30-GCCcore-6.4.0
+module load GLI/4.5.31-GCCcore-6.4.0
 setenv GLI_HOME ${EBROOTGLI}
 setenv NCDIR ${EBROOTNETCDFMINFORTRAN}
 module load flex/2.6.4-GCCcore-6.4.0
