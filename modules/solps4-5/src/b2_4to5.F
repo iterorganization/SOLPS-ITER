@@ -960,8 +960,8 @@ c Fill out b2mod_indirect arrays
 c Compute geometrical quantities
       call b2agmt(nx, ny, 1, crx, cry,
      & fpsi, bb, vol, hx, hy, hz, hc, ht, qz, qc, qs, qac, qas, ebc,
-     & gs, cell_width, cell_height, leftix, leftiy, bottomix, bottomiy,
-     & rightix, rightiy, topix, topiy, cflags)
+     & gs, cell_width, cell_height,
+     & leftix, leftiy, bottomix, bottomiy, cflags)
       fpsi = 0.0_R8
       ffbz = 0.0_R8
       periodic_bc = 0
