@@ -18,5 +18,6 @@ links           = read_ft35_us(fort35);
 triangles.nghbr = links.nghbr;
 triangles.side  = links.side;
 triangles.cont  = links.cont;
+triangles.plasma_cell_faces = links.plasma_cell_faces;
 
 end
