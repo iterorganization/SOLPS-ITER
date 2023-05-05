@@ -2,7 +2,7 @@ function [Ch] = contourplot(gmtry,field,scale,fmin,fmax,ncont)
 % [Ch]= contourplot(gmtry,field,scale,ncont,fmin,fmax,ncont)
 %
 % Routine to make contourplot of cell centered quantity.
-% 
+%
 % Input arguments:
 %
 % - gmtry : struct read from b2fgmtry-file
@@ -17,7 +17,7 @@ function [Ch] = contourplot(gmtry,field,scale,fmin,fmax,ncont)
 % - Ch  : struct, length 3 (1 = Core, 2 = SOL, 3 = PFR), with fields
 %         * Ch(i).C: matrix with contour levels (see CONTOURC)
 %         * Ch(i).h: handles to the CONTOURGROUP objects
-% 
+%
 % Example:
 %
 %

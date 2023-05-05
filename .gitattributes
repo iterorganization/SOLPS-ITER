@@ -3,3 +3,6 @@
 *.eps binary
 *.pdf binary
 *.ps binary
+
+# Enforce Unix-style line endings
+* text=auto
