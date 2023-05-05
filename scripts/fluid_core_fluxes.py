@@ -32,7 +32,23 @@ if nargs > 2: E=int(sys.argv[2])
 
 print(species[S],species[E])
 
-if vreg == 5:
+if vreg == 2:
+
+  plt.plot(times[:],numpy.sum(fnayreg[:,S:E+1,1],axis=1), label='core')
+
+elif vreg == 3:
+
+  plt.plot(times[:],numpy.sum(fnayreg[:,S:E+1,1],axis=1), label='core')
+
+elif vreg == 5:
+
+  plt.plot(times[:],numpy.sum(fnayreg[:,S:E+1,2],axis=1), label='core')
+
+elif vreg == 6:
+
+  plt.plot(times[:],numpy.sum(fnayreg[:,S:E+1,2],axis=1), label='core')
+
+elif vreg == 8:
 
   plt.plot(times[:],numpy.sum(fnayreg[:,S:E+1,2],axis=1), label='core')
 
@@ -48,7 +64,31 @@ else:
 plt.xlabel('time')
 plt.ylabel(species[S] + "--" + species[E] + "   ( - losses / + sources )")
 
-if vreg == 5:
+if vreg == 2:
+
+  CORE=numpy.sum(fnayreg[-1,S:E+1,1],axis=0)
+
+  print('Core(%s--%s) = %s' % (species[S],species[E],CORE))
+
+elif vreg == 3:
+
+  CORE=numpy.sum(fnayreg[-1,S:E+1,1],axis=0)
+
+  print('Core(%s--%s) = %s' % (species[S],species[E],CORE))
+
+elif vreg == 5:
+
+  CORE=numpy.sum(fnayreg[-1,S:E+1,2],axis=0)
+
+  print('Core(%s--%s) = %s' % (species[S],species[E],CORE))
+
+elif vreg == 6:
+
+  CORE=numpy.sum(fnayreg[-1,S:E+1,2],axis=0)
+
+  print('Core(%s--%s) = %s' % (species[S],species[E],CORE))
+
+elif vreg == 8:
 
   CORE=numpy.sum(fnayreg[-1,S:E+1,2],axis=0)
 

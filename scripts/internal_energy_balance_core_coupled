@@ -48,8 +48,12 @@ pipe_run.log | \
        /b2wrong3/{b2wrong3=$3} \
        /b2stbr_she_reg/{b2brhe=$3} \
        /b2stbr_shi_reg/{b2brhi=$3} \
+       /fhiyreg/&&nrv==2{S=-$3;N=$5} \
+       /fheyreg/&&nrv==2{S+=-$3;N+=$5} \
        /fhiyreg/&&nrv==4{S=-$4;N=$6} \
        /fheyreg/&&nrv==4{S+=-$4;N+=$6} \
+       /fhiyreg/&&nrv==5{S=-$4;N=$6} \
+       /fheyreg/&&nrv==5{S+=-$4;N+=$6} \
        /fhiyreg/&&nrv==7{S=-$4;N=$6} \
        /fheyreg/&&nrv==7{S+=-$4;N+=$6} \
        /fhiyreg/&&nrv==8{S=-$4-$11;N=$6+$13} \

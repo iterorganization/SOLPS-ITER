@@ -789,8 +789,7 @@ The {\tt setup.csh} file and its subsidiaries {\tt \$\{SOLPSTOP\}/SETUP/setup.cs
 Of course, any additional desired definitions can be added. The preferred place for those is, for those variables that need not be shared by other users, the {\tt \$\{SOLPSTOP\}/SETUP/setup.csh.\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}.local} and {\tt \$\{SOLPSTOP\}/SETUP/config.\$\{HOST\_NAME\}.\$\{COMPILER\}.local} files. Variables that are needed at compilation time need to appear in the {\tt config.*.*(.local)} file, while variables needed at runtime must appear in {\tt setup.csh.*.*(.local)} file.
 \end{sloppypar}
 
-However, the \SOLPSITER GIT server
-holds several examples in the {\tt \$\{SOLPSTOP\}/SETUP/} directory.
+Moreover, the \SOLPSITER GIT server holds several examples in the {\tt \$\{SOLPSTOP\}/SETUP/} directory.
 
 The command\index{stop}
 \begin{verbatim}
@@ -850,10 +849,8 @@ SOLPSTOP
 
 \begin{description}
 \item[config] \index{config} contains compiler option files
-\item[src.local] \index{src.local}\index{B2.5,
-    local}\label{src.local} is an optional location which can contain locally modified source files (not version-controlled)
-\item[src] \index{src}\index{B2.5, src}\label{b2.5_src}
-  contains the {\tt B2.5} source code files
+\item[src.local] \index{src.local}\index{B2.5,local}\label{src.local} is an optional location which can contain locally modified source files (not version-controlled)
+\item[src] \index{src}\index{B2.5, src}\label{b2.5_src} contains the {\tt B2.5} source code files
 \item[builds]\index{builds}\index{B2.5, builds} contains the compiled object files for building the {\tt B2.5} executables.
 \end{description}
 
@@ -880,7 +877,7 @@ The files in {\tt src} will be version-controlled and updated whenever the
 user will pull in new code version.
 If, however, one wishes to make local changes to a file and protect those from
 GIT updates, the procedure for that purpose is to copy the file you want to change to
-{\tt src.local} and then edit that file.  You will then need to do
+{\tt src.local} and then edit that file. You will then need to do
 \begin{verbatim}
   sbb
   gmake local
@@ -910,7 +907,7 @@ following performed:
   gmake
 \end{verbatim}
 If you want to avoid a long recompilation, you need to remove from the {\tt builds/*/}
-directories , the object and module files corresponding to your locally changed file(s),
+directories, the object and module files corresponding to your locally changed file(s),
 and then ask for a normal recompilation with a single {\tt gmake} command.
 
 \begin{sloppypar}
@@ -921,6 +918,12 @@ reads those after the {\tt config.\allowbreak \$\{HOST\_NAME\}.\allowbreak \$\{C
 and {\tt config.common.\$\{COMPILER\}} files,
 they need only contain the modified definitions.
 \end{sloppypar}
+
+It is also possible to add additional dependencies by means of a {\tt config/dependencies.local} file, which should then contain lines with the format:
+\begin{verbatim}
+${OBJDIR}/<calling_program>.o: ${OBJDIR}/<called_program>.o
+\end{verbatim}
+This can be particularly useful when compiling with options such as {\tt warn interfaces} to make sure that the files containing the called routines are compiled before the files containing the calling routines.
 
 If you just want to compile {\tt b2mn.exe}, you can do
 \begin{verbatim}
@@ -1584,6 +1587,8 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[awk.plot\_mesh \#1]\index{awk.plot\_mesh} Outputs the mesh specified as \#1 in a form usable for {\tt xyplot}.
   \item[awk.reverse]\index{awk.reverse} Outputs a file in reverse order.
   \item[awk.transpose]\index{awk.transpose} Transposes an array of data.
+  \item[blank]\index{blank} Dummy script that does nothing.
+  \item[canonical \#1]\index{canonical} Provides the full absolute path to the filename given as argument.
   \item[chop\_pwd \#1]\index{chop\_pwd} Truncates the name of the current directory to not exceed \#1 characters (default 60).
   \item[count]\index{count} Basic counting with advanced options ({\tt count -h} for help).
   \item[datestamp]\index{datestamp} Gets a date stamp from the machine.
@@ -1644,6 +1649,7 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[QSUB.postprocess\_coupled]\index{QSUB.postprocess\_coupled} List of instructions appended to the \SOLPSITER submission scripts for run post-processing
   \item[recover\_initial\_files]\index{recover\_initial\_files}\index{b2co}\index{plasmastate} For use to copy back the stored initial case files ({\tt .i} extension) before a run restart, or when use of {\tt b2co} is not possible because the run crash happened too early for {\tt plasmastate} files to be written.
   \item[regression\_test]\index{regression\_test} Utility script to run regression tests.
+  \item[regxy\_sum\_over\_species]\index{regxy\_sum\_over\_species} Intermediate utility script to extract a face-directed region quantity and sum it over species.
   \item[res\_av]\index{res\_av} Special script to reduce residuals in the finalization step of the {\tt Eirene} sources averaging scheme (see Section~\ref{sec:B2Eirene:averaging} for details).
   \item[rps]\index{rps} Shifts $\Psi$ values by a given amount within a {\tt DG} equilibrium file (see Sec.~\ref{sec:equtrn}).
   \item[run\_av]\index{run\_av} Special script to prepare the averaging step of the {\tt Eirene} sources averaging scheme (see Section~\ref{sec:B2Eirene:averaging} for details).
@@ -1703,13 +1709,10 @@ The following have not yet been documented --- user contributions are
 welcome!
 \begin{description}
   \item[awk.derivative]\index{awk.derivative}
-  \item[blank]\index{blank}
-  \item[canonical]\index{canonical}
   \item[cnvtria]\index{cnvtria}
   \item[min\_ave\_max.awk]\index{min\_ave\_max.awk}
   \item[plot\_bc\_conpar13]\index{plot\_bc\_conpar13}
   \item[plotdg]\index{plotdg}
-  \item[regxy\_sum\_over\_species]\index{regxy\_sum\_over\_species}
 \end{description}
 
 \subsection{scripts/commands}
@@ -15410,14 +15413,7 @@ a charge state below the considered ion (inclusive) within their isonuclear sequ
 \chapter{Region definitions}
 \label{cha:regions}\index{regions}\index{vreg}\index{xreg}\index{yreg}\index{NREG}
 
-Three types of regions are defined in {\tt b2agfs.F}: volume,
-$x$-directed and $y$-directed.  The number of volume regions should also
-be stored in the {\tt NREG} environment variable (or through the presence
-of an {\tt NREG} ASCII file containing only the number of regions) as it is
-used for a variety of analysis scripts.
-Typical configurations for 1-D, linear, limiter,
-SN, DN (Connected and Disconnected) and periodic stellarator island cases are
-shown below:
+Three types of regions are defined in {\tt b2agfs.F}: volume, $x$-directed and $y$-directed. The number of volume regions should also be stored in the {\tt NREG} environment variable (or through the presence of an {\tt NREG} ASCII file containing only the number of regions) as it is used for a variety of analysis scripts. Typical configurations for 1-D, linear, limiter, SN, DN (Connected and Disconnected), periodic stellarator island, and LFS snowflake cases are shown below:
 
 \clearpage
 \section{Regions for 1-D and linear cases}
@@ -16008,6 +16004,22 @@ sets each. If a stack overflow occurs, the data set at the bottom of the stack
 is dropped, and the command can proceed. Stack overflows can be avoided by using
 the appropriate {\bf drop} (see \ref{sec:drop}) commands once a stack quantity is
 no longer needed.
+
+\section{Environment variables}
+
+\begin{description}
+\item[B2PLOT\_DEV]\index{B2PLOT\_DEV} is used to specify plotting to any combination of {\tt x11}, {\tt ps} or {\tt cgm} (default is {\tt ps}).  Under {\tt tcsh}, use
+  \begin{verbatim}
+setenv B2PLOT_DEV 'x11 ps'
+  \end{verbatim}
+\item[SOLPSTOP]\index{SOLPSTOP} used to specify the top of the {\tt SOLPS} tree
+\item[SOLPSTOP\_FORCE]\index{SOLPSTOP\_FORCE} used to override the value of {\tt \$SOLPSTOP} to force execution of code executables from a different tree (not defined by default)
+\end{description}
+
+Environment variables can also be used in the {\bf extl} command
+(see \ref{sec:extl}). If not explicitly set by the user, they inherit
+their value from the {\tt setup.csh.*} files in the {\tt \$\{SOLPSTOP\}}
+directory.
 
 \section{Commands}
 
@@ -19483,22 +19495,6 @@ Computes a reaction rate as per the {\tt ADAS} specification. The $\langle${\tt 
 form 'acd89'. The matrix obtained contains then all the rates from these files, for all species in the run, extracted
 from the files stored in {\tt \$\{SOLPSTOP\}/modules/adas} or
 {\tt \$\{SOLPSTOP\}/data.local/adas}.
-
-\section{Environment variables}
-
-\begin{description}
-\item[B2PLOT\_DEV]\index{B2PLOT\_DEV} is used to specify plotting to any combination of {\tt x11}, {\tt ps} or {\tt cgm} (default is {\tt ps}).  Under {\tt tcsh}, use
-  \begin{verbatim}
-setenv B2PLOT_DEV 'x11 ps'
-  \end{verbatim}
-\item[SOLPSTOP]\index{SOLPSTOP} used to specify the top of the {\tt SOLPS} tree
-\item[SOLPSTOP\_FORCE]\index{SOLPSTOP\_FORCE} used to override the value of {\tt \$SOLPSTOP} to force execution of code executables from a different tree (not defined by default)
-\end{description}
-
-Environment variables can also be used in the {\bf extl} command
-(see \ref{sec:extl}). If not explicitly set by the user, they inherit
-their value from the {\tt setup.csh.*} files in the {\tt \$\{SOLPSTOP\}}
-directory.
 
 \section{Examples}
 

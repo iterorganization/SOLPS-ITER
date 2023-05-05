@@ -1064,6 +1064,9 @@ endif
 	${MAKE} depend
 
 include ${OBJDIR}/dependencies
+ifeq ($(shell [ -e ${S45DIR}/config/dependencies.local ] && echo yes || echo no ),yes)
+include ${S45DIR}/config/dependencies.local
+endif
 
 echo:
 	@echo VPATH=${VPATH}

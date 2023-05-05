@@ -4,10 +4,10 @@ function h = streamlineplot(gmtry,uu,vv,startx,starty)
 % Routine to make streamline plot of the velocity field (uu,vv), where uu
 % is the poloidal velocity and vv the radial velocity defined in cell
 % centers of gmtry.
-% 
+%
 % If starting points are not supplied, 15 streamlines starting at the
 % separatrix are followed.
-% 
+%
 % Input arguments:
 %
 % - gmtry  : struct read from b2fgmtry-file
@@ -19,7 +19,7 @@ function h = streamlineplot(gmtry,uu,vv,startx,starty)
 % Output arguments:
 %
 % - h      : handle to the streamline plot
-% 
+%
 % Example:
 %
 %
@@ -34,7 +34,7 @@ function h = streamlineplot(gmtry,uu,vv,startx,starty)
 if ~exist('startx','var') || isempty(startx)
     d   = (size(gmtry.vol,1)-2)/16;
     xsep = floor([d:d:size(gmtry.vol,1)]);
-    ysep = gmtry.topcut+2; 
+    ysep = gmtry.topcut+2;
     startx  = 0.5*(gmtry.crx(xsep,ysep,1) + gmtry.crx(xsep,ysep,2));
     starty  = 0.5*(gmtry.cry(xsep,ysep,1) + gmtry.cry(xsep,ysep,2));
 end
@@ -67,6 +67,6 @@ vyI = interpolate(gmtry,vy,repmat(xI,length(yI),1),repmat(yI,1,length(xI)));
 h = streamline(xI,yI,vxI,vyI,startx,starty); hold on;
 plot(startx,starty,'ro');
 
-    
+
 % Reset status of hold
 if ~hs, hold off; end;

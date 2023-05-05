@@ -4,7 +4,7 @@ function h = quiverplot(gmtry,uu,vv)
 % Routine to make quiver plot of the velocity field (uu,vv), where uu
 % is the poloidal velocity and vv the radial velocity defined in cell
 % centers of gmtry.
-% 
+%
 % Input arguments:
 %
 % - gmtry  : struct read from b2fgmtry-file
@@ -14,7 +14,7 @@ function h = quiverplot(gmtry,uu,vv)
 % Output arguments:
 %
 % - h      : handle to the quiver plot
-% 
+%
 % Example:
 %
 %

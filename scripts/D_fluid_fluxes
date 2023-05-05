@@ -16,10 +16,34 @@ if ("X$nnreg" != "X") then
   endif
 endif
 switch ($NREG)
+  case "1":
+    pipe_run.log | \
+      egrep -a 'fna.reg|nnreg' | \
+      awk 'BEGIN{iss=0;ise=1;nxreg=6+1;nyreg=7+1} \
+           /nnreg/{nxreg=$3+1;nyreg=$4+1} \
+           /fnaxreg/{E=0;W=0;for (i=iss;i<=ise;i++) {E+=-$(2+nxreg*i+1);W+=$(3+nxreg*i+1)}} \
+           /fnayreg/{S=0;N=0; \
+                 for (i=iss;i<=ise;i++) \
+                   {S+=-($(2+nyreg*i+1));N+=$(3+nyreg*i+1)}; \
+                 cnt++;print cnt,E,W,S,N}' | \
+      plot x$1yplot4 -E W -S N iteration D0+D1+ `noquote_pwd 3`
+    breaksw
+  case "2":
+    pipe_run.log | \
+      egrep -a 'fna.reg|nnreg' | \
+      awk 'BEGIN{iss=0;ise=1;nxreg=6+1;nyreg=7+1} \
+           /nnreg/{nxreg=$3+1;nyreg=$4+1} \
+           /fnaxreg/{E=0;W=0;for (i=iss;i<=ise;i++) {E+=-$(2+nxreg*i+1);W+=$(3+nxreg*i+1)}} \
+           /fnayreg/{S=0;N=0; \
+                 for (i=iss;i<=ise;i++) \
+                   {S+=-($(2+nyreg*i+1));N+=$(4+nyreg*i+1)}; \
+                 cnt++;print cnt,E,W,S,N}' | \
+      plot x$1yplot4 -E W -S N iteration D0+D1+ `noquote_pwd 3`
+    breaksw
   case "4":
     pipe_run.log | \
       egrep -a 'fna.reg|nnreg' | \
-      awk 'BEGIN{iss=0;ise=1;nxreg=4+1;nyreg=7+1} \
+      awk 'BEGIN{iss=0;ise=1;nxreg=6+1;nyreg=7+1} \
            /nnreg/{nxreg=$3+1;nyreg=$4+1} \
            /fnaxreg/{E=0;W=0;for (i=iss;i<=ise;i++) {E+=-$(2+nxreg*i+1);W+=$(5+nxreg*i+1)}} \
            /fnayreg/{core=0;pflxl=0;pflxr=0;N=0; \
@@ -29,10 +53,23 @@ switch ($NREG)
                  cnt++;print cnt,E,W,core,pflxl,pflxr,N}' | \
       plot x$1yplot6 -E W -core -pflxl -pflxr N iteration D0+D1+ `noquote_pwd 3`
     breaksw
+  case "5":
+    pipe_run.log | \
+      egrep -a 'fna.reg|nnreg' | \
+      awk 'BEGIN{iss=0;ise=1;nxreg=7+1;nyreg=8+1} \
+           /nnreg/{nxreg=$3+1;nyreg=$4+1} \
+           /fnaxreg/{E=0;W=0;for (i=iss;i<=ise;i++) {E+=-$(2+nxreg*i+1);W+=$(5+nxreg*i+1)}} \
+           /fnayreg/{core=0;pflxl=0;pflxr=0;N=0; \
+                 for (i=iss;i<=ise;i++) \
+                   {core+=-($(3+nyreg*i+1));pflxl+=-($(2+nyreg*i+1));pflxr+=-($(4+nyreg*i+1)); \
+                    N+=$(7+nyreg*i+1)}; \
+                 cnt++;print cnt,E,W,core,pflxl,pflxr,N}' | \
+      plot x$1yplot6 -E W -core -pflxl -pflxr N iteration D0+D1+ `noquote_pwd 3`
+    breaksw
   case "7":
     pipe_run.log | \
       egrep -a 'fna.reg|nnreg' | \
-      awk 'BEGIN{iss=0;ise=1;nxreg=4+1;nyreg=7+1} \
+      awk 'BEGIN{iss=0;ise=1;nxreg=13+1;nyreg=13+1} \
            /nnreg/{nxreg=$3+1;nyreg=$4+1} \
            /fnaxreg/{E1=0;W1=0;E2=0;W2=0;for (i=iss;i<=ise;i++) {E1+=-$(2+nxreg*i+1);W1+=$(5+nxreg*i+1);E2+=-$(6+nxreg*i+1);W2+=$(9+nxreg*i+1)}} \
            /fnayreg/{core=0;pflx=0;N=0; \
@@ -45,7 +82,7 @@ switch ($NREG)
   case "8":
     pipe_run.log | \
       egrep -a 'fna.reg|nnreg' | \
-      awk 'BEGIN{iss=0;ise=1;nxreg=4+1;nyreg=7+1} \
+      awk 'BEGIN{iss=0;ise=1;nxreg=12+1;nyreg=14+1} \
            /nnreg/{nxreg=$3+1;nyreg=$4+1} \
            /fnaxreg/{E1=0;W1=0;E2=0;W2=0;for (i=iss;i<=ise;i++) {E1+=-$(2+nxreg*i+1);W1+=$(5+nxreg*i+1);E2+=-$(6+nxreg*i+1);W1+=$(9+nxreg*i+1)}} \
            /fnayreg/{core=0;pflx=0;N=0; \

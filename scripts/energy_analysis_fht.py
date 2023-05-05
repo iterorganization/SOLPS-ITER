@@ -39,7 +39,7 @@ if yreg == 3:
 elif yreg == 8:
   plt.plot(times[:],fhtyreg[:,2], label='core')
   plt.plot(times[:],fhtyreg[:,4], label='sep')
-  plt.plot(times[:],numpy.sum(fhtyreg[:,5:8],axis=1), label='mcw')
+  plt.plot(times[:],numpy.sum(fhtyreg[:,5:7],axis=1), label='mcw')
   plt.plot(times[:],-fhtyreg[:,1]-fhtyreg[:,3], label='-pfw')
 
 if  matplotlib.__version__ <=  '0.98.1':
