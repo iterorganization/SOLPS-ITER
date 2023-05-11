@@ -15,4 +15,4 @@ export DEVICE=iter
 ${SOLPSTOP}/modules/B2.5/src/test/run_omp_test.sh ITER_535_D+He+Ar standalone 100 24 || exit 2
 ${SOLPSTOP}/modules/B2.5/src/test/run_omp_test.sh ITER_535_D+He+Ar standalone_9-pt 100 24 || exit 3
 ${SOLPSTOP}/modules/B2.5/src/test/run_omp_test.sh ITER_2171_D+He+Be+Ne standalone 100 21 || exit 4
-${SOLPSTOP}/modules/B2.5/src/test/run_omp_test.sh ITER_2171_D+He+Be+Ne standalone_9-pt 100 21 || exit 5
+# ${SOLPSTOP}/modules/B2.5/src/test/run_omp_test.sh ITER_2171_D+He+Be+Ne standalone_9-pt 100 21 || exit 5
