@@ -24,7 +24,7 @@ cp ../run_kin_mpi/b2.*.parameters .
 cp ../run_kin_mpi/b2mn.dat .
 cp ../run_kin_mpi/input.dat .
 cp ../run_kin_mpi/b2fstati .
-cp ../run_kin_mpi/b2time.nc .
+cp ../run_kin_mpi/b2time.nc.i b2time.nc
 cp ../run_kin_mpi/fort.11.i fort.11
 cp ../run_kin_mpi/fort.13.i fort.13
 cp ../run_kin_mpi/fort.15.i fort.15

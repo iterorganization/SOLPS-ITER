@@ -56,7 +56,7 @@ import_files_from_convert_wg
 cp ../run_kin_CI/b2.*.parameters .
 cp ../run_kin_CI/b2mn.dat .
 cp ../run_kin_CI/b2fstati .
-cp ../run_kin_CI/b2time.nc .
+cp ../run_kin_CI/b2time.nc.i b2time.nc
 cp ../run_kin_CI/input.dat .
 cp ../run_kin_CI/fort.11.i fort.11
 cp ../run_kin_CI/fort.13.i fort.13
