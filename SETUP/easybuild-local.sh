@@ -547,7 +547,7 @@ solps_top=$(git rev-parse --show-toplevel)
 EASYBUILD_LOCAL=${solps_top}/easybuild.local
 
 TAG_DD=${TAG_DD:-3.38.1}
-TAG_AL=${TAG_AL:-4.11.3}
+TAG_AL=${TAG_AL:-4.11.4}
 
 setup=${solps_top}/SETUP/setup-easybuild.local && test -f ${setup} && . ${setup}
     
@@ -723,7 +723,7 @@ function build_imas() {
     cd ${EASYBUILD_LOCAL}/imas-installer
     export IMAS_HOME=${EASYBUILD_PREFIX}/imas
     export INSTALL_MOD_DIR=${EASYBUILD_PREFIX}/modules/all
-    test -d ${IMAS_HOME}/core/IMAS/${TAG_DD}-${TAG_AL}* && \
+    test -d ${IMAS_HOME}/core/IMAS/${TAG_DD}-${TAG_AL}/models && \
         chmod -R +w ${IMAS_HOME}/core/IMAS/${TAG_DD}-${TAG_AL}*/models
     make IMAS_NAGFOR=no IMAS_HDC=no IMAS_MEX=no IMAS_PGI=no IMAS_JAVA=no $*
 }
