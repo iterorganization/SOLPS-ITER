@@ -104,6 +104,20 @@ To use build modules use
 
     module use ${PWD}/easybuild.local/modules/all
 
+### Site specific configuration
+
+Instead of exporting environment variables one can save site-specific
+configuration under `SETUP/setup-easybuild.local` that is sourced
+if exists. For example:
+
+    export EASYBUILD_PREFIX=/opt/pkg/ITER
+    export EASYBUILD_MODULES_TOOL=Lmod
+    export INTEL_LICENSE_FILE=/opt/pkg/etc/intel.lic
+    export HTTP_AUTH_BEARER=MTk1ODA1MzE1MTI3OoHVFKMpL/kn8BQKWBiLFNfrCTrU
+    export EASYBUILD_BUILDPATH=/dev/shm/
+    module purge
+    module load AlmaLinux/profile  python-3.8.12-gcc-8.5.0-bvu5tg4
+
 ### SOLPS-ITER gfortran modules
 
 Follow success of each step below and adapt `.eb` files as necessary
@@ -113,7 +127,7 @@ by putting them into easyconfigs.local
     SETUP/easybuild-local.sh # defaults to foss modules
     SETUP/easybuild-local.sh --imas-foss 
     SETUP/easybuild-local.sh --imas-foss install
-    SETUP/easybuild-local.sh GGD-1.10.3-GCC-10.2.0-DD-3.38.0.eb
+    SETUP/easybuild-local.sh GGD-1.10.3-GCC-10.2.0-DD-3.38.1.eb
     sed -i -e /CPATH/d easybuild.local/modules/*/GGD/*
     SETUP/easybuild-local.sh Viz-2.6.1-foss-2020b.eb --robot
     SETUP/easybuild-local.sh SimDB-0.7.1-foss-2020b.eb --robot
@@ -201,7 +215,7 @@ and for that use lower threads or even `--parallel 1` for serial build.
 IMAS installer is needed to build IMAS modules. There is no EasyBuild
 for IMAS! After IMAS is built AMNS, GGD, and Viz can be built. Note
 that by default IMAS module name assumes "some" compilers without
-having toolchain in its name. For example `IMAS/3.38.0-4.11.1-2020b`
+having toolchain in its name. For example `IMAS/3.38.1-4.11.1-2020b`
 module may or may not contain `ifort` modules. This means that
 `--imas-foss` will build only *foss* FORTRAN modules, while
 `--imas-intel` will build only *intel* FORTRAN modules.
@@ -216,7 +230,7 @@ AMNS requires system to having latexmk package installed on the system.
 
 Dependency to IMAS for AMNS, GGD and VIZ needs to be updated with
 
-    ('IMAS/3.38.0-4.11.1-2020b', EXTERNAL_MODULE),
+    ('IMAS/3.38.1-4.11.1-2020b', EXTERNAL_MODULE),
 
 GGD and AMNS modules must not have CPATH otherwise `pkg-config ggd
 amns --cflags` will not have GGD include path
@@ -508,7 +522,7 @@ SETUP/easybuild-local.sh [OPTION... | easybuild_command...]
   --imas                builds default CentOS-8 IMAS built with GCC and INTEL
   --imas install        installs IMAS CentOS-8 module built with GCC and INTEL
   --imas-apps           builds all IMAS applications
-  --pull                pulls latest sources for environment update
+  --pull                pulls Git repos for IMAS and updates EasyBuild configs
   --patch-imas-modules  fixes AMNS and GGD module by removing CPATH
 
 ENVIRONMENT variables:
@@ -520,6 +534,10 @@ ENVIRONMENT variables:
   EASYBUILD_MODULE_SYNTAX  Tcl or Lua syntax for modulefiles generated
   HTTP_AUTH_BEARER         Personal token for downloading of ITER GIT sources
 
+Files:
+
+  SETUP/setup-easybuild.local Site specific environment variables and modules
+
 ~~~
 EOF
 }
@@ -529,7 +547,7 @@ solps_top=$(git rev-parse --show-toplevel)
 EASYBUILD_LOCAL=${solps_top}/easybuild.local
 
 TAG_DD=${TAG_DD:-3.38.1}
-TAG_AL=${TAG_AL:-4.11.3}
+TAG_AL=${TAG_AL:-4.11.4}
 
 setup=${solps_top}/SETUP/setup-easybuild.local && test -f ${setup} && . ${setup}
     
@@ -567,7 +585,7 @@ SOLPS_ITER_FOSS_2020b_MODULES="
 	makedepend/1.0.6-GCCcore-10.2.0
 	MSCL/1.2.3-GCCcore-10.2.0
 	GR/0.0.94-GCCcore-10.2.0
-	GLI/4.5.30-GCCcore-10.2.0
+	GLI/4.5.31-GCCcore-10.2.0
 	NCL/6.6.2-foss-2020b
 	NAG/26-GCC-10.2.0
 	Ghostscript/9.53.3-GCCcore-10.2.0
@@ -592,7 +610,7 @@ SOLPS_ITER_INTEL_2020b_MODULES="
         makedepend/1.0.6-GCCcore-10.2.0
         MSCL/1.2.2-intel-2020b
         GR/0.0.94-GCCcore-10.2.0
-        GLI/4.5.30-GCCcore-10.2.0
+        GLI/4.5.31-GCCcore-10.2.0
         NCL/6.6.2-intel-2020b
         NAG/26-intel-2020b
         Ghostscript/9.53.3-GCCcore-10.2.0
@@ -705,7 +723,7 @@ function build_imas() {
     cd ${EASYBUILD_LOCAL}/imas-installer
     export IMAS_HOME=${EASYBUILD_PREFIX}/imas
     export INSTALL_MOD_DIR=${EASYBUILD_PREFIX}/modules/all
-    test -d ${IMAS_HOME}/core/IMAS/${TAG_DD}-${TAG_AL}* && \
+    test -d ${IMAS_HOME}/core/IMAS/${TAG_DD}-${TAG_AL}/models && \
         chmod -R +w ${IMAS_HOME}/core/IMAS/${TAG_DD}-${TAG_AL}*/models
     make IMAS_NAGFOR=no IMAS_HDC=no IMAS_MEX=no IMAS_PGI=no IMAS_JAVA=no $*
 }
@@ -777,8 +795,8 @@ case "${1##--}" in
         help | grip --title="EasyBuild for SOLPS-ITER modules" \
                     --export -> ${EASYBUILD_LOCAL}/README.html
         2>/dev/null xdg-open ${EASYBUILD_LOCAL}/README.html  &
-        help
         eb --help
+        help
         echo "Help in HTML is available as ${EASYBUILD_LOCAL}/README.html"
         ;;
     *) eb ${eb_auth} "$@"
