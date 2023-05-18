@@ -68,9 +68,9 @@ c*** Default boundary conditions
      ,  (jnibndx(0,i),i=1,nbndknd),  (jnebndx(0,i),i=1,nbndknd)/
      /      4*10001     ,         6, 7, 6, 6       /,
      ,  (leebndx(0,i),i=1,nbndknd), (leibndx(0,i),i=1,nbndknd) /
-     /         8, 3, 9, 9   ,    8, 3, 9, 9        /,
+     /         8,15, 9, 9   ,    8,15, 9, 9        /,
      ,  (lpobndx(0,i),i=1,nbndknd)/
-     /        12, 3,13,13         /,
+     /        12,11,13,13         /,
      ,  ((lcobndx(j,0,i),j=1,nsdb2),i=1,nbndknd) /
      /    nsdb2*1, nsdb2*3, nsdb2*9, nsdb2*9        /,
      ,  ((lmobndx(j,0,i),j=1,nsdb2),i=1,nbndknd) /
@@ -93,10 +93,10 @@ c*** Default boundary conditions
 c*** Default boundary conditions for particular species
 
       data kcobndx /
-     ,  4*1,    7*8, nspdgen*3, nspdgen*9, nspdgen*9,
-     ,  4*1,8,1,5*8, nspdgen*3, nspdgen*9, nspdgen*9 /
-      data kmobndx / nspdgen*2, nspdgen*3, nspdgen*2, nspdgen*2,
-     ,               nspdgen*2, nspdgen*3, nspdgen*2, nspdgen*2 /
+     ,  4*1,    7*8, nspdgen*14, nspdgen*9, nspdgen*9,
+     ,  4*1,8,1,5*8, nspdgen*14, nspdgen*9, nspdgen*9 /
+      data kmobndx / nspdgen*2, nspdgen*13, nspdgen*2, nspdgen*2,
+     ,               nspdgen*2, nspdgen*13, nspdgen*2, nspdgen*2 /
       data    ((dcobndx(j,1,i,1),j=1,nspdgen),i=1,nbndknd)   /
      /      3*3.e19,8*0., nspdgen*0., nspdgen*0.03,
      ,                                          nspdgen*0.03 /,
