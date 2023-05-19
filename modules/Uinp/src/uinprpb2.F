@@ -23,6 +23,7 @@ c=======================================================================
       external xerrab, idez, streql
       integer find_matching_species, get_atomic_number
       external find_matching_species, get_atomic_number
+      integer ispc
 c=======================================================================
       call subini ('uinprpb2')
 #ifdef DBG
@@ -135,9 +136,20 @@ c*** bcchar, bcpos, bcstart, bcend, bcene, bceni, bcpot, enepar, enipar, potpar
           rniprm(k,1,1,11,2)=bpobnds(i,1,j)
           rniprm(k,2,1,11,2)=bpobnds(i,2,j)
 c*** bccon, conpar, bcmom, mompar
+          ispc = 0
           do l=1,nspcpls+nspcncl !{
-            if (ifl(l).eq.0) then !{ default fluid neutral b.c.
-              if (cznbndt(i,j).eq.'W' .or. cznbndt(i,j).eq.'E') then
+            if (ifl(l).eq.0) then !{ fluid neutral b.c.
+              ispc = ispc + 1
+              if ((spcigen(ispc).eq.'H').or.(spcigen(ispc).eq.'D').or.
+     .            (spcigen(ispc).eq.'T')) then !nh{ AFN b.c.'s for hydrogen species
+                iniprm(l,k,1,12,2)=5 !nh zero particle flux density at all boundaries
+                if (i.le.nznbndt(1).and.j.eq.1) then !}{ core boundary
+                  iniprm(l,k,1,14,2)=2 !nh zero gradient at core boundary
+                else
+                  iniprm(l,k,1,14,2)=5 !nh zero momentum flux at other boundaries
+                end if !} 
+              else if (cznbndt(i,j).eq.'W' .or. cznbndt(i,j).eq.'E') 
+     .            then
                 iniprm(l,k,1,12,2)=5
                 iniprm(l,k,1,14,2)=1
               else if (i.le.nznbndt(1).and.j.eq.1) then !}{ core boundary
