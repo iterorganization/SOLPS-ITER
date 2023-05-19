@@ -140,8 +140,8 @@ c*** bccon, conpar, bcmom, mompar
           do l=1,nspcpls+nspcncl !{
             if (ifl(l).eq.0) then !{ fluid neutral b.c.
               ispc = ispc + 1
-              if ((spcigen(ispc).eq.'H').or.(spcigen(ispc).eq.'D').or.
-     .            (spcigen(ispc).eq.'T')) then !nh{ AFN b.c.'s for hydrogen species
+              if (streql(spcigen(ispc),'H').or.streql(spcigen(ispc),'D')
+     .            .or.streql(spcigen(ispc),'T')) then !nh{ AFN b.c.'s for hydrogen species
                 iniprm(l,k,1,12,2)=5 !nh zero particle flux density at all boundaries
                 if (i.le.nznbndt(1).and.j.eq.1) then !}{ core boundary
                   iniprm(l,k,1,14,2)=2 !nh zero gradient at core boundary
