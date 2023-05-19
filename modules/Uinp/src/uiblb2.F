@@ -19,7 +19,7 @@ c*** The list of keywords to work on:
      ,  'bcene','bceni','bcpot','enepar','enipar',
      ,  'potpar','bccon','conpar','bcmom','mompar',
      ,  'lcbs','nniso','nxiso1','nxiso2','nyiso1',
-     ,  'nyiso2','niiso','teiso','tiiso',15*' '/
+     ,  'nyiso2','niiso','teiso','tiiso',17*' '/
       data (chrpl(i,3),i=1,nkwrd) /
      /  'nstrai','crcstra','rcpos','rcstart','rcend',
      ,  'species_start','species_end','eb2spcr','eb2atcr','b2espcr',
@@ -28,7 +28,8 @@ c*** The list of keywords to work on:
      ,  'latmscl','lmolscl','lionscl','mlcmp','chemical_sputter_yield',
      ,  'n_spcsrf','l_spcsrf','sps_id','i_spcsrf','j_spcsrf',
      ,  'sps_absr','sps_trno','sps_trni','sps_mtri','sps_tmpr',
-     ,  'sps_spph','sps_spch','sps_sgrp','targsp'/
+     ,  'sps_spph','sps_spch','sps_sgrp','targsp','surf_mat',
+     ,  'accel_ion'/
       data (chrpl(i,4),i=1,nkwrd) / 'jxi','jxa',37*' '/
       data (chrpl(i,5),i=1,nkwrd) /
      /  'nncut','ntcut','nxcut1','nxcut2','nycut1',
