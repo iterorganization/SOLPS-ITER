@@ -98,7 +98,7 @@ c*** Default boundary conditions for particular species
       data kmobndx / nspdgen*2, nspdgen*13, nspdgen*2, nspdgen*2,
      ,               nspdgen*2, nspdgen*13, nspdgen*2, nspdgen*2 /
       data    ((dcobndx(j,1,i,1),j=1,nspdgen),i=1,nbndknd)   /
-     /      3*3.e19,8*0., nspdgen*0., nspdgen*0.03,
+     /      3*3.e19,8*0., nspdgen*1., nspdgen*0.03,
      ,                                          nspdgen*0.03 /,
      ,        ((dcobndx(j,2,i,1),j=1,nspdgen),i=1,nbndknd) /
      /      nspdgen*0., nspdgen*0., nspdgen*0., nspdgen*0. /,
@@ -108,7 +108,7 @@ c*** Default boundary conditions for particular species
      /      nspdgen*0., nspdgen*0., nspdgen*0., nspdgen*0. /
       data    ((dcobndx(j,1,i,2),j=1,nspdgen),i=1,nbndknd) /
      /      3*3.e19,2.e18,7*0.,
-     ,                nspdgen*0.,nspdgen*0.03,nspdgen*0.03 /,
+     ,                nspdgen*1.,nspdgen*0.03,nspdgen*0.03 /,
      ,        ((dcobndx(j,2,i,2),j=1,nspdgen),i=1,nbndknd) /
      /      nspdgen*0., nspdgen*0., nspdgen*0., nspdgen*0. /,
      ,        ((dmobndx(j,1,i,2),j=1,nspdgen),i=1,nbndknd) /
