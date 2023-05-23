@@ -557,8 +557,8 @@ c*** Create the b2ar.dat file
           write(2,'(a)') '*tailep         (real, free format)'
           write(2,'(2x,f5.2)') 0.08
 cnh       AFN-specific inputs
-          write(2,'(a)') '''b2ardr_no_smoothing''     ''1'''//
-     .      '       # Eliminate smoothing for benchmark with EIRENE'  
+c          write(2,'(a)') '''b2ardr_no_smoothing''     ''1'''//
+c     .      '       # Eliminate smoothing for benchmark with EIRENE'  
           write(2,'(a)') '''b2ardr_rtnt''             ''100'''//
      .      '     # Use finer discretization for AFN (default 40)' 
           write(2,'(a)') '''b2ardr_rtnn''             ''100'''//
