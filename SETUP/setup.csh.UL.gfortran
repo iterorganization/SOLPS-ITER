@@ -1,20 +1,23 @@
 # General
+if ( -d $HOME/privatemodules ) then
+  module use $HOME/privatemodules
+endif
 module use /opt/pkg/ITER/modules/all
 
 # Use the same configs as ITER
 setenv HOST_NAME ITER
 
 # Modules needed by SOLPS-ITER
-module load IMAS/3.38.0-4.11.1-foss-2020b
-module load GGD/1.10.3-GCC-10.2.0-DD-3.38.0
-module load AMNS/1.4.0-foss-2020b-DD-3.38.0
+module load IMAS/3.38.1-4.11.1-foss-2020b
+module load GGD/1.10.3-GCC-10.2.0-DD-3.38.1
+module load AMNS/1.4.0-foss-2020b-DD-3.38.1
 module load xarray/0.16.2-foss-2020b
 module load Viz/2.6.1-foss-2020b
 module load ToFu/1.5.0-foss-2020b-Python-3.8.6
 module load makedepend/1.0.6-GCCcore-10.2.0
 module load MSCL/1.2.3-GCCcore-10.2.0
 module load GR/0.0.94-GCCcore-10.2.0
-module load GLI/4.5.30-GCCcore-10.2.0
+module load GLI/4.5.31-GCCcore-10.2.0
 module load NCL/6.6.2-foss-2020b
 module load flex/2.6.4-GCCcore-10.2.0
 module load Doxygen/1.8.20-GCCcore-10.2.0
@@ -22,7 +25,6 @@ module load Ghostscript/9.53.3-GCCcore-10.2.0
 module load CMake/3.20.1-GCCcore-10.2.0
 module load ParaView/5.10.0-foss-2020b-mpi
 module load PyQt5/5.15.2-GCCcore-10.2.0
-module load NAG/26-GCC-10.2.0
 module load netCDF-Fortran/4.5.3-gompi-2020b
 module load motif/2.3.8-GCCcore-10.2.0
 module load gnuplot/5.4.1-GCCcore-10.2.0
