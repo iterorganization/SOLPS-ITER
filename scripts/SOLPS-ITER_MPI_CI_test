@@ -16,24 +16,22 @@ correct_baserun_timestamps
 # rm *.prt b2fgmtry b2fpardf b2fstati b2frates
 # b2run b2ag b2ah b2ai b2ar
 # cd ..
+
+# Important note! We assume the case run_kin_mpi has been run with 4 processes. If this is not the case, the test will likely fail.
 mkdir run_kin_test
 cd run_kin_test
-cp ../run_kin/b2.*.parameters .
-cp ../run_kin/b2mn.dat .
-cp ../run_kin/b2fstate b2fstati
-cp ../run_kin/b2time.nc .
-cp ../run_kin/input.dat .
-cp ../run_kin/fort.11 .
-cp ../run_kin/fort.13 .
-cp ../run_kin/fort.15 .
-cp ../run_kin/fort.33 .
-cp ../run_kin/fort.34 .
-cp ../run_kin/fort.35 .
-cp ../run_kin/fort.44 .
-cp ../run_kin/fort.46 .
+cp ../run_kin_mpi/b2.*.parameters .
+cp ../run_kin_mpi/b2mn.dat .
+cp ../run_kin_mpi/input.dat .
+cp ../run_kin_mpi/b2fstati .
+cp ../run_kin_mpi/b2time.nc .
+cp ../run_kin_mpi/fort.11.i fort.11
+cp ../run_kin_mpi/fort.13.i fort.13
+cp ../run_kin_mpi/fort.15.i fort.15
+cp ../run_kin_mpi/fort.44.i fort.44
+cp ../run_kin_mpi/fort.46.i fort.46
 touch b2fstati
 setup_baserun_eirene_links
 echo "'b2mndr_ntim' '10'" >> b2mn.dat
 b2run -m \"mpiexec -np 4\" b2mn
-${SOLPSTOP}/modules/B2.5/src/test/run_checks_CI_coupled.sh ../run_kin/ ./ || exit 1
-
+${SOLPSTOP}/modules/B2.5/src/test/run_checks_CI_coupled.sh ../run_kin_mpi/ ./ || exit 1
