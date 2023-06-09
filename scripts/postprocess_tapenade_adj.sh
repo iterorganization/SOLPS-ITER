@@ -43,7 +43,15 @@ sed -i -e "/CALL B2MNDT_B/i\      switchb%keps_cd = 0.D0" b2mod_driver_diff.F90
 sed -i -e "/CALL B2MNDT_B/i\      switchb%keps_heat = 0.D0" b2mod_driver_diff.F90
 sed -i -e "/CALL B2MNDT_B/i\      switchb%keps_heat_i = 0.D0" b2mod_driver_diff.F90
 sed -i -e 's/TYPE(SWITCHES_DIFF)/TYPE(SWITCHES)/g' ./*.F90
-
+# trick here: add to both calls to b2mndt_b, remove only the first one
+sed -i -e "/ CALL B2MNDT_B/i\!   csc the next enables to save the sensitivity of transport coefficients" b2mod_driver_diff.F90
+sed -i -e "/ CALL B2MNDT_B/i\!   for each point of the domain but only for the call to b2tqna within" b2mod_driver_diff.F90
+sed -i -e "/ CALL B2MNDT_B/i\!   the next call to b2mndt" b2mod_driver_diff.F90
+sed -i -e "/ CALL B2MNDT_B/i\    last_call_transp = .true." b2mod_driver_diff.F90
+sed -i -e '0,/last_call_transp = .true./{/last_call_transp = .true./d}' b2mod_driver_diff.F90
+sed -i -e '0,/!   the next call to b2mndt/{/!   the next call to b2mndt/d}' b2mod_driver_diff.F90
+sed -i -e '0,/!   for each point of the domain but only for the call to b2tqna within/{/!   for each point of the domain but only for the call to b2tqna within/d}' b2mod_driver_diff.F90
+sed -i -e '0,/!   csc the next enables to save the sensitivity of transport coefficients/{/!   csc the next enables to save the sensitivity of transport coefficients/d}' b2mod_driver_diff.F90
 
 sed -i -e "/REAL(kind=r8) :: jb(nncf)/i\    integer :: ii" b2mod_main_diff.F90
 

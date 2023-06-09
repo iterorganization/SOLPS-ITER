@@ -348,16 +348,6 @@ sed -i -e "/ CALL B2TQNA_B/i\! manually to save the sensitivity of transport coe
 sed -i -e "/ CALL B2TQNA_B/i\! cell of the domain" b2trno_b.F90
 sed -i -e 's/\&         %hci_exb)/\&         %hci_exb, cob%dna0save, cob%hce0save, cob%hci0save)/g' b2trno_b.F90
 
-# trick here: add to both calls to b2mndt_b, remove only the first one
-sed -i -e "/ CALL B2MNDT_B/i\!   csc the next enables to save the sensitivity of transport coefficients" b2mod_driver_diff.F90
-sed -i -e "/ CALL B2MNDT_B/i\!   for each point of the domain but only for the call to b2tqna within" b2mod_driver_diff.F90
-sed -i -e "/ CALL B2MNDT_B/i\!   the next call to b2mndt" b2mod_driver_diff.F90
-sed -i -e "/ CALL B2MNDT_B/i\    last_call_transp = .true." b2mod_driver_diff.F90
-sed -i -e '0,/last_call_transp = .true./{/last_call_transp = .true./d}' b2mod_driver_diff.F90
-sed -i -e '0,/!   the next call to b2mndt/{/!   the next call to b2mndt/d}' b2mod_driver_diff.F90
-sed -i -e '0,/!   for each point of the domain but only for the call to b2tqna within/{/!   for each point of the domain but only for the call to b2tqna within/d}' b2mod_driver_diff.F90
-sed -i -e '0,/!   csc the next enables to save the sensitivity of transport coefficients/{/!   csc the next enables to save the sensitivity of transport coefficients/d}' b2mod_driver_diff.F90
-
 ### modify all the switchbXX geobXX etc to just have one, TOO DIFFICULT TO IMPLEMENT, NEED BY HAND
 
 sed -i -e "/TYPE(B2STATE_DIFF) :: state0b/d" b2mod_driver_diff.F90
