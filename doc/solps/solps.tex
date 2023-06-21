@@ -2297,7 +2297,7 @@ Another option allows for the user to request specific rates using reaction card
 
 \VerbatimInput[fontsize=\footnotesize]{D/b2ar_AFN.dat}
 
-Note that the headers must contain the exact text shown, including the capitalization. The reaction list order must be the same as in the example and both the ionization and recombination rates must include two reaction cards, one for the particle reaction rate, followed by a second one for the associated electron heat loss rate.
+When {\tt b2ardr\_nreac = 0}, a default set of AMJUEL/HYDHEL reactions is used, i.e., AMJUEL 2.1.5 for ionization, HYDHEL 3.1.8 for charge exchange and AMJUEL 2.1.8 for recombination. This default set of reactions can be overwritten by user-specified reactions from the AMJUEL/HYDHEL databases by making {\tt b2ardr\_nreac > 0}. Then a {\tt reac} field has to be added, as illustrated in the example. The format is not important, but there have to be blanks in between. For the above example, the default reaction for ionization is explicitly overwritten by the default one. Hence, it makes no difference if you specify them or not.      
 
 \begin{sloppypar}
 Supplemental information on atomic physics rates can be found in the file
