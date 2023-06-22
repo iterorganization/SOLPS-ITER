@@ -242,7 +242,7 @@ ifneq (${MOD},o)
 endif
 
 depend: ${OBJS:.o=.F} uiblkd.F uinput.F uiblb2.F ub2p.F ${SRCDIR}/git_version_Uinp.h
-	@`which makedepend` -p'$${OBJDIR}/' ${SOLPS_CPP} ${USE_DEBUG} -f- ${INCLUDE} $^ | \
+	@`which makedepend` -p'$${OBJDIR}/' ${SOLPS_CPP} ${USE_DEBUG} ${DEFINES} -f- ${INCLUDE} $^ | \
 	sed 's,^$${OBJDIR}/[^ ][^ ]*/,\$${OBJDIR}/,' | \
 	sed 's,: ${SOLPSTOP},: $${SOLPSTOP},' > ${OBJDIR}/dependencies.${COMPILER}
 
