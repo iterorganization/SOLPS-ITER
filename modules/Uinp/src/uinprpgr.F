@@ -149,22 +149,22 @@ c*** Limiter and linear configurations - a temporary, clumsy solution
         ntrgdflt=4
         if(topo.eq.'DNS') then  !{
           nrsol1=0
-          nrpfl=npr(5)-1
-          nrsol=npr(1)-1
+          nrpfl=max(npr(5),npr(2),npr(4))-1
+          nrsol=max(npr(1),npr(3))-1
           irsp=nrpfl+1
           irsp2=irsp
           ex=.true.
         else if(topo.eq.'DNL') then !}{
           nrsol1=npr(1)-1
-          nrpfl=npr(6)-1
-          nrsol=npr(2)-1
+          nrpfl=max(npr(6),npr(5),npr(3)-nrsol1)-1
+          nrsol=max(npr(2),npr(4))-1
           irsp=nrpfl+1
           irsp2=irsp+nrsol1
           ex=.true.
         else if(topo.eq.'DNU') then !}{
           nrsol1=npr(1)-1
-          nrpfl=npr(6)-1
-          nrsol=npr(2)-1
+          nrpfl=max(npr(6),npr(3),npr(5)-nrsol1)-1
+          nrsol=max(npr(2),npr(4))-1
           irsp2=nrpfl+1
           irsp=irsp2+nrsol1
           ex=.true.
@@ -209,7 +209,7 @@ c*** Limiter and linear configurations - a temporary, clumsy solution
         end if  !}
         if(ex) then !{
           nrsol1=0
-          nrpfl=npr(3)-1
+          nrpfl=max(npr(3),npr(2))-1
           nrsol=npr(1)-1
           nzinn=nptseg(3)-1
           nzidv2=0
