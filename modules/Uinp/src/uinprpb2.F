@@ -5,6 +5,9 @@
       use eirmod_solps
       use b2mod_elements
       use b2mod_subsys
+#ifdef DIMENSIONS_MODULE
+      use b2mod_dimensions
+#endif
 c
 c  version : 15.08.2003 18:26
 c

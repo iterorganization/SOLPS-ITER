@@ -4,6 +4,9 @@
      , , only: ntrack, nalloys
       use b2mod_subsys
       use eirmod_solps
+#ifdef DIMENSIONS_MODULE
+      use b2mod_dimensions
+#endif
 c
 c  version : 01.04.2005 14:27
 c
@@ -265,6 +268,9 @@ c=======================================================================
      , , only: ntrack, nalloys
       use eirmod_solps
       use b2mod_elements
+#ifdef DIMENSIONS_MODULE
+      use b2mod_dimensions
+#endif
       implicit none
 #     include "uinpcom.inc"
       character*2 name, str_name
@@ -302,6 +308,9 @@ c=======================================================================
      , , only: ntrack, nalloys
       use eirmod_solps
       use b2mod_elements
+#ifdef DIMENSIONS_MODULE
+      use b2mod_dimensions
+#endif
       implicit none
 #     include "uinpcom.inc"
       character*8 name, species_name

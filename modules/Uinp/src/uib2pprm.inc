@@ -1,7 +1,7 @@
 c  VERSION : 14.08.2003 23:15
-
+#ifndef DIMENSIONS_MODULE
 #include "DIMENSIONS.F"
-
+#endif
 c*** The numbers of input blocks and variables to work on in one block
       integer, parameter :: nblck=7, nkwrd=39, nnmdf=nblck*nkwrd
 

@@ -1,7 +1,9 @@
 c  VERSION : 01.04.2005 14:26
 
 c*** The basic data for uinput
-
+#ifndef DIMENSIONS_MODULE
+#include "DIMENSIONS.F"
+#endif
 #include "COUPLE/KOPPLDIM.F"
 
 c=======================================================================

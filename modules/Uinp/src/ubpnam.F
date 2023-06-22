@@ -1,4 +1,7 @@
       subroutine ubpnam(unn)
+#ifdef DIMENSIONS_MODULE
+      use b2mod_dimensions
+#endif
 c
 c  version : 17.11.2003 17:38
 c
