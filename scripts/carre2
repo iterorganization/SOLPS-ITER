@@ -240,9 +240,9 @@ do {
                      }
                     [ -n "$u" ] && {
                       [ -d "$s" ] || mkdir -p "$s"
-                      cp carre.dat structure.dat rzpsi.dat btor.dat "$s" && \
-                              /bin/echo -e "carre.dat, structure.dat, rzpsi.dat, and btor.dat copied to $s" && \
-                              /bin/echo -e "carre.dat, structure.dat, rzpsi.dat, and btor.dat copied to $s" >> CARRE.HISTORY
+                      cp carre.dat structure.dat rzpsi.dat btor.dat carre.out "$s" && \
+                              /bin/echo -e "carre.dat, structure.dat, rzpsi.dat, btor.dat, and carre.out copied to $s" && \
+                              /bin/echo -e "carre.dat, structure.dat, rzpsi.dat, btor.dat, and carre.out copied to $s" >> CARRE.HISTORY
                     }
                   }
                 }
