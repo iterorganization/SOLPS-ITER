@@ -50,8 +50,8 @@ c
         call import(uintrg)
       else
         ! obtain grid size from carre.out file
-        write(*,*) '... opening carre.out'
-        open(iunii,file='carre.out')
+        write(*,*) '... opening uinput.crr'
+        open(iunii,file='uinput.crr')
         call uincrr(iunii)
       endif
       if(ntrgte.ne.ntrgtm) then !{

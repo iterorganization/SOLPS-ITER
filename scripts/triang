@@ -127,7 +127,7 @@ TRIAGEOM="${SOLPSTOP}/modules/Triang/builds/$toolchain/triageom"
 TRIAINQ="${SOLPSTOP}/modules/Triang/builds/$toolchain/triainq"
 EIRENE="${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.$eirchain/eirobjx"
 
-griddir=${CARRE_GRIDDIR-$SOLPSTOP/modules/Carre/meshes/${DEVICE-iter}}
+griddir=${CARRE_GRIDDIR-$SOLPSTOP/modules/Carre2/meshes/${DEVICE-iter}}
 [ -s dg.dgo ] && {
   modelname=`lln dg.dgo`
   [ -s $modelname ] && {
@@ -150,6 +150,7 @@ griddir=${CARRE_GRIDDIR-$SOLPSTOP/modules/Carre/meshes/${DEVICE-iter}}
     n=000
   }
   carrename=$carre_stem.v$n.geo
+  ln -sf $griddir/$carre_stem.v$n/carre.out uinput.crr
 } || {
   print -u2 -n -- "The directory $griddir does not exist. Create it? (y/n)"
   while true; do {
@@ -165,6 +166,7 @@ griddir=${CARRE_GRIDDIR-$SOLPSTOP/modules/Carre/meshes/${DEVICE-iter}}
   }; done
   n=000
   carrename=$carre_stem.v$n.geo
+  ln -sf $griddir/$carre_stem.v$n/carre.out uinput.crr
 }
 
 templatedir=$SOLPSTOP/modules/DivGeo/device/${DEVICE-iter}/templates
@@ -189,7 +191,7 @@ e=
 [ -n "$e" ] && exit 4
 
 q=U
-[ -L uinput.dg ] && [ -L uinput.trg ] && q=u
+[ -L uinput.dg ] && [ -L uinput.trg ] && [ -L uinput.crr ] && q=u
 
 
 export GRSOFT_DEVICE='62'
