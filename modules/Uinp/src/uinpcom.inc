@@ -23,7 +23,12 @@ c***  ntrgdflt  : default number of targets depending on the topology
 c***  ntrgts    : maximum number of targets
 c***  nntrian   : maximum number of triangular mesh nodes for input
       integer,parameter::nnpr=6,nnptseg=6,ntrgts=4,namdfs=20,nntrian=1
+      integer,parameter::nmreg=6,npmamx=2000,nrmamx=200
       integer mnpr,mnptseg,npr(nnpr),nptseg(nnptseg),ntrgdflt,namdf
+      integer nppol(nmreg),nprad(nmreg),nnreg,
+     .        cflags(5,npmamx,nrmamx,nmreg),
+     .        fdegen(4,npmamx,nrmamx,nmreg)
+      integer ncells,nicells,nbcells,nfaces,ndfaces
       integer carre_mode
       character*4 topo
       character*48 amd_file(namdfs)
@@ -557,7 +562,9 @@ c=======================================================================
      ,  trisize,trixmin,trixmax,triymin,triymax,pwrhepdt,pmphepdt,
      ,  sps_absr,sps_trno,sps_trni,sps_mtri,sps_tmpr,sps_spph,sps_spch,
      i  nstrao,natmo,nmolo,niono,nphto,nplso,
-     ,  mnpr,mnptseg,npr,nptseg,carre_mode,laddsrfs,indasrfe,indasrfs,
+     ,  mnpr,mnptseg,npr,nptseg,nppol,nprad,nnreg,cflags,fdegen,
+     ,  carre_mode,ncells,nicells,nbcells,nfaces,ndfaces, 
+     ,  laddsrfs,indasrfe,indasrfs,
      ,  nttrator,jxi,jxa,ntcpub2,nnvsle,nmvsle,ttntcpu,ttnfile,ttnpts,
      ,  ntrgdflt,namdf,nncut,nxcut1,nycut2,
      ,  nniso,nxiso1,nxiso2,nyiso1,nyiso2,nx,ny,

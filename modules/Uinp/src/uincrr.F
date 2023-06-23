@@ -11,11 +11,9 @@
       use eirmod_solps
       implicit none
 #include "uinput.inc"
-      integer :: lun, ireg, nreg
+      integer :: lun, i,j, ireg
       character*80 uline
-      character*7  dum0
-      character*11 dum1
-      character*8  dum2
+      character*12  dum0, dum1
       logical lfound
 !======================================================================
 !
@@ -27,34 +25,90 @@
         lfound=index(uline,'nreg=').gt.0
       end do
       if(.not.lfound) stop 'Problem with carre.out file'
-      read (uline,'(a, i5)') dum0, nreg
-      ! read number of poloidal and radial points per region
+      read (uline,'(a7, i5)') dum0, nnreg
+      mnptseg = nnreg
+      mnpr = nnreg
+      ! read nptseg and npr per region
       rewind (lun)
-      do ireg=1,nreg
+      do ireg=1,nnreg
         lfound=.false.
         do while (.not.lfound)
           read (lun,'(a)') uline
           lfound=index(uline,'nptseg(').gt.0
         end do
         if(.not.lfound) stop 'Problem with carre.out file'
-        read (uline,'(a, i3)') dum1, nptseg(ireg)
+        read (uline,'(a11, i3)') dum0, nptseg(ireg)
       end do
-      do ireg=1,nreg
+      do ireg=1,nnreg
         lfound=.false.
         do while (.not.lfound)
           read (lun,'(a)') uline
           lfound=index(uline,'npr(').gt.0
         end do
         if(.not.lfound) stop 'Problem with carre.out file'
-        read (uline,'(a, i3)') dum2, npr(ireg)
+        read (uline,'(a8, i3)') dum0, npr(ireg)
       end do
-!      do ireg=1,nreg
-!        write (*,*) 'Region ', ireg, ' has nptseg, npr = ',
-!     .             nptseg(ireg), npr(ireg)
-!      enddo
-      mnptseg = nreg
-      mnpr = nreg
-
+      ! read nppol and nprad per region
+      do ireg=1,nnreg
+        lfound=.false.
+        do while (.not.lfound)
+          read (lun,'(a)') uline
+          lfound=index(uline,'nppol=').gt.0
+        end do
+        if(.not.lfound) stop 'Problem with carre.out file'
+        read (uline,'(a8, i5, 2X, a8, i5)') 
+     .    dum0, nppol(ireg), dum1, nprad(ireg)
+      end do
+      ! read cellflags and info on degenerate faces
+      rewind (lun)
+      cflags = 0
+      do ireg=1,nnreg
+        lfound=.false.
+        do while (.not.lfound)
+          read (lun,'(a)') uline
+          lfound=index(uline,'cellflags').gt.0
+        end do
+        if(.not.lfound) stop 'Problem with carre.out file'
+        do j=1,nprad(ireg)-1
+          do i=1,nppol(ireg)-1
+            read (lun,'(5i4)') cflags(1:5,i,j,ireg)
+          end do
+        end do
+        lfound=.false.
+        do while (.not.lfound)
+          read (lun,'(a)') uline
+          lfound=index(uline,'degenerate faces').gt.0
+        end do
+        if(.not.lfound) stop 'Problem with carre.out file'
+        do j=1,nprad(ireg)-1
+          do i=1,nppol(ireg)-1
+            read (lun,'(4i4)') fdegen(1:4,i,j,ireg)
+          end do
+        end do
+      end do
+      ! compute number of interal cells, boundary cells and faces
+      ncells = 0
+      nicells = 0
+      nbcells = 0
+      nfaces = 0
+      ndfaces = 0
+      do ireg = 1,nnreg
+        ! number of physical cells in this region
+        nicells = nicells + count(
+     .    (cflags(1,1:nppol(ireg)-1,1:nprad(ireg)-1,ireg).eq.1).or.
+     .    (cflags(1,1:nppol(ireg)-1,1:nprad(ireg)-1,ireg).eq.3))
+        ! number of boundary faces in this region
+        nbcells = nbcells + count(
+     .     cflags(2:5,1:nppol(ireg)-1,1:nprad(ireg)-1,ireg).ne.0)
+        ! count degenerate faces
+        ndfaces = ndfaces + count(
+     .     fdegen(:,1:nppol(ireg)-1,1:nprad(ireg)-1,ireg).ne.0)
+      enddo
+      nbcells = nbcells - ndfaces
+      ncells = nicells + nbcells
+      nfaces = (4*(nicells - ndfaces) + 3*ndfaces - nbcells)/2 + nbcells
+!      write (*,*) 'uincrr - nCv, nCi, nCg, nFc = ', 
+!     .  ncells, nicells, nbcells, nfaces
       return
 !======================================================================
       end
