@@ -482,7 +482,7 @@ c*** lstrascl,gpfc
         lprdckw(k,1,20,3)=.true.
 
 c*** surf_mat
-        cniprm(k,1,1,40,3) = 'C'
+        cniprm(k,1,1,40,3) = ''
 
 c*** accel_ion
         iniprm(k,1,1,41,3) = 0
@@ -525,7 +525,7 @@ c*** lstrascl, gpfc
         end do !}
 
 c*** surf_mat
-        cniprm(k,1,1,40,3) = 'C'
+        cniprm(k,1,1,40,3) = ''
 
 c*** accel_ion
         iniprm(k,1,1,41,3) = 0
@@ -564,7 +564,7 @@ c*** lstrascl
         end do !}
 
 c*** surf_mat
-        cniprm(k,1,1,40,3) = 'C'
+        cniprm(k,1,1,40,3) = ''
 
 c*** accel_ion
         iniprm(k,1,1,41,3) = 0

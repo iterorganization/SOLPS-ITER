@@ -17,7 +17,7 @@
 'b2ardr_t_min'            '1.0E-01' # Minimum temperature [eV] for which AMJUEL rates are evaluated
 'b2ardr_nn_min'           '1.0E+14' # Minimum density [m^-3] for which AMJUEL rates are evaluated
 'b2ardr_fix_recomb'       '1'
-'b2ardr_nreac'            '2'       # Number of reactions explicily specified below *nreac
+'b2ardr_nreac'            '2'       # Number of reactions explicitly specified below *nreac
 *reac
 AMJUEL H.4  2.1.5 EI
 AMJUEL H.10 2.1.5 EI
