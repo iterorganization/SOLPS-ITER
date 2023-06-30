@@ -210,7 +210,7 @@ ${OBJDIR}/eirmod_cestim.o:
 	ln -sf ${EIROBJ}/eirmod_cestim.o ${OBJDIR}
 	@gtfl $@
 
-${OBJDIR}/eirmod_cinit.o:
+${OBJDIR}/eirmod_cinit.o: ${OBJDIR}/eirmod_mpi.o ${OBJDIR}/eirmod_parmmod.o
 	ln -sf ${EIROBJ}/eirmod_cinit.o ${OBJDIR}
 	@gtfl $@
 
@@ -343,7 +343,7 @@ ${OBJDIR}/eirmod_cestim.${MOD}:
 	ln -sf ${EIROBJ}/eirmod_cestim.${MOD} ${OBJDIR}
 	@gtfl $@
 
-${OBJDIR}/eirmod_cinit.${MOD}:
+${OBJDIR}/eirmod_cinit.${MOD}: ${OBJDIR}/eirmod_mpi.${MOD} ${OBJDIR}/eirmod_precision.${MOD}
 	ln -sf ${EIROBJ}/eirmod_cinit.${MOD} ${OBJDIR}
 	@gtfl $@
 
