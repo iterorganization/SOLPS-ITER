@@ -114,7 +114,7 @@ target_xd = B2SXDR
 target_rd = b2rd.prt
 target_ual = b2_ual_write.prt
 target_rew = b2_ual_rewrite.prt
-target_us = b2us.prt b2fstati_us b2fgmtry_us b2us.boundary.parameters b2us.neutrals.parameters b2us.feedback_control.parameters b2us.regions.parameters b2us.user.parameters input.dat.us triangle.coordinates triangle.elements triangle.neighbors
+target_us = b2us.prt b2fstati_us b2fgmtry_us b2us.boundary.parameters b2us.neutrals.parameters b2us.regions.parameters b2us.user.parameters input.dat.us triangle.coordinates triangle.elements triangle.neighbors
 
 scandir := $(shell cd .. ; pwd)
 projdir := $(shell cd ../.. ; pwd)
@@ -654,6 +654,7 @@ $(target_us) : b2fstati b2fgmtry b2fpardf b2mn.dat
 	[ -s ../${fort_lc}35 ] && cp -p ../${fort_lc}35 . || echo > /dev/null ; \
 	[ -s ../input.dat ] && cp -p ../input.dat . || echo > /dev/null
 	cd b2us.exe.dir ; ${TIME} ${B2OBJ}/b2us.exe ${RUN_OPTIONS} ; mv $(target_us) .. ; rm -f $(notdir $^) >& /dev/null
+	[ -s b2us.exe.dir/b2us.feedback_control.parameters ] && mv b2us.exe.dir/b2us.feedback_control.parameters . ; \
 	[ -s b2us.exe.dir/${fort_lc}33 ] && rm b2us.exe.dir/${fort_lc}33 || echo > /dev/null ; \
 	[ -s b2us.exe.dir/${fort_lc}34 ] && rm b2us.exe.dir/${fort_lc}34 || echo > /dev/null ; \
 	[ -s b2us.exe.dir/${fort_lc}35 ] && rm b2us.exe.dir/${fort_lc}35 || echo > /dev/null ; \
