@@ -36,7 +36,7 @@ c*** The list of keywords to work on:
      ,  'nycut2','nniso',' ','nxiso1','nxiso2',
      ,  'nyiso1','nyiso2','niiso','tiiso','teiso',26*' '/
       data (chrpl(i,6),i=1,nkwrd) / 'impflag','nspecies','nfluids',
-     ,  36*' '/
+     ,  38*' '/
       data (chrpl(i,7),i=1,nkwrd) / 
      /  'fusion_power','Spmp_He_to_D','lhetrgts','lpfrb_i','lpfrb_o',
      ,  'lpfrt_i','lpfrt_o','j_h_at','j_he_at','j_ne_at',
