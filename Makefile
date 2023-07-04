@@ -78,6 +78,11 @@ endif
 
 MAKEO = ${MAKE} ${MAKE_OPTIONS}
 
+DIMENSIONS =
+ifeq ($(shell [ -s modules/B2.5/src/modules/b2mod_dimensions.F ] && echo yes || echo no ),yes)
+DIMENSIONS = -DDIMENSIONS_MODULE
+endif
+
 # SOLPS_DEBUG, SOLPS_OPENMP and SOLPS_MPI will not be taken from environment,
 # but will be passed by the corresponding make-targets
 unexport SOLPS_OPENMP
@@ -436,7 +441,7 @@ listobj:
 	cd modules/Uinp;           ${MAKE} listobj USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes
 	cd modules/Triang;         ${MAKE} listobj
 	cd modules/DivGeo;         ${MAKE} listobj
-	cd modules/Eirene;         ${MAKE} listobj USE_B25=-DB25_EIRENE
+	cd modules/Eirene;         ${MAKE} listobj USE_B25=-DB25_EIRENE DIMENSIONS_MODULE=${DIMENSIONS}
 	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE
 	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE USE_OPENMP=-DUSE_OPENMP SOLPS_OPENMP=yes
 ifeq (${MPI_PRESENT},1)
@@ -445,10 +450,10 @@ ifeq (${MPI_PRESENT},1)
 	cd modules/B2.5;           ${MAKE} listobj USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 	cd modules/Uinp;           ${MAKE} listobj USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 	cd modules/Uinp;           ${MAKE} listobj USE_MPI=-DUSE_MPI SOLPS_MPI=yes USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes
-	cd modules/Eirene;         ${MAKE} listobj USE_B25=-DB25_EIRENE USE_MPI=-DUSE_MPI SOLPS_MPI=yes
+	cd modules/Eirene;         ${MAKE} listobj USE_B25=-DB25_EIRENE USE_MPI=-DUSE_MPI SOLPS_MPI=yes DIMENSIONS_MODULE=${DIMENSIONS}
 	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI USE_OPENMP=-DUSE_OPENMP SOLPS_OPENMP=yes SOLPS_MPI=yes
-	cd modules/Eirene;         ${MAKE} listobj USE_B25=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO
+	cd modules/Eirene;         ${MAKE} listobj USE_B25=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO DIMENSIONS_MODULE=${DIMENSIONS}
 	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO
 endif
 #	cd modules/solps4-5;       ${MAKE} listobj
@@ -462,7 +467,7 @@ listobj_nox:
 	cd modules/Uinp;           ${MAKE} listobj
 	cd modules/Uinp;           ${MAKE} listobj USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes
 	cd modules/Triang;         ${MAKE} listobj LD_GR="" LD_GKS=""
-	cd modules/Eirene;         ${MAKE} listobj USE_B25=-DB25_EIRENE LD_GR="" LD_GKS=""
+	cd modules/Eirene;         ${MAKE} listobj USE_B25=-DB25_EIRENE LD_GR="" LD_GKS="" DIMENSIONS_MODULE=${DIMENSIONS}
 	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE LD_GR="" LD_GKS=""
 	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes LD_GR="" LD_GKS=""
 ifeq (${MPI_PRESENT},1)
@@ -471,10 +476,10 @@ ifeq (${MPI_PRESENT},1)
 	cd modules/B2.5;           ${MAKE} listobj USE_MPI=-DUSE_MPI LD_GR="" LD_GKS="" SOLPS_MPI=yes
 	cd modules/Uinp;           ${MAKE} listobj USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 	cd modules/Uinp;           ${MAKE} listobj USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes USE_MPI=-DUSE_MPI SOLPS_MPI=yes
-	cd modules/Eirene;         ${MAKE} listobj USE_B25=-DB25_EIRENE USE_MPI=-DUSE_MPI LD_GR="" LD_GKS="" SOLPS_MPI=yes
+	cd modules/Eirene;         ${MAKE} listobj USE_B25=-DB25_EIRENE USE_MPI=-DUSE_MPI LD_GR="" LD_GKS="" SOLPS_MPI=yes DIMENSIONS_MODULE=${DIMENSIONS}
 	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI SOLPS_MPI=yes LD_GR="" LD_GKS=""
 	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI SOLPS_OPENMP=-D_OPENMP SOLPS_MPI=yes SOLPS_OPENMP=yes LD_GR="" LD_GKS=""
-	cd modules/Eirene;         ${MAKE} listobj USE_B25=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO LD_GR="" LD_GKS=""
+	cd modules/Eirene;         ${MAKE} listobj USE_B25=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO LD_GR="" LD_GKS="" DIMENSIONS_MODULE=${DIMENSIONS}
 	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO LD_GR="" LD_GKS=""
 endif
 #	cd modules/solps4-5;       ${MAKE} listobj
@@ -489,7 +494,7 @@ depend:
 	cd modules/Uinp;           ${MAKE} depend USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes
 	cd modules/Triang;         ${MAKE} depend
 	cd modules/DivGeo/equtrn;  ${MAKE} depend
-	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE
+	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE DIMENSIONS_MODULE=${DIMENSIONS}
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE
 	cd modules/B2.5;	   ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes
 ifndef NO_MOTIF
@@ -502,10 +507,10 @@ ifeq (${MPI_PRESENT},1)
 	cd modules/B2.5;	   ${MAKE} depend USE_OPENMP=-D_OPENMP USE_MPI=-DUSE_MPI SOLPS_OPENMP=yes SOLPS_MPI=yes
 	cd modules/Uinp;           ${MAKE} depend USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 	cd modules/Uinp;           ${MAKE} depend USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes USE_MPI=-DUSE_MPI SOLPS_MPI=yes
-	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI SOLPS_MPI=yes
+	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI SOLPS_MPI=yes DIMENSIONS_MODULE=${DIMENSIONS}
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 	cd modules/B2.5;	   ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_OPENMP=-D_OPENMP USE_MPI=-DUSE_MPI SOLPS_MPI=yes SOLPS_OPENMP=yes
-	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE    USE_IMPGYRO=-DUSE_IMPGYRO
+	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE    USE_IMPGYRO=-DUSE_IMPGYRO DIMENSIONS_MODULE=${DIMENSIONS}
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO
 endif
 #	cd modules/solps4-5;       ${MAKE} depend
@@ -528,7 +533,7 @@ depend_nox:
 	cd modules/Uinp;           ${MAKE} depend USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes
 	cd modules/Triang;         ${MAKE} depend LD_GR="" LD_GKS=""
 	cd modules/DivGeo/equtrn;  ${MAKE} depend
-	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE LD_GR="" LD_GKS=""
+	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE LD_GR="" LD_GKS="" DIMENSIONS_MODULE=${DIMENSIONS}
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE LD_GR="" LD_GKS=""
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_OPENMP=-D_OPENMP LD_GR="" LD_GKS="" SOLPS_OPENMP=yes
 ifeq (${MPI_PRESENT},1)
@@ -537,10 +542,10 @@ ifeq (${MPI_PRESENT},1)
 	cd modules/B2.5;           ${MAKE} depend USE_MPI=-DUSE_MPI LD_GR="" LD_GKS="" SOLPS_MPI=yes
 	cd modules/Uinp;           ${MAKE} depend USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 	cd modules/Uinp;           ${MAKE} depend USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes USE_MPI=-DUSE_MPI SOLPS_MPI=yes
-	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE USE_MPI=-DUSE_MPI LD_GR="" LD_GKS="" SOLPS_MPI=yes
+	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE USE_MPI=-DUSE_MPI LD_GR="" LD_GKS="" SOLPS_MPI=yes DIMENSIONS_MODULE=${DIMENSIONS}
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI LD_GR="" LD_GKS="" SOLPS_MPI=yes
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI USE_OPENMP=-D_OPENMP LD_GR="" LD_GKS="" SOLPS_MPI=yes SOLPS_OPENMP=yes
-	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO LD_GR="" LD_GKS=""
+	cd modules/Eirene;         ${MAKE} depend USE_B25=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO LD_GR="" LD_GKS="" DIMENSIONS_MODULE=${DIMENSIONS}
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO LD_GR="" LD_GKS=""
 endif
 
