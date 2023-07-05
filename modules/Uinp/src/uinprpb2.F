@@ -124,8 +124,8 @@ c*** nbc
 c*** bcchar, bcpos, bcstart, bcend, bcene, bceni, bcpot, enepar, enipar, potpar
           cniprm(k,1,1, 2,2)='A'  !nh Always using 'A' in the wg code
 cnh          iniprm(k,1,1, 3,2)=lcpbnds(i,j)-1 No longer used in wg code
-          iniprm(k,1,1, 4,2)=lc1bnds_us(i,j)
-          iniprm(k,1,1, 5,2)=lc2bnds_us(i,j)
+          iniprm(k,1,1, 4,2)=lc1bnds(i,j)
+          iniprm(k,1,1, 5,2)=lc2bnds(i,j)
           iniprm(k,1,1, 6,2)=leebnds(i,j)
           iniprm(k,1,1, 7,2)=leibnds(i,j)
           iniprm(k,1,1, 8,2)=lpobnds(i,j)
@@ -355,10 +355,10 @@ c*** Recycling sources
               end if !}
 
 c***          crcstra, rcpos, rcstart, rcend
-              cniprm(k,1,1,2,3)=cznbndt(i,j)
-              iniprm(k,1,1,3,3)=lcpbnds(i,j)-1
-              iniprm(k,1,1,4,3)=ls1bnds(i,j)-1
-              iniprm(k,1,1,5,3)=ls2bnds(i,j)-1
+              cniprm(k,1,1,2,3)='A' !nh always 'A' for surface strata
+cnh              iniprm(k,1,1,3,3)=lcpbnds(i,j)-1 !No longer used in wg code
+              iniprm(k,1,1,4,3)=ls1bnds(i,j)
+              iniprm(k,1,1,5,3)=ls2bnds(i,j)
 
 c***          species_start, species_end
               iniprm(k,1,1,6,3)=ispi-1+(iatm-1)
@@ -437,7 +437,7 @@ c*** Gas puffing sources
 
 c*** crcstra, rcpos, rcstart, rcend
         cniprm(k,1,1,2,3)='C'
-        iniprm(k,1,1,3,3)=0
+cnh        iniprm(k,1,1,3,3)=0 ! No longer used in wg code
         iniprm(k,1,1,4,3)=0
         iniprm(k,1,1,5,3)=0
 
@@ -500,7 +500,7 @@ c*** Recombination sources
 
 c*** crcstra, rcpos, rcstart, rcend
         cniprm(k,1,1,2,3)='V'
-        iniprm(k,1,1,3,3)=0
+cnh        iniprm(k,1,1,3,3)=0 ! No longer used in wg code
         iniprm(k,1,1,4,3)=0
         iniprm(k,1,1,5,3)=0
 
@@ -550,7 +550,7 @@ c*** Time-dependent stratum
 
 c*** crcstra, rcpos, rcstart, rcend
         cniprm(k,1,1,2,3)='T'
-        iniprm(k,1,1,3,3)=0
+cnh        iniprm(k,1,1,3,3)=0 ! No longer used in wg code
         iniprm(k,1,1,4,3)=0
         iniprm(k,1,1,5,3)=0
 

@@ -21,7 +21,7 @@ c*** The list of keywords to work on:
      ,  'lcbs','nniso','nxiso1','nxiso2','nyiso1',
      ,  'nyiso2','niiso','teiso','tiiso',17*' '/
       data (chrpl(i,3),i=1,nkwrd) /
-     /  'nstrai','crcstra','rcpos','rcstart','rcend',
+     /  'nstrai','crcstra','','rcstart','rcend',
      ,  'species_start','species_end','eb2spcr','eb2atcr','b2espcr',
      ,  'b2eatcr','lstrascl','lsns','msns','ksns',
      ,  'lcns','ltns','recyc','userfluxparm','gpfc',

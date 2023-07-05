@@ -231,8 +231,7 @@ c***         parameters for boundary conditions for Te, Ti, n, and v
      ,        ls1bnds(nbndzon,nbndknd), ls2bnds(nbndzon,nbndknd),
      ,        leebnds(nbndzon,nbndknd), lcobnds(nsdb2,nbndzon,nbndknd),
      ,        leibnds(nbndzon,nbndknd), lmobnds(nsdb2,nbndzon,nbndknd),
-     ,        lpobnds(nbndzon,nbndknd), lscbnds(natm,nbndzon,nbndknd),
-     ,        lc1bnds_us(nbndzon,nbndknd), lc2bnds_us(nbndzon,nbndknd)
+     ,        lpobnds(nbndzon,nbndknd), lscbnds(natm,nbndzon,nbndknd)
       real(kind=R4)
      ,  beebnds(nbndzon,2,nbndknd),bcobnds(nsdb2,nbndzon,2,nbndknd),
      ,  beibnds(nbndzon,2,nbndknd),bmobnds(nsdb2,nbndzon,2,nbndknd),
@@ -586,7 +585,7 @@ c     ,  spcifup,spcifua,spcifum,spcifui,
      ,  jcgbnds,jpsbnds,jppbnds,jnpbnds,jmpbnds,jnibnds,jnebnds,
      ,  nwllmrk,nedgmrk,ntrgmrk,ledgmrk,ltrgmrk,lwllmrk,ledgdfl,
      ,  lcpbnds,lc1bnds,lc2bnds,lrrbnds,ls1bnds,ls2bnds,leebnds,lcobnds,
-     ,  leibnds,lmobnds,lscbnds,lpobnds,lc1bnds_us,lc2bnds_us,
+     ,  leibnds,lmobnds,lscbnds,lpobnds,
      ,  mdvbndx,ldvbndx,mznbndx,lznbndx,mmkbndx,lmkbndx,
      ,  jskbndx,jclbndx,jrfbndx,jcsbndx,jcgbndx,jpsbndx,jppbndx,nlrbndx,
      ,  jnpbndx,jmpbndx,jnibndx,jnebndx,

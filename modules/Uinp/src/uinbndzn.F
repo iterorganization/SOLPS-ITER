@@ -288,13 +288,10 @@ c*** Specify the position-related data for B2 and Eirene input files
             end if !}
             cskbnds(iz,m)=cznbndt(iz,m)
             lcpbnds(iz,m)=lzpbndt(iz,m)
-            lc1bnds(iz,m)=lzrbndt(iz,m,1)
-            lc2bnds(iz,m)=lzrbndt(iz,m,2)
-cnh Unstructured format
-            lc1bnds_us(iz,m)=lzrbndt_us(iz,m,1)
-            lc2bnds_us(iz,m)=lzrbndt_us(iz,m,2)
-            ls1bnds(iz,m)=max(1,lc1bnds(iz,m))
-            ls2bnds(iz,m)=min(ny,lc2bnds(iz,m))
+            lc1bnds(iz,m)=lzrbndt_us(iz,m,1)
+            lc2bnds(iz,m)=lzrbndt_us(iz,m,2)
+            ls1bnds(iz,m)=lc1bnds(iz,m)
+            ls2bnds(iz,m)=lc2bnds(iz,m)
 
             if(jc1bnds(iz,m).ge.jc2bnds(iz,m)) then !{
 c*** Boundary zone consists of a single guard cell - reject it
@@ -353,13 +350,10 @@ c*** Specify the position-related data for B2 and Eirene input files
           end if !}
           cskbnds(iz,m)=cznbndt(iz,m)
           lcpbnds(iz,m)=lzpbndt(iz,m)
-          lc1bnds(iz,m)=lzrbndt(iz,m,1)
-          lc2bnds(iz,m)=lzrbndt(iz,m,2)
-cnh Unstructured format
-          lc1bnds_us(iz,m)=lzrbndt_us(iz,m,1)
-          lc2bnds_us(iz,m)=lzrbndt_us(iz,m,2)
-          ls1bnds(iz,m)=max(1,lc1bnds(iz,m))
-          ls2bnds(iz,m)=min(ny,lc2bnds(iz,m))
+          lc1bnds(iz,m)=lzrbndt_us(iz,m,1)
+          lc2bnds(iz,m)=lzrbndt_us(iz,m,2)
+          ls1bnds(iz,m)=lc1bnds(iz,m)
+          ls2bnds(iz,m)=lc2bnds(iz,m)
 
           if(jc1bnds(iz,m).ge.jc2bnds(iz,m)) then !{
 c*** Boundary zone consists of a single guard cell - reject it
@@ -462,22 +456,10 @@ c!###}
               end if !}
               cskbnds(iz,m)=cznbndt(iz,m)
               lcpbnds(iz,m)=lzpbndt(iz,m)
-              lc1bnds(iz,m)=lzrbndt(iz,m,1)
-              lc2bnds(iz,m)=lzrbndt(iz,m,2)
-cnh Unstructured format
-              lc1bnds_us(iz,m)=lzrbndt_us(iz,m,1)
-              lc2bnds_us(iz,m)=lzrbndt_us(iz,m,2)
+              lc1bnds(iz,m)=lzrbndt_us(iz,m,1)
+              lc2bnds(iz,m)=lzrbndt_us(iz,m,2)
               ls1bnds(iz,m)=lc1bnds(iz,m)
               ls2bnds(iz,m)=lc2bnds(iz,m)
-              if(ls1bnds(iz,m).eq.0 .or. (nncut.eq.4 .and.
-     .           ls1bnds(iz,m).eq.nxcut1(2)+nzodv+1+1)) then !{
-                ls1bnds(iz,m)=ls1bnds(iz,m)+1
-              end if !}
-              if(ls2bnds(iz,m).eq.nx+1 .or.
-     .            (nncut.eq.4 .and.
-     .             ls2bnds(iz,m).eq.nxcut1(2)+nzodv+1)) then !{
-                ls2bnds(iz,m)=ls2bnds(iz,m)-1
-              end if !}
 
               if(jc1bnds(iz,m).ge.jc2bnds(iz,m)) then !{
 c*** Boundary zone consists of a single guard cell - reject it
@@ -550,22 +532,10 @@ c!###}
             end if !}
             cskbnds(iz,m)=cznbndt(iz,m)
             lcpbnds(iz,m)=lzpbndt(iz,m)
-            lc1bnds(iz,m)=lzrbndt(iz,m,1)
-            lc2bnds(iz,m)=lzrbndt(iz,m,2)
-cnh Unstructured format
-            lc1bnds_us(iz,m)=lzrbndt_us(iz,m,1)
-            lc2bnds_us(iz,m)=lzrbndt_us(iz,m,2)
+            lc1bnds(iz,m)=lzrbndt_us(iz,m,1)
+            lc2bnds(iz,m)=lzrbndt_us(iz,m,2)
             ls1bnds(iz,m)=lc1bnds(iz,m)
             ls2bnds(iz,m)=lc2bnds(iz,m)
-            if(ls1bnds(iz,m).eq.0 .or. (nncut.eq.4 .and.
-     .         ls1bnds(iz,m).eq.nxcut1(2)+nzodv+1+1)) then !{
-              ls1bnds(iz,m)=ls1bnds(iz,m)+1
-            end if !}
-            if(ls2bnds(iz,m).eq.nx+1 .or.
-     .          (nncut.eq.4 .and.
-     .             ls2bnds(iz,m).eq.nxcut1(2)+nzodv+1)) then !{
-              ls2bnds(iz,m)=ls2bnds(iz,m)-1
-            end if !}
 
             if(jc1bnds(iz,m).ge.jc2bnds(iz,m)) then !{
 c*** Boundary zone consists of a single guard cell - reject it
