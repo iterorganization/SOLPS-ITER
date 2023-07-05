@@ -4246,8 +4246,8 @@ The format of this input block for coupling to \SOLPSITER is as follows:
 
 {\it ***14. Data for interfacing routine "infusr"}
 \begin{verbatim}
-LSYMET  LBALAN  LCOARSE NLTRIMESH  LSPRCL
-NFLA    NCUTB   NCUTL   IMF   NTRFRM   NFULL   IBRAD   IBPOL   IBTOR
+LSYMET  LBALAN
+NFLA    NTRFRM   NFULL   IBRAD   IBPOL   IBTOR
 \end{verbatim}
 {\it read NPLSI species lines}
 \begin{verbatim}
@@ -4262,8 +4262,7 @@ NTARGI
 NTGPRT(IT), IT=1,NTARGI
 DO 30, IT=1,NTARGI
    DO 33, IPRT=1,NTGPRT(IT)
-      I NDT    NINCT  NIXY   NTIN   NTEN   NIFLG   NPTC   NPTCM
-        NSPZI  NSPZE  NEMOD
+      I NDT    NPTC   NPTCM  NSPZI  NSPZE  NEMOD  ITYPE 
    33 CONTINUE
 30 CONTINUE
 \end{verbatim}
@@ -4290,14 +4289,12 @@ We only include here the variables or aspects thereof not already described in t
   \item[LCOARSE] Coarse mesh switch ???
   \item[NLTRIMESH] When {\tt .TRUE.}, {\tt Eirene} is only run to obtain the contours necessary to build the triangular grid, which are then written in {\tt fort.78}. This is used by the {\tt triang} script toolchain. No particle trajectories are followed.
   \item[LSPRCL] Turns on species-specific source rescaling when {\tt .TRUE.}
-  \item[NCUTB] For \SOLPSITER couplings, should be 0
-  \item[NCUTL] For \SOLPSITER couplings, should be 1
-  \item[IMF] {\tt fort.30} format switch, should be 0
-  \item[NTRFRM] {\tt fort.33} format switch, should be 0
+  \item[NTRFRM] {\tt fort.33} format switch, should be 1 for the widegrid code
   \item[LKINDP] Index of the {\tt Eirene} atom this species is linked to
   \item[NPTC] In addition to the description in the {\tt Eirene} manual, note that only the value from the first segment of the stratum ({\tt IPRT=1}) is used.
   \item[NPTCM] This corresponds to the {\tt NMINPTS} flag in input block 7, and is needed only if {\tt INDSRC=6}, i.e., if the source is specified by data from block 14 alone. As for {\tt NPTC}, only the value from the first stratum segment is used.
   \item[NEMOD] This corresponds to the {\tt NEMODS} flag in input block 7, and is needed only if {\tt INDSRC=6}, i.e., if the source is specified by data from block 14 alone. As for {\tt NPTC}, only the value from the first stratum segment is used. It is overwritten internally by the code to be {\tt 7} for E/W surfaces (i.e. include sheath acceleration) and {\tt 6} for N/S surfaces (do not include sheath acceleration).
+  \item[ITYPE] Possibility to specify the species type: {\tt ITYPE=0} (default): bulk ion species ({\tt NLPLS=.TRUE.}); {\tt ITYPE=1}: atoms ({\tt NLATM=.TRUE.}); {\tt ITYPE=2}: molecules; {\tt ITYPE=3}: trace ions; {\tt ITYPE=4}: bulk ions; {\tt ITYPE=5}: photons.  
   \item[NCOPIB] Not in use
   \item[NCOPEB] Maximum number of additional tallies per plasma background species
 \end{description}

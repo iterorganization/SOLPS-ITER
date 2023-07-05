@@ -1155,7 +1155,7 @@ c*** 14.  data for interfacing subroutine infcop
       write(iunoo,700) utxthd(19)
       if (nmode.ne.0) then !{
         write(iunoo,706) lsymet,lbalan,lcoarse,nltrimesh,lsprcl
-        write(iunoo,707) nfla,ncutb,ncutl,imf,
+        write(iunoo,707) nfla,
      .                   ntrfrm,nfull,ibrad,ibpol,ibtor
         do i=1,nplsi+nbgk !{
           write(iunoo,710) i,iflb(i),fcte(i),bmass(i),lkindp(i)
@@ -1174,8 +1174,8 @@ c*** 14.  data for interfacing subroutine infcop
         if(l.ge.100) k=1000
         do i=1,ntargi !{
           do j=1,ntgprt(i) !{
-            write(iunoo,707) k*i+j*m,ndt2(i,j),ninct2(i,j),nixy2(i,j),
-     ,          ntin2(i,j),nten2(i,j),niflg(i,j),nptc(i,j),nptcm(i,j),
+            write(iunoo,707) k*i+j*m,ndt2(i,j),
+     ,          nptc(i,j),nptcm(i,j),
      ,                                  nspzi(i,j),nspze(i,j),nemod(i,j)
           end do !}
         end do !}

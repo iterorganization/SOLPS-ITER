@@ -13,7 +13,7 @@ c*** sources) for the Eirene input file
 c=======================================================================
       implicit none
 #include "uinput.inc"
-      integer ibk,isf,iatm,ispe,ispi
+      integer ibk,isf,iatm,ispe,ispi,ndt
       external xerrab
 c=======================================================================
       call subini ('uinbnddt')
@@ -23,7 +23,7 @@ c=======================================================================
       ntargi=0
 
 c*** Follow the boundary kinds: core, targets, PFR, outer edge
-
+      ndt = -1 !nh initialization of ndt for the wg format
       do ibk=1,nbndknd !{
         do isf=1,nznbndt(ibk) !{
 c*** First, non-default surface...
@@ -100,6 +100,7 @@ c*** ... set up the material properties
           end if !}
 c*** ... and then the recycling source if specified
           if(nlrbnds(isf,ibk)) then !{
+           ndt=ndt-1
            ispe=0
            do iatm=1,natmi !{ Split the strata per species
             if(is_meta(iatm)) cycle
@@ -136,7 +137,7 @@ c*** ... and then the recycling source if specified
             nspzi(ntargi,1)=ispi
             nspze(ntargi,1)=ispe
             insor(1,nstrai)=jcpbnds(isf,ibk)
-            ndt2(ntargi,1)=insor(1,nstrai)-1
+            ndt2(ntargi,1)=ndt
             ntin2(ntargi,1)=jc1bnds(isf,ibk)
             nten2(ntargi,1)=jc2bnds(isf,ibk)
             npts(nstrai)=jnpbnds(isf,ibk)

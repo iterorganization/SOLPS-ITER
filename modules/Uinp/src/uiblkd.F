@@ -179,9 +179,9 @@ c*** 2
      ,     volcor , voladd  /
      /    nbmax*1., nadd*1. /
       data  nlrad , nlslb , nlcrc , nlell , nltri , nlplg /
-     /      .true.,.false.,.false.,.false.,.false., .true./,
+     /      .true.,.false.,.false.,.false.,.false., .false./,
      ,      nlfem , nltet , nlgen /
-     /     .false.,.false.,.false./,
+     /     .true.,.false.,.false./,
      ,      nlpol , nlply , nlpla , nlplp , nltor /
      /      .true.,.false.,.false.,.false.,.false./,
      ,      nltrz , nltra , nltrt , nlmlt , nladd /
@@ -917,7 +917,7 @@ c*** 14
       data nclmi,nblcki,nprnvi,nprtvi,nprdvi, nfla , ncutb, lkindp  /
      /        5 , -25  ,  1   , 350  ,  1   ,   0  ,   0  , npls*0  /,
      ,     ncutl, imf  ,ntrfrm, nfull, ibrad, ibpol, ibtor /
-     /       1  ,   0  ,  0   ,   0  ,  1   ,    1 ,   1   /,
+     /       1  ,   0  ,  1   ,   0  ,  0   ,    1 ,   1   /,
      ,     iflb , ndxa , ndya ,ntargi, ntgprt, ndt2  /
      /    npls*1,  0   ,  0   ,  0   ,nstep*1,lusg*0 /,
      ,    ninct2, nixy2, ntin2, nten2, niflg,  nptc , nptcm, nspzi /
