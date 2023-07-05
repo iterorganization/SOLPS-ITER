@@ -122,10 +122,10 @@ c*** nbc
         do i=1,nznbndt(j) !{
           k=k+1
 c*** bcchar, bcpos, bcstart, bcend, bcene, bceni, bcpot, enepar, enipar, potpar
-          cniprm(k,1,1, 2,2)=cznbndt(i,j)
-          iniprm(k,1,1, 3,2)=lcpbnds(i,j)-1
-          iniprm(k,1,1, 4,2)=lc1bnds(i,j)-1
-          iniprm(k,1,1, 5,2)=lc2bnds(i,j)-1
+          cniprm(k,1,1, 2,2)='A'  !nh Always using 'A' in the wg code
+cnh          iniprm(k,1,1, 3,2)=lcpbnds(i,j)-1 No longer used in wg code
+          iniprm(k,1,1, 4,2)=lc1bnds_us(i,j)
+          iniprm(k,1,1, 5,2)=lc2bnds_us(i,j)
           iniprm(k,1,1, 6,2)=leebnds(i,j)
           iniprm(k,1,1, 7,2)=leibnds(i,j)
           iniprm(k,1,1, 8,2)=lpobnds(i,j)

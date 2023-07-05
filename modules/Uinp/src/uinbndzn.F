@@ -255,6 +255,18 @@ c*** divide found
             lzpbndt(iz,m)=lrsbndt(k,m)
             lzrbndt(iz,m,1)=iy
             lzrbndt(iz,m,2)=j-1
+cnh asigning bcstart and bcend for the unstructured format
+            if (crgbndt(k,m).eq.'W') then
+              lzrbndt_us(iz,m,1)=-10-2*iz-1
+              lzrbndt_us(iz,m,2)=-10-2*iz-1
+            elseif (crgbndt(k,m).eq.'E') then
+              lzrbndt_us(iz,m,1)=-30-2*iz
+              lzrbndt_us(iz,m,2)=-30-2*iz
+            else
+              write(0,*) 'Internal error in uinbndzn: wrong boundary ',
+     ,          'code ',crgbndt(k,m),' for target',k,'  zone',iz
+              call xerrab ('Wrong boundary code')
+            endif
             lrfbndt(iz,m)=k
             cznbndt(iz,m)=crgbndt(k,m)
             iy=j
@@ -278,6 +290,9 @@ c*** Specify the position-related data for B2 and Eirene input files
             lcpbnds(iz,m)=lzpbndt(iz,m)
             lc1bnds(iz,m)=lzrbndt(iz,m,1)
             lc2bnds(iz,m)=lzrbndt(iz,m,2)
+cnh Unstructured format
+            lc1bnds_us(iz,m)=lzrbndt_us(iz,m,1)
+            lc2bnds_us(iz,m)=lzrbndt_us(iz,m,2)
             ls1bnds(iz,m)=max(1,lc1bnds(iz,m))
             ls2bnds(iz,m)=min(ny,lc2bnds(iz,m))
 
@@ -306,6 +321,18 @@ c           print *,'k,iz,iy =',k,iz,iy !###
           lzpbndt(iz,m)=lrsbndt(k,m)
           lzrbndt(iz,m,1)=iy
           lzrbndt(iz,m,2)=ny+1
+cnh asigning bcstart and bcend for the unstructured format
+          if (crgbndt(k,m).eq.'W') then
+            lzrbndt_us(iz,m,1)=-10-2*iz-1
+            lzrbndt_us(iz,m,2)=-10-2*iz-1
+          elseif (crgbndt(k,m).eq.'E') then
+            lzrbndt_us(iz,m,1)=-30-2*iz
+            lzrbndt_us(iz,m,2)=-30-2*iz
+          else
+            write(0,*) 'Internal error in uinbndzn: wrong boundary ',
+     ,        'code ',crgbndt(k,m),' for target',k,'  zone',iz
+            call xerrab ('Wrong boundary code')
+          endif
           lrfbndt(iz,m)=k
           cznbndt(iz,m)=crgbndt(k,m)
 
@@ -328,6 +355,9 @@ c*** Specify the position-related data for B2 and Eirene input files
           lcpbnds(iz,m)=lzpbndt(iz,m)
           lc1bnds(iz,m)=lzrbndt(iz,m,1)
           lc2bnds(iz,m)=lzrbndt(iz,m,2)
+cnh Unstructured format
+          lc1bnds_us(iz,m)=lzrbndt_us(iz,m,1)
+          lc2bnds_us(iz,m)=lzrbndt_us(iz,m,2)
           ls1bnds(iz,m)=max(1,lc1bnds(iz,m))
           ls2bnds(iz,m)=min(ny,lc2bnds(iz,m))
 
@@ -388,6 +418,24 @@ c*** divide found
               lzpbndt(iz,m)=lrsbndt(k,m)
               lzrbndt(iz,m,1)=ix
               lzrbndt(iz,m,2)=j-1
+cnh asigning bcstart and bcend for the unstructured format
+              if (crgbndt(k,m).eq.'S') then
+                if (m.eq.1) then ! core boundaries
+                  lzrbndt_us(iz,m,1)=-20-4*(iz-1)-1
+                  lzrbndt_us(iz,m,2)=-20-4*(iz-1)-1
+                else ! pf boundaries
+                  lzrbndt_us(iz,m,1)=-20-2*iz-mod(iz,2)
+                  lzrbndt_us(iz,m,2)=-20-2*iz-mod(iz,2)  
+                endif                 
+              elseif (crgbndt(k,m).eq.'N') then
+                lzrbndt_us(iz,m,1)=-40-4*iz
+                lzrbndt_us(iz,m,2)=-40-iz*(iz+1)
+              else
+                write(0,*) 'Internal error in uinbndzn: wrong ',
+     ,            'boundary code ',crgbndt(k,m),' for side',m,
+     ,                                          '  region',k,'  zone',iz
+                call xerrab ('Wrong boundary code')
+              endif
               lrfbndt(iz,m)=k
               cznbndt(iz,m)=crgbndt(k,m)
 
@@ -416,6 +464,9 @@ c!###}
               lcpbnds(iz,m)=lzpbndt(iz,m)
               lc1bnds(iz,m)=lzrbndt(iz,m,1)
               lc2bnds(iz,m)=lzrbndt(iz,m,2)
+cnh Unstructured format
+              lc1bnds_us(iz,m)=lzrbndt_us(iz,m,1)
+              lc2bnds_us(iz,m)=lzrbndt_us(iz,m,2)
               ls1bnds(iz,m)=lc1bnds(iz,m)
               ls2bnds(iz,m)=lc2bnds(iz,m)
               if(ls1bnds(iz,m).eq.0 .or. (nncut.eq.4 .and.
@@ -455,6 +506,24 @@ c     ,                             jc1bnds(iz,m),jc2bnds(iz,m) !###
             lzpbndt(iz,m)=lrsbndt(k,m)
             lzrbndt(iz,m,1)=ix
             lzrbndt(iz,m,2)=lrpbndt(k,m,2)
+cnh asigning bcstart and bcend for the unstructured format
+            if (crgbndt(k,m).eq.'S') then
+              if (m.eq.1) then ! core boundaries
+                lzrbndt_us(iz,m,1)=-20-4*(iz-1)-1
+                lzrbndt_us(iz,m,2)=-20-4*(iz-1)-1
+              else ! pf boundaries
+                lzrbndt_us(iz,m,1)=-20-2*iz-mod(iz,2)
+                lzrbndt_us(iz,m,2)=-20-2*iz-mod(iz,2)  
+              endif                 
+            elseif (crgbndt(k,m).eq.'N') then
+              lzrbndt_us(iz,m,1)=-40-4*iz
+              lzrbndt_us(iz,m,2)=-40-iz*(iz+1)
+            else
+              write(0,*) 'Internal error in uinbndzn: wrong ',
+     ,          'boundary code ',crgbndt(k,m),' for side',m,
+     ,                                        '  region',k,'  zone',iz
+              call xerrab ('Wrong boundary code')
+            endif
             lrfbndt(iz,m)=k
             cznbndt(iz,m)=crgbndt(k,m)
 
@@ -483,6 +552,9 @@ c!###}
             lcpbnds(iz,m)=lzpbndt(iz,m)
             lc1bnds(iz,m)=lzrbndt(iz,m,1)
             lc2bnds(iz,m)=lzrbndt(iz,m,2)
+cnh Unstructured format
+            lc1bnds_us(iz,m)=lzrbndt_us(iz,m,1)
+            lc2bnds_us(iz,m)=lzrbndt_us(iz,m,2)
             ls1bnds(iz,m)=lc1bnds(iz,m)
             ls2bnds(iz,m)=lc2bnds(iz,m)
             if(ls1bnds(iz,m).eq.0 .or. (nncut.eq.4 .and.

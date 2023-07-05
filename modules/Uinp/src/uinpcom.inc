@@ -231,7 +231,8 @@ c***         parameters for boundary conditions for Te, Ti, n, and v
      ,        ls1bnds(nbndzon,nbndknd), ls2bnds(nbndzon,nbndknd),
      ,        leebnds(nbndzon,nbndknd), lcobnds(nsdb2,nbndzon,nbndknd),
      ,        leibnds(nbndzon,nbndknd), lmobnds(nsdb2,nbndzon,nbndknd),
-     ,        lpobnds(nbndzon,nbndknd), lscbnds(natm,nbndzon,nbndknd)
+     ,        lpobnds(nbndzon,nbndknd), lscbnds(natm,nbndzon,nbndknd),
+     ,        lc1bnds_us(nbndzon,nbndknd), lc2bnds_us(nbndzon,nbndknd)
       real(kind=R4)
      ,  beebnds(nbndzon,2,nbndknd),bcobnds(nsdb2,nbndzon,2,nbndknd),
      ,  beibnds(nbndzon,2,nbndknd),bmobnds(nsdb2,nbndzon,2,nbndknd),
@@ -303,7 +304,8 @@ c***             boundary code (E, W, S, N) for each region and zone;
      ,  lcmbndt(nbndrgn,nbndknd),lrfbndt(nbndzon,nbndknd),
      ,  lrrbndt(nbndrgn,nbndknd,2),lrpbndt(nbndrgn,nbndknd,2),
      ,  lrsbndt(nbndrgn,nbndknd),
-     ,  lzrbndt(nbndzon,nbndknd,2),lzpbndt(nbndzon,nbndknd)
+     ,  lzrbndt(nbndzon,nbndknd,2),lzpbndt(nbndzon,nbndknd),
+     ,  lzrbndt_us(nbndzon,nbndknd,2)
       logical bxsbndt(nbndzon,nbndknd),rxsbndt(nbndzon,nbndknd)
       character crgbndt(nbndrgn,nbndknd),cznbndt(nbndzon,nbndknd)
 
@@ -584,13 +586,13 @@ c     ,  spcifup,spcifua,spcifum,spcifui,
      ,  jcgbnds,jpsbnds,jppbnds,jnpbnds,jmpbnds,jnibnds,jnebnds,
      ,  nwllmrk,nedgmrk,ntrgmrk,ledgmrk,ltrgmrk,lwllmrk,ledgdfl,
      ,  lcpbnds,lc1bnds,lc2bnds,lrrbnds,ls1bnds,ls2bnds,leebnds,lcobnds,
-     ,  leibnds,lmobnds,lscbnds,lpobnds,
+     ,  leibnds,lmobnds,lscbnds,lpobnds,lc1bnds_us,lc2bnds_us,
      ,  mdvbndx,ldvbndx,mznbndx,lznbndx,mmkbndx,lmkbndx,
      ,  jskbndx,jclbndx,jrfbndx,jcsbndx,jcgbndx,jpsbndx,jppbndx,nlrbndx,
      ,  jnpbndx,jmpbndx,jnibndx,jnebndx,
      ,  leebndx,lcobndx,leibndx,lmobndx,lpobndx,kcobndx,kmobndx,
      ,  nrgbndt,nznbndt,lcmbndt,lrfbndt,lrrbndt,lrpbndt,lrsbndt,lzrbndt,
-     ,  lzpbndt,
+     ,  lzpbndt,lzrbndt_us,
      ,  nnrctn,rctngrp,rctnmsp,rctnmst,rctnnmo1,rctnnmo2,rctnnmo3,
      ,  rctnimn,rctniz,rctnimx,nnrctd,rctdgrp,rctdmsp,rctdmst,
      ,  nspcncl,nspcpls,nspcatm,nspcmol,nspcion,spcsmsp,spcsmsa,spcsmsm,
