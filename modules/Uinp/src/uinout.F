@@ -1160,7 +1160,8 @@ c*** 14.  data for interfacing subroutine infcop
         do i=1,nplsi+nbgk !{
           write(iunoo,710) i,iflb(i),fcte(i),bmass(i),lkindp(i)
         end do !}
-        write(iunoo,707) ndxa,ndya
+cnh        write(iunoo,707) ndxa,ndya
+        write(iunoo,707) ncvp,ncip,nfcp
         write(iunoo,707) ntargi
         write(iunoo,707) (ntgprt(i),i=1,ntargi)
         l=maxval(ntgprt)
