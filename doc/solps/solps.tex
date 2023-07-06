@@ -4257,7 +4257,7 @@ DO 20, IPL=1,NPLSI
 \end{verbatim}
 {\it Recycling target definitions}
 \begin{verbatim}
-NDXA   NDYA
+NCVP   NCIP   NFCP
 NTARGI
 NTGPRT(IT), IT=1,NTARGI
 DO 30, IT=1,NTARGI
@@ -4291,6 +4291,9 @@ We only include here the variables or aspects thereof not already described in t
   \item[LSPRCL] Turns on species-specific source rescaling when {\tt .TRUE.}
   \item[NTRFRM] {\tt fort.33} format switch, should be 1 for the widegrid code
   \item[LKINDP] Index of the {\tt Eirene} atom this species is linked to
+  \item[NCVP] Total number of cells in the B2.5 mesh
+  \item[NCIP] Total number of internal cells in the B2.5 mesh
+  \item[NFCP] Total number of faces in the B2.5 mesh 
   \item[NPTC] In addition to the description in the {\tt Eirene} manual, note that only the value from the first segment of the stratum ({\tt IPRT=1}) is used.
   \item[NPTCM] This corresponds to the {\tt NMINPTS} flag in input block 7, and is needed only if {\tt INDSRC=6}, i.e., if the source is specified by data from block 14 alone. As for {\tt NPTC}, only the value from the first stratum segment is used.
   \item[NEMOD] This corresponds to the {\tt NEMODS} flag in input block 7, and is needed only if {\tt INDSRC=6}, i.e., if the source is specified by data from block 14 alone. As for {\tt NPTC}, only the value from the first stratum segment is used. It is overwritten internally by the code to be {\tt 7} for E/W surfaces (i.e. include sheath acceleration) and {\tt 6} for N/S surfaces (do not include sheath acceleration).
