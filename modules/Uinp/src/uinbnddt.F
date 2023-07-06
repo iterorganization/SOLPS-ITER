@@ -23,11 +23,12 @@ c=======================================================================
       ntargi=0
 
 c*** Follow the boundary kinds: core, targets, PFR, outer edge
-      ndt = -1 !nh initialization of ndt for the wg format
+      ndt = 0 !nh initialization of ndt for the wg format
       do ibk=1,nbndknd !{
         do isf=1,nznbndt(ibk) !{
 c*** First, non-default surface...
           nstsi=nstsi+1
+          ndt = ndt-1
           if(nstsi.ge.nsts) then !{
             write(0,*) 'Too many "non-default surfaces" are specified.',
      ,                                 '  ',ctxbnds(ibk),',  zone',isf
@@ -100,7 +101,6 @@ c*** ... set up the material properties
           end if !}
 c*** ... and then the recycling source if specified
           if(nlrbnds(isf,ibk)) then !{
-           ndt=ndt-1
            ispe=0
            do iatm=1,natmi !{ Split the strata per species
             if(is_meta(iatm)) cycle
