@@ -4329,7 +4329,7 @@ DO I=1,NADMOD
    NRS   IPUNKT   XCOOR   YCOOR   ZCOOR
 ENDDO
 DO I=1,NASMOD
-   NAS   IPUNKT   NSSIR   NSSIP
+   NAS   IPUNKT   NSSIR   
 ENDDO
 DO I=1,NORMOD
    IDIR  IR   IP
@@ -4360,8 +4360,7 @@ ENDDO
   \item[XPOLPOS] Integer X-index (poloidal) of the {\tt Eirene} grid vertex to which the additional surface vertex must be matched. To be used only if the default setting does not give the desired result.
   \item[YPOLPOS] Integer Y-index (radial) of the {\tt Eirene} grid vertex to which the additional surface vertex must be matched. To be used only if the default setting does not give the desired result.
   \item[NAS] Index of the additional surface to be modified
-  \item[NSSIR] Radial index of the {\tt Eirene} grid vertex to which the additional surface vertex is to be matched
-  \item[NSSIP] Poloidal index of the {\tt Eirene} grid vertex to which the additional surface vertex is to be matched
+  \item[NSSIR] Index of the {\tt Eirene} grid vertex to which the additional surface vertex is to be matched
   \item[IDIR] Direction of the face which normal is being inverted (1 = radial, 2 = poloidal)
   \item[IR] Radial index of the {\tt Eirene} grid cell which face normal is being inverted
   \item[IP] Poloidal index of the {\tt Eirene} grid cell which face normal is being inverted
