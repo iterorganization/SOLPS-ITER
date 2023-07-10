@@ -1224,8 +1224,7 @@ c*** segment numbers for the target edges to be modified by geousr
       if(ntrgte.gt.0) then !{
         do i=1,ntrgte !{
           if (lm_cnfg.and.mod(i,2).eq.1) cycle
-          write(iunoo,'(2i6,1p,2e12.5)') jedge(2,i),jedge(1,i),
-     ,                                             xpolpos(i),ypolpos(i)
+          write(iunoo,'(3i6)') jedge(2,i),jedge(1,i),nssir(i)
         end do !}
       end if !}
 

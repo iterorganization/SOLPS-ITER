@@ -939,6 +939,8 @@ c*** 15
      /        0  ,nnadmod*0,nnadmod*0,  16*0 /
       data xcoor   ,  ycoor   ,  zcoor   ,xpolpos,ypolpos /
      /   nnadmod*0.,nnadmod*0.,nnadmod*0.,  8*0. ,  8*0.  /
+      data nssir /    !nh 07.07.23
+     /   8*0 /
 
 c*** Data for Eirene test run
 

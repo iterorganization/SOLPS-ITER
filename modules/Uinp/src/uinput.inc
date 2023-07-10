@@ -361,7 +361,8 @@ c*** 15
 
       integer nnadmod
       parameter (nnadmod=1)
-      integer nadmod,nasmod,nrs(nnadmod),ipunkt(nnadmod),jedge(2,8)
+      integer nadmod,nasmod,nrs(nnadmod),ipunkt(nnadmod),jedge(2,8),
+     ,  nssir(8)
       real xcoor(nnadmod),ycoor(nnadmod),zcoor(nnadmod),
      ,  xpolpos(8),ypolpos(8)
 
@@ -459,7 +460,7 @@ c*** b2ah.dat
      ,  ntin2,nten2,niflg,nptc,nptcm,nspzi,nspze,nemod,istramin,
      ,  istramax,nainb,ncopib,ncopeb,nains,naint,naotb,naots,naott,
      ,  lkindm,lkindi,lkindp,
-     ,  nadmod,nasmod,nrs,ipunkt,jedge,
+     ,  nadmod,nasmod,nrs,ipunkt,jedge,nssir,
      ,  scilref,scilspt,scisrs,scisrc,sclchspnwl,scisrsg,
      ,  iscrd,jscrd,
      ,  cbnrso,cbnrno,cbnrwe,cbnrea,
