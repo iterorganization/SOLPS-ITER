@@ -13,7 +13,7 @@ c*** 1
       integer noptim,noptm1,ngeom_usr,ncoup_input,nsmstra,
      ,        nstoram,ngstal,nrtal1,nreac_add,lfrm15
       logical nlscl,nltest,nlana,nldrft,nlcrr,nlerg,nlident,nlone,
-     ,        nlmovie,nldfst,nloldran,nlcascad,nloctree,nlwrmsh,
+     ,        nlmovie,nldfst,nlranmar,nlcascad,nloctree,nlwrmsh,
      ,        nexvs,nltrimesh
       character txtrun*71
 
@@ -300,7 +300,7 @@ c*** 11
       logical trcplt, trchst, trcnal, trcmod, trcsig, trcgrd, trcsur,
      ,  trcref, trcfle, trcamd, trcint, trctim, trcsou, trcrec,
      ,  trclst, trcbla, trcblm, trcbli, trcblp, trcble,
-     ,  trcblph,trctal, trcoct, trccen, trcrnf, trchktim,
+     ,  trcblph,trctal, trcoct, trccen, trcrnf, trchktim, trcscl,
      ,  trcdbg2,trcdbge,trcdbgm,trcdbgf,trcdbgl,
      ,  trcdbgs,trcdbgg,trcdbgmpi,trcdbgc,
      ,  trcsrc(0:nstra),pl1st,pl2nd,pl3rd,pladd,plhst,plcut(3),plbox,
@@ -359,7 +359,7 @@ c*** 14
      ,  lkindp(npls)
       real fcte(npls),bmass(npls),chgsp(nstra),chgsee(nstra),
      ,  chgsei(nstra),chgsmom(nstra)
-      logical lsymet,lbalan,lcoarse,lfchgs,lsprcl
+      logical lsymet,lbalan,lcoarse,lfchgs,lsprcl,lold31
       character txtpls(nain)*72, txtpsp(nain)*24, txtpun(nain)*24
 
 c*** 15
@@ -519,7 +519,7 @@ c*** b2ah.dat
 
       common/uinlog/
      ,  nlscl,nltest,nlana,nldrft,nlcrr,nlerg,nlident,nlone,
-     ,  nlmovie,nldfst,nloldran,nlcascad,nloctree,
+     ,  nlmovie,nldfst,nlranmar,nlcascad,nloctree,
      ,  nlwrmsh,nexvs,nltrimesh,
      ,  nlrad,nlslb,nlcrc,nlell,nltri,nlplg,nlfem,nltet,nlgen,
      ,  nlpol,nlply,nlpla,nlplp,nltor,nltrz,nltra,nltrt,
@@ -529,7 +529,7 @@ c*** b2ah.dat
      ,  trcplt,trchst,trcnal,trcmod,
      ,  trcsig,trcgrd,trcsur,trcref,trcfle,trcamd,trcint,trctim,
      ,  trcsou,trcrec,trclst,trcbla,trcblm,trcbli,trcblp,trcble,
-     ,  trcblph,trctal,trcoct,trccen,trcrnf,trchktim,
+     ,  trcblph,trctal,trcoct,trccen,trcrnf,trchktim,trcscl,
      ,  trcdbg2,trcdbge,trcdbgm,trcdbgf,trcdbgl,
      ,  trcdbgs,trcdbgg,trcdbgmpi,trcdbgc,
      ,  trcsrc,pl1st,pl2nd,pl3rd,pladd,plhst,plcut,plbox,plstor,plnumv,
@@ -537,7 +537,7 @@ c*** b2ah.dat
      ,  pltler,lhist2,lsmot2,lhist3,lcntr3,lsmot3,lraps,lvect3,lrpvc3,
      ,  lrps3d,lrpscn,lprad,lppol,lptor,plidl,plvtk,
      ,  plchor,plspec,prspec,plargl,prargl,lpw_d,
-     ,  lsymet,lbalan,lcoarse,lfchgs,lsprcl,
+     ,  lsymet,lbalan,lcoarse,lfchgs,lsprcl,lold31,
      ,  is_bundled
 
       common/uinchr/ txtrun,txtsfl,txtsfa,

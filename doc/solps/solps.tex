@@ -1072,7 +1072,6 @@ SOLPSTOP
 |   |   |   |   +---couple_Dummy
 |   |   |   |   +---couple_SOLPS-ITER
 |   |   |   |   +---couple_Tria
-|   |   |   +---ioflush
 |   |   |   +---iterate
 |   |   |   +---main-routines
 |   |   |   +---mathematics
@@ -4000,8 +3999,9 @@ The conversion of the {\tt Eirene} input file additionally requires for the conv
   \item['facelift'] for input files from \SOLPSfiveone runs
   \item['juelich'] for input files from Juelich {\tt Eirene} versions (2008 and younger)
   \item['iter'] (default) for input files from {\bf SOLPS4.2/4.3} and \SOLPSITER runs
+  \item['msv'] for input files from the {\tt Eirene} Milestone Version
 \end{description}
-The {\tt input.dat.2} file that the converter will create will follow the \SOLPSITER format.
+The {\tt input.dat.2} file that the converter will create will follow the Milestone Version format.
 
 The conversion of the {\tt Eirene} output file ({\tt fort.44}) additionally requires for the converter program to know the original version of {\tt SOLPS} with which the output file was created, and this is provided by means of the {\tt 'solps\_version'} switch. Its possible values (case-insensitive) are:
 \begin{description}
@@ -4415,7 +4415,7 @@ The format of this input block for coupling to \SOLPSITER is as follows:
 
 {\it ***14. Data for interfacing routine "infusr"}
 \begin{verbatim}
-LSYMET  LBALAN  LCOARSE NLTRIMESH  LSPRCL
+LSYMET  LBALAN  LCOARSE NLTRIMESH  LSPRCL  LOLD31
 NFLA    NCUTB   NCUTL   IMF   NTRFRM   NFULL   IBRAD   IBPOL   IBTOR
 \end{verbatim}
 {\it read NPLSI species lines}
@@ -4459,6 +4459,7 @@ We only include here the variables or aspects thereof not already described in t
   \item[LCOARSE] Coarse mesh switch ???
   \item[NLTRIMESH] When {\tt .TRUE.}, {\tt Eirene} is only run to obtain the contours necessary to build the triangular grid, which are then written in {\tt fort.78}. This is used by the {\tt triang} script toolchain. No particle trajectories are followed.
   \item[LSPRCL] Turns on species-specific source rescaling when {\tt .TRUE.}
+  \item[LOLD31] Switch for backward compatibility with SOLPS5.3 {\tt fort.31} file format (should always be set to {\tt .FALSE.} in \SOLPSITER runs)
   \item[NCUTB] For \SOLPSITER couplings, should be 0
   \item[NCUTL] For \SOLPSITER couplings, should be 1
   \item[IMF] {\tt fort.30} format switch, should be 0
@@ -20654,6 +20655,7 @@ if desired, be declared as part of either the {\tt SOLPS\_CPP} or the
 {\tt \$\{SOLPSTOP\}/SETUP/config.\$\{HOST\_NAME\}.\$\{COMPILER\}(.local)} files.
 
 \begin{description}
+\item[CHECKBIN] \index{CHECKBIN} Turns on debugging output to check the contents of the output binary files
 \item[TRACE] \index{TRACE} Turns on tracing output in geometry routines (set internally by the {\tt Makefile} when requesting a {\tt \_debug} compilation)
 \end{description}
 
@@ -20705,25 +20707,28 @@ We list below where the {\tt Eirene} compilation switches are used.
     \hline \endfoot
     \endlastfoot
 ALLOCATE\_AND\_NAMELIST & startup-routines/find\_param.F \\
-B25\_EIRENE & file-handling/wrmesh.F \\
-B25\_EIRENE & main-routines/eirene.f \\
+B25\_EIRENE & main-routines/eirmod\_eirene.f \\
+B25\_EIRENE & interfaces/couple\_SOLPS-ITER/couple\_param.f \\
 B25\_EIRENE & interfaces/couple\_SOLPS-ITER/eirmod\_extrab25.F90 \\
-B25\_EIRENE & plotting/plmesh.F \\
-B25\_EIRENE & startup-routines/find\_param.f \\
+CHECKBIN & src/assistant/wrstrt.f \\
+CHECKBIN & src/file-handling/wrgeom.f \\
+CHECKBIN & src/file-handling/wrplam\_long.f \\
+CHECKBIN & src/file-handling/wrplam\_shrt.f \\
+CHECKBIN & src/interfaces/couple\_B2/infcop.f \\
+CHECKBIN & src/main-routines/eirmod\_mcarlo.f \\
+CHECKBIN & src/modules/eirmod\_comxs.f \\
 COMPILER\_MAJOR\_VERSION & assistant/exit\_own.f \\
 COMPILER\_MINOR\_VERSION & assistant/exit\_own.f \\
 DBG & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.F \\
 F2003 & assistant/subtit.f \\
-F2003 & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.F \\
-F2003 & output/outidlsrf.f \\
+F2003 & file-handling/eirmod\_openfile.f \\
 GFORTRAN & modules/eirmod\_mpi.F90 \\
 GFORTRAN & assistant/exit\_own.f \\
 G95 & assistant/exit\_own.f \\
 HPUX & modules/eirmod\_cinit.F \\
 MPI\_MOD & modules/eirmod\_mpi.F90 \\
 MPI\_VERSION & modules/eirmod\_mpi.F90 \\
-NAGFOR & main-routines/eirene.f \\
-NAGFOR & startup-routines/find\_param.f \\
+NAGFOR & file-handling/eirmod\_openfile.f \\
 NO\_B2\_CHEM\_SPUT & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.F \\
 NO\_GETENV & file-handling/get\_solpstop.f \\
 PGF90 & assistant/exit\_own.f \\
@@ -20732,15 +20737,17 @@ PGF90 & particle-tracing/velocs.F \\
 PGF90 & surface-processes/emaxw.F \\
 TRACE & geometry/time-routines/checks.F \\
 TRACE & geometry/time-routines/timea.F \\
-TRACE & geometry/time-routines/timep.F \\
-TRACE & geometry/time-routines/timer.F \\
+TRACE & geometry/time-routines/eirmod\_timep.F \\
+TRACE & geometry/time-routines/eirmod\_timer.F \\
 TRACE & geometry/time-routines/timet.F \\
+USE\_MPI & assistant/eirmod\_second\_own.f \\
 USE\_MPI & assistant/exit\_own.f \\
 USE\_MPI & modules/eirmod\_mpi.F90 \\
 USE\_MPI & photons/eirmod\_phot\_reflec.f \\
 USE\_MPI & startup-routines/input.f \\
 USE\_PXFGETENV & file-handling/get\_solpstop.f \\
-WINDOWS & main-routines/eirene.f \\
+WINDOWS & main-routines/eirmod\_eirene.f \\
+WINDOWS & user-routines/user\_iter/ioflush\_usr.f \\
     \hline
     \caption{Defines for Eirene and where they are used.}
     \label{tab:Eirdefines}
