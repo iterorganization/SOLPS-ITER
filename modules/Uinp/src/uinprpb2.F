@@ -335,6 +335,8 @@ c*** k, m, n are the numbers of recycling, specified, and all strata
       nmdpr(40,8)=n+nhyb
       nmdpr(41,3)=n
       nmdpr(41,8)=n+nhyb
+      nmdpr(42,8)=nspcpls+nspcncl
+      nmdlr(42,8)=n+nhyb
 
       ltrvr( 2,3)=.true.
       ltrvr( 2,8)=.true.
@@ -354,6 +356,8 @@ c*** k, m, n are the numbers of recycling, specified, and all strata
       lrrvr(25,8)=.true.
       ltrvr(40,3)=.true.
       ltrvr(40,8)=.true.
+      lrrvr(42,8)=.true.
+      lspvr(42,8)=.true.
 
       iniprm(:,:,1,39,3)=-1
       iniprm(:,:,1,39,8)=-1
@@ -736,6 +740,7 @@ c*** recyc
           end if !}
         end do !}
       end do !}
+c*** recyc, b2recyc for hybrid stencil file
       do j=1,n+nhyb !{
         ispc = 0
         do i=1,nspcpls+nspcncl !{
@@ -745,18 +750,24 @@ c*** recyc
             if (streql(spcigen(ispc),'H').or.streql(spcigen(ispc),'D')
      .          .or.streql(spcigen(ispc),'T')) then !{ recycling 1 for AFN neutrals (hydrogen)
               rniprm(i,j,1,18,8)=1.
-              rniprm(i,j,1,18,8)=1.
+              rniprm(i,j,1,42,8)=0.
             else !{ recycling 0 for non-AFN neutrals (impurities)
               rniprm(i,j,1,18,8)=0.
+              rniprm(i,j,1,42,8)=0.
             end if !}
-          elseif (ncharp(k).eq.1 .or. ncharp(k).eq.2 .or.
+          elseif (ncharp(k).eq.1) then
+            rniprm(i,j,1,18,8)=1.
+            rniprm(i,j,1,42,8)=0.
+          elseif (ncharp(k).eq.2 .or.
      .            ncharp(k).eq.7 .or. ncharp(k).eq.8 .or.
      .            ncharp(k).eq.10.or. ncharp(k).eq.18.or.
      .            ncharp(k).eq.36.or. ncharp(k).eq.54.or.
      .            ncharp(k).eq.86) then !}{
             rniprm(i,j,1,18,8)=1.
+            rniprm(i,j,1,42,8)=1.
           else !}{
             rniprm(i,j,1,18,8)=0.
+            rniprm(i,j,1,42,8)=0.
           end if !}
         end do !}
       end do !}
