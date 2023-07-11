@@ -500,9 +500,9 @@ c*** Data substitution for the Eirene test run
       real(kind=R4) ttalloc
       logical
      ,  ttchst,ttcref,ttcint,ttcamd,ttcsou,ttcsur,ttcbla,ttcblm,ttcbli,
-     ,  ttcblp,ttcble,ttcblph,ttctal,ttcoct,ttccen,ttcrnf,
+     ,  ttcblp,ttcble,ttcblph,ttctal,ttcoct,ttccen,ttcrnf,ttcsrc,
      ,  ttcdbg2,ttcdbge,ttcdbgm,ttcdbgf,
-     ,  ttcdbgl,ttcdbgs,ttcdbgg,ttcdbgmpi,ttcdbgc,ttchktim,ttcsrc,
+     ,  ttcdbgl,ttcdbgs,ttcdbgg,ttcdbgmpi,ttcdbgc,ttchktim,ttcscl,
      ,  ttpl1st,ttpl2nd,ttpladd,ttplhst,ttplcut(3),ttplnums,tttest,
      ,  ttplspec,ttprspec,ttplargl,ttprargl,ttlsprcl
 
@@ -614,7 +614,7 @@ c     ,  spcifup,spcifua,spcifum,spcifui,
      ,  ttcamd,ttcsou,ttcsur,ttcbla,ttcblm,ttcbli,ttcblp,ttcble,
      ,  ttcblph,ttctal,ttcoct,ttccen,ttcrnf,
      ,  ttcdbg2,ttcdbge,ttcdbgm,ttcdbgf,ttcdbgl,ttcdbgs,
-     ,  ttcdbgg,ttcdbgmpi,ttcdbgc,ttchktim,
+     ,  ttcdbgg,ttcdbgmpi,ttcdbgc,ttchktim,ttcscl,
      ,  ttpl1st,ttpl2nd,ttpladd,ttplhst,ttplcut,ttplnums,tttest,
      ,  ttplspec,ttprspec,ttplargl,ttprargl,ttlsprcl,
      ,  lm_cnfg,ln_cnfg,no_n2,l_ammon,l_meta,
