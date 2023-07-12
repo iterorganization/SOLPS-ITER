@@ -820,7 +820,7 @@ cank        isrsp(l)=spcsrsp(l)
         k=0
         do i=1,nspcatm !{
           if(streql(c,spcsatm(i)(1:1))) k=i
-	end do !}
+        end do !}
         if(k.eq.0) then !{
           write(0,*) 'Reflected fast particle not found ',
      ,      'for neutral background species', c
