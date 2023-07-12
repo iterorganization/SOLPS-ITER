@@ -345,17 +345,17 @@ c*** 14
 
       integer nclmi,nblcki,nprnvi,nprtvi,nprdvi,nfla,ncutb,ncutl,
      ,  imf,ntrfrm,nfull,ibrad,ibpol,ibtor,
-     ,  iflb(npls),ndxa,ndya,ncvp,ncip,nfcp,ntargi,ntgprt(nstep),
-     ,  ndt2(nstep,ngitt),
+     ,  iflb(npls),iflbh(npls),ndxa,ndya,ncvp,ncip,nfcp,ntargi,
+     ,  ntgprt(nstep),ndt2(nstep,ngitt),
      ,  ninct2(nstep,ngitt),nixy2(nstep,ngitt),ntin2(nstep,ngitt),
      ,  nten2(nstep,ngitt),niflg(nstep,ngitt),nptc(nstep,ngitt),
      ,  nptcm(nstep,ngitt),nspzi(nstep,ngitt),nspze(nstep,ngitt),
      ,  nemod(nstep,ngitt),istramin,istramax,
      ,  nainb,ncopib,ncopeb,nains(nain),naint(nain),
      ,  naotb,naots(nlimps),naott(nlimps),
-     ,  lkindp(npls)
-      real fcte(npls),bmass(npls),chgsp(nstra),chgsee(nstra),
-     ,  chgsei(nstra),chgsmom(nstra)
+     ,  lkindp(npls),lkindph(npls)
+      real fcte(npls),fcteh(npls),bmass(npls),bmassh(npls),chgsp(nstra),
+     ,  chgsee(nstra),chgsei(nstra),chgsmom(nstra)
       logical lsymet,lbalan,lcoarse,lfchgs,lsprcl
       character txtpls(nain)*72, txtpsp(nain)*24, txtpun(nain)*24
 
@@ -459,10 +459,10 @@ c*** b2ah.dat
      ,  jadch0,jadch1,jadnsw,jadmsw,jadlsw,jadksw,jadjsw,jadisw,
      ,  jlblck,jlacll,nclmi,nblcki,nprnvi,nprtvi,nprdvi,nfla,
      ,  ncutb,ncutl,imf,ntrfrm,nfull,ibrad,ibpol,ibtor,
-     ,  iflb,ndxa,ndya,ncvp,ncip,nfcp,ntargi,ntgprt,ndt2,ninct2,nixy2,
-     ,  ntin2,nten2,niflg,nptc,nptcm,nspzi,nspze,nemod,istramin,
+     ,  iflb,iflbh,ndxa,ndya,ncvp,ncip,nfcp,ntargi,ntgprt,ndt2,ninct2,
+     ,  nixy2,ntin2,nten2,niflg,nptc,nptcm,nspzi,nspze,nemod,istramin,
      ,  istramax,nainb,ncopib,ncopeb,nains,naint,naotb,naots,naott,
-     ,  lkindm,lkindi,lkindp,
+     ,  lkindm,lkindi,lkindp,lkindph,
      ,  nadmod,nasmod,nrs,ipunkt,jedge,nssir,
      ,  scilref,scilspt,scisrs,scisrc,sclchspnwl,scisrsg,
      ,  iscrd,jscrd,
@@ -508,7 +508,7 @@ c*** b2ah.dat
      ,  talzmi,talzma,talxmi,talxma,talymi,talyma,talw1,talw2,fcabs1,
      ,  fcabs2,rpsdl,emin1,emax1,eshift,emnspc,emxspc,
      ,  chpts,xpivot,ypivot,zpivot,xchord,ychord,zchord,
-     ,  dtimv,time0,fcte,bmass,chgsp,chgsee,chgsei,chgsmom,
+     ,  dtimv,time0,fcte,fcteh,bmass,bmassh,chgsp,chgsee,chgsei,chgsmom,
      ,  scxmlim,scewall,scewbin,sctransp,screcycf,screcyct,scrcprm,
      ,  scfsheat,scexppl,scexpel,scexpil,screcycs,scychsptg,
      ,  scechsptg,scfchsptg,scstprm,chmvar,

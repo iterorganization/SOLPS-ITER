@@ -22,7 +22,7 @@ c=======================================================================
 #include "git_version_Uinp.h"
 
       integer i,ii,ih,j,k,l,m,n,nm,icont,istep,jsurpr,ists,ibulk,iscd2,
-     ,        ibgk,ityp,ihyb,nrc,nstrais,nstraih
+     ,        ibgk,ityp,ihyb,nrc,nstrais,nstraih,ispz
       integer icopy,jlswch,jlcell,imrlb,iulin,iuscn,ich,ichmin,iid
       integer iatm,imol,iion,ipht,ipls,ichori,inum
       integer llm(nchor),lli(nchor)
@@ -1338,15 +1338,15 @@ c*** 14.  data for interfacing subroutine infcop
       write(iunoo,700) utxthd(19)
       if (nmode.ne.0) then !{
         write(iunoo,706) lsymet,lbalan,lcoarse,nltrimesh,lsprcl
-        write(iunoo,707) nfla,
+        write(iunoo,707) nfla+nplsh,
      .                   ntrfrm,nfull,ibrad,ibpol,ibtor
-        do i=1,nplsi+nbgk !{
-          write(iunoo,710) i,iflb(i),fcte(i),bmass(i),lkindp(i)
+        do i=1,nplsi+nplsh+nbgk !{
+          write(iunoo,710) i,iflbh(i),fcteh(i),bmassh(i),lkindph(i)
         end do !}
 cnh        write(iunoo,707) ndxa,ndya
         write(iunoo,707) ncvp,ncip,nfcp
-        write(iunoo,707) ntargi
-        write(iunoo,707) (ntgprt(i),i=1,ntargi)
+        write(iunoo,707) ntargi+nstraih
+        write(iunoo,707) (ntgprt(i),i=1,ntargi),(1,i=1,nstraih)
         l=maxval(ntgprt)
         k=1
         m=0
@@ -1356,11 +1356,19 @@ cnh        write(iunoo,707) ndxa,ndya
         end if !}
         if(l.ge.10) k=100
         if(l.ge.100) k=1000
+        ihyb=0
         do i=1,ntargi !{
           do j=1,ntgprt(i) !{
-            write(iunoo,707) k*i+j*m,ndt2(i,j),
-     ,          nptc(i,j),nptcm(i,j),
-     ,                                  nspzi(i,j),nspze(i,j),nemod(i,j)
+            write(iunoo,707) k*i+j*m+ihyb,ndt2(i,j),
+     ,          nptc(i,j),nptcm(i,j),nspzi(i,j),nspze(i,j),nemod(i,j)
+            if (ncharp(nspzi(i,j)).eq.1) then !nh duplicate line for hybrid model
+              ihyb=ihyb+1
+              do ispz=nfla+1,nfla+nplsh
+                if (bmassh(ispz).eq.bmassh(nspzi(i,j))) exit
+              enddo
+              write(iunoo,707) k*i+j*m+ihyb,ndt2(i,j),
+     ,          nptc(i,j),nptcm(i,j),ispz,ispz,6
+            end if
           end do !}
         end do !}
         if(lfchgs) then !{

@@ -763,15 +763,20 @@ cank        isrsi(l)=spcsrsi(l)
         nchrgp(l)=spcscgp(l)
 cank        isrsp(l)=spcsrsp(l)
         bmass(l)=nmassp(l)
+        bmassh(l)=nmassp(l)
         if (l.eq.1) then !{
           lkindp(l)=1
+          lkindph(l)=1
         else if (bmass(l).eq.bmass(l-1) .and. 
      &           ncharp(l).eq.ncharp(l-1)) then !}{
           lkindp(l)=lkindp(l-1)
+          lkindph(l)=lkindph(l-1)
         else
           lkindp(l)=lkindp(l-1)+1
+          lkindph(l)=lkindph(l-1)+1
         endif !}
         iflb(l)=l
+        iflbh(l)=l
 
         k=0
         c=spcsrfp(l)
@@ -815,6 +820,7 @@ cank        isrsp(l)=spcsrsp(l)
       end do !}
 
 !nh   species indices for relection of neutral background species
+!nh   and adding the neutral background in block 14
       do l=1,nplsh !{
         c=textph(l)(1:1)
         k=0
@@ -826,6 +832,7 @@ cank        isrsp(l)=spcsrsp(l)
      ,      'for neutral background species', c
         end if !}
         isrfph(l)=k
+        lkindph(nspcpls+l)=k
         k = 0
         do i=1,nspcmol !{
           if(streql(c,spcsmol(i)(1:1))) k=-i
@@ -835,6 +842,11 @@ cank        isrsp(l)=spcsrsp(l)
      ,      'for neutral background species', c
         end if !}
         isrtph(l)=k
+        iflbh(nspcpls+l)=nspcpls+l
+        fcteh(nspcpls+l)=1.
+        if (streql(c,'H')) bmassh(nspcpls+l)=1.
+        if (streql(c,'D')) bmassh(nspcpls+l)=2.
+        if (streql(c,'T')) bmassh(nspcpls+l)=3.
       end do !}
 
       write(*,*)

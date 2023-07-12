@@ -931,9 +931,13 @@ c*** 14
      ,    ninct2, nixy2, ntin2, nten2, niflg,  nptc , nptcm, nspzi /
      /    lusg*0,lusg*0,lusg*0,lusg*0,lusg*0, lusg*0,lusg*0,lusg*0 /,
      ,     nspze, nemod, nainb, naotb,istramin,istramax,ncopib,ncopeb /
-     /    lusg*0,lusg*7,   0  ,   0  ,    1   ,    1   ,   0  ,   0   /
+     /    lusg*0,lusg*7,   0  ,   0  ,    1   ,    1   ,   0  ,   0   /,
+     ,     iflbh /
+     /    npls*1 /
       data fcte , bmass ,  chgsp ,  chgsee ,  chgsei , chgsmom /
-     /   npls*1.,npls*0.,nstra*60.,nstra*60.,nstra*100.,nstra*50. /
+     /   npls*1.,npls*0.,nstra*60.,nstra*60.,nstra*100.,nstra*50. /,
+     ,   fcteh  , bmassh  , lkindph /
+     /   npls*1., npls*0. , npls*0  /
       data lsymet,lbalan,lcoarse, lfchgs,lsprcl /
      /    .false.,.true.,.false.,.false.,.true. /
 
