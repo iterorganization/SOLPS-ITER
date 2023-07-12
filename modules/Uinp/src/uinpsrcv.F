@@ -104,6 +104,11 @@ c*** Find the corresponding reaction(s)
                   n=n+1
                   l_hlp=.false.
                   npts(nstrai)=nrcmstrs(n)
+                  if (ncharp(ipl).eq.1) then
+                    nptsh(nstrai)=0 !nh no vol. rec. for hydrogenic species for hybrid model
+                  else
+                    nptsh(nstrai)=nrcmstrs(n)
+                  end if
                   ninitl(nstrai)=ircmstrs(n)
                   nspez(nstrai)=ipl
                   lsrcmstr(spcsrnp(ipl),n)=spcsrnp(ipl)

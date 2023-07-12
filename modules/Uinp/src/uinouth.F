@@ -22,7 +22,7 @@ c=======================================================================
 #include "git_version_Uinp.h"
 
       integer i,ii,ih,j,k,l,m,n,nm,icont,istep,jsurpr,ists,ibulk,iscd2,
-     ,        ibgk,ityp,ihyb,nrc
+     ,        ibgk,ityp,ihyb,nrc,nstrais,nstraih
       integer icopy,jlswch,jlcell,imrlb,iulin,iuscn,ich,ichmin,iid
       integer iatm,imol,iion,ipht,ipls,ichori,inum
       integer llm(nchor),lli(nchor)
@@ -978,8 +978,11 @@ c*** surface cards
 c*** 7.  data for primary source
 
       write(iunoo,700) utxthd(8)
-      write(iunoo,707) nstrai
-      write(iunoo,707) (indsrc(i),i=1,nstrai)
+      nstrais = count(indsrc(1:nstrai).eq.6)
+      nstraih = nstrais/natmi*nplsh
+      write(iunoo,707) nstrai+nstraih
+      write(iunoo,707) (indsrc(i),i=1,nstrais),(6,i=1,nstraih),
+     ,  (indsrc(i),i=nstrais+1,nstrai)
       write(iunoo,703) alloc
       inum=0
       istep=0
@@ -991,7 +994,7 @@ c*** 7.  data for primary source
         write(iunoo,709) i,txtsou(i)
         write(iunoo,706) nlavrp(i),nlavrt(i),nlsymp(i),nlsymt(i),
      ,                      nlray(i)
-        write(iunoo,707) npts(i),ninitl(i),nemods(i),namods(i),
+        write(iunoo,707) nptsh(i),ninitl(i),nemods(i),namods(i),
      ,                                                        nminpts(i)
         write(iunoo,718) flux(i),scalv(i),ivlsf(i),iscls(i),isclt(i),
      ,                      iscl1(i),iscl2(i),iscl3(i),isclb(i),iscla(i)

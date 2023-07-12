@@ -15,7 +15,7 @@ c=======================================================================
 #include "uinput.inc"
 #include "uib2pprm.inc"
       integer i,j,k,kk,l,m,n,ii,jj,ll,nbc,iatm,ipl,isp,ispi,ispe,ists,
-     .        nhyb,ihyb
+     .        ihyb,nhyb
       integer ifl(DEF_NFL),cmp_bck(nmol,nmol+nion)
       logical ex,hlp_el,hlp_mol(nmol),hlp_ion(nion),
      .        pass, found

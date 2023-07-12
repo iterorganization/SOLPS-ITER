@@ -741,7 +741,9 @@ c*** 7
       data  nstrai,alloc,indsrc ,  npts  , ninitl, nemods , namods  /
      /         0  , 0.5 ,nstra*6,nstra*-1,nstra*-1, nstra*6, nstra*1 /,
      , nminpts, ivlsf , iscls , isclt , iscl1 , iscl2 , iscl3 , isclb /
-     / nstra*0,nstra*0,nstra*0,nstra*0,nstra*0,nstra*0,nstra*0,nstra*0/
+     / nstra*0,nstra*0,nstra*0,nstra*0,nstra*0,nstra*0,nstra*0,nstra*0/,
+     , nptsh /
+     / nstra*-1 /
       data iscla , nspez  , nsrfsi,  indim ,  insor ,  nrsor  , npsor  /
      /    nstra*0,nstra*-1,nstra*1,lustsr*1,lustsr*1,lustsr*-1,lustsr*0/
       data ntsor ,  nbsor ,  nasor ,  nisor , istor,  ingrda , ingrde /

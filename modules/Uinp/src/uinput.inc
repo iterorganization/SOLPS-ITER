@@ -199,7 +199,8 @@ c*** Surface Cards
 
 c*** 7
 
-      integer nstrai,indsrc(nstra),npts(nstra),ninitl(nstra),
+      integer nstrai,indsrc(nstra),npts(nstra),nptsh(nstra),
+     ,  ninitl(nstra),
      ,  nemods(nstra),namods(nstra),nminpts(nstra),nspez(nstra),
      ,  ivlsf(nstra),iscls(nstra),isclt(nstra),iscl1(nstra),
      ,  iscl2(nstra),iscl3(nstra),isclb(nstra),iscla(nstra),
@@ -429,8 +430,8 @@ c*** b2ah.dat
      ,  indpro,nnftrm,nchsppri,
      ,  lchsptrg,lchspgrp,lchspprt,lchspprp,lchsptgt,
      ,  lchsptgp,lchspnwl,lchspaux,nchemvar,indchemvar,nnchemvar,
-     ,  nstrai,indsrc,npts,ninitl,nemods,namods,nminpts,nspez,ivlsf,
-     ,  iscls,isclt,iscl1,iscl2,iscl3,isclb,iscla,nsrfsi,
+     ,  nstrai,indsrc,npts,nptsh,ninitl,nemods,namods,nminpts,nspez,
+     ,  ivlsf,iscls,isclt,iscl1,iscl2,iscl3,isclb,iscla,nsrfsi,
      ,  indim,insor,ingrda,ingrde,nrsor,npsor,ntsor,nbsor,nasor,nisor,
      ,  istor,nzadd,ini,ine,
      ,  nprcsf,iprcsf,maxlev,maxrad,maxpol,maxtor,maxadd,nssplr,nssplp,
