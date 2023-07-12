@@ -41,6 +41,11 @@ c*** Produce the input file for Eirene
       call uinout('input.eir')
       print *,'    ... input.eir created'
 
+c*** Produce the input file for Eirene for the hybrid model
+
+      call uinouth('input_hybrid.eir')
+      print *,'    ... input_hybrid.eir created'
+
 c*** Produce the input file for Eirene test run
 
       call uinprptt(.true.)

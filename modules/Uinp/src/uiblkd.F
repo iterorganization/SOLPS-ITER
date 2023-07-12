@@ -664,6 +664,7 @@ c*** 5
       parameter (lurp=nreac*npls, lurc=nrcdn*npls)
       parameter (lup5=5*npls, lup6=6*npls)
       data nplsi / 0 /
+      data nplsh / 0 / !nh neutral background species for the hybrid model
       data nbgk / 0 /
       data nmassp,ncharp, nprtp,nchrgp, isrfp, isrtp,nmsecp, nrcp  /
      /     npls*0,npls*0,npls*0,npls*0,npls*0,npls*0,npls*0,npls*0 /,
@@ -671,9 +672,12 @@ c*** 5
      /     npls*0,npls*0,npls*0,npls*0 /,
      ,     ireacp,ibulkp,iscd1p,iscd2p,iscd3p,iscd4p,iscdep /
      /     lurp*0,lurp*0,lurp*0,lurp*0,lurp*0,lurp*0,lurp*0 /
+      data nmassph, isrfph, isrtph /
+     /     npls*0 ,npls*0 , npls*0 /
       data eelecp, ebulkp, escd1p, escd2p, freacp /
      /    lurp*0.,lurp*0.,lurp*0.,lurp*0.,lurp*0. /
       data textp / npls*' ' /
+      data textph / npls*' ' /
       data cdnmdlp_sel/
      /   'FORT.13', 'FTN13', 'FORT.10', 'FTN10',
      /   'CONSTANT','PLANCK','MULTIPLY','SAHA','BOLTZMANN','CORONA',

@@ -139,9 +139,10 @@ c*** 4d
 
 c*** 5
 
-      integer nplsi,nbgk,
-     ,  nmassp(npls),ncharp(npls),nprtp(npls),nchrgp(npls),
-     ,  isrfp(npls),isrtp(npls),nmsecp(npls),nrcp(npls),idnslmp(npls),
+      integer nplsi,nplsh,nbgk,
+     ,  nmassp(npls),nmassph(npls),ncharp(npls),nprtp(npls),
+     ,  nchrgp(npls),isrfp(npls),isrfph(npls),isrtp(npls),isrtph(npls),
+     ,  nmsecp(npls),nrcp(npls),idnslmp(npls),
      ,  nfolp(npls),ngenp(npls),nhstp(npls),
      ,  ireacp(npls,nreac),ibulkp(npls,nreac),
      ,  iscd1p(npls,nreac),iscd2p(npls,nreac),iscd3p(npls,nreac),
@@ -161,7 +162,7 @@ c*** 5
      ,     vy2(npls), vy3(npls), vy4(npls), vy5(npls), vz0(npls),
      ,     vz1(npls), vz2(npls), vz3(npls), vz4(npls), vz5(npls),
      ,     b0, b1, b2, b3, b4, b5, vl0, vl1, vl2, vl3, vl4, vl5
-      character textp(npls)*8
+      character textp(npls)*8, textph(npls)*8
 
 c*** 6
 
@@ -421,8 +422,9 @@ c*** b2ah.dat
      ,  nphti,isrff,isrtf,nmsecf,nrcf,nfolf,
      ,  ngenf,nhstf,
      ,  ireacf,ibulkf,iscd1f,iscd2f,iscd3f,iscd4f,iscdef,iestmf,ibgkf,
-     ,  nplsi,nbgk,nmassp,ncharp,nprtp,nchrgp,isrfp,
-     ,  isrtp,nmsecp,nrcp,idnslmp,nfolp,ngenp,nhstp,ireacp,ibulkp,
+     ,  nplsi,nplsh,nbgk,nmassp,nmassph,ncharp,nprtp,nchrgp,isrfp,
+     ,  isrfph,isrtp,isrtph,nmsecp,nrcp,idnslmp,nfolp,ngenp,nhstp,
+     ,  ireacp,ibulkp,
      ,  iscd1p,iscd2p,iscd3p,iscd4p,iscdep,nrep,ispcdn,itpcdn,istrcdn,
      ,  indpro,nnftrm,nchsppri,
      ,  lchsptrg,lchspgrp,lchspprt,lchspprp,lchsptgt,
@@ -538,7 +540,7 @@ c*** b2ah.dat
 
       common/uinchr/ txtrun,txtsfl,txtsfa,
      ,  filnam,h123,reac,crc,elname,bundling,
-     ,  texta,textm,texti,textf,textp,
+     ,  texta,textm,texti,textf,textp,textph,
      ,  cdnmdlp,fnamcdn,h2cdn,reaccdn,crcdn,path,filtrm,
      ,  txtsou,txttla,txtspa,txtuna,txttlc,txtspc,txtunc,
      ,  txttlr,txtspr,txtunr,txttld,txtspd,txtund,chrtal,chrtls,
