@@ -81,14 +81,14 @@ c*** the atoms and nuclei
                 end if !}
                 if(.not.l_meta(j+m)) then
                   nspcncl=nspcncl+1
-                  if (streql(c(1:1),'H').or.streql(c(1:1),'D').or.
-     ,              streql(c(1:1),'T')) then
+                  if (streql(c,'H').or.streql(c,'D').or.
+     ,              streql(c,'T')) then
 !nh neutral background species for the hybrid model
                     nplsh=nplsh+1
                     textph(nplsh)=c(1:1)//'0'
-                    if (streql(c(1:1),'H')) nmassph(nplsh)=1
-                    if (streql(c(1:1),'D')) nmassph(nplsh)=2
-                    if (streql(c(1:1),'T')) nmassph(nplsh)=3
+                    if (streql(c,'H')) nmassph(nplsh)=1
+                    if (streql(c,'D')) nmassph(nplsh)=2
+                    if (streql(c,'T')) nmassph(nplsh)=3
                   end if
                   if(nspcpls+nspcncl.gt.nsdb2) then !{
                     write(0,*) 'The total number of B2.5 species must ',
@@ -819,7 +819,7 @@ cank        isrsp(l)=spcsrsp(l)
         c=textph(l)(1:1)
         k=0
         do i=1,nspcatm !{
-          if(streql(c,spcsatm(i)(1:1))) k=i
+          if(streql(c,spcsatm(i))) k=i
         end do !}
         if(k.eq.0) then !{
           write(0,*) 'Reflected fast particle not found ',

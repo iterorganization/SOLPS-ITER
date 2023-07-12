@@ -486,9 +486,9 @@ c***          accel_ion
               end if
 
 cnh           Values for additional hybrid strata
-              if (streql(texta(iatm)(1:1),'H').or.
-     ,          streql(texta(iatm)(1:1),'D').or.
-     ,          streql(texta(iatm)(1:1),'T')) then
+              if (streql(texta(iatm),'H').or.
+     ,          streql(texta(iatm),'D').or.
+     ,          streql(texta(iatm),'T')) then
                 ihyb = ihyb+1
                 cniprm(k+ihyb,1,1,2,8)='A'
                 iniprm(k+ihyb,1,1,4,8)=ls1bnds(i,j)
