@@ -4247,13 +4247,19 @@ The format of this input block for coupling to \SOLPSITER is as follows:
 {\it ***14. Data for interfacing routine "infusr"}
 \begin{verbatim}
 LSYMET  LBALAN
-NFLA    NTRFRM   NFULL   IBRAD   IBPOL   IBTOR
+NFLA    NTRFRM   NFULL   IBRAD   IBPOL   IBTOR    DUM7    DUM8    DUM9    DUM10    NCOND
 \end{verbatim}
 {\it read NPLSI species lines}
 \begin{verbatim}
 DO 20, IPL=1,NPLSI
    I   IFLB   FCTE   BMASS   LKINDP
 20 CONTINUE
+\end{verbatim}
+{\it Kinetic-fluid condensation for hybrid model}
+\begin{verbatim}
+DO ICOND=1,NCOND
+   CONDENSE_FROM  CONDENSE_TO
+ENDDO
 \end{verbatim}
 {\it Recycling target definitions}
 \begin{verbatim}
@@ -4290,7 +4296,11 @@ We only include here the variables or aspects thereof not already described in t
   \item[NLTRIMESH] When {\tt .TRUE.}, {\tt Eirene} is only run to obtain the contours necessary to build the triangular grid, which are then written in {\tt fort.78}. This is used by the {\tt triang} script toolchain. No particle trajectories are followed.
   \item[LSPRCL] Turns on species-specific source rescaling when {\tt .TRUE.}
   \item[NTRFRM] {\tt fort.33} format switch, should be 1 for the widegrid code
+  \item[DUM7-10] Dummy parameters, not in use in the widegrid code. Present to avoid issues when starting from a converted structured case (with additional inputs).
+  \item[NCOND] Number of atoms that is allowed to "condense" from the EIRENE kinetic to B2.5 fluid population in the hybrid model. 
   \item[LKINDP] Index of the {\tt Eirene} atom this species is linked to
+  \item[CONDENSE_FROM] Number of atom ({\tt IATM}) that is able to condense from the kinetic to fluid population. 
+  \item[CONDENSE_TO] Number of background species of block 5 ({\tt IPLS}) with the corresponding fluid neutral background. 
   \item[NCVP] Total number of cells in the B2.5 mesh
   \item[NCIP] Total number of internal cells in the B2.5 mesh
   \item[NFCP] Total number of faces in the B2.5 mesh 
