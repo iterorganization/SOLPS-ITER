@@ -54,6 +54,7 @@ CARRE_DEFINES  =
 EIRENE_DEFINES =
 FFLAGSEXTRA    =
 
+LDOPTSend += -shared-intel
 
 #!!!Local Variables:
 #!!! mode: Makefile
