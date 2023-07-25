@@ -24,7 +24,7 @@
 if (! $?DEVICE) then
   setenv DEVICE KSTAR
 endif
-source /opt/app/intel/bin/compilervars.csh intel64
+source /opt/intel/compilers_and_libraries/linux/bin/compilervars.csh intel64
 setenv PATH ${PATH}:${HOME}/bin
 setenv GLI_HOME /home/sunny2216/solps5.0_old/solps5.0/solps5.0/src/lib
 setenv NCARG_ROOT /home/sunny2216/solps5.0_old/solps5.0/solps_other/NCARG/linux.ifort64
