@@ -1,0 +1,130 @@
+#!/bin/bash
+#
+# pshenoa version 2023/07/07
+# Governing script for the series plotting with plot_trc.py
+#
+#======================================================================
+# USAGE:
+#
+# in the desired run directory:
+# plot_series $series.dat 
+#                The argument is the series file produced by the
+#                get_series script 
+#
+# by default the plot_series.cmd file in the present directory is used
+# if absent plot_series will search for it the directory above from 
+# the script is invoked
+#=======================================================================
+
+CMD_FILE=plot_series.cmd
+PLT_SCRIPT=plot_trc.py
+OUTPUT_FILE=series.ps
+DSH_FILE=.plt_series
+
+CURRENT_DIR=${PWD##*/}
+
+SOURCE_DIR=$(cd $(dirname "${BASH_SOURCE:-$0}") && pwd)
+SOURCE_FILE=$SOURCE_DIR/$(basename "${BASH_SOURCE:-$0}")
+
+CMD_DIR=$SOURCE_DIR/commands
+CMD_LOCAL_DIR=$SOLPSTOP/scripts.local/commands
+
+PEXEC=plot_trc.exe.py
+PCMD=plot_trc.exe.cmd
+PLOG=plot_trc.exe.log
+WRK_DIR=wrk.tmp
+WRK_FILE=series
+
+echo "setting up workspace..."
+if [ -f "$SOURCE_DIR/$PLT_SCRIPT" ]
+then
+  echo "ln -sf $SOURCE_DIR/$PLT_SCRIPT $PEXEC"
+  ln -sf "$SOURCE_DIR/$PLT_SCRIPT" "$PEXEC"
+else
+  echo "driver script $PLT_SCRIPT is absent in $SOURCE_DIR"
+fi
+
+if [ -f "$CMD_FILE" ]
+then
+  echo "command file $CMD_FILE spotted in $CURRENT_DIR"
+  echo "ln -sf "$CMD_FILE" $PCMD"
+  ln -sf "$CMD_FILE" "$PCMD"
+else
+  echo "no command file $CMD_FILE in current $CURRENT_DIR"
+  echo "checking $CMD_LOCAL_DIR"
+  if [ -f "$CMD_LOCAL_DIR/$CMD_FILE" ]
+  then
+    echo "command file $CMD_FILE spotted in $CMD_LOCAL_DIR"
+    echo "ln -sf $CMD_LOCAL_DIR/$CMD_FILE $PCMD"
+    ln -sf "$CMD_LOCAL_DIR/$CMD_FILE" "$PCMD"
+  else
+    echo "checking $CMD_DIR"
+    if [ -f "$CMD_DIR/$CMD_FILE" ]
+    then
+      echo "command file $CMD_FILE spotted in $CMD_DIR"
+      echo "ln -sf $CMD_DIR/$CMD_FILE $PCMD"
+      ln -sf "$CMD_DIR/$CMD_FILE" "$PCMD"
+    else
+      echo "no command file $CMD_FILE found... plots wont be produced"
+    fi
+  fi
+fi
+
+SFILE=
+[ ! $# -eq 0 ] && { 
+SFILE=$1 && echo "Working with series file: $SFILE "
+} || {
+[ -f $DSH_FILE ] && SFILE=`cat $DSH_FILE | tr -d ' '` && echo "Working with default series file: $SFILE"
+}
+
+if [ -d "$WRK_DIR" ]
+then
+  echo "rm -rf $WRK_DIR"
+  rm -rf $WRK_DIR
+fi
+echo "mkdir $WRK_DIR"
+mkdir "$WRK_DIR"
+
+if [ ! -z "$SFILE" ]
+then
+  echo "cp -rf $SFILE $WRK_DIR/$WRK_FILE"
+  cp -rf "$SFILE" "$WRK_DIR"/"$WRK_FILE"
+else
+  echo "series file was neither provided as an argument nor found in $DSH_FILE"
+fi
+
+if [ -d "$WRK_DIR" ] && [ ! -z "$(ls -A "$WRK_DIR")" ] && [ -f "$PEXEC" ] && [ -f "$PCMD" ]
+then
+  echo "workspace is set, producing *.ps files..."
+  echo "python $PEXEC"
+  python "$PEXEC"
+  echo "cat $PLOG"
+  cat $PLOG
+  echo "rm -f $PLOG"
+  rm -f $PLOG
+else
+  echo "something went wrong, not all required files are setup"
+  echo "ls -l $PEXEC $PCMD $WRK_DIR/"
+  ls -l "$PEXEC" "$PCMD" "$WRK_DIR/"
+fi
+
+count=`ls -1 $WRK_DIR/*.ps 2>/dev/null | wc -l`
+if [ $count != 0 ]
+then
+  echo "producing $OUTPUT_FILE"
+  echo "gs -dSAFER -dBATCH -dNOPAUSE -sDEVICE=ps2write -o $OUTPUT_FILE $WRK_DIR/*.ps"
+  gs -dSAFER -dBATCH -dNOPAUSE -sDEVICE=ps2write -o $OUTPUT_FILE $WRK_DIR/*.ps
+else
+  echo "no *.ps produced, nothing to do"
+fi
+
+echo "cleaning..."
+echo "rm -rf $PEXEC $PCMD $WRK_DIR"
+rm -rf "$PEXEC" "$PCMD" "$WRK_DIR"
+
+if [ -f "$OUTPUT_FILE" ]
+then
+  echo "plot_trc finished check $OUTPUT_FILE for the result"
+else
+  echo "no $OUTPUT_FILE produced, make sure proper $CMD_FILE is supplied"
+fi
