@@ -45,6 +45,8 @@ ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local ] && 
   MAKES += ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
 endif
 
+MAKETAGS ?= ctags -e -f
+
 ifdef SOLPS_MPI
   USE_MPI ?= -DUSE_MPI
 endif
@@ -239,7 +241,7 @@ listobj:
 	sed -e 's/ub2p\.o//' -e 's/uinput\.o//' -e 's/uiblkd\.o//' -e 's/uiblb2\.o//' > ${OBJDIR}/LISTOBJ
 
 tags:
-	rm -f ${BASEDIR}/TAGS ; ctags -e -f ${BASEDIR}/TAGS ${SRCDIR}/*.F ${SRCDIR}/*.h ${SRCDIR}/*.inc || touch ${BASEDIR}/TAGS
+	rm -f ${BASEDIR}/TAGS ; ${MAKETAGS} ${BASEDIR}/TAGS ${SRCDIR}/*.F ${SRCDIR}/*.h ${SRCDIR}/*.inc || touch ${BASEDIR}/TAGS
 
 ${OBJDIR}/LISTOBJ: listobj
 
