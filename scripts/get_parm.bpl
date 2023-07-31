@@ -51,7 +51,6 @@ function spec_symbol {
     (  7 )  S=N_;;
     ( 10 )  S=Ne;;
     ( 18 )  S=Ar;;
-    ( 20 )  S=Wb;;
     ( 74 )  S=W_;;
     (  * )  S=xx;;
   esac

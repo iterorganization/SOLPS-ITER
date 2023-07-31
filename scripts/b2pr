@@ -7,7 +7,7 @@
 
 # This script retains the functionality of b2pl (so one could produce a meta-script doing everything at once
 
-# However this version is aimed at mass production of convenietly structured 1d profile files
+# However this version is aimed at mass production of conveniently structured 1d profile files
 #
 # The resulting files are placed b2pl_PS/mono/ (i.e. $STEM/$LK) 
 # Files are named $VarID.[p,r].$index.txt
