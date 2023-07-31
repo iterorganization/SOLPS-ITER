@@ -10,6 +10,8 @@ ifndef SOLPSTOP
   $(error SOLPSTOP not defined)
 endif
 
+MAKETAGS ?= ctags -e -f
+
 # Extensions for OBJDIR if mpi and/or debug options are used
 ifdef USE_IMPGYRO
 EXT_IMPGYRO = .ig
@@ -461,9 +463,9 @@ listobj:
 
 tags:
 ifeq ($(LOCAL),yes)
-	rm -f ${SRCTRI}/TAGS ; ctags -e -f ${SRCTRI}/TAGS ${SRCLOCAL}/*.[fF] ${SRCDIR}/*/*.f || touch ${SRCTRI}/TAGS
+	rm -f ${SRCTRI}/TAGS ; ${MAKETAGS} ${SRCTRI}/TAGS ${SRCLOCAL}/*.[fF] ${SRCDIR}/*/*.f || touch ${SRCTRI}/TAGS
 else
-	rm -f ${SRCTRI}/TAGS ; ctags -e -f ${SRCTRI}/TAGS ${SRCDIR}/*/*.f || touch ${SCRTRI}/TAGS
+	rm -f ${SRCTRI}/TAGS ; ${MAKETAGS} ${SRCTRI}/TAGS ${SRCDIR}/*/*.f || touch ${SCRTRI}/TAGS
 endif
 
 ${OBJDIR}/LISTOBJ: listobj
