@@ -1,6 +1,6 @@
 # Load modules
 setenv MODULEPATH /tokp/work/software/TOK_2023/modules:$MODULEPATH
-module load anaconda
+module load anaconda/3/2023.03
 module load intel/2023.1.0.x
 module load texlive/2021
 # module load subversion  # use built in SVN
