@@ -4300,7 +4300,7 @@ We only include here the variables or aspects thereof not already described in t
   \item[DUM7-10] Dummy parameters, not in use in the widegrid code. Present to avoid issues when starting from a converted structured case (with additional inputs).
   \item[NCOND] Number of atoms that is allowed to ``condense" from the EIRENE kinetic to the B2.5 fluid population in the hybrid model. 
   \item[LKINDP] Index of the {\tt Eirene} atom this species is linked to
-  \item[CONDENSE\_FROM] Index of atom ({\tt IATM}) that is able to condense from the kinetic to fluid population. The condensation will happen when the Knudsen number based on the local charge-exchange mean-free path of the atom is smaller than the value specified by FLDLMA in block 4. Remark: FLDLMA is replaced by EDPOT in a more recent EIRENE version $\Rightarrow$ FLDLMA should be re-implemented after merging the milestone EIRENE version in the widegrid code.  
+  \item[CONDENSE\_FROM] Index of atom ({\tt IATM}) that is able to condense from the kinetic to fluid population. The condensation will happen if ({\tt NGENA(IATM).lt.0} in block 4) and when the Knudsen number based on the local charge-exchange mean-free path of the atom becomes smaller than the value specified by FLDLMA for the charge-exchange reaction in block 4. Remark: FLDLMA is replaced by EDPOTA in a more recent EIRENE version $\Rightarrow$ FLDLMA should be re-implemented after merging the milestone EIRENE version in the widegrid code.  
   \item[CONDENSE\_TO] Index of background species of block 5 ({\tt IPLS}) with the corresponding fluid neutral background. 
   \item[NCVP] Total number of cells in the B2.5 mesh
   \item[NCIP] Total number of internal cells in the B2.5 mesh

@@ -22,11 +22,11 @@ c=======================================================================
 #include "git_version_Uinp.h"
 
       integer i,ii,ih,j,k,l,m,n,nm,icont,istep,jsurpr,ists,ibulk,iscd2,
-     ,        ibgk,ityp,ihyb,nrc,nstrais,nstraih,ispz
+     ,        ibgk,ityp,ihyb,nrc,nstrais,nstraih,ispz,ngen
       integer icopy,jlswch,jlcell,imrlb,iulin,iuscn,ich,ichmin,iid
       integer iatm,imol,iion,ipht,ipls,ichori,inum
       integer llm(nchor),lli(nchor)
-      real x, y
+      real x, y, fldlm
       logical handle,ulmlti,ex,hydrogen,helium,carbon,nitrogen
       logical streql,silent_open
       logical, allocatable :: done(:)
@@ -35,6 +35,7 @@ c=======================================================================
       character utxthd(35)*71, utxtfl(7)*50, ufnm*(*)
       character utxtgt*71
       integer len_of_digits, idez
+      integer condense_from
       external streql, silent_open, len_of_digits, idez, xerrab
       data utxthd /
      1        '** 1. Data for operating mode' ,
@@ -520,12 +521,14 @@ c**  atomic species cards
       do iatm=1,natmi !{
         if (nchara(iatm).eq.1) then
           nrc=nrca(iatm)+nplsh
+          ngen=-1
         else
           nrc=nrca(iatm)
+          ngen=ngena(iatm)
         end if
         write(iunoo,708) iatm,texta(iatm),nmassa(iatm),nchara(iatm),
      ,    1,0,isrfa(iatm),isrta(iatm),nmseca(iatm),nrc,
-     ,    nfola(iatm),ngena(iatm),nhsta(iatm)
+     ,    nfola(iatm),ngen,nhsta(iatm)
         do k=1,nrca(iatm) !{
           if (floor(real(ibulka(iatm,k))/100.).gt.nplsi) then
             ibulk=ibulka(iatm,k)+nplsh*100
@@ -551,8 +554,14 @@ c**  atomic species cards
      ,                     iscd3a(iatm,k),iscd4a(iatm,k),
      ,                     iscdea(iatm,k),iestma(iatm,k),ibgka(iatm,k)
           end if !}
+          if ((nchara(iatm).eq.1).and.
+     ,      streql(crc(ireaca(iatm,k)),'CX')) then
+            fldlm=0.1
+          else
+            fldlm=edpota(iatm,k)
+          end if
           write(iunoo,703) eeleca(iatm,k),ebulka(iatm,k),escd1a(iatm,k),
-     ,                     escd2a(iatm,k),freaca(iatm,k),edpota(iatm,k)
+     ,                     escd2a(iatm,k),freaca(iatm,k),fldlm
         end do !}
 
 !nh     neutral-neutral collisions with fluid atom background
@@ -1339,10 +1348,25 @@ c*** 14.  data for interfacing subroutine infcop
       if (nmode.ne.0) then !{
         write(iunoo,706) lsymet,lbalan,lcoarse,nltrimesh,lsprcl
         write(iunoo,707) nfla+nplsh,
-     .                   ntrfrm,nfull,ibrad,ibpol,ibtor
+     .                   ntrfrm,nfull,ibrad,ibpol,ibtor,0,0,0,0,nplsh
         do i=1,nplsi+nplsh+nbgk !{
           write(iunoo,710) i,iflbh(i),fcteh(i),bmassh(i),lkindph(i)
         end do !}
+cnh     species indices for kinetic-fluid condensation process in hybrid model
+c       condense_from, condense_to
+        do i=1,nplsh
+          condense_from=0
+          do iatm=1,natmi
+            if ((nchara(iatm).eq.1).and.
+     .        (nmassa(iatm).eq.nmassph(i))) then
+              condense_from=iatm
+            end if
+          end do
+          if (condense_from.eq.0) then
+            call xerrab('Atom index for condensation process not found')
+          end if
+          write(iunoo,710) condense_from,nplsi+i
+        end do
 cnh        write(iunoo,707) ndxa,ndya
         write(iunoo,707) ncvp,ncip,nfcp
         write(iunoo,707) ntargi+nstraih
