@@ -353,6 +353,7 @@ c*** the atoms and nuclei
                   spcsrsp(np)=-1
                 end if !}
                 dpls(np)=1./mm
+                dplsh(np)=1./mm
               end do  !}
               j=j+mm
 
@@ -576,12 +577,14 @@ c*** Plasma ions:
             spcsfup(nspcpls)=1
             spcsrsp(nspcpls)=spcirsp(l)
             dpls(nspcpls)=spcidsp(l)
+            dplsh(nspcpls)=spcidsp(l)
           else  !}{
             write(*,*) 'A plasma ion species "',c,'" has already been ',
      ,        'added - skipping it'
           end if  !}
         end if  !}
       end do  !}
+
 c!#{
 c      print *
 c      print *,'nspcatm nspcmol nspcion nspcpls'
@@ -848,6 +851,9 @@ cank        isrsp(l)=spcsrsp(l)
         if (streql(c,'D')) bmassh(nspcpls+l)=2.
         if (streql(c,'T')) bmassh(nspcpls+l)=3.
       end do !}
+
+!nh   setting dpls to 1.0 for the fluid neutral background species in the hybrid model
+      dplsh(nplsi+1:nplsi+nplsh)=1.
 
       write(*,*)
       write(*,'(a,4i5)') 'Particle list: natmi,nmoli,nioni,nplsi =',

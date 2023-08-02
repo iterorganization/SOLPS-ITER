@@ -953,8 +953,8 @@ c*** 6a.  data for reflection model
       else
         write(iunoo,703) 0.
       end if
-      if (nplsi+nbgk.gt.0) then
-        write(iunoo,703) (dpls(ipls),ipls=1,nplsi+nbgk)
+      if (nplsi+nplsh+nbgk.gt.0) then
+        write(iunoo,703) (dplsh(ipls),ipls=1,nplsi+nplsh+nbgk)
       else
         write(iunoo,703) 0.
       end if

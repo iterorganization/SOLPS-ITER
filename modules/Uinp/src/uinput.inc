@@ -172,8 +172,8 @@ c*** 6
      ,     lchsptrg(nchsppr), lchspgrp(nchsppr),
      ,     lchspprt(nchsppr), lchspprp(nchsppr), lchsptgt(nchsppr),
      ,     lchsptgp(nchsppr), lchspnwl(nchsppr), lchspaux(5,nchsppr)
-      real datm(natm), dmol(nmol), dion(nion), dpls(npls), ermin,
-     ,     ercut, rprob0, rinteg, einteg, ainteg,
+      real datm(natm), dmol(nmol), dion(nion), dpls(npls), dplsh(npls), 
+     ,     ermin, ercut, rprob0, rinteg, einteg, ainteg,
      ,     ychsptg(nchsppr), echsptg(nchsppr), fchsptg(nchsppr),
      ,     achsptg(3,nchsppr)
       logical nltrim
@@ -495,7 +495,7 @@ c*** b2ah.dat
      ,  di4,di5,vx0,vx1,vx2,vx3,vx4,vx5,vy0,vy1,vy2,vy3,vy4,vy5,vz0,vz1,
      ,  vz2,vz3,vz4,vz5,
      ,  b0,b1,b2,b3,b4,b5,vl0,vl1,vl2,vl3,vl4,vl5,
-     ,  datm,dmol,dion,dpls,ermin,
+     ,  datm,dmol,dion,dpls,dplsh,ermin,
      ,  ercut,rprob0,rinteg,einteg,ainteg,ychsptg,echsptg,fchsptg,
      ,  achsptg,fsheata,
      ,  alloc,flux,scalv,sorwgt,sorlim,sorind,sorexp,sorifl,sorad1,

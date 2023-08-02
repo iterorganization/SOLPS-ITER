@@ -1748,6 +1748,7 @@ c>>>
                     fcte(ipls)=0.
                     fcteh(nplsh+ipls)=0.
                     dpls(ipls)=0.
+                    dplsh(nplsh+ipls)=0.
                     bmass(ipls)=real(nmassp(ipls))
                     bmassh(nplsh+ipls)=real(nmassp(ipls))
                   end if !}

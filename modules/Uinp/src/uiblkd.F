@@ -726,6 +726,8 @@ c*** 6
      /    maxsc*0., maxsc*0., maxsc*0., maxsc*0.,maxsc*0. /
       data nnchemvar,indchemvar, chvarname , chmspname , chmvar    /
      /      maxsc*0 , maxchsc*0,maxchsc*' ',maxchsc*' ',maxchsc*0. /
+      data dplsh  /
+     /    npls*0 /    
 
 c*** 7
 
