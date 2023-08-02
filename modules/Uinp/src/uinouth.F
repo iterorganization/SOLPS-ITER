@@ -35,7 +35,7 @@ c=======================================================================
       character utxthd(35)*71, utxtfl(7)*50, ufnm*(*)
       character utxtgt*71
       integer len_of_digits, idez
-      integer condense_from
+      integer condense_from, nemodh, itype
       external streql, silent_open, len_of_digits, idez, xerrab
       data utxthd /
      1        '** 1. Data for operating mode' ,
@@ -1390,8 +1390,15 @@ cnh        write(iunoo,707) ndxa,ndya
               do ispz=nfla+1,nfla+nplsh
                 if (bmassh(ispz).eq.bmassh(nspzi(i,j))) exit
               enddo
+              if (iliin(-ndt2(i,j)).le.0) then ! transparent surface
+                nemodh=0
+                itype=1  ! send particle in void regions
+              else
+		nemodh=6
+                itype=0 ! recycle particle
+              endif
               write(iunoo,707) k*i+j*m+ihyb,ndt2(i,j),
-     ,          nptc(i,j),nptcm(i,j),ispz,ispz,6
+     ,          nptc(i,j),nptcm(i,j),ispz,ispz,nemodh,itype
             end if
           end do !}
         end do !}
