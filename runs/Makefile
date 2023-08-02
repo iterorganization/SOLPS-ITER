@@ -81,9 +81,9 @@ prints = b2ag.prt b2ah.prt b2ai.prt b2ar.prt b2mn.prt \
  b2ye.prt b2yg.prt b2yh.prt b2yi.prt b2ym.prt b2yn.prt b2yp.prt b2yq.prt \
  b2yr.prt b2yt.prt b2yi_gnuplot.prt
 
-target_ag = b2ag.prt b2fgmtry
+target_ag = b2ag.prt b2fgmtry b2fgmtry_st
 target_ah = b2ah.prt b2fpardf
-target_ai = b2ai.prt b2fstati
+target_ai = b2ai.prt b2fstati b2fstati_st
 target_ar = b2ar.prt b2frates
 target_mn = b2mn.prt b2fparam b2fstate b2fmovie b2ftrace b2ftrack b2fplasma b2fdiffe b2ftraced
 target_opt = target_mn
@@ -214,13 +214,13 @@ $(target_ag) : b2ag.dat
 	-[ -s b2ag.exe.dir/info.dat ] && mv b2ag.exe.dir/info.dat . || echo > /dev/null
 	-rmdir b2ag.exe.dir
 
-$(target_ah) : b2ah.dat b2fgmtry
+$(target_ah) : b2ah.dat b2fgmtry b2fgmtry_st
 	rm -rf b2ah.exe.dir >& /dev/null ; mkdir b2ah.exe.dir ; cp $^ b2ah.exe.dir
 	rm -f $(target_ah)
 	cd b2ah.exe.dir ; ${TIME} ${B2OBJ}/b2ah.exe ${RUN_OPTIONS} ; mv $(target_ah) .. ; rm -f $(notdir $^) >& /dev/null
 	-rmdir b2ah.exe.dir
 
-$(target_ai) : b2ag.dat b2ai.dat b2fgmtry
+$(target_ai) : b2ag.dat b2ai.dat b2fgmtry b2fgmtry_st
 	rm -rf b2ai.exe.dir >& /dev/null ; mkdir b2ai.exe.dir ; cp $^ b2ai.exe.dir
 	-[ -s b2fgmtry_us ] && cp b2fgmtry_us b2ai.exe.dir || echo > /dev/null
 	rm -f $(target_ai)
