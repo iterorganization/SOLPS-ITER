@@ -19,7 +19,7 @@ c*** The list of keywords to work on:
      ,  'bcene','bceni','bcpot','enepar','enipar',
      ,  'potpar','bccon','conpar','bcmom','mompar',
      ,  'lcbs','nniso','nxiso1','nxiso2','nyiso1',
-     ,  'nyiso2','niiso','teiso','tiiso',18*' '/
+     ,  'nyiso2','niiso','teiso','tiiso',19*' '/
       data (chrpl(i,3),i=1,nkwrd) /
      /  'nstrai','crcstra','','rcstart','rcend',
      ,  'species_start','species_end','eb2spcr','eb2atcr','b2espcr',
@@ -29,19 +29,19 @@ c*** The list of keywords to work on:
      ,  'n_spcsrf','l_spcsrf','sps_id','i_spcsrf','j_spcsrf',
      ,  'sps_absr','sps_trno','sps_trni','sps_mtri','sps_tmpr',
      ,  'sps_spph','sps_spch','sps_sgrp','targsp','surf_mat',
-     ,  'accel_ion',1*' '/
-      data (chrpl(i,4),i=1,nkwrd) / 'jxi','jxa',40*' '/
+     ,  'accel_ion',2*' '/
+      data (chrpl(i,4),i=1,nkwrd) / 'jxi','jxa',41*' '/
       data (chrpl(i,5),i=1,nkwrd) /
      /  'nncut','ntcut','nxcut1','nxcut2','nycut1',
      ,  'nycut2','nniso',' ','nxiso1','nxiso2',
-     ,  'nyiso1','nyiso2','niiso','tiiso','teiso',27*' '/
+     ,  'nyiso1','nyiso2','niiso','tiiso','teiso',28*' '/
       data (chrpl(i,6),i=1,nkwrd) / 'impflag','nspecies','nfluids',
-     ,  39*' '/
+     ,  40*' '/
       data (chrpl(i,7),i=1,nkwrd) / 
      /  'fusion_power','Spmp_He_to_D','lhetrgts','lpfrb_i','lpfrb_o',
      ,  'lpfrt_i','lpfrt_o','j_h_at','j_he_at','j_ne_at',
      ,  'l_h_mol','lpfrs_pmp','npfrgrp','lpfrgrp','ipfrgrp',
-     ,  'jpfrgrp','gpfrgrp',25*' '/
+     ,  'jpfrgrp','gpfrgrp',26*' '/
       data (chrpl(i,8),i=1,nkwrd) /
      /  'nstrai','crcstra','','rcstart','rcend',
      ,  'species_start','species_end','eb2spcr','eb2atcr','b2espcr',
@@ -51,7 +51,7 @@ c*** The list of keywords to work on:
      ,  'n_spcsrf','l_spcsrf','sps_id','i_spcsrf','j_spcsrf',
      ,  'sps_absr','sps_trno','sps_trni','sps_mtri','sps_tmpr',
      ,  'sps_spph','sps_spch','sps_sgrp','targsp','surf_mat',
-     ,  'accel_ion','b2recyc'/
+     ,  'accel_ion','b2recyc','strasclfl'/
 
 c*** Initialisation of the control data
       data nmdpr, nmdlr, nmdbr / nnmdf*1, nnmdf*0, nnmdf*0 /

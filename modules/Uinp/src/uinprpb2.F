@@ -337,6 +337,7 @@ c*** k, m, n are the numbers of recycling, specified, and all strata
       nmdpr(41,8)=n+nhyb
       nmdpr(42,8)=nspcpls+nspcncl
       nmdlr(42,8)=n+nhyb
+      nmdpr(43,8)=n+nhyb
 
       ltrvr( 2,3)=.true.
       ltrvr( 2,8)=.true.
@@ -358,6 +359,7 @@ c*** k, m, n are the numbers of recycling, specified, and all strata
       ltrvr(40,8)=.true.
       lrrvr(42,8)=.true.
       lspvr(42,8)=.true.
+      lrrvr(43,8)=.true.
 
       iniprm(:,:,1,39,3)=-1
       iniprm(:,:,1,39,8)=-1
@@ -416,6 +418,13 @@ c***          species_start, species_end
               iniprm(k+ihyb,1,1,6,8)=ispi-1+(iatm-1)
               iniprm(k,1,1,7,3)=ispe+(iatm-1)
               iniprm(k+ihyb,1,1,7,8)=ispe+(iatm-1)
+
+c***          strasclfl for hybrid stencil file
+              if (nchara(iatm).eq.1) then !{
+                rniprm(k+ihyb,1,1,43,8)=1.
+              else
+                rniprm(k+ihyb,1,1,43,8)=1.e-10
+              end if !}
 
 c***          lstrascl
               do l=1,nspcncl !{
@@ -496,6 +505,7 @@ cnh           Values for additional hybrid strata
                 iniprm(k+ihyb-1,1,1,6,8)=ispi+(iatm-1)
                 iniprm(k+ihyb,1,1,6,8)=ispi-1+(iatm-1)
                 iniprm(k+ihyb,1,1,7,8)=ispe-1+(iatm-1)
+                rniprm(k+ihyb,1,1,43,8)=1.
                 do l=1,nspcncl
                   if (l.eq.iatm) iniprm(k+ihyb,l,1,12,8)=lscbnds(l,i,j)
                 end do
@@ -583,6 +593,9 @@ c*** species_start, species_end
           iniprm(k+nhyb,1,1,7,8)=ispe+(j-1)
         end if !}
 
+c*** strasclfl
+        rniprm(k+nhyb,1,1,43,8)=1.e-10
+
 c*** userfluxparm
         rniprm(k,1,1,19,3)=fgpfstr(i)
         rniprm(k+nhyb,1,1,19,8)=fgpfstr(i)
@@ -638,6 +651,13 @@ c*** species_start, species_end
         iniprm(k,1,1,7,3)=ispe+(lkindp(nspez(k))-1)
         iniprm(k+nhyb,1,1,7,8)=ispe+(lkindp(nspez(k))-1)
 
+c*** strasclfl for hybrid stencil
+        if (nchara(lkindp(nspez(k))).eq.1) then !{
+          rniprm(k+nhyb,1,1,43,8)=1.
+        else
+          rniprm(k+nhyb,1,1,43,8)=1.e-10
+        end if !}
+
 c*** userfluxparm
         rniprm(k,1,1,19,3)=0.
         rniprm(k+nhyb,1,1,19,8)=0.
@@ -690,6 +710,9 @@ c*** species_start, species_end
         iniprm(k+nhyb,1,1,6,8)=0
         iniprm(k,1,1,7,3)=nspcpls+nspcncl-1
         iniprm(k+nhyb,1,1,7,8)=nspcpls+nspcncl-1
+
+c*** strasclfl for hybrid stencil
+        rniprm(k+nhyb,1,1,43,8)=1.e-10
 
 c*** lstrascl
         do l=1,nspcncl !{
