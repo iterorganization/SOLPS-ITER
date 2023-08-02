@@ -123,6 +123,30 @@ c*** Create the header for the b2ag.dat file
           print *,'    ... b2ag.dat created'
       endif !}
 
+c*** Create the b2us.dat file for triangulation
+      inquire(file='b2us.dat', exist=uex)
+      if(uex) then !{
+          print *,'    ... b2us.dat file already present, not created'
+      else !}{
+          open(2,file='b2us.dat')
+          write(2,'(a)')
+     .     '*label          (lblmn: character*60)'
+          write(2,'(a)')
+     .     'Input file for triangulation plasma region with b2us'
+          write(2,'(a)') '*b2cmpa  basic parameters'
+          write(2,'(a)') '*b2cmpb  boundary conditions'
+          write(2,'(a)') '*b2cmpt  transport coefficients'
+          write(2,'(a)') '*endphy'
+          write(2,'(a)') '''b2mndr_eirene''    ''1'''
+          write(2,'(a)') '''b2stbc_boundary_namelist''    ''1'''
+          write(2,'(a)') '''b2stbr_neutrals_namelist''    ''1'''
+          write(2,'(a)') '''b2us_write_b2fgmtry_us''    ''0'''
+          write(2,'(a)') '''b2us_write_b2fstati_us''    ''0'''
+          close(2)
+          print *,'    ... b2us.dat created'
+      endif !}
+
+
 c*** Create a b2ah.dat.stencil file
       inquire(file='b2ah.dat.stencil', exist=uex)
       if(uex) then
