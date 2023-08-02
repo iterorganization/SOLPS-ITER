@@ -13,7 +13,7 @@ c*** sources) for the Eirene input file
 c=======================================================================
       implicit none
 #include "uinput.inc"
-      integer ibk,isf,iatm,ispe,ispi
+      integer ibk,isf,iatm,ispe,ispi,ndt
       external xerrab
 c=======================================================================
       call subini ('uinbnddt')
@@ -23,11 +23,12 @@ c=======================================================================
       ntargi=0
 
 c*** Follow the boundary kinds: core, targets, PFR, outer edge
-
+      ndt = 0 !nh initialization of ndt for the wg format
       do ibk=1,nbndknd !{
         do isf=1,nznbndt(ibk) !{
 c*** First, non-default surface...
           nstsi=nstsi+1
+          ndt = ndt-1
           if(nstsi.ge.nsts) then !{
             write(0,*) 'Too many "non-default surfaces" are specified.',
      ,                                 '  ',ctxbnds(ibk),',  zone',isf
@@ -136,7 +137,7 @@ c*** ... and then the recycling source if specified
             nspzi(ntargi,1)=ispi
             nspze(ntargi,1)=ispe
             insor(1,nstrai)=jcpbnds(isf,ibk)
-            ndt2(ntargi,1)=insor(1,nstrai)-1
+            ndt2(ntargi,1)=ndt
             ntin2(ntargi,1)=jc1bnds(isf,ibk)
             nten2(ntargi,1)=jc2bnds(isf,ibk)
             npts(nstrai)=jnpbnds(isf,ibk)

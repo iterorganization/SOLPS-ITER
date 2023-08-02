@@ -1155,12 +1155,13 @@ c*** 14.  data for interfacing subroutine infcop
       write(iunoo,700) utxthd(19)
       if (nmode.ne.0) then !{
         write(iunoo,706) lsymet,lbalan,lcoarse,nltrimesh,lsprcl
-        write(iunoo,707) nfla,ncutb,ncutl,imf,
+        write(iunoo,707) nfla,
      .                   ntrfrm,nfull,ibrad,ibpol,ibtor
         do i=1,nplsi+nbgk !{
           write(iunoo,710) i,iflb(i),fcte(i),bmass(i),lkindp(i)
         end do !}
-        write(iunoo,707) ndxa,ndya
+cnh        write(iunoo,707) ndxa,ndya
+        write(iunoo,707) ncvp,ncip,nfcp
         write(iunoo,707) ntargi
         write(iunoo,707) (ntgprt(i),i=1,ntargi)
         l=maxval(ntgprt)
@@ -1174,8 +1175,8 @@ c*** 14.  data for interfacing subroutine infcop
         if(l.ge.100) k=1000
         do i=1,ntargi !{
           do j=1,ntgprt(i) !{
-            write(iunoo,707) k*i+j*m,ndt2(i,j),ninct2(i,j),nixy2(i,j),
-     ,          ntin2(i,j),nten2(i,j),niflg(i,j),nptc(i,j),nptcm(i,j),
+            write(iunoo,707) k*i+j*m,ndt2(i,j),
+     ,          nptc(i,j),nptcm(i,j),
      ,                                  nspzi(i,j),nspze(i,j),nemod(i,j)
           end do !}
         end do !}
@@ -1223,8 +1224,7 @@ c*** segment numbers for the target edges to be modified by geousr
       if(ntrgte.gt.0) then !{
         do i=1,ntrgte !{
           if (lm_cnfg.and.mod(i,2).eq.1) cycle
-          write(iunoo,'(2i6,1p,2e12.5)') jedge(2,i),jedge(1,i),
-     ,                                             xpolpos(i),ypolpos(i)
+          write(iunoo,'(3i6)') jedge(2,i),jedge(1,i),nssir(i)
         end do !}
       end if !}
 

@@ -303,7 +303,8 @@ c***             boundary code (E, W, S, N) for each region and zone;
      ,  lcmbndt(nbndrgn,nbndknd),lrfbndt(nbndzon,nbndknd),
      ,  lrrbndt(nbndrgn,nbndknd,2),lrpbndt(nbndrgn,nbndknd,2),
      ,  lrsbndt(nbndrgn,nbndknd),
-     ,  lzrbndt(nbndzon,nbndknd,2),lzpbndt(nbndzon,nbndknd)
+     ,  lzrbndt(nbndzon,nbndknd,2),lzpbndt(nbndzon,nbndknd),
+     ,  lzrbndt_us(nbndzon,nbndknd,2)
       logical bxsbndt(nbndzon,nbndknd),rxsbndt(nbndzon,nbndknd)
       character crgbndt(nbndrgn,nbndknd),cznbndt(nbndzon,nbndknd)
 
@@ -590,7 +591,7 @@ c     ,  spcifup,spcifua,spcifum,spcifui,
      ,  jnpbndx,jmpbndx,jnibndx,jnebndx,
      ,  leebndx,lcobndx,leibndx,lmobndx,lpobndx,kcobndx,kmobndx,
      ,  nrgbndt,nznbndt,lcmbndt,lrfbndt,lrrbndt,lrpbndt,lrsbndt,lzrbndt,
-     ,  lzpbndt,
+     ,  lzpbndt,lzrbndt_us,
      ,  nnrctn,rctngrp,rctnmsp,rctnmst,rctnnmo1,rctnnmo2,rctnnmo3,
      ,  rctnimn,rctniz,rctnimx,nnrctd,rctdgrp,rctdmsp,rctdmst,
      ,  nspcncl,nspcpls,nspcatm,nspcmol,nspcion,spcsmsp,spcsmsa,spcsmsm,

@@ -343,7 +343,8 @@ c*** 14
 
       integer nclmi,nblcki,nprnvi,nprtvi,nprdvi,nfla,ncutb,ncutl,
      ,  imf,ntrfrm,nfull,ibrad,ibpol,ibtor,
-     ,  iflb(npls),ndxa,ndya,ntargi,ntgprt(nstep),ndt2(nstep,ngitt),
+     ,  iflb(npls),ndxa,ndya,ncvp,ncip,nfcp,ntargi,ntgprt(nstep),
+     ,  ndt2(nstep,ngitt),
      ,  ninct2(nstep,ngitt),nixy2(nstep,ngitt),ntin2(nstep,ngitt),
      ,  nten2(nstep,ngitt),niflg(nstep,ngitt),nptc(nstep,ngitt),
      ,  nptcm(nstep,ngitt),nspzi(nstep,ngitt),nspze(nstep,ngitt),
@@ -360,7 +361,8 @@ c*** 15
 
       integer nnadmod
       parameter (nnadmod=1)
-      integer nadmod,nasmod,nrs(nnadmod),ipunkt(nnadmod),jedge(2,8)
+      integer nadmod,nasmod,nrs(nnadmod),ipunkt(nnadmod),jedge(2,8),
+     ,  nssir(8)
       real xcoor(nnadmod),ycoor(nnadmod),zcoor(nnadmod),
      ,  xpolpos(8),ypolpos(8)
 
@@ -454,11 +456,11 @@ c*** b2ah.dat
      ,  jadch0,jadch1,jadnsw,jadmsw,jadlsw,jadksw,jadjsw,jadisw,
      ,  jlblck,jlacll,nclmi,nblcki,nprnvi,nprtvi,nprdvi,nfla,
      ,  ncutb,ncutl,imf,ntrfrm,nfull,ibrad,ibpol,ibtor,
-     ,  iflb,ndxa,ndya,ntargi,ntgprt,ndt2,ninct2,nixy2,
+     ,  iflb,ndxa,ndya,ncvp,ncip,nfcp,ntargi,ntgprt,ndt2,ninct2,nixy2,
      ,  ntin2,nten2,niflg,nptc,nptcm,nspzi,nspze,nemod,istramin,
      ,  istramax,nainb,ncopib,ncopeb,nains,naint,naotb,naots,naott,
      ,  lkindm,lkindi,lkindp,
-     ,  nadmod,nasmod,nrs,ipunkt,jedge,
+     ,  nadmod,nasmod,nrs,ipunkt,jedge,nssir,
      ,  scilref,scilspt,scisrs,scisrc,sclchspnwl,scisrsg,
      ,  iscrd,jscrd,
      ,  cbnrso,cbnrno,cbnrwe,cbnrea,

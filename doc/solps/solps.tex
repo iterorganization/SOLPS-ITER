@@ -787,8 +787,7 @@ The {\tt setup.csh} file and its subsidiaries {\tt \$\{SOLPSTOP\}/SETUP/setup.cs
 Of course, any additional desired definitions can be added. The preferred place for those is, for those variables that need not be shared by other users, the {\tt \$\{SOLPSTOP\}/SETUP/setup.csh.\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}.local} and {\tt \$\{SOLPSTOP\}/SETUP/config.\$\{HOST\_NAME\}.\$\{COMPILER\}.local} files. Variables that are needed at compilation time need to appear in the {\tt config.*.*(.local)} file, while variables needed at runtime must appear in {\tt setup.csh.*.*(.local)} file.
 \end{sloppypar}
 
-However, the \SOLPSITER GIT server
-holds several examples in the {\tt \$\{SOLPSTOP\}/SETUP/} directory.
+Moreover, the \SOLPSITER GIT server holds several examples in the {\tt \$\{SOLPSTOP\}/SETUP/} directory.
 
 The command\index{stop}
 \begin{verbatim}
@@ -849,10 +848,8 @@ SOLPSTOP
 
 \begin{description}
 \item[config] \index{config} contains compiler option files
-\item[src.local] \index{src.local}\index{B2.5,
-    local}\label{src.local} is an optional location which can contain locally modified source files (not version-controlled)
-\item[src] \index{src}\index{B2.5, src}\label{b2.5_src}
-  contains the {\tt B2.5} source code files
+\item[src.local] \index{src.local}\index{B2.5,local}\label{src.local} is an optional location which can contain locally modified source files (not version-controlled)
+\item[src] \index{src}\index{B2.5, src}\label{b2.5_src} contains the {\tt B2.5} source code files
 \item[builds]\index{builds}\index{B2.5, builds} contains the compiled object files for building the {\tt B2.5} executables.
 \end{description}
 
@@ -879,7 +876,7 @@ The files in {\tt src} will be version-controlled and updated whenever the
 user will pull in new code version.
 If, however, one wishes to make local changes to a file and protect those from
 GIT updates, the procedure for that purpose is to copy the file you want to change to
-{\tt src.local} and then edit that file.  You will then need to do
+{\tt src.local} and then edit that file. You will then need to do
 \begin{verbatim}
   sbb
   gmake local
@@ -909,7 +906,7 @@ following performed:
   gmake
 \end{verbatim}
 If you want to avoid a long recompilation, you need to remove from the {\tt builds/*/}
-directories , the object and module files corresponding to your locally changed file(s),
+directories, the object and module files corresponding to your locally changed file(s),
 and then ask for a normal recompilation with a single {\tt gmake} command.
 
 \begin{sloppypar}
@@ -920,6 +917,12 @@ reads those after the {\tt config.\allowbreak \$\{HOST\_NAME\}.\allowbreak \$\{C
 and {\tt config.common.\$\{COMPILER\}} files,
 they need only contain the modified definitions.
 \end{sloppypar}
+
+It is also possible to add additional dependencies by means of a {\tt config/dependencies.local} file, which should then contain lines with the format:
+\begin{verbatim}
+${OBJDIR}/<calling_program>.o: ${OBJDIR}/<called_program>.o
+\end{verbatim}
+This can be particularly useful when compiling with options such as {\tt warn interfaces} to make sure that the files containing the called routines are compiled before the files containing the calling routines.
 
 If you just want to compile {\tt b2mn.exe}, you can do
 \begin{verbatim}
@@ -1585,6 +1588,8 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[awk.plot\_mesh \#1]\index{awk.plot\_mesh} Outputs the mesh specified as \#1 in a form usable for {\tt xyplot}.
   \item[awk.reverse]\index{awk.reverse} Outputs a file in reverse order.
   \item[awk.transpose]\index{awk.transpose} Transposes an array of data.
+  \item[blank]\index{blank} Dummy script that does nothing.
+  \item[canonical \#1]\index{canonical} Provides the full absolute path to the filename given as argument.
   \item[chop\_pwd \#1]\index{chop\_pwd} Truncates the name of the current directory to not exceed \#1 characters (default 60).
   \item[count]\index{count} Basic counting with advanced options ({\tt count -h} for help).
   \item[datestamp]\index{datestamp} Gets a date stamp from the machine.
@@ -1673,6 +1678,7 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[QSUB.postprocess\_coupled]\index{QSUB.postprocess\_coupled} List of instructions appended to the \SOLPSITER submission scripts for run post-processing
   \item[recover\_initial\_files]\index{recover\_initial\_files}\index{b2co}\index{plasmastate} For use to copy back the stored initial case files ({\tt .i} extension) before a run restart, or when use of {\tt b2co} is not possible because the run crash happened too early for {\tt plasmastate} files to be written.
   \item[regression\_test]\index{regression\_test} Utility script to run regression tests.
+  \item[regxy\_sum\_over\_species]\index{regxy\_sum\_over\_species} Intermediate utility script to extract a face-directed region quantity and sum it over species.
   \item[res\_av]\index{res\_av} Special script to reduce residuals in the finalization step of the {\tt Eirene} sources averaging scheme (see Section~\ref{sec:B2Eirene:averaging} for details).
   \item[rps]\index{rps} Shifts $\Psi$ values by a given amount within a {\tt DG} equilibrium file (see Sec.~\ref{sec:equtrn}).
   \item[run\_av]\index{run\_av} Special script to prepare the averaging step of the {\tt Eirene} sources averaging scheme (see Section~\ref{sec:B2Eirene:averaging} for details).
@@ -1733,13 +1739,10 @@ The following have not yet been documented --- user contributions are
 welcome!
 \begin{description}
   \item[awk.derivative]\index{awk.derivative}
-  \item[blank]\index{blank}
-  \item[canonical]\index{canonical}
   \item[cnvtria]\index{cnvtria}
   \item[min\_ave\_max.awk]\index{min\_ave\_max.awk}
   \item[plot\_bc\_conpar13]\index{plot\_bc\_conpar13}
   \item[plotdg]\index{plotdg}
-  \item[regxy\_sum\_over\_species]\index{regxy\_sum\_over\_species}
 \end{description}
 
 \subsection{scripts/commands}
@@ -2297,7 +2300,7 @@ Another option allows for the user to request specific rates using reaction card
 
 \VerbatimInput[fontsize=\footnotesize]{D/b2ar_AFN.dat}
 
-Note that the headers must contain the exact text shown, including the capitalization. The reaction list order must be the same as in the example and both the ionization and recombination rates must include two reaction cards, one for the particle reaction rate, followed by a second one for the associated electron heat loss rate.
+When {\tt b2ardr\_nreac = 0}, a default set of AMJUEL/HYDHEL reactions is used, i.e., AMJUEL 2.1.5 for ionization, HYDHEL 3.1.8 for charge exchange and AMJUEL 2.1.8 for recombination. This default set of reactions can be overwritten by user-specified reactions from the AMJUEL/HYDHEL databases by making {\tt b2ardr\_nreac > 0}. Then a {\tt reac} field has to be added, as illustrated in the example. The format is not important as long as blanks separate the fields. For the above example, the default reaction for ionization is explicitly overwritten by the default one. Hence, it makes no difference if you specify them or not.      
 
 \begin{sloppypar}
 Supplemental information on atomic physics rates can be found in the file
@@ -4243,8 +4246,8 @@ The format of this input block for coupling to \SOLPSITER is as follows:
 
 {\it ***14. Data for interfacing routine "infusr"}
 \begin{verbatim}
-LSYMET  LBALAN  LCOARSE NLTRIMESH  LSPRCL
-NFLA    NCUTB   NCUTL   IMF   NTRFRM   NFULL   IBRAD   IBPOL   IBTOR
+LSYMET  LBALAN
+NFLA    NTRFRM   NFULL   IBRAD   IBPOL   IBTOR
 \end{verbatim}
 {\it read NPLSI species lines}
 \begin{verbatim}
@@ -4254,13 +4257,12 @@ DO 20, IPL=1,NPLSI
 \end{verbatim}
 {\it Recycling target definitions}
 \begin{verbatim}
-NDXA   NDYA
+NCVP   NCIP   NFCP
 NTARGI
 NTGPRT(IT), IT=1,NTARGI
 DO 30, IT=1,NTARGI
    DO 33, IPRT=1,NTGPRT(IT)
-      I NDT    NINCT  NIXY   NTIN   NTEN   NIFLG   NPTC   NPTCM
-        NSPZI  NSPZE  NEMOD
+      I NDT    NPTC   NPTCM  NSPZI  NSPZE  NEMOD  ITYPE 
    33 CONTINUE
 30 CONTINUE
 \end{verbatim}
@@ -4287,14 +4289,15 @@ We only include here the variables or aspects thereof not already described in t
   \item[LCOARSE] Coarse mesh switch ???
   \item[NLTRIMESH] When {\tt .TRUE.}, {\tt Eirene} is only run to obtain the contours necessary to build the triangular grid, which are then written in {\tt fort.78}. This is used by the {\tt triang} script toolchain. No particle trajectories are followed.
   \item[LSPRCL] Turns on species-specific source rescaling when {\tt .TRUE.}
-  \item[NCUTB] For \SOLPSITER couplings, should be 0
-  \item[NCUTL] For \SOLPSITER couplings, should be 1
-  \item[IMF] {\tt fort.30} format switch, should be 0
-  \item[NTRFRM] {\tt fort.33} format switch, should be 0
+  \item[NTRFRM] {\tt fort.33} format switch, should be 1 for the widegrid code
   \item[LKINDP] Index of the {\tt Eirene} atom this species is linked to
+  \item[NCVP] Total number of cells in the B2.5 mesh
+  \item[NCIP] Total number of internal cells in the B2.5 mesh
+  \item[NFCP] Total number of faces in the B2.5 mesh 
   \item[NPTC] In addition to the description in the {\tt Eirene} manual, note that only the value from the first segment of the stratum ({\tt IPRT=1}) is used.
   \item[NPTCM] This corresponds to the {\tt NMINPTS} flag in input block 7, and is needed only if {\tt INDSRC=6}, i.e., if the source is specified by data from block 14 alone. As for {\tt NPTC}, only the value from the first stratum segment is used.
   \item[NEMOD] This corresponds to the {\tt NEMODS} flag in input block 7, and is needed only if {\tt INDSRC=6}, i.e., if the source is specified by data from block 14 alone. As for {\tt NPTC}, only the value from the first stratum segment is used. It is overwritten internally by the code to be {\tt 7} for E/W surfaces (i.e. include sheath acceleration) and {\tt 6} for N/S surfaces (do not include sheath acceleration).
+  \item[ITYPE] Possibility to specify the species type: {\tt ITYPE=0} (default): bulk ion species ({\tt NLPLS=.TRUE.}); {\tt ITYPE=1}: atoms ({\tt NLATM=.TRUE.}); {\tt ITYPE=2}: molecules ({\tt NLMOL=.TRUE.}); {\tt ITYPE=3}: trace ions ({\tt NLION=.TRUE.}); {\tt ITYPE=4}: bulk ions ({\tt NLPLS=.TRUE.}); {\tt ITYPE=5}: photons ({\tt NLPHOT=.TRUE.}).  
   \item[NCOPIB] Not in use
   \item[NCOPEB] Maximum number of additional tallies per plasma background species
 \end{description}
@@ -4326,7 +4329,7 @@ DO I=1,NADMOD
    NRS   IPUNKT   XCOOR   YCOOR   ZCOOR
 ENDDO
 DO I=1,NASMOD
-   NAS   IPUNKT   NSSIR   NSSIP
+   NAS   IPUNKT   NSSIR   
 ENDDO
 DO I=1,NORMOD
    IDIR  IR   IP
@@ -4357,8 +4360,7 @@ ENDDO
   \item[XPOLPOS] Integer X-index (poloidal) of the {\tt Eirene} grid vertex to which the additional surface vertex must be matched. To be used only if the default setting does not give the desired result.
   \item[YPOLPOS] Integer Y-index (radial) of the {\tt Eirene} grid vertex to which the additional surface vertex must be matched. To be used only if the default setting does not give the desired result.
   \item[NAS] Index of the additional surface to be modified
-  \item[NSSIR] Radial index of the {\tt Eirene} grid vertex to which the additional surface vertex is to be matched
-  \item[NSSIP] Poloidal index of the {\tt Eirene} grid vertex to which the additional surface vertex is to be matched
+  \item[NSSIR] Index of the {\tt Eirene} grid vertex to which the additional surface vertex is to be matched
   \item[IDIR] Direction of the face which normal is being inverted (1 = radial, 2 = poloidal)
   \item[IR] Radial index of the {\tt Eirene} grid cell which face normal is being inverted
   \item[IP] Poloidal index of the {\tt Eirene} grid cell which face normal is being inverted
@@ -4531,40 +4533,40 @@ The data blocks are:
   \item[edissml] Energy spent for dissociating hydrogenic molecules ($W$), dimension ({\tt NDX},{\tt NDY},{\tt NMOL})
   \item[wldnek] Net kinetic energy deposited by neutrals ($W$), total over strata, dimension ({\tt NLIM}+{\tt NSTS})
   \item[wldnep] Energy released by recombination of neutrals and ions into molecules ($W$), total over strata, dimension ({\tt NLIM}+{\tt NSTS})
-  \item[wldna] Flux of atoms impinging on surface ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
+  \item[wldna] Flux of atoms impinging on surface ($particles.s^{-1}$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
   \item[ewlda] Average energy of impinging atoms on surface ($eV$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
-  \item[wldnm] Flux of molecules impinging on surface ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NMOL})
+  \item[wldnm] Flux of molecules impinging on surface ($particles.s^{-1}$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NMOL})
   \item[ewldm] Average energy of impinging molecules on surface ($eV$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NMOL})
   \item[p1,p2] Endpoints of surface ($X$ and $Y$ coordinates, in $m$), total over strata, dimension ({\tt NLIM})
-  \item[wldra] Flux of reflected atoms from surface ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
-  \item[wldrm] Flux of reflected molecules from surface ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NMOL})
+  \item[wldra] Flux of reflected atoms from surface ($particles.s^{-1}$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
+  \item[wldrm] Flux of reflected molecules from surface ($particles.s^{-1}$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NMOL})
   \item[For each stratum $i=1,nstra$] The above data, resolved per stratum:
   \begin{description}
     \item[wldnek(i)] Net kinetic energy deposited by neutrals ($W$), dimension ({\tt NLIM}+{\tt NSTS})
     \item[wldnep(i)] Energy released by recombination of neutrals and ions into molecules ($W$), dimension ({\tt NLIM}+{\tt NSTS})
-    \item[wldna(i)] Flux of atoms impinging on surface ($A$), dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
+    \item[wldna(i)] Flux of atoms impinging on surface ($particles.s^{-1}$), dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
     \item[ewlda(i)] Average energy of impinging atoms on surface ($eV$), dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
-    \item[wldnm(i)] Flux of molecules impinging on surface ($A$), dimension ({\tt NLIM}+{\tt NSTS},{\tt NMOL})
+    \item[wldnm(i)] Flux of molecules impinging on surface ($particles.s^{-1}$), dimension ({\tt NLIM}+{\tt NSTS},{\tt NMOL})
     \item[ewldm(i)] Average energy of impinging molecules on surface ($eV$), dimension ({\tt NLIM}+{\tt NSTS},{\tt NMOL})
-    \item[wldra(i)] Flux of reflected atoms from surface ($A$), dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
-    \item[wldrm(i)] Flux of reflected molecules from surface ($A$), dimension ({\tt NLIM}+{\tt NSTS},{\tt NMOL})
+    \item[wldra(i)] Flux of reflected atoms from surface ($particles.s^{-1}$), dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
+    \item[wldrm(i)] Flux of reflected molecules from surface ($particles.s^{-1}$), dimension ({\tt NLIM}+{\tt NSTS},{\tt NMOL})
   \end{description}
-  \item[wldpp] Flux of plasma ions impinging on surface ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NPLS})
-  \item[wldpa] Net flux of atoms emitted from surface ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
-  \item[wldpm] Net flux of molecules emitted from surface ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NMOL})
+  \item[wldpp] Flux of plasma ions impinging on surface ($particles.s^{-1}$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NPLS})
+  \item[wldpa] Net flux of atoms emitted from surface ($particles.s^{-1}$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
+  \item[wldpm] Net flux of molecules emitted from surface ($particles.s^{-1}$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NMOL})
   \item[wldpeb] Power carried by particles emitted from surface ($W$), total over strata, dimension ({\tt NLIM}+{\tt NSTS})
-  \item[wldspt] Flux of sputtered wall material ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS})
-  \item[wldspta] Flux of sputtered wall material per atom ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
-  \item[wldsptm] Flux of sputtered wall material per molecule ($A$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NMOL})
+  \item[wldspt] Flux of sputtered wall material ($particles.s^{-1}$), total over strata, dimension ({\tt NLIM}+{\tt NSTS})
+  \item[wldspta] Flux of sputtered wall material per atom ($particles.s^{-1}$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
+  \item[wldsptm] Flux of sputtered wall material per molecule ($particles.s^{-1}$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NMOL})
   \item[For each stratum $i=1,nstra$] The above data, resolved per stratum:
   \begin{description}
-    \item[wldpp(i)] Flux of plasma ions impinging on surface ($A$), dimension ({\tt NLIM}+{\tt NSTS},{\tt NPLS})
-    \item[wldpa(i)] Net flux of atoms emitted from surface ($A$), dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
-    \item[wldpm(i)] Net flux of molecules emitted from surface ($A$), dimension ({\tt NLIM}+{\tt NSTS},{\tt NMOL})
+    \item[wldpp(i)] Flux of plasma ions impinging on surface ($particles.s^{-1}$), dimension ({\tt NLIM}+{\tt NSTS},{\tt NPLS})
+    \item[wldpa(i)] Net flux of atoms emitted from surface ($particles.s^{-1}$), dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
+    \item[wldpm(i)] Net flux of molecules emitted from surface ($particles.s^{-1}$), dimension ({\tt NLIM}+{\tt NSTS},{\tt NMOL})
     \item[wldpeb(i)] Power carried by particles emitted from surface ($W$), dimension ({\tt NLIM}+{\tt NSTS})
-    \item[wldspt(i)] Flux of sputtered wall material ($A$), dimension ({\tt NLIM}+{\tt NSTS})
-  \item[wldspta(m)] Flux of sputtered wall material per atom ($A$), dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
-  \item[wldsptm(m)] Flux of sputtered wall material per molecule ($A$), dimension ({\tt NLIM}+{\tt NSTS},{\tt NMOL})
+    \item[wldspt(i)] Flux of sputtered wall material ($particles.s^{-1}$), dimension ({\tt NLIM}+{\tt NSTS})
+    \item[wldspta(m)] Flux of sputtered wall material per atom ($particles.s^{-1}$), dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
+    \item[wldsptm(m)] Flux of sputtered wall material per molecule ($particles.s^{-1}$), dimension ({\tt NLIM}+{\tt NSTS},{\tt NMOL})
   \end{description}
   \item[isrftype] {\tt ILIIN} surface type variable in {\tt Eirene}, dimension ({\tt NLIM}+{\tt NSTS})
   \item[wlarea] Surface area ($m^2$), dimension ({\tt NLIM}+{\tt NSTS})
@@ -4572,15 +4574,15 @@ The data blocks are:
   \item[wlabsrp(M)] Absorption rate for molecules, dimension ({\tt NMOL}, {\tt NLIM}+{\tt NSTS})
   \item[wlabsrp(I)] Absorption rate for test ions, dimension ({\tt NION}, {\tt NLIM}+{\tt NSTS})
   \item[wlabsrp(P)] Absorption rate for plasma ions, dimension ({\tt NPLS}, {\tt NLIM}+{\tt NSTS})
-  \item[wlpump(A)] Pumped flux per atom ($A$), dimension ({\tt NATM}, {\tt NLIM}+{\tt NSTS})
-  \item[wlpump(M)] Pumped flux per molecule ($A$), dimension ({\tt NMOL}, {\tt NLIM}+{\tt NSTS})
-  \item[wlpump(I)] Pumped flux per test ion ($A$), dimension ({\tt NION}, {\tt NLIM}+{\tt NSTS})
-  \item[wlpump(P)] Pumped flux per plasma ion ($A$), dimension ({\tt NPLS}, {\tt NLIM}+{\tt NSTS})
+  \item[wlpump(A)] Pumped flux per atom ($particles.s^{-1}$), dimension ({\tt NATM}, {\tt NLIM}+{\tt NSTS})
+  \item[wlpump(M)] Pumped flux per molecule ($particles.s^{-1}$), dimension ({\tt NMOL}, {\tt NLIM}+{\tt NSTS})
+  \item[wlpump(I)] Pumped flux per test ion ($particles.s^{-1}$), dimension ({\tt NION}, {\tt NLIM}+{\tt NSTS})
+  \item[wlpump(P)] Pumped flux per plasma ion ($particles.s^{-1}$), dimension ({\tt NPLS}, {\tt NLIM}+{\tt NSTS})
   \item[eneutrad] Radiation rate due to atoms ($W$), dimension ({\tt NDX},{\tt NDY},{\tt NATM})
   \item[eirdiag\_nds] Indices for segments on resolved non-standard surfaces, dimension ($5 \times$ {\tt NSTS} $+ 1$)
   \item[sarea\_res] Surface area of surface segment ($m^2$), dimension ({\tt NCL})
-  \item[wldna\_res] Flux of atoms impinging on surface segment ($A.m^{-2}$), dimension ({\tt NATM}, {\tt NCL})
-  \item[wldnm\_res] Flux of molecules impinging on surface segment ($A.m^{-2}$), dimension ({\tt NMOL}, {\tt NCL})
+  \item[wldna\_res] Flux of atoms impinging on surface segment ($particles.m^{-2}.s^{-1}$), dimension ({\tt NATM}, {\tt NCL})
+  \item[wldnm\_res] Flux of molecules impinging on surface segment ($particles.m^{-2}.s^{-1}$), dimension ({\tt NMOL}, {\tt NCL})
   \item[ewlda\_res] Average energy of impinging atoms on surface segment ($eV$), dimension ({\tt NATM}, {\tt NCL})
   \item[ewldm\_res] Average energy of impinging molecules on surface segment ($eV$), dimension ({\tt NMOL}, {\tt NCL})
   \item[ewldea\_res] Energy flux carried by emitted atoms from surface segment ($W.m^{-2}$), dimension ({\tt NATM}, {\tt NCL})
@@ -13522,14 +13524,7 @@ a charge state below the considered ion (inclusive) within their isonuclear sequ
 \chapter{Region definitions}
 \label{cha:regions}\index{regions}\index{vreg}\index{xreg}\index{yreg}\index{NREG}
 
-Three types of regions are defined in {\tt b2agfs.F}: volume,
-$x$-directed and $y$-directed.  The number of volume regions should also
-be stored in the {\tt NREG} environment variable (or through the presence
-of an {\tt NREG} ASCII file containing only the number of regions) as it is
-used for a variety of analysis scripts.
-Typical configurations for 1-D, linear, limiter,
-SN, DN (Connected and Disconnected) and periodic stellarator island cases are
-shown below:
+Three types of regions are defined in {\tt b2agfs.F}: volume, $x$-directed and $y$-directed. The number of volume regions should also be stored in the {\tt NREG} environment variable (or through the presence of an {\tt NREG} ASCII file containing only the number of regions) as it is used for a variety of analysis scripts. Typical configurations for 1-D, linear, limiter, SN, DN (Connected and Disconnected) and periodic stellarator island cases are shown below:
 
 \clearpage
 \section{Regions for 1-D and linear cases}
