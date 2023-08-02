@@ -993,14 +993,14 @@ c*** 7.  data for primary source
       write(iunoo,707) (indsrc(i),i=1,nstrais),(6,i=1,nstraih),
      ,  (indsrc(i),i=nstrais+1,nstrai)
       write(iunoo,703) alloc
-      inum=0
-      istep=0
+      inum=nstraih
+      istep=nstraih
       do i=1,nstrai !{
         inum=inum+1
         istep=istep+1
         if(indsrc(i).eq.6) cycle
 
-        write(iunoo,709) i,txtsou(i)
+        write(iunoo,709) i+nstraih,txtsou(i)
         write(iunoo,706) nlavrp(i),nlavrt(i),nlsymp(i),nlsymt(i),
      ,                      nlray(i)
         write(iunoo,707) nptsh(i),ninitl(i),nemods(i),namods(i),
