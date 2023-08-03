@@ -321,7 +321,7 @@ c***           material; flag "target data was read"
      ,  ntrgto,ntrgtm
       integer tgrefsw(ntrgts),tgsppsw(ntrgts),tgspcsw(ntrgts),
      ,  tgsppsp(ntrgts),tgspcgr(ntrgts),tgnhst(ntrgts),tgmhst(ntrgts),
-     ,  tgnini(ntrgts)
+     ,  tgnini(ntrgts),tgfclbl(ntrgts)
       real(kind=R4)
      ,  tgsppff(ntrgts),tgspcff(ntrgts),tgewall(ntrgts),
      ,  tgabsrp(ntrgts),tgtrnsf(ntrgts),tgtrnsb(ntrgts)

@@ -256,7 +256,10 @@ c*** divide found
             lzrbndt(iz,m,1)=iy
             lzrbndt(iz,m,2)=j-1
 cnh asigning bcstart and bcend for the unstructured format
-            if (crgbndt(k,m).eq.'W') then
+            if (carre_mode.eq.2) then
+              lzrbndt_us(iz,m,1)=tgfclbl(iz) ! assigning the face label
+              lzrbndt_us(iz,m,2)=tgfclbl(iz)
+            elseif (crgbndt(k,m).eq.'W') then
               lzrbndt_us(iz,m,1)=-10-2*iz-1
               lzrbndt_us(iz,m,2)=-10-2*iz-1
             elseif (crgbndt(k,m).eq.'E') then
@@ -319,7 +322,10 @@ c           print *,'k,iz,iy =',k,iz,iy !###
           lzrbndt(iz,m,1)=iy
           lzrbndt(iz,m,2)=ny+1
 cnh asigning bcstart and bcend for the unstructured format
-          if (crgbndt(k,m).eq.'W') then
+          if (carre_mode.eq.2) then
+            lzrbndt_us(iz,m,1)=tgfclbl(iz) ! assigning the face label
+            lzrbndt_us(iz,m,2)=tgfclbl(iz)
+          elseif (crgbndt(k,m).eq.'W') then          
             lzrbndt_us(iz,m,1)=-10-2*iz-1
             lzrbndt_us(iz,m,2)=-10-2*iz-1
           elseif (crgbndt(k,m).eq.'E') then
