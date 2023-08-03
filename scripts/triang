@@ -33,6 +33,11 @@ eirhed=triang.hed
   eirlink=fort.1
 }
 b2agout=b2fgmtry
+b2aiout=b2fstati
+b2ahout=b2fpardf
+b2arout=b2frates
+b2usout=triangle.neighbors
+b2usinp=b2us.dat
 eirlog=eirtria.log
 triain=tria.in
 trialog=tria.log
@@ -71,10 +76,11 @@ Help="
 Uinp    (u) run uinp to produce the input files for the initial short run of Eirene;
         (U) run uinp -l to make first the necessary links to the DG output (run first the 
             lns command from the DG environment to link the DG output to the standard place);
-B2ag    (b) run b2ag to produce the $b2agout file;
+B2a*    (b) run b2ag, b2ai, b2ah and b2ar to produce the B2.5 input files;
 Eirene  (e) run eirobjx to produce the geometry data for tria;
 Tria    (t) run tria to generate the triangular mesh outside the regular B2.5 grid;
 triaGeom(g) run triageom to combine the triangular mesh with the regular B2.5 grid;
+b2us    (f) run b2us to complete plasma grid triangulation;
 Plot    (p) produce PostScript plots of the structures and triangular mesh using gnuplot;
 View    (v) view the PostScript output from tria (v) or triageom (V);
 Store   (s) store the combined mesh, giving it a serial number and linking to fort.3[345];
@@ -201,7 +207,7 @@ export PLOT_IT_STEM='tria'
 N=
 
 while true; do {
-  print -u2 -n -- "Help, Uinp, B2ag, Eirene, Tria, triaGeom, Plot, View, Store, Convert, List, Remove, reMap, Inquire, Quit ? ($q)"
+  print -u2 -n -- "Help, Uinp, B2ag, Eirene, Tria, triaGeom, b2 input Files, Plot, View, Store, Convert, List, Remove, reMap, Inquire, Quit ? ($q)"
   while true; do {
     read u
     extra="${u#*-}"
@@ -244,7 +250,7 @@ while true; do {
               [ $eirinp -nt dg.dgo ] && q=b || q=q
             }
             break;;  
-      ( b|B )                                               # run b2ag to produce fort.30 file:
+      ( b|B )                                               # run b2ag/i/h to produce fort.30 file and b2 input files
             print -u2 -- "Command line: ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2ag.prt > b2ag.log"
             [ -r b2ag.prt ] && rm b2ag.prt
             [ -r $b2agout ] && rm $b2agout
@@ -252,10 +258,59 @@ while true; do {
             [ -r $b2agout ] && {
               [ -d b2ag.exe.dir ] && rmdir b2ag.exe.dir
               print -u2 -- "Produced $b2agout file"
-              q=e
             } || {
               print -u2 -- "Could not produce the $b2agout file"
               print -u2 -- "    ==> Check b2ag.log file or provide separately"
+              q=u
+              break
+            }
+            print -u2 -- "Command line: ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2ai.prt > b2ai.log"
+            [ -r b2ai.prt ] && rm b2ai.prt
+            [ -r $b2aiout ] && rm $b2aiout
+            ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2ai.prt > b2ai.log
+            [ -r $b2aiout ] && {
+              [ -d b2ai.exe.dir ] && rmdir b2ai.exe.dir
+              print -u2 -- "Produced $b2aiout file"
+            } || {
+              print -u2 -- "Could not produce the $b2aiout file"
+              print -u2 -- "    ==> Check b2ai.log file or provide separately"
+              q=u
+              break
+            }
+            print -u2 -- "Command line: ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2ah.prt > b2ah.log"
+            [ ! -r b2ah.dat ] && {
+              [ -r b2ah.dat.stencil ] && {
+               ln -sf b2ah.dat.stencil b2ah.dat
+              } || {
+                print -u2 -- "Could not find b2ah.dat(.stencil) file"
+                print -u2 -- "    ==> Check b2ah.log file or provide separately"
+                q=u
+                break
+              }
+            }
+            [ -r b2ah.prt ] && rm b2ah.prt
+            [ -r $b2ahout ] && rm $b2ahout
+            ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2ah.prt > b2ah.log
+            [ -r $b2ahout ] && {
+              [ -d b2ah.exe.dir ] && rmdir b2ah.exe.dir
+              print -u2 -- "Produced $b2ahout file"
+            } || {
+              print -u2 -- "Could not produce the $b2ahout file"
+              print -u2 -- "    ==> Check b2ah.log file or provide separately"
+              q=u
+              break
+            }
+            print -u2 -- "Command line: ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2ar.prt > b2ar.log"
+            [ -r b2ar.prt ] && rm b2ar.prt
+            [ -r $b2arout ] && rm $b2arout
+            ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2ar.prt > b2ar.log
+            [ -r $b2arout ] && {
+              [ -d b2ar.exe.dir ] && rmdir b2ar.exe.dir
+              print -u2 -- "Produced $b2arout file"
+              q=e
+            } || {
+              print -u2 -- "Could not produce the $b2arout file"
+              print -u2 -- "    ==> Check b2ar.log file or provide separately"
               q=u
             }
             break;;
@@ -347,6 +402,45 @@ while true; do {
             } || {
               print -u2 -- "No valid $b2agout file is found. Run b2ag or b2plot first"
               q=b
+            }
+            break;;
+      ( f|F )                                               # run b2us to triangulate unstructured plasma grid
+            print -u2 -- "Command line: ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2us.prt > b2us.log"
+            [ -r $b2usinp ] && {
+              [ -r b2mn.dat ] && {
+                cp b2mn.dat b2mn.dat.backup 
+              }
+              cp $b2usinp b2mn.dat
+            } || {
+              print -u2 -- "Could not find the $b2usinp file"
+              print -u2 -- "    ==> Rerun uinp or provide separately"
+              q=u
+              break
+            }
+            [ -r b2fgmtry ] && {
+              cp b2fgmtry b2fgmtry.backup 
+            }
+            cp b2fgmtry_st b2fgmtry
+            [ -r b2fstati ] && {
+              cp b2fstati b2fstati.backup 
+            }
+            cp b2fstati_st b2fstati
+            cp b2.boundary.parameters.stencil b2.boundary.parameters
+            cp b2.neutrals.parameters.stencil b2.neutrals.parameters
+            [ -r b2us.prt ] && rm b2us.prt
+            [ -r $b2usout ] && rm $b2usout
+            ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2us.prt > b2us.log
+            [ -r $b2usout ] && {
+              [ -d b2us.exe.dir ] && rmdir b2us.exe.dir
+              [ -r b2fgmtry.backup ] && cp b2fgmtry.backup b2fgmtry
+              [ -r b2fstati.backup ] && cp b2fstati.backup b2fstati
+              rm b2ah.dat
+              print -u2 -- "Produced $b2usout file"
+              q=s
+            } || {
+              print -u2 -- "Could not produce the $b2usout file"
+              print -u2 -- "    ==> Check b2us.log file or provide separately"
+              q=u
             }
             break;;
       ( s|S )                                             # assign a serial number and store the mesh:
