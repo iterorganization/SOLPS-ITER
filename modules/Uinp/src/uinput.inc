@@ -70,7 +70,8 @@ c*** 3b
      ,     rcprma(nlim), sptpra(nlim), echspta(nlim),fchspta(nlim),
      ,     xlcor(nlim), ylcor(nlim), zlcor(nlim),
      ,     xlref(nlim), ylref(nlim), zlref(nlim), xlrot(nlim),
-     ,     ylrot(nlim), zlrot(nlim), alrot(nlim), fsheata(nlim)
+     ,     ylrot(nlim), zlrot(nlim), alrot(nlim), fsheata(nlim),
+     ,     fclbl(nlim)
       character txtsfa(nlim)*64
 
 c*** 4
@@ -408,7 +409,7 @@ c*** b2ah.dat
      ,  ilbox,ilplg,ilref,ilsptp,ilsptc,isrss,isrc,lchspnws,isrsg,
      ,  nlimi,itend,
      ,  itini,jliin,jlside,jlequi,jltor,jlcol,jlfit,jlbox,jlplg,jlref,
-     ,  jsrss,jsrc,lchspnwa,jsrsg,
+     ,  jsrss,jsrc,lchspnwa,jsrsg,fclbl,
      ,  jlsptp,jlsptc,nreaci,ir,massp,masst,
      ,  ifex1mn,ifex1mx,ifex2mn,ifex2mx,iz,nrcln,
      ,  natmi,nmeta,

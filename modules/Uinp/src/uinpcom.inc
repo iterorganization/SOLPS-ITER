@@ -29,7 +29,7 @@ c***  nntrian   : maximum number of triangular mesh nodes for input
      .        cflags(5,npmamx,nrmamx,nmreg),
      .        fdegen(4,npmamx,nrmamx,nmreg)
       integer ncells,nicells,nbcells,nfaces,ndfaces
-      integer carre_mode
+      integer carre_mode,grid_mode
       character*4 topo
       character*48 amd_file(namdfs)
 
@@ -564,7 +564,7 @@ c=======================================================================
      ,  sps_absr,sps_trno,sps_trni,sps_mtri,sps_tmpr,sps_spph,sps_spch,
      i  nstrao,natmo,nmolo,niono,nphto,nplso,
      ,  mnpr,mnptseg,npr,nptseg,nppol,nprad,nnreg,cflags,fdegen,
-     ,  carre_mode,ncells,nicells,nbcells,nfaces,ndfaces, 
+     ,  carre_mode,grid_mode,ncells,nicells,nbcells,nfaces,ndfaces, 
      ,  laddsrfs,indasrfe,indasrfs,
      ,  nttrator,jxi,jxa,ntcpub2,nnvsle,nmvsle,ttntcpu,ttnfile,ttnpts,
      ,  ntrgdflt,namdf,nncut,nxcut1,nycut2,
@@ -607,7 +607,7 @@ c     ,  spcifup,spcifua,spcifum,spcifui,
      ,  listaddi,ngwtiesi,nsrfclu,msrfclu,lsrfclu,isrfclu,
      ,  ntrgte,jedgep,jedgec,jedgeo,ntrgto,ntrgtm,
      ,  tgrefsw,tgsppsw,tgspcsw,tgsppsp,tgspcgr,tgnhst,tgmhst,tgnini,
-     ,  ilplgu,jlplgu,ilplgdg,trirefel,trirefcn,ntriref,
+     ,  tgfclbl,ilplgu,jlplgu,ilplgdg,trirefel,trirefcn,ntriref,
      ,  locphep,lpbihep,lpbohep,lptihep,lptohep,
      ,  j_he_at,j_h_at,j_ne_at,l_h_mol,
      ,  lstclhep,nstclhep,lhetrgts,nhetrgts,

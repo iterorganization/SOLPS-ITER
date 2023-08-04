@@ -217,8 +217,8 @@ c*** 3b
      ,    nlim*0, nlim*0, nlim*0, nlim*0, nlim*0, nlim*0 /,
      ,     jlref, jlsptp, jlsptc,  jsrss,  jsrc, lchspnwa, jsrsg /
      /    nlim*1, nlim*0, nlim*0, nlim*0, nlim*0, nlim*0, nlim*0 /,
-     ,     itini,  itend /
-     /   nlim*-1, nlim*0 /
+     ,     itini,  itend,  fclbl /
+     /   nlim*-1, nlim*0, nlim*0 /
       data  rlb  , sarea , rlwmn ,   rlwmx  , a0lm  , a1lm  , a2lm  /
      /    nlim*2.,nlim*1.,nlim*1.,nlim*1.e-5,nlim*0.,nlim*0.,nlim*0./,
      ,     a3lm  , a4lm  , a5lm  , a6lm  , a7lm  , a8lm  , a9lm  /

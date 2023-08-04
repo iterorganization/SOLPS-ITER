@@ -25,6 +25,7 @@ c=======================================================================
       integer find_matching_species, get_atomic_number
       external find_matching_species, get_atomic_number
       integer ispc
+      integer ncore, nvess
 c=======================================================================
       call subini ('uinprpb2')
 #ifdef DBG
@@ -72,11 +73,16 @@ c*** mi, zi
 
 c-----------------------------------------------------------------------
 c*** Boundary
-
-      nbc=0
-      do i=1,nbndknd !{
-        nbc=nbc+nznbndt(i)
-      end do !}
+      ncore=nznbndt(1)   ! number of core regions
+      nvess=maxval(fclbl) ! vessel elements for vessel mode
+      if (grid_mode.ne.2) then 
+        nbc=0
+        do i=1,nbndknd !{
+          nbc=nbc+nznbndt(i)
+        end do !}
+      else ! extended grid in vessel mode
+        nbc=ncore+nvess
+      end if
       do i=2,11 !{
         nmdpr(i,2)=nbc
       end do !}
@@ -121,60 +127,126 @@ c*** nbc
 
       k=0
       nhyb=0 !nh additional number of strata for the hybrid model
-      do j=1,nbndknd !{
-        do i=1,nznbndt(j) !{
-          k=k+1
+      if (grid_mode.ne.2) then
+        do j=1,nbndknd !{
+          do i=1,nznbndt(j) !{
+            k=k+1
 c*** bcchar, bcpos, bcstart, bcend, bcene, bceni, bcpot, enepar, enipar, potpar
-          cniprm(k,1,1, 2,2)='A'  !nh Always using 'A' in the wg code
-cnh          iniprm(k,1,1, 3,2)=lcpbnds(i,j)-1 No longer used in wg code
-          iniprm(k,1,1, 4,2)=lc1bnds(i,j)
-          iniprm(k,1,1, 5,2)=lc2bnds(i,j)
-          iniprm(k,1,1, 6,2)=leebnds(i,j)
-          iniprm(k,1,1, 7,2)=leibnds(i,j)
-          iniprm(k,1,1, 8,2)=lpobnds(i,j)
-          rniprm(k,1,1, 9,2)=beebnds(i,1,j)
-          rniprm(k,1,1,10,2)=beibnds(i,1,j)
-          rniprm(k,2,1, 9,2)=beebnds(i,2,j)
-          rniprm(k,2,1,10,2)=beibnds(i,2,j)
-          rniprm(k,1,1,11,2)=bpobnds(i,1,j)
-          rniprm(k,2,1,11,2)=bpobnds(i,2,j)
+            cniprm(k,1,1, 2,2)='A'  !nh Always using 'A' in the wg code
+cnh            iniprm(k,1,1, 3,2)=lcpbnds(i,j)-1 No longer used in wg code
+            iniprm(k,1,1, 4,2)=lc1bnds(i,j)
+            iniprm(k,1,1, 5,2)=lc2bnds(i,j)
+            iniprm(k,1,1, 6,2)=leebnds(i,j)
+            iniprm(k,1,1, 7,2)=leibnds(i,j)
+            iniprm(k,1,1, 8,2)=lpobnds(i,j)
+            rniprm(k,1,1, 9,2)=beebnds(i,1,j)
+            rniprm(k,1,1,10,2)=beibnds(i,1,j)
+            rniprm(k,2,1, 9,2)=beebnds(i,2,j)
+            rniprm(k,2,1,10,2)=beibnds(i,2,j)
+            rniprm(k,1,1,11,2)=bpobnds(i,1,j)
+            rniprm(k,2,1,11,2)=bpobnds(i,2,j)
 c*** bccon, conpar, bcmom, mompar
-          ispc = 0
-          do l=1,nspcpls+nspcncl !{
-            if (ifl(l).eq.0) then !{ fluid neutral b.c.
-              ispc = ispc + 1
-              if (streql(spcigen(ispc),'H').or.streql(spcigen(ispc),'D')
-     .            .or.streql(spcigen(ispc),'T')) then !nh{ AFN b.c.'s for hydrogen species
-                iniprm(l,k,1,12,2)=5 !nh zero particle flux density at all boundaries
-                if (i.le.nznbndt(1).and.j.eq.1) then !}{ core boundary
-                  iniprm(l,k,1,14,2)=2 !nh zero gradient at core boundary
-                else
-                  nhyb=nhyb+1
-                  iniprm(l,k,1,14,2)=5 !nh zero momentum flux at other boundaries
-                end if !} 
-              else if (cznbndt(i,j).eq.'W' .or. cznbndt(i,j).eq.'E') 
-     .            then
-                iniprm(l,k,1,12,2)=5
-                iniprm(l,k,1,14,2)=1
-              else if (i.le.nznbndt(1).and.j.eq.1) then !}{ core boundary
-                iniprm(l,k,1,12,2)=8
-                iniprm(l,k,1,14,2)=2
+            ispc = 0
+            do l=1,nspcpls+nspcncl !{
+              if (ifl(l).eq.0) then !{ fluid neutral b.c.
+                ispc = ispc + 1
+                if (streql(spcigen(ispc),'H').or.
+     .              streql(spcigen(ispc),'D').or.
+     .              streql(spcigen(ispc),'T')) then !nh{ AFN b.c.'s for hydrogen species
+                  iniprm(l,k,1,12,2)=5 !nh zero particle flux density at all boundaries
+                  if (i.le.nznbndt(1).and.j.eq.1) then !}{ core boundary
+                    iniprm(l,k,1,14,2)=2 !nh zero gradient at core boundary
+                  else
+                    nhyb=nhyb+1
+                    iniprm(l,k,1,14,2)=5 !nh zero momentum flux at other boundaries
+                  end if !} 
+                else if (cznbndt(i,j).eq.'W' .or. cznbndt(i,j).eq.'E') 
+     .              then
+                  iniprm(l,k,1,12,2)=5
+                  iniprm(l,k,1,14,2)=1
+                else if (i.le.nznbndt(1).and.j.eq.1) then !}{ core boundary
+                  iniprm(l,k,1,12,2)=8
+                  iniprm(l,k,1,14,2)=2
+                else !}{
+                  iniprm(l,k,1,12,2)=10
+                  rniprm(l,k,1,13,2)=-0.01
+                  iniprm(l,k,1,14,2)=2
+                end if !}
               else !}{
-                iniprm(l,k,1,12,2)=10
-                rniprm(l,k,1,13,2)=-0.01
-                iniprm(l,k,1,14,2)=2
+                iniprm(l,k,1,12,2)=lcobnds(ifl(l),i,j)
+                rniprm(l,k,1,13,2)=bcobnds(ifl(l),i,1,j)
+                rniprm(l,k,2,13,2)=bcobnds(ifl(l),i,2,j)
+                iniprm(l,k,1,14,2)=lmobnds(ifl(l),i,j)
+                rniprm(l,k,1,15,2)=bmobnds(ifl(l),i,1,j)
+                rniprm(l,k,2,15,2)=bmobnds(ifl(l),i,2,j)
               end if !}
-            else !}{
-              iniprm(l,k,1,12,2)=lcobnds(ifl(l),i,j)
-              rniprm(l,k,1,13,2)=bcobnds(ifl(l),i,1,j)
-              rniprm(l,k,2,13,2)=bcobnds(ifl(l),i,2,j)
-              iniprm(l,k,1,14,2)=lmobnds(ifl(l),i,j)
-              rniprm(l,k,1,15,2)=bmobnds(ifl(l),i,1,j)
-              rniprm(l,k,2,15,2)=bmobnds(ifl(l),i,2,j)
-            end if !}
+            end do !}
           end do !}
         end do !}
-      end do !}
+      else ! vessel mode
+c*** bcchar, bcstart, bcend, bcene, bceni, bcpot, enepar, enipar, potpar
+        cniprm(1:nbc,1,1, 2,2)='A'  !nh Always using 'A' in the wg code
+!    first set the core regions
+        iniprm(1:ncore,1,1, 4,2)=lc1bnds(1:ncore,1)
+        iniprm(1:ncore,1,1, 5,2)=lc2bnds(1:ncore,1)
+        iniprm(1:ncore,1,1, 6,2)=leebnds(1:ncore,1)
+        iniprm(1:ncore,1,1, 7,2)=leibnds(1:ncore,1)
+        iniprm(1:ncore,1,1, 8,2)=lpobnds(1:ncore,1)
+        rniprm(1:ncore,1,1, 9,2)=beebnds(1:ncore,1,1)
+        rniprm(1:ncore,1,1,10,2)=beibnds(1:ncore,1,1)
+        rniprm(1:ncore,2,1, 9,2)=beebnds(1:ncore,2,1)
+        rniprm(1:ncore,2,1,10,2)=beibnds(1:ncore,2,1)
+        rniprm(1:ncore,1,1,11,2)=bpobnds(1:ncore,1,1)
+        rniprm(1:ncore,2,1,11,2)=bpobnds(1:ncore,2,1)
+!     set the other components of the vessel
+        do i=ncore+1,nbc
+          iniprm(i,1,1, 4,2)=i
+          iniprm(i,1,1, 5,2)=i
+          iniprm(i,1,1, 6,2)=15
+          iniprm(i,1,1, 7,2)=15
+          iniprm(i,1,1, 8,2)=11
+          rniprm(i,1,1, 9,2)=1.
+          rniprm(i,1,1,10,2)=1.5
+          rniprm(i,2,1, 9,2)=0.
+          rniprm(i,2,1,10,2)=0.
+          rniprm(i,1,1,11,2)=0.
+          rniprm(i,2,1,11,2)=0.
+        end do 
+c*** bccon, conpar, bcmom, mompar
+        ispc = 0
+        do l=1,nspcpls+nspcncl !{
+          if (ifl(l).eq.0) then !{ fluid neutral b.c.
+            ispc = ispc + 1
+            if (streql(spcigen(ispc),'H').or.
+     .          streql(spcigen(ispc),'D').or.
+     .          streql(spcigen(ispc),'T')) then !nh{ AFN b.c.'s for hydrogen species
+              iniprm(l,1:nbc,1,12,2)=5 !nh zero particle flux density at all boundaries
+              iniprm(l,1:ncore,1,14,2)=2 !nh zero gradient at core boundary
+              iniprm(l,ncore+1:nbc,1,14,2)=5 !nh zero momentum flux at other boundaries
+            else
+              iniprm(l,1:ncore,1,12,2)=8
+              iniprm(l,ncore+1:nbc,1,12,2)=5
+              iniprm(l,1:ncore,1,14,8)=2
+              iniprm(l,ncore+1:nbc,1,14,8)=1
+            end if
+          else !}{
+!    core regions
+            iniprm(l,1:ncore,1,12,2)=lcobnds(ifl(l),1:ncore,1)
+            rniprm(l,1:ncore,1,13,2)=bcobnds(ifl(l),1:ncore,1,1)
+            rniprm(l,1:ncore,2,13,2)=bcobnds(ifl(l),1:ncore,2,1)
+            iniprm(l,1:ncore,1,14,2)=lmobnds(ifl(l),1:ncore,1)
+            rniprm(l,1:ncore,1,15,2)=bmobnds(ifl(l),1:ncore,1,1)
+            rniprm(l,1:ncore,2,15,2)=bmobnds(ifl(l),1:ncore,2,1)
+!    other components of the vessel
+            iniprm(l,ncore+1:nbc,1,12,2)=14
+            rniprm(l,ncore+1:nbc,1,13,2)=1.
+            rniprm(l,ncore+1:nbc,2,13,2)=0.
+            iniprm(l,ncore+1:nbc,1,14,2)=13
+            rniprm(l,ncore+1:nbc,1,15,2)=1.
+            rniprm(l,ncore+1:nbc,2,15,2)=0.
+          end if !}
+        end do !}    
+      end if
 c*** lcbs
       do i=1,nznbndt(1) !{
         iniprm(i,1,1,16,2)=i
