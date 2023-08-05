@@ -227,11 +227,12 @@ c*** bccon, conpar, bcmom, mompar
               iniprm(l,1:nbc,1,12,2)=5 !nh zero particle flux density at all boundaries
               iniprm(l,1:ncore,1,14,2)=2 !nh zero gradient at core boundary
               iniprm(l,ncore+1:nbc,1,14,2)=5 !nh zero momentum flux at other boundaries
+              nhyb=nhyb+nvess
             else
               iniprm(l,1:ncore,1,12,2)=8
               iniprm(l,ncore+1:nbc,1,12,2)=5
-              iniprm(l,1:ncore,1,14,8)=2
-              iniprm(l,ncore+1:nbc,1,14,8)=1
+              iniprm(l,1:ncore,1,14,2)=2
+              iniprm(l,ncore+1:nbc,1,14,2)=1
             end if
           else !}{
 !    core regions
@@ -253,7 +254,7 @@ c*** bccon, conpar, bcmom, mompar
       end if
 c*** lcbs
       do i=1,nznbndt(1) !{
-        iniprm(i,1,1,16,2)=nbc-ncore+i
+        iniprm(i,1,1,16,2)=i
       end do !}
 c*** nniso
       iniprm(1,1,1,17,2)=nniso
@@ -329,12 +330,16 @@ c-----------------------------------------------------------------------
 c*** Neutrals
 
 c*** k, m, n are the numbers of recycling, specified, and all strata
-      k=0
-      do j=1,nbndknd !{
-        do i=1,nznbndt(j) !{
-          if(nlrbnds(i,j)) k=k+(natmi-nmeta)
+      if (grid_mode.ne.2) then ! standard + target mode
+        k=0
+        do j=1,nbndknd !{
+          do i=1,nznbndt(j) !{
+            if(nlrbnds(i,j)) k=k+(natmi-nmeta)
+          end do !}
         end do !}
-      end do !}
+      else ! vessel mode
+        k=nvess*(natmi-nmeta)
+      end if
       m=k+ngpfstr+nrcmstr
       n=m
       if(usetmstr) n=m+1
@@ -450,171 +455,320 @@ c*** Recycling sources
       k=0
       kk=0
       ihyb = 0
-      do j=1,nbndknd !{
-        do i=1,nznbndt(j) !{
-          kk=kk+1
-          if(nlrbnds(i,j)) then !{
-            ispe=0
-            do iatm=1,natmi !{
-              if (is_meta(iatm)) cycle
-              ispi=ispe+1
-              ispe=ispi
-              do while (lkindp(min(ispe+1,nplsi)).eq.lkindp(ispi)) !{
-                ispe=ispe+1
-                if (ispe.gt.nplsi) then !{
-                  ispe=nplsi
-                  exit
-                end if !}
-              end do !}
-              k=k+1
-              if(k.ge.nmxprm) then !{
-                write(0,*) 'Too many strata found in uinprpb2: ',k
-                write(0,*) 'Recycling loop, j,i,kk = ',j,i,kk
-                write(0,*) 'nlrbnds:'
-                do jj=1,nbndknd !{
-                  if(nznbndt(jj).gt.0) write(0,
-     ,                          '(1x,a2,1x,50l2/(4x,50l2))') jj,
-     ,                            (nlrbnds(ii,jj),ii=1,nznbndt(j))
-                end do !}
-                call xerrab (' == Internal error in Uinp !!')
-              end if !}
-
-
-c***          crcstra, rcpos, rcstart, rcend
-              cniprm(k,1,1,2,3)='A' !nh always 'A' for surface strata
-              cniprm(k+ihyb,1,1,2,8)='A'
-cnh              iniprm(k,1,1,3,3)=lcpbnds(i,j)-1 !No longer used in wg code
-              iniprm(k,1,1,4,3)=ls1bnds(i,j)
-              iniprm(k+ihyb,1,1,4,8)=ls1bnds(i,j)
-              iniprm(k,1,1,5,3)=ls2bnds(i,j)
-              iniprm(k+ihyb,1,1,5,8)=ls2bnds(i,j)
-
-c***          species_start, species_end
-              iniprm(k,1,1,6,3)=ispi-1+(iatm-1)
-              iniprm(k+ihyb,1,1,6,8)=ispi-1+(iatm-1)
-              iniprm(k,1,1,7,3)=ispe+(iatm-1)
-              iniprm(k+ihyb,1,1,7,8)=ispe+(iatm-1)
-
-c***          strasclfl for hybrid stencil file
-              if (nchara(iatm).eq.1) then !{
-                rniprm(k+ihyb,1,1,43,8)=1.
-              else
-                rniprm(k+ihyb,1,1,43,8)=1.e-10
-              end if !}
-
-c***          lstrascl
-              do l=1,nspcncl !{
-                if (l.eq.iatm) iniprm(k,l,1,12,3)=lscbnds(l,i,j)
-                if (l.eq.iatm) iniprm(k+ihyb,l,1,12,8)=lscbnds(l,i,j)
-              end do !}
-
-c***          lsns, ksns
-              iniprm(k,1,1,13,3)=kk
-              iniprm(k+ihyb,1,1,13,8)=kk
-              iniprm(k,1,1,15,3)=1
-              iniprm(k+ihyb,1,1,15,8)=1
-
-c***          userfluxparm
-              rniprm(k,1,1,19,3)=0.
-              rniprm(k+ihyb,1,1,19,8)=0.
-
-c***          gpfc
-              do l=1,nspcncl !{
-                rniprm(l,k,1,20,3)=0.
-                rniprm(l,k+ihyb,1,20,8)=0.
-              end do !}
-
-c***          targsp
-              if (j.gt.1) then !{
-                ists = 0
-                do jj = 2, j !{
-                  ists = ists+nznbndt(j-1)
-                end do !}
-                ists = ists + i
-                isp = 0
-                if (ilsptp(ists).gt.0) then !{
-                  if (isrss(ists).gt.0) then !{
-                    isp = isrss(ists)
-                  else if (isrss(ists).lt.0) then !}{
-                    ii = mod(nint(xmlim(ists)),100)
-                    do jj = 1, nspcatm !{
-                      if (isp.ne.0) cycle
-                      if (ii.eq.get_atomic_number(spcsatm(jj))) isp = jj
-                    end do !}
+      if (grid_mode.ne.2) then ! target and vessel mode
+        do j=1,nbndknd !{
+          do i=1,nznbndt(j) !{
+            kk=kk+1
+            if(nlrbnds(i,j)) then !{
+              ispe=0
+              do iatm=1,natmi !{
+                if (is_meta(iatm)) cycle
+                ispi=ispe+1
+                ispe=ispi
+                do while (lkindp(min(ispe+1,nplsi)).eq.lkindp(ispi)) !{
+                  ispe=ispe+1
+                  if (ispe.gt.nplsi) then !{
+                    ispe=nplsi
+                    exit
                   end if !}
-                end if !}
-                if (isp.gt.0.and.isp.le.nspcatm) then !{
-                  iniprm(k,1,1,39,3) = 0
-                  iniprm(k+ihyb,1,1,39,8) = 0
-                  do ii = 1, isp-1 !{
-                    do ll = 1, nspcpls !{
-                      if (lkindp(ll).eq.ii)
-     >                 iniprm(k,1,1,39,3) = iniprm(k,1,1,39,3)+1
-                      if (lkindp(ll).eq.ii)
-     >                 iniprm(k+ihyb,1,1,39,8) = iniprm(k+ihyb,1,1,39,8)
-     >                   +1
-                    end do !}
-                    iniprm(k,1,1,39,3) = iniprm(k,1,1,39,3)+1
-                    iniprm(k+ihyb,1,1,39,8) = iniprm(k+ihyb,1,1,39,8)+1
+                end do !}
+                k=k+1
+                if(k.ge.nmxprm) then !{
+                  write(0,*) 'Too many strata found in uinprpb2: ',k
+                  write(0,*) 'Recycling loop, j,i,kk = ',j,i,kk
+                  write(0,*) 'nlrbnds:'
+                  do jj=1,nbndknd !{
+                    if(nznbndt(jj).gt.0) write(0,
+     ,                            '(1x,a2,1x,50l2/(4x,50l2))') jj,
+     ,                              (nlrbnds(ii,jj),ii=1,nznbndt(j))
                   end do !}
+                  call xerrab (' == Internal error in Uinp !!')
                 end if !}
-              end if !}
 
-c***          surf_mat
-              cniprm(k,1,1,40,3) = ewmbnds(i,j)
-              cniprm(k+ihyb,1,1,40,8) = ewmbnds(i,j)
 
-c***          accel_ion
-              if (j.eq.2) then
-                iniprm(k,1,1,41,3) = 1
-                iniprm(k+ihyb,1,1,41,8) = 1
-              end if
-
-cnh           Values for additional hybrid strata
-              if (streql(texta(iatm),'H').or.
-     ,          streql(texta(iatm),'D').or.
-     ,          streql(texta(iatm),'T')) then
-                ihyb = ihyb+1
+c***            crcstra, rcpos, rcstart, rcend
+                cniprm(k,1,1,2,3)='A' !nh always 'A' for surface strata
                 cniprm(k+ihyb,1,1,2,8)='A'
+cnh              iniprm(k,1,1,3,3)=lcpbnds(i,j)-1 !No longer used in wg code
+                iniprm(k,1,1,4,3)=ls1bnds(i,j)
                 iniprm(k+ihyb,1,1,4,8)=ls1bnds(i,j)
+                iniprm(k,1,1,5,3)=ls2bnds(i,j)
                 iniprm(k+ihyb,1,1,5,8)=ls2bnds(i,j)
-                iniprm(k+ihyb-1,1,1,6,8)=ispi+(iatm-1)
+
+c***            species_start, species_end
+                iniprm(k,1,1,6,3)=ispi-1+(iatm-1)
                 iniprm(k+ihyb,1,1,6,8)=ispi-1+(iatm-1)
-                iniprm(k+ihyb,1,1,7,8)=ispe-1+(iatm-1)
-                rniprm(k+ihyb,1,1,43,8)=1.
-                do l=1,nspcncl
-                  if (l.eq.iatm) iniprm(k+ihyb,l,1,12,8)=lscbnds(l,i,j)
-                end do
-                iniprm(k+ihyb,1,1,13,8)=kk
-                iniprm(k+ihyb,1,1,15,8)=1
-                rniprm(k+ihyb,1,1,19,8)=0.
+                iniprm(k,1,1,7,3)=ispe+(iatm-1)
+                iniprm(k+ihyb,1,1,7,8)=ispe+(iatm-1)
+
+c***            strasclfl for hybrid stencil file
+                if (nchara(iatm).eq.1) then !{
+                  rniprm(k+ihyb,1,1,43,8)=1.
+                else
+                  rniprm(k+ihyb,1,1,43,8)=1.e-10
+                end if !}
+
+c***            lstrascl
                 do l=1,nspcncl !{
+                  if (l.eq.iatm) iniprm(k,l,1,12,3)=lscbnds(l,i,j)
+                  if (l.eq.iatm) iniprm(k+ihyb,l,1,12,8)=lscbnds(l,i,j)
+                end do !}
+
+c***            lsns, ksns
+                iniprm(k,1,1,13,3)=kk
+                iniprm(k+ihyb,1,1,13,8)=kk
+                iniprm(k,1,1,15,3)=1
+                iniprm(k+ihyb,1,1,15,8)=1
+
+c***            userfluxparm
+                rniprm(k,1,1,19,3)=0.
+                rniprm(k+ihyb,1,1,19,8)=0.
+
+c***            gpfc
+                do l=1,nspcncl !{
+                  rniprm(l,k,1,20,3)=0.
                   rniprm(l,k+ihyb,1,20,8)=0.
                 end do !}
+
+c***            targsp
                 if (j.gt.1) then !{
+                  ists = 0
+                  do jj = 2, j !{
+                    ists = ists+nznbndt(j-1)
+                  end do !}
+                  ists = ists + i
+                  isp = 0
+                  if (ilsptp(ists).gt.0) then !{
+                    if (isrss(ists).gt.0) then !{
+                      isp = isrss(ists)
+                    else if (isrss(ists).lt.0) then !}{
+                      ii = mod(nint(xmlim(ists)),100)
+                      do jj = 1, nspcatm !{
+                        if (isp.ne.0) cycle
+                        if (ii.eq.get_atomic_number(spcsatm(jj))) 
+     .                    isp = jj
+                      end do !}
+                    end if !}
+                  end if !}
                   if (isp.gt.0.and.isp.le.nspcatm) then !{
+                    iniprm(k,1,1,39,3) = 0
                     iniprm(k+ihyb,1,1,39,8) = 0
                     do ii = 1, isp-1 !{
                       do ll = 1, nspcpls !{
                         if (lkindp(ll).eq.ii)
+     >                   iniprm(k,1,1,39,3) = iniprm(k,1,1,39,3)+1
+                        if (lkindp(ll).eq.ii)
      >                   iniprm(k+ihyb,1,1,39,8) = 
      >                     iniprm(k+ihyb,1,1,39,8)+1
                       end do !}
+                      iniprm(k,1,1,39,3) = iniprm(k,1,1,39,3)+1
                       iniprm(k+ihyb,1,1,39,8) = iniprm(k+ihyb,1,1,39,8)
      >                  +1
                     end do !}
                   end if !}
                 end if !}
+
+c***            surf_mat
+                cniprm(k,1,1,40,3) = ewmbnds(i,j)
                 cniprm(k+ihyb,1,1,40,8) = ewmbnds(i,j)
+
+c***            accel_ion
                 if (j.eq.2) then
+                  iniprm(k,1,1,41,3) = 1
                   iniprm(k+ihyb,1,1,41,8) = 1
                 end if
-              end if
 
-            end do !}
-          end if !}
+cnh             values for additional hybrid strata
+                if (streql(texta(iatm),'H').or.
+     ,            streql(texta(iatm),'D').or.
+     ,            streql(texta(iatm),'T')) then
+                  ihyb = ihyb+1
+                  cniprm(k+ihyb,1,1,2,8)='A'
+                  iniprm(k+ihyb,1,1,4,8)=ls1bnds(i,j)
+                  iniprm(k+ihyb,1,1,5,8)=ls2bnds(i,j)
+                  iniprm(k+ihyb-1,1,1,6,8)=ispi+(iatm-1)
+                  iniprm(k+ihyb,1,1,6,8)=ispi-1+(iatm-1)
+                  iniprm(k+ihyb,1,1,7,8)=ispe-1+(iatm-1)
+                  rniprm(k+ihyb,1,1,43,8)=1.
+                  do l=1,nspcncl
+                    if (l.eq.iatm) iniprm(k+ihyb,l,1,12,8)=
+     >                lscbnds(l,i,j)
+                  end do
+                  iniprm(k+ihyb,1,1,13,8)=kk
+                  iniprm(k+ihyb,1,1,15,8)=1
+                  rniprm(k+ihyb,1,1,19,8)=0.
+                  do l=1,nspcncl !{
+                    rniprm(l,k+ihyb,1,20,8)=0.
+                  end do !}
+                  if (j.gt.1) then !{
+                    if (isp.gt.0.and.isp.le.nspcatm) then !{
+                      iniprm(k+ihyb,1,1,39,8) = 0
+                      do ii = 1, isp-1 !{
+                        do ll = 1, nspcpls !{
+                          if (lkindp(ll).eq.ii)
+     >                     iniprm(k+ihyb,1,1,39,8) = 
+     >                       iniprm(k+ihyb,1,1,39,8)+1
+                        end do !}
+                        iniprm(k+ihyb,1,1,39,8) = 
+     >                    iniprm(k+ihyb,1,1,39,8)+1
+                      end do !}
+                    end if !}
+                  end if !}
+                  cniprm(k+ihyb,1,1,40,8) = ewmbnds(i,j)
+                  if (j.eq.2) then
+                    iniprm(k+ihyb,1,1,41,8) = 1
+                  end if
+                end if
+
+              end do !}
+            end if !}
+          end do !}
         end do !}
-      end do !}
+      else ! vessel mode
+        k=0
+        ihyb=0
+        do i=1,nvess !{
+          ispe=0
+          do iatm=1,natmi !{
+            if (is_meta(iatm)) cycle
+            ispi=ispe+1
+            ispe=ispi
+            do while (lkindp(min(ispe+1,nplsi)).eq.lkindp(ispi)) !{
+              ispe=ispe+1
+              if (ispe.gt.nplsi) then !{
+                ispe=nplsi
+                exit
+              end if !}
+            end do !}
+            k=k+1
+
+c***        crcstra, rcstart, rcend
+            cniprm(k,1,1,2,3)='A' !nh always 'A' for surface strata
+            cniprm(k+ihyb,1,1,2,8)='A'
+            iniprm(k,1,1,4,3)=i
+            iniprm(k,1,1,5,3)=i
+            iniprm(k+ihyb,1,1,4,8)=i
+            iniprm(k+ihyb,1,1,5,8)=i
+
+
+c***        species_start, species_end
+            iniprm(k,1,1,6,3)=ispi-1+(iatm-1)
+            iniprm(k+ihyb,1,1,6,8)=ispi-1+(iatm-1)
+            iniprm(k,1,1,7,3)=ispe+(iatm-1)
+            iniprm(k+ihyb,1,1,7,8)=ispe+(iatm-1) 
+
+c***        strasclfl for hybrid stencil file
+            if (nchara(iatm).eq.1) then !{
+               rniprm(k+ihyb,1,1,43,8)=1.
+            else
+               rniprm(k+ihyb,1,1,43,8)=1.e-10
+            end if !}
+
+c***        lstrascl
+            do l=1,nspcncl !{
+              if (l.eq.iatm) iniprm(k,l,1,12,3)=lscbnds(l,1,2) !nh for now, always take the specification of the inner target
+              if (l.eq.iatm) iniprm(k+ihyb,l,1,12,8)=lscbnds(l,1,2)
+            end do !}
+
+c***        lsns, ksns
+            iniprm(k,1,1,13,3)=i
+            iniprm(k+ihyb,1,1,13,8)=i
+            iniprm(k,1,1,15,3)=1
+            iniprm(k+ihyb,1,1,15,8)=1
+
+c***        userfluxparm
+            rniprm(k,1,1,19,3)=0.
+            rniprm(k+ihyb,1,1,19,8)=0.
+
+c***        gpfc
+            do l=1,nspcncl !{
+              rniprm(l,k,1,20,3)=0.
+              rniprm(l,k+ihyb,1,20,8)=0.
+            end do !}
+
+c***        targsp
+            ists = i
+            isp = 0
+            if (ilsptp(ists).gt.0) then !{
+              if (isrss(ists).gt.0) then !{
+                isp = isrss(ists)
+              else if (isrss(ists).lt.0) then !}{
+                ii = mod(nint(xmlim(ists)),100)
+                do jj = 1, nspcatm !{
+                  if (isp.ne.0) cycle
+                  if (ii.eq.get_atomic_number(spcsatm(jj))) 
+     .              isp = jj
+                end do !}
+              end if !}
+            end if !}
+            if (isp.gt.0.and.isp.le.nspcatm) then !{
+              iniprm(k,1,1,39,3) = 0
+              iniprm(k+ihyb,1,1,39,8) = 0
+              do ii = 1, isp-1 !{
+                do ll = 1, nspcpls !{
+                  if (lkindp(ll).eq.ii)
+     >              iniprm(k,1,1,39,3) = iniprm(k,1,1,39,3)+1
+                  if (lkindp(ll).eq.ii)
+     >              iniprm(k+ihyb,1,1,39,8) = 
+     >                iniprm(k+ihyb,1,1,39,8)+1
+                end do !}
+                iniprm(k,1,1,39,3) = iniprm(k,1,1,39,3)+1
+                iniprm(k+ihyb,1,1,39,8) = iniprm(k+ihyb,1,1,39,8)
+     >            +1
+              end do !}
+            end if !}
+
+c***        surf_mat
+cnh         find material of the face
+cnh         should be replaced by vessel properties in the future!
+            do j=1,nlimi !{
+               if (fclbl(j).eq.i) exit
+            end do !}  
+            cniprm(k,1,1,40,3) = umtrl(j) 
+            cniprm(k+ihyb,1,1,40,8) = umtrl(j)
+
+c***        accel_ion
+            iniprm(k,1,1,41,3) = 1
+            iniprm(k+ihyb,1,1,41,8) = 1
+
+cnh         values for additional hybrid strata
+            if (streql(texta(iatm),'H').or.
+     ,        streql(texta(iatm),'D').or.
+     ,        streql(texta(iatm),'T')) then
+              ihyb = ihyb+1
+              cniprm(k+ihyb,1,1,2,8)='A'
+              iniprm(k+ihyb,1,1,4,8)=i
+              iniprm(k+ihyb,1,1,5,8)=i
+              iniprm(k+ihyb-1,1,1,6,8)=ispi+(iatm-1)
+              iniprm(k+ihyb,1,1,6,8)=ispi-1+(iatm-1)
+              iniprm(k+ihyb,1,1,7,8)=ispe-1+(iatm-1) 
+              rniprm(k+ihyb,1,1,43,8)=1.
+              do l=1,nspcncl !{
+                if (l.eq.iatm) iniprm(k+ihyb,l,1,12,8)=lscbnds(l,1,2)
+              end do !}
+              iniprm(k+ihyb,1,1,13,8)=i
+              iniprm(k+ihyb,1,1,15,8)=1
+              rniprm(k+ihyb,1,1,19,8)=0.
+              do l=1,nspcncl !{
+                rniprm(l,k+ihyb,1,20,8)=0.
+              end do !}
+              if (isp.gt.0.and.isp.le.nspcatm) then !{
+                iniprm(k+ihyb,1,1,39,8) = 0
+                do ii = 1, isp-1 !{
+                  do ll = 1, nspcpls !{
+                    if (lkindp(ll).eq.ii)
+     >                iniprm(k+ihyb,1,1,39,8) = 
+     >                  iniprm(k+ihyb,1,1,39,8)+1
+                  end do !}
+                  iniprm(k+ihyb,1,1,39,8) = 
+     >              iniprm(k+ihyb,1,1,39,8)+1
+                end do !}
+              end if !}
+              cniprm(k+ihyb,1,1,40,8) = umtrl(j)
+            end if
+          end do !}
+        end do !}        
+      end if
 
 c*** Gas puffing sources
 
@@ -807,12 +961,22 @@ c*** accel_ion
 
 c*** lcns, ltns
       do i=1,nznbndt(1) !{
-        iniprm(i,1,1,16,3)=i
-        iniprm(i,1,1,16,8)=i
+        if (carre_mode.ne.2) then !{ standard case
+          iniprm(i,1,1,16,3)=i
+          iniprm(i,1,1,16,8)=i
+        else ! target or vessel mode
+          iniprm(i,1,1,16,3)=nbc-ncore+i
+          iniprm(i,1,1,16,3)=nbc-ncore+i
+        end if
       end do !}
       do i=1,nznbndt(2) !{
-        iniprm(i,1,1,17,3)=nznbndt(1)+i
-        iniprm(i,1,1,17,8)=nznbndt(1)+i
+        if (carre_mode.ne.2) then !{ standard case
+          iniprm(i,1,1,17,3)=nznbndt(1)+i
+          iniprm(i,1,1,17,8)=nznbndt(1)+i
+        else ! target or vessel mode
+          iniprm(i,1,1,17,3)=i
+          iniprm(i,1,1,17,8)=i
+        end if !}         
       end do !}
 
 c*** recyc
