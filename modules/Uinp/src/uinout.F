@@ -1261,8 +1261,13 @@ c*** 14.  data for interfacing subroutine infcop
         end do !}
 cnh        write(iunoo,707) ndxa,ndya
         write(iunoo,707) ncvp,ncip,nfcp
-        write(iunoo,707) ntargi
-        write(iunoo,707) (ntgprt(i),i=1,ntargi)
+        if (grid_mode.ne.2) then ! standard + target mode
+          write(iunoo,707) ntargi
+          write(iunoo,707) (ntgprt(i),i=1,ntargi)
+        else ! vessel mode
+           write(iunoo,707) nvess
+           write(iunoo,707) (1,i=1,nvess)
+        end if
         l=maxval(ntgprt)
         k=1
         m=0
@@ -1272,13 +1277,19 @@ cnh        write(iunoo,707) ndxa,ndya
         end if !}
         if(l.ge.10) k=100
         if(l.ge.100) k=1000
-        do i=1,ntargi !{
-          do j=1,ntgprt(i) !{
-            write(iunoo,707) k*i+j*m,ndt2(i,j),
-     ,          nptc(i,j),nptcm(i,j),
+        if (grid_mode.ne.2) then ! standard + target mode
+          do i=1,ntargi !{
+            do j=1,ntgprt(i) !{
+              write(iunoo,707) k*i+j*m,ndt2(i,j),nptc(i,1),nptcm(i,1), 
      ,                                  nspzi(i,j),nspze(i,j),nemod(i,j)
+            end do !}
           end do !}
-        end do !}
+        else ! vessel mode
+          do i=1,nvess !{
+            write(iunoo,707) i,ndt2(i,1),nptc(1,1),nptcm(1,1), ! for now using the number of histories specified for the first target
+     ,                                  nspzi(i,1),nspze(i,1),7
+          end do !}
+        end if
         if(lfchgs) then !{
           x=real(istramin)
           y=real(istramax)

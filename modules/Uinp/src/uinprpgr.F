@@ -273,9 +273,15 @@ c*** Limiter and linear configurations - a temporary, clumsy solution
         cbrbrk(cbirno) = rratio(nxcut1(2)+nzodv+1,nrplg-npplg)
       end if
 cnh Grid parameters for unstructured format
-      ncvp = (ndxa-npplg+3)*(ndya+2)-2*nncut
-      ncip = (ndxa-npplg-nncut+3)*ndya
-      nfcp = (ndxa-2*nncut+3)*ndya+(ndxa-npplg-nncut+3)*(ndya+1)
+      if (carre_mode.lt.2) then
+        ncvp = (ndxa-npplg+3)*(ndya+2)-2*nncut
+        ncip = (ndxa-npplg-nncut+3)*ndya
+        nfcp = (ndxa-2*nncut+3)*ndya+(ndxa-npplg-nncut+3)*(ndya+1)
+      else
+        ncvp = ncells
+        ncip = nicells
+        nfcp = nfaces
+      end if
       
       if (npplg.eq.0) then
         nssir(1) = 1

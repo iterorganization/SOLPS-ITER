@@ -13,7 +13,7 @@ c*** sources) for the Eirene input file
 c=======================================================================
       implicit none
 #include "uinput.inc"
-      integer ibk,isf,iatm,ispe,ispi,ndt
+      integer ibk,isf,iatm,ispe,ispi,ndt,i,k
       external xerrab
 c=======================================================================
       call subini ('uinbnddt')
@@ -191,6 +191,31 @@ c*** ... and then the recycling source if specified
           end if !}
         end do !}
       end do !}
+
+cnh   adapt some variables of block 14 for vessel mode
+      if (grid_mode.eq.2) then
+        k=0
+        do i=1,maxval(fclbl)
+          ispe=0
+          do iatm=1,natmi
+            if (is_meta(iatm)) cycle
+            k=k+1
+            ndt2(k,1)=-i
+            ispi=ispe+1
+            ispe=ispi
+            do while (lkindp(min(ispe+1,nplsi)).eq.lkindp(ispi)) !{
+              ispe=ispe+1
+              if (ispe.gt.nplsi) then !{
+                ispe=nplsi
+                exit
+              end if !}
+            end do !}
+            nspzi(k,1)=ispi
+            nspze(k,1)=ispe
+          end do
+        end do
+       end if
+          
 c=======================================================================
       call subend ()
       return
