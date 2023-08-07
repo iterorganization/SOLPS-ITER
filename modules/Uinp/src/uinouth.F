@@ -1066,6 +1066,7 @@ c*** 7.  data for primary source
         write(iunoo,707) nstrai+nstraih
         write(iunoo,707) (indsrc(i),i=1,nstrais),(6,i=1,nstraih),
      ,    (indsrc(i),i=nstrais+1,nstrai)
+        nvess=0
       else ! vessel mode
         nvess=maxval(fclbl)*(natmi-nmeta+nplsh)
         j=0
@@ -1080,18 +1081,17 @@ c*** 7.  data for primary source
         write(iunoo,707) (6,i=1,nvess),(indsrc7(i),i=1,j)
       end if
       write(iunoo,703) alloc
-      inum=nstraih
+      inum=nvess
       istep=nstraih
-      index=0
       do i=1,nstrai !{
-        inum=inum+1
+        if (grid_mode.ne.2) inum=inum+1
         istep=istep+1
         if(indsrc(i).eq.6) cycle
-        index=index+1
+        if (grid_mode.eq.2) inum=inum+1
         if (grid_mode.ne.2) then ! standard + target mode
           write(iunoo,709) i+nstraih,txtsou(i)
         else
-          write(iunoo,709) nvess+index,txtsou(i)
+          write(iunoo,709) inum,txtsou(i)
         end if
         write(iunoo,706) nlavrp(i),nlavrt(i),nlsymp(i),nlsymt(i),
      ,                      nlray(i)

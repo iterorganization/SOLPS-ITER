@@ -33,8 +33,7 @@ c=======================================================================
       character*50 hlp_frm
       character utxthd(35)*71, utxtfl(7)*50, ufnm*(*)
       character utxtgt*71
-      integer len_of_digits, idez, nlimi_vess, ncore, nskip, nvess, 
-     &  index
+      integer len_of_digits, idez, nlimi_vess, ncore, nskip, nvess
       integer :: indsrc7(nstrai)
       external streql, silent_open, len_of_digits, idez, xerrab
       data utxthd /
@@ -893,16 +892,15 @@ c     correct number of strata for vessel mode
       write(iunoo,703) alloc
       inum=0
       istep=0
-      index=0
       do i=1,nstrai !{
-        inum=inum+1
+        if (grid_mode.ne.2) inum=inum+1 ! standard + target mode
         istep=istep+1
         if(indsrc(i).eq.6) cycle
-        index=index+1
+        if (grid_mode.eq.2) inum=inum+1 ! vessel mode
         if (grid_mode.ne.2) then ! standard + target mode
           write(iunoo,709) i,txtsou(i)
         else ! vessel mode
-          write(iunoo,709) nvess+index,txtsou(i)
+          write(iunoo,709) nvess+inum,txtsou(i)
         end if
         write(iunoo,706) nlavrp(i),nlavrt(i),nlsymp(i),nlsymt(i),
      ,                      nlray(i)
@@ -929,9 +927,15 @@ c**  same for point-, line-, surface- and volume sources
               sorind(j,i)=0
             end if !}
           end if !}
-          write(iunoo,707) inum,indim(j,i),insor(j,i),ingrda(j,i,1),
-     ,      ingrde(j,i,1),ingrda(j,i,2),ingrde(j,i,2),ingrda(j,i,3),
-     ,      ingrde(j,i,3)
+          if (grid_mode.ne.2) then
+            write(iunoo,707) inum,indim(j,i),insor(j,i),ingrda(j,i,1),
+     ,        ingrde(j,i,1),ingrda(j,i,2),ingrde(j,i,2),ingrda(j,i,3),
+     ,        ingrde(j,i,3)
+          else
+            write(iunoo,707) nvess+inum,indim(j,i),insor(j,i),
+     ,        ingrda(j,i,1),ingrde(j,i,1),ingrda(j,i,2),ingrde(j,i,2),
+     ,        ingrda(j,i,3),ingrde(j,i,3)
+          end if
           write(iunoo,703) sorwgt(j,i),sorlim(j,i),
      ,                     sorind(j,i),sorexp(j,i),sorifl(j,i)
           write(iunoo,707) nrsor(j,i),npsor(j,i),ntsor(j,i),
