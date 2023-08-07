@@ -444,17 +444,7 @@ c     write the core regions at the end for target mode
 c*** 3b.  data for additional surfaces
 
       write(iunoo,700) utxthd(4)
-      if (grid_mode.ne.2) then
-        write(iunoo,707) nlimi
-      else ! count the surfaces that still have to be written
-        nlimi_vess=0
-        do k=laddsrfs+1,nlimi
-          i=indasrfs(k)
-          if(i.eq.0) cycle
-          if(jliin(i).ne.1) nlimi_vess=nlimi_vess+1
-        end do
-        write(iunoo,707) nlimi_vess
-      end if
+      write(iunoo,707) nlimi
 c***  "ch0-cards"
       call uichwr(iunoo,0,jadch0,nlimi)
       icopy=0
@@ -462,9 +452,6 @@ c***  "ch0-cards"
       do 360 k=laddsrfs+1,nlimi !{
         i=indasrfs(k)
         if(i.eq.0) go to 360
-cnh     reflecting surfaces are no longer written in block 3b in vessel mode
-cnh     in the future, it should still be possible to have some structures in 3b
-        if((grid_mode.eq.2).and.(jliin(i).eq.1)) go to 360 
         write(iunoo,714) k,i,txtsfa(k)
 
         icopy=icopy-1
