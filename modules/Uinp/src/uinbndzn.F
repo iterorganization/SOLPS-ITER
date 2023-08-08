@@ -322,12 +322,12 @@ c           print *,'k,iz,iy =',k,iz,iy !###
           lzrbndt(iz,m,1)=iy
           lzrbndt(iz,m,2)=ny+1
 cnh asigning bcstart and bcend for the unstructured format
-          if (carre_mode.eq.2) then
+          if ((carre_mode.eq.2).and.(tgfclbl(iz).ne.0)) then
             lzrbndt_us(iz,m,1)=tgfclbl(iz) ! assigning the face label
             lzrbndt_us(iz,m,2)=tgfclbl(iz)
           elseif (crgbndt(k,m).eq.'W') then          
             lzrbndt_us(iz,m,1)=-10-2*iz-1
-            lzrbndt_us(iz,m,2)=-10-2*iz-1
+            lzrbndt_us(iz,m,2)=-10-2*iz-1          
           elseif (crgbndt(k,m).eq.'E') then
             lzrbndt_us(iz,m,1)=-30-2*iz
             lzrbndt_us(iz,m,2)=-30-2*iz
@@ -374,6 +374,37 @@ c           print *,'k,iz,iy =',k,iz,iy !###
         end if !}
       end do !}
       nznbndt(m)=iz
+cnh   replace face labels of targets with carre2 conventions for negative face labels
+cnh   I think it is not correct yet for USN
+      if (carre_mode.ne.2) then
+        if (nznbndt(m).eq.4) then ! DN
+          lc1bnds(1,m)=4
+          lc2bnds(1,m)=4
+          lc1bnds(2,m)=2
+          lc2bnds(2,m)=2
+          lc1bnds(3,m)=1
+          lc2bnds(3,m)=1
+          lc1bnds(4,m)=3
+          lc2bnds(4,m)=3
+          ls1bnds(1,m)=4
+          ls2bnds(1,m)=4
+          ls1bnds(2,m)=2
+          ls2bnds(2,m)=2
+          ls1bnds(3,m)=1
+          ls2bnds(3,m)=1
+          ls1bnds(4,m)=3
+          ls2bnds(4,m)=3
+        else ! SN
+          lc1bnds(1,m)=2
+          lc2bnds(1,m)=2
+          lc1bnds(2,m)=1
+          lc2bnds(2,m)=1
+          ls1bnds(1,m)=2
+          ls2bnds(1,m)=2
+          ls1bnds(2,m)=1
+          ls2bnds(2,m)=1
+        end if 
+      end if    
 
 c*** Sides. 
 
