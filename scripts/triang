@@ -408,38 +408,92 @@ while true; do {
             print -u2 -- "Command line: ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2us.prt > b2us.log"
             [ -r $b2usinp ] && {
               [ -r b2mn.dat ] && {
-                cp b2mn.dat b2mn.dat.backup 
+                mv b2mn.dat b2mn.dat.backup 
               }
-              cp $b2usinp b2mn.dat
+              ln -s $b2usinp b2mn.dat
             } || {
               print -u2 -- "Could not find the $b2usinp file"
               print -u2 -- "    ==> Rerun uinp or provide separately"
               q=u
               break
             }
+            [ ! -r b2.boundary.parameters ] && {
+              [ -r b2.boundary.parameters.stencil ] && {
+               ln -sf b2.boundary.parameters.stencil b2.boundary.parameters
+              } || {
+                print -u2 -- "Could not find b2.boundary.parameters(.stencil) file"
+                print -u2 -- "    ==> Rerun uinp or provide separately"
+                [ -r b2mn.dat.backup ] && {
+                  rm b2mn.dat
+                  mv b2mn.dat.backup b2mn.dat
+                }
+                q=u
+                break
+              }
+            }
+            [ ! -r b2.neutrals.parameters ] && {
+              [ -r b2.neutrals.parameters.stencil ] && {
+               ln -sf b2.neutrals.parameters.stencil b2.neutrals.parameters
+              } || {
+                print -u2 -- "Could not find b2.neutrals.parameters(.stencil) file"
+                print -u2 -- "    ==> Rerun uinp or provide separately"
+                [ -r b2mn.dat.backup ] && {
+                  rm b2mn.dat
+                  mv b2mn.dat.backup b2mn.dat
+                }
+                q=u
+                break
+              }
+            }
             [ -r b2fgmtry ] && {
               cp b2fgmtry b2fgmtry.backup 
+              cp b2fgmtry_st b2fgmtry
+            } || {
+              print -u2 -- "Could not find b2fgmtry file"
+              print -u2 -- "    ==> Rerun B2a* or provide separately"
+              [ -r b2mn.dat.backup ] && {
+                rm b2mn.dat
+                mv b2mn.dat.backup b2mn.dat
+              }
+              q=b
+              break
             }
-            cp b2fgmtry_st b2fgmtry
             [ -r b2fstati ] && {
               cp b2fstati b2fstati.backup 
+              cp b2fstati_st b2fstati
+            } || {
+              print -u2 -- "Could not find b2fstati file"
+              print -u2 -- "    ==> Rerun B2a* or provide separately"
+              [ -r b2mn.dat.backup ] && {
+                rm b2mn.dat
+                mv b2mn.dat.backup b2mn.dat
+              }
+              mv b2fgmtry.backup b2fgmtry
+              q=b
+              break
             }
-            cp b2fstati_st b2fstati
-            cp b2.boundary.parameters.stencil b2.boundary.parameters
-            cp b2.neutrals.parameters.stencil b2.neutrals.parameters
             [ -r b2us.prt ] && rm b2us.prt
             [ -r $b2usout ] && rm $b2usout
             ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2us.prt > b2us.log
             [ -r $b2usout ] && {
               [ -d b2us.exe.dir ] && rmdir b2us.exe.dir
-              [ -r b2fgmtry.backup ] && cp b2fgmtry.backup b2fgmtry
-              [ -r b2fstati.backup ] && cp b2fstati.backup b2fstati
-              rm b2ah.dat
+              [ -r b2mn.dat.backup ] && {
+                rm b2mn.dat
+                mv b2mn.dat.backup b2mn.dat
+              }
+              [ -r b2fgmtry.backup ] && mv b2fgmtry.backup b2fgmtry
+              [ -r b2fstati.backup ] && mv b2fstati.backup b2fstati
               print -u2 -- "Produced $b2usout file"
               q=s
             } || {
               print -u2 -- "Could not produce the $b2usout file"
               print -u2 -- "    ==> Check b2us.log file or provide separately"
+              [ -r b2mn.dat.backup ] && {
+                rm b2mn.dat
+                mv b2mn.dat.backup b2mn.dat
+              }
+              [ -r b2fgmtry.backup ] && mv b2fgmtry.backup b2fgmtry
+              [ -r b2fstati.backup ] && mv b2fstati.backup b2fstati
               q=u
             }
             break;;
