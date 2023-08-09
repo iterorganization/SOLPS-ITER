@@ -64,7 +64,12 @@ case "freia*.hpc.l":
 case "*.mech.kuleuven.be":
 case "*.icts.leuven.vsc":
 case "*.hpc.kuleuven.be":
-  echo LEUVEN
+  set genius=`echo $fullhost | grep -i genius`
+  if ("$genius" == "") then
+    echo LEUVEN-WICE
+  else
+    echo LEUVEN
+  endif
   breaksw
 case "*.snellius.surf.nl":
 case "*.bullx":
