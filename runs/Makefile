@@ -85,7 +85,7 @@ prints = b2ag.prt b2ah.prt b2ai.prt b2ar.prt b2mn.prt \
  b2ye.prt b2yg.prt b2yh.prt b2yi.prt b2ym.prt b2yn.prt b2yp.prt b2yq.prt \
  b2yr.prt b2yt.prt b2yi_gnuplot.prt
 
-target_ag = b2ag.prt b2fgmtry b2fgmtry_st
+target_ag = b2ag.prt b2fgmtry b2fgmtry_st ${fort_lc}30
 target_ah = b2ah.prt b2fpardf
 target_ai = b2ai.prt b2fstati b2fstati_st
 target_ar = b2ar.prt b2frates

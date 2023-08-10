@@ -461,13 +461,18 @@ c*** Data for triangular mesh: maximum number of mesh refinment zones;
 c*** temporary arrays for ILPLG parameter;
 c*** mesh size and coordinates of refinment zone (rectangle);
 c*** refinment zone markers from DG, and actual number of zones
-       integer ntrimax
-       parameter (ntrimax=100)
+       integer ntrimax, ntriplgmax, nsegtriplgmax
+       parameter (ntrimax=100, ntriplgmax = 6, nsegtriplgmax = 10)
        integer ilplgu(nsts),jlplgu(nlim),ilplgdg(nlim)
        real(kind=R4)
      ,      trisize(0:ntrimax), trixmin(ntrimax), trixmax(ntrimax),
      ,      triymin(ntrimax), triymax(ntrimax)
        integer trirefel(2*nlim),trirefcn(ntrimax),ntriref
+       integer ntriplg, nntriplg(ntriplgmax), nsegtriplg(ntriplgmax),
+     ,      nnsstriplg(ntriplgmax),nfclbltriplg(ntriplgmax)
+       integer triplg(nlim,ntriplgmax),
+     ,      triplgnss(2*nsegtriplgmax,ntriplgmax),
+     ,      triplgfclbl(2*nsegtriplgmax,ntriplgmax)
 
 c-----------------------------------------------------------------------
 c*** Data for pre-defined 'density models' in Eirene:
@@ -608,6 +613,8 @@ c     ,  spcifup,spcifua,spcifum,spcifui,
      ,  ntrgte,jedgep,jedgec,jedgeo,ntrgto,ntrgtm,
      ,  tgrefsw,tgsppsw,tgspcsw,tgsppsp,tgspcgr,tgnhst,tgmhst,tgnini,
      ,  tgfclbl,ilplgu,jlplgu,ilplgdg,trirefel,trirefcn,ntriref,
+     ,  ntriplg,nntriplg,nsegtriplg,nnsstriplg,triplg,triplgnss,
+     ,  nfclbltriplg,triplgfclbl,
      ,  locphep,lpbihep,lpbohep,lptihep,lptohep,
      ,  j_he_at,j_h_at,j_ne_at,l_h_mol,
      ,  lstclhep,nstclhep,lhetrgts,nhetrgts,

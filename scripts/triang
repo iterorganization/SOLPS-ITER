@@ -26,11 +26,13 @@ gkseps=gli.eps
 eirinp=triang.eir
 eirhed=triang.hed
 [ "$COMPILER" = 'HP' ] && {
-  eirout=ftn78
-  eirlink=ftn1
+  tripuin=ftn48
+  tripbin=ftn30
+  tripout=ftn78
 } || {
-  eirout=fort.78
-  eirlink=fort.1
+  tripuin=fort.48
+  tripbin=fort.30
+  tripout=fort.78
 }
 b2agout=b2fgmtry
 b2aiout=b2fstati
@@ -38,7 +40,7 @@ b2ahout=b2fpardf
 b2arout=b2frates
 b2usout=triangle.neighbors
 b2usinp=b2us.dat
-eirlog=eirtria.log
+triplog=triainp.log
 triain=tria.in
 trialog=tria.log
 trianodes=tria.${f[0]}
@@ -130,6 +132,7 @@ toolchain=${HOST_NAME}.${COMPILER}
 
 TRIA="${SOLPSTOP}/modules/Triang/builds/$toolchain/tria"
 TRIAGEOM="${SOLPSTOP}/modules/Triang/builds/$toolchain/triageom"
+TRIAINP="${SOLPSTOP}/modules/Triang/builds/$toolchain/triainp"
 TRIAINQ="${SOLPSTOP}/modules/Triang/builds/$toolchain/triainq"
 EIRENE="${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.$eirchain/eirobjx"
 
@@ -188,6 +191,10 @@ e=
 }
 [ -x "$TRIAINQ" ] || {
   print -u2 -- "$NAME: $TRIAINQ not found. Check run environment settings"
+  e=y
+}
+[ -x "$TRIAINP" ] || {
+  print -u2 -- "$NAME: $TRIAINP not found. Check run environment settings"
   e=y
 }
 [ -x "$EIRENE" ] || {
@@ -315,39 +322,34 @@ while true; do {
             }
             break;;
       ( e|E )                                               # run EIRENE to make input file for TRIA:
-            [ -r AMJUEL ] || {
-              setup_baserun_eirene_links ; rm b2.log b2.log.gz ; rmdir tracing batch_av run_av
-            } 
-            [ -r $b2agout ] && {
-              [ -r $eirinp ] && {
+            [ -r $tripbin ] && {
+              [ -r $tripuin ] && {
                 N=
-                print -u2 -- "Starting Eirene - may take a while..."
-                print -u2 -- "Command line: $EIRENE > $eirlog"
-                [ -r $eirout ] && rm $eirout
-                ln -sf "$eirinp" "$eirlink"
-                $EIRENE > "$eirlog"
-                rm $eirlink fort.85
-                [ -s "$eirout" ] && [ -r "$eirout" ] && {
+                print -u2 -- "Starting triainp"
+                print -u2 -- "Command line: $TRIAINP > $triplog"
+                [ -r $tripout ] && rm $tripout
+                "$TRIAINP" > "$triplog"
+                [ -s "$tripout" ] && [ -r "$tripout" ] && {
                   [ -s "$eirhed" ] && [ -r "$eirhed" ] && {
-                    (cat "$eirhed"; tail --lines=+2 "$eirout") > "$triain"
+                    (cat "$eirhed"; tail --lines=+2 "$tripout") > "$triain"
                   } || {
-                    cp "$eirout" "$triain"
+                    cp "$tripout" "$triain"
                     print -u2 -- "No $eirhed file found, using default provided by Eirene instead"
                   }
                   q=t
                   true
                 } || {
-                  print -u2 -- "No valid $eirout file created ==> Check $eirlog"
+                  print -u2 -- "No valid $tripout file created ==> Check $triplog"
                   q=u
                 }
               } || {
-                print -u2 -- "No $eirinp - run uinp first"
+                print -u2 -- "No $tripuin - run uinp first"
                 q=u
                 [ -L uinput.dg ] && [ -L uinput.trg ] && q=u
               }
               true
             } || {
-              print -u2 -- "No $b2agout - run b2ag or b2plot first"
+              print -u2 -- "No $tripbin - run b2ag first"
               q=b
               [ -s b2mn.dat ] && [ -r b2mn.dat ] && q=m
             }
