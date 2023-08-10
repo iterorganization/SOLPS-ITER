@@ -20,7 +20,7 @@ c=======================================================================
      .  lchrdgrp,lchrdlint,lchrdlprf
       integer :: ichlst(nchor)
       real(kind=R4) :: u
-      parameter(lunm=178)
+      parameter(lunm=180)
       character*8 unm(lunm),uun
       character*8, save :: chtyp
       character ubs*1,uam*52
@@ -77,7 +77,7 @@ c*** lugwt : counter for the grid-wall ties
      3    'spcs_scn','tgminhst','gpf_mhst','chords'  ,'linintg' ,
      4    'set_id'  ,'chr_lbl' ,'chr_angl','chrdsdat','data_id' ,
      5    'set_list','n_points','linprfs' ,'lm_equ'  ,'crr_mode',
-     6    'grd_mode','tgfclbl','fclbl' /
+     6    'grd_mode','tgfclbl' ,'fclbl'   ,'omp_elm' ,'imp_elm'  /
 c=======================================================================
       call subini ('uinnam')
 c*** Backslash:
@@ -1097,6 +1097,10 @@ c***  input elements indices for current rectangle
         call resimi(tgfclbl(luswch))
       case (178) ! fclbl
         call rearri(fclbl,nlim,i)
+      case (179) ! omp_elm
+        call resimi(omp_elm)
+      case (180) ! imp_elm
+        call resimi(imp_elm)
       case default
         call skipit
       end select

@@ -1654,6 +1654,24 @@ c-----------------------------------------------------------------------
 c*** User
 
       ex=.true.
+
+
+c*** rzomp and rzimp
+      lrrvr(18,7)=.true.
+      lrrvr(19,7)=.true.
+      nmdpr(18,7)=2
+      nmdlr(18,7)=2
+      nmdpr(19,7)=2
+      nmdlr(19,7)=2
+      rniprm(1,1,1,18,7)=p1(1,omp_elm)*0.01
+      rniprm(1,2,1,18,7)=p2(1,omp_elm)*0.01
+      rniprm(2,1,1,18,7)=p1(2,omp_elm)*0.01
+      rniprm(2,2,1,18,7)=p2(2,omp_elm)*0.01
+      rniprm(1,1,1,19,7)=p1(1,imp_elm)*0.01
+      rniprm(1,2,1,19,7)=p2(1,imp_elm)*0.01
+      rniprm(2,1,1,19,7)=p1(2,imp_elm)*0.01
+      rniprm(2,2,1,19,7)=p2(2,imp_elm)*0.01
+
       if(do_hepdt) then !{
 c*** Helium pumping data
 

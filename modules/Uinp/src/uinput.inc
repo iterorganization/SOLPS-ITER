@@ -52,7 +52,7 @@ c*** 3b
      ,    jlside(nlim), jlequi(nlim), jltor(nlim), jlcol(nlim),
      ,    jlfit(nlim),  jlbox(nlim),  jlref(nlim), jlsptp(nlim),
      ,    jlsptc(nlim), jsrss(nlim),  jsrc(nlim),  lchspnwa(nlim),
-     ,    jsrsg(nlim),  jlplg(nlim),  fclbl(nlim)
+     ,    jsrsg(nlim),  jlplg(nlim),  fclbl(nlim), omp_elm, imp_elm
       integer jadch0(nlim), jadch1(nlim,nlim), jadnsw(nlim),
      ,    jadmsw(nlim), jadlsw(nlim), jadksw(nlim), jadjsw(nlim),
      ,    jadisw(nlim), jlblck(nlim), jlacll(nlim)
@@ -408,7 +408,7 @@ c*** b2ah.dat
      ,  ilbox,ilplg,ilref,ilsptp,ilsptc,isrss,isrc,lchspnws,isrsg,
      ,  nlimi,itend,
      ,  itini,jliin,jlside,jlequi,jltor,jlcol,jlfit,jlbox,jlplg,jlref,
-     ,  jsrss,jsrc,lchspnwa,jsrsg,fclbl,
+     ,  jsrss,jsrc,lchspnwa,jsrsg,fclbl,omp_elm,imp_elm,
      ,  jlsptp,jlsptc,nreaci,ir,massp,masst,
      ,  ifex1mn,ifex1mx,ifex2mn,ifex2mx,iz,nrcln,
      ,  natmi,nmeta,
