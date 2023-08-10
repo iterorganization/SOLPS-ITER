@@ -24,7 +24,7 @@ TRIASTEM_back=$TRIASTEM
 set -A f -- $TRIATRI
 gkseps=gli.eps
 eirinp=triang.eir
-eirhed=triang.hed
+triahed=triang.hed
 [ "$COMPILER" = 'HP' ] && {
   tripuin=ftn48
   tripbin=ftn30
@@ -52,6 +52,9 @@ trignodes=triageom.${f[0]}
 trigcells=triageom.${f[1]}
 triglinks=triageom.${f[2]}
 trigeps=triageom.eps
+b2usnodes=triangle.coordinates
+b2uscells=triangle.elements
+b2uslinks=triangle.neighbors
 STRDAT=structures.dat
 FRNDAT=frontier.dat
 TRNDAT=triangles.dat
@@ -70,6 +73,8 @@ triglnklist="ftn33 ftn34 ftn35"
 } || {
 triglnklist="fort.33 fort.34 fort.35"
 }
+b2usoutlist="$b2usnodes $b2uscells $b2uslinks"
+b2uslnklist=$triglnklist
 
 NAME=`basename $0`
 stty erase ^H
@@ -314,6 +319,7 @@ while true; do {
             [ -r $b2arout ] && {
               [ -d b2ar.exe.dir ] && rmdir b2ar.exe.dir
               print -u2 -- "Produced $b2arout file"
+              print -u2 -- "For extended cases without void regions, proceed with (f)"
               q=e
             } || {
               print -u2 -- "Could not produce the $b2arout file"
@@ -330,11 +336,11 @@ while true; do {
                 [ -r $tripout ] && rm $tripout
                 "$TRIAINP" > "$triplog"
                 [ -s "$tripout" ] && [ -r "$tripout" ] && {
-                  [ -s "$eirhed" ] && [ -r "$eirhed" ] && {
-                    (cat "$eirhed"; tail --lines=+2 "$tripout") > "$triain"
+                  [ -s "$triahed" ] && [ -r "$triahed" ] && {
+                    (cat "$triahed"; tail --lines=+2 "$tripout") > "$triain"
                   } || {
                     cp "$tripout" "$triain"
-                    print -u2 -- "No $eirhed file found, using default provided by Eirene instead"
+                    print -u2 -- "No $triahed file found, using default provided by TRIAINP instead"
                   }
                   q=t
                   true
@@ -367,6 +373,7 @@ while true; do {
               check_files $triaoutlist && q=g || {
                 print -u2 -- "Not all output files, $triaoutlist, are produced"
                 print -u2 -- "    ==> Check $trialog"
+                print -u2 -- "For extended cases without void regions, proceed with (f)"
                 q=p
               }
               true
@@ -384,7 +391,7 @@ while true; do {
                 "$TRIAGEOM" > $triglog
                 [ -s "$gkseps" ] && [ -r "$gkseps" ] && mv "$gkseps" "$trigeps"
                 check_files $trigoutlist && {
-                  q=s
+                  q=f
                   set -A L -- $triglnklist
                   ln -sf $trignodes ${L[0]}
                   ln -sf $trigcells ${L[1]}
@@ -448,8 +455,8 @@ while true; do {
               }
             }
             [ -r b2fgmtry ] && {
-              cp b2fgmtry b2fgmtry.backup 
-              cp b2fgmtry_st b2fgmtry
+              cp -p b2fgmtry b2fgmtry.backup 
+              cp -p b2fgmtry_st b2fgmtry
             } || {
               print -u2 -- "Could not find b2fgmtry file"
               print -u2 -- "    ==> Rerun B2a* or provide separately"
@@ -461,8 +468,8 @@ while true; do {
               break
             }
             [ -r b2fstati ] && {
-              cp b2fstati b2fstati.backup 
-              cp b2fstati_st b2fstati
+              cp -p b2fstati b2fstati.backup 
+              cp -p b2fstati_st b2fstati
             } || {
               print -u2 -- "Could not find b2fstati file"
               print -u2 -- "    ==> Rerun B2a* or provide separately"
@@ -485,6 +492,24 @@ while true; do {
               }
               [ -r b2fgmtry.backup ] && mv b2fgmtry.backup b2fgmtry
               [ -r b2fstati.backup ] && mv b2fstati.backup b2fstati
+              [ -r b2fgmtry_us ] && rm b2fgmtry_us
+              [ -r b2fstati_us ] && rm b2fstati_us
+
+
+
+              check_files $b2usoutlist && {
+                  q=s
+                  set -A L -- $b2uslnklist
+                  ln -sf $b2usnodes ${L[0]}
+                  ln -sf $b2uscells ${L[1]}
+                  ln -sf $b2uslinks ${L[2]}
+                } || {
+                  print -u2 -- "Not all output files, $b2usoutlist, are produced"
+                  print -u2 -- "    ==> Check b2us.log"
+                  q=u
+                  break
+                }
+
               print -u2 -- "Produced $b2usout file"
               q=s
             } || {
@@ -500,8 +525,8 @@ while true; do {
             }
             break;;
       ( s|S )                                             # assign a serial number and store the mesh:
-            check_files $trigoutlist && q=c || {
-              print -u2 -- "Not all output files, $trigoutlist, are produced"
+            check_files $trigoutlist || check_files $b2usoutlist && q=c || {
+              print -u2 -- "Not all output files, $b2usoutlist, are produced"
               print -u2 -- "Probably, some of the previous steps forgotten?"
               q=g
               break
@@ -521,7 +546,7 @@ while true; do {
               }; done
             }
             N=
-            for x in $TRIAEXT; do {
+            for x in $B2USEXT; do {
               n=`get_serial_number -d "$TRIADIR" -p "$TRIASTEM.*.$x" -s $POS -l $LEN` || {
                 print -u2 -- "$NAME: error $? reported from get_serial_number:"
                 print -u2 -- "get_serial_number -d \"$TRIADIR\" -p \"$TRIASTEM.*.$x\" -s $POS -l $LEN n"
@@ -530,7 +555,7 @@ while true; do {
               }
               [ -z "$N" ] && N=$n || { [ "$N" -lt "$n" ] && N=$n; }
             }; done
-            for x in $TRIAEXT; do {
+            for x in $B2USEXT; do {
               while [ -e "$TRIADIR/$TRIASTEM.$N.$x" ]; do {
                 ((n+=1))
                 while [ $LEN -gt ${#n} ]; do n="0$n"; done
@@ -540,9 +565,9 @@ while true; do {
             }; done
             print -u2 -- "The serial number selected for the mesh is $N"
             set -A X -- $TRIAFTN
-            set -A f -- $trigoutlist
+            set -A f -- $b2usoutlist
             i=0
-            for x in $TRIAEXT; do {
+            for x in $B2USEXT; do {
               mv ${f[i]} "$TRIADIR/$TRIASTEM.$N.${x}" && ln -sf "$TRIADIR/$TRIASTEM.$N.${x}" fort.${X[i]} || {
                 print -u2 -- "$NAME: error while moving files."
                 print -u2 -- "$f $TRIADIR/$TRIASTEM.$N.${x[i]} fort.${X[i]}"
