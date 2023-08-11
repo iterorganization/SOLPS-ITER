@@ -665,7 +665,8 @@ The cases stored for retrieval include:
   \item[ITER\_2588\_drifts] ITER {\tt B2.5} standalone D-only demonstration case with and without drifts
   \item[ITER\_535\_D+He+Ar] ITER full power case with Ar injection
   \item[ITER\_Be-W\_D+T+He+Ne] ITER full power case with 98 species
-  \item[COMPASS\_16515\_1150ms\_D\_AFN] an unstructured, coarse grid, pure D COMPASS case with drifts and Advanced Fluid Neutrals, and kinetic neutrals without drifts, with a Matlab example script to plot results in the WG code. Two demo cases for the optimization are also available.
+  \item[COMPASS\_16515\_1150ms\_D\_AFN] an unstructured, coarse grid, pure D COMPASS case with drifts and Advanced Fluid Neutrals, and kinetic neutrals without drifts, with a Matlab example script to plot results in the WG code
+  \item[COMPASS\_optimization] Demo cases for the optimization toolbox based on AD. Based on the COMPASS\_16515\_1150ms\_D\_AFN case above
 \end{description}
 as well as additional partial cases used in tutorials when learning how to build a case using the {\tt DivGeo} and {\tt SOLPS-GUI} utilities.
 Other cases can be added at the suggestion of users, if available.
@@ -2289,11 +2290,11 @@ data are stored in the {\tt weis.dat}\index{weis.dat} file which should be prese
 {\tt baserun} directory where {\tt b2ar} is run. When running {\tt b2ar.dat} using the
 dedicated {\tt Makefile}, this is automatically done.
 
-Another option allows for the user to request specific rates using reaction cards from the {\tt AMJUEL} and {\tt HYDHEL} database files. To be used, one must set {\tt b2ardr\_no\_weisheit} to {\tt 1} and {\tt b2ardr\_amjhydhel} to {\tt 1}. An example of such a file is provided below:
+Another option allows for the user to request specific rates using reaction cards from the {\tt AMJUEL} and {\tt HYDHEL} database files. This is recommended when using the AFN model for hydrogenic neutrals. To be used, one must set {\tt b2ardr\_no\_weisheit} to {\tt 1} and {\tt b2ardr\_amjhydhel} to {\tt 1}. An example of such a file is provided below:
 
 \VerbatimInput[fontsize=\footnotesize]{D/b2ar_AFN.dat}
 
-Note that the headers must contain the exact text shown, including the capitalization. The reaction list order must be the same as in the example and both the ionization and recombination rates must include two reaction cards, one for the particle reaction rate, followed by a second one for the associated electron heat loss rate.
+When {\tt b2ardr\_nreac = 0}, a default set of AMJUEL/HYDHEL reactions is used, i.e., AMJUEL 2.1.5 for ionization, HYDHEL 3.1.8 for charge exchange and AMJUEL 2.1.8 for recombination. This default set of reactions can be overwritten by user-specified reactions from the AMJUEL/HYDHEL databases by making {\tt b2ardr\_nreac > 0}. Then a {\tt reac} field has to be added, as illustrated in the example. The format is not important as long as blanks separate the fields. For the above example, the default reaction for ionization is explicitly overwritten by the default one. Hence, it makes no difference if you specify them or not.      
 
 \begin{sloppypar}
 Supplemental information on atomic physics rates can be found in the file
@@ -21496,4 +21497,3 @@ introduced a very small effect, seen only as a jump in the residuals.
 \ifpdf
 \else
 \fi
-

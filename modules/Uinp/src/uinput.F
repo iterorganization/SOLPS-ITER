@@ -557,6 +557,24 @@ c*** Create the b2ar.dat file
           write(2,'(2x,a)') '''adas'''
           write(2,'(a)') '*tailep         (real, free format)'
           write(2,'(2x,f5.2)') 0.08
+cnh       AFN-specific inputs
+c          write(2,'(a)') '''b2ardr_no_smoothing''     ''1'''//
+c     .      '       # Eliminate smoothing for benchmark with EIRENE'  
+          write(2,'(a)') '''b2ardr_rtnt''             ''100'''//
+     .      '     # Use finer discretization for AFN (default 40)' 
+          write(2,'(a)') '''b2ardr_rtnn''             ''100'''//
+     .      '     # Use finer discretization for AFN (default 32)'
+          write(2,'(a)') '''b2ardr_no_weisheit''      ''1'''//
+     .      '       # No correction for hydrogen neutrals' 
+          write(2,'(a)') '''b2ardr_amjhydhel''        ''1'''// 
+     .      '       # Take AMJUEL/HYDHEL for hydrogen neutrals' 
+          write(2,'(a)') '''b2ardr_t_min''            ''1.0E-01'''// 
+     .      ' # Minimum temperature [eV] for which AMJUEL rates '//
+     .      'are evaluated' 
+          write(2,'(a)') '''b2ardr_nn_min''           ''1.0E+14'''//
+     .      ' # Minimum density [m^-3] for which AMJUEL rates '//
+     .      'are evaluated' 
+          write(2,'(a)') '''b2ardr_fix_recomb''       ''1'''
           close(2)
           print *,'    ... b2ar.dat created'
       endif

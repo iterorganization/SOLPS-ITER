@@ -23,6 +23,7 @@ c=======================================================================
       external xerrab, idez, streql
       integer find_matching_species, get_atomic_number
       external find_matching_species, get_atomic_number
+      integer ispc
 c=======================================================================
       call subini ('uinprpb2')
 #ifdef DBG
@@ -135,9 +136,20 @@ c*** bcchar, bcpos, bcstart, bcend, bcene, bceni, bcpot, enepar, enipar, potpar
           rniprm(k,1,1,11,2)=bpobnds(i,1,j)
           rniprm(k,2,1,11,2)=bpobnds(i,2,j)
 c*** bccon, conpar, bcmom, mompar
+          ispc = 0
           do l=1,nspcpls+nspcncl !{
-            if (ifl(l).eq.0) then !{ default fluid neutral b.c.
-              if (cznbndt(i,j).eq.'W' .or. cznbndt(i,j).eq.'E') then
+            if (ifl(l).eq.0) then !{ fluid neutral b.c.
+              ispc = ispc + 1
+              if (streql(spcigen(ispc),'H').or.streql(spcigen(ispc),'D')
+     .            .or.streql(spcigen(ispc),'T')) then !nh{ AFN b.c.'s for hydrogen species
+                iniprm(l,k,1,12,2)=5 !nh zero particle flux density at all boundaries
+                if (i.le.nznbndt(1).and.j.eq.1) then !}{ core boundary
+                  iniprm(l,k,1,14,2)=2 !nh zero gradient at core boundary
+                else
+                  iniprm(l,k,1,14,2)=5 !nh zero momentum flux at other boundaries
+                end if !} 
+              else if (cznbndt(i,j).eq.'W' .or. cznbndt(i,j).eq.'E') 
+     .            then
                 iniprm(l,k,1,12,2)=5
                 iniprm(l,k,1,14,2)=1
               else if (i.le.nznbndt(1).and.j.eq.1) then !}{ core boundary
@@ -290,6 +302,8 @@ c*** k, m, n are the numbers of recycling, specified, and all strata
       nmdpr(21,3)=nspcatm
       nmdpr(39,3)=n
       nmdlr(39,3)=ntrack
+      nmdpr(40,3)=n
+      nmdpr(41,3)=n
 
       ltrvr( 2,3)=.true.
       lspvr(10,3)=.true.
@@ -299,6 +313,7 @@ c*** k, m, n are the numbers of recycling, specified, and all strata
       lrrvr(19,3)=.true.
       lrrvr(20,3)=.true.
       lrrvr(25,3)=.true.
+      ltrvr(40,3)=.true.
 
       iniprm(:,:,1,39,3)=-1
 
@@ -397,6 +412,14 @@ c***          targsp
                 end if !}
               end if !}
 
+c***          surf_mat
+              cniprm(k,1,1,40,3) = ewmbnds(i,j)
+
+c***          accel_ion
+              if (j.eq.2) then
+                iniprm(k,1,1,41,3) = 1
+              end if
+
             end do !}
           end if !}
         end do !}
@@ -457,6 +480,12 @@ c*** lstrascl,gpfc
           rniprm(l,k,1,20,3)=igpfstr(l,i)
         end do !}
         lprdckw(k,1,20,3)=.true.
+
+c*** surf_mat
+        cniprm(k,1,1,40,3) = ''
+
+c*** accel_ion
+        iniprm(k,1,1,41,3) = 0
       end do !}
 
 c*** Recombination sources
@@ -494,6 +523,12 @@ c*** lstrascl, gpfc
           iniprm(k,l,1,12,3)=lsrcmstr(l,i)
           rniprm(l,k,1,20,3)=0.
         end do !}
+
+c*** surf_mat
+        cniprm(k,1,1,40,3) = ''
+
+c*** accel_ion
+        iniprm(k,1,1,41,3) = 0
       end do !}
 
 c*** Time-dependent stratum
@@ -527,6 +562,12 @@ c*** lstrascl
         do l=1,nspcncl !{
           iniprm(k,l,1,12,3)=0
         end do !}
+
+c*** surf_mat
+        cniprm(k,1,1,40,3) = ''
+
+c*** accel_ion
+        iniprm(k,1,1,41,3) = 0
       end if !}
 
 c*** lcns, ltns
@@ -539,10 +580,17 @@ c*** lcns, ltns
 
 c*** recyc
       do j=1,n !{
+        ispc = 0
         do i=1,nspcpls+nspcncl !{
           k=ifl(i)
-          if (k.eq.0) then !{
-            rniprm(i,j,1,18,3)=0.
+          if (k.eq.0) then !{ 
+            ispc = ispc + 1
+            if (streql(spcigen(ispc),'H').or.streql(spcigen(ispc),'D')
+     .          .or.streql(spcigen(ispc),'T')) then !{ recycling 1 for AFN neutrals (hydrogen)
+              rniprm(i,j,1,18,3)=1.
+            else !{ recycling 0 for non-AFN neutrals (impurities)
+              rniprm(i,j,1,18,3)=0.
+            end if !}
           elseif (ncharp(k).eq.1 .or. ncharp(k).eq.2 .or.
      .            ncharp(k).eq.7 .or. ncharp(k).eq.8 .or.
      .            ncharp(k).eq.10.or. ncharp(k).eq.18.or.

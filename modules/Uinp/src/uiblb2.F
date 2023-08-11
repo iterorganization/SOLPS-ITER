@@ -13,13 +13,13 @@ c*** The list of keywords to work on:
      /  '&initialization','&boundary','&neutrals','&diagnostics','&cut',
      ,  '&impurities','&user'/
 
-      data (chrpl(i,1),i=1,nkwrd) / 'nx','ny','ns','zi','mi',34*' '/
+      data (chrpl(i,1),i=1,nkwrd) / 'nx','ny','ns','zi','mi',36*' '/
       data (chrpl(i,2),i=1,nkwrd) /
      /  'nbc','bcchar','bcpos','bcstart','bcend',
      ,  'bcene','bceni','bcpot','enepar','enipar',
      ,  'potpar','bccon','conpar','bcmom','mompar',
      ,  'lcbs','nniso','nxiso1','nxiso2','nyiso1',
-     ,  'nyiso2','niiso','teiso','tiiso',15*' '/
+     ,  'nyiso2','niiso','teiso','tiiso',17*' '/
       data (chrpl(i,3),i=1,nkwrd) /
      /  'nstrai','crcstra','rcpos','rcstart','rcend',
      ,  'species_start','species_end','eb2spcr','eb2atcr','b2espcr',
@@ -28,19 +28,20 @@ c*** The list of keywords to work on:
      ,  'latmscl','lmolscl','lionscl','mlcmp','chemical_sputter_yield',
      ,  'n_spcsrf','l_spcsrf','sps_id','i_spcsrf','j_spcsrf',
      ,  'sps_absr','sps_trno','sps_trni','sps_mtri','sps_tmpr',
-     ,  'sps_spph','sps_spch','sps_sgrp','targsp'/
-      data (chrpl(i,4),i=1,nkwrd) / 'jxi','jxa',37*' '/
+     ,  'sps_spph','sps_spch','sps_sgrp','targsp','surf_mat',
+     ,  'accel_ion'/
+      data (chrpl(i,4),i=1,nkwrd) / 'jxi','jxa',39*' '/
       data (chrpl(i,5),i=1,nkwrd) /
      /  'nncut','ntcut','nxcut1','nxcut2','nycut1',
      ,  'nycut2','nniso',' ','nxiso1','nxiso2',
-     ,  'nyiso1','nyiso2','niiso','tiiso','teiso',24*' '/
+     ,  'nyiso1','nyiso2','niiso','tiiso','teiso',26*' '/
       data (chrpl(i,6),i=1,nkwrd) / 'impflag','nspecies','nfluids',
-     ,  36*' '/
+     ,  38*' '/
       data (chrpl(i,7),i=1,nkwrd) / 
      /  'fusion_power','Spmp_He_to_D','lhetrgts','lpfrb_i','lpfrb_o',
      ,  'lpfrt_i','lpfrt_o','j_h_at','j_he_at','j_ne_at',
      ,  'l_h_mol','lpfrs_pmp','npfrgrp','lpfrgrp','ipfrgrp',
-     ,  'jpfrgrp','gpfrgrp',22*' '/
+     ,  'jpfrgrp','gpfrgrp',24*' '/
 
 c*** Initialisation of the control data
       data nmdpr, nmdlr, nmdbr / nnmdf*1, nnmdf*0, nnmdf*0 /
