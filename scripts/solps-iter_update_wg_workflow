@@ -21,7 +21,7 @@ Eirene:
   cd $SOLPSTOP/modules/Eirene
   set repo="Eirene"
   git fetch --prune
-  git checkout feature/wg_workflow. && echo "Checked out Eirene WG-workflow branch" || goto branch
+  git checkout feature/wg_workflow && echo "Checked out Eirene WG-workflow branch" || goto branch
   git pull && goto Carre || goto local
 
 Carre:
