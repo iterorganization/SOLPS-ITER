@@ -577,7 +577,7 @@ while true; do {
               ((i+=1))
             }; done
             unset f X
-            q=c 
+            q=C 
             break;;
       (  c  )                                               # convert the TRIA result to template:
             check_files $triaoutlist && {
@@ -647,28 +647,28 @@ while true; do {
       (  C  )                                               # convert the TRIAGEOM result to template:
             [ X"$extra" = X ] && NN="$N" || set -A NN -- $extra
             [ -z "$NN" ] && {
-              check_files $trigoutlist && {
+              check_files $b2usoutlist && {
                 stem="template.g"
-                set -A f -- $trigoutlist
+                set -A f -- $b2usoutlist
                 true
               } || {
-                print -u2 -- "Not all the files in $trigoutlist are present ==> run TRIAGEOM first?"
-                q=g
+                print -u2 -- "Not all the files in $b2usoutlist are present ==> run B2US first?"
+                q=f
               }
               true
               } || {
                 while [ $LEN -gt ${#NN} ]; do NN="0$NN"; done
                 stem="template.g$NN"
                 list=
-                for x in $TRIAEXT; do list="$list $TRIADIR/$TRIASTEM.$NN.$x"; done
-                check_files $list && set -A f -- $list || {
-                  print -u2 -- "Not all the files $TRIASTEM.$NN.{$TRIAEXT} are present in $TRIADIR"
-                  q=l
-                  break
-                }
+                #for x in $TRIAEXT; do list="$list $TRIADIR/$TRIASTEM.$NN.$x"; done
+                #check_files $list && set -A f -- $list || {
+                #  print -u2 -- "Not all the files $TRIASTEM.$NN.{$TRIAEXT} are present in $TRIADIR"
+                #  q=l
+                #  break
+                #}
               }
               i=0
-              for x in $TRIATRI; do {
+              for x in $B2USEXT; do {
                 ln -sf ${f[i]} $stem.$x || {
                   print -u2 -- "Unable to link ${f[i]} to $stem.$x ==> check the file permissions"
                   q=q

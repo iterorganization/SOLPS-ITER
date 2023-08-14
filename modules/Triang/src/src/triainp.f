@@ -38,6 +38,8 @@ c*  other
       character line*72
       character filename*7, topo*4, dumm*20, hlp_frm*20
       logical dbg
+      integer find_loc
+      external find_loc
 #ifdef DBG
       data dbg /.true./
 #else
@@ -109,7 +111,7 @@ c*** triangulation with tria
 
         ! append the plasma polygons, in reverse order, following conventions for face normals
         do j=1,nfclblplg(i)
-          iplsplg = findloc(lblplsplg,plgfclbl(j,i),1)
+          iplsplg = find_loc(lblplsplg,nbmax,plgfclbl(j,i))
           if (iplsplg.ne.0) then
             coords(1:2,nnplg(i)+1:nnplg(i)+nnplsplg(iplsplg)-1,i) = 
      ,        plsplgcoords(1:2,nnplsplg(iplsplg):2:-1,iplsplg)
