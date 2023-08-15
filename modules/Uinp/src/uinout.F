@@ -388,7 +388,7 @@ c         detect the properties of an element with a certain face label
             if(j.eq.0) cycle
             if (fclbl(j).eq.i) exit
           end do
-          write(iunoo,709) i, 'Vessel part                             '
+          write(iunoo,709) i, 'Vessel part'//repeat(' ',52)
           write(iunoo,707) i,1,1,1,1
           jlswch=jadnsw(j)+10*jadmsw(j)+100*jadlsw(j)+1000*jadksw(j)+
      +                               10000*jadjsw(j)+100000*jadisw(j)
