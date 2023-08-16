@@ -147,6 +147,7 @@ c*** Create the b2us.dat file for triangulation
           write(2,'(a)') '''b2stbr_neutrals_namelist''    ''1'''
           write(2,'(a)') '''b2us_write_b2fgmtry_us''    ''0'''
           write(2,'(a)') '''b2us_write_b2fstati_us''    ''0'''
+          write(2,'(a)') '''b2us_tria_mode''   ''1'''
           close(2)
           print *,'    ... b2us.dat created'
       endif !}

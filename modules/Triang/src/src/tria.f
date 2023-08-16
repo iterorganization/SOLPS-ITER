@@ -632,8 +632,9 @@ C---- ALL FRONTIER PARTS ARE WORKED OUT
 
 C---- OUTPUT OF COORDINATES
       WRITE(23,*) NPOIN
-      WRITE(23,101) (X(I),I=1,NPOIN)
-      WRITE(23,101) (Y(I),I=1,NPOIN)
+      DO I=1,NPOIN
+        WRITE(23,'(I9,ES24.16,ES24.16)') I, X(I), Y(I)
+      ENDDO
       CLOSE(23)
  101  FORMAT (1P,4E17.9)
 cc??? - debugging output?  !{
