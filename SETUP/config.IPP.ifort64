@@ -55,6 +55,8 @@ EIRENE_DEFINES =
 FFLAGSEXTRA    =
 
 
+MAKETAGS = etags -o
+
 #!!!Local Variables:
 #!!! mode: Makefile
 #!!! End:
