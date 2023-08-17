@@ -230,6 +230,11 @@ while true; do {
       (  u  )                                               # run uinp to produce the input for Eirene:
             [ -r $eirinp ] && rm $eirinp
             uinp
+            [ -r b2.neutrals.parameters_hybrid.stencil ] && {
+              mv b2.neutrals.parameters_hybrid.stencil b2.neutrals.parameters_hybrid.stencil.tmp
+              sed -e 's:NEUTRALS_HYBRID:NEUTRALS:g' < b2.neutrals.parameters_hybrid.stencil.tmp > b2.neutrals.parameters_hybrid.stencil
+              rm b2.neutrals.parameters_hybrid.stencil.tmp
+            }
             N=
             [ -r $b2agout ] && [ b2ag.dat -nt structure.dat ] && {
               [ -r $eirinp ] && q=e || q=q
@@ -245,6 +250,11 @@ while true; do {
       (  U  )                                               # run uinp to produce the input for Eirene:
             [ -r $eirinp ] && rm $eirinp
             uinp -l
+            [ -r b2.neutrals.parameters_hybrid.stencil ] && {
+              mv b2.neutrals.parameters_hybrid.stencil b2.neutrals.parameters_hybrid.stencil.tmp
+              sed -e 's:NEUTRALS_HYBRID:NEUTRALS:g' < b2.neutrals.parameters_hybrid.stencil.tmp > b2.neutrals.parameters_hybrid.stencil
+              rm b2.neutrals.parameters_hybrid.stencil.tmp
+            }
             [ -L uinput.dg ] && {
               TRIADIR=$TRIADIR_back
               TRIASTEM=$TRIASTEM_back
