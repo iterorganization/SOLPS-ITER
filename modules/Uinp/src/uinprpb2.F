@@ -966,7 +966,7 @@ c*** lcns, ltns
           iniprm(i,1,1,16,8)=i
         else ! target or vessel mode
           iniprm(i,1,1,16,3)=nbc-ncore+i
-          iniprm(i,1,1,16,3)=nbc-ncore+i
+          iniprm(i,1,1,16,8)=nbc-ncore+i
         end if
       end do !}
       do i=1,nznbndt(2) !{
