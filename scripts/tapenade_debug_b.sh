@@ -1,3 +1,5 @@
+
+rm set_adj_gradient.F
 sed -i -e 's/ISIZE1OFfceb/mpg%nFc/g' b2us_geo_diff.F90 
 sed -i -e "s/arg1(2\*m%nfc)0/arg10(2\*m%nfc)/g" b2us_prep_diff.F90
 sed -i -e 's/ISIZE1OFarg1/mpg%nCv/g' b2npmo_b.F90 
@@ -25,7 +27,9 @@ sed -i -e 's/rtb\%rza = 0.D0/\!rtb\%rza = 0.D0/g' b2stbc_phys_b.F90
 
 sed -i -e 's/EXTERNAL SUBINI, SUBEND, XERTST, SFILL, DIM/EXTERNAL SUBINI, SUBEND, XERTST, SFILL/g' b2usht_b.F90
 sed -i -e 's/EXTERNAL MACHSFR, DIM/EXTERNAL MACHSFR/g' expu2_b.F90 expu_b.F90
+sed -i '/EXTERNAL B2TRCI/d' b2mod_driver_diff.F90
 
+sed -i -e "s/, uold, mold, told, uoldb, moldb, toldb, uoldb0, moldb0, toldb0/, uold, mold, told/g" b2mod_driver_diff.F90
 
 sed -i -e 's/ISIZE1OFfcbb/nFc/g' b2siav_b.F90 b2tvspa_b.F90 b2tvsq_b.F90 b2tvskt_b.F90 b2tfch__b.F90 b2tfnb_b.F90 b2tinnt_b.F90
 sed -i -e 's/ISIZE1OFvxbb/nVx/g' b2siav_b.F90
@@ -38,7 +42,8 @@ sed -i -e 's/DIMENSION(SIZE(x1, 1))/DIMENSION(mpg%nCv)/g' b2mod_driver_diff.F90
 sed -i -e 's/DIMENSION(SIZE(x2, 1))/DIMENSION(mpg%nCv)/g' b2mod_driver_diff.F90
 sed -i -e 's/DIMENSION(SIZE(x3, 1))/DIMENSION(mpg%nCv)/g' b2mod_driver_diff.F90
 sed -i -e 's/DIMENSION(SIZE(x4, 1), SIZE(x4, 2))/DIMENSION(mpg%nCv, 0:state%pl%ns-1)/g' b2mod_driver_diff.F90
-sed -i -e 's/DIMENSION(SIZE(x5, 1))/DIMENSION(mpg%nCv)/g' b2mod_driver_diff.F90
-sed -i -e 's/DIMENSION(SIZE(x6, 1), SIZE(x6, 2))/DIMENSION(mpg%nCv, 0:state%pl%ns-1)/g' b2mod_driver_diff.F90
+sed -i -e 's/DIMENSION(SIZE(x6, 1))/DIMENSION(mpg%nCv)/g' b2mod_driver_diff.F90
+sed -i -e 's/DIMENSION(SIZE(x7, 1), SIZE(x7, 2))/DIMENSION(mpg%nCv, 0:state%pl%ns-1)/g' b2mod_driver_diff.F90
 
-
+cp $TAPENADEDIR/ADFirstAidKit/adDebug.c .
+cp $TAPENADEDIR/ADFirstAidKit/adDebug.h .

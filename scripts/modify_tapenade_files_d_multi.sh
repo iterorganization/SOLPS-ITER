@@ -3,7 +3,7 @@
 move_to_F90.sh
 rm b2uxus_dv.F90
 collect_nodiff_d_multi.sh
-rm samax_dv.F90 smin_dv.F90 smax_dv.F90 get_jsep_dv.F90
+rm samax_dv.F90 smin_dv.F90 smax_dv.F90 get_jsep_dv.F90 my_outi_us_dv.F90
 mv b2mn_dv.F90 b2mn_d.F90
 
 sed -i "/INCLUDE 'DIFFSIZES.inc'/d" ./*.F90
@@ -32,7 +32,7 @@ sed -i -e "s/INTEGER :: dummyzerodiffd33/INTEGER :: dummyzerodiffd33(nbdirsmax)/
 sed -i -e "s/INTEGER :: dummyzerodiffd37/INTEGER :: dummyzerodiffd37(nbdirsmax)/g" b2news__dv.F90
 sed -i -e "s/INTEGER :: dummyzerodiffd54/INTEGER :: dummyzerodiffd54(nbdirsmax)/g" b2news__dv.F90
 sed -i -e 's/ISIZE1OFtemp/nCv/g' b2news__dv.F90 b2tfcc_dv.F90 b2tfnb_dv.F90 b2tqna_dv.F90 b2xpic_dv.F90 b2us_feedback_diffv.F90 b2npmo_dv.F90 b2sikt_dv.F90 b2tral_dv.F90 b2trcl_dv.F90 b2mndt_dv.F90
-sed -i -e 's/ISIZE1OFlnlam/nCv/g' b2npmo_dv.F90
+sed -i -e 's/ISIZE1OFlnlam/nCv/g' b2npmo_dv.F90 b2trcl_dv.F90
 sed -i -e 's/ISIZE1OFcvsa/nFc/g' b2npmo_dv.F90
 sed -i -e 's/ISIZE1OFresult1/nCv/g' b2npmo_dv.F90 b2tqna_dv.F90 b2sikt_dv.F90 b2trcl_dv.F90
 sed -i -e 's/ISIZE1OFcvvol/nCv/g' b2sikt_dv.F90

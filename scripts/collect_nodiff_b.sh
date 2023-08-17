@@ -146,6 +146,7 @@ cp $SOLPSTOP/modules/B2.5/src/utility/dfmin.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/dseval.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/dspline.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/cond_coef.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/my_outi_us.F .
 #cp $SOLPSTOP/modules/B2.5/src/utility/mass_density.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/erf_b.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/b2uxus_b.F .

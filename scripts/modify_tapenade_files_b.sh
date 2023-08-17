@@ -3,7 +3,7 @@
 move_to_F90.sh
 rm b2uxus_b.F90
 collect_nodiff_b.sh
-rm smax_b.F90 samax_b.F90 smin_b.F90 get_jsep_b.F90
+rm smax_b.F90 samax_b.F90 smin_b.F90 get_jsep_b.F90 my_outi_us_b.F90
 
 sed -i '/DIFFSIZES/d' ./*.F90 
 sed -i -e 's/REAL :: result1$/integer :: result1/g' b2mod_input_profile_diff.F90
@@ -29,7 +29,7 @@ sed -i -e 's/ISIZE1OFcvsahz/nFc/g' b2mod_recycle_diff.F90
 sed -i -e 's/ISIZE2OFcvsahz/0:1/g' b2mod_recycle_diff.F90
 sed -i -e 's/ISIZE1OFdv%fch_pi_c/nCv/g' b2news__b.F90
 sed -i -e 's/ISIZE1OFcvsa/nFc/g' b2npmo_b.F90
-sed -i -e 's/ISIZE1OFlnlam/nCv/g' b2npmo_b.F90
+sed -i -e 's/ISIZE1OFlnlam/nCv/g' b2npmo_b.F90 b2trcl_b.F90
 sed -i -e 's/ISIZE1OFvxhz/nVx/g' b2nxfv_b.F90 
 sed -i -e 's/ISIZE1OFcvhz/nCv/g' b2nxfv_b.F90
 sed -i -e 's/ISIZE1OFgeo%cvvol/nCv/g' b2stbc_b.F90

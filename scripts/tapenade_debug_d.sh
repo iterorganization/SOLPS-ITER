@@ -1,5 +1,7 @@
+rm print_tgt_gradient.F set_tgt_perturbation.F
+
 sed -i -e 's/LOGICAL :: arg10/LOGICAL :: arg10(2*m%nfc)/g' b2us_prep_diff.F90
-sed -i '/switchd%b2mndr_na_min = 0.D0/d' b2stbc_d.F90  b2stbc_phys_d.F90 
+sed -i '/switchd%b2mndr_na_min = 0.D0/d' b2stbc_d.F90  b2stbc_phys_d.F90 b2npco_d.F90
 sed -i '/switchd%fch_pte = 0.D0/d' b2tqce_d.F90 b2trcl_d.F90
 sed -i '/switchd%b2sqcx_phm0 = 0.D0/d' b2trcl_d.F90
 sed -i -e 's/LOGICAL :: arg1/LOGICAL :: arg1(m%nfc)/g' find_faces_d.F90
@@ -13,13 +15,40 @@ sed -i -e 's/(SIZE(sy, \&/n\&/g' myblas_d.F90
 sed -i -e 's/(SIZE(sx\&/\&/g' myblas_d.F90
 sed -i -e 's/\&                              , 1)+1)\/8)/\&                              n\/8)/g' myblas_d.F90
 
-sed -i -e '/CALL DIM_D/i\  cutlod=0.0_R8' expu_d.F90
+# i put intent in for pld, geod, rtd, rtwd in b2stel_d
+sed -i -e 's/TYPE(GEOMETRY), INTENT(IN) :: geod/TYPE(GEOMETRY), INTENT(INout) :: geod/g' b2stel_d.F90
+sed -i -e 's/TYPE(B2PLASMA_DIFF), INTENT(IN)/TYPE(B2PLASMA_DIFF), INTENT(INout)/g' b2stel_d.F90
+sed -i -e 's/TYPE(B2RATES_DIFF), INTENT(IN) :: rtd/TYPE(B2RATES_DIFF), INTENT(INout) :: rtd/g' b2stel_d.F90
+sed -i -e 's/TYPE(B2RATESWORK), INTENT(IN) :: rtwd/TYPE(B2RATESWORK), INTENT(INout) :: rtwd/g' b2stel_d.F90
 
-sed -i -e '/EXTERNAL DIM_D/i\  real(kind=r8) DIM_D' b2usht_d.F90  expu2_d.F90 expu_d.F90
+sed -i -e 's/MODULE B2MOD_GEO/MODULE B2MOD_GEO_DIFF/g' b2mod_geo_diff.F90
+mv b2mod_sources_diff.F90 b2mod_sources.F90
+sed -i -e 's/MODULE B2MOD_SOURCES_DIFF/MODULE B2MOD_SOURCES/g' b2mod_sources.F90
+sed -i -e 's/use b2mod_sources_diff/use b2mod_sources/g' *.F*
+mv b2mod_transport_diff.F90 b2mod_transport.F90
+sed -i -e 's/MODULE B2MOD_TRANSPORT_DIFF/MODULE B2MOD_TRANSPORT/g' b2mod_transport.F90
+mv b2mod_anomalous_transport_diff.F90 b2mod_anomalous_transport.F90
+sed -i -e 's/MODULE B2MOD_ANOMALOUS_TRANSPORT_DIFF/MODULE B2MOD_ANOMALOUS_TRANSPORT/g' b2mod_anomalous_transport.F90
+
+sed -i -e 's/8ARRAY(parm_hced, r8\/8)/8(parm_hced, r8\/8)/g' b2tqna_d.F90
+sed -i -e 's/8ARRAY(df0d, r8\/8)/8(df0d, r8\/8)/g' b2tqna_d.F90
+sed -i -e 's/8ARRAY(dnnd, r8\/8)/8(dnnd, r8\/8)/g' b2tqna_d.F90
+sed -i -e 's/8ARRAY(dind, r8\/8)/8(dind, r8\/8)/g' b2tqna_d.F90
+sed -i -e 's/8ARRAY(diond, r8\/8)/8(diond, r8\/8)/g' b2tqna_d.F90
+sed -i -e 's/8ARRAY(vcxd, r8\/8)/8(vcxd, r8\/8)/g' b2tqna_d.F90
+sed -i -e 's/8ARRAY(arg2d, r8\/8)/8(arg2d, r8\/8)/g' b2tqna_d.F90
+sed -i -e 's/8ARRAY(wrk0d, r8\/8)/8(wrk0d, r8\/8)/g' b2tqna_d.F90
+sed -i -e 's/8ARRAY(tavd, r8\/8)/8(tavd, r8\/8)/g' b2tqna_d.F90
+sed -i -e 's/8ARRAY(result1d, r8\/8)/8(result1d, r8\/8)/g' b2tqna_d.F90
+sed -i -e 's/8ARRAY(max3d, r8\/8)/8(max3d, r8\/8)/g' b2tqna_d.F90
+
+sed -i -e 's/expu_d = DIM_D(arg1, arg1d, cutlo, cutlod, expu)/CALL DIM_D(arg1, arg1d, cutlo, cutlod, expu, expu_d)/g' b2mod_math_diff.F90
+sed -i -e 's/expu2_d = DIM_D(arg1, arg1d, cutlo, cutlod, expu2)/CALL DIM_D(arg1, arg1d, cutlo, cutlod, expu2, expu2_d)/g' b2mod_math_diff.F90
+sed -i -e '/CALL DIM_D/i\    cutlod=0.0_R8' b2mod_math_diff.F90
 
 sed -i -e '/REAL(kind=r8) :: temp1/i\     REAL(kind=r8) :: dummy' b2usht_d.F90
 sed -i -e '/result1d = DIM_D(1.0_R8, 0.D0, arg1, arg1d, result1)/i\     dummy = 0.0_R8' b2usht_d.F90
-sed -i -e 's/result1d = DIM_D(1.0_R8, 0.D0, arg1, arg1d, result1)/result1d = DIM_D(1.0_R8, dummy, arg1, arg1d, result1)/g' b2usht_d.F90
+sed -i -e '/result1d = DIM_D(1.0_R8, 0.D0, arg1, arg1d, result1)/ call DIM_D(1.0_R8, dummy, arg1, arg1d, result1, result1d)/g'
 
 sed -i -e 's/pld\%na = 0.D0/\!pld\%na = 0.D0/g' b2tfhe__d.F90 b2mod_recycle_diff.F90 b2stbc_phys_d.F90
 sed -i -e 's/nad = 0.D0/\!nad = 0.D0/g' b2upht_d.F90
@@ -42,6 +71,7 @@ sed -i -e 's/CALL SFILL_D(nfc, 0.0e0_R8, 0.D0/CALL SFILL_D(nfc, 0.0e0_R8, dummyd
 sed -i -e 's/CALL SFILL_D(nfc, 1.0_R8, 0.D0/CALL SFILL_D(nfc, 1.0_R8, dummydiff/g' b2trcl_d.F90
 sed -i -e 's/CALL SFILL_D(ncv, 1.0_R8, 0.D0/CALL SFILL_D(ncv, 1.0_R8, dummydiff/g' b2trcl_d.F90
 
+sed -i -e 's/use b2mod_geo_diff/use b2mod_geo/g' ./*F*
 
 # NOT NEEDED ANYMORE?
 #sed -i '/switchd%b2npco_pcm0 = 0.D0/d' b2npco_d.F90 
@@ -129,4 +159,6 @@ sed -i '/switchd%b2sikt_fac_aniso = 0.D0/d' b2npht_d.F90
 
 
 #gedit b2npht_d.F90 b2npmo_d.F90 b2sihs__d.F90 b2stbc_d.F90 b2stbr_phys_d.F90 b2tfch__d.F90 b2tfhe__d.F90 b2tfnb_d.F90 b2tlc0_d.F90 b2tlh0_d.F90 b2tlnl_d.F90 b2tlv0_d.F90 b2tqca_d.F90 b2tqce_d.F90 b2trcl_d.F90 b2treq_d.F90 
-
+cp $TAPENADEDIR/ADFirstAidKit/adStack.h .
+cp $TAPENADEDIR/ADFirstAidKit/adStack.c .
+cp $TAPENADEDIR/ADFirstAidKit/adComplex.h .
