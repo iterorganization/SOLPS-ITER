@@ -41,9 +41,7 @@ SOLPSTOP=`determine_SOLPSTOP`
 [ "$SOLPS_DEBUG" = '' ] || {
   export EXT_DEBUG=".debug"
 }
-CARRE_PATH=$SOLPSTOP/modules/Carre/builds/$HOST_NAME.$COMPILER$EXT_DEBUG
 CARRE2_PATH=$SOLPSTOP/modules/Carre2/builds/$HOST_NAME.$COMPILER$EXT_DEBUG
-/bin/echo -e "CARRE_PATH : $CARRE_PATH"
 /bin/echo -e "CARRE2_PATH : $CARRE2_PATH"
 
 [ "$DEVICE" = '' ] && {
