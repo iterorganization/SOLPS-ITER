@@ -436,8 +436,8 @@ c*** k, m, n are the numbers of recycling, specified, and all strata
       lrrvr(20,8)=.true.
       lrrvr(25,3)=.true.
       lrrvr(25,8)=.true.
-      ltrvr(40,3)=.true.
-      ltrvr(40,8)=.true.
+      lt2rvr(40,3)=.true.
+      lt2rvr(40,8)=.true.
       lrrvr(42,8)=.true.
       lspvr(42,8)=.true.
       lrrvr(43,8)=.true.
@@ -569,8 +569,8 @@ c***            targsp
                 end if !}
 
 c***            surf_mat
-                cniprm(k,1,1,40,3) = ewmbnds(i,j)
-                cniprm(k+ihyb,1,1,40,8) = ewmbnds(i,j)
+                c2niprm(k,1,1,40,3) = ewmbnds(i,j)
+                c2niprm(k+ihyb,1,1,40,8) = ewmbnds(i,j)
 
 c***            accel_ion
                 if (j.eq.2) then
@@ -614,7 +614,7 @@ cnh             values for additional hybrid strata
                       end do !}
                     end if !}
                   end if !}
-                  cniprm(k+ihyb,1,1,40,8) = ewmbnds(i,j)
+                  c2niprm(k+ihyb,1,1,40,8) = ewmbnds(i,j)
                   if (j.eq.2) then
                     iniprm(k+ihyb,1,1,41,8) = 1
                   end if
@@ -724,8 +724,8 @@ cnh         should be replaced by vessel properties in the future!
             do j=1,nlimi !{
                if (fclbl(j).eq.i) exit
             end do !}  
-            cniprm(k,1,1,40,3) = umtrl(j) 
-            cniprm(k+ihyb,1,1,40,8) = umtrl(j)
+            c2niprm(k,1,1,40,3) = umtrl(j) 
+            c2niprm(k+ihyb,1,1,40,8) = umtrl(j)
 
 c***        accel_ion
             iniprm(k,1,1,41,3) = 1
@@ -764,7 +764,7 @@ cnh         values for additional hybrid strata
      >              iniprm(k+ihyb,1,1,39,8)+1
                 end do !}
               end if !}
-              cniprm(k+ihyb,1,1,40,8) = umtrl(j)
+              c2niprm(k+ihyb,1,1,40,8) = umtrl(j)
             end if
           end do !}
         end do !}        
@@ -841,8 +841,8 @@ c*** lstrascl,gpfc
         lprdckw(k+nhyb,1,20,8)=.true.
 
 c*** surf_mat
-        cniprm(k,1,1,40,3) = ''
-        cniprm(k+nhyb,1,1,40,8) = ''
+        c2niprm(k,1,1,40,3) = ''
+        c2niprm(k+nhyb,1,1,40,8) = ''
 
 c*** accel_ion
         iniprm(k,1,1,41,3) = 0
@@ -901,8 +901,8 @@ c*** lstrascl, gpfc
         end do !}
 
 c*** surf_mat
-        cniprm(k,1,1,40,3) = ''
-        cniprm(k+nhyb,1,1,40,8) = ''
+        c2niprm(k,1,1,40,3) = ''
+        c2niprm(k+nhyb,1,1,40,8) = ''
 
 c*** accel_ion
         iniprm(k,1,1,41,3) = 0
@@ -951,8 +951,8 @@ c*** lstrascl
         end do !}
 
 c*** surf_mat
-        cniprm(k,1,1,40,3) = ''
-        cniprm(k+nhyb,1,1,40,8) = ''
+        c2niprm(k,1,1,40,3) = ''
+        c2niprm(k+nhyb,1,1,40,8) = ''
 
 c*** accel_ion
         iniprm(k,1,1,41,3) = 0
