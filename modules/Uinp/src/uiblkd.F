@@ -145,7 +145,7 @@ c*** Data for TRIA mesh
 c*** 1
 
       data nmach, nmode , ntcpu, nfile, niter0, niter, ntime0, ntim1 /
-     /       2  ,   1   ,  50  , 5306 ,   1   ,   1  ,   0   ,   1   /,
+     /       2  ,   1   ,  50  , 5800 ,   1   ,   1  ,   0   ,   1   /,
      ,  nfullrun, noptim,noptm1, ngeom_usr, ncoup_input, nsmstra /
      /       0  ,   1   ,   1  ,     0    ,     1      ,    1    /,
      ,   nstoram, ngstal,nrtal1,nreac_add /
@@ -179,9 +179,9 @@ c*** 2
      ,     volcor , voladd  /
      /    nbmax*1., nadd*1. /
       data  nlrad , nlslb , nlcrc , nlell , nltri , nlplg /
-     /      .true.,.false.,.false.,.false.,.false., .false./,
+     /      .true.,.false.,.false.,.false.,.false.,.false./,
      ,      nlfem , nltet , nlgen /
-     /     .true.,.false.,.false./,
+     /     .true. ,.false.,.false./,
      ,      nlpol , nlply , nlpla , nlplp , nltor /
      /      .true.,.false.,.false.,.false.,.false./,
      ,      nltrz , nltra , nltrt , nlmlt , nladd /
@@ -958,7 +958,7 @@ c*** Data for Eirene test run
 
       data
      , ttntcpu,ttnfile, ttnpts, ttalloc,tttest,ttcsrc,ttcsur,ttcint /
-     /    50  , 10100 , nstra*5,   0.  ,.true.,.true.,.true.,.true. /,
+     /    50  , 10600 , nstra*5,   0.  ,.true.,.true.,.true.,.true. /,
      , ttchst,ttcref,ttcamd,ttcsou,ttcbla,ttcblm,ttcbli,ttcblp,ttcble /
      / .true.,.true.,.true.,.true.,.true.,.true.,.true.,.true.,.true. /,
      , ttcblph,ttctal,ttcoct,ttccen,ttcrnf /
@@ -975,7 +975,7 @@ c*** Data for Eirene test run
 c*** Data for diagnostic run
 
       data lntspcu,lntsptu,nmcsptu,dgntcpu,dgnptsfc,dgnfile,dgalloc /
-     /        1   ,   0   ,   0   ,  1200 ,   10   , 00100 ,  0.5   /
+     /        1   ,   0   ,   0   ,  1200 ,   10   , 10606 ,  0.5   /
 
 c*** Data for b2ah.dat.stencil file
 
