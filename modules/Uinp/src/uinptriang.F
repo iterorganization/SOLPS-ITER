@@ -105,8 +105,28 @@ c***   store the sorted chain to construct polygons for void triangulation
              stop 'Check DG model'
            endif
          elseif (index(topo,'DN').gt.0) then
-
-
+           if (NSS(j).eq.7) then
+             nnlbl = nnlbl+1
+             triplgfclbl(nnlbl,ntriplg)=-23
+           elseif (NSS(j).eq.8) then
+             nnlbl = nnlbl+1
+             triplgfclbl(nnlbl,ntriplg)=-24
+           elseif (NSS(j).eq.9) then
+             nnlbl = nnlbl+1
+             triplgfclbl(nnlbl,ntriplg)=-27
+           elseif (NSS(j).eq.10) then
+             nnlbl = nnlbl+1
+             triplgfclbl(nnlbl,ntriplg)=-28
+           elseif (NSS(j).eq.11) then
+             nnlbl = nnlbl+3
+             triplgfclbl(nnlbl-2:nnlbl,ntriplg)=(/-43,-42,-44/)
+           elseif (NSS(j).eq.12) then
+             nnlbl = nnlbl+3
+             triplgfclbl(nnlbl-2:nnlbl,ntriplg)=(/-47,-46,-48/)
+           else
+             write (*,*) 'Did not expect NSS = ',NSS(j),' in chain'
+             stop 'Check DG model'
+           endif
          else
            write (*,*) 'uinptriang -- warning: topology ',topo,
      ,                 'not yet supported for void triangulation'
