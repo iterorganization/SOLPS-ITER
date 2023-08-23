@@ -52,7 +52,7 @@ c*** 3b
      ,    jlside(nlim), jlequi(nlim), jltor(nlim), jlcol(nlim),
      ,    jlfit(nlim),  jlbox(nlim),  jlref(nlim), jlsptp(nlim),
      ,    jlsptc(nlim), jsrss(nlim),  jsrc(nlim),  lchspnwa(nlim),
-     ,    jsrsg(nlim),  jlplg(nlim)
+     ,    jsrsg(nlim),  jlplg(nlim),  fclbl(nlim), omp_elm, imp_elm
       integer jadch0(nlim), jadch1(nlim,nlim), jadnsw(nlim),
      ,    jadmsw(nlim), jadlsw(nlim), jadksw(nlim), jadjsw(nlim),
      ,    jadisw(nlim), jlblck(nlim), jlacll(nlim)
@@ -139,9 +139,10 @@ c*** 4d
 
 c*** 5
 
-      integer nplsi,nbgk,
-     ,  nmassp(npls),ncharp(npls),nprtp(npls),nchrgp(npls),
-     ,  isrfp(npls),isrtp(npls),nmsecp(npls),nrcp(npls),idnslmp(npls),
+      integer nplsi,nplsh,nbgk,
+     ,  nmassp(npls),nmassph(npls),ncharp(npls),nprtp(npls),
+     ,  nchrgp(npls),isrfp(npls),isrfph(npls),isrtp(npls),isrtph(npls),
+     ,  nmsecp(npls),nrcp(npls),idnslmp(npls),
      ,  nfolp(npls),ngenp(npls),nhstp(npls),
      ,  ireacp(npls,nreac),ibulkp(npls,nreac),
      ,  iscd1p(npls,nreac),iscd2p(npls,nreac),iscd3p(npls,nreac),
@@ -161,7 +162,7 @@ c*** 5
      ,     vy2(npls), vy3(npls), vy4(npls), vy5(npls), vz0(npls),
      ,     vz1(npls), vz2(npls), vz3(npls), vz4(npls), vz5(npls),
      ,     b0, b1, b2, b3, b4, b5, vl0, vl1, vl2, vl3, vl4, vl5
-      character textp(npls)*8
+      character textp(npls)*8, textph(npls)*8
 
 c*** 6
 
@@ -171,8 +172,8 @@ c*** 6
      ,     lchsptrg(nchsppr), lchspgrp(nchsppr),
      ,     lchspprt(nchsppr), lchspprp(nchsppr), lchsptgt(nchsppr),
      ,     lchsptgp(nchsppr), lchspnwl(nchsppr), lchspaux(5,nchsppr)
-      real datm(natm), dmol(nmol), dion(nion), dpls(npls), ermin,
-     ,     ercut, rprob0, rinteg, einteg, ainteg,
+      real datm(natm), dmol(nmol), dion(nion), dpls(npls), dplsh(npls), 
+     ,     ermin, ercut, rprob0, rinteg, einteg, ainteg,
      ,     ychsptg(nchsppr), echsptg(nchsppr), fchsptg(nchsppr),
      ,     achsptg(3,nchsppr)
       logical nltrim
@@ -198,7 +199,8 @@ c*** Surface Cards
 
 c*** 7
 
-      integer nstrai,indsrc(nstra),npts(nstra),ninitl(nstra),
+      integer nstrai,indsrc(nstra),npts(nstra),nptsh(nstra),
+     ,  ninitl(nstra),
      ,  nemods(nstra),namods(nstra),nminpts(nstra),nspez(nstra),
      ,  ivlsf(nstra),iscls(nstra),isclt(nstra),iscl1(nstra),
      ,  iscl2(nstra),iscl3(nstra),isclb(nstra),iscla(nstra),
@@ -343,16 +345,17 @@ c*** 14
 
       integer nclmi,nblcki,nprnvi,nprtvi,nprdvi,nfla,ncutb,ncutl,
      ,  imf,ntrfrm,nfull,ibrad,ibpol,ibtor,
-     ,  iflb(npls),ndxa,ndya,ntargi,ntgprt(nstep),ndt2(nstep,ngitt),
+     ,  iflb(npls),iflbh(npls),ndxa,ndya,ncvp,ncip,nfcp,ntargi,
+     ,  ntgprt(nstep),ndt2(nstep,ngitt),
      ,  ninct2(nstep,ngitt),nixy2(nstep,ngitt),ntin2(nstep,ngitt),
      ,  nten2(nstep,ngitt),niflg(nstep,ngitt),nptc(nstep,ngitt),
      ,  nptcm(nstep,ngitt),nspzi(nstep,ngitt),nspze(nstep,ngitt),
      ,  nemod(nstep,ngitt),istramin,istramax,
      ,  nainb,ncopib,ncopeb,nains(nain),naint(nain),
      ,  naotb,naots(nlimps),naott(nlimps),
-     ,  lkindp(npls)
-      real fcte(npls),bmass(npls),chgsp(nstra),chgsee(nstra),
-     ,  chgsei(nstra),chgsmom(nstra)
+     ,  lkindp(npls),lkindph(npls)
+      real fcte(npls),fcteh(npls),bmass(npls),bmassh(npls),chgsp(nstra),
+     ,  chgsee(nstra),chgsei(nstra),chgsmom(nstra)
       logical lsymet,lbalan,lcoarse,lfchgs,lsprcl
       character txtpls(nain)*72, txtpsp(nain)*24, txtpun(nain)*24
 
@@ -360,7 +363,8 @@ c*** 15
 
       integer nnadmod
       parameter (nnadmod=1)
-      integer nadmod,nasmod,nrs(nnadmod),ipunkt(nnadmod),jedge(2,8)
+      integer nadmod,nasmod,nrs(nnadmod),ipunkt(nnadmod),jedge(2,8),
+     ,  nssir(8)
       real xcoor(nnadmod),ycoor(nnadmod),zcoor(nnadmod),
      ,  xpolpos(8),ypolpos(8)
 
@@ -404,7 +408,7 @@ c*** b2ah.dat
      ,  ilbox,ilplg,ilref,ilsptp,ilsptc,isrss,isrc,lchspnws,isrsg,
      ,  nlimi,itend,
      ,  itini,jliin,jlside,jlequi,jltor,jlcol,jlfit,jlbox,jlplg,jlref,
-     ,  jsrss,jsrc,lchspnwa,jsrsg,
+     ,  jsrss,jsrc,lchspnwa,jsrsg,fclbl,omp_elm,imp_elm,
      ,  jlsptp,jlsptc,nreaci,ir,massp,masst,
      ,  ifex1mn,ifex1mx,ifex2mn,ifex2mx,iz,nrcln,
      ,  natmi,nmeta,
@@ -419,14 +423,15 @@ c*** b2ah.dat
      ,  nphti,isrff,isrtf,nmsecf,nrcf,nfolf,
      ,  ngenf,nhstf,
      ,  ireacf,ibulkf,iscd1f,iscd2f,iscd3f,iscd4f,iscdef,iestmf,ibgkf,
-     ,  nplsi,nbgk,nmassp,ncharp,nprtp,nchrgp,isrfp,
-     ,  isrtp,nmsecp,nrcp,idnslmp,nfolp,ngenp,nhstp,ireacp,ibulkp,
+     ,  nplsi,nplsh,nbgk,nmassp,nmassph,ncharp,nprtp,nchrgp,isrfp,
+     ,  isrfph,isrtp,isrtph,nmsecp,nrcp,idnslmp,nfolp,ngenp,nhstp,
+     ,  ireacp,ibulkp,
      ,  iscd1p,iscd2p,iscd3p,iscd4p,iscdep,nrep,ispcdn,itpcdn,istrcdn,
      ,  indpro,nnftrm,nchsppri,
      ,  lchsptrg,lchspgrp,lchspprt,lchspprp,lchsptgt,
      ,  lchsptgp,lchspnwl,lchspaux,nchemvar,indchemvar,nnchemvar,
-     ,  nstrai,indsrc,npts,ninitl,nemods,namods,nminpts,nspez,ivlsf,
-     ,  iscls,isclt,iscl1,iscl2,iscl3,isclb,iscla,nsrfsi,
+     ,  nstrai,indsrc,npts,nptsh,ninitl,nemods,namods,nminpts,nspez,
+     ,  ivlsf,iscls,isclt,iscl1,iscl2,iscl3,isclb,iscla,nsrfsi,
      ,  indim,insor,ingrda,ingrde,nrsor,npsor,ntsor,nbsor,nasor,nisor,
      ,  istor,nzadd,ini,ine,
      ,  nprcsf,iprcsf,maxlev,maxrad,maxpol,maxtor,maxadd,nssplr,nssplp,
@@ -454,11 +459,11 @@ c*** b2ah.dat
      ,  jadch0,jadch1,jadnsw,jadmsw,jadlsw,jadksw,jadjsw,jadisw,
      ,  jlblck,jlacll,nclmi,nblcki,nprnvi,nprtvi,nprdvi,nfla,
      ,  ncutb,ncutl,imf,ntrfrm,nfull,ibrad,ibpol,ibtor,
-     ,  iflb,ndxa,ndya,ntargi,ntgprt,ndt2,ninct2,nixy2,
-     ,  ntin2,nten2,niflg,nptc,nptcm,nspzi,nspze,nemod,istramin,
+     ,  iflb,iflbh,ndxa,ndya,ncvp,ncip,nfcp,ntargi,ntgprt,ndt2,ninct2,
+     ,  nixy2,ntin2,nten2,niflg,nptc,nptcm,nspzi,nspze,nemod,istramin,
      ,  istramax,nainb,ncopib,ncopeb,nains,naint,naotb,naots,naott,
-     ,  lkindm,lkindi,lkindp,
-     ,  nadmod,nasmod,nrs,ipunkt,jedge,
+     ,  lkindm,lkindi,lkindp,lkindph,
+     ,  nadmod,nasmod,nrs,ipunkt,jedge,nssir,
      ,  scilref,scilspt,scisrs,scisrc,sclchspnwl,scisrsg,
      ,  iscrd,jscrd,
      ,  cbnrso,cbnrno,cbnrwe,cbnrea,
@@ -490,7 +495,7 @@ c*** b2ah.dat
      ,  di4,di5,vx0,vx1,vx2,vx3,vx4,vx5,vy0,vy1,vy2,vy3,vy4,vy5,vz0,vz1,
      ,  vz2,vz3,vz4,vz5,
      ,  b0,b1,b2,b3,b4,b5,vl0,vl1,vl2,vl3,vl4,vl5,
-     ,  datm,dmol,dion,dpls,ermin,
+     ,  datm,dmol,dion,dpls,dplsh,ermin,
      ,  ercut,rprob0,rinteg,einteg,ainteg,ychsptg,echsptg,fchsptg,
      ,  achsptg,fsheata,
      ,  alloc,flux,scalv,sorwgt,sorlim,sorind,sorexp,sorifl,sorad1,
@@ -503,7 +508,7 @@ c*** b2ah.dat
      ,  talzmi,talzma,talxmi,talxma,talymi,talyma,talw1,talw2,fcabs1,
      ,  fcabs2,rpsdl,emin1,emax1,eshift,emnspc,emxspc,
      ,  chpts,xpivot,ypivot,zpivot,xchord,ychord,zchord,
-     ,  dtimv,time0,fcte,bmass,chgsp,chgsee,chgsei,chgsmom,
+     ,  dtimv,time0,fcte,fcteh,bmass,bmassh,chgsp,chgsee,chgsei,chgsmom,
      ,  scxmlim,scewall,scewbin,sctransp,screcycf,screcyct,scrcprm,
      ,  scfsheat,scexppl,scexpel,scexpil,screcycs,scychsptg,
      ,  scechsptg,scfchsptg,scstprm,chmvar,
@@ -536,7 +541,7 @@ c*** b2ah.dat
 
       common/uinchr/ txtrun,txtsfl,txtsfa,
      ,  filnam,h123,reac,crc,elname,bundling,
-     ,  texta,textm,texti,textf,textp,
+     ,  texta,textm,texti,textf,textp,textph,
      ,  cdnmdlp,fnamcdn,h2cdn,reaccdn,crcdn,path,filtrm,
      ,  txtsou,txttla,txtspa,txtuna,txttlc,txtspc,txtunc,
      ,  txttlr,txtspr,txtunr,txttld,txtspd,txtund,chrtal,chrtls,

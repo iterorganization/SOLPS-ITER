@@ -1,16 +1,16 @@
 #!/bin/bash
-echo "This script is used to add a DEVICE directory to DivGeo/device, Carre/meshes, and Triang/triangles"
+echo "This script is used to add a DEVICE directory to DivGeo/device, Carre2/meshes, and Triang/triangles"
 echo "These directories will also be created with the appropriate permissions if necessary"
 read -p "Enter DEVICE name:" MYDEVICE
 set -x
 mkdir -p $SOLPSTOP/modules/DivGeo/device/$MYDEVICE
-mkdir -p $SOLPSTOP/modules/Carre/meshes/$MYDEVICE
+mkdir -p $SOLPSTOP/modules/Carre2/meshes/$MYDEVICE
 mkdir -p $SOLPSTOP/modules/Triang/triangles/$MYDEVICE
 chmod a+w $SOLPSTOP/modules/DivGeo/device
-chmod a+w $SOLPSTOP/modules/Carre/meshes
+chmod a+w $SOLPSTOP/modules/Carre2/meshes
 chmod a+w $SOLPSTOP/modules/Triang/triangles
 chmod a+w $SOLPSTOP/modules/DivGeo/device/$MYDEVICE
-chmod a+w $SOLPSTOP/modules/Carre/meshes/$MYDEVICE
+chmod a+w $SOLPSTOP/modules/Carre2/meshes/$MYDEVICE
 chmod a+w $SOLPSTOP/modules/Triang/triangles/$MYDEVICE
 
 

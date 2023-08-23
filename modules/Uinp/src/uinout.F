@@ -33,7 +33,8 @@ c=======================================================================
       character*50 hlp_frm
       character utxthd(35)*71, utxtfl(7)*50, ufnm*(*)
       character utxtgt*71
-      integer len_of_digits, idez
+      integer len_of_digits, idez, nlimi_vess, ncore, nskip, nvess
+      integer :: indsrc7(nstrai)
       external streql, silent_open, len_of_digits, idez, xerrab
       data utxthd /
      1        '** 1. Data for operating mode' ,
@@ -341,30 +342,103 @@ c**  additional cells outside standard mesh
 c*** 3a.  data for non-default surface models on standard surfaces
 
       write(iunoo,700) utxthd(3)
-      write(iunoo,707) nstsi
-      do ists=1,nstsi !{
-        write(iunoo,709) ists,txtsfl(ists)
-        write(iunoo,707) ists,idimp(ists),inump(ists),
+      if (grid_mode.ne.2) then ! standard + target mode
+        write(iunoo,707) nstsi
+        nskip=0
+        do ists=1,nstsi !{
+          if ((carre_mode.eq.2).and.(iliin(ists).eq.2)) then ! write core regions at the end in target mode
+            nskip=nskip+1 
+            cycle 
+          end if
+          write(iunoo,709) ists-nskip,txtsfl(ists)
+          write(iunoo,707) ists-nskip,idimp(ists),inump(ists),
      ,                   irpta1(ists),irpte1(ists),irpta2(ists),
      ,                   irpte2(ists),irpta3(ists),irpte3(ists)
-        write(iunoo,707) iliin(ists),ilside(ists),ilswch(ists),
+          write(iunoo,707) iliin(ists),ilside(ists),ilswch(ists),
      .                   ilequi(ists),iltor(ists),ilcol(ists),
      .                   ilfit(ists),ilcell(ists),ilbox(ists),
      .                   ilplg(ists)
-        if(iscrd(ists).gt.0) then !{
-          write(iunoo,715) scard_name(iscrd(ists))
-        else if (iliin(ists).eq.1 .or. bliin(ists)) then !}{
-          ii=10*ilsptc(ists)+ilsptp(ists)
-          write(iunoo,707) ilref(ists),ii,isrss(ists),isrc(ists),
+          if(iscrd(ists).gt.0) then !{
+            write(iunoo,715) scard_name(iscrd(ists))
+          else if (iliin(ists).eq.1 .or. bliin(ists)) then !}{
+            ii=10*ilsptc(ists)+ilsptp(ists)
+            write(iunoo,707) ilref(ists),ii,isrss(ists),isrc(ists),
      ,                                    lchspnws(ists)
-          write(iunoo,703) xmlim(ists),ewall(ists),ewbin(ists),
+            write(iunoo,703) xmlim(ists),ewall(ists),ewbin(ists),
      ,                       transp(ists,1),transp(ists,2),fsheat(ists)
-          write(iunoo,703) recycf(ists),recyct(ists),recprm(ists),
+            write(iunoo,703) recycf(ists),recyct(ists),recprm(ists),
      ,                              exppl(ists),expel(ists),expil(ists)
-          write(iunoo,703) recycs(ists),recycc(ists),echspts(ists),
+            write(iunoo,703) recycs(ists),recycc(ists),echspts(ists),
      ,                        fchspts(ists),sptprm(ists)
-        end if !}
-      end do !}
+          end if !}
+        end do !}  
+        i=nstsi-nskip      
+      else ! vessel mode
+c       count the number of core regions
+        ncore=0
+        do ists=1,nstsi
+          if (iliin(ists).eq.2) ncore=ncore+1
+        end do
+        write(iunoo,707) maxval(fclbl)+ncore
+c       first write the positive face labels
+        do i=1,maxval(fclbl)
+c         detect the properties of an element with a certain face label
+          do k=laddsrfs+1,nlimi !{
+            j=indasrfs(k)
+            if(j.eq.0) cycle
+            if (fclbl(j).eq.i) exit
+          end do
+          write(iunoo,709) i, 'Vessel part'//repeat(' ',52)
+          write(iunoo,707) i,1,1,1,1
+          jlswch=jadnsw(j)+10*jadmsw(j)+100*jadlsw(j)+1000*jadksw(j)+
+     +                               10000*jadjsw(j)+100000*jadisw(j)
+          jlcell=jlacll(j)+1000*jlblck(j)
+          write(iunoo,707) jliin(j),jlside(j),jlswch,jlequi(j),
+     ,      jltor(j),jlcol(j),jlfit(j),jlcell,jlbox(j),jlplg(j)
+          if(jscrd(j).gt.0) then !{
+            write(iunoo,715) scard_name(jscrd(j))
+          else if (jliin(j).eq.1) then !}{
+            ii=10*jlsptc(j)+jlsptp(j)
+            write(iunoo,707) jlref(j),ii,jsrss(j),jsrc(j),lchspnwa(j)
+            write(iunoo,703) xmlma(j),ewala(j),ewbna(j),
+     ,                  trnspa(j,1),trnspa(j,2),fsheata(j)
+            write(iunoo,703) rcycfa(j),rcycta(j),rcprma(j),
+     ,                  exppla(j),expela(j),expila(j)
+            write(iunoo,703) rcycsa(j),rcycca(j),
+     ,                  echspta(j),fchspta(j),sptpra(j)
+          end if !}
+        end do
+        i=maxval(fclbl)
+      end if
+c     write the core regions at the end for target mode
+      if (carre_mode.eq.2) then
+        do ists=1,nstsi !{
+          if (iliin(ists).ne.2) cycle
+          i=i+1
+          write(iunoo,709) i,txtsfl(ists)
+          write(iunoo,707) i,idimp(ists),inump(ists),
+     ,                 irpta1(ists),irpte1(ists),irpta2(ists),
+     ,                 irpte2(ists),irpta3(ists),irpte3(ists)
+          write(iunoo,707) iliin(ists),ilside(ists),ilswch(ists),
+     .                 ilequi(ists),iltor(ists),ilcol(ists),
+     .                 ilfit(ists),ilcell(ists),ilbox(ists),
+     .                 ilplg(ists)
+          if(iscrd(ists).gt.0) then !{
+            write(iunoo,715) scard_name(iscrd(ists))
+          else if (iliin(ists).eq.1 .or. bliin(ists)) then !}{
+            ii=10*ilsptc(ists)+ilsptp(ists)
+            write(iunoo,707) ilref(ists),ii,isrss(ists),isrc(ists),
+     ,                      lchspnws(ists)
+            write(iunoo,703) xmlim(ists),ewall(ists),ewbin(ists),
+     ,                      transp(ists,1),transp(ists,2),fsheat(ists)
+            write(iunoo,703) recycf(ists),recyct(ists),recprm(ists),
+     ,                      exppl(ists),expel(ists),expil(ists)
+            write(iunoo,703) recycs(ists),recycc(ists),echspts(ists),
+     ,                      fchspts(ists),sptprm(ists)
+          end if !}
+        end do !}
+      end if 
+      
 
 c*** 3b.  data for additional surfaces
 
@@ -798,17 +872,36 @@ c*** surface cards
 c*** 7.  data for primary source
 
       write(iunoo,700) utxthd(8)
-      write(iunoo,707) nstrai
-      write(iunoo,707) (indsrc(i),i=1,nstrai)
+c     correct number of strata for vessel mode
+      if (grid_mode.ne.2) then ! standard + target mode
+        write(iunoo,707) nstrai
+        write(iunoo,707) (indsrc(i),i=1,nstrai)
+      else ! vessel mode
+        nvess=maxval(fclbl)*(natmi-nmeta) ! number of surface strata
+        j=0
+        indsrc7=0
+        do i=1,nstrai 
+          if (indsrc(i).ne.6) then ! gas puff or vol. rec.
+            j=j+1
+            indsrc7(j)=indsrc(i)
+          end if
+        end do
+        write(iunoo,707) nvess+j
+        write(iunoo,707) (6,i=1,nvess),(indsrc7(i),i=1,j)
+      end if
       write(iunoo,703) alloc
       inum=0
       istep=0
       do i=1,nstrai !{
-        inum=inum+1
+        if (grid_mode.ne.2) inum=inum+1 ! standard + target mode
         istep=istep+1
         if(indsrc(i).eq.6) cycle
-
-        write(iunoo,709) i,txtsou(i)
+        if (grid_mode.eq.2) inum=inum+1 ! vessel mode
+        if (grid_mode.ne.2) then ! standard + target mode
+          write(iunoo,709) i,txtsou(i)
+        else ! vessel mode
+          write(iunoo,709) nvess+inum,txtsou(i)
+        end if
         write(iunoo,706) nlavrp(i),nlavrt(i),nlsymp(i),nlsymt(i),
      ,                      nlray(i)
         write(iunoo,707) npts(i),ninitl(i),nemods(i),namods(i),
@@ -834,9 +927,15 @@ c**  same for point-, line-, surface- and volume sources
               sorind(j,i)=0
             end if !}
           end if !}
-          write(iunoo,707) inum,indim(j,i),insor(j,i),ingrda(j,i,1),
-     ,      ingrde(j,i,1),ingrda(j,i,2),ingrde(j,i,2),ingrda(j,i,3),
-     ,      ingrde(j,i,3)
+          if (grid_mode.ne.2) then
+            write(iunoo,707) inum,indim(j,i),insor(j,i),ingrda(j,i,1),
+     ,        ingrde(j,i,1),ingrda(j,i,2),ingrde(j,i,2),ingrda(j,i,3),
+     ,        ingrde(j,i,3)
+          else
+            write(iunoo,707) nvess+inum,indim(j,i),insor(j,i),
+     ,        ingrda(j,i,1),ingrde(j,i,1),ingrda(j,i,2),ingrde(j,i,2),
+     ,        ingrda(j,i,3),ingrde(j,i,3)
+          end if
           write(iunoo,703) sorwgt(j,i),sorlim(j,i),
      ,                     sorind(j,i),sorexp(j,i),sorifl(j,i)
           write(iunoo,707) nrsor(j,i),npsor(j,i),ntsor(j,i),
@@ -1155,14 +1254,20 @@ c*** 14.  data for interfacing subroutine infcop
       write(iunoo,700) utxthd(19)
       if (nmode.ne.0) then !{
         write(iunoo,706) lsymet,lbalan,lcoarse,nltrimesh,lsprcl
-        write(iunoo,707) nfla,ncutb,ncutl,imf,
+        write(iunoo,707) nfla,
      .                   ntrfrm,nfull,ibrad,ibpol,ibtor
         do i=1,nplsi+nbgk !{
           write(iunoo,710) i,iflb(i),fcte(i),bmass(i),lkindp(i)
         end do !}
-        write(iunoo,707) ndxa,ndya
-        write(iunoo,707) ntargi
-        write(iunoo,707) (ntgprt(i),i=1,ntargi)
+cnh        write(iunoo,707) ndxa,ndya
+        write(iunoo,707) ncvp,ncip,nfcp
+        if (grid_mode.ne.2) then ! standard + target mode
+          write(iunoo,707) ntargi
+          write(iunoo,707) (ntgprt(i),i=1,ntargi)
+        else ! vessel mode
+           write(iunoo,707) nvess
+           write(iunoo,707) (1,i=1,nvess)
+        end if
         l=maxval(ntgprt)
         k=1
         m=0
@@ -1172,13 +1277,19 @@ c*** 14.  data for interfacing subroutine infcop
         end if !}
         if(l.ge.10) k=100
         if(l.ge.100) k=1000
-        do i=1,ntargi !{
-          do j=1,ntgprt(i) !{
-            write(iunoo,707) k*i+j*m,ndt2(i,j),ninct2(i,j),nixy2(i,j),
-     ,          ntin2(i,j),nten2(i,j),niflg(i,j),nptc(i,j),nptcm(i,j),
+        if (grid_mode.ne.2) then ! standard + target mode
+          do i=1,ntargi !{
+            do j=1,ntgprt(i) !{
+              write(iunoo,707) k*i+j*m,ndt2(i,j),nptc(i,1),nptcm(i,1), 
      ,                                  nspzi(i,j),nspze(i,j),nemod(i,j)
+            end do !}
           end do !}
-        end do !}
+        else ! vessel mode
+          do i=1,nvess !{
+            write(iunoo,707) i,ndt2(i,1),nptc(1,1),nptcm(1,1), ! for now using the number of histories specified for the first target
+     ,                                  nspzi(i,1),nspze(i,1),7
+          end do !}
+        end if
         if(lfchgs) then !{
           x=real(istramin)
           y=real(istramax)
@@ -1211,22 +1322,25 @@ c*** 15. additional information for geousr
 c*** segment numbers for the target edges to be modified by geousr
 
       write(iunoo,700) utxthd(27)
-      if(lm_cnfg) then
-        write(iunoo,707) nadmod,ntrgte/2
-      else
-        write(iunoo,707) nadmod,ntrgte
-      endif
-      do i=1,nadmod !{
-        write (iunoo,'(2i6,1p,3e12.5)') nrs(i),ipunkt(i),
+      if (grid_mode.ne.2) then ! standard + target mode
+        if(lm_cnfg) then
+          write(iunoo,707) nadmod,ntrgte/2
+        else
+          write(iunoo,707) nadmod,ntrgte
+        endif
+        do i=1,nadmod !{
+          write (iunoo,'(2i6,1p,3e12.5)') nrs(i),ipunkt(i),
      ,                                        xcoor(i),ycoor(i),zcoor(i)
-      end do !}
-      if(ntrgte.gt.0) then !{
-        do i=1,ntrgte !{
-          if (lm_cnfg.and.mod(i,2).eq.1) cycle
-          write(iunoo,'(2i6,1p,2e12.5)') jedge(2,i),jedge(1,i),
-     ,                                             xpolpos(i),ypolpos(i)
         end do !}
-      end if !}
+        if(ntrgte.gt.0) then !{
+          do i=1,ntrgte !{
+            if (lm_cnfg.and.mod(i,2).eq.1) cycle
+            write(iunoo,'(3i6)') jedge(2,i),jedge(1,i),nssir(i)
+          end do !}
+        end if !}
+      else ! vessel mode => no need for block 15
+        write(iunoo,707) 0,0
+      end if
 
       call subend ()
       return

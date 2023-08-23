@@ -1,4 +1,10 @@
-function [listcv,listfc,nn] = cv_intersections(segm,gmtry)
+function [listcv,listfc,nn] = cv_intersections(segm,gmtry,meth)
+
+% Set default values for some arguments, if not supplied
+if ~exist('meth','var') || isempty(meth)
+  meth = '';
+end
+
 nn = 1;
 listcv = zeros(100,1);
 listfc = zeros(100,1);
@@ -34,4 +40,18 @@ end
 nn = nn-1;
 listcv=listcv(1:nn);
 listfc=listfc(1:nn);
+
+
+% Sort list
+switch meth
+    case 'X'
+        [~,order] = sort(gmtry.cvX(listcv));
+        listcv = listcv(order);
+    case 'Y'
+        [~,order] = sort(gmtry.cvY(listcv));
+        listcv = listcv(order);
+end
+
+        
+        
 end

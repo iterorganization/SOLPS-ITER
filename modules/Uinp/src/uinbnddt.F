@@ -13,7 +13,7 @@ c*** sources) for the Eirene input file
 c=======================================================================
       implicit none
 #include "uinput.inc"
-      integer ibk,isf,iatm,ispe,ispi
+      integer ibk,isf,iatm,ispe,ispi,ndt,i,k
       external xerrab
 c=======================================================================
       call subini ('uinbnddt')
@@ -23,11 +23,12 @@ c=======================================================================
       ntargi=0
 
 c*** Follow the boundary kinds: core, targets, PFR, outer edge
-
+      ndt = 0 !nh initialization of ndt for the wg format
       do ibk=1,nbndknd !{
         do isf=1,nznbndt(ibk) !{
 c*** First, non-default surface...
           nstsi=nstsi+1
+          ndt = ndt-1
           if(nstsi.ge.nsts) then !{
             write(0,*) 'Too many "non-default surfaces" are specified.',
      ,                                 '  ',ctxbnds(ibk),',  zone',isf
@@ -136,7 +137,7 @@ c*** ... and then the recycling source if specified
             nspzi(ntargi,1)=ispi
             nspze(ntargi,1)=ispe
             insor(1,nstrai)=jcpbnds(isf,ibk)
-            ndt2(ntargi,1)=insor(1,nstrai)-1
+            ndt2(ntargi,1)=ndt
             ntin2(ntargi,1)=jc1bnds(isf,ibk)
             nten2(ntargi,1)=jc2bnds(isf,ibk)
             npts(nstrai)=jnpbnds(isf,ibk)
@@ -190,6 +191,31 @@ c*** ... and then the recycling source if specified
           end if !}
         end do !}
       end do !}
+
+cnh   adapt some variables of block 14 for vessel mode
+      if (grid_mode.eq.2) then
+        k=0
+        do i=1,maxval(fclbl)
+          ispe=0
+          do iatm=1,natmi
+            if (is_meta(iatm)) cycle
+            k=k+1
+            ndt2(k,1)=-i
+            ispi=ispe+1
+            ispe=ispi
+            do while (lkindp(min(ispe+1,nplsi)).eq.lkindp(ispi)) !{
+              ispe=ispe+1
+              if (ispe.gt.nplsi) then !{
+                ispe=nplsi
+                exit
+              end if !}
+            end do !}
+            nspzi(k,1)=ispi
+            nspze(k,1)=ispe
+          end do
+        end do
+       end if
+          
 c=======================================================================
       call subend ()
       return

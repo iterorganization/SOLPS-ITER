@@ -255,6 +255,21 @@ c*** divide found
             lzpbndt(iz,m)=lrsbndt(k,m)
             lzrbndt(iz,m,1)=iy
             lzrbndt(iz,m,2)=j-1
+cnh asigning bcstart and bcend for the unstructured format
+            if (carre_mode.eq.2) then
+              lzrbndt_us(iz,m,1)=tgfclbl(iz) ! assigning the face label
+              lzrbndt_us(iz,m,2)=tgfclbl(iz)
+            elseif (crgbndt(k,m).eq.'W') then
+              lzrbndt_us(iz,m,1)=-10-2*iz-1
+              lzrbndt_us(iz,m,2)=-10-2*iz-1
+            elseif (crgbndt(k,m).eq.'E') then
+              lzrbndt_us(iz,m,1)=-30-2*iz
+              lzrbndt_us(iz,m,2)=-30-2*iz
+            else
+              write(0,*) 'Internal error in uinbndzn: wrong boundary ',
+     ,          'code ',crgbndt(k,m),' for target',k,'  zone',iz
+              call xerrab ('Wrong boundary code')
+            endif
             lrfbndt(iz,m)=k
             cznbndt(iz,m)=crgbndt(k,m)
             iy=j
@@ -276,10 +291,10 @@ c*** Specify the position-related data for B2 and Eirene input files
             end if !}
             cskbnds(iz,m)=cznbndt(iz,m)
             lcpbnds(iz,m)=lzpbndt(iz,m)
-            lc1bnds(iz,m)=lzrbndt(iz,m,1)
-            lc2bnds(iz,m)=lzrbndt(iz,m,2)
-            ls1bnds(iz,m)=max(1,lc1bnds(iz,m))
-            ls2bnds(iz,m)=min(ny,lc2bnds(iz,m))
+            lc1bnds(iz,m)=lzrbndt_us(iz,m,1)
+            lc2bnds(iz,m)=lzrbndt_us(iz,m,2)
+            ls1bnds(iz,m)=lc1bnds(iz,m)
+            ls2bnds(iz,m)=lc2bnds(iz,m)
 
             if(jc1bnds(iz,m).ge.jc2bnds(iz,m)) then !{
 c*** Boundary zone consists of a single guard cell - reject it
@@ -306,6 +321,21 @@ c           print *,'k,iz,iy =',k,iz,iy !###
           lzpbndt(iz,m)=lrsbndt(k,m)
           lzrbndt(iz,m,1)=iy
           lzrbndt(iz,m,2)=ny+1
+cnh asigning bcstart and bcend for the unstructured format
+          if ((carre_mode.eq.2).and.(tgfclbl(iz).ne.0)) then
+            lzrbndt_us(iz,m,1)=tgfclbl(iz) ! assigning the face label
+            lzrbndt_us(iz,m,2)=tgfclbl(iz)
+          elseif (crgbndt(k,m).eq.'W') then          
+            lzrbndt_us(iz,m,1)=-10-2*iz-1
+            lzrbndt_us(iz,m,2)=-10-2*iz-1          
+          elseif (crgbndt(k,m).eq.'E') then
+            lzrbndt_us(iz,m,1)=-30-2*iz
+            lzrbndt_us(iz,m,2)=-30-2*iz
+          else
+            write(0,*) 'Internal error in uinbndzn: wrong boundary ',
+     ,        'code ',crgbndt(k,m),' for target',k,'  zone',iz
+            call xerrab ('Wrong boundary code')
+          endif
           lrfbndt(iz,m)=k
           cznbndt(iz,m)=crgbndt(k,m)
 
@@ -326,10 +356,10 @@ c*** Specify the position-related data for B2 and Eirene input files
           end if !}
           cskbnds(iz,m)=cznbndt(iz,m)
           lcpbnds(iz,m)=lzpbndt(iz,m)
-          lc1bnds(iz,m)=lzrbndt(iz,m,1)
-          lc2bnds(iz,m)=lzrbndt(iz,m,2)
-          ls1bnds(iz,m)=max(1,lc1bnds(iz,m))
-          ls2bnds(iz,m)=min(ny,lc2bnds(iz,m))
+          lc1bnds(iz,m)=lzrbndt_us(iz,m,1)
+          lc2bnds(iz,m)=lzrbndt_us(iz,m,2)
+          ls1bnds(iz,m)=lc1bnds(iz,m)
+          ls2bnds(iz,m)=lc2bnds(iz,m)
 
           if(jc1bnds(iz,m).ge.jc2bnds(iz,m)) then !{
 c*** Boundary zone consists of a single guard cell - reject it
@@ -344,6 +374,37 @@ c           print *,'k,iz,iy =',k,iz,iy !###
         end if !}
       end do !}
       nznbndt(m)=iz
+cnh   replace face labels of targets with carre2 conventions for negative face labels
+cnh   I think it is not correct yet for USN
+      if (carre_mode.ne.2) then
+        if (nznbndt(m).eq.4) then ! DN
+          lc1bnds(1,m)=4
+          lc2bnds(1,m)=4
+          lc1bnds(2,m)=2
+          lc2bnds(2,m)=2
+          lc1bnds(3,m)=1
+          lc2bnds(3,m)=1
+          lc1bnds(4,m)=3
+          lc2bnds(4,m)=3
+          ls1bnds(1,m)=4
+          ls2bnds(1,m)=4
+          ls1bnds(2,m)=2
+          ls2bnds(2,m)=2
+          ls1bnds(3,m)=1
+          ls2bnds(3,m)=1
+          ls1bnds(4,m)=3
+          ls2bnds(4,m)=3
+        else ! SN
+          lc1bnds(1,m)=2
+          lc2bnds(1,m)=2
+          lc1bnds(2,m)=1
+          lc2bnds(2,m)=1
+          ls1bnds(1,m)=2
+          ls2bnds(1,m)=2
+          ls1bnds(2,m)=1
+          ls2bnds(2,m)=1
+        end if 
+      end if    
 
 c*** Sides. 
 
@@ -388,6 +449,24 @@ c*** divide found
               lzpbndt(iz,m)=lrsbndt(k,m)
               lzrbndt(iz,m,1)=ix
               lzrbndt(iz,m,2)=j-1
+cnh asigning bcstart and bcend for the unstructured format
+              if (crgbndt(k,m).eq.'S') then
+                if (m.eq.1) then ! core boundaries
+                  lzrbndt_us(iz,m,1)=-20-4*(iz-1)-1
+                  lzrbndt_us(iz,m,2)=-20-4*(iz-1)-1
+                else ! pf boundaries
+                  lzrbndt_us(iz,m,1)=-20-2*iz-mod(iz,2)
+                  lzrbndt_us(iz,m,2)=-20-2*iz-mod(iz,2)  
+                endif                 
+              elseif (crgbndt(k,m).eq.'N') then
+                lzrbndt_us(iz,m,1)=-40-4*iz
+                lzrbndt_us(iz,m,2)=-40-iz*(iz+1)
+              else
+                write(0,*) 'Internal error in uinbndzn: wrong ',
+     ,            'boundary code ',crgbndt(k,m),' for side',m,
+     ,                                          '  region',k,'  zone',iz
+                call xerrab ('Wrong boundary code')
+              endif
               lrfbndt(iz,m)=k
               cznbndt(iz,m)=crgbndt(k,m)
 
@@ -414,19 +493,10 @@ c!###}
               end if !}
               cskbnds(iz,m)=cznbndt(iz,m)
               lcpbnds(iz,m)=lzpbndt(iz,m)
-              lc1bnds(iz,m)=lzrbndt(iz,m,1)
-              lc2bnds(iz,m)=lzrbndt(iz,m,2)
+              lc1bnds(iz,m)=lzrbndt_us(iz,m,1)
+              lc2bnds(iz,m)=lzrbndt_us(iz,m,2)
               ls1bnds(iz,m)=lc1bnds(iz,m)
               ls2bnds(iz,m)=lc2bnds(iz,m)
-              if(ls1bnds(iz,m).eq.0 .or. (nncut.eq.4 .and.
-     .           ls1bnds(iz,m).eq.nxcut1(2)+nzodv+1+1)) then !{
-                ls1bnds(iz,m)=ls1bnds(iz,m)+1
-              end if !}
-              if(ls2bnds(iz,m).eq.nx+1 .or.
-     .            (nncut.eq.4 .and.
-     .             ls2bnds(iz,m).eq.nxcut1(2)+nzodv+1)) then !{
-                ls2bnds(iz,m)=ls2bnds(iz,m)-1
-              end if !}
 
               if(jc1bnds(iz,m).ge.jc2bnds(iz,m)) then !{
 c*** Boundary zone consists of a single guard cell - reject it
@@ -455,6 +525,24 @@ c     ,                             jc1bnds(iz,m),jc2bnds(iz,m) !###
             lzpbndt(iz,m)=lrsbndt(k,m)
             lzrbndt(iz,m,1)=ix
             lzrbndt(iz,m,2)=lrpbndt(k,m,2)
+cnh asigning bcstart and bcend for the unstructured format
+            if (crgbndt(k,m).eq.'S') then
+              if (m.eq.1) then ! core boundaries
+                lzrbndt_us(iz,m,1)=-20-4*(iz-1)-1
+                lzrbndt_us(iz,m,2)=-20-4*(iz-1)-1
+              else ! pf boundaries
+                lzrbndt_us(iz,m,1)=-20-2*iz-mod(iz,2)
+                lzrbndt_us(iz,m,2)=-20-2*iz-mod(iz,2)  
+              endif                 
+            elseif (crgbndt(k,m).eq.'N') then
+              lzrbndt_us(iz,m,1)=-40-4*iz
+              lzrbndt_us(iz,m,2)=-40-iz*(iz+1)
+            else
+              write(0,*) 'Internal error in uinbndzn: wrong ',
+     ,          'boundary code ',crgbndt(k,m),' for side',m,
+     ,                                        '  region',k,'  zone',iz
+              call xerrab ('Wrong boundary code')
+            endif
             lrfbndt(iz,m)=k
             cznbndt(iz,m)=crgbndt(k,m)
 
@@ -481,19 +569,10 @@ c!###}
             end if !}
             cskbnds(iz,m)=cznbndt(iz,m)
             lcpbnds(iz,m)=lzpbndt(iz,m)
-            lc1bnds(iz,m)=lzrbndt(iz,m,1)
-            lc2bnds(iz,m)=lzrbndt(iz,m,2)
+            lc1bnds(iz,m)=lzrbndt_us(iz,m,1)
+            lc2bnds(iz,m)=lzrbndt_us(iz,m,2)
             ls1bnds(iz,m)=lc1bnds(iz,m)
             ls2bnds(iz,m)=lc2bnds(iz,m)
-            if(ls1bnds(iz,m).eq.0 .or. (nncut.eq.4 .and.
-     .         ls1bnds(iz,m).eq.nxcut1(2)+nzodv+1+1)) then !{
-              ls1bnds(iz,m)=ls1bnds(iz,m)+1
-            end if !}
-            if(ls2bnds(iz,m).eq.nx+1 .or.
-     .          (nncut.eq.4 .and.
-     .             ls2bnds(iz,m).eq.nxcut1(2)+nzodv+1)) then !{
-              ls2bnds(iz,m)=ls2bnds(iz,m)-1
-            end if !}
 
             if(jc1bnds(iz,m).ge.jc2bnds(iz,m)) then !{
 c*** Boundary zone consists of a single guard cell - reject it

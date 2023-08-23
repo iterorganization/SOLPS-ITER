@@ -54,7 +54,7 @@ if isplasmagrid(gmtry)
     Y(3:4,:) = Y(4:-1:3,:);
 
     % Eliminate guard cells
-    if isfield(gmtry,'cflags') & ~isempty(gmtry.cflags)
+    if isfield(gmtry,'cflags') && ~isempty(gmtry.cflags)
         X = X(:,gmtry.cflags(:,:,1)~=9);
         Y = Y(:,gmtry.cflags(:,:,1)~=9);
         f = f(gmtry.cflags(:,:,1)~=9);
@@ -68,33 +68,39 @@ elseif isunstructuredgrid(gmtry)
 
     S = struct([]);
     for iCv = 1:length(gmtry.cvVol)
-        S(iCv).XData = [];
-        S(iCv).YData = [];
+        iVx1 = gmtry.cvVx(gmtry.cvVxP(iCv,1));
+        S(iCv).XData = gmtry.vxX(iVx1);
+        S(iCv).YData = gmtry.vxY(iVx1);
         if (length(field)==gmtry.nVx)
-            S(iCv).ZData = [];
+            S(iCv).ZData = field(iVx1);
         else
             S(iCv).ZData = field(iCv);
         end
-        iVx1 = gmtry.cvVx(gmtry.cvVxP(iCv,1));
-        for i = 1:gmtry.cvVxP(iCv,2)
-            iVx = gmtry.cvVx(gmtry.cvVxP(iCv,1)+i-1);
-
-            S(iCv).XData = [S(iCv).XData;gmtry.vxX(iVx)];
-            S(iCv).YData = [S(iCv).YData;gmtry.vxY(iVx)];
-            if (length(field)==gmtry.nVx)
-                S(iCv).ZData = [S(iCv).ZData;field(iVx)];
-            end
-        end
-        S(iCv).XData = [S(iCv).XData;gmtry.vxX(iVx1)];
-        S(iCv).YData = [S(iCv).YData;gmtry.vxY(iVx1)];
-        if (length(field)==gmtry.nVx)
-            S(iCv).ZData = [S(iCv).ZData;field(iVx1)];
-        end
-        if (gmtry.isClassicalGrid==1)
-            S(iCv).XData(end-2:end-1) = [S(iCv).XData(end-1);S(iCv).XData(end-2)];
-            S(iCv).YData(end-2:end-1) = [S(iCv).YData(end-1);S(iCv).YData(end-2)];
-            if (length(field)==gmtry.nVx)
-                S(iCv).ZData(end-2:end-1) = [S(iCv).ZData(end-1);S(iCv).ZData(end-2)];
+        iVx  = iVx1;
+        nfaces = gmtry.cvFcP(iCv,2);
+        face_treated = zeros(nfaces,1);
+        while sum(face_treated) < nfaces
+            for i = 1:nfaces
+                if (face_treated(i) == 0)
+                    iFc = gmtry.cvFc(gmtry.cvFcP(iCv,1)+i-1);
+                    if (gmtry.fcVx(iFc,1)==iVx)
+                        S(iCv).XData = [S(iCv).XData;gmtry.vxX(gmtry.fcVx(iFc,2))];
+                        S(iCv).YData = [S(iCv).YData;gmtry.vxY(gmtry.fcVx(iFc,2))];
+                        if (length(field)==gmtry.nVx)
+                            S(iCv).ZData = [S(iCv).ZData;field(gmtry.fcVx(iFc,2))];
+                        end
+                        face_treated(i)=1;
+                        iVx=gmtry.fcVx(iFc,2);
+                    elseif (gmtry.fcVx(iFc,2)==iVx)
+                        S(iCv).XData = [S(iCv).XData;gmtry.vxX(gmtry.fcVx(iFc,1))];
+                        S(iCv).YData = [S(iCv).YData;gmtry.vxY(gmtry.fcVx(iFc,1))];
+                        if (length(field)==gmtry.nVx)
+                            S(iCv).ZData = [S(iCv).ZData;field(gmtry.fcVx(iFc,1))];
+                        end
+                        face_treated(i)=1;
+                        iVx=gmtry.fcVx(iFc,1);
+                    end
+                end
             end
         end
     end

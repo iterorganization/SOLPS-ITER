@@ -42,6 +42,11 @@ c*** Produce the input file for Eirene
       call uinout('input.eir')
       print *,'    ... input.eir created'
 
+c*** Produce the input file for Eirene for the hybrid model
+
+      call uinouth('input_hybrid.eir')
+      print *,'    ... input_hybrid.eir created'
+
 c*** Produce the input file for Eirene test run
 
       call uinprptt(.true.)
@@ -117,9 +122,37 @@ c*** Create the header for the b2ag.dat file
      .                   '''b2agfs_periodic_bc''  ''1'''
           if (ln_cnfg) write(2,'(a)')
      .                   '''b2agfs_lineardevice'' ''linear.geometry'''
+          ! temporary for target/vessel mode grids: disable redef_gmtry
+          if (carre_mode.eq.2) write(2,'(a)')
+     .                   '''b2agdr_redef_gmtry''  ''0'''
           close(2)
           print *,'    ... b2ag.dat created'
       endif !}
+
+c*** Create the b2us.dat file for triangulation
+      inquire(file='b2us.dat', exist=uex)
+      if(uex) then !{
+          print *,'    ... b2us.dat file already present, not created'
+      else !}{
+          open(2,file='b2us.dat')
+          write(2,'(a)')
+     .     '*label          (lblmn: character*60)'
+          write(2,'(a)')
+     .     'Input file for triangulation plasma region with b2us'
+          write(2,'(a)') '*b2cmpa  basic parameters'
+          write(2,'(a)') '*b2cmpb  boundary conditions'
+          write(2,'(a)') '*b2cmpt  transport coefficients'
+          write(2,'(a)') '*endphy'
+          write(2,'(a)') '''b2mndr_eirene''    ''1'''
+          write(2,'(a)') '''b2stbc_boundary_namelist''    ''1'''
+          write(2,'(a)') '''b2stbr_neutrals_namelist''    ''1'''
+          write(2,'(a)') '''b2us_write_b2fgmtry_us''    ''0'''
+          write(2,'(a)') '''b2us_write_b2fstati_us''    ''0'''
+          write(2,'(a)') '''b2us_tria_mode''   ''1'''
+          close(2)
+          print *,'    ... b2us.dat created'
+      endif !}
+
 
 c*** Create a b2ah.dat.stencil file
       inquire(file='b2ah.dat.stencil', exist=uex)
@@ -625,11 +658,12 @@ c*** Modify the input file for B2, if possible
           else
             print *,
      .       '    Error while creating b2.neutrals.parameters.2: ',irt
-          end if
+          end if        
        else
           write(*,*) 'No b2.neutrals.parameters found'
           write(*,*) 'Writing b2.neutrals.parameters.stencil'
           open(99,status='SCRATCH')
+          write(99,'(a)') 'VERSION03.002.000'
           write(99,*) '&NEUTRALS'
           write(99,*) '/'
           rewind(99)
@@ -643,6 +677,41 @@ c*** Modify the input file for B2, if possible
             print *,
      .      '    Error while creating b2.neutrals.parameters.stencil:'
      .      ,irt
+          end if
+      end if
+cnh b2.neutrals.parameters for the hybrid model
+      inquire(file='b2.neutrals.parameters_hybrid', exist=uex)
+      if(uex) then
+          open(1,file='b2.neutrals.parameters_hybrid',status='old',
+     .      err=22)
+          open(2,file='b2.neutrals.parameters_hybrid.2',err=20)
+          call uicrb2(1,2,irt)
+          if(irt.eq.0) then
+            print *,'    ... b2.neutrals.parameters_hybrid.2 created'
+            close(2,err=22)
+          else
+            print *,
+     .       '    Error while creating ',
+     .       'b2.neutrals.parameters_hybrid.2: ',irt
+          end if        
+       else
+          write(*,*) 'No b2.neutrals.parameters_hybrid found'
+          write(*,*) 'Writing b2.neutrals.parameters_hybrid.stencil'
+          open(99,status='SCRATCH')
+          write(99,*) '&NEUTRALS_HYBRID'
+          write(99,*) '/'
+          rewind(99)
+          open(2,file='b2.neutrals.parameters_hybrid.stencil',err=20)
+          call uicrb2(99,2,irt)
+          close(99)
+          if(irt.eq.0) then
+            print *,'    ... b2.neutrals.parameters_hybrid.stencil ',
+     .        'created'
+            close(2,err=22)
+          else
+            print *,
+     .      '    Error while creating ',
+     .      'b2.neutrals.parameters_hybrid.stencil:',irt
           end if
       end if
    20 close(1,err=22)
@@ -664,6 +733,7 @@ c*** Modify the input file for B2, if possible
           write(*,*) 'No b2.boundary.parameters found'
           write(*,*) 'Writing b2.boundary.parameters.stencil'
           open(99,status='SCRATCH')
+          write(99,'(a)') 'VERSION03.002.000'
           write(99,*) '&BOUNDARY'
           write(99,*) '/'
           rewind(99)

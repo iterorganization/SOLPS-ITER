@@ -6,6 +6,7 @@
   filestem="fort."
 }
   echo "Saving converted geometry and state files in structured format for post-processing"
+  echo "Structured filenames: b2fgmtry_st and b2stati_st"
   [ -s ./b2fgmtry ] && cp ./b2fgmtry ./b2fgmtry_st
   [ -s ../convert/b2fgmtry ] && cp ../convert/b2fgmtry ./b2fgmtry_st
   [ -s ./b2fstati ] && cp ./b2fstati ./b2fstati_st
