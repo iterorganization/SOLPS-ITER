@@ -651,12 +651,13 @@ C---- OUTPUT OF ELEMENTS
       WRITE(25,*) NELM
       DO I=1,NELM !{
         WRITE(24,103) I,(IELM(J,I),J=1,3)
-        WRITE(25,104) I,(IADJA(J,I),ISIDE(J,I),IPROP(J,I),J=1,3),-1,-1
+        WRITE(25,104) I,(IADJA(J,I),ISIDE(J,I),IPROP(J,I),J=1,3),
+     .               -1,0,0,0
       ENDDO !}
       CLOSE(24)
       CLOSE(25)
 103   FORMAT(I5,2X,3I7)
-104   FORMAT(I5,2X,3(I6,2I3,2X),2(I3))
+104   FORMAT(I5,2X,3(I6,2I3,2X),4(I3))
 
 C---- GRAPHIC OUTPUT
       DELTAX = ABS(XMAX-XMIN)
