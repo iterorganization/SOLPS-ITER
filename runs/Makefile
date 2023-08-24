@@ -645,6 +645,7 @@ endif
 $(target_us) : b2fstati b2fgmtry b2fpardf b2mn.dat
 	rm -rf b2us.exe.dir >& /dev/null ; mkdir b2us.exe.dir ; cp $^ b2us.exe.dir
 	rm -f $(target_us)
+	[ -e b2faveri_us ] && rm -f b2faveri_us || echo > /dev/null
 	[ -e input.dat.us ] && rm -f input.dat.us || echo > /dev/null
 	[ -e b2us.user.parameters ] && rm -f b2us.user.parameters || echo > /dev/null
 	[ -e b2us.regions.parameters ] && rm -f b2us.regions.parameters || echo > /dev/null
@@ -660,7 +661,7 @@ $(target_us) : b2fstati b2fgmtry b2fpardf b2mn.dat
 	[ -s ../${fort_lc}34 ] && cp -p ../${fort_lc}34 . || echo > /dev/null ; \
 	[ -s ../${fort_lc}35 ] && cp -p ../${fort_lc}35 . || echo > /dev/null ; \
 	[ -s ../input.dat ] && cp -p ../input.dat . || echo > /dev/null
-	cd b2us.exe.dir ; ${TIME} ${B2OBJ}/b2us.exe ${RUN_OPTIONS} ; mv $(target_us) .. ; [ -e input.dat.us ] && mv input.dat.us .. ; [ -e b2us.user.parameters ] && mv b2us.user.parameters .. ; [ -e b2us.regions.parameters ] && mv b2us.regions.parameters .. ; [ -e b2us.boundary.parameters ] && mv b2us.boundary.parameters .. ; [ -e b2us.neutrals.parameters ] && mv b2us.neutrals.parameters .. ; [ -e b2us.feedback_control.parameters ] && mv b2us.feedback_control.parameters .. ; rm -f $(notdir $^) >& /dev/null
+	cd b2us.exe.dir ; ${TIME} ${B2OBJ}/b2us.exe ${RUN_OPTIONS} ; mv $(target_us) .. ; [ -e b2faveri_us ] && mv b2faveri_us .. ; [ -e input.dat.us ] && mv input.dat.us .. ; [ -e b2us.user.parameters ] && mv b2us.user.parameters .. ; [ -e b2us.regions.parameters ] && mv b2us.regions.parameters .. ; [ -e b2us.boundary.parameters ] && mv b2us.boundary.parameters .. ; [ -e b2us.neutrals.parameters ] && mv b2us.neutrals.parameters .. ; [ -e b2us.feedback_control.parameters ] && mv b2us.feedback_control.parameters .. ; rm -f $(notdir $^) >& /dev/null
 	[ -s b2us.exe.dir/${fort_lc}33 ] && rm b2us.exe.dir/${fort_lc}33 || echo > /dev/null ; \
 	[ -s b2us.exe.dir/${fort_lc}34 ] && rm b2us.exe.dir/${fort_lc}34 || echo > /dev/null ; \
 	[ -s b2us.exe.dir/${fort_lc}35 ] && rm b2us.exe.dir/${fort_lc}35 || echo > /dev/null ; \
