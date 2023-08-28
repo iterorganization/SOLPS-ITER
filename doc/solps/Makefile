@@ -4,24 +4,20 @@ B25DIR=${SOLPSTOP}/modules/B2.5
 PATH+=:/usr/bin:/bin
 SVN=svn
 GIT=`which git`
+MAKES = Makefile
 LATEX ?= $(shell which_latex)
 LATEX_VERSION = $(shell ${LATEX} --version | head -1 | cut -d ' ' -f 5 | cut -c 1-4 )
 PDFTOPS ?= $(shell which_pdftops)
 PYTHON ?= python
-ifeq ($(shell test ${LATEX_VERSION} -lt 2015; echo $$?),0)
-PACKAGES =
-else
-PACKAGES = Optional_packages
-endif
-
 INCLUDES=b2cdca.F b2cdci.F b2cdcn.F b2cdcr.F b2cdcv.F DIMENSIONS.F B2_5.Makefile B2_5.config.ITER.ifort64 B2_5.config.common.ifort64 solps-iter_git.log b2plot.commands SOLPS_versions LICENSE.tex CONTRIBUTING.tex
 BIBFILES=aps.bib aug.bib divgas.bib extern.bib general.bib main.bib mnw.bib model.bib tok.bib WebofScience.bib xpb.bib
 STYFILES=fancyvrb.sty fullpage.sty groff.enc microtype.sty microtype-pdftex.def parskip.sty pdftex.def relsize.sty stdclsdv.sty subfigure.sty supertabular.sty times.sty tocbibind.sty
-FILES=D/b2ag.dat D/b2ah.dat D/b2ar.dat D/b2ai.dat D/b2mn.dat D+C+He/b2ag.dat D+C+He/b2ah.dat D+C+He/b2ar.dat D+C+He/b2ai.dat D+C+He/b2mn.dat D+C+He/b2.boundary.parameters D+C+He/b2.numerics.parameters D+C+He/b2.transport.parameters D+C+He/b2.neutrals.parameters b2.transport.inputfile b2.sources.profile b2yg.dat b2yh.dat b2yi.dat b2ym.dat b2yn.dat b2yp.dat b2yq.dat b2yr.dat b2ymb.dat b2yrp.dat input_for_refusr_advanced.dat input_for_refusr_minimal.dat MDSPLUS/b2md.dat MDSPLUS/SOLPS_MODEL.TCL.index MDSPLUS/IDENT_MODEL.TCL.index MDSPLUS/SNAPSHOT_MODEL.TCL.index MDSPLUS/TALLIES_MODEL.TCL.index MDSPLUS/TIMEDEP_MODEL.TCL.index MDSPLUS/DIAG_MODEL.TCL.index shots.python_movie compare_shots.py QSUB.shot.python_movie sql_solps.py Makefile ${BIBFILES} ${STYFILES} ${PACKAGES}
+FILES=D/b2ag.dat D/b2ah.dat D/b2ar.dat D/b2ai.dat D/b2mn.dat D+C+He/b2ag.dat D+C+He/b2ah.dat D+C+He/b2ar.dat D+C+He/b2ai.dat D+C+He/b2mn.dat D+C+He/b2.boundary.parameters D+C+He/b2.numerics.parameters D+C+He/b2.transport.parameters D+C+He/b2.neutrals.parameters b2.transport.inputfile b2.sources.profile b2yg.dat b2yh.dat b2yi.dat b2ym.dat b2yn.dat b2yp.dat b2yq.dat b2yr.dat b2ymb.dat b2yrp.dat input_for_refusr_advanced.dat input_for_refusr_minimal.dat MDSPLUS/b2md.dat MDSPLUS/SOLPS_MODEL.TCL.index MDSPLUS/IDENT_MODEL.TCL.index MDSPLUS/SNAPSHOT_MODEL.TCL.index MDSPLUS/TALLIES_MODEL.TCL.index MDSPLUS/TIMEDEP_MODEL.TCL.index MDSPLUS/DIAG_MODEL.TCL.index shots.python_movie compare_shots.py QSUB.shot.python_movie sql_solps.py Makefile ${BIBFILES} ${STYFILES} Old_packages.tex
 
 ifeq ($(shell [ -e Makefile.local ] && echo yes || echo no ),yes)
   include Makefile.local
   FILES += Makefile.local
+  MAKES += Makefile.local
 endif
 
 all: solps.pdf solps.ps
@@ -132,6 +128,14 @@ LICENSE.tex: ${SOLPSTOP}/LICENSE.md
 
 CONTRIBUTING.tex: ${SOLPSTOP}/CONTRIBUTING.md
 	pandoc ${SOLPSTOP}/CONTRIBUTING.md -o CONTRIBUTING.tex || cat ${SOLPSTOP}/CONTRIBUTING.md | sed -e "s:#::g" -e "s:_:\\\_:g" -e 's:$$SOLPSTOP:\\$$SOLPSTOP:g' -e 's:$$:\\\\:' -e 's:\^:\\\^:g' > CONTRIBUTING.tex
+
+Old_packages.tex: ${MAKES}
+ifeq ($(shell test ${LATEX_VERSION} -lt 2015; echo $$?),0)
+	echo "\usepackage{fixltx2e}" > Old_packages.tex
+else
+	@- rm -f Old_packages.tex
+	touch Old_packages.tex
+endif
 
 SOLPS_versions: force
 	@( cd ${SOLPSTOP} ; git describe --tags --always | awk '{print "SOLPS-ITER version : ",$$1}' ) > SOLPS_versions_new
