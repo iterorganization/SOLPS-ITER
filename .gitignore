@@ -87,6 +87,7 @@ doc/solps/SOLPS_versions
 doc/solps/texput.log
 doc/solps/LICENSE.tex
 doc/solps/CONTRIBUTING.tex
+doc/solps/Old_packages.tex
 
 # auxiliary files for AMDS
 modules/amds/src/x_~fbr.c
