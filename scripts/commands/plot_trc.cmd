@@ -266,7 +266,7 @@
 :N_i_reg_02_H:SOL:
 :N_i_reg_03_H:inner:
 :N_i_reg_04_H:outer:
-@page: Total number of H neutals per region
+@page: Total number of H neutrals per region
 :N_a_reg_01_H:core:
 :N_a_reg_02_H:SOL:
 :N_a_reg_03_H:inner:
@@ -276,7 +276,7 @@
 :N_i_reg_02_D:SOL:
 :N_i_reg_03_D:inner:
 :N_i_reg_04_D:outer:
-@page: Total number of D neutals per region
+@page: Total number of D neutrals per region
 :N_a_reg_01_D:core:
 :N_a_reg_02_D:SOL:
 :N_a_reg_03_D:inner:
@@ -286,7 +286,7 @@
 :N_i_reg_02_He:SOL:
 :N_i_reg_03_He:inner:
 :N_i_reg_04_He:outer:
-@page: Total number of He neutals per region
+@page: Total number of He neutrals per region
 :N_a_reg_01_He:core:
 :N_a_reg_02_He:SOL:
 :N_a_reg_03_He:inner:
@@ -296,7 +296,7 @@
 :N_i_reg_02_Li:SOL:
 :N_i_reg_03_Li:inner:
 :N_i_reg_04_Li:outer:
-@page: Total number of Li neutals per region
+@page: Total number of Li neutrals per region
 :N_a_reg_01_Li:core:
 :N_a_reg_02_Li:SOL:
 :N_a_reg_03_Li:inner:
@@ -306,7 +306,7 @@
 :N_i_reg_02_Be:SOL:
 :N_i_reg_03_Be:inner:
 :N_i_reg_04_Be:outer:
-@page: Total number of Be neutals per region
+@page: Total number of Be neutrals per region
 :N_a_reg_01_Be:core:
 :N_a_reg_02_Be:SOL:
 :N_a_reg_03_Be:inner:
@@ -316,7 +316,7 @@
 :N_i_reg_02_C:SOL:
 :N_i_reg_03_C:inner:
 :N_i_reg_04_C:outer:
-@page: Total number of C neutals per region
+@page: Total number of C neutrals per region
 :N_a_reg_01_C:core:
 :N_a_reg_02_C:SOL:
 :N_a_reg_03_C:inner:
@@ -326,7 +326,7 @@
 :N_i_reg_02_N:SOL:
 :N_i_reg_03_N:inner:
 :N_i_reg_04_N:outer:
-@page: Total number of N neutals per region
+@page: Total number of N neutrals per region
 :N_a_reg_01_N:core:
 :N_a_reg_02_N:SOL:
 :N_a_reg_03_N:inner:
@@ -336,7 +336,7 @@
 :N_i_reg_02_Ne:SOL:
 :N_i_reg_03_Ne:inner:
 :N_i_reg_04_Ne:outer:
-@page: Total number of Ne neutals per region
+@page: Total number of Ne neutrals per region
 :N_a_reg_01_Ne:core:
 :N_a_reg_02_Ne:SOL:
 :N_a_reg_03_Ne:inner:
@@ -346,11 +346,21 @@
 :N_i_reg_02_Ar:SOL:
 :N_i_reg_03_Ar:inner:
 :N_i_reg_04_Ar:outer:
-@page: Total number of Ar neutals per region
+@page: Total number of Ar neutrals per region
 :N_a_reg_01_Ar:core:
 :N_a_reg_02_Ar:SOL:
 :N_a_reg_03_Ar:inner:
 :N_a_reg_04_Ar:outer:
+@page: Total number of W ions per region
+:N_i_reg_01_W:core:
+:N_i_reg_02_W:SOL:
+:N_i_reg_03_W:inner:
+:N_i_reg_04_W:outer:
+@page: Total number of W neutrals per region
+:N_a_reg_01_W:core:
+:N_a_reg_02_W:SOL:
+:N_a_reg_03_W:inner:
+:N_a_reg_04_W:outer:
 @page: Total number of electorns in the egde
 :N_e_edge:N_{e}^{edge}:
 @page: Total number of H ions in the egde
