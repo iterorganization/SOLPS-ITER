@@ -4,6 +4,9 @@
      , , only: ntrack, nalloys
       use b2mod_subsys
       use eirmod_solps
+#ifdef DIMENSIONS_MODULE
+      use b2mod_dimensions
+#endif
 c
 c  version : 13.02.2005 20:02
 c
@@ -98,7 +101,7 @@ c*** Find the corresponding reaction(s)
                   if(nstrai.ge.nstra) then !{
                     write(0,*) 'Too many strata requested: ',nstrai
                     write(0,*) 'STOP ==> check the DG model and the ',
-     ,                         'value of DEF_NSTRA in DIMENSIONS.F'
+     ,               'value of DEF_NSTRA in b2mod_dimensions.F'
                     call xerrab ('Too many strata requested')
                   end if !}
                   n=n+1

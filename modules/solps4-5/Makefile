@@ -119,6 +119,10 @@ endif
 TAGSLIST += ${SRCDIR}/*_commons/*.[hH] ${SRCDIR}/*/*.F ${SRCDIR}/*.F
 VPATH += ${SRCDIR}/B2.5_modules:${SRCDIR}:${SRCDIR}/solps4_B2:${SRCDIR}/solps4_Eirene:${SRCDIR}/solps5
 
+ifeq ($(shell [ -s ${SRCDIR}/B2.5_modules/b2mod_dimensions.F ] && echo yes || echo no ),yes)
+DEFINES += -DDIMENSIONS_MODULE
+endif
+
 include ${S45DIR}/config/compile
 MAKES += ${S45DIR}/config/compile ${S45DIR}/config/config.${HOST_NAME}.${COMPILER}
 ifeq ($(shell [ -e ${S45DIR}/config/config.${HOST_NAME}.${COMPILER}.local ] && echo yes || echo no ),yes)

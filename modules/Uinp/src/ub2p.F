@@ -1,6 +1,9 @@
       program ub2p
       use b2mod_types
       use b2mod_xerset
+#ifdef DIMENSIONS_MODULE
+      use b2mod_dimensions
+#endif
       implicit none
 c======================================================================
 c*** Creates the additional input files for b2plot, provided that the

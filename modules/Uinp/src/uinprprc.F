@@ -4,6 +4,9 @@
      , , only: ntrack, nalloys
       use b2mod_subsys
       use eirmod_solps
+#ifdef DIMENSIONS_MODULE
+      use b2mod_dimensions
+#endif
 c
 c  version : 17.02.2002 21:52
 c
@@ -79,7 +82,7 @@ c*** Add some explicit elastic neutral-neutral collisions
           if (.not.h_iso_used(i)) cycle
           if (nnrctn+4.gt.mreac) then !{
             write(0,*) 'Too many reaction datasets specified:',nnrctn+4
-            call xerrab('==> Check DEF_NREAC in DIMENSIONS.F')
+            call xerrab('==> Check DEF_NREAC in b2mod_dimensions.F')
           end if !}
 cxpb First do self-collisions
           rctntyp(nnrctn+1:nnrctn+4)='EL'
@@ -122,7 +125,7 @@ cxpb Now consider cross-collisions
             if (nnrctn+4.gt.mreac) then !{
               write(0,*)
      .         'Too many reaction datasets specified:',nnrctn+4
-              call xerrab('==> Check DEF_NREAC in DIMENSIONS.F')
+              call xerrab('==> Check DEF_NREAC in b2mod_dimensions.F')
             end if !}
             rctntyp(nnrctn+1:nnrctn+4)='EL'
             rctndbs(nnrctn+1:nnrctn+4)='AMMONX'
@@ -163,7 +166,7 @@ cxpb Now consider cross-collisions
       if (lhelium) then !{
         if (nnrctn+1.gt.mreac) then !{
           write(0,*) 'Too many reaction datasets specified:',nnrctn+1
-          call xerrab('==> Check DEF_NREAC in DIMENSIONS.F')
+          call xerrab('==> Check DEF_NREAC in b2mod_dimensions.F')
         end if !}
         rctntyp(nnrctn+1)='EL'
         rctndbs(nnrctn+1)='AMMONX'
@@ -191,7 +194,7 @@ cxpb Now consider cross-collisions
           if (.not.h_iso_used(i)) cycle
           if (nnrctn+4.gt.mreac) then !{
             write(0,*) 'Too many reaction datasets specified:',nnrctn+4
-            call xerrab('==> Check DEF_NREAC in DIMENSIONS.F')
+            call xerrab('==> Check DEF_NREAC in b2mod_dimensions.F')
           end if !}
           rctntyp(nnrctn+1:nnrctn+4)='EL'
           rctndbs(nnrctn+1:nnrctn+4)='AMMONX'
@@ -338,7 +341,7 @@ cxpb Find out the number of passes to do
                   write(0,*) 'Too many reaction datasets specified:',
      .                                                           nnrctn
                   call xerrab
-     .     ('==> Check the AMDS model and DEF_NREAC in DIMENSIONS.F')
+     . ('==> Check the AMDS model and DEF_NREAC in b2mod_dimensions.F')
                 end if !}
                 ii=rctdgrp(j,l)
                 if(ii.ne.0) then !{
@@ -1978,7 +1981,7 @@ c>>>
         write(0,'(4x,a2,1x,i5,i8)') 'EI',m,DEF_NREI
         write(0,'(4x,a2,1x,i5,i8)') 'RC',n,DEF_NREC
         write(0,*) '==> Check the AMDS model '//
-     ,   'and NREL, NREI, or NREC in DIMENSIONS.F'
+     ,   'and NREL, NREI, or NREC in b2mod_dimensions.F'
         call xerrab ('Too many reactions')
       end if !}
 c=======================================================================

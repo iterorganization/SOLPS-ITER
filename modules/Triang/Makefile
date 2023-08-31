@@ -119,7 +119,7 @@ MODLOCASE:=$(shell echo $(MODULES)| tr A-Z a-z)
 MODMODS := ${MODLOCASE:%=${OBJDIR}/%.${MOD}}
 MODOBJS = ${MODULES:%=${OBJDIR}/%.o}
 ALLOBJS = ${OBJS:%.o=${OBJDIR}/%.o}
-EIROBJS = ${patsubst %.o,${OBJDIR}/%.o,eirmod_balanced_strategy.o eirmod_cai.o eirmod_calstr_buffered.o eirmod_ccona.o eirmod_cestim.o eirmod_cinit.o eirmod_comprt.o eirmod_comsou.o eirmod_comusr.o eirmod_coutau.o eirmod_cpes.o eirmod_csdvi.o eirmod_cspez.o eirmod_cstep.o eirmod_mpi.o eirmod_parmmod.o exit_own.o leer.o masage.o masj1r.o masj2r.o pedist.o plend.o}
+EIROBJS = ${patsubst %.o,${OBJDIR}/%.o,eirmod_balanced_strategy.o eirmod_cai.o eirmod_calstr_buffered.o eirmod_ccona.o eirmod_cestim.o eirmod_cinit.o eirmod_clogau.o eirmod_comprt.o eirmod_comsou.o eirmod_comusr.o eirmod_coutau.o eirmod_cpes.o eirmod_csdvi.o eirmod_cspez.o eirmod_cstep.o eirmod_mpi.o eirmod_parmmod.o exit_own.o leer.o masage.o masj1r.o masj2r.o pedist.o plend.o}
 EGROBJS = ${patsubst %.o,${OBJDIR}/%.o,graxs.o grdrw.o grend.o grjmp.o grnwpn.o grsclc.o grsclv.o grspts.o grstrt.o gr90dg.o}
 
 MAINLIST = tria.o triageom.o triainq.o
@@ -209,11 +209,11 @@ ${OBJDIR}/eirmod_cestim.o:
 	ln -sf ${EIROBJ}/eirmod_cestim.o ${OBJDIR}
 	@gtfl $@
 
-${OBJDIR}/eirmod_cinit.o: ${OBJDIR}/eirmod_mpi.o ${OBJDIR}/eirmod_parmmod.o
+${OBJDIR}/eirmod_cinit.o: ${OBJDIR}/eirmod_mpi.${MOD} ${OBJDIR}/eirmod_parmmod.${MOD}
 	ln -sf ${EIROBJ}/eirmod_cinit.o ${OBJDIR}
 	@gtfl $@
 
-${OBJDIR}/eirmod_clogau.o:
+${OBJDIR}/eirmod_clogau.o: ${OBJDIR}/eirmod_mpi.${MOD}
 	ln -sf ${EIROBJ}/eirmod_clogau.o ${OBJDIR}
 	@gtfl $@
 
@@ -261,7 +261,7 @@ ${OBJDIR}/eirmod_precision.o:
 	ln -sf ${EIROBJ}/eirmod_precision.o ${OBJDIR}
 	@gtfl $@
 
-${OBJDIR}/exit_own.o: ${OBJDIR}/eirmod_mpi.${MOD} ${OBJDIR}/eirmod_cpes.${MOD} ${OBJDIR}/eirmod_comprt.${MOD}
+${OBJDIR}/exit_own.o: ${OBJDIR}/eirmod_mpi.${MOD} ${OBJDIR}/eirmod_cpes.${MOD} ${OBJDIR}/eirmod_comprt.${MOD} ${OBJDIR}/plend.o
 	ln -sf ${EIROBJ}/exit_own.o ${OBJDIR}
 	@gtfl $@
 
@@ -354,7 +354,7 @@ ${OBJDIR}/eirmod_cinit.${MOD}: ${OBJDIR}/eirmod_mpi.${MOD} ${OBJDIR}/eirmod_prec
 	ln -sf ${EIROBJ}/eirmod_cinit.${MOD} ${OBJDIR}
 	@gtfl $@
 
-${OBJDIR}/eirmod_clogau.${MOD}:
+${OBJDIR}/eirmod_clogau.${MOD}: ${OBJDIR}/eirmod_mpi.${MOD}
 	ln -sf ${EIROBJ}/eirmod_clogau.${MOD} ${OBJDIR}
 	@gtfl $@
 

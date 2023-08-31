@@ -473,16 +473,16 @@ LAPACK packages should be used instead, and links to them added to the correspon
 \begin{sloppypar}
 To compile the coupled version of the code you should begin by checking that the default
 array dimensions provided fit your problem size. These are stored in the file
-{\tt \$\{SOLPSTOP\}/modules/B2.5/src/include\allowbreak/DIMENSIONS.F}. If the dimensions are not right for you,
+{\tt \$\{SOLPSTOP\}/modules/B2.5/src/modules\allowbreak/b2mod\_dimensions.F}. If the dimensions are not right for you,
 then do the following:
-\index{DIMENSIONS.F}
+\index{b2mod\_dimensions.F}
 \begin{verbatim}
   sb2
   cd src
-  mkdir -p include.local
-  cp include/DIMENSIONS.F include.local
+  mkdir -p modules.local
+  cp modules/b2mod_dimensions.F modules.local
 \end{verbatim}
-and edit the file {\tt include.local/DIMENSIONS.F} so that the
+and edit the file {\tt modules.local/b2mod\_dimensions.F} so that the
 dimensions (mainly used for the namelists in {\tt B2.5}) are
 big enough (see the description of the relevant variables in section \ref{sec:DIMENSIONS}). Once you have edited that file, you will need to recompile with:
 \begin{verbatim}
@@ -642,11 +642,11 @@ After activating one of these flags and upon succesful compilation, it is recomm
 to refresh the list of executables to be found with the search path.
 
 \section{Examples}
-\label{examples}\index{DIMENSIONS.F}
+\label{examples}\index{b2mod\_dimensions.F}
 
 On the \SOLPSITER web site (\href{https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}{https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}), in the folder {\em Examples}, one can find a few example cases for \SOLPSITER runs, in both {\tt B2.5} standalone or {\tt B2.5-Eirene} coupled modes.
 
-There is also a dedicated directory {\tt \$\{SOLPSTOP\}/runs/examples} which contains links to a series of sample cases. These are actually stored in the {\tt /work/imas/shared/external/assets/solps-iter/MD5} directory hosted at the IO, and the means to retrieve these cases is detailed in the {\tt \$\{SOLPSTOP\}/runs/examples\allowbreak/README.md} file. Following the instructions therein will extract an archived file in gzipped tar format containing a {\tt baserun} and one or more run directories and associated files. In some cases, a {\tt DIMENSIONS.F} file is also provided, which shows the dimensions necessary to run those cases (see Appendix \ref{sec:DIMENSIONS} for full details about the contents of such files).
+There is also a dedicated directory {\tt \$\{SOLPSTOP\}/runs/examples} which contains links to a series of sample cases. These are actually stored in the {\tt /work/imas/shared/external/assets/solps-iter/MD5} directory hosted at the IO, and the means to retrieve these cases is detailed in the {\tt \$\{SOLPSTOP\}/runs/examples\allowbreak/README.md} file. Following the instructions therein will extract an archived file in gzipped tar format containing a {\tt baserun} and one or more run directories and associated files. In some cases, a {\tt b2mod\_dimensions.F} file is also provided, which shows the dimensions necessary to run those cases (see Appendix \ref{sec:DIMENSIONS} for full details about the contents of such files).
 
 \begin{sloppypar}
 The cases stored for retrieval include:
@@ -1535,7 +1535,7 @@ rm GNUPLOT_COUNT gnuplot.*data
   \item[fhtxreg]\index{fhtxreg} Plots the total energy flow across important $x$-directed surfaces in {\tt B2.5}.
   \item[fhtyreg]\index{fhtyreg} Plots the total energy flow across important $y$-directed surfaces in {\tt B2.5}.
   \item[fluid\_fluxes \#1 \#2]\index{fluid\_fluxes} Plots the sum of fluid fluxes for species numbers varying from \#1 to \#2 (respective defaults are 0 and 1). Also exists as a Python script. Fluxes into the domain are shown as negative values, fluxes out of the domain as positive values.
-  \item[fluxt \#1]\index{fluxt}\index{DIMENSIONS.F} Gives the flux strength for the first \#1 {\tt Eirene} strata. The default value is all the strata, as read from the {\tt b2.neutrals.parameters} file, or if not present, the {\tt \$\{SOLPSTOP\}/modules/B2.5/src\allowbreak/include.local/DIMENSIONS.F} file, or if not present, the {\tt \$\{SOLPSTOP\}/modules/B2.5\allowbreak /src/include/DIMENSIONS.F} file.
+  \item[fluxt \#1]\index{fluxt}\index{b2mod\_dimensions.F} Gives the flux strength for the first \#1 {\tt Eirene} strata. The default value is all the strata, as read from the {\tt b2.neutrals.parameters} file, or if not present, the {\tt \$\{SOLPSTOP\}/modules/B2.5/src\allowbreak/modules.local/b2mod\_dimensions.F} file, or if not present, the {\tt \$\{SOLPSTOP\}/modules/B2.5\allowbreak /src/modules/b2mod\_dimensions.F} file.
   \item[get\_solps\_fluids]\index{get\_solps\_fluids} A utility script to obtain the list of fluid species labels from the {\tt run.log} file.
   \item[internal\_energy\_balance]\index{internal\_energy\_balance} Outputs the energy balance tallies.
   \item[internal\_energy\_balance\_coupled]\index{internal\_energy\_balance\_coupled} Outputs the energy balance tallies for a coupled run.
@@ -1565,7 +1565,7 @@ rm GNUPLOT_COUNT gnuplot.*data
   \item[sputter\_chemical\_energy]\index{sputter\_chemical\_energy} Shows chemical sputtering energy fluxes (for {\tt B2.5} standalone runs).
   \item[sputter\_physical]\index{sputter\_physical} Shows physical sputtering particle fluxes (for {\tt B2.5} standalone runs).
   \item[sputter\_physical\_energy]\index{sputter\_physical\_energy} Shows physical sputtering energy fluxes (for {\tt B2.5} standalone runs).
-  \item[tflux \#1]\index{tflux}\index{DIMENSIONS.F} Gives the flux strength for the first \#1 strata from {\tt b2.neutrals.parameters}. The default value is all the strata, as read from the {\tt b2.neutrals.parameters} file, or if not present, the {\tt \$\{SOLPSTOP\}\allowbreak/modules/B2.5/src/include.local/DIMENSIONS.F} file, or if not present, the {\tt \$\{SOLPSTOP\}\allowbreak /modules/B2.5/src\allowbreak /include/DIMENSIONS.F} file.
+  \item[tflux \#1]\index{tflux}\index{b2mod\_dimensions.F} Gives the flux strength for the first \#1 strata from {\tt b2.neutrals.parameters}. The default value is all the strata, as read from the {\tt b2.neutrals.parameters} file, or if not present, the {\tt \$\{SOLPSTOP\}\allowbreak/modules/B2.5/src/modules.local/b2mod\_dimensions.F} file, or if not present, the {\tt \$\{SOLPSTOP\}\allowbreak /modules/B2.5/src\allowbreak /modules/b2mod\_dimensions.F} file.
   \item[thermal\_evaporation]\index{thermal\_evaporation} Shows thermal evaporation particle fluxes (for {\tt B2.5} standalone runs).
   \item[thermal\_evaporation\_energy]\index{thermal\_evaporation\_energy} Shows thermal evaporation energy fluxes (for {\tt B2.5} standalone runs).
   \item[tereg]\index{tereg} Shows averaged electron temperature per region.
@@ -19800,11 +19800,11 @@ scaling is done on all of the data.
 \chapter{Miscellaneous}
 \label{cha:Misc}
 
-\section{DIMENSIONS.F}\index{DIMENSIONS.F}\label{sec:DIMENSIONS}
+\section{b2mod\_dimensions.F}\index{b2mod\_dimensions.F}\label{sec:DIMENSIONS}
 
 \begin{sloppypar}
-The file {\tt \$\{SOLPSTOP\}/modules/B2.5/src/include/DIMENSIONS.F} and its local version
-{\tt \$\{SOLPSTOP\}\allowbreak/modules\allowbreak/B2.5/src/include.local/DIMENSIONS.F} contain key dimensions
+The file {\tt \$\{SOLPSTOP\}/modules/B2.5/src/modules/b2mod\_dimensions.F} and its local version
+{\tt \$\{SOLPSTOP\}\allowbreak/modules\allowbreak/B2.5/src/modules.local/b2mod\_dimensions.F} contain key dimensions
 that determine
 the sizes of arrays that can be defined by namelists
 in {\tt b2.*.parameters} files (for compatibility with
@@ -19812,7 +19812,7 @@ certain compilers).
 \end{sloppypar}
 
 \begin{sloppypar}
-Upon the first creation of the local version of the {\tt DIMENSIONS.F} file,
+Upon the first creation of the local version of the {\tt b2mod\_dimensions.F} file,
 one must make the {\tt Makefile} aware of its presence by doing the following:
 \begin{verbatim}
   stop
@@ -19826,7 +19826,7 @@ replaced by {\tt gmake \allowbreak solps(\_debug)}, {\tt gmake solps\_mpi(\_debu
 {\tt gmake all(\_debug)} or {\tt gmake all\_mpi(\_debug)} as needed.
 \end{sloppypar}
 
-The quantities defined in {\tt DIMENSIONS.F} are:
+The quantities defined in {\tt b2mod\_dimensions.F} are:
 \begin{description}
 \item[DEF\_ISOEXTRA]\index{DEF\_ISOEXTRA}\index{ISOEXTRA} the maximum
 number of extra isolating cells
@@ -19863,9 +19863,9 @@ number of extra isolating cells
 %%\item[] the maximum number of
 \end{description}
 
-The current default settings of {\tt DIMENSIONS.F}, which allow for a
+The current default settings of {\tt b2mod\_dimensions.F}, which allow for a
 128$\times$36 DN geometry case including species H, D, T, He, Be and C, are:
-\VerbatimInput[fontsize=\footnotesize]{DIMENSIONS.F}
+\VerbatimInput[fontsize=\footnotesize]{b2mod_dimensions.F}
 
 \section{Making movies}
 
@@ -19910,6 +19910,7 @@ Additionally, system-wide compiler flags can be provided by means of the
 
 \begin{description}
 \item[CATALYST] \index{CATALYST} Turns on the Paraview Catalyst utility (see the SOLPS-GUI manual for full details)
+\item[DIMENSIONS\_MODULE] \index{DIMENSIONS\_MODULE} Indicates whether the \SOLPSITER version is one that uses a {\tt b2mod\_dimensions.F} module file instead of the {\tt DIMENSIONS.F} include file (set internally by the configuration files)
 \item[COMPILER\_MAJOR\_VERSION] \index{COMPILER\_MAJOR\_VERSION} Major version number of the compiler being used (set internally by the configuration files)
 \item[COMPILER\_MINOR\_VERSION] \index{COMPILER\_MINOR\_VERSION} Minor version number of the compiler being used (set internally by the configuration files)
 \item[CONSTANTS\_PROVIDED] \index{CONSTANTS\_PROVIDED} Indicates whether the {\tt Fundamental-Constants} module is being at compilation time (set internally by the configuration files)
@@ -20013,6 +20014,34 @@ We list below where the {\tt Carre} compilation switches are used.
 DBG & carre/doubld.F \\
 DBG & carre/saute.F \\
 DBG & fcrr/fcrprp.F \\
+DIMENSIONS\_MODULE & carre/carre.F \\
+DIMENSIONS\_MODULE & carre/change.F \\
+DIMENSIONS\_MODULE & carre/defaut.F \\
+DIMENSIONS\_MODULE & carre/derive.F \\
+DIMENSIONS\_MODULE & carre/doubld.F \\
+DIMENSIONS\_MODULE & carre/frtier.F \\
+DIMENSIONS\_MODULE & carre/insert.F \\
+DIMENSIONS\_MODULE & carre/limfnd.f \\
+DIMENSIONS\_MODULE & carre/mailcn.F \\
+DIMENSIONS\_MODULE & carre/maille.F \\
+DIMENSIONS\_MODULE & carre/mailrg.F \\
+DIMENSIONS\_MODULE & carre/marche.F \\
+DIMENSIONS\_MODULE & carre/nulort.F \\
+DIMENSIONS\_MODULE & carre/rappel.F \\
+DIMENSIONS\_MODULE & carre/selptx.F \\
+DIMENSIONS\_MODULE & carre/sortie.F \\
+DIMENSIONS\_MODULE & carre/sptris.F \\
+DIMENSIONS\_MODULE & carre/warnings.F \\
+DIMENSIONS\_MODULE & cntour/cntour.F \\
+DIMENSIONS\_MODULE & cntour/struct.F \\
+DIMENSIONS\_MODULE & cntour/trace2.F \\
+DIMENSIONS\_MODULE & cntour/trace3.F \\
+DIMENSIONS\_MODULE & cntour/trace.F \\
+DIMENSIONS\_MODULE & dummy/bidon.F \\
+DIMENSIONS\_MODULE & include/CARREDIM.F \\
+DIMENSIONS\_MODULE & trans/b2agfz.F \\
+DIMENSIONS\_MODULE & trans/ecrim5.F \\
+DIMENSIONS\_MODULE & trans/tradui.F \\
 EXTRA\_GRAPHS & carre/carre.F \\
 GFORTRAN & carre/rdfrin.F \\
 GFORTRAN & carre/rdfrre.F \\
@@ -20021,6 +20050,8 @@ MODIF & carre/mailrg.F \\
 READOPT & carre/rdfrch.F \\
 READOPT & carre/rdfrin.F \\
 READOPT & carre/rdfrre.F \\
+SOLPS\_CPP & include/CARREDIM.F \\
+SOLPS\_CPP & trans\b2agfz.F \\
     \hline
     \caption{Defines for Carre and where they are used.}
     \label{tab:Carredefines}
@@ -20720,6 +20751,8 @@ CHECKBIN & src/modules/eirmod\_comxs.f \\
 COMPILER\_MAJOR\_VERSION & assistant/exit\_own.f \\
 COMPILER\_MINOR\_VERSION & assistant/exit\_own.f \\
 DBG & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.F \\
+DIMENSIONS\_MODULE & interfaces/couple\_SOLPS-ITER/couple\_param.f \\
+DIMENSIONS\_MODULE & interfaces/couple\_SOLPS-ITER/eirmod\_extrab25.F90 \\
 F2003 & assistant/subtit.f \\
 F2003 & file-handling/eirmod\_openfile.f \\
 GFORTRAN & modules/eirmod\_mpi.F90 \\

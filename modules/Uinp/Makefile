@@ -17,6 +17,7 @@ SRCDIR  = ${SRCUIN}/src
 BASEDIR = ${SRCUIN}
 B2DIR   = ${SOLPSTOP}/modules/B2.5
 EIRDIR  = ${SOLPSTOP}/modules/Eirene
+B2SRC   = ${B2DIR}/src
 
 MAKES = ${BASEDIR}/Makefile
 # Include global SOLPS compiler settings
@@ -111,8 +112,15 @@ endif
 
 DEST = $(OBJS:%.o=$(OBJDIR)/%.o)
 
+DEFINES =
+DIMENSIONS =
+ifeq ($(shell [ -s ${B2SRC}/modules/b2mod_dimensions.F ] && echo yes || echo no ),yes)
+DIMENSIONS = ${B2OBJ}/b2mod_dimensions.o
+DEFINES += -DDIMENSIONS_MODULE
+endif
+
 $(OBJDIR)/%.o : %.F
-	${CPP} -P ${INCLUDE} ${SOLPS_CPP} ${USE_DEBUG} $< ${OBJDIR}/$*.f
+	${CPP} -P ${INCLUDE} ${SOLPS_CPP} ${DEFINES} ${USE_DEBUG} $< ${OBJDIR}/$*.f
 	$(COMPILE) ${INCLUDE} ${FFLAGSEXTRA} -o ${OBJDIR}/$*.o ${OBJDIR}/$*.f
 
 all: VERSION ${OBJDIR}/${PROG} ${OBJDIR}/ub2p
@@ -129,13 +137,16 @@ ${OBJDIR}/libui.a: ${DEST} ${SRCDIR}/git_version_Uinp.h ${MAKES}
 	@ar rucv $@ ${DEST}
 	ranlib $@
 
-${OBJDIR}/libb25.a: ${B2OBJ}/b2mod_constants.o ${B2OBJ}/b2mod_elements.o ${B2OBJ}/b2mod_types.o ${B2OBJ}/b2mod_layer.o ${B2OBJ}/b2mod_math.o ${B2OBJ}/b2mod_openmp.o ${B2OBJ}/b2mod_solpstop.o ${B2OBJ}/chcase.o ${B2OBJ}/helper.o ${B2OBJ}/ifill.o ${B2OBJ}/b2mod_ipmain.o ${B2OBJ}/isadigit.o ${B2OBJ}/isplusorminus.o ${B2OBJ}/len_of_digits.o ${B2OBJ}/lnblnk.o ${B2OBJ}/lower_case.o ${B2OBJ}/b2mod_lwimai.o ${B2OBJ}/b2mod_lwmain.o ${B2OBJ}/machsfr.o ${B2OBJ}/nagsubst.o ${B2OBJ}/open_file.o ${B2OBJ}/prgend.o ${B2OBJ}/prgini.o ${B2OBJ}/prvrt.o ${B2OBJ}/prvrti.o ${B2OBJ}/ratio.o ${B2OBJ}/sfill.o ${B2OBJ}/streql.o ${B2OBJ}/strip_spaces.o ${B2OBJ}/b2mod_subsys.o ${B2OBJ}/sysend.o ${B2OBJ}/sysini.o ${B2OBJ}/xerrab.o ${B2OBJ}/b2mod_xerset.o ${B2OBJ}/xertst.o ${B2OBJ}/xxdata_11.o ${SRCDIR}/.new_routines ${MAKES}
-	@ar rucv $@ ${B2OBJ}/b2mod_constants.o ${B2OBJ}/b2mod_elements.o ${B2OBJ}/b2mod_types.o ${B2OBJ}/b2mod_layer.o ${B2OBJ}/b2mod_math.o ${B2OBJ}/b2mod_openmp.o ${B2OBJ}/b2mod_solpstop.o ${B2OBJ}/chcase.o ${B2OBJ}/helper.o ${B2OBJ}/ifill.o ${B2OBJ}/b2mod_ipmain.o ${B2OBJ}/isadigit.o ${B2OBJ}/isplusorminus.o ${B2OBJ}/len_of_digits.o ${B2OBJ}/lnblnk.o ${B2OBJ}/lower_case.o ${B2OBJ}/b2mod_lwimai.o ${B2OBJ}/b2mod_lwmain.o ${B2OBJ}/machsfr.o ${B2OBJ}/nagsubst.o ${B2OBJ}/open_file.o ${B2OBJ}/prgend.o ${B2OBJ}/prgini.o ${B2OBJ}/prvrt.o ${B2OBJ}/prvrti.o ${B2OBJ}/ratio.o ${B2OBJ}/sfill.o ${B2OBJ}/streql.o ${B2OBJ}/strip_spaces.o ${B2OBJ}/b2mod_subsys.o ${B2OBJ}/sysend.o ${B2OBJ}/sysini.o ${B2OBJ}/xerrab.o ${B2OBJ}/b2mod_xerset.o ${B2OBJ}/xertst.o ${B2OBJ}/xxdata_11.o
+${OBJDIR}/libb25.a: ${DIMENSIONS} ${B2OBJ}/b2mod_constants.o ${B2OBJ}/b2mod_elements.o ${B2OBJ}/b2mod_types.o ${B2OBJ}/b2mod_layer.o ${B2OBJ}/b2mod_math.o ${B2OBJ}/b2mod_openmp.o ${B2OBJ}/b2mod_solpstop.o ${B2OBJ}/chcase.o ${B2OBJ}/helper.o ${B2OBJ}/ifill.o ${B2OBJ}/b2mod_ipmain.o ${B2OBJ}/isadigit.o ${B2OBJ}/isplusorminus.o ${B2OBJ}/len_of_digits.o ${B2OBJ}/lnblnk.o ${B2OBJ}/lower_case.o ${B2OBJ}/b2mod_lwimai.o ${B2OBJ}/b2mod_lwmain.o ${B2OBJ}/machsfr.o ${B2OBJ}/nagsubst.o ${B2OBJ}/open_file.o ${B2OBJ}/prgend.o ${B2OBJ}/prgini.o ${B2OBJ}/prvrt.o ${B2OBJ}/prvrti.o ${B2OBJ}/ratio.o ${B2OBJ}/sfill.o ${B2OBJ}/streql.o ${B2OBJ}/strip_spaces.o ${B2OBJ}/b2mod_subsys.o ${B2OBJ}/sysend.o ${B2OBJ}/sysini.o ${B2OBJ}/xerrab.o ${B2OBJ}/b2mod_xerset.o ${B2OBJ}/xertst.o ${B2OBJ}/xxdata_11.o ${SRCDIR}/.new_routines ${MAKES}
+	@ar rucv $@ ${DIMENSIONS} ${B2OBJ}/b2mod_constants.o ${B2OBJ}/b2mod_elements.o ${B2OBJ}/b2mod_types.o ${B2OBJ}/b2mod_layer.o ${B2OBJ}/b2mod_math.o ${B2OBJ}/b2mod_openmp.o ${B2OBJ}/b2mod_solpstop.o ${B2OBJ}/chcase.o ${B2OBJ}/helper.o ${B2OBJ}/ifill.o ${B2OBJ}/b2mod_ipmain.o ${B2OBJ}/isadigit.o ${B2OBJ}/isplusorminus.o ${B2OBJ}/len_of_digits.o ${B2OBJ}/lnblnk.o ${B2OBJ}/lower_case.o ${B2OBJ}/b2mod_lwimai.o ${B2OBJ}/b2mod_lwmain.o ${B2OBJ}/machsfr.o ${B2OBJ}/nagsubst.o ${B2OBJ}/open_file.o ${B2OBJ}/prgend.o ${B2OBJ}/prgini.o ${B2OBJ}/prvrt.o ${B2OBJ}/prvrti.o ${B2OBJ}/ratio.o ${B2OBJ}/sfill.o ${B2OBJ}/streql.o ${B2OBJ}/strip_spaces.o ${B2OBJ}/b2mod_subsys.o ${B2OBJ}/sysend.o ${B2OBJ}/sysini.o ${B2OBJ}/xerrab.o ${B2OBJ}/b2mod_xerset.o ${B2OBJ}/xertst.o ${B2OBJ}/xxdata_11.o
 	ranlib $@
 
 ${OBJDIR}/uinput.o: ${OBJDIR}/uiblkd.o
 
 ifneq (${MOD},o)
+${OBJDIR}/b2mod_dimensions.${MOD}:
+	ln -sf ${B2OBJ}/b2mod_dimensions.${MOD} ${OBJDIR}
+
 ${OBJDIR}/b2mod_types.${MOD}:
 	ln -sf ${B2OBJ}/b2mod_types.${MOD} ${OBJDIR}
 
@@ -181,6 +192,9 @@ ${OBJDIR}/libeirene.a:
 
 ${OBJDIR}/libgr_dummy.a:
 	ln -sf ${EIROBJ}/libgr_dummy.a ${OBJDIR}
+
+${OBJDIR}/b2mod_dimensions.o:
+	ln -sf ${B2OBJ}/b2mod_dimensions.o ${OBJDIR}
 
 ${OBJDIR}/b2mod_types.o:
 	ln -sf ${B2OBJ}/b2mod_types.o ${OBJDIR}
@@ -228,7 +242,7 @@ ifneq (${MOD},o)
 endif
 
 depend: ${OBJS:.o=.F} uiblkd.F uinput.F uiblb2.F ub2p.F ${SRCDIR}/git_version_Uinp.h
-	@`which makedepend` -p'$${OBJDIR}/' ${SOLPS_CPP} ${USE_DEBUG} -f- ${INCLUDE} $^ | \
+	@`which makedepend` -p'$${OBJDIR}/' ${SOLPS_CPP} ${USE_DEBUG} ${DEFINES} -f- ${INCLUDE} $^ | \
 	sed 's,^$${OBJDIR}/[^ ][^ ]*/,\$${OBJDIR}/,' | \
 	sed 's,: ${SOLPSTOP},: $${SOLPSTOP},' > ${OBJDIR}/dependencies.${COMPILER}
 
