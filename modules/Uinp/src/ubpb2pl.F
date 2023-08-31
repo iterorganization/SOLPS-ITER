@@ -1,4 +1,7 @@
       subroutine ubpb2pl
+#ifdef DIMENSIONS_MODULE
+      use b2mod_dimensions
+#endif
 c
 c  version : 27.11.2003 21:10
 c
@@ -107,6 +110,9 @@ c
 c
 c======================================================================
       block data ubpblkd
+#ifdef DIMENSIONS_MODULE
+      use b2mod_dimensions
+#endif
 #include "ubpcom.h"
       data nnvsle, nubchrd,  nubnpnt  ,  nubnpni  , nubchrdp, nubchrdi/
 

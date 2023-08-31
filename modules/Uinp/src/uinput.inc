@@ -7,7 +7,6 @@ c*** Temporary - max. number of reactions in cdenmodel section
       integer nrcdn
       parameter (nrcdn=1)
 
-
 c*** 1
       integer nprll,nmode,ntcpu,nfile,niter0,niter,ntime0,ntim1,nfullrun
       integer noptim,noptm1,ngeom_usr,ncoup_input,nsmstra,
