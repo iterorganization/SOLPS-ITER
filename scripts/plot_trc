@@ -93,11 +93,13 @@ then
   echo "rm -rf $WRK_DIR"
   rm -rf $WRK_DIR
 fi
+echo "mkdir $WRK_DIR"
+mkdir $WRK_DIR
 
 if [ -d "$TRC_DIR" ]
 then
-  echo "cp -rf $TRC_DIR $WRK_DIR"
-  cp -rf "$TRC_DIR" "$WRK_DIR"
+  echo "cp -rf $TRC_DIR/* $WRK_DIR"
+  cp -rf "$TRC_DIR"/* "$WRK_DIR"
   echo "fixing format: sed -i.tmp 's/[0-9][-+]/E[-+]/g' $WRK_DIR/*.trc"
   sed -i.tmp 's/[0-9]-/E-/g' $WRK_DIR/*.trc
   sed -i.tmp 's/[0-9]+/E+/g' $WRK_DIR/*.trc
@@ -131,7 +133,6 @@ then
 else
   ntime=$1
   regex='^[+-]?[0-9]+([.][0-9]+)?+([eE][+-][0-9]+)?$'
-#  if [ -n "$ntime" ] && [ "$ntime" -eq "$ntime" ] 2>/dev/null
   if [[ $ntime  =~ $regex ]]
   then 
     if (( $(echo "$ntime > 0." | bc -l))) 
@@ -160,6 +161,10 @@ else
   then
     echo "only one argument given, no further adjustment to $PNTIME will be done"
   else
+    [ ! -f "$PNTIME" ] && {
+      echo "echo 0.0 > $PNTIME"
+      echo 0.0 > $PNTIME
+    }  
     ctime=$1
     regex='^[0-9]+$'
     if [[ $ctime  =~ $regex ]]

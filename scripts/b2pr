@@ -23,6 +23,7 @@ export B2PLOT_DEV=cgm
 STEM=b2pr_PS
 LK=bpl
 exedir=b2pl.exe.dir
+VARF=.VarID
 
 LN_FILES='box.b2p mesh.extra'
 
@@ -64,7 +65,13 @@ If no option is given, the gmeta files are created.
 
 # First, determine the basic variables
 
+  [ -s "$VARF" ] && {
+      echo "reading parameters from $VARF"
+      cat "$VARF"
+      . "./$VARF"
+  } || {
   . get_parm.bpl
+  }
 
   B="'$LL' extl"
   BBB="comp"

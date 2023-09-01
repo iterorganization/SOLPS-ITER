@@ -7,9 +7,11 @@
 # USAGE:
 #
 # in the desired run directory:
-# plot_series $series.dat 
-#                The argument is the series file produced by the
+# plot_series $series.dat $series.name
+#                First argument is the series file produced by the
 #                get_series script 
+#                Second argument can be used to control the outputfile
+#                name (.ps will be attached in the end if absent)
 #
 # by default the plot_series.cmd file in the present directory is used
 # if absent plot_series will search for it the directory above from 
@@ -72,9 +74,20 @@ fi
 
 SFILE=
 [ ! $# -eq 0 ] && { 
-SFILE=$1 && echo "Working with series file: $SFILE "
+  SFILE=$1 && echo "Working with series file: $SFILE "
 } || {
-[ -f $DSH_FILE ] && SFILE=`cat $DSH_FILE | tr -d ' '` && echo "Working with default series file: $SFILE"
+  [ -f $DSH_FILE ] && SFILE=`cat $DSH_FILE | tr -d ' '` && echo "Working with default series file: $SFILE"
+}
+shift
+[ ! $# -eq 0 ] && { 
+  res=`echo $1 | rev | cut -f 1 -d "."`
+  if [ "$res" == "sp" ]
+  then
+    OUTPUT_FILE=$1
+  else
+    OUTPUT_FILE="$1.ps"
+  fi
+  echo "Output will be written to: $OUTPUT_FILE"
 }
 
 if [ -d "$WRK_DIR" ]

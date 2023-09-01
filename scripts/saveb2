@@ -1,14 +1,16 @@
 #!/bin/bash
 
 ext=save
-SAVE_FILES='b2fstate b2fplasma b2fparam b2fmovie b2ftrack b2ftrace b2frates b2fpardf b2mn.dat b2.boundary.parameters b2.transport.parameters b2.user.parameters b2.feedback_control.parameters b2.neutrals.parameters b2.numerics.parameters b2.transport.inputfile b2.sources.profile b2.atomic_physics_rescale.parameters input.dat fort.10 fort.11 fort.13 fort.14 fort.15 fort.21 fort.22 fort.31 fort.33 fort.34 fort.35 fort.44 fort.46 b2.feedback_save.parameters b2.wall_save.parameters .VarID trc.ps trg.ps trg_sum.dat b2time.nc b2tallies.nc b2batch.nc b2wall.nc balance.nc last_2d_out last_2d_out_f ld_tg_i.dat ld_tg_o.dat ld_tg_iu.dat ld_tg_ou.dat fp_tg_i.dat fp_tg_o.dat fp_tg_iu.dat fp_tg_ou.dat box.b2p run.log.gz'
-SAVE_DIR='tracing b2pl_PS batch_av' 
+SAVE_LAST10=`ls *.last10 2>/dev/null`
+SAVE_FILES="b2fstate b2fplasma b2fparam b2fmovie b2ftrack b2ftrace b2frates b2fpardf b2mn.dat b2.boundary.parameters b2.transport.parameters b2.user.parameters b2.feedback_control.parameters b2.neutrals.parameters b2.numerics.parameters b2.transport.inputfile b2.sources.profile b2.atomic_physics_rescale.parameters input.dat fort.10 fort.11 fort.13 fort.14 fort.15 fort.21 fort.22 fort.31 fort.33 fort.34 fort.35 fort.44 fort.46 b2.feedback_save.parameters b2.wall_save.parameters .VarID trc.ps trg.ps trg_sum.dat b2time.nc b2tallies.nc b2batch.nc b2wall.nc balance.nc last_2d_out last_2d_out_f ld_tg_i.dat ld_tg_o.dat ld_tg_iu.dat ld_tg_ou.dat fp_tg_i.dat fp_tg_o.dat fp_tg_iu.dat fp_tg_ou.dat box.b2p run.log.gz $SAVE_LAST10"
+SAVE_DIR="tracing b2pl_PS batch_av" 
 
 backup=backup
 label=`date +"%Y%m%d"`
-BK_FILES='b2fstate b2fplasma b2fparam b2fmovie b2ftrack b2ftrace b2frates b2fpardf b2mn.dat b2.boundary.parameters b2.transport.parameters b2.user.parameters b2.feedback_control.parameters b2.neutrals.parameters b2.numerics.parameters b2.transport.inputfile b2.sources.profile b2.atomic_physics_rescale.parameters input.dat fort.10 fort.11 fort.13 fort.14 fort.15 fort.31 fort.44 fort.46 b2.feedback_save.parameters b2.wall_save.parameters .VarID trc.ps trg.ps trg_sum.dat last_2d_out last_2d_out_f run.log.gz'
-BK_MV_FILES='b2time.nc b2tallies.nc b2batch.nc b2wall.nc balance.nc'
-BK_MV_DIR='tracing batch_av'
+BK_LAST10=`ls *.last10 2>/dev/null`
+BK_FILES="b2fstate b2fplasma b2fparam b2fmovie b2ftrack b2ftrace b2frates b2fpardf b2mn.dat b2.boundary.parameters b2.transport.parameters b2.user.parameters b2.feedback_control.parameters b2.neutrals.parameters b2.numerics.parameters b2.transport.inputfile b2.sources.profile b2.atomic_physics_rescale.parameters input.dat fort.10 fort.11 fort.13 fort.14 fort.15 fort.31 fort.44 fort.46 b2.feedback_save.parameters b2.wall_save.parameters .VarID trc.ps trg.ps trg_sum.dat last_2d_out last_2d_out_f run.log.gz $BK_LAST10"
+BK_MV_FILES="b2time.nc b2tallies.nc b2batch.nc b2wall.nc balance.nc"
+BK_MV_DIR="tracing batch_av"
 
 NAME=${0##*/}
 [ ! $# -eq 0 ] && arg=$1
@@ -24,8 +26,8 @@ case $arg in
    *)
     echo "$NAME - used to create local and final backups. "
     echo "USAGE: "
-    echo "	saveb2 -l              : backup local files between b2run sessions"
-    echo "	saveb2 -s dir_name(s)  : store finished runs to dirname(s).$ext"
+    echo "	saveb2 -l             : backup local files between b2run sessions"
+    echo "	saveb2 -s dir_name(s) : store finished runs to dirname(s).$ext"
     exit 1
 esac
 
