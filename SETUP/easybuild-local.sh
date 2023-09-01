@@ -230,7 +230,7 @@ AMNS requires system to having latexmk package installed on the system.
 
 Dependency to IMAS for AMNS, GGD and VIZ needs to be updated with
 
-    ('IMAS/3.38.1-4.11.1-2020b', EXTERNAL_MODULE),
+    ('IMAS/3.39.0-4.11.5-2020b', EXTERNAL_MODULE),
 
 GGD and AMNS modules must not have CPATH otherwise `pkg-config ggd
 amns --cflags` will not have GGD include path
@@ -546,8 +546,8 @@ trap 'ec=$?; ((ec != 0)) && echo -e "\e[31mExited with failure: $ec\e[m"' EXIT
 solps_top=$(git rev-parse --show-toplevel)
 EASYBUILD_LOCAL=${solps_top}/easybuild.local
 
-TAG_DD=${TAG_DD:-3.38.1}
-TAG_AL=${TAG_AL:-4.11.4}
+TAG_DD=${TAG_DD:-3.39.0}
+TAG_AL=${TAG_AL:-4.11.5}
 
 setup=${solps_top}/SETUP/setup-easybuild.local && test -f ${setup} && . ${setup}
     
@@ -600,6 +600,7 @@ SOLPS_ITER_FOSS_2020b_MODULES="
 	Fundamental-Constants/0.1.1
 	ToFu/1.5.0-foss-2020b-Python-3.8.6
 	netCDF-Fortran/4.5.3-gompi-2020b
+        netcdf4-python/1.5.5.1-foss-2020b
 	flex/2.6.4-GCCcore-10.2.0
 	"
 
@@ -624,6 +625,7 @@ SOLPS_ITER_INTEL_2020b_MODULES="
         SimDB/0.7.1-intel-2020b
         Fundamental-Constants/0.1.1
         ToFu/1.5.0-intel-2020b-Python-3.8.6
+        netcdf4-python/1.5.5.1-intel-2020b
         "
   
 # Listed in imas-installer/site-config/Makefile.ITER.HPC.foss-2020b
@@ -637,14 +639,14 @@ IMAS_FOSS_2020b_MODULES="
         Blitz++/1.0.2-GCCcore-10.2.0
         libMemcached/1.0.18-GCCcore-10.2.0
         Python/3.8.6-GCCcore-10.2.0
-        PyAL/1.3.4-GCCcore-10.2.0
+        PyAL/1.4.1-GCCcore-10.2.0
         PyYAML/5.3.1-GCCcore-10.2.0
         MDSplus-Java/7.96.17-GCCcore-10.2.0-Java-11
-        UDA/2.3.1-GCCcore-10.2.0
+        UDA/2.7.1-GCCcore-10.2.0
         foss/2020b
         SciPy-bundle/2020.11-foss-2020b
         matplotlib/3.3.3-foss-2020b
-        IDStools/1.10.0-foss-2020b
+        IDStools/1.14.1-foss-2020b
         PyHDC/0.17.3-foss-2020b
         HDF5/1.10.7-gompi-2020b
         NAGfor/6.2.14
@@ -652,9 +654,9 @@ IMAS_FOSS_2020b_MODULES="
         libtirpc/1.3.1-GCCcore-10.2.0
         "
 #        NVHPC/21.2
-# MDSplus/7.96.17-GCCcore-10.2.0
+#        MDSplus/7.96.17-GCCcore-10.2.0
 
-# Listed in  imas-installer/site-config/Makefile.ITER.HPC.intel-2020b
+# Listed in imas-installer/site-config/Makefile.ITER.HPC.intel-2020b
 # MDSplus must be with Java
 IMAS_INTEL_2020b_MODULES="
      Doxygen/1.8.20-GCCcore-10.2.0
@@ -665,10 +667,10 @@ IMAS_INTEL_2020b_MODULES="
      Blitz++/1.0.2-GCCcore-10.2.0
      libMemcached/1.0.18-GCCcore-10.2.0
      Python/3.8.6-GCCcore-10.2.0
-     PyAL/1.3.4-GCCcore-10.2.0
+     PyAL/1.4.1-GCCcore-10.2.0
      PyYAML/5.3.1-GCCcore-10.2.0
      MDSplus-Java/7.96.17-GCCcore-10.2.0-Java-11
-     UDA/2.3.1-GCCcore-10.2.0
+     UDA/2.7.1-GCCcore-10.2.0
      intel/2020b
      SciPy-bundle/2020.11-intel-2020b
      matplotlib/3.3.3-intel-2020b
@@ -694,7 +696,6 @@ IMAS_2020b_APPLICATIONS="
     Viz/2.6.1-intel-2020b
     SimDB/0.7.1-intel-2020b
     "
-
 
 # Creating authentication for download from http://git.iter.org/ 
 if [ -n "${HTTP_AUTH_BEARER}" ]; then
