@@ -67,7 +67,7 @@
 :ntrl_cor:neutrals:1.e-6
 :tot_core:total:1.e-6
 @page: Stored energy, W
-:tot_enre:electorns:
+:tot_enre:electrons:
 :tot_enri:ions:
 :tot_enrg:total:
 @page: Power to the inner target, MW
@@ -229,7 +229,7 @@
 @page: Recombination sink, s^{-1} 
 :SNI_rcmb::6.242e+18
 @page: Recombination power source, W
-:SEE_rcmb:to electorns:
+:SEE_rcmb:to electrons:
 :SEI_rcmb:to ions:
 @page: Radiation losses total, MW
 :Brmsreg:bremsstrahlung:-1.e-6
@@ -361,7 +361,7 @@
 :N_a_reg_02_W:SOL:
 :N_a_reg_03_W:inner:
 :N_a_reg_04_W:outer:
-@page: Total number of electorns in the egde
+@page: Total number of electrons in the egde
 :N_e_edge:N_{e}^{edge}:
 @page: Total number of H ions in the egde
 :N_i_edge_H:N_{i,H}^{edge}:
