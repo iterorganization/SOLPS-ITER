@@ -400,7 +400,7 @@ $(target_fu) : b2fgmtry b2fparam b2fstate b2fplasmf
 	-rmdir b2fu.exe.dir
 
 ifndef STAND_ALONE
-$(target_pl) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates AMJUEL ${fort_lc}44 ${fort_lc}46
+$(target_pl) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates AMJUEL ${fort_lc}33 ${fort_lc}34 ${fort_lc}35 ${fort_lc}44 ${fort_lc}46
 else
 $(target_pl) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates AMJUEL
 endif
