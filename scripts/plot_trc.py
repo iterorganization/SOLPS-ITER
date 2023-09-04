@@ -705,8 +705,12 @@ def main():
                 logging.error('data from %s could not be loaded... default ntime = %s applied', ntime_file,ntime)
     else:
         logging.info('%s file absent... default ntime = %s sec applied',ntime_file,ntime)
-        if ( ctime != 0 ):
-            logging.info('last %s iterations will be cut off',ctime)
+    if ( ntime > 0. ):
+        logging.info('traces will be plotted from %s and on',ntime)
+    elif  (ntime < 0. ):
+        logging.info('traces for the last %s will be plotted',-ntime)
+    if ( ctime != 0 ):
+        logging.info('last %s iterations will be cut off',ctime)
     
     "Setting default values for cycling"
     page_title, ptype, xtype, xarg, quan_names, quan_labels, quan_scales, setprange, prange, xquan, xname, xscale = RESET_PAGE()
