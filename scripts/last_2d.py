@@ -1118,7 +1118,7 @@ def WRITE_RAW(out_file, l2d_files, l2d_header, l2d_data, ires):
         line ='#' + 2*' ' + 'produced:  ' + str(now) + '\n' 
         ff.write(line)
         if ( ires < 0. ):
-            resstr = '{0}{1}'.format(str(-ires*1.e+3),' miliseconds')
+            resstr = '{0}{1}'.format(str(-ires*1.e+3),' milliseconds')
         elif (ires > 0.):
             resstr = '{0}{1}'.format(str(ires),' iterations')
         else:
@@ -1264,7 +1264,7 @@ def WRITE_FMT(out_file, cmd_file, l2d_files, l2d_header, l2d_data, ires):
         line ='#' + 2*' ' + 'produced:  ' + str(now) + '\n' 
         ff.write(line)
         if ( ires < 0. ):
-            resstr = '{0}{1}'.format(str(-ires*1.e+3),' miliseconds')
+            resstr = '{0}{1}'.format(str(-ires*1.e+3),' milliseconds')
         elif (ires > 0.):
             resstr = '{0}{1}'.format(str(ires),' iterations')
         else:
