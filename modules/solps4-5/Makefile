@@ -112,7 +112,10 @@ endif
 ifdef NCDIR
 SOLPSINCLUDE += -I${NCDIR}/include
 endif
-SOLPSINCLUDE += -I${SRCDIR}/B2.5_include -I${SRCDIR}/B2.5_commons -I${SRCDIR}/B2_include -I${SRCDIR}/Eirene_commons
+SOLPSINCLUDE += -I${SRCDIR}/B2.5_include -I${SRCDIR}/B2.5_commons -I${SRCDIR}/B2_include
+ifeq ($(shell [ -d ${SRCDIR}/Eirene_commons ] && echo yes || echo no ),yes)
+SOLPSINCLUDE += -I${SRCDIR}/Eirene_commons
+endif
 TAGSLIST += ${SRCDIR}/*_commons/*.[hH] ${SRCDIR}/*/*.F ${SRCDIR}/*.F
 VPATH += ${SRCDIR}/B2.5_modules:${SRCDIR}:${SRCDIR}/solps4_B2:${SRCDIR}/solps4_Eirene:${SRCDIR}/solps5
 
