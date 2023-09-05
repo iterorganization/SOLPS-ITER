@@ -4,11 +4,11 @@
 #==============================================================================
 # USAGE:
 #
-# @file:XXX     - read XXX or XXX.trc file
+# @file:XXX     - read XXX, XXX.trc or XXX.nc file
 # @page:XXX     - start next page labeled XXX defaults to the .trc header
 # @log:         - plot in semilogY scale
 # @iter:XX      - plot against last XX iterations, not time, 
-#                  (if XX < 0 or absent will plot for the whole time)
+#                  (if XX < 0 or absent will plot for the whole history)
 # @setymax:XX    - set Y-axis maximum plotting limit to XX
 # @setymim:XX    - set Y-axis mainimun plotting limit to XX
 # @setxmax:XX    - set X-axis maximum plotting limit to XX

@@ -14,7 +14,7 @@
 #          to obtain them. Then two python scripts are executed:
 #          trg_sum.py that produces trg_sum.dat summary file and
 #          plot_trcc.py that produces standard set of plots goverened 
-#          by the plot_trg.cmd comand file
+#          by the plot_trg.cmd command file
 #
 # by default the plot_trg.cmd file in the present directory is used
 # if absent plot_trc will be searched in the baserun directory above

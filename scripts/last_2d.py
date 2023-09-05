@@ -5,25 +5,32 @@ Created on 26/06/2023
 @author: pshenoa
 
 DESCRIPTION
-This script averages the data contained in WRK_DIR, following the .RES file prescriptions
-.RES file contains a number IRES: 
+This script averages the data contained in wrk.tmp, following the .RES file prescriptions
+.RES file contains a number IRES interpreted as follows: 
 IRES - positive   :   data will be averaged over the last "int(IRES) timesteps"
 IRES - negative   :   data will be averaged over the last "float(IRES) ms"
 DEFAULT           :   data will be averaged over the last "1 ms"
 
-TRC_FLE   - tracing files to be averaged (at the moment residuals.trc, blnn.trc, blnm.trc and sources.trc are excluded)
-            all of of them are treated in the simillar manner, all the quantities are averaged 
-            and put into the resulting file with under the same names
-b2time    - handled with the separate routine for time-dependent quantities treatment is straightforward
-            for quantities depending on "nc" first two are labeled _l and _u the rest if present are _uX (2,3,4...)
+TRC_FLE   - tracing files to be averaged 
+            (at the moment residuals.trc, blnn.trc, blnm.trc and sources.trc are excluded)
+            all of of them are treated in the similar manner, i.e. all the quantities are averaged 
+            and put into the resulting file under the original names
+b2time    - handled with the separate routine
+            for time-dependent quantities treatment is straightforward and similar to the .trc ones
+            for quantities depending on "nc" first two are labeled _l and _u the rest if present - _uX (_u2,_u3 etc)
             the remaining quantities (not "nc" vectors and 2D) are handled separately by last_3d.py (in development)
-b2tallies - handled with separate routine grabs data about species from .VarID file
-            by convension the naming of the averaged quantities in this routine yileds XX_reg_ns (i.e. Ntot_04_D_1)
-            if VarID is not found the species go by Ns0,Ns1,Ns2 etc
+b2tallies - handled with separate routine 
+            by convention the naming of the averaged quantities in this routine is as follows:
+            XX_reg_ns, where reg is the region number VN for Nth volumetric-region, XN for Nth x-region and 
+            YN for Nth y-region, and ns is the specie index (i.e. Ntot_V04_D1 for example)
+
+The script also reads .VarID file, therefore obtained cut and midplane definitions can in future be used 
+for more detailed handling of b2time vectors and similar multidimentional infomation.
 
 OUTPUT
 last_2d_out   - raw output file containing "file of origin : averaged quantity name : value "
-last_2d_out_f - formated output file, contains are controlled via last_2d.cmd
+                for all the averaged quantities
+last_2d_out_f - formated output file, contains are controlled via last_2d.exe.cmd
 
 USAGE
 python plot_trc.py  
@@ -32,7 +39,7 @@ with tracing and netcdf files present in wrk.tmp directory
 
 IMPORTANT 
 data should be present in ./wrk.tmp which is 
-usually handled by the giverning script last_2d
+usually handled by the governing script last_2d
 
 WHAT CAN BE CHANGED
 Generally speaking only the first block "BASIC SETUP" is expected to be changed

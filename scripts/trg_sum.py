@@ -1,16 +1,15 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
 Created on 15/05/2023
+@author: pshenoa
 
 The script provides summary of target heat and particle load routines produced via
 echo "0100 wlld" | b2plot
 
-The script searches for the relevant associated files and produces:
+The script searches for the relevant associated files and if found produces:
     
-    ttg_sum.dat - containing integral and peak values of heat and particle fluxes
-
-@author: andreypsenov
+    trg_sum.dat - containing integral, average and peak values of heat and particle fluxes
 """
 
 import logging

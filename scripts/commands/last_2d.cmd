@@ -8,19 +8,19 @@
 #       (i.e b2time, sepdata etc)
 #
 #  B  - text, name of the desired quantity as it stands in the raw output
-#       (for .trc files corresponds to the quantity names there, whereas
-#       multidimentional data massives from .nc files are unpacked in
-#       specific way and the quantity names should be looked up in 
-#       the last_2d_out or last_2d.py directly)
+#       (for .trc files and single dimension quantities in .nc files
+#       corresponds to the quantity names directly, whereas multidimentional 
+#       data from .nc files are unpacked via adding specific suffixes that
+#       and the quantity names should be looked up in the last_2d.py driver)
 #
-#  C  - real, scaling factor to scale the original quantity value with
+#  C  - real, scaling factor, original quantity value will be scaled with it
 #
 #  D  - text, name under which the quantity will appear in the formatted output
 #       (if blank the original quantity name (field B) will be used)
 #
-#  E  - text, the units of the resulting quantity value to be shown 
-#       in brackets after the name (if blank "N/A" will be added to 
-#       distinguish between lack of units provided and unitles quantities
+#  E  - text, the units of the resulting quantity value (after scaling), will
+#       be shown in brackets after the name (if blank "N/A" will be added to 
+#       distinguish between lack of units provided and a.u. quantities)
 #==============================================================================
 
 sepdata : ne_sep    : 1. : ne_sep    : m^-3

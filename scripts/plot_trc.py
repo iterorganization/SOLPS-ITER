@@ -5,20 +5,20 @@ Created on 22/03/2023
 @author: pshenoa
 
 DESCRIPTION
-This script produces a number of plot files N.ps from the SOLPS tracing file 
-located in the ./wrk.tmp folder based on the supplied command file plot_trc.cmd
+This script produces a number of plot files N.ps from the SOLPS tracing files 
+located in the ./wrk.tmp folder based on the supplied command file plot_trc.exe.cmd
 
 OUTPUT
 Series of XXXX.ps figures placed in ./wrk.tmp 
 
 USAGE
 python plot_trc.py 
-(intended to be used as a driver in plot_trc and plot_trg scripts)
+(intended to be used as a driver for plot_trc, plot_trg and plot_series scripts)
 with plot_trc.exe.cmd and wrk.tmp present in the exectution directory
 
 IMPORTANT 
-plot_trc.cmd and ./wrk.tmp should be present in the directory which is 
-usually handled by the giverning script plot_trc
+plot_trc.exe.cmd and ./wrk.tmp should be present in the directory 
+this is handled by the governing scripts (plot_trc, plot_trg and plot_series)
 
 WHAT CAN BE CHANGED
 Generally speaking only the first block "BASIC SETUP" is expected to be changed

@@ -19,12 +19,15 @@
 # if absent will search for it in the baserun directory in the directory
 # from which the get_series script is called
 #=======================================================================
-# EXAMPLE of series file (GSGOV in script)
+# EXAMPLE of series file ($GSGOV in this script)
 #
 # series: Example : add_units / scale
 # run   :  001    : ./
 # run   :  002    : ../2405.test
 #
+# keys ( "add_units" and "scale" for now) are optional
+#     scale     - perfoms the scaling according to .cmd file prescription
+#     add_units - adds units to the quantity names in the output file title 
 #======================================================================
 
 DGS_FILE=.series

@@ -6,7 +6,7 @@ Created on 06/07/2023
 
 DESCRIPTION
 This script gets the average data from last_2d raw output files (last_2d_out) for every run in the series
-the results are concatated and written to the output file named after the series
+the results are concatenated and written to the output file named after the series
 
 The script work is governed by several command files that should be present in the directory where 
 the script is executed:
@@ -18,17 +18,17 @@ series.exe      :  the file that contains the series name and mapping of the run
                       the output data will be called Series_name.dat
                       keys can add special treatment if needed. Several keys can be added separated by "/"
                       Currently available keys:
-                            "add_units" - will add units from cmd file to the legend (if present)
-                            "scale"     - will scale the quantities with values given in cmd_file
+                            "add_units" - will add units from get_series.exe.cmd to the legend (if present)
+                            "scale"     - will scale the quantities with values given in get_series.exe.cmd
         run     : "run_name" : "run_path"
                       individual runs in the output file will be marked via run_name
-                      the run_path is local or absolut path to the associated run data.
+                      the run_path is local or absolute path to the associated run data.
 
-get_series.cmd  :  similar to the formatted last_2d output (description can be found in the example                     
-                     found in the script directory along with the example .series file
+get_series.exe.cmd  :  similar to the formatted last_2d output (description can be found in the example 
+                       file found in the script/commands directory along with the example_of_.series file)
 
 OUTPUT
-Series_name.dat - contains a table of data descirbed in get_series.cmd file for every run of the series
+Series_name.dat - contains a table of data described in get_series.exe.cmd file for every run of the series
                   fetched from the last_2d_out file located in the associated run_path
 
 USAGE
@@ -38,7 +38,7 @@ with associated .series and get_series.cmd files present
 
 IMPORTANT 
 averaged data for every run in the series should be present in run_path 
-which is usually handled by the giverning script get_series (if possible)
+which is usually handled by the governing script get_series (if possible)
 
 WHAT CAN BE CHANGED
 New keys can be added, although it requires some understanding of the script 
