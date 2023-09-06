@@ -124,7 +124,7 @@ else
   if [ $count != 0 ]
   then
     for f in $LN_FILES; do {
-      [ -f "$B2PL_DIR/$f" ] && echo "cp $B2PL_DIR/$f $WRK_DIR/$f" && cp "$B2PL_DIR/$f" "$WRK_DIR/$f"
+      [ -f "$B2PL_DIR/$f" ] && echo "cp $B2PL_DIR/$f $f && cp $f $WRK_DIR/$f" && cp "$B2PL_DIR/$f" "$f" && cp "$f" "$WRK_DIR/$f"
     }; done
   else
     echo "failed to produce $LN_FILES, no target data to plot or summarize" 
