@@ -40,5 +40,5 @@ if ($COMPILER == "HP") then
 else
   ln -sf input.dat fort.1
 endif
-${MPI_EXEC} ${MPI_OPTS} $SOLPSTOP/modules/Eirene/builds/standalone.ITER.ifort64${EXT_MPI}/eirobjx
+${MPI_EXEC} ${MPI_OPTS} $SOLPSTOP/modules/Eirene/builds/standalone.ITER.${COMPILER}${EXT_MPI}/eirobjx
 

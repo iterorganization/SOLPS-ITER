@@ -1,0 +1,5 @@
+# rmin zmin rmax zmax suffix keyword
+  0.0  -2.0  3.5  1.5   a     gmeta
+  0.8  -1.8  1.8 -0.8   l     PS
+  0.8   0.6  1.8  1.6   u     PS
+  0.8  -1.8  1.8  1.6   f     PS
