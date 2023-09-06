@@ -32,8 +32,8 @@
 #   LL        : the case ID    (VarID)
 #   BB        : viewing frame(s)  (box.b2p)
 #   SB        : suffices for PS files with different frames (box.b2p)
-#   KW        : keywords for the frames: 
-#	              	      	  P for PostScript, g for gmeta, empty for both
+#   KW        : keywords for the frames:
+#                        P for PostScript, g for gmeta, empty for both
 
 # Derived variables
 
@@ -45,11 +45,13 @@ function spec_symbol {
   case "$1" in
     (  1 )  S=$H;;
     (  2 )  S=He;;
+    (  3 )  S=Li;;
     (  4 )  S=Be;;
     (  6 )  S=C_;;
     (  7 )  S=N_;;
     ( 10 )  S=Ne;;
     ( 18 )  S=Ar;;
+    ( 74 )  S=W_;;
     (  * )  S=xx;;
   esac
 }
@@ -78,31 +80,45 @@ m=`grep -A$NLINES ' am' b2fstate | tail -$NLINES | paste -s`
 zamin=`grep -A$NLINES 'zamin' b2fstate | tail -$NLINES | paste -s`
 zamax=`grep -A$NLINES 'zamax' b2fstate | tail -$NLINES | paste -s`
 
-u=`pipe_run.log | grep jxi | head -1 | awk '{print $5}'`
+u=`pipe_run.log | grep jxi | grep User-corrected | head -1 | awk '{print $8}'`
 let "NMP_I=$u"
 
-u=`pipe_run.log | grep jxa | head -1 | awk '{print $6}'`
+u=`pipe_run.log | grep jxa | grep User-corrected | head -1 | awk '{print $9}'`
 let "NMP_O=$u"
 
-u=`pipe_run.log | grep jsep | head -1 | awk '{print $7+1}'`
+u=`pipe_run.log | grep jsep | grep User-corrected | head -1 | awk '{print $10+1}'`
 let "NSEP=$u"
 
 set -A Hiso -- \* H D T
 H=D_
-[ -n "$m" ] && [ -n "$z" ] && {
-  unset MI ZI
+unset ZMIN ZMAX
+typeset -a ZMIN
+typeset -a ZMAX
+[ -n "$zamin" ] && {
+  i=0; for f in ${zamin#*=}; do {
+    let "i=i+1"; ZMIN[$i]=$f
+    [ "$i" -eq "$NS" ] && break
+}; done }
+[ -n "$zamax" ] && {
+  i=0; for f in ${zamax#*=}; do {
+    let "i=i+1"; ZMAX[i]=$f
+    [ "$i" -eq "$NS" ] && break
+}; done }
+[ -n "$m" ] && [ -n "$zamin" ] && [ -n "$zamax" ] && {
+unset MI ZI
+typeset -a MI
+typeset -a ZI
   i=0; for f in ${m#*=}; do {
-    echo $f
     let "i=i+1";
-    let "ZI[i]=($zamin[i]+$zamin[i])/2";
+    MI[$i]=$(("$f"));
+    ZI[$i]=$((0.5*"${ZMIN[$i]}"+0.5*"${ZMAX[$i]}"));
     [ "$i" -eq "$NS" ] && break
   }; done
 
-  i=0; while [ -n "${m[i]}" ] && [ -n "${ZI[i]}" ]; do {
-    echo $i
-    [ "${ZI[i]}" -eq 1 ] && {
-      j=${MI[i]}
-      H=${Hiso[j]}_
+  i=1; while [ -n "${MI[$i]}" ] && [ -n "${ZI[$i]}" ]; do {
+    [ "${ZI[$i]}" -eq 1 ] && {
+      j=${MI[$i]}
+      H=${Hiso[$j]}_
       break
     }
     let "i=i+1"
@@ -110,6 +126,41 @@ H=D_
 }
 
 unset Hiso MI ZI i j m z NTP_I NTP_O NXT_I NXT_O
+
+u=`pipe_run.log | grep natm | head -1 | awk '{print $4}'`
+let "NSPEC=$u"
+if [ "$NSPEC" -gt 1 ]
+ then {
+  u=`pipe_run.log | grep nfluids | head -1 | awk '{for (i=2;i<=NF;i++) print $i}'`
+  set -A u -- `echo ${u#*=} | tr , \ `
+  n=0; p=0
+  i=0; until [ $i -eq "$NSPEC" ]; do {
+    let "i=i+1"
+    f=${u[i]}
+    let "k=p+i"
+    let "p=p+f"
+    let "n=k+f-1"
+    SUMZ_1[i]=$k
+    SUMZ_N[i]=$n
+    spec_symbol $f
+    SPEC[i]="$S"
+    [ "$i" -ge "$NSPEC" ] && break
+  }; done
+ }
+else
+  NSPEC=1
+  SPEC=$H
+  SUMZ_1=1
+  SUMZ_N=1
+fi
+unset u f n p k i S
+
+SUMZ_ALL_I="1 $(($NS-1)) sumz"
+SUMZ_ALL_F="1 $NSPEC sumz"
+
+[ -s b2.boundary.parameters ]  || {
+    print -u2 "No b2.boundary.parameters file found"
+  }
 
 u=`grep -i -e '  *nniso *=' -e '^nniso *=' -e ',nniso *=' b2.boundary.parameters | tail -1 | tr [A-Z] [a-z]`
 u=${u#*nniso}
@@ -205,30 +256,39 @@ for f in "${BB[@]}"; do
   echo -e "\t$f\t\t:  ${SB[ib]}\t:  ${KW[ib]}"
 done
 
-case "$NS" in
-  ( -* ) {
-           u=`pipe_run.log | grep natm | head -1 | awk '{print $4}'`
-           let "NSPEC=$u"
-           u=`pipe_run.log | grep nfluids | head -1 | awk '{for (i=2;i<=NF;i++) print $i}'`
-           set -A u -- `echo ${u#*=} | tr , \ `
-           n=0
-           i=0; until [ $i -eq "$NSPEC" ]; do {
-             f=${u[i]}
-             let "k=n+1"
-             let "n=n+f"
-             SUMZ_1[i]=$k
-             SUMZ_N[i]=$n
-             spec_symbol $f
-             SPEC[i]="$S"
-             let "i=i+1"
-             [ "$i" -ge "$NS" ] && break
-           }; done
-           ((NSPEC=i))
-         };;
-  (  * ) NSPEC=1; SPEC=$H; SUMZ_1=1; SUMZ_N=1;;
-esac
-unset u f n k i S
+#Write the data to VarID file so dont have to invoke script next time
+ff=.VarID
+echo "LL=\"$LL\""                    > "$ff"
+echo "L=$L"                          >>"$ff"
+echo "NSPEC=$NSPEC"                  >>"$ff"
+echo "NS=$NS"                        >>"$ff"
+k=0
+until [ $k -eq "$NSPEC" ]; do {
+  let "k=k+1"
+  echo "SPEC[$k]=${SPEC[k]}"         >>"$ff"
+  echo "SUMZ_1[$k]=${SUMZ_1[k]}"     >>"$ff"
+  echo "SUMZ_N[$k]=${SUMZ_N[k]}"     >>"$ff"
+}; done
+echo "NX=$NX"                        >>"$ff"
+echo "NY=$NY"                        >>"$ff"
+echo "NSEP=$NSEP"                    >>"$ff"
+echo "NMP_I=$NMP_I"                  >>"$ff"
+echo "NMP_O=$NMP_O"                  >>"$ff"
+echo "NNISO=$NNISO"                  >>"$ff"
+echo "NXC_I=$NXC_I"                  >>"$ff"
+echo "NXC_O=$NXC_O"                  >>"$ff"
+echo "NXT_I=$NXT_I"                  >>"$ff"
+echo "NXT_O=$NXT_O"                  >>"$ff"
+echo "NTP_I=$NTP_I"                  >>"$ff"
+echo "NTP_O=$NTP_O"                  >>"$ff"
+echo "SUMZ_ALL_I=\"$SUMZ_ALL_I\""    >>"$ff"
+echo "SUMZ_ALL_F=\"$SUMZ_ALL_F\""    >>"$ff"
+k=0
+[ -n "${BB[1]}" ] || echo "BB="      >>"$ff"
+for f in "${BB[@]}"; do
+  [ -n "${BB[1]}" ] && let 'k=k+1'
+  echo "BB[$k]=\"${BB[$k]}\""           >>"$ff"
+  echo "KW[$k]=\"${KW[$k]}\""           >>"$ff"
+done
 
-SUMZ_ALL_I="1 $NS sumz"
-SUMZ_ALL_F="1 $NSPEC sumz"
-
+[ -s "$ff" ] && echo "$ff written"
