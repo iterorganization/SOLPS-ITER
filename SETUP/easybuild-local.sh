@@ -565,44 +565,44 @@ export EASYBUILD_ROBOT_PATHS=${ebrp}
 
 if ! test -d ${EASYBUILD_LOCAL}/imas-installer ; then # Install local EasyBuild
         rm -rf ${EASYBUILD_LOCAL}
-	python3 -m venv ${EASYBUILD_LOCAL}
-	${EASYBUILD_LOCAL}/bin/python -m pip install --upgrade pip wheel
-	${EASYBUILD_LOCAL}/bin/python -m pip install setuptools grip \
-		keyring GitPython keyrings.alt easybuild
-	git clone ssh://git@git.iter.org/imex/easybuild-easyconfigs.git \
-	    -b develop ${EASYBUILD_LOCAL}/imas-easybuild-easyconfigs
-	git clone ssh://git@git.iter.org/imex/easybuild-easyconfigs.git \
-	    -b SOLPS-ITER ${solps_top}/easyconfigs.local
-	git clone ssh://git@git.iter.org/imas/installer.git \
-		${EASYBUILD_LOCAL}/imas-installer
+        python3 -m venv ${EASYBUILD_LOCAL}
+        ${EASYBUILD_LOCAL}/bin/python -m pip install --upgrade pip wheel
+        ${EASYBUILD_LOCAL}/bin/python -m pip install setuptools grip \
+                keyring GitPython keyrings.alt easybuild
+        git clone ssh://git@git.iter.org/imex/easybuild-easyconfigs.git \
+            -b develop ${EASYBUILD_LOCAL}/imas-easybuild-easyconfigs
+        git clone ssh://git@git.iter.org/imex/easybuild-easyconfigs.git \
+            -b SOLPS-ITER ${solps_top}/easyconfigs.local
+        git clone ssh://git@git.iter.org/imas/installer.git \
+                ${EASYBUILD_LOCAL}/imas-installer
 fi
 
 
 # Listed in SETUP/setup.csh.ITER.gfortran
 SOLPS_ITER_FOSS_2020b_MODULES="
-	CMake/3.20.1-GCCcore-10.2.0
-	xarray/0.16.2-foss-2020b
-	makedepend/1.0.6-GCCcore-10.2.0
-	MSCL/1.2.3-GCCcore-10.2.0
-	GR/0.0.94-GCCcore-10.2.0
-	GLI/4.5.31-GCCcore-10.2.0
-	NCL/6.6.2-foss-2020b
-	NAG/26-GCC-10.2.0
-	Ghostscript/9.53.3-GCCcore-10.2.0
-	Doxygen/1.8.20-GCCcore-10.2.0
-	ParaView/5.10.0-foss-2020b-mpi
-	PyQt5/5.15.1-GCCcore-10.2.0
-	motif/2.3.8-GCCcore-10.2.0
-	gnuplot/5.4.1-GCCcore-10.2.0
-	texlive/20210216-GCCcore-10.2.0
-	libtirpc/1.3.1-GCCcore-10.2.0
-	SimDB/0.7.1-foss-2020b
-	Fundamental-Constants/0.1.1
-	ToFu/1.5.0-foss-2020b-Python-3.8.6
-	netCDF-Fortran/4.5.3-gompi-2020b
+        CMake/3.20.1-GCCcore-10.2.0
+        xarray/0.16.2-foss-2020b
+        makedepend/1.0.6-GCCcore-10.2.0
+        MSCL/1.2.3-GCCcore-10.2.0
+        GR/0.0.94-GCCcore-10.2.0
+        GLI/4.5.31-GCCcore-10.2.0
+        NCL/6.6.2-foss-2020b
+        NAG/26-GCC-10.2.0
+        Ghostscript/9.53.3-GCCcore-10.2.0
+        Doxygen/1.8.20-GCCcore-10.2.0
+        ParaView/5.10.0-foss-2020b-mpi
+        PyQt5/5.15.1-GCCcore-10.2.0
+        motif/2.3.8-GCCcore-10.2.0
+        gnuplot/5.4.1-GCCcore-10.2.0
+        texlive/20210216-GCCcore-10.2.0
+        libtirpc/1.3.1-GCCcore-10.2.0
+        SimDB/0.7.1-foss-2020b
+        Fundamental-Constants/0.1.1
+        ToFu/1.5.0-foss-2020b-Python-3.8.6
+        netCDF-Fortran/4.5.3-gompi-2020b
         netcdf4-python/1.5.5.1-foss-2020b
-	flex/2.6.4-GCCcore-10.2.0
-	"
+        flex/2.6.4-GCCcore-10.2.0
+        "
 
 # Listed in SETUP/setup.csh.ITER.ifort64
 SOLPS_ITER_INTEL_2020b_MODULES="
@@ -741,11 +741,11 @@ function add_imas_lite() { # IMAS without matplotlib as a dependency
 function build_modules () {
     for m in $*; do       
         if test -f ${EASYBUILD_PREFIX}/modules/all/${m}
-	then echo -e "\e[32mModule ${m} exists. Skipping build.\e[m"
-	else echo -e "\e[34mBuilding required SOLPS-ITER module ${m}$ec\e[m"
+        then echo -e "\e[32mModule ${m} exists. Skipping build.\e[m"
+        else echo -e "\e[34mBuilding required SOLPS-ITER module ${m}$ec\e[m"
              em=$(echo ${m}.eb | tr / -)
              eb --robot ${eb_auth} ${em}
-	fi
+        fi
     done
 }
 
