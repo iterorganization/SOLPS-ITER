@@ -108,8 +108,6 @@ sed -i -e 's/INTEGER, SAVE :: ank_tracing=0/INTEGER :: ank_tracing=0/g' b2mod_di
 sed -i '/INTRINSIC HUGE/d' b2mod_neutrals_namelist_diffv.F90 b2mod_geo2_diffv.F90
 sed -i -e 's/LOGICAL :: result10/INTEGER :: result10/g' b2mod_geo2_diffv.F90
 sed -i '/INTRINSIC MAX/d' b2stbc_fb_dv.F90 b2stbc_phys_dv.F90 b2usr_cost_function_dv.F90 fix_user_dv.F90
-sed -i '/TYPE(B2PLASMASNAPSHOT_DIFFV) :: dummyzerodiffd0/d' b2sral_dv.F90
-sed -i 's/dummyzerodiffd0/std%psnl/g' b2sral_dv.F90
 
 sed -i '/EXTERNAL SUBINI/d' *.F90
 sed -i '/EXTERNAL SUBEND/d' *.F90
@@ -244,7 +242,7 @@ sed -i -e "s/state_extdiff/state_extd/g" b2optim_*.F*
 sed -i -e "s/switchdiff/switchd/g" b2optim_*.F*
 sed -i -e "s/par_opt_physdiff/par_opt_physd/g" b2optim_*.F*
 sed -i -e "s/state_ext, state_extd)/state_ext, state_extd, npar_opt)/g" b2optim_*.F*
-sed -i -e "s/state_ext, state_extd, j, jdiff)/state_ext, state_extd, j, jdiff, npar_opt-nsigma_opt-nmean_opt)/g" b2optim_*.F*
+sed -i -e "s/state_ext, state_extd, j, jdiff)/state_ext, state_extd, j, jdiff, npar_opt-nsigma_opt-nmean_opt-nshift_opt)/g" b2optim_*.F*
 sed -i -e 's/jdiff(nncf)/jdiff(nbdirsmax,nncf)/g' b2optim_*.F*
 sed -i -e "/subroutine EV_GRAD_F(/a\      use b2mod_diffsizes" b2optim_ipopt.F
 sed -i -e "/subroutine FormFunctionGradient(/a\      use b2mod_diffsizes" b2optim_tao.F90

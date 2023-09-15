@@ -275,12 +275,18 @@ sed -i "/stateb4/d" b2mod_driver_diff.F90 ## CAREFUL! might be needed in future
 sed -i "/stateb5/d" b2mod_driver_diff.F90 ## CAREFUL! might be needed in future
 sed -i "/cumul = cumul/d" b2mod_driver_diff.F90 ## CAREFUL! might be needed in future
 sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      call calc_res_fp_diff(nCv, ns, stateb1, stateb0, cumul)" b2mod_driver_diff.F90
-sed -i -e "s/DO WHILE (cumul .GT. 1.0e-6)/DO WHILE (cumul .GT. res_quit)/g" b2mod_driver_diff.F90
+sed -i -e "s/DO WHILE (cumul .GT. 1.0e-6)/DO WHILE ((cumul .GT. res_quit) .and. (ITERCOUNT.lt.ntim) .and. (.not.quit))/g" b2mod_driver_diff.F90
 sed -i -e "/REAL(kind=r8) :: cumul/i\    INTEGER :: ITERCOUNT" b2mod_driver_diff.F90
 sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      ITERCOUNT = ITERCOUNT + 1" b2mod_driver_diff.F90
 sed -i -e "/CALL ADSTACK_STARTREPEAT/i\    ITERCOUNT = 0" b2mod_driver_diff.F90
 sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT ITERATION ',ITERCOUNT" b2mod_driver_diff.F90
 sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT MAX RES ',cumul" b2mod_driver_diff.F90
+sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      inquire(file='_quit',exist=quitexist_)" b2mod_driver_diff.F90
+sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      inquire(file='.quit',exist=quitexist)" b2mod_driver_diff.F90
+sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      quit = quitexist.or.quitexist_" b2mod_driver_diff.F90
+sed -i -e "/WRITE(\*, \*) 'MAX RESIDUAL ', res_max/a\      quit = quitexist_.or.quitexist" b2mod_driver_diff.F90
+sed -i -e "/WRITE(\*, \*) 'MAX RESIDUAL ', res_max/a\      inquire(file='.quit',exist=quitexist)" b2mod_driver_diff.F90
+sed -i -e "/WRITE(\*, \*) 'MAX RESIDUAL ', res_max/a\      inquire(file='_quit',exist=quitexist_)" b2mod_driver_diff.F90
 
 sed -i -e "/INTEGER, ALLOCATABLE, SAVE :: rtyr(:)/i\  REAL(kind=r8), ALLOCATABLE, SAVE :: rtlrab0(:, :, :), rtlsab0(:, :, :),&" b2mod_b2cmrc_diff.F90
 sed -i -e "/INTEGER, ALLOCATABLE, SAVE :: rtyr(:)/i\& rtlqab0(:, :, :), rtlcxb0(:, :, :)" b2mod_b2cmrc_diff.F90
@@ -302,6 +308,128 @@ sed -i -e '/stateb1 = state0b/d' b2mod_driver_diff.F90
 sed -i -e '/TYPE(MAPPING_DIFF) :: mpgb1/d' b2mod_driver_diff.F90
 sed -i -e '/TYPE(MAPPING_DIFF) :: mpgb2/d' b2mod_driver_diff.F90
 sed -i -e '/TYPE(MAPPING_DIFF) :: mpgb3/d' b2mod_driver_diff.F90
+
+# adding restartma28 section in reverse sweeps (CAREFUL HERE TOO!)
+# first b2npco_nodiff
+sed -i -e '0,/    CALL B2NPCO_NODIFF/s//    new_matrix = .false.\n&/' b2news__b.F90
+sed -i -e '0,/    CALL B2NPCO_NODIFF/s//    DO ireg=0,mpg%nnreg(0)\n&/' b2news__b.F90
+sed -i -e '0,/    CALL B2NPCO_NODIFF/s//      new_matrix = (new_matrix .OR. solveco(is, ireg)) .NEQV. \&\n&/' b2news__b.F90
+sed -i -e '0,/    CALL B2NPCO_NODIFF/s//\&       last_solve_9(ireg)\n&/' b2news__b.F90
+sed -i -e '0,/    CALL B2NPCO_NODIFF/s//    END DO\n&/' b2news__b.F90
+sed -i -e '0,/    CALL B2NPCO_NODIFF/s//    IF (new_matrix .OR. .true.) CALL RESTART_MA28_FOR_US()\n&/' b2news__b.F90
+# b2nppo_nodiff
+sed -i -e '0,/        CALL B2NPPO_NODIFF/s//        new_matrix = .false.\n&/' b2news__b.F90
+sed -i -e '0,/        CALL B2NPPO_NODIFF/s//        DO ireg=0,mpg%nnreg(0)\n&/' b2news__b.F90
+sed -i -e '0,/        CALL B2NPPO_NODIFF/s//          new_matrix = (new_matrix .OR. solvepo(ireg)) .NEQV. \&\n&/' b2news__b.F90
+sed -i -e '0,/        CALL B2NPPO_NODIFF/s//\&           last_solve_9(ireg)\n&/' b2news__b.F90
+sed -i -e '0,/        CALL B2NPPO_NODIFF/s//        END DO\n&/' b2news__b.F90
+sed -i -e '0,/        CALL B2NPPO_NODIFF/s//        IF (new_matrix .OR. .true.) CALL RESTART_MA28_FOR_US()\n&/' b2news__b.F90
+# second b2npco_nodiff
+sed -i -e '0,/      CALL B2NPCO_NODIFF(ncv, nfc, nvx, mpg%nnreg(0), b2news_solving(2)\&/s//      new_matrix = .false.\n&/' b2news__b.F90
+sed -i -e '0,/      CALL B2NPCO_NODIFF(ncv, nfc, nvx, mpg%nnreg(0), b2news_solving(2)\&/s//      DO ireg=0,mpg%nnreg(0)\n&/' b2news__b.F90
+sed -i -e '0,/      CALL B2NPCO_NODIFF(ncv, nfc, nvx, mpg%nnreg(0), b2news_solving(2)\&/s//        new_matrix = (new_matrix .OR. solveco(is, ireg)) .NEQV. \&\n&/' b2news__b.F90
+sed -i -e '0,/      CALL B2NPCO_NODIFF(ncv, nfc, nvx, mpg%nnreg(0), b2news_solving(2)\&/s//\&         last_solve_9(ireg)\n&/' b2news__b.F90
+sed -i -e '0,/      CALL B2NPCO_NODIFF(ncv, nfc, nvx, mpg%nnreg(0), b2news_solving(2)\&/s//      END DO\n&/' b2news__b.F90
+sed -i -e '0,/      CALL B2NPCO_NODIFF(ncv, nfc, nvx, mpg%nnreg(0), b2news_solving(2)\&/s//      IF (new_matrix) CALL RESTART_MA28_FOR_US()\n&/' b2news__b.F90
+sed -i -e '0,/      CALL B2NPCO_NODIFF(ncv, nfc, nvx, mpg%nnreg(0), b2news_solving(2)\&/s//      last_solve_9(0:mpg%nnreg(0)) = solveco(is, 0:mpg%nnreg(0))\n&/' b2news__b.F90
+# first b2npco_b(=second b2ncpo_nodiff (need to change on letter to lower case to not match second b2npco_b)
+sed -i -e '0,/      CALL B2NPCO_B/s//      new_matrix = .false.\n&/' b2news__b.F90
+sed -i -e '0,/      CALL B2NPCO_B/s//      DO ireg=0,mpg%nnreg(0)\n&/' b2news__b.F90
+sed -i -e '0,/      CALL B2NPCO_B/s//        new_matrix = (new_matrix .OR. solveco(is, ireg)) .NEQV. \&\n&/' b2news__b.F90
+sed -i -e '0,/      CALL B2NPCO_B/s//\&         last_solve_9(ireg)\n&/' b2news__b.F90
+sed -i -e '0,/      CALL B2NPCO_B/s//      END DO\n&/' b2news__b.F90
+sed -i -e '0,/      CALL B2NPCO_B/s//      IF (new_matrix) CALL RESTART_MA28_FOR_US()\n&/' b2news__b.F90
+sed -i -e '0,/      CALL B2NPCO_B/s//      last_solve_9(0:mpg%nnreg(0)) = solveco(is, 0:mpg%nnreg(0))\n&/' b2news__b.F90
+sed -i -e '0,/      CALL B2NPCO_B/s/      CALL B2NPCO_B/      CALL B2NPCO_b/' b2news__b.F90 #change first B2NPCO_B into smaller letter to avoid matching for the second one
+# b2nppo_b(=b2nppo_nodiff
+sed -i -e '0,/        CALL B2NPPO_B/s//        new_matrix = .false.\n&/' b2news__b.F90
+sed -i -e '0,/        CALL B2NPPO_B/s//        DO ireg=0,mpg%nnreg(0)\n&/' b2news__b.F90
+sed -i -e '0,/        CALL B2NPPO_B/s//          new_matrix = (new_matrix .OR. solvepo(ireg)) .NEQV. \&\n&/' b2news__b.F90
+sed -i -e '0,/        CALL B2NPPO_B/s//\&           last_solve_9(ireg)\n&/' b2news__b.F90
+sed -i -e '0,/        CALL B2NPPO_B/s//        END DO\n&/' b2news__b.F90
+sed -i -e '0,/        CALL B2NPPO_B/s//        IF (new_matrix .OR. .true.) CALL RESTART_MA28_FOR_US()\n&/' b2news__b.F90
+sed -i -e '0,/        CALL B2NPPO_B/s//        last_solve_9(0:mpg%nnreg(0)) = solvepo(0:mpg%nnreg(0))\n&/' b2news__b.F90
+# second b2npco_b(=first b2ncpo_nodiff
+sed -i -e '0,/    CALL B2NPCO_B/s//    new_matrix = .false.\n&/' b2news__b.F90
+sed -i -e '0,/    CALL B2NPCO_B/s//    DO ireg=0,mpg%nnreg(0)\n&/' b2news__b.F90
+sed -i -e '0,/    CALL B2NPCO_B/s//      new_matrix = (new_matrix .OR. solveco(is, ireg)) .NEQV. \&\n&/' b2news__b.F90
+sed -i -e '0,/    CALL B2NPCO_B/s//\&       last_solve_9(ireg)\n&/' b2news__b.F90
+sed -i -e '0,/    CALL B2NPCO_B/s//    END DO\n&/' b2news__b.F90
+sed -i -e '0,/    CALL B2NPCO_B/s//    IF (new_matrix .OR. .true.) CALL RESTART_MA28_FOR_US()\n&/' b2news__b.F90
+sed -i -e '0,/    CALL B2NPCO_B/s//    last_solve_9(0:mpg%nnreg(0)) = solveco(is, 0:mpg%nnreg(0))\n&/' b2news__b.F90
+sed -i -e 's/B2NPCO_b/B2NPCO_B/g' b2news__b.F90 #revert B2NPCO_b into B2NPCO_B
+# first b2usmo_nodiff
+sed -i -e '0,/      CALL B2USMO_NODIFF/s//      new_matrix = .false.\n&/' b2npmo_b.F90
+sed -i -e '0,/      CALL B2USMO_NODIFF/s//      DO ireg=0,mpg%nnreg(0)\n&/' b2npmo_b.F90
+sed -i -e '0,/      CALL B2USMO_NODIFF/s//        new_matrix = (new_matrix .OR. solvemo(is, ireg)) .NEQV. \&\n&/' b2npmo_b.F90
+sed -i -e '0,/      CALL B2USMO_NODIFF/s//\&         last_solve_9(ireg)\n&/' b2npmo_b.F90
+sed -i -e '0,/      CALL B2USMO_NODIFF/s//      END DO\n&/' b2npmo_b.F90
+sed -i -e '0,/      CALL B2USMO_NODIFF/s//      IF (new_matrix .OR. .true.) CALL RESTART_MA28_FOR_US()\n&/' b2npmo_b.F90
+sed -i -e '0,/      CALL B2USMO_NODIFF/s//      last_solve_9(0:mpg%nnreg(0)) = solvemo(is, 0:mpg%nnreg(0))\n&/' b2npmo_b.F90
+sed -i -e '0,/      CALL B2USMO_NODIFF/s/      CALL B2USMO_NODIFF/      CALL B2USMO_nodiff/' b2npmo_b.F90 #avoid matching for second b2usmo_nodiff
+# second b2usmo_nodiff
+sed -i -e '0,/    CALL B2USMO_NODIFF/s//    new_matrix = .false.\n&/' b2npmo_b.F90
+sed -i -e '0,/    CALL B2USMO_NODIFF/s//    DO ireg=0,mpg%nnreg(0)\n&/' b2npmo_b.F90
+sed -i -e '0,/    CALL B2USMO_NODIFF/s//      new_matrix = (new_matrix .OR. solvemt(ireg)) .NEQV. last_solve_9(\&\n&/' b2npmo_b.F90
+sed -i -e '0,/    CALL B2USMO_NODIFF/s//\&       ireg)\n&/' b2npmo_b.F90
+sed -i -e '0,/    CALL B2USMO_NODIFF/s//    END DO\n&/' b2npmo_b.F90
+sed -i -e '0,/    CALL B2USMO_NODIFF/s//    last_solve_9(0:mpg%nnreg(0)) = solvemt(0:mpg%nnreg(0))\n&/' b2npmo_b.F90
+sed -i -e 's/CALL B2USMO_nodiff/CALL B2USMO_NODIFF/g' b2npmo_b.F90
+# first b2usmo_b
+sed -i -e '0,/    CALL B2USMO_B/s//    new_matrix = .false.\n&/' b2npmo_b.F90
+sed -i -e '0,/    CALL B2USMO_B/s//    DO ireg=0,mpg%nnreg(0)\n&/' b2npmo_b.F90
+sed -i -e '0,/    CALL B2USMO_B/s//      new_matrix = (new_matrix .OR. solvemt(ireg)) .NEQV. last_solve_9(\&\n&/' b2npmo_b.F90
+sed -i -e '0,/    CALL B2USMO_B/s//\&       ireg)\n&/' b2npmo_b.F90
+sed -i -e '0,/    CALL B2USMO_B/s//    END DO\n&/' b2npmo_b.F90
+sed -i -e '0,/    CALL B2USMO_B/s//    last_solve_9(0:mpg%nnreg(0)) = solvemt(0:mpg%nnreg(0))\n&/' b2npmo_b.F90
+sed -i -e '0,/    CALL B2USMO_B/s/    CALL B2USMO_B/    CALL B2USMO_b/' b2npmo_b.F90
+#second b2usmo_b
+sed -i -e '0,/      CALL B2USMO_B/s//      new_matrix = .false.\n&/' b2npmo_b.F90
+sed -i -e '0,/      CALL B2USMO_B/s//      DO ireg=0,mpg%nnreg(0)\n&/' b2npmo_b.F90
+sed -i -e '0,/      CALL B2USMO_B/s//        new_matrix = (new_matrix .OR. solvemo(is, ireg)) .NEQV. \&\n&/' b2npmo_b.F90
+sed -i -e '0,/      CALL B2USMO_B/s//\&         last_solve_9(ireg)\n&/' b2npmo_b.F90
+sed -i -e '0,/      CALL B2USMO_B/s//      END DO\n&/' b2npmo_b.F90
+sed -i -e '0,/      CALL B2USMO_B/s//      IF (new_matrix .OR. .true.) CALL RESTART_MA28_FOR_US()\n&/' b2npmo_b.F90
+sed -i -e '0,/      CALL B2USMO_B/s//      last_solve_9(0:mpg%nnreg(0)) = solvemo(is, 0:mpg%nnreg(0))\n&/' b2npmo_b.F90
+sed -i -e 's/CALL B2USMO_b/CALL B2USMO_B/g' b2npmo_b.F90
+# total heat
+sed -i -e '0,/! ..total heat correction equation/s/! ..total heat correction equation/99HERE99\n&/' b2usht_b.F90
+sed -i -e '/99HERE99/i\    new_matrix = .false.' b2usht_b.F90
+sed -i -e '/99HERE99/i\    DO ireg=0,mpg%nnreg(0)' b2usht_b.F90
+sed -i -e '/99HERE99/i\      new_matrix = (new_matrix .OR. solveet(ireg)) .NEQV. last_solve_9(\&' b2usht_b.F90
+sed -i -e '/99HERE99/i\\&       ireg)' b2usht_b.F90
+sed -i -e '/99HERE99/i\    END DO' b2usht_b.F90
+sed -i -e '/99HERE99/i\    IF (new_matrix .OR. .true.) CALL RESTART_MA28_FOR_US()' b2usht_b.F90
+sed -i -e '/99HERE99/d' b2usht_b.F90
+# electron heat
+sed -i -e '0,/  IF (ANY(solveee(0:mpg%nnreg(0)))) THEN/s/  IF (ANY(solveee(0:mpg%nnreg(0)))) THEN/  IF (ANY(solveee(0:mpg%nnreg(0)))) THEN\n99HERE99/' b2usht_b.F90
+sed -i -e '/99HERE99/i\    new_matrix = .false.' b2usht_b.F90
+sed -i -e '/99HERE99/i\    DO ireg=0,mpg%nnreg(0)' b2usht_b.F90
+sed -i -e '/99HERE99/i\      new_matrix = (new_matrix .OR. solveee(ireg)) .NEQV. solveet(ireg)' b2usht_b.F90
+sed -i -e '/99HERE99/i\    END DO' b2usht_b.F90
+sed -i -e '/99HERE99/i\    IF (new_matrix .OR. .true.) CALL RESTART_MA28_FOR_US()' b2usht_b.F90
+sed -i -e '/99HERE99/d' b2usht_b.F90
+# atom heat
+sed -i -e '0,/  IF (ANY(solveei(0:mpg%nnreg(0)))) THEN/s/  IF (ANY(solveei(0:mpg%nnreg(0)))) THEN/  IF (ANY(solveei(0:mpg%nnreg(0)))) THEN\n99HERE99/' b2usht_b.F90
+sed -i -e '/99HERE99/i\    new_matrix = .false.' b2usht_b.F90
+sed -i -e '/99HERE99/i\    DO ireg=0,mpg%nnreg(0)' b2usht_b.F90
+sed -i -e '/99HERE99/i\      new_matrix = (new_matrix .OR. solveei(ireg)) .NEQV. solveee(ireg)' b2usht_b.F90
+sed -i -e '/99HERE99/i\    END DO' b2usht_b.F90
+sed -i -e '/99HERE99/i\    IF (new_matrix .OR. .true.) CALL RESTART_MA28_FOR_US()' b2usht_b.F90
+sed -i -e '/99HERE99/d' b2usht_b.F90
+# neutral heat
+sed -i -e '0,/  IF (ANY(solveen(0:mpg%nnreg(0)))) THEN/s/  IF (ANY(solveen(0:mpg%nnreg(0)))) THEN/  IF (ANY(solveen(0:mpg%nnreg(0)))) THEN\n99HERE99/' b2usht_b.F90
+sed -i -e '/99HERE99/i\      new_matrix = .false.' b2usht_b.F90
+sed -i -e '/99HERE99/i\      DO ireg=0,mpg%nnreg(0)' b2usht_b.F90
+sed -i -e '/99HERE99/i\        new_matrix = (new_matrix .OR. solveen(ireg)) .NEQV. solveei(ireg\&' b2usht_b.F90
+sed -i -e '/99HERE99/i\\&         )' b2usht_b.F90
+sed -i -e '/99HERE99/i\      END DO' b2usht_b.F90
+sed -i -e '/99HERE99/i\      IF (new_matrix .OR. .true.) CALL RESTART_MA28_FOR_US()' b2usht_b.F90
+sed -i -e '/99HERE99/d' b2usht_b.F90
+# k
+sed -i -e '0,/  IF (switch%solve_keps .GT. 0 .AND. ANY(solvekt(0:mpg%nnreg(0)))) THEN/s/  IF (switch%solve_keps .GT. 0 .AND. ANY(solvekt(0:mpg%nnreg(0)))) THEN/  IF (switch%solve_keps .GT. 0 .AND. ANY(solvekt(0:mpg%nnreg(0)))) THEN\n    CALL RESTART_MA28_FOR_US()/' b2usht_b.F90
+# enstrophy
+sed -i -e '0,/  IF (switch%solve_keps .GT. 1 .AND. ANY(solvezt(0:mpg%nnreg(0)))) THEN/s/  IF (switch%solve_keps .GT. 1 .AND. ANY(solvezt(0:mpg%nnreg(0)))) THEN/  IF (switch%solve_keps .GT. 1 .AND. ANY(solvezt(0:mpg%nnreg(0)))) THEN\n    CALL RESTART_MA28_FOR_US()/' b2usht_b.F90
 
 # add variables for output of 2D maps of transport coeff
 sed -i -e "/REAL(r8), DIMENSION(:), ALLOCATABLE :: cssb/a\      REAL(r8), DIMENSION(:, :), ALLOCATABLE :: dna0save" b2us_plasma_diff.F90

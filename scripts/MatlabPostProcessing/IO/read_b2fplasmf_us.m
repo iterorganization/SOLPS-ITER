@@ -54,6 +54,7 @@ state.kt     = read_rfield(fid,'kt'    ,statedim);
 %% Read fluxes
 
 state.fna    = read_rfield(fid,'fna'   ,fluxdims);
+state.fne    = read_rfield(fid,'fne'   ,fluxdim);
 state.fhe    = read_rfield(fid,'fhe'   ,fluxdim);
 state.fhi    = read_rfield(fid,'fhi'   ,fluxdim);
 state.fhn    = read_rfield(fid,'fhn'   ,fluxdim);
@@ -90,6 +91,11 @@ state.fchvispar   = read_rfield(fid,'fchvispar'  ,fluxdim);
 state.fchvisper   = read_rfield(fid,'fchvisper'  ,fluxdim);
 state.fchvisq     = read_rfield(fid,'fchvisq'    ,fluxdim);
 state.fchinert    = read_rfield(fid,'fchinert'   ,fluxdim);
+state.fchanml     = read_rfield(fid,'fchanml'    ,fluxdim);
+state.fht         = read_rfield(fid,'fht'        ,fluxdim);
+state.fhj         = read_rfield(fid,'fhj'        ,fluxdim);
+state.fhm         = read_rfield(fid,'fhm'        ,fluxdims);
+state.fhp         = read_rfield(fid,'fhp'        ,fluxdims);
 
 state.vaecrb = read_rfield(fid,'vaecrb' ,fluxdims);
 state.vadia  = read_rfield(fid,'vadia'  ,fluxdims);
