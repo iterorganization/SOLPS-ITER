@@ -33,7 +33,7 @@ c=======================================================================
       character*50 hlp_frm
       character utxthd(35)*71, utxtfl(7)*50, ufnm*(*)
       character utxtgt*71
-      integer len_of_digits, idez, nlimi_vess, ncore, nskip, nvess
+      integer len_of_digits, idez, ncore, nskip, nvess
       integer :: indsrc7(nstrai)
       external streql, silent_open, len_of_digits, idez, xerrab
       data utxthd /

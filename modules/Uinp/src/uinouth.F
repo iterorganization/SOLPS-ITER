@@ -34,8 +34,8 @@ c=======================================================================
       character*50 hlp_frm
       character utxthd(35)*71, utxtfl(7)*50, ufnm*(*)
       character utxtgt*71
-      integer len_of_digits, idez, nlimi_vess, ncore, nskip, nvess
-      integer condense_from, nemodh, itype, index
+      integer len_of_digits, idez, ncore, nskip, nvess
+      integer condense_from, nemodh, itype
       integer :: indsrc7(nstrai)
       external streql, silent_open, len_of_digits, idez, xerrab
       data utxthd /
@@ -349,8 +349,8 @@ c*** 3a.  data for non-default surface models on standard surfaces
         nskip=0
         do ists=1,nstsi !{
           if ((carre_mode.eq.2).and.(iliin(ists).eq.2)) then ! write core regions at the end in target mode
-            nskip=nskip+1 
-            cycle 
+            nskip=nskip+1
+            cycle
           end if
           write(iunoo,709) ists-nskip,txtsfl(ists)
           write(iunoo,707) ists-nskip,idimp(ists),inump(ists),
@@ -373,8 +373,8 @@ c*** 3a.  data for non-default surface models on standard surfaces
             write(iunoo,703) recycs(ists),recycc(ists),echspts(ists),
      ,                        fchspts(ists),sptprm(ists)
           end if !}
-        end do !}  
-        i=nstsi-nskip      
+        end do !}
+        i=nstsi-nskip
       else ! vessel mode
 c       count the number of core regions
         ncore=0
@@ -439,7 +439,7 @@ c     write the core regions at the end for target mode
      ,                      fchspts(ists),sptprm(ists)
           end if !}
         end do !}
-      end if 
+      end if
 
 c*** 3b.  data for additional surfaces
 
@@ -661,13 +661,13 @@ c**  atomic species cards
      ,                 iscd1a(iatm,k),iscd2,
      ,                 iscd3a(iatm,k),iscd4a(iatm,k),
      ,                 iscdea(iatm,k),iestma(iatm,k),0
-                end if !} 
+                end if !}
                 write(iunoo,703) eeleca(iatm,k),ebulka(iatm,k),
      ,            escd1a(iatm,k),escd2a(iatm,k),freaca(iatm,k),
      ,            edpota(iatm,k)
               end if
             end if
-          end if                       
+          end if
         end do
 
       end do !}
@@ -739,12 +739,12 @@ c**  neutral molecules species cards
      ,                 iscd1m(imol,k),iscd2,
      ,                 iscd3a(imol,k),iscd4m(imol,k),
      ,                 iscdem(imol,k),iestmm(imol,k),0
-                end if !} 
+                end if !}
                 write(iunoo,703) eelecm(imol,k),ebulkm(imol,k),
      ,                     escd1m(imol,k),escd2m(imol,k),freacm(imol,k)
               end if
             end if
-          end if                       
+          end if
         end do
       end do !}
 
@@ -1071,7 +1071,7 @@ c*** 7.  data for primary source
         nvess=maxval(fclbl)*(natmi-nmeta+nplsh)
         j=0
         indsrc7=0
-        do i=1,nstrai 
+        do i=1,nstrai
           if (indsrc(i).ne.6) then ! gas puff or vol. rec.
             j=j+1
             indsrc7(j)=indsrc(i)
@@ -1492,7 +1492,7 @@ cnh        write(iunoo,707) ndxa,ndya
                   nemodh=0
                   itype=1  ! send particle in void regions
                 else
-		  nemodh=6
+                  nemodh=6
                   itype=0 ! recycle particle
                 endif
                 write(iunoo,707) k*i+j*m+ihyb,ndt2(i,j),
@@ -1511,7 +1511,7 @@ cnh        write(iunoo,707) ndxa,ndya
               enddo
               write(iunoo,707) i+ihyb,ndt2(i,1),
      ,            nptc(1,1),nptcm(1,1),ispz,ispz,6 !nh for now, no plasma-void interfaces
-            end if  
+            end if
           end do !}
         end if
         if(lfchgs) then !{
