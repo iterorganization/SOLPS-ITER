@@ -24,7 +24,7 @@ For issues, suggestions, and comments about sensitivity calculation and optimiza
 
 To cite this part of the code please use:
 \begin{itemize}
-  \item For sensitivity calculation and optimization: Carli S., Hascoet L., Dekeyser W., Blommaert M., Algorithmic differentiation for adjoint sensitivity calculation in plasma edge codes, submitted to Journal of Computational Physics, 2022 (Reference~\cite{carlijcp} in this manual)
+  \item For sensitivity calculation and optimization: Carli S., Hasco\"{e}t L., Dekeyser W., Blommaert M., Algorithmic differentiation for adjoint sensitivity calculation in plasma edge codes, Journal of Computational Physics 491 (2023) 112403. https://doi.org/10.1016/j.jcp.2023.112403 (Reference~\cite{carlijcp} in this manual)
   \item For optimization, also: Carli, S., Dekeyser, W., Blommaert, M., Coosemans, R., Van Uytven, W., Baelmans, M., Contributions to Plasma Physics 2022, 62 (5-6), e202100184. https://doi.org/10.1002/ctpp.202100184 (Reference~\cite{carlpet21} in this manual)
 \end{itemize}
 
@@ -62,7 +62,13 @@ For a MAP estimation, the following cost function is employed:
 \end{equation}
 where $\mathcal{D}$ is the experimental dataset available for the analysis, of which $q^{\mathrm{EXP}}$ is a specific measurement. In Eq.~(\ref{eq:mapcost}), $\mathcal{L}(\mathcal{D}\vert\theta)$ is the likelihood function and $\pi(\theta)$ the prior distribution.
 
-The prior distribution $\pi(\theta)$ can be chosen by the user, and currently available options are uniform distributions (i.e. $\pi(\theta_i)=1.0$), or Gaussian priors $\pi(\theta_i)=\frac{2}{\sigma_{\theta,i}\sqrt{(2\pi)}} \exp{\left[-\frac{1}{2} \frac{\left( \theta_i -\mu_{\theta_i}\right)^2}{\sigma_{\theta,i}^2} \right]}$, where $i$ indicates the specific element in the vector of control variables $\theta$, and $\mu_{\theta_i}$ and $\sigma_{\theta,i}$ are respectively the mean and standard deviation associated with the Gaussian for variable $\theta_i$.
+The prior distribution $\pi(\theta)$ can be chosen by the user, and currently available options are:
+\begin{description}
+	\item[uniform prior] $\pi(\theta_i)=1.0$,
+	\item[Gaussian prior] $\pi(\theta_i)=\frac{1}{\sigma_{\theta,i}\sqrt{(2\pi)}} \exp{\left[-\frac{1}{2} \frac{\left( \theta_i -\mu_{\theta_i}\right)^2}{\sigma_{\theta,i}^2} \right]}$,
+	\item[Gamma prior] $\pi(\theta_i)=\frac{\theta_i^{\alpha_i-1}e^{-\beta_i \theta_i}\beta_i^{\alpha_i}}{\Gamma(\alpha_i)}$, for $\theta_i, \alpha_i, \beta_i >0$. $\Gamma$ is the gamma function, $\alpha_i=(\mu_{\theta_i}/\sigma_{\theta,i})^2$, and $\beta_i=\mu_{\theta_i}/\sigma_{\theta,i}^2$,
+\end{description}
+ where $i$ indicates the specific element in the vector of control variables $\theta$, and $\mu_{\theta_i}$ and $\sigma_{\theta,i}$ are respectively the mean and standard deviation associated with the Gaussian or Gamma priors for variable $\theta_i$.
 
 The likelihood function $\mathcal{L}(\mathcal{D}\vert \theta)$ is currently available as a Gaussian distribution, while other types may be implemented in the future if needed. The Gaussian likelihood for a quantity $q$ at a specific spatial location $\Omega_l$ takes the form
 \begin{equation}\label{eq:likelihood}
@@ -102,23 +108,31 @@ The user can select one of these cost functions through the input file {\tt b2.o
   \item[CFSTART, CFEND]\index{CFSTART}\index{CFEND} {\tt integer arrays, dimension (NCF)}, specify the starting/ending, face (FC) label {\tt fcLbl} or control volume (CV) label {\tt cvLbl} where the cost function {\tt icf} will be evaluated. For {\tt CFTYPE = 0} and {\tt CFTYPE = 6}, they instead identify which cost functions will be summed together. Default to {\tt 0}.
   \item[CF\_REGP]\index{CF\_REGP} {\tt integer array, dimension (NCF, 2)}, points for each cost function to the first index in the {\tt CF\_REG} list, and its number of items. Defaults to {\tt 0}.
   \item[CF\_REG]\index{CF\_REG} {\tt integer array, dimension (MXNCF)}\footnote{The parameter {\tt MXNCF} is hard-coded with value {\tt 1000} in {\tt b2mod\_par\_opt.F}.}, lists for each cost function the corresponding domain CVs or FCs. WARNING! No attempt is made to check if these CVs or FCs are connected, sorted or even available in the current geometry: it is up to the user to make sure the list is correct. Defaults to {\tt 0}.
-  \item[CFWEIGHT]\index{CFWEIGHT} {\tt real array, dimension (NCF)}. Multipliers to rescale each cost function separately, $w_{l,q}$ in Eq.~(\ref{eq:regression}). Defaults to {\tt 1.0}.
+  \item[CFWEIGHT]\index{CFWEIGHT} {\tt real*8 array, dimension (NCF)}. Multipliers to rescale each cost function separately, $w_{l,q}$ in Eq.~(\ref{eq:regression}). Defaults to {\tt 1.0}.
   \item[MapToOMP]\index{MapToOMP} {\tt logical array, dimension (NCF)}, indicates if cost function {\tt icf} is to be re-mapped to the OMP, according to {\tt CFTYPE}. \textbf{Warning:} the mapping is a rigid translation of the data to the OMP and is safe to work only for non-extended grids and for cost functions defined on the same number of elements as the OMP list. Defaults to {\tt .false.}.
   \item[READ\_SIGMA]\index{READ\_SIGMA} {\tt logical array, dimension (NCF)}, indicates if file {\tt cf[i].dat} containing the experimental data uncertainty is to be read. Defaults to {\tt .false.}.
   \item[NSIGMA]\index{NSIGMA} {\tt integer}, number of standard deviation variables used for Bayesian MAP cost function (normally this should be equal to the number of cost functions summed for {\tt CFTYPE = 6}, i.e. one for each variable on each domain) ({\tt isigma = 1, NSIGMA}). Defaults to {\tt 0}.
-  \item[SIGMA]\index{SIGMA} {\tt real array, dimension (NSIGMA)}. Value of the standard deviation $\sigma$ in the likelihood function. For absolute STD, the units are the same as the experimental data used for the cost function it refers to. Defaults to {\tt 0.0}.
+  \item[SIGMA]\index{SIGMA} {\tt real*8 array, dimension (NSIGMA)}. Value of the standard deviation $\sigma$ in the likelihood function. For absolute STD, the units are the same as the experimental data used for the cost function it refers to. Defaults to {\tt 0.0}.
   \item[SCALE\_SIGMA]\index{SCALE\_SIGMA} {\tt logical array, dimension (NSIGMA)}, indicates if {\tt SIGMA(isigma)} is intended as relative standard deviation ({\tt SCALE\_SIGMA(isigma)=.true.}) or absolute ({\tt SCALE\_SIGMA(isigma)=\allowbreak .false.}). Defaults to {\tt .true.}.
+  \item[NMEAN]\index{NMEAN} {\tt integer}, number of error mean/bias variables used for Bayesian MAP cost function. Defaults to {\tt 0}.
+  \item[MEAN]\index{MEAN} {\tt real*8 array, dimension (NMEAN)}. Value of the error mean/bias $\mu$ in the likelihood function. Defaults to {\tt 0.0}.
   \item[PRIOR\_TYPE]\index{PRIOR\_TYPE} {\tt integer array, dimension (NNVAR)}. Defines the type of prior distribution for each parameter for the MAP cost function. Defaults to {\tt -1}. Possible values are:
     \begin{description}
       \item[0] Uniform distribution.
       \item[1] Uninformative, proper, Gaussian prior.
+      \item[2] Gamma distributed prior.
     \end{description}
-  \item[PRIOR\_PAR]\index{PRIOR\_PAR} {\tt real array, dimension (NNVAR,2)}. Indicates parameters for the prior distributions. Defaults to {\tt -1.0}. For {\tt PRIOR\_TYPE}:
+  \item[PRIOR\_PAR]\index{PRIOR\_PAR} {\tt real*8 array, dimension (NNVAR,2)}. Indicates parameters for the prior distributions. Defaults to {\tt -1.0}. For {\tt PRIOR\_TYPE}:
     \begin{description}
       \item[0] Not used
-      \item[1] {\tt PRIOR\_PAR(ii,1)} indicates the mean $\mu_{\theta_i}$ and {\tt PRIOR\_PAR(ii,2)} indicates the standard deviation $\sigma_{\theta,i}$ of the Gaussian distribution.
+      \item[1] {\tt PRIOR\_PAR(ii,1)} indicates the mean $\mu_{\theta_i}$ and {\tt PRIOR\_PAR(ii,2)} indicates the standard deviation $\sigma_{\theta,i}$ for the Gaussian and Gamma distributions.
     \end{description}
-  \item[PRIOR\_RANGE]\index{PRIOR\_RANGE} {\tt real array, dimension (NNVAR,2)}. Indicates the valid range for the prior distributions, outside of which the program will return an infinite cost function value. {\tt PRIOR\_RANGE(:,1)} sets the lower bound and {\tt PRIOR\_RANGE(:,2)} sets the upper bound. Defaults to {\tt $\pm 10p_{\infty}$}, where $p_{\infty}$ is a parameter currently set to $10^{30}$.
+  \item[PRIOR\_RANGE]\index{PRIOR\_RANGE} {\tt real*8 array, dimension (NNVAR,2)}. Indicates the valid range for the prior distributions, outside of which the program will return an infinite cost function value. {\tt PRIOR\_RANGE(:,1)} sets the lower bound and {\tt PRIOR\_RANGE(:,2)} sets the upper bound. Defaults to {\tt $\pm 10p_{\infty}$}, where $p_{\infty}$ is a parameter currently set to $10^{30}$.
+  \item[SHIFT\_CF\_DATA]\index{SHIFT\_CF\_DATA} {\tt integer array, dimension (NCF)}. For each cost function where experimental data is read, specifies whether or not to shift the separatrix position in the experimental data spatial coordinate as follows: $(r - r_{sep}) - shift\_value$. Unique integers larger than zero for each cost function means that each has its specific shift value. Using the same integer for two (or more) cost functions makes to code use the same shift value for those cost functions (the first {\tt SHIFT\_VALUE} among the cost function with the same integer is adopted). Possible usage: Thomson scattering data of density and temperature which should be defined in two separate cost functions but come from the same source and thus have the same shift. {\tt NSHIFT} is then the number of unique integers and is used to define other parameters below other parameters. Defaults to 0.
+  \item[SHIFT\_VALUE]\index{SHIFT\_VALUE} {\tt real*8 array, dimension (NCF)}. Defines the value of the shift in \underline{millimeters} for each cost function with {\tt SHIFT\_CF\_DATA}$\neq0$. Tis is also used as initial guess in case of optimization. Defaults to 0.0.
+  \item[SHIFT\_PRIOR\_TYPE]\index{SHIFT\_PRIOR\_TYPE} {\tt integer array, dimension (NSHIFT)}. Same as {\tt PRIOR\_TYPE} but defined for each unique cost function shift. Defaults to -1.
+  \item[SHIFT\_PRIOR\_PAR]\index{SHIFT\_PRIOR\_PAR} {\tt real*8 array, dimension (NSHIFT,2)}. Same as {\tt PRIOR\_PAR} but defined for each unique cost function shift. Defaults to -1.0.
+  \item[SHIFT\_PRIOR\_RANGE]\index{SHIFT\_PRIOR\_RANGE} {\tt real*8 array, dimension (NSHIFT,2)}. Same as {\tt PRIOR\_RANGE} but defined for each unique cost function shift. Defaults to {\tt $\pm 10p_{\infty}$}.  
 \end{description}
 
 
@@ -131,7 +145,7 @@ Dedicated internal mapping arrays have been additionally defined in {\tt b2us\_m
   \item[cfRegP] \index{cfRegP} {\tt integer array, dimension (NCF, 2)}, pointing for each cost function to the first index in the {\tt cfReg} list, and its number of elements.
   \item[cfReg] \index{cfReg} {\tt integer array, dimension (MXNCF)}, listing for each cost function the corresponding domain cells or faces.
   \item[cfOnCv] \index{cfOnCv} {\tt logical array, dimension (NCF)}. Logical to indicate whether a CF domain is on CVs ({\tt .true.}) or FCs ({\tt .false.}).
-  \item[cfFcOr] \index{cfFcOr} {\tt real array, dimension (NCF)}. Multiplier to indicate whether outward normal coincides with the face normal ({\tt 1.0}) or not ({\tt -1.0}).
+  \item[cfFcOr] \index{cfFcOr} {\tt real*8 array, dimension (NCF)}. Multiplier to indicate whether outward normal coincides with the face normal ({\tt 1.0}) or not ({\tt -1.0}).
 \end{description}
 
 Cost functions requiring cell-centered quantities like density or temperature can be correctly defined also using FC labels, since the lowest numbered internal CV belonging to each face will be mapped.
@@ -223,15 +237,16 @@ Below is a description of the variables needed in {\tt b2.optimization.parameter
 
 \begin{description}
 	\item[NNVAR]\index{NNVAR} {\tt integer}, number of sensitivity/optimization parameters $\theta$ (radially varying transport coefficients count as 1 as a whole) ({\tt ipar = 1, NNVAR}). Defaults to {\tt 0}.
-	\item[PARTYPE]\index{PARTYPE} {\tt integer array, dimension (NNVAR)}, indicates the type of sensitivity/optimization parameter $\theta$ for index {\tt ipar}. Defaults to {\tt -1}. Available options are:
+	\item[PARTYPE]\index{PARTYPE} {\tt integer array, dimension (NNVAR)}, indicates the type of sensitivity/optimization parameter $\theta$ for index {\tt ipar}. Defaults to {\tt -2}. Available options are:
 	\begin{description}
-		\item[0] {\tt SIGMA}, standard deviation $\sigma_{q,l}$ in likelihood function for Bayesian inference (one for each plasma quantity and location used). These must {\em always} be the last parameters in the {\tt PARTYPE} vector!
+		\item[-1] {\tt MEAN}, error mean $\mu_{q,l}$ in likelihood function for Bayesian inference (one for each plasma quantity and location used). If present, these must {\em always} be the last parameters in the vector!
+		\item[0] {\tt SIGMA}, standard deviation $\sigma_{q,l}$ in likelihood function for Bayesian inference (one for each plasma quantity and location used). If present, these must {\em always} be defined after each physical parameter (PARTYPE>0) and before the mean (PARTYPE=-1).
 		\item[1] {\tt PARM\_DNA} or {\tt TDATA(:,:,1,:)}
 		\item[2] {\tt PARM\_DPA} or {\tt TDATA(:,:,2,:)}
 		\item[3] {\tt PARM\_HCI} or {\tt TDATA(:,:,3,:)}
 		\item[4] {\tt PARM\_HCE} or {\tt TDATA(:,:,4,:)}
-		\item[5] {\tt PARM\_VLA} or {\tt TDATA(:,:,5,:)} (not yet tested!)
-		\item[6] nothing yet (presumably $y$-component of {\tt vla}?)
+		\item[5] {\tt TDATA(:,:,5,:)}
+		\item[6] {\tt PARM\_VLA} or {\tt TDATA(:,:,6,:)}
 		\item[7] {\tt PARM\_VSA} or {\tt TDATA(:,:,7,:)}
 		\item[8] {\tt PARM\_SIG} or {\tt TDATA(:,:,8,:)}
 		\item[9] {\tt PARM\_ALF} or {\tt TDATA(:,:,9,:)}
@@ -267,6 +282,8 @@ Below is a description of the variables needed in {\tt b2.optimization.parameter
 		\item[39] {\tt b2tfhe\_vis\_kt}
 	\end{description}
 	\item[SIGMA\_OPT]\index{SIGMA\_OPT} {\tt logical array, dimension (NSIGMA)}, for each {\tt SIGMA}, specifies whether its sensitivity is computed or not, and whether is optimized or fixed. Defaults to {\tt .true.}.
+	\item[MEAN\_OPT]\index{MEAN\_OPT} {\tt logical array, dimension (NMEAN)}, for each {\tt MEAN}, specifies whether its sensitivity is computed or not, and whether is optimized or fixed. Defaults to {\tt .false.}.
+	\item[SHIFT\_OPT]\index{SHIFT\_OPT} {\tt logical array, dimension (NCF)}. For each {\tt SHIFT\_CF\_VALUE}, specifies whether its sensitivity is computed or not, and whether is optimized or fixed. Defaults to {\tt .false.}.
 	\item[SPATIAL\_DEP]\index{SPATIAL\_DEP} {\tt logical array, dimension (NNVAR)}, for each sensitivity/optimization variable {\tt ipar}, specifies if radially varying coefficients are optimized.	Meaningful only for {\tt PARTYPE = 1} to {\tt 9}. Defaults to {\tt .false.}.
 	\item[SPATIAL\_POINTS]\index{SPATIAL\_POINTS} {\tt integer array, dimension (NNVAR)}, number of spatial points for sensitivity/optimization parameter {\tt ipar} (should be the same as {\tt NDATA} in {\tt b2.transport.inputfile}). The actual number of optimized variables ({\tt NPAR\_OPT}) is then equal to the total number of spatial points + any other additional parameters. Defaults to {\tt 0}.
 	\item[PARIS]\index{PARIS} {\tt integer array, dimension (NNVAR)}, specifies the species of the sensitivity/optimization parameter {\tt ipar}. Only meaningful for {\tt PARTYPE = [1-5,7,12,13,16]}. Defaults to {\tt 0}.
@@ -504,10 +521,12 @@ After successful compilation, the optimization case can be setup. This requires 
 Below is a description of the additional variables set in {\tt b2.optimization.parameters} within the {\tt OPTIMIZATION} namelist. An up-to-date list is also available in Appendix~\ref{lis:b2cdcn}.
 
 \begin{description}
-  \item[PAR\_RESCALE]\index{PAR\_RESCALE} {\tt real*8 array, dimension (NPAR\_OPT)}, coefficient to rescale optimization parameters (and their gradient). Note that the dimension is {\tt NPAR\_OPT}, so it needs to be specified also for each spatial point in case of radially varying coefficients. Defaults to {\tt 1.0}.
-  \item[X0]\index{X0} {\tt real*8 array, dimension (NPAR\_OPT)}, initial guess for each optimization parameter. Must be set for MAP cost function as its value is employed for calculating priors. Defaults to $10*p_\infty$, where $p_\infty$ is a parameter currently set to $10^{30}$.
+  \item[PAR\_RESCALE]\index{PAR\_RESCALE} {\tt real*8 array, dimension (NPAR\_OPT)}, coefficient to rescale optimization parameters (and their gradient). Note that the dimension is {\tt NPAR\_OPT}, so it needs to be specified also for each spatial point in case of radially varying coefficients. Note: for {\tt SHIFT\_CF\_VALUE} there is no rescaling foreseen as this is typically expected in the order of 10 mm. Defaults to {\tt 1.0}.
+  \item[X0]\index{X0} {\tt real*8 array, dimension (NPAR\_OPT)}, initial guess for each optimization parameter. Must be set for MAP cost function as its value is employed for calculating priors. Note: {\tt SHIFT\_CF\_VALUE} acts as initial guess for such parameter and thus it should not be specified here. Defaults to $10*p_\infty$, where $p_\infty$ is a parameter currently set to $10^{30}$.
   \item[XL]\index{XL} {\tt real*8 array, dimension (NPAR\_OPT)}, lower bound for each optimization parameter. Defaults to $-10*p_\infty$.
   \item[XU]\index{XU} {\tt real*8 array, dimension (NPAR\_OPT)}, upper bound for each optimization parameter. Defaults to $10*p_\infty$.
+  \item[SHIFT\_L]\index{SHIFT\_L} {\tt real*8 array, dimension (NCF)}, lower bound for {\tt SHIFT\_CF\_DATA} parameter. Defaults to $-1000.0$.
+  \item[SHIFT\_U]\index{SHIFT\_U} {\tt real*8 array, dimension (NCF)}, upper bound for {\tt SHIFT\_CF\_DATA} parameter. Defaults to $1000.0$.  
   \item[CPU\_OPT]\index{CPU\_OPT} {\tt real*8}, maximum amount of CPU time in seconds after which the optimization is stopped. Defaults to {\tt 0.0}.
   \item[MAXITER]\index{MAXITER} {\tt integer}, maximum number of optimization iterations. The maximum number of cost function evaluations is set to {\tt 2*MAXITER} to allow for line searches. Can be overridden with {\tt PETSc/TAO} by using command line options for the optimization. Defaults to {\tt 100}.
   \item[TOL\_OPT]\index{TOL\_OPT} {\tt real*8}, tolerance below which optimization is stopped. For {\tt PETSc/TAO} it is used for the absolute gradient norm, the relative gradient norm, and the gradient reduction stopping criteria. Can be overridden with {\tt PETSc/TAO} by using command line options for the optimization. Defaults to $10^{-7}$.
