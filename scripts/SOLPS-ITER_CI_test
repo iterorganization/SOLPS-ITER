@@ -2,8 +2,6 @@
 . $(dirname $0)/SOLPS-ITER_CI_env
 
 # Compile the code
-echo "LDOPTS += -mcmodel large -shared-intel" > ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
-echo "FCOPTS += -mcmodel large -shared-intel" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
 make listobj_nox depend_nox
 make MAKE_OPTIONS=-j8 nox_build b25_nox
 
@@ -18,7 +16,6 @@ cd run_new
 cp ../test/b2.*.parameters .
 cp ../test/b2mn.dat .
 cp ../test/b2fstati .
-cp ../test/b2time.nc .
 touch b2fstati
 b2run -s b2mn
 ${SOLPSTOP}/modules/B2.5/src/test/run_checks.sh ../test ./ || exit 1
@@ -36,8 +33,8 @@ cd run_standalone_new
 cp ../16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2.*.parameters .
 cp ../16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2mn.dat .
 cp ../16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2fstati .
-cp ../16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2time.nc .
-cp ../16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2tallies.nc .
+cp ../16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2time.nc.i b2time.nc
+cp ../16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2tallies.nc.i b2tallies.nc
 touch b2fstati
 setup_baserun_eirene_links
 b2run b2mn
