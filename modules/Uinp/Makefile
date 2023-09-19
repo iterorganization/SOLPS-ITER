@@ -259,3 +259,6 @@ ${OBJDIR}/dependencies.${COMPILER}:
 	${MAKE} depend
 
 include ${OBJDIR}/dependencies.${COMPILER}
+ifeq ($(shell [ -e ${SRCUIN}/config/dependencies.local ] && echo yes || echo no ),yes)
+include ${SRCUIN}/config/dependencies.local
+endif
