@@ -2,6 +2,8 @@
 . $(dirname $0)/SOLPS-ITER_CI_env
 
 # Compile the code with OpenMP options activated
+echo "LDOPTS += -mcmodel=large -shared-intel" > ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
+echo "FCOPTS += -mcmodel=large -shared-intel -diag-enable=error" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
 make listobj_nox depend_nox
 make MAKE_OPTIONS=-j8 b25_nox_openmp
 
