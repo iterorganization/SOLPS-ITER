@@ -29,6 +29,7 @@ c*  data of the plasma grid boundary polygons
 
 c*  data for the final polygons
        integer nnplg(nplgmax), nnsegpls(nsegplgmax,nplgmax)
+       integer split(2*nsegplgmax*nbvmax+(nlim+1)*nsegplgmax,nplgmax)
        double precision 
      ,      coords(3,2*nsegplgmax*nbvmax+(nlim+1)*nsegplgmax,nplgmax),
      ,      coordsend(3), c0(3), c1(3), n0(3), n1(3),
@@ -241,6 +242,7 @@ c*** triangulation with tria
 
       nnplg = 0
       coords = 0.0
+      split = 0
 
       do i=1,nplg
 
@@ -250,6 +252,8 @@ c*** triangulation with tria
           ! exclude first and last points => to be replaced by grid points
           coords(1:2,nnplg(i)+2:nnplg(i)+nnsegwllplg(j,i)-1,i) = 
      ,      wllplgcoords(1:2,2:nnsegwllplg(j,i)-1,j,i)
+          ! wall segments can be split by tria later on
+          split(nnplg(i)+1:nnplg(i)+nnsegwllplg(j,i)-1,i) = 1
           nnplg(i) = nnplg(i) + nnsegwllplg(j,i) - 1
 
           ! add the next the plasma boundary for this segment
@@ -265,6 +269,9 @@ c*** triangulation with tria
         ! set start op polygon equal to end
         nnplg(i) = nnplg(i) + 1
         coords(1:2,1,i) = coords(1:2,nnplg(i),i)
+
+        ! last point equal to first => set value of split to correspond to wall
+        split(nnplg(i),i) = 1
 
       enddo
 
@@ -282,11 +289,10 @@ cwdk  write additional file with (part of) the polygons for triangulation
       do i=1,nplg
         write(78,'(i12)') nnplg(i)
         do j=1,nnplg(i)
-          write(78,'(2(2X,E21.14))') coords(1:2,j,i)*100.
+          write(78,'(2(2X,E21.14),I3)') coords(1:2,j,i)*100.,split(j,i)
         end do
       end do
       !close(78)
-
 
       write (*,*) 'triainp --> end'
       stop

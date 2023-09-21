@@ -386,6 +386,7 @@ while true; do {
                 print -u2 -- "For extended cases without void regions, proceed with (f)"
                 q=p
               }
+              q=f
               true
             } || {
               print -u2 -- "No valid $triain file found. Probably, some of the previous steps forgotten?"
@@ -491,6 +492,22 @@ while true; do {
               q=b
               break
             }
+            check_files $triaoutlist && {
+              ln -sf $trianodes fort.33
+              ln -sf $triacells fort.34
+              ln -sf $trialinks fort.35
+            } || {
+              print -u2 -- "Did not find void triangulation files"
+              print -u2 -- "    ==> only creating triangulation plasma region"
+            }
+            [ -r input.eir ] && {
+              ln -sf input.eir input.dat
+            } || {
+              print -u2 -- "Could not find input.eir file"
+              print -u2 -- "    ==> Rerun Uinp or provide separately"
+              q=u
+              break
+            }
             [ -r b2us.prt ] && rm b2us.prt
             [ -r $b2usout ] && rm $b2usout
             ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2us.prt > b2us.log
@@ -504,9 +521,6 @@ while true; do {
               [ -r b2fstati.backup ] && mv b2fstati.backup b2fstati
               [ -r b2fgmtry_us ] && rm b2fgmtry_us
               [ -r b2fstati_us ] && rm b2fstati_us
-
-
-
               check_files $b2usoutlist && {
                   q=s
                   set -A L -- $b2uslnklist
@@ -587,7 +601,7 @@ while true; do {
               ((i+=1))
             }; done
             unset f X
-            q=C 
+            q=c
             break;;
       (  c  )                                               # convert the TRIA result to template:
             check_files $triaoutlist && {
@@ -654,7 +668,7 @@ while true; do {
             }
             unset f 
             break;;
-      (  C  )                                               # convert the TRIAGEOM result to template:
+      (  C  )                                               # convert the TRIAGEOM / B2US result to template:
             [ X"$extra" = X ] && NN="$N" || set -A NN -- $extra
             [ -z "$NN" ] && {
               check_files $b2usoutlist && {
@@ -670,12 +684,12 @@ while true; do {
                 while [ $LEN -gt ${#NN} ]; do NN="0$NN"; done
                 stem="template.g$NN"
                 list=
-                #for x in $TRIAEXT; do list="$list $TRIADIR/$TRIASTEM.$NN.$x"; done
-                #check_files $list && set -A f -- $list || {
-                #  print -u2 -- "Not all the files $TRIASTEM.$NN.{$TRIAEXT} are present in $TRIADIR"
-                #  q=l
-                #  break
-                #}
+                for x in $B2USEXT; do list="$list $TRIADIR/$TRIASTEM.$NN.$x"; done
+                check_files $list && set -A f -- $list || {
+                  print -u2 -- "Not all the files $TRIASTEM.$NN.{$B2USEXT} are present in $TRIADIR"
+                  q=l
+                  break
+                }
               }
               i=0
               for x in $B2USEXT; do {
@@ -796,7 +810,7 @@ while true; do {
               e="$e $n"
             }; done
             excom=`comma_separate ${e# }`
-            tricom=`comma_separate $TRIAEXT`
+            tricom=`comma_separate $B2USEXT`
             L="${excom:=*}"
             listi=`ls $TRIADIR/$TRIASTEM.$L.$tricom | sed -e '1,$s,^.*/,,' -e '1,$s/\./ /g' | awk '{print $3}' | sort -u`
             listo=
@@ -822,7 +836,7 @@ while true; do {
               e="$e $n"
             }; done
             excom=`comma_separate ${e# }`
-            tricom=`comma_separate $TRIAEXT`
+            tricom=`comma_separate $B2USEXT`
             [ -z "$CNVTRIOUT" ] && { 
               CNVTRIOUT=$SOLPSTOP/modules/DivGeo/device/$DEVICE
             }
