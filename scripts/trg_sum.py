@@ -433,7 +433,7 @@ def WRT_APP(str_len,title,extra_line,val_tot,val_pfr,val_sol,val_names,val_seq,a
             logging.warning('title length %s is greater then the limit, title will be cut to %s',ttl_len,str_len*10)
             ttl = ttl[0:str_len*10]
             ttl_len = len(ttl)
-        step = np.int((str_len*10 - ttl_len)/2)
+        step = int((str_len*10 - ttl_len)/2)
         prin = ' '*step + ttl + '\n'
         ff.write(prin)
 
@@ -449,7 +449,7 @@ def WRT_APP(str_len,title,extra_line,val_tot,val_pfr,val_sol,val_names,val_seq,a
                 logging.warning('extra_line length %s is greater then the limit, it will be cut to %s',len(extra_line),str_len*10)
                 prin = extra_line[0:str_len*10] + '\n'
             else:
-                step = np.int((str_len*10 - len(extra_line))/2)
+                step = int((str_len*10 - len(extra_line))/2)
                 prin = ' '*step + extra_line + '\n'
             ff.write(prin)
             ff.write('\n') 
