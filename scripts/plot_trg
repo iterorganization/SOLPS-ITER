@@ -8,12 +8,12 @@
 #
 # in the desired run directory:
 # plot_trg
-#         
+#
 #          script uses existing ld_tg* and fp_tg* files if present
 #          otherwise "echo '100 wlld' | b2plot command is executed
 #          to obtain them. Then two python scripts are executed:
 #          trg_sum.py that produces trg_sum.dat summary file and
-#          plot_trcc.py that produces standard set of plots goverened 
+#          plot_trcc.py that produces standard set of plots goverened
 #          by the plot_trg.cmd command file
 #
 # by default the plot_trg.cmd file in the present directory is used
@@ -26,7 +26,9 @@ PLT_SCRIPT=plot_trc.py
 B2PL_DIR=b2pl.exe.dir
 SUM_SCRIPT=trg_sum.py
 SUM_FILE=trg_sum.dat
-OUTPUT_FILE=trg.ps
+OUTPUT_FILE=trg
+OUTPUT_FMT=pdf
+ORIGIN_PDF=multipage.pdf
 LN_FILES='ld_tg_i.dat ld_tg_o.dat ld_tg_iu.dat ld_tg_ou.dat fp_tg_i.dat fp_tg_o.dat fp_tg_iu.dat fp_tg_ou.dat'
 
 B2EXE_DIR=b2mn.exe.dir
@@ -49,6 +51,14 @@ PEXEC=plot_trc.exe.py
 PCMD=plot_trc.exe.cmd
 PLOG=plot_trc.exe.log
 WRK_DIR=wrk.tmp
+
+if [ "$PLOT_TRC_FMT" = "ps" ] || [ "$PLOT_TRC_FMT" = "pdf" ]
+then
+  OUTPUT_FMT=$PLOT_TRC_FMT
+  echo "Output will be written to $OUTPUT_FILE.$OUTPUT_FMT"
+else
+  echo "Unexpected value of PLOT_TRC_FMT=$PLOT_TRC_FMT, default output file $OUTPUT_FILE.$OUTPUT_FMT will be used "
+fi
 
 echo "setting up workspace..."
 if [ -f "$SOURCE_DIR/$SUM_SCRIPT" ]
@@ -127,7 +137,7 @@ else
       [ -f "$B2PL_DIR/$f" ] && echo "cp $B2PL_DIR/$f $f && cp $f $WRK_DIR/$f" && cp "$B2PL_DIR/$f" "$f" && cp "$f" "$WRK_DIR/$f"
     }; done
   else
-    echo "failed to produce $LN_FILES, no target data to plot or summarize" 
+    echo "failed to produce $LN_FILES, no target data to plot or summarize"
   fi
 fi
 
@@ -139,8 +149,8 @@ then
   echo "cat $SLOG"
   cat $SLOG
   echo "rm -f $SLOG"
-#  rm -f $SLOG
-  echo "producing *.ps files..."
+  rm -f $SLOG
+  echo "start plotting..."
   echo "python $PEXEC"
   python "$PEXEC"
   echo "cat $PLOG"
@@ -153,23 +163,38 @@ else
   ls -l "$SEXEC" "$PEXEC" "$PCMD" "$WRK_DIR"
 fi
 
-count=`ls -1 $WRK_DIR/*.ps 2>/dev/null | wc -l`
-if [ $count != 0 ]
+if [ "$OUTPUT_FMT" = "pdf" ]
 then
-  echo "producing $OUTPUT_FILE"
-  echo "gs -dSAFER -dBATCH -dNOPAUSE -sDEVICE=ps2write -o $OUTPUT_FILE $WRK_DIR/*.ps"
-  gs -dSAFER -dBATCH -dNOPAUSE -sDEVICE=ps2write -o $OUTPUT_FILE $WRK_DIR/*.ps
-else
-  echo "no *.ps produced, nothing to do"
+  if [ -f "$WRK_DIR/$ORIGIN_PDF" ]
+  then
+    echo "mv $WRK_DIR/$ORIGIN_PDF $OUTPUT_FILE.$OUTPUT_FMT"
+    mv "$WRK_DIR/$ORIGIN_PDF" "$OUTPUT_FILE"."$OUTPUT_FMT"
+  else
+    echo "no $ORIGIN_PDF produced, trying .ps output instead"
+    OUTPUT_FMT=ps
+  fi
+fi
+
+if [ "$OUTPUT_FMT" = "ps" ]
+then
+  count=`ls -1 $WRK_DIR/*.ps 2>/dev/null | wc -l`
+  if [ $count != 0 ]
+  then
+    echo "producing $OUTPUT_FILE.$OUTPUT_FMT"
+    echo "gs -dSAFER -dBATCH -dNOPAUSE -sDEVICE=ps2write -o $OUTPUT_FILE.$OUTPUT_FMT $WRK_DIR/*.ps"
+    gs -dSAFER -dBATCH -dNOPAUSE -sDEVICE=ps2write -o $OUTPUT_FILE.$OUTPUT_FMT $WRK_DIR/*.ps
+  else
+    echo "no *.ps produced, nothing to do"
+  fi
 fi
 
 echo "cleaning..."
 echo "rm -rf $SEXEC $PEXEC $PCMD $WRK_DIR"
 rm -rf "$SEXEC" "$PEXEC" "$PCMD" "$WRK_DIR"
 
-if [ -f "$OUTPUT_FILE" ] && [ -f "$SUM_FILE" ]
+if [ -f "$OUTPUT_FILE.$OUTPUT_FMT" ] && [ -f "$SUM_FILE" ]
 then
-  echo "plot_trg finished check $SUM_FILE and $OUTPUT_FILE for the result"
+  echo "plot_trg finished check $SUM_FILE and $OUTPUT_FILE.$OUTPUT_FMT for the result"
 else
-	echo "either $SUM_FILE or $OUTPUT_FILE was not produced, make sure that $LN_FILES are present (or can be produced from the run data) and that proper $CMD_FILE is supplied"
+  echo "either $SUM_FILE or $OUTPUT_FILE.$OUTPUT_FMT was not produced, make sure that $LN_FILES are present (or can be produced from the run data) and that proper $CMD_FILE is supplied"
 fi
