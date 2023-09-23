@@ -11,7 +11,7 @@ C---- INODCON : INDEX OF CONNECTION NODE
 C---- NFRONT  : TOTAL NUMBER OF FRONTIERS
 C---- IKONT  : TOTAL NUMBER OF POINTS FOR EACH FRONTIER
       double precision, allocatable, public, save :: x(:), y(:)
-      integer, allocatable, public, save :: ikont(:)
+      integer, allocatable, public, save :: ikont(:), isplit_hlp(:)
 
       DOUBLE PRECISION, public, save :: XA(2),XB(2),XC(2),NODCON(2)
       INTEGER, public, save :: NPOIN,IA,IB,IC,INODCON,NFRONT
@@ -50,6 +50,14 @@ c     .              ' auf ',size(ikont)+incr
          allocate(ikont(size(ihelp)+incr))
          ikont = 0
          ikont(1:size(ihelp)) = ihelp
+         deallocate(ihelp)
+      elseif (kennung .eq. 'isplit_hlp') then
+         allocate(ihelp(size(isplit_hlp)))
+         ihelp = isplit_hlp
+         deallocate (isplit_hlp)
+         allocate(isplit_hlp(size(ihelp)+incr))
+         isplit_hlp = 0
+         isplit_hlp(1:size(ihelp)) = ihelp
          deallocate(ihelp)
       else
          write(6,*) 'unknown flag in realloc_cpoin ', kennung

@@ -65,6 +65,8 @@ while dir && ~all(used)
             fcList  = [fcList;fcList_unsorted(i)];
             ifc     = length(fcList);
             ivx     = 1;
+            % Store current vertex as end point of polyline
+            end_point = gmtry.fcVx(fcList(ifc),ivx);
         end
     end
 end

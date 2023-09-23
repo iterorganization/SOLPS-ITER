@@ -85,6 +85,8 @@ C---- INITIALISATION
       x = 0.
       allocate(y(100))
       y = 0.
+      allocate(isplit_hlp(100))
+      isplit_hlp = 0
       NPARTFR = 0
       NFRONT = 0
       allocate(ikont(100))
@@ -93,6 +95,8 @@ C---- INITIALISATION
       delfro = 0.
       allocate(ifront(2,100))
       ifront = 0
+      allocate(isplit(100))
+      isplit = 0
       allocate(ielm(3,100))
       ielm = 0
 
@@ -194,7 +198,10 @@ C---- INPUT OF X- AND Y-COORDINATES OF ONE BOUNDARY
           IF (NPOIN+I .GT. size(x)) THEN !{
              call realloc_cpoin('xy',100)
           ENDIF !}
-          READ(2,*,END=99) X(NPOIN+I),Y(NPOIN+I)
+          IF (NPOIN+I .GT. size(ISPLIT_HLP)) THEN
+             call realloc_cpoin('isplit_hlp',100)
+          ENDIF
+          READ(2,*,END=99) X(NPOIN+I),Y(NPOIN+I),ISPLIT_HLP(NPOIN+I)
 C---- CHANGES OF MINIMA AND MAXIMA DEPENDING OF INPUT
           IF (X(NPOIN+I) .LT. XMIN) XMIN = X(NPOIN+I)
           IF (X(NPOIN+I) .GT. XMAX) XMAX = X(NPOIN+I)
@@ -209,10 +216,15 @@ C---- ADD ACTUAL BOUNDARY TO FRONTIER
         IF (NPARTFR+NBOUN-1 .GT. size(ifront,2)) THEN !{
            call realloc_cfront('ifront',
      .                         npartfr+nboun-1-size(ifront,2)+100)
+        ENDIF
+        IF (NPARTFR+NBOUN-1 .GT. size(isplit)) THEN !{
+           call realloc_cfront('isplit',
+     .                         npartfr+nboun-1-size(isplit)+100)
         ENDIF !}
         DO I=1,NBOUN-1 !{
           IFRONT(1,NPARTFR+I) = NPOIN+I
           IFRONT(2,NPARTFR+I) = NPOIN+I+1
+          ISPLIT(NPARTFR+I) = ISPLIT_HLP(NPOIN+I)
         ENDDO !}
         IFRONT(2,NPARTFR+NBOUN-1) = IFRONT(1,NPARTFR+1)
         NFR = NPARTFR
@@ -270,7 +282,7 @@ c          print *,' i,npartfr=',i,npartfr !###
           IF (ABS(DELPOIN) .LT. 1.E-6) DELPOIN = DELTA0
 
 C---- SPLIT FRONTIER PART IF IT IS LONGER THAN DELPOIN
-          IF (DELFRO(I) .GT. DELPOIN) THEN !{
+          IF (DELFRO(I) .GT. DELPOIN .AND. ISPLIT(I).EQ. 1) THEN !{
             NPOIN = NPOIN + 1
             IF (NPOIN .GT. size(x)) THEN !{
                call realloc_cpoin('xy',1)
@@ -289,6 +301,10 @@ C---- SPLIT FRONTIER PART IF IT IS LONGER THAN DELPOIN
             DELFRO(NPARTFR) = DELFRO(I)*0.5
             IFRONT(2,I) = NPOIN
             DELFRO(I) = DELFRO(I)*0.5
+            IF (NPARTFR .GT. size(isplit)) THEN !{
+               call realloc_cfront('isplit',1)
+            ENDIF !}
+            ISPLIT(NPARTFR) = ISPLIT(I)
           ELSE !}{
             I = I + 1
           ENDIF !}
@@ -651,12 +667,13 @@ C---- OUTPUT OF ELEMENTS
       WRITE(25,*) NELM
       DO I=1,NELM !{
         WRITE(24,103) I,(IELM(J,I),J=1,3)
-        WRITE(25,104) I,(IADJA(J,I),ISIDE(J,I),IPROP(J,I),J=1,3),-1,-1
+        WRITE(25,104) I,(IADJA(J,I),ISIDE(J,I),IPROP(J,I),J=1,3),
+     .               -1,0,0,0
       ENDDO !}
       CLOSE(24)
       CLOSE(25)
 103   FORMAT(I5,2X,3I7)
-104   FORMAT(I5,2X,3(I6,2I3,2X),2(I3))
+104   FORMAT(I5,2X,3(I6,2I3,2X),4(I3))
 
 C---- GRAPHIC OUTPUT
       DELTAX = ABS(XMAX-XMIN)
