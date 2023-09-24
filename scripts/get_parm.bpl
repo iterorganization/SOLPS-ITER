@@ -32,8 +32,8 @@
 #   LL        : the case ID    (VarID)
 #   BB        : viewing frame(s)  (box.b2p)
 #   SB        : suffices for PS files with different frames (box.b2p)
-#   KW        : keywords for the frames: 
-#	              	      	  P for PostScript, g for gmeta, empty for both
+#   KW        : keywords for the frames:
+#                        P for PostScript, g for gmeta, empty for both
 
 # Derived variables
 
@@ -95,15 +95,15 @@ unset ZMIN ZMAX
 typeset -a ZMIN
 typeset -a ZMAX
 [ -n "$zamin" ] && {
-	i=0; for f in ${zamin#*=}; do {
-        let "i=i+1"; ZMIN[$i]=$f
-    		[ "$i" -eq "$NS" ] && break
-		}; done } 
+  i=0; for f in ${zamin#*=}; do {
+    let "i=i+1"; ZMIN[$i]=$f
+    [ "$i" -eq "$NS" ] && break
+}; done }
 [ -n "$zamax" ] && {
-	i=0; for f in ${zamax#*=}; do {
-        	let "i=i+1"; ZMAX[i]=$f
-    		[ "$i" -eq "$NS" ] && break
-		}; done }
+  i=0; for f in ${zamax#*=}; do {
+    let "i=i+1"; ZMAX[i]=$f
+    [ "$i" -eq "$NS" ] && break
+}; done }
 [ -n "$m" ] && [ -n "$zamin" ] && [ -n "$zamax" ] && {
 unset MI ZI
 typeset -a MI
@@ -129,29 +129,29 @@ unset Hiso MI ZI i j m z NTP_I NTP_O NXT_I NXT_O
 
 u=`pipe_run.log | grep natm | head -1 | awk '{print $4}'`
 let "NSPEC=$u"
-if [ "$NSPEC" -gt 1 ] 
-	then {
-           u=`pipe_run.log | grep nfluids | head -1 | awk '{for (i=2;i<=NF;i++) print $i}'`
-           set -A u -- `echo ${u#*=} | tr , \ `
-           n=0; p=0
-           i=0; until [ $i -eq "$NSPEC" ]; do {
-             let "i=i+1"
-             f=${u[i]}
-             let "k=p+i"
-	     let "p=p+f"
-             let "n=k+f-1"
-             SUMZ_1[i]=$k
-             SUMZ_N[i]=$n
-             spec_symbol $f
-             SPEC[i]="$S"
-             [ "$i" -ge "$NSPEC" ] && break
-           }; done
-         }
-	else 
-	    NSPEC=1 
-	    SPEC=$H 
-	    SUMZ_1=1 
-	    SUMZ_N=1 
+if [ "$NSPEC" -gt 1 ]
+ then {
+  u=`pipe_run.log | grep nfluids | head -1 | awk '{for (i=2;i<=NF;i++) print $i}'`
+  set -A u -- `echo ${u#*=} | tr , \ `
+  n=0; p=0
+  i=0; until [ $i -eq "$NSPEC" ]; do {
+    let "i=i+1"
+    f=${u[i]}
+    let "k=p+i"
+    let "p=p+f"
+    let "n=k+f-1"
+    SUMZ_1[i]=$k
+    SUMZ_N[i]=$n
+    spec_symbol $f
+    SPEC[i]="$S"
+    [ "$i" -ge "$NSPEC" ] && break
+  }; done
+ }
+else
+  NSPEC=1
+  SPEC=$H
+  SUMZ_1=1
+  SUMZ_N=1
 fi
 unset u f n p k i S
 
@@ -262,7 +262,7 @@ echo "LL=\"$LL\""                    > "$ff"
 echo "L=$L"                          >>"$ff"
 echo "NSPEC=$NSPEC"                  >>"$ff"
 echo "NS=$NS"                        >>"$ff"
-k=0 
+k=0
 until [ $k -eq "$NSPEC" ]; do {
   let "k=k+1"
   echo "SPEC[$k]=${SPEC[k]}"         >>"$ff"

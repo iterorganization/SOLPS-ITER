@@ -8,12 +8,12 @@
 #
 # in the desired run directory:
 # plot_trg
-#         
+#
 #          script uses existing ld_tg* and fp_tg* files if present
 #          otherwise "echo '100 wlld' | b2plot command is executed
 #          to obtain them. Then two python scripts are executed:
 #          trg_sum.py that produces trg_sum.dat summary file and
-#          plot_trcc.py that produces standard set of plots goverened 
+#          plot_trcc.py that produces standard set of plots goverened
 #          by the plot_trg.cmd command file
 #
 # by default the plot_trg.cmd file in the present directory is used
@@ -53,12 +53,12 @@ PLOG=plot_trc.exe.log
 WRK_DIR=wrk.tmp
 
 if [ "$PLOT_TRC_FMT" = "ps" ] || [ "$PLOT_TRC_FMT" = "pdf" ]
-then 
+then
   OUTPUT_FMT=$PLOT_TRC_FMT
   echo "Output will be written to $OUTPUT_FILE.$OUTPUT_FMT"
 else
   echo "Unexpected value of PLOT_TRC_FMT=$PLOT_TRC_FMT, default output file $OUTPUT_FILE.$OUTPUT_FMT will be used "
-fi	
+fi
 
 echo "setting up workspace..."
 if [ -f "$SOURCE_DIR/$SUM_SCRIPT" ]
@@ -137,7 +137,7 @@ else
       [ -f "$B2PL_DIR/$f" ] && echo "cp $B2PL_DIR/$f $f && cp $f $WRK_DIR/$f" && cp "$B2PL_DIR/$f" "$f" && cp "$f" "$WRK_DIR/$f"
     }; done
   else
-    echo "failed to produce $LN_FILES, no target data to plot or summarize" 
+    echo "failed to produce $LN_FILES, no target data to plot or summarize"
   fi
 fi
 
@@ -167,8 +167,8 @@ if [ "$OUTPUT_FMT" = "pdf" ]
 then
   if [ -f "$WRK_DIR/$ORIGIN_PDF" ]
   then
-    echo "mv $WRK_DIR/$ORIGIN_PDF $OUTPUT_FILE.$OUTPUT_FMT" 
-    mv "$WRK_DIR/$ORIGIN_PDF" "$OUTPUT_FILE"."$OUTPUT_FMT" 
+    echo "mv $WRK_DIR/$ORIGIN_PDF $OUTPUT_FILE.$OUTPUT_FMT"
+    mv "$WRK_DIR/$ORIGIN_PDF" "$OUTPUT_FILE"."$OUTPUT_FMT"
   else
     echo "no $ORIGIN_PDF produced, trying .ps output instead"
     OUTPUT_FMT=ps

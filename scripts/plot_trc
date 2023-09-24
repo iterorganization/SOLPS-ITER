@@ -8,7 +8,7 @@
 #
 # in the desired run directory:
 # plot_trc ntime ctime gtime
-#                if suppled ntime: cuts traces at given time, 
+#                if suppled ntime: cuts traces at given time,
 #                if ntime > 0 slices with time > ntime [s] are plotted
 #                if ntime < 0 slices witn time < ntime [s] are plotted
 #                if supplied ctime: cuts last ctime iterations
@@ -50,12 +50,12 @@ PNTIME=.ntime
 WRK_DIR=wrk.tmp
 
 if [ "$PLOT_TRC_FMT" = "ps" ] || [ "$PLOT_TRC_FMT" = "pdf" ]
-then 
+then
   OUTPUT_FMT=$PLOT_TRC_FMT
   echo "Output will be written to $OUTPUT_FILE.$OUTPUT_FMT"
 else
   echo "Unexpected value of PLOT_TRC_FMT=$PLOT_TRC_FMT, default output file $OUTPUT_FILE.$OUTPUT_FMT will be used "
-fi	
+fi
 
 echo "setting up workspace..."
 if [ -f "$SOURCE_DIR/$PLT_SCRIPT" ]
@@ -120,14 +120,14 @@ then
   if [ "$CURRENT_DIR" = "$B2EXE_DIR" ]
   then
     for f in $LN_FILES; do {
-      if [ -f "$f" ] 
-      then 
+      if [ -f "$f" ]
+      then
         echo "cp $f $WRK_DIR/$f" && cp "$f" "$WRK_DIR/$f"
       else
-        if [ -f "../$f" ] 
-	then
+        if [ -f "../$f" ]
+        then
           echo "cp ../$f $WRK_DIR/$f" && cp "../$f" "$WRK_DIR/$f"
-	fi
+        fi
       fi
     }; done
   else
@@ -148,21 +148,21 @@ else
   ntime=$1
   regex='^[+-]?[0-9]+([.][0-9]+|[.])?+([eE][+-][0-9]+|[eE][0-9]+)?$'
   if [[ $ntime  =~ $regex ]]
-  then 
+  then
     ntimebc=`echo "$ntime" | cut -f 1 -d "e" | cut -f 1 -d "E"`
-    if (( $(echo "$ntimebc > 0." | bc -l))) 
+    if (( $(echo "$ntimebc > 0." | bc -l)))
     then
       echo "positive first argument given, traces will be plotted for time > $ntime ms "
       echo "echo $ntime > $PNTIME"
       echo "$ntime" > "$PNTIME"
-    fi  
-    if (( $(echo "$ntimebc < 0." | bc -l))) 
+    fi
+    if (( $(echo "$ntimebc < 0." | bc -l)))
     then
       echo "negative first argument given, traces will be plotted for last $ntime ms"
       echo "echo $ntime > $PNTIME"
       echo "$ntime" > "$PNTIME"
     fi
-    if (( $(echo "$ntimebc == 0." | bc -l))) 
+    if (( $(echo "$ntimebc == 0." | bc -l)))
     then
       echo "0 first argument provided, $PNTIME file will be removed"
       echo "rm -rf $PNTIME"
@@ -179,11 +179,11 @@ else
     [ ! -f "$PNTIME" ] && {
       echo "echo 0.0 > $PNTIME"
       echo 0.0 > $PNTIME
-    }  
+    }
     ctime=$1
     regex='^[+-]?[0-9]+$'
     if [[ $ctime  =~ $regex ]]
-    then 
+    then
       echo "$ctime last iterations will be cut off when plotting"
       echo "echo $ctime >> $PNTIME"
       echo "$ctime" >> "$PNTIME"
@@ -201,20 +201,20 @@ else
       echo 0.0 > $PNTIME
       echo "echo 0 >> $PNTIME"
       echo 0 >> $PNTIME
-    }  
+    }
     gtime=$1
     regex='^[+-]?[0-9]+$'
     if [[ $gtime  =~ $regex ]]
-    then 
-      if (( $(echo "$gtime > 0." | bc -l))) 
+    then
+      if (( $(echo "$gtime > 0." | bc -l)))
       then
         echo "positive third argument given, every $gtime-th point will be plotted "
-      fi  
-      if (( $(echo "$gtime < 0." | bc -l))) 
+      fi
+      if (( $(echo "$gtime < 0." | bc -l)))
       then
         echo "negative third argument given, every $gtime-th point will be cut"
       fi
-      if (( $(echo "$ntime == 0." | bc -l))) 
+      if (( $(echo "$ntime == 0." | bc -l)))
       then
         echo "0 third argument provided, nothing will be done"
       fi
@@ -224,10 +224,10 @@ else
       echo "WARNING: argument $gtime is not an integer number, skipping"
     fi
   fi
-fi  
+fi
 
 if [ -f "$PNTIME" ]
-then 
+then
   echo "$PNTIME file present, containing:"
   cat "$PNTIME"
 fi
@@ -236,7 +236,7 @@ if [ -d "$WRK_DIR" ] && [ ! -z "$(ls -A "$WRK_DIR")" ] && [ -f "$PEXEC" ] && [ -
 then
   echo "workspace is set, start plotting..."
   echo "python $PEXEC"
-  python "$PEXEC" 
+  python "$PEXEC"
   echo "cat $PLOG"
   cat $PLOG
   echo "rm -f $PLOG"
@@ -251,8 +251,8 @@ if [ "$OUTPUT_FMT" = "pdf" ]
 then
   if [ -f "$WRK_DIR/$ORIGIN_PDF" ]
   then
-    echo "mv $WRK_DIR/$ORIGIN_PDF $OUTPUT_FILE.$OUTPUT_FMT" 
-    mv "$WRK_DIR/$ORIGIN_PDF" "$OUTPUT_FILE"."$OUTPUT_FMT" 
+    echo "mv $WRK_DIR/$ORIGIN_PDF $OUTPUT_FILE.$OUTPUT_FMT"
+    mv "$WRK_DIR/$ORIGIN_PDF" "$OUTPUT_FILE"."$OUTPUT_FMT"
   else
     echo "no $ORIGIN_PDF produced, trying .ps output instead"
     OUTPUT_FMT=ps
