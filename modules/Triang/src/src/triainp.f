@@ -36,20 +36,13 @@ c*  data for the final polygons
      ,      plscoords(3,nbvmax,nsegplgmax,nplgmax)
 
 c*  other
-      integer i,j,k,l,n,iout,iplsplg
+      integer i,j,k,n,iplsplg
       double precision maxlen
-      logical lused(2*nsegplgmax), lfound, lstop, lbeg, lend
-      character line*72
-      character filename*7, topo*4, dumm*20, hlp_frm*20
-      logical dbg
+      logical lfound, lstop, lbeg, lend
+      character filename*7, topo*4, hlp_frm*20
       integer find_loc
       double precision dist
       external find_loc, dist
-#ifdef DBG
-      data dbg /.true./
-#else
-      data dbg /.false./
-#endif
 
 c=======================================================================
 
@@ -244,7 +237,7 @@ c*** triangulation with tria
       coords = 0.0
       split = 0
 
-      do i=1,nplg
+      do i = 1,nplg
 
         do j = 1,nsegwllplg(i)
 
@@ -266,7 +259,7 @@ c*** triangulation with tria
 
         end do
 
-        ! set start op polygon equal to end
+        ! set start of polygon equal to end
         nnplg(i) = nnplg(i) + 1
         coords(1:2,1,i) = coords(1:2,nnplg(i),i)
 
