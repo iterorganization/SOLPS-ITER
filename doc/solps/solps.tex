@@ -3319,12 +3319,12 @@ of fixing radial positions, applicable species, etc...
 
 The coefficient types go as:
 \begin{enumerate}
-   \item Particle sources {\em sna} \index{b2plot, exna}
-   \item Parallel momentum sources {\em smo} \index{b2plot, exmo}
-   \item Electron heat sources {\em she} \index{b2plot, exhe}
-   \item Ion heat sources {\em shi} \index{b2plot, exhi}
-   \item Electric charge sources {\em sch} \index{b2plot, exch}
-   \item Electric particle source (non-ambipolar) {\em sne} \index{b2plot, exne}
+   \item Particle sources {\tt sna} \index{b2plot, exna}
+   \item Parallel momentum sources {\tt smo} \index{b2plot, exmo}
+   \item Electron heat sources {\tt she} \index{b2plot, exhe}
+   \item Ion heat sources {\tt shi} \index{b2plot, exhi}
+   \item Electric charge sources {\tt sch} \index{b2plot, exch}
+   \item Electric particle source (non-ambipolar) {\tt sne} \index{b2plot, exne}
 \end{enumerate}
 
 It is also possible to multiply these radial profiles by an axial form factor.
@@ -3332,39 +3332,46 @@ This axial multiplier is set in the same way as the poloidal profile.
 
 The description of the variables found in {\tt b2.sources.profile} is as follows:
 \begin{description}
-  \item[nsdata(1,i,j)]\index{nsdata} where $i$ is an index for the type of source
-     being defined (see table above) and $j$ is a species index ($0$ for atoms and $1$
-     for ions in a $D$-only case, for instance, and irrelevant (use $1$) for electron
+  \item[nsdata(1,i,j)]\index{nsdata} where {\tt i} is an index for the type of source
+     being defined (see table above) and {\tt j} is a species index ({\tt 0} for atoms and {\tt 1}
+     for ions in a $D$-only case, for instance, and irrelevant (use {\tt 1}) for electron
      sources). {\tt nsdata} is the
      number of data points where the strength of the source is given.
   \item[sdata(1,m,i,j)]\index{sdata} are the radial positions (measured in metres) of the
      {\tt nsdata(1,i,j)} points,
-     where $m$ runs from $1$ to {\tt nsdata(1,i,j)}. By default, the radial positions are
+     where {\tt m} runs from {\tt 1} to {\tt nsdata(1,i,j)}. By default, the radial positions are
      measured from the separatrix outward, along the outer midplane, but this can be changed by
-     making use of the $ixref$ and $iyref$ switches, respectively, to modify the poloidal
+     making use of the {\tt ixref} and {\tt iyref} switches, respectively, to modify the poloidal
      location of the profile and the radial position from which the distances are measured.
   \item[sdata(2,m,i,j)] are the corresponding strengths of the sources.
-  \item[nxdata(k,i,j)]\index{nxdata} where $i$ is an index for the type of source
-     being defined (see table above) and $j$ is a species index ($0$ for atoms and $1$
-     for ions in a $D$-only case, for instance, and irrelevant (use $1$) for electron
+  \item[nxdata(k,i,j)]\index{nxdata} where {\tt i} is an index for the type of source
+     being defined (see table above) and {\tt j} is a species index ({\tt 0} for atoms and {\tt 1}
+     for ions in a $D$-only case, for instance, and irrelevant (use {\tt 1}) for electron
      sources). {\tt nxdata} is the
      number of data points where the value of the axial multiplier to the source is given.
-     If $k$ is equal to $1$, the data is to be understood as function of normalized
-     connection length. If $k$ is equal to $2$, then the axial profile is given in terms
-     of the normalized computational coordinate (running from $0$ to $1$ as $ix$ runs from
-     $-1$ to $nx$).
+     If {\tt k} is equal to {\tt 1}, the data is to be understood as function of normalized
+     connection length. If {\tt k} is equal to {\tt 2}, then the axial profile is given in terms
+     of the normalized computational coordinate (running from {\tt 0} to {\tt 1} as {\tt ix} runs from
+     {\tt -1} to {\tt nx}).
   \item[xdata(1,m,i,j)]\index{xdata} are the axial positions (normalised to the total length)
      of the {\tt nxdata(1,i,j)} points,
-     where $m$ runs from $1$ to {\tt nxdata(1,i,j)}. By default, the connection length
+     where {\tt m} runs from {\tt 1} to {\tt nxdata(1,i,j)}. By default, the connection length
      used is the one measured just inside the separatrix, with the origin
      located at the outer midplane, but this can be changed by
-     making use of the $ixref$ and $iyref$ switches, respectively, to modify the poloidal
+     making use of the {\tt ixref} and {\tt iyref} switches, respectively, to modify the poloidal
      location of the origin and the radial position along which the distances are measured.
      In case the reference location is chosen inside a closed field line region, the axial
      multiplier is set to zero everywhere on the open field lines.
   \item[xdata(2,m,i,j)] are the corresponding values of the source strengths.
   \item[divheat]\index{divheat} is the total volumetric ion heat source (in $W/m^{3}$)
      spread equally throughout the divertor volume.
+  \item[ixref\_profile]\index{ixref\_profile} {\tt integer}, the poloidal location along which the sources radial profile is measured. Defaults to {\tt -2}, in which case the value from {\tt set\_transport\_ixref} is used.
+  \item[iyref\_profile]\index{iyref\_profile} {\tt integer}, the radial location along which the sources axial profile is measured. Defaults to {\tt -2}, in which case the value from {\tt set\_transport\_iyref} is used.
+  \item[sources\_filename]\index{sources\_filename} {\tt filename}, the name of a new sources input file that will be read based on a condition determined by $\mod(${\tt tim},{\tt sources\_time\_mod}$)>${\tt sources\_time\_switch}.
+\item[sources\_time\_mod]\index{sources\_time\_mod}  {\tt real},
+  the basic time periodicity used to set time varying sources, in $s$.
+\item[sources\_time\_switch]\index{sources\_time\_switch}
+  {\tt real}, the basic time at which a switch is to be made to a new sources input file, in $s$.
 \end{description}
 
 The results of these imported source profiles can be visualised in
