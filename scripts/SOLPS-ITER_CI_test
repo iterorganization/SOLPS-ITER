@@ -32,6 +32,7 @@ cp ../test_9pt/b2.*.parameters .
 cp ../test_9pt/b2mn.dat .
 cp ../test_9pt/b2fstati .
 cp ../test_9pt/b2time.nc.i b2time.nc
+cp ../test_9pt/b2batch.nc.i b2batch.nc
 setup_baserun_eirene_links
 touch b2fstati
 b2run -s b2mn
