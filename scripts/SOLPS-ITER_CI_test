@@ -81,7 +81,7 @@ cp ../ref_run_for_CI/b2time.nc.i b2time.nc
 touch b2fstati
 setup_baserun_eirene_links
 b2run b2mn
-${SOLPSTOP}/modules/B2.5/src/test/run_checks_MPI_CI_coupled.sh ../ref_run_for_CI/ ./ || exit 4
+../run_checks_ITER_2360_coupled.sh ../ref_run_for_CI/ ./ || exit 4
 
 cd ..
 mkdir run_CI_test_9-pt
