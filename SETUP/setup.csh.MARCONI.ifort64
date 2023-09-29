@@ -3,6 +3,7 @@ setenv PATH ${PATH}:/marconi_work/FUSIO_ALL/SOLPS-ITER/${COMPILER}/NETCDF/bin
 setenv NCARG_ROOT /marconi_work/FUSIO_ALL/SOLPS-ITER/${COMPILER}/NCARG
 setenv PATH ${PATH}:${NCARG_ROOT}/bin
 setenv SOLPSWORK ${SOLPSTOP}/runs
+setenv NO_MANUAL true
 
 #module load imasenv/3.12.1
 
