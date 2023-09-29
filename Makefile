@@ -388,10 +388,14 @@ b2sxdr:
 	cd modules/solps4-5; ${MAKE}
 
 manual:
+ifndef NO_MANUAL
 ifeq ($(shell [ -e ${SOLPSTOP}/doc/solps/b2cdci.F ] && echo yes || echo no ),no)
 	cd doc/solps; ${MAKE} complete
 else
 	cd doc/solps; ${MAKE}
+endif
+else
+	$(warning SOLPS-ITER Manual will not be produced because NO_MANUAL switch is activated.)
 endif
 
 local:

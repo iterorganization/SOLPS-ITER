@@ -249,6 +249,13 @@ alias unset_ig='. $SOLPSTOP/SETUP/noig'
   [ `ldconfig -p | grep 'libXm\.' | wc -l` != 0 ] && unset NO_MOTIF
 }
 
+# Check if Manual can be built
+export LATEX=`${SOLPSTOP}/scripts/which_latex`
+[ $LATEX = "" ] && {
+  export NO_MANUAL=true
+  echo 'No LaTeX executable found: Manual will not be built'
+}
+
 # Add any local settings if present
 [ -s ${SOLPSTOP}/SETUP/setup.ksh.local ] && {
    echo "Loading SETUP/setup.ksh.local"
