@@ -4,6 +4,7 @@ setenv NCARG_ROOT /marconi_work/FUSIO_ALL/SOLPS-ITER/${COMPILER}/NCARG
 setenv PATH ${PATH}:${NCARG_ROOT}/bin
 setenv SOLPSWORK ${SOLPSTOP}/runs
 setenv FC gfortran
+setenv NO_MANUAL true
 
 # Load modules
 #module unload imasenv
