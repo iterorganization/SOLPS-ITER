@@ -275,6 +275,13 @@ if ($?NO_MOTIF) then
   if (`ldconfig -p | grep 'libXm\.' | wc -l` != 0) unsetenv NO_MOTIF
 endif
 
+# Check if Manual can be built
+setenv LATEX `${SOLPSTOP}/scripts/which_latex`
+if ($LATEX == "") then
+  setenv NO_MANUAL true
+  echo 'No LaTeX executable found: Manual will not be built'
+endif
+
 # Add any local settings if present
 if (-s ${SOLPSTOP}/SETUP/setup.csh.local) then
   echo Loading SETUP/setup.csh.local.

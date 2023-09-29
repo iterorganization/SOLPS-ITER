@@ -311,7 +311,7 @@ To best use the \SOLPSITER code suite, the user will need, locally installed:
 \item[gnuplot] for many analysis scripts
 \item[nc2text] for obtaining time-dependent data traces (optional)
 \item[plotmtv] for obtaining graphs of the time evolution of various profiles (optional)
-\item[LaTeX interpreter] to produce this manual
+\item[LaTeX interpreter] to produce this manual (optional)
 \item[GIT] version control software
 \item[python] scripting language (\SOLPSITER needs at least version 2.7, but version at least 3.5 is required for many additional features)
 \item[/bin/bash] used by some scripts
@@ -335,6 +335,9 @@ If one uses local copies of these libraries, a copy or link to them should be pu
 For fuller code capability, it is also recommended to load the IMAS (Integrated Modelling and Analysis Suite)\index{IMAS} environment, provided by the IO, whenever possible.
 
 If the {\tt nc2text} utility program is not present on the system, but the {\tt NetCDF} library is available, the code will then automatically build an alternative skeleton version and add it to the scripts path.\index{nc2text}
+
+\index{NO\_MANUAL}
+If there is no \LaTeX interpreter found on the system, this manual will not be built. For other systems on which one may not wish to build the manual, the environment variable {\tt NO\_MANUAL} can be set to any non-empty string, for instance as part of the {\tt \$SOLPSTOP/SETUP/setup.csh.\$\{HOST\_NAME\}.\$\{COMPILER\}(.local)} files.
 
 \section{Initial set-up}
 \index{Initial set-up}
