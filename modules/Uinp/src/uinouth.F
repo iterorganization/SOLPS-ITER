@@ -355,7 +355,8 @@ c*** 3a.  data for non-default surface models on standard surfaces
           write(iunoo,709) ists-nskip,txtsfl(ists)
           write(iunoo,707) ists-nskip,idimp(ists),inump(ists),
      ,                   irpta1(ists),irpte1(ists),irpta2(ists),
-     ,                   irpte2(ists),irpta3(ists),irpte3(ists)
+     ,                   irpte2(ists),irpta3(ists),irpte3(ists),
+     ,                   ifclbla(ists),ifclble(ists)
           write(iunoo,707) iliin(ists),ilside(ists),ilswch(ists),
      .                   ilequi(ists),iltor(ists),ilcol(ists),
      .                   ilfit(ists),ilcell(ists),ilbox(ists),
@@ -420,7 +421,8 @@ c     write the core regions at the end for target mode
           write(iunoo,709) i,txtsfl(ists)
           write(iunoo,707) i,idimp(ists),inump(ists),
      ,                 irpta1(ists),irpte1(ists),irpta2(ists),
-     ,                 irpte2(ists),irpta3(ists),irpte3(ists)
+     ,                 irpte2(ists),irpta3(ists),irpte3(ists),
+     ,                 ifclbla(ists),ifclble(ists)
           write(iunoo,707) iliin(ists),ilside(ists),ilswch(ists),
      .                 ilequi(ists),iltor(ists),ilcol(ists),
      .                 ilfit(ists),ilcell(ists),ilbox(ists),
