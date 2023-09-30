@@ -55,7 +55,7 @@ c     ,      isf,ibk,nstsi,' ',cskbnds(isf,ibk),' ',                !###
 c     ,      iliin(nstsi),ilside(nstsi)                             !###
           if(cskbnds(isf,ibk).eq.'W' .or.
      ,                                  cskbnds(isf,ibk).eq.'E') then !{
-            idimp(nstsi)=2
+            idimp(nstsi)=1 !nh always 1 for unstructured version
             ilswch(nstsi)=0
           else if(cskbnds(isf,ibk).eq.'S' .or.
      ,                                 cskbnds(isf,ibk).eq.'N') then !}{

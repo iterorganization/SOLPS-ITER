@@ -347,7 +347,7 @@ c*** 3a.  data for non-default surface models on standard surfaces
         nskip=0
         do ists=1,nstsi !{
           write(iunoo,709) ists-nskip,txtsfl(ists)
-          write(iunoo,707) ists-nskip,idimp(ists),inump(ists),
+          write(iunoo,707) ists-nskip,idimp(ists),1,
      ,                   irpta1(ists),irpte1(ists),irpta2(ists),
      ,                   irpte2(ists),irpta3(ists),irpte3(ists),
      ,                   ifclbla(ists),ifclble(ists)
@@ -383,7 +383,7 @@ c       first write the core regions
           if (iliin(ists).ne.2) cycle
           ncore=ncore+1
           write(iunoo,709) ncore,txtsfl(ists)
-          write(iunoo,707) ncore,idimp(ists),inump(ists),
+          write(iunoo,707) ncore,idimp(ists),1,
      ,                 irpta1(ists),irpte1(ists),irpta2(ists),
      ,                 irpte2(ists),irpta3(ists),irpte3(ists),
      ,                 ifclbla(ists),ifclble(ists)
