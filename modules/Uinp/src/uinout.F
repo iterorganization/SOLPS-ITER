@@ -346,10 +346,6 @@ c*** 3a.  data for non-default surface models on standard surfaces
         write(iunoo,707) nstsi
         nskip=0
         do ists=1,nstsi !{
-          if ((carre_mode.eq.2).and.(iliin(ists).eq.2)) then ! write core regions at the end in target mode
-            nskip=nskip+1 
-            cycle 
-          end if
           write(iunoo,709) ists-nskip,txtsfl(ists)
           write(iunoo,707) ists-nskip,idimp(ists),inump(ists),
      ,                   irpta1(ists),irpte1(ists),irpta2(ists),
@@ -381,43 +377,13 @@ c       count the number of core regions
           if (iliin(ists).eq.2) ncore=ncore+1
         end do
         write(iunoo,707) maxval(fclbl)+ncore
-c       first write the positive face labels
-        do i=1,maxval(fclbl)
-c         detect the properties of an element with a certain face label
-          do k=laddsrfs+1,nlimi !{
-            j=indasrfs(k)
-            if(j.eq.0) cycle
-            if (fclbl(j).eq.i) exit
-          end do
-          write(iunoo,709) i, 'Vessel part'//repeat(' ',52)
-          write(iunoo,707) i,1,1,1,1
-          jlswch=jadnsw(j)+10*jadmsw(j)+100*jadlsw(j)+1000*jadksw(j)+
-     +                               10000*jadjsw(j)+100000*jadisw(j)
-          jlcell=jlacll(j)+1000*jlblck(j)
-          write(iunoo,707) jliin(j),jlside(j),jlswch,jlequi(j),
-     ,      jltor(j),jlcol(j),jlfit(j),jlcell,jlbox(j),jlplg(j)
-          if(jscrd(j).gt.0) then !{
-            write(iunoo,715) scard_name(jscrd(j))
-          else if (jliin(j).eq.1) then !}{
-            ii=10*jlsptc(j)+jlsptp(j)
-            write(iunoo,707) jlref(j),ii,jsrss(j),jsrc(j),lchspnwa(j)
-            write(iunoo,703) xmlma(j),ewala(j),ewbna(j),
-     ,                  trnspa(j,1),trnspa(j,2),fsheata(j)
-            write(iunoo,703) rcycfa(j),rcycta(j),rcprma(j),
-     ,                  exppla(j),expela(j),expila(j)
-            write(iunoo,703) rcycsa(j),rcycca(j),
-     ,                  echspta(j),fchspta(j),sptpra(j)
-          end if !}
-        end do
-        i=maxval(fclbl)
-      end if
-c     write the core regions at the end for target mode
-      if (carre_mode.eq.2) then
+c       first write the core regions
+        ncore=0
         do ists=1,nstsi !{
           if (iliin(ists).ne.2) cycle
-          i=i+1
-          write(iunoo,709) i,txtsfl(ists)
-          write(iunoo,707) i,idimp(ists),inump(ists),
+          ncore=ncore+1
+          write(iunoo,709) ncore,txtsfl(ists)
+          write(iunoo,707) ncore,idimp(ists),inump(ists),
      ,                 irpta1(ists),irpte1(ists),irpta2(ists),
      ,                 irpte2(ists),irpta3(ists),irpte3(ists),
      ,                 ifclbla(ists),ifclble(ists)
@@ -439,8 +405,36 @@ c     write the core regions at the end for target mode
      ,                      fchspts(ists),sptprm(ists)
           end if !}
         end do !}
-      end if 
-      
+c       then write the positive face labels
+        do i=1,maxval(fclbl)
+c         detect the properties of an element with a certain face label
+          do k=laddsrfs+1,nlimi !{
+            j=indasrfs(k)
+            if(j.eq.0) cycle
+            if (fclbl(j).eq.i) exit
+          end do
+          write(iunoo,709) i+ncore, 'Vessel part'//repeat(' ',52)
+          write(iunoo,707) i+ncore,1,1,1,1
+          jlswch=jadnsw(j)+10*jadmsw(j)+100*jadlsw(j)+1000*jadksw(j)+
+     +                               10000*jadjsw(j)+100000*jadisw(j)
+          jlcell=jlacll(j)+1000*jlblck(j)
+          write(iunoo,707) jliin(j),jlside(j),jlswch,jlequi(j),
+     ,      jltor(j),jlcol(j),jlfit(j),jlcell,jlbox(j),jlplg(j)
+          if(jscrd(j).gt.0) then !{
+            write(iunoo,715) scard_name(jscrd(j))
+          else if (jliin(j).eq.1) then !}{
+            ii=10*jlsptc(j)+jlsptp(j)
+            write(iunoo,707) jlref(j),ii,jsrss(j),jsrc(j),lchspnwa(j)
+            write(iunoo,703) xmlma(j),ewala(j),ewbna(j),
+     ,                  trnspa(j,1),trnspa(j,2),fsheata(j)
+            write(iunoo,703) rcycfa(j),rcycta(j),rcprma(j),
+     ,                  exppla(j),expela(j),expila(j)
+            write(iunoo,703) rcycsa(j),rcycca(j),
+     ,                  echspta(j),fchspta(j),sptpra(j)
+          end if !}
+        end do
+        i=maxval(fclbl)
+      end if     
 
 c*** 3b.  data for additional surfaces
 
