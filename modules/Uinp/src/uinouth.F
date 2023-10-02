@@ -416,7 +416,7 @@ c         detect the properties of an element with a certain face label
             if (fclbl(j).eq.i) exit
           end do
           write(iunoo,709) i+ncore, 'Vessel part'//repeat(' ',52)
-          write(iunoo,707) i+ncore,1,1,1,1
+          write(iunoo,707) i+ncore,1,1,1,1,0,0,0,0,i,i
           jlswch=jadnsw(j)+10*jadmsw(j)+100*jadlsw(j)+1000*jadksw(j)+
      +                               10000*jadjsw(j)+100000*jadisw(j)
           jlcell=jlacll(j)+1000*jlblck(j)
