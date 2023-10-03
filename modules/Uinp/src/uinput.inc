@@ -35,15 +35,15 @@ c*** 3a
 
       integer nstsi,    idimp(nsts),  inump(nsts),  irpta1(nsts),
      ,    irpte1(nsts), irpta2(nsts), irpte2(nsts), irpta3(nsts),
-     ,    irpte3(nsts), iliin(nsts),  ilside(nsts), ilswch(nsts),
-     ,    ilequi(nsts), iltor(nsts),  ilcol(nsts),  ilfit(nsts),
-     ,    ilcell(nsts), ilbox(nsts),  ilplg(nsts),  ilref(nsts),
-     ,    ilsptp(nsts), ilsptc(nsts), isrss(nsts),  isrc(nsts),
-     ,    lchspnws(nsts),isrsg(nsts)
+     ,    irpte3(nsts), ifclbla(nsts), ifclble(nsts), iliin(nsts),
+     ,    ilside(nsts), ilswch(nsts), ilequi(nsts), iltor(nsts),
+     ,    ilcol(nsts),  ilfit(nsts),  ilcell(nsts), ilbox(nsts),
+     ,    ilplg(nsts),  ilref(nsts),  ilsptp(nsts), ilsptc(nsts),
+     ,    isrss(nsts),  isrc(nsts), lchspnws(nsts),isrsg(nsts)
       real xmlim(nsts), ewall(nsts),  ewbin(nsts),  transp(nsts,2),
      ,    recycc(nsts), recycf(nsts), recyct(nsts), recprm(nsts),
      ,    recycs(nsts), exppl(nsts),  expel(nsts),  expil(nsts),
-     ,    fsheat(nsts), echspts(nsts),fchspts(nsts),sptprm(nsts) 
+     ,    fsheat(nsts), echspts(nsts),fchspts(nsts),sptprm(nsts)
       character txtsfl(nsts)*64
 
 c*** 3b
@@ -172,7 +172,7 @@ c*** 6
      ,     lchsptrg(nchsppr), lchspgrp(nchsppr),
      ,     lchspprt(nchsppr), lchspprp(nchsppr), lchsptgt(nchsppr),
      ,     lchsptgp(nchsppr), lchspnwl(nchsppr), lchspaux(5,nchsppr)
-      real datm(natm), dmol(nmol), dion(nion), dpls(npls), dplsh(npls), 
+      real datm(natm), dmol(nmol), dion(nion), dpls(npls), dplsh(npls),
      ,     ermin, ercut, rprob0, rinteg, einteg, ainteg,
      ,     ychsptg(nchsppr), echsptg(nchsppr), fchsptg(nchsppr),
      ,     achsptg(3,nchsppr)
@@ -404,9 +404,9 @@ c*** b2ah.dat
      ,  nrplg,npplg,nrknot,npoin1,necke,nchbar,nseite,inmti,
      ,  np2nd,npsep,nppla,npper,nt3rd,ntsep,nttra,ntper,nbmlt,
      ,  nradd,nstsi,idimp,inump,irpta1,irpte1,irpta2,irpte2,irpta3,
-     ,  irpte3,iliin,ilside,ilswch,ilequi,iltor,ilcol,ilfit,ilcell,
-     ,  ilbox,ilplg,ilref,ilsptp,ilsptc,isrss,isrc,lchspnws,isrsg,
-     ,  nlimi,itend,
+     ,  irpte3,ifclbla,ifclble,iliin,ilside,ilswch,ilequi,iltor,ilcol,
+     ,  ilfit,ilcell,ilbox,ilplg,ilref,ilsptp,ilsptc,isrss,isrc,
+     ,  lchspnws,isrsg,nlimi,itend,
      ,  itini,jliin,jlside,jlequi,jltor,jlcol,jlfit,jlbox,jlplg,jlref,
      ,  jsrss,jsrc,lchspnwa,jsrsg,fclbl,omp_elm,imp_elm,
      ,  jlsptp,jlsptc,nreaci,ir,massp,masst,

@@ -43,7 +43,7 @@ c*** The list of keywords to work on:
      ,  'l_h_mol','lpfrs_pmp','npfrgrp','lpfrgrp','ipfrgrp',
      ,  'jpfrgrp','gpfrgrp','rzomp','rzimp',24*' '/
       data (chrpl(i,8),i=1,nkwrd) /
-     /  'nstrai','crcstra','','rcstart','rcend',
+     /  'nstrai','crcstra',' ','rcstart','rcend',
      ,  'species_start','species_end','eb2spcr','eb2atcr','b2espcr',
      ,  'b2eatcr','lstrascl','lsns','msns','ksns',
      ,  'lcns','ltns','recyc','userfluxparm','gpfc',

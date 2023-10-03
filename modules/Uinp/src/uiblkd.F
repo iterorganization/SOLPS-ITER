@@ -190,9 +190,11 @@ c*** 2
 c*** 3a
 
       data  nstsi , idimp , inump , irpta1, irpte1,  iliin , ilside /
-     /        0   , nsts*2, nsts*1, nsts*1, nsts*0, nsts*-1, nsts*0 /,
+     /        0   , nsts*2, nsts*1, nsts*1, nsts*1, nsts*-1, nsts*0 /,
      ,      ilswch, ilequi, ilcol , irpta2, irpte2, irpta3, irpte3 /
      /      nsts*0, nsts*0, nsts*6, nsts*0, nsts*0, nsts*0, nsts*0 /,
+     ,      ifclbla, ifclble /
+     /      nsts*0 , nsts*0  /,
      ,     iltor  , ilfit , ilplg , ilbox , ilcell/
      /     nsts*0 , nsts*0, nsts*0, nsts*0, nsts*0/,
      ,     ilref  , ilsptp, ilsptc, isrss ,  isrc ,lchspnws, isrsg  /
