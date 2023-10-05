@@ -255,7 +255,7 @@ c*** divide found
             lzpbndt(iz,m)=lrsbndt(k,m)
             lzrbndt(iz,m,1)=iy
             lzrbndt(iz,m,2)=j-1
-cnh asigning bcstart and bcend for the unstructured format
+cnh assigning bcstart and bcend for the unstructured format
             if (carre_mode.eq.2) then
               lzrbndt_us(iz,m,1)=tgfclbl(iz) ! assigning the face label
               lzrbndt_us(iz,m,2)=tgfclbl(iz)
@@ -321,7 +321,7 @@ c           print *,'k,iz,iy =',k,iz,iy !###
           lzpbndt(iz,m)=lrsbndt(k,m)
           lzrbndt(iz,m,1)=iy
           lzrbndt(iz,m,2)=ny+1
-cnh asigning bcstart and bcend for the unstructured format
+cnh assigning bcstart and bcend for the unstructured format
           if ((carre_mode.eq.2).and.(tgfclbl(iz).ne.0)) then
             lzrbndt_us(iz,m,1)=tgfclbl(iz) ! assigning the face label
             lzrbndt_us(iz,m,2)=tgfclbl(iz)
@@ -449,7 +449,7 @@ c*** divide found
               lzpbndt(iz,m)=lrsbndt(k,m)
               lzrbndt(iz,m,1)=ix
               lzrbndt(iz,m,2)=j-1
-cnh asigning bcstart and bcend for the unstructured format
+cnh assigning bcstart and bcend for the unstructured format
               if (crgbndt(k,m).eq.'S') then
                 if (m.eq.1) then ! core boundaries
                   lzrbndt_us(iz,m,1)=-20-4*(iz-1)-1
@@ -525,7 +525,7 @@ c     ,                             jc1bnds(iz,m),jc2bnds(iz,m) !###
             lzpbndt(iz,m)=lrsbndt(k,m)
             lzrbndt(iz,m,1)=ix
             lzrbndt(iz,m,2)=lrpbndt(k,m,2)
-cnh asigning bcstart and bcend for the unstructured format
+cnh assigning bcstart and bcend for the unstructured format
             if (crgbndt(k,m).eq.'S') then
               if (m.eq.1) then ! core boundaries
                 lzrbndt_us(iz,m,1)=-20-4*(iz-1)-1

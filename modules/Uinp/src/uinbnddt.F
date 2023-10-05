@@ -39,8 +39,10 @@ c*** First, non-default surface...
           write(txtsfl(nstsi),'(a10,i4)') ctxbnds(ibk),isf
           bliin(nstsi)=bbliin(isf,ibk)
           inump(nstsi)=jcpbnds(isf,ibk)
-          irpta1(nstsi)=jc1bnds(isf,ibk)
-          irpte1(nstsi)=jc2bnds(isf,ibk)
+!nh          irpta1(nstsi)=jc1bnds(isf,ibk)
+!nh          irpte1(nstsi)=jc2bnds(isf,ibk)
+          ifclbla(nstsi)=lc1bnds(isf,ibk)  !nh face label needed for triangulation
+          ifclble(nstsi)=lc2bnds(isf,ibk)
           iliin(nstsi)=jskbnds(isf,ibk)
           ilcol(nstsi)=jclbnds(isf,ibk)
           if(iliin(nstsi).eq.2) then !{
@@ -53,7 +55,7 @@ c     ,      isf,ibk,nstsi,' ',cskbnds(isf,ibk),' ',                !###
 c     ,      iliin(nstsi),ilside(nstsi)                             !###
           if(cskbnds(isf,ibk).eq.'W' .or.
      ,                                  cskbnds(isf,ibk).eq.'E') then !{
-            idimp(nstsi)=2
+            idimp(nstsi)=1 !nh always 1 for unstructured version
             ilswch(nstsi)=0
           else if(cskbnds(isf,ibk).eq.'S' .or.
      ,                                 cskbnds(isf,ibk).eq.'N') then !}{

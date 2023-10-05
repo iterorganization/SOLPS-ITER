@@ -2305,7 +2305,7 @@ Another option allows for the user to request specific rates using reaction card
 
 \VerbatimInput[fontsize=\footnotesize]{D/b2ar_AFN.dat}
 
-When {\tt b2ardr\_nreac = 0}, a default set of AMJUEL/HYDHEL reactions is used, i.e., AMJUEL 2.1.5 for ionization, HYDHEL 3.1.8 for charge exchange and AMJUEL 2.1.8 for recombination. This default set of reactions can be overwritten by user-specified reactions from the AMJUEL/HYDHEL databases by making {\tt b2ardr\_nreac > 0}. Then a {\tt reac} field has to be added, as illustrated in the example. The format is not important as long as blanks separate the fields. For the above example, the default reaction for ionization is explicitly overwritten by the default one. Hence, it makes no difference if you specify them or not.      
+When {\tt b2ardr\_nreac = 0}, a default set of AMJUEL/HYDHEL reactions is used, i.e., AMJUEL 2.1.5 for ionization, HYDHEL 3.1.8 for charge exchange and AMJUEL 2.1.8 for recombination. This default set of reactions can be overwritten by user-specified reactions from the AMJUEL/HYDHEL databases by making {\tt b2ardr\_nreac > 0}. Then a {\tt reac} field has to be added, as illustrated in the example. The format is not important as long as blanks separate the fields. For the above example, the default reaction for ionization is explicitly overwritten by the default one. Hence, it makes no difference if you specify them or not.
 
 \begin{sloppypar}
 Supplemental information on atomic physics rates can be found in the file
@@ -4252,7 +4252,7 @@ The format of this input block for coupling to \SOLPSITER is as follows:
 {\it ***14. Data for interfacing routine "infusr"}
 \begin{verbatim}
 LSYMET  LBALAN
-NFLA    NTRFRM   NFULL   IBRAD   IBPOL   IBTOR    DUM7    ...    
+NFLA    NTRFRM   NFULL   IBRAD   IBPOL   IBTOR    DUM7    ...
 ...       DUM8    DUM9   DUM10   NCOND
 \end{verbatim}
 {\it read NPLSI species lines}
@@ -4274,7 +4274,7 @@ NTARGI
 NTGPRT(IT), IT=1,NTARGI
 DO 30, IT=1,NTARGI
    DO 33, IPRT=1,NTGPRT(IT)
-      I NDT    NPTC   NPTCM  NSPZI  NSPZE  NEMOD  ITYPE 
+      I NDT    NPTC   NPTCM  NSPZI  NSPZE  NEMOD  ITYPE
    33 CONTINUE
 30 CONTINUE
 \end{verbatim}
@@ -4301,18 +4301,18 @@ We only include here the variables or aspects thereof not already described in t
   \item[LCOARSE] Coarse mesh switch ???
   \item[NLTRIMESH] When {\tt .TRUE.}, {\tt Eirene} is only run to obtain the contours necessary to build the triangular grid, which are then written in {\tt fort.78}. This is used by the {\tt triang} script toolchain. No particle trajectories are followed.
   \item[LSPRCL] Turns on species-specific source rescaling when {\tt .TRUE.}
-  \item[NTRFRM] {\tt fort.33} format switch, should be 1 for the widegrid code
-  \item[DUM7-10] Dummy parameters, not in use in the widegrid code. Present to avoid issues when starting from a converted structured case (with additional inputs).
-  \item[NCOND] Number of atoms that is allowed to ``condense" from the EIRENE kinetic to the B2.5 fluid population in the hybrid model. 
+  \item[NTRFRM] {\tt fort.33} format switch, should be {\tt 1} for the wide grids code
+  \item[DUM7-10] Dummy parameters, not in use in the wide grids code. Present to avoid issues when starting from a converted structured case (with additional inputs).
+  \item[NCOND] Number of atoms that is allowed to ``condense" from the {\tt Eirene} kinetic to the {\tt B2.5} fluid population in the hybrid model.
   \item[LKINDP] Index of the {\tt Eirene} atom this species is linked to
-  \item[CONDENSE\_FROM] Index of atom ({\tt IATM}) that is able to condense from the kinetic to fluid population. The condensation will happen if ({\tt NGENA(IATM).lt.0} in block 4) and when the Knudsen number based on the local charge-exchange mean-free path of the atom becomes smaller than the value specified by FLDLMA for the charge-exchange reactions in block 4. Remark: FLDLMA is replaced by EDPOTA in a more recent EIRENE version $\Rightarrow$ FLDLMA should be re-implemented after merging the milestone EIRENE version in the widegrid code.  
-  \item[CONDENSE\_TO] Index of background species of block 5 ({\tt IPLS}) with the corresponding fluid neutral background. 
-  \item[NCVP] Total number of cells in the B2.5 mesh
-  \item[NCIP] Total number of internal cells in the B2.5 mesh
-  \item[NFCP] Total number of faces in the B2.5 mesh 
+  \item[CONDENSE\_FROM] Index of atom ({\tt IATM}) that is able to condense from the kinetic to fluid population. The condensation will happen if ({\tt NGENA(IATM).lt.0} in block 4) and when the Knudsen number based on the local charge-exchange mean-free path of the atom becomes smaller than the value specified by {\tt FLDLMA} for the charge-exchange reactions in block 4. Remark: {\tt FLDLMA} is replaced by {\tt EDPOTA} in a more recent {\tt Eirene} version $\Rightarrow$ {\tt FLDLMA} should be re-implemented after merging the Milestone {\tt Eirene} version in the wide grids code.
+  \item[CONDENSE\_TO] Index of background species of block 5 ({\tt IPLS}) with the corresponding fluid neutral background.
+  \item[NCVP] Total number of cells in the {\tt B2.5} mesh
+  \item[NCIP] Total number of internal cells in the {\tt B2.5} mesh
+  \item[NFCP] Total number of faces in the {\tt B2.5} mesh
   \item[NPTC] In addition to the description in the {\tt Eirene} manual, note that only the value from the first segment of the stratum ({\tt IPRT=1}) is used.
   \item[NPTCM] This corresponds to the {\tt NMINPTS} flag in input block 7, and is needed only if {\tt INDSRC=6}, i.e., if the source is specified by data from block 14 alone. As for {\tt NPTC}, only the value from the first stratum segment is used.
-  \item[NEMOD] This corresponds to the {\tt NEMODS} flag in input block 7 and is needed only if {\tt INDSRC=6}, i.e., if the source is specified by data from block 14 alone. As for {\tt NPTC}, only the value from the first stratum segment is used. {\tt NEMOD=7} includes sheath acceleration (e.g., needed at the targets). {\tt NEMOD=6} does not include sheath acceleration and is recommended at plasma-void interfaces. If you want to sample kinetic atoms from the fluid neutral Maxwellian background distribution and send in the void regions in the hybrid model, it is strongly recommended to use {\tt NEMOD=0}. 
+  \item[NEMOD] This corresponds to the {\tt NEMODS} flag in input block 7 and is needed only if {\tt INDSRC=6}, i.e., if the source is specified by data from block 14 alone. As for {\tt NPTC}, only the value from the first stratum segment is used. {\tt NEMOD=7} includes sheath acceleration (e.g., needed at the targets). {\tt NEMOD=6} does not include sheath acceleration and is recommended at plasma-void interfaces. If you want to sample kinetic atoms from the fluid neutral Maxwellian background distribution and send in the void regions in the hybrid model, it is strongly recommended to use {\tt NEMOD=0}.
   \item[ITYPE] Possibility to specify the species type: {\tt ITYPE=0} (default): bulk ion species ({\tt NLPLS=.TRUE.}); {\tt ITYPE=1}: atoms ({\tt NLATM=.TRUE.}); {\tt ITYPE=2}: molecules ({\tt NLMOL=.TRUE.}); {\tt ITYPE=3}: trace ions ({\tt NLION=.TRUE.}); {\tt ITYPE=4}: bulk ions ({\tt NLPLS=.TRUE.}); {\tt ITYPE=5}: photons ({\tt NLPHOT=.TRUE.}). For {\tt ITYPE=1}, the surface normal is reversed as well by making {\tt SORIFL=2000} ensuring that the atoms are sent into the void region.
   \item[NCOPIB] Not in use
   \item[NCOPEB] Maximum number of additional tallies per plasma background species
@@ -4345,7 +4345,7 @@ DO I=1,NADMOD
    NRS   IPUNKT   XCOOR   YCOOR   ZCOOR
 ENDDO
 DO I=1,NASMOD
-   NAS   IPUNKT   NSSIR   
+   NAS   IPUNKT   NSSIR
 ENDDO
 DO I=1,NORMOD
    IDIR  IR   IP
