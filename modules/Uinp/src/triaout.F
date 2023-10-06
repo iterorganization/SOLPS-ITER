@@ -35,9 +35,9 @@ cwdk  write additional file with (part of) the polygons for triangulation
           n=triplg(l,i)
           write(iunoo,'(i12)') n+1
           do k=1,n
-            write(iunoo,'(2(2X,E21.14))') p1(1:2,triplg(k+l,i))*0.01
+            write(iunoo,'(2(2X,E13.6))') p1(1:2,triplg(k+l,i))*0.01_R8
           enddo
-          write(iunoo,'(2(2X,E21.14))') p2(1:2,triplg(n+l,i))*0.01
+          write(iunoo,'(2(2X,E13.6))') p2(1:2,triplg(n+l,i))*0.01_R8
           l=l+n+1
         end do
       end do

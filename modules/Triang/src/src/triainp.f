@@ -91,7 +91,7 @@ c*** Read the data from the wall polygons from fort.48
           read(48,'(i12)') n
           nnsegwllplg(j,i)=n
           do k=1,n
-            read(48,'(2(2X,E21.14))') wllplgcoords(1:2,k,j,i)
+            read(48,'(2(2X,E13.6))') wllplgcoords(1:2,k,j,i)
           enddo
         end do
       end do
