@@ -45,6 +45,18 @@ LD_NAG     = -L${NAGDIR} -llapack -lrefblas
 LD_MDSPLUS =
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 
+LIBGKS     = ${GLI_HOME}/libgks.a
+LIBGRS     = ${GR_ROOT}/libgr.a
+LIBX11     = /usr/X11R6/lib64/libX11.so
+ADDLIBS    = -lgfortran
+
+#
+# Provide compiler
+#
+
+FC         = gfortran
+MPI_F90    = mpif90
+
 #
 # Preprocessor options
 #

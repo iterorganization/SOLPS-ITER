@@ -16,7 +16,7 @@
 NAME=${0##*/}
 
 legend=
-while true; do { 
+while true; do {
   { case "$1" in
     ( -l )  shift; [ -s "$1" ] && legend="$1"; shift;;
     ( -L )  shift; L="$1"; shift;;
@@ -49,7 +49,7 @@ infile=b2plot.write
       L=`echo $u | cut -f1 -d_ | cut -f2 -d#`
     }
   } || {
-    . get_parm.bpl >/dev/null 2>&1 
+    . get_parm.bpl >/dev/null 2>&1
 #  echo "L from get_parm.bpl L=$L"
   }
 }
@@ -126,7 +126,7 @@ while read -p u; do {
     [ $ii -gt ${nbl[0]} ] && {
 #      set +x #!!!
       [ -z "$emsg" ] && print -- "Legend file too short"
-      emsg=y 
+      emsg=y
       set -- ${u%%\(*}
       while { shift; [ -n "$1" ]; }; do {
         C=${C}_$1

@@ -8,7 +8,7 @@
 
 NAME=${0##*/}
 USAGE="$NAME - Auxilary script to be used with b2save workflow. \n
-Usage: $NAME Options \n 
+Usage: $NAME Options \n
 Options:  \n
 \t        -a  -- set b2mndr_stime to -1 (to be used if continuing without b2save -l) \n
 \t        -p  -- pirnts time interval of the current tracing files \n
@@ -33,26 +33,26 @@ case $arg in
     print -- $USAGE
     exit 1
 esac
-	
+
 [ $mode == "p" ] && {
 
   if [ -f tracing/blne.trc ]
   then
-    cat tracing/blne.trc | sed "/^#/d" | head -1 | sed "s/^[ \t]*//" | cut -d " " -f 1 
-    tail -1 tracing/blne.trc | sed "s/^[ \t]*//" | cut -d " " -f 1 
+    cat tracing/blne.trc | sed "/^#/d" | head -1 | sed "s/^[ \t]*//" | cut -d " " -f 1
+    tail -1 tracing/blne.trc | sed "s/^[ \t]*//" | cut -d " " -f 1
   fi
 
 } || {
-	
+
   if [ $mode == "a" ]
   then
     STIME=-1.0
-    echo "STIME = $STIME" 
+    echo "STIME = $STIME"
   else
     if [ $mode == "l" ] && [ -f b2fstati ]
     then
       STIME=`grep -A 1 time b2fstati | tail -1`
-      echo "STIME = $STIME" 
+      echo "STIME = $STIME"
     else
       echo "b2fstati is absent"
     fi
@@ -71,7 +71,7 @@ esac
     fi
   else
     echo "TIME veriable could not be set"
-  fi  
+  fi
 
 }
 

@@ -44,6 +44,21 @@ LD_NAG     = -L${NAGDIR} -lnag
 LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client -lMdsIpShr
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 
+LIBGKS     = ${GLI_HOME}/libgks.a
+LIBGRS     = ${GR_ROOT}/libgr.a
+LIBX11     = /usr/X11R6/lib64/libX11.so
+
+#
+# Provide compiler
+#
+
+ifdef SOLPS_MPI
+FC         = mpiifort
+else
+FC         = ifort
+endif
+MPI_FC     = mpiifort
+
 #
 # Preprocessor options
 #

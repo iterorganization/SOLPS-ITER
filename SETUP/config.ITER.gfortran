@@ -53,6 +53,20 @@ LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lXext `pkg
 endif
 # LD_MPI     = -lmpi2
 
+LIBGKS     = ${GLI_HOME}/libgks.a
+LIBGRS     = ${GR_ROOT}/lib/libgr.a
+
+#
+# Provide compiler
+#
+
+ifdef SOLPS_MPI
+FC         = mpif90
+else
+FC         = gfortran
+endif
+MPI_FC     = mpif90
+
 #
 # Preprocessor options
 #

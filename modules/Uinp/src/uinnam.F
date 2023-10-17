@@ -744,12 +744,21 @@ c*** Surface data transfer from B2 to Eirene
           call xerrab (' ==> Corrupted DG output?')
         end if !}
         call rearri(ll_spcsrf(1,n_spcsrf),nlimps,k_spcsrf(n_spcsrf))
-        if(maxval(ll_spcsrf).gt.nlim) then !{
+        if(maxval(ll_spcsrf).gt.(nlim+nsts)) then !{
           write(0,*) 'Too many wall elements: maximum ',nlim
+          write(0,*) 'Or non-standard surfaces: maximum ',nsts
           write(0,*) 'Current number of requested elements: ',
      .     maxval(ll_spcsrf)
           call xerrab
-     .   (' ==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
+     .     (' ==> Check the DG model and '//
+     .      'DEF_NLIM and DEF_NSTS in b2mod_dimensions.F')
+        end if !}
+        if(minval(ll_spcsrf).lt.(-nsts)) then !{
+          write(0,*) 'Too many non-standard surfaces: maximum ',nsts
+          write(0,*) 'Current number of requested surfaces: ',
+     .     abs(minval(ll_spcsrf))
+          call xerrab
+     .   (' ==> Check the DG model and DEF_NSTS in b2mod_dimensions.F')
         end if !}
       case (105)
         if(n_spcsrf.le.0) then !{

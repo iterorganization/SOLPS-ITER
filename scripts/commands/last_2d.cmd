@@ -9,7 +9,7 @@
 #
 #  B  - text, name of the desired quantity as it stands in the raw output
 #       (for .trc files and single dimension quantities in .nc files
-#       corresponds to the quantity names directly, whereas multidimentional 
+#       corresponds to the quantity names directly, whereas multidimensional
 #       data from .nc files are unpacked via adding specific suffixes that
 #       and the quantity names should be looked up in the last_2d.py driver)
 #
@@ -19,13 +19,13 @@
 #       (if blank the original quantity name (field B) will be used)
 #
 #  E  - text, the units of the resulting quantity value (after scaling), will
-#       be shown in brackets after the name (if blank "N/A" will be added to 
+#       be shown in brackets after the name (if blank "N/A" will be added to
 #       distinguish between lack of units provided and a.u. quantities)
 #==============================================================================
 
 sepdata : ne_sep    : 1. : ne_sep    : m^-3
-sepdata : Te_sep    : 1. : Te_sep    : eV 
-sepdata : Ti_sep    : 1. : Ti_sep    : eV 
+sepdata : Te_sep    : 1. : Te_sep    : eV
+sepdata : Ti_sep    : 1. : Ti_sep    : eV
 sepdata : Zef_sep   : 1. : Zeff_sep  : a.u.
 sepdata : nr_sep_H  : 1. : nr_sep_H  : a.u.
 sepdata : nr_sep_D  : 1. : nr_sep_D  : a.u.
@@ -321,10 +321,10 @@ integral : N_i_reg_01_Ar : 1. : N_i_01_Ar  : part.
 integral : N_i_reg_02_Ar : 1. : N_i_02_Ar  : part.
 integral : N_i_reg_03_Ar : 1. : N_i_03_Ar  : part.
 integral : N_i_reg_04_Ar : 1. : N_i_04_Ar  : part.
-integral : N_i_reg_01_W  : 1. : N_i_01_W   : part. 
-integral : N_i_reg_02_W  : 1. : N_i_02_W   : part. 
-integral : N_i_reg_03_W  : 1. : N_i_03_W   : part. 
-integral : N_i_reg_04_W  : 1. : N_i_04_W   : part. 
+integral : N_i_reg_01_W  : 1. : N_i_01_W   : part.
+integral : N_i_reg_02_W  : 1. : N_i_02_W   : part.
+integral : N_i_reg_03_W  : 1. : N_i_03_W   : part.
+integral : N_i_reg_04_W  : 1. : N_i_04_W   : part.
 
 integral : N_a_reg_01_H  : 1. : N_a_01_H   : part.
 integral : N_a_reg_02_H  : 1. : N_a_02_H   : part.
@@ -366,10 +366,10 @@ integral : N_a_reg_01_Ar : 1. : N_a_01_Ar  : part.
 integral : N_a_reg_02_Ar : 1. : N_a_02_Ar  : part.
 integral : N_a_reg_03_Ar : 1. : N_a_03_Ar  : part.
 integral : N_a_reg_04_Ar : 1. : N_a_04_Ar  : part.
-integral : N_a_reg_01_W  : 1. : N_a_01_W   : part. 
-integral : N_a_reg_02_W  : 1. : N_a_02_W   : part. 
-integral : N_a_reg_03_W  : 1. : N_a_03_W   : part. 
-integral : N_a_reg_04_W  : 1. : N_a_04_W   : part. 
+integral : N_a_reg_01_W  : 1. : N_a_01_W   : part.
+integral : N_a_reg_02_W  : 1. : N_a_02_W   : part.
+integral : N_a_reg_03_W  : 1. : N_a_03_W   : part.
+integral : N_a_reg_04_W  : 1. : N_a_04_W   : part.
 
 integral : imp_rad_01 : -1.e-6 : Q_imp_rad_01 : MW
 integral : imp_rad_02 : -1.e-6 : Q_imp_rad_02 : MW

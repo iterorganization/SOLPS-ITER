@@ -305,6 +305,7 @@ To best use the \SOLPSITER code suite, the user will need, locally installed:
 \item[GR] plotting library (optional, developed at FZ-J{\"u}lich, available from the IO Git repository at \href{https://git.iter.org/projects/LIB/repos/gr-software/browse}{https://git.iter.org/projects\allowbreak/LIB/repos/gr-software/browse})
 \item[GKS] graphical kernel library (available from \href{http://ngwww.ucar.edu}{http://ngwww.ucar.edu})
 \item[HDF5] data storage library (available from \href{http://support.hdfgroup.org/HDF5/}{http://support.hdfgroup.org/HDF5/})
+\item[JSON] data storage library (Fortran version, available from \href{https://jacobwilliams.github.io/json-fortran/}{https://jacobwilliams.github.io/json-fortran/})
 \item[NetCDF]\index{netcdf} storage/archival library (optional) (available from \href{http://www.unidata.ucar.edu/netcdf/}{http://www.unidata.ucar.edu/netcdf/}) (\SOLPSITER needs at least version 4)
 \item[MSCL] utility library (available from the IO Git repository at \href{https://git.iter.org/projects/LIB/repos/mscl/browse}{https://git.iter.org/projects/LIB/repos/mscl/browse})
 \item[makedepend] to build the dependencies needed by the {\tt Makefiles}
@@ -1060,12 +1061,16 @@ SOLPSTOP
 |   |   |   +---SurfaceData
 |   |   |   |   +---TRIM
 |   |   |   |   |   +---10_bins
+|   |   +---Manual
+|   |   |   +---figures
+|   |   |   +---tex
 |   |   +---scripts
 |   |   +---src.local
 |   |   +---src
 |   |   |   +---assistant
 |   |   |   +---broadcast
 |   |   |   +---broadcast_dummy
+|   |   |   +---cmake
 |   |   |   +---diagno
 |   |   |   +---file-handling
 |   |   |   +---geometry
@@ -19936,6 +19941,9 @@ Additionally, system-wide compiler flags can be provided by means of the
 {\tt FFLAGSEXTRA} environment variable in the same files.
 
 \begin{description}
+\item[AL\_MAJOR\_VERSION] \index{AL\_MAJOR\_VERSION} Major version number of the AL (IMAS Access Layer) library to which the code is linked (set internally by the configuration files)
+\item[AL\_MICRO\_VERSION] \index{AL\_MICRO\_VERSION} Micro version number of the AL (IMAS Access Layer) library to which the code is linked (set internally by the configuration files)
+\item[AL\_MINOR\_VERSION] \index{AL\_MINOR\_VERSION} Minor version number of the AL (IMAS Access Layer) library to which the code is linked (set internally by the configuration files)
 \item[CATALYST] \index{CATALYST} Turns on the Paraview Catalyst utility (see the SOLPS-GUI manual for full details)
 \item[DIMENSIONS\_MODULE] \index{DIMENSIONS\_MODULE} Indicates whether the \SOLPSITER version is one that uses a {\tt b2mod\_dimensions.F} module file instead of the {\tt DIMENSIONS.F} include file (set internally by the configuration files)
 \item[COMPILER\_MAJOR\_VERSION] \index{COMPILER\_MAJOR\_VERSION} Major version number of the compiler being used (set internally by the configuration files)
@@ -19968,9 +19976,6 @@ Additionally, system-wide compiler flags can be provided by means of the
 \item[NO\_NAG] \index{NO\_NAG} No {\tt NAG} libraries available
 \item[PGF90] \index{PGF90} To be used when compiling with the Portland Group {\tt Fortran-90} compiler
 \item[PSR] \index{PSR} Specific to the Pacific Sierra VAST compiler
-\item[UAL\_MAJOR\_VERSION] \index{UAL\_MAJOR\_VERSION} Major version number of the UAL (Universal Access Layer) library to which the code is linked (set internally by the configuration files)
-\item[UAL\_MICRO\_VERSION] \index{UAL\_MICRO\_VERSION} Micro version number of the UAL (Universal Access Layer) library to which the code is linked (set internally by the configuration files)
-\item[UAL\_MINOR\_VERSION] \index{UAL\_MINOR\_VERSION} Minor version number of the UAL (Universal Access Layer) library to which the code is linked (set internally by the configuration files)
 \item[USE\_MPI] \index{USE\_MPI} Set internally by the {\tt Makefile} and used to identify code necessary for MPI applications
 \item[USE\_PXFGETENV] \index{USE\_PXFGETENV} Uses {\tt PXFGETENV} instead of {\tt GETENV}
 \item[WINDOWS] \index{WINDOWS} To be used when compiling on a Windows system
@@ -20104,6 +20109,10 @@ We list below where the {\tt DivGeo} compilation switches are used.
     \multicolumn{2}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
+       AL\_MAJOR\_VERSION & equtrn/src/rdids.f \\
+       AL\_MAJOR\_VERSION & equtrn/src/wrids.f \\
+       AL\_MICRO\_VERSION & equtrn/src/rdids.f \\
+       AL\_MINOR\_VERSION & equtrn/src/rdids.f \\
        CONSTANTS\_PROVIDED & equtrn/src/eqdim.f90 \\
        GGD\_MAJOR\_VERSION & equtrn/src/wrids.f \\
        GGD\_MICRO\_VERSION & equtrn/src/wrids.f \\
@@ -20114,19 +20123,12 @@ We list below where the {\tt DivGeo} compilation switches are used.
        IMAS\_MAJOR\_VERSION & equtrn/src/ids2dg.f \\
        IMAS\_MAJOR\_VERSION & equtrn/src/rdids.f \\
        IMAS\_MAJOR\_VERSION & equtrn/src/wrids.f \\
-       IMAS\_MICRO\_VERSION & equtrn/src/wrids.f \\
        IMAS\_MINOR\_VERSION & equtrn/src/eqdim.f90 \\
        IMAS\_MINOR\_VERSION & equtrn/src/rdids.f \\
        IMAS\_MINOR\_VERSION & equtrn/src/wrids.f \\
        NO\_GETENV & equtrn/src/dg2ids.f \\
        NO\_GETENV & equtrn/src/ids2dg.f \\
        NO\_GETENV & equtrn/src/wrids.f \\
-       UAL\_MAJOR\_VERSION & equtrn/src/rdids.f \\
-       UAL\_MAJOR\_VERSION & equtrn/src/wrids.f \\
-       UAL\_MICRO\_VERSION & equtrn/src/rdids.f \\
-       UAL\_MICRO\_VERSION & equtrn/src/wrids.f \\
-       UAL\_MINOR\_VERSION & equtrn/src/rdids.f \\
-       UAL\_MINOR\_VERSION & equtrn/src/wrids.f \\
        USE\_PXFGETENV & equtrn/src/dg2ids.f \\
        USE\_PXFGETENV & equtrn/src/ids2dg.f \\
        USE\_PXFGETENV & equtrn/src/wrids.f \\
@@ -20154,7 +20156,9 @@ which is defined in the
 \item[NO\_B2\_CHEM\_SPUT] \index{NO\_B2\_CHEM\_SPUT} Used to indicate that chemical sputtering is specified through {\tt Eirene} arrays instead of {\tt B2.5}
 \item[NO\_SAVE] \index{NO\_SAVE} Turning off static save of some common blocks
 \item[SOLPS4\_3] \index{SOLPS4\_3} Set internally by the {\tt Makefile} to activate code specific to the {\tt SOLPS4-5 b2sxdr} converter
+\item[USE\_EXT\_OPENMP] \index{USE\_EXT\_OPENMP} For use if {\tt B2.5-Eirene} or its components are called from within an OpenMP parallelized region inside a larger workflow
 \item[USE\_IMPGYRO] \index{USE\_IMPGYRO} Used when coupling to IMPGYRO
+\item[USE\_OPENMP] \index{USE\_OPENMP} For OpenMP specific code related to {\tt Eirene} parallelization
 \end{description}
 
 \subsection{B2.5}
@@ -20180,13 +20184,13 @@ if desired, be declared as part of either the {\tt SOLPS\_CPP} or the
 \item[NO\_21] \index{NO\_21} Do not use 21-moment model for thermal and viscous forces
 \item[NO\_IEEE] \index{NO\_IEEE} Provides replacements to IEEE non-standard arithmetic routines
 \item[NO\_F01AAF] \index{NO\_F01AAF} No {\tt NAG} routine {\tt F01AAF} --- uses its replacement instead (needed if linking with Version 17 or later of {\tt NAG})
-\item[NO\_OPENMP\_\*] \index{NO\_OPENMP} Turning off OpenMP parallelization
+\item[NO\_OPENMP\_*] \index{NO\_OPENMP} Turning off OpenMP parallelization
 \item[NO\_OPT] \index{NO\_OPT} No compiler optimization
+\item[\_OPENMP] \index{\_OPENMP} For OpenMP specific code
 \item[PAR\_OPT] \index{PAR\_OPT} Runs the code in a special interpretive parameter optimization mode
 \item[PERFMON] \index{PERFMON} Enable performance monitoring
 \item[PLPLOT] \index{PLPLOT} Use {\tt PLPLOT} instead of {\tt NCAR} for plotting
 %\item[SCL\_IMP\_RCI] \index{SCL\_IMP\_RCI} Toggles scaling of impurities tallies
-\item[UAL\_MAJOR\_VERSION] \index{UAL\_MAJOR\_VERSION} Major version number of the UAL (Universal Access Layer) library to which the code is linked (set internally by the configuration files)
 \item[USE\_CDF\_B2STIME] \index{USE\_CDF\_B2STIME} Specific for \SOLPSfour {\tt CDF} tallies
 \item[WANT\_PROCESS] \index{WANT\_PROCESS} Enables the code for the \SOLPSfive to \SOLPSfour converter
 \item[WOS] \index{WOS} Uses the {\tt WOS} libraries for accessing experimental data at IPP
@@ -20255,6 +20259,8 @@ ALLOCATE\_AND\_NAMELIST & modules/b2mod\_user\_namelist.F \\
 ALLOCATE\_AND\_NAMELIST & modules/b2mod\_wall.F \\
 ALLOCATE\_AND\_NAMELIST & postprocessing/b2yt\_wall.F \\
 ALLOCATE\_AND\_NAMELIST & sources/b2stbr.F \\
+AL\_MAJOR\_VERSION & ids/b2mod\_ual.F90 \\
+AL\_MINOR\_VERSION & ids/b2mod\_ual.F90 \\
 AMNS & preprocessing/b2ardr.F \\
 AMNS & utility/ratadas.F \\
 ASTRA & modules/b2mod\_astra\_to\_b2.F \\
@@ -20593,6 +20599,25 @@ NO\_OPT & postprocessing/b2ytdr.F \\
 NO\_SAVE & include/BRAEIR.H \\
 NO\_SAVE & include/EIRBRA.H \\
 NO\_SAVE & include/EIRDIAG.H \\
+\_OPENMP & src/catalyst/fortranAdaptor.F90 \\
+\_OPENMP & src/driver/b2mn\_opt.F \\
+\_OPENMP & src/driver/b2mnastra.F \\
+\_OPENMP & src/driver/b2mod\_driver.F \\
+\_OPENMP & src/driver/b2obeq.F \\
+\_OPENMP & src/driver/b2obfn.F \\
+\_OPENMP & src/driver/b2oblm.F \\
+\_OPENMP & src/equations/b2npmo.F \\
+\_OPENMP & src/modules/b2mod\_openmp.F \\
+\_OPENMP & src/solvers/b2ux11p.F \\
+\_OPENMP & src/solvers/b2ux5p.F \\
+\_OPENMP & src/solvers/b2ux7p.F \\
+\_OPENMP & src/solvers/b2ux9p.F \\
+\_OPENMP & src/sources/b2stbr.F \\
+\_OPENMP & src/utility/b2mod\_illtern\_7.F \\
+\_OPENMP & src/utility/b2mod\_ilutern\_11.F \\
+\_OPENMP & src/utility/b2mod\_ilutern\_7.F \\
+\_OPENMP & src/utility/b2mod\_ilutern\_9.F \\
+\_OPENMP & src/utility/b2opd\_subsys.F \\
 PAR\_OPT & sources/b2stbc\_phys.F \\
 PAR\_OPT & transport/b2tqna.F \\
 PERFMON & utility/prgend.F \\
@@ -20645,12 +20670,9 @@ SOLPS4\_3 & modules/b2mod\_diag.F \\
 SOLPS4\_3 & modules/b2mod\_mwti.F90 \\
 SOLPS4\_3 & modules/b2mod\_neutrals\_namelist.F \\
 SOLPS4\_3 & sources/eirene\_f30f31.F \\
-UAL\_MAJOR\_VERSION & ids/b2mod\_ual.F90 \\
-UAL\_MAJOR\_VERSION & ids/b2mod\_ual\_io.F90 \\
-UAL\_MICRO\_VERSION & ids/b2mod\_ual\_io.F90 \\
-UAL\_MINOR\_VERSION & ids/b2mod\_ual\_io.F90 \\
 USE\_CDF\_B2STIME & modules/b2mod\_comtimpl.F \\
 USE\_CDF\_B2STIME & common/COUPLE/COMTIMPL.F \\
+USE\_EXT\_OPENMP & driver/b2mod\_driver.F \\
 USE\_IMPGYRO & driver/b2mod\_driver.F \\
 USE\_IMPGYRO & driver/b2mod\_main.F \\
 USE\_IMPGYRO & modules/b2mod\_impgyro.F \\
@@ -20671,6 +20693,7 @@ USE\_MPI & modules/b2mod\_transport\_namelist.F \\
 USE\_MPI & modules/b2mod\_user\_namelist.F \\
 USE\_MPI & modules/b2mod\_wall.F \\
 USE\_MPI & utility/xertst.F \\
+USE\_OPENMP & driver/b2mod\_driver.F \\
 USE\_PXFGETENV & b2plot/b2plot.F \\
 USE\_PXFGETENV & b2plot/initialize\_plotting.F \\
 USE\_PXFGETENV & b2plot/set\_extralabel.F \\
@@ -20721,6 +20744,7 @@ if desired, be declared as part of either the {\tt SOLPS\_CPP} or the
 
 \begin{description}
 \item[CHECKBIN] \index{CHECKBIN} Turns on debugging output to check the contents of the output binary files
+\item[NO\_JSON] \index{NO\_JSON} Turns off JSON I/O format support
 \item[TRACE] \index{TRACE} Turns on tracing output in geometry routines (set internally by the {\tt Makefile} when requesting a {\tt \_debug} compilation)
 \end{description}
 
@@ -20791,13 +20815,60 @@ F2003 & assistant/subtit.f \\
 F2003 & file-handling/eirmod\_openfile.f \\
 GFORTRAN & modules/eirmod\_mpi.F90 \\
 GFORTRAN & assistant/exit\_own.f \\
+GFORTRAN & broadcast/broad\_iestr.f \\
+GFORTRAN & broadcast/broadcast.f \\
+GFORTRAN & broadcast/broadsput.f \\
+GFORTRAN & broadcast/calstr.f \\
+GFORTRAN & broadcast/collect\_census.f \\
+GFORTRAN & broadcast/collect\_coutau.f \\
+GFORTRAN & broadcast/eirmod\_calstr\_buffered.f90 \\
+GFORTRAN & interfaces/couple\_SOLPS-ITER/eirmod\_wneutrals.f \\
+GFORTRAN & interfaces/couple\_SOLPS-ITER/eirsrt.f \\
+GFORTRAN & modules/eirmod\_balanced\_strategy.f90 \\
+GFORTRAN & modules/eirmod\_cadgeo.f \\
+GFORTRAN & modules/eirmod\_cai.f \\
+GFORTRAN & modules/eirmod\_ccona.f \\
+GFORTRAN & modules/eirmod\_cestim.f \\
+GFORTRAN & modules/eirmod\_cgeom.f \\
+GFORTRAN & modules/eirmod\_cgrid.f \\
+GFORTRAN & modules/eirmod\_cinit.F \\
+GFORTRAN & modules/eirmod\_clogau.f \\
+GFORTRAN & modules/eirmod\_comnnl.f \\
+GFORTRAN & modules/eirmod\_comsig.f \\
+GFORTRAN & modules/eirmod\_comsou.f \\
+GFORTRAN & modules/eirmod\_comspl.f \\
+GFORTRAN & modules/eirmod\_comusr.f \\
+GFORTRAN & modules/eirmod\_comxs.f \\
+GFORTRAN & modules/eirmod\_coutau.f \\
+GFORTRAN & modules/eirmod\_cpes.f \\
+GFORTRAN & modules/eirmod\_cpolyg.f \\
+GFORTRAN & modules/eirmod\_cref.f \\
+GFORTRAN & modules/eirmod\_csdvi.f \\
+GFORTRAN & modules/eirmod\_cstep.f \\
+GFORTRAN & modules/eirmod\_ctetra.f \\
+GFORTRAN & modules/eirmod\_ctext.f \\
+GFORTRAN & modules/eirmod\_ctrig.f \\
+GFORTRAN & modules/eirmod\_czt1.f \\
+GFORTRAN & modules/eirmod\_parmmod.f \\
+GFORTRAN & photons/eirmod\_photon.f \\
+GFORTRAN & user-routines/user\_iter/broad\_usr.f \\
+GFORTRAN & user-routines/user\_iter/eirmod\_refusr.f \\
 G95 & assistant/exit\_own.f \\
 HPUX & modules/eirmod\_cinit.F \\
-MPI\_MOD & modules/eirmod\_mpi.F90 \\
 MPI\_VERSION & modules/eirmod\_mpi.F90 \\
 NAGFOR & file-handling/eirmod\_openfile.f \\
 NO\_B2\_CHEM\_SPUT & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.F \\
 NO\_GETENV & file-handling/get\_solpstop.f \\
+NO\_JSON & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.F \\
+NO\_JSON & interfaces/couple\_SOLPS-ITER/if0prm\_json.f \\
+NO\_JSON & interfaces/couple\_SOLPS-ITER/wr0\_json.f \\
+NO\_JSON & modules/eirmod\_json.f \\
+NO\_JSON & startup-routines/read\_fixform.f \\
+NO\_JSON & startup-routines/read\_json.f \\
+NO\_JSON & startup-routines/read\_reaclines.f \\
+NO\_JSON & startup-routines/write\_json\_amdata.f \\
+NO\_JSON & startup-routines/write\_json\_file.f \\
+NO\_JSON & user-routines/user\_iter/eirmod\_iousr.f \\
 PGF90 & assistant/exit\_own.f \\
 PGF90 & particle-tracing/folion.F \\
 PGF90 & particle-tracing/velocs.F \\
@@ -20807,11 +20878,57 @@ TRACE & geometry/time-routines/timea.F \\
 TRACE & geometry/time-routines/eirmod\_timep.F \\
 TRACE & geometry/time-routines/eirmod\_timer.F \\
 TRACE & geometry/time-routines/timet.F \\
+USE\_EXT\_OPENMP & main-routines/eirmod\_eirene.f \\
+USE\_EXT\_OPENMP & main-routines/eirmod\_mcarlo.f \\
 USE\_MPI & assistant/eirmod\_second\_own.f \\
 USE\_MPI & assistant/exit\_own.f \\
+USE\_MPI & broadcast/broad\_iestr.f \\
+USE\_MPI & broadcast/broadcast.f \\
+USE\_MPI & broadcast/broadsput.f \\
+USE\_MPI & broadcast/calstr.f \\
+USE\_MPI & broadcast/collect\_census.f \\
+USE\_MPI & broadcast/collect\_coutau.f \\
+USE\_MPI & broadcast/eirmod\_calstr\_buffered.f90 \\
+USE\_MPI & interfaces/couple\_SOLPS-ITER/eirmod\_ccoupl.f \\
+USE\_MPI & interfaces/couple\_SOLPS-ITER/eirmod\_eirbra.f \\
+USE\_MPI & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.f \\
+USE\_MPI & interfaces/couple\_SOLPS-ITER/eirmod\_wneutrals.f \\
+USE\_MPI & interfaces/couple\_SOLPS-ITER/eirsrt.f \\
+USE\_MPI & modules/eirmod\_balanced\_strategy.f90 \\
+USE\_MPI & modules/eirmod\_cadgeo.f \\
+USE\_MPI & modules/eirmod\_cai.f \\
+USE\_MPI & modules/eirmod\_ccona.f \\
+USE\_MPI & modules/eirmod\_cestim.f \\
+USE\_MPI & modules/eirmod\_cgeom.f \\
+USE\_MPI & modules/eirmod\_cgrid.f \\
+USE\_MPI & modules/eirmod\_cinit.F \\
+USE\_MPI & modules/eirmod\_clgin.f \\
+USE\_MPI & modules/eirmod\_clogau.f \\
+USE\_MPI & modules/eirmod\_comnnl.f \\
+USE\_MPI & modules/eirmod\_comsig.f \\
+USE\_MPI & modules/eirmod\_comsou.f \\
+USE\_MPI & modules/eirmod\_comspl.f \\
+USE\_MPI & modules/eirmod\_comusr.f \\
+USE\_MPI & modules/eirmod\_comxs.f \\
+USE\_MPI & modules/eirmod\_coutau.f \\
+USE\_MPI & modules/eirmod\_cpes.f \\
+USE\_MPI & modules/eirmod\_cpolyg.f \\
+USE\_MPI & modules/eirmod\_cref.f \\
+USE\_MPI & modules/eirmod\_csdvi.f \\
+USE\_MPI & modules/eirmod\_cstep.f \\
+USE\_MPI & modules/eirmod\_ctetra.f \\
+USE\_MPI & modules/eirmod\_ctext.f \\
+USE\_MPI & modules/eirmod\_ctrig.f \\
+USE\_MPI & modules/eirmod\_czt1.f \\
 USE\_MPI & modules/eirmod\_mpi.F90 \\
-USE\_MPI & photons/eirmod\_phot\_reflec.f \\
+USE\_MPI & modules/eirmod\_parmmod.f \\
+USE\_MPI & photons/eirmod\_photon.f \\
 USE\_MPI & startup-routines/input.f \\
+USE\_MPI & user-routines/user\_iter/broad\_usr.f \\
+USE\_MPI & user-routines/user\_iter/eirmod\_refusr.f \\
+USE\_OPENMP & assistant/eirmod\_second\_own.f \\
+USE\_OPENMP & main-routines/eirmod\_eirene.f \\
+USE\_OPENMP & main-routines/eirmod\_mcarlo.f \\
 USE\_PXFGETENV & file-handling/get\_solpstop.f \\
 WINDOWS & main-routines/eirmod\_eirene.f \\
 WINDOWS & user-routines/user\_iter/ioflush\_usr.f \\

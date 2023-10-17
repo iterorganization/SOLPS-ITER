@@ -1,4 +1,4 @@
-# Command file for the plot_trc.py script 
+# Command file for the plot_trc.py script
 # designed to produce default analysis plots from the files tracing/*
 #
 #===============================================================================
@@ -7,16 +7,16 @@
 # @file:XXX     - read XXX, XXX.trc or XXX.nc file
 # @page:XXX     - start next page labeled XXX defaults to the .trc header
 # @log:         - plot in semilogY scale
-# @iter:XX      - plot against last XX iterations, not time, 
+# @iter:XX      - plot against last XX iterations, not time,
 #                  (if XX < 0 or absent will plot for the whole history)
 # @setmax:XX    - set Y-axis maximum plotting limit to XX
-# @setmim:XX    - set Y-axis mainimun plotting limit to XX
+# @setmim:XX    - set Y-axis minimum plotting limit to XX
 #
-# @setx:quantity:label:XX  - change X-axis from default time to given 
+# @setx:quantity:label:XX  - change X-axis from default time to given
 #                             quantity with provided label and scaling
-                              factor XX 
+                              factor XX
 #
-# :quantity:label:XX - name of quantity added to the plot 
+# :quantity:label:XX - name of quantity added to the plot
 #                       multiplied by XX (used for unit and sign conversion)
 #                       label can be added to clarify the meaning in plot
 #                       (otherwise default 'quantity' name will be used)
@@ -69,7 +69,7 @@
 @page: He throughput, s^{-1}
 @setx:ne_sep:n_{e,avg}^{sep}, 10^{20} m^{-3}:1.e-20
 :wll_pmp_He:He:-1.
-@page: Recombination sink, s^{-1} 
+@page: Recombination sink, s^{-1}
 @setx:ne_sep:n_{e,avg}^{sep}, 10^{20} m^{-3}:1.e-20
 :SNI_rcmb::6.242e+18
 @page: Impurity radiation, MW

@@ -28,6 +28,17 @@ ifeq ($(shell [ -e Makefile.local ] && echo yes || echo no ),yes)
   MAKES += Makefile.local
 endif
 
+# Include dependency on global SOLPS environment settings
+ifdef SOLPS_CPP
+  MAKES += ${SOLPSTOP}/Makefile
+endif
+ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/setup.csh${HOST_NAME}.${COMPILER} ] && echo yes || echo no ),yes)
+  MAKES += ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}
+endif
+ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local ] && echo yes || echo no ),yes)
+  MAKES += ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
+endif
+
 all: solps.pdf solps.ps
 
 .PHONY: bibtex thumb update_log complete force

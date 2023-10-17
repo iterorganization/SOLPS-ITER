@@ -97,7 +97,7 @@ setenv SOLPSLIB ${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}
 
 # setup files for combination of HOST_NAME and COMPILER, + local modifications if present
 if (-s ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}) then
-  echo Loading SETUP/setup.csh.${HOST_NAME}.${COMPILER}...
+  echo Loading SETUP/setup.csh.${HOST_NAME}.${COMPILER}.
   source ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}
 else
   echo File SETUP/setup.csh.${HOST_NAME}.${COMPILER} not found!
@@ -276,6 +276,12 @@ setenv LATEX `${SOLPSTOP}/scripts/which_latex`
 if ($LATEX == "") then
   setenv NO_MANUAL true
   echo 'No LaTeX executable found: Manual will not be built'
+endif
+
+# Check if CMake available for Eirene compilation
+if (! -x `which cmake`) then
+  setenv NO_CMAKE true
+  echo 'Did not find a CMake installation. Will revert to traditional Eirene compilation style'
 endif
 
 # Add any local settings if present

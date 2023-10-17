@@ -26,7 +26,7 @@ ifndef SOLPS_CPP
     MAKES += ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
   endif
 else
-  MAKES += ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER} ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
+  MAKES += ${SOLPSTOP}/Makefile ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER} ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
   ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.common.${COMPILER} ] && echo yes || echo no ),yes)
     MAKES += ${SOLPSTOP}/SETUP/config.common.${COMPILER}
   endif
@@ -1073,6 +1073,9 @@ endif
 	${MAKE} depend
 
 include ${OBJDIR}/dependencies
+ifeq ($(shell [ -e ${S45DIR}/config/dependencies.local ] && echo yes || echo no ),yes)
+include ${S45DIR}/config/dependencies.local
+endif
 
 echo:
 	@echo VPATH=${VPATH}

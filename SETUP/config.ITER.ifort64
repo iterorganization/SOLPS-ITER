@@ -49,6 +49,26 @@ LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lm -lX11 -lXext 
 endif
 NCDIR     ?= ${EBROOTNETCDFMINFORTRAN}
 
+LIBGRS     = ${GR_ROOT}/lib/libgr.a
+LIBGKS     = ${GLI_HOME}/libgks.a
+ADDLIBS    = -lgfortran
+
+#
+# Provide compiler
+#
+
+ifdef SOLPS_MPI
+FC         = mpiifort
+ifndef MPDIR
+MPDIR      = ${EBROOTIMPI}
+LD_MPI    += -Wl,-rpath,${MPDIR}/lib64
+endif
+else
+FC         = ifort
+endif
+MPI_FC     = mpiifort
+
+#
 # Preprocessor options
 #
 

@@ -46,6 +46,22 @@ LD_NAG     = -L${NAGDIR} -llapack -lblas
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 LD_MPI     = -L${MPDIR} -lmpi
 
+LIBGKS     = ${GLI_HOME}/libgks.a
+LIBGRS     = ${GR_ROOT}/libgr.a
+LIBX11     = /usr/X11R6/lib64/libX11.so
+ADDLIBS    = -lgfortran
+
+#
+# Provide compiler
+#
+
+ifdef SOLPS_MPI
+FC         = mpif90
+else
+FC         = gfortran
+endif
+MPI_FC     = mpif90
+
 #
 # Preprocessor options
 #
