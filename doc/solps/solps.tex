@@ -305,6 +305,7 @@ To best use the \SOLPSITER code suite, the user will need, locally installed:
 \item[GR] plotting library (optional, developed at FZ-J{\"u}lich, available from the IO Git repository at \href{https://git.iter.org/projects/LIB/repos/gr-software/browse}{https://git.iter.org/projects\allowbreak/LIB/repos/gr-software/browse})
 \item[GKS] graphical kernel library (available from \href{http://ngwww.ucar.edu}{http://ngwww.ucar.edu})
 \item[HDF5] data storage library (available from \href{http://support.hdfgroup.org/HDF5/}{http://support.hdfgroup.org/HDF5/})
+\item[JSON] data storage library (Fortran version, available from \href{https://jacobwilliams.github.io/json-fortran/}{https://jacobwilliams.github.io/json-fortran/})
 \item[NetCDF]\index{netcdf} storage/archival library (optional) (available from \href{http://www.unidata.ucar.edu/netcdf/}{http://www.unidata.ucar.edu/netcdf/}) (\SOLPSITER needs at least version 4)
 \item[MSCL] utility library (available from the IO Git repository at \href{https://git.iter.org/projects/LIB/repos/mscl/browse}{https://git.iter.org/projects/LIB/repos/mscl/browse})
 \item[makedepend] to build the dependencies needed by the {\tt Makefiles}
@@ -1060,6 +1061,9 @@ SOLPSTOP
 |   |   |   +---SurfaceData
 |   |   |   |   +---TRIM
 |   |   |   |   |   +---10_bins
+|   |   +---Manual
+|   |   |   +---figures
+|   |   |   +---tex
 |   |   +---scripts
 |   |   +---src.local
 |   |   +---src
@@ -20158,7 +20162,9 @@ which is defined in the
 \item[NO\_B2\_CHEM\_SPUT] \index{NO\_B2\_CHEM\_SPUT} Used to indicate that chemical sputtering is specified through {\tt Eirene} arrays instead of {\tt B2.5}
 \item[NO\_SAVE] \index{NO\_SAVE} Turning off static save of some common blocks
 \item[SOLPS4\_3] \index{SOLPS4\_3} Set internally by the {\tt Makefile} to activate code specific to the {\tt SOLPS4-5 b2sxdr} converter
+\item[USE\_EXT\_OPENMP] \index{USE\_EXT\_OPENMP} For use if {\tt B2.5-Eirene} or its components are called from within an OpenMP parallelized region inside a larger workflow
 \item[USE\_IMPGYRO] \index{USE\_IMPGYRO} Used when coupling to IMPGYRO
+\item[USE\_OPENMP] \index{USE\_OPENMP} For OpenMP specific code related to {\tt Eirene} parallelization
 \end{description}
 
 \subsection{B2.5}
@@ -20184,8 +20190,9 @@ if desired, be declared as part of either the {\tt SOLPS\_CPP} or the
 \item[NO\_21] \index{NO\_21} Do not use 21-moment model for thermal and viscous forces
 \item[NO\_IEEE] \index{NO\_IEEE} Provides replacements to IEEE non-standard arithmetic routines
 \item[NO\_F01AAF] \index{NO\_F01AAF} No {\tt NAG} routine {\tt F01AAF} --- uses its replacement instead (needed if linking with Version 17 or later of {\tt NAG})
-\item[NO\_OPENMP\_\*] \index{NO\_OPENMP} Turning off OpenMP parallelization
+\item[NO\_OPENMP\_*] \index{NO\_OPENMP} Turning off OpenMP parallelization
 \item[NO\_OPT] \index{NO\_OPT} No compiler optimization
+\item[\_OPENMP] \index{\_OPENMP} For OpenMP specific code
 \item[PAR\_OPT] \index{PAR\_OPT} Runs the code in a special interpretive parameter optimization mode
 \item[PERFMON] \index{PERFMON} Enable performance monitoring
 \item[PLPLOT] \index{PLPLOT} Use {\tt PLPLOT} instead of {\tt NCAR} for plotting
@@ -20595,6 +20602,25 @@ NO\_OPT & postprocessing/b2ytdr.F \\
 NO\_SAVE & include/BRAEIR.H \\
 NO\_SAVE & include/EIRBRA.H \\
 NO\_SAVE & include/EIRDIAG.H \\
+\_OPENMP & src/catalyst/fortranAdaptor.F90 \\
+\_OPENMP & src/driver/b2mn\_opt.F \\
+\_OPENMP & src/driver/b2mnastra.F \\
+\_OPENMP & src/driver/b2mod\_driver.F \\
+\_OPENMP & src/driver/b2obeq.F \\
+\_OPENMP & src/driver/b2obfn.F \\
+\_OPENMP & src/driver/b2oblm.F \\
+\_OPENMP & src/equations/b2npmo.F \\
+\_OPENMP & src/modules/b2mod\_openmp.F \\
+\_OPENMP & src/solvers/b2ux11p.F \\
+\_OPENMP & src/solvers/b2ux5p.F \\
+\_OPENMP & src/solvers/b2ux7p.F \\
+\_OPENMP & src/solvers/b2ux9p.F \\
+\_OPENMP & src/sources/b2stbr.F \\
+\_OPENMP & src/utility/b2mod\_illtern\_7.F \\
+\_OPENMP & src/utility/b2mod\_ilutern\_11.F \\
+\_OPENMP & src/utility/b2mod\_ilutern\_7.F \\
+\_OPENMP & src/utility/b2mod\_ilutern\_9.F \\
+\_OPENMP & src/utility/b2opd\_subsys.F \\
 PAR\_OPT & sources/b2stbc\_phys.F \\
 PAR\_OPT & transport/b2tqna.F \\
 PERFMON & utility/prgend.F \\
@@ -20653,6 +20679,7 @@ UAL\_MICRO\_VERSION & ids/b2mod\_ual\_io.F90 \\
 UAL\_MINOR\_VERSION & ids/b2mod\_ual\_io.F90 \\
 USE\_CDF\_B2STIME & modules/b2mod\_comtimpl.F \\
 USE\_CDF\_B2STIME & common/COUPLE/COMTIMPL.F \\
+USE\_EXT\_OPENMP & driver/b2mod\_driver.F \\
 USE\_IMPGYRO & driver/b2mod\_driver.F \\
 USE\_IMPGYRO & driver/b2mod\_main.F \\
 USE\_IMPGYRO & modules/b2mod\_impgyro.F \\
@@ -20673,6 +20700,7 @@ USE\_MPI & modules/b2mod\_transport\_namelist.F \\
 USE\_MPI & modules/b2mod\_user\_namelist.F \\
 USE\_MPI & modules/b2mod\_wall.F \\
 USE\_MPI & utility/xertst.F \\
+USE\_OPENMP & driver/b2mod\_driver.F \\
 USE\_PXFGETENV & b2plot/b2plot.F \\
 USE\_PXFGETENV & b2plot/initialize\_plotting.F \\
 USE\_PXFGETENV & b2plot/set\_extralabel.F \\
@@ -20723,6 +20751,7 @@ if desired, be declared as part of either the {\tt SOLPS\_CPP} or the
 
 \begin{description}
 \item[CHECKBIN] \index{CHECKBIN} Turns on debugging output to check the contents of the output binary files
+\item[NO\_JSON] \index{NO\_JSON} Turns off JSON I/O format support
 \item[TRACE] \index{TRACE} Turns on tracing output in geometry routines (set internally by the {\tt Makefile} when requesting a {\tt \_debug} compilation)
 \end{description}
 
@@ -20799,6 +20828,16 @@ MPI\_VERSION & modules/eirmod\_mpi.F90 \\
 NAGFOR & file-handling/eirmod\_openfile.f \\
 NO\_B2\_CHEM\_SPUT & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.F \\
 NO\_GETENV & file-handling/get\_solpstop.f \\
+NO\_JSON & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.F \\
+NO\_JSON & interfaces/couple\_SOLPS-ITER/if0prm\_json.f \\
+NO\_JSON & interfaces/couple\_SOLPS-ITER/wr0\_json.f \\
+NO\_JSON & modules/eirmod\_json.f \\
+NO\_JSON & startup-routines/read\_fixform.f \\
+NO\_JSON & startup-routines/read\_json.f \\
+NO\_JSON & startup-routines/read\_reaclines.f \\
+NO\_JSON & startup-routines/write\_json\_amdata.f \\
+NO\_JSON & startup-routines/write\_json\_file.f \\
+NO\_JSON & user-routines/user\_iter/eirmod\_iousr.f \\
 PGF90 & assistant/exit\_own.f \\
 PGF90 & particle-tracing/folion.F \\
 PGF90 & particle-tracing/velocs.F \\
@@ -20808,11 +20847,16 @@ TRACE & geometry/time-routines/timea.F \\
 TRACE & geometry/time-routines/eirmod\_timep.F \\
 TRACE & geometry/time-routines/eirmod\_timer.F \\
 TRACE & geometry/time-routines/timet.F \\
+USE\_EXT\_OPENMP & main-routines/eirmod\_eirene.f \\
+USE\_EXT\_OPENMP & main-routines/eirmod\_mcarlo.f \\
 USE\_MPI & assistant/eirmod\_second\_own.f \\
 USE\_MPI & assistant/exit\_own.f \\
 USE\_MPI & modules/eirmod\_mpi.F90 \\
 USE\_MPI & photons/eirmod\_phot\_reflec.f \\
 USE\_MPI & startup-routines/input.f \\
+USE\_OPENMP & assistant/eirmod\_second\_own.f \\
+USE\_OPENMP & main-routines/eirmod\_eirene.f \\
+USE\_OPENMP & main-routines/eirmod\_mcarlo.f \\
 USE\_PXFGETENV & file-handling/get\_solpstop.f \\
 WINDOWS & main-routines/eirmod\_eirene.f \\
 WINDOWS & user-routines/user\_iter/ioflush\_usr.f \\

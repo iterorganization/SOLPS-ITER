@@ -13,7 +13,7 @@ c*** 1
      ,        nstoram,ngstal,nrtal1,nreac_add,lfrm15
       logical nlscl,nltest,nlana,nldrft,nlcrr,nlerg,nlident,nlone,
      ,        nlmovie,nldfst,nlranmar,nlcascad,nloctree,nlwrmsh,
-     ,        nexvs,nltrimesh
+     ,        nexvs,nltrimesh,nlsoledge
       character txtrun*71
 
 c*** 2
@@ -272,7 +272,7 @@ c*** 10e
 c*** 10f
 
       integer ispsrf(nads), iptyp(nads), ipspz(nads), isptyp(nads),
-     ,        nsps(nads), isrfcl(nads), idirec(nads)
+     ,        nsps(nads), isrfcl(nads), idirec(nads), ispopt(nads)
       real spcmn(nads), spcmx(nads), spcsh(nads), spcpx(nads),
      ,     spcpy(nads), spcps(nads), spcvx(nads), spcvy(nads),
      ,     spcvz(nads)
@@ -439,7 +439,7 @@ c*** b2ah.dat
      ,  ighw,iihw,ighc,iihc,nadvi,nclvi,nalvi,nadsi,nalsi,nadspc,
      ,  iadve,iadvs,iadvt,iadrc,iclve,iclvs,iclvt,iclrc,iadse,
      ,  iadss,iadst,iadsc,
-     ,  ispsrf,iptyp,ipspz,isptyp,nsps,isrfcl,idirec,
+     ,  ispsrf,iptyp,ipspz,isptyp,nsps,isrfcl,idirec,ispopt,
      ,  nvolpr,ntlv,nflgv,nspzv1,nspzv2,ntlvf,nsurpr,
      ,  nsrf,nflgs,nspzs1,nspzs2,nsptal,ntls,nplinr,nplotr,npldlr,
      ,  nplinp,nplotp,npldlp,
@@ -519,7 +519,7 @@ c*** b2ah.dat
       common/uinlog/
      ,  nlscl,nltest,nlana,nldrft,nlcrr,nlerg,nlident,nlone,
      ,  nlmovie,nldfst,nlranmar,nlcascad,nloctree,
-     ,  nlwrmsh,nexvs,nltrimesh,
+     ,  nlwrmsh,nexvs,nltrimesh,nlsoledge,
      ,  nlrad,nlslb,nlcrc,nlell,nltri,nlplg,nlfem,nltet,nlgen,
      ,  nlpol,nlply,nlpla,nlplp,nltor,nltrz,nltra,nltrt,
      ,  nlmlt,nladd,lconst,nltrim,nlavrp,nlavrt,nlsymp,nlsymt,
