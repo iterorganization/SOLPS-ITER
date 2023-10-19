@@ -528,8 +528,8 @@ if plot_type == 9:
             fcVx_first_point = fcVx1[i] - 1
             fcVx_second_point = fcVx2[i] - 1
 
-            first_point = [vxX[fcVx_first_point], vxY[fcVx_first_point]]
-            second_point = [vxX[fcVx_second_point], vxY[fcVx_second_point]]
+            first_point = [vxX[fcVx_first_point] * 1000, vxY[fcVx_first_point] * 1000]
+            second_point = [vxX[fcVx_second_point] * 1000, vxY[fcVx_second_point] * 1000]
             face_points = np.array([first_point, second_point])
 
             np.savetxt(f, face_points, fmt='%.8f', delimiter='    ')
