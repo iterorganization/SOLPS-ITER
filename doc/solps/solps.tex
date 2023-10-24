@@ -19944,6 +19944,9 @@ Additionally, system-wide compiler flags can be provided by means of the
 {\tt FFLAGSEXTRA} environment variable in the same files.
 
 \begin{description}
+\item[AL\_MAJOR\_VERSION] \index{AL\_MAJOR\_VERSION} Major version number of the AL (IMAS Access Layer) library to which the code is linked (set internally by the configuration files)
+\item[AL\_MICRO\_VERSION] \index{AL\_MICRO\_VERSION} Micro version number of the AL (IMAS Access Layer) library to which the code is linked (set internally by the configuration files)
+\item[AL\_MINOR\_VERSION] \index{AL\_MINOR\_VERSION} Minor version number of the AL (IMAS Access Layer) library to which the code is linked (set internally by the configuration files)
 \item[CATALYST] \index{CATALYST} Turns on the Paraview Catalyst utility (see the SOLPS-GUI manual for full details)
 \item[DIMENSIONS\_MODULE] \index{DIMENSIONS\_MODULE} Indicates whether the \SOLPSITER version is one that uses a {\tt b2mod\_dimensions.F} module file instead of the {\tt DIMENSIONS.F} include file (set internally by the configuration files)
 \item[COMPILER\_MAJOR\_VERSION] \index{COMPILER\_MAJOR\_VERSION} Major version number of the compiler being used (set internally by the configuration files)
@@ -19976,9 +19979,6 @@ Additionally, system-wide compiler flags can be provided by means of the
 \item[NO\_NAG] \index{NO\_NAG} No {\tt NAG} libraries available
 \item[PGF90] \index{PGF90} To be used when compiling with the Portland Group {\tt Fortran-90} compiler
 \item[PSR] \index{PSR} Specific to the Pacific Sierra VAST compiler
-\item[UAL\_MAJOR\_VERSION] \index{UAL\_MAJOR\_VERSION} Major version number of the UAL (Universal Access Layer) library to which the code is linked (set internally by the configuration files)
-\item[UAL\_MICRO\_VERSION] \index{UAL\_MICRO\_VERSION} Micro version number of the UAL (Universal Access Layer) library to which the code is linked (set internally by the configuration files)
-\item[UAL\_MINOR\_VERSION] \index{UAL\_MINOR\_VERSION} Minor version number of the UAL (Universal Access Layer) library to which the code is linked (set internally by the configuration files)
 \item[USE\_MPI] \index{USE\_MPI} Set internally by the {\tt Makefile} and used to identify code necessary for MPI applications
 \item[USE\_PXFGETENV] \index{USE\_PXFGETENV} Uses {\tt PXFGETENV} instead of {\tt GETENV}
 \item[WINDOWS] \index{WINDOWS} To be used when compiling on a Windows system
@@ -20112,6 +20112,10 @@ We list below where the {\tt DivGeo} compilation switches are used.
     \multicolumn{2}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
+       AL\_MAJOR\_VERSION & equtrn/src/rdids.f \\
+       AL\_MAJOR\_VERSION & equtrn/src/wrids.f \\
+       AL\_MICRO\_VERSION & equtrn/src/rdids.f \\
+       AL\_MINOR\_VERSION & equtrn/src/rdids.f \\
        CONSTANTS\_PROVIDED & equtrn/src/eqdim.f90 \\
        GGD\_MAJOR\_VERSION & equtrn/src/wrids.f \\
        GGD\_MICRO\_VERSION & equtrn/src/wrids.f \\
@@ -20122,19 +20126,12 @@ We list below where the {\tt DivGeo} compilation switches are used.
        IMAS\_MAJOR\_VERSION & equtrn/src/ids2dg.f \\
        IMAS\_MAJOR\_VERSION & equtrn/src/rdids.f \\
        IMAS\_MAJOR\_VERSION & equtrn/src/wrids.f \\
-       IMAS\_MICRO\_VERSION & equtrn/src/wrids.f \\
        IMAS\_MINOR\_VERSION & equtrn/src/eqdim.f90 \\
        IMAS\_MINOR\_VERSION & equtrn/src/rdids.f \\
        IMAS\_MINOR\_VERSION & equtrn/src/wrids.f \\
        NO\_GETENV & equtrn/src/dg2ids.f \\
        NO\_GETENV & equtrn/src/ids2dg.f \\
        NO\_GETENV & equtrn/src/wrids.f \\
-       UAL\_MAJOR\_VERSION & equtrn/src/rdids.f \\
-       UAL\_MAJOR\_VERSION & equtrn/src/wrids.f \\
-       UAL\_MICRO\_VERSION & equtrn/src/rdids.f \\
-       UAL\_MICRO\_VERSION & equtrn/src/wrids.f \\
-       UAL\_MINOR\_VERSION & equtrn/src/rdids.f \\
-       UAL\_MINOR\_VERSION & equtrn/src/wrids.f \\
        USE\_PXFGETENV & equtrn/src/dg2ids.f \\
        USE\_PXFGETENV & equtrn/src/ids2dg.f \\
        USE\_PXFGETENV & equtrn/src/wrids.f \\
@@ -20197,7 +20194,6 @@ if desired, be declared as part of either the {\tt SOLPS\_CPP} or the
 \item[PERFMON] \index{PERFMON} Enable performance monitoring
 \item[PLPLOT] \index{PLPLOT} Use {\tt PLPLOT} instead of {\tt NCAR} for plotting
 %\item[SCL\_IMP\_RCI] \index{SCL\_IMP\_RCI} Toggles scaling of impurities tallies
-\item[UAL\_MAJOR\_VERSION] \index{UAL\_MAJOR\_VERSION} Major version number of the UAL (Universal Access Layer) library to which the code is linked (set internally by the configuration files)
 \item[USE\_CDF\_B2STIME] \index{USE\_CDF\_B2STIME} Specific for \SOLPSfour {\tt CDF} tallies
 \item[WANT\_PROCESS] \index{WANT\_PROCESS} Enables the code for the \SOLPSfive to \SOLPSfour converter
 \item[WOS] \index{WOS} Uses the {\tt WOS} libraries for accessing experimental data at IPP
@@ -20266,6 +20262,8 @@ ALLOCATE\_AND\_NAMELIST & modules/b2mod\_user\_namelist.F \\
 ALLOCATE\_AND\_NAMELIST & modules/b2mod\_wall.F \\
 ALLOCATE\_AND\_NAMELIST & postprocessing/b2yt\_wall.F \\
 ALLOCATE\_AND\_NAMELIST & sources/b2stbr.F \\
+AL\_MAJOR\_VERSION & ids/b2mod\_ual.F90 \\
+AL\_MINOR\_VERSION & ids/b2mod\_ual.F90 \\
 AMNS & preprocessing/b2ardr.F \\
 AMNS & utility/ratadas.F \\
 ASTRA & modules/b2mod\_astra\_to\_b2.F \\
@@ -20673,10 +20671,6 @@ SOLPS4\_3 & modules/b2mod\_diag.F \\
 SOLPS4\_3 & modules/b2mod\_mwti.F90 \\
 SOLPS4\_3 & modules/b2mod\_neutrals\_namelist.F \\
 SOLPS4\_3 & sources/eirene\_f30f31.F \\
-UAL\_MAJOR\_VERSION & ids/b2mod\_ual.F90 \\
-UAL\_MAJOR\_VERSION & ids/b2mod\_ual\_io.F90 \\
-UAL\_MICRO\_VERSION & ids/b2mod\_ual\_io.F90 \\
-UAL\_MINOR\_VERSION & ids/b2mod\_ual\_io.F90 \\
 USE\_CDF\_B2STIME & modules/b2mod\_comtimpl.F \\
 USE\_CDF\_B2STIME & common/COUPLE/COMTIMPL.F \\
 USE\_EXT\_OPENMP & driver/b2mod\_driver.F \\

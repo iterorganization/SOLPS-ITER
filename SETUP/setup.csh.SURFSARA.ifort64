@@ -61,8 +61,8 @@ endif
 ## Build with IMAS if imas module is loaded
 #ifdef IMAS_PREFIX
 #  SOLPS_CPP += -DIMAS
-#  LD_UAL     = `pkg-config imas-lowlevel imas-ifort --libs`
-#  export LD_UAL
+#  LD_AL      = `pkg-config imas-lowlevel imas-ifort --libs`
+#  export LD_AL
 #endif
 
 # compilers
