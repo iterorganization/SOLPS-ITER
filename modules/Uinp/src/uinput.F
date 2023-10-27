@@ -3,6 +3,7 @@
       use b2mod_layer
      , , only: ntrack, nalloys
       use b2mod_xerset
+      use b2mod_version
       use eirmod_solps
       use helper
 
@@ -663,7 +664,7 @@ c*** Modify the input file for B2, if possible
           write(*,*) 'No b2.neutrals.parameters found'
           write(*,*) 'Writing b2.neutrals.parameters.stencil'
           open(99,status='SCRATCH')
-          write(99,'(a)') 'VERSION03.002.000'
+          write(99,'(a)') 'VERSION'//newversion
           write(99,*) '&NEUTRALS'
           write(99,*) '/'
           rewind(99)
@@ -733,7 +734,7 @@ cnh b2.neutrals.parameters for the hybrid model
           write(*,*) 'No b2.boundary.parameters found'
           write(*,*) 'Writing b2.boundary.parameters.stencil'
           open(99,status='SCRATCH')
-          write(99,'(a)') 'VERSION03.002.000'
+          write(99,'(a)') 'VERSION'//newversion
           write(99,*) '&BOUNDARY'
           write(99,*) '/'
           rewind(99)
