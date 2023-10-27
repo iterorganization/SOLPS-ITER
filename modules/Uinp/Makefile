@@ -17,6 +17,7 @@ SRCDIR  = ${SRCUIN}/src
 BASEDIR = ${SRCUIN}
 B2DIR   = ${SOLPSTOP}/modules/B2.5
 EIRDIR  = ${SOLPSTOP}/modules/Eirene
+CRRDIR  = ${SOLPSTOP}/modules/Carre2
 
 MAKES = ${BASEDIR}/Makefile
 # Include global SOLPS compiler settings
@@ -86,6 +87,7 @@ ifeq ($(shell [ -e ${EIRDIR}/src/common ] && echo yes || echo no ),yes)
 EIRINC += -I${EIRDIR}/src/common
 endif
 EIRINC += -I${EIROBJ}
+CRRINC += -I${CRRDIR}/src90/include
 
 include ${SRCUIN}/config/config.${HOST_NAME}.${COMPILER}
 MAKES += ${SRCUIN}/config/config.${HOST_NAME}.${COMPILER}

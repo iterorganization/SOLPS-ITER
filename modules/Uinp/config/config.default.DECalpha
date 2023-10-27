@@ -9,7 +9,7 @@ FC       = f90
 CPP      = /usr/ucb/cpp -C
 MOD      = mod
 FFLAGS   = -i4 -fast
-INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
+INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC} ${CRRINC}
 COMPILE  = ${FC} -c ${FFLAGS}
 
 LDLIBS   = ${LD_MSCL} ${LD_NAG}

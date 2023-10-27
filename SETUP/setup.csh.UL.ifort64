@@ -8,7 +8,7 @@ module use /opt/pkg/ITER/modules/all
 setenv HOST_NAME ITER
 
 # Modules needed by SOLPS-ITER
-module load IMAS/3.38.1-4.11.1-2020b
+module load IMAS/3.38.1-4.11.4-2020b
 module load GGD/1.10.3-intel-2020b-DD-3.38.1
 module load AMNS/1.4.0-intel-2020b-DD-3.38.1
 module load Viz/2.6.1-intel-2020b

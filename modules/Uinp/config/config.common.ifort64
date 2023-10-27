@@ -24,7 +24,7 @@ ifdef SOLPS_OPENMP
  endif
 endif
 
-INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
+INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC} ${CRRINC}
 COMPILE  = ${FC} -c ${FFLAGS} -module ${OBJDIR}
 
 MOD      = mod

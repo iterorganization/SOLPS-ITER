@@ -383,23 +383,23 @@ c!###}
         goto 9999
       end if !}
 
-!      write (*,*) 'Chain info'
-!      write (*,*) 'nr. of chains = ', irt
-!      k=1
-!      do j = 1,irt
-!        write (*,*) 'Chain ', j, ' has ', ind(k), ' points.'
-!        do i = 1, ind(k)
-!          l = ind(k+i)
-!          write (*,*) 'i, elm, p1(), p2() ',i, l, p1(1:2,l), p2(1:2,l)
-!        enddo
-!        k = k + ind(k) + 1
-!      enddo
-!      write (*,*) 'indnss'
-!      do i = 1,max(nnx,1)
-!        write (*,*) indnss(i)
-!      enddo
-
-
+#ifdef DBG
+      write (*,*) 'Chain info'
+      write (*,*) 'nr. of chains = ', irt
+      k=1
+      do j = 1,irt
+        write (*,*) 'Chain ', j, ' has ', ind(k), ' points.'
+        do i = 1, ind(k)
+          l = ind(k+i)
+          write (*,*) 'i, elm, p1(), p2() ',i, l, p1(1:2,l), p2(1:2,l)
+        enddo
+        k = k + ind(k) + 1
+      enddo
+      write (*,*) 'indnss'
+      do i = 1,max(nnx,1)
+        write (*,*) indnss(i)
+      enddo
+#endif
 
       goto 9999
 c=======================================================================
