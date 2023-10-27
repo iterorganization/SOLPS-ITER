@@ -12,7 +12,7 @@ FFLAGS  += -g -O0
 else
 FFLAGS  += Kfast,eval -x- -O
 endif
-INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
+INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC} ${CRRINC}
 COMPILE  = ${FC} -c ${FFLAGS}
 CPP      = /lib/cpp -C -traditional
 MOD      = mod

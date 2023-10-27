@@ -590,7 +590,8 @@ c**  atomic species cards
       write(iunoo,707) natmi
       do iatm=1,natmi !{
         if (nchara(iatm).eq.1) then
-          nrc=nrca(iatm)+nplsh
+!nh          nrc=nrca(iatm)+nplsh
+          nrc=nrca(iatm)
           ngen=-1
         else
           nrc=nrca(iatm)
@@ -635,37 +636,38 @@ c**  atomic species cards
         end do !}
 
 !nh     neutral-neutral collisions with fluid atom background
-        ihyb=0
-        do k=1,nrca(iatm)
-          if (ibgka(iatm,k).ne.0) then
-            ibgk=floor(real(ibgka(iatm,k))/100.)
-            ityp=ibgka(iatm,k)-ibgk*100-10
-            if (ityp.eq.1) then ! collision with atom
-              if (nchara(ibgk).eq.1) then ! hydrogenic
-                ihyb=ihyb+1
-                ibulk=(nplsi+ihyb)*100+14
-                iscd2=ibulk
-                if(nmseca(iatm).le.2) then !{
-                  write(iunoo,707) ireaca(iatm,k),ibulk,
-     ,                 iscd1a(iatm,k),iscd2,
-     ,                 iscdea(iatm,k),iestma(iatm,k),0
-                else if (nmseca(iatm).eq.3) then !}{
-                  write(iunoo,707) ireaca(iatm,k),ibulk,
-     ,                 iscd1a(iatm,k),iscd2,iscd3a(iatm,k),
-     ,                 iscdea(iatm,k),iestma(iatm,k),0
-                else if (nmseca(iatm).eq.4) then !}{
-                  write(iunoo,707) ireaca(iatm,k),ibulk,
-     ,                 iscd1a(iatm,k),iscd2,
-     ,                 iscd3a(iatm,k),iscd4a(iatm,k),
-     ,                 iscdea(iatm,k),iestma(iatm,k),0
-                end if !} 
-                write(iunoo,703) eeleca(iatm,k),ebulka(iatm,k),
-     ,            escd1a(iatm,k),escd2a(iatm,k),freaca(iatm,k),
-     ,            edpota(iatm,k)
-              end if
-            end if
-          end if                       
-        end do
+!nh     for now excluding these collisions, because EIRENE is not yet working for them
+!nh        ihyb=0
+!nh        do k=1,nrca(iatm)
+!nh          if (ibgka(iatm,k).ne.0) then
+!nh            ibgk=floor(real(ibgka(iatm,k))/100.)
+!nh            ityp=ibgka(iatm,k)-ibgk*100-10
+!nh            if (ityp.eq.1) then ! collision with atom
+!nh              if (nchara(ibgk).eq.1) then ! hydrogenic
+!nh                ihyb=ihyb+1
+!nh                ibulk=(nplsi+ihyb)*100+14
+!nh                iscd2=ibulk
+!nh                if(nmseca(iatm).le.2) then !{
+!nh                  write(iunoo,707) ireaca(iatm,k),ibulk,
+!nh     ,                 iscd1a(iatm,k),iscd2,
+!nh     ,                 iscdea(iatm,k),iestma(iatm,k),0
+!nh                else if (nmseca(iatm).eq.3) then !}{
+!nh                  write(iunoo,707) ireaca(iatm,k),ibulk,
+!nh     ,                 iscd1a(iatm,k),iscd2,iscd3a(iatm,k),
+!nh     ,                 iscdea(iatm,k),iestma(iatm,k),0
+!nh                else if (nmseca(iatm).eq.4) then !}{
+!nh                  write(iunoo,707) ireaca(iatm,k),ibulk,
+!nh     ,                 iscd1a(iatm,k),iscd2,
+!nh     ,                 iscd3a(iatm,k),iscd4a(iatm,k),
+!nh     ,                 iscdea(iatm,k),iestma(iatm,k),0
+!nh                end if !} 
+!nh                write(iunoo,703) eeleca(iatm,k),ebulka(iatm,k),
+!nh     ,            escd1a(iatm,k),escd2a(iatm,k),freaca(iatm,k),
+!nh     ,            edpota(iatm,k)
+!nh              end if
+!nh            end if
+!nh          end if                       
+!nh        end do
 
       end do !}
 
@@ -675,7 +677,8 @@ c**  neutral molecules species cards
       write(iunoo,707) nmoli
       do imol=1,nmoli !{
         if (ncharm(imol).eq.2) then
-          nrc=nrcm(imol)+nplsh
+!nh          nrc=nrcm(imol)+nplsh
+          nrc=nrcm(imol)
         else
           nrc=nrcm(imol)
         end if
@@ -713,36 +716,37 @@ c**  neutral molecules species cards
         end do !}
 
 !nh     neutral-neutral collisions with fluid atom background
-        ihyb=0
-        do k=1,nrcm(imol)
-          if (ibgkm(imol,k).ne.0) then
-            ibgk=floor(real(ibgkm(imol,k))/100.)
-            ityp=ibgkm(imol,k)-ibgk*100-10
-            if (ityp.eq.1) then ! collision with atom
-              if (nchara(ibgk).eq.1) then ! hydrogenic
-                ihyb=ihyb+1
-                ibulk=(nplsi+ihyb)*100+14
-                iscd2=ibulk
-                if(nmsecm(imol).le.2) then !{
-                  write(iunoo,707) ireacm(imol,k),ibulk,
-     ,                 iscd1m(imol,k),iscd2,
-     ,                 iscdem(imol,k),iestmm(imol,k),0
-                else if (nmsecm(imol).eq.3) then !}{
-                  write(iunoo,707) ireacm(imol,k),ibulk,
-     ,                 iscd1m(imol,k),iscd2,iscd3m(imol,k),
-     ,                 iscdem(imol,k),iestmm(imol,k),0
-                else if (nmsecm(imol).eq.4) then !}{
-                  write(iunoo,707) ireacm(imol,k),ibulk,
-     ,                 iscd1m(imol,k),iscd2,
-     ,                 iscd3a(imol,k),iscd4m(imol,k),
-     ,                 iscdem(imol,k),iestmm(imol,k),0
-                end if !} 
-                write(iunoo,703) eelecm(imol,k),ebulkm(imol,k),
-     ,                     escd1m(imol,k),escd2m(imol,k),freacm(imol,k)
-              end if
-            end if
-          end if                       
-        end do
+!nh     for now excluding these collisions, because EIRENE is not yet working for them
+!nh        ihyb=0
+!nh        do k=1,nrcm(imol)
+!nh          if (ibgkm(imol,k).ne.0) then
+!nh            ibgk=floor(real(ibgkm(imol,k))/100.)
+!nh            ityp=ibgkm(imol,k)-ibgk*100-10
+!nh            if (ityp.eq.1) then ! collision with atom
+!nh              if (nchara(ibgk).eq.1) then ! hydrogenic
+!nh                ihyb=ihyb+1
+!nh                ibulk=(nplsi+ihyb)*100+14
+!nh                iscd2=ibulk
+!nh                if(nmsecm(imol).le.2) then !{
+!nh                  write(iunoo,707) ireacm(imol,k),ibulk,
+!nh     ,                 iscd1m(imol,k),iscd2,
+!nh     ,                 iscdem(imol,k),iestmm(imol,k),0
+!nh                else if (nmsecm(imol).eq.3) then !}{
+!nh                  write(iunoo,707) ireacm(imol,k),ibulk,
+!nh     ,                 iscd1m(imol,k),iscd2,iscd3m(imol,k),
+!nh     ,                 iscdem(imol,k),iestmm(imol,k),0
+!nh                else if (nmsecm(imol).eq.4) then !}{
+!nh                  write(iunoo,707) ireacm(imol,k),ibulk,
+!nh     ,                 iscd1m(imol,k),iscd2,
+!nh     ,                 iscd3a(imol,k),iscd4m(imol,k),
+!nh     ,                 iscdem(imol,k),iestmm(imol,k),0
+!nh                end if !} 
+!nh                write(iunoo,703) eelecm(imol,k),ebulkm(imol,k),
+!nh     ,                     escd1m(imol,k),escd2m(imol,k),freacm(imol,k)
+!nh              end if
+!nh            end if
+!nh          end if                       
+!nh        end do
       end do !}
 
 c**  test particle ions species cards

@@ -3,6 +3,7 @@ c  VERSION : 01.04.2005 14:26
 c*** The basic data for uinput
 
 #include "COUPLE/KOPPLDIM.F"
+#include "CARREDIM.F"
 
 c=======================================================================
 c*** Temporary assignment - the max. number of photon species
@@ -23,11 +24,10 @@ c***  ntrgdflt  : default number of targets depending on the topology
 c***  ntrgts    : maximum number of targets
 c***  nntrian   : maximum number of triangular mesh nodes for input
       integer,parameter::nnpr=6,nnptseg=6,ntrgts=4,namdfs=20,nntrian=1
-      integer,parameter::nmreg=6,npmamx=2000,nrmamx=200
       integer mnpr,mnptseg,npr(nnpr),nptseg(nnptseg),ntrgdflt,namdf
-      integer nppol(nmreg),nprad(nmreg),nnreg,
-     .        cflags(5,npmamx,nrmamx,nmreg),
-     .        fdegen(4,npmamx,nrmamx,nmreg)
+      integer nppol(nregmx),nprad(nregmx),nnreg,
+     .        cflags(5,npmamx,nrmamx,nregmx),
+     .        fdegen(4,npmamx,nrmamx,nregmx)
       integer ncells,nicells,nbcells,nfaces,ndfaces
       integer carre_mode,grid_mode
       character*4 topo
@@ -481,7 +481,6 @@ c*** names of the models
       integer ndnmdlp,ldnmdlp
       parameter (ndnmdlp=11,ldnmdlp=10)
       character*(ldnmdlp) cdnmdlp_sel(ndnmdlp)
-
 
 c-----------------------------------------------------------------------
 c*** Data for postprocessing windows: max. number of them

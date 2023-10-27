@@ -307,7 +307,7 @@ endif
 update_solps_run_status -n "Submitted at `date`"
 
 if ($chain == "unset") then
-  sbatch $NAME
+  sbatch --export=ALL $NAME
 else
-  sbatch --dependency=afterok:${chain} $NAME
+  sbatch --export=ALL --dependency=afterok:${chain} $NAME
 endif
