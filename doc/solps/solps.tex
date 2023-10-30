@@ -20086,7 +20086,6 @@ We list below where the {\tt DivGeo} compilation switches are used.
        IMAS\_MAJOR\_VERSION & equtrn/src/ids2dg.f \\
        IMAS\_MAJOR\_VERSION & equtrn/src/rdids.f \\
        IMAS\_MAJOR\_VERSION & equtrn/src/wrids.f \\
-       IMAS\_MICRO\_VERSION & equtrn/src/wrids.f \\
        IMAS\_MINOR\_VERSION & equtrn/src/eqdim.f90 \\
        IMAS\_MINOR\_VERSION & equtrn/src/rdids.f \\
        IMAS\_MINOR\_VERSION & equtrn/src/wrids.f \\
@@ -20096,9 +20095,7 @@ We list below where the {\tt DivGeo} compilation switches are used.
        UAL\_MAJOR\_VERSION & equtrn/src/rdids.f \\
        UAL\_MAJOR\_VERSION & equtrn/src/wrids.f \\
        UAL\_MICRO\_VERSION & equtrn/src/rdids.f \\
-       UAL\_MICRO\_VERSION & equtrn/src/wrids.f \\
        UAL\_MINOR\_VERSION & equtrn/src/rdids.f \\
-       UAL\_MINOR\_VERSION & equtrn/src/wrids.f \\
        USE\_PXFGETENV & equtrn/src/dg2ids.f \\
        USE\_PXFGETENV & equtrn/src/ids2dg.f \\
        USE\_PXFGETENV & equtrn/src/wrids.f \\
@@ -20152,13 +20149,13 @@ if desired, be declared as part of either the {\tt SOLPS\_CPP} or the
 \item[NO\_21] \index{NO\_21} Do not use 21-moment model for thermal and viscous forces
 \item[NO\_IEEE] \index{NO\_IEEE} Provides replacements to IEEE non-standard arithmetic routines
 \item[NO\_F01AAF] \index{NO\_F01AAF} No {\tt NAG} routine {\tt F01AAF} --- uses its replacement instead (needed if linking with Version 17 or later of {\tt NAG})
-\item[NO\_OPENMP\_\*] \index{NO\_OPENMP} Turning off OpenMP parallelization
+\item[NO\_OPENMP\_*] \index{NO\_OPENMP} Turning off OpenMP parallelization
 \item[NO\_OPT] \index{NO\_OPT} No compiler optimization
+\item[\_OPENMP] \index{\_OPENMP} For OpenMP specific code
 \item[PAR\_OPT] \index{PAR\_OPT} Runs the code in a special interpretive parameter optimization mode
 \item[PERFMON] \index{PERFMON} Enable performance monitoring
 \item[PLPLOT] \index{PLPLOT} Use {\tt PLPLOT} instead of {\tt NCAR} for plotting
 %\item[SCL\_IMP\_RCI] \index{SCL\_IMP\_RCI} Toggles scaling of impurities tallies
-\item[UAL\_MAJOR\_VERSION] \index{UAL\_MAJOR\_VERSION} Major version number of the UAL (Universal Access Layer) library to which the code is linked (set internally by the configuration files)
 \item[USE\_CDF\_B2STIME] \index{USE\_CDF\_B2STIME} Specific for \SOLPSfour {\tt CDF} tallies
 \item[WANT\_PROCESS] \index{WANT\_PROCESS} Enables the code for the \SOLPSfive to \SOLPSfour converter
 \item[WOS] \index{WOS} Uses the {\tt WOS} libraries for accessing experimental data at IPP
@@ -20563,6 +20560,25 @@ NO\_OPT & postprocessing/b2ytdr.F \\
 NO\_SAVE & include/BRAEIR.H \\
 NO\_SAVE & include/EIRBRA.H \\
 NO\_SAVE & include/EIRDIAG.H \\
+\_OPENMP & src/catalyst/fortranAdaptor.F90 \\
+\_OPENMP & src/driver/b2mn\_opt.F \\
+\_OPENMP & src/driver/b2mnastra.F \\
+\_OPENMP & src/driver/b2mod\_driver.F \\
+\_OPENMP & src/driver/b2obeq.F \\
+\_OPENMP & src/driver/b2obfn.F \\
+\_OPENMP & src/driver/b2oblm.F \\
+\_OPENMP & src/equations/b2npmo.F \\
+\_OPENMP & src/modules/b2mod\_openmp.F \\
+\_OPENMP & src/solvers/b2ux11p.F \\
+\_OPENMP & src/solvers/b2ux5p.F \\
+\_OPENMP & src/solvers/b2ux7p.F \\
+\_OPENMP & src/solvers/b2ux9p.F \\
+\_OPENMP & src/sources/b2stbr.F \\
+\_OPENMP & src/utility/b2mod\_illtern\_7.F \\
+\_OPENMP & src/utility/b2mod\_ilutern\_11.F \\
+\_OPENMP & src/utility/b2mod\_ilutern\_7.F \\
+\_OPENMP & src/utility/b2mod\_ilutern\_9.F \\
+\_OPENMP & src/utility/b2opd\_subsys.F \\
 PAR\_OPT & sources/b2stbc\_phys.F \\
 PAR\_OPT & transport/b2tqna.F \\
 PERFMON & utility/prgend.F \\
@@ -20616,9 +20632,7 @@ SOLPS4\_3 & modules/b2mod\_mwti.F90 \\
 SOLPS4\_3 & modules/b2mod\_neutrals\_namelist.F \\
 SOLPS4\_3 & sources/eirene\_f30f31.F \\
 UAL\_MAJOR\_VERSION & ids/b2mod\_ual.F90 \\
-UAL\_MAJOR\_VERSION & ids/b2mod\_ual\_io.F90 \\
-UAL\_MICRO\_VERSION & ids/b2mod\_ual\_io.F90 \\
-UAL\_MINOR\_VERSION & ids/b2mod\_ual\_io.F90 \\
+UAL\_MINOR\_VERSION & ids/b2mod\_ual.F90 \\
 USE\_CDF\_B2STIME & modules/b2mod\_comtimpl.F \\
 USE\_CDF\_B2STIME & common/COUPLE/COMTIMPL.F \\
 USE\_IMPGYRO & driver/b2mod\_driver.F \\
@@ -20641,6 +20655,7 @@ USE\_MPI & modules/b2mod\_transport\_namelist.F \\
 USE\_MPI & modules/b2mod\_user\_namelist.F \\
 USE\_MPI & modules/b2mod\_wall.F \\
 USE\_MPI & utility/xertst.F \\
+USE\_OPENMP & driver/b2mod\_driver.F \\
 USE\_PXFGETENV & b2plot/b2plot.F \\
 USE\_PXFGETENV & b2plot/initialize\_plotting.F \\
 USE\_PXFGETENV & b2plot/set\_extralabel.F \\

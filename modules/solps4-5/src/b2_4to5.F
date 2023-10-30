@@ -2971,7 +2971,7 @@ c
       write(34,'(a,1pe9.2,a)') 'NEUT_SCL_LIM=',neut_scl_lim,','
       if(n_spcsrf_4.gt.0) then !DPC
         write(34,'(a,i2,a)') 'N_SPCSRF=',n_spcsrf_4,','
-        ii=minloc(l_spcsrf_4)
+        ii=minloc(abs(l_spcsrf_4))
         if (ii(1).eq.1) then
           is = 0
         else if (l_spcsrf_4(ii(1)).eq.0) then
