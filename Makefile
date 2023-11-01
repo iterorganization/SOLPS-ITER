@@ -682,7 +682,7 @@ ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version.mk: ${MAKES}
 debug: solps_debug
 
 %_debug:
-	${MAKE} $(@:%_debug=%) ${OPT_DBG} SOLPS_DEBUG=yes
+	${MAKE} $(@:%_debug=%) SOLPS_DEBUG=yes
 
 
 # CI build tests
