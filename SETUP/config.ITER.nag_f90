@@ -47,6 +47,16 @@ ifdef NCARG_ROOT
 LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lXrender -lbz2 -lz # for NCARG v6.x.x
 endif
 
+LIBGKS     = ${GLI_HOME}/libgks.a
+LIBGRS     = ${GR_ROOT}/lib/libgr.a
+ADDLIBS    = -lgfortran -lXmu
+
+#
+# Provide compiler
+#
+
+FC         = nagfor
+
 #
 # Preprocessor options
 #
@@ -205,7 +215,6 @@ export LD_NAG
 export LD_MDSPLUS
 export LD_SONNET
 export LD_MPI
-export LD_AL
 
 export NODENAME
 export SOLPS_CPP

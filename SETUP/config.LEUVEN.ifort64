@@ -61,6 +61,19 @@ LD_MDSPLUS =
 LD_SONNET  = -L${STGDIR} -lsonnet -lstdc++
 LD_MPI     = 
 
+LIBGKS     = ${STGDIR}/libgks.a
+LIBGRS     = ${STGDIR}/libgr.a
+
+#
+# Provide compiler
+#
+
+ifdef SOLPS_MPI
+FC         = mpiifort
+else
+FC         = ifort
+endif
+MPI_FC     = mpiifort
 
 #
 # Preprocessor options

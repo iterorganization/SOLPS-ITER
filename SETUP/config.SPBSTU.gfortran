@@ -38,7 +38,6 @@
  MDSPLUS_DIR ?= ${SOLPSTOP}/../${COMPILER}/MDSPLUS
        MPDIR ?=
 
-
 #
 # Variables of linking, using pkg-config
 #
@@ -58,6 +57,23 @@ ifdef NCARG_ROOT
 LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lz -lXrender -lbz2 -ldl # for NCARG v6.x.x
 endif
 #LD_MPI     = -lmpi2
+
+LIBGKS     = ${GLI_HOME}/lib/libgks.a
+LIBGRS     = ${GR_ROOT}/lib/libgr.a
+ADDLIBS    = -lXmu -ldl
+
+#
+# Provide compiler
+#
+
+ifdef SOLPS_MPI
+FC         = mpif90
+MPDIR     ?= ${I_MPI_ROOT}
+LD_MPI    ?= -L${MPDIR}/lib64
+else
+FC         = gfortran
+endif
+MPI_FC     = mpif90
 
 #
 # Preprocessor options

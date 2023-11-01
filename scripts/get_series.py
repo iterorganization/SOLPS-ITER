@@ -8,11 +8,11 @@ DESCRIPTION
 This script gets the average data from last_2d raw output files (last_2d_out) for every run in the series
 the results are concatenated and written to the output file named after the series
 
-The script work is governed by several command files that should be present in the directory where 
+The script work is governed by several command files that should be present in the directory where
 the script is executed:
 
-series.exe      :  the file that contains the series name and mapping of the runs composing it. 
-                
+series.exe      :  the file that contains the series name and mapping of the runs composing it.
+
     Syntax:
         series  : "Series_name" : "key"
                       the output data will be called Series_name.dat
@@ -24,7 +24,7 @@ series.exe      :  the file that contains the series name and mapping of the run
                       individual runs in the output file will be marked via run_name
                       the run_path is local or absolute path to the associated run data.
 
-get_series.exe.cmd  :  similar to the formatted last_2d output (description can be found in the example 
+get_series.exe.cmd  :  similar to the formatted last_2d output (description can be found in the example
                        file found in the script/commands directory along with the example_of_.series file)
 
 OUTPUT
@@ -32,16 +32,16 @@ Series_name.dat - contains a table of data described in get_series.exe.cmd file 
                   fetched from the last_2d_out file located in the associated run_path
 
 USAGE
-python get_series.py  
+python get_series.py
 (intended to be used as a driver for get_series script)
-with associated .series and get_series.cmd files present 
+with associated .series and get_series.cmd files present
 
-IMPORTANT 
-averaged data for every run in the series should be present in run_path 
+IMPORTANT
+averaged data for every run in the series should be present in run_path
 which is usually handled by the governing script get_series (if possible)
 
 WHAT CAN BE CHANGED
-New keys can be added, although it requires some understanding of the script 
+New keys can be added, although it requires some understanding of the script
 """
 
 import logging
@@ -78,10 +78,10 @@ out_file_ext ='.dat'
 "!!! SUBROUTINES: START !!!"
 
 "==== READ_Series ==="
-""" 
+"""
 Reads the series_file to setup the series data
 
-INPUT: 
+INPUT:
     series_file - path to the series file
 
 OUTPUT:
@@ -101,7 +101,7 @@ def READ_Series(series_file):
     rpaths  = []
     rtos    = []
     rcount  = 0
-    
+
     if ( os.path.isfile(series_file) == False ):
         logging.critical("%s file absent... nothing to be done",series_file)
         return file_read, slabels, keys, rlabels, rpaths, rtos;
@@ -166,14 +166,14 @@ def READ_Series(series_file):
                     logging.error('%s recieved at least one empty argument (%s:%s), skipping',cmd,arg1_tmp,arg2_tmp)
             else:
                 logging.error('unrecognized command "%s", skipping',cmd)
-        rtos = np.append(rtos,rcount) 
-    
+        rtos = np.append(rtos,rcount)
+
     for i in range(0,np.size(slabels)):
         if ( rtos[i] == rtos[i+1]):
             rtos = np.delete(rtos,i)
             slabels = np.delete(slabels,i)
             keys = np.delete(keys,i)
-    
+
     if ( (np.size(slabels) > 0) and (np.size(rlabels) > 0) ):
         file_read = True
         logging.info('Series information successfully read')
@@ -181,12 +181,12 @@ def READ_Series(series_file):
         logging.critical('%s lacks properly described series (%s) or runs (%s)',series_file,np.size(slabels),np.size(rlabels))
 
     return file_read, slabels, keys, rlabels, rpaths, rtos;
-    
+
 "==== READ_CMD ==="
-""" 
+"""
 Reads the cmd_file and provides the data necessary to process raw last_2d_out files
 
-INPUT: 
+INPUT:
     cmd_file    - path to the command file
 
 OUTPUT:
@@ -205,7 +205,7 @@ def READ_CMD(cmd_file):
     cmd_scl   = []
     cmd_txt   = []
     cmd_uni   = []
-    
+
     if ( os.path.isfile(cmd_file) == False ):
         logging.critical("%s file absent... nothing to be done",cmd_file)
         return file_read, cmd_fle, cmd_quan, cmd_scl, cmd_txt, cmd_uni;
@@ -270,7 +270,7 @@ def READ_CMD(cmd_file):
             tmp_uni = tmp.strip()
             if ( tmp_uni == '' ):
                 tmp_uni = 'N/A'
-            "Append obtained data to command arrays"    
+            "Append obtained data to command arrays"
             cmd_fle = np.append(cmd_fle,tmp_fle)
             cmd_quan = np.append(cmd_quan,tmp_quan)
             cmd_scl = np.append(cmd_scl,tmp_scl)
@@ -286,10 +286,10 @@ def READ_CMD(cmd_file):
     return file_read, cmd_fle, cmd_quan, cmd_scl, cmd_txt, cmd_uni;
 
 "==== READ_L2D ==="
-""" 
+"""
 Reads the raw last_2d_out files
 
-INPUT: 
+INPUT:
     raw_file  - path raw last_2d file
 
 OUTPUT:
@@ -315,7 +315,7 @@ def READ_L2D(raw_file):
         except:
             logging.critical('A field in %s could not be handled...',raw_file)
             return file_read, l2d_files, l2d_header, l2d_data;
-    
+
     with open(raw_file) as ff:
         try:
             l2d_header_tmp = np.loadtxt(ff, comments='#', dtype='str', delimiter=':',usecols=1)
@@ -354,10 +354,10 @@ def READ_L2D(raw_file):
     return file_read, l2d_files, l2d_header, l2d_data;
 
 "==== choose_raw ==="
-""" 
+"""
 Fetches requested keyword in the list of data labels
 
-INPUT: 
+INPUT:
     data_list  - list of labels
     keyword    - label we are searching for
 
@@ -374,17 +374,17 @@ def choose_raw(data_list, keyword):
         if ( keyword == data_list[i] ):
             ind = i
             found = True
-            
+
     if ( ind == -1 ):
         logging.error("Data for: %s was not found in the processed file",keyword)
-    
+
     return found, ind;
 
 "==== match_raw ==="
-""" 
+"""
 Fetches requested combination of keywords in 2 list of data labels
 
-INPUT: 
+INPUT:
     data_list_up  - list of upper labels
     data_list_dw  - list of lower labels
     keyword_up    - label of upper level
@@ -407,18 +407,18 @@ def match_raw(datalist_up, keyword_up, datalist_dw, keyword_dw):
         if ( (keyword_up == datalist_up[i]) and (keyword_dw == datalist_dw[i]) ):
             ind = i
             found = True
-            
+
     if ( ind == -1 ):
         logging.error("Data for: (%s + %s) was not found in the data list",keyword_up,keyword_dw)
-    
+
     return found, ind;
 
 "==== GRAB_DATA==="
-""" 
-Fetches the required fields (based on cmd file read) form the last_2d raw output data 
-the qunatities that were not found are replaced with zeros 
+"""
+Fetches the required fields (based on cmd file read) form the last_2d raw output data
+the quantities that were not found are replaced with zeros
 
-INPUT: 
+INPUT:
     cmd_fle     -  list of files containing the original data for desired ouptput quantities
     cmd_quan    -  list of desired quantities
     l2d_files   -  list of files with the original the data
@@ -509,7 +509,7 @@ def main():
 
         "Try to grab the run data"
         for j in range(int(rtos[i]),int(rtos[i+1])):
-            
+
             if ( rpaths[j][-1] == '/'):
                 l2d_path = rpaths[j] + raw_file
             else:
@@ -548,8 +548,8 @@ def main():
                 line = line + ' \n'
                 sf.write(line)
 
-        logging.info('data for series %s of %s was successfully written to %s',i+1,np.size(slabels),series_out)    
-            
+        logging.info('data for series %s of %s was successfully written to %s',i+1,np.size(slabels),series_out)
+
 "!!! DRIVER: END !!!"
 
 "================================================================="

@@ -165,6 +165,13 @@ export LD_SONNET
 export LD_MPI
 export LD_JSON
 
+export LIBGKS
+export LIBGRS
+export LIBX11
+export LIBXT
+export LIBZ
+export ADDLIBS
+
 export SOLPS_CPP
 export FFLAGSEXTRA
 export B25_DEFINES

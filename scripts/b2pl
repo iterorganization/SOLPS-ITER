@@ -112,7 +112,7 @@ If no option is given, the gmeta files are created.
       let "ic=ic+1"
       echo "$B
         dab2 0 zsel tab2 0 zsel m* dmb2 0 zsel tmb2 0 zsel m* m+ 1.6e-19 rm*
-        0 ' ' slbl 'Hydrogenic specie neutral presssure [Pa]' glbl
+        0 ' ' slbl 'Hydrogenic species neutral pressure [Pa]' glbl
         0.02 0.05 0.1 0.2 0.5 1.0 2.0 5.0 10.0 20.0 50.0 100.0 200. 13 clvs surf drop" >> color.${LK}
       echo -e "prn_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
 
@@ -128,7 +128,7 @@ If no option is given, the gmeta files are created.
       echo -e "nm_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
 
       let "ic=ic+1"
-      echo "$B 
+      echo "$B
         tmb2 0 zsel
         0.05 0.1 0.2 0.5 1.0 2.0 5.0 10. 20. 50. 100. 200. 300. 13 clvs surf drop" >> color.${LK}
       echo -e "tm_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
@@ -140,7 +140,7 @@ If no option is given, the gmeta files are created.
       echo -e "nim_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
 
       let "ic=ic+1"
-      echo "$B 
+      echo "$B
         tib2 0 zsel
         0.05 0.1 0.2 0.5 1.0 2.0 5.0 10. 20. 50. 100. 200. 300. 13 clvs surf drop" >> color.${LK}
       echo -e "tim_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
@@ -151,7 +151,7 @@ If no option is given, the gmeta files are created.
               let "iHe=iHe+1"
               [ $f = He ] && break
             done
-	    let "iHe=iHe-1"
+            let "iHe=iHe-1"
             let "ic=ic+1"
             echo "$B
               dab2 $iHe zsel tab2 $iHe zsel m* 1.6e-19 rm*
@@ -168,19 +168,19 @@ If no option is given, the gmeta files are created.
 
 #        4 4 clvp surf drop" >> color.${LK}
       let "ic=ic+1"
-      echo "$B 
+      echo "$B
         sna 1 1 sumz
         -1 10 clvp surf drop" >> color.${LK}
       echo -e "rci_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
 
       let "ic=ic+1"
-      echo "$B 
+      echo "$B
         mach 1 1 sumz
         -1.0 -0.5 -0.2 -0.1 -0.05 0.0 0.05 0.1 0.2 0.5 1.0 11 clvs surf drop" >> color.${LK}
       echo -e "mach_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
 
       let "ic=ic+1"
-      echo "$B 
+      echo "$B
         mach 1 1 sumz
         -1.e8 -2.0 -1.0 -0.99999 -0.99998 0.0 0.99995 0.99996 0.99997 0.99998 0.99999 1.0 2.0 13 clvs surf drop" >> color.${LK}
       echo -e "mach1_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
@@ -188,7 +188,7 @@ If no option is given, the gmeta files are created.
       let "ic=ic+1"
       echo "$B
         b2ra b2br m+ $SUMZ_ALL_I neutrad 0 0 sumz m+ molrad 0 0 sumz m+ ionrad 0 0 sumz m+ abs pvol
-	0 ' ' slbl 'Total radiation loss (W/m^{3})' glbl
+         0 ' ' slbl 'Total radiation loss (W/m^{3})' glbl
         -1 10 clvp surf drop" >> color.${LK}
       echo -e "rad_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
 
@@ -196,23 +196,23 @@ If no option is given, the gmeta files are created.
         ff=`echo $f | tr [A-Z] [a-z]`
         let "ii=i+1"
         let "ic=ic+1"
-        echo "$B 
-	  dab2 $i zsel
+        echo "$B
+          dab2 $i zsel
           -1 10 clvp surf drop" >> color.${LK}
         echo -e "na_${ff}_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
 
         let "ic=ic+1"
-        echo "$B 
-	  tab2 $i zsel
+        echo "$B
+          tab2 $i zsel
           0.05 0.1 0.2 0.5 1.0 2.0 5.0 10. 20. 50. 100. 200. 300. 13 clvs surf drop" >> color.${LK}
         echo -e "ta_${ff}_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
 
         [ ${SUMZ_1[$ii]} -eq ${SUMZ_N[$ii]} ] && {
 
           let "ic=ic+1"
-          echo "$B 
-	    b2br ${SUMZ_1[$ii]} ${SUMZ_N[$ii]} sumz neutrad 0 zsel m+ molrad 0 zsel m+ ionrad 0 zsel m+ pvol abs
-	    0 ' $f' slbl 'Radiation loss (W/m^{3})' glbl
+          echo "$B
+            b2br ${SUMZ_1[$ii]} ${SUMZ_N[$ii]} sumz neutrad 0 zsel m+ molrad 0 zsel m+ ionrad 0 zsel m+ pvol abs
+            0 ' $f' slbl 'Radiation loss (W/m^{3})' glbl
             -1 10 clvp surf drop " >> color.${LK}
           echo -e "rd_nt${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
 
@@ -222,21 +222,21 @@ If no option is given, the gmeta files are created.
 
           ((ns=${SUMZ_N[$ii]}-${SUMZ_1[$ii]}+1))
           echo "Species ${f} : $ns"
-#	  echo "ff=$ff"
-#	  echo "ii=$ii"
-#	  echo "SUMZ_1=${SUMZ_1[$ii]}"
-#	  echo "SUMZ_N=${SUMZ_N[$ii]}"
+#         echo "ff=$ff"
+#         echo "ii=$ii"
+#         echo "SUMZ_1=${SUMZ_1[$ii]}"
+#         echo "SUMZ_N=${SUMZ_N[$ii]}"
 
           let "ic=ic+1"
           echo "$B
-	    na ${SUMZ_1[$ii]} ${SUMZ_N[$ii]} sumz ne m/
-            0 ' ' slbl 'n$f/ne' glbl 
+            na ${SUMZ_1[$ii]} ${SUMZ_N[$ii]} sumz ne m/
+            0 ' ' slbl 'n$f/ne' glbl
             1.e-4 2.e-4 5.e-4 1.e-3 0.002 0.005 0.01 0.02 0.05 0.1 0.2 0.3 0.5 13 clvs surf drop" >> color.${LK}
           echo -e "nr_${ff}${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
 
           let "ic=ic+1"
-          echo "$B 
-	    na ${SUMZ_1[$ii]} ${SUMZ_N[$ii]} sumz
+          echo "$B
+            na ${SUMZ_1[$ii]} ${SUMZ_N[$ii]} sumz
             -1 10 clvp surf drop" >> color.${LK}
           echo -e "ni_${ff}${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
 
@@ -257,21 +257,21 @@ If no option is given, the gmeta files are created.
                     l='2.0 3.0 4.0 5.0 6.0 7.0 8.0 9.0 10.0 11.0 12.0 14.0 16.0 13 clvs'
                   } || {
                     l="1.0 $ns.0 13 clvn"
-	          }
-	        }
+                  }
+                }
               }
             }
           }
           echo "$B
-	    na za m* ${SUMZ_1[$ii]} ${SUMZ_N[$ii]} sumz na ${SUMZ_1[$ii]} ${SUMZ_N[$ii]} sumz 1.e-12 rm+ m/
+            na za m* ${SUMZ_1[$ii]} ${SUMZ_N[$ii]} sumz na ${SUMZ_1[$ii]} ${SUMZ_N[$ii]} sumz 1.e-12 rm+ m/
             0 ' ' slbl 'Zi($f)' glbl
             $l surf drop" >> color.${LK}
           echo -e "Zi_${ff}${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
 
           let "ic=ic+1"
-	  echo "$B 
-	    b2ra b2br m+ ${SUMZ_1[$ii]} ${SUMZ_N[$ii]} sumz neutrad $i zsel m+ pvol abs
-	    0 ' $f' slbl 'Radiation power loss from ions and atoms (W/m^{3})' glbl
+          echo "$B
+            b2ra b2br m+ ${SUMZ_1[$ii]} ${SUMZ_N[$ii]} sumz neutrad $i zsel m+ pvol abs
+            0 ' $f' slbl 'Radiation power loss from ions and atoms (W/m^{3})' glbl
             -1 10 clvp surf drop" >> color.${LK}
           echo -e "rd_${ff}${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
         }
@@ -279,7 +279,7 @@ If no option is given, the gmeta files are created.
       }; done
 
       let "ic=ic+1"
-      echo "$B 
+      echo "$B
         rcxm $SUMZ_ALL_I
         4 4 clvp surf drop" >> color.${LK}
       echo -e "srcm${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
@@ -288,7 +288,7 @@ If no option is given, the gmeta files are created.
   }; done
 
   # Plots invariant with respect to the bounding box
- 
+
   let "im=im+1"
   echo "phys $B pr 0.0 fmin 0.0 fmax $NSEP f.x drop" >> mono.${LK}
   echo -e "prs_${L}\t$im" >> ${LK}_${L}m.ps.legend
@@ -332,16 +332,16 @@ If no option is given, the gmeta files are created.
 
     [ ${SUMZ_1[$ii]} -eq ${SUMZ_N[$ii]} ] && {
       let "im=im+1"
-      echo "phys $B 
+      echo "phys $B
         b2br ${SUMZ_1[$ii]} ${SUMZ_N[$ii]} sumz ionrad $i zsel molrad $i zsel m+ neutrad $i zsel m+ abs sumy intx
-       	0 ' $f' slbl 'Cumulative radiation loss [W]' glbl 0.0 fmin 0.0 fmax $NSEP f.x drop" >> mono.${LK}
+        0 ' $f' slbl 'Cumulative radiation loss [W]' glbl 0.0 fmin 0.0 fmax $NSEP f.x drop" >> mono.${LK}
       echo -e "ir_nt${L}\t$im" >> ${LK}_${L}m.ps.legend
       true
     } || {
       let "im=im+1"
       echo "phys $B
-        b2ra b2br m+ ${SUMZ_1[$ii]} ${SUMZ_N[$ii]} sumz neutrad $i zsel m+ abs sumy intx 
-	0 ' $f' slbl 'Cumulative radiation loss [W]' glbl 0.0 fmin 0.0 fmax $NSEP f.x drop" >> mono.${LK}
+        b2ra b2br m+ ${SUMZ_1[$ii]} ${SUMZ_N[$ii]} sumz neutrad $i zsel m+ abs sumy intx
+        0 ' $f' slbl 'Cumulative radiation loss [W]' glbl 0.0 fmin 0.0 fmax $NSEP f.x drop" >> mono.${LK}
       echo -e "ir_${ff}${L}\t$im" >> ${LK}_${L}m.ps.legend
     }
     i=$ii
@@ -349,29 +349,29 @@ If no option is given, the gmeta files are created.
 
   let "im=im+1"
   echo "phys $B
-    rcxm $SUMZ_ALL_I sumy intx 
+    rcxm $SUMZ_ALL_I sumy intx
     0 ' ' slbl 'Cumulative neutral friction [N]' glbl 0. fmin 0. fmax $NSEP f.x drop" >> mono.${LK}
   echo -e "ifrx_${L}\t$im" >> ${LK}_${L}m.ps.legend
 
   let "im=im+1"
   echo "phys $B
-    p* fmox $SUMZ_ALL_I m+ sx m* pit m* sumy 
+    p* fmox $SUMZ_ALL_I m+ sx m* pit m* sumy
     0 ' ' slbl 'Integral ressure [N]' glbl 0. fmin 0. fmax $NSEP f.x drop" >> mono.${LK}
   echo -e "iprx_${L}\t$im" >> ${LK}_${L}m.ps.legend
 
   let "im=im+1"
-  echo "phys $B 
+  echo "phys $B
     hx $NSEP f.x drop" >> mono.${LK}
   echo -e "hx_${L}\t$im" >> ${LK}_${L}m.ps.legend
 
   let "im=im+1"
   echo "phys $B
-    b2ra b2br m+ $SUMZ_ALL_I neurtad 0 0 sumz m+ molrad 0 0 sumz m+ ionrad 0 0 sumz m+ abs sumy 
+    b2ra b2br m+ $SUMZ_ALL_I neurtad 0 0 sumz m+ molrad 0 0 sumz m+ ionrad 0 0 sumz m+ abs sumy
     0 ' ' slbl 'Radiation total, inegrated over Y [W]' glbl $NSEP f.x drop" >> mono.${LK}
   echo -e "rdy_${L}\t$im" >> ${LK}_${L}m.ps.legend
- 
+
 #  # Plots on the computational mesh
- 
+
 #  [ -z "$PS" ] && {
     i=0; for f in ${SPEC[*]}; do {
       ff=`echo $f | tr [A-Z] [a-z]`
@@ -384,16 +384,16 @@ If no option is given, the gmeta files are created.
 
       let "ic=ic+1"
       let "ii=i+1"
-      echo "$B 
+      echo "$B
         b2ra b2br m+ ${SUMZ_1[$ii]} ${SUMZ_N[$ii]} sumz neutrad $i zsel m+ pvol abs
-	0 ' $f' slbl 'Radiation loss from atoms and ions (W/m^{3})' glbl -1 10 clvp surf drop" >> color.${LK}
+        0 ' $f' slbl 'Radiation loss from atoms and ions (W/m^{3})' glbl -1 10 clvp surf drop" >> color.${LK}
       echo -e "rd-c_${ff}${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
 
       let "i=i+1"
     }; done
 
     let "ic=ic+1"
-    echo "$B 
+    echo "$B
        sna 1 1 sumz
       -1 10 clvp surf drop" >> color.${LK}
     echo -e "rci-c_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend

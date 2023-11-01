@@ -26,7 +26,7 @@ ifndef SOLPS_CPP
     MAKES += ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
   endif
 else
-  MAKES += ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER} ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
+  MAKES += ${SOLPSTOP}/Makefile ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER} ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
   ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.common.${COMPILER} ] && echo yes || echo no ),yes)
     MAKES += ${SOLPSTOP}/SETUP/config.common.${COMPILER}
   endif

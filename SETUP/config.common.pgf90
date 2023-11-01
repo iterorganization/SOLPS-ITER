@@ -1,5 +1,6 @@
 # Autodetected optional features...
 
+FC          = pgf90
 SOLPS_CPP  += -DPGF90 -DNOQUAD
 LD_MPI      = -Mmpi=mpich
 FFLAGSEXTRA = -Mnorpath
@@ -153,6 +154,13 @@ export LD_NAG
 export LD_MDSPLUS
 export LD_SONNET
 export LD_MPI
+
+export LIBGKS
+export LIBGRS
+export LIBX11
+export LIBXT
+export LIBZ
+export ADDLIBS
 
 export SOLPS_CPP
 export FFLAGSEXTRA

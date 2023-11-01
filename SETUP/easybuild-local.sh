@@ -215,7 +215,7 @@ and for that use lower threads or even `--parallel 1` for serial build.
 IMAS installer is needed to build IMAS modules. There is no EasyBuild
 for IMAS! After IMAS is built AMNS, GGD, and Viz can be built. Note
 that by default IMAS module name assumes "some" compilers without
-having toolchain in its name. For example `IMAS/3.38.1-4.11.1-2020b`
+having toolchain in its name. For example `IMAS/3.39.0-4.11.7-2020b`
 module may or may not contain `ifort` modules. This means that
 `--imas-foss` will build only *foss* FORTRAN modules, while
 `--imas-intel` will build only *intel* FORTRAN modules.

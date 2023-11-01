@@ -276,6 +276,12 @@ if ($LATEX == "") then
   echo 'No LaTeX executable found: Manual will not be built'
 endif
 
+# Check if CMake available for Eirene compilation
+if (! -x `which cmake`) then
+  setenv NO_CMAKE true
+  echo 'Did not find a CMake installation. Will revert to traditional Eirene compilation style'
+endif
+
 # Add any local settings if present
 if (-s ${SOLPSTOP}/SETUP/setup.csh.local) then
   echo Loading SETUP/setup.csh.local.

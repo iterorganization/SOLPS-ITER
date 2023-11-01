@@ -83,6 +83,17 @@ LD_NAG     = `pkg-config sci --libs`
 endif
 endif
 
+LIBGKS    = ${GLI_HOME}/libgks.a
+ifdef GR_ROOT
+LIBGRS    = ${GR_ROOT}/libgr.a
+endif
+
+#
+# Provide compiler
+#
+
+FC        = ftn
+
 #
 # Preprocessor options
 #

@@ -7,7 +7,7 @@
 # converts gmeta file converted by ctrans to ghostview-capable multipage file
 # which can be reprocessed same as the gnuplot files
 # options: -h or -H help to screen
- 
+
 # version : 18.07.2008 20:20
 
 scriptname=`basename $0`
@@ -38,7 +38,7 @@ done
 startdir=$PWD
 filename=
 
-for f in ${filelist}; do 
+for f in ${filelist}; do
 
     filename=$f
 
@@ -70,7 +70,7 @@ filename=`basename ${filename}`
 prologend=`grep -n "^/" ../$filename | tail -1 | awk -F: '{print $1}'`
 let " prologend = prologend + 1"
 
-csplit -k -s ../$filename $prologend 
+csplit -k -s ../$filename $prologend
 mv xx00 prolog
 mv xx01 file
 # Divide up the pages: last page is trailer, first page is different still

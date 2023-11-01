@@ -256,6 +256,13 @@ export LATEX=`${SOLPSTOP}/scripts/which_latex`
   echo 'No LaTeX executable found: Manual will not be built'
 }
 
+# Check if CMake available for Eirene compilation
+export CMAKE=`which cmake`
+[ $CMAKE = "" ] && {
+  export NO_CMAKE=true
+  echo 'Did not find a CMake installation. Will revert to traditional Eirene compilation style'
+}
+
 # Add any local settings if present
 [ -s ${SOLPSTOP}/SETUP/setup.ksh.local ] && {
    echo "Loading SETUP/setup.ksh.local"
