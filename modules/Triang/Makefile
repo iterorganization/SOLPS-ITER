@@ -80,7 +80,7 @@ EIROBJ   = ${SOLPSTOP}/modules/Eirene/builds/standalone.${HOST_NAME}.${COMPILER}
 PLOT_DIR = plotting
 else
 EIROBJ   = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
-PLOT_DIR  = plot_dummy
+PLOT_DIR = plot_dummy
 endif
 else
 EIROBJ   = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
@@ -88,6 +88,15 @@ PLOT_DIR = plot_dummy
 endif
 ifndef NO_CMAKE
 CMAKE_DIR = CMakeFiles/EIRENE.dir
+ifneq ($(strip ${LD_GR}),)
+ifneq ($(strip ${LD_GKS}),)
+GR_DIR = CMakeFiles/EIRENE.dir/plotting
+else
+GR_DIR = CMakeFiles/GR-DUMMY.dir/grsoft-dummy
+endif
+else
+GR_DIR = CMakeFiles/GR-DUMMY.dir/grsoft-dummy
+endif
 endif
 
 ifeq ($(LOCAL),yes)
@@ -357,7 +366,7 @@ endif
 
 ${OBJDIR}/graxs.o:
 ifndef NO_CMAKE
-	ln -sf ${EIROBJ}/${CMAKE_DIR}/${PLOT_DIR}/graxs.f.o $@
+	ln -sf ${EIROBJ}/${GR_DIR}/graxs.f.o $@
 else
 	ln -sf ${EIROBJ}/graxs.o ${OBJDIR}
 endif
@@ -365,7 +374,7 @@ endif
 
 ${OBJDIR}/grdrw.o:
 ifndef NO_CMAKE
-	ln -sf ${EIROBJ}/${CMAKE_DIR}/${PLOT_DIR}/grdrw.f.o $@
+	ln -sf ${EIROBJ}/${GR_DIR}/grdrw.f.o $@
 else
 	ln -sf ${EIROBJ}/grdrw.o ${OBJDIR}
 endif
@@ -373,7 +382,7 @@ endif
 
 ${OBJDIR}/grend.o:
 ifndef NO_CMAKE
-	ln -sf ${EIROBJ}/${CMAKE_DIR}/grend.f.o $@
+	ln -sf ${EIROBJ}/${GR_DIR}/grend.f.o $@
 else
 	ln -sf ${EIROBJ}/grend.o ${OBJDIR}
 endif
@@ -381,7 +390,7 @@ endif
 
 ${OBJDIR}/grjmp.o:
 ifndef NO_CMAKE
-	ln -sf ${EIROBJ}/${CMAKE_DIR}/${PLOT_DIR}/grjmp.f.o $@
+	ln -sf ${EIROBJ}/${GR_DIR}/grjmp.f.o $@
 else
 	ln -sf ${EIROBJ}/grjmp.o ${OBJDIR}
 endif
@@ -389,7 +398,7 @@ endif
 
 ${OBJDIR}/grnwpn.o:
 ifndef NO_CMAKE
-	ln -sf ${EIROBJ}/${CMAKE_DIR}/${PLOT_DIR}/grnwpn.f.o $@
+	ln -sf ${EIROBJ}/${GR_DIR}/grnwpn.f.o $@
 else
 	ln -sf ${EIROBJ}/grnwpn.o ${OBJDIR}
 endif
@@ -397,7 +406,7 @@ endif
 
 ${OBJDIR}/grsclc.o:
 ifndef NO_CMAKE
-	ln -sf ${EIROBJ}/${CMAKE_DIR}/${PLOT_DIR}/grsclc.f.o $@
+	ln -sf ${EIROBJ}/${GR_DIR}/grsclc.f.o $@
 else
 	ln -sf ${EIROBJ}/grsclc.o ${OBJDIR}
 endif
@@ -405,7 +414,7 @@ endif
 
 ${OBJDIR}/grsclv.o:
 ifndef NO_CMAKE
-	ln -sf ${EIROBJ}${CMAKE_DIR}/${PLOT_DIR}/grsclv.f.o $@
+	ln -sf ${EIROBJ}/${GR_DIR}/grsclv.f.o $@
 else
 	ln -sf ${EIROBJ}/grsclv.o ${OBJDIR}
 endif
@@ -413,7 +422,7 @@ endif
 
 ${OBJDIR}/grspts.o:
 ifndef NO_CMAKE
-	ln -sf ${EIROBJ}/${CMAKE_DIR}/${PLOT_DIR}/grspts.f.o $@
+	ln -sf ${EIROBJ}/${GR_DIR}/grspts.f.o $@
 else
 	ln -sf ${EIROBJ}/grspts.o ${OBJDIR}
 endif
@@ -421,7 +430,7 @@ endif
 
 ${OBJDIR}/grstrt.o:
 ifndef NO_CMAKE
-	ln -sf ${EIROBJ}/${CMAKE_DIR}/${PLOT_DIR}/grstrt.f.o $@
+	ln -sf ${EIROBJ}/${GR_DIR}/grstrt.f.o $@
 else
 	ln -sf ${EIROBJ}/grstrt.o ${OBJDIR}
 endif
@@ -429,7 +438,7 @@ endif
 
 ${OBJDIR}/gr90dg.o:
 ifndef NO_CMAKE
-	ln -sf ${EIROBJ}/${CMAKE_DIR}/${PLOT_DIR}/gr90dg.f.o $@
+	ln -sf ${EIROBJ}/${GR_DIR}/gr90dg.f.o $@
 else
 	ln -sf ${EIROBJ}/gr90dg.o ${OBJDIR}
 endif
