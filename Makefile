@@ -518,8 +518,9 @@ ifeq ($(shell [ -e ${SOLPSTOP}/doc/solps/b2cdci.F ] && echo yes || echo no ),no)
 else
 	cd doc/solps; ${MAKE}
 endif
+	cd modules/Eirene/Manual; latexmk -pdfdvi eirene.tex
 else
-	$(warning SOLPS-ITER Manual will not be produced because NO_MANUAL switch is activated.)
+	$(warning SOLPS-ITER and Eirene manuals will not be produced because NO_MANUAL switch is activated.)
 endif
 
 local:
