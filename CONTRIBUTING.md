@@ -39,3 +39,4 @@ Contributors to the SOLPS-ITER code base are expected to follow **ALL** the rule
 33.	When modifying the format of the **Eirene** input file, the converter program **b2yt** and input file builder program **Uinp** must also be modified to reflect this change, within the same pull request.
 34.	When adding or modifying a variable in the `fort.44` or `fort.46` output files from **Eirene**, a conversion or transcription rule must be provided in `b2yt_ngread` or `b2yt_ntread`, respectively, in the same pull request.
 35.	In comments, avoid the use of apostrophes, as they can be mis-interpreted as unbalanced quote characters by certain compilers.
+36.	When using a mathematical or physical constant, always apply the value provided by the `b2mod_constants` module.
