@@ -1,7 +1,7 @@
 
 # all files are .f90 files, move them to .F90 extension
 move_to_F90.sh
-rm b2uxus_b.F90
+rm b2uxus_b.F90 solve_covariance_b.F90
 collect_nodiff_b.sh
 rm smax_b.F90 samax_b.F90 smin_b.F90 get_jsep_b.F90 my_outi_us_b.F90
 

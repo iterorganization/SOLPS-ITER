@@ -1,9 +1,9 @@
 
 # all files are .f90 files, move them to .F90 extension
 move_to_F90.sh
-rm b2uxus_dv.F90
+rm b2uxus_dv.F90 solve_covariance_dv.F90
 collect_nodiff_d_multi.sh
-rm samax_dv.F90 smin_dv.F90 smax_dv.F90 get_jsep_dv.F90 my_outi_us_dv.F90
+rm samax_dv.F90 smin_dv.F90 smax_dv.F90 get_jsep_dv.F90 my_outi_us_dv.F90 
 mv b2mn_dv.F90 b2mn_d.F90
 
 sed -i "/INCLUDE 'DIFFSIZES.inc'/d" ./*.F90

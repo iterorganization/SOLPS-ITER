@@ -148,10 +148,12 @@ cp $SOLPSTOP/modules/B2.5/src/utility/dseval.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/dspline.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/cond_coef.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/my_outi_us.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/solve_covariance.F .
 #cp $SOLPSTOP/modules/B2.5/src/utility/mass_density.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/erf_dv.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/dim_dv.F90 .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/b2uxus_dv.F .
+cp $SOLPSTOP/modules/B2.5/src/differentiation/solve_covariance_dv.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/b2mwqt_diffv.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/b2mxar_diffv.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/b2mxac_diffv.F .
