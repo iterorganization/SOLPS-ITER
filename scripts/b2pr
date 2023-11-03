@@ -5,7 +5,7 @@
 # Universal script for b2plot.
 # Multiple boxes can be specified in box.b2p - if the first line there starts with #
 
-# This script retains the functionality of b2pl (so one could produce a meta-script doing everything at once
+# This script retains the functionality of b2pl (so one could produce a meta-script doing everything at once)
 
 # However this version is aimed at mass production of conveniently structured 1d profile files
 #
@@ -13,9 +13,9 @@
 # Files are named $VarID.[p,r].$index.txt
 # where VarID comes from the LABEL in b2mn (a number following first # on that line)
 # p corresponds to f.y and r to f.x slice
-# finally ind is the f.x or f.y raw index
+# finally ind is the f.x or f.y row index
 #
-# The files are sturctured with one header and multiple raws
+# The files are structured with one header and multiple rows
 # therefore unlike b2plot.write files these are easily operable by awk etc
 
 export B2PLOT_DEV=cgm
@@ -164,7 +164,7 @@ If no option is given, the gmeta files are created.
               let "iHe=iHe+1"
               [ $f = He ] && break
             done
-	    let "iHe=iHe-1"
+            let "iHe=iHe-1"
             let "ic=ic+1"
             echo "$B
               dab2 $iHe zsel tab2 $iHe zsel m* 1.6e-19 rm*
@@ -201,7 +201,7 @@ If no option is given, the gmeta files are created.
       let "ic=ic+1"
       echo "$B
         b2ra b2br m+ $SUMZ_ALL_I neutrad 0 0 sumz m+ molrad 0 0 sumz m+ ionrad 0 0 sumz m+ abs pvol
-	0 ' ' slbl 'Total radiation loss (W/m^{3})' glbl
+        0 ' ' slbl 'Total radiation loss (W/m^{3})' glbl
         -1 10 clvp surf drop" >> color.${LK}
       echo -e "rad_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
 
@@ -210,13 +210,13 @@ If no option is given, the gmeta files are created.
         let "ii=i+1"
         let "ic=ic+1"
         echo "$B
-	  dab2 $i zsel
+          dab2 $i zsel
           -1 10 clvp surf drop" >> color.${LK}
         echo -e "na_${ff}_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
 
         let "ic=ic+1"
         echo "$B
-	  tab2 $i zsel
+          tab2 $i zsel
           0.05 0.1 0.2 0.5 1.0 2.0 5.0 10. 20. 50. 100. 200. 300. 13 clvs surf drop" >> color.${LK}
         echo -e "ta_${ff}_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
 
@@ -224,8 +224,8 @@ If no option is given, the gmeta files are created.
 
           let "ic=ic+1"
           echo "$B
-	    b2br ${SUMZ_1[$ii]} ${SUMZ_N[$ii]} sumz neutrad 0 zsel m+ molrad 0 zsel m+ ionrad 0 zsel m+ pvol abs
-	    0 ' $f' slbl 'Radiation loss (W/m^{3})' glbl
+            b2br ${SUMZ_1[$ii]} ${SUMZ_N[$ii]} sumz neutrad 0 zsel m+ molrad 0 zsel m+ ionrad 0 zsel m+ pvol abs
+            0 ' $f' slbl 'Radiation loss (W/m^{3})' glbl
             -1 10 clvp surf drop " >> color.${LK}
           echo -e "rd_nt${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
 
@@ -235,21 +235,21 @@ If no option is given, the gmeta files are created.
 
           ((ns=${SUMZ_N[$ii]}-${SUMZ_1[$ii]}+1))
           echo "Species ${f} : $ns"
-#	  echo "ff=$ff"
-#	  echo "ii=$ii"
-#	  echo "SUMZ_1=${SUMZ_1[$ii]}"
-#	  echo "SUMZ_N=${SUMZ_N[$ii]}"
+#         echo "ff=$ff"
+#         echo "ii=$ii"
+#         echo "SUMZ_1=${SUMZ_1[$ii]}"
+#         echo "SUMZ_N=${SUMZ_N[$ii]}"
 
           let "ic=ic+1"
           echo "$B
-	    na ${SUMZ_1[$ii]} ${SUMZ_N[$ii]} sumz ne m/
+            na ${SUMZ_1[$ii]} ${SUMZ_N[$ii]} sumz ne m/
             0 ' ' slbl 'n$f/ne' glbl
             1.e-4 2.e-4 5.e-4 1.e-3 0.002 0.005 0.01 0.02 0.05 0.1 0.2 0.3 0.5 13 clvs surf drop" >> color.${LK}
           echo -e "nr_${ff}${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
 
           let "ic=ic+1"
           echo "$B
-	    na ${SUMZ_1[$ii]} ${SUMZ_N[$ii]} sumz
+            na ${SUMZ_1[$ii]} ${SUMZ_N[$ii]} sumz
             -1 10 clvp surf drop" >> color.${LK}
           echo -e "ni_${ff}${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
 
@@ -270,21 +270,21 @@ If no option is given, the gmeta files are created.
                     l='2.0 3.0 4.0 5.0 6.0 7.0 8.0 9.0 10.0 11.0 12.0 14.0 16.0 13 clvs'
                   } || {
                     l="1.0 $ns.0 13 clvn"
-	          }
-	        }
+                  }
+                }
               }
             }
           }
           echo "$B
-	    na za m* ${SUMZ_1[$ii]} ${SUMZ_N[$ii]} sumz na ${SUMZ_1[$ii]} ${SUMZ_N[$ii]} sumz 1.e-12 rm+ m/
+            na za m* ${SUMZ_1[$ii]} ${SUMZ_N[$ii]} sumz na ${SUMZ_1[$ii]} ${SUMZ_N[$ii]} sumz 1.e-12 rm+ m/
             0 ' ' slbl 'Zi($f)' glbl
             $l surf drop" >> color.${LK}
           echo -e "Zi_${ff}${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
 
           let "ic=ic+1"
-	  echo "$B
-	    b2ra b2br m+ ${SUMZ_1[$ii]} ${SUMZ_N[$ii]} sumz neutrad $i zsel m+ pvol abs
-	    0 ' $f' slbl 'Radiation power loss from ions and atoms (W/m^{3})' glbl
+          echo "$B
+            b2ra b2br m+ ${SUMZ_1[$ii]} ${SUMZ_N[$ii]} sumz neutrad $i zsel m+ pvol abs
+            0 ' $f' slbl 'Radiation power loss from ions and atoms (W/m^{3})' glbl
             -1 10 clvp surf drop" >> color.${LK}
           echo -e "rd_${ff}${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
         }
@@ -452,6 +452,7 @@ If no option is given, the gmeta files are created.
           0.0 fmin 0.0 fmax $k f.x drop" >> mono.${LK}
     echo -e "sy_$k\t$im" >> ${LK}_${L}m.ps.legend
 
+
    true
   }; done && {
 
@@ -489,7 +490,7 @@ for C in m c; do {
             ((k=NSEP))
             cut -f2 -d\   $L.p.$k | tr x X > xmp.tmp
             for f in $L.p.*; do cat $f | tr \# \   | paste -d \  xmp.tmp - > $f.txt; done
-	  }
+          }
         )
 #        mv $L-*.txt ${STEM}
         [ $C = c ] && (cd ${STEM}/${S}

@@ -304,7 +304,7 @@ ${OBJDIR}/eirmod_cpes.o:
 ifndef NO_CMAKE
 	ln -sf ${EIROBJ}/${CMAKE_DIR}/modules/eirmod_cpes.f.o $@
 else
-	ln -sf ${EIROBJ}eirmod_cpes.o ${OBJDIR}
+	ln -sf ${EIROBJ}/eirmod_cpes.o ${OBJDIR}
 endif
 	@gtfl $@
 
@@ -320,7 +320,7 @@ ${OBJDIR}/eirmod_cspez.o:
 ifndef NO_CMAKE
 	ln -sf ${EIROBJ}/${CMAKE_DIR}/modules/eirmod_cspez.f.o $@
 else
-	ln -sf ${EIROBJ}eirmod_cspez.o ${OBJDIR}
+	ln -sf ${EIROBJ}/eirmod_cspez.o ${OBJDIR}
 endif
 	@gtfl $@
 
@@ -328,7 +328,7 @@ ${OBJDIR}/eirmod_cstep.o:
 ifndef NO_CMAKE
 	ln -sf ${EIROBJ}/${CMAKE_DIR}/modules/eirmod_cstep.f.o $@
 else
-	ln -sf ${EIROBJ}eirmod_cstep.o ${OBJDIR}
+	ln -sf ${EIROBJ}/eirmod_cstep.o ${OBJDIR}
 endif
 	@gtfl $@
 
@@ -336,7 +336,7 @@ ${OBJDIR}/eirmod_mpi.o:
 ifndef NO_CMAKE
 	ln -sf ${EIROBJ}/${CMAKE_DIR}/modules/eirmod_mpi.F90.o $@
 else
-	ln -sf ${EIROBJ}eirmod_mpi.o ${OBJDIR}
+	ln -sf ${EIROBJ}/eirmod_mpi.o ${OBJDIR}
 endif
 	@gtfl $@
 

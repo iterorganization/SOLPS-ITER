@@ -11,6 +11,8 @@ echo or online at:
 echo https://sharepoint.iter.org/departments/POP/CM/IMDesign/Code%20Documentation/solps-doc/solps.pdf
 echo The Eirene manual is located at http://www.eirene.de/
 
+test $0 == tcsh || echo -e "\e[31mUse tcsh to source setup.csh!\e[m" && return 1
+
 # Obtain the directory where setup.csh is located to use as SOLPSTOP
 setenv LAST_COMMAND `echo $_`
 if (`echo ${LAST_COMMAND}` == "") then
