@@ -74,29 +74,28 @@ INCLUDE += -I${SRCLOCAL}
 endif
 INCLUDE += -I${OBJDIR} -I${B2SRC}/include.local -I${B2SRC}/include
 
-ifneq ($(strip ${LD_GR}),)
-ifneq ($(strip ${LD_GKS}),)
-EIROBJ   = ${SOLPSTOP}/modules/Eirene/builds/standalone.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
-PLOT_DIR = plotting
-else
-EIROBJ   = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
-PLOT_DIR = plot_dummy
-endif
-else
-EIROBJ   = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
-PLOT_DIR = plot_dummy
-endif
 ifndef NO_CMAKE
-CMAKE_DIR = CMakeFiles/EIRENE.dir
+  CMAKE_DIR = CMakeFiles/EIRENE.dir
+endif
 ifneq ($(strip ${LD_GR}),)
-ifneq ($(strip ${LD_GKS}),)
-GR_DIR = CMakeFiles/EIRENE.dir/plotting
+ ifneq ($(strip ${LD_GKS}),)
+  EIROBJ   = ${SOLPSTOP}/modules/Eirene/builds/standalone.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
+  ifeq ($(shell [ -e ${EIROBJ}/${CMAKE_DIR}/plotting/plend.f.o ] && echo yes || echo no ), yes)
+    GR_DIR = CMakeFiles/EIRENE.dir/plotting
+    PLOT_DIR = plotting
+  else
+    GR_DIR = CMakeFiles/GR-DUMMY.dir/grsoft-dummy
+    PLOT_DIR = plot_dummy
+  endif
+ else
+  EIROBJ   = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
+  GR_DIR = CMakeFiles/GR-DUMMY.dir/grsoft-dummy
+  PLOT_DIR = plot_dummy
+ endif
 else
-GR_DIR = CMakeFiles/GR-DUMMY.dir/grsoft-dummy
-endif
-else
-GR_DIR = CMakeFiles/GR-DUMMY.dir/grsoft-dummy
-endif
+  EIROBJ   = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
+  GR_DIR = CMakeFiles/GR-DUMMY.dir/grsoft-dummy
+  PLOT_DIR = plot_dummy
 endif
 
 ifeq ($(LOCAL),yes)
