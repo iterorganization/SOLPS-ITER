@@ -26,7 +26,7 @@ c=======================================================================
       integer icopy,jlswch,jlcell,imrlb,iulin,iuscn,ich,ichmin,iid
       integer iatm,imol,iion,ipht,ipls,ichori,inum
       integer llm(nchor),lli(nchor)
-      real x, y, fldlm
+      real x, y
       logical handle,ulmlti,ex,hydrogen,helium,carbon,nitrogen
       logical streql,silent_open
       logical, allocatable :: done(:)
@@ -592,7 +592,7 @@ c**  atomic species cards
         if (nchara(iatm).eq.1) then
 !nh          nrc=nrca(iatm)+nplsh
           nrc=nrca(iatm)
-          ngen=-1
+          ngen=-11
         else
           nrc=nrca(iatm)
           ngen=ngena(iatm)
@@ -625,14 +625,8 @@ c**  atomic species cards
      ,                     iscd3a(iatm,k),iscd4a(iatm,k),
      ,                     iscdea(iatm,k),iestma(iatm,k),ibgka(iatm,k)
           end if !}
-          if ((nchara(iatm).eq.1).and.
-     ,      streql(crc(ireaca(iatm,k)),'CX')) then
-            fldlm=0.1
-          else
-            fldlm=edpota(iatm,k)
-          end if
           write(iunoo,703) eeleca(iatm,k),ebulka(iatm,k),escd1a(iatm,k),
-     ,                     escd2a(iatm,k),freaca(iatm,k),fldlm
+     ,                     escd2a(iatm,k),freaca(iatm,k),edpota(iatm,k)
         end do !}
 
 !nh     neutral-neutral collisions with fluid atom background
