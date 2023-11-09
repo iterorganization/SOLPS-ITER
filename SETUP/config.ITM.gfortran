@@ -54,11 +54,11 @@ ADDLIBS    = -lgfortran
 #
 
 ifdef SOLPS_MPI
-FC        = mpifort
+FC         = mpifort
 else
-FC        = gfortran
+FC         = gfortran
 endif
-MPI_FC    = mpifort
+MPI_FC     = mpifort
 
 #
 # Preprocessor options
