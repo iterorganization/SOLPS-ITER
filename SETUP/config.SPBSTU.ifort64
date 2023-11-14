@@ -47,6 +47,8 @@ LD_MPI     = -L${MPDIR}/lib -lmpi
 LIBGKS     = ${GLI_HOME}/lib/libgks.a
 LIBGRS     = ${GR_ROOT}/lib/libgr.a
 LIBX11     = /usr/lib64/libX11.so
+LIBXT      = /usr/lib64/libXt.so
+LIBZ       = /usr/lib64/libz.so
 
 #
 # Provide compiler
