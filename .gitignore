@@ -37,6 +37,7 @@ unicos*
 cray*
 git_version.h
 git_version_*.h
+make.log.*
 
 linux.*/
 g77*/
