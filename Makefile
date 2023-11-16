@@ -524,7 +524,7 @@ else
 endif
 
 local:
-	cd modules/Eirene;   ${MAKEE} local
+	cd modules/Eirene;   ${MAKEE} local links
 	cd modules/B2.5;     ${MAKE} local
 	cd modules/solps4-5; ${MAKE} local
 

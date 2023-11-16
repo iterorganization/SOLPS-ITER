@@ -23,12 +23,15 @@ This script is used to submit SOLPS-ITER compilation jobs to the SLURM batch sys
 Usage:
 
 Available options are:
+  -h                 prints this message
   -j <<JOB NAME>>    set the job name (default $JOB_NAME)
   -c <<JOB_ID>>      job ID of the previous job in a chain submission
   -o <<OPTIONS>>     options to be passed to the Makefile (within quotes)
   -T <<HOURS>>       number of elapsed hours requested (default $hours)
   -M <<MEM_SIZE>>    memory size (default $mem)
-  -Q <<PARTITION>>   partition on which to submit the job (default centos8.2)
+  -Q <<PARTITION>>   partition on which to submit the job (default $part)
+
+The list of compile targets (default "solps") is to be provided after these options.
 
 EOF
     exit
