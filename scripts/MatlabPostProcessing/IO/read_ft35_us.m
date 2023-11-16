@@ -20,6 +20,7 @@ links.nghbr = zeros(ntria,3);
 links.side  = zeros(ntria,3);
 links.cont  = zeros(ntria,3);
 links.plasma_cell  = zeros(ntria,1);
+links.faces  = zeros(ntria,3);
 
 for i = 1:ntria
     data = fscanf(fid,'%d',14);
@@ -27,6 +28,8 @@ for i = 1:ntria
     links.side(i,:)  = data(3:3:9);
     links.cont(i,:)  = data(4:3:10);
     links.plasma_cell(i,:) = data(11);
+    links.faces(i,:) = data(12:14);
+
 end
 
 % close file
