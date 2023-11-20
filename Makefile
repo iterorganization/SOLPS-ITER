@@ -177,7 +177,7 @@ b25_all:
 	cd modules/B2.5;     ${MAKE} ${B25_SERIAL}
 	cd modules/B2.5;     ${MAKEO} ALL
 
-b25_openmp:
+b25_openmp: nc2text_simple nc_reduce
 	cd modules/B2.5; ${MAKE} USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes
 
@@ -185,7 +185,7 @@ b25_mpi:
 	cd modules/B2.5; ${MAKE} USE_MPI=-DUSE_MPI SOLPS_MPI=yes ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 
-b25_openmp_mpi:
+b25_openmp_mpi: nc2text_simple nc_reduce
 	cd modules/B2.5; ${MAKE} USE_OPENMP=-D_OPENMP USE_MPI=-DUSE_MPI SOLPS_MPI=yes SOLPS_OPENMP=yes ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} USE_OPENMP=-D_OPENMP USE_MPI=-DUSE_MPI SOLPS_MPI=yes SOLPS_OPENMP=yes
 
@@ -199,12 +199,12 @@ b25_ig:
 	cd modules/B2.5; ${MAKE} USE_IMPGYRO=-DUSE_IMPGYRO ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} USE_IMPGYRO=-DUSE_IMPGYRO
 
-b25_all_openmp:
+b25_all_openmp: nc2text_simple nc_reduce
 	cd modules/solps4-5; ${MAKE} SOLPS_OPENMP=yes links
 	cd modules/B2.5;     ${MAKE} USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes ${B25_SERIAL}
 	cd modules/B2.5;     ${MAKEO} USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes
 
-b25_nox_openmp:
+b25_nox_openmp: nc2text_simple nc_reduce
 	cd modules/B2.5; ${MAKE} USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes NOPLOT
 
@@ -212,7 +212,7 @@ b25_nox_mpi:
 	cd modules/B2.5; ${MAKE} USE_MPI=-DUSE_MPI SOLPS_MPI=yes ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} USE_MPI=-DUSE_MPI SOLPS_MPI=yes NOPLOT
 
-b25_nox_openmp_mpi:
+b25_nox_openmp_mpi: nc2text_simple nc_reduce
 	cd modules/B2.5; ${MAKE} USE_OPENMP=-D_OPENMP USE_MPI=-DUSE_MPI SOLPS_MPI=yes SOLPS_OPENMP=yes ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} USE_OPENMP=-D_OPENMP USE_MPI=-DUSE_MPI SOLPS_MPI=yes SOLPS_OPENMP=yes NOPLOT
 
@@ -223,7 +223,7 @@ b25_all_mpi:
 	cd modules/B2.5;     ${MAKE} USE_MPI=-DUSE_MPI SOLPS_MPI=yes ${B25_SERIAL}
 	cd modules/B2.5;     ${MAKEO} USE_MPI=-DUSE_MPI SOLPS_MPI=yes ALL
 
-b25_all_openmp_mpi:
+b25_all_openmp_mpi: nc2text_simple nc_reduce
 	cd modules/solps4-5; ${MAKE} SOLPS_MPI=yes SOLPS_OPENMP=yes links
 	cd modules/B2.5;     ${MAKE} USE_OPENMP=-D_OPENMP USE_MPI=-DUSE_MPI SOLPS_MPI=yes SOLPS_OPENMP=yes ${B25_SERIAL}
 	cd modules/B2.5;     ${MAKEO} USE_OPENMP=-D_OPENMP USE_MPI=-DUSE_MPI SOLPS_MPI=yes SOLPS_OPENMP=yes ALL
@@ -246,7 +246,7 @@ b25eirene_nox:
 	cd modules/B2.5;   ${MAKE}  USE_EIRENE=-DB25_EIRENE ${B25_SERIAL}
 	cd modules/B2.5;   ${MAKEO} USE_EIRENE=-DB25_EIRENE NOPLOT
 
-b25eirene_openmp:
+b25eirene_openmp: nc2text_simple nc_reduce
 	cd modules/Eirene; ${MAKEO} USE_B25=-DB25_EIRENE    USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes
 	cd modules/B2.5;   ${MAKE}  USE_EIRENE=-DB25_EIRENE USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes ${B25_SERIAL}
 	cd modules/B2.5;   ${MAKEO} USE_EIRENE=-DB25_EIRENE USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes
@@ -256,14 +256,14 @@ b25eirene_mpi:
 	cd modules/B2.5;   ${MAKE}  USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI SOLPS_MPI=yes ${B25_SERIAL}
 	cd modules/B2.5;   ${MAKEO} USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 
-b25eirene_openmp_mpi:
+b25eirene_openmp_mpi: nc2text_simple nc_reduce
 	cd modules/Eirene; ${MAKEO} USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI USE_OPENMP=-D_OPENMP SOLPS_MPI=yes SOLPS_OPENMP=yes
 	cd modules/B2.5;   ${MAKE}  USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI USE_OPENMP=-D_OPENMP SOLPS_MPI=yes SOLPS_OPENMP=yes ${B25_SERIAL}
 	cd modules/B2.5;   ${MAKEO} USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI USE_OPENMP=-D_OPENMP SOLPS_MPI=yes SOLPS_OPENMP=yes
 
 b25eirene_mpi_openmp: b25eirene_openmp_mpi
 
-b25eirene_nox_openmp:
+b25eirene_nox_openmp: nc2text_simple nc_reduce
 	cd modules/Eirene; ${MAKEO} USE_B25=-DB25_EIRENE LD_GR="" LD_GKS="" SOLPS_OPENMP=yes
 	cd modules/B2.5;   ${MAKE}  USE_EIRENE=-DB25_EIRENE USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes ${B25_SERIAL}
 	cd modules/B2.5;   ${MAKEO} USE_EIRENE=-DB25_EIRENE USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes NOPLOT
@@ -278,7 +278,7 @@ b25eirene_ig:
 	cd modules/B2.5;   ${MAKE}  USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO ${B25_SERIAL}
 	cd modules/B2.5;   ${MAKEO} USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO
 
-b25eirene_all_openmp:
+b25eirene_all_openmp: nc2text_simple nc_reduce
 	cd modules/Eirene;   ${MAKEO} USE_B25=-DB25_EIRENE SOLPS_OPENMP=yes
 	cd modules/solps4-5; ${MAKE}  SOLPS_OPENMP=yes links
 	cd modules/B2.5;     ${MAKE}  USE_EIRENE=-DB25_EIRENE USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes ${B25_SERIAL}
@@ -290,7 +290,7 @@ b25eirene_all_mpi:
 	cd modules/B2.5;     ${MAKE}  USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI SOLPS_MPI=yes ${B25_SERIAL}
 	cd modules/B2.5;     ${MAKEO} USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI SOLPS_MPI=yes ALL
 
-b25eirene_all_openmp_mpi:
+b25eirene_all_openmp_mpi: nc2text_simple nc_reduce
 	cd modules/Eirene;   ${MAKEO} USE_B25=-DB25_EIRENE    USE_MPI=-DUSE_MPI SOLPS_MPI=yes SOLPS_OPENMP=yes
 	cd modules/solps4-5; ${MAKE}  SOLPS_MPI=yes SOLPS_OPENMP=yes links
 	cd modules/B2.5;     ${MAKE}  USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI USE_OPENMP=-D_OPENMP SOLPS_MPI=yes SOLPS_OPENMP=yes ${B25_SERIAL}
@@ -298,7 +298,7 @@ b25eirene_all_openmp_mpi:
 
 b25eirene_all_mpi_openmp: b25eirene_all_openmp_mpi
 
-b25eirene_nox_openmp_mpi:
+b25eirene_nox_openmp_mpi: nc2text_simple nc_reduce
 	cd modules/Eirene; ${MAKEO} USE_B25=-DB25_EIRENE LD_GR=""  LD_GKS="" USE_MPI=-DUSE_MPI SOLPS_MPI=yes SOLPS_OPENMP=yes
 	cd modules/B2.5;   ${MAKE}  USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI USE_OPENMP=-D_OPENMP SOLPS_MPI=yes SOLPS_OPENMP=yes ${B25_SERIAL}
 	cd modules/B2.5;   ${MAKEO} USE_EIRENE=-DB25_EIRENE USE_MPI=-DUSE_MPI USE_OPENMP=-D_OPENMP SOLPS_MPI=yes SOLPS_OPENMP=yes NOPLOT
