@@ -1,0 +1,16 @@
+# Test whether necessary variables are defined
+ifndef LD_MSCL
+  $(error LD_MSCL not defined)
+endif
+ifdef USE_MPI
+FC = mpiifort
+else
+FC       = ifort
+endif
+
+CPP      = /lib/cpp -C -traditional -ffreestanding
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+
