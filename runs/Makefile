@@ -660,10 +660,11 @@ $(target_us) : b2fstati b2fgmtry b2fpardf b2mn.dat
 	[ -s ../${fort_lc}34 ] && cp -p ../${fort_lc}34 . || echo > /dev/null ; \
 	[ -s ../${fort_lc}35 ] && cp -p ../${fort_lc}35 . || echo > /dev/null ; \
 	[ -s ../input.dat ] && cp -p ../input.dat . || echo > /dev/null
-	cd b2us.exe.dir ; ${TIME} ${B2OBJ}/b2us.exe ${RUN_OPTIONS} ; mv $(target_us) .. ; [ -e input.dat.us ] && mv input.dat.us .. ; [ -e b2us.user.parameters ] && mv b2us.user.parameters .. ; [ -e b2us.regions.parameters ] && mv b2us.regions.parameters .. ; [ -e b2us.boundary.parameters ] && mv b2us.boundary.parameters .. ; [ -e b2us.neutrals.parameters ] && mv b2us.neutrals.parameters .. ; [ -e b2us.feedback_control.parameters ] && mv b2us.feedback_control.parameters .. ; rm -f $(notdir $^) >& /dev/null
+	cd b2us.exe.dir ; ${TIME} ${B2OBJ}/b2us.exe ${RUN_OPTIONS} ; mv $(target_us) .. ; [ -e input.dat.us ] && mv input.dat.us .. ; [ -e b2us.user.parameters ] && mv b2us.user.parameters .. ; [ -e b2us.regions.parameters ] && mv b2us.regions.parameters .. ; [ -e b2us.boundary.parameters ] && mv b2us.boundary.parameters .. ; [ -e b2us.neutrals.parameters ] && mv b2us.neutrals.parameters .. ; [ -e b2us.feedback_control.parameters ] && mv b2us.feedback_control.parameters .. ; [ -e b2us.midplane.parameters ] && mv b2us.midplane.parameters .. ; rm -f $(notdir $^) >& /dev/null
 	[ -s b2us.exe.dir/${fort_lc}33 ] && rm b2us.exe.dir/${fort_lc}33 || echo > /dev/null ; \
 	[ -s b2us.exe.dir/${fort_lc}34 ] && rm b2us.exe.dir/${fort_lc}34 || echo > /dev/null ; \
 	[ -s b2us.exe.dir/${fort_lc}35 ] && rm b2us.exe.dir/${fort_lc}35 || echo > /dev/null ; \
+	[ -s b2us.exe.dir/${fort_lc}85 ] && rm b2us.exe.dir/${fort_lc}85 || echo > /dev/null ; \
 	[ -s b2us.exe.dir/input.dat ] && rm b2us.exe.dir/input.dat || echo > /dev/null
 	[ -s b2us.exe.dir/eirene_block3.dat  ] && mv b2us.exe.dir/eirene_block3.dat  . || echo > /dev/null ; \
 	[ -s b2us.exe.dir/eirene_block14.dat ] && mv b2us.exe.dir/eirene_block14.dat . || echo > /dev/null ; \

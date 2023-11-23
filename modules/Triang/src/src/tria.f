@@ -334,7 +334,14 @@ C---- SPLIT FRONTIER PART IF IT IS LONGER THAN DELPOIN
       if (npartfr .eq. 0) then !{
 c---- empty input
         WRITE(6,*) 'STOP IN MAIN, EMPTY INPUT'
-        STOP 'ERROR'
+        WRITE(6,*) 'WRITING EMPTY OUTPUT FILES'
+        WRITE(23,*) 0
+        WRITE(24,*) 0
+        WRITE(25,*) 0
+        CLOSE(23)
+        CLOSE(24)
+        CLOSE(25)
+        STOP
       endif !}
 !###{
       print *
