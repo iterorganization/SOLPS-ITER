@@ -1,12 +1,12 @@
 function [ fieldfunction ] = readrzpsi(file)
-% 
+%
 % [ fieldfunction ] = readrzpsi(file)
-% 
+%
 % This functions reads a rzpsi file and generates matlab data
 % files containing these data, in this case being matrices filled with the
-% R and Z axis values and for each of the grid points the magnetic flux 
+% R and Z axis values and for each of the grid points the magnetic flux
 % function values.
-% 
+%
 % As input the file name should be given
 % Output is R,Z,Psi and dimensions
 %

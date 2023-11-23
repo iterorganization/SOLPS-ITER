@@ -1,12 +1,12 @@
 function writerzpsi(file,fieldfunction)
-% 
+%
 % writerzpsi(file, fieldfunction)
-% 
+%
 % This functions writes a rzpsi file from matlab structure fieldfunction
 % containing these data, in this case being matrices filled with the
-% R and Z axis values and for each of the grid points the magnetic flux 
+% R and Z axis values and for each of the grid points the magnetic flux
 % function values.
-% 
+%
 % As input the file name should be given + the fieldfunction.
 %
 
@@ -64,7 +64,7 @@ if strcmp(sfield(end),sprintf('\n'))
 end
 fprintf(fid,'%s\n',sfield);
 
-% 
+%
 % line = fgetl(fid);
 % while ~contains(line,'nr=')
 %     line = fgetl(fid);
@@ -77,7 +77,7 @@ fprintf(fid,'%s\n',sfield);
 %     error('readrzpsi: inconsistent specification of nR.');
 % end
 % R=fscanf(fid, '%f',nR);
-% 
+%
 % % Read Z-coordinates
 % line = fgetl(fid);
 % while ~contains(line,'nz=')
@@ -91,7 +91,7 @@ fprintf(fid,'%s\n',sfield);
 %     error('readrzpsi: inconsistent specification of nZ.');
 % end
 % Z=fscanf(fid, '%f',nZ);
-% 
+%
 % % Read Psi function
 % Psi=zeros(nR,nZ);
 % %in psi verandert de R index het eerst
