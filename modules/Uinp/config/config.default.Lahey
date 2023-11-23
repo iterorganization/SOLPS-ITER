@@ -9,7 +9,7 @@ FC      = f95f
 
 FFLAGS  = -O --tpp
 
-INCLUDE = -I${SRCDIR} ${EIRINC} ${B2INC}
+INCLUDE = -I${SRCDIR} ${EIRINC} ${B2INC} ${CRRINC}
 COMPILE = ${FC} -c ${FFLAGS}
 CPP     = /lib/cpp -C -traditional
 MOD     = mod

@@ -193,7 +193,7 @@ To obtain the code a request should be sent to Xavier Bonnin
 
 The first formality will then be for prospective users to obtain an IDM (ITER Document Management) account, in case they do not have one already. This account request will be done by the RO, and the requesting user will receive an automated electronic message asking for confirmation of the provided e-mail address. This e-mail address should preferably be a professional one, or requesting users need to provide a way for the IO to verify their belonging to an authorized ITER collaboration partner (academic or non-military state institutions within the ITER Member States, or that have an existing contractual relationship with the IO). This may also require the signature of an IMAS Collaboration Agreement between the IO and the requesting user's institution, if one is not already in force. Another option is for the user to be sponsored nominatively by a third party institution through their own IMAS Collaboration Agreement.
 
-The next step, after the IDM account has been obtained, is to agree to the ITER Integrated Modelling and Analysis Suite (IMAS) terms of use and request access to the needed repositories. The form to fill out for this is to be found at: \href{https://jira.iter.org/servicedesk/customer/portal/1/create/257}{https://jira.iter.org/servicedesk/customer/portal/1/create/257}. For a full \SOLPSITER installation, you should request access to the following repositories:
+The next step, after the IDM account has been obtained, is for the user to agree to the ITER Integrated Modelling and Analysis Suite (IMAS) terms of use and request access to the needed repositories. The form to fill out for this is to be found at: \href{https://jira.iter.org/servicedesk/customer/portal/1/create/257}{https://jira.iter.org/servicedesk/customer/portal/1/create/257}. For a full \SOLPSITER installation, you should request access to the following repositories:
 \begin{description}
   \item[SOLPS-ITER] The overarching \SOLPSITER repository
   \item[B2.5] For the {\tt B2.5} source code
@@ -1719,13 +1719,15 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[fluid\_core\_fluxes.py \#1 \#2]\index{fluid\_core\_fluxes.py} Total fluid flux entering the core region summed from species \#1 to \#2.
   \item[fluid\_fluxes.py \#1 \#2]\index{fluid\_fluxes.py} Fluid fluxes through various surfaces summed from species \#1 to \#2.
   \item[nareg.py \#1]\index{nareg.py} Average ion densities for region \#1.
-  \item[nareg\_species.py \#1]\index{nareg\_species.py}  Average ion densities for region \#1 summed over charge states for each species.
+  \item[nareg\_species.py \#1]\index{nareg\_species.py} Average ion densities for region \#1 summed over charge states for each species.
   \item[nereg.py]\index{nereg.py} Average electron densities.
+  \item[plot\_traduit\_out\_b2us.py]\index{plot\_traduit\_out\_b2us.py}\index{traduit.out.b2us} Plots contents of the {\tt traduit.out.b2us} file.
   \item[rqradreg.py \#1]\index{rqradreg.py} Line radiation summed over each species' charge states for region \#1.
   \item[rranareg.py \#1]\index{rranareg.py} Recombination rates for region \#1.
   \item[rranareg\_per\_rsanareg.py \#1]\index{[rranareg\_per\_rsanareg.py} Recombination rates divided by ionisation rates for region \#1 (summed over charge states).
   \item[rsanareg.py \#1]\index{rsanareg.py} Ionisation rates for region \#1.
   \item[tereg.py]\index{tereg.py} Average electron temperatures.
+  \item[tiara\_ggd\_to\_b2us.py]\index{tiara\_ggd\_to\_b2us.py}\index{GGD} Converts a GGD object from an {\tt equilibrium} IDS into the {\tt b2us} format.
   \item[tireg.py]\index{tireg.py} Average ion temperatures.
   \item[zeffreg.py]\index{zeffreg.py} Average $Z_{eff}$.
  \end{description}
@@ -3204,12 +3206,12 @@ of fixing radial positions, applicable species, etc...
 
 The coefficient types go as:
 \begin{enumerate}
-   \item Particle sources {\em sna} \index{b2plot, exna}
-   \item Parallel momentum sources {\em smo} \index{b2plot, exmo}
-   \item Electron heat sources {\em she} \index{b2plot, exhe}
-   \item Ion heat sources {\em shi} \index{b2plot, exhi}
-   \item Electric charge sources {\em sch} \index{b2plot, exch}
-   \item Electric particle source (non-ambipolar) {\em sne} \index{b2plot, exne}
+   \item Particle sources {\tt sna} \index{b2plot, exna}
+   \item Parallel momentum sources {\tt smo} \index{b2plot, exmo}
+   \item Electron heat sources {\tt she} \index{b2plot, exhe}
+   \item Ion heat sources {\tt shi} \index{b2plot, exhi}
+   \item Electric charge sources {\tt sch} \index{b2plot, exch}
+   \item Electric particle source (non-ambipolar) {\tt sne} \index{b2plot, exne}
 \end{enumerate}
 
 It is also possible to multiply these radial profiles by an axial form factor.
@@ -3217,33 +3219,33 @@ This axial multiplier is set in the same way as the poloidal profile.
 
 The description of the variables found in {\tt b2.sources.profile} is as follows:
 \begin{description}
-  \item[nsdata(1,i,j)]\index{nsdata} where $i$ is an index for the type of source
-     being defined (see table above) and $j$ is a species index ($0$ for atoms and $1$
-     for ions in a $D$-only case, for instance, and irrelevant (use $1$) for electron
+  \item[nsdata(1,i,j)]\index{nsdata} where {\tt i} is an index for the type of source
+     being defined (see table above) and {\tt j} is a species index ({\tt 0} for atoms and {\tt 1}
+     for ions in a $D$-only case, for instance, and irrelevant (use {\tt 1}) for electron
      sources). {\tt nsdata} is the
      number of data points where the strength of the source is given.
   \item[sdata(1,m,i,j)]\index{sdata} are the radial positions (measured in metres) of the
      {\tt nsdata(1,i,j)} points,
-     where $m$ runs from $1$ to {\tt nsdata(1,i,j)}. By default, the radial positions are
+     where {\tt m} runs from {\tt 1} to {\tt nsdata(1,i,j)}. By default, the radial positions are
      measured from the separatrix outward, along the outer midplane, but this can be changed by
-     making use of the $ixref$ and $iyref$ switches, respectively, to modify the poloidal
+     making use of the {\tt ixref} and {\tt iyref} switches, respectively, to modify the poloidal
      location of the profile and the radial position from which the distances are measured.
   \item[sdata(2,m,i,j)] are the corresponding strengths of the sources.
-  \item[nxdata(k,i,j)]\index{nxdata} where $i$ is an index for the type of source
-     being defined (see table above) and $j$ is a species index ($0$ for atoms and $1$
-     for ions in a $D$-only case, for instance, and irrelevant (use $1$) for electron
+  \item[nxdata(k,i,j)]\index{nxdata} where {\tt i} is an index for the type of source
+     being defined (see table above) and {\tt j} is a species index ({\tt 0} for atoms and {\tt 1}
+     for ions in a $D$-only case, for instance, and irrelevant (use {\tt 1}) for electron
      sources). {\tt nxdata} is the
      number of data points where the value of the axial multiplier to the source is given.
-     If $k$ is equal to $1$, the data is to be understood as function of normalized
-     connection length. If $k$ is equal to $2$, then the axial profile is given in terms
-     of the normalized computational coordinate (running from $0$ to $1$ as $ix$ runs from
-     $-1$ to $nx$).
+     If {\tt k} is equal to {\tt 1}, the data is to be understood as function of normalized
+     connection length. If {\tt k} is equal to {\tt 2}, then the axial profile is given in terms
+     of the normalized computational coordinate (running from {\tt 0} to {\tt 1} as {\tt ix} runs from
+     {\tt -1} to {\tt nx}).
   \item[xdata(1,m,i,j)]\index{xdata} are the axial positions (normalised to the total length)
      of the {\tt nxdata(1,i,j)} points,
-     where $m$ runs from $1$ to {\tt nxdata(1,i,j)}. By default, the connection length
+     where {\tt m} runs from {\tt 1} to {\tt nxdata(1,i,j)}. By default, the connection length
      used is the one measured just inside the separatrix, with the origin
      located at the outer midplane, but this can be changed by
-     making use of the $ixref$ and $iyref$ switches, respectively, to modify the poloidal
+     making use of the {\tt ixref} and {\tt iyref} switches, respectively, to modify the poloidal
      location of the origin and the radial position along which the distances are measured.
      In case the reference location is chosen inside a closed field line region, the axial
      multiplier is set to zero everywhere on the open field lines.
@@ -4312,7 +4314,7 @@ We only include here the variables or aspects thereof not already described in t
   \item[NFCP] Total number of faces in the {\tt B2.5} mesh
   \item[NPTC] In addition to the description in the {\tt Eirene} manual, note that only the value from the first segment of the stratum ({\tt IPRT=1}) is used.
   \item[NPTCM] This corresponds to the {\tt NMINPTS} flag in input block 7, and is needed only if {\tt INDSRC=6}, i.e., if the source is specified by data from block 14 alone. As for {\tt NPTC}, only the value from the first stratum segment is used.
-  \item[NEMOD] This corresponds to the {\tt NEMODS} flag in input block 7 and is needed only if {\tt INDSRC=6}, i.e., if the source is specified by data from block 14 alone. As for {\tt NPTC}, only the value from the first stratum segment is used. {\tt NEMOD=7} includes sheath acceleration (e.g., needed at the targets). {\tt NEMOD=6} does not include sheath acceleration and is recommended at plasma-void interfaces. If you want to sample kinetic atoms from the fluid neutral Maxwellian background distribution and send in the void regions in the hybrid model, it is strongly recommended to use {\tt NEMOD=0}.
+  \item[NEMOD] This corresponds to the {\tt NEMODS} flag in input block 7, and is needed only if {\tt INDSRC=6}, i.e., if the source is specified by data from block 14 alone. As for {\tt NPTC}, only the value from the first stratum segment is used. {\tt NEMOD=7} includes sheath acceleration (e.g., needed at the targets). {\tt NEMOD=6} does not include sheath acceleration and is recommended at plasma-void interfaces. If you want to sample kinetic atoms from the fluid neutral Maxwellian background distribution and send in the void regions in the hybrid model, it is strongly recommended to use {\tt NEMOD=0}.
   \item[ITYPE] Possibility to specify the species type: {\tt ITYPE=0} (default): bulk ion species ({\tt NLPLS=.TRUE.}); {\tt ITYPE=1}: atoms ({\tt NLATM=.TRUE.}); {\tt ITYPE=2}: molecules ({\tt NLMOL=.TRUE.}); {\tt ITYPE=3}: trace ions ({\tt NLION=.TRUE.}); {\tt ITYPE=4}: bulk ions ({\tt NLPLS=.TRUE.}); {\tt ITYPE=5}: photons ({\tt NLPHOT=.TRUE.}). For {\tt ITYPE=1}, the surface normal is reversed as well by making {\tt SORIFL=2000} ensuring that the atoms are sent into the void region.
   \item[NCOPIB] Not in use
   \item[NCOPEB] Maximum number of additional tallies per plasma background species
@@ -9473,6 +9475,8 @@ $\widetilde{j}_{ax}^{(visq)}$ is the component of the poloidal heat viscosity cu
 
 For the definition of $\widetilde{q}_a^{(0)}$, see Eqs. (\ref{eq:q0-0}) and (\ref{eq:q0-1}).
 
+The poloidal component of the ion-neutral current is
+
 \begin{equation}\label{eq:pot_jxs}
 \widetilde{j}_x^{(s)} =
 \sum \limits^{ns-1}_{\substack{a_0 = 0 \\ z_{a_0} = 0~\&~z_{n,a_0} = 1 }}
@@ -9484,26 +9488,54 @@ For the definition of $\widetilde{q}_a^{(0)}$, see Eqs. (\ref{eq:q0-0}) and (\re
 \right)
 \end{equation}
 
+If {\tt 'b2tinnt\_style'} is set to {\tt '1'} (default), the gradient of $n_a T_i$ is calculated directly.
+If {\tt 'b2tinnt\_style'} is set to {\tt '0'}, the implementation follows from rewriting the equation as
+
+\begin{equation}\label{eq:pot_jxs_old}
+\widetilde{j}_x^{(s)} =
+\sum \limits^{ns-1}_{\substack{a_0 = 0 \\ z_{a_0} = 0~\&~z_{n,a_0} = 1 }}
+\sum \limits^{ns-1}_{\substack{a = 0 \\ z_{a} = 1~\&~z_{n,a} = 1 }}
+\left(
+- \sigma_{aa_0} b_z^2 \frac{\partial \Phi}{h_x \partial x}
+- \sigma_{aa_0} b_z^2 \frac{1}{z_a e} (\frac{\partial T_i}{h_x \partial x} + T_i \frac{\partial log(n_a)}{h_x \partial x})
++ \sigma_{aa_0} B_z V_{a_{0}y}
+\right)
+\end{equation}
+
+The ion-neutral conductivity is given by:
+
 \begin{equation}
 \sigma_{aa_0} =
 \left\{
 \begin{matrix}\label{eq:pot_sigaa0}
-\frac{\tilde\mu_{aa_0} m_p n_a \left\langle V_{aa_0} \sigma_{ex} \right\rangle n_{a_0}}{B^2}, &
+\frac{m_p n_a \left\langle V_{aa_0} \sigma_{ex} \right\rangle n_{a_0}}{B^2}, &
 z_{a_0} = 0 ~ \& ~ z_{n,a_0} = 1, z_a \ne 0 ~ \& ~z_{n_a} = 1 \\
 0, & \text{otherwise}
 \end{matrix}
 \right.
 \end{equation}
 
+If {\tt 'b2tqin\_csigin\_style'} is {\tt '0'} the diffusivity of room-temperature hydrogen is used
+
 \begin{equation}
 \left\langle V_{aa_0} \sigma_{ex} \right\rangle = 3.2 \cdot 10^{-15} \sqrt{\frac{T_i}{0.026e}}\sqrt{\frac{1}{\tilde\mu_{aa_0}}}
 \end{equation}
 
-\begin{equation}
-\tilde\mu_{aa_0}= \frac{\frac{m_a}{m_p} \frac{m_{a_0}}{m_p}}{\frac{m_a}{m_p} + \frac{m_{a_0}}{m_p}}
-\end{equation}
+If {\tt 'b2tqin\_csigin\_style'} is {\tt '1'} the local B2.5 CX rate is used
+
+% This factor probably has to do with CX between particles of unlike mass, but it doesn't seem to be implemented in this code version.
+%\begin{equation}
+%\tilde\mu_{aa_0}= \frac{\frac{m_a}{m_p} \frac{m_{a_0}}{m_p}}{\frac{m_a}{m_p} + \frac{m_{a_0}}{m_p}}
+%\end{equation}
 
 $V_{a_{0}y} = \frac{\Gamma_{a_{0}y} }{n_{a_0}}$
+
+The neutral densities $n_{a_0}$ are the sum of the fluid neutral and kinetic neutral densities.
+The radial neutral flux $\Gamma_{a_{0}y}$ is the density-weighted average of the fluid and kinetic fluxes (for compatibility with hybrid fluid-kinetic neutrals).
+
+Remark: when the perpendicular momentum sources are scored in EIRENE and available in B2.5, the ion-neutral current should be rewritten. This would be more self-consistent, whereas now
+it is a mix of post-processed EIRENE perpendicular atom velocities and B2.5 CX rates. See derivations in \cite{Rozhansky2001NF} and \cite{VanUytvenPSI2022}.
+
 
 $j_x^{(\parallel)}$ - see Eq.~(\ref{eq:fch_p}) above.
 
@@ -9622,6 +9654,8 @@ $\widetilde{j}_{ay}^{(visq)}$ is the radial component of the heat viscosity curr
 
 For definition of $\widetilde{q}_a^{(0)}$, see Eqs.~(\ref{eq:q0-0}) and (\ref{eq:q0-1}).
 
+The radial component of the ion-neutral current is
+
 \begin{equation}\label{eq:pot_jys}
 \widetilde{j}_y^{(s)} =
 \sum \limits^{ns-1}_{\substack{a_0 = 0 \\ z_{a_0} = 0~\&~z_{n,a_0} = 1 }}
@@ -9629,9 +9663,11 @@ For definition of $\widetilde{q}_a^{(0)}$, see Eqs.~(\ref{eq:q0-0}) and (\ref{eq
 \left(
 - \sigma_{aa_0} \frac{\partial \Phi}{h_y \partial y}
 - \sigma_{aa_0} \frac{1}{z_a e n_a} \frac{\partial n_a T_i}{h_y \partial y}
-- \sigma_{aa_0} B V_{a_{0}x}
+- \sigma_{aa_0} B V_{a_{0}\perp}
 \right)
 \end{equation}
+
+The {\tt 'b2tinnt\_style'} switch determines the numerical implementation, similarly as for Eq.~(\ref{eq:pot_jxs}) and Eq.~(\ref{eq:pot_jxs_old}).
 
 \begin{equation}\label{eq:pot_jyst}
 \begin{matrix}
@@ -9649,7 +9685,10 @@ j_y^{(ST)} = &
 \end{matrix}
 \end{equation}
 
-$V_{a_{0}x}=\frac{\Gamma_{a_{0}x}}{n_{a_0}}$
+$V_{a_{0}\perp}=\frac{\Gamma_{a_{0}\perp}}{n_{a_0}}$
+
+The neutral densities $n_{a_0}$ are the sum of the fluid neutral and kinetic neutral densities.
+The diamagnetic neutral flux $\Gamma_{a_{0}\perp}$ is the density-weighted average of the fluid and kinetic fluxes (for compatibility with hybrid fluid-kinetic neutrals).
 
 $\sigma_{aa_0}$ see Eq.~(\ref{eq:pot_sigaa0}) above.
 
@@ -18115,7 +18154,6 @@ We list below where the {\tt DivGeo} compilation switches are used.
        IMAS\_MAJOR\_VERSION & equtrn/src/dg2ids.f \\
        IMAS\_MAJOR\_VERSION & equtrn/src/ids2dg.f \\
        IMAS\_MAJOR\_VERSION & equtrn/src/wrids.f \\
-       IMAS\_MICRO\_VERSION & equtrn/src/wrids.f \\
        IMAS\_MINOR\_VERSION & equtrn/src/eqdim.f90 \\
        IMAS\_MINOR\_VERSION & equtrn/src/rdids.f \\
        IMAS\_MINOR\_VERSION & equtrn/src/wrids.f \\
@@ -18125,9 +18163,7 @@ We list below where the {\tt DivGeo} compilation switches are used.
        UAL\_MAJOR\_VERSION & equtrn/src/rdids.f \\
        UAL\_MAJOR\_VERSION & equtrn/src/wrids.f \\
        UAL\_MICRO\_VERSION & equtrn/src/rdids.f \\
-       UAL\_MICRO\_VERSION & equtrn/src/wrids.f \\
        UAL\_MINOR\_VERSION & equtrn/src/rdids.f \\
-       UAL\_MINOR\_VERSION & equtrn/src/wrids.f \\
        USE\_PXFGETENV & equtrn/src/dg2ids.f \\
        USE\_PXFGETENV & equtrn/src/ids2dg.f \\
        USE\_PXFGETENV & equtrn/src/wrids.f \\
@@ -18181,13 +18217,13 @@ if desired, be declared as part of either the {\tt SOLPS\_CPP} or the
 \item[NO\_21] \index{NO\_21} Do not use 21-moment model for thermal and viscous forces
 \item[NO\_IEEE] \index{NO\_IEEE} Provides replacements to IEEE non-standard arithmetic routines
 \item[NO\_F01AAF] \index{NO\_F01AAF} No {\tt NAG} routine {\tt F01AAF} --- uses its replacement instead (needed if linking with Version 17 or later of {\tt NAG})
-\item[NO\_OPENMP\_\*] \index{NO\_OPENMP} Turning off OpenMP parallelization
+\item[NO\_OPENMP\_*] \index{NO\_OPENMP} Turning off OpenMP parallelization
 \item[NO\_OPT] \index{NO\_OPT} No compiler optimization
+\item[\_OPENMP] \index{\_OPENMP} For OpenMP specific code
 \item[PAR\_OPT] \index{PAR\_OPT} Runs the code in a special interpretive parameter optimization mode
 \item[PERFMON] \index{PERFMON} Enable performance monitoring
 \item[PLPLOT] \index{PLPLOT} Use {\tt PLPLOT} instead of {\tt NCAR} for plotting
 %\item[SCL\_IMP\_RCI] \index{SCL\_IMP\_RCI} Toggles scaling of impurities tallies
-\item[UAL\_MAJOR\_VERSION] \index{UAL\_MAJOR\_VERSION} Major version number of the UAL (Universal Access Layer) library to which the code is linked (set internally by the configuration files)
 \item[USE\_CDF\_B2STIME] \index{USE\_CDF\_B2STIME} Specific for \SOLPSfour {\tt CDF} tallies
 \item[WANT\_PROCESS] \index{WANT\_PROCESS} Enables the code for the \SOLPSfive to \SOLPSfour converter
 \item[WOS] \index{WOS} Uses the {\tt WOS} libraries for accessing experimental data at IPP
@@ -18572,12 +18608,30 @@ NO\_NAG & b2plot/caltraj.F \\
 NO\_NAG & sources/heatdiff1D.F \\
 NO\_NAG & transport/b2tr21.F \\
 NO\_NAG & utility/nagsubst.F \\
+NO\_OPENMP\_B2SRDT & sources/b2srdt.F \\
 NO\_OPT & b2plot/b2plot.F \\
 NO\_OPT & ids/b2mod\_ual\_io.F90 \\
 NO\_OPT & postprocessing/b2ytdr.F \\
 NO\_SAVE & include/BRAEIR.H \\
 NO\_SAVE & include/EIRBRA.H \\
 NO\_SAVE & include/EIRDIAG.H \\
+\_OPENMP & src/catalyst/fortranAdaptor.F90 \\
+\_OPENMP & src/driver/b2mn\_opt.F \\
+\_OPENMP & src/driver/b2mnastra.F \\
+\_OPENMP & src/driver/b2mod\_driver.F \\
+\_OPENMP & src/driver/b2obeq.F \\
+\_OPENMP & src/driver/b2obfn.F \\
+\_OPENMP & src/driver/b2oblm.F \\
+\_OPENMP & src/modules/b2mod\_openmp.F \\
+\_OPENMP & src/solvers/b2ux11p.F \\
+\_OPENMP & src/solvers/b2ux5p.F \\
+\_OPENMP & src/solvers/b2ux7p.F \\
+\_OPENMP & src/solvers/b2ux9p.F \\
+\_OPENMP & src/sources/b2stbr.F \\
+\_OPENMP & src/utility/illtern\_7\_solps.F \\
+\_OPENMP & src/utility/ilutern\_7\_solps.F \\
+\_OPENMP & src/utility/ilutern\_9\_solps.F \\
+\_OPENMP & src/utility/ilutern\_us\_solps.F \\
 PAR\_OPT & sources/b2stbc\_phys.F \\
 PAR\_OPT & transport/b2tqna.F \\
 PERFMON & utility/prgend.F \\
@@ -18629,9 +18683,7 @@ SOLPS4\_3 & modules/b2mod\_mwti.F90 \\
 SOLPS4\_3 & modules/b2mod\_neutrals\_namelist.F \\
 SOLPS4\_3 & sources/eirene\_f30f31.F \\
 UAL\_MAJOR\_VERSION & ids/b2mod\_ual.F90 \\
-UAL\_MAJOR\_VERSION & ids/b2mod\_ual\_io.F90 \\
-UAL\_MICRO\_VERSION & ids/b2mod\_ual\_io.F90 \\
-UAL\_MINOR\_VERSION & ids/b2mod\_ual\_io.F90 \\
+UAL\_MINOR\_VERSION & ids/b2mod\_ual.F90 \\
 USE\_CDF\_B2STIME & modules/b2mod\_comtimpl.F \\
 USE\_CDF\_B2STIME & common/COUPLE/COMTIMPL.F \\
 USE\_IMPGYRO & driver/b2mod\_driver.F \\
@@ -21480,7 +21532,7 @@ introduced a very small effect, seen only as a jump in the residuals.
 \input{CONTRIBUTING.tex}
 
 \bibliographystyle{iaea}
-\bibliography{tok,aug,general,extern,main,model,divgas,mnw,xpb,adopt}
+\bibliography{tok,aug,general,extern,main,model,divgas,mnw,xpb,adopt,afn}
 
 \input{solps.ind}
 

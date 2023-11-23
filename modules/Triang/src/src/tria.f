@@ -287,6 +287,18 @@ C---- SPLIT FRONTIER PART IF IT IS LONGER THAN DELPOIN
             IF (NPOIN .GT. size(x)) THEN !{
                call realloc_cpoin('xy',1)
             ENDIF !}
+            IF (NPOIN .GT. size(isplit_hlp)) THEN !{
+               call realloc_cpoin('isplit_hlp',1)
+            ENDIF !}
+            isplit_hlp(NPOIN) = 1
+            IF (isplit_hlp(IFRONT(1,I)) .NE. 1 .OR. 
+     &          isplit_hlp(IFRONT(2,I)) .NE. 1 ) THEN
+              WRITE(6,*) 'isplit_hlp(IFRONT(1,I)), I',
+     &          isplit_hlp(IFRONT(1,I)), I
+              WRITE(6,*) 'isplit_hlp(IFRONT(2,I)), I',
+     &          isplit_hlp(IFRONT(2,I)), I
+              STOP 'ERROR'
+            ENDIF 
             X(NPOIN) = (X(IFRONT(1,I))+X(IFRONT(2,I)))*0.5
             Y(NPOIN) = (Y(IFRONT(1,I))+Y(IFRONT(2,I)))*0.5
             NPARTFR = NPARTFR + 1
