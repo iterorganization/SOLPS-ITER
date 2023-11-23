@@ -193,6 +193,7 @@ $(target_ag) : b2ag.dat
 	-[ -s b2ag.exe.dir/b2fgmtry_us ] && mv b2ag.exe.dir/b2fgmtry_us . || echo > /dev/null
 	-[ -s b2ag.exe.dir/b2us.regions.parameters ] && mv b2ag.exe.dir/b2us.regions.parameters . || echo > /dev/null
 	-[ -s b2ag.exe.dir/b2us.user.parameters ] && mv b2ag.exe.dir/b2us.user.parameters . || echo > /dev/null
+	-[ -s b2ag.exe.dir/b2us.midplane.parameters ] && mv b2ag.exe.dir/b2us.midplane.parameters . || echo > /dev/null
 	-[ -s b2ag.exe.dir/info.dat ] && mv b2ag.exe.dir/info.dat . || echo > /dev/null
 	-rmdir b2ag.exe.dir
 
@@ -651,6 +652,7 @@ $(target_us) : b2fstati b2fgmtry b2fpardf b2mn.dat
 	[ -e b2us.boundary.parameters ] && rm -f b2us.boundary.parameters || echo > /dev/null
 	[ -e b2us.neutrals.parameters ] && rm -f b2us.neutrals.parameters || echo > /dev/null
 	[ -e b2us.feedback_control.parameters ] && rm -f b2us.feedback_control.parameters || echo > /dev/null
+	[ -e b2us.midplane.parameters ] && rm -f b2us.midplane.parameters || echo > /dev/null
 	[ -s ${fort_lc}33 ] || ( [ -s $(baserundir)/${fort_lc}33 ] && ln -sf $(baserundir)/${fort_lc}33 . || ( [ -s $(triangdir)/${fort_lc}33 ] && ln -sf $(triangdir)/${fort_lc}33 . || echo > /dev/null ) )
 	[ -s ${fort_lc}34 ] || ( [ -s $(baserundir)/${fort_lc}34 ] && ln -sf $(baserundir)/${fort_lc}34 . || ( [ -s $(triangdir)/${fort_lc}34 ] && ln -sf $(triangdir)/${fort_lc}34 . || echo > /dev/null ) )
 	[ -s ${fort_lc}35 ] || ( [ -s $(baserundir)/${fort_lc}35 ] && ln -sf $(baserundir)/${fort_lc}35 . || ( [ -s $(triangdir)/${fort_lc}35 ] && ln -sf $(triangdir)/${fort_lc}35 . || echo > /dev/null ) )
