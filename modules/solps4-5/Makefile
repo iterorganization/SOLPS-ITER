@@ -381,7 +381,7 @@ ${OBJDIR}/b2_4to5.o: ${OBJDIR}/eirmod_parmmod.${MOD} ${OBJDIR}/braeir.${MOD} ${O
 
 ${OBJDIR}/b2mod_b2_to_astra.o: ${OBJDIR}/eirdiag.${MOD}
 
-${OBJDIR}/b2mod_neutrals_namelist.o: ${OBJDIR}/eirmod_parmmod.${MOD} ${OBJDIR}/parmmod.${MOD} ${OBJDIR}/braeir.${MOD} ${OBJDIR}/ceirsrt.${MOD} ${OBJDIR}/eirdiag.${MOD}
+${OBJDIR}/b2mod_neutrals_namelist.o: ${OBJDIR}/eirmod_parmmod.${MOD} ${OBJDIR}/parmmod.${MOD} ${OBJDIR}/braeir.${MOD} ${OBJDIR}/ceirsrt.${MOD} ${OBJDIR}/comusr.${MOD} ${OBJDIR}/eirdiag.${MOD}
 
 ${OBJDIR}/eirmod_parmmod.o:
 	ln -sf ${OBJDIR}/parmmod.o $@
@@ -394,6 +394,9 @@ ${OBJDIR}/eirmod_braeir.o:
 
 ${OBJDIR}/eirmod_cinit.o:
 	ln -sf ${EIRDIR}/eirmod_cinit.o ${OBJDIR}
+
+${OBJDIR}/eirmod_comusr.o:
+	ln -sf ${EIRDIR}/eirmod_comusr.o ${OBJDIR}
 
 ${OBJDIR}/eirmod_comxs.o:
 	ln -sf ${EIRDIR}/eirmod_comxs.o ${OBJDIR}
@@ -643,13 +646,16 @@ ${OBJDIR}/b2_4to5.${MOD}: ${OBJDIR}/eirmod_parmmod.${MOD} ${OBJDIR}/braeir.${MOD
 
 ${OBJDIR}/b2mod_b2_to_astra.${MOD}: ${OBJDIR}/eirdiag.${MOD}
 
-${OBJDIR}/b2mod_neutrals_namelist.${MOD}: ${OBJDIR}/parmmod.${MOD} ${OBJDIR}/braeir.${MOD} ${OBJDIR}/ceirsrt.${MOD} ${OBJDIR}/eirdiag.${MOD}
+${OBJDIR}/b2mod_neutrals_namelist.${MOD}: ${OBJDIR}/parmmod.${MOD} ${OBJDIR}/braeir.${MOD} ${OBJDIR}/ceirsrt.${MOD} ${OBJDIR}/comusr.${MOD} ${OBJDIR}/eirdiag.${MOD}
 
 ${OBJDIR}/eirmod_braeir.${MOD}:
 	ln -sf ${EIRDIR}/eirmod_braeir.${MOD} ${OBJDIR}
 
 ${OBJDIR}/eirmod_cinit.${MOD}:
 	ln -sf ${EIRDIR}/eirmod_cinit.${MOD} ${OBJDIR}
+
+${OBJDIR}/eirmod_comusr.${MOD}:
+	ln -sf ${EIRDIR}/eirmod_comusr.${MOD} ${OBJDIR}
 
 ${OBJDIR}/eirmod_comxs.${MOD}:
 	ln -sf ${EIRDIR}/eirmod_comxs.${MOD} ${OBJDIR}
