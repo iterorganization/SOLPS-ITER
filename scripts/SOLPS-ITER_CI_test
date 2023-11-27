@@ -149,3 +149,56 @@ touch b2fstati
 setup_baserun_eirene_links
 b2run b2mn
 ../run_checks_DIIID_3106_coupled.sh ../run_for_CI_9-pt/ ./ || exit 7
+
+# Special test to look for restart effects
+cd ${SOLPSTOP}/modules/B2.5
+cat src/utility/cfwure.F | sed -e "s:ifmt=1:ifmt=0:" > src.local/cfwure.F
+touch src/modules/.new_modules
+cd ${SOLPSTOP}
+make b25eirene_nox
+cd ${SOLPSTOP}/runs/examples/DIIID_3106_DN_D+C
+mkdir run_CI_test_9-pt_20
+cd run_CI_test_9-pt_20
+cp ../run_for_CI_9-pt/b2.*.parameters .
+cp ../run_for_CI_9-pt/b2mn.dat .
+cp ../run_for_CI_9-pt/b2fstati .
+cp ../run_for_CI_9-pt/input.dat .
+cp ../run_for_CI_9-pt/fort.10.i fort.10
+cp ../run_for_CI_9-pt/fort.11.i fort.11
+cp ../run_for_CI_9-pt/fort.13.i fort.13
+cp ../run_for_CI_9-pt/fort.14.i fort.14
+cp ../run_for_CI_9-pt/fort.15.i fort.15
+cp ../run_for_CI_9-pt/fort.44.i fort.44
+cp ../run_for_CI_9-pt/fort.46.i fort.46
+cp ../run_for_CI_9-pt/b2time.nc.i b2time.nc
+cp ../run_for_CI_9-pt/b2batch.nc.i b2batch.nc
+cp ../run_for_CI_9-pt/b2tallies.nc.i b2tallies.nc
+touch b2fstati
+setup_baserun_eirene_links
+echo "'b2mndr_ntim' '20'" >> b2mn.dat
+b2run b2mn
+cd ..
+mkdir run_CI_test_9-pt_2x10
+cd run_CI_test_9-pt_2x10
+cp ../run_for_CI_9-pt/b2.*.parameters .
+cp ../run_for_CI_9-pt/b2mn.dat .
+cp ../run_for_CI_9-pt/b2fstati .
+cp ../run_for_CI_9-pt/input.dat .
+cp ../run_for_CI_9-pt/fort.10.i fort.10
+cp ../run_for_CI_9-pt/fort.11.i fort.11
+cp ../run_for_CI_9-pt/fort.13.i fort.13
+cp ../run_for_CI_9-pt/fort.14.i fort.14
+cp ../run_for_CI_9-pt/fort.15.i fort.15
+cp ../run_for_CI_9-pt/fort.44.i fort.44
+cp ../run_for_CI_9-pt/fort.46.i fort.46
+cp ../run_for_CI_9-pt/b2time.nc.i b2time.nc
+cp ../run_for_CI_9-pt/b2batch.nc.i b2batch.nc
+cp ../run_for_CI_9-pt/b2tallies.nc.i b2tallies.nc
+touch b2fstati
+setup_baserun_eirene_links
+b2run b2mn
+rm b2mn.prt
+mv b2fstate b2fstati
+echo "'eirene_repeat_first_call' '0'" >> b2mn.dat
+b2run b2mn
+${SOLPSTOP}/modules/B2.5/src/test/run_checks_CI_coupled.sh ../run_CI_test_9-pt_20/ ./ || exit 8
