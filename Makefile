@@ -99,7 +99,7 @@ B25_SERIAL = mods
 endif
 
 DEFLIBS =
-DEGLIBS =
+DEGLIBS = -DGRAPHICS=ON
 ifdef LIBGRS
 DEGLIBS += -DLibGRS=${LIBGRS}
 endif
