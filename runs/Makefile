@@ -197,12 +197,10 @@ $(target_ag) : b2ag.dat
 	-[ -s b2ag.exe.dir/info.dat ] && mv b2ag.exe.dir/info.dat . || echo > /dev/null
 	-rmdir b2ag.exe.dir
 
-$(target_ah) : b2ah.dat b2fgmtry
+$(target_ah) : b2ah.dat
 	rm -rf b2ah.exe.dir >& /dev/null ; mkdir b2ah.exe.dir ; cp $^ b2ah.exe.dir
-	-[ -s b2fgmtry_st ] && cp b2fgmtry_st b2ah.exe.dir || echo "Could not find b2fgmtry_st. Please provide!" 
 	rm -f $(target_ah)
 	cd b2ah.exe.dir ; ${TIME} ${B2OBJ}/b2ah.exe ${RUN_OPTIONS} ; mv $(target_ah) .. ; rm -f $(notdir $^) >& /dev/null
-	-[ -s b2ah.exe.dir/b2fgmtry_st ] && rm b2ah.exe.dir/b2fgmtry_st || echo > /dev/null
 	-rmdir b2ah.exe.dir
 
 $(target_ai) : b2ai.dat b2fgmtry
