@@ -9,6 +9,11 @@ echo "(both require a valid ITER IDM account)"
 echo The full SOLPS-ITER manual can be found in \$SOLPSTOP/doc/solps/solps.pdf
 echo The Eirene manual is located at http://www.eirene.de/
 
+if ($0 != "tcsh" ) then
+  echo "\e[31mUse tcsh to source setup.csh!\e[m"
+  exit 1
+endif
+
 # Obtain the directory where setup.csh is located to use as SOLPSTOP
 setenv LAST_COMMAND `echo $_`
 if (`echo ${LAST_COMMAND}` == "") then
@@ -266,6 +271,7 @@ alias   set_ipopt  'source $SOLPSTOP/SETUP/ipopt'
 alias unset_ipopt  'source $SOLPSTOP/SETUP/noipopt'
 alias   set_tao    'source $SOLPSTOP/SETUP/tao'
 alias unset_tao    'source $SOLPSTOP/SETUP/notao'
+
 # Check for Motif library
 if (! -e `which mwm`) setenv NO_MOTIF 1
 if ($?NO_MOTIF) then
