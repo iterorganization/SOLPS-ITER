@@ -9544,6 +9544,8 @@ $\widetilde{j}_{ax}^{(visq)}$ is the component of the poloidal heat viscosity cu
 
 For the definition of $\widetilde{q}_a^{(0)}$, see Eqs. (\ref{eq:q0-0}) and (\ref{eq:q0-1}).
 
+The poloidal component of the ion-neutral current is
+
 \begin{equation}\label{eq:pot_jxs}
 \widetilde{j}_x^{(s)} =
 \sum \limits^{ns-1}_{\substack{a_0 = 0 \\ z_{a_0} = 0~\&~z_{n,a_0} = 1 }}
@@ -9555,26 +9557,54 @@ For the definition of $\widetilde{q}_a^{(0)}$, see Eqs. (\ref{eq:q0-0}) and (\re
 \right)
 \end{equation}
 
+If {\tt 'b2tinnt\_style'} is set to {\tt '1'} (default), the gradient of $n_a T_i$ is calculated directly.
+If {\tt 'b2tinnt\_style'} is set to {\tt '0'}, the implementation follows from rewriting the equation as
+
+\begin{equation}\label{eq:pot_jxs_old}
+\widetilde{j}_x^{(s)} =
+\sum \limits^{ns-1}_{\substack{a_0 = 0 \\ z_{a_0} = 0~\&~z_{n,a_0} = 1 }}
+\sum \limits^{ns-1}_{\substack{a = 0 \\ z_{a} = 1~\&~z_{n,a} = 1 }}
+\left(
+- \sigma_{aa_0} b_z^2 \frac{\partial \Phi}{h_x \partial x}
+- \sigma_{aa_0} b_z^2 \frac{1}{z_a e} (\frac{\partial T_i}{h_x \partial x} + T_i \frac{\partial log(n_a)}{h_x \partial x})
++ \sigma_{aa_0} B_z V_{a_{0}y}
+\right)
+\end{equation}
+
+The ion-neutral conductivity is given by:
+
 \begin{equation}
 \sigma_{aa_0} =
 \left\{
 \begin{matrix}\label{eq:pot_sigaa0}
-\frac{\tilde\mu_{aa_0} m_p n_a \left\langle V_{aa_0} \sigma_{ex} \right\rangle n_{a_0}}{B^2}, &
+\frac{m_p n_a \left\langle V_{aa_0} \sigma_{ex} \right\rangle n_{a_0}}{B^2}, &
 z_{a_0} = 0 ~ \& ~ z_{n,a_0} = 1, z_a \ne 0 ~ \& ~z_{n_a} = 1 \\
 0, & \text{otherwise}
 \end{matrix}
 \right.
 \end{equation}
 
+If {\tt 'b2tqin\_csigin\_style'} is {\tt '0'} the diffusivity of room-temperature hydrogen is used
+
 \begin{equation}
 \left\langle V_{aa_0} \sigma_{ex} \right\rangle = 3.2 \cdot 10^{-15} \sqrt{\frac{T_i}{0.026e}}\sqrt{\frac{1}{\tilde\mu_{aa_0}}}
 \end{equation}
 
-\begin{equation}
-\tilde\mu_{aa_0}= \frac{\frac{m_a}{m_p} \frac{m_{a_0}}{m_p}}{\frac{m_a}{m_p} + \frac{m_{a_0}}{m_p}}
-\end{equation}
+If {\tt 'b2tqin\_csigin\_style'} is {\tt '1'} the local B2.5 CX rate is used
+
+% This factor probably has to do with CX between particles of unlike mass, but it doesn't seem to be implemented in this code version.
+%\begin{equation}
+%\tilde\mu_{aa_0}= \frac{\frac{m_a}{m_p} \frac{m_{a_0}}{m_p}}{\frac{m_a}{m_p} + \frac{m_{a_0}}{m_p}}
+%\end{equation}
 
 $V_{a_{0}y} = \frac{\Gamma_{a_{0}y} }{n_{a_0}}$
+
+The neutral densities $n_{a_0}$ are the sum of the fluid neutral and kinetic neutral densities.
+The radial neutral flux $\Gamma_{a_{0}y}$ is the density-weighted average of the fluid and kinetic fluxes (for compatibility with hybrid fluid-kinetic neutrals).
+
+Remark: when the perpendicular momentum sources are scored in EIRENE and available in B2.5, the ion-neutral current should be rewritten. This would be more self-consistent, whereas now
+it is a mix of post-processed EIRENE perpendicular atom velocities and B2.5 CX rates. See derivations in \cite{Rozhansky2001NF} and \cite{VanUytvenPSI2022}.
+
 
 $j_x^{(\parallel)}$ - see Eq.~(\ref{eq:fch_p}) above.
 
@@ -9693,6 +9723,8 @@ $\widetilde{j}_{ay}^{(visq)}$ is the radial component of the heat viscosity curr
 
 For definition of $\widetilde{q}_a^{(0)}$, see Eqs.~(\ref{eq:q0-0}) and (\ref{eq:q0-1}).
 
+The radial component of the ion-neutral current is
+
 \begin{equation}\label{eq:pot_jys}
 \widetilde{j}_y^{(s)} =
 \sum \limits^{ns-1}_{\substack{a_0 = 0 \\ z_{a_0} = 0~\&~z_{n,a_0} = 1 }}
@@ -9700,9 +9732,11 @@ For definition of $\widetilde{q}_a^{(0)}$, see Eqs.~(\ref{eq:q0-0}) and (\ref{eq
 \left(
 - \sigma_{aa_0} \frac{\partial \Phi}{h_y \partial y}
 - \sigma_{aa_0} \frac{1}{z_a e n_a} \frac{\partial n_a T_i}{h_y \partial y}
-- \sigma_{aa_0} B V_{a_{0}x}
+- \sigma_{aa_0} B V_{a_{0}\perp}
 \right)
 \end{equation}
+
+The {\tt 'b2tinnt\_style'} switch determines the numerical implementation, similarly as for Eq.~(\ref{eq:pot_jxs}) and Eq.~(\ref{eq:pot_jxs_old}).
 
 \begin{equation}\label{eq:pot_jyst}
 \begin{matrix}
@@ -9720,7 +9754,10 @@ j_y^{(ST)} = &
 \end{matrix}
 \end{equation}
 
-$V_{a_{0}x}=\frac{\Gamma_{a_{0}x}}{n_{a_0}}$
+$V_{a_{0}\perp}=\frac{\Gamma_{a_{0}\perp}}{n_{a_0}}$
+
+The neutral densities $n_{a_0}$ are the sum of the fluid neutral and kinetic neutral densities.
+The diamagnetic neutral flux $\Gamma_{a_{0}\perp}$ is the density-weighted average of the fluid and kinetic fluxes (for compatibility with hybrid fluid-kinetic neutrals).
 
 $\sigma_{aa_0}$ see Eq.~(\ref{eq:pot_sigaa0}) above.
 
@@ -21531,7 +21568,7 @@ introduced a very small effect, seen only as a jump in the residuals.
 \input{CONTRIBUTING.tex}
 
 \bibliographystyle{iaea}
-\bibliography{tok,aug,general,extern,main,model,divgas,mnw,xpb,adopt}
+\bibliography{tok,aug,general,extern,main,model,divgas,mnw,xpb,adopt,afn}
 
 \input{solps.ind}
 
