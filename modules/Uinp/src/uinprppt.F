@@ -81,6 +81,15 @@ c*** the atoms and nuclei
                 end if !}
                 if(.not.l_meta(j+m)) then
                   nspcncl=nspcncl+1
+                  if (streql(c,'H').or.streql(c,'D').or.
+     ,              streql(c,'T')) then
+!nh neutral background species for the hybrid model
+                    nplsh=nplsh+1
+                    textph(nplsh)=c(1:1)//'0'
+                    if (streql(c,'H')) nmassph(nplsh)=1
+                    if (streql(c,'D')) nmassph(nplsh)=2
+                    if (streql(c,'T')) nmassph(nplsh)=3
+                  end if
                   if(nspcpls+nspcncl.gt.nsdb2) then !{
                     write(0,*) 'The total number of B2.5 species must ',
      ,               'not exceed ',nsdb2
@@ -344,6 +353,7 @@ c*** the atoms and nuclei
                   spcsrsp(np)=-1
                 end if !}
                 dpls(np)=1./mm
+                dplsh(np)=1./mm
               end do  !}
               j=j+mm
 
@@ -567,12 +577,14 @@ c*** Plasma ions:
             spcsfup(nspcpls)=1
             spcsrsp(nspcpls)=spcirsp(l)
             dpls(nspcpls)=spcidsp(l)
+            dplsh(nspcpls)=spcidsp(l)
           else  !}{
             write(*,*) 'A plasma ion species "',c,'" has already been ',
      ,        'added - skipping it'
           end if  !}
         end if  !}
       end do  !}
+
 c!#{
 c      print *
 c      print *,'nspcatm nspcmol nspcion nspcpls'
@@ -754,15 +766,20 @@ cank        isrsi(l)=spcsrsi(l)
         nchrgp(l)=spcscgp(l)
 cank        isrsp(l)=spcsrsp(l)
         bmass(l)=nmassp(l)
+        bmassh(l)=nmassp(l)
         if (l.eq.1) then !{
           lkindp(l)=1
+          lkindph(l)=1
         else if (bmass(l).eq.bmass(l-1) .and. 
      &           ncharp(l).eq.ncharp(l-1)) then !}{
           lkindp(l)=lkindp(l-1)
+          lkindph(l)=lkindph(l-1)
         else
           lkindp(l)=lkindp(l-1)+1
+          lkindph(l)=lkindph(l-1)+1
         endif !}
         iflb(l)=l
+        iflbh(l)=l
 
         k=0
         c=spcsrfp(l)
@@ -804,6 +821,39 @@ cank        isrsp(l)=spcsrsp(l)
           isrtp(l)=0
         end if !}
       end do !}
+
+!nh   species indices for relection of neutral background species
+!nh   and adding the neutral background in block 14
+      do l=1,nplsh !{
+        c=textph(l)(1:1)
+        k=0
+        do i=1,nspcatm !{
+          if(streql(c,spcsatm(i))) k=i
+        end do !}
+        if(k.eq.0) then !{
+          write(0,*) 'Reflected fast particle not found ',
+     ,      'for neutral background species', c
+        end if !}
+        isrfph(l)=k
+        lkindph(nspcpls+l)=k
+        k = 0
+        do i=1,nspcmol !{
+          if(streql(c,spcsmol(i)(1:1))) k=-i
+        end do !{
+        if(k.eq.0) then !{
+          write(0,*) 'Re-emitted thermal particle not found ',
+     ,      'for neutral background species', c
+        end if !}
+        isrtph(l)=k
+        iflbh(nspcpls+l)=nspcpls+l
+        fcteh(nspcpls+l)=1.
+        if (streql(c,'H')) bmassh(nspcpls+l)=1.
+        if (streql(c,'D')) bmassh(nspcpls+l)=2.
+        if (streql(c,'T')) bmassh(nspcpls+l)=3.
+      end do !}
+
+!nh   setting dpls to 1.0 for the fluid neutral background species in the hybrid model
+      dplsh(nplsi+1:nplsi+nplsh)=1.
 
       write(*,*)
       write(*,'(a,4i5)') 'Particle list: natmi,nmoli,nioni,nplsi =',

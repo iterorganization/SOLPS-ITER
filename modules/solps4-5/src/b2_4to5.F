@@ -671,6 +671,7 @@ cxpb
       use b2mod_constants
       use b2mod_residuals
       use b2mod_transport
+      use b2mod_connectivity
       use b2mod_neutr_src_scaling
       use b2mod_boundary_namelist
       use b2mod_neutrals_namelist
@@ -966,7 +967,7 @@ c Compute geometrical quantities
       ffbz = 0.0_R8
       periodic_bc = 0
       call init_region(nx,ny,nncut,nncutmax,
-     1 leftcut,rightcut,topcut,bottomcut,
+     1 leftcut,rightcut,topcut,bottomcut,ccut,
      1 leftix,leftiy,rightix,rightiy,topix,topiy,bottomix,bottomiy,
      2 region,nnreg,resignore,
      3 crx,cry,periodic_bc,cflags)
@@ -2976,7 +2977,7 @@ c
       write(34,'(a,1pe9.2,a)') 'NEUT_SCL_LIM=',neut_scl_lim,','
       if(n_spcsrf_4.gt.0) then !DPC
         write(34,'(a,i2,a)') 'N_SPCSRF=',n_spcsrf_4,','
-        ii=minloc(l_spcsrf_4)
+        ii=minloc(abs(l_spcsrf_4))
         if (ii(1).eq.1) then
           is = 0
         else if (l_spcsrf_4(ii(1)).eq.0) then

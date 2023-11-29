@@ -11,7 +11,7 @@ FC       = f77
 ifdef SOLPS_DEBUG
 FFLAGS   = -g
 endif
-INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
+INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC} ${CRRINC}
 COMPILE  = ${FC} -c ${FFLAGS}
 CPP      = /lib/cpp
 

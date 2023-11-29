@@ -33,7 +33,7 @@ write_ifield(fid,'nCmxVx,nCmxFc,nVmxCv,nVmxFc,nCmxNv',[gmtry.nCmxVx,gmtry.nCmxFc
 
 
 %% Write symmetry information
-write_ifield(fid,'isClassicalGrid',1);
+write_ifield(fid,'isClassicalGrid',gmtry.isClassicalGrid);
 write_ifield(fid,'nx,ny,nncut',[gmtry.nx,gmtry.ny,gmtry.nncut]);
 
 write_sfield(fid,'label',label);
@@ -73,11 +73,18 @@ if gmtry.isClassicalGrid == 1
   write_ifield(fid, 'imapFcy', gmtry.imapFcy);
   write_ifield(fid, 'imapVx', gmtry.imapVx);
   write_ifield(fid, 'icornVx', gmtry.icornVx);
-
+else
+    write_ifield(fid, 'imapCv', []);
+    write_ifield(fid, 'imapFcx', []);
+    write_ifield(fid, 'imapFcy', []);
+    write_ifield(fid, 'imapVx', []);
+    write_ifield(fid, 'icornVx', []);
 end
+
 write_ifield(fid, 'fcLbl',   gmtry.fcLbl );
 write_ifield(fid, 'cvLbl',   gmtry.cvLbl );
 write_ifield(fid, 'ftLbl',   gmtry.ftLbl );
+
 
 %% Write geometry variables
 

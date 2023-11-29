@@ -41,6 +41,7 @@
 \fi
 \usepackage{color}
 \usepackage{alltt}
+\input{Old_packages}
 
 \def\topfraction{.9}
 \def\bottomfraction{.9}
@@ -190,14 +191,14 @@ The next section discusses obtaining and updating the code.
 To obtain the code a request should be sent to Xavier Bonnin
 ({\tt Xavier.Bonnin@iter.org}) at ITER, the code Responsible Officer (RO).
 
-The first formality will then be for prospective users to obtain an IDM (ITER Document Management) account, in case they do not have one already. This account request will be done by the RO, and the requesting user will receive an automated electronic message asking for confirmation of the provided e-mail address.
+The first formality will then be for prospective users to obtain an IDM (ITER Document Management) account, in case they do not have one already. This account request will be done by the RO, and the requesting user will receive an automated electronic message asking for confirmation of the provided e-mail address. This e-mail address should preferably be a professional one, or requesting users need to provide a way for the IO to verify their belonging to an authorized ITER collaboration partner (academic or non-military state institutions within the ITER Member States, or that have an existing contractual relationship with the IO). This may also require the signature of an IMAS Collaboration Agreement between the IO and the requesting user's institution, if one is not already in force. Another option is for the user to be sponsored nominatively by a third party institution through their own IMAS Collaboration Agreement.
 
-The next step, after the IDM account has been obtained, is to agree to the ITER Integrated Modelling and Analysis Suite (IMAS) terms of use and request access to the needed repositories. The form to fill out for this is to be found at: \href{https://jira.iter.org/servicedesk/customer/portal/1/create/257}{https://jira.iter.org/servicedesk/customer/portal/1/create/257}. This may also require the signature of a Research Collaboration Agreement between the IO and the requesting user's institution, if one is not already in force. For a full \SOLPSITER installation, you should request access to the following repositories:
+The next step, after the IDM account has been obtained, is for the user to agree to the ITER Integrated Modelling and Analysis Suite (IMAS) terms of use and request access to the needed repositories. The form to fill out for this is to be found at: \href{https://jira.iter.org/servicedesk/customer/portal/1/create/257}{https://jira.iter.org/servicedesk/customer/portal/1/create/257}. For a full \SOLPSITER installation, you should request access to the following repositories:
 \begin{description}
   \item[SOLPS-ITER] The overarching \SOLPSITER repository
   \item[B2.5] For the {\tt B2.5} source code
   \item[EIRENE] For the {\tt Eirene} source code
-  \item[CARRE] For the {\tt Carre} and {tt Carre2} source codes
+  \item[CARRE] For the {\tt Carre2} source code
   \item[DIVGEO] For the {\tt DG} source code and the equilibrium conversion programs
   \item[TIARA] For the {\tt TIARA} grid generator
   \item[SOLPS-GUI] For the graphical environment in which \SOLPSITER can be run
@@ -207,9 +208,11 @@ The next step, after the IDM account has been obtained, is to agree to the ITER 
 \end{description}
 Users may request access to other repositories as well according to their needs or interest. If not intending to participate in code development, one may ask for {\tt REPO\_READ} permissions only, instead of {\tt REPO\_WRITE}.
 
+Note that access to the {\tt Eirene} repository is also subject to the user agreeing to the terms of the {\tt Eirene} license, which is not managed by the IO, but rather by Forschungszentrum J{\"u}lich. For this, go to the {\tt Eirene} website at \href{http://www.eirene.de}{http://www.eirene.de} and follow the registration process there.
+
 After access is granted, the user will be able to consult the \SOLPSITER GIT repository (\href{https://git.iter.org/projects/BND/repos/solps-iter/browse}{https://git.iter.org/projects\allowbreak/BND/repos/solps-iter/browse}) maintained at the IO, and the \SOLPSITER SharePoint web site hosted by ITER (\href{https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}{https://sharepoint.iter.org\allowbreak/departments/POP/CM/IMAS/SOLPS-ITER}). The manual to the SOLPS-GUI can be found online at \href{https://static.iter.org/imas/assets/solps-iter/html/}{https://static.iter.org/imas/assets/solps-iter/html/}. Links to the IDM-controlled documents related to \SOLPSITER can be found in a centralized folder (\href{https://user.iter.org/?uid=Q92BAQ}{https://user.iter.org/?uid=Q92BAQ}). The account request will also serve for registration of the user to the \SOLPSITER mailing list ({\tt SOLPS-ITER@iter.org}). Additionally, there is a Confluence Wiki page located at \href{https://confluence.iter.org/display/IMP/SOLPS-ITER}{https://confluence.iter.org/display/IMP/SOLPS-ITER} for the purpose of collecting user contributions to the body of knowledge about the code and which contains minutes of the \SOLPSITER User Forums and Release Notes for the various code versions. Lastly, a Slack discussion forum has been set up. To join, please send a request to the \SOLPSITER RO at ITER: {\tt xavier.bonnin@iter.org}.
 
-The \SOLPSITER Git repository includes the repositories for {\tt B2.5}, {\tt EIRENE}, {\tt Carre} and {\tt DivGeo} individually as submodules. Some service libraries (such as the {\tt GGD}, {\tt MSCL} and {\tt GR} service libraries), can be found in the repository in the {\tt IMAS Extra} and {\tt Libraries} section. Users can also have access to the standalone {\tt SOLPS4.3} repository.
+The \SOLPSITER Git repository includes the repositories for {\tt B2.5}, {\tt EIRENE}, {\tt Carre2} and {\tt DivGeo} individually as submodules. Some service libraries (such as the {\tt GGD}, {\tt MSCL} and {\tt GR} service libraries), can be found in the repository in the {\tt IMAS Extra} and {\tt Libraries} section. Users can also have access to the standalone {\tt SOLPS4.3} repository.
 
 One can generally browse the ITER Git repositories here: \href{https://git.iter.org}{https://git.iter.org} and \SOLPSITER specifically here: \href{https://git.iter.org/projects/BND/repos/solps-iter/browse}{https://git.iter.org/projects/BND/repos/solps-iter/browse}, but since these repositories are restricted users will first need to authenticate with their ITER (IDM) username and password - possibly twice, once for the intranet, and once for the Git web front end in the top right hand corner in the web browser window.
 
@@ -310,7 +313,7 @@ To best use the \SOLPSITER code suite, the user will need, locally installed:
 \item[gnuplot] for many analysis scripts
 \item[nc2text] for obtaining time-dependent data traces (optional)
 \item[plotmtv] for obtaining graphs of the time evolution of various profiles (optional)
-\item[LaTeX interpreter] to produce this manual
+\item[LaTeX interpreter] to produce this manual (optional)
 \item[GIT] version control software
 \item[python] scripting language (\SOLPSITER needs at least version 2.7, but version at least 3.5 is required for many additional features)
 \item[/bin/bash] used by some scripts
@@ -334,6 +337,9 @@ If one uses local copies of these libraries, a copy or link to them should be pu
 For fuller code capability, it is also recommended to load the IMAS (Integrated Modelling and Analysis Suite)\index{IMAS} environment, provided by the IO, whenever possible.
 
 If the {\tt nc2text} utility program is not present on the system, but the {\tt NetCDF} library is available, the code will then automatically build an alternative skeleton version and add it to the scripts path.\index{nc2text}
+
+\index{NO\_MANUAL}
+If there is no \LaTeX interpreter found on the system, this manual will not be built. For other systems on which one may not wish to build the manual, the environment variable {\tt NO\_MANUAL} can be set to any non-empty string, for instance as part of the {\tt \$SOLPSTOP/SETUP/setup.csh.\$\{HOST\_NAME\}.\$\{COMPILER\}(.local)} files.
 
 \section{Initial set-up}
 \index{Initial set-up}
@@ -513,7 +519,7 @@ purpose, a master \SOLPSITER {\tt Makefile} is provided, located at {\tt \$\{SOL
   \item[solps] (Default) Compiles the necessary components for a full \SOLPSITER implementation, including:
     \begin{description}
       \item[libs] Installs the needed libraries according to configuration files
-      \item[carre] The {\tt Carre} and {\tt Carre2} grid generators and associated translators
+      \item[carre] The {\tt Carre2} grid generator and associated translators
       \item[divgeo] The {\tt DivGeo} graphical input file builder and accompanying equilibrium and template converters
       \item[b25eirene] The {\tt B2.5-Eirene} main code and accompanying programs
       \item[uinp] The {\tt Uinp} translator from {\tt DivGeo} output to {\tt B2.5-Eirene} input
@@ -529,7 +535,7 @@ purpose, a master \SOLPSITER {\tt Makefile} is provided, located at {\tt \$\{SOL
     \end{description}
   \item[nox] The same as {\bf solps} above, but without linking to any graphical libraries:
     \begin{description}
-      \item[carre\_nox] The {\tt Carre} and {\tt Carre2} grid generators will not generate graphs
+      \item[carre\_nox] The {\tt Carre2} grid generator will not generate graphs
       \item[divgeo\_nox] Equilibrium and template converters for {\tt DivGeo}
       \item[b25eirene\_nox] Only the {\tt B2.5-Eirene} executable will be built, without graphics
       \item[triang\_nox] The {\tt tria.eps} and {\tt triageom.eps} files will not be produced
@@ -544,14 +550,14 @@ purpose, a master \SOLPSITER {\tt Makefile} is provided, located at {\tt \$\{SOL
     \end{description}
   \item[nox\_build] The same as {\bf nox} above and used for compilation tests on the Continous Integration server:
     \begin{description}
-      \item[carre\_nox] The {\tt Carre} and {\tt Carre2} grid generators will not generate graphs
+      \item[carre\_nox] The {\tt Carre2} grid generator will not generate graphs
       \item[divgeo\_nox] Equilibrium and template converters for {\tt DivGeo}
       \item[b25eirene\_nox] Only the {\tt B2.5-Eirene} executable will be built without graphics
       \item[triang\_nox] The {\tt tria.eps} and {\tt triageom.eps} files will not be produced
       \item[uinp\_nox] The {\tt Uinp} translator from {\tt DivGeo} output to {\tt B2.5-Eirene} input
       \item[libs, divgeo, amds, sonnet-light, manual] Will not be built
     \end{description}
-  \item[carre] The {\tt Carre} and {\tt Carre2} grid generators and associated translators only
+  \item[carre] The {\tt Carre2} grid generator and associated translators only
   \item[divgeo] The {\tt DivGeo} graphical input file builder and accompanying equilibrium and template converters only
   \item[divgeo\_nox] Equilibrium and template converters for {\tt DivGeo}
   \item[b25] The {\tt B2.5} standalone plasma fluid solver and accompanying programs only
@@ -665,7 +671,8 @@ The cases stored for retrieval include:
   \item[ITER\_2588\_drifts] ITER {\tt B2.5} standalone D-only demonstration case with and without drifts
   \item[ITER\_535\_D+He+Ar] ITER full power case with Ar injection
   \item[ITER\_Be-W\_D+T+He+Ne] ITER full power case with 98 species
-  \item[COMPASS\_16515\_1150ms\_D\_AFN] an unstructured, coarse grid, pure D COMPASS case with drifts and Advanced Fluid Neutrals, and kinetic neutrals without drifts, with a Matlab example script to plot results in the WG code. Two demo cases for the optimization are also available.
+  \item[COMPASS\_16515\_1150ms\_D\_AFN] an unstructured, coarse grid, pure D COMPASS case with drifts and Advanced Fluid Neutrals, and kinetic neutrals without drifts, with a Matlab example script to plot results in the WG code
+  \item[COMPASS\_optimization] Demo cases for the optimization toolbox based on AD. Based on the COMPASS\_16515\_1150ms\_D\_AFN case above
 \end{description}
 as well as additional partial cases used in tutorials when learning how to build a case using the {\tt DivGeo} and {\tt SOLPS-GUI} utilities.
 Other cases can be added at the suggestion of users, if available.
@@ -687,7 +694,7 @@ if (-e $SOLPSWORK/setup.csh.local) then
 endif
 setenv SOLPS_CENTRAL "yes"
 \end{verbatim}
-This will set {\tt SOLPSWORK}, create the appropriate {\tt SOLPSTOP} file, and load a {\tt setup.csh.local} for each user if it exists. The scripts such as {\tt dg}, {\tt carre}, and {\tt triang} then check if {\tt SOLPS\_CENTRAL} is set and will create the meshes, etc under {\tt \$\{DEVICE\}/\$\{USER\}} instead of just {\tt \$\{DEVICE\}}. It is therefore important that the {\tt DivGeo/device}, {\tt Carre/meshes} and {\tt Triang/triangles} and each {\tt \$\{DEVICE\}} subdirectory have the permissions set such that each user can write to it. This can be achieved by having a {\tt solps} group, for example, or by providing write access for all users. Users should also have read and execute access throughout the arboresence emanating from the central installation directory. To avoid issues where the first user to create a {\tt \$\{DEVICE\}} directory will do so without the correct permissions, an {\tt add\_central\_device} script has been provided which will create the appropriate directories with write access for all users. The administrator should run this and add each {\tt DEVICE} that will be used by the group.
+This will set {\tt SOLPSWORK}, create the appropriate {\tt SOLPSTOP} file, and load a {\tt setup.csh.local} for each user if it exists. The scripts such as {\tt dg}, {\tt carre}, and {\tt triang} then check if {\tt SOLPS\_CENTRAL} is set and will create the meshes, etc under {\tt \$\{DEVICE\}/\$\{USER\}} instead of just {\tt \$\{DEVICE\}}. It is therefore important that the {\tt DivGeo/device}, {\tt Carre2/meshes} and {\tt Triang/triangles} and each {\tt \$\{DEVICE\}} subdirectory have the permissions set such that each user can write to it. This can be achieved by having a {\tt solps} group, for example, or by providing write access for all users. Users should also have read and execute access throughout the arboresence emanating from the central installation directory. To avoid issues where the first user to create a {\tt \$\{DEVICE\}} directory will do so without the correct permissions, an {\tt add\_central\_device} script has been provided which will create the appropriate directories with write access for all users. The administrator should run this and add each {\tt DEVICE} that will be used by the group.
 
 Before each session, each user will then set up the \SOLPSITER environment by running
 \begin{verbatim}
@@ -1286,6 +1293,7 @@ The number of scripts developed for various {\bf SOLPS} versions is very large. 
   \item[eirobjx]\index{eirobjx} Alias to run {\tt Eirene} standalone without graphics.
   \item[ippsubmit]\index{ippsubmit} Command file to launch runs on the new (2019) IPP cluster. See Section~\ref{b2run} for details.
   \item[ITER\_divertor\_HTM]\index{ITER\_divertor\_HTM} Performs the thermal calculation of the divertor target monoblocks and reflector plate hypervapotron channels. It requires {\tt b2ymb.dat} and {\tt b2yrp.dat} to be present in the run directory. It runs \btwoplot to produce the heat load profile data of the targets and reflector plates. Then it runs {\tt b2ymb} to produce the input files (see \ref{sec:b2ymb}) for the {\tt FreeFem++}\cite{MR3043640} heat transfer model of the monoblock {\tt Monoblock\_HTM.edp} for the outer target. Afterwards, {\tt b2ymb} is run again to produce the input files to run {\tt Monoblock\_HTM.edp} for the inner target. When the inner target is completed, {\tt b2yrp} (see \ref{sec:b2yrp}) is run to produce the input files for the inner reflector plate heat transfer model {\tt ReflectorPlate\_HTM.edp}. Finally, {\tt b2yrp} is executed one last time to produce the input files for the thermal analysis of the outer reflector plate.
+  \item[itermake]\index{itermake} Command file to launch a batch compilation script on the ITER SDCC cluster. A {\tt -o} option allows to pass Makefile options. Other options are as per the submission scripts. The list of objects to be compiled should form the end of the list of arguments.
   \item[itersubmit]\index{itersubmit} Command file to launch runs on the ITER SDCC cluster. See Section~\ref{b2run} for details.
   \item[itmsubmit]\index{itmsubmit} Command file to launch runs on the Marconi ITM Gateway machine. See Section~\ref{b2run} for details.
   \item[jetsubmit]\index{jetsubmit} Command file to launch runs on the JET Analysis Cluster (JAC). See Section~\ref{b2run} for details.
@@ -1440,7 +1448,7 @@ rm GNUPLOT_COUNT gnuplot.*data
   \item[plot\_mesh \#1 \#2]\index{plot\_mesh} Plots the mesh specified as \#1 accompanied by the {\tt mesh.extra} file specified as \#2 as \#1.ps.
   \item[plot\_png]\index{plot\_png} produces a PNG output file instead
   \item[plot\_ps \#1]\index{plot\_ps} Copies {\tt gnuplot.cmd} to {\tt gnuplot\_ps.cmd}, modifying it so that black-and-white plotting occurs to \#1 or by default {\tt out.ps}; executes {\tt gnuplot} on new file. The location of these files can be modified by use of the {\tt GNUPLOT\_TMP} variable.
-  \item[plot\_rzpsi.dat]\index{plot\_rzpsi.dat} Utility script using {\tt plotmtv} to obtain a plot of the equilibrium data from the {\tt rzpsi.dat} file used by {\tt Carre} and {\tt Carre2} to build the computational grid.
+  \item[plot\_rzpsi.dat]\index{plot\_rzpsi.dat} Utility script using {\tt plotmtv} to obtain a plot of the equilibrium data from the {\tt rzpsi.dat} file used by {\tt Carre2} to build the computational grid.
   \item[plot\_trouble]\index{plot\_trouble} Plots {\tt Eirene} problematic trajectories over the {\tt B2.5} mesh and {\tt mesh.extra}.
   \item[plot\_set]\index{plot\_set} Utility script preparing files for complex plots.
   \item[xyplot ]\index{xyplot } alias for simple "$x~y$" plot
@@ -1635,7 +1643,6 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[b2pl]\index{b2pl} Script to obtain a standard series of \btwoplot graphs.
   \item[b2pp]\index{b2pp} Script to obtain a standard series of \btwoplot graphs.
   \item[b2pt]\index{b2pt} Script to obtain a standard series of \btwoplot graphs.
-  \item[carre]\index{carre}\index{Carre} Script used to launch the {\tt Carre} grid generator in the current working directory
   \item[carre2]\index{carre2}\index{Carre2} Script used to launch the {\tt Carre2} grid generator in the current working directory
   \item[climb\_and\_look\_for]\index{climb\_and\_look\_for} Script used to find a file in a directory above the current one.
   \item[copy\_tracing\_files]\index{copy\_tracing\_files} Script to bring tracing files to temporary run directory, if present.
@@ -1673,11 +1680,12 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[regression\_test]\index{regression\_test} Utility script to run regression tests.
   \item[regxy\_sum\_over\_species]\index{regxy\_sum\_over\_species} Intermediate utility script to extract a face-directed region quantity and sum it over species.
   \item[res\_av]\index{res\_av} Special script to reduce residuals in the finalization step of the {\tt Eirene} sources averaging scheme (see Section~\ref{sec:B2Eirene:averaging} for details).
-  \item[reset\_structure\_for\_carre2]\index{reset\_structure\_for\_carre2} Script to merge two {\tt Carre} {\it structure.dat} files, one containing virtual structures (which must appear first), located in {\tt basegrid} directory, and the one containing the real structures, from the {\tt baserun} directory. 
+  \item[reset\_structure\_for\_carre2]\index{reset\_structure\_for\_carre2} Script to merge two {\tt Carre} {\it structure.dat} files, one containing virtual structures (which must appear first), located in {\tt basegrid} directory, and the one containing the real structures, from the {\tt baserun} directory.
   \item[rps]\index{rps} Shifts $\Psi$ values by a given amount within a {\tt DG} equilibrium file (see Sec.~\ref{sec:equtrn}).
   \item[run\_av]\index{run\_av} Special script to prepare the averaging step of the {\tt Eirene} sources averaging scheme (see Section~\ref{sec:B2Eirene:averaging} for details).
   \item[save\_initial\_files]\index{save\_initial\_files} Script used by runs Makefile at start of a run to save initial state files for eventual recovery.
   \item[setup\_baserun\_eirene\_links]\index{setup\_baserun\_eirene\_links} Prepares the run directory before a {\tt B2.5-Eirene} run by settings up links to the proper data files.
+  \item[SLURM.iter\_compile]\index{SLURM.iter\_compile} Template file for batch compilation on the ITER SDCC cluster.
   \item[SLURM.postprocess]\index{SLURM.postprocess} Alias to {\tt QSUB.postprocess}.
   \item[SLURM.postprocess\_coupled]\index{SLURM.postprocess\_coupled} Alias to {\tt QSUB.postprocess\_coupled}.
   \item[SOLPS4to5]\index{SOLPS4to5} Script to convert a \SOLPSfour run directory into a \SOLPSfive one.
@@ -1709,13 +1717,15 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[fluid\_core\_fluxes.py \#1 \#2]\index{fluid\_core\_fluxes.py} Total fluid flux entering the core region summed from species \#1 to \#2.
   \item[fluid\_fluxes.py \#1 \#2]\index{fluid\_fluxes.py} Fluid fluxes through various surfaces summed from species \#1 to \#2.
   \item[nareg.py \#1]\index{nareg.py} Average ion densities for region \#1.
-  \item[nareg\_species.py \#1]\index{nareg\_species.py}  Average ion densities for region \#1 summed over charge states for each species.
+  \item[nareg\_species.py \#1]\index{nareg\_species.py} Average ion densities for region \#1 summed over charge states for each species.
   \item[nereg.py]\index{nereg.py} Average electron densities.
+  \item[plot\_traduit\_out\_b2us.py]\index{plot\_traduit\_out\_b2us.py}\index{traduit.out.b2us} Plots contents of the {\tt traduit.out.b2us} file.
   \item[rqradreg.py \#1]\index{rqradreg.py} Line radiation summed over each species' charge states for region \#1.
   \item[rranareg.py \#1]\index{rranareg.py} Recombination rates for region \#1.
   \item[rranareg\_per\_rsanareg.py \#1]\index{[rranareg\_per\_rsanareg.py} Recombination rates divided by ionisation rates for region \#1 (summed over charge states).
   \item[rsanareg.py \#1]\index{rsanareg.py} Ionisation rates for region \#1.
   \item[tereg.py]\index{tereg.py} Average electron temperatures.
+  \item[tiara\_ggd\_to\_b2us.py]\index{tiara\_ggd\_to\_b2us.py}\index{GGD} Converts a GGD object from an {\tt equilibrium} IDS into the {\tt b2us} format.
   \item[tireg.py]\index{tireg.py} Average ion temperatures.
   \item[zeffreg.py]\index{zeffreg.py} Average $Z_{eff}$.
  \end{description}
@@ -2070,7 +2080,8 @@ as {\tt jet.50401.58000.geo}, identify it as being of size $96 \times
       directory
     \item the current run directory
     \item {\tt \$\{SOLPSTOP\}/data.local/meshes}
-    \item {\tt \$\{SOLPSTOP\}/modules/Carre/meshes/\$\{DEVICE\}}
+    \item {\tt \$\{SOLPSTOP\}/modules/Carre2/meshes/\$\{DEVICE\}}
+    \item {\tt \$\{SOLPSTOP\}/modules/Carre2/meshes/\$\{DEVICE\}/\$\{USER\}}
     \end{enumerate}
   \end{itemize}
 \item[...] other options can be used to modify the mesh and magnetic
@@ -2290,11 +2301,11 @@ data are stored in the {\tt weis.dat}\index{weis.dat} file which should be prese
 {\tt baserun} directory where {\tt b2ar} is run. When running {\tt b2ar.dat} using the
 dedicated {\tt Makefile}, this is automatically done.
 
-Another option allows for the user to request specific rates using reaction cards from the {\tt AMJUEL} and {\tt HYDHEL} database files. To be used, one must set {\tt b2ardr\_no\_weisheit} to {\tt 1} and {\tt b2ardr\_amjhydhel} to {\tt 1}. An example of such a file is provided below:
+Another option allows for the user to request specific rates using reaction cards from the {\tt AMJUEL} and {\tt HYDHEL} database files. This is recommended when using the AFN model for hydrogenic neutrals. To be used, one must set {\tt b2ardr\_no\_weisheit} to {\tt 1} and {\tt b2ardr\_amjhydhel} to {\tt 1}. An example of such a file is provided below:
 
 \VerbatimInput[fontsize=\footnotesize]{D/b2ar_AFN.dat}
 
-Note that the headers must contain the exact text shown, including the capitalization. The reaction list order must be the same as in the example and both the ionization and recombination rates must include two reaction cards, one for the particle reaction rate, followed by a second one for the associated electron heat loss rate.
+When {\tt b2ardr\_nreac = 0}, a default set of AMJUEL/HYDHEL reactions is used, i.e., AMJUEL 2.1.5 for ionization, HYDHEL 3.1.8 for charge exchange and AMJUEL 2.1.8 for recombination. This default set of reactions can be overwritten by user-specified reactions from the AMJUEL/HYDHEL databases by making {\tt b2ardr\_nreac > 0}. Then a {\tt reac} field has to be added, as illustrated in the example. The format is not important as long as blanks separate the fields. For the above example, the default reaction for ionization is explicitly overwritten by the default one. Hence, it makes no difference if you specify them or not.
 
 \begin{sloppypar}
 Supplemental information on atomic physics rates can be found in the file
@@ -3193,12 +3204,12 @@ of fixing radial positions, applicable species, etc...
 
 The coefficient types go as:
 \begin{enumerate}
-   \item Particle sources {\em sna} \index{b2plot, exna}
-   \item Parallel momentum sources {\em smo} \index{b2plot, exmo}
-   \item Electron heat sources {\em she} \index{b2plot, exhe}
-   \item Ion heat sources {\em shi} \index{b2plot, exhi}
-   \item Electric charge sources {\em sch} \index{b2plot, exch}
-   \item Electric particle source (non-ambipolar) {\em sne} \index{b2plot, exne}
+   \item Particle sources {\tt sna} \index{b2plot, exna}
+   \item Parallel momentum sources {\tt smo} \index{b2plot, exmo}
+   \item Electron heat sources {\tt she} \index{b2plot, exhe}
+   \item Ion heat sources {\tt shi} \index{b2plot, exhi}
+   \item Electric charge sources {\tt sch} \index{b2plot, exch}
+   \item Electric particle source (non-ambipolar) {\tt sne} \index{b2plot, exne}
 \end{enumerate}
 
 It is also possible to multiply these radial profiles by an axial form factor.
@@ -3206,33 +3217,33 @@ This axial multiplier is set in the same way as the poloidal profile.
 
 The description of the variables found in {\tt b2.sources.profile} is as follows:
 \begin{description}
-  \item[nsdata(1,i,j)]\index{nsdata} where $i$ is an index for the type of source
-     being defined (see table above) and $j$ is a species index ($0$ for atoms and $1$
-     for ions in a $D$-only case, for instance, and irrelevant (use $1$) for electron
+  \item[nsdata(1,i,j)]\index{nsdata} where {\tt i} is an index for the type of source
+     being defined (see table above) and {\tt j} is a species index ({\tt 0} for atoms and {\tt 1}
+     for ions in a $D$-only case, for instance, and irrelevant (use {\tt 1}) for electron
      sources). {\tt nsdata} is the
      number of data points where the strength of the source is given.
   \item[sdata(1,m,i,j)]\index{sdata} are the radial positions (measured in metres) of the
      {\tt nsdata(1,i,j)} points,
-     where $m$ runs from $1$ to {\tt nsdata(1,i,j)}. By default, the radial positions are
+     where {\tt m} runs from {\tt 1} to {\tt nsdata(1,i,j)}. By default, the radial positions are
      measured from the separatrix outward, along the outer midplane, but this can be changed by
-     making use of the $ixref$ and $iyref$ switches, respectively, to modify the poloidal
+     making use of the {\tt ixref} and {\tt iyref} switches, respectively, to modify the poloidal
      location of the profile and the radial position from which the distances are measured.
   \item[sdata(2,m,i,j)] are the corresponding strengths of the sources.
-  \item[nxdata(k,i,j)]\index{nxdata} where $i$ is an index for the type of source
-     being defined (see table above) and $j$ is a species index ($0$ for atoms and $1$
-     for ions in a $D$-only case, for instance, and irrelevant (use $1$) for electron
+  \item[nxdata(k,i,j)]\index{nxdata} where {\tt i} is an index for the type of source
+     being defined (see table above) and {\tt j} is a species index ({\tt 0} for atoms and {\tt 1}
+     for ions in a $D$-only case, for instance, and irrelevant (use {\tt 1}) for electron
      sources). {\tt nxdata} is the
      number of data points where the value of the axial multiplier to the source is given.
-     If $k$ is equal to $1$, the data is to be understood as function of normalized
-     connection length. If $k$ is equal to $2$, then the axial profile is given in terms
-     of the normalized computational coordinate (running from $0$ to $1$ as $ix$ runs from
-     $-1$ to $nx$).
+     If {\tt k} is equal to {\tt 1}, the data is to be understood as function of normalized
+     connection length. If {\tt k} is equal to {\tt 2}, then the axial profile is given in terms
+     of the normalized computational coordinate (running from {\tt 0} to {\tt 1} as {\tt ix} runs from
+     {\tt -1} to {\tt nx}).
   \item[xdata(1,m,i,j)]\index{xdata} are the axial positions (normalised to the total length)
      of the {\tt nxdata(1,i,j)} points,
-     where $m$ runs from $1$ to {\tt nxdata(1,i,j)}. By default, the connection length
+     where {\tt m} runs from {\tt 1} to {\tt nxdata(1,i,j)}. By default, the connection length
      used is the one measured just inside the separatrix, with the origin
      located at the outer midplane, but this can be changed by
-     making use of the $ixref$ and $iyref$ switches, respectively, to modify the poloidal
+     making use of the {\tt ixref} and {\tt iyref} switches, respectively, to modify the poloidal
      location of the origin and the radial position along which the distances are measured.
      In case the reference location is chosen inside a closed field line region, the axial
      multiplier is set to zero everywhere on the open field lines.
@@ -4310,8 +4321,9 @@ The format of this input block for coupling to \SOLPSITER is as follows:
 
 {\it ***14. Data for interfacing routine "infusr"}
 \begin{verbatim}
-LSYMET  LBALAN  LCOARSE NLTRIMESH  LSPRCL
-NFLA    NCUTB   NCUTL   IMF   NTRFRM   NFULL   IBRAD   IBPOL   IBTOR
+LSYMET  LBALAN
+NFLA    NTRFRM   NFULL   IBRAD   IBPOL   IBTOR    DUM7    ...
+...       DUM8    DUM9   DUM10   NCOND
 \end{verbatim}
 {\it read NPLSI species lines}
 \begin{verbatim}
@@ -4319,15 +4331,20 @@ DO 20, IPL=1,NPLSI
    I   IFLB   FCTE   BMASS   LKINDP
 20 CONTINUE
 \end{verbatim}
+{\it Kinetic-fluid condensation for hybrid model}
+\begin{verbatim}
+DO ICOND=1,NCOND
+   CONDENSE_FROM  CONDENSE_TO
+ENDDO
+\end{verbatim}
 {\it Recycling target definitions}
 \begin{verbatim}
-NDXA   NDYA
+NCVP   NCIP   NFCP
 NTARGI
 NTGPRT(IT), IT=1,NTARGI
 DO 30, IT=1,NTARGI
    DO 33, IPRT=1,NTGPRT(IT)
-      I NDT    NINCT  NIXY   NTIN   NTEN   NIFLG   NPTC   NPTCM
-        NSPZI  NSPZE  NEMOD
+      I NDT    NPTC   NPTCM  NSPZI  NSPZE  NEMOD  ITYPE
    33 CONTINUE
 30 CONTINUE
 \end{verbatim}
@@ -4354,14 +4371,19 @@ We only include here the variables or aspects thereof not already described in t
   \item[LCOARSE] Coarse mesh switch ???
   \item[NLTRIMESH] When {\tt .TRUE.}, {\tt Eirene} is only run to obtain the contours necessary to build the triangular grid, which are then written in {\tt fort.78}. This is used by the {\tt triang} script toolchain. No particle trajectories are followed.
   \item[LSPRCL] Turns on species-specific source rescaling when {\tt .TRUE.}
-  \item[NCUTB] For \SOLPSITER couplings, should be 0
-  \item[NCUTL] For \SOLPSITER couplings, should be 1
-  \item[IMF] {\tt fort.30} format switch, should be 0
-  \item[NTRFRM] {\tt fort.33} format switch, should be 0
+  \item[NTRFRM] {\tt fort.33} format switch, should be {\tt 1} for the wide grids code
+  \item[DUM7-10] Dummy parameters, not in use in the wide grids code. Present to avoid issues when starting from a converted structured case (with additional inputs).
+  \item[NCOND] Number of atoms that is allowed to ``condense" from the {\tt Eirene} kinetic to the {\tt B2.5} fluid population in the hybrid model.
   \item[LKINDP] Index of the {\tt Eirene} atom this species is linked to
+  \item[CONDENSE\_FROM] Index of atom ({\tt IATM}) that is able to condense from the kinetic to fluid population. The condensation will happen if ({\tt NGENA(IATM).lt.0} in block 4) and when the Knudsen number based on the local charge-exchange mean-free path of the atom becomes smaller than the value specified by {\tt FLDLMA} for the charge-exchange reactions in block 4. Remark: {\tt FLDLMA} is replaced by {\tt EDPOTA} in a more recent {\tt Eirene} version $\Rightarrow$ {\tt FLDLMA} should be re-implemented after merging the Milestone {\tt Eirene} version in the wide grids code.
+  \item[CONDENSE\_TO] Index of background species of block 5 ({\tt IPLS}) with the corresponding fluid neutral background.
+  \item[NCVP] Total number of cells in the {\tt B2.5} mesh
+  \item[NCIP] Total number of internal cells in the {\tt B2.5} mesh
+  \item[NFCP] Total number of faces in the {\tt B2.5} mesh
   \item[NPTC] In addition to the description in the {\tt Eirene} manual, note that only the value from the first segment of the stratum ({\tt IPRT=1}) is used.
   \item[NPTCM] This corresponds to the {\tt NMINPTS} flag in input block 7, and is needed only if {\tt INDSRC=6}, i.e., if the source is specified by data from block 14 alone. As for {\tt NPTC}, only the value from the first stratum segment is used.
-  \item[NEMOD] This corresponds to the {\tt NEMODS} flag in input block 7, and is needed only if {\tt INDSRC=6}, i.e., if the source is specified by data from block 14 alone. As for {\tt NPTC}, only the value from the first stratum segment is used. It is overwritten internally by the code to be {\tt 7} for E/W surfaces (i.e. include sheath acceleration) and {\tt 6} for N/S surfaces (do not include sheath acceleration).
+  \item[NEMOD] This corresponds to the {\tt NEMODS} flag in input block 7, and is needed only if {\tt INDSRC=6}, i.e., if the source is specified by data from block 14 alone. As for {\tt NPTC}, only the value from the first stratum segment is used. {\tt NEMOD=7} includes sheath acceleration (e.g., needed at the targets). {\tt NEMOD=6} does not include sheath acceleration and is recommended at plasma-void interfaces. If you want to sample kinetic atoms from the fluid neutral Maxwellian background distribution and send in the void regions in the hybrid model, it is strongly recommended to use {\tt NEMOD=0}.
+  \item[ITYPE] Possibility to specify the species type: {\tt ITYPE=0} (default): bulk ion species ({\tt NLPLS=.TRUE.}); {\tt ITYPE=1}: atoms ({\tt NLATM=.TRUE.}); {\tt ITYPE=2}: molecules ({\tt NLMOL=.TRUE.}); {\tt ITYPE=3}: trace ions ({\tt NLION=.TRUE.}); {\tt ITYPE=4}: bulk ions ({\tt NLPLS=.TRUE.}); {\tt ITYPE=5}: photons ({\tt NLPHOT=.TRUE.}). For {\tt ITYPE=1}, the surface normal is reversed as well by making {\tt SORIFL=2000} ensuring that the atoms are sent into the void region.
   \item[NCOPIB] Not in use
   \item[NCOPEB] Maximum number of additional tallies per plasma background species
 \end{description}
@@ -4393,7 +4415,7 @@ DO I=1,NADMOD
    NRS   IPUNKT   XCOOR   YCOOR   ZCOOR
 ENDDO
 DO I=1,NASMOD
-   NAS   IPUNKT   NSSIR   NSSIP
+   NAS   IPUNKT   NSSIR
 ENDDO
 DO I=1,NORMOD
    IDIR  IR   IP
@@ -4424,8 +4446,7 @@ ENDDO
   \item[XPOLPOS] Integer X-index (poloidal) of the {\tt Eirene} grid vertex to which the additional surface vertex must be matched. To be used only if the default setting does not give the desired result.
   \item[YPOLPOS] Integer Y-index (radial) of the {\tt Eirene} grid vertex to which the additional surface vertex must be matched. To be used only if the default setting does not give the desired result.
   \item[NAS] Index of the additional surface to be modified
-  \item[NSSIR] Radial index of the {\tt Eirene} grid vertex to which the additional surface vertex is to be matched
-  \item[NSSIP] Poloidal index of the {\tt Eirene} grid vertex to which the additional surface vertex is to be matched
+  \item[NSSIR] Index of the {\tt Eirene} grid vertex to which the additional surface vertex is to be matched
   \item[IDIR] Direction of the face which normal is being inverted (1 = radial, 2 = poloidal)
   \item[IR] Radial index of the {\tt Eirene} grid cell which face normal is being inverted
   \item[IP] Poloidal index of the {\tt Eirene} grid cell which face normal is being inverted
@@ -4644,12 +4665,13 @@ The data blocks are:
   \item[wlpump(I)] Pumped flux per test ion ($particles.s^{-1}$), dimension ({\tt NION}, {\tt NLIM}+{\tt NSTS})
   \item[wlpump(P)] Pumped flux per plasma ion ($particles.s^{-1}$), dimension ({\tt NPLS}, {\tt NLIM}+{\tt NSTS})
   \item[eneutrad] Radiation rate due to atoms ($W$), dimension ({\tt NDX},{\tt NDY},{\tt NATM})
-  \item[eirdiag\_nds] Indices for segments on resolved non-standard surfaces, dimension ($5 \times$ {\tt NSTS} $+ 1$)
+  \item[eirdiag] Index delimitors for segments on resolved non-standard surfaces, dimension ({\tt NSTS +  1})
+  \item[fnmti\_b2] Face indices forming the non-standard surfaces, dimension ({\tt eirdiag(NSTS+1)})
   \item[sarea\_res] Surface area of surface segment ($m^2$), dimension ({\tt NCL})
   \item[wldna\_res] Flux of atoms impinging on surface segment ($particles.m^{-2}.s^{-1}$), dimension ({\tt NATM}, {\tt NCL})
   \item[wldnm\_res] Flux of molecules impinging on surface segment ($particles.m^{-2}.s^{-1}$), dimension ({\tt NMOL}, {\tt NCL})
-  \item[ewlda\_res] Average energy of impinging atoms on surface segment ($eV$), dimension ({\tt NATM}, {\tt NCL})
-  \item[ewldm\_res] Average energy of impinging molecules on surface segment ($eV$), dimension ({\tt NMOL}, {\tt NCL})
+  \item[ewlda\_res] Energy flux carried by impinging atoms on surface segment ($W.m^{-2}$), dimension ({\tt NATM}, {\tt NCL})
+  \item[ewldm\_res] Energy flux carried by impinging molecules on surface segment ($W.m^{-2}$), dimension ({\tt NMOL}, {\tt NCL})
   \item[ewldea\_res] Energy flux carried by emitted atoms from surface segment ($W.m^{-2}$), dimension ({\tt NATM}, {\tt NCL})
   \item[ewldem\_res] Energy flux carried by emitted molecules from surface segment ($W.m^{-2}$), dimension ({\tt NMOL}, {\tt NCL})
   \item[ewldrp\_res] Kinetic energy flux carried by recycling atoms and molecules ($W.m^{-2}$), dimension ({\tt NCL})
@@ -5607,7 +5629,7 @@ will then need to \index{lns}
 \end{verbatim}
 where {\tt case} is the name of the just saved case (without the
 {\tt .dg} extension). This links the {\tt DG} output files to
-files named {\tt dg.*} in the {\tt Carre} run directory.
+files named {\tt dg.*} in the {\tt Carre2} run directory.
 
 The {\tt lns} script establishes a series of symbolic links from the {\tt DivGeo} output files to some files with standardized names on which other parts of the workflow rely. It also copies the {\tt case.trg} target and {\tt case.str} structure description files to the {\tt \$\{DGSONNETMASK\}} directory (with default value {\tt \$\{DG\}/device/\$\{DEVICE\}} or {\tt \$\{DG\}/device/\allowbreak \$\{DEVICE\}/\$\{USER\}} for central installation).
 
@@ -5620,7 +5642,7 @@ it back into {\tt DG} ({\tt File|Import|Mesh}) to check it.
 
 If {\tt Carre} is not yet compiled, you will need to do \index{Carre, compiling}
 \begin{verbatim}
-  ssc
+  ssc2
   gmake tags
   gmake listobj
   gmake depend
@@ -5665,18 +5687,20 @@ If you want to avoid a long recompilation, you need to remove from the {\tt buil
 directories , the object and module files corresponding to your locally changed file(s),
 and then ask for a normal recompilation with a single {\tt gmake} command.
 
-To run {\tt Carre}, assuming that you are working on a case from {\tt DG},
+To run {\tt Carre2}, assuming that you are working on a case from {\tt DG},
 you would then need to do
 \begin{verbatim}
-  carre -
+  carre2 -
 \end{verbatim}
 and then either type {\tt return} to accept the default, or a {\tt y} if
-asked to accept {\tt Carre}'s choices.
+asked to accept {\tt Carre2}'s choices.
 
 The presence in the run directory of a file called {\tt ncar.cfg}, with the
 first character of the first line non-blank, will cause the program to use
 'publication-ready' settings for the graphs, namely thicker and visible lines
 and easier-to-read font. \index{ncar.cfg}
+
+{\em The following section only applies if Carre2 is compiled in interactive mode}
 
 The program will propose a table (see next chapter for an example) containing,
 for each
@@ -5766,17 +5790,17 @@ to its original {\tt 'francais'}.
 Once all the settings have been chosen, it is often convenient to save them, so as to not have to re-enter them on the next {\tt Carre} meshing attempt. This is achieved by means of the {\tt (S)ave} option within the {\tt carre} script, provided that the user does not start the next meshing attempt with the {\tt (P)repare} option, but rather jumps directly to {\tt (G)rid}.
 
 \begin{sloppypar}
-Upon succesful termination, one needs to {\tt (C)onvert} the grid files to the {\tt .geo} and {\tt .sno} formats understandable by {\tt B2.5} and {\tt DivGeo}. It is also possible to {\tt s(T)ore} the files used to create the grid and the grid output for archival. The input files will be copied to the {\tt \$\{CARRE\_STOREDIR\}} directory (default value is {\tt \$\{SOLPSTOP\}/modules/Carre/\allowbreak meshes/\$\{DEVICE\}}, or {\tt \$\{SOLPSTOP\}/modules/Carre/meshes/\$\{DEVICE\}/\$\{USER\}} for a central installation). The Carre grid output and {\tt .geo} file will be stored in the same location, but that can be changed by means of the {\tt (O)utput} command in the script itsef, or by specifying the {\tt \$\{CARRE\_GRIDDIR\}} environment variable. If {\tt \$\{CARRE\_GRIDDIR\}} is not specified, the {\tt *.sno} converted output file will be copied instead to {\tt \$\{SOLPSTOP\}/\allowbreak modules/DivGeo/device/\allowbreak \$\{DEVICE\}} (or {\tt \$\{SOLPSTOP\}/modules/DivGeo/device/\$\{DEVICE\}/\allowbreak \$\{USER\}} for a central installation).
+Upon succesful termination, one needs to {\tt (C)onvert} the grid files to the {\tt .geo} and {\tt .sno} formats understandable by {\tt B2.5} and {\tt DivGeo}. It is also possible to {\tt s(T)ore} the files used to create the grid and the grid output for archival. The input files will be copied to the {\tt \$\{CARRE\_STOREDIR\}} directory (default value is {\tt \$\{SOLPSTOP\}/modules/Carre2/\allowbreak meshes/\$\{DEVICE\}}, or {\tt \$\{SOLPSTOP\}/modules/Carre2/meshes/\$\{DEVICE\}/\$\{USER\}} for a central installation). The Carre2 grid output and {\tt .geo} file will be stored in the same location, but that can be changed by means of the {\tt (O)utput} command in the script itsef, or by specifying the {\tt \$\{CARRE\_GRIDDIR\}} environment variable. If {\tt \$\{CARRE\_GRIDDIR\}} is not specified, the {\tt *.sno} converted output file will be copied instead to {\tt \$\{SOLPSTOP\}/\allowbreak modules/DivGeo/device/\allowbreak \$\{DEVICE\}} (or {\tt \$\{SOLPSTOP\}/modules/DivGeo/device/\$\{DEVICE\}/\allowbreak \$\{USER\}} for a central installation).
 \end{sloppypar}
 
-After running {\tt Carre}, it is recommended to have a look at the mesh and decide if one wants to modify it before
+After running {\tt Carre2}, it is recommended to have a look at the mesh and decide if one wants to modify it before
 proceeding much further (see previous section). The default settings may not be appropriate for all cases. It is
 particularly important to check the mesh near the separatrix, the X-point(s) and the target plates.
 
-In some cases, the {\tt carre -} script will fail. In that case, one can still
-run {\tt Carre} in "standalone" mode by invoking:
+In some cases, the {\tt carre2 -} script will fail. In that case, one can still
+run {\tt Carre2} in "standalone" mode by invoking:
 \begin{verbatim}
-  ssc
+  ssc2
   builds/${HOST_NAME}.${COMPILER}(.debug)/carre
 \end{verbatim}
 
@@ -9520,6 +9544,8 @@ $\widetilde{j}_{ax}^{(visq)}$ is the component of the poloidal heat viscosity cu
 
 For the definition of $\widetilde{q}_a^{(0)}$, see Eqs. (\ref{eq:q0-0}) and (\ref{eq:q0-1}).
 
+The poloidal component of the ion-neutral current is
+
 \begin{equation}\label{eq:pot_jxs}
 \widetilde{j}_x^{(s)} =
 \sum \limits^{ns-1}_{\substack{a_0 = 0 \\ z_{a_0} = 0~\&~z_{n,a_0} = 1 }}
@@ -9531,26 +9557,54 @@ For the definition of $\widetilde{q}_a^{(0)}$, see Eqs. (\ref{eq:q0-0}) and (\re
 \right)
 \end{equation}
 
+If {\tt 'b2tinnt\_style'} is set to {\tt '1'} (default), the gradient of $n_a T_i$ is calculated directly.
+If {\tt 'b2tinnt\_style'} is set to {\tt '0'}, the implementation follows from rewriting the equation as
+
+\begin{equation}\label{eq:pot_jxs_old}
+\widetilde{j}_x^{(s)} =
+\sum \limits^{ns-1}_{\substack{a_0 = 0 \\ z_{a_0} = 0~\&~z_{n,a_0} = 1 }}
+\sum \limits^{ns-1}_{\substack{a = 0 \\ z_{a} = 1~\&~z_{n,a} = 1 }}
+\left(
+- \sigma_{aa_0} b_z^2 \frac{\partial \Phi}{h_x \partial x}
+- \sigma_{aa_0} b_z^2 \frac{1}{z_a e} (\frac{\partial T_i}{h_x \partial x} + T_i \frac{\partial log(n_a)}{h_x \partial x})
++ \sigma_{aa_0} B_z V_{a_{0}y}
+\right)
+\end{equation}
+
+The ion-neutral conductivity is given by:
+
 \begin{equation}
 \sigma_{aa_0} =
 \left\{
 \begin{matrix}\label{eq:pot_sigaa0}
-\frac{\tilde\mu_{aa_0} m_p n_a \left\langle V_{aa_0} \sigma_{ex} \right\rangle n_{a_0}}{B^2}, &
+\frac{m_p n_a \left\langle V_{aa_0} \sigma_{ex} \right\rangle n_{a_0}}{B^2}, &
 z_{a_0} = 0 ~ \& ~ z_{n,a_0} = 1, z_a \ne 0 ~ \& ~z_{n_a} = 1 \\
 0, & \text{otherwise}
 \end{matrix}
 \right.
 \end{equation}
 
+If {\tt 'b2tqin\_csigin\_style'} is {\tt '0'} the diffusivity of room-temperature hydrogen is used
+
 \begin{equation}
 \left\langle V_{aa_0} \sigma_{ex} \right\rangle = 3.2 \cdot 10^{-15} \sqrt{\frac{T_i}{0.026e}}\sqrt{\frac{1}{\tilde\mu_{aa_0}}}
 \end{equation}
 
-\begin{equation}
-\tilde\mu_{aa_0}= \frac{\frac{m_a}{m_p} \frac{m_{a_0}}{m_p}}{\frac{m_a}{m_p} + \frac{m_{a_0}}{m_p}}
-\end{equation}
+If {\tt 'b2tqin\_csigin\_style'} is {\tt '1'} the local B2.5 CX rate is used
+
+% This factor probably has to do with CX between particles of unlike mass, but it doesn't seem to be implemented in this code version.
+%\begin{equation}
+%\tilde\mu_{aa_0}= \frac{\frac{m_a}{m_p} \frac{m_{a_0}}{m_p}}{\frac{m_a}{m_p} + \frac{m_{a_0}}{m_p}}
+%\end{equation}
 
 $V_{a_{0}y} = \frac{\Gamma_{a_{0}y} }{n_{a_0}}$
+
+The neutral densities $n_{a_0}$ are the sum of the fluid neutral and kinetic neutral densities.
+The radial neutral flux $\Gamma_{a_{0}y}$ is the density-weighted average of the fluid and kinetic fluxes (for compatibility with hybrid fluid-kinetic neutrals).
+
+Remark: when the perpendicular momentum sources are scored in EIRENE and available in B2.5, the ion-neutral current should be rewritten. This would be more self-consistent, whereas now
+it is a mix of post-processed EIRENE perpendicular atom velocities and B2.5 CX rates. See derivations in \cite{Rozhansky2001NF} and \cite{VanUytvenPSI2022}.
+
 
 $j_x^{(\parallel)}$ - see Eq.~(\ref{eq:fch_p}) above.
 
@@ -9669,6 +9723,8 @@ $\widetilde{j}_{ay}^{(visq)}$ is the radial component of the heat viscosity curr
 
 For definition of $\widetilde{q}_a^{(0)}$, see Eqs.~(\ref{eq:q0-0}) and (\ref{eq:q0-1}).
 
+The radial component of the ion-neutral current is
+
 \begin{equation}\label{eq:pot_jys}
 \widetilde{j}_y^{(s)} =
 \sum \limits^{ns-1}_{\substack{a_0 = 0 \\ z_{a_0} = 0~\&~z_{n,a_0} = 1 }}
@@ -9676,9 +9732,11 @@ For definition of $\widetilde{q}_a^{(0)}$, see Eqs.~(\ref{eq:q0-0}) and (\ref{eq
 \left(
 - \sigma_{aa_0} \frac{\partial \Phi}{h_y \partial y}
 - \sigma_{aa_0} \frac{1}{z_a e n_a} \frac{\partial n_a T_i}{h_y \partial y}
-- \sigma_{aa_0} B V_{a_{0}x}
+- \sigma_{aa_0} B V_{a_{0}\perp}
 \right)
 \end{equation}
+
+The {\tt 'b2tinnt\_style'} switch determines the numerical implementation, similarly as for Eq.~(\ref{eq:pot_jxs}) and Eq.~(\ref{eq:pot_jxs_old}).
 
 \begin{equation}\label{eq:pot_jyst}
 \begin{matrix}
@@ -9696,7 +9754,10 @@ j_y^{(ST)} = &
 \end{matrix}
 \end{equation}
 
-$V_{a_{0}x}=\frac{\Gamma_{a_{0}x}}{n_{a_0}}$
+$V_{a_{0}\perp}=\frac{\Gamma_{a_{0}\perp}}{n_{a_0}}$
+
+The neutral densities $n_{a_0}$ are the sum of the fluid neutral and kinetic neutral densities.
+The diamagnetic neutral flux $\Gamma_{a_{0}\perp}$ is the density-weighted average of the fluid and kinetic fluxes (for compatibility with hybrid fluid-kinetic neutrals).
 
 $\sigma_{aa_0}$ see Eq.~(\ref{eq:pot_sigaa0}) above.
 
@@ -18013,23 +18074,23 @@ or {\tt bash} users would use something like
 %% $
 ).
 
-\subsection{Carre}
-\index{DEFINES, used in compiling Carre}
+\subsection{Carre2}
+\index{DEFINES, used in compiling Carre2}
 
-%%grep #if $SOLPSTOP/modules/Carre/src/*/*.F | awk '{print $2}' | sort | uniq
+%%grep #if $SOLPSTOP/modules/Carre2/src90/*/*.F90 | awk '{print $2}' | sort | uniq
 
-We list here additional possible compiler options that can be used when compiling {\tt Carre}.
+We list here additional possible compiler options that can be used when compiling {\tt Carre2}.
 
 \begin{description}
-\item[BUILDING\_CARRE] \index{BUILDING\_CARRE} Flags code for extended grids handling routine specific to {\tt Carre}
-\item[EXTRA\_GRAPHS] \index{EXTRA\_GRAPHS} Turns on additional graphical output of intermediate steps of the {\tt Carre} grid generation
-\item[MODIF] \index{MODIF} Allows for manual modifications to the grid generation process during the {\tt Carre} run
+\item[BUILDING\_CARRE] \index{BUILDING\_CARRE} Flags code for extended grids handling routine specific to {\tt Carre2}
+\item[EXTRA\_GRAPHS] \index{EXTRA\_GRAPHS} Turns on additional graphical output of intermediate steps of the {\tt Carre2} grid generation
+\item[MODIF] \index{MODIF} Allows for manual modifications to the grid generation process during the {\tt Carre2} run
 \item[READOPT] \index{READOPT} Allows for format-free keyboard input
 \end{description}
 
-%%grep #if $SOLPSTOP/modules/Carre/src/*/*.F | awk '{print $2,$1}' | sort | uniq
+%%grep #if $SOLPSTOP/modules/Carre2/src90/*/*.F90 | awk '{print $2,$1}' | sort | uniq
 
-We list below where the {\tt Carre} compilation switches are used.
+We list below where the {\tt Carre2} compilation switches are used.
 
 \begin{center}
   \begin{longtable}{|l|l|}
@@ -18055,8 +18116,8 @@ READOPT & carre/rdfrch.F \\
 READOPT & carre/rdfrin.F \\
 READOPT & carre/rdfrre.F \\
     \hline
-    \caption{Defines for Carre and where they are used.}
-    \label{tab:Carredefines}
+    \caption{Defines for Carre2 and where they are used.}
+    \label{tab:Carre2defines}
   \end{longtable}
 \end{center}
 
@@ -18085,9 +18146,10 @@ We list below where the {\tt DivGeo} compilation switches are used.
        GGD\_MINOR\_VERSION & equtrn/src/wrids.f \\
        IMAS & equtrn/src/eqdim.f90 \\
        IMAS\_MAJOR\_VERSION & equtrn/src/dg2ids.f \\
+       IMAS\_MAJOR\_VERSION & equtrn/src/eqdim.f90 \\
        IMAS\_MAJOR\_VERSION & equtrn/src/ids2dg.f \\
+       IMAS\_MAJOR\_VERSION & equtrn/src/rdids.f \\
        IMAS\_MAJOR\_VERSION & equtrn/src/wrids.f \\
-       IMAS\_MICRO\_VERSION & equtrn/src/wrids.f \\
        IMAS\_MINOR\_VERSION & equtrn/src/eqdim.f90 \\
        IMAS\_MINOR\_VERSION & equtrn/src/rdids.f \\
        IMAS\_MINOR\_VERSION & equtrn/src/wrids.f \\
@@ -18097,9 +18159,7 @@ We list below where the {\tt DivGeo} compilation switches are used.
        UAL\_MAJOR\_VERSION & equtrn/src/rdids.f \\
        UAL\_MAJOR\_VERSION & equtrn/src/wrids.f \\
        UAL\_MICRO\_VERSION & equtrn/src/rdids.f \\
-       UAL\_MICRO\_VERSION & equtrn/src/wrids.f \\
        UAL\_MINOR\_VERSION & equtrn/src/rdids.f \\
-       UAL\_MINOR\_VERSION & equtrn/src/wrids.f \\
        USE\_PXFGETENV & equtrn/src/dg2ids.f \\
        USE\_PXFGETENV & equtrn/src/ids2dg.f \\
        USE\_PXFGETENV & equtrn/src/wrids.f \\
@@ -18154,13 +18214,13 @@ if desired, be declared as part of either the {\tt SOLPS\_CPP} or the
 \item[NO\_21] \index{NO\_21} Do not use 21-moment model for thermal and viscous forces
 \item[NO\_IEEE] \index{NO\_IEEE} Provides replacements to IEEE non-standard arithmetic routines
 \item[NO\_F01AAF] \index{NO\_F01AAF} No {\tt NAG} routine {\tt F01AAF} --- uses its replacement instead (needed if linking with Version 17 or later of {\tt NAG})
-\item[NO\_OPENMP\_\*] \index{NO\_OPENMP} Turning off OpenMP parallelization
+\item[NO\_OPENMP\_*] \index{NO\_OPENMP} Turning off OpenMP parallelization
 \item[NO\_OPT] \index{NO\_OPT} No compiler optimization
+\item[\_OPENMP] \index{\_OPENMP} For OpenMP specific code
 \item[PAR\_OPT] \index{PAR\_OPT} Runs the code in a special interpretive parameter optimization mode
 \item[PERFMON] \index{PERFMON} Enable performance monitoring
 \item[PLPLOT] \index{PLPLOT} Use {\tt PLPLOT} instead of {\tt NCAR} for plotting
 %\item[SCL\_IMP\_RCI] \index{SCL\_IMP\_RCI} Toggles scaling of impurities tallies
-\item[UAL\_MAJOR\_VERSION] \index{UAL\_MAJOR\_VERSION} Major version number of the UAL (Universal Access Layer) library to which the code is linked (set internally by the configuration files)
 \item[USE\_CDF\_B2STIME] \index{USE\_CDF\_B2STIME} Specific for \SOLPSfour {\tt CDF} tallies
 \item[WANT\_PROCESS] \index{WANT\_PROCESS} Enables the code for the \SOLPSfive to \SOLPSfour converter
 \item[WOS] \index{WOS} Uses the {\tt WOS} libraries for accessing experimental data at IPP
@@ -18417,6 +18477,10 @@ IMAS & modules/b2mod\_ppout.F \\
 IMAS & preprocessing/b2ardr.F \\
 IMAS & utility/ratadas.F \\
 IMAS\_MAJOR\_VERSION & driver/b2mod\_driver.F \\
+IMAS\_MAJOR\_VERSION & ids/b2mod\_ual.F90 \\
+IMAS\_MAJOR\_VERSION & ids/b2mod\_ual\_io.F90 \\
+IMAS\_MAJOR\_VERSION & ids/b2mod\_ual\_io\_data.F90 \\
+IMAS\_MAJOR\_VERSION & ids/b2mod\_ual\_io\_grid.F90 \\
 IMAS\_MAJOR\_VERSION & ids/b2\_ual\_rewrite.F90 \\
 IMAS\_MAJOR\_VERSION & ids/b2\_ual\_write.F90 \\
 IMAS\_MAJOR\_VERSION & ids/b2\_ual\_write\_b2mod.F90 \\
@@ -18576,12 +18640,30 @@ NO\_NAG & b2plot/caltraj.F \\
 NO\_NAG & sources/heatdiff1D.F \\
 NO\_NAG & transport/b2tr21.F \\
 NO\_NAG & utility/nagsubst.F \\
+NO\_OPENMP\_B2SRDT & sources/b2srdt.F \\
 NO\_OPT & b2plot/b2plot.F \\
 NO\_OPT & ids/b2mod\_ual\_io.F90 \\
 NO\_OPT & postprocessing/b2ytdr.F \\
 NO\_SAVE & include/BRAEIR.H \\
 NO\_SAVE & include/EIRBRA.H \\
 NO\_SAVE & include/EIRDIAG.H \\
+\_OPENMP & src/catalyst/fortranAdaptor.F90 \\
+\_OPENMP & src/driver/b2mn\_opt.F \\
+\_OPENMP & src/driver/b2mnastra.F \\
+\_OPENMP & src/driver/b2mod\_driver.F \\
+\_OPENMP & src/driver/b2obeq.F \\
+\_OPENMP & src/driver/b2obfn.F \\
+\_OPENMP & src/driver/b2oblm.F \\
+\_OPENMP & src/modules/b2mod\_openmp.F \\
+\_OPENMP & src/solvers/b2ux11p.F \\
+\_OPENMP & src/solvers/b2ux5p.F \\
+\_OPENMP & src/solvers/b2ux7p.F \\
+\_OPENMP & src/solvers/b2ux9p.F \\
+\_OPENMP & src/sources/b2stbr.F \\
+\_OPENMP & src/utility/illtern\_7\_solps.F \\
+\_OPENMP & src/utility/ilutern\_7\_solps.F \\
+\_OPENMP & src/utility/ilutern\_9\_solps.F \\
+\_OPENMP & src/utility/ilutern\_us\_solps.F \\
 PAR\_OPT & sources/b2stbc\_phys.F \\
 PAR\_OPT & transport/b2tqna.F \\
 PERFMON & utility/prgend.F \\
@@ -18633,9 +18715,7 @@ SOLPS4\_3 & modules/b2mod\_mwti.F90 \\
 SOLPS4\_3 & modules/b2mod\_neutrals\_namelist.F \\
 SOLPS4\_3 & sources/eirene\_f30f31.F \\
 UAL\_MAJOR\_VERSION & ids/b2mod\_ual.F90 \\
-UAL\_MAJOR\_VERSION & ids/b2mod\_ual\_io.F90 \\
-UAL\_MICRO\_VERSION & ids/b2mod\_ual\_io.F90 \\
-UAL\_MINOR\_VERSION & ids/b2mod\_ual\_io.F90 \\
+UAL\_MINOR\_VERSION & ids/b2mod\_ual.F90 \\
 USE\_CDF\_B2STIME & modules/b2mod\_comtimpl.F \\
 USE\_CDF\_B2STIME & common/COUPLE/COMTIMPL.F \\
 USE\_IMPGYRO & driver/b2mod\_driver.F \\
@@ -19007,10 +19087,10 @@ Output file  & Specification of the {\it elements} and some other
 information - to be used by the interface routines producing
 the input files for {\tt B2-Eirene}                 & .dgo \\
 Targets file & Specification of the {\it targets} - to be used by the
-interface routines producing the input files for {\tt B2-Eirene} and {\tt Sonnet} or {\tt Carre}
+interface routines producing the input files for {\tt B2-Eirene} and {\tt Sonnet} or {\tt Carre2}
                                                     & .trg \\
 Structure file&Specification of the structures - to be used
-by the interface routines producing the input files for {\tt Sonnet} or {\tt Carre}
+by the interface routines producing the input files for {\tt Sonnet} or {\tt Carre2}
                                                     & .str \\ \hline
 
 {\bf Configuration file:}&                          & \\ \hline
@@ -19067,7 +19147,7 @@ Contours of constant poloidal flux
 in yellow) computed from {\it equilibrium} data. You can create,
 move, and delete them. The surfaces allow you to specify the
 requirements on the radial mesh for the mesh generator
-({\tt Sonnet} or {\tt Carre}), and also to
+({\tt Sonnet} or {\tt Carre2}), and also to
 check the compatibility of your wall structures with the magnetic
 configuration.
 \\
@@ -19075,7 +19155,7 @@ Grid points
 &
 Points on the separatrix which represent partition of the magnetic
 surfaces in different regions for the grid generator
-({\tt Sonnet} or {\tt Carre}). They are
+({\tt Sonnet} or {\tt Carre2}). They are
 displayed as dashes in magenta, the separatrix being drawn in red.
 \\
 Separators
@@ -19096,7 +19176,7 @@ corresponding to negative and positive, respectively,
 values of the poloidal magnetic flux. \\
 Mesh                &
 Computational mesh, displayed in blue, produced with a grid generator
-({\tt Sonnet} or {\tt Carre}) and imported into {\tt DG}.
+({\tt Sonnet} or {\tt Carre2}) and imported into {\tt DG}.
 Allows you to check the quality of the mesh and
 to make the necessary corrections to the input data for the grid
 generator. \\
@@ -19905,10 +19985,10 @@ positive $\psi$ values, while blue represents the negative ones.
 \index{DG, output mode}
 
 The detailed procedures for creating and editing surfaces and grid
-points differ slightly for the {\tt Sonnet} and {\tt Carre} mesh generators.
+points differ slightly for the {\tt Sonnet} and {\tt Carre2} mesh generators.
 So, before undertaking these tasks, the user should select the
 appropriate output mode in {\tt Options\allowbreak|Output mode}.
-Since only the {\tt Carre} code is distributed along with this manual,
+Since only the {\tt Carre2} code is distributed along with this manual,
 only procedures pertinent to it will be described.
 
 This dialog box also allows the user to determine which objects are
@@ -19982,7 +20062,7 @@ import the parameters describing these surfaces.
 Note that the dialog will {\em not} enforce constraints on the number of
 cells (e.g., that the number of core and PFR cells must be equal); the
 user must check to be sure that all such constraints are satisfied.
-{\tt Carre} will perform its own set of checks when invoked as well.
+{\tt Carre2} will perform its own set of checks when invoked as well.
 
 {\tt DG}'s algorithm for calculating the outermost flux surface level for unbounded
 regions (e.g., PFR and SOL)
@@ -20037,7 +20117,7 @@ changed, the bounding element might different than before.
 The process of creating surfaces is perhaps the most confusing and difficult
 aspect of using {\tt DG}.  Moreover, the algorithm it uses for choosing the
 outermost flux surface level differs in detail from the one used by
-{\tt Carre}.  If you are having problems getting the surfaces you want,
+{\tt Carre2}.  If you are having problems getting the surfaces you want,
 you might benefit from reading the precise description of {\tt DG}'s
 current algorithm for setting the outermost flux level:
 
@@ -20193,7 +20273,7 @@ establish the necessary symbolic links (the scripts checks if you are doing
 a limiter case, and, if so, will have {\tt dg.equ} link to the
 file you indicated as the {\tt Real equilibrium}), then use the {\tt carre -}
 script to create the grid, {\tt Import} the {\tt Grid} and inspect it.
-For linear cases, you cannot use {\tt Carre} and must provide the grid
+For linear cases, you cannot use {\tt Carre2} and must provide the grid
 independently.
 You may have to play with the usual settings for the grid generation,
 such as the {\tt Surfaces} and {\tt Grid points} together with the
@@ -20277,7 +20357,7 @@ Note that the dialog will {\em not} enforce constraints on the number of
 cells (e.g., that the number of grid points on either side of the
 PFR must be equal); the
 user must check to be sure that all such constraints are satisfied.
-Again, {\tt Carre} will perform its own series of such checks when invoked.
+Again, {\tt Carre2} will perform its own series of such checks when invoked.
 
 With the {\tt Add grid point} tool, move the mouse pointer to the
 desired location on the separatrix and press the mouse button. A grid
@@ -20457,7 +20537,7 @@ To delete all sources, issue the {\tt Edit|Delete|Sources} menu command.
 \subsection{Importing a SONNET format mesh}
 
 \index{DG, importing a SONNET grid}
-{\tt DG} allows you to import a mesh in the {\tt Sonnet} format. {\tt Carre}'s output
+{\tt DG} allows you to import a mesh in the {\tt Sonnet} format. {\tt Carre2}'s output
 mesh can be converted into this format, as can meshes produced by other
 codes. At present, it
 can only read the ASCII version of the grid file. The grid can then be
@@ -20510,7 +20590,7 @@ A modified mesh can be written out with the
 Mesh cells highlighted in pink in {\tt DG}'s main window are either concave
 (have an interior angle greater than 180 degrees) or consist of
 overlap with a neighboring cell.  These problems typically arise where
-the mesh generator ({\tt Carre} or otherwise) is forcing the mesh to
+the mesh generator ({\tt Carre2} or otherwise) is forcing the mesh to
 conform to the specified divertor target shape and usually involve
 cells that are stretched significantly in one direction.
 
@@ -21488,7 +21568,7 @@ introduced a very small effect, seen only as a jump in the residuals.
 \input{CONTRIBUTING.tex}
 
 \bibliographystyle{iaea}
-\bibliography{tok,aug,general,extern,main,model,divgas,mnw,xpb,adopt}
+\bibliography{tok,aug,general,extern,main,model,divgas,mnw,xpb,adopt,afn}
 
 \input{solps.ind}
 
@@ -21497,4 +21577,3 @@ introduced a very small effect, seen only as a jump in the residuals.
 \ifpdf
 \else
 \fi
-

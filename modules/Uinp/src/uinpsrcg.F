@@ -61,8 +61,10 @@ c>>>
         write(txtsou(nstrai),'(a,i2,a,a)')
      ,   'Gas puffing source ',istr,' : ',trim(cgpfstrs(istr))
         npts(nstrai)=npgpfstr(istr)
+        nptsh(nstrai)=npgpfstr(istr)
         nminpts(nstrai)=mpgpfstr(istr)
         if(npts(nstrai).lt.0) npts(nstrai)=10000
+        if(nptsh(nstrai).lt.0) nptsh(nstrai)=10000
         ninitl(nstrai)=nigpfstr(istr)
         if(ninitl(nstrai).eq.0) ninitl(nstrai)=6001
         if(soreni(nstrai).eq.0) soreni(nstrai)=tgpfstr(istr)

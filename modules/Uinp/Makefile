@@ -17,6 +17,7 @@ SRCDIR  = ${SRCUIN}/src
 BASEDIR = ${SRCUIN}
 B2DIR   = ${SOLPSTOP}/modules/B2.5
 EIRDIR  = ${SOLPSTOP}/modules/Eirene
+CRRDIR  = ${SOLPSTOP}/modules/Carre2
 
 MAKES = ${BASEDIR}/Makefile
 # Include global SOLPS compiler settings
@@ -44,6 +45,8 @@ ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local ] && 
   include ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
   MAKES += ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
 endif
+
+MAKETAGS ?= ctags -e -f
 
 ifdef SOLPS_MPI
   USE_MPI ?= -DUSE_MPI
@@ -84,6 +87,7 @@ ifeq ($(shell [ -e ${EIRDIR}/src/common ] && echo yes || echo no ),yes)
 EIRINC += -I${EIRDIR}/src/common
 endif
 EIRINC += -I${EIROBJ}
+CRRINC += -I${CRRDIR}/src90/include
 
 include ${SRCUIN}/config/config.${HOST_NAME}.${COMPILER}
 MAKES += ${SRCUIN}/config/config.${HOST_NAME}.${COMPILER}
@@ -127,8 +131,8 @@ ${OBJDIR}/libui.a: ${DEST} ${SRCDIR}/git_version_Uinp.h ${MAKES}
 	@ar rucv $@ ${DEST}
 	ranlib $@
 
-${OBJDIR}/libb25.a: ${B2OBJ}/b2mod_constants.o ${B2OBJ}/b2mod_elements.o ${B2OBJ}/b2mod_types.o ${B2OBJ}/b2mod_layer.o ${B2OBJ}/b2mod_math.o ${B2OBJ}/b2mod_openmp.o ${B2OBJ}/b2mod_solpstop.o ${B2OBJ}/chcase.o ${B2OBJ}/helper.o ${B2OBJ}/ifill.o ${B2OBJ}/b2mod_ipmain.o ${B2OBJ}/isadigit.o ${B2OBJ}/isplusorminus.o ${B2OBJ}/len_of_digits.o ${B2OBJ}/lnblnk.o ${B2OBJ}/lower_case.o ${B2OBJ}/b2mod_lwimai.o ${B2OBJ}/b2mod_lwmain.o ${B2OBJ}/machsfr.o ${B2OBJ}/nagsubst.o ${B2OBJ}/open_file.o ${B2OBJ}/prgend.o ${B2OBJ}/prgini.o ${B2OBJ}/prvrt.o ${B2OBJ}/prvrti.o ${B2OBJ}/ratio.o ${B2OBJ}/sfill.o ${B2OBJ}/streql.o ${B2OBJ}/strip_spaces.o ${B2OBJ}/b2mod_subsys.o ${B2OBJ}/sysend.o ${B2OBJ}/sysini.o ${B2OBJ}/xerrab.o ${B2OBJ}/b2mod_xerset.o ${B2OBJ}/xertst.o ${B2OBJ}/xxdata_11.o ${SRCDIR}/.new_routines ${MAKES}
-	@ar rucv $@ ${B2OBJ}/b2mod_constants.o ${B2OBJ}/b2mod_elements.o ${B2OBJ}/b2mod_types.o ${B2OBJ}/b2mod_layer.o ${B2OBJ}/b2mod_math.o ${B2OBJ}/b2mod_openmp.o ${B2OBJ}/b2mod_solpstop.o ${B2OBJ}/chcase.o ${B2OBJ}/helper.o ${B2OBJ}/ifill.o ${B2OBJ}/b2mod_ipmain.o ${B2OBJ}/isadigit.o ${B2OBJ}/isplusorminus.o ${B2OBJ}/len_of_digits.o ${B2OBJ}/lnblnk.o ${B2OBJ}/lower_case.o ${B2OBJ}/b2mod_lwimai.o ${B2OBJ}/b2mod_lwmain.o ${B2OBJ}/machsfr.o ${B2OBJ}/nagsubst.o ${B2OBJ}/open_file.o ${B2OBJ}/prgend.o ${B2OBJ}/prgini.o ${B2OBJ}/prvrt.o ${B2OBJ}/prvrti.o ${B2OBJ}/ratio.o ${B2OBJ}/sfill.o ${B2OBJ}/streql.o ${B2OBJ}/strip_spaces.o ${B2OBJ}/b2mod_subsys.o ${B2OBJ}/sysend.o ${B2OBJ}/sysini.o ${B2OBJ}/xerrab.o ${B2OBJ}/b2mod_xerset.o ${B2OBJ}/xertst.o ${B2OBJ}/xxdata_11.o
+${OBJDIR}/libb25.a: ${B2OBJ}/b2mod_constants.o ${B2OBJ}/b2mod_elements.o ${B2OBJ}/b2mod_types.o ${B2OBJ}/b2mod_layer.o ${B2OBJ}/b2mod_math.o ${B2OBJ}/b2mod_openmp.o ${B2OBJ}/b2mod_solpstop.o ${B2OBJ}/b2mod_version.o ${B2OBJ}/cfvers.o ${B2OBJ}/chcase.o ${B2OBJ}/helper.o ${B2OBJ}/ifill.o ${B2OBJ}/b2mod_ipmain.o ${B2OBJ}/isadigit.o ${B2OBJ}/isplusorminus.o ${B2OBJ}/len_of_digits.o ${B2OBJ}/lnblnk.o ${B2OBJ}/lower_case.o ${B2OBJ}/b2mod_lwimai.o ${B2OBJ}/b2mod_lwmain.o ${B2OBJ}/machsfr.o ${B2OBJ}/nagsubst.o ${B2OBJ}/open_file.o ${B2OBJ}/prgend.o ${B2OBJ}/prgini.o ${B2OBJ}/prvrt.o ${B2OBJ}/prvrti.o ${B2OBJ}/ratio.o ${B2OBJ}/sfill.o ${B2OBJ}/streql.o ${B2OBJ}/strip_spaces.o ${B2OBJ}/b2mod_subsys.o ${B2OBJ}/sysend.o ${B2OBJ}/sysini.o ${B2OBJ}/xerrab.o ${B2OBJ}/b2mod_xerset.o ${B2OBJ}/xertst.o ${B2OBJ}/xxdata_11.o ${SRCDIR}/.new_routines ${MAKES}
+	@ar rucv $@ ${B2OBJ}/b2mod_constants.o ${B2OBJ}/b2mod_elements.o ${B2OBJ}/b2mod_types.o ${B2OBJ}/b2mod_layer.o ${B2OBJ}/b2mod_math.o ${B2OBJ}/b2mod_openmp.o ${B2OBJ}/b2mod_solpstop.o ${B2OBJ}/b2mod_version.o ${B2OBJ}/cfvers.o ${B2OBJ}/chcase.o ${B2OBJ}/helper.o ${B2OBJ}/ifill.o ${B2OBJ}/b2mod_ipmain.o ${B2OBJ}/isadigit.o ${B2OBJ}/isplusorminus.o ${B2OBJ}/len_of_digits.o ${B2OBJ}/lnblnk.o ${B2OBJ}/lower_case.o ${B2OBJ}/b2mod_lwimai.o ${B2OBJ}/b2mod_lwmain.o ${B2OBJ}/machsfr.o ${B2OBJ}/nagsubst.o ${B2OBJ}/open_file.o ${B2OBJ}/prgend.o ${B2OBJ}/prgini.o ${B2OBJ}/prvrt.o ${B2OBJ}/prvrti.o ${B2OBJ}/ratio.o ${B2OBJ}/sfill.o ${B2OBJ}/streql.o ${B2OBJ}/strip_spaces.o ${B2OBJ}/b2mod_subsys.o ${B2OBJ}/sysend.o ${B2OBJ}/sysini.o ${B2OBJ}/xerrab.o ${B2OBJ}/b2mod_xerset.o ${B2OBJ}/xertst.o ${B2OBJ}/xxdata_11.o
 	ranlib $@
 
 ${OBJDIR}/uinput.o: ${OBJDIR}/uiblkd.o
@@ -166,6 +170,9 @@ ${OBJDIR}/b2mod_solpstop.${MOD}:
 
 ${OBJDIR}/b2mod_subsys.${MOD}:
 	ln -sf ${B2OBJ}/b2mod_subsys.${MOD} ${OBJDIR}
+
+${OBJDIR}/b2mod_version.${MOD}:
+	ln -sf ${B2OBJ}/b2mod_version.${MOD} ${OBJDIR}
 
 ${OBJDIR}/b2mod_xerset.${MOD}:
 	ln -sf ${B2OBJ}/b2mod_xerset.${MOD} ${OBJDIR}
@@ -216,6 +223,9 @@ ${OBJDIR}/b2mod_solpstop.o:
 ${OBJDIR}/b2mod_subsys.o:
 	ln -sf ${B2OBJ}/b2mod_subsys.o ${OBJDIR}
 
+${OBJDIR}/b2mod_version.o:
+	ln -sf ${B2OBJ}/b2mod_version.o ${OBJDIR}
+
 ${OBJDIR}/b2mod_xerset.o:
 	ln -sf ${B2OBJ}/b2mod_xerset.o ${OBJDIR}
 
@@ -239,7 +249,7 @@ listobj:
 	sed -e 's/ub2p\.o//' -e 's/uinput\.o//' -e 's/uiblkd\.o//' -e 's/uiblb2\.o//' > ${OBJDIR}/LISTOBJ
 
 tags:
-	rm -f ${BASEDIR}/TAGS ; ctags -e -f ${BASEDIR}/TAGS ${SRCDIR}/*.F ${SRCDIR}/*.h ${SRCDIR}/*.inc || touch ${BASEDIR}/TAGS
+	rm -f ${BASEDIR}/TAGS ; ${MAKETAGS} ${BASEDIR}/TAGS ${SRCDIR}/*.F ${SRCDIR}/*.h ${SRCDIR}/*.inc || touch ${BASEDIR}/TAGS
 
 ${OBJDIR}/LISTOBJ: listobj
 

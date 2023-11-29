@@ -1,6 +1,6 @@
 function cont = read_ft78(file)
 % cont = read_ft78(file)
-% 
+%
 % Read contours from fort.78 files
 %
 
@@ -26,24 +26,25 @@ i = 0;
 line = fgetl(fid);
 while line ~= -1
     i = i+1;
-    
+
     % Read number of point in polygon
     nel = strread(line,'%d',1);
-    
+    coords = zeros(2,nel);
+
     % Read coordinates
-    coords = fscanf(fid,'%f',[2,nel]);
+    for j = 1:nel
+       line = fgetl(fid);
+       coords(:,j) = strread(line,'%f',2);
+    end
+
     cont(i).r = 1e-2*coords(1,:)';
     cont(i).z = 1e-2*coords(2,:)';
 
     % Story dummy
     cont(i).tsize = dum;
-    
+
     % Check for next polygon
-    fgetl(fid);
     line = fgetl(fid);
-    
+
 end
 
-
-
-    

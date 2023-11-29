@@ -20,7 +20,7 @@ c=======================================================================
      .  lchrdgrp,lchrdlint,lchrdlprf
       integer :: ichlst(nchor)
       real(kind=R4) :: u
-      parameter(lunm=174)
+      parameter(lunm=180)
       character*8 unm(lunm),uun
       character*8, save :: chtyp
       character ubs*1,uam*52
@@ -76,7 +76,8 @@ c*** lugwt : counter for the grid-wall ties
      2    'glb_pwrf','glb_tmst','spcs_crk','spcs_crp','spcs_crf',
      3    'spcs_scn','tgminhst','gpf_mhst','chords'  ,'linintg' ,
      4    'set_id'  ,'chr_lbl' ,'chr_angl','chrdsdat','data_id' ,
-     5    'set_list','n_points','linprfs' ,'lm_equ'  /
+     5    'set_list','n_points','linprfs' ,'lm_equ'  ,'crr_mode',
+     6    'grd_mode','tgfclbl' ,'fclbl'   ,'omp_elm' ,'imp_elm'  /
 c=======================================================================
       call subini ('uinnam')
 c*** Backslash:
@@ -740,12 +741,21 @@ c*** Surface data transfer from B2 to Eirene
           call xerrab (' ==> Corrupted DG output?')
         end if !}
         call rearri(ll_spcsrf(1,n_spcsrf),nlimps,k_spcsrf(n_spcsrf))
-        if(maxval(ll_spcsrf).gt.nlim) then !{
+        if(maxval(ll_spcsrf).gt.(nlim+nsts)) then !{
           write(0,*) 'Too many wall elements: maximum ',nlim
+          write(0,*) 'Or non-standard surfaces: maximum ',nsts
           write(0,*) 'Current number of requested elements: ',
      .     maxval(ll_spcsrf)
           call xerrab
-     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+     .     (' ==> Check the DG model and '//
+     .      'DEF_NLIM and DEF_NSTS in DIMENSIONS.F')
+        end if !}
+        if(minval(ll_spcsrf).lt.(-nsts)) then !{
+          write(0,*) 'Too many non-standard surfaces: maximum ',nsts
+          write(0,*) 'Current number of requested surfaces: ',
+     .     abs(minval(ll_spcsrf))
+          call xerrab
+     .     (' ==> Check the DG model and DEF_NSTS in DIMENSIONS.F')
         end if !}
       case (105)
         if(n_spcsrf.le.0) then !{
@@ -1088,6 +1098,18 @@ c***  input elements indices for current rectangle
         call resima(uam)
         lena=i
         ln_cnfg = uam(1:1).eq.'-'.and.lm_cnfg
+      case (175) ! crr_mode
+        call resimi(carre_mode)
+      case (176) ! grd_mode
+        call resimi(grid_mode)
+      case (177) ! tgfclbl
+        call resimi(tgfclbl(luswch))
+      case (178) ! fclbl
+        call rearri(fclbl,nlim,i)
+      case (179) ! omp_elm
+        call resimi(omp_elm)
+      case (180) ! imp_elm
+        call resimi(imp_elm)
       case default
         call skipit
       end select

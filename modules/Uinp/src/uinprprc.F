@@ -1715,6 +1715,7 @@ c>>>
                       nmsecp(ipls)=nmseca(kk)
                       nhstp(ipls)=nhsta(kk)
                       lkindp(ipls)=kk
+                      lkindph(nplsh+ipls)=kk
                     else if (ll.eq.2) then !}{
                       nmassp(ipls)=nmassm(kk)
                       ncharp(ipls)=ncharm(kk)
@@ -1725,6 +1726,7 @@ c>>>
                       nmsecp(ipls)=nmsecm(kk)
                       nhstp(ipls)=nhstm(kk)
                       lkindp(ipls)=lkindm(kk)
+                      lkindph(nplsh+ipls)=lkindm(kk)
                     else if (ll.eq.3) then !}{
                       nmassp(ipls)=nmassi(kk)
                       ncharp(ipls)=nchari(kk)
@@ -1735,15 +1737,20 @@ c>>>
                       nmsecp(ipls)=nmseci(kk)
                       nhstp(ipls)=nhsti(kk)
                       lkindp(ipls)=lkindi(kk)
+                      lkindph(nplsh+ipls)=lkindi(kk)
                     end if !}
                     nrcp(ipls)=0
                     idnslmp(ipls)=0
                     cdnmdlp(ipls)=' '
                     nrep(ipls)=0
                     iflb(ipls)=-13
+                    iflbh(nplsh+ipls)=-13
                     fcte(ipls)=0.
+                    fcteh(nplsh+ipls)=0.
                     dpls(ipls)=0.
+                    dplsh(nplsh+ipls)=0.
                     bmass(ipls)=real(nmassp(ipls))
+                    bmassh(nplsh+ipls)=real(nmassp(ipls))
                   end if !}
                   iie=1001
                   iik=100*k+10+l
