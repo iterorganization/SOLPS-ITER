@@ -23,7 +23,7 @@ c=======================================================================
       character*27 lbreg(0:cbnrmx-1)
       character*120 lblps
       character*80 column_header
-      logical uex, todo
+      logical uex
       integer find_matching_species
       logical streql
       external find_matching_species, streql
