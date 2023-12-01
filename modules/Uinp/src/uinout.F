@@ -1157,6 +1157,10 @@ c**  particle history plots in 2d or 3d geometry plots
 c*** 12.  data for diagnostic module
 
       write(iunoo,700) utxthd(18)
+      if (hydrogen) then
+        write(iunoo,721) "DEFINE_LINES"
+        write(iunoo,707) numlines,modaddv
+      end if
       write(iunoo,707) nchori,ncheni,lntspec,lntsput,nmcsput,
      ,                                         nlstadds,mtreadds,ngwties
       if (nchori.gt.0) then !{
