@@ -4253,7 +4253,7 @@ The format of this input block for coupling to \SOLPSITER is as follows:
 
 {\it ***14. Data for interfacing routine "infusr"}
 \begin{verbatim}
-LSYMET  LBALAN
+LSYMET  LBALAN   LCOARSE NLTRIMESH  LSPRCL
 NFLA    NTRFRM   NFULL   IBRAD   IBPOL   IBTOR    DUM7    ...
 ...       DUM8    DUM9   DUM10   NCOND
 \end{verbatim}
@@ -4300,7 +4300,7 @@ DO 50, IAOT=1,NAOTB
 We only include here the variables or aspects thereof not already described in the {\tt Eirene} manual, section 2.14.
 
 \begin{description}
-  \item[LCOARSE] Coarse mesh switch ???
+  \item[LCOARSE] Coarse mesh switch ??? $\Rightarrow$ no longer in use in the extended grids code
   \item[NLTRIMESH] When {\tt .TRUE.}, {\tt Eirene} is only run to obtain the contours necessary to build the triangular grid, which are then written in {\tt fort.78}. This is used by the {\tt triang} script toolchain. No particle trajectories are followed.
   \item[LSPRCL] Turns on species-specific source rescaling when {\tt .TRUE.}
   \item[NTRFRM] {\tt fort.33} format switch, should be {\tt 1} for the wide grids code
