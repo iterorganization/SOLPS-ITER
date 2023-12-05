@@ -1,9 +1,8 @@
 #! /bin/csh -f
 pipe_run.log | \
-  egrep -a 'fna.reg|nnreg' | \
-  awk '/nnreg/{nxreg=$3;nyreg=$4} \
-       /fnaxreg/{E=-($3);W=($6)} \
-       /fnayreg/{core=-($4);pflxl=-($3); \
-                 pflxr=-($5);N=($7+$8+$9); \
-                 cnt++;print cnt,E,W,core,pflxl,pflxr,N}' | \
+  egrep -a 'fnareg|nnreg' | \
+  awk '/nnreg/{nfreg=$3} \
+       /fnareg/{E=-($3);W=($6);core=-($10);pflxl=-($9); \
+                pflxr=-($11);N=($13+$14+$15); \
+                cnt++;print cnt,E,W,core,pflxl,pflxr,N}' | \
   plot x$1yplot6 -E W -core -pflxl -pflxr N iteration D0 `noquote_pwd 3`

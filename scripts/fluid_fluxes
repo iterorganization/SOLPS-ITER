@@ -6,14 +6,19 @@
 
 set nreg=`climb_and_look_for NREG`
 if (-s $nreg) then
-  setenv NREG `cat $nreg`
+  setenv NREG `cat $nreg | cut -d ' ' -f 1`
+  setenv FREG `cat $nreg | cut -d ' ' -f 2`
   echo Set NREG to $NREG "(based on $nreg)"
+  echo Set FREG to $FREG "(based on $nreg)"
 else
   set nnreg=`pipe_run.log | grep -a ^nnreg | head -1`
   set NREG=$nnreg[2]
+  set FREG=$nnreg[3]
   echo Set NREG to $NREG "(based on log file)"
+  echo Set FREG to $FREG "(based on log file)"
 endif
 if (! $?NREG) set NREG = 4
+if (! $?NREG) set NREG = 13
 
 if ("${1}" == "") then
    set S=0
@@ -37,203 +42,301 @@ switch ($NREG)
   case "4":
 # West target fluxes
     foreach i (`count $S $E`)
-      set line = "$line 'fnaxreg(2,$i,:)'"
+      set line = "$line 'fnareg(2,$i,:)'"
     end
 # East target fluxes
     foreach i (`count $S $E`)
-      set line = "$line 'fnaxreg(5,$i,:)'"
+      set line = "$line 'fnareg(5,$i,:)'"
     end
 # PFR West side fluxes
     foreach i (`count $S $E`)
-      set line = "$line 'fnayreg(2,$i,:)'"
+      set line = "$line 'fnareg(7,$i,:)'"
     end
 # core fluxes
     foreach i (`count $S $E`)
-      set line = "$line 'fnayreg(3,$i,:)'"
+      set line = "$line 'fnareg(8,$i,:)'"
     end
 # PFR East fluxes
     foreach i (`count $S $E`)
-      set line = "$line 'fnayreg(4,$i,:)'"
+      set line = "$line 'fnareg(9,$i,:)'"
     end
 # North West divertor fluxes
     foreach i (`count $S $E`)
-      set line = "$line 'fnayreg(6,$i,:)'"
+      set line = "$line 'fnareg(11,$i,:)'"
     end
 # North MCW fluxes
     foreach i (`count $S $E`)
-      set line = "$line 'fnayreg(7,$i,:)'"
+      set line = "$line 'fnareg(12,$i,:)'"
     end
 # North East fluxes
     foreach i (`count $S $E`)
-      set line = "$line 'fnayreg(8,$i,:)'"
+      set line = "$line 'fnareg(13,$i,:)'"
     end
     breaksw
-  case "8":
-# Lower West target fluxes
-    foreach i (`count $S $E`)
-      set line = "$line 'fnaxreg(2,$i,:)'"
-    end
-# Upper East target fluxes
-    foreach i (`count $S $E`)
-      set line = "$line 'fnaxreg(5,$i,:)'"
-    end
-# Upper West target fluxes
-    foreach i (`count $S $E`)
-      set line = "$line 'fnaxreg(6,$i,:)'"
-    end
-# Lower East target fluxes
-    foreach i (`count $S $E`)
-      set line = "$line 'fnaxreg(9,$i,:)'"
-    end
-# PFR Lower West side fluxes
-    foreach i (`count $S $E`)
-      set line = "$line 'fnayreg(2,$i,:)'"
-    end
-# Inner core fluxes
-    foreach i (`count $S $E`)
-      set line = "$line 'fnayreg(3,$i,:)'"
-    end
-# PFR Upper East fluxes
-    foreach i (`count $S $E`)
-      set line = "$line 'fnayreg(4,$i,:)'"
-    end
-# North Lower West divertor fluxes
-    foreach i (`count $S $E`)
-      set line = "$line 'fnayreg(6,$i,:)'"
-    end
-# North Inner MCW fluxes
-    foreach i (`count $S $E`)
-      set line = "$line 'fnayreg(7,$i,:)'"
-    end
-# North Upper East fluxes
-    foreach i (`count $S $E`)
-      set line = "$line 'fnayreg(8,$i,:)'"
-    end
-# PFR Upper West side fluxes
-    foreach i (`count $S $E`)
-      set line = "$line 'fnayreg(9,$i,:)'"
-    end
-# Outer core fluxes
-    foreach i (`count $S $E`)
-      set line = "$line 'fnayreg(10,$i,:)'"
-    end
-# PFR Lower East fluxes
-    foreach i (`count $S $E`)
-      set line = "$line 'fnayreg(11,$i,:)'"
-    end
-# North Upper West divertor fluxes
-    foreach i (`count $S $E`)
-      set line = "$line 'fnayreg(13,$i,:)'"
-    end
-# North Outer MCW fluxes
-    foreach i (`count $S $E`)
-      set line = "$line 'fnayreg(14,$i,:)'"
-    end
-# North Lower East fluxes
-    foreach i (`count $S $E`)
-      set line = "$line 'fnayreg(15,$i,:)'"
-    end
-    breaksw
-  case "7":
+  case "5":
 # West target fluxes
     foreach i (`count $S $E`)
-      set line = "$line 'fnaxreg(2,$i,:)'"
+      set line = "$line 'fnareg(2,$i,:)'"
     end
-# First East target fluxes
+# East target fluxes
     foreach i (`count $S $E`)
-      set line = "$line 'fnaxreg(5,$i,:)'"
-    end
-# Second East target fluxes
-    foreach i (`count $S $E`)
-      set line = "$line 'fnaxreg(6,$i,:)'"
-    end
-# Third East target fluxes
-    foreach i (`count $S $E`)
-      set line = "$line 'fnaxreg(9,$i,:)'"
+      set line = "$line 'fnareg(5,$i,:)'"
     end
 # PFR West side fluxes
     foreach i (`count $S $E`)
-      set line = "$line 'fnayreg(2,$i,:)'"
+      set line = "$line 'fnareg(9,$i,:)'"
+    end
+# core fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnareg(10,$i,:)'"
+    end
+# PFR East fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnareg(11,$i,:)'"
+    end
+# North island fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnareg(14,$i,:)'"
+    end
+    breaksw
+  case "8":
+    switch ($FREG)
+      case "26":
+# Lower West target fluxes
+        foreach i (`count $S $E`)
+          set line = "$line 'fnareg(2,$i,:)'"
+        end
+# Upper East target fluxes
+        foreach i (`count $S $E`)
+          set line = "$line 'fnareg(5,$i,:)'"
+        end
+# Upper West target fluxes
+        foreach i (`count $S $E`)
+          set line = "$line 'fnareg(6,$i,:)'"
+        end
+# Lower East target fluxes
+        foreach i (`count $S $E`)
+          set line = "$line 'fnareg(9,$i,:)'"
+        end
+# PFR Lower West side fluxes
+        foreach i (`count $S $E`)
+          set line = "$line 'fnareg(14,$i,:)'"
+        end
+# Inner core fluxes
+        foreach i (`count $S $E`)
+          set line = "$line 'fnareg(15,$i,:)'"
+        end
+# PFR Upper East fluxes
+        foreach i (`count $S $E`)
+          set line = "$line 'fnareg(16,$i,:)'"
+        end
+# North Lower West divertor fluxes
+        foreach i (`count $S $E`)
+          set line = "$line 'fnareg(18,$i,:)'"
+        end
+# North Inner MCW fluxes
+        foreach i (`count $S $E`)
+          set line = "$line 'fnareg(19,$i,:)'"
+        end
+# North Upper East fluxes
+        foreach i (`count $S $E`)
+          set line = "$line 'fnareg(20,$i,:)'"
+        end
+# PFR Upper West side fluxes
+        foreach i (`count $S $E`)
+          set line = "$line 'fnareg(21,$i,:)'"
+        end
+# Outer core fluxes
+        foreach i (`count $S $E`)
+          set line = "$line 'fnareg(22,$i,:)'"
+        end
+# PFR Lower East fluxes
+        foreach i (`count $S $E`)
+          set line = "$line 'fnareg(23,$i,:)'"
+        end
+# North Upper West divertor fluxes
+        foreach i (`count $S $E`)
+          set line = "$line 'fnareg(25,$i,:)'"
+        end
+# North Outer MCW fluxes
+        foreach i (`count $S $E`)
+          set line = "$line 'fnareg(26,$i,:)'"
+        end
+# North Lower East fluxes
+        foreach i (`count $S $E`)
+          set line = "$line 'fnareg(27,$i,:)'"
+        end
+        breaksw
+      case "27":
+# Lower West target fluxes
+        foreach i (`count $S $E`)
+          set line = "$line 'fnareg(2,$i,:)'"
+        end
+# Upper East target fluxes
+        foreach i (`count $S $E`)
+          set line = "$line 'fnareg(5,$i,:)'"
+        end
+# Upper West target fluxes
+        foreach i (`count $S $E`)
+          set line = "$line 'fnareg(6,$i,:)'"
+        end
+# Lower East target fluxes
+        foreach i (`count $S $E`)
+          set line = "$line 'fnareg(9,$i,:)'"
+        end
+# PFR Lower West side fluxes
+        foreach i (`count $S $E`)
+          set line = "$line 'fnareg(15,$i,:)'"
+        end
+# Inner core fluxes
+        foreach i (`count $S $E`)
+          set line = "$line 'fnareg(16,$i,:)'"
+        end
+# PFR Upper East fluxes
+        foreach i (`count $S $E`)
+          set line = "$line 'fnareg(17,$i,:)'"
+        end
+# North Lower West divertor fluxes
+        foreach i (`count $S $E`)
+          set line = "$line 'fnareg(19,$i,:)'"
+        end
+# North Inner MCW fluxes
+        foreach i (`count $S $E`)
+          set line = "$line 'fnareg(20,$i,:)'"
+        end
+# North Upper East fluxes
+        foreach i (`count $S $E`)
+          set line = "$line 'fnareg(21,$i,:)'"
+        end
+# PFR Upper West side fluxes
+        foreach i (`count $S $E`)
+          set line = "$line 'fnareg(22,$i,:)'"
+        end
+# Outer core fluxes
+        foreach i (`count $S $E`)
+          set line = "$line 'fnareg(23,$i,:)'"
+        end
+# PFR Lower East fluxes
+        foreach i (`count $S $E`)
+          set line = "$line 'fnareg(24,$i,:)'"
+        end
+# North Upper West divertor fluxes
+        foreach i (`count $S $E`)
+          set line = "$line 'fnareg(26,$i,:)'"
+        end
+# North Outer MCW fluxes
+        foreach i (`count $S $E`)
+          set line = "$line 'fnareg(27,$i,:)'"
+        end
+# North Lower East fluxes
+        foreach i (`count $S $E`)
+          set line = "$line 'fnareg(28,$i,:)'"
+        end
+        breaksw
+      default:
+        echo "This geometry case is not yet coded"
+        echo "FREG = " $FREG
+    endsw
+  case "7":
+# West target fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnareg(2,$i,:)'"
+    end
+# First East target fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnareg(5,$i,:)'"
+    end
+# Second East target fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnareg(6,$i,:)'"
+    end
+# Third East target fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnareg(9,$i,:)'"
+    end
+# PFR West side fluxes
+    foreach i (`count $S $E`)
+      set line = "$line 'fnareg(15,$i,:)'"
     end
 # Core fluxes
     foreach i (`count $S $E`)
-      set line = "$line 'fnayreg(3,$i,:)'"
+      set line = "$line 'fnareg(16,$i,:)'"
     end
 # Main East PFR fluxes
     foreach i (`count $S $E`)
-      set line = "$line 'fnayreg(4,$i,:)'"
+      set line = "$line 'fnareg(17,$i,:)'"
     end
 # North West divertor fluxes
     foreach i (`count $S $E`)
-      set line = "$line 'fnayreg(6,$i,:)'"
+      set line = "$line 'fnareg(19,$i,:)'"
     end
 # North Inner MCW fluxes
     foreach i (`count $S $E`)
-      set line = "$line 'fnayreg(7,$i,:)'"
+      set line = "$line 'fnareg(20,$i,:)'"
     end
 # North Main East fluxes
     foreach i (`count $S $E`)
-      set line = "$line 'fnayreg(8,$i,:)'"
+      set line = "$line 'fnareg(21,$i,:)'"
     end
 # First PFR East side fluxes
     foreach i (`count $S $E`)
-      set line = "$line 'fnayreg(9,$i,:)'"
+      set line = "$line 'fnareg(22,$i,:)'"
     end
 # Second PFR East side fluxes
     foreach i (`count $S $E`)
-      set line = "$line 'fnayreg(10,$i,:)'"
+      set line = "$line 'fnareg(23,$i,:)'"
     end
 # Third PFR East side fluxes
     foreach i (`count $S $E`)
-      set line = "$line 'fnayreg(11,$i,:)'"
+      set line = "$line 'fnareg(24,$i,:)'"
     end
 # First East divertor fluxes
     foreach i (`count $S $E`)
-      set line = "$line 'fnayreg(12,$i,:)'"
+      set line = "$line 'fnareg(25,$i,:)'"
     end
 # Second East divertor fluxes
     foreach i (`count $S $E`)
-      set line = "$line 'fnayreg(13,$i,:)'"
+      set line = "$line 'fnareg(26,$i,:)'"
     end
 # Third East divertor fluxes
     foreach i (`count $S $E`)
-      set line = "$line 'fnayreg(14,$i,:)'"
+      set line = "$line 'fnareg(27,$i,:)'"
     end
     breaksw
   case "2":
 # West target fluxes
     foreach i (`count $S $E`)
-      set line = "$line 'fnaxreg(2,$i,:)'"
+      set line = "$line 'fnareg(2,$i,:)'"
     end
 # East target fluxes
     foreach i (`count $S $E`)
-      set line = "$line 'fnaxreg(3,$i,:)'"
+      set line = "$line 'fnareg(3,$i,:)'"
     end
 # South side fluxes
     foreach i (`count $S $E`)
-      set line = "$line 'fnayreg(2,$i,:)'"
+      set line = "$line 'fnareg(5,$i,:)'"
     end
  # North side fluxes
     foreach i (`count $S $E`)
-      set line = "$line 'fnayreg(4,$i,:)'"
+      set line = "$line 'fnareg(7,$i,:)'"
     end
     breaksw
   case "1":
 # West target fluxes
     foreach i (`count $S $E`)
-      set line = "$line 'fnaxreg(2,$i,:)'"
+      set line = "$line 'fnareg(2,$i,:)'"
     end
 # East target fluxes
     foreach i (`count $S $E`)
-      set line = "$line 'fnaxreg(3,$i,:)'"
+      set line = "$line 'fnareg(3,$i,:)'"
     end
 # South side fluxes
     foreach i (`count $S $E`)
-      set line = "$line 'fnayreg(2,$i,:)'"
+      set line = "$line 'fnareg(4,$i,:)'"
     end
  # North side fluxes
     foreach i (`count $S $E`)
-      set line = "$line 'fnayreg(3,$i,:)'"
+      set line = "$line 'fnareg(5,$i,:)'"
     end
     breaksw
   default:
@@ -261,6 +364,11 @@ endif
 
 switch ($NREG)
   case "4":
+    eval 2da -s $FILE times $line | \
+      awk 'BEGIN{ns='$E'-'$S'+1}NR>1{t=$1; i=2; W=0; for (j=1;j<=ns;j++) {W+=$i;i++}; E=0; for (j=1;j<=ns;j++) {E+=$i;i++}; pflxl=0; for (j=1;j<=ns;j++) {pflxl+=$i;i++}; core=0; for (j=1;j<=ns;j++) {core+=$i;i++}; pflxr=0; for (j=1;j<=ns;j++) {pflxr+=$i;i++}; N=0; for (j=1;j<=3*ns;j++) {N+=$i;i++}; print t,-W, E, -core, -pflxl, -pflxr, N}' | \
+      plot x$3yplot6 -W E -core -pflxl -pflxr N time $label `noquote_pwd 3`
+    breaksw
+  case "5":
     eval 2da -s $FILE times $line | \
       awk 'BEGIN{ns='$E'-'$S'+1}NR>1{t=$1; i=2; W=0; for (j=1;j<=ns;j++) {W+=$i;i++}; E=0; for (j=1;j<=ns;j++) {E+=$i;i++}; pflxl=0; for (j=1;j<=ns;j++) {pflxl+=$i;i++}; core=0; for (j=1;j<=ns;j++) {core+=$i;i++}; pflxr=0; for (j=1;j<=ns;j++) {pflxr+=$i;i++}; N=0; for (j=1;j<=3*ns;j++) {N+=$i;i++}; print t,-W, E, -core, -pflxl, -pflxr, N}' | \
       plot x$3yplot6 -W E -core -pflxl -pflxr N time $label `noquote_pwd 3`

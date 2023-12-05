@@ -44,7 +44,7 @@ while dir && ~all(used)
     while ~found && dir
         i = i+1;
         if i > length(fcList_unsorted)
-            % No connecting face found in this direction 
+            % No connecting face found in this direction
             % Store current vertex as end point of polyline
             end_point = gmtry.fcVx(fcList(ifc),ivx);
             % Move into other direction
@@ -70,14 +70,14 @@ while dir && ~all(used)
         end
     end
 end
-    
+
 while ~dir  && ~all(used)
     found   = 0;
     i       = 0;
     while ~found && ~dir
         i = i+1;
         if i > length(fcList_unsorted)
-            % No connecting face found in this direction 
+            % No connecting face found in this direction
             % Store current vertex as starting point of polyline
             start_point = gmtry.fcVx(fcList(ifc),ivx);
             % move into other direction to terminate search
@@ -104,34 +104,31 @@ end
 if (start_point ~= end_point)
     switch meth
         case 'X'
-            
+
             % Sort based on X-co of start and end point
             if gmtry.vxX(start_point) > gmtry.vxX(end_point)
                 fcList = fcList(end:-1:1);
             end
-            
+
         case 'Y'
-            
+
             % Sort based on Y-co of start and end point
             if gmtry.vxY(start_point) > gmtry.vxY(end_point)
                 fcList = fcList(end:-1:1);
             end
-            
-            
+
+
         case 'Psi'
-            
+
             % Sort based on Psi-value of start and end point
             if gmtry.vxFpsi(start_point) > gmtry.vxFpsi(end_point)
                 fcList = fcList(end:-1:1);
             end
-            
+
         otherwise
-            
+
             % do nothing
-            
+
     end
 end
-
-        
-
 

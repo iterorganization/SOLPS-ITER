@@ -15,7 +15,7 @@ endif
 set nreg=`climb_and_look_for NREG`
 set nnreg=`pipe_run.log | grep ^nnreg | head -1`
 if (-s $nreg) then
-  setenv NREG `cat $nreg`
+  setenv NREG `cat $nreg | cut -d ' ' -f 1`
   echo Set NREG to $NREG "(based on $nreg)"
 else
   set NREG=$nnreg[2]
@@ -30,7 +30,7 @@ if ("X$nnreg" != "X") then
 endif
 pipe_run.log | \
   awk 'BEGIN{nrv='$NREG'} \
-       /nreg/{nrv=$2;nrx=$3;nry=$4} \
+       /nreg/{nrv=$2;nrf=$3} \
        /pot/{for (i=1;i<=NF-1;i++) pot[i]=$(i+1)*1.602176634e-19;pot[NF]=0} \
        /rsahireg/{rsa=0;for (i=3;i<=NF;i+=nrv+1) rsa+=$i} \
        /rrahireg/{rra=0;for (i=3;i<=NF;i+=nrv+1) rra+=$i} \
@@ -48,12 +48,18 @@ pipe_run.log | \
        /b2wrong3/{b2wrong3=$3} \
        /b2stbr_she_reg/{b2brhe=$3} \
        /b2stbr_shi_reg/{b2brhi=$3} \
-       /fhiyreg/&&nrv==4{S=-$4;N=$6} \
-       /fheyreg/&&nrv==4{S+=-$4;N+=$6} \
-       /fhiyreg/&&nrv==7{S=-$4;N=$6} \
-       /fheyreg/&&nrv==7{S+=-$4;N+=$6} \
-       /fhiyreg/&&nrv==8{S=-$4-$11;N=$6+$13} \
-       /fheyreg/&&nrv==8{S+=-$4-$11;N+=$6+$13} \
+       /fhireg/&&nrv==2{S=-$4;N=$5} \
+       /fhereg/&&nrv==2{S+=-$4;N+=$5} \
+       /fhireg/&&nrv==4{S=-$10;N=$12} \
+       /fhereg/&&nrv==4{S+=-$10;N+=$12} \
+       /fhireg/&&nrv==5{S=-$11;N=$13} \
+       /fhereg/&&nrv==5{S+=-$11;N+=$13} \
+       /fhireg/&&nrv==7{S=-$17;N=$19} \
+       /fhereg/&&nrv==7{S+=-$17;N+=$19} \
+       /fhireg/&&nrv==8&&nrf==26{S=-$16-$23;N=$18+$25} \
+       /fhereg/&&nrv==8&&nrf==26{S+=-$16-$23;N+=$18+$25} \
+       /fhireg/&&nrv==8&&nrf==27{S=-$17-$24;N=$19+$26} \
+       /fhereg/&&nrv==8&&nrf==27{S+=-$17-$24;N+=$19+$26} \
        /rsanareg/{rsap=0;for (i=3;i<=NF;i+=nrv+1) rsap+=$i*pot[int(i/(nrv+1))+2]} \
        /rranareg/{rrap=0;for (i=3;i<=NF;i+=nrv+1) rrap+=$i*pot[int(i/(nrv+1))+1]} \
        /b2stbr_sna_reg/{b2brnp=0; for (i=3;i<=NF;i+=nrv+1) b2brnp+=$i*pot[int(i/(nrv+1))+2]} \

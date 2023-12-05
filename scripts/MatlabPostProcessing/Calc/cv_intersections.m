@@ -28,13 +28,13 @@ for ifc=1:gmtry.nFc
                 kk=kk+1;
             end
             if (trovato==0)
-                
+
                 listcv(nn) = cv;
                 listfc(nn) = ifc;
                 nn = nn +1;
             end
         end
-           
+
     end
 end
 nn = nn-1;
@@ -52,6 +52,6 @@ switch meth
         listcv = listcv(order);
 end
 
-        
-        
+
+
 end

@@ -14,12 +14,10 @@ if os.access('b2mn.exe.dir/b2tallies.nc', os.R_OK):
 else:
   f=netCDF4.Dataset('b2tallies.nc','r')
 vreg=f.dimensions['vreg'].size
-xreg=f.dimensions['xreg'].size
-yreg=f.dimensions['yreg'].size
+freg=f.dimensions['freg'].size
 ns=f.dimensions['ns'].size
 times=f.variables['times']
-fnaxreg=f.variables['fnaxreg']
-fnayreg=f.variables['fnayreg']
+fnareg=f.variables['fnareg']
 extsnareg=f.variables['b2sext_sna_reg']
 species_names=f.variables['species']
 species=[b''.join(species_names[i,:]).strip().decode('utf-8') for i in range(species_names.shape[0])]
@@ -32,14 +30,35 @@ if nargs > 2: E=int(sys.argv[2])
 
 print(species[S],species[E])
 
-if vreg == 5:
+if vreg == 2:
 
-  plt.plot(times[:],numpy.sum(fnayreg[:,S:E+1,2],axis=1), label='core')
+  plt.plot(times[:],numpy.sum(fnareg[:,S:E+1,3],axis=1), label='core')
 
-else:
+elif vreg == 3:
 
-  plt.plot(times[:],numpy.sum(fnayreg[:,S:E+1,2],axis=1), label='core1')
-  plt.plot(times[:],numpy.sum(fnayreg[:,S:E+1,9],axis=1), label='core2')
+  plt.plot(times[:],numpy.sum(fnareg[:,S:E+1,4],axis=1), label='core')
+
+elif vreg == 5:
+
+  plt.plot(times[:],numpy.sum(fnareg[:,S:E+1,8],axis=1), label='core')
+
+elif vreg == 6:
+
+  plt.plot(times[:],numpy.sum(fnareg[:,S:E+1,9],axis=1), label='core')
+
+elif vreg == 8:
+
+  plt.plot(times[:],numpy.sum(fnareg[:,S:E+1,15],axis=1), label='core')
+
+elif freg == 27:
+
+  plt.plot(times[:],numpy.sum(fnareg[:,S:E+1,14],axis=1), label='core1')
+  plt.plot(times[:],numpy.sum(fnareg[:,S:E+1,21],axis=1), label='core2')
+
+elif freg == 28:
+
+  plt.plot(times[:],numpy.sum(fnareg[:,S:E+1,15],axis=1), label='core1')
+  plt.plot(times[:],numpy.sum(fnareg[:,S:E+1,22],axis=1), label='core2')
 
 if  matplotlib.__version__ <=  '0.98.1':
   plt.legend(loc=0)
@@ -48,21 +67,53 @@ else:
 plt.xlabel('time')
 plt.ylabel(species[S] + "--" + species[E] + "   ( - losses / + sources )")
 
-if vreg == 5:
+if vreg == 2:
 
-  CORE=numpy.sum(fnayreg[-1,S:E+1,2],axis=0)
+  CORE=numpy.sum(fnareg[-1,S:E+1,3],axis=0)
 
   print('Core(%s--%s) = %s' % (species[S],species[E],CORE))
 
-else:
+elif vreg == 3:
 
-  CORE1=numpy.sum(fnayreg[-1,S:E+1,2],axis=0)
-  CORE2=numpy.sum(fnayreg[-1,S:E+1,8],axis=0)
+  CORE=numpy.sum(fnareg[-1,S:E+1,4],axis=0)
+
+  print('Core(%s--%s) = %s' % (species[S],species[E],CORE))
+
+elif vreg == 5:
+
+  CORE=numpy.sum(fnareg[-1,S:E+1,8],axis=0)
+
+  print('Core(%s--%s) = %s' % (species[S],species[E],CORE))
+
+elif vreg == 6:
+
+  CORE=numpy.sum(fnareg[-1,S:E+1,9],axis=0)
+
+  print('Core(%s--%s) = %s' % (species[S],species[E],CORE))
+
+elif vreg == 8:
+
+  CORE=numpy.sum(fnareg[-1,S:E+1,15],axis=0)
+
+  print('Core(%s--%s) = %s' % (species[S],species[E],CORE))
+
+elif freg == 27:
+
+  CORE1=numpy.sum(fnareg[-1,S:E+1,14],axis=0)
+  CORE2=numpy.sum(fnareg[-1,S:E+1,21],axis=0)
 
   print('Core1(%s--%s) = %s' % (species[S],species[E],CORE1))
   print('Core2(%s--%s) = %s' % (species[S],species[E],CORE2))
 
-# print('SumSOL(%s--%s) = %s' % (species[S],species[E],SEP-numpy.sum(fnayreg[-1,S:E+1,6],axis=0)+west+east))
+elif freg == 28:
+
+  CORE1=numpy.sum(fnareg[-1,S:E+1,15],axis=0)
+  CORE2=numpy.sum(fnareg[-1,S:E+1,22],axis=0)
+
+  print('Core1(%s--%s) = %s' % (species[S],species[E],CORE1))
+  print('Core2(%s--%s) = %s' % (species[S],species[E],CORE2))
+
+# print('SumSOL(%s--%s) = %s' % (species[S],species[E],SEP-numpy.sum(fnareg[-1,S:E+1,12],axis=0)+west+east))
 
 cwd=os.getcwd()
 l=0

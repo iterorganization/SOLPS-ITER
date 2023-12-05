@@ -178,7 +178,7 @@ c***  Maximum numbers of divides, kinds of boundaries (core, target,
 c***     PFR side, outer side), boundary regions of each type,
 c***     boundary zones of each kind, markers for each zone
       integer nbnddvd,nbndknd,nbndrgn,nbndzon,nbndmrk
-      parameter (nbnddvd=400, nbndknd=4, nbndrgn=12, 
+      parameter (nbnddvd=400, nbndknd=4, nbndrgn=12,
      ,  nbndzon=20, nbndmrk=100)
 
 c*** Eirene data: surface type, position, start, end, plotting color,
@@ -568,7 +568,7 @@ c=======================================================================
      ,  sps_absr,sps_trno,sps_trni,sps_mtri,sps_tmpr,sps_spph,sps_spch,
      i  nstrao,natmo,nmolo,niono,nphto,nplso,
      ,  mnpr,mnptseg,npr,nptseg,nppol,nprad,nnreg,cflags,fdegen,
-     ,  carre_mode,grid_mode,ncells,nicells,nbcells,nfaces,ndfaces, 
+     ,  carre_mode,grid_mode,ncells,nicells,nbcells,nfaces,ndfaces,
      ,  laddsrfs,indasrfe,indasrfs,
      ,  nttrator,jxi,jxa,ntcpub2,nnvsle,nmvsle,ttntcpu,ttnfile,ttnpts,
      ,  ntrgdflt,namdf,nncut,nxcut1,nycut2,

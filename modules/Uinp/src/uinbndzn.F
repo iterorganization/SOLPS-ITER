@@ -115,7 +115,7 @@ c       print '(1x,100i1)',(i_tg(i,k),i=0,ny+1)
 c      end do !}
 c!###}
 
-c*** Poloidal divides (core and wall)     
+c*** Poloidal divides (core and wall)
       do i=n+1,mdvbndx !{
         k=ldvbndx(i)
         if(k.ge.0) then !{
@@ -181,7 +181,7 @@ c        end do !}
 c      end if !}
 c!###}
 c*** Prepare the array which describes correspondence between the B2
-c*** and Eirene numbering in poloidal directions (extra surfaces at the 
+c*** and Eirene numbering in poloidal directions (extra surfaces at the
 c*** cuts)
       m=0
       k=0
@@ -232,11 +232,11 @@ c*** cuts)
 
 c      print '(8h  i_cr: ,100i1)',(i_cr(i),i=0,nx+1) !###
 
-      
+
 c*** Plan boundary zones between the divides
 
 c*** Targets
-      
+
       m=2
       iz=0
       do k=1,nrgbndt(m) !{
@@ -249,7 +249,7 @@ c*** divide found
               write(0,*) 'Too many boundary zones specified for targets'
               write(0,*) 'STOP ==> check "Boundary divides" in the DG ',
      ,                   'model and parameter "nbndzon" in uinpcom.inc'
-              call xerrab 
+              call xerrab
      .         ('Too many boundary zones specified for targets')
             end if !}
             lzpbndt(iz,m)=lrsbndt(k,m)
@@ -325,9 +325,9 @@ cnh assigning bcstart and bcend for the unstructured format
           if ((carre_mode.eq.2).and.(tgfclbl(iz).ne.0)) then
             lzrbndt_us(iz,m,1)=tgfclbl(iz) ! assigning the face label
             lzrbndt_us(iz,m,2)=tgfclbl(iz)
-          elseif (crgbndt(k,m).eq.'W') then          
+          elseif (crgbndt(k,m).eq.'W') then
             lzrbndt_us(iz,m,1)=-10-2*iz-1
-            lzrbndt_us(iz,m,2)=-10-2*iz-1          
+            lzrbndt_us(iz,m,2)=-10-2*iz-1
           elseif (crgbndt(k,m).eq.'E') then
             lzrbndt_us(iz,m,1)=-30-2*iz
             lzrbndt_us(iz,m,2)=-30-2*iz
@@ -403,10 +403,10 @@ cnh   I think it is not correct yet for USN
           ls2bnds(1,m)=2
           ls1bnds(2,m)=1
           ls2bnds(2,m)=1
-        end if 
-      end if    
+        end if
+      end if
 
-c*** Sides. 
+c*** Sides.
 
       do l=1,n_hlp !{
         m=l_hlp(l)
@@ -456,8 +456,8 @@ cnh assigning bcstart and bcend for the unstructured format
                   lzrbndt_us(iz,m,2)=-20-4*(iz-1)-1
                 else ! pf boundaries
                   lzrbndt_us(iz,m,1)=-20-2*iz-mod(iz,2)
-                  lzrbndt_us(iz,m,2)=-20-2*iz-mod(iz,2)  
-                endif                 
+                  lzrbndt_us(iz,m,2)=-20-2*iz-mod(iz,2)
+                endif
               elseif (crgbndt(k,m).eq.'N') then
                 lzrbndt_us(iz,m,1)=-40-4*iz
                 lzrbndt_us(iz,m,2)=-40-iz*(iz+1)
@@ -532,8 +532,8 @@ cnh assigning bcstart and bcend for the unstructured format
                 lzrbndt_us(iz,m,2)=-20-4*(iz-1)-1
               else ! pf boundaries
                 lzrbndt_us(iz,m,1)=-20-2*iz-mod(iz,2)
-                lzrbndt_us(iz,m,2)=-20-2*iz-mod(iz,2)  
-              endif                 
+                lzrbndt_us(iz,m,2)=-20-2*iz-mod(iz,2)
+              endif
             elseif (crgbndt(k,m).eq.'N') then
               lzrbndt_us(iz,m,1)=-40-4*iz
               lzrbndt_us(iz,m,2)=-40-iz*(iz+1)

@@ -30,9 +30,9 @@ for i = 1:length(fcList)
     delta_s = sqrt(...
         (gmtry.vxX(gmtry.fcVx(iFc,2))-gmtry.vxX(gmtry.fcVx(iFc,1)))^2 +...
         (gmtry.vxY(gmtry.fcVx(iFc,2))-gmtry.vxY(gmtry.fcVx(iFc,1)))^2);
-    bCoord(i) = offset + delta_s/2; 
+    bCoord(i) = offset + delta_s/2;
     offset    = offset + delta_s;
-    
+
     % Check whether one of the face vertices is the reference point
     if gmtry.fcVx(iFc,1) == iVx_ref
         if i < length(fcList)
@@ -48,9 +48,9 @@ for i = 1:length(fcList)
                 s_ref = offset;
             end
         end
-        
+
     elseif gmtry.fcVx(iFc,2) == iVx_ref
-        
+
         if i < length(fcList)
             % Common with next face?
             if (gmtry.fcVx(iFc,2) == gmtry.fcVx(fcList(i+1),1) || ...
@@ -63,8 +63,8 @@ for i = 1:length(fcList)
                 gmtry.fcVx(iFc,2) ~= gmtry.fcVx(fcList(i-1),2))
                 s_ref = offset;
             end
-        end 
-    end   
+        end
+    end
 end
 
 % Shift to have zero at reference point

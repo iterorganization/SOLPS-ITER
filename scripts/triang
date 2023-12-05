@@ -527,6 +527,10 @@ while true; do {
                   ln -sf $b2usnodes ${L[0]}
                   ln -sf $b2uscells ${L[1]}
                   ln -sf $b2uslinks ${L[2]}
+                  [ -r input.dat.us    ] && {
+                    rm input.dat
+                    mv input.dat.us input.dat
+                   }
                 } || {
                   print -u2 -- "Not all output files, $b2usoutlist, are produced"
                   print -u2 -- "    ==> Check b2us.log"

@@ -729,7 +729,7 @@ c*** 6
       data nnchemvar,indchemvar, chvarname , chmspname , chmvar    /
      /      maxsc*0 , maxchsc*0,maxchsc*' ',maxchsc*' ',maxchsc*0. /
       data dplsh  /
-     /    npls*0 /    
+     /    npls*0 /
 
 c*** 7
 
@@ -928,8 +928,8 @@ c*** 14
      /        5 , -25  ,  1   , 350  ,  1   ,   0  ,   0  , npls*0  /,
      ,     ncutl, imf  ,ntrfrm, nfull, ibrad, ibpol, ibtor /
      /       1  ,   0  ,  1   ,   0  ,  0   ,    1 ,   1   /,
-     ,     iflb , ndxa , ndya , ncvp , ncip , nfcp ,ntargi, ntgprt /                 
-     /    npls*1,  0   ,  0   ,  0   ,  0   ,  0   ,  0   ,nstep*1 /,                       
+     ,     iflb , ndxa , ndya , ncvp , ncip , nfcp ,ntargi, ntgprt /
+     /    npls*1,  0   ,  0   ,  0   ,  0   ,  0   ,  0   ,nstep*1 /,
      ,    ndt2   /
      /    lusg*0 /,
      ,    ninct2, nixy2, ntin2, nten2, niflg,  nptc , nptcm, nspzi /

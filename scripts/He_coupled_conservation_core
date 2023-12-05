@@ -1,11 +1,11 @@
 #! /bin/csh -f
 pipe_run.log | \
-  egrep -a 'fna.reg|b2stbr_sna_reg|nnreg|Total profile-source na|tallies' | \
+  egrep -a 'fnareg|b2stbr_sna_reg|nnreg|Total profile-source na|tallies' | \
   awk 'BEGIN{iss=9;ise=11} \
-       /nnreg/{nvreg=$2+1;nxreg=$3+1;nyreg=$4+1} \
+       /nnreg/{nvreg=$2+1;nfreg=$3+1} \
        /Total profile-source na: *2 /{ext=$5} \
        /Total profile-source na: *[345678] /{ext+=$5} \
-       /fnayreg/{dev=0;for (i=iss;i<=ise;i++) dev+=-$(3+nyreg*i+1)+$(5+nyreg*i+1)}\
+       /fnareg/{dev=0;for (i=iss;i<=ise;i++) dev+=-$(10+nfreg*i+1)+$(12+nfreg*i+1)}\
        /b2stbr_sna_reg/{recyc=0;for (i=iss;i<=ise;i++) recyc+=$(2+nvreg*i+1)}\
        /End tallies by region/{cnt++;print cnt,dev,ext+0,recyc,dev-ext-recyc}' | \
   plot x$1yplot4 N-S EXT RECYC ERR

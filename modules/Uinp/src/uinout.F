@@ -33,7 +33,7 @@ c=======================================================================
       character*50 hlp_frm
       character utxthd(35)*71, utxtfl(7)*50, ufnm*(*)
       character utxtgt*71
-      integer len_of_digits, idez, nlimi_vess, ncore, nskip, nvess
+      integer len_of_digits, idez, ncore, nskip, nvess
       integer :: indsrc7(nstrai)
       external streql, silent_open, len_of_digits, idez, xerrab
       data utxthd /
@@ -368,8 +368,8 @@ c*** 3a.  data for non-default surface models on standard surfaces
             write(iunoo,703) recycs(ists),recycc(ists),echspts(ists),
      ,                        fchspts(ists),sptprm(ists)
           end if !}
-        end do !}  
-        i=nstsi-nskip      
+        end do !}
+        i=nstsi-nskip
       else ! vessel mode
 c       count the number of core regions
         ncore=0
@@ -434,7 +434,7 @@ c         detect the properties of an element with a certain face label
           end if !}
         end do
         i=maxval(fclbl)
-      end if     
+      end if
 
 c*** 3b.  data for additional surfaces
 
@@ -876,7 +876,7 @@ c     correct number of strata for vessel mode
         nvess=maxval(fclbl)*(natmi-nmeta) ! number of surface strata
         j=0
         indsrc7=0
-        do i=1,nstrai 
+        do i=1,nstrai
           if (indsrc(i).ne.6) then ! gas puff or vol. rec.
             j=j+1
             indsrc7(j)=indsrc(i)
@@ -1280,7 +1280,7 @@ cnh        write(iunoo,707) ndxa,ndya
         if (grid_mode.ne.2) then ! standard + target mode
           do i=1,ntargi !{
             do j=1,ntgprt(i) !{
-              write(iunoo,707) k*i+j*m,ndt2(i,j),nptc(i,1),nptcm(i,1), 
+              write(iunoo,707) k*i+j*m,ndt2(i,j),nptc(i,1),nptcm(i,1),
      ,                                  nspzi(i,j),nspze(i,j),nemod(i,j)
             end do !}
           end do !}

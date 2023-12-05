@@ -5,9 +5,9 @@ function [bcList,fcList] = bc_cell_list(gmtry,fcLbl,sort)
 % a (set of) given face label(s).
 % It is assumed that the faces form a single (open or closed)
 % polyline.
-% 
+%
 % Also the corresponding face list can be returned.
-% 
+%
 
 % Find all faces with the corresponding label(s)
 fcList = face_list(gmtry,fcLbl,sort);

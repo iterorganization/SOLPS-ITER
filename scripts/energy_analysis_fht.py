@@ -14,33 +14,34 @@ if os.access('b2mn.exe.dir/b2tallies.nc', os.R_OK):
 else:
   f=netCDF4.Dataset('b2tallies.nc','r')
 vreg=f.dimensions['vreg'].size
-xreg=f.dimensions['xreg'].size
-yreg=f.dimensions['yreg'].size
+freg=f.dimensions['freg'].size
 ns=f.dimensions['ns'].size
 time=f.dimensions['time'].size
 times=f.variables['times']
-fhtxreg=f.variables['fhtxreg']
-fhtyreg=f.variables['fhtyreg']
+fhtreg=f.variables['fhtreg']
 
-if xreg == 3:
-  plt.plot(times[:],fhtxreg[:,1], label='W')
-  plt.plot(times[:],fhtxreg[:,2], label='E')
+if freg == 5:
+  plt.plot(times[:],fhtreg[:,1], label='W')
+  plt.plot(times[:],fhtreg[:,2], label='E')
+  plt.plot(times[:],fhtreg[:,3], label='S')
+  plt.plot(times[:],fhtreg[:,4], label='N')
 
-elif xreg == 7:
-  plt.plot(times[:],-fhtxreg[:,1], label='-W')
-  plt.plot(times[:],-fhtxreg[:,2], label='-w')
-  plt.plot(times[:],fhtxreg[:,3], label='e')
-  plt.plot(times[:],fhtxreg[:,4], label='E')
+elif freg == 7:
+  plt.plot(times[:],fhtreg[:,1], label='W')
+  plt.plot(times[:],fhtreg[:,2], label='E')
+  plt.plot(times[:],fhtreg[:,4], label='core')
+  plt.plot(times[:],fhtreg[:,5], label='sep')
+  plt.plot(times[:],fhtreg[:,6], label='N')
 
-if yreg == 3:
-  plt.plot(times[:],fhtyreg[:,1], label='S')
-  plt.plot(times[:],fhtyreg[:,1], label='N')
-
-elif yreg == 8:
-  plt.plot(times[:],fhtyreg[:,2], label='core')
-  plt.plot(times[:],fhtyreg[:,4], label='sep')
-  plt.plot(times[:],numpy.sum(fhtyreg[:,5:8],axis=1), label='mcw')
-  plt.plot(times[:],-fhtyreg[:,1]-fhtyreg[:,3], label='-pfw')
+elif freg == 14:
+  plt.plot(times[:],-fhtreg[:,1], label='-W')
+  plt.plot(times[:],-fhtreg[:,2], label='-w')
+  plt.plot(times[:],fhtreg[:,3], label='e')
+  plt.plot(times[:],fhtreg[:,4], label='E')
+  plt.plot(times[:],fhtreg[:,8], label='core')
+  plt.plot(times[:],fhtreg[:,10], label='sep')
+  plt.plot(times[:],numpy.sum(fhtreg[:,11:13],axis=1), label='mcw')
+  plt.plot(times[:],-fhtreg[:,7]-fhtreg[:,9], label='-pfw')
 
 if  matplotlib.__version__ <=  '0.98.1':
   plt.legend(loc=0)

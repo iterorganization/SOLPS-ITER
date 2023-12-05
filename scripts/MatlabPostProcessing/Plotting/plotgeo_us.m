@@ -22,7 +22,7 @@ elseif nargin == 3
     color = varargin{1};
 end
 
-% Unpack 
+% Unpack
 try
 cell = geo_us.cell;
 face = geo_us.face;
@@ -56,7 +56,7 @@ for iCv = 1:cell.ntot
     end
 
 
-      
+
 %    if (cell.cflags(iCv) == 1)
         h(iCv).h = plot(rco,zco,'k');hold on;
 %    elseif (geo_us.cflags(iCv) == 3)
@@ -64,7 +64,7 @@ for iCv = 1:cell.ntot
 %    else
 %        h(iCv).h = plot(rco,zco,'k');hold on;
 %    end
-   
+
 end
 
     case 'fast'
@@ -72,7 +72,7 @@ end
         maxnvpc = max(cell.vertP(:,2));
         plotvecx = NaN((maxnvpc+2)*cell.ntot,1); % +2 to account for NaNs and extra vert
         plotvecy = NaN(size(plotvecx));
-        k = 0; 
+        k = 0;
         for iC = 1:cell.ntot
             % Add to plotter
             s = cell.vertP(iC,1);
@@ -92,7 +92,7 @@ end
         maxnvpc = max(cell.vertP(:,2));
         plotvecx = NaN((maxnvpc+2)*cell.ntot,1); % +2 to account for NaNs and extra vert
         plotvecy = NaN(size(plotvecx));
-        k = 0; 
+        k = 0;
         for iC = 1:cell.ntot
             % Add to plotter
             s = cell.vertP(iC,1);
@@ -108,7 +108,7 @@ end
         %plot(vert.x,vert.y,'r.','MarkerSize',3);
 
     otherwise
-        error('plotgeo_us: type not specified')        
+        error('plotgeo_us: type not specified')
 end
 
 

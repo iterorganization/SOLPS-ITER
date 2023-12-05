@@ -76,7 +76,7 @@ Whenever data is available at multiple locations (OMP, targets,...) and for mult
 \subsection{How to specify the cost function in B2.5}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The user can select one of these cost functions through the input file {\tt b2.optimization.parameters}. To do so, it is needed to specify the following parameters, contained in the {\tt OPTIMIZATION} namelist, which are similar to the boundary condition specification. An up-to-date list is also available in Appendix~\ref{lis:b2cdcn}. Note that to read the {\tt b2.optimization.parameters} file users needs to set in {\tt b2mn.dat} the switch {\tt 'b2optim\_namelist'} to {\tt '1'}. 
+The user can select one of these cost functions through the input file {\tt b2.optimization.parameters}. To do so, it is needed to specify the following parameters, contained in the {\tt OPTIMIZATION} namelist, which are similar to the boundary condition specification. An up-to-date list is also available in Appendix~\ref{lis:b2cdcn}. Note that to read the {\tt b2.optimization.parameters} file users needs to set in {\tt b2mn.dat} the switch {\tt 'b2optim\_namelist'} to {\tt '1'}.
 \begin{description}
   \item[NCF]\index{NCF} {\tt integer}, number of cost functions ({\tt icf = 1, NCF}). Defaults to {\tt 0}.
   \item[CFTYPE]\index{CFTYPE} {\tt integer array, dimension (NCF)}, specifies the type of cost function for index {\tt icf}. Defaults to {\tt -1}. Available options are:

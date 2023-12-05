@@ -30,26 +30,19 @@ c*  data of the plasma grid boundary polygons
 c*  data for the final polygons
        integer nnplg(nplgmax), nnsegpls(nsegplgmax,nplgmax)
        integer split(2*nsegplgmax*nbvmax+(nlim+1)*nsegplgmax,nplgmax)
-       double precision 
+       double precision
      ,      coords(3,2*nsegplgmax*nbvmax+(nlim+1)*nsegplgmax,nplgmax),
      ,      coordsend(3), c0(3), c1(3), n0(3), n1(3),
      ,      plscoords(3,nbvmax,nsegplgmax,nplgmax)
 
 c*  other
-      integer i,j,k,l,n,iout,iplsplg
+      integer i,j,k,n,iplsplg
       double precision maxlen
-      logical lused(2*nsegplgmax), lfound, lstop, lbeg, lend
-      character line*72
-      character filename*7, topo*4, dumm*20, hlp_frm*20
-      logical dbg
+      logical lfound, lstop, lbeg, lend
+      character filename*7, topo*4, hlp_frm*20
       integer find_loc
       double precision dist
       external find_loc, dist
-#ifdef DBG
-      data dbg /.true./
-#else
-      data dbg /.false./
-#endif
 
 c=======================================================================
 
@@ -99,7 +92,7 @@ c*** Read the data from the wall polygons from fort.48
 
       write (*,'(a,i3,a)') 'Read ', nplg, ' polygons from fort.48'
       do i = 1,nplg
-        write (*,'(a,i3,a,i3,a,i3)') 'Plg ', i, ' has ', nsegwllplg(i), 
+        write (*,'(a,i3,a,i3,a,i3)') 'Plg ', i, ' has ', nsegwllplg(i),
      ,          ' segments with length ', nnsegwllplg(1:nsegwllplg(i),i)
         write (*,'(a,i3,a,10(i4))') 'Plasma boundaries to close plg ',i,
      ,          ': ', plgfclbl(1:nfclblplg(i),i)
@@ -155,7 +148,7 @@ c*** Assume that NSS parts will be sorted per wall segment, but possibly in reve
           if (.not.lfound) then
             write (*,'(a,i3,i3)') 'trianp -- did not find plasma '//
      .                  'boundary for segment ipol, iseg = ', i, j
-            stop 
+            stop
           endif
 
           ! check for consecutive segments
@@ -187,7 +180,7 @@ c*** Assume that NSS parts will be sorted per wall segment, but possibly in reve
 
                 ! shift polygon back
                 plscoords(1:2,nnplsplg(iplsplg):
-     ,            nnplsplg(iplsplg)+nnsegpls(j,i)-1,j,i) = 
+     ,            nnplsplg(iplsplg)+nnsegpls(j,i)-1,j,i) =
      ,            plscoords(1:2,1:nnsegpls(j,i),j,i)
 
                 ! add plasma boundary segment to beginning of plasma polygon
@@ -244,13 +237,13 @@ c*** triangulation with tria
       coords = 0.0
       split = 0
 
-      do i=1,nplg
+      do i = 1,nplg
 
         do j = 1,nsegwllplg(i)
 
           ! add the next wall polygon segment
           ! exclude first and last points => to be replaced by grid points
-          coords(1:2,nnplg(i)+2:nnplg(i)+nnsegwllplg(j,i)-1,i) = 
+          coords(1:2,nnplg(i)+2:nnplg(i)+nnsegwllplg(j,i)-1,i) =
      ,      wllplgcoords(1:2,2:nnsegwllplg(j,i)-1,j,i)
           ! wall segments can be split by tria later on
           split(nnplg(i)+1:nnplg(i)+nnsegwllplg(j,i)-1,i) = 1
@@ -259,14 +252,14 @@ c*** triangulation with tria
           ! add the next the plasma boundary for this segment
           ! coordinates per segment in reverse order, following conventions for face normals
           ! keep the exact coordinates for the end points of the plasma boundary to avoid gaps
-          coords(1:2,nnplg(i)+1:nnplg(i)+nnsegpls(j,i),i) = 
+          coords(1:2,nnplg(i)+1:nnplg(i)+nnsegpls(j,i),i) =
      ,      plscoords(1:2,nnsegpls(j,i):1:-1,j,i)
           nnplg(i) = nnplg(i) + nnsegpls(j,i) - 1
           coordsend(1:2) = plscoords(1:2,1,j,i)
 
         end do
 
-        ! set start op polygon equal to end
+        ! set start of polygon equal to end
         nnplg(i) = nnplg(i) + 1
         coords(1:2,1,i) = coords(1:2,nnplg(i),i)
 

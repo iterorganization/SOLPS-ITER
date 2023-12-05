@@ -282,7 +282,7 @@ cnh Grid parameters for unstructured format
         ncip = nicells
         nfcp = nfaces
       end if
-      
+
       if (npplg.eq.0) then
         nssir(1) = 1
         nssir(2) = ndxa+1
@@ -303,7 +303,7 @@ cnh Grid parameters for unstructured format
         nssir(7) = ndxa-5
         nssir(8) = (ndxa-5)*(ndya+1)-2
       end if
-      
+
 c!###{
 c      print *,'uinprpgr: nx,ny,nncut,nxcut{4},nycut{4},nniso,nxiso = ',
 c     ,                   nx,ny,nncut,nxcut1,  nycut2,  nniso,nxiso1(1)

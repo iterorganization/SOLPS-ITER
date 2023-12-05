@@ -68,11 +68,6 @@ INC4LOCAL = ${SOLPSTOP}/modules/solps4-5/src/B2_include.local
 INC5LOCAL = ${SOLPSTOP}/modules/solps4-5/src/B2.5_include.local
 B2M5LOCAL = ${SOLPSTOP}/modules/solps4-5/src/B2.5_modules.local
 EIRMLOCAL = ${SOLPSTOP}/modules/solps4-5/src/Eirene_modules.local
-ifeq ($(shell `pkg-config --exists fundamental-constants`; echo $$?),0)
-SOLPSINCLUDE += `pkg-config fundamental-constants --cflags`
-else
-SOLPSINCLUDE ?=
-endif
 ifeq ($(shell [ -d ${SRC4LOCAL} ] && echo yes || echo no ),yes)
 SOLPSINCLUDE += -I${SRC4LOCAL}
 TAGSLIST = ${SRC4LOCAL}/*.F
@@ -112,7 +107,10 @@ endif
 ifdef NCDIR
 SOLPSINCLUDE += -I${NCDIR}/include
 endif
-SOLPSINCLUDE += -I${SRCDIR}/B2.5_include -I${SRCDIR}/B2.5_commons -I${SRCDIR}/B2_include -I${SRCDIR}/Eirene_commons
+SOLPSINCLUDE += -I${SRCDIR}/B2.5_include -I${SRCDIR}/B2.5_commons -I${SRCDIR}/B2_include
+ifeq ($(shell [ -d ${SRCDIR}/Eirene_commons ] && echo yes || echo no ),yes)
+SOLPSINCLUDE += -I${SRCDIR}/Eirene_commons
+endif
 TAGSLIST += ${SRCDIR}/*_commons/*.[hH] ${SRCDIR}/*/*.F ${SRCDIR}/*.F
 VPATH += ${SRCDIR}/B2.5_modules:${SRCDIR}:${SRCDIR}/solps4_B2:${SRCDIR}/solps4_Eirene:${SRCDIR}/solps5
 
@@ -1066,6 +1064,9 @@ endif
 	${MAKE} depend
 
 include ${OBJDIR}/dependencies
+ifeq ($(shell [ -e ${S45DIR}/config/dependencies.local ] && echo yes || echo no ),yes)
+include ${S45DIR}/config/dependencies.local
+endif
 
 echo:
 	@echo VPATH=${VPATH}

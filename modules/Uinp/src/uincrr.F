@@ -56,7 +56,7 @@
           lfound=index(uline,'nppol=').gt.0
         end do
         if(.not.lfound) stop 'Problem with carre.out file'
-        read (uline,'(a8, i5, 2X, a8, i5)') 
+        read (uline,'(a8, i5, 2X, a8, i5)')
      .    dum0, nppol(ireg), dum1, nprad(ireg)
       end do
       ! read cellflags and info on degenerate faces
@@ -107,7 +107,7 @@
       nbcells = nbcells - ndfaces
       ncells = nicells + nbcells
       nfaces = (4*(nicells - ndfaces) + 3*ndfaces - nbcells)/2 + nbcells
-!      write (*,*) 'uincrr - nCv, nCi, nCg, nFc = ', 
+!      write (*,*) 'uincrr - nCv, nCi, nCg, nFc = ',
 !     .  ncells, nicells, nbcells, nfaces
       return
 !======================================================================

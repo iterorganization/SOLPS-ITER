@@ -217,7 +217,7 @@ cnh   adapt some variables of block 14 for vessel mode
           end do
         end do
        end if
-          
+
 c=======================================================================
       call subend ()
       return
