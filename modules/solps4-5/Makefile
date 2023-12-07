@@ -395,6 +395,9 @@ ${OBJDIR}/eirmod_ctrig.o:
 ${OBJDIR}/eirmod_extrab25.o: ${OBJDIR}/eirmod_comxs.${MOD}
 	ln -sf ${EIRDIR}/eirmod_extrab25.o ${OBJDIR}
 
+${OBJDIR}/eirmod_wneutrals.o:
+	ln -sf ${EIRDIR}/eirmod_wneutrals.o ${OBJDIR}
+
 ${OBJDIR}/eirmod_mpi.o: ${OBJDIR}/comprt.${MOD} ${OBJDIR}/precision.${MOD} ${SRCDIR}/Eirene_modules/eirmod_mpi.F90 ${MAKES}
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${SOLPSINCLUDE} ${OBJDEST} -o ${OBJDIR}/eirmod_mpi.o -c ${SRCDIR}/Eirene_modules/eirmod_mpi.F90
 
@@ -650,6 +653,9 @@ ${OBJDIR}/eirmod_ctrig.${MOD}:
 
 ${OBJDIR}/eirmod_extrab25.${MOD}: ${OBJDIR}/eirmod_comxs.${MOD}
 	ln -sf ${EIRDIR}/eirmod_extrab25.${MOD} ${OBJDIR}
+
+${OBJDIR}/eirmod_wneutrals.${MOD}:
+	ln -sf ${EIRDIR}/eirmod_wneutrals.${MOD} ${OBJDIR}
 
 ${OBJDIR}/eirmod_parmmod.${MOD}: ${OBJDIR}/parmmod.${MOD}
 	ln -sf ${OBJDIR}/parmmod.${MOD} $@

@@ -1483,7 +1483,7 @@ c Fill out b2mod_neutrals_namelist data
       end do
       write(*,*) 'sput_dst: ',sput_dst
       call alloc_b2mod_neutrals
-     . (nx, ny, ns, natm, nmol, nion, nstrai_4, nsts, sput_dst)
+     . (ns, natm, nmol, nion, nstrai_4, nsts, sput_dst)
       nstrai = nstrai_4
       nflai = nfla_4
       crcstra(1:nstrai) = crcstra_4(1:nstrai)
