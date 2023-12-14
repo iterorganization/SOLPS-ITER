@@ -8,7 +8,7 @@ NAGDIR      ?= /home/ir-nunn1/solps-iter-dependencies/nag
 MDSPLUS_DIR ?=
 MPDIR ?= /usr/local/Cluster-Apps/intel/2017.7/compilers_and_libraries_2017.7.259/linux/mpi/intel64
 
-LD_NETCDF  = -L/usr/local/software/spack/spack-0.11.2/opt/spack/linux-rhel7-x86_64/intel-17.0.4/netcdf-4.4.1.1-zysrbqwgar43zq7pisurzuhnk6iix3bf/lib -lnetcdf -L${NCDIR}/lib -lnetcdff -I${NCDIR}/include 
+LD_NETCDF  = -L/usr/local/software/spack/spack-0.11.2/opt/spack/linux-rhel7-x86_64/intel-17.0.4/netcdf-4.4.1.1-zysrbqwgar43zq7pisurzuhnk6iix3bf/lib -lnetcdf -L${NCDIR}/lib -lnetcdff -I${NCDIR}/include
 LD_MSCL    = -L${MSCL_ROOT}/lib -lmscl
 ifdef GR_ROOT
 LD_GR      = -L${GR_ROOT} -lgr

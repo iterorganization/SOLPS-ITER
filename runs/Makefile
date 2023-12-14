@@ -425,7 +425,7 @@ $(target_fu) : b2fgmtry b2fparam b2fstate b2fplasmf
 	-rmdir b2fu.exe.dir
 
 ifndef STAND_ALONE
-$(target_pl) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates AMJUEL ${fort_lc}44 ${fort_lc}46
+$(target_pl) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates AMJUEL ${fort_lc}33 ${fort_lc}34 ${fort_lc}35 ${fort_lc}44 ${fort_lc}46
 else
 $(target_pl) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates AMJUEL
 endif
@@ -645,6 +645,7 @@ endif
 $(target_us) : b2fstati b2fgmtry b2fpardf b2mn.dat
 	rm -rf b2us.exe.dir >& /dev/null ; mkdir b2us.exe.dir ; cp $^ b2us.exe.dir
 	rm -f $(target_us)
+	[ -e b2faveri_us ] && rm -f b2faveri_us || echo > /dev/null
 	[ -e input.dat.us ] && rm -f input.dat.us || echo > /dev/null
 	[ -e b2us.user.parameters ] && rm -f b2us.user.parameters || echo > /dev/null
 	[ -e b2us.regions.parameters ] && rm -f b2us.regions.parameters || echo > /dev/null
@@ -655,13 +656,13 @@ $(target_us) : b2fstati b2fgmtry b2fpardf b2mn.dat
 	[ -s ${fort_lc}33 ] || ( [ -s $(baserundir)/${fort_lc}33 ] && ln -sf $(baserundir)/${fort_lc}33 . || ( [ -s $(triangdir)/${fort_lc}33 ] && ln -sf $(triangdir)/${fort_lc}33 . || echo > /dev/null ) )
 	[ -s ${fort_lc}34 ] || ( [ -s $(baserundir)/${fort_lc}34 ] && ln -sf $(baserundir)/${fort_lc}34 . || ( [ -s $(triangdir)/${fort_lc}34 ] && ln -sf $(triangdir)/${fort_lc}34 . || echo > /dev/null ) )
 	[ -s ${fort_lc}35 ] || ( [ -s $(baserundir)/${fort_lc}35 ] && ln -sf $(baserundir)/${fort_lc}35 . || ( [ -s $(triangdir)/${fort_lc}35 ] && ln -sf $(triangdir)/${fort_lc}35 . || echo > /dev/null ) )
-	[ -s input.dat ] || ( [ -s $(baserundir)/input.dat ] && ln -sf $(baserundir)/input.dat . || echo > /dev/null ) 
+	[ -s input.dat ] || ( [ -s $(baserundir)/input.dat ] && ln -sf $(baserundir)/input.dat . || echo > /dev/null )
 	cd b2us.exe.dir ; \
 	[ -s ../${fort_lc}33 ] && cp -p ../${fort_lc}33 . || echo > /dev/null ; \
 	[ -s ../${fort_lc}34 ] && cp -p ../${fort_lc}34 . || echo > /dev/null ; \
 	[ -s ../${fort_lc}35 ] && cp -p ../${fort_lc}35 . || echo > /dev/null ; \
 	[ -s ../input.dat ] && cp -p ../input.dat . || echo > /dev/null
-	cd b2us.exe.dir ; ${TIME} ${B2OBJ}/b2us.exe ${RUN_OPTIONS} ; mv $(target_us) .. ; [ -e input.dat.us ] && mv input.dat.us .. ; [ -e b2us.user.parameters ] && mv b2us.user.parameters .. ; [ -e b2us.regions.parameters ] && mv b2us.regions.parameters .. ; [ -e b2us.boundary.parameters ] && mv b2us.boundary.parameters .. ; [ -e b2us.neutrals.parameters ] && mv b2us.neutrals.parameters .. ; [ -e b2us.feedback_control.parameters ] && mv b2us.feedback_control.parameters .. ; [ -e b2us.midplane.parameters ] && mv b2us.midplane.parameters .. ; rm -f $(notdir $^) >& /dev/null
+	cd b2us.exe.dir ; ${TIME} ${B2OBJ}/b2us.exe ${RUN_OPTIONS} ; mv $(target_us) .. ; [ -e b2faveri_us ] && mv b2faveri_us .. ; [ -e input.dat.us ] && mv input.dat.us .. ; [ -e b2us.user.parameters ] && mv b2us.user.parameters .. ; [ -e b2us.regions.parameters ] && mv b2us.regions.parameters .. ; [ -e b2us.boundary.parameters ] && mv b2us.boundary.parameters .. ; [ -e b2us.neutrals.parameters ] && mv b2us.neutrals.parameters .. ; [ -e b2us.feedback_control.parameters ] && mv b2us.feedback_control.parameters .. ; [ -e b2us.midplane.parameters ] && mv b2us.midplane.parameters .. ; rm -f $(notdir $^) >& /dev/null
 	[ -s b2us.exe.dir/${fort_lc}33 ] && rm b2us.exe.dir/${fort_lc}33 || echo > /dev/null ; \
 	[ -s b2us.exe.dir/${fort_lc}34 ] && rm b2us.exe.dir/${fort_lc}34 || echo > /dev/null ; \
 	[ -s b2us.exe.dir/${fort_lc}35 ] && rm b2us.exe.dir/${fort_lc}35 || echo > /dev/null ; \

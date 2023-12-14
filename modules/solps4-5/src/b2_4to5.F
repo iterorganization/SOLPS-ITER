@@ -961,8 +961,8 @@ c Fill out b2mod_indirect arrays
 c Compute geometrical quantities
       call b2agmt(nx, ny, 1, crx, cry,
      & fpsi, bb, vol, hx, hy, hz, hc, ht, qz, qc, qs, qac, qas, ebc,
-     & gs, cell_width, cell_height, leftix, leftiy, bottomix, bottomiy,
-     & rightix, rightiy, topix, topiy, cflags)
+     & gs, cell_width, cell_height,
+     & leftix, leftiy, bottomix, bottomiy, cflags)
       fpsi = 0.0_R8
       ffbz = 0.0_R8
       periodic_bc = 0
@@ -1483,7 +1483,7 @@ c Fill out b2mod_neutrals_namelist data
       end do
       write(*,*) 'sput_dst: ',sput_dst
       call alloc_b2mod_neutrals
-     . (nx, ny, ns, natm, nmol, nion, nstrai_4, nsts, sput_dst)
+     . (ns, natm, nmol, nion, nstrai_4, nsts, sput_dst)
       nstrai = nstrai_4
       nflai = nfla_4
       crcstra(1:nstrai) = crcstra_4(1:nstrai)

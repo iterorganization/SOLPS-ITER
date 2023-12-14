@@ -1,17 +1,17 @@
 function [ds] = calc_dist(geo,clist,nc,iref)
     % Description
     %============
-    % Subroutine to compute relative distance between a set of cell 
-    % centers (Euclidean). The distance is computed between each 
+    % Subroutine to compute relative distance between a set of cell
+    % centers (Euclidean). The distance is computed between each
     % set of consecutive cells (i.e. x(iCv+1) - x(iCv) in 1D), but no
-    % check is made whether the cells are ordened in a 'logical' way. 
-       
+    % check is made whether the cells are ordened in a 'logical' way.
+
     % Output variables
     % ds(1:nc)
-    
+
     % Main program
     %=============
-    % Compute the initial length as the distance of the first cell to 
+    % Compute the initial length as the distance of the first cell to
     % the first boundary face
     ds(1) = 0;
 
@@ -29,9 +29,9 @@ function [ds] = calc_dist(geo,clist,nc,iref)
     else
         dsref = (ds(iref) + ds(iref-1))/2.0;
     end
-    
+
     % Subtract reference length
     ds = ds - dsref;
-   
+
     return
 end

@@ -22,7 +22,7 @@ for j = 1:length(cells)
     iCv = cells(j);
     nv = geo_us.cvVxP(iCv,2);
     s = geo_us.cvVxP(iCv,1);
-    
+
     % Get vertices and faces
     verts = geo_us.cvVx(s:s+nv - 1);
     faces = geo_us.cvFc(s:s+nv - 1);
@@ -48,7 +48,7 @@ for j = 1:length(cells)
     v1f = geo_us.fcVx(f1,1);
     v2f = geo_us.fcVx(f1,2);
     %if ~ismember(verts(i),geo_us.face.vert(faces(i),:)) || ~ismember(verts(1), geo_us.face.vert(faces(i),:))
-    if ((v1 ~= v1f) && (v1 ~= v2f)) || ((verts(1) ~= v1f) && (verts(1) ~= v2f))    
+    if ((v1 ~= v1f) && (v1 ~= v2f)) || ((verts(1) ~= v1f) && (verts(1) ~= v2f))
         is_ordered(j) = 0;
     end
 
@@ -59,27 +59,27 @@ for j = 1:length(cells)
         %Calculate vectors between centroids and vertices
         vec_vxX = geo_us.vxX(verts)- cvX;
         vec_vxY = geo_us.vxY(verts)- cvY;
-    
+
         %Calculate vectors between centroids and face centers
         %face centers
         %fcX = (geo_us.vxX(geo_us.face.vert(faces,1))  + geo_us.vxX(geo_us.face.vert(faces,2)) ) /2;
         %fcY = (geo_us.vxY(geo_us.face.vert(faces,1))  + geo_us.vxY(geo_us.face.vert(faces,2)) ) /2;
-    
+
         %vectors
         vec_fcX = fcX(faces) - cvX;
         vec_fcY = fcY(faces) - cvY;
-        
 
-        for i = 1:nv-1     
-        
+
+        for i = 1:nv-1
+
             %check sinus between vector to vertex (a) and vector to face
             %center (b)
             %calculate angles (sin = |a x b| / norm(a)*norm(b))
             %with |a x b | = ax*by - bx*ay
             sin1 = vec_vxX(i)*vec_fcY(i) - vec_fcX(i) * vec_vxY(i);
-            
+
             %should be positive
-            if sin1 < 0 
+            if sin1 < 0
                 is_ordered(j) = 0;
                 break
             else

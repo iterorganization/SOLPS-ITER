@@ -23,9 +23,10 @@ c=======================================================================
       character*27 lbreg(0:cbnrmx-1)
       character*120 lblps
       character*80 column_header
-      logical uex, todo
+      logical uex
       integer find_matching_species
-      external find_matching_species
+      logical streql
+      external find_matching_species, streql
       external prgini,prgend
 c=======================================================================
       call prgini('uinput')
@@ -305,7 +306,7 @@ c*** Create the b2ai.dat file
           open(2,file='b2ai.dat')
           write(2,'(a)') '*dimens         (ns; free format)'
           write(2,'(3x,i4)') natmi-nmeta+nplsi
-          write(2,'(a)') 
+          write(2,'(a)')
      .     '*label          (lblps, character*60; free format)'
           if (texta(1)(2:2).eq.' ') then
             lblps(1:25) = '''Flat initial state for '//texta(1)(1:1)
@@ -364,7 +365,7 @@ c*** Create the b2ai.dat file
           print *,'    ... b2ai.dat created'
           deallocate(na0)
       endif
- 
+
 c*** Create the b2ar.dat file
       inquire(file='b2ar.dat', exist=uex)
       if(uex) then
@@ -390,21 +391,21 @@ c*** Create the b2ar.dat file
           write(2,'(2x,f5.2)') 0.08
 cnh       AFN-specific inputs
 c          write(2,'(a)') '''b2ardr_no_smoothing''     ''1'''//
-c     .      '       # Eliminate smoothing for benchmark with EIRENE'  
+c     .      '       # Eliminate smoothing for benchmark with EIRENE'
           write(2,'(a)') '''b2ardr_rtnt''             ''100'''//
-     .      '     # Use finer discretization for AFN (default 40)' 
+     .      '     # Use finer discretization for AFN (default 40)'
           write(2,'(a)') '''b2ardr_rtnn''             ''100'''//
      .      '     # Use finer discretization for AFN (default 32)'
           write(2,'(a)') '''b2ardr_no_weisheit''      ''1'''//
-     .      '       # No correction for hydrogen neutrals' 
-          write(2,'(a)') '''b2ardr_amjhydhel''        ''1'''// 
-     .      '       # Take AMJUEL/HYDHEL for hydrogen neutrals' 
-          write(2,'(a)') '''b2ardr_t_min''            ''1.0E-01'''// 
+     .      '       # No correction for hydrogen neutrals'
+          write(2,'(a)') '''b2ardr_amjhydhel''        ''1'''//
+     .      '       # Take AMJUEL/HYDHEL for hydrogen neutrals'
+          write(2,'(a)') '''b2ardr_t_min''            ''1.0E-01'''//
      .      ' # Minimum temperature [eV] for which AMJUEL rates '//
-     .      'are evaluated' 
+     .      'are evaluated'
           write(2,'(a)') '''b2ardr_nn_min''           ''1.0E+14'''//
      .      ' # Minimum density [m^-3] for which AMJUEL rates '//
-     .      'are evaluated' 
+     .      'are evaluated'
           write(2,'(a)') '''b2ardr_fix_recomb''       ''1'''
           close(2)
           print *,'    ... b2ar.dat created'
@@ -456,7 +457,7 @@ c*** Modify the input file for B2, if possible
           else
             print *,
      .       '    Error while creating b2.neutrals.parameters.2: ',irt
-          end if        
+          end if
        else
           write(*,*) 'No b2.neutrals.parameters found'
           write(*,*) 'Writing b2.neutrals.parameters.stencil'
@@ -491,7 +492,7 @@ cnh b2.neutrals.parameters for the hybrid model
             print *,
      .       '    Error while creating ',
      .       'b2.neutrals.parameters_hybrid.2: ',irt
-          end if        
+          end if
        else
           write(*,*) 'No b2.neutrals.parameters_hybrid found'
           write(*,*) 'Writing b2.neutrals.parameters_hybrid.stencil'
@@ -619,11 +620,15 @@ cnh b2.neutrals.parameters for the hybrid model
         write(*,*) 'Writing ../NREG'
         open(unit=2,file='../NREG')
         if (ln_cnfg) then
-          write(2,'(i1)') 1
+          write(2,'(i1,1x,i1)') 1,4
         else if (lm_cnfg) then
-          write(2,'(i1)') 2
-        else
-          write(2,'(i1)') 2*nncut
+          write(2,'(i1,1x,i1)') 2,6
+        else if (nncut.eq.1) then
+          write(2,'(i1,1x,i2)') 4,13
+        else if (nncut.eq.2.and.streql(topo,'DNS')) then
+          write(2,'(i1,1x,i2)') 8,26
+        else if (nncut.eq.2) then
+          write(2,'(i1,1x,i2)') 8,27
         end if
         close(2)
       end if

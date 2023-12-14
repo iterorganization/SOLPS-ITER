@@ -26,7 +26,7 @@ c=======================================================================
       integer icopy,jlswch,jlcell,imrlb,iulin,iuscn,ich,ichmin,iid
       integer iatm,imol,iion,ipht,ipls,ichori,inum
       integer llm(nchor),lli(nchor)
-      real x, y, fldlm
+      real x, y
       logical handle,ulmlti,ex,hydrogen,helium,carbon,nitrogen
       logical streql,silent_open
       logical, allocatable :: done(:)
@@ -34,8 +34,8 @@ c=======================================================================
       character*50 hlp_frm
       character utxthd(35)*71, utxtfl(7)*50, ufnm*(*)
       character utxtgt*71
-      integer len_of_digits, idez, nlimi_vess, ncore, nskip, nvess
-      integer condense_from, nemodh, itype, index
+      integer len_of_digits, idez, ncore, nskip, nvess
+      integer condense_from, nemodh, itype
       integer :: indsrc7(nstrai)
       external streql, silent_open, len_of_digits, idez, xerrab
       data utxthd /
@@ -370,8 +370,8 @@ c*** 3a.  data for non-default surface models on standard surfaces
             write(iunoo,703) recycs(ists),recycc(ists),echspts(ists),
      ,                        fchspts(ists),sptprm(ists)
           end if !}
-        end do !}  
-        i=nstsi-nskip      
+        end do !}
+        i=nstsi-nskip
       else ! vessel mode
 c       count the number of core regions
         ncore=0
@@ -436,7 +436,7 @@ c         detect the properties of an element with a certain face label
           end if !}
         end do
         i=maxval(fclbl)
-      end if     
+      end if
 
 c*** 3b.  data for additional surfaces
 
@@ -592,7 +592,7 @@ c**  atomic species cards
         if (nchara(iatm).eq.1) then
 !nh          nrc=nrca(iatm)+nplsh
           nrc=nrca(iatm)
-          ngen=-1
+          ngen=-11
         else
           nrc=nrca(iatm)
           ngen=ngena(iatm)
@@ -625,14 +625,8 @@ c**  atomic species cards
      ,                     iscd3a(iatm,k),iscd4a(iatm,k),
      ,                     iscdea(iatm,k),iestma(iatm,k),ibgka(iatm,k)
           end if !}
-          if ((nchara(iatm).eq.1).and.
-     ,      streql(crc(ireaca(iatm,k)),'CX')) then
-            fldlm=0.1
-          else
-            fldlm=edpota(iatm,k)
-          end if
           write(iunoo,703) eeleca(iatm,k),ebulka(iatm,k),escd1a(iatm,k),
-     ,                     escd2a(iatm,k),freaca(iatm,k),fldlm
+     ,                     escd2a(iatm,k),freaca(iatm,k),edpota(iatm,k)
         end do !}
 
 !nh     neutral-neutral collisions with fluid atom background
@@ -660,13 +654,13 @@ c**  atomic species cards
 !nh     ,                 iscd1a(iatm,k),iscd2,
 !nh     ,                 iscd3a(iatm,k),iscd4a(iatm,k),
 !nh     ,                 iscdea(iatm,k),iestma(iatm,k),0
-!nh                end if !} 
+!nh                end if !}
 !nh                write(iunoo,703) eeleca(iatm,k),ebulka(iatm,k),
 !nh     ,            escd1a(iatm,k),escd2a(iatm,k),freaca(iatm,k),
 !nh     ,            edpota(iatm,k)
 !nh              end if
 !nh            end if
-!nh          end if                       
+!nh          end if
 !nh        end do
 
       end do !}
@@ -740,12 +734,12 @@ c**  neutral molecules species cards
 !nh     ,                 iscd1m(imol,k),iscd2,
 !nh     ,                 iscd3a(imol,k),iscd4m(imol,k),
 !nh     ,                 iscdem(imol,k),iestmm(imol,k),0
-!nh                end if !} 
+!nh                end if !}
 !nh                write(iunoo,703) eelecm(imol,k),ebulkm(imol,k),
 !nh     ,                     escd1m(imol,k),escd2m(imol,k),freacm(imol,k)
 !nh              end if
 !nh            end if
-!nh          end if                       
+!nh          end if
 !nh        end do
       end do !}
 
@@ -1072,7 +1066,7 @@ c*** 7.  data for primary source
         nvess=maxval(fclbl)*(natmi-nmeta+nplsh)
         j=0
         indsrc7=0
-        do i=1,nstrai 
+        do i=1,nstrai
           if (indsrc(i).ne.6) then ! gas puff or vol. rec.
             j=j+1
             indsrc7(j)=indsrc(i)
@@ -1347,6 +1341,10 @@ c**  particle history plots in 2d or 3d geometry plots
 c*** 12.  data for diagnostic module
 
       write(iunoo,700) utxthd(18)
+      if (hydrogen) then
+        write(iunoo,721) "DEFINE_LINES"
+        write(iunoo,707) numlines,modaddv
+      end if
       write(iunoo,707) nchori,ncheni,lntspec,lntsput,nmcsput,
      ,                                         nlstadds,mtreadds,ngwties
       if (nchori.gt.0) then !{
@@ -1493,7 +1491,7 @@ cnh        write(iunoo,707) ndxa,ndya
                   nemodh=0
                   itype=1  ! send particle in void regions
                 else
-		  nemodh=6
+                  nemodh=6
                   itype=0 ! recycle particle
                 endif
                 write(iunoo,707) k*i+j*m+ihyb,ndt2(i,j),
@@ -1512,7 +1510,7 @@ cnh        write(iunoo,707) ndxa,ndya
               enddo
               write(iunoo,707) i+ihyb,ndt2(i,1),
      ,            nptc(1,1),nptcm(1,1),ispz,ispz,6 !nh for now, no plasma-void interfaces
-            end if  
+            end if
           end do !}
         end if
         if(lfchgs) then !{

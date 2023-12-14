@@ -5,9 +5,9 @@ function [bcList,fcList] = bc_cell_list(gmtry,fcLbl,sort)
 % a (set of) given face label(s).
 % It is assumed that the faces form a single (open or closed)
 % polyline.
-% 
+%
 % Also the corresponding face list can be returned.
-% 
+%
 
 % Set default values for some arguments, if not supplied
 if ~exist('sort','var') || isempty(sort)

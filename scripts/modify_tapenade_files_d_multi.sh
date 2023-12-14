@@ -36,7 +36,7 @@ sed -i -e 's/ISIZE1OFlnlam/nCv/g' b2npmo_dv.F90
 sed -i -e 's/ISIZE1OFcvsa/nFc/g' b2npmo_dv.F90
 sed -i -e 's/ISIZE1OFresult1/nCv/g' b2npmo_dv.F90 b2tqna_dv.F90 b2sikt_dv.F90 b2trcl_dv.F90
 sed -i -e 's/ISIZE1OFcvvol/nCv/g' b2sikt_dv.F90
-sed -i -e "s/INTEGER :: dummyzerodiffd10/INTEGER :: dummyzerodiffd10(nbdirsmax)/g" b2npmo_dv.F90 
+sed -i -e "s/INTEGER :: dummyzerodiffd10/INTEGER :: dummyzerodiffd10(nbdirsmax)/g" b2npmo_dv.F90
 sed -i -e "s/INTEGER :: dummyzerodiffd14/INTEGER :: dummyzerodiffd14(nbdirsmax)/g" b2npmo_dv.F90
 sed -i -e 's/ISIZE1OFcvhz/nCv/g' b2nxfv_dv.F90
 sed -i -e 's/ISIZE1OFvxhz/nVx/g' b2nxfv_dv.F90
@@ -58,7 +58,7 @@ sed -i -e "s/INTEGER :: dummyzerodiffd6/INTEGER :: dummyzerodiffd6(nbdirsmax)/g"
 sed -i -e "s/INTEGER :: dummyzerodiffd1/INTEGER :: dummyzerodiffd1(nbdirsmax)/g" b2tanml_dv.F90
 sed -i -e 's/ISIZE1OFcdpa/nFc/g' b2tfcc_dv.F90 b2tfnb_dv.F90
 sed -i -e 's/ISIZE1OFne/nCv/g' b2tfhe__dv.F90 b2tfrn_dv.F90
-sed -i -e 's/ISIZE1OFni/nCv/g' b2tfhi__dv.F90 
+sed -i -e 's/ISIZE1OFni/nCv/g' b2tfhi__dv.F90
 sed -i -e 's/ISIZE1OFcdna/nFc/g' b2tfnb_dv.F90
 sed -i -e 's/ISIZE1OFfchz/nFc/g' b2tfnb_dv.F90
 sed -i -e 's/ISIZE1OFpa/nCv/g' b2tfnb_dv.F90
@@ -113,7 +113,7 @@ sed -i 's/dummyzerodiffd0/std%psnl/g' b2sral_dv.F90
 
 sed -i '/EXTERNAL SUBINI/d' *.F90
 sed -i '/EXTERNAL SUBEND/d' *.F90
-sed -i '/EXTERNAL RESTART_MA28_FOR_US/d' b2news__dv.F90 b2npmo_dv.F90 b2usht_dv.F90  
+sed -i '/EXTERNAL RESTART_MA28_FOR_US/d' b2news__dv.F90 b2npmo_dv.F90 b2usht_dv.F90
 sed -i '/EXTERNAL DEALLOC_B2MOD_MA28_FOR_US/d' b2mod_driver_diffv.F90
 sed -i '/EXTERNAL ISGHOSTCELL/d' b2us_prep_diffv.F90 b2mod_geo2_diffv.F90 b2mod_geo_diffv.F90
 sed -i '/LOGICAL :: ISGHOSTCELL/d' b2us_prep_diffv.F90 b2mod_geo2_diffv.F90 b2mod_geo_diffv.F90
@@ -127,8 +127,8 @@ sed -i '/EXTERNAL ISBOUNDARYCELL/d' b2us_prep_diffv.F90
 sed -i '/LOGICAL :: ISBOUNDARYCELL/d' b2us_prep_diffv.F90
 sed -i '/EXTERNAL ISUNUSEDCELL/d' b2us_prep_diffv.F90 b2mod_geo2_diffv.F90 b2xvsg_dv.F90 b2mod_geo_diffv.F90
 sed -i '/LOGICAL :: ISUNUSEDCELL/d' b2us_prep_diffv.F90 b2mod_geo2_diffv.F90 b2xvsg_dv.F90 b2mod_geo_diffv.F90
-sed -i '/EXTERNAL ISCLASSICALGRID/d' b2us_prep_diffv.F90 
-sed -i '/LOGICAL :: ISCLASSICALGRID/d' b2us_prep_diffv.F90 
+sed -i '/EXTERNAL ISCLASSICALGRID/d' b2us_prep_diffv.F90
+sed -i '/LOGICAL :: ISCLASSICALGRID/d' b2us_prep_diffv.F90
 sed -i -e 's/MSTEP_NODIFF/MSTEP/g' heatdiff1D_dv.F90
 sed -i -e 's/LINES2C_NODIFF/LINES2C/g' heatdiff1D_dv.F90
 sed -i '/EXTERNAL OR/d' b2stbr_dv.F90
@@ -136,9 +136,9 @@ sed -i '/INTEGER :: OR/d' b2stbr_dv.F90
 sed -i -e 's/B2UXUS_NODIFF/B2UXUS/g' b2usco_dv.F90 b2usmo_dv.F90 b2usht_dv.F90 b2uspo_dv.F90
 sed -i -e 's/GET_JSEP_NODIFF/GET_JSEP/g' ./*.F90
 sed -i -e 's/CFWURE_NODIFF/CFWURE/g' ./*.F90
-sed -i '/EXTERNAL IPSETC/d' b2mnds_dv.F90 
-sed -i '/EXTERNAL IPPRHP/d' b2mnds_dv.F90 
-sed -i '/EXTERNAL ANINT/d' b2xvcp_dv.F90 
+sed -i '/EXTERNAL IPSETC/d' b2mnds_dv.F90
+sed -i '/EXTERNAL IPPRHP/d' b2mnds_dv.F90
+sed -i '/EXTERNAL ANINT/d' b2xvcp_dv.F90
 sed -i '/REAL(kind=r8) :: ANINT/d' b2xvcp_dv.F90
 sed -i '/EXTERNAL XERSET/d' b2mod_main_diffv.F90
 sed -i '/EXTERNAL IPGETC/d' b2mod_driver_diffv.F90

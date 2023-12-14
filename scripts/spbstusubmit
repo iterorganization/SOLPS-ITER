@@ -50,7 +50,7 @@ Available options are:
   -t <<THREADS>>           use OpenMP parallelization with <<THREADS>> threads (default $THREADS)
   -T <<HOURS>>             number of elapsed hours requested (default $hours)
   -M <<MEM_SIZE>>          memory size (default $mem)
-  -N <<NODES>>       number of nodes requested (default $NODES)
+  -N <<NODES>>             number of nodes requested (default $NODES)
 
 EOF
     exit
