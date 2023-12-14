@@ -30,7 +30,7 @@ cp ../run_kin_CI/fort.46.i fort.46
 touch b2fstati
 setup_baserun_eirene_links
 b2run b2mn
-${SOLPSTOP}/modules/B2.5/src/test/run_checks_CI_coupled.sh ../run_kin_CI/ ./ || exit 2
+${SOLPSTOP}/modules/B2.5/src/test/run_checks_CI_coupled.sh ../run_kin_CI/ ./ || exit 1
 
 # Special test to look for restart effects
 cd ${SOLPSTOP}/modules/B2.5
@@ -71,4 +71,4 @@ rm b2mn.prt
 mv b2fstate b2fstati
 echo "'eirene_repeat_first_call' '0'" >> b2mn.dat
 b2run b2mn
-${SOLPSTOP}/modules/B2.5/src/test/run_checks_CI_coupled.sh ../run_CI_test_20/ ./ || exit 3
+${SOLPSTOP}/modules/B2.5/src/test/run_checks_CI_coupled.sh ../run_CI_test_20/ ./ || exit 2
