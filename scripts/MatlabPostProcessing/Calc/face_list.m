@@ -23,6 +23,9 @@ fcList_unsorted = [];
 for i = 1:length(fcLbl)
     fcList_unsorted = [fcList_unsorted;find(gmtry.fcLbl == fcLbl(i))];
 end
+if length(fcList_unsorted) < 1
+    error('No faces in list')
+end
 
 % Form continuous line by connecting vertices
 used   = zeros(size(fcList_unsorted));
@@ -36,6 +39,10 @@ dir     = 1;
 
 % Tentatively store initial vertex as starting point of polyline
 start_point = gmtry.fcVx(fcList(ifc),ivx);
+
+if length(fcList_unsorted) == 1
+    end_point = gmtry.fcVx(fcList(ifc),2);
+end
 
 % Find chain of neighbors
 while dir && ~all(used)
