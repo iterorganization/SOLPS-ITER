@@ -9,14 +9,17 @@
 # @log:         - plot in semilogY scale
 # @iter:XX      - plot against last XX iterations, not time,
 #                  (if XX < 0 or absent will plot for the whole history)
-# @setymax:XX    - set Y-axis maximum plotting limit to XX
-# @setymim:XX    - set Y-axis minimum plotting limit to XX
-# @setxmax:XX    - set X-axis maximum plotting limit to XX
-# @setxmim:XX    - set X-axis minimum plotting limit to XX
+# @points:      - lines replaced by markers
+# @linepoints:  - lines supplemented by markers
+#
+# @setymax:XX   - set Y-axis maximum plotting limit to XX
+# @setymin:XX   - set Y-axis minimum plotting limit to XX
+# @setxmax:XX   - set X-axis maximum plotting limit to XX
+# @setxmin:XX   - set X-axis minimum plotting limit to XX
 #
 # @setx:quantity:label:XX  - change X-axis from default time to given
 #                             quantity with provided label and scaling
-                              factor XX
+#                             factor XX
 #
 # :quantity:label:XX - name of quantity added to the plot
 #                       multiplied by XX (used for unit and sign conversion)
@@ -25,22 +28,22 @@
 #==============================================================================
 
 @file:ld_tg_i
-@page: Parallel heat flux around X-point mapped to IMP, inner lower divertor, MW/m^{2}
+@page: Parallel heat flux around X-point, inner lower divertor, MW/m^{2}
 @setx:xMP:r-r_{IMP}, m:
 @setymin:0.
 @setxmin:0.
 :Wpar_xpt:q_{\parallel}^{xpt}:1.e-6
-@page: Parallel heat flux around X-point and target, inner lower divertor, MW/m^{2}
+@page: Parallel heat flux X-point and target, inner lower divertor, MW/m^{2}
 @setx:x:r-r_{sep}, m:
 @setymin:0.
 @setxmin:0.
 :Wpar_xpt:q_{\parallel}^{xpt}:1.e-6
 :WWpar:q_{\parallel}^{trg}:1.e-6
-@page: Target heat flux with and without dissipation, inner lower divertor, MW/m^{2}
+@page: Target heat flux with and w/o dissipation, inner lower divertor, MW/m^{2}
 @setx:x:r-r_{sep}, m:
 @setymin:0.
-:WWtrg:w/o dissipation:1.e-6
-:Wtot:with dissipation:1.e-6
+:WWtrg:w/o diss:1.e-6
+:Wtot:with diss:1.e-6
 @page: Heat loads breakdown, inner lower divertor, MW/m^{2}
 @setx:x:r-r_{sep}, m:
 @setymin:0.
@@ -136,22 +139,22 @@
 :W_pres_atm:p_{W}:
 
 @file:ld_tg_o
-@page: Parallel heat flux around X-point mapped to OMP, outer lower divertor, MW/m^{2}
+@page: Parallel heat flux around X-point, outer lower divertor, MW/m^{2}
 @setx:xMP:r-r_{OMP}, m:
 @setymin:0.
 @setxmin:0.
 :Wpar_xpt:q_{\parallel}^{xpt}:1.e-6
-@page: Parallel heat flux around X-point and target, outer lower divertor, MW/m^{2}
+@page: Parallel heat flux X-point and target, outer lower divertor, MW/m^{2}
 @setx:x:r-r_{sep}, m:
 @setymin:0.
 @setxmin:0.
 :Wpar_xpt:q_{\parallel}^{xpt}:1.e-6
 :WWpar:q_{\parallel}^{trg}:1.e-6
-@page: Target heat flux with and without dissipation, outer lower divertor, MW/m^{2}
+@page: Target heat flux with and w/o dissipation, outer lower divertor, MW/m^{2}
 @setx:x:r-r_{sep}, m:
 @setymin:0.
-:WWtrg:w/o dissipation:1.e-6
-:Wtot:with dissipation:1.e-6
+:WWtrg:w/o diss:1.e-6
+:Wtot:with diss:1.e-6
 @page: Heat loads breakdown, outer lower divertor, MW/m^{2}
 @setx:x:r-r_{sep}, m:
 @setymin:0.
@@ -247,22 +250,22 @@
 :W_pres_atm:p_{W}:
 
 @file:ld_tg_iu
-@page: Parallel heat flux around X-point mapped to IMP, inner upper divertor, MW/m^{2}
+@page: Parallel heat flux around X-point, inner upper divertor, MW/m^{2}
 @setx:xMP:r-r_{IMP}, m:
 @setymin:0.
 @setxmin:0.
 :Wpar_xpt:q_{\parallel}^{xpt}:1.e-6
-@page: Parallel heat flux around X-point and target, inner upper divertor, MW/m^{2}
+@page: Parallel heat flux X-point and target, inner upper divertor, MW/m^{2}
 @setx:x:r-r_{sep}, m:
 @setymin:0.
 @setxmin:0.
 :Wpar_xpt:q_{\parallel}^{xpt}:1.e-6
 :WWpar:q_{\parallel}^{trg}:1.e-6
-@page: Target heat flux with and without dissipation, outer upper upper divertor, MW/m^{2}
+@page: Target heat flux with and w/o dissipation, outer upper upper divertor, MW/m^{2}
 @setx:x:r-r_{sep}, m:
 @setymin:0.
-:WWtrg:w/o dissipation:1.e-6
-:Wtot:with dissipation:1.e-6
+:WWtrg:w/o diss:1.e-6
+:Wtot:with diss:1.e-6
 @page: Heat loads breakdown, outer upper upper divertor, MW/m^{2}
 @setx:x:r-r_{sep}, m:
 @setymin:0.
@@ -358,22 +361,22 @@
 :W_pres_atm:p_{W}:
 
 @file:ld_tg_ou
-@page: Parallel heat flux around X-point mapped to IMP, outer upper divertor, MW/m^{2}
+@page: Parallel heat flux around X-point, outer upper divertor, MW/m^{2}
 @setx:xMP:r-r_{OMP}, m:
 @setymin:0.
 @setxmin:0.
 :Wpar_xpt:q_{\parallel}^{xpt}:1.e-6
-@page: Parallel heat flux around X-point and target, outer upper divertor, MW/m^{2}
+@page: Parallel heat flux X-point and target, outer upper divertor, MW/m^{2}
 @setx:x:r-r_{sep}, m:
 @setymin:0.
 @setxmin:0.
 :Wpar_xpt:q_{\parallel}^{xpt}:1.e-6
 :WWpar:q_{\parallel}^{trg}:1.e-6
-@page: Target heat flux with and without dissipation, outer upper divertor, MW/m^{2}
+@page: Target heat flux with and w/o dissipation, outer upper divertor, MW/m^{2}
 @setx:x:r-r_{sep}, m:
 @setymin:0.
-:WWtrg:w/o dissipation:1.e-6
-:Wtot:with dissipation:1.e-6
+:WWtrg:w/o diss:1.e-6
+:Wtot:with diss:1.e-6
 @page: Heat loads breakdown, outer upper divertor, MW/m^{2}
 @setx:x:r-r_{sep}, m:
 @setymin:0.

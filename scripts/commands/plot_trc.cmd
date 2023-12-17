@@ -9,12 +9,17 @@
 # @log:         - plot in semilogY scale
 # @iter:XX      - plot against last XX iterations, not time,
 #                  (if XX < 0 or absent will plot for the whole history)
-# @setmax:XX    - set Y-axis maximum plotting limit to XX
-# @setmim:XX    - set Y-axis minimum plotting limit to XX
+# @points:      - lines replaced by markers
+# @linepoints:  - lines supplemented by markers
+#
+# @setymax:XX   - set Y-axis maximum plotting limit to XX
+# @setymin:XX   - set Y-axis minimum plotting limit to XX
+# @setxmax:XX   - set X-axis maximum plotting limit to XX
+# @setxmin:XX   - set X-axis minimum plotting limit to XX
 #
 # @setx:quantity:label:XX  - change X-axis from default time to given
 #                             quantity with provided label and scaling
-                              factor XX
+#                             factor XX
 #
 # :quantity:label:XX - name of quantity added to the plot
 #                       multiplied by XX (used for unit and sign conversion)
@@ -59,8 +64,8 @@
 :tot_wall:to walls:1.e-6
 :tot_rad:radiated:1.e-6
 :pwr_totl:total:1.e-6
-@page: Energy timescale, s
-:pwr_tscl:\tau_{E}:
+@page: Energy timescale d(ln(W))/dt, s^{-1}
+:pwr_tscl:1/\tau_{E}:
 @page: Core power balance, MW
 :heat_cor:heat:1.e-6
 :ptnt_cor:particles:1.e-6
@@ -111,7 +116,7 @@
 :ntr_puff_H:
 :src_ext_H:
 :flux_tot_H:
-@page: H ion dn/dt, m^{-3}s^{-1}
+@page: H ion dn/dt, s^{-1}
 :ion_dn/dt_H:
 @page: Flux balance total D, s^{-1}
 :ion_core_D:
@@ -123,7 +128,7 @@
 :ntr_puff_D:
 :src_ext_D:
 :flux_tot_D:
-@page: D ion dn/dt, m^{-3}s^{-1}
+@page: D ion dn/dt, s^{-1}
 :ion_dn/dt_D:
 @page: Flux balance total He, s^{-1}
 :ion_core_He:
@@ -135,7 +140,7 @@
 :ntr_puff_He:
 :src_ext_He:
 :flux_tot_He:
-@page: He ion dn/dt, m^{-3}s^{-1}
+@page: He ion dn/dt, s^{-1}
 :ion_dn/dt_He:
 @page: Flux balance total Li, s^{-1}
 :ion_core_Li:
@@ -147,7 +152,7 @@
 :ntr_puff_Li:
 :src_ext_Li:
 :flux_tot_Li:
-@page: Li ion dn/dt, m^{-3}s^{-1}
+@page: Li ion dn/dt, s^{-1}
 :ion_dn/dt_Li:
 @page: Flux balance total Be, s^{-1}
 :ion_core_Be:
@@ -159,7 +164,7 @@
 :ntr_puff_Be:
 :src_ext_Be:
 :flux_tot_Be:
-@page: Be ion dn/dt, m^{-3}s^{-1}
+@page: Be ion dn/dt, s^{-1}
 :ion_dn/dt_Be:
 @page: Flux balance total C, s^{-1}
 :ion_core_C:
@@ -171,7 +176,7 @@
 :ntr_puff_C:
 :src_ext_C:
 :flux_tot_C:
-@page: C ion dn/dt, m^{-3}s^{-1}
+@page: C ion dn/dt, s^{-1}
 :ion_dn/dt_C:
 @page: Flux balance total N, s^{-1}
 :ion_core_N:
@@ -183,7 +188,7 @@
 :ntr_puff_N:
 :src_ext_N:
 :flux_tot_N:
-@page: N ion dn/dt, m^{-3}s^{-1}
+@page: N ion dn/dt, s^{-1}
 :ion_dn/dt_N:
 @page: Flux balance total Ne, s^{-1}
 :ion_core_Ne:
@@ -195,7 +200,7 @@
 :ntr_puff_Ne:
 :src_ext_Ne:
 :flux_tot_Ne:
-@page: Ne ion dn/dt, m^{-3}s^{-1}
+@page: Ne ion dn/dt, s^{-1}
 :ion_dn/dt_Ne:
 @page: Flux balance total Ar, s^{-1}
 :ion_core_Ar:
@@ -207,7 +212,7 @@
 :ntr_puff_Ar:
 :src_ext_Ar:
 :flux_tot_Ar:
-@page: Ar ion dn/dt, m^{-3}s^{-1}
+@page: Ar ion dn/dt, s^{-1}
 :ion_dn/dt_Ar:
 @page: Flux balance total W, s^{-1}
 :ion_core_W:
@@ -219,7 +224,7 @@
 :ntr_puff_W:
 :src_ext_W:
 :flux_tot_W:
-@page: W ion dn/dt, m^{-3}s^{-1}
+@page: W ion dn/dt, s^{-1}
 :ion_dn/dt_W:
 @page: Hydrogenic ionization source, s^{-1}
 :src_ioniz_H:H:
@@ -2027,23 +2032,23 @@
 @page: Peak ion saturation current to the target, MA/m^{2}
 :j_s_tot_i:j_{sat,max}^{inner}:1.e-6
 :j_s_tot_o:j_{sat,max}^{outer}:1.e-6
-:j_s_tot_iu:j_{sat,max}^{upper inner}:1.e-6
-:j_s_tot_ou:j_{sat,max}^{upper outer}:1.e-6
+:j_s_tot_iu:j_{sat,max}^{inner,up}:1.e-6
+:j_s_tot_ou:j_{sat,max}^{outer,up}:1.e-6
 @page: Integral ion saturation current to the target, MA
 :I_s_tot_i:I_{sat}^{inner}:1.e-6
 :I_s_tot_o:I_{sat}^{outer}:1.e-6
-:I_s_tot_iu:I_{sat}^{upper inner}:1.e-6
-:I_s_tot_ou:I_{sat}^{upper outer}:1.e-6
+:I_s_tot_iu:I_{sat}^{inner,up}:1.e-6
+:I_s_tot_ou:I_{sat}^{outer,up}:1.e-6
 @page: Net electric current to the target, MA
 :I_tot_i:I_{net}^{inner}:1.e-6
 :I_tot_o:I_{net}^{outer}:1.e-6
-:I_tot_iu:I_{net}^{upper inner}:1.e-6
-:I_tot_ou:I_{net}^{upper outer}:1.e-6
+:I_tot_iu:I_{net}^{inner,up}:1.e-6
+:I_tot_ou:I_{net}^{outer,up}:1.e-6
 @page: Peak heat flux to the target, MW/m^{2}
 :q_max_i:q_{peak}^{inner}:1.e-6
 :q_max_o:q_{peak}^{outer}:1.e-6
-:q_max_iu:q_{peal}^{upper inner}:1.e-6
-:q_max_ou:q_{peak}^{upper outer}:1.e-6
+:q_max_iu:q_{peak}^{inner,up}:1.e-6
+:q_max_ou:q_{peak}^{outer,up}:1.e-6
 @page: Neutral pressure in PFR as defined by SPb, Pa
 :p_neut_PFR:average:
 :p_neut_PFR_i:inner:
@@ -2061,28 +2066,28 @@
 :p_D_pump:p_{D}{pump}:
 @file:blnm
 @page: Momentum balance lower inner (ank)
-:ref_resf_il:relative force total:
+:ref_resf_il:relative force tot:
 :rel_prtg_il:target pressure:
 :rel_flxp_il:flow x-point:
 :rel_fltg_il:flow target:
 :rel_fneu_il:neutrals:
 :ref_fmag_il:magnetic:
 @page: Momentum balance lower outer (ank)
-:ref_resf_ol:relative force total:
+:ref_resf_ol:relative force tot:
 :rel_prtg_ol:target pressure:
 :rel_flxp_ol:flow x-point:
 :rel_fltg_ol:flow target:
 :rel_fneu_ol:neutrals:
 :ref_fmag_ol:magnetic:
 @page: Momentum balance upper inner (ank)
-:ref_resf_iu:relative force total:
+:ref_resf_iu:relative force tot:
 :rel_prtg_iu:target pressure:
 :rel_flxp_iu:flow x-point:
 :rel_fltg_iu:flow target:
 :rel_fneu_iu:neutrals:
 :ref_fmag_iu:magnetic:
 @page: Momentum balance upper outer (ank)
-:ref_resf_ou:relative force total:
+:ref_resf_ou:relative force tot:
 :rel_prtg_ou:target pressure:
 :rel_flxp_ou:flow x-point:
 :rel_fltg_ou:flow target:
@@ -2129,27 +2134,27 @@
 :feisip_l:ions:-1.e-6
 :fetsip_l:total:-1.e-6
 @page: Power to the Western upper divertor, MW
-:feesip_u:electrons:-1.e-6
-:feisip_u:ions:-1.e-6
-:fetsip_u:total:-1.e-6
+:feesip_u:electrons:1.e-6
+:feisip_u:ions:1.e-6
+:fetsip_u:total:1.e-6
 @page: Power to the Eastern lower divertor, MW
 :feesap_l:electrons:1.e-6
 :feisap_l:ions:1.e-6
 :fetsap_l:total:1.e-6
-@page: Power to the Eastern lower divertor, MW
-:feesap_u:electrons:1.e-6
-:feisap_u:ions:1.e-6
-:fetsap_u:total:1.e-6
+@page: Power to the Eastern upper divertor, MW
+:feesap_u:electrons:-1.e-6
+:feisap_u:ions:-1.e-6
+:fetsap_u:total:-1.e-6
 @page: Power to the divertors, MW
 :fetsip_l:Western lower:-1.e-6
 :fetsap_l:Eastern lower:1.e-6
-:fetsip_u:Western upper:-1.e-6
-:fetsap_u:Eastern upper:1.e-6
+:fetsip_u:Western upper:1.e-6
+:fetsap_u:Eastern upper:-1.e-6
 @page: Ions flow to the divertors, s^{-1}
 :fnisip_l:Western lower:-1.
 :fnisap_l:Eastern lower:
-:fnisip_u:Western upper:-1.
-:fnisap_u:Eastern upper:
+:fnisip_u:Western upper:
+:fnisap_u:Eastern upper:-1.
 @page: H_{\alpha} signal from divertor region, ph/m^{2}/sr/s
 :tmhadiv:H_{\alpha}:
 
