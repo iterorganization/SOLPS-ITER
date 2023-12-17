@@ -29,6 +29,8 @@ SUM_FILE=trg_sum.dat
 OUTPUT_FILE=trg
 OUTPUT_FMT=pdf
 ORIGIN_PDF=multipage.pdf
+STATE_FILE=b2fstate
+REF_FILE=ld_tg_o.dat
 LN_FILES='ld_tg_i.dat ld_tg_o.dat ld_tg_iu.dat ld_tg_ou.dat fp_tg_i.dat fp_tg_o.dat fp_tg_iu.dat fp_tg_ou.dat'
 
 B2EXE_DIR=b2mn.exe.dir
@@ -45,12 +47,12 @@ SOURCE_FILE=$SOURCE_DIR/$(basename "${BASH_SOURCE:-$0}")
 CMD_DIR=$SOURCE_DIR/commands
 CMD_LOCAL_DIR=$SOLPSTOP/scripts.local/commands
 
-SEXEC=trg_sum.exe.py
-SLOG=trg_sum.exe.log
-PEXEC=plot_trc.exe.py
-PCMD=plot_trc.exe.cmd
-PLOG=plot_trc.exe.log
-WRK_DIR=wrk.tmp
+SEXEC=trg_sum.trg.py
+SLOG=trg_sum.trg.log
+PEXEC=plot_trc.trg.py
+PCMD=plot_trc.trg.cmd
+PLOG=plot_trc.trg.log
+WRK_DIR=wrk.trg
 
 if [ "$PLOT_TRC_FMT" = "ps" ] || [ "$PLOT_TRC_FMT" = "pdf" ]
 then
@@ -120,14 +122,26 @@ fi
 echo "mkdir $WRK_DIR"
 mkdir "$WRK_DIR"
 
+count=`ls -l $STATE_FILE 2>/dev/null | wc -l`
+if [ $count = 0 ]
+then
+  STATE_FILE=b2fstati
+  count=`ls -l $STATE_FILE 2>/dev/null | wc -l`
+  if [ $count = 0 ]
+  then
+    STATE_FILE=$REF_FILE
+  fi
+fi
+echo "$STATE_FILE defined as STATE_FILE"
+
 count=`ls -l $LN_FILES 2>/dev/null | wc -l`
-if [ $count != 0 ]
+if [ $count != 0 ] && [ $REF_FILE -nt $STATE_FILE ]
 then
   for f in $LN_FILES; do {
     [ -f "$f" ] && echo "cp $f $WRK_DIR/$f" && cp "$f" "$WRK_DIR/$f"
   }; done
 else
-  echo "$LN_FILES not found trying to produce"
+  echo "$LN_FILES not found or too old trying to produce..."
   echo "echo '100 wlld' | b2plot"
   echo "100 wlld" | b2plot >/dev/null 2>&1
   count=`ls -l $B2PL_DIR/$LN_FILES 2>/dev/null | wc -l`
@@ -144,15 +158,15 @@ fi
 if [ -d "$WRK_DIR" ] && [ -f "$SEXEC" ] && [ -f "$PEXEC" ] && [ -f "$PCMD" ]
 then
   echo "workspace is set, producing summary file $SUM_FILE..."
-  echo "python $SEXEC"
-  python "$SEXEC"
+  echo "python $SEXEC $WRK_DIR $SLOG"
+  python "$SEXEC" "$WRK_DIR" "$SLOG"
   echo "cat $SLOG"
   cat $SLOG
   echo "rm -f $SLOG"
   rm -f $SLOG
   echo "start plotting..."
-  echo "python $PEXEC"
-  python "$PEXEC"
+  echo "python $PEXEC $PCMD $WRK_DIR $PLOG $PLOT_TRC_FMT"
+  python "$PEXEC" "$PCMD" "$WRK_DIR" "$PLOG" "$PLOT_TRC_FMT"
   echo "cat $PLOG"
   cat $PLOG
   echo "rm -f $PLOG"
@@ -183,6 +197,8 @@ then
     echo "producing $OUTPUT_FILE.$OUTPUT_FMT"
     echo "gs -dSAFER -dBATCH -dNOPAUSE -sDEVICE=ps2write -o $OUTPUT_FILE.$OUTPUT_FMT $WRK_DIR/*.ps"
     gs -dSAFER -dBATCH -dNOPAUSE -sDEVICE=ps2write -o $OUTPUT_FILE.$OUTPUT_FMT $WRK_DIR/*.ps
+    echo "ps2pdf $OUTPUT_FILE.$OUTPUT_FMT $OUTPUT_FILE.pdf"
+    ps2pdf "$OUTPUT_FILE.$OUTPUT_FMT" "$OUTPUT_FILE.pdf"
   else
     echo "no *.ps produced, nothing to do"
   fi

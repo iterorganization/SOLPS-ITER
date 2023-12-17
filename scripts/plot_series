@@ -33,10 +33,10 @@ SOURCE_FILE=$SOURCE_DIR/$(basename "${BASH_SOURCE:-$0}")
 CMD_DIR=$SOURCE_DIR/commands
 CMD_LOCAL_DIR=$SOLPSTOP/scripts.local/commands
 
-PEXEC=plot_trc.exe.py
-PCMD=plot_trc.exe.cmd
-PLOG=plot_trc.exe.log
-WRK_DIR=wrk.tmp
+PEXEC=plot_trc.series.py
+PCMD=plot_trc.series.cmd
+PLOG=plot_trc.series.log
+WRK_DIR=wrk.series
 WRK_FILE=series
 
 if [ "$PLOT_TRC_FMT" = "ps" ] || [ "$PLOT_TRC_FMT" = "pdf" ]
@@ -122,8 +122,8 @@ fi
 if [ -d "$WRK_DIR" ] && [ ! -z "$(ls -A "$WRK_DIR")" ] && [ -f "$PEXEC" ] && [ -f "$PCMD" ]
 then
   echo "workspace is set, start plotting..."
-  echo "python $PEXEC"
-  python "$PEXEC"
+  echo "python $PEXEC $PCMD $WRK_DIR $PLOG $PLOT_TRC_FMT"
+  python "$PEXEC" "$PCMD" "$WRK_DIR" "$PLOG" "$PLOT_TRC_FMT"
   echo "cat $PLOG"
   cat $PLOG
   echo "rm -f $PLOG"
@@ -154,6 +154,8 @@ then
     echo "producing $OUTPUT_FILE.$OUTPUT_FMT"
     echo "gs -dSAFER -dBATCH -dNOPAUSE -sDEVICE=ps2write -o $OUTPUT_FILE.$OUTPUT_FMT $WRK_DIR/*.ps"
     gs -dSAFER -dBATCH -dNOPAUSE -sDEVICE=ps2write -o $OUTPUT_FILE.$OUTPUT_FMT $WRK_DIR/*.ps
+    echo "ps2pdf $OUTPUT_FILE.$OUTPUT_FMT $OUTPUT_FILE.pdf"
+    ps2pdf "$OUTPUT_FILE.$OUTPUT_FMT" "$OUTPUT_FILE.pdf"
   else
     echo "no *.ps produced, nothing to do"
   fi
