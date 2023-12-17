@@ -43,11 +43,11 @@ SOURCE_FILE=$SOURCE_DIR/$(basename "${BASH_SOURCE:-$0}")
 CMD_DIR=$SOURCE_DIR/commands
 CMD_LOCAL_DIR=$SOLPSTOP/scripts.local/commands
 
-LEXEC=last_2d.exe.py
-LCMD=last_2d.exe.cmd
-LLOG=last_2d.exe.log
+LEXEC=last_2d.l2d.py
+LCMD=last_2d.l2d.cmd
+LLOG=last_2d.l2d.log
 LRES=.RES
-WRK_DIR=wrk.tmp
+WRK_DIR=wrk.l2d
 
 echo "setting up workspace..."
 if [ -f "$SOURCE_DIR/$L2D_SCRIPT" ]
@@ -174,8 +174,8 @@ fi
 if [ -d "$WRK_DIR" ] && [ ! -z "$(ls -A "$WRK_DIR")" ] && [ -f "$LEXEC" ]
 then
   echo "workspace is set, procceed to averaging..."
-  echo "python $LEXEC"
-  python "$LEXEC"
+  echo "python $LEXEC $LCMD $WRK_DIR $LLOG"
+  python "$LEXEC" "$LCMD" "$WRK_DIR" "$LLOG"
   echo "cat $LLOG"
   cat $LLOG
   echo "rm -f $LLOG"

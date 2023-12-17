@@ -58,10 +58,19 @@ import datetime
 
 "!!! BASIC SETUP: START !!!"
 
+cmd_file = 'last_2d.exe.cmd'
+"Name of the command file"
+if (np.size(sys.argv) > 1):
+    cmd_file = sys.argv[1]
+logging.info('COMMAND FILE: %s',cmd_file)
+
 trc_dir = 'wrk.tmp'
 "Directory searched for the corresponding *.trc and *.nc files"
+if (np.size(sys.argv) > 2):
+    trc_dir = sys.argv[2]
+logging.info('WORK DIRECTORY: %s',trc_dir)
 
-cmd_file = 'last_2d.exe.cmd'
+
 "Name of the command file"
 
 res_file = '.RES'
@@ -73,6 +82,10 @@ var_file = '.VarID'
 
 log_file = 'last_2d.exe.log'
 "Log file produced by the script"
+if (np.size(sys.argv) > 3):
+    log_file = sys.argv[3]
+logging.info('LOG FILE: %s',log_file)
+
 logging.basicConfig(filename=log_file,format='%(levelname)s:%(filename)s-%(funcName)s: %(message)s',level=logging.INFO,filemode='w')
 
 b2time_FLE = 'b2time'

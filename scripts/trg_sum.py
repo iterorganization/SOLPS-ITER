@@ -29,14 +29,23 @@ fptg_names   = [    'fp_tg_i.dat',           'fp_tg_o.dat',         'fp_tg_ui.da
 
 "Directory searched for the corresponding *.dat files"
 wlld_dir = 'wrk.tmp'
+if (np.size(sys.argv) > 1):
+    wlld_dir = sys.argv[1]
+logging.info('WORK DIRECTORY: %s',wlld_dir)
+
 "Output file name"
 out_file = 'trg_sum.dat'
 "Log file"
 log_file = 'trg_sum.exe.log'
-"Length of string in 10 symlobs per unit cannot be lower then 4"
-str_len = 7
+"Log file produced by the script"
+if (np.size(sys.argv) > 2):
+    log_file = sys.argv[2]
+logging.info('LOG FILE: %s',log_file)
 
 logging.basicConfig(filename=log_file,format='%(levelname)s:%(filename)s-%(funcName)s: %(message)s',level=logging.INFO,filemode='w')
+
+"Length of string in 10 symlobs per unit cannot be lower then 4"
+str_len = 7
 
 "Variable list, names legend and actions"
 wlld_quan_int  = ['Wtot',         'Wpls',          'Wneut',          'Wrad']

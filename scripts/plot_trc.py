@@ -5,11 +5,12 @@ Created on 22/03/2023
 @author: pshenoa
 
 DESCRIPTION
-This script produces multipage.pdf file and number of plot files N.ps from the SOLPS tracing files
-located in the ./wrk.tmp folder, plots are based on the supplied command file plot_trc.cmd
+This script produces multipage.pdf file and number of plot files N.ps from the SOLPS
+tracing files located in the $trc_dir folder, plots are based on the supplied command
+file plot_trc.cmd
 
 OUTPUT
-Multipage (multipage.pdf) file and a series of separate XXXX.ps figures placed in ./wrk.tmp
+Multipage (multipage.pdf) file and a series of separate XXXX.ps figures placed in $trc_dir
 
 USAGE
 python plot_trc.py
@@ -17,7 +18,7 @@ python plot_trc.py
 with plot_trc.exe.cmd and wrk.tmp present in the exectution directory
 
 IMPORTANT
-plot_trc.cmd and ./wrk.tmp should be present in the directory which is
+plot_trc.cmd and $trc_dir should be present in the directory which is
 usually handled by the giverning script plot_trc
 
 WHAT CAN BE CHANGED
@@ -30,41 +31,37 @@ for handler in logging.root.handlers[:]:
     logging.root.removeHandler(handler)
 
 import matplotlib
-from matplotlib.backends.backend_pgf import PdfPages
+import matplotlib.pyplot as plt
 
 import netCDF4 as nc
 import numpy as np
-import matplotlib.pyplot as plt
 import sys
 import os
 
 "!!! BASIC SETUP: START !!!"
 
-trc_dir = 'wrk.tmp'
-"Directory searched for the corresponding *.trc files"
-
 cmd_file = 'plot_trc.exe.cmd'
 "Name of the command file"
+if (np.size(sys.argv) > 1):
+    cmd_file = sys.argv[1]
+logging.info('COMMAND FILE: %s',cmd_file)
+
+trc_dir = 'wrk.tmp'
+"Directory searched for the corresponding *.trc files"
+if (np.size(sys.argv) > 2):
+    trc_dir = sys.argv[2]
+logging.info('WORK DIRECTORY: %s',trc_dir)
 
 log_file = 'plot_trc.exe.log'
 "Log file produced by the script"
+if (np.size(sys.argv) > 3):
+    log_file = sys.argv[3]
+logging.info('LOG FILE: %s',log_file)
+
 logging.basicConfig(filename=log_file,format='%(levelname)s:%(filename)s-%(funcName)s: %(message)s',level=logging.INFO,filemode='w')
 
 pdf_out = trc_dir + '/multipage.pdf'
 "Name of the multipage pdf file produced along with the separate .ps files"
-
-if (len(sys.argv) > 1):
-    fmt = sys.argv[1]
-    logging.info('argument received: %s',fmt)
-else:
-    fmt = 'pdf'
-if (fmt == 'ps'):
-    produce_ps = True
-    logging.info('OUTPUT: .ps pictures will be produced')
-else:
-    produce_ps = False
-    logging.info('OUTPUT: multipage .pdf file will be produced')
-"By default only multipage.pdf is written"
 
 ntime_file = '.ntime'
 "Hidden file containing specific time handling if required"
@@ -72,12 +69,14 @@ ntime_file = '.ntime'
 "Default plotting options"
 default_fig_size=(3.37,2.5275)
 default_line_color = ['tab:red', 'tab:blue', 'tab:green', 'tab:gray', 'tab:purple','tab:orange', 'tab:cyan', 'tab:olive', 'tab:brown',  'tab:pink' ]
+default_marker = ['o', 's', '^', 'v', 'p','h', '*', 'D', 'X',  'P' ]
 
 default_line_width = 1.0
 default_size_ticks = 10
 default_size_xlabel = 10
 default_size_title = 10
 default_size_legend = 10
+default_markersize = 6
 
 plt_grid = False
 output_format = 'ps'
@@ -92,6 +91,14 @@ mi_maxi = 1.0
 pl_mini = 1.0
 mi_mini = 1.0
 minmarg = 0.1
+
+logging.info('OUTPUT: .ps pictures will be produced')
+produce_pdf = False
+if (np.size(sys.argv) > 4):
+    if (sys.argv[4] == "pdf"):
+        logging.info('OUTPUT: multipage .pdf file will be produced')
+        produce_pdf = True
+        from matplotlib.backends.backend_pdf import PdfPages
 
 """Governs the axis limits:
     maxval, minval - Y axis limits
@@ -319,6 +326,8 @@ General plotting engine
 INPUT:
     pnum       - number of quantities to be plotted
     slog       - logical, True if xsemilog is required
+    sline      - logical, True if points are connected by lines
+    smark      - logical, True if points are marked
     ymaxx      - Y-axis max limit
     yminn      - Y-amis min limit
     xmaxx      - X-axis max limit
@@ -339,17 +348,32 @@ OUTPUT:
     produces the output plot file file_out.$output_format
 """
 
-def PLT(slog,ymaxx,yminn,xmaxx,xminn,pnum,xmass,ymass,labelmass,ymaskmass,xlabel,ftitle,file_out,pdf):
+def PLT(slog,sline,smark,ymaxx,yminn,xmaxx,xminn,pnum,xmass,ymass,labelmass,ymaskmass,xlabel,ftitle,file_out,pdf):
 
-    if (produce_ps == True):
-        logging.info('plotting %s',file_out)
-    else:
+    logging.info('plotting %s',file_out)
+    if (produce_pdf == True):
         logging.info('adding page to %s',pdf_out)
 
     line_color = default_line_color
     if (pnum > np.size(default_line_color)):
         for i in range(0,np.int64(np.floor(pnum/np.size(default_line_color)))):
             line_color = np.append(line_color,default_line_color)
+
+    if (sline == True):
+        line = 'solid'
+    else:
+        line = 'None'
+
+    if (smark == True):
+        line_marker = default_marker
+        if (pnum > np.size(default_marker)):
+            for i in range(0,np.int64(np.floor(pnum/np.size(default_marker)))):
+                line_marker = np.append(line_marker,default_marker)
+    else:
+        line_marker = ['None']
+        for i in range(1,pnum):
+            line_marker = np.append(line_marker,'None')
+
 
     ftitle = ftitle.replace(' ','\ ')
     ftitle = '{0}{1}{2}'.format(r'$\mathrm{',ftitle,'}$')
@@ -450,22 +474,23 @@ def PLT(slog,ymaxx,yminn,xmaxx,xminn,pnum,xmass,ymass,labelmass,ymaskmass,xlabel
         plt.grid(plt_grid, color='g', linestyle='-.', linewidth=0.5)
     if (pnum == 1):
         if (slog == False):
-            plt.plot(xmass, ymass, color=line_color[0], label=labelmass[0])
+            plt.plot(xmass, ymass, color=line_color[0], marker=line_marker[0], linestyle=line, markersize=default_markersize, label=labelmass[0])
         else:
-            plt.semilogy(xmass, ymass, color=line_color[0], label=labelmass[0])
+            plt.semilogy(xmass, ymass, color=line_color[0], marker=line_marker[0], linestyle=line, markersize=default_markersize, label=labelmass[0])
     else:
         for i in range(0,pnum):
             if (ymaskmass[i] >= 0):
                 if (slog == False):
-                    plt.plot(xmass, ymass[:,i], color=line_color[i], label=labelmass[i])
+                    plt.plot(xmass, ymass[:,i], color=line_color[i], marker=line_marker[i], linestyle=line, markersize=default_markersize, label=labelmass[i])
                 else:
-                    plt.semilogy(xmass, ymass[:,i], color=line_color[i], label=labelmass[i])
+                    plt.semilogy(xmass, ymass[:,i], color=line_color[i], marker=line_marker[i], linestyle=line, markersize=default_markersize, label=labelmass[i])
     if ((np.sign(minval)*np.sign(maxval)) < 0):
         plt.plot([mini,maxi],[0,0],'k--', linewidth=1.0)
     plt.legend(bbox_to_anchor=(1.01, 1.),loc=2,borderaxespad=0.,fontsize=size_legend,frameon=True)
     plt.tight_layout()
     plt.savefig(file_out, format=output_format, bbox_inches='tight')
-    pdf.savefig()
+    if (produce_pdf == True):
+        pdf.savefig()
     plt.cla()
     fig.clear()
     plt.close(1)
@@ -484,6 +509,10 @@ INPUT:
     ptype       - plot type
                   'd' - default linear
                   'l' - semilog (Y axis log, X still linear)
+    ltype       - line type
+                  'l' - lines without markers
+                  'm' - markers without lines
+                  'c' - markers with lines
     xtype       - defines the X axsis data:
                   't' - plot against time
                   'i' - plot against iterations
@@ -505,7 +534,7 @@ INPUT:
 OUTPUT:
     prepares data for .ps file production with PLT
 """
-def PRODUCE_PAGE(page_number,page_title,trc_header,trc_data,ptype,xtype,xarg,quan_names,quan_labels,quan_scales,xquan,xname,xscale,setprange,prange,ntime,ctime,gtime,pdf):
+def PRODUCE_PAGE(page_number,page_title,trc_header,trc_data,ptype,ltype,xtype,xarg,quan_names,quan_labels,quan_scales,xquan,xname,xscale,setprange,prange,ntime,ctime,gtime,pdf):
 
     logging.info('producing page %s with title: %s',page_number,page_title)
 
@@ -642,10 +671,19 @@ def PRODUCE_PAGE(page_number,page_title,trc_header,trc_data,ptype,xtype,xarg,qua
     "Preparing the plot"
     plot = True
     slog = False
+    sline = True
+    smark = False
     pnum = np.size(quan_names)
 
     if (ptype == 'l'):
-        slog =True
+        slog = True
+
+    if (ltype == 'm'):
+        sline = False
+        smark = True
+    elif (ltype == 'c'):
+        sline = True
+        smark = True
 
     if (pnum < 1):
         logging.warning('no quantities assigned to page %s,nothing to plot',page_number)
@@ -674,7 +712,7 @@ def PRODUCE_PAGE(page_number,page_title,trc_header,trc_data,ptype,xtype,xarg,qua
         else:
             internal_page_number = page_number
         fout = '{0}{1}{2}{3}{4}'.format(trc_dir,'/',internal_page_number,'.',output_format)
-        PLT(slog,ymaxx,yminn,xmaxx,xminn,pnum,xmass,ymass,quan_labels,ymaskmass,xlabel,page_title,fout,pdf)
+        PLT(slog,sline,smark,ymaxx,yminn,xmaxx,xminn,pnum,xmass,ymass,quan_labels,ymaskmass,xlabel,page_title,fout,pdf)
 
     return;
 
@@ -688,6 +726,7 @@ INPUT:
 OUTPUT:
     page_title   = 'Blank'
     ptype        = 'd'
+    ltype        = 'l'
     xtype        = 't'
     xarg         = -1.0
     quan_names   = []
@@ -705,6 +744,7 @@ def RESET_PAGE():
 
     page_title = 'Blank'
     ptype = 'd'
+    ltype = 'l'
     xtype ='t'
     xarg = -1.0
     quan_names = []
@@ -716,7 +756,7 @@ def RESET_PAGE():
     xname = ''
     xscale = 1.
 
-    return page_title, ptype, xtype, xarg, quan_names, quan_labels, quan_scales, setprange, prange, xquan, xname, xscale;
+    return page_title, ptype, ltype, xtype, xarg, quan_names, quan_labels, quan_scales, setprange, prange, xquan, xname, xscale;
 
 
 
@@ -770,7 +810,7 @@ def main():
             logging.info('GTIME: every %s point will be plotted',gtime)
 
     "Setting default values for cycling"
-    page_title, ptype, xtype, xarg, quan_names, quan_labels, quan_scales, setprange, prange, xquan, xname, xscale = RESET_PAGE()
+    page_title, ptype, ltype, xtype, xarg, quan_names, quan_labels, quan_scales, setprange, prange, xquan, xname, xscale = RESET_PAGE()
 
     trc_read = False
     page_first = False
@@ -785,205 +825,212 @@ def main():
     nlines = count + 1
     logging.info('command file %s containing %s lines to be executed',cmd_file, nlines)
 
-    "Open multipage pdf file for writing"
-    with PdfPages(pdf_out) as pdf:
+    "Open file and process it line by line"
+    with open(cmd_file,"r") as cmf:
+        k = 1
+        while (k <= nlines):
 
-        "Open file and process it line by line"
-        with open(cmd_file,"r") as cmf:
-            k = 1
-            while (k <= nlines):
+            line = cmf.readline()
 
-                line = cmf.readline()
+            "Check if line is empty before checking first symbol to avoid errors"
+            if (line == ''):
+                continue;
 
-                "Check if line is empty before checking first symbol to avoid errors"
-                if (line == ''):
-                    continue;
+            "Check if line envokes a command"
+            if (line[0] == '@'):
 
-                "Check if line envokes a command"
-                if (line[0] == '@'):
+                s = line.find(':')
 
-                    s = line.find(':')
+                if ( s == -1):
+                    logging.critical('unfinished command %s encountered at line %s of the command file %s', line[1:].strip(), k, cmd_file)
+                else:
+                    cmd = line[1:s]
+                    cmd_arg = line[s+1:].strip()
 
-                    if ( s == -1):
-                        logging.critical('unfinished command %s encounter at line %s of the command file %s', line[1:].strip(), k, cmd_file)
+                "Cycle over commands"
+                if (cmd.lower() == 'file'):
+
+                    "Finish previous @page if it was asked for and there is a data to produce it"
+                    if ( (page_first == True) and (trc_read == True)):
+                        PRODUCE_PAGE(page_number,page_title,trc_header,trc_data,ptype,ltype,xtype,xarg,quan_names,quan_labels,quan_scales,xquan,xname,xscale,setprange,prange,ntime,ctime,gtime,pdf)
+                        page_first = False
+
+                    "read file and reset @page parameters"
+                    trc_read, trc_header, trc_data = READ_TRC(cmd_arg)
+                    page_title, ptype, ltype, xtype, xarg, quan_names, quan_labels, quan_scales, setprange, prange, xquan, xname, xscale = RESET_PAGE()
+
+                elif (cmd.lower() =='page'):
+
+                    "Check if it is the first page for a given .trc file if not production should start"
+                    if ((page_first == False) and (trc_read == True)):
+                        page_title = cmd_arg
+                        page_number = page_number + 1
+                        page_first = True
+                        logging.info('starting page %s with title: %s', page_number, page_title)
+
+                    elif ((page_first == True) and (trc_read == True)):
+                        PRODUCE_PAGE(page_number,page_title,trc_header,trc_data,ptype,ltype,xtype,xarg,quan_names,quan_labels,quan_scales,xquan,xname,xscale,setprange,prange,ntime,ctime,gtime,pdf)
+                        page_title, ptype, ltype, xtype, xarg, quan_names, quan_labels, quan_scales, setprange, prange, xquan, xname, xscale = RESET_PAGE()
+                        page_title = cmd_arg
+                        page_number = page_number + 1
+                        logging.info('starting page %s with title: %s', page_number, page_title)
+
                     else:
-                        cmd = line[1:s]
-                        cmd_arg = line[s+1:].strip()
+                        logging.error('@page command called before @file, or @file could not be processed. Page wont be produced...')
 
-                    "Cycle over commands"
-                    if (cmd.lower() == 'file'):
+                elif (cmd.lower() == 'log'):
 
-                        "Finish previous @page if it was asked for and there is a data to produce it"
-                        if ( (page_first == True) and (trc_read == True)):
-                            PRODUCE_PAGE(page_number,page_title,trc_header,trc_data,ptype,xtype,xarg,quan_names,quan_labels,quan_scales,xquan,xname,xscale,setprange,prange,ntime,ctime,gtime,pdf)
-                            page_first = False
+                    ptype = 'l'
+                    logging.info('logarithmic mode for page %s with title: %s', page_number, page_title)
 
-                        "read file and reset @page parameters"
-                        trc_read, trc_header, trc_data = READ_TRC(cmd_arg)
-                        page_title, ptype, xtype, xarg, quan_names, quan_labels, quan_scales, setprange, prange, xquan, xname, xscale = RESET_PAGE()
+                elif (cmd.lower() == 'points'):
 
-                    elif (cmd.lower() =='page'):
+                    ltype = 'm'
+                    logging.info('lines replaced by markers for page %s with title: %s', page_number, page_title)
 
-                        "Check if it is the first page for a given .trc file if not production should start"
-                        if ((page_first == False) and (trc_read == True)):
-                            page_title = cmd_arg
-                            page_number = page_number + 1
-                            page_first = True
-                            logging.info('starting page %s with title: %s', page_number, page_title)
+                elif (cmd.lower() == 'linepoints'):
 
-                        elif ((page_first == True) and (trc_read == True)):
-                            PRODUCE_PAGE(page_number,page_title,trc_header,trc_data,ptype,xtype,xarg,quan_names,quan_labels,quan_scales,xquan,xname,xscale,setprange,prange,ntime,ctime,gtime,pdf)
-                            page_title, ptype, xtype, xarg, quan_names, quan_labels, quan_scales, setprange, prange, xquan, xname, xscale = RESET_PAGE()
-                            page_title = cmd_arg
-                            page_number = page_number + 1
-                            logging.info('starting page %s with title: %s', page_number, page_title)
+                    ltype = 'c'
+                    logging.info('lines supplemented by markers for page %s with title: %s', page_number, page_title)
 
-                        else:
-                            logging.error('@page command called before @file, or @file could not be processed. Page wont be produced...')
+                elif (cmd.lower() == 'setymin'):
 
-                    elif (cmd.lower() == 'log'):
+                    try:
+                        xarg = np.float64(cmd_arg)
+                        setprange[0] = True
+                        prange[0] = xarg
+                        logging.info('lower Y-axis limit set to %s for page %s with title: %s', xarg, page_number, page_title)
+                    except:
+                        logging.error('command %s recieved %s argument while real value is expected and wont be applied',cmd,cmd_arg)
 
-                        ptype = 'l'
-                        logging.info('logarithmic mode for page %s with title: %s', page_number, page_title)
+                elif (cmd.lower() == 'setymax'):
 
-                    elif (cmd.lower() == 'setymin'):
+                    try:
+                        xarg = np.float64(cmd_arg)
+                        setprange[1] = True
+                        prange[1] = xarg
+                        logging.info('upper Y-axis limit set to %s for page %s with title: %s', xarg, page_number, page_title)
+                    except:
+                        logging.error('command %s recieved %s argument while real value is expected and wont be applied',cmd,cmd_arg)
 
-                        try:
-                            xarg = np.float64(cmd_arg)
-                            setprange[0] = True
-                            prange[0] = xarg
-                            logging.info('lower Y-axis limit set to %s for page %s with title: %s', xarg, page_number, page_title)
-                        except:
-                            logging.error('command %s recieved %s argument while real value is expected and wont be applied',cmd,cmd_arg)
+                elif (cmd.lower() == 'setxmin'):
 
-                    elif (cmd.lower() == 'setymax'):
+                    try:
+                        xarg = np.float64(cmd_arg)
+                        setprange[2] = True
+                        prange[2] = xarg
+                        logging.info('lower X-axis limit set to %s for page %s with title: %s', xarg, page_number, page_title)
+                    except:
+                        logging.error('command %s recieved %s argument while real value is expected and wont be applied',cmd,cmd_arg)
 
-                        try:
-                            xarg = np.float64(cmd_arg)
-                            setprange[1] = True
-                            prange[1] = xarg
-                            logging.info('upper Y-axis limit set to %s for page %s with title: %s', xarg, page_number, page_title)
-                        except:
-                            logging.error('command %s recieved %s argument while real value is expected and wont be applied',cmd,cmd_arg)
+                elif (cmd.lower() == 'setxmax'):
 
-                    elif (cmd.lower() == 'setxmin'):
+                    try:
+                        xarg = np.float64(cmd_arg)
+                        setprange[3] = True
+                        prange[3] = xarg
+                        logging.info('upper X-axis limit set to %s for page %s with title: %s', xarg, page_number, page_title)
+                    except:
+                        logging.error('command %s recieved %s argument while real value is expected and wont be applied',cmd,cmd_arg)
 
-                        try:
-                            xarg = np.float64(cmd_arg)
-                            setprange[2] = True
-                            prange[2] = xarg
-                            logging.info('lower X-axis limit set to %s for page %s with title: %s', xarg, page_number, page_title)
-                        except:
-                            logging.error('command %s recieved %s argument while real value is expected and wont be applied',cmd,cmd_arg)
+                elif (cmd.lower() == 'setx'):
 
-                    elif (cmd.lower() == 'setxmax'):
+                    s = cmd_arg.find(':')
+                    "Should be followed by name"
+                    if ( s == -1):
+                        logging.critical('unfinished data identifier %s for command %s encountered, command will be skipped', cmd_arg.strip(), cmd)
 
-                        try:
-                            xarg = np.float64(cmd_arg)
-                            setprange[3] = True
-                            prange[3] = xarg
-                            logging.info('upper X-axis limit set to %s for page %s with title: %s', xarg, page_number, page_title)
-                        except:
-                            logging.error('command %s recieved %s argument while real value is expected and wont be applied',cmd,cmd_arg)
-
-                    elif (cmd.lower() == 'setx'):
-
+                    else:
+                        xquan = cmd_arg[0:s].strip()
+                        xtype = 'u'
+                        cmd_arg = cmd_arg[s+1:]
                         s = cmd_arg.find(':')
-                        "Should be followed by name"
+
+                        "Can be followed by x axis title or blank"
                         if ( s == -1):
-                            logging.critical('unfinished data identifier %s for command %s encountered, command will be skipped', cmd_arg.strip(), cmd)
+                            logging.warning('unfinished data label %s encountered for command %s default name %s will be used with no rescaling applied',cmd_arg.strip(),cmd,xquan)
+                            xname = xquan
 
                         else:
-                            xquan = cmd_arg[0:s].strip()
-                            xtype = 'u'
+                            xname = cmd_arg[0:s].strip()
                             cmd_arg = cmd_arg[s+1:]
-                            s = cmd_arg.find(':')
 
-                            "Can be followed by x axis title or blank"
-                            if ( s == -1):
-                                logging.warning('unfinished data label %s encounter for command %s default name will be used with no rescaling applied',cmd_arg.strip(),cmd)
-                                xname = xquan
-
-                            else:
-                                xname = cmd_arg[0:s].strip()
-                                cmd_arg = cmd_arg[s+1:]
-
-                                "Can be followed by x axis scaling factor"
-                                if (cmd_arg != ''):
-                                    try:
-                                        cmd_arg = np.float64(cmd_arg.strip())
-                                        xscale = cmd_arg
-                                    except:
-                                        logging.error('command %s recieved %s scaling argument while real value is expected, no rescaling will be carried out',cmd,cmd_arg)
-
-                            logging.info('data for page %s, named %s will be plotted against quantity %s, named %s scaled with a factor of %s', page_number, page_title, xquan, xname, xscale)
-
-                    elif (cmd.lower() =='iter'):
-
-                        xtype = 'i'
-
-                        try:
-                            xarg = np.int64(cmd_arg)
-                        except:
-                            logging.error('command %s recieved %s argument while positive integer is expected',cmd,cmd_arg)
-                        logging.info('plotting against last %s iterations for page %s with title: %s', cmd_arg, page_number, page_title)
-
-                    else:
-                        logging.error('Command %s not implemented yet and will be skipped',cmd)
-
-                "Check if line is data label"
-                if (line[0] == ':'):
-
-                    s = line[1:].find(':')
-
-                    "Data identifier should start and end with :"
-                    if ( s == -1):
-                        logging.critical('unfinished data identifier %s encounter at line %s of the command file %s', line[1:].strip(), k, cmd_file)
-
-                    else:
-                        cmd = line[1:s+1]
-                        quan_name = cmd
-                        quan_label = cmd
-                        quan_scale = 1.0
-
-                        line = line[s+2:]
-                        s = line.find(':')
-
-                        "Arguments have to be separated with :"
-                        "if one argument is given it is a label, otherwise label + scaling factor"
-
-                        if ( s == -1):
-                            cmd_arg = line.strip()
-                            logging.warning('unfinished data label %s encounter, default name will be used with no rescaling applied',cmd_arg)
-
-                        else:
-                            cmd_arg = line[0:s].strip()
-                            if (cmd_arg != ''):
-                                quan_label = cmd_arg
-                            else:
-                                logging.warning('empty label for %s default name will be used instead',cmd)
-
-                            line = line[s+1:]
-                            cmd_arg = line.strip()
+                            "Can be followed by x axis scaling factor"
                             if (cmd_arg != ''):
                                 try:
-                                    cmd_arg = np.float64(cmd_arg)
-                                    quan_scale = cmd_arg
+                                    cmd_arg = np.float64(cmd_arg.strip())
+                                    xscale = cmd_arg
                                 except:
-                                    logging.error('command %s recieved %s argument while real value is expected',cmd,cmd_arg)
+                                    logging.error('command %s recieved %s scaling argument while real value is expected, no rescaling will be carried out',cmd,cmd_arg)
 
-                        quan_names = np.append(quan_names,quan_name)
-                        quan_labels = np.append(quan_labels,quan_label)
-                        quan_scales = np.append(quan_scales,quan_scale)
-                        logging.info('adding quantity %s with label %s and scaling factor %s to page %s with title: %s', quan_name, quan_label, quan_scale, page_number, page_title)
+                        logging.info('data for page %s, named %s will be plotted against quantity %s, named %s scaled with a factor of %s', page_number, page_title, xquan, xname, xscale)
 
-                "cycle through command file lines"
-                k = k + 1
-                "Command file read ends here"
+                elif (cmd.lower() =='iter'):
 
-        "produce the final page if needed"
-        if ((page_first == True) and (trc_read == True)):
-            PRODUCE_PAGE(page_number,page_title,trc_header,trc_data,ptype,xtype,xarg,quan_names,quan_labels,quan_scales,xquan,xname,xscale,setprange,prange,ntime,ctime,gtime,pdf)
+                    xtype = 'i'
+
+                    try:
+                        xarg = np.int64(cmd_arg)
+                    except:
+                        logging.error('command %s recieved %s argument while positive integer is expected',cmd,cmd_arg)
+                    logging.info('plotting against last %s iterations for page %s with title: %s', cmd_arg, page_number, page_title)
+
+                else:
+                    logging.error('Command %s not implemented yet and will be skipped',cmd)
+
+            "Check if line is data label"
+            if (line[0] == ':'):
+
+                s = line[1:].find(':')
+
+                "Data identifier should start and end with :"
+                if ( s == -1):
+                    logging.critical('unfinished data identifier %s encountered at line %s of the command file %s', line[1:].strip(), k, cmd_file)
+
+                else:
+                    cmd = line[1:s+1]
+                    quan_name = cmd
+                    quan_label = cmd
+                    quan_scale = 1.0
+
+                    line = line[s+2:]
+                    s = line.find(':')
+
+                    "Arguments have to be separated with :"
+                    "if one argument is given it is a label, otherwise label + scaling factor"
+
+                    if ( s == -1):
+                        cmd_arg = line.strip()
+                        logging.warning('unfinished data label %s encountered, default name%s will be used with no rescaling applied',cmd_arg,quan_label)
+
+                    else:
+                        cmd_arg = line[0:s].strip()
+                        if (cmd_arg != ''):
+                            quan_label = cmd_arg
+                        else:
+                            logging.warning('empty label for %s default name will be used instead',cmd)
+
+                        line = line[s+1:]
+                        cmd_arg = line.strip()
+                        if (cmd_arg != ''):
+                            try:
+                                cmd_arg = np.float64(cmd_arg)
+                                quan_scale = cmd_arg
+                            except:
+                                logging.error('command %s recieved %s argument while real value is expected',cmd,cmd_arg)
+
+                    quan_names = np.append(quan_names,quan_name)
+                    quan_labels = np.append(quan_labels,quan_label)
+                    quan_scales = np.append(quan_scales,quan_scale)
+                    logging.info('adding quantity %s with label %s and scaling factor %s to page %s with title: %s', quan_name, quan_label, quan_scale, page_number, page_title)
+
+            "cycle through command file lines"
+            k = k + 1
+            "Command file read ends here"
+
+    "produce the final page if needed"
+    if ((page_first == True) and (trc_read == True)):
+        PRODUCE_PAGE(page_number,page_title,trc_header,trc_data,ptype,ltype,xtype,xarg,quan_names,quan_labels,quan_scales,xquan,xname,xscale,setprange,prange,ntime,ctime,gtime,pdf)
 
 "!!! DRIVER: END !!!"
 
@@ -992,4 +1039,10 @@ def main():
 "!!! EXECUTION LOOP !!!"
 
 if __name__ == "__main__":
-    main()
+    if ( produce_pdf == True):
+        "Open multipage pdf file for writing"
+        with PdfPages(pdf_out) as pdf:
+            main()
+    else:
+        pdf='dummy'
+        main()
