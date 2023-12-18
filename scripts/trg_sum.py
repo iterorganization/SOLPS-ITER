@@ -44,7 +44,7 @@ logging.info('LOG FILE: %s',log_file)
 
 logging.basicConfig(filename=log_file,format='%(levelname)s:%(filename)s-%(funcName)s: %(message)s',level=logging.INFO,filemode='w')
 
-"Length of string in 10 symlobs per unit cannot be lower then 4"
+"Length of string in 10 symbols per unit cannot be lower then 4"
 str_len = 7
 
 "Variable list, names legend and actions"
