@@ -41,7 +41,7 @@ endif
 setenv GGD_VERSION `pkg-config ggd --modversion`
 setenv GLI_HOME $IPPSOLPSLIBS/gks
 setenv NCARG_ROOT $IPPSOLPSLIBS/NCARG
-setenv NCARG_ROOT /afs/.ipp/tok/soft/ncarg/6.6.2
+setenv NCARG_ROOT /tokp/work/software/TOK_2019/software/ncarg/6.6.2
 setenv PATH ${PATH}
 setenv MDSPLUS_DIR $IPPSOLPSLIBS/MDSPLUS
 setenv PATH ${PATH}:${NCARG_ROOT}/bin:${MDSPLUS_DIR}/bin
