@@ -129,7 +129,7 @@ by putting them into easyconfigs.local
     SETUP/easybuild-local.sh --imas-foss install
     SETUP/easybuild-local.sh GGD-1.10.4-GCC-10.2.0-DD-3.38.1.eb
     sed -i -e /CPATH/d easybuild.local/modules/*/GGD/*
-    SETUP/easybuild-local.sh Viz-2.6.1-foss-2020b.eb --robot
+    SETUP/easybuild-local.sh Viz-2.8.0-foss-2020b.eb --robot
     SETUP/easybuild-local.sh SimDB-0.7.1-foss-2020b.eb --robot
 
 ### SOLPS-ITER ifort64 modules
@@ -690,12 +690,12 @@ IMAS_2020b_APPLICATIONS="
     IMAS/${TAG_DD}-${TAG_AL}-2020b
     AMNS/1.4.0-foss-2020b-DD-${TAG_DD}
     GGD/1.10.4-GCC-10.2.0-DD-${TAG_DD}
-    Viz/2.6.1-foss-2020b
+    Viz/2.8.0-foss-2020b
     SimDB/0.7.1-foss-2020b
     IMAS/${TAG_DD}-${TAG_AL}-2020b
     GGD/1.10.4-intel-2020b-DD-${TAG_DD}
     AMNS/1.4.0-intel-2020b-DD-${TAG_DD}
-    Viz/2.6.1-intel-2020b
+    Viz/2.8.0-intel-2020b
     SimDB/0.7.1-intel-2020b
     "
 
