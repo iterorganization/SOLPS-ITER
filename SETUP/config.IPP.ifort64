@@ -47,7 +47,7 @@ LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 LIBGKS     = ${GLI_HOME}/libgks.a
 LIBGRS     = ${GR_ROOT}/libgr.a
 LIBX11     = /usr/X11R6/lib64/libX11.so
-ADDLIBS    = -lgfortran
+# ADDLIBS    = -lgfortran
 
 #
 # Provide compiler
