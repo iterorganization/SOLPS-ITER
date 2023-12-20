@@ -6981,13 +6981,13 @@ where
 \begin{multline}
 \hfill        \tilde{q}_{ex} = \frac{3}{2} n T_e \left(- \frac{b_z}{B h_y}
          \frac{\partial \Phi}{\partial y}
-         + b_x V_{\parallel} - b_x j_{\parallel} / en + b_z V_{\perp}^{(AN)} \right) \hfill \\
+         + b_x V_{\parallel} - b_x j_{\parallel} / en \right) \hfill \\
      \hfill + \frac{5}{2} n T_e b_z \left(
      - \frac{D}{T_e+T_i} \frac{b_z}{h_x} \left(\frac{\partial p}{n \partial x}
      - \frac{3}{2} \frac{\partial T_e}{\partial x} \right)
      - D^{(AN)}_n \frac{1}{h_x n} \frac{\partial n}{\partial x}
-     - D^{(AN)}_p \frac{1}{h_x n} \frac{\partial p_i}{\partial x} \right)
-     + n V_{e\perp}^{(AN)}
+     - D^{(AN)}_p \frac{1}{h_x n} \frac{\partial p_i}{\partial x}
+     + V_{e\perp}^{(AN)} \right)
       \hfill \\
       \hfill   - 0.71 b_x j_{\parallel} T_e/e - \kappa_{e \parallel}
          \frac{b_x^2}{h_x} \frac{\partial T_e}{\partial x}
@@ -7000,13 +7000,13 @@ where
 \end{multline}
 \begin{multline}
 \hfill  \tilde{q}_{ey} = \frac{3}{2} n T_e \left( \frac{B_z}{B^2} \frac{1}{h_x}
-        \frac{\partial \Phi}{\partial x} + V_{y}^{(AN)} \right) \hfill \\
+        \frac{\partial \Phi}{\partial x} \right) \hfill \\
      \hfill  + \frac{5}{2} n T_e \left(
      - \frac{D}{T_e+T_i} \frac{1}{h_y} \left( \frac{\partial p}{n \partial y}
      - \frac{3}{2} \frac{\partial T_e}{\partial y} \right)
      - D^{(AN)}_n \frac{1}{h_y n} \frac{\partial n}{\partial y}
-     - D^{(AN)}_p \frac{1}{h_y n} \frac{\partial p_i}{\partial y} \right)
-     + n V_{ey}^{(AN)}
+     - D^{(AN)}_p \frac{1}{h_y n} \frac{\partial p_i}{\partial y}
+     + V_{ey}^{(AN)} \right)
          \hfill \\
          \hfill - \kappa_{e \perp} \frac{1}{h_y} \frac{\partial T_e}{\partial y}
          + \frac{3}{2}\frac{T_e}{e B} \frac{\nu_{ei}}{\omega_{ce}}
@@ -7066,13 +7066,13 @@ where
 \begin{multline} \hfill
         \tilde{q}_{ix} = \frac{3}{2} n T_i \left(- \frac{b_z}{B h_y}
         \frac{\partial \Phi}{\partial y}
-         + b_x V_{\parallel} + b_z V_{\perp}^{(AN)} \right) \hfill \\
-\hfill + \frac{5}{2} n T_i b_z\left(
-     - \frac{D}{T_e+T_i} \frac{b_z}{h_x}\left(\frac{\partial p}{n \partial x}
+         + b_x V_{\parallel} \right) \hfill \\
+\hfill + \frac{5}{2} n T_i b_z \left(
+     - \frac{D}{T_e + T_i} \frac{b_z}{h_x}\left(\frac{\partial p}{n \partial x}
      - \frac{3}{2} \frac{\partial T_e}{\partial x} \right)
      - D^{(AN)}_n \frac{1}{h_x n} \frac{\partial n}{\partial x}
-     - D^{(AN)}_p \frac{1}{h_x n} \frac{\partial p_i}{\partial x}\right)
-     + n V_{i\perp}^{(AN)}
+     - D^{(AN)}_p \frac{1}{h_x n} \frac{\partial p_i}{\partial x}
+     + V_{i\perp}^{(AN)} \right)
          \hfill \\ \hfill
          + \frac{5}{2} n T_i b_z \tilde{V}_{\perp}^{\left(dia\right)}
          - \kappa_{i \parallel}
@@ -7082,14 +7082,14 @@ where
 \end{multline}
 \begin{multline} \hfill
         \tilde{q}_{iy} = \frac{3}{2} n T_i \left( \frac{B_z}{B^2}
-         \frac{1}{h_x} \frac{\partial \Phi}{\partial x} + V_{y}^{(AN)} \right)
+         \frac{1}{h_x} \frac{\partial \Phi}{\partial x} \right)
         \hfill \\ \hfill
      + \frac{5}{2} n T_i \left(
      - \frac{D}{T_e+T_i} \frac{1}{h_y} \left( \frac{\partial p}{n \partial y}
      - \frac{3}{2} \frac{\partial T_e}{\partial y}\right)
      - D^{(AN)}_n \frac{1}{h_y n} \frac{\partial n}{\partial y}
-     - D^{(AN)}_p \frac{1}{h_y n} \frac{\partial p_i}{\partial y} \right)
-     + n V_{iy}^{(AN)} \hfill \\ \hfill
+     - D^{(AN)}_p \frac{1}{h_y n} \frac{\partial p_i}{\partial y}
+     + V_{iy}^{(AN)} \right) \hfill \\ \hfill
          - \kappa_{e \perp} \frac{1}{h_y}
          \frac{\partial T_i}{\partial y}
          + \frac{5}{2} n T_i \tilde{V}_{y}^{\left(dia\right)} ~. \hfill
