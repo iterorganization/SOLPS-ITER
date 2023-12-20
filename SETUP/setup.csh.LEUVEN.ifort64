@@ -39,7 +39,7 @@ module load Emacs/28.1-GCCcore-10.3.0
 module load gnuplot/5.4.2-GCCcore-10.3.0
 module load PETSc/3.15.1-intel-2021a
 # Debugger (set environment variable DBX)
-module load ArmForge/20.0.2
+module load ArmForge/22.1.2
 setenv DBX ddt
 module load MATLAB/2020a
 ###UNAVAILABLE!!###module unload GLib/2.54.3-GCCcore-6.4.0
