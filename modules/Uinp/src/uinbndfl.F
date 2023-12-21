@@ -190,6 +190,7 @@ c*** Take the default for the generic species
           end if !}
         end do !}
       end do !}
+
 c*** Check for input data for generic species
       iknd=1
       n=nznbndt(iknd)

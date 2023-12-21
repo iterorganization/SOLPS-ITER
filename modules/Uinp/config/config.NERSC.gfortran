@@ -5,7 +5,7 @@ LD_MSCL   ?= -L${MSCL_ROOT} -lmscl
 FC       = ftn
 
 ifndef SOLPS_DEBUG
-FFLAGS   = -O 
+FFLAGS   = -O
 endif
 
 CPP      = cpp -traditional

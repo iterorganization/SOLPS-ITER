@@ -174,8 +174,8 @@ c*** 6
      ,     lchsptrg(nchsppr), lchspgrp(nchsppr),
      ,     lchspprt(nchsppr), lchspprp(nchsppr), lchsptgt(nchsppr),
      ,     lchsptgp(nchsppr), lchspnwl(nchsppr), lchspaux(5,nchsppr)
-      real datm(natm), dmol(nmol), dion(nion), dpls(npls), ermin,
-     ,     ercut, rprob0, rinteg, einteg, ainteg,
+      real datm(natm), dmol(nmol), dion(nion), dpls(npls),
+     ,     ermin, ercut, rprob0, rinteg, einteg, ainteg,
      ,     ychsptg(nchsppr), echsptg(nchsppr), fchsptg(nchsppr),
      ,     achsptg(3,nchsppr)
       logical nltrim
@@ -348,7 +348,8 @@ c*** 14
 
       integer nclmi,nblcki,nprnvi,nprtvi,nprdvi,nfla,ncutb,ncutl,
      ,  imf,ntrfrm,nfull,ibrad,ibpol,ibtor,
-     ,  iflb(npls),ndxa,ndya,ntargi,ntgprt(nstep),ndt2(nstep,ngitt),
+     ,  iflb(npls),ndxa,ndya,ntargi,
+     ,  ntgprt(nstep),ndt2(nstep,ngitt),
      ,  ninct2(nstep,ngitt),nixy2(nstep,ngitt),ntin2(nstep,ngitt),
      ,  nten2(nstep,ngitt),niflg(nstep,ngitt),nptc(nstep,ngitt),
      ,  nptcm(nstep,ngitt),nspzi(nstep,ngitt),nspze(nstep,ngitt),
@@ -356,8 +357,8 @@ c*** 14
      ,  nainb,ncopib,ncopeb,nains(nain),naint(nain),
      ,  naotb,naots(nlimps),naott(nlimps),
      ,  lkindp(npls)
-      real fcte(npls),bmass(npls),chgsp(nstra),chgsee(nstra),
-     ,  chgsei(nstra),chgsmom(nstra)
+      real fcte(npls),bmass(npls),chgsp(nstra),
+     ,  chgsee(nstra),chgsei(nstra),chgsmom(nstra)
       logical lsymet,lbalan,lcoarse,lfchgs,lsprcl,lold31
       character txtpls(nain)*72, txtpsp(nain)*24, txtpun(nain)*24
 
@@ -405,9 +406,9 @@ c*** b2ah.dat
      ,  nrplg,npplg,nrknot,npoin1,necke,nchbar,nseite,inmti,
      ,  np2nd,npsep,nppla,npper,nt3rd,ntsep,nttra,ntper,nbmlt,
      ,  nradd,nstsi,idimp,inump,irpta1,irpte1,irpta2,irpte2,irpta3,
-     ,  irpte3,iliin,ilside,ilswch,ilequi,iltor,ilcol,ilfit,ilcell,
-     ,  ilbox,ilplg,ilref,ilsptp,ilsptc,isrss,isrc,lchspnws,isrsg,
-     ,  arefcell,nlimi,itend,
+     ,  irpte3,iliin,ilside,ilswch,ilequi,iltor,ilcol,
+     ,  ilfit,ilcell,ilbox,ilplg,ilref,ilsptp,ilsptc,isrss,isrc,
+     ,  lchspnws,isrsg,arefcell,nlimi,itend,
      ,  itini,jliin,jlside,jlequi,jltor,jlcol,jlfit,jlbox,jlplg,jlref,
      ,  jsrss,jsrc,lchspnwa,jsrsg,refcell,
      ,  jlsptp,jlsptc,nreaci,ir,massp,masst,
@@ -430,8 +431,8 @@ c*** b2ah.dat
      ,  indpro,nnftrm,nchsppri,
      ,  lchsptrg,lchspgrp,lchspprt,lchspprp,lchsptgt,
      ,  lchsptgp,lchspnwl,lchspaux,nchemvar,indchemvar,nnchemvar,
-     ,  nstrai,indsrc,npts,ninitl,nemods,namods,nminpts,nspez,ivlsf,
-     ,  iscls,isclt,iscl1,iscl2,iscl3,isclb,iscla,nsrfsi,
+     ,  nstrai,indsrc,npts,ninitl,nemods,namods,nminpts,nspez,
+     ,  ivlsf,iscls,isclt,iscl1,iscl2,iscl3,isclb,iscla,nsrfsi,
      ,  indim,insor,ingrda,ingrde,nrsor,npsor,ntsor,nbsor,nasor,nisor,
      ,  istor,nzadd,ini,ine,
      ,  nprcsf,iprcsf,maxlev,maxrad,maxpol,maxtor,maxadd,nssplr,nssplp,
@@ -459,8 +460,8 @@ c*** b2ah.dat
      ,  jadch0,jadch1,jadnsw,jadmsw,jadlsw,jadksw,jadjsw,jadisw,
      ,  jlblck,jlacll,nclmi,nblcki,nprnvi,nprtvi,nprdvi,nfla,
      ,  ncutb,ncutl,imf,ntrfrm,nfull,ibrad,ibpol,ibtor,
-     ,  iflb,ndxa,ndya,ntargi,ntgprt,ndt2,ninct2,nixy2,
-     ,  ntin2,nten2,niflg,nptc,nptcm,nspzi,nspze,nemod,istramin,
+     ,  iflb,ndxa,ndya,ntargi,ntgprt,ndt2,ninct2,
+     ,  nixy2,ntin2,nten2,niflg,nptc,nptcm,nspzi,nspze,nemod,istramin,
      ,  istramax,nainb,ncopib,ncopeb,nains,naint,naotb,naots,naott,
      ,  lkindm,lkindi,lkindp,
      ,  nadmod,nasmod,nrs,ipunkt,jedge,

@@ -118,7 +118,7 @@ c       print '(1x,100i1)',(i_tg(i,k),i=0,ny+1)
 c      end do !}
 c!###}
 
-c*** Poloidal divides (core and wall)     
+c*** Poloidal divides (core and wall)
       do i=n+1,mdvbndx !{
         k=ldvbndx(i)
         if(k.ge.0) then !{
@@ -184,7 +184,7 @@ c        end do !}
 c      end if !}
 c!###}
 c*** Prepare the array which describes correspondence between the B2
-c*** and Eirene numbering in poloidal directions (extra surfaces at the 
+c*** and Eirene numbering in poloidal directions (extra surfaces at the
 c*** cuts)
       m=0
       k=0
@@ -235,11 +235,11 @@ c*** cuts)
 
 c      print '(8h  i_cr: ,100i1)',(i_cr(i),i=0,nx+1) !###
 
-      
+
 c*** Plan boundary zones between the divides
 
 c*** Targets
-      
+
       m=2
       iz=0
       do k=1,nrgbndt(m) !{
@@ -252,7 +252,7 @@ c*** divide found
               write(0,*) 'Too many boundary zones specified for targets'
               write(0,*) 'STOP ==> check "Boundary divides" in the DG ',
      ,                   'model and parameter "nbndzon" in uinpcom.inc'
-              call xerrab 
+              call xerrab
      .         ('Too many boundary zones specified for targets')
             end if !}
             lzpbndt(iz,m)=lrsbndt(k,m)
@@ -348,7 +348,7 @@ c           print *,'k,iz,iy =',k,iz,iy !###
       end do !}
       nznbndt(m)=iz
 
-c*** Sides. 
+c*** Sides.
 
       do l=1,n_hlp !{
         m=l_hlp(l)

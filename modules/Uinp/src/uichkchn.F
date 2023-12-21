@@ -38,12 +38,13 @@ c***        < -100 - not enough space for NSS (needed nnx >= 100-nno)
 c=======================================================================
 
       implicit none
-      integer nni,nnx,nno,label,indelm(max(nni,1)),indnss(max(nnx,1))
 
 #include "uinput.inc"
 
-      integer i,j,k,l,m,n,i1,i2,j1,j2,jj,k1,k2,irt,ntg,
-     ,  ind(max(nni,1)+ntrgts),
+      integer nni,nnx,nno,label,indelm(max(nni,1)),indnss(max(nnx,1)),
+     ,  ind(max(nni,1)+ntrgts),irt
+
+      integer i,j,k,l,m,n,i1,i2,j1,j2,jj,k1,k2,ntg,
      ,  ltge(2*ntrgts),mtge(2*ntrgts),mtgb(2*ntrgts),
      ,  kbnd(nnptseg),lbnd(nnptseg)
       integer ip,iz1,iz2,ik,loff(nbndknd),nz,lz(nnptseg)
