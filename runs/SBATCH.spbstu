@@ -35,6 +35,7 @@ endif
 if ($?SOLPS_ADJ) then
   set STANDALONE=-${SOLPS_OPT}adj
 endif
+
 time b2run ${STANDALONE} ${USE_MPI} b2mn >& run.log
 
 QSUB.postprocess_coupled

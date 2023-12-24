@@ -4,6 +4,9 @@
      , , only: ntrack, nalloys
       use b2mod_subsys
       use eirmod_solps
+#ifdef DIMENSIONS_MODULE
+      use b2mod_dimensions
+#endif
 
 c  version : 31.03.2005 20:05
 
@@ -361,7 +364,7 @@ c!###}
      ,                           'required to close the chain  '
         write(0,*) 'label,nno,nnx= ',label,nno,nnx
         write(0,*) ' ==> Check the DG model or increase the DEF_NSTS ',
-     ,                 'parameter in $SOLPSTOP/src/include/DIMENSIONS.F'
+     ,   'parameter in $SOLPSTOP/src/modules(.local)/b2mod_dimensions.F'
         flush(0)
         nno=-100-nno
         goto 9999

@@ -6,6 +6,9 @@
       use b2mod_version
       use eirmod_solps
       use helper
+#ifdef DIMENSIONS_MODULE
+      use b2mod_dimensions
+#endif
 
 c  version : 28.01.2003 18:08
 
@@ -153,7 +156,6 @@ c*** Create the b2us.dat file for triangulation
           close(2)
           print *,'    ... b2us.dat created'
       endif !}
-
 
 c*** Create a b2ah.dat.stencil file
       inquire(file='b2ah.dat.stencil', exist=uex)

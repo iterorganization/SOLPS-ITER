@@ -433,6 +433,7 @@ endif
 	rm -rf b2pl.exe.dir >& /dev/null ; mkdir b2pl.exe.dir ; cp $^ b2pl.exe.dir
 	rm -f $(target_pl)
 	cd b2pl.exe.dir ; ${TIME} ${B2OBJ}/b2pl.exe ${RUN_OPTIONS} ; mv $(target_pl) .. ; rm -f $(notdir $^) .quit >& /dev/null
+	-rm b2pl.exe.dir/${fort_lc}85
 	-rmdir b2pl.exe.dir
 
 $(target_rd) : shotnumber.history

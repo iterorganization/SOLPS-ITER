@@ -4,6 +4,9 @@
      , , only: ntrack, nalloys
       use b2mod_subsys
       use eirmod_solps
+#ifdef DIMENSIONS_MODULE
+      use b2mod_dimensions
+#endif
 c
 c  version : 03.04.2003 17:25
 c
@@ -21,7 +24,8 @@ c*** Output:
 c***  bbliin    flag "insert material data" for each non-def. surface
 c***  material specification for the side grid edges:
 c***    jrfbnds, jcsbnds, jpsbnds, jppbnds, jcgbnds, wlmbnds,
-c***    eewbnds, etfbnds, etbbnds, efcbnds, easbnds, efpbnds
+c***    eewbnds, etfbnds, etbbnds, efcbnds, easbnds, efpbnds,
+c***    rfcbnds, rfpbnds
 c=======================================================================
       implicit none
 #include "uinput.inc"
@@ -130,6 +134,8 @@ c*** First, the side edges
             efcbnds(j,k)=rcycca(m)
             easbnds(j,k)=1-rcycta(m)
             efpbnds(j,k)=rcycsa(m)
+            rfcbnds(j,k)=refcell(m)
+            rfpbnds(j,k)=refpress(m)
           end do !}
         end if !}
 
@@ -195,6 +201,8 @@ c*** Then, the targets
             efcbnds(j,k)=rcycca(m)
             easbnds(j,k)=1-rcycta(m)
             efpbnds(j,k)=rcycsa(m)
+            rfcbnds(j,k)=refcell(m)
+            rfpbnds(j,k)=refpress(m)
           end do !}
         end if !}
       end do !}
@@ -220,6 +228,8 @@ c            print *,'j,k,bbliin(j,k)=',j,k,bbliin(j,k)  !###
               efcbnds(j,k)=rcycca(m)
               easbnds(j,k)=1-rcycta(m)
               efpbnds(j,k)=rcycsa(m)
+              rfcbnds(j,k)=refcell(m)
+              rfpbnds(j,k)=refpress(m)
             end if !}
           end do !}
         end do !}

@@ -3,6 +3,9 @@
       use b2mod_layer
      , , only: ntrack, nalloys
       use eirmod_solps
+#ifdef DIMENSIONS_MODULE
+      use b2mod_dimensions
+#endif
 c
 c  version : 24.03.99 23:20
 c

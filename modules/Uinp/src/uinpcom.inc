@@ -197,12 +197,13 @@ c***    flag "recycling surface"; surface material
      ,        jcgbnds(nbndzon,nbndknd), jpsbnds(nbndzon,nbndknd),
      ,        jppbnds(nbndzon,nbndknd), jnpbnds(nbndzon,nbndknd),
      ,        jmpbnds(nbndzon,nbndknd), jnibnds(nbndzon,nbndknd),
-     ,        jnebnds(nbndzon,nbndknd)
+     ,        jnebnds(nbndzon,nbndknd), rfcbnds(nbndzon,nbndknd)
       real(kind=R4)
      ,        etfbnds(nbndzon,nbndknd), etbbnds(nbndzon,nbndknd),
      ,        easbnds(nbndzon,nbndknd), eewbnds(nbndzon,nbndknd),
      ,        efpbnds(nbndzon,nbndknd), efcbnds(nbndzon,nbndknd),
-     ,        esibnds(nbndzon,nbndknd), esebnds(nbndzon,nbndknd)
+     ,        esibnds(nbndzon,nbndknd), esebnds(nbndzon,nbndknd),
+     ,        rfpbnds(nbndzon,nbndknd)
       logical nlrbnds(nbndzon,nbndknd)
       character*8 ewmbnds(nbndzon,nbndknd)
 
@@ -262,12 +263,14 @@ c***                    Below, index "0" corresponds to a group default
      ,        jcgbndx(0:nbndzon,nbndknd), jpsbndx(0:nbndzon,nbndknd),
      ,        jppbndx(0:nbndzon,nbndknd), nlrbndx(0:nbndzon,nbndknd),
      ,        jnpbndx(0:nbndzon,nbndknd), jmpbndx(0:nbndzon,nbndknd),
-     ,        jnibndx(0:nbndzon,nbndknd), jnebndx(0:nbndzon,nbndknd)
+     ,        jnibndx(0:nbndzon,nbndknd), jnebndx(0:nbndzon,nbndknd),
+     ,        rfcbndx(0:nbndzon,nbndknd)
       real(kind=R4)
      ,        etfbndx(0:nbndzon,nbndknd), etbbndx(0:nbndzon,nbndknd),
      ,        easbndx(0:nbndzon,nbndknd), eewbndx(0:nbndzon,nbndknd),
      ,        efpbndx(0:nbndzon,nbndknd), efcbndx(0:nbndzon,nbndknd),
-     ,        esibndx(0:nbndzon,nbndknd), esebndx(0:nbndzon,nbndknd)
+     ,        esibndx(0:nbndzon,nbndknd), esebndx(0:nbndzon,nbndknd),
+     ,        rfpbndx(0:nbndzon,nbndknd)
       character*2 ewmbndx(0:nbndzon,nbndknd)*8,
      ,  escbndx(natm,0:nbndzon,nbndknd), eswbndx(natm,0:nbndzon,nbndknd)
       logical dfrbndx(nbndknd)
@@ -321,10 +324,11 @@ c***           material; flag "target data was read"
      ,  ntrgto,ntrgtm
       integer tgrefsw(ntrgts),tgsppsw(ntrgts),tgspcsw(ntrgts),
      ,  tgsppsp(ntrgts),tgspcgr(ntrgts),tgnhst(ntrgts),tgmhst(ntrgts),
-     ,  tgnini(ntrgts),tgfclbl(ntrgts)
+     ,  tgnini(ntrgts),trefcell(ntrgts),tgfclbl(ntrgts)
       real(kind=R4)
      ,  tgsppff(ntrgts),tgspcff(ntrgts),tgewall(ntrgts),
-     ,  tgabsrp(ntrgts),tgtrnsf(ntrgts),tgtrnsb(ntrgts)
+     ,  tgabsrp(ntrgts),tgtrnsf(ntrgts),tgtrnsb(ntrgts),
+     ,  trfpress(ntrgts)
       character*8 made_of(ntrgts)
       logical tgdtinpt
 
@@ -508,9 +512,9 @@ c*** Data substitution for the Eirene test run
       real(kind=R4) ttalloc
       logical
      ,  ttchst,ttcref,ttcint,ttcamd,ttcsou,ttcsur,ttcbla,ttcblm,ttcbli,
-     ,  ttcblp,ttcble,ttcblph,ttctal,ttcoct,ttccen,ttcrnf,
+     ,  ttcblp,ttcble,ttcblph,ttctal,ttcoct,ttccen,ttcrnf,ttcsrc,
      ,  ttcdbg2,ttcdbge,ttcdbgm,ttcdbgf,
-     ,  ttcdbgl,ttcdbgs,ttcdbgg,ttcdbgmpi,ttcdbgc,ttchktim,ttcsrc,
+     ,  ttcdbgl,ttcdbgs,ttcdbgg,ttcdbgmpi,ttcdbgc,ttchktim,
      ,  ttpl1st,ttpl2nd,ttpladd,ttplhst,ttplcut(3),ttplnums,tttest,
      ,  ttplspec,ttprspec,ttplargl,ttprargl,ttlsprcl
 
@@ -555,15 +559,16 @@ c=======================================================================
      ,  spcidsp,spcidsa,spcidsm,spcidsi,spcicrp,spcicrf,
      ,  etfbnds,etbbnds,easbnds,eewbnds,efpbnds,efcbnds,
      ,  esibnds,esebnds,beebnds,bcobnds,beibnds,bmobnds,bpobnds,
+     ,  rfcbnds,rfpbnds,
      ,  etfbndx,etbbndx,easbndx,eewbndx,efpbndx,efcbndx,esibndx,esebndx,
-     ,  wlmbnds,beebndx,bcobndx,beibndx,bmobndx,bpobndx,
-     ,  dcobndx, dmobndx,
+     ,  wlmbnds,beebndx,bcobndx,beibndx,bmobndx,bpobndx,rfcbndx,rfpbndx,
+     ,  dcobndx,dmobndx,
      ,  pwrcrtte,pwrcrtti,pwrcrfri,
      ,  rctndlte,rctntmin,rctntmax,rctnenr1,rctnenr2,rctnexcf,
      ,  rctddlte,rctdtmin,rctdtmax,rctdenr1,rctdenr2,
      ,  tgpfstr,tgpfstd,fgpfstr,pgpfstr,dgalloc,
      ,  tgsppff,tgspcff,tgewall,tgabsrp,tgtrnsf,tgtrnsb,ttalloc,
-     ,  xlpcntr,zaator,roator,
+     ,  trfpress,xlpcntr,zaator,roator,
      ,  trisize,trixmin,trixmax,triymin,triymax,pwrhepdt,pmphepdt,
      ,  sps_absr,sps_trno,sps_trni,sps_mtri,sps_tmpr,sps_spph,sps_spch,
      i  nstrao,natmo,nmolo,niono,nphto,nplso,
@@ -611,6 +616,7 @@ c     ,  spcifup,spcifua,spcifum,spcifui,
      ,  listaddi,ngwtiesi,nsrfclu,msrfclu,lsrfclu,isrfclu,
      ,  ntrgte,jedgep,jedgec,jedgeo,ntrgto,ntrgtm,
      ,  tgrefsw,tgsppsw,tgspcsw,tgsppsp,tgspcgr,tgnhst,tgmhst,tgnini,
+     ,  trefcell,
      ,  tgfclbl,ilplgu,jlplgu,ilplgdg,trirefel,trirefcn,ntriref,
      ,  ntriplg,nntriplg,nsegtriplg,nnsstriplg,triplg,triplgnss,
      ,  nfclbltriplg,triplgfclbl,

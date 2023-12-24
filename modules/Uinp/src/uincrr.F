@@ -1,7 +1,4 @@
       subroutine uincrr(lun)
-!
-!
-!
 !======================================================================
 !*** Obtain the grid size from carre.out
 !======================================================================
@@ -9,6 +6,9 @@
       use b2mod_layer
      , , only: ntrack, nalloys
       use eirmod_solps
+#ifdef DIMENSIONS_MODULE
+      use b2mod_dimensions
+#endif
       implicit none
 #include "uinput.inc"
       integer :: lun, i,j, ireg
@@ -111,4 +111,4 @@
 !     .  ncells, nicells, nbcells, nfaces
       return
 !======================================================================
-      end
+      end subroutine uincrr

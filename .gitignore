@@ -83,7 +83,7 @@ doc/solps/B2_5.config.ITER.ifort64
 doc/solps/B2_5.config.common.ifort64
 doc/solps/B2_5.Makefile
 doc/solps/b2plot.commands
-doc/solps/DIMENSIONS.F
+doc/solps/b2mod_dimensions.F
 doc/solps/SOLPS_versions
 doc/solps/texput.log
 doc/solps/LICENSE.tex

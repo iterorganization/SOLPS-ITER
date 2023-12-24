@@ -102,7 +102,7 @@ ifndef STAND_ALONE
 	-[ -e b2sx.exe.dir/${fort_lc}34 ] && mv b2sx.exe.dir/${fort_lc}34 . || echo > /dev/null
 	-[ -e b2sx.exe.dir/${fort_lc}35 ] && mv b2sx.exe.dir/${fort_lc}35 . || echo > /dev/null
 	-[ -e b2sx.exe.dir/${fort_lc}44 ] && mv b2sx.exe.dir/${fort_lc}44 . || echo > /dev/null
-	-cd b2sx.exe.dir ; rm -f HYDHEL AMJUEL METHANE SPUTER H2VIBR AMMONX ${fort_lc}21 ${fort_lc}22 ${fort_lc}85 ${fort_lc}1 ${fort_lc}29 ${fort_lc}37 ${fort_lc}55 ${fort_lc}78 vtk.out
+	-cd b2sx.exe.dir ; rm -f HYDHEL AMJUEL METHANE SPUTER H2VIBR AMMONX ${fort_lc}21 ${fort_lc}22 ${fort_lc}85 ${fort_lc}1 ${fort_lc}29 ${fort_lc}78 vtk.out
 endif
 	-rmdir b2sx.exe.dir
 
@@ -129,7 +129,7 @@ ifndef STAND_ALONE
 	-[ -e b2sx.exe.dir/${fort_lc}34 ] && mv b2sx.exe.dir/${fort_lc}34 . || echo > /dev/null
 	-[ -e b2sx.exe.dir/${fort_lc}35 ] && mv b2sx.exe.dir/${fort_lc}35 . || echo > /dev/null
 	-[ -e b2sx.exe.dir/${fort_lc}44 ] && mv b2sx.exe.dir/${fort_lc}44 . || echo > /dev/null
-	-cd b2sx.exe.dir ; rm -f HYDHEL AMJUEL METHANE SPUTER H2VIBR AMMONX ${fort_lc}21 ${fort_lc}22 ${fort_lc}85 ${fort_lc}1 ${fort_lc}29 ${fort_lc}37 ${fort_lc}55 ${fort_lc}78 vtk.out
+	-cd b2sx.exe.dir ; rm -f HYDHEL AMJUEL METHANE SPUTER H2VIBR AMMONX ${fort_lc}21 ${fort_lc}22 ${fort_lc}85 ${fort_lc}1 ${fort_lc}29 ${fort_lc}78 vtk.out
 endif
 	-rmdir b2sx.exe.dir
 

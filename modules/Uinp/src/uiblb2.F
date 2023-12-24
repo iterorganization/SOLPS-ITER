@@ -1,4 +1,7 @@
       block data uiblb2
+#ifdef DIMENSIONS_MODULE
+      use b2mod_dimensions
+#endif
 c
 c  version : 14.08.2003 23:11
 c

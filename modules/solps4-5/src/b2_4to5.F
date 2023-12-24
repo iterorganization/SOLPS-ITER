@@ -1,8 +1,8 @@
       module b2_4to5
       use b2mod_types
       use b2mod_subsys
+      use b2mod_dimensions
       implicit none
-#     include "DIMENSIONS.F"
 
       real (kind=R8), allocatable ::
      *  fch_4(:,:,:),  fch_32_4(:,:,:), fch_52_4(:,:,:), fch_p_4(:,:,:),
@@ -297,6 +297,7 @@ cxpb
       use cinit
      , , only: indsrc
       use ceirsrt
+      use b2mod_dimensions
       implicit none
 #     include <KOPPLDIM.F>
 #     include <COMDIM.F>
@@ -680,8 +681,8 @@ cxpb
       use b2mod_b2cmpb
       use b2mod_b2cmpt
       use b2mod_external
+      use b2mod_dimensions
       implicit none
-#     include "DIMENSIONS.F"
 
       integer nx, ny, ns
       character*120 lblgm

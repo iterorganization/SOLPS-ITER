@@ -5,6 +5,9 @@
       use eirmod_solps
       use b2mod_elements
       use b2mod_subsys
+#ifdef DIMENSIONS_MODULE
+      use b2mod_dimensions
+#endif
 c
 c  version : 15.08.2003 18:26
 c
@@ -22,8 +25,8 @@ c=======================================================================
       integer idez
       logical streql
       external xerrab, idez, streql
-      integer find_matching_species, get_atomic_number
-      external find_matching_species, get_atomic_number
+      integer find_matching_species
+      external find_matching_species
       integer ispc
       integer ncore, nvess
 c=======================================================================

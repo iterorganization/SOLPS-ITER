@@ -127,9 +127,9 @@ by putting them into easyconfigs.local
     SETUP/easybuild-local.sh # defaults to foss modules
     SETUP/easybuild-local.sh --imas-foss 
     SETUP/easybuild-local.sh --imas-foss install
-    SETUP/easybuild-local.sh GGD-1.10.3-GCC-10.2.0-DD-3.38.1.eb
+    SETUP/easybuild-local.sh GGD-1.10.4-GCC-10.2.0-DD-3.38.1.eb
     sed -i -e /CPATH/d easybuild.local/modules/*/GGD/*
-    SETUP/easybuild-local.sh Viz-2.6.1-foss-2020b.eb --robot
+    SETUP/easybuild-local.sh Viz-2.8.0-foss-2020b.eb --robot
     SETUP/easybuild-local.sh SimDB-0.7.1-foss-2020b.eb --robot
 
 ### SOLPS-ITER ifort64 modules
@@ -215,7 +215,7 @@ and for that use lower threads or even `--parallel 1` for serial build.
 IMAS installer is needed to build IMAS modules. There is no EasyBuild
 for IMAS! After IMAS is built AMNS, GGD, and Viz can be built. Note
 that by default IMAS module name assumes "some" compilers without
-having toolchain in its name. For example `IMAS/3.39.0-4.11.5-2020b`
+having toolchain in its name. For example `IMAS/3.39.0-4.11.7-2020b`
 module may or may not contain `ifort` modules. This means that
 `--imas-foss` will build only *foss* FORTRAN modules, while
 `--imas-intel` will build only *intel* FORTRAN modules.
@@ -230,7 +230,7 @@ AMNS requires system to having latexmk package installed on the system.
 
 Dependency to IMAS for AMNS, GGD and VIZ needs to be updated with
 
-    ('IMAS/3.39.0-4.11.5-2020b', EXTERNAL_MODULE),
+    ('IMAS/3.39.0-4.11.7-2020b', EXTERNAL_MODULE),
 
 GGD and AMNS modules must not have CPATH otherwise `pkg-config ggd
 amns --cflags` will not have GGD include path
@@ -547,7 +547,7 @@ solps_top=$(git rev-parse --show-toplevel)
 EASYBUILD_LOCAL=${solps_top}/easybuild.local
 
 TAG_DD=${TAG_DD:-3.39.0}
-TAG_AL=${TAG_AL:-4.11.5}
+TAG_AL=${TAG_AL:-4.11.7}
 
 setup=${solps_top}/SETUP/setup-easybuild.local && test -f ${setup} && . ${setup}
     
@@ -687,13 +687,13 @@ IMAS_INTEL_2020b_MODULES="
 IMAS_2020b_APPLICATIONS="
     IMAS/${TAG_DD}-${TAG_AL}-2020b
     AMNS/1.4.0-foss-2020b-DD-${TAG_DD}
-    GGD/1.10.3-GCC-10.2.0-DD-${TAG_DD}
-    Viz/2.6.1-foss-2020b
+    GGD/1.10.4-GCC-10.2.0-DD-${TAG_DD}
+    Viz/2.8.0-foss-2020b
     SimDB/0.7.1-foss-2020b
     IMAS/${TAG_DD}-${TAG_AL}-2020b
-    GGD/1.10.3-intel-2020b-DD-${TAG_DD}
+    GGD/1.10.4-intel-2020b-DD-${TAG_DD}
     AMNS/1.4.0-intel-2020b-DD-${TAG_DD}
-    Viz/2.6.1-intel-2020b
+    Viz/2.8.0-intel-2020b
     SimDB/0.7.1-intel-2020b
     "
 

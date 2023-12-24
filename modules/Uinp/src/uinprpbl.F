@@ -6,6 +6,9 @@
       use b2mod_elements
       use b2mod_solpstop
       use b2mod_subsys
+#ifdef DIMENSIONS_MODULE
+      use b2mod_dimensions
+#endif
       implicit none
 
 c======================================================================
@@ -67,11 +70,10 @@ c     helpers for composing filenames
       character SUBDIRpot*4
       character ES*2, EB*2, YEAR*2, Bdescr*8, filename*256
 c     procedures
-      integer get_atomic_number
       real (kind=R8) :: rratio
       logical silent_open, streql
       external silent_open, streql
-      external get_atomic_number, lower_case, xxdata_11, rratio
+      external lower_case, xxdata_11, rratio
       external xertst, xerrab
 c======================================================================
       call subini ('uinprpbl')

@@ -4,6 +4,9 @@
      , , only: ntrack, nalloys
       use b2mod_subsys
       use eirmod_solps
+#ifdef DIMENSIONS_MODULE
+      use b2mod_dimensions
+#endif
 c
 c  version : 19.02.2003 18:23
 c

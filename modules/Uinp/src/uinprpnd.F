@@ -4,6 +4,9 @@
      , , only: ntrack, nalloys
       use b2mod_subsys
       use eirmod_solps
+#ifdef DIMENSIONS_MODULE
+      use b2mod_dimensions
+#endif
 c
 c  version : 14.03.2001 17:11
 c
@@ -28,7 +31,7 @@ c*** 2 cuts for a limiter
           write(0,*) 'Too many "non-default surfaces" are specified',
      ,                                  '  (cuts).'
           write(0,*) '  ==> Check the boundary specification in ',
-     ,                  'DG and parameter DEF_NSTS in DIMENSIONS.F'
+     ,               'DG and parameter DEF_NSTS in b2mod_dimensions.F'
           call xerrab ('Too many "non-default surfaces"')
         end if !}
 
@@ -52,7 +55,7 @@ c*** 2*2*2 cuts for a single null
           write(0,*) 'Too many "non-default surfaces" are specified.',
      ,                                  '  (cuts)'
           write(0,*) 'STOP ==> Check the boundary specification in ',
-     ,                'DG and parameter DEF_NSTS in DIMENSIONS.F'
+     ,               'DG and parameter DEF_NSTS in b2mod_dimensions.F'
           call xerrab ('Too many "non-default surfaces"')
         end if !}
 
@@ -133,7 +136,7 @@ c*** 4*2*2 cuts for a double-null
           write(0,*) 'Too many "non-default surfaces" are specified.',
      ,                                  '  (cuts)'
           write(0,*) 'STOP ==> Check the boundary specification in ',
-     ,                   'DG and parameter DEF_NSTS in DIMENSIONS.F'
+     ,               'DG and parameter DEF_NSTS in b2mod_dimensions.F'
           call xerrab ('Too many "non-default surfaces"')
         end if !}
 

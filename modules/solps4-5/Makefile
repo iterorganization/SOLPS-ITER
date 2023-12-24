@@ -26,7 +26,7 @@ ifndef SOLPS_CPP
     MAKES += ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
   endif
 else
-  MAKES += ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER} ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
+  MAKES += ${SOLPSTOP}/Makefile ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER} ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
   ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.common.${COMPILER} ] && echo yes || echo no ),yes)
     MAKES += ${SOLPSTOP}/SETUP/config.common.${COMPILER}
   endif
@@ -68,6 +68,11 @@ INC4LOCAL = ${SOLPSTOP}/modules/solps4-5/src/B2_include.local
 INC5LOCAL = ${SOLPSTOP}/modules/solps4-5/src/B2.5_include.local
 B2M5LOCAL = ${SOLPSTOP}/modules/solps4-5/src/B2.5_modules.local
 EIRMLOCAL = ${SOLPSTOP}/modules/solps4-5/src/Eirene_modules.local
+ifeq ($(shell `pkg-config --exists fundamental-constants`; echo $$?),0)
+SOLPSINCLUDE += `pkg-config fundamental-constants --cflags`
+else
+SOLPSINCLUDE ?=
+endif
 ifeq ($(shell [ -d ${SRC4LOCAL} ] && echo yes || echo no ),yes)
 SOLPSINCLUDE += -I${SRC4LOCAL}
 TAGSLIST = ${SRC4LOCAL}/*.F
@@ -113,6 +118,10 @@ SOLPSINCLUDE += -I${SRCDIR}/Eirene_commons
 endif
 TAGSLIST += ${SRCDIR}/*_commons/*.[hH] ${SRCDIR}/*/*.F ${SRCDIR}/*.F
 VPATH += ${SRCDIR}/B2.5_modules:${SRCDIR}:${SRCDIR}/solps4_B2:${SRCDIR}/solps4_Eirene:${SRCDIR}/solps5
+
+ifeq ($(shell [ -s ${SRCDIR}/B2.5_modules/b2mod_dimensions.F ] && echo yes || echo no ),yes)
+DEFINES += -DDIMENSIONS_MODULE
+endif
 
 include ${S45DIR}/config/compile
 MAKES += ${S45DIR}/config/compile ${S45DIR}/config/config.${HOST_NAME}.${COMPILER}

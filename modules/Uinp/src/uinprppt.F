@@ -4,6 +4,9 @@
      , , only: ntrack, nalloys
       use b2mod_subsys
       use eirmod_solps
+#ifdef DIMENSIONS_MODULE
+      use b2mod_dimensions
+#endif
       implicit none
 
 c  version : 27.12.2004 23:24
@@ -13,10 +16,10 @@ c*** Prepare the particle lists
 c======================================================================
 #include "uinput.inc"
       integer i,ii,iii,j,jj,jjj,k,l,m,mm,n,na,ni,nm,np,ipt
-      integer find_matching_species, get_atomic_number, lnblnk
+      integer find_matching_species, lnblnk
       logical ex,streql
       external streql, xerrab
-      external find_matching_species, get_atomic_number, lnblnk
+      external find_matching_species, lnblnk
       character*8 c,cc,c0*1
       character*20 hlp_frm
 c======================================================================
@@ -76,13 +79,13 @@ c*** the atoms and nuclei
                   write(0,*) 'Current requested number of atomic ',
      ,              'species is ',na
                   write(0,*) 'STOP ==> Check the AMDS model - or ',
-     ,              'increase DEF_NATM in DIMENSIONS.F'
+     ,              'increase DEF_NATM in b2mod_dimensions.F'
                   call xerrab ('Too many atomic species')
                 end if !}
                 if(.not.l_meta(j+m)) then
                   nspcncl=nspcncl+1
                   if (streql(c,'H').or.streql(c,'D').or.
-     ,              streql(c,'T')) then
+     ,                streql(c,'T')) then
 !nh neutral background species for the hybrid model
                     nplsh=nplsh+1
                     textph(nplsh)=c(1:1)//'0'
@@ -96,7 +99,7 @@ c*** the atoms and nuclei
                     write(0,*) 'Current requested number of B2.5 ',
      ,               'species is ',nspcpls+nspcncl
                     write(0,*) 'STOP ==> Check the AMDS model - ',
-     ,               'or increase DEF_NSD in DIMENSIONS.F'
+     ,               'or increase DEF_NSD in b2mod_dimensions.F'
                     call xerrab ('Too many B2.5 species')
                   end if !}
                   spcsncl(nspcncl)=c
@@ -159,7 +162,7 @@ c*** the atoms and nuclei
                   write(0,*) 'Current requested number of molecular ',
      ,              'species is ',nm
                   write(0,*) 'STOP ==> Check the AMDS model - or ',
-     ,              'increase DEF_NMOL in DIMENSIONS.F'
+     ,              'increase DEF_NMOL in b2mod_dimensions.F'
                   call xerrab ('Too many molecular species')
                 end if !}
                 spcscmm(nspcncl,nm)=spcdfu(j+m)
@@ -225,7 +228,7 @@ c*** the atoms and nuclei
                   write(0,*) 'Current requested number of test ion ',
      ,              'species is ',ni
                   write(0,*) 'STOP ==> Check the AMDS model - or ',
-     ,              'increase DEF_NION in DIMENSIONS.F'
+     ,              'increase DEF_NION in b2mod_dimensions.F'
                   call xerrab ('Too many test ion species')
                 end if !}
                 spcscmi(nspcncl,ni)=spcdfu(j+m)
@@ -319,7 +322,7 @@ c*** the atoms and nuclei
                   write(0,*) 'Current requested number of plasma ',
      ,              'species is ',np
                   write(0,*) 'STOP ==> Check the AMDS model - or ',
-     ,              'increase DEF_NPLS in DIMENSIONS.F'
+     ,              'increase DEF_NPLS in b2mod_dimensions.F'
                   call xerrab ('Too many plasma species')
                 end if !}
                 spcsrnp(np)=nspcncl
@@ -397,7 +400,7 @@ c*** Atoms:
               write(0,*) 'Current requested number of atomic ',
      ,          'species is ',nspcatm
               write(0,*) 'STOP ==> Check the AMDS model - or increase ',
-     ,          'DEF_NATM in DIMENSIONS.F'
+     ,          'DEF_NATM in b2mod_dimensions.F'
               call xerrab ('Too many atomic species')
             end if !}
             nspcncl=nspcatm
@@ -437,7 +440,7 @@ c*** Molecules:
               write(0,*) 'Current requested number of molecular ',
      ,          'species is ',nspcmol
               write(0,*) 'STOP ==> Check the AMDS model - or increase ',
-     ,          'DEF_NMOL in DIMENSIONS.F'
+     ,          'DEF_NMOL in b2mod_dimensions.F'
               call xerrab ('Too many molecular species')
             end if !}
             n=0
@@ -491,7 +494,7 @@ c*** Test ions:
               write(0,*) 'Current requested number of test ion ',
      ,          'species is ',nspcion
               write(0,*) 'STOP ==> Check the AMDS model - or increase ',
-     ,          'DEF_NION in DIMENSIONS.F'
+     ,          'DEF_NION in b2mod_dimensions.F'
               call xerrab ('Too many test ion species')
             end if !}
             n=0
@@ -544,7 +547,7 @@ c*** Plasma ions:
               write(0,*) 'Current requested number of atomic ',
      ,          'species is ',nspcpls
               write(0,*) 'STOP ==> Check the AMDS model - or increase ',
-     ,          'DEF_NPLS in DIMENSIONS.F'
+     ,          'DEF_NPLS in b2mod_dimensions.F'
               call xerrab ('Too many plasma ion species')
             end if !}
             if(nspcpls+nspcncl.gt.nsdb2) then !{
@@ -553,7 +556,7 @@ c*** Plasma ions:
               write(0,*) 'Current requested number of B2.5 ',
      ,          'species is ',nspcpls+nspcncl
               write(0,*) 'STOP ==> Check the AMDS model - or increase ',
-     ,          'DEF_NSD in DIMENSIONS.F'
+     ,          'DEF_NSD in b2mod_dimensions.F'
               call xerrab ('Too many B2.5 species')
             end if !}
             cc=spcirnp(l)

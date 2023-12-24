@@ -3,6 +3,9 @@
       use b2mod_layer
      , , only: ntrack, nalloys
       use eirmod_solps
+#ifdef DIMENSIONS_MODULE
+      use b2mod_dimensions
+#endif
 
 c  version : 01.04.2005 14:35
 
@@ -144,8 +147,8 @@ c*** Data for TRIA mesh
 
 c*** 1
 
-      data nmach, nmode , ntcpu, nfile, niter0, niter, ntime0, ntim1 /
-     /       2  ,   1   ,  50  , 5800 ,   1   ,   1  ,   0   ,   1   /,
+      data nprll, nmode , ntcpu, nfile, niter0, niter, ntime0, ntim1 /
+     /      -1  ,   1   ,  50  , 5800 ,   1   ,   1  ,   0   ,   1   /,
      ,  nfullrun, noptim,noptm1, ngeom_usr, ncoup_input, nsmstra /
      /       0  ,   1   ,   1  ,     0    ,     1      ,    1    /,
      ,   nstoram, ngstal,nrtal1,nreac_add /
@@ -198,13 +201,15 @@ c*** 3a
      ,     iltor  , ilfit , ilplg , ilbox , ilcell/
      /     nsts*0 , nsts*0, nsts*0, nsts*0, nsts*0/,
      ,     ilref  , ilsptp, ilsptc, isrss ,  isrc ,lchspnws, isrsg  /
-     /     nsts*1 , nsts*0, nsts*0, nsts*0, nsts*0, nsts*0 , nsts*0 /
+     /     nsts*1 , nsts*0, nsts*0, nsts*0, nsts*0, nsts*0 , nsts*0 /,
+     ,    arefcell/
+     /     nsts*0 /
       data  xmlim   ,   ewall   ,  ewbin ,    transp     , fsheat /
      /    nsts*1206., nsts*0.087, nsts*0.,nsts*0.,nsts*0.,nsts*-1./,
      ,     recycf , recyct , recprm , recycs ,  exppl ,  expel    /
      /     nsts*1., nsts*1., nsts*0., nsts*0., nsts*1., nsts*0.5  /,
-     ,      expil , recycc , echspts, fchspts, sptprm  /
-     /     nsts*1.,nsts*0.01,nsts*0., nsts*0., nsts*0. /
+     ,      expil , recycc , echspts, fchspts, sptprm , arfpress  /
+     /     nsts*1.,nsts*0.01,nsts*0., nsts*0., nsts*0.,  nsts*0.  /
       data  ctxbnds / 'Core side','Target','PFR side','Outer side'/
       data tgdtinpt / .false. /
 
@@ -219,8 +224,8 @@ c*** 3b
      ,    nlim*0, nlim*0, nlim*0, nlim*0, nlim*0, nlim*0 /,
      ,     jlref, jlsptp, jlsptc,  jsrss,  jsrc, lchspnwa, jsrsg /
      /    nlim*1, nlim*0, nlim*0, nlim*0, nlim*0, nlim*0, nlim*0 /,
-     ,     itini,  itend,  fclbl /
-     /   nlim*-1, nlim*0, nlim*0 /
+     ,     itini,  itend,refcell,  fclbl /
+     /   nlim*-1, nlim*0, nlim*0, nlim*0 /
       data  rlb  , sarea , rlwmn ,   rlwmx  , a0lm  , a1lm  , a2lm  /
      /    nlim*2.,nlim*1.,nlim*1.,nlim*1.e-5,nlim*0.,nlim*0.,nlim*0./,
      ,     a3lm  , a4lm  , a5lm  , a6lm  , a7lm  , a8lm  , a9lm  /
@@ -244,7 +249,9 @@ c*** 3b
      ,      xlcor ,  ylcor ,  zlcor  /
      /    nlim*0., nlim*0., nlim*0. /,
      ,     xlref , ylref , zlref , xlrot , ylrot , zlrot , alrot /
-     /    nlim*0.,nlim*0.,nlim*0.,nlim*0.,nlim*0.,nlim*0.,nlim*0./
+     /    nlim*0.,nlim*0.,nlim*0.,nlim*0.,nlim*0.,nlim*0.,nlim*0./,
+     ,   refpress /
+     /    nlim*0. /
       data txtsfa / nlim*' ' /
 
 c*** 4
@@ -257,14 +264,14 @@ c*** 4
      /    mreac*0.,mreac*0.,mreac*0.,mreac*0.,mreac*0.,lur6*0.,lur6*0./
       data creac / lur9*0. /
       data lconst / mreac*.false. /
-      data filnam ,    h123  ,   reac  ,   crc   , elname   /
-     /    mreac*' ',mreac*' ',mreac*' ',mreac*' ',mreac*' ' /
+      data filnam ,    h123  ,   reac  ,   crc   , elname  , bundling /
+     /    mreac*' ',mreac*' ',mreac*' ',mreac*' ',mreac*' ', mreac*' '/
 
       data rctndflt / .true. /,
      ,  rctntyp , rctndbs , rctnchp , rctnrct , rctnptpr, rctnptin /
      / mreac*' ',mreac*' ',mreac*' ',mreac*' ',mreac*' ',mreac*' ' /,
-     ,  rctnpto1, rctnpto2, rctnpto3 /
-     / mreac*' ',mreac*' ',mreac*' ' /,
+     ,  rctnpto1, rctnpto2, rctnpto3, rctnbdl /
+     / mreac*' ',mreac*' ',mreac*' ',mreac*' '/,
      ,  rctngrp , rctnmsp , rctnmst , rctnnmo1 /
      /  mreac*0 , mreac*0 , mreac*0 , mreac*0  /,
      ,  rctnnmo2, rctnnmo3 /
@@ -699,6 +706,7 @@ c*** 5
       data vx0,vx1,vx2,vx3,vx4,vx5 / lup6*0./
       data vy0,vy1,vy2,vy3,vy4,vy5 / lup6*0./
       data vz0,vz1,vz2,vz3,vz4,vz5 / lup6*0./
+      data zi0,zi1,zi2,zi3,zi4,zi5 / lup6*0./
       data b0,b1,b2,b3,b4,b5       / 6*0./
       data vl0,vl1,vl2,vl3,vl4,vl5 / 6*0./
 
@@ -718,8 +726,10 @@ c*** 6
      ,      rprob0 , rinteg  , einteg  , ainteg , achsptg  /
      /        0.1  ,   0.    ,   0.    ,   0.   , lvchsr*0./
       data scard_name /maxsc*' ' /
-      data scilref,scilspt, scisrs, scisrc,sclchspnwl /
-     /     maxsc*1,maxsc*0,maxsc*0,maxsc*0, maxsc*1   /
+      data scilref,scilspt, scisrs, scisrc,sclchspnwl,screfcell /
+     /     maxsc*1,maxsc*0,maxsc*0,maxsc*0, maxsc*1  ,maxsc*0   /,
+     ,     screfpress /
+     ,     maxsc*0.   /
       data scxmlim, scewall, scewbin,    sctransp     ,scfsheat /
      /    maxsc*0.,maxsc*0.,maxsc*0.,maxsc*0.,maxsc*0.,maxsc*-1. /,
      ,    screcycf,screcyct, scrcprm, scexppl, scexpel ,scexpil /
