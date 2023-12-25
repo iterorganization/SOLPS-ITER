@@ -143,14 +143,14 @@ DEFOPTS += -DDIMENSIONS_MODULE=yes
 endif
 
 MAKEO = ${MAKE} ${MAKE_OPTIONS}
-ifeq (${DIMENSIONS},1)
+MAKEF = ${MAKEO} -f config/Makefile
 ifndef NO_CMAKE
-MAKEE = ${MAKEO} DIMENSIONS_MODULE=yes
+MAKEE = ${MAKEO}
 else
-MAKEE = ${MAKEO} -f config/Makefile DIMENSIONS_MODULE=yes
+MAKEE = ${MAKEF}
 endif
-else
-MAKEE = ${MAKEO} -f config/Makefile
+ifeq (${DIMENSIONS},1)
+MAKEE = ${MAKEE} DIMENSIONS_MODULE=yes
 endif
 ifdef NO_CMAKE
 MAKEC = ${MAKEE}
@@ -172,7 +172,6 @@ MAKEY = FC=${MPI_FC} ${MAKEX} -DMPI=ON -DMPI_VERSION=${MPI_VERSION}
 MAKEZ = ${MAKEX} -DMPI=OFF -DOPENMP=ON
 MAKEA = ${MAKEY} -DOPENMP=ON
 endif
-MAKEF = ${MAKEO} -f config/Makefile
 
 # SOLPS_DEBUG, SOLPS_OPENMP and SOLPS_MPI will not be taken from environment,
 # but will be passed by the corresponding make-targets
