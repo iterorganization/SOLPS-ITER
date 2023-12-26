@@ -789,9 +789,9 @@ The {\tt setup.csh} file and its subsidiaries {\tt \$\{SOLPSTOP\}/SETUP/setup.cs
 \item {\tt SOLPS\_CPP}\index{SOLPS\_CPP}, an environment variable containing the global "defines" to use during compilation of {\tt SOLPS} code components
 \item some aliases to move around the tree ({\tt sbb}, {\tt sei}, {\it etc.})
 \item some aliases for plotting ({\tt xyplot}, etc...)
-\item two aliases to swap between the debug and no\_debug versions of the code ({\tt set\_debug} and {\tt set\_nodebug})
-\item two aliases to swap between the MPI and no\_MPI versions of the code ({\tt set\_mpi} and {\tt set\_nompi})
-\item two aliases to swap between the OpenMP and no\_OpenMP versions of the code ({\tt set\_openmp} and {\tt set\_noopenmp})
+\item two aliases to swap between the debug and no\_debug versions of the code ({\tt set\_debug} and {\tt unset\_debug})
+\item two aliases to swap between the MPI and no\_MPI versions of the code ({\tt set\_mpi} and {\tt unset\_mpi})
+\item two aliases to swap between the OpenMP and no\_OpenMP versions of the code ({\tt set\_openmp} and {\tt unset\_openmp})
 \end{enumerate}
 Of course, any additional desired definitions can be added. The preferred place for those is, for those variables that need not be shared by other users, the {\tt \$\{SOLPSTOP\}/SETUP/setup.csh.\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}.local} and {\tt \$\{SOLPSTOP\}/SETUP/config.\$\{HOST\_NAME\}.\$\{COMPILER\}.local} files. Variables that are needed at compilation time need to appear in the {\tt config.*.*(.local)} file, while variables needed at runtime must appear in {\tt setup.csh.*.*(.local)} file.
 \end{sloppypar}
@@ -3373,10 +3373,10 @@ The description of the variables found in {\tt b2.sources.profile} is as follows
   \item[ixref\_profile]\index{ixref\_profile} {\tt integer}, the poloidal location along which the sources radial profile is measured. Defaults to {\tt -2}, in which case the value from {\tt set\_transport\_ixref} is used.
   \item[iyref\_profile]\index{iyref\_profile} {\tt integer}, the radial location along which the sources axial profile is measured. Defaults to {\tt -2}, in which case the value from {\tt set\_transport\_iyref} is used.
   \item[sources\_filename]\index{sources\_filename} {\tt filename}, the name of a new sources input file that will be read based on a condition determined by $\mod(${\tt tim},{\tt sources\_time\_mod}$)>${\tt sources\_time\_switch}.
-\item[sources\_time\_mod]\index{sources\_time\_mod}  {\tt real},
-  the basic time periodicity used to set time varying sources, in $s$.
-\item[sources\_time\_switch]\index{sources\_time\_switch}
-  {\tt real}, the basic time at which a switch is to be made to a new sources input file, in $s$.
+  \item[sources\_time\_mod]\index{sources\_time\_mod}  {\tt real},
+    the basic time periodicity used to set time varying sources, in $s$.
+  \item[sources\_time\_switch]\index{sources\_time\_switch}
+    {\tt real}, the basic time at which a switch is to be made to a new sources input file, in $s$.
 \end{description}
 
 The results of these imported source profiles can be visualised in
@@ -9909,6 +9909,8 @@ If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $\widetilde j_{ax}^{(v
 
 For the definition of $\widetilde{q}_a^{(0)}$, see Eqs. (\ref{eq:q0-0}) and (\ref{eq:q0-1}).
 
+The poloidal component of the ion-neutral current is
+
 \begin{equation}\label{eq:pot_jxs}
 \widetilde{j}_x^{(s)} =
 \sum \limits^{ns-1}_{\substack{a_0 = 0 \\ z_{a_0} = 0~\&~z_{n,a_0} = 1 }}
@@ -9919,6 +9921,22 @@ For the definition of $\widetilde{q}_a^{(0)}$, see Eqs. (\ref{eq:q0-0}) and (\re
 + \sigma_{aa_0} B_z V_{a_{0}y}
 \right)
 \end{equation}
+
+If {\tt 'b2tinnt\_style'} is set to {\tt '1'} (default), the gradient of $n_a T_i$ is calculated directly.
+If {\tt 'b2tinnt\_style'} is set to {\tt '0'}, the implementation follows from rewriting the equation as
+
+\begin{equation}\label{eq:pot_jxs_old}
+\widetilde{j}_x^{(s)} =
+\sum \limits^{ns-1}_{\substack{a_0 = 0 \\ z_{a_0} = 0~\&~z_{n,a_0} = 1 }}
+\sum \limits^{ns-1}_{\substack{a = 0 \\ z_{a} = 1~\&~z_{n,a} = 1 }}
+\left(
+- \sigma_{aa_0} b_z^2 \frac{\partial \Phi}{h_x \partial x}
+- \sigma_{aa_0} b_z^2 \frac{1}{z_a e} \left( \frac{\partial T_i}{h_x \partial x} + T_i \frac{\partial log(n_a)}{h_x \partial x} \right)
++ \sigma_{aa_0} B_z V_{a_{0}y}
+\right)
+\end{equation}
+
+The ion-neutral conductivity is given by:
 
 \begin{equation}
 \sigma_{aa_0} =
@@ -9931,6 +9949,8 @@ z_{a_0} = 0 ~ \& ~ z_{n,a_0} = 1, z_a \ne 0 ~ \& ~z_{n_a} = 1 \\
 \right.
 \end{equation}
 
+If {\tt 'b2tqin\_csigin\_style'} is {\tt '0'} the diffusivity of room-temperature hydrogen is used:
+
 \begin{equation}
 \left\langle V_{aa_0} \sigma_{ex} \right\rangle = 3.2 \cdot 10^{-15} \sqrt{\frac{T_i}{0.026e}}\sqrt{\frac{1}{\tilde\mu_{aa_0}}}
 \end{equation}
@@ -9938,6 +9958,8 @@ z_{a_0} = 0 ~ \& ~ z_{n,a_0} = 1, z_a \ne 0 ~ \& ~z_{n_a} = 1 \\
 \begin{equation}
 \tilde\mu_{aa_0}= \frac{\frac{m_a}{m_p} \frac{m_{a_0}}{m_p}}{\frac{m_a}{m_p} + \frac{m_{a_0}}{m_p}}
 \end{equation}
+
+If {\tt 'b2tqin\_csigin\_style'} is {\tt '1'} the local B2.5 CX rate is used.
 
 $V_{a_{0}y} = \frac{\Gamma_{a_{0}y} }{n_{a_0}}$
 
@@ -10062,6 +10084,8 @@ If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $\widetilde j_{ay}^{(v
 
 For definition of $\widetilde{q}_a^{(0)}$, see Eqs.~(\ref{eq:q0-0}) and (\ref{eq:q0-1}).
 
+The radial component of the ion-neutral current is
+
 \begin{equation}\label{eq:pot_jys}
 \widetilde{j}_y^{(s)} =
 \sum \limits^{ns-1}_{\substack{a_0 = 0 \\ z_{a_0} = 0~\&~z_{n,a_0} = 1 }}
@@ -10069,9 +10093,11 @@ For definition of $\widetilde{q}_a^{(0)}$, see Eqs.~(\ref{eq:q0-0}) and (\ref{eq
 \left(
 - \sigma_{aa_0} \frac{\partial \Phi}{h_y \partial y}
 - \sigma_{aa_0} \frac{1}{z_a e n_a} \frac{\partial n_a T_i}{h_y \partial y}
-- \sigma_{aa_0} B V_{a_{0}x}
+- \sigma_{aa_0} B V_{a_{0}\perp}
 \right)
 \end{equation}
+
+The {\tt 'b2tinnt\_style'} switch determines the numerical implementation, similarly as for Eq.~(\ref{eq:pot_jxs}) and Eq.~(\ref{eq:pot_jxs_old}).
 
 \begin{equation}\label{eq:pot_jyst}
 \begin{matrix}
@@ -10089,7 +10115,7 @@ j_y^{(ST)} = &
 \end{matrix}
 \end{equation}
 
-$V_{a_{0}x}=\frac{\Gamma_{a_{0}x}}{n_{a_0}}$
+$V_{a_{0}\perp}=\frac{\Gamma_{a_{0}\perp}}{n_{a_0}}$
 
 $\sigma_{aa_0}$ see Eq.~(\ref{eq:pot_sigaa0}) above.
 
@@ -20247,6 +20273,8 @@ We list below where the {\tt B2.5} compilation switches are used.
     \multicolumn{2}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
+AL\_MAJOR\_VERSION & ids/b2mod\_ual.F90 \\
+AL\_MINOR\_VERSION & ids/b2mod\_ual.F90 \\
 ALLOCATE\_AND\_NAMELIST & b2plot/init\_wall.F \\
 ALLOCATE\_AND\_NAMELIST & modules/b2mod\_boundary\_namelist.F \\
 ALLOCATE\_AND\_NAMELIST & modules/b2mod\_input\_profile.F \\
@@ -20261,8 +20289,6 @@ ALLOCATE\_AND\_NAMELIST & modules/b2mod\_user\_namelist.F \\
 ALLOCATE\_AND\_NAMELIST & modules/b2mod\_wall.F \\
 ALLOCATE\_AND\_NAMELIST & postprocessing/b2yt\_wall.F \\
 ALLOCATE\_AND\_NAMELIST & sources/b2stbr.F \\
-AL\_MAJOR\_VERSION & ids/b2mod\_ual.F90 \\
-AL\_MINOR\_VERSION & ids/b2mod\_ual.F90 \\
 AMNS & preprocessing/b2ardr.F \\
 AMNS & utility/ratadas.F \\
 ASTRA & modules/b2mod\_astra\_to\_b2.F \\
@@ -23634,4 +23660,3 @@ introduced a very small effect, seen only as a jump in the residuals.
 \ifpdf
 \else
 \fi
-
