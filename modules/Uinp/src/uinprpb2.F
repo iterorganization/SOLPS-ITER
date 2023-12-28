@@ -22,8 +22,8 @@ c=======================================================================
       integer idez
       logical streql
       external xerrab, idez, streql
-      integer find_matching_species, get_atomic_number
-      external find_matching_species, get_atomic_number
+      integer find_matching_species
+      external find_matching_species
       integer ispc
       integer ncore, nvess
 c=======================================================================

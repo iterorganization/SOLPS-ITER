@@ -40,11 +40,9 @@ c======================================================================
       logical h_iso_used(m_hlp_h)
       logical, allocatable :: ldup(:)
       integer find_matching_reagent, lnblnk, len_of_digits
-      integer get_atomic_number
       logical streql, silent_open
       external xerrab, streql
       external find_matching_reagent, lnblnk, len_of_digits
-      external get_atomic_number
       external silent_open
 c======================================================================
       call subini ('uinprprc')
