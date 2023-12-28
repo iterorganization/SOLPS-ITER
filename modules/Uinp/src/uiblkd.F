@@ -63,7 +63,9 @@ c*** Default boundary conditions
      ,  (eewbndx(0,i),i=1,nbndknd), (efpbndx(0,i),i=1,nbndknd) /
      /    nbndknd*-0.1    ,   nbndknd*1.     /,
      ,  (efcbndx(0,i),i=1,nbndknd), (ewmbndx(0,i),i=1,nbndknd) /
-     /    nbndknd*1.    ,    nbndknd*'C'         /,
+     /    nbndknd*1.    ,    nbndknd*'C'     /,
+     ,  (rfcbndx(0,i),i=1,nbndknd), (rfpbndx(0,i),i=1,nbndknd) /
+     /    nbndknd*0     ,    nbndknd*0.      /,
      ,  (nlrbndx(0,i),i=1,nbndknd),  (jnpbndx(0,i),i=1,nbndknd)/
      /      0, 3*1    ,       2000,25000,2*2000    /,
      ,  (jmpbndx(0,i),i=1,nbndknd)/

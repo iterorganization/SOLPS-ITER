@@ -4623,6 +4623,7 @@ When running the coupled version of \SOLPSITERns, you will obtain additional out
   \item[NLIM] Number of "additional surfaces" (physical walls) declared in block 3B of the {\tt Eirene} input file
   \item[NSTS] Number of "non-standard surfaces" (plasma boundaries) declared in block 3A of the {\tt Eirene} input file
   \item[NTRII] Number of triangles forming the {\tt Eirene} computational grid
+  \item[NCVTOT] Number of coarse cells forming the {\tt Eirene} computational grid
   \item[NCL] Number of segments for resolved tallies on non-standard surfaces
 \end{description}
 
@@ -4735,26 +4736,26 @@ The data blocks are:
 Similarly, the {\tt fort.46} file contains the following data blocks, this time all defined on the {\tt Eirene} triangle grid, which are:
 
 \begin{description}
-  \item[PDENA] Atom particle density (in $cm^{-3}$), dimension ({\tt NTRII},{\tt NATM})
-  \item[PDENM] Molecule particle density (in $cm^{-3}$), dimension ({\tt NTRII},{\tt NMOL})
-  \item[PDENI] Test ion particle density (in $cm^{-3}$), dimension ({\tt NTRII},{\tt NION})
-  \item[EDENA] Energy density carried by atoms (in $eV.cm^{-3}$), dimension ({\tt NTRII},{\tt NATM})
-  \item[EDENM] Energy density carried by molecules (in $eV.cm^{-3}$), dimension ({\tt NTRII},{\tt NMOL})
-  \item[EDENI] Energy density carried by test ions (in $eV.cm^{-3}$), dimension ({\tt NTRII},{\tt NION})
-  \item[VXDENA] $X$-directed momentum density carried by atoms (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NATM})
-  \item[VXDENM] $X$-directed momentum density carried by molecules (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NMOL})
-  \item[VXDENI] $X$-directed momentum density carried by test ions (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NION})
-  \item[VYDENA] $Y$-directed momentum density carried by atoms (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NATM})
-  \item[VYDENM] $Y$-directed momentum density carried by molecules (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NMOL})
-  \item[VYDENI] $Y$-directed momentum density carried by test ions (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NION})
-  \item[VZDENA] $Z$-directed momentum density carried by atoms (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NATM})
-  \item[VZDENM] $Z$-directed momentum density carried by molecules (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NMOL})
-  \item[VZDENI] $Z$-directed momentum density carried by test ions (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NION})
+  \item[PDENA] Atom particle density (in $cm^{-3}$), dimension ({\tt NCVTOT},{\tt NATM})
+  \item[PDENM] Molecule particle density (in $cm^{-3}$), dimension ({\tt NCVTOT},{\tt NMOL})
+  \item[PDENI] Test ion particle density (in $cm^{-3}$), dimension ({\tt NCVTOT},{\tt NION})
+  \item[EDENA] Energy density carried by atoms (in $eV.cm^{-3}$), dimension ({\tt NCVTOT},{\tt NATM})
+  \item[EDENM] Energy density carried by molecules (in $eV.cm^{-3}$), dimension ({\tt NCVTOT},{\tt NMOL})
+  \item[EDENI] Energy density carried by test ions (in $eV.cm^{-3}$), dimension ({\tt NCVTOT},{\tt NION})
+  \item[VXDENA] $X$-directed momentum density carried by atoms (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NCVTOT},{\tt NATM})
+  \item[VXDENM] $X$-directed momentum density carried by molecules (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NCVTOT},{\tt NMOL})
+  \item[VXDENI] $X$-directed momentum density carried by test ions (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NCVTOT},{\tt NION})
+  \item[VYDENA] $Y$-directed momentum density carried by atoms (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NCVTOT},{\tt NATM})
+  \item[VYDENM] $Y$-directed momentum density carried by molecules (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NCVTOT},{\tt NMOL})
+  \item[VYDENI] $Y$-directed momentum density carried by test ions (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NCVTOT},{\tt NION})
+  \item[VZDENA] $Z$-directed momentum density carried by atoms (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NCVTOT},{\tt NATM})
+  \item[VZDENM] $Z$-directed momentum density carried by molecules (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NCVTOT},{\tt NMOL})
+  \item[VZDENI] $Z$-directed momentum density carried by test ions (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NCVTOT},{\tt NION})
   \item[VOL] Triangle volumes (in $cm^3$), dimension ({\tt NTRII})
-  \item[PUX] $X$-component of the poloidal unit vector at the triangle center
-  \item[PUY] $Y$-component of the poloidal unit vector at the triangle center
-  \item[PVX] $X$-component of the radial unit vector at the triangle center
-  \item[PVY] $Y$-component of the radial unit vector at the triangle center
+  \item[PUX] $X$-component of the poloidal unit vector at the triangle center, dimension ({\tt NCV})
+  \item[PUY] $Y$-component of the poloidal unit vector at the triangle center, dimension ({\tt NCV})
+  \item[PVX] $X$-component of the radial unit vector at the triangle center, dimension ({\tt NCV})
+  \item[PVY] $Y$-component of the radial unit vector at the triangle center, dimension ({\tt NCV})
 \end{description}
 
 Please note that, for the momentum densities, the coordinate system used by {\tt Eirene} is cartesian, i.e. independent of the local magnetic field, and that this data is given in CGS units. For cases without a certain species type, for example a pure Helium case with no molecules, the relevant data fields have a species dimension of {\tt 1} as they are mapped internally in {\tt Eirene} to a dummy pointer array.

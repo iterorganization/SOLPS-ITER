@@ -425,13 +425,14 @@ c         detect the properties of an element with a certain face label
             write(iunoo,715) scard_name(jscrd(j))
           else if (jliin(j).eq.1) then !}{
             ii=10*jlsptc(j)+jlsptp(j)
-            write(iunoo,707) jlref(j),ii,jsrss(j),jsrc(j),lchspnwa(j)
+            write(iunoo,707) jlref(j),ii,jsrss(j),jsrc(j),lchspnwa(j),
+     ,                  refcell(i)
             write(iunoo,703) xmlma(j),ewala(j),ewbna(j),
      ,                  trnspa(j,1),trnspa(j,2),fsheata(j)
             write(iunoo,703) rcycfa(j),rcycta(j),rcprma(j),
      ,                  exppla(j),expela(j),expila(j)
             write(iunoo,703) rcycsa(j),rcycca(j),
-     ,                  echspta(j),fchspta(j),sptpra(j)
+     ,                  echspta(j),fchspta(j),sptpra(j),refpress(i)
           end if !}
         end do
         i=maxval(fclbl)
